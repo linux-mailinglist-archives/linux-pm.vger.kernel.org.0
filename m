@@ -1,346 +1,233 @@
-Return-Path: <linux-pm+bounces-37656-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37657-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED97FC41C37
-	for <lists+linux-pm@lfdr.de>; Fri, 07 Nov 2025 22:18:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59F84C425C7
+	for <lists+linux-pm@lfdr.de>; Sat, 08 Nov 2025 04:23:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2C3464F4F6E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Nov 2025 21:16:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC1DE188C795
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Nov 2025 03:24:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 524F3238178;
-	Fri,  7 Nov 2025 21:16:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8EF42D29A9;
+	Sat,  8 Nov 2025 03:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VjSRCErY"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="crj/lZcs";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="i8vEI0C2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D22B1F461A
-	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 21:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D2E2D0C78
+	for <linux-pm@vger.kernel.org>; Sat,  8 Nov 2025 03:23:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762550169; cv=none; b=tdt2/AMKEozAeGuPEcruTFcLKLi6Ozh/9LDcishZsFUg4Y7nZ370V08pCKBygffZrZ6gUJ45wEPlJxbx4a5hGUocg3kgsRSRL/dlkUom+2qqxZLVyBDzjz0CbHb7eNuYqoQwz/svOYZwKg7kibRPNzf6m3wDEA+uyGkXNrA/uF8=
+	t=1762572223; cv=none; b=Ei+vn0jP01LaLlEyefwl9B/eeCj7F2/MTQF612TjMUJyF32Y+SKdK2F9c4bArcjuyqqieIBhBDc+ZKLgyB43Rfi106ke5+HnNEIQQiEr9V4uYHf52vHhbfFZZLC5+CPOakJZnoIqZQ8pBJ2YpnShUzQ2Bz670jtYlDMfFhrD998=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762550169; c=relaxed/simple;
-	bh=jahd1A6NrGjxxhSg5p+0yLuTk6UAdJ7dcQOlFjdsY+U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R+UrrcsL8cCbfAHzq77wUsb8/JkxUdacWhyAMJrwiZtyKGNfSoBRSjdIgaBuPbEQ00xsag01ewPmTagny/b+DzdiWAg4GfICWZ5LyWQIcpFeOKmxA+/xMio1ZKUKnmqTMXdl8gnyGAfpymnTsRQ0yOnSRPSPAvh3KM3vWnAUW0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VjSRCErY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE745C4CEF8
-	for <linux-pm@vger.kernel.org>; Fri,  7 Nov 2025 21:16:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762550168;
-	bh=jahd1A6NrGjxxhSg5p+0yLuTk6UAdJ7dcQOlFjdsY+U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VjSRCErYA6jYjIN9rOK7lEsOQWy4EPMqhFBKDPrbySzk3vztBS8dSsmb3jJrWLWVW
-	 mJH1eZGLVUDws1cbXriawj/qk0yFWdpF2cAHwLVo8E6q15o4nMD+s5gCP7aj2s0J4l
-	 +bXb8dtloznazmRmHTHGZsrjn+GLD12NGyUikjJj8iWEDr/JQ8lWDkRoILc8xmd+k/
-	 NbOWmAGPrsWhZDErCg9FWMB8GqTrXxIIbwLuZoXwxO4SkyfKLHEAKsOXVU6xfgDKh/
-	 pMqjg2kjCD0sIbw9se8Z9rIrohIaBOC5hWRhhKlvL9AVSglsGL/RVioLS4VQMACy6c
-	 XepAMWoF2EI2g==
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-43325879139so11052495ab.1
-        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 13:16:08 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUJa4xqqHRBuHD6Yfb6cWUdihFmSwYC54u+yOIRc3C/j3+gNTeeNKENx0Ww8T42ViY15puVSMdisA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVlxhpIPyN2b0PfIKEMOO6UDOkG0hfZnydlCFRo9imrfXsMwOG
-	e8xnDF3+Xhmy/OcKKaPQKkJESI/yyOolGGZEcUyNL4Z5yejSDL+ipjjzOx5BQIhbeEYYVlRxY5w
-	Sd6866SUy6LaO5JVHW4WK2z0jzPys0hU=
-X-Google-Smtp-Source: AGHT+IE6smacNZz38kBqN1RpQOUoT8tWfgpyKwx3hnYYSUV4uyLAydqFqqiSZcZzvb8zebIK1oyZAJ05DVrvdODlcbc=
-X-Received: by 2002:a05:6820:825:b0:654:f193:26dc with SMTP id
- 006d021491bc7-656d879cd39mr508579eaf.2.1762549668939; Fri, 07 Nov 2025
- 13:07:48 -0800 (PST)
+	s=arc-20240116; t=1762572223; c=relaxed/simple;
+	bh=Gdnp6jYIXA7d23ypy6BccSCLfEp5aevtpcimBZd6xFk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PrvmST2Pg4/6eB+TEJGOQBxkZAFd1EZ8s03LxGs4nzmoz/hQPxg5XQR0fYY9lgE0xgNXfOBBvqp8jiv/fRir5mp1UjjUn83qr/NwH6Zia4dntcJgfUiSVq0eB+6b34dO7WDac/yBo+TShqqRR5yUCsppnTXnC2BMgbgK2cz0MGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=crj/lZcs; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=i8vEI0C2; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A7DPNin3129725
+	for <linux-pm@vger.kernel.org>; Sat, 8 Nov 2025 03:23:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=UQD+AnbpjLp+8MO+oABz15
+	H+UXUQBW4nkQHQuBpZOGg=; b=crj/lZcsGVYal3MHooyTUyOEgfEaEWcJibZsX3
+	C6Ixfk6tXPk8B0cob9sEgpTatFyUgGoPTRBxO2iHDyLjqArwfYDZDczjTUDYkY54
+	ja2ya9/K4/WhlrQTFrx1A1SrB79h7dEeTkqDpZprcEOWKmJ9yr9zx5gIy/ixklOG
+	1ZwDZ3uzRK898UADGhaab9DE2A3MFOTdxhnWVyzxmtqBCl6KuhKZJ13AI0oq9wG6
+	BPWp7WT8Ak1/m3UA32XonZGiRzrw1twFdcfzZ+vXEQzgrV+1evQnnTZ5JC0itIqJ
+	AHZFdlV5HXyJmKpjzc300/+YV2UL+38v4pJJ1tHbVcCXyeAA==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a9hn09u0h-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Sat, 08 Nov 2025 03:23:41 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-29598910dd2so31554675ad.1
+        for <linux-pm@vger.kernel.org>; Fri, 07 Nov 2025 19:23:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1762572220; x=1763177020; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UQD+AnbpjLp+8MO+oABz15H+UXUQBW4nkQHQuBpZOGg=;
+        b=i8vEI0C2cdmbvcJidALaYNLmTVt/75EzafcKWlzH9Z71e+mU8e0mWhGR+F/t1iB+QD
+         VfTQhPSeZ2OPPAZg5BpSPAGnt25yJ2IfNoelmb+Vi7RQn3pejV+kwVphbe4Ztf/PywUe
+         8+In/y9x/9ZzTGssem/DONoQxZbf1uyO2TJjhzCjMrHZGUdYTPBuMgw3gwCM5lpHFFaJ
+         Er4e2C1C/MFwcveCIKK17eeptH35BxEQHR8zpF248JuJj60tI9Tt0pdF6A1rGfm+I9P0
+         RC0nxtaHA4QCsDuXZPFFQyTPc2rgsgbV8pV1HdDMeYRnSRpIN1/MviX3RdEk15ShvmB0
+         4EPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762572220; x=1763177020;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UQD+AnbpjLp+8MO+oABz15H+UXUQBW4nkQHQuBpZOGg=;
+        b=loJrGY2DK21b4/bAGt3/qHT2/cHm6t4dMtArV1GBWf4yZk/5jtxxVrFBeTZXKyhlN5
+         Obetk3htokh4bgZSk6HxAigd0640kGYEnzcFD0t54FFBh+yt6jl02Ophlp4dSp2FZ78/
+         CHwfR7wFYuN9TYp0x/bjIWyH9JAYuiHrjEcnFukj+QPZXA1j6lTDvvnwWASvGL8jMTeX
+         wQZtkoCw/WMHw9/WDW1MJMM8uODXHizm63szo2abuMrH1PrXyQtMyDvrD1qIUH9GD+L4
+         15a7vvNgH7ck8VWoWBOQCPSp03qL0IGMrDeAAr0Vfyq/Vv09SR8Le5ot8CEGy/tYvY4S
+         VP/w==
+X-Forwarded-Encrypted: i=1; AJvYcCVGdQpicyfwD9LAY0k/HkEdBDJPLYIkV81h6ARcWPjUFphcKcR9HlxiqVvg1MZujQE1NfgpQvknfQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0NkwkOiRjn7xwRP32WlWqvdEqn+/TcrA3ZGuMha/XTfobAiii
+	IwbZajwp8rh2CX9ScYODTl1q32D8FTjQuKrqF/3wWswfk4QhLndPoYJNF19Q16pgaVAsDYJLQWn
+	b0GeJal81NxhA5wPVmd/TtELFPsYnMX6GpxDHLj5YYw+EunDG6VrWhqbn0RnDKw==
+X-Gm-Gg: ASbGnct45lY/wzSTf45vFhG3iBDIMiuLIbcy86xgJHSxuxhJbn/aNcSaeR9tJbO1MJF
+	C/mKad2iWaUnf9PhrN9x5MM/T0lbTRumhM0Jb+RPB/dLHUs+31ynVDr3zqXGvIVpt34zaEnCstt
+	VTVeok1Bmtm02ylN/OMdLKvIVAl2MVvncVmE+CODrT5IGCFyugBMEZ29/L9JpaBO51ZkSQAvCvP
+	9L7pvdEV/R28Xtg3GgXQQ0GLkT8kqwj3s8t5ms5I+73kkqHeAX31sDY5m6K/gwrAGgNydFmhFZ7
+	FX9HVk3dvCP+2qEWsZ1efdbtBcTDud3wG7PGLqg2iRV3wolm4vp1rwjEaMLYFNDhpzSyL+3Ctqo
+	6WVjFgtOACRfqWqhs+LPrrRimuAFhCjc=
+X-Received: by 2002:a17:902:ecc6:b0:295:f1f:65f with SMTP id d9443c01a7336-297e56b8528mr17465055ad.31.1762572220358;
+        Fri, 07 Nov 2025 19:23:40 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH8USEyiNCEiXp2OT9EbZJesOy/WV8hNF2yLgYyzUYE/6Zy5ACi2czutGoJg718PBBbBxmkYw==
+X-Received: by 2002:a17:902:ecc6:b0:295:f1f:65f with SMTP id d9443c01a7336-297e56b8528mr17464705ad.31.1762572219838;
+        Fri, 07 Nov 2025 19:23:39 -0800 (PST)
+Received: from [192.168.0.104] ([106.219.179.230])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-297d83c941esm19942445ad.44.2025.11.07.19.23.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Nov 2025 19:23:39 -0800 (PST)
+From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+Subject: [PATCH v2 0/4] PCI: Add initial support for handling PCIe M.2
+ connectors in devicetree
+Date: Sat, 08 Nov 2025 08:53:18 +0530
+Message-Id: <20251108-pci-m2-v2-0-e8bc4d7bf42d@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251030210110.298612-1-wusamuel@google.com> <CAJZ5v0gzKN1cXfj508G4_9O2hKR0HncW4et3BNbaV+5Erh=LMA@mail.gmail.com>
- <CAG2KctonFbbN9KrKWweQWaRKNN=rZkpWQCmyyY2rKfcAUzF=sA@mail.gmail.com> <CAJZ5v0g6F+iEdicqSBb5M6-EfKfdW3vfwsxa98H2mrn5by6hPA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0g6F+iEdicqSBb5M6-EfKfdW3vfwsxa98H2mrn5by6hPA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Nov 2025 22:07:37 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iuRkf+xDHSiioZV=4-8PLx1eOz3bzojvuuC_Y1ZP1-VA@mail.gmail.com>
-X-Gm-Features: AWmQ_bnp_4FQtp7B5FhBSSlBtxcVN6lgCv3FIUniU7YATlV4GMTiyjj6fTKnKjw
-Message-ID: <CAJZ5v0iuRkf+xDHSiioZV=4-8PLx1eOz3bzojvuuC_Y1ZP1-VA@mail.gmail.com>
-Subject: Re: [PATCH v6] PM: Support aborting sleep during filesystem sync
-To: Samuel Wu <wusamuel@google.com>
-Cc: Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, tuhaowen@uniontech.com, 
-	Saravana Kannan <saravanak@google.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKa3DmkC/zXMQQrCMBCF4auUWZuSSUwtrryHdJHWiR0wTU00K
+ KV3Nxa6GfiHx7dAosiU4FwtEClz4jCVUIcKhtFOdxJ8Kw1KKoMotZgHFl6JU6N1o7FvnLVQxnM
+ kx58NunalR06vEL+bm/H/3QmzExmFFO2xNw4dkqH2ElKqn2/7GIL3dTnQrev6AzKJJKejAAAA
+X-Change-ID: 20251103-pci-m2-7633631b6faa
+To: Bjorn Helgaas <bhelgaas@google.com>,
+        Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Stephan Gerhold <stephan.gerhold@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        linux-pm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3581;
+ i=manivannan.sadhasivam@oss.qualcomm.com; h=from:subject:message-id;
+ bh=Gdnp6jYIXA7d23ypy6BccSCLfEp5aevtpcimBZd6xFk=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpDrexLthZW1QbVwJ+5bGWI3fkrcZNliIDoJvKd
+ gUglQuBXF2JATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaQ63sQAKCRBVnxHm/pHO
+ 9d9QB/9FD3dsNu0uaPnLM0yo7EQwcEweLwyFi/H0JtF4U7Isg2qKBsDzXaybv0pAM/xxclG4Svm
+ 7xP3Yy8/GxiBj0a6cqq3lOsAVqp0Rj5V6ZcVqLrT5j7+42doHx94jNfe2fkpv1eWfixAV6yMYQb
+ 3XtTkboarpDsg0xc30ucNgzDxVl9b2FYwQ7l4aP+HUWse5t1TxRn+1fzvCB4g7QUShFIA0WVpwk
+ YyG59vG9twBP+N/nuzTSt5Vf1I9iwRJec3DHMNPgT9QM+5HbKbChohzFuSgSKNzEFfsgowud8VN
+ XIEaQkMknmT/QPYHykAKaZkC9C6A0LaFipVcUPaYg6S933AH
+X-Developer-Key: i=manivannan.sadhasivam@oss.qualcomm.com; a=openpgp;
+ fpr=C668AEC3C3188E4C611465E7488550E901166008
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA4MDAyNyBTYWx0ZWRfXxcuJ5L3yjJ8l
+ gdD5aZaCNJBU+RHeT6d0+b0QDMljzwM9Ac/YoD00+Ye+V66FocL6UL1G5VcPWLV3uiVM0dwWO81
+ mLVIHUftYvQH6nGSDZi6x3wL/SPqwKHZpuRbcLiysGN3/Dtw88n+vsBRr8BjHqafg7LJ4M07Jwi
+ TH0HU+3Feh95xn0xurLuMWtFmUnBIiIcPmPc8E9MqKtktoRZWSWmf9vQUlyjjgS0nwRn9vo3LPx
+ wVYtsKxVLleAb1hkUFQ+K6XNjFKajHdBYZOOmufO9FZSB4/GuGLSuzTWAr3CgOQWn9tUPXPi/7V
+ qkmAE8MYSYWYVHG9nKGAEmYW30JeLxRxkBflOrGWC6rDrqfDj9BqoQzdyg1u2v0ele4ljn08G9j
+ bgS2ppAzCW9uRQkQynXjc6ShFEVUIg==
+X-Proofpoint-GUID: l08rOSN65rbs4TjG66ErM6MqrB5rLltZ
+X-Authority-Analysis: v=2.4 cv=MsJfKmae c=1 sm=1 tr=0 ts=690eb7bd cx=c_pps
+ a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=qronr9GGDLuyXDLutoyxMA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=NEAV23lmAAAA:8 a=EUspDBNiAAAA:8
+ a=3P-LAdjlN1q_Sw6-dOgA:9 a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22
+ a=HhbK4dLum7pmb74im6QT:22
+X-Proofpoint-ORIG-GUID: l08rOSN65rbs4TjG66ErM6MqrB5rLltZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-08_01,2025-11-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 bulkscore=0 adultscore=0 malwarescore=0
+ spamscore=0 priorityscore=1501 clxscore=1011 phishscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511080027
 
-On Fri, Nov 7, 2025 at 9:58=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
->
-> On Wed, Nov 5, 2025 at 2:20=E2=80=AFAM Samuel Wu <wusamuel@google.com> wr=
-ote:
-> >
-> > On Tue, Nov 4, 2025 at 10:52=E2=80=AFAM Rafael J. Wysocki <rafael@kerne=
-l.org> wrote:
-> > >
-> > > On Thu, Oct 30, 2025 at 10:01=E2=80=AFPM Samuel Wu <wusamuel@google.c=
-om> wrote:
-> > > >
-> > > > At the start of suspend and hibernate, filesystems will sync to sav=
-e the
-> > > > current state of the device. However, the long tail of the filesyst=
-em
-> > > > sync can take upwards of 25 seconds. If during this filesystem sync
-> > > > there is some wakeup or abort signal, it will not be processed unti=
-l the
-> > > > sync is complete; from a user's perspective, this looks like the de=
-vice
-> > > > is unresponsive to any form of input.
-> > > >
-> > > > This patch adds functionality to handle a sleep abort signal when i=
-n
-> > > > the filesystem sync phase of suspend or hibernate. This topic was f=
-irst
-> > > > discussed by Saravana Kannan at LPC 2024 [1], where the general
-> > > > consensus was to allow filesystem sync on a parallel thread. In cas=
-e of
-> > > > abort, the suspend process will stop waiting on an in-progress
-> > > > filesystem sync, and continue by aborting suspend before the filesy=
-stem
-> > > > sync is complete.
-> > > >
-> > > > Additionally, there is extra care needed to account for back-to-bac=
-k
-> > > > sleeps while maintaining functionality to immediately abort during =
-the
-> > > > filesystem sync stage. Furthermore, in the case of the back-to-back
-> > > > sleeps, a subsequent filesystem sync is needed to ensure the latest
-> > > > files are synced right before sleep. If necessary, a subsequent sle=
-ep's
-> > > > filesystem sync will be queued, and will only start when the previo=
-us
-> > > > sleep's filesystem sync has finished. While waiting for the previou=
-s
-> > > > sleep's filesystem sync to finish, the subsequent sleep will still =
-abort
-> > > > early if a wakeup event is triggered, solving the original issue of
-> > > > filesystem sync blocking abort.
-> > > >
-> > > > [1]: https://lpc.events/event/18/contributions/1845/
-> > > >
-> > > > Suggested-by: Saravana Kannan <saravanak@google.com>
-> > > > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > > > ---
-> > > > Changes in v6:
-> > > > - Use spin_lock_irq() in thread context
-> > > > - Use dedicated ordered workqueue for sync work items
-> > > > - Use a counter instead of two bools for synchronization
-> > > > - Queue fs_sync if it's not already pending on workqueue
-> > > > - pm_wakeup_clear(0) is prequisite to this feature, so move it with=
-in function
-> > > > - Updated commit text for motive of back-to-back fs syncs
-> > > > - Tighter lock/unlock around setup, checks, and loop
-> > > > - Fix function definitions for CONFIG_PM_SLEEP=3Dn
-> > > > - v5 link: https://lore.kernel.org/all/20251017233907.2305303-1-wus=
-amuel@google.com/
-> > > >
-> > > > Changes in v5:
-> > > > - Update spin_lock() to spin_lock_irqsave() since abort can be in I=
-RQ context
-> > > > - Updated changelog description to be more precise regarding contin=
-uing abort
-> > > >   sleep before fs_sync() is complete
-> > > > - Rename abort_sleep_during_fs_sync() to pm_stop_waiting_for_fs_syn=
-c()
-> > > > - Simplify from a goto to do-while in pm_sleep_fs_sync()
-> > > > - v4 link: https://lore.kernel.org/all/20250911185314.2377124-1-wus=
-amuel@google.com
-> > > >
-> > > > Changes in v4:
-> > > > - Removed patch 1/3 of v3 as it is already picked up on linux-pm
-> > > > - Squashed patches 2/3 and 3/3 from v3 into this single patch
-> > > > - Added abort during fs_sync functionality to hibernate in addition=
- to suspend
-> > > > - Moved variables and functions for abort from power/suspend.c to p=
-ower/main.c
-> > > > - Renamed suspend_fs_sync_with_abort() to pm_sleep_fs_sync()
-> > > > - Renamed suspend_abort_fs_sync() to abort_sleep_during_fs_sync()
-> > > > - v3 link: https://lore.kernel.org/all/20250821004237.2712312-1-wus=
-amuel@google.com/
-> > > >
-> > > > Changes in v3:
-> > > > - Split v2 patch into 3 patches
-> > > > - Moved pm_wakeup_clear() outside of if(sync_on_suspend_enabled) co=
-ndition
-> > > > - Updated documentation and comments within kernel/power/suspend.c
-> > > > - v2 link: https://lore.kernel.org/all/20250812232126.1814253-1-wus=
-amuel@google.com/
-> > > >
-> > > > Changes in v2:
-> > > > - Added documentation for suspend_abort_fs_sync()
-> > > > - Made suspend_fs_sync_lock and suspend_fs_sync_complete declaratio=
-n static
-> > > > - v1 link: https://lore.kernel.org/all/20250815004635.3684650-1-wus=
-amuel@google.com
-> > > >
-> > > >  drivers/base/power/wakeup.c |  8 ++++
-> > > >  include/linux/suspend.h     |  4 ++
-> > > >  kernel/power/hibernate.c    |  5 ++-
-> > > >  kernel/power/main.c         | 81 +++++++++++++++++++++++++++++++++=
-++++
-> > > >  kernel/power/suspend.c      |  4 +-
-> > > >  5 files changed, 100 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeu=
-p.c
-> > > > index d1283ff1080b..689c16b08b38 100644
-> > > > --- a/drivers/base/power/wakeup.c
-> > > > +++ b/drivers/base/power/wakeup.c
-> > > > @@ -570,6 +570,13 @@ static void wakeup_source_activate(struct wake=
-up_source *ws)
-> > > >
-> > > >         /* Increment the counter of events in progress. */
-> > > >         cec =3D atomic_inc_return(&combined_event_count);
-> > > > +       /*
-> > > > +        * wakeup_source_activate() aborts sleep only if events_che=
-ck_enabled
-> > > > +        * is set (see pm_wakeup_pending()). Similarly, abort sleep=
- during
-> > > > +        * fs_sync only if events_check_enabled is set.
-> > > > +        */
-> > > > +       if (events_check_enabled)
-> > > > +               pm_stop_waiting_for_fs_sync();
-> > > >
-> > > >         trace_wakeup_source_activate(ws->name, cec);
-> > > >  }
-> > > > @@ -899,6 +906,7 @@ EXPORT_SYMBOL_GPL(pm_wakeup_pending);
-> > > >  void pm_system_wakeup(void)
-> > > >  {
-> > > >         atomic_inc(&pm_abort_suspend);
-> > > > +       pm_stop_waiting_for_fs_sync();
-> > > >         s2idle_wake();
-> > > >  }
-> > > >  EXPORT_SYMBOL_GPL(pm_system_wakeup);
-> > > > diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> > > > index b02876f1ae38..4795f55f9cbe 100644
-> > > > --- a/include/linux/suspend.h
-> > > > +++ b/include/linux/suspend.h
-> > > > @@ -450,6 +450,8 @@ void restore_processor_state(void);
-> > > >  extern int register_pm_notifier(struct notifier_block *nb);
-> > > >  extern int unregister_pm_notifier(struct notifier_block *nb);
-> > > >  extern void ksys_sync_helper(void);
-> > > > +extern void pm_stop_waiting_for_fs_sync(void);
-> > > > +extern int pm_sleep_fs_sync(void);
-> > > >  extern void pm_report_hw_sleep_time(u64 t);
-> > > >  extern void pm_report_max_hw_sleep(u64 t);
-> > > >  void pm_restrict_gfp_mask(void);
-> > > > @@ -505,6 +507,8 @@ static inline void pm_restrict_gfp_mask(void) {=
-}
-> > > >  static inline void pm_restore_gfp_mask(void) {}
-> > > >
-> > > >  static inline void ksys_sync_helper(void) {}
-> > > > +static inline void pm_stop_waiting_for_fs_sync(void) {}
-> > > > +static inline int pm_sleep_fs_sync(void) { return 0; }
-> > > >
-> > > >  #define pm_notifier(fn, pri)   do { (void)(fn); } while (0)
-> > > >
-> > > > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> > > > index 53166ef86ba4..1874fde4b4f3 100644
-> > > > --- a/kernel/power/hibernate.c
-> > > > +++ b/kernel/power/hibernate.c
-> > > > @@ -820,7 +820,10 @@ int hibernate(void)
-> > > >         if (error)
-> > > >                 goto Restore;
-> > > >
-> > > > -       ksys_sync_helper();
-> > > > +       error =3D pm_sleep_fs_sync();
-> > > > +       if (error)
-> > > > +               goto Restore;
-> > > > +
-> > > >         if (filesystem_freeze_enabled)
-> > > >                 filesystems_freeze();
-> > > >
-> > > > diff --git a/kernel/power/main.c b/kernel/power/main.c
-> > > > index a6cbc3f4347a..23ca87a172a4 100644
-> > > > --- a/kernel/power/main.c
-> > > > +++ b/kernel/power/main.c
-> > > > @@ -582,6 +582,84 @@ bool pm_sleep_transition_in_progress(void)
-> > > >  {
-> > > >         return pm_suspend_in_progress() || hibernation_in_progress(=
-);
-> > > >  }
-> > > > +
-> > > > +static int pm_sleep_fs_syncs_queued;
-> > > > +static DEFINE_SPINLOCK(pm_sleep_fs_sync_lock);
-> > > > +static DECLARE_COMPLETION(pm_sleep_fs_sync_complete);
-> > > > +static struct workqueue_struct *pm_fs_sync_wq;
-> > > > +
-> > > > +static int __init pm_start_fs_sync_workqueue(void)
-> > > > +{
-> > > > +       pm_fs_sync_wq =3D alloc_ordered_workqueue("pm_fs_sync_wq", =
-0);
-> > > > +
-> > > > +       return pm_fs_sync_wq ? 0 : -ENOMEM;
-> > > > +}
-> > > > +
-> > > > +/**
-> > > > + * pm_stop_waiting_for_fs_sync - Abort fs_sync to abort sleep earl=
-y
-> > > > + *
-> > > > + * This function causes the suspend process to stop waiting on an =
-in-progress
-> > > > + * filesystem sync, such that the suspend process can be aborted b=
-efore the
-> > > > + * filesystem sync is complete.
-> > > > + */
-> > > > +void pm_stop_waiting_for_fs_sync(void)
-> > > > +{
-> > > > +       unsigned long flags;
-> > > > +
-> > > > +       spin_lock_irqsave(&pm_sleep_fs_sync_lock, flags);
-> > > > +       complete(&pm_sleep_fs_sync_complete);
-> > > > +       spin_unlock_irqrestore(&pm_sleep_fs_sync_lock, flags);
-> > > > +}
-> > >
-> > > Apart from the kernel test robot reports,
-> >
-> > Of course, I'll fix this in v7.
-> >
-> > > pm_stop_waiting_for_fs_sync() has become slightly too heavy for
-> > > calling it from wakeup_source_activate().
-> >
-> > Trying to understand- are you saying spin_lock_irqsave() makes
-> > pm_stop_waiting_for_fs_sync() too slow?
->
-> Spin lock and the completion handling.
->
-> This function has been designed to be as lightweight as reasonably
-> possible and the $subject patch is adding a branch and a global
-> spinlock locking to it.
->
-> > > Waking up the suspend process from there should be sufficient.  The
-> > > completion is not necessary for that in principle.
-> >
-> > Can you elaborate more on what "there" means and why completion isn't
-> > necessary? From what I can see, the only way to abort the suspend
-> > _early_ is with the completion.
->
-> Well, there are wait queues.
->
-> In the first place though, do you really need to stop the suspend
-> process immediately after a wakeup event?
->
-> This generally does not happen and wakeup sources are designed with
-> the assumption that it need not happen: The suspend process will check
-> if there is a pending wakeup at some places and wakeup sources just
-> need to update the counters.
->
-> Quite frankly, I don't see why the filesystem sync period needs to be
-> special in that respect.  And if it need not be special, nothing needs
-> to be added to wakeup_source_activate().
+Hi,
 
-In case it is unclear where I'm going with this, the suspend process
-can be made use wait_event_timeout() with a timeout of, say, 20 ms to
-wait for pm_sleep_fs_syncs_queued to drop down to 0 in a loop and
-check pm_wakeup_pending() in every iteration.
+This series is an initial attempt to support the PCIe M.2 connectors in the
+kernel and devicetree binding. The PCIe M.2 connectors as defined in the PCI
+Express M.2 Specification are widely used in Notebooks/Tablet form factors (even
+in PCs). On the ACPI platforms, power to these connectors are mostly handled by
+the firmware/BIOS and the kernel never bothered to directly power manage them as
+like other PCIe connectors. But on the devicetree platforms, the kernel needs to
+power manage these connectors with the help of the devicetree description. But
+so far, there is no proper representation of the M.2 connectors in devicetree
+binding. This forced the developers to fake the M.2 connectors as PMU nodes [1]
+and fixed regulators in devicetree.
+
+So to properly support the M.2 connectors in devicetree platforms, this series
+introduces the devicetree binding for Mechanical Key M connector as an example
+and also the corresponding pwrseq driver and PCI changes in kernel to driver the
+connector.
+
+The Mechanical Key M connector is used to connect SSDs to the host machine over
+PCIe/SATA interfaces. Due to the hardware constraints, this series only adds
+support for driving the PCIe interface of the connector in the kernel.
+
+Also, the optional interfaces supported by the Key M connectors are not
+supported in the driver and left for the future enhancements.
+
+Future work
+===========
+
+I'm planning to submit the follow-up series to add support for the Mechanical
+Key A connector for connecting the WiFI/BT cards, once some initial review
+happens on this series.
+
+Testing
+=======
+
+This series, together with the devicetree changes [2] [3] were tested on the
+Qualcomm X1e based Lenovo Thinkpad T14s Laptop which has the NVMe SSD connected
+over PCIe.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/arch/arm64/boot/dts/qcom/x1e80100-qcp.dts?h=v6.18-rc4&id=d09ab685a8f51ba412d37305ea62628a01cbea57
+[2] https://github.com/Mani-Sadhasivam/linux/commit/8f1d17c01a0d607a36e19c6d9f7fc877226ba315
+[3] https://github.com/Mani-Sadhasivam/linux/commit/0b1f14a18db2a04046ad6af40e94984166c78fbc
+
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+---
+Changes in v2:
+- Incorporated comments from Bartosz and Frank for pwrseq and dt-binding
+  patches, especially adding the pwrseq match() code.
+- Link to v1: https://lore.kernel.org/r/20251105-pci-m2-v1-0-84b5f1f1e5e8@oss.qualcomm.com
+
+---
+Manivannan Sadhasivam (4):
+      dt-bindings: connector: Add PCIe M.2 Mechanical Key M connector
+      PCI/pwrctrl: Add support for handling PCIe M.2 connectors
+      PCI/pwrctrl: Create pwrctrl device if the graph port is found
+      power: sequencing: Add the Power Sequencing driver for the PCIe M.2 connectors
+
+ .../bindings/connector/pcie-m2-m-connector.yaml    | 122 +++++++++++++++
+ MAINTAINERS                                        |   7 +
+ drivers/pci/probe.c                                |   3 +-
+ drivers/pci/pwrctrl/Kconfig                        |   1 +
+ drivers/pci/pwrctrl/slot.c                         |  35 ++++-
+ drivers/power/sequencing/Kconfig                   |   8 +
+ drivers/power/sequencing/Makefile                  |   1 +
+ drivers/power/sequencing/pwrseq-pcie-m2.c          | 163 +++++++++++++++++++++
+ 8 files changed, 334 insertions(+), 6 deletions(-)
+---
+base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+change-id: 20251103-pci-m2-7633631b6faa
+
+Best regards,
+-- 
+Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+
 
