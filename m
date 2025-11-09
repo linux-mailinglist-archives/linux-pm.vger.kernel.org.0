@@ -1,193 +1,146 @@
-Return-Path: <linux-pm+bounces-37676-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37677-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68117C43759
-	for <lists+linux-pm@lfdr.de>; Sun, 09 Nov 2025 03:39:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4ACEC4384A
+	for <lists+linux-pm@lfdr.de>; Sun, 09 Nov 2025 05:04:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0ED7188BF30
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Nov 2025 02:39:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60DA03AF7C9
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Nov 2025 04:04:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04BC41D88A4;
-	Sun,  9 Nov 2025 02:39:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82BA120013A;
+	Sun,  9 Nov 2025 04:04:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gngKxkgb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R+xddn9q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD0A134AB;
-	Sun,  9 Nov 2025 02:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013261ACEDE
+	for <linux-pm@vger.kernel.org>; Sun,  9 Nov 2025 04:04:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762655970; cv=none; b=gwh4dUVIaFg8dMwKki28m+Ihq+rwRZvuXwbfFIFrCUUV5PkEdJ0TUij/fTtlUsaVnNFn/iq/KOqiVxLjmhZ+EyfJ8xgmCZeOGA5GmYYmTCEV0ICRpvzV5H1ooRNEwi5GpYH9zdE70VfvrRM1TcteyPYPg8Fc0LegdbRVWP2U5HY=
+	t=1762661094; cv=none; b=E2uNxoWEOlYkmztpFSU6TbMTqBlzkuSv7wjxKaIFM/5ckpZ02jHJvVGDgwbN21Yf4F8GeCGR2RmyThMCcViOKtiTz6M/5ZosKjTRqn2auDqIvETee0xrPwSv26SHb4EkdO3th/ccCnRDYTmEjfs5M5Fe4vLm5hP+xJ4AnS4GQ9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762655970; c=relaxed/simple;
-	bh=xOezjHAfrG6FPu0vI2TkQaXhUlIqnhRYOSpd8sjNurI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=FHjIW+RUhU4mBEIghhPIj8hGY9f0OPyYP/roATwrDCsHGOPJ74lFayidxo7YoscCMJMuxNZGpkFRzMbYyn4kOLAEv34AJoUyRocAzo7B+eqHQO7L30zB+pzqBbMMnBZlzPPd9U6l4TqlKiBYN2/FGKkEnfsNUAnzc5ion1ZNh1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gngKxkgb; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762655969; x=1794191969;
-  h=date:from:to:cc:subject:message-id;
-  bh=xOezjHAfrG6FPu0vI2TkQaXhUlIqnhRYOSpd8sjNurI=;
-  b=gngKxkgbXBxBpA3m+OKjZLh1liq1Q7osvXDQ8NxFpxr1ctIYVEjRObyT
-   JD0j7jFv3FVqbDhGpi/nMreCE/KrRCxTmjAaJav98l9B4BqEJwuotCrdx
-   Zwzb3FkUCSkgX6KItjWtCcYC0YUOlwUH30oM1bHV8RDvS1Y7YeEcMHORM
-   IbSxWtZbh9LUxpCZ5xL+inquowdjrqUGfEmGoFZV+mNbUA24+e49y4wba
-   /Rle92bZ7hrXgMia+7pOfFiXSVlW6p5aW+prqUiI04WNvZnnm16gXKRg7
-   vNAzKNgGexEmxXx9N6jasNPcdUc6cbPHkVZin68bRWXLOH6IhJFtz/T+x
-   Q==;
-X-CSE-ConnectionGUID: 1ZULqS1cQo2Wf/YU8Yj/Lw==
-X-CSE-MsgGUID: 28V8WX5eRfmGQnKqvbCmAw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11607"; a="64635656"
-X-IronPort-AV: E=Sophos;i="6.19,291,1754982000"; 
-   d="scan'208";a="64635656"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2025 18:39:28 -0800
-X-CSE-ConnectionGUID: mfUhvN7+QKK1H0o2wggBwA==
-X-CSE-MsgGUID: LB7ln90HSBGZib6t+ym0nw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,291,1754982000"; 
-   d="scan'208";a="193394367"
-Received: from lkp-server01.sh.intel.com (HELO 6ef82f2de774) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 08 Nov 2025 18:39:27 -0800
-Received: from kbuild by 6ef82f2de774 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vHvKv-0001hv-0O;
-	Sun, 09 Nov 2025 02:39:25 +0000
-Date: Sun, 09 Nov 2025 10:38:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:fixes] BUILD SUCCESS
- d1dbf135dcce0eafcc24bddf17c48738846a6eb9
-Message-ID: <202511091021.mpleiFl4-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1762661094; c=relaxed/simple;
+	bh=vy7e0Uz1+HoY2uFB4YSEuZK75o24i9fXUAPPGgAPgzg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ovc+lcs7oXPQPnM56xI/9fNfJXsvg4VHipvuMt69IrU6dywtpQnFRQlciCelN5aVQGzGMrbl0o7iD/D58UbYYFCnuWMYfoXXcbSbHsQH70RTsFT7jl1AcSukdkI8v4kkp6ieBFICPhxW4L6v9iFMB/OnoysRYdnfAt1rFyk+p7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R+xddn9q; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-295247a814bso25467835ad.0
+        for <linux-pm@vger.kernel.org>; Sat, 08 Nov 2025 20:04:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1762661092; x=1763265892; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Hv9xrZ2yv0nmyGUfiS3/1XZ0Dl71alHT6BglkhqZupw=;
+        b=R+xddn9qEX31BHz7cYv01PqV8p25v0QuFsKYxA0C/IQm1XwW7VYxjTb7UlZbTDq3OJ
+         jQfTPnjxez/77WZHDQa5r1B1qNsKIOGCwWDevipLCgh17SJ7hYkDK3LtMgjMx+Nv4dPm
+         1dXPGRRe2GD+ttMo6PaOcurqjk4tWG6F5sma5iYgFoWTRKf4/mu9WP3mH9YqUCyaJ3ch
+         CuxcuUldhHqzd74+mzyODlhoXrm4q3OjvabdigHJj87ILWZckp5/9Vx3CEjSffef2324
+         LOAY80tC8ICiyC0GxI3gxlOuBq4VdaFAppeLmKC6gmOMqNGO31DUOF+cPzk8jJ4JqJvq
+         Cu4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762661092; x=1763265892;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Hv9xrZ2yv0nmyGUfiS3/1XZ0Dl71alHT6BglkhqZupw=;
+        b=Q1S5+jbJDvVeP9M/GXpVm3cHErRT4Nu+MxEsW0a19btbl3ineE5z/Jnn9Z9QVE+hSW
+         oqm4HjmPT0/PCnoR73ZmKUytNo0Z8L2pxeFSlnzuRrzWvzdA+shcOmugUNoGUA8iVg+9
+         ADyplbkb3TpxVUNNIP6Tg5/5vrtq0KI24BsdGcxOXLFsEQbo8LGXGe1E32C+h2QTF5XE
+         ticU0BWXXLncwfYipRGe6ySeypbfwyDAVh1ehSIXnVDYvSq9FTdoig8hFIXYZfNNX+UE
+         NWA1kh3/oG0KFGHDNz/J/JZQvNt4v6AoBgJQ3FDVrZOVAd5FXPEyPVvx/uxdu1Z7rJnS
+         VazQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVR6c6wqRuGi9vJdMLsTk5dMxxtQng0Tt0nthy76vig5dGoSH2KKIpPv9aiWyGQDTWtgVH9ekQxhw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzKgU1Ee7HJ5hF4MzdJJx5zRPn4md/95bVBKP7nzZNSoAF/6HQF
+	HIq5rbwnNOqODOjF2Qlv3vGGzxzp1edOlSN3oairGSRWMMyC5OpcoR0KGV9DtTmXIBETRZhCjMK
+	2Dk4cS3CyaTlW/8MLwjy9mwJ0dKPBxuqTcnP+pc4=
+X-Gm-Gg: ASbGncskazcCnyVmD65HQ9ScCeavjw6UwBOdHBXDsn8+dR0LVoDj7Vt9bG48F8UfBQ0
+	izXj6QTKekGzqEDi2aolyIwvkCixZH1o+2AFKZ0wTggNcw/QY+NHd9rK1desVFDUq12J/mly0Yk
+	HX0L06mJIrufGHKJ6SZpyHPoJzZtaqeG/h3ohZImF8eOshyCAHiX33TTHrdaBPifBMmUfvciTL2
+	J+9JCPWhXDODRlHVwqMWI4Yg6fQ8KADepNF+JIqEmm1w9mZdviyXLnntXxsvp5G4O7EoSemb7B0
+	5I7oZAvIQ74Pi9j5u7UYa56Dw626RIiPJq0b6r60RSqp0+0eovbARvUa
+X-Google-Smtp-Source: AGHT+IEcGZVVTcMhYTPoqkW+BIztOhsUvcA0pcYzLEUPTNs1B9rap7L/jCYqurq1olrU2M+Ac1pBzPS7A+rk7X+tkU4=
+X-Received: by 2002:a17:902:ec8d:b0:295:586d:677f with SMTP id
+ d9443c01a7336-297e540d259mr55218165ad.10.1762661092036; Sat, 08 Nov 2025
+ 20:04:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20251107074145.2340-1-gautham.shenoy@amd.com> <CAJZ5v0jS_uNRz=3ZQQLsChf2V3UUvhf6BZ+MBL0WMv+rcW4H6w@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jS_uNRz=3ZQQLsChf2V3UUvhf6BZ+MBL0WMv+rcW4H6w@mail.gmail.com>
+From: Chris Harris <chris.harris79@gmail.com>
+Date: Sat, 8 Nov 2025 20:04:40 -0800
+X-Gm-Features: AWmQ_bl5lUahx-ddHLXQbQC5JBoYj958vCD7_rQlbtTof8rtQnJKJu5Jt7SEWN4
+Message-ID: <CAM+eXpe1inRG9Rbb7y=tGOWrKrQ0nnXut09MEtXwwV35Zc-tCw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] CPPC/amd-pstate: Fixes to limit actions to online CPUs
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Len Brown <lenb@kernel.org>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Yunhui Cui <cuiyunhui@bytedance.com>, 
+	Jeremy Linton <jeremy.linton@arm.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Ionela Voinescu <ionela.voinescu@arm.com>, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
-branch HEAD: d1dbf135dcce0eafcc24bddf17c48738846a6eb9  Merge branch 'acpi-tables' into fixes
+Hi, I've tested all five v2 patches and have observed no issues in the
+use case the bug report was based upon.  I continue to successfully
+receive the desired amd-pstate scaling driver when 'nosmt=3Dforce' and
+'amd_pstate=3Dpassive' are set.  I've not tested other cases/scenarios
+for which the additional hardening/patches may have been intended.
 
-elapsed time: 1752m
+Thank you again for the rapid efforts that went into this solution.
 
-configs tested: 100
-configs skipped: 3
+Chris Harris
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                     nsimosci_hs_defconfig    gcc-15.1.0
-arc                   randconfig-001-20251108    gcc-12.5.0
-arc                   randconfig-002-20251108    gcc-8.5.0
-arm                               allnoconfig    clang-22
-arm                         nhk8815_defconfig    clang-22
-arm                   randconfig-001-20251108    gcc-14.3.0
-arm                   randconfig-002-20251108    gcc-15.1.0
-arm                   randconfig-003-20251108    clang-22
-arm                   randconfig-004-20251108    gcc-10.5.0
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20251109    gcc-15.1.0
-arm64                 randconfig-002-20251109    gcc-12.5.0
-arm64                 randconfig-003-20251109    clang-19
-arm64                 randconfig-004-20251109    gcc-8.5.0
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20251109    gcc-14.3.0
-csky                  randconfig-002-20251109    gcc-11.5.0
-hexagon                           allnoconfig    clang-22
-hexagon               randconfig-001-20251108    clang-22
-hexagon               randconfig-002-20251108    clang-22
-i386                              allnoconfig    gcc-14
-i386        buildonly-randconfig-001-20251109    gcc-14
-i386        buildonly-randconfig-002-20251109    gcc-13
-i386        buildonly-randconfig-003-20251109    clang-20
-i386        buildonly-randconfig-004-20251109    clang-20
-i386        buildonly-randconfig-005-20251109    clang-20
-i386        buildonly-randconfig-006-20251109    clang-20
-i386                  randconfig-011-20251109    clang-20
-i386                  randconfig-012-20251109    clang-20
-i386                  randconfig-013-20251109    gcc-14
-i386                  randconfig-014-20251109    gcc-14
-i386                  randconfig-015-20251109    gcc-12
-i386                  randconfig-016-20251109    gcc-14
-i386                  randconfig-017-20251109    gcc-14
-loongarch                         allnoconfig    clang-22
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20251108    gcc-12.5.0
-loongarch             randconfig-002-20251108    gcc-12.5.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                                defconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20251108    gcc-8.5.0
-nios2                 randconfig-002-20251108    gcc-9.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                randconfig-001-20251108    gcc-8.5.0
-parisc                randconfig-002-20251108    gcc-8.5.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                     ksi8560_defconfig    gcc-15.1.0
-powerpc               randconfig-001-20251108    gcc-8.5.0
-powerpc               randconfig-002-20251108    gcc-9.5.0
-powerpc                     redwood_defconfig    clang-22
-powerpc                     tqm8541_defconfig    clang-22
-powerpc                         wii_defconfig    gcc-15.1.0
-powerpc64             randconfig-001-20251108    gcc-8.5.0
-powerpc64             randconfig-002-20251108    gcc-8.5.0
-riscv                             allnoconfig    gcc-15.1.0
-s390                              allnoconfig    clang-22
-s390                  randconfig-001-20251108    clang-22
-sh                                allnoconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                           se7712_defconfig    gcc-15.1.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                 randconfig-001-20251109    gcc-8.5.0
-sparc                 randconfig-002-20251109    gcc-15.1.0
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20251109    gcc-8.5.0
-sparc64               randconfig-002-20251109    gcc-14.3.0
-um                                allnoconfig    clang-22
-um                                  defconfig    clang-22
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251109    gcc-13
-um                    randconfig-002-20251109    clang-17
-um                           x86_64_defconfig    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64      buildonly-randconfig-001-20251109    clang-20
-x86_64      buildonly-randconfig-002-20251109    gcc-14
-x86_64      buildonly-randconfig-003-20251109    clang-20
-x86_64      buildonly-randconfig-004-20251109    clang-20
-x86_64      buildonly-randconfig-005-20251109    clang-20
-x86_64      buildonly-randconfig-006-20251109    clang-20
-x86_64                              defconfig    gcc-14
-x86_64                randconfig-011-20251109    gcc-14
-x86_64                randconfig-012-20251109    clang-20
-x86_64                randconfig-013-20251109    gcc-14
-x86_64                randconfig-014-20251109    clang-20
-x86_64                randconfig-015-20251109    clang-20
-x86_64                randconfig-016-20251109    clang-20
-x86_64                randconfig-073-20251109    gcc-14
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20251109    gcc-13.4.0
-xtensa                randconfig-002-20251109    gcc-13.4.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Fri, Nov 7, 2025 at 9:41=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.org=
+> wrote:
+>
+> Hi,
+>
+> On Fri, Nov 7, 2025 at 8:42=E2=80=AFAM Gautham R. Shenoy <gautham.shenoy@=
+amd.com> wrote:
+> >
+> > Hello,
+> >
+> > This is the v2 of the patchset to restrict certain actions to only
+> > online CPUs instead of present CPUs.
+> >
+> > The v1 of this patchset can be found here:
+> > https://lore.kernel.org/lkml/20251105143851.4251-1-gautham.shenoy@amd.c=
+om/
+> >
+> > Changes between v1 --> v2:
+> >
+> >  * Picked up the Reviewed-by tags from Mario for the first four
+> >    patches
+> >
+> >  * Picked up the Tested-by tags from Chris for the first two patches
+> >
+> >  * Added a fifth patch to fix calling of cppc_set_auto_sel() for only
+> >    online CPUs in the amd-pstate driver code (Mario)
+> >
+> >
+> > Gautham R. Shenoy (5):
+> >   ACPI: CPPC: Detect preferred core availability on online CPUs
+> >   ACPI: CPPC: Check _CPC validity for only the online CPUs
+> >   ACPI: CPPC: Perform fast check switch only for online CPUs
+> >   ACPI: CPPC: Limit perf ctrs in PCC check only to online CPUs
+>
+> The above 4 patches applied as 6.18-rc material.
+>
+> >   cpufreq/amd-pstate: Call cppc_set_auto_sel() only for online CPUs
+>
+> And I'm leaving this one to Mario.
+>
+> Thanks!
 
