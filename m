@@ -1,258 +1,255 @@
-Return-Path: <linux-pm+bounces-37696-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37697-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D414C44698
-	for <lists+linux-pm@lfdr.de>; Sun, 09 Nov 2025 21:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8957AC446DB
+	for <lists+linux-pm@lfdr.de>; Sun, 09 Nov 2025 21:36:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E83134E2DE9
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Nov 2025 20:14:08 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6B2404E13C5
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Nov 2025 20:36:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1607258CD7;
-	Sun,  9 Nov 2025 20:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZpyhZE9E";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="H8L3bxWV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06D4A264F9C;
+	Sun,  9 Nov 2025 20:36:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C99239573
-	for <linux-pm@vger.kernel.org>; Sun,  9 Nov 2025 20:14:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8D34223DFF
+	for <linux-pm@vger.kernel.org>; Sun,  9 Nov 2025 20:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762719246; cv=none; b=nw5/n7Nkxtl3TYrI0RqZTc37WXDCaRu8I+CupcLO0Hr81aldzR2353Tn0D3anGA7hMZQLLCc1hVXBpZPv3HwnEuFRoVuGwR/8OAKK4ZApSxWBt7fN0HfAJggAeArSePneD74tTLEl8v7oDy0Ld8nBqRz83F6LkXUOJq08JKQz4M=
+	t=1762720559; cv=none; b=pfiOVsyDWU0Ufdbvf9ENUUm/kSD9FzTUk3VE5pYsvsrvkQPJHJ1PYNDN+H8/VfiWko2QaBKhfbmcrc4CE1NQB34QEWDE5pftLb2EmLK98ROUkM59BEvZWvbWfqpA92raNwBVrWWGJIVrrIgEWuaE4/UEkL2z8LW596JQ8TYeLyQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762719246; c=relaxed/simple;
-	bh=3YDD6QYRVYHOe62goM64un6Zx1SgceIyEXlt1CxPalI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aiz3wnrHsjeA7Eo6CKqqzrusKyjm2DGasT8mp5Japr/HGzxXY6yUBpEU6Q6abiQNrtTkTkrfnfPInWG+ZqPLLJ3r9FpSp+TgRTQ7/BTcQC5cVC8z8xYIIzet0HXVCFzLWmEZc3zOtODtTF4tQ5ok6AYbWT2S5iQc4e0GaE8oPpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZpyhZE9E; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=H8L3bxWV; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5A9HsGle883008
-	for <linux-pm@vger.kernel.org>; Sun, 9 Nov 2025 20:14:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=QQrHVmgQKbHvQ2sU0ktxIzUv
-	0KL8iYk/4UNwwRP5jlY=; b=ZpyhZE9EcbwNTTzMN8K/RahsI71LhHMorHpW7jG0
-	YFR+cF9PoEDuJ3Hj4fSAcaqrFWgg4J9J5KiFNY5OdLhBK0zutWFRHWMZgCaDNrTc
-	li9UmJWRKiDo8fkWhCVZDcGHAJ4RHjDfBAY7zW22TNY2s6zWl6oeacyZFzRcz64m
-	1bMFWlVeKmxv8oNPHVghFUpI9rZOHkDgQk64lqYCa6074jYOT/4/uC/A0I4Me/Wu
-	v+hWymxAVobRm+AJYWEWZu2x2Xy4nd/HGDEcrXD3xTRJ0J6bixkBMHfb3dgkJyGR
-	1K1VRHRMHLkxnvTHdq12zBNq7dell6PUjOD4QeH/7RyQ0w==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4a9y1h2k6m-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Sun, 09 Nov 2025 20:14:03 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4ed6466f2baso72687781cf.0
-        for <linux-pm@vger.kernel.org>; Sun, 09 Nov 2025 12:14:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1762719243; x=1763324043; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QQrHVmgQKbHvQ2sU0ktxIzUv0KL8iYk/4UNwwRP5jlY=;
-        b=H8L3bxWVrUX6V3jWwt5OKm9vwI9KjjHyrsOXw9vlfeuTUllThD65opOngnbfmfk/k7
-         4mTNHRUHWJu8Gcp1QAEuskyTMWRbf0g+RIoZ0NiBbulcNb6v5yBH/bvbBboEgh6fJ49J
-         y+SFaQYSIJjW/b3Yaw25ZlUXbEloy2NZMJJcvCtzK+S+6jZwzGzLD78Hw0KrI5hadJX+
-         1B+EuVGxcT4ri/hxtT9uIM4Vpm2wNaZulhJfAkXMJWr5M7I9raUjL3e+iKNVtDQqjgzl
-         WIgeOC/wdOBdGvs/F/xn0yaoHefg4n4rh/ZQV5sg3l9fCk82ce9ToCHrEyezqeo4Scyv
-         Ab6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762719243; x=1763324043;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QQrHVmgQKbHvQ2sU0ktxIzUv0KL8iYk/4UNwwRP5jlY=;
-        b=VAPQFX459SEaN7c+g2Hq3Kwa3C65wnRGHJAvKO6ddarNf4w3rViOVUOreu6fmuJLxn
-         a0TyJOz8/5Rg0eubOFLKxdBr6GDgeqcnNf4//0IjLrQHm4BrTkPJVurIgpHEgwKQLDhK
-         3+DVedYVNi7DEozotrX8zLVPycVec1kgzSUEF6nPsUqDnSsNfR37Tlyj8GZvsPRvXrW3
-         gw5Blygz6nG51HsGU0gxSWLxk1+3Bcxb8Zfwiq57Uhjp4gRqnCypUlwWjE60lVV1dCAP
-         dEPVVF86bhyZPyJSbLK7Wtb0H8e84GpwcBMSYmbnqSTg05EVNpjIknmS/kAuvOeEBNzt
-         muRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWhWPAdrKiCl35GbHSVM/2HzgIYwJ3VpoDyvmcbevvc6dvPNApMWrUlJdtF1rFLwJqsOY/4X0u4cQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQgfpKVh+O//nhwHrJYzH7lP/FnAZj4UkB66/5t9Rkzp6tdC5g
-	R49B4KdN169wspYCHfvHHXvMR4jVvKNxPlHfCT96BULJxTcmz3XUGqkNNGuIHCGfU+Q7d14gTwt
-	hu9Z1I/9OMr1yGfG5Di1ig6EXWPlXHj1sOfqUIRiA8lLCKy3/yp2CU2rmJSbtrQ==
-X-Gm-Gg: ASbGncvDt34OBRcp1GKzolUdfQwnBMfyPCul5Z3WFGhkCGBmPh3HSd6WRw0NuK3u4Co
-	TWgjHGfaKjtNaQZYLt/ERsGFrAMEYamPrkM+AlGjRrVBfhOFHEEMpjbKqpHVODO2hq1M7c9fgZ7
-	KssqV1WcjYDbDZxTeJ5NmgW3wrOXaKAo8Y2qjD5wkA1q2HIHTIenTxoE8TNvQlYM5+Rj2NqJ6v1
-	//pk6DHLf0K5Dhh3no7GBBYrMekgf/SLRpYGi2BX/xgbq1HScgGH/jC+o2Cc9NdHi24e13fUOTv
-	hBxf9kH5lu7aXgkGwlo55eg99j2q+rKkJ9bzlDRQiH3dyIAO/ZyzTYhfeWrszefMHbFF2aX3X2B
-	XQnoHz+mc3+owa6xLjEXJYwnFT4q2b5xyHLQbfowe7cUX0dgYfDdogv247l+24h7UoCUKmCQsYK
-	rlHQL7MRr+UVR1
-X-Received: by 2002:a05:622a:11c8:b0:4ed:6989:85ff with SMTP id d75a77b69052e-4eda4e8c089mr74729161cf.3.1762719242779;
-        Sun, 09 Nov 2025 12:14:02 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFIvKnzhoEtORiw56O3jY2DU4HPr1sokGpTQfcUEGwkVd9PZNUkRGso0cDRdafjoSJK2fpfuw==
-X-Received: by 2002:a05:622a:11c8:b0:4ed:6989:85ff with SMTP id d75a77b69052e-4eda4e8c089mr74728871cf.3.1762719242355;
-        Sun, 09 Nov 2025 12:14:02 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5944a1b28d0sm3360679e87.77.2025.11.09.12.14.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Nov 2025 12:14:01 -0800 (PST)
-Date: Sun, 9 Nov 2025 22:13:59 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Stephan Gerhold <stephan.gerhold@linaro.org>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: connector: Add PCIe M.2 Mechanical
- Key M connector
-Message-ID: <5kedk7c6kc2e5j4kqeyik6i7ju54sdn6etjhpwl2vt4nq6c6ug@2yld4hpvbuzg>
-References: <20251108-pci-m2-v2-0-e8bc4d7bf42d@oss.qualcomm.com>
- <20251108-pci-m2-v2-1-e8bc4d7bf42d@oss.qualcomm.com>
- <gmwg46c3za5z2ev34mms44gpq3sq7sb4jaozbdn5cejwbejbpo@wwr2j7dkjov4>
- <qrgaulegz2tb7yzklyl7rpkgbf6ysx44bxtyn6n3tcyq4an4e5@bzngutkvfno3>
+	s=arc-20240116; t=1762720559; c=relaxed/simple;
+	bh=ighfFnsiw1puwUIgoZK23r5ZxJkVYXqVCSWF/3zgnxg=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=IjMarqI3i0VM0GZNRLQwkJlplxTpvaUq7bAF9YFIWqBC2vfqn4YwCdnuoWzx3FaxM/OMzSEtfFB4aEfdNVF3LVLJUfSS1Ko0UGdOuayizTCSQMDwwg+Vq7Q4sU7tKUTLFZVz3ofC82Xt/6eNauPe5NbLNxGoBAM9QlgMsHcnuP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 395DD497;
+	Sun,  9 Nov 2025 12:35:48 -0800 (PST)
+Received: from [192.168.0.16] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 69AE13F5A1;
+	Sun,  9 Nov 2025 12:35:54 -0800 (PST)
+Message-ID: <f0a2492b-9cea-4450-88ca-be8f99f3e0fe@arm.com>
+Date: Sun, 9 Nov 2025 20:35:51 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <qrgaulegz2tb7yzklyl7rpkgbf6ysx44bxtyn6n3tcyq4an4e5@bzngutkvfno3>
-X-Proofpoint-ORIG-GUID: gjA9QyJrvdUULeFc3tBhOck8lxhntwfc
-X-Proofpoint-GUID: gjA9QyJrvdUULeFc3tBhOck8lxhntwfc
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTA5MDE4MCBTYWx0ZWRfX748NBtAsj+uL
- YhSosunNDzKlv8obdWc0PHelXmunNJJ8SJ5U49VL1MgXOIgZiqFK7gWhQvSkYm4jzhihE6KkBYc
- mO5z/a/icci5rGfAdK8UkHlL9YdxSO2RdYysPAWZIkGedPdfY0szauSnqwd1xyABJVN3pQmsazt
- ykAOCCZRSBlCHgDodq2BSqfwQRfkV5U8q23M0ixxP0jyumdTrYCKE2DHswb6xCjQDQn6lJtsvPd
- 6gBzeicat+fWkra17Dy//1ifTcXG4PFp486w/cNMdOP94BaxOKHjFGs6x+X2JmXUPGjjt+QPFAJ
- wsxlLn1Kz3TC/bgpy8W2vkkk+4GbEwx3sO5TcWqpLJmHBpGsDcaB8mPxBzD9PB1iSNAGLsns/Ex
- YOfDD8uvrga6hjIJRh8HdtD5BkaFYw==
-X-Authority-Analysis: v=2.4 cv=Xuj3+FF9 c=1 sm=1 tr=0 ts=6910f60b cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=gEfo2CItAAAA:8 a=EUspDBNiAAAA:8 a=vecdOpQ8aSexLyLbR9sA:9 a=CjuIK1q_8ugA:10
- a=uxP6HrT_eTzRwkO_Te1X:22 a=sptkURWiP4Gy88Gu7hUp:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-09_08,2025-11-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 adultscore=0 suspectscore=0 spamscore=0 phishscore=0
- malwarescore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
- definitions=main-2511090180
+User-Agent: Mozilla Thunderbird
+From: Christian Loehle <christian.loehle@arm.com>
+Subject: Re: Regression in TEO cpuidle governor between 6.6 and 6.12
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Reka Norman <rekanorman@chromium.org>
+Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
+ <a50064b2-e6aa-4237-a715-12f21a65e9a6@arm.com>
+ <ed1e64dc-91c9-44d9-b3d3-9f142bcf7a8d@arm.com>
+ <CAJZ5v0g9Jndez5y5i4pPW1C+qfj=4iiu51HV7Eb1dBGd1jg-CA@mail.gmail.com>
+ <b910a35c-83aa-4050-9c6c-de40f13a2a55@arm.com>
+ <CAJZ5v0h6qAgWkEad5OGM-V-HOE-1PwD_XqgsDWbnJNxLWOKDfA@mail.gmail.com>
+ <CAEmPcws_pvYpzRMQfMyRPBw=7bUyYCcnP3BHN2H4wgUeLLszFg@mail.gmail.com>
+ <CAJZ5v0i_ZUD1=3JDABJZ3fcdD7r8uMU36=mam8r2=1P02YksYw@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAJZ5v0i_ZUD1=3JDABJZ3fcdD7r8uMU36=mam8r2=1P02YksYw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, Nov 09, 2025 at 09:48:02PM +0530, Manivannan Sadhasivam wrote:
-> On Sat, Nov 08, 2025 at 08:10:54PM +0200, Dmitry Baryshkov wrote:
-> > On Sat, Nov 08, 2025 at 08:53:19AM +0530, Manivannan Sadhasivam wrote:
-> > > Add the devicetree binding for PCIe M.2 Mechanical Key M connector defined
-> > > in the PCI Express M.2 Specification, r4.0, sec 5.3. This connector
-> > > provides interfaces like PCIe and SATA to attach the Solid State Drives
-> > > (SSDs) to the host machine along with additional interfaces like USB, and
-> > > SMB for debugging and supplementary features. At any point of time, the
-> > > connector can only support either PCIe or SATA as the primary host
-> > > interface.
-> > > 
-> > > The connector provides a primary power supply of 3.3v, along with an
-> > > optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
-> > > 1.8v sideband signaling.
-> > > 
-> > > The connector also supplies optional signals in the form of GPIOs for fine
-> > > grained power management.
-> > > 
-> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > > ---
-> > >  .../bindings/connector/pcie-m2-m-connector.yaml    | 122 +++++++++++++++++++++
-> > >  1 file changed, 122 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
-> > > new file mode 100644
-> > > index 0000000000000000000000000000000000000000..be0a3b43e8fd2a2a3b76cad4808ddde79dceaa21
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
-> > > @@ -0,0 +1,122 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/connector/pcie-m2-m-connector.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: PCIe M.2 Mechanical Key M Connector
-> > > +
-> > > +maintainers:
-> > > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > > +
-> > > +description:
-> > > +  A PCIe M.2 M connector node represents a physical PCIe M.2 Mechanical Key M
-> > > +  connector. The Mechanical Key M connectors are used to connect SSDs to the
-> > > +  host system over PCIe/SATA interfaces. These connectors also offer optional
-> > > +  interfaces like USB, SMB.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: pcie-m2-m-connector
-> > 
-> > Is a generic compatible enough here? Compare this to the USB connectors,
-> > which, in case of an independent USB-B connector controlled/ing GPIOs,
-> > gets additional gpio-usb-b-connector?
-> > 
+On 11/7/25 11:35, Rafael J. Wysocki wrote:
+> On Fri, Nov 7, 2025 at 4:28 AM Reka Norman <rekanorman@chromium.org> wrote:
+>>
+>> On Fri, Nov 7, 2025 at 7:33 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>>
+>>> On Thu, Nov 6, 2025 at 12:13 PM Christian Loehle
+>>> <christian.loehle@arm.com> wrote:
+>>>>
+>>>> On 11/5/25 20:48, Rafael J. Wysocki wrote:
+>>>>> On Wed, Nov 5, 2025 at 12:24 AM Christian Loehle
+>>>>> <christian.loehle@arm.com> wrote:
+>>>>>>
+>>>>>> On 11/4/25 09:03, Christian Loehle wrote:
+>>>>>>> On 11/4/25 03:36, Reka Norman wrote:
+>>>>>>>> Hi,
+>>>>>>>>
+>>>>>>>> I’m seeing a regression in the TEO governor between 6.6 and 6.12. At
+>>>>>>>> 6.12, when the system is idle it’s spending almost 100% of time in
+>>>>>>>> WFI, compared to about 6% at 6.6. At mainline it has improved compared
+>>>>>>>> to 6.12 but is still a lot worse than 6.6, spending about 50% in WFI.
+>>>>>>>>
+>>>>>>>> The system is a ChromeOS device with Mediatek MT8196.
+>>>>>>>>
+>>>>>>>> Bisecting showed the specific commit which caused the regression is:
+>>>>>>>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
+>>>>>>>>
+>>>>>>>> I’ve attached sysfs dumps showing the issue. All were taken a couple
+>>>>>>>> of minutes after boot, with the device having been idle since boot.
+>>>>>>>> The cases tested are:
+>>>>>>>> cpuidle_6_6.txt      = 6.6 kernel
+>>>>>>>> cpuidle_6_12.txt     = 6.6 kernel with teo commits up to 6.12
+>>>>>>>> cpuidle_mainline.txt = 6.6 kernel with teo commits up to mainline
+>>>>>>>>
+>>>>>>>> Summary of the percentage time spent in each state (averaged across CPUs):
+>>>>>>>>
+>>>>>>>> |            |   6.6 |  6.12 | mainline |
+>>>>>>>> |------------|------:|------:|---------:|
+>>>>>>>> | WFI        |  6.02 | 99.94 |    56.84 |
+>>>>>>>> | cpuoff     | 11.02 |     0 |     0.65 |
+>>>>>>>> | clusteroff | 82.96 |  0.05 |    42.51 |
+>>>>>>>> | s2idle     |     0 |     0 |        0 |
+>>>>>>>>
+>>>>>>>> Any help would be much appreciated. Let me know if there's any other
+>>>>>>>> debugging information I should provide.
+>>>>>>>>
+>>>>>>>
+>>>>>>> That's not good.
+>>>>>>> If the system is mostly idle (only boot activity but dumps are taken after
+>>>>>>> ~3mins?), what is causing the wakeups? Even in 6.6 There are definitely more
+>>>>>>> than I would've expected?
+>>>>>>> I noticed that clusteroff and cpuoff have equal residency, which is
+>>>>>>> obviously a bit awkward for cpuidle, but shouldn't be relevant to your issue.
+>>>>>>>
+>>>>>>> I'm a bit puzzled by your bisect results.
+>>>>>>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
+>>>>>>> made the intercept logic *less* prone to count (false) intercepts, yet it
+>>>>>>> seems to count more of them? (resulting in more WFI).
+>>>>>>> I'll think about it some more, for now of course a trace would be very
+>>>>>>> helpful. (cpuidle events, ipi_raise, irqs?)
+>>>>>>> Are there ever any latency constraints set?
+>>>>>>>
+>>>>>>> FWIW the mainline results look the most reasonable, from a 30000 feet view
+>>>>>>> anyway:
+>>>>>>> Cluster       State           above   below   usage   above%  below%
+>>>>>>> LITTLE        cpuoff-l        ~75     ~65     ~140    23%     20%
+>>>>>>> LITTLE        clusteroff-l    ~800    0       ~100    89%     0%
+>>>>>>> MID   cpuoff-m        ~3–4    ~15     ~20     15%     55%
+>>>>>>> MID   clusteroff-m    ~1300   0       ~4000   24%     0%
+>>>>>>> BIG   cpuoff-b        0       1       1       —       —
+>>>>>>> BIG   clusteroff-b    ~800    0       ~1900   30%     0%
+>>>>>>>
+>>>>>>> (WFI seems mostly the correct choice for little CPUs, that's fine, the energy
+>>>>>>> savings compared to cpuoff should be marginal anyway.)
+>>>>>>>
+>>>>>>> Do you mind trying:
+>>>>>>> 13ed5c4a6d9c cpuidle: teo: Skip getting the sleep length if wakeups are very frequent
+>>>>>>> on 6.12?
+>>>>>>>
+>>>>>>
+>>>>>> So just thinking out loud, the only case I can actually thing of to explain your
+>>>>>> bisect to 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
+>>>>>> is that the workload essentially changed dramatically because of our calls
+>>>>>> to tick_nohz_get_sleep_length() now.
+>>>>>> I'm not sure how likely I think that is, but I'm lacking imagination for another
+>>>>>> cause. That's why results with
+>>>>>> 13ed5c4a6d9c ("cpuidle: teo: Skip getting the sleep length if wakeups are very frequent")
+>>>>>> would be interesting.
+>>>>>
+>>>>> My current theory is that this issue is related to the
+>>>>> tick_nohz_get_sleep_length() overhead and the way "intercepts" are
+>>>>> distinguished from "hits" in teo.
+>>>>>
+>>>>> Namely, teo assumes that its own overhead is negligible and so it
+>>>>> counts a given event as an "intercept" if the measured time spent in
+>>>>> the idle state (with the exit latency roughly taken into account)
+>>>>> falls into a different "state bin" than the sleep length (the expected
+>>>>> time till the next timer).  However, the sleep length is computed as a
+>>>>> difference between the upcoming timer wakeup event time and
+>>>>> ts->idle_entrytime, so it actually includes the time taken by
+>>>>> tick_nohz_next_event().  If the latter is significant, it may
+>>>>> contribute to the difference seen by teo_update() and cause extra
+>>>>> "intercepts" to appear.
+>>>>
+>>>> Right, additionally with psci pc-mode and the exposed clusteroff states we end
+>>>> up vastly exaggerating the wakeup latency (i.e. underestimating the actual idle time)
+>>>> for three reasons:
+>>>> - wakeup latency = entry+exit latency (worst case: pay full latencies on both
+>>>> even though for most cases we don't incur the entry latency)
+>>>> - Wakeup latency is a worst-case and often is more like 2x-3x of the average.
+>>>> - We use the (higher) clusteroff values even though the clusteroff state couldn't
+>>>> possibly have been entered as not the entire cluster is idle.
+>>>>
+>>>> Nonetheless these are all just a "intercept counting is significantly more likely"
+>>>> while the results show not a single state >0 entered => the intercept logic
+>>>> probably triggers every cpuidle entry.
+>>>
+>>> It has to for this to happen, if timers are not frequent enough.
+>>>
+>>>> Feels like there should be an issue in the feedback loop.
+>>>
+>>> I'm wondering what the issue could be though.  The change in commit
+>>> 4b20b07ce72f only affects the cases when idle state 0 is about to be
+>>> selected and it only really changes the sleep length value from
+>>> KTIME_MAX to something more realistic (but it still may be KTIME_MAX).
+>>>
+>>> It may turn an "intercept" into a "hit", but only if the CPU is not
+>>> woken up by the tick because those cases had been already counted as
+>>> "hits" before commit 4b20b07ce72f.
+>>>
+>>> Now, if the majority of wakeups in the workload are tick wakeups, the
+>>> only real difference appears to be the presence of
+>>> tick_nohz_get_sleep_length() in that code path.
+>>>
+>>> Frankly, I would try to remove the update of cpu_data->sleep_length_ns
+>>> right before the "goto out_tick" statement (in 6.12 that should be
+>>> line 426) and see what happens.
+>>
+>> Just tried this quickly. Results attached. It goes back to behaving
+>> the same as 6.6 - about 2% WFI.
 > 
-> I can't comment on it as I've not seen such usecases as of now. But I do think
-> that this generic compatible should satisfy most of the design requirements. If
-> necessity arises, a custom compatible could be introduced with this generic one
-> as a fallback.
-
-Ack
-
+> Thanks for checking this!  It means that the
+> tick_nohz_get_sleep_length() overhead doesn't matter here that much.
 > 
-> > > +
-> > > +  vpcie3v3-supply:
-> > > +    description: A phandle to the regulator for 3.3v supply.
-> > > +
-> > > +  vio1v8-supply:
-> > > +    description: A phandle to the regulator for VIO 1.8v supply.
-> > > +
-> > > +  ports:
-> > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > +    description: OF graph bindings modeling the interfaces exposed on the
-> > > +      connector. Since a single connector can have multiple interfaces, every
-> > > +      interface has an assigned OF graph port number as described below.
-> > > +
-> > > +    properties:
-> > > +      port@0:
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +        description: PCIe/SATA interface
-> > 
-> > Should it be defined as having two endpoints: one for PCIe, one for
-> > SATA?
-> > 
+> Instead of making the change above, can you please try the 6.12
+> equivalent of the attached patch?
 > 
-> I'm not sure. From the dtschema of the connector node:
-> 
-> "If a single port is connected to more than one remote device, an 'endpoint'
-> child node must be provided for each link"
-> 
-> Here, a single port is atmost connected to only one endpoint and that endpoint
-> could PCIe/SATA. So IMO, defining two endpoint nodes doesn't fit here.
+> Or alternatively, apply this one to the mainline and see if it changes
+> the idle states selection proportions?
 
-I think this needs to be better defined. E.g. there should be either one
-endpoint going to the shared SATA / PCIe MUX, which should then be
-controlled somehow, in a platform-specific way (how?) or there should be
-two endpoints defined, e.g. @0 for SATA and @1 for PCIe (should we
-prevent powering up M.2 if PEDET points out the unsupported function?).
-(Note: these questions might be the definitive point for the bare
-m2-m-connector vs gpio-m2-m-connector: the former one defines just the
-M.2 signals, letting e.g. UEFI or PCIe controller to react to them, the
-latter one defines how to control MUXes, the behaviour wrt PEDET, etc.,
-performing all those actions in OS driver).
+I don't quite follow this.
+While I don't really believe that the tick_nohz_get_sleep_length() overhead
+plays a role here, how does removing that assignment prove it isn't?
 
-Likewise, for USB you specify just the port, but is it just USB 2.0 or
-USB 3.0 port? In the latter case we should have two endpoints defined,
-one for DP/DM and another one for SS singnals.
+The below (if that's what you meant) might lead to the overhead being optimized
+out? [1]
+I'd be curious if [2] behaves like 6.12. So far I haven't been able to
+reproduce the issue Reka is seeing.
+There's one oddity that immediately came to mind: state1 and state2 having
+the same residency (slightly different latency though), but when I set these
+as such teo works fine. So I don't think it is an issue here.
 
--- 
-With best wishes
-Dmitry
+If Rafael's patch fixes the issue I'd still be curious what the predicted sleep
+length values are here (they must be <1ms, but do in fact never trigger?).
+
+[1]
+diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+index 173ddcac540a..d960963cd101 100644
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -428,7 +428,6 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+                 * know after wakeup if our guess was correct.
+                 */
+                duration_ns = tick_nohz_get_sleep_length(&delta_tick);
+-               cpu_data->sleep_length_ns = duration_ns;
+                goto out_tick;
+        }
+ 
+
+[2]
+diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+index 173ddcac540a..e55b180afc25 100644
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -427,7 +427,7 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+                 * We have to query the sleep length here otherwise we don't
+                 * know after wakeup if our guess was correct.
+                 */
+-               duration_ns = tick_nohz_get_sleep_length(&delta_tick);
++               duration_ns = TICK_NSEC / 2;
+                cpu_data->sleep_length_ns = duration_ns;
+                goto out_tick;
+        }
 
