@@ -1,159 +1,326 @@
-Return-Path: <linux-pm+bounces-37693-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37694-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D35EC44525
-	for <lists+linux-pm@lfdr.de>; Sun, 09 Nov 2025 19:35:23 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80819C44531
+	for <lists+linux-pm@lfdr.de>; Sun, 09 Nov 2025 19:36:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96FC23A5D8E
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Nov 2025 18:34:39 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0532434679B
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Nov 2025 18:36:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C4B9224B1B;
-	Sun,  9 Nov 2025 18:34:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="PbabfmMB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76804221277;
+	Sun,  9 Nov 2025 18:36:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7973921C9E5;
-	Sun,  9 Nov 2025 18:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762713275; cv=pass; b=p4Xx9A+xFLT1Xvih6GRC2bvyrDOaVjPL2H+APorwQRjt9t3HhpgB8aaz6kLNXfdi0kiCvwfNOWKMSQmYhi5VlYok6QZETTUjwefLDFLfc9ypi7P9K16uLzmGV1/d0955GI96n2f4Q4yhfX9OEC6Hi4/Rntvg9tpCRcUMnOE9nQI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762713275; c=relaxed/simple;
-	bh=vcl2WRG8ig0pt4U28bUUN8ohEswzlYl2LS+IoX3RUUM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uPrNFg4xk3cPN06DPiMWLxEzEimgbb5LyM03GCMWzXh3o5vEivIUDrtpOyYim1d+DXa8xIKhk+1DMORT2glL9K0AArpqqc1vwL5wmmSXHfdp8rnThH902Kii8njKcoYuJA5oy3x/lmQuxT58yFCLH5Z0kC6bk0LHP7j9UBJI3kg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=PbabfmMB; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1762713264; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=XcMiy/RXv+jq541IzJYoepbrJpmXEUy6/atk1AOEuTJiohwFhlymJIlIfi5D6SjT2wGhk8Vm5fN8j59besbIpB/I1AOcIcIFFq/qplcz2Q33X+3Fr/NzcByLCOWhrRIx9ECv+dpdM0WsaSRC4ouzSs5RN7hEJ2xSL/JbW9Lw+Hk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1762713264; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=9Et9UYZ8BHyLLylfji7OkuBRbSAyMrXl07spb7ym+84=; 
-	b=XCNhvxRStxRQWcbg6P/HeQXuszXWJFKwem0h+qumPy9Nt8+s0FKs1hQ2I98t05uImfsFblWmGOubXhqvGZxNdCSj2ZOoHe2uO3t0bZPicW3rO7M5u10snRBY87iP4o6PuD/VDuDRqrXjZwTFtUGyGt2rHm/WojXKEt+gcpUQK4s=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1762713264;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=9Et9UYZ8BHyLLylfji7OkuBRbSAyMrXl07spb7ym+84=;
-	b=PbabfmMBf7dRcG2nTjvlPqxmvo7AShyf90YpGbwNKdx6zsUbcPSXUowQZB3uHqVJ
-	43DcYBaYUjujqg/z7mV1vXnefH01iBSyIgjPyjOgV4o3NNM0Mngl22dLqXD5kUN3gui
-	9i7TFH+RlfH8dwB4F/6Oj5qHg5zRD8cjjwjdfJEM=
-Received: by mx.zohomail.com with SMTPS id 1762713261111263.4400627931818;
-	Sun, 9 Nov 2025 10:34:21 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id CCD33180CB7; Sun, 09 Nov 2025 19:34:09 +0100 (CET)
-Date: Sun, 9 Nov 2025 19:34:09 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	Stephan Gerhold <stephan.gerhold@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: connector: Add PCIe M.2 Mechanical
- Key M connector
-Message-ID: <b6bj7tqpp55lx24qcf6czqydmjfm2xaztcada4iczptaiozc55@c5xkbdxwe5jp>
-References: <20251108-pci-m2-v2-0-e8bc4d7bf42d@oss.qualcomm.com>
- <20251108-pci-m2-v2-1-e8bc4d7bf42d@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99C9A23535E;
+	Sun,  9 Nov 2025 18:36:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762713394; cv=none; b=DMnyFRLTxoEz++lq5DBMxhO57ss96WFXigrZFwMZV7WC+5M6T1Oqt5NjkxI95PgglHJGndujZyWC3gGcLr0f1am6fiJOSOs0S+Fz8/mGVjoOfEbV6ZIZUGEfRDxSXKYSQi13aRqtUikkBwAeQO9ZM6GEc9E8XVJvZtdssAlwrNI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762713394; c=relaxed/simple;
+	bh=O1kqeBDqLc8VqrzuUp5s89T5uvVtLs0zaf+FUvVaXOE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ApMZ4V2l7RtuAPQtjQpbNdyGnY7iVCqnbdawH1SLKN4Tbmz+TZZNENNi1GWov9xtAFb0lrBPn6SbYP+mjYovaCBt6oBvCFBSmCt6tI8jVp2vHRI1PrBGBt54N8eYK7w7JR/Ba5QWWH9MIKPvsEo7Bi1V3t5FTTHhzZRytWInoTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from [192.168.100.50] (unknown [144.48.130.189])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0D08D17E00B0;
+	Sun,  9 Nov 2025 19:36:23 +0100 (CET)
+Message-ID: <d09a70c8-4d07-476a-87d3-671c24c97b32@gmail.com>
+Date: Sun, 9 Nov 2025 23:36:05 +0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zx4ltudquq64qrc6"
-Content-Disposition: inline
-In-Reply-To: <20251108-pci-m2-v2-1-e8bc4d7bf42d@oss.qualcomm.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.5.1/262.655.73
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] cpufreq: intel_pstate: Use mutex guard for driver
+ locking
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+References: <2807232.mvXUDI8C0e@rafael.j.wysocki>
+Content-Language: en-US
+From: Muhammad Usama Anjum <MUsamaAnjum@gmail.com>
+In-Reply-To: <2807232.mvXUDI8C0e@rafael.j.wysocki>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 11/7/25 11:18 PM, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Use guard(mutex)(&intel_pstate_driver_lock), or the scoped variant of
+> it, wherever intel_pstate_driver_lock needs to be held.
+It really simplifies the code.
 
---zx4ltudquq64qrc6
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 1/4] dt-bindings: connector: Add PCIe M.2 Mechanical
- Key M connector
-MIME-Version: 1.0
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-Hi,
-
-On Sat, Nov 08, 2025 at 08:53:19AM +0530, Manivannan Sadhasivam wrote:
-> Add the devicetree binding for PCIe M.2 Mechanical Key M connector defined
-> in the PCI Express M.2 Specification, r4.0, sec 5.3. This connector
-> provides interfaces like PCIe and SATA to attach the Solid State Drives
-> (SSDs) to the host machine along with additional interfaces like USB, and
-> SMB for debugging and supplementary features. At any point of time, the
-> connector can only support either PCIe or SATA as the primary host
-> interface.
->=20
-> The connector provides a primary power supply of 3.3v, along with an
-> optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
-> 1.8v sideband signaling.
->=20
-> The connector also supplies optional signals in the form of GPIOs for fine
-> grained power management.
->=20
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.=
-com>
+> 
+> This allows some local variables and goto statements to be dropped as
+> they are not necessary any more.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  .../bindings/connector/pcie-m2-m-connector.yaml    | 122 +++++++++++++++=
-++++++
->  1 file changed, 122 insertions(+)
+>  drivers/cpufreq/intel_pstate.c |   99 +++++++++++++----------------------------
+>  1 file changed, 33 insertions(+), 66 deletions(-)
+> 
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -1467,7 +1467,8 @@ static void set_power_ctl_ee_state(bool
+>  {
+>  	u64 power_ctl;
+>  
+> -	mutex_lock(&intel_pstate_driver_lock);
+> +	guard(mutex)(&intel_pstate_driver_lock);
+> +
+>  	rdmsrq(MSR_IA32_POWER_CTL, power_ctl);
+>  	if (input) {
+>  		power_ctl &= ~BIT(MSR_IA32_POWER_CTL_BIT_EE);
+> @@ -1477,7 +1478,6 @@ static void set_power_ctl_ee_state(bool
+>  		power_ctl_ee_state = POWER_CTL_EE_DISABLE;
+>  	}
+>  	wrmsrq(MSR_IA32_POWER_CTL, power_ctl);
+> -	mutex_unlock(&intel_pstate_driver_lock);
+>  }
+>  
+>  static void intel_pstate_hwp_enable(struct cpudata *cpudata);
+> @@ -1599,13 +1599,9 @@ static int intel_pstate_update_status(co
+>  static ssize_t show_status(struct kobject *kobj,
+>  			   struct kobj_attribute *attr, char *buf)
+>  {
+> -	ssize_t ret;
+> -
+> -	mutex_lock(&intel_pstate_driver_lock);
+> -	ret = intel_pstate_show_status(buf);
+> -	mutex_unlock(&intel_pstate_driver_lock);
+> +	guard(mutex)(&intel_pstate_driver_lock);
+>  
+> -	return ret;
+> +	return intel_pstate_show_status(buf);
+>  }
+>  
+>  static ssize_t store_status(struct kobject *a, struct kobj_attribute *b,
+> @@ -1614,11 +1610,13 @@ static ssize_t store_status(struct kobje
+>  	char *p = memchr(buf, '\n', count);
+>  	int ret;
+>  
+> -	mutex_lock(&intel_pstate_driver_lock);
+> +	guard(mutex)(&intel_pstate_driver_lock);
+> +
+>  	ret = intel_pstate_update_status(buf, p ? p - buf : count);
+> -	mutex_unlock(&intel_pstate_driver_lock);
+> +	if (ret < 0)
+> +		return ret;
+>  
+> -	return ret < 0 ? ret : count;
+> +	return count;
+>  }
+>  
+>  static ssize_t show_turbo_pct(struct kobject *kobj,
+> @@ -1628,12 +1626,10 @@ static ssize_t show_turbo_pct(struct kob
+>  	int total, no_turbo, turbo_pct;
+>  	uint32_t turbo_fp;
+>  
+> -	mutex_lock(&intel_pstate_driver_lock);
+> +	guard(mutex)(&intel_pstate_driver_lock);
+>  
+> -	if (!intel_pstate_driver) {
+> -		mutex_unlock(&intel_pstate_driver_lock);
+> +	if (!intel_pstate_driver)
+>  		return -EAGAIN;
+> -	}
+>  
+>  	cpu = all_cpu_data[0];
+>  
+> @@ -1642,8 +1638,6 @@ static ssize_t show_turbo_pct(struct kob
+>  	turbo_fp = div_fp(no_turbo, total);
+>  	turbo_pct = 100 - fp_toint(mul_fp(turbo_fp, int_tofp(100)));
+>  
+> -	mutex_unlock(&intel_pstate_driver_lock);
+> -
+>  	return sprintf(buf, "%u\n", turbo_pct);
+>  }
+>  
+> @@ -1653,38 +1647,26 @@ static ssize_t show_num_pstates(struct k
+>  	struct cpudata *cpu;
+>  	int total;
+>  
+> -	mutex_lock(&intel_pstate_driver_lock);
+> +	guard(mutex)(&intel_pstate_driver_lock);
+>  
+> -	if (!intel_pstate_driver) {
+> -		mutex_unlock(&intel_pstate_driver_lock);
+> +	if (!intel_pstate_driver)
+>  		return -EAGAIN;
+> -	}
+>  
+>  	cpu = all_cpu_data[0];
+>  	total = cpu->pstate.turbo_pstate - cpu->pstate.min_pstate + 1;
+>  
+> -	mutex_unlock(&intel_pstate_driver_lock);
+> -
+>  	return sprintf(buf, "%u\n", total);
+>  }
+>  
+>  static ssize_t show_no_turbo(struct kobject *kobj,
+>  			     struct kobj_attribute *attr, char *buf)
+>  {
+> -	ssize_t ret;
+> -
+> -	mutex_lock(&intel_pstate_driver_lock);
+> +	guard(mutex)(&intel_pstate_driver_lock);
+>  
+> -	if (!intel_pstate_driver) {
+> -		mutex_unlock(&intel_pstate_driver_lock);
+> +	if (!intel_pstate_driver)
+>  		return -EAGAIN;
+> -	}
+> -
+> -	ret = sprintf(buf, "%u\n", global.no_turbo);
+> -
+> -	mutex_unlock(&intel_pstate_driver_lock);
+>  
+> -	return ret;
+> +	return sprintf(buf, "%u\n", global.no_turbo);
+>  }
+>  
+>  static ssize_t store_no_turbo(struct kobject *a, struct kobj_attribute *b,
+> @@ -1696,29 +1678,25 @@ static ssize_t store_no_turbo(struct kob
+>  	if (sscanf(buf, "%u", &input) != 1)
+>  		return -EINVAL;
+>  
+> -	mutex_lock(&intel_pstate_driver_lock);
+> +	guard(mutex)(&intel_pstate_driver_lock);
+>  
+> -	if (!intel_pstate_driver) {
+> -		count = -EAGAIN;
+> -		goto unlock_driver;
+> -	}
+> +	if (!intel_pstate_driver)
+> +		return -EAGAIN;
+>  
+>  	no_turbo = !!clamp_t(int, input, 0, 1);
+>  
+>  	WRITE_ONCE(global.turbo_disabled, turbo_is_disabled());
+>  	if (global.turbo_disabled && !no_turbo) {
+>  		pr_notice("Turbo disabled by BIOS or unavailable on processor\n");
+> -		count = -EPERM;
+>  		if (global.no_turbo)
+> -			goto unlock_driver;
+> -		else
+> -			no_turbo = 1;
+> -	}
+> +			return -EPERM;
+>  
+> -	if (no_turbo == global.no_turbo) {
+> -		goto unlock_driver;
+> +		no_turbo = 1;
+>  	}
+>  
+> +	if (no_turbo == global.no_turbo)
+> +		return count;
+> +
+>  	WRITE_ONCE(global.no_turbo, no_turbo);
+>  
+>  	mutex_lock(&intel_pstate_limits_lock);
+> @@ -1737,9 +1715,6 @@ static ssize_t store_no_turbo(struct kob
+>  	intel_pstate_update_limits_for_all();
+>  	arch_set_max_freq_ratio(no_turbo);
+>  
+> -unlock_driver:
+> -	mutex_unlock(&intel_pstate_driver_lock);
+> -
+>  	return count;
+>  }
+>  
+> @@ -1789,12 +1764,10 @@ static ssize_t store_max_perf_pct(struct
+>  	if (ret != 1)
+>  		return -EINVAL;
+>  
+> -	mutex_lock(&intel_pstate_driver_lock);
+> +	guard(mutex)(&intel_pstate_driver_lock);
+>  
+> -	if (!intel_pstate_driver) {
+> -		mutex_unlock(&intel_pstate_driver_lock);
+> +	if (!intel_pstate_driver)
+>  		return -EAGAIN;
+> -	}
+>  
+>  	mutex_lock(&intel_pstate_limits_lock);
+>  
+> @@ -1807,8 +1780,6 @@ static ssize_t store_max_perf_pct(struct
+>  	else
+>  		update_qos_requests(FREQ_QOS_MAX);
+>  
+> -	mutex_unlock(&intel_pstate_driver_lock);
+> -
+>  	return count;
+>  }
+>  
+> @@ -1822,12 +1793,10 @@ static ssize_t store_min_perf_pct(struct
+>  	if (ret != 1)
+>  		return -EINVAL;
+>  
+> -	mutex_lock(&intel_pstate_driver_lock);
+> +	guard(mutex)(&intel_pstate_driver_lock);
+>  
+> -	if (!intel_pstate_driver) {
+> -		mutex_unlock(&intel_pstate_driver_lock);
+> +	if (!intel_pstate_driver)
+>  		return -EAGAIN;
+> -	}
+>  
+>  	mutex_lock(&intel_pstate_limits_lock);
+>  
+> @@ -1841,8 +1810,6 @@ static ssize_t store_min_perf_pct(struct
+>  	else
+>  		update_qos_requests(FREQ_QOS_MIN);
+>  
+> -	mutex_unlock(&intel_pstate_driver_lock);
+> -
+>  	return count;
+>  }
+>  
+> @@ -1863,10 +1830,10 @@ static ssize_t store_hwp_dynamic_boost(s
+>  	if (ret)
+>  		return ret;
+>  
+> -	mutex_lock(&intel_pstate_driver_lock);
+> +	guard(mutex)(&intel_pstate_driver_lock);
+> +
+>  	hwp_boost = !!input;
+>  	intel_pstate_update_policies();
+> -	mutex_unlock(&intel_pstate_driver_lock);
+>  
+>  	return count;
+>  }
+> @@ -3977,9 +3944,9 @@ hwp_cpu_matched:
+>  
+>  	}
+>  
+> -	mutex_lock(&intel_pstate_driver_lock);
+> -	rc = intel_pstate_register_driver(default_driver);
+> -	mutex_unlock(&intel_pstate_driver_lock);
+> +	scoped_guard(mutex, &intel_pstate_driver_lock) {
+> +		rc = intel_pstate_register_driver(default_driver);
+> +	}
+>  	if (rc) {
+>  		intel_pstate_sysfs_remove();
+>  		return rc;
+> 
+> 
+> 
 
-I would expect something similar to usb-connector.yaml, i.e. m2-connector.y=
-aml,
-which then defines
-
-compatible:
-  enum:
-    - m2-a-connector
-    - m2-b-connector
-    - m2-e-connector
-    - m2-m-connector
-
-(also not sure if we need the PCIe prefix, it just seems to make the
-name longer)
-
-Greetings,
-
--- Sebastian
-
---zx4ltudquq64qrc6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmkQ3p4ACgkQ2O7X88g7
-+pqL0w/+KpXEgKSf9yjlKS+VW0hpy/bZByO60LcxziTV0tm18r1nRuuezSKFJsuz
-GoF8wnfPkebcWhj92P0LiJuNeSSp09urvHOhB23gsBY4IzxiCTNOR0DtR/Rxl4cQ
-Mh55AQe/+ZIKnTw0ru0PyDCeCI8R3+MD20PJS2QiRZinie1ydWiwtb1w4awOm8Z2
-VgABufhD+koy633Zt3ION/H2E0ArauKZh2pNquZlRICeGBOJZ5tcWycCvc1/E+Km
-DfykhTQ997TTS1rwIKQ/fbu7bP9l9qJ2NGQ2j1BiGHkJIZBLbV3IwpA5yowbEkRJ
-WmuHh+wSMFej639g8pYzamDiXdmieOqi1BWPrU65JraaVg/TL1SSF0qTMo55DY9U
-GxQIW9ED9LCDOCpFhLOjcM92Dsj3HpFvVD5sYRIg3bE4imytxXWnrYv3Oc5Nx7aD
-3zDJPxLP/86+g78Z0ZZvbNtHx5pn9aUMq7bMcqUShFTb88KpPHsYCTvro+xkm4wZ
-PNqMWU0mhuAfqZeCeJbkmDQWS5iOFV3NZelt/TP4l6WNaC0CkqC/juXPpzAohLet
-4fAQsNim1LIDNSJBrUFoaUaLlbsbeRednbAM453Lpo6h/LoMIgEG5sAKAcr10goK
-KjrZLQCqKbvXPkCkgglHsUGEHtmcMkh+GghjnG3xEG+m5ON1pYM=
-=oxYb
------END PGP SIGNATURE-----
-
---zx4ltudquq64qrc6--
 
