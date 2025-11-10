@@ -1,73 +1,50 @@
-Return-Path: <linux-pm+bounces-37752-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37753-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65C1DC47F08
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 17:29:18 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F688C4821D
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 17:54:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8DFC04EDCCF
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 16:26:15 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A92A734A907
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 16:54:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B459827CCF0;
-	Mon, 10 Nov 2025 16:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s//iuaT/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C00B3148BA;
+	Mon, 10 Nov 2025 16:49:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A9F1AA7BF;
-	Mon, 10 Nov 2025 16:26:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 247E928FFF6;
+	Mon, 10 Nov 2025 16:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762791971; cv=none; b=NGeZL1fxjcSbJwcbRiQLC9EninZ0tlVNeVR5n5GFrPEhV/85E+EpiTLFxnm/i8GG+Joykhz5dxKMtbdfYsdLwh3henL9qI0dWch9YRNFAApJCT/qlrmlwiBiobYYm2CalAPwxgaT6rumDpSBL7Op2jU0y3OUFlNy7ap6VXpOmlM=
+	t=1762793397; cv=none; b=l6hK/Nwl4Q8MjvkaAFEH/jqnVbhMvDTgBDE86ezG/nsN35jAYq9pY7wGlFCxvpfpJcishZyAGVEQJadZMy5LwW3XixtByt6PDJLBOIGSSsNG1y3/M152Ki1l5V00TuWh5kttyXFmayZZYahuSyYV87fT+jqUfTFB3+NtBOTIrxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762791971; c=relaxed/simple;
-	bh=IPfuQylnIw+J6vOE6q09eI97Ns9VHJzbg5vnx0xQt24=;
+	s=arc-20240116; t=1762793397; c=relaxed/simple;
+	bh=szA0izNDW4MUnH+SzMV30IqRjy7AQ/Lm1obB3OD/vbQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y8tF+9V/N2Lp3oTaJMpqkD9ixLlW/gXluf/MjMCiy8iQzbyfnJNe1wCl6A851X6Rek2pB9RSt8yZWnKTdjjucfT+ZofDkdA58T6eVgwDjqOHdIwKJAxKmRWsn562paqMZ4SBMXThctI35xvxHgsZX4jvc8MyidaR+fbBYyclguE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=s//iuaT/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9240EC4CEFB;
-	Mon, 10 Nov 2025 16:26:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762791971;
-	bh=IPfuQylnIw+J6vOE6q09eI97Ns9VHJzbg5vnx0xQt24=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s//iuaT/Pl4OEHgK/m9UzXGs+CneP/bHIDMM57/fguC/4N37jncfiN3PTtSUAUXY4
-	 2NmrobrHvb7CNxU2E112LXRKcPCcr0vtzKL3kGqKyi2kLta79tP9r8qvJpDMJzy+1s
-	 0tGZObhhSChzqEYC8Jc6GoLXNyXZOiaQ5L36g5KQYRtozsLPQQdb3SGjmNZA44NeQt
-	 pJDhsCFAALpWQ8sMf4/2VPpZk05MqLZgrfeqATc7Sd0SnrtKofdPxCrBHd82oUJaZY
-	 faymKkI6VHB83rzf3m7JSJulwf6W/fbCZT4UMSbXS3eReIWtAqmXYvJeXUdmLGXe3f
-	 7MU6i4BxvS7cg==
-Date: Mon, 10 Nov 2025 10:30:16 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
-Cc: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Sebastian Reichel <sre@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Souvik Chakravarty <Souvik.Chakravarty@arm.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Andy Yan <andy.yan@rock-chips.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Konrad Dybcio <konradybcio@kernel.org>, 
-	cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Moritz Fischer <moritz.fischer@ettus.com>, 
-	John Stultz <john.stultz@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Stephen Boyd <swboyd@chromium.org>, Andre Draszik <andre.draszik@linaro.org>, 
-	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, Elliot Berman <quic_eberman@quicinc.com>, 
-	Xin Liu <xin.liu@oss.qualcomm.com>, Srinivas Kandagatla <srini@kernel.org>, 
-	Umang Chheda <umang.chheda@oss.qualcomm.com>, Nirmesh Kumar Singh <nirmesh.singh@oss.qualcomm.com>
-Subject: Re: [PATCH v17 03/12] power: reset: reboot-mode: Add support for 64
- bit magic
-Message-ID: <gzj4r4elqewjt2gjzhuamslvobz5fgyvt672brwknoozlsplaq@wsebzmi2l6pc>
-References: <20251109-arm-psci-system_reset2-vendor-reboots-v17-0-46e085bca4cc@oss.qualcomm.com>
- <20251109-arm-psci-system_reset2-vendor-reboots-v17-3-46e085bca4cc@oss.qualcomm.com>
- <20251110134529.uljjqzb3vhda3vya@hu-mojha-hyd.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fMc2QH9MFEVAXVNKsuRPLETsxgAQNXm4lVB2KLOJYzUos40SZbzxGod3zuLAkcX29hWXF6FFNoY8BWJwbK9AWu9Kufsvg3vla+tE9q+UJ/HD3fYN/5jtPMNdrBKbcFij6z897KXgTzadTMb9GWpJKYdLZyxIWcMjqMOb1YigbQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD43D2B;
+	Mon, 10 Nov 2025 08:49:46 -0800 (PST)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB2AB3F66E;
+	Mon, 10 Nov 2025 08:49:50 -0800 (PST)
+Date: Mon, 10 Nov 2025 17:49:47 +0100
+From: Beata Michalska <beata.michalska@arm.com>
+To: Jie Zhan <zhanjie9@hisilicon.com>
+Cc: viresh.kumar@linaro.org, rafael@kernel.org, ionela.voinescu@arm.com,
+	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
+	zhenglifeng1@huawei.com, prime.zeng@hisilicon.com,
+	jonathan.cameron@huawei.com
+Subject: Re: [PATCH v3] cpufreq: CPPC: Update FIE arch_freq_scale in ticks
+ for non-PCC regs
+Message-ID: <aRIXlSOPzAy1nXUQ@arm.com>
+References: <20251104065039.1675549-1-zhanjie9@hisilicon.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,260 +54,414 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251110134529.uljjqzb3vhda3vya@hu-mojha-hyd.qualcomm.com>
+In-Reply-To: <20251104065039.1675549-1-zhanjie9@hisilicon.com>
 
-On Mon, Nov 10, 2025 at 07:15:29PM +0530, Mukesh Ojha wrote:
-> On Sun, Nov 09, 2025 at 08:07:16PM +0530, Shivendra Pratap wrote:
-> > Current reboot-mode supports a single 32-bit argument for any
-> > supported mode. Some reboot-mode based drivers may require
-> > passing two independent 32-bit arguments during a reboot
-> > sequence, for uses-cases, where a mode requires an additional
-> > argument. Such drivers may not be able to use the reboot-mode
-> > driver. For example, ARM PSCI vendor-specific resets, need two
-> > arguments for its operation – reset_type and cookie, to complete
-> > the reset operation. If a driver wants to implement this
-> > firmware-based reset, it cannot use reboot-mode framework.
-> > 
-> > Introduce 64-bit magic values in reboot-mode driver to
-> > accommodate dual 32-bit arguments when specified via device tree.
-> > In cases, where no second argument is passed from device tree,
-> > keep the upper 32-bit of magic un-changed(0) to maintain backward
-> > compatibility.
-> > 
-> > Update the current drivers using reboot-mode for a 64-bit magic
-> > value.
-> > 
-> > Reviewed-by: Umang Chheda <umang.chheda@oss.qualcomm.com>
-> > Reviewed-by: Nirmesh Kumar Singh <nirmesh.singh@oss.qualcomm.com>
-> > Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-> > ---
-> >  drivers/power/reset/nvmem-reboot-mode.c  | 13 +++++++++----
-> >  drivers/power/reset/qcom-pon.c           | 11 ++++++++---
-> >  drivers/power/reset/reboot-mode.c        | 19 +++++++++++++------
-> >  drivers/power/reset/syscon-reboot-mode.c | 11 ++++++++---
-> >  include/linux/reboot-mode.h              |  3 ++-
-> >  5 files changed, 40 insertions(+), 17 deletions(-)
-> > 
-> > diff --git a/drivers/power/reset/nvmem-reboot-mode.c b/drivers/power/reset/nvmem-reboot-mode.c
-> > index 41530b70cfc48c2a83fbbd96f523d5816960a0d1..5d73dde585b1fd438b1847f884feb37cd9e4dd5c 100644
-> > --- a/drivers/power/reset/nvmem-reboot-mode.c
-> > +++ b/drivers/power/reset/nvmem-reboot-mode.c
-> > @@ -16,15 +16,20 @@ struct nvmem_reboot_mode {
-> >  	struct nvmem_cell *cell;
-> >  };
-> >  
-> > -static int nvmem_reboot_mode_write(struct reboot_mode_driver *reboot,
-> > -				    unsigned int magic)
-> > +static int nvmem_reboot_mode_write(struct reboot_mode_driver *reboot, u64 magic)
-> >  {
-> > -	int ret;
-> >  	struct nvmem_reboot_mode *nvmem_rbm;
-> > +	u32 magic_32;
-> > +	int ret;
-> > +
-> > +	if (magic > U32_MAX)
-> > +		return -EINVAL;
+Hi Jie,
+On Tue, Nov 04, 2025 at 02:50:39PM +0800, Jie Zhan wrote:
+> Currently, the CPPC Frequency Invariance Engine (FIE) is invoked from the
+> scheduler tick but defers the update of arch_freq_scale to a separate
+> thread because cppc_get_perf_ctrs() would sleep if the CPC regs are in PCC.
 > 
+> However, this deferred update mechanism is unnecessary and introduces extra
+> overhead for non-PCC register spaces (e.g. System Memory or FFH), where
+> accessing the regs won't sleep and can be safely performed from the tick
+> context.
 > 
-> I believe, we need a comment in all the client driver.. 
+> Furthermore, with the CPPC FIE registered, it throws repeated warnings of
+> "cppc_scale_freq_workfn: failed to read perf counters" on our platform with
+> the CPC regs in System Memory and a power-down idle state enabled.  That's
+> because the remote CPU can be in a power-down idle state, and reading its
+> perf counters returns 0.  Moving the FIE handling back to the scheduler
+> tick process makes the CPU handle its own perf counters, so it won't be
+> idle and the issue would be inherently solved.
 > 
-> > +
-> > +	magic_32 = magic;
-> >  
-> >  	nvmem_rbm = container_of(reboot, struct nvmem_reboot_mode, reboot);
-> >  
-> > -	ret = nvmem_cell_write(nvmem_rbm->cell, &magic, sizeof(magic));
-> > +	ret = nvmem_cell_write(nvmem_rbm->cell, &magic_32, sizeof(magic_32));
-> >  	if (ret < 0)
-> >  		dev_err(reboot->dev, "update reboot mode bits failed\n");
-> >  
-> > diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-pon.c
-> > index 7e108982a582e8243c5c806bd4a793646b87189f..d0ed9431a02313a7bbaa93743c16fa1ae713ddfe 100644
-> > --- a/drivers/power/reset/qcom-pon.c
-> > +++ b/drivers/power/reset/qcom-pon.c
-> > @@ -27,17 +27,22 @@ struct qcom_pon {
-> >  	long reason_shift;
-> >  };
-> >  
-> > -static int qcom_pon_reboot_mode_write(struct reboot_mode_driver *reboot,
-> > -				    unsigned int magic)
-> > +static int qcom_pon_reboot_mode_write(struct reboot_mode_driver *reboot, u64 magic)
-> >  {
-> >  	struct qcom_pon *pon = container_of
-> >  			(reboot, struct qcom_pon, reboot_mode);
-> > +	u32 magic_32;
-> >  	int ret;
-> > 
+> To address the above issues, update arch_freq_scale directly in ticks for
+> non-PCC regs and keep the deferred update mechanism for PCC regs.
+Something about it just didn’t sit right with me, and apparently, it needed some
+time to settle down - thus the delay.
+
+It all looks sensible though it might be worth to considered applying
+the change on a per-CPU basis, as, in theory at least, different address
+spaces are allowed for different registers (at least according to the ACPI
+spec, if I read it right).
+So I was thinking about smth along the lines of:
+
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index 6c684e54fe01..07f4e59f2f0a 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -1431,38 +1431,47 @@ EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
+  *
+  * Return: true if any of the counters are in PCC regions, false otherwise
+  */
+-bool cppc_perf_ctrs_in_pcc(void)
++bool cppc_perf_ctrs_in_pcc(unsigned int cpu)
+ {
+-	int cpu;
++	struct cpc_register_resource *ref_perf_reg;
++	struct cpc_desc *cpc_desc;
+ 
+-	for_each_present_cpu(cpu) {
+-		struct cpc_register_resource *ref_perf_reg;
+-		struct cpc_desc *cpc_desc;
++	cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+ 
+-		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
++	if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
++	    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
++	    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
++		return true;
+ 
+-		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
+-		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
+-		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
+-			return true;
+ 
++	ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+ 
+-		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
++	/*
++	 * If reference perf register is not supported then we should
++	 * use the nominal perf value
++	 */
++	if (!CPC_SUPPORTED(ref_perf_reg))
++		ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+ 
+-		/*
+-		 * If reference perf register is not supported then we should
+-		 * use the nominal perf value
+-		 */
+-		if (!CPC_SUPPORTED(ref_perf_reg))
+-			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
++	if (CPC_IN_PCC(ref_perf_reg))
++		return true;
++
++	return false;
++}
++EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
+ 
+-		if (CPC_IN_PCC(ref_perf_reg))
++bool cppc_any_perf_ctrs_in_pcc(void)
++{
++	int cpu;
++
++	for_each_present_cpu(cpu) {
++		if (cppc_perf_ctrs_in_pcc(cpu))
+ 			return true;
+ 	}
+ 
+ 	return false;
+ }
+-EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
++EXPORT_SYMBOL_GPL(cppc_any_perf_ctrs_in_pcc);
+ 
+ /**
+  * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 4fcaec7e2034..fdf5a49c04ed 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -48,7 +48,6 @@ struct cppc_freq_invariance {
+ };
+ 
+ static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
+-static bool perf_ctrs_in_pcc;
+ static struct kthread_worker *kworker_fie;
+ 
+ static int cppc_perf_from_fbctrs(struct cppc_perf_fb_ctrs *fb_ctrs_t0,
+@@ -132,7 +131,12 @@ static void cppc_scale_freq_tick_pcc(void)
+ 
+ static void cppc_scale_freq_tick(void)
+ {
+-	__cppc_scale_freq_tick(&per_cpu(cppc_freq_inv, smp_processor_id()));
++	unsigned int cpu = smp_processor_id();
++
++	cppc_perf_ctrs_in_pcc(cpu) ? cppc_scale_freq_tick_pcc()
++				   : __cppc_scale_freq_tick(
++				   			&per_cpu(cppc_freq_inv,
++				   				 cpu));
+ }
+ 
+ static struct scale_freq_data cppc_sftd = {
+@@ -152,7 +156,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+ 		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+ 		cppc_fi->cpu = cpu;
+ 		cppc_fi->cpu_data = policy->driver_data;
+-		if (perf_ctrs_in_pcc) {
++		if (cppc_perf_ctrs_in_pcc(cpu)) {
+ 			kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
+ 			init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+ 		}
+@@ -193,10 +197,9 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+ 	/* policy->cpus will be empty here, use related_cpus instead */
+ 	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, policy->related_cpus);
+ 
+-	if (!perf_ctrs_in_pcc)
+-		return;
+-
+ 	for_each_cpu(cpu, policy->related_cpus) {
++		if (!cppc_perf_ctrs_in_pcc(cpu))
++			continue;
+ 		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+ 		irq_work_sync(&cppc_fi->irq_work);
+ 		kthread_cancel_work_sync(&cppc_fi->work);
+@@ -218,14 +221,11 @@ static void __init cppc_freq_invariance_init(void)
+ 		.sched_deadline = 10 * NSEC_PER_MSEC,
+ 		.sched_period	= 10 * NSEC_PER_MSEC,
+ 	};
++	bool perf_ctrs_in_pcc = cppc_any_perf_ctrs_in_pcc();
+ 	int ret;
+ 
+-	perf_ctrs_in_pcc = cppc_perf_ctrs_in_pcc();
+-
+ 	if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED) {
+-		if (!perf_ctrs_in_pcc) {
+-			fie_disabled = FIE_ENABLED;
+-		} else {
++		if (perf_ctrs_in_pcc) {
+ 			pr_info("FIE not enabled on systems with registers in PCC\n");
+ 			fie_disabled = FIE_DISABLED;
+ 		}
+@@ -234,12 +234,12 @@ static void __init cppc_freq_invariance_init(void)
+ 	if (fie_disabled || !perf_ctrs_in_pcc)
+ 		return;
+ 
+-	cppc_sftd.set_freq_scale = cppc_scale_freq_tick_pcc;
+ 
+ 	kworker_fie = kthread_run_worker(0, "cppc_fie");
+ 	if (IS_ERR(kworker_fie)) {
+ 		pr_warn("%s: failed to create kworker_fie: %ld\n", __func__,
+ 			PTR_ERR(kworker_fie));
++		kworker_fie = NULL;
+ 		fie_disabled = FIE_DISABLED;
+ 		return;
+ 	}
+@@ -255,10 +255,8 @@ static void __init cppc_freq_invariance_init(void)
+ 
+ static void cppc_freq_invariance_exit(void)
+ {
+-	if (fie_disabled || !perf_ctrs_in_pcc)
+-		return;
+-
+-	kthread_destroy_worker(kworker_fie);
++	if (kworker_fie)
++		kthread_destroy_worker(kworker_fie);
+ }
+ 
+ #else
+diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+index 13fa81504844..3af503b12f60 100644
+--- a/include/acpi/cppc_acpi.h
++++ b/include/acpi/cppc_acpi.h
+@@ -154,7 +154,8 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+ extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+ extern int cppc_set_enable(int cpu, bool enable);
+ extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+-extern bool cppc_perf_ctrs_in_pcc(void);
++extern bool cppc_perf_ctrs_in_pcc(unsigned int cpu);
++extern bool cppc_any_perf_ctrs_in_pcc(void);
+ extern unsigned int cppc_perf_to_khz(struct cppc_perf_caps *caps, unsigned int perf);
+ extern unsigned int cppc_khz_to_perf(struct cppc_perf_caps *caps, unsigned int freq);
+ extern bool acpi_cpc_valid(void);
+@@ -204,7 +205,11 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
+ {
+ 	return -EOPNOTSUPP;
+ }
+-static inline bool cppc_perf_ctrs_in_pcc(void)
++static inline bool cppc_perf_ctrs_in_pcc(unsigned int cpu)
++{
++	return false;
++}
++static inline bool cppc_any_perf_ctrs_in_pcc(void)
+ {
+ 	return false;
+ }
+
+
+Additionally, it might be worth to get rid of (at least) some messages printed
+on the path of reading the counters in case it is being done in tick context.
+
+Also , I do not have access to any machine using PCC, and it would be good to
+double check that as well.
+
+---
+BR
+Beata
 > 
-> Since we are doing this change in reboot framework, client driver should know about
-> it too about this new check because of framework.
+> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+> ---
+> We have tested this on Kunpeng SoCs with the CPC regs both in System Memory
+> and FFH.  More tests on other platforms are welcome.
 > 
-> > +	if (magic > U32_MAX || (magic << pon->reason_shift) > U32_MAX)
+> Changelog:
 > 
+> v3:
+> - Stash the state of 'cppc_perf_ctrs_in_pcc' so it won't have to check the CPC
+>   regs of all CPUs everywhere (Thanks to the suggestion from Beata Michalska).
+> - Update the commit log, explaining more on the warning issue caused by
+>   accessing perf counters on remote CPUs.
+> - Drop Patch 1 that has been accepted, and rebase Patch 2 on that.
 > 
-> is this (magic << pon->reason_shift) > U32_MAX really needed ..?
+> v2:
+> https://lore.kernel.org/linux-pm/20250828110212.2108653-1-zhanjie9@hisilicon.com/
+> - Update the cover letter and the commit log based on v1 discussion
+> - Update FIE arch_freq_scale in ticks for non-PCC regs
 > 
-
-In my eyes the introduction of a magic_32 variable seems a bit
-copy-paste, and this check does tell a similar story...
-
-We have two possible bit patterns:
-  GENMASK(7, 2)
-  GENMASK(7, 1)
-
-So this means that we have either 5 or 6 bits of magic, not 32.
-
-So far we've just trusted that the mode provided in DeviceTree would
-fit, and we've silently discarded the other bits.
-
-But if we're introducing checks here, we should do it properly, if
-nothing else for the sake of making the code self-documented.
-
-
-There's also no need for a new local variable for the magic, check that
-we have a valid range and then just typecast it into the argument.
-
-> > +		return -EINVAL;
-> > +
-> > +	magic_32 = magic << pon->reason_shift;
-> > +
-> >  	ret = regmap_update_bits(pon->regmap,
-> >  				 pon->baseaddr + PON_SOFT_RB_SPARE,
-> >  				 GENMASK(7, pon->reason_shift),
-> > -				 magic << pon->reason_shift);
-> > +				 magic_32);
-> >  	if (ret < 0)
-> >  		dev_err(pon->dev, "update reboot mode bits failed\n");
-> >  
-> > diff --git a/drivers/power/reset/reboot-mode.c b/drivers/power/reset/reboot-mode.c
-> > index eff60d6e04df2cb84ba59d38512654336f272f8a..873ac45cd7659b214b7c21958f580ca381e0a63d 100644
-> > --- a/drivers/power/reset/reboot-mode.c
-> > +++ b/drivers/power/reset/reboot-mode.c
-> > @@ -19,12 +19,11 @@
-> >  
-> >  struct mode_info {
-> >  	const char *mode;
-> > -	u32 magic;
-> > +	u64 magic;
-> >  	struct list_head list;
-> >  };
-> >  
-> > -static unsigned int get_reboot_mode_magic(struct reboot_mode_driver *reboot,
-> > -					  const char *cmd)
-> > +static u64 get_reboot_mode_magic(struct reboot_mode_driver *reboot, const char *cmd)
-> >  {
-> >  	const char *normal = "normal";
-> >  	struct mode_info *info;
-> > @@ -56,7 +55,7 @@ static int reboot_mode_notify(struct notifier_block *this,
-> >  			      unsigned long mode, void *cmd)
-> >  {
-> >  	struct reboot_mode_driver *reboot;
-> > -	unsigned int magic;
-> > +	u64 magic;
-> >  
-> >  	reboot = container_of(this, struct reboot_mode_driver, reboot_notifier);
-> >  	magic = get_reboot_mode_magic(reboot, cmd);
-> > @@ -80,6 +79,8 @@ int reboot_mode_register(struct reboot_mode_driver *reboot, struct fwnode_handle
-> >  	struct device_node *np;
-> >  	struct property *prop;
-> >  	size_t len = strlen(PREFIX);
-> > +	u32 magic_arg1;
-> > +	u32 magic_arg2;
-> >  	int ret;
-> >  
-> >  	if (!fwnode)
-> > @@ -101,12 +102,18 @@ int reboot_mode_register(struct reboot_mode_driver *reboot, struct fwnode_handle
-> >  			goto error;
-> >  		}
-> >  
-> > -		if (of_property_read_u32(np, prop->name, &info->magic)) {
-> > -			pr_err("reboot mode %s without magic number\n", info->mode);
-> > +		if (of_property_read_u32(np, prop->name, &magic_arg1)) {
-> > +			pr_err("reboot mode without magic number\n");
-> >  			kfree(info);
-> >  			continue;
-> >  		}
-> >  
-> > +		if (of_property_read_u32_index(np, prop->name, 1, &magic_arg2))
-> > +			magic_arg2 = 0;
-> > +
-> > +		info->magic = magic_arg2;
-> > +		info->magic = (info->magic << 32) | magic_arg1;
-
-There's no reason to assign the value and then reassign it, it just
-makes the code harder to read.
-
-If you mean "info->magic = (magic_arg2 << 32) | magic_arg1" then write
-that...
-
-> > +
-> >  		info->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
-> >  		if (!info->mode) {
-> >  			ret =  -ENOMEM;
-> > diff --git a/drivers/power/reset/syscon-reboot-mode.c b/drivers/power/reset/syscon-reboot-mode.c
-> > index e0772c9f70f7a19cd8ec8a0b7fdbbaa7ba44afd0..3cbd000c512239b12ec51987e900d260540a9dea 100644
-> > --- a/drivers/power/reset/syscon-reboot-mode.c
-> > +++ b/drivers/power/reset/syscon-reboot-mode.c
-> > @@ -20,16 +20,21 @@ struct syscon_reboot_mode {
-> >  	u32 mask;
-> >  };
-> >  
-> > -static int syscon_reboot_mode_write(struct reboot_mode_driver *reboot,
-> > -				    unsigned int magic)
-> > +static int syscon_reboot_mode_write(struct reboot_mode_driver *reboot, u64 magic)
-> >  {
-> >  	struct syscon_reboot_mode *syscon_rbm;
-> > +	u32 magic_32;
-> >  	int ret;
-> >
+> v1:
+> https://lore.kernel.org/linux-pm/20250730032312.167062-1-yubowen8@huawei.com/
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 60 ++++++++++++++++++++++++----------
+>  1 file changed, 42 insertions(+), 18 deletions(-)
 > 
-> same here
-> 
-> > +	if (magic > U32_MAX)
-> > +		return -EINVAL;
-> > +
-> > +	magic_32 = magic;
-> > +
-> >  	syscon_rbm = container_of(reboot, struct syscon_reboot_mode, reboot);
-> >  
-> >  	ret = regmap_update_bits(syscon_rbm->map, syscon_rbm->offset,
-> > -				 syscon_rbm->mask, magic);
-> > +				 syscon_rbm->mask, magic_32);
-
-As above, if we're no longer silently discarding bits, I think we should
-compare the magic against syscon_rbm->mask.
-
-No need for a local variable, just type cast after checking the validity.
-
-Regards,
-Bjorn
-
-> >  	if (ret < 0)
-> >  		dev_err(reboot->dev, "update reboot mode bits failed\n");
-> >  
-> > diff --git a/include/linux/reboot-mode.h b/include/linux/reboot-mode.h
-> > index 22f707ade4ba93592823ea8718d467dbfc5ffd7c..e0d3e8a54050a76f26846f456120b4c7e371d284 100644
-> > --- a/include/linux/reboot-mode.h
-> > +++ b/include/linux/reboot-mode.h
-> > @@ -3,11 +3,12 @@
-> >  #define __REBOOT_MODE_H__
-> >  
-> >  #include <linux/fwnode.h>
-> > +#include <linux/types.h>
-> >  
-> >  struct reboot_mode_driver {
-> >  	struct device *dev;
-> >  	struct list_head head;
-> > -	int (*write)(struct reboot_mode_driver *reboot, unsigned int magic);
-> > +	int (*write)(struct reboot_mode_driver *reboot, u64 magic);
-> >  	struct notifier_block reboot_notifier;
-> >  };
-> >  
-> > 
-> > -- 
-> > 2.34.1
-> > 
-> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 9eac77c4f294..4fcaec7e2034 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -48,37 +48,31 @@ struct cppc_freq_invariance {
+>  };
+>  
+>  static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
+> +static bool perf_ctrs_in_pcc;
+>  static struct kthread_worker *kworker_fie;
+>  
+>  static int cppc_perf_from_fbctrs(struct cppc_perf_fb_ctrs *fb_ctrs_t0,
+>  				 struct cppc_perf_fb_ctrs *fb_ctrs_t1);
+>  
+>  /**
+> - * cppc_scale_freq_workfn - CPPC arch_freq_scale updater for frequency invariance
+> - * @work: The work item.
+> + * __cppc_scale_freq_tick - CPPC arch_freq_scale updater for frequency invariance
+> + * @cppc_fi: per-cpu CPPC FIE data.
+>   *
+> - * The CPPC driver register itself with the topology core to provide its own
+> + * The CPPC driver registers itself with the topology core to provide its own
+>   * implementation (cppc_scale_freq_tick()) of topology_scale_freq_tick() which
+>   * gets called by the scheduler on every tick.
+>   *
+>   * Note that the arch specific counters have higher priority than CPPC counters,
+>   * if available, though the CPPC driver doesn't need to have any special
+>   * handling for that.
+> - *
+> - * On an invocation of cppc_scale_freq_tick(), we schedule an irq work (since we
+> - * reach here from hard-irq context), which then schedules a normal work item
+> - * and cppc_scale_freq_workfn() updates the per_cpu arch_freq_scale variable
+> - * based on the counter updates since the last tick.
+>   */
+> -static void cppc_scale_freq_workfn(struct kthread_work *work)
+> +static void __cppc_scale_freq_tick(struct cppc_freq_invariance *cppc_fi)
+>  {
+> -	struct cppc_freq_invariance *cppc_fi;
+>  	struct cppc_perf_fb_ctrs fb_ctrs = {0};
+>  	struct cppc_cpudata *cpu_data;
+>  	unsigned long local_freq_scale;
+>  	u64 perf;
+>  
+> -	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
+>  	cpu_data = cppc_fi->cpu_data;
+>  
+>  	if (cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs)) {
+> @@ -102,6 +96,14 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
+>  	per_cpu(arch_freq_scale, cppc_fi->cpu) = local_freq_scale;
+>  }
+>  
+> +static void cppc_scale_freq_workfn(struct kthread_work *work)
+> +{
+> +	struct cppc_freq_invariance *cppc_fi;
+> +
+> +	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
+> +	__cppc_scale_freq_tick(cppc_fi);
+> +}
+> +
+>  static void cppc_irq_work(struct irq_work *irq_work)
+>  {
+>  	struct cppc_freq_invariance *cppc_fi;
+> @@ -110,7 +112,14 @@ static void cppc_irq_work(struct irq_work *irq_work)
+>  	kthread_queue_work(kworker_fie, &cppc_fi->work);
+>  }
+>  
+> -static void cppc_scale_freq_tick(void)
+> +/*
+> + * Reading perf counters may sleep if the CPC regs are in PCC.  Thus, we
+> + * schedule an irq work in scale_freq_tick (since we reach here from hard-irq
+> + * context), which then schedules a normal work item cppc_scale_freq_workfn()
+> + * that updates the per_cpu arch_freq_scale variable based on the counter
+> + * updates since the last tick.
+> + */
+> +static void cppc_scale_freq_tick_pcc(void)
+>  {
+>  	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_freq_inv, smp_processor_id());
+>  
+> @@ -121,6 +130,11 @@ static void cppc_scale_freq_tick(void)
+>  	irq_work_queue(&cppc_fi->irq_work);
+>  }
+>  
+> +static void cppc_scale_freq_tick(void)
+> +{
+> +	__cppc_scale_freq_tick(&per_cpu(cppc_freq_inv, smp_processor_id()));
+> +}
+> +
+>  static struct scale_freq_data cppc_sftd = {
+>  	.source = SCALE_FREQ_SOURCE_CPPC,
+>  	.set_freq_scale = cppc_scale_freq_tick,
+> @@ -138,8 +152,10 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+>  		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+>  		cppc_fi->cpu = cpu;
+>  		cppc_fi->cpu_data = policy->driver_data;
+> -		kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
+> -		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+> +		if (perf_ctrs_in_pcc) {
+> +			kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
+> +			init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+> +		}
+>  
+>  		ret = cppc_get_perf_ctrs(cpu, &cppc_fi->prev_perf_fb_ctrs);
+>  
+> @@ -177,6 +193,9 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+>  	/* policy->cpus will be empty here, use related_cpus instead */
+>  	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, policy->related_cpus);
+>  
+> +	if (!perf_ctrs_in_pcc)
+> +		return;
+> +
+>  	for_each_cpu(cpu, policy->related_cpus) {
+>  		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+>  		irq_work_sync(&cppc_fi->irq_work);
+> @@ -201,17 +220,22 @@ static void __init cppc_freq_invariance_init(void)
+>  	};
+>  	int ret;
+>  
+> +	perf_ctrs_in_pcc = cppc_perf_ctrs_in_pcc();
+> +
+>  	if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED) {
+> -		fie_disabled = FIE_ENABLED;
+> -		if (cppc_perf_ctrs_in_pcc()) {
+> +		if (!perf_ctrs_in_pcc) {
+> +			fie_disabled = FIE_ENABLED;
+> +		} else {
+>  			pr_info("FIE not enabled on systems with registers in PCC\n");
+>  			fie_disabled = FIE_DISABLED;
+>  		}
+>  	}
+>  
+> -	if (fie_disabled)
+> +	if (fie_disabled || !perf_ctrs_in_pcc)
+>  		return;
+>  
+> +	cppc_sftd.set_freq_scale = cppc_scale_freq_tick_pcc;
+> +
+>  	kworker_fie = kthread_run_worker(0, "cppc_fie");
+>  	if (IS_ERR(kworker_fie)) {
+>  		pr_warn("%s: failed to create kworker_fie: %ld\n", __func__,
+> @@ -231,7 +255,7 @@ static void __init cppc_freq_invariance_init(void)
+>  
+>  static void cppc_freq_invariance_exit(void)
+>  {
+> -	if (fie_disabled)
+> +	if (fie_disabled || !perf_ctrs_in_pcc)
+>  		return;
+>  
+>  	kthread_destroy_worker(kworker_fie);
 > -- 
-> -Mukesh Ojha
+> 2.33.0
+> 
 
