@@ -1,339 +1,342 @@
-Return-Path: <linux-pm+bounces-37754-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37755-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AEC2C4836E
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 18:09:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87E34C484B3
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 18:23:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 388A04F5DC9
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 16:59:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36F381886331
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 17:23:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8E7B27FD43;
-	Mon, 10 Nov 2025 16:58:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7B82BCF46;
+	Mon, 10 Nov 2025 17:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QgKbhQ8F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DQfdSfc0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177E22777FE;
-	Mon, 10 Nov 2025 16:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51D229BDAB;
+	Mon, 10 Nov 2025 17:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762793938; cv=none; b=bfDrzQz5wc2mx2u/xs5erGSr4C3Hf+l914IDG+su6aE0Jv1hbb2ywTu0OjQcZCD2GXC85+6DyCsgakzvS3tkf24bkprffClWQQj5Wxw2dHKQSG7XCeKQ6IGzn1BkLuiH2AD+m8QCCfAsEh4y4okfG0kpBvgD2R865uF1vqUe4gU=
+	t=1762795394; cv=none; b=L3CkUSBm9PQK1xOxCZn2lr8AabIAma8nK4LfxbZoqKIWPbnVf0H5/1YJv6acSTrf4Rv9NJt7vrY84EgY6UeIqWvDrpPH3bVOZqV2Jvsk8uVrxSvAvd5XiPp2ImjpQQb5rahCQGEn/DrC1Qaby3+19IiBYJUBFh/fus35Vpl/xoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762793938; c=relaxed/simple;
-	bh=AmnEP7hxptzLyDCTDEMxmA+ZsQDnrhvdXn5AmxqJoI0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HuQR9MOeWC8x+o3g3bBuWI8omK/2q2Y8Qpj0NNYotdxbOZFOI0ZGwX1t6blmvctUxEGyO1F0qLU7eRZLxBjl5p10uYxVqdl1mNdlwujbS6zLv9OpA0nykPJrVCfat3SG+KMNf34T172eIKuUiPuguprGYdOmaaMiu8pSxj67ksM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QgKbhQ8F; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762793936; x=1794329936;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version;
-  bh=AmnEP7hxptzLyDCTDEMxmA+ZsQDnrhvdXn5AmxqJoI0=;
-  b=QgKbhQ8F70BRtobWBRwfJKedTFjRNoGtIGE27l3Od1np+IAXVQAKLPHE
-   Lq62kPfWFjuOWSvIh5bsePZxF+vEcXwwQd6+juR29t4MuMHhYGofHehOB
-   zxzXN2dZXad8XnQW8sZVID7coFVSFHEckq5zW24futXJ7K7z/6SXgeLeH
-   TqvCbCgLqc+KJPcp/trbEXWUou0RWfZnJ3HF/2+vJoiALWJPUTP1BtO85
-   9c/QItCyvCB2OyEc55a8IPhb7T5WDfLyans+JHQmKU/eh+3p5NBTd3N2j
-   +l69KuzXb1h1RD7umse0/e1/6bJyODVHA3/rZHKkC9c8nXpAO1WA4F0s8
-   g==;
-X-CSE-ConnectionGUID: bSGOnLIXQMinhGbTMsQv7w==
-X-CSE-MsgGUID: /VrLiMHGQEK1Jfnheqjjwg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11609"; a="75140355"
-X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
-   d="scan'208,223";a="75140355"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 08:58:55 -0800
-X-CSE-ConnectionGUID: IBGI0kFXSJC4tDXhWScoEQ==
-X-CSE-MsgGUID: ij0PXvB+RcOB//c9RY+51Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,294,1754982000"; 
-   d="scan'208,223";a="188027760"
-Received: from spandruv-desk2.jf.intel.com ([10.88.27.176])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 08:58:56 -0800
-Message-ID: <aa8d90214822829fb392022f0c7f4148822a6aa7.camel@linux.intel.com>
-Subject: Re: [REGRESSION] Intel Turbo Boost stuck disabled on some Clevo
- machines (was: [PATCH] cpufreq: intel_pstate: Unchecked MSR aceess in
- legacy mode)
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Aaron Rainbolt <arainbolt@kfocus.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, viresh.kumar@linaro.org, 
+	s=arc-20240116; t=1762795394; c=relaxed/simple;
+	bh=WYTcByahqL1XJ5FT3lBhy0MI/HDkJwgwIwz+0jeqOm0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=phRWYWEYAz4twg3a8bbQSvLEyRqIjEH3vYZIsTd5XKV/sUHup1lxnvPfAht7PaSmDJ4uyzdF0/cNuWfkCP7IoLb0q4tLqBfLcJN96ILFmS+GpxukPzjZ63Q1I6nEMpCtrp+ay/S0sa/0etzOteMxX4IkL7f2qsBFeSJMnpk6bIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DQfdSfc0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F51BC116B1;
+	Mon, 10 Nov 2025 17:23:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762795394;
+	bh=WYTcByahqL1XJ5FT3lBhy0MI/HDkJwgwIwz+0jeqOm0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DQfdSfc0cfZHtzUJ9FIF2TJPMrgiis+AW5bqE72iUAr1kJTRaaPZbUtpwRp9k3Fg7
+	 kaDy+FJn/cM1RWvxz80jjg/KfwXU4WVPC7cyBKmTISUBRh5fMuslJq2kDzqgp3s/1/
+	 ZL0GbW3pDL2bXsP+aocNuYRsgHgV4GNIN4A4zduz9RMakhewq0lXbWn2KGyT3KCHoM
+	 W2vqrLu1S2H0Zz4lIJqrVVANUtH9jRz2N0TIscjfYZk29tRsZM3j9SmEDlpEdxRwEv
+	 ee73ebFLg9QXRkGag3O1kxh/sVnZ5dHp2DUn/ZDsisMa/2lA/xybzW4CeaY3SsB3V9
+	 Uuwb4FSO7OR1g==
+Date: Mon, 10 Nov 2025 18:22:59 +0100
+From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Moritz Fischer <moritz.fischer@ettus.com>,
+	John Stultz <john.stultz@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Andre Draszik <andre.draszik@linaro.org>,
+	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
 	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org, 	mmikowski@kfocus.org, Thomas Renninger
- <trenn@suse.de>
-Date: Mon, 10 Nov 2025 08:58:55 -0800
-In-Reply-To: <8794c34dc127ee1bd3ed4d746ca7c1235ca3cb93.camel@linux.intel.com>
-References: <20250429210711.255185-1-srinivas.pandruvada@linux.intel.com>
-		 <CAJZ5v0h99RFF26qAnJf07LS0t-6ATm9c2zrQVzdi96x3FAPXQg@mail.gmail.com>
-		 <20250910113650.54eafc2b@kf-m2g5>
-		 <dda1d8d23407623c99e2f22e60ada1872bca98fe.camel@linux.intel.com>
-		 <20250910153329.10dcef9d@kf-m2g5>
-		 <db92b8a310d88214e2045a73d3da6d0ffe8606f7.camel@linux.intel.com>
-		 <20251106113137.5b83bb3f@kf-m2g5>
-	 <8794c34dc127ee1bd3ed4d746ca7c1235ca3cb93.camel@linux.intel.com>
-Content-Type: multipart/mixed; boundary="=-IMOs4CuJXzOvRh2J+xkb"
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	Elliot Berman <quic_eberman@quicinc.com>,
+	Xin Liu <xin.liu@oss.qualcomm.com>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Umang Chheda <umang.chheda@oss.qualcomm.com>,
+	Nirmesh Kumar Singh <nirmesh.singh@oss.qualcomm.com>
+Subject: Re: [PATCH v17 07/12] firmware: psci: Implement vendor-specific
+ resets as reboot-mode
+Message-ID: <aRIfc9iuC2b9DqI+@lpieralisi>
+References: <20251109-arm-psci-system_reset2-vendor-reboots-v17-0-46e085bca4cc@oss.qualcomm.com>
+ <20251109-arm-psci-system_reset2-vendor-reboots-v17-7-46e085bca4cc@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251109-arm-psci-system_reset2-vendor-reboots-v17-7-46e085bca4cc@oss.qualcomm.com>
 
---=-IMOs4CuJXzOvRh2J+xkb
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On Sun, Nov 09, 2025 at 08:07:20PM +0530, Shivendra Pratap wrote:
+> SoC vendors have different types of resets which are controlled
+> through various hardware registers. For instance, Qualcomm SoC
+> may have a requirement that reboot with “bootloader” command
+> should reboot the device to bootloader flashing mode and reboot
+> with “edl” should reboot the device into Emergency flashing mode.
+> Setting up such reboots on Qualcomm devices can be inconsistent
+> across SoC platforms and may require setting different HW
+> registers, where some of these registers may not be accessible to
+> HLOS. These knobs evolve over product generations and require
+> more drivers. PSCI spec defines, SYSTEM_RESET2, vendor-specific
+> reset which can help align this requirement. Add support for PSCI
+> SYSTEM_RESET2, vendor-specific resets and align the implementation
+> to allow user-space initiated reboots to trigger these resets.
+> 
+> Implement the PSCI vendor-specific resets by registering to the
+> reboot-mode framework.
 
-+ Thomas
+I think that we should expose to user space _all_ PSCI reset types,
+cold, warm + vendor specific - as a departure from using the reboot_mode
+variable (and possibly deprecate it - or at least stop using it).
 
-Please verify so that I can post the patch.
+> As psci init is done at early kernel init, reboot-mode registration cannot
+> be done at the time of psci init.  This is because reboot-mode creates a
+> “reboot-mode” class for exposing sysfs, which can fail at early kernel init.
+> To overcome this, introduce a late_initcall to register PSCI vendor-specific
+> resets as reboot modes. Implement a reboot-mode write function that sets
+> reset_type and cookie values during the reboot notifier callback.  Introduce
+> a firmware-based call for SYSTEM_RESET2 vendor-specific reset in the
+> psci_sys_reset path, using reset_type and cookie if supported by secure
+> firmware. Register a panic notifier and clear vendor_reset valid status
+> during panic.  This is needed for any kernel panic that occurs post
+> reboot_notifiers.
+
+Is it because panic uses reboot_mode to determine the reset to issue ?
+
+> By using the above implementation, userspace will be able to issue
+> such resets using the reboot() system call with the "*arg"
+> parameter as a string based command. The commands can be defined
+> in PSCI device tree node under “reboot-mode” and are based on the
+> reboot-mode based commands.
+
+IMHO - it would be nice if could add mode-cold (or mode-normal in reboot mode
+speak) and mode-warm by default (if PSCI supports them) so that userspace
+could issue those resets too without having to set the reboot_mode variable.
+
+Reason is, since we are doing this it is worth going the whole nine
+yards and try to decouple the reboot_mode variable from the RESTART2
+syscall argument.
+
+Reworded: just use the new userspace interface you are adding for
+all PSCI reset types.
+
+Thoughts very much welcome - I understand this is controversial.
+
+> Reviewed-by: Umang Chheda <umang.chheda@oss.qualcomm.com>
+> Reviewed-by: Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>
+> Reviewed-by: Nirmesh Kumar Singh <nirmesh.singh@oss.qualcomm.com>
+> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+> ---
+>  drivers/firmware/psci/Kconfig |  2 +
+>  drivers/firmware/psci/psci.c  | 92 ++++++++++++++++++++++++++++++++++++++++++-
+>  2 files changed, 93 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/firmware/psci/Kconfig b/drivers/firmware/psci/Kconfig
+> index 97944168b5e66aea1e38a7eb2d4ced8348fce64b..93ff7b071a0c364a376699733e6bc5654d56a17f 100644
+> --- a/drivers/firmware/psci/Kconfig
+> +++ b/drivers/firmware/psci/Kconfig
+> @@ -1,6 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config ARM_PSCI_FW
+>  	bool
+> +	select POWER_RESET
+> +	select REBOOT_MODE
+>  
+>  config ARM_PSCI_CHECKER
+>  	bool "ARM PSCI checker"
+> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> index 38ca190d4a22d6e7e0f06420e8478a2b0ec2fe6f..ff82e7f4c27d1609a75cedc3a9790affaf839801 100644
+> --- a/drivers/firmware/psci/psci.c
+> +++ b/drivers/firmware/psci/psci.c
+> @@ -8,15 +8,18 @@
+>  
+>  #include <linux/acpi.h>
+>  #include <linux/arm-smccc.h>
+> +#include <linux/bitops.h>
+>  #include <linux/cpuidle.h>
+>  #include <linux/debugfs.h>
+>  #include <linux/errno.h>
+>  #include <linux/linkage.h>
+>  #include <linux/of.h>
+> +#include <linux/panic_notifier.h>
+>  #include <linux/pm.h>
+>  #include <linux/printk.h>
+>  #include <linux/psci.h>
+>  #include <linux/reboot.h>
+> +#include <linux/reboot-mode.h>
+>  #include <linux/slab.h>
+>  #include <linux/suspend.h>
+>  
+> @@ -51,6 +54,24 @@ static int resident_cpu = -1;
+>  struct psci_operations psci_ops;
+>  static enum arm_smccc_conduit psci_conduit = SMCCC_CONDUIT_NONE;
+>  
+> +struct psci_vendor_sysreset2 {
+> +	u32 reset_type;
+> +	u32 cookie;
+> +	bool valid;
+> +};
+> +
+> +static struct psci_vendor_sysreset2 vendor_reset;
+
+I think this should represent all possible PSCI reset types, not vendor only
+and its value is set by the reboot mode framework.
+
+> +
+> +static int psci_panic_event(struct notifier_block *nb, unsigned long v, void *p)
+> +{
+> +	vendor_reset.valid = false;
+
+I don't like this. Basically all you want this for is to make sure that
+we don't override the reboot_mode variable.
+
+One (hack) would consist in checking the reboot_mode variable here and
+set the struct I mentioned above to the value represented in reboot_mode.
+
+Good luck if reboot_mode == REBOOT_GPIO :-)
+
+> +	return NOTIFY_DONE;
+> +}
+> +
+> +static struct notifier_block psci_panic_block = {
+> +	.notifier_call = psci_panic_event
+> +};
+> +
+>  bool psci_tos_resident_on(int cpu)
+>  {
+>  	return cpu == resident_cpu;
+> @@ -309,7 +330,10 @@ static int get_set_conduit_method(const struct device_node *np)
+>  static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
+>  			  void *data)
+>  {
+> -	if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
+> +	if (vendor_reset.valid && psci_system_reset2_supported) {
+> +		invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2), vendor_reset.reset_type,
+> +			       vendor_reset.cookie, 0);
+
+See above. Two calls here: one for resets issued using the new userspace
+interface you are adding and legacy below - no vendor vs reboot_mode, this
+is a mess.
+
+> +	} else if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
+>  	    psci_system_reset2_supported) {
+>  		/*
+>  		 * reset_type[31] = 0 (architectural)
+> @@ -547,6 +571,72 @@ static const struct platform_suspend_ops psci_suspend_ops = {
+>  	.enter          = psci_system_suspend_enter,
+>  };
+>  
+> +static int psci_set_vendor_sys_reset2(struct reboot_mode_driver *reboot, u64 magic)
+> +{
+> +	u32 magic_32;
+> +
+> +	if (psci_system_reset2_supported) {
+> +		magic_32 = magic & GENMASK(31, 0);
+> +		vendor_reset.reset_type = PSCI_1_1_RESET_TYPE_VENDOR_START | magic_32;
+> +		vendor_reset.cookie = (magic >> 32) & GENMASK(31, 0);
+
+Use FIELD_PREP/GET() please (but as mentioned above the vendor reset type
+bit[31] should be part of the reboot mode magic value, see above).
+
+> +		vendor_reset.valid = true;
+> +	}
+> +
+> +	return NOTIFY_DONE;
+> +}
+> +
+> +static int __init psci_init_vendor_reset(void)
+> +{
+> +	struct reboot_mode_driver *reboot;
+> +	struct device_node *psci_np;
+> +	struct device_node *np;
+> +	int ret;
+> +
+> +	if (!psci_system_reset2_supported)
+> +		return -EINVAL;
+> +
+> +	psci_np = of_find_compatible_node(NULL, NULL, "arm,psci-1.0");
+> +	if (!psci_np)
+> +		return -ENODEV;
+> +
+> +	np = of_find_node_by_name(psci_np, "reboot-mode");
+> +	if (!np) {
+> +		of_node_put(psci_np);
+> +		return -ENODEV;
+> +	}
+> +
+> +	ret = atomic_notifier_chain_register(&panic_notifier_list, &psci_panic_block);
+> +	if (ret)
+> +		goto err_notifier;
+> +
+> +	reboot = kzalloc(sizeof(*reboot), GFP_KERNEL);
+> +	if (!reboot) {
+> +		ret = -ENOMEM;
+> +		goto err_kzalloc;
+> +	}
+> +
+> +	reboot->write = psci_set_vendor_sys_reset2;
+> +	reboot->driver_name = "psci";
+> +
+> +	ret = reboot_mode_register(reboot, of_fwnode_handle(np));
+> +	if (ret)
+> +		goto err_register;
+> +
+> +	of_node_put(psci_np);
+> +	of_node_put(np);
+> +	return 0;
+> +
+> +err_register:
+> +	kfree(reboot);
+> +err_kzalloc:
+> +	atomic_notifier_chain_unregister(&panic_notifier_list, &psci_panic_block);
+> +err_notifier:
+> +	of_node_put(psci_np);
+> +	of_node_put(np);
+> +	return ret;
+> +}
+> +late_initcall(psci_init_vendor_reset)
+
+I don't like adding another initcall here.
+
+I wonder whether this code belongs in a PSCI reboot mode driver, possibly a
+faux device in a way similar to what we did for cpuidle-psci (that after all
+is a consumer of PSCI_CPU_SUSPEND in a similar way as this code is a
+PSCI_SYSTEM_RESET{2} consumer), that communicates with
+drivers/firmware/psci/psci.c with the struct mentioned above.
 
 Thanks,
-Srinivas
+Lorenzo
 
-
-On Thu, 2025-11-06 at 17:48 -0800, srinivas pandruvada wrote:
-> Hi Aaron,
->=20
-> Please again verify this change. This limits the scope.
-> Patch attached.
->=20
-> Thanks,
-> Srinivas
->=20
-> On Thu, 2025-11-06 at 11:31 -0600, Aaron Rainbolt wrote:
-> > On Thu, 06 Nov 2025 07:23:14 -0800
-> > srinivas pandruvada <srinivas.pandruvada@linux.intel.com> wrote:
-> >=20
-> > > Hi Aaron,
-> > >=20
-> > > On Wed, 2025-09-10 at 15:33 -0500, Aaron Rainbolt wrote:
-> > > > On Wed, 10 Sep 2025 10:15:00 -0700
-> > > > srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-> > > > wrote:
-> > > > =C2=A0=20
-> > > > > On Wed, 2025-09-10 at 11:36 -0500, Aaron Rainbolt wrote:=C2=A0=
-=20
-> > > > > > On Wed, 30 Apr 2025 16:29:09 +0200
-> > > > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > > > > =C2=A0=C2=A0=C2=A0=20
-> > > > > > > On Tue, Apr 29, 2025 at 11:07=E2=80=AFPM Srinivas Pandruvada
-> > > > > > > <srinivas.pandruvada@linux.intel.com> wrote:=C2=A0=C2=A0=C2=
-=A0=20
-> > > > > > > >=20
-> > > > > > > > When turbo mode is unavailable on a Skylake-X system,
-> > > > > > > > executing
-> > > > > > > > the
-> > > > > > > > command:
-> > > > > > > > "echo 1 >
-> > > > > > > > /sys/devices/system/cpu/intel_pstate/no_turbo"
-> > > > > > > > results in an unchecked MSR access error: WRMSR to
-> > > > > > > > 0x199
-> > > > > > > > (attempted to write 0x0000000100001300).=C2=A0=20
-> > > Please try the attached patch, if this address this issue.
-> >=20
-> > I can confirm that this patch does resolve the issue when applied
-> > to
-> > Kubuntu Focus's 6.14 kernel. CPU frequencies are available that
-> > require
-> > turbo boost, and `cat /sys/devices/system/cpu/intel_pstate` returns
-> > `0`. The logs from `dmesg` also indicate that turbo was disabled
-> > earlier in boot, but the warnings about turbo being disabled stop
-> > appearing later on, even when manipulating the `no_turbo` file:
-> >=20
-> > [=C2=A0=C2=A0 25.893012] intel_pstate: Turbo is disabled
-> > [=C2=A0=C2=A0 25.893019] intel_pstate: Turbo disabled by BIOS or unavai=
-lable
-> > on
-> > processor
-> > [=C2=A0=C2=A0 25.950587] NET: Registered PF_QIPCRTR protocol family
-> > [=C2=A0=C2=A0 26.599013] Realtek Internal NBASE-T PHY r8169-0-6c00:00:
-> > attached
-> > PHY driver (mii_bus:phy_addr=3Dr8169-0-6c00:00, irq=3DMAC)
-> > [=C2=A0=C2=A0 26.725959] ACPI BIOS Error (bug): Could not resolve symbo=
-l
-> > [\_TZ.ETMD], AE_NOT_FOUND (20240827/psargs-332)
-> >=20
-> > [=C2=A0=C2=A0 26.725976] No Local Variables are initialized for Method =
-[_OSC]
-> >=20
-> > [=C2=A0=C2=A0 26.725978] Initialized Arguments for Method [_OSC]:=C2=A0=
- (4
-> > arguments
-> > defined for method invocation)
-> > [=C2=A0=C2=A0 26.725979]=C2=A0=C2=A0 Arg0:=C2=A0=C2=A0 0000000030ddf166=
- <Obj>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> > Buffer(16)
-> > 5D A8 3B B2 B7 C8 42 35
-> > [=C2=A0=C2=A0 26.725991]=C2=A0=C2=A0 Arg1:=C2=A0=C2=A0 0000000002bd3ac4=
- <Obj>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Integer
-> > 0000000000000001
-> > [=C2=A0=C2=A0 26.725996]=C2=A0=C2=A0 Arg2:=C2=A0=C2=A0 0000000033eb047e=
- <Obj>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Integer
-> > 0000000000000002
-> > [=C2=A0=C2=A0 26.725999]=C2=A0=C2=A0 Arg3:=C2=A0=C2=A0 00000000de6cf5f1=
- <Obj>=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Buffer(8=
-)
-> > 00 00 00 00 05 00 00 00
-> >=20
-> > [=C2=A0=C2=A0 26.726010] ACPI Error: Aborting method \_SB.IETM._OSC due=
- to
-> > previous error (AE_NOT_FOUND) (20240827/psparse-529)
-> > [=C2=A0=C2=A0 26.726056] Consider using thermal netlink events interfac=
-e
-> > [=C2=A0=C2=A0 26.769209] r8169 0000:6c:00.0 enp108s0: Link is Down
-> > [=C2=A0=C2=A0 26.857318] zram0: detected capacity change from 0 to 1950=
-35136
-> > [=C2=A0=C2=A0 26.864390] vboxdrv: Found 32 processor cores/threads
-> > [=C2=A0=C2=A0 26.873227] Adding 97517564k swap on /dev/zram0.=C2=A0 Pri=
-ority:-2
-> > extents:1 across:97517564k SS
-> > [=C2=A0=C2=A0 26.880588] vboxdrv: TSC mode is Invariant, tentative freq=
-uency
-> > 2419194640 Hz
-> > [=C2=A0=C2=A0 26.880592] vboxdrv: Successfully loaded version 7.2.4 r17=
-0995
-> > (interface 0x00340001)
-> > [=C2=A0=C2=A0 26.895725] intel_pstate: Turbo is disabled
-> > [=C2=A0=C2=A0 26.895730] intel_pstate: Turbo disabled by BIOS or unavai=
-lable
-> > on
-> > processor
-> > [=C2=A0=C2=A0 26.943715] iwlwifi 0000:00:14.3: WFPM_UMAC_PD_NOTIFICATIO=
-N:
-> > 0x20
-> > [=C2=A0=C2=A0 26.943746] iwlwifi 0000:00:14.3: WFPM_LMAC2_PD_NOTIFICATI=
-ON:
-> > 0x1f
-> > [=C2=A0=C2=A0 26.943755] iwlwifi 0000:00:14.3: WFPM_AUTH_KEY_0: 0x90
-> > [=C2=A0=C2=A0 26.943765] iwlwifi 0000:00:14.3: CNVI_SCU_SEQ_DATA_DW9: 0=
-x0
-> > [=C2=A0=C2=A0 26.944901] iwlwifi 0000:00:14.3: RFIm is deactivated, rea=
-son =3D
-> > 5
-> > [=C2=A0=C2=A0 27.045437] iwlwifi 0000:00:14.3: Registered PHC clock: iw=
-lwifi-
-> > PTP, with index: 0
-> > [=C2=A0=C2=A0 27.098590] VBoxNetFlt: Successfully started.
-> > [=C2=A0=C2=A0 27.101687] VBoxNetAdp: Successfully started.
-> > [=C2=A0=C2=A0 27.153602] bridge: filtering via arp/ip/ip6tables is no l=
-onger
-> > available by default. Update your scripts to load br_netfilter if
-> > you
-> > need this.
-> > [=C2=A0=C2=A0 27.851014] loop14: detected capacity change from 0 to 8
-> > [=C2=A0=C2=A0 27.895706] r8169 0000:6c:00.0: invalid VPD tag 0xff (size=
- 0) at
-> > offset 0; assume missing optional EEPROM
-> > [=C2=A0=C2=A0 28.898015] intel_pstate: Turbo is disabled
-> > [=C2=A0=C2=A0 28.898021] intel_pstate: Turbo disabled by BIOS or unavai=
-lable
-> > on
-> > processor
-> > [=C2=A0=C2=A0 31.900781] intel_pstate: Turbo is disabled
-> > [=C2=A0=C2=A0 31.900788] intel_pstate: Turbo disabled by BIOS or unavai=
-lable
-> > on
-> > processor
-> > [=C2=A0=C2=A0 33.959448] Bluetooth: RFCOMM TTY layer initialized
-> > [=C2=A0=C2=A0 33.959456] Bluetooth: RFCOMM socket layer initialized
-> > [=C2=A0=C2=A0 33.959462] Bluetooth: RFCOMM ver 1.11
-> > [=C2=A0=C2=A0 36.903768] intel_pstate: Turbo is disabled
-> > [=C2=A0=C2=A0 36.903777] intel_pstate: Turbo disabled by BIOS or unavai=
-lable
-> > on
-> > processor
-> > [=C2=A0=C2=A0 38.054345] systemd-journald[883]:
-> > /var/log/journal/a9e8e3d2041547169b107e1e1a23f2ce/user-
-> > 1000.journal:
-> > Journal file uses a different sequence number ID, rotating.
-> > [=C2=A0=C2=A0 39.799560] warning: `kded5' uses wireless extensions whic=
-h will
-> > stop working for Wi-Fi 7 hardware; use nl80211
-> > [=C2=A0=C2=A0 40.884365] wlp0s20f3: authenticate with 18:ee:86:8b:16:a2
-> > (local
-> > address=3D98:bd:80:8a:e9:27)
-> > [=C2=A0=C2=A0 40.885147] wlp0s20f3: send auth to 18:ee:86:8b:16:a2 (try=
- 1/3)
-> > [=C2=A0=C2=A0 40.968595] wlp0s20f3: authenticate with 18:ee:86:8b:16:a2
-> > (local
-> > address=3D98:bd:80:8a:e9:27)
-> > [=C2=A0=C2=A0 40.968603] wlp0s20f3: send auth to 18:ee:86:8b:16:a2 (try=
- 1/3)
-> > [=C2=A0=C2=A0 40.980941] wlp0s20f3: authenticated
-> > [=C2=A0=C2=A0 40.981904] wlp0s20f3: associate with 18:ee:86:8b:16:a2 (t=
-ry
-> > 1/3)
-> > [=C2=A0=C2=A0 41.042933] wlp0s20f3: RX AssocResp from 18:ee:86:8b:16:a2
-> > (capab=3D0x1431 status=3D0 aid=3D14)
-> > [=C2=A0=C2=A0 41.046917] wlp0s20f3: associated
-> >=20
-> > If you post the patch, I'm happy to add a `Tested-by` tag for it.
-> > Thank you for your help!
-> >=20
-> > > Thanks,
-> > > Srinivas
-> >=20
-> >=20
-
---=-IMOs4CuJXzOvRh2J+xkb
-Content-Disposition: attachment;
-	filename*0=0001-cpufreq-intel_pstate-Check-IDA-feature-only-during-M.pat;
-	filename*1=ch
-Content-Transfer-Encoding: base64
-Content-Type: text/x-patch;
-	name="0001-cpufreq-intel_pstate-Check-IDA-feature-only-during-M.patch";
-	charset="UTF-8"
-
-RnJvbSAxNGE3MjI1ZGVhODZkZjBmMjg4Zjk0ZGYxNzRlM2QxZmNkMGExOGVkIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBTcmluaXZhcyBQYW5kcnV2YWRhIDxzcmluaXZhcy5wYW5kcnV2
-YWRhQGxpbnV4LmludGVsLmNvbT4KRGF0ZTogVGh1LCA2IE5vdiAyMDI1IDE3OjM0OjA5IC0wODAw
-ClN1YmplY3Q6IFtQQVRDSF0gY3B1ZnJlcTogaW50ZWxfcHN0YXRlOiBDaGVjayBJREEgZmVhdHVy
-ZSBvbmx5IGR1cmluZyBNU1IKIDB4MTk5IHdyaXRlCgpDb21taXQgMGZiNWJlN2ZlYTk4ICgiY3B1
-ZnJlcTogaW50ZWxfcHN0YXRlOiBVbmNoZWNrZWQgTVNSIGFjZWVzcyBpbgpsZWdhY3kgbW9kZSIp
-IGludHJvZHVjZWQgYSBjaGVjayBmb3IgZmVhdHVyZSBYODZfRkVBVFVSRV9JREEgdG8gdmVyaWZ5
-CnR1cmJvIG1vZGUgc3VwcG9ydC4gQWx0aG91Z2ggdGhpcyBpcyB0aGUgY29ycmVjdCB3YXkgdG8g
-Y2hlY2sgZm9yIHR1cmJvCm1vZGUsIGl0IGNhdXNlcyBpc3N1ZXMgb24gc29tZSBwbGF0Zm9ybXMg
-dGhhdCBkaXNhYmxlIHR1cmJvIGR1cmluZyBPUwpib290IGJ1dCBlbmFibGUgaXQgbGF0ZXIuIFdp
-dGhvdXQgdGhpcyBmZWF0dXJlIGNoZWNrLCB1c2VycyB3ZXJlIGFibGUgdG8Kd3JpdGUgMCB0byAv
-c3lzL2RldmljZXMvc3lzdGVtL2NwdS9pbnRlbF9wc3RhdGUvbm9fdHVyYm8gcG9zdC1ib290IHRv
-CmdldCB0dXJibyBtb2RlIGZyZXF1ZW5jaWVzLgoKVG8gcmVzdG9yZSB0aGUgb2xkIGJlaGF2aW9y
-IHdoaWxlIHN0aWxsIGFkZHJlc3NpbmcgdGhlIHVuY2hlY2tlZCBNU1IKaXNzdWUgb24gc29tZSBT
-a3lsYWtlLVggc3lzdGVtcywgbGltaXQgdGhlIFg4Nl9GRUFUVVJFX0lEQSBjaGVjayB0byBvbmx5
-CndoZW4gc2V0dGluZyBNU1IgMHgxOTkgVHVyYm8gRW5nYWdlIEJpdCAoYml0IDMyKS4KCkZpeGVz
-OiAwZmI1YmU3ZmVhOTggKCJjcHVmcmVxOiBpbnRlbF9wc3RhdGU6IFVuY2hlY2tlZCBNU1IgYWNl
-ZXNzIGluIGxlZ2FjeSBtb2RlIikKU2lnbmVkLW9mZi1ieTogU3Jpbml2YXMgUGFuZHJ1dmFkYSA8
-c3Jpbml2YXMucGFuZHJ1dmFkYUBsaW51eC5pbnRlbC5jb20+Ci0tLQogZHJpdmVycy9jcHVmcmVx
-L2ludGVsX3BzdGF0ZS5jIHwgOSArKysrLS0tLS0KIDEgZmlsZSBjaGFuZ2VkLCA0IGluc2VydGlv
-bnMoKyksIDUgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9jcHVmcmVxL2ludGVs
-X3BzdGF0ZS5jIGIvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCmluZGV4IDQzZTg0N2U5
-Zjc0MS4uMzhhOGU4NzdmMjIyIDEwMDY0NAotLS0gYS9kcml2ZXJzL2NwdWZyZXEvaW50ZWxfcHN0
-YXRlLmMKKysrIGIvZHJpdmVycy9jcHVmcmVxL2ludGVsX3BzdGF0ZS5jCkBAIC01OTgsOSArNTk4
-LDYgQEAgc3RhdGljIGJvb2wgdHVyYm9faXNfZGlzYWJsZWQodm9pZCkKIHsKIAl1NjQgbWlzY19l
-bjsKIAotCWlmICghY3B1X2ZlYXR1cmVfZW5hYmxlZChYODZfRkVBVFVSRV9JREEpKQotCQlyZXR1
-cm4gdHJ1ZTsKLQogCXJkbXNybChNU1JfSUEzMl9NSVNDX0VOQUJMRSwgbWlzY19lbik7CiAKIAly
-ZXR1cm4gISEobWlzY19lbiAmIE1TUl9JQTMyX01JU0NfRU5BQkxFX1RVUkJPX0RJU0FCTEUpOwpA
-QCAtMjAxNCw3ICsyMDExLDggQEAgc3RhdGljIHU2NCBhdG9tX2dldF92YWwoc3RydWN0IGNwdWRh
-dGEgKmNwdWRhdGEsIGludCBwc3RhdGUpCiAJdTMyIHZpZDsKIAogCXZhbCA9ICh1NjQpcHN0YXRl
-IDw8IDg7Ci0JaWYgKFJFQURfT05DRShnbG9iYWwubm9fdHVyYm8pICYmICFSRUFEX09OQ0UoZ2xv
-YmFsLnR1cmJvX2Rpc2FibGVkKSkKKwlpZiAoUkVBRF9PTkNFKGdsb2JhbC5ub190dXJibykgJiYg
-IVJFQURfT05DRShnbG9iYWwudHVyYm9fZGlzYWJsZWQpICYmCisJICAgIGNwdV9mZWF0dXJlX2Vu
-YWJsZWQoWDg2X0ZFQVRVUkVfSURBKSkKIAkJdmFsIHw9ICh1NjQpMSA8PCAzMjsKIAogCXZpZF9m
-cCA9IGNwdWRhdGEtPnZpZC5taW4gKyBtdWxfZnAoCkBAIC0yMTc5LDcgKzIxNzcsOCBAQCBzdGF0
-aWMgdTY0IGNvcmVfZ2V0X3ZhbChzdHJ1Y3QgY3B1ZGF0YSAqY3B1ZGF0YSwgaW50IHBzdGF0ZSkK
-IAl1NjQgdmFsOwogCiAJdmFsID0gKHU2NClwc3RhdGUgPDwgODsKLQlpZiAoUkVBRF9PTkNFKGds
-b2JhbC5ub190dXJibykgJiYgIVJFQURfT05DRShnbG9iYWwudHVyYm9fZGlzYWJsZWQpKQorCWlm
-IChSRUFEX09OQ0UoZ2xvYmFsLm5vX3R1cmJvKSAmJiAhUkVBRF9PTkNFKGdsb2JhbC50dXJib19k
-aXNhYmxlZCkgJiYKKwkgICAgY3B1X2ZlYXR1cmVfZW5hYmxlZChYODZfRkVBVFVSRV9JREEpKQog
-CQl2YWwgfD0gKHU2NCkxIDw8IDMyOwogCiAJcmV0dXJuIHZhbDsKLS0gCjIuNDMuMAoK
-
-
---=-IMOs4CuJXzOvRh2J+xkb--
+> +
+>  static void __init psci_init_system_reset2(void)
+>  {
+>  	int ret;
+> 
+> -- 
+> 2.34.1
+> 
 
