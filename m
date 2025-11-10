@@ -1,119 +1,156 @@
-Return-Path: <linux-pm+bounces-37709-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37710-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4698FC460A6
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 11:48:05 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 653D3C460CA
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 11:49:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6357C3A572A
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 10:47:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1F9894E875D
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 10:49:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B14E301010;
-	Mon, 10 Nov 2025 10:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695B33054C2;
+	Mon, 10 Nov 2025 10:49:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="agia5V3S"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="VBd3EL5U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC427301034
-	for <linux-pm@vger.kernel.org>; Mon, 10 Nov 2025 10:47:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762771631; cv=none; b=GYPfafsxpho8HtoxneDutCgBpiwrrpM9Aql3JfdFgosPZdFmK8jmO7ec9LJPQPn+Q2vPNb9Da/v8T9CGu/VQmAjnAJ4l7sqRgceZdgqSGjgtbJ6f90rcOvE21TAXDVP3GQw9ynPb+Neb4uRuuCfskEfKJ5juqxDbdqvpkYeI5O4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762771631; c=relaxed/simple;
-	bh=KWD0dSUvwuItAstvLunIOIEZaKlPBNCzkWHJb6tbpAw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ES30UU2Wqe1PZAybydFeWSdKDZh5IZwWY6JdfQILFi/MR+9ICC9lRgkuTl/eYHHwMZ28+bkqDgD5ty9wkGZVqLG85YWE76cpDRK9D0y5CwA9XFnaim/zFb6O2lqozgfhNOTZOIlKyRK7r25lCzooblOfB3yCdwth34jsRb3zJPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=agia5V3S; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2980d9b7df5so9049605ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 10 Nov 2025 02:47:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762771628; x=1763376428; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XQGzwKFQ+Rtg1mWaUwQhxw/U0dzqmCy2pKOiipYqOes=;
-        b=agia5V3S5b6p8rNCtswM2bwpKA2BcIZN3zwGq/H4x9Reiy+69Mrag/JDp8TKRYhX2k
-         JXgFq4h90CGcbWwlHOvicKRM4IQwVxLlpF6UIaL5RLSQf0RoH8KPvApcPoQ3gHW1HU6S
-         RKUoOJrCH2/iQUIm8yNqen2ZfcHKhVOnj1fWhgUp/sXw4YFPUQ93IUT3WLK5zqNxiAvM
-         JWc6kChJfnR82ToN812xj+HuHKuoOl0A8nJEltYzU1hLP+XIJ4x04DyMmNWCEWCUoDWN
-         KNh0f8YDC5xz5+xiBclkanJA5vzHjvDCbKG5Yi9CB7kpxI+bhRkFl8UTugirGfReI41l
-         WXBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762771628; x=1763376428;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XQGzwKFQ+Rtg1mWaUwQhxw/U0dzqmCy2pKOiipYqOes=;
-        b=QXiQMxMR+tC/FQOoBZAxgdwYg6RVoRWk5CfingaaFHgh+lzN8XzrrliEhueKm1lGlL
-         bQrOXxF/UplCEGNavjdnTiZwXIIAliuNY/TgzovFsGFvQK3Z3CI8qbQst3dn6SYiKtUO
-         iwDSKrSjtVMxRSHZQAZzfxLLX1/Z45qbFmffnmZHA+AirBY3eEIBJEE1q1XW1TPgnTl/
-         oOLpWhtj78ASAPf7jZxyqIr8iVdwacWO7wVrNomUXkGC7SyfVVGS9RkVQuQ+IT4JkztA
-         Y5oNcU7g+Q20334gYXIrrb99FCq4w70//Z0cOCcUdjXT3Lf6BBex22Ygg1lybTU+9Iwh
-         vKMA==
-X-Forwarded-Encrypted: i=1; AJvYcCWhBWMNgEh/P52JsUVCmj1/iPh9V+QafhVV3TrBTGK0r3ksS3k3AOBltZ12Qe2JN1+R8FRDPgBrVQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBXB1xwUe1+KDvbQ+zgqGapC3bHzBGH8qBK5Q8YGSRguYUQX7A
-	++XFEpFe76pRq6TXvjjJVDc8jIzVBLKwCScXdns6LAlm/wuS/2gHrtptqsRNnfOTUWE=
-X-Gm-Gg: ASbGnctyCch7HyRqMlLcdObdMw39QhzYIK9VYwf2hyi9YOGdhrW5iqZ13wv0YMqCcQ8
-	E+ikTrEtleYh6ByqHzaniy+YxKio3t/1nOCmJA1bITlPQG9TmQrlIbcZeaPcS0bFC23M/8bUmxF
-	E5fmSM/DQjgz3p+CLrZpWm1GuyuZGvBffKfWJYJYhwsdL7Fn4QXfigo9XBmc5IMxWPbzXTR7Vgw
-	qmbRplQANbooqUI8+TZC5t+SlYihTnXRbjrsllkmOoyW4Rr+T90Nkt0XyjP4AcUL29gnTX9jXbj
-	/MjYNQGMIL6cr6t0hTqbp5GOlkDcniokPPhXtUAxHCbF6d4AXr4e5LfEIYOXyHuedRFqcum6Svp
-	Iv1JlwwZusZsHsFGVCOEDtZZDEimgukSci4C8aL0LLoZisx5mnoqEnS6ZbKFdNfhcAqXv5FMYcG
-	vHk2wu7HadXY0=
-X-Google-Smtp-Source: AGHT+IHg+DThhk+gJUORdYe/ePATJKcs+WA9A2y1rPJPIsw5mDbwrRCWQvQPcr7jYbijEjp+p5km1w==
-X-Received: by 2002:a17:902:e888:b0:295:1aa7:edf7 with SMTP id d9443c01a7336-297e56be1c6mr87877225ad.30.1762771627875;
-        Mon, 10 Nov 2025 02:47:07 -0800 (PST)
-Received: from localhost ([122.172.86.94])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b0cc179f77sm11235385b3a.34.2025.11.10.02.47.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Nov 2025 02:47:07 -0800 (PST)
-Date: Mon, 10 Nov 2025 16:17:04 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Ilia Lin <ilia.lin@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v4 1/1] cpufreq: qcom-nvmem: add compatible fallback for
- ipq806x for no SMEM
-Message-ID: <y4ys4cp42vp3air2lnlbcglfbh42siguh5zpo3hxugqswwzrdy@qz7mrdzzmhnt>
-References: <20251105112136.371376-1-ansuelsmth@gmail.com>
- <20251105112136.371376-2-ansuelsmth@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF4B211A14;
+	Mon, 10 Nov 2025 10:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762771783; cv=pass; b=hkYcjMDAIYh8V/vwRYVGo0FAwHgOKFpuqo6OWwkcGnSKycPZlYZN9xiC+aZ/gjhx+t3bnCOk1eUxz6DLKS16QjOwfm7LvU7kQhZALO86F+9a16t+u3Lx7DcxBHKGW5s9JAFSa8Lf+Gi2/XiR3Cu6HvpF20sshX41RKwV65vQLDE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762771783; c=relaxed/simple;
+	bh=k+cIHb+jF4FREuVisxyDxGDBVMofZ9kYHaWf5eH17h4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LNtY9SSRM7uSBzJ1RWv+1ExC0n+YTYKsvhBEyukyKiJIKSMs2iZ2vtreJb6qCEuz7QjIkmdBuSDJV22rF9iC5meUGof2gmEGkJQaB5jhhRB3hGGdmkITp2LXPG1vm0sZlmZhszcvE93kAlyy5+KnNWXIklm71GZYTqbdU5kX7DA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=VBd3EL5U; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1762771764; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=NxkxrJemZezmKrnWKU50oEyuQ0oCj/UUy1xO5JA0Gxn9hFcL8TKfLyZ9KjZK0Oj0JuaQfXVLrz/fLTRYpOpa1ehrccY4PZYSvu95xVpyoEGqHKNJIZKqZ7noyjFhJlISRGOCeVfVMTkvYNqRmBdvc90If/92GDVfoy+n2dsECTE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1762771764; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=M3hjjQw506YKhgHdFR2a57hcN/smdx/JNOkEsmfHHZk=; 
+	b=aCxRLagrCIk8Z4COBk6g3josoNmO+MGUHDltmbPTzTdDmTTOuLRTxMiCLvRy08HwLsFgO/iVdI8mbNOub7r8jKGDGkaiAXxIMppwWE+6LP5tU/US9jl2dpE1vhWqavByHylZXFprTtLYSFIOsvHnZ0zslYFLvQvBllhzpcZcTJw=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1762771764;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=M3hjjQw506YKhgHdFR2a57hcN/smdx/JNOkEsmfHHZk=;
+	b=VBd3EL5UPfRGd3kOCmotU8adSTTmnNAgPJhL85RfMUAYwnFFqt1sQGScQeXfHtnq
+	5MtVhSlfd1As0In11QZQr2rKRZoGz7fe2XwrKIIJHeGcFyT8+8fXOywCIdVrBqO0CSh
+	qjJGAlCu1mMEDhsVV8VXSqvTB6HnfBOAwkRMWe/A=
+Received: by mx.zohomail.com with SMTPS id 1762771762436795.5055126772169;
+	Mon, 10 Nov 2025 02:49:22 -0800 (PST)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Maxime Ripard <mripard@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+ Brian Masney <bmasney@redhat.com>, Brian Masney <bmasney@redhat.com>
+Cc: linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org
+Subject:
+ Re: [PATCH] pmdomain: mediatek: convert from clk round_rate() to
+ determine_rate()
+Date: Mon, 10 Nov 2025 11:49:17 +0100
+Message-ID: <9531607.CDJkKcVGEf@workhorse>
+In-Reply-To:
+ <20251106-clk-pmdomain-mediatek-round-rate-v1-1-49441ea27f84@redhat.com>
+References:
+ <20251106-clk-pmdomain-mediatek-round-rate-v1-1-49441ea27f84@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251105112136.371376-2-ansuelsmth@gmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On 05-11-25, 12:21, Christian Marangi wrote:
-> On some IPQ806x SoC SMEM might be not initialized by SBL. This is the
-> case for some Google devices (the OnHub family) that can't make use of
-> SMEM to detect the SoC ID (and socinfo can't be used either as it does
-> depends on SMEM presence).
+On Friday, 7 November 2025 00:40:43 Central European Standard Time Brian Masney wrote:
+> The round_rate() clk ops is deprecated in the clk framework in favor
+> of the determine_rate() clk ops, so let's convert this driver so that
+> round_rate() can be removed from the clk core.
 > 
-> To handle these specific case, check if the SMEM is not initialized (by
-> checking if the qcom_smem_get_soc_id returns -ENODEV) and fallback to
-> OF machine compatible checking to identify the SoC variant.
-> 
-> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
 > ---
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 35 ++++++++++++++++++++++++++--
->  1 file changed, 33 insertions(+), 2 deletions(-)
+>  drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c b/drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c
+> index af20111067c02a5f9a0d6d751e9e0dc32c1a4d90..9bad577b3ae4bf1b83d4f782bb52f56f779a8974 100644
+> --- a/drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c
+> +++ b/drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c
+> @@ -309,11 +309,11 @@ static unsigned long mtk_mfg_recalc_rate_gpu(struct clk_hw *hw,
+>  	return readl(mfg->shared_mem + GF_REG_FREQ_OUT_GPU) * HZ_PER_KHZ;
+>  }
+>  
+> -static long mtk_mfg_round_rate(struct clk_hw *hw, unsigned long rate,
+> -			       unsigned long *parent_rate)
+> +static int mtk_mfg_determine_rate(struct clk_hw *hw,
+> +				  struct clk_rate_request *req)
+>  {
+>  	/*
+> -	 * The round_rate callback needs to be implemented to avoid returning
+> +	 * The determine_rate callback needs to be implemented to avoid returning
+>  	 * the current clock frequency, rather than something even remotely
+>  	 * close to the frequency that was asked for.
+>  	 *
+> @@ -325,7 +325,7 @@ static long mtk_mfg_round_rate(struct clk_hw *hw, unsigned long rate,
+>  	 * high current frequency, breaking the powersave governor in the process.
+>  	 */
+>  
+> -	return rate;
+> +	return 0;
+>  }
+>  
+>  static unsigned long mtk_mfg_recalc_rate_stack(struct clk_hw *hw,
+> @@ -338,12 +338,12 @@ static unsigned long mtk_mfg_recalc_rate_stack(struct clk_hw *hw,
+>  
+>  static const struct clk_ops mtk_mfg_clk_gpu_ops = {
+>  	.recalc_rate = mtk_mfg_recalc_rate_gpu,
+> -	.round_rate = mtk_mfg_round_rate,
+> +	.determine_rate = mtk_mfg_determine_rate,
+>  };
+>  
+>  static const struct clk_ops mtk_mfg_clk_stack_ops = {
+>  	.recalc_rate = mtk_mfg_recalc_rate_stack,
+> -	.round_rate = mtk_mfg_round_rate,
+> +	.determine_rate = mtk_mfg_determine_rate,
+>  };
+>  
+>  static const struct clk_init_data mtk_mfg_clk_gpu_init = {
+> 
+> ---
+> base-commit: df5d79720b152e7ff058f11ed7e88d5b5c8d2a0c
+> change-id: 20251106-clk-pmdomain-mediatek-round-rate-649a9bf7d30a
+> 
+> Best regards,
+> 
 
-Applied. Thanks.
+Reviewed-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
--- 
-viresh
+I didn't test boot this, but it should be fine, as I've checked
+and all the places where the clk core checks for round_rate, it
+also checks for determine_rate. So this is likely correct.
+
+I've also made sure the adjusted op implementation is correct,
+in that simply returning 0 leaves the requested rate as-is and
+preserves the existing behaviour.
+
+Kind regards,
+Nicolas Frattaroli
+
+
 
