@@ -1,171 +1,132 @@
-Return-Path: <linux-pm+bounces-37719-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37720-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62D82C465F4
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 12:50:15 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B75B9C46657
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 12:54:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DEC0F34801A
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 11:50:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9473A4E3A04
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 11:54:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B82DF30BF66;
-	Mon, 10 Nov 2025 11:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48019309EEC;
+	Mon, 10 Nov 2025 11:54:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MybNDpjY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xp20MxYh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC19630ACEE;
-	Mon, 10 Nov 2025 11:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FCCA2EB87F
+	for <linux-pm@vger.kernel.org>; Mon, 10 Nov 2025 11:54:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762775399; cv=none; b=HFCc6oLcin3sfiZUZi8V5EIBwePG5h4WESnUUJkoMGtSkCzPJG/VfZUAXIiPNf+BKwIm75tBrZ7hj3wD7ZIu6tlcbxeqUgd8jHJDzaNW2I9pU+/itc/gntVH3gARwEUky9i8It2mc6jjJ07H9ZtRB+uTDwc9RAdpvEroFwj8n64=
+	t=1762775672; cv=none; b=iE6dnKSXQJsobFro/EDJqIatuTHRJrBROgRSqQRrIeteAu6wWzsvtIHk0Y9uBU8IQVa0GJMmOMuHAZWlL5iIZQgmOlMyC7Z247TLPjdQQA1rlsQwDli2u1bwdWiqQPN/dkHpZY/d0uRNUh+/utX5iP1WOJy4ST+kMJnk8H/HAGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762775399; c=relaxed/simple;
-	bh=kgLvGqGW6Y2MVxPS0dVKx+QUBt0U5B7prEs50cqFkU4=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=cHchF+3SJs7n+nnBrL5JSJxU/LYj51e1j+Qc1y4n6t4WWiVQ05TcyGDM9JabhHMvvxvOxPpxfto4uETLWRiSjVwtqCKiHDnk4hfx6OuO6M5e5vqlAKPjbjt6mp2wFZGBjOnP3VrM1UrlSomBeCTWh3xpNaSg/iUHKbegrjZl5RI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MybNDpjY; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1762775398; x=1794311398;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=kgLvGqGW6Y2MVxPS0dVKx+QUBt0U5B7prEs50cqFkU4=;
-  b=MybNDpjYgKJzlFJE1XlpRif5sw8WHu5Oa0DPp+7PPcrvsdcoEou2DCsA
-   nquc7AEVVNrIdcfV0p8X+fVSJJ2s5K6UjkbYi5X6xyb/iRbwnVjFLa2KX
-   mUbdG6XTlJgOz7H3b1N0+b1qfvHFcpVJ40pB0DS+RgzpZrYDR/A8Ui9Bi
-   E6FGEqNksD6qGPooTKNnZsSrn3UnlOn+SMCGgisksA9sl9etTKgVAbSR4
-   zEexw75QcZkFksiEb7l+GbvPSNiK2pN0yZC3uRMTGlyIGWjwacAWEoxQF
-   fuGD/FtPIFSgzt/kofTi1XRcIY+zeOz137dj9ZqKlbQTVUbDsyOVYq1z6
-   w==;
-X-CSE-ConnectionGUID: W1fT316HSnm/TQmGTWuvYw==
-X-CSE-MsgGUID: IrTEIptmT+C0026QS1VRsw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11608"; a="52381235"
-X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
-   d="scan'208";a="52381235"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 03:49:57 -0800
-X-CSE-ConnectionGUID: Sj9MWXvmSo6S4AGtYTK6HQ==
-X-CSE-MsgGUID: q0aaSUIcTOWst/+WBvw2kg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
-   d="scan'208";a="193665319"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.13])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 03:49:46 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 10 Nov 2025 13:49:42 +0200 (EET)
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-    "Rafael J. Wysocki" <rafael@kernel.org>, 
-    Viresh Kumar <viresh.kumar@linaro.org>, 
-    Matthias Brugger <matthias.bgg@gmail.com>, 
-    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-    Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@kernel.org>, 
-    Jernej Skrabec <jernej.skrabec@gmail.com>, 
-    Samuel Holland <samuel@sholland.org>, 
-    Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-    Daniel Lezcano <daniel.lezcano@linaro.org>, 
-    Bjorn Andersson <andersson@kernel.org>, 
-    Konrad Dybcio <konradybcio@kernel.org>, 
-    Thomas Gleixner <tglx@linutronix.de>, 
-    Nicolas Ferre <nicolas.ferre@microchip.com>, 
-    Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-    Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-    Maximilian Luz <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>, 
-    Daniel Lezcano <daniel.lezcano@kernel.org>, 
-    Thierry Reding <thierry.reding@gmail.com>, 
-    Jonathan Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org, 
-    linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-    linux-sunxi@lists.linux.dev, linux-arm-msm@vger.kernel.org, 
-    platform-driver-x86@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 09/13] platform: surface: Simplify with
- of_machine_get_match_data()
-In-Reply-To: <20251106-b4-of-match-matchine-data-v1-9-d780ea1780c2@linaro.org>
-Message-ID: <4986f752-ba21-6a5f-641a-e0dadb4abd11@linux.intel.com>
-References: <20251106-b4-of-match-matchine-data-v1-0-d780ea1780c2@linaro.org> <20251106-b4-of-match-matchine-data-v1-9-d780ea1780c2@linaro.org>
+	s=arc-20240116; t=1762775672; c=relaxed/simple;
+	bh=m14UuhQAtTVkGBGRwXQgis+qG89w5J+jO0n0Pjk8p18=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ajr6y8s5yUqtKIb5n5UKv5OUSOaY/6YtMVus7hOzibUQO5uXUc+wbUfl7BswUorK2DtqhM9xt6KCk5IXhy1OzD1ELdw1ICejiYfZ0EyHEuC3niaAnlv6MLTxyTdQ56HaDklw04odBKvEIyPX2pBQAN4Z2g+6hJnZEV6j5rS7k3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xp20MxYh; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-42b3d7c1321so354757f8f.3
+        for <linux-pm@vger.kernel.org>; Mon, 10 Nov 2025 03:54:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1762775669; x=1763380469; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EMD9+URtcaUjSQn0X74/mQzArg3218Yo/nyvQktn/2A=;
+        b=xp20MxYhf4/JtLImqEftv3pnj4AAIrYmDUNT2xh7nHegqxXXuMj/uhUKP4N/wvp+f6
+         mVYd18RDVtuDRtrNbR0qgeOoqen/ZbkrBDzKcNND17EkqQaag406B0zbGsbVI0Tc/2QU
+         zwKQIJgR1qfE0gfGFEbH+ZnisyGimfA7aY14c+LZVpdTrCXEQOS0UbmdsiuLftX3OgpW
+         zCLgwNMVakguD3LPCh9NS5Q1V8SPobuQ1qd1B5Jph3/pR6wk6x/L5Ng49W77KoW91YKl
+         Ro5E/X5yWhTeDV8ax4hSHweyeQSP0lHNSh2xT7JQZwWEGMOF/hJxZJg2UUh1yh4KhgFf
+         H4EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762775669; x=1763380469;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EMD9+URtcaUjSQn0X74/mQzArg3218Yo/nyvQktn/2A=;
+        b=H9icRy2LgtciDweWU2o2PTnrcTz7qY5OaI4wCIoeGKSdv64BHi/v5m4dQ9k4+ag6Dt
+         wITOVw3ImYnlKAQ5bCNPQf7Zz4Tbyl/tMuTZRMhzt9a5OkO+FJ3RZqRutn5NS2kkIGYU
+         r0dTS5HozoYRQFSRpG8IwHT4jQH7IFkKO87xDFt/3wZyl5VbJhMKRHUCBl03MzNVw5sA
+         g5b3Nzmuc3XQFrFpVKhiGciJoGy5F2NDoncaB8BYvFh9QI0MdFEIRSk7Zr30swzGjHzA
+         kMOoaj8eigP6MlwyozJY4dLB069j0827cdprGEgj9JFTfWUeSD2CTnhvt0bT6U+7msat
+         QpnA==
+X-Gm-Message-State: AOJu0YxI+emD2Oe3r2YO4tX4XtAGeBtaaaNCFGmXVnLBiKzLQnvrv+SB
+	ZwCMdnbwx7KLMeuLMSycxm40au2p74LHRq+ilsPVKaFBuwNKGlSkWrXeL8aHxhOaqWo=
+X-Gm-Gg: ASbGnctkm7rmwAH3a56nkD7TD86+3MZ/ujIniLuD4kIfW1n6J4GsWa/1kcU3SnPpVMH
+	+asSRdLnw7y+D2xYe6JjBqsGIHOfE68kSIVpqrwJkGq4VLyDcGqPC7C1vHuBlEXjRJ961wBpLnr
+	5l4O7wiymwBZ461YmqCRJtRLMqwFfL2bfbCYxdgMDnUqdc9msD4d3Z3hCAfXO159PJUp9HhcyOc
+	10L4qRcDZCn2a0+Tz9J52hJNpaEvuKTcm/02OohULAi97HpytK9DeF8IMZGc2QUq2PFyxYYtjTi
+	Dvt1IeOWM3+euRkrSTCcco+YMbJNHBr4fhmOtYvBk8gVdlSFVg7GMVsPoriPiZAgrswyhb+CQR3
+	/qjzUrZ3u0Gy+4D1+2V8YyoQgYqgixlwGRshCUcL1K0pGmGQkflTCZc4wfZuDhFn1ykFO6YHlzD
+	wJbB1XN1IRAc2S5DsAJBQSPj6gzDyyBabhBxsKMmZhtokrv/fpvBi5nqA6+Oie8+zxuUDSsQuD8
+	6C3
+X-Google-Smtp-Source: AGHT+IFt7FkGrjUGlQOSv30PcOTuYAg+G2jnyYcbkEOUdx4PafX6+NozVe5jVhG/6PDgSwaF9ZS0xA==
+X-Received: by 2002:a05:6000:2dc6:b0:42b:3746:3b82 with SMTP id ffacd0b85a97d-42b3746406cmr3612494f8f.54.1762775668787;
+        Mon, 10 Nov 2025 03:54:28 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:2b20:d700:6e9c:533c? ([2a05:6e02:1041:c10:2b20:d700:6e9c:533c])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-42b30dd4d86sm13217556f8f.26.2025.11.10.03.54.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Nov 2025 03:54:28 -0800 (PST)
+Message-ID: <8f4e2705-6174-462d-9160-6723c28ea08a@linaro.org>
+Date: Mon, 10 Nov 2025 12:54:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1580227820-1762775382=:1060"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] thermal/drivers/rcar_gen3: Document R-Car Gen4 and
+ RZ/G2 support in driver comment
+To: Marek Vasut <marek.vasut@mailbox.org>,
+ =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+ Marek Vasut <marek.vasut+renesas@mailbox.org>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Lukasz Luba <lukasz.luba@arm.com>, Magnus Damm <magnus.damm@gmail.com>,
+ Zhang Rui <rui.zhang@intel.com>, linux-renesas-soc@vger.kernel.org
+References: <20251015155905.186612-1-marek.vasut+renesas@mailbox.org>
+ <20251015173303.GA607688@ragnatech.se>
+ <48f394d9-69d4-449b-8478-f2f24b230e94@mailbox.org>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <48f394d9-69d4-449b-8478-f2f24b230e94@mailbox.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323328-1580227820-1762775382=:1060
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Hi Marek,
 
-On Thu, 6 Nov 2025, Krzysztof Kozlowski wrote:
+On 10/15/25 20:11, Marek Vasut wrote:
+> On 10/15/25 7:33 PM, Niklas Söderlund wrote:
+> 
+> Hello Niklas,
+> 
+>>> - *  R-Car Gen3 THS thermal sensor driver
+>>> + *  R-Car Gen3/Gen4 and RZ/G2 THS thermal sensor driver
+>>
+>> Super nit: I would write "Gen3, Gen4 and RZ/...". Compared to v1 you
+>> updated the commit message not the comment here. Not a big deal all the
+>> information is there.
+> 
+> Like this, right ? I will include that in V3, thanks:
 
-Please change the prefixes to:
+Did you send the V3 ? Not sure if I missed it or if you had no time to 
+send it yet
 
-platform/surface: aggregator_registry: ...
 
-Once that is changed,
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Acked-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
-
---=20
- i.
-
-> Replace open-coded getting root OF node, matching against it and getting
-> the match data with new of_machine_get_match_data() helper.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->=20
-> ---
->=20
-> Depends on the first OF patch.
-> ---
->  drivers/platform/surface/surface_aggregator_registry.c | 13 +-----------=
--
->  1 file changed, 1 insertion(+), 12 deletions(-)
->=20
-> diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/dri=
-vers/platform/surface/surface_aggregator_registry.c
-> index a594d5fcfcfd..78ac3a8fbb73 100644
-> --- a/drivers/platform/surface/surface_aggregator_registry.c
-> +++ b/drivers/platform/surface/surface_aggregator_registry.c
-> @@ -491,24 +491,13 @@ static const struct of_device_id ssam_platform_hub_=
-of_match[] __maybe_unused =3D {
->  static int ssam_platform_hub_probe(struct platform_device *pdev)
->  {
->  =09const struct software_node **nodes;
-> -=09const struct of_device_id *match;
-> -=09struct device_node *fdt_root;
->  =09struct ssam_controller *ctrl;
->  =09struct fwnode_handle *root;
->  =09int status;
-> =20
->  =09nodes =3D (const struct software_node **)acpi_device_get_match_data(&=
-pdev->dev);
->  =09if (!nodes) {
-> -=09=09fdt_root =3D of_find_node_by_path("/");
-> -=09=09if (!fdt_root)
-> -=09=09=09return -ENODEV;
-> -
-> -=09=09match =3D of_match_node(ssam_platform_hub_of_match, fdt_root);
-> -=09=09of_node_put(fdt_root);
-> -=09=09if (!match)
-> -=09=09=09return -ENODEV;
-> -
-> -=09=09nodes =3D (const struct software_node **)match->data;
-> +=09=09nodes =3D (const struct software_node **)of_machine_get_match_data=
-(ssam_platform_hub_of_match);
->  =09=09if (!nodes)
->  =09=09=09return -ENODEV;
->  =09}
->=20
->=20
---8323328-1580227820-1762775382=:1060--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
