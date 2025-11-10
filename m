@@ -1,129 +1,171 @@
-Return-Path: <linux-pm+bounces-37718-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37719-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97531C463EA
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 12:28:11 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62D82C465F4
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 12:50:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CE9224ECA03
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 11:26:32 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DEC0F34801A
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 11:50:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06B730B512;
-	Mon, 10 Nov 2025 11:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B82DF30BF66;
+	Mon, 10 Nov 2025 11:49:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f7XBuqb6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MybNDpjY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4863130AD0C
-	for <linux-pm@vger.kernel.org>; Mon, 10 Nov 2025 11:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC19630ACEE;
+	Mon, 10 Nov 2025 11:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762773881; cv=none; b=eSoqCyaEUaIiNoSbkJkiyEHyxCBR7kfSe+718pwtCW9bde1gYwzp8LUtfeDcGRTrUd5t4hf993c0XXHtQl3VtNwxNIAGcNnNFCn8hyLO+qI1BBNOOTWVih3t7S0fQAU9xetO+N8wdlpdwQ+WjIXnyCfmWsGBHDLgk9yCPjIJsfw=
+	t=1762775399; cv=none; b=HFCc6oLcin3sfiZUZi8V5EIBwePG5h4WESnUUJkoMGtSkCzPJG/VfZUAXIiPNf+BKwIm75tBrZ7hj3wD7ZIu6tlcbxeqUgd8jHJDzaNW2I9pU+/itc/gntVH3gARwEUky9i8It2mc6jjJ07H9ZtRB+uTDwc9RAdpvEroFwj8n64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762773881; c=relaxed/simple;
-	bh=VZG4ADvxmOQVKXoG8pF38F0+M2qbCM7PhQDQ4O9N4wU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bjf9rlycaJhBznsGLA6vLG0wBknHAoWdYTR01lRE2YYxDZZQeJ8MgyG83kK3+GXulUF42F0Hp8+AZHsMh8aRa4c55ZTUhWlMCwdfVQyB593lcpaiJRXspN2TGV8sHOX21iLTtl8ChIhXa7EpfjmgT3rW8+Z8aEJ0XY5nq8XIvSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=f7XBuqb6; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7b0246b27b2so3019607b3a.0
-        for <linux-pm@vger.kernel.org>; Mon, 10 Nov 2025 03:24:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762773879; x=1763378679; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vMDkjQGobsOv3RR6xr/uyV8xnVRXND5aFdVyt0tgcL0=;
-        b=f7XBuqb6sBMF6DaAsQ3/yGe1CPap8qfs+zBddr9yvZWwkj8nNbL59JiCuU4u8tKCf0
-         95vXGUlmwnydx441+Nw9lAxi9ZS5lHF35Xvni6TqHQkOQ9gMKsV++rtuHkbU4Z9J9wEi
-         WYVoo1bpWkUj/vA1GyxhOElFMTSrZR288WCKsmTsl8hKPTEB9iFs6nJqYrmCp7YtUGmI
-         cf2wUEcc/rGWAvK4t0eQpukg749Rv4vVjgvxyknBpgMoog5K544oQVHjmo5M2GLgRN7x
-         7GG+Fr4Ele5NsTMe0jGMRAHPiCyLh9qS+QNqh8QCdi4GxP+TDGleYuIGylt0QxD+WNqR
-         vk5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762773879; x=1763378679;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vMDkjQGobsOv3RR6xr/uyV8xnVRXND5aFdVyt0tgcL0=;
-        b=N1hcHUnFrsRcOImprdLQ/xf2iwp36d8ifIMQlz2cRnb8aOOus9eWXg8xWgHmtv1/2V
-         6CQUivkIc7j70Uu4xxpAua6zgHrRioUGGf6BDjPdL6YsF0Uafs8FhbiOAmcg0rnZTajU
-         o9w97nmtSAc3yMZ5mmdnV6RdD5rWB+Vlul3NOCOYM41K01mg45ATvOkp4Oi/HmwrM/Ts
-         el8WimvEWskXbdXiGOnVD4u7JLjZsRLDYl8ZLvx4VnFBPtE5SzZRYvOgrquro2xoLw44
-         Ynd3OKjKIJaljQq/sLdXJP/dhbsWmb5+Ejh+Zn53JbaOAb3ZKjtI+X2mTr/1kn17u0PQ
-         mU2g==
-X-Forwarded-Encrypted: i=1; AJvYcCVWc1i3ZIfYtteabK4P8XeX2dUpjRHV0MQ+vfpsYKCBKWlkABBAqUwKCZ/EeY9C1EU55l1qkLwgEw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSc1DucQtUhqR0SvxsiDKxeKPF1ePzX8K1nx33CiWj2COcfmB6
-	pZR9pJCvtoeqDErPv50akg5+FpVysGeClLhzdCVyLIckzUxesBAvEjC+NZjoqH3Gbhc=
-X-Gm-Gg: ASbGncvBqPzNiXVjOuzaHHUzyTyZaEl/ScfIP7PARVgO0Re+T9fGgtxuuKsslMDrN+I
-	3uWdqYSuZf32HMBSOqfMkNpjkCzG6QWn+f9aMqygJn17J70lew2IiMNTf/QCbSwtBKkbAsYhC6R
-	+/wetVTkMoyHv2mWGgV1f290wmWIxuvK85WQIdlwviOjcQVa2lafd1AZXQ5bkhwPbrUTZhD2EOn
-	bWD13sV24757p2XHHTVuXzxGNiRsVG1ZcKhfYWo2VJ9FJVdewpsAoHtHbA9Eue58IDimSnokiUi
-	CVHmraP+n2KAaMsg0PlrH+ryW6luKVKTLbLQZ7i4Ro2App0O4ofg1ZmxCYXdyQ0zgOCF4yb4cky
-	I4ehahvhMHmYR8a3CfOg5r2nfa6stXwnPW0CRDRefXKnuWVQ91ijSU7G5ywDWM+UhjqvyqTzbZb
-	G4
-X-Google-Smtp-Source: AGHT+IFAkaqN83yZLc1MvlehEFP3AsNvnAaW41gBCIMnAllwfEShHWXKI43+yaUimozXj7v3jpkizQ==
-X-Received: by 2002:a05:6a00:228b:b0:77f:324a:6037 with SMTP id d2e1a72fcca58-7b225ad97f8mr9670962b3a.7.1762773879445;
-        Mon, 10 Nov 2025 03:24:39 -0800 (PST)
-Received: from localhost ([122.172.86.94])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b0c9f01821sm11646876b3a.26.2025.11.10.03.24.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Nov 2025 03:24:38 -0800 (PST)
-Date: Mon, 10 Nov 2025 16:54:36 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>, 
-	ulf.hansson@linaro.org
-Cc: vireshk@kernel.org, Nishanth Menon <nm@ti.com>, 
-	Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
-	Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: Queries on required-opps on calling dev_pm_opp_set_opp()
-Message-ID: <7paqqdkxfxd3hz76o7o4q7pkmc27czqtn3smffpkwoha7bncdq@w7ik7v3c5uwk>
-References: <8e542a9d-132d-45c3-b17f-1dcea4bdf337@oss.qualcomm.com>
+	s=arc-20240116; t=1762775399; c=relaxed/simple;
+	bh=kgLvGqGW6Y2MVxPS0dVKx+QUBt0U5B7prEs50cqFkU4=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=cHchF+3SJs7n+nnBrL5JSJxU/LYj51e1j+Qc1y4n6t4WWiVQ05TcyGDM9JabhHMvvxvOxPpxfto4uETLWRiSjVwtqCKiHDnk4hfx6OuO6M5e5vqlAKPjbjt6mp2wFZGBjOnP3VrM1UrlSomBeCTWh3xpNaSg/iUHKbegrjZl5RI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MybNDpjY; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762775398; x=1794311398;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=kgLvGqGW6Y2MVxPS0dVKx+QUBt0U5B7prEs50cqFkU4=;
+  b=MybNDpjYgKJzlFJE1XlpRif5sw8WHu5Oa0DPp+7PPcrvsdcoEou2DCsA
+   nquc7AEVVNrIdcfV0p8X+fVSJJ2s5K6UjkbYi5X6xyb/iRbwnVjFLa2KX
+   mUbdG6XTlJgOz7H3b1N0+b1qfvHFcpVJ40pB0DS+RgzpZrYDR/A8Ui9Bi
+   E6FGEqNksD6qGPooTKNnZsSrn3UnlOn+SMCGgisksA9sl9etTKgVAbSR4
+   zEexw75QcZkFksiEb7l+GbvPSNiK2pN0yZC3uRMTGlyIGWjwacAWEoxQF
+   fuGD/FtPIFSgzt/kofTi1XRcIY+zeOz137dj9ZqKlbQTVUbDsyOVYq1z6
+   w==;
+X-CSE-ConnectionGUID: W1fT316HSnm/TQmGTWuvYw==
+X-CSE-MsgGUID: IrTEIptmT+C0026QS1VRsw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11608"; a="52381235"
+X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
+   d="scan'208";a="52381235"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 03:49:57 -0800
+X-CSE-ConnectionGUID: Sj9MWXvmSo6S4AGtYTK6HQ==
+X-CSE-MsgGUID: q0aaSUIcTOWst/+WBvw2kg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,293,1754982000"; 
+   d="scan'208";a="193665319"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.13])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2025 03:49:46 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 10 Nov 2025 13:49:42 +0200 (EET)
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+    "Rafael J. Wysocki" <rafael@kernel.org>, 
+    Viresh Kumar <viresh.kumar@linaro.org>, 
+    Matthias Brugger <matthias.bgg@gmail.com>, 
+    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+    Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@kernel.org>, 
+    Jernej Skrabec <jernej.skrabec@gmail.com>, 
+    Samuel Holland <samuel@sholland.org>, 
+    Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+    Daniel Lezcano <daniel.lezcano@linaro.org>, 
+    Bjorn Andersson <andersson@kernel.org>, 
+    Konrad Dybcio <konradybcio@kernel.org>, 
+    Thomas Gleixner <tglx@linutronix.de>, 
+    Nicolas Ferre <nicolas.ferre@microchip.com>, 
+    Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+    Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+    Maximilian Luz <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>, 
+    Daniel Lezcano <daniel.lezcano@kernel.org>, 
+    Thierry Reding <thierry.reding@gmail.com>, 
+    Jonathan Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org, 
+    linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+    linux-sunxi@lists.linux.dev, linux-arm-msm@vger.kernel.org, 
+    platform-driver-x86@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH 09/13] platform: surface: Simplify with
+ of_machine_get_match_data()
+In-Reply-To: <20251106-b4-of-match-matchine-data-v1-9-d780ea1780c2@linaro.org>
+Message-ID: <4986f752-ba21-6a5f-641a-e0dadb4abd11@linux.intel.com>
+References: <20251106-b4-of-match-matchine-data-v1-0-d780ea1780c2@linaro.org> <20251106-b4-of-match-matchine-data-v1-9-d780ea1780c2@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8e542a9d-132d-45c3-b17f-1dcea4bdf337@oss.qualcomm.com>
+Content-Type: multipart/mixed; boundary="8323328-1580227820-1762775382=:1060"
 
-Hi Krishna,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 07-11-25, 15:25, Krishna Chaitanya Chundru wrote:
-> As you are aware that we had OPP enabled for PCIe[1].
-> We plan to introduce a OPP table for phy node also where we want to change
-> the frequency of the clock based on
-> PCIe data rate it operates. we planned to have the reference of OPP table of
-> phy in the controller node so that
-> when ever controller node sets a opp then corresponding phy opp also will
-> get set.
+--8323328-1580227820-1762775382=:1060
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-A DT example could be useful here.
+On Thu, 6 Nov 2025, Krzysztof Kozlowski wrote:
 
-> But currently we see calling dev_pm_opp_set_opp() for required opps is
-> removed with this patch[2]
+Please change the prefixes to:
 
-Yeah, it wasn't working as we thought it should and moreover there were no
-non-genpd users.
+platform/surface: aggregator_registry: ...
 
-> Can you tell us if it is ok to call dev_pm_opp_set_opp() for required opps
-> if level is OPP_LEVEL_UNSET
-> or is there a way to know that opp is for PM domain (maybe dev->pm_domain)?
+Once that is changed,
 
-Yeah, something like that can be done.
+Acked-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
 
-> if know that we can call dev_pm_opp_set_opp() for remaining devs.
+--=20
+ i.
 
-We need to figure out voting aggregation in that case. For example, what will
-happen if we change the OPP from required-opp call chain and then a driver
-directly updates the OPP of the required device.
-
--- 
-viresh
+> Replace open-coded getting root OF node, matching against it and getting
+> the match data with new of_machine_get_match_data() helper.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>=20
+> ---
+>=20
+> Depends on the first OF patch.
+> ---
+>  drivers/platform/surface/surface_aggregator_registry.c | 13 +-----------=
+-
+>  1 file changed, 1 insertion(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/dri=
+vers/platform/surface/surface_aggregator_registry.c
+> index a594d5fcfcfd..78ac3a8fbb73 100644
+> --- a/drivers/platform/surface/surface_aggregator_registry.c
+> +++ b/drivers/platform/surface/surface_aggregator_registry.c
+> @@ -491,24 +491,13 @@ static const struct of_device_id ssam_platform_hub_=
+of_match[] __maybe_unused =3D {
+>  static int ssam_platform_hub_probe(struct platform_device *pdev)
+>  {
+>  =09const struct software_node **nodes;
+> -=09const struct of_device_id *match;
+> -=09struct device_node *fdt_root;
+>  =09struct ssam_controller *ctrl;
+>  =09struct fwnode_handle *root;
+>  =09int status;
+> =20
+>  =09nodes =3D (const struct software_node **)acpi_device_get_match_data(&=
+pdev->dev);
+>  =09if (!nodes) {
+> -=09=09fdt_root =3D of_find_node_by_path("/");
+> -=09=09if (!fdt_root)
+> -=09=09=09return -ENODEV;
+> -
+> -=09=09match =3D of_match_node(ssam_platform_hub_of_match, fdt_root);
+> -=09=09of_node_put(fdt_root);
+> -=09=09if (!match)
+> -=09=09=09return -ENODEV;
+> -
+> -=09=09nodes =3D (const struct software_node **)match->data;
+> +=09=09nodes =3D (const struct software_node **)of_machine_get_match_data=
+(ssam_platform_hub_of_match);
+>  =09=09if (!nodes)
+>  =09=09=09return -ENODEV;
+>  =09}
+>=20
+>=20
+--8323328-1580227820-1762775382=:1060--
 
