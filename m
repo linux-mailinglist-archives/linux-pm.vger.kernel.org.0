@@ -1,126 +1,143 @@
-Return-Path: <linux-pm+bounces-37765-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37766-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86053C49B24
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 00:04:33 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E2C9C49D20
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 00:58:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9FB163A28F1
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 23:04:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7F5BA4EF761
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 23:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF90E301006;
-	Mon, 10 Nov 2025 23:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 296E6305043;
+	Mon, 10 Nov 2025 23:58:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UhQ1D1Km"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rMfnUB62"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B6F2FB988
-	for <linux-pm@vger.kernel.org>; Mon, 10 Nov 2025 23:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C141C336EFF
+	for <linux-pm@vger.kernel.org>; Mon, 10 Nov 2025 23:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762815867; cv=none; b=Kwnzr8bnQcBnXOOjwF8LKFy8mIdwWFHUDpBrIW0QehKpFt2LXUV/cSrEDPUPK1ZirmjlW6l1VBVStGoiHkL51vMPa45tFoso0IFWxbTbWjhSe+t2Bu1Cbc5qeOEELHSL24VXrvBqTHoWTbbxtV81f1Z9Zh1lTB+iFoCJ9U8k9wc=
+	t=1762819086; cv=none; b=kXNRLKEoz0lmqjwgeCTRP0IC85PZYREEbp9BHgv1bd1pepFZKwopPPCKRyCc9wsoDyGAn6l7HjhInL/DwQYvWGyDREUOXurih+XSJnfMgqUYOODOeOQoG+SwkhHmyE/d9AK3cg1R4XRO8MWmF/ltQlkqQwQWPdpE0g8HPKwbyiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762815867; c=relaxed/simple;
-	bh=iJtkiZUOo775Ftb6cLEsbpL0tmdErWFS9CRdvdq4yBY=;
+	s=arc-20240116; t=1762819086; c=relaxed/simple;
+	bh=gR2t+MCFT0pENLeKE/c4frJpybxo9Ti1EMQAvfgDQGI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WLssv6GrEzAKtiu9tQVfH9xSw6L07mgdFHc9xNHOXdcusGYU+R6mUWhWWHePEbdfLEJLvrCDfppNp53l7BVQ3lEkWzi6Yy6osj/4Y7fVguc0MuFyJMzRQXfWV0rq01y63zZqwx0etfoRiNzjhgYHvpARjFtvJ4UABq93YMtUg7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UhQ1D1Km; arc=none smtp.client-ip=209.85.128.170
+	 To:Cc:Content-Type; b=OABBh0Q/FXLejK0QRQhoKf03qv2Sj0hNDJc/kBZowHWnTwzz+vNR4fCq+jHRX4q0+L7r3I1k+1RWmL0XFwP0QwC+UYwPEnnosbdtwFoqmoRezwx4hl6DteoHZmpBUbqREbQJk/YIt6oHnY7VBnF9PxwAd5jGliYkN1ZRtOl6ATM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rMfnUB62; arc=none smtp.client-ip=209.85.167.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-7869deffb47so35045887b3.1
-        for <linux-pm@vger.kernel.org>; Mon, 10 Nov 2025 15:04:25 -0800 (PST)
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5943d1d0656so4652202e87.0
+        for <linux-pm@vger.kernel.org>; Mon, 10 Nov 2025 15:58:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1762815864; x=1763420664; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1762819082; x=1763423882; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iJtkiZUOo775Ftb6cLEsbpL0tmdErWFS9CRdvdq4yBY=;
-        b=UhQ1D1KmPSyna4F/76ZCUiG8KhIv95nF4dhc49qrIM3p2GzZR8fl4PtKw6Yk5uaenr
-         Jxo6B1MPDizlQu/eAzhlHvAjPysa3NgZUqffrBat8sUZCey95AmWJHKnSMiP9zRpfVwn
-         yDf7hD9zPMNJY5K/TDMfIBp874x/FBBHi88+dxfp8g2/um8X8UHQj372t+OGfbo82eR1
-         O1hbOAThw5oCk4Sy/TkWbTHXa+HDjeRny+D/HCyIsPlxXxKrnhIkL79zMZOuophqGxN7
-         HEm1Hqzly5dxGv5sdqIOUUxBQAtVaiVswEfsuQw5gUpO4MhmxEB5Nma4Cgn7+HcHKITN
-         65kg==
+        bh=gR2t+MCFT0pENLeKE/c4frJpybxo9Ti1EMQAvfgDQGI=;
+        b=rMfnUB62IkZBgU4Z+MwGW9CfUGrmA19YQdXxMpBNsOeSJ0mEIRcXgpji9QXC0EYyJa
+         o+/Tku8BunlJT5rqpTHIDQcnC0gQ3F+JkdSrYjtxQfXoIsyhWp6/QS7GuituJLbu5Vwy
+         Y2z36yLhaznblXd+6FSzx3ztBGjYUzzA+q46QqvbjDXeQi0qTzWXA3AuPHvGZXRtu8Cq
+         RTZKrvyOiNDmIj/4kKFajk4V5MVhg+bkHb0LR2U8TtduyxRf1DorNvQFruPMZ/SbpwDG
+         13aG9D3U2O+aC7XKZ2XKF3l80D0Wm2qCGZQQeTFm/o11lzRynFNQt5R4bLoZZjz8H5GR
+         UBqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762815864; x=1763420664;
+        d=1e100.net; s=20230601; t=1762819082; x=1763423882;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=iJtkiZUOo775Ftb6cLEsbpL0tmdErWFS9CRdvdq4yBY=;
-        b=dHvHjV9qBCL32qGj7uX3qFISpVa88nOWb/PgK7sP5iLbKNj1C3LmqD76gbB8qOoAR3
-         xNmHoWl5GNF3RSlR936aaLiyb5nfmuk6c4184AFonOd6ulK2M7IUbROb7RX2kRQZg9zj
-         Uv56zXbdWjCio5ziZ7XorJt2CJQ+EdQ15p+CSyXBIx/TWta2zUTWvfDfy7dntCreX8LR
-         gX6PNcW7wvvsvGK3zKQzTVjuCNKu4sovjEZqgYRAtbONOiC0RjJL+GzrVc5t/0JbbkO/
-         ki23k/oNzwQrTZqRkOaIrz1vrKxwCOnw45X/dkqbpOm+yJf4ZzdxpywCnUSfWKdG27sJ
-         18qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWfLDc/Nt8ZDIpG61ZROXirXTvR5Labse1ZNHMaj/6UmRLZEwlbQfn2nrpxCcjd/tqXKcygrsFEBg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3LU5iEg+WuWr1bzklLOW6iXIGBtr2V9RUgrbZTun6Tc+GaQxS
-	ZurnCgx2BseNbXqHpIUYF5yWwUyjHuq223B6Dfy1lZ8z+EmPI+q7OdFCtp5KIVOUIkIS0lMjwYl
-	o3Wnx2gAHXaNE68kVjg0TmjPNEk+OVz5Q2K/FFYkL1g==
-X-Gm-Gg: ASbGnctXMsLV9yopDOxdWGVMZSTh9fXcXSayduG4WsqzlU0ADm2GVIGdtXIyqn30h1b
-	ilyjri8evgxtBEpdCLqUplOWOUmjmkQVy1ux7/Y4EvrJuL08BHmU8TL3yuYLKe4rduCoCv5Vani
-	MeoNHvwolAC/lBqPOr2i/UU2vy4RhEZ2TsPe063TJ748dDUqMXFuxbwm/mAlSnCiVnOCCyLTKiW
-	JPX3WJKUAVkxRMCzCcIoehTbWtZsdrX0KO/8OGneLvTyJN05/zCw8W0Xa7+Opgp0dB9W0I=
-X-Google-Smtp-Source: AGHT+IHoC/R8TGWkSsRmVYTrTznpjr4STw1JDCmsU2sbR9qoad5PnTy6Rrlwiey4S9ikwN3xlZNQtXBlBuI95lMoqZY=
-X-Received: by 2002:a05:690c:6385:b0:786:4fd5:e5cb with SMTP id
- 00721157ae682-787d541b7f3mr90568307b3.35.1762815864323; Mon, 10 Nov 2025
- 15:04:24 -0800 (PST)
+        bh=gR2t+MCFT0pENLeKE/c4frJpybxo9Ti1EMQAvfgDQGI=;
+        b=WfB7iuLkJjkLGDXTcEW0ABSh7vLxHHjqDVDh/Glj/5+HHOhTCxmzhCTsmiExIKBgKn
+         SRWTShtvyX2ABPu6X/7IrNRN9kgk70fI1aQdCpl6dBa4N6YRqcC6eVaiwi+oSaghQCWF
+         RfAZm1FkP7MHY/Qa5ZXor8jDDc53bA/FWPwVIdZcssJtWaAZiB0D2X/A5GumNyQbz6Vl
+         WIUwAVn99KW00BKGrMeZKyywRboKzqrczcRtEJ5syuu+9aIDPfbpm23xsTy6XX9EmmdH
+         pjNWXb2eQqV5CvW09ck2Irw2htMDIeG1aXM6snRn1Au6fFwpLnHpqOWId+wsuoXB8Ya5
+         aspw==
+X-Forwarded-Encrypted: i=1; AJvYcCXkkta8/6qMNZPmFtzC+dH+pIpiY8yD/vSqIe73ldvWCa89gVjOCPfqeOMOoaO+oFQTm/fPz0lxbQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyF0/E/LDUUb2JShpxDAjdPJCUi3DGWO+pJ0JThx6DmcB+sMBoK
+	tY9mCAWS/F+8RrlTJsXbU6KKKKn3J7ADEzDjY+f6aTOSIWZu50z3lK89kAGFaRlMKxZihfTY0HF
+	njrp2b71oAqCrtB32MqCnBS2cfXfsQL9QG+/3a/BJbA==
+X-Gm-Gg: ASbGnctMUsYq/ErQWCHjllcUkpv0r88sVfKzSfHmLBCwipD0DfmLAvRar/jYbr48Grx
+	kh1Dv50O8RQAXzIz0BfSrspmmSov4Q2XaqgLe6LA76jrsKqDB5UJc1VmG1h7ujN4Qp7jFf6xr82
+	tzaGnULo9dOe+4sHa6eDSFdU8zAKTb9YtdYgE8C5IPnsHPT3af1kECe+GaJ63JNCJ9gDOvURWRi
+	Avfr1S7idMep1e5aF+oI+pIokP04aeuvHpEm3r1r1kH0IsVe09r2f6ecYIwMXPFYm4Nxmw=
+X-Google-Smtp-Source: AGHT+IGq8/YFN7hlWLIK9a4/CG12Y6T0bDy/N5/JTLofPKZElIMDZsi5lcAadM+CuswrNL2lnuY1YgL0/HzwYkg+O1w=
+X-Received: by 2002:a05:6512:b03:b0:594:4a5a:346 with SMTP id
+ 2adb3069b0e04-5945f15bf72mr2619011e87.17.1762819081904; Mon, 10 Nov 2025
+ 15:58:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1762327887.git.mazziesaccount@gmail.com> <742fcdcc8b6dcb5989418e8c1cf5a7d7ba5434a5.1762327887.git.mazziesaccount@gmail.com>
-In-Reply-To: <742fcdcc8b6dcb5989418e8c1cf5a7d7ba5434a5.1762327887.git.mazziesaccount@gmail.com>
+References: <20251107-wakeirq_support-v5-0-464e17f2c20c@oss.qualcomm.com> <20251107-wakeirq_support-v5-2-464e17f2c20c@oss.qualcomm.com>
+In-Reply-To: <20251107-wakeirq_support-v5-2-464e17f2c20c@oss.qualcomm.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 11 Nov 2025 00:04:09 +0100
-X-Gm-Features: AWmQ_blNtjThswk7W8THjiE7tdsgu2zFtwGMw_ARgVxMcfWy78tjHu1U0YBhMO0
-Message-ID: <CACRpkdbP-GZXtj_-AuZ=q8zUKwt0qWQ1L6v7WsoQ50JwTs6JUA@mail.gmail.com>
-Subject: Re: [PATCH v3 02/16] dt-bindings: battery: Clarify trickle-charge
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lee Jones <lee@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
+Date: Tue, 11 Nov 2025 00:57:50 +0100
+X-Gm-Features: AWmQ_blAezbQ4rkb-Vrevk4Zgb5huFnQ0lcUTpotRRUAIJPGPB05jzXROpJ4ido
+Message-ID: <CACRpkdY9HsnG=xo=swnMcVha+unmvmxR6e6Ynsj09srM_tPmWA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] PCI: Add support for PCIe WAKE# interrupt
+To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Bartosz Golaszewski <brgl@bgdev.pl>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, quic_vbadigan@quicinc.com, quic_mrana@quicinc.com, 
+	sherry.sun@nxp.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 5, 2025 at 8:36=E2=80=AFAM Matti Vaittinen
-<matti.vaittinen@linux.dev> wrote:
+On Fri, Nov 7, 2025 at 10:22=E2=80=AFAM Krishna Chaitanya Chundru
+<krishna.chundru@oss.qualcomm.com> wrote:
 
-> From: Matti Vaittinen <mazziesaccount@gmail.com>
+> According to the PCIe specification 6, sec 5.3.3.2, there are two defined
+> wakeup mechanisms: Beacon and WAKE# for the Link wakeup mechanisms to
+> provide a means of signaling the platform to re-establish power and
+> reference clocks to the components within its domain. Beacon is a hardwar=
+e
+> mechanism invisible to software (PCIe r7.0, sec 4.2.7.8.1). Adding WAKE#
+> support in PCI framework.
 >
-> The term 'trickle-charging' is used to describe a very slow charging
-> phase, where electrons "trickle-in" the battery.
+> According to the PCIe specification, multiple WAKE# signals can exist in
+> a system. In configurations involving a PCIe switch, each downstream port
+> (DSP) of the switch may be connected to a separate WAKE# line, allowing
+> each endpoint to signal WAKE# independently. From figure 5.4, WAKE# can
+> also be terminated at the switch itself. To support this, the WAKE#
+> should be described in the device tree node of the endpint/bridge. If all
+> endpoints share a single WAKE# line, then WAKE# should be defined in the
+> each node.
 >
-> There are two different use-cases for this type of charging. At least
-> some Li-Ion batteries can benefit from very slow, constant current,
-> pre-pre phase 'trickle-charging', if a battery is very empty.
+> To support legacy devicetree in direct attach case, driver will search
+> in root port node for WAKE# if the driver doesn't find in the endpoint
+> node.
 >
-> Some other batteries use top-off phase 'trickle-charging', which is
-> different from the above case.
+> In pci_device_add(), PCI framework will search for the WAKE# in its node,
+> If not found, it searches in its upstream port only if upstream port is
+> root port to support legacy bindings. Once found, register for the wake I=
+RQ
+> in shared mode, as the WAKE# may be shared among multiple endpoints.
 >
-> The battery bindings use the term 'trickle-charge' without specifying
-> which of the use-cases properties are addressing. This has already
-> caused some confusion.
+> When the IRQ is asserted, the handle_threaded_wake_irq() handler triggers
+> a pm_runtime_resume(). The PM framework ensures that the parent device is
+> resumed before the child i.e controller driver which can bring back devic=
+e
+> state to D0.
 >
-> Clarify that the 'trickle-charge-current-microamp' refers to the first
-> one, the "pre-pre" -charging use-case.
+> WAKE# is added in dts schema and merged based on below links.
 >
-> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> Link: https://lore.kernel.org/all/20250515090517.3506772-1-krishna.chundr=
+u@oss.qualcomm.com/
+> Link: https://github.com/devicetree-org/dt-schema/pull/170
+> Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.co=
+m>
 
+The GPIO parts look all right to me, a bit complex since we can't use
+devm_* stuff here, but that happens.
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
