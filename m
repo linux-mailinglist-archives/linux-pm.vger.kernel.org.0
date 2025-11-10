@@ -1,164 +1,210 @@
-Return-Path: <linux-pm+bounces-37757-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37758-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98C21C4896A
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 19:36:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AC4A9C48A03
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 19:45:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BE3B74F232E
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 18:32:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 896554E27DC
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Nov 2025 18:45:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04E0F32E6AD;
-	Mon, 10 Nov 2025 18:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2C7023183B;
+	Mon, 10 Nov 2025 18:45:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nmdgkZUw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qqYCHOxH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE81632E6A0;
-	Mon, 10 Nov 2025 18:29:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4F161C695;
+	Mon, 10 Nov 2025 18:45:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762799345; cv=none; b=K/lo6881LFE0Ox2mbizaQojDiNv9bUuKSAIPT9m+NRQitBYU0LDBcfz2gi/nwrzYP/3hVZYeUOxe/h15FMdfm69PI5aoBshSj7qfo6WaylcKj1mlIbWwsqMWliy8bFK8WSJQFuqXlEQdT2EzzuKGe0mOXb3/GEmSQSAbxPbsmaU=
+	t=1762800327; cv=none; b=dRXeelVTuAuqDOVVWPgAbdT4w3zhjk/FwjU/hsEk66RHvKlI4qKEvuYzk/oIsByF7Y1RtcFQfih3e0EFurKYckghSu5mvh2zb/znoQyHtv4vYq90EKqtNB+67Or+vRn8yGW91PCA+jALGendFqIPcuvZL7U+3o+0naR6ECDyYOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762799345; c=relaxed/simple;
-	bh=u9Jb89JkKBZeEXePVaq8UqB4TuhULaWnLyCjR38ppvI=;
+	s=arc-20240116; t=1762800327; c=relaxed/simple;
+	bh=h+hvokvmCCTDbp1ZtZ5LLSZHkoGj3sCDkVi6fIPluaM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MIPAsVfzqnC6HLkuO3lZ/k6LVTpuJVa+K7kCpvhTnv5jMINV8Iq0dK+CCXugUZxCmWNDAN+ZZzEi/9pDtIJLbu/jTZ9HS8at9BsR4ZecvYZU4FcwzcfCXJp0iqOD62AwnKxgbMr1/DO3svm+04urP/elGmdMxAo96DzUxF+3mLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nmdgkZUw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D63A2C4CEF5;
-	Mon, 10 Nov 2025 18:29:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DQsX9PxtLKwA0wT0ZyMjYm5vahTNArln30Y3kV5Kmd+ydoq0Xac4hS07r5aeGploi/FBZykgwmZ8XjJ27Lhw+qjrd1Ivag3nY7M6pWBmzMjXVc83iQV3bFz+X9mVy/K8JyLbGctTCoWsomDSEF/ZMRX9BQfdzQgukl+cNLU9eeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qqYCHOxH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32A14C16AAE;
+	Mon, 10 Nov 2025 18:45:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762799345;
-	bh=u9Jb89JkKBZeEXePVaq8UqB4TuhULaWnLyCjR38ppvI=;
+	s=k20201202; t=1762800327;
+	bh=h+hvokvmCCTDbp1ZtZ5LLSZHkoGj3sCDkVi6fIPluaM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nmdgkZUwBErlZ4R16rraci9mo0wDpQbaUlJ80M2tD0YhX2zZBk4FM55WGhg6jopmP
-	 8TLIN7zJLQlkoApbwuqW02D6rWpvDo6pZcGSVwrqJ+OTOOZaFw477qCXI6ekqSD1wk
-	 DAtMwRluIYZ2U1Uaz9xCCWzihVzLJH49FMJN77vrbtb4tvcilMbPkfiZng/AERMyb7
-	 5pz8cAXv+gchZkSZRd34XnFwevKx+uRiARAzJbM3yYR4oS7zLY5zizhkSURATxvYST
-	 1e/WDB6iTHrIsA757VXJ91Xey3mb7tPLIdrc9Hpg+xcEzyEevI13Vnwndb0fU+oeI2
-	 8n/sodalpELIA==
-Date: Mon, 10 Nov 2025 12:33:10 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Cc: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Sebastian Reichel <sre@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Souvik Chakravarty <Souvik.Chakravarty@arm.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Andy Yan <andy.yan@rock-chips.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Konrad Dybcio <konradybcio@kernel.org>, 
-	cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, Moritz Fischer <moritz.fischer@ettus.com>, 
-	John Stultz <john.stultz@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Stephen Boyd <swboyd@chromium.org>, Andre Draszik <andre.draszik@linaro.org>, 
-	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, Elliot Berman <quic_eberman@quicinc.com>, 
-	Xin Liu <xin.liu@oss.qualcomm.com>, Srinivas Kandagatla <srini@kernel.org>, 
-	Umang Chheda <umang.chheda@oss.qualcomm.com>, Nirmesh Kumar Singh <nirmesh.singh@oss.qualcomm.com>
-Subject: Re: [PATCH v17 03/12] power: reset: reboot-mode: Add support for 64
- bit magic
-Message-ID: <zejaqakbtufwzlzs7xc7xzxezcylqjkmu4nne2mro4riuhgbkc@hlgu3u2w36bb>
-References: <20251109-arm-psci-system_reset2-vendor-reboots-v17-0-46e085bca4cc@oss.qualcomm.com>
- <20251109-arm-psci-system_reset2-vendor-reboots-v17-3-46e085bca4cc@oss.qualcomm.com>
- <20251110134529.uljjqzb3vhda3vya@hu-mojha-hyd.qualcomm.com>
- <gzj4r4elqewjt2gjzhuamslvobz5fgyvt672brwknoozlsplaq@wsebzmi2l6pc>
- <681a72ba-d8fb-bfc2-d2bb-d80ac667bc5c@oss.qualcomm.com>
+	b=qqYCHOxHrTmZdzB1WxpNF61c/7mzYYd64sAZLx7pm8fQ5FHdlPMVUWCNq5lZAwAYN
+	 IARYZ2xi5eguyUrK1/n3ud3g+I0ZVTtbej0tMgp4HaqrpUGr6nKS3g7goyyNjC4IQF
+	 oW+wjYzjH0dVZeWGbOrt19dSO1ye+/BrWqoYn0UXZD2AcwYRFjs9tyDTxmJZAYmCSl
+	 VIF6FxfnPJMrGiIr6yoqN2avq8U+z7iHGwcmEmIetJTs7RvoT01JA/f/9cWQfhvhvD
+	 5iqagu1+YKiqxcr94E3Lz5l2N1jsnWZOUXxx1cZgWqckCMiKMhK49cP2xHOuJDQVLd
+	 Rd02bg09psC6g==
+Date: Mon, 10 Nov 2025 18:45:20 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Hanchien Lin <hanchien.lin@mediatek.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Balsam CHIHI <bchihi@baylibre.com>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Project_Global_Chrome_Upstream_Group@mediatek.com,
+	raymond.sun@mediatek.com, Irving-CH.lin@mediatek.com
+Subject: Re: [PATCH 1/2] arm64: dts: mediatek: mt8189: Add thermal controller
+ node
+Message-ID: <20251110-vagueness-waggle-50b8efe728a8@spud>
+References: <20251110094113.3965182-1-hanchien.lin@mediatek.com>
+ <20251110094113.3965182-2-hanchien.lin@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="C0KGNy2z0JyurDwg"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <681a72ba-d8fb-bfc2-d2bb-d80ac667bc5c@oss.qualcomm.com>
-
-On Mon, Nov 10, 2025 at 11:22:40PM +0530, Shivendra Pratap wrote:
-> 
-> 
-> On 11/10/2025 10:00 PM, Bjorn Andersson wrote:
-> > On Mon, Nov 10, 2025 at 07:15:29PM +0530, Mukesh Ojha wrote:
-> >> On Sun, Nov 09, 2025 at 08:07:16PM +0530, Shivendra Pratap wrote:
-> >>> Current reboot-mode supports a single 32-bit argument for any
-> >>> supported mode. Some reboot-mode based drivers may require
-> >>> passing two independent 32-bit arguments during a reboot
-> >>> sequence, for uses-cases, where a mode requires an additional
-> >>> argument. Such drivers may not be able to use the reboot-mode
-> >>> driver. For example, ARM PSCI vendor-specific resets, need two
-> >>> arguments for its operation – reset_type and cookie, to complete
-> >>> the reset operation. If a driver wants to implement this
-> >>> firmware-based reset, it cannot use reboot-mode framework.
-> >>>
-> >>> Introduce 64-bit magic values in reboot-mode driver to
-> >>> accommodate dual 32-bit arguments when specified via device tree.
-> >>> In cases, where no second argument is passed from device tree,
-> >>> keep the upper 32-bit of magic un-changed(0) to maintain backward
-> >>> compatibility.
-> >>>
-> >>> Update the current drivers using reboot-mode for a 64-bit magic
-> >>> value.
-> 
-> [SNIP..]
-> 
-> >>> +	if (magic > U32_MAX)
-> >>> +		return -EINVAL;
-> >>> +
-> >>> +	magic_32 = magic;
-> >>> +
-> >>>  	syscon_rbm = container_of(reboot, struct syscon_reboot_mode, reboot);
-> >>>  
-> >>>  	ret = regmap_update_bits(syscon_rbm->map, syscon_rbm->offset,
-> >>> -				 syscon_rbm->mask, magic);
-> >>> +				 syscon_rbm->mask, magic_32);
-> > 
-> > As above, if we're no longer silently discarding bits, I think we should
-> > compare the magic against syscon_rbm->mask.
-> > 
-> > No need for a local variable, just type cast after checking the validity.
-> 
-> Trying to summarize below why we added these check-
-> 
-> the patch in v11 used typecasting and did not have any of these checks(link below):
-> https://lore.kernel.org/all/20250717-arm-psci-system_reset2-vendor-reboots-v11-2-df3e2b2183c3@oss.qualcomm.com/
-> 
-> As per below upstream review, type cast was removed and bound checks were added all-over patchset:
-> "As a general rule of thumb, code with casts is poor quality code. Try
-> to write the code without casts." - 
-> https://lore.kernel.org/all/8d4a42b6-657f-4c30-8e25-4213d8d53a89@lunn.ch/
-> 
-> We can revert to the typecast way. Please suggest.
-> 
-
-Okay, I'm okay with Andrew's original request, stick to that for the
-nvmem case. Although I don't fancy the name "magic_32", and would prefer
-that you just call it "value" or something.
+In-Reply-To: <20251110094113.3965182-2-hanchien.lin@mediatek.com>
 
 
-For pon and syscon however, I'm wondering why you have ignored Andrew's
-other request from that same email:
+--C0KGNy2z0JyurDwg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-"""
-You might be able to go further, and validate that magic actually fits
-into the field when you consider the << pon->reason_shift.
-"""
+On Mon, Nov 10, 2025 at 05:40:38PM +0800, Hanchien Lin wrote:
+> Add device tree node for the thermal controller on MediaTek MT8189 SoC.
 
-Writing "if (magic > U32_MAX)" in a snippet of code where magic isn't
-allowed to be more than either 32 or 64 is misleading.
+$subject is incorrect for a binding change.
+pw-bot: changes-requested
 
-For syscon, it's true that the parameter is an unsigned long, but the
-actual limit better be based on syscon_rbm->mask.
+>=20
+> Signed-off-by: Hanchien Lin <hanchien.lin@mediatek.com>
+> ---
+>  .../thermal/mediatek,lvts-thermal.yaml        | 27 +++++++++++++++++--
+>  .../thermal/mediatek,lvts-thermal.h           | 20 ++++++++++++++
+>  2 files changed, 45 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-ther=
+mal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.=
+yaml
+> index 0259cd3ce9c5..0f7fd69f5fdf 100644
+> --- a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+> @@ -22,6 +22,8 @@ properties:
+>        - mediatek,mt8186-lvts
+>        - mediatek,mt8188-lvts-ap
+>        - mediatek,mt8188-lvts-mcu
+> +      - mediatek,mt8189-lvts-ap
+> +      - mediatek,mt8189-lvts-mcu
+>        - mediatek,mt8192-lvts-ap
+>        - mediatek,mt8192-lvts-mcu
+>        - mediatek,mt8195-lvts-ap
+> @@ -58,6 +60,21 @@ properties:
+>  allOf:
+>    - $ref: thermal-sensor.yaml#
+> =20
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mediatek,mt8189-lvts-ap
+> +              - mediatek,mt8189-lvts-mcu
+> +    then:
+> +      properties:
+> +        nvmem-cells:
+> +          minItems: 2
+> +
+> +        nvmem-cell-names:
+> +          minItems: 2
+> +
+>    - if:
+>        properties:
+>          compatible:
+> @@ -75,6 +92,10 @@ allOf:
+>          nvmem-cell-names:
+>            maxItems: 1
+> =20
+> +      required:
+> +        - clocks
+> +        - resets
+> +
+>    - if:
+>        properties:
+>          compatible:
+> @@ -91,12 +112,14 @@ allOf:
+>          nvmem-cell-names:
+>            minItems: 2
+> =20
+> +      required:
+> +        - clocks
+> +        - resets
+> +
+>  required:
+>    - compatible
+>    - reg
+>    - interrupts
+> -  - clocks
+> -  - resets
+>    - nvmem-cells
+>    - nvmem-cell-names
+> =20
+> diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/includ=
+e/dt-bindings/thermal/mediatek,lvts-thermal.h
+> index ddc7302a510a..6c9103dfdc2d 100644
+> --- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> +++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+> @@ -42,6 +42,26 @@
+>  #define MT8188_AP_CAM1		6
+>  #define MT8188_AP_CAM2		7
+> =20
+> +#define MT8189_MCU_BIG_CPU1     0
+> +#define MT8189_MCU_BIG_CPU2     1
+> +#define MT8189_MCU_BIG_CPU3     2
+> +#define MT8189_MCU_BIG_CPU4     3
+> +#define MT8189_MCU_LITTLE_CPU1  4
+> +#define MT8189_MCU_LITTLE_CPU2  5
+> +#define MT8189_MCU_LITTLE_CPU3  6
+> +#define MT8189_MCU_LITTLE_CPU4  7
+> +#define MT8189_MCU_LITTLE_CPU5  8
+> +#define MT8189_MCU_LITTLE_CPU6  9
+> +#define MT8189_MCU_LITTLE_CPU7  10
+> +#define MT8189_MCU_LITTLE_CPU8  11
+> +
+> +#define MT8189_AP_SOC1          12
+> +#define MT8189_AP_SOC2          13
+> +#define MT8189_AP_SOC3          14
+> +#define MT8189_AP_APU           15
+> +#define MT8189_AP_GPU1          16
+> +#define MT8189_AP_GPU2          17
+> +
+>  #define MT8195_MCU_BIG_CPU0     0
+>  #define MT8195_MCU_BIG_CPU1     1
+>  #define MT8195_MCU_BIG_CPU2     2
+> --=20
+> 2.45.2
+>=20
 
-Regards,
-Bjorn
+--C0KGNy2z0JyurDwg
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> thanks,
-> Shivendra
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRIywAAKCRB4tDGHoIJi
+0rCTAP9newdSvzQ50dBkzqSM5wtiWoT8lSk9sQqFZvPJH+LPZQEA5SXT+Bxj/MFp
+miT6FPn/6265Zc6AXcJjiSewgImm9wA=
+=HeTN
+-----END PGP SIGNATURE-----
+
+--C0KGNy2z0JyurDwg--
 
