@@ -1,348 +1,544 @@
-Return-Path: <linux-pm+bounces-37785-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37786-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC2BDC4D6AF
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 12:36:06 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4729AC4D89E
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 12:57:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7DF584E89ED
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 11:30:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5C7354FF555
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 11:49:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC78A3570CD;
-	Tue, 11 Nov 2025 11:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28402FA0ED;
+	Tue, 11 Nov 2025 11:48:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j0TfWkvH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66AC92FD1CE;
-	Tue, 11 Nov 2025 11:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CBB92D6624
+	for <linux-pm@vger.kernel.org>; Tue, 11 Nov 2025 11:48:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762860625; cv=none; b=aI4PWKZ40wIOSJaY3oLd3pS9tdIX6+v83n3bXBPTrtTEq7Gy+hjMEyxPI7G6HtNFtDHgHPRIRsd/hBiLOXtvlQm2HpYchq7S5kXHxqn2PbVaQ1dw/4+0Uemj+pIlbIK3Ibxk6aLLi2gh7jrxT1h9wG2i1BYV8OmOKwi5A+wLfpg=
+	t=1762861736; cv=none; b=T2DtA5mjXfnEIZ7Ajgh5NdaHxmz56vjwt1q+yIDyW3QqQB+uGVrQYnF4BgcD4K2QLrY+VWuqzMxDlKHhrHpLxjoqLHcnrZOtsNxPnboVzofxMH5myMy3ItjvnZPvvKDAUlVI+sniTcmaPytzZ4FewRUkyT84Vkstg8f4fqZ7jHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762860625; c=relaxed/simple;
-	bh=mMDVYG9hHoSFptMqJptOJhed/7/j/h46E4OUb7rvRgQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=kyJknIYi/qxk+WJ2GMUmrKQYdJwUVibgBdK6OjGKmw/KFfmE0FccR4lKSlylDQ9B3OaOzzk5z4vsHNkPRPKFachNfxUq8qm/jIq/xFVV4DuJOKb5AHutMBJK88OSbpDkvgyv3eogR52m9Hn8CKf73k5olETvLz1f1Q6cTc1aJps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4d5PRY3JTXzcZyM;
-	Tue, 11 Nov 2025 19:28:25 +0800 (CST)
-Received: from kwepemr500004.china.huawei.com (unknown [7.202.195.141])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4457D14027A;
-	Tue, 11 Nov 2025 19:30:13 +0800 (CST)
-Received: from [10.67.121.58] (10.67.121.58) by kwepemr500004.china.huawei.com
- (7.202.195.141) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 11 Nov
- 2025 19:30:11 +0800
-Message-ID: <e439d370-48a3-40c3-ae54-67d2f844bae5@hisilicon.com>
-Date: Tue, 11 Nov 2025 19:30:09 +0800
+	s=arc-20240116; t=1762861736; c=relaxed/simple;
+	bh=pldYe+rsQ0BpIzLwaylofNhggcMdoz5m9YwE1fIVJ8E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TU+JSJF5Ai4sfqYKVad+LQUdPxnH+DopfXatI6ybdSEQbBmBlPlZEZNqV5xerL0Fb48dJwchjm3V0WIkmbeSlyn2uX6uXesm0vE6ktDGMwKrIvc5ye9mqiKlSIY2J54om8RzXl5fBMEU2woXTeDXaUO7Ixz4v4tJGZy5VBAVDOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j0TfWkvH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18673C2BC86
+	for <linux-pm@vger.kernel.org>; Tue, 11 Nov 2025 11:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762861736;
+	bh=pldYe+rsQ0BpIzLwaylofNhggcMdoz5m9YwE1fIVJ8E=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=j0TfWkvHQEpAN9/dzZeQckYCXM2o+u+4wFr5tf5c1OnrxgYEzk1dugXpX+Fhek4Fc
+	 4RW4J/fWa8cVo4FpGs2/T4yQ/ltWrVW1R58HT5H/8x1bL/lUJTnSuXqRzquTX89iIo
+	 /qQbwJ98FOprnaRZK1SJxZJOS7SbgG48o0l2cqHrlXr11HAcv1XH4D7QcmGLqy7n6/
+	 dFgYfFsbC7+fcE42J2/gwL/MsVg+/kYYfL21YnRussf+8qFB/UgABdCcd9hoIBQVuc
+	 DzuLzjcWDBrqBGTyFau7j82ncB8iH625rmF+d0cQzBA3QXgr/vrccFCzc8FzvcNn3X
+	 8ruh98LBjHrAw==
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-656f84c6b92so224207eaf.1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Nov 2025 03:48:56 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVRziXY6InpeLvYNwF9sWnn358Aj3sWnGZwE+dd8g9QZ67we6upPA1iADu8yxJVvF5d5OkX6nn0kw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZqI5kz6o0JR9EKSXTW9gj0/J7UiFkWXC/PWqrWn5MkWbH7Tk8
+	Pjf6TL+R/hMy9aBIRYhZPXt1wu4/lzkqsbs1lKcz+0tfDjOktsLKIwB23rG25WZufR0aYxHaypz
+	i1rCFvPPYZjI9VuyAsKXKRr9jK8+1eso=
+X-Google-Smtp-Source: AGHT+IG1BbaZm4KXbf5BRI9e9ixlVdB0iZBHZl/awznkhLVMR1Zx0yAm0rZ8Glv6hZpC7uy0fmfmDKLuBe4aKrSGpDA=
+X-Received: by 2002:a05:6808:220f:b0:44d:b018:7b8a with SMTP id
+ 5614622812f47-45060a8ad49mr1314173b6e.23.1762861735112; Tue, 11 Nov 2025
+ 03:48:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] cpufreq: CPPC: Update FIE arch_freq_scale in ticks for
- non-PCC regs
-To: Beata Michalska <beata.michalska@arm.com>
-CC: <viresh.kumar@linaro.org>, <rafael@kernel.org>, <ionela.voinescu@arm.com>,
-	<linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-	<zhenglifeng1@huawei.com>, <prime.zeng@hisilicon.com>,
-	<jonathan.cameron@huawei.com>
-References: <20251104065039.1675549-1-zhanjie9@hisilicon.com>
- <aRIXlSOPzAy1nXUQ@arm.com>
-From: Jie Zhan <zhanjie9@hisilicon.com>
-Content-Language: en-US
-In-Reply-To: <aRIXlSOPzAy1nXUQ@arm.com>
+References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
+ <a50064b2-e6aa-4237-a715-12f21a65e9a6@arm.com> <ed1e64dc-91c9-44d9-b3d3-9f142bcf7a8d@arm.com>
+ <CAJZ5v0g9Jndez5y5i4pPW1C+qfj=4iiu51HV7Eb1dBGd1jg-CA@mail.gmail.com>
+ <b910a35c-83aa-4050-9c6c-de40f13a2a55@arm.com> <CAJZ5v0h6qAgWkEad5OGM-V-HOE-1PwD_XqgsDWbnJNxLWOKDfA@mail.gmail.com>
+ <CAEmPcws_pvYpzRMQfMyRPBw=7bUyYCcnP3BHN2H4wgUeLLszFg@mail.gmail.com>
+ <CAJZ5v0i_ZUD1=3JDABJZ3fcdD7r8uMU36=mam8r2=1P02YksYw@mail.gmail.com>
+ <f0a2492b-9cea-4450-88ca-be8f99f3e0fe@arm.com> <CAEmPcwvui5Cg5yoa9NEq5b3OZREb08tbmy4=f=adTLuLPBgGgw@mail.gmail.com>
+ <0c018867-c092-4f8e-8f7a-32bb02de3ad5@arm.com> <CAEmPcwuVPMONrDHcnxbWpoG5K5DFwf-u2i7wuOK4Q9HvF2uOhw@mail.gmail.com>
+ <2a429c41-8624-408c-9db0-4450ab76e52f@arm.com> <a33965da-81d8-47c5-9fa0-434812f2bd72@arm.com>
+In-Reply-To: <a33965da-81d8-47c5-9fa0-434812f2bd72@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 11 Nov 2025 12:48:42 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jjswmSsSRqfjrbDVD4rpYvp2qCdweYrK0JV0zUketczQ@mail.gmail.com>
+X-Gm-Features: AWmQ_bml0i-YUGLbmqrF5FXa9xZmTxyY6qQbNyV07TSS2UIBSl4P5g4FkcRjtQw
+Message-ID: <CAJZ5v0jjswmSsSRqfjrbDVD4rpYvp2qCdweYrK0JV0zUketczQ@mail.gmail.com>
+Subject: Re: Regression in TEO cpuidle governor between 6.6 and 6.12
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Reka Norman <rekanorman@chromium.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemr500004.china.huawei.com (7.202.195.141)
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Nov 11, 2025 at 11:48=E2=80=AFAM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 11/11/25 10:00, Christian Loehle wrote:
+> > On 11/11/25 04:23, Reka Norman wrote:
+> >> On Mon, Nov 10, 2025 at 11:06=E2=80=AFPM Christian Loehle
+> >> <christian.loehle@arm.com> wrote:
+> >>>
+> >>> On 11/10/25 06:10, Reka Norman wrote:
+> >>>> On Mon, Nov 10, 2025 at 7:35=E2=80=AFAM Christian Loehle
+> >>>> <christian.loehle@arm.com> wrote:
+> >>>>>
+> >>>>> On 11/7/25 11:35, Rafael J. Wysocki wrote:
+> >>>>>> On Fri, Nov 7, 2025 at 4:28=E2=80=AFAM Reka Norman <rekanorman@chr=
+omium.org> wrote:
+> >>>>>>>
+> >>>>>>> On Fri, Nov 7, 2025 at 7:33=E2=80=AFAM Rafael J. Wysocki <rafael@=
+kernel.org> wrote:
+> >>>>>>>>
+> >>>>>>>> On Thu, Nov 6, 2025 at 12:13=E2=80=AFPM Christian Loehle
+> >>>>>>>> <christian.loehle@arm.com> wrote:
+> >>>>>>>>>
+> >>>>>>>>> On 11/5/25 20:48, Rafael J. Wysocki wrote:
+> >>>>>>>>>> On Wed, Nov 5, 2025 at 12:24=E2=80=AFAM Christian Loehle
+> >>>>>>>>>> <christian.loehle@arm.com> wrote:
+> >>>>>>>>>>>
+> >>>>>>>>>>> On 11/4/25 09:03, Christian Loehle wrote:
+> >>>>>>>>>>>> On 11/4/25 03:36, Reka Norman wrote:
+> >>>>>>>>>>>>> Hi,
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> I=E2=80=99m seeing a regression in the TEO governor between=
+ 6.6 and 6.12. At
+> >>>>>>>>>>>>> 6.12, when the system is idle it=E2=80=99s spending almost =
+100% of time in
+> >>>>>>>>>>>>> WFI, compared to about 6% at 6.6. At mainline it has improv=
+ed compared
+> >>>>>>>>>>>>> to 6.12 but is still a lot worse than 6.6, spending about 5=
+0% in WFI.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> The system is a ChromeOS device with Mediatek MT8196.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> Bisecting showed the specific commit which caused the regre=
+ssion is:
+> >>>>>>>>>>>>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent inter=
+cepts")
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> I=E2=80=99ve attached sysfs dumps showing the issue. All we=
+re taken a couple
+> >>>>>>>>>>>>> of minutes after boot, with the device having been idle sin=
+ce boot.
+> >>>>>>>>>>>>> The cases tested are:
+> >>>>>>>>>>>>> cpuidle_6_6.txt      =3D 6.6 kernel
+> >>>>>>>>>>>>> cpuidle_6_12.txt     =3D 6.6 kernel with teo commits up to =
+6.12
+> >>>>>>>>>>>>> cpuidle_mainline.txt =3D 6.6 kernel with teo commits up to =
+mainline
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> Summary of the percentage time spent in each state (average=
+d across CPUs):
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> |            |   6.6 |  6.12 | mainline |
+> >>>>>>>>>>>>> |------------|------:|------:|---------:|
+> >>>>>>>>>>>>> | WFI        |  6.02 | 99.94 |    56.84 |
+> >>>>>>>>>>>>> | cpuoff     | 11.02 |     0 |     0.65 |
+> >>>>>>>>>>>>> | clusteroff | 82.96 |  0.05 |    42.51 |
+> >>>>>>>>>>>>> | s2idle     |     0 |     0 |        0 |
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>> Any help would be much appreciated. Let me know if there's =
+any other
+> >>>>>>>>>>>>> debugging information I should provide.
+> >>>>>>>>>>>>>
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> That's not good.
+> >>>>>>>>>>>> If the system is mostly idle (only boot activity but dumps a=
+re taken after
+> >>>>>>>>>>>> ~3mins?), what is causing the wakeups? Even in 6.6 There are=
+ definitely more
+> >>>>>>>>>>>> than I would've expected?
+> >>>>>>>>>>>> I noticed that clusteroff and cpuoff have equal residency, w=
+hich is
+> >>>>>>>>>>>> obviously a bit awkward for cpuidle, but shouldn't be releva=
+nt to your issue.
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> I'm a bit puzzled by your bisect results.
+> >>>>>>>>>>>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent interc=
+epts")
+> >>>>>>>>>>>> made the intercept logic *less* prone to count (false) inter=
+cepts, yet it
+> >>>>>>>>>>>> seems to count more of them? (resulting in more WFI).
+> >>>>>>>>>>>> I'll think about it some more, for now of course a trace wou=
+ld be very
+> >>>>>>>>>>>> helpful. (cpuidle events, ipi_raise, irqs?)
+> >>>>>>>>>>>> Are there ever any latency constraints set?
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> FWIW the mainline results look the most reasonable, from a 3=
+0000 feet view
+> >>>>>>>>>>>> anyway:
+> >>>>>>>>>>>> Cluster       State           above   below   usage   above%=
+  below%
+> >>>>>>>>>>>> LITTLE        cpuoff-l        ~75     ~65     ~140    23%   =
+  20%
+> >>>>>>>>>>>> LITTLE        clusteroff-l    ~800    0       ~100    89%   =
+  0%
+> >>>>>>>>>>>> MID   cpuoff-m        ~3=E2=80=934    ~15     ~20     15%   =
+  55%
+> >>>>>>>>>>>> MID   clusteroff-m    ~1300   0       ~4000   24%     0%
+> >>>>>>>>>>>> BIG   cpuoff-b        0       1       1       =E2=80=94     =
+  =E2=80=94
+> >>>>>>>>>>>> BIG   clusteroff-b    ~800    0       ~1900   30%     0%
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> (WFI seems mostly the correct choice for little CPUs, that's=
+ fine, the energy
+> >>>>>>>>>>>> savings compared to cpuoff should be marginal anyway.)
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> Do you mind trying:
+> >>>>>>>>>>>> 13ed5c4a6d9c cpuidle: teo: Skip getting the sleep length if =
+wakeups are very frequent
+> >>>>>>>>>>>> on 6.12?
+> >>>>>>>>>>>>
+> >>>>>>>>>>>
+> >>>>>>>>>>> So just thinking out loud, the only case I can actually thing=
+ of to explain your
+> >>>>>>>>>>> bisect to 4b20b07ce72f ("cpuidle: teo: Don't count non-existe=
+nt intercepts")
+> >>>>>>>>>>> is that the workload essentially changed dramatically because=
+ of our calls
+> >>>>>>>>>>> to tick_nohz_get_sleep_length() now.
+> >>>>>>>>>>> I'm not sure how likely I think that is, but I'm lacking imag=
+ination for another
+> >>>>>>>>>>> cause. That's why results with
+> >>>>>>>>>>> 13ed5c4a6d9c ("cpuidle: teo: Skip getting the sleep length if=
+ wakeups are very frequent")
+> >>>>>>>>>>> would be interesting.
+> >>>>>>>>>>
+> >>>>>>>>>> My current theory is that this issue is related to the
+> >>>>>>>>>> tick_nohz_get_sleep_length() overhead and the way "intercepts"=
+ are
+> >>>>>>>>>> distinguished from "hits" in teo.
+> >>>>>>>>>>
+> >>>>>>>>>> Namely, teo assumes that its own overhead is negligible and so=
+ it
+> >>>>>>>>>> counts a given event as an "intercept" if the measured time sp=
+ent in
+> >>>>>>>>>> the idle state (with the exit latency roughly taken into accou=
+nt)
+> >>>>>>>>>> falls into a different "state bin" than the sleep length (the =
+expected
+> >>>>>>>>>> time till the next timer).  However, the sleep length is compu=
+ted as a
+> >>>>>>>>>> difference between the upcoming timer wakeup event time and
+> >>>>>>>>>> ts->idle_entrytime, so it actually includes the time taken by
+> >>>>>>>>>> tick_nohz_next_event().  If the latter is significant, it may
+> >>>>>>>>>> contribute to the difference seen by teo_update() and cause ex=
+tra
+> >>>>>>>>>> "intercepts" to appear.
+> >>>>>>>>>
+> >>>>>>>>> Right, additionally with psci pc-mode and the exposed clusterof=
+f states we end
+> >>>>>>>>> up vastly exaggerating the wakeup latency (i.e. underestimating=
+ the actual idle time)
+> >>>>>>>>> for three reasons:
+> >>>>>>>>> - wakeup latency =3D entry+exit latency (worst case: pay full l=
+atencies on both
+> >>>>>>>>> even though for most cases we don't incur the entry latency)
+> >>>>>>>>> - Wakeup latency is a worst-case and often is more like 2x-3x o=
+f the average.
+> >>>>>>>>> - We use the (higher) clusteroff values even though the cluster=
+off state couldn't
+> >>>>>>>>> possibly have been entered as not the entire cluster is idle.
+> >>>>>>>>>
+> >>>>>>>>> Nonetheless these are all just a "intercept counting is signifi=
+cantly more likely"
+> >>>>>>>>> while the results show not a single state >0 entered =3D> the i=
+ntercept logic
+> >>>>>>>>> probably triggers every cpuidle entry.
+> >>>>>>>>
+> >>>>>>>> It has to for this to happen, if timers are not frequent enough.
+> >>>>>>>>
+> >>>>>>>>> Feels like there should be an issue in the feedback loop.
+> >>>>>>>>
+> >>>>>>>> I'm wondering what the issue could be though.  The change in com=
+mit
+> >>>>>>>> 4b20b07ce72f only affects the cases when idle state 0 is about t=
+o be
+> >>>>>>>> selected and it only really changes the sleep length value from
+> >>>>>>>> KTIME_MAX to something more realistic (but it still may be KTIME=
+_MAX).
+> >>>>>>>>
+> >>>>>>>> It may turn an "intercept" into a "hit", but only if the CPU is =
+not
+> >>>>>>>> woken up by the tick because those cases had been already counte=
+d as
+> >>>>>>>> "hits" before commit 4b20b07ce72f.
+> >>>>>>>>
+> >>>>>>>> Now, if the majority of wakeups in the workload are tick wakeups=
+, the
+> >>>>>>>> only real difference appears to be the presence of
+> >>>>>>>> tick_nohz_get_sleep_length() in that code path.
+> >>>>>>>>
+> >>>>>>>> Frankly, I would try to remove the update of cpu_data->sleep_len=
+gth_ns
+> >>>>>>>> right before the "goto out_tick" statement (in 6.12 that should =
+be
+> >>>>>>>> line 426) and see what happens.
+> >>>>>>>
+> >>>>>>> Just tried this quickly. Results attached. It goes back to behavi=
+ng
+> >>>>>>> the same as 6.6 - about 2% WFI.
+> >>>>>>
+> >>>>>> Thanks for checking this!  It means that the
+> >>>>>> tick_nohz_get_sleep_length() overhead doesn't matter here that muc=
+h.
+> >>>>>>
+> >>>>>> Instead of making the change above, can you please try the 6.12
+> >>>>>> equivalent of the attached patch?
+> >>>>>>
+> >>>>>> Or alternatively, apply this one to the mainline and see if it cha=
+nges
+> >>>>>> the idle states selection proportions?
+> >>>>
+> >>>> It doesn't seem to have an effect. Results are attached for both 6.1=
+2
+> >>>> (6_12_teo_reflect) and mainline (mainline_teo_reflect). 6.12 is stil=
+l
+> >>>> 100% WFI and mainline is about 20% WFI on average, the same as befor=
+e.
+> >>>>
+> >>>>>
+> >>>>> I don't quite follow this.
+> >>>>> While I don't really believe that the tick_nohz_get_sleep_length() =
+overhead
+> >>>>> plays a role here, how does removing that assignment prove it isn't=
+?
+> >>>>>
+> >>>>> The below (if that's what you meant) might lead to the overhead bei=
+ng optimized
+> >>>>> out? [1]
+> >>>>
+> >>>> Oh true. I tried the diff below instead (which I think should avoid
+> >>>> that?). This also behaves the same as 6.6. Results attached as
+> >>>> 6_12_sleep_length2.
+> >>>
+> >>> Thanks for testing
+> >>>
+> >>>>
+> >>>> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/gover=
+nors/teo.c
+> >>>> index 173ddcac540a..3c9595bc6c80 100644
+> >>>> --- a/drivers/cpuidle/governors/teo.c
+> >>>> +++ b/drivers/cpuidle/governors/teo.c
+> >>>> @@ -427,8 +427,7 @@ static int teo_select(struct cpuidle_driver *drv=
+,
+> >>>> struct cpuidle_device *dev,
+> >>>>                  * We have to query the sleep length here otherwise =
+we don't
+> >>>>                  * know after wakeup if our guess was correct.
+> >>>>                  */
+> >>>> -               duration_ns =3D tick_nohz_get_sleep_length(&delta_ti=
+ck);
+> >>>> -               cpu_data->sleep_length_ns =3D duration_ns;
+> >>>> +               volatile s64 __maybe_unused duration_volatile_ns =3D
+> >>>> tick_nohz_get_sleep_length(&delta_tick);
+> >>>>                 goto out_tick;
+> >>>>         }
+> >>>>
+> >>>>> I'd be curious if [2] behaves like 6.12. So far I haven't been able=
+ to
+> >>>>> reproduce the issue Reka is seeing.
+> >>>>
+> >>>> Results with [2] attached as 6_12_sleep_length3. Yes, it behaves lik=
+e 6.12.
+> >>>>
+> >>>
+> >>> Hmm interesting.
+> >>>
+> >>>>> There's one oddity that immediately came to mind: state1 and state2=
+ having
+> >>>>> the same residency (slightly different latency though), but when I =
+set these
+> >>>>> as such teo works fine. So I don't think it is an issue here.
+> >>>>>
+> >>>>> If Rafael's patch fixes the issue I'd still be curious what the pre=
+dicted sleep
+> >>>>> length values are here (they must be <1ms, but do in fact never tri=
+gger?).
+> >>>>
+> >>>> In case it's helpful, I've attached a trace (trace_duration.dat) whi=
+ch
+> >>>> includes a trace_printk of the duration_ns at this point (on top of
+> >>>> unmodified 6.12).
+> >>> While I was gonna ask for this anyway, it's not that useful (duration=
+_ns is some
+> >>> time in the far future, most wakeups are obviously ticks).
+> >>> May I ask you to run the following hopefully one last time, just to c=
+heck if we're
+> >>> not missing something here:
+> >>
+> >> Trace attached.
+> >>
+> >
+> > Thank you!
+> > So the intercept bin counts themselves aren't the issue:
+> >           <idle>-0     [007] d..1.  1097.218324: bprint:               =
+teo_update: teo_update cpu=3D7 last_state_idx=3D0 state_count=3D4 total=3D7=
+182 sleep_len_ns=3D62615312 last_residency_ns=3D997307 measured_ns=3D184467=
+44073709551615 lat_ns=3D1000 idx_timer=3D2 idx_duration=3D2 tick_hits=3D0 |=
+ bins: [0]h=3D7,i=3D7,tr=3D1000 [1]h=3D0,i=3D0,tr=3D2580000 [2]h=3D8192,i=
+=3D0,tr=3D2580000 [3]h=3D0,i=3D0,tr=3D4294967295000
+> >           <idle>-0     [007] d..1.  1097.218324: cpu_idle:             =
+state=3D0 cpu_id=3D7
+> >           <idle>-0     [007] d..1.  1097.219321: cpu_idle:             =
+state=3D4294967295 cpu_id=3D7
+> >           <idle>-0     [007] d.h1.  1097.219322: irq_handler_entry:    =
+irq=3D19 name=3Darch_timer
+> >           <idle>-0     [007] d.h1.  1097.219323: irq_handler_exit:     =
+irq=3D19 ret=3Dhandled
+> >           <idle>-0     [007] d..1.  1097.219324: bprint:               =
+teo_update: teo_update cpu=3D7 last_state_idx=3D0 state_count=3D4 total=3D7=
+182 sleep_len_ns=3D61615389 last_residency_ns=3D997538 measured_ns=3D184467=
+44073709551615 lat_ns=3D1000 idx_timer=3D2 idx_duration=3D2 tick_hits=3D0 |=
+ bins: [0]h=3D7,i=3D7,tr=3D1000 [1]h=3D0,i=3D0,tr=3D2580000 [2]h=3D8192,i=
+=3D0,tr=3D2580000 [3]h=3D0,i=3D0,tr=3D4294967295000
+> >           <idle>-0     [007] d..1.  1097.219324: cpu_idle:             =
+state=3D0 cpu_id=3D7
+> >           <idle>-0     [007] d..1.  1097.220321: cpu_idle:             =
+state=3D4294967295 cpu_id=3D7
+> >           <idle>-0     [007] d.h1.  1097.220322: irq_handler_entry:    =
+irq=3D19 name=3Darch_timer
+> >           <idle>-0     [007] d.h1.  1097.220323: irq_handler_exit:     =
+irq=3D19 ret=3Dhandled
+> >           <idle>-0     [007] d..1.  1097.220324: bprint:               =
+teo_update: teo_update cpu=3D7 last_state_idx=3D0 state_count=3D4 total=3D7=
+182 sleep_len_ns=3D60615312 last_residency_ns=3D997538 measured_ns=3D184467=
+44073709551615 lat_ns=3D1000 idx_timer=3D2 idx_duration=3D2 tick_hits=3D0 |=
+ bins: [0]h=3D7,i=3D7,tr=3D1000 [1]h=3D0,i=3D0,tr=3D2580000 [2]h=3D8192,i=
+=3D0,tr=3D2580000 [3]h=3D0,i=3D0,tr=3D4294967295000
+> >           <idle>-0     [007] d..1.  1097.220324: cpu_idle:             =
+state=3D0 cpu_id=3D7
+> >           <idle>-0     [007] d..1.  1097.221321: cpu_idle:             =
+state=3D4294967295 cpu_id=3D7
+> >           <idle>-0     [007] d.h1.  1097.221322: irq_handler_entry:    =
+irq=3D19 name=3Darch_timer
+> >           <idle>-0     [007] d.h1.  1097.221323: irq_handler_exit:     =
+irq=3D19 ret=3Dhandled
+> >           <idle>-0     [007] d..1.  1097.221324: bprint:               =
+teo_update: teo_update cpu=3D7 last_state_idx=3D0 state_count=3D4 total=3D7=
+182 sleep_len_ns=3D59615312 last_residency_ns=3D997538 measured_ns=3D184467=
+44073709551615 lat_ns=3D1000 idx_timer=3D2 idx_duration=3D2 tick_hits=3D0 |=
+ bins: [0]h=3D7,i=3D7,tr=3D1000 [1]h=3D0,i=3D0,tr=3D2580000 [2]h=3D8192,i=
+=3D0,tr=3D2580000 [3]h=3D0,i=3D0,tr=3D4294967295000
+> >
+> >
+> > 386         if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum)
+> > will be 2*7 > 8206 - (7 + 8192) =3D> True
+> > The intercept state selection will choose a state that covers at least =
+half of the
+> > intercepts, but only bin 0 has intercepts at all =3D> state0 selected.
+> >
+> > I see two issues:
+> > 1) Because of DECAY_SHIFT 3 values < 8 cannot decay (I guess this would=
+n't really be an issue without 2))
 
+This shouldn't be a problem.
 
-On 11/11/2025 12:49 AM, Beata Michalska wrote:
-> Hi Jie,
-> On Tue, Nov 04, 2025 at 02:50:39PM +0800, Jie Zhan wrote:
->> Currently, the CPPC Frequency Invariance Engine (FIE) is invoked from the
->> scheduler tick but defers the update of arch_freq_scale to a separate
->> thread because cppc_get_perf_ctrs() would sleep if the CPC regs are in PCC.
->>
->> However, this deferred update mechanism is unnecessary and introduces extra
->> overhead for non-PCC register spaces (e.g. System Memory or FFH), where
->> accessing the regs won't sleep and can be safely performed from the tick
->> context.
->>
->> Furthermore, with the CPPC FIE registered, it throws repeated warnings of
->> "cppc_scale_freq_workfn: failed to read perf counters" on our platform with
->> the CPC regs in System Memory and a power-down idle state enabled.  That's
->> because the remote CPU can be in a power-down idle state, and reading its
->> perf counters returns 0.  Moving the FIE handling back to the scheduler
->> tick process makes the CPU handle its own perf counters, so it won't be
->> idle and the issue would be inherently solved.
->>
->> To address the above issues, update arch_freq_scale directly in ticks for
->> non-PCC regs and keep the deferred update mechanism for PCC regs.
-> Something about it just didn’t sit right with me, and apparently, it needed some
-> time to settle down - thus the delay.
-> 
-> It all looks sensible though it might be worth to considered applying
-> the change on a per-CPU basis, as, in theory at least, different address
-> spaces are allowed for different registers (at least according to the ACPI
-> spec, if I read it right).
-> So I was thinking about smth along the lines of:
-Beata,
+> > 2) if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) isn't an =
+appropriate check, it will
+> > exclude the state if it its idx_hit_sum make up the vast majority of cp=
+u_data->total (i.e. it would
+> > have been a really good candidate actually).
 
-Right, I see what you want to do.
-Some comments inline.
+Well, it would exclude the state if the sum of hits for the states
+below it is large enough.  This is questionable (because why would
+hits matter here), but I attempted to make the change below and
+somebody reported a regression IIRC.
 
-Would you like to make it a full patch so I can include it in the next
-version? or some other way?
+This check is related to the problem at hand though (see below).
 
-Jie
-> 
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 6c684e54fe01..07f4e59f2f0a 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1431,38 +1431,47 @@ EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
->   *
->   * Return: true if any of the counters are in PCC regions, false otherwise
->   */
-> -bool cppc_perf_ctrs_in_pcc(void)
-> +bool cppc_perf_ctrs_in_pcc(unsigned int cpu)
->  {
-> -	int cpu;
-> +	struct cpc_register_resource *ref_perf_reg;
-> +	struct cpc_desc *cpc_desc;
->  
-> -	for_each_present_cpu(cpu) {
-> -		struct cpc_register_resource *ref_perf_reg;
-> -		struct cpc_desc *cpc_desc;
-> +	cpc_desc = per_cpu(cpc_desc_ptr, cpu);
->  
-> -		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-> +	if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> +	    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> +	    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-> +		return true;
->  
-> -		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> -		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> -		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-> -			return true;
->  
-> +	ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
->  
-> -		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
-> +	/*
-> +	 * If reference perf register is not supported then we should
-> +	 * use the nominal perf value
-> +	 */
-> +	if (!CPC_SUPPORTED(ref_perf_reg))
-> +		ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-Though not related to this issue, I'm confused that this sort of workaround
-appears here - it should be in some init function.
->  
-> -		/*
-> -		 * If reference perf register is not supported then we should
-> -		 * use the nominal perf value
-> -		 */
-> -		if (!CPC_SUPPORTED(ref_perf_reg))
-> -			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-> +	if (CPC_IN_PCC(ref_perf_reg))
-> +		return true;
-> +
-> +	return false;
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
->  
-> -		if (CPC_IN_PCC(ref_perf_reg))
-> +bool cppc_any_perf_ctrs_in_pcc(void)
-> +{
-> +	int cpu;
-> +
-> +	for_each_present_cpu(cpu) {
-> +		if (cppc_perf_ctrs_in_pcc(cpu))
->  			return true;
->  	}
->  
->  	return false;
->  }
-> -EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
-> +EXPORT_SYMBOL_GPL(cppc_any_perf_ctrs_in_pcc);
->  
->  /**
->   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 4fcaec7e2034..fdf5a49c04ed 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -48,7 +48,6 @@ struct cppc_freq_invariance {
->  };
->  
->  static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
-> -static bool perf_ctrs_in_pcc;
->  static struct kthread_worker *kworker_fie;
->  
->  static int cppc_perf_from_fbctrs(struct cppc_perf_fb_ctrs *fb_ctrs_t0,
-> @@ -132,7 +131,12 @@ static void cppc_scale_freq_tick_pcc(void)
->  
->  static void cppc_scale_freq_tick(void)
->  {
-> -	__cppc_scale_freq_tick(&per_cpu(cppc_freq_inv, smp_processor_id()));
-> +	unsigned int cpu = smp_processor_id();
-> +
-> +	cppc_perf_ctrs_in_pcc(cpu) ? cppc_scale_freq_tick_pcc()
-Calling cppc_perf_ctrs_in_pcc() could be expensive here.
-I'd prefer something like a static branch or a determined callback for each
-cpu.
-> +				   : __cppc_scale_freq_tick(
-> +				   			&per_cpu(cppc_freq_inv,
-> +				   				 cpu));
->  }
->  
->  static struct scale_freq_data cppc_sftd = {
-> @@ -152,7 +156,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
->  		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
->  		cppc_fi->cpu = cpu;
->  		cppc_fi->cpu_data = policy->driver_data;
-> -		if (perf_ctrs_in_pcc) {
-> +		if (cppc_perf_ctrs_in_pcc(cpu)) {
->  			kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
->  			init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
->  		}
-> @@ -193,10 +197,9 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
->  	/* policy->cpus will be empty here, use related_cpus instead */
->  	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, policy->related_cpus);
->  
-> -	if (!perf_ctrs_in_pcc)
-> -		return;
-> -
->  	for_each_cpu(cpu, policy->related_cpus) {
-> +		if (!cppc_perf_ctrs_in_pcc(cpu))
-> +			continue;
->  		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
->  		irq_work_sync(&cppc_fi->irq_work);
->  		kthread_cancel_work_sync(&cppc_fi->work);
-> @@ -218,14 +221,11 @@ static void __init cppc_freq_invariance_init(void)
->  		.sched_deadline = 10 * NSEC_PER_MSEC,
->  		.sched_period	= 10 * NSEC_PER_MSEC,
->  	};
-> +	bool perf_ctrs_in_pcc = cppc_any_perf_ctrs_in_pcc();
->  	int ret;
->  
-> -	perf_ctrs_in_pcc = cppc_perf_ctrs_in_pcc();
-> -
->  	if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED) {
-> -		if (!perf_ctrs_in_pcc) {
-> -			fie_disabled = FIE_ENABLED;
-> -		} else {
-> +		if (perf_ctrs_in_pcc) {
->  			pr_info("FIE not enabled on systems with registers in PCC\n");
->  			fie_disabled = FIE_DISABLED;
->  		}
-> @@ -234,12 +234,12 @@ static void __init cppc_freq_invariance_init(void)
->  	if (fie_disabled || !perf_ctrs_in_pcc)
->  		return;
->  
-> -	cppc_sftd.set_freq_scale = cppc_scale_freq_tick_pcc;
->  
->  	kworker_fie = kthread_run_worker(0, "cppc_fie");
->  	if (IS_ERR(kworker_fie)) {
->  		pr_warn("%s: failed to create kworker_fie: %ld\n", __func__,
->  			PTR_ERR(kworker_fie));
-> +		kworker_fie = NULL;
->  		fie_disabled = FIE_DISABLED;
->  		return;
->  	}
-> @@ -255,10 +255,8 @@ static void __init cppc_freq_invariance_init(void)
->  
->  static void cppc_freq_invariance_exit(void)
->  {
-> -	if (fie_disabled || !perf_ctrs_in_pcc)
-> -		return;
-> -
-> -	kthread_destroy_worker(kworker_fie);
-> +	if (kworker_fie)
-> +		kthread_destroy_worker(kworker_fie);
->  }
->  
->  #else
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index 13fa81504844..3af503b12f60 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -154,7 +154,8 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
->  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
->  extern int cppc_set_enable(int cpu, bool enable);
->  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-> -extern bool cppc_perf_ctrs_in_pcc(void);
-> +extern bool cppc_perf_ctrs_in_pcc(unsigned int cpu);
-> +extern bool cppc_any_perf_ctrs_in_pcc(void);
-would be slightly better to keep cppc_perf_ctrs_in_pcc(void) and add a new
-function, e.g. cppc_perf_ctrs_in_pcc_cpu(unsigned int cpu), such that the
-old ABI is unchanged.
->  extern unsigned int cppc_perf_to_khz(struct cppc_perf_caps *caps, unsigned int perf);
->  extern unsigned int cppc_khz_to_perf(struct cppc_perf_caps *caps, unsigned int freq);
->  extern bool acpi_cpc_valid(void);
-> @@ -204,7 +205,11 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
->  {
->  	return -EOPNOTSUPP;
->  }
-> -static inline bool cppc_perf_ctrs_in_pcc(void)
-> +static inline bool cppc_perf_ctrs_in_pcc(unsigned int cpu)
-> +{
-> +	return false;
-> +}
-> +static inline bool cppc_any_perf_ctrs_in_pcc(void)
->  {
->  	return false;
->  }
-> 
-> 
-> Additionally, it might be worth to get rid of (at least) some messages printed
-> on the path of reading the counters in case it is being done in tick context.
-Cool, will have a look.
-> 
-> Also , I do not have access to any machine using PCC, and it would be good to
-> double check that as well.
-> 
-> ---
-> BR
-> Beata
+> >
+> > I lightly tested the below, it seems to be at least comparable to mainl=
+ine teo.
+> > (the documentation/comments would need adapting too, of course)
+> >
+> > -----8<-----
+> >
+> > diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governor=
+s/teo.c
+> > index bfa55c1eab5b..f8f76e3b8364 100644
+> > --- a/drivers/cpuidle/governors/teo.c
+> > +++ b/drivers/cpuidle/governors/teo.c
+> > @@ -355,7 +355,7 @@ static int teo_select(struct cpuidle_driver *drv, s=
+truct cpuidle_device *dev,
+> >          * all of the deeper states, a shallower idle state is likely t=
+o be a
+> >          * better choice.
+> >          */
+> > -       if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
+> > +       if (2 * idx_intercept_sum > idx_hit_sum) {
+> >                 int first_suitable_idx =3D idx;
+> >
+> >                 /*
+> >
+> >
+>
+> ... nevermind the patch, idx_hit_sum is of course the sum of 0...idx-1.
+> Maybe something like this, again lightly tested:
+>
+> -----8<-----
+>
+> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/=
+teo.c
+> index 173ddcac540a..6bfb9cedb75e 100644
+> --- a/drivers/cpuidle/governors/teo.c
+> +++ b/drivers/cpuidle/governors/teo.c
+> @@ -383,13 +395,15 @@ static int teo_select(struct cpuidle_driver *drv, s=
+truct cpuidle_device *dev,
+>                  * has been stopped already into account.
+>                  */
+>                 intercept_sum =3D 0;
+> +               hit_sum =3D 0;
+>
+>                 for (i =3D idx - 1; i >=3D 0; i--) {
+>                         struct teo_bin *bin =3D &cpu_data->state_bins[i];
+>
+>                         intercept_sum +=3D bin->intercepts;
+> +                       hit_sum +=3D bin->hits;
+>
+> -                       if (2 * intercept_sum > idx_intercept_sum) {
+> +                       if (2 * intercept_sum > cpu_data->total || 2 * hi=
+t_sum > cpu_data->total) {
+>                                 /*
+>                                  * Use the current state unless it is too
+>                                  * shallow or disabled, in which case tak=
+e the
 
->>
->> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
->> ---
->> We have tested this on Kunpeng SoCs with the CPC regs both in System Memory
->> and FFH.  More tests on other platforms are welcome.
->>
->> Changelog:
->>
->> v3:
->> - Stash the state of 'cppc_perf_ctrs_in_pcc' so it won't have to check the CPC
->>   regs of all CPUs everywhere (Thanks to the suggestion from Beata Michalska).
->> - Update the commit log, explaining more on the warning issue caused by
->>   accessing perf counters on remote CPUs.
->> - Drop Patch 1 that has been accepted, and rebase Patch 2 on that.
->>
->> v2:
->> https://lore.kernel.org/linux-pm/20250828110212.2108653-1-zhanjie9@hisilicon.com/
->> - Update the cover letter and the commit log based on v1 discussion
->> - Update FIE arch_freq_scale in ticks for non-PCC regs
->>
->> v1:
->> https://lore.kernel.org/linux-pm/20250730032312.167062-1-yubowen8@huawei.com/
->> ---
->>  drivers/cpufreq/cppc_cpufreq.c | 60 ++++++++++++++++++++++++----------
->>  1 file changed, 42 insertions(+), 18 deletions(-)
-...
+This will only matter after the deepest state has been rejected
+already and on the system in question this means selecting state 0 no
+matter what.
+
+The pre-6.12 behavior can be explained if tick wakeups are taken into accou=
+nt.
+
+Namely, when state 0 is chosen (because of the check mentioned above),
+the tick is not stopped and the sleep length is KTIME_MAX.  If the
+subsequent wakeup is a tick one, it will be counted as a hit on the
+deepest state (and it will contribute to the total sum in the check
+mentioned above).  Then, at one point, cpu_data->total will be large
+enough and the deepest state will become the candidate one.  If
+tick_nohz_get_sleep_length() returns a large value at that point, the
+tick will be stopped and the deepest state will be entered.  Nirvana
+ensues.
+
+The change in commit 4b20b07ce72f causes the sleep length to fall
+below the deepest idle state target residency at least sometimes in
+the scenario above, and if the subsequent wakeup is a tick one, it
+doesn't matter how it is counted - it will contribute to selecting
+idle state 0.
+
+The mainline is affected to a lesser extent because it sometimes does
+what pre-6.12 did.
+
+IMV addressing this would require changing the check you've identified
+as the culprit, but I'm not sure how to change it TBH.
 
