@@ -1,367 +1,197 @@
-Return-Path: <linux-pm+bounces-37780-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37781-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 341EDC4D296
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 11:49:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED70CC4D4E9
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 12:08:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F8BA189F5F3
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 10:48:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AF8318C4ABD
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 11:02:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D85EC3502A6;
-	Tue, 11 Nov 2025 10:48:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BC0E3557E0;
+	Tue, 11 Nov 2025 10:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ngxyr4HG";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="fHCsfdWQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F239C35029D
-	for <linux-pm@vger.kernel.org>; Tue, 11 Nov 2025 10:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF7F355051
+	for <linux-pm@vger.kernel.org>; Tue, 11 Nov 2025 10:57:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762858087; cv=none; b=Z4RGGSScDHksD11LyNMQNA1GF5GNpJGXAshap9XLDyaO3Fh9uQB+C0qWcW+kJTjiTc5kaHrcIx4Blfzlruu0YPQj3ghyax1c5+0AygRuPzJuP+ZOcWYYNK57UAjo02E/9MtLjDmb5xdtscLqoVDRyYnqR18F3ZACq9JuCzOdw/c=
+	t=1762858648; cv=none; b=SxKF9y8eWwf5XmJ1v1H2/5tHQvC0sfYnWYWfvgc2xtka66R0lDGO30ZU4tx56kVuUZ3KbaROlSEsjpGwYn35xPHirNF/VATx6IsQPgYdSqd30Q8qvvTbxYp+Mi0xoaSvNPsq2mbvrhQcD/bM+61weRxAGrY7Aab2png7pdok2Dc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762858087; c=relaxed/simple;
-	bh=DsR4HOIcBM6BwVzUGs83L2zQkZ1laEl7PZdAI2DHmlo=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=uwNfwGhImc3eBxOT0y5PeXPYN6ohuhbplNGBXdiYJa+IvXXUri9Wwe/p7OT/O+bnt4x1zw3eQfW6ibaSBIRnid+zoph2CFhYO5LlnZNQDkmaFKsePoeRWXSnLDBqTigFo2gH9lL+RnjSYfu7JWGE6fW1V8cnjvqDFBKmMuP/hyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3AB42F;
-	Tue, 11 Nov 2025 02:47:56 -0800 (PST)
-Received: from [10.1.39.22] (e127648.arm.com [10.1.39.22])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 983E43F63F;
-	Tue, 11 Nov 2025 02:48:03 -0800 (PST)
-Message-ID: <a33965da-81d8-47c5-9fa0-434812f2bd72@arm.com>
-Date: Tue, 11 Nov 2025 10:48:01 +0000
+	s=arc-20240116; t=1762858648; c=relaxed/simple;
+	bh=NYhtfUxZT1YXAcAQF0qWwjxLnb4vU/OkwMpSzLBjlsI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HwyKycupuwj68NxW5jtGEPrcw5hXmaDKQixVvrJWDKqYJS1GWuyspQzNHicbArkZThw4QBPLGB2T/1JbpeVST5nMmH1ZW7eiaxzquJBNDXpf4UA5kBgAZPCx8zT0Y4ykbO0XM07ZfCbVvqC7ifffp2zVF+HpKTgBAFTdVRd5PQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ngxyr4HG; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=fHCsfdWQ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1762858645;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=lLXbfdbNy9/hvVp5w0asRQYfVq1o80iFeNQJCAkbC5k=;
+	b=Ngxyr4HGahZzy288KG8M8EJ2+MHfaAF9foqVEfu/dt5diZDEeknZpgi9DC7ZnKD6/SMd1e
+	fgJrJtRppbR1Pgx42BRuSocbw61ZzHewO4Q9aKS5C6FeQm+V037Txd4IcdDnRgCujCuP3/
+	1wzjSFrbErJPSWtxtRiHeq3brei8e8I=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-544-5wcO6ZQaMg-4_9Ov5IenuA-1; Tue, 11 Nov 2025 05:57:24 -0500
+X-MC-Unique: 5wcO6ZQaMg-4_9Ov5IenuA-1
+X-Mimecast-MFC-AGG-ID: 5wcO6ZQaMg-4_9Ov5IenuA_1762858643
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-42b2f79759bso2106416f8f.2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Nov 2025 02:57:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1762858643; x=1763463443; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lLXbfdbNy9/hvVp5w0asRQYfVq1o80iFeNQJCAkbC5k=;
+        b=fHCsfdWQ3V4PBbz4jsTDxqBxNxltb39q51RMs6y2unPRDs/4gLxyU9wAZN9NbrVMa2
+         fw9tKqEA8J2NZbg/UIjs5dqof8uP2GgQewuru7uln9bOCfNmxSTcQhSm7nHV73w5Nj9R
+         jrvJhda3jm/RAkuqxD55Uns7NzSVvdwnAj0caoLgKvK/s5v+dzSggU7bJzaX4MIgKlcd
+         7faF6pwutADlu5/foyrb6Q0Iisv6pzGgpicddWZE5OwouaEjoOiMnJdzP4jPiJS3El2+
+         cVA7S66R6oQEBiikh+p57l3HJZGfzdYEobhoJJYYwpyENi7JgwdXn0/x6Y1r3jPHY59r
+         LG7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762858643; x=1763463443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lLXbfdbNy9/hvVp5w0asRQYfVq1o80iFeNQJCAkbC5k=;
+        b=kF27LMOxjuXRZuyHQZgjKnb2Ry93kGxagCv/yPIBBh+NkmgS8cGS+osPGClK9TP7w1
+         eUqiFpBvv+1HFR8G6kKV0JgofdbzhFpdkGR0OJycmKUKtowT6Uwfnvw/W8jmD0tMbzAA
+         hzNVfPfcjkwm2Wl6sMGGYL1ic3Z/OkJuTNGXk765Sik7MqhY7/cx770uWZ0tEBLgfeXr
+         lrNWseSspxntE5IJScm9Z9kKojzX1UKkDM6k/0LvDGdzQX+z7mtLz7vltjvZfnN8zmsX
+         f/4r8O9J20t0dswiooPlnAvKd/MuuwVjnfP2vCEnFltByw50v0d2DFX+rKS4ni5wRW1s
+         aclw==
+X-Forwarded-Encrypted: i=1; AJvYcCV/CGqcJkBKb0193cJt3douof3IOjUF3r/oVvDPa7KyYQM1IFOcZJhkEOgYw4E0gUUnAfEEzzrJqg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2FeGJDaApbfxKYoh+RNakCBxDJ+9fU2IQpGRAz+qOVT4DbTko
+	vUWVQHYAtx9N/76eLcMlX6fyAKvEm0TMLC0avcHUrvhJtBDG58XgEH46NWXy2puYPxxp7FzKZLT
+	i9qqRoi2/sQ9GRqVFzi29CYdlLMTNnoFHJkmnnbWZQjubnTobOByimj8LmoaS
+X-Gm-Gg: ASbGnct2xyVCTKxAUhrssWVj4AVRVOyYEOxaeW+XiNE4hnF9U+/teneaq15E+gJK8zx
+	5I8IgS3Xj+eeXe2/PGAJVo/V/Qpez8zrbXmPo7GIEJod+sea/n5I+GB/znVKhO0/u4oAbgE765q
+	muiLkW+wjo/8W8Y+j4FlNwjc6VGHuQzcS668d9ZYPXyiQJpF8zMO+jxfE+zoRbfvFqZvPDYlKbr
+	oQjXt9tyA7z6o+a59O7/9B3i7LyJo8YWq3gUlAY74JM+Gvx8GmDT5zx6OT4+cSyKkIvpqyjPuWY
+	z3A3IEkH9FWHebKSghGZCoXIajtUjPO5b1iRoZ0GTfPBrI4muOc8gJatNH+Y84dTzLu5bmcYWB+
+	N2umDGc2YI3sH+g==
+X-Received: by 2002:a5d:64e6:0:b0:42b:3680:3567 with SMTP id ffacd0b85a97d-42b36803910mr6819196f8f.18.1762858642761;
+        Tue, 11 Nov 2025 02:57:22 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IExHgXpLyzfVfcHOvkKwXBj1AViraKaxnypuiWpEttXt7rvZ6i7XtflKrBTuB0ga0hZUwj6/g==
+X-Received: by 2002:a5d:64e6:0:b0:42b:3680:3567 with SMTP id ffacd0b85a97d-42b36803910mr6819179f8f.18.1762858642355;
+        Tue, 11 Nov 2025 02:57:22 -0800 (PST)
+Received: from sissix.lzampier.com ([2a06:5900:814a:ab00:3725:2991:6cf3:b3aa])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42ac679607esm27069549f8f.43.2025.11.11.02.57.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Nov 2025 02:57:22 -0800 (PST)
+From: Lucas Zampieri <lzampier@redhat.com>
+To: linux-input@vger.kernel.org
+Cc: Lucas Zampieri <lzampier@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	linux-pm@vger.kernel.org
+Subject: [RFC PATCH 0/1] HID: Add support for multiple batteries per device
+Date: Tue, 11 Nov 2025 10:56:30 +0000
+Message-ID: <20251111105634.1684751-1-lzampier@redhat.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Regression in TEO cpuidle governor between 6.6 and 6.12
-From: Christian Loehle <christian.loehle@arm.com>
-To: Reka Norman <rekanorman@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
- linux-pm@vger.kernel.org
-References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
- <a50064b2-e6aa-4237-a715-12f21a65e9a6@arm.com>
- <ed1e64dc-91c9-44d9-b3d3-9f142bcf7a8d@arm.com>
- <CAJZ5v0g9Jndez5y5i4pPW1C+qfj=4iiu51HV7Eb1dBGd1jg-CA@mail.gmail.com>
- <b910a35c-83aa-4050-9c6c-de40f13a2a55@arm.com>
- <CAJZ5v0h6qAgWkEad5OGM-V-HOE-1PwD_XqgsDWbnJNxLWOKDfA@mail.gmail.com>
- <CAEmPcws_pvYpzRMQfMyRPBw=7bUyYCcnP3BHN2H4wgUeLLszFg@mail.gmail.com>
- <CAJZ5v0i_ZUD1=3JDABJZ3fcdD7r8uMU36=mam8r2=1P02YksYw@mail.gmail.com>
- <f0a2492b-9cea-4450-88ca-be8f99f3e0fe@arm.com>
- <CAEmPcwvui5Cg5yoa9NEq5b3OZREb08tbmy4=f=adTLuLPBgGgw@mail.gmail.com>
- <0c018867-c092-4f8e-8f7a-32bb02de3ad5@arm.com>
- <CAEmPcwuVPMONrDHcnxbWpoG5K5DFwf-u2i7wuOK4Q9HvF2uOhw@mail.gmail.com>
- <2a429c41-8624-408c-9db0-4450ab76e52f@arm.com>
-Content-Language: en-US
-In-Reply-To: <2a429c41-8624-408c-9db0-4450ab76e52f@arm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 11/11/25 10:00, Christian Loehle wrote:
-> On 11/11/25 04:23, Reka Norman wrote:
->> On Mon, Nov 10, 2025 at 11:06 PM Christian Loehle
->> <christian.loehle@arm.com> wrote:
->>>
->>> On 11/10/25 06:10, Reka Norman wrote:
->>>> On Mon, Nov 10, 2025 at 7:35 AM Christian Loehle
->>>> <christian.loehle@arm.com> wrote:
->>>>>
->>>>> On 11/7/25 11:35, Rafael J. Wysocki wrote:
->>>>>> On Fri, Nov 7, 2025 at 4:28 AM Reka Norman <rekanorman@chromium.org> wrote:
->>>>>>>
->>>>>>> On Fri, Nov 7, 2025 at 7:33 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>>>>>>>
->>>>>>>> On Thu, Nov 6, 2025 at 12:13 PM Christian Loehle
->>>>>>>> <christian.loehle@arm.com> wrote:
->>>>>>>>>
->>>>>>>>> On 11/5/25 20:48, Rafael J. Wysocki wrote:
->>>>>>>>>> On Wed, Nov 5, 2025 at 12:24 AM Christian Loehle
->>>>>>>>>> <christian.loehle@arm.com> wrote:
->>>>>>>>>>>
->>>>>>>>>>> On 11/4/25 09:03, Christian Loehle wrote:
->>>>>>>>>>>> On 11/4/25 03:36, Reka Norman wrote:
->>>>>>>>>>>>> Hi,
->>>>>>>>>>>>>
->>>>>>>>>>>>> I’m seeing a regression in the TEO governor between 6.6 and 6.12. At
->>>>>>>>>>>>> 6.12, when the system is idle it’s spending almost 100% of time in
->>>>>>>>>>>>> WFI, compared to about 6% at 6.6. At mainline it has improved compared
->>>>>>>>>>>>> to 6.12 but is still a lot worse than 6.6, spending about 50% in WFI.
->>>>>>>>>>>>>
->>>>>>>>>>>>> The system is a ChromeOS device with Mediatek MT8196.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Bisecting showed the specific commit which caused the regression is:
->>>>>>>>>>>>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
->>>>>>>>>>>>>
->>>>>>>>>>>>> I’ve attached sysfs dumps showing the issue. All were taken a couple
->>>>>>>>>>>>> of minutes after boot, with the device having been idle since boot.
->>>>>>>>>>>>> The cases tested are:
->>>>>>>>>>>>> cpuidle_6_6.txt      = 6.6 kernel
->>>>>>>>>>>>> cpuidle_6_12.txt     = 6.6 kernel with teo commits up to 6.12
->>>>>>>>>>>>> cpuidle_mainline.txt = 6.6 kernel with teo commits up to mainline
->>>>>>>>>>>>>
->>>>>>>>>>>>> Summary of the percentage time spent in each state (averaged across CPUs):
->>>>>>>>>>>>>
->>>>>>>>>>>>> |            |   6.6 |  6.12 | mainline |
->>>>>>>>>>>>> |------------|------:|------:|---------:|
->>>>>>>>>>>>> | WFI        |  6.02 | 99.94 |    56.84 |
->>>>>>>>>>>>> | cpuoff     | 11.02 |     0 |     0.65 |
->>>>>>>>>>>>> | clusteroff | 82.96 |  0.05 |    42.51 |
->>>>>>>>>>>>> | s2idle     |     0 |     0 |        0 |
->>>>>>>>>>>>>
->>>>>>>>>>>>> Any help would be much appreciated. Let me know if there's any other
->>>>>>>>>>>>> debugging information I should provide.
->>>>>>>>>>>>>
->>>>>>>>>>>>
->>>>>>>>>>>> That's not good.
->>>>>>>>>>>> If the system is mostly idle (only boot activity but dumps are taken after
->>>>>>>>>>>> ~3mins?), what is causing the wakeups? Even in 6.6 There are definitely more
->>>>>>>>>>>> than I would've expected?
->>>>>>>>>>>> I noticed that clusteroff and cpuoff have equal residency, which is
->>>>>>>>>>>> obviously a bit awkward for cpuidle, but shouldn't be relevant to your issue.
->>>>>>>>>>>>
->>>>>>>>>>>> I'm a bit puzzled by your bisect results.
->>>>>>>>>>>> 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
->>>>>>>>>>>> made the intercept logic *less* prone to count (false) intercepts, yet it
->>>>>>>>>>>> seems to count more of them? (resulting in more WFI).
->>>>>>>>>>>> I'll think about it some more, for now of course a trace would be very
->>>>>>>>>>>> helpful. (cpuidle events, ipi_raise, irqs?)
->>>>>>>>>>>> Are there ever any latency constraints set?
->>>>>>>>>>>>
->>>>>>>>>>>> FWIW the mainline results look the most reasonable, from a 30000 feet view
->>>>>>>>>>>> anyway:
->>>>>>>>>>>> Cluster       State           above   below   usage   above%  below%
->>>>>>>>>>>> LITTLE        cpuoff-l        ~75     ~65     ~140    23%     20%
->>>>>>>>>>>> LITTLE        clusteroff-l    ~800    0       ~100    89%     0%
->>>>>>>>>>>> MID   cpuoff-m        ~3–4    ~15     ~20     15%     55%
->>>>>>>>>>>> MID   clusteroff-m    ~1300   0       ~4000   24%     0%
->>>>>>>>>>>> BIG   cpuoff-b        0       1       1       —       —
->>>>>>>>>>>> BIG   clusteroff-b    ~800    0       ~1900   30%     0%
->>>>>>>>>>>>
->>>>>>>>>>>> (WFI seems mostly the correct choice for little CPUs, that's fine, the energy
->>>>>>>>>>>> savings compared to cpuoff should be marginal anyway.)
->>>>>>>>>>>>
->>>>>>>>>>>> Do you mind trying:
->>>>>>>>>>>> 13ed5c4a6d9c cpuidle: teo: Skip getting the sleep length if wakeups are very frequent
->>>>>>>>>>>> on 6.12?
->>>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> So just thinking out loud, the only case I can actually thing of to explain your
->>>>>>>>>>> bisect to 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
->>>>>>>>>>> is that the workload essentially changed dramatically because of our calls
->>>>>>>>>>> to tick_nohz_get_sleep_length() now.
->>>>>>>>>>> I'm not sure how likely I think that is, but I'm lacking imagination for another
->>>>>>>>>>> cause. That's why results with
->>>>>>>>>>> 13ed5c4a6d9c ("cpuidle: teo: Skip getting the sleep length if wakeups are very frequent")
->>>>>>>>>>> would be interesting.
->>>>>>>>>>
->>>>>>>>>> My current theory is that this issue is related to the
->>>>>>>>>> tick_nohz_get_sleep_length() overhead and the way "intercepts" are
->>>>>>>>>> distinguished from "hits" in teo.
->>>>>>>>>>
->>>>>>>>>> Namely, teo assumes that its own overhead is negligible and so it
->>>>>>>>>> counts a given event as an "intercept" if the measured time spent in
->>>>>>>>>> the idle state (with the exit latency roughly taken into account)
->>>>>>>>>> falls into a different "state bin" than the sleep length (the expected
->>>>>>>>>> time till the next timer).  However, the sleep length is computed as a
->>>>>>>>>> difference between the upcoming timer wakeup event time and
->>>>>>>>>> ts->idle_entrytime, so it actually includes the time taken by
->>>>>>>>>> tick_nohz_next_event().  If the latter is significant, it may
->>>>>>>>>> contribute to the difference seen by teo_update() and cause extra
->>>>>>>>>> "intercepts" to appear.
->>>>>>>>>
->>>>>>>>> Right, additionally with psci pc-mode and the exposed clusteroff states we end
->>>>>>>>> up vastly exaggerating the wakeup latency (i.e. underestimating the actual idle time)
->>>>>>>>> for three reasons:
->>>>>>>>> - wakeup latency = entry+exit latency (worst case: pay full latencies on both
->>>>>>>>> even though for most cases we don't incur the entry latency)
->>>>>>>>> - Wakeup latency is a worst-case and often is more like 2x-3x of the average.
->>>>>>>>> - We use the (higher) clusteroff values even though the clusteroff state couldn't
->>>>>>>>> possibly have been entered as not the entire cluster is idle.
->>>>>>>>>
->>>>>>>>> Nonetheless these are all just a "intercept counting is significantly more likely"
->>>>>>>>> while the results show not a single state >0 entered => the intercept logic
->>>>>>>>> probably triggers every cpuidle entry.
->>>>>>>>
->>>>>>>> It has to for this to happen, if timers are not frequent enough.
->>>>>>>>
->>>>>>>>> Feels like there should be an issue in the feedback loop.
->>>>>>>>
->>>>>>>> I'm wondering what the issue could be though.  The change in commit
->>>>>>>> 4b20b07ce72f only affects the cases when idle state 0 is about to be
->>>>>>>> selected and it only really changes the sleep length value from
->>>>>>>> KTIME_MAX to something more realistic (but it still may be KTIME_MAX).
->>>>>>>>
->>>>>>>> It may turn an "intercept" into a "hit", but only if the CPU is not
->>>>>>>> woken up by the tick because those cases had been already counted as
->>>>>>>> "hits" before commit 4b20b07ce72f.
->>>>>>>>
->>>>>>>> Now, if the majority of wakeups in the workload are tick wakeups, the
->>>>>>>> only real difference appears to be the presence of
->>>>>>>> tick_nohz_get_sleep_length() in that code path.
->>>>>>>>
->>>>>>>> Frankly, I would try to remove the update of cpu_data->sleep_length_ns
->>>>>>>> right before the "goto out_tick" statement (in 6.12 that should be
->>>>>>>> line 426) and see what happens.
->>>>>>>
->>>>>>> Just tried this quickly. Results attached. It goes back to behaving
->>>>>>> the same as 6.6 - about 2% WFI.
->>>>>>
->>>>>> Thanks for checking this!  It means that the
->>>>>> tick_nohz_get_sleep_length() overhead doesn't matter here that much.
->>>>>>
->>>>>> Instead of making the change above, can you please try the 6.12
->>>>>> equivalent of the attached patch?
->>>>>>
->>>>>> Or alternatively, apply this one to the mainline and see if it changes
->>>>>> the idle states selection proportions?
->>>>
->>>> It doesn't seem to have an effect. Results are attached for both 6.12
->>>> (6_12_teo_reflect) and mainline (mainline_teo_reflect). 6.12 is still
->>>> 100% WFI and mainline is about 20% WFI on average, the same as before.
->>>>
->>>>>
->>>>> I don't quite follow this.
->>>>> While I don't really believe that the tick_nohz_get_sleep_length() overhead
->>>>> plays a role here, how does removing that assignment prove it isn't?
->>>>>
->>>>> The below (if that's what you meant) might lead to the overhead being optimized
->>>>> out? [1]
->>>>
->>>> Oh true. I tried the diff below instead (which I think should avoid
->>>> that?). This also behaves the same as 6.6. Results attached as
->>>> 6_12_sleep_length2.
->>>
->>> Thanks for testing
->>>
->>>>
->>>> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
->>>> index 173ddcac540a..3c9595bc6c80 100644
->>>> --- a/drivers/cpuidle/governors/teo.c
->>>> +++ b/drivers/cpuidle/governors/teo.c
->>>> @@ -427,8 +427,7 @@ static int teo_select(struct cpuidle_driver *drv,
->>>> struct cpuidle_device *dev,
->>>>                  * We have to query the sleep length here otherwise we don't
->>>>                  * know after wakeup if our guess was correct.
->>>>                  */
->>>> -               duration_ns = tick_nohz_get_sleep_length(&delta_tick);
->>>> -               cpu_data->sleep_length_ns = duration_ns;
->>>> +               volatile s64 __maybe_unused duration_volatile_ns =
->>>> tick_nohz_get_sleep_length(&delta_tick);
->>>>                 goto out_tick;
->>>>         }
->>>>
->>>>> I'd be curious if [2] behaves like 6.12. So far I haven't been able to
->>>>> reproduce the issue Reka is seeing.
->>>>
->>>> Results with [2] attached as 6_12_sleep_length3. Yes, it behaves like 6.12.
->>>>
->>>
->>> Hmm interesting.
->>>
->>>>> There's one oddity that immediately came to mind: state1 and state2 having
->>>>> the same residency (slightly different latency though), but when I set these
->>>>> as such teo works fine. So I don't think it is an issue here.
->>>>>
->>>>> If Rafael's patch fixes the issue I'd still be curious what the predicted sleep
->>>>> length values are here (they must be <1ms, but do in fact never trigger?).
->>>>
->>>> In case it's helpful, I've attached a trace (trace_duration.dat) which
->>>> includes a trace_printk of the duration_ns at this point (on top of
->>>> unmodified 6.12).
->>> While I was gonna ask for this anyway, it's not that useful (duration_ns is some
->>> time in the far future, most wakeups are obviously ticks).
->>> May I ask you to run the following hopefully one last time, just to check if we're
->>> not missing something here:
->>
->> Trace attached.
->>
-> 
-> Thank you!
-> So the intercept bin counts themselves aren't the issue:
->           <idle>-0     [007] d..1.  1097.218324: bprint:               teo_update: teo_update cpu=7 last_state_idx=0 state_count=4 total=7182 sleep_len_ns=62615312 last_residency_ns=997307 measured_ns=18446744073709551615 lat_ns=1000 idx_timer=2 idx_duration=2 tick_hits=0 | bins: [0]h=7,i=7,tr=1000 [1]h=0,i=0,tr=2580000 [2]h=8192,i=0,tr=2580000 [3]h=0,i=0,tr=4294967295000
->           <idle>-0     [007] d..1.  1097.218324: cpu_idle:             state=0 cpu_id=7
->           <idle>-0     [007] d..1.  1097.219321: cpu_idle:             state=4294967295 cpu_id=7
->           <idle>-0     [007] d.h1.  1097.219322: irq_handler_entry:    irq=19 name=arch_timer
->           <idle>-0     [007] d.h1.  1097.219323: irq_handler_exit:     irq=19 ret=handled
->           <idle>-0     [007] d..1.  1097.219324: bprint:               teo_update: teo_update cpu=7 last_state_idx=0 state_count=4 total=7182 sleep_len_ns=61615389 last_residency_ns=997538 measured_ns=18446744073709551615 lat_ns=1000 idx_timer=2 idx_duration=2 tick_hits=0 | bins: [0]h=7,i=7,tr=1000 [1]h=0,i=0,tr=2580000 [2]h=8192,i=0,tr=2580000 [3]h=0,i=0,tr=4294967295000
->           <idle>-0     [007] d..1.  1097.219324: cpu_idle:             state=0 cpu_id=7
->           <idle>-0     [007] d..1.  1097.220321: cpu_idle:             state=4294967295 cpu_id=7
->           <idle>-0     [007] d.h1.  1097.220322: irq_handler_entry:    irq=19 name=arch_timer
->           <idle>-0     [007] d.h1.  1097.220323: irq_handler_exit:     irq=19 ret=handled
->           <idle>-0     [007] d..1.  1097.220324: bprint:               teo_update: teo_update cpu=7 last_state_idx=0 state_count=4 total=7182 sleep_len_ns=60615312 last_residency_ns=997538 measured_ns=18446744073709551615 lat_ns=1000 idx_timer=2 idx_duration=2 tick_hits=0 | bins: [0]h=7,i=7,tr=1000 [1]h=0,i=0,tr=2580000 [2]h=8192,i=0,tr=2580000 [3]h=0,i=0,tr=4294967295000
->           <idle>-0     [007] d..1.  1097.220324: cpu_idle:             state=0 cpu_id=7
->           <idle>-0     [007] d..1.  1097.221321: cpu_idle:             state=4294967295 cpu_id=7
->           <idle>-0     [007] d.h1.  1097.221322: irq_handler_entry:    irq=19 name=arch_timer
->           <idle>-0     [007] d.h1.  1097.221323: irq_handler_exit:     irq=19 ret=handled
->           <idle>-0     [007] d..1.  1097.221324: bprint:               teo_update: teo_update cpu=7 last_state_idx=0 state_count=4 total=7182 sleep_len_ns=59615312 last_residency_ns=997538 measured_ns=18446744073709551615 lat_ns=1000 idx_timer=2 idx_duration=2 tick_hits=0 | bins: [0]h=7,i=7,tr=1000 [1]h=0,i=0,tr=2580000 [2]h=8192,i=0,tr=2580000 [3]h=0,i=0,tr=4294967295000
-> 
-> 
-> 386         if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum)
-> will be 2*7 > 8206 - (7 + 8192) => True
-> The intercept state selection will choose a state that covers at least half of the
-> intercepts, but only bin 0 has intercepts at all => state0 selected.
-> 
-> I see two issues:
-> 1) Because of DECAY_SHIFT 3 values < 8 cannot decay (I guess this wouldn't really be an issue without 2))
-> 2) if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) isn't an appropriate check, it will
-> exclude the state if it its idx_hit_sum make up the vast majority of cpu_data->total (i.e. it would
-> have been a really good candidate actually).
-> 
-> I lightly tested the below, it seems to be at least comparable to mainline teo.
-> (the documentation/comments would need adapting too, of course)
-> 
-> -----8<-----
-> 
-> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-> index bfa55c1eab5b..f8f76e3b8364 100644
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -355,7 +355,7 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->          * all of the deeper states, a shallower idle state is likely to be a
->          * better choice.
->          */
-> -       if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
-> +       if (2 * idx_intercept_sum > idx_hit_sum) {
->                 int first_suitable_idx = idx;
->  
->                 /*
-> 
-> 
+This RFC introduces support for multiple batteries per HID device, addressing
+a long-standing architectural limitation in the HID battery reporting subsystem.
 
-... nevermind the patch, idx_hit_sum is of course the sum of 0...idx-1.
-Maybe something like this, again lightly tested:
+## Background
 
------8<-----
+The current HID implementation explicitly prevents multiple batteries per device
+through an early return in hidinput_setup_battery() that enforces a single-battery
+assumption. Linux treats peripheral batteries (scope=Device) differently from system
+batteries, with desktop environments often displaying them separately or ignoring
+them entirely. However, this design doesn't account for modern multi-battery hardware patterns.
 
-diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-index 173ddcac540a..6bfb9cedb75e 100644
---- a/drivers/cpuidle/governors/teo.c
-+++ b/drivers/cpuidle/governors/teo.c
-@@ -383,13 +395,15 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-                 * has been stopped already into account.
-                 */
-                intercept_sum = 0;
-+               hit_sum = 0;
- 
-                for (i = idx - 1; i >= 0; i--) {
-                        struct teo_bin *bin = &cpu_data->state_bins[i];
- 
-                        intercept_sum += bin->intercepts;
-+                       hit_sum += bin->hits;
- 
--                       if (2 * intercept_sum > idx_intercept_sum) {
-+                       if (2 * intercept_sum > cpu_data->total || 2 * hit_sum > cpu_data->total) {
-                                /*
-                                 * Use the current state unless it is too
-                                 * shallow or disabled, in which case take the
+## Problem Statement
 
+Multiple battery scenarios that cannot be properly reported today:
+
+1. Gaming headsets with charging docks (e.g., SteelSeries Arctis Nova Pro
+   Wireless) - headset battery reported, dock battery invisible
+2. Graphics tablets with stylus batteries (Wacom) - requires driver-specific
+   workarounds
+3. Wireless earbuds with per-earbud batteries plus charging case
+4. Multi-device receivers (Logitech Unifying) - requires proprietary HID++
+   protocol parsing
+
+This forces manufacturers to use proprietary protocols and vendor-specific
+software. Community projects parse USB packets directly because standard HID
+battery reporting cannot handle multi-battery scenarios.
+
+## Why This Matters
+
+The current limitation creates a cycle: OS lacks support, so manufacturers
+implement proprietary protocols, which makes vendor software necessary, which
+reduces pressure to fix the OS limitation. Improving HID core support for
+multiple batteries would enable standardized reporting, reduce the need for
+vendor software, improve OS integration, reduce driver duplication, and provide
+a foundation for future multi-battery devices.
+
+## Proposed Solution
+
+This patch introduces struct hid_battery to encapsulate individual battery
+state, adds a batteries list to struct hid_device for tracking multiple
+batteries, and uses report ID-based identification. The implementation maintains
+full backwards compatibility with existing single-battery code.
+
+## Testing
+
+Tested with split keyboard hardware. Each battery reports independently
+through the power supply interface.
+
+## Request for Comments
+
+Is list-based storage appropriate or would another structure work better?
+Should we support usage-based identification in addition to report ID for
+devices using the same report ID? Is sequential naming (battery-N) sufficient
+or should batteries have semantic role identifiers like "main", "stylus", "dock"?
+
+To HID maintainers (Jiri Kosina, Benjamin Tissoires): Does this belong in
+hid-input.c or should it be separate? Any concerns about the backwards
+compatibility approach? Meaning, should I have removed the whole
+dev->bat legacy mapping and use the new struct?
+
+To power supply maintainers (Sebastian Reichel): Any issues with multiple
+power_supply devices from a single HID device?
+
+Related commits:
+- c6838eeef2fb: HID: hid-input: occasionally report stylus battery
+- a608dc1c0639: HID: input: map battery system charging
+- fd2a9b29dc9c: HID: wacom: Remove AES power_supply after inactivity
+
+Community projects demonstrating the need:
+- HeadsetControl: https://github.com/Sapd/HeadsetControl
+- Solaar: https://github.com/pwr-Solaar/Solaar
+- OpenRazer: https://github.com/openrazer/openrazer
+
+Lucas Zampieri (1):
+  HID: input: Add support for multiple batteries per device
+
+ drivers/hid/hid-core.c  |   4 +
+ drivers/hid/hid-input.c | 193 +++++++++++++++++++++++++++-------------
+ include/linux/hid.h     |  42 ++++++++-
+ 3 files changed, 176 insertions(+), 63 deletions(-)
+
+--
+2.51.1
 
 
