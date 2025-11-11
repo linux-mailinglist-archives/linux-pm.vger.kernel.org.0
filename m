@@ -1,95 +1,98 @@
-Return-Path: <linux-pm+bounces-37781-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37782-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED70CC4D4E9
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 12:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A395EC4D4E3
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 12:08:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2AF8318C4ABD
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 11:02:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40FA918C4F37
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Nov 2025 11:02:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BC0E3557E0;
-	Tue, 11 Nov 2025 10:57:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D313355040;
+	Tue, 11 Nov 2025 10:57:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ngxyr4HG";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="fHCsfdWQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QXZMdTij";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="dd/EiRUJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF7F355051
-	for <linux-pm@vger.kernel.org>; Tue, 11 Nov 2025 10:57:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A89F34FF77
+	for <linux-pm@vger.kernel.org>; Tue, 11 Nov 2025 10:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762858648; cv=none; b=SxKF9y8eWwf5XmJ1v1H2/5tHQvC0sfYnWYWfvgc2xtka66R0lDGO30ZU4tx56kVuUZ3KbaROlSEsjpGwYn35xPHirNF/VATx6IsQPgYdSqd30Q8qvvTbxYp+Mi0xoaSvNPsq2mbvrhQcD/bM+61weRxAGrY7Aab2png7pdok2Dc=
+	t=1762858650; cv=none; b=tdooAZ1ZTgkzrfv7ANdQDXf9cLr/9dK8NYv3tJMS/Px+oeomDupMELK6hSWNJj/LjKfEx4pTANjCuZ8Xd5c2nv/YZw4IJRYFFtLTK1lJw0r8RBui1MYPLiEz2akiUjnCi7zDVSkV/YhQDMdTCR6nhFW0K3XmWZSI2QKDJU7dJxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762858648; c=relaxed/simple;
-	bh=NYhtfUxZT1YXAcAQF0qWwjxLnb4vU/OkwMpSzLBjlsI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HwyKycupuwj68NxW5jtGEPrcw5hXmaDKQixVvrJWDKqYJS1GWuyspQzNHicbArkZThw4QBPLGB2T/1JbpeVST5nMmH1ZW7eiaxzquJBNDXpf4UA5kBgAZPCx8zT0Y4ykbO0XM07ZfCbVvqC7ifffp2zVF+HpKTgBAFTdVRd5PQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ngxyr4HG; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=fHCsfdWQ; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1762858650; c=relaxed/simple;
+	bh=GAhLUK7NokaOBdHhjdiuOOBNENQn4uOex32x8jh3pcA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FPU4aR9wsRSQoAsj9i6B3BfAiUnmTYPBqyvLgEzxt6dMADQ3uZqhDrG19AUnZnkeM2wRHqyxylQ4UGfbNDUn7eWKSRcPA0hz+uar8WfpaXMCbTZSt4un3UuEhoSz4oWWN5zW0pGobxFTqd59CEn1vnUgZoGk8PcUmR4+xtt7N0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QXZMdTij; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=dd/EiRUJ; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1762858645;
+	s=mimecast20190719; t=1762858647;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=lLXbfdbNy9/hvVp5w0asRQYfVq1o80iFeNQJCAkbC5k=;
-	b=Ngxyr4HGahZzy288KG8M8EJ2+MHfaAF9foqVEfu/dt5diZDEeknZpgi9DC7ZnKD6/SMd1e
-	fgJrJtRppbR1Pgx42BRuSocbw61ZzHewO4Q9aKS5C6FeQm+V037Txd4IcdDnRgCujCuP3/
-	1wzjSFrbErJPSWtxtRiHeq3brei8e8I=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=OA3MLt0HtCa+3bbTy+qorTBrGQRJe5gwgZCEi7pnzlA=;
+	b=QXZMdTijDMbyCAfXhEpldnSS5lHi4d5Hp/r30hvCeTtpZQJyipFi6yn4dom81cILXjac+E
+	QS9Il00ZTJ4F99Uys38oiZz+XNkcWD6ndC/Tg7o+VtkTxLEi6OAl3O4FgvNtkcLaM7+n6P
+	gXt0R3o9bpUneUcKLsmykcog22ydho8=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-544-5wcO6ZQaMg-4_9Ov5IenuA-1; Tue, 11 Nov 2025 05:57:24 -0500
-X-MC-Unique: 5wcO6ZQaMg-4_9Ov5IenuA-1
-X-Mimecast-MFC-AGG-ID: 5wcO6ZQaMg-4_9Ov5IenuA_1762858643
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-42b2f79759bso2106416f8f.2
-        for <linux-pm@vger.kernel.org>; Tue, 11 Nov 2025 02:57:23 -0800 (PST)
+ us-mta-552-Lc1c2C8ROUmqr4-RQGFRaQ-1; Tue, 11 Nov 2025 05:57:25 -0500
+X-MC-Unique: Lc1c2C8ROUmqr4-RQGFRaQ-1
+X-Mimecast-MFC-AGG-ID: Lc1c2C8ROUmqr4-RQGFRaQ_1762858644
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4775f51ce36so37362915e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Nov 2025 02:57:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1762858643; x=1763463443; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lLXbfdbNy9/hvVp5w0asRQYfVq1o80iFeNQJCAkbC5k=;
-        b=fHCsfdWQ3V4PBbz4jsTDxqBxNxltb39q51RMs6y2unPRDs/4gLxyU9wAZN9NbrVMa2
-         fw9tKqEA8J2NZbg/UIjs5dqof8uP2GgQewuru7uln9bOCfNmxSTcQhSm7nHV73w5Nj9R
-         jrvJhda3jm/RAkuqxD55Uns7NzSVvdwnAj0caoLgKvK/s5v+dzSggU7bJzaX4MIgKlcd
-         7faF6pwutADlu5/foyrb6Q0Iisv6pzGgpicddWZE5OwouaEjoOiMnJdzP4jPiJS3El2+
-         cVA7S66R6oQEBiikh+p57l3HJZGfzdYEobhoJJYYwpyENi7JgwdXn0/x6Y1r3jPHY59r
-         LG7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762858643; x=1763463443;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=redhat.com; s=google; t=1762858644; x=1763463444; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lLXbfdbNy9/hvVp5w0asRQYfVq1o80iFeNQJCAkbC5k=;
-        b=kF27LMOxjuXRZuyHQZgjKnb2Ry93kGxagCv/yPIBBh+NkmgS8cGS+osPGClK9TP7w1
-         eUqiFpBvv+1HFR8G6kKV0JgofdbzhFpdkGR0OJycmKUKtowT6Uwfnvw/W8jmD0tMbzAA
-         hzNVfPfcjkwm2Wl6sMGGYL1ic3Z/OkJuTNGXk765Sik7MqhY7/cx770uWZ0tEBLgfeXr
-         lrNWseSspxntE5IJScm9Z9kKojzX1UKkDM6k/0LvDGdzQX+z7mtLz7vltjvZfnN8zmsX
-         f/4r8O9J20t0dswiooPlnAvKd/MuuwVjnfP2vCEnFltByw50v0d2DFX+rKS4ni5wRW1s
-         aclw==
-X-Forwarded-Encrypted: i=1; AJvYcCV/CGqcJkBKb0193cJt3douof3IOjUF3r/oVvDPa7KyYQM1IFOcZJhkEOgYw4E0gUUnAfEEzzrJqg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2FeGJDaApbfxKYoh+RNakCBxDJ+9fU2IQpGRAz+qOVT4DbTko
-	vUWVQHYAtx9N/76eLcMlX6fyAKvEm0TMLC0avcHUrvhJtBDG58XgEH46NWXy2puYPxxp7FzKZLT
-	i9qqRoi2/sQ9GRqVFzi29CYdlLMTNnoFHJkmnnbWZQjubnTobOByimj8LmoaS
-X-Gm-Gg: ASbGnct2xyVCTKxAUhrssWVj4AVRVOyYEOxaeW+XiNE4hnF9U+/teneaq15E+gJK8zx
-	5I8IgS3Xj+eeXe2/PGAJVo/V/Qpez8zrbXmPo7GIEJod+sea/n5I+GB/znVKhO0/u4oAbgE765q
-	muiLkW+wjo/8W8Y+j4FlNwjc6VGHuQzcS668d9ZYPXyiQJpF8zMO+jxfE+zoRbfvFqZvPDYlKbr
-	oQjXt9tyA7z6o+a59O7/9B3i7LyJo8YWq3gUlAY74JM+Gvx8GmDT5zx6OT4+cSyKkIvpqyjPuWY
-	z3A3IEkH9FWHebKSghGZCoXIajtUjPO5b1iRoZ0GTfPBrI4muOc8gJatNH+Y84dTzLu5bmcYWB+
-	N2umDGc2YI3sH+g==
-X-Received: by 2002:a5d:64e6:0:b0:42b:3680:3567 with SMTP id ffacd0b85a97d-42b36803910mr6819196f8f.18.1762858642761;
-        Tue, 11 Nov 2025 02:57:22 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IExHgXpLyzfVfcHOvkKwXBj1AViraKaxnypuiWpEttXt7rvZ6i7XtflKrBTuB0ga0hZUwj6/g==
-X-Received: by 2002:a5d:64e6:0:b0:42b:3680:3567 with SMTP id ffacd0b85a97d-42b36803910mr6819179f8f.18.1762858642355;
-        Tue, 11 Nov 2025 02:57:22 -0800 (PST)
+        bh=OA3MLt0HtCa+3bbTy+qorTBrGQRJe5gwgZCEi7pnzlA=;
+        b=dd/EiRUJpt8I/4Bm2uTWvtkCVuV/9ik3Y7B1+ttXoYSkgos25CiJjSKOIwViYc4VzO
+         6CzIxuxd5DM5CZtfyMGc/hSXmX+pIwDazLPF4CUDoJ0LwXocWVeUts1v1S6XvzKe4Wpx
+         oUMh7bH9lQHGa3Uy0I+KUuydGyqIzBl8h0XXBOvAno0FMKHB70CJ6FelZYZewOXG1wGY
+         iJAFoJK2vXEl789+WpfYkmxbYJd6ayJImuFnuFdUpBZuDSOJGZGhK3XrYZJKx0bvr3gA
+         VIBmJ7Ixk4Rd+DNrw3ugaWbThq9hNdP8IrXBGw/dB59RcUtdIbouZR2A40bo3tvfXIob
+         CD3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762858644; x=1763463444;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OA3MLt0HtCa+3bbTy+qorTBrGQRJe5gwgZCEi7pnzlA=;
+        b=RTWBAqP2rSt7emY/hv/Xe/WBYG4jd+Y0r2Rs7X/PxyEkxAjPXc7WGfxba4oaL2qd5y
+         6xM3pa3dquN6dyYtZgEiT8o80XAsQJANnAUC9ll8PJQ5qe7kTKvhE/gumUe6WczbwKnU
+         LTY2HH8C2rbm6ZLODC9Rj4p2qBSN6aAsd9IUwZW+oorUv3TYdpfdh93UHxLB75rym5l8
+         gaEi8Yu7klM39GYwrkJcbkZfhK7w6RRJksCFPnnf3XY2UeSFrOGikktFKIXlBX4lNlxJ
+         DcGpg68a/5xIFPK2lTZSWZkoeQo+NNeQZ+39SG2iLk876eNZwqM6/CmwOZtTvxkOnUWx
+         8ZUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXAvrDgE7syndN4f2yaMnBEhz2eZ69vX6/FmKQTF0RZhzRDgo70KFODhIlfLxgGY1qfqRYn7St8ag==@vger.kernel.org
+X-Gm-Message-State: AOJu0YycDNNxIPN0kL3buSn1ahEVQHBfnLK3tyHxh8CnWeckTGcdH9Ue
+	mmWM2saGvLQJGFymZOd1Dk7LokGEknQgIWNXM/xizeCVD7F08kkzm9nOn9PTmyfDl31ytLg2r4N
+	ddbRQ47SUAMXCxxzixYBqR5h+yHNDSt7xdRlBz2jV0aXNME0/o9w2uKVpd0jV
+X-Gm-Gg: ASbGncvhGwEwvIERThTCnVdZRgzoMUKIByq+Sr0ryTHXMUCALMyMxVe9JYMjcE7+io4
+	mzwxXuGXvyvP+M8jimDLfB55wqLZAAsfU/bF6F1PiZNWt1fOuqS+VVdKAnciTxEzOXFiTiCj5Xk
+	C1itNCzaOyyzMrn0wg0RhsYtcUTewBQ4Bj+nLNciDpTwJ2b/h1AxIxCbaKV8OwM42gQfn4hmnDs
+	8FtRmoODFA5qvr+fT4cNjSPs32tCrX9H3k5WbLNE16poGndXh5glXg0xCTsMu/vKb58y9CuNcly
+	Uhdipb6PD/lE369Dhsh+RSKfKk7ZiSd1jWyBHxOvq1lcWpbjcczg2Jg3STooCOeSB4QIUUFHqZq
+	8o23Un0AMNugdpw==
+X-Received: by 2002:a05:600c:3b0a:b0:46e:46c7:b79a with SMTP id 5b1f17b1804b1-4777322870bmr105691035e9.2.1762858644200;
+        Tue, 11 Nov 2025 02:57:24 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFJ90auCasoE9P8jn9uzsh4DtTgqPrjXay3Mk3u1ymZy23RmngSV+vew6hQGAhqIpqU5mnSgA==
+X-Received: by 2002:a05:600c:3b0a:b0:46e:46c7:b79a with SMTP id 5b1f17b1804b1-4777322870bmr105690745e9.2.1762858643746;
+        Tue, 11 Nov 2025 02:57:23 -0800 (PST)
 Received: from sissix.lzampier.com ([2a06:5900:814a:ab00:3725:2991:6cf3:b3aa])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42ac679607esm27069549f8f.43.2025.11.11.02.57.21
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42ac679607esm27069549f8f.43.2025.11.11.02.57.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Nov 2025 02:57:22 -0800 (PST)
+        Tue, 11 Nov 2025 02:57:23 -0800 (PST)
 From: Lucas Zampieri <lzampier@redhat.com>
 To: linux-input@vger.kernel.org
 Cc: Lucas Zampieri <lzampier@redhat.com>,
@@ -98,10 +101,12 @@ Cc: Lucas Zampieri <lzampier@redhat.com>,
 	Benjamin Tissoires <bentiss@kernel.org>,
 	Sebastian Reichel <sre@kernel.org>,
 	linux-pm@vger.kernel.org
-Subject: [RFC PATCH 0/1] HID: Add support for multiple batteries per device
-Date: Tue, 11 Nov 2025 10:56:30 +0000
-Message-ID: <20251111105634.1684751-1-lzampier@redhat.com>
+Subject: [RFC PATCH 1/1] HID: input: Add support for multiple batteries per device
+Date: Tue, 11 Nov 2025 10:56:31 +0000
+Message-ID: <20251111105634.1684751-2-lzampier@redhat.com>
 X-Mailer: git-send-email 2.51.1
+In-Reply-To: <20251111105634.1684751-1-lzampier@redhat.com>
+References: <20251111105634.1684751-1-lzampier@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -110,88 +115,423 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This RFC introduces support for multiple batteries per HID device, addressing
-a long-standing architectural limitation in the HID battery reporting subsystem.
+Add support for multiple batteries per HID device by introducing
+struct hid_battery to encapsulate individual battery state and using
+a list to track multiple batteries identified by report ID. The legacy
+dev->battery field is maintained for backwards compatibility.
 
-## Background
-
-The current HID implementation explicitly prevents multiple batteries per device
-through an early return in hidinput_setup_battery() that enforces a single-battery
-assumption. Linux treats peripheral batteries (scope=Device) differently from system
-batteries, with desktop environments often displaying them separately or ignoring
-them entirely. However, this design doesn't account for modern multi-battery hardware patterns.
-
-## Problem Statement
-
-Multiple battery scenarios that cannot be properly reported today:
-
-1. Gaming headsets with charging docks (e.g., SteelSeries Arctis Nova Pro
-   Wireless) - headset battery reported, dock battery invisible
-2. Graphics tablets with stylus batteries (Wacom) - requires driver-specific
-   workarounds
-3. Wireless earbuds with per-earbud batteries plus charging case
-4. Multi-device receivers (Logitech Unifying) - requires proprietary HID++
-   protocol parsing
-
-This forces manufacturers to use proprietary protocols and vendor-specific
-software. Community projects parse USB packets directly because standard HID
-battery reporting cannot handle multi-battery scenarios.
-
-## Why This Matters
-
-The current limitation creates a cycle: OS lacks support, so manufacturers
-implement proprietary protocols, which makes vendor software necessary, which
-reduces pressure to fix the OS limitation. Improving HID core support for
-multiple batteries would enable standardized reporting, reduce the need for
-vendor software, improve OS integration, reduce driver duplication, and provide
-a foundation for future multi-battery devices.
-
-## Proposed Solution
-
-This patch introduces struct hid_battery to encapsulate individual battery
-state, adds a batteries list to struct hid_device for tracking multiple
-batteries, and uses report ID-based identification. The implementation maintains
-full backwards compatibility with existing single-battery code.
-
-## Testing
-
-Tested with split keyboard hardware. Each battery reports independently
-through the power supply interface.
-
-## Request for Comments
-
-Is list-based storage appropriate or would another structure work better?
-Should we support usage-based identification in addition to report ID for
-devices using the same report ID? Is sequential naming (battery-N) sufficient
-or should batteries have semantic role identifiers like "main", "stylus", "dock"?
-
-To HID maintainers (Jiri Kosina, Benjamin Tissoires): Does this belong in
-hid-input.c or should it be separate? Any concerns about the backwards
-compatibility approach? Meaning, should I have removed the whole
-dev->bat legacy mapping and use the new struct?
-
-To power supply maintainers (Sebastian Reichel): Any issues with multiple
-power_supply devices from a single HID device?
-
-Related commits:
-- c6838eeef2fb: HID: hid-input: occasionally report stylus battery
-- a608dc1c0639: HID: input: map battery system charging
-- fd2a9b29dc9c: HID: wacom: Remove AES power_supply after inactivity
-
-Community projects demonstrating the need:
-- HeadsetControl: https://github.com/Sapd/HeadsetControl
-- Solaar: https://github.com/pwr-Solaar/Solaar
-- OpenRazer: https://github.com/openrazer/openrazer
-
-Lucas Zampieri (1):
-  HID: input: Add support for multiple batteries per device
-
+Signed-off-by: Lucas Zampieri <lzampier@redhat.com>
+---
  drivers/hid/hid-core.c  |   4 +
  drivers/hid/hid-input.c | 193 +++++++++++++++++++++++++++-------------
  include/linux/hid.h     |  42 ++++++++-
  3 files changed, 176 insertions(+), 63 deletions(-)
 
---
+diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+index a5b3a8ca2fcb..76d628547e9a 100644
+--- a/drivers/hid/hid-core.c
++++ b/drivers/hid/hid-core.c
+@@ -2990,6 +2990,10 @@ struct hid_device *hid_allocate_device(void)
+ 	mutex_init(&hdev->ll_open_lock);
+ 	kref_init(&hdev->ref);
+ 
++#ifdef CONFIG_HID_BATTERY_STRENGTH
++	INIT_LIST_HEAD(&hdev->batteries);
++#endif
++
+ 	ret = hid_bpf_device_init(hdev);
+ 	if (ret)
+ 		goto out_err;
+diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+index e56e7de53279..071df319775b 100644
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -454,7 +454,8 @@ static int hidinput_get_battery_property(struct power_supply *psy,
+ 					 enum power_supply_property prop,
+ 					 union power_supply_propval *val)
+ {
+-	struct hid_device *dev = power_supply_get_drvdata(psy);
++	struct hid_battery *bat = power_supply_get_drvdata(psy);
++	struct hid_device *dev = bat->dev;
+ 	int value;
+ 	int ret = 0;
+ 
+@@ -465,13 +466,13 @@ static int hidinput_get_battery_property(struct power_supply *psy,
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_CAPACITY:
+-		if (dev->battery_status != HID_BATTERY_REPORTED &&
+-		    !dev->battery_avoid_query) {
++		if (bat->status != HID_BATTERY_REPORTED &&
++		    !bat->avoid_query) {
+ 			value = hidinput_query_battery_capacity(dev);
+ 			if (value < 0)
+ 				return value;
+ 		} else  {
+-			value = dev->battery_capacity;
++			value = bat->capacity;
+ 		}
+ 
+ 		val->intval = value;
+@@ -482,20 +483,20 @@ static int hidinput_get_battery_property(struct power_supply *psy,
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_STATUS:
+-		if (dev->battery_status != HID_BATTERY_REPORTED &&
+-		    !dev->battery_avoid_query) {
++		if (bat->status != HID_BATTERY_REPORTED &&
++		    !bat->avoid_query) {
+ 			value = hidinput_query_battery_capacity(dev);
+ 			if (value < 0)
+ 				return value;
+ 
+-			dev->battery_capacity = value;
+-			dev->battery_status = HID_BATTERY_QUERIED;
++			bat->capacity = value;
++			bat->status = HID_BATTERY_QUERIED;
+ 		}
+ 
+-		if (dev->battery_status == HID_BATTERY_UNKNOWN)
++		if (bat->status == HID_BATTERY_UNKNOWN)
+ 			val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
+ 		else
+-			val->intval = dev->battery_charge_status;
++			val->intval = bat->charge_status;
+ 		break;
+ 
+ 	case POWER_SUPPLY_PROP_SCOPE:
+@@ -513,33 +514,53 @@ static int hidinput_get_battery_property(struct power_supply *psy,
+ static int hidinput_setup_battery(struct hid_device *dev, unsigned report_type,
+ 				  struct hid_field *field, bool is_percentage)
+ {
++	struct hid_battery *bat;
+ 	struct power_supply_desc *psy_desc;
+-	struct power_supply_config psy_cfg = { .drv_data = dev, };
++	struct power_supply_config psy_cfg;
+ 	unsigned quirks;
+ 	s32 min, max;
+ 	int error;
++	int battery_num = 0;
+ 
+-	if (dev->battery)
+-		return 0;	/* already initialized? */
++	list_for_each_entry(bat, &dev->batteries, list) {
++		if (bat->report_id == field->report->id)
++			return 0;	/* already initialized */
++		battery_num++;
++	}
+ 
+ 	quirks = find_battery_quirk(dev);
+ 
+-	hid_dbg(dev, "device %x:%x:%x %d quirks %d\n",
+-		dev->bus, dev->vendor, dev->product, dev->version, quirks);
++	hid_dbg(dev, "device %x:%x:%x %d quirks %d report_id %d\n",
++		dev->bus, dev->vendor, dev->product, dev->version, quirks,
++		field->report->id);
+ 
+ 	if (quirks & HID_BATTERY_QUIRK_IGNORE)
+ 		return 0;
+ 
+-	psy_desc = kzalloc(sizeof(*psy_desc), GFP_KERNEL);
+-	if (!psy_desc)
++	bat = kzalloc(sizeof(*bat), GFP_KERNEL);
++	if (!bat)
+ 		return -ENOMEM;
+ 
+-	psy_desc->name = kasprintf(GFP_KERNEL, "hid-%s-battery",
+-				   strlen(dev->uniq) ?
+-					dev->uniq : dev_name(&dev->dev));
++	psy_desc = kzalloc(sizeof(*psy_desc), GFP_KERNEL);
++	if (!psy_desc) {
++		error = -ENOMEM;
++		goto err_free_bat;
++	}
++
++	/* Create unique name for each battery based on report ID */
++	if (battery_num == 0) {
++		psy_desc->name = kasprintf(GFP_KERNEL, "hid-%s-battery",
++					   strlen(dev->uniq) ?
++						dev->uniq : dev_name(&dev->dev));
++	} else {
++		psy_desc->name = kasprintf(GFP_KERNEL, "hid-%s-battery-%d",
++					   strlen(dev->uniq) ?
++						dev->uniq : dev_name(&dev->dev),
++					   battery_num);
++	}
+ 	if (!psy_desc->name) {
+ 		error = -ENOMEM;
+-		goto err_free_mem;
++		goto err_free_desc;
+ 	}
+ 
+ 	psy_desc->type = POWER_SUPPLY_TYPE_BATTERY;
+@@ -559,98 +580,148 @@ static int hidinput_setup_battery(struct hid_device *dev, unsigned report_type,
+ 	if (quirks & HID_BATTERY_QUIRK_FEATURE)
+ 		report_type = HID_FEATURE_REPORT;
+ 
+-	dev->battery_min = min;
+-	dev->battery_max = max;
+-	dev->battery_report_type = report_type;
+-	dev->battery_report_id = field->report->id;
+-	dev->battery_charge_status = POWER_SUPPLY_STATUS_DISCHARGING;
++	/* Initialize battery structure */
++	bat->dev = dev;
++	bat->min = min;
++	bat->max = max;
++	bat->report_type = report_type;
++	bat->report_id = field->report->id;
++	bat->charge_status = POWER_SUPPLY_STATUS_DISCHARGING;
++	bat->status = HID_BATTERY_UNKNOWN;
+ 
+ 	/*
+ 	 * Stylus is normally not connected to the device and thus we
+ 	 * can't query the device and get meaningful battery strength.
+ 	 * We have to wait for the device to report it on its own.
+ 	 */
+-	dev->battery_avoid_query = report_type == HID_INPUT_REPORT &&
+-				   field->physical == HID_DG_STYLUS;
++	bat->avoid_query = report_type == HID_INPUT_REPORT &&
++			   field->physical == HID_DG_STYLUS;
+ 
+ 	if (quirks & HID_BATTERY_QUIRK_AVOID_QUERY)
+-		dev->battery_avoid_query = true;
++		bat->avoid_query = true;
+ 
+-	dev->battery = power_supply_register(&dev->dev, psy_desc, &psy_cfg);
+-	if (IS_ERR(dev->battery)) {
+-		error = PTR_ERR(dev->battery);
++	psy_cfg.drv_data = bat;
++	bat->ps = power_supply_register(&dev->dev, psy_desc, &psy_cfg);
++	if (IS_ERR(bat->ps)) {
++		error = PTR_ERR(bat->ps);
+ 		hid_warn(dev, "can't register power supply: %d\n", error);
+ 		goto err_free_name;
+ 	}
+ 
+-	power_supply_powers(dev->battery, &dev->dev);
++	power_supply_powers(bat->ps, &dev->dev);
++
++	list_add_tail(&bat->list, &dev->batteries);
++
++	/*
++	 * The legacy single battery API is preserved by exposing the first
++	 * discovered battery. Systems relying on a single battery view maintain
++	 * unchanged behavior.
++	 */
++	if (battery_num == 0) {
++		dev->battery = bat->ps;
++		dev->battery_min = bat->min;
++		dev->battery_max = bat->max;
++		dev->battery_report_type = bat->report_type;
++		dev->battery_report_id = bat->report_id;
++		dev->battery_charge_status = bat->charge_status;
++		dev->battery_status = bat->status;
++		dev->battery_avoid_query = bat->avoid_query;
++	}
++
+ 	return 0;
+ 
+ err_free_name:
+ 	kfree(psy_desc->name);
+-err_free_mem:
++err_free_desc:
+ 	kfree(psy_desc);
+-	dev->battery = NULL;
++err_free_bat:
++	kfree(bat);
+ 	return error;
+ }
+ 
+ static void hidinput_cleanup_battery(struct hid_device *dev)
+ {
++	struct hid_battery *bat, *next;
+ 	const struct power_supply_desc *psy_desc;
+ 
+-	if (!dev->battery)
+-		return;
++	list_for_each_entry_safe(bat, next, &dev->batteries, list) {
++		psy_desc = bat->ps->desc;
++		power_supply_unregister(bat->ps);
++		kfree(psy_desc->name);
++		kfree(psy_desc);
++		list_del(&bat->list);
++		kfree(bat);
++	}
+ 
+-	psy_desc = dev->battery->desc;
+-	power_supply_unregister(dev->battery);
+-	kfree(psy_desc->name);
+-	kfree(psy_desc);
+ 	dev->battery = NULL;
+ }
+ 
+-static bool hidinput_update_battery_charge_status(struct hid_device *dev,
++static struct hid_battery *hidinput_find_battery(struct hid_device *dev,
++						 int report_id)
++{
++	struct hid_battery *bat;
++
++	list_for_each_entry(bat, &dev->batteries, list) {
++		if (bat->report_id == report_id)
++			return bat;
++	}
++	return NULL;
++}
++
++static bool hidinput_update_battery_charge_status(struct hid_battery *bat,
+ 						  unsigned int usage, int value)
+ {
+ 	switch (usage) {
+ 	case HID_BAT_CHARGING:
+-		dev->battery_charge_status = value ?
+-					     POWER_SUPPLY_STATUS_CHARGING :
+-					     POWER_SUPPLY_STATUS_DISCHARGING;
++		bat->charge_status = value ?
++				     POWER_SUPPLY_STATUS_CHARGING :
++				     POWER_SUPPLY_STATUS_DISCHARGING;
++		if (bat->dev->battery == bat->ps)
++			bat->dev->battery_charge_status = bat->charge_status;
+ 		return true;
+ 	}
+ 
+ 	return false;
+ }
+ 
+-static void hidinput_update_battery(struct hid_device *dev, unsigned int usage,
+-				    int value)
++static void hidinput_update_battery(struct hid_device *dev, int report_id,
++				    unsigned int usage, int value)
+ {
++	struct hid_battery *bat;
+ 	int capacity;
+ 
+-	if (!dev->battery)
++	bat = hidinput_find_battery(dev, report_id);
++	if (!bat)
+ 		return;
+ 
+-	if (hidinput_update_battery_charge_status(dev, usage, value)) {
+-		power_supply_changed(dev->battery);
++	if (hidinput_update_battery_charge_status(bat, usage, value)) {
++		power_supply_changed(bat->ps);
+ 		return;
+ 	}
+ 
+ 	if ((usage & HID_USAGE_PAGE) == HID_UP_DIGITIZER && value == 0)
+ 		return;
+ 
+-	if (value < dev->battery_min || value > dev->battery_max)
++	if (value < bat->min || value > bat->max)
+ 		return;
+ 
+ 	capacity = hidinput_scale_battery_capacity(dev, value);
+ 
+-	if (dev->battery_status != HID_BATTERY_REPORTED ||
+-	    capacity != dev->battery_capacity ||
+-	    ktime_after(ktime_get_coarse(), dev->battery_ratelimit_time)) {
+-		dev->battery_capacity = capacity;
+-		dev->battery_status = HID_BATTERY_REPORTED;
+-		dev->battery_ratelimit_time =
++	if (bat->status != HID_BATTERY_REPORTED ||
++	    capacity != bat->capacity ||
++	    ktime_after(ktime_get_coarse(), bat->ratelimit_time)) {
++		bat->capacity = capacity;
++		bat->status = HID_BATTERY_REPORTED;
++		bat->ratelimit_time =
+ 			ktime_add_ms(ktime_get_coarse(), 30 * 1000);
+-		power_supply_changed(dev->battery);
++
++		if (dev->battery == bat->ps) {
++			dev->battery_capacity = bat->capacity;
++			dev->battery_status = bat->status;
++			dev->battery_ratelimit_time = bat->ratelimit_time;
++		}
++
++		power_supply_changed(bat->ps);
+ 	}
+ }
+ #else  /* !CONFIG_HID_BATTERY_STRENGTH */
+@@ -664,8 +735,8 @@ static void hidinput_cleanup_battery(struct hid_device *dev)
+ {
+ }
+ 
+-static void hidinput_update_battery(struct hid_device *dev, unsigned int usage,
+-				    int value)
++static void hidinput_update_battery(struct hid_device *dev, int report_id,
++				    unsigned int usage, int value)
+ {
+ }
+ #endif	/* CONFIG_HID_BATTERY_STRENGTH */
+@@ -1533,7 +1604,7 @@ void hidinput_hid_event(struct hid_device *hid, struct hid_field *field, struct
+ 		return;
+ 
+ 	if (usage->type == EV_PWR) {
+-		hidinput_update_battery(hid, usage->hid, value);
++		hidinput_update_battery(hid, report->id, usage->hid, value);
+ 		return;
+ 	}
+ 
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index a4ddb94e3ee5..a6e36835fb3c 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -634,6 +634,36 @@ enum hid_battery_status {
+ 	HID_BATTERY_REPORTED,		/* Device sent unsolicited battery strength report */
+ };
+ 
++/**
++ * struct hid_battery - represents a single battery power supply
++ * @list: list node for linking into hid_device's battery list
++ * @dev: pointer to the parent hid_device
++ * @ps: the power supply device
++ * @capacity: current battery capacity
++ * @min: minimum battery value
++ * @max: maximum battery value
++ * @report_type: type of report (HID_INPUT_REPORT, HID_FEATURE_REPORT)
++ * @report_id: report ID for this battery
++ * @charge_status: current charge status
++ * @status: battery status (unknown, queried, reported)
++ * @avoid_query: if true, don't query battery (wait for device reports)
++ * @ratelimit_time: time for rate limiting battery updates
++ */
++struct hid_battery {
++	struct list_head list;
++	struct hid_device *dev;
++	struct power_supply *ps;
++	__s32 capacity;
++	__s32 min;
++	__s32 max;
++	__s32 report_type;
++	__s32 report_id;
++	__s32 charge_status;
++	enum hid_battery_status status;
++	bool avoid_query;
++	ktime_t ratelimit_time;
++};
++
+ struct hid_driver;
+ struct hid_ll_driver;
+ 
+@@ -670,8 +700,16 @@ struct hid_device {
+ #ifdef CONFIG_HID_BATTERY_STRENGTH
+ 	/*
+ 	 * Power supply information for HID devices which report
+-	 * battery strength. power_supply was successfully registered if
+-	 * battery is non-NULL.
++	 * battery strength. Each battery is tracked separately in the
++	 * batteries list.
++	 */
++	struct list_head batteries;		/* List of hid_battery structures */
++
++	/*
++	 * Legacy single battery support - kept for backwards compatibility.
++	 * Points to the first battery in the list if any exists.
++	 * power_supply was successfully registered if battery is non-NULL.
++	 * DEPRECATED: New code should iterate through batteries list instead.
+ 	 */
+ 	struct power_supply *battery;
+ 	__s32 battery_capacity;
+-- 
 2.51.1
 
 
