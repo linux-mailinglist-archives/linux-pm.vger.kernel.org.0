@@ -1,261 +1,183 @@
-Return-Path: <linux-pm+bounces-37800-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37801-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EEDAC5074E
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 04:57:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAE29C50BC7
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 07:40:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E6AF6349C7B
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 03:57:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68FFA18883CE
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 06:40:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E312C11D5;
-	Wed, 12 Nov 2025 03:57:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC1862DECBA;
+	Wed, 12 Nov 2025 06:39:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="h2VeDbcO"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="eus6FUAE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010056.outbound.protection.outlook.com [52.101.46.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52032207A20
-	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 03:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762919844; cv=none; b=od/hkyrhsf1svotNNxfoHRal88yGS0/sZdtRUDJ8QoqPGEZ/AkKCdelD4YSdOoEw46luHzja8jZ9SNjJ9rrb/NCimEWT0Vtm6nMXG0b0ur/r8DWA75NeNBTTjiVmv8n7CeIp53V31j98quynwvKVFB93f9l4AulUU08UYLjh1U8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762919844; c=relaxed/simple;
-	bh=8UrXATVEOSkpcOqAwYDPjZ/LwNgFCgVkt2cRW5OlIyU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qlme7WeTSdvL+rLSiu8cZlAOTghsiQJcS+BbiIHT8GzVLa4JshXN4GYJi2L5m9oMJe/AI8OhYG8h8G7tVeVX2E0E6QXfaj2cVT63JD02kLIyydnSogzR5UhVn1gS9Tg0JIK6MKtXLAgP/bOOKMULKE/kKG6tlZ3D5li+zodFx1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=h2VeDbcO; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-343dfb673a8so301531a91.0
-        for <linux-pm@vger.kernel.org>; Tue, 11 Nov 2025 19:57:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1762919842; x=1763524642; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ovVpRNi0EQ6lOoutzsikI7movk3CjwrYn04Q7//VyJg=;
-        b=h2VeDbcOJy+eyCjz9XR4Itw7E2lmCnI66r6HIVx7hECtt7bnN/VUstgHH02rAqpNh2
-         n3ed9max9IEh/itP+BR5XkTc4i0QVn+/1TsYBxUrrigO4l6jbR1jIBVBvK9k8INgXsV3
-         t3goUFHASs3xp0HS5JzrBd13qYyB2TLUuaWCM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762919842; x=1763524642;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ovVpRNi0EQ6lOoutzsikI7movk3CjwrYn04Q7//VyJg=;
-        b=H5liwMZtg0P7zYUz9CPocXQ2Yng7mC6w0Is39mGhK7qoYGtpKvvLQrLdoNR1zktVK/
-         fTmGIP+1HBrB4KoBh3HhQIK3xAAPCx7pa9BNYwC5eVAeBGvRkici10CS8kZF4UhtNTCR
-         uwZFUL/ZplE+7ZMu0FmsaweTMZccCrUiKiTbBa0tu67CdHrTWdtH6T+2nPZzOJBBp0cK
-         KjPL2OTLLdSkaUGjt9QFnnUVrXEAKFsviUEdnSMo2OpcKIIX74FQ7FEuqArMEvYlZpdH
-         vmhHBLU0DMzLCFhyqTy4BEqTaRssU576QTJznjCY7+/mNygDzCEBtYjHOC2NByvgqDwC
-         jv2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWY2ckpEok+X/kC9mvj6o6/SEuIPmv9IB7fzDwPSv0trwv/vaJ65gooLo0hGaEHWlFL5ZTTa+erGA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWsoVmNg31uyixImpteJ9gf4X6vOffT01VnZxVK91gtj9/UfE1
-	xlEOXj5oJlYIWOUhNNdOuW4OrS+h7dH0BlsrnCxAPw47yKGSh0tPYmm9KPJjS2cdRA==
-X-Gm-Gg: ASbGnct15PnOpSBFE5F4+Q9AQDopEQsoCiUGafdcEkM6G6+n9UB/3u1p5zRK0tHOY1F
-	NmbnwmqSBfHUdYeT/TPfWdMq3qIjIFVdHst2BDC+DLMcQJM++8b7G0eNAhlbgeZrbFTGUk0CMFL
-	3XiTpQzfDf99GSPybfGzJCO5awGgcfiEVNtCWAb4LFcCtlr09/Q+lda+eoHQBKN6NA1vJnLicFM
-	/QVrk7Sjb2mU/8I/eJoV4Afm9UTuGXpwzvTgtoMwmIhWybDvdIocHnnmkJpV5N4ze8twpuCYTRX
-	zjcdHDDGN6+zomSkQBfQlQSgwWGVsbQ5jIx/GH2vLpAE7ZGxR/qz/OSiEoC3TztYPXxOxyWbWmp
-	nHqfyaroUr6WdEtnzAZbE7zxRALhtvLXbmQXBaDBJe3iK5q767+VmBlGW+u+XZ2+X+/r7QmGeZI
-	m9MJmxZdgMPBZ+8SoNjwgrnz4TBwuJHNXw
-X-Google-Smtp-Source: AGHT+IFuC7JCagvpoSYGItHOD5crq2vbUP/LygFRR5OO11qZWWEU7YvPgPRxAneMXyaEw4LK8Np9Xg==
-X-Received: by 2002:a17:90b:1fc5:b0:340:6f9c:b25b with SMTP id 98e67ed59e1d1-343dde030a0mr2130204a91.11.1762919841636;
-        Tue, 11 Nov 2025 19:57:21 -0800 (PST)
-Received: from google.com ([2a00:79e0:201d:8:8b66:5f0b:945c:64eb])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b783087c08sm1168218b3a.3.2025.11.11.19.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Nov 2025 19:57:21 -0800 (PST)
-Date: Wed, 12 Nov 2025 11:57:17 +0800
-From: Chen-Yu Tsai <wenst@chromium.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	Stephan Gerhold <stephan.gerhold@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] dt-bindings: connector: Add PCIe M.2 Mechanical
- Key M connector
-Message-ID: <20251112035717.GA3363355@google.com>
-References: <20251108-pci-m2-v2-0-e8bc4d7bf42d@oss.qualcomm.com>
- <20251108-pci-m2-v2-1-e8bc4d7bf42d@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C692DC788;
+	Wed, 12 Nov 2025 06:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.56
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1762929596; cv=fail; b=fWCuzi+WXtcbCZh6WqkWHQWyUc7Cmd/5Eh7V97D2u6lpXFH1fNBCQQPjTk4DZg8jXVAtIrsmXYTK4uyy0nqDXMPQZlAjWwfTUd3T5nEdlo99vOx5O0NAi7fdsltYM9xasxX1H8Dz+J4HXZ0r9N5M5PtI3YgLxDT05Zvm7z3k5/Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1762929596; c=relaxed/simple;
+	bh=K8OQApxQaba/gGPvPwsLAA9hOdcdrWosZJGMlIGfL2o=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VKr99pt0BsguwFekIjfpEx/4kDtPBXVAXRVlvSDJyXE/Bjg+3tmQHBHfOC28gzWpzmyIRyf48FpatbFuMxb1hFIajFtzSAdOhv+CB/LNrw1bqfe4Yh1eq9yGJGAp1k+KtgBguR3skayF8TO61R62Wy7KiEZTvgaEbtqwTJpFwSY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=eus6FUAE; arc=fail smtp.client-ip=52.101.46.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bUDz2Kz4Mn/U1pR1yxOm6e6ekXz+v5qfHcrqfZodxmsaqiQhC+aRSA3qALqpZHbnDFVWndZuhhQtabkN7cPVEBcRlKk1Zex1iO9g4jM7TL5qqI2sq51bgLw787UXAGEegow1Ar6YjGPXn197bJSoh57nGXG5GWA9L5vspL5Uz+tyjCaTIhGbKXLi5WkgajzBNaJhgNFE4quq6dyaaJP8kYYKgKt6tTNlhwtYIUIayk5bbEwIZRwia7eKoJ7Lvn/cA+1ecEufTdPApGGgDvB8VXHRmC8QdfN5zYGfthcCLdL4T6MYavrWLe7DWPABGFMG/MFS5s8fcYnm5SJt13up6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y/cDwCmGZwWgUMWP3Z9lLvOpk6Os4ApsRoVIDg99lMU=;
+ b=aw0yYrg00ZqC18AM2P5ENI0gqvxl0shKPjjG5HJ4IaINduB2k2OP80L5I0hqcugR0L5z7RRL/W7rOe1ZHkMfspPbtkHCPA7bW35ktyEebhSXlx5yuIzjvci1s9wNLcw37UzspnmyeBvEMvLCQbHrCme4XoqFbgwIpppAjv7FasjoQxO/T2fYM4T3BADk6FH9775vW5Zr2/QNh8j+feyurhEGiUBRkOn4qjMfoCw4Q+6g4Rv8jSGnb+elhdVX+9xQrMxXWyQHfAclrZZ05fnPMoVdGbSqHv5/VXxHzXkMyxa6BwOB+0SOmo4I5ptVoNNHJSQAwqwGCJIzqZh0pvZ1ng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.21.194) smtp.rcpttodomain=redhat.com smtp.mailfrom=ti.com; dmarc=pass
+ (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
+ (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y/cDwCmGZwWgUMWP3Z9lLvOpk6Os4ApsRoVIDg99lMU=;
+ b=eus6FUAEvHBkcGQe494QKrDNjZWJ3Zb4Z2KRUOTvoTzL0LZWJSzQkGw2RvpWaTKjlAhy72Gk6UEidslqzeCszwQdmTWj8MKbWl+VTnPsku0owlqt6pfFngAC8/Trt/sy6ZG1BE2YhTmeM3tqWT45u2vxVg5VOrwrY4rVeAv9a6Y=
+Received: from MW4PR04CA0199.namprd04.prod.outlook.com (2603:10b6:303:86::24)
+ by CH3PR10MB6692.namprd10.prod.outlook.com (2603:10b6:610:148::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.15; Wed, 12 Nov
+ 2025 06:39:52 +0000
+Received: from CO1PEPF000075F1.namprd03.prod.outlook.com
+ (2603:10b6:303:86:cafe::e8) by MW4PR04CA0199.outlook.office365.com
+ (2603:10b6:303:86::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9320.15 via Frontend Transport; Wed,
+ 12 Nov 2025 06:39:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
+Received: from flwvzet200.ext.ti.com (198.47.21.194) by
+ CO1PEPF000075F1.mail.protection.outlook.com (10.167.249.40) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9320.13 via Frontend Transport; Wed, 12 Nov 2025 06:39:51 +0000
+Received: from DFLE203.ent.ti.com (10.64.6.61) by flwvzet200.ext.ti.com
+ (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 12 Nov
+ 2025 00:39:43 -0600
+Received: from DFLE213.ent.ti.com (10.64.6.71) by DFLE203.ent.ti.com
+ (10.64.6.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Wed, 12 Nov
+ 2025 00:39:43 -0600
+Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE213.ent.ti.com
+ (10.64.6.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Wed, 12 Nov 2025 00:39:43 -0600
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
+	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5AC6dfRd2207191;
+	Wed, 12 Nov 2025 00:39:42 -0600
+Date: Wed, 12 Nov 2025 12:09:41 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Linux PM <linux-pm@vger.kernel.org>, Linux ACPI
+	<linux-acpi@vger.kernel.org>, Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Takashi Iwai <tiwai@suse.de>, LKML <linux-kernel@vger.kernel.org>, "Zhang
+ Qilong" <zhangqilong3@huawei.com>, Frank Li <Frank.Li@nxp.com>, Dan Williams
+	<dan.j.williams@intel.com>, Linux PCI <linux-pci@vger.kernel.org>, "Bjorn
+ Helgaas" <helgaas@kernel.org>, Alex Williamson <alex.williamson@redhat.com>
+Subject: Re: [PATCH v1 0/3] PM: runtime: Wrapper macros for usage counter
+ guards
+Message-ID: <20251112063941.kbg44srt5f7rfkjb@lcpd911>
+References: <13883374.uLZWGnKmhe@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20251108-pci-m2-v2-1-e8bc4d7bf42d@oss.qualcomm.com>
+In-Reply-To: <13883374.uLZWGnKmhe@rafael.j.wysocki>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000075F1:EE_|CH3PR10MB6692:EE_
+X-MS-Office365-Filtering-Correlation-Id: d095273b-ff1e-4d90-ea57-08de21b64854
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|376014|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Opqh2cXOAcc32zkx78y2/8Qm/8BsfS41ENvzEKKENQzquGnTSOnPcOD72k5F?=
+ =?us-ascii?Q?KWC5YphokE769kfsQnasmwRheHgjyfi+4XoJpx3nUNlFyyFSvG13woJw/30M?=
+ =?us-ascii?Q?VCrivJSyvMlGMB1mcIb+uY50KLYd0dReUO/vfCes1u2VBJbIUmvIqx5GFbGg?=
+ =?us-ascii?Q?xuh22bmh0PHlCdPkw4Rr411Q6Tz5xHxFakuinuZ6R4rR9ubhvNVCgyMvZCvI?=
+ =?us-ascii?Q?ApZLo/jTsBsBpVsPXPC/lnXVtPaouol1YqZ8hCMMIN/XCJtvZMZdu3a7xerb?=
+ =?us-ascii?Q?Es2KpAkxzKDr+y3+lNNXzM7cTsSMmqV2HPCjdww1RCzljHQykb6Pj4IrKvPE?=
+ =?us-ascii?Q?Xn/LT/YwhE4TvJHa8KHgNGdQIYzgHF0A0JAaZIt9tOvDfITPTgR1gcRDD9vo?=
+ =?us-ascii?Q?W0mwIP50lf931ZXHglESW1B7WXPw7IBx5e0mmt3wwSSGgWSrTcgIyB+e9Zg5?=
+ =?us-ascii?Q?7LiV5xByyLD5Dnw0rhhezw7FMev/EabTdXqo3enrWkuTI+4bRlf/vardcO3a?=
+ =?us-ascii?Q?qpdijinlRAvlduafb7OcNqmfAgc7OAxmCcO+FDmMw5Gr62I4t6ZWUVh00OK6?=
+ =?us-ascii?Q?wNIn669HVI2qtxrlh17qh2uIrFUEbWOUvpN8Vh6ZuAm/N2RkNeZl2MV2Gpy2?=
+ =?us-ascii?Q?fyNrjxw5OSEHKpZAU5YzDa7OOqbAAZ3i9B9zI01bAlApxRHrcdTlbM5NGZry?=
+ =?us-ascii?Q?YNR0EScNQsLKu7nSdHtGESYIn/o7c2L0Jo1pBz7N4gzhIvWRvnzDiE22iyAf?=
+ =?us-ascii?Q?2JtPFbq5e21e73dorcNEUevprIyCNF0Zkeme1GLliom98zWtx9TP8mOobTZi?=
+ =?us-ascii?Q?868g18Bn7SC/s/WJEX/gczaB3dQ9MQf+tRKgKXoSMq0mAh1UjEuNVJK6H+p5?=
+ =?us-ascii?Q?OHyMSGo29DVAkl2Zqy8Im4xqePROp0UVKuESFnRj+JKGydJG75iwUorSLbD/?=
+ =?us-ascii?Q?+C7Rwk3sy/cAV9VakSXnIcoyos0smfeB5Gei8hzUuRrxMMNyic0M7zATeaEF?=
+ =?us-ascii?Q?1bBsY7yv8jhDD39HwZKhjczCne+Cn7i5w0bFQ6AnQgQAyo2J2tG0HQdR8llm?=
+ =?us-ascii?Q?H05YjwZMg4UMHZ0t/mION4XmaAttkoL4JSTklOoOU5ySz4aXq2lwl7bK2TrO?=
+ =?us-ascii?Q?M9vEqMvGNqHIYdqRuots3pGGgtM5alPMOvo8mCDgWUYibaMY4FTSdI81lrfO?=
+ =?us-ascii?Q?wrWgk7z5q1vqFA72QsCY4m7VoaYM0wJgiZGg6t14aKqLYT8YFlE6rUJuVdU9?=
+ =?us-ascii?Q?zL3GRHUXl7bxRGgw4Nd5GReWukkMUTIxtAUNtiXG1FwOQXc8UcqBtagb8bQ4?=
+ =?us-ascii?Q?EDar3TyauqJYyD3kaP7y4OCZrWF69c0b5O2x9cUXjLQuTKcqGrQiwTdS0bpc?=
+ =?us-ascii?Q?YFEuGRbE8FK591ZGjAUkgRCnwGVynAJJFLnHZy7sBMKN84Ko4cHWFkdncoVV?=
+ =?us-ascii?Q?HvfPbsc+BIqzearAu6zgnxQiFh5ScaQDUQJEZMpN0ExM1l+T8c+IALcY0EJO?=
+ =?us-ascii?Q?2TiVVtiRwEJiXpe+YAoa81s9psDvJjstAUuttbk/y1qYkfzUIu6cNm6S+kQB?=
+ =?us-ascii?Q?RHnEakDYxEue/9GNeRo=3D?=
+X-Forefront-Antispam-Report:
+	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Nov 2025 06:39:51.3096
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d095273b-ff1e-4d90-ea57-08de21b64854
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000075F1.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6692
 
-On Sat, Nov 08, 2025 at 08:53:19AM +0530, Manivannan Sadhasivam wrote:
-> Add the devicetree binding for PCIe M.2 Mechanical Key M connector defined
-> in the PCI Express M.2 Specification, r4.0, sec 5.3. This connector
-> provides interfaces like PCIe and SATA to attach the Solid State Drives
-> (SSDs) to the host machine along with additional interfaces like USB, and
-> SMB for debugging and supplementary features. At any point of time, the
-> connector can only support either PCIe or SATA as the primary host
-> interface.
+On Nov 07, 2025 at 19:35:09 +0100, Rafael J. Wysocki wrote:
+> Hi All,
 > 
-> The connector provides a primary power supply of 3.3v, along with an
-> optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
-> 1.8v sideband signaling.
+> The runtime PM usage counter guards introduced recently:
 > 
-> The connector also supplies optional signals in the form of GPIOs for fine
-> grained power management.
+> https://lore.kernel.org/linux-pm/6196611.lOV4Wx5bFT@rafael.j.wysocki/
 > 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> ---
->  .../bindings/connector/pcie-m2-m-connector.yaml    | 122 +++++++++++++++++++++
->  1 file changed, 122 insertions(+)
+> and then fixed:
 > 
-> diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..be0a3b43e8fd2a2a3b76cad4808ddde79dceaa21
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
-> @@ -0,0 +1,122 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/connector/pcie-m2-m-connector.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: PCIe M.2 Mechanical Key M Connector
-> +
-> +maintainers:
-> +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> +
-> +description:
-> +  A PCIe M.2 M connector node represents a physical PCIe M.2 Mechanical Key M
-> +  connector. The Mechanical Key M connectors are used to connect SSDs to the
-> +  host system over PCIe/SATA interfaces. These connectors also offer optional
-> +  interfaces like USB, SMB.
-> +
-> +properties:
-> +  compatible:
-> +    const: pcie-m2-m-connector
-> +
-> +  vpcie3v3-supply:
-> +    description: A phandle to the regulator for 3.3v supply.
-> +
-> +  vio1v8-supply:
-> +    description: A phandle to the regulator for VIO 1.8v supply.
+> https://lore.kernel.org/linux-pm/5943878.DvuYhMxLoT@rafael.j.wysocki/
+> 
+> should generally work, but using them feels sort of arcane and cryptic
+> even though the underlying concept is relatively straightforward.
+> 
+> For this reason, runtime PM wrapper macros around ACQUIRE() and
+> ACQUIRE_ERR() involving the new guards are introduced in this series
+> (patch [1/3]) and then used in the code already using the guards (patches
+> [2/3] and [3/3]) to make it look more straightforward.
 
-FYI I just added vpcie1v8-supply to the core DT schema [1]. vpcie1v8
-instead of vio1v8 was requested by Rob.
+The patches look okay to me,
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
-[1] https://github.com/devicetree-org/dt-schema/pull/176
-
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    description: OF graph bindings modeling the interfaces exposed on the
-> +      connector. Since a single connector can have multiple interfaces, every
-> +      interface has an assigned OF graph port number as described below.
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: PCIe/SATA interface
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: USB interface
-> +
-> +      port@2:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: SMB interface
-> +
-> +    required:
-> +      - port@0
-> +
-> +  clocks:
-> +    description: 32.768 KHz Suspend Clock (SUSCLK) input from the host system to
-> +      the M.2 card. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.1 for
-> +      more details.
-> +    maxItems: 1
-> +
-> +  pedet-gpios:
-> +    description: GPIO controlled connection to PEDET signal. This signal is used
-> +      by the host systems to determine the communication protocol that the M.2
-> +      card uses; SATA signaling (low) or PCIe signaling (high). Refer, PCI
-> +      Express M.2 Specification r4.0, sec 3.3.4.2 for more details.
-> +    maxItems: 1
-> +
-> +  led1-gpios:
-> +    description: GPIO controlled connection to LED_1# signal. This signal is
-> +      used by the M.2 card to indicate the card status via the system mounted
-> +      LED. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.2 for more
-> +      details.
-> +    maxItems: 1
-> +
-> +  viocfg-gpios:
-> +    description: GPIO controlled connection to IO voltage configuration
-> +      (VIO_CFG) signal. This signal is used by the M.2 card to indicate to the
-> +      host system that the card supports an independent IO voltage domain for
-> +      the sideband signals. Refer, PCI Express M.2 Specification r4.0, sec
-> +      3.1.15.1 for more details.
-> +    maxItems: 1
-> +
-> +  pwrdis-gpios:
-> +    description: GPIO controlled connection to Power Disable (PWRDIS) signal.
-> +      This signal is used by the host system to disable power on the M.2 card.
-> +      Refer, PCI Express M.2 Specification r4.0, sec 3.3.5.2 for more details.
-> +    maxItems: 1
-> +
-> +  pln-gpios:
-> +    description: GPIO controlled connection to Power Loss Notification (PLN#)
-> +      signal. This signal is use to notify the M.2 card by the host system that
-> +      the power loss event is expected to occur. Refer, PCI Express M.2
-> +      Specification r4.0, sec 3.2.17.1 for more details.
-> +    maxItems: 1
-> +
-> +  plas3-gpios:
-> +    description: GPIO controlled connection to Power Loss Acknowledge (PLA_S3#)
-> +      signal. This signal is used by the M.2 card to notify the host system, the
-> +      status of the M.2 card's preparation for power loss.
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - vpcie3v3-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  # PCI M.2 Key M connector for SSDs with PCIe interface
-> +  - |
-> +    connector {
-> +        compatible = "pcie-m2-m-connector";
-> +        vpcie3v3-supply = <&vreg_nvme>;
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            port@0 {
-> +                reg = <0>;
-> +
-> +                endpoint {
-> +                    remote-endpoint = <&pcie6_port0_ep>;
-> +                };
-> +            };
-> +        };
-> +    };
-> 
-> -- 
-> 2.48.1
-> 
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
