@@ -1,180 +1,120 @@
-Return-Path: <linux-pm+bounces-37872-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37873-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B976C54488
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 20:55:39 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC179C54594
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 21:07:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B27213AF05A
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 19:44:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EBCC24FDD59
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 19:54:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0122B663;
-	Wed, 12 Nov 2025 19:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414DD293C44;
+	Wed, 12 Nov 2025 19:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uVZujVAK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JezSlwvx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E35E21CFF7;
-	Wed, 12 Nov 2025 19:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE6F1C695
+	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 19:54:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762976652; cv=none; b=ZiQyCwU90akUOrTre1wUSfzZHWcYKVkd8eEYaxusc8IPdALEJePx+HrallUZTIYU+eCk9m6XtWcjzx0Vqcor/srZt5OvFvyAZIPW9ca4fjQNSvrZdv+mHGA1gnp3IqmA94XJAcQ5J3A74RAT2ZkRum6+H1WWXoYrNeYI8Fivnss=
+	t=1762977252; cv=none; b=MoM+uSa4yoZwJTGgA7AniT14tvqs9YZDniAOZTpvE7Ni67fSYEF2z66bfuOBB1s1dD8gx5kiv4sBgiBKrkIwBh//wJcpp0xMAEcqXGTJFnHC/QEcIA9tuscjjQ07RxwIcgYhajI81O9ruz5jw7s1a+5jEDZI8PZUV9zPiHS0T6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762976652; c=relaxed/simple;
-	bh=/dRWxlVyhkYKzoog2JBkvAoSjenzJSwBsUBiVIGwso0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Rfoy03sLS4IEmlmC1NVqsiVwDqk6wT66jR1ZhFjWBsa+CsPqpFc6OUbiMGiueS/KedgBuAB7awS56JBSdog8j4g3FYYRT+5aDtoVnHN1Pc299/HPGCE9erwsYci1fWzfHmnKtkwJal2MUfD7b6DTScp8JGov/8cdD+FqkdH+Nwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uVZujVAK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C89A4C19421;
-	Wed, 12 Nov 2025 19:44:08 +0000 (UTC)
+	s=arc-20240116; t=1762977252; c=relaxed/simple;
+	bh=5bofe8ZOb4VvTUy3rgqITPh6PxHOQe2EO8GL4iOm3z4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V8lmtD+Qja5e7Rm1+mj5ItiDirrXkFd1DuupF/j3qnHzaubQyytWCLjvklzFvUF6p4y0oto62h1k48vbK2pSIRha8A5AQe28movmZzSxpquNXABjBpbpYuxEEYjEEr5Xu0JNdtT8xH9U9zsOM89nM1/jcENX677qiqCq7Am8XM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JezSlwvx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E5BC116B1
+	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 19:54:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762976652;
-	bh=/dRWxlVyhkYKzoog2JBkvAoSjenzJSwBsUBiVIGwso0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uVZujVAKNnz+10xT2WKSWwjsKqRh7b02FuY5yd76XUeOKrFERi3xzXHLonG071UVp
-	 3zv1HxljQpROafsrhxwdXwzuJcCNboIUjJwOHaU+gLaPnjLG08KOvthr4nXlr0YLIv
-	 Eu7kh1tElQgY/vnaYg4Y/x8mEJInKOZ84QcdjNkJxdkrADHCvNbH8jbHo2drfCYR7f
-	 dMNBK89Fi+vZ3cy4+dQXUEbBK33u1Qc7X05MyUuwy5kWobA5O810t92iQOl/yuWlS2
-	 2ScGoJXkbgcBF0xpHDKBq1xmKkjjgrtOFtKGivUsHbUywodjApn7jnkK+MSuSZsoyt
-	 +WvRKfj51X/Eg==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Dhruva Gole <d-gole@ti.com>,
- Jonathan Cameron <jonathan.cameron@huawei.com>, Frank Li <Frank.Li@nxp.com>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
- Linux ACPI <linux-acpi@vger.kernel.org>, Takashi Iwai <tiwai@suse.de>,
- LKML <linux-kernel@vger.kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>,
- Dan Williams <dan.j.williams@intel.com>,
- Linux PCI <linux-pci@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>,
- Alex Williamson <alex.williamson@redhat.com>
-Subject:
- Re: [PATCH v1 0/3] PM: runtime: Wrapper macros for usage counter guards
-Date: Wed, 12 Nov 2025 20:44:06 +0100
-Message-ID: <5068916.31r3eYUQgx@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <20251112063941.kbg44srt5f7rfkjb@lcpd911>
-References:
- <13883374.uLZWGnKmhe@rafael.j.wysocki>
- <20251112063941.kbg44srt5f7rfkjb@lcpd911>
+	s=k20201202; t=1762977251;
+	bh=5bofe8ZOb4VvTUy3rgqITPh6PxHOQe2EO8GL4iOm3z4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JezSlwvxLqltWXUdAhI7P7JOveemAl9vw5flfzosUg9jH761Wm3tQSZSlrvO6+BAn
+	 QRz3695gJIq+eyvyyXTtpBBlGBpxknnM1JSJsvaLZNRKp+8pQdec7mwT4nCgGmGPkY
+	 OImTMyfyL1A+NqJPMMEmm2KhQGxNckHuEPClQvoES0NL7UAupyWE9HbDdsX69i91Uv
+	 qouBrH6NeYXPQTU21iIqGSyg9p6oMRK1eNrJiVom2rqLPMn6VO4CAsar8HBgy1i+tW
+	 4EpXMQ5g4RLIzE9LfTNiQrrN8WBTao4mdd6IxcY9aS60+Sg3+UzekgwYyVIR61M/vL
+	 k5hneN5GJiCPg==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-656b1f906e4so49379eaf.0
+        for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 11:54:11 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX0cviydbEqWp1wU9ZNp6ekpU+JwVkDQTyZiOEXZfkD3mBzXGA3neysK07iY3MXEbex5IyvDIV9dw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzo0qKoIEyKrm5Z99FZxBgtH2jVPC29WWDhL3EESttZ1pTr5u/A
+	VA/pFrQRliH7xxjsdT3cZzMc2pwdxLYJQkjLpMwGUYAgZwFx43Ht2PuxgK3UAJy2XlbhQ0bZPy+
+	GFMvhuJtY6gOumksHfSVeNY9VfXYSXSc=
+X-Google-Smtp-Source: AGHT+IEVJSROAFckCy8D41FmqFJJW5EYYy0PCDk6s51ryKib/uPfn5q9gya0sOFEA/O4rvAbR6ADyqOGzZfH00T+ZKM=
+X-Received: by 2002:a05:6808:181e:b0:450:4e08:a210 with SMTP id
+ 5614622812f47-45074656cacmr1672093b6e.53.1762977250896; Wed, 12 Nov 2025
+ 11:54:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <f175ca74-78f9-4210-8185-ada8091e95a5@kernel.org>
+In-Reply-To: <f175ca74-78f9-4210-8185-ada8091e95a5@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 12 Nov 2025 20:53:59 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hrHPV1FADc6Usy=oETJDFTUWo0Xxi48mbiUjFHCRDvMQ@mail.gmail.com>
+X-Gm-Features: AWmQ_bk8ePmWrLIyZ2HMPRmSUpeRHsV7R-e7y-vmswAqfJO6zBnlhRKIhUQo6_w
+Message-ID: <CAJZ5v0hrHPV1FADc6Usy=oETJDFTUWo0Xxi48mbiUjFHCRDvMQ@mail.gmail.com>
+Subject: Re: [GIT PULL] amd-pstate content for 6.19 (11/10/25)
+To: Mario Limonciello <superm1@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wednesday, November 12, 2025 7:39:41 AM CET Dhruva Gole wrote:
-> On Nov 07, 2025 at 19:35:09 +0100, Rafael J. Wysocki wrote:
-> > Hi All,
-> > 
-> > The runtime PM usage counter guards introduced recently:
-> > 
-> > https://lore.kernel.org/linux-pm/6196611.lOV4Wx5bFT@rafael.j.wysocki/
-> > 
-> > and then fixed:
-> > 
-> > https://lore.kernel.org/linux-pm/5943878.DvuYhMxLoT@rafael.j.wysocki/
-> > 
-> > should generally work, but using them feels sort of arcane and cryptic
-> > even though the underlying concept is relatively straightforward.
-> > 
-> > For this reason, runtime PM wrapper macros around ACQUIRE() and
-> > ACQUIRE_ERR() involving the new guards are introduced in this series
-> > (patch [1/3]) and then used in the code already using the guards (patches
-> > [2/3] and [3/3]) to make it look more straightforward.
-> 
-> The patches look okay to me,
-> Reviewed-by: Dhruva Gole <d-gole@ti.com>
+Hi,
 
-Thank you and Jonathan for the tags, but since Frank is not convinced, let me
-bounce one more idea off all of you.
+On Tue, Nov 11, 2025 at 6:40=E2=80=AFAM Mario Limonciello <superm1@kernel.o=
+rg> wrote:
+>
+> Hello,
+>
+> The following changes since commit e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a=
+7c:
+>
+>    Linux 6.18-rc5 (2025-11-09 15:10:19 -0800)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
+> tags/amd-pstate-v6.19-2025-11-10
+>
+> for you to fetch changes up to bb31fef0d03ed17d587b40e3458786be408fb9df:
+>
+>    cpufreq/amd-pstate: Call cppc_set_auto_sel() only for online CPUs
+> (2025-11-10 23:35:20 -0600)
+>
+> ----------------------------------------------------------------
+> amd-pstate content for 6.19 (11/10/25)
+>
+> * optimizations for parameter array handling
+> * fix for mode changes with offline CPUs
+>
+> ----------------------------------------------------------------
+> Gautham R. Shenoy (1):
+>        cpufreq/amd-pstate: Call cppc_set_auto_sel() only for online CPUs
+>
+> Mario Limonciello (AMD) (6):
+>        cpufreq/amd-pstate: Use sysfs_match_string() for epp
+>        cpufreq/amd-pstate: Drop NULL value from amd_pstate_mode_string
+>        cpufreq/amd-pstate: Make amd_pstate_get_mode_string() never
+> return NULL
+>        cpufreq/amd-pstate: Adjust return values in
+> amd_pstate_update_status()
+>        cpufreq/amd-pstate: Fix some whitespace issues
+>        cpufreq/amd-pstate: Add static asserts for EPP indices
+>
+>   drivers/cpufreq/amd-pstate.c | 35 +++++++++++++++--------------------
+>   1 file changed, 15 insertions(+), 20 deletions(-)
 
-Namely, I think that Frank has a point when he wonders if PM_RUNTIME_ACQUIRE_ERR
-hides too much information and I agree with Jonathan that may be misunderstood,
-so what about defining the wrapper macros so they don't hide the guard variable
-name, like in the patch below?
-
----
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH v2] PM: runtime: Wrapper macros for ACQUIRE()/ACQUIRE_ERR()
-
-Add several wrapper macros for ACQUIRE()/ACQUIRE_ERR() and runtime PM
-usage counter guards introduced recently: pm_runtime_active_try,
-pm_runtime_active_auto_try, pm_runtime_active_try_enabled, and
-pm_runtime_active_auto_try_enabled.
-
-The new macros are simpler and should be more straightforward to use.
-
-For example, they can be used for rewriting a piece of code like below:
-
-        ACQUIRE(pm_runtime_active_try, pm)(dev);
-        if ((ret = ACQUIRE_ERR(pm_runtime_active_try, &pm)))
-                return ret;
-
-in the following way:
-
-        PM_RUNTIME_ACQUIRE(dev, pm);
-        if ((ret = PM_RUNTIME_ACQUIRE_ERR(pm)))
-                return ret;
-
-If the original code does not care about the specific error code
-returned when attempting to resume the device:
-
-        ACQUIRE(pm_runtime_active_try, pm)(dev);
-        if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-                return -ENXIO;
-
-it may be changed like this:
-
-        PM_RUNTIME_ACQUIRE(dev, pm);
-        if (PM_RUNTIME_ACQUIRE_ERR(pm))
-                return -ENXIO;
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- include/linux/pm_runtime.h |   25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
-
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -637,6 +637,31 @@ DEFINE_GUARD_COND(pm_runtime_active_auto
- DEFINE_GUARD_COND(pm_runtime_active_auto, _try_enabled,
- 		  pm_runtime_resume_and_get(_T), _RET == 0)
- 
-+/* ACQUIRE() wrapper macros for the guards defined above. */
-+
-+#define PM_RUNTIME_ACQUIRE(dev, var_name)	\
-+	ACQUIRE(pm_runtime_active_try, var_name)(dev)
-+
-+#define PM_RUNTIME_ACQUIRE_AUTOSUSPEND(dev, var_name)	\
-+	ACQUIRE(pm_runtime_active_auto_try, var_name)(dev)
-+
-+#define PM_RUNTIME_ACQUIRE_IF_ENABLED(dev, var_name)	\
-+	ACQUIRE(pm_runtime_active_try_enabled, var_name)(dev)
-+
-+#define PM_RUNTIME_ACQUIRE_IF_ENABLED_AUTOSUSPEND(dev, var_name)	\
-+	ACQUIRE(pm_runtime_active_auto_try_enabled, var_name)(dev)
-+
-+/*
-+ * ACQUIRE_ERR() wrapper macro for guard pm_runtime_active.
-+ *
-+ * Always check PM_RUNTIME_ACQUIRE_ERR() after using one of the
-+ * PM_RUNTIME_ACQUIRE*() macros defined above (yes, it can be used
-+ * with any of them) and avoid accessing the given device if it is
-+ * nonzero.
-+ */
-+#define PM_RUNTIME_ACQUIRE_ERR(var_name)	\
-+	ACQUIRE_ERR(pm_runtime_active, &var_name)
-+
- /**
-  * pm_runtime_put_sync - Drop device usage counter and run "idle check" if 0.
-  * @dev: Target device.
-
-
-
+Pulled and added to linux-pm.git/linux-next, thanks!
 
