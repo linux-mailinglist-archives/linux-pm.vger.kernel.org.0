@@ -1,120 +1,171 @@
-Return-Path: <linux-pm+bounces-37873-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37874-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC179C54594
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 21:07:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D2E8DC545E2
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 21:11:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EBCC24FDD59
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 19:54:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3FD674E3B82
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 20:03:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414DD293C44;
-	Wed, 12 Nov 2025 19:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BAD027703E;
+	Wed, 12 Nov 2025 20:03:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JezSlwvx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HrRAgHrg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE6F1C695
-	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 19:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667782749E4
+	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 20:03:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762977252; cv=none; b=MoM+uSa4yoZwJTGgA7AniT14tvqs9YZDniAOZTpvE7Ni67fSYEF2z66bfuOBB1s1dD8gx5kiv4sBgiBKrkIwBh//wJcpp0xMAEcqXGTJFnHC/QEcIA9tuscjjQ07RxwIcgYhajI81O9ruz5jw7s1a+5jEDZI8PZUV9zPiHS0T6o=
+	t=1762977811; cv=none; b=dqEgmBbMliMoXBYZ+TOhjZF5vjO/s7Az+pBAKPphRymeoCke7+3s9cwjyL1KOZX/puL4P00Fs0eWrocZTczni8VERTiiUiuDv8NQfqncTRQCWEsYa/dYPQ0ThbtHOemO2KxMbEXoTmyZrQJIsVX7nv/GVNRZVr0h1vCzLX2WPQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762977252; c=relaxed/simple;
-	bh=5bofe8ZOb4VvTUy3rgqITPh6PxHOQe2EO8GL4iOm3z4=;
+	s=arc-20240116; t=1762977811; c=relaxed/simple;
+	bh=2truygGR7fmvsFgLhsjwjiIdPMxhJOWDBjbJln/EW4E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V8lmtD+Qja5e7Rm1+mj5ItiDirrXkFd1DuupF/j3qnHzaubQyytWCLjvklzFvUF6p4y0oto62h1k48vbK2pSIRha8A5AQe28movmZzSxpquNXABjBpbpYuxEEYjEEr5Xu0JNdtT8xH9U9zsOM89nM1/jcENX677qiqCq7Am8XM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JezSlwvx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E5BC116B1
-	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 19:54:11 +0000 (UTC)
+	 To:Cc:Content-Type; b=mQcxjWd9wsxWpETTjfo5JDQ8lz7p7yyK1/mc6wykRIZSMNY30/TDnbcWjhhAdkWVI72MF7+l87BykO9O2TZ001o7PzYhrEIXhfLcR4tq1voeHzYnkvW0L9cQH5ih2O1NZ3W6K3oc9Ipb1Rx5uSyXYwU+tYnSJM5nFsW+fEIiyFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HrRAgHrg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32619C19424
+	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 20:03:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762977251;
-	bh=5bofe8ZOb4VvTUy3rgqITPh6PxHOQe2EO8GL4iOm3z4=;
+	s=k20201202; t=1762977811;
+	bh=2truygGR7fmvsFgLhsjwjiIdPMxhJOWDBjbJln/EW4E=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JezSlwvxLqltWXUdAhI7P7JOveemAl9vw5flfzosUg9jH761Wm3tQSZSlrvO6+BAn
-	 QRz3695gJIq+eyvyyXTtpBBlGBpxknnM1JSJsvaLZNRKp+8pQdec7mwT4nCgGmGPkY
-	 OImTMyfyL1A+NqJPMMEmm2KhQGxNckHuEPClQvoES0NL7UAupyWE9HbDdsX69i91Uv
-	 qouBrH6NeYXPQTU21iIqGSyg9p6oMRK1eNrJiVom2rqLPMn6VO4CAsar8HBgy1i+tW
-	 4EpXMQ5g4RLIzE9LfTNiQrrN8WBTao4mdd6IxcY9aS60+Sg3+UzekgwYyVIR61M/vL
-	 k5hneN5GJiCPg==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-656b1f906e4so49379eaf.0
-        for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 11:54:11 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX0cviydbEqWp1wU9ZNp6ekpU+JwVkDQTyZiOEXZfkD3mBzXGA3neysK07iY3MXEbex5IyvDIV9dw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzo0qKoIEyKrm5Z99FZxBgtH2jVPC29WWDhL3EESttZ1pTr5u/A
-	VA/pFrQRliH7xxjsdT3cZzMc2pwdxLYJQkjLpMwGUYAgZwFx43Ht2PuxgK3UAJy2XlbhQ0bZPy+
-	GFMvhuJtY6gOumksHfSVeNY9VfXYSXSc=
-X-Google-Smtp-Source: AGHT+IEVJSROAFckCy8D41FmqFJJW5EYYy0PCDk6s51ryKib/uPfn5q9gya0sOFEA/O4rvAbR6ADyqOGzZfH00T+ZKM=
-X-Received: by 2002:a05:6808:181e:b0:450:4e08:a210 with SMTP id
- 5614622812f47-45074656cacmr1672093b6e.53.1762977250896; Wed, 12 Nov 2025
- 11:54:10 -0800 (PST)
+	b=HrRAgHrgewQiNS6qPWAgMzhx0EJLVM27DRZ4Tg0nMaz0+LIhxNjRX+zY+EmKQQ4fv
+	 uBna2AoeL7CTxoTYsVs2G0hZU1461VcmYnqSIAWJVWnEbq88CQCBo7hbr6QtY5XJmu
+	 HRzzDwG7vdQxlpfBakCwHj0NfDKSzWywGME4H6CmxMKovs/5ZMWaXnDyLY19OAcDYO
+	 pBG3KHzpyXRjxEJXURoxvDqonp2+LRY1Y/UfCsphnN2+hwJgi0doeurcgIw/i1MO+m
+	 8KYN1HKENsa+oX3dzE1MJUCC98+KrJHNqAFCzti/z/1xeUA9PurO8Gm+UvurOYe2BK
+	 bqHuUWVNtI05g==
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-656e585587bso32953eaf.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 12:03:31 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVRkcTrCpm9iqB7zwG/Y8hXz+ivA16nmbXA2qBvyYMjJoETd7W2tppIfDs6MdATAanr9C1AK420Mw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7PZyZkkpDhNE/UENInRMW3KK3cMnN4nbJwRyINE6gDVT5saww
+	TEn8XGYf9r4I9mQF4r9LmT0CWXQcNT4S5zku6E/jYWtU2CLDxIwpuYT9wS5/S8OkrsYoNjFGnXd
+	HyWakReWilvYTia64vcELdJbYramxRN4=
+X-Google-Smtp-Source: AGHT+IGRBeNRM+HNo5unVf2rRvHcql8w4SILTxjZzsf1VLzE4PQggEmnPM37H5AYrqsAt+y0dGqZWxRQHZsSe99OE6A=
+X-Received: by 2002:a05:6820:81c9:b0:656:735e:9eff with SMTP id
+ 006d021491bc7-65716443681mr1926630eaf.7.1762977810471; Wed, 12 Nov 2025
+ 12:03:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <f175ca74-78f9-4210-8185-ada8091e95a5@kernel.org>
-In-Reply-To: <f175ca74-78f9-4210-8185-ada8091e95a5@kernel.org>
+References: <20251110120819.714560-1-christian.loehle@arm.com>
+In-Reply-To: <20251110120819.714560-1-christian.loehle@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 12 Nov 2025 20:53:59 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hrHPV1FADc6Usy=oETJDFTUWo0Xxi48mbiUjFHCRDvMQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bk8ePmWrLIyZ2HMPRmSUpeRHsV7R-e7y-vmswAqfJO6zBnlhRKIhUQo6_w
-Message-ID: <CAJZ5v0hrHPV1FADc6Usy=oETJDFTUWo0Xxi48mbiUjFHCRDvMQ@mail.gmail.com>
-Subject: Re: [GIT PULL] amd-pstate content for 6.19 (11/10/25)
-To: Mario Limonciello <superm1@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Date: Wed, 12 Nov 2025 21:03:19 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jjh2cJhfQQBgtqPvNGgzUmyV_tkLQ7WJv6cXhPYBQrcA@mail.gmail.com>
+X-Gm-Features: AWmQ_bkFq_SDqC3LU9Wj50F7rCTNrLgPevAbF4KDpRAyN3MOhb8pM3MPrmyPWOc
+Message-ID: <CAJZ5v0jjh2cJhfQQBgtqPvNGgzUmyV_tkLQ7WJv6cXhPYBQrcA@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: teo: Use this_cpu_ptr where possible
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Mon, Nov 10, 2025 at 1:08=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> The cpuidle governor callbacks for update, select and reflect
+> are always running on the actual idle entering/exiting CPU, so
+> use the more optimized this_cpu_ptr() to access the internal teo
+> data.
+>
+> This brings down the latency-critical teo_reflect() from
+> static void teo_reflect(struct cpuidle_device *dev, int state)
+> {
+> ffffffc080ffcff0:       hint    #0x19
+> ffffffc080ffcff4:       stp     x29, x30, [sp, #-48]!
+>         struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
+> ffffffc080ffcff8:       adrp    x2, ffffffc0848c0000 <gicv5_global_data+0=
+x28>
+> {
+> ffffffc080ffcffc:       add     x29, sp, #0x0
+> ffffffc080ffd000:       stp     x19, x20, [sp, #16]
+> ffffffc080ffd004:       orr     x20, xzr, x0
+>         struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
+> ffffffc080ffd008:       add     x0, x2, #0xc20
+> {
+> ffffffc080ffd00c:       stp     x21, x22, [sp, #32]
+>         struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
+> ffffffc080ffd010:       adrp    x19, ffffffc083eb5000 <cpu_devices+0x78>
+> ffffffc080ffd014:       add     x19, x19, #0xbb0
+> ffffffc080ffd018:       ldr     w3, [x20, #4]
+>
+>         dev->last_state_idx =3D state;
+>
+> to
+>
+> static void teo_reflect(struct cpuidle_device *dev, int state)
+> {
+> ffffffc080ffd034:       hint    #0x19
+> ffffffc080ffd038:       stp     x29, x30, [sp, #-48]!
+> ffffffc080ffd03c:       add     x29, sp, #0x0
+> ffffffc080ffd040:       stp     x19, x20, [sp, #16]
+> ffffffc080ffd044:       orr     x20, xzr, x0
+>         struct teo_cpu *cpu_data =3D this_cpu_ptr(&teo_cpus);
+> ffffffc080ffd048:       adrp    x19, ffffffc083eb5000 <cpu_devices+0x78>
+> {
+> ffffffc080ffd04c:       stp     x21, x22, [sp, #32]
+>         struct teo_cpu *cpu_data =3D this_cpu_ptr(&teo_cpus);
+> ffffffc080ffd050:       add     x19, x19, #0xbb0
+>
+>         dev->last_state_idx =3D state;
+>
+> This saves us:
+>         adrp    x2, ffffffc0848c0000 <gicv5_global_data+0x28>
+>         add     x0, x2, #0xc20
+>         ldr     w3, [x20, #4]
+>
+> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> ---
+>  drivers/cpuidle/governors/teo.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/=
+teo.c
+> index bfa55c1eab5b..a3ebc2cda093 100644
+> --- a/drivers/cpuidle/governors/teo.c
+> +++ b/drivers/cpuidle/governors/teo.c
+> @@ -155,7 +155,7 @@ static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
+>   */
+>  static void teo_update(struct cpuidle_driver *drv, struct cpuidle_device=
+ *dev)
+>  {
+> -       struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
+> +       struct teo_cpu *cpu_data =3D this_cpu_ptr(&teo_cpus);
+>         int i, idx_timer =3D 0, idx_duration =3D 0;
+>         s64 target_residency_ns;
+>         u64 measured_ns;
+> @@ -268,7 +268,7 @@ static int teo_find_shallower_state(struct cpuidle_dr=
+iver *drv,
+>  static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device =
+*dev,
+>                       bool *stop_tick)
+>  {
+> -       struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
+> +       struct teo_cpu *cpu_data =3D this_cpu_ptr(&teo_cpus);
+>         s64 latency_req =3D cpuidle_governor_latency_req(dev->cpu);
+>         ktime_t delta_tick =3D TICK_NSEC / 2;
+>         unsigned int idx_intercept_sum =3D 0;
+> @@ -504,7 +504,7 @@ static int teo_select(struct cpuidle_driver *drv, str=
+uct cpuidle_device *dev,
+>   */
+>  static void teo_reflect(struct cpuidle_device *dev, int state)
+>  {
+> -       struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
+> +       struct teo_cpu *cpu_data =3D this_cpu_ptr(&teo_cpus);
+>
+>         dev->last_state_idx =3D state;
+>         if (dev->poll_time_limit ||
+> --
 
-On Tue, Nov 11, 2025 at 6:40=E2=80=AFAM Mario Limonciello <superm1@kernel.o=
-rg> wrote:
->
-> Hello,
->
-> The following changes since commit e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a=
-7c:
->
->    Linux 6.18-rc5 (2025-11-09 15:10:19 -0800)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
-> tags/amd-pstate-v6.19-2025-11-10
->
-> for you to fetch changes up to bb31fef0d03ed17d587b40e3458786be408fb9df:
->
->    cpufreq/amd-pstate: Call cppc_set_auto_sel() only for online CPUs
-> (2025-11-10 23:35:20 -0600)
->
-> ----------------------------------------------------------------
-> amd-pstate content for 6.19 (11/10/25)
->
-> * optimizations for parameter array handling
-> * fix for mode changes with offline CPUs
->
-> ----------------------------------------------------------------
-> Gautham R. Shenoy (1):
->        cpufreq/amd-pstate: Call cppc_set_auto_sel() only for online CPUs
->
-> Mario Limonciello (AMD) (6):
->        cpufreq/amd-pstate: Use sysfs_match_string() for epp
->        cpufreq/amd-pstate: Drop NULL value from amd_pstate_mode_string
->        cpufreq/amd-pstate: Make amd_pstate_get_mode_string() never
-> return NULL
->        cpufreq/amd-pstate: Adjust return values in
-> amd_pstate_update_status()
->        cpufreq/amd-pstate: Fix some whitespace issues
->        cpufreq/amd-pstate: Add static asserts for EPP indices
->
->   drivers/cpufreq/amd-pstate.c | 35 +++++++++++++++--------------------
->   1 file changed, 15 insertions(+), 20 deletions(-)
-
-Pulled and added to linux-pm.git/linux-next, thanks!
+Applied as 6.19 material, thanks!
 
