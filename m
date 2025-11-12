@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-37840-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37842-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0C05C52D26
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 15:54:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2784C52DFF
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 16:04:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 527293497C8
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 14:51:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 187AE502D4B
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 14:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E723446B0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE3434B1B6;
 	Wed, 12 Nov 2025 14:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z+kgUaAP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G7TcIa0M"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9642342507;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC97E34250C;
 	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762958731; cv=none; b=A5oYOUt16cDvCPmlhZ+m64HQry+DSQJUZ3dHzaVyTsiBNDaAwdPFejfL1NmKg2LCbOFg9PYhRqD2+aIGho1UAxl5oAoBX/cfZ0T48cf09IK9hzP9+WxnLOpztGUeOuoLpua7UtVbwB9gGt8zWf1af8zAoiQHGiUvhcIdeWjHizg=
+	t=1762958731; cv=none; b=jYqJLEU6tLgkETt7gFFZKkvj8vhGc9wL3Dyb9545rIGO2kswtlarIPZF5UpVO5FjM2o5CzF9+WjMQtSk1/u8e4qFc0OvcEjUu87RHRpwBTXc1nn58VNqlqev4pMmwxrw4a2u6uGDF0CrkrMOTEeqaaDwYV2d/Yhy9ABnVawaE/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762958731; c=relaxed/simple;
-	bh=BSF6pgHwRJ8wKRNwr418rTD4ufEtxZ2p1Im79cwxzV4=;
+	bh=UIyVuuxmdNWaQhSJYIjG9EwjXu8WQiu2r7LNT3ovXmk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oApVg7ajpgxDNOQR1MvB6dRiK8kmQm1WO4gGtwKdHwK4b5jLwg/RmsTAqox+vELACiZhgH9pN4AnM4RgoYPh8w0n4sDd8YhkPr6G7oOhGWU/Ob1yinjGfHiYTrBLLeoWf9mM9bSSflmB7BXevs10/Lf6t/tLJGquaCAR9BsnqyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z+kgUaAP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 40F42C19421;
+	 In-Reply-To:To:Cc; b=CZWfiesq46SreJQzVUykxbZtd5zU1CeLkQwWsfqZdYl4ryDmy8jrKbdIFDbrdCDb+LzoEuUMEfYkJ2PwzHHZ565SDnyPjEVfT2FufSOf/n1jfEhtN24z3QZIGLJqu1i0Ywc3OpQsw7zuVJfRBmrd/Mmbdugl0oJIwp3NKU20O4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G7TcIa0M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D7D8C19425;
 	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1762958731;
-	bh=BSF6pgHwRJ8wKRNwr418rTD4ufEtxZ2p1Im79cwxzV4=;
+	bh=UIyVuuxmdNWaQhSJYIjG9EwjXu8WQiu2r7LNT3ovXmk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Z+kgUaAPEnBSn83dE5sic6dzmfi26DDd05Jb/aMOfrFa02eXfQAaRBR8gJv7wwABK
-	 NSeYUVhHujfgfPy65QPOy2aG2xmfxpYZ0mOsVgS2z9Bpb9zMtQZXbA7LQpwV+h1kMA
-	 B/BaRARCqz78Wk9Q4+vTkp4wt9HS32wrNtVyTa7itnIfDpNzO8BIdeKYUkbxvlQzwg
-	 HOxB8vI8EFMic++Gx08VLXQ6LDTNZfQh+98pYRTaTrHBUwWHP3RHyV55CJRwdSUyxW
-	 m/kyRfpddntflRYGcoflMSaG/hf8VgdjM8QhTO6YY7CdG0XnpZGcZNKKO5JPhS5DH4
-	 gkIhXtosM/s5A==
+	b=G7TcIa0M7BgO+w+aWcSqWxEyqms9md1DwXPhJP/8O6lvj0mvncvKeRVkyxOCgc2sA
+	 Su5uQY9ylyJCUSMqNMe0Z29Ve/NcaaColnygOl59zZGu6tQpebbwA5VoSgbIrtg3m5
+	 kuu3OXX48sc/IXqXIY7aqe0qhUyrRW8TurOCYASpmM1QqfCCjG0UE7DFf3v+kKnOLq
+	 QVCVZSMyS49cNVSiFJRfxBfeLmhowm1ZAwUA6ykTgryFrrghf89fH3tFjEm0BJoDTc
+	 eEavvPHlZkpduCwQ8OuDanq9FqVdlrG6WfN9UFYM4moeU88Rd4g3FieNGF4Gg/P/d1
+	 h4RrgNL1G1w5g==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37F9DCD1297;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56F18CD13CF;
 	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
 From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>
-Date: Wed, 12 Nov 2025 20:15:18 +0530
-Subject: [PATCH 6/9] serdev: Skip registering serdev devices from DT is
- external connector is used
+Date: Wed, 12 Nov 2025 20:15:20 +0530
+Subject: [PATCH 8/9] Bluetooth: hci_qca: Add support for WCN7850 PCIe M.2
+ card
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251112-pci-m2-e-v1-6-97413d6bf824@oss.qualcomm.com>
+Message-Id: <20251112-pci-m2-e-v1-8-97413d6bf824@oss.qualcomm.com>
 References: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
 In-Reply-To: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
 To: Rob Herring <robh@kernel.org>, 
@@ -79,16 +79,16 @@ Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
  Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
  Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1489;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2696;
  i=manivannan.sadhasivam@oss.qualcomm.com; h=from:subject:message-id;
- bh=9l0vV6HXXlRQhGb6LPV2j9zLb+eL0Fpf0v/SXfsrOaY=;
- b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpFJ2HYIFtN5v5bNyD8H02BJPR+1uACNYqLJQdu
- pU9f/L5A+2JATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaRSdhwAKCRBVnxHm/pHO
- 9RwgB/47EH+jLOBR8bp8aP5M5wGWY4SysKJtZO4fkj97iCzy/SsK9prWiuuaBDNz/F5VfGuxdtE
- Kin9UH7qcWGK/P3pKH7xvC9p6Mm8NlJjS6oni2Z3zPLX6VllhharFcxCAoHHjXEvdbaw4EPGomr
- S7Bq9ooyzXH3s3+GqPs7RdiqKCh3HIEhlt1xa550XiX7bCQDgjrsNVHqLy4jWaCrdWhfQ74eZlV
- pJaVlLxPif2eLcTh562fAWZ2dA/Oknb7ywQKC0VSBcQyZqRuMwRMHr0eZOkcPwWg8i7QsB5jXun
- UbBPcW1fXEPr3OZDqWb5SWwrc8t+apPpHsnLxxflovrsrkqs
+ bh=BvmMTIXQ1GNDFtswjVs+6kgwmDbVSZjbebNDSNmVGWY=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpFJ2HGzyZfvK1wWuuh2R0+XpgrtuddR6FBBMSs
+ h9ujHKvehqJATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaRSdhwAKCRBVnxHm/pHO
+ 9ZJMB/9CsIHjXFLhSxMyD3KH42rNli77Z0cMlgKT76aBTmR1yHjj4rM5kkkP9+YqQAIK9g4dvKj
+ IhkioadhbwsVBbgv0No2SGnsLJesOHwDW1/Q4OebgTR4Osg78Iai2xvxB6ybVmW+J6O3tjaDD0q
+ 9JzWdanKbxsb3neIa4HtYsw9W7ORxGryz49PoqcK5wdXLCaIV64MbruswFeUp8ZG1BA30MgCzT9
+ y1cCjIgjBov6xWYWpuGK8J7PpHe8NbfwoUfv50vZMwZXTKNS8zVdy7n7LNVNBV9R+NxLK5Xh+2t
+ bGn/mmnez+yaIgjVC7MDJ1nhWAcFKF3DMa2D4HnzUFGqMoje
 X-Developer-Key: i=manivannan.sadhasivam@oss.qualcomm.com; a=openpgp;
  fpr=C668AEC3C3188E4C611465E7488550E901166008
 X-Endpoint-Received: by B4 Relay for
@@ -98,44 +98,76 @@ Reply-To: manivannan.sadhasivam@oss.qualcomm.com
 
 From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 
-If an external connector like M.2 is connected to the serdev controller
-in DT, then the serdev devices will be created dynamically by the connector
-driver. So skip registering devices from DT node as there will be no
-statically defined devices.
+The WCN7850 PCIe M.2 card connected to the UART controller exposes the
+'WCN7850' serdev device and is controlled using the pwrseq framework.
+
+Hence, add support for it in the driver. It reuses the existing
+'qca_soc_data_wcn7850' driver data.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 ---
- drivers/tty/serdev/core.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/bluetooth/hci_qca.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-index 8c2a40a537d93f4b9353a2f128cdf51b521929b1..1378587d386356ca4415fa455b2ee722b5e44d3e 100644
---- a/drivers/tty/serdev/core.c
-+++ b/drivers/tty/serdev/core.c
-@@ -12,6 +12,7 @@
- #include <linux/kernel.h>
+diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+index 4cff4d9be3132561ee9bae4ddf2c8ac0bc13ecd7..09bfb3bba93698f496947775bf6b31f2f20279f1 100644
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -26,6 +26,7 @@
+ #include <linux/mod_devicetable.h>
  #include <linux/module.h>
  #include <linux/of.h>
 +#include <linux/of_graph.h>
- #include <linux/of_device.h>
- #include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
-@@ -560,6 +561,15 @@ static int of_serdev_register_devices(struct serdev_controller *ctrl)
- 	int err;
- 	bool found = false;
+ #include <linux/acpi.h>
+ #include <linux/platform_device.h>
+ #include <linux/pwrseq/consumer.h>
+@@ -2344,6 +2345,9 @@ static int qca_serdev_probe(struct serdev_device *serdev)
  
-+	/*
-+	 * When the serdev controller is connected to an external connector like
-+	 * M.2 in DT, then the serdev devices will be created dynamically by the
-+	 * connector driver. So skip looking for devices in DT node as there will
-+	 * be no statically defined devices.
-+	 */
-+	if (of_graph_is_present(ctrl->dev.of_node))
-+		return 0;
+ 	qcadev->serdev_hu.serdev = serdev;
+ 	data = device_get_match_data(&serdev->dev);
++	if (!data && serdev->id)
++		data = (const struct qca_device_data *) serdev->id->driver_data;
 +
- 	for_each_available_child_of_node(ctrl->dev.of_node, node) {
- 		if (!of_property_present(node, "compatible"))
- 			continue;
+ 	serdev_device_set_drvdata(serdev, qcadev);
+ 	device_property_read_string_array(&serdev->dev, "firmware-name",
+ 					 qcadev->firmware_name, ARRAY_SIZE(qcadev->firmware_name));
+@@ -2384,6 +2388,15 @@ static int qca_serdev_probe(struct serdev_device *serdev)
+ 	case QCA_WCN6855:
+ 	case QCA_WCN7850:
+ 	case QCA_WCN6750:
++		if (of_graph_is_present(dev_of_node(&serdev->ctrl->dev))) {
++			qcadev->bt_power->pwrseq = devm_pwrseq_get(&serdev->ctrl->dev,
++								   "uart");
++			if (IS_ERR(qcadev->bt_power->pwrseq))
++				qcadev->bt_power->pwrseq = NULL;
++			else
++				break;
++		}
++
+ 		if (!device_property_present(&serdev->dev, "enable-gpios")) {
+ 			/*
+ 			 * Backward compatibility with old DT sources. If the
+@@ -2740,6 +2753,12 @@ static const struct acpi_device_id qca_bluetooth_acpi_match[] = {
+ MODULE_DEVICE_TABLE(acpi, qca_bluetooth_acpi_match);
+ #endif
+ 
++static const struct serdev_device_id qca_bluetooth_serdev_match[] = {
++	{ "WCN7850", (kernel_ulong_t)&qca_soc_data_wcn7850 },
++	{ },
++};
++MODULE_DEVICE_TABLE(serdev, qca_bluetooth_serdev_match);
++
+ #ifdef CONFIG_DEV_COREDUMP
+ static void hciqca_coredump(struct device *dev)
+ {
+@@ -2756,6 +2775,7 @@ static void hciqca_coredump(struct device *dev)
+ static struct serdev_device_driver qca_serdev_driver = {
+ 	.probe = qca_serdev_probe,
+ 	.remove = qca_serdev_remove,
++	.id_table = qca_bluetooth_serdev_match,
+ 	.driver = {
+ 		.name = "hci_uart_qca",
+ 		.of_match_table = of_match_ptr(qca_bluetooth_of_match),
 
 -- 
 2.48.1
