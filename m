@@ -1,131 +1,253 @@
-Return-Path: <linux-pm+bounces-37880-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55C66C54814
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 21:47:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 806FCC548CC
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 22:08:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D57594E1E25
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 20:42:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 989AB3B603F
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 21:07:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41362C159A;
-	Wed, 12 Nov 2025 20:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 466972DAFD7;
+	Wed, 12 Nov 2025 21:07:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A9HmdC8d"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aULWBmZ3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C47242D91
-	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 20:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20BCE2D9EE5
+	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 21:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762980171; cv=none; b=Cm4fO1NCv0VAoZn+jIbP3MRsGaqKWTd5UlUA5oJAQFIWHDWnVx0jSZYVIuotvrmg1iAe44ypKwt1/kemtGkaG9POMvihTSObmBQ2Pe8pPyGIYSnN7uUiLu8/noF9NYLmPD8vq4TErvRWPEMb4VJurPdFaf/4f4JNsAAZPZcLosg=
+	t=1762981663; cv=none; b=fA/QgVcNH49zxUcbX9SoC6aSDkZawYrqlE0nyPqYoIRV9EQ+YofPsKiYGVHWpugZLZ5oNIWCgKeHMuRXJubatUw4kqWJYRQUwxF/7ykuCFiw6Y8RTL7CgdeWKXL2v2sURK7tKibsLj0T7WwkGc9MIvXLYJXOaYIaYkxlrcbyZNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762980171; c=relaxed/simple;
-	bh=B26hrNmYi6XQEGPnMIeB4tF8WMLyskH7o/DQg1cKnwY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XUkVrwEN+IgvudND9u5e7GFzpQHCDDv+iAOd/ab324rCvXLLn3220KLfglVENx7pDraPEKRoLr7Lt+KZFaJK4cWK+/UHgNdEhIyKItfpBmvKur0ZvAxiZWswDK4GiBmQAA9bGRxL7icsn7O90wuTeW7/l4uGDKbD76E1ql/4tkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A9HmdC8d; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-64198771a9bso128333a12.2
-        for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 12:42:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762980168; x=1763584968; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qYRlTpYA/7Q8cmYHoawv0jNTOuUhyYj1/N3pLlPxP7U=;
-        b=A9HmdC8dQreyTzbu/PQGjEyDWx5tS3QpnZrCHp6ej+r1QKnLEWU/0L5dTWtFawVdRi
-         n9Fw9mAtZ2eo5yNhNv4R51sH7/tQQ69i8JT9Jfo+JgkBJzXEMdsx3W1EJUlAkZIPkHTX
-         lMgXNYQAkGHLB6rdaZPkouBqxmK8Lw2l0N1jg/vkqvVIdfA1ibge4wswOVUoAW4yywE+
-         Gn+NWjwx7p4BtpptElAZvX0nIMifCHst1nJgR2zuAN3OKq4SuQhCfWHKKJFlJbQO5MOM
-         UtWsGzJ6BHIVYTZfh3Cc5dHdrJT3UBXRlOnDGfMhwPqU7RmXehU62hd41HBmKD6r6a1O
-         vhTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762980168; x=1763584968;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qYRlTpYA/7Q8cmYHoawv0jNTOuUhyYj1/N3pLlPxP7U=;
-        b=GzqvTtl1iUDS9RbQBU/ANLbZP+v0G1n5zWkkWGbFkB0qOfVYqe3tbeqvIFSziUP9hQ
-         IUW9Du2BfPKe3U0fp8yWnpH7XIeUU0okZKtIKOTqMWA5zV1zX8+VDvUXxP/W3blz4kEf
-         GO5arYc51g5WMPZ1IX4t1wOFPnX8s5jGyVpYLcI/dRa3XgeXvSRw79TGPt3OifI+7oE4
-         pAc+vZqV16DWzozPpU2zzapx0M3USl7btTZzcyqB4y0jjXFE0774APaulejgH0G2QrRR
-         UX25lVuJAtGkOzKLDdqelSxUrkKyOS614KgG9wrNZ8iwZQ4iiz2R6o4Jn/INMrftrLKG
-         KEqg==
-X-Forwarded-Encrypted: i=1; AJvYcCWakDX6DZz3x0jC6vZ3BcZiO35XT1fXxUIbB7iydTX6d3I7dNx9oKIGiQN7ypqGiXOmHg9q1xkoTw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YykJ5jdbYE9OY7GLEJKqt4mk9dFtC6GQx9vcywzZBScx0pJAvqv
-	R7d6wRkp7eZYqQb6Wu7YEU6UFzc6Czoz06SZ/17slmKmKaErOSRKcZ++
-X-Gm-Gg: ASbGncsatp64735VvXxwfLJIM532Fw7Ky71XsvlylaFr+X/K3HYMUivOhCGkH/Y9DJz
-	/1+oxmWYr3TR2SkFUJsglGyB0JAeEj1WWpPFf1IYJRpFdmdAJXgNyrxpJkPZ8pLQyuZbB2raxNb
-	tje6AGdCF75Ebg5KAry3gVmB0VN4uJd9439W0tnxvxNhkw/hLiF9t+QmBw/b1YAVO2XeoneHFeU
-	0UwR3esQMT14B5Eca5WsBW+t7iCBQx9h5LNXNrx2FvZvrq6kdonNbiU3B7EdTcCy1iwGk4ZmV7j
-	o8iW+agymrVfBPolidnMPWskCbTfOBL0bqT7uVdSDv5n8fCkbHQpJztF5XVryftIRioTg/DnlOb
-	zYjcfEcz4oFFDAv0+qyn42vdr88P2frhs6GY2NiLdliyFp2YFLfOA6xak6xFLtHxUKHv40fGtM0
-	ePDabz3J4SdozF46Qu1DwbGMiqomiG6Q==
-X-Google-Smtp-Source: AGHT+IG+jx+M3nE36Fz5bthJFfjspwcmRI7tEfhQmZIEm5r+HcFJgbvQic4eUr3n+TZlrw7O4BctyQ==
-X-Received: by 2002:a17:907:6092:b0:b6d:62e4:a63a with SMTP id a640c23a62f3a-b7331aa9775mr491880066b.40.1762980168240;
-        Wed, 12 Nov 2025 12:42:48 -0800 (PST)
-Received: from [192.168.0.253] (5D59A51C.catv.pool.telekom.hu. [93.89.165.28])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-b72bf9bc214sm1742888366b.52.2025.11.12.12.42.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 12:42:47 -0800 (PST)
-From: Gabor Juhos <j4g8y7@gmail.com>
-Date: Wed, 12 Nov 2025 21:42:41 +0100
-Subject: [PATCH] interconnect: icc-clk: clear enabled flag only when it is
- set
+	s=arc-20240116; t=1762981663; c=relaxed/simple;
+	bh=u8q2TZF20ibeYFuY8h4yCLkgQDj7Xrhx2gKQ62/nSkk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Dppwb/zwk80tr58MbWKqJQGeBRpYkyQxLHuh1DBMKWIUXAotSo+AMNiQT9/h6+QeulMuQeI+JpwDzcMZKlaGmmpo90nAqgtSiuhzTFxhhoy2f2pG5ss4cRFcMN1zV2/f9Oy3X9CO6pk4TzeF/GFH7bWJvWI/v+xOgsMhsl+YE8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aULWBmZ3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9558C4CEF1
+	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 21:07:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762981662;
+	bh=u8q2TZF20ibeYFuY8h4yCLkgQDj7Xrhx2gKQ62/nSkk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=aULWBmZ3rD1NOHg1GcQ4Dq2EBVHRlCDrSxReNcyrhsRiK1A2FuL00TwRxPiGuN4Db
+	 OKIrCUVIDLpK8jqGmMEAEZvERB8tg6pMwBoAiH4CsPX0gnoN+1qcTm+mxekJWDG+9G
+	 XgM8haSqwQasnU2/WgQCSpjtRUpEg+ytNyBljhB8bPSMB3jcrBn4aNlywo2AAlqTOl
+	 MWMANIebhQ1TxnenHMk2MDfOXtC8a2P8AZjlXo5da3Ts9/Kx00vg7gtFqYVpRUFxvA
+	 HcOZNzSR+8nmU8KV1v59K2b+h6WZxg8f9EB4/qrujfwGgn6fQlSZy7FZz2Futss1Rf
+	 Xne5czQMN2nQg==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6417313bddaso160113a12.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 13:07:42 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVWu19c25aJKB8CCRTRsURoytlwQo5zjBSQT6TNW5UL4jhkPmZRisWxDmURVyQWxveBh5GZ4vlUGQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJhSsTyaQVpqagJf5PL/xcDPD2CzCA4gcv9JutSdEa/UaweuMu
+	vzq1O1jgIorpDIM1k7u02OlWedZTMaxWqOsxd6q/DPaKRbQhrQeRlhuuFbqvu+DqDFVuA1Gnn+8
+	teiR6f0X4YdjR+86967Gt9e/n7QyZiw==
+X-Google-Smtp-Source: AGHT+IEIy21Sb3B7FBrgAI8SVidk1uSmlkEpW+/mXMU6zQinRFFusx79rk2YkYD+SPkgL7pLFxsxRVnlBhzaVvKVnfk=
+X-Received: by 2002:a05:6402:2106:b0:641:27d8:ec72 with SMTP id
+ 4fb4d7f45d1cf-6431a39656dmr3803888a12.4.1762981660959; Wed, 12 Nov 2025
+ 13:07:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251112-icc-clk-disable-cleanup-v1-1-fa4794bf5cc8@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAEDxFGkC/x2MzQqDMBAGX0X23IUk+IevUnqIm09dlFQSLAXx3
- Q3eZg4zJ2UkRaahOinhp1m/sYh9VSSLjzNYQ3FyxjXWuI5VhGVbOWj244bC8PHYuanbXmzoMRp
- QqfeESf/P+f25rhtpDyS5aQAAAA==
-X-Change-ID: 20251027-icc-clk-disable-cleanup-5468c1d8eb0e
-To: Georgi Djakov <djakov@kernel.org>
-Cc: Dmitry Baryshkov <lumag@kernel.org>, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Gabor Juhos <j4g8y7@gmail.com>
-X-Mailer: b4 0.14.2
+References: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
+In-Reply-To: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 12 Nov 2025 15:07:29 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+rOGUETwhPuzSsC6bhq1Q10k=pCRnZrnoDbCxVYV91YA@mail.gmail.com>
+X-Gm-Features: AWmQ_bkhxcdj-NsfzZ0QRxOltuG2xQHMKmcPZ2R7l6HHsGWU07rxfsx54qGm66Y
+Message-ID: <CAL_Jsq+rOGUETwhPuzSsC6bhq1Q10k=pCRnZrnoDbCxVYV91YA@mail.gmail.com>
+Subject: Re: [PATCH 0/9] Add support for handling PCIe M.2 Key E connectors in devicetree
+To: manivannan.sadhasivam@oss.qualcomm.com
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Hans de Goede <hansg@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-It is pointless to clear the enabled flag when it is cleared already, so
-change the code to do that only when the flag is set.
+On Wed, Nov 12, 2025 at 8:45=E2=80=AFAM Manivannan Sadhasivam via B4 Relay
+<devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org> wrote:
+>
+> Hi,
+>
+> This series is the continuation of the series [1] that added the initial =
+support
+> for the PCIe M.2 connectors. This series extends it by adding support for=
+ Key E
+> connectors. These connectors are used to connect the Wireless Connectivit=
+y
+> devices such as WiFi, BT, NFC and GNSS devices to the host machine over
+> interfaces such as PCIe/SDIO, USB/UART and NFC. This series adds support =
+for
+> connectors that expose PCIe interface for WiFi and UART interface for BT.=
+ Other
+> interfaces are left for future improvements.
+>
+> Serdev device support for BT
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D
+>
+> Adding support for the PCIe interface was mostly straightforward and a lo=
+t
+> similar to the previous Key M connector. But adding UART interface has pr=
+oved to
+> be tricky. This is mostly because of the fact UART is a non-discoverable =
+bus,
+> unlike PCIe which is discoverable. So this series relied on the PCI notif=
+ier to
+> create the serdev device for UART/BT. This means the PCIe interface will =
+be
+> brought up first and after the PCIe device enumeration, the serdev device=
+ will
+> be created by the pwrseq driver. This logic is necessary since the connec=
+tor
+> driver and DT node don't describe the device, but just the connector. So =
+to make
+> the connector interface Plug and Play, the connector driver uses the PCIe=
+ device
+> ID to identify the card and creates the serdev device. This logic could b=
+e
+> extended in the future to support more M.2 cards. Even if the M.2 card us=
+es SDIO
+> interface for connecting WLAN, a SDIO notifier could be added to create t=
+he
+> serdev device.
+>
+> Open questions
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> Though this series adds the relevant functionality for handling the M.2 K=
+ey M
+> connectors, there are still a few open questions exists on the design.
+>
+> 1. I've used the M.2 card model name as the serdev device name. This is f=
+ound
+> out by comparing the PCIe VID:PID in the notifier. Is this approach accep=
+table?
+> I did not use the PID as the serdev name since it will vary if the SDIO
+> interface is used in the future.
+>
+> 2. PCIe client drivers of some M.2 WLAN cards like the Qcom QCA6390, rely=
+ on
+> the PCIe device DT node to extract properties such as
+> 'qcom,calibration-variant', 'firmware-name', etc... For those drivers, sh=
+ould we
+> add the PCIe DT node in the Root Port in conjunction with the Port node a=
+s
+> below?
+>
+> pcie@0 {
+>         wifi@0 {
+>                 compatible =3D "pci17cb,1103";
+>                 ...
+>                 qcom,calibration-variant =3D "LE_X13S";
+>         };
+>
+>         port {
+>                 pcie4_port0_ep: endpoint {
+>                         remote-endpoint =3D <&m2_e_pcie_ep>;
+>                 };
+>         };
+> };
+>
+> This will also require marking the PMU supplies optional in the relevant =
+ath
+> bindings for M.2 cards.
+>
+> 3. Some M.2 cards require specific power up sequence like delays between
+> regulator/GPIO and such. For instance, the WCN7850 card supported in this=
+ series
+> requires 50ms delay between powering up an interface and driving it. I've=
+ just
+> hardcoded the delay in the driver, but it is a pure hack. Since the pwrse=
+q
+> driver doesn't know anything about the device it is dealing with before p=
+owering
+> it ON, how should it handle the device specific power requirements? Shoul=
+d we
+> hardcode the device specific property in the connector node? But then, it=
+ will
+> no longer become a generic M.2 connector and sort of defeats the purpose =
+of the
+> connector binding.
+>
+> I hope to address these questions with the help of the relevant subsystem
+> maintainers and the community. Until then, this series is *not* mergeable=
+ as a
+> whole.
+>
+> Testing
+> =3D=3D=3D=3D=3D=3D=3D
+>
+> This series, together with the devicetree changes [2] was tested on the
+> Qualcomm X1e based Lenovo Thinkpad T14s Laptop which has the WCN7850 WLAN=
+/BT M.2
+> card connected over PCIe and UART.
+>
+> [1] https://lore.kernel.org/linux-pci/20251108-pci-m2-v2-0-e8bc4d7bf42d@o=
+ss.qualcomm.com
+> [2] https://github.com/Mani-Sadhasivam/linux/commit/d39b81b3ff1ecfb0d423b=
+4da0771925d41648b5a
+>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.=
+com>
+> ---
+> Manivannan Sadhasivam (9):
+>       serdev: Convert to_serdev_device() and to_serdev_controller() helpe=
+rs to macros
+>       serdev: Add serdev device based driver match support
+>       serdev: Allow passing the serdev device name to serdev_device_add()
+>       serdev: Add an API to find the serdev controller associated with th=
+e devicetree node
+>       serdev: Add modalias support for serdev client devices
+>       serdev: Skip registering serdev devices from DT is external connect=
+or is used
+>       dt-bindings: connector: Add PCIe M.2 Mechanical Key E connector
+>       Bluetooth: hci_qca: Add support for WCN7850 PCIe M.2 card
+>       power: sequencing: pcie-m2: Add support for PCIe M.2 Key E connecto=
+rs
+>
+>  .../bindings/connector/pcie-m2-e-connector.yaml    | 154 +++++++++++++++
+>  MAINTAINERS                                        |   1 +
+>  drivers/bluetooth/hci_qca.c                        |  20 ++
+>  drivers/platform/x86/dell/dell-uart-backlight.c    |   2 +-
+>  .../x86/lenovo/yoga-tab2-pro-1380-fastcharger.c    |   2 +-
+>  drivers/platform/x86/x86-android-tablets/core.c    |   2 +-
+>  drivers/power/sequencing/Kconfig                   |   1 +
+>  drivers/power/sequencing/pwrseq-pcie-m2.c          | 218 +++++++++++++++=
++++++-
+>  drivers/tty/serdev/core.c                          |  77 +++++++-
+>  include/linux/mod_devicetable.h                    |   8 +
+>  include/linux/serdev.h                             |  25 ++-
+>  scripts/mod/devicetable-offsets.c                  |   3 +
+>  scripts/mod/file2alias.c                           |   8 +
+>  13 files changed, 494 insertions(+), 27 deletions(-)
+> ---
+> base-commit: db81ec30672bb228cd7cd809edeeae661d621f2d
 
-Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
----
- drivers/interconnect/icc-clk.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+git show db81ec30672bb228cd7cd80
+fatal: ambiguous argument 'db81ec30672bb228cd7cd80': unknown revision
+or path not in the working tree.
+Use '--' to separate paths from revisions, like this:
+'git <command> [<revision>...] -- [<file>...]'
 
-diff --git a/drivers/interconnect/icc-clk.c b/drivers/interconnect/icc-clk.c
-index 93c030608d3e0aad7d9c1ed81a51dcde0d3f85ab..6bbafe8fc6bdf6c036eafab6db8b68687611d6b6 100644
---- a/drivers/interconnect/icc-clk.c
-+++ b/drivers/interconnect/icc-clk.c
-@@ -31,9 +31,10 @@ static int icc_clk_set(struct icc_node *src, struct icc_node *dst)
- 		return 0;
- 
- 	if (!src->peak_bw) {
--		if (qn->enabled)
-+		if (qn->enabled) {
- 			clk_disable_unprepare(qn->clk);
--		qn->enabled = false;
-+			qn->enabled = false;
-+		}
- 
- 		return 0;
- 	}
+This series doesn't apply.
 
----
-base-commit: 41aa8dd5b19c447686b68e6730d348ecc0373143
-change-id: 20251027-icc-clk-disable-cleanup-5468c1d8eb0e
-
-Best regards,
--- 
-Gabor Juhos <j4g8y7@gmail.com>
-
+Rob
 
