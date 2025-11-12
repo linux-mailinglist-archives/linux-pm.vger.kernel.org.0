@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-37854-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37852-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CAF6C5382B
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 17:51:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E40F3C537AD
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 17:44:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0609B5058D8
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 16:26:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5B38502FCD
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 16:26:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D54E341AD8;
-	Wed, 12 Nov 2025 16:26:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28B133F372;
+	Wed, 12 Nov 2025 16:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mB1mQh+t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iLt97/X3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D39D2341AC6;
-	Wed, 12 Nov 2025 16:26:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4EC33F36D;
+	Wed, 12 Nov 2025 16:26:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762964781; cv=none; b=reDt0kiU5NLs3ysIHyduc1bXLcSqT14M36PbwoVHPJBfPVk4Hb3CF0H+Sx3cTaocVE+ZhdqVjNdEYUphUbqvNqhIgJukXLyB7kKm4TbJKm18VIGIduRPCEknMR9DafJZ7AcqV1kyafTScMqCuwB3JmxuYgs9Dhr3h8WhU6H39zY=
+	t=1762964773; cv=none; b=a8fL4zMZQUZMYk+IP/y6+cMGrurLEYo+oFjNKj+pL8wQgIcgs64TXy/vhXDfCFKyXsijQcOMDtKo/4wGm6rSMtgKgk7tOp/mRJKBZgW3jsUgXx34QLan9lw0IBO8eGaxwOgyMknmCrISqObWZ8zvATyVZRmBzWL2E3r1AuMYjJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762964781; c=relaxed/simple;
-	bh=O2u1JkKSRWyTtHiZkB6M/me8YBPi6rG9qMh6BMXmUr8=;
+	s=arc-20240116; t=1762964773; c=relaxed/simple;
+	bh=FvQTca1f1kUbxhOefqJtNOjPp0/EO7kKIOVQ3Sbp5R8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rv7aR/LuCVX4YeimSLCsrB47jcT3X9EZyVyDj1Slax+x8WQQKrPcwqk8JUkXM/WalHNrVXB5NoBi+WsEPr3kW+/IZfRFP3PA+EVdKkj0rlJHH3ES1L9aVLTyzX/h0uzhralWHtARGxJmwA+AUMYr29eQI9Wer/EhxpyvRoNUsOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mB1mQh+t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A575C19421;
-	Wed, 12 Nov 2025 16:26:20 +0000 (UTC)
+	 MIME-Version:Content-Type; b=IT2MiN/dNTioPtKofLFVZzUxUf303ALIDvCBSbCC0E04dCkH0qmCWb9CVh0tM0kXneYs5sgpHxXXnS4yGjyloCPOfg+6itB4SWPt+Pu/3Rh6nNfki0UBw0CPWhpeSei/BCsOSPekP2426AkPDxB6msiYV9ILLzdc9wuZvxMxMa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iLt97/X3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED684C19422;
+	Wed, 12 Nov 2025 16:26:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762964781;
-	bh=O2u1JkKSRWyTtHiZkB6M/me8YBPi6rG9qMh6BMXmUr8=;
+	s=k20201202; t=1762964773;
+	bh=FvQTca1f1kUbxhOefqJtNOjPp0/EO7kKIOVQ3Sbp5R8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mB1mQh+t5asl6pwzNwUjGfdqeY7ZWBtsbbFNd0zEAxBHS0mFXnFHZBzlfuoSHm0on
-	 3LIhridCUm2uXDwD8FAoxZ9lfm7GkjrW8n8LOvDnxZLeX4gILFGH0lBOGYL9igSsWa
-	 J57XCfKiOp92+5TNMZw/cqk6lzhs/3F0q7lI9VHlALPOevq2lIodt1YYPvNbiGsGm8
-	 kMUMi4hk/+A2SlGkJoEqg3iERudNqyvJ4lAovFjKh5eCi2SvH2inm78ZbDHemfssTY
-	 7eLoyFKzP1u7SQbrXg+y3K84UvT7TnUBtEDmojGdfza7lSx2rZhCZNgaVMQq6ednJp
-	 v+FFbdti9AOZg==
+	b=iLt97/X3KHt3ivYex1Cd2R88LSeKbUd8Qm9dnqqQgYzTY4QJ+NS727tr72kTcuWs8
+	 3nBxq3OnsdNVD8FD1M3dbb93RbfIk3gVr2aNwu8GEx/4ALZsWm8UWBGs6SWrr+QBq2
+	 110SKrdr9lr4l5I7pA5NtPBLWMhgbMTlbdpx02HNpZFrgpH/l6TDORb3llNk2K/AUs
+	 whKFh4OH77Mh9wrRPR+ufiNQ4hXPyCIT6QxFfolcXaf1ge09baRCxSf1tq8Xasnz3h
+	 T4cXuqBN6CeCg1/uG5Sy1nUkaAx0wNETUWDZ5NLGe5HJNFZBgcmz0iwm2bdxEx9ntB
+	 UbuPjOIleny/A==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>,
  Christian Loehle <christian.loehle@arm.com>
 Cc: LKML <linux-kernel@vger.kernel.org>, Reka Norman <rekanorman@chromium.org>
 Subject:
- [PATCH v1 1/4] cpuidle: governors: teo: Drop incorrect target residency check
-Date: Wed, 12 Nov 2025 17:22:30 +0100
-Message-ID: <5035693.GXAFRqVoOG@rafael.j.wysocki>
+ [PATCH v1 3/4] cpuidle: governors: teo: Use s64 consistently in teo_update()
+Date: Wed, 12 Nov 2025 17:24:40 +0100
+Message-ID: <3026616.e9J7NaK4W3@rafael.j.wysocki>
 Organization: Linux Kernel Development
 In-Reply-To: <4701737.LvFx2qVVIh@rafael.j.wysocki>
 References: <4701737.LvFx2qVVIh@rafael.j.wysocki>
@@ -63,40 +63,41 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-When the target residency of the current candidate idle state is
-greater than the expected time till the closest timer (the sleep
-length), it does not matter whether or not the tick has already
-been stopped or if it is going to be stopped.  The closest timer
-will trigger anyway at its due time, so it does not make sense to
-select an idle state with target residency above the sleep length.
+Two local variables in teo_update() are defined as u64, but their
+values are then compared with s64 values, so it is more consistent
+to use s64 as their data type.
 
-Accordingly, drop the teo_state_ok() check done in that case and
-let the governor use the teo_find_shallower_state() return value
-as the new candidate idle state index.
+No intentional functional impact.
 
-Fixes: 21d28cd2fa5f ("cpuidle: teo: Do not call tick_nohz_get_sleep_length() upfront")
-Cc: All applicable <stable@vger.kernel.org>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpuidle/governors/teo.c |    7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/cpuidle/governors/teo.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 --- a/drivers/cpuidle/governors/teo.c
 +++ b/drivers/cpuidle/governors/teo.c
-@@ -458,11 +458,8 @@ static int teo_select(struct cpuidle_dri
- 	 * If the closest expected timer is before the target residency of the
- 	 * candidate state, a shallower one needs to be found.
- 	 */
--	if (drv->states[idx].target_residency_ns > duration_ns) {
--		i = teo_find_shallower_state(drv, dev, idx, duration_ns, false);
--		if (teo_state_ok(i, drv))
--			idx = i;
--	}
-+	if (drv->states[idx].target_residency_ns > duration_ns)
-+		idx = teo_find_shallower_state(drv, dev, idx, duration_ns, false);
+@@ -157,8 +157,7 @@ static void teo_update(struct cpuidle_dr
+ {
+ 	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
+ 	int i, idx_timer = 0, idx_duration = 0;
+-	s64 target_residency_ns;
+-	u64 measured_ns;
++	s64 target_residency_ns, measured_ns;
  
- 	/*
- 	 * If the selected state's target residency is below the tick length
+ 	cpu_data->short_idles -= cpu_data->short_idles >> DECAY_SHIFT;
+ 
+@@ -167,9 +166,9 @@ static void teo_update(struct cpuidle_dr
+ 		 * If one of the safety nets has triggered, assume that this
+ 		 * might have been a long sleep.
+ 		 */
+-		measured_ns = U64_MAX;
++		measured_ns = S64_MAX;
+ 	} else {
+-		u64 lat_ns = drv->states[dev->last_state_idx].exit_latency_ns;
++		s64 lat_ns = drv->states[dev->last_state_idx].exit_latency_ns;
+ 
+ 		measured_ns = dev->last_residency_ns;
+ 		/*
 
 
 
