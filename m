@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-37837-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37840-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC381C52D0E
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 15:53:25 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0C05C52D26
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 15:54:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E16F5350A11
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 14:50:44 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 527293497C8
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 14:51:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1544342514;
-	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E723446B0;
+	Wed, 12 Nov 2025 14:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jkar5/a0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z+kgUaAP"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5688A340293;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9642342507;
 	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762958731; cv=none; b=e/58wSYhF7f5lInXxpnd0BQ/UJmSr2TXmaOGnupujCNA9+AqMzJMznaJufAmlRlrvh7vomk8fSeg1Xr1oZLtvI4Lbx9GlZUt/k8uwgU/NFAopZMPQcVut4iQZM6bGRDhEvuoIeR5pl/ktpckXJuqtQqUsC11qqVpCQQbZHf13d4=
+	t=1762958731; cv=none; b=A5oYOUt16cDvCPmlhZ+m64HQry+DSQJUZ3dHzaVyTsiBNDaAwdPFejfL1NmKg2LCbOFg9PYhRqD2+aIGho1UAxl5oAoBX/cfZ0T48cf09IK9hzP9+WxnLOpztGUeOuoLpua7UtVbwB9gGt8zWf1af8zAoiQHGiUvhcIdeWjHizg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762958731; c=relaxed/simple;
-	bh=L7iVFg7sZFJXM/ApGg4k66iGAwt68odx4+E9YWY+cnY=;
+	bh=BSF6pgHwRJ8wKRNwr418rTD4ufEtxZ2p1Im79cwxzV4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XMo1SEq0cxZCG5W4lWoIfscAANcAC17G0j3XiOpT/btT+NgRGzbTyJf+R0zpEjVsNyKQ8xRQHJkOTBNUSpF+fcst2RHaMbj+BmeJ7gNo6iRDgyOtdIn4ep4QZ2HiXTG59ZgVuif3hw4LDcrxVI7QepUndKC1fV0nEJOjz8rhiD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jkar5/a0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 11EF9C19423;
+	 In-Reply-To:To:Cc; b=oApVg7ajpgxDNOQR1MvB6dRiK8kmQm1WO4gGtwKdHwK4b5jLwg/RmsTAqox+vELACiZhgH9pN4AnM4RgoYPh8w0n4sDd8YhkPr6G7oOhGWU/Ob1yinjGfHiYTrBLLeoWf9mM9bSSflmB7BXevs10/Lf6t/tLJGquaCAR9BsnqyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z+kgUaAP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 40F42C19421;
 	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1762958731;
-	bh=L7iVFg7sZFJXM/ApGg4k66iGAwt68odx4+E9YWY+cnY=;
+	bh=BSF6pgHwRJ8wKRNwr418rTD4ufEtxZ2p1Im79cwxzV4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=jkar5/a0xV0XfBYLALRxb9FqHLFMf5G0T3DQfiYdsWHlKfuS0cL/XxFbHk5+ObGUd
-	 gWBSf9UXqPiR+AoilYJcC7LbEfmwhBRl/lQo9v+ONpG0cD2lbHxLSMQshPTmRH4LC8
-	 GIP7Lf4PdsHg6La3kq1zJujMZr13SvyKtyWHfu9HEeUdVt0b8GlsZIbGvhRNKQeTe8
-	 xcXBLiFadI1v/lsBhAwXGjoWs/sjMr6x632q0I6REW/RhkXBdYLcbnJHqin13IF1GS
-	 +wHGQrsE5/5oBqL3yNyIbuD0ndlnZ0ZxZL76DlWnpYV7WoMicFQm2ELL/c9BQmhEhR
-	 yjOrpQsSDW8Sw==
+	b=Z+kgUaAPEnBSn83dE5sic6dzmfi26DDd05Jb/aMOfrFa02eXfQAaRBR8gJv7wwABK
+	 NSeYUVhHujfgfPy65QPOy2aG2xmfxpYZ0mOsVgS2z9Bpb9zMtQZXbA7LQpwV+h1kMA
+	 B/BaRARCqz78Wk9Q4+vTkp4wt9HS32wrNtVyTa7itnIfDpNzO8BIdeKYUkbxvlQzwg
+	 HOxB8vI8EFMic++Gx08VLXQ6LDTNZfQh+98pYRTaTrHBUwWHP3RHyV55CJRwdSUyxW
+	 m/kyRfpddntflRYGcoflMSaG/hf8VgdjM8QhTO6YY7CdG0XnpZGcZNKKO5JPhS5DH4
+	 gkIhXtosM/s5A==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A93BCCF9E3;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 37F9DCD1297;
 	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
 From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>
-Date: Wed, 12 Nov 2025 20:15:15 +0530
-Subject: [PATCH 3/9] serdev: Allow passing the serdev device name to
- serdev_device_add()
+Date: Wed, 12 Nov 2025 20:15:18 +0530
+Subject: [PATCH 6/9] serdev: Skip registering serdev devices from DT is
+ external connector is used
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251112-pci-m2-e-v1-3-97413d6bf824@oss.qualcomm.com>
+Message-Id: <20251112-pci-m2-e-v1-6-97413d6bf824@oss.qualcomm.com>
 References: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
 In-Reply-To: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
 To: Rob Herring <robh@kernel.org>, 
@@ -79,16 +79,16 @@ Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
  Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
  Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5251;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1489;
  i=manivannan.sadhasivam@oss.qualcomm.com; h=from:subject:message-id;
- bh=c+ZfFChOiwPXrgBo3Hm41yJ4twgPMWwihL2KydIW2hU=;
- b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpFJ2GuH9bSE/qLpnlL7qfWYHEJ9kMMpDh2IkZg
- ioAcrCMP6WJATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaRSdhgAKCRBVnxHm/pHO
- 9V4xCACpKggi0h5EsAbWmO1W3x1wepvdIQr3nk0oqB8ZQCGLntg+/dBH3YvESuNvQx+eHq1ecDy
- cJEs6hUol9p8HzY4e/wBOxnCvBmvD0cUlixShwOQUIpKslW2fiIJhdYuXOu1524VGYS85GWtRk2
- QT1cJ+1IpsxSmCTXiqPCoAICGWgZ4xU3/K3lIvJlXzGoyew4LMK3K6crX/RCr5B2KYcwfNa2A68
- 0mP9nGlvNLw+cKNCFfP2jv2rt9HNRAwgdJZYTQoVgn3qbsO/i0Zt5GhuGWqYxd97xkdp78VtW+v
- NOpygSfJ3jQK71/T0iPfQ1Dm5UDNO0u+7B4QBKl41P6CqrMR
+ bh=9l0vV6HXXlRQhGb6LPV2j9zLb+eL0Fpf0v/SXfsrOaY=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpFJ2HYIFtN5v5bNyD8H02BJPR+1uACNYqLJQdu
+ pU9f/L5A+2JATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaRSdhwAKCRBVnxHm/pHO
+ 9RwgB/47EH+jLOBR8bp8aP5M5wGWY4SysKJtZO4fkj97iCzy/SsK9prWiuuaBDNz/F5VfGuxdtE
+ Kin9UH7qcWGK/P3pKH7xvC9p6Mm8NlJjS6oni2Z3zPLX6VllhharFcxCAoHHjXEvdbaw4EPGomr
+ S7Bq9ooyzXH3s3+GqPs7RdiqKCh3HIEhlt1xa550XiX7bCQDgjrsNVHqLy4jWaCrdWhfQ74eZlV
+ pJaVlLxPif2eLcTh562fAWZ2dA/Oknb7ywQKC0VSBcQyZqRuMwRMHr0eZOkcPwWg8i7QsB5jXun
+ UbBPcW1fXEPr3OZDqWb5SWwrc8t+apPpHsnLxxflovrsrkqs
 X-Developer-Key: i=manivannan.sadhasivam@oss.qualcomm.com; a=openpgp;
  fpr=C668AEC3C3188E4C611465E7488550E901166008
 X-Endpoint-Received: by B4 Relay for
@@ -98,118 +98,44 @@ Reply-To: manivannan.sadhasivam@oss.qualcomm.com
 
 From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 
-Instead of always setting the serdev device name from 'struct device' name,
-allow the callers to pass an optional name and set it as the serdev device
-name.
-
-This will be used by the future callers passing the serdev device ID as the
-name.
+If an external connector like M.2 is connected to the serdev controller
+in DT, then the serdev devices will be created dynamically by the connector
+driver. So skip registering devices from DT node as there will be no
+statically defined devices.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 ---
- drivers/platform/x86/dell/dell-uart-backlight.c             |  2 +-
- .../platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c    |  2 +-
- drivers/platform/x86/x86-android-tablets/core.c             |  2 +-
- drivers/tty/serdev/core.c                                   | 13 +++++++++----
- include/linux/serdev.h                                      |  2 +-
- 5 files changed, 13 insertions(+), 8 deletions(-)
+ drivers/tty/serdev/core.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/platform/x86/dell/dell-uart-backlight.c b/drivers/platform/x86/dell/dell-uart-backlight.c
-index f323a667dc2d2c7dec9fb284515bc3b6b984b7b9..f076cfac2bc5ec14899d6622d084bae2ffecfa3c 100644
---- a/drivers/platform/x86/dell/dell-uart-backlight.c
-+++ b/drivers/platform/x86/dell/dell-uart-backlight.c
-@@ -354,7 +354,7 @@ static int dell_uart_bl_pdev_probe(struct platform_device *pdev)
- 	if (!serdev)
- 		return -ENOMEM;
- 
--	ret = serdev_device_add(serdev);
-+	ret = serdev_device_add(serdev, NULL);
- 	if (ret) {
- 		dev_err(&pdev->dev, "error %d adding serdev\n", ret);
- 		serdev_device_put(serdev);
-diff --git a/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c b/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c
-index 8551ab4d2c7dbc3a8d0b2f50071d4460a3ee65e9..5e568fe1162d1563183713f8d5c71c59ff7667a1 100644
---- a/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c
-+++ b/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c
-@@ -260,7 +260,7 @@ static int yt2_1380_fc_pdev_probe(struct platform_device *pdev)
- 	/* The fwnode is a managed node, so it will be auto-put on serdev_device_put() */
- 	fwnode_handle_get(dev_fwnode(&serdev->dev));
- 
--	ret = serdev_device_add(serdev);
-+	ret = serdev_device_add(serdev, NULL);
- 	if (ret) {
- 		serdev_device_put(serdev);
- 		return dev_err_probe(&pdev->dev, ret, "adding serdev\n");
-diff --git a/drivers/platform/x86/x86-android-tablets/core.c b/drivers/platform/x86/x86-android-tablets/core.c
-index 6588fae303562b7dc9a1a8d281b167e44f0d3e84..96140f5d4f79240f44cb4530ee63777f783c6aaf 100644
---- a/drivers/platform/x86/x86-android-tablets/core.c
-+++ b/drivers/platform/x86/x86-android-tablets/core.c
-@@ -316,7 +316,7 @@ static __init int x86_instantiate_serdev(const struct x86_dev_info *dev_info, in
- 	ACPI_COMPANION_SET(&serdev->dev, serdev_adev);
- 	acpi_device_set_enumerated(serdev_adev);
- 
--	ret = serdev_device_add(serdev);
-+	ret = serdev_device_add(serdev, NULL);
- 	if (ret) {
- 		dev_err(&serdev->dev, "error %d adding serdev\n", ret);
- 		serdev_device_put(serdev);
 diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-index 2b5582cd5063a87c9a6c99f83a8ab071637eae57..76b89dd0720f89dbe34e205b905ef24d9f94d770 100644
+index 8c2a40a537d93f4b9353a2f128cdf51b521929b1..1378587d386356ca4415fa455b2ee722b5e44d3e 100644
 --- a/drivers/tty/serdev/core.c
 +++ b/drivers/tty/serdev/core.c
-@@ -121,14 +121,19 @@ static int serdev_device_match(struct device *dev, const struct device_driver *d
- /**
-  * serdev_device_add() - add a device previously constructed via serdev_device_alloc()
-  * @serdev:	serdev_device to be added
-+ * @name:	name of the serdev device (optional)
-  */
--int serdev_device_add(struct serdev_device *serdev)
-+int serdev_device_add(struct serdev_device *serdev, const char *name)
-+
- {
- 	struct serdev_controller *ctrl = serdev->ctrl;
- 	struct device *parent = serdev->dev.parent;
+@@ -12,6 +12,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
++#include <linux/of_graph.h>
+ #include <linux/of_device.h>
+ #include <linux/pm_domain.h>
+ #include <linux/pm_runtime.h>
+@@ -560,6 +561,15 @@ static int of_serdev_register_devices(struct serdev_controller *ctrl)
  	int err;
+ 	bool found = false;
  
--	dev_set_name(&serdev->dev, "%s-%d", dev_name(parent), serdev->nr);
-+	if (name)
-+		dev_set_name(&serdev->dev, "%s", name);
-+	else
-+		dev_set_name(&serdev->dev, "%s-%d", dev_name(parent), serdev->nr);
- 
- 	/* Only a single slave device is currently supported. */
- 	if (ctrl->serdev) {
-@@ -544,7 +549,7 @@ static int of_serdev_register_devices(struct serdev_controller *ctrl)
- 
- 		device_set_node(&serdev->dev, of_fwnode_handle(node));
- 
--		err = serdev_device_add(serdev);
-+		err = serdev_device_add(serdev, NULL);
- 		if (err) {
- 			dev_err(&serdev->dev,
- 				"failure adding device. status %pe\n",
-@@ -692,7 +697,7 @@ static acpi_status acpi_serdev_register_device(struct serdev_controller *ctrl,
- 	ACPI_COMPANION_SET(&serdev->dev, adev);
- 	acpi_device_set_enumerated(adev);
- 
--	err = serdev_device_add(serdev);
-+	err = serdev_device_add(serdev, NULL);
- 	if (err) {
- 		dev_err(&serdev->dev,
- 			"failure adding ACPI serdev device. status %pe\n",
-diff --git a/include/linux/serdev.h b/include/linux/serdev.h
-index ee42e293445d928a311bd3c120e609214f89a5dd..3b87909b199af74d619b4fe548c5c9c994e7bc15 100644
---- a/include/linux/serdev.h
-+++ b/include/linux/serdev.h
-@@ -163,7 +163,7 @@ static inline void serdev_controller_put(struct serdev_controller *ctrl)
- }
- 
- struct serdev_device *serdev_device_alloc(struct serdev_controller *);
--int serdev_device_add(struct serdev_device *);
-+int serdev_device_add(struct serdev_device *serdev, const char *name);
- void serdev_device_remove(struct serdev_device *);
- 
- struct serdev_controller *serdev_controller_alloc(struct device *host,
++	/*
++	 * When the serdev controller is connected to an external connector like
++	 * M.2 in DT, then the serdev devices will be created dynamically by the
++	 * connector driver. So skip looking for devices in DT node as there will
++	 * be no statically defined devices.
++	 */
++	if (of_graph_is_present(ctrl->dev.of_node))
++		return 0;
++
+ 	for_each_available_child_of_node(ctrl->dev.of_node, node) {
+ 		if (!of_property_present(node, "compatible"))
+ 			continue;
 
 -- 
 2.48.1
