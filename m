@@ -1,54 +1,55 @@
-Return-Path: <linux-pm+bounces-37852-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37851-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E40F3C537AD
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 17:44:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A8CFC537FB
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 17:47:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5B38502FCD
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 16:26:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E49CD50190D
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 16:26:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28B133F372;
-	Wed, 12 Nov 2025 16:26:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4128B33AD8A;
+	Wed, 12 Nov 2025 16:26:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iLt97/X3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dw946iKs"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4EC33F36D;
-	Wed, 12 Nov 2025 16:26:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1663332D7DD;
+	Wed, 12 Nov 2025 16:26:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762964773; cv=none; b=a8fL4zMZQUZMYk+IP/y6+cMGrurLEYo+oFjNKj+pL8wQgIcgs64TXy/vhXDfCFKyXsijQcOMDtKo/4wGm6rSMtgKgk7tOp/mRJKBZgW3jsUgXx34QLan9lw0IBO8eGaxwOgyMknmCrISqObWZ8zvATyVZRmBzWL2E3r1AuMYjJ4=
+	t=1762964769; cv=none; b=sszNH0zVlaJlaspq8jbXDGhKiUxckdhtmlvSHb1p26hKsyANGcn9J7jMPKBED2iRy49/sLAVoftElL6UJCOdRxUZhM+uZF7CxHmWqHwl6Da4bsV6LwfFhAkR3q8b30Mdly31AUKLPvVPix76BQL4Bip+cgXiCWIHbxdJELTDoWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762964773; c=relaxed/simple;
-	bh=FvQTca1f1kUbxhOefqJtNOjPp0/EO7kKIOVQ3Sbp5R8=;
+	s=arc-20240116; t=1762964769; c=relaxed/simple;
+	bh=PhOpg8daI+pn+v5iRCHrewm5SXnZkOlAgbebDrQtMXM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IT2MiN/dNTioPtKofLFVZzUxUf303ALIDvCBSbCC0E04dCkH0qmCWb9CVh0tM0kXneYs5sgpHxXXnS4yGjyloCPOfg+6itB4SWPt+Pu/3Rh6nNfki0UBw0CPWhpeSei/BCsOSPekP2426AkPDxB6msiYV9ILLzdc9wuZvxMxMa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iLt97/X3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED684C19422;
-	Wed, 12 Nov 2025 16:26:11 +0000 (UTC)
+	 MIME-Version:Content-Type; b=a+Uj2HJxAeydZPngaQMOfJfZevuJNeU73E6AkQeTSxWU5udMPyCQ5nZyyXhMoHCexbFLHUAalHevMW3BYj/SJv2jKNVWlPWG+njV/zbrJ0yC+WJ+5TLhNDnmcuh8Tt+gCNeqjEuZSQaIzZBPpd8X/yv454fsoE/q1OHOGmscaao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dw946iKs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DCB1C4CEF5;
+	Wed, 12 Nov 2025 16:26:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762964773;
-	bh=FvQTca1f1kUbxhOefqJtNOjPp0/EO7kKIOVQ3Sbp5R8=;
+	s=k20201202; t=1762964768;
+	bh=PhOpg8daI+pn+v5iRCHrewm5SXnZkOlAgbebDrQtMXM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iLt97/X3KHt3ivYex1Cd2R88LSeKbUd8Qm9dnqqQgYzTY4QJ+NS727tr72kTcuWs8
-	 3nBxq3OnsdNVD8FD1M3dbb93RbfIk3gVr2aNwu8GEx/4ALZsWm8UWBGs6SWrr+QBq2
-	 110SKrdr9lr4l5I7pA5NtPBLWMhgbMTlbdpx02HNpZFrgpH/l6TDORb3llNk2K/AUs
-	 whKFh4OH77Mh9wrRPR+ufiNQ4hXPyCIT6QxFfolcXaf1ge09baRCxSf1tq8Xasnz3h
-	 T4cXuqBN6CeCg1/uG5Sy1nUkaAx0wNETUWDZ5NLGe5HJNFZBgcmz0iwm2bdxEx9ntB
-	 UbuPjOIleny/A==
+	b=dw946iKshpxcD8rShBTNe8wyJhDV8yw4yt1sVVMehScyAvRjv/fUMkCYLJfitv3J1
+	 Pg3qWfEcLbsw9Q22tCqTA8U9Xe9wD2o65bZLnJeDTZJ1YuQTVbGNksd3GMsTI2rPRa
+	 C4VQfczxkIyzSuPQSYCvvZqSm1a9Mdam9KJ2SOzVEEguOYQnUGnTsznDaDa1yBzwYh
+	 FrRd1xOLKgioA3bdt2LOwBHElqKWbNYBK6QR0Ke60mo/wDIPAN0XmfU1HLNlBZTeC2
+	 D+IAL+v2sr8fHD9yc59gO29salcLmiE0adAGy0xC9V9kaUy77zSNEj8UltYWJzU3H2
+	 /LvubpEglCuMg==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>,
  Christian Loehle <christian.loehle@arm.com>
 Cc: LKML <linux-kernel@vger.kernel.org>, Reka Norman <rekanorman@chromium.org>
 Subject:
- [PATCH v1 3/4] cpuidle: governors: teo: Use s64 consistently in teo_update()
-Date: Wed, 12 Nov 2025 17:24:40 +0100
-Message-ID: <3026616.e9J7NaK4W3@rafael.j.wysocki>
+ [PATCH v1 4/4] cpuidle: governors: teo: Decay metrics below DECAY_SHIFT
+ threshold
+Date: Wed, 12 Nov 2025 17:25:48 +0100
+Message-ID: <3396811.44csPzL39Z@rafael.j.wysocki>
 Organization: Linux Kernel Development
 In-Reply-To: <4701737.LvFx2qVVIh@rafael.j.wysocki>
 References: <4701737.LvFx2qVVIh@rafael.j.wysocki>
@@ -63,41 +64,76 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Two local variables in teo_update() are defined as u64, but their
-values are then compared with s64 values, so it is more consistent
-to use s64 as their data type.
+If a given governor metric falls below a certain value (8 for
+DECAY_SHIFT equal to 3), it will not decay any more due to the
+simplistic decay implementation.  This may in some cases lead to
+subtle inconsistencies in the governor behavior, so change the
+decay implementation to take it into account and set the metric
+at hand to 0 in that case.
 
-No intentional functional impact.
-
+Suggested-by: Christian Loehle <christian.loehle@arm.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpuidle/governors/teo.c |    7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/cpuidle/governors/teo.c |   20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
 --- a/drivers/cpuidle/governors/teo.c
 +++ b/drivers/cpuidle/governors/teo.c
-@@ -157,8 +157,7 @@ static void teo_update(struct cpuidle_dr
- {
- 	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
+@@ -148,6 +148,16 @@ struct teo_cpu {
+ 
+ static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
+ 
++static void teo_decay(unsigned int *metric)
++{
++	unsigned int delta = *metric >> DECAY_SHIFT;
++
++	if (delta)
++		*metric -= delta;
++	else
++		*metric = 0;
++}
++
+ /**
+  * teo_update - Update CPU metrics after wakeup.
+  * @drv: cpuidle driver containing state data.
+@@ -159,7 +169,7 @@ static void teo_update(struct cpuidle_dr
  	int i, idx_timer = 0, idx_duration = 0;
--	s64 target_residency_ns;
--	u64 measured_ns;
-+	s64 target_residency_ns, measured_ns;
+ 	s64 target_residency_ns, measured_ns;
  
- 	cpu_data->short_idles -= cpu_data->short_idles >> DECAY_SHIFT;
+-	cpu_data->short_idles -= cpu_data->short_idles >> DECAY_SHIFT;
++	teo_decay(&cpu_data->short_idles);
  
-@@ -167,9 +166,9 @@ static void teo_update(struct cpuidle_dr
- 		 * If one of the safety nets has triggered, assume that this
- 		 * might have been a long sleep.
- 		 */
--		measured_ns = U64_MAX;
-+		measured_ns = S64_MAX;
- 	} else {
--		u64 lat_ns = drv->states[dev->last_state_idx].exit_latency_ns;
-+		s64 lat_ns = drv->states[dev->last_state_idx].exit_latency_ns;
- 
- 		measured_ns = dev->last_residency_ns;
+ 	if (cpu_data->artificial_wakeup) {
  		/*
+@@ -195,8 +205,8 @@ static void teo_update(struct cpuidle_dr
+ 	for (i = 0; i < drv->state_count; i++) {
+ 		struct teo_bin *bin = &cpu_data->state_bins[i];
+ 
+-		bin->hits -= bin->hits >> DECAY_SHIFT;
+-		bin->intercepts -= bin->intercepts >> DECAY_SHIFT;
++		teo_decay(&bin->hits);
++		teo_decay(&bin->intercepts);
+ 
+ 		target_residency_ns = drv->states[i].target_residency_ns;
+ 
+@@ -207,7 +217,7 @@ static void teo_update(struct cpuidle_dr
+ 		}
+ 	}
+ 
+-	cpu_data->tick_intercepts -= cpu_data->tick_intercepts >> DECAY_SHIFT;
++	teo_decay(&cpu_data->tick_intercepts);
+ 	/*
+ 	 * If the measured idle duration falls into the same bin as the sleep
+ 	 * length, this is a "hit", so update the "hits" metric for that bin.
+@@ -222,7 +232,7 @@ static void teo_update(struct cpuidle_dr
+ 			cpu_data->tick_intercepts += PULSE;
+ 	}
+ 
+-	cpu_data->total -= cpu_data->total >> DECAY_SHIFT;
++	teo_decay(&cpu_data->total);
+ 	cpu_data->total += PULSE;
+ }
+ 
 
 
 
