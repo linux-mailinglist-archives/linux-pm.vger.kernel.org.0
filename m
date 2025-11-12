@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-37819-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37820-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DBD8C520C9
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 12:45:38 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 049D9C52162
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 12:51:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A91C6188ADF5
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 11:45:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 765604FB16F
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 11:44:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 112DB3128D4;
-	Wed, 12 Nov 2025 11:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B37CB313E25;
+	Wed, 12 Nov 2025 11:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HDyiKCrW"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="SDXA+L+K"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7AD310624;
-	Wed, 12 Nov 2025 11:44:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51243043B8;
+	Wed, 12 Nov 2025 11:44:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762947875; cv=none; b=XKKvvnxRB+14tS3j5Gi2+/WnU7sbX0tiJUPAtVG5NZ5Ph+qFCYqlohAd22JIs/lieKcoLtzRIa55hqM4XZTKVBNZVZygm+j4I5XJOE7i/9k+fU/sCKUtNTkkgmSC0HB/vypdrjrSrD6bpKR3OtCRRgtvQgUY/A6CVxy0GF39JcI=
+	t=1762947877; cv=none; b=KYdYq2OdMQAcDgjz/Aky+250wp5gwyVMixJ+EHVbRru2cyil6qC2A3zGuouzUf/D6TzyZW5iOraNqVvWkAXfrmby3qnUaym7qxMObyZUiIv295gsdg53cwPTqi9Kvtw4fpxUxEKI+xrq1XL4YMsK/sZId1W3Qj+dzUOMZlupjGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762947875; c=relaxed/simple;
-	bh=T/3f2aH4OlFw/lLjeQrh+LUIMpt0NqIajGPJMFGS/xM=;
+	s=arc-20240116; t=1762947877; c=relaxed/simple;
+	bh=/wmc1nvaEZ1gZ+YbHmL9cMGHJGbAlywM2NFI5baKvfM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KbScwvbENvzHBwZ1ux8x44ZANnKIzTv79jNG2lpLnY7+jp5RUjHm+W73rx9CdTzA/SYNzxdvDVFeGwuMdWcz4H35faeeC6xHhwRF+X45liOF3Zdp4Y0bPHSvmES2thaH0V/BwtOKT1MEwUHp2aDfqWG6y4UeLQQgFXe+gOpJzoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HDyiKCrW; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:Content-Type; b=oYm53OoCJdtve4ukPGcqDC/eJRVOZlE7yEvxobiucUaa3RwvZtTX3sClBoO0VXF6utTDppPnQ6+9gpw3fJhogZc3ySJh9JL+Dvnae8HCwZFo3pA/6gtQhPrvy0N0zXCc+FRyW4jKzGzlhPq9X1yhK+3pvOnzdMQL5lcYnLyccSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=SDXA+L+K; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1762947872;
-	bh=T/3f2aH4OlFw/lLjeQrh+LUIMpt0NqIajGPJMFGS/xM=;
+	s=mail; t=1762947874;
+	bh=/wmc1nvaEZ1gZ+YbHmL9cMGHJGbAlywM2NFI5baKvfM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HDyiKCrWYa7YuVZkprl1h9/2UwefZKbnbSHEJBtlKGb27Y/rdSpmZ1p0CaVOiGolw
-	 27G6PajNHsfMo5C1AYZxQK84XKeojTKNfkMM99dPvJYPoxcV9kvGJQCAcwQ7rDJPXE
-	 1wrXT+vq7eoRrAWQ0cIogYvPSA7dslEzJAxdc05K7agpJqAs2Qb+6tJcr6Gxym35XM
-	 KpCo51S/SUdtnMl92hmumkrC9veferld3nIwKWh9nlBrsGQ5lrWTqIs/sJh/Ha45Gt
-	 t2506BZE51fZItv4ZdghI+2+XI94Kmenq26eu3fC+ijTvwDP9Xp+/diii9JXsag0Sr
-	 nGyxCZmGHEl8g==
+	b=SDXA+L+K+W0lcl1zTrtbjIqI5psxaAo6So2ct0Hf6UqtjiOTRqdFs7PgVvXaLVIMs
+	 ffld+wqvVCa10q4EI9CeyWiGdAPFzh1XtKgedmAHIZHTZZeAAGVUeO2rNqOznW215G
+	 b3ZFb0vf3xR4l0C0zI0NAMcyxuB/2NFcp9msWoyKEek+ieOV2uGBixKlGvqQB3ftS8
+	 3YpUPnPDFeeW6Z8kIMd1KIfYvFU4yQemNsxx+Qaw44sitbdv2NoRxBNj3BRPHzqP5/
+	 aMlFB61Tat/BruSkLJEA0eti+QLV4jH+FPz0OeR83T7NnriDCPh3LHozqUw+MDLmkX
+	 xNmCYWqhAedbQ==
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0F61117E129C;
-	Wed, 12 Nov 2025 12:44:31 +0100 (CET)
-Message-ID: <a5ebb6ac-52c8-4b48-a67b-2d1e34aa73ea@collabora.com>
-Date: Wed, 12 Nov 2025 12:44:30 +0100
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 933CE17E12E5;
+	Wed, 12 Nov 2025 12:44:32 +0100 (CET)
+Message-ID: <4cac7e07-d6a5-474b-83ef-ef4e096911d0@collabora.com>
+Date: Wed, 12 Nov 2025 12:44:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 11/11] soc: tegra: Simplify with
+Subject: Re: [PATCH v2 05/11] cpuidle: big_little: Simplify with
  of_machine_device_match()
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
@@ -85,10 +85,10 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
  linux-tegra@vger.kernel.org
 References: <20251112-b4-of-match-matchine-data-v2-0-d46b72003fd6@linaro.org>
- <20251112-b4-of-match-matchine-data-v2-11-d46b72003fd6@linaro.org>
+ <20251112-b4-of-match-matchine-data-v2-5-d46b72003fd6@linaro.org>
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-In-Reply-To: <20251112-b4-of-match-matchine-data-v2-11-d46b72003fd6@linaro.org>
+In-Reply-To: <20251112-b4-of-match-matchine-data-v2-5-d46b72003fd6@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
@@ -96,7 +96,6 @@ Il 12/11/25 11:28, Krzysztof Kozlowski ha scritto:
 > Replace open-coded getting root OF node and matching against it with
 > new of_machine_device_match() helper.
 > 
-> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
