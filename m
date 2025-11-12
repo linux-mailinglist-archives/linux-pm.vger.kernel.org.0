@@ -1,170 +1,122 @@
-Return-Path: <linux-pm+bounces-37874-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37875-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2E8DC545E2
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 21:11:14 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7FD5C54627
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 21:13:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3FD674E3B82
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 20:03:35 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C0E534E2A6E
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Nov 2025 20:07:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BAD027703E;
-	Wed, 12 Nov 2025 20:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4151027703E;
+	Wed, 12 Nov 2025 20:07:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HrRAgHrg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u0+s0V8Y"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667782749E4
-	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 20:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 196431397
+	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 20:07:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762977811; cv=none; b=dqEgmBbMliMoXBYZ+TOhjZF5vjO/s7Az+pBAKPphRymeoCke7+3s9cwjyL1KOZX/puL4P00Fs0eWrocZTczni8VERTiiUiuDv8NQfqncTRQCWEsYa/dYPQ0ThbtHOemO2KxMbEXoTmyZrQJIsVX7nv/GVNRZVr0h1vCzLX2WPQo=
+	t=1762978073; cv=none; b=uwgDtjnrtRbq/wKVjToS2XypMSicXwXGUYlimMK5b/JmLUCajyr3ps0i78k6RU6RXaspCyDrAxhUvKWUR2RsFLjSwvuapCsskn0Gcmift5Lld+NGG4sn2KfPiCxrsYftX6MlZVob+LG2pfmcROS/ile2AQs7zp3SGDm4VhMl8jU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762977811; c=relaxed/simple;
-	bh=2truygGR7fmvsFgLhsjwjiIdPMxhJOWDBjbJln/EW4E=;
+	s=arc-20240116; t=1762978073; c=relaxed/simple;
+	bh=vVBal5Kzk7fkAnG9uQe2oIMU6cm2imGDuVo7gW5jwAM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mQcxjWd9wsxWpETTjfo5JDQ8lz7p7yyK1/mc6wykRIZSMNY30/TDnbcWjhhAdkWVI72MF7+l87BykO9O2TZ001o7PzYhrEIXhfLcR4tq1voeHzYnkvW0L9cQH5ih2O1NZ3W6K3oc9Ipb1Rx5uSyXYwU+tYnSJM5nFsW+fEIiyFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HrRAgHrg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32619C19424
-	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 20:03:31 +0000 (UTC)
+	 To:Cc:Content-Type; b=r8ZN/GSgqILWHrHkIkSBQ/Gqwp35ufPCOGyBdULfirrenL8dfBiOG20hzRHnWJoT5vdWT1z1kJzi+dlNrRHVoc3FO+EVo1b75D819Nq2I6nopgIo+gYSCFLeJfbhuzTpeCc1LI2/OMU1esx3AclfSFoxj5eZ1Xn9NpLzjI6Da2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u0+s0V8Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC0A5C19424
+	for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 20:07:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762977811;
-	bh=2truygGR7fmvsFgLhsjwjiIdPMxhJOWDBjbJln/EW4E=;
+	s=k20201202; t=1762978072;
+	bh=vVBal5Kzk7fkAnG9uQe2oIMU6cm2imGDuVo7gW5jwAM=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HrRAgHrgewQiNS6qPWAgMzhx0EJLVM27DRZ4Tg0nMaz0+LIhxNjRX+zY+EmKQQ4fv
-	 uBna2AoeL7CTxoTYsVs2G0hZU1461VcmYnqSIAWJVWnEbq88CQCBo7hbr6QtY5XJmu
-	 HRzzDwG7vdQxlpfBakCwHj0NfDKSzWywGME4H6CmxMKovs/5ZMWaXnDyLY19OAcDYO
-	 pBG3KHzpyXRjxEJXURoxvDqonp2+LRY1Y/UfCsphnN2+hwJgi0doeurcgIw/i1MO+m
-	 8KYN1HKENsa+oX3dzE1MJUCC98+KrJHNqAFCzti/z/1xeUA9PurO8Gm+UvurOYe2BK
-	 bqHuUWVNtI05g==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-656e585587bso32953eaf.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 12:03:31 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVRkcTrCpm9iqB7zwG/Y8hXz+ivA16nmbXA2qBvyYMjJoETd7W2tppIfDs6MdATAanr9C1AK420Mw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7PZyZkkpDhNE/UENInRMW3KK3cMnN4nbJwRyINE6gDVT5saww
-	TEn8XGYf9r4I9mQF4r9LmT0CWXQcNT4S5zku6E/jYWtU2CLDxIwpuYT9wS5/S8OkrsYoNjFGnXd
-	HyWakReWilvYTia64vcELdJbYramxRN4=
-X-Google-Smtp-Source: AGHT+IGRBeNRM+HNo5unVf2rRvHcql8w4SILTxjZzsf1VLzE4PQggEmnPM37H5AYrqsAt+y0dGqZWxRQHZsSe99OE6A=
-X-Received: by 2002:a05:6820:81c9:b0:656:735e:9eff with SMTP id
- 006d021491bc7-65716443681mr1926630eaf.7.1762977810471; Wed, 12 Nov 2025
- 12:03:30 -0800 (PST)
+	b=u0+s0V8YrP04MnWYsacxqQiVb7+jQXAhKfjtmIgbO41DIylhypDJ9F5CjXPnFbzK3
+	 l8cZjdFb63WW2ub77KpieuGyfzftvlGrW4xsoN40Keru4U2Au4if35e3vEJCmh0cFg
+	 0cktA2+1VGXMTWu7zMeOBJNEKH7INPtHQMZYckZBBnkQM7C6SzJXtTIZ5uUN4mw5bP
+	 s6wbP1R2hBKMWEAT7QVOoVISrM4X0woHVC/h/RqQQBtnyyAtVZQio2uEayAVoPr2VS
+	 JMDnZUFu1CoWWgkQI1fm43vN454fwchjL5135YAuLwkYLSnfbdOyg3gVgiep2PACJ0
+	 J0PcYv4DX7Rjw==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-651cda151f0so64366eaf.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 12:07:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVjwXIQaeqniJVpyznMuxGBVKFsETyjO614irvsBzzTXGkL0sC/tKFyMdoaML17dRPPlKrI3ymN9Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAMWKus6Wa2UUkbCdFmLPzovjNGyLl4Wa4TBv75UrCpcczNNCz
+	MEGgKU/74JGc+Szy++TYU3TRf43i+A9h3lCM7XM9lhVDfTwlsUJxa4zpjwNQiyF0yfZ5VJTJrVx
+	oW5fUZBJmkhFgYLngGfc1k/MoI7jDNxU=
+X-Google-Smtp-Source: AGHT+IGwYiIFbRkFL3h9dqQCSKOrBzmm7cihC9sfDuJDHgJXo9D38mFo2766T2t3LE1zcWGlwd1hDaIAFO5QfYPjpzc=
+X-Received: by 2002:a05:6820:1896:b0:656:9c61:9db8 with SMTP id
+ 006d021491bc7-65716252535mr2141137eaf.4.1762978071898; Wed, 12 Nov 2025
+ 12:07:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251110120819.714560-1-christian.loehle@arm.com>
-In-Reply-To: <20251110120819.714560-1-christian.loehle@arm.com>
+References: <20251030035955.62171-1-kaushlendra.kumar@intel.com>
+In-Reply-To: <20251030035955.62171-1-kaushlendra.kumar@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 12 Nov 2025 21:03:19 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jjh2cJhfQQBgtqPvNGgzUmyV_tkLQ7WJv6cXhPYBQrcA@mail.gmail.com>
-X-Gm-Features: AWmQ_bkFq_SDqC3LU9Wj50F7rCTNrLgPevAbF4KDpRAyN3MOhb8pM3MPrmyPWOc
-Message-ID: <CAJZ5v0jjh2cJhfQQBgtqPvNGgzUmyV_tkLQ7WJv6cXhPYBQrcA@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: teo: Use this_cpu_ptr where possible
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Wed, 12 Nov 2025 21:07:41 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gSDfsnrnh0a8LaKv8+_RbarA-uemhRmv1c356Rx87ijw@mail.gmail.com>
+X-Gm-Features: AWmQ_blj1OXIMB_Gd_a-ePWWOloo6nu7Dmhj-JjbC9cGAPOX_vSfu3yrt31bB8c
+Message-ID: <CAJZ5v0gSDfsnrnh0a8LaKv8+_RbarA-uemhRmv1c356Rx87ijw@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: Use symbolic constant for UUID prefix comparison
+To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Cc: rafael@kernel.org, rui.zhang@intel.com, 
+	srinivas.pandruvada@linux.intel.com, daniel.lezcano@linaro.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 10, 2025 at 1:08=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
+On Thu, Oct 30, 2025 at 5:02=E2=80=AFAM Kaushlendra Kumar
+<kaushlendra.kumar@intel.com> wrote:
 >
-> The cpuidle governor callbacks for update, select and reflect
-> are always running on the actual idle entering/exiting CPU, so
-> use the more optimized this_cpu_ptr() to access the internal teo
-> data.
+> Replace sizeof() with a symbolic constant for UUID matching to maintain
+> existing ABI behavior while improving code clarity. The current behavior
+> of comparing only the first 7 characters is sufficient to distinguish
+> all UUIDs and changing to full string comparison would alter the kernel
+> ABI, potentially breaking existing userspace applications.
 >
-> This brings down the latency-critical teo_reflect() from
-> static void teo_reflect(struct cpuidle_device *dev, int state)
-> {
-> ffffffc080ffcff0:       hint    #0x19
-> ffffffc080ffcff4:       stp     x29, x30, [sp, #-48]!
->         struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
-> ffffffc080ffcff8:       adrp    x2, ffffffc0848c0000 <gicv5_global_data+0=
-x28>
-> {
-> ffffffc080ffcffc:       add     x29, sp, #0x0
-> ffffffc080ffd000:       stp     x19, x20, [sp, #16]
-> ffffffc080ffd004:       orr     x20, xzr, x0
->         struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
-> ffffffc080ffd008:       add     x0, x2, #0xc20
-> {
-> ffffffc080ffd00c:       stp     x21, x22, [sp, #32]
->         struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
-> ffffffc080ffd010:       adrp    x19, ffffffc083eb5000 <cpu_devices+0x78>
-> ffffffc080ffd014:       add     x19, x19, #0xbb0
-> ffffffc080ffd018:       ldr     w3, [x20, #4]
+> Use a defined constant to make the truncated comparison explicit and
+> maintainable.
 >
->         dev->last_state_idx =3D state;
->
-> to
->
-> static void teo_reflect(struct cpuidle_device *dev, int state)
-> {
-> ffffffc080ffd034:       hint    #0x19
-> ffffffc080ffd038:       stp     x29, x30, [sp, #-48]!
-> ffffffc080ffd03c:       add     x29, sp, #0x0
-> ffffffc080ffd040:       stp     x19, x20, [sp, #16]
-> ffffffc080ffd044:       orr     x20, xzr, x0
->         struct teo_cpu *cpu_data =3D this_cpu_ptr(&teo_cpus);
-> ffffffc080ffd048:       adrp    x19, ffffffc083eb5000 <cpu_devices+0x78>
-> {
-> ffffffc080ffd04c:       stp     x21, x22, [sp, #32]
->         struct teo_cpu *cpu_data =3D this_cpu_ptr(&teo_cpus);
-> ffffffc080ffd050:       add     x19, x19, #0xbb0
->
->         dev->last_state_idx =3D state;
->
-> This saves us:
->         adrp    x2, ffffffc0848c0000 <gicv5_global_data+0x28>
->         add     x0, x2, #0xc20
->         ldr     w3, [x20, #4]
->
-> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+> Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 > ---
->  drivers/cpuidle/governors/teo.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> Changes in v2:
+> - Use symbolic constant instead of strlen() to maintain existing ABI
+>   behavior as review feedback
 >
-> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/=
-teo.c
-> index bfa55c1eab5b..a3ebc2cda093 100644
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -155,7 +155,7 @@ static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
->   */
->  static void teo_update(struct cpuidle_driver *drv, struct cpuidle_device=
- *dev)
->  {
-> -       struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
-> +       struct teo_cpu *cpu_data =3D this_cpu_ptr(&teo_cpus);
->         int i, idx_timer =3D 0, idx_duration =3D 0;
->         s64 target_residency_ns;
->         u64 measured_ns;
-> @@ -268,7 +268,7 @@ static int teo_find_shallower_state(struct cpuidle_dr=
-iver *drv,
->  static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device =
-*dev,
->                       bool *stop_tick)
->  {
-> -       struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
-> +       struct teo_cpu *cpu_data =3D this_cpu_ptr(&teo_cpus);
->         s64 latency_req =3D cpuidle_governor_latency_req(dev->cpu);
->         ktime_t delta_tick =3D TICK_NSEC / 2;
->         unsigned int idx_intercept_sum =3D 0;
-> @@ -504,7 +504,7 @@ static int teo_select(struct cpuidle_driver *drv, str=
-uct cpuidle_device *dev,
->   */
->  static void teo_reflect(struct cpuidle_device *dev, int state)
->  {
-> -       struct teo_cpu *cpu_data =3D per_cpu_ptr(&teo_cpus, dev->cpu);
-> +       struct teo_cpu *cpu_data =3D this_cpu_ptr(&teo_cpus);
+>  drivers/thermal/intel/int340x_thermal/int3400_thermal.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 >
->         dev->last_state_idx =3D state;
->         if (dev->poll_time_limit ||
+> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/dr=
+ivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> index 908cc1bf57f1..128556632685 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+> @@ -16,6 +16,8 @@
+>  #define INT3400_ODVP_CHANGED 0x88
+>  #define INT3400_KEEP_ALIVE 0xA0
+>  #define INT3400_FAKE_TEMP (20 * 1000) /* faked temp sensor with 20C */
+> +/* UUID prefix length for comparison - sufficient for all UUIDs */
+> +#define INT3400_UUID_PREFIX_LEN 7
+>
+>  enum int3400_thermal_uuid {
+>         INT3400_THERMAL_ACTIVE =3D 0,
+> @@ -199,7 +201,7 @@ static ssize_t current_uuid_store(struct device *dev,
+>
+>         for (i =3D 0; i < INT3400_THERMAL_MAXIMUM_UUID; ++i) {
+>                 if (!strncmp(buf, int3400_thermal_uuids[i],
+> -                            sizeof(int3400_thermal_uuids[i]) - 1)) {
+> +                            INT3400_UUID_PREFIX_LEN)) {
+>                         /*
+>                          * If we have a list of supported UUIDs, make sur=
+e
+>                          * this one is supported.
 > --
 
 Applied as 6.19 material, thanks!
