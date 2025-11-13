@@ -1,172 +1,121 @@
-Return-Path: <linux-pm+bounces-37994-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37995-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id A206AC59E0F
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:59:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C292C59E18
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:59:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3935A3530DA
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 19:57:40 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6C17D354647
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 19:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AB7831B80E;
-	Thu, 13 Nov 2025 19:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD0F31B10B;
+	Thu, 13 Nov 2025 19:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cYEzuM9N"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="s8nBX6me"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE28776026;
-	Thu, 13 Nov 2025 19:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C4E76026;
+	Thu, 13 Nov 2025 19:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763063852; cv=none; b=leHNWrodjFF8kGR0AMNBCG27KEN0XVq6tecFQxmPEwMyBD+uxOGxP7ZfU+cWWJMljbxcoTyyWNoTDBWzyi95FcBzFaTZMIiCBRaAtF6yHgjTdqT7IFyzPGMI9MIkTbiBw1qn21w8puJ8U19GcuEqONKjH8KCtqnp3vzRKYj6suI=
+	t=1763063885; cv=none; b=EQbintq5nkfk/CugOqCfCV6plDws3ROye/Ebp7F/UXRlSLjRknPuYJj9wIG1d8puDD4ogWaMcOBiLA0SUfK/m8GrOe8b162abGLzWkr3GN6GYgH0FOEVjM24774tzc5TAKQwFbBsYmH/wgiG68z0V2uwOKMc2YahjEtfn0ZboE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763063852; c=relaxed/simple;
-	bh=puo0UoB37ZnIPSLQ+4sdZrPawcM3Ismb6YVyUz2aLwc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V463ttrkSu2zxVDt9DQbVKbBuDcc/8GTfDkukCpY7Zpj10Dlryva75kx9o5tY4+I8EwwCCLyM6doLDab0BZXiEKdyrqw9xYXmzW9/Q4C6xSzxL8qIyDPDb3lTAN0D2A5sr0dawc29CUXfEWM0GVGXaZfk2sVhUIL4H8D0TDhbMg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cYEzuM9N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09BADC4CEF5;
-	Thu, 13 Nov 2025 19:57:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763063851;
-	bh=puo0UoB37ZnIPSLQ+4sdZrPawcM3Ismb6YVyUz2aLwc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cYEzuM9NfSh3sWGMHViESvr3w7FufROCVw1qN0xO7aPwIQqauF+9tEO45BOKCoD0L
-	 IfUY4to5+TjoonkFYBv5XMiLmV4sHa6ml0Adr4TEFbcMFjdlmzf5Cl0UhiybpOz55Z
-	 RmIS4K6cU3HbYZ44+FPGaZSstZdKGowNlCkyd8Jjt+xzORKuGG9vbYMV6lgLeGAlzj
-	 ZhiltSJL4r0ZLOSU4wglstb1hwUUkTDK8c16AhEBdmOR8YY/J0EmncaZyBXOJhcl4d
-	 gBQaDYPmNsw4At4rNVk+0BF9L70CZG3ErgOC00gpsFwMvusAllveTJtuVuQUXsvic4
-	 GTz0RD3wCqyaw==
-Date: Thu, 13 Nov 2025 19:57:25 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Kaustabh Chakraborty <kauschluss@disroot.org>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 04/13] dt-bindings: power: supply: document Samsung S2M
- series PMIC charger device
-Message-ID: <20251113-evaluate-unrented-0f87915a5297@spud>
-References: <20251114-s2mu005-pmic-v1-0-9e3184d3a0c9@disroot.org>
- <20251114-s2mu005-pmic-v1-4-9e3184d3a0c9@disroot.org>
+	s=arc-20240116; t=1763063885; c=relaxed/simple;
+	bh=iBTFanEIxOT4IMFjt8xI4rzsbKY4Dm6/ucMLBZ2V4gc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V6uD83LAFoeD+1+MQ6C0YAZIyfCH1tlLiSs+0iyFqWGpxXiUjHifCCLSwfwpEbXm8fx8X/TFP2p8D0WgGUaIAshFV3SjGmtXqJ9MYh3s6Jcp7LIl5aPpBnjDS83s+8pyWiSR9lcAs1mbY3ku5RE6yjGAs2swlXAwxAreKIU85eU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=s8nBX6me; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=UAioK4DG5C9zm1t6hyaDe3YJWZ5Zta/Pw1nq2GgNNgY=; b=s8nBX6meJGhwpK5oym8SCA1bBN
+	z878G0qTQ9+6fUcBwxozuPeScqbLnkG7YsmhzqixQWUn5FI1u32s6nqnXYqlaBYeAqZxyPcIt69MB
+	nlSjbE8HNu0b6W3d8PHadWuCK4lBcqX8C2/Z0kOWLUNFa6otjf2JnKpa67Stcf4MQu6L4ahKkPlOA
+	T+ICIPJcO9SOPElSasN6sqmBjgPw8y/Nnwm22MZvaQMQKMKB2HaTMCYnDk4Q9z18T1+ttd43SBl3o
+	5Qu/YqIlbSC77sUbZB+l0oB+WhFEzJ16i6qVoh0EsSFEWhfxQfBqYF7YuEzMmDyRg0IQ/jqfjCe++
+	1w4Wf6rA==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vJdSB-0000000B37a-2kPs;
+	Thu, 13 Nov 2025 19:57:59 +0000
+Message-ID: <2b5e182f-1933-41b1-803d-7084fbc4bbdc@infradead.org>
+Date: Thu, 13 Nov 2025 11:57:58 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="u7n4qZJf1FleTFjE"
-Content-Disposition: inline
-In-Reply-To: <20251114-s2mu005-pmic-v1-4-9e3184d3a0c9@disroot.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 11/13] Documentation: leds: document pattern behavior of
+ Samsung S2M series PMIC RGB LEDs
+To: Kaustabh Chakraborty <kauschluss@disroot.org>, Lee Jones
+ <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20251114-s2mu005-pmic-v1-0-9e3184d3a0c9@disroot.org>
+ <20251114-s2mu005-pmic-v1-11-9e3184d3a0c9@disroot.org>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20251114-s2mu005-pmic-v1-11-9e3184d3a0c9@disroot.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
---u7n4qZJf1FleTFjE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 14, 2025 at 12:35:05AM +0530, Kaustabh Chakraborty wrote:
-> Certain Samsung S2M series PMICs have a battery charger device which,
-> among other things, manages power interfacing of the USB port. It may
-> supply power, as done in USB OTG operation mode, or it may accept power
-> and redirect it to the battery fuelgauge for charging.
->=20
-> This driver depends on the MUIC device present in the same PMIC block.
->=20
-> The initial driver introduced has support for S2MU005, add its
-> compatible as well.
-
-Similar comments in all these binding commit messages, they should only
-really contain mentions of "drivers" if you are talking about electrical
-circuitry.
-
->=20
+On 11/13/25 11:05 AM, Kaustabh Chakraborty wrote:
+> Add documentation to describe how hardware patterns (as defined by the
+> documentation of led-class-multicolor) are parsed and implemented by the
+> Samsung S2M series PMIC RGB LED driver.
+> 
 > Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
 > ---
->  .../power/supply/samsung,s2mu005-charger.yaml      | 35 ++++++++++++++++=
-++++++
->  1 file changed, 35 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/supply/samsung,s2mu0=
-05-charger.yaml b/Documentation/devicetree/bindings/power/supply/samsung,s2=
-mu005-charger.yaml
+>  Documentation/leds/index.rst        |  1 +
+>  Documentation/leds/leds-s2m-rgb.rst | 60 +++++++++++++++++++++++++++++++++++++
+>  2 files changed, 61 insertions(+)
+> 
+
+> diff --git a/Documentation/leds/leds-s2m-rgb.rst b/Documentation/leds/leds-s2m-rgb.rst
 > new file mode 100644
-> index 000000000000..80292d6e2562
+> index 000000000000..cf91f0238093
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/samsung,s2mu005-char=
-ger.yaml
-> @@ -0,0 +1,35 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/samsung,s2mu005-charger.=
-yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/Documentation/leds/leds-s2m-rgb.rst
+> @@ -0,0 +1,60 @@
+> +.. SPDX-License-Identifier: GPL-2.0
 > +
-> +title: Battery Charger Driver for Samsung S2M series PMICs
+> +======================================
+> +Samsung S2M Series PMIC RGB LED Driver
+> +======================================
 > +
-> +maintainers:
-> +  - Kaustabh Chakraborty <kauschluss@disroot.org>
+> +Description
+> +-----------
 > +
-> +description: |
-> +  The Samsung S2M series PMIC battery charger manages power interfacing
-> +  of the USB port. It may supply power, as done in USB OTG operation
-> +  mode, or it may accept power and redirect it to the battery fuelgauge
-> +  for charging.
-> +
-> +  This is a part of device tree bindings for S2M and S5M family of Power
-> +  Management IC (PMIC).
-> +
-> +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
-> +  additional information and example.
-> +
-> +allOf:
-> +  - $ref: power-supply.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - samsung,s2mu005-charger
+> +The RGB LED on the S2M series PMIC hardware features a three-channel LED that is
+> +grouped together as a single device. Furthermore, the it supports 8-bit
 
-Why do you need a dedicated child node for this? It's got one property,
-other than the compatible, that you're using. It could easily just go
-in the parent without a dedicated node etc.
+                                           drop the  ^^^
 
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
->=20
-> --=20
-> 2.51.2
->=20
+> +brightness control for each channel. This LED is typically used as a status
+> +indicator in mobile devices. It also supports various parameters for hardware
+> +patterns.
 
---u7n4qZJf1FleTFjE
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+~Randy
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRY4JQAKCRB4tDGHoIJi
-0lucAQDyRCAA4SjDFvfubCoPl93IXeeEYtZ1Fr/ARmnLeDMbBwEArFFq5IqPWdLd
-1boZpaq0faA9nEz/5hWtAica4B7b8wY=
-=GYZh
------END PGP SIGNATURE-----
-
---u7n4qZJf1FleTFjE--
 
