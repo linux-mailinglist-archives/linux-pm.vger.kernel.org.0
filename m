@@ -1,130 +1,347 @@
-Return-Path: <linux-pm+bounces-37912-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37913-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C7ADC55F82
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 07:46:46 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC50FC562B1
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 09:09:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A40F24E33C1
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 06:45:04 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D50F33528D6
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 08:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C41F321456;
-	Thu, 13 Nov 2025 06:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t0CLmSqu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B589132ED2F;
+	Thu, 13 Nov 2025 08:04:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A107D320A24
-	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 06:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3A9B2F7ADC;
+	Thu, 13 Nov 2025 08:04:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763016303; cv=none; b=Wq9LJ1D26/mcSd1Q0JGf17ZBVxcY4rnWhOHgDnEXqFdh/I5kxzGZNlGZMdnc0hkaQrnHUiBTAFDJ+eqTiOy5Bl9twVHhkQHXQhzMBEHqkMoXMzINFqZwofcr6oHlwFOys8rtBIQiggCd2LrXSEIBbSBsdTyBueSQ94kGLTx13tI=
+	t=1763021094; cv=none; b=dj1DXgA9/kwU8l+bYW9DKBbP9hydQfQZsMBszNHlKyhhV6mLYaYkl5wNo7rh5oZrfMWDKn+1VcpjfumqAyww59u6JVGtOYr47TxU5VSNAA0bGAson5GBlu2W1rhNrS4MTCMc5eL2s/d3QhlrhmspHjZ5yd/cTl56F6tLApytE8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763016303; c=relaxed/simple;
-	bh=zW0U/Jj9Zj5cp+rpQ/nb/eNOgY0kP5K/zUMpKvWQ5VY=;
+	s=arc-20240116; t=1763021094; c=relaxed/simple;
+	bh=iBjUFz1C4YY4fh6MkRMm5mFJg1/BcKzFHP2YKdPVv4k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pAJkjONfFCk6lWs4mq4wfvTDiNL5A9Bp7lEg5mvb6xwp/kMy5KIHTmexQGKTeebZDuefISs0WOY5icOelvhBbgmRxmfedogUf0sipOoIwBbQIm2pAI0cok7H3oVDl31Nt9+9N1odlUA4JbMg8Ln+zWMhoaF2Ab71pe3Va5IRZ3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=t0CLmSqu; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7b852bb31d9so526639b3a.0
-        for <linux-pm@vger.kernel.org>; Wed, 12 Nov 2025 22:45:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763016300; x=1763621100; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TNrsYC8dvbwkQ0q38sJTUQW/VSDJEZpXwI2c7yivRYY=;
-        b=t0CLmSqu4ffwnPQ+SDa6MBbM8gxpaZrCgkTr9I5CJJd/J1XhteI4XZ/+k78ZhMpZvn
-         XV2wDgApqtAxc0e/Q78cGSpmBk6xdRjX42mcEy9k0mesoe5oexQR3sZZAwk4ffx0eVkA
-         ef1WmUpEdGubidEDPTLiXWD6hOcOexkspSH5FzyNalJiE2sB70HmBtHZXlarFBiDnQ3U
-         WZtphv6LBBovuTEBBGhh5Rf1RXc/eoPRhEcfYoPhCaKAE2LOM8EjkzBz4GqvZodbplGg
-         b3FJMG6/OiYMbKNG8Ft89XlYouuwcwlEhwOunbhNWSrRwcaGOP9bAsrCBkS0V9eFlYdw
-         i/iA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763016300; x=1763621100;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TNrsYC8dvbwkQ0q38sJTUQW/VSDJEZpXwI2c7yivRYY=;
-        b=AY1xbv/DRsqQM099BiFm2k5+PdhFxIHFJgTtN3ZGvfwmZYiPyJ4HB+j4/uuQaA+P1a
-         2LPn0HrneFGwvXlq/KjjOFqMCGZ3riu5ifKYdBQir+OIZONymMcGb70R6qjnrxc2+nKZ
-         40Ao8mIzhxyajhsEsOOBUhG1gJ4RqTqckhpOs1flp4U5pHP3rMZaRyaKrWbn3X1+J392
-         +A56x2jhOUaIy+Ui8n5bWDvw1013yiec9VD+veHMQJpGcSIR//nFOmIOUCMRyIlkLGV6
-         4SNirk+KUNCy5k8o1E5w2I7A5vTVfknWISyLCf5ImwvjopQtnT93jg3CAor20pPLwyrW
-         eQPA==
-X-Forwarded-Encrypted: i=1; AJvYcCWOfKIjv7ZggTEJ+TsedXqd3Sa5JrGV1COL+lgCnW0KOVzjaEdG1pxPYBiWACkQkTNM2MkqfnH2VQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwC/OKWS6ta2c9/h/516XBQUxG9nS6mL64RsYVizTQpsZyzi8lv
-	iD9uTRilpAZ7LISYROE/NcbapkOaXzinyuefOoQE4dFQ8PqLaArji07FvTYrf1L6P5Q=
-X-Gm-Gg: ASbGncsRSHj42WUK5zq/JjMFxbf/99559ZK8DFsHJaWoIb8auwwZF42KbM7/QfoPzwn
-	x7OboypKMrQGbWhTE6DK5vkfztVIK4a2ed8muz7lLfMb6b85bFlmwo7j7ChWPYjgEEwZOMnrys/
-	ffzGgc2damj8E9TnndXHkmuQ7QyQwxl60/CLZvFWBkCpffrKV5Lot9ZgpctpQtPc2DwToFiDNEC
-	c+qKN1Wkuk1rZVmxOOIcjEpKEeQmqXExBH5N39qFDEEBb9joYrDAY3rsNGyc59fJqxR5idyLq6Z
-	b+Fe29EwZpnSrIVbXWoIPGklF5peJv6TbocXTDKesQirLO6rmy5RdBX0O+hMcMp9D+xUCTQXxs4
-	Df8+jEZYEOEpaP3N5t2Oaea6hZnvnGjNv4jV6QzW2qso/KoiEY/1lb+ALU4+pIbPGKnU34uoBC+
-	LC
-X-Google-Smtp-Source: AGHT+IG/YrAEmV2pNfg3Yz0x5My5Rp1QA12LboDz6ew0EMfuz/CKACL8CP3RpYoJ2sNr09LmKQyELg==
-X-Received: by 2002:a05:6a00:3a0f:b0:7ab:a41:2874 with SMTP id d2e1a72fcca58-7b7a2d91dcdmr6725319b3a.10.1763016299642;
-        Wed, 12 Nov 2025 22:44:59 -0800 (PST)
-Received: from localhost ([122.172.86.94])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b927151380sm1099354b3a.38.2025.11.12.22.44.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 22:44:59 -0800 (PST)
-Date: Thu, 13 Nov 2025 12:14:56 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Samuel Wu <wusamuel@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] cpufreq: Add policy_frequency trace event
-Message-ID: <hslbhy6btkbpsgriafvdq4ligq7vorwcpffaakinqoieroopur@beyq5ouauscf>
-References: <20251112235154.2974902-1-wusamuel@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=s15wCp/0ny5AJ+bWNGBJ0jXPkF1ZssTiB/wpSfNpqDbCA0gKB73qF13gQX4y+ZRBKKkZ4M1fIF7/GZEy96Q7KoB+ah654c9nakjH8NnXOxc5BI12TtyC1udCs+3Mzh+HOSjlDKCEqqjNxZxRFNKJ/GscsQc7JqHO70+6rKCiRQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5EF1A12FC;
+	Thu, 13 Nov 2025 00:04:42 -0800 (PST)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 134263F5A1;
+	Thu, 13 Nov 2025 00:04:45 -0800 (PST)
+Date: Thu, 13 Nov 2025 09:04:42 +0100
+From: Beata Michalska <beata.michalska@arm.com>
+To: Jie Zhan <zhanjie9@hisilicon.com>
+Cc: viresh.kumar@linaro.org, rafael@kernel.org, ionela.voinescu@arm.com,
+	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
+	zhenglifeng1@huawei.com, prime.zeng@hisilicon.com,
+	jonathan.cameron@huawei.com
+Subject: Re: [PATCH v3] cpufreq: CPPC: Update FIE arch_freq_scale in ticks
+ for non-PCC regs
+Message-ID: <aRWRGvQg1u9bPg5V@arm.com>
+References: <20251104065039.1675549-1-zhanjie9@hisilicon.com>
+ <aRIXlSOPzAy1nXUQ@arm.com>
+ <e439d370-48a3-40c3-ae54-67d2f844bae5@hisilicon.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251112235154.2974902-1-wusamuel@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e439d370-48a3-40c3-ae54-67d2f844bae5@hisilicon.com>
 
-On 12-11-25, 15:51, Samuel Wu wrote:
-> The existing cpu_frequency trace_event can be verbose, emitting an event
-> for every CPU in the policy even when their frequencies are identical.
+On Tue, Nov 11, 2025 at 07:30:09PM +0800, Jie Zhan wrote:
 > 
-> This patch adds a new policy_frequency trace event, which provides a
-> more efficient alternative to cpu_frequency trace event. This option
-> allows users who only need frequency at a policy level more concise logs
-> with simpler analysis.
 > 
-> Signed-off-by: Samuel Wu <wusamuel@google.com>
-> ---
->  drivers/cpufreq/cpufreq.c    |  2 ++
->  include/trace/events/power.h | 21 +++++++++++++++++++++
->  2 files changed, 23 insertions(+)
+> On 11/11/2025 12:49 AM, Beata Michalska wrote:
+> > Hi Jie,
+> > On Tue, Nov 04, 2025 at 02:50:39PM +0800, Jie Zhan wrote:
+> >> Currently, the CPPC Frequency Invariance Engine (FIE) is invoked from the
+> >> scheduler tick but defers the update of arch_freq_scale to a separate
+> >> thread because cppc_get_perf_ctrs() would sleep if the CPC regs are in PCC.
+> >>
+> >> However, this deferred update mechanism is unnecessary and introduces extra
+> >> overhead for non-PCC register spaces (e.g. System Memory or FFH), where
+> >> accessing the regs won't sleep and can be safely performed from the tick
+> >> context.
+> >>
+> >> Furthermore, with the CPPC FIE registered, it throws repeated warnings of
+> >> "cppc_scale_freq_workfn: failed to read perf counters" on our platform with
+> >> the CPC regs in System Memory and a power-down idle state enabled.  That's
+> >> because the remote CPU can be in a power-down idle state, and reading its
+> >> perf counters returns 0.  Moving the FIE handling back to the scheduler
+> >> tick process makes the CPU handle its own perf counters, so it won't be
+> >> idle and the issue would be inherently solved.
+> >>
+> >> To address the above issues, update arch_freq_scale directly in ticks for
+> >> non-PCC regs and keep the deferred update mechanism for PCC regs.
+> > Something about it just didn’t sit right with me, and apparently, it needed some
+> > time to settle down - thus the delay.
+> > 
+> > It all looks sensible though it might be worth to considered applying
+> > the change on a per-CPU basis, as, in theory at least, different address
+> > spaces are allowed for different registers (at least according to the ACPI
+> > spec, if I read it right).
+> > So I was thinking about smth along the lines of:
+> Beata,
 > 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 4472bb1ec83c..b65534a4fd9a 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -345,6 +345,7 @@ static void cpufreq_notify_transition(struct cpufreq_policy *policy,
->  		pr_debug("FREQ: %u - CPUs: %*pbl\n", freqs->new,
->  			 cpumask_pr_args(policy->cpus));
->  
-> +		trace_policy_frequency(freqs->new, policy->cpu);
->  		for_each_cpu(cpu, policy->cpus)
->  			trace_cpu_frequency(freqs->new, cpu);
+> Right, I see what you want to do.
+> Some comments inline.
+> 
+> Would you like to make it a full patch so I can include it in the next
+> version? or some other way?
+What I have shared was just to ilustrate the idea, so if that's ok with you,
+you might carry on with that as well ?
 
-I don't see much value in almost duplicate trace events. If we feel that a
-per-policy event is a better fit (which makes sens), then we can just drop the
-trace_cpu_frequency() events and print policy->cpus (or related_cpus)
-information along with the per-policy events.
-
--- 
-viresh
+---
+BR
+Beata
+> 
+> Jie
+> > 
+> > diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> > index 6c684e54fe01..07f4e59f2f0a 100644
+> > --- a/drivers/acpi/cppc_acpi.c
+> > +++ b/drivers/acpi/cppc_acpi.c
+> > @@ -1431,38 +1431,47 @@ EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
+> >   *
+> >   * Return: true if any of the counters are in PCC regions, false otherwise
+> >   */
+> > -bool cppc_perf_ctrs_in_pcc(void)
+> > +bool cppc_perf_ctrs_in_pcc(unsigned int cpu)
+> >  {
+> > -	int cpu;
+> > +	struct cpc_register_resource *ref_perf_reg;
+> > +	struct cpc_desc *cpc_desc;
+> >  
+> > -	for_each_present_cpu(cpu) {
+> > -		struct cpc_register_resource *ref_perf_reg;
+> > -		struct cpc_desc *cpc_desc;
+> > +	cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> >  
+> > -		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> > +	if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
+> > +	    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
+> > +	    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
+> > +		return true;
+> >  
+> > -		if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
+> > -		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
+> > -		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
+> > -			return true;
+> >  
+> > +	ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+> >  
+> > -		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+> > +	/*
+> > +	 * If reference perf register is not supported then we should
+> > +	 * use the nominal perf value
+> > +	 */
+> > +	if (!CPC_SUPPORTED(ref_perf_reg))
+> > +		ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+> Though not related to this issue, I'm confused that this sort of workaround
+> appears here - it should be in some init function.
+> >  
+> > -		/*
+> > -		 * If reference perf register is not supported then we should
+> > -		 * use the nominal perf value
+> > -		 */
+> > -		if (!CPC_SUPPORTED(ref_perf_reg))
+> > -			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+> > +	if (CPC_IN_PCC(ref_perf_reg))
+> > +		return true;
+> > +
+> > +	return false;
+> > +}
+> > +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
+> >  
+> > -		if (CPC_IN_PCC(ref_perf_reg))
+> > +bool cppc_any_perf_ctrs_in_pcc(void)
+> > +{
+> > +	int cpu;
+> > +
+> > +	for_each_present_cpu(cpu) {
+> > +		if (cppc_perf_ctrs_in_pcc(cpu))
+> >  			return true;
+> >  	}
+> >  
+> >  	return false;
+> >  }
+> > -EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
+> > +EXPORT_SYMBOL_GPL(cppc_any_perf_ctrs_in_pcc);
+> >  
+> >  /**
+> >   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
+> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> > index 4fcaec7e2034..fdf5a49c04ed 100644
+> > --- a/drivers/cpufreq/cppc_cpufreq.c
+> > +++ b/drivers/cpufreq/cppc_cpufreq.c
+> > @@ -48,7 +48,6 @@ struct cppc_freq_invariance {
+> >  };
+> >  
+> >  static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
+> > -static bool perf_ctrs_in_pcc;
+> >  static struct kthread_worker *kworker_fie;
+> >  
+> >  static int cppc_perf_from_fbctrs(struct cppc_perf_fb_ctrs *fb_ctrs_t0,
+> > @@ -132,7 +131,12 @@ static void cppc_scale_freq_tick_pcc(void)
+> >  
+> >  static void cppc_scale_freq_tick(void)
+> >  {
+> > -	__cppc_scale_freq_tick(&per_cpu(cppc_freq_inv, smp_processor_id()));
+> > +	unsigned int cpu = smp_processor_id();
+> > +
+> > +	cppc_perf_ctrs_in_pcc(cpu) ? cppc_scale_freq_tick_pcc()
+> Calling cppc_perf_ctrs_in_pcc() could be expensive here.
+> I'd prefer something like a static branch or a determined callback for each
+> cpu.
+> > +				   : __cppc_scale_freq_tick(
+> > +				   			&per_cpu(cppc_freq_inv,
+> > +				   				 cpu));
+> >  }
+> >  
+> >  static struct scale_freq_data cppc_sftd = {
+> > @@ -152,7 +156,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
+> >  		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+> >  		cppc_fi->cpu = cpu;
+> >  		cppc_fi->cpu_data = policy->driver_data;
+> > -		if (perf_ctrs_in_pcc) {
+> > +		if (cppc_perf_ctrs_in_pcc(cpu)) {
+> >  			kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
+> >  			init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
+> >  		}
+> > @@ -193,10 +197,9 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
+> >  	/* policy->cpus will be empty here, use related_cpus instead */
+> >  	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, policy->related_cpus);
+> >  
+> > -	if (!perf_ctrs_in_pcc)
+> > -		return;
+> > -
+> >  	for_each_cpu(cpu, policy->related_cpus) {
+> > +		if (!cppc_perf_ctrs_in_pcc(cpu))
+> > +			continue;
+> >  		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
+> >  		irq_work_sync(&cppc_fi->irq_work);
+> >  		kthread_cancel_work_sync(&cppc_fi->work);
+> > @@ -218,14 +221,11 @@ static void __init cppc_freq_invariance_init(void)
+> >  		.sched_deadline = 10 * NSEC_PER_MSEC,
+> >  		.sched_period	= 10 * NSEC_PER_MSEC,
+> >  	};
+> > +	bool perf_ctrs_in_pcc = cppc_any_perf_ctrs_in_pcc();
+> >  	int ret;
+> >  
+> > -	perf_ctrs_in_pcc = cppc_perf_ctrs_in_pcc();
+> > -
+> >  	if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED) {
+> > -		if (!perf_ctrs_in_pcc) {
+> > -			fie_disabled = FIE_ENABLED;
+> > -		} else {
+> > +		if (perf_ctrs_in_pcc) {
+> >  			pr_info("FIE not enabled on systems with registers in PCC\n");
+> >  			fie_disabled = FIE_DISABLED;
+> >  		}
+> > @@ -234,12 +234,12 @@ static void __init cppc_freq_invariance_init(void)
+> >  	if (fie_disabled || !perf_ctrs_in_pcc)
+> >  		return;
+> >  
+> > -	cppc_sftd.set_freq_scale = cppc_scale_freq_tick_pcc;
+> >  
+> >  	kworker_fie = kthread_run_worker(0, "cppc_fie");
+> >  	if (IS_ERR(kworker_fie)) {
+> >  		pr_warn("%s: failed to create kworker_fie: %ld\n", __func__,
+> >  			PTR_ERR(kworker_fie));
+> > +		kworker_fie = NULL;
+> >  		fie_disabled = FIE_DISABLED;
+> >  		return;
+> >  	}
+> > @@ -255,10 +255,8 @@ static void __init cppc_freq_invariance_init(void)
+> >  
+> >  static void cppc_freq_invariance_exit(void)
+> >  {
+> > -	if (fie_disabled || !perf_ctrs_in_pcc)
+> > -		return;
+> > -
+> > -	kthread_destroy_worker(kworker_fie);
+> > +	if (kworker_fie)
+> > +		kthread_destroy_worker(kworker_fie);
+> >  }
+> >  
+> >  #else
+> > diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+> > index 13fa81504844..3af503b12f60 100644
+> > --- a/include/acpi/cppc_acpi.h
+> > +++ b/include/acpi/cppc_acpi.h
+> > @@ -154,7 +154,8 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+> >  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+> >  extern int cppc_set_enable(int cpu, bool enable);
+> >  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+> > -extern bool cppc_perf_ctrs_in_pcc(void);
+> > +extern bool cppc_perf_ctrs_in_pcc(unsigned int cpu);
+> > +extern bool cppc_any_perf_ctrs_in_pcc(void);
+> would be slightly better to keep cppc_perf_ctrs_in_pcc(void) and add a new
+> function, e.g. cppc_perf_ctrs_in_pcc_cpu(unsigned int cpu), such that the
+> old ABI is unchanged.
+> >  extern unsigned int cppc_perf_to_khz(struct cppc_perf_caps *caps, unsigned int perf);
+> >  extern unsigned int cppc_khz_to_perf(struct cppc_perf_caps *caps, unsigned int freq);
+> >  extern bool acpi_cpc_valid(void);
+> > @@ -204,7 +205,11 @@ static inline int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps)
+> >  {
+> >  	return -EOPNOTSUPP;
+> >  }
+> > -static inline bool cppc_perf_ctrs_in_pcc(void)
+> > +static inline bool cppc_perf_ctrs_in_pcc(unsigned int cpu)
+> > +{
+> > +	return false;
+> > +}
+> > +static inline bool cppc_any_perf_ctrs_in_pcc(void)
+> >  {
+> >  	return false;
+> >  }
+> > 
+> > 
+> > Additionally, it might be worth to get rid of (at least) some messages printed
+> > on the path of reading the counters in case it is being done in tick context.
+> Cool, will have a look.
+> > 
+> > Also , I do not have access to any machine using PCC, and it would be good to
+> > double check that as well.
+> > 
+> > ---
+> > BR
+> > Beata
+> 
+> >>
+> >> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+> >> ---
+> >> We have tested this on Kunpeng SoCs with the CPC regs both in System Memory
+> >> and FFH.  More tests on other platforms are welcome.
+> >>
+> >> Changelog:
+> >>
+> >> v3:
+> >> - Stash the state of 'cppc_perf_ctrs_in_pcc' so it won't have to check the CPC
+> >>   regs of all CPUs everywhere (Thanks to the suggestion from Beata Michalska).
+> >> - Update the commit log, explaining more on the warning issue caused by
+> >>   accessing perf counters on remote CPUs.
+> >> - Drop Patch 1 that has been accepted, and rebase Patch 2 on that.
+> >>
+> >> v2:
+> >> https://lore.kernel.org/linux-pm/20250828110212.2108653-1-zhanjie9@hisilicon.com/
+> >> - Update the cover letter and the commit log based on v1 discussion
+> >> - Update FIE arch_freq_scale in ticks for non-PCC regs
+> >>
+> >> v1:
+> >> https://lore.kernel.org/linux-pm/20250730032312.167062-1-yubowen8@huawei.com/
+> >> ---
+> >>  drivers/cpufreq/cppc_cpufreq.c | 60 ++++++++++++++++++++++++----------
+> >>  1 file changed, 42 insertions(+), 18 deletions(-)
+> ...
 
