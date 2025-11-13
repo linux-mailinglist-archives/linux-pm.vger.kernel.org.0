@@ -1,121 +1,117 @@
-Return-Path: <linux-pm+bounces-37995-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37997-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C292C59E18
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 26E84C59ED5
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 21:15:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6C17D354647
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 19:58:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3A780346FB1
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:14:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD0F31B10B;
-	Thu, 13 Nov 2025 19:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE33630E82A;
+	Thu, 13 Nov 2025 20:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="s8nBX6me"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pHrQS+sz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02C4E76026;
-	Thu, 13 Nov 2025 19:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96C926B2D3
+	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 20:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763063885; cv=none; b=EQbintq5nkfk/CugOqCfCV6plDws3ROye/Ebp7F/UXRlSLjRknPuYJj9wIG1d8puDD4ogWaMcOBiLA0SUfK/m8GrOe8b162abGLzWkr3GN6GYgH0FOEVjM24774tzc5TAKQwFbBsYmH/wgiG68z0V2uwOKMc2YahjEtfn0ZboE0=
+	t=1763064860; cv=none; b=qgfyTTA1B4hTCDezs9WHpjPdCSNd2kIcVFmbcc3UT8RLeNDXTOrA5Qzkk18KaRg7Mwkq34G7eQcDQZAzZf/3CXXjnWST7VX6Td8PP1SQ2PUFCfumnP4YWViqAF5IWr9kz+5eOj1rVa3DWUNgkYHgbE7hwLIhmwrBmvLumXGkx/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763063885; c=relaxed/simple;
-	bh=iBTFanEIxOT4IMFjt8xI4rzsbKY4Dm6/ucMLBZ2V4gc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V6uD83LAFoeD+1+MQ6C0YAZIyfCH1tlLiSs+0iyFqWGpxXiUjHifCCLSwfwpEbXm8fx8X/TFP2p8D0WgGUaIAshFV3SjGmtXqJ9MYh3s6Jcp7LIl5aPpBnjDS83s+8pyWiSR9lcAs1mbY3ku5RE6yjGAs2swlXAwxAreKIU85eU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=s8nBX6me; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=UAioK4DG5C9zm1t6hyaDe3YJWZ5Zta/Pw1nq2GgNNgY=; b=s8nBX6meJGhwpK5oym8SCA1bBN
-	z878G0qTQ9+6fUcBwxozuPeScqbLnkG7YsmhzqixQWUn5FI1u32s6nqnXYqlaBYeAqZxyPcIt69MB
-	nlSjbE8HNu0b6W3d8PHadWuCK4lBcqX8C2/Z0kOWLUNFa6otjf2JnKpa67Stcf4MQu6L4ahKkPlOA
-	T+ICIPJcO9SOPElSasN6sqmBjgPw8y/Nnwm22MZvaQMQKMKB2HaTMCYnDk4Q9z18T1+ttd43SBl3o
-	5Qu/YqIlbSC77sUbZB+l0oB+WhFEzJ16i6qVoh0EsSFEWhfxQfBqYF7YuEzMmDyRg0IQ/jqfjCe++
-	1w4Wf6rA==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vJdSB-0000000B37a-2kPs;
-	Thu, 13 Nov 2025 19:57:59 +0000
-Message-ID: <2b5e182f-1933-41b1-803d-7084fbc4bbdc@infradead.org>
-Date: Thu, 13 Nov 2025 11:57:58 -0800
+	s=arc-20240116; t=1763064860; c=relaxed/simple;
+	bh=76EvaeQI5XEPFQQiNAA3g7E01+m/sCelT9LslmIdgDM=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=EfEuIUz8ERopqYd10y7EV/GUq5es/GnykfbyMxkC96nzuHWbdeEJ6muYIz1nePoszqeJyRGgQRztDD8pr0PNYOW0+2lAxMJLrtbTlffTJaTXrZwG8hSJ+LUEQNDP4hKTct4tBdndnKwX1CuUXJT3vljZmqM8hKZ2mzMtE01Fsy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pHrQS+sz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 637C6C2BC86
+	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 20:14:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763064860;
+	bh=76EvaeQI5XEPFQQiNAA3g7E01+m/sCelT9LslmIdgDM=;
+	h=From:Date:Subject:To:Cc:From;
+	b=pHrQS+szacBGnfLizjPD2mmqMXSTenGwugENXteV/+vAKPGnOZ/e5g7hs8zuiK5sy
+	 rK9bFF4DNRypFFyYIgnhITPEdDZBUU1Zby1Uor2EPjwHfgAOXenMKC2PNLmsIEVHWT
+	 sMN+0ndKBmvCBmCdABsz7mh+9ZFka+Lek6ZdjL3gbcxhf9ypgBzslgSUBf5mijkvUq
+	 WCZ6QFnr8nzpiInwWp1iSTYbbG23odklR9w4DgoHj4+2fSRd6Q8tp6Ax7vYz2d091r
+	 o2PZWpvSGfx7IqVM5VzoLozm00YOWRY9RjymHLXOd1ASmzzK31Pfz8nAkMIy4Q8CNx
+	 ooTBVAyqmxjwg==
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7c71cca8fc2so808613a34.1
+        for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 12:14:20 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVD4ZAiWr2FHitIB0Is1kuJhQuMpFtWfTa3CEfjwgVBBMZfG1aw00yfEU5oXEP18M15yfq6Wru7YQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8rLlbXyAvz1vmeB85cdDaNkqE1EP+6RbvoHGFzyF4cXvDweS/
+	YrrHZrp9Sv7EWjkjHcSXlAunBJx6hAqSl9h7YdGxjQ4iDw1ZUocC7fksfca5FS5r8Dw3JEht9OZ
+	FTk5lCn4vQuqATu1RWYHknHL1F8DvFpk=
+X-Google-Smtp-Source: AGHT+IEvaZ/Fzxot95Xje9kKzOAn5s6+MtCfOUZZiY70GMKlnN8bqrGa9rIlMPbfLcOldZIt6K5U+eAyUyHMBRBwajM=
+X-Received: by 2002:a05:6830:7185:b0:7c7:526:b1fd with SMTP id
+ 46e09a7af769-7c7443682b3mr696808a34.11.1763064859588; Thu, 13 Nov 2025
+ 12:14:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/13] Documentation: leds: document pattern behavior of
- Samsung S2M series PMIC RGB LEDs
-To: Kaustabh Chakraborty <kauschluss@disroot.org>, Lee Jones
- <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>,
- Krzysztof Kozlowski <krzk@kernel.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20251114-s2mu005-pmic-v1-0-9e3184d3a0c9@disroot.org>
- <20251114-s2mu005-pmic-v1-11-9e3184d3a0c9@disroot.org>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20251114-s2mu005-pmic-v1-11-9e3184d3a0c9@disroot.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 13 Nov 2025 21:14:08 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gTrsccUOjqAM4tRoYiFdpemWzsZ6kY=P+r+yDJ38Hw1g@mail.gmail.com>
+X-Gm-Features: AWmQ_bn8RSmNGuJCe_vafx9jt8ekKS39bneJpicsQp8WdOOdXGBHNrG6hGK4H54
+Message-ID: <CAJZ5v0gTrsccUOjqAM4tRoYiFdpemWzsZ6kY=P+r+yDJ38Hw1g@mail.gmail.com>
+Subject: [GIT PULL] ACPI support fixes for v6.18-rc6
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, "the arch/x86 maintainers" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi Linus,
+
+Please pull from the tag
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-6.18-rc6
+
+with top-most commit 7564f3543cf19b1232553ab10399c9fbf514b5f3
+
+ Merge branches 'acpi-cppc' and 'acpi-tables'
+
+on top of commit e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c
+
+ Linux 6.18-rc5
+
+to receive ACPI support fixes for 6.18-rc6.
+
+These fix issues in the ACPI CPPC library and in the recently added
+parser for the ACPI MRRM table:
+
+ - Limit some checks in the ACPI CPPC library to online CPUs to avoid
+   accessing uninitialized per-CPU variables when some CPUs are offline
+   to start with, like during boot with "nosmt=force" (Gautham Shenoy)
+
+ - Rework add_boot_memory_ranges() in the ACPI MRRM table parser to fix
+   memory leaks and improve error handling (Kaushlendra Kumar)
+
+Thanks!
 
 
+---------------
 
-On 11/13/25 11:05 AM, Kaustabh Chakraborty wrote:
-> Add documentation to describe how hardware patterns (as defined by the
-> documentation of led-class-multicolor) are parsed and implemented by the
-> Samsung S2M series PMIC RGB LED driver.
-> 
-> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
-> ---
->  Documentation/leds/index.rst        |  1 +
->  Documentation/leds/leds-s2m-rgb.rst | 60 +++++++++++++++++++++++++++++++++++++
->  2 files changed, 61 insertions(+)
-> 
+Gautham R. Shenoy (4):
+      ACPI: CPPC: Detect preferred core availability on online CPUs
+      ACPI: CPPC: Check _CPC validity for only the online CPUs
+      ACPI: CPPC: Perform fast check switch only for online CPUs
+      ACPI: CPPC: Limit perf ctrs in PCC check only to online CPUs
 
-> diff --git a/Documentation/leds/leds-s2m-rgb.rst b/Documentation/leds/leds-s2m-rgb.rst
-> new file mode 100644
-> index 000000000000..cf91f0238093
-> --- /dev/null
-> +++ b/Documentation/leds/leds-s2m-rgb.rst
-> @@ -0,0 +1,60 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +======================================
-> +Samsung S2M Series PMIC RGB LED Driver
-> +======================================
-> +
-> +Description
-> +-----------
-> +
-> +The RGB LED on the S2M series PMIC hardware features a three-channel LED that is
-> +grouped together as a single device. Furthermore, the it supports 8-bit
+Kaushlendra Kumar (1):
+      ACPI: MRRM: Fix memory leaks and improve error handling
 
-                                           drop the  ^^^
+---------------
 
-> +brightness control for each channel. This LED is typically used as a status
-> +indicator in mobile devices. It also supports various parameters for hardware
-> +patterns.
-
--- 
-~Randy
-
+ arch/x86/kernel/acpi/cppc.c |  2 +-
+ drivers/acpi/acpi_mrrm.c    | 43 +++++++++++++++++++++++++++++++++----------
+ drivers/acpi/cppc_acpi.c    |  6 +++---
+ 3 files changed, 37 insertions(+), 14 deletions(-)
 
