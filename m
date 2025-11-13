@@ -1,204 +1,242 @@
-Return-Path: <linux-pm+bounces-37941-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37942-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E179C57157
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 12:05:20 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F51EC571A5
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 12:09:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3E9FE354916
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 11:01:06 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1CAC634C048
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 11:04:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C6233892F;
-	Thu, 13 Nov 2025 11:00:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 965683346BA;
+	Thu, 13 Nov 2025 11:04:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RjbrXA50";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="TQUbJ9x4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fs4L0cWg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3778E3396F0
-	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 11:00:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A1A1FF7B3
+	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 11:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763031650; cv=none; b=CfnnUXM9++rmW15iBYEso1srk2GLW3XOtkF+G6wn8hQohFS8JGM64uQGl9Qg2d4SXUU0aMw1URnW93i0Gmu7VJrrWUZtvWjdE8RufUAJGFaaaQeK6mv8C97s6D6kOkhXuZ9Ty1j2YTkKYilfd75X6oKP3mEnHfLEmOWmJbojKQA=
+	t=1763031866; cv=none; b=bWmbGgkGG4IHrKgglu2PZQ7h8AXgejbr3how2tvMWWu7B0f4ll9O0ibblzkWM7yosiI2GHKCqn89tGAWX7gyKtXfh/tzvDVDZTITj1q9XEA65nq6+idnsqjOrJNCjallMTplz2uGd33gUd4u8sDbVxo83TOdwL+1q5jx0TIyffE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763031650; c=relaxed/simple;
-	bh=m5MeXEG3jZ6w84sxyLlnVWrLy9Qi9HUWIDgjc4XX0dk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c/YSY9pwXOWZahCXmWc5A0wowLUPiT1vokGh/fp2bhmM4QtId4rH5nSD/Zxk88wjYo6rX1hTPGtI94q8NrDKCMye1pXthik8WU5sUtFA9nTDRyJ16jKZo7VKKNFHAaQW+J50XScRjiFCS++lgmqwhMps0i8ijrN1X+7QudDTqRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RjbrXA50; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=TQUbJ9x4; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AD8w15K3035353
-	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 11:00:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Dctm8dTwaNPV9EO1BqVmXYSJCSP7ANhI7WYmBi6vq2c=; b=RjbrXA50z6h7NNvg
-	jOCNuSSFppBjleq/dMjJ6ijGPRgNDSWUbjMfByueEa18RzFDKdyhNbzY/l8qkkVE
-	FBTEl0I/4TMpsiCyaAdwDROO+BLSNJOU8EQCmDotWjsW/jepZRq2C48sRc0Ph3wT
-	ChkTBLlZL+/Yglk1uQTJoSIo9jDXEYRql3QF1INXtKAgMEziQkGwu8jMOHtDkT7t
-	X8KB2KJcTGh3QEGxFF1taxqg2LlrxDvSUh3z9livUcPjBfFsRnfGItETb/9SZe3q
-	LzlI0P8HJsuMFvHcrHT7Haf6kE8oLJXRj9sT7me/jpaNyATHWUOd1XFbFpqUTCdg
-	6Vo0pQ==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ad4ju9tr1-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 11:00:48 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8b196719e0fso22723085a.2
-        for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 03:00:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1763031647; x=1763636447; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Dctm8dTwaNPV9EO1BqVmXYSJCSP7ANhI7WYmBi6vq2c=;
-        b=TQUbJ9x4yT/KgkMH8gZ9QTwq5GswlIpdu5NB9mhhZ0qka+rbcd2DhGGyB3UV1ZIiWE
-         DsyO9Wjdx2z1MpOeZIsOcOi/mebqLKIwJZxPYOeHYS0nQ0C1xKnutSe2iJcSN0zFZBl+
-         yPaWIq4XF4uG67piEMzdHPGNs77ppLaAmcMSFkTT/D7HAnLJEs22phAwxu9BwluYqvYo
-         YWSOlgbPJEHwHVag5izD1W36THoOMoWTxO+rfDPyaB/zvRHQHv6n5W/GUAQuIqfQbtuT
-         2+r5ntQgwXyZlHrtbN7wpUvHqLVlRaJQAAVZ62j/ncQ9Lt8ETOSTUIbZwL2lSM/jhMDi
-         quQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763031647; x=1763636447;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Dctm8dTwaNPV9EO1BqVmXYSJCSP7ANhI7WYmBi6vq2c=;
-        b=R+FpaHsVVnqAHSFU9pWq1dn8Glrs6EYeZ+ECA/DGcUK/ok8d4+UisnMRnd83UK2eOf
-         axS4aza8pS81AvLwi+tyYeqNq4pZhru8Ww6Izwx4irBgwaCeY9HclszT5JrShyKYzvTQ
-         7C8kDH5mzHd56ZNevr5dNBZn9RAJpAqcyLTCkeyX3HKpfTUvA0NBuL12rSH+SrfXJ5Ku
-         BdEWmwDQXFnhIrCUiAj/mLHBUeIFPz/YyTBODNortlch27hgBVASfwmJ/2LzwkAMY4hh
-         0hU+yEb/XzmqF53c9Y4q29iVhDDzt53ueqy2K5z/t5RqJYQEnKilDjb4lX+PNxs3QInk
-         vFyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU29yCg06A7A/dtW4xonpVfyFQ1+glQLkkYddpNOEuunYoqe/UTNZ/bEWOiS4SmUbO11e9LopZoIw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYvL/Dl1oMqq8HVc6KAQKFbvj1xmIPpJ4cNVAiskmDz1WDpeH/
-	vd2ME2uluzAVFwvty38aujKqbGiKpkh7nnVPRB8ZonGcLaAinWvWtACEjfMY8J7vTK4wOHQ8xpw
-	Z9R29vJ59kJqbbv8lT04fJMGCgFhgJVhG35lk74bPB5aDDUnCKfAUhmlSE9NVQw==
-X-Gm-Gg: ASbGncvWUONb7aKEP2x18i29wmsDmyVrJALUwUWUUt3DgLJ2Fq28FT4EM/QnroUap/+
-	j7VbiJkcSm5nSnZgcOkyDhdaPgksYsCnxsMVFhK23kw4DWV9pC+9UBfzE5ustCqsBSmt0UJXgyC
-	oPynUPyYekiLxIDKZ/FNuYWxPQdziw1Udwz3fbewjoopAMZlLZVZx1MxD8lNWGqJe2J6DzWm57s
-	kobkz/KS81jWTAvl53/AsLgoDzh//H+ZXgnb6WZXjkuPey/DPdatnml8BbphDk2KaSdUJUV2rw0
-	oTQL6J7ipJtOUxBBGBEI1peGSMXlPSl0dydR89zH7VXAORe0AGyR6DERl2Bn0UPnSN/pp5X+Urc
-	6jDUYYbMKrCk4rBppUqycUw+neudw2Gnz3H+Jc5wCtbt4DU3WNv9BRuf8
-X-Received: by 2002:a05:622a:1a18:b0:4ed:afb4:5e30 with SMTP id d75a77b69052e-4ede794dc16mr20378501cf.11.1763031645535;
-        Thu, 13 Nov 2025 03:00:45 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFlVsSXjGAfEYJjZnev0pvnXR+ZCVmOPqmdnlNGvxTXW2vNS2YbvXEmH1mcjxmr+DTcdG+UNw==
-X-Received: by 2002:a05:622a:1a18:b0:4ed:afb4:5e30 with SMTP id d75a77b69052e-4ede794dc16mr20376831cf.11.1763031643184;
-        Thu, 13 Nov 2025 03:00:43 -0800 (PST)
-Received: from [192.168.119.202] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b734ff75e4fsm137001066b.12.2025.11.13.03.00.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Nov 2025 03:00:42 -0800 (PST)
-Message-ID: <fcb093e3-05e6-4e77-9150-25f9a76f8937@oss.qualcomm.com>
-Date: Thu, 13 Nov 2025 12:00:40 +0100
+	s=arc-20240116; t=1763031866; c=relaxed/simple;
+	bh=SEc1U/IsU8n/IpLp6bGxD1QXscyC1CjSPywxkyanvdk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TOXg69S/L1z7mtOkucGe3FSWGI+gommZXDO6rmYf+VUBQRanyuD6WDDqH83A0BIyUPMKbjONrel6hxohJ3ZKOlOKqWrFhQGpPtcPtMZuTtewn9ZeAZk7iNDApTsIKvHA/gwOfQ9SyQJYe6HwwCwJRxLt5eClymWoDdl3uz/XbdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fs4L0cWg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51747C4AF0B
+	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 11:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763031866;
+	bh=SEc1U/IsU8n/IpLp6bGxD1QXscyC1CjSPywxkyanvdk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=fs4L0cWg/qobFFx1P3/JEU0OEml0cjLkBqtwuEANjZGtd7UtN6XhWd5oyQC3UoWSS
+	 rtumyAStMeJCVsg0dpZy+FqqqaxLo6N+YcKQFPmmzZKPyGODU6re/1KHbmT/EDM3Jf
+	 3Fu95XlYt+7+wnfLpIhX4ctopMSzzgirA8cXOGWXGRxtXvVBe/rDKkPoT6qnazT74K
+	 PpzBhBaidRlVpXLEWhVnNTp627/HOHM9LgBxKBpuO/nIty5V3m6bAccgbXRGq+NL4j
+	 7nInEX83aoJIIixU0eYHLR+VcLx3HKuTHVp74CWfMyhEaW7mfK97bJ9xDvMd8ojBUX
+	 bu5aC+/y7OMrw==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-656b1f906e4so274523eaf.0
+        for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 03:04:26 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVkLREh7D8r0LPTlhHEyILyPeoUe56o0OoZ+fJuGhxDb6QEHH/twsBX+onH3L2RVpd+YGWtdxV+Kw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrxafFXNLgvUsa8WO0pbg0o6690aYRpUET1FNarau4dl99qYT7
+	+waiq53NUaHuD4CuSkVIJkTsh7wInAWZ+Sgxu+24QnQnabuZ22IwJnm25/WwxF3hdLZxEVJ5FaL
+	fFogiVJk8J8cpqproFBwbqJJvOKZPNiE=
+X-Google-Smtp-Source: AGHT+IF2ULWHUJGEWlRG50n+yg7mnDekrYpftDO7lfwZMtO0rXsv5PQZbv1PiolBljsVlXo2mP61/qQo/N/qC+El+KM=
+X-Received: by 2002:a05:6820:178e:b0:656:8548:d866 with SMTP id
+ 006d021491bc7-657161c211cmr3013911eaf.1.1763031865608; Thu, 13 Nov 2025
+ 03:04:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] dt-bindings: firmware: qcom,scm: Document reboot mode
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>, konradybcio@kernel.org,
-        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-        sre@kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20251103182006.1158383-1-loic.poulain@oss.qualcomm.com>
- <20251103182006.1158383-4-loic.poulain@oss.qualcomm.com>
- <aqoxdaq72prkeqwxmmohlmbpx7icuc32sej7did6vt6rzrgfib@bvmt7ppkvloc>
- <CAFEp6-2GGA2gvBKfO0fZemVmJmjQpTQEJ0vLfEewfhHKOYQGSQ@mail.gmail.com>
- <be0a418b-5e8f-4895-a3b8-482b6ad6a40e@oss.qualcomm.com>
- <sdhnchve6r5i4frhlx5q7lod5npzosbfdjjyd56l2z5ksoe4t4@lhm6d2pzsztm>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <sdhnchve6r5i4frhlx5q7lod5npzosbfdjjyd56l2z5ksoe4t4@lhm6d2pzsztm>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: oCnDxRF2axyoSIzSZZpS3SGdmZK2Yo4W
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEzMDA4MSBTYWx0ZWRfX2pXVXPBKYgZr
- HEaPvFNdGsizWOSbUR9FEBv9uhLG8V3MGkH0Q2PGHUVkylntzXPVJIATxymoKMCwrwiCNSs4S8A
- Sig7uNRjaDuPI3KEi5g0Y3/OTTzpGPGz8Bv10vSf25e3S0brBErsHdlf3Zsxzlwvurlrs7daD1G
- Yl2aA0QpGFthJzN2XyaxE9XpHxh+R1EdDNyRzi1z6/fMsplfWXuo7D+zQ+ekZWpaSbjIQlIlZ5S
- /x4oR7rgTfRzE68Zu3nPSR0LIsuiujE0J/irZ93VG6wy82w9SAMHkBPMQbk2vz00TP9278MLrTL
- AtWp0a268H7aEnjh6EPJe1wOORZFpNZcxma5njo9v1iKmKI6E1j8+OfHH/q6672Sms1V0310iOv
- cHM6A1KCw42JfD18XBqHiGiNGqS1kQ==
-X-Authority-Analysis: v=2.4 cv=BdnVE7t2 c=1 sm=1 tr=0 ts=6915ba60 cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=hsPK79fdjXi5lFZ4yDYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=NFOGd7dJGGMPyQGDc5-O:22
-X-Proofpoint-GUID: oCnDxRF2axyoSIzSZZpS3SGdmZK2Yo4W
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-13_01,2025-11-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 phishscore=0 bulkscore=0 priorityscore=1501 spamscore=0
- lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1015 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511130081
+References: <20251113014116.196638-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20251113014116.196638-1-srinivas.pandruvada@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 13 Nov 2025 12:04:13 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gPTKDYpze-ejhA3ySJB0dHXQQ4uZfXQFed=PrsWh=aqw@mail.gmail.com>
+X-Gm-Features: AWmQ_bmsvWz8HwvP8E4sLNGMPsFBoo72dIfDUG-30i-CSGH6IP8wMWKhQ1kqPGQ
+Message-ID: <CAJZ5v0gPTKDYpze-ejhA3ySJB0dHXQQ4uZfXQFed=PrsWh=aqw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: thermal: Add documentation for thermal throttle
+To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, corbet@lwn.net, 
+	linux-pm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/12/25 5:36 PM, Bjorn Andersson wrote:
-> On Wed, Nov 05, 2025 at 10:44:05AM +0100, Konrad Dybcio wrote:
->> On 11/4/25 10:19 PM, Loic Poulain wrote:
->>> On Tue, Nov 4, 2025 at 3:12 AM Bjorn Andersson <andersson@kernel.org> wrote:
->>>>
->>>> On Mon, Nov 03, 2025 at 07:20:04PM +0100, Loic Poulain wrote:
->>>>> SCM can be used to support reboot mode such as Emergency Recovery Mode.
->>>>
->>>> "such as"? Do we have any other useful bits in here?
->>>
->>>  I heard we may have different EDL modes supported like USB or SD
->>> based EDL, but I don't know much about the details.
->>>
->>>>
->>>>>
->>>>> Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
->>>>> ---
->>>>>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 4 ++++
->>>>>  1 file changed, 4 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->>>>> index b913192219e4..c8bb7dacd900 100644
->>>>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->>>>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
->>>>> @@ -121,6 +121,10 @@ properties:
->>>>>            - description: offset of the download mode control register
->>>>>      description: TCSR hardware block
->>>>>
->>>>> +patternProperties:
->>>>> +  "^mode-.*$":
->>>>
->>>> I'd only ever expect mode-edl = <1>. Do we have additional modes that
->>>> warrant the generic nature of this?
->>>
->>> We may extend this to mode-ramdump if it makes sense, but as of now
->>> it's indeed only edl, will fix it.
->>
->> Would adding ramdump here be a matter of:
->>
->> + mode-ramdump = <0xmagic>
->>
->> ?
->>
->> If so, please add it too
->>
-> 
-> But what does that mean? "Hey computer, perform a graceful shutdown and
-> when you're done, give me a ramdump"?
+On Thu, Nov 13, 2025 at 2:41=E2=80=AFAM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Add documentation for Intel thermal throttling reporting events.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  Documentation/admin-guide/thermal/index.rst   |  1 +
+>  .../admin-guide/thermal/thermal_throttle.rst  | 84 +++++++++++++++++++
+>  2 files changed, 85 insertions(+)
+>  create mode 100644 Documentation/admin-guide/thermal/thermal_throttle.rs=
+t
+>
+> diff --git a/Documentation/admin-guide/thermal/index.rst b/Documentation/=
+admin-guide/thermal/index.rst
+> index 193b7b01a87d..2e0cafd19f6b 100644
+> --- a/Documentation/admin-guide/thermal/index.rst
+> +++ b/Documentation/admin-guide/thermal/index.rst
+> @@ -6,3 +6,4 @@ Thermal Subsystem
+>     :maxdepth: 1
+>
+>     intel_powerclamp
+> +   thermal_throttle
+> diff --git a/Documentation/admin-guide/thermal/thermal_throttle.rst b/Doc=
+umentation/admin-guide/thermal/thermal_throttle.rst
+> new file mode 100644
+> index 000000000000..ab146ffdffca
+> --- /dev/null
+> +++ b/Documentation/admin-guide/thermal/thermal_throttle.rst
+> @@ -0,0 +1,84 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +.. include:: <isonum.txt>
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Intel thermal throttle events reporting
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +:Author: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> +
+> +Introduction
+> +------------
+> +
+> +Intel processors have built in automatic and adaptive thermal monitoring=
+ mechanisms
+> +that force the processor to reduce its power consumption in order to ope=
+rate within
+> +predetermined temperature limits.
+> +
+> +Refer to section "THERMAL MONITORING AND PROTECTION" in the "Intel=C2=AE=
+ 64 and IA-32
+> +Architectures Software Developer=E2=80=99s Manual Volume 3 (3A, 3B, 3C, =
+& 3D): System
+> +Programming Guide" for more details.
+> +
+> +In general, there are two mechanisms to control the core temperature of =
+the processor.
+> +They are called "Thermal Monitor 1 (TM1) and Thermal Monitor 2 (TM2)".
+> +
+> +The status of the temperature sensor that triggers the thermal monitor (=
+TM1/TM2) is
+> +indicated through the "thermal status flag" and "thermal status log flag=
+" in the
+> +IA32_THERM_STATUS MSR for core level and IA32_PACKAGE_THERM_STATUS for p=
+ackage level.
 
-I.. guess?
+I would use the MSR names from the code, that is MSR_IA32_THERM_STATUS
+and MSR_IA32_PACKAGE_THERM_STATUS, respectively, here and below.
 
-Perhaps it could be useful for registering a panic handler to reboot
-into ramdump in case that's not enabled by deafult (but is that
-possible with our fw?)
+> +
+> +Thermal Status flag, bit 0 =E2=80=94 When set, indicates that the proces=
+sor core temperature
+> +is currently at the trip temperature of the thermal monitor and that the=
+ processor power
+> +consumption is being reduced via either TM1 or TM2, depending on which i=
+s enabled. When
+> +clear, the flag indicates that the core temperature is below the thermal=
+ monitor trip
+> +temperature. This flag is read only.
+> +
+> +Thermal Status Log flag, bit 1 =E2=80=94 When set, indicates that the th=
+ermal sensor has tripped
+> +since the last power-up or reset or since the last time that software cl=
+eared this flag.
+> +This flag is a sticky bit; once set it remains set until cleared by soft=
+ware or until a
+> +power-up or reset of the processor. The default state is clear.
+> +
+> +It is possible that when user reads IA32_THERM_STATUS or IA32_PACKAGE_TH=
+ERM_STATUS,
+> +TM1/TM2 is not active. In this case, "Thermal Status flag" will read "0"=
+ and the
+> +"Thermal Status Log flag" will be set to show any previous "TM1/TM2" act=
+ivation. But
+> +since it needs to be cleared by software, it can't show the number of oc=
+currences of
+> +"TM1/TM2" activations.
+> +
+> +Hence, Linux provides counters of how many times the "Thermal Status fla=
+g" was set. Also
+> +presents how long the "Thermal Status flag" was active in milliseconds. =
+Using these counters,
+> +users can check if the performance was limited because of thermal events=
+. It is recommended
+> +to read from sysfs instead of directly reading MSRs as the "Thermal Stat=
+us Log flag" is reset
+> +by the driver to implement rate control.
+> +
+> +Sysfs Interface
+> +---------------
+> +
+> +Thermal throttling events are presented for each CPU under
+> +"/sys/devices/system/cpu/cpuX/thermal_throttle/", where "X" is the CPU n=
+umber.
+> +
+> +All these counters are read-only. They can't be reset to 0. So, they can=
+ potentially
+> +overflow after reaching the maximum 64 bit unsigned integer.
+> +
+> +``core_throttle_count``
+> +       This shows how many times "Thermal Status flag" changed from 0 to=
+ 1
+> +       for this CPU. This is a 64 bit counter.
 
-Konrad
+I would say "Number of times "Thermal Status flag" has changed from 0
+to 1 since ...."
+
+> +
+> +``package_throttle_count``
+> +       This shows how many times "Thermal Status flag" changed from 0 to=
+ 1
+> +       for this package. Package status is broadcast to all CPUs; all CP=
+Us in
+> +       the package increment this count. This is a 64-bit counter.
+
+I would say "Number of times "Thermal Status flag" has changed from 0
+to 1 for the package containing this CPU since ..."
+
+> +
+> +``core_throttle_max_time_ms``
+> +       This shows the maximum amount of time "Thermal Status flag" was s=
+et to 1
+> +       for this CPU for core level flag.
+
+I would say "Maximum amount of time for which "Thermal Status flag"
+has been set to 1 for this CPU at the core level since ...".
+
+And analogously below.
+
+> +
+> +``package_throttle_max_time_ms``
+> +       This shows the maximum amount of time "Thermal Status flag" was s=
+et to 1
+> +       for this CPU for package level flag.
+> +
+> +``core_throttle_total_time_ms``
+> +       This shows the cumulative time "Thermal Status flag" was set to 1=
+ for this
+> +       CPU for core level flag.
+> +
+> +``package_throttle_total_time_ms``
+> +       This shows the cumulative time "Thermal Status flag" was set to 1=
+ for this
+> +       CPU for package level flag.
+> +
+> --
 
