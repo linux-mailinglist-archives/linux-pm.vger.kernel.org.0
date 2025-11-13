@@ -1,341 +1,260 @@
-Return-Path: <linux-pm+bounces-37943-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37945-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71C4AC571A2
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 12:09:27 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0130C5736A
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 12:35:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF1F23A7883
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 11:08:39 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 70B80344AFE
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 11:31:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D914B33375F;
-	Thu, 13 Nov 2025 11:08:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512E12E54A8;
+	Thu, 13 Nov 2025 11:31:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uc00NlNW"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="rBtEjN/r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic306-46.consmr.mail.gq1.yahoo.com (sonic306-46.consmr.mail.gq1.yahoo.com [98.137.68.109])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB33F2D6E51;
-	Thu, 13 Nov 2025 11:08:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84EAB2D9792
+	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 11:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=98.137.68.109
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763032116; cv=none; b=eeoOH5GgwfqL8tBT06UW39ApOzArqbt3PAMpm7jjFcWT6aK5gJdmuKbti8frbd1gCby7cWqqWKjPpAPlhFXOC2ddWYnoNieJlL8aQeN1lGgganELvc1QDQScZJqJCXQIdLN5w4NYqVdVoSMJeUUZrSr3PXARsWJaSkyeBVUMbks=
+	t=1763033500; cv=none; b=CKsUfOQ6YwlgmvSG0kYTPBZjf6BXPlrUyh9M+1tJnhqlagXrFXnWjTeZ3aG/b1YrBivKKlqzjZR3P4X06ZmvcW9MhCzAJ8lMM6Dnfe1KUggtSi/gCXsh3imNnc0Q3Z4iH/riIi0IDtfYjvfJZRhnIG1iZqL/Du+Uh/GfDot92to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763032116; c=relaxed/simple;
-	bh=afemL/E0l10dPwi2FABl4iJ1F+RV+CutUeg4nsajqIo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hlFOwgnRVkk4Hb9VdsorE6T1ViAW2/es3nSojlHl/lD53Y1/Z+wZnr4SWA6viiiR8QkPmLiL/BLDPngJMQpCNtGp5KAKcj+jwBM7OQsNuuvjTVM7RGWBKBAWAJmHxErFhAofDdOJBc+0OKLc+iqYYpkaMMd8Rx1i/cPjU5H8NeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uc00NlNW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DCB6C4CEF5;
-	Thu, 13 Nov 2025 11:08:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763032116;
-	bh=afemL/E0l10dPwi2FABl4iJ1F+RV+CutUeg4nsajqIo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uc00NlNWah6gFEoJlQ6Hqi4MUonk/PXXlhnKMAQrAhAviUMfhtpZIMMcDA5kB1Fce
-	 DIRatPNyEn2V/+eFBZ1UNLI5Y5psOzoYeaYsA2yr05Jk/Cgc/wRoFmZRsGw85f3/2F
-	 tsEdkU+7xX+wbpyhTSI4pmaPfoD7jHCbPA8It1dLA+x12v0lPsS7Ou+D8cAtVpQ0Sz
-	 mhJvpuRPkaz+zwHdF0kiYkK0Gp3yn2aZZzeUSvZoxhx4nXyoFOPgiq8B0ZcocvbRfp
-	 qAV9jRj/QTowYwyAHWOZjCRpxKRYdxotDlXnHCAI/TRMpoRs5eq6MzRenRnfqwkHHA
-	 2VNCh0ilH08+g==
-Date: Thu, 13 Nov 2025 12:08:32 +0100
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Lucas Zampieri <lzampier@redhat.com>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Jiri Kosina <jikos@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-	Bastien Nocera <hadess@hadess.net>, linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH v2 3/3] HID: input: Add support for multiple
- batteries per device
-Message-ID: <my3aleryrl57cp3lc7y2puh45rccgxmkvlkyib5537zvhjnnwc@bfbyknryvp2u>
-References: <20251113001508.713574-1-lzampier@redhat.com>
- <20251113001508.713574-4-lzampier@redhat.com>
+	s=arc-20240116; t=1763033500; c=relaxed/simple;
+	bh=SZalB5aQla3qn/0cW/BbnXxJUbwl6RPd2pzE9G6eyxE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=ZRf5m5EuNXdZa2W2mITVkcao6i/s2fvvo9ZBmnABNgXJWKCv4UsIhBZ3PkeC9SkSiQU2MuFmu6ExExdWgBak//v5H9hipBzbazEqWNiNFTCXFR93FSCpGL5SiWfhmxsiemMdqf0T8MTqKEzk8TN5xQ7byrwCfuAYJO6ZySpCfYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=rBtEjN/r; arc=none smtp.client-ip=98.137.68.109
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1763033497; bh=oT4L3jIxsTZnsFboLQQ8v8h33s4X0AFwU2A0o+fUlg4=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=rBtEjN/rrzuUCzZLQYhB+62j1X083RKMAwtnPeWNkGzseejO4JCpbi5xDfL5Mss0xfEw/AP8FPW5p+1WwnvYNSQDyTu6+hGctkYfnjLQeN43emRa6YTZfnYYTGcMqLpncjSecxDsrkA2joZpw4/prbKieZyDM+w5Z8HYK5dhw/Jgefk/mNBjDWRL4RyYrthadaF8lHAiaS4fUbpsKr+YgHmW/xprLyQyMx1HEZtlFLf7LOE49yf+afUOeS1I9EaKUk5ETaqwWKG5ApbkYbFInBvunA+y5CjTCNd9FKZoqKIoj8mouaZ611xVfCIhg32orIMeEl6UdZ0lkMw1J7x+2w==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1763033497; bh=E9r/UFSgILKN0DcJfjE/7v5h0uN/gF//9zDMeU0pKLv=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=R+xkX7vfvoghFqIzapSc+xCpIGKCNmcDoYhAHTamsmEPDhIb6qFo16otqjDTT0NNz+kKLKC61G/e961IsE3Ww9VPN6AiVTSb64zJeULk9FhSOX5IIq60tIGuOo2JSleiz6osLT6i74gReUnQkB0d4/p5fVDKGm6Rg9i5/d0WEka4NtZoC0t2rhX7tzAwYwqa9X5UwSr9xphE3USyypAHzzyoN06NhRgGaWjZSdCHHEP1dqrTeEk20a9kYx/PS3P/Vm3JdxEitMr4RksBZQYCC/2CEHTgurqzE1p3SopEN2Nq02Qiqbn2aja0sI1cHkATpEabfAIoJrp2/70vzKDhXg==
+X-YMail-OSG: AWsnZJUVM1kklOsVl7Rrkc5i8tP2_uXsAz4OER_Q1f4tfunrRAKx18IaT14JiR5
+ 1ZXWCSnzy7iYsRGMgFIMXjcJV52.5vJtJoyHAklxyecnltOwAwvMwVJOpdo.pAe6_1gyZ6gEzvIi
+ zJLUYAM2gMED3wygyTHe6Bgp3ryBGN9d_vBrK7tpm4d8qxnTrEcKkmFNRZVuDrq.Ben1V0pO27GL
+ jwdmR.Y7x115ORbaSQF0n6rc6CVcFTyGqJcUpxfoPXnYrFf2i7vmX5cLQK9Vw67H0csPSs.wEj53
+ wsFAp2nyLvNZwCe1u0KeM4LN5K.D7.hMa790XstnVFGNJOxhcT9GD44jphWCQ7iqaItvQ9lNbrsn
+ 6VqZvdicNtja936BcLSQsoPuaLeBM8fM_N5dXrycn3xlYMzuk_OhI2bm3moiV6LeJeKRiPY9wUPj
+ fMOnEu.Lg4X3S1NIHfhlyNwpNzQBACZDc0flym.BWyxKk2kpu2EHpHiCYK6mvEkGNgDx0NwLzDoT
+ .pJBqzH1DV9EfFLMHyo5ao68CKYLMv.gJopwQDYdsXu1MHeuyaInw_U1h779HoXiO_aaQiGbUpAx
+ DJ.sqCboWFkjiFEtwaNm4P6CzeNR3c52kRWCLUZAydRZ6MK.LlJS_TAvOz.06YdiARqtfh1bc2Tg
+ i9DNT.TTnYHIKxnLdLXVYnYTnmR2Nwhjs22O_dskpUcZr9QI010QUJ28G9777GXIXbTdtH2p5ba0
+ oz84Ddz6qmt7Kdxr7WbRhnXlQRjlJ7H0PlgLA5bkjCvMIhWQ3YMBLte4pkTtjsrq9HIDuM0yNUX2
+ VZ2PXUAG3KYUY3riUJKmut2.ZmWbdkR.JYPaMcyR.JjP9hZvjGQqcf0NXAxG5vBPi.D2Lx6VA1mn
+ tcVdlyY08dsodSB7eI5iqsklHMsXoW.tYSgNJOlZ71mbyauHggsvKzSskem0oc33HMLWmS7tz97d
+ uLsA8UOth_2ex.CUzRqLfz7e2VobsiR_y0oT3WBzeuQZOsSOJKU8ABBw4RudxGtYkunAYKpMJ_Zr
+ 42zetxB_nWgr673nHIh9VwgVt1vCVb2h9om2N4PvswJolDAoKkzy1XAHPqV2p2mT.7NQxIVFZou6
+ 9V7TCcWxmAb1Ct4nKVUzuGuCe.2VxjDLXf41yGdIeFBTSIyjdQIA3qrq.AGDPBQf7BCo9CE7XF4e
+ XXaIwm3zM0S0bJPdCisFupjL5ueG924NqYesIZtk8xplY6mQfHXEOEVolLrODhUYlfGc7XYlFlQM
+ 7rXNHn.iZWJ3hIO94kzxHw4YpsXyoTjzLPd9XBhjpG8ov5_vPCF5uoWpPIKvg7JJvllCfXlkNBOH
+ LhRv_Rp3ygE0p1HrnOkwAJYVZj0G4u.LwN8cd7_nEzfYBbCh8f4dEceNmKeMgMqiSZg2jUKrC7zH
+ naipx22fPVjf01HtFFpujLjMKr3_J3Er7HrqG_0lUFgY14JrBikdRnqu3oUmbjLDdCMW754jR3b2
+ 2FIoSW3DAcbzQ6A3l3BS3UXnLcgUdsN1hdAEPdLjaUAEVSZuoElBqbvaB35a0f6kL3oD7WPa18c3
+ 1n233sZCNRto5il4zT_QZSa6oj68Le194xGV2t1Z9xA0LtMGvENGquucDprSwC33CpJynaDF6XV_
+ lYHxgkNccj74NvP1JPfW2L2b9iP4AWMunVw_xWfgTPOGh9e9navjKZDh9EKzJx7WvaL5OdurXTPm
+ OL6fMQZlFW7g21Y8TWcVPSWmIckjDZlRK3k.Ix78TLYiORQBhQ267f8CIAC966R0uA7ilFaya_bF
+ WmNFT7GcwSckhgjKFaMwmD85r3e2cPsivjICGWjGIWrsQjlhrBahUemKjbbNUPkahxcFT5cLZcky
+ CNmqHakTTqNfVujC8_HdkIRHYVnvaffyknLXSGu68iiMig7MTK01Ly.ophJ4jYNm9Fjf_sTGc0f3
+ lxBe_yY6FL6egiqSJF0x_URDgd32JiHaKbJ6d0hU.pasK1w0.WOKHtdnqDBpjL77Ag6KE3kqTbWI
+ j2866qbJSPHvXP2CQFsQ7DkcHiQ95DhqsRcpsMDtyg2X1WSe.rtud9QAk1gk36hFfr7D4R3I.G7K
+ IZDVFjceFj0gM_SAt0AUBCwA_jSTg6ubBR_8Z_090KPgePdcHOjj75zq54y.NZdR8_Ppp6OCRIps
+ XwvrF3g176.1INHnDyuVdj5tQUm2BQCojjHqeTfqbMqtEK7G9EozprmRL4_9r0GqZkYl7p0S5nGA
+ LdCyrxKa6kJBjTp9BPk.XizOnQsq4TGtS0NY0PXI_YbcoPWB_yiGTA_LpRh6Jyx6n4rLj.LxuBOf
+ tCgVr97crLm5AcatB6RBwUBsVEMivXEoGzTsa.AXhRPVncxSNwmmH98kYSLSNAHtDGHxfStSPjxV
+ 6DpEKyEGF8Ljf2L5S
+X-Sonic-MF: <adelodunolaoluwa@yahoo.com>
+X-Sonic-ID: 5093b66e-f2ca-464a-916b-91760f641faf
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.gq1.yahoo.com with HTTP; Thu, 13 Nov 2025 11:31:37 +0000
+Received: by hermes--production-bf1-58477f5468-b4rj2 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d8fb56c506b501dc7b51dd0946a4f9cb;
+          Thu, 13 Nov 2025 11:09:20 +0000 (UTC)
+From: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
+To: rafael@kernel.org,
+	pavel@kernel.org,
+	lenb@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	david.hunter.linux@gmail.com,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	Sunday Adelodun <adelodunolaoluwa@yahoo.com>
+Subject: [PATCH v2] power: swap: Convert kernel-doc comments to regular block comments
+Date: Thu, 13 Nov 2025 12:09:14 +0100
+Message-ID: <20251113110914.44223-1-adelodunolaoluwa@yahoo.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251113001508.713574-4-lzampier@redhat.com>
+Content-Transfer-Encoding: 8bit
+References: <20251113110914.44223-1-adelodunolaoluwa.ref@yahoo.com>
 
-On Nov 13 2025, Lucas Zampieri wrote:
-> Enable HID devices to register and manage multiple batteries by
-> maintaining a list of hid_battery structures, each identified by
-> its report ID.
-> 
-> The legacy dev->battery field and related fields are maintained for
-> backward compatibility, pointing to the first battery in the list.
-> This allows existing code to continue working unchanged while
-> enabling new functionality for multi-battery devices.
-> 
-> Example hardware that can benefit from this:
-> - Gaming headsets with charging docks (e.g., SteelSeries Arctis Nova Pro
->   Wireless)
-> - Graphics tablets with stylus batteries (Wacom)
-> - Wireless earbuds with per-earbud batteries plus charging case
-> - Split keyboards with independent battery per side
-> 
-> Signed-off-by: Lucas Zampieri <lzampier@redhat.com>
-> ---
->  drivers/hid/hid-core.c  |  4 ++
->  drivers/hid/hid-input.c | 99 +++++++++++++++++++++++++++--------------
->  include/linux/hid.h     | 12 ++++-
->  3 files changed, 80 insertions(+), 35 deletions(-)
-> 
-> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> index a5b3a8ca2fcb..76d628547e9a 100644
-> --- a/drivers/hid/hid-core.c
-> +++ b/drivers/hid/hid-core.c
-> @@ -2990,6 +2990,10 @@ struct hid_device *hid_allocate_device(void)
->  	mutex_init(&hdev->ll_open_lock);
->  	kref_init(&hdev->ref);
-> 
-> +#ifdef CONFIG_HID_BATTERY_STRENGTH
-> +	INIT_LIST_HEAD(&hdev->batteries);
-> +#endif
-> +
->  	ret = hid_bpf_device_init(hdev);
->  	if (ret)
->  		goto out_err;
-> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-> index 0e71efea9da3..9d0be3d4ce04 100644
-> --- a/drivers/hid/hid-input.c
-> +++ b/drivers/hid/hid-input.c
-> @@ -520,14 +520,20 @@ static int hidinput_setup_battery(struct hid_device *dev, unsigned report_type,
->  	unsigned quirks;
->  	s32 min, max;
->  	int error;
-> +	int battery_num = 0;
-> 
-> -	if (dev->battery)
-> -		return 0;	/* already initialized? */
-> +	/* Check if battery with this report_id already exists */
-> +	list_for_each_entry(bat, &dev->batteries, list) {
-> +		if (bat->report_id == field->report->id)
-> +			return 0;	/* already initialized */
+Several static functions in kernel/power/swap.c were using the kernel-doc
+comment style (/** ... */) even though they are not exported or referenced
+in generated documentation. This triggers documentation warnings and makes
+the comments inconsistent with kernel style for local functions.
 
-I wonder if we should not make this test stick out a little bit more.
+Convert these comment blocks to regular C-style comments (/* ... */) and
+update a few function headers to include proper "Return:" descriptions
+where applicable.
 
-Something like "get_battery(field)" which would return a battery if the
-field matches. This way, if we ever encounter multiple batteries
-reported on the same report ID, we can always split them by logical
-collection, physical, or something else.
+No functional changes.
 
-> +		battery_num++;
-> +	}
-> 
->  	quirks = find_battery_quirk(dev);
-> 
-> -	hid_dbg(dev, "device %x:%x:%x %d quirks %d\n",
-> -		dev->bus, dev->vendor, dev->product, dev->version, quirks);
-> +	hid_dbg(dev, "device %x:%x:%x %d quirks %d report_id %d\n",
-> +		dev->bus, dev->vendor, dev->product, dev->version, quirks,
-> +		field->report->id);
-> 
->  	if (quirks & HID_BATTERY_QUIRK_IGNORE)
->  		return 0;
-> @@ -542,9 +548,17 @@ static int hidinput_setup_battery(struct hid_device *dev, unsigned report_type,
->  		goto err_free_bat;
->  	}
-> 
-> -	psy_desc->name = kasprintf(GFP_KERNEL, "hid-%s-battery",
-> -				   strlen(dev->uniq) ?
-> -					dev->uniq : dev_name(&dev->dev));
-> +	/* Create unique name for each battery based on report ID */
-> +	if (battery_num == 0) {
-> +		psy_desc->name = kasprintf(GFP_KERNEL, "hid-%s-battery",
-> +					   strlen(dev->uniq) ?
-> +						dev->uniq : dev_name(&dev->dev));
-> +	} else {
-> +		psy_desc->name = kasprintf(GFP_KERNEL, "hid-%s-battery-%d",
-> +					   strlen(dev->uniq) ?
-> +						dev->uniq : dev_name(&dev->dev),
-> +					   battery_num);
-> +	}
+Signed-off-by: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
+---
+changelog:
 
-Not sure how much conservative you need to be here, but I would prefer
-we stick to the same naming pattern whether this is the first or second
-battery.
+changes from v1 to v2:
+- Converted function comment blocks from /** */ to /* */ style for
+  static functions
+- Minor reformatting of comment indentation and spacing
 
->  	if (!psy_desc->name) {
->  		error = -ENOMEM;
->  		goto err_free_desc;
-> @@ -597,15 +611,23 @@ static int hidinput_setup_battery(struct hid_device *dev, unsigned report_type,
-> 
->  	power_supply_powers(bat->ps, &dev->dev);
-> 
-> -	/* Maintain legacy single battery fields for backward compatibility */
-> -	dev->battery = bat->ps;
-> -	dev->battery_min = bat->min;
-> -	dev->battery_max = bat->max;
-> -	dev->battery_report_type = bat->report_type;
-> -	dev->battery_report_id = bat->report_id;
-> -	dev->battery_charge_status = bat->charge_status;
-> -	dev->battery_status = bat->status;
-> -	dev->battery_avoid_query = bat->avoid_query;
-> +	list_add_tail(&bat->list, &dev->batteries);
-> +
-> +	/*
-> +	 * The legacy single battery API is preserved by exposing the first
-> +	 * discovered battery. Systems relying on a single battery view maintain
-> +	 * unchanged behavior.
-> +	 */
-> +	if (battery_num == 0) {
-> +		dev->battery = bat->ps;
-> +		dev->battery_min = bat->min;
-> +		dev->battery_max = bat->max;
-> +		dev->battery_report_type = bat->report_type;
-> +		dev->battery_report_id = bat->report_id;
-> +		dev->battery_charge_status = bat->charge_status;
-> +		dev->battery_status = bat->status;
-> +		dev->battery_avoid_query = bat->avoid_query;
-> +	}
+v1 patch link:
+https://lore.kernel.org/all/20251106113938.34693-2-adelodunolaoluwa@yahoo.com/
 
-Again, why keeping the old fields? Are they used anywhere?
+ kernel/power/swap.c | 54 ++++++++++++++++++++-------------------------
+ 1 file changed, 24 insertions(+), 30 deletions(-)
 
-> 
->  	return 0;
-> 
-> @@ -620,21 +642,33 @@ static int hidinput_setup_battery(struct hid_device *dev, unsigned report_type,
-> 
->  static void hidinput_cleanup_battery(struct hid_device *dev)
->  {
-> -	struct hid_battery *bat;
-> +	struct hid_battery *bat, *next;
->  	const struct power_supply_desc *psy_desc;
-> 
-> -	if (!dev->battery)
-> -		return;
-> +	list_for_each_entry_safe(bat, next, &dev->batteries, list) {
-> +		psy_desc = bat->ps->desc;
-> +		power_supply_unregister(bat->ps);
-> +		kfree(psy_desc->name);
-> +		kfree(psy_desc);
-> +		list_del(&bat->list);
-> +		kfree(bat);
-> +	}
+diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+index 0beff7eeaaba..076ed590e8c9 100644
+--- a/kernel/power/swap.c
++++ b/kernel/power/swap.c
+@@ -336,10 +336,8 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
+  */
+ unsigned int swsusp_header_flags;
+ 
+-/**
+- *	swsusp_swap_check - check if the resume device is a swap device
+- *	and get its index (if so)
+- *
++/*
++ *	check if the resume device is a swap device and get its index (if so).
+  *	This is called before saving image
+  */
+ static int swsusp_swap_check(void)
+@@ -362,11 +360,8 @@ static int swsusp_swap_check(void)
+ 	return 0;
+ }
+ 
+-/**
+- *	write_page - Write one page to given swap location.
+- *	@buf:		Address we're writing.
+- *	@offset:	Offset of the swap page we're writing to.
+- *	@hb:		bio completion batch
++/*
++ *	Write one page to given swap location.
+  */
+ 
+ static int write_page(void *buf, sector_t offset, struct hib_bio_batch *hb)
+@@ -526,8 +521,8 @@ static int swap_writer_finish(struct swap_map_handle *handle,
+ #define CMP_MIN_RD_PAGES	1024
+ #define CMP_MAX_RD_PAGES	8192
+ 
+-/**
+- *	save_image - save the suspend image data
++/*
++ *	save the suspend image data
+  */
+ 
+ static int save_image(struct swap_map_handle *handle,
+@@ -671,11 +666,8 @@ static int compress_threadfn(void *data)
+ 	return 0;
+ }
+ 
+-/**
+- * save_compressed_image - Save the suspend image data after compression.
+- * @handle: Swap map handle to use for saving the image.
+- * @snapshot: Image to read data from.
+- * @nr_to_write: Number of pages to save.
++/*
++ * Save the suspend image data after compression.
+  */
+ static int save_compressed_image(struct swap_map_handle *handle,
+ 				 struct snapshot_handle *snapshot,
+@@ -904,11 +896,8 @@ static int save_compressed_image(struct swap_map_handle *handle,
+ 	return ret;
+ }
+ 
+-/**
+- *	enough_swap - Make sure we have enough swap to save the image.
+- *
+- *	Returns TRUE or FALSE after checking the total amount of swap
+- *	space available from the resume partition.
++/*
++ *	Make sure we have enough swap to save the image.
+  */
+ 
+ static int enough_swap(unsigned int nr_pages)
+@@ -930,6 +919,8 @@ static int enough_swap(unsigned int nr_pages)
+  *	them synced (in case something goes wrong) but we DO not want to mark
+  *	filesystem clean: it is not. (And it does not matter, if we resume
+  *	correctly, we'll mark system clean, anyway.)
++ *
++ *	Return: 0 on success, negative error code on failure.
+  */
+ 
+ int swsusp_write(unsigned int flags)
+@@ -1077,10 +1068,8 @@ static int swap_reader_finish(struct swap_map_handle *handle)
+ 	return 0;
+ }
+ 
+-/**
+- *	load_image - load the image using the swap map handle
+- *	@handle and the snapshot handle @snapshot
+- *	(assume there are @nr_pages pages to load)
++/*
++ *	load the image using the swap map handle
+  */
+ 
+ static int load_image(struct swap_map_handle *handle,
+@@ -1190,11 +1179,8 @@ static int decompress_threadfn(void *data)
+ 	return 0;
+ }
+ 
+-/**
+- * load_compressed_image - Load compressed image data and decompress it.
+- * @handle: Swap map handle to use for loading data.
+- * @snapshot: Image to copy uncompressed data into.
+- * @nr_to_read: Number of pages to load.
++/*
++ * Load compressed image data and decompress it.
+  */
+ static int load_compressed_image(struct swap_map_handle *handle,
+ 				 struct snapshot_handle *snapshot,
+@@ -1529,6 +1515,8 @@ static int load_compressed_image(struct swap_map_handle *handle,
+  *	swsusp_read - read the hibernation image.
+  *	@flags_p: flags passed by the "frozen" kernel in the image header should
+  *		  be written into this memory location
++ *
++ *	Return: 0 on success, negative error code on failure.
+  */
+ 
+ int swsusp_read(unsigned int *flags_p)
+@@ -1567,6 +1555,10 @@ static void *swsusp_holder;
+ /**
+  * swsusp_check - Open the resume device and check for the swsusp signature.
+  * @exclusive: Open the resume device exclusively.
++ *
++ * Return:
++ *	0 if a valid hibernation image is found,
++ *	negative error code on failure.
+  */
+ 
+ int swsusp_check(bool exclusive)
+@@ -1631,6 +1623,8 @@ void swsusp_close(void)
+ 
+ /**
+  *      swsusp_unmark - Unmark swsusp signature in the resume device
++ *
++ *      Return: 0 on success, negative error code on failure.
+  */
+ 
+ #ifdef CONFIG_SUSPEND
+-- 
+2.43.0
 
-Really, switching to devm the batteries would greatly help not making
-mistakes here.
-
-> 
-> -	bat = power_supply_get_drvdata(dev->battery);
-> -	psy_desc = dev->battery->desc;
-> -	power_supply_unregister(dev->battery);
-> -	kfree(psy_desc->name);
-> -	kfree(psy_desc);
-> -	kfree(bat);
->  	dev->battery = NULL;
->  }
-> 
-> +static struct hid_battery *hidinput_find_battery(struct hid_device *dev,
-> +						 int report_id)
-> +{
-> +	struct hid_battery *bat;
-> +
-> +	list_for_each_entry(bat, &dev->batteries, list) {
-> +		if (bat->report_id == report_id)
-> +			return bat;
-> +	}
-> +	return NULL;
-> +}
-
-Oh, so you already have this function. So why not making use of it in
-hidinput_setup_battery()?
-
-> +
->  static bool hidinput_update_battery_charge_status(struct hid_battery *bat,
->  						  unsigned int usage, int value)
->  {
-> @@ -652,17 +686,16 @@ static bool hidinput_update_battery_charge_status(struct hid_battery *bat,
->  	return false;
->  }
-> 
-> -static void hidinput_update_battery(struct hid_device *dev, unsigned int usage,
-> -				    int value)
-> +static void hidinput_update_battery(struct hid_device *dev, int report_id,
-> +				    unsigned int usage, int value)
->  {
->  	struct hid_battery *bat;
->  	int capacity;
-> 
-> -	if (!dev->battery)
-> +	bat = hidinput_find_battery(dev, report_id);
-> +	if (!bat)
->  		return;
-> 
-> -	bat = power_supply_get_drvdata(dev->battery);
-> -
->  	if (hidinput_update_battery_charge_status(bat, usage, value)) {
->  		power_supply_changed(bat->ps);
->  		return;
-> @@ -705,8 +738,8 @@ static void hidinput_cleanup_battery(struct hid_device *dev)
->  {
->  }
-> 
-> -static void hidinput_update_battery(struct hid_device *dev, unsigned int usage,
-> -				    int value)
-> +static void hidinput_update_battery(struct hid_device *dev, int report_id,
-> +				    unsigned int usage, int value)
-
-Why not hidinput_update_battery(struct hid_battery *bat, unsigned int usage, int value)?
-
->  {
->  }
->  #endif	/* CONFIG_HID_BATTERY_STRENGTH */
-> @@ -1574,7 +1607,7 @@ void hidinput_hid_event(struct hid_device *hid, struct hid_field *field, struct
->  		return;
-> 
->  	if (usage->type == EV_PWR) {
-> -		hidinput_update_battery(hid, usage->hid, value);
-> +		hidinput_update_battery(hid, report->id, usage->hid, value);
-
-With the suggested change in hidinput_update_battery, first query the
-battery and then change it.
-
->  		return;
->  	}
-> 
-> diff --git a/include/linux/hid.h b/include/linux/hid.h
-> index 63422130de20..a6e36835fb3c 100644
-> --- a/include/linux/hid.h
-> +++ b/include/linux/hid.h
-> @@ -700,8 +700,16 @@ struct hid_device {
->  #ifdef CONFIG_HID_BATTERY_STRENGTH
->  	/*
->  	 * Power supply information for HID devices which report
-> -	 * battery strength. power_supply was successfully registered if
-> -	 * battery is non-NULL.
-> +	 * battery strength. Each battery is tracked separately in the
-> +	 * batteries list.
-> +	 */
-> +	struct list_head batteries;		/* List of hid_battery structures */
-> +
-> +	/*
-> +	 * Legacy single battery support - kept for backwards compatibility.
-> +	 * Points to the first battery in the list if any exists.
-> +	 * power_supply was successfully registered if battery is non-NULL.
-> +	 * DEPRECATED: New code should iterate through batteries list instead.
->  	 */
->  	struct power_supply *battery;
-
-Nah. hid_device is pure internal interface. So change all the users if
-needed, but don't keep something around in the hope that others will do
-the work for you.
-
-For references there has been a very long discussion with Linus about
-API changes, and the result was that any API change that introduced a
-duplicate API was probably a bad design ;)
-
-Cheers,
-Benjamin
-
->  	__s32 battery_capacity;
-> --
-> 2.51.1
-> 
 
