@@ -1,451 +1,204 @@
-Return-Path: <linux-pm+bounces-37940-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37941-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2820C57109
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 12:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E179C57157
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 12:05:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 91139356982
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 10:57:06 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3E9FE354916
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 11:01:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08073375CD;
-	Thu, 13 Nov 2025 10:56:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C6233892F;
+	Thu, 13 Nov 2025 11:00:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RjbrXA50";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="TQUbJ9x4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BC13346A1;
-	Thu, 13 Nov 2025 10:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3778E3396F0
+	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 11:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763031418; cv=none; b=DHVj/Suzqk/e0+lt7/A9kKynqOne0h7XlPGJCNy3htd4Sq3eVntn0JZ6UB8WyE/j6opN+fpGfaHzh1XDkH3IoG7M8NlCfd19QjMM6TK7163SYneiHFUp1WDjqecV1UQkQtEIRtTX0tGBipTjf27oxrcAO+uYrdCRXyOtyaMK6F0=
+	t=1763031650; cv=none; b=CfnnUXM9++rmW15iBYEso1srk2GLW3XOtkF+G6wn8hQohFS8JGM64uQGl9Qg2d4SXUU0aMw1URnW93i0Gmu7VJrrWUZtvWjdE8RufUAJGFaaaQeK6mv8C97s6D6kOkhXuZ9Ty1j2YTkKYilfd75X6oKP3mEnHfLEmOWmJbojKQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763031418; c=relaxed/simple;
-	bh=wwla/DfICk8GpawwzmuHDrOrFU5Yu+Eo/4wBqE+pOAs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z6WQSNDVcKMeyf6+D+0DySDzrs8hPXzNhKP6UktVhU+QGukgP9o4elhNpd/0lhv+MxGkg3V9NuSELeVUfDonKKQGNaoYuHsqrBMpjdQF2dJ17sVpjuR6QpDLUSXMMD0bxsoX32tVMC3jw8ZSk0dMHrn6ZDxbX8r6juO7jZrD76k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 671D212FC;
-	Thu, 13 Nov 2025 02:56:48 -0800 (PST)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.80.58])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B298A3F66E;
-	Thu, 13 Nov 2025 02:56:55 -0800 (PST)
-Date: Thu, 13 Nov 2025 10:56:54 +0000
-From: Ionela Voinescu <ionela.voinescu@arm.com>
-To: Sumit Gupta <sumitg@nvidia.com>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, lenb@kernel.org,
-	robert.moore@intel.com, corbet@lwn.net, pierre.gondois@arm.com,
-	zhenglifeng1@huawei.com, rdunlap@infradead.org, ray.huang@amd.com,
-	gautham.shenoy@amd.com, mario.limonciello@amd.com,
-	perry.yuan@amd.com, zhanjie9@hisilicon.com,
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-	treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
-	ksitaraman@nvidia.com, sanjayc@nvidia.com, nhartman@nvidia.com,
-	bbasu@nvidia.com
-Subject: Re: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface for
- min/max_perf
-Message-ID: <aRW5dhyN5/JF3F3i@arm.com>
-References: <20251105113844.4086250-1-sumitg@nvidia.com>
- <20251105113844.4086250-5-sumitg@nvidia.com>
+	s=arc-20240116; t=1763031650; c=relaxed/simple;
+	bh=m5MeXEG3jZ6w84sxyLlnVWrLy9Qi9HUWIDgjc4XX0dk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c/YSY9pwXOWZahCXmWc5A0wowLUPiT1vokGh/fp2bhmM4QtId4rH5nSD/Zxk88wjYo6rX1hTPGtI94q8NrDKCMye1pXthik8WU5sUtFA9nTDRyJ16jKZo7VKKNFHAaQW+J50XScRjiFCS++lgmqwhMps0i8ijrN1X+7QudDTqRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RjbrXA50; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=TQUbJ9x4; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AD8w15K3035353
+	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 11:00:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	Dctm8dTwaNPV9EO1BqVmXYSJCSP7ANhI7WYmBi6vq2c=; b=RjbrXA50z6h7NNvg
+	jOCNuSSFppBjleq/dMjJ6ijGPRgNDSWUbjMfByueEa18RzFDKdyhNbzY/l8qkkVE
+	FBTEl0I/4TMpsiCyaAdwDROO+BLSNJOU8EQCmDotWjsW/jepZRq2C48sRc0Ph3wT
+	ChkTBLlZL+/Yglk1uQTJoSIo9jDXEYRql3QF1INXtKAgMEziQkGwu8jMOHtDkT7t
+	X8KB2KJcTGh3QEGxFF1taxqg2LlrxDvSUh3z9livUcPjBfFsRnfGItETb/9SZe3q
+	LzlI0P8HJsuMFvHcrHT7Haf6kE8oLJXRj9sT7me/jpaNyATHWUOd1XFbFpqUTCdg
+	6Vo0pQ==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ad4ju9tr1-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 11:00:48 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8b196719e0fso22723085a.2
+        for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 03:00:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1763031647; x=1763636447; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Dctm8dTwaNPV9EO1BqVmXYSJCSP7ANhI7WYmBi6vq2c=;
+        b=TQUbJ9x4yT/KgkMH8gZ9QTwq5GswlIpdu5NB9mhhZ0qka+rbcd2DhGGyB3UV1ZIiWE
+         DsyO9Wjdx2z1MpOeZIsOcOi/mebqLKIwJZxPYOeHYS0nQ0C1xKnutSe2iJcSN0zFZBl+
+         yPaWIq4XF4uG67piEMzdHPGNs77ppLaAmcMSFkTT/D7HAnLJEs22phAwxu9BwluYqvYo
+         YWSOlgbPJEHwHVag5izD1W36THoOMoWTxO+rfDPyaB/zvRHQHv6n5W/GUAQuIqfQbtuT
+         2+r5ntQgwXyZlHrtbN7wpUvHqLVlRaJQAAVZ62j/ncQ9Lt8ETOSTUIbZwL2lSM/jhMDi
+         quQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763031647; x=1763636447;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dctm8dTwaNPV9EO1BqVmXYSJCSP7ANhI7WYmBi6vq2c=;
+        b=R+FpaHsVVnqAHSFU9pWq1dn8Glrs6EYeZ+ECA/DGcUK/ok8d4+UisnMRnd83UK2eOf
+         axS4aza8pS81AvLwi+tyYeqNq4pZhru8Ww6Izwx4irBgwaCeY9HclszT5JrShyKYzvTQ
+         7C8kDH5mzHd56ZNevr5dNBZn9RAJpAqcyLTCkeyX3HKpfTUvA0NBuL12rSH+SrfXJ5Ku
+         BdEWmwDQXFnhIrCUiAj/mLHBUeIFPz/YyTBODNortlch27hgBVASfwmJ/2LzwkAMY4hh
+         0hU+yEb/XzmqF53c9Y4q29iVhDDzt53ueqy2K5z/t5RqJYQEnKilDjb4lX+PNxs3QInk
+         vFyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU29yCg06A7A/dtW4xonpVfyFQ1+glQLkkYddpNOEuunYoqe/UTNZ/bEWOiS4SmUbO11e9LopZoIw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYvL/Dl1oMqq8HVc6KAQKFbvj1xmIPpJ4cNVAiskmDz1WDpeH/
+	vd2ME2uluzAVFwvty38aujKqbGiKpkh7nnVPRB8ZonGcLaAinWvWtACEjfMY8J7vTK4wOHQ8xpw
+	Z9R29vJ59kJqbbv8lT04fJMGCgFhgJVhG35lk74bPB5aDDUnCKfAUhmlSE9NVQw==
+X-Gm-Gg: ASbGncvWUONb7aKEP2x18i29wmsDmyVrJALUwUWUUt3DgLJ2Fq28FT4EM/QnroUap/+
+	j7VbiJkcSm5nSnZgcOkyDhdaPgksYsCnxsMVFhK23kw4DWV9pC+9UBfzE5ustCqsBSmt0UJXgyC
+	oPynUPyYekiLxIDKZ/FNuYWxPQdziw1Udwz3fbewjoopAMZlLZVZx1MxD8lNWGqJe2J6DzWm57s
+	kobkz/KS81jWTAvl53/AsLgoDzh//H+ZXgnb6WZXjkuPey/DPdatnml8BbphDk2KaSdUJUV2rw0
+	oTQL6J7ipJtOUxBBGBEI1peGSMXlPSl0dydR89zH7VXAORe0AGyR6DERl2Bn0UPnSN/pp5X+Urc
+	6jDUYYbMKrCk4rBppUqycUw+neudw2Gnz3H+Jc5wCtbt4DU3WNv9BRuf8
+X-Received: by 2002:a05:622a:1a18:b0:4ed:afb4:5e30 with SMTP id d75a77b69052e-4ede794dc16mr20378501cf.11.1763031645535;
+        Thu, 13 Nov 2025 03:00:45 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFlVsSXjGAfEYJjZnev0pvnXR+ZCVmOPqmdnlNGvxTXW2vNS2YbvXEmH1mcjxmr+DTcdG+UNw==
+X-Received: by 2002:a05:622a:1a18:b0:4ed:afb4:5e30 with SMTP id d75a77b69052e-4ede794dc16mr20376831cf.11.1763031643184;
+        Thu, 13 Nov 2025 03:00:43 -0800 (PST)
+Received: from [192.168.119.202] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b734ff75e4fsm137001066b.12.2025.11.13.03.00.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Nov 2025 03:00:42 -0800 (PST)
+Message-ID: <fcb093e3-05e6-4e77-9150-25f9a76f8937@oss.qualcomm.com>
+Date: Thu, 13 Nov 2025 12:00:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251105113844.4086250-5-sumitg@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/5] dt-bindings: firmware: qcom,scm: Document reboot mode
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Loic Poulain <loic.poulain@oss.qualcomm.com>, konradybcio@kernel.org,
+        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+        sre@kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20251103182006.1158383-1-loic.poulain@oss.qualcomm.com>
+ <20251103182006.1158383-4-loic.poulain@oss.qualcomm.com>
+ <aqoxdaq72prkeqwxmmohlmbpx7icuc32sej7did6vt6rzrgfib@bvmt7ppkvloc>
+ <CAFEp6-2GGA2gvBKfO0fZemVmJmjQpTQEJ0vLfEewfhHKOYQGSQ@mail.gmail.com>
+ <be0a418b-5e8f-4895-a3b8-482b6ad6a40e@oss.qualcomm.com>
+ <sdhnchve6r5i4frhlx5q7lod5npzosbfdjjyd56l2z5ksoe4t4@lhm6d2pzsztm>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <sdhnchve6r5i4frhlx5q7lod5npzosbfdjjyd56l2z5ksoe4t4@lhm6d2pzsztm>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: oCnDxRF2axyoSIzSZZpS3SGdmZK2Yo4W
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTEzMDA4MSBTYWx0ZWRfX2pXVXPBKYgZr
+ HEaPvFNdGsizWOSbUR9FEBv9uhLG8V3MGkH0Q2PGHUVkylntzXPVJIATxymoKMCwrwiCNSs4S8A
+ Sig7uNRjaDuPI3KEi5g0Y3/OTTzpGPGz8Bv10vSf25e3S0brBErsHdlf3Zsxzlwvurlrs7daD1G
+ Yl2aA0QpGFthJzN2XyaxE9XpHxh+R1EdDNyRzi1z6/fMsplfWXuo7D+zQ+ekZWpaSbjIQlIlZ5S
+ /x4oR7rgTfRzE68Zu3nPSR0LIsuiujE0J/irZ93VG6wy82w9SAMHkBPMQbk2vz00TP9278MLrTL
+ AtWp0a268H7aEnjh6EPJe1wOORZFpNZcxma5njo9v1iKmKI6E1j8+OfHH/q6672Sms1V0310iOv
+ cHM6A1KCw42JfD18XBqHiGiNGqS1kQ==
+X-Authority-Analysis: v=2.4 cv=BdnVE7t2 c=1 sm=1 tr=0 ts=6915ba60 cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=hsPK79fdjXi5lFZ4yDYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=NFOGd7dJGGMPyQGDc5-O:22
+X-Proofpoint-GUID: oCnDxRF2axyoSIzSZZpS3SGdmZK2Yo4W
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-13_01,2025-11-12_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 phishscore=0 bulkscore=0 priorityscore=1501 spamscore=0
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 clxscore=1015 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511130081
 
-Hi,
+On 11/12/25 5:36 PM, Bjorn Andersson wrote:
+> On Wed, Nov 05, 2025 at 10:44:05AM +0100, Konrad Dybcio wrote:
+>> On 11/4/25 10:19 PM, Loic Poulain wrote:
+>>> On Tue, Nov 4, 2025 at 3:12 AM Bjorn Andersson <andersson@kernel.org> wrote:
+>>>>
+>>>> On Mon, Nov 03, 2025 at 07:20:04PM +0100, Loic Poulain wrote:
+>>>>> SCM can be used to support reboot mode such as Emergency Recovery Mode.
+>>>>
+>>>> "such as"? Do we have any other useful bits in here?
+>>>
+>>>  I heard we may have different EDL modes supported like USB or SD
+>>> based EDL, but I don't know much about the details.
+>>>
+>>>>
+>>>>>
+>>>>> Signed-off-by: Loic Poulain <loic.poulain@oss.qualcomm.com>
+>>>>> ---
+>>>>>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 4 ++++
+>>>>>  1 file changed, 4 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>>>> index b913192219e4..c8bb7dacd900 100644
+>>>>> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>>>> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+>>>>> @@ -121,6 +121,10 @@ properties:
+>>>>>            - description: offset of the download mode control register
+>>>>>      description: TCSR hardware block
+>>>>>
+>>>>> +patternProperties:
+>>>>> +  "^mode-.*$":
+>>>>
+>>>> I'd only ever expect mode-edl = <1>. Do we have additional modes that
+>>>> warrant the generic nature of this?
+>>>
+>>> We may extend this to mode-ramdump if it makes sense, but as of now
+>>> it's indeed only edl, will fix it.
+>>
+>> Would adding ramdump here be a matter of:
+>>
+>> + mode-ramdump = <0xmagic>
+>>
+>> ?
+>>
+>> If so, please add it too
+>>
+> 
+> But what does that mean? "Hey computer, perform a graceful shutdown and
+> when you're done, give me a ramdump"?
 
-On Wednesday 05 Nov 2025 at 17:08:40 (+0530), Sumit Gupta wrote:
-> CPPC allows platforms to specify minimum and maximum performance
-> limits that constrain the operating range for CPU performance scaling
-> when Autonomous Selection is enabled. These limits can be dynamically
-> adjusted to implement power management policies or workload-specific
-> optimizations.
-> 
-> Add cppc_get_min_perf() and cppc_set_min_perf() functions to read and
-> write the MIN_PERF register, allowing dynamic adjustment of the minimum
-> performance floor.
-> 
-> Add cppc_get_max_perf() and cppc_set_max_perf() functions to read and
-> write the MAX_PERF register, enabling dynamic ceiling control for
-> maximum performance.
-> 
-> Expose these capabilities through cpufreq sysfs attributes that accept
-> frequency values in kHz (which are converted to/from performance values
-> internally):
-> - /sys/.../cpufreq/policy*/min_perf: Read/write min perf as freq (kHz)
-> - /sys/.../cpufreq/policy*/max_perf: Read/write max perf as freq (kHz)
-> 
+I.. guess?
 
-There's a theoretical problem here for CPUFREQ_SHARED_TYPE_ANY, when
-multiple CPUs share a policy, but that existed before your
-patches :). Almost all of the files exposed by cppc_cpufreq should be
-per-CPU and not per policy: auto_select, energy_performance_preference,
-etc., and now min_perf, max_perf and perf_limited.
+Perhaps it could be useful for registering a panic handler to reboot
+into ramdump in case that's not enabled by deafult (but is that
+possible with our fw?)
 
-In practice it's likely not a problem as all CPUs that have P-State
-dependencies would likely share all of these controls. But that's not
-mandated by the ACPI specification.
-
-> The frequency-based interface provides a user-friendly abstraction which
-> is similar to other cpufreq sysfs interfaces, while the driver handles
-> conversion to hardware performance values.
-> 
-> Also update EPP constants for better clarity:
-> - Rename CPPC_ENERGY_PERF_MAX to CPPC_EPP_ENERGY_EFFICIENCY_PREF
-> - Add CPPC_EPP_PERFORMANCE_PREF for the performance-oriented setting
-> 
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  drivers/acpi/cppc_acpi.c       |  55 ++++++++++-
->  drivers/cpufreq/cppc_cpufreq.c | 166 +++++++++++++++++++++++++++++++++
->  include/acpi/cppc_acpi.h       |  23 ++++-
->  3 files changed, 242 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 757e8ce87e9b..ef53eb8a1feb 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1634,7 +1634,7 @@ EXPORT_SYMBOL_GPL(cppc_set_epp_perf);
->   */
->  int cppc_set_epp(int cpu, u64 epp_val)
->  {
-> -	if (epp_val > CPPC_ENERGY_PERF_MAX)
-> +	if (epp_val > CPPC_EPP_ENERGY_EFFICIENCY_PREF)
->  		return -EINVAL;
->  
->  	return cppc_set_reg_val(cpu, ENERGY_PERF, epp_val);
-> @@ -1757,6 +1757,59 @@ int cppc_set_enable(int cpu, bool enable)
->  	return cppc_set_reg_val(cpu, ENABLE, enable);
->  }
->  EXPORT_SYMBOL_GPL(cppc_set_enable);
-> +
-> +/**
-> + * cppc_get_min_perf - Get the min performance register value.
-> + * @cpu: CPU from which to get min performance.
-> + * @min_perf: Return address.
-> + *
-> + * Return: 0 for success, -EIO on register access failure, -EOPNOTSUPP if not supported.
-> + */
-> +int cppc_get_min_perf(int cpu, u64 *min_perf)
-> +{
-> +	return cppc_get_reg_val(cpu, MIN_PERF, min_perf);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_get_min_perf);
-> +
-> +/**
-> + * cppc_set_min_perf() - Write the min performance register.
-> + * @cpu: CPU on which to write register.
-> + * @min_perf: Value to write to the MIN_PERF register.
-> + *
-> + * Return: 0 for success, -EIO otherwise.
-> + */
-> +int cppc_set_min_perf(int cpu, u64 min_perf)
-> +{
-> +	return cppc_set_reg_val(cpu, MIN_PERF, min_perf);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_set_min_perf);
-> +
-> +/**
-> + * cppc_get_max_perf - Get the max performance register value.
-> + * @cpu: CPU from which to get max performance.
-> + * @max_perf: Return address.
-> + *
-> + * Return: 0 for success, -EIO on register access failure, -EOPNOTSUPP if not supported.
-> + */
-> +int cppc_get_max_perf(int cpu, u64 *max_perf)
-> +{
-> +	return cppc_get_reg_val(cpu, MAX_PERF, max_perf);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_get_max_perf);
-> +
-> +/**
-> + * cppc_set_max_perf() - Write the max performance register.
-> + * @cpu: CPU on which to write register.
-> + * @max_perf: Value to write to the MAX_PERF register.
-> + *
-> + * Return: 0 for success, -EIO otherwise.
-> + */
-> +int cppc_set_max_perf(int cpu, u64 max_perf)
-> +{
-> +	return cppc_set_reg_val(cpu, MAX_PERF, max_perf);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_set_max_perf);
-> +
->  /**
->   * cppc_get_perf - Get a CPU's performance controls.
->   * @cpu: CPU for which to get performance controls.
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index cf3ed6489a4f..cde6202e9c51 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -23,10 +23,12 @@
->  #include <uapi/linux/sched/types.h>
->  
->  #include <linux/unaligned.h>
-> +#include <linux/cleanup.h>
->  
->  #include <acpi/cppc_acpi.h>
->  
->  static struct cpufreq_driver cppc_cpufreq_driver;
-> +static DEFINE_MUTEX(cppc_cpufreq_update_autosel_config_lock);
->  
->  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
->  static enum {
-> @@ -582,6 +584,68 @@ static void cppc_cpufreq_put_cpu_data(struct cpufreq_policy *policy)
->  	policy->driver_data = NULL;
->  }
->  
-> +/**
-> + * cppc_cpufreq_set_mperf_limit - Generic function to set min/max performance limit
-> + * @policy: cpufreq policy
-> + * @val: performance value to set
-> + * @update_reg: whether to update hardware register
-> + * @update_policy: whether to update policy constraints
-> + * @is_min: true for min_perf, false for max_perf
-> + */
-> +static int cppc_cpufreq_set_mperf_limit(struct cpufreq_policy *policy, u64 val,
-> +					bool update_reg, bool update_policy, bool is_min)
-> +{
-> +	struct cppc_cpudata *cpu_data = policy->driver_data;
-> +	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
-> +	unsigned int cpu = policy->cpu;
-> +	struct freq_qos_request *req;
-> +	unsigned int freq;
-> +	u32 perf;
-> +	int ret;
-> +
-> +	perf = clamp(val, caps->lowest_perf, caps->highest_perf);
-> +	freq = cppc_perf_to_khz(caps, perf);
-> +
-> +	pr_debug("cpu%d, %s_perf:%llu, update_reg:%d, update_policy:%d\n", cpu,
-> +		 is_min ? "min" : "max", (u64)perf, update_reg, update_policy);
-> +
-> +	guard(mutex)(&cppc_cpufreq_update_autosel_config_lock);
-> +
-> +	if (update_reg) {
-> +		ret = is_min ? cppc_set_min_perf(cpu, perf) : cppc_set_max_perf(cpu, perf);
-> +		if (ret) {
-> +			if (ret != -EOPNOTSUPP)
-> +				pr_warn("Failed to set %s_perf (%llu) on CPU%d (%d)\n",
-> +					is_min ? "min" : "max", (u64)perf, cpu, ret);
-> +			return ret;
-> +		}
-> +
-> +		if (is_min)
-> +			cpu_data->perf_ctrls.min_perf = perf;
-> +		else
-> +			cpu_data->perf_ctrls.max_perf = perf;
-> +	}
-> +
-> +	if (update_policy) {
-> +		req = is_min ? policy->min_freq_req : policy->max_freq_req;
-> +
-> +		ret = freq_qos_update_request(req, freq);
-> +		if (ret < 0) {
-> +			pr_warn("Failed to update %s_freq constraint for CPU%d: %d\n",
-> +				is_min ? "min" : "max", cpu, ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +#define cppc_cpufreq_set_min_perf(policy, val, update_reg, update_policy) \
-> +	cppc_cpufreq_set_mperf_limit(policy, val, update_reg, update_policy, true)
-> +
-> +#define cppc_cpufreq_set_max_perf(policy, val, update_reg, update_policy) \
-> +	cppc_cpufreq_set_mperf_limit(policy, val, update_reg, update_policy, false)
-> +
->  static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  {
->  	unsigned int cpu = policy->cpu;
-> @@ -881,16 +945,118 @@ static ssize_t store_energy_performance_preference_val(struct cpufreq_policy *po
->  	return cppc_cpufreq_sysfs_store_u64(policy->cpu, cppc_set_epp, buf, count);
->  }
->  
-> +/**
-> + * show_min_perf - Show minimum performance as frequency (kHz)
-> + *
-> + * Reads the MIN_PERF register and converts the performance value to
-> + * frequency (kHz) for user-space consumption.
-> + */
-> +static ssize_t show_min_perf(struct cpufreq_policy *policy, char *buf)
-> +{
-> +	struct cppc_cpudata *cpu_data = policy->driver_data;
-> +	u64 perf;
-> +	int ret;
-> +
-> +	ret = cppc_get_min_perf(policy->cpu, &perf);
-> +	if (ret == -EOPNOTSUPP)
-> +		return sysfs_emit(buf, "<unsupported>\n");
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Convert performance to frequency (kHz) for user */
-> +	return sysfs_emit(buf, "%u\n", cppc_perf_to_khz(&cpu_data->perf_caps, perf));
-> +}
-> +
-> +/**
-> + * store_min_perf - Set minimum performance from frequency (kHz)
-> + *
-> + * Converts the user-provided frequency (kHz) to a performance value
-> + * and writes it to the MIN_PERF register.
-> + */
-> +static ssize_t store_min_perf(struct cpufreq_policy *policy, const char *buf, size_t count)
-> +{
-> +	struct cppc_cpudata *cpu_data = policy->driver_data;
-> +	unsigned int freq_khz;
-> +	u64 perf;
-> +	int ret;
-> +
-> +	ret = kstrtouint(buf, 0, &freq_khz);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Convert frequency (kHz) to performance value */
-> +	perf = cppc_khz_to_perf(&cpu_data->perf_caps, freq_khz);
-> +
-> +	ret = cppc_cpufreq_set_min_perf(policy, perf, true, cpu_data->perf_caps.auto_sel);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return count;
-> +}
-> +
-> +/**
-> + * show_max_perf - Show maximum performance as frequency (kHz)
-> + *
-> + * Reads the MAX_PERF register and converts the performance value to
-> + * frequency (kHz) for user-space consumption.
-> + */
-> +static ssize_t show_max_perf(struct cpufreq_policy *policy, char *buf)
-> +{
-> +	struct cppc_cpudata *cpu_data = policy->driver_data;
-> +	u64 perf;
-> +	int ret;
-> +
-> +	ret = cppc_get_max_perf(policy->cpu, &perf);
-> +	if (ret == -EOPNOTSUPP)
-> +		return sysfs_emit(buf, "<unsupported>\n");
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Convert performance to frequency (kHz) for user */
-> +	return sysfs_emit(buf, "%u\n", cppc_perf_to_khz(&cpu_data->perf_caps, perf));
-> +}
-> +
-> +/**
-> + * store_max_perf - Set maximum performance from frequency (kHz)
-> + *
-> + * Converts the user-provided frequency (kHz) to a performance value
-> + * and writes it to the MAX_PERF register.
-> + */
-> +static ssize_t store_max_perf(struct cpufreq_policy *policy, const char *buf, size_t count)
-> +{
-> +	struct cppc_cpudata *cpu_data = policy->driver_data;
-> +	unsigned int freq_khz;
-> +	u64 perf;
-> +	int ret;
-> +
-> +	ret = kstrtouint(buf, 0, &freq_khz);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* Convert frequency (kHz) to performance value */
-> +	perf = cppc_khz_to_perf(&cpu_data->perf_caps, freq_khz);
-> +
-> +	ret = cppc_cpufreq_set_max_perf(policy, perf, true, cpu_data->perf_caps.auto_sel);
-
-Can you give me some details around updating the policy limits when
-auto-select is true? I suppose if P-state selection is autonomous, the
-policy limits should not matter, right?
-
-Thanks,
-Ionela.
-
-> +	if (ret)
-> +		return ret;
-> +
-> +	return count;
-> +}
-> +
->  cpufreq_freq_attr_ro(freqdomain_cpus);
->  cpufreq_freq_attr_rw(auto_select);
->  cpufreq_freq_attr_rw(auto_act_window);
->  cpufreq_freq_attr_rw(energy_performance_preference_val);
-> +cpufreq_freq_attr_rw(min_perf);
-> +cpufreq_freq_attr_rw(max_perf);
->  
->  static struct freq_attr *cppc_cpufreq_attr[] = {
->  	&freqdomain_cpus,
->  	&auto_select,
->  	&auto_act_window,
->  	&energy_performance_preference_val,
-> +	&min_perf,
-> +	&max_perf,
->  	NULL,
->  };
->  
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index 42e37a84cac9..be7de1222eee 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -39,7 +39,8 @@
->  /* CPPC_AUTO_ACT_WINDOW_MAX_SIG is 127, so 128 and 129 will decay to 127 when writing */
->  #define CPPC_AUTO_ACT_WINDOW_SIG_CARRY_THRESH 129
->  
-> -#define CPPC_ENERGY_PERF_MAX	(0xFF)
-> +#define CPPC_EPP_PERFORMANCE_PREF		0x00
-> +#define CPPC_EPP_ENERGY_EFFICIENCY_PREF		0xFF
->  
->  /* Each register has the folowing format. */
->  struct cpc_reg {
-> @@ -172,6 +173,10 @@ extern int cppc_get_auto_act_window(int cpu, u64 *auto_act_window);
->  extern int cppc_set_auto_act_window(int cpu, u64 auto_act_window);
->  extern int cppc_get_auto_sel(int cpu, bool *enable);
->  extern int cppc_set_auto_sel(int cpu, bool enable);
-> +extern int cppc_get_min_perf(int cpu, u64 *min_perf);
-> +extern int cppc_set_min_perf(int cpu, u64 min_perf);
-> +extern int cppc_get_max_perf(int cpu, u64 *max_perf);
-> +extern int cppc_set_max_perf(int cpu, u64 max_perf);
->  extern int amd_get_highest_perf(unsigned int cpu, u32 *highest_perf);
->  extern int amd_get_boost_ratio_numerator(unsigned int cpu, u64 *numerator);
->  extern int amd_detect_prefcore(bool *detected);
-> @@ -264,6 +269,22 @@ static inline int cppc_set_auto_sel(int cpu, bool enable)
->  {
->  	return -EOPNOTSUPP;
->  }
-> +static inline int cppc_get_min_perf(int cpu, u64 *min_perf)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +static inline int cppc_set_min_perf(int cpu, u64 min_perf)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +static inline int cppc_get_max_perf(int cpu, u64 *max_perf)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +static inline int cppc_set_max_perf(int cpu, u64 max_perf)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
->  static inline int amd_get_highest_perf(unsigned int cpu, u32 *highest_perf)
->  {
->  	return -ENODEV;
-> -- 
-> 2.34.1
-> 
+Konrad
 
