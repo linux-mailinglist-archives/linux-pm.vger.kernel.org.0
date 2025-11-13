@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-37975-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37976-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4320CC599EB
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:07:32 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F6B2C59A00
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:10:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8752E3B911A
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 19:06:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1C3513498F6
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 19:07:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C4A031AF01;
-	Thu, 13 Nov 2025 19:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C08319610;
+	Thu, 13 Nov 2025 19:06:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="j3FOhaFn"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="A7kde7cw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8BF318131;
-	Thu, 13 Nov 2025 19:06:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F9E3195E7;
+	Thu, 13 Nov 2025 19:06:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763060777; cv=none; b=Ln6BnU7gLSFxZdKm5ZzuWp8riadpSuM0nTlBYgzXulc75c04SUiTEnVLSuUvO3DFECJnwpzeN6fNGqFjn6AYM25P8CPLaZiCYdek0pJCS4Q0UBw1X/2N+Kq4rhRU+U/UmQCwaQB0aiH7yQTiKx0jGGWSdKLZqqgYQX2+KTe9cNM=
+	t=1763060789; cv=none; b=Zqw0JTVKgGD2SukOyMeE2o/Bb4UiXq910JjSWaoy8NPMEvkoIzFCrMZ/e96+ku+uiczFQeqlqz08MT7pfONzxMarG22g2N0ycMMgt3XyVkTPoBQ7HHGqrYnGShIH4dRxoIs/AgB9SJl3Oi1qFZkwJKHcGEj1NcGlfk9pEsdSkZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763060777; c=relaxed/simple;
-	bh=5FNwlUMck66ibENDTF/wvOSl606brZH0+kglqdmd2yA=;
+	s=arc-20240116; t=1763060789; c=relaxed/simple;
+	bh=EJ/+SlcFBg6eyfXaWGPrB6FJ2pXIZRWt1+9hWtofYIo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=d/g7W+7uePLHPlmb54h6rTaJhJJSQD8SwhS2cBlEhQlFyzJid7j1FKQb8rUwh89hhprhQS2e28W+yFfzfcLPaPl2mpYs6nxkyS1mn8wj/IeMlxN/0CPGRnJmZGzTDDgwpkxhtvLVvqjHCeyhYpX82iMAZSuFkEc69i2A9LBquKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=j3FOhaFn; arc=none smtp.client-ip=178.21.23.139
+	 In-Reply-To:To:Cc; b=ffIOG2SkjD1ySeswaRJbaun8aUS/z4cmlPcmwRHHh+6YpwwPmWr+NytBgiz7lEJm+BoAGTeOQ1m2uEK0P1dFInmx0Isput1Uzr+Esz13SpWnGUHxk79n4/TrrY9zv6pOcXq5Y58Ly14pyMwy6iUzhC7GQNmiVgrUtVaqbtnWTg0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=A7kde7cw; arc=none smtp.client-ip=178.21.23.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id B2CBE26715;
-	Thu, 13 Nov 2025 20:06:14 +0100 (CET)
+	by disroot.org (Postfix) with ESMTP id 546C72674D;
+	Thu, 13 Nov 2025 20:06:26 +0100 (CET)
 X-Virus-Scanned: SPAM Filter at disroot.org
 Received: from layka.disroot.org ([127.0.0.1])
  by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id OYT87sDU0UDO; Thu, 13 Nov 2025 20:06:14 +0100 (CET)
+ id p0J_MNiE_R_g; Thu, 13 Nov 2025 20:06:25 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1763060773; bh=5FNwlUMck66ibENDTF/wvOSl606brZH0+kglqdmd2yA=;
+	t=1763060785; bh=EJ/+SlcFBg6eyfXaWGPrB6FJ2pXIZRWt1+9hWtofYIo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=j3FOhaFnd7kUuP+A/L8E9sTa0/h9lYUUoHB09oLDatUTMiBWzvQxrv9HWshAgaZY3
-	 sJ3yux4UJmrzvjx+Hzr6KWSKkIAqJ4IH6LKKZ+K/Q0pfWBkGS77fCo9SOdc3F7J8h0
-	 ghEjDtqaCqD/p0UO4waztjGgRwEIr9l6cQwMf74ynUHXYGj5lSzxdzfF3ghmGHLtoi
-	 d/l3D0YCyAl+7jDg/Uml7QPr7F1ZcqnM+GiJvHBMCkkYgA96nVt7en8QsucXRquqs+
-	 HRQEhahNTsC6bn5r0AQK9v7imz4un1AOoITBgtTMLgGn5NQrkQrdHJ11dMrsGyeouy
-	 xpH/RsPmOJssw==
+	b=A7kde7cwyPuSm0upZMlmzgi0J6+xQ8jeKODbPzzcjDS0bl69x3Z+G3kfFiJXA7fhf
+	 Np7mhkBgcqfru7CDuLYH6ZUO3AgqwclhoGjRZ6mzWTFnEQhM6q8qbqlutM1UlE8h2k
+	 PueoF2usqvRKCmyUQVj8LNWSifiTw5sWjGcwzcNkmrpTMbJnaJe/YYak4vCVbNdHsy
+	 decltP0oTE1YKVzs2yFLfZP4LkOjYlF5yhJcVaBrc28Jj9nQHPiE88kqYCWykfdAwY
+	 Z1jk6uWBXLcSCRLO/KVZa2oo9wkwobMIawqSI3s3g7h1TFId6dt0BVW60+bhnE8ZgV
+	 Vec223S8Hk9dQ==
 From: Kaustabh Chakraborty <kauschluss@disroot.org>
-Date: Fri, 14 Nov 2025 00:35:05 +0530
-Subject: [PATCH 04/13] dt-bindings: power: supply: document Samsung S2M
- series PMIC charger device
+Date: Fri, 14 Nov 2025 00:35:06 +0530
+Subject: [PATCH 05/13] dt-bindings: mfd: s2mps11: add documentation for
+ S2MU005 PMIC
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,7 +59,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251114-s2mu005-pmic-v1-4-9e3184d3a0c9@disroot.org>
+Message-Id: <20251114-s2mu005-pmic-v1-5-9e3184d3a0c9@disroot.org>
 References: <20251114-s2mu005-pmic-v1-0-9e3184d3a0c9@disroot.org>
 In-Reply-To: <20251114-s2mu005-pmic-v1-0-9e3184d3a0c9@disroot.org>
 To: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
@@ -74,70 +74,210 @@ Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
  linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org, 
  linux-doc@vger.kernel.org, Kaustabh Chakraborty <kauschluss@disroot.org>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763060713; l=1991;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763060713; l=5753;
  i=kauschluss@disroot.org; s=20250202; h=from:subject:message-id;
- bh=5FNwlUMck66ibENDTF/wvOSl606brZH0+kglqdmd2yA=;
- b=/rgPRmJbUWtoTa+xBitTvM7xRSzqUo4FD2voBD6lgnY1G9qD9+nlRGRuCqqcrVpbn+lIGIBio
- ISj27oCVGqIANZ35U6VCzSXldIGg+avmwqYXP1ggWPOkU2jpATTzk2Z
+ bh=EJ/+SlcFBg6eyfXaWGPrB6FJ2pXIZRWt1+9hWtofYIo=;
+ b=WduHYbWTepjUPsCxB38vQmxEE9ggCzi15TEDxWsURB/GcxQ6ZjzXOeV/WXbeiccbemNej1LUd
+ JricGDBHpSlBMOPUGKZYwdeJCoOsogeTpVK/j6E6iGDfNJ1bkn+DGtw
 X-Developer-Key: i=kauschluss@disroot.org; a=ed25519;
  pk=h2xeR+V2I1+GrfDPAhZa3M+NWA0Cnbdkkq1bH3ct1hE=
 
-Certain Samsung S2M series PMICs have a battery charger device which,
-among other things, manages power interfacing of the USB port. It may
-supply power, as done in USB OTG operation mode, or it may accept power
-and redirect it to the battery fuelgauge for charging.
+Samsung's S2MU005 PMIC includes subdevices for a charger, an MUIC (Micro
+USB Interface Controller), and flash and RGB LED controllers.
 
-This driver depends on the MUIC device present in the same PMIC block.
+Since regulators are not supported by this device, unmark this property
+as required and instead set this in a per-device basis for ones which
+need it.
 
-The initial driver introduced has support for S2MU005, add its
-compatible as well.
+Add the compatible and documentation for the S2MU005 PMIC. Also, add an
+example for nodes for supported sub-devices, i.e. charger, extcon,
+flash, and rgb.
 
 Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
 ---
- .../power/supply/samsung,s2mu005-charger.yaml      | 35 ++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ .../devicetree/bindings/mfd/samsung,s2mps11.yaml   | 103 ++++++++++++++++++++-
+ 1 file changed, 102 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/samsung,s2mu005-charger.yaml b/Documentation/devicetree/bindings/power/supply/samsung,s2mu005-charger.yaml
-new file mode 100644
-index 000000000000..80292d6e2562
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/samsung,s2mu005-charger.yaml
-@@ -0,0 +1,35 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/samsung,s2mu005-charger.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml b/Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml
+index 31d544a9c05c..aef634ca2e36 100644
+--- a/Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml
++++ b/Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml
+@@ -27,12 +27,28 @@ properties:
+       - samsung,s2mps15-pmic
+       - samsung,s2mpu02-pmic
+       - samsung,s2mpu05-pmic
++      - samsung,s2mu005-pmic
+ 
+   clocks:
+     $ref: /schemas/clock/samsung,s2mps11.yaml
+     description:
+       Child node describing clock provider.
+ 
++  charger:
++    $ref: /schemas/power/supply/samsung,s2m-charger.yaml
++    description:
++      Child node describing battery charger device.
 +
-+title: Battery Charger Driver for Samsung S2M series PMICs
++  extcon:
++    $ref: /schemas/extcon/samsung,s2m-muic.yaml
++    description:
++      Child node describing extcon device.
 +
-+maintainers:
-+  - Kaustabh Chakraborty <kauschluss@disroot.org>
++  flash:
++    $ref: /schemas/leds/samsung,s2m-flash.yaml
++    description:
++      Child node describing flash LEDs.
 +
-+description: |
-+  The Samsung S2M series PMIC battery charger manages power interfacing
-+  of the USB port. It may supply power, as done in USB OTG operation
-+  mode, or it may accept power and redirect it to the battery fuelgauge
-+  for charging.
+   interrupts:
+     maxItems: 1
+ 
+@@ -44,6 +60,11 @@ properties:
+     description:
+       List of child nodes that specify the regulators.
+ 
++  rgb:
++    $ref: /schemas/leds/samsung,s2m-rgb.yaml
++    description:
++      Child node describing RGB LEDs.
 +
-+  This is a part of device tree bindings for S2M and S5M family of Power
-+  Management IC (PMIC).
+   samsung,s2mps11-acokb-ground:
+     description: |
+       Indicates that ACOKB pin of S2MPS11 PMIC is connected to the ground so
+@@ -65,7 +86,6 @@ properties:
+ 
+ required:
+   - compatible
+-  - regulators
+ 
+ additionalProperties: false
+ 
+@@ -105,6 +125,8 @@ allOf:
+         regulators:
+           $ref: /schemas/regulator/samsung,s2mps11.yaml
+         samsung,s2mps11-wrstbi-ground: false
++      required:
++        - regulators
+ 
+   - if:
+       properties:
+@@ -116,6 +138,8 @@ allOf:
+         regulators:
+           $ref: /schemas/regulator/samsung,s2mps13.yaml
+         samsung,s2mps11-acokb-ground: false
++      required:
++        - regulators
+ 
+   - if:
+       properties:
+@@ -128,6 +152,8 @@ allOf:
+           $ref: /schemas/regulator/samsung,s2mps14.yaml
+         samsung,s2mps11-acokb-ground: false
+         samsung,s2mps11-wrstbi-ground: false
++      required:
++        - regulators
+ 
+   - if:
+       properties:
+@@ -140,6 +166,8 @@ allOf:
+           $ref: /schemas/regulator/samsung,s2mps15.yaml
+         samsung,s2mps11-acokb-ground: false
+         samsung,s2mps11-wrstbi-ground: false
++      required:
++        - regulators
+ 
+   - if:
+       properties:
+@@ -152,6 +180,8 @@ allOf:
+           $ref: /schemas/regulator/samsung,s2mpu02.yaml
+         samsung,s2mps11-acokb-ground: false
+         samsung,s2mps11-wrstbi-ground: false
++      required:
++        - regulators
+ 
+   - if:
+       properties:
+@@ -164,6 +194,18 @@ allOf:
+           $ref: /schemas/regulator/samsung,s2mpu05.yaml
+         samsung,s2mps11-acokb-ground: false
+         samsung,s2mps11-wrstbi-ground: false
++      required:
++        - regulators
 +
-+  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
-+  additional information and example.
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: samsung,s2mu005-pmic
++    then:
++      properties:
++        samsung,s2mps11-acokb-ground: false
++        samsung,s2mps11-wrstbi-ground: false
+ 
+ examples:
+   - |
+@@ -305,3 +347,62 @@ examples:
+             };
+         };
+     };
 +
-+allOf:
-+  - $ref: power-supply.yaml#
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/leds/common.h>
 +
-+properties:
-+  compatible:
-+    enum:
-+      - samsung,s2mu005-charger
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
 +
-+required:
-+  - compatible
++        pmic@3d {
++            compatible = "samsung,s2mu005-pmic";
++            reg = <0x3d>;
++            interrupt-parent = <&gpa2>;
++            interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
 +
-+unevaluatedProperties: false
++            charger {
++                compatible = "samsung,s2mu005-charger";
++                monitored-battery = <&battery>;
++            };
++
++            extcon {
++                compatible = "samsung,s2mu005-muic";
++
++                port {
++                    muic_to_usb: endpoint {
++                        remote-endpoint = <&usb_to_muic>;
++                    };
++                };
++            };
++
++            flash {
++                compatible = "samsung,s2mu005-flash";
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                led@0 {
++                    reg = <0>;
++                    label = "back-cam:white:flash";
++                    color = <LED_COLOR_ID_WHITE>;
++                    function = LED_FUNCTION_FLASH;
++                };
++
++                led@1 {
++                    reg = <1>;
++                    label = "front-cam:white:flash";
++                    color = <LED_COLOR_ID_WHITE>;
++                    function = LED_FUNCTION_FLASH;
++                };
++            };
++
++            rgb {
++                compatible = "samsung,s2mu005-rgb";
++                label = "notification:rgb:indicator";
++                color = <LED_COLOR_ID_RGB>;
++                function = LED_FUNCTION_INDICATOR;
++                linux,default-trigger = "pattern";
++            };
++        };
++    };
 
 -- 
 2.51.2
