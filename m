@@ -1,140 +1,141 @@
-Return-Path: <linux-pm+bounces-37931-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37932-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 126E3C56825
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 10:11:45 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 901B9C56B06
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 10:51:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6E3AA355F16
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 09:01:17 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DBB2634C7F1
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 09:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCC1633ADAB;
-	Thu, 13 Nov 2025 08:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i6HACEtl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C633F2DF3FD;
+	Thu, 13 Nov 2025 09:50:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15D03396F1;
-	Thu, 13 Nov 2025 08:56:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 518F12D73B4;
+	Thu, 13 Nov 2025 09:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763024184; cv=none; b=CEJzmg0k4HGouyHv4+PbvsVq9V2ih93pfdJM3yDQOTuPzfGa/u2CcCGu0lrTaJJAuSLYoeW1FfZDoF/yjMgOKQcn4xcXYqjMX5dWQ1GfcTEPGH0HtcQF/iVRUf/kJJe8H0/RbpQpuLYqJXtF0PsDLlxppbvp8v2FAURjIPqsaQk=
+	t=1763027413; cv=none; b=fJkMgiAt3qC/pschuMaXaVeOZWLbBQPgAfREIoFn49S9RWOiu4xaRprRXL9zdaw0S5r8210trehL96LtFIv3syl5YwiwAdshwc3paO8dclQ+QPZcpeV5wFT1tdcgpTrg3YUrhEbDkK/a8KOJR+PVjoYGF9bVRRYus0z0H6TOhBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763024184; c=relaxed/simple;
-	bh=zp6SlYcPA6p/E0ySGHx+QoEp05+2+wht8ejef48Qeh8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lEQMIF1yKg+8Un3p2HqPfsgsX2UgG35eM10BThDAWdcHofHl1YmCJDfkl2hdgDZtbd3nUDhWh2BHIG9qPBIUCh9zvbMBySGqJDGtEfVdM0J0zgxjHpljPMTzrrar9CbEQKf2x7bPGFl4KqIZ+QmUe5Ky+UsBpSPDWi04kIBoqcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i6HACEtl; arc=none smtp.client-ip=95.215.58.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 13 Nov 2025 10:56:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763024180; h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=nWP3To9chHe8h02n9M1ldMghujzaU64BefpJAj3Yhlc=;
-	b=i6HACEtlEZRTsOq0Aw420IWJzeqnYlQlHrCGC44aRMpphV+QM19Nkd3SWxR/8Rh+VPI1Wx
-	YGN+xA5JY7HUIRIu9XqP51yViYUBKG2vuOAvUwSFyWUYnIzCJwJ3Kut3n0/z4NiKcvFHsa
-	ajjEH3CAha+UqO/Fa252aB6HqDN6iyw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Matti Vaittinen <matti.vaittinen@linux.dev>
-To: Matti Vaittinen <mazziesaccount@gmail.com>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v4 16/16] MAINTAINERS: Add ROHM BD72720 PMIC
-Message-ID: <3aa7088ba93e0faac1010897e5da2f0541022d9f.1763022807.git.mazziesaccount@gmail.com>
-Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
-References: <cover.1763022807.git.mazziesaccount@gmail.com>
+	s=arc-20240116; t=1763027413; c=relaxed/simple;
+	bh=vnpgERAXA13Nli6g2gHDQ3S7eRBRkQiSbM9EinmQVd4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZmY0hZcYBoS6QcA52A2dDMI6xfdexdzgOXkqyl47MSqV++x1H2Mkc0MoLDSkJLYrYnDnm9odNNZZjjF+EJdVZXKxYw7/YTZk9N6VT9VP2IHA3oEc/sw/DemOh/6ev16yUGQ4FhQRQ7TPCJQdXTXsb9tUPMgV7IKi5Cc4KSk6W1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E89CC12FC;
+	Thu, 13 Nov 2025 01:49:57 -0800 (PST)
+Received: from [10.57.40.163] (unknown [10.57.40.163])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E5B913F66E;
+	Thu, 13 Nov 2025 01:49:59 -0800 (PST)
+Message-ID: <953f1aaa-d8bd-4091-9bf6-9538ccdd3bfa@arm.com>
+Date: Thu, 13 Nov 2025 09:50:40 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="a9hT/oob02Yt7ImX"
-Content-Disposition: inline
-In-Reply-To: <cover.1763022807.git.mazziesaccount@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 09/11] powercap: dtpm: Simplify with
+ of_machine_get_match_data()
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Samuel Holland <samuel@sholland.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Viresh Kumar <viresh.kumar@linaro.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Thierry Reding <thierry.reding@gmail.com>,
+ Daniel Lezcano <daniel.lezcano@kernel.org>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+ Saravana Kannan <saravanak@google.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Maximilian Luz <luzmaximilian@gmail.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, linux-pm@vger.kernel.org,
+ Chen-Yu Tsai <wens@kernel.org>, Yangtao Li <tiny.windzz@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+ platform-driver-x86@vger.kernel.org, linux-tegra@vger.kernel.org,
+ Rob Herring <robh@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Hans de Goede <hansg@kernel.org>
+References: <20251112-b4-of-match-matchine-data-v2-0-d46b72003fd6@linaro.org>
+ <20251112-b4-of-match-matchine-data-v2-9-d46b72003fd6@linaro.org>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20251112-b4-of-match-matchine-data-v2-9-d46b72003fd6@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
---a9hT/oob02Yt7ImX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-=46rom: Matti Vaittinen <mazziesaccount@gmail.com>
+On 11/12/25 10:28, Krzysztof Kozlowski wrote:
+> Replace open-coded getting root OF node, matching against it and getting
+> the match data with new of_machine_get_match_data() helper.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Depends on the first OF patch.
+> ---
+>   drivers/powercap/dtpm.c | 16 +---------------
+>   1 file changed, 1 insertion(+), 15 deletions(-)
+> 
+> diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+> index f390665743c4..129d55bc705c 100644
+> --- a/drivers/powercap/dtpm.c
+> +++ b/drivers/powercap/dtpm.c
+> @@ -548,9 +548,7 @@ static int dtpm_for_each_child(const struct dtpm_node *hierarchy,
+>    */
+>   int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table)
+>   {
+> -	const struct of_device_id *match;
+>   	const struct dtpm_node *hierarchy;
+> -	struct device_node *np;
+>   	int i, ret;
+>   
+>   	mutex_lock(&dtpm_lock);
+> @@ -567,19 +565,7 @@ int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table)
+>   		goto out_pct;
+>   	}
+>   
+> -	ret = -ENODEV;
+> -	np = of_find_node_by_path("/");
+> -	if (!np)
+> -		goto out_err;
+> -
+> -	match = of_match_node(dtpm_match_table, np);
+> -
+> -	of_node_put(np);
+> -
+> -	if (!match)
+> -		goto out_err;
+> -
+> -	hierarchy = match->data;
+> +	hierarchy = of_machine_get_match_data(dtpm_match_table);
+>   	if (!hierarchy) {
+>   		ret = -EFAULT;
+>   		goto out_err;
+> 
 
-Add the ROHM BD72720 PMIC driver files to be maintained by undersigned.
+I don't know if Daniel had a chance to look at it, but I can help him.
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+The patch looks OK.
 
----
-Revision history:
- RFCv1 =3D>:
- - No changes
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+The extra return error value which is removed doesn't harm the client of
+this function in other subsystem.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index fe01aa31c58b..7e3c1eac7cda 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -22353,6 +22353,7 @@ S:	Supported
- F:	drivers/clk/clk-bd718x7.c
- F:	drivers/gpio/gpio-bd71815.c
- F:	drivers/gpio/gpio-bd71828.c
-+F:	drivers/gpio/gpio-bd72720.c
- F:	drivers/mfd/rohm-bd71828.c
- F:	drivers/mfd/rohm-bd718x7.c
- F:	drivers/mfd/rohm-bd9576.c
-@@ -22369,6 +22370,7 @@ F:	drivers/watchdog/bd96801_wdt.c
- F:	include/linux/mfd/rohm-bd71815.h
- F:	include/linux/mfd/rohm-bd71828.h
- F:	include/linux/mfd/rohm-bd718x7.h
-+F:	include/linux/mfd/rohm-bd72720.h
- F:	include/linux/mfd/rohm-bd957x.h
- F:	include/linux/mfd/rohm-bd96801.h
- F:	include/linux/mfd/rohm-bd96802.h
---=20
-2.51.1
-
-
---a9hT/oob02Yt7ImX
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkVnSoACgkQeFA3/03a
-ocUZKQf3RnWEJD5XEsjYHiqpfGbSkxCyq2y+9UDyXdp8Wuq1kAvLxy1AgMgYRhSQ
-Kgsi/BaCI4HQt1RS6SxDioeYjAslQzVgcDRCRi3Uzw9wp8VUHx7F1QtZ7UY1oEur
-jE+IMZO4jPa0DF5EZAaxwaIPXmls2Lk/O3GYxMkeOdE7FR1vrFnY1EgiRv50W7QV
-Ai0RXIpR56RHaFZUPcdAse7o5xlRmNfttvhTEiKQ5jPjz1TmkOKJeoRNCSPwutS8
-t1i5GYgJ2MpQtdnmIEomcGfUA+Ul0xZCDGXuX2luQeTy1ncCy2Bsc2qVg7UL1iYN
-xGOLD658Bmn8KrOss590oC5IroDe
-=n6lR
------END PGP SIGNATURE-----
-
---a9hT/oob02Yt7ImX--
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
