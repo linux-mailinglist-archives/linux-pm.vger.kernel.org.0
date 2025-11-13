@@ -1,126 +1,164 @@
-Return-Path: <linux-pm+bounces-37996-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37971-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72564C59E1C
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:59:52 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 591FEC59997
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:05:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D9B43AA5DD
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 19:59:51 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AEC5F3442D0
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 19:05:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91C8C31B839;
-	Thu, 13 Nov 2025 19:59:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4E3731814F;
+	Thu, 13 Nov 2025 19:05:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2zBNUi+"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="KOikJ6xR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6653031B13C;
-	Thu, 13 Nov 2025 19:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67011313529;
+	Thu, 13 Nov 2025 19:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763063986; cv=none; b=KQPNx7n53TO1wCk8wNzw1THHZW4JxBgmOkNK5PMQxm+zPVOxxNALWJn8U1wge/ADs74PvxLu5vm3U7H7VbPoGX3BoFUn0+BtACZ9kv2H5FJuxCGbWV/7ez5F4P2kS0xQcqFwQi+bbLXfI6gUWyiQJBCVJv8P3+5AV9rO4LhJie8=
+	t=1763060732; cv=none; b=BSvNFEF2Rx0QWaUt5MpBxH6sUkjrwz/yQoZ6Iew98oV64Yi+B2O9f6PDmSG2GZT6+2hoXbLN2pJbc+MHhBsD3KQnuMFBDUaLevEZstmefPahjbVswzqXoxZS6tPA+8tPqm6Ze60xKoWc/wV+SinNl34nXwkDlfYwwg51oQ5dyxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763063986; c=relaxed/simple;
-	bh=albEH2IwQeApwJMRsxBQcInlleO96o5R96BSCYwWvmk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dg1e06230Bhq6aAP9vBulx6cs8PAHvvahrQZS8Oj1o7ig+02bmJbDU5K3HWq9TmG97xH+djtU9XUmAH92kA/Enj1UPDTxQseoCT5AhyhvnA1xSFWXRNjTFBUreptdqB3EbhVSJByBf6euiDRwIXB3fI7oVqz+Oam/+pdvjWhkPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2zBNUi+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF0E7C113D0;
-	Thu, 13 Nov 2025 19:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763063986;
-	bh=albEH2IwQeApwJMRsxBQcInlleO96o5R96BSCYwWvmk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=B2zBNUi+8bbGLwAJ/33NOAz2+djFfC5eQbi/Cth7/8eALanAeHfR8UqigSOeS1eK6
-	 0J2KS1AqXEUZ3b3W5eX+BU/cZNax5FH2whih2ho//jwVgL+rG5Ae4w+aQNPoqaO8KB
-	 U1ZaqS9NW064N38cdtaqw75gk/+uAIQrCLnBFJncbiLJ7Sf5d12aH30GhO7SEhF9Aj
-	 FbDuHSeUbiAN6hudq2B3qtbZKH7BelJciRHB2cGpLmaxZHF/rSe8Geog0xcWL0Ho4C
-	 px/YF+CLRhJJsZY+qd2+KlfWCgdW3m4W61lk2kDZk61HrVM8vvvceuW63Xk0mTH+0R
-	 m4ea7uK/dEGYg==
-Received: by venus (Postfix, from userid 1000)
-	id DE84B180785; Thu, 13 Nov 2025 12:16:21 +0100 (CET)
-Date: Thu, 13 Nov 2025 12:16:21 +0100
-From: Sebastian Reichel <sre@kernel.org>
-To: Lucas Zampieri <lzampier@redhat.com>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
-	Bastien Nocera <hadess@hadess.net>, linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH v2 0/3] HID: Add support for multiple batteries per
- device
-Message-ID: <z7rlg27pref5o3y5c3lrxab7pilzuxqgofuogh5547kw5jpj56@basmdf4uwh56>
-References: <20251113001508.713574-1-lzampier@redhat.com>
+	s=arc-20240116; t=1763060732; c=relaxed/simple;
+	bh=xbsJgSP/qfdSCYvBFIjxcuGK2HLNSgntGJrudJXGpGE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CYOC5lAtDCGigBPTqm0ELRXfyiC19P6cNKVr8GqB2kAL8HXtmjpTs5yel4tkydZCJ9UtnvWF9kRQiolpFBsu+sHQjI9lpW9c+sJ2TxcPmAwSHNzWP74GQzmBz0Iy8YKGdD5qlbHXqBYcfTvtGCKWjvXd7mcmM2fpCFsuguvO0/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=KOikJ6xR; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
+Received: from mail01.disroot.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id A4006264C2;
+	Thu, 13 Nov 2025 20:05:27 +0100 (CET)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id cVVbP0EOnFVw; Thu, 13 Nov 2025 20:05:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1763060727; bh=xbsJgSP/qfdSCYvBFIjxcuGK2HLNSgntGJrudJXGpGE=;
+	h=From:Subject:Date:To:Cc;
+	b=KOikJ6xRJHpCFTI/IIBv1x8rSDYBLfgSMh9rKWcN5FiFD9GTD+S8ktgGR3JSvzm84
+	 0xdJl1jE+pMK76FoZ2piHSO1IccpEXEQ9bomElLgh80726rKxRTd1jTcs1XdUlmUQq
+	 AGxS5iDOodDd7gTXYQwxQoGoPD6i/F3dplQeTi30OGt09aAg8h2ySEvuuDQl8//u4I
+	 C1mc8Qz8pFJjwdYv/908gh3ceaDLKOc7qDCTMRJBd5QKFNSl0+cw/ZqzKKIZNUvQY1
+	 t3SXCgcS4PGfrFYdP0lqTqV5lPCTYXQer6mnf0hUuc9W00h+xJIgfx84VLvn37Y5OB
+	 4xSuRWpJTsTpw==
+From: Kaustabh Chakraborty <kauschluss@disroot.org>
+Subject: [PATCH 00/13] Support for Samsung S2MU005 PMIC and its sub-devices
+Date: Fri, 14 Nov 2025 00:35:01 +0530
+Message-Id: <20251114-s2mu005-pmic-v1-0-9e3184d3a0c9@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="u3i5adcbhywjdycu"
-Content-Disposition: inline
-In-Reply-To: <20251113001508.713574-1-lzampier@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAN0rFmkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDQ0Mj3WKj3FIDA1PdgtzMZF2DZDPztESzpMRk42QloJaCotS0zAqwcdG
+ xtbUAuSre+V4AAAA=
+X-Change-ID: 20251112-s2mu005-pmic-0c67fa6bac3c
+To: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Kaustabh Chakraborty <kauschluss@disroot.org>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763060713; l=4075;
+ i=kauschluss@disroot.org; s=20250202; h=from:subject:message-id;
+ bh=xbsJgSP/qfdSCYvBFIjxcuGK2HLNSgntGJrudJXGpGE=;
+ b=BtLrXuFPHG7bSTiR5t6fQiSMgXQ+caOKS4PELrmBT94oWUNgGzcGPA3OMy56H2k1iPz9Y0ktH
+ dTdDg5YNfc3BqiZIqypdiFUb4NME3nHGoQx3bnRuOHcdyzmAGCjy6E+
+X-Developer-Key: i=kauschluss@disroot.org; a=ed25519;
+ pk=h2xeR+V2I1+GrfDPAhZa3M+NWA0Cnbdkkq1bH3ct1hE=
 
+S2MU005 is an MFD chip manufactured by Samsung Electronics. This is
+found in various devices manufactured by Samsung and others, including
+all Exynos 7870 devices. It is known to have the following features:
 
---u3i5adcbhywjdycu
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [RFC PATCH v2 0/3] HID: Add support for multiple batteries per
- device
-MIME-Version: 1.0
+1. Two LED channels with adjustable brightness for use as a torch, or a
+   flash strobe.
+2. An RGB LED with 8-bit channels. Usually programmed as a notification
+   indicator.
+3. An MUIC, which works with USB micro-B (and USB-C?). For the micro-B
+   variant though, it measures the ID-GND resistance using an internal
+   ADC.
+4. A charger device, which reports if charger is online, voltage,
+   resistance, etc.
 
-Hi,
+This patch series implements a lot of these features. Naturally, this
+series touches upon a lot of subsystems. The 'parent' is the MFD driver,
+so the subsystems have some form of dependency to the MFD driver, so
+they are not separable.
 
-On Thu, Nov 13, 2025 at 12:15:02AM +0000, Lucas Zampieri wrote:
-> ## Request for Comments
->=20
-> Is list-based storage appropriate or would another structure work better?
-> Should we support usage-based identification in addition to report ID for
-> devices using the same report ID? Is sequential naming (battery-N) suffic=
-ient
-> or should batteries have semantic role identifiers like "main", "stylus",=
- "dock"?
+Here are the subsystems corresponding to the patch numbers:
+dt-bindings - 01, 02, 03, 04, 05
+mfd         - 05, 06, 07, 08
+rtc         - 06
+led         - 01, 02, 09, 10, 11
+extcon      - 03, 12
+power       - 04, 13
 
-If unique semantic identifiers are available they are obviously a better
-choice.
+Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+---
+Kaustabh Chakraborty (13):
+      dt-bindings: leds: document Samsung S2M series PMIC flash LED device
+      dt-bindings: leds: document Samsung S2M series PMIC RGB LED device
+      dt-bindings: extcon: document Samsung S2M series PMIC extcon device
+      dt-bindings: power: supply: document Samsung S2M series PMIC charger device
+      dt-bindings: mfd: s2mps11: add documentation for S2MU005 PMIC
+      mfd: sec-irq: add support for creating multiple IRQ chips
+      mfd: sec: add support for S2MU005 PMIC
+      mfd: sec: store hardware revision in sec_pmic_dev and add S2MU005 support
+      leds: flash: add support for Samsung S2M series PMIC flash LED device
+      leds: rgb: add support for Samsung S2M series PMIC RGB LED device
+      Documentation: leds: document pattern behavior of Samsung S2M series PMIC RGB LEDs
+      extcon: add support for Samsung S2M series PMIC extcon devices
+      power: supply: add support for Samsung S2M series PMIC charger device
 
-> To HID maintainers (Jiri Kosina, Benjamin Tissoires): Does this belong in
-> hid-input.c or should it be separate? Any concerns about the backwards
-> compatibility approach? Meaning, should I have removed the whole
-> dev->bat legacy mapping and use the new struct?
->=20
-> To power supply maintainers (Sebastian Reichel): Any issues with multiple
-> power_supply devices from a single HID device?
+ .../bindings/extcon/samsung,s2mu005-muic.yaml      |  35 ++
+ .../bindings/leds/samsung,s2mu005-flash.yaml       |  52 +++
+ .../bindings/leds/samsung,s2mu005-rgb.yaml         |  34 ++
+ .../devicetree/bindings/mfd/samsung,s2mps11.yaml   | 103 ++++-
+ .../power/supply/samsung,s2mu005-charger.yaml      |  35 ++
+ Documentation/leds/index.rst                       |   1 +
+ Documentation/leds/leds-s2m-rgb.rst                |  60 +++
+ drivers/extcon/Kconfig                             |  10 +
+ drivers/extcon/Makefile                            |   1 +
+ drivers/extcon/extcon-s2m.c                        | 355 ++++++++++++++++
+ drivers/leds/flash/Kconfig                         |  12 +
+ drivers/leds/flash/Makefile                        |   1 +
+ drivers/leds/flash/leds-s2m-flash.c                | 413 ++++++++++++++++++
+ drivers/leds/rgb/Kconfig                           |  11 +
+ drivers/leds/rgb/Makefile                          |   1 +
+ drivers/leds/rgb/leds-s2m-rgb.c                    | 462 +++++++++++++++++++++
+ drivers/mfd/sec-common.c                           |  41 +-
+ drivers/mfd/sec-i2c.c                              |  29 ++
+ drivers/mfd/sec-irq.c                              | 234 ++++++++---
+ drivers/power/supply/Kconfig                       |  11 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/s2m-charger.c                 | 216 ++++++++++
+ drivers/rtc/rtc-s5m.c                              |  15 +-
+ include/linux/mfd/samsung/core.h                   |   9 +-
+ include/linux/mfd/samsung/irq.h                    |  94 +++++
+ include/linux/mfd/samsung/s2mu005.h                | 328 +++++++++++++++
+ 26 files changed, 2487 insertions(+), 77 deletions(-)
+---
+base-commit: 131f3d9446a6075192cdd91f197989d98302faa6
+change-id: 20251112-s2mu005-pmic-0c67fa6bac3c
 
-I don't see any issues with that.
+Best regards,
+-- 
+Kaustabh Chakraborty <kauschluss@disroot.org>
 
-Greetings,
-
--- Sebastian
-
---u3i5adcbhywjdycu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmkVvf4ACgkQ2O7X88g7
-+ppbvg//XLJry0vRnhIFIutwoLrryUxt16rSUfo0i/YAB03VQOQ/2o9XzmSUkFlO
-2WGvBbm1dRjkfw44CXCQLNvdz5nfKjSRvAnVRV2JW4kqjG67hdtN18iR0v0Hz13q
-VWWYtnDBcGS1+ICCZJfVRW1K03+3SaUSU5luyytIx22qAI5+LMfaW8FxqgbPNNcX
-uEQtMIIDaX4+cy/yGmdOXq2lPAj35tHcLR8hOmWo6bY84Byt+SuTItIQhCKzPGHO
-aGTN1oyXCwqVbsrWlSpjqgeLstWNBqjMzMHkmeU2rA4SJkgMnLDkGICLfhgbnnfz
-rwmVK/xHcJGvR8BB6YGRAs8yt8dUIbYSuBYjcuVHCN/ntgcQUbGybiSMmXArlFBV
-aYgLyzOduvdRfq+FYM8xQgX6P+q54mZ2cnQdIoiw0jx8WC3oFid/E+wn+IVjlK7w
-H3mbeOoJtIIjJLw7wkHRkjBISgxVxeJYavYTGD1dkZH3DjeQDlTzwZxprtUNcl3Q
-P8EzRKoQkYXZBOL8R/46CiOpFkBnYXDfavzrQZQ/3G+xjEi3uhr8Z+gVqqmF5VzC
-JtB8Aoh26KHrKC5MSh8Z0G2GWFJdsEAwav0DpgWvk7tP5jfyCWy06VU2gXiaME+r
-YO31U1dvvtM9jB7wCpQWyP1PoZXWQ9gPBvEkulzIYl6Dh02tDfs=
-=uYh1
------END PGP SIGNATURE-----
-
---u3i5adcbhywjdycu--
 
