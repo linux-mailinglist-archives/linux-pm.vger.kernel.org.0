@@ -1,112 +1,93 @@
-Return-Path: <linux-pm+bounces-37964-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37965-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E86C5C588C2
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 17:01:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6839EC589F1
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 17:12:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 759C14254C4
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 15:34:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F7D7423351
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 15:36:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2F523396E4;
-	Thu, 13 Nov 2025 15:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD7135295A;
+	Thu, 13 Nov 2025 15:29:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VG0SAln8"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tU5vr2gc";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="AgzJqop0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA3D33556C
-	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 15:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EEA227BA4;
+	Thu, 13 Nov 2025 15:29:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763047515; cv=none; b=BdyER7rVpDxEm7rfhusfc83dRIsX2yu9YJGnv2N1VAolunWZPOVJ885jf1/tDLSqFEn42MJBpDr3rEA7IOav4GFb8sWEfZ6BkxAeT2hBkpraJV4gLiOz0md+vvQebqPoYz4tqChpsByAoI8QqjEKqPj4CSXNR1HYTFWD5KAJcq4=
+	t=1763047775; cv=none; b=YYhULBsJrFkrGTdz/wHGyioJhZUDJ+BLwb1ab4EIx7e8LvQPtckJ8CUYkKvK6da9U9CtvsH4GJk6PRc7n+3nHSXQ7aXs1OFsu+xh6Q1Kl9MlN6YiFgR0gTeW5uvR+DqWAFTRgvx5KbYHu6weYQoVyKI+jBKI+abOkKzP/Z11pYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763047515; c=relaxed/simple;
-	bh=zVXuKQQY5c+w49KZil6xN/VdD3U8/LYFNkcdzi/d9Jg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QVePmsJPW0buCOkFYjFnqIC92O1wX8uNgyU4lHpq+tHTLkG4Fa2k/gAbNjm9gZL5KC2/jEJJeht8TifgXeeRKfsCnY+VnCgpv/ddiRyxtl1n1MPwfguRzyD138r1EJQQom23NcWwVMoPENjpyZbii+9xKq6a/S4FGJ0YkKiqSNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VG0SAln8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 383DEC113D0
-	for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 15:25:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763047515;
-	bh=zVXuKQQY5c+w49KZil6xN/VdD3U8/LYFNkcdzi/d9Jg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VG0SAln8X5hDAzGWIpcCvMT3nHvaEUZO2q/NXQBAkFbvP6GTSy+nxanUiWeppQavo
-	 b62nh0uR+J7Ke8239WlagW3h08WlmKI8ZvkmansIfD1RgaMhQI2gA9fia49pnPhr2Q
-	 YuAOZXGNbigalvda3Bkv7mH6ffBD3HTYE/KBZY2rAdn4JV2AdiBPVeajoYOjUFUmVr
-	 M9uo8l2eT4Wo0PATOC6nGZvuO41rzd37fLQUwNbyzp9iiQ7TUIzUchSVTSg+qXRbDG
-	 b6hdk70kL3AvoR9Nm2sP2ov9fTijrDWxdaKJCGt2tOVmQGI6ufQ4YYA5sYhDNbD+Ao
-	 9w5Bd2tAigYiQ==
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-45034dbaaabso386389b6e.3
-        for <linux-pm@vger.kernel.org>; Thu, 13 Nov 2025 07:25:15 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXsmCtdcQoFUSNAhCgA2EZ1LvM6Z14ErUUXQIXPajwWjIlteAEVkSC4VsObrsFCouuDbh9Af3b6Bw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+rRYopLqJ4P9HE/NAyANJoRRpUoszw1nHZRjEsKS2HHU0A84j
-	RAfLTNsrfhRbHPg4JVToR3woPjeYm0z9MAcmzUaHOsuaDFrFMewwSS3ccIpX5nc6MqFm+rqC9bf
-	7lU75hZ/qrpPD9cBnrsae0ZusiXm7nIo=
-X-Google-Smtp-Source: AGHT+IFfmmIT1O0Jd8y77kmYZ06G5uXm163vmKDKtM5n96Ro7peJ5hDMSwqL4MNbQKH56lk/SqOCUOy9kBnuSlJqUnA=
-X-Received: by 2002:a05:6808:318a:b0:44d:be6b:33c1 with SMTP id
- 5614622812f47-450745d93c4mr3472624b6e.65.1763047514456; Thu, 13 Nov 2025
- 07:25:14 -0800 (PST)
+	s=arc-20240116; t=1763047775; c=relaxed/simple;
+	bh=smA20V17ZF1F2xtWy4wiqSmfxMuxp7FSVoSwrSRVQDk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ahIgIykb7iRnn0KNcsaGQOYFKEafXui2mdxqv5JkhlhRq4KM+8tvdnVBfo3wk0ta5zLdrdTDq2tiKXXWl6YrBwEWPerMC7mhU4Tu7NYHQzMHv246CwhoZCFKaJmgRXOaRXOgwWyR+zIVtSTegvtZHSgGUOLZvNlxJKRctEeD1ZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tU5vr2gc; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=AgzJqop0; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1763047772;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=smA20V17ZF1F2xtWy4wiqSmfxMuxp7FSVoSwrSRVQDk=;
+	b=tU5vr2gcdFphwGWO7V259GwnrVBX/crtdTVtsc+FjI8oON/IEYNrN6Ln4FAGYRcRD1zVgg
+	R8qdalzr9RSC2pQgiikrx2CNb0lC9FO+2/NIuNbQ/7Wjw/nuFnfTSAvlMGmQN7r0/MAp+Y
+	cqGEeBcwAZru5Z84TXVp+Tb1oxVEW+fCl5fh7yR9lhbmkM3Nz4n+7pEBpaxOTN425wywkc
+	D4Bx9bqyVHVVdM4dZ1vFg1T/S/YTB/RnH6iT6NMidvHfin10NDQcGCKvZ9gFqQHzptaheT
+	s7FycTHvXEy8BSjBi1BElvV3mOJNUTR8TZxKqiXUeP5s2kPWwT9epIcb7lWkYg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1763047772;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=smA20V17ZF1F2xtWy4wiqSmfxMuxp7FSVoSwrSRVQDk=;
+	b=AgzJqop0o/OwWkx+w2MpwQXjEapM8ajgNebEaWYm11Cl121wviNTVCHimYjbW01CWDsA1m
+	shYmfzxisZxCmeAw==
+To: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>,
+ Maulik Shah <quic_mkshah@quicinc.com>, Sudeep Holla
+ <sudeep.holla@arm.com>, Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Ben Horgan
+ <ben.horgan@arm.com>, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, Ulf
+ Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v4 1/2] smp: Introduce a helper function to check for
+ pending IPIs
+In-Reply-To: <20251105095415.17269-2-ulf.hansson@linaro.org>
+References: <20251105095415.17269-1-ulf.hansson@linaro.org>
+ <20251105095415.17269-2-ulf.hansson@linaro.org>
+Date: Thu, 13 Nov 2025 16:29:31 +0100
+Message-ID: <874iqyc5no.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4701737.LvFx2qVVIh@rafael.j.wysocki> <69115878-ec5e-4f7c-bb3e-9f61cce75c70@arm.com>
-In-Reply-To: <69115878-ec5e-4f7c-bb3e-9f61cce75c70@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 13 Nov 2025 16:25:01 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gWrkT9-wucHBGLLN1AVOazBLEv0Xn_ebpO1dt=Xp3XeQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bl0a74gTL4igagURGNIBDyo6DjQ8P3FklGJBAiHMwLu5o5AlK695HdZILU
-Message-ID: <CAJZ5v0gWrkT9-wucHBGLLN1AVOazBLEv0Xn_ebpO1dt=Xp3XeQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] cpuidle: governors: teo: Assorted improvements
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Reka Norman <rekanorman@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Thu, Nov 13, 2025 at 4:21=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
+On Wed, Nov 05 2025 at 10:54, Ulf Hansson wrote:
+> When governors used during cpuidle try to find the most optimal idle state
+> for a CPU or a group of CPUs, they are known to quite often fail. One
+> reason for this is, that they are not taking into account whether there has
+> been an IPI scheduled for any of the CPUs that are affected by the selected
+> idle state.
 >
-> On 11/12/25 16:21, Rafael J. Wysocki wrote:
-> > Hi,
-> >
-> > This is a bunch of teo cpuidle governor improvements, some of which are=
- related
-> > to a bug report discussed recently:
-> >
-> > https://lore.kernel.org/linux-pm/CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQs=
-U_qdcCx1m4w5g@mail.gmail.com/
-> >
-> > The first patch fixes a bug that may cause an overly deep idle state
-> > to be selected when the scheduler tick has been already stopped.
-> >
-> > Patch [2/4] removes an unnecessary function argument.
-> >
-> > Patch [3/4] makes teo_update() to use s64 as the data type for its loca=
-l
-> > variables more consistently.
-> >
-> > The last patch reworks the governor's decay implementation to also deca=
-y
-> > metric values lower than 8.
-> >
+> To enable pending IPIs to be taken into account for cpuidle decisions,
+> introduce a new helper function, cpus_peek_for_pending_ipi().
 >
-> Tested-by: Christian Loehle <christian.loehle@arm.com>
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Thank you!
-
-> Test results below, although there really isn't anything interesting in t=
-here.
-> teo-1 to teo-4 (patches 1 to 4 respectively are essentially indistinguish=
-able from
-> teo-m =3D mainline)
-
-Good, that's how it should be.
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 
