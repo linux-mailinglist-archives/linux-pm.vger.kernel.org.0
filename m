@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-37993-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37994-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D3B1C59DD3
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:55:00 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id A206AC59E0F
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:59:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4C6644E5719
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 19:54:48 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3935A3530DA
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 19:57:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8392731B10B;
-	Thu, 13 Nov 2025 19:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AB7831B80E;
+	Thu, 13 Nov 2025 19:57:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vwlb74ks"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cYEzuM9N"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E482FC881;
-	Thu, 13 Nov 2025 19:54:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE28776026;
+	Thu, 13 Nov 2025 19:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763063683; cv=none; b=f7y9v9dmEtYaMKLDCANFHezNMg2vqQ6mKDkjiX5XEcFTSxTgKK4ftrvpa6JiVsvgQxt7Z8F9Hzx/oe4HO/vyFxesuZyORQWSWP61dAKDwstC8RUilbILaZBv1+EzBJEd36b4kntLjJi7iem8vTnLVUm0CSr2LUE+Se7OeqCI7hY=
+	t=1763063852; cv=none; b=leHNWrodjFF8kGR0AMNBCG27KEN0XVq6tecFQxmPEwMyBD+uxOGxP7ZfU+cWWJMljbxcoTyyWNoTDBWzyi95FcBzFaTZMIiCBRaAtF6yHgjTdqT7IFyzPGMI9MIkTbiBw1qn21w8puJ8U19GcuEqONKjH8KCtqnp3vzRKYj6suI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763063683; c=relaxed/simple;
-	bh=rd3gd8jpljtLVI/ul/oa4QUW2omKUk/tIvW4U3c4pUc=;
+	s=arc-20240116; t=1763063852; c=relaxed/simple;
+	bh=puo0UoB37ZnIPSLQ+4sdZrPawcM3Ismb6YVyUz2aLwc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZaS6D0EONRoODTQeYphXdLM02wvFHkoTlv4d8bSAo3SJbcunky4ttsSJfFXNluI1EkERmHoUL7dXdvcnUtRgpI0Ncie90G5DdZNQUWw13c302vNgxogyl8IoLLiXdz1fm4u7cL1GTmEEenV9WHc71VAtDuTqxuoVmt5+0wKbY2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vwlb74ks; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8295EC4CEF5;
-	Thu, 13 Nov 2025 19:54:39 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=V463ttrkSu2zxVDt9DQbVKbBuDcc/8GTfDkukCpY7Zpj10Dlryva75kx9o5tY4+I8EwwCCLyM6doLDab0BZXiEKdyrqw9xYXmzW9/Q4C6xSzxL8qIyDPDb3lTAN0D2A5sr0dawc29CUXfEWM0GVGXaZfk2sVhUIL4H8D0TDhbMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cYEzuM9N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09BADC4CEF5;
+	Thu, 13 Nov 2025 19:57:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763063683;
-	bh=rd3gd8jpljtLVI/ul/oa4QUW2omKUk/tIvW4U3c4pUc=;
+	s=k20201202; t=1763063851;
+	bh=puo0UoB37ZnIPSLQ+4sdZrPawcM3Ismb6YVyUz2aLwc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Vwlb74ksOhWYBHwKEmGH9f8msK/5U+iPbKtGhb1aPbLy0FRmBYZh8PrIJ0XVnY7PQ
-	 H6m3h+mkdBQGsmsJfzXr3aF1wiSELK79ww6M1UezyDvL15I9yhRKGgSZoVtmAGyh2q
-	 G+TOaPBkC7S2oeV26nIyks1yRe8p+y7ujd5AsJWGa5CnlpsRetMuHJq9HU4EZL8SFY
-	 xTFoA9rznDQozeNA/vFvigi2fUE3C758EXAPisuBr/gO5N4Ki7e95mf3r1bT8K0H05
-	 J3AhpmH2jTbejJpJSf369rsFUPzygXPRmqCFlO65BUeO2+liWE0R1TU3KwRe3ercrB
-	 SvEFT74ztInQA==
-Date: Thu, 13 Nov 2025 19:54:37 +0000
+	b=cYEzuM9NfSh3sWGMHViESvr3w7FufROCVw1qN0xO7aPwIQqauF+9tEO45BOKCoD0L
+	 IfUY4to5+TjoonkFYBv5XMiLmV4sHa6ml0Adr4TEFbcMFjdlmzf5Cl0UhiybpOz55Z
+	 RmIS4K6cU3HbYZ44+FPGaZSstZdKGowNlCkyd8Jjt+xzORKuGG9vbYMV6lgLeGAlzj
+	 ZhiltSJL4r0ZLOSU4wglstb1hwUUkTDK8c16AhEBdmOR8YY/J0EmncaZyBXOJhcl4d
+	 gBQaDYPmNsw4At4rNVk+0BF9L70CZG3ErgOC00gpsFwMvusAllveTJtuVuQUXsvic4
+	 GTz0RD3wCqyaw==
+Date: Thu, 13 Nov 2025 19:57:25 +0000
 From: Conor Dooley <conor@kernel.org>
 To: Kaustabh Chakraborty <kauschluss@disroot.org>
 Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
@@ -58,11 +58,11 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
 	linux-rtc@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 03/13] dt-bindings: extcon: document Samsung S2M series
- PMIC extcon device
-Message-ID: <20251113-game-willpower-5ca93ea62cd0@spud>
+Subject: Re: [PATCH 04/13] dt-bindings: power: supply: document Samsung S2M
+ series PMIC charger device
+Message-ID: <20251113-evaluate-unrented-0f87915a5297@spud>
 References: <20251114-s2mu005-pmic-v1-0-9e3184d3a0c9@disroot.org>
- <20251114-s2mu005-pmic-v1-3-9e3184d3a0c9@disroot.org>
+ <20251114-s2mu005-pmic-v1-4-9e3184d3a0c9@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -70,52 +70,64 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="z2jFyzIGjzo/0PsT"
+	protocol="application/pgp-signature"; boundary="u7n4qZJf1FleTFjE"
 Content-Disposition: inline
-In-Reply-To: <20251114-s2mu005-pmic-v1-3-9e3184d3a0c9@disroot.org>
+In-Reply-To: <20251114-s2mu005-pmic-v1-4-9e3184d3a0c9@disroot.org>
 
 
---z2jFyzIGjzo/0PsT
+--u7n4qZJf1FleTFjE
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 14, 2025 at 12:35:04AM +0530, Kaustabh Chakraborty wrote:
-> Certain Samsung S2M series PMICs have a MUIC device which reports
-> various cable states by measuring the ID-GND resistance with an internal
-> ADC. Document the devicetree schema for this device.
+On Fri, Nov 14, 2025 at 12:35:05AM +0530, Kaustabh Chakraborty wrote:
+> Certain Samsung S2M series PMICs have a battery charger device which,
+> among other things, manages power interfacing of the USB port. It may
+> supply power, as done in USB OTG operation mode, or it may accept power
+> and redirect it to the battery fuelgauge for charging.
+>=20
+> This driver depends on the MUIC device present in the same PMIC block.
 >=20
 > The initial driver introduced has support for S2MU005, add its
 > compatible as well.
+
+Similar comments in all these binding commit messages, they should only
+really contain mentions of "drivers" if you are talking about electrical
+circuitry.
+
 >=20
 > Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
 > ---
->  .../bindings/extcon/samsung,s2mu005-muic.yaml      | 35 ++++++++++++++++=
+>  .../power/supply/samsung,s2mu005-charger.yaml      | 35 ++++++++++++++++=
 ++++++
 >  1 file changed, 35 insertions(+)
 >=20
-> diff --git a/Documentation/devicetree/bindings/extcon/samsung,s2mu005-mui=
-c.yaml b/Documentation/devicetree/bindings/extcon/samsung,s2mu005-muic.yaml
+> diff --git a/Documentation/devicetree/bindings/power/supply/samsung,s2mu0=
+05-charger.yaml b/Documentation/devicetree/bindings/power/supply/samsung,s2=
+mu005-charger.yaml
 > new file mode 100644
-> index 000000000000..8511bb96b47a
+> index 000000000000..80292d6e2562
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/extcon/samsung,s2mu005-muic.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/samsung,s2mu005-char=
+ger.yaml
 > @@ -0,0 +1,35 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/extcon/samsung,s2mu005-muic.yaml#
+> +$id: http://devicetree.org/schemas/power/supply/samsung,s2mu005-charger.=
+yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Extcon Driver for Samsung S2M series PMICs
+> +title: Battery Charger Driver for Samsung S2M series PMICs
 > +
 > +maintainers:
 > +  - Kaustabh Chakraborty <kauschluss@disroot.org>
 > +
 > +description: |
-> +  The Samsung S2M series PMIC extcon device is a USB port accessory
-> +  detector. It reports multiple states depending on the ID-GND
-> +  resistance measured by an internal ADC.
+> +  The Samsung S2M series PMIC battery charger manages power interfacing
+> +  of the USB port. It may supply power, as done in USB OTG operation
+> +  mode, or it may accept power and redirect it to the battery fuelgauge
+> +  for charging.
 > +
 > +  This is a part of device tree bindings for S2M and S5M family of Power
 > +  Management IC (PMIC).
@@ -123,37 +135,38 @@ c.yaml b/Documentation/devicetree/bindings/extcon/samsung,s2mu005-muic.yaml
 > +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
 > +  additional information and example.
 > +
+> +allOf:
+> +  - $ref: power-supply.yaml#
+> +
 > +properties:
 > +  compatible:
 > +    enum:
-> +      - samsung,s2mu005-muic
+> +      - samsung,s2mu005-charger
 
-Why does this need a dedicated child node for just a port property?
+Why do you need a dedicated child node for this? It's got one property,
+other than the compatible, that you're using. It could easily just go
+in the parent without a dedicated node etc.
 
-> +
-> +  port:
-> +    $ref: /schemas/graph.yaml#/properties/port
 > +
 > +required:
 > +  - compatible
-> +  - port
 > +
-> +additionalProperties: false
+> +unevaluatedProperties: false
 >=20
 > --=20
 > 2.51.2
 >=20
 
---z2jFyzIGjzo/0PsT
+--u7n4qZJf1FleTFjE
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRY3fQAKCRB4tDGHoIJi
-0kh4AP0XKLv/7QaeBB/tOO5jDegjLltpByS6Yu72YKSMZ2wxSgD+MyBrIbJZ7Auj
-qjPG4CZpkpsPkWJyje/gPu4/l6XC7Ac=
-=v6gL
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRY4JQAKCRB4tDGHoIJi
+0lucAQDyRCAA4SjDFvfubCoPl93IXeeEYtZ1Fr/ARmnLeDMbBwEArFFq5IqPWdLd
+1boZpaq0faA9nEz/5hWtAica4B7b8wY=
+=GYZh
 -----END PGP SIGNATURE-----
 
---z2jFyzIGjzo/0PsT--
+--u7n4qZJf1FleTFjE--
 
