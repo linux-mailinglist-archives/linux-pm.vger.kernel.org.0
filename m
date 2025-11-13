@@ -1,153 +1,116 @@
-Return-Path: <linux-pm+bounces-37955-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37956-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 686B3C5777E
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 13:43:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D718C57CCB
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 14:55:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C49F54E5AF8
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 12:41:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A27B34A4E45
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 13:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B03634F461;
-	Thu, 13 Nov 2025 12:41:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944EB351FBA;
+	Thu, 13 Nov 2025 13:24:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EDUmRthq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3838E34DCFE;
-	Thu, 13 Nov 2025 12:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDB43446AA;
+	Thu, 13 Nov 2025 13:24:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763037687; cv=none; b=p4hqVoprkvjeQZgtLqMXdAEzaXDCiapcTNSb1M7DBlwbjkKVb5WZ+R+4QgXDcZBzTidmgBFgYlSnoNtZmOJZ7V1JhW0ATFsnZyFT9yp3Xze0RuaBsB/xZQKIJYd2HRAP+Bb6PE00I/vVcjnSArRZI9mX87fL1229oxROnG6oJis=
+	t=1763040276; cv=none; b=C27PrbZYVc2BxlcSyB+twEc20BvWeed9ozUqO4kOtJpS2O899bpqXxXN2ZahnFfBp5qbjzevpWKpxwYhA/Z3xVaLtb7qi9gECipZruZssCcFAWVMT2PqtF9hpnU1xkczmdwYX1aZbI/s1DM2X8ljuvX1oXHXP4oZa/prBkDRI4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763037687; c=relaxed/simple;
-	bh=XaTNNB/CqGz+V+OMzj/mIjV+mLYVDACn92ZqVORRSbQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gGQtwWGpvSRE3rZqCBr6YsDBZ3xf5YJjR/31CnDfvrFvoKlulf3pdhMFqyaf9pndTijPryqI1+Sl8BNoznQ79X6gyczOnvN/SLxfGwvlpxMcM11y5AGpJAYr+JPoV+i0nTzbgeRd4q47eDfelLUNoyB4upBvvsRJxB+jHgOuBv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C26B012FC;
-	Thu, 13 Nov 2025 04:41:16 -0800 (PST)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.80.58])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 026C73F5A1;
-	Thu, 13 Nov 2025 04:41:24 -0800 (PST)
-Date: Thu, 13 Nov 2025 12:41:19 +0000
-From: Ionela Voinescu <ionela.voinescu@arm.com>
-To: Sumit Gupta <sumitg@nvidia.com>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, lenb@kernel.org,
-	robert.moore@intel.com, corbet@lwn.net, pierre.gondois@arm.com,
-	zhenglifeng1@huawei.com, rdunlap@infradead.org, ray.huang@amd.com,
-	gautham.shenoy@amd.com, mario.limonciello@amd.com,
-	perry.yuan@amd.com, zhanjie9@hisilicon.com,
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-	treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
-	ksitaraman@nvidia.com, sanjayc@nvidia.com, nhartman@nvidia.com,
-	bbasu@nvidia.com
-Subject: Re: [PATCH v4 6/8] cpufreq: CPPC: Add sysfs for min/max_perf and
- perf_limited
-Message-ID: <aRXR7yKyG6l1Agfq@arm.com>
-References: <20251105113844.4086250-1-sumitg@nvidia.com>
- <20251105113844.4086250-7-sumitg@nvidia.com>
+	s=arc-20240116; t=1763040276; c=relaxed/simple;
+	bh=OVlfDob210xkBYPcrnR/Kfy4T4yeohtxEqflJ1gh0rw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eE+zk8glJ7vsUDqPFKj7GmFZMhjV43j75YN5w/wBVyLYWhvML5Ec0hRmUk9mVRa+KF7vkHIMrTxDcjmvW9lAA+67cCvU0XXE1V0JC9kz1do/COaKJrxeCAoeiVwwEP0+Y6eJrKEgFRTJJBfxzNOFvRe+DIGfVwBZq44zBd7cnYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EDUmRthq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A165C4CEFB;
+	Thu, 13 Nov 2025 13:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763040275;
+	bh=OVlfDob210xkBYPcrnR/Kfy4T4yeohtxEqflJ1gh0rw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=EDUmRthqMCW49fs/aqdy1TYnjLXr/3cQveQtaZ637a6Zb8064y0oOc75Mf5clyBkK
+	 H2Flzt99PQ+qAeY+3xms3zdc209/qgd4XjBaoIlmoDSB8tIvOHa57UHrg600S3gOJM
+	 wDKmzGadGGbz6KSnXQXNHSoh8cE1uPuCGsMY489O5JWRiJzFuQq/U0nQ7tHYvjpUyX
+	 0tUNPI8KIllS+UQ0E/wRJT0lwOO6frDo/GMFGIBNLauCslZ6Wis4L3UwFs9x6YWQUR
+	 CPdyspYkATs2jPzC/AnsamcJfnTc7UWVsVkcrRdSeinWTxsAreC3hlBebntGxzZXEm
+	 qUDtii7kf62sQ==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>,
+ Christian Loehle <christian.loehle@arm.com>
+Cc: LKML <linux-kernel@vger.kernel.org>, Reka Norman <rekanorman@chromium.org>
+Subject:
+ [PATCH v2 1/4] cpuidle: governors: teo: Drop misguided target residency check
+Date: Thu, 13 Nov 2025 14:24:31 +0100
+Message-ID: <5955081.DvuYhMxLoT@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <5035693.GXAFRqVoOG@rafael.j.wysocki>
+References:
+ <4701737.LvFx2qVVIh@rafael.j.wysocki> <5035693.GXAFRqVoOG@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251105113844.4086250-7-sumitg@nvidia.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Wednesday 05 Nov 2025 at 17:08:42 (+0530), Sumit Gupta wrote:
-> Add sysfs interfaces for Minimum Performance, Maximum Performance
-> and Performance Limited Register in the cppc_cpufreq driver.
-> 
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  .../ABI/testing/sysfs-devices-system-cpu      | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> index 8aed6d94c4cd..6f1f70696000 100644
-> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-> @@ -327,6 +327,52 @@ Description:	Energy performance preference
->  
->  		This file is only present if the cppc-cpufreq driver is in use.
->  
-> +What:		/sys/devices/system/cpu/cpuX/cpufreq/min_perf
-> +Date:		December 2025
-> +Contact:	linux-pm@vger.kernel.org
-> +Description:	Minimum Performance Frequency
-> +
-> +		Read/write a frequency value in kHz from/to this file. This
-> +		file conveys the minimum performance level (as frequency) at
-> +		which the platform may run. The frequency value is internally
-> +		converted to a performance value and must correspond to a
-> +		performance level in the range [Lowest Performance, Highest
-> +		Performance], inclusive. The minimum must be less than or equal
-> +		to the maximum performance. The performance range can be checked
-> +		from nodes:
-> +			/sys/devices/system/cpu/cpuX/acpi_cppc/highest_perf
-> +			/sys/devices/system/cpu/cpuX/acpi_cppc/lowest_perf
+When the target residency of the current candidate idle state is
+greater than the expected time till the closest timer (the sleep
+length), it does not matter whether or not the tick has already been
+stopped or if it is going to be stopped.  The closest timer will
+trigger anyway at its due time, so if an idle state with target
+residency above the sleep length is selected, energy will be wasted
+and there may be excess latency.
 
-I think information on highest/lowest performance is irrelevant here. If
-the user is expected to provide a frequency value, it should only care
-about it being in the range [cpuinfo_min_freq, cpuinfo_max_freq].
+Of course, if the closest timer were canceled before it could trigger,
+a deeper idle state would be more suitable, but this is not expected
+to happen (generally speaking, hrtimers are not expected to be
+canceled as a rule).
 
-I think ideally all of these controls (auto-select, EPP, min, max, etc.)
-would have been better placed under
-/sys/devices/system/cpu/cpuX/acpi_cppc, but I suppose the intention
-was/is to have all performance related controls under cpufreq. But that
-means that the user should not be concerned about the underlying CPPC
-scale and only use /sys/devices/system/cpu/cpuX/acpi_cppc for
-information purposes.
+Accordingly, the teo_state_ok() check done in that case causes energy to
+be wasted more often than it allows any energy to be saved (if it allows
+any energy to be saved at all), so drop it and let the governor use the
+teo_find_shallower_state() return value as the new candidate idle state
+index.
 
-Thanks,
-Ionela.
+Fixes: 21d28cd2fa5f ("cpuidle: teo: Do not call tick_nohz_get_sleep_length() upfront")
+Cc: All applicable <stable@vger.kernel.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-> +
-> +		This file is only present if the cppc-cpufreq driver is in use.
-> +
-> +What:		/sys/devices/system/cpu/cpuX/cpufreq/max_perf
-> +Date:		December 2025
-> +Contact:	linux-pm@vger.kernel.org
-> +Description:	Maximum Performance Frequency
-> +
-> +		Read/write a frequency value in kHz from/to this file. This
-> +		file conveys the maximum performance level (as frequency) at
-> +		which the platform may run. The frequency value is internally
-> +		converted to a performance value and must correspond to a
-> +		performance level in the range [Lowest Performance, Highest
-> +		Performance], inclusive. The performance range can be checked
-> +		from nodes:
-> +			/sys/devices/system/cpu/cpuX/acpi_cppc/highest_perf
-> +			/sys/devices/system/cpu/cpuX/acpi_cppc/lowest_perf
-> +
-> +		This file is only present if the cppc-cpufreq driver is in use.
-> +
-> +What:		/sys/devices/system/cpu/cpuX/cpufreq/perf_limited
-> +Date:		December 2025
-> +Contact:	linux-pm@vger.kernel.org
-> +Description:	Performance Limited
-> +
-> +		Read/write a 32 bits value from/to this file. This file indicates
-> +		to OSPM that an unpredictable event has limited processor
-> +		performance, and the delivered performance may be less than
-> +		desired/minimum performance.
-> +
-> +		This file is only present if the cppc-cpufreq driver is in use.
->  
->  What:		/sys/devices/system/cpu/cpu*/cache/index3/cache_disable_{0,1}
->  Date:		August 2008
-> -- 
-> 2.34.1
-> 
+v1 -> v2: Subject and changelog modifications
+
+---
+ drivers/cpuidle/governors/teo.c |    7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -458,11 +458,8 @@ static int teo_select(struct cpuidle_dri
+ 	 * If the closest expected timer is before the target residency of the
+ 	 * candidate state, a shallower one needs to be found.
+ 	 */
+-	if (drv->states[idx].target_residency_ns > duration_ns) {
+-		i = teo_find_shallower_state(drv, dev, idx, duration_ns, false);
+-		if (teo_state_ok(i, drv))
+-			idx = i;
+-	}
++	if (drv->states[idx].target_residency_ns > duration_ns)
++		idx = teo_find_shallower_state(drv, dev, idx, duration_ns, false);
+ 
+ 	/*
+ 	 * If the selected state's target residency is below the tick length
+
+
+
 
