@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-37992-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37993-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id E23A2C59DBE
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:54:09 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D3B1C59DD3
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 20:55:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C1CEB3488A0
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 19:54:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4C6644E5719
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 19:54:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 173FC3161A7;
-	Thu, 13 Nov 2025 19:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8392731B10B;
+	Thu, 13 Nov 2025 19:54:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PkNaukk3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vwlb74ks"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFAB32FC881;
-	Thu, 13 Nov 2025 19:53:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E482FC881;
+	Thu, 13 Nov 2025 19:54:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763063637; cv=none; b=AaiUSptmfC64cJnL1HvnmSBj/2DFW1KO7gSbvInSDgGk/wmbvM5OTTapTT2PuB6SqnOB75nDSYhvS2awMOTguIYJh+8pLfJj5xqHLKODZ1lOz0jsUJmDjazd2RFf8UxTk1wCI/Osv1qXzXYQsPHT5KE4Ht3MTzwCCJULO0KpkEE=
+	t=1763063683; cv=none; b=f7y9v9dmEtYaMKLDCANFHezNMg2vqQ6mKDkjiX5XEcFTSxTgKK4ftrvpa6JiVsvgQxt7Z8F9Hzx/oe4HO/vyFxesuZyORQWSWP61dAKDwstC8RUilbILaZBv1+EzBJEd36b4kntLjJi7iem8vTnLVUm0CSr2LUE+Se7OeqCI7hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763063637; c=relaxed/simple;
-	bh=ZKJbLBa0fy5L++3eLehWmmy0nrt64NDQIpOco3SAK+k=;
+	s=arc-20240116; t=1763063683; c=relaxed/simple;
+	bh=rd3gd8jpljtLVI/ul/oa4QUW2omKUk/tIvW4U3c4pUc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VvJhaQugpCTG9BKEjmMd8DCLq9T/w79ZKnN+QQVRqQRHYzDT+uGOWGwgHrT3ek6BZtdqcXMr2RAKVET2H2g90PCspaGWH30JVRl4vqFsYOYHzQniOiefBtlVq0u+T7H341mjyI1dHK00dgxPTCf5PuDKyNoMj705jpmN8+kZ+/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PkNaukk3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11E4BC4CEF7;
-	Thu, 13 Nov 2025 19:53:52 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZaS6D0EONRoODTQeYphXdLM02wvFHkoTlv4d8bSAo3SJbcunky4ttsSJfFXNluI1EkERmHoUL7dXdvcnUtRgpI0Ncie90G5DdZNQUWw13c302vNgxogyl8IoLLiXdz1fm4u7cL1GTmEEenV9WHc71VAtDuTqxuoVmt5+0wKbY2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vwlb74ks; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8295EC4CEF5;
+	Thu, 13 Nov 2025 19:54:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763063636;
-	bh=ZKJbLBa0fy5L++3eLehWmmy0nrt64NDQIpOco3SAK+k=;
+	s=k20201202; t=1763063683;
+	bh=rd3gd8jpljtLVI/ul/oa4QUW2omKUk/tIvW4U3c4pUc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PkNaukk39QBebiHy439y0q5dIw1iaKCIUkF1979D1Owm+yO4/tZnGa5JV6gZZA4kH
-	 z0qiDz5Ff2yVR6+mJqLLKxZyvIFk9a9Tza8/L0HntUrKlSN8XPD4WlgkAGBmfJVeq2
-	 8gwrS8eFPwb44s+Rk7DN0w5hktJ/ow1omLymcvKf9A2H/uVWQZp+uniBUBHWjtXBf7
-	 RB+18WWuBFybBRPBUci6BKy5A4RUdJ2HpYXtjsFV1CiGEZk0MaMkl+1uMJe6kOA+Gj
-	 W8oStvSL0GFIV/mj5C/7w9rolBUcvwN3Zcm1asF7WZg+iw03QgYdjqpeozEJacD1qL
-	 zYg41/z96SmSA==
-Date: Thu, 13 Nov 2025 19:53:51 +0000
+	b=Vwlb74ksOhWYBHwKEmGH9f8msK/5U+iPbKtGhb1aPbLy0FRmBYZh8PrIJ0XVnY7PQ
+	 H6m3h+mkdBQGsmsJfzXr3aF1wiSELK79ww6M1UezyDvL15I9yhRKGgSZoVtmAGyh2q
+	 G+TOaPBkC7S2oeV26nIyks1yRe8p+y7ujd5AsJWGa5CnlpsRetMuHJq9HU4EZL8SFY
+	 xTFoA9rznDQozeNA/vFvigi2fUE3C758EXAPisuBr/gO5N4Ki7e95mf3r1bT8K0H05
+	 J3AhpmH2jTbejJpJSf369rsFUPzygXPRmqCFlO65BUeO2+liWE0R1TU3KwRe3ercrB
+	 SvEFT74ztInQA==
+Date: Thu, 13 Nov 2025 19:54:37 +0000
 From: Conor Dooley <conor@kernel.org>
 To: Kaustabh Chakraborty <kauschluss@disroot.org>
 Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
@@ -58,11 +58,11 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
 	linux-rtc@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 02/13] dt-bindings: leds: document Samsung S2M series
- PMIC RGB LED device
-Message-ID: <20251113-predefine-reprogram-6ac518ae3c01@spud>
+Subject: Re: [PATCH 03/13] dt-bindings: extcon: document Samsung S2M series
+ PMIC extcon device
+Message-ID: <20251113-game-willpower-5ca93ea62cd0@spud>
 References: <20251114-s2mu005-pmic-v1-0-9e3184d3a0c9@disroot.org>
- <20251114-s2mu005-pmic-v1-2-9e3184d3a0c9@disroot.org>
+ <20251114-s2mu005-pmic-v1-3-9e3184d3a0c9@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -70,60 +70,52 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="SLQIDdi531A5rD9h"
+	protocol="application/pgp-signature"; boundary="z2jFyzIGjzo/0PsT"
 Content-Disposition: inline
-In-Reply-To: <20251114-s2mu005-pmic-v1-2-9e3184d3a0c9@disroot.org>
+In-Reply-To: <20251114-s2mu005-pmic-v1-3-9e3184d3a0c9@disroot.org>
 
 
---SLQIDdi531A5rD9h
+--z2jFyzIGjzo/0PsT
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 14, 2025 at 12:35:03AM +0530, Kaustabh Chakraborty wrote:
-> Certain Samsung S2M series PMICs have a three-channel LED device with
-> independent brightness control for each channel, typically used as
-> status indicators in mobile phones. Document the devicetree schema from
-> this driver.
+On Fri, Nov 14, 2025 at 12:35:04AM +0530, Kaustabh Chakraborty wrote:
+> Certain Samsung S2M series PMICs have a MUIC device which reports
+> various cable states by measuring the ID-GND resistance with an internal
+> ADC. Document the devicetree schema for this device.
 >=20
 > The initial driver introduced has support for S2MU005, add its
 > compatible as well.
-
-Same here.
-Additionally "Document the ... from this driver" should lose the driver
-part, unless you mean it as "led driver" rather than "linux driver".
-pw-bot: changes-requested
-
-
 >=20
 > Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
 > ---
->  .../bindings/leds/samsung,s2mu005-rgb.yaml         | 34 ++++++++++++++++=
+>  .../bindings/extcon/samsung,s2mu005-muic.yaml      | 35 ++++++++++++++++=
 ++++++
->  1 file changed, 34 insertions(+)
+>  1 file changed, 35 insertions(+)
 >=20
-> diff --git a/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.y=
-aml b/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml
+> diff --git a/Documentation/devicetree/bindings/extcon/samsung,s2mu005-mui=
+c.yaml b/Documentation/devicetree/bindings/extcon/samsung,s2mu005-muic.yaml
 > new file mode 100644
-> index 000000000000..bad7080ff8f5
+> index 000000000000..8511bb96b47a
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml
-> @@ -0,0 +1,34 @@
+> +++ b/Documentation/devicetree/bindings/extcon/samsung,s2mu005-muic.yaml
+> @@ -0,0 +1,35 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/leds/samsung,s2mu005-rgb.yaml#
+> +$id: http://devicetree.org/schemas/extcon/samsung,s2mu005-muic.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: RGB LED Driver for Samsung S2M series PMICs
+> +title: Extcon Driver for Samsung S2M series PMICs
 > +
 > +maintainers:
 > +  - Kaustabh Chakraborty <kauschluss@disroot.org>
 > +
 > +description: |
-> +  The Samsung S2M series PMIC RGB LED is a three-channel LED device with
-> +  8-bit brightness control for each channel, typically used as status
-> +  indicators in mobile phones.
+> +  The Samsung S2M series PMIC extcon device is a USB port accessory
+> +  detector. It reports multiple states depending on the ID-GND
+> +  resistance measured by an internal ADC.
 > +
 > +  This is a part of device tree bindings for S2M and S5M family of Power
 > +  Management IC (PMIC).
@@ -131,33 +123,37 @@ aml b/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml
 > +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
 > +  additional information and example.
 > +
-> +allOf:
-> +  - $ref: common.yaml#
-> +
 > +properties:
 > +  compatible:
 > +    enum:
-> +      - samsung,s2mu005-rgb
+> +      - samsung,s2mu005-muic
+
+Why does this need a dedicated child node for just a port property?
+
+> +
+> +  port:
+> +    $ref: /schemas/graph.yaml#/properties/port
 > +
 > +required:
 > +  - compatible
+> +  - port
 > +
-> +unevaluatedProperties: false
+> +additionalProperties: false
 >=20
 > --=20
 > 2.51.2
 >=20
 
---SLQIDdi531A5rD9h
+--z2jFyzIGjzo/0PsT
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRY3TgAKCRB4tDGHoIJi
-0ttSAQCrTnorYl4zjYckb6wIib40vGfB8jpqrPfkPj0b9WYNOAD/Wm0MR2BOYqu8
-tUWoOQo3rw843YlaMf3HXmiNSnyo1AA=
-=Lphx
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaRY3fQAKCRB4tDGHoIJi
+0kh4AP0XKLv/7QaeBB/tOO5jDegjLltpByS6Yu72YKSMZ2wxSgD+MyBrIbJZ7Auj
+qjPG4CZpkpsPkWJyje/gPu4/l6XC7Ac=
+=v6gL
 -----END PGP SIGNATURE-----
 
---SLQIDdi531A5rD9h--
+--z2jFyzIGjzo/0PsT--
 
