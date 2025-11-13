@@ -1,150 +1,102 @@
-Return-Path: <linux-pm+bounces-37944-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37946-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 633BEC572B4
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 12:26:23 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D288BC57393
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 12:38:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D9D564E2B0D
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 11:26:21 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 56AFF34E238
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 11:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 558AB33B6D2;
-	Thu, 13 Nov 2025 11:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDE842F0C46;
+	Thu, 13 Nov 2025 11:32:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42BD82D5C6C;
-	Thu, 13 Nov 2025 11:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3771C2EE607;
+	Thu, 13 Nov 2025 11:32:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763033178; cv=none; b=bdbcI4YDpLDPpCNu0ghCKmKbxZemk4NqSDLWIQhwHhL5RZvIEq8WXnj6fv2fwNEXbvZgXs2YGFZsYz7mrSWDsy3Si5XQmVimSZqF2s16Xxj7ghQGjyaTyBVcbXhxU6fUV8j5+HGL3XEcRQ0HoxevbFbV3QX6zq/Pk+f0zjRJyOA=
+	t=1763033567; cv=none; b=M2Xc0nlj1CODgnhPghOozq7rSToT8JJml1e8+4226CG3fhmMk3wquK+P96YpiYg/EW7x6V0NPPZjO7OR+ymFntnbgQaeY4clQRAHvvUtSe3449e9VGL28oQcpoYrjbtTZODGRIeO2lLmsj5FJRWQJ3t0sQIKvc3ytaBFhCkTvDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763033178; c=relaxed/simple;
-	bh=/FJmqLMHLv/MBteuHFWGYx6Eqd8rC4+Vxc9u9W0jJPk=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=W3/Rf5tEgvc0STNhfyV/FD+IyUeYyAVBf1F+83Jn44GPOcGAoZLKQvRuDnfttUDd6ss1PYpfHnEAYW78aoKgW5W4/LNf46INnJPA35K7ok6VpQYgD9oBE2dyua8NVN+pj3XAc8UA5kbE8Vz8PDUxiUPaUhTtyjmhSTr782hPl+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4d6dHg5CqlzHnGcw;
-	Thu, 13 Nov 2025 19:25:51 +0800 (CST)
-Received: from dubpeml100005.china.huawei.com (unknown [7.214.146.113])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9CE331402F5;
-	Thu, 13 Nov 2025 19:26:12 +0800 (CST)
-Received: from localhost (10.203.177.15) by dubpeml100005.china.huawei.com
- (7.214.146.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Thu, 13 Nov
- 2025 11:26:11 +0000
-Date: Thu, 13 Nov 2025 11:26:10 +0000
-From: Jonathan Cameron <jonathan.cameron@huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: <dan.j.williams@intel.com>, Dhruva Gole <d-gole@ti.com>, Frank Li
-	<Frank.Li@nxp.com>, Linux PM <linux-pm@vger.kernel.org>, Linux ACPI
-	<linux-acpi@vger.kernel.org>, Takashi Iwai <tiwai@suse.de>, LKML
-	<linux-kernel@vger.kernel.org>, Zhang Qilong <zhangqilong3@huawei.com>, Linux
- PCI <linux-pci@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>, Alex
- Williamson <alex.williamson@redhat.com>
-Subject: Re: [PATCH v1 0/3] PM: runtime: Wrapper macros for usage counter
- guards
-Message-ID: <20251113112610.000071df@huawei.com>
-In-Reply-To: <CAJZ5v0i0U=BYFH+QmeVjSpcyrVhVR0zjke3Vve3wxnpNzcDcoQ@mail.gmail.com>
-References: <13883374.uLZWGnKmhe@rafael.j.wysocki>
-	<20251112063941.kbg44srt5f7rfkjb@lcpd911>
-	<5068916.31r3eYUQgx@rafael.j.wysocki>
-	<6914fbb5a6ce_1d911001b@dwillia2-mobl4.notmuch>
-	<CAJZ5v0i0U=BYFH+QmeVjSpcyrVhVR0zjke3Vve3wxnpNzcDcoQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1763033567; c=relaxed/simple;
+	bh=gsE04yxtQUqCAg9Uv0wf+vQtEfwTWll6x+wXBOPmv+4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IqDeTLTe3/r72/BT+CmhUEsga/ILynKvERYyMb62epjMy1ys5/JJpfqDuAsRoUlMDuryx9qboI/iJv+AyMtwDTxX6gqJLayOMdN7Qo2cLJVkMYEHsSgCBzH17bxv9Rs7L2J2RLTbgp0i8HJQwb7s1QOSn3gQ7ufaRg42MJG5o6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1FD112FC;
+	Thu, 13 Nov 2025 03:32:37 -0800 (PST)
+Received: from [10.1.28.59] (e127648.arm.com [10.1.28.59])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A2B6D3F66E;
+	Thu, 13 Nov 2025 03:32:44 -0800 (PST)
+Message-ID: <1dc4934f-a3ce-4ead-a43c-0a80987364b6@arm.com>
+Date: Thu, 13 Nov 2025 11:32:42 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500009.china.huawei.com (7.191.174.84) To
- dubpeml100005.china.huawei.com (7.214.146.113)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/4] cpuidle: governors: teo: Drop incorrect target
+ residency check
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Reka Norman <rekanorman@chromium.org>
+References: <4701737.LvFx2qVVIh@rafael.j.wysocki>
+ <5035693.GXAFRqVoOG@rafael.j.wysocki>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <5035693.GXAFRqVoOG@rafael.j.wysocki>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, 12 Nov 2025 22:38:14 +0100
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+On 11/12/25 16:22, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> When the target residency of the current candidate idle state is
+> greater than the expected time till the closest timer (the sleep
+> length), it does not matter whether or not the tick has already
+> been stopped or if it is going to be stopped.  The closest timer
+> will trigger anyway at its due time, so it does not make sense to
+> select an idle state with target residency above the sleep length.
+> 
+> Accordingly, drop the teo_state_ok() check done in that case and
+> let the governor use the teo_find_shallower_state() return value
+> as the new candidate idle state index.
+> 
+> Fixes: 21d28cd2fa5f ("cpuidle: teo: Do not call tick_nohz_get_sleep_length() upfront")
+> Cc: All applicable <stable@vger.kernel.org>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpuidle/governors/teo.c |    7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> --- a/drivers/cpuidle/governors/teo.c
+> +++ b/drivers/cpuidle/governors/teo.c
+> @@ -458,11 +458,8 @@ static int teo_select(struct cpuidle_dri
+>  	 * If the closest expected timer is before the target residency of the
+>  	 * candidate state, a shallower one needs to be found.
+>  	 */
+> -	if (drv->states[idx].target_residency_ns > duration_ns) {
+> -		i = teo_find_shallower_state(drv, dev, idx, duration_ns, false);
+> -		if (teo_state_ok(i, drv))
+> -			idx = i;
+> -	}
+> +	if (drv->states[idx].target_residency_ns > duration_ns)
+> +		idx = teo_find_shallower_state(drv, dev, idx, duration_ns, false);
+>  
+>  	/*
+>  	 * If the selected state's target residency is below the tick length
+> 
+> 
+> 
 
-> On Wed, Nov 12, 2025 at 10:27=E2=80=AFPM <dan.j.williams@intel.com> wrote:
-> >
-> > Rafael J. Wysocki wrote: =20
-> > > On Wednesday, November 12, 2025 7:39:41 AM CET Dhruva Gole wrote: =20
-> > > > On Nov 07, 2025 at 19:35:09 +0100, Rafael J. Wysocki wrote: =20
-> > > > > Hi All,
-> > > > >
-> > > > > The runtime PM usage counter guards introduced recently:
-> > > > >
-> > > > > https://lore.kernel.org/linux-pm/6196611.lOV4Wx5bFT@rafael.j.wyso=
-cki/
-> > > > >
-> > > > > and then fixed:
-> > > > >
-> > > > > https://lore.kernel.org/linux-pm/5943878.DvuYhMxLoT@rafael.j.wyso=
-cki/
-> > > > >
-> > > > > should generally work, but using them feels sort of arcane and cr=
-yptic
-> > > > > even though the underlying concept is relatively straightforward.
-> > > > >
-> > > > > For this reason, runtime PM wrapper macros around ACQUIRE() and
-> > > > > ACQUIRE_ERR() involving the new guards are introduced in this ser=
-ies
-> > > > > (patch [1/3]) and then used in the code already using the guards =
-(patches
-> > > > > [2/3] and [3/3]) to make it look more straightforward. =20
-> > > >
-> > > > The patches look okay to me,
-> > > > Reviewed-by: Dhruva Gole <d-gole@ti.com> =20
-> > >
-> > > Thank you and Jonathan for the tags, but since Frank is not convinced=
-, let me
-> > > bounce one more idea off all of you.
-> > >
-> > > Namely, I think that Frank has a point when he wonders if PM_RUNTIME_=
-ACQUIRE_ERR
-> > > hides too much information and I agree with Jonathan that may be misu=
-nderstood,
-> > > so what about defining the wrapper macros so they don't hide the guar=
-d variable
-> > > name, like in the patch below? =20
-> >
-> > I had been reluctant about offering an enthusiastic tag on this series
-> > given that information hiding, but with this change:
-> >
-> > Reviewed-by: Dan Williams <dan.j.williams@intel.com> =20
->=20
-> Thanks!
->=20
-> > However, I prefer that the scope variable declaration vs usage
-> > (reference) cases should maintain visual separation with an operator,
-> > i.e.:
-> >
-> >         PM_RUNTIME_ACQUIRE(dev, pm);
-> >         if (PM_RUNTIME_ACQUIRE_ERR(&pm))
-> >                 return -ENXIO;
-> >
-> > Otherwise we have a case of different flavors of *_ACQUIRE_ERR
-> > implementing various styles. I initially looked at hiding the '&':
-> >
-> > http://lore.kernel.org/681ea7d5ea04b_2a2bb100cf@dwillia2-mobl4.notmuch
-> >
-> > ...but it grew on me precisely because it provides a clue about how this
-> > magic operates. =20
->=20
-> Fair enough.
->=20
-> I'll resend the series with this change then.
-This new option is much nicer and not too verbose.
-
->=20
-> Thank you!
->=20
-
+AFAICT this check was to not be stuck in a shallow state when tick is already disabled.
+There might be a timer armed in t+500us but that might still get cancelled, which
+is why we didn't think a below TICK_NSEC 'shallow' state is acceptable?
 
