@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-37967-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-37968-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EA8FC5910A
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 18:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EEB43C5908E
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 18:14:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 1B34F4F0027
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 16:28:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 00C7A4F63CF
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Nov 2025 16:30:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D073596FC;
-	Thu, 13 Nov 2025 16:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C06C735A950;
+	Thu, 13 Nov 2025 16:21:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="L08N9R9H"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="FXGx0vo5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DEF3570C4;
-	Thu, 13 Nov 2025 16:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ADD835A15E;
+	Thu, 13 Nov 2025 16:21:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763050753; cv=none; b=ZvLzWfCOswDFvfo7RefBcGQ3+khOhdSytBw52PH/SW81u1kBfS/UQZyERFqLmL4Q6B/UhdBYEq711wnZ/Sd0kbU+MIa7IhOIo/d6lU+dfPLPDeaNEMRVzSWn1HBcWR4ytza9Z0eu9ThjujkXlMrYTPiZEeWGCQ3ER/Ztj74KtnY=
+	t=1763050868; cv=none; b=IIxo5puebYFQkIv30DUM6WhzR4ITYviLQLPsl0JQRInXxvfK1QEZrncjEkw6oQUjGsVNi4+PoA2zmYYPmhXCABzBGYXORrlQUAyzGh6x7SyRz/At/rMUG0OIa+xpabP5N6fH2hJUe2hQ8l1RP89syrMszb5zG3JcJh9xk81yipg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763050753; c=relaxed/simple;
-	bh=ZbbaaHUsQVLypoOUIIZkHe7iZlm+xeNap25LcZ0bsIk=;
+	s=arc-20240116; t=1763050868; c=relaxed/simple;
+	bh=eBWGYbEPMSvsTZJWmtZWO1t79PMxcV429zFLf0WhYQw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kCp8b5QcevgzbQEEFQU7Ng+OKMvhRZe0RepumU84W8CrhaNVDnZUhKtoYILtJ4TMPncGktq+/BVYe45IUWStF1Z+RO5kF7L/35K/OIT1ZFJPdKjaI5JXZ5ynIhw6cPMnkXcn5zHdxbNrOWM4p6jroycmLgabMLKFv41JTiDidQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=L08N9R9H; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version:Content-Type; b=kc6VD4UzMlKMjP4yw9RCxm/ZmFhi+SxLikIJmiCnSyxvgDPgzJb9P1arVq03t65PKCz0QMVOPAu8McGs/AFS3uO0QRnC/GvBcHqXNiDQGGKkf2qea5PLAj6QK+yKv9Hic20mWtNion0FD7k2MOS3tPTGUIcG9oELcJY0u3qdKnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=FXGx0vo5; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1763050749;
-	bh=ZbbaaHUsQVLypoOUIIZkHe7iZlm+xeNap25LcZ0bsIk=;
+	s=mail; t=1763050864;
+	bh=eBWGYbEPMSvsTZJWmtZWO1t79PMxcV429zFLf0WhYQw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=L08N9R9H05FYgeI9He5wHagRWiiNK1wBzRiAIi1E0bwjHP0B2EawoC/wrhPwCN6Y5
-	 jhuQHRwtEgVNqhy1K8RlbKaA6mevZjcmqSfVk09V1KBpkYqzapV1YnScBMrbOIYjOX
-	 VO4RxYBGG1jvY89tItdFBj+QnC0NoujI7MTpkhy770bdBzoC53sQLi2f8D6yMnAv+L
-	 XslBpTDc5Z4swz4lXyOEr3alCOFf9ZUXdjRUlAQxuWVXekfL64byL9cFcYkfNoWBly
-	 iuaXggnvrQNWwSLGZXDdPxCELz6+ayfY5Rg8wYmCTxE7/qW4zGxeSh5vSq1nYDiIdg
-	 60E/apd/bqVHA==
+	b=FXGx0vo55dQWrQLSZ6T5FwniDgYI8sm4cMlr4ZHSh0vV2u9jFCJsdEcRIbc7Tqdhr
+	 w/P4ldsvV+lsw6AGnXfWLgVu6XnFxaQ+J11rJiHgM8vE6bmEJs+AsfaIZUoYvZR8nh
+	 T5c7GcM+bDwbbNxRvnwst2Dr0au4OntLx9K99s3uAMbmEuJt67dgU8iyTogu4ch3MD
+	 xyYEPdMW+4+e4UgU7z0ppYQvxdtIv3Sx1eHwZFWIBZrSOv8GCYEIkyvJBVlS+ISK7F
+	 uip+yMNGWz97aCboHz61ru3EoKCProh9B/a0t23QVRJyGwwYGsEqVNkAbiuhI5c4Wx
+	 T2IyvBkxMAO/g==
 Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:9cb8:f653:99e7:c419])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: laura.nao)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id B644117E00B0;
-	Thu, 13 Nov 2025 17:19:07 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 97DB117E1341;
+	Thu, 13 Nov 2025 17:21:03 +0100 (CET)
 From: Laura Nao <laura.nao@collabora.com>
 To: daniel.lezcano@linaro.org
 Cc: andrew-ct.chen@mediatek.com,
@@ -74,14 +74,13 @@ Cc: andrew-ct.chen@mediatek.com,
 	robh@kernel.org,
 	rui.zhang@intel.com,
 	srini@kernel.org,
-	u.kleine-koenig@baylibre.com,
-	wenst@chromium.org
-Subject: Re: [PATCH RESEND v3 3/9] thermal/drivers/mediatek/lvts: Guard against zero temp_factor in lvts_raw_to_temp
-Date: Thu, 13 Nov 2025 17:18:59 +0100
-Message-Id: <20251113161859.280743-1-laura.nao@collabora.com>
+	u.kleine-koenig@baylibre.com
+Subject: Re: [PATCH RESEND v3 4/9] thermal: mediatek: lvts: Add platform ops to support alternative conversion logic
+Date: Thu, 13 Nov 2025 17:20:53 +0100
+Message-Id: <20251113162053.281093-1-laura.nao@collabora.com>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <84b9fd00-ce75-43bf-a53b-48818628f7e2@linaro.org>
-References: <84b9fd00-ce75-43bf-a53b-48818628f7e2@linaro.org>
+In-Reply-To: <1e0545da-5d24-4ca4-863d-0d5671902d0b@linaro.org>
+References: <1e0545da-5d24-4ca4-863d-0d5671902d0b@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -93,76 +92,110 @@ Content-Transfer-Encoding: 8bit
 
 Hi Daniel,
 
-On 11/10/25 13:42, Daniel Lezcano wrote:
+On 11/10/25 14:06, Daniel Lezcano wrote:
 > On 10/16/25 16:21, Laura Nao wrote:
->> Add a guard against zero temp_factor in lvts_raw_to_temp() to prevent
->> division by zero and ensure safe conversion. 
->
-> Is the temp_factor something else than a ro data statically initialized by the lvts_data structure ?
->
-> It is pointless to handle the case where the temp_factor is zero. If we read the temperature the kernel crashes immediately (which means it was not tested).
->
-> The temp_factor is an internal value of the driver. If the temp_factor is zero, the driver is buggy and should be fixed.
->
->
-
-That’s right - if temp_factor is zero, that indicates broken platform 
-data. I propose failing the probe instead of adding a runtime guard, 
-since this condition should never happen in a valid configuration. This 
-way, we make the developer aware of the issue early and avoid a kernel 
-crash at runtime.
-
-I'll send out a v4 to drop the "if (temp_factor == 0)" checks and 
-replace the warning with an error:
-
-if (!lvts_data->temp_factor)
-	return dev_err_probe(dev, -EINVAL, "temp_factor should never be zero; check platform data.\n");
-
-Best,
-
-Laura
-
->> Fixes: 6725a29321e4 ("thermal/drivers/mediatek/lvts_thermal: Make coeff configurable")
->> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+>> Introduce lvts_platform_ops struct to support SoC-specific versions of
+>> lvts_raw_to_temp() and lvts_temp_to_raw() conversion functions.
+>>
+>> This is in preparation for supporting SoCs like MT8196/MT6991, which
+>> require a different lvts_temp_to_raw() implementation.
+>>
 >> Reviewed-by: Fei Shao <fshao@chromium.org>
 >> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 >> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 >> Signed-off-by: Laura Nao <laura.nao@collabora.com>
 >> ---
->>   drivers/thermal/mediatek/lvts_thermal.c | 12 +++++++++---
->>   1 file changed, 9 insertions(+), 3 deletions(-)
+>>   drivers/thermal/mediatek/lvts_thermal.c | 27 ++++++++++++++++++++++---
+>>   1 file changed, 24 insertions(+), 3 deletions(-)
 >>
 >> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
->> index 1c54d0b75b1a..4ef549386add 100644
+>> index 4ef549386add..df1c0f059ad0 100644
 >> --- a/drivers/thermal/mediatek/lvts_thermal.c
 >> +++ b/drivers/thermal/mediatek/lvts_thermal.c
->> @@ -284,11 +284,14 @@ static int lvts_raw_to_temp(u32 raw_temp, int temp_factor)
->>     static u32 lvts_temp_to_raw(int temperature, int temp_factor)
->>   {
->> -    u32 raw_temp = ((s64)(golden_temp_offset - temperature)) << 14;
->> +    u32 raw_temp;
->>   -    raw_temp = div_s64(raw_temp, -temp_factor);
->> +    if (temp_factor == 0)
->> +        return temperature;
->>   -    return raw_temp;
->> +    raw_temp = ((s64)(golden_temp_offset - temperature)) << 14;
+>> @@ -125,8 +125,14 @@ struct lvts_ctrl_data {
+>>               continue; \
+>>           else
+>>   +struct lvts_platform_ops {
+>> +    int (*lvts_raw_to_temp)(u32 raw_temp, int temp_factor);
+>> +    u32 (*lvts_temp_to_raw)(int temperature, int temp_factor);
+>> +};
 >> +
->> +    return div_s64(raw_temp, -temp_factor);
->>   }
->>     static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
->> @@ -1346,6 +1349,9 @@ static int lvts_probe(struct platform_device *pdev)
->>       if (irq < 0)
->>           return irq;
->>   +    if (!lvts_data->temp_factor)
->> +        dev_warn(dev, "temp_factor should never be zero; check platform data.\n");
->> +
->>       golden_temp_offset = lvts_data->temp_offset;
->>         ret = lvts_domain_init(dev, lvts_td, lvts_data); 
-> If
+>>   struct lvts_data {
+>>       const struct lvts_ctrl_data *lvts_ctrl;
+>> +    const struct lvts_platform_ops *ops;
+>>       const u32 *conn_cmd;
+>>       const u32 *init_cmd;
+>>       int num_cal_offsets;
+>> @@ -300,6 +306,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+>>       struct lvts_ctrl *lvts_ctrl = container_of(lvts_sensor, struct lvts_ctrl,
+>>                              sensors[lvts_sensor->id]);
+>>       const struct lvts_data *lvts_data = lvts_ctrl->lvts_data;
+>> +    const struct lvts_platform_ops *ops = lvts_data->ops;
+>>       void __iomem *msr = lvts_sensor->msr;
+>>       u32 value;
+>>       int rc;
+>> @@ -332,7 +339,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+>>       if (rc)
+>>           return -EAGAIN;
+>>   -    *temp = lvts_raw_to_temp(value & 0xFFFF, lvts_data->temp_factor);
+>> +    *temp = ops->lvts_raw_to_temp(value & 0xFFFF, lvts_data->temp_factor); 
 >
+> Don't do this in each functions. It does not help for the readability.
 >
+> May be something like:
 >
+> int lvts_raw_to_temp(u32 raw_temp, const struct lvts_ctrl_data)
+> {
+>     return data->ops->lvts_temp_to_raw(raw_temp, data->temp_factor);
+> }
 >
+> or
+>
+> int lvts_raw_to_temp(u32 raw_temp, const struct lvts_ctrl_data)
+> {
+>     int temperature;
+>
+>     if (data->ops->lvts_temp_to_raw)
+>         return data->ops->lvts_temp_to_raw(raw_temp, data->temp_factor);
+>
+>     temperature = ((s64)(raw_temp & 0xFFFF) * temp_factor) >> 14;
+>         temperature += golden_temp_offset;
+>
+>         return temperature;
+> }
+>
+> ... and get rid of all the lvts_platform_ops_v1
+>
+> (btw _v1 is confusing, it suggests there multiple versions of the same SoC)
+>
+
+Right, the first option looks more efficient. Since temp_offset is 
+already part of lvts_data, the function would look like:
+
+int lvts_raw_to_temp(u32 raw_temp, const struct lvts_data *lvts_data)
+{
+	return lvts_data->ops->lvts_raw_to_temp(raw_temp, lvts_data->temp_factor);
+}
+
+and the same pattern applies for temp_to_raw().
+
+This change will require renaming the existing 
+lvts_raw_to_temp()/lvts_temp_to_raw()/lvts_temp_to_raw_v2() 
+implementations. I agree the current _v1 and _v2 suffixes aren’t very 
+descriptive. Since lvts_temp_to_raw_v2() version is only used by MT8196,
+it could be renamed to lvts_temp_to_raw_mt8196(), with the corresponding 
+platform ops defined as lvts_platform_ops_mt8196. The base 
+lvts_raw_to_temp()/lvts_temp_to_raw() are shared across the other SoCs,
+so they could be renamed after the first supported platform (mt7988) and 
+reused for all SoCs that share the same logic.
+
+I'll send out a v4 with the proposed changes.
+
+Thanks,
+
+Laura
+
+> [ ... ]
 >
 
 
