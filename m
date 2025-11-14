@@ -1,162 +1,313 @@
-Return-Path: <linux-pm+bounces-38039-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38040-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43070C5D5A5
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 14:29:42 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4370AC5D8AA
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 15:23:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D1BE734AA3D
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 13:24:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D93C44F2809
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 14:16:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAB53315D27;
-	Fri, 14 Nov 2025 13:24:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D9030B50A;
+	Fri, 14 Nov 2025 14:16:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="An0Ki4z5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QD5h+ifW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BC1314B95
-	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 13:24:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29E535CBD3
+	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 14:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763126688; cv=none; b=PQwBBO5pslhOBKMV74qW/63DPjSyHYbZSWoyXhWQxua0gCcGSZSCx2TyQbO68hdj2Z6MVyiRG4zkfxVryUUwkUk/1bqtZi7UhZcbv7xS6idiKBhgmpjtwy7/46T4WvUpdFPIAFrCX1L00VYhsdUqJaCFmL4Q3+1HxhORB91nG5k=
+	t=1763129772; cv=none; b=qjl+0halZordV1YBaWzoIm+3ihK1DPa6obmEqrrX6U4ByK7vqHMuXCVrL91PopFH1ObJMjv7meYHugTBUXxaqJ12rVcNS1jq94VYiw1vZkm3sK9YtLxMOgNIKk6lmqOTZDMJrGSHBbrRMl8APnApKbczfCkv5HT8ATD6F6de6OE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763126688; c=relaxed/simple;
-	bh=/MfNmCaMbBpwAOzkjJvB9GOQKWmOcsbFnthRP3WrP4c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SEfN12U8S85jkacYrDwaCDhfTfIYZJasGqURSkvjCeIZTluaIiOnM+nAPJgFJiDj3vMUUibWLhAQV/CzXbbBhMOxWsSAfcDkYYS44PT4OFkwCEgCv3JJF3KiQJAoyB1z9x6OrVPN/NNfTTfR7TTlOAXAbOOLJmFTFBVYMeJtVfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=An0Ki4z5; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47775fb6c56so22354835e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 05:24:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763126685; x=1763731485; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9tFYx+r0LtpX/2l5hmodetJ2Wuc+Oih4VLt/Zf0jWOY=;
-        b=An0Ki4z5M41xmXqsKse7t1kP32LyH7afmW0YlcG9Klz4WF2Qx46YDfpOj9RcO8CIW9
-         f8efAj6aNHro8mPQWwq81DAj64i0kZRyu87XRwFl0qsvaDUW0vE7DzGLHl7CTqkpF8cB
-         RBuTx/0HmQ+ZYpJotrbnDXqLaCZFTiycAX58s0n649VTxK2Lw1+OmXloblDS4EynSQeh
-         zYKoVclD7t4CU9KkLLfS4mJ4oK49bGhGV6eIqqTlPrKW/uKBy3IvcxdrDTU1Mc6NblsK
-         ByrgavWKyOE8tH68P8SfojNr4pMgMWJrBUDZjexZwzoxjXBw2o2kLowBzdJ/f4HwwtK3
-         SFBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763126685; x=1763731485;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9tFYx+r0LtpX/2l5hmodetJ2Wuc+Oih4VLt/Zf0jWOY=;
-        b=DSz8OAX9XEoYkWSiav/olRZlR09+yguHo9BI6Co/AmW1hMApdTitjKOj1DoLPZahfk
-         0qCUI5oSDIhoaLaNPFBajzS7Lxco0ibqIubNEVXFYPC+Pvssy14Z5vQ3CeZMQhXQ+p87
-         rm8Aod6RC7s+YkOql44oaQ/lD0hwg2j2ET6puV85TcMES8yrrDH0BXWuRj4IK8UC227u
-         67YIAU3uX8VI1hkDUPxDlB+70aopyOyConZHU3VODuTU3NUHb1606lAdPz2qzqimQh8K
-         +7pTc3QpC9ICxSQko5V4wM6C5gEhX2k27u7csZdXX+pyd5DOM5iu1xF/LdRmX29Lhy+A
-         zuZA==
-X-Forwarded-Encrypted: i=1; AJvYcCU5lcarvP7hemLZYYOibBQbiyIAi0CwtfhRtVeaBxDGG/eBQIJpxaftld3rSJ0j+S+aVTNJDUhPGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHWdmArAW3qFIu5JHCQCksSpJCdcD727xUJ0YMVESu6LgrXNdx
-	8ogatfTTHFyN8prc7E5ZWOaEc6Z4JYwio7RMAljjbHm0eJAigo1xLs0V
-X-Gm-Gg: ASbGncsTKNfGSxJ+Sq+QGMQcV8kjXf/Dl557U2ZmhU0lwAScDC6bgUmj4B7NRcK2+DL
-	MvXUICANWzJS52o21fBeeXeMxpxMoP9pk3wXLhO+1gdgC5fzm+Fy81o7IJDBzqNTMXRZjy+DuYL
-	fHi8USWlrOSsybcP5uu83Cuk8WYa6CtAd0z9txAHyLQNSPPwpL3CDqe9v8+ropXoPqc4+nna4ef
-	Hq3ub+wqc8ouBA6OiAmvwtDZ21PUEKZmwZc8VkQTIqZipkifdEGLlw6+8/XX1MXbGX/8bVGU/jk
-	JvTSnaQGe6hMZ+Vd/GxjpZnkeCEjl2oVsyxx2x3Ep3AyPx5G61X/pGFpeLhsLbTxAY2+azYQ35e
-	wPfRmelsOQDOZkv/OZ2k6JbAvKNDE6mqoOmA3eSUMCzkYPTB+CegaQn9AfOmFBKocvlmFivOpxk
-	ljDY9XAf+x0F/ALC/+qXQQbOIdTDzbZbmaUjYSVP4M8BnhMAtOTsAeHJReMKVVlWpMD6KggkJpZ
-	Q==
-X-Google-Smtp-Source: AGHT+IGGro6Ab6Q6hQTIcaBq7Nzqv7eihH1X2JDeRvd7W4sKRsUWsSzI35q89svHlSq6wH7pBHiBUw==
-X-Received: by 2002:a05:600c:1c20:b0:477:5b0a:e616 with SMTP id 5b1f17b1804b1-4778fe4f635mr29777265e9.5.1763126684877;
-        Fri, 14 Nov 2025 05:24:44 -0800 (PST)
-Received: from orome (p200300e41f274600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f27:4600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4778bb454a6sm46271815e9.2.2025.11.14.05.24.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Nov 2025 05:24:43 -0800 (PST)
-Date: Fri, 14 Nov 2025 14:24:41 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, 
-	Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Samuel Holland <samuel@sholland.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Maximilian Luz <luzmaximilian@gmail.com>, 
-	Hans de Goede <hansg@kernel.org>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-tegra@vger.kernel.org, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: [PATCH v2 00/11] of: Add wrappers to match root node with OF
- device ID tables
-Message-ID: <kqtjfqkzz3lfnpg7lo5m4dctowsxqxtlcdtktoatpze3hr3tue@ku6p25skb666>
-References: <20251112-b4-of-match-matchine-data-v2-0-d46b72003fd6@linaro.org>
- <f949c2a6-df24-41bb-aac7-f5567d03c5f5@collabora.com>
+	s=arc-20240116; t=1763129772; c=relaxed/simple;
+	bh=CY/43TKGyTJGl+lStS+Y2MgI5etM774AT71I4+JrUcY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kqwpjLgbSMrWdVGntv+aSXLynturYFrgpQZh5zKpMgo57KR8F7yvH6jXE7j/40JmtQ3G/M0avsDZwcumjHcWNQGfaesqo1mJRd0mRSrbyMAblDyMjylZDod6G/aC0w4vXGPDYTTHLlCjIgPbw8jPtx1K8D0ajejtVOmXvugz2hU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QD5h+ifW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 646FEC4CEF1
+	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 14:16:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763129771;
+	bh=CY/43TKGyTJGl+lStS+Y2MgI5etM774AT71I4+JrUcY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=QD5h+ifWs2FhRJgxlIs9P4xm1EFbhXR9AiUWuAo5i0WJnNCqR08S0jSJ6c6NMop79
+	 C07PSZMPMLJDBDQXCDhUem2FqHTM+4hWsRmulej+JSXi/s5HXF0s9H0zCo4pwuU0RQ
+	 vHBiyeMF2h3S1ewVgp2DoJRtcf+Dxoaqm+4wsRAFYcDFElnawxzHkjTsmS6M7ShNcQ
+	 P2BrtOaIkQKfMhQUWH87wbYAyuuWiGcVFoSS84FBmtnNLmdfwLMrMxT31saXtpnd1n
+	 zgU/A4MFaHNNaUjmHNOETnSVJbpCXKaInscL1huv8vsU+WzTVz0br66Xg5EtaXEdNI
+	 rgfW3BYY8gCAQ==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-656b7f02b56so862189eaf.0
+        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 06:16:11 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWvI47HU3dzuu4mzZZj4IezGXzIQmIPt1jHG5PtiaAwbIMPZXl9cES1JP7qCLIxYILzDSYqoKwKcw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzdbEiL8IJONweQ9VFrsEPXigOXikzrtCU5c7K7aQ/o4+jLILd
+	pBd4adAOZJxviob1xQ9SlPxnU6fgxoqEHOHNAXeKYkezwUEz+Mnt9ko04dHKQZo3iiRXuianZxh
+	R9HiAFvzZ42/+atd7TnJ/hqkg1SMsfv4=
+X-Google-Smtp-Source: AGHT+IHFng1++n6E0/dxwv86kGr1OS8kgzH4eMy45CGHgGUX4PL8LF5jfGbJHYq6pOYvn/d3ytG71AsAiBIWv0375o4=
+X-Received: by 2002:a05:6820:c084:b0:651:c2cf:8c8c with SMTP id
+ 006d021491bc7-657232439dcmr2294898eaf.0.1763129770683; Fri, 14 Nov 2025
+ 06:16:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ntn2juw5rgeaer4c"
-Content-Disposition: inline
-In-Reply-To: <f949c2a6-df24-41bb-aac7-f5567d03c5f5@collabora.com>
-
-
---ntn2juw5rgeaer4c
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
+References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
+ <00928b9d-7189-4929-afc9-7684fc5ef531@arm.com> <ca45366d-4c85-4802-8a35-886a6f69d10d@arm.com>
+ <6228387.lOV4Wx5bFT@rafael.j.wysocki> <CAEmPcwsVfcoFTyS-mHSkZTFmS8Y1vkFToYo1xcAH0522wyDawA@mail.gmail.com>
+ <431db236-736d-4fc3-95c2-876bc767aa0c@arm.com>
+In-Reply-To: <431db236-736d-4fc3-95c2-876bc767aa0c@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 14 Nov 2025 15:15:57 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0huP6hjDzJ9HoAmUVaS1ss2g0baMROiAz9cqkgmOn1kHQ@mail.gmail.com>
+X-Gm-Features: AWmQ_bl-7ELt7drLwyrbbWe4YyfyJGHTCvkPBYLWf6QowBml1SQJp9sv8wAyGq0
+Message-ID: <CAJZ5v0huP6hjDzJ9HoAmUVaS1ss2g0baMROiAz9cqkgmOn1kHQ@mail.gmail.com>
+Subject: Re: [PATCH v1] cpuidle: governors: teo: Rework the handling of tick wakeups
+To: Christian Loehle <christian.loehle@arm.com>, Reka Norman <rekanorman@chromium.org>
+Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2 00/11] of: Add wrappers to match root node with OF
- device ID tables
-MIME-Version: 1.0
 
-On Wed, Nov 12, 2025 at 12:52:48PM +0100, AngeloGioacchino Del Regno wrote:
-> Il 12/11/25 11:28, Krzysztof Kozlowski ha scritto:
-> > Changes in v2:
->=20
-> Note:
->=20
-> Looks ok based on code and based on testing on the following platforms:
->  - tegra: Jetson Xavier NX Development Kit
+On Fri, Nov 14, 2025 at 9:33=E2=80=AFAM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 11/14/25 04:05, Reka Norman wrote:
+> > On Fri, Nov 14, 2025 at 3:56=E2=80=AFAM Rafael J. Wysocki <rafael@kerne=
+l.org> wrote:
+> >>
+> >> On Thursday, November 13, 2025 4:43:18 PM CET Christian Loehle wrote:
+> >>> On 11/12/25 18:33, Christian Loehle wrote:
+> >>>> On 11/12/25 14:16, Rafael J. Wysocki wrote:
+> >>>>> On Wed, Nov 12, 2025 at 3:03=E2=80=AFPM Christian Loehle
+> >>>>> <christian.loehle@arm.com> wrote:
+> >>>>>>
+> >>>>>> On 11/12/25 13:32, Rafael J. Wysocki wrote:
+> >>>>>>> On Tue, Nov 11, 2025 at 6:20=E2=80=AFPM Christian Loehle
+> >>>>>>> <christian.loehle@arm.com> wrote:
+> >>>>>>>>
+> >>>>>>>> On 11/11/25 11:48, Rafael J. Wysocki wrote:
+> >>>>>>>>> On Tue, Nov 11, 2025 at 11:48=E2=80=AFAM Christian Loehle
+> >>>>>>>>> <christian.loehle@arm.com> wrote:
+> >>>>>>>>>>
+> >>>>>>>>>> On 11/11/25 10:00, Christian Loehle wrote:
+> >>>>>>>
+> >>>>>>> [...]
+> >>>>>>>
+> >>>>>>>>>>> I see two issues:
+> >>>>>>>>>>> 1) Because of DECAY_SHIFT 3 values < 8 cannot decay (I guess =
+this wouldn't really be an issue without 2))
+> >>>>>>>>>
+> >>>>>>>>> This shouldn't be a problem.
+> >>>>>>>>
+> >>>>>>>> Agreed, it should be a non-issue. Nonetheless if this wasn't the=
+ case $subject would've likely
+> >>>>>>>> never been an issue.
+> >>>>>>>
+> >>>>>>> Well, I think that the leftovers can be cleared when they become =
+less than 8.
+> >>>>>>>
+> >>>>>>>>>
+> >>>>>>>>>>> 2) if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum)=
+ isn't an appropriate check, it will
+> >>>>>>>>>>> exclude the state if it its idx_hit_sum make up the vast majo=
+rity of cpu_data->total (i.e. it would
+> >>>>>>>>>>> have been a really good candidate actually).
+> >>>>>>>>>
+> >>>>>>>>> Well, it would exclude the state if the sum of hits for the sta=
+tes
+> >>>>>>>>> below it is large enough.  This is questionable (because why wo=
+uld
+> >>>>>>>>> hits matter here), but I attempted to make the change below and
+> >>>>>>>>> somebody reported a regression IIRC.
+> >>>>>>>>>
+> >>>>>>>>> This check is related to the problem at hand though (see below)=
+.
+> >>>>>>>>>
+> >>>>>>>>>>>
+> >>>>>>>>>>> I lightly tested the below, it seems to be at least comparabl=
+e to mainline teo.
+> >>>>>>>>>>> (the documentation/comments would need adapting too, of cours=
+e)
+> >>>>>>>>>>>
+> >>>>>>>>>>> -----8<-----
+> >>>>>>>>>>>
+> >>>>>>>>>>> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidl=
+e/governors/teo.c
+> >>>>>>>>>>> index bfa55c1eab5b..f8f76e3b8364 100644
+> >>>>>>>>>>> --- a/drivers/cpuidle/governors/teo.c
+> >>>>>>>>>>> +++ b/drivers/cpuidle/governors/teo.c
+> >>>>>>>>>>> @@ -355,7 +355,7 @@ static int teo_select(struct cpuidle_driv=
+er *drv, struct cpuidle_device *dev,
+> >>>>>>>>>>>          * all of the deeper states, a shallower idle state i=
+s likely to be a
+> >>>>>>>>>>>          * better choice.
+> >>>>>>>>>>>          */
+> >>>>>>>>>>> -       if (2 * idx_intercept_sum > cpu_data->total - idx_hit=
+_sum) {
+> >>>>>>>>>>> +       if (2 * idx_intercept_sum > idx_hit_sum) {
+> >>>>>>>>>>>                 int first_suitable_idx =3D idx;
+> >>>>>>>>>>>
+> >>>>>>>>>>>                 /*
+> >>>>>>>>>>>
+> >>>>>>>>>>>
+> >>>>>>>>>>
+> >>>>>>>>>> ... nevermind the patch, idx_hit_sum is of course the sum of 0=
+...idx-1.
+> >>>>>>>>>> Maybe something like this, again lightly tested:
+> >>>>>>>>>>
+> >>>>>>>>>> -----8<-----
+> >>>>>>>>>>
+> >>>>>>>>>> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle=
+/governors/teo.c
+> >>>>>>>>>> index 173ddcac540a..6bfb9cedb75e 100644
+> >>>>>>>>>> --- a/drivers/cpuidle/governors/teo.c
+> >>>>>>>>>> +++ b/drivers/cpuidle/governors/teo.c
+> >>>>>>>>>> @@ -383,13 +395,15 @@ static int teo_select(struct cpuidle_dri=
+ver *drv, struct cpuidle_device *dev,
+> >>>>>>>>>>                  * has been stopped already into account.
+> >>>>>>>>>>                  */
+> >>>>>>>>>>                 intercept_sum =3D 0;
+> >>>>>>>>>> +               hit_sum =3D 0;
+> >>>>>>>>>>
+> >>>>>>>>>>                 for (i =3D idx - 1; i >=3D 0; i--) {
+> >>>>>>>>>>                         struct teo_bin *bin =3D &cpu_data->sta=
+te_bins[i];
+> >>>>>>>>>>
+> >>>>>>>>>>                         intercept_sum +=3D bin->intercepts;
+> >>>>>>>>>> +                       hit_sum +=3D bin->hits;
+> >>>>>>>>>>
+> >>>>>>>>>> -                       if (2 * intercept_sum > idx_intercept_=
+sum) {
+> >>>>>>>>>> +                       if (2 * intercept_sum > cpu_data->tota=
+l || 2 * hit_sum > cpu_data->total) {
+> >>>>>>>>>>                                 /*
+> >>>>>>>>>>                                  * Use the current state unles=
+s it is too
+> >>>>>>>>>>                                  * shallow or disabled, in whi=
+ch case take the
+> >>>>>>>>>
+> >>>>>>>>> This will only matter after the deepest state has been rejected
+> >>>>>>>>> already and on the system in question this means selecting stat=
+e 0 no
+> >>>>>>>>> matter what.
+> >>>>>>>>>
+> >>>>>>>>
+> >>>>>>>> Ah, right!
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>> The pre-6.12 behavior can be explained if tick wakeups are take=
+n into account.
+> >>>>>>>>>
+> >>>>>>>>> Namely, when state 0 is chosen (because of the check mentioned =
+above),
+> >>>>>>>>> the tick is not stopped and the sleep length is KTIME_MAX.  If =
+the
+> >>>>>>>>> subsequent wakeup is a tick one, it will be counted as a hit on=
+ the
+> >>>>>>>>> deepest state (and it will contribute to the total sum in the c=
+heck
+> >>>>>>>>> mentioned above).  Then, at one point, cpu_data->total will be =
+large
+> >>>>>>>>> enough and the deepest state will become the candidate one.  If
+> >>>>>>>>> tick_nohz_get_sleep_length() returns a large value at that poin=
+t, the
+> >>>>>>>>> tick will be stopped and the deepest state will be entered.  Ni=
+rvana
+> >>>>>>>>> ensues.
+> >>>>>>>>
+> >>>>>>>> So fundamentally we will have to count tick-wakeups as a) nothin=
+g, which
+> >>>>>>>> doesn't allow us to ever break out of the intercept logic that c=
+aused us
+> >>>>>>>> to leave the tick on b) intercepts, which is bonkers and doesn't=
+ allow us
+> >>>>>>>> to ever break out and c) hits =3D=3D sleep_length would've been =
+accurate.
+> >>>>>>>> Of course counting a tick wakeup as a hit for sleep_length negat=
+es the
+> >>>>>>>> intercept logic.
+> >>>>>>>
+> >>>>>>> Not quite.  The intercept logic is there for wakeups other than t=
+ick
+> >>>>>>> wakeups and timer wakeups.
+> >>>>>>>
+> >>>>>>> I actually think that tick wakeups can be counted as hits on the
+> >>>>>>> deepest available state - maybe only when tick wakeups dominate t=
+he
+> >>>>>>> wakeup pattern - but generally this is not unreasonable: When the
+> >>>>>>> wakeup pattern is dominated by tick wakeups, this by itself is a =
+good
+> >>>>>>> enough reason to stop the tick.
+> >>>>>>
+> >>>>>> (assuming HZ=3D1000 below but it doesn't matter)
+> >>>>>> That will exclude any 'intercept' logic from having much effect if=
+ the
+> >>>>>> avg idle duration is >TICK_NSEC/2, which is potentially still quit=
+e a bit
+> >>>>>> off from state1 residency, like in Reka's case here.
+> >>>>>> That's why I thought it would cause unreasonable regressions here.
+> >>>>>> I'll give it a go as well though!
+> >>>>>
+> >>>>> Thanks!
+> >>>>>
+> >>>>> Note that I'd prefer to add a check if tick wakeups dominate the
+> >>>>> wakeup pattern before setting sleep_length_ns to KTIME_MAX though.
+> >>>>> I'd first like to know how the Reka's system reacts to the more
+> >>>>> drastic variant of this change.
+> >>>>
+> >>>> Below are my usual tests, it's definitely visible but the impact is =
+limited
+> >>>> on this platform anyway. I think if we gate the KTIME_MAX setting be=
+hind
+> >>>> the "tick wakeup dominate" it should be acceptable!
+> >>>> Let's see what Reka reports.
+> >>>>
+> >>> Forgot to post the full results, anyway as expected with mtdblock (a =
+very slow
+> >>> / low frequent wakeup scenario) the impact becomes clearly visible.
+> >>> Still hopeful that the more conservative approach will be acceptable!
+> >>
+> >> Speaking of which, the patch to test is appended below, but it doesn't=
+ apply
+> >> directly on top of the mainline.  It is based on some other patches th=
+at have
+> >> been posted recently, so here's a git branch with all of the requisite
+> >> material:
+> >>
+> >> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git cpui=
+dle-teo-testing
+> >>
+> >> Reka, please try this one and let us know how it goes.
+> >
+> > Results attached. The residencies are a bit less deep than before -
+> > about 4.5% in WFI vs 2% at 6.6 or with the more aggressive patch. But
+> > I=E2=80=99m guessing that=E2=80=99s expected.
+> >
+> > I also measured the power on a slightly different system where I first
+> > noticed this regression, and it=E2=80=99s indistinguishable from 6.6. S=
+o from
+> > my side this looks great, thank you!
+>
+> Good news!
 
-Thanks for testing, but Xavier NX doesn't run any of the code changed by
-this patch. soc_is_tegra() is a legacy function that we need for DT
-backwards-compatibility and should only run on 32-bit ARM devices.
+So I'm going to queue this up for 6.19 along with the material it depends o=
+n.
 
-Technically there's one case in drivers/soc/tegra/flowctrl.c that runs
-this on Tegra210, but it should probably undergo the same treatment as
-the PMC and FUSE drivers. The code that needs this is only used for CPU
-power management on 32-bit ARM devices.
+I'd rather not rush it into 6.18-rc7 because it would not get
+meaningful exposure in linux-next before appearing in the mainline in
+that case.
 
-Thierry
+Reka, I'm going to add your Tested-by: to it, please let me know if
+there are any concerns regarding that.
 
---ntn2juw5rgeaer4c
-Content-Type: application/pgp-signature; name="signature.asc"
+Now, I think that it needs to go into -stable (6.12+ I suppose?) and
+I'm going to instruct -stable to pick up the dependencies along with
+it.
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmkXLZkACgkQ3SOs138+
-s6G/cA/+IgP1K3OXIF03hJ/xSNn2a6/dnr1TTFLAUI6Ge13aBNVPxKCDqoxLZCAt
-pN2vtjYNWX0Z80+tnCpGdf961hS6OY28OJmABKNotQvlrnzBSn8ggsZ64UlAka80
-SRr74Do7F4bWqWrBHEDD4FRjlYR0OVy2/s0i5Zcavhixa1bqN/F9gTWT+kKItZOE
-TcV+O8gQF/op9NSShu+oXIZFRcPKdugCNN8w77cE/9B/0o1iII9DzX5uzFYK0Au4
-M7rAxBiHHh71czN3ts79Mcyinj9kcC3zGq9wtusv3N18sDRqwZCp+mPP3Y8Up0t4
-OotwMzxf59FsoSpNDUh/FgkCNoDoDXbajVzHTig9OQspb/nNis+P5Pbw7FIZb8Q2
-3jq8uRvMP3p8gc2pB7nnyQoC6ToofIcHlnhbW0oi1Fi0HovauoN7Vb8/gsJDWY6c
-hBe4ABpghzhh0VXFf8CM0vK2MonZYPO0BTyDguUr4nx6QGrrLnBG7S/B2wvaIzgs
-UeyUPjbgEhQVdyWALBKf6aK9IXi/Wp+s9w0XJ7qG14q665MqwxIXXIo0ZOIiIe28
-e+Ajuapyv0juG6x+mVb44mHgWqZ6bquDTegdCr9PakfF4rDYnDKAcdzOM7/y8/UX
-FXAgwJiScvxp/LO7D70bNXMPtYPQ3TVxDJu2I5128N5iNtuaxgE=
-=vxrn
------END PGP SIGNATURE-----
-
---ntn2juw5rgeaer4c--
+Thanks!
 
