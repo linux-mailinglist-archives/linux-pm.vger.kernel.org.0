@@ -1,146 +1,162 @@
-Return-Path: <linux-pm+bounces-38038-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38039-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8032AC5D593
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 14:29:07 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43070C5D5A5
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 14:29:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4AD9D4E23CB
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 13:22:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D1BE734AA3D
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 13:24:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD2AB314A79;
-	Fri, 14 Nov 2025 13:22:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAB53315D27;
+	Fri, 14 Nov 2025 13:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JLxJBecV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="An0Ki4z5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD7F313E30
-	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 13:22:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3BC1314B95
+	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 13:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763126525; cv=none; b=GXK+DuJFx/ADYJKUdTI56US3tDn1CvwZhqFG8nwOlxq0y6kR5QossushxX24nPh3fMIcBjBdHfbXk6Gsi2V/tUXW1pv/xGaj2sZBheNSmw1thOhauDym79SbpeVfbmVQsmWuxSjBeJACVGuZOlEi3ZHeYp2eRwQO/Zdi2c+zKaU=
+	t=1763126688; cv=none; b=PQwBBO5pslhOBKMV74qW/63DPjSyHYbZSWoyXhWQxua0gCcGSZSCx2TyQbO68hdj2Z6MVyiRG4zkfxVryUUwkUk/1bqtZi7UhZcbv7xS6idiKBhgmpjtwy7/46T4WvUpdFPIAFrCX1L00VYhsdUqJaCFmL4Q3+1HxhORB91nG5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763126525; c=relaxed/simple;
-	bh=PIhVxornY+xeHydrfUvm8sKztzt4GgYtkzvZxgJ8W40=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mwW+FBZb0F5iEJOfq+uMlmS3+8gTaxylt3c+k3KI4t9Qux+q1vf+UbEDLWvMD7ESVc3n7ed+asp36yEz1K1xRoaBvbcehAWX0Bd4wtIkrk28Id0n42gjR0O72Izs/5coyijfD/7wG+YabLOqf4qPiGdwuxRzaGd8v8JPYjo1Tqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JLxJBecV; arc=none smtp.client-ip=209.85.208.181
+	s=arc-20240116; t=1763126688; c=relaxed/simple;
+	bh=/MfNmCaMbBpwAOzkjJvB9GOQKWmOcsbFnthRP3WrP4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SEfN12U8S85jkacYrDwaCDhfTfIYZJasGqURSkvjCeIZTluaIiOnM+nAPJgFJiDj3vMUUibWLhAQV/CzXbbBhMOxWsSAfcDkYYS44PT4OFkwCEgCv3JJF3KiQJAoyB1z9x6OrVPN/NNfTTfR7TTlOAXAbOOLJmFTFBVYMeJtVfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=An0Ki4z5; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-37bac34346dso5637421fa.2
-        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 05:22:03 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47775fb6c56so22354835e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 05:24:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763126522; x=1763731322; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TrtX8x6xiGPlcF3REo6XTaulSDVNKE90sjqlhnGudPU=;
-        b=JLxJBecVTt7ci4MySHtaJCX2RuSWm+47+kgQXd3+q5iCTC6xRsKVeS4VMO2C6iKoUi
-         7wC7myl8516ZyD8NfP4qhC6InalfcMWDXVAnbtLDFNwJ6ARwpQfEZIrsLX12cgIT1uql
-         lrk6TGIK/1QEbP5uaOpQ8lOu/DJZfSzIb3aiGlYvsoBl6Z+b0tkjB3xpz6kbj1SreGpl
-         da9piGtvNIXkCcYmoDu2sNWR9609OQO1ta0KvjdQNYb4U1AiIS2D9tvNsn+Wv5udjE9n
-         tKW1+Vcx+V8JDmWgyb2Y2iuVQPq4hnOZ7a48Uw3v7Cx5fOHYIAEu4dBdezJxsOSPM0Es
-         tZGA==
+        d=gmail.com; s=20230601; t=1763126685; x=1763731485; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9tFYx+r0LtpX/2l5hmodetJ2Wuc+Oih4VLt/Zf0jWOY=;
+        b=An0Ki4z5M41xmXqsKse7t1kP32LyH7afmW0YlcG9Klz4WF2Qx46YDfpOj9RcO8CIW9
+         f8efAj6aNHro8mPQWwq81DAj64i0kZRyu87XRwFl0qsvaDUW0vE7DzGLHl7CTqkpF8cB
+         RBuTx/0HmQ+ZYpJotrbnDXqLaCZFTiycAX58s0n649VTxK2Lw1+OmXloblDS4EynSQeh
+         zYKoVclD7t4CU9KkLLfS4mJ4oK49bGhGV6eIqqTlPrKW/uKBy3IvcxdrDTU1Mc6NblsK
+         ByrgavWKyOE8tH68P8SfojNr4pMgMWJrBUDZjexZwzoxjXBw2o2kLowBzdJ/f4HwwtK3
+         SFBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763126522; x=1763731322;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TrtX8x6xiGPlcF3REo6XTaulSDVNKE90sjqlhnGudPU=;
-        b=dcCddMkoNdH3x9jUNBtaJW3/r5ushWVJxGDfCEj/NDlc2zpwHXHk8tFHYhHxqtNuPn
-         0k/aLGt87VuaH5TzukZ8YyfSw09qRAngy4HNgseCIMtTg1hOflK9l2FjOSPScIutn2Fr
-         WX/s3ajvLKO6fmtQD/C5R89Ea6+MXrsB0gfVFGTuJbssoWo9cHqmyoKeKnJOFc3DIXU7
-         NSTjGHZX54XBSJ7LVL5DOM6MElgooNdx3rGa09K9t6scrjWSa6AqNKgaysvIb8s+ulnc
-         cUYk87NGrOHhtb12/nxWROeAoSjebNaKgCAUw4svuXrBvsDHVTHgd1WB/ACq1cfraWVB
-         1fjw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9loVQC2BmJA8UMvOfsAPlCXtSMN9tk1/TTBF7f3b/yZkaIex6F7L1jaBC0hmFUt9L3MyC4LlsKA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT/Z4BeHAOiWf2naPh2onXT6TbMMLaZQlo9wAljwlmaSMb3+N3
-	pOwdrnlkTFDf8rxNGMRwVQJAALfn3GZBQ3Y1/KSTnM/zxV5gc5nzeQVD
-X-Gm-Gg: ASbGnctELcs8xuRyS3V8xumJhK2Y0MiPb9ivwS5f2+l+3X1FsWUw1sFuApLNvrW1Hdo
-	2qjFhv9upVyvdHHbXMKTEOLocUt1eBQ4QA/19WbZHDhgr5azwM4i+8pxqX38qWBPjlQFjxgG3Tt
-	fhmAJu34xgXiZ6pIN5taDVQyT5mLtb+mXxehkYouB4VthZhIVwpEM1wxamkGcIe2Sr2exYjbKLR
-	ih5cjD1RIo2W+pKhYxy8qQBjRlKhUqxyQ1NtOUpiXj6CnhKwZ3FURfuuZ6EEiJI6sLqyuvqdKmk
-	Iwy8Z+ep+s3v4lb16FtY5DwiZJtQ47NSoRlPjbLFN3NYuLjd9KKi8HGsLl42wxQNuiXzQ25hA/p
-	WxyQEaIx4sLO4Nh3Gf+AZxPcbXTiQCBL15oHTJPRzWGwXJessZLByiLaRCUBksguUuaMwRLSl+E
-	Uu68c1yDnJqQLcrs7JIha0A5BjUyelYoiW2es5eBEF47QYWKZS0JvQLLWjwA==
-X-Google-Smtp-Source: AGHT+IFJvPwRc3iSb2WexT7/Nxb76MqMei5zXQUBPxVbaOVwZ0mTUJAzGoCKPRFSwFTVf5iDU0WZyw==
-X-Received: by 2002:a05:651c:418f:b0:378:e3f9:2d26 with SMTP id 38308e7fff4ca-37babd80ac1mr5793261fa.39.1763126521767;
-        Fri, 14 Nov 2025 05:22:01 -0800 (PST)
-Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-37b9ce080a6sm10220141fa.4.2025.11.14.05.22.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Nov 2025 05:22:01 -0800 (PST)
-Message-ID: <2334e57c-a384-4a1e-9708-19d14b8f082c@gmail.com>
-Date: Fri, 14 Nov 2025 15:22:00 +0200
+        d=1e100.net; s=20230601; t=1763126685; x=1763731485;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9tFYx+r0LtpX/2l5hmodetJ2Wuc+Oih4VLt/Zf0jWOY=;
+        b=DSz8OAX9XEoYkWSiav/olRZlR09+yguHo9BI6Co/AmW1hMApdTitjKOj1DoLPZahfk
+         0qCUI5oSDIhoaLaNPFBajzS7Lxco0ibqIubNEVXFYPC+Pvssy14Z5vQ3CeZMQhXQ+p87
+         rm8Aod6RC7s+YkOql44oaQ/lD0hwg2j2ET6puV85TcMES8yrrDH0BXWuRj4IK8UC227u
+         67YIAU3uX8VI1hkDUPxDlB+70aopyOyConZHU3VODuTU3NUHb1606lAdPz2qzqimQh8K
+         +7pTc3QpC9ICxSQko5V4wM6C5gEhX2k27u7csZdXX+pyd5DOM5iu1xF/LdRmX29Lhy+A
+         zuZA==
+X-Forwarded-Encrypted: i=1; AJvYcCU5lcarvP7hemLZYYOibBQbiyIAi0CwtfhRtVeaBxDGG/eBQIJpxaftld3rSJ0j+S+aVTNJDUhPGw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHWdmArAW3qFIu5JHCQCksSpJCdcD727xUJ0YMVESu6LgrXNdx
+	8ogatfTTHFyN8prc7E5ZWOaEc6Z4JYwio7RMAljjbHm0eJAigo1xLs0V
+X-Gm-Gg: ASbGncsTKNfGSxJ+Sq+QGMQcV8kjXf/Dl557U2ZmhU0lwAScDC6bgUmj4B7NRcK2+DL
+	MvXUICANWzJS52o21fBeeXeMxpxMoP9pk3wXLhO+1gdgC5fzm+Fy81o7IJDBzqNTMXRZjy+DuYL
+	fHi8USWlrOSsybcP5uu83Cuk8WYa6CtAd0z9txAHyLQNSPPwpL3CDqe9v8+ropXoPqc4+nna4ef
+	Hq3ub+wqc8ouBA6OiAmvwtDZ21PUEKZmwZc8VkQTIqZipkifdEGLlw6+8/XX1MXbGX/8bVGU/jk
+	JvTSnaQGe6hMZ+Vd/GxjpZnkeCEjl2oVsyxx2x3Ep3AyPx5G61X/pGFpeLhsLbTxAY2+azYQ35e
+	wPfRmelsOQDOZkv/OZ2k6JbAvKNDE6mqoOmA3eSUMCzkYPTB+CegaQn9AfOmFBKocvlmFivOpxk
+	ljDY9XAf+x0F/ALC/+qXQQbOIdTDzbZbmaUjYSVP4M8BnhMAtOTsAeHJReMKVVlWpMD6KggkJpZ
+	Q==
+X-Google-Smtp-Source: AGHT+IGGro6Ab6Q6hQTIcaBq7Nzqv7eihH1X2JDeRvd7W4sKRsUWsSzI35q89svHlSq6wH7pBHiBUw==
+X-Received: by 2002:a05:600c:1c20:b0:477:5b0a:e616 with SMTP id 5b1f17b1804b1-4778fe4f635mr29777265e9.5.1763126684877;
+        Fri, 14 Nov 2025 05:24:44 -0800 (PST)
+Received: from orome (p200300e41f274600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f27:4600:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4778bb454a6sm46271815e9.2.2025.11.14.05.24.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Nov 2025 05:24:43 -0800 (PST)
+Date: Fri, 14 Nov 2025 14:24:41 +0100
+From: Thierry Reding <thierry.reding@gmail.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>, 
+	Chen-Yu Tsai <wens@kernel.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Maximilian Luz <luzmaximilian@gmail.com>, 
+	Hans de Goede <hansg@kernel.org>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Daniel Lezcano <daniel.lezcano@kernel.org>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Subject: Re: [PATCH v2 00/11] of: Add wrappers to match root node with OF
+ device ID tables
+Message-ID: <kqtjfqkzz3lfnpg7lo5m4dctowsxqxtlcdtktoatpze3hr3tue@ku6p25skb666>
+References: <20251112-b4-of-match-matchine-data-v2-0-d46b72003fd6@linaro.org>
+ <f949c2a6-df24-41bb-aac7-f5567d03c5f5@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 14/16] power: supply: bd71828: Support wider register
- addresses
-To: Andreas Kemnade <andreas@kemnade.info>,
- Matti Vaittinen <matti.vaittinen@linux.dev>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
- Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-rtc@vger.kernel.org
-References: <cover.1763022807.git.mazziesaccount@gmail.com>
- <6248200397d3582fe926938736da66d6bbf9535d.1763022807.git.mazziesaccount@gmail.com>
- <20251114121509.629d171b@kemnade.info>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20251114121509.629d171b@kemnade.info>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ntn2juw5rgeaer4c"
+Content-Disposition: inline
+In-Reply-To: <f949c2a6-df24-41bb-aac7-f5567d03c5f5@collabora.com>
 
-Thanks Andreas,
 
-On 14/11/2025 13:15, Andreas Kemnade wrote:
-> On Thu, 13 Nov 2025 10:55:39 +0200
-> Matti Vaittinen <matti.vaittinen@linux.dev> wrote:
-> 
->> As a side note, we can reduce the "wasted space / member / instance" from
->> 3 bytes to 1 byte, by using u16 instead of the unsigned int if needed. I
->> rather use unsigned int to be initially prepared for devices with 32 bit
->> registers if there is no need to count bytes.
-> 
-> Well, this is totally internal to the module, so no ABI/API changes, so
-> there is no advantage of using 32bit now I think. We can switch any time.
+--ntn2juw5rgeaer4c
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 00/11] of: Add wrappers to match root node with OF
+ device ID tables
+MIME-Version: 1.0
 
-The only advantage is to avoid the churn if 32bit ICs are to be added.
+On Wed, Nov 12, 2025 at 12:52:48PM +0100, AngeloGioacchino Del Regno wrote:
+> Il 12/11/25 11:28, Krzysztof Kozlowski ha scritto:
+> > Changes in v2:
+>=20
+> Note:
+>=20
+> Looks ok based on code and based on testing on the following platforms:
+>  - tegra: Jetson Xavier NX Development Kit
 
-> But we have 32bit stuff in the regmap cache anyways, so that is not above
-> the general level of wasting space.
+Thanks for testing, but Xavier NX doesn't run any of the code changed by
+this patch. soc_is_tegra() is a legacy function that we need for DT
+backwards-compatibility and should only run on 32-bit ARM devices.
 
-Exactly. And, I am not sure if sparing ~hundred bytes is worth the 
-hassle - even if it is hassle internal to the driver. But yeah, we can 
-squeeze a few bytes if it is seen beneficial. That's why I mentioned it 
-here :)
+Technically there's one case in drivers/soc/tegra/flowctrl.c that runs
+this on Tegra210, but it should probably undergo the same treatment as
+the PMC and FUSE drivers. The code that needs this is only used for CPU
+power management on 32-bit ARM devices.
 
-Yours,
-	-- Matti
+Thierry
 
----
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+--ntn2juw5rgeaer4c
+Content-Type: application/pgp-signature; name="signature.asc"
 
-~~ When things go utterly wrong vim users can always type :help! ~~
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmkXLZkACgkQ3SOs138+
+s6G/cA/+IgP1K3OXIF03hJ/xSNn2a6/dnr1TTFLAUI6Ge13aBNVPxKCDqoxLZCAt
+pN2vtjYNWX0Z80+tnCpGdf961hS6OY28OJmABKNotQvlrnzBSn8ggsZ64UlAka80
+SRr74Do7F4bWqWrBHEDD4FRjlYR0OVy2/s0i5Zcavhixa1bqN/F9gTWT+kKItZOE
+TcV+O8gQF/op9NSShu+oXIZFRcPKdugCNN8w77cE/9B/0o1iII9DzX5uzFYK0Au4
+M7rAxBiHHh71czN3ts79Mcyinj9kcC3zGq9wtusv3N18sDRqwZCp+mPP3Y8Up0t4
+OotwMzxf59FsoSpNDUh/FgkCNoDoDXbajVzHTig9OQspb/nNis+P5Pbw7FIZb8Q2
+3jq8uRvMP3p8gc2pB7nnyQoC6ToofIcHlnhbW0oi1Fi0HovauoN7Vb8/gsJDWY6c
+hBe4ABpghzhh0VXFf8CM0vK2MonZYPO0BTyDguUr4nx6QGrrLnBG7S/B2wvaIzgs
+UeyUPjbgEhQVdyWALBKf6aK9IXi/Wp+s9w0XJ7qG14q665MqwxIXXIo0ZOIiIe28
+e+Ajuapyv0juG6x+mVb44mHgWqZ6bquDTegdCr9PakfF4rDYnDKAcdzOM7/y8/UX
+FXAgwJiScvxp/LO7D70bNXMPtYPQ3TVxDJu2I5128N5iNtuaxgE=
+=vxrn
+-----END PGP SIGNATURE-----
+
+--ntn2juw5rgeaer4c--
 
