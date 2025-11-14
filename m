@@ -1,141 +1,115 @@
-Return-Path: <linux-pm+bounces-38050-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38051-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4C73C5E8C0
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 18:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B01CC5E582
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 17:52:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9C2F73A4EBD
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 16:16:38 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B7BCF350282
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 16:17:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4957F330303;
-	Fri, 14 Nov 2025 16:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61230267B94;
+	Fri, 14 Nov 2025 16:12:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j8RynZl5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gcdgLKE7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F41B32D432
-	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3915D2638BA
+	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:12:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763136718; cv=none; b=gPwh6gqcidSYfCphdQllqDxs817JhmkGm2A5cwqaZtm7dyKNNi6v6krYJxt11kGJnSRucwgl5XshCPPuRGh1QFiOYxyNsEjqpGQxx84cNU7avV7QTr12rsniIsdUXNPWuc7op2DN9iMK8sOdPU+tOrL7EUIuCk3zHc3FiU+bAl8=
+	t=1763136764; cv=none; b=DqPJGGGlKVUdms5q5ZmFEcDzoff5vzdFVEaeSAxfiDMJH2+1A8s+UKopctsF5Ij8s5tA0482GkdGdCTF/Z5IxcprXO+nyq0TYZzz2IbKhmzJuxDAVvybsSvDI5BOIkSL7FhVwcH7lqqKdCbVTxeo7eXUVzdhAvuinmNAslDm1ZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763136718; c=relaxed/simple;
-	bh=ND1G3qoy+JHM8+IvcJxTR6Dp/QmSGS9bB8N2BVeV0Fk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MJbaczr/DDL4oQmLONfE2NQp4jM7Z1P6fIqul0LNQd6m//M0M8y7yo6CihIZeHjrr0xL9i+jvfMYlSFUQpFP3wDIEkQd/kKZaQLHA2GUQB+pZBKraj6pEICXgW1YmO7dviyZjSUxsjWak5GyG1CgPoCwsvSS1vQ7GN/76OTayb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=j8RynZl5; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-37a2dced861so29930861fa.1
-        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 08:11:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763136715; x=1763741515; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cSNhX2pkt7zcNqtt73B/SxXjHG2Uh9RLAgF3dQ2MWK8=;
-        b=j8RynZl5nIuyofMPcnIg0JFRypTXS93o5SL98jy0nwLF4U3x49KruI2ILeiUPflvRp
-         pJOigSp+RQmoByvivc6OwJ3cLOFOqFn+El6q8J1ZAJR4jmxmlhcWcXNv7js03ehO12Lc
-         neFu5198q+80L6elkILRNBLJtECmdfR8txSbvE3kZxho59AE1q10n3J/QE29XhsbIlts
-         adO032fjNtJJsHV1ssbRCEEojp2W/dZk0oWwEN4rkoJ6zU9zJpFzSw18ufq1RcMHcN6i
-         2gtdwThYqP93sleY9Ld4gEpptHhufUU7lHqpD9Hd7u6BPxvW410d5zSqihkIAGhQOp85
-         oC3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763136715; x=1763741515;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cSNhX2pkt7zcNqtt73B/SxXjHG2Uh9RLAgF3dQ2MWK8=;
-        b=Yy1qEr9VbYDhuQFGaLfY8NUdjii9sJ2JdZ0shwst8Li6xRcZJbQ7rIEUOZR/TxhLNY
-         9tyVXjP0DZkKhduqMLeN0ZFSjHcfbsYZQw9qx1mUdIvCQbNbmHsNeEs6avf/vTUHr/Od
-         Nz5u0OXsoK840nK+IiHJi1FGi0T/C/DOP8MNTK9562xLEzNpP3tlq/18MOTsvmeJ9hio
-         ZX+BSWeluycikSWZ7elavBVgNW1KbHuf/EzVCnUQdlCePUMRNfMXumqFdpZ19T2m2qMk
-         3Ekz9SbtABJIiH6qDxy9Porc9MVCZa5DT36yRLDcsl8Ce7+RQwEWeZwN5CkMQWv1DuGW
-         O1ZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZT6Jl4bTiJqpoWCDGLwTdXA6j7lWS0ru+eVLp0ZQ5w5r1d8Rz+rJHpePTIs8t+iFyXAse4L6qdA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHb8vUFTg/Cx2Z/KcrT4Ksg261mC2R8upJRCV6og+/02i2RemB
-	YP60CrFkrHhz7M1Jir3bi8d1k9MYYC69qR1WCNYjDL8qVxLwT2WrCftGJinwBkmUBi8=
-X-Gm-Gg: ASbGncvj/rYrAvdie6Py0KvE9eTUU0sy2tfaJ9Gf+7/Hi5IcQG5RKVj/aMQ0wl7H7FN
-	JaJfdCxqwHTkdjSTQuEhqQYaj+M/IjlwIfbU/Budg7mBlOu6Zuj5DI80MCrJtfeCA0OndTjAHV3
-	jAOTt9pefMJfP0Y4jOQMAzvn3csMaH9ERXrBxlc3bAefTnGZyi7FlXV3KkczYz0rAI+/NnvIpvQ
-	f5O2cf2vEGRxMFB6Q3zfEyZsazdoGGsz+/ZOGH2o/thnvJJPGWr+Jiu0aMljVS4oOG6xcK5oRQd
-	bMiBmL8t5XNhNcMi4r1LTpX1BN02X1Gj4nWd167/UEQ4aF31N36cF/yE+/GQd0h1Rma0n0sTBcn
-	DbbsN8nveWdeMNJGGtoME3DsLb4jSAIGvktc2nxsRlD+20huk7++1/n+D9aIuRixIXBweYksaRv
-	NsMJ6aVGwwCdxpxrVJtAvDWrlanckEVE3ehDEF3gKSUaeRIW+aGrkBN2xNmUl4
-X-Google-Smtp-Source: AGHT+IE/hPBAWD9qBVjQMVIn4EUSgwCIcA9zVNyR1z50W4cCJMeA0fLeL7x9Slc5b9xh7VmbI0rqbA==
-X-Received: by 2002:a05:651c:3041:b0:372:221a:b124 with SMTP id 38308e7fff4ca-37baacd9bbamr8456321fa.0.1763136714550;
-        Fri, 14 Nov 2025 08:11:54 -0800 (PST)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-37b9ce080casm11520281fa.5.2025.11.14.08.11.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Nov 2025 08:11:53 -0800 (PST)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Linus <torvalds@linux-foundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain fixes for v6.18-rc6
-Date: Fri, 14 Nov 2025 17:11:46 +0100
-Message-ID: <20251114161152.92955-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1763136764; c=relaxed/simple;
+	bh=bs2i0H0jlQ8HsZ+KnPKsgYngEWs21g4qYocSJoUifgA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V9c3WGNjbQQjwdzUF9nLPZQ0+cPN9DslcY4yeMVyCDFQvcbHWPb8IbQewQb9IT+BCBiOkOtzOfY+knPizuKx8w0Zc2p049SK3TlUBOoDRIUihrh6czwuUkvhVLvYZB8g7Y0lP+v6yL7SU4XkScVUK0eqUojC73cZ/dkA5kGns9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gcdgLKE7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B4EC4CEFB
+	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:12:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763136763;
+	bh=bs2i0H0jlQ8HsZ+KnPKsgYngEWs21g4qYocSJoUifgA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gcdgLKE7lEaIaFEb+rmrx9CGkbzColvzRmwy9I/t+fRKTKCq04IFa9kiUI31SjNlz
+	 Mr+e1rJ222bDqpOxWKOBXj4EisN1IZXEj8xkHqYL3ljbOBueb5az8mSELKJqWT9CTp
+	 GHeFs47leEaxQYMOlkDmHDnNce4cWltI1kSfQi55nbLYPUAAd5tPj0kmmS40SzIyyw
+	 hnDZbtThKaVOGEwnIDRrY3UwF+FA9VYbetAETXs6nvviMsMVoPvOPp6Dglmvudn4Il
+	 cVr6kr2xxOmU9yF3CbzVksAUl25oXYbvTb50UBQ5asGZk1+aXatQjVYl2QpW3VILHq
+	 uWN2B9jIN0JSQ==
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-4507605e19aso1026409b6e.2
+        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 08:12:43 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXdAGrzcFVDJbfjRrRtu+oFSc421u6RP/0AqLY35AZ/10JhuH9xCptMMDmEA2bxsE7NjmbaSJjG8A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxildhHH0CGKm2MjtMqX5OAAnQt2UkgOCrcGZlT/voS+aW6rFNf
+	Zx02kse/kU32CkDGJOAo7OpguxZrdUC4j6U89EkwbO+PFSGiGpUqBGHZgBqqiN3+9Jt/QTgmPuW
+	lBndkzEPgUEY3QE6g19Z4QTQvwYvFliM=
+X-Google-Smtp-Source: AGHT+IEgmPDZF6MbpSeY+SWnu4uKD6OSs6x6OPLIYCl/Q/zRfCT5orZNrCRl2BOirXPI/vN/QwqjEs+I2p6W5zFGVuA=
+X-Received: by 2002:a05:6808:5283:b0:450:3823:b5ef with SMTP id
+ 5614622812f47-4509757eb23mr1966391b6e.34.1763136763085; Fri, 14 Nov 2025
+ 08:12:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20251112224025.2051702-1-superm1@kernel.org>
+In-Reply-To: <20251112224025.2051702-1-superm1@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 14 Nov 2025 17:12:31 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0i8RR_o-DmLrBUg_xLZxoNpUqLhudvPphgv7fmW=qZ9kw@mail.gmail.com>
+X-Gm-Features: AWmQ_blCfef8qy6eK5xND1HxM5r1qHEqftrJk62QA5sKUfq8A3gWPEwT79AHjN8
+Message-ID: <CAJZ5v0i8RR_o-DmLrBUg_xLZxoNpUqLhudvPphgv7fmW=qZ9kw@mail.gmail.com>
+Subject: Re: [PATCH v10 0/3] Introduce and plumb PMSG_POWEROFF
+To: "Mario Limonciello (AMD)" <superm1@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Pavel Machek <pavel@kernel.org>, 
+	Len Brown <lenb@kernel.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
+	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
+	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, AceLan Kao <acelan.kao@canonical.com>, 
+	Kai-Heng Feng <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
+	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>, 
+	Eric Naim <dnaim@cachyos.org>, "Guilherme G . Piccoli" <gpiccoli@igalia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Wed, Nov 12, 2025 at 11:40=E2=80=AFPM Mario Limonciello (AMD)
+<superm1@kernel.org> wrote:
+>
+> I've been working on a series that uses the hibernate flows (S4)
+> during shutdown (S5) [1], but it's a bit risky because it has changes
+> all around the kernel.  To mitigate risk Rafael suggested [2] to split
+> the series into at least 3 parts across different kernel cycles.
+>
+> Here is the first part, which just introduces a PMSG_POWEROFF event
+> and uses it in any driver that manipulates PM events.
+>
+> There are no functional changes for these changes and this series is
+> intended for 6.19.
+>
+> v10:
+>  * Drop resume_event changes
+>  * Drop patch 4 (will come in later phase)
+>
+> Mario Limonciello (AMD) (3):
+>   PM: Introduce new PMSG_POWEROFF event
+>   scsi: Add PM_EVENT_POWEROFF into suspend callbacks
+>   usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+>
+>  drivers/base/power/main.c    | 5 +++++
+>  drivers/scsi/mesh.c          | 1 +
+>  drivers/scsi/stex.c          | 1 +
+>  drivers/usb/host/sl811-hcd.c | 1 +
+>  include/linux/pm.h           | 3 +++
+>  include/trace/events/power.h | 3 ++-
+>  6 files changed, 13 insertions(+), 1 deletion(-)
+>
+> --
 
-Here's a pull-request with a couple of pmdomain fixes intended for v6.18-rc6.
-Details about the highlights are as usual found in the signed tag.
-
-Please pull this in!
-
-Kind regards
-Ulf Hansson
-
-
-The following changes since commit 211ddde0823f1442e4ad052a2f30f050145ccada:
-
-  Linux 6.18-rc2 (2025-10-19 15:19:16 -1000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.18-rc2
-
-for you to fetch changes up to bbde14682eba21d86f5f3d6fe2d371b1f97f1e61:
-
-  pmdomain: imx: Fix reference count leak in imx_gpc_remove (2025-11-04 17:29:00 +0100)
-
-----------------------------------------------------------------
-pmdomain providers:
- - imx: Fix reference count leak in ->remove()
- - samsung: Rework legacy splash-screen handover workaround
- - samsung: Fix potential memleak during ->probe()
- - arm: Fix genpd leak on provider registration failure for scmi
-
-----------------------------------------------------------------
-André Draszik (1):
-      pmdomain: samsung: plug potential memleak during probe
-
-Marek Szyprowski (1):
-      pmdomain: samsung: Rework legacy splash-screen handover workaround
-
-Miaoqian Lin (1):
-      pmdomain: imx: Fix reference count leak in imx_gpc_remove
-
-Sudeep Holla (1):
-      pmdomain: arm: scmi: Fix genpd leak on provider registration failure
-
- drivers/pmdomain/arm/scmi_pm_domain.c        | 13 +++++++++++--
- drivers/pmdomain/imx/gpc.c                   |  2 ++
- drivers/pmdomain/samsung/exynos-pm-domains.c | 29 ++++++++++++++--------------
- 3 files changed, 27 insertions(+), 17 deletions(-)
+All 3 patches applied as 6.19 material, thanks!
 
