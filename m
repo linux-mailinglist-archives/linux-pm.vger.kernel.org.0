@@ -1,500 +1,274 @@
-Return-Path: <linux-pm+bounces-38014-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38015-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21281C5BD7B
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 08:50:19 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D276C5C01D
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 09:34:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 95ABB34FDD7
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 07:50:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0E5844E25A1
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 08:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1106A2F6904;
-	Fri, 14 Nov 2025 07:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DxG0tymF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2390C2FB998;
+	Fri, 14 Nov 2025 08:33:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965482E719E;
-	Fri, 14 Nov 2025 07:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57560272E5A
+	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 08:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763106614; cv=none; b=K3MfxCTN1Agmnwx0Pp49RvMirh/oWqaQjsWEZkvvT3dt/aeNEIeukmglkP3hrHQYdEYUvfLvMJ2LT9hK+1DvV2kpMexpA/IdQ0un+csgxicFm5rrt+MZKSpyFo/9v+2JdoYmJBW+2DJeqiEt5x4wTs2QTI+1w0cReLrC11A5zp4=
+	t=1763109221; cv=none; b=dMKqvv1ZIOPxd0/rxkSC4z2rKrLejln3Xdp8ZVlH5wpqNnTD8QqMiJxqnu4DUg5ZKkWO3NQJTTgqKl855dE35X2UiUs59qXhxdbenrlpu+HYGXbF9dm0LMtcrDw5YIfuTO3ZoJ1UUHLoG/ujuhCneNKNSRQef+8GKhLU4zVWbcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763106614; c=relaxed/simple;
-	bh=My1DkSx6E8NH1/g/2YUqKSOXU94pnaYksctIemj4gWo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Djkne36c1ihTibW4laqhMthCMUIRYC2kHB1olQnLTMKo6Pxqjxn4mUlhIxUm0Nt29eEegLxBpmMLiY0sf4GzmZFG1zBzvg6/ymcONjkFpBtMmbbxyEZJlo7uvNnS8/+0RRL2BJhJpYZNGgU+nCOrjUGEyTFHOaFaET8+nr0AlxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DxG0tymF; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id E84CF4E416AB;
-	Fri, 14 Nov 2025 07:50:09 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id BB2756060E;
-	Fri, 14 Nov 2025 07:50:09 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 22A71102F2A6F;
-	Fri, 14 Nov 2025 08:50:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1763106608; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=vou/PSvtoM9CuF1Iut3e8wcLV2zmRLJ9tzJ9Bc7FteA=;
-	b=DxG0tymFHZP8aF0T9HNNjCVnOtqgWqBQZopOzLsGe+MG7KLBS4zvwmPb2xNNRrCkT+nrkD
-	yil4rKK2fwvvvOC+Z+9QK6Aur4ok9ME9aaGiBROB50aI0G+zjNJSjP4LlVl5oin9PHUKm5
-	nI+hL41DkAq14lsblJe0evNclURr5zQGvZkZFw0DqGD0wUqCUY9cwlXE2RFuyDHRnhGXiM
-	ytuL5oJuyJNECkpMaInkO3/uNepVPmMrLBD/WjX39hgnceVCtw0kgw4YCDqNW2GKZQspJM
-	q9OZ0HAscsCb1vyXLDXOCal4YNeRgm2QLHCE054nvuBiGsye+4PCvXe4w/EiPg==
-Date: Fri, 14 Nov 2025 08:50:04 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: Kaustabh Chakraborty <kauschluss@disroot.org>
-Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Jonathan Corbet <corbet@lwn.net>, linux-leds@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 06/13] mfd: sec-irq: add support for creating multiple
- IRQ chips
-Message-ID: <20251114075004a444bff0@mail.local>
-References: <20251114-s2mu005-pmic-v1-0-9e3184d3a0c9@disroot.org>
- <20251114-s2mu005-pmic-v1-6-9e3184d3a0c9@disroot.org>
+	s=arc-20240116; t=1763109221; c=relaxed/simple;
+	bh=Qq1zuMMhQDMnIrglE/e799gEQrf6ScFHbMlZlNjQ6J0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PocpK6AGwqvv54Biv+WToysrtzuBxU/2A/hTa/2m4Z+SlGSOacSe/QsuFS809f88fIdjO2nYBd0HRnLH4dwnIBdNPw9CunP9Bg17PQVr03ctfyJxIzH49lU1WB9yBIZq3Jd+/puOqn+i55xNtEoPygnG0kd+Mns+2B9yUDt7Tmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A2DF41063;
+	Fri, 14 Nov 2025 00:33:30 -0800 (PST)
+Received: from [10.57.41.249] (unknown [10.57.41.249])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 23E1C3F5A1;
+	Fri, 14 Nov 2025 00:33:36 -0800 (PST)
+Message-ID: <431db236-736d-4fc3-95c2-876bc767aa0c@arm.com>
+Date: Fri, 14 Nov 2025 08:33:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251114-s2mu005-pmic-v1-6-9e3184d3a0c9@disroot.org>
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] cpuidle: governors: teo: Rework the handling of tick
+ wakeups
+To: Reka Norman <rekanorman@chromium.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
+ <00928b9d-7189-4929-afc9-7684fc5ef531@arm.com>
+ <ca45366d-4c85-4802-8a35-886a6f69d10d@arm.com>
+ <6228387.lOV4Wx5bFT@rafael.j.wysocki>
+ <CAEmPcwsVfcoFTyS-mHSkZTFmS8Y1vkFToYo1xcAH0522wyDawA@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAEmPcwsVfcoFTyS-mHSkZTFmS8Y1vkFToYo1xcAH0522wyDawA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 14/11/2025 00:35:07+0530, Kaustabh Chakraborty wrote:
-> The current state of the driver only allows creating only one IRQ chip
-> per PMIC. On some PMICs, such as Samsung's S2MU005, there are multiple
-> interrupt blocks, for which the current implementation stands insufficient.
+On 11/14/25 04:05, Reka Norman wrote:
+> On Fri, Nov 14, 2025 at 3:56 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Thursday, November 13, 2025 4:43:18 PM CET Christian Loehle wrote:
+>>> On 11/12/25 18:33, Christian Loehle wrote:
+>>>> On 11/12/25 14:16, Rafael J. Wysocki wrote:
+>>>>> On Wed, Nov 12, 2025 at 3:03 PM Christian Loehle
+>>>>> <christian.loehle@arm.com> wrote:
+>>>>>>
+>>>>>> On 11/12/25 13:32, Rafael J. Wysocki wrote:
+>>>>>>> On Tue, Nov 11, 2025 at 6:20 PM Christian Loehle
+>>>>>>> <christian.loehle@arm.com> wrote:
+>>>>>>>>
+>>>>>>>> On 11/11/25 11:48, Rafael J. Wysocki wrote:
+>>>>>>>>> On Tue, Nov 11, 2025 at 11:48 AM Christian Loehle
+>>>>>>>>> <christian.loehle@arm.com> wrote:
+>>>>>>>>>>
+>>>>>>>>>> On 11/11/25 10:00, Christian Loehle wrote:
+>>>>>>>
+>>>>>>> [...]
+>>>>>>>
+>>>>>>>>>>> I see two issues:
+>>>>>>>>>>> 1) Because of DECAY_SHIFT 3 values < 8 cannot decay (I guess this wouldn't really be an issue without 2))
+>>>>>>>>>
+>>>>>>>>> This shouldn't be a problem.
+>>>>>>>>
+>>>>>>>> Agreed, it should be a non-issue. Nonetheless if this wasn't the case $subject would've likely
+>>>>>>>> never been an issue.
+>>>>>>>
+>>>>>>> Well, I think that the leftovers can be cleared when they become less than 8.
+>>>>>>>
+>>>>>>>>>
+>>>>>>>>>>> 2) if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) isn't an appropriate check, it will
+>>>>>>>>>>> exclude the state if it its idx_hit_sum make up the vast majority of cpu_data->total (i.e. it would
+>>>>>>>>>>> have been a really good candidate actually).
+>>>>>>>>>
+>>>>>>>>> Well, it would exclude the state if the sum of hits for the states
+>>>>>>>>> below it is large enough.  This is questionable (because why would
+>>>>>>>>> hits matter here), but I attempted to make the change below and
+>>>>>>>>> somebody reported a regression IIRC.
+>>>>>>>>>
+>>>>>>>>> This check is related to the problem at hand though (see below).
+>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> I lightly tested the below, it seems to be at least comparable to mainline teo.
+>>>>>>>>>>> (the documentation/comments would need adapting too, of course)
+>>>>>>>>>>>
+>>>>>>>>>>> -----8<-----
+>>>>>>>>>>>
+>>>>>>>>>>> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+>>>>>>>>>>> index bfa55c1eab5b..f8f76e3b8364 100644
+>>>>>>>>>>> --- a/drivers/cpuidle/governors/teo.c
+>>>>>>>>>>> +++ b/drivers/cpuidle/governors/teo.c
+>>>>>>>>>>> @@ -355,7 +355,7 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+>>>>>>>>>>>          * all of the deeper states, a shallower idle state is likely to be a
+>>>>>>>>>>>          * better choice.
+>>>>>>>>>>>          */
+>>>>>>>>>>> -       if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
+>>>>>>>>>>> +       if (2 * idx_intercept_sum > idx_hit_sum) {
+>>>>>>>>>>>                 int first_suitable_idx = idx;
+>>>>>>>>>>>
+>>>>>>>>>>>                 /*
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> ... nevermind the patch, idx_hit_sum is of course the sum of 0...idx-1.
+>>>>>>>>>> Maybe something like this, again lightly tested:
+>>>>>>>>>>
+>>>>>>>>>> -----8<-----
+>>>>>>>>>>
+>>>>>>>>>> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+>>>>>>>>>> index 173ddcac540a..6bfb9cedb75e 100644
+>>>>>>>>>> --- a/drivers/cpuidle/governors/teo.c
+>>>>>>>>>> +++ b/drivers/cpuidle/governors/teo.c
+>>>>>>>>>> @@ -383,13 +395,15 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+>>>>>>>>>>                  * has been stopped already into account.
+>>>>>>>>>>                  */
+>>>>>>>>>>                 intercept_sum = 0;
+>>>>>>>>>> +               hit_sum = 0;
+>>>>>>>>>>
+>>>>>>>>>>                 for (i = idx - 1; i >= 0; i--) {
+>>>>>>>>>>                         struct teo_bin *bin = &cpu_data->state_bins[i];
+>>>>>>>>>>
+>>>>>>>>>>                         intercept_sum += bin->intercepts;
+>>>>>>>>>> +                       hit_sum += bin->hits;
+>>>>>>>>>>
+>>>>>>>>>> -                       if (2 * intercept_sum > idx_intercept_sum) {
+>>>>>>>>>> +                       if (2 * intercept_sum > cpu_data->total || 2 * hit_sum > cpu_data->total) {
+>>>>>>>>>>                                 /*
+>>>>>>>>>>                                  * Use the current state unless it is too
+>>>>>>>>>>                                  * shallow or disabled, in which case take the
+>>>>>>>>>
+>>>>>>>>> This will only matter after the deepest state has been rejected
+>>>>>>>>> already and on the system in question this means selecting state 0 no
+>>>>>>>>> matter what.
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> Ah, right!
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>> The pre-6.12 behavior can be explained if tick wakeups are taken into account.
+>>>>>>>>>
+>>>>>>>>> Namely, when state 0 is chosen (because of the check mentioned above),
+>>>>>>>>> the tick is not stopped and the sleep length is KTIME_MAX.  If the
+>>>>>>>>> subsequent wakeup is a tick one, it will be counted as a hit on the
+>>>>>>>>> deepest state (and it will contribute to the total sum in the check
+>>>>>>>>> mentioned above).  Then, at one point, cpu_data->total will be large
+>>>>>>>>> enough and the deepest state will become the candidate one.  If
+>>>>>>>>> tick_nohz_get_sleep_length() returns a large value at that point, the
+>>>>>>>>> tick will be stopped and the deepest state will be entered.  Nirvana
+>>>>>>>>> ensues.
+>>>>>>>>
+>>>>>>>> So fundamentally we will have to count tick-wakeups as a) nothing, which
+>>>>>>>> doesn't allow us to ever break out of the intercept logic that caused us
+>>>>>>>> to leave the tick on b) intercepts, which is bonkers and doesn't allow us
+>>>>>>>> to ever break out and c) hits == sleep_length would've been accurate.
+>>>>>>>> Of course counting a tick wakeup as a hit for sleep_length negates the
+>>>>>>>> intercept logic.
+>>>>>>>
+>>>>>>> Not quite.  The intercept logic is there for wakeups other than tick
+>>>>>>> wakeups and timer wakeups.
+>>>>>>>
+>>>>>>> I actually think that tick wakeups can be counted as hits on the
+>>>>>>> deepest available state - maybe only when tick wakeups dominate the
+>>>>>>> wakeup pattern - but generally this is not unreasonable: When the
+>>>>>>> wakeup pattern is dominated by tick wakeups, this by itself is a good
+>>>>>>> enough reason to stop the tick.
+>>>>>>
+>>>>>> (assuming HZ=1000 below but it doesn't matter)
+>>>>>> That will exclude any 'intercept' logic from having much effect if the
+>>>>>> avg idle duration is >TICK_NSEC/2, which is potentially still quite a bit
+>>>>>> off from state1 residency, like in Reka's case here.
+>>>>>> That's why I thought it would cause unreasonable regressions here.
+>>>>>> I'll give it a go as well though!
+>>>>>
+>>>>> Thanks!
+>>>>>
+>>>>> Note that I'd prefer to add a check if tick wakeups dominate the
+>>>>> wakeup pattern before setting sleep_length_ns to KTIME_MAX though.
+>>>>> I'd first like to know how the Reka's system reacts to the more
+>>>>> drastic variant of this change.
+>>>>
+>>>> Below are my usual tests, it's definitely visible but the impact is limited
+>>>> on this platform anyway. I think if we gate the KTIME_MAX setting behind
+>>>> the "tick wakeup dominate" it should be acceptable!
+>>>> Let's see what Reka reports.
+>>>>
+>>> Forgot to post the full results, anyway as expected with mtdblock (a very slow
+>>> / low frequent wakeup scenario) the impact becomes clearly visible.
+>>> Still hopeful that the more conservative approach will be acceptable!
+>>
+>> Speaking of which, the patch to test is appended below, but it doesn't apply
+>> directly on top of the mainline.  It is based on some other patches that have
+>> been posted recently, so here's a git branch with all of the requisite
+>> material:
+>>
+>> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git cpuidle-teo-testing
+>>
+>> Reka, please try this one and let us know how it goes.
 > 
-> Add support for creating multiple IRQ chips for a PMIC. Every IRQ chip is
-> given it's own index, which is used by sub-device drivers to request IRQs.
+> Results attached. The residencies are a bit less deep than before -
+> about 4.5% in WFI vs 2% at 6.6 or with the more aggressive patch. But
+> I’m guessing that’s expected.
 > 
-> A macro is defined which states the maximum number of chips supported.
-> It's set to 1 as currently, no PMIC requires more than one IRQ chip. The
-> value must be changed accordingly on adding new PMICs requiring multiple
-> IRQ chips.
-> 
-> Moreover, adjust the s5m RTC driver to initialize IRQs with the
-> appropriate IRQ chip index.
-> 
-> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
-Acked-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+> I also measured the power on a slightly different system where I first
+> noticed this regression, and it’s indistinguishable from 6.6. So from
+> my side this looks great, thank you!
 
-> ---
->  drivers/mfd/sec-irq.c            | 163 +++++++++++++++++++++++----------------
->  drivers/rtc/rtc-s5m.c            |  15 +++-
->  include/linux/mfd/samsung/core.h |   5 +-
->  include/linux/mfd/samsung/irq.h  |  14 ++++
->  4 files changed, 127 insertions(+), 70 deletions(-)
-> 
-> diff --git a/drivers/mfd/sec-irq.c b/drivers/mfd/sec-irq.c
-> index c5c80b1ba104..053c28f31ec9 100644
-> --- a/drivers/mfd/sec-irq.c
-> +++ b/drivers/mfd/sec-irq.c
-> @@ -181,25 +181,31 @@ static const struct regmap_irq s5m8767_irqs[] = {
->  };
->  
->  /* All S2MPG10 interrupt sources are read-only and don't require clearing */
-> -static const struct regmap_irq_chip s2mpg10_irq_chip = {
-> -	.name = "s2mpg10",
-> -	.irqs = s2mpg10_irqs,
-> -	.num_irqs = ARRAY_SIZE(s2mpg10_irqs),
-> -	.num_regs = 6,
-> -	.status_base = S2MPG10_PMIC_INT1,
-> -	.mask_base = S2MPG10_PMIC_INT1M,
-> +static const struct regmap_irq_chip s2mpg10_irq_chip[] = {
-> +	[S2MPG10_IRQ_CHIP] = {
-> +		.name = "s2mpg10",
-> +		.irqs = s2mpg10_irqs,
-> +		.num_irqs = ARRAY_SIZE(s2mpg10_irqs),
-> +		.num_regs = 6,
-> +		.status_base = S2MPG10_PMIC_INT1,
-> +		.mask_base = S2MPG10_PMIC_INT1M,
-> +	},
->  };
->  
-> -static const struct regmap_irq_chip s2mps11_irq_chip = {
-> -	.name = "s2mps11",
-> -	.irqs = s2mps11_irqs,
-> -	.num_irqs = ARRAY_SIZE(s2mps11_irqs),
-> -	.num_regs = 3,
-> -	.status_base = S2MPS11_REG_INT1,
-> -	.mask_base = S2MPS11_REG_INT1M,
-> -	.ack_base = S2MPS11_REG_INT1,
-> +static const struct regmap_irq_chip s2mps11_irq_chip[] = {
-> +	[S2MPS11_IRQ_CHIP] = {
-> +		.name = "s2mps11",
-> +		.irqs = s2mps11_irqs,
-> +		.num_irqs = ARRAY_SIZE(s2mps11_irqs),
-> +		.num_regs = 3,
-> +		.status_base = S2MPS11_REG_INT1,
-> +		.mask_base = S2MPS11_REG_INT1M,
-> +		.ack_base = S2MPS11_REG_INT1,
-> +	},
->  };
->  
-> +#define S2MPS1X_IRQ_CHIP		S2MPS14_IRQ_CHIP
-> +
->  #define S2MPS1X_IRQ_CHIP_COMMON_DATA		\
->  	.irqs = s2mps14_irqs,			\
->  	.num_irqs = ARRAY_SIZE(s2mps14_irqs),	\
-> @@ -208,85 +214,106 @@ static const struct regmap_irq_chip s2mps11_irq_chip = {
->  	.mask_base = S2MPS14_REG_INT1M,		\
->  	.ack_base = S2MPS14_REG_INT1		\
->  
-> -static const struct regmap_irq_chip s2mps13_irq_chip = {
-> -	.name = "s2mps13",
-> -	S2MPS1X_IRQ_CHIP_COMMON_DATA,
-> +static const struct regmap_irq_chip s2mps13_irq_chip[] = {
-> +	[S2MPS1X_IRQ_CHIP] = {
-> +		.name = "s2mps13",
-> +		S2MPS1X_IRQ_CHIP_COMMON_DATA,
-> +	},
->  };
->  
-> -static const struct regmap_irq_chip s2mps14_irq_chip = {
-> -	.name = "s2mps14",
-> -	S2MPS1X_IRQ_CHIP_COMMON_DATA,
-> +static const struct regmap_irq_chip s2mps14_irq_chip[] = {
-> +	[S2MPS1X_IRQ_CHIP] = {
-> +		.name = "s2mps14",
-> +		S2MPS1X_IRQ_CHIP_COMMON_DATA,
-> +	},
->  };
->  
-> -static const struct regmap_irq_chip s2mps15_irq_chip = {
-> -	.name = "s2mps15",
-> -	S2MPS1X_IRQ_CHIP_COMMON_DATA,
-> +static const struct regmap_irq_chip s2mps15_irq_chip[] = {
-> +	[S2MPS1X_IRQ_CHIP] = {
-> +		.name = "s2mps15",
-> +		S2MPS1X_IRQ_CHIP_COMMON_DATA,
-> +	},
->  };
->  
-> -static const struct regmap_irq_chip s2mpu02_irq_chip = {
-> -	.name = "s2mpu02",
-> -	.irqs = s2mpu02_irqs,
-> -	.num_irqs = ARRAY_SIZE(s2mpu02_irqs),
-> -	.num_regs = 3,
-> -	.status_base = S2MPU02_REG_INT1,
-> -	.mask_base = S2MPU02_REG_INT1M,
-> -	.ack_base = S2MPU02_REG_INT1,
-> +static const struct regmap_irq_chip s2mpu02_irq_chip[] = {
-> +	[S2MPU02_IRQ_CHIP] = {
-> +		.name = "s2mpu02",
-> +		.irqs = s2mpu02_irqs,
-> +		.num_irqs = ARRAY_SIZE(s2mpu02_irqs),
-> +		.num_regs = 3,
-> +		.status_base = S2MPU02_REG_INT1,
-> +		.mask_base = S2MPU02_REG_INT1M,
-> +		.ack_base = S2MPU02_REG_INT1,
-> +	},
->  };
->  
-> -static const struct regmap_irq_chip s2mpu05_irq_chip = {
-> -	.name = "s2mpu05",
-> -	.irqs = s2mpu05_irqs,
-> -	.num_irqs = ARRAY_SIZE(s2mpu05_irqs),
-> -	.num_regs = 3,
-> -	.status_base = S2MPU05_REG_INT1,
-> -	.mask_base = S2MPU05_REG_INT1M,
-> -	.ack_base = S2MPU05_REG_INT1,
-> +static const struct regmap_irq_chip s2mpu05_irq_chip[] = {
-> +	[S2MPU05_IRQ_CHIP] = {
-> +		.name = "s2mpu05",
-> +		.irqs = s2mpu05_irqs,
-> +		.num_irqs = ARRAY_SIZE(s2mpu05_irqs),
-> +		.num_regs = 3,
-> +		.status_base = S2MPU05_REG_INT1,
-> +		.mask_base = S2MPU05_REG_INT1M,
-> +		.ack_base = S2MPU05_REG_INT1,
-> +	},
->  };
->  
-> -static const struct regmap_irq_chip s5m8767_irq_chip = {
-> -	.name = "s5m8767",
-> -	.irqs = s5m8767_irqs,
-> -	.num_irqs = ARRAY_SIZE(s5m8767_irqs),
-> -	.num_regs = 3,
-> -	.status_base = S5M8767_REG_INT1,
-> -	.mask_base = S5M8767_REG_INT1M,
-> -	.ack_base = S5M8767_REG_INT1,
-> +static const struct regmap_irq_chip s5m8767_irq_chip[] = {
-> +	[S5M8767_IRQ_CHIP] = {
-> +		.name = "s5m8767",
-> +		.irqs = s5m8767_irqs,
-> +		.num_irqs = ARRAY_SIZE(s5m8767_irqs),
-> +		.num_regs = 3,
-> +		.status_base = S5M8767_REG_INT1,
-> +		.mask_base = S5M8767_REG_INT1M,
-> +		.ack_base = S5M8767_REG_INT1,
-> +	},
->  };
->  
->  int sec_irq_init(struct sec_pmic_dev *sec_pmic)
->  {
->  	const struct regmap_irq_chip *sec_irq_chip;
-> -	int ret;
-> +	int sec_irq_chip_num, i, ret;
->  
->  	switch (sec_pmic->device_type) {
->  	case S5M8767X:
-> -		sec_irq_chip = &s5m8767_irq_chip;
-> +		sec_irq_chip = s5m8767_irq_chip;
-> +		sec_irq_chip_num = ARRAY_SIZE(s5m8767_irq_chip);
->  		break;
->  	case S2DOS05:
->  		return 0;
->  	case S2MPA01:
-> -		sec_irq_chip = &s2mps14_irq_chip;
-> +		sec_irq_chip = s2mps14_irq_chip;
-> +		sec_irq_chip_num = ARRAY_SIZE(s2mps14_irq_chip);
->  		break;
->  	case S2MPG10:
-> -		sec_irq_chip = &s2mpg10_irq_chip;
-> +		sec_irq_chip = s2mpg10_irq_chip;
-> +		sec_irq_chip_num = ARRAY_SIZE(s2mpg10_irq_chip);
->  		break;
->  	case S2MPS11X:
-> -		sec_irq_chip = &s2mps11_irq_chip;
-> +		sec_irq_chip = s2mps11_irq_chip;
-> +		sec_irq_chip_num = ARRAY_SIZE(s2mps11_irq_chip);
->  		break;
->  	case S2MPS13X:
-> -		sec_irq_chip = &s2mps13_irq_chip;
-> +		sec_irq_chip = s2mps13_irq_chip;
-> +		sec_irq_chip_num = ARRAY_SIZE(s2mps13_irq_chip);
->  		break;
->  	case S2MPS14X:
-> -		sec_irq_chip = &s2mps14_irq_chip;
-> +		sec_irq_chip = s2mps14_irq_chip;
-> +		sec_irq_chip_num = ARRAY_SIZE(s2mps14_irq_chip);
->  		break;
->  	case S2MPS15X:
-> -		sec_irq_chip = &s2mps15_irq_chip;
-> +		sec_irq_chip = s2mps15_irq_chip;
-> +		sec_irq_chip_num = ARRAY_SIZE(s2mps15_irq_chip);
->  		break;
->  	case S2MPU02:
-> -		sec_irq_chip = &s2mpu02_irq_chip;
-> +		sec_irq_chip = s2mpu02_irq_chip;
-> +		sec_irq_chip_num = ARRAY_SIZE(s2mpu02_irq_chip);
->  		break;
->  	case S2MPU05:
-> -		sec_irq_chip = &s2mpu05_irq_chip;
-> +		sec_irq_chip = s2mpu05_irq_chip;
-> +		sec_irq_chip_num = ARRAY_SIZE(s2mpu05_irq_chip);
->  		break;
->  	default:
->  		return dev_err_probe(sec_pmic->dev, -EINVAL,
-> @@ -300,13 +327,19 @@ int sec_irq_init(struct sec_pmic_dev *sec_pmic)
->  		return 0;
->  	}
->  
-> -	ret = devm_regmap_add_irq_chip(sec_pmic->dev, sec_pmic->regmap_pmic,
-> -				       sec_pmic->irq, IRQF_ONESHOT,
-> -				       0, sec_irq_chip, &sec_pmic->irq_data);
-> -	if (ret)
-> -		return dev_err_probe(sec_pmic->dev, ret,
-> -				     "Failed to add %s IRQ chip\n",
-> -				     sec_irq_chip->name);
-> +	for (i = 0; i < sec_irq_chip_num; i++) {
-> +		ret = devm_regmap_add_irq_chip(sec_pmic->dev,
-> +					       sec_pmic->regmap_pmic,
-> +					       sec_pmic->irq,
-> +					       IRQF_ONESHOT | IRQF_SHARED, 0,
-> +					       sec_irq_chip + i,
-> +					       sec_pmic->irq_data + i);
-> +		if (ret) {
-> +			return dev_err_probe(sec_pmic->dev, ret,
-> +					     "Failed to add %s IRQ chip\n",
-> +					     sec_irq_chip->name);
-> +		}
-> +	}
->  
->  	/*
->  	 * The rtc-s5m driver requests S2MPS14_IRQ_RTCA0 also for S2MPS11
-> diff --git a/drivers/rtc/rtc-s5m.c b/drivers/rtc/rtc-s5m.c
-> index a7220b4d0e8d..726915deff7a 100644
-> --- a/drivers/rtc/rtc-s5m.c
-> +++ b/drivers/rtc/rtc-s5m.c
-> @@ -668,7 +668,7 @@ static int s5m_rtc_probe(struct platform_device *pdev)
->  	enum sec_device_type device_type =
->  		platform_get_device_id(pdev)->driver_data;
->  	struct s5m_rtc_info *info;
-> -	int ret, alarm_irq;
-> +	int ret, alarm_irq, irq_chip;
->  
->  	info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
->  	if (!info)
-> @@ -684,21 +684,25 @@ static int s5m_rtc_probe(struct platform_device *pdev)
->  			regmap_cfg = &s2mps14_rtc_regmap_config;
->  			info->regs = &s2mps15_rtc_regs;
->  			alarm_irq = S2MPS14_IRQ_RTCA0;
-> +			irq_chip = S2MPS11_IRQ_CHIP;
->  			break;
->  		case S2MPS14X:
->  			regmap_cfg = &s2mps14_rtc_regmap_config;
->  			info->regs = &s2mps14_rtc_regs;
->  			alarm_irq = S2MPS14_IRQ_RTCA0;
-> +			irq_chip = S2MPS14_IRQ_CHIP;
->  			break;
->  		case S2MPS13X:
->  			regmap_cfg = &s2mps14_rtc_regmap_config;
->  			info->regs = &s2mps13_rtc_regs;
->  			alarm_irq = S2MPS14_IRQ_RTCA0;
-> +			irq_chip = S2MPS14_IRQ_CHIP;
->  			break;
->  		case S5M8767X:
->  			regmap_cfg = &s5m_rtc_regmap_config;
->  			info->regs = &s5m_rtc_regs;
->  			alarm_irq = S5M8767_IRQ_RTCA1;
-> +			irq_chip = S5M8767_IRQ_CHIP;
->  			break;
->  		default:
->  			return dev_err_probe(&pdev->dev, -ENODEV,
-> @@ -720,6 +724,7 @@ static int s5m_rtc_probe(struct platform_device *pdev)
->  	} else if (device_type == S2MPG10) {
->  		info->regs = &s2mpg10_rtc_regs;
->  		alarm_irq = S2MPG10_IRQ_RTCA0;
-> +		irq_chip = S2MPG10_IRQ_CHIP;
->  	} else {
->  		return dev_err_probe(&pdev->dev, -ENODEV,
->  				     "Unsupported device type %d\n",
-> @@ -730,12 +735,14 @@ static int s5m_rtc_probe(struct platform_device *pdev)
->  	info->s5m87xx = s5m87xx;
->  	info->device_type = device_type;
->  
-> -	if (s5m87xx->irq_data) {
-> -		info->irq = regmap_irq_get_virq(s5m87xx->irq_data, alarm_irq);
-> -		if (info->irq <= 0)
-> +	if (s5m87xx->irq_data[irq_chip]) {
-> +		info->irq = regmap_irq_get_virq(s5m87xx->irq_data[irq_chip],
-> +						alarm_irq);
-> +		if (info->irq <= 0) {
->  			return dev_err_probe(&pdev->dev, -EINVAL,
->  					     "Failed to get virtual IRQ %d\n",
->  					     alarm_irq);
-> +		}
->  	}
->  
->  	platform_set_drvdata(pdev, info);
-> diff --git a/include/linux/mfd/samsung/core.h b/include/linux/mfd/samsung/core.h
-> index d785e101fe79..dcd741c4f0d6 100644
-> --- a/include/linux/mfd/samsung/core.h
-> +++ b/include/linux/mfd/samsung/core.h
-> @@ -33,6 +33,9 @@
->  #define STEP_12_5_MV		12500
->  #define STEP_6_25_MV		6250
->  
-> +/* Maximum number of IRQ chips in a PMIC */
-> +#define MAX_IRQ_CHIPS		1
-> +
->  struct gpio_desc;
->  
->  enum sec_device_type {
-> @@ -69,7 +72,7 @@ struct sec_pmic_dev {
->  
->  	int device_type;
->  	int irq;
-> -	struct regmap_irq_chip_data *irq_data;
-> +	struct regmap_irq_chip_data *irq_data[MAX_IRQ_CHIPS];
->  };
->  
->  struct sec_platform_data {
-> diff --git a/include/linux/mfd/samsung/irq.h b/include/linux/mfd/samsung/irq.h
-> index b4805cbd949b..78eb894e350e 100644
-> --- a/include/linux/mfd/samsung/irq.h
-> +++ b/include/linux/mfd/samsung/irq.h
-> @@ -34,6 +34,8 @@ enum s2mpa01_irq {
->  	S2MPA01_IRQ_NR,
->  };
->  
-> +#define S2MPA01_IRQ_CHIP		0
-> +
->  #define S2MPA01_IRQ_PWRONF_MASK		(1 << 0)
->  #define S2MPA01_IRQ_PWRONR_MASK		(1 << 1)
->  #define S2MPA01_IRQ_JIGONBF_MASK	(1 << 2)
-> @@ -58,6 +60,8 @@ enum s2mpa01_irq {
->  #define S2MPA01_IRQ_B35_TSD_MASK	(1 << 5)
->  
->  enum s2mpg10_irq {
-> +#define S2MPG10_IRQ_CHIP		0
-> +
->  	/* PMIC */
->  	S2MPG10_IRQ_PWRONF,
->  	S2MPG10_IRQ_PWRONR,
-> @@ -183,6 +187,8 @@ enum s2mps11_irq {
->  	S2MPS11_IRQ_NR,
->  };
->  
-> +#define S2MPS11_IRQ_CHIP		0
-> +
->  #define S2MPS11_IRQ_PWRONF_MASK		(1 << 0)
->  #define S2MPS11_IRQ_PWRONR_MASK		(1 << 1)
->  #define S2MPS11_IRQ_JIGONBF_MASK	(1 << 2)
-> @@ -226,6 +232,8 @@ enum s2mps14_irq {
->  	S2MPS14_IRQ_NR,
->  };
->  
-> +#define S2MPS14_IRQ_CHIP		0
-> +
->  enum s2mpu02_irq {
->  	S2MPU02_IRQ_PWRONF,
->  	S2MPU02_IRQ_PWRONR,
-> @@ -250,6 +258,8 @@ enum s2mpu02_irq {
->  	S2MPU02_IRQ_NR,
->  };
->  
-> +#define S2MPU02_IRQ_CHIP		0
-> +
->  /* Masks for interrupts are the same as in s2mps11 */
->  #define S2MPS14_IRQ_TSD_MASK		(1 << 2)
->  
-> @@ -277,6 +287,8 @@ enum s2mpu05_irq {
->  	S2MPU05_IRQ_NR,
->  };
->  
-> +#define S2MPU05_IRQ_CHIP		0
-> +
->  #define S2MPU05_IRQ_PWRONF_MASK		BIT(0)
->  #define S2MPU05_IRQ_PWRONR_MASK		BIT(1)
->  #define S2MPU05_IRQ_JIGONBF_MASK	BIT(2)
-> @@ -321,6 +333,8 @@ enum s5m8767_irq {
->  	S5M8767_IRQ_NR,
->  };
->  
-> +#define S5M8767_IRQ_CHIP		0
-> +
->  #define S5M8767_IRQ_PWRR_MASK		(1 << 0)
->  #define S5M8767_IRQ_PWRF_MASK		(1 << 1)
->  #define S5M8767_IRQ_PWR1S_MASK		(1 << 3)
-> 
-> -- 
-> 2.51.2
-> 
+Good news!
+For completeness:
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Per-Cluster deltas: BIG
+
++---------+-------+--------------+------------+---------+--------+--------+---------+--------+---------+
+| cluster | state | name         | timeΔ      | time%   | usageΔ | aboveΔ | above%  | belowΔ | below%  |
++=========+=======+==============+============+=========+========+========+=========+========+=========+
+| BIG     |     0 | WFI          | 957,853    |   2.99% | 2,537  | 0      |   0.00% | 0      |   0.00% |
+| BIG     |     1 | cpuoff-b     | 163,636    |   0.51% | 21     | 18     |  85.71% | 3      |  14.29% |
+| BIG     |     2 | clusteroff-b | 30,918,285 |  96.50% | 501    | 128    |  25.55% | 0      |   0.00% |
+| BIG     |     3 | s2idle       | 0          |   0.00% | 0      | 0      |   0.00% | 0      |   0.00% |
+| BIG     | TOTAL |              | 32,039,774 | 100.00% | 3,059  | 146    |   4.77% | 3      |   0.10% |
++---------+-------+--------------+------------+---------+--------+--------+---------+--------+---------+
+
+Per-Cluster deltas: LITTLE
+
++---------+-------+--------------+-------------+---------+--------+--------+---------+--------+---------+
+| cluster | state | name         | timeΔ       | time%   | usageΔ | aboveΔ | above%  | belowΔ | below%  |
++=========+=======+==============+=============+=========+========+========+=========+========+=========+
+| LITTLE  |     0 | WFI          | 8,424,141   |   6.63% | 16,629 | 0      |   0.00% | 0      |   0.00% |
+| LITTLE  |     1 | cpuoff-l     | 11,121,561  |   8.75% | 485    | 96     |  19.79% | 388    |  80.00% |
+| LITTLE  |     2 | clusteroff-l | 107,499,073 |  84.62% | 2,705  | 1,001  |  37.01% | 0      |   0.00% |
+| LITTLE  |     3 | s2idle       | 0           |   0.00% | 0      | 0      |   0.00% | 0      |   0.00% |
+| LITTLE  | TOTAL |              | 127,044,775 | 100.00% | 19,819 | 1,097  |   5.54% | 388    |   1.96% |
++---------+-------+--------------+-------------+---------+--------+--------+---------+--------+---------+
+
+Per-Cluster deltas: MID
+
++---------+-------+--------------+------------+---------+--------+--------+---------+--------+---------+
+| cluster | state | name         | timeΔ      | time%   | usageΔ | aboveΔ | above%  | belowΔ | below%  |
++=========+=======+==============+============+=========+========+========+=========+========+=========+
+| MID     |     0 | WFI          | 2,593,501  |   2.72% | 7,278  | 0      |   0.00% | 0      |   0.00% |
+| MID     |     1 | cpuoff-m     | 188,793    |   0.20% | 51     | 48     |  94.12% | 3      |   5.88% |
+| MID     |     2 | clusteroff-m | 92,616,252 |  97.08% | 605    | 257    |  42.48% | 0      |   0.00% |
+| MID     |     3 | s2idle       | 0          |   0.00% | 0      | 0      |   0.00% | 0      |   0.00% |
+| MID     | TOTAL |              | 95,398,546 | 100.00% | 7,934  | 305    |   3.84% | 3      |   0.04% |
++---------+-------+--------------+------------+---------+--------+--------+---------+--------+---------+
+
+Out of curiosity:
+Do you know if the platform respects cpuoff / clusteroff distinction
+properly? Is the power difference measurable?
+There really is no reason for cpuidle to not autopromote them, if there's no latency
+requirement that would prevent that.
+Especially for the big cluster (just one CPU).
 
