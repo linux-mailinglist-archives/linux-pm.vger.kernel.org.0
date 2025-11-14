@@ -1,201 +1,232 @@
-Return-Path: <linux-pm+bounces-38018-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38019-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BB72C5C247
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 10:05:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EB9DC5C250
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 10:05:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 322693513E8
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 09:03:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C7673AD897
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 09:05:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B982F4A1B;
-	Fri, 14 Nov 2025 09:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF80305058;
+	Fri, 14 Nov 2025 09:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="BBtnV+6n"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VRyHedUR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010041.outbound.protection.outlook.com [52.101.201.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716622C326F;
-	Fri, 14 Nov 2025 09:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763110988; cv=fail; b=YuREHFUvhhCgnUETcY+bQdtXGxwr/IO4p3KMs9/7R4F/Jc4SJFtz1W4HtmrZayUN0p/3LDhwufH4M4anJVP+Z8fu4cPKj7qXld6vrWSOUMfInyQoS2d54MIL1aps+L2CjUifL4HF83Q81wYj2hiaYgYCpRQncc6Oft+u8VN2+tA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763110988; c=relaxed/simple;
-	bh=VqozsP8jaV2A0Lm6vdr3vuzmR/1GX5lKPUyvGAhl6Dk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KwktUVCqYNE/i1RFq2O8cjVTe8/r6Nn53cTaOc0O47Pa/ADWLJe+EyuStoXowchjvCRxMnQ3Tmpf8w0ej+Y9deXho+VEmSztNpBWYbk7iyJmFxSzeLg0MIE9tLcdII9FNvgZvdUPRi6xaCK8besD1+U9K7bcoDRwP48sLJOeAF4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=BBtnV+6n; arc=fail smtp.client-ip=52.101.201.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=d8nt5D9YJmBqNbXr8+W15yppDHZ8De6foi31uulGEEqWSAJx8wqd3UV3g361y7vE+hzv86tPy2xEtXtMtYuHQutrL24RcqVPMsqbRlLE435NjqbdHKUPbEFhBeO4hCCuW+A+qlMOmMCnhf2W/cXiOWtCN/dw0wWiB8tY9PZyrCtk8ZujW6j8jAW+ILIPUH6vtxG1WqdvPeLlo41Ng2qJPIX53hs3CSkbs180QvWHc051hiOXaUyjvmA7TjoLcP9ATUADEHHV3aKIDEqlV80SHTPGHN8qWH2NqgZtSGUboItdMxLX0Wm4xe91Ay5AA11BL7J8rDd85vC03fOGKMdFhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=a8oyFpXk/GMi65JsF4UZ1QSUXfh4u2927iQz+zK81hU=;
- b=ckIZyuM0CWM1IRZUxDj/lA9Ru0jGR3PyoN4Q2Es56ccAAEz5VGGBFROzUdi883Mi+XKd9lcLgMQbHBbfacMb2ETqa/U+wPn/Xyk+ebwJ6Hgk50aqO666qGkeu0tJXiYX8XIfo2lvraw00Lm6ajlofCn0fIbLp/eAbmq1xujHocW3j/ceszlu3w6RZDCiGQUYSIthucHrbAhmvJ9KGmcdskOXgT22p+/yB23G/D9dyC2YR7mN1qLyjHOARYlJJWredhXZbsqg8pDuoEvkvTXruGiUxdwJZloztaYTRmdPqLywioTz5r57TWdqK7cVXy08r2lBUUIFq22X25fCbLX17g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.21.194) smtp.rcpttodomain=kernel.org smtp.mailfrom=ti.com; dmarc=pass
- (p=quarantine sp=none pct=100) action=none header.from=ti.com; dkim=none
- (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=a8oyFpXk/GMi65JsF4UZ1QSUXfh4u2927iQz+zK81hU=;
- b=BBtnV+6nzzCwaExRb+7J6IqdWwByO24GOcEBoUXJ+zMcMHzMcKTcDgFuEfGSK28ACr8L+TWuqYyp8qUw3dLvzs01AMdZPDHf6uz6+dGxP7wDuuREqMwp5lr0BC+DclMPXjPeE58Q9ABtGNvHHPsPwjXhAOYNuixdIs/ZIDlJaVg=
-Received: from SJ0PR05CA0132.namprd05.prod.outlook.com (2603:10b6:a03:33d::17)
- by SA1PR10MB6493.namprd10.prod.outlook.com (2603:10b6:806:29c::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.16; Fri, 14 Nov
- 2025 09:03:02 +0000
-Received: from SJ1PEPF000023CB.namprd02.prod.outlook.com
- (2603:10b6:a03:33d:cafe::88) by SJ0PR05CA0132.outlook.office365.com
- (2603:10b6:a03:33d::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.7 via Frontend Transport; Fri,
- 14 Nov 2025 09:03:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.21.194)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.21.194 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.21.194; helo=flwvzet200.ext.ti.com; pr=C
-Received: from flwvzet200.ext.ti.com (198.47.21.194) by
- SJ1PEPF000023CB.mail.protection.outlook.com (10.167.244.5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9320.13 via Frontend Transport; Fri, 14 Nov 2025 09:03:00 +0000
-Received: from DFLE105.ent.ti.com (10.64.6.26) by flwvzet200.ext.ti.com
- (10.248.192.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.2.2562.20; Fri, 14 Nov
- 2025 03:02:55 -0600
-Received: from DFLE200.ent.ti.com (10.64.6.58) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Fri, 14
- Nov 2025 03:02:55 -0600
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DFLE200.ent.ti.com
- (10.64.6.58) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Fri, 14 Nov 2025 03:02:55 -0600
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5AE92sZ91715918;
-	Fri, 14 Nov 2025 03:02:54 -0600
-Date: Fri, 14 Nov 2025 14:32:53 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Linux PM <linux-pm@vger.kernel.org>, Linux ACPI
-	<linux-acpi@vger.kernel.org>, Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Takashi Iwai <tiwai@suse.de>, LKML <linux-kernel@vger.kernel.org>, "Zhang
- Qilong" <zhangqilong3@huawei.com>, Frank Li <Frank.Li@nxp.com>, Dan Williams
-	<dan.j.williams@intel.com>, Linux PCI <linux-pci@vger.kernel.org>, "Bjorn
- Helgaas" <helgaas@kernel.org>
-Subject: Re: [PATCH v2 3/3] PCI/sysfs: Use
- PM_RUNTIME_ACQUIRE()/PM_RUNTIME_ACQUIRE_ERR()
-Message-ID: <20251114090253.n5m43jdvg5rv2bbb@lcpd911>
-References: <5959587.DvuYhMxLoT@rafael.j.wysocki>
- <3932581.kQq0lBPeGt@rafael.j.wysocki>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30B3E2FCC1E
+	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 09:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763111074; cv=none; b=EiieryXEtRgGcfQqm6x5Cat/1dd2qfG84AJfS7jbOlaJLin7jb14VT5Lwh8rwvM56vt5wNZVIsVG9YcY1JsbBuPiuza73J57PP5M+RTLbuHF/9rVCbMio6eN5Bf761FykEcysjDi7KSuV9tdtY3h26Ve3UI2/Ld1SkaCU94aC4k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763111074; c=relaxed/simple;
+	bh=0TEm7iRCHjxnOslZB50ja14A360VHxBjrAw5MtbVg4E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m0vtx5lr5P85hKixsOG0AKg4pmt3Sl17IFe47FWM1UGZJ0m9RmRGs3DsLIgiAZg7EKmTz9DkOOeAUkxWtxg9YTVaoZFBCRSmdj03/UlbAn6dTGJpZjriqfLAeWxsgqbzQVAWnLJr1mcUXumjjsf7chskyTZ8SIotUdiC05FAtRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VRyHedUR; arc=none smtp.client-ip=209.85.208.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-37b495ce059so14507921fa.0
+        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 01:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763111070; x=1763715870; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eyGXFrfPOvtO9Z4s8XQ0ch6UyF0uTEn2G/XOy3LSwzA=;
+        b=VRyHedUReEEON2xYd87WuLqJfD1noLS/ndv5UrVlMiwt4AvPh301/msGwg3YAfz0NK
+         YD13TyYHFEGdhF+5LIO+mQG9Tyu/olXSrJrogNVSienDMHGnhETw0TerCFiLjUNbtdSN
+         b2KuZnS/MEw5h1jDPYrtK3hTXlGXAvWxnhvxvZ/bZshcWh2279+HMLOGna+Y5GEV8lPm
+         MG8G1pzJsYP6py5eaIA1WVqC+WoYcku5GLY9qpVnCTnQpRRocLijXlcMvTJ/vqGmLHV/
+         lNrKrdCC2Wa58fVEXVPdN417hEOZFXG5JpD9cSwnpoUsZ9Jb3STOsMywbKG0ccu742fw
+         YCOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763111070; x=1763715870;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eyGXFrfPOvtO9Z4s8XQ0ch6UyF0uTEn2G/XOy3LSwzA=;
+        b=EhW7V3bCwM36qBTY20fC089JoxFMD2ifACHGJ5guOO1Oaq1VuZ/a8wSWx1NnJV1maj
+         5sMLfwlg3CNSg/Hvnn3loaMOd9BcKqkTZWlFA671yRPHtd1toPSzVTQYVMklW6T1Bc8W
+         o2UrYrTpSSPivV52blt67NuaTIM5EFUPJ4nos6Om5cqc/elBO2lVpAtA3FARyrodXS6F
+         CunZlEsI1km1cO3QRZD9xLxBSIk7qoVUY+HDbeKZyRshgi3/FG4ncJN8kGHJhBazfUij
+         VXt+UITJHvFuDYPgBGmeKh73tKTto38S6KaFYttVCI+f2ImrrwlbfHdjG7zcdn2F+T6l
+         hhEg==
+X-Forwarded-Encrypted: i=1; AJvYcCULFxPv8SgbKMAaRGyOmkeSeleHAilVPb6sezoweXTOCPYZvxEQBj+HR88p8lslnMn4GTb/fouG3g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbsffnOL9KF6VnJ+XtyiSvnkrqx2igZOVrYs1pZlS8oWkhSqCi
+	OM/bal+Xys6Gzj7dY03L/iqvPVho0S/Qbfa1mfpUih1c9zDDyVkxPVve
+X-Gm-Gg: ASbGncuxrmcWTFsJtLmGeBV6PnWm/Uf2BQtGGQJKrAwZ1nFzjgwssTFmja2X7W4wuzt
+	URH3nNsvM9E3+LfN1cjNxARpLOxUIayIjkwsVVADZStAhGiqMldQxe77N/cBxz1g0I1bypsysxq
+	GGKkK4o+ja5NPceLBULq9fr6kHMwWKIV0j55j0YVKVsb3nmIL+am5sknMYgq45r8HY26wT2Kpbk
+	K9yv/5n97cxiA1Umc58gPLe2jkqI7yQW6KbqU3eXOlUaacU1gQODIfmx3M0HKoL/lgIlQWr2Dd6
+	8KgKQdpA58iTNiE4oAWTtluexs1d2UXBZWWrE7u9Cz4xvkpSe7qvqwoNfO1Vw2tisFn+fg5BTZD
+	ZALZFmYYK1GM0/DVm2OSXzqJNyJJ7TaJSM3063MAQGp3f9r9YhvAr19JDrdopWpFrXTY3PoZhLy
+	5PjqXy8dcGMCHUEgdYcdHB9lOncen3IrzXG/xC8lS+APps6w/Ua0Tnlvdvhg==
+X-Google-Smtp-Source: AGHT+IFr4MNcx4dsYyHl+PkDpXtMSjAYMNDIYKiKLMNKzXGQD8YnOzZnKnzRzUK+LYDxWhp7vqal/A==
+X-Received: by 2002:a2e:b4a6:0:b0:37b:a664:acde with SMTP id 38308e7fff4ca-37babd29d4emr4429431fa.32.1763111069883;
+        Fri, 14 Nov 2025 01:04:29 -0800 (PST)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-37b9ce080d9sm9121361fa.3.2025.11.14.01.04.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Nov 2025 01:04:29 -0800 (PST)
+Message-ID: <ee36d7d1-ef47-4a35-9aff-baa6ed32105a@gmail.com>
+Date: Fri, 14 Nov 2025 11:04:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <3932581.kQq0lBPeGt@rafael.j.wysocki>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CB:EE_|SA1PR10MB6493:EE_
-X-MS-Office365-Filtering-Correlation-Id: cff481f0-93c3-48b4-b246-08de235c9c73
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700013|376014|7416014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Y3R7qD+x1Bb2K+c6kHBk+XYPiPJ8bZCoFOhPM5XCEGlVttvEAd9U0TrvBbpp?=
- =?us-ascii?Q?NmxVcsx2QTQY/17VZ4Pw2htbetaXJfCub35e0+1l9dE1LBXc+nOmgwPj/Pi3?=
- =?us-ascii?Q?t/fg1mhD9KncqPwEFZNSZtzNjWvht6kw7ZlwZV17tc6doJKSZy56b1PFxkjt?=
- =?us-ascii?Q?UMfNgZKMZOqxNctkZhFbdgpSaVS6Kf5IFfBSdjUQPAWwj5vLAIyQZ3dMh53+?=
- =?us-ascii?Q?WXwMXihbzf4Jo4oVqUGbR/99i3jnZHsgO8yY45kBPTXRbR4wbY2QoGeEY2nc?=
- =?us-ascii?Q?yMe5td4a0mfcklJ4T+ql99xKOqLU61du2ZPto7rLubAYRQmB8T89eKwWGl5J?=
- =?us-ascii?Q?/Wdarqas9rDSglmg3ErpjyxEKcQsnGFanP7CJ91WWbQWjkiRRen6hta6NA3L?=
- =?us-ascii?Q?Nd5AgwpUWPzzXmRmCpy+xH+JZdr3vPQjrJ3FOV+lWZe+ruyWnzr7P7MISF45?=
- =?us-ascii?Q?cOIlVqeBqIRkkDMYR1WU5p1RzNn1leFx+NlNXZZ1K5WcgNx5N27kgwmGhxkj?=
- =?us-ascii?Q?qFC4E9Qq/lm6et6brdeJZZFcIXpdvIPj8fOrssy5enPu/DMGEu2t2aCGO2bi?=
- =?us-ascii?Q?b7bk6FMAbxKwxBRuUDm+9egzr2yp83XlpH4aoQxGLF1M+YNaaY3JndUx5w5c?=
- =?us-ascii?Q?aO4fw74ruwcNpLXDmBDm+NjQWleRBH6AC2lN88kvgeB9IqCIvKqn3yCzYVgf?=
- =?us-ascii?Q?GPbA6OcTuP2I3dxJZtkrapdNyp9F28jUKtw+NDe0E6hB2eej/ccfjeBOOf6i?=
- =?us-ascii?Q?ibCCtmJor0lkMRq9WZ74kZdDBNJSP+0ZMbzVwkK5d/66LXg78UDMEgN8CpeV?=
- =?us-ascii?Q?BKG5MXoVXTAkJiPjK+LFxtC2+EjdAyGLtsQETnncnhlexQyKcHDm57ETRYPU?=
- =?us-ascii?Q?DDlIRFIuQEEBKfDKgV0J7wD8tLJwmQJng4I76WeXQ6Z/rMHrjOpkG3ZMPKTM?=
- =?us-ascii?Q?7CfeJm2HD6vjGat8BE/iooCawtBkNU/KaIJCHCd/BuK+V7nDIt8dhaG4ormt?=
- =?us-ascii?Q?kqgVEh8VybJzh8z8pUbbcACBfM5VKIzmuHPI6RZLnR73D3VzzL1MqRv2b0fy?=
- =?us-ascii?Q?mpsI1LPDS/K8Fe5FaX7y6dLhpfxgNx3HjU3tWlXznLt5hSNT/8WIkF+KLe9+?=
- =?us-ascii?Q?bGZs16twFAY+66TSEjFPbGteHg/7CIus686tKDS12QG39YZGmZdfJVyx2be9?=
- =?us-ascii?Q?oWGTFSecprsSigIxE6m5a5g1pgfeApB3PWytAxN3TL0rnA0Jw/y+pijHuS++?=
- =?us-ascii?Q?1pVmbMw4j51Znsja3yXjToG6Uxt3uYfpbDoaQRU+Fm+xfYGCfZqStsnMXmKG?=
- =?us-ascii?Q?fXZHmhYP0om3j8JZ0Zc7ok/13GLyG4PJv4KpDmVFIvax/yAJuhkhSkVcVwyS?=
- =?us-ascii?Q?Lxq4IjvVuq3H8o0F3FNt3AawuURtQwOn7qb28vgVi7Py+mm7FxA2jm6LgvrG?=
- =?us-ascii?Q?IX19JGKFVq24jw0leJVW011RzxyWbusPsPH0JRFI9r+IfgGQXtjqkW7uuvRq?=
- =?us-ascii?Q?vskiVH3sWoTFE3UnxqoyDwFj4qEqJslebkpRo/urIx7lvcg3cHDvE9lcPYo0?=
- =?us-ascii?Q?7rUVMkq82JRNqepbDRc=3D?=
-X-Forefront-Antispam-Report:
-	CIP:198.47.21.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:flwvzet200.ext.ti.com;PTR:ErrorRetry;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2025 09:03:00.1003
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cff481f0-93c3-48b4-b246-08de235c9c73
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.21.194];Helo=[flwvzet200.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF000023CB.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB6493
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 04/16] dt-bindings: power: supply: BD72720 managed
+ battery
+To: "Rob Herring (Arm)" <robh@kernel.org>,
+ Matti Vaittinen <matti.vaittinen@linux.dev>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Mark Brown
+ <broonie@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ linux-clk@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>,
+ Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+ linux-leds@vger.kernel.org, Pavel Machek <pavel@kernel.org>,
+ Liam Girdwood <lgirdwood@gmail.com>, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>,
+ Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+ linux-rtc@vger.kernel.org, Lee Jones <lee@kernel.org>,
+ Stephen Boyd <sboyd@kernel.org>
+References: <cover.1763022807.git.mazziesaccount@gmail.com>
+ <ac5a4e992e4fb9c7bffb1e641a7cd61f74af4cba.1763022807.git.mazziesaccount@gmail.com>
+ <176303119683.3716572.16868393928566655866.robh@kernel.org>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <176303119683.3716572.16868393928566655866.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Nov 13, 2025 at 20:35:27 +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 13/11/2025 12:53, Rob Herring (Arm) wrote:
 > 
-> Use new PM_RUNTIME_ACQUIRE() and PM_RUNTIME_ACQUIRE_ERR() wrapper macros
-> to make the code look more straightforward.
-> 
-> No intentional funtional impact.
+> On Thu, 13 Nov 2025 10:52:19 +0200, Matti Vaittinen wrote:
+>> From: Matti Vaittinen <mazziesaccount@gmail.com>
+>>
+>> The BD72720 PMIC has a battery charger + coulomb counter block. These
+>> can be used to manage charging of a lithium-ion battery and to do fuel
+>> gauging.
+>>
+>> ROHM has developed a so called "zero-correction" -algorithm to improve
+>> the fuel-gauging accuracy close to the point where battery is depleted.
+>> This relies on battery specific "VDR" tables, which are measured from
+>> the battery, and which describe the voltage drop rate. More thorough
+>> explanation about the "zero correction" and "VDR" parameters is here:
+>> https://lore.kernel.org/all/676253b9-ff69-7891-1f26-a8b5bb5a421b@fi.rohmeurope.com/
+>>
+>> Document the VDR zero-correction specific battery properties used by the
+>> BD72720 and some other ROHM chargers.
+>>
+>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+>> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>>
+>> ---
+>> NOTE:
+>> Linus' rb-tag holds only if there's no further comments from Rob.
+>>
+>> Revision history:
+>>   v3 =>:
+>>   - No changes
+>>
+>>   v2 => v3:
+>>   - Constrain VDR threshold voltage to 48V
+>>   - Use standard '-bp' -suffix for the rohm,volt-drop-soc
+>>
+>>   RFCv1 => v2:
+>>   - Add units to rohm,volt-drop-soc (tenths of %)
+>>   - Give real temperatures matching the VDR tables, instead of vague
+>>     'high', 'normal', 'low', 'very low'. (Add table of temperatures and
+>>     use number matching the right temperature index in the VDR table name).
+>>   - Fix typoed 'algorithm' in commit message.
+>>
+>> The parameters are describing the battery voltage drop rates - so they
+>> are properties of the battery, not the charger. Thus they do not belong
+>> in the charger node.
+>>
 
-Same here ...
+// snip
 
-Reviewed-by: Dhruva Gole <d-gole@ti.com> 
-
+> My bot found errors running 'make dt_binding_check' on your patch:
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
+> yamllint warnings/errors:
 > 
-> v1 -> v2: Adjust to the changes in patch [1/3].
-> 
-> ---
->  drivers/pci/pci-sysfs.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> --- a/drivers/pci/pci-sysfs.c
-> +++ b/drivers/pci/pci-sysfs.c
-> @@ -1517,8 +1517,8 @@ static ssize_t reset_method_store(struct
->  		return count;
->  	}
->  
-> -	ACQUIRE(pm_runtime_active_try, pm)(dev);
-> -	if (ACQUIRE_ERR(pm_runtime_active_try, &pm))
-> +	PM_RUNTIME_ACQUIRE(dev, pm);
-> +	if (PM_RUNTIME_ACQUIRE_ERR(&pm))
->  		return -ENXIO;
->  
->  	if (sysfs_streq(buf, "default")) {
-> 
-> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/rohm,vdr-battery.example.dtb: battery (simple-battery): 'degrade-cycle-microamp-hours', 'rohm,volt-drop-0-microvolt', 'rohm,volt-drop-1-microvolt', 'rohm,volt-drop-2-microvolt', 'rohm,volt-drop-3-temp-microvolt', 'rohm,volt-drop-soc-bp', 'rohm,volt-drop-temperatures-millicelsius', 'rohm,voltage-vdr-thresh-microvolt' do not match any of the regexes: '^ocv-capacity-table-[0-9]+$', '^pinctrl-[0-9]+$'
+> 	from schema $id: http://devicetree.org/schemas/power/supply/battery.yaml
 > 
 
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+Odd. I am pretty sure I didn't see this when I ran the make 
+dt_binding_check. Not 100% sure what happened there. I get this error 
+now though when including all the bindings to the check.
+
+Do I get this right - these errors result from the properties used in 
+example not being included in the battery.yaml? So, this means that the 
+check is done based on the binding (battery.yaml) where the compatible 
+(simple-battery) is defined - not based on the properties which are 
+present in this file where the example resides, (and which references 
+the battery.yaml)?
+
+...
+
+Oh... Now that I wrote it I feel like an idiot.
+
+This approach couldn't work for the validation, right? Let's assume I 
+had a VDR battery, and I added a static-battery -node for it. Running 
+the validation would pick the battery.yaml based on the compatible (just 
+as it does here), and be completely unaware of this vdr-battery.yaml. I 
+have no idea why I thought this would work. Probably because I only 
+thought this from the documentation POV.
+
+So, as far as I understand, the only viable options are expanding the 
+existing battery.yaml with these properties (which I hoped to avoid, see 
+below)
+
+ >> The right place for them is the battery node, which is described by the
+ >> generic "battery.yaml". I was not comfortable with adding these
+ >> properties to the generic battery.yaml because they are:
+ >>    - Meaningful only for those charger drivers which have the VDR
+ >>      algorithm implemented. (And even though the algorithm is not 
+charger
+ >>      specific, AFAICS, it is currently only used by some ROHM PMIC
+ >>      drivers).
+ >>    - Technique of measuring the VDR tables for a battery is not widely
+ >>      known. AFAICS, only folks at ROHM are measuring those for some
+ >>      customer products. We do have those tables available for some 
+of the
+ >>      products though (Kobo?).
+
+or, to add new compatible for the "vdr-battery".
+AFAICS, adding new compatible would require us to wither duplicate the 
+used properties from battery.yaml here (as battery.yaml mandates the 
+"simple-battery" - compatible) - or to split the battery.yaml in two 
+files, one containing the generic properties, other containing the 
+"simple-battery" -compatible and referencing the generic one. Then the 
+"vdr-battery" could also reference the generic one.
+
+Any suggestions for the next path to follow?
+
+Oh, and sorry for asking to review something which is obviously not 
+working approach. I should've understood this from the beginning.
+
+Yours,
+	-- Matti
+
+---
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
