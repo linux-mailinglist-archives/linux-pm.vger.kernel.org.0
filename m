@@ -1,203 +1,214 @@
-Return-Path: <linux-pm+bounces-38056-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38057-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86CC8C5E6C4
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 18:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 301E2C5EA59
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 18:50:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 022EB383CF6
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 16:40:06 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 85B8A3637E7
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 16:50:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EDDE33556E;
-	Fri, 14 Nov 2025 16:39:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9F62BE7AF;
+	Fri, 14 Nov 2025 16:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JiHuM5Q9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hERqqFGF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433EE335549;
-	Fri, 14 Nov 2025 16:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A90128D84F
+	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763138397; cv=none; b=JnT0N0VeAnchB67Lxx5K1zWuKpWH0CGQ6KjvIrmBDDTDH69h/7lGB/HiZzJC6T/WASN1tWE4TmqUuZgmvp1+q8NIrynrl05H1F+rp+lF5+fSNxOfvQ1KCrae5e02FXUv92OwK0Avai8nRuFWuDveZUdVm1DSr3Udfc7H/g2rOH0=
+	t=1763139046; cv=none; b=LZRoB8bGgOok2nMzcLjCPjxEgmtreSxKCrJGsdbnK4bISXTZcwPyy15y6L5xkRFrX4Q+X1uGjKny/AAzvyl8PNLeW5H8ZtmgLdq5g1c0CyjqjmSqtXTgakQ12Lk2CWUWzdaL4ZR4+ZbYnYUgvyb+5yjtSTSeC+O6mc/wVRTsLg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763138397; c=relaxed/simple;
-	bh=bLsvvHPDpo7u9K8rvsM02ueTdodp270jX2AjxuPSOVs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QXfd/WJJga/03L1tsbt9DSVDQCeFbgN+4qKYJ2xGsYBqidIPuB08qqUMcXepLP3ENBnNcqLXJ1J4dQ0/tsbG1F0qnjhqL6dR0H8AAOYggYFNj6sTjkCEfRT++ndHoIjEm2+LgSeDULwuq8wtfjWFJmWRwyDBure/hvkst3fzg64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JiHuM5Q9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8814AC4CEF5;
-	Fri, 14 Nov 2025 16:39:56 +0000 (UTC)
+	s=arc-20240116; t=1763139046; c=relaxed/simple;
+	bh=kRAIXpQL0rtpWzajaSCTkkyqSQYa+ftfCRXl8V2IxE0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qSXKDAmSjwjjDpPETPfzZItVQDzQEhXW+dUAM18AZv6iF7Cpyx1x5jJeL3h/W6puC7YxJbKAZLk9DGWLrX5PLxw+QntVHVYZiPh5Fi9W0N3LUn3hBfaAdKyqVs+XUNLIvLgk1QcKATOcl2uEQdOSeSS5tOUITcCs+6a60Mm5b/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hERqqFGF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D38FC2BC9E
+	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:50:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763138396;
-	bh=bLsvvHPDpo7u9K8rvsM02ueTdodp270jX2AjxuPSOVs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JiHuM5Q9ROv7GzsPSbypcQLkjsyQw7zUp80ynEPMqDZYukhnpJt0JIXbufYpj3oiJ
-	 PVueWfvhKe4kUx5KIYS4Xte4v4BEpW8iHB0nkm4x9VB6TI27yYpj8McDCU/+mQ1b/L
-	 m1gvZds85tHQgBfvjGcVYXf06kWV0p9vGn6sjBOqkR0+DSBu8Halsif6kLw4aEJDut
-	 EQQ8GD6gf2KDtCiaVwM/2WX/+uKIptN3BIkE+wIekjuhxJQ2VJuE3aoAmKv/mB/ews
-	 RZyq67l/ziPikXwmtK+M1lmB4NmUzUeejp2/5AQYXBjo2nMsm+7/AI8jelS1st3VdX
-	 zQFQMUwWx82sQ==
-Date: Fri, 14 Nov 2025 10:39:54 -0600
-From: Rob Herring <robh@kernel.org>
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@linux.dev>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Mark Brown <broonie@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-clk@vger.kernel.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	linux-leds@vger.kernel.org, Pavel Machek <pavel@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>, linux-gpio@vger.kernel.org,
-	linux-pm@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-rtc@vger.kernel.org, Lee Jones <lee@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>
-Subject: Re: [PATCH v4 04/16] dt-bindings: power: supply: BD72720 managed
- battery
-Message-ID: <20251114163954.GA3399895-robh@kernel.org>
-References: <cover.1763022807.git.mazziesaccount@gmail.com>
- <ac5a4e992e4fb9c7bffb1e641a7cd61f74af4cba.1763022807.git.mazziesaccount@gmail.com>
- <176303119683.3716572.16868393928566655866.robh@kernel.org>
- <ee36d7d1-ef47-4a35-9aff-baa6ed32105a@gmail.com>
+	s=k20201202; t=1763139046;
+	bh=kRAIXpQL0rtpWzajaSCTkkyqSQYa+ftfCRXl8V2IxE0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=hERqqFGFEWsgElkSKHoC3j1on9AuWyUT+X7M8qrqyZk/7B2v7cHEh9TG2rVvJ+HYs
+	 jIBGlJWpjFVbX1ydcmDu8dv3/C9es21yyfhfyU9pm0MA2lioBhf583hiVt6Z8y8F6i
+	 ZVjRol18PqFa6pc1htrm5XM4XO4goUKrjBtIlzRd/w1KahXUKEcHW6eQPKmJytK5u/
+	 6rJb+DgjrH4T25CH0IJ15rAGsi7LZ2cSIJlO/nJ9Dkn4nsGSvE04Ys43hYA1iAUr11
+	 Ww+hEwj40E5tufKCjB4k28M83umiVUO00LTP5BfetaPWVv6mYGHkI9e7owF5/xrTlZ
+	 GAaV7Vc71uQ1g==
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-44fffff5f73so1611027b6e.0
+        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 08:50:46 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW5RMojlJvbgrse7Hpn6X6ma+NmKvciyWaEoVWV1F93da3OMeTd1Fz2K4/t53B7fB/1CGjKqU+jOw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQkCJZ8YZAoSK/Jv8EqiuUTx4LDYpY4fEuh22Lt7lf1Z8D54zE
+	OZm+VmZJLq7QrAYHQame/IUZvdBYF1dAqTJ7A+3TGiOZa0bVdsDIvg5Xko0PGdQK1ZgolLvt62V
+	BdFYosQ1+rg6CS3wpvO+gApm8sO8CFv4=
+X-Google-Smtp-Source: AGHT+IEYoY5xYDQM2BBb9X6HkbmqaxbA6wbw9D2hrDeBHcEQWKaobtybIG/1lrjxhUBp4/SMuWImn4eAYFy9CIQanRY=
+X-Received: by 2002:a05:6808:13d5:b0:44f:ddf1:f238 with SMTP id
+ 5614622812f47-4508625eabemr3567353b6e.0.1763139045390; Fri, 14 Nov 2025
+ 08:50:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ee36d7d1-ef47-4a35-9aff-baa6ed32105a@gmail.com>
+References: <20251107-wakeirq_support-v5-0-464e17f2c20c@oss.qualcomm.com> <20251107-wakeirq_support-v5-1-464e17f2c20c@oss.qualcomm.com>
+In-Reply-To: <20251107-wakeirq_support-v5-1-464e17f2c20c@oss.qualcomm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 14 Nov 2025 17:50:34 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jF2DG8Dki8+vVbOR20Z-=5=1XW2AjU05fzQPDJfzhLzA@mail.gmail.com>
+X-Gm-Features: AWmQ_bm376pzy83QmYYBd-oR2tNJ4Dlhl0hniQgkzHybVJ8j4IFmpm1XO_r7SUc
+Message-ID: <CAJZ5v0jF2DG8Dki8+vVbOR20Z-=5=1XW2AjU05fzQPDJfzhLzA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] PM: sleep: wakeirq: Add support for custom IRQ
+ flags in dedicated wake IRQ setup
+To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	quic_vbadigan@quicinc.com, quic_mrana@quicinc.com, sherry.sun@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 14, 2025 at 11:04:27AM +0200, Matti Vaittinen wrote:
-> On 13/11/2025 12:53, Rob Herring (Arm) wrote:
-> > 
-> > On Thu, 13 Nov 2025 10:52:19 +0200, Matti Vaittinen wrote:
-> > > From: Matti Vaittinen <mazziesaccount@gmail.com>
-> > > 
-> > > The BD72720 PMIC has a battery charger + coulomb counter block. These
-> > > can be used to manage charging of a lithium-ion battery and to do fuel
-> > > gauging.
-> > > 
-> > > ROHM has developed a so called "zero-correction" -algorithm to improve
-> > > the fuel-gauging accuracy close to the point where battery is depleted.
-> > > This relies on battery specific "VDR" tables, which are measured from
-> > > the battery, and which describe the voltage drop rate. More thorough
-> > > explanation about the "zero correction" and "VDR" parameters is here:
-> > > https://lore.kernel.org/all/676253b9-ff69-7891-1f26-a8b5bb5a421b@fi.rohmeurope.com/
-> > > 
-> > > Document the VDR zero-correction specific battery properties used by the
-> > > BD72720 and some other ROHM chargers.
-> > > 
-> > > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> > > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > > 
-> > > ---
-> > > NOTE:
-> > > Linus' rb-tag holds only if there's no further comments from Rob.
-> > > 
-> > > Revision history:
-> > >   v3 =>:
-> > >   - No changes
-> > > 
-> > >   v2 => v3:
-> > >   - Constrain VDR threshold voltage to 48V
-> > >   - Use standard '-bp' -suffix for the rohm,volt-drop-soc
-> > > 
-> > >   RFCv1 => v2:
-> > >   - Add units to rohm,volt-drop-soc (tenths of %)
-> > >   - Give real temperatures matching the VDR tables, instead of vague
-> > >     'high', 'normal', 'low', 'very low'. (Add table of temperatures and
-> > >     use number matching the right temperature index in the VDR table name).
-> > >   - Fix typoed 'algorithm' in commit message.
-> > > 
-> > > The parameters are describing the battery voltage drop rates - so they
-> > > are properties of the battery, not the charger. Thus they do not belong
-> > > in the charger node.
-> > > 
-> 
-> // snip
-> 
-> > My bot found errors running 'make dt_binding_check' on your patch:
-> > 
-> > yamllint warnings/errors:
-> > 
-> > dtschema/dtc warnings/errors:
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/rohm,vdr-battery.example.dtb: battery (simple-battery): 'degrade-cycle-microamp-hours', 'rohm,volt-drop-0-microvolt', 'rohm,volt-drop-1-microvolt', 'rohm,volt-drop-2-microvolt', 'rohm,volt-drop-3-temp-microvolt', 'rohm,volt-drop-soc-bp', 'rohm,volt-drop-temperatures-millicelsius', 'rohm,voltage-vdr-thresh-microvolt' do not match any of the regexes: '^ocv-capacity-table-[0-9]+$', '^pinctrl-[0-9]+$'
-> > 	from schema $id: http://devicetree.org/schemas/power/supply/battery.yaml
-> > 
-> 
-> Odd. I am pretty sure I didn't see this when I ran the make
-> dt_binding_check. Not 100% sure what happened there. I get this error now
-> though when including all the bindings to the check.
-> 
-> Do I get this right - these errors result from the properties used in
-> example not being included in the battery.yaml? So, this means that the
-> check is done based on the binding (battery.yaml) where the compatible
-> (simple-battery) is defined - not based on the properties which are present
-> in this file where the example resides, (and which references the
-> battery.yaml)?
-> 
-> ...
-> 
-> Oh... Now that I wrote it I feel like an idiot.
-> 
-> This approach couldn't work for the validation, right? Let's assume I had a
-> VDR battery, and I added a static-battery -node for it. Running the
-> validation would pick the battery.yaml based on the compatible (just as it
-> does here), and be completely unaware of this vdr-battery.yaml. I have no
-> idea why I thought this would work. Probably because I only thought this
-> from the documentation POV.
-> 
-> So, as far as I understand, the only viable options are expanding the
-> existing battery.yaml with these properties (which I hoped to avoid, see
-> below)
-> 
-> >> The right place for them is the battery node, which is described by the
-> >> generic "battery.yaml". I was not comfortable with adding these
-> >> properties to the generic battery.yaml because they are:
-> >>    - Meaningful only for those charger drivers which have the VDR
-> >>      algorithm implemented. (And even though the algorithm is not charger
-> >>      specific, AFAICS, it is currently only used by some ROHM PMIC
-> >>      drivers).
-> >>    - Technique of measuring the VDR tables for a battery is not widely
-> >>      known. AFAICS, only folks at ROHM are measuring those for some
-> >>      customer products. We do have those tables available for some of the
-> >>      products though (Kobo?).
-> 
-> or, to add new compatible for the "vdr-battery".
-> AFAICS, adding new compatible would require us to wither duplicate the used
-> properties from battery.yaml here (as battery.yaml mandates the
-> "simple-battery" - compatible) - or to split the battery.yaml in two files,
-> one containing the generic properties, other containing the "simple-battery"
-> -compatible and referencing the generic one. Then the "vdr-battery" could
-> also reference the generic one.
-> 
-> Any suggestions for the next path to follow?
+On Fri, Nov 7, 2025 at 10:22=E2=80=AFAM Krishna Chaitanya Chundru
+<krishna.chundru@oss.qualcomm.com> wrote:
+>
+> Some devices require more flexibility when configuring their dedicated
+> wake-up interrupts, such as support for IRQF_SHARED or other IRQ flags.
+> This is particularly useful in PCIe systems where multiple endpoints
+> (e.g., Wi-Fi and Bluetooth controllers) share a common WAKE# signal
+> line which requests platform to re-establish power and reference clocks
+> to the components. In such cases, drivers can use this API with IRQF_SHAR=
+ED
+> to register a shared wake IRQ handler.
+>
+> Update the internal helper __dev_pm_set_dedicated_wake_irq() to accept an
+> irq_flags argument. Modify the existing dev_pm_set_dedicated_wake_irq()
+> and dev_pm_set_dedicated_wake_irq_reverse() to preserve current behavior
+> by passing default flags (IRQF_ONESHOT | IRQF_NO_AUTOEN).
+>
+> Introduce a new API, dev_pm_set_dedicated_wake_irq_flags(), to allow
+> callers to specify custom IRQ flags. If IRQF_SHARED is used, remove
+> IRQF_NO_AUTOEN and disable the IRQ after setup to prevent spurious wakeup=
+s.
+>
+> Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.co=
+m>
+> ---
+>  drivers/base/power/wakeirq.c | 43 ++++++++++++++++++++++++++++++++++++++=
+-----
+>  include/linux/pm_wakeirq.h   |  6 ++++++
+>  2 files changed, 44 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
+> index 8aa28c08b2891f3af490175362cc1a759069bd50..655c28d5fc6850f50fc2ed74c=
+5fbc066a21ae7b3 100644
+> --- a/drivers/base/power/wakeirq.c
+> +++ b/drivers/base/power/wakeirq.c
+> @@ -168,7 +168,8 @@ static irqreturn_t handle_threaded_wake_irq(int irq, =
+void *_wirq)
+>         return IRQ_HANDLED;
+>  }
+>
+> -static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, =
+unsigned int flag)
+> +static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, =
+unsigned int flag,
+> +                                          unsigned int irq_flags)
+>  {
+>         struct wake_irq *wirq;
+>         int err;
+> @@ -197,8 +198,7 @@ static int __dev_pm_set_dedicated_wake_irq(struct dev=
+ice *dev, int irq, unsigned
+>          * so we use a threaded irq.
+>          */
+>         err =3D request_threaded_irq(irq, NULL, handle_threaded_wake_irq,
+> -                                  IRQF_ONESHOT | IRQF_NO_AUTOEN,
+> -                                  wirq->name, wirq);
+> +                                  irq_flags, wirq->name, wirq);
 
-Probably the latter option. You could do the former and make the new 
-properties conditional on the "vdr-battery" compatible. That's fine with 
-small differences, but gets messy as there are more properties and 
-variations.
+It looks like IRQF_ONESHOT will always be there in the flags, so maybe do
 
-But is "VDR" a type of battery though? Is there a certain type/chemistry 
-of battery we should be describing where VDR is applicable? I don't 
-think it scales well if we define battery compatibles for every 
-variation of charger algorithm. Honestly I don't mind just adding 1 
-property. I care more if we allow undocumented properties than 
-allowing documented but invalid for the platform properties. When it 
-becomes 10, 20, 30 properties, then I might start to care. If that 
-happens, either we are doing a poor job of generically describing 
-battery parameters or chargers and batteries are tightly coupled and 
-can't be described independently.
++                                  IRQF_ONESHOT | irq_flags, wirq->name, wi=
+rq);
 
-Rob
+here?
+
+>         if (err)
+>                 goto err_free_name;
+>
+> @@ -234,7 +234,7 @@ static int __dev_pm_set_dedicated_wake_irq(struct dev=
+ice *dev, int irq, unsigned
+>   */
+>  int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq)
+>  {
+> -       return __dev_pm_set_dedicated_wake_irq(dev, irq, 0);
+> +       return __dev_pm_set_dedicated_wake_irq(dev, irq, 0, IRQF_ONESHOT =
+| IRQF_NO_AUTOEN);
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq);
+>
+> @@ -255,10 +255,43 @@ EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq);
+>   */
+>  int dev_pm_set_dedicated_wake_irq_reverse(struct device *dev, int irq)
+>  {
+> -       return __dev_pm_set_dedicated_wake_irq(dev, irq, WAKE_IRQ_DEDICAT=
+ED_REVERSE);
+> +       return __dev_pm_set_dedicated_wake_irq(dev, irq, WAKE_IRQ_DEDICAT=
+ED_REVERSE,
+> +                                              IRQF_ONESHOT | IRQF_NO_AUT=
+OEN);
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq_reverse);
+>
+> +/**
+> + * dev_pm_set_dedicated_wake_irq_flags - Request a dedicated wake-up int=
+errupt
+> + *                                       with custom flags
+> + * @dev: Device entry
+> + * @irq: Device wake-up interrupt
+> + * @flags: IRQ flags (e.g., IRQF_SHARED)
+> + *
+> + * This API sets up a threaded interrupt handler for a device that has
+> + * a dedicated wake-up interrupt in addition to the device IO interrupt,
+> + * allowing the caller to specify custom IRQ flags such as IRQF_SHARED.
+> + *
+> + * Returns 0 on success or a negative error code on failure.
+> + */
+> +int dev_pm_set_dedicated_wake_irq_flags(struct device *dev, int irq, uns=
+igned long flags)
+> +{
+> +       struct wake_irq *wirq;
+> +       int ret;
+> +
+> +       flags |=3D IRQF_ONESHOT;
+> +       if (!(flags & IRQF_SHARED))
+> +               flags |=3D IRQF_NO_AUTOEN;
+> +
+> +       ret =3D  __dev_pm_set_dedicated_wake_irq(dev, irq, 0, flags);
+> +       if (!ret && (flags & IRQF_SHARED)) {
+> +               wirq =3D dev->power.wakeirq;
+> +               disable_irq_nosync(wirq->irq);
+> +       }
+> +
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq_flags);
+
+Instead of this, I'd introduce
+
+int dev_pm_set_dedicated_shared_wake_irq(struct device *dev, int irq,
+unsigned long additional_flags)
+
+that would pass IRQF_SHARED combined with additional_flags to
+__dev_pm_set_dedicated_wake_irq() to avoid having two different helper
+functions that can be used for the same purpose.
+
+I think that it would be sufficient for your use case.
 
