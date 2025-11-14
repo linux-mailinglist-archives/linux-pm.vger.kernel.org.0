@@ -1,293 +1,203 @@
-Return-Path: <linux-pm+bounces-38055-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38056-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0523C5E5A6
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 17:53:52 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86CC8C5E6C4
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 18:04:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EC52435DFF9
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 16:37:35 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 022EB383CF6
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 16:40:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D08E8334C0D;
-	Fri, 14 Nov 2025 16:37:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EDDE33556E;
+	Fri, 14 Nov 2025 16:39:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ddHdSPWz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JiHuM5Q9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C49D334C07
-	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:37:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433EE335549;
+	Fri, 14 Nov 2025 16:39:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763138250; cv=none; b=hWfAATuHy83WhJsR14dve8SWJ7pTayIBKadiiaj/xttx59kQVXQxuUcqUSCttB8tkwa8sT8cwmj6Nod3FSol/fCjJ6eLuDC5X8N09+gf+EpW+cuh4UXiqiFWU0umB+8zUoxdEbZXtPZKqZ8ckfmrmjbXnmKLjos8lXVxohObmWY=
+	t=1763138397; cv=none; b=JnT0N0VeAnchB67Lxx5K1zWuKpWH0CGQ6KjvIrmBDDTDH69h/7lGB/HiZzJC6T/WASN1tWE4TmqUuZgmvp1+q8NIrynrl05H1F+rp+lF5+fSNxOfvQ1KCrae5e02FXUv92OwK0Avai8nRuFWuDveZUdVm1DSr3Udfc7H/g2rOH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763138250; c=relaxed/simple;
-	bh=6s2EBzXGw0jlDZLIBeNdlnVqiBzH4+2CCRLHKhxPbw0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oeWQWW06zNXwMBKUIwDKIt3dZP4aq4XK95RQkfAd56p9XFzKljLaW7rj9L7/iE9tuoddnM8WkClkWb7YPHXeIy/DztBAcdTV/HUiaR1w/5k5p5lqN14LUrGLlDUKsf9OuVfr8xVnEmoqm04dNdgrPdflXeKpAPa/n9o7mtEVJtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ddHdSPWz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36E25C19425
-	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:37:30 +0000 (UTC)
+	s=arc-20240116; t=1763138397; c=relaxed/simple;
+	bh=bLsvvHPDpo7u9K8rvsM02ueTdodp270jX2AjxuPSOVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QXfd/WJJga/03L1tsbt9DSVDQCeFbgN+4qKYJ2xGsYBqidIPuB08qqUMcXepLP3ENBnNcqLXJ1J4dQ0/tsbG1F0qnjhqL6dR0H8AAOYggYFNj6sTjkCEfRT++ndHoIjEm2+LgSeDULwuq8wtfjWFJmWRwyDBure/hvkst3fzg64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JiHuM5Q9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8814AC4CEF5;
+	Fri, 14 Nov 2025 16:39:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763138250;
-	bh=6s2EBzXGw0jlDZLIBeNdlnVqiBzH4+2CCRLHKhxPbw0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ddHdSPWzT9iLA0CIazG5hZBsxK9JOrw6KpqrhfKbLWf6P3vrIuQISR8zxSXFEpCS7
-	 qcjtRBsoFsKUIfUt6ZATiyIuA2a2z8ckveUKqmGbfEA2tNQz6Lq6aN6iGrVePEKbpK
-	 luPdnC/7lmi5HcyG3Eb3TUiIGzaTYzv8X+SHcS/5Oa5dXIhGRzmUVWVY8fRplmpSl3
-	 GX/0J3/IfYn1f+MoOnMbcP2U3PMrZZbwZqlV+u5G8PFUz+w2qYyI5WUWQd21OIcuuC
-	 ljilKGV3e0Tby6+of3+bvvGA+Iq7p307rKHauVcrz6gUUMQINdXUBB3OOUQfvRrgOK
-	 fswZWrmM9aJgg==
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-7c704bdd57aso1044773a34.3
-        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 08:37:30 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUJ6OqI2lETPAGZDBI2sDEpxUX0oBLkvsTtem0Tw8Se2+Pc9dnGn+iQWV5RUbhzASdswjW4oAtyGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw8vwTmhTsE4VBajc3z6gHBtRSkrxmvMyDnz044PMUHLe3BlccL
-	xvNtYpTcUrrXyATKg1FwJgYgiAKXWd+6ABfoO3WVnDFZnHWkA3itkfW3zTbCUHPIwyXv781I3oF
-	GXe5kinowV0MWE6wZqpa3BHn7JylKn10=
-X-Google-Smtp-Source: AGHT+IG3r+hhrmR59PqBPg4MuCIUY2ildFPsk+Mm5FK3UoAduJPupdv5Zl5o+KnlE+edDBYIN2vqDjw6oecNbkUS1xE=
-X-Received: by 2002:a05:6808:5285:b0:450:730e:d109 with SMTP id
- 5614622812f47-450975f39f2mr1810272b6e.48.1763138249423; Fri, 14 Nov 2025
- 08:37:29 -0800 (PST)
+	s=k20201202; t=1763138396;
+	bh=bLsvvHPDpo7u9K8rvsM02ueTdodp270jX2AjxuPSOVs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JiHuM5Q9ROv7GzsPSbypcQLkjsyQw7zUp80ynEPMqDZYukhnpJt0JIXbufYpj3oiJ
+	 PVueWfvhKe4kUx5KIYS4Xte4v4BEpW8iHB0nkm4x9VB6TI27yYpj8McDCU/+mQ1b/L
+	 m1gvZds85tHQgBfvjGcVYXf06kWV0p9vGn6sjBOqkR0+DSBu8Halsif6kLw4aEJDut
+	 EQQ8GD6gf2KDtCiaVwM/2WX/+uKIptN3BIkE+wIekjuhxJQ2VJuE3aoAmKv/mB/ews
+	 RZyq67l/ziPikXwmtK+M1lmB4NmUzUeejp2/5AQYXBjo2nMsm+7/AI8jelS1st3VdX
+	 zQFQMUwWx82sQ==
+Date: Fri, 14 Nov 2025 10:39:54 -0600
+From: Rob Herring <robh@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@linux.dev>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-clk@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	linux-leds@vger.kernel.org, Pavel Machek <pavel@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>, linux-gpio@vger.kernel.org,
+	linux-pm@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	linux-rtc@vger.kernel.org, Lee Jones <lee@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v4 04/16] dt-bindings: power: supply: BD72720 managed
+ battery
+Message-ID: <20251114163954.GA3399895-robh@kernel.org>
+References: <cover.1763022807.git.mazziesaccount@gmail.com>
+ <ac5a4e992e4fb9c7bffb1e641a7cd61f74af4cba.1763022807.git.mazziesaccount@gmail.com>
+ <176303119683.3716572.16868393928566655866.robh@kernel.org>
+ <ee36d7d1-ef47-4a35-9aff-baa6ed32105a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251113110914.44223-1-adelodunolaoluwa.ref@yahoo.com> <20251113110914.44223-1-adelodunolaoluwa@yahoo.com>
-In-Reply-To: <20251113110914.44223-1-adelodunolaoluwa@yahoo.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 14 Nov 2025 17:37:17 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jEqNPPNE-5FuAm3Hd8YH1BecoOACoa6Sdr+VjHwBk9PA@mail.gmail.com>
-X-Gm-Features: AWmQ_bk6uIL6nGxanLp1nz7r_AfPkJf8ZXDEXbMSrvMK5cOgQsm4X881SePbEKo
-Message-ID: <CAJZ5v0jEqNPPNE-5FuAm3Hd8YH1BecoOACoa6Sdr+VjHwBk9PA@mail.gmail.com>
-Subject: Re: [PATCH v2] power: swap: Convert kernel-doc comments to regular
- block comments
-To: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
-Cc: rafael@kernel.org, pavel@kernel.org, lenb@kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	skhan@linuxfoundation.org, david.hunter.linux@gmail.com, 
-	linux-kernel-mentees@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee36d7d1-ef47-4a35-9aff-baa6ed32105a@gmail.com>
 
-On Thu, Nov 13, 2025 at 12:31=E2=80=AFPM Sunday Adelodun
-<adelodunolaoluwa@yahoo.com> wrote:
->
-> Several static functions in kernel/power/swap.c were using the kernel-doc
-> comment style (/** ... */) even though they are not exported or reference=
-d
-> in generated documentation. This triggers documentation warnings and make=
-s
-> the comments inconsistent with kernel style for local functions.
->
-> Convert these comment blocks to regular C-style comments (/* ... */) and
-> update a few function headers to include proper "Return:" descriptions
-> where applicable.
->
-> No functional changes.
->
-> Signed-off-by: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
-> ---
-> changelog:
->
-> changes from v1 to v2:
-> - Converted function comment blocks from /** */ to /* */ style for
->   static functions
-> - Minor reformatting of comment indentation and spacing
->
-> v1 patch link:
-> https://lore.kernel.org/all/20251106113938.34693-2-adelodunolaoluwa@yahoo=
-.com/
->
->  kernel/power/swap.c | 54 ++++++++++++++++++++-------------------------
->  1 file changed, 24 insertions(+), 30 deletions(-)
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index 0beff7eeaaba..076ed590e8c9 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -336,10 +336,8 @@ static int mark_swapfiles(struct swap_map_handle *ha=
-ndle, unsigned int flags)
->   */
->  unsigned int swsusp_header_flags;
->
-> -/**
-> - *     swsusp_swap_check - check if the resume device is a swap device
-> - *     and get its index (if so)
-> - *
-> +/*
-> + *     check if the resume device is a swap device and get its index (if=
- so).
->   *     This is called before saving image
->   */
+On Fri, Nov 14, 2025 at 11:04:27AM +0200, Matti Vaittinen wrote:
+> On 13/11/2025 12:53, Rob Herring (Arm) wrote:
+> > 
+> > On Thu, 13 Nov 2025 10:52:19 +0200, Matti Vaittinen wrote:
+> > > From: Matti Vaittinen <mazziesaccount@gmail.com>
+> > > 
+> > > The BD72720 PMIC has a battery charger + coulomb counter block. These
+> > > can be used to manage charging of a lithium-ion battery and to do fuel
+> > > gauging.
+> > > 
+> > > ROHM has developed a so called "zero-correction" -algorithm to improve
+> > > the fuel-gauging accuracy close to the point where battery is depleted.
+> > > This relies on battery specific "VDR" tables, which are measured from
+> > > the battery, and which describe the voltage drop rate. More thorough
+> > > explanation about the "zero correction" and "VDR" parameters is here:
+> > > https://lore.kernel.org/all/676253b9-ff69-7891-1f26-a8b5bb5a421b@fi.rohmeurope.com/
+> > > 
+> > > Document the VDR zero-correction specific battery properties used by the
+> > > BD72720 and some other ROHM chargers.
+> > > 
+> > > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> > > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > > 
+> > > ---
+> > > NOTE:
+> > > Linus' rb-tag holds only if there's no further comments from Rob.
+> > > 
+> > > Revision history:
+> > >   v3 =>:
+> > >   - No changes
+> > > 
+> > >   v2 => v3:
+> > >   - Constrain VDR threshold voltage to 48V
+> > >   - Use standard '-bp' -suffix for the rohm,volt-drop-soc
+> > > 
+> > >   RFCv1 => v2:
+> > >   - Add units to rohm,volt-drop-soc (tenths of %)
+> > >   - Give real temperatures matching the VDR tables, instead of vague
+> > >     'high', 'normal', 'low', 'very low'. (Add table of temperatures and
+> > >     use number matching the right temperature index in the VDR table name).
+> > >   - Fix typoed 'algorithm' in commit message.
+> > > 
+> > > The parameters are describing the battery voltage drop rates - so they
+> > > are properties of the battery, not the charger. Thus they do not belong
+> > > in the charger node.
+> > > 
+> 
+> // snip
+> 
+> > My bot found errors running 'make dt_binding_check' on your patch:
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/supply/rohm,vdr-battery.example.dtb: battery (simple-battery): 'degrade-cycle-microamp-hours', 'rohm,volt-drop-0-microvolt', 'rohm,volt-drop-1-microvolt', 'rohm,volt-drop-2-microvolt', 'rohm,volt-drop-3-temp-microvolt', 'rohm,volt-drop-soc-bp', 'rohm,volt-drop-temperatures-millicelsius', 'rohm,voltage-vdr-thresh-microvolt' do not match any of the regexes: '^ocv-capacity-table-[0-9]+$', '^pinctrl-[0-9]+$'
+> > 	from schema $id: http://devicetree.org/schemas/power/supply/battery.yaml
+> > 
+> 
+> Odd. I am pretty sure I didn't see this when I ran the make
+> dt_binding_check. Not 100% sure what happened there. I get this error now
+> though when including all the bindings to the check.
+> 
+> Do I get this right - these errors result from the properties used in
+> example not being included in the battery.yaml? So, this means that the
+> check is done based on the binding (battery.yaml) where the compatible
+> (simple-battery) is defined - not based on the properties which are present
+> in this file where the example resides, (and which references the
+> battery.yaml)?
+> 
+> ...
+> 
+> Oh... Now that I wrote it I feel like an idiot.
+> 
+> This approach couldn't work for the validation, right? Let's assume I had a
+> VDR battery, and I added a static-battery -node for it. Running the
+> validation would pick the battery.yaml based on the compatible (just as it
+> does here), and be completely unaware of this vdr-battery.yaml. I have no
+> idea why I thought this would work. Probably because I only thought this
+> from the documentation POV.
+> 
+> So, as far as I understand, the only viable options are expanding the
+> existing battery.yaml with these properties (which I hoped to avoid, see
+> below)
+> 
+> >> The right place for them is the battery node, which is described by the
+> >> generic "battery.yaml". I was not comfortable with adding these
+> >> properties to the generic battery.yaml because they are:
+> >>    - Meaningful only for those charger drivers which have the VDR
+> >>      algorithm implemented. (And even though the algorithm is not charger
+> >>      specific, AFAICS, it is currently only used by some ROHM PMIC
+> >>      drivers).
+> >>    - Technique of measuring the VDR tables for a battery is not widely
+> >>      known. AFAICS, only folks at ROHM are measuring those for some
+> >>      customer products. We do have those tables available for some of the
+> >>      products though (Kobo?).
+> 
+> or, to add new compatible for the "vdr-battery".
+> AFAICS, adding new compatible would require us to wither duplicate the used
+> properties from battery.yaml here (as battery.yaml mandates the
+> "simple-battery" - compatible) - or to split the battery.yaml in two files,
+> one containing the generic properties, other containing the "simple-battery"
+> -compatible and referencing the generic one. Then the "vdr-battery" could
+> also reference the generic one.
+> 
+> Any suggestions for the next path to follow?
 
-I'd move this comment (after the change above) into the function body
-(before the first statement) because the function does more than what
-is says.
+Probably the latter option. You could do the former and make the new 
+properties conditional on the "vdr-battery" compatible. That's fine with 
+small differences, but gets messy as there are more properties and 
+variations.
 
->  static int swsusp_swap_check(void)
-> @@ -362,11 +360,8 @@ static int swsusp_swap_check(void)
->         return 0;
->  }
->
-> -/**
-> - *     write_page - Write one page to given swap location.
-> - *     @buf:           Address we're writing.
-> - *     @offset:        Offset of the swap page we're writing to.
-> - *     @hb:            bio completion batch
-> +/*
-> + *     Write one page to given swap location.
->   */
+But is "VDR" a type of battery though? Is there a certain type/chemistry 
+of battery we should be describing where VDR is applicable? I don't 
+think it scales well if we define battery compatibles for every 
+variation of charger algorithm. Honestly I don't mind just adding 1 
+property. I care more if we allow undocumented properties than 
+allowing documented but invalid for the platform properties. When it 
+becomes 10, 20, 30 properties, then I might start to care. If that 
+happens, either we are doing a poor job of generically describing 
+battery parameters or chargers and batteries are tightly coupled and 
+can't be described independently.
 
-There is not much value in the comment after the change, please drop
-it altogether.
-
->  static int write_page(void *buf, sector_t offset, struct hib_bio_batch *=
-hb)
-> @@ -526,8 +521,8 @@ static int swap_writer_finish(struct swap_map_handle =
-*handle,
->  #define CMP_MIN_RD_PAGES       1024
->  #define CMP_MAX_RD_PAGES       8192
->
-> -/**
-> - *     save_image - save the suspend image data
-> +/*
-> + *     save the suspend image data
->   */
-
-Same here.
-
->  static int save_image(struct swap_map_handle *handle,
-> @@ -671,11 +666,8 @@ static int compress_threadfn(void *data)
->         return 0;
->  }
->
-> -/**
-> - * save_compressed_image - Save the suspend image data after compression=
-.
-> - * @handle: Swap map handle to use for saving the image.
-> - * @snapshot: Image to read data from.
-> - * @nr_to_write: Number of pages to save.
-> +/*
-> + * Save the suspend image data after compression.
->   */
-
-Same here.
-
->  static int save_compressed_image(struct swap_map_handle *handle,
->                                  struct snapshot_handle *snapshot,
-> @@ -904,11 +896,8 @@ static int save_compressed_image(struct swap_map_han=
-dle *handle,
->         return ret;
->  }
->
-> -/**
-> - *     enough_swap - Make sure we have enough swap to save the image.
-> - *
-> - *     Returns TRUE or FALSE after checking the total amount of swap
-> - *     space available from the resume partition.
-> +/*
-> + *     Make sure we have enough swap to save the image.
->   */
-
-Same here.
-
->  static int enough_swap(unsigned int nr_pages)
-> @@ -930,6 +919,8 @@ static int enough_swap(unsigned int nr_pages)
->   *     them synced (in case something goes wrong) but we DO not want to =
-mark
->   *     filesystem clean: it is not. (And it does not matter, if we resum=
-e
->   *     correctly, we'll mark system clean, anyway.)
-> + *
-> + *     Return: 0 on success, negative error code on failure.
->   */
->
-
-Please remove the empty line between the comment and the function definitio=
-n.
-
->  int swsusp_write(unsigned int flags)
-> @@ -1077,10 +1068,8 @@ static int swap_reader_finish(struct swap_map_hand=
-le *handle)
->         return 0;
->  }
->
-> -/**
-> - *     load_image - load the image using the swap map handle
-> - *     @handle and the snapshot handle @snapshot
-> - *     (assume there are @nr_pages pages to load)
-> +/*
-> + *     load the image using the swap map handle
->   */
->
->  static int load_image(struct swap_map_handle *handle,
-> @@ -1190,11 +1179,8 @@ static int decompress_threadfn(void *data)
->         return 0;
->  }
->
-> -/**
-> - * load_compressed_image - Load compressed image data and decompress it.
-> - * @handle: Swap map handle to use for loading data.
-> - * @snapshot: Image to copy uncompressed data into.
-> - * @nr_to_read: Number of pages to load.
-> +/*
-> + * Load compressed image data and decompress it.
->   */
-
-This comment is not too useful any more, please drop it.
-
->  static int load_compressed_image(struct swap_map_handle *handle,
->                                  struct snapshot_handle *snapshot,
-> @@ -1529,6 +1515,8 @@ static int load_compressed_image(struct swap_map_ha=
-ndle *handle,
->   *     swsusp_read - read the hibernation image.
->   *     @flags_p: flags passed by the "frozen" kernel in the image header=
- should
->   *               be written into this memory location
-> + *
-> + *     Return: 0 on success, negative error code on failure.
->   */
->
-
-Please remove the empty line between the comment and the function definitio=
-n.
-
->  int swsusp_read(unsigned int *flags_p)
-> @@ -1567,6 +1555,10 @@ static void *swsusp_holder;
->  /**
->   * swsusp_check - Open the resume device and check for the swsusp signat=
-ure.
->   * @exclusive: Open the resume device exclusively.
-> + *
-> + * Return:
-> + *     0 if a valid hibernation image is found,
-> + *     negative error code on failure.
-
-I think that the above can be one line, can't it?
-
->   */
-
-Please remove the empty line between the comment and the function definitio=
-n.
-
->  int swsusp_check(bool exclusive)
-> @@ -1631,6 +1623,8 @@ void swsusp_close(void)
->
->  /**
->   *      swsusp_unmark - Unmark swsusp signature in the resume device
-> + *
-> + *      Return: 0 on success, negative error code on failure.
->   */
-
-Same here.
-
->  #ifdef CONFIG_SUSPEND
-> --
-
-Thanks!
+Rob
 
