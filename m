@@ -1,115 +1,128 @@
-Return-Path: <linux-pm+bounces-38051-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38052-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B01CC5E582
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 17:52:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2F13C5E37B
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 17:26:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B7BCF350282
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 16:17:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C9A0423A43
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 16:20:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61230267B94;
-	Fri, 14 Nov 2025 16:12:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C861D259CB2;
+	Fri, 14 Nov 2025 16:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gcdgLKE7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DUrrQ0J9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3915D2638BA
-	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:12:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1882C25A2DD
+	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:17:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763136764; cv=none; b=DqPJGGGlKVUdms5q5ZmFEcDzoff5vzdFVEaeSAxfiDMJH2+1A8s+UKopctsF5Ij8s5tA0482GkdGdCTF/Z5IxcprXO+nyq0TYZzz2IbKhmzJuxDAVvybsSvDI5BOIkSL7FhVwcH7lqqKdCbVTxeo7eXUVzdhAvuinmNAslDm1ZU=
+	t=1763137032; cv=none; b=eMqd6pr8sHxgU/pzTFOz4eTSwZv3fiXvm9gITWR1D+583wErghiZ2d0X6wYQK+dVKt/3FgKGW63RM2XEQWVYt3jQvHFJ3lDbAlj9+95DJB600pdTPHNPZlx+ivbjqkH+sFyWshOEHtWm7sWHiSav43vNl0KWdNoz02JH4c+OX5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763136764; c=relaxed/simple;
-	bh=bs2i0H0jlQ8HsZ+KnPKsgYngEWs21g4qYocSJoUifgA=;
+	s=arc-20240116; t=1763137032; c=relaxed/simple;
+	bh=jvQ2Hpm8jqSuR1+Xm7nXJfomvqUBl5P8BIURnZpswlw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V9c3WGNjbQQjwdzUF9nLPZQ0+cPN9DslcY4yeMVyCDFQvcbHWPb8IbQewQb9IT+BCBiOkOtzOfY+knPizuKx8w0Zc2p049SK3TlUBOoDRIUihrh6czwuUkvhVLvYZB8g7Y0lP+v6yL7SU4XkScVUK0eqUojC73cZ/dkA5kGns9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gcdgLKE7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B4EC4CEFB
-	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:12:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763136763;
-	bh=bs2i0H0jlQ8HsZ+KnPKsgYngEWs21g4qYocSJoUifgA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gcdgLKE7lEaIaFEb+rmrx9CGkbzColvzRmwy9I/t+fRKTKCq04IFa9kiUI31SjNlz
-	 Mr+e1rJ222bDqpOxWKOBXj4EisN1IZXEj8xkHqYL3ljbOBueb5az8mSELKJqWT9CTp
-	 GHeFs47leEaxQYMOlkDmHDnNce4cWltI1kSfQi55nbLYPUAAd5tPj0kmmS40SzIyyw
-	 hnDZbtThKaVOGEwnIDRrY3UwF+FA9VYbetAETXs6nvviMsMVoPvOPp6Dglmvudn4Il
-	 cVr6kr2xxOmU9yF3CbzVksAUl25oXYbvTb50UBQ5asGZk1+aXatQjVYl2QpW3VILHq
-	 uWN2B9jIN0JSQ==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-4507605e19aso1026409b6e.2
-        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 08:12:43 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXdAGrzcFVDJbfjRrRtu+oFSc421u6RP/0AqLY35AZ/10JhuH9xCptMMDmEA2bxsE7NjmbaSJjG8A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxildhHH0CGKm2MjtMqX5OAAnQt2UkgOCrcGZlT/voS+aW6rFNf
-	Zx02kse/kU32CkDGJOAo7OpguxZrdUC4j6U89EkwbO+PFSGiGpUqBGHZgBqqiN3+9Jt/QTgmPuW
-	lBndkzEPgUEY3QE6g19Z4QTQvwYvFliM=
-X-Google-Smtp-Source: AGHT+IEgmPDZF6MbpSeY+SWnu4uKD6OSs6x6OPLIYCl/Q/zRfCT5orZNrCRl2BOirXPI/vN/QwqjEs+I2p6W5zFGVuA=
-X-Received: by 2002:a05:6808:5283:b0:450:3823:b5ef with SMTP id
- 5614622812f47-4509757eb23mr1966391b6e.34.1763136763085; Fri, 14 Nov 2025
- 08:12:43 -0800 (PST)
+	 To:Cc:Content-Type; b=IaT95Y0c4uX7+V4EFzUEiNUKOu0PNpeNTrioPrcBIO63DEkuXJ6ehOldoXbFM+NSwK6+pxPBrGWwDeBhl6hPaoOp/K00LlELrc8/wpu1MwGln/VgCAwg+MgJihaTnGRmp/dXTM6e5dS60imIo/zvl1Bk4DRTiho59f3vr9pQyXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DUrrQ0J9; arc=none smtp.client-ip=74.125.224.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-63f95dc176fso1977474d50.1
+        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 08:17:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1763137030; x=1763741830; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+68C8P05ehiszBwfU5pbI3MewYs+8o/ivU0GxbGrBsA=;
+        b=DUrrQ0J9GXSigdEiSF2B/Wswv67D4K2FadhyxMiDCS/EBffnrZ6pF795Bvh5EWCzGF
+         4JB/sWaJl4m7C/sMQSopCSTCg0UbYCALBiupn3QVuYHoY/RsuhG8Y6nWonfUF0RqE89I
+         wGKsIAr7DuXDtsGn7aFZJNEJ4EJR5A0CBoFKyf1FTVUZSJdPb3ArSMTumrbQ9jW7jqhB
+         r+fm+H14MG09nrQnRNaNti13SD+xbEqi3n2++VuTEEWa4mAg5TW843BMBJ4zw2pWznGj
+         Fn4frOYdMg2mzarLB59JHQZk/lH0bJVKJrZXkGHFkTQPv0Y5iplp+IcHcs4vcXjCXVkL
+         +3Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763137030; x=1763741830;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+68C8P05ehiszBwfU5pbI3MewYs+8o/ivU0GxbGrBsA=;
+        b=mTLcLUP85cOrTCnrLGwMswfT22FzIAw1nysvtn6Do5Jm7weNsTkmEEXJNljQLRp8lD
+         Lha2uyiCN6wNCnhp4/YVz0HQ5GxeBNojYYzD7FJbGcLGE/OnsiaGhcfe86gpQMfu7pIJ
+         ABxM9YEo09ajnjnxvHHOalSrdlpAAiDqL0+9YoFmirjf3a7AIpMkYefrQLDXBv0rMVGM
+         9aR2JNNG52U6yTvJ/fFBR6GET6AfE7SvqWXM1q0J1jIJOA5sFKfAmonKgvttfZFowZbJ
+         SzbtfqFnw9DrQ5OWwKg8N599HYEhJlLQ5YCtgPeN3LhKb05qkdyyUv/IS/z5yVLlLWE/
+         dQpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV6bGqkpMtcOP4z9lDp/SqcDO1ia9CXid88RkPByGF2rW4/85WA6HdXzRNOYbYZpGavkuBOnpx2Rg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6a7baiEGT3Ev+DAj8bTa8FOhKKXvM2Pve0bCdDHi2buahqS78
+	krt6/v1+IfZ2wcPKEyNCM/40CIenQi1Q0dkwufmoAQ2sYY3qHegueDDJvYfMOg9XgbNwu+016uQ
+	LupfxegnAfHDLKZPysKEY4lgSsesQNTx7Q4Nz9GRPCw==
+X-Gm-Gg: ASbGncu61NQrD8cweISUUrUq8F5IQNNouV+3HV4L+OlbGdYtV6Cl7bRfr3jh4W+ChM3
+	5ZvRe3+6YV+M01PKlh4gxudCd9QNmEcn73fTQzTM7fklcdq5ecm+pTujbEPa/+OoLmt3gANRjst
+	bVICWZi5Em9vcbs8YCK9uzZ6rEB/fWZdz3R+TgZAZg5U7ft18WNs0pdBD/DsiR7ag1XgIF0AQV0
+	wLbCiuj6lR8xxEkPmxxKwVDBTDFlzJ54mKyYD3a2E8Fid6SIwmlRxfPWXo9gI6bMXvQ5RAB
+X-Google-Smtp-Source: AGHT+IF2u3OHz+gDlMtDxnSWseapvAQvqP7XLj7Iw/7dpTrGPniYJ5fgz5OjyeTX2Hv74MloNFC74k8FEtz04zmSx1c=
+X-Received: by 2002:a53:d057:0:10b0:63e:2d17:6a67 with SMTP id
+ 956f58d0204a3-641e75bbe5cmr2760050d50.28.1763137030018; Fri, 14 Nov 2025
+ 08:17:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251112224025.2051702-1-superm1@kernel.org>
-In-Reply-To: <20251112224025.2051702-1-superm1@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 14 Nov 2025 17:12:31 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i8RR_o-DmLrBUg_xLZxoNpUqLhudvPphgv7fmW=qZ9kw@mail.gmail.com>
-X-Gm-Features: AWmQ_blCfef8qy6eK5xND1HxM5r1qHEqftrJk62QA5sKUfq8A3gWPEwT79AHjN8
-Message-ID: <CAJZ5v0i8RR_o-DmLrBUg_xLZxoNpUqLhudvPphgv7fmW=qZ9kw@mail.gmail.com>
-Subject: Re: [PATCH v10 0/3] Introduce and plumb PMSG_POWEROFF
-To: "Mario Limonciello (AMD)" <superm1@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Pavel Machek <pavel@kernel.org>, 
-	Len Brown <lenb@kernel.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, 
-	"open list:SCSI SUBSYSTEM" <linux-scsi@vger.kernel.org>, 
-	"open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>, AceLan Kao <acelan.kao@canonical.com>, 
-	Kai-Heng Feng <kaihengf@nvidia.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
-	=?UTF-8?Q?Merthan_Karaka=C5=9F?= <m3rthn.k@gmail.com>, 
-	Eric Naim <dnaim@cachyos.org>, "Guilherme G . Piccoli" <gpiccoli@igalia.com>
+References: <20251105095415.17269-1-ulf.hansson@linaro.org>
+In-Reply-To: <20251105095415.17269-1-ulf.hansson@linaro.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 14 Nov 2025 17:16:33 +0100
+X-Gm-Features: AWmQ_bnGF5L9SDMykII4EF15vkBInQsc-nLOhsh7Tw7Z2aJya79QRcFM--SxzKQ
+Message-ID: <CAPDyKFqtJDoFwCB8_GG1XUVmmbQw=Wc+CEfuC0V3qqB6Xz3YtA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] pmdomain: Improve idle state selection for CPUs
+To: "Rafael J . Wysocki" <rafael@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
+Cc: Mark Rutland <mark.rutland@arm.com>, Marc Zyngier <maz@kernel.org>, 
+	Maulik Shah <quic_mkshah@quicinc.com>, Sudeep Holla <sudeep.holla@arm.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Ben Horgan <ben.horgan@arm.com>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 12, 2025 at 11:40=E2=80=AFPM Mario Limonciello (AMD)
-<superm1@kernel.org> wrote:
+On Wed, 5 Nov 2025 at 10:54, Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> I've been working on a series that uses the hibernate flows (S4)
-> during shutdown (S5) [1], but it's a bit risky because it has changes
-> all around the kernel.  To mitigate risk Rafael suggested [2] to split
-> the series into at least 3 parts across different kernel cycles.
+> Platforms using the genpd governor for CPUs are relying on it to find the most
+> optimal idle state for a group of CPUs. Although, observations tells us that
+> there are some significant improvement that can be made around this.
 >
-> Here is the first part, which just introduces a PMSG_POWEROFF event
-> and uses it in any driver that manipulates PM events.
+> These improvement are based upon allowing us to take pending IPIs into account
+> for the group of CPUs that the genpd governor is in control of. If there is
+> pending IPI for any of these CPUs, we should not request an idle state that
+> affects the group, but rather pick a shallower state that affects only the CPU.
 >
-> There are no functional changes for these changes and this series is
-> intended for 6.19.
+> More details are available in the commit messages for each patch.
 >
-> v10:
->  * Drop resume_event changes
->  * Drop patch 4 (will come in later phase)
+> Kind regards
+> Ulf Hansson
 >
-> Mario Limonciello (AMD) (3):
->   PM: Introduce new PMSG_POWEROFF event
->   scsi: Add PM_EVENT_POWEROFF into suspend callbacks
->   usb: sl811-hcd: Add PM_EVENT_POWEROFF into suspend callbacks
+> Ulf Hansson (2):
+>   smp: Introduce a helper function to check for pending IPIs
+>   pmdomain: Extend the genpd governor for CPUs to account for IPIs
 >
->  drivers/base/power/main.c    | 5 +++++
->  drivers/scsi/mesh.c          | 1 +
->  drivers/scsi/stex.c          | 1 +
->  drivers/usb/host/sl811-hcd.c | 1 +
->  include/linux/pm.h           | 3 +++
->  include/trace/events/power.h | 3 ++-
->  6 files changed, 13 insertions(+), 1 deletion(-)
+>  drivers/pmdomain/governor.c | 20 +++++++++++++-------
+>  include/linux/smp.h         |  5 +++++
+>  kernel/smp.c                | 22 ++++++++++++++++++++++
+>  3 files changed, 40 insertions(+), 7 deletions(-)
 >
 > --
+> 2.43.0
+>
 
-All 3 patches applied as 6.19 material, thanks!
+FYI, I have queued this for v6.19 via my pmdomain tree. Please let me
+know if you have any further comments or objections to this!
+
+Thomas, thanks for your guidance around this topic!
+
+Kind regards
+Uffe
 
