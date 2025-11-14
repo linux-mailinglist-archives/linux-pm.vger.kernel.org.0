@@ -1,121 +1,141 @@
-Return-Path: <linux-pm+bounces-38049-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38050-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49CE4C5E987
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 18:35:23 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4C73C5E8C0
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 18:26:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4D9083E0C16
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 16:15:40 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9C2F73A4EBD
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 16:16:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6EC332E69F;
-	Fri, 14 Nov 2025 16:11:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4957F330303;
+	Fri, 14 Nov 2025 16:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ed7Qw6R6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j8RynZl5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16C632E694
-	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F41B32D432
+	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763136688; cv=none; b=q0frNh1rGHIady2RC4bhStmybhE8/45RCvsAR4VHVS5epXxsMOUcnETxDXH/YTAPnx4jryqT81ZmiqHWNZQphFxyBiXlCALaonpXMirEWWZT6IZHHkKNnO3AsVrGwOkixbgV9f39Uf/NieDL08f/FJfswF8u/Elk8WvPC/5GCr8=
+	t=1763136718; cv=none; b=gPwh6gqcidSYfCphdQllqDxs817JhmkGm2A5cwqaZtm7dyKNNi6v6krYJxt11kGJnSRucwgl5XshCPPuRGh1QFiOYxyNsEjqpGQxx84cNU7avV7QTr12rsniIsdUXNPWuc7op2DN9iMK8sOdPU+tOrL7EUIuCk3zHc3FiU+bAl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763136688; c=relaxed/simple;
-	bh=UF5bCjNDENBmgs2z4GMRiZcWwPYNZxMzi9mBqeh/7VU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eXIk+QN8SYWbMQCzyJSmZg0UhM396tpk5KVSL2tNkj7tbgUTWoDKDLpJ+vOxQPexsfyYNdYlr32NCXhTUDyzlhJ7C9I3IPfofx9RucZTKzo/Imae013fSecEQxWUoX23zAhUo+E5oYe2zxQBM726kVU0Ro7huYn4r/cg48KdXZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ed7Qw6R6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A210C4CEF1
-	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:11:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763136688;
-	bh=UF5bCjNDENBmgs2z4GMRiZcWwPYNZxMzi9mBqeh/7VU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ed7Qw6R6nLnwTNEDpQq9zi6nPwdhBGmnf8wYG+CYrNAH3qiuvBuPXejXW9Mttn50X
-	 oGqOzkU4qVAUf7ix217dfa//p2Kspt+3Rj0Bi1AEFdhXD6nEOjAIwx/9LyuVv3u9u1
-	 dNdTXRhiLXzvRuqlTWz32RoQOTQP9bPOr83gZ89l3vjjDcX30E5dy+Du5SYPDCaSyd
-	 83Uq2NxWs6P1mvLBwbTBmrVw3b8lribPf56yAFkZqnw1NMIPNtU92QX78RVg3bm2SZ
-	 FrgPOB0uThMjtguOdyyll6qypx1odbGH3VkU23DRIfP/vKNNy/Si6zrU5NFURIECud
-	 5u+M5k2dwNdjg==
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7c284d4867eso682570a34.3
-        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 08:11:28 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVOR1BitJBvq3qswVbp6uqQPu4zsdTkM5mG1RnTRvD9p7SBbTUYl3+zecOdbOkctNHO1eT7XbhquQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSK4Sv9BIhWUzPU0W4961L7hvbUBsu0JdoxdUOIuJlnrcEckx3
-	yWTFphTTqQ8uecQnwDAo7QnkIaBwgNQSGbi0Z5ayoymYdIz/xg+dRimUA/XeGiTjqPchhXK+ROE
-	F7dXfyNt/auPe8CZiCNN78WUvag+I2Ko=
-X-Google-Smtp-Source: AGHT+IGC3vRVh1NEB42EzeB0SqeJdvJvRJfnCJCmVrFluGylCsR+WxU/CRu3lDJUZplFmMqQXvTzqJZfMtqLTeslsaY=
-X-Received: by 2002:a05:6808:10d3:b0:443:a155:d833 with SMTP id
- 5614622812f47-4509757ae19mr1481653b6e.42.1763136687658; Fri, 14 Nov 2025
- 08:11:27 -0800 (PST)
+	s=arc-20240116; t=1763136718; c=relaxed/simple;
+	bh=ND1G3qoy+JHM8+IvcJxTR6Dp/QmSGS9bB8N2BVeV0Fk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MJbaczr/DDL4oQmLONfE2NQp4jM7Z1P6fIqul0LNQd6m//M0M8y7yo6CihIZeHjrr0xL9i+jvfMYlSFUQpFP3wDIEkQd/kKZaQLHA2GUQB+pZBKraj6pEICXgW1YmO7dviyZjSUxsjWak5GyG1CgPoCwsvSS1vQ7GN/76OTayb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=j8RynZl5; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-37a2dced861so29930861fa.1
+        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 08:11:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1763136715; x=1763741515; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSNhX2pkt7zcNqtt73B/SxXjHG2Uh9RLAgF3dQ2MWK8=;
+        b=j8RynZl5nIuyofMPcnIg0JFRypTXS93o5SL98jy0nwLF4U3x49KruI2ILeiUPflvRp
+         pJOigSp+RQmoByvivc6OwJ3cLOFOqFn+El6q8J1ZAJR4jmxmlhcWcXNv7js03ehO12Lc
+         neFu5198q+80L6elkILRNBLJtECmdfR8txSbvE3kZxho59AE1q10n3J/QE29XhsbIlts
+         adO032fjNtJJsHV1ssbRCEEojp2W/dZk0oWwEN4rkoJ6zU9zJpFzSw18ufq1RcMHcN6i
+         2gtdwThYqP93sleY9Ld4gEpptHhufUU7lHqpD9Hd7u6BPxvW410d5zSqihkIAGhQOp85
+         oC3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763136715; x=1763741515;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cSNhX2pkt7zcNqtt73B/SxXjHG2Uh9RLAgF3dQ2MWK8=;
+        b=Yy1qEr9VbYDhuQFGaLfY8NUdjii9sJ2JdZ0shwst8Li6xRcZJbQ7rIEUOZR/TxhLNY
+         9tyVXjP0DZkKhduqMLeN0ZFSjHcfbsYZQw9qx1mUdIvCQbNbmHsNeEs6avf/vTUHr/Od
+         Nz5u0OXsoK840nK+IiHJi1FGi0T/C/DOP8MNTK9562xLEzNpP3tlq/18MOTsvmeJ9hio
+         ZX+BSWeluycikSWZ7elavBVgNW1KbHuf/EzVCnUQdlCePUMRNfMXumqFdpZ19T2m2qMk
+         3Ekz9SbtABJIiH6qDxy9Porc9MVCZa5DT36yRLDcsl8Ce7+RQwEWeZwN5CkMQWv1DuGW
+         O1ZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXZT6Jl4bTiJqpoWCDGLwTdXA6j7lWS0ru+eVLp0ZQ5w5r1d8Rz+rJHpePTIs8t+iFyXAse4L6qdA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHb8vUFTg/Cx2Z/KcrT4Ksg261mC2R8upJRCV6og+/02i2RemB
+	YP60CrFkrHhz7M1Jir3bi8d1k9MYYC69qR1WCNYjDL8qVxLwT2WrCftGJinwBkmUBi8=
+X-Gm-Gg: ASbGncvj/rYrAvdie6Py0KvE9eTUU0sy2tfaJ9Gf+7/Hi5IcQG5RKVj/aMQ0wl7H7FN
+	JaJfdCxqwHTkdjSTQuEhqQYaj+M/IjlwIfbU/Budg7mBlOu6Zuj5DI80MCrJtfeCA0OndTjAHV3
+	jAOTt9pefMJfP0Y4jOQMAzvn3csMaH9ERXrBxlc3bAefTnGZyi7FlXV3KkczYz0rAI+/NnvIpvQ
+	f5O2cf2vEGRxMFB6Q3zfEyZsazdoGGsz+/ZOGH2o/thnvJJPGWr+Jiu0aMljVS4oOG6xcK5oRQd
+	bMiBmL8t5XNhNcMi4r1LTpX1BN02X1Gj4nWd167/UEQ4aF31N36cF/yE+/GQd0h1Rma0n0sTBcn
+	DbbsN8nveWdeMNJGGtoME3DsLb4jSAIGvktc2nxsRlD+20huk7++1/n+D9aIuRixIXBweYksaRv
+	NsMJ6aVGwwCdxpxrVJtAvDWrlanckEVE3ehDEF3gKSUaeRIW+aGrkBN2xNmUl4
+X-Google-Smtp-Source: AGHT+IE/hPBAWD9qBVjQMVIn4EUSgwCIcA9zVNyR1z50W4cCJMeA0fLeL7x9Slc5b9xh7VmbI0rqbA==
+X-Received: by 2002:a05:651c:3041:b0:372:221a:b124 with SMTP id 38308e7fff4ca-37baacd9bbamr8456321fa.0.1763136714550;
+        Fri, 14 Nov 2025 08:11:54 -0800 (PST)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-37b9ce080casm11520281fa.5.2025.11.14.08.11.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Nov 2025 08:11:53 -0800 (PST)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Linus <torvalds@linux-foundation.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] pmdomain fixes for v6.18-rc6
+Date: Fri, 14 Nov 2025 17:11:46 +0100
+Message-ID: <20251114161152.92955-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251113012638.1362013-1-luriwen@kylinos.cn>
-In-Reply-To: <20251113012638.1362013-1-luriwen@kylinos.cn>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 14 Nov 2025 17:11:16 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hwhVO6J2nS2-byU0+Lm8QbzdBzv4-X4eLNNUpTg+41Kg@mail.gmail.com>
-X-Gm-Features: AWmQ_bm7tMPOJfTDde1--fL7RH1HAnLn5OWTI3oBkP55X0JQvuowwM9CLpRgMWE
-Message-ID: <CAJZ5v0hwhVO6J2nS2-byU0+Lm8QbzdBzv4-X4eLNNUpTg+41Kg@mail.gmail.com>
-Subject: Re: [PATCH v3] PM: suspend: Make pm_test delay interruptible by
- wakeup events
-To: Riwen Lu <luriwen@kylinos.cn>
-Cc: rafael@kernel.org, pavel@kernel.org, lenb@kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	xiongxin <xiongxin@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 13, 2025 at 2:26=E2=80=AFAM Riwen Lu <luriwen@kylinos.cn> wrote=
-:
->
-> Modify the suspend_test() function to make the test delay can be
-> interrupted by wakeup events.
->
-> This improves the responsiveness of the system during suspend testing
-> when wakeup events occur, allowing the suspend process to proceed
-> without waiting for the full test delay to complete when wakeup events
-> are detected.
->
-> Additionally, using msleep() instead of mdelay() avoids potential soft
-> lockup "CPU stuck" issues when long test delays are configured.
->
-> Co-developed-by: xiongxin <xiongxin@kylinos.cn>
-> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
-> ---
->  kernel/power/suspend.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index b4ca17c2fecf..1c2f777da367 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -344,10 +344,14 @@ MODULE_PARM_DESC(pm_test_delay,
->  static int suspend_test(int level)
->  {
->  #ifdef CONFIG_PM_DEBUG
-> +       int i;
-> +
->         if (pm_test_level =3D=3D level) {
->                 pr_info("suspend debug: Waiting for %d second(s).\n",
->                                 pm_test_delay);
-> -               mdelay(pm_test_delay * 1000);
-> +               for (i =3D 0; i < pm_test_delay && !pm_wakeup_pending(); =
-i++)
-> +                       msleep(1000);
-> +
->                 return 1;
->         }
->  #endif /* !CONFIG_PM_DEBUG */
-> --
+Hi Linus,
 
-Applied as 6.19 material, thanks!
+Here's a pull-request with a couple of pmdomain fixes intended for v6.18-rc6.
+Details about the highlights are as usual found in the signed tag.
+
+Please pull this in!
+
+Kind regards
+Ulf Hansson
+
+
+The following changes since commit 211ddde0823f1442e4ad052a2f30f050145ccada:
+
+  Linux 6.18-rc2 (2025-10-19 15:19:16 -1000)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.18-rc2
+
+for you to fetch changes up to bbde14682eba21d86f5f3d6fe2d371b1f97f1e61:
+
+  pmdomain: imx: Fix reference count leak in imx_gpc_remove (2025-11-04 17:29:00 +0100)
+
+----------------------------------------------------------------
+pmdomain providers:
+ - imx: Fix reference count leak in ->remove()
+ - samsung: Rework legacy splash-screen handover workaround
+ - samsung: Fix potential memleak during ->probe()
+ - arm: Fix genpd leak on provider registration failure for scmi
+
+----------------------------------------------------------------
+André Draszik (1):
+      pmdomain: samsung: plug potential memleak during probe
+
+Marek Szyprowski (1):
+      pmdomain: samsung: Rework legacy splash-screen handover workaround
+
+Miaoqian Lin (1):
+      pmdomain: imx: Fix reference count leak in imx_gpc_remove
+
+Sudeep Holla (1):
+      pmdomain: arm: scmi: Fix genpd leak on provider registration failure
+
+ drivers/pmdomain/arm/scmi_pm_domain.c        | 13 +++++++++++--
+ drivers/pmdomain/imx/gpc.c                   |  2 ++
+ drivers/pmdomain/samsung/exynos-pm-domains.c | 29 ++++++++++++++--------------
+ 3 files changed, 27 insertions(+), 17 deletions(-)
 
