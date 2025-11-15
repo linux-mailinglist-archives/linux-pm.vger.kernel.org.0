@@ -1,241 +1,133 @@
-Return-Path: <linux-pm+bounces-38082-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38083-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF71AC5FBC9
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Nov 2025 01:24:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D547C5FF8C
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Nov 2025 04:47:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 814FD4E415A
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Nov 2025 00:23:25 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DF1C24E4BD8
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Nov 2025 03:46:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30F0D15CD74;
-	Sat, 15 Nov 2025 00:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3A72236FD;
+	Sat, 15 Nov 2025 03:46:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="gRjueAgR"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="fYqCKu7+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03EAB1662E7
-	for <linux-pm@vger.kernel.org>; Sat, 15 Nov 2025 00:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B51221545
+	for <linux-pm@vger.kernel.org>; Sat, 15 Nov 2025 03:46:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763166195; cv=none; b=lJ6hZlFQTcSIjBilFUX3Fnt7MgqPCLeenlXFw687b7ELmoXlKsunq9Pww070hSZiyhierWeU1mwp+DW4ERn8DA9UAmPpJ7pICYTLqCjAj2TJrp5feGULHeT+XnclgdXZ7lTKf38zQFDkSjgxEFkiwR7Z1AyPVYb/pSBlIFGLbl8=
+	t=1763178373; cv=none; b=YzdxTBdWBNv2ac061BLuX5MRCepN7A7Bw0poWo+vMjq/DLxE2AiA6K6E7CjqfDbKbUhBoA/SO8evwQUapfAfjN5UX2AwSSjgskW4N1xOtaLC+0mx1GJlyaiuxXI2OazKoYUl8XP7V3aSvHmtthQbf19eq8WhbZBhSJg2C4puq04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763166195; c=relaxed/simple;
-	bh=DIxjBZ2aoYO+FEvySF09p6zr1nZNMnmXb2G+/NwG0Wo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=j463V1cmCNFEh0fwPuwVL99V7R58HezPIYqfjBuTVO+Ad6r40A63cfCvQujhLucfZ4PAREnkE2uLBCEku0HblhLbfHoZzOY6e4GmZtKADF7oON/oOLvf3zb33XwjHsvRyWAMTl9Jbj7o5YXrlXaLCGriAFvLVmX6DuGo0UAO9Wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=gRjueAgR; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-29558061c68so30521045ad.0
-        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:23:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1763166191; x=1763770991; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1B/7EYtoj2CV5TTIMpc+9qgHFvwOgaXnLPax3zhrL7w=;
-        b=gRjueAgRt8eV5bgmZVUWmG/SKnHz/95NaTUwaVP+et0WEnxHvCO6pqRQHUCXdv1wKW
-         +ZlKXnv/xt7Cp89O1k7L1P2lv5Aq+TWBXUSO1YWbg+Hpbl6CN6EoJJsPOIT3RflTnnGt
-         dPTQySx/k9ayhuO9no4eqyRYZhZ5VMNDbZ3EeoCin7WQZ3iruCSGEBlKRcyo1ixOTYIh
-         SGrWozmtlMZbbpQ1r6V8Qgyv73w+6pyg3xfwM8KAyNAi8WkiEUDVsLEJtnjvY4HhAauq
-         xRsrVi6/fSSq9CHhH3la64lHVC3nGffTx3/PbbJxNXzSh2BgK5/teLMcX0WqwdlhmzIJ
-         6QGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763166191; x=1763770991;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1B/7EYtoj2CV5TTIMpc+9qgHFvwOgaXnLPax3zhrL7w=;
-        b=HJln9vVTxeX+SXt8ebISoVi4cMm4SW/mN+NYXJe8ZEub+uxyXfAKgB+jL44h13dWwl
-         CMxccYlsIZ0luEs+6DBlE2DaNV3FYynn6CQLc0dJjezSd8osXnGUrdB437uwKsKiQxPt
-         yiDuS0GSM2RtYOIVAP+RKxvojm6iOCpnrz5LBkl/l9soa5qZ5zthCnPKjmhxm9kZ38Cx
-         fRDya+tje1KgAGCaGh86i405FLbAngNAHDdzGv+WfNcR2hkIY75P11iVExyj4n73kwgA
-         mOVYKPZk296EcpNgOT0PpLtMhTSh3ZKYvapZHZVsd4RPcQBW2KTM2xnfz0aL5X3NPCl5
-         SbdQ==
-X-Gm-Message-State: AOJu0Yymap7SDdI1jyrE5pIjEReapI/amM9kLAUSod2JmK+iLliEOfbe
-	3S0iAUm5MS7hj7+f7dEAyQWQm0dTX3+ivFxQHQEJ9zD2SeZs9ec1+S2nNDKB8OtiG+c=
-X-Gm-Gg: ASbGncvyvQbgaZOY6ot5uBAu0EP3LiSysku3YxytW3uDgJdpiolfqti75lctIZbhhEC
-	tZhJ5BXN07Rg+wjNuckFXKVki/tRbmU3dJbQgh9FXR3lSwhW3xk48cXRtZubkwHVVUufFLlRzC0
-	Z7BYe+QTuB6rhkIXUctcvDGUdqH4sjAq2scz7GugC2WIZi8wYbDj6wemmbOaBRdbnlMhm4lQauq
-	NoRef++8aR6RtsloN/g6rXC2h6xQCHzukADPenZD7efLvN4fsUN9NFSGGEJ+31v97vnlT6dCCck
-	dzxuatVwqMZJibj3ydrnI37CUPyDn4vmq3FNEO82nBZ2Cx72EEiFe/APb9yLqmkhTmEuEyt29Rk
-	e0N3+J4igQxGkrPWB5aowN+Ui0WfH6DPbKfOlKrHdU9RDPI+3jMluhOErHLOCrKnbpFezVdL28g
-	==
-X-Google-Smtp-Source: AGHT+IGnUIwqBD5p2aTQOIEnwJalu8rxkmWR/0y4l7mzZmFExWWN+P3su1Chjm8xIjxy5i8LKUWgiw==
-X-Received: by 2002:a17:903:384c:b0:298:68e:4057 with SMTP id d9443c01a7336-2986a759838mr62756635ad.59.1763166191152;
-        Fri, 14 Nov 2025 16:23:11 -0800 (PST)
-Received: from localhost ([71.212.208.158])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c244e13sm66297935ad.29.2025.11.14.16.23.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Nov 2025 16:23:10 -0800 (PST)
-From: Kevin Hilman <khilman@baylibre.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki"
- <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>,
- Peter Zijlstra <peterz@infradead.org>, Pavel Machek <pavel@kernel.org>,
- Len Brown <len.brown@intel.com>, Daniel Lezcano
- <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>,
- Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi
- <psodagud@quicinc.com>, Dhruva Gole <d-gole@ti.com>,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] pmdomain: Respect the CPU system-wakeup QoS
- limit during s2idle
-In-Reply-To: <CAPDyKFr1bC1=3psegT0DM0tPQaCUm1DoOxV3xBa-gVV6oSuRVA@mail.gmail.com>
-References: <20251016151929.75863-1-ulf.hansson@linaro.org>
- <20251016151929.75863-3-ulf.hansson@linaro.org>
- <7h1pmik3w9.fsf@baylibre.com>
- <CAPDyKFr1bC1=3psegT0DM0tPQaCUm1DoOxV3xBa-gVV6oSuRVA@mail.gmail.com>
-Date: Fri, 14 Nov 2025 16:23:09 -0800
-Message-ID: <7hh5uwkutu.fsf@baylibre.com>
+	s=arc-20240116; t=1763178373; c=relaxed/simple;
+	bh=+j5wbe7YjB1a0hotxpowwguyvU6nExjp2FExXGquiXk=;
+	h=Mime-Version:Subject:From:To:CC:In-Reply-To:Message-ID:Date:
+	 Content-Type:References; b=iE3psqZVDvQNiRocxE2OZC+CHCjmDdbqm5bsB4lYPWvgFJObQngcxcSI+wtCHutPkqIsfW7aiinFgxT7V4e5gFZUImecHmKSyWIScopPbe8YYIY8MflUjN3ikYlS/TXrVXliLbyDdPhzy0ggyP5PcxQqiIPgMq2wviyJApvTBSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=fYqCKu7+; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas1p3.samsung.com (unknown [182.195.41.47])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20251115034608epoutp01dbaccbe0ab7764c095f6f674110232c4~4EWJZT-Jf1751117511epoutp01g
+	for <linux-pm@vger.kernel.org>; Sat, 15 Nov 2025 03:46:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20251115034608epoutp01dbaccbe0ab7764c095f6f674110232c4~4EWJZT-Jf1751117511epoutp01g
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1763178368;
+	bh=iezP+plYmMt5jcJgmzrY9aAxgyLRNZkWdBeBYsojFg8=;
+	h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+	b=fYqCKu7+cdH4XbYqUOP6kUsrEHgyY3SbCc6MmgPl67uLD7ff1SqeS7Tce5eJbPQH9
+	 41xnhza+C0uRL5npDT55v1QvIG7hFkYJNL8ZiJOT4UcfS/h+C6pJSdxgQVqdaPY3B/
+	 Fj+cjv+evKV2xl/aSDUVjsGDwrr/bX7dXRQgNt6M=
+Received: from epsnrtp03.localdomain (unknown [182.195.42.155]) by
+	epcas1p3.samsung.com (KnoxPortal) with ESMTPS id
+	20251115034607epcas1p34f9f9576203c8a0e3dda95c01d1505af~4EWIqO2IQ2030020300epcas1p3R;
+	Sat, 15 Nov 2025 03:46:07 +0000 (GMT)
+Received: from epcas1p1.samsung.com (unknown [182.195.38.109]) by
+	epsnrtp03.localdomain (Postfix) with ESMTP id 4d7g0G5tG3z3hhT7; Sat, 15 Nov
+	2025 03:46:06 +0000 (GMT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Subject: RE: Re: [PATCH RESEND v2] devfreq: move governor.h to a public
+ header location
+Reply-To: myungjoo.ham@samsung.com
+Sender: MyungJoo Ham <myungjoo.ham@samsung.com>
+From: MyungJoo Ham <myungjoo.ham@samsung.com>
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+CC: Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi
+	<cw00.choi@samsung.com>, Dmitry Osipenko <digetx@gmail.com>, Thierry Reding
+	<thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+	"linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>, Robie Basak
+	<robibasa@qti.qualcomm.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <cdzlgnun7kpn24hziut23njsnlnzl465hdquq4zfmur7ylt5id@ioaqt5ilixwt>
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20251115034606epcms1p8e17db2609c72815e30df17ab4c895afb@epcms1p8>
+Date: Sat, 15 Nov 2025 12:46:06 +0900
+X-CMS-MailID: 20251115034606epcms1p8e17db2609c72815e30df17ab4c895afb
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 101P
+cpgsPolicy: CPGSC10-361,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20251030182636epcas1p2b332b417c1c42fb559a6f34e9e9f408c
+References: <cdzlgnun7kpn24hziut23njsnlnzl465hdquq4zfmur7ylt5id@ioaqt5ilixwt>
+	<20251030-governor-public-v2-1-432a11a9975a@oss.qualcomm.com>
+	<20251107005809epcms1p5f33e9560755367f0ba4b7df82c87fc85@epcms1p5>
+	<CGME20251030182636epcas1p2b332b417c1c42fb559a6f34e9e9f408c@epcms1p8>
 
-Ulf Hansson <ulf.hansson@linaro.org> writes:
-
-> On Sat, 1 Nov 2025 at 01:11, Kevin Hilman <khilman@baylibre.com> wrote:
->>
->> Ulf Hansson <ulf.hansson@linaro.org> writes:
->>
->> > A CPU system-wakeup QoS limit may have been requested by user-space. To
->> > avoid breaking this constraint when entering a low-power state during
->> > s2idle through genpd, let's extend the corresponding genpd governor for
->> > CPUs. More precisely, during s2idle let the genpd governor select a
->> > suitable low-power state, by taking into account the QoS limit.
->>
->> In addition to a QoS limit requested by userspace, shouldn't any
->> per-device QoS limits from devices in the PM domain with CPUs/clusters
->> also be considered?
->>
->> Right now, if a device is in a PM domain that also contains CPUs, any
->> per-device QoS constraints for those devices should also impact the
->> state chosen by s2idle.
+>On Fri, Nov 07, 2025 at 09:58:09AM +0900, MyungJoo Ham wrote:
+>> >Sender: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com> 
+>> >Date: 2025-10-31 03:26 (GMT+9)
+>> >Title: [PATCH RESEND v2] devfreq: move governor.h to a public header location
+>> >
+>> >Some device drivers (and out-of-tree modules) might want to define
+>> >device-specific device governors. Rather than restricting all of them to
+>> >be a part of drivers/devfreq/ (which is not possible for out-of-tree
+>> >drivers anyway) move governor.h to include/linux/devfreq-governor.h and
+>> >update all drivers to use it.
+>> >
+>> >The devfreq_cpu_data is only used internally, by the passive governor,
+>> >so it is moved to the driver source rather than being a part of the
+>> >public interface.
+>> 
+>> Hi!
+>> 
+>> Could you please direct me to the governors or drivers needing this?
+>> (Qualcomm drivers?)
 >
-> I am not so sure about that. The existing dev PM QoS latency is
-> targeted towards runtime suspend of a device and the genpd governor
-> also takes it into account for this use case.
+>This has been prompted by the Qualcomm KGSL driver:
 >
-> If we would start to take the same dev PM QoS latency constraint into
-> account for system suspend (s2idle), it may not be what the user
-> really intended. Instead, I think we should consider extending the dev
-> PM QoS interface, to allow the user to set a specific latency limit
-> for system wakeup. Then the genpd governor should take that into
-> account for s2idle.
->>
->> I just tried a quick hack of extending you cpu_system_power_down_ok()
->> function to look for any per-device QoS constraints set all devices in
->> the PM domain (and subdomains).  It takes the min of all the per-device
->> QoS constratins, compares it to the one from userspace, and uses the min
->> of those to decide the genpd state.
->>
->> That has the effect I'm after, but curious what you think about the
->> usecase and the idea?
+>- https://protect2.fireeye.com/v1/url?k=f6bd3b8e-a92112a4-f6bcb0c1-000babe598f7-61920f21ff9de708&q=1&e=8591e0e4-db8b-428a-84a2-250662bb2f1b&u=https%3A%2F%2Fgithub.com%2Fqualcomm-linux%2Fkgsl
+>- https://protect2.fireeye.com/v1/url?k=47a092b9-183cbb93-47a119f6-000babe598f7-7e1401a14df18a21&q=1&e=8591e0e4-db8b-428a-84a2-250662bb2f1b&u=https%3A%2F%2Fgithub.com%2Fqualcomm-linux%2Fkgsl%2Fissues%2F11
 >
-> It makes sense, but as stated above, I think we need a new QoS limit
-> specific for system suspend.
+>But I think this issue is not limited to the KGSL driver. Other
+>out-of-tree modules might also implement device-specific governors.
 
-OK, got it.  I understand the need to distinguish between QoS
-constraints set for runtime PM and system-wide suspend/resume.
+Ok, I see.
+It look good to move to the common include directory.
 
-So, instead of adding a completely separate entry for system-wide
-suspend, and duplicating a bunch of code/API, what about using the QoS
-flags, and adding a new flag that indicates if the resume_latency
-constraint applies only to runtime PM (the default) or if it *also*
-applies to system-wide suspend? (RFC patch below[1])
+Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
 
-With this, I was able to extend your new cpu_system_power_down_ok()
-function to check for any devices in the domain with a resume_latency
-*and* this new flag before applying it to s2idle, and that's working
-great locally.
+Cheers,
+MyungJoo
 
-Kevin
-
-[1]
-From d25b871c2044ee0e993fd75f5f1df36a35633d1f Mon Sep 17 00:00:00 2001
-From: "Kevin Hilman (TI.com)" <khilman@baylibre.com>
-Date: Thu, 13 Nov 2025 17:02:38 -0800
-Subject: [RFC/PATCH] PM / QoS: add flag to indicate latency applies
- system-wide
-
-Add new PM_QOS_FLAG_LATENCY_SYS flag to indicate that the
-resume_latency QoS constraint applies not just to runtime PM
-transitions but also to system-wide suspend/s2idle.
-
-Signed-off-by: Kevin Hilman (TI.com) <khilman@baylibre.com>
----
- drivers/base/power/sysfs.c | 27 +++++++++++++++++++++++++++
- include/linux/pm_qos.h     |  2 ++
- 2 files changed, 29 insertions(+)
-
-diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-index 13b31a3adc77..9136c13c17e4 100644
---- a/drivers/base/power/sysfs.c
-+++ b/drivers/base/power/sysfs.c
-@@ -316,6 +316,32 @@ static ssize_t pm_qos_no_power_off_store(struct device *dev,
- 
- static DEVICE_ATTR_RW(pm_qos_no_power_off);
- 
-+static ssize_t pm_qos_latency_sys_show(struct device *dev,
-+				       struct device_attribute *attr,
-+				       char *buf)
-+{
-+	return sysfs_emit(buf, "%d\n", !!(dev_pm_qos_requested_flags(dev)
-+					  & PM_QOS_FLAG_LATENCY_SYS));
-+}
-+
-+static ssize_t pm_qos_latency_sys_store(struct device *dev,
-+					 struct device_attribute *attr,
-+					 const char *buf, size_t n)
-+{
-+	int ret;
-+
-+	if (kstrtoint(buf, 0, &ret))
-+		return -EINVAL;
-+
-+	if (ret != 0 && ret != 1)
-+		return -EINVAL;
-+
-+	ret = dev_pm_qos_update_flags(dev, PM_QOS_FLAG_LATENCY_SYS, ret);
-+	return ret < 0 ? ret : n;
-+}
-+
-+static DEVICE_ATTR_RW(pm_qos_latency_sys);
-+
- #ifdef CONFIG_PM_SLEEP
- static const char _enabled[] = "enabled";
- static const char _disabled[] = "disabled";
-@@ -681,6 +707,7 @@ static const struct attribute_group pm_qos_latency_tolerance_attr_group = {
- 
- static struct attribute *pm_qos_flags_attrs[] = {
- 	&dev_attr_pm_qos_no_power_off.attr,
-+	&dev_attr_pm_qos_latency_sys.attr,
- 	NULL,
- };
- static const struct attribute_group pm_qos_flags_attr_group = {
-diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-index 4a69d4af3ff8..b95f52775dfb 100644
---- a/include/linux/pm_qos.h
-+++ b/include/linux/pm_qos.h
-@@ -37,6 +37,8 @@ enum pm_qos_flags_status {
- #define PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT	(-1)
- 
- #define PM_QOS_FLAG_NO_POWER_OFF	(1 << 0)
-+/* latency value applies to system-wide suspend/s2idle */
-+#define PM_QOS_FLAG_LATENCY_SYS		(2 << 0)
- 
- enum pm_qos_type {
- 	PM_QOS_UNITIALIZED,
--- 
-2.51.0
-
-
-
+>
+>-- 
+>With best wishes
+>Dmitry
 
