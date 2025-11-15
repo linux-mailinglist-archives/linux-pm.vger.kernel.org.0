@@ -1,278 +1,241 @@
-Return-Path: <linux-pm+bounces-38081-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38082-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14E54C5F76B
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 23:05:04 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF71AC5FBC9
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Nov 2025 01:24:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 23CB335A325
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Nov 2025 22:04:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 814FD4E415A
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Nov 2025 00:23:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7FD030102B;
-	Fri, 14 Nov 2025 22:04:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30F0D15CD74;
+	Sat, 15 Nov 2025 00:23:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="K6AGMy90"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="gRjueAgR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sonic313-20.consmr.mail.gq1.yahoo.com (sonic313-20.consmr.mail.gq1.yahoo.com [98.137.65.83])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BF9281504
-	for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 22:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=98.137.65.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03EAB1662E7
+	for <linux-pm@vger.kernel.org>; Sat, 15 Nov 2025 00:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763157892; cv=none; b=gNbGsUsog4VzIUaJGeYcS1/v/8UBxbMUds3rJPRWSfFRAy2iiiL2huIKNVrrmSnSwiJlqqgCTy/HoIoCucgWSaBwEk51pYX9v/Pc06zyK0pIFP5SYt/d9YYPWQ+xvviJ2q49R17MZJgIiLsZh+QgNyAOP2Ivcs2uF4fa4ryqHJg=
+	t=1763166195; cv=none; b=lJ6hZlFQTcSIjBilFUX3Fnt7MgqPCLeenlXFw687b7ELmoXlKsunq9Pww070hSZiyhierWeU1mwp+DW4ERn8DA9UAmPpJ7pICYTLqCjAj2TJrp5feGULHeT+XnclgdXZ7lTKf38zQFDkSjgxEFkiwR7Z1AyPVYb/pSBlIFGLbl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763157892; c=relaxed/simple;
-	bh=W2SgFxPhfn7FIVRm8Z/uPyhX20wpv50j2FNrmNYD4s8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=n6GlBeCkNDk/zD8Nb8t2pK9Bkqze15K3qRTsb3aTY1SFsiXn6zc0nekL07zZ34j2B1HbVeOfmfIjBnQnFOyNLE5OsEq+Xkewr0Hs9t3IEUskAMTwpGc6M4ER/lTHQ4C36iAMbyQGATyCNqmRvssgUWOBjyv5/lYr7VU4YLsHaVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=K6AGMy90; arc=none smtp.client-ip=98.137.65.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1763157890; bh=TzmiFzUmkKs/zWi2LzadwLCGjRnCMk2O7lj6+RzqUwI=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=K6AGMy90jogjVcUBN+M63OKSxHLtwYvfAo4fBCBufiBbJ+f3tMJIQeB5oy3zrE48Zz1gYDAGA09PzXVK7VAV34UbkPIJ8u3nKOgantASJpWSEuyU0rJqz5LCkdsaDzra5J2Sp/qTwLVRS5n+wl+gPjIYq0P+SSq6mSkIYtYX2f9PuWC7pgtyTUhsRVNtu2j0RPurNLXULMJgHZ3mZ2rwCFjVYI8Ch17srHzuegfmrTl4a8X67cT6rYADv1uPuhUAjaNcZvHUeayX+CLtq6eLx67VqXkdIK2A83niJAhcTDJpNbKAqNFSZ1tcWmDQzH9iKfUuF1Y05tfrGNIm4eKn8A==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1763157890; bh=o3kA6kULFzmmhu/1NjJ03Z2zAFIMKU+9sSgfp3X2ypJ=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=BYfRbzcXDB3DFCeNjqOw5hdVUFnXx6OEv+cGbsDKpO3c4sdM0CjERxrDQTJ2Uqp1mxUZKAwlh0v8HBVGEI67kXG28rAxrT2tLKPeRARi0WFUqjmVCvi5J9aME1uECCRbc+cjl3vOXZGIQcYeGjBkKL2YLsFV4H2ChvtoogsV7IKON04pE2Qy7VB8RcM4QL15vAw1WPd3WCxKm7XR/JAV1/vH1/fnAFd2VqxfFPOSv+Wx/wwYQ8utM21iGoODOTKtDpkKx8tvR/qMTFhmtc/Pw/Sg7o4gQn1W6zLAkD9EQGyZ2kHHBlATGCF1JUPLlM1/Q4ybyYTAK5jEm+pNpU+w9g==
-X-YMail-OSG: uChzXZYVM1lnEBuSHPyLLbkpOyyyRn.JwkFXXbU17Mvn0FWxXTcVneWyx3I3B0w
- 2vEGfe4.LIJTgqRLzo8Dx6mizA7zJ2bh1exhkF2zw01jj1bPYMjaCN6PnsFyLouUinDEaDD71Mkf
- iq5Q6RjxxPkNp_PsGk7LcHym5LzbBG0FdfZ9R3vSy910QRjaaKNK7GgaLQKf7Dy7ToE28n1R5DKJ
- CWLdVMYgtCszDPOfiroPEDkv4IZ4FJZfo0JF5osqPgrIMfsl5pHeTK9TGWkbjDv7cIvRyFq3bxHS
- iivPa6ETyw_4xtKqKcTGwvyxKwO8Mxtgqd3LRQ8EHQSIVfZUgmEiw3vVC4AbjD2fyCvmcHLIBtme
- sCwmCXM2HCGrTxSjpHKzG_BhZVsZUU8wvvM4XBvKq7_ISriNBhbcMdgNPJ8dbWIWNyus2tIwIWn0
- hujCpFs_hYlq2FNvxOzc2vumRKIvJP46NVWT2b9WS8ZK7h8LhDEpbrpdmbr31mlpclQxphN_VJlc
- 7ZBrSqdk9UeDcKW.jxSU3fWse0oNiQgE7hn8gmR5SPbGibQM.AEAU6Z9VwQjwfiWHiGiODS5Y9FB
- kjDZM0qZalEQQiYCWkfWtnvUtwaSyF7kGuaMGIyN5KbNdGjGfvacLtTpPWABy60E8JtMY3gQOio9
- u0vKqyRNshZJ5QmwbzNwr05bFmmuOV3Yp_lcg_ER32pRohrhhl779deEhHwgDS3lLx2D6roE1siq
- z18b8kx0MWhijEbhz95do4wn9h7KOIY4WuuTKalivkyiqYyzJT3N8xbbB5fNpI7PMbqBurqrw9J3
- Dz4z2wRywnzwmfc6nttGvSLcmBBG08lEioo.Gv25VLjCZNJjPYhUJ4pKCSmbQWrHT6mCEbMF7v4N
- jT_YIbf2RN5E11Gu53C3fGm_3R.rjiMS9ZGdz3rn9qa8MIKADulOBlyQAzrC0P0cFHCyt.GAPGKc
- se2r.DzO43xtWExNsd_noKs7RsK0Qd0L02A0_KDgmup_uc_Ew_nkKlSAocOeiAKzb6.shdm2gUUn
- mmWe6T_N4lXh2L.31gCU2GSkNLmkCOuJOiAusXkzWBbDjjMpaL4_uU7typWkPgxeTm4tWvuYZOFT
- T2eS3hDJQOqhPYco.0d450U8Iu19ba6URRCv2Wd2MEmYPnO2zr3l3NE5buGnzviEYl._G.ABn25I
- _TdifRAdNrbvB4gzQijWiuFdDiFq8FVpceWMOEh8LveJfzOaqBjuawgFCNp15RmVQpA4tJJzaPm8
- Nrkl51rl7z.MPw7mBNm_pMNE0hUQX5Zy4Y5m75w0akr53_xf0mJma8J8bKuCukOyfqXWHzqWrHj9
- VGVX9wRoDB5oPS.epRx6nTO3ab62yDo9j6lLHSh0Q5JuRF9TpKqSmixDBxh1xq4onPbwefbrh23K
- W5SECYMyOnBWiI..FPGeVwMXmJAVNMjfXeDLw8w_ODwKhJNae0j3o70NZ2RkSPXnZzrz0Es8LIWP
- Ns8KQuc2Zphf9qABR7Pk251Pj6DwnG5OpcCi1Jo6rPjFMsx9RSzdM8apjjvQiivjn4QRVx.es59u
- .o6E0t2RaMV3fi76O5SBHoyqbxBfNPhPOpuLWrC4eKf6kpBiNflw17g5Bved2QOe9YEELQinZb6M
- dZUk_tkOEeGhgLiaVYpU0mIKEfL9d0r5RmSQoZ7H6Xkm_AiJZ74g2LtJuOkeyyau140d1dyb9aKt
- hA7YLWANcwVCBxOoiRDZVrRJ1SAS3XR9J.oVWzytXEMOzwKZH3UsRgKbUrWn3nP1V9wN9yFdjwda
- nXumWrgHgcTPbFUwF0ISegd1GCLmZOvPIOQBleGEzMyJ_dXAlHVutHAaiXIk.0jvEaW11KmClcNO
- XOPQsJjm3emX5YEvIYIXdtR3DBxf1qn8FyrJAhV5TPYkBeQMw7Ps1_0LOHhVEJVTlxyeXvfXUi.N
- itqNzeNn6D70jJCKysHHYCY2YJ5wdY2B.SRuuIsQ1RwGA3_RSm.Du8EyMBcI2UQdaXxP83NYZdfO
- 7pp7civkW9s5eWoSIVx3nuRZfa43rtJEln9pHfxkLWgxtRu9NQmCIfYvp7DOGmVKgMWCYuDbE2VM
- Rtn40ATMdi1QivLcj5DLM3YUUbBVQl81gAqR6o8kTG91oLFZhGV6l6L9vm3O88y0GR3cZDH75EPm
- O0JkBJ8M05BekyjC5dcqWYRDWEkz9SRMHufXt6coc5uTkPUPk_b8sTUQCH4Byh9trcA6yr5kJsSL
- deJSUObery1_VuKkeMc_vXs9OidHeI18UKZo4KNq1_Aam1tkjID0pzr8keKMZye8TVEF.jBn1aXv
- MCkeU1qCvFTy0
-X-Sonic-MF: <adelodunolaoluwa@yahoo.com>
-X-Sonic-ID: 3c0a5b38-29bb-4cf5-9a34-ed7f599d05ff
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.gq1.yahoo.com with HTTP; Fri, 14 Nov 2025 22:04:50 +0000
-Received: by hermes--production-bf1-58477f5468-cg9f9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e7d9a9c0ed942aa3fd36f2c659798fae;
-          Fri, 14 Nov 2025 22:04:48 +0000 (UTC)
-From: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Pavel Machek <pavel@kernel.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	david.hunter.linux@gmail.com,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	Sunday Adelodun <adelodunolaoluwa@yahoo.com>
-Subject: [PATCH v3] power: swap: Fix comment style and clean up outdated function headers
-Date: Fri, 14 Nov 2025 23:04:38 +0100
-Message-ID: <20251114220438.52448-1-adelodunolaoluwa@yahoo.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1763166195; c=relaxed/simple;
+	bh=DIxjBZ2aoYO+FEvySF09p6zr1nZNMnmXb2G+/NwG0Wo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=j463V1cmCNFEh0fwPuwVL99V7R58HezPIYqfjBuTVO+Ad6r40A63cfCvQujhLucfZ4PAREnkE2uLBCEku0HblhLbfHoZzOY6e4GmZtKADF7oON/oOLvf3zb33XwjHsvRyWAMTl9Jbj7o5YXrlXaLCGriAFvLVmX6DuGo0UAO9Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=gRjueAgR; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-29558061c68so30521045ad.0
+        for <linux-pm@vger.kernel.org>; Fri, 14 Nov 2025 16:23:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1763166191; x=1763770991; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1B/7EYtoj2CV5TTIMpc+9qgHFvwOgaXnLPax3zhrL7w=;
+        b=gRjueAgRt8eV5bgmZVUWmG/SKnHz/95NaTUwaVP+et0WEnxHvCO6pqRQHUCXdv1wKW
+         +ZlKXnv/xt7Cp89O1k7L1P2lv5Aq+TWBXUSO1YWbg+Hpbl6CN6EoJJsPOIT3RflTnnGt
+         dPTQySx/k9ayhuO9no4eqyRYZhZ5VMNDbZ3EeoCin7WQZ3iruCSGEBlKRcyo1ixOTYIh
+         SGrWozmtlMZbbpQ1r6V8Qgyv73w+6pyg3xfwM8KAyNAi8WkiEUDVsLEJtnjvY4HhAauq
+         xRsrVi6/fSSq9CHhH3la64lHVC3nGffTx3/PbbJxNXzSh2BgK5/teLMcX0WqwdlhmzIJ
+         6QGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763166191; x=1763770991;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1B/7EYtoj2CV5TTIMpc+9qgHFvwOgaXnLPax3zhrL7w=;
+        b=HJln9vVTxeX+SXt8ebISoVi4cMm4SW/mN+NYXJe8ZEub+uxyXfAKgB+jL44h13dWwl
+         CMxccYlsIZ0luEs+6DBlE2DaNV3FYynn6CQLc0dJjezSd8osXnGUrdB437uwKsKiQxPt
+         yiDuS0GSM2RtYOIVAP+RKxvojm6iOCpnrz5LBkl/l9soa5qZ5zthCnPKjmhxm9kZ38Cx
+         fRDya+tje1KgAGCaGh86i405FLbAngNAHDdzGv+WfNcR2hkIY75P11iVExyj4n73kwgA
+         mOVYKPZk296EcpNgOT0PpLtMhTSh3ZKYvapZHZVsd4RPcQBW2KTM2xnfz0aL5X3NPCl5
+         SbdQ==
+X-Gm-Message-State: AOJu0Yymap7SDdI1jyrE5pIjEReapI/amM9kLAUSod2JmK+iLliEOfbe
+	3S0iAUm5MS7hj7+f7dEAyQWQm0dTX3+ivFxQHQEJ9zD2SeZs9ec1+S2nNDKB8OtiG+c=
+X-Gm-Gg: ASbGncvyvQbgaZOY6ot5uBAu0EP3LiSysku3YxytW3uDgJdpiolfqti75lctIZbhhEC
+	tZhJ5BXN07Rg+wjNuckFXKVki/tRbmU3dJbQgh9FXR3lSwhW3xk48cXRtZubkwHVVUufFLlRzC0
+	Z7BYe+QTuB6rhkIXUctcvDGUdqH4sjAq2scz7GugC2WIZi8wYbDj6wemmbOaBRdbnlMhm4lQauq
+	NoRef++8aR6RtsloN/g6rXC2h6xQCHzukADPenZD7efLvN4fsUN9NFSGGEJ+31v97vnlT6dCCck
+	dzxuatVwqMZJibj3ydrnI37CUPyDn4vmq3FNEO82nBZ2Cx72EEiFe/APb9yLqmkhTmEuEyt29Rk
+	e0N3+J4igQxGkrPWB5aowN+Ui0WfH6DPbKfOlKrHdU9RDPI+3jMluhOErHLOCrKnbpFezVdL28g
+	==
+X-Google-Smtp-Source: AGHT+IGnUIwqBD5p2aTQOIEnwJalu8rxkmWR/0y4l7mzZmFExWWN+P3su1Chjm8xIjxy5i8LKUWgiw==
+X-Received: by 2002:a17:903:384c:b0:298:68e:4057 with SMTP id d9443c01a7336-2986a759838mr62756635ad.59.1763166191152;
+        Fri, 14 Nov 2025 16:23:11 -0800 (PST)
+Received: from localhost ([71.212.208.158])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c244e13sm66297935ad.29.2025.11.14.16.23.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Nov 2025 16:23:10 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>,
+ Peter Zijlstra <peterz@infradead.org>, Pavel Machek <pavel@kernel.org>,
+ Len Brown <len.brown@intel.com>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Saravana Kannan <saravanak@google.com>,
+ Maulik Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi
+ <psodagud@quicinc.com>, Dhruva Gole <d-gole@ti.com>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] pmdomain: Respect the CPU system-wakeup QoS
+ limit during s2idle
+In-Reply-To: <CAPDyKFr1bC1=3psegT0DM0tPQaCUm1DoOxV3xBa-gVV6oSuRVA@mail.gmail.com>
+References: <20251016151929.75863-1-ulf.hansson@linaro.org>
+ <20251016151929.75863-3-ulf.hansson@linaro.org>
+ <7h1pmik3w9.fsf@baylibre.com>
+ <CAPDyKFr1bC1=3psegT0DM0tPQaCUm1DoOxV3xBa-gVV6oSuRVA@mail.gmail.com>
+Date: Fri, 14 Nov 2025 16:23:09 -0800
+Message-ID: <7hh5uwkutu.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-References: <20251114220438.52448-1-adelodunolaoluwa.ref@yahoo.com>
+Content-Type: text/plain
 
-Several static functions in kernel/power/swap.c were written using the
-kernel-doc comment style (/** ... */) even though they are not exported
-or referenced by generated documentation. This led to kernel-doc warnings
-and stylistic inconsistencies.
+Ulf Hansson <ulf.hansson@linaro.org> writes:
 
-Convert these unnecessary kernel-doc blocks to regular C comments,
-remove comment blocks that are no longer useful, relocate comments to
-more appropriate positions where needed, and fix a few "Return:"
-descriptions that were either missing or incorrectly formatted.
+> On Sat, 1 Nov 2025 at 01:11, Kevin Hilman <khilman@baylibre.com> wrote:
+>>
+>> Ulf Hansson <ulf.hansson@linaro.org> writes:
+>>
+>> > A CPU system-wakeup QoS limit may have been requested by user-space. To
+>> > avoid breaking this constraint when entering a low-power state during
+>> > s2idle through genpd, let's extend the corresponding genpd governor for
+>> > CPUs. More precisely, during s2idle let the genpd governor select a
+>> > suitable low-power state, by taking into account the QoS limit.
+>>
+>> In addition to a QoS limit requested by userspace, shouldn't any
+>> per-device QoS limits from devices in the PM domain with CPUs/clusters
+>> also be considered?
+>>
+>> Right now, if a device is in a PM domain that also contains CPUs, any
+>> per-device QoS constraints for those devices should also impact the
+>> state chosen by s2idle.
+>
+> I am not so sure about that. The existing dev PM QoS latency is
+> targeted towards runtime suspend of a device and the genpd governor
+> also takes it into account for this use case.
+>
+> If we would start to take the same dev PM QoS latency constraint into
+> account for system suspend (s2idle), it may not be what the user
+> really intended. Instead, I think we should consider extending the dev
+> PM QoS interface, to allow the user to set a specific latency limit
+> for system wakeup. Then the genpd governor should take that into
+> account for s2idle.
+>>
+>> I just tried a quick hack of extending you cpu_system_power_down_ok()
+>> function to look for any per-device QoS constraints set all devices in
+>> the PM domain (and subdomains).  It takes the min of all the per-device
+>> QoS constratins, compares it to the one from userspace, and uses the min
+>> of those to decide the genpd state.
+>>
+>> That has the effect I'm after, but curious what you think about the
+>> usecase and the idea?
+>
+> It makes sense, but as stated above, I think we need a new QoS limit
+> specific for system suspend.
 
-No functional changes.
+OK, got it.  I understand the need to distinguish between QoS
+constraints set for runtime PM and system-wide suspend/resume.
 
-Signed-off-by: Sunday Adelodun <adelodunolaoluwa@yahoo.com>
+So, instead of adding a completely separate entry for system-wide
+suspend, and duplicating a bunch of code/API, what about using the QoS
+flags, and adding a new flag that indicates if the resume_latency
+constraint applies only to runtime PM (the default) or if it *also*
+applies to system-wide suspend? (RFC patch below[1])
+
+With this, I was able to extend your new cpu_system_power_down_ok()
+function to check for any devices in the domain with a resume_latency
+*and* this new flag before applying it to s2idle, and that's working
+great locally.
+
+Kevin
+
+[1]
+From d25b871c2044ee0e993fd75f5f1df36a35633d1f Mon Sep 17 00:00:00 2001
+From: "Kevin Hilman (TI.com)" <khilman@baylibre.com>
+Date: Thu, 13 Nov 2025 17:02:38 -0800
+Subject: [RFC/PATCH] PM / QoS: add flag to indicate latency applies
+ system-wide
+
+Add new PM_QOS_FLAG_LATENCY_SYS flag to indicate that the
+resume_latency QoS constraint applies not just to runtime PM
+transitions but also to system-wide suspend/s2idle.
+
+Signed-off-by: Kevin Hilman (TI.com) <khilman@baylibre.com>
 ---
-changelog:
+ drivers/base/power/sysfs.c | 27 +++++++++++++++++++++++++++
+ include/linux/pm_qos.h     |  2 ++
+ 2 files changed, 29 insertions(+)
 
-Changes from v2:
-- Moved the swsusp_swap_check() comment inside the function as requested.
-- Dropped comment blocks that no longer provided meaningful value.
-- Removed unnecessary blank lines before function definitions.
-- Reformatted multi-line Return: descriptions into a single line where appropriate.
-- Kept only useful non-kernel-doc comments consistent with style guidelines.
-
-Changes from v1:
-- Converted /** */ kernel-doc style blocks to /* */ regular comments.
-- Cleaned up indentation and spacing.
-
-link to v2:
-https://lore.kernel.org/all/20251113110914.44223-1-adelodunolaoluwa@yahoo.com/
-
- kernel/power/swap.c | 58 ++++++++++-----------------------------------
- 1 file changed, 12 insertions(+), 46 deletions(-)
-
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 0beff7eeaaba..cf5736aabb39 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -336,16 +336,14 @@ static int mark_swapfiles(struct swap_map_handle *handle, unsigned int flags)
-  */
- unsigned int swsusp_header_flags;
+diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
+index 13b31a3adc77..9136c13c17e4 100644
+--- a/drivers/base/power/sysfs.c
++++ b/drivers/base/power/sysfs.c
+@@ -316,6 +316,32 @@ static ssize_t pm_qos_no_power_off_store(struct device *dev,
  
--/**
-- *	swsusp_swap_check - check if the resume device is a swap device
-- *	and get its index (if so)
-- *
-- *	This is called before saving image
-- */
- static int swsusp_swap_check(void)
- {
- 	int res;
+ static DEVICE_ATTR_RW(pm_qos_no_power_off);
  
-+	/*
-+	 * check if the resume device is a swap device and get its index (if so).
-+	 * This is called before saving image
-+	 */
- 	if (swsusp_resume_device)
- 		res = swap_type_of(swsusp_resume_device, swsusp_resume_block);
- 	else
-@@ -362,13 +360,6 @@ static int swsusp_swap_check(void)
- 	return 0;
- }
++static ssize_t pm_qos_latency_sys_show(struct device *dev,
++				       struct device_attribute *attr,
++				       char *buf)
++{
++	return sysfs_emit(buf, "%d\n", !!(dev_pm_qos_requested_flags(dev)
++					  & PM_QOS_FLAG_LATENCY_SYS));
++}
++
++static ssize_t pm_qos_latency_sys_store(struct device *dev,
++					 struct device_attribute *attr,
++					 const char *buf, size_t n)
++{
++	int ret;
++
++	if (kstrtoint(buf, 0, &ret))
++		return -EINVAL;
++
++	if (ret != 0 && ret != 1)
++		return -EINVAL;
++
++	ret = dev_pm_qos_update_flags(dev, PM_QOS_FLAG_LATENCY_SYS, ret);
++	return ret < 0 ? ret : n;
++}
++
++static DEVICE_ATTR_RW(pm_qos_latency_sys);
++
+ #ifdef CONFIG_PM_SLEEP
+ static const char _enabled[] = "enabled";
+ static const char _disabled[] = "disabled";
+@@ -681,6 +707,7 @@ static const struct attribute_group pm_qos_latency_tolerance_attr_group = {
  
--/**
-- *	write_page - Write one page to given swap location.
-- *	@buf:		Address we're writing.
-- *	@offset:	Offset of the swap page we're writing to.
-- *	@hb:		bio completion batch
-- */
--
- static int write_page(void *buf, sector_t offset, struct hib_bio_batch *hb)
- {
- 	gfp_t gfp = GFP_NOIO | __GFP_NOWARN | __GFP_NORETRY;
-@@ -526,10 +517,6 @@ static int swap_writer_finish(struct swap_map_handle *handle,
- #define CMP_MIN_RD_PAGES	1024
- #define CMP_MAX_RD_PAGES	8192
+ static struct attribute *pm_qos_flags_attrs[] = {
+ 	&dev_attr_pm_qos_no_power_off.attr,
++	&dev_attr_pm_qos_latency_sys.attr,
+ 	NULL,
+ };
+ static const struct attribute_group pm_qos_flags_attr_group = {
+diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
+index 4a69d4af3ff8..b95f52775dfb 100644
+--- a/include/linux/pm_qos.h
++++ b/include/linux/pm_qos.h
+@@ -37,6 +37,8 @@ enum pm_qos_flags_status {
+ #define PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT	(-1)
  
--/**
-- *	save_image - save the suspend image data
-- */
--
- static int save_image(struct swap_map_handle *handle,
-                       struct snapshot_handle *snapshot,
-                       unsigned int nr_to_write)
-@@ -671,12 +658,6 @@ static int compress_threadfn(void *data)
- 	return 0;
- }
+ #define PM_QOS_FLAG_NO_POWER_OFF	(1 << 0)
++/* latency value applies to system-wide suspend/s2idle */
++#define PM_QOS_FLAG_LATENCY_SYS		(2 << 0)
  
--/**
-- * save_compressed_image - Save the suspend image data after compression.
-- * @handle: Swap map handle to use for saving the image.
-- * @snapshot: Image to read data from.
-- * @nr_to_write: Number of pages to save.
-- */
- static int save_compressed_image(struct swap_map_handle *handle,
- 				 struct snapshot_handle *snapshot,
- 				 unsigned int nr_to_write)
-@@ -904,13 +885,6 @@ static int save_compressed_image(struct swap_map_handle *handle,
- 	return ret;
- }
- 
--/**
-- *	enough_swap - Make sure we have enough swap to save the image.
-- *
-- *	Returns TRUE or FALSE after checking the total amount of swap
-- *	space available from the resume partition.
-- */
--
- static int enough_swap(unsigned int nr_pages)
- {
- 	unsigned int free_swap = count_swap_pages(root_swap, 1);
-@@ -930,8 +904,9 @@ static int enough_swap(unsigned int nr_pages)
-  *	them synced (in case something goes wrong) but we DO not want to mark
-  *	filesystem clean: it is not. (And it does not matter, if we resume
-  *	correctly, we'll mark system clean, anyway.)
-+ *
-+ *	Return: 0 on success, negative error code on failure.
-  */
--
- int swsusp_write(unsigned int flags)
- {
- 	struct swap_map_handle handle;
-@@ -1077,12 +1052,6 @@ static int swap_reader_finish(struct swap_map_handle *handle)
- 	return 0;
- }
- 
--/**
-- *	load_image - load the image using the swap map handle
-- *	@handle and the snapshot handle @snapshot
-- *	(assume there are @nr_pages pages to load)
-- */
--
- static int load_image(struct swap_map_handle *handle,
-                       struct snapshot_handle *snapshot,
-                       unsigned int nr_to_read)
-@@ -1190,12 +1159,6 @@ static int decompress_threadfn(void *data)
- 	return 0;
- }
- 
--/**
-- * load_compressed_image - Load compressed image data and decompress it.
-- * @handle: Swap map handle to use for loading data.
-- * @snapshot: Image to copy uncompressed data into.
-- * @nr_to_read: Number of pages to load.
-- */
- static int load_compressed_image(struct swap_map_handle *handle,
- 				 struct snapshot_handle *snapshot,
- 				 unsigned int nr_to_read)
-@@ -1529,8 +1492,9 @@ static int load_compressed_image(struct swap_map_handle *handle,
-  *	swsusp_read - read the hibernation image.
-  *	@flags_p: flags passed by the "frozen" kernel in the image header should
-  *		  be written into this memory location
-+ *
-+ *	Return: 0 on success, negative error code on failure.
-  */
--
- int swsusp_read(unsigned int *flags_p)
- {
- 	int error;
-@@ -1567,8 +1531,9 @@ static void *swsusp_holder;
- /**
-  * swsusp_check - Open the resume device and check for the swsusp signature.
-  * @exclusive: Open the resume device exclusively.
-+ *
-+ * Return: 0 if a valid hibernation image is found, negative error code on failure.
-  */
--
- int swsusp_check(bool exclusive)
- {
- 	void *holder = exclusive ? &swsusp_holder : NULL;
-@@ -1631,8 +1596,9 @@ void swsusp_close(void)
- 
- /**
-  *      swsusp_unmark - Unmark swsusp signature in the resume device
-+ *
-+ *      Return: 0 on success, negative error code on failure.
-  */
--
- #ifdef CONFIG_SUSPEND
- int swsusp_unmark(void)
- {
+ enum pm_qos_type {
+ 	PM_QOS_UNITIALIZED,
 -- 
-2.43.0
+2.51.0
+
+
 
 
