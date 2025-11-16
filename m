@@ -1,107 +1,109 @@
-Return-Path: <linux-pm+bounces-38089-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38090-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45CEBC61394
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Nov 2025 12:39:01 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2809C613BE
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Nov 2025 12:42:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BF10E346B4B
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Nov 2025 11:39:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BD6704E5CA8
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Nov 2025 11:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE0E29CB4C;
-	Sun, 16 Nov 2025 11:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42C422BD035;
+	Sun, 16 Nov 2025 11:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AAUcib0Z";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="TTFzdkzg"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T8+tP7k2";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="dpODfykt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44D3238C29
-	for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 11:38:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B36522756A
+	for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 11:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763293136; cv=none; b=cdIg8WpcSFC3ZuOb6c7UNA+sGd1uttf7PGJw8R9RRfEBJxkU1iSGDL4Q0urqCLFRr9PLZshTsB6uqipv2omAeLmx8ZEVWubo2xxHu9uw/0MiU/ZnN9ywKZOEQV4eETNWzZmTlYspIO8xH2ZXlBTzfNeU995lLntauf8s57HIYrY=
+	t=1763293276; cv=none; b=tEWd6vnBSd0n6Dxtd/jlf8gddDwYpCFVUU0axbGdoFlPLrnYxDiBxuFCr1oJT0mOU7L8Mvu1/2E0JuxjpDE5GPD2Zw670K7kEZ+LhHZ/ECTj0IF0S9bguxb27UvwLN4khsL+w+lGt2nCKt+M4WXK8Rl4Ua3hvzicDs/zOin/3Lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763293136; c=relaxed/simple;
-	bh=Rkmp8nk9YPwAc1Krs/u7fCIQnRQEkc8AB4UPMFi8Ixo=;
+	s=arc-20240116; t=1763293276; c=relaxed/simple;
+	bh=dztS8ZITpfRexBgTDPAFBRUtjmHYPm7XXnxJOCZYL5w=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=paLXQGQkn4NUC8JOhDzZZT5VN0646E/gXQ2QpDlaAt9U6JPfrqYbWpLKLaicUw8aWyHJOVq8eFfVT0YoWmRBYvl6Uh0rKtBuLp/5LckoR6pYhDxFmeV2BvLUBdBYljRft0eFVOWk7qyyzPrI1OpBsGMeNsoQDFkGKjD5B2wNKHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AAUcib0Z; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=TTFzdkzg; arc=none smtp.client-ip=170.10.129.124
+	 To:Cc:Content-Type; b=QW6lLAV7JsI37woZsgvasy1pLs1dHpe0Ybc7WbVocWMfPP/PkAb/TqbRKcKuQz+fyXNszwgAY5LlBKwHGAb15zvGiDGqsugS8hsKzsSxAKbvpYMgO3DRp4Zdw7ZrfxXqQ+HM+uAKQ0HL5ppCoJF5LEMubHcS5bBFNXJNXNO+RWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T8+tP7k2; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=dpODfykt; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1763293132;
+	s=mimecast20190719; t=1763293272;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=xHkZ/fK1g8OIbwauzu6LXr6MNLKI40irhP6OOIOoypA=;
-	b=AAUcib0Zvi7wJLzFzonlV5utZtXEGDvfBnkC9B0isc0tOL7q1Ym+R/8gqgQMtC8l05O8j4
-	5DSUxUUdGCDbzBLJ7iwNmw3Ulw4Kq+uqqq//LCKCKl/Yqf2FOk0pq6851AgzrOJFk12aHS
-	Mao1w60iASbLFBZ+HD4f35IFoY5c1D0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=xRsv2NgYCJFeldUxTz05FhsASHZ2GxNbrz+Y660AFCo=;
+	b=T8+tP7k29evaHIwY4/riN7Ity+YVzvLI+mujwM7/wvynainKKiBP8UTLPZsHN2XnzW4hwe
+	I/7vxw25v5tw8W+/Rm/HZDxkFAt0VmkyuPOggu21Jo9rBKYW7aq6S4AEphLAhiNwanuIPR
+	Th3WlKDzi2jpj2JkRu+NPrak1mc2VXE=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-687-Gd2EAgpXOBOhgPXWZVQPvw-1; Sun, 16 Nov 2025 06:38:50 -0500
-X-MC-Unique: Gd2EAgpXOBOhgPXWZVQPvw-1
-X-Mimecast-MFC-AGG-ID: Gd2EAgpXOBOhgPXWZVQPvw_1763293130
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-42b2ad2a58cso1845770f8f.0
-        for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 03:38:50 -0800 (PST)
+ us-mta-632-9QiKySC-P1WWKdshcEcZaA-1; Sun, 16 Nov 2025 06:41:10 -0500
+X-MC-Unique: 9QiKySC-P1WWKdshcEcZaA-1
+X-Mimecast-MFC-AGG-ID: 9QiKySC-P1WWKdshcEcZaA_1763293270
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-42b2ad29140so1524345f8f.0
+        for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 03:41:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1763293129; x=1763897929; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1763293269; x=1763898069; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xHkZ/fK1g8OIbwauzu6LXr6MNLKI40irhP6OOIOoypA=;
-        b=TTFzdkzgR6hO7kU3h6XwZhzigq7igmVBdovnVnS9b3BjlAS6SttQLfREvRiDSEvdw+
-         5ACeLITdJPxikYoSpLb+xtFhBDd7mQgr4NJxG4QF3HMRynM8u+KDtiAf6M6UoBCpK1iq
-         JDjysXrpLNI/EGipe8iQvN90Ylg2ObD81HswRAcfpXTJPEXTVg4GFYLZprwv4GcEww/J
-         MDoIRfhQSXtf/LoqCAx8X95dsx+5IUhEQtWLZdUf/7bs3fM8oyJxpz0Q1kbXAUCmD0gL
-         oC6PnxHNnnS5GCL2XKZhwcXqqzBC36N+pyXCPs35JI6zEhbt+EE2R35xmzWVYIRfz9HD
-         miGQ==
+        bh=xRsv2NgYCJFeldUxTz05FhsASHZ2GxNbrz+Y660AFCo=;
+        b=dpODfyktJ00/hDcd8OmvDpxIi6DPZn5DbRkd/cgiwjBObACJL4LieKDmgF+OZ3CT1G
+         +t66TnyvRv5dwk3wXEoeIlkCKwDZxhI4Xb39xDTKYLEL3MEViy5A7jrdHmhJkXVAdyjy
+         pb3bP7gC8jOp5MxAnyDqihopEi0cZpsh1fCXlfiXygopl7PxNLXN8IIHAXtm1OLV0uKc
+         rkn7Xa/6a1P4Dh5NQ/rcYMB9cyZEieybNlpEboK9w+hbtL6zPOZHBj6KI8YZ+zg4XJXE
+         dsrD/g8v42QowqZDqu1E3PzAQEc2N2zx9rRwGE1FdKtFVA2esgts1bSUBBa6UNFBFn7d
+         JvLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763293129; x=1763897929;
+        d=1e100.net; s=20230601; t=1763293269; x=1763898069;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=xHkZ/fK1g8OIbwauzu6LXr6MNLKI40irhP6OOIOoypA=;
-        b=V87US2Jtpy913CXQ2LlIdCU3CIUjdayienANfKGwzSV2Iu63bBCPOex2mxK7feo6t7
-         TdM7VfDs3o16BPhS68lFqbRsjLXrmv3yC0uNI+xxp+gv0j/55Wb1r/NgHwABn0dFiJTq
-         OUPFqUEfDjf/saSjVZYOyYs9a8fPk+xmeFRZYroByMp717Nf830758lxlRyswp7teYH9
-         PXR0sjj58uvm6dd+Z5A7TrCSyhFiYEzCtW5ysUsUsvM2ytq4EYQj3VkzSc0VULG6C1LK
-         GjR6timsUAY7yzy2pEZ0ojZf+H7HAXfhGeNUYil3SOsfSyCJ19Usj/a4/vwqTIL63Xgo
-         hHhg==
-X-Forwarded-Encrypted: i=1; AJvYcCV7TqaQ1Itg9OUQLrbTmFsLKQ/RkwFLVk7QarvjQhwVgIVk1XvDu2DBZzr001X8mvWZlJc9ZQHhIA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YySLV/vWN3DdgcnHKYhmERCZlm/iZtA2Eq9UmsfS+gmgpOIFoqy
-	ue9iNkOEYNUil9/NqndHo+eKm/uyDIeew3OgBrBkYJAicW9610JOGHzM/aXEg5SXf/CfaeCpU2e
-	JHbdNnTavkwcjE3NUOrsAE0vBkOWmSc3M3HE1ENlct0nXjn9GlbCCQsi3eKTkTNIr7Beoxap0Rv
-	HGXCyHGq706Lff6tGByMRdwSm8UH5oDoFdIZd7jJS4mvw72Q==
-X-Gm-Gg: ASbGncuWUyes2mPQsPYZ/0J+XFbZ9uVQC/E2DKtT21UzHk8pxlkMvXUYr3TPj9YVGqn
-	CoI+NZp0mXY/8fV4ToWhxT24tLtwnHlLMbRJs4T+HVcgFrV4Ygv2nYdt0lcaZx5F81OKxj3OouI
-	2R8YqYdchScKK8Hk+YGoxeFj5fYSPtH4LNbm/8IBSidCHs+a2bMXPol1QDFfuVWYB/kZCBbDkLm
-	54DPGHckD3uObd080Pg9Vku2eT1
-X-Received: by 2002:a05:6000:2083:b0:42b:3867:b39c with SMTP id ffacd0b85a97d-42b593745c4mr8417329f8f.34.1763293129156;
-        Sun, 16 Nov 2025 03:38:49 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IETOCFVzc8BB00Owfa1i3+3Q0yqDizEYCn3a3fdBPIaGMhwbfLsq30o1dTe4jzls1nYHL0VBK5XTZfUo48pK2E=
-X-Received: by 2002:a05:6000:2083:b0:42b:3867:b39c with SMTP id
- ffacd0b85a97d-42b593745c4mr8417306f8f.34.1763293128622; Sun, 16 Nov 2025
- 03:38:48 -0800 (PST)
+        bh=xRsv2NgYCJFeldUxTz05FhsASHZ2GxNbrz+Y660AFCo=;
+        b=e0iFn658JIA/Asr2mYH7CWgVr9V/s65x5CqULvNETM+JAhz3MQb7dgOw/bz+9UIO8K
+         wYFr21cA7t/BPz6ZrKkkmfsgS6bimWEAIv9vTW99LRARWMAlOGYdqcoBcUSdi1v2Advl
+         BfYHAvDSPKQrtnqoAMNdXf4x+xMsUAtcLszZsl7F69+Nhc3587XUcJusI/vRPkeSwAHG
+         eja4yOHZbovPrAa4EP6F7QeloDbwjXVavs86LaVaScri75/FMcKufDCtsKKCMNUuqzOP
+         jVl15uKQv5vE+98USbBSafcsNXYaoToh6/I74XFm7r/gnYV4ijyg2rPOtimbhQC0aqdJ
+         QlZw==
+X-Forwarded-Encrypted: i=1; AJvYcCVJ7DIfgi0Jwx6CE5ziur9unWxTRpgTdXAaj6XmE9F8ftzX1WuYzgdyVYH8iId+H2vK1vUFsxuLtA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLG6EtyA0jcOOpGS1LjSxSGigDxnr/IjfP+y58FLJ5392lst9e
+	uCVR5BZUk5BqIWA+bzNw9KpOWZmBwSMPx1likQ+SME2czzitREN9kbzwnMO/Dd0pNRsrzlY8mrm
+	JE5t45W7spPt+dBHdw+phluFm35gqGxFkDLO0Oy0ilcq1Ju3ZRlJ/wRMRcO+oePEBULE1w7AI3z
+	vSBPc83lbvUpWJJVYf9L+y1pNse4tOZMTbf2vQucn5CZY=
+X-Gm-Gg: ASbGncs3yMyXMUgmzB0wvnD0kvAcx6HFLC3fY13bppenX2gnnDBjbyBzmtnBry34CWr
+	do9ivSkygTRX5rnlJ/F43LFII0SlMx9r7GoQv4XbbFRW7uoW3gEHg8WY4xpOxUmD9VrrxOywXEj
+	1pYPF9cavdZAlehUNSfVZiu81lB8dqaiJzUoQ6LdYm96qXrwfHx922j3K3QAGTwjSjf6sjtbiTa
+	MAhwiqx2+gEkMYWAWZv/l+AMch+
+X-Received: by 2002:a05:6000:430e:b0:42b:39d0:6386 with SMTP id ffacd0b85a97d-42b5936796fmr7426316f8f.31.1763293269417;
+        Sun, 16 Nov 2025 03:41:09 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHMJsK/Mu81AW8RrOxMycoMigYCm1vvFEAtIVBD6SN7Gjc5Gpbt0B7e0gEepqHga1HMserLegirqZqVXgSLTMo=
+X-Received: by 2002:a05:6000:430e:b0:42b:39d0:6386 with SMTP id
+ ffacd0b85a97d-42b5936796fmr7426302f8f.31.1763293269015; Sun, 16 Nov 2025
+ 03:41:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251113001508.713574-1-lzampier@redhat.com> <em2u4ncbsu3ivwkiucthvqzhzbklu72eo3ovhshzy4m6iqiv4v@bvlk4w4ux2qh>
-In-Reply-To: <em2u4ncbsu3ivwkiucthvqzhzbklu72eo3ovhshzy4m6iqiv4v@bvlk4w4ux2qh>
+References: <20251113001508.713574-1-lzampier@redhat.com> <20251113001508.713574-3-lzampier@redhat.com>
+ <jil4fvsfddgdj46yjy5rzw7zg6xlb2u2pgzlpkn2bte6du2ht6@5plrpdaf4u7w>
+In-Reply-To: <jil4fvsfddgdj46yjy5rzw7zg6xlb2u2pgzlpkn2bte6du2ht6@5plrpdaf4u7w>
 From: Lucas Zampieri <lzampier@redhat.com>
-Date: Sun, 16 Nov 2025 11:38:37 +0000
-X-Gm-Features: AWmQ_bmpeG04rWxCoIFg1PQDQIsMKIhVz8Tcqr7b22vCvYHj9wwDUO3RrUwV1UA
-Message-ID: <CAOOg__BCa3WC5xc5-Qiy9FS1umWN-yr-j+KG5k=qOf7ue68MoQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/3] HID: Add support for multiple batteries per device
+Date: Sun, 16 Nov 2025 11:40:58 +0000
+X-Gm-Features: AWmQ_bkuyR1DZZLukvJgvD9V6rdqtxs5NK_nCcGLLPt9oEJsegGD7q6xmoBQgTs
+Message-ID: <CAOOg__DqNTZpWV96ozgd=RJdUd+JkUDfeMfoa54mgnb1pb27Wg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 2/3] HID: input: Refactor battery code to use
+ struct hid_battery
 To: Benjamin Tissoires <bentiss@kernel.org>
 Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	Jiri Kosina <jikos@kernel.org>, Sebastian Reichel <sre@kernel.org>, Bastien Nocera <hadess@hadess.net>, 
@@ -109,361 +111,321 @@ Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hey Benjamin
-
-On Thu, Nov 13, 2025 at 10:44=E2=80=AFAM Benjamin Tissoires <bentiss@kernel=
+On Thu, Nov 13, 2025 at 10:54=E2=80=AFAM Benjamin Tissoires <bentiss@kernel=
 .org> wrote:
 >
-> Hi Lucas,
->
 > On Nov 13 2025, Lucas Zampieri wrote:
-> > This RFC introduces support for multiple batteries per HID device, addr=
-essing
-> > a long-standing architectural limitation in the HID battery reporting s=
-ubsystem.
+> > Refactor the battery handling code to use the newly introduced
+> > struct hid_battery internally, replacing direct access to individual
+> > power_supply and state fields.
+> >
+> > The legacy dev->battery and dev->battery_* fields are maintained and
+> > synchronized for backward compatibility. This refactoring prepares
+> > the code for supporting multiple batteries per device in a subsequent
+> > patch.
+> >
+> > Signed-off-by: Lucas Zampieri <lzampier@redhat.com>
+> > ---
+> >  drivers/hid/hid-input.c | 125 ++++++++++++++++++++++++++--------------
+> >  1 file changed, 83 insertions(+), 42 deletions(-)
+> >
+> > diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+> > index e56e7de53279..0e71efea9da3 100644
+> > --- a/drivers/hid/hid-input.c
+> > +++ b/drivers/hid/hid-input.c
+> > @@ -454,7 +454,8 @@ static int hidinput_get_battery_property(struct pow=
+er_supply *psy,
+> >                                        enum power_supply_property prop,
+> >                                        union power_supply_propval *val)
+> >  {
+> > -     struct hid_device *dev =3D power_supply_get_drvdata(psy);
+> > +     struct hid_battery *bat =3D power_supply_get_drvdata(psy);
+> > +     struct hid_device *dev =3D bat->dev;
+> >       int value;
+> >       int ret =3D 0;
+> >
+> > @@ -465,13 +466,13 @@ static int hidinput_get_battery_property(struct p=
+ower_supply *psy,
+> >               break;
+> >
+> >       case POWER_SUPPLY_PROP_CAPACITY:
+> > -             if (dev->battery_status !=3D HID_BATTERY_REPORTED &&
+> > -                 !dev->battery_avoid_query) {
+> > +             if (bat->status !=3D HID_BATTERY_REPORTED &&
+> > +                 !bat->avoid_query) {
+> >                       value =3D hidinput_query_battery_capacity(dev);
+> >                       if (value < 0)
+> >                               return value;
+> >               } else  {
+> > -                     value =3D dev->battery_capacity;
+> > +                     value =3D bat->capacity;
+> >               }
+> >
+> >               val->intval =3D value;
+> > @@ -482,20 +483,20 @@ static int hidinput_get_battery_property(struct p=
+ower_supply *psy,
+> >               break;
+> >
+> >       case POWER_SUPPLY_PROP_STATUS:
+> > -             if (dev->battery_status !=3D HID_BATTERY_REPORTED &&
+> > -                 !dev->battery_avoid_query) {
+> > +             if (bat->status !=3D HID_BATTERY_REPORTED &&
+> > +                 !bat->avoid_query) {
+> >                       value =3D hidinput_query_battery_capacity(dev);
+> >                       if (value < 0)
+> >                               return value;
+> >
+> > -                     dev->battery_capacity =3D value;
+> > -                     dev->battery_status =3D HID_BATTERY_QUERIED;
+> > +                     bat->capacity =3D value;
+> > +                     bat->status =3D HID_BATTERY_QUERIED;
+> >               }
+> >
+> > -             if (dev->battery_status =3D=3D HID_BATTERY_UNKNOWN)
+> > +             if (bat->status =3D=3D HID_BATTERY_UNKNOWN)
+> >                       val->intval =3D POWER_SUPPLY_STATUS_UNKNOWN;
+> >               else
+> > -                     val->intval =3D dev->battery_charge_status;
+> > +                     val->intval =3D bat->charge_status;
+> >               break;
+> >
+> >       case POWER_SUPPLY_PROP_SCOPE:
+> > @@ -513,8 +514,9 @@ static int hidinput_get_battery_property(struct pow=
+er_supply *psy,
+> >  static int hidinput_setup_battery(struct hid_device *dev, unsigned rep=
+ort_type,
+> >                                 struct hid_field *field, bool is_percen=
+tage)
+> >  {
+> > +     struct hid_battery *bat;
+> >       struct power_supply_desc *psy_desc;
+> > -     struct power_supply_config psy_cfg =3D { .drv_data =3D dev, };
+> > +     struct power_supply_config psy_cfg;
+> >       unsigned quirks;
+> >       s32 min, max;
+> >       int error;
+> > @@ -530,16 +532,22 @@ static int hidinput_setup_battery(struct hid_devi=
+ce *dev, unsigned report_type,
+> >       if (quirks & HID_BATTERY_QUIRK_IGNORE)
+> >               return 0;
+> >
+> > -     psy_desc =3D kzalloc(sizeof(*psy_desc), GFP_KERNEL);
+> > -     if (!psy_desc)
+> > +     bat =3D kzalloc(sizeof(*bat), GFP_KERNEL);
+> > +     if (!bat)
+> >               return -ENOMEM;
+> >
+> > +     psy_desc =3D kzalloc(sizeof(*psy_desc), GFP_KERNEL);
+> > +     if (!psy_desc) {
+> > +             error =3D -ENOMEM;
+> > +             goto err_free_bat;
+> > +     }
+> > +
+> >       psy_desc->name =3D kasprintf(GFP_KERNEL, "hid-%s-battery",
+> >                                  strlen(dev->uniq) ?
+> >                                       dev->uniq : dev_name(&dev->dev));
+> >       if (!psy_desc->name) {
+> >               error =3D -ENOMEM;
+> > -             goto err_free_mem;
+> > +             goto err_free_desc;
 >
-> (TBH, that cover letter screams AI :-P)
-(partly yes, but also the cover letter kept growing and growing with
-more things to point out/data to make this request seem sane)
+> I wonder if a devm conversion of the whole battery support handling
+> would not be beneficial here.
+>
+I'll give it a try and see how it looks.
 
+> >       }
+> >
+> >       psy_desc->type =3D POWER_SUPPLY_TYPE_BATTERY;
+> > @@ -559,63 +567,85 @@ static int hidinput_setup_battery(struct hid_devi=
+ce *dev, unsigned report_type,
+> >       if (quirks & HID_BATTERY_QUIRK_FEATURE)
+> >               report_type =3D HID_FEATURE_REPORT;
+> >
+> > -     dev->battery_min =3D min;
+> > -     dev->battery_max =3D max;
+> > -     dev->battery_report_type =3D report_type;
+> > -     dev->battery_report_id =3D field->report->id;
+> > -     dev->battery_charge_status =3D POWER_SUPPLY_STATUS_DISCHARGING;
+> > +     /* Initialize battery structure */
+> > +     bat->dev =3D dev;
+> > +     bat->min =3D min;
+> > +     bat->max =3D max;
+> > +     bat->report_type =3D report_type;
+> > +     bat->report_id =3D field->report->id;
+> > +     bat->charge_status =3D POWER_SUPPLY_STATUS_DISCHARGING;
+> > +     bat->status =3D HID_BATTERY_UNKNOWN;
+> >
+> >       /*
+> >        * Stylus is normally not connected to the device and thus we
+> >        * can't query the device and get meaningful battery strength.
+> >        * We have to wait for the device to report it on its own.
+> >        */
+> > -     dev->battery_avoid_query =3D report_type =3D=3D HID_INPUT_REPORT =
+&&
+> > -                                field->physical =3D=3D HID_DG_STYLUS;
+> > +     bat->avoid_query =3D report_type =3D=3D HID_INPUT_REPORT &&
+> > +                        field->physical =3D=3D HID_DG_STYLUS;
+> >
+> >       if (quirks & HID_BATTERY_QUIRK_AVOID_QUERY)
+> > -             dev->battery_avoid_query =3D true;
+> > +             bat->avoid_query =3D true;
+> >
+> > -     dev->battery =3D power_supply_register(&dev->dev, psy_desc, &psy_=
+cfg);
+> > -     if (IS_ERR(dev->battery)) {
+> > -             error =3D PTR_ERR(dev->battery);
+> > +     psy_cfg.drv_data =3D bat;
+> > +     bat->ps =3D power_supply_register(&dev->dev, psy_desc, &psy_cfg);
+> > +     if (IS_ERR(bat->ps)) {
+> > +             error =3D PTR_ERR(bat->ps);
+> >               hid_warn(dev, "can't register power supply: %d\n", error)=
+;
+> >               goto err_free_name;
+> >       }
+> >
+> > -     power_supply_powers(dev->battery, &dev->dev);
+> > +     power_supply_powers(bat->ps, &dev->dev);
+> > +
+> > +     /* Maintain legacy single battery fields for backward compatibili=
+ty */
+> > +     dev->battery =3D bat->ps;
+> > +     dev->battery_min =3D bat->min;
+> > +     dev->battery_max =3D bat->max;
+> > +     dev->battery_report_type =3D bat->report_type;
+> > +     dev->battery_report_id =3D bat->report_id;
+> > +     dev->battery_charge_status =3D bat->charge_status;
+> > +     dev->battery_status =3D bat->status;
+> > +     dev->battery_avoid_query =3D bat->avoid_query;
 >
-> Stating a "long-standing architectural limitation" is a bit rough. The
-> need wasn't there or nobody took the time and effort to plug this hole
-> :)
+> Already mentioned in the cover letter, but what's the point of keeping
+> those legacy fields when the exact same data is stored in bat?
 >
-> General comment on this cover letter actually: it is way too detailed,
-> and try to iron out every corner case the AI bot thought would be fought
-> against.
-> Which leads to people actually nitpicking on the details below:
-> for example, I immediately thought the Wacom bit down below was wrong.
->
-> But really, all you need is multiple battery support on devices.
-> And this is fine. A couple of example would be good enough, and we can
-> move on.
->
-Ack, will make it simpler and remove those many examples.
+Yep, now that I know that is better to have cohereand-API instead of
+maintaining backwards compatiliby to a single battery structure that
+was only internal, I'll update those as well.
 
+> > +
+> >       return 0;
 > >
-> > ## Background
+> >  err_free_name:
+> >       kfree(psy_desc->name);
+> > -err_free_mem:
+> > +err_free_desc:
+> >       kfree(psy_desc);
+> > -     dev->battery =3D NULL;
+> > +err_free_bat:
+> > +     kfree(bat);
+> >       return error;
+> >  }
 > >
-> > The current HID implementation explicitly prevents multiple batteries p=
-er device
-> > through an early return in hidinput_setup_battery() that enforces a sin=
-gle-battery
-> > assumption. Linux treats peripheral batteries (scope=3DDevice) differen=
-tly from system
-> > batteries, with desktop environments often displaying them separately o=
-r ignoring
-> > them entirely. However, this design doesn't account for modern multi-ba=
-ttery hardware patterns.
+> >  static void hidinput_cleanup_battery(struct hid_device *dev)
+> >  {
+> > +     struct hid_battery *bat;
+> >       const struct power_supply_desc *psy_desc;
 > >
-> > ## Problem Statement
+> >       if (!dev->battery)
+> >               return;
 > >
-> > Multiple battery scenarios that cannot be properly reported today:
+> > +     bat =3D power_supply_get_drvdata(dev->battery);
+> >       psy_desc =3D dev->battery->desc;
+> >       power_supply_unregister(dev->battery);
+> >       kfree(psy_desc->name);
+> >       kfree(psy_desc);
+> > +     kfree(bat);
+> >       dev->battery =3D NULL;
+> >  }
 > >
-> > 1. Gaming headsets with charging docks (e.g., SteelSeries Arctis Nova P=
-ro
-> >    Wireless) - headset battery reported, dock battery invisible
-> > 2. Graphics tablets with stylus batteries (Wacom) - requires driver-spe=
-cific
-> >    workarounds
->
-> Technically, most Wacom styluses are battery-less for their pencils. The
-> battery issue that was related below is for a AES device, which is an
-> integrated wacom tablet in a laptop, so the only battery we have is on
-> the stylus itself. Arguably we can have several styluses, but only one
-> can be used at the same time, so reusing the same power supply device is
-> fine.
->
-> (see, I told you, that's the "someone is wrong on the internet effect")
->
-oh okay, thats the only type of driver that I found did a similar
-thing to what I'm proposing, but yeah I missed the part we most
-styluses where battery-less.
-
-> > 3. Wireless earbuds with per-earbud batteries plus charging case
-> > 4. Multi-device receivers (Logitech Unifying) - requires proprietary HI=
-D++
-> >    protocol parsing
->
-> That's an entire different reason why there is HID++, and the fact that
-> Solaar handles batteries itself is lack of support in the kernel for
-> some devices. (and because sometimes it's much simpler to update a user
-> space client than a kernel driver)
->
-I know I was picking an specific HID++ feature, over the many others
-that it provides just to make a point.
-
+> > -static bool hidinput_update_battery_charge_status(struct hid_device *d=
+ev,
+> > +static bool hidinput_update_battery_charge_status(struct hid_battery *=
+bat,
+> >                                                 unsigned int usage, int=
+ value)
+> >  {
+> >       switch (usage) {
+> >       case HID_BAT_CHARGING:
+> > -             dev->battery_charge_status =3D value ?
+> > -                                          POWER_SUPPLY_STATUS_CHARGING=
+ :
+> > -                                          POWER_SUPPLY_STATUS_DISCHARG=
+ING;
+> > +             bat->charge_status =3D value ?
+> > +                                  POWER_SUPPLY_STATUS_CHARGING :
+> > +                                  POWER_SUPPLY_STATUS_DISCHARGING;
+> > +             /* Update legacy field for backward compatibility */
+> > +             if (bat->dev->battery =3D=3D bat->ps)
+> > +                     bat->dev->battery_charge_status =3D bat->charge_s=
+tatus;
+> >               return true;
+> >       }
 > >
-> > This forces manufacturers to use proprietary protocols and vendor-speci=
-fic
-> > software. Community projects parse USB packets directly because standar=
-d HID
-> > battery reporting cannot handle multi-battery scenarios.
->
-> I don't think Linux ever forced any manufacturer to use proprietary
-> protocols or vendor-specific software. For Logitech (or any gaming mouse
-> FWIW), those protocols were in place well before Linux ever had support
-> for them.
->
-Yes, what I mean, it that there's no path to make the multi-battery
-reporting native to Linux(Other than ofk you can report only the
-lowest of the average of all batteries, but not individual batteries),
-so I feel manufactures have no other option other than write their own
-perfiferal-sw (eg, steelseries sonar, Logitech GHUB, etc.)(and sure,
-many of those dont even work on linux, but then we are left
-reverse-engineering protocols in Solaar, HeadsetControl and others).
-
+> > @@ -625,32 +655,43 @@ static bool hidinput_update_battery_charge_status=
+(struct hid_device *dev,
+> >  static void hidinput_update_battery(struct hid_device *dev, unsigned i=
+nt usage,
+> >                                   int value)
+> >  {
+> > +     struct hid_battery *bat;
+> >       int capacity;
 > >
-> > ## Why This Matters
+> >       if (!dev->battery)
+> >               return;
 > >
-> > The current limitation creates a cycle: OS lacks support, so manufactur=
-ers
-> > implement proprietary protocols, which makes vendor software necessary,=
- which
-> > reduces pressure to fix the OS limitation. Improving HID core support f=
-or
-> > multiple batteries would enable standardized reporting, reduce the need=
- for
-> > vendor software, improve OS integration, reduce driver duplication, and=
- provide
-> > a foundation for future multi-battery devices.
->
-> This is completely BS and AI generated. There is no such cycle.
->
-> But again, the need is there, so we need to push this series forward.
-> The packaging of the cover letter is wrong. We are not salesmen, there
-> is no need to pitch this like that.
->
-Well, BS maybe, but completely human fabricated :p
-And sure, I have no ground in reality for this supposition other than
-inferring from the peripherals that I've seen. But my questions here
-mostly is, why would manufactures spend time and money creating and
-maintaining their custom protocols and accompanying desktop-software
-if there was a native way? But I guess you got to the same conclusion
-as I did, so then, I'll remove my suppositions, and only keep the real
-world examples.
-
+> > -     if (hidinput_update_battery_charge_status(dev, usage, value)) {
+> > -             power_supply_changed(dev->battery);
+> > +     bat =3D power_supply_get_drvdata(dev->battery);
+> > +
+> > +     if (hidinput_update_battery_charge_status(bat, usage, value)) {
+> > +             power_supply_changed(bat->ps);
+> >               return;
+> >       }
 > >
-> > ## Proposed Solution
+> >       if ((usage & HID_USAGE_PAGE) =3D=3D HID_UP_DIGITIZER && value =3D=
+=3D 0)
+> >               return;
 > >
-> > This series introduces struct hid_battery to encapsulate individual bat=
-tery
-> > state, refactors the code to use this structure internally, and adds su=
-pport
-> > for multiple batteries tracked in a list within struct hid_device. Batt=
-eries
-> > are identified by report ID. The implementation maintains full backward=
-s
-> > compatibility with existing single-battery code.
->
-> That paragraph is good. Keep it please :)
->
+> > -     if (value < dev->battery_min || value > dev->battery_max)
+> > +     if (value < bat->min || value > bat->max)
+> >               return;
 > >
-> > ## Testing
+> >       capacity =3D hidinput_scale_battery_capacity(dev, value);
 > >
-> > Tested with split keyboard hardware (Dactyl 5x6) using custom ZMK firmw=
-are
-> > that implements per-side HID battery reporting. Each battery (left and =
-right
-> > keyboard halves) reports independently through the power supply interfa=
-ce with
-> > distinct report IDs (0x05 and 0x06).
-> >
-> > Test firmware available on my personal fork at:
-> > https://github.com/zampierilucas/zmk/tree/feat/individual-hid-battery-r=
-eporting
-> > If this series gets merged, these changes will be proposed to upstream =
-ZMK.
-> >
-> > HID descriptor and recording captured with hid-recorder:
-> >
-> > D: 0
-> > R: 162 05 01 09 06 a1 01 85 01 05 07 19 e0 29 e7 15 00 25 01 75 01 95 0=
-8 81 02 05 07 75 08 95 01 81 03 05 07 15 00 25 01 19 00 29 67 75 01 95 68 8=
-1 02 c0 05 0c 09 01 a1 01 85 02 05 0c 15 00 26 ff 0f 19 00 2a ff 0f 75 10 9=
-5 06 81 00 c0 05 84 09 05 a1 01 05 85 85 05 09 44 15 00 25 01 35 00 45 01 7=
-5 08 95 01 81 02 09 65 15 00 25 64 35 00 45 64 75 08 95 01 81 02 c0 05 84 0=
-9 05 a1 01 05 85 85 06 09 44 15 00 25 01 35 00 45 01 75 08 95 01 81 02 09 6=
-5 15 00 25 64 35 00 45 64 75 08 95 01 81 02 c0
-> > N: ZMK Project Dactyl 5x6
-> > P: usb-0000:2d:00.3-4.2/input2
-> > I: 3 1d50 615e
-> > D: 0
-> > E: 0.000000 3 05 00 56
-> > E: 0.000977 3 05 00 56
-> > E: 1.490974 3 06 00 52
-> > E: 1.491958 3 06 00 52
-> > E: 6.492979 3 06 00 53
-> > E: 6.493962 3 06 00 53
-> >
-> > The recording shows both batteries reporting with different charge leve=
-ls
-> > (Report ID 05: 86%, Report ID 06: 82%-83%), demonstrating the multi-bat=
-tery
-> > functionality. This can be used to verify UPower compatibility.
->
-> Same, please keep that testing note in future versions.
->
-> >
-> > ## Future Work: Userspace Integration
-> >
-> > As suggested by Bastien, semantic battery differentiation (e.g., "left
-> > earbud" vs "right earbud") requires userspace coordination, as HID
-> > reports typically lack role metadata.
->
-> The sad part is that HID can report a lot of things, but manufacturers
-> don't make a full use of it.
->
-> For example, in the split keyboard case, you could make use of the
-> Handedness NAry of the generic device Controls page (0x06) which can
-> help describing Left Hand (0x32) and Right Hand (0x33).
->
-> But the problem is more likely that no known manufacturer will follow
-> your lead on this, and the NAry code you put here will only be used by
-> your firmware.
->
-> For the bluetooth earbuds, the Logical collection Channel Left (0x161,
-> page Consumer Page 0x0c) and Channel Right (0x162, same page) could be
-> used.
->
-> >
-> > This will require:
-> > 1. systemd/hwdb entries for device-specific battery role mappings
-> > 2. UPower updates to enumerate and group multi-battery devices
-> > 3. Desktop environment changes to display batteries with meaningful lab=
-els
-> >
-> > This kernel infrastructure is a prerequisite for that userspace work.
-> >
-> > ## Request for Comments
-> >
-> > Is list-based storage appropriate or would another structure work bette=
-r?
->
-> List based storage should be fine. We don't receive battery updates that
-> often, so if that is simpler for you, that's all right.
->
-> > Should we support usage-based identification in addition to report ID f=
-or
-> > devices using the same report ID?
->
-> If the question is:
-> - should we enforce each battery to have a different name, the answer is
->         yes
-> - should we take the report ID as the battery identifier in the name:
->         why not?
-> - should we make use of other collections to split up batteries: maybe.
->         If you have a device which reports multiple batteries on the same
->         report ID, then yes, we will need a way to split them.
->
-> But again, we are only theorically speaking here, so it's hard to
-> answer. I really wish we had an actual consumer device we could use as a
-> reference, not a custom firmware we can tune in any way we want.
->
-yeah, but I guess we are also showing the way of how it could be
-implemented in a future device,  so might as well stress the
-theoretical aspect of it, so we can provide a well rounded api. For
-now I'll work on a v3 with report ID, but I'm open to changing things
-around if we come up with something better.
-
-> > Is sequential naming (battery-N) sufficient
-> > or should batteries have semantic role identifiers like "main", "stylus=
-", "dock"?
->
-> Semantic would be ideal, but at least having a unique identifier is a
-> requirement. That's more a question for the upower guys.
->
-> >
-> > To HID maintainers (Jiri Kosina, Benjamin Tissoires): Does this belong =
-in
-> > hid-input.c or should it be separate?
->
-> hid-input.c seems fine to me. There are technically not a lot of
-> differences from the existing AFAICT, it's just that we iterate over a
-> list.
->
-> > Any concerns about the backwards
-> > compatibility approach? Meaning, should I have removed the whole
-> > dev->bat legacy mapping and use the new struct?
->
-> I'm not sure I follow that backwards compatibility. AFAIU that API is
-> kernel internal, so it should be easier to drop it entirely instead of
-> duplicating the data for no benefit.
->
-Got it, I was mostly worried that it was expected somewhere else, but
-given your feedback, I'll make sure to have a proper new api without
-so many edge case handling for a single device.
-
-> >
-> > To power supply maintainers (Sebastian Reichel): Any issues with multip=
-le
-> > power_supply devices from a single HID device?
->
-> Not a power supply maintainer, but unless upower builds a graph of the
-> devices it sees, I don't see why this would be a problem.
->
-> >
-> > Related commits:
-> > - c6838eeef2fb: HID: hid-input: occasionally report stylus battery
-> > - a608dc1c0639: HID: input: map battery system charging
-> > - fd2a9b29dc9c: HID: wacom: Remove AES power_supply after inactivity
->
-> What the point of those?
-Mostly to say, "Hey I know it has been done there!", but I'll get rid
-of those in v3 as its just noise.
-
->
-> >
-> > Community projects demonstrating the need:
-> > - HeadsetControl: https://github.com/Sapd/HeadsetControl
-> > - Solaar: https://github.com/pwr-Solaar/Solaar
-> > - OpenRazer: https://github.com/openrazer/openrazer
-> >
-> > Lucas Zampieri (3):
-> >   HID: input: Introduce struct hid_battery
-> >   HID: input: Refactor battery code to use struct hid_battery
-> >   HID: input: Add support for multiple batteries per device
-> >
-> > Changes in v2:
-> > - Split the monolithic v1 patch into three logical patches for easier r=
-eview:
-> >   1. Introduce struct hid_battery (pure structure addition)
-> >   2. Refactor existing code to use the new structure (internal changes)
-> >   3. Add multi-battery support (new functionality)
-> > - Added detailed testing section with hardware specifics
-> > - Added hid-recorder output (dactyl-hid-recording.txt) demonstrating tw=
-o-battery
-> >   HID descriptor for UPower validation
-> > - Added "Future Work: Userspace Integration" section addressing Bastien=
-'s feedback
-> >   about semantic battery differentiation
-> > - Added hardware examples with product links to commit messages (per Ba=
-stien's
-> >   suggestion)
-> > - No functional changes from v1, only improved patch organization and d=
-ocumentation
-> >
-> >  drivers/hid/hid-core.c  |   4 +
-> >  drivers/hid/hid-input.c | 196 +++++++++++++++++++++++++++-------------
-> >  include/linux/hid.h     |  42 ++++++++-
-> >  3 files changed, 179 insertions(+), 63 deletions(-)
-> >
+> > -     if (dev->battery_status !=3D HID_BATTERY_REPORTED ||
+> > -         capacity !=3D dev->battery_capacity ||
+> > -         ktime_after(ktime_get_coarse(), dev->battery_ratelimit_time))=
+ {
+> > -             dev->battery_capacity =3D capacity;
+> > -             dev->battery_status =3D HID_BATTERY_REPORTED;
+> > -             dev->battery_ratelimit_time =3D
+> > +     if (bat->status !=3D HID_BATTERY_REPORTED ||
+> > +         capacity !=3D bat->capacity ||
+> > +         ktime_after(ktime_get_coarse(), bat->ratelimit_time)) {
+> > +             bat->capacity =3D capacity;
+> > +             bat->status =3D HID_BATTERY_REPORTED;
+> > +             bat->ratelimit_time =3D
+> >                       ktime_add_ms(ktime_get_coarse(), 30 * 1000);
+> > -             power_supply_changed(dev->battery);
+> > +
+> > +             /* Update legacy fields for backward compatibility */
+> > +             if (dev->battery =3D=3D bat->ps) {
+> > +                     dev->battery_capacity =3D bat->capacity;
+> > +                     dev->battery_status =3D bat->status;
+> > +                     dev->battery_ratelimit_time =3D bat->ratelimit_ti=
+me;
+> > +             }
+> > +
+> > +             power_supply_changed(bat->ps);
+> >       }
+> >  }
+> >  #else  /* !CONFIG_HID_BATTERY_STRENGTH */
 > > --
 > > 2.51.1
 > >
 >
-> And now after all of this bikeshedding, I can move on to the review of
-> the series.
->
 > Cheers,
 > Benjamin
 >
-Thank you for the bikeshedding, and sorry for such a long cover
-letter, I just wanted to justify every aspect of what/why/how was
-needed, and ended up with this monstruosity :D I'll clean this up for
-v3 and make sure only what is relevant needed for this to the throught
-is there.
 
 Best,
 Lucas Zampieri
