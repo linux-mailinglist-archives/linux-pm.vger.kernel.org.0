@@ -1,122 +1,121 @@
-Return-Path: <linux-pm+bounces-38113-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38114-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09775C63250
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 10:23:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D455AC632CB
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 10:31:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BA46E34B6B1
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 09:18:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B5AB3AB396
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 09:31:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39AC324B2A;
-	Mon, 17 Nov 2025 09:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2965926ED4F;
+	Mon, 17 Nov 2025 09:31:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ALUf/nVb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCC131A07B;
-	Mon, 17 Nov 2025 09:18:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59DE26462E;
+	Mon, 17 Nov 2025 09:31:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763371125; cv=none; b=rguSwjItFqGlD4q8oQCcrWCt/djmnLpOMnBV/NsFI3Qcnv5SdtAQ2BTufXxPUNU7HbCgOqopuO91GWr9e+NoseBohjcIrjvIX863N/tPK5wRmmx2yrf4QBp9VSEr70Z9zqjVa/jSyVF8/7Rz+3t/7KOiI2Urfz+AUduQ5QcMr9c=
+	t=1763371873; cv=none; b=Y5LjxfDioWgmrw+Ov2rH74h+kv2glZggRf3OU7mv7+GJ8c8P9zNWgO4CvCmcGiYOjQaRNTOPkR5fWDe2AKSFePEbxd2tq2QbZC1G2m6WGz5J2ha9I3VEkiszbaG7LUkxfJkBRdveuxqGfdTsHotKYvSo7v/XsFPyHf7VsunH4Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763371125; c=relaxed/simple;
-	bh=tOhBaqusApoCmBoq4Ahas/AFuv/QNj4TQZOaZxpcIgs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RuoW1ah4cY0n2+gz7WUF2l6yd11+rOaFiyX8KhwlOsTSGpEi+mtMpDHbeW9eYDbmg2vb9DYBfeXLazTUkMNauvzWMmU9IR8i1NjBaOv+xF9w5o++SCKvVbbePbpDStQhMo/JsHg57zV2qnv4aswRQETB+a/6P2PNyo9omG+R+xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 715FCFEC;
-	Mon, 17 Nov 2025 01:18:35 -0800 (PST)
-Received: from [10.57.74.7] (unknown [10.57.74.7])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B68453F66E;
-	Mon, 17 Nov 2025 01:18:38 -0800 (PST)
-Message-ID: <28868c0e-2a46-47ed-9bd7-439056cf94c0@arm.com>
-Date: Mon, 17 Nov 2025 09:18:35 +0000
+	s=arc-20240116; t=1763371873; c=relaxed/simple;
+	bh=9QRjyk/cjVzZE8w18YoaMyF20fk/O9vAFKuOFyC2bNs=;
+	h=Message-ID:Subject:From:To:CC:Date:Content-Type:MIME-Version; b=rXTK7acxmW+/6FPLvV5En9N3U81qzzI9HMZBZQpScx2XmE6F1sfLYJK/96Vz1uI4Q4up6C93U2CvmSHMe8YMPMwSKr0WrEubZpOQbgrY8sIK4tFvuYmTsB62kzxmhiopt5IctRPj4gtJVBp/PXAlwy/vR5KClC9D0mMzUakf+OY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=ALUf/nVb; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 24415c4ac39811f0b33aeb1e7f16c2b6-20251117
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Transfer-Encoding:MIME-Version:Content-Type:Date:CC:To:From:Subject:Message-ID; bh=9QRjyk/cjVzZE8w18YoaMyF20fk/O9vAFKuOFyC2bNs=;
+	b=ALUf/nVbClnlwJd00bWlGw87jFoXT0+QmKJ4rS7Uhc29n17qjsyREXeaaSpoI13BsSsvXplAQah08pvhOd+koCth0GwqXbjskSnK+rlc3lWZT/oDcsopAKThK4bs3K93Xh12cSpnbOoN6ZEkLpos8XScWdjcoXHcdCpnRtSDe7s=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:6f32ed18-8e83-4989-8980-c2ea03ac2c04,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:6d008692-7fd3-4c6a-836a-51b0a70fa8fb,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|888|898,TC:-5,Content:0|15|5
+	0,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OS
+	A:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 24415c4ac39811f0b33aeb1e7f16c2b6-20251117
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+	(envelope-from <ya-jou.wu@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 769305134; Mon, 17 Nov 2025 17:31:05 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Mon, 17 Nov 2025 17:31:04 +0800
+Received: from [10.233.130.16] (10.233.130.16) by mtkmbs13n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.1748.26 via Frontend
+ Transport; Mon, 17 Nov 2025 17:31:05 +0800
+Message-ID: <70b25dca6f8c2756d78f076f4a7dee7edaaffc33.camel@mediatek.com>
+Subject: [REGRESSION] PM / sleep: Unbalanced suspend/resume on late abort
+ causes data abort
+From: Rose Wu <ya-jou.wu@mediatek.com>
+To: <rafael.j.wysocki@intel.com>, <linux-pm@vger.kernel.org>,
+	<regressions@lists.linux.dev>
+CC: <saravanak@google.com>, <len.brown@intel.com>, <pavel@kernel.org>,
+	<linux-kernel@vger.kernel.org>, wsd_upstream <wsd_upstream@mediatek.com>,
+	<linux-mediatek@lists.infradead.org>,
+	=?UTF-8?Q?=E5=A3=AB=E9=A1=8F_=E9=82=B1?= <artis.chiu@mediatek.com>,
+	=?UTF-8?Q?=E9=9D=96=E6=99=BA_=E9=AB=98?= <Johnny-cc.Kao@mediatek.com>
+Date: Mon, 17 Nov 2025 17:31:05 +0800
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] cpufreq: Add policy_frequency trace event
-To: Viresh Kumar <viresh.kumar@linaro.org>, Samuel Wu <wusamuel@google.com>,
- peterz@infradead.org, vincent.guittot@linaro.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- kernel-team@android.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Qais Yousef <qyousef@layalina.io>, John Stultz <jstultz@google.com>
-References: <20251112235154.2974902-1-wusamuel@google.com>
- <hslbhy6btkbpsgriafvdq4ligq7vorwcpffaakinqoieroopur@beyq5ouauscf>
- <CAG2KctqdJzhaC4pRG9rAgteVKHtKsA8Y7=_MHEUCCeBBhoejWQ@mail.gmail.com>
- <5pv5tqf24p6ttpydpdegyhyod3m2hmpwbfrzl6otsq3q2gvb2s@gsgcgbcvin3u>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <5pv5tqf24p6ttpydpdegyhyod3m2hmpwbfrzl6otsq3q2gvb2s@gsgcgbcvin3u>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: base64
 
-On 11/14/25 05:11, Viresh Kumar wrote:
-> On 13-11-25, 19:41, Samuel Wu wrote:
->> On Wed, Nov 12, 2025 at 10:45 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->>>
->>> On 12-11-25, 15:51, Samuel Wu wrote:
->>>> The existing cpu_frequency trace_event can be verbose, emitting an event
->>>> for every CPU in the policy even when their frequencies are identical.
->>>>
->>>> This patch adds a new policy_frequency trace event, which provides a
->>>> more efficient alternative to cpu_frequency trace event. This option
->>>> allows users who only need frequency at a policy level more concise logs
->>>> with simpler analysis.
->>>>
->>>> Signed-off-by: Samuel Wu <wusamuel@google.com>
->>>> ---
->>>>  drivers/cpufreq/cpufreq.c    |  2 ++
->>>>  include/trace/events/power.h | 21 +++++++++++++++++++++
->>>>  2 files changed, 23 insertions(+)
->>>>
->>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->>>> index 4472bb1ec83c..b65534a4fd9a 100644
->>>> --- a/drivers/cpufreq/cpufreq.c
->>>> +++ b/drivers/cpufreq/cpufreq.c
->>>> @@ -345,6 +345,7 @@ static void cpufreq_notify_transition(struct cpufreq_policy *policy,
->>>>               pr_debug("FREQ: %u - CPUs: %*pbl\n", freqs->new,
->>>>                        cpumask_pr_args(policy->cpus));
->>>>
->>>> +             trace_policy_frequency(freqs->new, policy->cpu);
->>>>               for_each_cpu(cpu, policy->cpus)
->>>>                       trace_cpu_frequency(freqs->new, cpu);
->>>
->>> I don't see much value in almost duplicate trace events. If we feel that a
->>> per-policy event is a better fit (which makes sens), then we can just drop the
->>> trace_cpu_frequency() events and print policy->cpus (or related_cpus)
->>> information along with the per-policy events.
->>
->> Thank you for the feedback Viresh. Fair enough, I've done some testing
->> and a single trace event should work and would be cleaner. Please let
->> me know what you think of this proposal for v2.
->>
->> We can append a bitmask of policy->cpus field to
->> trace_cpu_frequency(). This way we maintain backwards compatibility:
->> trace_cpu_frequency() is not removed, and its pre-existing fields are
->> not disturbed.
->>
->> Call flow wise, we can delete all the for_each_cpu() loops, and we
->> still retain the benefits of the trace emitting once per policy
->> instead of once per cpu.
-> 
-> Fine by me. I have added Scheduler maintainers in the loop to see if they have a
-> different view.
->
+SGkgUmFmYWVsIGFuZCBBbGwsDQoNCkkgYW0gcmVwb3J0aW5nIGEgcmVncmVzc2lvbiBpbnRyb2R1
+Y2VkIGJ5IHRoZSBjb21taXQNCjQ0MzA0NmQxYWQ2NjYwN2YzMjRjNjA0YjlmYmRmMTEyNjZmYThh
+YWQgKFBNOiBzbGVlcDogTWFrZSBzdXNwZW5kIG9mDQpkZXZpY2VzIG1vcmUgYXN5bmNocm9ub3Vz
+KSwgd2hpY2ggY2FuIGxlYWQgdG8gYSBrZXJuZWwgcGFuaWMgKGRhdGENCmFib3J0KSBpZiBhIGxh
+dGUgc3VzcGVuZCBhYm9ydHMuDQpUaGUgY29tbWl0IG1vZGlmaWVzIGxpc3QgaGFuZGxpbmcgZHVy
+aW5nIHN1c3BlbmQuIFdoZW4gYSBkZXZpY2Ugc3VzcGVuZA0KYWJvcnRzIGF0IHRoZSAibGF0ZSIg
+c3RhZ2UsIGBkcG1fc3VzcGVuZGVkX2xpc3RgIGlzIHNwbGljZWQgaW50bw0KYGRwbV9sYXRlX2Vh
+cmx5X2xpc3RgLg0KVGhpcyBjcmVhdGVzIGFuIGltYmFsYW5jZS4gRGV2aWNlcyBvbiB0aGlzIGxp
+c3QgdGhhdCBoYWQgbm90IHlldA0KZXhlY3V0ZWQgYHBtX3J1bnRpbWVfZGlzYWJsZSgpYCBpbiBg
+ZGV2aWNlX3N1c3BlbmRfbGF0ZSgpYCBhcmUgbm93DQppbmNvcnJlY3RseSBzdWJqZWN0ZWQgdG8g
+YHBtX3J1bnRpbWVfZW5hYmxlKClgIGR1cmluZyB0aGUgc3Vic2VxdWVudA0KYGRldmljZV9yZXN1
+bWVfZWFybHkoKWAgc2VxdWVuY2UuDQoNClRoaXMgY2F1c2VzIHR3byBpc3N1ZXM6DQoNCjEuIE51
+bWVyb3VzIGVycm9yIG1lc3NhZ2VzIGluIGRtZXNnOiAiQXR0ZW1wdCB0byBlbmFibGUgcnVudGlt
+ZSBQTSB3aGVuDQppdCBpcyBibG9ja2VkLiINCjIuIEEgY3JpdGljYWwgZmFpbHVyZSBmb3Igc2lt
+cGxlLWJ1cyBkZXZpY2VzOiBXaGVuDQpgc2ltcGxlX3BtX2J1c19ydW50aW1lX3Jlc3VtZSgpYCBp
+cyBjYWxsZWQgZm9yIGEgZGV2aWNlIHdob3NlIGJ1cyBpcw0KYE5VTExgLCB0aGUga2VybmVsIGF0
+dGVtcHRzIHRvIGFjY2VzcyB0aGUgbnVsbCBidXMgc3RydWN0LCB0cmlnZ2VyaW5nIGENCmRhdGEg
+YWJvcnQuDQoNClN0ZXBzIHRvIFJlcHJvZHVjZToNCg0KVGhlIGlzc3VlIGNhbiBiZSByZWxpYWJs
+eSByZXByb2R1Y2VkIGJ5IGZvcmNpbmcgYSBsYXRlIHN1c3BlbmQgdG8NCmFib3J0Lg0KDQoxLiBB
+cHBseSB0aGUgZm9sbG93aW5nIG1vZGlmaWNhdGlvbiB0byB0aGUgYGRldmljZV9zdXNwZW5kX2xh
+dGUoKWANCmZ1bmN0aW9uIHRvIHNpbXVsYXRlIGEgd2FrZXVwIGV2ZW50Og0KLS0tIGEvZHJpdmVy
+cy9iYXNlL3Bvd2VyL21haW4uYw0KKysrIGIvZHJpdmVycy9iYXNlL3Bvd2VyL21haW4uYw0KQEAg
+LTE1NjgsNyArMTU2OCw3IEBAIHN0YXRpYyBpbnQgZGV2aWNlX3N1c3BlbmRfbGF0ZShzdHJ1Y3Qg
+ZGV2aWNlDQoqZGV2LCBwbV9tZXNzYWdlX3Qgc3RhdGUsIGJvb2wgYXN5bg0KIAlpZiAoYXN5bmNf
+ZXJyb3IpDQogCQlnb3RvIENvbXBsZXRlOw0KIA0KLQlpZiAocG1fd2FrZXVwX3BlbmRpbmcoKSkg
+ew0KKwlpZiAoMSkgeyAvKiBGb3JjZSBhYm9ydCBmb3IgdGVzdGluZyAqLw0KIAkJYXN5bmNfZXJy
+b3IgPSAtRUJVU1k7DQogCQlnb3RvIENvbXBsZXRlOw0KIAl9DQoyLiBUcmlnZ2VyIGEgc3lzdGVt
+IHN1c3BlbmQuDQozLiBUaGUgc3lzdGVtIHdpbGwgYXR0ZW1wdCB0byBzdXNwZW5kLCBhYm9ydCBh
+dCB0aGUgbGF0ZSBzdGFnZSwgYW5kDQp0aGVuIHRyaWdnZXIgdGhlIGRhdGEgYWJvcnQgZHVyaW5n
+IHRoZSByZXN1bWUgc2VxdWVuY2UuDQoNCkNhbGwgVHJhY2U6DQoNClVuYWJsZSB0byBoYW5kbGUg
+a2VybmVsIE5VTEwgcG9pbnRlciBkZXJlZmVyZW5jZSBhdCB2aXJ0dWFsIGFkZHJlc3MNCjAwMDAw
+MDAwMDAwMDAwMDgNCnBjIDogWzB4ZmZmZmZmZTM5ODhlODFlNF0gc2ltcGxlX3BtX2J1c19ydW50
+aW1lX3Jlc3VtZSsweDFjLzB4OTANCmxyIDogWzB4ZmZmZmZmZTM5OGE4NDhkMF0gcG1fZ2VuZXJp
+Y19ydW50aW1lX3Jlc3VtZSsweDQwLzB4NTgNCg0KQXMgYSBwb3RlbnRpYWwgZml4LCBJIGFtIHdv
+bmRlcmluZyBpZiBhIGNvbmRpdGlvbmFsIGNoZWNrIGlzIG5lZWRlZCBpbg0KYGRldmljZV9yZXN1
+bWVfZWFybHkoKWAgYmVmb3JlIGludm9raW5nIGBwbV9ydW50aW1lX2VuYWJsZSgpYCBmb3IgYQ0K
+ZGV2aWNlPw0KDQpCZXN0IFJlZ2FyZHMsDQpSb3Nl
 
-And IIUC your proposal is to fold policy_frequency into cpu_frequency but then
-only have one cpu_frequency event per policy emitted?
-I think from a tooling perspective it would be easier to remove cpu_frequency
-entirely, then tools can probe on the presence of policy_frequency / cpu_frequency.
 
