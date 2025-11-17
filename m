@@ -1,102 +1,102 @@
-Return-Path: <linux-pm+bounces-38102-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38103-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9456BC6250A
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 05:28:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BABEFC625E5
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 06:12:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 60A7C21592
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 04:28:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73F483A78DA
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 05:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671C7314D06;
-	Mon, 17 Nov 2025 04:28:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E402D8DB0;
+	Mon, 17 Nov 2025 05:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MkTlyOWx";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Ugcwq4nl"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RPqgjPXf";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Q7Olwj+I"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCC63115B1
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 04:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA0F242D88
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763353723; cv=none; b=pL/slyZBAx3Aqu79cLgYC/cvWDgLWV3TMRRhYUdpclbE1EDv5+c62XTB2G/W91q95FcTrtRWMKCINDm/n9py6T0rwOTY0Muwss4zQhudarBkCR58tR6O+rlMWET1JZUlU0/fiYbBXbjidCcEJz28ZMfkgMT0JJsNj4Sr25OJs4s=
+	t=1763356341; cv=none; b=p7ctA99YTmXoKKb7jzFzUuDS7vc55B71Vm/CnC/khSZ9DeUXw8TBv+ZlXGbANy6P6I3t5ooqlJlQejH/hEYEHWbSBern1BXbyfJGRnpC0BrmpHqZnjhDOrFvrcTWRhFTK1wJWBhaivtcvjuQx7tGuZo6JFTQJJ4yFULqBIhW6hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763353723; c=relaxed/simple;
-	bh=OeM/OYP4MqcRWc5TtekQphX8zrTpv2dN89hcSU7XVys=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aA017rxk5c0VV2RkKOaxsk0KqBQOVcjSgrtghGTUqTuFryE2Hq/htqsKrUMhns+YQhKxDP7BgSkaGpI3Gby/plUdlHx4VzmLA3E7V+mwDhO09ymrytL6avJliAIWaICKx50MWB6k+1d7b6qGtLBlPCGu+ZJsxvLWt1sSgacRis8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MkTlyOWx; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Ugcwq4nl; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1763356341; c=relaxed/simple;
+	bh=J8z7X1x3/ScI35iGGWKTEX1fEK0jJHLhUm2IbIlXq94=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=QGWIUD83tF1Va+t4JQyOQ4yqfqF/SPY8LsiYjjEmOs4DzgBhAIdnRvL6iaYYEzJL0mjb71967XwjP7laCcm+R9jrFHGkvpUHMTLJvNgY/GHpnFSfF5vbf1QL3Ju+uKpOeSzywTGNunxZ6euktK+ZyXP/YuXbQIM/GBL7AdjWYfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RPqgjPXf; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Q7Olwj+I; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AGH02Uu1269038
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 04:28:40 GMT
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AH4ntZw3081829
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:12:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	iPbU5dYethHvG7uL6GYJ4YK1ysP2x8WQABZrUrkX7Fw=; b=MkTlyOWx9N+fSCna
-	1wA4mdakAyXuGEaL8+I1JqRqQeirBkbJ5puoEGk0YwVblg+IeJE/uu/HuyPSG7Q5
-	fdA8eLwH/bgjcjGAZKvF1p3MwOxQHKQTY2C2rnPWoR1zYG7dQCX2WKJpaHt3z+rO
-	D5BX/d3ofoFCOh2sb1IB6G8yOrdhpjRrGfdZmwpAGE7TD1ovQdUkplyPZWUUMtVV
-	V0hb0vWMtMfdsWjyRWpBrSuePxQUHk674Zkt/mI3AoeZqvVaMNSj/Xy9rFw+PX4e
-	c9yD+q/4CH2XJeLMm4KARUApIYaB4gnCr8y/a5vpm4MiV6hPfKfPp9wzVPo7ZGoe
-	ZVM0Kw==
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4aejt5b9xu-1
+	FWr9n67dO1c7n4hq7B6wcG0DtGSgKlDPwTUOrm2oxug=; b=RPqgjPXfZp3lwZnp
+	QNZw5EePej+GX+myojewUgzoIuDa5IF0bUjp89eEoQjRai2YZ0XgWot8nsINV2kX
+	nP2xwKVbH/Jf61qBGjkFMHSK3kaD1ub2kMyR6VlT2LeKoofkBbulOq8gB2qrxl3D
+	YpdBW7m1IJt4PYtlHx13MZxjR4Ss4S2h0fhytNfo9rOmUPbezx4yI0KLYU1ePYE3
+	uyoJoABjXo3LsDBQrcVZ640lDQSLYh5puNBL9wKo5ZjjMrMjKtPJg5ULpmFGzxO5
+	6rSo0MVvkcAiIU5Cfl9XmgsAXOyCTc3rXeDSQySg94EPY9dJ+xgaQPDlgAMw9reF
+	VIeJPA==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4aejhr3c64-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 04:28:40 +0000 (GMT)
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-7bf5cdef41dso1079384b3a.0
-        for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 20:28:40 -0800 (PST)
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:12:19 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-298535ef0ccso45980705ad.3
+        for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 21:12:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1763353720; x=1763958520; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1763356338; x=1763961138; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iPbU5dYethHvG7uL6GYJ4YK1ysP2x8WQABZrUrkX7Fw=;
-        b=Ugcwq4nlMGB2Nd8sCEnJbie+HJblwgnyjX0H3csveehwspj+98WoEqvAx2Z+EXeZMJ
-         PBRCY3a1HOz4Nsjm7XwcJ1A8/4bsAL4eDNtMoNDPrrUi9TTr8rqFNBGPM9syK1xGbBQH
-         YR0C8IfliwagoswbzjGQuQQFWdRTWR+xsOOVDuzQCXaWGCo5fLCEtGLKO1u2CrNJUKmh
-         xw1Kb1KEgsLaLBemT0ov4TwwUsGFM6q1QL4MX+Vc9nqOEj18xMxDsYzIgYZSVBO9KQrK
-         JYDOGRbk1nyDxv4rCmz9ToKDUR5Aq8ClRhwx7f09VTznYm9AXgKQf3/UpqaVipTaRehm
-         17RA==
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=FWr9n67dO1c7n4hq7B6wcG0DtGSgKlDPwTUOrm2oxug=;
+        b=Q7Olwj+IwnJQ6oheKc/mBNr4vPQtSMNHxBAcqAUEAB8tF6vR09m1du+tzQEr6ghf1K
+         CJD3Wop4AKe3QKEiMEO6608gqtGyIYNdNqXSxMLWJWvMsGLzASsVERwK1CtWmIVu7BqL
+         dfd/Kad26BDtZut+GiMmzHzNzybbUfF4fNPmm/y7NNzrnsEImCmgIkpz7wV0Hf0JAO4y
+         Zixz86dSTxLb9ACdEWvceepCMN27PiRvkkMG8tZaARz3UyAU+PH9RTUB0MjKwIYnQvSF
+         I2gNv4movz1qCAADfpGYe6vNpRUcXKRBDIMaZLGls/4d4UaJ3vJyUpCh7lgar9Oer+yF
+         6WtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763353720; x=1763958520;
+        d=1e100.net; s=20230601; t=1763356338; x=1763961138;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=iPbU5dYethHvG7uL6GYJ4YK1ysP2x8WQABZrUrkX7Fw=;
-        b=QLi3f6IhM48g2Yy5l+rxISkf6KA86xlQLjATbeu/iKoudQYChuBvoGKWWGDiGwUYSO
-         WR+MgA4miTcVRtjmvv5HPVnNgPcnUti+8nDYPj5izZJZJ7jXXbBF+rA9j6MzeAHSff4Z
-         n0inuquyk7FV8ho4G+i7kraHyR3SpvxqAAjdhLimk9iPWCYVv5jBYwJhGyxrv8UARIxH
-         e7Rww5HTjZdolq6vrwUeClO9GOQWdUQlcuaGb8QA8oIywXBU+OCxGpwgfn+DTY+r1wfL
-         HJsYaTQ1JB0rEDT0ndISsVq8mx3IP1xm2aRQzJJdlQzZrE68GfyPe6E/wiD9FKpqQC7r
-         0llg==
-X-Forwarded-Encrypted: i=1; AJvYcCUcAF5Mhg0aaUYBfE/Gi/xzqsakuR64A6AuOR62cW4DPeuFXyZN1h1BTINFiUZKRPjwMElqu9BGHw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyy772FYhkOPhWJK1sp+x+Ds9qIkoozr6N6e+K/wM9xC/5evD7S
-	hFhdUKjNmahPU27K2JuIoRPvwsaRncg3rMZiDn/uJI5HutSzu0Yskxvk0jK3fPtJx+HlMaDlik+
-	CpV9OdeIe5S+8BTsBl0AUNTNSY28a6v8B9QjOztQcKPHzMAWhLXFVUSgS7GUQYg==
-X-Gm-Gg: ASbGncs6UdebLeI83LL7W6NVFN87R6qAvpcfZ2ahE12E2nF+hXd/YQHWbv5kfXq9uVp
-	eciQ68XNzM3YOzEuXDIGWyGDoNSaQ9PVgEujUfmE1BleSR6+mLEoYp0AWiNGejmSiDSotw9wBib
-	423qn+w48joEJzA9evNKALj36RvGbnuNBr8mmDwoTxSDa8vu0au0xuFfQoaQH/R97eLI9EXW0yD
-	4amstPPVH0utJKa6w0LVRwcdI36s/4PWRggoVnMdbSSkjNIL86wFHfzZeimAQ/+d0BLlKubA901
-	0kZUx0jUMgwwJFI9WHv12wmBGMrtdlyXARFjfCdMzfzY+ZpiIBblnFoLWoXN5WQVjD+K1LbBpa+
-	kB5nmiEOujIT2+cSMHvTpTeFBOCDwpNg=
-X-Received: by 2002:a05:6a20:7352:b0:347:6c59:c728 with SMTP id adf61e73a8af0-35b9fa8a393mr13027914637.8.1763353719956;
-        Sun, 16 Nov 2025 20:28:39 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFAGXsBySUpGdiPlGNLuHMNHzPUJCG2unKjgBTsUsQrrMo80amGj8Exnb+4i4hydiJ50+pzJA==
-X-Received: by 2002:a05:6a20:7352:b0:347:6c59:c728 with SMTP id adf61e73a8af0-35b9fa8a393mr13027878637.8.1763353719327;
-        Sun, 16 Nov 2025 20:28:39 -0800 (PST)
-Received: from [10.218.35.45] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b9250cd969sm11578890b3a.23.2025.11.16.20.28.35
+        bh=FWr9n67dO1c7n4hq7B6wcG0DtGSgKlDPwTUOrm2oxug=;
+        b=eu35ORnWLQIFtqXEjvuTjTn4Jlddlr+nUnF45MjJFJ/iYcHmoW1qh3da5vizEgJNJM
+         BiBiuyr2YpawMiXZh5Del94dfyTd/PSCqtPg3f78g+E23M9J1lhJWDsUXbK4L9maFbmC
+         8H0y/mJC3H3EeGYUjUP8vARSbWQt8q1U/7mdupHw0Vv66zZeBF+9aPePTBAL59Ce2iqU
+         0YY0SwuxaHhzXdP7FaqmLNSAYJj4/kTSvtaWSDIG36ODG9fIUqrYDY2cCTashbXQp8ZK
+         JQNcQlnSfuQSnA7pHvyBs/06gnTRwkCdQ90fLmjX7ukmceue0lZhVYe8knKnKnZeIy1+
+         WH2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXFQvNdYZ5Mc6gkqIr7PeZWjX6sX6S73UFzlyIhJWpYle/66SRljaJD5LzOyUBsuArU2PbZkPhh9w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyORd59Lq5XX8rx+yqiQN2jOo5iZoEUW5Kc3NwMdTc6YqaZLC+u
+	+1t/cwWyClAGbiOwtBCiOYhOiZVczYAa84SJkqaN0aW9VMIZOszkOYLya+SlqZ/PgLhDgUo+NeS
+	0+FS0FZ9aOtsNPRJcFl8PpsDTPd84+bR9/P3n0tkiDqQy0pMH4hvdb81t7V5BLw==
+X-Gm-Gg: ASbGncsw8XK3csWB4NmkiMoMvfk9+HSuXTkYbeHXMIejTVXNpTrMxq0puclyRefIxnK
+	Olffj13X601/bfnx9OfZ56WDsbT7zPs/DszZ5LvsC6moBAdZSZnbtU+HV0sl0F3ymmyDjY6v6Jd
+	dzqnY7oH4Srx+tCj3yp+V48DiPbHUAdHveS57F/vX7ikOccYvLCUlJvkzRAY5X6dEu1IwhknqaH
+	AgQzr9lLuSwaDOyJcouYCwp0JdQB/ARvkYvzzdkfWkDTVYMm7qnCr5YbcmGEF0wbhcysdsFIMC0
+	sGkM41yCrdEEtz3AUrR4HJAK6hjdhfYEVb2VktK52AnrWdLdRGiXyRb0l+AspZTaUTZ70kKy3gH
+	ysKg+DZbBLaNIQU10TuP7d8dkOdQXvMxRqhQwvGqdAok/PrPjiQPJSA6YO3eN//uJA623
+X-Received: by 2002:a17:902:e546:b0:295:9b3a:16b6 with SMTP id d9443c01a7336-2986a752896mr142438585ad.49.1763356338217;
+        Sun, 16 Nov 2025 21:12:18 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFkAlkBUSo3LAwVcndFhKY2cG2oUKDb7mcn6f+LmxOgD+wNzYVQ7C4MBdXdViSscfftKCbAVA==
+X-Received: by 2002:a17:902:e546:b0:295:9b3a:16b6 with SMTP id d9443c01a7336-2986a752896mr142438315ad.49.1763356337715;
+        Sun, 16 Nov 2025 21:12:17 -0800 (PST)
+Received: from [10.133.33.145] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2b11b4sm124284545ad.73.2025.11.16.21.12.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Nov 2025 20:28:39 -0800 (PST)
-Message-ID: <4b04531b-64f9-4e42-b43b-bfcfa251b665@oss.qualcomm.com>
-Date: Mon, 17 Nov 2025 09:58:33 +0530
+        Sun, 16 Nov 2025 21:12:17 -0800 (PST)
+Message-ID: <faa9d74d-63d3-4569-ab36-5e0ee0241794@oss.qualcomm.com>
+Date: Mon, 17 Nov 2025 13:12:12 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -104,171 +104,78 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] PM: sleep: wakeirq: Add support for custom IRQ
- flags in dedicated wake IRQ setup
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Danilo Krummrich <dakr@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski
- <brgl@bgdev.pl>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-gpio@vger.kernel.org, quic_vbadigan@quicinc.com,
-        quic_mrana@quicinc.com, sherry.sun@nxp.com
-References: <20251107-wakeirq_support-v5-0-464e17f2c20c@oss.qualcomm.com>
- <20251107-wakeirq_support-v5-1-464e17f2c20c@oss.qualcomm.com>
- <CAJZ5v0jF2DG8Dki8+vVbOR20Z-=5=1XW2AjU05fzQPDJfzhLzA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] power: supply: qcom_battmgr: improve charge control
+ threshold handling
+To: Val Packett <val@packett.cool>, Sebastian Reichel <sre@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20251012233333.19144-2-val@packett.cool>
 Content-Language: en-US
-From: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
-In-Reply-To: <CAJZ5v0jF2DG8Dki8+vVbOR20Z-=5=1XW2AjU05fzQPDJfzhLzA@mail.gmail.com>
+From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+In-Reply-To: <20251012233333.19144-2-val@packett.cool>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=LqmfC3dc c=1 sm=1 tr=0 ts=691aa478 cx=c_pps
- a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE3MDA0MiBTYWx0ZWRfXx+BMnSWynK8K
+ DbGKUpBrHX9pkHXAkGcdSXJYUq6PusCDVsTPdcZab1LlI7IyZF6CtGE/HVuT7ALdIdFOSsoM/z8
+ sJaHFMeGCPcEMp8LPlK2FTvgXIgsFcssp9VmvF1MBqBeMnMo1SBAuzjBcFgDApq6i7k3ZgccnUa
+ 3FAEvoa5Lc7/RntowVEeZCCaFziFdYJ9YwGB/OePjsl9Hl/2QO0LSo8VlrOTrALX92tO+eXV+rd
+ ycA7sGDiUiD/4Doi7vbsKv6xUDl2/EOJ+yvBF8OJdfL3j06deXOi0F2tb9NFthqJZ/xdOVQ9V3v
+ FpDJKH0L/1yVXjQoaNGdNCgpFMm3OhCwpHOF6Ipl0l4FrEFHtXEP1GBk5HU9Kx8Z4H5vqvlxECS
+ B8L1GL3FFh7DYDt9eDfZz/RYew+iFQ==
+X-Proofpoint-GUID: rAO37c_mINaTr5xhvF2eSCEbVgiv11xP
+X-Authority-Analysis: v=2.4 cv=dLCrWeZb c=1 sm=1 tr=0 ts=691aaeb3 cx=c_pps
+ a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
  a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=7B57G2-S2px21d87HYoA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=zc0IvFSfCIW2DFIPzwfm:22
-X-Proofpoint-ORIG-GUID: 2VNay-oGrT-RMZDhY1y2SX6wsdSqtFWk
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE3MDAzNSBTYWx0ZWRfX8bEPZUBTS4HA
- eCX3JonCC0o2KPZ25i5yIIMOTFhqzjq0kGmHx9IUW6XzT+yh8maMwjIbtpq92vNa5BIGhaPOn4S
- sLT6aJKn4MWIXiSIAsNUIiFgHL49eqKTcV0ba188XQtOZSq6z9cmSIK+f0FG0DZMQcxxJIVdgSY
- u1d6VQpO8XkQct5mZBmiltsXCrlWcwrkScDHZizX3EXfQmYxAoJuyuSDylJTAXi/NJId/uOY9UJ
- bwL/IRTGZumFbExSLcTK8g/HIZ3Y8D2qdaRjQV0AdrpM4H8LI4GMebTHCQNfv+2/7NvaCRqAyNU
- cz+PnORjyyXMZylt06vC+Bywz6XJr+TzoVyWuJYyXXhIwaYgJSE3Wyk4SS+1DmdAwaxBxUKPGHX
- zzOdGfPNKOjwSqpr1MgaK2pLAST1jQ==
-X-Proofpoint-GUID: 2VNay-oGrT-RMZDhY1y2SX6wsdSqtFWk
+ a=VkNPw1HP01LnGYTKEx00:22 a=e5mUnYsNAAAA:8 a=VwQbUJbxAAAA:8
+ a=-rvc63fW53tOKHq7dmUA:9 a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22
+ a=Vxmtnl_E_bksehYqCbjh:22
+X-Proofpoint-ORIG-GUID: rAO37c_mINaTr5xhvF2eSCEbVgiv11xP
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-11-17_02,2025-11-13_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 phishscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- impostorscore=0 clxscore=1015 adultscore=0 bulkscore=0 lowpriorityscore=0
+ bulkscore=0 priorityscore=1501 phishscore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1011 spamscore=0 impostorscore=0 malwarescore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511170035
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511170042
 
 
-
-On 11/14/2025 10:20 PM, Rafael J. Wysocki wrote:
-> On Fri, Nov 7, 2025 at 10:22 AM Krishna Chaitanya Chundru
-> <krishna.chundru@oss.qualcomm.com> wrote:
->> Some devices require more flexibility when configuring their dedicated
->> wake-up interrupts, such as support for IRQF_SHARED or other IRQ flags.
->> This is particularly useful in PCIe systems where multiple endpoints
->> (e.g., Wi-Fi and Bluetooth controllers) share a common WAKE# signal
->> line which requests platform to re-establish power and reference clocks
->> to the components. In such cases, drivers can use this API with IRQF_SHARED
->> to register a shared wake IRQ handler.
->>
->> Update the internal helper __dev_pm_set_dedicated_wake_irq() to accept an
->> irq_flags argument. Modify the existing dev_pm_set_dedicated_wake_irq()
->> and dev_pm_set_dedicated_wake_irq_reverse() to preserve current behavior
->> by passing default flags (IRQF_ONESHOT | IRQF_NO_AUTOEN).
->>
->> Introduce a new API, dev_pm_set_dedicated_wake_irq_flags(), to allow
->> callers to specify custom IRQ flags. If IRQF_SHARED is used, remove
->> IRQF_NO_AUTOEN and disable the IRQ after setup to prevent spurious wakeups.
->>
->> Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
->> ---
->>   drivers/base/power/wakeirq.c | 43 ++++++++++++++++++++++++++++++++++++++-----
->>   include/linux/pm_wakeirq.h   |  6 ++++++
->>   2 files changed, 44 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
->> index 8aa28c08b2891f3af490175362cc1a759069bd50..655c28d5fc6850f50fc2ed74c5fbc066a21ae7b3 100644
->> --- a/drivers/base/power/wakeirq.c
->> +++ b/drivers/base/power/wakeirq.c
->> @@ -168,7 +168,8 @@ static irqreturn_t handle_threaded_wake_irq(int irq, void *_wirq)
->>          return IRQ_HANDLED;
->>   }
->>
->> -static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned int flag)
->> +static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned int flag,
->> +                                          unsigned int irq_flags)
->>   {
->>          struct wake_irq *wirq;
->>          int err;
->> @@ -197,8 +198,7 @@ static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned
->>           * so we use a threaded irq.
->>           */
->>          err = request_threaded_irq(irq, NULL, handle_threaded_wake_irq,
->> -                                  IRQF_ONESHOT | IRQF_NO_AUTOEN,
->> -                                  wirq->name, wirq);
->> +                                  irq_flags, wirq->name, wirq);
-> It looks like IRQF_ONESHOT will always be there in the flags, so maybe do
+On 10/13/2025 7:32 AM, Val Packett wrote:
+> Currently, upowerd is unable to turn off the battery preservation mode[1]
+> on Qualcomm laptops, because it does that by setting the start threshold to
+> zero and the driver returns an error:
 >
-> +                                  IRQF_ONESHOT | irq_flags, wirq->name, wirq);
+> pmic_glink.power-supply.0: charge control start threshold exceed range: [50 - 95]
 >
-> here?
+> Kernel documentation says the end threshold must be clamped[2] but does
+> not say anything about the start threshold.
 >
->>          if (err)
->>                  goto err_free_name;
->>
->> @@ -234,7 +234,7 @@ static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned
->>    */
->>   int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq)
->>   {
->> -       return __dev_pm_set_dedicated_wake_irq(dev, irq, 0);
->> +       return __dev_pm_set_dedicated_wake_irq(dev, irq, 0, IRQF_ONESHOT | IRQF_NO_AUTOEN);
->>   }
->>   EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq);
->>
->> @@ -255,10 +255,43 @@ EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq);
->>    */
->>   int dev_pm_set_dedicated_wake_irq_reverse(struct device *dev, int irq)
->>   {
->> -       return __dev_pm_set_dedicated_wake_irq(dev, irq, WAKE_IRQ_DEDICATED_REVERSE);
->> +       return __dev_pm_set_dedicated_wake_irq(dev, irq, WAKE_IRQ_DEDICATED_REVERSE,
->> +                                              IRQF_ONESHOT | IRQF_NO_AUTOEN);
->>   }
->>   EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq_reverse);
->>
->> +/**
->> + * dev_pm_set_dedicated_wake_irq_flags - Request a dedicated wake-up interrupt
->> + *                                       with custom flags
->> + * @dev: Device entry
->> + * @irq: Device wake-up interrupt
->> + * @flags: IRQ flags (e.g., IRQF_SHARED)
->> + *
->> + * This API sets up a threaded interrupt handler for a device that has
->> + * a dedicated wake-up interrupt in addition to the device IO interrupt,
->> + * allowing the caller to specify custom IRQ flags such as IRQF_SHARED.
->> + *
->> + * Returns 0 on success or a negative error code on failure.
->> + */
->> +int dev_pm_set_dedicated_wake_irq_flags(struct device *dev, int irq, unsigned long flags)
->> +{
->> +       struct wake_irq *wirq;
->> +       int ret;
->> +
->> +       flags |= IRQF_ONESHOT;
->> +       if (!(flags & IRQF_SHARED))
->> +               flags |= IRQF_NO_AUTOEN;
->> +
->> +       ret =  __dev_pm_set_dedicated_wake_irq(dev, irq, 0, flags);
->> +       if (!ret && (flags & IRQF_SHARED)) {
->> +               wirq = dev->power.wakeirq;
->> +               disable_irq_nosync(wirq->irq);
->> +       }
->> +
->> +       return ret;
->> +}
->> +EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq_flags);
-> Instead of this, I'd introduce
+> In this proposal I've special-cased start==0 to actually disable the
+> functionality via the enable bit, and otherwise made both start and
+> end thresholds be clamped to the acceptable range. Hopefully that's
+> fine?
+It is fine to clamping the threshold to the acceptable range. Thank you 
+for making the changes.
+> Or should the [1 - 49] range for start actually be rejected?
+The minimum charging start threshold was set to 50 to improve user 
+experience. If the threshold is too low and the system keeps drawing 
+power from the battery frequently due to a large system load and a weak 
+charger, the laptop will only begin charging when the battery level 
+falls below that threshold. If the user disconnects the charger at that 
+time, then the device would be only having a battery below 50%. Setting 
+the threshold at 50 ensures the battery always stays above 50%.
+> [1]: https://gitlab.freedesktop.org/upower/upower/-/issues/327
+> [2]: https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-power
 >
-> int dev_pm_set_dedicated_shared_wake_irq(struct device *dev, int irq,
-> unsigned long additional_flags)
+> Thanks,
+> ~val
 >
-> that would pass IRQF_SHARED combined with additional_flags to
-> __dev_pm_set_dedicated_wake_irq() to avoid having two different helper
-> functions that can be used for the same purpose.
+> Val Packett (2):
+>    power: supply: qcom_battmgr: clamp charge control thresholds
+>    power: supply: qcom_battmgr: support disabling charge control
 >
-> I think that it would be sufficient for your use case.
-Ack.
-
-- Krishna Chaitanya.
-
-
+>   drivers/power/supply/qcom_battmgr.c | 26 ++++++++++----------------
+>   1 file changed, 10 insertions(+), 16 deletions(-)
+>
 
