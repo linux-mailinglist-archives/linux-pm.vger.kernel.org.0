@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-38112-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38113-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2B57C63168
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 10:15:26 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09775C63250
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 10:23:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4306E3A97B0
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 09:14:38 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BA46E34B6B1
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 09:18:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CAF4313264;
-	Mon, 17 Nov 2025 09:14:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39AC324B2A;
+	Mon, 17 Nov 2025 09:18:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3E8227E060;
-	Mon, 17 Nov 2025 09:14:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCC131A07B;
+	Mon, 17 Nov 2025 09:18:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763370875; cv=none; b=JXAgF3oxBYUgam9EJJahpKktaPa+awa657u7HN3ZNXqiSRtYvcHuTs8/LtyJtHv1dEp6APH4Wg4fq77/p7iFMjgdzDhXUOwuZLtFfxVn5Ot3QtsP8Rj5NP5l2tgkGBYDwd26GgGTuF0OlB8rkTfZ/86EhI0E8u8EVwBXInqydns=
+	t=1763371125; cv=none; b=rguSwjItFqGlD4q8oQCcrWCt/djmnLpOMnBV/NsFI3Qcnv5SdtAQ2BTufXxPUNU7HbCgOqopuO91GWr9e+NoseBohjcIrjvIX863N/tPK5wRmmx2yrf4QBp9VSEr70Z9zqjVa/jSyVF8/7Rz+3t/7KOiI2Urfz+AUduQ5QcMr9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763370875; c=relaxed/simple;
-	bh=GPqvZg+qkTe/2G6tOziGFBWa9p+NefU3MgtEuEV+JHg=;
+	s=arc-20240116; t=1763371125; c=relaxed/simple;
+	bh=tOhBaqusApoCmBoq4Ahas/AFuv/QNj4TQZOaZxpcIgs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FIXPZDN1DufRktSmzTt+yB+hfg9/o20fJABFnbNJWd65tG0pA0VxrOg7ehZ3iJ2tRJBFPXLyJDkYGWCBEFTObKaI5m21va7+e/M1aHRmoQoAvGc5k6mphgo30N0JYdZPHsdLDLvWSwwnfwHbYh27SJbLw/YKq37OWNPe0lIyKFg=
+	 In-Reply-To:Content-Type; b=RuoW1ah4cY0n2+gz7WUF2l6yd11+rOaFiyX8KhwlOsTSGpEi+mtMpDHbeW9eYDbmg2vb9DYBfeXLazTUkMNauvzWMmU9IR8i1NjBaOv+xF9w5o++SCKvVbbePbpDStQhMo/JsHg57zV2qnv4aswRQETB+a/6P2PNyo9omG+R+xc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 70C44FEC;
-	Mon, 17 Nov 2025 01:14:25 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 715FCFEC;
+	Mon, 17 Nov 2025 01:18:35 -0800 (PST)
 Received: from [10.57.74.7] (unknown [10.57.74.7])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2A1A33F66E;
-	Mon, 17 Nov 2025 01:14:27 -0800 (PST)
-Message-ID: <341938b2-c8f0-4014-9e51-02521e7c497a@arm.com>
-Date: Mon, 17 Nov 2025 09:14:25 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B68453F66E;
+	Mon, 17 Nov 2025 01:18:38 -0800 (PST)
+Message-ID: <28868c0e-2a46-47ed-9bd7-439056cf94c0@arm.com>
+Date: Mon, 17 Nov 2025 09:18:35 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -113,9 +113,10 @@ On 11/14/25 05:11, Viresh Kumar wrote:
 > 
 > Fine by me. I have added Scheduler maintainers in the loop to see if they have a
 > different view.
-> 
+>
 
-That's gonna break a lot of tooling but AFAICS that in and of itself isn't
-a good enough reason not to do it.
-(Added some CCs)
+And IIUC your proposal is to fold policy_frequency into cpu_frequency but then
+only have one cpu_frequency event per policy emitted?
+I think from a tooling perspective it would be easier to remove cpu_frequency
+entirely, then tools can probe on the presence of policy_frequency / cpu_frequency.
 
