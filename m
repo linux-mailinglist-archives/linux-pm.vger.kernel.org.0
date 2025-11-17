@@ -1,121 +1,202 @@
-Return-Path: <linux-pm+bounces-38114-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38115-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D455AC632CB
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 10:31:15 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17E1AC63715
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 11:11:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B5AB3AB396
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 09:31:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C212C4EAC3B
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 10:07:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2965926ED4F;
-	Mon, 17 Nov 2025 09:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1C4F2D0637;
+	Mon, 17 Nov 2025 10:07:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="ALUf/nVb"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="QFadB+H0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from mail-06.mail-europe.com (mail-06.mail-europe.com [85.9.210.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C59DE26462E;
-	Mon, 17 Nov 2025 09:31:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88BDF2773E5;
+	Mon, 17 Nov 2025 10:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.9.210.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763371873; cv=none; b=Y5LjxfDioWgmrw+Ov2rH74h+kv2glZggRf3OU7mv7+GJ8c8P9zNWgO4CvCmcGiYOjQaRNTOPkR5fWDe2AKSFePEbxd2tq2QbZC1G2m6WGz5J2ha9I3VEkiszbaG7LUkxfJkBRdveuxqGfdTsHotKYvSo7v/XsFPyHf7VsunH4Ug=
+	t=1763374070; cv=none; b=kq4q2R11jNKvHOjBFUATMgK5+V14nJgtgT0nX3rKfuxixHIQNzvU8c8ktNen1Hp7ClLYFEZeuq/a44Dl0G+GzOcc20f6iSAt+cCjji1+iCZHs92ougX59MMGaRzcIxOaN2nuib+qEz4upQykaFZvqizBAOrBodF+uX5Dc6+bkuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763371873; c=relaxed/simple;
-	bh=9QRjyk/cjVzZE8w18YoaMyF20fk/O9vAFKuOFyC2bNs=;
-	h=Message-ID:Subject:From:To:CC:Date:Content-Type:MIME-Version; b=rXTK7acxmW+/6FPLvV5En9N3U81qzzI9HMZBZQpScx2XmE6F1sfLYJK/96Vz1uI4Q4up6C93U2CvmSHMe8YMPMwSKr0WrEubZpOQbgrY8sIK4tFvuYmTsB62kzxmhiopt5IctRPj4gtJVBp/PXAlwy/vR5KClC9D0mMzUakf+OY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=ALUf/nVb; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 24415c4ac39811f0b33aeb1e7f16c2b6-20251117
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:MIME-Version:Content-Type:Date:CC:To:From:Subject:Message-ID; bh=9QRjyk/cjVzZE8w18YoaMyF20fk/O9vAFKuOFyC2bNs=;
-	b=ALUf/nVbClnlwJd00bWlGw87jFoXT0+QmKJ4rS7Uhc29n17qjsyREXeaaSpoI13BsSsvXplAQah08pvhOd+koCth0GwqXbjskSnK+rlc3lWZT/oDcsopAKThK4bs3K93Xh12cSpnbOoN6ZEkLpos8XScWdjcoXHcdCpnRtSDe7s=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:6f32ed18-8e83-4989-8980-c2ea03ac2c04,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:6d008692-7fd3-4c6a-836a-51b0a70fa8fb,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|888|898,TC:-5,Content:0|15|5
-	0,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OS
-	A:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 24415c4ac39811f0b33aeb1e7f16c2b6-20251117
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-	(envelope-from <ya-jou.wu@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 769305134; Mon, 17 Nov 2025 17:31:05 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS09N2.mediatek.inc (172.21.101.94) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26; Mon, 17 Nov 2025 17:31:04 +0800
-Received: from [10.233.130.16] (10.233.130.16) by mtkmbs13n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.1748.26 via Frontend
- Transport; Mon, 17 Nov 2025 17:31:05 +0800
-Message-ID: <70b25dca6f8c2756d78f076f4a7dee7edaaffc33.camel@mediatek.com>
-Subject: [REGRESSION] PM / sleep: Unbalanced suspend/resume on late abort
- causes data abort
-From: Rose Wu <ya-jou.wu@mediatek.com>
-To: <rafael.j.wysocki@intel.com>, <linux-pm@vger.kernel.org>,
-	<regressions@lists.linux.dev>
-CC: <saravanak@google.com>, <len.brown@intel.com>, <pavel@kernel.org>,
-	<linux-kernel@vger.kernel.org>, wsd_upstream <wsd_upstream@mediatek.com>,
-	<linux-mediatek@lists.infradead.org>,
-	=?UTF-8?Q?=E5=A3=AB=E9=A1=8F_=E9=82=B1?= <artis.chiu@mediatek.com>,
-	=?UTF-8?Q?=E9=9D=96=E6=99=BA_=E9=AB=98?= <Johnny-cc.Kao@mediatek.com>
-Date: Mon, 17 Nov 2025 17:31:05 +0800
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1763374070; c=relaxed/simple;
+	bh=/OfxDbM5PhujQxO2Ni7MYKJp5JiCGBKVpMvPz5fETx8=;
+	h=Date:To:From:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=QgyKjabmdFspZjRiNocCk6rA7mJ2jm++wIDqLj+FyoSMxjGLXz3rwOohNuddTuFk4IvdZ57oM7sv/EitU+brgnHWgHBNiFyBzq4RHS0WqZZbvPnAEwbL5LKw9HfixGSAEPxmNNXMz+fmQg15JtwUK7ndRB/S+5z86HWxn/f2jX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=QFadB+H0; arc=none smtp.client-ip=85.9.210.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1763374054; x=1763633254;
+	bh=gm1HcMa14sf0lW/ftyfE3B16t17DV5H4XD9euU4478w=;
+	h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
+	 Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
+	b=QFadB+H0AwTALkpadolrcwXWw1gR+aLZhnzR/YNsZXaGb9v0GZcGhgS7EsW49o5vX
+	 0dv25eUxzQNVope8KL7qpXFXu6uVXU3gziWnA3Yg5RkRUsTQTkGy1Up1Edz7ivhdwE
+	 EHcNnCgMZXkBsS+W/xioj850f8V9dsmijzaTWp1T7ABXUL+gj3zunHrTxfHX6vcgTc
+	 0z1OzZ6UE9GTk5p8jRCifot2Cv98HEymfhztdneNQkOMIRs7SdcUVEeFXdZuba9c+i
+	 gpm3Sl0SnbvqNSH+JGpQviDdydX5Vz6rjfDvI6RZa26piivEBwRj2tt6LTxLy6b8jw
+	 veLU5j0L56zEg==
+Date: Mon, 17 Nov 2025 10:07:28 +0000
+To: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, Viresh Kumar
+	<vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, =?utf-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Asahi Lina <lina+kernel@asahilina.net>
+From: Oliver Mangold <oliver.mangold@pm.me>
+Cc: rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-block@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, linux-security-module@vger.kernel.org, Oliver Mangold <oliver.mangold@pm.me>
+Subject: [PATCH v13 0/4] New trait OwnableRefCounted for ARef<->Owned conversion.
+Message-ID: <20251117-unique-ref-v13-0-b5b243df1250@pm.me>
+Feedback-ID: 31808448:user:proton
+X-Pm-Message-ID: 6a407b36d3d339aba0a481e59f0ac3f5cc525bfe
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-SGkgUmFmYWVsIGFuZCBBbGwsDQoNCkkgYW0gcmVwb3J0aW5nIGEgcmVncmVzc2lvbiBpbnRyb2R1
-Y2VkIGJ5IHRoZSBjb21taXQNCjQ0MzA0NmQxYWQ2NjYwN2YzMjRjNjA0YjlmYmRmMTEyNjZmYThh
-YWQgKFBNOiBzbGVlcDogTWFrZSBzdXNwZW5kIG9mDQpkZXZpY2VzIG1vcmUgYXN5bmNocm9ub3Vz
-KSwgd2hpY2ggY2FuIGxlYWQgdG8gYSBrZXJuZWwgcGFuaWMgKGRhdGENCmFib3J0KSBpZiBhIGxh
-dGUgc3VzcGVuZCBhYm9ydHMuDQpUaGUgY29tbWl0IG1vZGlmaWVzIGxpc3QgaGFuZGxpbmcgZHVy
-aW5nIHN1c3BlbmQuIFdoZW4gYSBkZXZpY2Ugc3VzcGVuZA0KYWJvcnRzIGF0IHRoZSAibGF0ZSIg
-c3RhZ2UsIGBkcG1fc3VzcGVuZGVkX2xpc3RgIGlzIHNwbGljZWQgaW50bw0KYGRwbV9sYXRlX2Vh
-cmx5X2xpc3RgLg0KVGhpcyBjcmVhdGVzIGFuIGltYmFsYW5jZS4gRGV2aWNlcyBvbiB0aGlzIGxp
-c3QgdGhhdCBoYWQgbm90IHlldA0KZXhlY3V0ZWQgYHBtX3J1bnRpbWVfZGlzYWJsZSgpYCBpbiBg
-ZGV2aWNlX3N1c3BlbmRfbGF0ZSgpYCBhcmUgbm93DQppbmNvcnJlY3RseSBzdWJqZWN0ZWQgdG8g
-YHBtX3J1bnRpbWVfZW5hYmxlKClgIGR1cmluZyB0aGUgc3Vic2VxdWVudA0KYGRldmljZV9yZXN1
-bWVfZWFybHkoKWAgc2VxdWVuY2UuDQoNClRoaXMgY2F1c2VzIHR3byBpc3N1ZXM6DQoNCjEuIE51
-bWVyb3VzIGVycm9yIG1lc3NhZ2VzIGluIGRtZXNnOiAiQXR0ZW1wdCB0byBlbmFibGUgcnVudGlt
-ZSBQTSB3aGVuDQppdCBpcyBibG9ja2VkLiINCjIuIEEgY3JpdGljYWwgZmFpbHVyZSBmb3Igc2lt
-cGxlLWJ1cyBkZXZpY2VzOiBXaGVuDQpgc2ltcGxlX3BtX2J1c19ydW50aW1lX3Jlc3VtZSgpYCBp
-cyBjYWxsZWQgZm9yIGEgZGV2aWNlIHdob3NlIGJ1cyBpcw0KYE5VTExgLCB0aGUga2VybmVsIGF0
-dGVtcHRzIHRvIGFjY2VzcyB0aGUgbnVsbCBidXMgc3RydWN0LCB0cmlnZ2VyaW5nIGENCmRhdGEg
-YWJvcnQuDQoNClN0ZXBzIHRvIFJlcHJvZHVjZToNCg0KVGhlIGlzc3VlIGNhbiBiZSByZWxpYWJs
-eSByZXByb2R1Y2VkIGJ5IGZvcmNpbmcgYSBsYXRlIHN1c3BlbmQgdG8NCmFib3J0Lg0KDQoxLiBB
-cHBseSB0aGUgZm9sbG93aW5nIG1vZGlmaWNhdGlvbiB0byB0aGUgYGRldmljZV9zdXNwZW5kX2xh
-dGUoKWANCmZ1bmN0aW9uIHRvIHNpbXVsYXRlIGEgd2FrZXVwIGV2ZW50Og0KLS0tIGEvZHJpdmVy
-cy9iYXNlL3Bvd2VyL21haW4uYw0KKysrIGIvZHJpdmVycy9iYXNlL3Bvd2VyL21haW4uYw0KQEAg
-LTE1NjgsNyArMTU2OCw3IEBAIHN0YXRpYyBpbnQgZGV2aWNlX3N1c3BlbmRfbGF0ZShzdHJ1Y3Qg
-ZGV2aWNlDQoqZGV2LCBwbV9tZXNzYWdlX3Qgc3RhdGUsIGJvb2wgYXN5bg0KIAlpZiAoYXN5bmNf
-ZXJyb3IpDQogCQlnb3RvIENvbXBsZXRlOw0KIA0KLQlpZiAocG1fd2FrZXVwX3BlbmRpbmcoKSkg
-ew0KKwlpZiAoMSkgeyAvKiBGb3JjZSBhYm9ydCBmb3IgdGVzdGluZyAqLw0KIAkJYXN5bmNfZXJy
-b3IgPSAtRUJVU1k7DQogCQlnb3RvIENvbXBsZXRlOw0KIAl9DQoyLiBUcmlnZ2VyIGEgc3lzdGVt
-IHN1c3BlbmQuDQozLiBUaGUgc3lzdGVtIHdpbGwgYXR0ZW1wdCB0byBzdXNwZW5kLCBhYm9ydCBh
-dCB0aGUgbGF0ZSBzdGFnZSwgYW5kDQp0aGVuIHRyaWdnZXIgdGhlIGRhdGEgYWJvcnQgZHVyaW5n
-IHRoZSByZXN1bWUgc2VxdWVuY2UuDQoNCkNhbGwgVHJhY2U6DQoNClVuYWJsZSB0byBoYW5kbGUg
-a2VybmVsIE5VTEwgcG9pbnRlciBkZXJlZmVyZW5jZSBhdCB2aXJ0dWFsIGFkZHJlc3MNCjAwMDAw
-MDAwMDAwMDAwMDgNCnBjIDogWzB4ZmZmZmZmZTM5ODhlODFlNF0gc2ltcGxlX3BtX2J1c19ydW50
-aW1lX3Jlc3VtZSsweDFjLzB4OTANCmxyIDogWzB4ZmZmZmZmZTM5OGE4NDhkMF0gcG1fZ2VuZXJp
-Y19ydW50aW1lX3Jlc3VtZSsweDQwLzB4NTgNCg0KQXMgYSBwb3RlbnRpYWwgZml4LCBJIGFtIHdv
-bmRlcmluZyBpZiBhIGNvbmRpdGlvbmFsIGNoZWNrIGlzIG5lZWRlZCBpbg0KYGRldmljZV9yZXN1
-bWVfZWFybHkoKWAgYmVmb3JlIGludm9raW5nIGBwbV9ydW50aW1lX2VuYWJsZSgpYCBmb3IgYQ0K
-ZGV2aWNlPw0KDQpCZXN0IFJlZ2FyZHMsDQpSb3Nl
+This allows to convert between ARef<T> and Owned<T> by
+implementing the new trait OwnedRefCounted.
+
+This way we will have a shared/unique reference counting scheme
+for types with built-in refcounts in analogy to Arc/UniqueArc.
+
+Signed-off-by: Oliver Mangold <oliver.mangold@pm.me>
+---
+Changes in v13:
+- Rebase onto v6.18-rc1 (Andreas's work).
+- Documentation and style fixes contributed by Andreas
+- Link to v12: https://lore.kernel.org/r/20251001-unique-ref-v12-0-fa5c31f0=
+c0c4@pm.me
+
+Changes in v12:
+-
+- Rebase onto v6.17-rc1 (Andreas's work).
+- moved kernel/types/ownable.rs to kernel/owned.rs
+- Drop OwnableMut, make DerefMut depend on Unpin instead. I understood
+  ML discussion as that being okay, but probably needs further scrunity.
+- Lots of more documentation changes suggested by reviewers.
+- Usage example for Ownable/Owned.
+- Link to v11: https://lore.kernel.org/r/20250618-unique-ref-v11-0-49eadcdc=
+0aa6@pm.me
+
+Changes in v11:
+- Rework of documentation. I tried to honor all requests for changes "in
+  spirit" plus some clearifications and corrections of my own.
+- Dropping `SimpleOwnedRefCounted` by request from Alice, as it creates a
+  potentially problematic blanket implementation (which a derive macro that
+  could be created later would not have).
+- Dropping Miguel's "kbuild: provide `RUSTC_HAS_DO_NOT_RECOMMEND` symbol"
+  patch, as it is not needed anymore after dropping `SimpleOwnedRefCounted`=
+.
+  (I can add it again, if it is considered useful anyway).
+- Link to v10: https://lore.kernel.org/r/20250502-unique-ref-v10-0-25de64c0=
+307f@pm.me
+
+Changes in v10:
+- Moved kernel/ownable.rs to kernel/types/ownable.rs
+- Fixes in documentation / comments as suggested by Andreas Hindborg
+- Added Reviewed-by comment for Andreas Hindborg
+- Fix rustfmt of pid_namespace.rs
+- Link to v9: https://lore.kernel.org/r/20250325-unique-ref-v9-0-e91618c1de=
+26@pm.me
+
+Changes in v9:
+- Rebase onto v6.14-rc7
+- Move Ownable/OwnedRefCounted/Ownable, etc., into separate module
+- Documentation fixes to Ownable/OwnableMut/OwnableRefCounted
+- Add missing SAFETY documentation to ARef example
+- Link to v8: https://lore.kernel.org/r/20250313-unique-ref-v8-0-3082ffc67a=
+31@pm.me
+
+Changes in v8:
+- Fix Co-developed-by and Suggested-by tags as suggested by Miguel and Boqu=
+n
+- Some small documentation fixes in Owned/Ownable patch
+- removing redundant trait constraint on DerefMut for Owned as suggested by=
+ Boqun Feng
+- make SimpleOwnedRefCounted no longer implement RefCounted as suggested by=
+ Boqun Feng
+- documentation for RefCounted as suggested by Boqun Feng
+- Link to v7: https://lore.kernel.org/r/20250310-unique-ref-v7-0-4caddb78aa=
+05@pm.me
+
+Changes in v7:
+- Squash patch to make Owned::from_raw/into_raw public into parent
+- Added Signed-off-by to other people's commits
+- Link to v6: https://lore.kernel.org/r/20250310-unique-ref-v6-0-1ff5355861=
+7e@pm.me
+
+Changes in v6:
+- Changed comments/formatting as suggested by Miguel Ojeda
+- Included and used new config flag RUSTC_HAS_DO_NOT_RECOMMEND,
+  thus no changes to types.rs will be needed when the attribute
+  becomes available.
+- Fixed commit message for Owned patch.
+- Link to v5: https://lore.kernel.org/r/20250307-unique-ref-v5-0-bffeb63327=
+7e@pm.me
+
+Changes in v5:
+- Rebase the whole thing on top of the Ownable/Owned traits by Asahi Lina.
+- Rename AlwaysRefCounted to RefCounted and make AlwaysRefCounted a
+  marker trait instead to allow to obtain an ARef<T> from an &T,
+  which (as Alice pointed out) is unsound when combined with UniqueRef/Owne=
+d.
+- Change the Trait design and naming to implement this feature,
+  UniqueRef/UniqueRefCounted is dropped in favor of Ownable/Owned and
+  OwnableRefCounted is used to provide the functions to convert
+  between Owned and ARef.
+- Link to v4: https://lore.kernel.org/r/20250305-unique-ref-v4-1-a8fdef7b1c=
+2c@pm.me
+
+Changes in v4:
+- Just a minor change in naming by request from Andreas Hindborg,
+  try_shared_to_unique() -> try_from_shared(),
+  unique_to_shared() -> into_shared(),
+  which is more in line with standard Rust naming conventions.
+- Link to v3: https://lore.kernel.org/r/Z8Wuud2UQX6Yukyr@mango
+
+---
+Asahi Lina (1):
+      rust: types: Add Ownable/Owned types
+
+Oliver Mangold (3):
+      rust: `AlwaysRefCounted` is renamed to `RefCounted`.
+      rust: Add missing SAFETY documentation for `ARef` example
+      rust: Add `OwnableRefCounted`
+
+ rust/kernel/auxiliary.rs        |   7 +-
+ rust/kernel/block/mq/request.rs |  15 +-
+ rust/kernel/cred.rs             |  13 +-
+ rust/kernel/device.rs           |  13 +-
+ rust/kernel/device/property.rs  |   7 +-
+ rust/kernel/drm/device.rs       |  10 +-
+ rust/kernel/drm/gem/mod.rs      |  10 +-
+ rust/kernel/fs/file.rs          |  16 +-
+ rust/kernel/lib.rs              |   1 +
+ rust/kernel/mm.rs               |  15 +-
+ rust/kernel/mm/mmput_async.rs   |   9 +-
+ rust/kernel/opp.rs              |  10 +-
+ rust/kernel/owned.rs            | 317 ++++++++++++++++++++++++++++++++++++=
+++++
+ rust/kernel/pci.rs              |  10 +-
+ rust/kernel/pid_namespace.rs    |  12 +-
+ rust/kernel/platform.rs         |   7 +-
+ rust/kernel/sync/aref.rs        |  69 ++++++---
+ rust/kernel/task.rs             |  10 +-
+ rust/kernel/types.rs            |   4 +-
+ 19 files changed, 492 insertions(+), 63 deletions(-)
+---
+base-commit: dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa
+change-id: 20250305-unique-ref-29fcd675f9e9
+
+Best regards,
+--=20
+Oliver Mangold <oliver.mangold@pm.me>
+
 
 
