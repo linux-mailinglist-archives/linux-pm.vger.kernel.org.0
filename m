@@ -1,108 +1,133 @@
-Return-Path: <linux-pm+bounces-38132-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38133-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 250E9C6512F
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 17:17:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56F30C65179
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 17:19:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sto.lore.kernel.org (Postfix) with ESMTPS id B8F1A24166
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 16:17:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 1372C29D2D
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 16:17:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F1342857FA;
-	Mon, 17 Nov 2025 16:15:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E28C42D592F;
+	Mon, 17 Nov 2025 16:16:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B9xYV828"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tyi40qh+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A685C2877C3
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 16:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDACF2D5924
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 16:16:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763396137; cv=none; b=GdI/r4SW/dcx7VTy1gdrpsyHBaRVibjLaM7hmyN4JPlFaIKp7Sh3ooRruw+8e66efglhvRxU/dWl+jGDUfEssvOOVqoNK/slzgF2DLaHrnTpV1Z5UJ1aUATQdK57JxgPwus1NBDQg/gx352pbR6pc7xbfjGTuwDkUDiOMcRObh4=
+	t=1763396170; cv=none; b=rjnf/C7HpHjxWanhXMEB06nfPoULtcC3csekTyN1eTveGblc/3Z0pfCMo7r9edFCP+TeADpJWW4vQL8oAH/uq1PX2p/RyKG13fyknGILAzrWtgszZ84P/K/oUrqZnmKcqCM9706pVmtVlcc6xrtRN0/KtLVh7XMFtsjaRrxIU2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763396137; c=relaxed/simple;
-	bh=Ix17wIzCTW7Y78cTkvhe8KwyiOkoAGc1A2A0irlsGlI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=ILPND423X0zpJ9Wl3FD4JJijTCIAp/guUDJye5q8YfMM2QdUhbJCoxr6ZkFFj/YBGUWGTiTGZF4xIGbTwN0aHN9Y0lvz7sNmRLQmMFnEYb2h2m+LOlG1oML1gE/ynLf4iC857B9ngtSXjOrTg3CxQs7eul7z/ALXUqA45V+64z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B9xYV828; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763396135; x=1794932135;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Ix17wIzCTW7Y78cTkvhe8KwyiOkoAGc1A2A0irlsGlI=;
-  b=B9xYV828XUtHclaMuKxjlNhT5i1YjE5X/kF/GBqwpEZbS6WGyEYP9SAI
-   7HArlvT0JJ9ITyEIm8tbKM//+KDDPLQUIQda7RWewLze45FuldNkPfEL2
-   ApKqghaJdVl6iu9x9fos0/9r1EXAQ5ynXi+yyJ3wZpDQ3bBeZb/U4ZbEW
-   BHMs6XpcWmCEzg9UM1kZnMiEnvnkv1nbM7VhKwO2+fWXjN+KO/Mk4LOS6
-   5HGDl2lLsOwRE693TsUKWrwuk92+bHH+w4Ez5N0r5ZJkSkwkDN/9gEtQT
-   byP2oHIk3vdxPdi0PDcqnca7Wq5EUOAt3cjzW+DsO0OhsTbMS0ti520Ks
-   Q==;
-X-CSE-ConnectionGUID: gBacOc+tRR+abOfKLhXUUg==
-X-CSE-MsgGUID: PL24KnAnSEWuQDDH2WUNfg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11616"; a="65283426"
-X-IronPort-AV: E=Sophos;i="6.19,312,1754982000"; 
-   d="scan'208";a="65283426"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 08:15:35 -0800
-X-CSE-ConnectionGUID: 8oM4HaKQRsmw53HYM4u65A==
-X-CSE-MsgGUID: xRuenYe7R7u6fwLf3HUIKg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,312,1754982000"; 
-   d="scan'208";a="190286633"
-Received: from baandr0id001.iind.intel.com ([10.66.253.151])
-  by orviesa009.jf.intel.com with ESMTP; 17 Nov 2025 08:15:34 -0800
-From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org,
-	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-Subject: [PATCH] cpufreq: ACPI: Replace udelay() with usleep_range()
-Date: Mon, 17 Nov 2025 21:43:17 +0530
-Message-Id: <20251117161317.2426787-1-kaushlendra.kumar@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1763396170; c=relaxed/simple;
+	bh=UieG9CwZdmYwQ9SDslSKRMC0Pk05rZFyhQjrdQmBiWg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rEJXwKh8x5s4N/2SelOMDjaQX2iFn/06XY1ezwguwQp6WIHUSxAysN6NTCYLEUmoi21+qTa/iwRbfbqekOcgHtFjIACFMbFSR7DuNXkJcyf2F3DUOSkbTevnYwJaUgVVYhxUbZ1xZdJzz7UgCcubHxhFvt1JeOoqlS9zgTdZfbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tyi40qh+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 550AAC2BC86
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 16:16:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763396170;
+	bh=UieG9CwZdmYwQ9SDslSKRMC0Pk05rZFyhQjrdQmBiWg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Tyi40qh+9V/f4KXyAsENfA0C+DzplXCuwHH8d3gnO8HUDq6NJ85dPIqO06WNFeRPk
+	 860eM2P4ZvCkne9jYsitPtlcOSLpDbHrKKG6S/S5Qpy3QKqU9fXpJoGAvmTxvcho1s
+	 Oagv6l8rnJ376N4NIdOgOfyzMjFGuhHl4XzWI2O0SZ3OmgMJhepOp2sQR+CMe9Z3bB
+	 3HEXIpBv+0YB2Fuwwcv91f9XGp+1fW/gDHOS8YsPFIO9cU4oGmt+I4PG3mWl8GpT6S
+	 A3xSw14k66ycbYTip4SRvwmqiD5hN6cf0yhoZUw2jXh6vea18usJxpdpHAR1agIUfz
+	 2ISLcCR3a0Opw==
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-65366485678so1948193eaf.2
+        for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 08:16:10 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWXZa7ZcngybvehZ4HqGreJfpjoVX8cXdGtTw6i67rJbnRX7WasEVh6fTMENxEapUDEzpvIk7GBug==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9HekbYG9qg20QHwKtfMQzBjXzDr3sQGkNMg3KEs+hsZfT/QGJ
+	JqyR5yFq+qDsvFFCtdm4DyslMeQ7LWJOpwu/HddiDXBoGhlYXoTzyOWg3CFbr6lXWwVSQ7yZlUn
+	qDekXhkjGxhJWbY45a7fMxTnv0kh8zB0=
+X-Google-Smtp-Source: AGHT+IGlzDPrzR+Sg1+ecp8Jx0LtBQx0PGsxKj2qzNctCNl1RuWuRCJFjsVW8QuimFHSTAUUR67qNWSNrpJXgyWux98=
+X-Received: by 2002:a05:6808:6714:b0:44f:e801:d6d6 with SMTP id
+ 5614622812f47-450973fb19cmr6750148b6e.6.1763396169541; Mon, 17 Nov 2025
+ 08:16:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <12810244.O9o76ZdvQC@rafael.j.wysocki> <5085160.31r3eYUQgx@rafael.j.wysocki>
+ <8a9482f3-d8f4-4dcf-b7eb-51a2e1bd4d3b@arm.com>
+In-Reply-To: <8a9482f3-d8f4-4dcf-b7eb-51a2e1bd4d3b@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 17 Nov 2025 17:15:55 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iyqW2hC1PJT+XqaSc9i2pvKOTjb+1w+jkCLpJSmA=9Lg@mail.gmail.com>
+X-Gm-Features: AWmQ_bkU60AMCmC86ORU69-JZFJ2GIlcN6uFjCVIb86Uy1lBKhRPIIgTjIxlpqo
+Message-ID: <CAJZ5v0iyqW2hC1PJT+XqaSc9i2pvKOTjb+1w+jkCLpJSmA=9Lg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] cpuidle: governors: teo: Fix tick_intercepts
+ handling in teo_update()
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Aboorva Devarajan <aboorvad@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Replace udelay() with usleep_range() in check_freqs() to allow
-CPU scheduling during frequency verification polling. This
-improves system responsiveness and avoides busy-waiting during
-frequency change verification.
+On Mon, Nov 17, 2025 at 10:06=E2=80=AFAM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 11/16/25 12:34, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > The condition deciding whether or not to increase cpu_data->tick_interc=
+epts
+> > in teo_update() is reverse, so fix it.
+> >
+> > Fixes: d619b5cc6780 ("cpuidle: teo: Simplify counting events used for t=
+ick management")
+> > Cc: All applicable <stable@vger.kernel.org>
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > I'm planning to apply this for 6.19 on top of
+> >
+> > https://lore.kernel.org/linux-pm/6228387.lOV4Wx5bFT@rafael.j.wysocki/
+> >
+> > because that patch (indirectly) depends on commit d619b5cc6780.
+> >
+> > ---
+> >  drivers/cpuidle/governors/teo.c |    2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > --- a/drivers/cpuidle/governors/teo.c
+> > +++ b/drivers/cpuidle/governors/teo.c
+> > @@ -251,7 +251,7 @@ static void teo_update(struct cpuidle_dr
+> >               cpu_data->state_bins[idx_timer].hits +=3D PULSE;
+> >       } else {
+> >               cpu_data->state_bins[idx_duration].intercepts +=3D PULSE;
+> > -             if (TICK_NSEC <=3D measured_ns)
+> > +             if (measured_ns <=3D TICK_NSEC)
+>
+> nit: Why <=3D instead of <?
 
-The 10μs delay is non-critical timing where scheduling
-overhead is acceptable, making usleep_range() more
-appropriate than busy-waiting.
+Because it was <=3D before.
 
-Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
----
- drivers/cpufreq/acpi-cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> I guess it really doesn't matter with measured_ns only being a rough appr=
+oximation
+> with an error in the order of wakeup-latency.
 
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index 083d8369a591..bf511ab675ba 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -395,7 +395,7 @@ static unsigned int check_freqs(struct cpufreq_policy *policy,
- 		cur_freq = extract_freq(policy, get_cur_val(mask, data));
- 		if (cur_freq == freq)
- 			return 1;
--		udelay(10);
-+		usleep_range(10, 20);
- 	}
- 	return 0;
- }
--- 
-2.34.1
+Right and moreover, TICK_NSEC is an upper bound for tick wakeups, they
+occur earlier as a rule.
 
+> Reviewed-by:
+> Christian Loehle <christian.loehle@arm.com>
+>
+> Let me go write some tests for all these edge cases :/
+>
+> IIRC Aboorva's power systems have no idle state deeper than TICK_NSEC, so
+> this might make a big difference here, hence CCed.
+
+Like x86 systems with HZ < 1000 which are the majority nowadays AFAICS.
+
+Thanks!
 
