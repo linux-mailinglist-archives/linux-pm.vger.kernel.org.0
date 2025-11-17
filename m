@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-38121-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38122-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE5B7C6422F
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 13:44:26 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88D01C642BF
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 13:50:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6EFAB4ED697
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 12:40:27 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E1FA136356D
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 12:43:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00CA5317707;
-	Mon, 17 Nov 2025 12:38:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6970333424;
+	Mon, 17 Nov 2025 12:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="lQ05Haa5"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="d49lZmHl"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C4530ACEB;
-	Mon, 17 Nov 2025 12:38:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980AA32ED44;
+	Mon, 17 Nov 2025 12:39:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763383127; cv=none; b=uTnjp29e8zj6+n9u3iSSprJRBoQFkPGeUfMhiymtAIzt6nS9pJ4TC4rbC+frW+o99SumkhJf7ZBKCdfA8tyK7QA5qgsKsXTxpJ072BNkSrY6YyFsI48sRdvz2y1ABB2FBAq6x7y8yOscM2f8TJvLRDRp7gW/L4M+Je70I8DDdpM=
+	t=1763383153; cv=none; b=m0JNh+ZAQp+iTEBwitFaN/pF0aDuOrufXSgaKGGD7AoPUcY/NxD+olRZV1LzgwmnhxTYVHjXw89QlLicesAhQdl+CP1ibyfYhxB7n5Ll6mXCiChjCYmydnDD/9i+hNXwG8KwifGvFKS+fD4y+mNCJNf9i6vvxn2O6sIWU+x07ak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763383127; c=relaxed/simple;
-	bh=n+whlhVXGNmROQDHpFtUuk6MoZNagUCrrAscIOv6pMM=;
+	s=arc-20240116; t=1763383153; c=relaxed/simple;
+	bh=ierKwIIuey+KBX9hw2bltCwqXrLhrQJwTN42mjY84yI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SvlDGeJhZDDq7DYbBRObcHkO5cwft7GiwXCSTIBpEdWlbCnNJaHWpNfYsLKe81gmGWUUY8StnzSNtyjfUw3O4IuGs49a6uW65VVXW9vOnDgiBKlvTW0gkJXg4qkteKAxFXov8Akb/QQE2IBRhyOj63+DvMv2y17hEfp3dMWGMCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=lQ05Haa5; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:Content-Type; b=Wm4El95VKebz5qtasJ+1indsVo8L5RARtRjccn3S2Hcu6kAYn9ONhb8aWx7Az+bhjSMiq01nqNAxIqU6g3f37iIoISKD3IGiN7hgAxXisgv0GufDPMHnvphWYeAX+rg2HBYhKKmd3ISF/i2oR8rKTnlvdAGBFf/GIbBtlQoeGY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=d49lZmHl; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1763383123;
-	bh=n+whlhVXGNmROQDHpFtUuk6MoZNagUCrrAscIOv6pMM=;
+	s=mail; t=1763383149;
+	bh=ierKwIIuey+KBX9hw2bltCwqXrLhrQJwTN42mjY84yI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lQ05Haa58fPVLNVCR1XlSb8ov0bHY6rJxrvBg/wn4n+wcriVuIiExdEWtT2WUG1jl
-	 dg4bug40KDpd6wp0hoFqE7d33SgxVd9GaFIxlcfIeAWmAZ5GWgmhLCVCP15NRDdtdR
-	 Hl1FVirpj8eGOk5TfWm9kvRjK1ihWmEb7c7K+TsMVI0+tKXDHTI6+Zry+cjxiOUAQQ
-	 4dguhNic9duRUhLoUtWVDWeD1uFYFn3ZpQgJSI0kiqvgBm8fhCF75SvDrxhuJNqLQn
-	 TGzvhhNrF/TLH9VkLQbUZjVZ7o5i0HnRA1DgpIHVtLy3GcjJTuxSKbzqxvYfTokLq2
-	 obgvmBaWKvUGQ==
+	b=d49lZmHlRM17eRcwy37ucduJi/6vt5S30qFVQ1rDXMn58KPiAZu+PV3X9mnSE7m2q
+	 zzhhe/mOUDd1XpBzlvkkbT5hUeiKSvNGGuSf2dkb7XNV1pc9i0yPHFjpBsd5lKj8kX
+	 /uWx3veA3PYYRhRw2qtCWLyaqy4HVh5zPYsCw+wi3POyszvaOM2Va32XYS53IOLXuF
+	 ow9K9pRbJCse9FujAdNkqAHLGqUVmrNPUjy16cwDDdj99SN+pcUL+Eeq6QV3q6nbkB
+	 eTvC45gEekK9fC4qDarD8Xs0bF0QBFK5s619StKPVkUVfAbV+al2HXmAgGB+B2z1Oz
+	 twtyJGWTWpuJg==
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id D78FA17E1249;
-	Mon, 17 Nov 2025 13:38:42 +0100 (CET)
-Message-ID: <f63c1702-e847-4c45-bf9a-a4985baff1b7@collabora.com>
-Date: Mon, 17 Nov 2025 13:38:42 +0100
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 5C23917E1249;
+	Mon, 17 Nov 2025 13:39:09 +0100 (CET)
+Message-ID: <2dd6857c-5895-4a53-8ccf-7407e454fd1d@collabora.com>
+Date: Mon, 17 Nov 2025 13:39:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,8 +57,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/13] soc: mediatek: mtk-dvfsrc: Get and Enable DVFSRC
- clock
+Subject: Re: [PATCH 10/13] soc: mediatek: mtk-dvfsrc: Rework bandwidth
+ calculations
 To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
@@ -68,21 +68,41 @@ Cc: kernel@collabora.com, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
 References: <20251114-mt8196-dvfsrc-v1-0-b956d4631468@collabora.com>
- <20251114-mt8196-dvfsrc-v1-9-b956d4631468@collabora.com>
+ <20251114-mt8196-dvfsrc-v1-10-b956d4631468@collabora.com>
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-In-Reply-To: <20251114-mt8196-dvfsrc-v1-9-b956d4631468@collabora.com>
+In-Reply-To: <20251114-mt8196-dvfsrc-v1-10-b956d4631468@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 Il 14/11/25 17:54, Nicolas Frattaroli ha scritto:
-> The DVFSRC has a clock on all platforms.
+> The code, as it is, plays fast and loose with bandwidth units. It also
+> doesn't specify its constraints in the actual maximum hardware value,
+> but as some roundabout thing that then ends up multiplied into the
+> actual hardware value constraint after some indirections. In part, this
+> is due to the use of individual members for storing each limit, instead
+> of making it possible to index them by type.
 > 
-> Get and enable it in the probe function, so that Linux's common clock
-> framework knows we're a user of it.
+> Rework all of this by adding const array members indexed by the
+> bandwidth type enum to the soc_data struct. This array expresses the
+> actual hardware value limitations, not a factor thereof.
+> 
+> Use the clamp function macro to clamp the values between the minimum and
+> maximum constraints after all the calculations, which also means the
+> code doesn't write nonsense to a hardware register when the math is
+> wrong, as it'll constrain after all the calculations.
+> 
+> Pass the type as the actual enum type as well, and not as an int. If
+> there's some type checking that can be extracted from the function
+> signature, then we may as well use it.
+> 
+> Don't needlessly explicitly cast return values to the return type
+> either; this is both unnecessary and makes it harder to spot type safety
+> issues.
 > 
 > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 
 
