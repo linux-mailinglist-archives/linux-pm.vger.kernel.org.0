@@ -1,194 +1,274 @@
-Return-Path: <linux-pm+bounces-38101-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38102-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66366C62389
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 04:11:58 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9456BC6250A
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 05:28:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D7DC64E726E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 03:10:29 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 60A7C21592
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 04:28:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E0C4270542;
-	Mon, 17 Nov 2025 03:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671C7314D06;
+	Mon, 17 Nov 2025 04:28:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kVAyj0f2"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MkTlyOWx";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Ugcwq4nl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08BB22765EA
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 03:10:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DCC63115B1
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 04:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763349025; cv=none; b=nUwYpXyjt8vBAaQY8Lj1BzWJgNi62q/tF/FuhVQFFCgzTm2qKo/hopqzv32+RYrXbZQR88iK93Aq211W3WrHed1OG4Lruv0yF813a1Sb0hb38OJcbb9+2Liqa9FVFzYdWgzKLCAFDv3weg3MEM5xVCChH0ZVf1B6EDaYFoYa5IQ=
+	t=1763353723; cv=none; b=pL/slyZBAx3Aqu79cLgYC/cvWDgLWV3TMRRhYUdpclbE1EDv5+c62XTB2G/W91q95FcTrtRWMKCINDm/n9py6T0rwOTY0Muwss4zQhudarBkCR58tR6O+rlMWET1JZUlU0/fiYbBXbjidCcEJz28ZMfkgMT0JJsNj4Sr25OJs4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763349025; c=relaxed/simple;
-	bh=KwkWTHqIdBLfSjywwKS8mZViqAho/uKguXMaQfCPYEo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rmiWSavNFBh1xTgZIahtdEYBMnWLEdVlIyg1ciuaiOia6wAllsHuL5dl4EAmg5NFw7vP/u4DPyfE7scm4JFwFwKyx8EGtQSM1+JsozUWTxhBtmga0GzRO8AqLkI+rhqX0Id4Oiz5HBqY66RhTgxxJzFnZg91NT7pwUaXXtsEhmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kVAyj0f2; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7aab061e7cbso4159632b3a.1
-        for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 19:10:22 -0800 (PST)
+	s=arc-20240116; t=1763353723; c=relaxed/simple;
+	bh=OeM/OYP4MqcRWc5TtekQphX8zrTpv2dN89hcSU7XVys=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aA017rxk5c0VV2RkKOaxsk0KqBQOVcjSgrtghGTUqTuFryE2Hq/htqsKrUMhns+YQhKxDP7BgSkaGpI3Gby/plUdlHx4VzmLA3E7V+mwDhO09ymrytL6avJliAIWaICKx50MWB6k+1d7b6qGtLBlPCGu+ZJsxvLWt1sSgacRis8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MkTlyOWx; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Ugcwq4nl; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AGH02Uu1269038
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 04:28:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	iPbU5dYethHvG7uL6GYJ4YK1ysP2x8WQABZrUrkX7Fw=; b=MkTlyOWx9N+fSCna
+	1wA4mdakAyXuGEaL8+I1JqRqQeirBkbJ5puoEGk0YwVblg+IeJE/uu/HuyPSG7Q5
+	fdA8eLwH/bgjcjGAZKvF1p3MwOxQHKQTY2C2rnPWoR1zYG7dQCX2WKJpaHt3z+rO
+	D5BX/d3ofoFCOh2sb1IB6G8yOrdhpjRrGfdZmwpAGE7TD1ovQdUkplyPZWUUMtVV
+	V0hb0vWMtMfdsWjyRWpBrSuePxQUHk674Zkt/mI3AoeZqvVaMNSj/Xy9rFw+PX4e
+	c9yD+q/4CH2XJeLMm4KARUApIYaB4gnCr8y/a5vpm4MiV6hPfKfPp9wzVPo7ZGoe
+	ZVM0Kw==
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4aejt5b9xu-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 04:28:40 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-7bf5cdef41dso1079384b3a.0
+        for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 20:28:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763349022; x=1763953822; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7hwVjAxpOZToTGqfUIP8woZ4spcPPvZlQGxtuhtvS7o=;
-        b=kVAyj0f2rOWUn10w6Wa3NWfOmBCVFQrN2yRqsIIpNqRTHtbGAJLnijxskaBTjtLCOD
-         zePRCa9XRCT83jKbbQrPV0VT4qv7BsYZBMJtZsHn1xe21KjAuYSopWOFsjIn4sSULEKw
-         EkYBA5nL0T2zkNYQUwC0CIXUhlfDENK08TBqMDWyfbZVAkGLergPURolHsdxKG5jesC6
-         PF36J0z6Kk3CyMzdCpLUlu3kHtjG+cchHmRGUJZ6KhgHFUE/B8rfYhtlmx/mEVWa5Vvw
-         /Ex7KN30dLNJlT9Kj7Nywpecc7QMuq5SsbvrqQUM2X6Jd+0i2FU+ltZjlTyfZv4rBbBq
-         HfaQ==
+        d=oss.qualcomm.com; s=google; t=1763353720; x=1763958520; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iPbU5dYethHvG7uL6GYJ4YK1ysP2x8WQABZrUrkX7Fw=;
+        b=Ugcwq4nlMGB2Nd8sCEnJbie+HJblwgnyjX0H3csveehwspj+98WoEqvAx2Z+EXeZMJ
+         PBRCY3a1HOz4Nsjm7XwcJ1A8/4bsAL4eDNtMoNDPrrUi9TTr8rqFNBGPM9syK1xGbBQH
+         YR0C8IfliwagoswbzjGQuQQFWdRTWR+xsOOVDuzQCXaWGCo5fLCEtGLKO1u2CrNJUKmh
+         xw1Kb1KEgsLaLBemT0ov4TwwUsGFM6q1QL4MX+Vc9nqOEj18xMxDsYzIgYZSVBO9KQrK
+         JYDOGRbk1nyDxv4rCmz9ToKDUR5Aq8ClRhwx7f09VTznYm9AXgKQf3/UpqaVipTaRehm
+         17RA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763349022; x=1763953822;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7hwVjAxpOZToTGqfUIP8woZ4spcPPvZlQGxtuhtvS7o=;
-        b=OhmDp+L/JPvL2zMf3YAIa5wR05gDM+68otNeQFPQ+rxhPQWGjDNl5xurXCeLlU2KHA
-         IWgKLSTCLhkIm1aTLD7xcdafrQz+QJ1fmEv1yfJVNuLFxQnaF1LhxwG5Wri110RfvFaM
-         1lnWvrEtzqadcCSIQK1Yc1r0w99j/kRXY95jHeX/dbDloAl1t6Pwvq5+v8IvBLNOg7zy
-         dcp7r1SZS//amCnNww4zl6FK4hZZuzRccjwcc/FtiWNR3NfM8oiDslT95YhUQo2B4bF5
-         +WKKqdbC99Hu254Em2CxTjiLOaX6sHlRPPbVysy1UJBbfY3R72YP+GWC/10hk6wDKHIP
-         JHRg==
-X-Forwarded-Encrypted: i=1; AJvYcCWM6laYWjpdBnqXCp/n8J5gGNG6Bj6ikjKRHSKSYLUIBsIGEOe+q7KHnZyPJf1OtjwiczJF93AcSQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3UmEbAsi8rU46ts2+ZstTcSpFKDVSLdJ/VwFbCrkxoX7HqTNr
-	ZzfECDgjTPit3Q/nuc6JP1HmEHOX348ziA/llf1bRg0Av77nGT2FI+T+
-X-Gm-Gg: ASbGncuDgL3MgfY4Vkt6nEElTb7Jcw+KqCTpoVBZfYwBZd4LWFvwrF4qRTfLktobkB9
-	Oj9DlU4f+mTGvfCgXtDyGp+OgyArAqFelhy2FStA6Gm+uMs433JS9GpDy3gqHIOiIxmzrq++9mc
-	2zMiJVMJgp9R+24D3Ny19sQnl2iqhH5tbu49v1GM8Wl/xe/9Jv4oWACDF2QxXPKqxICBjqwFbfv
-	K/bb72ft5S+tniB/Xzukxgl01sPu0iLqSglkYpfry6N8fXMr2SHoGhJCNOLRTLR+O0jZbORMnyj
-	CSSmaXQxiGu4mCVHQ38sW7SwsNZRDqkXJZhpl/RDHGUZyBvksJkeDSVXLyTqerAB4uZ/s8qW+HV
-	Q5AFRxSo7LxB56CwXRIfx8p1M1N+QRRoQqy3VZoRjIJBh7HgtmZcsur0ixyDqutLDR0zVD6hHcb
-	8WWjch1kaMn7jqH6I3BjA=
-X-Google-Smtp-Source: AGHT+IHam6C6QuknGeD3kkf4bhbtS71Whx06JMQo1zqax8fpO/s5JVsWS1eh6JI/8lnaqRirI9cq7Q==
-X-Received: by 2002:a05:6a20:a11f:b0:35d:d477:a7d7 with SMTP id adf61e73a8af0-35dd477ab32mr6249535637.7.1763349022214;
-        Sun, 16 Nov 2025 19:10:22 -0800 (PST)
-Received: from aheev.home ([106.215.169.184])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bc36db22439sm11054860a12.4.2025.11.16.19.10.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Nov 2025 19:10:21 -0800 (PST)
-From: Ally Heev <allyheev@gmail.com>
-Date: Mon, 17 Nov 2025 08:40:12 +0530
-Subject: [PATCH RESEND v4] checkpatch: add uninitialized pointer with
- __free attribute check
+        d=1e100.net; s=20230601; t=1763353720; x=1763958520;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iPbU5dYethHvG7uL6GYJ4YK1ysP2x8WQABZrUrkX7Fw=;
+        b=QLi3f6IhM48g2Yy5l+rxISkf6KA86xlQLjATbeu/iKoudQYChuBvoGKWWGDiGwUYSO
+         WR+MgA4miTcVRtjmvv5HPVnNgPcnUti+8nDYPj5izZJZJ7jXXbBF+rA9j6MzeAHSff4Z
+         n0inuquyk7FV8ho4G+i7kraHyR3SpvxqAAjdhLimk9iPWCYVv5jBYwJhGyxrv8UARIxH
+         e7Rww5HTjZdolq6vrwUeClO9GOQWdUQlcuaGb8QA8oIywXBU+OCxGpwgfn+DTY+r1wfL
+         HJsYaTQ1JB0rEDT0ndISsVq8mx3IP1xm2aRQzJJdlQzZrE68GfyPe6E/wiD9FKpqQC7r
+         0llg==
+X-Forwarded-Encrypted: i=1; AJvYcCUcAF5Mhg0aaUYBfE/Gi/xzqsakuR64A6AuOR62cW4DPeuFXyZN1h1BTINFiUZKRPjwMElqu9BGHw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyy772FYhkOPhWJK1sp+x+Ds9qIkoozr6N6e+K/wM9xC/5evD7S
+	hFhdUKjNmahPU27K2JuIoRPvwsaRncg3rMZiDn/uJI5HutSzu0Yskxvk0jK3fPtJx+HlMaDlik+
+	CpV9OdeIe5S+8BTsBl0AUNTNSY28a6v8B9QjOztQcKPHzMAWhLXFVUSgS7GUQYg==
+X-Gm-Gg: ASbGncs6UdebLeI83LL7W6NVFN87R6qAvpcfZ2ahE12E2nF+hXd/YQHWbv5kfXq9uVp
+	eciQ68XNzM3YOzEuXDIGWyGDoNSaQ9PVgEujUfmE1BleSR6+mLEoYp0AWiNGejmSiDSotw9wBib
+	423qn+w48joEJzA9evNKALj36RvGbnuNBr8mmDwoTxSDa8vu0au0xuFfQoaQH/R97eLI9EXW0yD
+	4amstPPVH0utJKa6w0LVRwcdI36s/4PWRggoVnMdbSSkjNIL86wFHfzZeimAQ/+d0BLlKubA901
+	0kZUx0jUMgwwJFI9WHv12wmBGMrtdlyXARFjfCdMzfzY+ZpiIBblnFoLWoXN5WQVjD+K1LbBpa+
+	kB5nmiEOujIT2+cSMHvTpTeFBOCDwpNg=
+X-Received: by 2002:a05:6a20:7352:b0:347:6c59:c728 with SMTP id adf61e73a8af0-35b9fa8a393mr13027914637.8.1763353719956;
+        Sun, 16 Nov 2025 20:28:39 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFAGXsBySUpGdiPlGNLuHMNHzPUJCG2unKjgBTsUsQrrMo80amGj8Exnb+4i4hydiJ50+pzJA==
+X-Received: by 2002:a05:6a20:7352:b0:347:6c59:c728 with SMTP id adf61e73a8af0-35b9fa8a393mr13027878637.8.1763353719327;
+        Sun, 16 Nov 2025 20:28:39 -0800 (PST)
+Received: from [10.218.35.45] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b9250cd969sm11578890b3a.23.2025.11.16.20.28.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 16 Nov 2025 20:28:39 -0800 (PST)
+Message-ID: <4b04531b-64f9-4e42-b43b-bfcfa251b665@oss.qualcomm.com>
+Date: Mon, 17 Nov 2025 09:58:33 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251117-aheev-checkpatch-uninitialized-free-v4-1-fbee16ffeab9@gmail.com>
-To: Dwaipayan Ray <dwaipayanray1@gmail.com>, 
- Lukas Bulwahn <lukas.bulwahn@gmail.com>, Joe Perches <joe@perches.com>, 
- Jonathan Corbet <corbet@lwn.net>, Andy Whitcroft <apw@canonical.com>
-Cc: workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Dan Carpenter <dan.carpenter@linaro.org>, 
- David Hunter <david.hunter.linux@gmail.com>, 
- Shuah Khan <skhan@linuxfoundation.org>, Viresh Kumar <vireshk@kernel.org>, 
- Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
- linux-pm <linux-pm@vger.kernel.org>, dan.j.williams@intel.com, 
- Geert Uytterhoeven <geert@linux-m68k.org>, Ally Heev <allyheev@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3515; i=allyheev@gmail.com;
- h=from:subject:message-id; bh=KwkWTHqIdBLfSjywwKS8mZViqAho/uKguXMaQfCPYEo=;
- b=owGbwMvMwCU2zXbRFfvr1TKMp9WSGDKlJokd3vXi8bVnnr+YAyQOPRLUn2qfY3fFyjFg8pnfS
- 6+Lng993lHKwiDGxSArpsjCKCrlp7dJakLc4aRvMHNYmUCGMHBxCsBE3NQYGZ6dKFqdFfzt28Y5
- qawOqVG2X2fWmhROC7VzrOC9+v1x7C5GhvbbrqUl1XkSzm41N9Lmv2na+GFFlt1LpfUpAvJ+fGs
- XcgIA
-X-Developer-Key: i=allyheev@gmail.com; a=openpgp;
- fpr=01151A4E2EB21A905EC362F6963DA2D43FD77B1C
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/2] PM: sleep: wakeirq: Add support for custom IRQ
+ flags in dedicated wake IRQ setup
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Danilo Krummrich <dakr@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski
+ <brgl@bgdev.pl>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-gpio@vger.kernel.org, quic_vbadigan@quicinc.com,
+        quic_mrana@quicinc.com, sherry.sun@nxp.com
+References: <20251107-wakeirq_support-v5-0-464e17f2c20c@oss.qualcomm.com>
+ <20251107-wakeirq_support-v5-1-464e17f2c20c@oss.qualcomm.com>
+ <CAJZ5v0jF2DG8Dki8+vVbOR20Z-=5=1XW2AjU05fzQPDJfzhLzA@mail.gmail.com>
+Content-Language: en-US
+From: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+In-Reply-To: <CAJZ5v0jF2DG8Dki8+vVbOR20Z-=5=1XW2AjU05fzQPDJfzhLzA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=LqmfC3dc c=1 sm=1 tr=0 ts=691aa478 cx=c_pps
+ a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=7B57G2-S2px21d87HYoA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-ORIG-GUID: 2VNay-oGrT-RMZDhY1y2SX6wsdSqtFWk
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE3MDAzNSBTYWx0ZWRfX8bEPZUBTS4HA
+ eCX3JonCC0o2KPZ25i5yIIMOTFhqzjq0kGmHx9IUW6XzT+yh8maMwjIbtpq92vNa5BIGhaPOn4S
+ sLT6aJKn4MWIXiSIAsNUIiFgHL49eqKTcV0ba188XQtOZSq6z9cmSIK+f0FG0DZMQcxxJIVdgSY
+ u1d6VQpO8XkQct5mZBmiltsXCrlWcwrkScDHZizX3EXfQmYxAoJuyuSDylJTAXi/NJId/uOY9UJ
+ bwL/IRTGZumFbExSLcTK8g/HIZ3Y8D2qdaRjQV0AdrpM4H8LI4GMebTHCQNfv+2/7NvaCRqAyNU
+ cz+PnORjyyXMZylt06vC+Bywz6XJr+TzoVyWuJYyXXhIwaYgJSE3Wyk4SS+1DmdAwaxBxUKPGHX
+ zzOdGfPNKOjwSqpr1MgaK2pLAST1jQ==
+X-Proofpoint-GUID: 2VNay-oGrT-RMZDhY1y2SX6wsdSqtFWk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-17_02,2025-11-13_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 phishscore=0 spamscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 clxscore=1015 adultscore=0 bulkscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511170035
 
-uninitialized pointers with __free attribute can cause undefined
-behavior as the memory randomly assigned to the pointer is freed
-automatically when the pointer goes out of scope.
-add check in checkpatch to detect such issues.
 
-Suggested-by: Dan Carpenter <dan.carpenter@linaro.org>
-Link: https://lore.kernel.org/all/8a4c0b43-cf63-400d-b33d-d9c447b7e0b9@suswa.mountain/
-Acked-by: Dan Williams <dan.j.williams@intel.com>
-Signed-off-by: Ally Heev <allyheev@gmail.com>
----
-Testing:
-ran checkpatch.pl before and after the change on
-crypto/asymmetric_keys/x509_public_key.c, which has
-both initialized with NULL and uninitialized pointers
----
-Changes in v4:
-- fixed UNINITIALIZED_PTR_WITH_FREE description
-- Link to v3: https://lore.kernel.org/r/20251025-aheev-checkpatch-uninitialized-free-v3-1-a67f72b1c2bd@gmail.com
 
-Changes in v3:
-- remove $FreeAttribute
-- Link to v2: https://lore.kernel.org/r/20251024-aheev-checkpatch-uninitialized-free-v2-0-16c0900e8130@gmail.com
+On 11/14/2025 10:20 PM, Rafael J. Wysocki wrote:
+> On Fri, Nov 7, 2025 at 10:22 AM Krishna Chaitanya Chundru
+> <krishna.chundru@oss.qualcomm.com> wrote:
+>> Some devices require more flexibility when configuring their dedicated
+>> wake-up interrupts, such as support for IRQF_SHARED or other IRQ flags.
+>> This is particularly useful in PCIe systems where multiple endpoints
+>> (e.g., Wi-Fi and Bluetooth controllers) share a common WAKE# signal
+>> line which requests platform to re-establish power and reference clocks
+>> to the components. In such cases, drivers can use this API with IRQF_SHARED
+>> to register a shared wake IRQ handler.
+>>
+>> Update the internal helper __dev_pm_set_dedicated_wake_irq() to accept an
+>> irq_flags argument. Modify the existing dev_pm_set_dedicated_wake_irq()
+>> and dev_pm_set_dedicated_wake_irq_reverse() to preserve current behavior
+>> by passing default flags (IRQF_ONESHOT | IRQF_NO_AUTOEN).
+>>
+>> Introduce a new API, dev_pm_set_dedicated_wake_irq_flags(), to allow
+>> callers to specify custom IRQ flags. If IRQF_SHARED is used, remove
+>> IRQF_NO_AUTOEN and disable the IRQ after setup to prevent spurious wakeups.
+>>
+>> Signed-off-by: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+>> ---
+>>   drivers/base/power/wakeirq.c | 43 ++++++++++++++++++++++++++++++++++++++-----
+>>   include/linux/pm_wakeirq.h   |  6 ++++++
+>>   2 files changed, 44 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
+>> index 8aa28c08b2891f3af490175362cc1a759069bd50..655c28d5fc6850f50fc2ed74c5fbc066a21ae7b3 100644
+>> --- a/drivers/base/power/wakeirq.c
+>> +++ b/drivers/base/power/wakeirq.c
+>> @@ -168,7 +168,8 @@ static irqreturn_t handle_threaded_wake_irq(int irq, void *_wirq)
+>>          return IRQ_HANDLED;
+>>   }
+>>
+>> -static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned int flag)
+>> +static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned int flag,
+>> +                                          unsigned int irq_flags)
+>>   {
+>>          struct wake_irq *wirq;
+>>          int err;
+>> @@ -197,8 +198,7 @@ static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned
+>>           * so we use a threaded irq.
+>>           */
+>>          err = request_threaded_irq(irq, NULL, handle_threaded_wake_irq,
+>> -                                  IRQF_ONESHOT | IRQF_NO_AUTOEN,
+>> -                                  wirq->name, wirq);
+>> +                                  irq_flags, wirq->name, wirq);
+> It looks like IRQF_ONESHOT will always be there in the flags, so maybe do
+>
+> +                                  IRQF_ONESHOT | irq_flags, wirq->name, wirq);
+>
+> here?
+>
+>>          if (err)
+>>                  goto err_free_name;
+>>
+>> @@ -234,7 +234,7 @@ static int __dev_pm_set_dedicated_wake_irq(struct device *dev, int irq, unsigned
+>>    */
+>>   int dev_pm_set_dedicated_wake_irq(struct device *dev, int irq)
+>>   {
+>> -       return __dev_pm_set_dedicated_wake_irq(dev, irq, 0);
+>> +       return __dev_pm_set_dedicated_wake_irq(dev, irq, 0, IRQF_ONESHOT | IRQF_NO_AUTOEN);
+>>   }
+>>   EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq);
+>>
+>> @@ -255,10 +255,43 @@ EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq);
+>>    */
+>>   int dev_pm_set_dedicated_wake_irq_reverse(struct device *dev, int irq)
+>>   {
+>> -       return __dev_pm_set_dedicated_wake_irq(dev, irq, WAKE_IRQ_DEDICATED_REVERSE);
+>> +       return __dev_pm_set_dedicated_wake_irq(dev, irq, WAKE_IRQ_DEDICATED_REVERSE,
+>> +                                              IRQF_ONESHOT | IRQF_NO_AUTOEN);
+>>   }
+>>   EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq_reverse);
+>>
+>> +/**
+>> + * dev_pm_set_dedicated_wake_irq_flags - Request a dedicated wake-up interrupt
+>> + *                                       with custom flags
+>> + * @dev: Device entry
+>> + * @irq: Device wake-up interrupt
+>> + * @flags: IRQ flags (e.g., IRQF_SHARED)
+>> + *
+>> + * This API sets up a threaded interrupt handler for a device that has
+>> + * a dedicated wake-up interrupt in addition to the device IO interrupt,
+>> + * allowing the caller to specify custom IRQ flags such as IRQF_SHARED.
+>> + *
+>> + * Returns 0 on success or a negative error code on failure.
+>> + */
+>> +int dev_pm_set_dedicated_wake_irq_flags(struct device *dev, int irq, unsigned long flags)
+>> +{
+>> +       struct wake_irq *wirq;
+>> +       int ret;
+>> +
+>> +       flags |= IRQF_ONESHOT;
+>> +       if (!(flags & IRQF_SHARED))
+>> +               flags |= IRQF_NO_AUTOEN;
+>> +
+>> +       ret =  __dev_pm_set_dedicated_wake_irq(dev, irq, 0, flags);
+>> +       if (!ret && (flags & IRQF_SHARED)) {
+>> +               wirq = dev->power.wakeirq;
+>> +               disable_irq_nosync(wirq->irq);
+>> +       }
+>> +
+>> +       return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq_flags);
+> Instead of this, I'd introduce
+>
+> int dev_pm_set_dedicated_shared_wake_irq(struct device *dev, int irq,
+> unsigned long additional_flags)
+>
+> that would pass IRQF_SHARED combined with additional_flags to
+> __dev_pm_set_dedicated_wake_irq() to avoid having two different helper
+> functions that can be used for the same purpose.
+>
+> I think that it would be sufficient for your use case.
+Ack.
 
-Changes in v2:
-- change cover letter and title to reflect new changes
-- fix regex to handle multiple declarations in a single line case
-- convert WARN to ERROR for uninitialized pointers
-- add a new WARN for pointers initialized with NULL
-- NOTE: tried handling multiple declarations on a single line by splitting
-        them and matching the parts with regex, but, it turned out to be
-	complex and overkill. Moreover, multi-line declarations pose a threat
-- Link to v1: https://lore.kernel.org/r/20251021-aheev-checkpatch-uninitialized-free-v1-1-18fb01bc6a7a@gmail.com
----
- Documentation/dev-tools/checkpatch.rst | 5 +++++
- scripts/checkpatch.pl                  | 6 ++++++
- 2 files changed, 11 insertions(+)
+- Krishna Chaitanya.
 
-diff --git a/Documentation/dev-tools/checkpatch.rst b/Documentation/dev-tools/checkpatch.rst
-index d5c47e560324fb2399a5b1bc99c891ed1de10535..c61a3892a60c13f7c5ba89e969e39a93a3dcd5bc 100644
---- a/Documentation/dev-tools/checkpatch.rst
-+++ b/Documentation/dev-tools/checkpatch.rst
-@@ -1009,6 +1009,11 @@ Functions and Variables
- 
-       return bar;
- 
-+  **UNINITIALIZED_PTR_WITH_FREE**
-+    Pointers with __free attribute should be initialized. Not doing so
-+    may lead to undefined behavior as the memory assigned (garbage,
-+    in case not initialized) to the pointer is freed automatically
-+    when the pointer goes out of scope.
- 
- Permissions
- -----------
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 92669904eecc7a8d2afd3f2625528e02b6d17cd6..e697d81d71c0b3628f7b59807e8bc40d582621bb 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -7721,6 +7721,12 @@ sub process {
- 				ERROR("MISSING_SENTINEL", "missing sentinel in ID array\n" . "$here\n$stat\n");
- 			}
- 		}
-+
-+# check for uninitialized pointers with __free attribute
-+		while ($line =~ /\*\s*($Ident)\s+__free\s*\(\s*$Ident\s*\)\s*[,;]/g) {
-+			ERROR("UNINITIALIZED_PTR_WITH_FREE",
-+			      "pointer '$1' with __free attribute should be initialized\n" . $herecurr);
-+		}
- 	}
- 
- 	# If we have no input at all, then there is nothing to report on
-
----
-base-commit: 6548d364a3e850326831799d7e3ea2d7bb97ba08
-change-id: 20251021-aheev-checkpatch-uninitialized-free-5c39f75e10a1
-
-Best regards,
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQQBFRpOLrIakF7DYvaWPaLUP9d7HAUCaQ2YPwAKCRCWPaLUP9d7
-HDkPAP9+gFqrD4O5qsYZzxGFwfXPAY7F8TM0lfYy7fLNxA2brAEAwLyLuyN0h7qg
-N7da1PWuOGK8tKeZ9dR4r3gFdlbZMAo=
-=zo4P
------END PGP SIGNATURE-----
--- 
-Ally Heev <allyheev@gmail.com>
 
 
