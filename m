@@ -1,228 +1,217 @@
-Return-Path: <linux-pm+bounces-38105-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38106-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AA3DC6265E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 06:23:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BB48AC626CB
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 06:40:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 627813B1666
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 05:23:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75CB63A56F6
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 05:40:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BF4830E82C;
-	Mon, 17 Nov 2025 05:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57D5D30F522;
+	Mon, 17 Nov 2025 05:40:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="V3Da/Bf4";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="X1U5p7+D"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oOGjgc8K";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="AJjLPwv1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F0B30E0F5
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F532690D5
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763356981; cv=none; b=tRNGHBIvHlVQxY10Q6olBSXNJYa30i1bGQi6fX+cu2XsEs6yp65/MwPkDMGjat9EA53Xbk+LasM66H7fpUnso89PMpLTVs2Wf4pGbWVzHPAfte6ZByNy/jHfOza14vPd32bx6ShL1pjt+umO2+qYlZ3Pd4EyRcie+Lmsf7ldJ7Q=
+	t=1763358042; cv=none; b=e8m4FsDt6eH+FTw1AhBA1N8z/8vGn+AV7RVtvMVIzHAlvR+Li9hKI9gNG8ZO2yGBANd3vJcPxd9hTvEunKY99Yng80NvDGYDs91fGaJqSlN1SFMJ8+4Rxwr/CSu9GJCMFtIF4h23jhPzwXclwi+djCqE+reoxayA2b4p0PkYZzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763356981; c=relaxed/simple;
-	bh=w6wiug95Uep2sy5YF1FeMxWbhb0PjR6EaPR77uu3r9I=;
+	s=arc-20240116; t=1763358042; c=relaxed/simple;
+	bh=5CgktAeVU5b5o5Gv7ZUcWMPYpmWApRwqLma2om/YaYw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QMhRKaYtLvIPSzdlDpRwlW3I29JhW4R9xt13PueVf1UWWGmySnawSiCPqx+YSBLlVVhcTkxDmQfZwwdYipjQsHzbsMa8TSfP0gVTaX/UrC0zblMGzzFTrpsumhxPLA+imWWmONxmndWWU48amdOeZhVJ9PYmixumo4m+ZeK1LlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=V3Da/Bf4; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=X1U5p7+D; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=B32TyM1XFZX8dxhcH5Hl3fi/dFVCUct0g9ARV2PB1zbXP76wWkeh8w4d9FZfGxJZdC1LkC+YsQkxjqCxxZy5/CNA2ZU0fmyCJTfSGYecXNcSUfuwn+aexaOs0u/XpXvTGOVw/1WozH7IH7RzDNhXd4oEvTtyL/yQXp+LjanDGvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oOGjgc8K; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=AJjLPwv1; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AH4nuoa3318434
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:22:59 GMT
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AH4o7Yv2852092
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:40:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Gor2wK9jXbtsJbqjtAgbnKhqnzfjD4B3yGBZu9lQGLo=; b=V3Da/Bf4KpAbk9zE
-	0S16MAr7Hiu+5dz+MNj1x42j8NwoZ5fvGQeGcxJGACT0/jzGXvWyjLeJol+t7Dnb
-	NiZBSKILWDiI5+8fRddONEJHG69L7qXZ9PZk1Ybw8aaKi+VLFvr5KX4zNfJVrXJK
-	MK9PcNBK+MOieQicUvynnnHK6W/sQJo9UQx7uSPBtcvNNCB/yaWKTsOVVl3yGnHL
-	dE07IVN3IR/fOtCADoZhQ1opJ0DY4fExZm9axyfB0WzU8/bVVheQTg5JcMOHkszL
-	rCLnREdgtkM3wXDiMAOFl15E1Kk0rYpFxCEEk/8RrI+CXSK7OpJ02p34GdxHkv9S
-	B/9tWQ==
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4aejm5bef2-1
+	JwGLuFJyAq4A3H7EurGW9xTM5A4YqSMPozkgARyIVrc=; b=oOGjgc8Kq3rXZrJz
+	CHfOvo5ezyaumC6LHqLq6qG53skD305fTxyljllaYLKjd9zUU0mlHDrLI1Jzesmh
+	PTqn7SklfyMxBo0v2NoITpYpS1plQOsFjMBvToMazYei7gn25mT/zXRQX6IQ544x
+	kL01vGc9x+2xLqLrltX078g1TBbZXcDCv5xJPQoPUX+JgfFVKBiiXB4eWQUobhHR
+	IGommN1T4uXSI6JDBBO+O+WjJrW3trd4sdfFyQ3kr+Qj0QlEviHvlnb5EpFmEB6F
+	KcqRmYyNf3FG6G9a4iJT/PNGJV36zbW3zYTzy6hOAhLh7+n/UDEl81qLKjWb94rS
+	a4Yeaw==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4aejh0bf30-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:22:59 +0000 (GMT)
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-7baaf371585so1922996b3a.0
-        for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 21:22:59 -0800 (PST)
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:40:38 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-29809acd049so63518405ad.3
+        for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 21:40:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1763356978; x=1763961778; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=oss.qualcomm.com; s=google; t=1763358038; x=1763962838; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Gor2wK9jXbtsJbqjtAgbnKhqnzfjD4B3yGBZu9lQGLo=;
-        b=X1U5p7+DtqY7RhozpNbF/4NsUPGx4/pm78oKX3LD8b1r/PC61P59fnmOt1DCMHs+DB
-         I7e4M9SP9AHeI/VVKDpe8EyriiCgkX2mrG/yhSqlzccqefL5saTa99zy3NQ6NqF/a1vV
-         GmXYQ4PE/oU8TvAPmqBU7r5loMH7zvt/QMlghEtqUB1ITaNe0qFLEvT6pIjBkTTYAAba
-         9mltIAk7orHUuaGGal+X7PuLxS69Rs85mXKK+rJ8CmD2UCndDPwVqQdquke7C9bVfJyW
-         IAJ4VjsICGDvFRRYt4CJbhApwS8V1kc8UUde+T02AlAZRwqGddZZpIgiX93wqJYSW1t8
-         vjZQ==
+        bh=JwGLuFJyAq4A3H7EurGW9xTM5A4YqSMPozkgARyIVrc=;
+        b=AJjLPwv1/e9LtTpSlupw7gtmaAEcHGTyRj8A+E1CtmgfXMxOqxLyQDaqs72i8USQ3f
+         dp8PDnUGXq7/7iv+3szCBI4rY+r/WrvINN7+cNWpXlfdNa7rclx5GBegNa3xd8jb6yJA
+         irMqQAQ/T5116rZKZvAJgEhhLkd8oEg4TsBhTlVnOgRcF/HuyW2DG8wcX+R2qblqHAUX
+         r49KlHlWYuGH1rj/e4w4ensodSuBjH0eREH+hTSXoZUJUgEcJ1rR2NB9mPjRTUPGUQPH
+         lcfZCRU0SeDW28QB6yKxu5XtY0qp8Bqz7+rpq5cVhLYZfMQGB85oGDHoqfOocoHhp40F
+         dSnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763356978; x=1763961778;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1763358038; x=1763962838;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Gor2wK9jXbtsJbqjtAgbnKhqnzfjD4B3yGBZu9lQGLo=;
-        b=O1PJ/HwD0X9P4HzGXPSGaIbFHbGrU8mCTZUtSfrPmWIrIXeCsIHTs4M3wygbHPooG/
-         Qizf6GCBq0wj3iudrZYEhrT2pMM0Z1hz3bDPBnuqAu/dr8pVrO31QMYHxS4J53fKL3v7
-         pFca3gYkwPkpkKS209KxjJVMOC+K8a5tpvPGPuEz3GMleDkn2ipwa+xaMIavMGYh/nco
-         RRQOvv/C8FP0QmbLy4a9XqrwYIKOoOnbVBt1iLMHyWoCUfOfV4HhZBdfkOCzWThZtzUY
-         p8xJzenkHbcBTCYp+v2N0v8ZhXbxuNEF+OnpGTzISjA7x7WilWFkanp1jt8fV9MLXshw
-         0RAg==
-X-Forwarded-Encrypted: i=1; AJvYcCUOTDkAr4F/KyFoB4aTyO68xa3KeHcLfaGSy14EF21dn7PbdlO1YWBBJl2cGD027f6rqA1rxmHexQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfSORU448+ZZOyLkmTEZvKhhonVRKrgz1EOuz/kvxMRt8Rnj4M
-	fJ1e8cBethJij33TF9XquwC1dvvc6tDdtNvodslrSukgeyTKGwZl1+G9DN+Yf2yQHkLyyk5pYK6
-	RczfpEMiFPn92O7R7+LzHBiucCkKO7JefvmmsASVo2LW6C4o6G8XuG55dCdZ2Fg==
-X-Gm-Gg: ASbGncuPJBu/7vImlzRj+5hSaf6bjdhHvK2GH1ip4RVxUMq5tpC7zBwrINcD5rk/xvn
-	iDWXwhr7nQz15yAY9LQxTXe9vHs1Cq4GQuYLxFEZOvm4vvTG2bedDukeFI8zCKZJX8M39iIZwjE
-	LQLPm58N0ZUIhfJwHBG2mBWt0cG8Z4vw28dco+w2ywfO+P/XgaaVxbMRhasaW00PIENpVAe3yiQ
-	BhXukNGt3iVBUKuJmrNQMDTu77sygXpW7RzcK3EMSDLYq64RQwnz/nfgxUBebhoz07d+dkS/tuI
-	ieudKJbszRfjEz2Ug4TUMW4sKuXHnBO6aWI0JKpHZV9NrkR/2h8DqexpblIE5EoQ6/zFLsXHyaG
-	RyTyi88cuVbYP4krB1kT9CZkJKr0r6Dwo9dh19nc7HzMvXTGpX4ZLqF+G1gedPJmRxcWh
-X-Received: by 2002:a05:6a20:2587:b0:35d:cc9a:8bc1 with SMTP id adf61e73a8af0-35dcc9a8d2fmr4842115637.27.1763356977995;
-        Sun, 16 Nov 2025 21:22:57 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGyqruXMe9cRMlaR2MRqRPfjUA0+sSI3KlT2wMD9cgAUh7FbBipxgghyFbOyvMu+Y0PCnyIcw==
-X-Received: by 2002:a05:6a20:2587:b0:35d:cc9a:8bc1 with SMTP id adf61e73a8af0-35dcc9a8d2fmr4842099637.27.1763356977458;
-        Sun, 16 Nov 2025 21:22:57 -0800 (PST)
-Received: from [10.133.33.145] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b9271505acsm11701649b3a.35.2025.11.16.21.22.55
+        bh=JwGLuFJyAq4A3H7EurGW9xTM5A4YqSMPozkgARyIVrc=;
+        b=KLfqFfWv2SZAF+WPSkXMjQmlJsIahzXXwCW3XMM1vTiRdSgqkITN/wigIu4MHujNgE
+         iJRfGNlIoYFMpuv0fyy51HqxlZvIJoQff4WvDhgVDIIz9YO973z9Wo3ju/cx6uDJjj5l
+         5wpXxNlj2tYnKOUDvLhAkeoniujWC9SiBToigvvlMfkkyN3uAdF5xaSbXWzP1irJ4Hct
+         TOsjcBeoLaKFWsNKkMOgznkQihaVUfJQyCFbIsNY4QgNIUOrnG9Qv8ICSup+sDM15GoH
+         RWHZZQ0ECGaSCtaH2C5Xj7tclXAZYXmg3jp97fYPL46ZZG5rcqeWv/7zVliCbAlJINQ4
+         de2w==
+X-Forwarded-Encrypted: i=1; AJvYcCW5sPZd6Hh6P5TCSjh1Eg+kKlXVRBNggixYXVoLCMF9sZA8TBqXvHYZJGJxESNLcGHWDtyy/BXgLA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvSAKo+Rga6CBDy1xoHTuEqu1bEfvSOyDk0QSe2M6MeNL06nh/
+	A7kxnMYdLrZw69r8/iK8yRP1G0QuQwCLBXxe1BfdwrCKbijYicDqEmX6F+ZwmV72wdTxoH03WkB
+	v9tQDP3FiI6d4PPIIGf793lReW5Peg9Y6QzMf/oeUQMn0+ljvUMHMDNAG9geNh4VAjxlYjA==
+X-Gm-Gg: ASbGncvBbMb7qHVhyjVPv1nateUbErJeD9zCyUJX/Dsq/T0s193Trm8I89lCAkWiLiZ
+	zgzPNTPbhOTmb3Fm0XZYJf8FU/ZDzF5cBMaa27FDLS/6Gk5Zp6VVNCwoCRUkDtRIr4eraL9Mbd+
+	DUKM2zJbMnJxi++Nl32I6NmPWMr8zJV1dixiS+T4kJtw8kz8aUKGe19l/Yv3jf8vjUBUfvKtp1C
+	Uit/MYwooaGvE+7ObqBAbn/CHttnfvSZYsvo8FMhZuFB0ZTuuwu2aSFxzrjMqAuR2+j3Ij5Uez0
+	muF5ff+ZmOlEBOLS+Wm8SHSPe1GBlXXQiNNeq5+amlRT3fROgnO5PHgDNdKo92Zoivj81v4YSEQ
+	2rSt62a8Dse+HXpdPOxG+suCZ9tHxkfKP
+X-Received: by 2002:a17:902:ebcd:b0:294:f70d:5e33 with SMTP id d9443c01a7336-2986a6ba476mr125253415ad.12.1763358038118;
+        Sun, 16 Nov 2025 21:40:38 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEmA6o+kbOYh/BaAqHLrJj6Wk8KzmDvDjZ9KxgpwKs+YO/pyMn5IK4SjYWx/utHO71biwVziQ==
+X-Received: by 2002:a17:902:ebcd:b0:294:f70d:5e33 with SMTP id d9443c01a7336-2986a6ba476mr125253145ad.12.1763358037616;
+        Sun, 16 Nov 2025 21:40:37 -0800 (PST)
+Received: from [10.219.57.23] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c245f8asm125541655ad.37.2025.11.16.21.40.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Nov 2025 21:22:57 -0800 (PST)
-Message-ID: <88535058-f385-4fb0-9b4a-bf6d854f7107@oss.qualcomm.com>
-Date: Mon, 17 Nov 2025 13:22:51 +0800
+        Sun, 16 Nov 2025 21:40:37 -0800 (PST)
+Message-ID: <17217b83-12ba-e3f2-da78-f423275da4ad@oss.qualcomm.com>
+Date: Mon, 17 Nov 2025 11:10:33 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] power: supply: qcom_battmgr: support disabling charge
- control
-To: Val Packett <val@packett.cool>, Sebastian Reichel <sre@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20251012233333.19144-2-val@packett.cool>
- <20251012233333.19144-4-val@packett.cool>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 1/2] Documentation: ABI: Add
+ sysfs-class-reboot-mode-reboot_modes
 Content-Language: en-US
-From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-In-Reply-To: <20251012233333.19144-4-val@packett.cool>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20251116-next-15nov_expose_sysfs-v1-0-3b7880e5b40e@oss.qualcomm.com>
+ <20251116-next-15nov_expose_sysfs-v1-1-3b7880e5b40e@oss.qualcomm.com>
+ <t3hfhlp27numfxurtmtcwrovvlgwdvnujain46kwmi37zehdak@xt3vngtkxpsm>
+From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+In-Reply-To: <t3hfhlp27numfxurtmtcwrovvlgwdvnujain46kwmi37zehdak@xt3vngtkxpsm>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE3MDA0MyBTYWx0ZWRfX8VawI6i7I6xI
- O1n2DtK6OAWhSgk4qe4K2mT8ow/vIacpXz42lbwqS5U61p1p4d08YcZuPvunoHHAbI7eP9tPInW
- 5NR+/skyaZ3+ZRhs5BoA8SRwWALZUOk7k/P4bFHI8yE1XYM/CH3hmOCxaj3Tvtiw1z2pepH7cfs
- zfwTR5Vq5sBHgdKGmfmG9VGmAT1G520co0oDYl51Mi43Ggbo2Aw0PRWZosTxlHXQ9YrI+I0njSi
- SAomBtr9wtxslK6FVLJaDe7iI2X6beNfcWT0dGKAxuut7XXjbeUFawCPkM2ATYp0/+cUaJkDrFh
- skPkCN69UA77pKpRCW7ri6lTjKiS0NUYst2omr3EljrIBmCMgT1oi0MP91M5RH/JVcfvQ6BX/7A
- rNNJJnOeqVb6rQKt58qIxMXj1fh2EQ==
-X-Proofpoint-GUID: xHzq4KGsKtn_4nX571UhHUz8CTt4XC28
-X-Proofpoint-ORIG-GUID: xHzq4KGsKtn_4nX571UhHUz8CTt4XC28
-X-Authority-Analysis: v=2.4 cv=Pb7yRyhd c=1 sm=1 tr=0 ts=691ab133 cx=c_pps
- a=m5Vt/hrsBiPMCU0y4gIsQw==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
+X-Proofpoint-ORIG-GUID: mwfaOqdiWbtbQYGm0eggxjhV0aK91fKy
+X-Authority-Analysis: v=2.4 cv=A8lh/qWG c=1 sm=1 tr=0 ts=691ab556 cx=c_pps
+ a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
  a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=q9oTrLaHPds-TktH9FUA:9 a=QEXdDO2ut3YA:10
- a=IoOABgeZipijB_acs4fv:22
+ a=VkNPw1HP01LnGYTKEx00:22 a=QX4gbG5DAAAA:8 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8
+ a=NpYxkmfexd4ejymn4sUA:9 a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22
+ a=AbAUZ8qAyYyZVLSsDulk:22
+X-Proofpoint-GUID: mwfaOqdiWbtbQYGm0eggxjhV0aK91fKy
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE3MDA0NSBTYWx0ZWRfX7nKumWD2hlZ4
+ xlapkNmVz/K0UsJU3pOxW0/WIOrF9DuHCmDqqoPEz1E/4V/Zr//SSHEiJZdrtZN99JZXp6LLlG0
+ DuN1KbbWMWJjSOL6hXXj/VaWSWmCRLILMU7/cX0jAaps4oQkKIH4MBMaFOxqAnVSi4ICTzjWoQO
+ ksqhF4VRF4lQef//AfNqLpg7xvdAwA2mxNW+5XIgHeFa1JjFK3UJQB1HkWY6ig63ANJv33YeTzZ
+ GLA2U6fh5WiBf0pUKbNQ1Ghtn3ZBFZllQ1gjkeLgR9eDIvISNPb16bl2q3pK5Zn73IEzCw6FT/O
+ hLX3KL/DOowHxu3uZU5s1GcKFUgsXtKq3Vdo/GgQ2JlLAYxV/dewHXDwYIbI4qO+teG3K0m/UbJ
+ Yvk0B+OBY7IiKVVJ7GqlLBd8fV235w==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-11-17_02,2025-11-13_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 adultscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 suspectscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ spamscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0 bulkscore=0
+ adultscore=0 malwarescore=0 priorityscore=1501 impostorscore=0 clxscore=1015
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511170043
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511170045
 
 
-On 10/13/2025 7:32 AM, Val Packett wrote:
-> Existing userspace (in particular, upower) disables charge control by
-> setting the start threshold to 0 and the stop threshold to 100.
->
-> Handle that by actually setting the enable bit to 0 when a start
-> threshold of 0 was requested.
->
-> Fixes: cc3e883a0625 ("power: supply: qcom_battmgr: Add charge control support")
-> Signed-off-by: Val Packett <val@packett.cool>
-> ---
->   drivers/power/supply/qcom_battmgr.c | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-> index c8028606bba0..e6f01e0122e1 100644
-> --- a/drivers/power/supply/qcom_battmgr.c
-> +++ b/drivers/power/supply/qcom_battmgr.c
-> @@ -257,6 +257,7 @@ struct qcom_battmgr_info {
->   	unsigned int capacity_warning;
->   	unsigned int cycle_count;
->   	unsigned int charge_count;
-> +	bool charge_ctrl_enable;
->   	unsigned int charge_ctrl_start;
->   	unsigned int charge_ctrl_end;
->   	char model_number[BATTMGR_STRING_LEN];
-> @@ -659,13 +660,13 @@ static int qcom_battmgr_bat_get_property(struct power_supply *psy,
->   }
->   
->   static int qcom_battmgr_set_charge_control(struct qcom_battmgr *battmgr,
-> -					   u32 target_soc, u32 delta_soc)
-> +					   bool enable, u32 target_soc, u32 delta_soc)
->   {
->   	struct qcom_battmgr_charge_ctrl_request request = {
->   		.hdr.owner = cpu_to_le32(PMIC_GLINK_OWNER_BATTMGR),
->   		.hdr.type = cpu_to_le32(PMIC_GLINK_REQ_RESP),
->   		.hdr.opcode = cpu_to_le32(BATTMGR_CHG_CTRL_LIMIT_EN),
-> -		.enable = cpu_to_le32(1),
-> +		.enable = cpu_to_le32(enable),
->   		.target_soc = cpu_to_le32(target_soc),
->   		.delta_soc = cpu_to_le32(delta_soc),
->   	};
-> @@ -677,6 +678,7 @@ static int qcom_battmgr_set_charge_start_threshold(struct qcom_battmgr *battmgr,
->   {
->   	u32 target_soc, delta_soc;
->   	int ret;
-> +	bool enable = start_soc != 0;
->   
->   	start_soc = clamp(start_soc, CHARGE_CTRL_START_THR_MIN, CHARGE_CTRL_START_THR_MAX);
->   
-> @@ -696,9 +698,10 @@ static int qcom_battmgr_set_charge_start_threshold(struct qcom_battmgr *battmgr,
->   	}
->   
->   	mutex_lock(&battmgr->lock);
-> -	ret = qcom_battmgr_set_charge_control(battmgr, target_soc, delta_soc);
-> +	ret = qcom_battmgr_set_charge_control(battmgr, enable, target_soc, delta_soc);
->   	mutex_unlock(&battmgr->lock);
->   	if (!ret) {
-> +		battmgr->info.charge_ctrl_enable = enable;
->   		battmgr->info.charge_ctrl_start = start_soc;
->   		battmgr->info.charge_ctrl_end = target_soc;
->   	}
-> @@ -710,6 +713,7 @@ static int qcom_battmgr_set_charge_end_threshold(struct qcom_battmgr *battmgr, i
->   {
->   	u32 delta_soc = CHARGE_CTRL_DELTA_SOC;
->   	int ret;
-> +	bool enable = battmgr->info.charge_ctrl_enable;
-Can you initialize "battmgr->info.charge_ctrl_enable" in 
-"qcom_battmgr_charge_control_thresholds_init()" based on the value 
-reading from the nvmem cell? Otherwise, it would have a false value by 
-default and a single write to the end threshold would result disabling 
-the charging control instead.
->   
->   	end_soc = clamp(end_soc, CHARGE_CTRL_END_THR_MIN, CHARGE_CTRL_END_THR_MAX);
->   
-> @@ -717,7 +721,7 @@ static int qcom_battmgr_set_charge_end_threshold(struct qcom_battmgr *battmgr, i
->   		delta_soc = end_soc - battmgr->info.charge_ctrl_start;
->   
->   	mutex_lock(&battmgr->lock);
-> -	ret = qcom_battmgr_set_charge_control(battmgr, end_soc, delta_soc);
-> +	ret = qcom_battmgr_set_charge_control(battmgr, enable, end_soc, delta_soc);
->   	mutex_unlock(&battmgr->lock);
->   	if (!ret) {
->   		battmgr->info.charge_ctrl_start = end_soc - delta_soc;
+
+On 11/16/2025 11:14 PM, Dmitry Baryshkov wrote:
+> On Sun, Nov 16, 2025 at 08:49:47PM +0530, Shivendra Pratap wrote:
+>> Add ABI documentation for /sys/class/reboot-mode/*/reboot_modes, a
+>> read-only sysfs attribute exposing the list of supported reboot-mode
+>> arguments. This file is created by reboot-mode framework and provides a
+>> user-readable interface to query available reboot-mode arguments.
+>>
+>> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+>> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+>> ---
+>>  .../testing/sysfs-class-reboot-mode-reboot_modes   | 39 ++++++++++++++++++++++
+>>  1 file changed, 39 insertions(+)
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-class-reboot-mode-reboot_modes b/Documentation/ABI/testing/sysfs-class-reboot-mode-reboot_modes
+>> new file mode 100644
+>> index 0000000000000000000000000000000000000000..28280ffe9bf962ef9d2136ea5d7c6aef77c4bd34
+>> --- /dev/null
+>> +++ b/Documentation/ABI/testing/sysfs-class-reboot-mode-reboot_modes
+>> @@ -0,0 +1,39 @@
+>> +What:		/sys/class/reboot-mode/<driver>/reboot_modes
+>> +Date:		November 2025
+>> +KernelVersion:	6.18.0-rc5
+>> +Contact:	linux-pm@vger.kernel.org
+>> +		Description:
+>> +		This interface exposes the reboot-mode arguments
+>> +		registered with the reboot-mode framework. It is
+>> +		a read-only interface and provides a space
+>> +		separated list of reboot-mode arguments supported
+>> +		on the current platform.
+>> +		Example:
+>> +		 recovery fastboot bootloader
+>> +
+>> +		The exact sysfs path may vary depending on the
+>> +		name of the driver that registers the arguments.
+>> +		Example:
+>> +		 /sys/class/reboot-mode/nvmem-reboot-mode/reboot_modes
+>> +		 /sys/class/reboot-mode/syscon-reboot-mode/reboot_modes
+>> +		 /sys/class/reboot-mode/qcom-pon/reboot_modes
+> 
+> This part is obvious, isn't it?
+
+yes thats correct. Its just added for completeness of the documentation.
+
+> 
+>> +
+>> +		The supported arguments can be used by userspace
+>> +		to invoke device reset using the reboot() system
+>> +		call, with the "argument" as string to "*arg"
+>> +		parameter along with LINUX_REBOOT_CMD_RESTART2.
+>> +		Example:
+>> +		 reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2,
+>> +		        LINUX_REBOOT_CMD_RESTART2, "bootloader");
+> 
+> So, does one need to write a tool for invoking reboot with the corerct
+> set of args? If we are adding a sysfs interface, wouldn't it be logical
+> to also add another sysfs file, setting the argument?
+
+Some of such utilities are already in use and they pass command as an "*arg"
+to the reboot SYSCALL.
+
+reboot-mode is currently tied to the reboot SYSCALL - "*arg" being processed as
+command. We can open a sysfs for setting the argument - That will be a design
+change for reboot-mode and then we need to also decide that if the command
+being passes will override the sysfs?
+
+thanks,
+Shivendra
 
