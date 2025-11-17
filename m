@@ -1,268 +1,223 @@
-Return-Path: <linux-pm+bounces-38129-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38130-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E2D1C645A9
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 14:29:46 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36E96C64DDF
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 16:27:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E16083A97B7
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 13:27:14 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 16EDB348FEE
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 15:23:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B234E331A5F;
-	Mon, 17 Nov 2025 13:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0F2233ADAD;
+	Mon, 17 Nov 2025 15:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZXEs49DX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VVMyXElu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9D1331A55
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 13:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641CD337BBC;
+	Mon, 17 Nov 2025 15:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763385958; cv=none; b=fgyeBh4h6k0VU3DhdrY2leJYCieCXdS3e8Fmmcz1Ji5NR5RMOebNks492zEa251UzEcA2GG8JK98fBQaiY1wC5tlViqCwIey+9aCCiS+YRJ3M1ONXyI/Q/Y7zJ6grAZ2jmzZCS0H6QIczHddD5bntLUTmUkyQJT0Q5dFDs3bvxw=
+	t=1763393024; cv=none; b=XI5/w0HExpgH2SIS77J3dl4JPNJ4UyiD0UZClnsVu+V3VtQX4k6aNNVwCnHUmrkunIksBX73k2Amw8mvEF1Wm7GXr5WodSb6oiEGXOMYyKQCicNaL2Gf6n7mY5iCnIBJO7Epk/kruBtK8n0PdbmJtUVlp5pM9l6+UGCivLEgiT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763385958; c=relaxed/simple;
-	bh=BXrkaPWSS4ADX1uV9kOtNe4mMT/WZtJVEu732fC+Nsc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B4c2e+RmqFEAH7xnSkkuQGyvyjC7HO3Q89jxrxZYkZRzRZPbrIl93O4QPsdU/aoSF3dXKU0dpjJC9I9x0GWDLjCqz/z3SjRmG5wZOPzf+ffLU7lrFQqPqD6iZ1aHv7jPQcRRqvtDpBZvWJva2R+10oU9P8kk9saOjPMntGvhMLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZXEs49DX; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-640b4a52950so6122963a12.1
-        for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:25:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763385955; x=1763990755; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PKrCcNYpwdQk4idzk2CaMl1TyunpWVVmxS8N4sU6sgM=;
-        b=ZXEs49DXok9qsNJGDEed75ch4EE4emxdz0OrONswDKPI7biOc+XLwta3F1bGgY+7ZD
-         zyDtlJeI2I2fLo/0Q8BYW6qfE/fdzHbYETPohTHGTdiDCKkp7uojcbxiRKdrn7qvk1Y3
-         oLCgWJAeLVJDLkoJlIa/E9z5HKP7vEwPSVskYkAuvtu6hHrIBXcFENdXGl/EXAxxPiJI
-         5k7Ha2iuByhrH3VWDc1jYO2+k706r2+g5DN4i6xhsC/CkoofKxp+Bk2jrg9eQQ0I698Q
-         S7es/ajWmGhb0TeA/74VHz62tg/+1ynKnPmMUgcwRVSif9TtQ4aLpMNHqHJ4VgxiV6IR
-         Kf/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763385955; x=1763990755;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PKrCcNYpwdQk4idzk2CaMl1TyunpWVVmxS8N4sU6sgM=;
-        b=gxl5AfrNQvXah9QCwrmeBspEEclS77ispQ23hMLjEvI4Dti13r/ZPBOm98KiT+bj1t
-         q5JHJSivbJUKhGDqWXjop3+XJhU0n0U/Sj258pyl3NRwnAoouGzU8uFcdjJiHTIl5HsH
-         NF20oS8qan4TkaXVWqUb1CBGPUviecp0yt9/X+2MU0YeYzpKecWC1YJHB45FYWGPWBR6
-         XZFDUXSIQmfGTy8upuaisp+i2h0catvk21Or2xD6RnHhY9dzCjKcf4vEQkZITdd3COTa
-         JJ0hcfNMCa8y8hQvmoDzCJcvB2ejI3Xz8jNFUsRI80zV4iG5ZcUP6q4rh3WzbBV0IXKj
-         AZ5g==
-X-Forwarded-Encrypted: i=1; AJvYcCXA0jF1/GBWbmMA164f29aXaId7OzD8Frb+4Q3UCQ+o2gQCnx1NTozJQcXiAi3D0ks6eBdrJ613nQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxliOk6Wzv0NVIJSivqhlTBO4fZ+TxVqHVhmimP2NihV8H3+qgI
-	WBwtbqXrL9/WIN5woc4PNtZ8Sfyl/IqCNsW8sT+cYzIY163iYbhjbN9aaTwUD+KqnHLrTDIN0ov
-	xHCb8HHttwI7FxunA2Q4YbhD3TlEHUur0qE2tXbI+CA==
-X-Gm-Gg: ASbGncs6V3+rpGpsBClRMe6WDVAoNzsKjoBWb/s/90a2gvWJVQ1UIjKPwy+fH70QvYp
-	HpBmc5n7ZFi6nP+mAhlUwxLTCQEgOU8arW3LbYir4nEZneDKHfJ124EJ9y6nqdtk60HcGS9zPKV
-	XT1D0xZewASLpFg4aungJ0emLLa/sief5aAD5uTCXKdn0gKjUMNnSYYDeE3tX/UBzALJzoGZB7a
-	52DYbP+fSB/KFIy/A2OrF1hmMdqhhyadsWUQp7B8SraTWy1gz3hJRi7MWfymN2CagJFVNftWcjp
-	KKw6vNiA5KcSom0AAoMwjvtgago4KhLd7lHa5A==
-X-Google-Smtp-Source: AGHT+IGA9IKPcA2NVRU837UYITNqUiXqVbs8u2QaPkG4oxbaV5NUnuCMpfTaiZd84H+nHDlEyxQ+y6jkHzkDtmQk7r0=
-X-Received: by 2002:a17:906:dc8b:b0:b73:7ebd:469d with SMTP id
- a640c23a62f3a-b737ebd51c7mr700980966b.18.1763385954694; Mon, 17 Nov 2025
- 05:25:54 -0800 (PST)
+	s=arc-20240116; t=1763393024; c=relaxed/simple;
+	bh=D0uHEF+8TZ+GciPjEn9il1CGydZ3mO5pAE9l/oJDips=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t6ad+2aIYk/yWXAAX5nS9xNgeclwj7YnENJgSwmC5kl1hMSVu/8j6w4ZYDl5sQ4t0BdhQvf8kU6U1OHYMEnijQtH+JVLYfJ1RLgnYvUp/D9QdPHz5eSPHmbAv6h4JcSckO2TYLJZfCR2Hhwe+dc/tK4Tb1ICNPyKCldQopiIM3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VVMyXElu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 869F8C19423;
+	Mon, 17 Nov 2025 15:23:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763393023;
+	bh=D0uHEF+8TZ+GciPjEn9il1CGydZ3mO5pAE9l/oJDips=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VVMyXEluUuY3fVAbZu5As/b3oLYYW1eM17pQU0tqvz8Dl91tztRJVHX2h56r73VGF
+	 6AFl7MqcTl7siDIzjU+QrZHbfmAPbqlsEj7e64oQeSyC5yWpjSllRHBuRIy79O/p3l
+	 fiAxH+8NOq2BQlHxISI6HA2oT+YvQpRfmfrpbdozZt2cRStk4Soe+aztUqUkGQj+bb
+	 Gvb4SclKUIISLGd/IB4mzbeX8xeP6WV7BRaUDCkQThQh5QceCpkzZMFOnprVW8GQNc
+	 IPFUo8Hwv9D6/HY8+3SP9d27jcrliTR63ZUtPe1DwIOq2pZu6bXwdAnKW0NfyHRnQr
+	 zt72M3bvIEcGg==
+Date: Mon, 17 Nov 2025 09:23:41 -0600
+From: Rob Herring <robh@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@linux.dev>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-kernel@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-clk@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	linux-leds@vger.kernel.org, Pavel Machek <pavel@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>, linux-gpio@vger.kernel.org,
+	linux-pm@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>,
+	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+	linux-rtc@vger.kernel.org, Lee Jones <lee@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>
+Subject: Re: [PATCH v4 04/16] dt-bindings: power: supply: BD72720 managed
+ battery
+Message-ID: <20251117152341.GA1944698-robh@kernel.org>
+References: <cover.1763022807.git.mazziesaccount@gmail.com>
+ <ac5a4e992e4fb9c7bffb1e641a7cd61f74af4cba.1763022807.git.mazziesaccount@gmail.com>
+ <176303119683.3716572.16868393928566655866.robh@kernel.org>
+ <ee36d7d1-ef47-4a35-9aff-baa6ed32105a@gmail.com>
+ <20251114163954.GA3399895-robh@kernel.org>
+ <32303b95-3fd5-44c4-bb7d-e2957a6064fc@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251116-next-15nov_expose_sysfs-v1-0-3b7880e5b40e@oss.qualcomm.com>
- <20251116-next-15nov_expose_sysfs-v1-2-3b7880e5b40e@oss.qualcomm.com>
-In-Reply-To: <20251116-next-15nov_expose_sysfs-v1-2-3b7880e5b40e@oss.qualcomm.com>
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Date: Mon, 17 Nov 2025 14:25:42 +0100
-X-Gm-Features: AWmQ_bko9MypuXVKQ-ri649OhlUs0218mLgHlt4bzFRM40wdm7fFs3mbaFjy7YE
-Message-ID: <CACMJSeu6BGS+AyEXyR9S7d6qGkbP3GiEzq6qy1860QaOQ-peQA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] power: reset: reboot-mode: Expose sysfs for
- registered reboot_modes
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <32303b95-3fd5-44c4-bb7d-e2957a6064fc@gmail.com>
 
-On Sun, 16 Nov 2025 at 16:20, Shivendra Pratap
-<shivendra.pratap@oss.qualcomm.com> wrote:
->
-> Currently, there is no standardized mechanism for userspace to discover
-> which reboot-modes are supported on a given platform. This limitation
-> forces tools and scripts to rely on hardcoded assumptions about the
-> supported reboot-modes.
->
-> Create a class 'reboot-mode' and a device under it to expose a sysfs
-> interface to show the available reboot mode arguments to userspace. Use
-> the driver_name field of the struct reboot_mode_driver to create the
-> device.  For device-based drivers, configure the device driver name as
-> driver_name.
->
-> This results in the creation of:
->   /sys/class/reboot-mode/<driver>/reboot_modes
->
-> This read-only sysfs file will exposes the list of supported reboot
-> modes arguments provided by the driver, enabling userspace to query the
-> list of arguments.
->
-> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-> ---
->  drivers/power/reset/reboot-mode.c | 72 +++++++++++++++++++++++++++++++++++++++
->  include/linux/reboot-mode.h       |  3 ++
->  2 files changed, 75 insertions(+)
->
-> diff --git a/drivers/power/reset/reboot-mode.c b/drivers/power/reset/reboot-mode.c
-> index fba53f638da04655e756b5f8b7d2d666d1379535..062df67735c4818cfeb894941e537f19ea9d4ccb 100644
-> --- a/drivers/power/reset/reboot-mode.c
-> +++ b/drivers/power/reset/reboot-mode.c
-> @@ -7,18 +7,77 @@
->  #include <linux/init.h>
->  #include <linux/kernel.h>
->  #include <linux/module.h>
-> +#include <linux/mutex.h>
->  #include <linux/of.h>
->  #include <linux/reboot.h>
->  #include <linux/reboot-mode.h>
->
->  #define PREFIX "mode-"
->
-> +static DEFINE_MUTEX(reboot_mode_mutex);
-> +
->  struct mode_info {
->         const char *mode;
->         u32 magic;
->         struct list_head list;
->  };
->
-> +static ssize_t reboot_modes_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +       struct reboot_mode_driver *reboot;
-> +       struct mode_info *info;
-> +       ssize_t size = 0;
-> +
-> +       reboot = container_of(dev, struct reboot_mode_driver, reboot_mode_device);
-> +       if (!reboot)
-> +               return -ENODATA;
-> +
-> +       list_for_each_entry(info, &reboot->head, list)
-> +               size += sysfs_emit_at(buf, size, "%s ", info->mode);
-> +
-> +       if (!size)
-> +               return -ENODATA;
-> +
-> +       return size + sysfs_emit_at(buf, size - 1, "\n");
-> +}
-> +static DEVICE_ATTR_RO(reboot_modes);
-> +
-> +static struct attribute *reboot_mode_attrs[] = {
-> +       &dev_attr_reboot_modes.attr,
-> +       NULL,
-> +};
-> +ATTRIBUTE_GROUPS(reboot_mode);
-> +
-> +static const struct class reboot_mode_class = {
-> +       .name = "reboot-mode",
-> +       .dev_groups = reboot_mode_groups,
-> +};
-> +
-> +static void reboot_mode_device_release(struct device *dev)
-> +{
-> +    /* place holder to avoid warning on device_unregister. nothing to free */
-> +}
-> +
-> +static void reboot_mode_create_device(struct reboot_mode_driver *reboot)
-> +{
-> +       static bool is_class_registered;
-> +
-> +       reboot->reboot_mode_device_registered = false;
-> +
-> +       scoped_guard(mutex, &reboot_mode_mutex) {
-> +               if (!is_class_registered) {
-> +                       if (!class_register(&reboot_mode_class))
-> +                               is_class_registered = true;
-> +               }
-> +       }
+On Mon, Nov 17, 2025 at 10:12:01AM +0200, Matti Vaittinen wrote:
+> On 14/11/2025 18:39, Rob Herring wrote:
+> > On Fri, Nov 14, 2025 at 11:04:27AM +0200, Matti Vaittinen wrote:
+> > > On 13/11/2025 12:53, Rob Herring (Arm) wrote:
+> > > > 
+> > > > On Thu, 13 Nov 2025 10:52:19 +0200, Matti Vaittinen wrote:
+> > > > > From: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> //snip
+> 
+> > > 
+> > > So, as far as I understand, the only viable options are expanding the
+> > > existing battery.yaml with these properties (which I hoped to avoid, see
+> > > below)
+> > > 
+> > > > > The right place for them is the battery node, which is described by the
+> > > > > generic "battery.yaml". I was not comfortable with adding these
+> > > > > properties to the generic battery.yaml because they are:
+> > > > >     - Meaningful only for those charger drivers which have the VDR
+> > > > >       algorithm implemented. (And even though the algorithm is not charger
+> > > > >       specific, AFAICS, it is currently only used by some ROHM PMIC
+> > > > >       drivers).
+> > > > >     - Technique of measuring the VDR tables for a battery is not widely
+> > > > >       known. AFAICS, only folks at ROHM are measuring those for some
+> > > > >       customer products. We do have those tables available for some of the
+> > > > >       products though (Kobo?).
+> > > 
+> > > or, to add new compatible for the "vdr-battery".
+> > > AFAICS, adding new compatible would require us to wither duplicate the used
+> > > properties from battery.yaml here (as battery.yaml mandates the
+> > > "simple-battery" - compatible) - or to split the battery.yaml in two files,
+> > > one containing the generic properties, other containing the "simple-battery"
+> > > -compatible and referencing the generic one. Then the "vdr-battery" could
+> > > also reference the generic one.
+> > > 
+> > > Any suggestions for the next path to follow?
+> > 
+> > Probably the latter option. You could do the former and make the new
+> > properties conditional on the "vdr-battery" compatible. That's fine with
+> > small differences, but gets messy as there are more properties and
+> > variations.
+> > 
+> > But is "VDR" a type of battery though? Is there a certain type/chemistry
+> > of battery we should be describing where VDR is applicable?
+> 
+> No. Not that I know. My understanding is that the "VDR (voltage drop rate)"
+> refers to measured voltage drop-rates under certain conditions - which can
+> be used to (more accurately) estimate the remaining capacity when battery is
+> nearly depleted. As far as I know, this is only used with Lithium-ion
+> batteries (I am not at all sure of this) - but I _assume_ the technique
+> could be applied to other type of batteries as well.
+> 
+> > I don't
+> > think it scales well if we define battery compatibles for every
+> > variation of charger algorithm. Honestly I don't mind just adding 1
+> > property. I care more if we allow undocumented properties than
+> > allowing documented but invalid for the platform properties.
+> 
+> I see. The "VDR" stuff is really tightly bound to the fuel-gauging
+> algorithm. It is measured characteristics of the battery - but those values
+> are only usable by the "VDR" algorithm. I don't really have a good insight
+> in the amount of fuel-gauging algorithm related properties suggested to be
+> added during the years - but don't think there have been that many of them.
+> So, I am not that worried about adding the compatible. On the other hand,
+> there is no technical reason (other than adding properties which are unused
+> on many platforms) why not to add the vdr tables in the static-battey node
+> without adding own compatible. And, reading reply from Andreas (I'll copy it
+> here to answer it in same mail)
+> 
+> /// Below text is form Andreas:
+> > just keep in mind, that several kobo devices have one pmic in one board
+> > revision and another one in the other (e.g. Kobo Nia rev A vs rev C).
+> > But probably the same battery. So if the "vdr-battery" is a compatible
+> > just to allow a more properties,
+> > then "simple-battery" should be allowed as fallback.
+> 
+> I didn't know Kobos use multiple chargers. Thanks Andreas! So, in that
+> sense, adding the "vdr" tables in static-battery node, without new
+> compatible, would maybe be simplest solution. Then the charger(s)
+> (fuel-gauge(s)) which implement VDR algorithm, can pick the tables while
+> those chargers which don't implement the VDR will just ignore these tables.
+> 
+> > When it
+> > becomes 10, 20, 30 properties, then I might start to care.
+> 
+> For VDR there are only:
+> 
+> rohm,voltage-vdr-thresh-microvolt,
 
-This could be achieved with DO_ONCE() but you still haven't explained
-why this needs to be done here. Why not in the module's
-subsys_initcall()? As of now, the class will not appear in sysfs until
-the first device is registered which isn't a very common behavior.
+So "voltage voltage drop rate"? And '-microvolt' says this is voltage 
+too. :)
 
-Bart
+> rohm,volt-drop-soc-bp,
+> rohm,volt-drop-temperatures-millicelsius
+> 
+> and
+> 
+> patternProperties:
+>   '^rohm,volt-drop-[0-9]-microvolt':
+> 
+> So, from the binding point of view (.yaml), it's not _that_ lot. In the .dts
+> there will be quite some noise as the tables have several values.
+> 
+> 
+> > If that
+> > happens, either we are doing a poor job of generically describing
+> > battery parameters or chargers and batteries are tightly coupled and
+> > can't be described independently.
+> 
+> I am under impression that chargers tend to be pretty flexible, and they can
+> be configured to work with many different batteries by altering the charging
+> profiles. Most of the battery properties (like and charging phases [like
+> pre, CC, CV], their limits, currents and voltages etc) are very generally
+> usable. So, large subset of charging functionality can be handled with
+> standard properties. I believe it is only the fuel-gauging where things get
+> more hairy.
+> 
+> I did prepare a series which does the split and adds new compatible for the
+> 'rohm,vdr-battery'. (The power-supply class is not yet modified in the
+> series, but we would probably want to modify the battery-info getters to
+> also accept the 'rohm,vdr-battery' -compatible.)
 
-> +
-> +       reboot->reboot_mode_device.class = &reboot_mode_class;
-> +       reboot->reboot_mode_device.release = reboot_mode_device_release;
-> +       dev_set_name(&reboot->reboot_mode_device, reboot->driver_name);
-> +       if (!device_register(&reboot->reboot_mode_device))
-> +               reboot->reboot_mode_device_registered = true;
-> +}
-> +
->  static unsigned int get_reboot_mode_magic(struct reboot_mode_driver *reboot,
->                                           const char *cmd)
->  {
-> @@ -78,6 +137,8 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
->
->         INIT_LIST_HEAD(&reboot->head);
->
-> +       reboot_mode_create_device(reboot);
-> +
->         for_each_property_of_node(np, prop) {
->                 if (strncmp(prop->name, PREFIX, len))
->                         continue;
-> @@ -119,6 +180,11 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
->         list_for_each_entry(info, &reboot->head, list)
->                 kfree_const(info->mode);
->
-> +       if (reboot->reboot_mode_device_registered) {
-> +               device_unregister(&reboot->reboot_mode_device);
-> +               reboot->reboot_mode_device_registered = false;
-> +       }
-> +
->         return ret;
->  }
->  EXPORT_SYMBOL_GPL(reboot_mode_register);
-> @@ -136,6 +202,11 @@ int reboot_mode_unregister(struct reboot_mode_driver *reboot)
->         list_for_each_entry(info, &reboot->head, list)
->                 kfree_const(info->mode);
->
-> +       if (reboot->reboot_mode_device_registered) {
-> +               device_unregister(&reboot->reboot_mode_device);
-> +               reboot->reboot_mode_device_registered = false;
-> +       }
-> +
->         return 0;
->  }
->  EXPORT_SYMBOL_GPL(reboot_mode_unregister);
-> @@ -162,6 +233,7 @@ int devm_reboot_mode_register(struct device *dev,
->         if (!dr)
->                 return -ENOMEM;
->
-> +       reboot->driver_name = reboot->dev->driver->name;
->         rc = reboot_mode_register(reboot);
->         if (rc) {
->                 devres_free(dr);
-> diff --git a/include/linux/reboot-mode.h b/include/linux/reboot-mode.h
-> index 4a2abb38d1d612ec0fdf05eb18c98b210f631b7f..400cfde0e029aef14ff90a11b9d12d0c3ce8dee6 100644
-> --- a/include/linux/reboot-mode.h
-> +++ b/include/linux/reboot-mode.h
-> @@ -5,6 +5,9 @@
->  struct reboot_mode_driver {
->         struct device *dev;
->         struct list_head head;
-> +       const char *driver_name;
-> +       struct device reboot_mode_device;
-> +       bool reboot_mode_device_registered;
->         int (*write)(struct reboot_mode_driver *reboot, unsigned int magic);
->         struct notifier_block reboot_notifier;
->  };
->
-> --
-> 2.34.1
->
+I don't think that's the right direction. It's not a Rohm battery.
+
+> I wonder if I should actually prepare also a series where these properties
+> are just placed in the existing static battery node without adding new
+> compatible. That way it would be easier to see which way is better.
+
+That seems like the right thing to do here. 
+
+The main question for me is whether these should even be Rohm specific? 
+That would probably require a 2nd user to answer for sure. 
+
+
+> If I do that, should I only spin these bindings as RFC to avoid the
+> unnecessary noise?
+
+Only if you think something is not complete and/or the patches should 
+not be applied.
+
+Rob
 
