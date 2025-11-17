@@ -1,181 +1,403 @@
-Return-Path: <linux-pm+bounces-38103-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38104-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BABEFC625E5
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 06:12:25 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2FD5C62600
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 06:15:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73F483A78DA
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 05:12:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 1044D24132
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 05:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E402D8DB0;
-	Mon, 17 Nov 2025 05:12:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44C4930E0F4;
+	Mon, 17 Nov 2025 05:15:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RPqgjPXf";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Q7Olwj+I"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cjamOM8N"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA0F242D88
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECED030E84A
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763356341; cv=none; b=p7ctA99YTmXoKKb7jzFzUuDS7vc55B71Vm/CnC/khSZ9DeUXw8TBv+ZlXGbANy6P6I3t5ooqlJlQejH/hEYEHWbSBern1BXbyfJGRnpC0BrmpHqZnjhDOrFvrcTWRhFTK1wJWBhaivtcvjuQx7tGuZo6JFTQJJ4yFULqBIhW6hs=
+	t=1763356512; cv=none; b=qtR/BYmnCfAsRRzBNXPiB2K22fk9IlLQ8sCbJ5OUD/IAiSvhATCHSzulZyQ/fgCfLeO2Vz7sJkbVuTpja2CB+LxLORhklPhKcHTS9beKVBScfR1yqdYqtJczn2q0dcTxvuDwq4Uygw5C55cCm19olj5gKVoAeLq2jT/nPoVcHmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763356341; c=relaxed/simple;
-	bh=J8z7X1x3/ScI35iGGWKTEX1fEK0jJHLhUm2IbIlXq94=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=QGWIUD83tF1Va+t4JQyOQ4yqfqF/SPY8LsiYjjEmOs4DzgBhAIdnRvL6iaYYEzJL0mjb71967XwjP7laCcm+R9jrFHGkvpUHMTLJvNgY/GHpnFSfF5vbf1QL3Ju+uKpOeSzywTGNunxZ6euktK+ZyXP/YuXbQIM/GBL7AdjWYfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RPqgjPXf; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Q7Olwj+I; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AH4ntZw3081829
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:12:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	FWr9n67dO1c7n4hq7B6wcG0DtGSgKlDPwTUOrm2oxug=; b=RPqgjPXfZp3lwZnp
-	QNZw5EePej+GX+myojewUgzoIuDa5IF0bUjp89eEoQjRai2YZ0XgWot8nsINV2kX
-	nP2xwKVbH/Jf61qBGjkFMHSK3kaD1ub2kMyR6VlT2LeKoofkBbulOq8gB2qrxl3D
-	YpdBW7m1IJt4PYtlHx13MZxjR4Ss4S2h0fhytNfo9rOmUPbezx4yI0KLYU1ePYE3
-	uyoJoABjXo3LsDBQrcVZ640lDQSLYh5puNBL9wKo5ZjjMrMjKtPJg5ULpmFGzxO5
-	6rSo0MVvkcAiIU5Cfl9XmgsAXOyCTc3rXeDSQySg94EPY9dJ+xgaQPDlgAMw9reF
-	VIeJPA==
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4aejhr3c64-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:12:19 +0000 (GMT)
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-298535ef0ccso45980705ad.3
-        for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 21:12:19 -0800 (PST)
+	s=arc-20240116; t=1763356512; c=relaxed/simple;
+	bh=pErQ4ukqR9I38weKlmWW7wLSLeQs0OJiDOZFRRHRi7A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bJKFfGkr0jpNGWUgQgvPwq45QnRMEkY54ZcUU9+TBmCiC+gIhUd/roj9RptrwyOL0811mHuhC/AqA5zMjgEGjZXrW62JArbAwuXLIwHealrGCpgYWdb3NA9Q3NvQoFMVRJGu73NNLPZpd0Cjq3+S2Vi9dZwrIZ55VhQlDyMl2N8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=cjamOM8N; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b7291af7190so553826266b.3
+        for <linux-pm@vger.kernel.org>; Sun, 16 Nov 2025 21:15:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1763356338; x=1763961138; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FWr9n67dO1c7n4hq7B6wcG0DtGSgKlDPwTUOrm2oxug=;
-        b=Q7Olwj+IwnJQ6oheKc/mBNr4vPQtSMNHxBAcqAUEAB8tF6vR09m1du+tzQEr6ghf1K
-         CJD3Wop4AKe3QKEiMEO6608gqtGyIYNdNqXSxMLWJWvMsGLzASsVERwK1CtWmIVu7BqL
-         dfd/Kad26BDtZut+GiMmzHzNzybbUfF4fNPmm/y7NNzrnsEImCmgIkpz7wV0Hf0JAO4y
-         Zixz86dSTxLb9ACdEWvceepCMN27PiRvkkMG8tZaARz3UyAU+PH9RTUB0MjKwIYnQvSF
-         I2gNv4movz1qCAADfpGYe6vNpRUcXKRBDIMaZLGls/4d4UaJ3vJyUpCh7lgar9Oer+yF
-         6WtQ==
+        d=chromium.org; s=google; t=1763356507; x=1763961307; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5AH6I7AqXCYiAtv3G9DF93VFse56LmS/de8Qvwj2YV0=;
+        b=cjamOM8NJtzJqyxpRfeeLUi3cGPP8ax7ctZDlwBol+dwG9U5eP86ouX6oLkGahJ5O/
+         Iu5bn6pA86hfsjT5n7uFSGo0mGu+AvuqCXbUMFzq18/lbG3PQItggNCBPgx34+o+ILr3
+         /8ujxjje2hkR5MYhW9cW9dB6nzpKJ1bijlZrA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763356338; x=1763961138;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FWr9n67dO1c7n4hq7B6wcG0DtGSgKlDPwTUOrm2oxug=;
-        b=eu35ORnWLQIFtqXEjvuTjTn4Jlddlr+nUnF45MjJFJ/iYcHmoW1qh3da5vizEgJNJM
-         BiBiuyr2YpawMiXZh5Del94dfyTd/PSCqtPg3f78g+E23M9J1lhJWDsUXbK4L9maFbmC
-         8H0y/mJC3H3EeGYUjUP8vARSbWQt8q1U/7mdupHw0Vv66zZeBF+9aPePTBAL59Ce2iqU
-         0YY0SwuxaHhzXdP7FaqmLNSAYJj4/kTSvtaWSDIG36ODG9fIUqrYDY2cCTashbXQp8ZK
-         JQNcQlnSfuQSnA7pHvyBs/06gnTRwkCdQ90fLmjX7ukmceue0lZhVYe8knKnKnZeIy1+
-         WH2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXFQvNdYZ5Mc6gkqIr7PeZWjX6sX6S73UFzlyIhJWpYle/66SRljaJD5LzOyUBsuArU2PbZkPhh9w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyORd59Lq5XX8rx+yqiQN2jOo5iZoEUW5Kc3NwMdTc6YqaZLC+u
-	+1t/cwWyClAGbiOwtBCiOYhOiZVczYAa84SJkqaN0aW9VMIZOszkOYLya+SlqZ/PgLhDgUo+NeS
-	0+FS0FZ9aOtsNPRJcFl8PpsDTPd84+bR9/P3n0tkiDqQy0pMH4hvdb81t7V5BLw==
-X-Gm-Gg: ASbGncsw8XK3csWB4NmkiMoMvfk9+HSuXTkYbeHXMIejTVXNpTrMxq0puclyRefIxnK
-	Olffj13X601/bfnx9OfZ56WDsbT7zPs/DszZ5LvsC6moBAdZSZnbtU+HV0sl0F3ymmyDjY6v6Jd
-	dzqnY7oH4Srx+tCj3yp+V48DiPbHUAdHveS57F/vX7ikOccYvLCUlJvkzRAY5X6dEu1IwhknqaH
-	AgQzr9lLuSwaDOyJcouYCwp0JdQB/ARvkYvzzdkfWkDTVYMm7qnCr5YbcmGEF0wbhcysdsFIMC0
-	sGkM41yCrdEEtz3AUrR4HJAK6hjdhfYEVb2VktK52AnrWdLdRGiXyRb0l+AspZTaUTZ70kKy3gH
-	ysKg+DZbBLaNIQU10TuP7d8dkOdQXvMxRqhQwvGqdAok/PrPjiQPJSA6YO3eN//uJA623
-X-Received: by 2002:a17:902:e546:b0:295:9b3a:16b6 with SMTP id d9443c01a7336-2986a752896mr142438585ad.49.1763356338217;
-        Sun, 16 Nov 2025 21:12:18 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFkAlkBUSo3LAwVcndFhKY2cG2oUKDb7mcn6f+LmxOgD+wNzYVQ7C4MBdXdViSscfftKCbAVA==
-X-Received: by 2002:a17:902:e546:b0:295:9b3a:16b6 with SMTP id d9443c01a7336-2986a752896mr142438315ad.49.1763356337715;
-        Sun, 16 Nov 2025 21:12:17 -0800 (PST)
-Received: from [10.133.33.145] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2b11b4sm124284545ad.73.2025.11.16.21.12.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 16 Nov 2025 21:12:17 -0800 (PST)
-Message-ID: <faa9d74d-63d3-4569-ab36-5e0ee0241794@oss.qualcomm.com>
-Date: Mon, 17 Nov 2025 13:12:12 +0800
+        d=1e100.net; s=20230601; t=1763356507; x=1763961307;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5AH6I7AqXCYiAtv3G9DF93VFse56LmS/de8Qvwj2YV0=;
+        b=k+UHgE/4F1LPjD5Ipofr4dWQ/PbAqLaB6BnmoSnnx48BuBgcXv8Sln4tk22ZRY8u6g
+         K3KFm9Bh+m8vIOcEGs8iBPOGvrV5gXylK0ppo3dcF5uJla/5SuFAjPh03M+LWSTKaCsT
+         WEE7mteIv6NCC2ZfKitJcc17AKvI/tlcs+8MQ9AtnmKHmRbw/BJd0cSY3wjUwa+PBODw
+         SzACPyzhBS8/+VfAWNIB5TzQggo/OQB2mCpyT2hCGvmObTrPmsXmD+n1f/hMXbiCZPPd
+         6SrP/8vZYmUbUBkPIqAaFOUURVh0P6Rw4CbgWkb48mEn9Z4QW1dmpBg3z1mWwA+9Y4sy
+         wnOw==
+X-Forwarded-Encrypted: i=1; AJvYcCWyGs9qL5L9VNXJSEYR0zegTls4ddna8urLP4t4mZnAe52VbhTKCgYNlhdsrwk1Wl7Zi7ExwuNj7Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfuWKihNY+LY0CgiPjHaFoUZsUvU00QBPPZr7kUewiK88IpIFC
+	OyC8w22SBA6OWMGnyjmP2hK1fQoU/Sl9HUcGATJaBmP6VRxMMiXmh5eZaqE41n9E62AhIzTn9sN
+	ujIDNmEvBxWcAuR8jmWnR6wZL6EXLcwJOW0fB9VyM9wXh5BJFfdCMDHaW
+X-Gm-Gg: ASbGncton5yma7lAR3UN0Tv8WrmMua/NrQgB+JrDykGjRQv5NZ2MMYos2oHCkX+iSpJ
+	fyX/SEvzOAtEyTq2IfVbSe4apZHhnH6V8LcVAEkTdDUhPaExIGa0EwjctKwv+a246cHoTDkF0TC
+	+8AA8YTVwgI0KpgjhQzXjGRqFNnBXK11XVmYC23Peqa6DjHEPw0cjHZf1Z+1MKl4qZ+KDqa6xSx
+	I3HmReF6wEPlxSXGLJcB/o+r/qTGMnWb+XCnlh8j8xsy6o0Rh6S3OYWb9zweuSyiijsPNCZiir4
+	5BYWwovPe+tuDZY7IzGymyQmXth4XmaXVy/watbcG+U+ayM=
+X-Google-Smtp-Source: AGHT+IGJL+rY/AuKcEmcooy7I0wLJJ2vdXADGE77+ubUMvYrGkjYRJoNczpIFz+cEjFQc6CsRJNmx11+iCamKpdi5wk=
+X-Received: by 2002:a17:906:ee89:b0:b43:b7ec:b8a1 with SMTP id
+ a640c23a62f3a-b736780de83mr1136738166b.24.1763356507000; Sun, 16 Nov 2025
+ 21:15:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] power: supply: qcom_battmgr: improve charge control
- threshold handling
-To: Val Packett <val@packett.cool>, Sebastian Reichel <sre@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20251012233333.19144-2-val@packett.cool>
-Content-Language: en-US
-From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
-In-Reply-To: <20251012233333.19144-2-val@packett.cool>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE3MDA0MiBTYWx0ZWRfXx+BMnSWynK8K
- DbGKUpBrHX9pkHXAkGcdSXJYUq6PusCDVsTPdcZab1LlI7IyZF6CtGE/HVuT7ALdIdFOSsoM/z8
- sJaHFMeGCPcEMp8LPlK2FTvgXIgsFcssp9VmvF1MBqBeMnMo1SBAuzjBcFgDApq6i7k3ZgccnUa
- 3FAEvoa5Lc7/RntowVEeZCCaFziFdYJ9YwGB/OePjsl9Hl/2QO0LSo8VlrOTrALX92tO+eXV+rd
- ycA7sGDiUiD/4Doi7vbsKv6xUDl2/EOJ+yvBF8OJdfL3j06deXOi0F2tb9NFthqJZ/xdOVQ9V3v
- FpDJKH0L/1yVXjQoaNGdNCgpFMm3OhCwpHOF6Ipl0l4FrEFHtXEP1GBk5HU9Kx8Z4H5vqvlxECS
- B8L1GL3FFh7DYDt9eDfZz/RYew+iFQ==
-X-Proofpoint-GUID: rAO37c_mINaTr5xhvF2eSCEbVgiv11xP
-X-Authority-Analysis: v=2.4 cv=dLCrWeZb c=1 sm=1 tr=0 ts=691aaeb3 cx=c_pps
- a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=e5mUnYsNAAAA:8 a=VwQbUJbxAAAA:8
- a=-rvc63fW53tOKHq7dmUA:9 a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22
- a=Vxmtnl_E_bksehYqCbjh:22
-X-Proofpoint-ORIG-GUID: rAO37c_mINaTr5xhvF2eSCEbVgiv11xP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-17_02,2025-11-13_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 priorityscore=1501 phishscore=0 adultscore=0 lowpriorityscore=0
- suspectscore=0 clxscore=1011 spamscore=0 impostorscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511170042
+References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
+ <00928b9d-7189-4929-afc9-7684fc5ef531@arm.com> <ca45366d-4c85-4802-8a35-886a6f69d10d@arm.com>
+ <6228387.lOV4Wx5bFT@rafael.j.wysocki> <CAEmPcwsVfcoFTyS-mHSkZTFmS8Y1vkFToYo1xcAH0522wyDawA@mail.gmail.com>
+ <431db236-736d-4fc3-95c2-876bc767aa0c@arm.com>
+In-Reply-To: <431db236-736d-4fc3-95c2-876bc767aa0c@arm.com>
+From: Reka Norman <rekanorman@chromium.org>
+Date: Mon, 17 Nov 2025 16:14:55 +1100
+X-Gm-Features: AWmQ_bkIhYtdwC3e6x43aQ-_Nwent2Gf-6HGPcqjn3oSckAZ5RGLkZdDYNo8VHA
+Message-ID: <CAEmPcwsQjHsqmvaWA_6ORCQnJdWutDmu=KZSrn=nKJhirX7H3Q@mail.gmail.com>
+Subject: Re: [PATCH v1] cpuidle: governors: teo: Rework the handling of tick wakeups
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Nov 14, 2025 at 7:33=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 11/14/25 04:05, Reka Norman wrote:
+> > On Fri, Nov 14, 2025 at 3:56=E2=80=AFAM Rafael J. Wysocki <rafael@kerne=
+l.org> wrote:
+> >>
+> >> On Thursday, November 13, 2025 4:43:18 PM CET Christian Loehle wrote:
+> >>> On 11/12/25 18:33, Christian Loehle wrote:
+> >>>> On 11/12/25 14:16, Rafael J. Wysocki wrote:
+> >>>>> On Wed, Nov 12, 2025 at 3:03=E2=80=AFPM Christian Loehle
+> >>>>> <christian.loehle@arm.com> wrote:
+> >>>>>>
+> >>>>>> On 11/12/25 13:32, Rafael J. Wysocki wrote:
+> >>>>>>> On Tue, Nov 11, 2025 at 6:20=E2=80=AFPM Christian Loehle
+> >>>>>>> <christian.loehle@arm.com> wrote:
+> >>>>>>>>
+> >>>>>>>> On 11/11/25 11:48, Rafael J. Wysocki wrote:
+> >>>>>>>>> On Tue, Nov 11, 2025 at 11:48=E2=80=AFAM Christian Loehle
+> >>>>>>>>> <christian.loehle@arm.com> wrote:
+> >>>>>>>>>>
+> >>>>>>>>>> On 11/11/25 10:00, Christian Loehle wrote:
+> >>>>>>>
+> >>>>>>> [...]
+> >>>>>>>
+> >>>>>>>>>>> I see two issues:
+> >>>>>>>>>>> 1) Because of DECAY_SHIFT 3 values < 8 cannot decay (I guess =
+this wouldn't really be an issue without 2))
+> >>>>>>>>>
+> >>>>>>>>> This shouldn't be a problem.
+> >>>>>>>>
+> >>>>>>>> Agreed, it should be a non-issue. Nonetheless if this wasn't the=
+ case $subject would've likely
+> >>>>>>>> never been an issue.
+> >>>>>>>
+> >>>>>>> Well, I think that the leftovers can be cleared when they become =
+less than 8.
+> >>>>>>>
+> >>>>>>>>>
+> >>>>>>>>>>> 2) if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum)=
+ isn't an appropriate check, it will
+> >>>>>>>>>>> exclude the state if it its idx_hit_sum make up the vast majo=
+rity of cpu_data->total (i.e. it would
+> >>>>>>>>>>> have been a really good candidate actually).
+> >>>>>>>>>
+> >>>>>>>>> Well, it would exclude the state if the sum of hits for the sta=
+tes
+> >>>>>>>>> below it is large enough.  This is questionable (because why wo=
+uld
+> >>>>>>>>> hits matter here), but I attempted to make the change below and
+> >>>>>>>>> somebody reported a regression IIRC.
+> >>>>>>>>>
+> >>>>>>>>> This check is related to the problem at hand though (see below)=
+.
+> >>>>>>>>>
+> >>>>>>>>>>>
+> >>>>>>>>>>> I lightly tested the below, it seems to be at least comparabl=
+e to mainline teo.
+> >>>>>>>>>>> (the documentation/comments would need adapting too, of cours=
+e)
+> >>>>>>>>>>>
+> >>>>>>>>>>> -----8<-----
+> >>>>>>>>>>>
+> >>>>>>>>>>> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidl=
+e/governors/teo.c
+> >>>>>>>>>>> index bfa55c1eab5b..f8f76e3b8364 100644
+> >>>>>>>>>>> --- a/drivers/cpuidle/governors/teo.c
+> >>>>>>>>>>> +++ b/drivers/cpuidle/governors/teo.c
+> >>>>>>>>>>> @@ -355,7 +355,7 @@ static int teo_select(struct cpuidle_driv=
+er *drv, struct cpuidle_device *dev,
+> >>>>>>>>>>>          * all of the deeper states, a shallower idle state i=
+s likely to be a
+> >>>>>>>>>>>          * better choice.
+> >>>>>>>>>>>          */
+> >>>>>>>>>>> -       if (2 * idx_intercept_sum > cpu_data->total - idx_hit=
+_sum) {
+> >>>>>>>>>>> +       if (2 * idx_intercept_sum > idx_hit_sum) {
+> >>>>>>>>>>>                 int first_suitable_idx =3D idx;
+> >>>>>>>>>>>
+> >>>>>>>>>>>                 /*
+> >>>>>>>>>>>
+> >>>>>>>>>>>
+> >>>>>>>>>>
+> >>>>>>>>>> ... nevermind the patch, idx_hit_sum is of course the sum of 0=
+...idx-1.
+> >>>>>>>>>> Maybe something like this, again lightly tested:
+> >>>>>>>>>>
+> >>>>>>>>>> -----8<-----
+> >>>>>>>>>>
+> >>>>>>>>>> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle=
+/governors/teo.c
+> >>>>>>>>>> index 173ddcac540a..6bfb9cedb75e 100644
+> >>>>>>>>>> --- a/drivers/cpuidle/governors/teo.c
+> >>>>>>>>>> +++ b/drivers/cpuidle/governors/teo.c
+> >>>>>>>>>> @@ -383,13 +395,15 @@ static int teo_select(struct cpuidle_dri=
+ver *drv, struct cpuidle_device *dev,
+> >>>>>>>>>>                  * has been stopped already into account.
+> >>>>>>>>>>                  */
+> >>>>>>>>>>                 intercept_sum =3D 0;
+> >>>>>>>>>> +               hit_sum =3D 0;
+> >>>>>>>>>>
+> >>>>>>>>>>                 for (i =3D idx - 1; i >=3D 0; i--) {
+> >>>>>>>>>>                         struct teo_bin *bin =3D &cpu_data->sta=
+te_bins[i];
+> >>>>>>>>>>
+> >>>>>>>>>>                         intercept_sum +=3D bin->intercepts;
+> >>>>>>>>>> +                       hit_sum +=3D bin->hits;
+> >>>>>>>>>>
+> >>>>>>>>>> -                       if (2 * intercept_sum > idx_intercept_=
+sum) {
+> >>>>>>>>>> +                       if (2 * intercept_sum > cpu_data->tota=
+l || 2 * hit_sum > cpu_data->total) {
+> >>>>>>>>>>                                 /*
+> >>>>>>>>>>                                  * Use the current state unles=
+s it is too
+> >>>>>>>>>>                                  * shallow or disabled, in whi=
+ch case take the
+> >>>>>>>>>
+> >>>>>>>>> This will only matter after the deepest state has been rejected
+> >>>>>>>>> already and on the system in question this means selecting stat=
+e 0 no
+> >>>>>>>>> matter what.
+> >>>>>>>>>
+> >>>>>>>>
+> >>>>>>>> Ah, right!
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>>> The pre-6.12 behavior can be explained if tick wakeups are take=
+n into account.
+> >>>>>>>>>
+> >>>>>>>>> Namely, when state 0 is chosen (because of the check mentioned =
+above),
+> >>>>>>>>> the tick is not stopped and the sleep length is KTIME_MAX.  If =
+the
+> >>>>>>>>> subsequent wakeup is a tick one, it will be counted as a hit on=
+ the
+> >>>>>>>>> deepest state (and it will contribute to the total sum in the c=
+heck
+> >>>>>>>>> mentioned above).  Then, at one point, cpu_data->total will be =
+large
+> >>>>>>>>> enough and the deepest state will become the candidate one.  If
+> >>>>>>>>> tick_nohz_get_sleep_length() returns a large value at that poin=
+t, the
+> >>>>>>>>> tick will be stopped and the deepest state will be entered.  Ni=
+rvana
+> >>>>>>>>> ensues.
+> >>>>>>>>
+> >>>>>>>> So fundamentally we will have to count tick-wakeups as a) nothin=
+g, which
+> >>>>>>>> doesn't allow us to ever break out of the intercept logic that c=
+aused us
+> >>>>>>>> to leave the tick on b) intercepts, which is bonkers and doesn't=
+ allow us
+> >>>>>>>> to ever break out and c) hits =3D=3D sleep_length would've been =
+accurate.
+> >>>>>>>> Of course counting a tick wakeup as a hit for sleep_length negat=
+es the
+> >>>>>>>> intercept logic.
+> >>>>>>>
+> >>>>>>> Not quite.  The intercept logic is there for wakeups other than t=
+ick
+> >>>>>>> wakeups and timer wakeups.
+> >>>>>>>
+> >>>>>>> I actually think that tick wakeups can be counted as hits on the
+> >>>>>>> deepest available state - maybe only when tick wakeups dominate t=
+he
+> >>>>>>> wakeup pattern - but generally this is not unreasonable: When the
+> >>>>>>> wakeup pattern is dominated by tick wakeups, this by itself is a =
+good
+> >>>>>>> enough reason to stop the tick.
+> >>>>>>
+> >>>>>> (assuming HZ=3D1000 below but it doesn't matter)
+> >>>>>> That will exclude any 'intercept' logic from having much effect if=
+ the
+> >>>>>> avg idle duration is >TICK_NSEC/2, which is potentially still quit=
+e a bit
+> >>>>>> off from state1 residency, like in Reka's case here.
+> >>>>>> That's why I thought it would cause unreasonable regressions here.
+> >>>>>> I'll give it a go as well though!
+> >>>>>
+> >>>>> Thanks!
+> >>>>>
+> >>>>> Note that I'd prefer to add a check if tick wakeups dominate the
+> >>>>> wakeup pattern before setting sleep_length_ns to KTIME_MAX though.
+> >>>>> I'd first like to know how the Reka's system reacts to the more
+> >>>>> drastic variant of this change.
+> >>>>
+> >>>> Below are my usual tests, it's definitely visible but the impact is =
+limited
+> >>>> on this platform anyway. I think if we gate the KTIME_MAX setting be=
+hind
+> >>>> the "tick wakeup dominate" it should be acceptable!
+> >>>> Let's see what Reka reports.
+> >>>>
+> >>> Forgot to post the full results, anyway as expected with mtdblock (a =
+very slow
+> >>> / low frequent wakeup scenario) the impact becomes clearly visible.
+> >>> Still hopeful that the more conservative approach will be acceptable!
+> >>
+> >> Speaking of which, the patch to test is appended below, but it doesn't=
+ apply
+> >> directly on top of the mainline.  It is based on some other patches th=
+at have
+> >> been posted recently, so here's a git branch with all of the requisite
+> >> material:
+> >>
+> >> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git cpui=
+dle-teo-testing
+> >>
+> >> Reka, please try this one and let us know how it goes.
+> >
+> > Results attached. The residencies are a bit less deep than before -
+> > about 4.5% in WFI vs 2% at 6.6 or with the more aggressive patch. But
+> > I=E2=80=99m guessing that=E2=80=99s expected.
+> >
+> > I also measured the power on a slightly different system where I first
+> > noticed this regression, and it=E2=80=99s indistinguishable from 6.6. S=
+o from
+> > my side this looks great, thank you!
+>
+> Good news!
+> For completeness:
+>
+> Per-Cluster deltas: BIG
+>
+> +---------+-------+--------------+------------+---------+--------+-------=
+-+---------+--------+---------+
+> | cluster | state | name         | time=CE=94      | time%   | usage=CE=
+=94 | above=CE=94 | above%  | below=CE=94 | below%  |
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+> | BIG     |     0 | WFI          | 957,853    |   2.99% | 2,537  | 0     =
+ |   0.00% | 0      |   0.00% |
+> | BIG     |     1 | cpuoff-b     | 163,636    |   0.51% | 21     | 18    =
+ |  85.71% | 3      |  14.29% |
+> | BIG     |     2 | clusteroff-b | 30,918,285 |  96.50% | 501    | 128   =
+ |  25.55% | 0      |   0.00% |
+> | BIG     |     3 | s2idle       | 0          |   0.00% | 0      | 0     =
+ |   0.00% | 0      |   0.00% |
+> | BIG     | TOTAL |              | 32,039,774 | 100.00% | 3,059  | 146   =
+ |   4.77% | 3      |   0.10% |
+> +---------+-------+--------------+------------+---------+--------+-------=
+-+---------+--------+---------+
+>
+> Per-Cluster deltas: LITTLE
+>
+> +---------+-------+--------------+-------------+---------+--------+------=
+--+---------+--------+---------+
+> | cluster | state | name         | time=CE=94       | time%   | usage=CE=
+=94 | above=CE=94 | above%  | below=CE=94 | below%  |
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+> | LITTLE  |     0 | WFI          | 8,424,141   |   6.63% | 16,629 | 0    =
+  |   0.00% | 0      |   0.00% |
+> | LITTLE  |     1 | cpuoff-l     | 11,121,561  |   8.75% | 485    | 96   =
+  |  19.79% | 388    |  80.00% |
+> | LITTLE  |     2 | clusteroff-l | 107,499,073 |  84.62% | 2,705  | 1,001=
+  |  37.01% | 0      |   0.00% |
+> | LITTLE  |     3 | s2idle       | 0           |   0.00% | 0      | 0    =
+  |   0.00% | 0      |   0.00% |
+> | LITTLE  | TOTAL |              | 127,044,775 | 100.00% | 19,819 | 1,097=
+  |   5.54% | 388    |   1.96% |
+> +---------+-------+--------------+-------------+---------+--------+------=
+--+---------+--------+---------+
+>
+> Per-Cluster deltas: MID
+>
+> +---------+-------+--------------+------------+---------+--------+-------=
+-+---------+--------+---------+
+> | cluster | state | name         | time=CE=94      | time%   | usage=CE=
+=94 | above=CE=94 | above%  | below=CE=94 | below%  |
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D+
+> | MID     |     0 | WFI          | 2,593,501  |   2.72% | 7,278  | 0     =
+ |   0.00% | 0      |   0.00% |
+> | MID     |     1 | cpuoff-m     | 188,793    |   0.20% | 51     | 48    =
+ |  94.12% | 3      |   5.88% |
+> | MID     |     2 | clusteroff-m | 92,616,252 |  97.08% | 605    | 257   =
+ |  42.48% | 0      |   0.00% |
+> | MID     |     3 | s2idle       | 0          |   0.00% | 0      | 0     =
+ |   0.00% | 0      |   0.00% |
+> | MID     | TOTAL |              | 95,398,546 | 100.00% | 7,934  | 305   =
+ |   3.84% | 3      |   0.04% |
+> +---------+-------+--------------+------------+---------+--------+-------=
+-+---------+--------+---------+
+>
+> Out of curiosity:
+> Do you know if the platform respects cpuoff / clusteroff distinction
+> properly? Is the power difference measurable?
 
-On 10/13/2025 7:32 AM, Val Packett wrote:
-> Currently, upowerd is unable to turn off the battery preservation mode[1]
-> on Qualcomm laptops, because it does that by setting the start threshold to
-> zero and the driver returns an error:
->
-> pmic_glink.power-supply.0: charge control start threshold exceed range: [50 - 95]
->
-> Kernel documentation says the end threshold must be clamped[2] but does
-> not say anything about the start threshold.
->
-> In this proposal I've special-cased start==0 to actually disable the
-> functionality via the enable bit, and otherwise made both start and
-> end thresholds be clamped to the acceptable range. Hopefully that's
-> fine?
-It is fine to clamping the threshold to the acceptable range. Thank you 
-for making the changes.
-> Or should the [1 - 49] range for start actually be rejected?
-The minimum charging start threshold was set to 50 to improve user 
-experience. If the threshold is too low and the system keeps drawing 
-power from the battery frequently due to a large system load and a weak 
-charger, the laptop will only begin charging when the battery level 
-falls below that threshold. If the user disconnects the charger at that 
-time, then the device would be only having a battery below 50%. Setting 
-the threshold at 50 ensures the battery always stays above 50%.
-> [1]: https://gitlab.freedesktop.org/upower/upower/-/issues/327
-> [2]: https://www.kernel.org/doc/Documentation/ABI/testing/sysfs-class-power
->
-> Thanks,
-> ~val
->
-> Val Packett (2):
->    power: supply: qcom_battmgr: clamp charge control thresholds
->    power: supply: qcom_battmgr: support disabling charge control
->
->   drivers/power/supply/qcom_battmgr.c | 26 ++++++++++----------------
->   1 file changed, 10 insertions(+), 16 deletions(-)
->
+No, I=E2=80=99m not really familiar with the details myself. I=E2=80=99ll c=
+heck if
+others know more. I did a quick test with disabling cpuoff on all
+cores, then disabling clusteroff on all cores. The power does seem to
+be slightly higher with clusteroff disabled, but the difference is
+barely above the noise level so I=E2=80=99m not certain.
+
+> There really is no reason for cpuidle to not autopromote them, if there's=
+ no latency
+> requirement that would prevent that.
+> Especially for the big cluster (just one CPU).
+
+For my understanding, could you explain a bit more what you mean? It=E2=80=
+=99s
+already spending a lot less time in cpuoff than clusteroff. Would you
+expect to see even less time in cpuoff (and 0 for the big core)?
 
