@@ -1,196 +1,268 @@
-Return-Path: <linux-pm+bounces-38128-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38129-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 642C7C6447F
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 14:08:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E2D1C645A9
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 14:29:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id 1C42328A43
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 13:08:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E16083A97B7
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Nov 2025 13:27:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8B03148AB;
-	Mon, 17 Nov 2025 13:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B234E331A5F;
+	Mon, 17 Nov 2025 13:25:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GT4QP7/Z"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZXEs49DX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C2C331225
-	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 13:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C9D1331A55
+	for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 13:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763384777; cv=none; b=a3RwmwrzAU4BTy7MKlBnEjyV4iuV6SGLEetg9mjan3ks3NWs2qthWbeHQ0m87mB9wYMe1npQonHReEM63yaq/LR1WssWUkwaURa0vhK7bj8p129txCLMxtnuQ4aYzTsLCAnxEr9PXbSVsWuOiJQ4dhct9nr9prq0/IsuWvRnSA0=
+	t=1763385958; cv=none; b=fgyeBh4h6k0VU3DhdrY2leJYCieCXdS3e8Fmmcz1Ji5NR5RMOebNks492zEa251UzEcA2GG8JK98fBQaiY1wC5tlViqCwIey+9aCCiS+YRJ3M1ONXyI/Q/Y7zJ6grAZ2jmzZCS0H6QIczHddD5bntLUTmUkyQJT0Q5dFDs3bvxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763384777; c=relaxed/simple;
-	bh=m3OL8AyMbHbrNVKacBSZn0hUzCvhl8MUsvirhFgMsLk=;
+	s=arc-20240116; t=1763385958; c=relaxed/simple;
+	bh=BXrkaPWSS4ADX1uV9kOtNe4mMT/WZtJVEu732fC+Nsc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LLP7zfdHIaJvud0USf6uLqQQ1+KMv4vVSQqMoSEHCGEH7cQ7dPQjI9PPqG1ZblL9WXDLnrvoxLqJDVDu+NH48sgq2BrJ0NnsZcmDDwO10pf2OI2hruI9cpk9s/NdLtxrlcg03TmAFzeWJ/wiifGRO70oeYjWYhen4An+YAqeF7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GT4QP7/Z; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b735b7326e5so589616866b.0
-        for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:06:13 -0800 (PST)
+	 To:Cc:Content-Type; b=B4c2e+RmqFEAH7xnSkkuQGyvyjC7HO3Q89jxrxZYkZRzRZPbrIl93O4QPsdU/aoSF3dXKU0dpjJC9I9x0GWDLjCqz/z3SjRmG5wZOPzf+ffLU7lrFQqPqD6iZ1aHv7jPQcRRqvtDpBZvWJva2R+10oU9P8kk9saOjPMntGvhMLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZXEs49DX; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-640b4a52950so6122963a12.1
+        for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 05:25:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763384772; x=1763989572; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dzmClbvPyvBeE+q//jkriOQoEKo3zwFbzk31wn2QdMo=;
-        b=GT4QP7/ZzPnwu4O54CPYdCDgahNruSKGNKPiGlhq1ICv/yleCnhwurr15Z63mioHS9
-         lGcbNX1XKQ3rFa1EZwsbnl58xMkda8CvaK5rwXPj3IuAgP17RvJwAZQSeYSXpbpecMtY
-         XDfs/eXWTjx4HY8EgOV6cxoUD0cbMyo1m5MdjtFTiSZMZY1yv4pll5+7eK7wshuevhAj
-         ly6XeVXOMf5OkHo9EGEcsk0tpBN7AUNo9Aj+JuSm7LzeJmwAF4VW2y4b2sBpb2+TtGkK
-         XRcfLwkWO3V79E6V3oB22zx5Q6wYs5a46dpmWanGcGB/TDKlhwuRJAq49Zf3t82Z6JK/
-         VmoA==
+        d=linaro.org; s=google; t=1763385955; x=1763990755; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PKrCcNYpwdQk4idzk2CaMl1TyunpWVVmxS8N4sU6sgM=;
+        b=ZXEs49DXok9qsNJGDEed75ch4EE4emxdz0OrONswDKPI7biOc+XLwta3F1bGgY+7ZD
+         zyDtlJeI2I2fLo/0Q8BYW6qfE/fdzHbYETPohTHGTdiDCKkp7uojcbxiRKdrn7qvk1Y3
+         oLCgWJAeLVJDLkoJlIa/E9z5HKP7vEwPSVskYkAuvtu6hHrIBXcFENdXGl/EXAxxPiJI
+         5k7Ha2iuByhrH3VWDc1jYO2+k706r2+g5DN4i6xhsC/CkoofKxp+Bk2jrg9eQQ0I698Q
+         S7es/ajWmGhb0TeA/74VHz62tg/+1ynKnPmMUgcwRVSif9TtQ4aLpMNHqHJ4VgxiV6IR
+         Kf/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763384772; x=1763989572;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dzmClbvPyvBeE+q//jkriOQoEKo3zwFbzk31wn2QdMo=;
-        b=NUiasJ3v5jFJFBTqgBBfC9gjWnAJ/+iKodon9C3JMCtUO/rwCJGE8pdiLMcues5k4L
-         v/PQSXJIqkrgbg6KuhQWRRbjImF0nFNIA1Zp1DsJe3qTRGnyRKBdwgf/W05gRa7xJPlk
-         /hL1H07kj3WD5MC+ZM07yRSoRsnf8130xBEEo/jPu3oqvfPqBaYA5zsLGJftfYpVXSk2
-         XO9PNJVLY7MRfKma+ZW+tuRDevmEecDXTWTsit4LwYVAObXw56+KWsaAMTMigfDZwbdS
-         bNF8O2EKjncWaKn3WqVj3bCBeGX2VjQ/DvZAiT7X5CeUQXkoudS4XlGZZDhSgQjAm8W6
-         fwyA==
-X-Forwarded-Encrypted: i=1; AJvYcCV/tTLlx5j32YQJ+K0teQNQM1YXqtP3/MvFZMFlVfMiR7rloB4vRFmU7T+ZiCG19uGnSHHxve0NDA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgFxWh9LBXp+GutJBNZYBJjSJ5D6cYZ01HfYSb9v4D88nRBiEF
-	r7BZCfjmSbZWs3mr5kMqiwT8NjDjNVnDzvvejZbjetyALK4T/JjP93EqKqGOikdeZlvv+aBWsAH
-	UU+RaSJlfd1dcJokL/k6IVEOJt0w8oeM=
-X-Gm-Gg: ASbGncs0yAEl6vWOEkfVqRGDB93URQUnKcHsMbKCObrbabLMJqu+zWdRIMNZEBYko1I
-	iHSZCr3hQGCPO9Pq1F9PJ8f+xzudoaIZrq7yworsxQFJ8T/fDoXn3VaFKLh275W8JeSdDCjpfto
-	gwXVQ8o3DKxzPWBklcJg/RyTSj1fK4ur9hHx0N4NapAYrJU9yBXKYbDQeenPY3mUU3ct0bP9gRZ
-	S2qYXSx4mszBs5OUAeJhsO9EDkH54YRFbHw91lORvky+YoBh+7rWNwPiS4GDJm1FV9L7WQE/PmK
-	c6xz6UnMRYM44DNgrfopFyn/LTjiDJo=
-X-Google-Smtp-Source: AGHT+IHqj3i2HRsibRzHKXf1dtPdvhXDhojSOWprepzSXOkYrPFcbb3l46Wk1jAyobY6QdZ9jWIdnMjC6+X5l2p7ueM=
-X-Received: by 2002:a17:906:fe4d:b0:b72:7e7c:e848 with SMTP id
- a640c23a62f3a-b7348570745mr810309066b.17.1763384772052; Mon, 17 Nov 2025
- 05:06:12 -0800 (PST)
+        d=1e100.net; s=20230601; t=1763385955; x=1763990755;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PKrCcNYpwdQk4idzk2CaMl1TyunpWVVmxS8N4sU6sgM=;
+        b=gxl5AfrNQvXah9QCwrmeBspEEclS77ispQ23hMLjEvI4Dti13r/ZPBOm98KiT+bj1t
+         q5JHJSivbJUKhGDqWXjop3+XJhU0n0U/Sj258pyl3NRwnAoouGzU8uFcdjJiHTIl5HsH
+         NF20oS8qan4TkaXVWqUb1CBGPUviecp0yt9/X+2MU0YeYzpKecWC1YJHB45FYWGPWBR6
+         XZFDUXSIQmfGTy8upuaisp+i2h0catvk21Or2xD6RnHhY9dzCjKcf4vEQkZITdd3COTa
+         JJ0hcfNMCa8y8hQvmoDzCJcvB2ejI3Xz8jNFUsRI80zV4iG5ZcUP6q4rh3WzbBV0IXKj
+         AZ5g==
+X-Forwarded-Encrypted: i=1; AJvYcCXA0jF1/GBWbmMA164f29aXaId7OzD8Frb+4Q3UCQ+o2gQCnx1NTozJQcXiAi3D0ks6eBdrJ613nQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxliOk6Wzv0NVIJSivqhlTBO4fZ+TxVqHVhmimP2NihV8H3+qgI
+	WBwtbqXrL9/WIN5woc4PNtZ8Sfyl/IqCNsW8sT+cYzIY163iYbhjbN9aaTwUD+KqnHLrTDIN0ov
+	xHCb8HHttwI7FxunA2Q4YbhD3TlEHUur0qE2tXbI+CA==
+X-Gm-Gg: ASbGncs6V3+rpGpsBClRMe6WDVAoNzsKjoBWb/s/90a2gvWJVQ1UIjKPwy+fH70QvYp
+	HpBmc5n7ZFi6nP+mAhlUwxLTCQEgOU8arW3LbYir4nEZneDKHfJ124EJ9y6nqdtk60HcGS9zPKV
+	XT1D0xZewASLpFg4aungJ0emLLa/sief5aAD5uTCXKdn0gKjUMNnSYYDeE3tX/UBzALJzoGZB7a
+	52DYbP+fSB/KFIy/A2OrF1hmMdqhhyadsWUQp7B8SraTWy1gz3hJRi7MWfymN2CagJFVNftWcjp
+	KKw6vNiA5KcSom0AAoMwjvtgago4KhLd7lHa5A==
+X-Google-Smtp-Source: AGHT+IGA9IKPcA2NVRU837UYITNqUiXqVbs8u2QaPkG4oxbaV5NUnuCMpfTaiZd84H+nHDlEyxQ+y6jkHzkDtmQk7r0=
+X-Received: by 2002:a17:906:dc8b:b0:b73:7ebd:469d with SMTP id
+ a640c23a62f3a-b737ebd51c7mr700980966b.18.1763385954694; Mon, 17 Nov 2025
+ 05:25:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251117-swap-table-p2-v2-14-37730e6ea6d5@tencent.com> <202511171942.psG9jTRx-lkp@intel.com>
-In-Reply-To: <202511171942.psG9jTRx-lkp@intel.com>
-From: Kairui Song <ryncsn@gmail.com>
-Date: Mon, 17 Nov 2025 21:05:35 +0800
-X-Gm-Features: AWmQ_bnUFnm0x-eDcpgtaE3URJs_3MiIsOAITzpaSFBE-GfFvya8ZTJD0VLBPq0
-Message-ID: <CAMgjq7BkVvhsCzk2r53159hDoZ+b+AvP1iUTBHA9zvb+SJFg=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 14/19] mm, swap: sanitize swap entry management workflow
-To: linux-mm@kvack.org
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Andrew Morton <akpm@linux-foundation.org>, Baoquan He <bhe@redhat.com>, 
-	Barry Song <baohua@kernel.org>, Chris Li <chrisl@kernel.org>, Nhat Pham <nphamcs@gmail.com>, 
-	Yosry Ahmed <yosry.ahmed@linux.dev>, David Hildenbrand <david@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Youngjun Park <youngjun.park@lge.com>, 
-	Hugh Dickins <hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
+References: <20251116-next-15nov_expose_sysfs-v1-0-3b7880e5b40e@oss.qualcomm.com>
+ <20251116-next-15nov_expose_sysfs-v1-2-3b7880e5b40e@oss.qualcomm.com>
+In-Reply-To: <20251116-next-15nov_expose_sysfs-v1-2-3b7880e5b40e@oss.qualcomm.com>
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Date: Mon, 17 Nov 2025 14:25:42 +0100
+X-Gm-Features: AWmQ_bko9MypuXVKQ-ri649OhlUs0218mLgHlt4bzFRM40wdm7fFs3mbaFjy7YE
+Message-ID: <CACMJSeu6BGS+AyEXyR9S7d6qGkbP3GiEzq6qy1860QaOQ-peQA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] power: reset: reboot-mode: Expose sysfs for
+ registered reboot_modes
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Bjorn Andersson <andersson@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 17, 2025 at 7:23=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
+On Sun, 16 Nov 2025 at 16:20, Shivendra Pratap
+<shivendra.pratap@oss.qualcomm.com> wrote:
 >
-> Hi Kairui,
+> Currently, there is no standardized mechanism for userspace to discover
+> which reboot-modes are supported on a given platform. This limitation
+> forces tools and scripts to rely on hardcoded assumptions about the
+> supported reboot-modes.
 >
-> kernel test robot noticed the following build errors:
+> Create a class 'reboot-mode' and a device under it to expose a sysfs
+> interface to show the available reboot mode arguments to userspace. Use
+> the driver_name field of the struct reboot_mode_driver to create the
+> device.  For device-based drivers, configure the device driver name as
+> driver_name.
 >
-> [auto build test ERROR on 41218ede767f6b218185af65ce919d0cade75f6b]
+> This results in the creation of:
+>   /sys/class/reboot-mode/<driver>/reboot_modes
 >
-> url:    https://github.com/intel-lab-lkp/linux/commits/Kairui-Song/mm-swa=
-p-rename-__read_swap_cache_async-to-swap_cache_alloc_folio/20251117-021532
-> base:   41218ede767f6b218185af65ce919d0cade75f6b
-> patch link:    https://lore.kernel.org/r/20251117-swap-table-p2-v2-14-377=
-30e6ea6d5%40tencent.com
-> patch subject: [PATCH v2 14/19] mm, swap: sanitize swap entry management =
-workflow
-> config: s390-defconfig (https://download.01.org/0day-ci/archive/20251117/=
-202511171942.psG9jTRx-lkp@intel.com/config)
-> compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 0=
-bba1e76581bad04e7d7f09f5115ae5e2989e0d9)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20251117/202511171942.psG9jTRx-lkp@intel.com/reproduce)
+> This read-only sysfs file will exposes the list of supported reboot
+> modes arguments provided by the driver, enabling userspace to query the
+> list of arguments.
 >
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202511171942.psG9jTRx-lkp=
-@intel.com/
+> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+> ---
+>  drivers/power/reset/reboot-mode.c | 72 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/reboot-mode.h       |  3 ++
+>  2 files changed, 75 insertions(+)
 >
-> All errors (new ones prefixed by >>):
+> diff --git a/drivers/power/reset/reboot-mode.c b/drivers/power/reset/reboot-mode.c
+> index fba53f638da04655e756b5f8b7d2d666d1379535..062df67735c4818cfeb894941e537f19ea9d4ccb 100644
+> --- a/drivers/power/reset/reboot-mode.c
+> +++ b/drivers/power/reset/reboot-mode.c
+> @@ -7,18 +7,77 @@
+>  #include <linux/init.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+> +#include <linux/mutex.h>
+>  #include <linux/of.h>
+>  #include <linux/reboot.h>
+>  #include <linux/reboot-mode.h>
 >
-> >> arch/s390/mm/gmap_helpers.c:35:2: error: call to undeclared function '=
-free_swap_and_cache'; ISO C99 and later do not support implicit function de=
-clarations [-Wimplicit-function-declaration]
->       35 |         free_swap_and_cache(entry);
->          |         ^
->    arch/s390/mm/gmap_helpers.c:35:2: note: did you mean 'free_swap_cache'=
-?
->    include/linux/swap.h:435:6: note: 'free_swap_cache' declared here
->      435 | void free_swap_cache(struct folio *folio);
->          |      ^
->    1 error generated.
+>  #define PREFIX "mode-"
 >
+> +static DEFINE_MUTEX(reboot_mode_mutex);
+> +
+>  struct mode_info {
+>         const char *mode;
+>         u32 magic;
+>         struct list_head list;
+>  };
 >
-> vim +/free_swap_and_cache +35 arch/s390/mm/gmap_helpers.c
->
-> 200197908dc4af Claudio Imbrenda 2025-05-28  19
-> 200197908dc4af Claudio Imbrenda 2025-05-28  20  /**
-> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  21   * ptep_zap_softleaf_entr=
-y() - discard a software leaf entry.
-> 200197908dc4af Claudio Imbrenda 2025-05-28  22   * @mm: the mm
-> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  23   * @entry: the software l=
-eaf entry that needs to be zapped
-> 200197908dc4af Claudio Imbrenda 2025-05-28  24   *
-> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  25   * Discards the given sof=
-tware leaf entry. If the leaf entry was an actual
-> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  26   * swap entry (and not a =
-migration entry, for example), the actual swapped
-> 200197908dc4af Claudio Imbrenda 2025-05-28  27   * page is also discarded=
- from swap.
-> 200197908dc4af Claudio Imbrenda 2025-05-28  28   */
-> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  29  static void ptep_zap_soft=
-leaf_entry(struct mm_struct *mm, softleaf_t entry)
-> 200197908dc4af Claudio Imbrenda 2025-05-28  30  {
-> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  31          if (softleaf_is_s=
-wap(entry))
-> 200197908dc4af Claudio Imbrenda 2025-05-28  32                  dec_mm_co=
-unter(mm, MM_SWAPENTS);
-> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  33          else if (softleaf=
-_is_migration(entry))
-> 6539cf8c98a8cc Lorenzo Stoakes  2025-11-10  34                  dec_mm_co=
-unter(mm, mm_counter(softleaf_to_folio(entry)));
-> 200197908dc4af Claudio Imbrenda 2025-05-28 @35          free_swap_and_cac=
-he(entry);
-> 200197908dc4af Claudio Imbrenda 2025-05-28  36  }
-> 200197908dc4af Claudio Imbrenda 2025-05-28  37
+> +static ssize_t reboot_modes_show(struct device *dev, struct device_attribute *attr, char *buf)
+> +{
+> +       struct reboot_mode_driver *reboot;
+> +       struct mode_info *info;
+> +       ssize_t size = 0;
+> +
+> +       reboot = container_of(dev, struct reboot_mode_driver, reboot_mode_device);
+> +       if (!reboot)
+> +               return -ENODATA;
+> +
+> +       list_for_each_entry(info, &reboot->head, list)
+> +               size += sysfs_emit_at(buf, size, "%s ", info->mode);
+> +
+> +       if (!size)
+> +               return -ENODATA;
+> +
+> +       return size + sysfs_emit_at(buf, size - 1, "\n");
+> +}
+> +static DEVICE_ATTR_RO(reboot_modes);
+> +
+> +static struct attribute *reboot_mode_attrs[] = {
+> +       &dev_attr_reboot_modes.attr,
+> +       NULL,
+> +};
+> +ATTRIBUTE_GROUPS(reboot_mode);
+> +
+> +static const struct class reboot_mode_class = {
+> +       .name = "reboot-mode",
+> +       .dev_groups = reboot_mode_groups,
+> +};
+> +
+> +static void reboot_mode_device_release(struct device *dev)
+> +{
+> +    /* place holder to avoid warning on device_unregister. nothing to free */
+> +}
+> +
+> +static void reboot_mode_create_device(struct reboot_mode_driver *reboot)
+> +{
+> +       static bool is_class_registered;
+> +
+> +       reboot->reboot_mode_device_registered = false;
+> +
+> +       scoped_guard(mutex, &reboot_mode_mutex) {
+> +               if (!is_class_registered) {
+> +                       if (!class_register(&reboot_mode_class))
+> +                               is_class_registered = true;
+> +               }
+> +       }
 
-Ops, not sure why this callsite was missed during the renaming
-conversion, probably lost it during a rebase as there are some
-conflicts here. This should fix it:
+This could be achieved with DO_ONCE() but you still haven't explained
+why this needs to be done here. Why not in the module's
+subsys_initcall()? As of now, the class will not appear in sysfs until
+the first device is registered which isn't a very common behavior.
 
-diff --git a/arch/s390/mm/gmap_helpers.c b/arch/s390/mm/gmap_helpers.c
-index 549f14ad08af..c3f56a096e8c 100644
---- a/arch/s390/mm/gmap_helpers.c
-+++ b/arch/s390/mm/gmap_helpers.c
-@@ -32,7 +32,7 @@ static void ptep_zap_softleaf_entry(struct mm_struct
-*mm, softleaf_t entry)
-                dec_mm_counter(mm, MM_SWAPENTS);
-        else if (softleaf_is_migration(entry))
-                dec_mm_counter(mm, mm_counter(softleaf_to_folio(entry)));
--       free_swap_and_cache(entry);
-+       swap_put_entries_direct(entry, 1);
- }
+Bart
 
-Will include it in the next update.
+> +
+> +       reboot->reboot_mode_device.class = &reboot_mode_class;
+> +       reboot->reboot_mode_device.release = reboot_mode_device_release;
+> +       dev_set_name(&reboot->reboot_mode_device, reboot->driver_name);
+> +       if (!device_register(&reboot->reboot_mode_device))
+> +               reboot->reboot_mode_device_registered = true;
+> +}
+> +
+>  static unsigned int get_reboot_mode_magic(struct reboot_mode_driver *reboot,
+>                                           const char *cmd)
+>  {
+> @@ -78,6 +137,8 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
+>
+>         INIT_LIST_HEAD(&reboot->head);
+>
+> +       reboot_mode_create_device(reboot);
+> +
+>         for_each_property_of_node(np, prop) {
+>                 if (strncmp(prop->name, PREFIX, len))
+>                         continue;
+> @@ -119,6 +180,11 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
+>         list_for_each_entry(info, &reboot->head, list)
+>                 kfree_const(info->mode);
+>
+> +       if (reboot->reboot_mode_device_registered) {
+> +               device_unregister(&reboot->reboot_mode_device);
+> +               reboot->reboot_mode_device_registered = false;
+> +       }
+> +
+>         return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(reboot_mode_register);
+> @@ -136,6 +202,11 @@ int reboot_mode_unregister(struct reboot_mode_driver *reboot)
+>         list_for_each_entry(info, &reboot->head, list)
+>                 kfree_const(info->mode);
+>
+> +       if (reboot->reboot_mode_device_registered) {
+> +               device_unregister(&reboot->reboot_mode_device);
+> +               reboot->reboot_mode_device_registered = false;
+> +       }
+> +
+>         return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(reboot_mode_unregister);
+> @@ -162,6 +233,7 @@ int devm_reboot_mode_register(struct device *dev,
+>         if (!dr)
+>                 return -ENOMEM;
+>
+> +       reboot->driver_name = reboot->dev->driver->name;
+>         rc = reboot_mode_register(reboot);
+>         if (rc) {
+>                 devres_free(dr);
+> diff --git a/include/linux/reboot-mode.h b/include/linux/reboot-mode.h
+> index 4a2abb38d1d612ec0fdf05eb18c98b210f631b7f..400cfde0e029aef14ff90a11b9d12d0c3ce8dee6 100644
+> --- a/include/linux/reboot-mode.h
+> +++ b/include/linux/reboot-mode.h
+> @@ -5,6 +5,9 @@
+>  struct reboot_mode_driver {
+>         struct device *dev;
+>         struct list_head head;
+> +       const char *driver_name;
+> +       struct device reboot_mode_device;
+> +       bool reboot_mode_device_registered;
+>         int (*write)(struct reboot_mode_driver *reboot, unsigned int magic);
+>         struct notifier_block reboot_notifier;
+>  };
+>
+> --
+> 2.34.1
+>
 
