@@ -1,184 +1,195 @@
-Return-Path: <linux-pm+bounces-38145-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38146-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7113C66D0B
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 02:16:48 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29AB1C67059
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 03:30:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DF7533470F6
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 01:13:03 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 652C7355EF0
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 02:29:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13F262F0681;
-	Tue, 18 Nov 2025 01:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CECF63203B0;
+	Tue, 18 Nov 2025 02:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gdO7XQpW"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KYdijhW9";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Er+sKGhz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001B62DE714
-	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 01:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E3F1F8691
+	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 02:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763428378; cv=none; b=lWWmfjXLHTbjdvC72KfurMIJUCoc7EfAMfdJrWZYy8os7ki/daMG4JsFVlrilkj0gz7g7vZO/nb/AX58Liv0b+IN9Box3CEp2+5gxP2i3mXQxDW4rsgDPz1piCE6pquxDX7lNdHedS0JMaiU65NtIfftiybiXkO7P5CvZi2hxzc=
+	t=1763432987; cv=none; b=FAxchV8onKHeKY+6yZKvh1jTuKIPhWkc5uaPYbd+Qyrvroo9kK1Y/jCpcUWgtRs7of5YvKBQ+C+Ks3LxqYxhAp32SFFcwKV9LKS0kA9l6JnusXemSy9jHEkYJlF1jj1T3TSwQO8timqAblUIbr11zR/fG86YcK2vEiGUo9wzXew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763428378; c=relaxed/simple;
-	bh=vprNlNF83I+ZNCi5EcyPPczMmil4BpyVQ+GAJSLz1UU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ve317mJdUz5vjxanh7hSs/bUZZFRVlAtabnTTpt726boQs2+mgpfSzUnfGTasBW+ahcROt+lx9kDQzlW+yRufeWFfI43ciKDqpBHPuz1OFywykm027eXnY1uQS0xDW3ByBznFwdVVxZIPs9YebbO8EyE8MGWcTb4WFWKcHYjlGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gdO7XQpW; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b73b24f1784so156747766b.0
-        for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 17:12:56 -0800 (PST)
+	s=arc-20240116; t=1763432987; c=relaxed/simple;
+	bh=2KOfma0sITPO/4dH2G9QHJ4relhWBo110kMOcda7Thk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=AqOdidCeOPcHU/ZKnBeiVouA0oeyPuc9kOQz8aKfDvVKvVA3DZdhOs7A65HSxxUKLH0vt4Fe9h1E7Wo5fvaUCLj/xQhKelRV+9c2EDgBZStrp4guA8LZ0BCJyxziNmDzRtpskDiZymJtypqITk1tL/Ig/tH7EAj3ppXfD9XO7BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KYdijhW9; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Er+sKGhz; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AHKBk1w623728
+	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 02:29:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	xDqii3elKukNgR40+RTb2lx/n+vGBSNGvcekTp398fU=; b=KYdijhW9h0aGpVmd
+	xAbg1APihmWlAuWKP2GrwJbGpFVIZeMYnFL0pk/BL5m69GOQcaovfVV79J94VBr7
+	ZCB/DamiCnmXXxXL1pevn04VVF1crVNJkLnFWgwlRrqfhCxbA7rd6mvpqDQlgFtJ
+	Uu4zaQAAUW6rOfuf1/f4blgXtftOR3GKnmSpTZNkk+T3K7dBP6yWyq+PqHHFXH/T
+	bVlDpwlBDfQjOLM7qGTx3LrSqx0sUzozY70EeKEM0pRHaWMvx1lCfGcuSbsZRSI4
+	knJTs1xQ798vMY5ynz2EGwbvOa4Jh9N07tElB93NHZ7tfCsa0s489NXSaJMgzdWt
+	OPmTtw==
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4agahf8t5b-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 02:29:45 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-7b89ee2c1a4so7148540b3a.2
+        for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 18:29:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763428375; x=1764033175; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BLypkKedaSatyVf6P7eTHsXDW5pFI6QMWuH1xNayjAc=;
-        b=gdO7XQpWrlGfCBM8MSXom9L7om7a/w+xxJYlcTtFvp1dDnWGHoYiLudtVeE36RTYA1
-         Oyexr44vi1bHLcqArL49Ulq9caFOeWxobp2H0us1uNB4qGt7kpEp4PkgHrqpQUN3+rJv
-         zH5oHs0wPmqPtEQyauFdRmIAsXJpfMFtm3eKh60PcCTRBg12SRTULH01DadotzvtwWs8
-         LqGixHlN2nCYYoe3oSliKyPWw68nGkYxCa+qUZOIHtiOZ8N8yJqNxA5m3ss96lmm1q9H
-         qQ2RqOQh3uA8wJ0GKEL+6eBs8R/n+iem/56A/CC4jrziYTRAEkUP72PX8nlt3DTDL5es
-         /8tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763428375; x=1764033175;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=oss.qualcomm.com; s=google; t=1763432985; x=1764037785; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=BLypkKedaSatyVf6P7eTHsXDW5pFI6QMWuH1xNayjAc=;
-        b=uendcCXjBrzOSZxkROdCIQ5KiWU9kDQ7vz+QjTy8IcdeZfLWGkNmlbyRO3Bc7N1A5z
-         hv6+EfRG/UEV/SN7K5ov4YoU9MRkXM5hYYnH8wRT2j8G1efrzAyRbmw0Es9+7/0bl/zR
-         7omZf6pZ/lXz9vV79mrf+wPXTVi+h1hNTf80xVz+WDvg1bWCOsJGZyJZAwK1kWpGJXE1
-         KqMHUntkCGmE12n39KX0ybqWqYLsgdGGyZLwlG+nDsz/28tKmE6lrLC2PAGK98Qh1p6Y
-         yrLM3VErpzFsXIRXfYat9gW7F/eI2Fuo4puKNi3C9O9CBNt7jfFBokVdFi5Dv86af1LQ
-         yWfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVmR40eBVaypLTswj3XILckCopJYMDH2HvC4rm9MlLnRYPFPDEyRDXNB9NuCA7z1l38amXEGn+SzA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxC7N5xfOAhiH7htNRuU4KxObUgfFEw3+FAK57CCuEyG53UkeHq
-	UJUvPqky4+umCxbnRe7c6Pnb+AIR2DiUkGyfRUKRzr8n8+7vddw/4eLvMlCXpPkuF+cWHZMaMA/
-	khJK66YH7ZCE3jQt0SUZ/0SbI+5RUw97EXK/zVzgV
-X-Gm-Gg: ASbGncv5Zcl89cN91fkCN3qEPj/TxYvVnf29/LbTq7OCIZhPZ107jbQGDDXVE5Zh+sh
-	g+TQCWOSTjRkVvUeOLtqduQgwQ7NbjL/5RUBm0/XyTGMiIDGwfgUbhmQMeYRqFviuApdxc/DFMJ
-	FKsOIcVJEHn+WjngOweSbiCa9iEw/GVXcbc7+mq1seg2jvlxWqDPZ8Re+PzR1FrtnGN1jo4lFqS
-	y4xhE24ArOn7q+oxZD6AjrAILyuKGB6wA5Nqie3i/Dlh8arbOkL49d8w4DpFvFSUPJ8/2nUvpNF
-	fkPyomRmX0Hr2Vz8oJq1dBiV2oaUIPQZRGDef0vo
-X-Google-Smtp-Source: AGHT+IEhPt97xpM9QAlAaltjDJJJ234wHSpYiikz3yudtwX2qGgx6x9IopSiX/gSigXYd9ESfwNuBAN149k8ySNW59I=
-X-Received: by 2002:a17:907:d8a:b0:b73:2ced:9af0 with SMTP id
- a640c23a62f3a-b75a0a94f28mr135637166b.27.1763428375062; Mon, 17 Nov 2025
- 17:12:55 -0800 (PST)
+        bh=xDqii3elKukNgR40+RTb2lx/n+vGBSNGvcekTp398fU=;
+        b=Er+sKGhz6/TlF73uASVCngfC4nurdPVYT7qtXcHQC+sKGk4AaYU0pYu18xUdekeL0x
+         qitUWTUXQ7K8x9fop/4IH9HdruZvIQUSo6jODlDolDRaPIMZSFJZqN6Gz0EG9WHHHck3
+         yMjcl+5k0UBUzGePfuB726RfmJdPJp1asIEuTP9LIrqpgR2PkV33vlZh8WeyPMBvUsXE
+         yMXdUcxiwHJKJXiXCybNq5NIa2I9OVzBGcijfkVTFrQyNfRTcdFEPrdU9nAZDljR2dQS
+         y3hxSUiGpADvSdJk5yvWgXc293fsY0ncd2DamECJbvsihTdQ3OODcmyny1afTenSa1BU
+         4s0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763432985; x=1764037785;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xDqii3elKukNgR40+RTb2lx/n+vGBSNGvcekTp398fU=;
+        b=sXY+xqy91orsLt+I3Cc1DpwY1ULgVRCPgkeBlYuMCGdxKXGa6HNwsTzk97Kyw1jGU9
+         WVDRv5KfChCcJXx9iKaG0ewDCRrYYO/XWNHFL2n3a1Kw4q9+oDki/oyPItchgF8ug8UJ
+         5ui0DGEIpmXucV23OyKkkDBu94pV5sFe1a5GgLU+CA7OjtpoaJucZ/3Yz/cvIL6GR/xQ
+         kV8+FW1syV4UUDA1KAeX3NBi2IgeSOvJFbRuPEZ5cPITQA5qG/XeQZvHsd1DJCuWtpxz
+         z4uymaAp4GBtzQJX+nIPAAj5NUgHLWB/scVwcxBfG7mBLtRsAyUA/iBSC6vEGnM4hms1
+         uwjg==
+X-Forwarded-Encrypted: i=1; AJvYcCV8oFBHz3+wfqdF3tt4hVGbyl44U5n4fDzw98vlwQUImWK1cVXDiR4aei+PTrPUn7rtlXbZSoI4sQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy40AErLrh+cnWjUzIqwRQl+lttLfTEsX0s2utJFB++xGuVmgLl
+	MGNM+3XMH+vwvBNgkJZ+llyrCTYXXp8Cj+ipJwe2ALU0PrxtWMninmtvVV2nOx1BjwlciQsfyvG
+	Qv5420Lq3tDQtlEqR3YdrEqfzB7jN52RohVaq4nnRUX4vn0qGRjzftI0K5GVVkw==
+X-Gm-Gg: ASbGnct36Ls1PeiVZjahOeB5Ae650rdEYxHKdPzo9J3BxHSp9YSKfojmcsw7enXYfDS
+	pqsOkhaxj32D0OLh3ThlQtI+Qkw2BdKTdgOotBsx7kX8vziEqOAPjbv8HHc56U328U5sFHv9c54
+	0GWBAQRulcQFYjYVM99UZdS5BHLIQixmXSDOLa5JEImU6/9NEt6U4yj2LCTunPQ0ld34StOup1R
+	EXObQTa3VB4KvCcBhHO8lOn1mP5FH+ySu3I0YUambzYM+6ZkDp6A4b7uonY+AW0yPOSscU1zUwe
+	mTXzbvHs3DoljpKRWDlSNdrAvC/zYmfOQpop7DHt6MiKp7P1NNMkGzf2KVoIL39Vevv6jbCudSb
+	8pZfYkiRu0uAN8+J1oWykF30mm5J0WEfMm5YYy2VI1pjls8QpXHWbn4nNCfuGGAVUyXxDj/5znt
+	UXfig=
+X-Received: by 2002:a05:6a00:1744:b0:7b8:6e0d:6566 with SMTP id d2e1a72fcca58-7ba3be8c60fmr13776020b3a.15.1763432984574;
+        Mon, 17 Nov 2025 18:29:44 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHARX4H4UC1Tv8HJiSAkEHFZwwaJOg+neMIkMp2N3vFNfTFZNFkcsb5OXabfS1mRLsiOx+BBA==
+X-Received: by 2002:a05:6a00:1744:b0:7b8:6e0d:6566 with SMTP id d2e1a72fcca58-7ba3be8c60fmr13775991b3a.15.1763432984068;
+        Mon, 17 Nov 2025 18:29:44 -0800 (PST)
+Received: from [10.133.33.128] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7b927c22b1bsm14420563b3a.66.2025.11.17.18.29.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Nov 2025 18:29:43 -0800 (PST)
+Message-ID: <d92cb96b-b398-45c1-964c-0ab551ca135f@oss.qualcomm.com>
+Date: Tue, 18 Nov 2025 10:29:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251112235154.2974902-1-wusamuel@google.com> <hslbhy6btkbpsgriafvdq4ligq7vorwcpffaakinqoieroopur@beyq5ouauscf>
- <CAG2KctqdJzhaC4pRG9rAgteVKHtKsA8Y7=_MHEUCCeBBhoejWQ@mail.gmail.com>
- <5pv5tqf24p6ttpydpdegyhyod3m2hmpwbfrzl6otsq3q2gvb2s@gsgcgbcvin3u> <28868c0e-2a46-47ed-9bd7-439056cf94c0@arm.com>
-In-Reply-To: <28868c0e-2a46-47ed-9bd7-439056cf94c0@arm.com>
-From: Samuel Wu <wusamuel@google.com>
-Date: Mon, 17 Nov 2025 17:12:44 -0800
-X-Gm-Features: AWmQ_blRuc1oXQfT-0XAwm__1Xp_jZ8h6hqyr5l1p-u5ZqHf4Qn1UqNNSnb93C8
-Message-ID: <CAG2Kctq9aTpcC8+Ay-Wbz_6=dTW7HR6NW6+kmc-ebo860nfpDA@mail.gmail.com>
-Subject: Re: [PATCH v1] cpufreq: Add policy_frequency trace event
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, peterz@infradead.org, 
-	vincent.guittot@linaro.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Qais Yousef <qyousef@layalina.io>, 
-	John Stultz <jstultz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] power: supply: qcom_battmgr: improve charge control
+ threshold handling
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Val Packett <val@packett.cool>, Sebastian Reichel <sre@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20251012233333.19144-2-val@packett.cool>
+ <faa9d74d-63d3-4569-ab36-5e0ee0241794@oss.qualcomm.com>
+ <02db51aa-6e19-411f-875f-718b8215c373@oss.qualcomm.com>
+Content-Language: en-US
+From: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+In-Reply-To: <02db51aa-6e19-411f-875f-718b8215c373@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE4MDAxOCBTYWx0ZWRfXxBX6GGS8X5ng
+ fEcShwk5hO7VL3qtuv0HnWx+ustQdnMANmWKMzkDTKccMcvjdGvg9/jCyvp0nYHaBHJxOvADCfy
+ lwSWu93xvph8CVmjJCDKbSM6igQVG40pE1pG3eeLWu1FK4t+xwNJluAjvD2KzoHosDdYXJ883y8
+ AxZRSlqDwFzFoFdZ3fNC9On4/XVQPt8ytEr+HoIsKGxiEMnSpc+Iq5LdVQbQTOlM+0Hqg+XdE1s
+ eM4oTzF16w+juP4K6Tyo3lipQGoH5pFhS24HpLRANPSmMOgQGeLRrCQvevQ3ui8DvVszAbo0I5r
+ 9hMAEtUgIQnBd0CmCWPQJja8QZCCUGJAjPpfgXZnToEoCKEZmJRBlniQyCap8bNY9ohKdHor41L
+ VE59GdZb60ev9VUouxiWPdXZ3NUx8Q==
+X-Authority-Analysis: v=2.4 cv=RpTI7SmK c=1 sm=1 tr=0 ts=691bda19 cx=c_pps
+ a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
+ a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=efJFygxvcKwCkfyfGs0A:9 a=QEXdDO2ut3YA:10
+ a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-ORIG-GUID: qBNzAk8zYcL7kr391qLy_8Kx0mj1xEin
+X-Proofpoint-GUID: qBNzAk8zYcL7kr391qLy_8Kx0mj1xEin
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-17_04,2025-11-13_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 clxscore=1015 adultscore=0 bulkscore=0 suspectscore=0
+ impostorscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511180018
 
-On Mon, Nov 17, 2025 at 1:18=E2=80=AFAM Christian Loehle
-<christian.loehle@arm.com> wrote:
+
+On 11/17/2025 8:45 PM, Konrad Dybcio wrote:
+> On 11/17/25 6:12 AM, Fenglin Wu wrote:
+>> On 10/13/2025 7:32 AM, Val Packett wrote:
+>>> Currently, upowerd is unable to turn off the battery preservation mode[1]
+>>> on Qualcomm laptops, because it does that by setting the start threshold to
+>>> zero and the driver returns an error:
+>>>
+>>> pmic_glink.power-supply.0: charge control start threshold exceed range: [50 - 95]
+>>>
+>>> Kernel documentation says the end threshold must be clamped[2] but does
+>>> not say anything about the start threshold.
+>>>
+>>> In this proposal I've special-cased start==0 to actually disable the
+>>> functionality via the enable bit, and otherwise made both start and
+>>> end thresholds be clamped to the acceptable range. Hopefully that's
+>>> fine?
+>> It is fine to clamping the threshold to the acceptable range. Thank you for making the changes.
+>>> Or should the [1 - 49] range for start actually be rejected?
+>> The minimum charging start threshold was set to 50 to improve user experience. If the threshold is too low and the system keeps drawing power from the battery frequently due to a large system load and a weak charger, the laptop will only begin charging when the battery level falls below that threshold. If the user disconnects the charger at that time, then the device would be only having a battery below 50%. Setting the threshold at 50 ensures the battery always stays above 50%.
+> So can we set it lower?
 >
-> On 11/14/25 05:11, Viresh Kumar wrote:
-> > On 13-11-25, 19:41, Samuel Wu wrote:
-> >> On Wed, Nov 12, 2025 at 10:45=E2=80=AFPM Viresh Kumar <viresh.kumar@li=
-naro.org> wrote:
-> >>>
-> >>> On 12-11-25, 15:51, Samuel Wu wrote:
-> >>>> The existing cpu_frequency trace_event can be verbose, emitting an e=
-vent
-> >>>> for every CPU in the policy even when their frequencies are identica=
-l.
-> >>>>
-> >>>> This patch adds a new policy_frequency trace event, which provides a
-> >>>> more efficient alternative to cpu_frequency trace event. This option
-> >>>> allows users who only need frequency at a policy level more concise =
-logs
-> >>>> with simpler analysis.
-> >>>>
-> >>>> Signed-off-by: Samuel Wu <wusamuel@google.com>
-> >>>> ---
-> >>>>  drivers/cpufreq/cpufreq.c    |  2 ++
-> >>>>  include/trace/events/power.h | 21 +++++++++++++++++++++
-> >>>>  2 files changed, 23 insertions(+)
-> >>>>
-> >>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> >>>> index 4472bb1ec83c..b65534a4fd9a 100644
-> >>>> --- a/drivers/cpufreq/cpufreq.c
-> >>>> +++ b/drivers/cpufreq/cpufreq.c
-> >>>> @@ -345,6 +345,7 @@ static void cpufreq_notify_transition(struct cpu=
-freq_policy *policy,
-> >>>>               pr_debug("FREQ: %u - CPUs: %*pbl\n", freqs->new,
-> >>>>                        cpumask_pr_args(policy->cpus));
-> >>>>
-> >>>> +             trace_policy_frequency(freqs->new, policy->cpu);
-> >>>>               for_each_cpu(cpu, policy->cpus)
-> >>>>                       trace_cpu_frequency(freqs->new, cpu);
-> >>>
-> >>> I don't see much value in almost duplicate trace events. If we feel t=
-hat a
-> >>> per-policy event is a better fit (which makes sens), then we can just=
- drop the
-> >>> trace_cpu_frequency() events and print policy->cpus (or related_cpus)
-> >>> information along with the per-policy events.
-> >>
-> >> Thank you for the feedback Viresh. Fair enough, I've done some testing
-> >> and a single trace event should work and would be cleaner. Please let
-> >> me know what you think of this proposal for v2.
-> >>
-> >> We can append a bitmask of policy->cpus field to
-> >> trace_cpu_frequency(). This way we maintain backwards compatibility:
-> >> trace_cpu_frequency() is not removed, and its pre-existing fields are
-> >> not disturbed.
-> >>
-> >> Call flow wise, we can delete all the for_each_cpu() loops, and we
-> >> still retain the benefits of the trace emitting once per policy
-> >> instead of once per cpu.
-> >
-> > Fine by me. I have added Scheduler maintainers in the loop to see if th=
-ey have a
-> > different view.
-> >
+> Such decisions are best deferred to userspace and/or the user, which can
+> limit what the kernel exposes as necessary/deemed useful
 >
-> And IIUC your proposal is to fold policy_frequency into cpu_frequency but=
- then
-> only have one cpu_frequency event per policy emitted?
+> Konrad
 
-That's right, emit the trace event once per policy instead of once per
-cpu- which I think is the most valuable element of this patch. And
-yes, the latest idea was to append bitmask of policy->cpus into the
-cpu_frequency event such that relevant policy info is encapsulated in
-the trace event.
+Yes, it can be set to a lower value.
 
-> I think from a tooling perspective it would be easier to remove cpu_frequ=
-ency
-> entirely, then tools can probe on the presence of policy_frequency / cpu_=
-frequency.
+However, I am still having concerns that the inappropriate start and end 
+threshold settings would cause a very bad user experience if they are 
+misused, since these thresholds are stored in nvmem and they won't be 
+reset until battery is unplugged or completely drained. For example, if 
+someone intentionally sets the start threshold to 1 and end threshold to 
+6, and if the laptop was shutdown with a battery SoC less than the end 
+threshold, I am not sure if <6% percent battery level would be good 
+enough to boot up the laptop successfully, if it is not, then the laptop 
+may not have chance to charge up until you hot plug the battery.
 
-This can be handled perfectly fine by the tools I know of that consume
-this trace event. The points you and Viresh have brought up are valid,
-and as this solution is not in conflict with those points,
-"policy_frequency replacing cpu_frequency" can be the frontrunner for
-now.
+Also, from battery management firmware point of view, the charge control 
+feature was mainly designed for battery health management, to slow the 
+aging of Li-ion battery by preventing it from being frequently charged 
+to full state. Having a too low minimum start threshold setting won't 
+help anything on that.
+
+Thanks
+
+Fenglin
+
 
