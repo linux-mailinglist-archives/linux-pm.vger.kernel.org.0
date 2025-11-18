@@ -1,202 +1,204 @@
-Return-Path: <linux-pm+bounces-38178-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38179-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48268C69E73
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 15:20:50 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E115CC6A13E
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 15:46:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sea.lore.kernel.org (Postfix) with ESMTPS id F2D9B2AF70
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 14:20:48 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7E2D44FB527
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 14:30:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B03B935A135;
-	Tue, 18 Nov 2025 14:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4C42322DAF;
+	Tue, 18 Nov 2025 14:30:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Lkk2EVcC";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="b6G0znGQ"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="Lq4z7uIo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12B5435503F
-	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 14:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE509355020
+	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 14:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763475638; cv=none; b=W7L8Q8CwSRDh3+ate4AoVK3bWUuHuKar+MJfBI8U9GrFF8QGYalA+mQy9nuzRpBpj3wKIMQ75ThnUDo0BLcJYdFtwvyn53VKgepVuf4v/YYnuviZMpDzu7eF7h2b1b2ZW08jx48Cg11/ALMNkHbkSNUWDVsGOsaw0mGGQv68KLI=
+	t=1763476207; cv=none; b=gTSkMHXlo0vldcjH3wPWj4+PpauR1Ar+Qz4C7anv5sS2DVKJZZoxeyRGib4EJmb73zjHU67v9ua1MwhhkHWFL0QmAB/627UK/S8+YsvohWLl8C3TGglOw3HQaNmlSpePsHbCpjl2yuVh2T010shkJ3Di10W7b/Eh9WGS6xUW0T8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763475638; c=relaxed/simple;
-	bh=yBuZpxbPhwoE9ApiClipPoDt4FBM4qUBQnCUmTKsdIA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=niwJe6IHA65rYECbJUfdh1C0zBaMztFp0DxISui+VpJZndt/Vybr1I2OPY3jVv5IC8smEv8Q2xK4fCG0uoHXTt2elPa+Ifohi+OxdyoObXfvidhch1taCZrQXvLC7GF1WVEpldg1zjkVvbLWBO0wHqV//ti7lBAfybqGtew5m+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Lkk2EVcC; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=b6G0znGQ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AI8l5jk2755013
-	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 14:20:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	1ORqv6M4KIpZhohWP0nchjhTLwssM6e06wxIHarVDt4=; b=Lkk2EVcCgQtOcSBm
-	43aMYSTc5IqggQVfwComBUoZoR809kWvkt2Izbx/9n7feAhxanv5Vrv4196idMK3
-	UhyelbNdRCAsXBGsKHMMwoHFyYbeybZDzHqcEAfzwmzwr/6k4B71rcJxmHntkhWy
-	U742vO90IjuxSTWHcL9Bli0XcdmKXJmI+1g5RWxSnoRG8JExKW7dqHkQzHl+mzFj
-	kh1y5vDCVwI3jLpyKTL03zbh/41cCyp+EjQ0pLAfkn+BYnPZx+ATPAg9sAWyBDHe
-	wI2MYA9qU8zw6kJqRVP6UqsTTw32jib1/+KdgCv58KAYejeijlGciS3bTNCwLPeJ
-	nMJTsg==
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4agnkj0wma-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 14:20:35 +0000 (GMT)
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-7bf15b82042so3798796b3a.1
-        for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 06:20:35 -0800 (PST)
+	s=arc-20240116; t=1763476207; c=relaxed/simple;
+	bh=812u0/kE8U6KIifXA4o4gTvauRi/MWbHZ1WwZdLX1Rs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qg8boPUoQx35/g3feZqf4z/yckaZuzZd4QsrfsEoBtCMPZuLYUUUIn00gVoVReac/xqLfqPS1DGkzBAS33J+CCNbE0fEbjv+vQL73YbEDMYiSSwdbT9b7Wig1M476qrSLL0PEDagn/jqHBqoCqezjb5v5mffihEme/HJzLJs3wA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=Lq4z7uIo; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-591c98ebe90so6022924e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 06:30:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1763475634; x=1764080434; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ORqv6M4KIpZhohWP0nchjhTLwssM6e06wxIHarVDt4=;
-        b=b6G0znGQPM/gyg8eLltRZD6WnqwFQYpLaKPsUrjX8eBeL8EJfVmJ1y+Eu5KoIhOm6i
-         CwNTKg4b/QJPzCCHKzcaK7bmCnAkYvPChQZJiBrDDxMGrI3AJPL8Xo4uidizeGmY6Ye4
-         yY9zMIb2kX6ZcZ3T2zK3uU/8PE8FT8KhjOcM9U5m1r7l+lV/It5jeA1ixIoWDhByAwbt
-         NhrvboaPkmozzyMpzRF+/dfmYUbQAzn190Tb/M92GNlgsE0jNf2Twgt8nZu0ySBeBm3f
-         JVPKp2ZyPeN23kFFTo85/UX3WrhsAL7TLnVPRMdJSzhtdISau8GbfuOIc6JJZvwrfXTL
-         Ce6w==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763476202; x=1764081002; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JPuRb3+haxxFSoGOZ/Vv3ClCGfszWqWGAZKDKrczFMg=;
+        b=Lq4z7uIoHwX+T0oZpnQeE7Sgq9N1okHHPsxFDCimKWGvAYYyd1L3RkOxAFX6qqwgAK
+         n7bdZ81LqGV1aeevTqZ8wYxo8zm2fcmodj9xNDXKeQJspHWeAezhpEaV3ItXy5cPjLX4
+         6lleapZWGYLkpOGJxS/+B70xq3sqzhS76pnHvh3KpwGhTjAk0fG5Bfaevs8HoAynZMpF
+         6Y9f9b3Bef5JuVIba38qaCDqJwveVXQ19CNrRhMaBrwVBCOxUcjdGZbK08iPRuO8sCQ+
+         nlyYi9cr1Cu3HHRMrga2WbosxHKUD2ZvZJFSImC9bw3VIP1RTXdGahqstC5GX3Xx94Lo
+         LSYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763475634; x=1764080434;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1ORqv6M4KIpZhohWP0nchjhTLwssM6e06wxIHarVDt4=;
-        b=qbSQnhivZ8M+0wDhs6MaI17KjNm41KVY4R4TgtXNBFXRoJ8SRVBLOPp367pi/69ztu
-         RBV2I1QAmVWzgdVyH0nZdpSOOnc75TOYqdjo35XfLaAzD7G/GQhX96lEAHXRXr70+kXA
-         9QfFig3eXGvczVtyCdqhvonH6NM319FIySGNszX8t0KKS2aKQa0dpmTJAwYrmESJavas
-         onq8aY4uwS15COhAbdC+Eu3s7JTaksGLUgROFtptUgQmTpoO7abT5YngpM3WMSdTLmc8
-         DjdpRz3aoWX6VwDSUynUcuWvenGNhOR0mifibjDY4kyFiyV/FBn30vLGv8vEyzE3lDV5
-         mYcg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGzOA1qVCo1JusqUXqKdb8ncz58y/cGHLGQZoouw+dYmQPUj4qa6tSnQxJ/Hy6rMFR/IooIL5oFg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNkDJ6Iw9sRLZ2CKZOY9Z4ak6rQf795DSTIuWOSctk447oL7IV
-	3+CQx1x3gmiVYJjJiltbUBVGdu4rid4qco2mD3XOsTBlRg1dw3jKj5oqQUeqSJPurF7XvIKJVYF
-	123/BPHvQjx3YhdV6bg4W37xh/Qo6GcEoSq5Gcpu/QxUTa+TmpEW5nKvY191Utg==
-X-Gm-Gg: ASbGncsTpjUZTkZXonQytQvRO0Pg3tHNV5ghqKHgSZkRGQGzeqp2fbTsHK1YcQR7p8l
-	/CR+mm6gA7DhQQnlleH7SGpoJNEPXrxxvWd4ustm4wNcoGt6ujfXryvWfuVomMly5OCgwCLpKCj
-	DLSHPgqIq28ShshBqLhO9TxMykMFlJqCtaa1TcS8VEvhcPGtoKunl/JyGrny9G+klJkQg4j4V9E
-	TobTI8ljfg1aXc9+yPtXCtZSEd7nJFfBAvNHz7DP+xAWQBNebgt/qxzuzwqlg9PHA1Z76sUPof+
-	0DKG+rOaPPekFsUam0t2RzNYCX1utaAs8MOO+ucp6LvZjRyaL2LzsqoXXoo/ewlIqzzrCLT72CA
-	IFjM/XL2+YiI56EsOzudtUP2pocwnGnA/
-X-Received: by 2002:a05:6a21:9999:b0:35e:4b35:3669 with SMTP id adf61e73a8af0-35e4b35382cmr12646057637.31.1763475634239;
-        Tue, 18 Nov 2025 06:20:34 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEYoHzllakq0T+6BK9IKhCVI+aW2IeP9GCdHUw1sMDeDxu/C7mgoOm/dGvn2O6wnicuyKu3FA==
-X-Received: by 2002:a05:6a21:9999:b0:35e:4b35:3669 with SMTP id adf61e73a8af0-35e4b35382cmr12646015637.31.1763475633669;
-        Tue, 18 Nov 2025 06:20:33 -0800 (PST)
-Received: from [10.219.57.23] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bc36db21a0esm15120200a12.8.2025.11.18.06.20.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Nov 2025 06:20:33 -0800 (PST)
-Message-ID: <b706ecd5-a564-35d7-9a02-8da9cd134b24@oss.qualcomm.com>
-Date: Tue, 18 Nov 2025 19:50:29 +0530
+        d=1e100.net; s=20230601; t=1763476202; x=1764081002;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JPuRb3+haxxFSoGOZ/Vv3ClCGfszWqWGAZKDKrczFMg=;
+        b=NRc+9DgbQLURej4VsPT+X8T+Cy+69UPrS7NogeAlaVBkRdryBAAq61LHoJM7syhjiO
+         w5pR0oG2K1nVkF+9FCpned54V/gr44Dw6YVehO5TyQu7ke01QJfjkgJ3tj3Rn+K341vh
+         A+4tBgEwaTW1PRYX5JsHQIxJjhZUAX1DoO4EkktpGLACbXBwGnDMbrb8YgW95dQgh4Rr
+         xNLFvtXKaPbsAcmyGZShzQoMKJyxtn8Znn5x/GKMYA2cg+JStqkuqkschcQ1+0Lw45tQ
+         vcZgt1xcyrQY8trGpraQm8MnwTnbBFpVxf2S2ylfmUGRokUjd5k1Zmg4Y6Oc2ass8BG9
+         v/DA==
+X-Forwarded-Encrypted: i=1; AJvYcCX32BWdWU3GBeL1IIsfESQzTRit2RjZxHmFLeN5v3fHihXxAN0VIdfC4Tn8NCwwBT2vAVRGXtp7WQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDWOHjTzNx26qTyDxW9YziR3wIpyjgLZvUTzAc/lLk+EjortxT
+	F/y1uxVqKYGkTHynzNJMsxHpObLcdoUx28/SMOOhfrckyapK7LNKohFREARacJdrQIIRItrJ6uh
+	FMgn/f7NG0bwWJThgbHB2YqEbOQqRa2HZoOs/YKeeRw==
+X-Gm-Gg: ASbGnctXG8givZNF39pRixYchvXxQjw9oXFwJPmyJsEqBrwSn8WarlsT0ZyHAT40Mk0
+	TeyciAQzKI8gnaB4SB1CUpvTBfcdDqIrf1pRJJ+dRX+RQlwmFusORI1VpWOjIvnIiRWbIaqOFBV
+	AHWK/JyL1yNt8Ir7NJ4A3fD83pQig5/nhkCfM7z6UQ5l70wBodcPjhCkl1croyAY/9dVlfmSVM4
+	jyX3cx6ijR6GuStSP1vtEQwrQZGo0fhWoFPCftM/4ajTI/MwVJa83OXaiGzWDwyzj27nnGM5FNv
+	qkSUWHwVlzXiPjnRNQKJCKTMOfxFi2qPnc/Q
+X-Google-Smtp-Source: AGHT+IG/8x599leRbcc55AKG5x7ewC54AAGqLK2r1ZPyGFLtbdnyvhRmFu7yQc8cTfZdSXpR6fRtj7AIKLBehJrw2m0=
+X-Received: by 2002:a05:6512:3ca2:b0:57a:2be1:d779 with SMTP id
+ 2adb3069b0e04-595841febd2mr6716947e87.31.1763476201587; Tue, 18 Nov 2025
+ 06:30:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 0/2] reboot-mode: Expose sysfs for registered reboot modes
-To: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>,
-        Bjorn Andersson
- <andersson@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20251116-next-15nov_expose_sysfs-v1-0-3b7880e5b40e@oss.qualcomm.com>
- <CACMJSeuiL5XEZjh8mOSj7tUnR8wEYSJ6FfZA87v8TSu8xM8_JA@mail.gmail.com>
- <8b6ba46d-ab64-dbc5-8f09-e810bdef724e@oss.qualcomm.com>
- <CACMJSesPSt7LM2duVuBOToxL_5e=SQysW4T+hndMu1Ubs5oJwQ@mail.gmail.com>
-Content-Language: en-US
-From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-In-Reply-To: <CACMJSesPSt7LM2duVuBOToxL_5e=SQysW4T+hndMu1Ubs5oJwQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: SFgK1pNcy1dvsD6X9QnZXwsrmwlJaWE5
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTE4MDExNSBTYWx0ZWRfXzHNOmPJAIRwX
- 1wdJsRDvQeA2CopOoIdXJQLOcdlyRxSihJThtVGzRQD0YX6VYrGvzz/y/Be6c4dhMqJp7z0Odmp
- 7L0AbzPfXE/YkmSs9v+FghiNfTRYLMOULqEBANcebtBZSwI/X+d+wCyibM7x0hYJTB9DYBB+5c0
- T1ABt8XGSjy6U76yjICfQYUiUe//x9G56Nh/zbuzAetv73Vip3mMaNSZz9yK05nlWYPMyk91pg8
- MhOjS6trRsYXwKdqbvxC+6lVj+VoxaktNytZ+4vs4WmuwmTeCNZvEC6gMeJ4Zko3clDOf6W7oYb
- vx6nLQ0SCXktZSE9vUd+AMjuHZ7MxdKXhQOSKOW9WWfhB0DdAnGSvjM5s5BJpwK9gFyZyIaPKeK
- sDDPvO+AuMbJ27kwDkBtGYk9LoZFGQ==
-X-Authority-Analysis: v=2.4 cv=cs+WUl4i c=1 sm=1 tr=0 ts=691c80b4 cx=c_pps
- a=m5Vt/hrsBiPMCU0y4gIsQw==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=llVMLCiusnd1_Z4tx68A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=IoOABgeZipijB_acs4fv:22
-X-Proofpoint-ORIG-GUID: SFgK1pNcy1dvsD6X9QnZXwsrmwlJaWE5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-18_01,2025-11-18_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 spamscore=0 phishscore=0 malwarescore=0 priorityscore=1501
- bulkscore=0 adultscore=0 clxscore=1015 impostorscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511180115
+References: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com> <20251112-pci-m2-e-v1-8-97413d6bf824@oss.qualcomm.com>
+In-Reply-To: <20251112-pci-m2-e-v1-8-97413d6bf824@oss.qualcomm.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Tue, 18 Nov 2025 15:29:49 +0100
+X-Gm-Features: AWmQ_bnS7J2LiofnEnjv4l_cFHHTAIWcbKZPMExzLrGKBD6vTSaTLBGi1oU52Ic
+Message-ID: <CAMRc=MdRw+spjN0ySJ7We_GJ8GaDU2Nb4unaxcnr2ZLjLOeSrA@mail.gmail.com>
+Subject: Re: [PATCH 8/9] Bluetooth: hci_qca: Add support for WCN7850 PCIe M.2 card
+To: manivannan.sadhasivam@oss.qualcomm.com
+Cc: Rob Herring <robh@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Hans de Goede <hansg@kernel.org>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, linux-serial@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Stephan Gerhold <stephan.gerhold@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Nov 12, 2025 at 3:45=E2=80=AFPM Manivannan Sadhasivam via B4 Relay
+<devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org> wrote:
+>
+> From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+>
+> The WCN7850 PCIe M.2 card connected to the UART controller exposes the
+> 'WCN7850' serdev device and is controlled using the pwrseq framework.
+>
+> Hence, add support for it in the driver. It reuses the existing
+> 'qca_soc_data_wcn7850' driver data.
+>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.=
+com>
+> ---
+>  drivers/bluetooth/hci_qca.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>
+> diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+> index 4cff4d9be3132561ee9bae4ddf2c8ac0bc13ecd7..09bfb3bba93698f496947775b=
+f6b31f2f20279f1 100644
+> --- a/drivers/bluetooth/hci_qca.c
+> +++ b/drivers/bluetooth/hci_qca.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/of_graph.h>
+>  #include <linux/acpi.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pwrseq/consumer.h>
+> @@ -2344,6 +2345,9 @@ static int qca_serdev_probe(struct serdev_device *s=
+erdev)
+>
+>         qcadev->serdev_hu.serdev =3D serdev;
+>         data =3D device_get_match_data(&serdev->dev);
+> +       if (!data && serdev->id)
+> +               data =3D (const struct qca_device_data *) serdev->id->dri=
+ver_data;
+> +
+>         serdev_device_set_drvdata(serdev, qcadev);
+>         device_property_read_string_array(&serdev->dev, "firmware-name",
+>                                          qcadev->firmware_name, ARRAY_SIZ=
+E(qcadev->firmware_name));
+> @@ -2384,6 +2388,15 @@ static int qca_serdev_probe(struct serdev_device *=
+serdev)
+>         case QCA_WCN6855:
+>         case QCA_WCN7850:
+>         case QCA_WCN6750:
+> +               if (of_graph_is_present(dev_of_node(&serdev->ctrl->dev)))=
+ {
+> +                       qcadev->bt_power->pwrseq =3D devm_pwrseq_get(&ser=
+dev->ctrl->dev,
+> +                                                                  "uart"=
+);
+> +                       if (IS_ERR(qcadev->bt_power->pwrseq))
+> +                               qcadev->bt_power->pwrseq =3D NULL;
+> +                       else
+> +                               break;
+> +               }
 
+Did you by any chance copy this logic from commit: db0ff7e15923
+("driver: bluetooth: hci_qca:fix unable to load the BT driver")? This
+commit is wrong and it flew under my radar during the summer and I
+never got around to fixing it. It doesn't take into account probe
+deferral.
 
-On 11/18/2025 3:30 PM, Bartosz Golaszewski wrote:
-> On Mon, 17 Nov 2025 at 19:05, Shivendra Pratap
-> <shivendra.pratap@oss.qualcomm.com> wrote:
->>
->>
->>
->> On 11/17/2025 6:33 PM, Bartosz Golaszewski wrote:
->>> On Sun, 16 Nov 2025 at 16:20, Shivendra Pratap
->>> <shivendra.pratap@oss.qualcomm.com> wrote:
->>>>
->>>> The reboot-mode framework provides infrastructure for drivers that want
->>>> to implement a userspace reboot command interface. However, there is
->>>> currently no standardized way for userspace to discover the list of
->>>> supported commands at runtime. This series introduces a sysfs interface
->>>> in the reboot-mode framework to expose the list of supported reboot-mode
->>>> commands to userspace. This will enable userspace tools to query
->>>> available reboot modes using the sysfs interface.
->>>>
->>>> Example:
->>>>   cat /sys/class/reboot-mode/<driver-name>/reboot_modes
->>>>
->>>> The series consists of two patches:
->>>>   1. power: reset: reboot-mode: Expose sysfs for registered reboot_modes
->>>>   2. Documentation: ABI: Add sysfs-class-reboot-mode-reboot_modes
->>>>
->>>> These patches were previously being reviewed as part of “vendor resets
->>>> for PSCI SYSTEM_RESET2”, until v17. Following the suggestions from
->>>> Bjorn, the reboot-mode sysfs patches have been split into a separate
->>>> series here, for focused discussions and better alignment.
->>>>
->>>> Previous discussion on these patches:
->>>> https://lore.kernel.org/all/20251109-arm-psci-system_reset2-vendor-reboots-v17-5-46e085bca4cc@oss.qualcomm.com/
->>>> https://lore.kernel.org/all/20251109-arm-psci-system_reset2-vendor-reboots-v17-4-46e085bca4cc@oss.qualcomm.com/
->>>>
->>>
->>> When doing a split like this, please keep the versioning going. This
->>> should be v18.
->>
->> Focus of that original series was "Implementing vendor resets for PSCI SYSTEM_RESET2".
->> These two patches have been split out of that series. The original series will
->> still continue to its next version(v18) after addressing all other reviews.
->> So i thought that these two patches can be split out to v1?
->>
-> 
-> No, they both continue at v18 so that the origin of this smaller
-> series is contained.
+Bartosz
 
-sure. I will resend this patch as v18, taking care of current comments
-as-well.
-
-thanks,
-Shivendra
+> +
+>                 if (!device_property_present(&serdev->dev, "enable-gpios"=
+)) {
+>                         /*
+>                          * Backward compatibility with old DT sources. If=
+ the
+> @@ -2740,6 +2753,12 @@ static const struct acpi_device_id qca_bluetooth_a=
+cpi_match[] =3D {
+>  MODULE_DEVICE_TABLE(acpi, qca_bluetooth_acpi_match);
+>  #endif
+>
+> +static const struct serdev_device_id qca_bluetooth_serdev_match[] =3D {
+> +       { "WCN7850", (kernel_ulong_t)&qca_soc_data_wcn7850 },
+> +       { },
+> +};
+> +MODULE_DEVICE_TABLE(serdev, qca_bluetooth_serdev_match);
+> +
+>  #ifdef CONFIG_DEV_COREDUMP
+>  static void hciqca_coredump(struct device *dev)
+>  {
+> @@ -2756,6 +2775,7 @@ static void hciqca_coredump(struct device *dev)
+>  static struct serdev_device_driver qca_serdev_driver =3D {
+>         .probe =3D qca_serdev_probe,
+>         .remove =3D qca_serdev_remove,
+> +       .id_table =3D qca_bluetooth_serdev_match,
+>         .driver =3D {
+>                 .name =3D "hci_uart_qca",
+>                 .of_match_table =3D of_match_ptr(qca_bluetooth_of_match),
+>
+> --
+> 2.48.1
+>
+>
 
