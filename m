@@ -1,455 +1,184 @@
-Return-Path: <linux-pm+bounces-38144-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38145-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC2BCC66A33
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 01:19:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D7113C66D0B
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 02:16:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 024A2350485
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 00:19:53 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DF7533470F6
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 01:13:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9642620409A;
-	Tue, 18 Nov 2025 00:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13F262F0681;
+	Tue, 18 Nov 2025 01:12:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lJS1ToY6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gdO7XQpW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4967B5464D
-	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 00:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 001B62DE714
+	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 01:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763425189; cv=none; b=hkgWPPpTNJmONIvgjEk1XL0xnpFs6ZIKmpelABooF8SemmlEkcdxBOrk5dLI5jHCUOX1Q7OSTuApviMT8iLS9zi8+UKogQbSBqCvbFifHnVn9IUzDY2b+bgYhj9iYtcWPFI1+JJXQnE4b0cj2OiWy9zOtAMfOJkgH1zkUXNuM2s=
+	t=1763428378; cv=none; b=lWWmfjXLHTbjdvC72KfurMIJUCoc7EfAMfdJrWZYy8os7ki/daMG4JsFVlrilkj0gz7g7vZO/nb/AX58Liv0b+IN9Box3CEp2+5gxP2i3mXQxDW4rsgDPz1piCE6pquxDX7lNdHedS0JMaiU65NtIfftiybiXkO7P5CvZi2hxzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763425189; c=relaxed/simple;
-	bh=zS5utLzdi+vZdUo2AxGtjJmPvu4Y7zmxtT3dmDIJbOA=;
+	s=arc-20240116; t=1763428378; c=relaxed/simple;
+	bh=vprNlNF83I+ZNCi5EcyPPczMmil4BpyVQ+GAJSLz1UU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eA9RE8cN/eOkegzTsD7YDR3qMrnVPo17SPVaaB1BlPbSYxkBkPeAoQrqpQPWHjdRQ5M5tmQejrrgWFkwa3x1I4dnRhCVcFJhuI/lOLAqOvAm2apIzT2oS2RKaLB53zfNtiHH8qVTaiU+pJQ/WztOKx3NOi0CgxcDSqSDYRdf5ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lJS1ToY6; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-64088c6b309so7840692a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 16:19:45 -0800 (PST)
+	 To:Cc:Content-Type; b=Ve317mJdUz5vjxanh7hSs/bUZZFRVlAtabnTTpt726boQs2+mgpfSzUnfGTasBW+ahcROt+lx9kDQzlW+yRufeWFfI43ciKDqpBHPuz1OFywykm027eXnY1uQS0xDW3ByBznFwdVVxZIPs9YebbO8EyE8MGWcTb4WFWKcHYjlGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gdO7XQpW; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b73b24f1784so156747766b.0
+        for <linux-pm@vger.kernel.org>; Mon, 17 Nov 2025 17:12:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1763425184; x=1764029984; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1763428375; x=1764033175; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ho36kore/veHUUwvXXRXtFwwXLwXLZNkFiXvPHtQqxk=;
-        b=lJS1ToY6KEPE3NotjDuqDhqw/WLAMerQ+S+dcwO5657ChBljcIjn5RvZjQcYPPXpN1
-         sMoy+k3uutJamXsKDLV0ctSL3E56UZhlAE/MciD7goGe99S1NtXJZj5F15ECm+sWBT8G
-         ArQDS/S+Qa75OAOh/5fjk9zhUFDjMrG16rNrQ=
+        bh=BLypkKedaSatyVf6P7eTHsXDW5pFI6QMWuH1xNayjAc=;
+        b=gdO7XQpWrlGfCBM8MSXom9L7om7a/w+xxJYlcTtFvp1dDnWGHoYiLudtVeE36RTYA1
+         Oyexr44vi1bHLcqArL49Ulq9caFOeWxobp2H0us1uNB4qGt7kpEp4PkgHrqpQUN3+rJv
+         zH5oHs0wPmqPtEQyauFdRmIAsXJpfMFtm3eKh60PcCTRBg12SRTULH01DadotzvtwWs8
+         LqGixHlN2nCYYoe3oSliKyPWw68nGkYxCa+qUZOIHtiOZ8N8yJqNxA5m3ss96lmm1q9H
+         qQ2RqOQh3uA8wJ0GKEL+6eBs8R/n+iem/56A/CC4jrziYTRAEkUP72PX8nlt3DTDL5es
+         /8tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763425184; x=1764029984;
+        d=1e100.net; s=20230601; t=1763428375; x=1764033175;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Ho36kore/veHUUwvXXRXtFwwXLwXLZNkFiXvPHtQqxk=;
-        b=oe6LvS16OrnSWNVSxLqhPIZ3t3O28TXxpH+XpSzWkbUspBmN7q9cHiMaxyglbkcx5x
-         0t3MPc8HxjmIXtWvBcM5z21H3ZwjKsds0+xB69qLscfUiiaS5g52RL+zmKIO+r3xqWYo
-         bbjdE3IfMGFsZno4G7zxyPB6f6x7UlBSa9F0HD27dNu/AYN83Jwj9V5TlW2HNRZ7EVd8
-         WMhHfnMOwUtiBEsSINI04roM8Fn7/J76pba+i6pW79cfNbC2tv9YH0IZEbcUcSxAyZXR
-         4AkL7wH/PgTSEsl6AiqkFnJ5QY5guh02cWbOKPOK6nfBfb7n13uuRjLMHM1J7e+v1XlA
-         Ew1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVM6Q1piP0rTceGJDV8rvCtkrZdZ1G/IiVxkNRmF+f3hf2uec5e5LOYb1gRACBa3ZardBDPx5xBIg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlY/XvKIXK0eQcLM6+bewC/+InpTaGkqJPagWCyFICW9JrzJwj
-	8K2RnvOgJJUXk4K8St49DsvAg+Ii1sFxwUmGKaT4Tw4sj/PyKXoI/+mL3w4pOxp5xuBl9gfRvFD
-	V1iP33CA8jv2WVVbgM11LdiL9MZyg7sTw96FMGeoh3UBBMKXZSjxZid+/
-X-Gm-Gg: ASbGncuuh0qMGQivPTZXB8QYGAYbJDk4NYjB3xJBb9ji5+sbsaHtLF0IaMuafE+E/5y
-	PO17kLAtOws1LSaOix15wxxLTZW2QgjQzFD2ActLLnklCMWXogxa3z/Uvahhhhr60yAfXQFtb9t
-	vdeqTPMIroqzEGA64nV+MvUSd78KnAzvdDaJOnPbrHs5e9iEqVCRkN7J6pb+uHfhdBGAIVRg+Hz
-	AlQRMzrdq5Dtmd3iAgaxhEHIAdeGH9OxPtD60hI/pn+U8X+HraOcNx/gSZWH2dy1JAlVsmBBGoH
-	Pn8qZD1EQPRahv125ZWhVpA0lw==
-X-Google-Smtp-Source: AGHT+IH4kd2Vcg+fr9xdZdJpabde7NUNGSZykRV+V8VcE6mO4e2OKLn2wvyRv8Wi3jJeyjecbXc14IEFuKkdCLvsST8=
-X-Received: by 2002:a05:6402:5254:b0:640:7690:997e with SMTP id
- 4fb4d7f45d1cf-64350e03a8bmr13391606a12.3.1763425184511; Mon, 17 Nov 2025
- 16:19:44 -0800 (PST)
+        bh=BLypkKedaSatyVf6P7eTHsXDW5pFI6QMWuH1xNayjAc=;
+        b=uendcCXjBrzOSZxkROdCIQ5KiWU9kDQ7vz+QjTy8IcdeZfLWGkNmlbyRO3Bc7N1A5z
+         hv6+EfRG/UEV/SN7K5ov4YoU9MRkXM5hYYnH8wRT2j8G1efrzAyRbmw0Es9+7/0bl/zR
+         7omZf6pZ/lXz9vV79mrf+wPXTVi+h1hNTf80xVz+WDvg1bWCOsJGZyJZAwK1kWpGJXE1
+         KqMHUntkCGmE12n39KX0ybqWqYLsgdGGyZLwlG+nDsz/28tKmE6lrLC2PAGK98Qh1p6Y
+         yrLM3VErpzFsXIRXfYat9gW7F/eI2Fuo4puKNi3C9O9CBNt7jfFBokVdFi5Dv86af1LQ
+         yWfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVmR40eBVaypLTswj3XILckCopJYMDH2HvC4rm9MlLnRYPFPDEyRDXNB9NuCA7z1l38amXEGn+SzA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxC7N5xfOAhiH7htNRuU4KxObUgfFEw3+FAK57CCuEyG53UkeHq
+	UJUvPqky4+umCxbnRe7c6Pnb+AIR2DiUkGyfRUKRzr8n8+7vddw/4eLvMlCXpPkuF+cWHZMaMA/
+	khJK66YH7ZCE3jQt0SUZ/0SbI+5RUw97EXK/zVzgV
+X-Gm-Gg: ASbGncv5Zcl89cN91fkCN3qEPj/TxYvVnf29/LbTq7OCIZhPZ107jbQGDDXVE5Zh+sh
+	g+TQCWOSTjRkVvUeOLtqduQgwQ7NbjL/5RUBm0/XyTGMiIDGwfgUbhmQMeYRqFviuApdxc/DFMJ
+	FKsOIcVJEHn+WjngOweSbiCa9iEw/GVXcbc7+mq1seg2jvlxWqDPZ8Re+PzR1FrtnGN1jo4lFqS
+	y4xhE24ArOn7q+oxZD6AjrAILyuKGB6wA5Nqie3i/Dlh8arbOkL49d8w4DpFvFSUPJ8/2nUvpNF
+	fkPyomRmX0Hr2Vz8oJq1dBiV2oaUIPQZRGDef0vo
+X-Google-Smtp-Source: AGHT+IEhPt97xpM9QAlAaltjDJJJ234wHSpYiikz3yudtwX2qGgx6x9IopSiX/gSigXYd9ESfwNuBAN149k8ySNW59I=
+X-Received: by 2002:a17:907:d8a:b0:b73:2ced:9af0 with SMTP id
+ a640c23a62f3a-b75a0a94f28mr135637166b.27.1763428375062; Mon, 17 Nov 2025
+ 17:12:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
- <00928b9d-7189-4929-afc9-7684fc5ef531@arm.com> <ca45366d-4c85-4802-8a35-886a6f69d10d@arm.com>
- <6228387.lOV4Wx5bFT@rafael.j.wysocki> <CAEmPcwsVfcoFTyS-mHSkZTFmS8Y1vkFToYo1xcAH0522wyDawA@mail.gmail.com>
- <431db236-736d-4fc3-95c2-876bc767aa0c@arm.com> <CAEmPcwsQjHsqmvaWA_6ORCQnJdWutDmu=KZSrn=nKJhirX7H3Q@mail.gmail.com>
- <faa4e196-f8bf-4800-b755-a35e80d41b9f@arm.com>
-In-Reply-To: <faa4e196-f8bf-4800-b755-a35e80d41b9f@arm.com>
-From: Reka Norman <rekanorman@chromium.org>
-Date: Tue, 18 Nov 2025 11:19:33 +1100
-X-Gm-Features: AWmQ_blwQQkqfatk7HBnYnDOgh2wwAFrMI6kI9m3mHv7gt5ySwpbkdq3czeaTkg
-Message-ID: <CAEmPcwsCby9NMGCAdKkDaKOobuLOY6fqP-HFUe6mGQBPkpcD3w@mail.gmail.com>
-Subject: Re: [PATCH v1] cpuidle: governors: teo: Rework the handling of tick wakeups
+References: <20251112235154.2974902-1-wusamuel@google.com> <hslbhy6btkbpsgriafvdq4ligq7vorwcpffaakinqoieroopur@beyq5ouauscf>
+ <CAG2KctqdJzhaC4pRG9rAgteVKHtKsA8Y7=_MHEUCCeBBhoejWQ@mail.gmail.com>
+ <5pv5tqf24p6ttpydpdegyhyod3m2hmpwbfrzl6otsq3q2gvb2s@gsgcgbcvin3u> <28868c0e-2a46-47ed-9bd7-439056cf94c0@arm.com>
+In-Reply-To: <28868c0e-2a46-47ed-9bd7-439056cf94c0@arm.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Mon, 17 Nov 2025 17:12:44 -0800
+X-Gm-Features: AWmQ_blRuc1oXQfT-0XAwm__1Xp_jZ8h6hqyr5l1p-u5ZqHf4Qn1UqNNSnb93C8
+Message-ID: <CAG2Kctq9aTpcC8+Ay-Wbz_6=dTW7HR6NW6+kmc-ebo860nfpDA@mail.gmail.com>
+Subject: Re: [PATCH v1] cpufreq: Add policy_frequency trace event
 To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, peterz@infradead.org, 
+	vincent.guittot@linaro.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, kernel-team@android.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Qais Yousef <qyousef@layalina.io>, 
+	John Stultz <jstultz@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 17, 2025 at 7:45=E2=80=AFPM Christian Loehle
+On Mon, Nov 17, 2025 at 1:18=E2=80=AFAM Christian Loehle
 <christian.loehle@arm.com> wrote:
 >
-> On 11/17/25 05:14, Reka Norman wrote:
-> > On Fri, Nov 14, 2025 at 7:33=E2=80=AFPM Christian Loehle
-> > <christian.loehle@arm.com> wrote:
-> >>
-> >> On 11/14/25 04:05, Reka Norman wrote:
-> >>> On Fri, Nov 14, 2025 at 3:56=E2=80=AFAM Rafael J. Wysocki <rafael@ker=
-nel.org> wrote:
-> >>>>
-> >>>> On Thursday, November 13, 2025 4:43:18 PM CET Christian Loehle wrote=
-:
-> >>>>> On 11/12/25 18:33, Christian Loehle wrote:
-> >>>>>> On 11/12/25 14:16, Rafael J. Wysocki wrote:
-> >>>>>>> On Wed, Nov 12, 2025 at 3:03=E2=80=AFPM Christian Loehle
-> >>>>>>> <christian.loehle@arm.com> wrote:
-> >>>>>>>>
-> >>>>>>>> On 11/12/25 13:32, Rafael J. Wysocki wrote:
-> >>>>>>>>> On Tue, Nov 11, 2025 at 6:20=E2=80=AFPM Christian Loehle
-> >>>>>>>>> <christian.loehle@arm.com> wrote:
-> >>>>>>>>>>
-> >>>>>>>>>> On 11/11/25 11:48, Rafael J. Wysocki wrote:
-> >>>>>>>>>>> On Tue, Nov 11, 2025 at 11:48=E2=80=AFAM Christian Loehle
-> >>>>>>>>>>> <christian.loehle@arm.com> wrote:
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> On 11/11/25 10:00, Christian Loehle wrote:
-> >>>>>>>>>
-> >>>>>>>>> [...]
-> >>>>>>>>>
-> >>>>>>>>>>>>> I see two issues:
-> >>>>>>>>>>>>> 1) Because of DECAY_SHIFT 3 values < 8 cannot decay (I gues=
-s this wouldn't really be an issue without 2))
-> >>>>>>>>>>>
-> >>>>>>>>>>> This shouldn't be a problem.
-> >>>>>>>>>>
-> >>>>>>>>>> Agreed, it should be a non-issue. Nonetheless if this wasn't t=
-he case $subject would've likely
-> >>>>>>>>>> never been an issue.
-> >>>>>>>>>
-> >>>>>>>>> Well, I think that the leftovers can be cleared when they becom=
-e less than 8.
-> >>>>>>>>>
-> >>>>>>>>>>>
-> >>>>>>>>>>>>> 2) if (2 * idx_intercept_sum > cpu_data->total - idx_hit_su=
-m) isn't an appropriate check, it will
-> >>>>>>>>>>>>> exclude the state if it its idx_hit_sum make up the vast ma=
-jority of cpu_data->total (i.e. it would
-> >>>>>>>>>>>>> have been a really good candidate actually).
-> >>>>>>>>>>>
-> >>>>>>>>>>> Well, it would exclude the state if the sum of hits for the s=
-tates
-> >>>>>>>>>>> below it is large enough.  This is questionable (because why =
-would
-> >>>>>>>>>>> hits matter here), but I attempted to make the change below a=
-nd
-> >>>>>>>>>>> somebody reported a regression IIRC.
-> >>>>>>>>>>>
-> >>>>>>>>>>> This check is related to the problem at hand though (see belo=
-w).
-> >>>>>>>>>>>
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> I lightly tested the below, it seems to be at least compara=
-ble to mainline teo.
-> >>>>>>>>>>>>> (the documentation/comments would need adapting too, of cou=
-rse)
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> -----8<-----
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpui=
-dle/governors/teo.c
-> >>>>>>>>>>>>> index bfa55c1eab5b..f8f76e3b8364 100644
-> >>>>>>>>>>>>> --- a/drivers/cpuidle/governors/teo.c
-> >>>>>>>>>>>>> +++ b/drivers/cpuidle/governors/teo.c
-> >>>>>>>>>>>>> @@ -355,7 +355,7 @@ static int teo_select(struct cpuidle_dr=
-iver *drv, struct cpuidle_device *dev,
-> >>>>>>>>>>>>>          * all of the deeper states, a shallower idle state=
- is likely to be a
-> >>>>>>>>>>>>>          * better choice.
-> >>>>>>>>>>>>>          */
-> >>>>>>>>>>>>> -       if (2 * idx_intercept_sum > cpu_data->total - idx_h=
-it_sum) {
-> >>>>>>>>>>>>> +       if (2 * idx_intercept_sum > idx_hit_sum) {
-> >>>>>>>>>>>>>                 int first_suitable_idx =3D idx;
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>                 /*
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>>
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> ... nevermind the patch, idx_hit_sum is of course the sum of=
- 0...idx-1.
-> >>>>>>>>>>>> Maybe something like this, again lightly tested:
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> -----8<-----
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuid=
-le/governors/teo.c
-> >>>>>>>>>>>> index 173ddcac540a..6bfb9cedb75e 100644
-> >>>>>>>>>>>> --- a/drivers/cpuidle/governors/teo.c
-> >>>>>>>>>>>> +++ b/drivers/cpuidle/governors/teo.c
-> >>>>>>>>>>>> @@ -383,13 +395,15 @@ static int teo_select(struct cpuidle_d=
-river *drv, struct cpuidle_device *dev,
-> >>>>>>>>>>>>                  * has been stopped already into account.
-> >>>>>>>>>>>>                  */
-> >>>>>>>>>>>>                 intercept_sum =3D 0;
-> >>>>>>>>>>>> +               hit_sum =3D 0;
-> >>>>>>>>>>>>
-> >>>>>>>>>>>>                 for (i =3D idx - 1; i >=3D 0; i--) {
-> >>>>>>>>>>>>                         struct teo_bin *bin =3D &cpu_data->s=
-tate_bins[i];
-> >>>>>>>>>>>>
-> >>>>>>>>>>>>                         intercept_sum +=3D bin->intercepts;
-> >>>>>>>>>>>> +                       hit_sum +=3D bin->hits;
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> -                       if (2 * intercept_sum > idx_intercep=
-t_sum) {
-> >>>>>>>>>>>> +                       if (2 * intercept_sum > cpu_data->to=
-tal || 2 * hit_sum > cpu_data->total) {
-> >>>>>>>>>>>>                                 /*
-> >>>>>>>>>>>>                                  * Use the current state unl=
-ess it is too
-> >>>>>>>>>>>>                                  * shallow or disabled, in w=
-hich case take the
-> >>>>>>>>>>>
-> >>>>>>>>>>> This will only matter after the deepest state has been reject=
-ed
-> >>>>>>>>>>> already and on the system in question this means selecting st=
-ate 0 no
-> >>>>>>>>>>> matter what.
-> >>>>>>>>>>>
-> >>>>>>>>>>
-> >>>>>>>>>> Ah, right!
-> >>>>>>>>>>
-> >>>>>>>>>>
-> >>>>>>>>>>> The pre-6.12 behavior can be explained if tick wakeups are ta=
-ken into account.
-> >>>>>>>>>>>
-> >>>>>>>>>>> Namely, when state 0 is chosen (because of the check mentione=
-d above),
-> >>>>>>>>>>> the tick is not stopped and the sleep length is KTIME_MAX.  I=
-f the
-> >>>>>>>>>>> subsequent wakeup is a tick one, it will be counted as a hit =
-on the
-> >>>>>>>>>>> deepest state (and it will contribute to the total sum in the=
- check
-> >>>>>>>>>>> mentioned above).  Then, at one point, cpu_data->total will b=
-e large
-> >>>>>>>>>>> enough and the deepest state will become the candidate one.  =
-If
-> >>>>>>>>>>> tick_nohz_get_sleep_length() returns a large value at that po=
-int, the
-> >>>>>>>>>>> tick will be stopped and the deepest state will be entered.  =
-Nirvana
-> >>>>>>>>>>> ensues.
-> >>>>>>>>>>
-> >>>>>>>>>> So fundamentally we will have to count tick-wakeups as a) noth=
-ing, which
-> >>>>>>>>>> doesn't allow us to ever break out of the intercept logic that=
- caused us
-> >>>>>>>>>> to leave the tick on b) intercepts, which is bonkers and doesn=
-'t allow us
-> >>>>>>>>>> to ever break out and c) hits =3D=3D sleep_length would've bee=
-n accurate.
-> >>>>>>>>>> Of course counting a tick wakeup as a hit for sleep_length neg=
-ates the
-> >>>>>>>>>> intercept logic.
-> >>>>>>>>>
-> >>>>>>>>> Not quite.  The intercept logic is there for wakeups other than=
- tick
-> >>>>>>>>> wakeups and timer wakeups.
-> >>>>>>>>>
-> >>>>>>>>> I actually think that tick wakeups can be counted as hits on th=
-e
-> >>>>>>>>> deepest available state - maybe only when tick wakeups dominate=
- the
-> >>>>>>>>> wakeup pattern - but generally this is not unreasonable: When t=
-he
-> >>>>>>>>> wakeup pattern is dominated by tick wakeups, this by itself is =
-a good
-> >>>>>>>>> enough reason to stop the tick.
-> >>>>>>>>
-> >>>>>>>> (assuming HZ=3D1000 below but it doesn't matter)
-> >>>>>>>> That will exclude any 'intercept' logic from having much effect =
-if the
-> >>>>>>>> avg idle duration is >TICK_NSEC/2, which is potentially still qu=
-ite a bit
-> >>>>>>>> off from state1 residency, like in Reka's case here.
-> >>>>>>>> That's why I thought it would cause unreasonable regressions her=
-e.
-> >>>>>>>> I'll give it a go as well though!
-> >>>>>>>
-> >>>>>>> Thanks!
-> >>>>>>>
-> >>>>>>> Note that I'd prefer to add a check if tick wakeups dominate the
-> >>>>>>> wakeup pattern before setting sleep_length_ns to KTIME_MAX though=
-.
-> >>>>>>> I'd first like to know how the Reka's system reacts to the more
-> >>>>>>> drastic variant of this change.
-> >>>>>>
-> >>>>>> Below are my usual tests, it's definitely visible but the impact i=
-s limited
-> >>>>>> on this platform anyway. I think if we gate the KTIME_MAX setting =
-behind
-> >>>>>> the "tick wakeup dominate" it should be acceptable!
-> >>>>>> Let's see what Reka reports.
-> >>>>>>
-> >>>>> Forgot to post the full results, anyway as expected with mtdblock (=
-a very slow
-> >>>>> / low frequent wakeup scenario) the impact becomes clearly visible.
-> >>>>> Still hopeful that the more conservative approach will be acceptabl=
-e!
-> >>>>
-> >>>> Speaking of which, the patch to test is appended below, but it doesn=
-'t apply
-> >>>> directly on top of the mainline.  It is based on some other patches =
-that have
-> >>>> been posted recently, so here's a git branch with all of the requisi=
-te
-> >>>> material:
-> >>>>
-> >>>> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git cp=
-uidle-teo-testing
-> >>>>
-> >>>> Reka, please try this one and let us know how it goes.
+> On 11/14/25 05:11, Viresh Kumar wrote:
+> > On 13-11-25, 19:41, Samuel Wu wrote:
+> >> On Wed, Nov 12, 2025 at 10:45=E2=80=AFPM Viresh Kumar <viresh.kumar@li=
+naro.org> wrote:
 > >>>
-> >>> Results attached. The residencies are a bit less deep than before -
-> >>> about 4.5% in WFI vs 2% at 6.6 or with the more aggressive patch. But
-> >>> I=E2=80=99m guessing that=E2=80=99s expected.
+> >>> On 12-11-25, 15:51, Samuel Wu wrote:
+> >>>> The existing cpu_frequency trace_event can be verbose, emitting an e=
+vent
+> >>>> for every CPU in the policy even when their frequencies are identica=
+l.
+> >>>>
+> >>>> This patch adds a new policy_frequency trace event, which provides a
+> >>>> more efficient alternative to cpu_frequency trace event. This option
+> >>>> allows users who only need frequency at a policy level more concise =
+logs
+> >>>> with simpler analysis.
+> >>>>
+> >>>> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> >>>> ---
+> >>>>  drivers/cpufreq/cpufreq.c    |  2 ++
+> >>>>  include/trace/events/power.h | 21 +++++++++++++++++++++
+> >>>>  2 files changed, 23 insertions(+)
+> >>>>
+> >>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> >>>> index 4472bb1ec83c..b65534a4fd9a 100644
+> >>>> --- a/drivers/cpufreq/cpufreq.c
+> >>>> +++ b/drivers/cpufreq/cpufreq.c
+> >>>> @@ -345,6 +345,7 @@ static void cpufreq_notify_transition(struct cpu=
+freq_policy *policy,
+> >>>>               pr_debug("FREQ: %u - CPUs: %*pbl\n", freqs->new,
+> >>>>                        cpumask_pr_args(policy->cpus));
+> >>>>
+> >>>> +             trace_policy_frequency(freqs->new, policy->cpu);
+> >>>>               for_each_cpu(cpu, policy->cpus)
+> >>>>                       trace_cpu_frequency(freqs->new, cpu);
 > >>>
-> >>> I also measured the power on a slightly different system where I firs=
-t
-> >>> noticed this regression, and it=E2=80=99s indistinguishable from 6.6.=
- So from
-> >>> my side this looks great, thank you!
+> >>> I don't see much value in almost duplicate trace events. If we feel t=
+hat a
+> >>> per-policy event is a better fit (which makes sens), then we can just=
+ drop the
+> >>> trace_cpu_frequency() events and print policy->cpus (or related_cpus)
+> >>> information along with the per-policy events.
 > >>
-> >> Good news!
-> >> For completeness:
+> >> Thank you for the feedback Viresh. Fair enough, I've done some testing
+> >> and a single trace event should work and would be cleaner. Please let
+> >> me know what you think of this proposal for v2.
 > >>
-> >> Per-Cluster deltas: BIG
+> >> We can append a bitmask of policy->cpus field to
+> >> trace_cpu_frequency(). This way we maintain backwards compatibility:
+> >> trace_cpu_frequency() is not removed, and its pre-existing fields are
+> >> not disturbed.
 > >>
-> >> +---------+-------+--------------+------------+---------+--------+----=
-----+---------+--------+---------+
-> >> | cluster | state | name         | time=CE=94      | time%   | usage=
-=CE=94 | above=CE=94 | above%  | below=CE=94 | below%  |
-> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> >> | BIG     |     0 | WFI          | 957,853    |   2.99% | 2,537  | 0  =
-    |   0.00% | 0      |   0.00% |
-> >> | BIG     |     1 | cpuoff-b     | 163,636    |   0.51% | 21     | 18 =
-    |  85.71% | 3      |  14.29% |
-> >> | BIG     |     2 | clusteroff-b | 30,918,285 |  96.50% | 501    | 128=
-    |  25.55% | 0      |   0.00% |
-> >> | BIG     |     3 | s2idle       | 0          |   0.00% | 0      | 0  =
-    |   0.00% | 0      |   0.00% |
-> >> | BIG     | TOTAL |              | 32,039,774 | 100.00% | 3,059  | 146=
-    |   4.77% | 3      |   0.10% |
-> >> +---------+-------+--------------+------------+---------+--------+----=
-----+---------+--------+---------+
-> >>
-> >> Per-Cluster deltas: LITTLE
-> >>
-> >> +---------+-------+--------------+-------------+---------+--------+---=
------+---------+--------+---------+
-> >> | cluster | state | name         | time=CE=94       | time%   | usage=
-=CE=94 | above=CE=94 | above%  | below=CE=94 | below%  |
-> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> >> | LITTLE  |     0 | WFI          | 8,424,141   |   6.63% | 16,629 | 0 =
-     |   0.00% | 0      |   0.00% |
-> >> | LITTLE  |     1 | cpuoff-l     | 11,121,561  |   8.75% | 485    | 96=
-     |  19.79% | 388    |  80.00% |
-> >> | LITTLE  |     2 | clusteroff-l | 107,499,073 |  84.62% | 2,705  | 1,=
-001  |  37.01% | 0      |   0.00% |
-> >> | LITTLE  |     3 | s2idle       | 0           |   0.00% | 0      | 0 =
-     |   0.00% | 0      |   0.00% |
-> >> | LITTLE  | TOTAL |              | 127,044,775 | 100.00% | 19,819 | 1,=
-097  |   5.54% | 388    |   1.96% |
-> >> +---------+-------+--------------+-------------+---------+--------+---=
------+---------+--------+---------+
-> >>
-> >> Per-Cluster deltas: MID
-> >>
-> >> +---------+-------+--------------+------------+---------+--------+----=
-----+---------+--------+---------+
-> >> | cluster | state | name         | time=CE=94      | time%   | usage=
-=CE=94 | above=CE=94 | above%  | below=CE=94 | below%  |
-> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> >> | MID     |     0 | WFI          | 2,593,501  |   2.72% | 7,278  | 0  =
-    |   0.00% | 0      |   0.00% |
-> >> | MID     |     1 | cpuoff-m     | 188,793    |   0.20% | 51     | 48 =
-    |  94.12% | 3      |   5.88% |
-> >> | MID     |     2 | clusteroff-m | 92,616,252 |  97.08% | 605    | 257=
-    |  42.48% | 0      |   0.00% |
-> >> | MID     |     3 | s2idle       | 0          |   0.00% | 0      | 0  =
-    |   0.00% | 0      |   0.00% |
-> >> | MID     | TOTAL |              | 95,398,546 | 100.00% | 7,934  | 305=
-    |   3.84% | 3      |   0.04% |
-> >> +---------+-------+--------------+------------+---------+--------+----=
-----+---------+--------+---------+
-> >>
-> >> Out of curiosity:
-> >> Do you know if the platform respects cpuoff / clusteroff distinction
-> >> properly? Is the power difference measurable?
+> >> Call flow wise, we can delete all the for_each_cpu() loops, and we
+> >> still retain the benefits of the trace emitting once per policy
+> >> instead of once per cpu.
 > >
-> > No, I=E2=80=99m not really familiar with the details myself. I=E2=80=99=
-ll check if
-> > others know more. I did a quick test with disabling cpuoff on all
-> > cores, then disabling clusteroff on all cores. The power does seem to
-> > be slightly higher with clusteroff disabled, but the difference is
-> > barely above the noise level so I=E2=80=99m not certain.
+> > Fine by me. I have added Scheduler maintainers in the loop to see if th=
+ey have a
+> > different view.
 > >
-> >> There really is no reason for cpuidle to not autopromote them, if ther=
-e's no latency
-> >> requirement that would prevent that.
-> >> Especially for the big cluster (just one CPU).
-> >
-> > For my understanding, could you explain a bit more what you mean? It=E2=
-=80=99s
-> > already spending a lot less time in cpuoff than clusteroff. Would you
-> > expect to see even less time in cpuoff (and 0 for the big core)?
 >
-> So the clusteroff states for psci in PC mode are exposed per-CPU, like he=
-re, but
-> since it (usually) refers to powering down the voltage rail of that clust=
-er it
-> requires all CPUs of that cluster to be in the clusteroff state to actual=
-ly be
-> entered (kernel is unaware of what state actually happened, only which on=
-e it requested).
-> What's special about your platform though:
-> The target residency (How long do I need to be in this state for the ente=
-ring+exiting
-> to pay off energy-wise) of cpuoff and clusteroff is equal. Therefore if y=
-ou don't
-> care about the wakeup latency, clusteroff should be the strictly better c=
-hoice from a
-> governor perspective (If a cluster can't be powered off because >=3D1 CPU=
-s aren't in
-> clusteroff, the clusteroff-selected CPUs will still go cpuoff).
-> Additionally the big CPU is (I'm assuming) alone on a cluster, therefore =
-if it doesn't
-> need the latency requirement it should never go cpuoff, always (actual) c=
-lusteroff.
->
-> The fact that teo still selects cpuoff is due to much of the logic workin=
-g on per-state
-> bins. It's rather an artifact than intended behaviour.
-> If you wanna experiment you might wanna try running this platform with al=
-l cpuoff states
-> removed.
+> And IIUC your proposal is to fold policy_frequency into cpu_frequency but=
+ then
+> only have one cpu_frequency event per policy emitted?
 
-Thanks for the explanation, that all makes sense. FWIW, a colleague
-shared that in their experience the power difference between cpuoff
-and clusteroff is measurable, at least for the middle cores. So I=E2=80=99l=
-l
-try experimenting with that. Thanks!
+That's right, emit the trace event once per policy instead of once per
+cpu- which I think is the most valuable element of this patch. And
+yes, the latest idea was to append bitmask of policy->cpus into the
+cpu_frequency event such that relevant policy info is encapsulated in
+the trace event.
+
+> I think from a tooling perspective it would be easier to remove cpu_frequ=
+ency
+> entirely, then tools can probe on the presence of policy_frequency / cpu_=
+frequency.
+
+This can be handled perfectly fine by the tools I know of that consume
+this trace event. The points you and Viresh have brought up are valid,
+and as this solution is not in conflict with those points,
+"policy_frequency replacing cpu_frequency" can be the frontrunner for
+now.
 
