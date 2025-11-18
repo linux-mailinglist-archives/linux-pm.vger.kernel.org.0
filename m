@@ -1,102 +1,110 @@
-Return-Path: <linux-pm+bounces-38152-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38153-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 336D5C68378
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 09:34:00 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B89FC68429
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 09:45:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4C52B4F1A8C
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 08:31:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id A0B872A1F2
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 08:45:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 553952877D7;
-	Tue, 18 Nov 2025 08:31:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Uq3h2piF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1739B257843;
+	Tue, 18 Nov 2025 08:45:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCE430ACEA;
-	Tue, 18 Nov 2025 08:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C03226CE23;
+	Tue, 18 Nov 2025 08:45:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763454682; cv=none; b=fA9vwNNp/AebThLa7gHY+UA2eskcs3xkoau0wQde/ugYM3hIA2yKdneFIV0NuKghxfFOl1W9Ho5as3d+oMevJ52otL+Z/ZPkgujuUSVoNN3cfo8kAT2nWgh5PYj6ZD+Vz2ED+cu9stqLbE2GNgeS35z0yFPXy/GyqKkVmsS05sU=
+	t=1763455520; cv=none; b=TvNat8TLmc4vPcLewMQjaF48NF5aXLDTg5Xd34PM5Ol0eqKJ1NEaNfqTHb0o+XlCB3RoJYCodbQNJP4jnON0DQKWPw70vO9m7v975Ur6IqKNB4srce8dBAQqPOsWDjtkGFs5WdzvFmmXWjwTGF0BS/jVTwuBT2/biJgyESBbSzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763454682; c=relaxed/simple;
-	bh=ftxHiNrtC+ti7V8R2Zi43QPvXWdUXaFm0pDBk/+vdC8=;
-	h=Message-ID:Subject:From:To:CC:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GL5LJIMrd56jR0iQPSr3Irr9i1EJbQxoBaCaJahoAAGFvBwbll61DRwrrsvWLvG7ZssDUv9fomguuXzNpWrBXPFd8vFZSzbq16swVFi23v/TPEtsU7GpUjGa9A1mZIYxh+9H6QbWTPXpobNGbJ4ZeiMTBhzRlmIEBqiWs94AngA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=Uq3h2piF; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: ef86c38ec45811f08ac0a938fc7cd336-20251118
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=ftxHiNrtC+ti7V8R2Zi43QPvXWdUXaFm0pDBk/+vdC8=;
-	b=Uq3h2piFTZHcXCAfnM/BRZGrgCHSPP+I75AEPPf4LGUQOx/AhhA7vYwcAsCNHjRi1T/U80xysI5ZmGCcVWl/ArUFry5CdIGyr8ZmJn3MxMz3cbTWefeX3f17xhZIacl+B5l22/3FX1nGtSNhhKdV6P8MHijsLMIhTVa7y2zv1+0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:1be82f83-b2e4-448c-8fad-def3a6e1b89c,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:91ab0558-17e4-43d2-bf73-55337eed999a,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|836|888|898,TC:-5,Co
-	ntent:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,CO
-	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: ef86c38ec45811f08ac0a938fc7cd336-20251118
-Received: from mtkmbs09n1.mediatek.inc [(172.21.101.35)] by mailgw01.mediatek.com
-	(envelope-from <ya-jou.wu@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 994463458; Tue, 18 Nov 2025 16:31:10 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26; Tue, 18 Nov 2025 16:31:09 +0800
-Received: from [10.233.130.16] (10.233.130.16) by mtkmbs13n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.1748.26 via Frontend
- Transport; Tue, 18 Nov 2025 16:31:09 +0800
-Message-ID: <119e2410ca32a0d55fa6febf93c7a3164b391db0.camel@mediatek.com>
-Subject: Re: [PATCH v1] PM: sleep: core: Fix runtime PM enabling in
- device_resume_early()
-From: Rose Wu <ya-jou.wu@mediatek.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>
-CC: <rafael.j.wysocki@intel.com>, <regressions@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, wsd_upstream <wsd_upstream@mediatek.com>,
-	<linux-mediatek@lists.infradead.org>, artis.chiu <artis.chiu@mediatek.com>,
-	Johnny-cc.Kao <Johnny-cc.Kao@mediatek.com>, Ulf Hansson
-	<ulf.hansson@linaro.org>
-Date: Tue, 18 Nov 2025 16:31:08 +0800
-In-Reply-To: <5940388.DvuYhMxLoT@rafael.j.wysocki>
-References: <70b25dca6f8c2756d78f076f4a7dee7edaaffc33.camel@mediatek.com>
-	 <CAJZ5v0jjQgoa8eRyQ-MVQW=FeOEVQP6YTsY7o49LV2wnO=xEDw@mail.gmail.com>
-	 <5940388.DvuYhMxLoT@rafael.j.wysocki>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1763455520; c=relaxed/simple;
+	bh=ChTxPLFlWr1lSX3akZs188rfnwDUuv11s05nw4ZOZIg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=WyQjcJ1hwV9bu2PksELfmkkq/D9a1S9qBL3mnIfssMbXQn+mE/+atfl3UtfY3ij336vUr9GZNJMrFQfsQN/et5SoV4UW13rCbHu7X5sS2SN+EYLAPVgFkLy8KO74GLv9+uwWVv5APHkeS6PybbgobvhOhYEn5nqf8AGfZ3tCQKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.88.163])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4d9dSH6kFkznTvj;
+	Tue, 18 Nov 2025 16:43:43 +0800 (CST)
+Received: from kwepemf200017.china.huawei.com (unknown [7.202.181.10])
+	by mail.maildlp.com (Postfix) with ESMTPS id 02B1C18001B;
+	Tue, 18 Nov 2025 16:45:12 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemf200017.china.huawei.com
+ (7.202.181.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 18 Nov
+ 2025 16:45:10 +0800
+Message-ID: <14efdd1b-677d-488b-8dce-b1131d6928ae@hisilicon.com>
+Date: Tue, 18 Nov 2025 16:45:10 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: base64
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/8] Enhanced autonomous selection and improvements
+To: Sumit Gupta <sumitg@nvidia.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<corbet@lwn.net>, <pierre.gondois@arm.com>, <zhenglifeng1@huawei.com>,
+	<rdunlap@infradead.org>, <ray.huang@amd.com>, <gautham.shenoy@amd.com>,
+	<mario.limonciello@amd.com>, <perry.yuan@amd.com>, <ionela.voinescu@arm.com>,
+	<linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>
+CC: <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
+	<jonathanh@nvidia.com>, <vsethi@nvidia.com>, <ksitaraman@nvidia.com>,
+	<sanjayc@nvidia.com>, <nhartman@nvidia.com>, <bbasu@nvidia.com>
+References: <20251105113844.4086250-1-sumitg@nvidia.com>
+Content-Language: en-US
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <20251105113844.4086250-1-sumitg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemf200017.china.huawei.com (7.202.181.10)
 
-SGksDQoNCk9uIE1vbiwgMjAyNS0xMS0xNyBhdCAxOTo1NyArMDEwMCwgUmFmYWVsIEouIFd5c29j
-a2kgd3JvdGU6DQo+IA0KPiBNYWtlIHR3byBjaGFuZ2VzIHRvIGFkZHJlc3MgdGhpcyBwcm9ibGVt
-Lg0KPiANCj4gRmlyc3QsIHJlb3JkZXIgZGV2aWNlX3N1c3BlbmRfbGF0ZSgpIHRvIG9ubHkgZGlz
-YWJsZSBydW50aW1lIFBNIGZvciBhDQo+IGRldmljZSBpZiB0aGUgcG93ZXIuaXNfbGF0ZV9zdXNw
-ZW5kZWQgZmxhZyBpcyBnb2luZyB0byBiZSBzZXQgZm9yIGl0Lg0KPiBJbiBhbGwgb2YgdGhlIG90
-aGVyIGNhc2VzLCBkaXNhYmxpbmcgcnVudGltZSBQTSBmb3IgdGhlIGRldmljZSBpcyBub3QNCj4g
-aW4gZmFjdCBuZWNlc3NhcnkuDQo+IA0KPiBTZWNvbmQsIG1ha2UgZGV2aWNlX3Jlc3VtZV9lYXJs
-eSgpIG9ubHkgZW5hYmxlIHJ1bnRpbWUgUE0gZm9yIHRoZQ0KPiBkZXZpY2VzIHdpdGggdGhlIHBv
-d2VyLmlzX2xhdGVfc3VzcGVuZGVkIGZsYWcgc2V0Lg0KPiANCg0KTXkgY29uY2VybiBpcyB3aXRo
-IHRoZSBlcnJvciBwYXRoIGluIGRldmljZV9zdXNwZW5kX2xhdGUoKS4NCklmIGEgZGV2aWNlIGZh
-aWxzIGl0cyBkcG1fcnVuX2NhbGxiYWNrKCksIGl0IGFwcGVhcnMgdGhhdCBpdHMNCnBvd2VyLmlz
-X2xhdGVfc3VzcGVuZGVkIGZsYWcgaXMgbm90IHNldCwgcG90ZW50aWFsbHkgbGVhdmluZyBpdHMg
-cnVudGltZQ0KUE0gZGlzYWJsZWQgZHVyaW5nIHRoZSByZXN1bWUgc2VxdWVuY2UuDQoNClJlZ2Fy
-ZHMsDQpSb3Nl
 
+
+On 11/5/2025 7:38 PM, Sumit Gupta wrote:
+> This patch series enhances the ACPI CPPC CPUFREQ driver with
+> comprehensive support for autonomous performance selection, expanded
+> runtime control interfaces and improvements.
+> 
+> It adds support for below:
+> - Expose sysfs to read/write the Minimum/Maximum Performance Registers
+>   using frequency (kHz), with internal conversion to performance values.
+>   Also, update the policy min/max accordingly.
+>     /sys/.../cpufreq/policy*/min_perf and max_perf
+> 
+> - Expose sysfs to read/write the Performance Limited Register.
+>     /sys/.../cpufreq/policy*/perf_limited
+> 
+> - When toggling autonomous selection, synchronize the policy limits
+>   by updating the policy min/max.
+> 
+> - System-wide autonomous mode configuration via 'auto_sel_mode' boot
+>   parameter. Mode can be switched dynamically on individual CPUs.
+> 
+> - Generic sysfs helper functions to reduce code duplication.
+
+Hi Sumit,
+
+My biggest question is what do we design for users to use all this CPPC
+autosel stuff in the cppc_cpufreq driver?
+
+Is it just exposing most of the related interfaces through sysfs and then
+we let userspace to play with it (probably with a userspace tool) or
+something like the amd_pstate_epp driver?
+
+Since this is quite a large change, we may need a guideline of how it's
+gonna be used so we would have a clue of how it should be made.
+
+Cheers,
+Jie
 
