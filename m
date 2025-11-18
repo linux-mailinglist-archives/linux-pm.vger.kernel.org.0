@@ -1,124 +1,117 @@
-Return-Path: <linux-pm+bounces-38192-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38193-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1C8CC6BE19
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 23:38:54 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40E1BC6BF1D
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 00:07:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7C2754E7F67
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 22:36:34 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EC77F4E72EB
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 23:06:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74F9F28DB56;
-	Tue, 18 Nov 2025 22:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E369D31062E;
+	Tue, 18 Nov 2025 23:06:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TpXpTggl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UfvYck1u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BCE1FD4;
-	Tue, 18 Nov 2025 22:36:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D183B308F23
+	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 23:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763505389; cv=none; b=f+ktDppeYg3Q+6Kqb4KLEPGbV3FaM6IG+P0TmXi2tNgLEKJ7FHXbByB2DgAt8QuXGE+hwkoEt0vLU4H9Pv9L+WVEcK3lyNGIEMNOK9Zlw/bSUWop7nnlLa1ZM5gJeIcvAUaixf0e3kOeRhL/npN9v2fD5QJGibtmbWc4EFQtPMc=
+	t=1763507201; cv=none; b=cGf1uAL5NVOEkFftPOoKk09wl88rLAaK+9lHQGmmlttKjYZesVvJBtxaMvfOXWVMSiIFd4N0XQECOUgi6w+6tyVbxf0P43kQo9ugb0pJALVUPGtyYt1lEP14+o486PT5JxB1bpCw1JZraLJQMON/xD4PEM0GhxI3kAg0+RArjks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763505389; c=relaxed/simple;
-	bh=4d7MX1whtq6+TcTCFIYoNmUkaDKM3v7BcC/5WjB9lr4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tOZkGZc/PwqU/IHWXW/ObMqQrOQr9yIXSdsrlx+peOXkshbmzKbswSOO03r9/2L2yab+fLgmX/C9/XD4mRw7DC5CM1n0ofnZEviN6dlh6mV+bTho3SqOOlXX7S9zCWBHxd8jSMe0Cz3GyEDlaigPXK/AzuQb7dR9fATkXC+RkfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TpXpTggl; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763505388; x=1795041388;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4d7MX1whtq6+TcTCFIYoNmUkaDKM3v7BcC/5WjB9lr4=;
-  b=TpXpTgglDx/qfDHTkhLNX3JC9kno16Qp7VenPBE/gkBzj+wczRUEbAAX
-   udklC/8j9y/DAKJO5jAr0haUJB1mZp8DMLH6NybQ8uYRcfqWS2KygejWG
-   xPvN5gfeyZgdW57mM8sRxx46lkCPxi/oqcjsYM7fnvAixCL6X8zo7fn47
-   z3A/sbQlavbkHqBz4QvNWYRz+l88bVn6adhTSoc6hhy3kQX6CfqiFl/Nu
-   LGrwP71mJ2++rikJWzpr7aWWxhroupad7EpXxNugTa40PqMCe60979tL6
-   OBY3ahdMO/usIt6NwjV+DHk2gVbR/PEuPG9jS2uvv6U7lv9ZL+F/PSA59
-   Q==;
-X-CSE-ConnectionGUID: dQXHhrtcTmqWUcnSvbYQJw==
-X-CSE-MsgGUID: XA2ee8tqQ6a5+8N69HgZpQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11617"; a="69392577"
-X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
-   d="scan'208";a="69392577"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2025 14:36:27 -0800
-X-CSE-ConnectionGUID: kXsO1TCVQMSFe7vhePqajg==
-X-CSE-MsgGUID: gROB/VIdQ3uuB7O4Kl5fUA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
-   d="scan'208";a="195810857"
-Received: from spandruv-desk.jf.intel.com ([10.54.55.20])
-  by fmviesa004.fm.intel.com with ESMTP; 18 Nov 2025 14:36:25 -0800
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: rafael@kernel.org,
-	daniel.lezcano@linaro.org
-Cc: corbet@lwn.net,
-	linux-pm@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	rdunlap@infradead.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] docs: driver-api/thermal/intel_dptf: Add new workload type hint
-Date: Tue, 18 Nov 2025 14:36:19 -0800
-Message-ID: <20251118223620.554798-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1763507201; c=relaxed/simple;
+	bh=njsPLW5+sRAcBfyQAXjbkM6oMwgJ0E/jrmQ49WJzmtY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Q2IQOh3Y6RPNMjjyy9RsC2dOnLLn4X58ftUliwKTmkDXgn5DJZhro7T9zwGRwv+Jyeg8UwLc6YlJrdXDesEWY7eOymiX25wcwcGpAETgll4KSJYljQW3XhGODDi6IYmwmBqse+sCigQhV7tOH7T8RODizEbudEwK9bPnME+UZb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UfvYck1u; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-594330147efso6012661e87.2
+        for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 15:06:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1763507197; x=1764111997; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=njsPLW5+sRAcBfyQAXjbkM6oMwgJ0E/jrmQ49WJzmtY=;
+        b=UfvYck1uNz8mqIo13JFGwzFX9VIkjKIEo9RmRV4QPX5MnAX+9ywoIUDmVoPkCRVIiG
+         3fxyN53ckBdXcvwPWw89T7UAoRuOIys+10yKO3sA++4R44slzYgRUir+QbRn2769mnk4
+         UnUwnfec1xgR4Xn6p22g6kaT7AUAac4rXo6Lmu/xf/BLJjfEXH5eFSFC9uHxVF9+UTu/
+         HGU5ktezAOQtZ36HJxwuWEjhQul4Gcn10kzddMrXMmazzT9msgcv/l0C71FGD5mXbrDK
+         x9lKdHGi+prGGXgWm8LMMM/Td90mu1ZLW+L7bVuf4z9Kl5kYjL1Q39LHBi+TKA/57TK+
+         TdaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763507197; x=1764111997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=njsPLW5+sRAcBfyQAXjbkM6oMwgJ0E/jrmQ49WJzmtY=;
+        b=UJU70tXjCtYJH+Wjua5uaws/fZBMzZlfNvLNEoc6DUcstwG3OIw3vylY+WwwIhLSej
+         66t3xYXjTNzW6HwtMoEJcA+fnkMPVi1ECOFhFt1gT4r3zFmTqtkA6CqgBX6S367nUBCo
+         n4OcnQXKG7T4yXDilAm68DLy45Ymx5rKujz7tRi1tdLE4nV2rhgsL7cyMFWaeWL63fFY
+         kqtINJxp3SNofdiuorfER0LuQZQ+Toc+wlS5app33ijJJ7qrIVF8mhUPAoAQnbTkzaTY
+         G9CvCoRQZ4IyuJ8z2SMfBU0rH/CkcLnsJsP7qZ08zAWA9+3IqjS2TUkkrfiu90ZoD1FH
+         59Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKG8G0OiWhbIGg7HdIRZm++tEXvA0UQ0WgibYgFZKbvQwRlmh9H9lhRWSlr+ScCCY4f/LRJ4EjVg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYhlKtrjan/bdy6SidlsESnPaHSl3WeoIbY2nj3ok6WiXD6Med
+	SrZVoxdUCXYJDi7C+yi6lCIuSS6nlHsbhO3qaNUVbRizyz881cPZhWaIRnTo33Gk9py/LpQ5rON
+	j7xPYtjN3L4DRRfhCf2/YtzHzF7QNejjCXTdYRwMuUA==
+X-Gm-Gg: ASbGncvQj84U68OGB8A4r/2NbINHPck3Ua6rQ0IpXpwZLVBM2ldTsER1tkVgiU36zv6
+	hMg2XDkYKKegclMjRg+Dv+GpEqGOmPeC/JhTDF1mNC07Y2LWPiaiLWxAw2irpaehJhnPuOxu6Df
+	Iieq7Wxkyi2ewYOU77z1BYJAtoq+CbD7MN2DK7JHKzO0SfQU1yZdPJ+en3HNYaOIE+sHdcMu7S5
+	rvoe25LHi/fqqA4Mdls5pI2X4DH3XSkXR2c/Hn6QOT3ExN2CLxMlCF7HPDw/4qPypxtsDmj+gg8
+	7UKC/g==
+X-Google-Smtp-Source: AGHT+IHgvWgHNR1n7HikNfbECM3QMJGErQNkGV7PI3jzhreQtbR/8j6SX6DzkJAmHt+W6Slk62x/gQ3zMskh1FFfiGU=
+X-Received: by 2002:ac2:4c4b:0:b0:592:fe0f:d9e with SMTP id
+ 2adb3069b0e04-5958419866amr5810310e87.7.1763507196990; Tue, 18 Nov 2025
+ 15:06:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <cover.1763022807.git.mazziesaccount@gmail.com> <ec2cb44d9d00f5edaed2fbe17fd9ddbed914ff37.1763022807.git.mazziesaccount@gmail.com>
+In-Reply-To: <ec2cb44d9d00f5edaed2fbe17fd9ddbed914ff37.1763022807.git.mazziesaccount@gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 19 Nov 2025 00:06:25 +0100
+X-Gm-Features: AWmQ_bnx0kL6TQjG1WBAuJJp0XRB0JYUZxqe_CZgABTVpH_anNv9ed5mp--DLwo
+Message-ID: <CACRpkdaa_DuXbLYqOV3aOSGywz1wSPc3-7SN8FtwTdVza6-omg@mail.gmail.com>
+Subject: Re: [PATCH v4 05/16] dt-bindings: mfd: ROHM BD72720
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, Lee Jones <lee@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Sebastian Reichel <sre@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+	linux-leds@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add documentation for longer term classification of workload type for
-power or performance.
+On Thu, Nov 13, 2025 at 9:52=E2=80=AFAM Matti Vaittinen
+<matti.vaittinen@linux.dev> wrote:
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- .../driver-api/thermal/intel_dptf.rst         | 23 +++++++++++++++++++
- 1 file changed, 23 insertions(+)
+> From: Matti Vaittinen <mazziesaccount@gmail.com>
+>
+> The ROHM BD72720 is a power management IC integrating regulators, GPIOs,
+> charger, LEDs, RTC and a clock gate.
+>
+> Add dt-binding doc for ROHM BD72720.
+>
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
-index c51ac793dc06..916bf0f36a03 100644
---- a/Documentation/driver-api/thermal/intel_dptf.rst
-+++ b/Documentation/driver-api/thermal/intel_dptf.rst
-@@ -409,3 +409,26 @@ based on the processor generation.
- 		Limit 1 from being exhausted.
- 
- 	4 – Unknown: Can't classify.
-+
-+	On processors starting from Panther Lake additional hints are provided.
-+	The hardware analyzes workload residencies over an extended period to
-+	determine whether the workload classification tends toward idle/battery
-+	life states or sustained/performance states. Based on this long-term
-+	analysis, it classifies:
-+
-+	Power Classification: If the workload exhibits more idle or battery life
-+	residencies, it is classified as "power".
-+
-+	Performance Classification: If the workload exhibits more sustained or
-+	performance residencies, it is classified as "performance".
-+
-+	This approach enables applications to ignore short-term workload
-+	fluctuations and instead respond to longer-term power vs. performance
-+	trends.
-+
-+	Residency thresholds for this classification are CPU generation-specific.
-+	Classification is reported via bit 4 of the workload_type_index:
-+
-+	Bit 4 = 1: Power classification
-+
-+	Bit 4 = 0: Performance classification
--- 
-2.51.0
+This is looking good!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
+Yours,
+Linus Walleij
 
