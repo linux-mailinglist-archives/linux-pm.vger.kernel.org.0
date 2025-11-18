@@ -1,66 +1,71 @@
-Return-Path: <linux-pm+bounces-38148-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38149-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2A40C6724F
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 04:24:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72238C67C78
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 07:50:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 36F1C3623FB
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 03:24:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DDE7B4E3C51
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 06:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E65832AAAB;
-	Tue, 18 Nov 2025 03:24:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 239C22EDD71;
+	Tue, 18 Nov 2025 06:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dAkrccoG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E89F329364;
-	Tue, 18 Nov 2025 03:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CC22E8B91
+	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 06:48:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763436250; cv=none; b=H0fQ3RBgKM0eP4BN3brLeTHzlAgdF2A3Jit0/wlu562T/ZaAjDSV6kV/Eo+QK3b9bCsk2Qno38JRiwzo5SAWQ+d06a9keiUYkbr4kwoipDwbN+jBAh3Lg/mxjEaq2pSy+0hZrdd2FDgtwfXXOowCNxvEEuloRqPJcFF+i63ybqs=
+	t=1763448514; cv=none; b=uBVo8bMmReg79XO4YygJkwvbfFUi8HCURSjV1OjSmLUpfH+bnJUgmH6+IQwrLIvK1ELvSj41wBuUNzdyZOPw62fAchPaGaarlyXfHbwX/kQLXqoFV8ReoUQVi+W+D0QnuAvxjv+FJI83keZM+xP9sLwU5twPEoCAurb7+vh9nvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763436250; c=relaxed/simple;
-	bh=m28yP26adj4bqeovQGwr1yJsiyJEiV8n8Y/Y/4BZhEY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=EKL6pssTWYZ2zIylAIDeVge4ROWG5RbEYKZ9oJQFz/9/CUr+8z8nkrMmIXnPlEZXD9+LcL6yEI9hgfz+RzJV8HTrbSLjRduD7FruMnDl6o3J31erj6TaLo5oqvKxF9Ia5lpPkSYl6OVri7HHzcohF7r/6PIVmZCjTFKF0obEPus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 06585cb0c42e11f0a38c85956e01ac42-20251118
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:72e47358-2147-4ad5-9f61-42ef41f9c03c,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:e7adeed6dafbaac007f2009b5af0c864,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|850,TC:nil,Content:0|15|50,EDM
-	:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-	,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 06585cb0c42e11f0a38c85956e01ac42-20251118
-X-User: luriwen@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <luriwen@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 741734572; Tue, 18 Nov 2025 11:24:00 +0800
-From: Riwen Lu <luriwen@kylinos.cn>
-To: myungjoo.ham@samsung.com,
-	kyungmin.park@samsung.com,
-	cw00.choi@samsung.com
+	s=arc-20240116; t=1763448514; c=relaxed/simple;
+	bh=xoNVCpbe2HKyUwxbYlvmcHK0VvJJjxZpb8PtK4DxEMQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FISuqD2bcty4QV+QU0gQtWHdAp1KmZw1i0nULdiCgq3yZa6gS8z8Nud9lib/xrV5RaZMwXPcvOxr0ZKJ11bJEBsLz4LiFPjM0izBRtTKy+CUDX7g8GtsImvtFjKaSlSvTPNkeI9yDPfDebnEf9Rqhn2NkqXdfhHhqD0e8rqFCQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dAkrccoG; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763448513; x=1794984513;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xoNVCpbe2HKyUwxbYlvmcHK0VvJJjxZpb8PtK4DxEMQ=;
+  b=dAkrccoGpLgCBDnsHEi5EFBzqYfNFkHoNHVtbh/VY86/XtYdsIXDvnhF
+   T9cu0J2KPt8IBD4KE56h3Q5aI2lNHm0FiIc9DNh7JrbqJyKWfK75JKhp+
+   2FZPayifDfgi+wL/gS6oxPhVihAJ2i9LkSkOM+VNEqwUn2yN0BF7SLwLQ
+   KFThkB7s3B4IGY+bTXESTlKpcqob9F5v7sYxYl158VGFT29uk2XJY9WkZ
+   wORmRaueBH938qq1xAmqhAxnKRwfK1b0yJIS1suS1ocCicMnugtQoqAJl
+   U7Us/JQVWlPiuCPdI1LsUk9T71sOZirytRJwjEdNf7VHRAhojsdIYgw4g
+   w==;
+X-CSE-ConnectionGUID: unbXHxy8Q++2SoN/fxwHJQ==
+X-CSE-MsgGUID: IvNuT9UsSSqLmseqU4Z/ww==
+X-IronPort-AV: E=McAfee;i="6800,10657,11616"; a="65399013"
+X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
+   d="scan'208";a="65399013"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2025 22:48:33 -0800
+X-CSE-ConnectionGUID: w3SxkFaXQfucL2sC+XuJxg==
+X-CSE-MsgGUID: 31+0VXTuQF23+qZpwv2EYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
+   d="scan'208";a="195135888"
+Received: from baandr0id001.iind.intel.com ([10.66.253.151])
+  by orviesa004.jf.intel.com with ESMTP; 17 Nov 2025 22:48:31 -0800
+From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+To: rafael@kernel.org,
+	viresh.kumar@linaro.org
 Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Riwen Lu <luriwen@kylinos.cn>
-Subject: [PATCH v1 2/2] PM: devfreq: handle invalid parameters gracefully in simpleondemand
-Date: Tue, 18 Nov 2025 11:23:39 +0800
-Message-Id: <20251118032339.2799230-2-luriwen@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20251118032339.2799230-1-luriwen@kylinos.cn>
-References: <20251118032339.2799230-1-luriwen@kylinos.cn>
+	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Subject: [PATCH] cpufreq: use cashed resolved frequency
+Date: Tue, 18 Nov 2025 12:16:06 +0530
+Message-Id: <20251118064606.2777035-1-kaushlendra.kumar@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,43 +74,38 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Instead of returning -EINVAL when upthreshold > 100 or upthreshold <
-downdifferential, fall back to default threshold values to ensure the
-governor continues functioning.
+Return a previously resolved frequency when the requested target
+matches the policy cache to avoid repeated frequency-table lookups
+This implementation reuses the existing cached_target_freq and
+cached_resolved_idx fields maintained by __resolve_freq() and does not
+introduce new state.
 
-Additionally, the validation is now scoped to the if (data) block,
-preventing unnecessary checks when no user data is provided, while the
-fallback mechanism ensures reliability with invalid configurations.
-
-Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 ---
- drivers/devfreq/governor_simpleondemand.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+ drivers/cpufreq/cpufreq.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
-index b4d7be766f33..7205891d2ec6 100644
---- a/drivers/devfreq/governor_simpleondemand.c
-+++ b/drivers/devfreq/governor_simpleondemand.c
-@@ -36,10 +36,15 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
- 			dfso_upthreshold = data->upthreshold;
- 		if (data->downdifferential)
- 			dfso_downdifferential = data->downdifferential;
-+
-+		if (dfso_upthreshold > 100 ||
-+		    dfso_upthreshold < dfso_downdifferential) {
-+			dfso_upthreshold = DFSO_UPTHRESHOLD;
-+			dfso_downdifferential = DFSO_DOWNDIFFERENTIAL;
-+			pr_debug("Invalid thresholds, using defaults: up = %u, down = %u\n",
-+				dfso_upthreshold, dfso_downdifferential);
-+		}
- 	}
--	if (dfso_upthreshold > 100 ||
--	    dfso_upthreshold < dfso_downdifferential)
--		return -EINVAL;
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 4472bb1ec83c..d90dcffac953 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -527,6 +527,15 @@ unsigned int cpufreq_driver_resolve_freq(struct cpufreq_policy *policy,
+ 	unsigned int min = READ_ONCE(policy->min);
+ 	unsigned int max = READ_ONCE(policy->max);
  
- 	/* Assume MAX if it is going to be divided by zero */
- 	if (stat->total_time == 0) {
++	/* If we recently resolved this target, return cached value.
++	 * This avoids repeated frequency table searches.
++	 */
++	if (likely(policy->cached_target_freq == target_freq &&
++		   policy->cached_resolved_idx != UINT_MAX &&
++		   policy->freq_table)) {
++		return policy->freq_table[policy->cached_resolved_idx].frequency;
++	}
++
+ 	/*
+ 	 * If this function runs in parallel with cpufreq_set_policy(), it may
+ 	 * read policy->min before the update and policy->max after the update
 -- 
-2.25.1
+2.34.1
 
 
