@@ -1,207 +1,381 @@
-Return-Path: <linux-pm+bounces-38166-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38167-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96CABC695DF
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 13:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C942AC69609
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 13:29:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5E6A9350B8F
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 12:26:42 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 503FC34BA91
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 12:28:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 423D0354AF5;
-	Tue, 18 Nov 2025 12:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE0B3344021;
+	Tue, 18 Nov 2025 12:28:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T7AuCQBQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X0zU4oM1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A55C3546F9
-	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 12:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D86B2F6569;
+	Tue, 18 Nov 2025 12:28:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763468783; cv=none; b=If6i3KnIvUD3rNOrnJtP0s1SYFmw4Zv9JhSnBgEGNmb3I5SnWTOlox8iKrh4/cOBvxTlYMy+m8QzV1SuBycsFpD572lt/F/3P9nrB18wFnrda+lGTG7NFNac4XQSiqDoL5Pdz5SgXw+1PenHbtboelRqvFTFepEPdLUgon4cJrI=
+	t=1763468907; cv=none; b=CRCDuSoPBK3K0Q9L4f0tGp6UchkxjH+UAYKTZ2RVPmc9/2Yvq75K6nTiTO7H1um5wVLp866yX2YNkfac8jZsjCNA6tUHpo+wSzSETGk68O90UX+PHmMAVzSH4qDjAQ5dpg3GzOe9AK6L2yfB0NJi/jy0xLeUYZhZHzdOudBcyBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763468783; c=relaxed/simple;
-	bh=OQW9B/dyCzcM/bIWdIMNnuLsQU3gBUjkA6PMYVbTh7I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FAfKJbXvl//myo02ycmGrqVbMYGjSURfLxh8HUJvGBX7Kcvv/27AI7JiUwon0VOnCswolPVOgH6Jkzp+U99LL07b6rWa/ibqhYaVY3bqokKiVyvPFnpVDOlkf5Jr3B7IdDmuaT3O7DiDMUBGMU4CdaPv+iI33evRFI2oC8NvNvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T7AuCQBQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3036BC4AF12
-	for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 12:26:22 +0000 (UTC)
+	s=arc-20240116; t=1763468907; c=relaxed/simple;
+	bh=HkElddSNiWQx84TT3HUUBpi/rNgO0A/CKPAtgfrEFa8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ISLPbjpA9k0RKAGmYIKv4/DWWF6By5rtd7haKEVxTvwexs3CqxRFAMlPW5uPoggqFzx0/B4fRpo8Wclznd7sCgJLBhper5sZbkGFAu+W6FEjy4mftG6/xUfgEl17IsnRC9tOorNOFTvF2T6atFVq7Hz69wxgoIIVrT5Yh2u0f6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X0zU4oM1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33852C4CEFB;
+	Tue, 18 Nov 2025 12:28:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763468782;
-	bh=OQW9B/dyCzcM/bIWdIMNnuLsQU3gBUjkA6PMYVbTh7I=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=T7AuCQBQzJ3MpT1vVfpibJcfTYM68Sz/tTRa0qCK7WIBGjGNlNsJ9klGL247/4VBB
-	 sY4i7ZZmOUBDyKdnzrOy/XlEiqZzW5ZutJE0P7jp1ziwc2BXcnjwIi/2sOB7n5ElKp
-	 nMlgnabqRh34Ie9jQ3Fl3GMFUATyLt9MMddd1RiySATC9Ngo6U3H5na91XIBzNc4Ki
-	 /y9l28rqV2/fMe0rWr/Z1XwrzqY6NXYOw1/mdx3bXc+n+6vkvhdknIxuKhsMHyqs0+
-	 hxFToA2HafwJ8NGr6rqiRXwnmyg3gD9QD3hZHf1ArZ8fJ/SDBvQjfMKasb6C+V2r/j
-	 hr0/2xHde2oGg==
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7c76f65feb5so1041857a34.0
-        for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 04:26:22 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX9kRTG3VYk5bx4QnWjahj/huExiDtGuprHPwJ28M56ZfA4LG4m1oHSum4hCq8OHoAW3pAOx37Usg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpW9LQDs6/6HIzTizIya4ElUtJlJlu6isdxYN4t/vfp5VQ0L3J
-	SSzcWXBSjmwXuoaQEZiUGxjWvqCXJb5Owx+IpV1o0bsMlHzVozPXO2kVGl2z/f74KDW82Fd09NR
-	2DlCTMPHH2ahcgIemXjuQf7zRIleWIPs=
-X-Google-Smtp-Source: AGHT+IELTs+baIL1OrUJ6lfYKQJrx3au7tikjQ/WjvAvnLWN8GeNFk7gmzuFm25SBqt1p1LkQmGpQPESh5sh/Go6alg=
-X-Received: by 2002:a05:6808:67c3:b0:43f:ee6f:3bf2 with SMTP id
- 5614622812f47-450974289b6mr7187219b6e.17.1763468779141; Tue, 18 Nov 2025
- 04:26:19 -0800 (PST)
+	s=k20201202; t=1763468905;
+	bh=HkElddSNiWQx84TT3HUUBpi/rNgO0A/CKPAtgfrEFa8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X0zU4oM1pH8YX2XK6W2GczfPtfKY6olP8Z/ZMzR7Jg8Aa+8BSORrRNvrMFXHb80q+
+	 UnxHc6Ywp1OIXy+rIqum7VGZ7Aaj+ryNouvyEJlNDltxDdF4f3R5SIuToTZ24zY1+f
+	 spPVFf2ylUfTQs2A/EQLfWO6+mWwfqRkY7NH02wbMlNi9FQsRj6F5kkoXIAWWcMd2K
+	 rTow1dvi13KG7jMvA+FgBWq/bbxS/oLHwkP3pm6C0PBRjPebfw5jOYytDHgF7BdqfW
+	 y3wS8UoI0Q+MoWethNO00zDIuamTBJAmpVRnqQCwxQ80JKQVllJ5vpU3uyolQez6Wb
+	 4ZDPOU5gXd0Gg==
+Date: Tue, 18 Nov 2025 13:28:10 +0100
+From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Moritz Fischer <moritz.fischer@ettus.com>,
+	John Stultz <john.stultz@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+	Stephen Boyd <swboyd@chromium.org>,
+	Andre Draszik <andre.draszik@linaro.org>,
+	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	Elliot Berman <quic_eberman@quicinc.com>,
+	Xin Liu <xin.liu@oss.qualcomm.com>,
+	Srinivas Kandagatla <srini@kernel.org>,
+	Umang Chheda <umang.chheda@oss.qualcomm.com>,
+	Nirmesh Kumar Singh <nirmesh.singh@oss.qualcomm.com>
+Subject: Re: [PATCH v17 07/12] firmware: psci: Implement vendor-specific
+ resets as reboot-mode
+Message-ID: <aRxmWrAkD0Vu4pF+@lpieralisi>
+References: <20251109-arm-psci-system_reset2-vendor-reboots-v17-0-46e085bca4cc@oss.qualcomm.com>
+ <20251109-arm-psci-system_reset2-vendor-reboots-v17-7-46e085bca4cc@oss.qualcomm.com>
+ <aRIfc9iuC2b9DqI+@lpieralisi>
+ <80e68e44-a8e0-464a-056e-9f087ad40d51@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <70b25dca6f8c2756d78f076f4a7dee7edaaffc33.camel@mediatek.com>
- <5940388.DvuYhMxLoT@rafael.j.wysocki> <119e2410ca32a0d55fa6febf93c7a3164b391db0.camel@mediatek.com>
- <12782716.O9o76ZdvQC@rafael.j.wysocki> <CAPDyKFqzt70rkHaRP62zErkMi2kFC1iY-NHPWjK0FWZSjZ00jA@mail.gmail.com>
-In-Reply-To: <CAPDyKFqzt70rkHaRP62zErkMi2kFC1iY-NHPWjK0FWZSjZ00jA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 18 Nov 2025 13:26:06 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iTMhWoBfbrPabdo7TkNuOwtC=-6acSe9tbDmyzZEoXwg@mail.gmail.com>
-X-Gm-Features: AWmQ_bnH3KX730tRoTnlZ4-5nfP9SwaRCiL1Njlm18RCobVNepyDg9y7Z_8Zzf8
-Message-ID: <CAJZ5v0iTMhWoBfbrPabdo7TkNuOwtC=-6acSe9tbDmyzZEoXwg@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: sleep: core: Fix runtime PM enabling in device_resume_early()
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	Rose Wu <ya-jou.wu@mediatek.com>, rafael.j.wysocki@intel.com, 
-	regressions@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	wsd_upstream <wsd_upstream@mediatek.com>, linux-mediatek@lists.infradead.org, 
-	"artis. chiu" <artis.chiu@mediatek.com>, "Johnny-cc. Kao" <Johnny-cc.Kao@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <80e68e44-a8e0-464a-056e-9f087ad40d51@oss.qualcomm.com>
 
-On Tue, Nov 18, 2025 at 1:18=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> On Tue, 18 Nov 2025 at 12:48, Rafael J. Wysocki <rafael@kernel.org> wrote=
-:
-> >
-> > On Tuesday, November 18, 2025 9:31:08 AM CET Rose Wu wrote:
-> > > Hi,
-> > >
-> > > On Mon, 2025-11-17 at 19:57 +0100, Rafael J. Wysocki wrote:
-> > > >
-> > > > Make two changes to address this problem.
-> > > >
-> > > > First, reorder device_suspend_late() to only disable runtime PM for=
- a
-> > > > device if the power.is_late_suspended flag is going to be set for i=
-t.
-> > > > In all of the other cases, disabling runtime PM for the device is n=
-ot
-> > > > in fact necessary.
-> > > >
-> > > > Second, make device_resume_early() only enable runtime PM for the
-> > > > devices with the power.is_late_suspended flag set.
-> > > >
-> > >
-> > > My concern is with the error path in device_suspend_late().
-> > > If a device fails its dpm_run_callback(), it appears that its
-> > > power.is_late_suspended flag is not set, potentially leaving its runt=
-ime
-> > > PM disabled during the resume sequence.
-> >
-> > Right, pm_runtime_enable() is missing in the error path after calling
-> > dpm_run_callback().
-> >
-> > ---
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Runtime PM should only be enabled in device_resume_early() if it has
-> > been disabled for the given device by device_suspend_late().  Otherwise=
-,
-> > it may cause runtime PM callbacks to run prematurely in some cases
-> > which leads to further functional issues.
-> >
-> > Make two changes to address this problem.
-> >
-> > First, reorder device_suspend_late() to only disable runtime PM for a
-> > device when it is going to look for the device's callback.  In all of
-> > the other cases, disabling runtime PM for the device is not in fact
-> > necessary.  However, if the device's callback returns an error and the
-> > power.is_late_suspended flag is not going to be set, enable runtime
-> > PM so it only remains disabled when power.is_late_suspended is set.
-> >
-> > Second, make device_resume_early() only enable runtime PM for the
-> > devices with the power.is_late_suspended flag set.
-> >
-> > Fixes: 443046d1ad66 ("PM: sleep: Make suspend of devices more asynchron=
-ous")
-> > Reported-by: Rose Wu <ya-jou.wu@mediatek.com>
-> > Closes: https://lore.kernel.org/linux-pm/70b25dca6f8c2756d78f076f4a7dee=
-7edaaffc33.camel@mediatek.com/
-> > Cc: 6.16+ <stable@vger.kernel.org> # 6.16+
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > v1 -> v2: Add pm_runtime_enable() to device_suspend_late() error path (=
-Rose).
-> >
-> > ---
-> >  drivers/base/power/main.c |   15 ++++++++-------
-> >  1 file changed, 8 insertions(+), 7 deletions(-)
-> >
-> > --- a/drivers/base/power/main.c
-> > +++ b/drivers/base/power/main.c
-> > @@ -941,11 +941,11 @@ Run:
-> >
-> >  Skip:
-> >         dev->power.is_late_suspended =3D false;
-> > +       pm_runtime_enable(dev);
-> >
-> >  Out:
-> >         TRACE_RESUME(error);
-> >
-> > -       pm_runtime_enable(dev);
-> >         complete_all(&dev->power.completion);
-> >
-> >         if (error) {
-> > @@ -1630,12 +1630,6 @@ static void device_suspend_late(struct d
-> >         TRACE_DEVICE(dev);
-> >         TRACE_SUSPEND(0);
-> >
-> > -       /*
-> > -        * Disable runtime PM for the device without checking if there =
-is a
-> > -        * pending resume request for it.
-> > -        */
-> > -       __pm_runtime_disable(dev, false);
-> > -
-> >         dpm_wait_for_subordinate(dev, async);
-> >
-> >         if (READ_ONCE(async_error))
-> > @@ -1649,6 +1643,12 @@ static void device_suspend_late(struct d
-> >         if (dev->power.syscore || dev->power.direct_complete)
-> >                 goto Complete;
-> >
-> > +       /*
-> > +        * Disable runtime PM for the device without checking if there =
-is a
-> > +        * pending resume request for it.
-> > +        */
-> > +       __pm_runtime_disable(dev, false);
-> > +
->
-> Moving this here means we are going to keep runtime pm enabled for
-> syscore devices during system wide suspend/resume. That's quite a
-> change in behaviour for a fix for a regression, I think. Not saying
-> that it can't work though.
+On Mon, Nov 17, 2025 at 11:14:48PM +0530, Shivendra Pratap wrote:
+> 
+> 
+> On 11/10/2025 10:52 PM, Lorenzo Pieralisi wrote:
+> > On Sun, Nov 09, 2025 at 08:07:20PM +0530, Shivendra Pratap wrote:
+> >> SoC vendors have different types of resets which are controlled
+> >> through various hardware registers. For instance, Qualcomm SoC
+> >> may have a requirement that reboot with “bootloader” command
+> >> should reboot the device to bootloader flashing mode and reboot
+> >> with “edl” should reboot the device into Emergency flashing mode.
+> >> Setting up such reboots on Qualcomm devices can be inconsistent
+> >> across SoC platforms and may require setting different HW
+> >> registers, where some of these registers may not be accessible to
+> >> HLOS. These knobs evolve over product generations and require
+> >> more drivers. PSCI spec defines, SYSTEM_RESET2, vendor-specific
+> >> reset which can help align this requirement. Add support for PSCI
+> >> SYSTEM_RESET2, vendor-specific resets and align the implementation
+> >> to allow user-space initiated reboots to trigger these resets.
+> >>
+> >> Implement the PSCI vendor-specific resets by registering to the
+> >> reboot-mode framework.
+> > 
+> > I think that we should expose to user space _all_ PSCI reset types,
+> > cold, warm + vendor specific - as a departure from using the reboot_mode
+> > variable (and possibly deprecate it - or at least stop using it).
+> 
+> sure. We can try that. Have tried to compile it all at the end of this thread.
+> 
+> > 
+> >> As psci init is done at early kernel init, reboot-mode registration cannot
+> >> be done at the time of psci init.  This is because reboot-mode creates a
+> >> “reboot-mode” class for exposing sysfs, which can fail at early kernel init.
+> >> To overcome this, introduce a late_initcall to register PSCI vendor-specific
+> >> resets as reboot modes. Implement a reboot-mode write function that sets
+> >> reset_type and cookie values during the reboot notifier callback.  Introduce
+> >> a firmware-based call for SYSTEM_RESET2 vendor-specific reset in the
+> >> psci_sys_reset path, using reset_type and cookie if supported by secure
+> >> firmware. Register a panic notifier and clear vendor_reset valid status
+> >> during panic.  This is needed for any kernel panic that occurs post
+> >> reboot_notifiers.
+> > 
+> > Is it because panic uses reboot_mode to determine the reset to issue ?
+> 
+> Yes. As we know, currently psci supports only two resets,
+> psci_sys_reset2 (ARCH warm reset) and psci_sys_reset(COLD RESET). And kernel
+> panic path should take the path set by reboot_mode to maintain backward
+> compatibility. 
+> 
+> > 
+> >> By using the above implementation, userspace will be able to issue
+> >> such resets using the reboot() system call with the "*arg"
+> >> parameter as a string based command. The commands can be defined
+> >> in PSCI device tree node under “reboot-mode” and are based on the
+> >> reboot-mode based commands.
+> > 
+> > IMHO - it would be nice if could add mode-cold (or mode-normal in reboot mode
+> > speak) and mode-warm by default (if PSCI supports them) so that userspace
+> 
+> Default mode in current kernel is cold, until explicitly set to warm.
+> So should it be defaulted to cold?
 
-syscore devices can be a special case, but I thought it wouldn't be
-necessary to special-case them.
+I managed to confuse you sorry. What I wanted to say is that user space
+should be able to issue _all_ PSCI resets (inclusive of cold and warm if
+supported - ie if SYSTEM_RESET2 is supported) not just vendor resets.
 
-Do you actually know about any of them needing special casing?
+I misused "by default" - I meant cold and warm PSCI resets should be part
+of the reboot-mode list.
 
-> Although, perhaps better to call __pm_runtime_disable() a few lines
-> earlier and use a separate flag to track that we need to call
-> pm_runtime_enable() in device_resume_early()?
+[...]
 
-I don't think it is necessary or even useful to introduce new flags for thi=
-s.
+> >>  
+> >> +struct psci_vendor_sysreset2 {
+> >> +	u32 reset_type;
+> >> +	u32 cookie;
+> >> +	bool valid;
+> >> +};
+> >> +
+> >> +static struct psci_vendor_sysreset2 vendor_reset;
+> > 
+> > I think this should represent all possible PSCI reset types, not vendor only
+> > and its value is set by the reboot mode framework.
+> > 
+> >> +
+> >> +static int psci_panic_event(struct notifier_block *nb, unsigned long v, void *p)
+> >> +{
+> >> +	vendor_reset.valid = false;
+> > 
+> > I don't like this. Basically all you want this for is to make sure that
+> > we don't override the reboot_mode variable.
+> 
+> Yes, it does not look good but as we planned to use reboot-mode framework earlier, which
+> sets the modes at the at reboot_notifiers. This needs to be taken care for any panic
+> that occurs between reboot_notifier and restart_notifier.
+
+Isn't there a simpler way to detect whether we are in panic mode and
+consequently we just issue a reset based on reboot_mode ?
+
+panic_in_progress() ?
+
+> > One (hack) would consist in checking the reboot_mode variable here and
+> > set the struct I mentioned above to the value represented in reboot_mode.
+> > 
+> > Good luck if reboot_mode == REBOOT_GPIO :-)
+> 
+> psci supports only two modes, ARCH_WARM and cold, so anything else except WARM/SOFT
+> should default to cold? So even if REBOOT_GPIO is set in reboot_mode, we should default
+> it to cold reset.
+> 
+> > 
+> >> +	return NOTIFY_DONE;
+> >> +}
+> >> +
+> >> +static struct notifier_block psci_panic_block = {
+> >> +	.notifier_call = psci_panic_event
+> >> +};
+> >> +
+> >>  bool psci_tos_resident_on(int cpu)
+> >>  {
+> >>  	return cpu == resident_cpu;
+> >> @@ -309,7 +330,10 @@ static int get_set_conduit_method(const struct device_node *np)
+> >>  static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
+> >>  			  void *data)
+> >>  {
+> >> -	if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
+> >> +	if (vendor_reset.valid && psci_system_reset2_supported) {
+> >> +		invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2), vendor_reset.reset_type,
+> >> +			       vendor_reset.cookie, 0);
+> > 
+> > See above. Two calls here: one for resets issued using the new userspace
+> > interface you are adding and legacy below - no vendor vs reboot_mode, this
+> > is a mess.
+> 
+> Are we suggesting to completely remove the reboot_mode check from here in the new
+> design and base it on reboot <CMD> param?
+
+I am suggesting that there must be two reset options:
+
+- based on reboot mode set by user space
+- based on reboot_mode variable (as a fallback and while panic is in progress)
+
+> > 
+> >> +	} else if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
+> >>  	    psci_system_reset2_supported) {
+> >>  		/*
+> >>  		 * reset_type[31] = 0 (architectural)
+> >> @@ -547,6 +571,72 @@ static const struct platform_suspend_ops psci_suspend_ops = {
+> >>  	.enter          = psci_system_suspend_enter,
+> >>  };
+> >>  
+> >> +static int psci_set_vendor_sys_reset2(struct reboot_mode_driver *reboot, u64 magic)
+> >> +{
+> >> +	u32 magic_32;
+> >> +
+> >> +	if (psci_system_reset2_supported) {
+> >> +		magic_32 = magic & GENMASK(31, 0);
+> >> +		vendor_reset.reset_type = PSCI_1_1_RESET_TYPE_VENDOR_START | magic_32;
+> >> +		vendor_reset.cookie = (magic >> 32) & GENMASK(31, 0);
+> > 
+> > Use FIELD_PREP/GET() please (but as mentioned above the vendor reset type
+> > bit[31] should be part of the reboot mode magic value, see above).
+> 
+> sure. Will align this. thanks.
+> 
+> > 
+> >> +		vendor_reset.valid = true;
+> >> +	}
+> >> +
+> >> +	return NOTIFY_DONE;
+> >> +}
+> >> +
+> >> +static int __init psci_init_vendor_reset(void)
+> >> +{
+> >> +	struct reboot_mode_driver *reboot;
+> >> +	struct device_node *psci_np;
+> >> +	struct device_node *np;
+> >> +	int ret;
+> >> +
+> >> +	if (!psci_system_reset2_supported)
+> >> +		return -EINVAL;
+> >> +
+> >> +	psci_np = of_find_compatible_node(NULL, NULL, "arm,psci-1.0");
+> >> +	if (!psci_np)
+> >> +		return -ENODEV;
+> >> +
+> >> +	np = of_find_node_by_name(psci_np, "reboot-mode");
+> >> +	if (!np) {
+> >> +		of_node_put(psci_np);
+> >> +		return -ENODEV;
+> >> +	}
+> >> +
+> >> +	ret = atomic_notifier_chain_register(&panic_notifier_list, &psci_panic_block);
+> >> +	if (ret)
+> >> +		goto err_notifier;
+> >> +
+> >> +	reboot = kzalloc(sizeof(*reboot), GFP_KERNEL);
+> >> +	if (!reboot) {
+> >> +		ret = -ENOMEM;
+> >> +		goto err_kzalloc;
+> >> +	}
+> >> +
+> >> +	reboot->write = psci_set_vendor_sys_reset2;
+> >> +	reboot->driver_name = "psci";
+> >> +
+> >> +	ret = reboot_mode_register(reboot, of_fwnode_handle(np));
+> >> +	if (ret)
+> >> +		goto err_register;
+> >> +
+> >> +	of_node_put(psci_np);
+> >> +	of_node_put(np);
+> >> +	return 0;
+> >> +
+> >> +err_register:
+> >> +	kfree(reboot);
+> >> +err_kzalloc:
+> >> +	atomic_notifier_chain_unregister(&panic_notifier_list, &psci_panic_block);
+> >> +err_notifier:
+> >> +	of_node_put(psci_np);
+> >> +	of_node_put(np);
+> >> +	return ret;
+> >> +}
+> >> +late_initcall(psci_init_vendor_reset)
+> > 
+> > I don't like adding another initcall here.
+> > 
+> > I wonder whether this code belongs in a PSCI reboot mode driver, possibly a
+> > faux device in a way similar to what we did for cpuidle-psci (that after all
+> > is a consumer of PSCI_CPU_SUSPEND in a similar way as this code is a
+> > PSCI_SYSTEM_RESET{2} consumer), that communicates with
+> > drivers/firmware/psci/psci.c with the struct mentioned above.
+> 
+> sure. we can create a new driver and try it as in cpuidle: cpuidle-psci.
+> Can you suggest a bit more on the overall approach we want to take here?
+> Have tried to summarize the potential changes and few questions below.
+> 
+> - new driver registers a faux device - say - power: reset: psci_reset.
+
+Yes this could be a potential way forward but that's decoupled from the
+options below. If we take this route PSCI maintainers should be added
+as maintainers for this reboot mode driver.
+
+> - struct with pre-built psci reset_types - (warm, soft, cold). Currently
+>   only two modes supported, anything other than warm/soft defaults to cold.
+> - vendor resets to be added as per vendor choice, inside psci device tree(SOC specific).
+> - psci_reset registers with reboot-mode for registering  vendor resets. Here, we
+>   have a problem, the pre-built psci reset_types - (warm, soft, cold) cannot be added via
+>   reboot-mode framework.
+
+Why ?
+
+>   Should the new psci_reset driver, move away from reboot-mode
+>   framework as-well? And define its own parsing logic for psci_reset_types,
+>   and have its own restart_notifier instead of reboot_notifier?
+
+No. As I said earlier, I think it makes sense to allow user space to
+select _all_ PSCI reset types - architected and vendor specific in
+a single reboot mode driver.
+
+I believe that we must be able to have two well defined ways for
+issuing resets:
+
+- one based on reboot mode driver
+- one based on reboot_mode variable interface
+
+Does this make sense everyone ? I don't know the history behind
+reboot_mode and the reboot mode driver framework I am just stating
+what I think makes sense to do for PSCI.
+
+Thanks,
+Lorenzo
+
+> - If new psci_reset driver move away from reboot-mode, we can get rid of the panic_notifier
+>   added in the psci code. Else, we may still need the panic_notifier for any kernel panic
+>   that occurs between reboot_notifier and restart_notifier?
+> - psci driver will export a function which will be called externally to set the current
+>   psci reset_type.
+> - psci_sys_reset in psci driver should remove the check on reboot_mode. It will default to
+>   cold reset (for the reason the current kernel defaults to cold reset in psci.)
+>   example change in psci_sys_reset:
+>     if(psci_system_reset2_supported && <psci_reset_new_struct_var> != cold)
+>        psci_sys_reset2(AS PER PARAMS FROM new psci_reset driver)
+>     else
+>        psci_sys_reset(COLD RESET)
+> 
+> thanks,
+> Shivendra
 
