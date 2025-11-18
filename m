@@ -1,275 +1,249 @@
-Return-Path: <linux-pm+bounces-38156-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38157-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05C15C6890F
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 10:35:48 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B372C689E6
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 10:46:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 1E4B12A638
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 09:35:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3A0D04EEEED
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 09:42:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7C7B3112BB;
-	Tue, 18 Nov 2025 09:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08D3D3101DF;
+	Tue, 18 Nov 2025 09:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="KVmR3CTo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UzR081wP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010019.outbound.protection.outlook.com [52.101.201.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B7B2F1FED;
-	Tue, 18 Nov 2025 09:35:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763458513; cv=fail; b=kc7Cp/OIaVkXQSKAZvRLlM0dDh4WRf7kJ1lXPGG+p6shzZD7cpmujyjj++TTcCl4YCRRwKfX9Z6IokoktIT2h6yTT4sf3sLGQ+tuX5trfGJ1z2B0zRwm6QrHPrYRWpg+RPntI0fNZfb/boAn2ctO+e5FFgKWhnXCV0IBk3xt5mM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763458513; c=relaxed/simple;
-	bh=H4L11u6QccGaIRh7i4yUa9hUubI64VME4ezQ1m3OV+E=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=GG6jayGb79tfEQVX1+cF/Zhsqt9g0JS5r1xWfWjESZGTXDbYbzLGwRROerc/ZIxynZ/dAPUUyV9u3Cnk0FS38vIMHrlYQRiAUM+iurJAnUl3yPEyB/aOea1zkP+fi/G/+mU30gltzJeaSsfno6JqmQsX3F7lNSUuDR2iH/cMBG8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=KVmR3CTo; arc=fail smtp.client-ip=52.101.201.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YwyEFvrb9K7mt13wQ7xBcWmOxcSv99Mc7DWdVTn0yb1EwqfUNebTzR9Bf2KDg/4qHc86DS2KJLRClC4YFHhMEe86nMdcKBBA/LQNP+qrsdaNYQocE0dpoicpydqtXfF3lXaHh1dYbWEdPdHagfkIQ1pvkl/SJO5oLRjLCZ+hhsyCUzX6ULE6I9Lqlpcau/KYykQ0la1dEEpPqj1t5EmIwPXVGiDTMtmddL6TlO3lhkHMBSFYoKYwPS3drLsKpmJinKAUX2Gd2o3FFp1Dypj8p9OXfMI0UcBuDjRXuigV4wcfZ9faja1bK3Lk8oAkuXo8W8qV+aFWm1nb3tSVv2pMLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ihzdpiBt8q4BrD3QgGjlhaVKiSRrIFXYJ6mVlYGEW9A=;
- b=rR7x+jN78/9LX1WjANfOy8FelK2yz5dHc2GY6JZZPeFvg9S03Pv1fD8ZvLszo8OF+enH19tLfPSLBP8MBDt8NawyqFNJNhrW36UiZouCUwMFs1NmyJWrsYFN238oQsY8c64lGA/JKxYvyoj5dupXGYwSKesyugP68fFmlY3/6d9r1xW2ri2uJ89s+mi1gA9l1ABzUxXJM2cK42iO8UIpA41GoxFmz/cHxsUm51WLmIkF+xzL1dWqhU5fx0oOXg0NuULOVFVeketS9PBSpEvlhKF67zAAHyYltzWi+Xv6+apDcrYEGZ01tASIcdIomS4lEhoAgbq8MmNY7iMeSeY/mg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ihzdpiBt8q4BrD3QgGjlhaVKiSRrIFXYJ6mVlYGEW9A=;
- b=KVmR3CToUhVEykMSZdjVZ1dZlgr4qoEILY9AUmDHuMOExxooQEwZpUADABu+4R0r0QH4An1aDNNjBQLUYQUvjZ1I9dIQA4w2BDH6H+q23p7nLAw9rdI+IGOM9105eU2HrIPifgiX0wS5RNM+DV94dKvxro5ks0zTjqXxhJRnB5MjVEAE/sWc/Y1BWn7xc2VtoyIeQqy8dcqI1uM4lpzzCLT6pWEyzqfAGZkbEMgPxas57Vro5D9SJ38S0i7mgO0Cjlgof7RRQ0r9LwwnYGYXd6YixCN5ULvqpDSBlhlYPoV2G9Uw7GcpM7/TC6CSUNr35CDShHUQNPfXmHHe1mkHbA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BN9PR12MB5179.namprd12.prod.outlook.com (2603:10b6:408:11c::18)
- by DS0PR12MB9273.namprd12.prod.outlook.com (2603:10b6:8:193::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9320.22; Tue, 18 Nov
- 2025 09:35:07 +0000
-Received: from BN9PR12MB5179.namprd12.prod.outlook.com
- ([fe80::44e5:415d:e1a8:6e42]) by BN9PR12MB5179.namprd12.prod.outlook.com
- ([fe80::44e5:415d:e1a8:6e42%7]) with mapi id 15.20.9343.009; Tue, 18 Nov 2025
- 09:35:06 +0000
-Message-ID: <34bdd40f-bad0-4c6f-91ef-a3bcacd180fb@nvidia.com>
-Date: Tue, 18 Nov 2025 15:04:53 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 4/8] ACPI: CPPC: add APIs and sysfs interface for
- min/max_perf
-To: Ionela Voinescu <ionela.voinescu@arm.com>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, lenb@kernel.org,
- robert.moore@intel.com, corbet@lwn.net, pierre.gondois@arm.com,
- zhenglifeng1@huawei.com, rdunlap@infradead.org, ray.huang@amd.com,
- gautham.shenoy@amd.com, mario.limonciello@amd.com, perry.yuan@amd.com,
- zhanjie9@hisilicon.com, linux-pm@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
- acpica-devel@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-tegra@vger.kernel.org, treding@nvidia.com, jonathanh@nvidia.com,
- vsethi@nvidia.com, ksitaraman@nvidia.com, sanjayc@nvidia.com,
- nhartman@nvidia.com, bbasu@nvidia.com, sumitg@nvidia.com
-References: <20251105113844.4086250-1-sumitg@nvidia.com>
- <20251105113844.4086250-5-sumitg@nvidia.com> <aRW5dhyN5/JF3F3i@arm.com>
-Content-Language: en-US
-From: Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <aRW5dhyN5/JF3F3i@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA5PR01CA0206.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:1b0::10) To BN9PR12MB5179.namprd12.prod.outlook.com
- (2603:10b6:408:11c::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E06726738B;
+	Tue, 18 Nov 2025 09:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763458912; cv=none; b=dQ9Kkw85qCTCmjTEyQiflGE94tYdEb/zObsZB+n3KmyB1m0we74H1ZZl2vF1TrUZo6WvWi/1gRjvGwvM76e4CBnoDZ/onp+MmTgi51DjB6vdgImyz2rOwO4smOG4VI/SEQ9JqNWkNyBP1mspKeBrUOc46nB5m5KIZhwoxSY39vw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763458912; c=relaxed/simple;
+	bh=6TUYgiA62XUz5gKE4YkIs/WJ0a5pVPi5602UevDtAlY=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=CZVJH7N1QlV0b04C+rXmITqNfHyqDe5faj3x7mwLEKvbzJoQZvrOzUTzdRDEpBwf/KCorwxXbeJlt+g6gu2htSSaxUa/YRyaBtGZzcVD7NF8b4+NCadqmggjYrphveCUgukK3A4qD/gRQGFt35qZnwv782lUU7Oris28KO5hwJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UzR081wP; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763458911; x=1794994911;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=6TUYgiA62XUz5gKE4YkIs/WJ0a5pVPi5602UevDtAlY=;
+  b=UzR081wPZxkDRaaIbh1KppUZyn3crNGOIIxDKNhFbKEWsyMqgJm+vtq8
+   ZY976XJ6mjDkrVRn0Ot4+Gi6CkmI6ALQ0jtvbH23YOTfV5wXtt4uaqIMF
+   VfguenggWiXMe2rOWWMW4ktyHEAhZ8vfTgcJSdG22ZPLP9Q+4sUlQ64zm
+   P1PaSZCQnfkXhYpD8zznf5P1wJ6OtWNccmTZLjW8qpE2btgt3hmyUC+I2
+   dVy0g0cn2L6P4HUvE42k5vJXaNO8qQ4kP4s+xYRxZGX3L6aXSqWJww0X1
+   zH9jYZUdItmcMmPDXN5YlARc2XXiB1oqqy/lB5/klLs9VXo+6QxbsQAXT
+   w==;
+X-CSE-ConnectionGUID: YiQMgWYeR5+erdJnA/Lulw==
+X-CSE-MsgGUID: XrFja3FCSZaFeEE0FgsGPw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11616"; a="64675468"
+X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
+   d="scan'208";a="64675468"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2025 01:41:49 -0800
+X-CSE-ConnectionGUID: xmDX5Nz1QGeTmdrc+qjkfg==
+X-CSE-MsgGUID: 89IvyINKSiqWhYbke59zNA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,314,1754982000"; 
+   d="scan'208";a="190501785"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.74])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2025 01:41:41 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 18 Nov 2025 11:41:37 +0200 (EET)
+To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+cc: Rob Herring <robh@kernel.org>, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+    Jiri Slaby <jirislaby@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+    Nicolas Schier <nicolas.schier@linux.dev>, 
+    Hans de Goede <hansg@kernel.org>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
+    "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+    Manivannan Sadhasivam <mani@kernel.org>, 
+    Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+    Conor Dooley <conor+dt@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
+    Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+    Bartosz Golaszewski <brgl@bgdev.pl>, 
+    linux-serial <linux-serial@vger.kernel.org>, 
+    LKML <linux-kernel@vger.kernel.org>, linux-kbuild@vger.kernel.org, 
+    platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, 
+    devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+    linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org, 
+    Stephan Gerhold <stephan.gerhold@linaro.org>, 
+    Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Subject: Re: [PATCH 3/9] serdev: Allow passing the serdev device name to
+ serdev_device_add()
+In-Reply-To: <20251112-pci-m2-e-v1-3-97413d6bf824@oss.qualcomm.com>
+Message-ID: <7053dfed-5eff-7182-bc85-0437a4074c82@linux.intel.com>
+References: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com> <20251112-pci-m2-e-v1-3-97413d6bf824@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5179:EE_|DS0PR12MB9273:EE_
-X-MS-Office365-Filtering-Correlation-Id: 248bb49d-5785-47c5-fa00-08de2685c23b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aHV6emlTTmN1MGp5U0pUUGJGUGVFOWtJYW1PZXU4MjZBdkd6WTlsTjc4bnFG?=
- =?utf-8?B?ZDJabFFpcXIyc08xT25nMnVLTmdlcE83ZTNmSFExRlR1RVV0Ky9rYUkreXps?=
- =?utf-8?B?WFFKMlVMZHdESTNCOHBFVWVoM2d2YjUxemV6aGVnT3hqZXBXYW4yTDEyM2x0?=
- =?utf-8?B?angvNmhoZVRObU85MW5TR1duTmdkUlNsNzhHemhSNlVWWDdoK3FUamhrTXlu?=
- =?utf-8?B?a3pFcCtLaSt2T0xvYnBCK1hMdWozTUdlWG5xanFJdS9JL05HdTlxeEpFdEVR?=
- =?utf-8?B?N0E2UlJrTzlCaFdoYXVSdTNxR1RLK0hNenJDSTdzYkFKcXVKelNaV2tnT0xh?=
- =?utf-8?B?SEMrTWFnRUVUTUQza1NHNngrd3R6ZjBxcFl2VHBkdVBMMG5pMnFuTEV1NUsx?=
- =?utf-8?B?alRtR1F5UXp6TDVSWTJzZWhNZDNvQldFN3NURGx2RzF3UmxqZHJjYXFLRW1R?=
- =?utf-8?B?Znk5ZUxpZzVodUJvNkRaeWFseXdKUzl0WGdkMFJMSnNSdnF1S0lCeGxBU3NP?=
- =?utf-8?B?TVU4SGVNM1JkZ1I0dEhoNGY0RVpuenpMWWRnbSt3STRPRjRGbmhkSW1ybVl6?=
- =?utf-8?B?SDQyNkp5SFpNbW1YU2pXcXJQNFhCUlFlcUo3RDJkU0phZC9FbU9QdElBSHpz?=
- =?utf-8?B?cjVUWWFmQmpDVEZtaU1RbXdRUXlMYk5kUkNCYjNRdnVaRE0xRzNwUW51RUgz?=
- =?utf-8?B?MUJBYUVKMmtpWWtoSTZwZXpFaE1zeHBuaHpNZXZ4aTFoZitBNE8zRUFtaDNr?=
- =?utf-8?B?ZWwzM3pKMWlXRHNDdEQzTE5OZjZiL3VGMkZZWUNHOG9VRndQVGg0dWNSNWU5?=
- =?utf-8?B?V08zMlBqRHorQ1ZQOWE3M2tJMXVNcjAyNlk2d2FidExpcW9nL3hBM2Q0em15?=
- =?utf-8?B?S2VTS2FJdGdqMUlCYWRkVytYMEQxeVFkRUVEMnJaanc1d3QxdmZyK2kvbkta?=
- =?utf-8?B?bW96eTV4dmVRV3A0NWtraXBTS3EvUXRHdVZIRnF3d0RuZUxlSitLNm94cERl?=
- =?utf-8?B?UWgrUko1b1Y4cW9IMjZlcElXWEQ3K2pydG1Td0c2V3lxZDhxUFdHdW5EZDRp?=
- =?utf-8?B?aGZ0RjhKcVh3elFZVkpKU3JJWTRSaStoeHU2a2VpVW9VZ1FlSEtrRGtaemlC?=
- =?utf-8?B?SGNFbkhjSUQ0eCtja3ZRbDJXL2ZiSHhvOVhmMElPWUZFUjBvTjdIeTV0a3dj?=
- =?utf-8?B?K1FVYm5yUys5S1dPZzlXeko5RG1pWk92cGJhdmVIVnlOeGVEdEtlbmFGZzFh?=
- =?utf-8?B?VHJ5OGRMdGRkSnBmQ1JrYWF2QVZkRXUyK09zL0JqbXNEeTBvRFdkejF4U2gz?=
- =?utf-8?B?SzBmKy9DaDVNYzVTdzBFblhsMzVyS2F5U1hncUozK0xpcjhhcWhyNnFQcGxa?=
- =?utf-8?B?QTZjdm9tSFZDZFdBYzFMd08vM3B1dERkRkxJbEZJR2dTaWQyanRnbnNkOEVZ?=
- =?utf-8?B?MVJMbWRtTVJjOW8zb2tTaUhOdjZOMzNTS2l0MkdwUmlLck1jbmdvTW43UTEz?=
- =?utf-8?B?eDVQVnZpTFZsSXVUOS8yRGN4bXFQdjBrY2tsVzkwUnQzUTM2bXFJVkVIb2dS?=
- =?utf-8?B?QzU5WGZLNmVmak9wcExSd2k0bnRxRlBoZE51NFUvWjlGNVU4cjBjK3pJalgx?=
- =?utf-8?B?Mm95bHZ3OTNPSjlqQ0FDcjJBeXpqZ1lxRUxDKzJRaXBIb1hqZUYrY1FZZ1RH?=
- =?utf-8?B?UzcvTCtiTjdPR2FhamY0YzBJMFBiMlE3c3c5c2Z4SnVybzZwUjdqaUVzZERZ?=
- =?utf-8?B?MVlaU1NtOGFuTXNGa1V4bkVXVGpoQkJEQXYra3JURno3NzdrNlZNYko5UHJJ?=
- =?utf-8?B?NHNpZUtQSlczcDdwZ0UxY2k2OGtWS1FORmJzakNWWGtHbzFrMGREU2l3ZVBv?=
- =?utf-8?B?Z1p3Rzd0OXVHTXVFdzJKQWZSR1V2MHhWTTJWTmhZUy9HVnV4SG11NGRiSzg4?=
- =?utf-8?B?bFdZa2w4UUhzT2liK2p5ZFkzcjMyUUZCNzNDbFNyYTJUc0ErdGZncTVPaG9l?=
- =?utf-8?B?RG8wUitUSk9BPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?NUpxQ3hOazJ2c0ZyUVlGSHhtWWpJV0gyUXlDZkMzbzMyazkvNFNHb1pkVEEw?=
- =?utf-8?B?S24xS2NhV2tpWWVzNkZwaVBnWmpXT050UjFZb2xMSlJZZ2ZWOVhkL2xMeHp4?=
- =?utf-8?B?eWxlQ3dUNTJGMmowbG1Hek1SaUk3b0h6b0lpTXV4MjBiRDZTVHlPR2lLS0sr?=
- =?utf-8?B?VDRsQlpBcGlnL3VIN21uUGw3NGpzYzQ1K2FtY0IyNFJJRzV3TS8xN1NUYVVt?=
- =?utf-8?B?RlhjckNhU0RLWkVTaTVjL1JzWlUwUk5PZnpFVmZqOThoQjUwZk13UWdJQklm?=
- =?utf-8?B?V3kzWlBrSW1DTktmUzZ4enZ2cUtvVSsrUVNNZjFlSzl6S3NoY0N1QjBCS2hl?=
- =?utf-8?B?Z0pEYWlSTjJQc0p4cGQxR1NuemtJMjJERVhJK1Q2YnF0UTdLZXYvdW8xd004?=
- =?utf-8?B?VWp0V0VQeEV0K2QxYmtuWXBOQVJwQTVlYVhPczdjZFdnMmd0cVdzY2tJdTho?=
- =?utf-8?B?b0Znb0hzNmwzR3Z5Tzl5Mjl3Y0VpWDF4QTlFMHc5eGpnbThqNm5kVWpORVFM?=
- =?utf-8?B?bFhhTzZFeVBSQ1lPY2hmbDVwMHhXenIyUmxxRDBxM250eG8wVHkyY3JMaVlY?=
- =?utf-8?B?NHF4V21zQm9TU1hCbWY4S3cyQ1NzM1ZyWTM2VERDSTNQRlh2WnlSZ2Mxc0Ro?=
- =?utf-8?B?SzhaZUtqUEIzbnJ4a09MRGh4WlZQVU5aN2hhWEhjN1lSZWRqcUI3dG9wTW9k?=
- =?utf-8?B?SHc4NGd5bUZBZjZpYnNSa21XWXR4V092SXpta0h5bjNoUDdwV2RMT09MYkl5?=
- =?utf-8?B?S05RWm5JK1dJckYzK2NWL2ZyWHp6NFZkUCtEbFpRcnhxdTkydUZnOTYwV1hn?=
- =?utf-8?B?VVB1NXNJYm44cytqd3VJZXBtVlBmalM4NDc5Y01pdEp2RWNIeUdLcGVrWG9V?=
- =?utf-8?B?YnZhbjBvQkN2eU5BeHRLRGhMOWlpWis4NDJUdUs1RnpzbG1Md0VUNGFLOElR?=
- =?utf-8?B?aW85K3JHdVNEU2dPSEkvbkY4Lytqbm9BSGhuTXdYdklibzMxQ1ZNbmdtT2FS?=
- =?utf-8?B?ZVFLVlNpanBWUndqZkh2QzVpM1JJQUFtUGZhVFdwUFVKaE16VlpaZlBvK0da?=
- =?utf-8?B?dTh3TFBWcGVMeHUyK0ltNG9OUHlwUmdKSTJzSkNyR2haMEpWMXZNa1Y2YkxR?=
- =?utf-8?B?WkN6N2c5RituTkM4d1luLzlVbUhOVEU2Qy9HRnZMRlpFY2xZM095VzlhUnl1?=
- =?utf-8?B?Nk5uZmx0YXN3WWlJUGw2WnNiYUhzZXhNZFVNaTdWaC9XSko1RGRJY09YaWpT?=
- =?utf-8?B?RE96aDVla1h5TzB4SDNDdlFnWFVvWWdtdVhYaG92bkFZQ2lpTElPbjMyMkY0?=
- =?utf-8?B?YkpHZ2ZFd1ByNEpGL1ZUdW8ydFZkNlQ2ODhjancxbWZiT254Q2pvMkdpbmRL?=
- =?utf-8?B?QmJzbWZBZU9ZdVNuVGpLVE9RNDlpUm9ITGVvQ3ZKc0FITzVXcUh3ZjJNaHZZ?=
- =?utf-8?B?UXZGQmVVaDBteUFkUTl4dmFGdVgxRkhCbVNuWGkxZ3p5OUxWVmw1aklsdmZa?=
- =?utf-8?B?V042c0F0UkJ3Mkw5cXZGOXBJTGVaM3RFMDZXaUxUVE1mWnNubWpPUDYxNnF4?=
- =?utf-8?B?ZWRvQ0ZEV2VkRHl6RUpzc0JmWkF4bWdaQmhsQk50RTg1NnBFcFNLUE5KMTV3?=
- =?utf-8?B?QWV3VlJKOG1qTVg4bzhXOTErWjAyVEhvVThoSGJXV1o2V3M1UkRrQndnTkZT?=
- =?utf-8?B?ZlAvbDNmTm1LSldVWmRJMkVabnFkSDZZREI1MkhSNjI0bjUwczNSemF0dHZP?=
- =?utf-8?B?cXVuNG1rNlV3SHhCZTltMEg5STUwL1VLOXE3RnVKQjlwSVRxQ1JhcGF6Sm9n?=
- =?utf-8?B?NUk5N3djS1hSWlI1ZWlLOW5kK2hvWkE2aUhYNDB4WW95bTVhZVBkdktLdS9j?=
- =?utf-8?B?WG5oMzhPMXgxYVd4NWRsUXdlU09QcFZaTmhtYUJpS2VZTUhHY1lPWGFoL0xt?=
- =?utf-8?B?emxQQ3pNNkdkM2FRaHROc1ZVYWprTUxTN05iNUlsMjdaSWc0aVk3YURFeWlM?=
- =?utf-8?B?VlFaY3VlK2hYaUVidWY3ZmFrZm9CQllncTQ5VlZyb01XeTdXSWI4L0tpNjd3?=
- =?utf-8?B?eitQcmZCVnNYdE9zMk02WkxZMmtWSmlwY2pVTzdoVnhNSkpRM3RKQ3N6QzdC?=
- =?utf-8?Q?LcV5ZCm9Xpd6md4HcskLpJeNj?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 248bb49d-5785-47c5-fa00-08de2685c23b
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2025 09:35:06.7926
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jLhhvycRmuAseFUzwAyxz4hp4MtR9lwLxhiKcFmgSgZdk2AkpdIHQZulal63RjunWAbYWaZTS3uywXM4id2Bpw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB9273
+Content-Type: multipart/mixed; boundary="8323328-2055180828-1763458897=:1205"
 
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 13/11/25 16:26, Ionela Voinescu wrote:
-> External email: Use caution opening links or attachments
->
->
-> Hi,
->
-> On Wednesday 05 Nov 2025 at 17:08:40 (+0530), Sumit Gupta wrote:
->> CPPC allows platforms to specify minimum and maximum performance
->> limits that constrain the operating range for CPU performance scaling
->> when Autonomous Selection is enabled. These limits can be dynamically
->> adjusted to implement power management policies or workload-specific
->> optimizations.
->>
->> Add cppc_get_min_perf() and cppc_set_min_perf() functions to read and
->> write the MIN_PERF register, allowing dynamic adjustment of the minimum
->> performance floor.
->>
->> Add cppc_get_max_perf() and cppc_set_max_perf() functions to read and
->> write the MAX_PERF register, enabling dynamic ceiling control for
->> maximum performance.
->>
->> Expose these capabilities through cpufreq sysfs attributes that accept
->> frequency values in kHz (which are converted to/from performance values
->> internally):
->> - /sys/.../cpufreq/policy*/min_perf: Read/write min perf as freq (kHz)
->> - /sys/.../cpufreq/policy*/max_perf: Read/write max perf as freq (kHz)
->>
-> There's a theoretical problem here for CPUFREQ_SHARED_TYPE_ANY, when
-> multiple CPUs share a policy, but that existed before your
-> patches :). Almost all of the files exposed by cppc_cpufreq should be
-> per-CPU and not per policy: auto_select, energy_performance_preference,
-> etc., and now min_perf, max_perf and perf_limited.
->
-> In practice it's likely not a problem as all CPUs that have P-State
-> dependencies would likely share all of these controls. But that's not
-> mandated by the ACPI specification.
+--8323328-2055180828-1763458897=:1205
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-Will send a separate patch as improvement for the existing code.
+On Wed, 12 Nov 2025, Manivannan Sadhasivam via B4 Relay wrote:
 
->> The frequency-based interface provides a user-friendly abstraction which
->> is similar to other cpufreq sysfs interfaces, while the driver handles
->> conversion to hardware performance values.
->>
->> Also update EPP constants for better clarity:
->> - Rename CPPC_ENERGY_PERF_MAX to CPPC_EPP_ENERGY_EFFICIENCY_PREF
->> - Add CPPC_EPP_PERFORMANCE_PREF for the performance-oriented setting
->>
->> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-......
->> +/**
->> + * store_max_perf - Set maximum performance from frequency (kHz)
->> + *
->> + * Converts the user-provided frequency (kHz) to a performance value
->> + * and writes it to the MAX_PERF register.
->> + */
->> +static ssize_t store_max_perf(struct cpufreq_policy *policy, const char *buf, size_t count)
->> +{
->> +     struct cppc_cpudata *cpu_data = policy->driver_data;
->> +     unsigned int freq_khz;
->> +     u64 perf;
->> +     int ret;
->> +
->> +     ret = kstrtouint(buf, 0, &freq_khz);
->> +     if (ret)
->> +             return ret;
->> +
->> +     /* Convert frequency (kHz) to performance value */
->> +     perf = cppc_khz_to_perf(&cpu_data->perf_caps, freq_khz);
->> +
->> +     ret = cppc_cpufreq_set_max_perf(policy, perf, true, cpu_data->perf_caps.auto_sel);
-> Can you give me some details around updating the policy limits when
-> auto-select is true? I suppose if P-state selection is autonomous, the
-> policy limits should not matter, right?
->
-> Thanks,
-> Ionela.
+> From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+>=20
+> Instead of always setting the serdev device name from 'struct device' nam=
+e,
+> allow the callers to pass an optional name and set it as the serdev devic=
+e
+> name.
+>=20
+> This will be used by the future callers passing the serdev device ID as t=
+he
+> name.
+>=20
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.=
+com>
+> ---
+>  drivers/platform/x86/dell/dell-uart-backlight.c             |  2 +-
+>  .../platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c    |  2 +-
+>  drivers/platform/x86/x86-android-tablets/core.c             |  2 +-
+>  drivers/tty/serdev/core.c                                   | 13 +++++++=
+++----
+>  include/linux/serdev.h                                      |  2 +-
+>  5 files changed, 13 insertions(+), 8 deletions(-)
+>=20
+> diff --git a/drivers/platform/x86/dell/dell-uart-backlight.c b/drivers/pl=
+atform/x86/dell/dell-uart-backlight.c
+> index f323a667dc2d2c7dec9fb284515bc3b6b984b7b9..f076cfac2bc5ec14899d6622d=
+084bae2ffecfa3c 100644
+> --- a/drivers/platform/x86/dell/dell-uart-backlight.c
+> +++ b/drivers/platform/x86/dell/dell-uart-backlight.c
+> @@ -354,7 +354,7 @@ static int dell_uart_bl_pdev_probe(struct platform_de=
+vice *pdev)
+>  =09if (!serdev)
+>  =09=09return -ENOMEM;
+> =20
+> -=09ret =3D serdev_device_add(serdev);
+> +=09ret =3D serdev_device_add(serdev, NULL);
+>  =09if (ret) {
+>  =09=09dev_err(&pdev->dev, "error %d adding serdev\n", ret);
+>  =09=09serdev_device_put(serdev);
+> diff --git a/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c=
+ b/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c
+> index 8551ab4d2c7dbc3a8d0b2f50071d4460a3ee65e9..5e568fe1162d1563183713f8d=
+5c71c59ff7667a1 100644
+> --- a/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c
+> +++ b/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c
+> @@ -260,7 +260,7 @@ static int yt2_1380_fc_pdev_probe(struct platform_dev=
+ice *pdev)
+>  =09/* The fwnode is a managed node, so it will be auto-put on serdev_dev=
+ice_put() */
+>  =09fwnode_handle_get(dev_fwnode(&serdev->dev));
+> =20
+> -=09ret =3D serdev_device_add(serdev);
+> +=09ret =3D serdev_device_add(serdev, NULL);
+>  =09if (ret) {
+>  =09=09serdev_device_put(serdev);
+>  =09=09return dev_err_probe(&pdev->dev, ret, "adding serdev\n");
+> diff --git a/drivers/platform/x86/x86-android-tablets/core.c b/drivers/pl=
+atform/x86/x86-android-tablets/core.c
+> index 6588fae303562b7dc9a1a8d281b167e44f0d3e84..96140f5d4f79240f44cb4530e=
+e63777f783c6aaf 100644
+> --- a/drivers/platform/x86/x86-android-tablets/core.c
+> +++ b/drivers/platform/x86/x86-android-tablets/core.c
+> @@ -316,7 +316,7 @@ static __init int x86_instantiate_serdev(const struct=
+ x86_dev_info *dev_info, in
+>  =09ACPI_COMPANION_SET(&serdev->dev, serdev_adev);
+>  =09acpi_device_set_enumerated(serdev_adev);
+> =20
+> -=09ret =3D serdev_device_add(serdev);
+> +=09ret =3D serdev_device_add(serdev, NULL);
+>  =09if (ret) {
+>  =09=09dev_err(&serdev->dev, "error %d adding serdev\n", ret);
+>  =09=09serdev_device_put(serdev);
+> diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+> index 2b5582cd5063a87c9a6c99f83a8ab071637eae57..76b89dd0720f89dbe34e205b9=
+05ef24d9f94d770 100644
+> --- a/drivers/tty/serdev/core.c
+> +++ b/drivers/tty/serdev/core.c
+> @@ -121,14 +121,19 @@ static int serdev_device_match(struct device *dev, =
+const struct device_driver *d
+>  /**
+>   * serdev_device_add() - add a device previously constructed via serdev_=
+device_alloc()
+>   * @serdev:=09serdev_device to be added
+> + * @name:=09name of the serdev device (optional)
+>   */
+> -int serdev_device_add(struct serdev_device *serdev)
+> +int serdev_device_add(struct serdev_device *serdev, const char *name)
+> +
+>  {
+>  =09struct serdev_controller *ctrl =3D serdev->ctrl;
+>  =09struct device *parent =3D serdev->dev.parent;
+>  =09int err;
+> =20
+> -=09dev_set_name(&serdev->dev, "%s-%d", dev_name(parent), serdev->nr);
+> +=09if (name)
+> +=09=09dev_set_name(&serdev->dev, "%s", name);
+> +=09else
+> +=09=09dev_set_name(&serdev->dev, "%s-%d", dev_name(parent), serdev->nr);
+> =20
+>  =09/* Only a single slave device is currently supported. */
+>  =09if (ctrl->serdev) {
+> @@ -544,7 +549,7 @@ static int of_serdev_register_devices(struct serdev_c=
+ontroller *ctrl)
+> =20
+>  =09=09device_set_node(&serdev->dev, of_fwnode_handle(node));
+> =20
+> -=09=09err =3D serdev_device_add(serdev);
+> +=09=09err =3D serdev_device_add(serdev, NULL);
+>  =09=09if (err) {
+>  =09=09=09dev_err(&serdev->dev,
+>  =09=09=09=09"failure adding device. status %pe\n",
+> @@ -692,7 +697,7 @@ static acpi_status acpi_serdev_register_device(struct=
+ serdev_controller *ctrl,
+>  =09ACPI_COMPANION_SET(&serdev->dev, adev);
+>  =09acpi_device_set_enumerated(adev);
+> =20
+> -=09err =3D serdev_device_add(serdev);
+> +=09err =3D serdev_device_add(serdev, NULL);
+>  =09if (err) {
+>  =09=09dev_err(&serdev->dev,
+>  =09=09=09"failure adding ACPI serdev device. status %pe\n",
+> diff --git a/include/linux/serdev.h b/include/linux/serdev.h
+> index ee42e293445d928a311bd3c120e609214f89a5dd..3b87909b199af74d619b4fe54=
+8c5c9c994e7bc15 100644
+> --- a/include/linux/serdev.h
+> +++ b/include/linux/serdev.h
+> @@ -163,7 +163,7 @@ static inline void serdev_controller_put(struct serde=
+v_controller *ctrl)
+>  }
+> =20
+>  struct serdev_device *serdev_device_alloc(struct serdev_controller *);
+> -int serdev_device_add(struct serdev_device *);
+> +int serdev_device_add(struct serdev_device *serdev, const char *name);
+>  void serdev_device_remove(struct serdev_device *);
+> =20
+>  struct serdev_controller *serdev_controller_alloc(struct device *host,
+>=20
+>=20
 
+Acked-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
 
-Yes, the cpufreq sw policy limits don't matter to hw in autonomous mode.
-This is done to notify the cpufreq framework and keep sw policy limits in
-sync with the new limits in HW. This was raised by Pierre also in [1] about
-cpufreq not being notified after user modifies the HW limits.
+--=20
+ i.
 
-[1] 
-https://lore.kernel.org/lkml/b2bd3258-51bd-462a-ae29-71f1d6f823f3@nvidia.com/
-
-Thank you,
-Sumit Gupta
-
+--8323328-2055180828-1763458897=:1205--
 
