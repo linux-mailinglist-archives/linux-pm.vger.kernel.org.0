@@ -1,68 +1,70 @@
-Return-Path: <linux-pm+bounces-38194-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38195-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DB64C6BF9C
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 00:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15D24C6C1F8
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 01:26:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0F06334D351
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Nov 2025 23:22:26 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8DA06361A0E
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 00:26:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42ABC3081D8;
-	Tue, 18 Nov 2025 23:22:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B25B21E1DF0;
+	Wed, 19 Nov 2025 00:25:55 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CWXP265CU010.outbound.protection.outlook.com (mail-ukwestazon11022072.outbound.protection.outlook.com [52.101.101.72])
+Received: from CWXP265CU008.outbound.protection.outlook.com (mail-ukwestazon11020102.outbound.protection.outlook.com [52.101.195.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 129332DCC17;
-	Tue, 18 Nov 2025 23:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.101.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D733F18C31;
+	Wed, 19 Nov 2025 00:25:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.195.102
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763508141; cv=fail; b=qE3f8G+3ky2MlYHsEmvCIaJKRKrSWBff+eKiZhObo2kZDaq3dAODSehmze9+13iVogOQUhpa35lRroTZqC9Cv7H+x+ieMNCCgEtquI+olkwgnmzmp/miURuZonbbPK5Hy9UwzHGfnTBnbCkA1arx60tV2jeuXfL5OgB6elpV60U=
+	t=1763511955; cv=fail; b=RIXcuzPqB0/a8C5ddR09YBdSrfxduM1PieCun5t4WFFUjh36PAgM4LCZcDUL/qfflTd9kgi5kCb6SZ8yqJJWjzHWjo39fhAuCcQ06CALJgeHq/fDcAg87XAnlzeAuOaQmpblObOWXejAbHRDpkRPBrXTijl2wrev+pHNGYzaMbY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763508141; c=relaxed/simple;
-	bh=S3n/bwfNiBCb4MfCCvxPB5VwH6C++lB1UiFoRG04v3k=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=BOmot0bn5SaPAaYwJXMFpBGisOLJTrC31ZpZgaJbc5NaY4KtYjZiqDrpcpQDpeZ3fbb/0R6jddv1lpd5FpIjAvq3oNcz2L4pnr4pLVMb5h/qLWtNe6JCzVRI+1qayBqk+9V2xRw+i6W4OqLVvAoByOB34k0314+AVe3ZZzXRsJQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.101.72
+	s=arc-20240116; t=1763511955; c=relaxed/simple;
+	bh=UO3uIfrut3AOF6Ha6CTsM7LLO6UWn0kF6ZE9IybCt1k=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=oNHGieO6ytAxeYOyFT3WLe8Whf/YH2IQCPhcw3L+ATA1QW3AYOuKlpfrg/8kfp28iRoJrwFt+B51RitUjPxwID2c7v3FLwZ6BNF9CP/+9iTAJUC3pS/UKmGM1y88aK3V9O4tzdtmombXbCuatlh08rKrReZNrD1wKUbfCy9hqRE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com; spf=pass smtp.mailfrom=atomlin.com; arc=fail smtp.client-ip=52.101.195.102
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atomlin.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JOH4DiJDzOAzrzoZuI+KW7WOMYxjp/gGgi8X0gycsI0daMKt8bJtUKRI/Kr+9BFMkXqZsdY90tKS4qIz/dATUcIe8t/Omw7LID0EKRSz/Hu8b4qk3uNeWQuo8BoMji7+ZX3iLTTJ41VedizpNdKMZzwOpuPdYgVJIfGJvz9EtXR5Yl0henWcAmpTytAlZwyqTigr9qt3h11aThKM23tAXMShNRkYKEUdott1IEAyRUvmT5fedGNA5cUmBcXJbsh5DcifA/DjtisCBuiQEkSmoE0iIK218ovphroG2jCT0Rbn/5ea4oIW1ZYWQ4dvl4h1RIiFZ2eJEfPj1vktNFppPg==
+ b=iq/agAAqKQ5I5kRCTiHreMlS8syzMtzrPVS8juXvg2axLFr1w+0QecAYOLSVrsapZO0p32za7RcC0zWpke5ZI75Mn2B62dJhBRDd6mZ2K4corsSfUG6mKC1/bZZydKfUg3uyoa/88f2RgzrjHygqVZBm0GvkFyMiIljbeaD5ZqXhBzRLqnyKbXGbafgQMyJxcWRWnqwEQACVtMfpHe8tIGPPxt+8IuZ4Ey5Xhn9VcEpbtk9gGsMOenk5epy9FSoRdIffAxS40GgXSA3cXCm2YfsK6DYr5uN8ft5KZ4v3llhqPKVZGD3zfsgvLynXNvZT0ig344HpxA6VzXknh83frg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3oYs6iwtln+wgq+swG4opyXCHdTOgxB/UDjVCkv4Ca0=;
- b=iKoEyc/ymDYO0SqCL2wcI4YYrNpt93W8V4TfIBjEGytSgTp93Dp7skj6N+694wIBJTksIaP217Q8lM7kF/tYw8mLSVeOXL7gO2NYU2CCQX/7KUg0mAwJHmvuc7VDoho5O8KbFB6G6EgrLM3L/qdI0O9KIXcbmgR27peUdYu+6LuIwzfSWyN0O1cDvhs+g7LamWDYIiRz4zIEdao84rmwgMZZ9lVz3e1LxkpPvTD8h6LSGCW8gul2KL6iDP4O23OgIlLoZl04zDH+8CE3Jes5Qip4vji6AJNslEYJJs+lFI6M7Rif2+ulJVDC6g9CTuAMk/Ip8yJaAYc/GBYt//aDqw==
+ bh=U6gqKR7XNHyopeHlpSvqf9/WyNfJuXOYNnjjiNJCZ5s=;
+ b=N8M0xACHMlt8kVLXXxSlECewzb3Kt/RTT4winG6zvnO8ABDXO35wshSfSw42ODvNaxsW/ybFQlbQeKBVN7huiOqUMRZ9DubMhKCxo2mnKG0Vn17KNdhMTEz7Rbj5ouabaA8tSKcBFI4sYB3EUU42sQoVb1rbgK2AVRPh7SWt2PSNOQ5uqX17pijmnYch0JN/MNEYNqmxsFqZrs7oBNZfk152jd1STHUuPxq0YAioPNDjs4fsgkARE53jCslzbrV857z0Sxfr5olm6ZWUux/4PWvacLqSkY9dxSt+xIvVIaP+6bG/0A8dTTAJlAvYyRWC2Vbt0N1tuFDOepPHdOje/g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=atomlin.com; dmarc=pass action=none header.from=atomlin.com;
  dkim=pass header.d=atomlin.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=atomlin.com;
 Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM (2603:10a6:400:70::10)
- by LO0P123MB7200.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:31f::16) with
+ by LO4P123MB6801.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:2f9::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.10; Tue, 18 Nov
- 2025 23:22:15 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.10; Wed, 19 Nov
+ 2025 00:25:50 +0000
 Received: from CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
  ([fe80::de8e:2e4f:6c6:f3bf]) by CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
- ([fe80::de8e:2e4f:6c6:f3bf%5]) with mapi id 15.20.9343.009; Tue, 18 Nov 2025
- 23:22:14 +0000
+ ([fe80::de8e:2e4f:6c6:f3bf%5]) with mapi id 15.20.9343.009; Wed, 19 Nov 2025
+ 00:25:50 +0000
 From: Aaron Tomlin <atomlin@atomlin.com>
 To: rafael@kernel.org,
-	daniel.lezcano@linaro.org
+	daniel.lezcano@linaro.org,
+	gregkh@linuxfoundation.org,
+	nathan@kernel.org
 Cc: linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH] cpuidle: sysfs: Display idle state enter function name
-Date: Tue, 18 Nov 2025 18:22:08 -0500
-Message-ID: <20251118232208.660255-1-atomlin@atomlin.com>
+Subject: [PATCH v2 0/1] cpuidle: sysfs: Display idle state enter function name
+Date: Tue, 18 Nov 2025 19:25:44 -0500
+Message-ID: <20251119002545.666251-1-atomlin@atomlin.com>
 X-Mailer: git-send-email 2.51.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BN9PR03CA0138.namprd03.prod.outlook.com
- (2603:10b6:408:fe::23) To LO3P123MB3531.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:be::10)
+X-ClientProxiedBy: BN9PR03CA0965.namprd03.prod.outlook.com
+ (2603:10b6:408:109::10) To CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:400:70::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -70,145 +72,93 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|LO0P123MB7200:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d43690d-eb64-42f2-4941-08de26f94d9f
+X-MS-TrafficTypeDiagnostic: CWLP123MB3523:EE_|LO4P123MB6801:EE_
+X-MS-Office365-Filtering-Correlation-Id: 49e301ab-266e-4be8-356a-08de270230dc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ZeSKKn3O0vPYXa89EW83TGeLTnYGNRy0HvBw9tOycJg9EuomuqkTIXkp25e3?=
- =?us-ascii?Q?+mETlKM0/5LSTD2rE467MRpQS8IBAS74SMmTMAXv7TCWZefwoQKBgvTiVPLx?=
- =?us-ascii?Q?ndZCkgUXqe99z2MFU+1+YJW69iwi4syo5x8FdtbJ4dB+b5MoIpJoa/BYMUuo?=
- =?us-ascii?Q?ScrwQIGyE6e5wbO6eUTnUq0v08aEoprRw55u2IS4iH0b8+LV4GyhR3yI+Pxk?=
- =?us-ascii?Q?+j1BtB7IJLdrr3ooGwBc360yEQD3VWPGC+12p/rlMX29U8ZUDUMJ5slHdHk7?=
- =?us-ascii?Q?DdxtJfBHuU/qSUfXCksL/w47FRUGPW7oVt8dS7uMF9+wOIp/lLI1NgXm8m3B?=
- =?us-ascii?Q?5cQJPiH2+vpdxytZnYzQz5/x2doyqVcxJEASzBPXyPG2ZJ0IyRfdEq9VYtNM?=
- =?us-ascii?Q?SGGOwS+Jef/u795XXZ6x7Hci1UTty6hSpx5mqu6TJ0ZB25dcIoDWx9LM1Lwv?=
- =?us-ascii?Q?8JDI2rb+K3ixKfeLz4xp2hXR1d9ParYf7P/rly2IYYqXQMHMlIBBGeDR4qnH?=
- =?us-ascii?Q?V6FKrFy8Yqrt4v3oUoBigVi+jr934qXOmbFjMJZkzcCqgYGPxc19BtIoK6/3?=
- =?us-ascii?Q?i8A66ColKoGVjEYg/NymFYj2doT5+B3NI90EDFRIv+Nw9fXkM++sqiWp3ztw?=
- =?us-ascii?Q?M1zW9D8HKmRD5lximJkpIPh5LNGvLwK3ni3azBLDCefVjWySnVIVqKAYExGA?=
- =?us-ascii?Q?Bv3jkWB3C/0G0TbF0uT+BPyCpgA5hJm+jr8RlH1hPiDLrJU/+jfW11xgep9W?=
- =?us-ascii?Q?A+SSUtfbGgVCfNK3WnZNUp08UqRc8A3SBb/O+WFDORC3iCvlgy/o8xx1WaRH?=
- =?us-ascii?Q?rfok1I9bdyFajk3vY5fCtvLyKclZjlu2Gbg2eroMW7uCHV1LY5lFuPmt19V8?=
- =?us-ascii?Q?Ni+jHONUtotPjAn7S7iSsrO5HbNH6olQlJHJaonWyNyPgRVBr9DslV93P4tN?=
- =?us-ascii?Q?ri4H6JykWQm2Cg495NGhVf13GSteXrhyTcqFIMLjWi29jhCqaKROlmwf+tal?=
- =?us-ascii?Q?tGt5xyl8eFtac1Uv4ub7DpLvcTiN4VhYnZ/n9CcUtm4/cfwg+wgAIBzme1kc?=
- =?us-ascii?Q?4Sth8eroinSx/AtD9mTMSCXsAMsk10SNS81b7R/5HrI67pcWF9MFhobIrXuI?=
- =?us-ascii?Q?S4lTNao7NmQWCbuBFVULAud+8bP0mPLgmDbwF5FuDfCfYEPOQeYqSkCb6VrH?=
- =?us-ascii?Q?vNrpdzvtlRzY97dpWIbeiolagIZamLZ/eCqyXvFtiF30WJ7iGKB50U0irevV?=
- =?us-ascii?Q?7tpBt3Kb7sbtWbu87Fjmgu831GSuAgcBPyemnkmz3hcTs8tIoT/aVW+4AmXi?=
- =?us-ascii?Q?TIr367dZ7uA1MfaFX4RAIAF6U0oY1r36dUvKmRxPmeOc60bu4CcGbL54aWH4?=
- =?us-ascii?Q?18Htc6rAfT0SmK3xlFCypJTU4mQLH6zvB9UniK+MvfBiDesxociT9USuea4+?=
- =?us-ascii?Q?Bt74FWtlW+MHnE0GUju3sSpoOdIUielL?=
+	=?us-ascii?Q?yeizM9KN5aVAiSXwLam7tf0NuqHVAJkQiNJ54qc42+S5UPy97j9BPGjEi9YJ?=
+ =?us-ascii?Q?VTfcrdb4DYzd/8LYz4USHgXym77hGxew2DNNAtxPeuxRcxwQxjlIgRZCIGQk?=
+ =?us-ascii?Q?bp1ShZrXlcldtPcGHUHJBibtn6k1kjJ60s03/MIw1gdIwr+db9laQKLMq5Yl?=
+ =?us-ascii?Q?tQO2GYj/oo08U8TowWuD5nmNSGE/gurPmiPnMdtc+r7QRQrpTmrJXLNOBdC/?=
+ =?us-ascii?Q?WTt3iiGMjVXVMibT8+5TfXDHXzxjQseRGDmAejCsMhceRZKlOpIUkiP/amFe?=
+ =?us-ascii?Q?pQR4lZsTFA7M28nSba/aguoKkthsQ5skraiZykAhrj8sl4LQBCG3dOJoR8Nc?=
+ =?us-ascii?Q?V2vsCiAB/tjhsX54cb4Rqgbr8rtRUCo1CKiaeqFBitMTAyOygVZW7TdEpuEP?=
+ =?us-ascii?Q?0y6NSZliYp+3xdihb38lhIbzez11zqBr9YGwO31kiKI+KNufg7uU64R825T3?=
+ =?us-ascii?Q?R4po5SfyWtiO+/3jXAJTOV1zCb6+7PrLNi324YWb02nFFT57A/wOy4B20ATc?=
+ =?us-ascii?Q?S+/+7ZQmAn3JkFBXPm3VTbBoLnbbynty2MJO8fQCS/wLr7iEzYByRj7M0I5k?=
+ =?us-ascii?Q?nxi0AXxAlDAqjp1Weo8ECVVNFP/4TdbWbCChhZ3rdC+2mMgOPM1fzpU5XBi9?=
+ =?us-ascii?Q?ynKL6BYiIAAIEhkxeqmfKPSdh3+9bLd+gnsvdQLYVNvdgB6Vr9GjWxhegog3?=
+ =?us-ascii?Q?5ct/TNhdgW1F0gDWDF62DtN1EZkTwTjKNDVXN4QV8owrK8Kv0pJEXLa/odIR?=
+ =?us-ascii?Q?P20LGRCrxFd7tXcpu41C9l5SCaFH9xAiZyQu9ScFiZ3XUr5McE7IncAuu7qf?=
+ =?us-ascii?Q?gu4sdpEQdoEMSuXiqSa5JCQ+0ZShtv0fTU5ht6fOqjTW/u1GNbfo1lPYxaqA?=
+ =?us-ascii?Q?F+/yEG5YW+7Ezan5AzrmcJK/gyfsCnXc7GEf5NOIQEHvn4lmzIYklZkGlGr4?=
+ =?us-ascii?Q?FJJYy0/vJ4UGYyGnv1OReuf+itNZur2sjVDeejm9Gd+r1fNRv35uEC4YgPW5?=
+ =?us-ascii?Q?Bntk0lWK3PSAcfV+kNEOA1aEPYHYmLG+xz8CnJ3WZJM1ZIPnnyexYLWnbg+g?=
+ =?us-ascii?Q?2BQFB5AnfEzgAdp+hPBrvv5ZS/4fWfQu+YFb5uUY8b/2myV4s+lSToWwgoVh?=
+ =?us-ascii?Q?Qdt6wa32VnFi1w7ledcMFNW8WjpG6agWUfyJP7Jlk+f8V49hsOvNytX8JbxW?=
+ =?us-ascii?Q?HLFBK15qKjB5JTClm5kuubuhYGiyLnslJDiVw/w8sd2sqWEXZFRCtME/4gRc?=
+ =?us-ascii?Q?QBbKjR33jPw+qTmE/mz3Ls+rwe6Cpbm7gPK3oAFi4yE/yraAAhd971XegTkU?=
+ =?us-ascii?Q?1cIC+TOY3jlTmqrpcLu7Bh1oMWsU8PST6iU6XukeTdu7ic6ljr52VOZFVF8T?=
+ =?us-ascii?Q?fLeNpK+RGIgX7/NpDmBvCvs2aW22bHSXb4WN+OMJ5IA+0xOpQ1SnAQr0lFVQ?=
+ =?us-ascii?Q?YtbCXzAR/mc6AqIUsSCnUdqmnt7PlBCXDq5H/sZgqOsQBXshftcC9A=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?dfAQ5xF+aQYxSd9HZU3Z1tOXrz9HioTWFiGKkrpMgYP8KLDm+xkpWVxjobBd?=
- =?us-ascii?Q?Qj9nemx1YwwlgFq4e4nRqapWGDi5YzBLATmEnWcbWaCbLASebBVezJPZ1toR?=
- =?us-ascii?Q?oVXZJLQsyg0YikrCIWat0bY7fTyAKtTfjPp4g5/yyPznv6JFeB02LpL7kRrp?=
- =?us-ascii?Q?jRZQM0Sfn8isFHgradqc3nH6GaIcIjVCnru4UN9XF39s9PA2uppZXTHMSbXv?=
- =?us-ascii?Q?oSnA6sGsfMCt1WT7JX3NS7wo2dAdR7G3ZPLUcgKsKH5KTeawri4HIXJHwO+K?=
- =?us-ascii?Q?RsZV7aQc6FSkmnHUUTLiwQMI/BQga4DA6eJfHvyTMiv2Ce6P9Vv9LGBUVcv3?=
- =?us-ascii?Q?2X3Vx8xg7k4vyt/H6bPImAchV1cioYX3GRE3s9yBuxZVg1zocb10FPCcoqyh?=
- =?us-ascii?Q?KNZMKlfuU9sJUXanLd61oUHcxVWWTOptDDwA93U2wWHe8Lzm1furL1DRL3XH?=
- =?us-ascii?Q?u6Kvt+W1awA5dkB8AA0RR9HgRjGAzfGQ7GSU79OhfJFY+fHhFJj/rSj9p6iF?=
- =?us-ascii?Q?vT1PSA5EcYAsTgO/xgXVn54DDp628Qi33yPSSZTASFg8HEGheb7UlU0p/E8n?=
- =?us-ascii?Q?2QOxyG6cUFsth6gc7G+yE9Dvo/Ij4KI6C40R/fhFnTEsNOtYT9nVTl/LYsxS?=
- =?us-ascii?Q?xqTkpwtZfRl49kdTIitls1pkNStJP98mCczFTlIZq32J522HBlzireLwGlDf?=
- =?us-ascii?Q?q2YLuwpaTdjFWP6Rsa7gQxgVGTbeYDJT3xTDvelCIfF3Y1a74JJtW2tFCORE?=
- =?us-ascii?Q?j2N3fDcDpyb0T+AuIFkEnhd5Mk6WUrh5jktwrffFhzoH6hBWYQmbYzs06DvL?=
- =?us-ascii?Q?+z4xXlhxle/O8wVzZWDQrF/rgASmBB8AlcF/p0RGshWbvPne8s18jQQlmfJt?=
- =?us-ascii?Q?WCjjsw817bGQk0q55xclai5UDx8GI77Zc62bQzJfkgAV70XEF+gGScG6lEzv?=
- =?us-ascii?Q?qpgQRZZcnqbJPDKmPxR9ff1TNf75+gcibxr8UFEfq6y5v7c8775/tPXkCeNz?=
- =?us-ascii?Q?ijj4kSrfwVb3XaW2xlVcFA6mLTTzeC1LWFU+JECW9B+NCslOgkjxJlOxFdJy?=
- =?us-ascii?Q?Td045y8fLWQ5Xeru79KTTShKUoNNtsb3HtjZvbs+n118W3DCg5o8H1d5J9rw?=
- =?us-ascii?Q?pfk52YYyPi/sWmET+1RauZCVkg3SNgapDPI/vRs1DYTyUFfp9zozljtDlW4I?=
- =?us-ascii?Q?q0nF1kN18mpTfLrD9DAx6w/vkZ15PYfgVj0A8I17BpTUJZyOiSmFCc9wgivY?=
- =?us-ascii?Q?nIp99v/clP8nkq1RJO8Oudfray9mZJqmJKtaM8BzZy5VolpHrH5bZRTRBThp?=
- =?us-ascii?Q?/TpO4yUhscTt7q0YhPWktlTQbJOmm4tiX1/nCQJHEpFzJjb5GnbZFrDrZG+/?=
- =?us-ascii?Q?or4sMF5L/UEs2JkPOm9UNwMBFvm5try280W3Y4DJmK4lGoSzuZuCFLMi+LJu?=
- =?us-ascii?Q?Hb305QC4p/L5ACC6nhLXh+MLXV8MXcy51gYIXY3pzJWilfkPvK7Di88HYSqj?=
- =?us-ascii?Q?r8LCK3Xud46a3m1sx3x6ntYlijEjdcqmLcOq/S7ZYR8n9izgEFEMZtHKVK0+?=
- =?us-ascii?Q?GIEafgibcCy88qnvCzw6cQQqQ0+a3tBESova8txx?=
+	=?us-ascii?Q?FfRwQqBG/BnGQoIjZq0J8w99XGwQfK/G4tZRpd07DgYCb+pIMytgiEJI2DkU?=
+ =?us-ascii?Q?T3Fn3nSbM5fvQ61wRvijL/ROcY4WnL4X4RJdj2Nwe5kjKY8nLu+P5CnlZdLv?=
+ =?us-ascii?Q?luuzMwS+XYrtwWLvduSO1t5nfo4A4BT6mUPtkMLhptvY/N3PPMcRSgFbrhDd?=
+ =?us-ascii?Q?vump4XcW93TuhVJ8vyq+q1kEicn5WUb9ZP21SO7XtdeuU0KTNlUZei/VXNcS?=
+ =?us-ascii?Q?1UdYHRTnvwUI/u+BJSF+hzT9QQydTimMWo4xmUre3MMVqDcByUG4BNC1+S8l?=
+ =?us-ascii?Q?SDZSfGKcpZqJv8pGnS8ahTZ3Xuh4ElzRL3WeGTbclh3/sJd4+kcO6vwgrGoO?=
+ =?us-ascii?Q?zCYb+5E66WBfw4G+JTswlfGwYIkTeWsvC+m9vx92z1pqK2x105/7SbRqebqk?=
+ =?us-ascii?Q?lfWxb3kb5LYpwsiSy5nhpJBlCoW8DOeg2zNvVPW72FPhCTcWyzT9R5xi9a7g?=
+ =?us-ascii?Q?Gut5NPi9Cc+xTLUyTIhklLesm0nvI/eqN5p4VlflvjmOZEFSKGAZoVACRgkx?=
+ =?us-ascii?Q?esAq6bdGBl85HPtMulKjnNXnYPxpqkfbFBra3MJ9gW7WT2XejFKJD5FLAnT7?=
+ =?us-ascii?Q?IFR8w1m1s/+CJ8cIKbdSiXhtFKWyQle8q+Y1dv8PXYKQRU51YA9ZciX4uumz?=
+ =?us-ascii?Q?pvNHv7qopukBWrn9K9GTEveTjqHzDuF7l5rR/xrCtJ/7KudPuO6R95a4MnOp?=
+ =?us-ascii?Q?s4jpl4wf3jPF3ompGI/vQhLPAJq3vub/RdxJNUpg7hgbrCJMM191VxApkbSb?=
+ =?us-ascii?Q?5V2I+A2sNpdwtTdY2z4DuVhBiP17SIbkKj2vxPiVA+K2Mij83QEIoJZw5HbO?=
+ =?us-ascii?Q?kVN9kNvJR4//K82MsVtU0KxhNMdD1+8ZgbvYvyI1ZZbLxgaqHtxrFMlR1jZW?=
+ =?us-ascii?Q?2VqcVZ8DAfynRk6Xhnfrjp/WiqBiv0RoKssNA7skQIc/qMxIlRaftBrfloFy?=
+ =?us-ascii?Q?5SbNeoGGCOBj6GxTV8tH070B8I1iv/y5k7T+hkB35VI4C5aODeJoL2xdf/Xs?=
+ =?us-ascii?Q?tWQdyuZfkoRIFid9R/mrw9TygyhBTFkJDsGhR1/7ZqYulwK310xM4LmVtSth?=
+ =?us-ascii?Q?Bp5kjXnYIl/w91YNA3Q//n8LdMbYn5u4rMtO3kmQjyVq6SDkse7//kw2IyKF?=
+ =?us-ascii?Q?8rw4mep8r7yQlDIDlHJOOadtDznYvbCxqaBZfPzD04uRIOJfi7MDCuM9KpEH?=
+ =?us-ascii?Q?bWQ1lyK7EuzEepV+P9TXWfg+D7Ox/i8wgJA6iLC+CTXu7LgAQ/JTI7bS3zXp?=
+ =?us-ascii?Q?MEnArNnCSuNlFQ8SvyrYfx51PFSW/GVLIo8uk6rJ6QB+ZwNuAwGmy5gsOjx9?=
+ =?us-ascii?Q?3Mrbe+haqe28+ibArL2uMgYDsBT9hZHGsYPm0Q6P393A6BT3o9cYKDBa3Nk+?=
+ =?us-ascii?Q?JNA5wd2WFp9vsOZm3MYOEk3tnDBJvAVVJN1zycPeR6mcfUWv4k0No6M2LQni?=
+ =?us-ascii?Q?ptzW7IYx6oUvEUUNCwaQeR03cNF4OO81uofgjHglj2NvKEGbI9LDjQZ7ykdt?=
+ =?us-ascii?Q?T4Lng+bFb29hYJ4E7Zh1BsQ9FQCenyqYT5yY9RWYZy1I5Ar2bD0AUeS6GILF?=
+ =?us-ascii?Q?SkzMhXlKKPmYvEZOCpgCSMvvAVqiSiiivs1vNzSb?=
 X-OriginatorOrg: atomlin.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d43690d-eb64-42f2-4941-08de26f94d9f
-X-MS-Exchange-CrossTenant-AuthSource: LO3P123MB3531.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49e301ab-266e-4be8-356a-08de270230dc
+X-MS-Exchange-CrossTenant-AuthSource: CWLP123MB3523.GBRP123.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2025 23:22:14.5424
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Nov 2025 00:25:50.3139
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: e6a32402-7d7b-4830-9a2b-76945bbbcb57
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xC7rJd7DVbWAuNXhzl891PE5EmGowpwSqt0kfd3Fn0R58MiW3ZrLhOKFNlVB6K9k8l++CbLvDOywb40bC6SZgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P123MB7200
+X-MS-Exchange-CrossTenant-UserPrincipalName: XeXi+/Io6FTq3sLM8+iqGEHmV+7EFnM+7W8PlywxXeJGWTYtQJlAW3YOKx5sw2A+vyxn1nSWk0+scWVQN39IMA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO4P123MB6801
 
-This patch introduces a read-only "enter_function" attribute to the
-cpuidle sysfs interface. It exports the kernel symbolic name of the
-enter callback responsible for executing the CPU idle state entry
-(state->enter). It allows users to reliably map an abstract C-state
-(e.g., "C1") to its concrete kernel implementation
-(e.g., acpi_idle_do_entry or poll_idle).
+Changes since v1 [1]:
 
-Signed-off-by: Aaron Tomlin <atomlin@atomlin.com>
----
+ - Correct commit message
+
+[1]: https://lore.kernel.org/lkml/20251118232208.660255-1-atomlin@atomlin.com/
+
+Aaron Tomlin (1):
+  cpuidle: sysfs: Display idle state enter function name
+
  Documentation/ABI/testing/sysfs-devices-system-cpu | 7 +++++++
  drivers/cpuidle/sysfs.c                            | 9 +++++++++
  2 files changed, 16 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-index 8aed6d94c4cd..7be4555d502a 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -217,6 +217,13 @@ Description:
- 		time (in microseconds) this cpu should spend in this idle state
- 		to make the transition worth the effort.
- 
-+What:		/sys/devices/system/cpu/cpuX/cpuidle/state<N>/enter_function
-+Date:		November 2025
-+KernelVersion:	v6.18
-+Contact:	Linux power management list <linux-pm@vger.kernel.org>
-+Description:
-+		(RO) Display the symbolic name of the idle state's enter callback.
-+
- What:		/sys/devices/system/cpu/cpuX/cpuidle/state<N>/s2idle/
- Date:		March 2018
- KernelVersion:	v4.17
-diff --git a/drivers/cpuidle/sysfs.c b/drivers/cpuidle/sysfs.c
-index 61de64817604..dbd8d796ad29 100644
---- a/drivers/cpuidle/sysfs.c
-+++ b/drivers/cpuidle/sysfs.c
-@@ -314,6 +314,13 @@ static ssize_t show_state_default_status(struct cpuidle_state *state,
- 		       state->flags & CPUIDLE_FLAG_OFF ? "disabled" : "enabled");
- }
- 
-+static ssize_t show_state_enter_function(struct cpuidle_state *state,
-+					 struct cpuidle_state_usage *state_usage,
-+					 char *buf)
-+{
-+	return sysfs_emit(buf, "%ps\n", state->enter);
-+}
-+
- define_one_state_ro(name, show_state_name);
- define_one_state_ro(desc, show_state_desc);
- define_one_state_ro(latency, show_state_exit_latency);
-@@ -326,6 +333,7 @@ define_one_state_rw(disable, show_state_disable, store_state_disable);
- define_one_state_ro(above, show_state_above);
- define_one_state_ro(below, show_state_below);
- define_one_state_ro(default_status, show_state_default_status);
-+define_one_state_ro(enter_function, show_state_enter_function);
- 
- static struct attribute *cpuidle_state_default_attrs[] = {
- 	&attr_name.attr,
-@@ -340,6 +348,7 @@ static struct attribute *cpuidle_state_default_attrs[] = {
- 	&attr_above.attr,
- 	&attr_below.attr,
- 	&attr_default_status.attr,
-+	&attr_enter_function.attr,
- 	NULL
- };
- ATTRIBUTE_GROUPS(cpuidle_state_default);
 -- 
 2.51.0
 
