@@ -1,70 +1,70 @@
-Return-Path: <linux-pm+bounces-38228-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38229-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61639C705E8
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 18:15:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E6F3C705EE
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 18:15:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 486DB28D3A
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 17:15:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id C3F4028E51
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 17:15:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02E7C334C1A;
-	Wed, 19 Nov 2025 17:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 942B6352929;
+	Wed, 19 Nov 2025 17:14:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W9FH6Gvi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I8Su3zRY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF30032FA1A
-	for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 17:14:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2716C34575A
+	for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 17:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763572477; cv=none; b=EQ3fvzLX4pukng+1QrbO4zAGpGEsa4FdfF0Pj/Te25dD8uXSXZfhuA9J864tk6PteTY14Nvu6+J9vvozkD2cuCT0gsdLbHF2BI3suqnMNCJMBQDh7DI59OGPwCrJKduCF7QM/nkw/sYFvG+SIB2m3vffkVoKJ/QmesJikXE2uG4=
+	t=1763572482; cv=none; b=ZAY0qU2SipoAsnPdAgTkMHs4WFe49Fcs+q3nbO4vvv38BE1icCVtL/zOhCazHQU143fEdmgzQBTG5ihfpb0YMFKMgFr2wsemhIgzjzBsaVc4rtkplVEMWdtSDqWIDECRoE1ZWIGMrxG/kIOVXw+R0Q5/O1Yfa8cd8TZnXyTO/uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763572477; c=relaxed/simple;
-	bh=hdLwb9acqDfhxBhnz8O1AJyDAdi9H/fDe7nvfKDiOuo=;
+	s=arc-20240116; t=1763572482; c=relaxed/simple;
+	bh=uQDldX9XG+qGRX0YlPxhmUz0f5fVzex/PC5c2OnnqD8=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qPXbw+/vKhyOaghGN3j+axX+fJFq+45Ai6+bNrpQHFeFKdXsPsv1cNR+Gqym1aOhV0LGb+FnddxdE8Ye9SFwUIuex/bc2P9yMrJSufPLBMDMdqXWBwGeQ17vFigyXUeXVcXvKFI4awXVMK0wCGK8kTm5TjU20on088jOwuzXW3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W9FH6Gvi; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=prD6KPH46Rz2CXxiyNiTXoycWlS8ZNGuddiXH0clzwT6a/MUAvKVswMGIPQwHZHo52OIomwnb7FoU+i9mlzmUp72EvjoXFIzo9jsoVSO6j+Iz3tDSHsHGjerupeaOUtHKbxnTK88F5vKKC/9B/SOSHJzmFAo5VVUSKiGHRWJN/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I8Su3zRY; arc=none smtp.client-ip=209.85.215.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-ba265ee0e34so6114206a12.2
-        for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 09:14:35 -0800 (PST)
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-b99f6516262so22122020a12.3
+        for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 09:14:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1763572475; x=1764177275; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1763572479; x=1764177279; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7C622rNOWivI+OfNCjEY0kVqx3N/Aq517Mczx5KB0m4=;
-        b=W9FH6GvimuVImlw7vMWR0bb255QLZGqiV8GBiEVQqaLxE1tC57hrOpZ1595VPbuLLR
-         TjAbfHiWDWrraNhrWe8DoHxG4swJJm4172TiNjdFAgccjbLw+GA1Qr4ZeLayZqam6l5M
-         SSZM8q6U/Dw4tWjaYGsWjwypvn+bwA7EQKtOTfukNAy5oX1hpnT0MtpdLP6boOnyjMpS
-         QuTkBkUWWvMPNJ6B6/BSElZwAhLAoPR2j4uL8PZp72zcLFxWIS8EXivpwkKsLO4rvx8P
-         iA4fTdYYuCpbXKpiv/naX0CkUTP0GMhElXbAuYHqQf25QiX+Gzz3Jf7XofFsuqv3GoK5
-         6aqA==
+        bh=Z6126D4hNlxSLngUWFJIL+pyRlCYrRkd1GbDL09+PJs=;
+        b=I8Su3zRY8Is9d1JHre5AYXQhh4N4htJyFdRxEs8ewxXvtT0dsBFsl8LMPRm7+cdsUG
+         ORwysIaCo4Knpkerf902ixcNKxQcUp6QyUN4S4XncfxdxdXF+557LbUNy1bl78Wm6UPv
+         elhz6Z2vwoMnXBsVhWHy5Ffq0b9hkJw2xaCKMM3JubkxluHWNvAm9FPYAKWLGXpESE0U
+         2DlAZwYcPJfCvWHzvWrVFlvu+4WiKgVMlJi5sDy8uju1CC5mHuoEaMjwwpLsKaX0Ft2v
+         nZruVPaJwculQnXJx8QAyFVS/5ezbty0iGilRyTIlieLJ80o/c2xtU3zUrzrWdTI1wdv
+         8aHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763572475; x=1764177275;
+        d=1e100.net; s=20230601; t=1763572479; x=1764177279;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7C622rNOWivI+OfNCjEY0kVqx3N/Aq517Mczx5KB0m4=;
-        b=FGLdBU/viTN/rh9Dlug/YtM3CWf3tTm4BGCBYdxHePXmlMrzFOr8mYr2eEZ7wXEiqg
-         7wT/LCw4bug0V6ZwSwfiDoXNHxVSTEH3kDp357IMBSU81Ok8Ibu4j8SQ8M9+OudaHbIG
-         hzBnapztSbyUoFxHa8sUuoxTXcLJjbz98/hB8pOYPCjT9GArbUSn0EyfIHgTTGq1NTey
-         lRH4cZsgNoOE9uXpTbXqRaap/Q1348+4feuxg+lqqo6VXcBb7EGkduI9kuUlBCR4sBU5
-         fYePs6MTqlvSvvTlUbTDmCQVl9PF/zWl3ykAOmv4PLJS6dIsKcjPjsKLizzi1vkLOXJZ
-         M0Jw==
-X-Forwarded-Encrypted: i=1; AJvYcCUnYll2epz1nXbUcgT6Rk3tdqsmoyO9wKgRyEmSCUIm6WwjlvoAhlPoXdXSO4uSo3u5jReYX5MOhw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGT8Bqx1EQSgsFrFkjo1Ha+78blTVzr4u4dnaKjE+JoOUwbfJ/
-	BM4GbD5VLQnBPN5FBnvQhcSo/mq8dVdI/EFxvXaQGn9w6DtsKLZaWlicbVdjKXemkjxLMuC7PvF
-	4BG8paxCKOnu7RA==
-X-Google-Smtp-Source: AGHT+IFcYEkscRBJM2wJ0hgN6X5hVzAyQFJwpeYa0ouwGIvKCLQRaLgmTSK+lp1IyAIbGOBaIKeQSk+dseGujQ==
-X-Received: from dlah17.prod.google.com ([2002:a05:701b:2611:b0:119:78ff:fe0f])
+        bh=Z6126D4hNlxSLngUWFJIL+pyRlCYrRkd1GbDL09+PJs=;
+        b=DoG2RX7xVy61FgEJW9cPxqBstZkgu0s8txuaZXZec6j2+uHUlULgdSAyDZCCYESlZw
+         XfJvvLLfRgNG3/j4/szhhU7f1H756GHTBgL3hlIL6LdAEtcWaAkGXvcX1Ewq2V2Ef2b+
+         ldMnVfop4bdNEhPsc0W++ImrxoF6uxnIqNLWILyvpifZ3OdemSobDjEWxBzKLd59mBP+
+         Cb+e38FN6ubPheEjylowRMEpzH3jovNdcbnx9hLqb+VTZT/aOAIsnX6ggoswEC/Qcfol
+         yXXLkuMhDvWjdM21JBAwS7f2PCc+UyWT+VBuBbAEYMuBCY5UqS4UeIQxA1HvUMZUJyzd
+         kZMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU9dHN/Pr8teLJxX/U4UR8W7Rk/9m4XvLov9MayxG/tTyuVhPcP46X40lq21LTqiGHuigDWJqICyw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw61LM7I5qHzP+dZ7fa+dwXWEYa1glOY0YAJlMdrHM/kiMr/Vaa
+	SaF43Rwid4qV30X9uGdIRLN0enuTH59qjSx5QFAz77OLrlUWCGNpyWNedM3CK95bN3wfZ2j/heY
+	TQoBjS3PCAi0n8g==
+X-Google-Smtp-Source: AGHT+IFjwX5vb9bGInL8052l+zRJKFhSXZ/kfdETPLlambCVPAjWDs7+TheNNhwqS+CFrq6JLBnbh33rbZbESA==
+X-Received: from dlbvg5.prod.google.com ([2002:a05:7022:7f05:b0:11b:1a9a:d2e8])
  (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7022:a92:b0:11b:9386:8270 with SMTP id a92af1059eb24-11c938b7857mr20568c88.45.1763572475044;
- Wed, 19 Nov 2025 09:14:35 -0800 (PST)
-Date: Wed, 19 Nov 2025 09:14:24 -0800
+ 2002:a05:7022:3c89:b0:11a:4525:5361 with SMTP id a92af1059eb24-11c937f6882mr34711c88.6.1763572479237;
+ Wed, 19 Nov 2025 09:14:39 -0800 (PST)
+Date: Wed, 19 Nov 2025 09:14:25 -0800
 In-Reply-To: <20251119171426.4086783-1-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251119171426.4086783-1-wusamuel@google.com>
 X-Mailer: git-send-email 2.52.0.rc1.455.g30608eb744-goog
-Message-ID: <20251119171426.4086783-2-wusamuel@google.com>
-Subject: [PATCH v7 1/2] PM: Add framework to abort during fs_sync
+Message-ID: <20251119171426.4086783-3-wusamuel@google.com>
+Subject: [PATCH v7 2/2] PM: Call pm_sleep_fs_sync() instead of ksys_sync_helper()
 From: Samuel Wu <wusamuel@google.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>
 Cc: tuhaowen@uniontech.com, Samuel Wu <wusamuel@google.com>, 
@@ -84,149 +84,76 @@ Cc: tuhaowen@uniontech.com, Samuel Wu <wusamuel@google.com>,
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Add helper function pm_sleep_fs_sync() and related data structures to
-setup a framework that allows for aborting suspend and hibernate during
-their filesystem sync phase.
+Replace the direct calls to ksys_sync_helper() with the new
+pm_sleep_fs_sync() in suspend, hibernation, and snapshot code paths.
+This enables the new polling mechanism that allows for the filesystem
+sync phase to be interrupted.
 
 Suggested-by: Saravana Kannan <saravanak@google.com>
 Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Samuel Wu <wusamuel@google.com>
 ---
- kernel/power/main.c  | 79 ++++++++++++++++++++++++++++++++++++++++----
- kernel/power/power.h |  1 +
- 2 files changed, 74 insertions(+), 6 deletions(-)
+ kernel/power/hibernate.c | 6 +++++-
+ kernel/power/suspend.c   | 6 +++++-
+ kernel/power/user.c      | 4 +++-
+ 3 files changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index a6cbc3f4347a..03b2c5495c77 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -18,6 +18,8 @@
- #include <linux/suspend.h>
- #include <linux/syscalls.h>
- #include <linux/pm_runtime.h>
-+#include <linux/atomic.h>
-+#include <linux/wait.h>
- 
- #include "power.h"
- 
-@@ -92,6 +94,61 @@ void ksys_sync_helper(void)
- }
- EXPORT_SYMBOL_GPL(ksys_sync_helper);
- 
-+#if defined(CONFIG_SUSPEND) || defined(CONFIG_HIBERNATION)
-+/* Wakeup events handling resolution while syncing file systems in jiffies */
-+#define PM_FS_SYNC_WAKEUP_RESOLUTION	5
-+
-+static atomic_t pm_fs_sync_count = ATOMIC_INIT(0);
-+static struct workqueue_struct *pm_fs_sync_wq;
-+static DECLARE_WAIT_QUEUE_HEAD(pm_fs_sync_wait);
-+
-+static bool pm_fs_sync_completed(void)
-+{
-+	return atomic_read(&pm_fs_sync_count) == 0;
-+}
-+
-+static void pm_fs_sync_work_fn(struct work_struct *work)
-+{
-+	ksys_sync_helper();
-+
-+	if (atomic_dec_and_test(&pm_fs_sync_count))
-+		wake_up(&pm_fs_sync_wait);
-+}
-+static DECLARE_WORK(pm_fs_sync_work, pm_fs_sync_work_fn);
-+
-+/**
-+ * pm_sleep_fs_sync() - Sync file systems in an interruptible way
-+ *
-+ * Return: 0 on successful file system sync, or -EBUSY if the file system sync
-+ * was aborted.
-+ */
-+int pm_sleep_fs_sync(void)
-+{
-+	pm_wakeup_clear(0);
-+
-+	/*
-+	 * Take back-to-back sleeps into account by queuing a subsequent fs sync
-+	 * only if the previous fs sync is running or is not queued. Multiple fs
-+	 * syncs increase the likelihood of saving the latest files immediately
-+	 * before sleep.
-+	 */
-+	if (!work_pending(&pm_fs_sync_work)) {
-+		atomic_inc(&pm_fs_sync_count);
-+		queue_work(pm_fs_sync_wq, &pm_fs_sync_work);
-+	}
-+
-+	while (!pm_fs_sync_completed()) {
-+		if (pm_wakeup_pending())
-+			return -EBUSY;
-+
-+		wait_event_timeout(pm_fs_sync_wait, pm_fs_sync_completed(),
-+				   PM_FS_SYNC_WAKEUP_RESOLUTION);
-+	}
-+
-+	return 0;
-+}
-+#endif /* CONFIG_SUSPEND || CONFIG_HIBERNATION */
-+
- /* Routines for PM-transition notifications */
- 
- static BLOCKING_NOTIFIER_HEAD(pm_chain_head);
-@@ -231,10 +288,10 @@ static ssize_t mem_sleep_store(struct kobject *kobj, struct kobj_attribute *attr
- power_attr(mem_sleep);
- 
- /*
-- * sync_on_suspend: invoke ksys_sync_helper() before suspend.
-+ * sync_on_suspend: Sync file systems before suspend.
-  *
-- * show() returns whether ksys_sync_helper() is invoked before suspend.
-- * store() accepts 0 or 1.  0 disables ksys_sync_helper() and 1 enables it.
-+ * show() returns whether file systems sync before suspend is enabled.
-+ * store() accepts 0 or 1.  0 disables file systems sync and 1 enables it.
-  */
- bool sync_on_suspend_enabled = !IS_ENABLED(CONFIG_SUSPEND_SKIP_SYNC);
- 
-@@ -1066,16 +1123,26 @@ static const struct attribute_group *attr_groups[] = {
- struct workqueue_struct *pm_wq;
- EXPORT_SYMBOL_GPL(pm_wq);
- 
--static int __init pm_start_workqueue(void)
-+static int __init pm_start_workqueues(void)
- {
- 	pm_wq = alloc_workqueue("pm", WQ_FREEZABLE | WQ_UNBOUND, 0);
-+	if (!pm_wq)
-+		return -ENOMEM;
- 
--	return pm_wq ? 0 : -ENOMEM;
-+#if defined(CONFIG_SUSPEND) || defined(CONFIG_HIBERNATION)
-+	pm_fs_sync_wq = alloc_ordered_workqueue("pm_fs_sync", 0);
-+	if (!pm_fs_sync_wq) {
-+		destroy_workqueue(pm_wq);
-+		return -ENOMEM;
-+	}
-+#endif
-+
-+	return 0;
- }
- 
- static int __init pm_init(void)
- {
--	int error = pm_start_workqueue();
-+	int error = pm_start_workqueues();
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 26e45f86b955..af8d07bafe02 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -820,7 +820,10 @@ int hibernate(void)
  	if (error)
- 		return error;
- 	hibernate_image_size_init();
-diff --git a/kernel/power/power.h b/kernel/power/power.h
-index 7ccd709af93f..75b63843886e 100644
---- a/kernel/power/power.h
-+++ b/kernel/power/power.h
-@@ -19,6 +19,7 @@ struct swsusp_info {
- } __aligned(PAGE_SIZE);
+ 		goto Restore;
  
- #if defined(CONFIG_SUSPEND) || defined(CONFIG_HIBERNATION)
-+extern int pm_sleep_fs_sync(void);
- extern bool filesystem_freeze_enabled;
- #endif
+-	ksys_sync_helper();
++	error = pm_sleep_fs_sync();
++	if (error)
++		goto Notify;
++
+ 	filesystems_freeze(filesystem_freeze_enabled);
  
+ 	error = freeze_processes();
+@@ -891,6 +894,7 @@ int hibernate(void)
+ 	freezer_test_done = false;
+  Exit:
+ 	filesystems_thaw();
++ Notify:
+ 	pm_notifier_call_chain(PM_POST_HIBERNATION);
+  Restore:
+ 	pm_restore_console();
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index d9461447e37b..2da4482bb6eb 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -593,7 +593,11 @@ static int enter_state(suspend_state_t state)
+ 
+ 	if (sync_on_suspend_enabled) {
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, true);
+-		ksys_sync_helper();
++
++		error = pm_sleep_fs_sync();
++		if (error)
++			goto Unlock;
++
+ 		trace_suspend_resume(TPS("sync_filesystems"), 0, false);
+ 	}
+ 
+diff --git a/kernel/power/user.c b/kernel/power/user.c
+index 3f9e3efb9f6e..4401cfe26e5c 100644
+--- a/kernel/power/user.c
++++ b/kernel/power/user.c
+@@ -278,7 +278,9 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
+ 		if (data->frozen)
+ 			break;
+ 
+-		ksys_sync_helper();
++		error = pm_sleep_fs_sync();
++		if (error)
++			break;
+ 
+ 		error = freeze_processes();
+ 		if (error)
 -- 
 2.52.0.rc1.455.g30608eb744-goog
 
