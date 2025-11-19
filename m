@@ -1,105 +1,90 @@
-Return-Path: <linux-pm+bounces-38210-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38211-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF815C6D734
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 09:35:37 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2682C6D854
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 09:51:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id EC5102D5BC
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 08:35:02 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9DF37352B03
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 08:51:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F9C32C92A;
-	Wed, 19 Nov 2025 08:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="kjsTtw1P"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B83306D2A;
+	Wed, 19 Nov 2025 08:50:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C015E32B9A7;
-	Wed, 19 Nov 2025 08:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091EB307AC8;
+	Wed, 19 Nov 2025 08:50:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=176.9.242.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763541244; cv=none; b=M/ftC+BTuxmEDNk6TfLPu0v3rlEGXqdE72KTnD//uAPGPBlIGaEj6HyuX6qzIydKHSVLbsmN6Z8lOR9C/iI4qx/MiIszOhyWxmaTckY5Ru1iiofW+HkhY8w/r+SS9IfY5myfD7Uk9iFNVB96+PO5t6cKcggGbm2JTRPuL/9siq8=
+	t=1763542259; cv=none; b=p/RKZa4FStqiZ9/puKhBrr7OR+SbvBKvwmT5/6Tb4fioi/PK2uQ9F/lHhlB70fdhF0J1TaMX4uny4HlkhE/riiq4LEd9Q+2h7KOcVb/0UlrkhH+V4wVAZLE04jOw5xNIyt+Gn9eC0wAefUrCmEIf2qA9AFynfLIAnAkx5T7fhbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763541244; c=relaxed/simple;
-	bh=1Pc5fBlhsZRdTIzwz2Wk8NOr8hOO9wcu82HCeysKRwk=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Gffa82Obuf/gGVv/efNowcP96G+e4VOxCwtiaK6FbuJp5oA4C3vDu5CuhOpe1VUVWwcPw/a7fWARl6QXE1O+0egQq7LxNOR06iIj11DDQSHP3sfoqbfwaKTA5wftImKFuQu9v/l7IpZJBSP8DgPmxTf8EvgMnf7ny0PW0W1dhvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=kjsTtw1P; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1763541237;
-	bh=1Pc5fBlhsZRdTIzwz2Wk8NOr8hOO9wcu82HCeysKRwk=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=kjsTtw1PJuGX6Mv1xUUq6YRgSSs3tyKfWsV9SfMHkCQV11DsLeiF5Q1IlSWZFIOLs
-	 6YRq74PzDdJTQNwRBujSx9zKpia9dAtzWgsr7jeT2f52844SwQX/y+l1/rwijtH9Qh
-	 UvbuQN3vIe2CKVGeSlLiT5JZDz+LEFnYr3+azqh4KOE2K7gqlA1wnu+ZdaeuJ6YX0Y
-	 Zr8epnbJMh2FlqeXhTp7IvEFA4Ukg+jsPVtV9eyg0smv3Bzeg4u/r9pJW6phmOnzQ+
-	 9gJfhJB3fMF+gAPejSh8ROpDS2qSVNo/NgF96G6X8CRReXrTqxPB3xlm9JgFu/uVKV
-	 FcGonuD9BQP7A==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id C2B3717E0154;
-	Wed, 19 Nov 2025 09:33:56 +0100 (CET)
-Message-ID: <bb84228f-2aab-4b82-b787-37fe631007e7@collabora.com>
-Date: Wed, 19 Nov 2025 09:33:56 +0100
+	s=arc-20240116; t=1763542259; c=relaxed/simple;
+	bh=mbuL7CvU6IjCUqMZR8b5Woc5ZfnbzyTIB6VR9DehR14=;
+	h=Message-ID:From:Date:Subject:To:Cc; b=e367fBXi4Ixf36STnyFrVSUlRuDzGb+KQeUoaj3vcYfBd2VDLVVG0EG5G+9UMFIt6IRZ+/Y5gnfJEg1KLfNE8s9ILUTfPQXGLtnYEd9hmAdGSx3B4jzSLI/90SAybOfC+UDjKlCoC0sUqHYcRiCr2PCpI6vD2NTIjfLqH6X+4O0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=pass smtp.mailfrom=wunner.de; arc=none smtp.client-ip=176.9.242.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wunner.de
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384
+	 client-signature ECDSA (secp384r1) client-digest SHA384)
+	(Client CN "*.hostsharing.net", Issuer "GlobalSign GCC R6 AlphaSSL CA 2025" (verified OK))
+	by bmailout3.hostsharing.net (Postfix) with ESMTPS id CC9BB2C000A8;
+	Wed, 19 Nov 2025 09:50:52 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 9A023D56F; Wed, 19 Nov 2025 09:50:52 +0100 (CET)
+Message-ID: <cover.1763483367.git.lukas@wunner.de>
+From: Lukas Wunner <lukas@wunner.de>
+Date: Wed, 19 Nov 2025 09:50:00 +0100
+Subject: [PATCH v2 0/3] PCI: Universal error recoverability of devices
+To: Bjorn Helgaas <helgaas@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Riana Tauro <riana.tauro@intel.com>, "Sean C. Dardis" <sean.c.dardis@intel.com>, Farhan Ali <alifm@linux.ibm.com>, Benjamin Block <bblock@linux.ibm.com>, Niklas Schnelle <schnelle@linux.ibm.com>, Alek Du <alek.du@intel.com>, "Mahesh J Salgaonkar" <mahesh@linux.ibm.com>, Oliver OHalloran <oohall@gmail.com>, linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org, linux-pm@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/13] dt-bindings: soc: mediatek: dvfsrc: Add support for
- MT8196
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>,
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, Henry Chen <henryc.chen@mediatek.com>,
- Georgi Djakov <djakov@kernel.org>, kernel@collabora.com,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org
-References: <20251114-mt8196-dvfsrc-v1-0-b956d4631468@collabora.com>
- <20251114-mt8196-dvfsrc-v1-1-b956d4631468@collabora.com>
- <20251119-alluring-jellyfish-of-chaos-4f5bd8@kuoka>
- <39fba430-3841-4bf2-9fe7-44f372ff4a16@collabora.com>
-Content-Language: en-US
-In-Reply-To: <39fba430-3841-4bf2-9fe7-44f372ff4a16@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Il 19/11/25 09:32, AngeloGioacchino Del Regno ha scritto:
-> Il 19/11/25 08:41, Krzysztof Kozlowski ha scritto:
->> On Fri, Nov 14, 2025 at 05:53:55PM +0100, Nicolas Frattaroli wrote:
->>> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>>
->>> Add a compatible for the MediaTek MT8196 Chromebook SoC's
->>> DVFSRC hardware, introducing capability to communicate with it.
->>>
->>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>
->> Incomplete DCO chain.
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> Eh yes, Nicolas forgot to add his SoC on all of my commits, whoops :-)
+This series intends to replace commit 1dc302f7fccc ("PCI: Ensure error
+recoverability at all times") on the pci/err topic branch:
 
-his SoC!??!?! Ugh. I meant SoB, and I should sleep more, lol
+https://git.kernel.org/pci/pci/c/1dc302f7fccc
 
-> 
-> Cheers,
-> Angelo
+The commit is assigning "dev->state_saved = false" in pci_bus_add_device()
+and during review there were requests to explain the assignment more
+clearly in a code comment.
+
+However the assignment is (only) necessitated by missing assignments in
+pci_legacy_suspend() and pci_pm_freeze(), so I propose to instead add
+*those* assignments (patch [1/3]) and thus avoid the need for the
+assignment in pci_bus_add_device(), together with its code comment.
+
+Furthermore the commit is *removing* an assignment in pci_device_add().
+I am separating that out to new patch [2/3].
+
+So patch [3/3] is identical to the commit, but without the addition
+of an assignment in pci_bus_add_device() and without the removal
+of an assignment in pci_device_add().
+
+I am looking into improving the documentation on pci_save_state()
+in a separate series.
+
+Lukas Wunner (3):
+  PCI/PM: Reinstate clearing state_saved in legacy and !pm codepaths
+  PCI/PM: Stop needlessly clearing state_saved on enumeration and thaw
+  PCI/ERR: Ensure error recoverability at all times
+
+ drivers/pci/bus.c        | 3 +++
+ drivers/pci/pci-driver.c | 6 ++++--
+ drivers/pci/pci.c        | 3 ---
+ drivers/pci/probe.c      | 2 --
+ 4 files changed, 7 insertions(+), 7 deletions(-)
+
+-- 
+2.51.0
 
 
