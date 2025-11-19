@@ -1,181 +1,201 @@
-Return-Path: <linux-pm+bounces-38235-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38236-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3348C7166C
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 23:58:52 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65F9CC71793
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 00:56:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7884F4EE510
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 22:53:29 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 250AC349CAC
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 23:56:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CA35302150;
-	Wed, 19 Nov 2025 22:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF8D3316185;
+	Wed, 19 Nov 2025 23:56:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="AAG9rXn0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bTUC2ErB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A33E312816
-	for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 22:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88066308F2B;
+	Wed, 19 Nov 2025 23:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763592745; cv=none; b=ajtRbG2u8VfL45W3jBGVly0KzanxhWI4h9iixmC0LQGc+HG8tQ3+yMKrB3qpcKEptkOGzHeDFcSlM7Sxx0UMJupTj1G7hf7u1GqT03RCiE5BcEMu/xkQdYoPo0m/DMA2WrLYGOJS5we53jrfEA4UUABQaSSF6S9+SF3M8OUq/ZA=
+	t=1763596576; cv=none; b=s7jKbaI2X5rRIVW6sKbsKwh7Ns3+6o+p0WWyLXqz5qw90Xfhpay1O0nJ/yc2fH6zCAa4Ie11oUXSD2+h3hETD/Nspx1zU72GCz8KSdMGqHfppdtqtSJb5cqEdkTDn7F1dAms6HJKRwQPhr9jhJlsReGcpx2Br8FH1NdDviJUZ3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763592745; c=relaxed/simple;
-	bh=ZXvmGem1gwvmXBdBtjwkfC/CUQrpbProwp1nnMC3AA0=;
-	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type; b=iV8Zxbntm7x6O4nLbQPCntk7HP7UvZRi4Pli9UEFlgtZkRQbSJDSXetRo3PPXi5asZ8kikK1YVrZQP8PdoO6kxvY8G3o6pAgm7dvUGiTnJG75M2wbO75C3IekPwzAzubCjgI8Ax9mOJFAusAEpIJafpjidGjl6n1GlJbfSWp1Dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=AAG9rXn0; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7bc0cd6a13aso140448b3a.0
-        for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 14:52:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1763592742; x=1764197542; darn=vger.kernel.org;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DNOjLlODDT7mgeVset8paaRwwJLENifjVg/m2cEQq14=;
-        b=AAG9rXn0nPkX5E0ImJI29UE15roxzmpG0+Xm5dZy95SsTxRpn8RhIYIy3RZmNykI30
-         YxAfdbV5JJpR4w8lGf9g0Is0XkoNkVr2bw7dMoJQ3hse/is5HBz+G2QkQjMDTr/srG5Z
-         L4mnTerfZyn2DwmYq9h4uW2Ptb1WG8S9vZOP8dJ4pdmQ1Io/L4bRjHJGVqdJIPTM3LYf
-         g8HYb2Ysu6Q1Lig80DtafZ+ktgqVHqoign3/6Lt3yXAe0dc2P611+KvFA3xJRTLjrQ7m
-         YOqZh0XcrdwrEG/5ymAjgPGhW/IUm74ohJ//r5CENkMleVa44J4naQwvNL0ZdBBGXaT7
-         cX/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763592742; x=1764197542;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DNOjLlODDT7mgeVset8paaRwwJLENifjVg/m2cEQq14=;
-        b=WSrW/KNpjc61YaJuHEnuOvxOaKbhGsW7HGXPEu+wTR2UTSFBJFMseHcUvv+UOITraD
-         R6K8hsPsozedTh6GE1CGZ86hBDkbTdwGCNe70ZKb9hyurb19E9x9WmxqMoqJ2ZIjLDTs
-         JgtTq23SSfGc47DYWP7bk7rJrQP5yyYpUQ1lfa9Fhy798s9ZsBA+cEtcJsaX+0tWORDx
-         UQoxxciaUPfZF5Sh/l4GGLlbuVt65OoB8183/WCSiGsEtPQYDEh3XLX/y67/le6Ttrsw
-         s3wyXAhYYfzbOr3r1EQymBWne6LnEgrjF9KCUSuJjLluq9Tw9VMtHJjpNduAkIPiT2e6
-         49Jw==
-X-Forwarded-Encrypted: i=1; AJvYcCXs/2QlJ2WZJVswdXLyBQquEQVQf5OrcM9STGGOcOpcDS0Aqyo2Tc7qbhfzwXqdcrLKVb9+OqX8lA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaCXkBOWFt11D4hXOnY7BUJPs5XyR/tZmkzgzOUR/JpVyBxi0P
-	/GZpLq79f+jxFvDaTTTJEqHMpUsDtm+ERRaDzv7AFMw87xHisRbAyJEZivIb8spo5U4=
-X-Gm-Gg: ASbGncs/9egXilhYiD1PNTyvcNhU50V/FpNccTwD1IfZLnJnhhyRCIu1rViki5qFgoR
-	LisGIUGqCyctXrvSkUPB6o7faGsE5Xr5gil5d5hc/0wrrc4LsMG+4mPRc+MRHDauJphl9An8adG
-	ybqAUOtwF4cVRxPaIpOOHBpKNAitbBJxzMw1snqV4ErEckGZlZUopxkzHUdOcEHZ2f1RvHrKvky
-	jHHNNFNcgyiaAY6A2p7LZF4SRLJPuaIhgfwXYHkap2rxYfjtlIFUG8VzppJT/6QyLaW88juFbcT
-	G9aqCqoLjMiSdKxuVXENU0tFpg3VU7feS1xdoVP2pwQQJ9vEeJOg+g3DyTRbABoiKIzyOd4NYOz
-	G67udk6InQXWG6uiQ8kIm3WHJOQ+olf7VnXLnVzIDYulhZ96sOm4UOVlBDWEictNtrhApTuXAjz
-	gS+B9RxfNr7n4wUAqYZd1nbnQH2GoXSkynq328eLT/7NmNr+6H4jUr9UlVGWQeMZhgGQ==
-X-Google-Smtp-Source: AGHT+IEUOVs/PEv+o6VMIvuJWjXWVzpvIID7k6tyED5+QqAJqGBvf++DZDjd+NnQ4+2HkzklC2Q9FA==
-X-Received: by 2002:a05:6a00:22cb:b0:7a9:7887:f0fa with SMTP id d2e1a72fcca58-7c41d72aa7dmr310149b3a.1.1763592742480;
-        Wed, 19 Nov 2025 14:52:22 -0800 (PST)
-Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7c3ed0751dfsm447524b3a.6.2025.11.19.14.52.21
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 Nov 2025 14:52:22 -0800 (PST)
-From: "Doug Smythies" <dsmythies@telus.net>
-To: "'Christian Loehle'" <christian.loehle@arm.com>,
-	"'Rafael J. Wysocki'" <rafael@kernel.org>,
-	"'Linux PM'" <linux-pm@vger.kernel.org>
-Cc: "'LKML'" <linux-kernel@vger.kernel.org>,
-	"'Reka Norman'" <rekanorman@chromium.org>,
-	"Doug Smythies" <dsmythies@telus.net>,
-	"'Marcelo Tosatti'" <mtosatti@redhat.com>
-References: <4701737.LvFx2qVVIh@rafael.j.wysocki> <69115878-ec5e-4f7c-bb3e-9f61cce75c70@arm.com>
-In-Reply-To: <69115878-ec5e-4f7c-bb3e-9f61cce75c70@arm.com>
-Subject: RE: [PATCH v1 0/4] cpuidle: governors: teo: Assorted improvements
-Date: Wed, 19 Nov 2025 14:52:23 -0800
-Message-ID: <003f01dc59a7$2bd98b40$838ca1c0$@telus.net>
+	s=arc-20240116; t=1763596576; c=relaxed/simple;
+	bh=YzJyIUyNa6g7ZAjFAcPsOhOoHn8RMvlppRcldQWdQfM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HeuPY4VjZaxfqLmdrQOq17vGt5wljdwvKNPi4Y1sYxVw85NLv2hisk8/Mpd9wdA+DJZO8/Niw8Vun8kalRdJl3Ro+d+U+nqPPhy9QSCaxhkjYOBmXH8eKPkJa+gkxRqA+42oab0BHgBs3ITB/jMPErEe/UFHi1wCg8m9bRprQgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bTUC2ErB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD104C4CEF5;
+	Wed, 19 Nov 2025 23:56:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763596576;
+	bh=YzJyIUyNa6g7ZAjFAcPsOhOoHn8RMvlppRcldQWdQfM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bTUC2ErBUxukaTFTxlt/tQxllvksi2OpMtdRaA0wYTAv2p5O0xqbplZQL8/txxmHS
+	 chET5hE7nUVW961JWygz4x5CN/OcEC1tyIyI/ESCdl5acX+3VNALfX3l6GZ+iP5xfF
+	 6WKo55ie8sKgnKV8ZXYbIJtWzqPZn0fvHS3Gj7FKugZ8n0DZx4X7Qk+ADl8hgtZDY4
+	 MeMB9S3P+kUKa/9zhSi5zJOVX4ILm6NyOyYaG22TvGQ/D1VyJFP6P9rGcsHW6o/7ZR
+	 3q5SCrqOgvTNG7mobvnoBRGmbe9LGvvSq6WLCJXrpdVNJvl6atejUJqnm8UGnaVIEK
+	 E+ZcZ4IKlAoyA==
+Date: Wed, 19 Nov 2025 17:56:14 -0600
+From: Rob Herring <robh@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	Stephan Gerhold <stephan.gerhold@linaro.org>,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dt-bindings: connector: Add PCIe M.2 Mechanical
+ Key M connector
+Message-ID: <20251119235614.GA3566558-robh@kernel.org>
+References: <20251108-pci-m2-v2-0-e8bc4d7bf42d@oss.qualcomm.com>
+ <20251108-pci-m2-v2-1-e8bc4d7bf42d@oss.qualcomm.com>
+ <gmwg46c3za5z2ev34mms44gpq3sq7sb4jaozbdn5cejwbejbpo@wwr2j7dkjov4>
+ <qrgaulegz2tb7yzklyl7rpkgbf6ysx44bxtyn6n3tcyq4an4e5@bzngutkvfno3>
+ <5kedk7c6kc2e5j4kqeyik6i7ju54sdn6etjhpwl2vt4nq6c6ug@2yld4hpvbuzg>
+ <n3efko3q7i64qmipgxz5yjeqvgmw26b4dvwofe6qnx7xqsjtx5@bbbpxmfioxrj>
+ <zjwuk4mg6n5wm7yecsjv6lrwb42rpmpdtoyh2dnh23h6kr57d6@iqxvrrdgs7vn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQHuO70FIpoCT8UjwWdl7ErjLgnvJgHh6mEctMfG19A=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <zjwuk4mg6n5wm7yecsjv6lrwb42rpmpdtoyh2dnh23h6kr57d6@iqxvrrdgs7vn>
 
-On 2025.11.13 07:22 Christian Loehle wrote:
-> On 11/12/25 16:21, Rafael J. Wysocki wrote:
->> Hi,
->> 
->> This is a bunch of teo cpuidle governor improvements, some of which are related
->> to a bug report discussed recently:
->> 
->> https://lore.kernel.org/linux-pm/CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com/
->> 
->> The first patch fixes a bug that may cause an overly deep idle state
->> to be selected when the scheduler tick has been already stopped.
->> 
->> Patch [2/4] removes an unnecessary function argument.
->> 
->> Patch [3/4] makes teo_update() to use s64 as the data type for its local
->> variables more consistently.
->> 
->> The last patch reworks the governor's decay implementation to also decay
->> metric values lower than 8.
->> 
->
-> Tested-by: Christian Loehle <christian.loehle@arm.com>
->
-> Test results below, although there really isn't anything interesting in there.
-> teo-1 to teo-4 (patches 1 to 4 respectively are essentially indistinguishable from
-> teo-m = mainline)
+On Wed, Nov 12, 2025 at 10:12:36PM +0200, Dmitry Baryshkov wrote:
+> On Tue, Nov 11, 2025 at 07:19:45PM +0530, Manivannan Sadhasivam wrote:
+> > On Sun, Nov 09, 2025 at 10:13:59PM +0200, Dmitry Baryshkov wrote:
+> > > On Sun, Nov 09, 2025 at 09:48:02PM +0530, Manivannan Sadhasivam wrote:
+> > > > On Sat, Nov 08, 2025 at 08:10:54PM +0200, Dmitry Baryshkov wrote:
+> > > > > On Sat, Nov 08, 2025 at 08:53:19AM +0530, Manivannan Sadhasivam wrote:
+> > > > > > Add the devicetree binding for PCIe M.2 Mechanical Key M connector defined
+> > > > > > in the PCI Express M.2 Specification, r4.0, sec 5.3. This connector
+> > > > > > provides interfaces like PCIe and SATA to attach the Solid State Drives
+> > > > > > (SSDs) to the host machine along with additional interfaces like USB, and
+> > > > > > SMB for debugging and supplementary features. At any point of time, the
+> > > > > > connector can only support either PCIe or SATA as the primary host
+> > > > > > interface.
+> > > > > > 
+> > > > > > The connector provides a primary power supply of 3.3v, along with an
+> > > > > > optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
+> > > > > > 1.8v sideband signaling.
+> > > > > > 
+> > > > > > The connector also supplies optional signals in the form of GPIOs for fine
+> > > > > > grained power management.
+> > > > > > 
+> > > > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > > > > > ---
+> > > > > >  .../bindings/connector/pcie-m2-m-connector.yaml    | 122 +++++++++++++++++++++
+> > > > > >  1 file changed, 122 insertions(+)
+> > > > > > 
+> > > > > > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
+> > > > > > new file mode 100644
+> > > > > > index 0000000000000000000000000000000000000000..be0a3b43e8fd2a2a3b76cad4808ddde79dceaa21
+> > > > > > --- /dev/null
+> > > > > > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
+> > > > > > @@ -0,0 +1,122 @@
+> > > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > > > +%YAML 1.2
+> > > > > > +---
+> > > > > > +$id: http://devicetree.org/schemas/connector/pcie-m2-m-connector.yaml#
+> > > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > > +
+> > > > > > +title: PCIe M.2 Mechanical Key M Connector
+> > > > > > +
+> > > > > > +maintainers:
+> > > > > > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > > > > > +
+> > > > > > +description:
+> > > > > > +  A PCIe M.2 M connector node represents a physical PCIe M.2 Mechanical Key M
+> > > > > > +  connector. The Mechanical Key M connectors are used to connect SSDs to the
+> > > > > > +  host system over PCIe/SATA interfaces. These connectors also offer optional
+> > > > > > +  interfaces like USB, SMB.
+> > > > > > +
+> > > > > > +properties:
+> > > > > > +  compatible:
+> > > > > > +    const: pcie-m2-m-connector
+> > > > > 
+> > > > > Is a generic compatible enough here? Compare this to the USB connectors,
+> > > > > which, in case of an independent USB-B connector controlled/ing GPIOs,
+> > > > > gets additional gpio-usb-b-connector?
+> > > > > 
+> > > > 
+> > > > I can't comment on it as I've not seen such usecases as of now. But I do think
+> > > > that this generic compatible should satisfy most of the design requirements. If
+> > > > necessity arises, a custom compatible could be introduced with this generic one
+> > > > as a fallback.
+> > > 
+> > > Ack
+> > > 
+> > > > 
+> > > > > > +
+> > > > > > +  vpcie3v3-supply:
+> > > > > > +    description: A phandle to the regulator for 3.3v supply.
+> > > > > > +
+> > > > > > +  vio1v8-supply:
+> > > > > > +    description: A phandle to the regulator for VIO 1.8v supply.
+> > > > > > +
+> > > > > > +  ports:
+> > > > > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > > > > +    description: OF graph bindings modeling the interfaces exposed on the
+> > > > > > +      connector. Since a single connector can have multiple interfaces, every
+> > > > > > +      interface has an assigned OF graph port number as described below.
+> > > > > > +
+> > > > > > +    properties:
+> > > > > > +      port@0:
+> > > > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > > > +        description: PCIe/SATA interface
+> > > > > 
+> > > > > Should it be defined as having two endpoints: one for PCIe, one for
+> > > > > SATA?
+> > > > > 
+> > > > 
+> > > > I'm not sure. From the dtschema of the connector node:
+> > > > 
+> > > > "If a single port is connected to more than one remote device, an 'endpoint'
+> > > > child node must be provided for each link"
+> > > > 
+> > > > Here, a single port is atmost connected to only one endpoint and that endpoint
+> > > > could PCIe/SATA. So IMO, defining two endpoint nodes doesn't fit here.
+> > > 
+> > > I think this needs to be better defined. E.g. there should be either one
+> > > endpoint going to the shared SATA / PCIe MUX, which should then be
+> > > controlled somehow, in a platform-specific way (how?) or there should be
+> > > two endpoints defined, e.g. @0 for SATA and @1 for PCIe (should we
+> > > prevent powering up M.2 if PEDET points out the unsupported function?).
+> > > (Note: these questions might be the definitive point for the bare
+> > > m2-m-connector vs gpio-m2-m-connector: the former one defines just the
+> > > M.2 signals, letting e.g. UEFI or PCIe controller to react to them, the
+> > > latter one defines how to control MUXes, the behaviour wrt PEDET, etc.,
+> > > performing all those actions in OS driver).
+> > > 
+> > 
+> > In the case of an external GPIO controlled MUX for PCIe/SATA interface, I would
+> > assume that the MUX will be controlled by the PEDET itself. PEDET will be driven
+> > low by the card if it uses SATA, pulled high (NC) if it uses PCIe. Then that
+> > signal will help the MUX to route the proper interface to the connector.
+> > 
+> > Even in that case, there should be a single endpoint coming from the MUX to the
+> > connector.
+> 
+> How would you model this in the actual DT? We don't have separate
+> PCIe/SATA muxes in DT, do we?
 
-I tested the 4 patch set also, and also found no differences in results above
-repeatability noise levels.
+Do we have to describe it? On an x86 system, does something have to 
+describe what's connected? Wouldn't you try a PCIe link and then a SATA 
+link if the PCIe link doesn't come up?
 
-Additionally, I added another patch (patch 5 of 4):
-"cpuidle: governors: teo: Rework the handling of tick wakeups" [1]
-Similar findings.
-
-Additionally, I added another patch (patch 6 of 4):
-"sched/idle: disable tick in idle=poll idle entry" [2]
-And found only one significant improvement, for only one test,
-but only for the TEO idle governor:
-
-Kernel 6.18-rc4:
-For a 6 pair fast ping-pong test (meaning no work per token stop):
-teo: 5.53 uSec per loop, reference test
-4 of 4 patches: 5.53 uSec per loop, 0% 
-5 of 4 patches: 5.54 uSec per loop, 0.2% (noise)
-6 of 4 patches: 4.77 uSec per loop, 13% better
-6 of 4 patches (again): 4.81 uSec per loop, 13% better
-menu: 5.29 uSec per loop, 4.4% better
-menu + patch 6 of 4: 5.28 uSec per loop, 4.5% better
-
-Idle state 0 usage:
-18% with patch 6, teo
-11% with menu
-~1% with mainline and not patch 6, teo.
-
-Idle state 1 usage:
-almost 0 with patch 6, teo
-~6% with menu
-27% with mainline and not patch 6, teo.
-
-Power: About 100 watts. Patch 6 and teo does increase power use by about a watt or 2.
-
-Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz, 6 cores 12 CPUs.
-
-For clarity my branch log:
-3993913d7f81 (HEAD -> rjw-teo) sched/idle: disable tick in idle=poll idle entry
-d9b12b8d62bf cpuidle: governors: teo: Rework the handling of tick wakeups
-e47178c87272 cpuidle: governors: teo: Decay metrics below DECAY_SHIFT threshold
-7fe32e411c2b cpuidle: governors: teo: Use s64 consistently in teo_update()
-490e6118e45d cpuidle: governors: teo: Drop redundant function parameter
-8f627f86062e cpuidle: governors: teo: Drop incorrect target residency check
-6146a0f1dfae (tag: v6.18-rc4, origin/master, origin/HEAD, master) Linux 6.18-rc4
-
-[1] https://lore.kernel.org/linux-pm/6228387.lOV4Wx5bFT@rafael.j.wysocki/
-[2] https://lore.kernel.org/linux-pm/aQiWfnnSzxsnwa2o@tpad/
-
-
-
+Rob
 
