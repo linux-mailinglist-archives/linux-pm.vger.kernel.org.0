@@ -1,61 +1,91 @@
-Return-Path: <linux-pm+bounces-38200-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38201-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86AE1C6C8D1
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 04:18:00 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 185C8C6CD36
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 06:49:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 790C32C4F8
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 03:17:59 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E7A394E6C98
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 05:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 696D42E7631;
-	Wed, 19 Nov 2025 03:17:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D64C258EE0;
+	Wed, 19 Nov 2025 05:49:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Elehsyoe"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gMQU49wI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD13260588;
-	Wed, 19 Nov 2025 03:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BC09156F45
+	for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 05:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763522277; cv=none; b=THsFycL3hxYMVTHKEGk5T1D7fRi5skpXfEpBZ5uOzxgRyGSxhcSDIb2lJE2IT+S/5nF/HT/H2tCvez5tW11TS/Scx05C03KuVQ7qutzg9u3pKwWvjmMgIVXJNN0P4nk2EUv+lNzLoH5GFq3VAJdgfMZevkF67ZQsc8Xwg6/Bm48=
+	t=1763531356; cv=none; b=fRfDRWJdvryEi5vR3WSm2Qg0Tcd36bv0UEi+7x+X6/m12+b2AHFAK5IDhGyaFt3vAWy/YyofJZ0NBuFN6ab5+Gg5LS1iK4mt8X8XzV5K36CEo/4U1yP0Tl3ry54e3U+sTCmHMRwRyS3VBba4r/iLHMDwzB/wOtzdRk0I13DNRPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763522277; c=relaxed/simple;
-	bh=MIjgvuB0KiPtZ+6xNAoLd+3B/qJ5CymJwizx6U/famA=;
+	s=arc-20240116; t=1763531356; c=relaxed/simple;
+	bh=UT+oK4HjoZ6Qe9gAfL7qbeZffPaQLIagEqMxVONPoAQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SoflqlQAfBnzyD0QnxceLMpd/AnGjUHkJsbvA/3DSuqXUehEpUqM46lhC6B3veVUwGfVBf7C90GPlrXYzePtkRIuW8cUAWbLclGPlE3/58jBRvPzfEUyljkOEE+XVfldA9DeSZSlpEy2e88hTG81Iu6xJqych8uf1xaqSw1caGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Elehsyoe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC73C16AAE;
-	Wed, 19 Nov 2025 03:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763522276;
-	bh=MIjgvuB0KiPtZ+6xNAoLd+3B/qJ5CymJwizx6U/famA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ElehsyoeaGF+JHCONkNRqSVn1gQIGVBnFS9qAFy6URSKQJmngam1W2OcbVTebjrdd
-	 2wFTCGurf47Aae50x8fCw0Glg2zLptoK36bcYjy91BmjgzWAizru4RDuZLpgUZa+Va
-	 aKMEjwctuhpctR05cXw5zAjI2b3yh7b2cdGzqz6G+jgolxjNa839itURDoob6+aY/D
-	 I05q2hVqdBdbtx8qRTWoPyCV+fKYzQwVsAArokPSIRK+Pz87/HjqwcVaNjk/jJ3wUX
-	 vREy5KykxaOf5iOkdFvTa5zoVdbjS2t8vhDFktH7HegBPOAmbpKxcYnvq6IBREGIyq
-	 y+wS/vnlVooMw==
-Date: Tue, 18 Nov 2025 21:22:46 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Sebastian Reichel <sre@kernel.org>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH 1/2] Documentation: ABI: Add
- sysfs-class-reboot-mode-reboot_modes
-Message-ID: <yxy7b4pdv4o7dvfjndi5awg5tcobkzwuewn6sal2v2eydv4aes@wkaknlotycrk>
-References: <20251116-next-15nov_expose_sysfs-v1-0-3b7880e5b40e@oss.qualcomm.com>
- <20251116-next-15nov_expose_sysfs-v1-1-3b7880e5b40e@oss.qualcomm.com>
- <t3hfhlp27numfxurtmtcwrovvlgwdvnujain46kwmi37zehdak@xt3vngtkxpsm>
- <virjbkkpdmufx2midadzwiml4boyuxtokikcvupswapwehnv65@d2ppyiaeti22>
- <1ddb483e-3c09-ff45-9d36-cf29a40ba55d@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=O95fSdxxE99BUAL5GzSVb/6tmcdRujsm+BW6EBXFWAcV70xL9aHUlFx5GECVUwq98HjPwUsl+dMpC9HT5Df3tQH0RRtY0BUgGc/lvuJ8p77+aEFsllmE4G0DAY2OEEGf8NdFoAUpjQ1qsQj26ASANB54SHEcs9GiYTXMZwAGEEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gMQU49wI; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-297e982506fso77167035ad.2
+        for <linux-pm@vger.kernel.org>; Tue, 18 Nov 2025 21:49:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1763531354; x=1764136154; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X0+Vr6x/hD2XVE7vVSWrfWAau9JVLWZCdzaXwsWMD+A=;
+        b=gMQU49wIC+638NiKTygSiHQPP85oy4i4Ao/foLCNexIX6Uzf/Ye2EA0icau3HxiI9F
+         Dzp/nbCuY2vcjb9s52bUVIB004ZacizFhWbgFKknIkR/yT7Q0g0wsjlf/YN2ULLZB+x7
+         eq2gwKpP8tUeU8X2DituXFRCmN2prSN3Stnaa8Kh8aj4gLx2pcWOmBsQYQKBY15roO0d
+         kFHqKEarhksiFBbyF/vWEOyWJHoIyht/KTCyKb90jOHTyaTVLiVXS8pwrM1rbpB4lCu4
+         SnfMpVt6bkI3fukt7stIZ4NEcuoTRdlW+8eAdBqpbEyhXqFdTcLTFBpflRnvVThhNNMc
+         xCuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763531354; x=1764136154;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X0+Vr6x/hD2XVE7vVSWrfWAau9JVLWZCdzaXwsWMD+A=;
+        b=p73RN4B2xxhMFPKy2642DIcEfiBlhqG81wM2RrWCTv+0j8A/7IJgQ8BIVp3b5ClfCd
+         dZjE+FzPWexW/GtgmFfrqVfo2kquhMgmB10cqzCYkDsXyDEv00Soxun+qh36uMarAQv/
+         gWUSZKrr5snNwfOKJa+WorV2O0w9Ls1U0/awSWiUTXCiPQ5iODXNC2mJBPgNTOa3acIC
+         AIEF8+QZSFHfSZHYyj0JT5H+xzbUYBcpx6ybaTI05p3erghmi49u5y6BZevMMU+kN4uX
+         zm7AOhrU+ZKTL4r2N70gbEJo7GWS7BHHILe/YNpCj18ex9HutXoY5vhtYxJUebahK/Bi
+         i90A==
+X-Forwarded-Encrypted: i=1; AJvYcCWAfjC5F1hb5Jx/lxGZNZhKbDZ7+TA0+kE+bcI8n1MnrV9TQskfagrlH3a2sXOdr0iZaSKg1ZdxaA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuBZIAmkogXMw/8BLooeCVvjvNSBuIZNWsy6v0laps3503guc+
+	KxyrHTWwLusWQuaiJHC/y2WZsl6FvZvdtT1Sa+A6w0fKH+dYrNJa2taBBjG3Q+yOOLQ=
+X-Gm-Gg: ASbGncthTymQ7LEmR0M6vg8Mrq/bxiQJBiYNsnds/j0rR4vY/16WCXDntwWB4NJINz4
+	58d1hnpzKFbCwXGJTIyIY+cY+HfUPFPnJsKq36LzOOXQYNE3uzzlkO5xLgHnyPPc9aJQrmhcS3s
+	TQs805KVAP+eA6zp9VKuPPu6o6mBD+MDPQYww+mZPFGPmJ76haClLiV3i7Bi9GSsysQVpY7QzOP
+	Fn9hyYhewy+sQOyNPLL91UYOn20mPm70KQeDxd32wOxgoLF3Nz1iAtFyvmhYZW+3yAIEcWmzsPm
+	gw8011YJqKNrHz5tXpwD4zK1tX+HM+FRR5CmAKJkBTQTYhtBizievo7YscJ/MwrzVv7+Joi10+j
+	bQ+NPwsV59SBpbHkTS+w2VeXBgwD7HGFtPWfllOkIhGrlVdVadEaiBgbIaiLTxTkugwcu5VO6Vw
+	C55Rw5RjhxWOzmpcuS4H9Kdw==
+X-Google-Smtp-Source: AGHT+IF83DkAlKom8H7yCIpqPkymM7Zq3lrKGS/FtMNUWxAOSoRjHEAR51MHxjq/T/AP7dmUpoqC8w==
+X-Received: by 2002:a17:902:fc8e:b0:290:ac36:2ed6 with SMTP id d9443c01a7336-2986a6d6612mr219651425ad.14.1763531353657;
+        Tue, 18 Nov 2025 21:49:13 -0800 (PST)
+Received: from localhost ([122.172.86.94])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2b10b4sm192307065ad.70.2025.11.18.21.49.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Nov 2025 21:49:13 -0800 (PST)
+Date: Wed, 19 Nov 2025 11:19:10 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>
+Cc: ulf.hansson@linaro.org, vireshk@kernel.org, Nishanth Menon <nm@ti.com>, 
+	Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org, 
+	Manivannan Sadhasivam <mani@kernel.org>
+Subject: Re: Queries on required-opps on calling dev_pm_opp_set_opp()
+Message-ID: <o67y2z47husak2ic3adb2w4kxst5vfdr3vdk3wifhbpyao7hew@jj5qerm3qxor>
+References: <8e542a9d-132d-45c3-b17f-1dcea4bdf337@oss.qualcomm.com>
+ <7paqqdkxfxd3hz76o7o4q7pkmc27czqtn3smffpkwoha7bncdq@w7ik7v3c5uwk>
+ <b3e9403e-6194-448d-a361-45c645a2ab2b@oss.qualcomm.com>
+ <kaxxdh2xt4hghwn23qzle5wx2ltdzq7eyp7rtyvbsgffjvowv6@hgphk72idpbz>
+ <621fbd17-99c6-4669-9d7f-4c1c42270dcd@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,94 +94,61 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1ddb483e-3c09-ff45-9d36-cf29a40ba55d@oss.qualcomm.com>
+In-Reply-To: <621fbd17-99c6-4669-9d7f-4c1c42270dcd@oss.qualcomm.com>
 
-On Tue, Nov 18, 2025 at 10:07:51PM +0530, Shivendra Pratap wrote:
+On 18-11-25, 21:22, Krishna Chaitanya Chundru wrote:
+> Are you suggesting to retrieve the required clock from the phy node and vote
+> from the controller
+> driver? If that is case it will not generic as some targets have different
+> name for refgen clock in
+> phy node. And this will be like a hack to do it from controller driver.
 > 
-> 
-> On 11/18/2025 2:18 AM, Bjorn Andersson wrote:
-> > On Sun, Nov 16, 2025 at 07:44:24PM +0200, Dmitry Baryshkov wrote:
-> >> On Sun, Nov 16, 2025 at 08:49:47PM +0530, Shivendra Pratap wrote:
-> >>> Add ABI documentation for /sys/class/reboot-mode/*/reboot_modes, a
-> >>> read-only sysfs attribute exposing the list of supported reboot-mode
-> >>> arguments. This file is created by reboot-mode framework and provides a
-> >>> user-readable interface to query available reboot-mode arguments.
-> >>>
-> >>> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> >>> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-> >>> ---
-> >>>  .../testing/sysfs-class-reboot-mode-reboot_modes   | 39 ++++++++++++++++++++++
-> >>>  1 file changed, 39 insertions(+)
-> >>>
-> >>> diff --git a/Documentation/ABI/testing/sysfs-class-reboot-mode-reboot_modes b/Documentation/ABI/testing/sysfs-class-reboot-mode-reboot_modes
-> >>> new file mode 100644
-> >>> index 0000000000000000000000000000000000000000..28280ffe9bf962ef9d2136ea5d7c6aef77c4bd34
-> >>> --- /dev/null
-> >>> +++ b/Documentation/ABI/testing/sysfs-class-reboot-mode-reboot_modes
-> >>> @@ -0,0 +1,39 @@
-> >>> +What:		/sys/class/reboot-mode/<driver>/reboot_modes
-> >>> +Date:		November 2025
-> >>> +KernelVersion:	6.18.0-rc5
-> >>> +Contact:	linux-pm@vger.kernel.org
-> >>> +		Description:
-> >>> +		This interface exposes the reboot-mode arguments
-> >>> +		registered with the reboot-mode framework. It is
-> >>> +		a read-only interface and provides a space
-> >>> +		separated list of reboot-mode arguments supported
-> >>> +		on the current platform.
-> >>> +		Example:
-> >>> +		 recovery fastboot bootloader
-> >>> +
-> >>> +		The exact sysfs path may vary depending on the
-> >>> +		name of the driver that registers the arguments.
-> >>> +		Example:
-> >>> +		 /sys/class/reboot-mode/nvmem-reboot-mode/reboot_modes
-> >>> +		 /sys/class/reboot-mode/syscon-reboot-mode/reboot_modes
-> >>> +		 /sys/class/reboot-mode/qcom-pon/reboot_modes
-> >>
-> >> This part is obvious, isn't it?
-> >>
-> >>> +
-> >>> +		The supported arguments can be used by userspace
-> >>> +		to invoke device reset using the reboot() system
-> >>> +		call, with the "argument" as string to "*arg"
-> >>> +		parameter along with LINUX_REBOOT_CMD_RESTART2.
-> >>> +		Example:
-> >>> +		 reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2,
-> >>> +		        LINUX_REBOOT_CMD_RESTART2, "bootloader");
-> >>
-> >> So, does one need to write a tool for invoking reboot with the corerct
-> >> set of args?
-> > 
-> > Here's an implementation of such tool
-> > https://github.com/systemd/systemd/blob/main/src/shared/reboot-util.c#L80
-> 
-> Should i include this link for an example of existing tools or i just add
-> add a line saying that such tools are already available?
-> 
-> > 
-> > Many other implementations of reboot provides the same.
-> > 
-> >> If we are adding a sysfs interface, wouldn't it be logical
-> >> to also add another sysfs file, setting the argument?
-> >>
-> > 
-> > The inclusion of the example indicates that we need to expose it in an
-> > accessible form, but I don't think we should, as it's already a
-> > widespread standard interface.
-> > 
-> > As such, I don't think the example adds any value, but it would be
-> > valuable to clarify that this is a standard interface.
-> 
-> ok. Will remove this example of reboot syscall and add a line to
-> indicate that this is standard interface.
-> 
+> If this is not the one you suggested can you give me some more details on to
+> change the frequency.
 
-This sounds good to me.
+This is your controller node, right ?
 
-Thanks,
-Bjorn
+                pcie0: pcie@1c00000 {
+                        compatible = "qcom,pcie-sm8450-pcie0";
 
-> thanks,
-> Shivendra
+                        clocks = <&gcc GCC_PCIE_0_PIPE_CLK>,
+                                 <&gcc GCC_PCIE_0_PIPE_CLK_SRC>,
+                                 <&pcie0_phy>,                          // Already has phy as a clk
+                                 <&rpmhcc RPMH_CXO_CLK>,
+                                 <&gcc GCC_PCIE_0_AUX_CLK>,
+                                 <&gcc GCC_PCIE_0_CFG_AHB_CLK>,
+                                 <&gcc GCC_PCIE_0_MSTR_AXI_CLK>,
+                                 <&gcc GCC_PCIE_0_SLV_AXI_CLK>,
+                                 <&gcc GCC_PCIE_0_SLV_Q2A_AXI_CLK>,
+                                 <&gcc GCC_DDRSS_PCIE_SF_TBU_CLK>,
+                                 <&gcc GCC_AGGRE_NOC_PCIE_0_AXI_CLK>,
+                                 <&gcc GCC_AGGRE_NOC_PCIE_1_AXI_CLK>;
+                        clock-names = "pipe",
+                                      "pipe_mux",
+                                      "phy_pipe",
+                                      "ref",
+                                      "aux",
+                                      "cfg",
+                                      "bus_master",
+                                      "bus_slave",
+                                      "slave_q2a",
+                                      "ddrss_sf_tbu",
+                                      "aggre0",
+                                      "aggre1";
+
+                        pcie0_opp_table: opp-table {
+                                compatible = "operating-points-v2";
+
+                                /* GEN 1 x1 */
+                                opp-2500000 {
+                                        opp-hz = /bits/ 64 <2500000>;
+                                        required-opps = <&rpmhpd_opp_low_svs>;
+                                        opp-peak-kBps = <250000 1>;
+                                };
+
+Can't we have two values in opp-hz here and configure phy's clk directly with
+the current code only ?
+
+-- 
+viresh
 
