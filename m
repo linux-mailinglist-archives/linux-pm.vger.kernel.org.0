@@ -1,102 +1,93 @@
-Return-Path: <linux-pm+bounces-38234-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38235-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA01CC715E2
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 23:51:57 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3348C7166C
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 23:58:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 02EE03163B
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 22:51:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7884F4EE510
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Nov 2025 22:53:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472B12ECEA3;
-	Wed, 19 Nov 2025 22:43:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CA35302150;
+	Wed, 19 Nov 2025 22:52:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="K9Mf8wPi"
+	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="AAG9rXn0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E58A329E52
-	for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 22:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A33E312816
+	for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 22:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763592217; cv=none; b=JJlpRv81u4j6rDK45Ox9utIGpSIsepGmftVBP95ZrTTKqSOHOXM47s9j1BXilIW6i1F3oyVNwNw9GAxFct8yljZa1b2vw1Stiv2/6nSi8fKxHrklC3hVdbSNob6IkhbNADk27NxHYplOg6FfGBTgW1PziH0tMr/+gwEN11g14bQ=
+	t=1763592745; cv=none; b=ajtRbG2u8VfL45W3jBGVly0KzanxhWI4h9iixmC0LQGc+HG8tQ3+yMKrB3qpcKEptkOGzHeDFcSlM7Sxx0UMJupTj1G7hf7u1GqT03RCiE5BcEMu/xkQdYoPo0m/DMA2WrLYGOJS5we53jrfEA4UUABQaSSF6S9+SF3M8OUq/ZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763592217; c=relaxed/simple;
-	bh=exLQU2A1uAUo4pWL01QGupT/xazbPH5x+lO8FbmJmrc=;
+	s=arc-20240116; t=1763592745; c=relaxed/simple;
+	bh=ZXvmGem1gwvmXBdBtjwkfC/CUQrpbProwp1nnMC3AA0=;
 	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type; b=S1snUXcI54leMG8DeC9iwzDvzXc7DsMWxO8YT9LelQZMLcMC09Nlu52XQjSCn7spgk02bjrVmgSG+qMWTRVQDWpfJv37vnl07NFrKDGEJm3BscElm+74LZZSuxxzhM6aDtqpaD5A6hy7wZlEjvpW2op0DIs540xPWqGG8tQMEpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=K9Mf8wPi; arc=none smtp.client-ip=209.85.210.179
+	 MIME-Version:Content-Type; b=iV8Zxbntm7x6O4nLbQPCntk7HP7UvZRi4Pli9UEFlgtZkRQbSJDSXetRo3PPXi5asZ8kikK1YVrZQP8PdoO6kxvY8G3o6pAgm7dvUGiTnJG75M2wbO75C3IekPwzAzubCjgI8Ax9mOJFAusAEpIJafpjidGjl6n1GlJbfSWp1Dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=AAG9rXn0; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7b75e366866so99742b3a.2
-        for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 14:43:34 -0800 (PST)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7bc0cd6a13aso140448b3a.0
+        for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 14:52:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1763592214; x=1764197014; darn=vger.kernel.org;
+        d=telus.net; s=google; t=1763592742; x=1764197542; darn=vger.kernel.org;
         h=thread-index:content-language:content-transfer-encoding
          :mime-version:message-id:date:subject:in-reply-to:references:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gjoVVBrGVNLceirqt6w86PFXimFupbw5muH/xGKrDMs=;
-        b=K9Mf8wPiYSWTwOEAZjpHEPesTCDd08ueARkK6WFn/fc3XpCh2iYPgxE7CNwQYgZ+UD
-         VFsOFlO7zBD0ax/gixOOW5f9Ifc17jZpVLJFYalIHgL4w/RA5XhORRhxyY47d33fclIZ
-         9fkrdHuGiBF/DmSPUQexOqim0mud2kq/Mox5BYJRTS2OAh83l/4qSC1ZUaclHVJCY+ea
-         hWhPxHNMQJhVEg7A1JEnEBVmRTuhkJfINlXnKN4M8ddF7E39NE1HpOIAmxqgzjlyVWLP
-         F/rBRRQr2crb17dDCFAYt6fOLBZi3Jft8X30gxEbrdn4dmAi1s40OGDkSfpW/0DyytcI
-         +yWg==
+        bh=DNOjLlODDT7mgeVset8paaRwwJLENifjVg/m2cEQq14=;
+        b=AAG9rXn0nPkX5E0ImJI29UE15roxzmpG0+Xm5dZy95SsTxRpn8RhIYIy3RZmNykI30
+         YxAfdbV5JJpR4w8lGf9g0Is0XkoNkVr2bw7dMoJQ3hse/is5HBz+G2QkQjMDTr/srG5Z
+         L4mnTerfZyn2DwmYq9h4uW2Ptb1WG8S9vZOP8dJ4pdmQ1Io/L4bRjHJGVqdJIPTM3LYf
+         g8HYb2Ysu6Q1Lig80DtafZ+ktgqVHqoign3/6Lt3yXAe0dc2P611+KvFA3xJRTLjrQ7m
+         YOqZh0XcrdwrEG/5ymAjgPGhW/IUm74ohJ//r5CENkMleVa44J4naQwvNL0ZdBBGXaT7
+         cX/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763592214; x=1764197014;
+        d=1e100.net; s=20230601; t=1763592742; x=1764197542;
         h=thread-index:content-language:content-transfer-encoding
          :mime-version:message-id:date:subject:in-reply-to:references:cc:to
          :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=gjoVVBrGVNLceirqt6w86PFXimFupbw5muH/xGKrDMs=;
-        b=XlHhuHlA4Q5qN2/vZnlvp2ExgAaB4L2lpDHZyC5zZ8gS+9ZKscqAxunZYmVfCvHhFu
-         0wD8qUQyvIukHNZTMz3NwxzmrukE+jEMLKbdKa3UcEKlbpkcAabIKKMBijJchXn0MsTd
-         TNM8fdyoFUvRbp3LOZwcu/uKm3Q0XXmrD8LE3gQtM770E5RRvXEBQLFXIaT5EykWwsc8
-         kwIGzGYyiMOQ0/FU8OkaOn6WQwZDNmOcByX0+f6wZ2VXePq5ZhhsnRSxqG7RsEuhwg6U
-         IKeS+adc4tNM9K9awFxygGq/qStn8N3OEaUulq37pRDCwDJlKNGCwGZz/Q7i2XFAEsUR
-         2Fzg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3PpuWIqOUenXVVUsAHzvGHZ0u4/uAcXYe+GFUBmfzENE96HhH6/vpQu17ozUrQeeR8IDvRTJr2A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxL/fpyAxmW1LvIUiqSV1+g/ikAHDvsfc+zFbmhbgiuivw8MiLN
-	/PJsw6AdAuhM56DNdwQ8itKB5F/dSczs5+zPy8uPU2cF3Ai9xY0GtWs4twzlGQscIoM=
-X-Gm-Gg: ASbGncvIeeyfxcpaLj8PCTBpaO0IVh57pIhQWwVZLIibYOhyxmcZu1QywH9eOKzqyUk
-	scU9VgafmLaj90B/+VMncWLoucDLK308CfHeWl9dLayW5VEq5VzmuESzOIi3pozQ+Ff38s8XRgl
-	18XaYxrMZflcezjRTlWyd1z4Or5zoL5cfAapsOoRMy336ezVB4vNsO0SHPvUYyRskFyAyjQsT+E
-	gR0nVcqt7JO4fLcuiPk+zR4Lvb85fisdEN/7EJy6NY2lbgAOgod+opB5DwsZj6LCTG/4iALAvBS
-	+lKPy0WKAlKc0fPzZ5SZ5sLUUQRSqphv+L4ZKeSH4gx7iEzSU7MywSpdkMf3F50XpLCRcx5wGel
-	TJvaK0FtppdHR3skTHSvRXOBB5craxWlCUjid5QkWcZUKn0CoWIO6sbrqrQTnJMa8dauE5S+yFb
-	MhMqv781HDN9duCZsG7emNt4uwEvthh+2xjLViXzIFwVVPYRH03RhkbPk=
-X-Google-Smtp-Source: AGHT+IGswi+yalLFuZR/+1ZlAeORcKWhaXPi+3FTeM2Xwwo+cmOsmiUNf/aTqwcufRZrVWrVnziaZg==
-X-Received: by 2002:a05:6a21:339b:b0:35f:fafa:a198 with SMTP id adf61e73a8af0-3613b4c002bmr1533019637.10.1763592214228;
-        Wed, 19 Nov 2025 14:43:34 -0800 (PST)
+        bh=DNOjLlODDT7mgeVset8paaRwwJLENifjVg/m2cEQq14=;
+        b=WSrW/KNpjc61YaJuHEnuOvxOaKbhGsW7HGXPEu+wTR2UTSFBJFMseHcUvv+UOITraD
+         R6K8hsPsozedTh6GE1CGZ86hBDkbTdwGCNe70ZKb9hyurb19E9x9WmxqMoqJ2ZIjLDTs
+         JgtTq23SSfGc47DYWP7bk7rJrQP5yyYpUQ1lfa9Fhy798s9ZsBA+cEtcJsaX+0tWORDx
+         UQoxxciaUPfZF5Sh/l4GGLlbuVt65OoB8183/WCSiGsEtPQYDEh3XLX/y67/le6Ttrsw
+         s3wyXAhYYfzbOr3r1EQymBWne6LnEgrjF9KCUSuJjLluq9Tw9VMtHJjpNduAkIPiT2e6
+         49Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCXs/2QlJ2WZJVswdXLyBQquEQVQf5OrcM9STGGOcOpcDS0Aqyo2Tc7qbhfzwXqdcrLKVb9+OqX8lA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaCXkBOWFt11D4hXOnY7BUJPs5XyR/tZmkzgzOUR/JpVyBxi0P
+	/GZpLq79f+jxFvDaTTTJEqHMpUsDtm+ERRaDzv7AFMw87xHisRbAyJEZivIb8spo5U4=
+X-Gm-Gg: ASbGncs/9egXilhYiD1PNTyvcNhU50V/FpNccTwD1IfZLnJnhhyRCIu1rViki5qFgoR
+	LisGIUGqCyctXrvSkUPB6o7faGsE5Xr5gil5d5hc/0wrrc4LsMG+4mPRc+MRHDauJphl9An8adG
+	ybqAUOtwF4cVRxPaIpOOHBpKNAitbBJxzMw1snqV4ErEckGZlZUopxkzHUdOcEHZ2f1RvHrKvky
+	jHHNNFNcgyiaAY6A2p7LZF4SRLJPuaIhgfwXYHkap2rxYfjtlIFUG8VzppJT/6QyLaW88juFbcT
+	G9aqCqoLjMiSdKxuVXENU0tFpg3VU7feS1xdoVP2pwQQJ9vEeJOg+g3DyTRbABoiKIzyOd4NYOz
+	G67udk6InQXWG6uiQ8kIm3WHJOQ+olf7VnXLnVzIDYulhZ96sOm4UOVlBDWEictNtrhApTuXAjz
+	gS+B9RxfNr7n4wUAqYZd1nbnQH2GoXSkynq328eLT/7NmNr+6H4jUr9UlVGWQeMZhgGQ==
+X-Google-Smtp-Source: AGHT+IEUOVs/PEv+o6VMIvuJWjXWVzpvIID7k6tyED5+QqAJqGBvf++DZDjd+NnQ4+2HkzklC2Q9FA==
+X-Received: by 2002:a05:6a00:22cb:b0:7a9:7887:f0fa with SMTP id d2e1a72fcca58-7c41d72aa7dmr310149b3a.1.1763592742480;
+        Wed, 19 Nov 2025 14:52:22 -0800 (PST)
 Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7c3f095c237sm424910b3a.45.2025.11.19.14.43.32
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7c3ed0751dfsm447524b3a.6.2025.11.19.14.52.21
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 19 Nov 2025 14:43:33 -0800 (PST)
+        Wed, 19 Nov 2025 14:52:22 -0800 (PST)
 From: "Doug Smythies" <dsmythies@telus.net>
-To: "'Christian Loehle'" <christian.loehle@arm.com>
-Cc: "'Reka Norman'" <rekanorman@chromium.org>,
-	<daniel.lezcano@linaro.org>,
-	<linux-pm@vger.kernel.org>,
+To: "'Christian Loehle'" <christian.loehle@arm.com>,
+	"'Rafael J. Wysocki'" <rafael@kernel.org>,
+	"'Linux PM'" <linux-pm@vger.kernel.org>
+Cc: "'LKML'" <linux-kernel@vger.kernel.org>,
+	"'Reka Norman'" <rekanorman@chromium.org>,
 	"Doug Smythies" <dsmythies@telus.net>,
-	"'Rafael J. Wysocki'" <rafael@kernel.org>
-References: <CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com>
- <CAJZ5v0h6qAgWkEad5OGM-V-HOE-1PwD_XqgsDWbnJNxLWOKDfA@mail.gmail.com>
- <CAEmPcws_pvYpzRMQfMyRPBw=7bUyYCcnP3BHN2H4wgUeLLszFg@mail.gmail.com>
- <CAJZ5v0i_ZUD1=3JDABJZ3fcdD7r8uMU36=mam8r2=1P02YksYw@mail.gmail.com>
- <f0a2492b-9cea-4450-88ca-be8f99f3e0fe@arm.com> <CAEmPcwvui5Cg5yoa9NEq5b3OZREb08tbmy4=f=adTLuLPBgGgw@mail.gmail.com>
- <0c018867-c092-4f8e-8f7a-32bb02de3ad5@arm.com> <CAEmPcwuVPMONrDHcnxbWpoG5K5DFwf-u2i7wuOK4Q9HvF2uOhw@mail.gmail.com>
- <2a429c41-8624-408c-9db0-4450ab76e52f@arm.com> <a33965da-81d8-47c5-9fa0-434812f2bd72@arm.com>
- <CAJZ5v0jjswmSsSRqfjrbDVD4rpYvp2qCdweYrK0JV0zUketczQ@mail.gmail.com>
- <939deff8-7856-4d9b-be91-eda06fac21d0@arm.com> <CAJZ5v0ic0+sG7yp=wXAcsTBmHdXLe8gKLosFJj48AGuCQ=1beg@mail.gmail.com>
- <571fb9f4-56f5-4d75-a70e-d8741bd1fad2@arm.com> <CAJZ5v0ihcLwoMKcPe2RC16sjvf5acU0Y8vjccUu=fYgD+ux12A@mail.gmail.com>
- <00928b9d-7189-4929-afc9-7684fc5ef531@arm.com> <ca45366d-4c85-4802-8a35-886a6f69d10d@arm.com>
-In-Reply-To: <ca45366d-4c85-4802-8a35-886a6f69d10d@arm.com>
-Subject: RE: Regression in TEO cpuidle governor between 6.6 and 6.12
-Date: Wed, 19 Nov 2025 14:43:34 -0800
-Message-ID: <003c01dc59a5$f0d97010$d28c5030$@telus.net>
+	"'Marcelo Tosatti'" <mtosatti@redhat.com>
+References: <4701737.LvFx2qVVIh@rafael.j.wysocki> <69115878-ec5e-4f7c-bb3e-9f61cce75c70@arm.com>
+In-Reply-To: <69115878-ec5e-4f7c-bb3e-9f61cce75c70@arm.com>
+Subject: RE: [PATCH v1 0/4] cpuidle: governors: teo: Assorted improvements
+Date: Wed, 19 Nov 2025 14:52:23 -0800
+Message-ID: <003f01dc59a7$2bd98b40$838ca1c0$@telus.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -108,67 +99,83 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 X-Mailer: Microsoft Outlook 16.0
 Content-Language: en-ca
-Thread-Index: AQHlet41AZsGUYXqd5J4NJ7wgh2vewLKMoeTAn3FA6oAlI5qgAJKDvBoAbkAIGIDGm7e/QIvh+5GARXxnD8A7bqRNgJF6oXoAgOXTuEC09pwjwEUCbAjAwsZXvQB+bQb1wHe+PDps+ZBsdA=
+Thread-Index: AQHuO70FIpoCT8UjwWdl7ErjLgnvJgHh6mEctMfG19A=
 
-Hi Christian,
+On 2025.11.13 07:22 Christian Loehle wrote:
+> On 11/12/25 16:21, Rafael J. Wysocki wrote:
+>> Hi,
+>> 
+>> This is a bunch of teo cpuidle governor improvements, some of which are related
+>> to a bug report discussed recently:
+>> 
+>> https://lore.kernel.org/linux-pm/CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com/
+>> 
+>> The first patch fixes a bug that may cause an overly deep idle state
+>> to be selected when the scheduler tick has been already stopped.
+>> 
+>> Patch [2/4] removes an unnecessary function argument.
+>> 
+>> Patch [3/4] makes teo_update() to use s64 as the data type for its local
+>> variables more consistently.
+>> 
+>> The last patch reworks the governor's decay implementation to also decay
+>> metric values lower than 8.
+>> 
+>
+> Tested-by: Christian Loehle <christian.loehle@arm.com>
+>
+> Test results below, although there really isn't anything interesting in there.
+> teo-1 to teo-4 (patches 1 to 4 respectively are essentially indistinguishable from
+> teo-m = mainline)
 
-This email is about testing as opposed to about the subject and patches.
-Specifically, the " adrestia" test.
+I tested the 4 patch set also, and also found no differences in results above
+repeatability noise levels.
 
-On 2025.11.13 07:43 Christian wrote:
-...
-> Forgot to post the full results, anyway as expected with mtdblock (a very slow
-> / low frequent wakeup scenario) the impact becomes clearly visible.
-> Still hopeful that the more conservative approach will be acceptable!
-...
-> test       gov        i     score  %change    idles  idle_miss  miss_rt   belows   aboves
-...
-> adrestia   teo-m      0         8    0     103680         21      0.000         19          2   <<<<
-> adrestia   teo-m      1        12   50     104026         31      0.000         16         15
-> adrestia   teo-m      2        12   50     104063         32      0.000         24          8
-> adrestia   teo-m      3        12   50     104768         44      0.000         22         22
-> adrestia   teo-m      4        12   50     104388         18      0.000         16          2
+Additionally, I added another patch (patch 5 of 4):
+"cpuidle: governors: teo: Rework the handling of tick wakeups" [1]
+Similar findings.
 
-> adrestia   teo-patch  0        12   50     103096         67      0.001         65          2
-> adrestia   teo-patch  1        12   50     103128         57      0.001         49          8
-> adrestia   teo-patch  2         8    0     102812         78      0.001         72          6    <<<<
-> adrestia   teo-patch  3        12   50     102990         60      0.001         55          5
-> adrestia   teo-patch  4        12   50     103168         24      0.000         24          0
-...
+Additionally, I added another patch (patch 6 of 4):
+"sched/idle: disable tick in idle=poll idle entry" [2]
+And found only one significant improvement, for only one test,
+but only for the TEO idle governor:
 
-I am curious about the significant variations between iterations for your
-adrestia test. And what does "score" mean for this test?
+Kernel 6.18-rc4:
+For a 6 pair fast ping-pong test (meaning no work per token stop):
+teo: 5.53 uSec per loop, reference test
+4 of 4 patches: 5.53 uSec per loop, 0% 
+5 of 4 patches: 5.54 uSec per loop, 0.2% (noise)
+6 of 4 patches: 4.77 uSec per loop, 13% better
+6 of 4 patches (again): 4.81 uSec per loop, 13% better
+menu: 5.29 uSec per loop, 4.4% better
+menu + patch 6 of 4: 5.28 uSec per loop, 4.5% better
 
-I don't know if we are running the exact same test [1], but my "score" means
-wakeup cost (periodic, 20us), and for the 6.18-rc4 kernel is around 2.7 uSec,
-independent of the various patches or teo verses menu governors.
-My results are very repeatable.
-With kernel 6.13 I was getting 3.3 uSec, but I suspect the differences
-have more to do with other kernel changes than any idle governor changes.
+Idle state 0 usage:
+18% with patch 6, teo
+11% with menu
+~1% with mainline and not patch 6, teo.
 
-My typical testing command line is:
+Idle state 1 usage:
+almost 0 with patch 6, teo
+~6% with menu
+27% with mainline and not patch 6, teo.
 
-./adrestia -a 20 -l 2000000 -t 500 wakeup-periodic
+Power: About 100 watts. Patch 6 and teo does increase power use by about a watt or 2.
 
-Where:
--a      arrival time (microseconds) << Only used for periodic test, sleep time. Actually arrival rate.
--l      number of loops
--L      list tests  << wakeup-periodic and wakeup-single
--s      service time (microseconds) << This has not been implemented.
--t      thread count
+Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz, 6 cores 12 CPUs.
 
-Those run parameters give a reasonable amount of idle time using
-both idle states 0 and 1.
+For clarity my branch log:
+3993913d7f81 (HEAD -> rjw-teo) sched/idle: disable tick in idle=poll idle entry
+d9b12b8d62bf cpuidle: governors: teo: Rework the handling of tick wakeups
+e47178c87272 cpuidle: governors: teo: Decay metrics below DECAY_SHIFT threshold
+7fe32e411c2b cpuidle: governors: teo: Use s64 consistently in teo_update()
+490e6118e45d cpuidle: governors: teo: Drop redundant function parameter
+8f627f86062e cpuidle: governors: teo: Drop incorrect target residency check
+6146a0f1dfae (tag: v6.18-rc4, origin/master, origin/HEAD, master) Linux 6.18-rc4
 
-[1] It is likely we are not running the exact same test, since I converted the
-source code I use from uSec to nSec. Notes to myself from a couple of
-years ago suggest that I am using the version from [2] and that the version
-from [3] does not compile (at least for me).
+[1] https://lore.kernel.org/linux-pm/6228387.lOV4Wx5bFT@rafael.j.wysocki/
+[2] https://lore.kernel.org/linux-pm/aQiWfnnSzxsnwa2o@tpad/
 
-[2] https://github.com/notcarbide/adrestia
-[3] https://github.com/mfleming/adrestia
-
-... Doug
 
 
 
