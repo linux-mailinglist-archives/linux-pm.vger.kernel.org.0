@@ -1,170 +1,195 @@
-Return-Path: <linux-pm+bounces-38296-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38297-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 531F6C7399C
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 12:02:35 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EE08C73A48
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 12:10:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 46FB94E1B1C
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 11:02:34 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1170234A75F
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 11:05:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19F9A326D74;
-	Thu, 20 Nov 2025 11:02:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F725306B05;
+	Thu, 20 Nov 2025 11:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RPjfxgzL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="frALlGhV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E794930F537
-	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 11:02:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73BC1F5617;
+	Thu, 20 Nov 2025 11:05:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763636551; cv=none; b=IUa8NHU5SS93A8K2ueuCxm2hMNWvCzph4lAZDeZQ5qu4cgBOerhlBK24mA2Rnukz4dJSW3g6Yed8eCwPTpAl0+MqWfSUTxWF66l3yQYDzgkcb7XKCTdqA+nSLhZ0an4zSLyDINJedzXZPDUn+GEkaPu2dwaxtmh6YSp/zMDmZI0=
+	t=1763636714; cv=none; b=RIBbrEFEqtInaMQi+PREyC59xH4sgEZkmLOqAmKd9VSeqScu+v/A7nF972jb0yK2f8eHgKOJlBORdMLrq5x3j+h7BKQtS9QHBvHvfMBzHbnwnobHVj9wABL3TISn29Hu7EI079VBTMp6+FpB4b5cPXL7FGJYW7mVJWV7r9kphUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763636551; c=relaxed/simple;
-	bh=FouX50HAHbiEHzayrYTP+d/rs5gRoDac17a03UaJvAk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O4cpUxkYUYonSuwuNJ6RHJhyZ57hTAmsxs/64b7xcbU3BqUS3xm109/9VWcaHtT3mOpMneQ7sTgBXGMUxJoGcOzUr7fJ+T2e7gSf5hSyrXEbN8W0Zy283SmA2juLXqjTnML15ChwZDF9VU7Ou0iTlu2jx1z4mrEEYb1PNFz5jCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RPjfxgzL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF7EC19422
-	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 11:02:30 +0000 (UTC)
+	s=arc-20240116; t=1763636714; c=relaxed/simple;
+	bh=WxFz3CaShF8+qMN0ByNt5QB3ybTN7mXPoCqLHNOZu2k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=piqBtdsTwki9vCXXB6KyfjeHnp8K0sTl7N45vCbcA/1ce+ImEv/xQ0g7Ox9T/gRtY+t6eO//7aCbErPnK1CQtUmXvDC/FH0mVuknx/4iOd7/ErkR24Y6juBrAfebMH5b+R6YDpsm1lTzrLhJ7Mnm0sWckBi1AEaAsvWj+Z7CL0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=frALlGhV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBB2C116D0;
+	Thu, 20 Nov 2025 11:05:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763636550;
-	bh=FouX50HAHbiEHzayrYTP+d/rs5gRoDac17a03UaJvAk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=RPjfxgzL2WT4dpK0R2jmCEq7yI0v1Ap9wqbrTl8JhsQ026vSqv7jnbEJP4J1sW1Uw
-	 wEBVSWZ9j6IDsH+bNRsrq8Kc/mCjNpXUeZYvvj4wYRhN20cF2Gi4EY6U642khRtmc3
-	 Bm4tmU9KujiAZaL9/mInRyz8phLozupTpcbtMUpz75HyTyIrl6BH8VA6MTHv3rPDjy
-	 1l6y/3ODl+6TJWrSByg8ugJCyRiO/xsmhK1dF4i59f8WxCIUZ8CV+G3c5x4jslUm+/
-	 aRVcV5DFAKgxIi0fZn0e4yl5zhLXNvjEWN4B6DSIU864MJyhv76LPUPrbxfHn/ZYHL
-	 YPlKzZTZOv1jw==
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-65763315216so291245eaf.0
-        for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 03:02:30 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUB+53mFWjCjJRPD4kdapeamfShgpnTDR7efiuVatq7JZ6gtXax+z07xuaYsVaQHppNuIF5nPn1xw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmPuP3yHkxDU12G58ZWQW+fEswlhfk+EzWV9m08+TtlAENQJVt
-	q+eDfRZIIR78rjxHNPfOfgZT3qigoKxsWL52Y17iS97IffU3O8c6aAa6mBFoWfAVejbdoO2tSv2
-	//3x65wJKcAwLf5v/1pUjcaRB2D/v3ME=
-X-Google-Smtp-Source: AGHT+IF9nKidG0i0gEkzI6ThqgzNl3O7eLP6Rom8/Fp7Z75dNL4HI+iLgk2Zl2i3tLlQhwdENynLiF0biN2LhoJa6uQ=
-X-Received: by 2002:a4a:e904:0:b0:657:7272:e011 with SMTP id
- 006d021491bc7-657849dfe0bmr1003438eaf.5.1763636549736; Thu, 20 Nov 2025
- 03:02:29 -0800 (PST)
+	s=k20201202; t=1763636713;
+	bh=WxFz3CaShF8+qMN0ByNt5QB3ybTN7mXPoCqLHNOZu2k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=frALlGhVJUpEjJQT14ToMiz5vkACAqiEf4AWagA/6ISh7vOJ1mIJjUAzbHJ9+W7Ng
+	 9FPasS1ewq3yMHFiFymv6V6WFTVkw6yVfA9+BSSvSzcDBN2eOo7/Q+AkMrPx42z0QG
+	 MI9NheyuSELKQ2rkB0FKMQCtZ2PvRx9mINEsvMEVENprWIdFy7bOAxJ34IdiB0uniL
+	 cMIRClQu5nYAbX6tPtxkAZMekqp0AC5xNwAos+9vB91DUTJu54jcerWC8JXXN+R+vo
+	 m3TBbb+ajpoHiFNl8LhmOjiX7ARYK1u1dhh/+g1E35WkCb0RImzXFvXJMW3d+uRbz5
+	 DxQuRKrETh1kw==
+Date: Thu, 20 Nov 2025 12:05:08 +0100
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Lucas Zampieri <lzampier@redhat.com>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Jiri Kosina <jikos@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	Bastien Nocera <hadess@hadess.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 0/1] HID: Add support for multiple batteries per device
+Message-ID: <pr3w6zp5hoza27fncktfj3qx3wp2nhdglbx46fbfx6swm4772d@7hg7a6dxom7p>
+References: <20251120105442.150508-1-lzampier@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4701737.LvFx2qVVIh@rafael.j.wysocki> <69115878-ec5e-4f7c-bb3e-9f61cce75c70@arm.com>
- <003f01dc59a7$2bd98b40$838ca1c0$@telus.net>
-In-Reply-To: <003f01dc59a7$2bd98b40$838ca1c0$@telus.net>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 20 Nov 2025 12:02:18 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ic91RriXEHJkEFn0EkPKykmdEANimbKjAtdR0SwCZ4OA@mail.gmail.com>
-X-Gm-Features: AWmQ_blgBu8uVi62DQdYH_oR-IveXrh7y7WiO2EWht9APILmATP7KN0yXzRX318
-Message-ID: <CAJZ5v0ic91RriXEHJkEFn0EkPKykmdEANimbKjAtdR0SwCZ4OA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] cpuidle: governors: teo: Assorted improvements
-To: Doug Smythies <dsmythies@telus.net>
-Cc: Christian Loehle <christian.loehle@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Reka Norman <rekanorman@chromium.org>, Marcelo Tosatti <mtosatti@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251120105442.150508-1-lzampier@redhat.com>
 
-On Wed, Nov 19, 2025 at 11:52=E2=80=AFPM Doug Smythies <dsmythies@telus.net=
-> wrote:
->
-> On 2025.11.13 07:22 Christian Loehle wrote:
-> > On 11/12/25 16:21, Rafael J. Wysocki wrote:
-> >> Hi,
-> >>
-> >> This is a bunch of teo cpuidle governor improvements, some of which ar=
-e related
-> >> to a bug report discussed recently:
-> >>
-> >> https://lore.kernel.org/linux-pm/CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQ=
-sU_qdcCx1m4w5g@mail.gmail.com/
-> >>
-> >> The first patch fixes a bug that may cause an overly deep idle state
-> >> to be selected when the scheduler tick has been already stopped.
-> >>
-> >> Patch [2/4] removes an unnecessary function argument.
-> >>
-> >> Patch [3/4] makes teo_update() to use s64 as the data type for its loc=
-al
-> >> variables more consistently.
-> >>
-> >> The last patch reworks the governor's decay implementation to also dec=
-ay
-> >> metric values lower than 8.
-> >>
-> >
-> > Tested-by: Christian Loehle <christian.loehle@arm.com>
-> >
-> > Test results below, although there really isn't anything interesting in=
- there.
-> > teo-1 to teo-4 (patches 1 to 4 respectively are essentially indistingui=
-shable from
-> > teo-m =3D mainline)
->
-> I tested the 4 patch set also, and also found no differences in results a=
-bove
-> repeatability noise levels.
->
-> Additionally, I added another patch (patch 5 of 4):
-> "cpuidle: governors: teo: Rework the handling of tick wakeups" [1]
-> Similar findings.
->
-> Additionally, I added another patch (patch 6 of 4):
-> "sched/idle: disable tick in idle=3Dpoll idle entry" [2]
-> And found only one significant improvement, for only one test,
-> but only for the TEO idle governor:
->
-> Kernel 6.18-rc4:
-> For a 6 pair fast ping-pong test (meaning no work per token stop):
-> teo: 5.53 uSec per loop, reference test
-> 4 of 4 patches: 5.53 uSec per loop, 0%
-> 5 of 4 patches: 5.54 uSec per loop, 0.2% (noise)
-> 6 of 4 patches: 4.77 uSec per loop, 13% better
-> 6 of 4 patches (again): 4.81 uSec per loop, 13% better
-> menu: 5.29 uSec per loop, 4.4% better
-> menu + patch 6 of 4: 5.28 uSec per loop, 4.5% better
->
-> Idle state 0 usage:
-> 18% with patch 6, teo
-> 11% with menu
-> ~1% with mainline and not patch 6, teo.
->
-> Idle state 1 usage:
-> almost 0 with patch 6, teo
-> ~6% with menu
-> 27% with mainline and not patch 6, teo.
->
-> Power: About 100 watts. Patch 6 and teo does increase power use by about =
-a watt or 2.
->
-> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz, 6 cores 12 CPUs.
->
-> For clarity my branch log:
-> 3993913d7f81 (HEAD -> rjw-teo) sched/idle: disable tick in idle=3Dpoll id=
-le entry
-> d9b12b8d62bf cpuidle: governors: teo: Rework the handling of tick wakeups
-> e47178c87272 cpuidle: governors: teo: Decay metrics below DECAY_SHIFT thr=
-eshold
-> 7fe32e411c2b cpuidle: governors: teo: Use s64 consistently in teo_update(=
-)
-> 490e6118e45d cpuidle: governors: teo: Drop redundant function parameter
-> 8f627f86062e cpuidle: governors: teo: Drop incorrect target residency che=
-ck
-> 6146a0f1dfae (tag: v6.18-rc4, origin/master, origin/HEAD, master) Linux 6=
-.18-rc4
->
-> [1] https://lore.kernel.org/linux-pm/6228387.lOV4Wx5bFT@rafael.j.wysocki/
-> [2] https://lore.kernel.org/linux-pm/aQiWfnnSzxsnwa2o@tpad/
+On Nov 20 2025, Lucas Zampieri wrote:
+> This series adds support for HID devices with multiple batteries.
+> 
+> Currently, the HID battery reporting subsystem only supports one battery per
+> device. There are several devices with multiple batteries that would benefit
+> from this support:
+> - Gaming headsets with batteries in both the headset and charging dock
+> - Wireless earbuds with per-earbud batteries plus charging case
+> - Split keyboards with per-side batteries
+> 
+> ## Proposed Solution
+> 
+> This series introduces struct hid_battery to encapsulate individual battery
+> state, replaces the old battery fields with a list-based approach, and adds
+> support for multiple batteries tracked within struct hid_device. Batteries
+> are identified by report ID. The implementation is fully backwards compatible
+> with single-battery devices through a helper function.
+> 
+> ## Testing
+> 
+> Tested with split keyboard hardware (Dactyl 5x6) using custom ZMK firmware
+> that implements per-side HID battery reporting. Each battery (left and right
+> keyboard halves) reports independently through the power supply interface with
+> distinct report IDs (0x05 and 0x06).
+> 
+> Test firmware available on my personal fork at:
+> https://github.com/zampierilucas/zmk/tree/feat/individual-hid-battery-reporting
+> If this series gets merged, these changes will be proposed to upstream ZMK.
+> 
+> HID descriptor and recording captured with hid-recorder:
+> 
+> D: 0
+> R: 162 05 01 09 06 a1 01 85 01 05 07 19 e0 29 e7 15 00 25 01 75 01 95 08 81 02 05 07 75 08 95 01 81 03 05 07 15 00 25 01 19 00 29 67 75 01 95 68 81 02 c0 05 0c 09 01 a1 01 85 02 05 0c 15 00 26 ff 0f 19 00 2a ff 0f 75 10 95 06 81 00 c0 05 84 09 05 a1 01 05 85 85 05 09 44 15 00 25 01 35 00 45 01 75 08 95 01 81 02 09 65 15 00 25 64 35 00 45 64 75 08 95 01 81 02 c0 05 84 09 05 a1 01 05 85 85 06 09 44 15 00 25 01 35 00 45 01 75 08 95 01 81 02 09 65 15 00 25 64 35 00 45 64 75 08 95 01 81 02 c0
+> N: ZMK Project Dactyl 5x6
+> P: usb-0000:2d:00.3-4.2/input2
+> I: 3 1d50 615e
+> D: 0
+> E: 0.000000 3 05 00 56
+> E: 0.000977 3 05 00 56
+> E: 1.490974 3 06 00 52
+> E: 1.491958 3 06 00 52
+> E: 6.492979 3 06 00 53
+> E: 6.493962 3 06 00 53
+> 
+> The recording shows both batteries reporting with different charge levels
+> (Report ID 05: 86%, Report ID 06: 82%-83%), demonstrating the multi-battery
+> functionality. This can be used to verify UPower compatibility.
+> 
+> ## Future Work: Userspace Integration
+> 
+> As suggested by Bastien, semantic battery differentiation (e.g., "left
+> earbud" vs "right earbud") requires userspace coordination, as HID
+> reports typically lack role metadata.
+> 
+> This will require:
+> 1. systemd/hwdb entries for device-specific battery role mappings
+> 2. UPower updates to enumerate and group multi-battery devices
+> 3. Desktop environment changes to display batteries with meaningful labels
+> 
+> This kernel infrastructure is a prerequisite for that userspace work.
+> 
+> Lucas Zampieri (1):
+>   HID: input: Add support for multiple batteries per device
+> 
+> Signed-off-by: Lucas Zampieri <lzampier@redhat.com>
+> 
+> Changes in v4:
+> - Added missing hidinput_update_battery() stub in #else block for
+>   CONFIG_HID_BATTERY_STRENGTH=n builds
+> - Reported-by: kernel test robot <lkp@intel.com>
+> - Closes: https://lore.kernel.org/oe-kbuild-all/202511201624.yUv4VtBv-lkp@intel.com/
 
-Thanks for the feedback, much appreciated!
+I don't think you need to keep the formal tags here in changlogs of the
+cover letter. A simple "as reported by kernel test robot
+<lkp@intel.com>" should be sufficient (given that usually we end up
+dropping the cover letter as we apply the patches only).
 
-I will likely have some more teo updates in the next cycle.
+> 
+> Changes in v3:
+> - Squashed the three v2 patches into a single patch as suggested by
+>   Benjamin
+
+Sorry we didn't understood each other: I was asking you to squash
+patches 1 and 2 only, and keep 3 separated. I was just complaining about
+a blank header change. Separating the non functional changes from the
+functional ones is important.
+
+> - Removed all legacy dev->battery_* fields, using list-based storage only
+> - Changed battery naming to include report ID: hid-{uniq}-battery-{report_id}
+> - Converted battery memory management to devm_* for automatic cleanup
+
+Haven't checked the code yet but that would require probably a separate
+patch so we can bisect to it if anything breaks.
+
+> - Updated hidinput_update_battery() to take struct hid_battery directly
+> - Added hid_get_first_battery() helper for external driver compatibility
+> - Updated hid-apple.c and hid-magicmouse.c to use new battery API
+> - Simplified cover letter based on feedback
+
+Heh, thanks :)
+
+Cheers,
+Benjamin
+
+> 
+> Changes in v2:
+> - Split the monolithic v1 patch into three logical patches for easier review:
+>   1. Introduce struct hid_battery (pure structure addition)
+>   2. Refactor existing code to use the new structure (internal changes)
+>   3. Add multi-battery support (new functionality)
+> - Added detailed testing section with hardware specifics
+> - Added hid-recorder output (dactyl-hid-recording.txt) demonstrating two-battery
+>   HID descriptor for UPower validation
+> - Added "Future Work: Userspace Integration" section addressing Bastien's feedback
+>   about semantic battery differentiation
+> - Added hardware examples with product links to commit messages (per Bastien's
+>   suggestion)
+> - No functional changes from v1, only improved patch organization and documentation
+> 
+>  drivers/hid/hid-apple.c      |  10 +-
+>  drivers/hid/hid-core.c       |   4 +
+>  drivers/hid/hid-input-test.c |  39 ++++---
+>  drivers/hid/hid-input.c      | 196 +++++++++++++++++++----------------
+>  drivers/hid/hid-magicmouse.c |  10 +-
+>  include/linux/hid.h          |  54 +++++++---
+>  6 files changed, 187 insertions(+), 126 deletions(-)
+> 
+> 
+> base-commit: 0678f5630429a5049d7663703b897e1bf8d13cd1
+> -- 
+> 2.51.0
+> 
 
