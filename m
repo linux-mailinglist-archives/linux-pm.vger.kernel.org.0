@@ -1,238 +1,145 @@
-Return-Path: <linux-pm+bounces-38301-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38302-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD363C740FC
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 13:57:43 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF95FC744CC
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 14:41:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2FFF835AAC9
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 12:57:43 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 687A43110A
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 13:35:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0546337BA7;
-	Thu, 20 Nov 2025 12:57:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6dAjwAN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EFC133A71B;
+	Thu, 20 Nov 2025 13:35:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5682DD60F;
-	Thu, 20 Nov 2025 12:57:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92CD3199EAD;
+	Thu, 20 Nov 2025 13:35:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763643454; cv=none; b=m2mUAPJ3vYnGYESM0Uyj+mUuQtU+kTNijvjfkJua/+ciXW3fShrMHK07rYXZdwaaHjxUed8zNcAPmYcxbwXWY4znDxpiVCIcKNC32xQqFrIs18aAuMcyCpCsUysRo9Re+w0HTKIXjYApwwCN6zfmO1tufSvkRmF++nUltAmQdec=
+	t=1763645708; cv=none; b=TO3//9YNs4Uu6cOkLJdHYEc3CiRVcAEuJJ7ZvAKZuI+VktgCXenaDZmMXbishdXrjS50Ta1R5qry2BqgKiw0emXIYHgoeQqSQoUpki78Au7qBEjKBPk42cHwDbYCv9YLZl3frOekGG4UAAy/xvPtdA1Ro3eKQLqA5H40B3FATLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763643454; c=relaxed/simple;
-	bh=BSAJnV6hGwIlrdf26TVWYrTtWavqRfw5o5IS/pX+paY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Agz7etuS7gI0daIhRzKUf+hysz9lnjEdi8VozmiOlKQLNI7AHGn/SJsWE5D/YObVYIkzjvGlRPknXw4wDi3SIiDTivCcYA/UL9Hk9XC2iG+uxjL0+KExfgtWRaEhp96ZPhvJTO3pC7N1e5YrMha8FWQb03Mg22Ff7d3Ern18Qy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6dAjwAN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35235C4CEF1;
-	Thu, 20 Nov 2025 12:57:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763643454;
-	bh=BSAJnV6hGwIlrdf26TVWYrTtWavqRfw5o5IS/pX+paY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U6dAjwANw4n/6ZVjJ+Seqdabz28l0Onx7duGdEvU7ZZtHs5Hc8Ggfu7Z0js38Nx86
-	 diRyJUNdPGO+7TgPQMXk/o6MQigTi+HXCP5LV7yM4EqH8cQCrWMB1ZLvS2ZCjul6G5
-	 Lms68eWAqPWHkzqprGdEz+wxr/CwjlnDd9HyU0Ehj9fPavXce0DbENY3r53MXvia8p
-	 8cKtJTZFsjfNItIpdoD8iPrfj/ikp/MKUNpbzbfjmPUGTMC6ggVjznVJbNbc0MS3Lj
-	 zzsNZ78ijnO+25UNbWxxvGaLb9H4AMxQNir5Xr5f3xShPNl56yyA9ajVlBr1ROb2SZ
-	 M1kOF05OwM0wQ==
-Date: Thu, 20 Nov 2025 18:27:06 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Frank Li <Frank.li@nxp.com>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, Hans de Goede <hansg@kernel.org>, 
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
-	"Derek J. Clark" <derekjohn.clark@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Stephan Gerhold <stephan.gerhold@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: [PATCH 7/9] dt-bindings: connector: Add PCIe M.2 Mechanical Key
- E connector
-Message-ID: <2dtqb5cpuhb4ln3vfuudortjesrcamwpokkcwoih6gz7u25rxr@mgtdturwyhq3>
-References: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
- <20251112-pci-m2-e-v1-7-97413d6bf824@oss.qualcomm.com>
- <aRS/3OTerCBGlmBm@lizhi-Precision-Tower-5810>
- <qiwgnela4b6gbwuuq7xaqjong47c2ix6caagjl6ryqukzqkswn@6l7rvkf4dfyx>
- <20251119235905.GA3575788-robh@kernel.org>
+	s=arc-20240116; t=1763645708; c=relaxed/simple;
+	bh=plFT7F2YDOY6kZZ6HHTCftwJzCeCbgs0LSSR9ob5Hkw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QMLEqz+Z06vl9eJ+5h5i4QqWtddJH1O/qy1VI68dzDVfuHZ3MFvBGLHYruuv3uk71irVJEjMEsTKP2rdP+jW65ASbstQVHTooxkTBaw+WQJdgaOUhlauAH4q2ybYchkAxPWT6TwMInYuxpwkSN4eAokEnNU9EMtuRKpseq2gbH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 31E86339;
+	Thu, 20 Nov 2025 05:34:57 -0800 (PST)
+Received: from [10.57.69.158] (unknown [10.57.69.158])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5039C3F66E;
+	Thu, 20 Nov 2025 05:35:03 -0800 (PST)
+Message-ID: <f46bb011-83b1-4037-bc6f-eb7e72800e38@arm.com>
+Date: Thu, 20 Nov 2025 13:35:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/4] cpuidle: governors: teo: Assorted improvements
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Doug Smythies <dsmythies@telus.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Reka Norman <rekanorman@chromium.org>, Marcelo Tosatti <mtosatti@redhat.com>
+References: <4701737.LvFx2qVVIh@rafael.j.wysocki>
+ <69115878-ec5e-4f7c-bb3e-9f61cce75c70@arm.com>
+ <003f01dc59a7$2bd98b40$838ca1c0$@telus.net>
+ <CAJZ5v0ic91RriXEHJkEFn0EkPKykmdEANimbKjAtdR0SwCZ4OA@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAJZ5v0ic91RriXEHJkEFn0EkPKykmdEANimbKjAtdR0SwCZ4OA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251119235905.GA3575788-robh@kernel.org>
 
-On Wed, Nov 19, 2025 at 05:59:05PM -0600, Rob Herring wrote:
-> On Thu, Nov 13, 2025 at 10:30:42AM +0530, Manivannan Sadhasivam wrote:
-> > On Wed, Nov 12, 2025 at 12:11:56PM -0500, Frank Li wrote:
-> > > On Wed, Nov 12, 2025 at 08:15:19PM +0530, Manivannan Sadhasivam wrote:
-> > > > Add the devicetree binding for PCIe M.2 Mechanical Key E connector defined
-> > > > in the PCI Express M.2 Specification, r4.0, sec 5.1.2. This connector
-> > > > provides interfaces like PCIe or SDIO to attach the WiFi devices to the
-> > > > host machine, USB or UART+PCM interfaces to attach the Bluetooth (BT)
-> > > > devices along with additional interfaces like I2C for NFC solution. At any
-> > > > point of time, the connector can only support either PCIe or SDIO as the
-> > > > WiFi interface and USB or UART as the BT interface.
-> > > >
-> > > > The connector provides a primary power supply of 3.3v, along with an
-> > > > optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
-> > > > 1.8v sideband signaling.
-> > > >
-> > > > The connector also supplies optional signals in the form of GPIOs for fine
-> > > > grained power management.
-> > > >
-> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > > > ---
-> > > >  .../bindings/connector/pcie-m2-e-connector.yaml    | 154 +++++++++++++++++++++
-> > > >  MAINTAINERS                                        |   1 +
-> > > >  2 files changed, 155 insertions(+)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
-> > > > new file mode 100644
-> > > > index 0000000000000000000000000000000000000000..91cb56b1a75b7e3de3b9fe9a7537089f96875746
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
-> > > > @@ -0,0 +1,154 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/connector/pcie-m2-e-connector.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: PCIe M.2 Mechanical Key E Connector
-> > > > +
-> > > > +maintainers:
-> > > > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > > > +
-> > > > +description:
-> > > > +  A PCIe M.2 E connector node represents a physical PCIe M.2 Mechanical Key E
-> > > > +  connector. Mechanical Key E connectors are used to connect Wireless
-> > > > +  Connectivity devices including combinations of Wi-Fi, BT, NFC to the host
-> > > > +  machine over interfaces like PCIe/SDIO, USB/UART+PCM, and I2C.
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    const: pcie-m2-e-connector
-> > > > +
-> > > > +  vpcie3v3-supply:
-> > > > +    description: A phandle to the regulator for 3.3v supply.
-> > > > +
-> > > > +  vpcie1v8-supply:
-> > > > +    description: A phandle to the regulator for VIO 1.8v supply.
-> > > > +
-> > > > +  ports:
-> > > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > > +    description: OF graph bindings modeling the interfaces exposed on the
-> > > > +      connector. Since a single connector can have multiple interfaces, every
-> > > > +      interface has an assigned OF graph port number as described below.
-> > > > +
-> > > > +    properties:
-> > > > +      port@0:
-> > > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > > +        description: PCIe/SDIO interface
-> > > 
-> > > 
-> > > PCIe and SDIO is difference signal at key E. why combine to one port? The
-> > > similar case is USB2.0/UART
-> > > 
-> > 
-> > They will be defined as separate endpoints in the next version.
-> > 
-> > > > +
-> > > > +      port@1:
-> > > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > > +        description: USB 2.0/UART interface
-> > > > +
-> > > > +      port@2:
-> > > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > > +        description: PCM/I2S interface
-> > > > +
-> > > > +      port@3:
-> > > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > > +        description: I2C interface
-> > > > +
-> > > > +    oneOf:
-> > > > +      - required:
-> > > > +          - port@0
-> > > > +
-> > > > +  clocks:
-> > > > +    description: 32.768 KHz Suspend Clock (SUSCLK) input from the host system to
-> > > > +      the M.2 card. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.1 for
-> > > > +      more details.
-> > > > +    maxItems: 1
-> > > 
-> > > Do we need add pciref clock here?
-> > > 
-> > > > +
-> > > > +  w_disable1-gpios:
-> > > 
-> > > use "-"
-> > > 
-> > > w-disable1-gpios
-> > > 
-> > 
-> > I just went with the spec that defines the signal as W_DISABLE.
-> > 
-> > > > +    description: GPIO controlled connection to W_DISABLE1# signal. This signal
-> > > > +      is used by the system to disable WiFi radio in the M.2 card. Refer, PCI
-> > > > +      Express M.2 Specification r4.0, sec 3.1.12.3 for more details.
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  w_disable2-gpios:
-> > > > +    description: GPIO controlled connection to W_DISABLE2# signal. This signal
-> > > > +      is used by the system to disable BT radio in the M.2 card. Refer, PCI
-> > > > +      Express M.2 Specification r4.0, sec 3.1.12.3 for more details.
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  led1-gpios:
-> > > > +    description: GPIO controlled connection to LED_1# signal. This signal is
-> > > > +      used by the M.2 card to indicate the card status via the system mounted
-> > > > +      LED. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.2 for more
-> > > > +      details.
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  led2-gpios:
-> > > > +    description: GPIO controlled connection to LED_2# signal. This signal is
-> > > > +      used by the M.2 card to indicate the card status via the system mounted
-> > > > +      LED. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.2 for more
-> > > > +      details.
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  viocfg-gpios:
-> > > > +    description: GPIO controlled connection to IO voltage configuration
-> > > > +      (VIO_CFG) signal. This signal is used by the M.2 card to indicate to the
-> > > > +      host system that the card supports an independent IO voltage domain for
-> > > > +      the sideband signals. Refer, PCI Express M.2 Specification r4.0, sec
-> > > > +      3.1.15.1 for more details.
-> > > > +    maxItems: 1
-> > > > +
-> > > > +  uim_power_src-gpios:
-> > > 
-> > > property use -
-> > > 
-> > 
-> > Again, this is as per the spec. If DT maintainers object to it, I'll change it.
+On 11/20/25 11:02, Rafael J. Wysocki wrote:
+> On Wed, Nov 19, 2025 at 11:52 PM Doug Smythies <dsmythies@telus.net> wrote:
+>>
+>> On 2025.11.13 07:22 Christian Loehle wrote:
+>>> On 11/12/25 16:21, Rafael J. Wysocki wrote:
+>>>> Hi,
+>>>>
+>>>> This is a bunch of teo cpuidle governor improvements, some of which are related
+>>>> to a bug report discussed recently:
+>>>>
+>>>> https://lore.kernel.org/linux-pm/CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com/
+>>>>
+>>>> The first patch fixes a bug that may cause an overly deep idle state
+>>>> to be selected when the scheduler tick has been already stopped.
+>>>>
+>>>> Patch [2/4] removes an unnecessary function argument.
+>>>>
+>>>> Patch [3/4] makes teo_update() to use s64 as the data type for its local
+>>>> variables more consistently.
+>>>>
+>>>> The last patch reworks the governor's decay implementation to also decay
+>>>> metric values lower than 8.
+>>>>
+>>>
+>>> Tested-by: Christian Loehle <christian.loehle@arm.com>
+>>>
+>>> Test results below, although there really isn't anything interesting in there.
+>>> teo-1 to teo-4 (patches 1 to 4 respectively are essentially indistinguishable from
+>>> teo-m = mainline)
+>>
+>> I tested the 4 patch set also, and also found no differences in results above
+>> repeatability noise levels.
+>>
+>> Additionally, I added another patch (patch 5 of 4):
+>> "cpuidle: governors: teo: Rework the handling of tick wakeups" [1]
+>> Similar findings.
+>>
+>> Additionally, I added another patch (patch 6 of 4):
+>> "sched/idle: disable tick in idle=poll idle entry" [2]
+>> And found only one significant improvement, for only one test,
+>> but only for the TEO idle governor:
+>>
+>> Kernel 6.18-rc4:
+>> For a 6 pair fast ping-pong test (meaning no work per token stop):
+>> teo: 5.53 uSec per loop, reference test
+>> 4 of 4 patches: 5.53 uSec per loop, 0%
+>> 5 of 4 patches: 5.54 uSec per loop, 0.2% (noise)
+>> 6 of 4 patches: 4.77 uSec per loop, 13% better
+>> 6 of 4 patches (again): 4.81 uSec per loop, 13% better
+>> menu: 5.29 uSec per loop, 4.4% better
+>> menu + patch 6 of 4: 5.28 uSec per loop, 4.5% better
+>>
+>> Idle state 0 usage:
+>> 18% with patch 6, teo
+>> 11% with menu
+>> ~1% with mainline and not patch 6, teo.
+>>
+>> Idle state 1 usage:
+>> almost 0 with patch 6, teo
+>> ~6% with menu
+>> 27% with mainline and not patch 6, teo.
+>>
+>> Power: About 100 watts. Patch 6 and teo does increase power use by about a watt or 2.
+>>
+>> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz, 6 cores 12 CPUs.
+>>
+>> For clarity my branch log:
+>> 3993913d7f81 (HEAD -> rjw-teo) sched/idle: disable tick in idle=poll idle entry
+>> d9b12b8d62bf cpuidle: governors: teo: Rework the handling of tick wakeups
+>> e47178c87272 cpuidle: governors: teo: Decay metrics below DECAY_SHIFT threshold
+>> 7fe32e411c2b cpuidle: governors: teo: Use s64 consistently in teo_update()
+>> 490e6118e45d cpuidle: governors: teo: Drop redundant function parameter
+>> 8f627f86062e cpuidle: governors: teo: Drop incorrect target residency check
+>> 6146a0f1dfae (tag: v6.18-rc4, origin/master, origin/HEAD, master) Linux 6.18-rc4
+>>
+>> [1] https://lore.kernel.org/linux-pm/6228387.lOV4Wx5bFT@rafael.j.wysocki/
+>> [2] https://lore.kernel.org/linux-pm/aQiWfnnSzxsnwa2o@tpad/
 > 
-> Use '-'.
+> Thanks for the feedback, much appreciated!
 > 
+> I will likely have some more teo updates in the next cycle.
 
-OK!
-
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
+You're welcome, looking forward to reviewing them too.
+I haven't tried to see what this would ideally look like for the -stable branches.
+Just backport everything until the most recent applicable Fixes:?
 
