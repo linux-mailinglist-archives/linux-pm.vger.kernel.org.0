@@ -1,133 +1,118 @@
-Return-Path: <linux-pm+bounces-38269-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38292-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC592C72739
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 07:57:57 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D37DAC73809
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 11:41:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 34F2A29C05
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 06:57:52 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AA7E34E5E2D
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 10:41:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BBF12EFD92;
-	Thu, 20 Nov 2025 06:53:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D107A2FDC4F;
+	Thu, 20 Nov 2025 10:41:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=it-loops.com header.i=@it-loops.com header.b="e7zx6hOD"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZVWYZX+J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AC012DA767
-	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 06:53:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B04D52F6924
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 10:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763621625; cv=none; b=P836kuiii17YCOo/dhg/ZygBVxmKpFm/t/PEVqP6RIGwjjUbbUsesFh7KWp413oDz7MCckG6FDMGMb1DlnTckkhxuB891hwylKhdoXK/K5c3SFDH2B9NhAzEilGZR4r4tb1bvBDcjlIEjVEin69mn9OBiGMlHojrdbd/e2uFMew=
+	t=1763635267; cv=none; b=PnoZHQSPItA9YghXz5QZhb3E40SI7o/21l5q3fQhlb3xpdJQ7BjDHb+vN5glb6xvptHEhV0ebCLMbwJiWkecv5Vk439KliTaDORbdsWXSvFbYkZq74bZ/HR1cxTZZ1ir9QfZGYFm8qruIGVHj55T0BG2HUT0By0lt0r83MyEns8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763621625; c=relaxed/simple;
-	bh=zr0CBJGyuyaXtn/TDsv2TcK75UaPiBC/TUNcJrIzhaA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p9qZI1sW+Hg2GssKs9ngCqOn0NBB7SI42cZEXbnzwbYeSPxPUUFVOYxeh/N2q+LTtD3FNjlkyGXnSd0RbFlbhg15HUpNyLd4OIPGSlO0BhIxIxbTWXMApqnQrITM2tMlt4NpImnixTWbLM03qMFaCrSq3oaNRlDRleVOSiM+K20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=it-loops.com; spf=pass smtp.mailfrom=it-loops.com; dkim=fail (0-bit key) header.d=it-loops.com header.i=@it-loops.com header.b=e7zx6hOD reason="key not found in DNS"; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=it-loops.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=it-loops.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-640b0639dabso822275a12.3
-        for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 22:53:42 -0800 (PST)
+	s=arc-20240116; t=1763635267; c=relaxed/simple;
+	bh=io0yQaa1iknMZ7l3/uqh69Bqn+IbEs5aipi1mxEhbhU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GMGUSni7lDIMCDCPTmfTnGQDCyq1NeZPsvXmdVLQIccpiThoeDGkogjDxJ5NtNuyfpxLfLHSl0PoarsFH9smyJEyBBMXHl1fZc9k3Q0XschKznKTXvvYuIa67VHt/t0tX2/Xd4E6aojWZmB3i/V+TykG6czAs+6hv2xEtUMsAIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZVWYZX+J; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-477a1c28778so8492595e9.3
+        for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 02:41:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=it-loops.com; s=google; t=1763621621; x=1764226421; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zr0CBJGyuyaXtn/TDsv2TcK75UaPiBC/TUNcJrIzhaA=;
-        b=e7zx6hODWljWhx/NDBltup3ltE4DNr1r/s4M5Fge58+invrWrJkIEaULzPAHDFtNiC
-         FCicKPLb/qJzL4l7fcKbb7+cfbtSLJdLOOZOTe2/hNccfXdtU749Pi0nWfb67QT/4WiR
-         DreKx56YERb/k/23RJwTCWko7i9RZ55ZPxSjA=
+        d=linaro.org; s=google; t=1763635264; x=1764240064; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6mgwJ/4Ukd3943JvYrBsHnnqudEXP4H0GnoIDUoRcjc=;
+        b=ZVWYZX+JN/f8iDmjZp5yg2RjaIzZd2mokkn/eUWWs8lsP+0CaW6MejDN7PO+TeXplv
+         5mTNyCO27siIgDdmJFyLxK0fDDrRDc6Dz8vmfExrPt/tQGClM1lixolhBVnF8fk7pTHb
+         bvGjbX1+7sKQZ7DggPqMAggGWKNnj0j9YgLG2PHrLgR5Z39qN8ZCzlnwKqq2hkxd/B35
+         J8mTU6t2kHgH2b4OuQdTkj4ImqR1WUzFPwvuiPA6WAfHqCvAI7uSmqTZ8vGAkjWCqPcU
+         msPEAPWobedjWDKH9Z+0fKmdOlkMMQuGYd2aRMksXP8huVUGatKaltpwyEpEYsKQmkvy
+         mrlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763621621; x=1764226421;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zr0CBJGyuyaXtn/TDsv2TcK75UaPiBC/TUNcJrIzhaA=;
-        b=URy6ppcfksQOOWO6Jt6XfZVIWUxVAHHNMHOUQNiMRVH8TPDYc3ktBBVviYxYUwILIX
-         ss7pZzstzw1IOLOR5LnCE8oFs2k9NLXMJiZfEoA63mTmVoy4vCLKe8TRWTeeWfFtLMQU
-         mgyn5+DXwiOOScbd1SnSIn7qHjg17M37py5IthIXqsOJp5vuVA9+JJdkyOB0WbLhXZBA
-         WCPiZ3NqCLgilno2ok6tTGlEIxRLsIkLQJSc4Q3Gj3oh00KhlmOrDanYzzA9KJcg1tcG
-         RdL7bq/JQcmXU/QTr7EhQAL4IaAJ+MCapehmBhWAYGvFA9S0ojVoZZzHRTwb9vRJL+ot
-         Kl5g==
-X-Forwarded-Encrypted: i=1; AJvYcCWKy97m1HdPqD8Bu+yn9OW8O3GVbo/fFgqv/k2dOSO6tuHnVX3WN08XI+Ax1ZCXtpI0vPWlUsqo/g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxo2g9sBSVJKf5FFvFzsiMojiIqh7O6546DBJEhVtkJp8FAIupS
-	gCOmsgcMdZfwFEGL5q2PLuLkCofYI0GdxLO7t+kelzUu1n0e90w2vlpXCBlgBdugjRt8hhey1Ft
-	wCRcEJXKHIl+bGdeuUshcxnoHJsELB1DaujeVLuYQab+0O9KXLoLsvuM=
-X-Gm-Gg: ASbGnctgPdtn+9iYs86nGheZlmGD2IAuwJXUoRsQqxJK9RJFjYUDBgiYqGRv+KNb8QS
-	ulRLiWNPQV3j7mgtqaNBdHlpsTO1sW9t/rLL2GV4S1oMHFGmZsm0cy23e2cAZj7WZgoT9Kc8W2x
-	YvZSKaw2WqXNiWIH4+1RmpS4jnBD97oQiQ5ouiHs+CD1UosCXR3Jyf2TzJctqlwHMdtNhyAmfxq
-	HCvEwRdrl7WW3SevdzNo8g/OIqrJKhLcTuelOFv+SPt6TyizRJkiflCevP7xAdQai2atRvbKTEk
-	kbfvh+yg
-X-Google-Smtp-Source: AGHT+IFDju7a6nSoanq8XycIM948k+1jT0tC4aFj2fiQdYIiPZGI+Boci8DqkHzsZeXu1mypd7pa22Z8g2CdRD7G7c4=
-X-Received: by 2002:a05:6402:2345:b0:643:d1b:41d9 with SMTP id
- 4fb4d7f45d1cf-6453821354cmr1475503a12.17.1763621621322; Wed, 19 Nov 2025
- 22:53:41 -0800 (PST)
+        d=1e100.net; s=20230601; t=1763635264; x=1764240064;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6mgwJ/4Ukd3943JvYrBsHnnqudEXP4H0GnoIDUoRcjc=;
+        b=cPcsWvmwxcY+IFV3cdaKxUZe5W5yyzPnvFCBzaiJjHQaDFlTzeSLdW5lh73VbQKNYk
+         EceFi4ZqljZubgvxmktfl8j4xN5dO+gskx047JdqpOtUt7EpIlTPU+H/5rDaXDDLUXtM
+         K+GDn0Rj3XiH/cF0LyDxgsXvh0eXypoy2dGbLVPoL5mOeFplduiarAOIgZosDq3LSWke
+         BVFQ6NkPBl9fCoYj5N4SWVlz5u37pCv38eRVA/B+652zGyglew0fByqDk8vVTvvj3g0k
+         I9mSDZcDnnjgxllAg16AdqBLrf32qwxNWyIGvMqLJ92fHRgu82wWjcUUO6Uk0pfNx7QZ
+         bMNg==
+X-Forwarded-Encrypted: i=1; AJvYcCXQSu1W7bYFF2GKMCsyAumsmkkM1SfVxv6Af7lZlDvHnLCGLSzLIDJhQVc/Dft/UD8bIZZmKy624g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJ+aGVvc26x1DdxlOzXyynCFVz19BVPoiLMdpV3dTESXQs9acN
+	t3/eNP75sRW/8inr1SGEwhfd/kGp6yprhkTrpsoOgCo5w9h8QaunZx0X23z9D8semRA=
+X-Gm-Gg: ASbGncvdG05nqVDunBhWzh3IeoLW4bjlmfDvA2zokqXQFps3zJuQdKJ9b1zKdCCeiCs
+	v11Jru79WfQMkbZM2EtSsX0IqFOfecKH4cVQ+MlIbguvygWXLYtTb4/hnF7BtA75VV9Qc77CIUN
+	nnZxpqkOHeDtbGJn9UmaCJzHzb1S/CAxlG1PKCKwKyU2XVdQ4cd81NMLvceu6La1dGcq3KRH9o2
+	qOyUg5GBk+QZuBoW6hDuEWxzi6miDQK8+VcRT/RZ1mhGWoNrTSwnpCFUiMK8oBgAwP+K5+0CINY
+	NDdlIIodqOz4Q8++5yb6a6qFryDRsqrTD6rSyHy+274kCnQhFsWYJ29GNAy23KY5OQAjoAgYels
+	Op2ml34x+vG8v/BTPJWe4KrEEKviGMelu5463J2KEsF+yeTs74PRUdWN+2U3lPJoSOqi4/yKiAv
+	dRx+RZVDWcjYYF0PsI
+X-Google-Smtp-Source: AGHT+IGGzICrs8WsC0ZES68VHcMi+t5RlEr2PL0lmqRHtaEz9GTuPQDpK/ZRodLwmdHXmR03IHrQcw==
+X-Received: by 2002:a05:600c:1386:b0:477:7b9a:bb07 with SMTP id 5b1f17b1804b1-477b8c91ecfmr28935345e9.35.1763635263239;
+        Thu, 20 Nov 2025 02:41:03 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-477a9731a75sm63861745e9.2.2025.11.20.02.40.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Nov 2025 02:41:02 -0800 (PST)
+Date: Thu, 20 Nov 2025 10:24:03 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: "Kevin Hilman (TI.com)" <khilman@baylibre.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+	arm-scmi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC v4 2/2] pmdomain: arm_scmi: add support for domain
+ hierarchies
+Message-ID: <aR7CEzlHFYmQykKm@stanley.mountain>
+References: <20251119-pmdomain-hierarchy-onecell-v4-0-f25a1d5022f8@baylibre.com>
+ <20251119-pmdomain-hierarchy-onecell-v4-2-f25a1d5022f8@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CALG0vJuaU_5REU55Hg170LipPLj7Tt0V3icn7XzxLY-8+jsx-A@mail.gmail.com>
- <20251120055748.GM2912318@black.igk.intel.com>
-In-Reply-To: <20251120055748.GM2912318@black.igk.intel.com>
-From: Michael Guntsche <michael.guntsche@it-loops.com>
-Date: Thu, 20 Nov 2025 07:53:30 +0100
-X-Gm-Features: AWmQ_bk3JB7Og3Frs0hJzyS1Q8xlvPf9E9GnCyeC0LqfMilOvaT7FhHYRLzDcME
-Message-ID: <CALG0vJtYLE3mz5EfyRVjW8-kgXvB+j3dYcXVbpYUb+4QNemzmg@mail.gmail.com>
-Subject: Re: Oops when returning from hibernation with changed thunderbolt status
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251119-pmdomain-hierarchy-onecell-v4-2-f25a1d5022f8@baylibre.com>
 
-On Thu, Nov 20, 2025 at 6:57=E2=80=AFAM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
->
-> Hi,
->
-> On Wed, Nov 19, 2025 at 06:43:16PM +0100, Michael Guntsche wrote:
-> > Hello,
-> >
-> > I started seeing this issue with kernel v6.15, it worked fine up to 6.1=
-4.
-> > If my notebook went into hibernation with the docking station plugged
-> > in and I then started it up again with the docking station unplugged
-> > it would panic. Some times but not always it would also panic if the
-> > dock was still connected.
-> > With a lot of support from Mika (thanks again) I tried to debug this
-> > issue for weeks but was not able to get any meaningful debug output.
-> > Now finally with 6.18rc6 and freeze_filesystems set to 1 I managed to
-> > get at least "something" showing up on my screen with a backtrace.
-> >
-> > Hibernating and waking up again works fine with no thunderbolt device c=
-onnected.
-> >
-> > The device in question is a
-> > Lenovo ThinkPad X1 Carbon Gen 11 with a 13th Gen Intel=C2=AE Core=E2=84=
-=A2 i7-1355U
-> >
-> > Please tell me if you require more information or want me to try
-> > something different.
->
-> Did you try to disable RTC_DRV_EFI? At least from the backtrace that's
-> where it crashes.
->
-I tried this with all drivers removed also this one.
+On Wed, Nov 19, 2025 at 04:58:46PM -0800, Kevin Hilman (TI.com) wrote:
+> @@ -110,7 +110,14 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
+>  
+>  	dev_set_drvdata(dev, scmi_pd_data);
+>  
+> -	return of_genpd_add_provider_onecell(np, scmi_pd_data);
+> +	ret = of_genpd_add_provider_onecell(np, scmi_pd_data);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* check for (optional) subdomain mapping with power-domain-map */
+> +	of_genpd_add_subdomain_map(np, scmi_pd_data);
+> +
+> +	return ret;
 
-> Also I think I asked you to check with the distro kernel because I rememb=
-er
-> that you did some changes to get the crashdump working (please correct me
-> if I'm wrong) so this could be related to that. For instance it is jumpin=
-g
-> to the crash kernel (through kexec) and tries to run EFI services related
-> to RTC but they are not there anymore due to kexec.
-The issue is reproducible with the current ubuntu and debian distro
-kernels as well. After I tried it with the vendor version I switched
-to the rc version to make sure it was not fixed in the meantime.
+return 0, plz.
+
+regards,
+dan carpenter
+
 
