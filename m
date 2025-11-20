@@ -1,102 +1,143 @@
-Return-Path: <linux-pm+bounces-38266-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38267-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25682C7233D
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 05:45:55 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27DC7C72454
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 06:44:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 2FB4D2904A
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 04:45:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2D6924E4B9C
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 05:43:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A418A1E9905;
-	Thu, 20 Nov 2025 04:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EDAE2FE567;
+	Thu, 20 Nov 2025 05:43:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="hqc7BOZo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6O44Yxx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F0A2AEF5
-	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 04:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EC22EACF9
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 05:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763613949; cv=none; b=JPwPM91tA1AIkqE/9b3TJHpVcQxMVuKjFbuQ+Pa4qlogRrGtbNnc8vxbMok61MF7LknztueZ5VZGL7/hb22ybAhrNceu8yu7+CrNbNE9D3E7tvuBe39az19eX522P4nyGePaWvkgjfyHGLXWByzUCIyWQdMqDIZ/IgkoOZxJzxU=
+	t=1763617424; cv=none; b=AWyqLjfZ7ytFAIygy+ZOrSoHisAqtUwh8Czh7u/Xo4WqnpgSTc04g5Aw2qnQmDw4jQaTFjf+al7hKbGhvTHWzj7/D9uo4stCxoQOcTBs7QjSrfbn36BVsbxCRCzFg9LkUT1tn11uKEmzrJYw3f0FvC9AwlmXU2uyZs1ORqPl7pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763613949; c=relaxed/simple;
-	bh=tNuAGLHpwPqBv4x5RWVvU4mnerMM3wfngMRCI9Z51GQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=V/4aUbg2J427dUdW5RlLXUqhswQVytLzk2SmhxER/iJUBkYt+alRIvSKRiTXn+wzu7hacx+cmvzdNTERmDgcmWLsMUZoA2n1xIIA555HjUPtktY/ZZne2M2BxEXIoRSjR4IkOg6q8QI1+pKzFbws80yVZVlbeRSENAqZxxU3kDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=hqc7BOZo; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-340a5c58bf1so264915a91.2
-        for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 20:45:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1763613947; x=1764218747; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4csVDGQi0uzI7KXFvmFTROpehQUVFhpuyhu7CkMbL2U=;
-        b=hqc7BOZoR6V+7CO1u5NWDvPCVnQfd4/wwfT7h0d/dGCesCzZKwQRf/I2v1e+mPK0H+
-         XLzwETf1o6alU6AH2vcHy/95oWf28HniV+oxooLC+4QdjPxDSqFLsfFm/i/jXVmcjkON
-         4SGQqHH+38MYhodFCHSZj0OIvMaDkxrnN0kmA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763613947; x=1764218747;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4csVDGQi0uzI7KXFvmFTROpehQUVFhpuyhu7CkMbL2U=;
-        b=ouAPThUc4mw/f8pc3JS9xcVg6Mxr7YFichfRtevlZsbm+CXT9qFbqhi9yazOg8/gp1
-         LoXlDuILEBEWGZnsirKuSzYgOiQoUZYFHrxpmkUOB0kn3Wm2lF3uwa96NFyIry3QfeN3
-         gDMT0UFZmNVNw7n4ePgKdiMJunn1d4A45ZPnABf2Mfb+XVEny/X+ui1oVAoPgYDES8sp
-         99vgoC8567rAtHEPLb9jzx1e5U+uRxKAhUmOlc3nvgBJA5QYagkfjTrGbt2eVNTjp0Jp
-         0VRxOzbmXNkBaXM0HK69o092BJuuS6M6u7MTlI02zdpevEIAUAciQnrK9ZtaY30AkCKI
-         ibgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVrneXmDKg15Hl51vKAp6E/IODiVgCzzsx8+rZMl3/Ej/AhNIp2cCVJ/sHNcRwUHoJ+HuGJxnwpcg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3FdTKdsbP9xa5Kdq8nToiA14s/oYI28qMD5HGRSrFnxvtdCsE
-	kbUmXOHnclyKdYUjOCZekcsBMI4Asly4t45slff0bs4MlqNgZIzOyPsF1NHdAOpD7w==
-X-Gm-Gg: ASbGncscrmvw8fF30muNAuvhlJDOSNwvnK0oGNr35WQxMe1OxpEU9n7TBZyipdilFQr
-	ciD64wxkK0zExTQ4LCZ1oYUx12blD8/08Ka4vFEYxXuiEKSNu8LGzSGgyn1B3J4RXH97IxCQ1X0
-	1Y60LMBFTW09WJmRm8QHJkLOYdQbpRb4HI1tHke4r5Tb3jF0oJlWpLSx5tagIQDBINByriG6rwy
-	BvEwbJf9wFm0wJmll06Aq4HaC5F8731QSpw+//L+e55XOp6BtqPMz9k6Y4iNqrIXaIluyfxcHW2
-	Am2SI1Zsg/+8E5e62OACgEeUJy8GFwxkIicQyLO+R5sNQhzXsxdb+RKO5qV85sbQcUKKb3qsIna
-	U7n+3Grm4i/m3QPMqNCxew5+fgKY5yomVlehP1//u9+844kkdXu+r+m3WtX3IH/jFnDKQjBjSkR
-	4zj/yc45Kjv7+W8rE=
-X-Google-Smtp-Source: AGHT+IE83S5WPqoVOxTlsmYoJYXn0pYm7LRkbtzXmy2+9sXRVSXiPydiB5UD2ENbkUfqj+ICV8VfDQ==
-X-Received: by 2002:a17:90b:2f44:b0:341:315:f4ed with SMTP id 98e67ed59e1d1-34727bdb84fmr1856728a91.10.1763613947454;
-        Wed, 19 Nov 2025 20:45:47 -0800 (PST)
-Received: from google.com ([2401:fa00:8f:203:6762:7dba:8487:43a1])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-345b04f3b8dsm2908936a91.12.2025.11.19.20.45.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Nov 2025 20:45:47 -0800 (PST)
-Date: Thu, 20 Nov 2025 13:45:41 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Vincent Guittot <vincent.guittot@linaro.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Yu-Che Cheng <giver@google.com>, 
-	Tomasz Figa <tfiga@chromium.org>, stable@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: stable 6.6: commit "sched/cpufreq: Rework schedutil governor
- performance estimation' causes a regression
-Message-ID: <q2dp7jlblofwkmkufjdysgu2ggv6g4cvhkah3trr5wamxymngm@p2mn4r7vyo77>
+	s=arc-20240116; t=1763617424; c=relaxed/simple;
+	bh=U151xLR0xAbp8Zo/f8OZp+wJyqHL+orqzWpyvMTDORI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qWSKL7jWpvKtehbw/lur7DdOU3SB+xjwXGwFk7JPQz8AEF4++5TykE8PjhkPjFIZ/hh3mAM4sU2fhnXfAKD5ulf3q7vC2jB7VOCvUzzhNZrdb0gcxvaM4ITedO6OSu+CYQqZH/x9flHhUlp42ZDdbzNnLPPg5OX42+hWC2cxqp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6O44Yxx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1302EC4CEF1
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 05:43:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763617424;
+	bh=U151xLR0xAbp8Zo/f8OZp+wJyqHL+orqzWpyvMTDORI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=K6O44YxxGHucoYJywyHTWI+nWElJj3pqZ+hnRJMbLzQCS/H+Rr+mm/0rHaIWuwMt+
+	 bTkEj1/MTRvYTqg+ZEbGYyOy1F0b3prjBS4kFzx8elZ5z0Fas1A+v7vsaz6UXtW60I
+	 lF0T0Yq6EqUVRf6vErtbnzJcfgKCs4RnntchfEbTkD94StIwRbcg2bAbCOnUHsSTeh
+	 8OwxdiMgexCrqa1LA/3ukpOgfs+MTfUyD4ajdq6gBzzt4cnDI4yMGMGBcC+sJl159W
+	 W48qg6iqR3/kcQwbW6tDC1RveFoKlFL57xETEMEjcexMnjq5oCtp4iiENE1hJDxnkJ
+	 084bE9/oIMvHQ==
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-65745a436f7so192273eaf.3
+        for <linux-pm@vger.kernel.org>; Wed, 19 Nov 2025 21:43:44 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXaTLiCbhRCzVzTlrZv2JqQ0UsAkvG44SVFq3A37SuzWIKdMwj5//jHZMDbGn/C4J+4K7PV/nAZFw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YztEZzqtG1wggJCXSnxAKULwrGuNYUrbBEjCnLEB3aUlKuMeLhP
+	bgl4gbe+hn0eqb6ru/Vwo9ssAKip3AGG7JL7GiHItEKiC5oL2UtjHb66kvcPK0mBixlgXoFP5ci
+	GIvOzpNy1eiaxemc1WHnKo99JeeT/3EU=
+X-Google-Smtp-Source: AGHT+IEAeyg4SW3jKUp/mX+B30LN6w98qmIV7dpZ7HDxEGQT//P0jNQnVxfc0A7w7ZL6BUK9lekoNpoq5nnZxovnGjU=
+X-Received: by 2002:a05:6820:2d8b:10b0:654:f9a7:76dc with SMTP id
+ 006d021491bc7-65787f3daefmr252556eaf.4.1763617423480; Wed, 19 Nov 2025
+ 21:43:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250915062135.748653-1-zhangpengjie2@huawei.com> <5be41a73-9afc-4c70-b77d-f89630aa83a3@huawei.com>
+In-Reply-To: <5be41a73-9afc-4c70-b77d-f89630aa83a3@huawei.com>
+From: Chanwoo Choi <chanwoo@kernel.org>
+Date: Thu, 20 Nov 2025 14:43:10 +0900
+X-Gmail-Original-Message-ID: <CAGTfZH2nK9OU5Q63LCATkNgts4R-NOZyPr_eJQHYpPupDFNYrw@mail.gmail.com>
+X-Gm-Features: AWmQ_bkUlSuonOtQflKSBf_3-FrPBA8CRRfk9R381s8AC3dcrb_uKDGVf773tZ0
+Message-ID: <CAGTfZH2nK9OU5Q63LCATkNgts4R-NOZyPr_eJQHYpPupDFNYrw@mail.gmail.com>
+Subject: Re: [PATCH] PM / devfreq: hisi: Fix potential UAF in OPP handling
+To: "zhangpengjie (A)" <zhangpengjie2@huawei.com>
+Cc: myungjoo.ham@samsung.com, kyungmin.park@samsung.com, cw00.choi@samsung.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	zhanjie9@hisilicon.com, zhenglifeng1@huawei.com, lihuisong@huawei.com, 
+	yubowen8@huawei.com, linhongye@h-partners.com, linuxarm@huawei.com, 
+	jonathan.cameron@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-We are observing a performance regression on one of our arm64 boards.
-We tracked it down to the linux-6.6.y commit ada8d7fa0ad4 ("sched/cpufreq:
-Rework schedutil governor performance estimation").
+I'm sorry for late reply.
 
-UI speedometer benchmark:
-w/commit:	395  +/-38
-w/o commit:	439  +/-14
+Acked-by: Chanwoo Choi <cw00.choi@samsung.com>
+
+If you need to apply this patch to other git repository with some
+related patch, I agree.
+
+Thanks,
+
+On Thu, Nov 20, 2025 at 10:31=E2=80=AFAM zhangpengjie (A)
+<zhangpengjie2@huawei.com> wrote:
+>
+>
+> Hi All,
+>
+> This is a friendly follow-up on this patch.
+>
+> Given that everyone is often busy with various tasks, I wanted to make
+> sure it doesn't fall through the cracks.
+>
+> Thank you for your time and review.
+>
+> Best regards,
+> Pengjie Zhang
+>
+> On 9/15/2025 2:21 PM, Pengjie Zhang wrote:
+> > Ensure all required data is acquired before calling dev_pm_opp_put(opp)
+> > to maintain correct resource acquisition and release order.
+> >
+> > Fixes: 7da2fdaaa1e6 ("PM / devfreq: Add HiSilicon uncore frequency scal=
+ing driver")
+> > Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
+> > ---
+> >   drivers/devfreq/hisi_uncore_freq.c | 3 ++-
+> >   1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/devfreq/hisi_uncore_freq.c b/drivers/devfreq/hisi_=
+uncore_freq.c
+> > index 96d1815059e3..c1ed70fa0a40 100644
+> > --- a/drivers/devfreq/hisi_uncore_freq.c
+> > +++ b/drivers/devfreq/hisi_uncore_freq.c
+> > @@ -265,10 +265,11 @@ static int hisi_uncore_target(struct device *dev,=
+ unsigned long *freq,
+> >               dev_err(dev, "Failed to get opp for freq %lu hz\n", *freq=
+);
+> >               return PTR_ERR(opp);
+> >       }
+> > -     dev_pm_opp_put(opp);
+> >
+> >       data =3D (u32)(dev_pm_opp_get_freq(opp) / HZ_PER_MHZ);
+> >
+> > +     dev_pm_opp_put(opp);
+> > +
+> >       return hisi_uncore_cmd_send(uncore, HUCF_PCC_CMD_SET_FREQ, &data)=
+;
+> >   }
+> >
+>
+
+
+--=20
+Best Regards,
+Chanwoo Choi
+Samsung Electronics
 
