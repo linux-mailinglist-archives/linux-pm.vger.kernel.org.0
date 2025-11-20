@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-38277-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38278-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBF8FC72D0B
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 09:26:08 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B00B7C72D55
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 09:27:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D2C734EB5A9
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 08:24:26 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id AC9EC35AB10
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 08:25:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0466730CDB5;
-	Thu, 20 Nov 2025 08:21:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99038309F0A;
+	Thu, 20 Nov 2025 08:21:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o3Xmgs1s"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VRmqaruD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C904430CDB8;
-	Thu, 20 Nov 2025 08:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDBCF30E0FB
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 08:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763626870; cv=none; b=ZQmLFyXZAv16U8ex26y/eiNYI0qcHZTMBtcyJwjsrBHkR5D/mgo8ogUOQwo7fDh5ChXKDEpF140PjRfmkWcDjIMfhzEosJpFL0V2A0CCA41ZUIn6C7VcHCEz38EzbTpklA5+bBpfbmjNsBX7ktwNko/OENItieTo2W/7WGq2Keg=
+	t=1763626890; cv=none; b=Q8bRQggI282WFr6HZ/xo/TMDZwwVUx8+VaLE84MVQa2fzSJE9NMZ6qD4Iv19Tu1na80ktcNk5Ml+XV/M7nHXW8Jsqocchjf4+Qhy7IVU9WV3V7vYlvfDS6cOdbAOZAqD5k7oDcLpbiqLvcBkLWjvSY/pa9rgQIVts9GKj7Y9Ps0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763626870; c=relaxed/simple;
-	bh=SAIK4onV8NTmzjrV3+g9HnR/iW2xGpENY9MfzhjMtXk=;
+	s=arc-20240116; t=1763626890; c=relaxed/simple;
+	bh=s/16VOdpr0QUIyU0oAkl6ONql9+SiafPwXCzHW/0OdE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oPRoHey1Y5eoSWLlkVk7suqlrIPTmJoCs5QUXHE9YrAVpYN/PpMM0M+0V7zBbFHZI3ke4JtgZtP/5bsYAqFOLndoAnt7T9sd+ePJmraqtpHCJibOqd+kml+6YFqWwIt4seZOYCa6mVHvaL1p2I9H1lgj0mNlUfbUAlabK8aqqNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o3Xmgs1s; arc=none smtp.client-ip=91.218.175.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=QfGlo1O2y0J1zUhtuXmUp1bZaq+p+GatAV1nbFj4ANKaAuaDLaa5QkoaG5nUwJYm6qYnZM6dspLePmadKEEuleGesE8Kjd0qb/KMmh0/AtFV0u4yAmv3+q6vP6MgDijp8VvtixMHV61EhXksexpiPrffnqPch0MN27WltnROcZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VRmqaruD; arc=none smtp.client-ip=91.218.175.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 20 Nov 2025 10:20:59 +0200
+Date: Thu, 20 Nov 2025 10:21:19 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763626866; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	t=1763626886; h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=DY0I0MLM0BsoV116nrWGTYdPME77o4JzIUFhcQ+5Hkg=;
-	b=o3Xmgs1s/Sd0VMTm3+aAMhVtDAQ77vtBRDlFm7a3Rl10hwTIAUPfvErSa6ySnlJEWxD+IM
-	ASZEshI7XOmBk5TLw7EhaYPFiVNm/ZX4GsrHB5wIIDdNesfEILJk4PkX+AS5gRBSB6ZQt8
-	pYU3egu0ETJbQFagEqVhCpxh+9apjqE=
+	bh=zmi7c6vmk+RrdayqIHmndICemIZ6fzioj9RusF0N01g=;
+	b=VRmqaruDtrK1wH66NfZqP17t/T6FdWdJAf2D2+I5EeKn7Y3/bzczu7+oivFlO7ABTouL8l
+	rY9SKA/typvpIaXA4iVhrg4+gLvGVmdfRvw74jYTIVe37ifR0+Xj0UE5hYC/eo5odcQ0TR
+	ijMdfTDoNKTh04Q8Uf73itsz2Ycx9dM=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Matti Vaittinen <matti.vaittinen@linux.dev>
 To: Matti Vaittinen <mazziesaccount@gmail.com>,
@@ -61,8 +61,8 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
 	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v5 06/16] dt-bindings: leds: bd72720: Add BD72720
-Message-ID: <b12e7484fe4682caf08e6ffbd3f9f16ee091ef60.1763625920.git.mazziesaccount@gmail.com>
+Subject: [PATCH v5 07/16] mfd: rohm-bd71828: Use regmap_reg_range()
+Message-ID: <b0c6256deb1388f0774b3c855c0614d363aa003b.1763625920.git.mazziesaccount@gmail.com>
 Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
 References: <cover.1763625920.git.mazziesaccount@gmail.com>
 Precedence: bulk
@@ -72,83 +72,131 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9Y07DckTc/eWPOBV"
+	protocol="application/pgp-signature"; boundary="x2UwjvEMUYcurv6R"
 Content-Disposition: inline
 In-Reply-To: <cover.1763625920.git.mazziesaccount@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 
 
---9Y07DckTc/eWPOBV
+--x2UwjvEMUYcurv6R
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 =46rom: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Add the ROHM BD72720 documentation to the binding documents.
+The regmap range tables tend to be somewhat verbose. Using the
+regmap_reg_range() can make the definitions slightly mode compact.
+
+Tidy the regmap range tables by using the regmap_reg_range().
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
 Revision history:
- RFCv1 =3D>:
- - No changes
-
-NOTE: The Linux LED driver does currently have: values
-bd72720-grnled and bd72720-ambled for the rohm,led-compatible. These are
-handled identically to the existing bd71828-grnled and bd71828-ambled
-and should be removed from the driver. Thus they are not documented in
-the binding document.
-
-Furthermore, the BD72720 Linux driver does not use the compatible property
-=66rom the LED node. The Linux driver is load and probed based on the PMIC
-compatible in the MFD node. Thus no compatible string for the BD72720
-LED node is added.
+ v2 =3D> :
+ - no changes
+ RFCv1 =3D> v2:
+ - New patch
 ---
- .../devicetree/bindings/leds/rohm,bd71828-leds.yaml        | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/mfd/rohm-bd71828.c | 64 +++++++++++---------------------------
+ 1 file changed, 18 insertions(+), 46 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml =
-b/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
-index b7a3ef76cbf4..64cc40523e3d 100644
---- a/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
-+++ b/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
-@@ -10,11 +10,12 @@ maintainers:
-   - Matti Vaittinen <mazziesaccount@gmail.com>
+diff --git a/drivers/mfd/rohm-bd71828.c b/drivers/mfd/rohm-bd71828.c
+index 84a64c3b9c9f..2a43005b67ee 100644
+--- a/drivers/mfd/rohm-bd71828.c
++++ b/drivers/mfd/rohm-bd71828.c
+@@ -157,55 +157,27 @@ static struct mfd_cell bd71828_mfd_cells[] =3D {
+ };
 =20
- description: |
--  This module is part of the ROHM BD71828 MFD device. For more details
--  see Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml.
-+  This module is part of the ROHM BD71828 and BD72720 MFD device. For more
-+  details see Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
-+  and Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
+ static const struct regmap_range bd71815_volatile_ranges[] =3D {
+-	{
+-		.range_min =3D BD71815_REG_SEC,
+-		.range_max =3D BD71815_REG_YEAR,
+-	}, {
+-		.range_min =3D BD71815_REG_CONF,
+-		.range_max =3D BD71815_REG_BAT_TEMP,
+-	}, {
+-		.range_min =3D BD71815_REG_VM_IBAT_U,
+-		.range_max =3D BD71815_REG_CC_CTRL,
+-	}, {
+-		.range_min =3D BD71815_REG_CC_STAT,
+-		.range_max =3D BD71815_REG_CC_CURCD_L,
+-	}, {
+-		.range_min =3D BD71815_REG_VM_BTMP_MON,
+-		.range_max =3D BD71815_REG_VM_BTMP_MON,
+-	}, {
+-		.range_min =3D BD71815_REG_INT_STAT,
+-		.range_max =3D BD71815_REG_INT_UPDATE,
+-	}, {
+-		.range_min =3D BD71815_REG_VM_VSYS_U,
+-		.range_max =3D BD71815_REG_REX_CTRL_1,
+-	}, {
+-		.range_min =3D BD71815_REG_FULL_CCNTD_3,
+-		.range_max =3D BD71815_REG_CCNTD_CHG_2,
+-	},
++	regmap_reg_range(BD71815_REG_SEC, BD71815_REG_YEAR),
++	regmap_reg_range(BD71815_REG_CONF, BD71815_REG_BAT_TEMP),
++	regmap_reg_range(BD71815_REG_VM_IBAT_U, BD71815_REG_CC_CTRL),
++	regmap_reg_range(BD71815_REG_CC_STAT, BD71815_REG_CC_CURCD_L),
++	regmap_reg_range(BD71815_REG_VM_BTMP_MON, BD71815_REG_VM_BTMP_MON),
++	regmap_reg_range(BD71815_REG_INT_STAT, BD71815_REG_INT_UPDATE),
++	regmap_reg_range(BD71815_REG_VM_VSYS_U, BD71815_REG_REX_CTRL_1),
++	regmap_reg_range(BD71815_REG_FULL_CCNTD_3, BD71815_REG_CCNTD_CHG_2),
+ };
 =20
-   The LED controller is represented as a sub-node of the PMIC node on the =
-device
--  tree.
-+  tree. This should be located under "leds" - node in PMIC node.
+ static const struct regmap_range bd71828_volatile_ranges[] =3D {
+-	{
+-		.range_min =3D BD71828_REG_PS_CTRL_1,
+-		.range_max =3D BD71828_REG_PS_CTRL_1,
+-	}, {
+-		.range_min =3D BD71828_REG_PS_CTRL_3,
+-		.range_max =3D BD71828_REG_PS_CTRL_3,
+-	}, {
+-		.range_min =3D BD71828_REG_RTC_SEC,
+-		.range_max =3D BD71828_REG_RTC_YEAR,
+-	}, {
+-		/*
+-		 * For now make all charger registers volatile because many
+-		 * needs to be and because the charger block is not that
+-		 * performance critical.
+-		 */
+-		.range_min =3D BD71828_REG_CHG_STATE,
+-		.range_max =3D BD71828_REG_CHG_FULL,
+-	}, {
+-		.range_min =3D BD71828_REG_INT_MAIN,
+-		.range_max =3D BD71828_REG_IO_STAT,
+-	},
++	regmap_reg_range(BD71828_REG_PS_CTRL_1, BD71828_REG_PS_CTRL_1),
++	regmap_reg_range(BD71828_REG_PS_CTRL_3, BD71828_REG_PS_CTRL_3),
++	regmap_reg_range(BD71828_REG_RTC_SEC, BD71828_REG_RTC_YEAR),
++	/*
++	 * For now make all charger registers volatile because many
++	 * needs to be and because the charger block is not that
++	 * performance critical.
++	 */
++	regmap_reg_range(BD71828_REG_CHG_STATE, BD71828_REG_CHG_FULL),
++	regmap_reg_range(BD71828_REG_INT_MAIN, BD71828_REG_IO_STAT),
+ };
 =20
-   The device has two LED outputs referred as GRNLED and AMBLED in data-she=
-et.
-=20
+ static const struct regmap_access_table bd71815_volatile_regs =3D {
 --=20
 2.51.1
 
 
---9Y07DckTc/eWPOBV
+--x2UwjvEMUYcurv6R
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkez2sACgkQeFA3/03a
-ocXrfwf+P2Fo0gYFUOjXb9C8VFRw2zP6flH5bVrzPvgz7XxG1EZDNNNeVYzPDw6b
-fjnOCsGMl/ePMuKA0ZGVMvIFDm+cb7aVc5U6mLNngz1DfJgLMvHcoRTXd+NVmKc9
-aFL0odEexLnKLKOy+YFkm6O6tf8FRoYwQApQo0axbES20d9EUTz1GHB4jX4RGKHu
-BxexDo+AQOHtDEC+evH5p5HgEUASikE9mJwE3uJwhnonS0rYhu2PU49wZbTp7ZkH
-082OGtZRPkjP3jrD1kEvhUZRfmlEgXYbyr5d7aW3ceCaojvikZdcdODNEldPPiX6
-p2dkICQ2o2lATCZ3UJWXTvjC3oeOow==
-=PQ0n
+iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkez38ACgkQeFA3/03a
+ocXyOQf/RrD6qS8POc+8LMIzVsn8w0IcQb75XjPnP1ShvY9z+jWF22gzjR9Bc0fM
+tso5EfUySRNCyE74Ee/xCbsDiH/Gds6wjWCqtaDcSO51mCjOT+WUjGKqTLD53/jB
+jwQIZanv6ajVOfoLK1Ol5TelhrfZYNnHpfJcspY6JDrNsgw9oPvSMd5q8RV3Gx2P
+MS6c8uLqXhEan2p/Gj2eUTf3xkm19L4BOAZkLfjpGPOf+3HAX4oyzp92oFDGdg9n
+GJKEQDQ+LGzE+FsvxF5gtOZFs97n+xPuO9misDemuPh6nS6GkWk/m/jrC3GphhGo
+oG/oxis09pT8kFKNP5azTt0AHclSgQ==
+=M5eq
 -----END PGP SIGNATURE-----
 
---9Y07DckTc/eWPOBV--
+--x2UwjvEMUYcurv6R--
 
