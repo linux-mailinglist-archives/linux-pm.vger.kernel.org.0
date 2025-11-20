@@ -1,149 +1,118 @@
-Return-Path: <linux-pm+bounces-38313-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38314-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37988C755A3
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 17:29:23 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBD8EC755AF
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 17:29:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8E2284F135B
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 16:12:10 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 87B5C346936
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 16:22:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74BE53644A7;
-	Thu, 20 Nov 2025 16:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DBF03644B7;
+	Thu, 20 Nov 2025 16:22:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j6sZSIw/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OJqg5gsj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364B334DB48;
-	Thu, 20 Nov 2025 16:11:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E3E3644AD
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 16:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763655082; cv=none; b=G69n3XuZnPnLCOJ3HGO2JVaCUvScpqfAEoUr+2a5WIzwMlDC7tNhqXTkscb1K/pRCZiMhfnggOTJtGUBQFYbDUt0mg9tKRcX1jOr7GE9vIzXVSNXC8pok6d9jsf1z9gJOCBjHBf/Rt/9LiN9HQwzGFxZz48woeya3GKF58XAn00=
+	t=1763655751; cv=none; b=YqPo2Ce+Zt80rHRxd+Ll7TJLKtdQK0vKiDzZHWVymGbmVD9EGnr4tIOCrBopy8bRbgyubxD3aWQbr5y98gI3sVqZdCd/N5gbQRpHxSVRwUJAdhhrvpOD8LSPIunr1CbfxtPgb6wqH8VDXXTISMQ7U+CRGYlg2BFUr6xjSex6QcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763655082; c=relaxed/simple;
-	bh=BbjFmvnZpIAYJemMHM1v/+EA292tt6R+P8dHMuj7Xbo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QDIUMhTfUbVvhr0XM1i/7RYf07JjFCUhsmnP1BYcX5uav6viwyi+Of0vhJva7IgBAATwQ5wEG+D7Q03ZyXy7DZRCfwxZ5VxflJS2H9Pb7ZmX7w/H3+xf0/RxeXNDFUoVXkGqB1KUsT+bvMPEnbe0XGjS3wPcfiCAmdI0iNBjZe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j6sZSIw/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7944BC16AAE;
-	Thu, 20 Nov 2025 16:11:21 +0000 (UTC)
+	s=arc-20240116; t=1763655751; c=relaxed/simple;
+	bh=bi/Po0AgpnEbGaYHxKxOmZ9YXa7BiIdYeqc0S3my3Xo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MlCHvOSj+eSgtja8UDQGx4Rx4RAT9YMTH9vOLLlBJBBnYe/qteceJaE5P1xVbj9CmggZjt9zpAFzY1EJrANu2eevqo7QFiJixlFmcPt7T7ByA0JeVbqak2sgGkpup33Z1zQHhKuZzcNT0JMyJGHl4rIKLKG6qH09xe7WVntArqs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OJqg5gsj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE42AC2BCB2
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 16:22:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763655081;
-	bh=BbjFmvnZpIAYJemMHM1v/+EA292tt6R+P8dHMuj7Xbo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=j6sZSIw/JPOJ5KPAnyvMTDJJwbyriGW5UTQEbsjE6QELz2EfAY2mJp36zyAAt0b+y
-	 +vswlXRwsb0Sxxg8huowpVFhvSMiHekutXcQKmGpubePU5D60wuTCeWev9J/6Fu+op
-	 cCSRGK1ecV/0eAkS9q+wD2uL2rM/iY1F7eOaa/u0kGHEoe9bkUCWrAbKWPBad3dSJT
-	 N2euymlkYqScUvei7EX4PwXMWXXmS+KZjw9lh/5DnWGrDlxud6l/CIoB+5tVAJ2r48
-	 Fnk6TPbYFHVm8R935wu3uLwRsCucySQuCtStJiF1UoblbTDE8eVGumiMuEoLObpe/g
-	 VTBQZGKbhUaKw==
-Date: Thu, 20 Nov 2025 10:11:19 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Matti Vaittinen <matti.vaittinen@linux.dev>
-Cc: Pavel Machek <pavel@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	devicetree@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-	Sebastian Reichel <sre@kernel.org>, Mark Brown <broonie@kernel.org>,
-	linux-gpio@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>,
-	Michael Turquette <mturquette@baylibre.com>,
-	linux-pm@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	linux-kernel@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	linux-clk@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Lee Jones <lee@kernel.org>, linux-rtc@vger.kernel.org,
-	linux-leds@vger.kernel.org,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: Re: [PATCH v5 04/16] dt-bindings: battery: Voltage drop properties
-Message-ID: <176365507949.1467967.14779548559679744817.robh@kernel.org>
-References: <cover.1763625920.git.mazziesaccount@gmail.com>
- <93768cba6688714756fca49cc57d46a111885863.1763625920.git.mazziesaccount@gmail.com>
+	s=k20201202; t=1763655750;
+	bh=bi/Po0AgpnEbGaYHxKxOmZ9YXa7BiIdYeqc0S3my3Xo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OJqg5gsj68ksFZN0GbvCUrDOmfrmRxVknpZNcMdToGVZVvl4EawqQiK/RQ7e58ifU
+	 vwvTkArvsYgKhaFbPDYTNrAswmZJS94eTfPRPPhrE1hIJ7kn6kr7CgGow1eRsLVwh+
+	 Ubqao6grr+Ox/P33v8nvayEXUjcRzbzY/otv9qQWV46zE7hCP268zEkixGSjcQLuT1
+	 OM/SURl1hDHKSZYhO5shJ+N0LjpXKnP9vMougYMgUBNotoEzcNREMrmw3cuW13QsDJ
+	 nodPtUgFwQD7zQ1PbtHPPWCL9CX+kRLzBEnh0p3TRHH7doP1PaMme5cuOgaUtzKZJQ
+	 QD3VK61BRe7rg==
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b71397df721so202328266b.1
+        for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 08:22:30 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWdZvn4CEyAR7QSdwmhmmLV5JddXvHHbXyzZWDQVp/D+9Nq5+WmjjfY5IQFUTV30bOk+J5MeZGNvw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxbBUGCys5h98Ctvzp5YDTscuNfKTrdw0+LP1oReo6eSqXCL5I
+	PwjfbdWF5nWmf1LPk9OtzXhDacqRhQ6cDJu3WQxCLDemPsyK13kBNIlyaZiiHZqbCloLP1+X13k
+	Lm0GIkj0V+E50Zzs1gvNn8sMZjUT0CQ==
+X-Google-Smtp-Source: AGHT+IEWkCgWatcHpdXr/OIRJiRj/QCEmSn/C4yEQfCtXou2e73E372BAB9bX3hhR6qzcGe6jCZ9JRVO/S+7C6PFF8E=
+X-Received: by 2002:a17:907:db16:b0:b72:d001:7653 with SMTP id
+ a640c23a62f3a-b7654de0b58mr374078966b.19.1763655748985; Thu, 20 Nov 2025
+ 08:22:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <93768cba6688714756fca49cc57d46a111885863.1763625920.git.mazziesaccount@gmail.com>
+References: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
+ <20251112-pci-m2-e-v1-6-97413d6bf824@oss.qualcomm.com> <CAL_JsqKBcXH0EWguto3EFY2cJ5p=8VUZczMHz1u5fNFocv-AmA@mail.gmail.com>
+ <cjtnoqjr3v5o64caa6unllb2e2csyvybr6vnzwuqqrl453bgz7@drqmfkfbn5xg>
+In-Reply-To: <cjtnoqjr3v5o64caa6unllb2e2csyvybr6vnzwuqqrl453bgz7@drqmfkfbn5xg>
+From: Rob Herring <robh@kernel.org>
+Date: Thu, 20 Nov 2025 10:22:16 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLoD5GiiGgWTEa6-g8VwyuPTko-ewe5CKPBWMgHDnKaHg@mail.gmail.com>
+X-Gm-Features: AWmQ_blvWXZ3OwaL5ikiIPwr7cVeDcTz_uslr7dP8flZZyL49YRBC5MiFZDf9vA
+Message-ID: <CAL_JsqLoD5GiiGgWTEa6-g8VwyuPTko-ewe5CKPBWMgHDnKaHg@mail.gmail.com>
+Subject: Re: [PATCH 6/9] serdev: Skip registering serdev devices from DT is
+ external connector is used
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: manivannan.sadhasivam@oss.qualcomm.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Hans de Goede <hansg@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+	linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Nov 19, 2025 at 7:33=E2=80=AFAM Manivannan Sadhasivam <mani@kernel.=
+org> wrote:
+>
+> On Tue, Nov 18, 2025 at 07:03:51AM -0600, Rob Herring wrote:
+> > On Wed, Nov 12, 2025 at 8:45=E2=80=AFAM Manivannan Sadhasivam via B4 Re=
+lay
+> > <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org> wrote:
+> > >
+> > > From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > >
+> > > If an external connector like M.2 is connected to the serdev controll=
+er
+> > > in DT, then the serdev devices will be created dynamically by the con=
+nector
+> > > driver. So skip registering devices from DT node as there will be no
+> > > statically defined devices.
+> >
+> > You could still have statically defined devices. You are just choosing
+> > to probe them later from the connector driver.
+> >
+>
+> The point of coming up with the M.2 binding is to avoid hardcoding the de=
+vices
+> in DT. So static devices are ruled out IMO.
 
-On Thu, 20 Nov 2025 10:20:24 +0200, Matti Vaittinen wrote:
-> From: Matti Vaittinen <mazziesaccount@gmail.com>
-> 
-> ROHM has developed a so called "zero-correction" -algorithm to improve
-> the fuel-gauging accuracy close to the point where battery is depleted.
-> This relies on battery specific "VDR" (voltage drop rate) tables, which
-> are measured from the battery, and which describe the voltage drop rate.
-> More thorough explanation about the "zero correction" and "VDR"
-> parameters is here:
-> https://lore.kernel.org/all/676253b9-ff69-7891-1f26-a8b5bb5a421b@fi.rohmeurope.com/
-> 
-> Document the VDR zero-correction specific battery properties used by the
-> BD71815, BD71828, BD72720 and some other ROHM chargers. (Note, charger
-> drivers aren't upstream yet).
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> 
-> ---
-> 
-> Revision history:
->  v4 => v5:
->  - Move volt-drop parameters from rohm,vdr-battry,yaml to the
->    battery.yaml
->  - drop rohm, -prefix from volt-drop-* properties
->  - Drop the rohm,vdr-battry,yaml
->  - Add comment clarifying what the rohm,volt-drop-* properties are for
->    because this may no longer be obvious as they were moved to common
->    battery.yaml
->  - Drop Linus Walleij's rb-tag because the concept was changed
-> 
->  v3 => v4:
->  - No changes
-> 
->  v2 => v3:
->  - Constrain VDR threshold voltage to 48V
->  - Use standard '-bp' -suffix for the rohm,volt-drop-soc
-> 
->  RFCv1 => v2:
->  - Add units to rohm,volt-drop-soc (tenths of %)
->  - Give real temperatures matching the VDR tables, instead of vague
->    'high', 'normal', 'low', 'very low'. (Add table of temperatures and
->    use number matching the right temperature index in the VDR table name).
->  - Fix typoed 'algorithm' in commit message.
-> 
-> The parameters are describing the battery voltage drop rates - so they
-> are properties of the battery, not the charger. Thus they do not belong
-> in the charger node.
-> 
-> The right place for them is the battery node, which is described by the
-> generic "battery.yaml". There were some discussion whether these
-> properties should be in their own file, or if they should be added to
-> battery.yaml. Discussion can be found from:
-> https://lore.kernel.org/all/52b99bf7-bfea-4cee-aa57-4c13e87eaa0d@gmail.com/
-> This patch implements the volt-drop properties as generic (not vemdor
-> specific) properties in the battery.yaml. It's worth noting that these
-> properties are:
-> 
->   - Meaningful only for those charger drivers which have the VDR
->     algorithm implemented. (And even though the algorithm is not charger
->     specific, AFAICS, it is currently only used by some ROHM PMIC
->     drivers).
->   - Technique of measuring the VDR tables for a battery is not widely
->     known. AFAICS, only folks at ROHM are measuring those for some
->     customer products. We do have those tables available for some of the
->     products, like Kobo e-readers though.
-> ---
->  .../bindings/power/supply/battery.yaml        | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
+Until you have any one of the reasons we have PCIe devices described
+even when in a standard slot. Take your pick. An ethernet adapter that
+omits an EEPROM for the MAC address.
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-
+Rob
 
