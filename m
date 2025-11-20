@@ -1,57 +1,69 @@
-Return-Path: <linux-pm+bounces-38300-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38301-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D98C8C740D8
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 13:56:26 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD363C740FC
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 13:57:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 09B384E6BAE
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 12:56:22 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 2FFF835AAC9
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 12:57:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F1A337B8D;
-	Thu, 20 Nov 2025 12:56:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0546337BA7;
+	Thu, 20 Nov 2025 12:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LMihkJwo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6dAjwAN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A70337699;
-	Thu, 20 Nov 2025 12:56:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5682DD60F;
+	Thu, 20 Nov 2025 12:57:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763643379; cv=none; b=Ucmg7ZRKEfy+2Q7eJFRq/vahBe8jqnbS+/MGO1ZrQQKFY8dZkcqWAubnpJGU7NTnkMCTWDEm/4Aj/sQPmTD4GtYUT/jzgIEXl/we9Q9+FZzBj9Zeu4LN/EjCo41BWStnepdvODwUWt8/I+qKAi3aNZYOXDshBAkn2KJLJnce4Vg=
+	t=1763643454; cv=none; b=m2mUAPJ3vYnGYESM0Uyj+mUuQtU+kTNijvjfkJua/+ciXW3fShrMHK07rYXZdwaaHjxUed8zNcAPmYcxbwXWY4znDxpiVCIcKNC32xQqFrIs18aAuMcyCpCsUysRo9Re+w0HTKIXjYApwwCN6zfmO1tufSvkRmF++nUltAmQdec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763643379; c=relaxed/simple;
-	bh=jkm+2/O2fv0YxoQqRRbJnf3LB1jc0nFx3ySZBS/Nrss=;
+	s=arc-20240116; t=1763643454; c=relaxed/simple;
+	bh=BSAJnV6hGwIlrdf26TVWYrTtWavqRfw5o5IS/pX+paY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JJ5vDNsu0IKSyulSv9Cye4FvGIWIz8VOelzLrZzbax6RCCe/mWwFtVn6/18Oc8j9I4dpU5Gx/RL8pNv5OqjBsVTkBNEf5LK5iCMAoR3869BSOC6X5pYf9uWdjAYrsEnnL/ywxytqx+rQkz/Zpd9vd4EIN6KIXOtfXmi4k6HFGyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LMihkJwo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C96DC4CEF1;
-	Thu, 20 Nov 2025 12:56:16 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Agz7etuS7gI0daIhRzKUf+hysz9lnjEdi8VozmiOlKQLNI7AHGn/SJsWE5D/YObVYIkzjvGlRPknXw4wDi3SIiDTivCcYA/UL9Hk9XC2iG+uxjL0+KExfgtWRaEhp96ZPhvJTO3pC7N1e5YrMha8FWQb03Mg22Ff7d3Ern18Qy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6dAjwAN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35235C4CEF1;
+	Thu, 20 Nov 2025 12:57:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763643378;
-	bh=jkm+2/O2fv0YxoQqRRbJnf3LB1jc0nFx3ySZBS/Nrss=;
+	s=k20201202; t=1763643454;
+	bh=BSAJnV6hGwIlrdf26TVWYrTtWavqRfw5o5IS/pX+paY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=LMihkJwoUkTyVD1/Z2zHY5/D4Pl88PENok29V+fj7r+5t0flDidM3FbJKFzxP886Q
-	 wM6jtdtkRNhU1VtePbX2rbRygaheDAJNGKpyiV59uEV+W5rGPJd+64Nj6aSvoTsatx
-	 2jFWMBfof2+kueDy3QLTmksH3rOf64HTSpxPB1SZ1f+ZT5XcbtSaWUYX+FlP6zoeI9
-	 DAPyBWHzP3dCZDm1gI8eyXuWI1A3ULdHUQmdzVuDPpClbmhxhkuAF9Jle5nNcmxhdb
-	 7NfXMtVcSV8kAIgBM+6rWHKnrNlj0uU8Ucf2ZV+0aI6Oelu6EZcV9KIlGSBvuheKw0
-	 sCM034al621Uw==
-Date: Thu, 20 Nov 2025 13:56:14 +0100
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Lucas Zampieri <lzampier@redhat.com>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Jiri Kosina <jikos@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-	Bastien Nocera <hadess@hadess.net>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 0/1] HID: Add support for multiple batteries per device
-Message-ID: <lgv3t6wlrg5t6tcrotwez3ashykfblikfvj7eayxdpdivfflmx@7uax54wnfnuq>
-References: <20251120105442.150508-1-lzampier@redhat.com>
- <pr3w6zp5hoza27fncktfj3qx3wp2nhdglbx46fbfx6swm4772d@7hg7a6dxom7p>
- <CAOOg__BCM_s+Mm8e6NcwwVhQLyZ3z2iMwX1FOwC_7drNd8gEjg@mail.gmail.com>
+	b=U6dAjwANw4n/6ZVjJ+Seqdabz28l0Onx7duGdEvU7ZZtHs5Hc8Ggfu7Z0js38Nx86
+	 diRyJUNdPGO+7TgPQMXk/o6MQigTi+HXCP5LV7yM4EqH8cQCrWMB1ZLvS2ZCjul6G5
+	 Lms68eWAqPWHkzqprGdEz+wxr/CwjlnDd9HyU0Ehj9fPavXce0DbENY3r53MXvia8p
+	 8cKtJTZFsjfNItIpdoD8iPrfj/ikp/MKUNpbzbfjmPUGTMC6ggVjznVJbNbc0MS3Lj
+	 zzsNZ78ijnO+25UNbWxxvGaLb9H4AMxQNir5Xr5f3xShPNl56yyA9ajVlBr1ROb2SZ
+	 M1kOF05OwM0wQ==
+Date: Thu, 20 Nov 2025 18:27:06 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Frank Li <Frank.li@nxp.com>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nicolas.schier@linux.dev>, Hans de Goede <hansg@kernel.org>, 
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Mark Pearson <mpearson-lenovo@squebb.ca>, 
+	"Derek J. Clark" <derekjohn.clark@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Stephan Gerhold <stephan.gerhold@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Subject: Re: [PATCH 7/9] dt-bindings: connector: Add PCIe M.2 Mechanical Key
+ E connector
+Message-ID: <2dtqb5cpuhb4ln3vfuudortjesrcamwpokkcwoih6gz7u25rxr@mgtdturwyhq3>
+References: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
+ <20251112-pci-m2-e-v1-7-97413d6bf824@oss.qualcomm.com>
+ <aRS/3OTerCBGlmBm@lizhi-Precision-Tower-5810>
+ <qiwgnela4b6gbwuuq7xaqjong47c2ix6caagjl6ryqukzqkswn@6l7rvkf4dfyx>
+ <20251119235905.GA3575788-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -61,188 +73,166 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOOg__BCM_s+Mm8e6NcwwVhQLyZ3z2iMwX1FOwC_7drNd8gEjg@mail.gmail.com>
+In-Reply-To: <20251119235905.GA3575788-robh@kernel.org>
 
-On Nov 20 2025, Lucas Zampieri wrote:
-> On Thu, Nov 20, 2025 at 11:05 AM Benjamin Tissoires <bentiss@kernel.org> wrote:
-> >
-> > On Nov 20 2025, Lucas Zampieri wrote:
-> > > This series adds support for HID devices with multiple batteries.
-> > >
-> > > Currently, the HID battery reporting subsystem only supports one battery per
-> > > device. There are several devices with multiple batteries that would benefit
-> > > from this support:
-> > > - Gaming headsets with batteries in both the headset and charging dock
-> > > - Wireless earbuds with per-earbud batteries plus charging case
-> > > - Split keyboards with per-side batteries
-> > >
-> > > ## Proposed Solution
-> > >
-> > > This series introduces struct hid_battery to encapsulate individual battery
-> > > state, replaces the old battery fields with a list-based approach, and adds
-> > > support for multiple batteries tracked within struct hid_device. Batteries
-> > > are identified by report ID. The implementation is fully backwards compatible
-> > > with single-battery devices through a helper function.
-> > >
-> > > ## Testing
-> > >
-> > > Tested with split keyboard hardware (Dactyl 5x6) using custom ZMK firmware
-> > > that implements per-side HID battery reporting. Each battery (left and right
-> > > keyboard halves) reports independently through the power supply interface with
-> > > distinct report IDs (0x05 and 0x06).
-> > >
-> > > Test firmware available on my personal fork at:
-> > > https://github.com/zampierilucas/zmk/tree/feat/individual-hid-battery-reporting
-> > > If this series gets merged, these changes will be proposed to upstream ZMK.
-> > >
-> > > HID descriptor and recording captured with hid-recorder:
-> > >
-> > > D: 0
-> > > R: 162 05 01 09 06 a1 01 85 01 05 07 19 e0 29 e7 15 00 25 01 75 01 95 08 81 02 05 07 75 08 95 01 81 03 05 07 15 00 25 01 19 00 29 67 75 01 95 68 81 02 c0 05 0c 09 01 a1 01 85 02 05 0c 15 00 26 ff 0f 19 00 2a ff 0f 75 10 95 06 81 00 c0 05 84 09 05 a1 01 05 85 85 05 09 44 15 00 25 01 35 00 45 01 75 08 95 01 81 02 09 65 15 00 25 64 35 00 45 64 75 08 95 01 81 02 c0 05 84 09 05 a1 01 05 85 85 06 09 44 15 00 25 01 35 00 45 01 75 08 95 01 81 02 09 65 15 00 25 64 35 00 45 64 75 08 95 01 81 02 c0
-> > > N: ZMK Project Dactyl 5x6
-> > > P: usb-0000:2d:00.3-4.2/input2
-> > > I: 3 1d50 615e
-> > > D: 0
-> > > E: 0.000000 3 05 00 56
-> > > E: 0.000977 3 05 00 56
-> > > E: 1.490974 3 06 00 52
-> > > E: 1.491958 3 06 00 52
-> > > E: 6.492979 3 06 00 53
-> > > E: 6.493962 3 06 00 53
-> > >
-> > > The recording shows both batteries reporting with different charge levels
-> > > (Report ID 05: 86%, Report ID 06: 82%-83%), demonstrating the multi-battery
-> > > functionality. This can be used to verify UPower compatibility.
-> > >
-> > > ## Future Work: Userspace Integration
-> > >
-> > > As suggested by Bastien, semantic battery differentiation (e.g., "left
-> > > earbud" vs "right earbud") requires userspace coordination, as HID
-> > > reports typically lack role metadata.
-> > >
-> > > This will require:
-> > > 1. systemd/hwdb entries for device-specific battery role mappings
-> > > 2. UPower updates to enumerate and group multi-battery devices
-> > > 3. Desktop environment changes to display batteries with meaningful labels
-> > >
-> > > This kernel infrastructure is a prerequisite for that userspace work.
-> > >
-> > > Lucas Zampieri (1):
-> > >   HID: input: Add support for multiple batteries per device
-> > >
-> > > Signed-off-by: Lucas Zampieri <lzampier@redhat.com>
-> > >
-> > > Changes in v4:
-> > > - Added missing hidinput_update_battery() stub in #else block for
-> > >   CONFIG_HID_BATTERY_STRENGTH=n builds
-> > > - Reported-by: kernel test robot <lkp@intel.com>
-> > > - Closes: https://lore.kernel.org/oe-kbuild-all/202511201624.yUv4VtBv-lkp@intel.com/
-> >
-> > I don't think you need to keep the formal tags here in changlogs of the
-> > cover letter. A simple "as reported by kernel test robot
-> > <lkp@intel.com>" should be sufficient (given that usually we end up
-> > dropping the cover letter as we apply the patches only).
-> >
-> > >
-> > > Changes in v3:
-> > > - Squashed the three v2 patches into a single patch as suggested by
-> > >   Benjamin
-> >
-> > Sorry we didn't understood each other: I was asking you to squash
-> > patches 1 and 2 only, and keep 3 separated. I was just complaining about
-> > a blank header change. Separating the non functional changes from the
-> > functional ones is important.
-> >
-> I get it, but the reason I made it one patch instead of two was to
-> have one functional patch hid-multi-battery patch, instead of one just
-> adding the structure, and then another one to really make use of the
-> multi-battery stuff, but I guess I can make it two again, even tho the
-> first one will have no real change in behavior
-
-The first one is not just adding the structure, it's also a clean
-refactor of the existing code where the battery information is nicely
-regrouped into a single struct. And if that patch is all by itself, we
-can again bisect it because we know it's not supposed to break anything
-because there is no functional changes. So yes, no changes in bahavior
-seems pointless but it is very important for your next patch so it's
-reviewable.
-
+On Wed, Nov 19, 2025 at 05:59:05PM -0600, Rob Herring wrote:
+> On Thu, Nov 13, 2025 at 10:30:42AM +0530, Manivannan Sadhasivam wrote:
+> > On Wed, Nov 12, 2025 at 12:11:56PM -0500, Frank Li wrote:
+> > > On Wed, Nov 12, 2025 at 08:15:19PM +0530, Manivannan Sadhasivam wrote:
+> > > > Add the devicetree binding for PCIe M.2 Mechanical Key E connector defined
+> > > > in the PCI Express M.2 Specification, r4.0, sec 5.1.2. This connector
+> > > > provides interfaces like PCIe or SDIO to attach the WiFi devices to the
+> > > > host machine, USB or UART+PCM interfaces to attach the Bluetooth (BT)
+> > > > devices along with additional interfaces like I2C for NFC solution. At any
+> > > > point of time, the connector can only support either PCIe or SDIO as the
+> > > > WiFi interface and USB or UART as the BT interface.
+> > > >
+> > > > The connector provides a primary power supply of 3.3v, along with an
+> > > > optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
+> > > > 1.8v sideband signaling.
+> > > >
+> > > > The connector also supplies optional signals in the form of GPIOs for fine
+> > > > grained power management.
+> > > >
+> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > > > ---
+> > > >  .../bindings/connector/pcie-m2-e-connector.yaml    | 154 +++++++++++++++++++++
+> > > >  MAINTAINERS                                        |   1 +
+> > > >  2 files changed, 155 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
+> > > > new file mode 100644
+> > > > index 0000000000000000000000000000000000000000..91cb56b1a75b7e3de3b9fe9a7537089f96875746
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
+> > > > @@ -0,0 +1,154 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/connector/pcie-m2-e-connector.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: PCIe M.2 Mechanical Key E Connector
+> > > > +
+> > > > +maintainers:
+> > > > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > > > +
+> > > > +description:
+> > > > +  A PCIe M.2 E connector node represents a physical PCIe M.2 Mechanical Key E
+> > > > +  connector. Mechanical Key E connectors are used to connect Wireless
+> > > > +  Connectivity devices including combinations of Wi-Fi, BT, NFC to the host
+> > > > +  machine over interfaces like PCIe/SDIO, USB/UART+PCM, and I2C.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: pcie-m2-e-connector
+> > > > +
+> > > > +  vpcie3v3-supply:
+> > > > +    description: A phandle to the regulator for 3.3v supply.
+> > > > +
+> > > > +  vpcie1v8-supply:
+> > > > +    description: A phandle to the regulator for VIO 1.8v supply.
+> > > > +
+> > > > +  ports:
+> > > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > > +    description: OF graph bindings modeling the interfaces exposed on the
+> > > > +      connector. Since a single connector can have multiple interfaces, every
+> > > > +      interface has an assigned OF graph port number as described below.
+> > > > +
+> > > > +    properties:
+> > > > +      port@0:
+> > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > +        description: PCIe/SDIO interface
+> > > 
+> > > 
+> > > PCIe and SDIO is difference signal at key E. why combine to one port? The
+> > > similar case is USB2.0/UART
+> > > 
+> > 
+> > They will be defined as separate endpoints in the next version.
+> > 
+> > > > +
+> > > > +      port@1:
+> > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > +        description: USB 2.0/UART interface
+> > > > +
+> > > > +      port@2:
+> > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > +        description: PCM/I2S interface
+> > > > +
+> > > > +      port@3:
+> > > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > > +        description: I2C interface
+> > > > +
+> > > > +    oneOf:
+> > > > +      - required:
+> > > > +          - port@0
+> > > > +
+> > > > +  clocks:
+> > > > +    description: 32.768 KHz Suspend Clock (SUSCLK) input from the host system to
+> > > > +      the M.2 card. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.1 for
+> > > > +      more details.
+> > > > +    maxItems: 1
+> > > 
+> > > Do we need add pciref clock here?
+> > > 
+> > > > +
+> > > > +  w_disable1-gpios:
+> > > 
+> > > use "-"
+> > > 
+> > > w-disable1-gpios
+> > > 
+> > 
+> > I just went with the spec that defines the signal as W_DISABLE.
+> > 
+> > > > +    description: GPIO controlled connection to W_DISABLE1# signal. This signal
+> > > > +      is used by the system to disable WiFi radio in the M.2 card. Refer, PCI
+> > > > +      Express M.2 Specification r4.0, sec 3.1.12.3 for more details.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  w_disable2-gpios:
+> > > > +    description: GPIO controlled connection to W_DISABLE2# signal. This signal
+> > > > +      is used by the system to disable BT radio in the M.2 card. Refer, PCI
+> > > > +      Express M.2 Specification r4.0, sec 3.1.12.3 for more details.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  led1-gpios:
+> > > > +    description: GPIO controlled connection to LED_1# signal. This signal is
+> > > > +      used by the M.2 card to indicate the card status via the system mounted
+> > > > +      LED. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.2 for more
+> > > > +      details.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  led2-gpios:
+> > > > +    description: GPIO controlled connection to LED_2# signal. This signal is
+> > > > +      used by the M.2 card to indicate the card status via the system mounted
+> > > > +      LED. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.2 for more
+> > > > +      details.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  viocfg-gpios:
+> > > > +    description: GPIO controlled connection to IO voltage configuration
+> > > > +      (VIO_CFG) signal. This signal is used by the M.2 card to indicate to the
+> > > > +      host system that the card supports an independent IO voltage domain for
+> > > > +      the sideband signals. Refer, PCI Express M.2 Specification r4.0, sec
+> > > > +      3.1.15.1 for more details.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  uim_power_src-gpios:
+> > > 
+> > > property use -
+> > > 
+> > 
+> > Again, this is as per the spec. If DT maintainers object to it, I'll change it.
 > 
-> > > - Removed all legacy dev->battery_* fields, using list-based storage only
-> > > - Changed battery naming to include report ID: hid-{uniq}-battery-{report_id}
-> > > - Converted battery memory management to devm_* for automatic cleanup
-> >
-> > Haven't checked the code yet but that would require probably a separate
-> > patch so we can bisect to it if anything breaks.
-> >
-> I guess I kinda coded myself into a corner here, as with the new
-> devm_* changes, I wrote the v4/v5 hid-multi-battery feature to be made
-> for it, so I would have to go back to the v2 implementation (which is
-> fine, its just that the new devm_* makes it much cleaner), and then
-> have another patch converting the whole to use devm_*, which might as
-> well be a separate series at that points so it's easier to
-> review/test/bisect. Likewise, I'm fine with either approach, your
-> call.
-
-Up to you. I didn't mean necessarily to make the devm changes right now.
-
-In an ideal world we would have:
-- first patch which convert the existing code into devm
-- second patch which introduces struct hid_battery
-- third patch with the multi-battery feature.
-
-But the order doesn't really matter (except 2 needs to come before 3).
-The devm patch can be inserted anywhere. Having it first will simplify a
-bit your 2 other patches, but having it last is also fine because we can
-see the cleanup easily as well.
-
-So if you want to postpone the devm patch, that's fine by me. But the
-more you postpone it the higher the chances are that you forgot one kfree
-or introduced a use-after-free, which means a lot more complications for
-everybody :)
-
-Cheers,
-Benjamin
-
+> Use '-'.
 > 
-> > > - Updated hidinput_update_battery() to take struct hid_battery directly
-> > > - Added hid_get_first_battery() helper for external driver compatibility
-> > > - Updated hid-apple.c and hid-magicmouse.c to use new battery API
-> > > - Simplified cover letter based on feedback
-> >
-> > Heh, thanks :)
-> >
-> > Cheers,
-> > Benjamin
-> >
-> > >
-> > > Changes in v2:
-> > > - Split the monolithic v1 patch into three logical patches for easier review:
-> > >   1. Introduce struct hid_battery (pure structure addition)
-> > >   2. Refactor existing code to use the new structure (internal changes)
-> > >   3. Add multi-battery support (new functionality)
-> > > - Added detailed testing section with hardware specifics
-> > > - Added hid-recorder output (dactyl-hid-recording.txt) demonstrating two-battery
-> > >   HID descriptor for UPower validation
-> > > - Added "Future Work: Userspace Integration" section addressing Bastien's feedback
-> > >   about semantic battery differentiation
-> > > - Added hardware examples with product links to commit messages (per Bastien's
-> > >   suggestion)
-> > > - No functional changes from v1, only improved patch organization and documentation
-> > >
-> > >  drivers/hid/hid-apple.c      |  10 +-
-> > >  drivers/hid/hid-core.c       |   4 +
-> > >  drivers/hid/hid-input-test.c |  39 ++++---
-> > >  drivers/hid/hid-input.c      | 196 +++++++++++++++++++----------------
-> > >  drivers/hid/hid-magicmouse.c |  10 +-
-> > >  include/linux/hid.h          |  54 +++++++---
-> > >  6 files changed, 187 insertions(+), 126 deletions(-)
-> > >
-> > >
-> > > base-commit: 0678f5630429a5049d7663703b897e1bf8d13cd1
-> > > --
-> > > 2.51.0
-> > >
-> >
-> 
+
+OK!
+
+- Mani
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
