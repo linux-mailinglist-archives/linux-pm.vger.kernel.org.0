@@ -1,111 +1,170 @@
-Return-Path: <linux-pm+bounces-38295-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38296-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71F78C73951
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 11:57:49 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 531F6C7399C
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 12:02:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 705EC2F829
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 10:56:20 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 46FB94E1B1C
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 11:02:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18AE731A067;
-	Thu, 20 Nov 2025 10:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19F9A326D74;
+	Thu, 20 Nov 2025 11:02:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nDTVVDlS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RPjfxgzL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A2921ABC1
-	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 10:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E794930F537
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 11:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763636146; cv=none; b=UjlnRy+v+FV+l6gcs++i7hQEbwagcFP9wJ7PSLrhsNapvlO6l8ihBV3fVfTI8EoNPyAioYWv++YeVlv06USfnz9ZEiyadw23J8MvT2ouIEgZMgMcWfR+AgHK6HAulbwWUpjpPhrsmZ5MnVYe1V/4KGOOHo8t766HkeBAI4fO4bo=
+	t=1763636551; cv=none; b=IUa8NHU5SS93A8K2ueuCxm2hMNWvCzph4lAZDeZQ5qu4cgBOerhlBK24mA2Rnukz4dJSW3g6Yed8eCwPTpAl0+MqWfSUTxWF66l3yQYDzgkcb7XKCTdqA+nSLhZ0an4zSLyDINJedzXZPDUn+GEkaPu2dwaxtmh6YSp/zMDmZI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763636146; c=relaxed/simple;
-	bh=cvbHrmgf08XIYn3vUZdntoO4zAMQE+fQWmkHA4zq24U=;
+	s=arc-20240116; t=1763636551; c=relaxed/simple;
+	bh=FouX50HAHbiEHzayrYTP+d/rs5gRoDac17a03UaJvAk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G+b5cZrT5K+9o+D0ovGdGM0ed8xf8TIlgltiu9eGxqrAM+1fLGhY1MLpcwxtA9lvQAY7fmVqCkXmHpVxPa6y5s70GUonvrksUaVP+3l0K0kSy8Br0qewHzY726HL+kaM9yfX/H5os+ZV/F9F5abkh0ozM/mDc4JRPjRilKePdN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nDTVVDlS; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b713c7096f9so126745166b.3
-        for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 02:55:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763636142; x=1764240942; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sEvhisOEOg0eUGED/5mmqd5Rh7K5bewJZQlOmHEK/fk=;
-        b=nDTVVDlSwyINAUYdz+nL+UspcRrPimaw6grB0wXSi9DKrNw13nboKdfmGbtVFgez/j
-         L8NE6F9tfRxicsqLoxA5wyMKOjVz8gRS5tOLXKcRqfI4UsT/WXDpVBeM4aCOzZSMY09R
-         zE3Y+F6Xt8MR4191119DN2Mobc0Q46EO2wIkuKzDFUtaP2/NqdGFYr0UE5ANB+IfCErs
-         nTPlcM3J0XoPEP1SjSoMOr2xN/Fd92QicfkktG82CbB+3Tpjed8/ebpL2P9jD5qum3lu
-         NzRV+g7cVTfgDy0GCqE902VDgQOfXL/vN6ovEIJUfhSIYZAQgrxndjDj0QCpRQRPgWYh
-         0Kyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763636142; x=1764240942;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sEvhisOEOg0eUGED/5mmqd5Rh7K5bewJZQlOmHEK/fk=;
-        b=ndc/UQl3gWItYuk/4FmmBxCpAxMqt+BtqpKLAwEv/x4h+1wVZkJtnv/vqvOs5brJLu
-         IwS/fcf8nmwIVpxEayGuGIiAahd+RkpYBb8bbrb2+t5fF8NjLxR+eORAbPYK9K+uWgfG
-         gEHqwYtIF7PDeeuz0QN1et2pKALYwH8x88PVbOLgl/Yqg0+LfGTBBiLZD9HFU40ax5Hr
-         +UIdOQtoyhzlF+77kOT252hACVkxaJ36WeVovT9jrcF1XExNVqWn3P6PkpqDpdPj16Uq
-         j3zOrCcZMUT4F0myBjKNN/zTEswDkCgpVcCGxw/mWemjAMwNbJqG67uUcKNEfrPRFLzQ
-         5r+w==
-X-Forwarded-Encrypted: i=1; AJvYcCVgw5jpFrAOrVeDLArQdgFBttPeG3lxgyF/+12J3ZWLtuVJUeiH6/Z/9yilvBKk3CchAqMomvyoFg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTL1YUv4xYGRVJ3R2UDZA0irYPamALEUCSi0DZr81QI9wtxCn8
-	ylyyrOk2F4SX3HEEsjIHXI4TXQxL0bejry/4PIKwIJccVZ/Vojxwemv3oXep/j5FuOxLVYoFsXp
-	ZCYq63hGaxCRLO2X8p/LbkxyUNxgabDl4FnbCCB4xPQ==
-X-Gm-Gg: ASbGncuTQmaVMUqvWX0ZccBjy5I0upQV0n0sCJmzF04OeiUubWSMEXwB63n8iyXSWCB
-	aDno/6DWQSiYEjP6JCJhyBSOaJbnA07uyIihM7IiyZmt4u7dHhOy8N6/ufEAduQYtyPnojFmTrN
-	hWLhzo5T35j+xDQc9k0WQDZ9QRLnaYNF6I048tByugRqt08RzujRLTZkCamqXuE8Q3l774GxHDv
-	DqsXPV7cXRv+5tBtL+RwIO+ahCGnXT6GtyemsNGjS5DPYzU+nwZuuZhm1KriGgof0fYeuznLcQY
-	Tazolgc1wSmkbaJXdnrXELc=
-X-Google-Smtp-Source: AGHT+IEEbNQPl4pHbHNC71Fe8G1/2uwl/krtAuMVOHWxz3fLv34NYSeDkLKF82fimJciS4w0Rmz8whpk90sogY49m7w=
-X-Received: by 2002:a17:907:9403:b0:b76:5393:758d with SMTP id
- a640c23a62f3a-b7654eaf6a7mr35795766b.34.1763636142531; Thu, 20 Nov 2025
- 02:55:42 -0800 (PST)
+	 To:Cc:Content-Type; b=O4cpUxkYUYonSuwuNJ6RHJhyZ57hTAmsxs/64b7xcbU3BqUS3xm109/9VWcaHtT3mOpMneQ7sTgBXGMUxJoGcOzUr7fJ+T2e7gSf5hSyrXEbN8W0Zy283SmA2juLXqjTnML15ChwZDF9VU7Ou0iTlu2jx1z4mrEEYb1PNFz5jCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RPjfxgzL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EF7EC19422
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 11:02:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763636550;
+	bh=FouX50HAHbiEHzayrYTP+d/rs5gRoDac17a03UaJvAk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=RPjfxgzL2WT4dpK0R2jmCEq7yI0v1Ap9wqbrTl8JhsQ026vSqv7jnbEJP4J1sW1Uw
+	 wEBVSWZ9j6IDsH+bNRsrq8Kc/mCjNpXUeZYvvj4wYRhN20cF2Gi4EY6U642khRtmc3
+	 Bm4tmU9KujiAZaL9/mInRyz8phLozupTpcbtMUpz75HyTyIrl6BH8VA6MTHv3rPDjy
+	 1l6y/3ODl+6TJWrSByg8ugJCyRiO/xsmhK1dF4i59f8WxCIUZ8CV+G3c5x4jslUm+/
+	 aRVcV5DFAKgxIi0fZn0e4yl5zhLXNvjEWN4B6DSIU864MJyhv76LPUPrbxfHn/ZYHL
+	 YPlKzZTZOv1jw==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-65763315216so291245eaf.0
+        for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 03:02:30 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUB+53mFWjCjJRPD4kdapeamfShgpnTDR7efiuVatq7JZ6gtXax+z07xuaYsVaQHppNuIF5nPn1xw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwmPuP3yHkxDU12G58ZWQW+fEswlhfk+EzWV9m08+TtlAENQJVt
+	q+eDfRZIIR78rjxHNPfOfgZT3qigoKxsWL52Y17iS97IffU3O8c6aAa6mBFoWfAVejbdoO2tSv2
+	//3x65wJKcAwLf5v/1pUjcaRB2D/v3ME=
+X-Google-Smtp-Source: AGHT+IF9nKidG0i0gEkzI6ThqgzNl3O7eLP6Rom8/Fp7Z75dNL4HI+iLgk2Zl2i3tLlQhwdENynLiF0biN2LhoJa6uQ=
+X-Received: by 2002:a4a:e904:0:b0:657:7272:e011 with SMTP id
+ 006d021491bc7-657849dfe0bmr1003438eaf.5.1763636549736; Thu, 20 Nov 2025
+ 03:02:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <q2dp7jlblofwkmkufjdysgu2ggv6g4cvhkah3trr5wamxymngm@p2mn4r7vyo77>
-In-Reply-To: <q2dp7jlblofwkmkufjdysgu2ggv6g4cvhkah3trr5wamxymngm@p2mn4r7vyo77>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Thu, 20 Nov 2025 11:55:30 +0100
-X-Gm-Features: AWmQ_blAIbaFsVzIrvLzF0Uj_TD5xSQkMIO9nrj7gb4Q7GJzX0PkQO_vz47YO58
-Message-ID: <CAKfTPtAkYfCYc3giCzbDFLBDNTM-nXjkE8FXMZhvJj_im+Qz0Q@mail.gmail.com>
-Subject: Re: stable 6.6: commit "sched/cpufreq: Rework schedutil governor
- performance estimation' causes a regression
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Yu-Che Cheng <giver@google.com>, 
-	Tomasz Figa <tfiga@chromium.org>, stable@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <4701737.LvFx2qVVIh@rafael.j.wysocki> <69115878-ec5e-4f7c-bb3e-9f61cce75c70@arm.com>
+ <003f01dc59a7$2bd98b40$838ca1c0$@telus.net>
+In-Reply-To: <003f01dc59a7$2bd98b40$838ca1c0$@telus.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 20 Nov 2025 12:02:18 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0ic91RriXEHJkEFn0EkPKykmdEANimbKjAtdR0SwCZ4OA@mail.gmail.com>
+X-Gm-Features: AWmQ_blgBu8uVi62DQdYH_oR-IveXrh7y7WiO2EWht9APILmATP7KN0yXzRX318
+Message-ID: <CAJZ5v0ic91RriXEHJkEFn0EkPKykmdEANimbKjAtdR0SwCZ4OA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/4] cpuidle: governors: teo: Assorted improvements
+To: Doug Smythies <dsmythies@telus.net>
+Cc: Christian Loehle <christian.loehle@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Reka Norman <rekanorman@chromium.org>, Marcelo Tosatti <mtosatti@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 20 Nov 2025 at 05:45, Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
+On Wed, Nov 19, 2025 at 11:52=E2=80=AFPM Doug Smythies <dsmythies@telus.net=
+> wrote:
 >
-> Hi,
+> On 2025.11.13 07:22 Christian Loehle wrote:
+> > On 11/12/25 16:21, Rafael J. Wysocki wrote:
+> >> Hi,
+> >>
+> >> This is a bunch of teo cpuidle governor improvements, some of which ar=
+e related
+> >> to a bug report discussed recently:
+> >>
+> >> https://lore.kernel.org/linux-pm/CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQ=
+sU_qdcCx1m4w5g@mail.gmail.com/
+> >>
+> >> The first patch fixes a bug that may cause an overly deep idle state
+> >> to be selected when the scheduler tick has been already stopped.
+> >>
+> >> Patch [2/4] removes an unnecessary function argument.
+> >>
+> >> Patch [3/4] makes teo_update() to use s64 as the data type for its loc=
+al
+> >> variables more consistently.
+> >>
+> >> The last patch reworks the governor's decay implementation to also dec=
+ay
+> >> metric values lower than 8.
+> >>
+> >
+> > Tested-by: Christian Loehle <christian.loehle@arm.com>
+> >
+> > Test results below, although there really isn't anything interesting in=
+ there.
+> > teo-1 to teo-4 (patches 1 to 4 respectively are essentially indistingui=
+shable from
+> > teo-m =3D mainline)
 >
-> We are observing a performance regression on one of our arm64 boards.
-> We tracked it down to the linux-6.6.y commit ada8d7fa0ad4 ("sched/cpufreq:
-> Rework schedutil governor performance estimation").
-
-Do you have the fix ?
-https://lore.kernel.org/all/170539970061.398.16662091173685476681.tip-bot2@tip-bot2/
-
-And do you have more details to share?
-
+> I tested the 4 patch set also, and also found no differences in results a=
+bove
+> repeatability noise levels.
 >
-> UI speedometer benchmark:
-> w/commit:       395  +/-38
-> w/o commit:     439  +/-14
+> Additionally, I added another patch (patch 5 of 4):
+> "cpuidle: governors: teo: Rework the handling of tick wakeups" [1]
+> Similar findings.
+>
+> Additionally, I added another patch (patch 6 of 4):
+> "sched/idle: disable tick in idle=3Dpoll idle entry" [2]
+> And found only one significant improvement, for only one test,
+> but only for the TEO idle governor:
+>
+> Kernel 6.18-rc4:
+> For a 6 pair fast ping-pong test (meaning no work per token stop):
+> teo: 5.53 uSec per loop, reference test
+> 4 of 4 patches: 5.53 uSec per loop, 0%
+> 5 of 4 patches: 5.54 uSec per loop, 0.2% (noise)
+> 6 of 4 patches: 4.77 uSec per loop, 13% better
+> 6 of 4 patches (again): 4.81 uSec per loop, 13% better
+> menu: 5.29 uSec per loop, 4.4% better
+> menu + patch 6 of 4: 5.28 uSec per loop, 4.5% better
+>
+> Idle state 0 usage:
+> 18% with patch 6, teo
+> 11% with menu
+> ~1% with mainline and not patch 6, teo.
+>
+> Idle state 1 usage:
+> almost 0 with patch 6, teo
+> ~6% with menu
+> 27% with mainline and not patch 6, teo.
+>
+> Power: About 100 watts. Patch 6 and teo does increase power use by about =
+a watt or 2.
+>
+> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz, 6 cores 12 CPUs.
+>
+> For clarity my branch log:
+> 3993913d7f81 (HEAD -> rjw-teo) sched/idle: disable tick in idle=3Dpoll id=
+le entry
+> d9b12b8d62bf cpuidle: governors: teo: Rework the handling of tick wakeups
+> e47178c87272 cpuidle: governors: teo: Decay metrics below DECAY_SHIFT thr=
+eshold
+> 7fe32e411c2b cpuidle: governors: teo: Use s64 consistently in teo_update(=
+)
+> 490e6118e45d cpuidle: governors: teo: Drop redundant function parameter
+> 8f627f86062e cpuidle: governors: teo: Drop incorrect target residency che=
+ck
+> 6146a0f1dfae (tag: v6.18-rc4, origin/master, origin/HEAD, master) Linux 6=
+.18-rc4
+>
+> [1] https://lore.kernel.org/linux-pm/6228387.lOV4Wx5bFT@rafael.j.wysocki/
+> [2] https://lore.kernel.org/linux-pm/aQiWfnnSzxsnwa2o@tpad/
+
+Thanks for the feedback, much appreciated!
+
+I will likely have some more teo updates in the next cycle.
 
