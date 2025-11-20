@@ -1,145 +1,133 @@
-Return-Path: <linux-pm+bounces-38302-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38303-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF95FC744CC
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 14:41:40 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89FFFC74526
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 14:46:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 687A43110A
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 13:35:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4C3594F93E8
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 13:35:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EFC133A71B;
-	Thu, 20 Nov 2025 13:35:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB0C733E358;
+	Thu, 20 Nov 2025 13:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iqEQugTO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92CD3199EAD;
-	Thu, 20 Nov 2025 13:35:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0FBD33C19D
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 13:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763645708; cv=none; b=TO3//9YNs4Uu6cOkLJdHYEc3CiRVcAEuJJ7ZvAKZuI+VktgCXenaDZmMXbishdXrjS50Ta1R5qry2BqgKiw0emXIYHgoeQqSQoUpki78Au7qBEjKBPk42cHwDbYCv9YLZl3frOekGG4UAAy/xvPtdA1Ro3eKQLqA5H40B3FATLI=
+	t=1763645722; cv=none; b=rZSGkm0eDRORUwAhIzaklGQIb/Cmrlp+ufUMFmWBH1tI3rupqGV/Tz309BmkR52uPGKxfobjkY5PbiAKsFhW9LW6xM+TxWfWFandfmbNN9H1tARVAE3THuj9JxLaXajpNAWr+C9Twyc5HgKcaxIa9s2/Z3BUc/fhLYywM0lVL6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763645708; c=relaxed/simple;
-	bh=plFT7F2YDOY6kZZ6HHTCftwJzCeCbgs0LSSR9ob5Hkw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QMLEqz+Z06vl9eJ+5h5i4QqWtddJH1O/qy1VI68dzDVfuHZ3MFvBGLHYruuv3uk71irVJEjMEsTKP2rdP+jW65ASbstQVHTooxkTBaw+WQJdgaOUhlauAH4q2ybYchkAxPWT6TwMInYuxpwkSN4eAokEnNU9EMtuRKpseq2gbH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 31E86339;
-	Thu, 20 Nov 2025 05:34:57 -0800 (PST)
-Received: from [10.57.69.158] (unknown [10.57.69.158])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5039C3F66E;
-	Thu, 20 Nov 2025 05:35:03 -0800 (PST)
-Message-ID: <f46bb011-83b1-4037-bc6f-eb7e72800e38@arm.com>
-Date: Thu, 20 Nov 2025 13:35:00 +0000
+	s=arc-20240116; t=1763645722; c=relaxed/simple;
+	bh=G8yIaxqlMSXlJp1hZsvZsMSWwE2jQYO0tbip8q7uWvo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iKuyE9XeSmEhFfyq5epfQZe58ED/lNzHK+fbJQb2ol/5OXyKLYHz5bJ9S5mYqeFTijL7MFcHDwNcX8olSslYO5qaJRovQfEJH4jmT955bkDzkK8iV7aLiV2+Wb6gWTadQoJpXEqRtIQJHWyH1nQ/arTHwSJB1Uw6Keie4hSlPak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iqEQugTO; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-42bb288c1bfso589257f8f.2
+        for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 05:35:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763645718; x=1764250518; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ivhCsjIpN+rKmvMKFUskFMdd2JcJlk5CTRXG/6h4Fp8=;
+        b=iqEQugTOred8HLJgcAfQm7em4J/hXa9o0ZJZ/EmS5wekyWk2Ndes/ez0hvJe4J8s4a
+         A4FpdGZ/INvrVktFiPUyEsbSZA02311oCI712gaqd8N9aE7fV0boJ66f2c0D4J3HvB0o
+         mDZFk1yB2I/9nOUmaeQLgukkeXatazFz/dE9xyE8kstyut1yVRfbh0p0Y8+BCjfxyz/x
+         Y9TGppKypP4YI5D3v0foPmwbLaNJwe/Y2Fvu8QTCp8Z9t3gI90uEudf8qSqi9S5ilqNN
+         c1bxVGmYzQHUxJfVF/YNNe9jFTDaRfF28wSUIM+fFfjxS5JAzOmpNl3HR90WdA9w9JnX
+         QRVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763645718; x=1764250518;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ivhCsjIpN+rKmvMKFUskFMdd2JcJlk5CTRXG/6h4Fp8=;
+        b=HQt0I8BWcsNMKMydh4vs0NzfXFvmIAhPxwM9Z70+VPrjju+ZjU1zPwvaKLqZfbKWom
+         WFhg4xFroUdxTuwGZrcfGB6zv0ebDgwu2Wr4EST2xK9B38Uj2GL3NSfOl1h2LjtEy1Jb
+         lpd44b9WDfnwL/0YXdPVmlInukfGvwSccWwo0Ux9VvjSdSWh5akdt5xk/qCXfK3W3KEd
+         WrVQhACaeBQKShlzPnCTrOv6cUqt0dVvq264RdCoOWLsDZpBGYtX+1oitxeIzg5yVX1J
+         uBXxMvecIusg1iebFAqCiThDkV/L1SD7uIAehYaVD7FdH3Oz+/9rZETdELwmy97c7xs8
+         A0bQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUa2Cg1GeS1UvEf9fZW6NaW53gj21/+THI/gCQ4odsX0mm95sKWRxk7SSsKo/k3ZIz1bZHLfPEelQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyiI8/fzH5VmT3e3wlQDJRZdOXjX42GRQVYRMYvUY2jTOQ5+Xdv
+	GbNRfMTQD0k8X143Cbli8c6cnzQ8AKy324fgIG7b4kcolDIUhggtPRdg
+X-Gm-Gg: ASbGncsGOe+wswOkbLblq7ToiG1dSJpLP9EZQOLJzz5Y4ECYtASQ7456AwczfGa4BNy
+	KQtm5Y3I7EJussMs4KckgXYzBGKQLiUF5yL623hvTFBLzRPGU/UEyEkitiEnhfe8K0ZZ+vqkU3R
+	PTzxculic4GWQ12Fy96feqb0fRtgTxK3yX1WgNwSLt/9UC2LoucKWhLuUVkiW6oIk2llmJtQIij
+	e5u54In26Zm/rnDlK1jb5xbEum91EYR4DQJvJzXdqv7cT4dzTvT/v/MQmgNBLqXtn3YOKBb27EU
+	H6Jyeliud7mPIohJEnndMUFIatwcglkyU+MOb7OSuWK+0YYzvrnz9uiAD0AlcurP9FNHYq2hEz2
+	jlLWv1h5Bw1URo2hKyiBrN2kBlJOuoisOM05fvHkHMd/vUBY0sOPU623fc8bOt43FMb6p4kP3g4
+	j3RAY+45gtbFA356n2i984+Aw42NlTj82b526ZVNhq
+X-Google-Smtp-Source: AGHT+IEMS03klaZwAAJMz9PSOT0oih6Mf5sEnZyDXJENW4M3aPZN+qxGbLvqwcRRah/8mB+rsAtzqQ==
+X-Received: by 2002:a05:6000:420a:b0:42b:389a:b49 with SMTP id ffacd0b85a97d-42cb9a60870mr3180090f8f.28.1763645717940;
+        Thu, 20 Nov 2025 05:35:17 -0800 (PST)
+Received: from Ansuel-XPS24 (93-34-90-37.ip49.fastwebnet.it. [93.34.90.37])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-42cb7fd8c47sm5724685f8f.38.2025.11.20.05.35.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Nov 2025 05:35:17 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Ilia Lin <ilia.lin@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: kernel test robot <lkp@intel.com>
+Subject: [PATCH] cpufreq: qcom-nvmem: fix compilation warning for qcom_cpufreq_ipq806x_match_list
+Date: Thu, 20 Nov 2025 14:35:02 +0100
+Message-ID: <20251120133508.4237-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/4] cpuidle: governors: teo: Assorted improvements
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Doug Smythies <dsmythies@telus.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Reka Norman <rekanorman@chromium.org>, Marcelo Tosatti <mtosatti@redhat.com>
-References: <4701737.LvFx2qVVIh@rafael.j.wysocki>
- <69115878-ec5e-4f7c-bb3e-9f61cce75c70@arm.com>
- <003f01dc59a7$2bd98b40$838ca1c0$@telus.net>
- <CAJZ5v0ic91RriXEHJkEFn0EkPKykmdEANimbKjAtdR0SwCZ4OA@mail.gmail.com>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <CAJZ5v0ic91RriXEHJkEFn0EkPKykmdEANimbKjAtdR0SwCZ4OA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 11/20/25 11:02, Rafael J. Wysocki wrote:
-> On Wed, Nov 19, 2025 at 11:52 PM Doug Smythies <dsmythies@telus.net> wrote:
->>
->> On 2025.11.13 07:22 Christian Loehle wrote:
->>> On 11/12/25 16:21, Rafael J. Wysocki wrote:
->>>> Hi,
->>>>
->>>> This is a bunch of teo cpuidle governor improvements, some of which are related
->>>> to a bug report discussed recently:
->>>>
->>>> https://lore.kernel.org/linux-pm/CAEmPcwsNMNnNXuxgvHTQ93Mx-q3Oz9U57THQsU_qdcCx1m4w5g@mail.gmail.com/
->>>>
->>>> The first patch fixes a bug that may cause an overly deep idle state
->>>> to be selected when the scheduler tick has been already stopped.
->>>>
->>>> Patch [2/4] removes an unnecessary function argument.
->>>>
->>>> Patch [3/4] makes teo_update() to use s64 as the data type for its local
->>>> variables more consistently.
->>>>
->>>> The last patch reworks the governor's decay implementation to also decay
->>>> metric values lower than 8.
->>>>
->>>
->>> Tested-by: Christian Loehle <christian.loehle@arm.com>
->>>
->>> Test results below, although there really isn't anything interesting in there.
->>> teo-1 to teo-4 (patches 1 to 4 respectively are essentially indistinguishable from
->>> teo-m = mainline)
->>
->> I tested the 4 patch set also, and also found no differences in results above
->> repeatability noise levels.
->>
->> Additionally, I added another patch (patch 5 of 4):
->> "cpuidle: governors: teo: Rework the handling of tick wakeups" [1]
->> Similar findings.
->>
->> Additionally, I added another patch (patch 6 of 4):
->> "sched/idle: disable tick in idle=poll idle entry" [2]
->> And found only one significant improvement, for only one test,
->> but only for the TEO idle governor:
->>
->> Kernel 6.18-rc4:
->> For a 6 pair fast ping-pong test (meaning no work per token stop):
->> teo: 5.53 uSec per loop, reference test
->> 4 of 4 patches: 5.53 uSec per loop, 0%
->> 5 of 4 patches: 5.54 uSec per loop, 0.2% (noise)
->> 6 of 4 patches: 4.77 uSec per loop, 13% better
->> 6 of 4 patches (again): 4.81 uSec per loop, 13% better
->> menu: 5.29 uSec per loop, 4.4% better
->> menu + patch 6 of 4: 5.28 uSec per loop, 4.5% better
->>
->> Idle state 0 usage:
->> 18% with patch 6, teo
->> 11% with menu
->> ~1% with mainline and not patch 6, teo.
->>
->> Idle state 1 usage:
->> almost 0 with patch 6, teo
->> ~6% with menu
->> 27% with mainline and not patch 6, teo.
->>
->> Power: About 100 watts. Patch 6 and teo does increase power use by about a watt or 2.
->>
->> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz, 6 cores 12 CPUs.
->>
->> For clarity my branch log:
->> 3993913d7f81 (HEAD -> rjw-teo) sched/idle: disable tick in idle=poll idle entry
->> d9b12b8d62bf cpuidle: governors: teo: Rework the handling of tick wakeups
->> e47178c87272 cpuidle: governors: teo: Decay metrics below DECAY_SHIFT threshold
->> 7fe32e411c2b cpuidle: governors: teo: Use s64 consistently in teo_update()
->> 490e6118e45d cpuidle: governors: teo: Drop redundant function parameter
->> 8f627f86062e cpuidle: governors: teo: Drop incorrect target residency check
->> 6146a0f1dfae (tag: v6.18-rc4, origin/master, origin/HEAD, master) Linux 6.18-rc4
->>
->> [1] https://lore.kernel.org/linux-pm/6228387.lOV4Wx5bFT@rafael.j.wysocki/
->> [2] https://lore.kernel.org/linux-pm/aQiWfnnSzxsnwa2o@tpad/
-> 
-> Thanks for the feedback, much appreciated!
-> 
-> I will likely have some more teo updates in the next cycle.
+If CONFIG_OF is not enabled, of_match_node() is set as NULL and
+qcom_cpufreq_ipq806x_match_list won't be used causing a compilation
+warning.
 
-You're welcome, looking forward to reviewing them too.
-I haven't tried to see what this would ideally look like for the -stable branches.
-Just backport everything until the most recent applicable Fixes:?
+Flag qcom_cpufreq_ipq806x_match_list as __maybe_unused to fix the
+compilation warning.
+
+While at it also flag as __initconst as it's used only in probe contest
+and can be freed after probe.
+
+This follows the pattern of the usual of_device_id variables.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202511202119.6zvvFMup-lkp@intel.com/
+Fixes: 58f5d39d5ed8 ("cpufreq: qcom-nvmem: add compatible fallback for ipq806x for no SMEM")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+index d5af74bf71c6..6c3c125f6818 100644
+--- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
++++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+@@ -256,7 +256,7 @@ static int qcom_cpufreq_krait_name_version(struct device *cpu_dev,
+ 	return ret;
+ }
+ 
+-static const struct of_device_id qcom_cpufreq_ipq806x_match_list[] = {
++static const struct of_device_id qcom_cpufreq_ipq806x_match_list[] __initconst __maybe_unused = {
+ 	{ .compatible = "qcom,ipq8062", .data = (const void *)QCOM_ID_IPQ8062 },
+ 	{ .compatible = "qcom,ipq8064", .data = (const void *)QCOM_ID_IPQ8064 },
+ 	{ .compatible = "qcom,ipq8065", .data = (const void *)QCOM_ID_IPQ8065 },
+-- 
+2.51.0
+
 
