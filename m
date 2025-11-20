@@ -1,342 +1,120 @@
-Return-Path: <linux-pm+bounces-38306-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38307-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 079A0C747B7
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 15:15:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 36E8EC749C0
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 15:39:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AFE394EA371
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 14:08:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6EB304E9509
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 14:33:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7FE6346E6B;
-	Thu, 20 Nov 2025 14:08:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3703F23CEF9;
+	Thu, 20 Nov 2025 14:33:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UhaPVNhu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rwL7wWdI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4713376AC
-	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 14:08:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5873223B605
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 14:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763647729; cv=none; b=qt8VKQ8Zq9BEVFWGUgYRImI9hZZnBg+g6RlVUU7Cr8jj9OxqN2mPqgxNRrGDPgsaXa64RdUPuf4xiksbV8n/xbI4UPCr+BPRVKiObj5dYVqK/4VRoFvPgkO1ngIsobyYqtevY++hzLKuCEzMExt4ZZtMO0bnDrOUTIuHJbuJhHI=
+	t=1763649187; cv=none; b=GJEkKNO5D5VAuzO9uL9SYxookB+PQoAmT4Im9x2tBqEdkgaqIDkk8xLcuUlrQBTE07Sv7V/dtR5djhlQJWnhbCdlrgP+0HlTa5rKQnUj+eUcC54wy6wncMqCzwgC/GuE/ZOOlo7KMK99RMnhihBeqzew5euZn+GtmQZMLyTGoQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763647729; c=relaxed/simple;
-	bh=hXBBthJypM5vjTTphA0r6Oi5jEFjwOHaRtvgMSwE0wk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bB5T9+iIliDjB6bzvM0By1GFF31uoYYe3RXU3Aemq0GAEm6XDriy6UOwS2H8LTwboEJ9VTpV/gO0Osp4MGkzXdV83BiS3jfq/QfTnpCseedizv+yMYNmemJqo7PgFcEfFN6pmjjjcU7iWNA6k3b5uxkAfQfOEgcv55EpjWl5lPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UhaPVNhu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45C9EC116D0
-	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 14:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763647729;
-	bh=hXBBthJypM5vjTTphA0r6Oi5jEFjwOHaRtvgMSwE0wk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=UhaPVNhu09owXU6y9W2n4EbDbqwc/M9mp92cn9ldwz/kHaQSikV4QEb1x8h862KGJ
-	 XEAlXPX/rZMIk4ZA/MYwmG9EU/RSiyYSX7pM56WL3cf1WqwvDKTFeYvROl6ruiKiWz
-	 RggNxFAtFsx+/iyPnygo4X7mkYvb76H07eNlxXYTNwF9wiCoIR/FCK1rQOFDN8Pz89
-	 ulOQwlOIztwO8KonkDga5rm923zYMQC2dcj4b91fvXFtiMLAZ6U7ixUJeqqReeRjA5
-	 G9fse4dfN9owLuSRdXtpyoUOE6rOkvVJcpFyUykgCDV57nRS6GoyWnsS0rOd+YyS/e
-	 x1GT2S7aSmTzA==
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-64198771a9bso1639064a12.2
-        for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 06:08:49 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUjjGX5Ut/Kiymg10QmXlrE0cs5BOK2LkylM/I+kv+PqjxlYSDZvAXktxUMBNo+owjc6kpuwRB0mA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywz4Pt0tCyefuE5TLk7h8JDt+QlaJwJZuYKPW19gr71d0ZYfRxz
-	DAZQUjamk0cuvmxEtBvwCHNVr1/zWHNhb9EmCAeNIDPKPxVhDr+FUr1CZVxkYQ6JmI8/cdAaExv
-	aD5tuEhdlgpbnPHjF2+UG7OxMUwuw9w==
-X-Google-Smtp-Source: AGHT+IFhmpxwxTK3iIU5gGY4RHYCOg2OWMZSTYPm0QsqQ/K/SQuzk+g5Q+9Xr/dcjgg52W8xNLzdh4MPPMoGiSlnRts=
-X-Received: by 2002:a05:6402:348c:b0:640:cdad:d2c0 with SMTP id
- 4fb4d7f45d1cf-64538227a06mr2493204a12.25.1763647727793; Thu, 20 Nov 2025
- 06:08:47 -0800 (PST)
+	s=arc-20240116; t=1763649187; c=relaxed/simple;
+	bh=g94W2Q/Kh6Xh7xJQTHuKAVhkV024rb3AUOYTPf2JMdQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j00AVJgdufNqLG6d1Wg0sI9Ae74XbCTsCQHp6zTVjfYv315RYw+qihdllDfB4P3V9KeWzJ5HJaGqBE1hpKQcTijGHwzUveQzlo/usMk7rBwzJzDcBLcb80iTuo5KI+Mjsgp28Dii6N1HYxeljWcLct7I2uidKa92X95Pv3Hdzug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rwL7wWdI; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4779cb0a33fso9543835e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 06:33:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1763649184; x=1764253984; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tjRZENQ+4nAVbqIuxdQaWCBPLWKLGcvWPo37O81CXX0=;
+        b=rwL7wWdIeGJ/bWutTMbSJYCelDrPrMNqMljH5M3WJzYd7pwQVd4LBKlB1pit4MyEJs
+         i8xVAfhepbECjsvhK/cQefgx/UDSLC0Cem3WZ30Ijt9fOZ9RyjibHMAiXNSmqdUU/Cul
+         ctQcgBcwjiTvWe95Ec7KGsuZ67pQxQG+WGEhJmHCSO2EMK8aItWJ+v4VyooeWNVLfYeP
+         dNc8AXGw1FvHw73RnckLNufcelH9ei3Vc1iTyoLabANTFD78itLxzTt0S/UAKg6d9Rqc
+         Y/ybG6gLC4KEzVxGBQmWQCAsQZG8d6QAJFxgxOIsKB8NneelfJSZs6ap8v8eb+mf0GFb
+         bLuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763649184; x=1764253984;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tjRZENQ+4nAVbqIuxdQaWCBPLWKLGcvWPo37O81CXX0=;
+        b=D9q67YSDn+mBd4hquARVYKM63Z/2Lxn6huU4Xcu4dXbEAL8RCFYcuGW5FJaYuDk9IU
+         EFUDDh8uoZEO9HtbrtOz2XBRt4i/zHHLK8ySTUElrijbHohgeCi9QWY+PRm7hZKZMtB/
+         L994Eb/yHtfJErKH0/KAOyDESi5kYUbzrcVzJgZGQ0qM5kFhmZs0Itg89J11WD8BJWho
+         4K9XvfMyn3ntz4GHi84D6dsDRkQ6w+eM9Ejbc7KI1FCAlr3dYGClrGFow3vj66NYr35Q
+         q9JI21hVYr8Zs692HrKhl+TNcT8vBWIgT9lH6WW9eMQ48icZWvk78MkzDtFxX/zt0bxr
+         TACw==
+X-Forwarded-Encrypted: i=1; AJvYcCXFcmOyQmGC25jN0QnvLlexR6yAY9rv5bDW/9RQgcc1Ei5hRabhy57dpajGi0LoEzh+/PN3KNbV0Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUZFKJCaB1DZnu8nCwDMlLLZ9HspZnGSS3fT4aXh8wK4DeyDpe
+	9omLo5CD55Zsvg9GUwNrEQQQly5RuVOT8i1cNm9m6gENbq2qlf+uD1beXx3pqnF7XGE=
+X-Gm-Gg: ASbGncs2Pa2r3PZrescIxDqDBWOV6zHkrG+vD5db56zzOxshrAQLE4nP2IQhvJmXv1P
+	FitodCd2RchfF2x1R0TbSLYueQeUEsXFFW6awmfHp684gAtXBpko+W8HW3A5c4fBHZmM/Bh4/+T
+	RMs2KsyMlIyTelRvOJPjBGPEJ6Kj8MwfHog7Oe4RASY65wNcjUD2gWBnqbZJuNiGYttfWQd40up
+	NDUOPi2WiEjQXJ+72WHD/B7hTSJltGoEVRW7doAII1QzIpp1IYSkxCcVTsy5ROJqKHMgLBXjHn7
+	17cF/Nlp98jFhlgtN70ETfsgczitwsEU2SrNT3opspd9iPvefiYnCIaC6veO/GmN1YvmaOe8uLg
+	GcIHmodwjyaxJ8RK4EUrpo6+CHo/DkSuc9ze/MVQc9YDKneoh259JRolczYxu4rSt1GPWZnwP8g
+	hfmBaQhnaltWz3kCsA+hIQ/NauMnFsHoaB2meIS4aVwyWvuKvu8vS1v/7aLU2iJgJizA==
+X-Google-Smtp-Source: AGHT+IFrm7f3D4ZpMOXc9Qkx58CciFrYbEpo9cBF72r6dlhpL8LKHFoMnR3Nqr9ZhUCz2EUoKnZBLQ==
+X-Received: by 2002:a05:600c:46cb:b0:477:7b16:5fb1 with SMTP id 5b1f17b1804b1-477b9dc06d4mr31332835e9.7.1763649183596;
+        Thu, 20 Nov 2025 06:33:03 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:37e6:ed62:3c8b:2621? ([2a05:6e02:1041:c10:37e6:ed62:3c8b:2621])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-477a96a58c5sm68949695e9.0.2025.11.20.06.33.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Nov 2025 06:33:03 -0800 (PST)
+Message-ID: <c9166508-88ce-471b-95f1-65a6bd5152b3@linaro.org>
+Date: Thu, 20 Nov 2025 15:33:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251119-topic-lpm-of-map-iterator-v6-18-v1-1-1f0075d771a3@baylibre.com>
-In-Reply-To: <20251119-topic-lpm-of-map-iterator-v6-18-v1-1-1f0075d771a3@baylibre.com>
-From: Rob Herring <robh@kernel.org>
-Date: Thu, 20 Nov 2025 08:08:36 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+2sFzQb8j5bBWbwgyYn5apLTfWOTZW3+9n74uVyph16A@mail.gmail.com>
-X-Gm-Features: AWmQ_bl_e2mY7mehKL9PPzNTQx6rMW289JXHIko6uxRTQ1xj75fDik3Oj__esgs
-Message-ID: <CAL_Jsq+2sFzQb8j5bBWbwgyYn5apLTfWOTZW3+9n74uVyph16A@mail.gmail.com>
-Subject: Re: [PATCH RFC] of: Add of_parse_map_iter() helper for nexus node map iteration
-To: "Kevin Hilman (TI.com)" <khilman@baylibre.com>, Herve Codina <herve.codina@bootlin.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	devicetree@vger.kernel.org, linux-pm@vger.kernel.org, 
-	arm-scmi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] thermal: rcar: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+ =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+ =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+References: <ee03ec71d10fd589e7458fa1b0ada3d3c19dbb54.1763117351.git.geert+renesas@glider.be>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <ee03ec71d10fd589e7458fa1b0ada3d3c19dbb54.1763117351.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-+Herve
-
-On Wed, Nov 19, 2025 at 6:41=E2=80=AFPM Kevin Hilman (TI.com)
-<khilman@baylibre.com> wrote:
->
-> Add a new helper function of_parse_map_iter() to iterate over nexus
-> node maps (c.f. DT spec, section 2.5.1.)
->
-> This function provides an iterator interface for traversing map
-> entries, handling the complexity of variable-sized entries based on
-> <stem>-cells properties, as well as handling the <stem>-skip and
-> <stem>-pass-thru properties.
->
-> RFC: There's a lot of overlap between this function and
-> of_parse_phandle_with_args_map().  However the key differences are:
->
->   - of_parse_phandle_with_args_map() does matching
->     it searches for an entry that matches specific child args
->   - of_parse_map_iter() does iteration
->     it simply walks through all entries sequentially
-
-There's also this in flight for interrupt-map:
-
-https://lore.kernel.org/all/20251027123601.77216-2-herve.codina@bootlin.com=
-/
-
-There's probably enough quirks with interrupt-map that we can't use
-the same code. Though it may boil down to handling #address-cells and
-how the parent is looked up.
-
-> There are likely ways to extract some shared code between these two
-> functions into some shared helpers, but I'm hoping someone more
-> familiar with this OF code can help here.
-
-I would expect of_parse_phandle_with_args_map() could be implemented
-in terms of the iterator.
-
-> However, before refactoring the shared code, it would be good to have
-> some feedback on this approach.
->
-> Signed-off-by: Kevin Hilman (TI.com) <khilman@baylibre.com>
+On 11/14/25 11:50, Geert Uytterhoeven wrote:
+> Convert the Renesas R-Car thermal driver from SIMPLE_DEV_PM_OPS() to
+> DEFINE_SIMPLE_DEV_PM_OPS() and pm_sleep_ptr().  This lets us drop the
+> check for CONFIG_PM_SLEEP, and reduces kernel size in case CONFIG_PM or
+> CONFIG_PM_SLEEP is disabled, while increasing build coverage.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 > ---
->  drivers/of/base.c  | 167 +++++++++++++++++++++++++++++++++++++++++++++++=
-+++++
->  include/linux/of.h |  13 ++++
->  2 files changed, 180 insertions(+)
->
-> diff --git a/drivers/of/base.c b/drivers/of/base.c
-> index 7043acd971a0..bdb4fde1bfa9 100644
-> --- a/drivers/of/base.c
-> +++ b/drivers/of/base.c
-> @@ -1594,6 +1594,173 @@ int of_parse_phandle_with_args_map(const struct d=
-evice_node *np,
->  }
->  EXPORT_SYMBOL(of_parse_phandle_with_args_map);
->
-> +/**
-> + * of_parse_map_iter() - Iterate through entries in a nexus node map
-> + * @np:                        pointer to a device tree node containing =
-the map
-> + * @stem_name:         stem of property names (e.g., "power-domain" for =
-"power-domain-map")
-> + * @index:             pointer to iteration index (set to 0 for first ca=
-ll)
-> + * @child_args:                pointer to structure to fill with child s=
-pecifier (can be NULL)
-> + * @parent_args:       pointer to structure to fill with parent phandle =
-and specifier
-> + *
-> + * This function iterates through a nexus node map property as defined i=
-n DT spec 2.5.1.
-> + * Each map entry has the format: <child_specifier phandle parent_specif=
-ier>
-> + *
-> + * On each call, it extracts one map entry and fills child_args (if prov=
-ided) with the
-> + * child specifier and parent_args with the parent phandle and specifier=
-.
-> + * The index pointer is updated to point to the next entry for the follo=
-wing call.
-> + *
-> + * Example usage::
-> + *
-> + *  int index =3D 0;
-> + *  struct of_phandle_args child_args, parent_args;
-> + *
-> + *  while (!of_parse_map_iter(np, "power-domain", &index, &child_args, &=
-parent_args)) {
-> + *      // Process child_args and parent_args
-> + *      of_node_put(parent_args.np);
-> + *  }
-> + *
-> + * Caller is responsible for calling of_node_put() on parent_args.np.
-> + *
-> + * Return: 0 on success, -ENOENT when iteration is complete, or negative=
- error code on failure.
-> + */
-> +int of_parse_map_iter(const struct device_node *np,
-> +                      const char *stem_name,
-> +                      int *index,
-> +                      struct of_phandle_args *child_args,
-> +                      struct of_phandle_args *parent_args)
-> +{
-> +       char *cells_name __free(kfree) =3D kasprintf(GFP_KERNEL, "#%s-cel=
-ls", stem_name);
-> +       char *map_name __free(kfree) =3D kasprintf(GFP_KERNEL, "%s-map", =
-stem_name);
-> +       char *mask_name __free(kfree) =3D kasprintf(GFP_KERNEL, "%s-map-m=
-ask", stem_name);
-> +       char *pass_name __free(kfree) =3D kasprintf(GFP_KERNEL, "%s-map-p=
-ass-thru", stem_name);
-> +       static const __be32 dummy_mask[] =3D { [0 ... MAX_PHANDLE_ARGS] =
-=3D cpu_to_be32(~0) };
-> +       static const __be32 dummy_pass[] =3D { [0 ... MAX_PHANDLE_ARGS] =
-=3D cpu_to_be32(0) };
-> +       const __be32 *map, *mask, *pass;
-> +       __be32 child_spec[MAX_PHANDLE_ARGS];
-> +       u32 child_cells, parent_cells;
-> +       int map_len, i, entry_idx;
-> +
-> +       if (!np || !stem_name || !index || !parent_args)
-> +               return -EINVAL;
-> +
-> +       if (!cells_name || !map_name || !mask_name || !pass_name)
-> +               return -ENOMEM;
-> +
-> +       /* Get the map property */
-> +       map =3D of_get_property(np, map_name, &map_len);
-> +       if (!map)
-> +               return -ENOENT;
-> +
-> +       map_len /=3D sizeof(u32);
-> +
-> +       /* Get child #cells */
-> +       if (of_property_read_u32(np, cells_name, &child_cells))
-> +               return -EINVAL;
-> +
-> +       /* Get the mask property (optional) */
-> +       mask =3D of_get_property(np, mask_name, NULL);
-> +       if (!mask)
-> +               mask =3D dummy_mask;
-> +
-> +       /* Get the pass-thru property (optional) */
-> +       pass =3D of_get_property(np, pass_name, NULL);
-> +       if (!pass)
-> +               pass =3D dummy_pass;
 
-Generally the DT iterators need some state maintained, so there's an
-init function to do all/most of the above and stash that into a state
-struct for the iterator.
+Applied, thanks
 
-> +
-> +       /* Iterate through map to find the entry at the requested index *=
-/
-> +       entry_idx =3D 0;
-> +       while (map_len > child_cells + 1) {
-> +               /* If this is the entry we're looking for, extract it */
-> +               if (entry_idx =3D=3D *index) {
-> +                       /* Save masked child specifier for pass-thru proc=
-essing */
-> +                       for (i =3D 0; i < child_cells && i < MAX_PHANDLE_=
-ARGS; i++)
-> +                               child_spec[i] =3D map[i] & mask[i];
-> +
-> +                       /* Extract child specifier if requested */
-> +                       if (child_args) {
-> +                               child_args->np =3D (struct device_node *)=
-np;
-> +                               child_args->args_count =3D child_cells;
-> +                               for (i =3D 0; i < child_cells && i < MAX_=
-PHANDLE_ARGS; i++)
-> +                                       child_args->args[i] =3D be32_to_c=
-pu(map[i]);
-> +                       }
-> +
-> +                       /* Move past child specifier */
-> +                       map +=3D child_cells;
-> +                       map_len -=3D child_cells;
-> +
-> +                       /* Extract parent phandle */
-> +                       parent_args->np =3D of_find_node_by_phandle(be32_=
-to_cpup(map));
 
-Before you update the parent node, you need to put the previous parent.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> +                       map++;
-> +                       map_len--;
-> +
-> +                       if (!parent_args->np)
-> +                               return -EINVAL;
-> +
-> +                       /* Get parent #cells */
-> +                       if (of_property_read_u32(parent_args->np, cells_n=
-ame, &parent_cells))
-> +                               parent_cells =3D 0;
-> +
-> +                       /* Check for malformed properties */
-> +                       if (WARN_ON(parent_cells > MAX_PHANDLE_ARGS) ||
-> +                           map_len < parent_cells) {
-> +                               of_node_put(parent_args->np);
-> +                               return -EINVAL;
-> +                       }
-> +
-> +                       /*
-> +                        * Copy parent specifier into the out_args struct=
-ure, keeping
-> +                        * the bits specified in <stem>-map-pass-thru per=
- DT spec 2.5.1
-> +                        */
-> +                       parent_args->args_count =3D parent_cells;
-> +                       for (i =3D 0; i < parent_cells; i++) {
-> +                               __be32 val =3D map[i];
-> +
-> +                               if (i < child_cells) {
-> +                                       val &=3D ~pass[i];
-> +                                       val |=3D child_spec[i] & pass[i];
-> +                               }
-> +
-> +                               parent_args->args[i] =3D be32_to_cpu(val)=
-;
-> +                       }
-> +
-> +                       /* Advance index for next iteration */
-> +                       (*index)++;
-> +                       return 0;
-> +               }
-> +
-> +               /* Skip this entry: child_cells + phandle + parent_cells =
-*/
-> +               map +=3D child_cells;
-> +               map_len -=3D child_cells;
-> +
-> +               /* Get parent node to determine parent_cells */
-> +               parent_args->np =3D of_find_node_by_phandle(be32_to_cpup(=
-map));
-> +               map++;
-> +               map_len--;
-> +
-> +               if (!parent_args->np)
-> +                       return -EINVAL;
-> +
-> +               if (of_property_read_u32(parent_args->np, cells_name, &pa=
-rent_cells))
-> +                       parent_cells =3D 0;
-> +
-> +               of_node_put(parent_args->np);
-> +
-> +               /* Check for malformed properties */
-> +               if (map_len < parent_cells)
-> +                       return -EINVAL;
-> +
-> +               /* Move forward by parent node's #<stem>-cells amount */
-> +               map +=3D parent_cells;
-> +               map_len -=3D parent_cells;
-> +
-> +               entry_idx++;
-> +       }
-> +
-> +       /* Reached end of map without finding the requested index */
-> +       return -ENOENT;
-> +}
-> +EXPORT_SYMBOL(of_parse_map_iter);
-> +
->  /**
->   * of_count_phandle_with_args() - Find the number of phandles references=
- in a property
->   * @np:                pointer to a device tree node containing a list
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
