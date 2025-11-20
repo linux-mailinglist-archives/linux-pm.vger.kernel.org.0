@@ -1,133 +1,93 @@
-Return-Path: <linux-pm+bounces-38320-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38321-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 037CAC762FE
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 21:22:41 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD47FC7636D
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 21:35:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D970E4E1348
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 20:22:35 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 58D593454EE
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 20:35:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9D1534572B;
-	Thu, 20 Nov 2025 20:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 111D92D8375;
+	Thu, 20 Nov 2025 20:34:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gd6+ReOT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y58sdKW/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EE333D6E6;
-	Thu, 20 Nov 2025 20:22:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E03F82652A2
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 20:34:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763670142; cv=none; b=IqvotWF1YfhJIMXgq+4bTrUoh+kt7qd5M0GJiHwG/yHx3qJJLLKxAn9erW4Yrt5BI1YHjNS/PG61OqQgGPjalE5CMjk0yOL/TBqukSOq8M2UEZZiEwqCqOnaFjjG5KWMsSGUDE4QQnNkcGpGbwDs1pfBAXiISeHB/m0Z/YSUc0c=
+	t=1763670895; cv=none; b=OQWCqgj34hY6kdSxwGGbFUIJ1y9mXa2Mhq/EY04AKjzKovah7PNzV9VhLnIP+wdTj/oD8izKMMMn3wyCiHJZUfepBS+MeV59i3ltLbJ8x/ciQ/owPVQ55hTLh0o2NoQaUAwbHOt2vlB8eejgiCMAI0/764eFXOiSvYzcRmOdgb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763670142; c=relaxed/simple;
-	bh=IIjNXmxsCQvExGI6pwxUj0v63rRpN+xaKbXaacnUje0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T10ODCEb11YPYN24M36wt40XuiOUAq1hzMlDqfuxIrKY3w8YWW0tBBZM96IBJ0fP6tdJEjlErWTGd8Ia0SEFqCO5zP3hLL45514ZELFsT64D2ub43zdT7WSzTNe0dCbUU26+XuS8CrKGY2a+26OF/xyey3MvJn7c1CPvYBie8e8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gd6+ReOT; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763670142; x=1795206142;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IIjNXmxsCQvExGI6pwxUj0v63rRpN+xaKbXaacnUje0=;
-  b=gd6+ReOTj5EZn2Mh9Bv2vXwEtMNLi+rm+7R4EOG8rGQXxYjVp3bAhs4g
-   abfmh3Z2hBP0sZDOAc/dMqvwMxycxtnr+5Lc3KkLpyHR1j85hY8elEWJo
-   L9WlbpZsx9u9Ft91x2GlxqJNyb6DW/txoGCjRVkAK9xz7Tv88ns3Wb98/
-   /EmFM+BYKwwdOsewoW6njedF90Ok9tq7sK4lBng43sFpS2u6hYxccvdFG
-   tuX3bSusJaCcS3od5jJvZOIsWFMZvRaYUTNRImFrid60JiOTe/r68R+tl
-   yFcWEmI+XTn7YB9Fcjw9kON0hjv/6I5s9mQ3O/U5Ew/n1MenBAnd63bt+
-   g==;
-X-CSE-ConnectionGUID: Ot8590eNSMSrDwFNMY7yYg==
-X-CSE-MsgGUID: 3UrrP/KJQY+9r8GrqgeeSg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="77224512"
-X-IronPort-AV: E=Sophos;i="6.20,213,1758610800"; 
-   d="scan'208";a="77224512"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 12:22:21 -0800
-X-CSE-ConnectionGUID: 6C1LP+SMTQS2yG2jUAy5QA==
-X-CSE-MsgGUID: xvx7Lhn0RaS+CqXzcboOtw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,213,1758610800"; 
-   d="scan'208";a="222123473"
-Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 20 Nov 2025 12:22:14 -0800
-Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vMBAR-0004Wx-1T;
-	Thu, 20 Nov 2025 20:22:11 +0000
-Date: Fri, 21 Nov 2025 04:21:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-	linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-	nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
-	Li Ming <ming.li@zohomail.com>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Ying Huang <huang.ying.caritas@gmail.com>,
-	Yao Xingtao <yaoxt.fnst@fujitsu.com>,
-	Peter Zijlstra <peterz@infradead.org>, Greg KH <greg@kroah.com>,
-	Nathan Fontenot <nathan.fontenot@amd.com>,
-	Terry Bowman <terry.bowman@amd.com>,
-	Robert Richter <rrichter@amd.com>,
-	Benjamin Cheatham <benjamin.cheatham@amd.com>,
-	Zhijian Li <lizhijian@fujitsu.com>, Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH v4 6/9] cxl/region: Add register_dax flag to defer DAX
- setup
-Message-ID: <202511210343.c0vb4NRc-lkp@intel.com>
-References: <20251120031925.87762-7-Smita.KoralahalliChannabasappa@amd.com>
+	s=arc-20240116; t=1763670895; c=relaxed/simple;
+	bh=+3EPyEqahop0Sw0Nneuy64POtCZ4cyQ/t3ZQzQV1Ly0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fpTVvZ1mgYGvVTRqYQQJr81IFvDIPTinyW6kSE/hQD2/Ynvq9ycYf+cNdheNsdIEtPvwLt8BjOqNrTVU942ExRZMTxvMUKSTLajPJLqgMDzq+zbAqUevSf/WP7YdOQdODyVomY5XMZwWvwWRLvJjh9epqMX+awZNXqY4IZ+mPXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y58sdKW/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E34C19421
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 20:34:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763670894;
+	bh=+3EPyEqahop0Sw0Nneuy64POtCZ4cyQ/t3ZQzQV1Ly0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Y58sdKW/JR7udLpNyyVKW+K4lL0IBYqyeaeD6SqvRf6XY5QA87ZWgGm99aWhQl49N
+	 uFbATnwMnj5ZtBUdmMsfTgzKiGK3P8Lkccj0re+VjzDcEtp1m//5GPfFYAyhQ65CdO
+	 REIjZkEWz3BGai2NLvGkSOE1oRpkDJs0z20y5MASlxYgtLzicAZx17XN/mnLNXd/Me
+	 11gkYsFQ2hobUnhZqa4x2XhVO0Z/yL5TEfhfvg3qE8nL5zICL6bshbB8H7I/p+02EZ
+	 ZNAeLux8rKFNawWjrQL/QREnofBogsxr3+REY9eiESQ08slh9FGtu18GpMmJqOLMMG
+	 Yt67abVYeqGjQ==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-65748e230f9so443585eaf.1
+        for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 12:34:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUj115x85X/IpPbVC6T74Dyj8APjJd/Tue/xCIo+8QwSPNs8QGJ55uPAQ9Z5akBjK2diSpPdc/syw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwFmR8UBRe0lutpopMP+qmvJqyJ856cnrpf4LC0r3hfDmhckWWL
+	QQo/b7jI2TLekfjd8EIfrIH+pZZgQOBWANEkfenQ1l3+QyvAHvUJAu/unzAG5QyyhyLjXwIe0Xd
+	GA0kNMrEMwpZIOMr1OvIyqtZvZ9z++gU=
+X-Google-Smtp-Source: AGHT+IEcBoK4EydGJZublvYo0ZCvFoxo1gmj5xwMPWIsqZZBE6Geg3SKtuMCg6rLMczgburZoXm/XMuzCaj+2lJ9c0g=
+X-Received: by 2002:a05:6820:2111:b0:657:5f19:55fa with SMTP id
+ 006d021491bc7-657857b449bmr1544748eaf.3.1763670893920; Thu, 20 Nov 2025
+ 12:34:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251120031925.87762-7-Smita.KoralahalliChannabasappa@amd.com>
+References: <20251118223620.554798-1-srinivas.pandruvada@linux.intel.com> <d31c0601-318f-4f85-9982-96bcb5de973d@infradead.org>
+In-Reply-To: <d31c0601-318f-4f85-9982-96bcb5de973d@infradead.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 20 Nov 2025 21:34:42 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gq+aaGOv2fU=tsEYs_A4YSWYsJS3HriqkrNnDx+pEw-g@mail.gmail.com>
+X-Gm-Features: AWmQ_blws8kFPOlTohi_YztwlS9yQMKV9HBInndNqGQR8qx-gjq2cnZnaVloyhw
+Message-ID: <CAJZ5v0gq+aaGOv2fU=tsEYs_A4YSWYsJS3HriqkrNnDx+pEw-g@mail.gmail.com>
+Subject: Re: [PATCH] docs: driver-api/thermal/intel_dptf: Add new workload
+ type hint
+To: Randy Dunlap <rdunlap@infradead.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: daniel.lezcano@linaro.org, corbet@lwn.net, linux-pm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Smita,
+On Wed, Nov 19, 2025 at 1:44=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org=
+> wrote:
+>
+>
+>
+> On 11/18/25 2:36 PM, Srinivas Pandruvada wrote:
+> > Add documentation for longer term classification of workload type for
+> > power or performance.
+> >
+> > Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com=
+>
+>
+>
+> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+> Tested-by: Randy Dunlap <rdunlap@infradead.org>
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 211ddde0823f1442e4ad052a2f30f050145ccada]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Smita-Koralahalli/dax-hmem-e820-resource-Defer-Soft-Reserved-insertion-until-hmem-is-ready/20251120-112457
-base:   211ddde0823f1442e4ad052a2f30f050145ccada
-patch link:    https://lore.kernel.org/r/20251120031925.87762-7-Smita.KoralahalliChannabasappa%40amd.com
-patch subject: [PATCH v4 6/9] cxl/region: Add register_dax flag to defer DAX setup
-config: sparc64-randconfig-6002-20251120 (https://download.01.org/0day-ci/archive/20251121/202511210343.c0vb4NRc-lkp@intel.com/config)
-compiler: sparc64-linux-gcc (GCC) 13.4.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251121/202511210343.c0vb4NRc-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511210343.c0vb4NRc-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> Warning: drivers/cxl/core/region.c:2544 function parameter 'register_dax' not described in 'devm_cxl_add_region'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Applied as 6.19 material, thanks!
 
