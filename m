@@ -1,195 +1,239 @@
-Return-Path: <linux-pm+bounces-38297-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38298-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EE08C73A48
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 12:10:21 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FE35C73A14
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 12:09:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1170234A75F
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 11:05:17 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B96564E8F68
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Nov 2025 11:07:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F725306B05;
-	Thu, 20 Nov 2025 11:05:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 398BA32FA01;
+	Thu, 20 Nov 2025 11:07:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="frALlGhV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O6lnjudB"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73BC1F5617;
-	Thu, 20 Nov 2025 11:05:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1537632F74F
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 11:07:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763636714; cv=none; b=RIBbrEFEqtInaMQi+PREyC59xH4sgEZkmLOqAmKd9VSeqScu+v/A7nF972jb0yK2f8eHgKOJlBORdMLrq5x3j+h7BKQtS9QHBvHvfMBzHbnwnobHVj9wABL3TISn29Hu7EI079VBTMp6+FpB4b5cPXL7FGJYW7mVJWV7r9kphUw=
+	t=1763636853; cv=none; b=sbfl96AIjl51/RXbT9P5OVRJWbDiGdNWMmdg8Yi9YQAU7+SgloQxcs2BUAwvg7u+pX6ivT5psg/gPi1E/0W9emrLd7ybdJ3vqHNF4jFsaCfb2/L9kTSsmxfVgfQOV3Pm0sMVPOYweQQzBW/oaFW2yK9U9fQJ6laf+v3xJZ5zSdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763636714; c=relaxed/simple;
-	bh=WxFz3CaShF8+qMN0ByNt5QB3ybTN7mXPoCqLHNOZu2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=piqBtdsTwki9vCXXB6KyfjeHnp8K0sTl7N45vCbcA/1ce+ImEv/xQ0g7Ox9T/gRtY+t6eO//7aCbErPnK1CQtUmXvDC/FH0mVuknx/4iOd7/ErkR24Y6juBrAfebMH5b+R6YDpsm1lTzrLhJ7Mnm0sWckBi1AEaAsvWj+Z7CL0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=frALlGhV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBB2C116D0;
-	Thu, 20 Nov 2025 11:05:11 +0000 (UTC)
+	s=arc-20240116; t=1763636853; c=relaxed/simple;
+	bh=v11BK620Bz6rGU0RaW0JbPVejPcmqpoaHqxSWTXotwQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GkEGX6M0tODTf2ayQSun9Hwt9X7JmXGflHa4sREGzyOMoyVbKykpd+2R54dAoeZDOL4fs/BDurO5MRqtyWkAkKJ/i1qlFdTH9PzC2SX+7aHxwCQWMt184iYPygrCxmeALIbdcP33amazNKFciFlYO2dDM6ZhdNKVsNNLtb42s6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O6lnjudB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C059C4CEF1
+	for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 11:07:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763636713;
-	bh=WxFz3CaShF8+qMN0ByNt5QB3ybTN7mXPoCqLHNOZu2k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=frALlGhVJUpEjJQT14ToMiz5vkACAqiEf4AWagA/6ISh7vOJ1mIJjUAzbHJ9+W7Ng
-	 9FPasS1ewq3yMHFiFymv6V6WFTVkw6yVfA9+BSSvSzcDBN2eOo7/Q+AkMrPx42z0QG
-	 MI9NheyuSELKQ2rkB0FKMQCtZ2PvRx9mINEsvMEVENprWIdFy7bOAxJ34IdiB0uniL
-	 cMIRClQu5nYAbX6tPtxkAZMekqp0AC5xNwAos+9vB91DUTJu54jcerWC8JXXN+R+vo
-	 m3TBbb+ajpoHiFNl8LhmOjiX7ARYK1u1dhh/+g1E35WkCb0RImzXFvXJMW3d+uRbz5
-	 DxQuRKrETh1kw==
-Date: Thu, 20 Nov 2025 12:05:08 +0100
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Lucas Zampieri <lzampier@redhat.com>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Jiri Kosina <jikos@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-	Bastien Nocera <hadess@hadess.net>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 0/1] HID: Add support for multiple batteries per device
-Message-ID: <pr3w6zp5hoza27fncktfj3qx3wp2nhdglbx46fbfx6swm4772d@7hg7a6dxom7p>
-References: <20251120105442.150508-1-lzampier@redhat.com>
+	s=k20201202; t=1763636851;
+	bh=v11BK620Bz6rGU0RaW0JbPVejPcmqpoaHqxSWTXotwQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=O6lnjudBYty6A+gYKAqQ1HBIjCJ9V6mf8+BJAep7A27nr6PWsOxAFBylxiCjeTXr3
+	 kEAQxCl3dy5Ng++E/ekn6udO8a1/ezSXL/lbsyPjv4Qp0/QF02UIwXArGRI6YXDPrJ
+	 ArNB8iBl76lXJDwnLJSnv6f4kdfbWoU7L3AeJm5hFrfutoHl6lhVJcSpBcIAuN4o7T
+	 TRrC8MwEcfBtZJSznl4ufImC5ihyZmLmYQ8pinzY3erAlNkqurFCq6pJfRNQGcP5fP
+	 vH4a6u4E8E8offB+66T8l5y+Dl8ArJqj5qoLHuoke7LSJEzfKY27DP6sCijOCNHVY3
+	 bETtJR5k0rnXQ==
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-3e8819eda8bso174305fac.3
+        for <linux-pm@vger.kernel.org>; Thu, 20 Nov 2025 03:07:31 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWogmeNp4KiJorwZgNSMQWs2rojJ4ioYf0SRB/gozt/cqt4997jteNfFbqzQyTJZzerMchOgfPFuQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzg1T42xV7XztENJLkhxRZjYd7c0pDDTopFKKWVM5/nF7KbQ52r
+	WYJC8DoK+3ivk0PVg3rrfDb2RpbmtLZo1vmy2oy4DrTHv7xmqRtJJ0EVH11OLDAdnVOOl7Oda66
+	vfemDzSV8dPpnU0tVvR78K/W9U2Zy4To=
+X-Google-Smtp-Source: AGHT+IGBAfOdbOuNpNkFMOkFcswoemOuxkRgEc7mRe/RJ6w1WQ0FkY1P+TCWVN1UbtqSy3zV4x8eBA3XkAsmG91LKa0=
+X-Received: by 2002:a05:6808:2519:b0:450:c456:10e3 with SMTP id
+ 5614622812f47-450ff276d3fmr1075751b6e.25.1763636850909; Thu, 20 Nov 2025
+ 03:07:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251120105442.150508-1-lzampier@redhat.com>
+References: <12810244.O9o76ZdvQC@rafael.j.wysocki> <2418792.ElGaqSPkdT@rafael.j.wysocki>
+ <1fcc8368-7a21-418e-8c42-aae96272beee@arm.com>
+In-Reply-To: <1fcc8368-7a21-418e-8c42-aae96272beee@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 20 Nov 2025 12:07:19 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jYxcsBv2OJdkJcvJK_HZDxuUEUq75Dg7LdvWcU0fV5tA@mail.gmail.com>
+X-Gm-Features: AWmQ_bkMtuQfH_E24XUZUfLMjXVUdUyEHe-lsOhuAT9qQPCiXZxrGI3pkgCtut8
+Message-ID: <CAJZ5v0jYxcsBv2OJdkJcvJK_HZDxuUEUq75Dg7LdvWcU0fV5tA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] cpuidle: governors: teo: Simplify intercepts-based
+ state lookup
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Nov 20 2025, Lucas Zampieri wrote:
-> This series adds support for HID devices with multiple batteries.
-> 
-> Currently, the HID battery reporting subsystem only supports one battery per
-> device. There are several devices with multiple batteries that would benefit
-> from this support:
-> - Gaming headsets with batteries in both the headset and charging dock
-> - Wireless earbuds with per-earbud batteries plus charging case
-> - Split keyboards with per-side batteries
-> 
-> ## Proposed Solution
-> 
-> This series introduces struct hid_battery to encapsulate individual battery
-> state, replaces the old battery fields with a list-based approach, and adds
-> support for multiple batteries tracked within struct hid_device. Batteries
-> are identified by report ID. The implementation is fully backwards compatible
-> with single-battery devices through a helper function.
-> 
-> ## Testing
-> 
-> Tested with split keyboard hardware (Dactyl 5x6) using custom ZMK firmware
-> that implements per-side HID battery reporting. Each battery (left and right
-> keyboard halves) reports independently through the power supply interface with
-> distinct report IDs (0x05 and 0x06).
-> 
-> Test firmware available on my personal fork at:
-> https://github.com/zampierilucas/zmk/tree/feat/individual-hid-battery-reporting
-> If this series gets merged, these changes will be proposed to upstream ZMK.
-> 
-> HID descriptor and recording captured with hid-recorder:
-> 
-> D: 0
-> R: 162 05 01 09 06 a1 01 85 01 05 07 19 e0 29 e7 15 00 25 01 75 01 95 08 81 02 05 07 75 08 95 01 81 03 05 07 15 00 25 01 19 00 29 67 75 01 95 68 81 02 c0 05 0c 09 01 a1 01 85 02 05 0c 15 00 26 ff 0f 19 00 2a ff 0f 75 10 95 06 81 00 c0 05 84 09 05 a1 01 05 85 85 05 09 44 15 00 25 01 35 00 45 01 75 08 95 01 81 02 09 65 15 00 25 64 35 00 45 64 75 08 95 01 81 02 c0 05 84 09 05 a1 01 05 85 85 06 09 44 15 00 25 01 35 00 45 01 75 08 95 01 81 02 09 65 15 00 25 64 35 00 45 64 75 08 95 01 81 02 c0
-> N: ZMK Project Dactyl 5x6
-> P: usb-0000:2d:00.3-4.2/input2
-> I: 3 1d50 615e
-> D: 0
-> E: 0.000000 3 05 00 56
-> E: 0.000977 3 05 00 56
-> E: 1.490974 3 06 00 52
-> E: 1.491958 3 06 00 52
-> E: 6.492979 3 06 00 53
-> E: 6.493962 3 06 00 53
-> 
-> The recording shows both batteries reporting with different charge levels
-> (Report ID 05: 86%, Report ID 06: 82%-83%), demonstrating the multi-battery
-> functionality. This can be used to verify UPower compatibility.
-> 
-> ## Future Work: Userspace Integration
-> 
-> As suggested by Bastien, semantic battery differentiation (e.g., "left
-> earbud" vs "right earbud") requires userspace coordination, as HID
-> reports typically lack role metadata.
-> 
-> This will require:
-> 1. systemd/hwdb entries for device-specific battery role mappings
-> 2. UPower updates to enumerate and group multi-battery devices
-> 3. Desktop environment changes to display batteries with meaningful labels
-> 
-> This kernel infrastructure is a prerequisite for that userspace work.
-> 
-> Lucas Zampieri (1):
->   HID: input: Add support for multiple batteries per device
-> 
-> Signed-off-by: Lucas Zampieri <lzampier@redhat.com>
-> 
-> Changes in v4:
-> - Added missing hidinput_update_battery() stub in #else block for
->   CONFIG_HID_BATTERY_STRENGTH=n builds
-> - Reported-by: kernel test robot <lkp@intel.com>
-> - Closes: https://lore.kernel.org/oe-kbuild-all/202511201624.yUv4VtBv-lkp@intel.com/
+On Thu, Nov 20, 2025 at 9:45=E2=80=AFAM Christian Loehle
+<christian.loehle@arm.com> wrote:
+>
+> On 11/16/25 12:35, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Simplify the loop looking up a candidate idle state in the case when an
+> > intercept is likely to occur by adding a search for the state index lim=
+it
+> > if the tick is stopped before it.
+> >
+> > First, call tick_nohz_tick_stopped() just once and if it returns true,
+> > look for the shallowest state index below the current candidate one wit=
+h
+> > target residency at least equal to the tick period length.
+> >
+> > Next, simply look for a state that is not shallower than the one found
+> > in the previous step and, ideally, satisfies the intercepts majority
+> > condition.
+>
+> NIT: The ideally is a bit handwavy, maybe:
+> Next, look for the deepest state that satisfies the intercepts majority
+> condition but select no shallower state than the one from the previous st=
+ep.
+>
+> Sounds a bit verbose I guess.
 
-I don't think you need to keep the formal tags here in changlogs of the
-cover letter. A simple "as reported by kernel test robot
-<lkp@intel.com>" should be sufficient (given that usually we end up
-dropping the cover letter as we apply the patches only).
+I'll figure out something suitable.
 
-> 
-> Changes in v3:
-> - Squashed the three v2 patches into a single patch as suggested by
->   Benjamin
+> >
+> > Since teo_state_ok() has no callers any more after the above changes,
+> > drop it.
+> >
+> > No intentional functional impact.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/cpuidle/governors/teo.c |   62 ++++++++++---------------------=
+---------
+> >  1 file changed, 16 insertions(+), 46 deletions(-)
+> >
+> > --- a/drivers/cpuidle/governors/teo.c
+> > +++ b/drivers/cpuidle/governors/teo.c
+> > @@ -256,12 +256,6 @@ static void teo_update(struct cpuidle_dr
+> >       }
+> >  }
+> >
+> > -static bool teo_state_ok(int i, struct cpuidle_driver *drv)
+> > -{
+> > -     return !tick_nohz_tick_stopped() ||
+> > -             drv->states[i].target_residency_ns >=3D TICK_NSEC;
+> > -}
+> > -
+> >  /**
+> >   * teo_find_shallower_state - Find shallower idle state matching given=
+ duration.
+> >   * @drv: cpuidle driver containing state data.
+> > @@ -383,7 +377,18 @@ static int teo_select(struct cpuidle_dri
+> >        * better choice.
+> >        */
+> >       if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
+> > -             int first_suitable_idx =3D idx;
+> > +             int min_idx =3D idx0;
+> > +
+> > +             if (tick_nohz_tick_stopped()) {
+> > +                     /*
+> > +                      * Look for the shallowest idle state below the c=
+urrent
+> > +                      * candidate one whose target residency is not be=
+low the
+> > +                      * tick period length.
+> > +                      */
+>
+> NIT: s/not below/above
+> or just use >=3D in the comment?
 
-Sorry we didn't understood each other: I was asking you to squash
-patches 1 and 2 only, and keep 3 separated. I was just complaining about
-a blank header change. Separating the non functional changes from the
-functional ones is important.
+Well, I can just say "equal to or greater than" or "at least equal to"
+(slightly preferred).
 
-> - Removed all legacy dev->battery_* fields, using list-based storage only
-> - Changed battery naming to include report ID: hid-{uniq}-battery-{report_id}
-> - Converted battery memory management to devm_* for automatic cleanup
+> > +                     while (min_idx < idx &&
+> > +                            drv->states[min_idx].target_residency_ns <=
+ TICK_NSEC)
+> > +                             min_idx++;
+> > +             }
+> >
+> >               /*
+> >                * Look for the deepest idle state whose target residency=
+ had
+> > @@ -393,49 +398,14 @@ static int teo_select(struct cpuidle_dri
+> >                * Take the possible duration limitation present if the t=
+ick
+> >                * has been stopped already into account.
+> >                */
+> > -             intercept_sum =3D 0;
+> > -
+> > -             for (i =3D idx - 1; i >=3D 0; i--) {
+> > -                     struct teo_bin *bin =3D &cpu_data->state_bins[i];
+> > -
+> > -                     intercept_sum +=3D bin->intercepts;
+> > -
+> > -                     if (2 * intercept_sum > idx_intercept_sum) {
+> > -                             /*
+> > -                              * Use the current state unless it is too
+> > -                              * shallow or disabled, in which case tak=
+e the
+> > -                              * first enabled state that is deep enoug=
+h.
+> > -                              */
+> > -                             if (teo_state_ok(i, drv) &&
+> > -                                 !dev->states_usage[i].disable) {
+> > -                                     idx =3D i;
+> > -                                     break;
+> > -                             }
+> > -                             idx =3D first_suitable_idx;
+> > -                             break;
+> > -                     }
+> > +             for (i =3D idx - 1, intercept_sum =3D 0; i >=3D min_idx; =
+i--) {
+> > +                     intercept_sum +=3D cpu_data->state_bins[i].interc=
+epts;
+> >
+> >                       if (dev->states_usage[i].disable)
+> >                               continue;
+> >
+> > -                     if (teo_state_ok(i, drv)) {
+> > -                             /*
+> > -                              * The current state is deep enough, but =
+still
+> > -                              * there may be a better one.
+> > -                              */
+> > -                             first_suitable_idx =3D i;
+> > -                             continue;
+> > -                     }
+> > -
+> > -                     /*
+> > -                      * The current state is too shallow, so if no sui=
+table
+> > -                      * states other than the initial candidate have b=
+een
+> > -                      * found, give up (the remaining states to check =
+are
+> > -                      * shallower still), but otherwise the first suit=
+able
+> > -                      * state other than the initial candidate may tur=
+n out
+> > -                      * to be preferable.
+> > -                      */
+> > -                     if (first_suitable_idx =3D=3D idx)
+> > +                     idx =3D i;
+> > +                     if (2 * intercept_sum > idx_intercept_sum)
+> >                               break;
+> >               }
+> >       }
+>
+> Thanks, that is indeed a nice simplification. I'll get test results out o=
+n Monday,
+> sorry!
 
-Haven't checked the code yet but that would require probably a separate
-patch so we can bisect to it if anything breaks.
+No worries.
 
-> - Updated hidinput_update_battery() to take struct hid_battery directly
-> - Added hid_get_first_battery() helper for external driver compatibility
-> - Updated hid-apple.c and hid-magicmouse.c to use new battery API
-> - Simplified cover letter based on feedback
+> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
 
-Heh, thanks :)
-
-Cheers,
-Benjamin
-
-> 
-> Changes in v2:
-> - Split the monolithic v1 patch into three logical patches for easier review:
->   1. Introduce struct hid_battery (pure structure addition)
->   2. Refactor existing code to use the new structure (internal changes)
->   3. Add multi-battery support (new functionality)
-> - Added detailed testing section with hardware specifics
-> - Added hid-recorder output (dactyl-hid-recording.txt) demonstrating two-battery
->   HID descriptor for UPower validation
-> - Added "Future Work: Userspace Integration" section addressing Bastien's feedback
->   about semantic battery differentiation
-> - Added hardware examples with product links to commit messages (per Bastien's
->   suggestion)
-> - No functional changes from v1, only improved patch organization and documentation
-> 
->  drivers/hid/hid-apple.c      |  10 +-
->  drivers/hid/hid-core.c       |   4 +
->  drivers/hid/hid-input-test.c |  39 ++++---
->  drivers/hid/hid-input.c      | 196 +++++++++++++++++++----------------
->  drivers/hid/hid-magicmouse.c |  10 +-
->  include/linux/hid.h          |  54 +++++++---
->  6 files changed, 187 insertions(+), 126 deletions(-)
-> 
-> 
-> base-commit: 0678f5630429a5049d7663703b897e1bf8d13cd1
-> -- 
-> 2.51.0
-> 
+Thanks!
 
