@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-38325-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38326-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1224CC76B44
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 01:07:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B32CC76B47
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 01:07:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B5C0C354E33
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 00:07:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 267814E4978
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 00:07:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3E7D72610;
-	Fri, 21 Nov 2025 00:07:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DFBF84A35;
+	Fri, 21 Nov 2025 00:07:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i5mD+9PZ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DdgWgY1X"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A1FFC0A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F8753A7;
 	Fri, 21 Nov 2025 00:07:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763683636; cv=none; b=BNI+Vt1RHm8xAcsBZzm1L0evpGFpXZLiA73THQ2QrgukRY43rQvRM+cvLpLe7VhJsPUYE/JpXQsTZbhGYZXmlu6/ZFO8SYXQ10eUfmkrYfVy7ZHtDXuJ5OIcVbGCfFf7IWVjiJmvXY86OTH6RvgdcV5XftCd4CVNOvN4ESeqwjE=
+	t=1763683637; cv=none; b=H+Q2fG/xjlhVFZEc6DG8Sp6GeYELpq1cuFgBes/FwVy1FQ4TQ5KSQeBe/0rGN+/mj9DkmX5F1hi227VezVudQnnOgHQotyf1JJZNxESY1NQKoL1bglZqe+6npORC+ODNgKTdQCSQnoE1ETrrMpDuY74YqwUtIz41EJStBMSMzi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763683636; c=relaxed/simple;
-	bh=bfJwRDXAxhXckL6EVpNJPFVPl4F1xun6htoI0zZiAhI=;
+	s=arc-20240116; t=1763683637; c=relaxed/simple;
+	bh=8oEpnrmPSP/iBxmGTp1aTA/w6REbpuatbjXx3z8yL5A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lGMJ0yi16rMrGG0kZ/4rlLKcNEt7ArE9TVEZM/unIYJpbWuvwmi2HYf4klHc5yH7r3vg64RCGzO5hc+sm0QEqcAkzMH7dQSX+aIEtEmObnSaifV9nkXEUu62cr0ZpP+Y5Uf/B79OdYvc3rqdLJeFkV/IPfI6oGxrs1fyoND2tVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i5mD+9PZ; arc=none smtp.client-ip=198.175.65.17
+	 MIME-Version; b=fnVmU1bllB4gDPaGf2DnsymdRMNhASGQYyJ7fLm/4zn/085ZbOutRm+wtQNex5sytyckM8e4PMG1kYpZJ0eQorCMmr1If++4t2n7g/DDfAuqcSGWHbmsLY6T4tnq9jrE3pjKDddeLSg84rMf8XkIll6UbwGvPhM0iaA58up5aB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DdgWgY1X; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,26 +36,26 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1763683635; x=1795219635;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=bfJwRDXAxhXckL6EVpNJPFVPl4F1xun6htoI0zZiAhI=;
-  b=i5mD+9PZXBleqiEMUUoCWZTTy+lyNkbqTeqJgDwKU1+HiDbhbQqUvy4c
-   MYTotz0xh+leARSqcP5TCTAJJG4sml8n1svVOiM1BHUHjv/EVFcNNnuGB
-   qPdNTUuvM1Jr/+oDjw6EpBm8itVUG73FlKWU0NKF+NKADPf4uutI0AM/f
-   lLZxwvovEPda0zp6dS35TM/qvZbVA+8LhJRgVpEqCKO5hgaTYUEy9NAR7
-   5ikV5uVFL1gc93y2Iz6tUPbQ7qcxkhj2adre3lat8o/BpQMhiw13d4Jwp
-   3fxmvL34gdCV3HoYEgGofP0ODeoS2UQ2EgeaiJFFduiSPSQwALL/7b3FT
-   w==;
-X-CSE-ConnectionGUID: MH3Z2+b0QXynTB8Ta8X14Q==
-X-CSE-MsgGUID: /8osxnl6QMmJtP8RG3seXg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="65718688"
+  bh=8oEpnrmPSP/iBxmGTp1aTA/w6REbpuatbjXx3z8yL5A=;
+  b=DdgWgY1X0hOXfuiZhVGTUSOSDoSxJYztBAwNh7PblwSBoVzsvjG9USsf
+   bRuMEosPPN1oGk3NvBPg4t8iOZLiDRdyMxR0VRqoMdgJGxqxFcqadMumj
+   +fZgaYucfSo0lek45YXYtB5/YyJs2h86PJPRdITYtXfEehUhkqKGqOjEn
+   ObnDLoqubBDj7TKWiSCYFCmLF0nr/kCAeJL6lRBRfTKhp6OatdXagcZpw
+   cRw8dIQZ+u+BkC1wbLEM+r8g/9qW/kwfCltiuG3f1jnFzjTI8D2eaNk5G
+   ixwxL1rxjlDXR8CBJfuVwnqHWSpxun/8fYUiGLs0n4wFE4xZn9uzVdOAC
+   Q==;
+X-CSE-ConnectionGUID: ZmnRS16QRASRKawX/fAGzg==
+X-CSE-MsgGUID: c+sqdR+GRiCVM0j8aE9LuA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11619"; a="65718693"
 X-IronPort-AV: E=Sophos;i="6.20,214,1758610800"; 
-   d="scan'208";a="65718688"
+   d="scan'208";a="65718693"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
   by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 16:07:12 -0800
-X-CSE-ConnectionGUID: E1FrIAVKRLa4/uuKHJVbBw==
-X-CSE-MsgGUID: UOPg/p0BQLujOOlh4Uq5Qw==
+X-CSE-ConnectionGUID: OffC2RVXTqu/saUJO0w22A==
+X-CSE-MsgGUID: 1HOXfi94TCCCcAzFWs9hPQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.20,214,1758610800"; 
-   d="scan'208";a="192298636"
+   d="scan'208";a="192298641"
 Received: from skuppusw-desk2.jf.intel.com ([10.165.154.101])
   by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2025 16:07:12 -0800
 From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -65,9 +65,9 @@ Cc: Zhang Rui <rui.zhang@intel.com>,
 	Lukasz Luba <lukasz.luba@arm.com>,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/2] powercap: intel_rapl: Prepare read_raw interface for atomic-context callers
-Date: Thu, 20 Nov 2025 16:05:38 -0800
-Message-ID: <20251121000539.386069-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v1 2/2] powercap: intel_rapl: Enable MSR-based RAPL PMU support
+Date: Thu, 20 Nov 2025 16:05:39 -0800
+Message-ID: <20251121000539.386069-3-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251121000539.386069-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20251121000539.386069-1-sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -79,215 +79,140 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The current read_raw() implementation of the TPMI, MMIO and MSR
-interfaces does not distinguish between atomic and non-atomic callers.
+Currently, RAPL PMU support requires adding CPU model entries to
+arch/x86/events/rapl.c for each new generation. However, RAPL MSRs are
+not architectural and require platform-specific customization, making
+arch/x86 an inappropriate location for this functionality.
 
-rapl_msr_read_raw() uses rdmsrq_safe_on_cpu(), which can sleep and
-issue cross CPU calls. When MSR-based RAPL PMU support is enabled, PMU
-event handlers can invoke this function from atomic context where
-sleeping or rescheduling is not allowed. In atomic context, the caller
-is already executing on the target CPU, so a direct rdmsrq() is
-sufficient.
+The powercap subsystem already handles RAPL functionality and is the
+natural place to consolidate all RAPL features. The powercap RAPL
+driver already includes PMU support for TPMI-based RAPL interfaces,
+making it straightforward to extend this support to MSR-based RAPL
+interfaces as well.
 
-To support such usage, introduce an atomic flag to the read_raw()
-interface to allow callers pass the context information. Modify the
-common RAPL code to propagate this flag, and set the flag to reflect
-the calling contexts.
+This consolidation eliminates the need to maintain RAPL support in
+multiple subsystems and provides a unified approach for both TPMI and
+MSR-based RAPL implementations.
 
-Utilize the atomic flag in rapl_msr_read_raw() to perform direct MSR
-read with rdmsrq() when running in atomic context, and a sanity check
-to ensure target CPU matches the current CPU for such use cases.
+The MSR-based PMU support includes the following updates:
 
-The TPMI and MMIO implementations do not require special atomic
-handling, so the flag is ignored in those paths.
-
-This is a preparatory patch for adding MSR-based RAPL PMU support.
+1. Register MSR-based PMU support for the supported platforms
+   and unregister it when no online CPUs remain in the package.
+2. Remove existing checks that restrict RAPL PMU support to TPMI-based
+   interfaces and extend the logic to allow MSR-based RAPL interfaces.
+   atomic-safe MSR reads when invoked from PMU event handlers
+3. Define a CPU model list to determine which processors should
+   register RAPL PMU interface through the powercap driver for
+   MSR-based RAPL, excluding those that support TPMI interface.
+   This list prevents conflicts with existing arch/x86 PMU code
+   that already registers RAPL PMU for some processors. Add
+   Panther Lake & Wildcat Lake to the CPU models list.
 
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
- drivers/powercap/intel_rapl_common.c          | 24 ++++++++++---------
- drivers/powercap/intel_rapl_msr.c             | 16 ++++++++++++-
- drivers/powercap/intel_rapl_tpmi.c            |  2 +-
- .../int340x_thermal/processor_thermal_rapl.c  |  2 +-
- include/linux/intel_rapl.h                    |  2 +-
- 5 files changed, 31 insertions(+), 15 deletions(-)
+ drivers/powercap/intel_rapl_common.c | 12 ++++++------
+ drivers/powercap/intel_rapl_msr.c    | 24 ++++++++++++++++++++++--
+ 2 files changed, 28 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index c7e7f9bf5313..066779460bc8 100644
+index 066779460bc8..03979d32aa34 100644
 --- a/drivers/powercap/intel_rapl_common.c
 +++ b/drivers/powercap/intel_rapl_common.c
-@@ -253,7 +253,8 @@ struct rapl_primitive_info {
- static void rapl_init_domains(struct rapl_package *rp);
- static int rapl_read_data_raw(struct rapl_domain *rd,
- 			      enum rapl_primitives prim,
--			      bool xlate, u64 *data);
-+			      bool xlate, u64 *data,
-+			      bool atomic);
- static int rapl_write_data_raw(struct rapl_domain *rd,
- 			       enum rapl_primitives prim,
- 			       unsigned long long value);
-@@ -289,7 +290,7 @@ static int get_energy_counter(struct powercap_zone *power_zone,
- 	cpus_read_lock();
- 	rd = power_zone_to_rapl_domain(power_zone);
+@@ -1594,11 +1594,11 @@ static int get_pmu_cpu(struct rapl_package *rp)
+ 	if (!rp->has_pmu)
+ 		return nr_cpu_ids;
  
--	if (!rapl_read_data_raw(rd, ENERGY_COUNTER, true, &energy_now)) {
-+	if (!rapl_read_data_raw(rd, ENERGY_COUNTER, true, &energy_now, false)) {
- 		*energy_raw = energy_now;
- 		cpus_read_unlock();
+-	/* Only TPMI RAPL is supported for now */
+-	if (rp->priv->type != RAPL_IF_TPMI)
++	/* Only TPMI & MSR RAPL are supported for now */
++	if (rp->priv->type != RAPL_IF_TPMI && rp->priv->type != RAPL_IF_MSR)
+ 		return nr_cpu_ids;
  
-@@ -830,7 +831,8 @@ prim_fixups(struct rapl_domain *rd, enum rapl_primitives prim)
-  * 63-------------------------- 31--------------------------- 0
-  */
- static int rapl_read_data_raw(struct rapl_domain *rd,
--			      enum rapl_primitives prim, bool xlate, u64 *data)
-+			      enum rapl_primitives prim, bool xlate, u64 *data,
-+			      bool atomic)
- {
- 	u64 value;
- 	enum rapl_primitives prim_fixed = prim_fixups(rd, prim);
-@@ -852,7 +854,7 @@ static int rapl_read_data_raw(struct rapl_domain *rd,
+-	/* TPMI RAPL uses any CPU in the package for PMU */
++	/* TPMI/MSR RAPL uses any CPU in the package for PMU */
+ 	for_each_online_cpu(cpu)
+ 		if (topology_physical_package_id(cpu) == rp->id)
+ 			return cpu;
+@@ -1611,11 +1611,11 @@ static bool is_rp_pmu_cpu(struct rapl_package *rp, int cpu)
+ 	if (!rp->has_pmu)
+ 		return false;
  
- 	ra.mask = rpi->mask;
+-	/* Only TPMI RAPL is supported for now */
+-	if (rp->priv->type != RAPL_IF_TPMI)
++	/* Only TPMI & MSR RAPL are supported for now */
++	if (rp->priv->type != RAPL_IF_TPMI && rp->priv->type != RAPL_IF_MSR)
+ 		return false;
  
--	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra)) {
-+	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra, atomic)) {
- 		pr_debug("failed to read reg 0x%llx for %s:%s\n", ra.reg.val, rd->rp->name, rd->name);
- 		return -EIO;
- 	}
-@@ -904,7 +906,7 @@ static int rapl_read_pl_data(struct rapl_domain *rd, int pl,
- 	if (!is_pl_valid(rd, pl))
- 		return -EINVAL;
- 
--	return rapl_read_data_raw(rd, prim, xlate, data);
-+	return rapl_read_data_raw(rd, prim, xlate, data, false);
+-	/* TPMI RAPL uses any CPU in the package for PMU */
++	/* TPMI/MSR RAPL uses any CPU in the package for PMU */
+ 	return topology_physical_package_id(cpu) == rp->id;
  }
  
- static int rapl_write_pl_data(struct rapl_domain *rd, int pl,
-@@ -941,7 +943,7 @@ static int rapl_check_unit_core(struct rapl_domain *rd)
- 
- 	ra.reg = rd->regs[RAPL_DOMAIN_REG_UNIT];
- 	ra.mask = ~0;
--	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra)) {
-+	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra, false)) {
- 		pr_err("Failed to read power unit REG 0x%llx on %s:%s, exit.\n",
- 			ra.reg.val, rd->rp->name, rd->name);
- 		return -ENODEV;
-@@ -969,7 +971,7 @@ static int rapl_check_unit_atom(struct rapl_domain *rd)
- 
- 	ra.reg = rd->regs[RAPL_DOMAIN_REG_UNIT];
- 	ra.mask = ~0;
--	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra)) {
-+	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra, false)) {
- 		pr_err("Failed to read power unit REG 0x%llx on %s:%s, exit.\n",
- 			ra.reg.val, rd->rp->name, rd->name);
- 		return -ENODEV;
-@@ -1156,7 +1158,7 @@ static int rapl_check_unit_tpmi(struct rapl_domain *rd)
- 
- 	ra.reg = rd->regs[RAPL_DOMAIN_REG_UNIT];
- 	ra.mask = ~0;
--	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra)) {
-+	if (rd->rp->priv->read_raw(get_rid(rd->rp), &ra, false)) {
- 		pr_err("Failed to read power unit REG 0x%llx on %s:%s, exit.\n",
- 			ra.reg.val, rd->rp->name, rd->name);
- 		return -ENODEV;
-@@ -1325,7 +1327,7 @@ static void rapl_update_domain_data(struct rapl_package *rp)
- 			struct rapl_primitive_info *rpi = get_rpi(rp, prim);
- 
- 			if (!rapl_read_data_raw(&rp->domains[dmn], prim,
--						rpi->unit, &val))
-+						rpi->unit, &val, false))
- 				rp->domains[dmn].rdd.primitives[prim] = val;
- 		}
- 	}
-@@ -1425,7 +1427,7 @@ static int rapl_check_domain(int domain, struct rapl_package *rp)
- 	 */
- 
- 	ra.mask = ENERGY_STATUS_MASK;
--	if (rp->priv->read_raw(get_rid(rp), &ra) || !ra.value)
-+	if (rp->priv->read_raw(get_rid(rp), &ra, false) || !ra.value)
- 		return -ENODEV;
- 
- 	return 0;
-@@ -1636,7 +1638,7 @@ static u64 event_read_counter(struct perf_event *event)
- 	if (event->hw.idx < 0)
- 		return 0;
- 
--	ret = rapl_read_data_raw(&rp->domains[event->hw.idx], ENERGY_COUNTER, false, &val);
-+	ret = rapl_read_data_raw(&rp->domains[event->hw.idx], ENERGY_COUNTER, false, &val, true);
- 
- 	/* Return 0 for failed read */
- 	if (ret)
 diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
-index 4ed06c71a3ac..46b716ea45b2 100644
+index 46b716ea45b2..15660c6ea5a7 100644
 --- a/drivers/powercap/intel_rapl_msr.c
 +++ b/drivers/powercap/intel_rapl_msr.c
-@@ -102,12 +102,26 @@ static int rapl_cpu_down_prep(unsigned int cpu)
- 	return 0;
- }
+@@ -33,6 +33,8 @@
+ /* private data for RAPL MSR Interface */
+ static struct rapl_if_priv *rapl_msr_priv;
  
--static int rapl_msr_read_raw(int cpu, struct reg_action *ra)
-+static int rapl_msr_read_raw(int cpu, struct reg_action *ra, bool atomic)
- {
-+	/*
-+	 * When called from atomic-context (eg PMU event handler)
-+	 * perform MSR read directly using rdmsrq().
-+	 */
-+	if (atomic) {
-+		if (unlikely(smp_processor_id() != cpu))
-+			return -EIO;
++static bool rapl_msr_pmu __ro_after_init;
 +
-+		rdmsrq(ra->reg.msr, ra->value);
-+		goto out;
+ static struct rapl_if_priv rapl_msr_priv_intel = {
+ 	.type = RAPL_IF_MSR,
+ 	.reg_unit.msr = MSR_RAPL_POWER_UNIT,
+@@ -79,6 +81,8 @@ static int rapl_cpu_online(unsigned int cpu)
+ 		rp = rapl_add_package_cpuslocked(cpu, rapl_msr_priv, true);
+ 		if (IS_ERR(rp))
+ 			return PTR_ERR(rp);
++		if (rapl_msr_pmu)
++			rapl_package_add_pmu(rp);
+ 	}
+ 	cpumask_set_cpu(cpu, &rp->cpumask);
+ 	return 0;
+@@ -95,10 +99,14 @@ static int rapl_cpu_down_prep(unsigned int cpu)
+ 
+ 	cpumask_clear_cpu(cpu, &rp->cpumask);
+ 	lead_cpu = cpumask_first(&rp->cpumask);
+-	if (lead_cpu >= nr_cpu_ids)
++	if (lead_cpu >= nr_cpu_ids) {
++		if (rapl_msr_pmu)
++			rapl_package_remove_pmu(rp);
+ 		rapl_remove_package_cpuslocked(rp);
+-	else if (rp->lead_cpu == cpu)
++	} else if (rp->lead_cpu == cpu) {
+ 		rp->lead_cpu = lead_cpu;
 +	}
 +
- 	if (rdmsrq_safe_on_cpu(cpu, ra->reg.msr, &ra->value)) {
- 		pr_debug("failed to read msr 0x%x on cpu %d\n", ra->reg.msr, cpu);
- 		return -EIO;
- 	}
-+
-+out:
- 	ra->value &= ra->mask;
  	return 0;
  }
-diff --git a/drivers/powercap/intel_rapl_tpmi.c b/drivers/powercap/intel_rapl_tpmi.c
-index 82201bf4685d..0a0b85f4528b 100644
---- a/drivers/powercap/intel_rapl_tpmi.c
-+++ b/drivers/powercap/intel_rapl_tpmi.c
-@@ -60,7 +60,7 @@ static DEFINE_MUTEX(tpmi_rapl_lock);
  
- static struct powercap_control_type *tpmi_control_type;
- 
--static int tpmi_rapl_read_raw(int id, struct reg_action *ra)
-+static int tpmi_rapl_read_raw(int id, struct reg_action *ra, bool atomic)
- {
- 	if (!ra->reg.mmio)
- 		return -EINVAL;
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-index bde2cc386afd..bf51a17c5be6 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-@@ -19,7 +19,7 @@ static const struct rapl_mmio_regs rapl_mmio_default = {
- 	.limits[RAPL_DOMAIN_DRAM] = BIT(POWER_LIMIT2),
+@@ -168,6 +176,13 @@ static const struct x86_cpu_id pl4_support_ids[] = {
+ 	{}
  };
  
--static int rapl_mmio_read_raw(int cpu, struct reg_action *ra)
-+static int rapl_mmio_read_raw(int cpu, struct reg_action *ra, bool atomic)
++/* List of MSR-based RAPL PMU support CPUs */
++static const struct x86_cpu_id pmu_support_ids[] = {
++	X86_MATCH_VFM(INTEL_PANTHERLAKE_L, NULL),
++	X86_MATCH_VFM(INTEL_WILDCATLAKE_L, NULL),
++	{}
++};
++
+ static int rapl_msr_probe(struct platform_device *pdev)
  {
- 	if (!ra->reg.mmio)
- 		return -EINVAL;
-diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
-index c0397423d3a8..e9ade2ff4af6 100644
---- a/include/linux/intel_rapl.h
-+++ b/include/linux/intel_rapl.h
-@@ -152,7 +152,7 @@ struct rapl_if_priv {
- 	union rapl_reg reg_unit;
- 	union rapl_reg regs[RAPL_DOMAIN_MAX][RAPL_DOMAIN_REG_MAX];
- 	int limits[RAPL_DOMAIN_MAX];
--	int (*read_raw)(int id, struct reg_action *ra);
-+	int (*read_raw)(int id, struct reg_action *ra, bool atomic);
- 	int (*write_raw)(int id, struct reg_action *ra);
- 	void *defaults;
- 	void *rpi;
+ 	const struct x86_cpu_id *id = x86_match_cpu(pl4_support_ids);
+@@ -195,6 +210,11 @@ static int rapl_msr_probe(struct platform_device *pdev)
+ 		pr_info("PL4 support detected.\n");
+ 	}
+ 
++	if (x86_match_cpu(pmu_support_ids)) {
++		rapl_msr_pmu = true;
++		pr_info("MSR-based RAPL PMU support enabled\n");
++	}
++
+ 	rapl_msr_priv->control_type = powercap_register_control_type(NULL, "intel-rapl", NULL);
+ 	if (IS_ERR(rapl_msr_priv->control_type)) {
+ 		pr_debug("failed to register powercap control_type.\n");
 -- 
 2.43.0
 
