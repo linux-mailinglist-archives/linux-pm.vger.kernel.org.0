@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-38356-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38357-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16ED2C78BD9
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 12:18:52 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07CFDC78BB8
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 12:18:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6AE5F354CAE
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 11:17:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id 681B82D9F6
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 11:17:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A449A349AF7;
-	Fri, 21 Nov 2025 11:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B7D234A773;
+	Fri, 21 Nov 2025 11:17:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="RVuXquJ/"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="nQP53C4a"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5FAD2F690A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23064346FC3;
 	Fri, 21 Nov 2025 11:17:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763723838; cv=none; b=mFtAWeBRVzDchlO/Q60QtujUWUfpzIm/oV1jJXB5cAM2GOqAAV9veaPF3LbDAv3geeQ1Crn5YXroTUhHKtzp0FuRAoyXo1SFedCP3Qwz/p1fV6P+7UiTcidixuJ4RqCtADPZ/uPsNT7CMmfCu2EnT5RF8THKvyxezdL0ZMIhF2c=
+	t=1763723838; cv=none; b=Z6zM6EarDxXf1Nf4WFDyzkIzKCN//HuKTv5m7aDKKOqRJolziO2m93KSoNnZFAlrXTfud9+JyvzCavumKrBeunKxL1bczUwQrtP4X+JMt69I+tWucAlCMU7XbCK9VPWHLjoZHJbu3Yt5mACNnHFkwP+46OJ7IkecnGjmVATGiyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1763723838; c=relaxed/simple;
-	bh=8h0CFC4hcjoXQqZWOG7FkphbZyR+191MEAMrW1ExjnE=;
+	bh=6YJLPO2KEF9QyWxLaPwxFzoKrk88Q8+O4pyGSdBlLAA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pLU3aTc/y8UF865F3pIw6c+oM2L3mdFmZ2xIq3Lz9DrZw7+24PwK0gfOQPOQ7H4tGof6Ya4Sb/X+d81bhw7WD6XFqrm/dP4kl0TZQXlvCN+Zk/hnB+rYAs5BA+JB4+sGX1/rKg2ceIU2mA1lvNK/z5dbk89LwtNyVvBmb2AEK7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=RVuXquJ/; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version:Content-Type; b=qnXOkABNvOPBcBVfnz8+L4HAP3hr+bhdygMCeEIso4dyjcasDzjbXX2eRsHv2M5ldYgdf5WNbCrnONDwTjf1vIQGNhFBQQmcYgVthY9PkziVrON8e+7t0XTcMz5qGUmoYo9TFlwT/XMhVxCv1TCc3TnknSP8W5WXPD7cksxYsNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=nQP53C4a; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1763723828;
-	bh=8h0CFC4hcjoXQqZWOG7FkphbZyR+191MEAMrW1ExjnE=;
+	s=mail; t=1763723829;
+	bh=6YJLPO2KEF9QyWxLaPwxFzoKrk88Q8+O4pyGSdBlLAA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RVuXquJ/9tLHTTsob1It3qBbysppwXZcZUbyxXAJcobgM93kJ0Z9MAWmnM7CAvWwz
-	 ezMFEn2gam7j5YmSWszWF35jNMBTxCMqgdEiCqtgs4+CgeNww9ni90kJ/qIOiPrFMB
-	 dn2Ls7KpEvZrjXkb4f5DdW5562wrFZpj88PO3y9nrYEbqY2YUMO6M2cqMtu0XGq+5P
-	 AutezsUhLqg3OYPkxISB1CW+GwesMnkPu+9Jc8OjaN5yMlCj/199AFEn2RiPO2usHx
-	 BVoa1PXRom/PKhRWUuxBSafPs5FPr6d2j69zWaXvPv1rcNg9vo+oAmusQxcMYn3NJk
-	 UxEmTaeYCG7rw==
+	b=nQP53C4aNcllaqDO3XfJj8E58ySqopLc2lmPgBcGShIjCc21m1Fu12LRDzy3GH8NZ
+	 josECmRaXYjnYbHyPkukHtE7o3SdB7s/UUyS6soW6NTz7HRtvZytCx6rYPF00x/xv/
+	 Mc+4LPNYo0vD1tYYw5WEHAW3PBCbuxxm6Qk17LM3Rg3QhYeRG71XPC9VAVqlKMq7x6
+	 fH1atf8vkkxJUsxPwVZHU/dkfiL8uFyqfjqZlHiy2ER0C02UqyH70gncO564dyG0AQ
+	 57zA88Ui9vqusQDk1nyfQYb0JF9XfDbWnP3UeU9JSC6jQSyMNOT11s3QorH4hd4b0D
+	 Ntnw6WWkKMgKg==
 Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:c4bf:9969:6e1c:dc69])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: laura.nao)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 4786517E153D;
-	Fri, 21 Nov 2025 12:17:07 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id B287E17E156E;
+	Fri, 21 Nov 2025 12:17:08 +0100 (CET)
 From: Laura Nao <laura.nao@collabora.com>
 To: srini@kernel.org,
 	robh@kernel.org,
@@ -76,9 +76,9 @@ Cc: nfraprado@collabora.com,
 	linux-mediatek@lists.infradead.org,
 	kernel@collabora.com,
 	Laura Nao <laura.nao@collabora.com>
-Subject: [PATCH v4 4/9] thermal: mediatek: lvts: Add platform ops to support alternative conversion logic
-Date: Fri, 21 Nov 2025 12:16:37 +0100
-Message-Id: <20251121-mt8196-lvts-v4-v4-4-357f955a3176@collabora.com>
+Subject: [PATCH v4 5/9] thermal/drivers/mediatek/lvts: Add lvts_temp_to_raw variant
+Date: Fri, 21 Nov 2025 12:16:38 +0100
+Message-Id: <20251121-mt8196-lvts-v4-v4-5-357f955a3176@collabora.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20251121-mt8196-lvts-v4-v4-0-357f955a3176@collabora.com>
 References: <20251121-mt8196-lvts-v4-v4-0-357f955a3176@collabora.com>
@@ -91,160 +91,45 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Introduce lvts_platform_ops struct to support SoC-specific versions of
-lvts_raw_to_temp() and lvts_temp_to_raw() conversion functions.
+MT8196/MT6991 require a different version of lvts_temp_to_raw(),
+specifically the multiplicative inverse of the existing implementation.
+Introduce a variant of the function with inverted calculation logic to
+match this requirement.
 
-This is in preparation for supporting SoCs like MT8196/MT6991, which
-require a different lvts_temp_to_raw() implementation.
+This ensures accurate raw value generation for temperature
+thresholds, avoiding spurious thermal interrupts or unintended hardware
+resets on MT8196/MT6991.
 
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Fei Shao <fshao@chromium.org>
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Frank Wunderlich <frank-w@public-files.de>
 Signed-off-by: Laura Nao <laura.nao@collabora.com>
 ---
- drivers/thermal/mediatek/lvts_thermal.c | 39 ++++++++++++++++++++++++++++-----
- 1 file changed, 34 insertions(+), 5 deletions(-)
+ drivers/thermal/mediatek/lvts_thermal.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-index b49441d82ffd..d713c46c21fc 100644
+index d713c46c21fc..3e05b29f7b05 100644
 --- a/drivers/thermal/mediatek/lvts_thermal.c
 +++ b/drivers/thermal/mediatek/lvts_thermal.c
-@@ -125,8 +125,14 @@ struct lvts_ctrl_data {
- 			continue; \
- 		else
- 
-+struct lvts_platform_ops {
-+	int (*lvts_raw_to_temp)(u32 raw_temp, int temp_factor);
-+	u32 (*lvts_temp_to_raw)(int temperature, int temp_factor);
-+};
-+
- struct lvts_data {
- 	const struct lvts_ctrl_data *lvts_ctrl;
-+	const struct lvts_platform_ops *ops;
- 	const u32 *conn_cmd;
- 	const u32 *init_cmd;
- 	int num_cal_offsets;
-@@ -272,7 +278,17 @@ static inline int lvts_debugfs_init(struct device *dev,
- 
- #endif
- 
--static int lvts_raw_to_temp(u32 raw_temp, int temp_factor)
-+static int lvts_raw_to_temp(u32 raw_temp, const struct lvts_data *lvts_data)
-+{
-+	return lvts_data->ops->lvts_raw_to_temp(raw_temp & 0xFFFF, lvts_data->temp_factor);
-+}
-+
-+static u32 lvts_temp_to_raw(int temperature, const struct lvts_data *lvts_data)
-+{
-+	return lvts_data->ops->lvts_temp_to_raw(temperature, lvts_data->temp_factor);
-+}
-+
-+static int lvts_raw_to_temp_mt7988(u32 raw_temp, int temp_factor)
- {
- 	int temperature;
- 
-@@ -282,7 +298,7 @@ static int lvts_raw_to_temp(u32 raw_temp, int temp_factor)
- 	return temperature;
+@@ -307,6 +307,15 @@ static u32 lvts_temp_to_raw_mt7988(int temperature, int temp_factor)
+ 	return raw_temp;
  }
  
--static u32 lvts_temp_to_raw(int temperature, int temp_factor)
-+static u32 lvts_temp_to_raw_mt7988(int temperature, int temp_factor)
- {
- 	u32 raw_temp = ((s64)(golden_temp_offset - temperature)) << 14;
- 
-@@ -329,7 +345,7 @@ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
- 	if (rc)
- 		return -EAGAIN;
- 
--	*temp = lvts_raw_to_temp(value & 0xFFFF, lvts_data->temp_factor);
-+	*temp = lvts_raw_to_temp(value, lvts_data);
- 
- 	return 0;
- }
-@@ -399,8 +415,8 @@ static int lvts_set_trips(struct thermal_zone_device *tz, int low, int high)
- 	const struct lvts_data *lvts_data = lvts_ctrl->lvts_data;
- 	void __iomem *base = lvts_sensor->base;
- 	u32 raw_low = lvts_temp_to_raw(low != -INT_MAX ? low : LVTS_MINIMUM_THRESHOLD,
--				       lvts_data->temp_factor);
--	u32 raw_high = lvts_temp_to_raw(high, lvts_data->temp_factor);
-+				       lvts_data);
-+	u32 raw_high = lvts_temp_to_raw(high, lvts_data);
- 	bool should_update_thresh;
- 
- 	lvts_sensor->low_thresh = low;
-@@ -1762,6 +1778,11 @@ static const struct lvts_ctrl_data mt8195_lvts_ap_data_ctrl[] = {
- 	}
- };
- 
-+static const struct lvts_platform_ops lvts_platform_ops_mt7988 = {
-+	.lvts_raw_to_temp = lvts_raw_to_temp_mt7988,
-+	.lvts_temp_to_raw = lvts_temp_to_raw_mt7988,
-+};
++static u32 lvts_temp_to_raw_mt8196(int temperature, int temp_factor)
++{
++	u32 raw_temp;
 +
- static const struct lvts_data mt7988_lvts_ap_data = {
- 	.lvts_ctrl	= mt7988_lvts_ap_data_ctrl,
- 	.conn_cmd	= mt7988_conn_cmds,
-@@ -1773,6 +1794,7 @@ static const struct lvts_data mt7988_lvts_ap_data = {
- 	.temp_offset	= LVTS_COEFF_B_MT7988,
- 	.gt_calib_bit_offset = 24,
- 	.num_cal_offsets = 3,
-+	.ops = &lvts_platform_ops_mt7988,
- };
- 
- static const struct lvts_data mt8186_lvts_data = {
-@@ -1787,6 +1809,7 @@ static const struct lvts_data mt8186_lvts_data = {
- 	.gt_calib_bit_offset = 24,
- 	.def_calibration = 19000,
- 	.num_cal_offsets = 3,
-+	.ops = &lvts_platform_ops_mt7988,
- };
- 
- static const struct lvts_data mt8188_lvts_mcu_data = {
-@@ -1801,6 +1824,7 @@ static const struct lvts_data mt8188_lvts_mcu_data = {
- 	.gt_calib_bit_offset = 20,
- 	.def_calibration = 35000,
- 	.num_cal_offsets = 3,
-+	.ops = &lvts_platform_ops_mt7988,
- };
- 
- static const struct lvts_data mt8188_lvts_ap_data = {
-@@ -1815,6 +1839,7 @@ static const struct lvts_data mt8188_lvts_ap_data = {
- 	.gt_calib_bit_offset = 20,
- 	.def_calibration = 35000,
- 	.num_cal_offsets = 3,
-+	.ops = &lvts_platform_ops_mt7988,
- };
- 
- static const struct lvts_data mt8192_lvts_mcu_data = {
-@@ -1829,6 +1854,7 @@ static const struct lvts_data mt8192_lvts_mcu_data = {
- 	.gt_calib_bit_offset = 24,
- 	.def_calibration = 35000,
- 	.num_cal_offsets = 3,
-+	.ops = &lvts_platform_ops_mt7988,
- };
- 
- static const struct lvts_data mt8192_lvts_ap_data = {
-@@ -1843,6 +1869,7 @@ static const struct lvts_data mt8192_lvts_ap_data = {
- 	.gt_calib_bit_offset = 24,
- 	.def_calibration = 35000,
- 	.num_cal_offsets = 3,
-+	.ops = &lvts_platform_ops_mt7988,
- };
- 
- static const struct lvts_data mt8195_lvts_mcu_data = {
-@@ -1857,6 +1884,7 @@ static const struct lvts_data mt8195_lvts_mcu_data = {
- 	.gt_calib_bit_offset = 24,
- 	.def_calibration = 35000,
- 	.num_cal_offsets = 3,
-+	.ops = &lvts_platform_ops_mt7988,
- };
- 
- static const struct lvts_data mt8195_lvts_ap_data = {
-@@ -1871,6 +1899,7 @@ static const struct lvts_data mt8195_lvts_ap_data = {
- 	.gt_calib_bit_offset = 24,
- 	.def_calibration = 35000,
- 	.num_cal_offsets = 3,
-+	.ops = &lvts_platform_ops_mt7988,
- };
- 
- static const struct of_device_id lvts_of_match[] = {
++	raw_temp = temperature - golden_temp_offset;
++
++	return div_s64((s64)temp_factor << 14, raw_temp);
++}
++
+ static int lvts_get_temp(struct thermal_zone_device *tz, int *temp)
+ {
+ 	struct lvts_sensor *lvts_sensor = thermal_zone_device_priv(tz);
 
 -- 
 2.39.5
