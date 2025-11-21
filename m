@@ -1,172 +1,102 @@
-Return-Path: <linux-pm+bounces-38392-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38393-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DEFBC7BA81
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 21:36:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45354C7BAC6
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 21:50:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A803736889F
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 20:36:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2F373A7136
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 20:50:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 702B82DE6EE;
-	Fri, 21 Nov 2025 20:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3416B309F12;
+	Fri, 21 Nov 2025 20:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L+zvWL/N"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S434OzRd"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4762C3009E2
-	for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 20:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F677309EF1
+	for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 20:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763757359; cv=none; b=AysqEhgiyoITOsXGs416Jajx2PPzaJSOEBpOJDW0fM1V2efgq6NTp8zbFZshEilZ8rWTsoP9sjGeaI+H8Vjphp8zBuaqjj0u7wFndYDneRLFMs/K3P61vTb57f8zvjcHH4kFzSrtdsYnNh3uyRvtZjFmqtQBQx9bfEsUEX0wCUs=
+	t=1763758121; cv=none; b=aqJwybOTHUCx6TPqqATdjvCdEhmRAXBV5sbXtLncsEe62BnLYT2YbLM/nFW9tP8cAoD5Z7SVf3RiQoM3UOGgoCQWygCT7GSmS8nMQIbPHT950GfzxRybZIvN6u3ihA3NFYUedRwh9RNJlGMcrGsjzy/RNJAabqcFJSLwftaeiSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763757359; c=relaxed/simple;
-	bh=meSktXQNs/zDvTr1rLs7LeQfxQysPHSbGkzQDId9XMY=;
+	s=arc-20240116; t=1763758121; c=relaxed/simple;
+	bh=6SP3t+XmrpuUwy7xRGD5mkIoFlRuzjo+IHwjwHnyGH8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FhUzeFsRFQ5SjwbXfC/is2fZLS/N8aJaURXI5/Ppjs7lSDZRsrNSbNtZoRsNuy8yiFFZSPSxySDVGTB6389Wo++UoNc5Wr1b3CMftoNI5qvG2QUIqRMJgijsyWDAQ/WFCwYt1DmeOCFJolx2MbdjOTCyPiIeHvxcGmfuioGJlyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L+zvWL/N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8648C19422
-	for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 20:35:58 +0000 (UTC)
+	 To:Cc:Content-Type; b=QG0IxsaOSsqGDmCqS549ikjuS49v3bVojnxm6wvGDX60sE/WQWVgaQtAXHKId4qKyv1ATv/vJPOoxhqgNf5jAFH1FVeyBPsArLZJDmxWXQjfuTmAt6a+zc4dMeLpbDu+9/rSiAmXg8eaI6s4deazLWsbGUAg3j3MA1nQLbU//DI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S434OzRd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5B9BC2BC87
+	for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 20:48:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763757358;
-	bh=meSktXQNs/zDvTr1rLs7LeQfxQysPHSbGkzQDId9XMY=;
+	s=k20201202; t=1763758120;
+	bh=6SP3t+XmrpuUwy7xRGD5mkIoFlRuzjo+IHwjwHnyGH8=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=L+zvWL/Nh94FkM1rZrXcBtTOzgK+mkJwTDosBcBijCdV34X53/cdtFJtiuZ0Md/WM
-	 GcqhqeRjUC0vm45dWjFBz6XmwGZdDlx/1YsRu2QyrzPY+3hCmTjo6+j5LM3zBib4I4
-	 J6tKQx3AUF2IB07P8TFo+IWDzck0Yp3oj5x5qK+1dMshchSxQDW1aIOTW5EmLdVjPD
-	 3zqNL5lRPlgjWSvClhgdnUG+fb4P2UmRkId3/JrLTerz93MIgGIWp8gL3/SUNNbMpt
-	 Z0A6qD2K62qoXRs1K/9ABvtlMFte9d0O1sWFPTl8RY6sAvXTCprA/RgDr/i7m3fD6z
-	 YI+JdDMM/fmQg==
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-657523b5db0so471351eaf.2
-        for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 12:35:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVjKmAtbmswpxPrCm+Y6bYsyiqUoPx31TaINAnQtXLA5OUFWkXA5YrmjKOtmrMjUBmlZLD1Tpc6LQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxvs5D/w/Jwn0UMboATc8yl2+FRmJo9wjpXoJ2QN8AzXGE9VvgG
-	tZn/3NzRoykj3d7G3ts6a+kBDEfGAUXwvAVFcbilNDQ+P7gaqK76M3xJFUFUFtq7JYmZ+V3bdrO
-	vT9tQc4Ri7iSaw7vd8IVcsGFCTpisV9E=
-X-Google-Smtp-Source: AGHT+IEGV1wW0AyQ4uV5rOeWs+mu0pohToH8QfmqGgzcM1nDvWFgodvXp8dfzsS7PUq8QlplylLWmLPmTb2ii+XtGZ8=
-X-Received: by 2002:a05:6820:4d57:10b0:657:7289:b1dc with SMTP id
- 006d021491bc7-65792596028mr1028369eaf.6.1763757357967; Fri, 21 Nov 2025
- 12:35:57 -0800 (PST)
+	b=S434OzRdHdEbQ9rItxxMnT0mwo22LMmPU7HHsuYX2pu0QaRbF7bcbSjK0UKLCBof5
+	 VvECCLTgOiXhQM7S61laxYl+Ok/iuPzBtc6yc7B1WvDzAe5hf8XbnkpsX7KveEcHik
+	 W/Gn5DSbGPKzX5JM5dlb7f3SMFZ5w893ox2zDHGXR6L7etyd0t0duRj1KvZfRcF1nh
+	 yNb7cDHVpudJzdFWZFMfizSUs/W+fFTDTXWdgA5k0sN4fuGYLSl3rnbJI7xtW6dgsM
+	 rgkGKg4W2rNVcd8K6dYBdSKjjJQQobHC+1hug9RZl+WNo9Fg8MfG4pwqwNWfaix2es
+	 0ExgTEK21yafA==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-657464a9010so602234eaf.3
+        for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 12:48:40 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUYieFfulxA2hnkstup0OldF56xvGNq6HJnLriVPIbLE7J9ZI1TTtzT/7kqDKUt0xNAQUyAYkc8xg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhHcunzIunhKh0zwoX89MqkwmCJpRRfxwTv3AvQgtfA6EJVnmn
+	Y3hYQrPeBB2D0he0g2gsb+eS2ais8kCbobY8rJV2nTQZ3bq9kVj3U7xtsVKYzIrGzxlAotZt/9K
+	aIRuoQfUa0BkafgWb8BPhb4wUivVW3V8=
+X-Google-Smtp-Source: AGHT+IEfWhK0vaY6gcDzTkMRIGYHeKBewn4hK9KthJdHLYp0DiGP50atsCmFHbakvQi2kS8jvuCyqszNJ8sqJhHTECI=
+X-Received: by 2002:a05:6820:2008:b0:654:18f9:10f4 with SMTP id
+ 006d021491bc7-657908517dcmr1374943eaf.0.1763758119875; Fri, 21 Nov 2025
+ 12:48:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251120-thermal-device-v1-0-bbdad594d57a@gmx.de>
-In-Reply-To: <20251120-thermal-device-v1-0-bbdad594d57a@gmx.de>
+References: <20251121000539.386069-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <515d0c022fff823eb7dbad302ab2b4443d6926fd.camel@intel.com>
+In-Reply-To: <515d0c022fff823eb7dbad302ab2b4443d6926fd.camel@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 21 Nov 2025 21:35:47 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jOPrBcozzJMsB1eE12MuZRWDAV-+=jfrhJbi=S0p5J9Q@mail.gmail.com>
-X-Gm-Features: AWmQ_bmY4Rgl1Z4nj5ks6gNTVnBjHocEaNjk9D0MQSLHqvtZo8fqobTCygtTNLc
-Message-ID: <CAJZ5v0jOPrBcozzJMsB1eE12MuZRWDAV-+=jfrhJbi=S0p5J9Q@mail.gmail.com>
-Subject: Re: [PATCH RFC RESEND 0/8] thermal: core: Allow setting the parent
- device of thermal zone/cooling devices
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Len Brown <lenb@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-tegra@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-doc@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, ath10k@lists.infradead.org, 
-	ath11k@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
-	linux-pci@vger.kernel.org, imx@lists.linux.dev, 
-	linux-renesas-soc@vger.kernel.org
+Date: Fri, 21 Nov 2025 21:48:27 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h=tikYWnUZfh_nqzAcpDiAMXe=0LOX8Y+tWOMO1cpBeA@mail.gmail.com>
+X-Gm-Features: AWmQ_bkNBBnnoqchAXaJJ-vxhVvXzu_iqh3QKuzsy0Fby9H5CFJ9sS9ysyZd5qw
+Message-ID: <CAJZ5v0h=tikYWnUZfh_nqzAcpDiAMXe=0LOX8Y+tWOMO1cpBeA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] Add MSR-based RAPL PMU support
+To: "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>
+Cc: "sathyanarayanan.kuppuswamy@linux.intel.com" <sathyanarayanan.kuppuswamy@linux.intel.com>, 
+	"rafael@kernel.org" <rafael@kernel.org>, "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>, 
+	"Zhang, Rui" <rui.zhang@intel.com>, "lukasz.luba@arm.com" <lukasz.luba@arm.com>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 20, 2025 at 4:41=E2=80=AFAM Armin Wolf <W_Armin@gmx.de> wrote:
+On Fri, Nov 21, 2025 at 2:50=E2=80=AFAM Pandruvada, Srinivas
+<srinivas.pandruvada@intel.com> wrote:
 >
-> Drivers registering thermal zone/cooling devices are currently unable
-> to tell the thermal core what parent device the new thermal zone/
-> cooling device should have, potentially causing issues with suspend
-> ordering
-
-This is one potential class of problems that may arise, but I would
-like to see a real example of this.
-
-As it stands today, thermal_class has no PM callbacks, so there are no
-callback execution ordering issues with devices in that class and what
-other suspend/resume ordering issues are there?
-
-Also, the suspend and resume of thermal zones is handled via PM
-notifiers.  Is there a problem with this?
-
-> and making it impossible for user space applications to
-> associate a given thermal zone device with its parent device.
-
-Why does user space need to know the parent of a given cooling device
-or thermal zone?
-
-> This patch series aims to fix this issue by extending the functions
-> used to register thermal zone/cooling devices to also accept a parent
-> device pointer. The first six patches convert all functions used for
-> registering cooling devices, while the functions used for registering
-> thermal zone devices are converted by the remaining two patches.
+> On Thu, 2025-11-20 at 16:05 -0800, Kuppuswamy Sathyanarayanan wrote:
+> > This patch series enables MSR-based PMU support for the Intel RAPL
+> > driver in the Linux powercap subsystem.
+> >
+> > Following are the patch details:
+> >
+> > Patch 1/2 - Preparatory patch that updates the read_raw() interface
+> >             to allow atomic-context callers.
+> >
+> > Patch 2/2 - More details about motivation of this series and adds
+> >             MSR-based RAPL PMU access support.
+> >
+> > This series has been tested and verified in the Panther Lake and
+> > Wildcat Lake platforms using perf tool.
+> >
+> > Please let me know your review comments.
+> >
 >
-> I tested this series on various devices containing (among others):
-> - ACPI thermal zones
-> - ACPI processor devices
-> - PCIe cooling devices
-> - Intel Wifi card
-> - Intel powerclamp
-> - Intel TCC cooling
+> Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-What exactly did you do to test it?
-
-> I also compile-tested the remaining affected drivers, however i would
-> still be happy if the relevant maintainers (especially those of the
-> mellanox ethernet switch driver) could take a quick glance at the
-> code and verify that i am using the correct device as the parent
-> device.
-
-I think that the above paragraph is not relevant any more?
-
-> This work is also necessary for extending the ACPI thermal zone driver
-> to support the _TZD ACPI object in the future.
-
-I'm still unsure why _TZD support requires the ability to set a
-thermal zone parent device.
-
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> ---
-> Armin Wolf (8):
->       thermal: core: Allow setting the parent device of cooling devices
->       thermal: core: Set parent device in thermal_of_cooling_device_regis=
-ter()
->       ACPI: processor: Stop creating "device" sysfs link
-
-That link is not to the cooling devices' parent, but to the ACPI
-device object (a struct acpi_device) that corresponds to the parent.
-The parent of the cooling device should be the processor device, not
-its ACPI companion, so I'm not sure why there would be a conflict.
-
->       ACPI: fan: Stop creating "device" sysfs link
->       ACPI: video: Stop creating "device" sysfs link
-
-Analogously in the above two cases AFAICS.
-
-The parent of a cooling device should be a "physical" device object,
-like a platform device or a PCI device or similar, not a struct
-acpi_device (which in fact is not a device even).
-
->       thermal: core: Set parent device in thermal_cooling_device_register=
-()
->       ACPI: thermal: Stop creating "device" sysfs link
-
-And this link is to the struct acpi_device representing the thermal zone it=
-self.
-
->       thermal: core: Allow setting the parent device of thermal zone devi=
-ces
-
-I'm not sure if this is a good idea, at least until it is clear what
-the role of a thermal zone parent device should be.
+Both patches applied as 6.19 material, thanks!
 
