@@ -1,141 +1,117 @@
-Return-Path: <linux-pm+bounces-38373-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38374-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8723C7947E
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 14:24:07 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BE50C79689
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 14:32:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 748E52DF56
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 13:24:00 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTPS id B006228A82
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 13:31:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1136331237;
-	Fri, 21 Nov 2025 13:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FEBF33438C;
+	Fri, 21 Nov 2025 13:31:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nG3IEBU1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="huFHck4h"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC67A3176E1
-	for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 13:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFEA73F9D2
+	for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 13:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763731424; cv=none; b=Sca0Gp/dRQKMYZ8Dw8LgtNouXTahV7E5T0g8StRzP5/2mpXOwHcJWhmzWnf3cF7PnrgSkSua0lrVJOsv7A++PtAstuGSt2iyyk3hOcNRTGoAebI5ocqU4pcFl4ZkmiuVza92J7Jb32ruKVGrOaPG7HhlaeLXw4toPHeri6fZ2Co=
+	t=1763731916; cv=none; b=EEV2xWn+eQrfPyjXYN6sQuzJ9/oCK1+nRrt55MIUhuRGmpNKdNSjIBsKHBut6b0mwmP64zOrXy3f4nvwXjrjw9MEdQcqcH1NDB5namPNsL+0h2xteIkrYbqQHJWaeFOIqMqaFg1gtz0l0jncuYRz3ueD6k5isrnffF3R52FXmsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763731424; c=relaxed/simple;
-	bh=ECEcTZSNracREyRBoHBY0EQNPthTpIWDuJV7GHm79Ug=;
+	s=arc-20240116; t=1763731916; c=relaxed/simple;
+	bh=pztRP1chr1Q5GoxgTUrDPjvVTN1vIREHiqy2bEgguts=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fj5rGj7Y5JHp+HUq7+eSnxqfRAVeYccgKywhGGa5tPI4bv9eAwjPFaKMKRk1Bv6AM191bJoasxwhQUrNA94u79bVJXQd+FF0M65m1hCxj2Z+9rX5/5pqsZaxLAwkftPBCBrvyA5GGamAvbn124GGC93JhAh2aJP5CaBihDB/qdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nG3IEBU1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ECB8C19423
-	for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 13:23:44 +0000 (UTC)
+	 To:Cc:Content-Type; b=I+CZRN8Ji1N94a9C6rRthKAU2tlCMbc/h4K17wOooiKuCIdnzMlSFN5hZgx2BUl/SwXLPfuYquBBpWozw831oL22f5NJ/X0NiVdQm67t1NbqaSa025ibX7/dmPMM/vhnf02BAehyaCD5HeGGw4MtBiwbWor1AEjYa0BIWlRqz8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=huFHck4h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C12C16AAE
+	for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 13:31:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763731424;
-	bh=ECEcTZSNracREyRBoHBY0EQNPthTpIWDuJV7GHm79Ug=;
+	s=k20201202; t=1763731915;
+	bh=pztRP1chr1Q5GoxgTUrDPjvVTN1vIREHiqy2bEgguts=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nG3IEBU1k9MufuwLMiuLVKZHavGOX5qH8JNk2SxUWFchiruvinJ2lvg3vnId/fhR9
-	 +gwiS0ClKy/mrd+Ph9ljzddjMrvqgrPngTvdyn5IbvYkOWKf4xiZp/byz7vPD+ZeUj
-	 peVPECgoivANQ2YWt69lFoI68Qxz/d9mEwdV2RvEbpyd3KIn95UPesTYRcbReZHqul
-	 hG9RsTV/iog3GjjDm2OQc8/QLbG/35DPXmvf34qCKz7Utm7waTql2gHdbFW0Ddi6k6
-	 SwB78YaLhf6Tk+FKMpgmdChbIGJIJRddeCMBOpyc5+dSzIg7kioTlA+52UaOFahpBI
-	 Yawy/dohFPcbQ==
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-65791c35134so279714eaf.1
-        for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 05:23:44 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU1Bh87SalXd86oPpjNcx/jhLzA7+rVZEv88LoBBSOO3C6Ef3e4Jd0Hi8iNFtNjiwEbTGiuTwq8Pg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzLRz3kOKBdiSc8M47E7Uu9naAAh+9ZPyNBkuCb4shvGemeNAR
-	4KXIqjBpPwrkNgwKRV2n0BDRmbmWAqzpK0qPbhHShVw7HHKpSodhKJ7+FAH8WkvLrlm53NMhu4L
-	4bhv0TVneeuYYEEmKxDDkPwUr6RhA1CQ=
-X-Google-Smtp-Source: AGHT+IFhp0YVKTtgS3L8OPuDSBkiyOLNkIUJXxKQSshiG2x2l23LJvripY/gCRFK9MFfhVgywKlcZjUCU7fKQ5VhEaA=
-X-Received: by 2002:a05:6820:810c:b0:656:b1fb:a8fd with SMTP id
- 006d021491bc7-65790a01bcamr707581eaf.1.1763731423664; Fri, 21 Nov 2025
- 05:23:43 -0800 (PST)
+	b=huFHck4hqlS+vBlBBtiKbgGN82F7Mw7JjPPJu8PsatGBgDIHZVceawi5K3eblDmRG
+	 WcZeXHEhOyv+A4GWoCkHkdZfh0db24kZxwewdIJ0wHwTkbsF4VWBS18LTnBgMMKQlB
+	 OQ9JLjU9mXr6v2HsrOWzYNhVETqasImyO5xTOr3h3WRnCS85w2VnGVrVl+J5mjUgtS
+	 IuqkYyJf/kIdj638imonzkGD1T1zgzDh6N0xzNcIckLJe7wrFNcFjmkEdcCqHAp+NM
+	 bBXUclYzRbePDKMJpu51w5G+4u2U4gDOYmc3iACinCYd9LsHOZ8N8uDtPL3E+9XJNg
+	 0FyHoiIS4pT2w==
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-65763315216so843172eaf.0
+        for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 05:31:55 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUyFpHKMWsY1hvFl7fLs46tZNOEJ9Mhwb0c321VFl4thpmzOsex9uLgKWczz16t1M6eVq7cYNaMCA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNHi/aOmPzM1oPtadJcSIOnejr4Feg9mthmTi3CTQ7VXC6o4sw
+	BfG8Qbs3+98zST/IAhOlPWpzzqEmW49gw2C+nYIXdLOZqiVzsnC36JvIwaljHzqvmo/f9R488/+
+	WlRE1ehAHV1qWtI63UTXdi/8QDYgiv+0=
+X-Google-Smtp-Source: AGHT+IF0iQJS3tVv9qLJbrkQxfwNA37G9ltJnTaGg2zEgP5E/ZiK+w4qMqaeXilBlRVJ3LVVHuS4hgE3x9Lnxz5svAY=
+X-Received: by 2002:a05:6820:4c09:b0:657:61da:5089 with SMTP id
+ 006d021491bc7-65790b6080fmr815913eaf.7.1763731915123; Fri, 21 Nov 2025
+ 05:31:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251121010756.6687-1-val@packett.cool> <efe52356123168be06811abd08a99f65d6980baa.camel@linux.intel.com>
-In-Reply-To: <efe52356123168be06811abd08a99f65d6980baa.camel@linux.intel.com>
+References: <20251119002545.666251-1-atomlin@atomlin.com> <20251119002545.666251-2-atomlin@atomlin.com>
+ <CAJZ5v0hUWMgJVAZ36_9k8N3AdZ_rGajKpQSprF6QwUtxmpH2qw@mail.gmail.com> <oifgpnkuupj4s7picyujw3jp2b22dcdrr7kqejho6uhxh3juam@7bqtbuxzjt5p>
+In-Reply-To: <oifgpnkuupj4s7picyujw3jp2b22dcdrr7kqejho6uhxh3juam@7bqtbuxzjt5p>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 21 Nov 2025 14:23:32 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h2u_Y8H-mCzeX+gxT4Aipa_MK6egMaA2fGuGkJBGXq7Q@mail.gmail.com>
-X-Gm-Features: AWmQ_bk47UcrAbnlYbzZbn257NFsWpeFAQcdakF9SM7SuiCPFKaw52f_xwxzm34
-Message-ID: <CAJZ5v0h2u_Y8H-mCzeX+gxT4Aipa_MK6egMaA2fGuGkJBGXq7Q@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: warn and fixup on sanity check instead of
- rejecting the driver
-To: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Cc: Val Packett <val@packett.cool>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Christian Loehle <christian.loehle@arm.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
+Date: Fri, 21 Nov 2025 14:31:44 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0j3Mpo2LLGN+jWbNi4vT+u+Wckm5NK+ehA=GhigThpcnA@mail.gmail.com>
+X-Gm-Features: AWmQ_blRBb9Giqe8VAqZHm-pVk0XjMctq8g77Yu3SLbuw-ry0kq4THoCCFMw0GQ
+Message-ID: <CAJZ5v0j3Mpo2LLGN+jWbNi4vT+u+Wckm5NK+ehA=GhigThpcnA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] cpuidle: sysfs: Display idle state enter function name
+To: Aaron Tomlin <atomlin@atomlin.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org, 
+	gregkh@linuxfoundation.org, nathan@kernel.org, linux-pm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 21, 2025 at 2:16=E2=80=AFPM Artem Bityutskiy
-<artem.bityutskiy@linux.intel.com> wrote:
+On Fri, Nov 21, 2025 at 4:16=E2=80=AFAM Aaron Tomlin <atomlin@atomlin.com> =
+wrote:
 >
-> On Thu, 2025-11-20 at 22:06 -0300, Val Packett wrote:
-> > On Device Tree platforms, the latency and target residency values come
-> > directly from device trees, which are numerous and weren't all written
-> > with cpuidle invariants in mind. For example, qcom/hamoa.dtsi currently
-> > trips this check: exit latency 680000 > residency 600000.
+> On Thu, Nov 20, 2025 at 04:36:21PM +0100, Rafael J. Wysocki wrote:
+> > I'm not really sure how this helps.
 > >
-> > Instead of harshly rejecting the entire cpuidle driver with a mysteriou=
-s
-> > error message, print a warning and set the target residency value to be
-> > equal to the exit latency.
+> > For example, the intel_idle driver uses the same function for all idle
+> > states except for the polling one, which is already advertised as
+> > polling.
 > >
-> > Fixes: 76934e495cdc ("cpuidle: Add sanity check for exit latency and ta=
-rget residency")
-> > Signed-off-by: Val Packett <val@packett.cool>
-> > ---
-> >  drivers/cpuidle/driver.c | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
-> > index 1c295a93d582..06aeb59c1017 100644
-> > --- a/drivers/cpuidle/driver.c
-> > +++ b/drivers/cpuidle/driver.c
-> > @@ -199,8 +199,11 @@ static int __cpuidle_driver_init(struct cpuidle_dr=
-iver *drv)
-> >                * exceed its target residency which is assumed in cpuidl=
-e in
-> >                * multiple places.
-> >                */
-> > -             if (s->exit_latency_ns > s->target_residency_ns)
-> > -                     return -EINVAL;
-> > +             if (s->exit_latency_ns > s->target_residency_ns) {
-> > +                     pr_warn("cpuidle: state %d: exit latency %lld > r=
-esidency %lld (fixing)\n",
-> > +                             i, s->exit_latency_ns, s->target_residenc=
-y_ns);
-> > +                     s->target_residency_ns =3D s->exit_latency_ns;
-> > +             }
-> >       }
+> > Besides, why do you want users to look into the kernel source code to
+> > figure things out?
 >
-> Ideally, in a perfect world, driver.c should verify input data and
-> reject bad input, rather than correct bad input.
+> Hi Rafael,
 >
-> So ideally, if there is an idle driver between DT and driver.c (like
-> intel_idle.c in case of Intel), that would be its job to correct DT
-> data.
+> While intel_idle uses a single function for most states today, other
+> cpuidle drivers, different architectures, or future changes might impleme=
+nt
+> per-state variations.
 >
-> But I'm not familiar with DT platforms, so I don't know if there is a
-> driver/piece of SW between DT parsing and driver.c that could handle
-> this correction at an earlier stage.
+> The mapping from abstract C-state names and descriptions (e.g., "C1", "C3=
+")
+> to the actual kernel implementation might not always be clear. Exposing t=
+he
+> enter function offers a direct, cheap and reliable way to easily identify
+> what is being executed for each state without using a kernel debugger
+> (e.g., crash(8). Finally user-space tools might benefit from introspectin=
+g
+> implementation details at runtime to validate configuration. This is
+> primarily for the advanced user.
 >
-> The reason I think this patch is not ideal is because it changes the
-> input data at the core framework level, and in theory the change may be
-> surprising to users. In general, sometimes rejecting bluntly is better
-> than correcting in a possibly unexpected way.
+> Please let me know if this clarifies the motivation.
 
-Unless rejecting it causes the functionality to be missing entirely
-and users have no straightforward way to fix it up.
+No, it doesn't.  You'd need to tell me specifically what use case is
+going to be addressed by this change.
 
-As I said in my reply, what can be done in this situation is to print
-a warning when assumptions are not met.
+Though this is not going to fly regardless because exposing kernel
+internals via sysfs turns them into ABI which may hinder future
+improvements.
+
+So let's first talk about what problem there is that needs addressing.
 
