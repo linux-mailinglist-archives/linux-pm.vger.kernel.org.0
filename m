@@ -1,313 +1,217 @@
-Return-Path: <linux-pm+bounces-38362-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38363-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90FF6C79066
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 13:33:31 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18CE6C79149
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 13:54:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 319C74E2452
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 12:33:30 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D18CD364107
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 12:52:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9425630274F;
-	Fri, 21 Nov 2025 12:33:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16DE133291F;
+	Fri, 21 Nov 2025 12:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="S1GmZrLn"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="AyMBh7tX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73EE2882B8;
-	Fri, 21 Nov 2025 12:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79FC4314D31;
+	Fri, 21 Nov 2025 12:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763728405; cv=none; b=E0c1M1iO83d9uGdkMUplYI8VZlp/V3MrZEJt0lMdqmZ7OlWghf1L69/HRJ0o/vhdmTLFPtZxSJdsST9G9wXnOm/JyN27lHMVlOocoQU/KuzjnIir3hQ+x7NRKu6e/8Z/rha/+oMYv/wLTOkcAOBFPNNSHq7xCWQ9SeK/+ycE8sU=
+	t=1763729540; cv=none; b=F3sinYRxTZL0ZY45a8Fyz4ljgdJw1kEBOXtIK5pIsbN3BBPQtzGph6Tm+ODVV9tFO1B7Da6QdcUVVvjZ3mWOK0+QZ0BGe+HuAQV4S5vZqUi5uOyD0pjdloubN4bDWbcsYnA5knSPkn5G6daSry1fXJ5DhSc2kG8gkaDBGC0pRBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763728405; c=relaxed/simple;
-	bh=h2p9n9HL07X7V1Dmpqbb7/35pYpOKbv1tzV544q1B+I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=fKE6Hfnfc2unMI1APwj2BlQ//QmqdUopcUGdyoHRH/ORvDU57pGJBaaA5bvLT/UFRdbYwHZ3kQ/CXGXiXBZEqbbj36t7nBsfHsfBieVwGFY411z4IabmrMsns+pMqbgVNNly3cQ1m9SM2DBvl449r0YZKPEftFrAZdioT8R7RtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=S1GmZrLn; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=TXgw7ZAAVoJUJUowbzTMYQN6JXMS+NzXRYgaB2geh2I=;
-	b=S1GmZrLnXJe0/U4QGAew7aeZIpwyU5KdoDE+PFHRm3GGf/jNh16cGJyEdlxmJK7zsTXK4Jz8R
-	3q/6gmEZEdJtfEuMBiStHjQtqlUSS4WZLSnNSMLaXCqxhl1cFsIhYnpSZU1m8w3HKVfSkAgWT2B
-	n7POrxRluNc7mIV4Vq31H1c=
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4dCZMF6ghQzcZy9;
-	Fri, 21 Nov 2025 20:31:05 +0800 (CST)
-Received: from kwepemr200004.china.huawei.com (unknown [7.202.195.241])
-	by mail.maildlp.com (Postfix) with ESMTPS id 167901402CF;
-	Fri, 21 Nov 2025 20:33:12 +0800 (CST)
-Received: from [10.67.121.62] (10.67.121.62) by kwepemr200004.china.huawei.com
- (7.202.195.241) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 21 Nov
- 2025 20:33:11 +0800
-Message-ID: <46b840b6-b172-4b7d-83d4-540c41608726@huawei.com>
-Date: Fri, 21 Nov 2025 20:33:10 +0800
+	s=arc-20240116; t=1763729540; c=relaxed/simple;
+	bh=shy6MzZU9wcGSmhy1yW9Nhob1xPf/NK+z+tKPMSJ5GI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q5msTrnsbFbDxZiAeqk0QITIh50y5HrXAleJaxF5Hrm4WDVjvmfsdASTHJFm9HeiLFEmTXYHP/O/JDZMNXN/9+ybIZhHaAjI4jlAj71yCAIqrj/uPRcpCRsUskGQIT9IbjBRsYKMdxJYdZNFtNz0P3dZhCm6kD18pM5Jpm1x6Cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=AyMBh7tX; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1763729535;
+	bh=shy6MzZU9wcGSmhy1yW9Nhob1xPf/NK+z+tKPMSJ5GI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=AyMBh7tX30idUdyAD6WcSGT9101hU8/GehXpTKZrFjBIrHEBgcOepR41BQxtSQil3
+	 RKrnt0IHGoE4U1VqUqR1qm7SRSkASqugtDQ01z2uGhCTt72XruFPR6PW1Xlno/stOx
+	 1J5sJIsSXLaVlNFL66WNpvf8O/g06c2kOLRxum+6Jpu6rCazmthu1+/BDgGULXcAVX
+	 6P1NG0mWTWjETlGGoHudNJFND+dgduviIN7Gl2IYjV601X+Hh8S5TV2dFNF/5OgtHg
+	 fXBAIwQp9Vo+OwmAcBWcV2+wu4Ul/wUJNlczp0OGxEVd8IjUyKIDSKDFG9+wAEe75I
+	 6gBc3HBsT9nvw==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0381D17E0222;
+	Fri, 21 Nov 2025 13:52:14 +0100 (CET)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: ulf.hansson@linaro.org
+Cc: matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	nfraprado@collabora.com,
+	irving-ch.lin@mediatek.com,
+	wenst@chromium.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	robh@kernel.org,
+	krzk@kernel.org,
+	conor@kernel.org,
+	kernel@collabora.com
+Subject: [PATCH - URGENT] pmdomains: mtk-pm-domains: Fix spinlock recursion in probe
+Date: Fri, 21 Nov 2025 13:52:12 +0100
+Message-ID: <20251121125212.43093-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] PM / devfreq: use _visible attribute to replace
- create/remove_sysfs_files()
-To: <myungjoo.ham@samsung.com>, <kyungmin.park@samsung.com>,
-	<cw00.choi@samsung.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>, <lihuisong@huawei.com>,
-	<yubowen8@huawei.com>, <linhongye@h-partners.com>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>
-References: <20251107031706.1698396-1-zhangpengjie2@huawei.com>
-From: "zhangpengjie (A)" <zhangpengjie2@huawei.com>
-In-Reply-To: <20251107031706.1698396-1-zhangpengjie2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemr200004.china.huawei.com (7.202.195.241)
+Content-Transfer-Encoding: 8bit
 
-Gentle ping .
+For some reason, of_find_node_with_property() is creating a spinlock
+recursion issue along with fwnode_count_parents(), and this issue
+is making all MediaTek boards unbootable.
 
-Thanks!
+As of kernel v6.18-rc6, there are only three users of this function,
+one of which is this driver.
 
+Migrate away from of_find_node_with_property() by adding a local
+scpsys_get_legacy_regmap_node() function, which acts similarly to
+of_find_node_with_property(), and calling the former in place of
+the latter.
 
-On 11/7/2025 11:17 AM, Pengjie Zhang wrote:
-> Previously, non-generic attributes (polling_interval, timer) used separate
-> create/delete logic, leading to race conditions during concurrent access in
-> creation/deletion. Multi-threaded operations also caused inconsistencies
-> between governor capabilities and attribute states.
->                                                                             
-> 1.Use is_visible + sysfs_update_group() to unify management of these
-> attributes, eliminating creation/deletion races.
-> 2.Add locks and validation to these attributes, ensuring consistency
-> between current governor capabilities and attribute operations in
-> multi-threaded environments.
->                                                                             
-> Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
-> ---
-> changes in v3:
-> - Use guard() to simplify lock acquisition and destruction.
-> - Eliminate redundant checks for df.
-> Link to v2:https://lore.kernel.org/lkml/20251028022458.2824872-1-zhangpengjie2@huawei.com/
->                                                                             
-> Changes in v2:
-> - Fix one problem reported by the kernel test robot.
-> - Redirect all error paths in timer_store() to out to ensure locks are not
->   left unReleased.
-> Link to v1:https://lore.kernel.org/lkml/20251025135238.3576861-1-zhangpengjie2@huawei.com/
->
->   drivers/devfreq/devfreq.c | 108 ++++++++++++++++++++++++--------------
->   1 file changed, 68 insertions(+), 40 deletions(-)
->
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 2e8d01d47f69..674b794d553d 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -38,6 +38,7 @@
->   
->   static struct class *devfreq_class;
->   static struct dentry *devfreq_debugfs;
-> +static const struct attribute_group gov_attr_group;
->   
->   /*
->    * devfreq core provides delayed work based load monitoring helper
-> @@ -785,11 +786,6 @@ static void devfreq_dev_release(struct device *dev)
->   	kfree(devfreq);
->   }
->   
-> -static void create_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov);
-> -static void remove_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov);
-> -
->   /**
->    * devfreq_add_device() - Add devfreq feature to the device
->    * @dev:	the device to add devfreq feature.
-> @@ -956,7 +952,10 @@ struct devfreq *devfreq_add_device(struct device *dev,
->   			 __func__);
->   		goto err_init;
->   	}
-> -	create_sysfs_files(devfreq, devfreq->governor);
-> +
-> +	err = sysfs_update_group(&devfreq->dev.kobj, &gov_attr_group);
-> +	if (err)
-> +		goto err_init;
->   
->   	list_add(&devfreq->node, &devfreq_list);
->   
-> @@ -998,9 +997,7 @@ int devfreq_remove_device(struct devfreq *devfreq)
->   	if (devfreq->governor) {
->   		devfreq->governor->event_handler(devfreq,
->   						 DEVFREQ_GOV_STOP, NULL);
-> -		remove_sysfs_files(devfreq, devfreq->governor);
->   	}
-> -
->   	device_unregister(&devfreq->dev);
->   
->   	return 0;
-> @@ -1460,7 +1457,6 @@ static ssize_t governor_store(struct device *dev, struct device_attribute *attr,
->   			 __func__, df->governor->name, ret);
->   		goto out;
->   	}
-> -	remove_sysfs_files(df, df->governor);
->   
->   	/*
->   	 * Start the new governor and create the specific sysfs files
-> @@ -1489,7 +1485,7 @@ static ssize_t governor_store(struct device *dev, struct device_attribute *attr,
->   	 * Create the sysfs files for the new governor. But if failed to start
->   	 * the new governor, restore the sysfs files of previous governor.
->   	 */
-> -	create_sysfs_files(df, df->governor);
-> +	ret = sysfs_update_group(&df->dev.kobj, &gov_attr_group);
->   
->   out:
->   	mutex_unlock(&devfreq_list_lock);
-> @@ -1807,17 +1803,22 @@ static struct attribute *devfreq_attrs[] = {
->   	&dev_attr_trans_stat.attr,
->   	NULL,
->   };
-> -ATTRIBUTE_GROUPS(devfreq);
->   
->   static ssize_t polling_interval_show(struct device *dev,
->   				     struct device_attribute *attr, char *buf)
->   {
->   	struct devfreq *df = to_devfreq(dev);
-> +	int ret;
->   
-> -	if (!df->profile)
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->profile || !df->governor ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, POLLING_INTERVAL))
->   		return -EINVAL;
->   
-> -	return sprintf(buf, "%d\n", df->profile->polling_ms);
-> +	ret = sprintf(buf, "%d\n", df->profile->polling_ms);
-> +
-> +	return ret;
->   }
->   
->   static ssize_t polling_interval_store(struct device *dev,
-> @@ -1828,7 +1829,10 @@ static ssize_t polling_interval_store(struct device *dev,
->   	unsigned int value;
->   	int ret;
->   
-> -	if (!df->governor)
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->governor ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, POLLING_INTERVAL))
->   		return -EINVAL;
->   
->   	ret = sscanf(buf, "%u", &value);
-> @@ -1847,7 +1851,10 @@ static ssize_t timer_show(struct device *dev,
->   {
->   	struct devfreq *df = to_devfreq(dev);
->   
-> -	if (!df->profile)
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->profile || !df->governor ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, TIMER))
->   		return -EINVAL;
->   
->   	return sprintf(buf, "%s\n", timer_name[df->profile->timer]);
-> @@ -1861,7 +1868,10 @@ static ssize_t timer_store(struct device *dev, struct device_attribute *attr,
->   	int timer = -1;
->   	int ret = 0, i;
->   
-> -	if (!df->governor || !df->profile)
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->governor || !df->profile ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, TIMER))
->   		return -EINVAL;
->   
->   	ret = sscanf(buf, "%16s", str_timer);
-> @@ -1905,36 +1915,54 @@ static ssize_t timer_store(struct device *dev, struct device_attribute *attr,
->   }
->   static DEVICE_ATTR_RW(timer);
->   
-> -#define CREATE_SYSFS_FILE(df, name)					\
-> -{									\
-> -	int ret;							\
-> -	ret = sysfs_create_file(&df->dev.kobj, &dev_attr_##name.attr);	\
-> -	if (ret < 0) {							\
-> -		dev_warn(&df->dev,					\
-> -			"Unable to create attr(%s)\n", "##name");	\
-> -	}								\
-> -}									\
-> +static struct attribute *governor_attrs[] = {
-> +	&dev_attr_polling_interval.attr,
-> +	&dev_attr_timer.attr,
-> +	NULL
-> +};
->   
-> -/* Create the specific sysfs files which depend on each governor. */
-> -static void create_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov)
-> +static umode_t gov_attr_visible(struct kobject *kobj,
-> +				struct attribute *attr, int n)
->   {
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, POLLING_INTERVAL))
-> -		CREATE_SYSFS_FILE(devfreq, polling_interval);
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, TIMER))
-> -		CREATE_SYSFS_FILE(devfreq, timer);
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct devfreq *df = to_devfreq(dev);
-> +
-> +	if (!df->governor || !df->governor->attrs)
-> +		return 0;
-> +
-> +	if (IS_SUPPORTED_ATTR(df->governor->attrs, POLLING_INTERVAL))
-> +		return attr->mode;
-> +	if (IS_SUPPORTED_ATTR(df->governor->attrs, TIMER))
-> +		return attr->mode;
-> +
-> +	return 0;
->   }
->   
-> -/* Remove the specific sysfs files which depend on each governor. */
-> -static void remove_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov)
-> +static bool gov_group_visible(struct kobject *kobj)
->   {
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, POLLING_INTERVAL))
-> -		sysfs_remove_file(&devfreq->dev.kobj,
-> -				&dev_attr_polling_interval.attr);
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, TIMER))
-> -		sysfs_remove_file(&devfreq->dev.kobj, &dev_attr_timer.attr);
-> +	struct device *dev = kobj_to_dev(kobj);
-> +
-> +	if (!dev)
-> +		return false;
-> +
-> +	return true;
->   }
-> +DEFINE_SYSFS_GROUP_VISIBLE(gov);
-> +
-> +static const struct attribute_group devfreq_group = {
-> +	.attrs = devfreq_attrs,
-> +};
-> +
-> +static const struct attribute_group gov_attr_group = {
-> +	.attrs = governor_attrs,
-> +	.is_visible = SYSFS_GROUP_VISIBLE(gov),
-> +};
-> +
-> +static const struct attribute_group *devfreq_groups[] = {
-> +	&devfreq_group,
-> +	&gov_attr_group,
-> +	NULL
-> +};
->   
->   /**
->    * devfreq_summary_show() - Show the summary of the devfreq devices
+This resolves the following spinlock recursion issue:
+
+[    1.773979] BUG: spinlock recursion on CPU#2, kworker/u24:1/60
+[    1.790485]  lock: devtree_lock+0x0/0x40, .magic: dead4ead, .owner: kworker/u24:1/60, .owner_cpu: 2
+[    1.791644] CPU: 2 UID: 0 PID: 60 Comm: kworker/u24:1 Tainted: G        W           6.18.0-rc6 #3 PREEMPT
+[    1.791649] Tainted: [W]=WARN
+[    1.791650] Hardware name: MediaTek Genio-510 EVK (DT)
+[    1.791653] Workqueue: events_unbound deferred_probe_work_func
+[    1.791658] Call trace:
+[    1.791659]  show_stack+0x18/0x30 (C)
+[    1.791664]  dump_stack_lvl+0x68/0x94
+[    1.791668]  dump_stack+0x18/0x24
+[    1.791672]  spin_dump+0x78/0x88
+[    1.791678]  do_raw_spin_lock+0x110/0x140
+[    1.791684]  _raw_spin_lock_irqsave+0x58/0x6c
+[    1.791690]  of_get_parent+0x28/0x74
+[    1.791694]  of_fwnode_get_parent+0x38/0x7c
+[    1.791700]  fwnode_count_parents+0x34/0xf0
+[    1.791705]  fwnode_full_name_string+0x28/0x120
+[    1.791710]  device_node_string+0x3e4/0x50c
+[    1.791715]  pointer+0x294/0x430
+[    1.791718]  vsnprintf+0x21c/0x5bc
+[    1.791722]  vprintk_store+0x108/0x47c
+[    1.791728]  vprintk_emit+0xc4/0x350
+[    1.791732]  vprintk_default+0x34/0x40
+[    1.791736]  vprintk+0x24/0x30
+[    1.791740]  _printk+0x60/0x8c
+[    1.791744]  of_node_release+0x154/0x194
+[    1.791749]  kobject_put+0xa0/0x120
+[    1.791753]  of_node_put+0x18/0x28
+[    1.791756]  of_find_node_with_property+0x74/0x100
+[    1.791761]  scpsys_probe+0x338/0x5e0
+[    1.791765]  platform_probe+0x5c/0xa4
+[    1.791770]  really_probe+0xbc/0x2ac
+[    1.791774]  __driver_probe_device+0x78/0x118
+[    1.791779]  driver_probe_device+0x3c/0x170
+[    1.791783]  __device_attach_driver+0xb8/0x150
+[    1.791788]  bus_for_each_drv+0x88/0xe8
+[    1.791792]  __device_attach+0x9c/0x1a0
+[    1.791796]  device_initial_probe+0x14/0x20
+[    1.791801]  bus_probe_device+0xa0/0xa4
+[    1.791805]  deferred_probe_work_func+0x88/0xd0
+[    1.791809]  process_one_work+0x1e8/0x448
+[    1.791813]  worker_thread+0x1ac/0x340
+[    1.791816]  kthread+0x138/0x220
+[    1.791821]  ret_from_fork+0x10/0x20
+
+Fixes: c29345fa5f66 ("pmdomain: mediatek: Refactor bus protection regmaps retrieval")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+
+This might not be the best fix to perform, and I have Cc'ed Rob and
+Krzysztof for them to have a look at the spinlock recursion issue,
+as I think it either has to be fixed, or the affected function has
+to be removed (or both, actually - in any case, if not fixed, this
+could backfire, and I'm not sure that the only function that shows
+this issue is just only of_find_node_with_property() or if others
+also do; at least, nothing else on MediaTek machines as of now).
+
+Counting that this makes *all* MediaTek machines to be unbootable,
+I'd prefer this fix to get merged immediately - so that it lands
+in v6.18 (which is at rc6 at the time of writing).
+
+That - because I think that resolving the source of this issue will
+take a bit of time and research - and I really don't want the LTS
+kernel to be broken on all MediaTek devices.
+
+Note: When I initially tested the commit pointed out in the Fixes
+tag, it was working with no spinlock recursion - I don't clearly
+remember what kernel version was that, but I think it was some
+linux-next around v6.16 or v6.17.
+
+ drivers/pmdomain/mediatek/mtk-pm-domains.c | 18 +++++++++++++++---
+ 1 file changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+index 407b4a7aba10..721224c89865 100644
+--- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
++++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+@@ -1006,6 +1006,18 @@ static void scpsys_domain_cleanup(struct scpsys *scpsys)
+ 	}
+ }
+ 
++static struct device_node *scpsys_get_legacy_regmap(struct device_node *np, const char *pn)
++{
++	struct device_node *local_node;
++
++	for_each_child_of_node(np, local_node) {
++		if (of_property_present(local_node, pn))
++			return local_node;
++	}
++
++	return NULL;
++}
++
+ static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *scpsys)
+ {
+ 	const u8 bp_blocks[3] = {
+@@ -1027,7 +1039,7 @@ static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
+ 	 * this makes it then possible to allocate the array of bus_prot
+ 	 * regmaps and convert all to the new style handling.
+ 	 */
+-	node = of_find_node_with_property(np, "mediatek,infracfg");
++	node = scpsys_get_legacy_regmap(np, "mediatek,infracfg");
+ 	if (node) {
+ 		regmap[0] = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg");
+ 		of_node_put(node);
+@@ -1040,7 +1052,7 @@ static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
+ 		regmap[0] = NULL;
+ 	}
+ 
+-	node = of_find_node_with_property(np, "mediatek,smi");
++	node = scpsys_get_legacy_regmap(np, "mediatek,smi");
+ 	if (node) {
+ 		smi_np = of_parse_phandle(node, "mediatek,smi", 0);
+ 		of_node_put(node);
+@@ -1058,7 +1070,7 @@ static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
+ 		regmap[1] = NULL;
+ 	}
+ 
+-	node = of_find_node_with_property(np, "mediatek,infracfg-nao");
++	node = scpsys_get_legacy_regmap(np, "mediatek,infracfg-nao");
+ 	if (node) {
+ 		regmap[2] = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg-nao");
+ 		num_regmaps++;
+-- 
+2.51.2
+
 
