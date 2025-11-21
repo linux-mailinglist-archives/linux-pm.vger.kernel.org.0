@@ -1,205 +1,138 @@
-Return-Path: <linux-pm+bounces-38351-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38352-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07091C788F8
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 11:42:53 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53EC7C78C1B
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 12:21:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 96FF2327CB
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 10:31:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 39A904F0996
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 11:17:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE69734405D;
-	Fri, 21 Nov 2025 10:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4914F2F1FCF;
+	Fri, 21 Nov 2025 11:17:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=benjamin.gaignard@collabora.com header.b="AjZP1bem"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="PJRQcbgV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender3-pp-f112.zoho.com (sender3-pp-f112.zoho.com [136.143.184.112])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C743343D84;
-	Fri, 21 Nov 2025 10:31:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763721102; cv=pass; b=tP+g4YvbdT8w4H7YsHWqOKsS1Ty9rBDJ4F6gIRMm+dM3S27ZFIHXAoAlDpRYBJyIqlUxi6EEFtZ/dn09+jmyRSgYCFqo0VWixoJU8hO2n4P/s55FOfYZ3Q51v38NCatVfaOJzSdK6WQmcSGLP3BPFiQH0IzCRpC6nlI3f2qDJN4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763721102; c=relaxed/simple;
-	bh=UMxctActzyaJXwNlh6SB/Gw3BcnrbWi51U6cejUMVcs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kP2+TsozY+0Uy4Kpp7KLYhoU4irurKTxG1aOXI6djtiOBywHmUGBUyIajz4SCrDhk8gYqfiKTRhgzN9bOnUyXPiyj7KmTyhScAjrttiWt0F9gywbEGiFeeE5Eh1W75BhJbI01rOsl9pKYjLat4JwgMz6xDzM/QekeHvbZv3L7gE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=benjamin.gaignard@collabora.com header.b=AjZP1bem; arc=pass smtp.client-ip=136.143.184.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9585E34321A;
+	Fri, 21 Nov 2025 11:17:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763723834; cv=none; b=VVshZsEuIZF0wgu4D2Ey9ptl0ItSa/YOyGga6bO77GABAzE9GyaorZSJ9iGEdOafxbEt/U/Eyo2cpEWHRNOVzNSMMTSLb6+XwlORyag1IRvjRX351V8lwQuOj2HBbHKakZzumIp4q7OPY17P9otjGfW/pvYapsN0kV88B02eULk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763723834; c=relaxed/simple;
+	bh=WsrtTZZgN5cpcaeLfhfmV5Uwfe5UlDUKhrY36z8jPVY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=Qrp5XgA3AIQMwUvGIHbjSSLl6Nr1YQXMiLH9XN0x1oAZQQ/phoza9XkgvHKma6kXw2ORu8Kj/yjhZQxEaPEdaISVrJyOvSHwBBJWBsU6x7e626A3zDSqs6tr7mtam9tmeHhWIhFj5MjAqXoJMvQR42IJN9Q686zGK5oPQ7fXq64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=PJRQcbgV; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1763721068; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Iq8Ov80lrJX6+LHwHs0xm8fC1Wsply20gg7+T5a3661OGwPs089k35v8vpAM/IelV6duqgd2IPRRu6J3dHPqyczQmFqKtuEsTrXMbmAyQpUW6S3RaA9z+ihcQDM030QmOojyM4CdQblLTkCzdtWkPZsJw3FNn7S5DG3yemntxpk=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1763721068; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=qQHzK2BSqPbNmZjYn7h/zJPYkRFHLnhXjNXGPoqjX0Q=; 
-	b=M3fsSNFoPXMwrM2WhQ3FZLvZtauaN1oel7ogVIM6A8nQQNxvCWNRXKq5RfOEd1eDRPw8dcBcWT3OlZxh8WA01onOcZCSp90s0kQHLC4jZrQ7e5yJ5RM1/q4K6CKWfhek/q7ZRtmYVsk08HmpSBdJjYeCnA3oTVEWG7HKS5YZV3Q=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=benjamin.gaignard@collabora.com;
-	dmarc=pass header.from=<benjamin.gaignard@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1763721068;
-	s=zohomail; d=collabora.com; i=benjamin.gaignard@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=qQHzK2BSqPbNmZjYn7h/zJPYkRFHLnhXjNXGPoqjX0Q=;
-	b=AjZP1bemhFSCaLhbZoMrxKfzCzXnJUS6f5nPQrWAWUpj04jI1x1qDOIGeuGTdB5N
-	+MiATYxh59/kaPVLnXA4j0gwEYYEC9WV04G80AN9op+T9S02HsLWoT0PH5qk8X3P+33
-	3gKSwYLmunqp1x4YCZ5DH8ezfbgN7fcfKmrOwxnQ=
-Received: by mx.zohomail.com with SMTPS id 1763721066252962.4226785100166;
-	Fri, 21 Nov 2025 02:31:06 -0800 (PST)
-Message-ID: <10929ed9-7137-442c-9bea-5291b81bd630@collabora.com>
-Date: Fri, 21 Nov 2025 11:31:01 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1763723822;
+	bh=WsrtTZZgN5cpcaeLfhfmV5Uwfe5UlDUKhrY36z8jPVY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=PJRQcbgVZNrXjk2K7ARdstUNgf7FfKlfkA8MvpZ/bHvoYpQyg8zo4nY1Jv1yYREXB
+	 N1CUgsZzeJfDrvKTpee+EnO9/nZ2MWvEYaG4YeWr3Bgv1EYQ8Gg08LfhgubBEQBYIR
+	 ecR1C9k1IqakxfHE3w0hcbDeC/x5+/1c/PocO5ciQOsZtVUIzntrVAcPm2VCv2nI97
+	 cmV8vDVCOB4lO/BOstQ0NHEGMmyUQmoMl7IHuOOnmte5p3B3chBjV4qSsWN1AxS/tt
+	 5IGkmGouqRre/IrgbCkjjBOCS++FJN3SZrErhKzKmm8h27XxsE8VFpsVxkZ+GVq0e0
+	 hX6vFchJfs2yA==
+Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:c4bf:9969:6e1c:dc69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: laura.nao)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id A007417E05BE;
+	Fri, 21 Nov 2025 12:17:01 +0100 (CET)
+From: Laura Nao <laura.nao@collabora.com>
+To: srini@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	rui.zhang@intel.com,
+	lukasz.luba@arm.com,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com
+Cc: nfraprado@collabora.com,
+	arnd@arndb.de,
+	colin.i.king@gmail.com,
+	u.kleine-koenig@baylibre.com,
+	andrew-ct.chen@mediatek.com,
+	lala.lin@mediatek.com,
+	bchihi@baylibre.com,
+	frank-w@public-files.de,
+	wenst@chromium.org,
+	fshao@chromium.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	kernel@collabora.com,
+	Laura Nao <laura.nao@collabora.com>
+Subject: [PATCH v4 0/9] Add thermal sensor driver support for Mediatek MT8196
+Date: Fri, 21 Nov 2025 12:16:33 +0100
+Message-Id: <20251121-mt8196-lvts-v4-v4-0-357f955a3176@collabora.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] media: verisilicon: Avoid G2 bus error while decoding
- H.264 and HEVC
-To: ming.qian@oss.nxp.com, linux-media@vger.kernel.org
-Cc: mchehab@kernel.org, hverkuil-cisco@xs4all.nl, nicolas@ndufresne.ca,
- p.zabel@pengutronix.de, sebastian.fricke@collabora.com, shawnguo@kernel.org,
- ulf.hansson@linaro.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, linux-imx@nxp.com, l.stach@pengutronix.de,
- peng.fan@nxp.com, eagle.zhou@nxp.com, imx@lists.linux.dev,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-References: <20251121081911.1682-1-ming.qian@oss.nxp.com>
- <20251121081911.1682-2-ming.qian@oss.nxp.com>
-Content-Language: en-US
-From: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <20251121081911.1682-2-ming.qian@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
+This patch series extends the MediaTek LVTS thermal driver to support the
+MT8196 SoC.
 
-Le 21/11/2025 à 09:19, ming.qian@oss.nxp.com a écrit :
-> From: Ming Qian <ming.qian@oss.nxp.com>
->
-> For the i.MX8MQ platform, there is a hardware limitation: the g1 VPU and
-> g2 VPU cannot decode simultaneously; otherwise, it will cause below bus
-> error and produce corrupted pictures, even led to system hang.
->
-> [  110.527986] hantro-vpu 38310000.video-codec: frame decode timed out.
-> [  110.583517] hantro-vpu 38310000.video-codec: bus error detected.
->
-> Therefore, it is necessary to ensure that g1 and g2 operate alternately.
-> Then this allows for successful multi-instance decoding of H.264 and HEVC.
-> Fixes: cb5dd5a0fa518 ("media: hantro: Introduce G2/HEVC decoder")
-> Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
+MT8196 requires a different implementation of the lvts_temp_to_raw()
+function.
 
-Thanks for the patch.
+To support this, the series introduces:
 
-Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+- A new struct lvts_platform_ops to allow platform-specific
+  conversion logic between raw sensor values and temperature
+- A variant of the lvts_temp_to_raw() implementation
+- Platform data and controller definitions for MT8196
 
-> ---
->   drivers/media/platform/verisilicon/hantro.h   |  1 +
->   .../media/platform/verisilicon/hantro_drv.c   | 26 +++++++++++++++++++
->   .../media/platform/verisilicon/imx8m_vpu_hw.c |  4 +++
->   3 files changed, 31 insertions(+)
->
-> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/platform/verisilicon/hantro.h
-> index e0fdc4535b2d..8baebf767d26 100644
-> --- a/drivers/media/platform/verisilicon/hantro.h
-> +++ b/drivers/media/platform/verisilicon/hantro.h
-> @@ -101,6 +101,7 @@ struct hantro_variant {
->   	unsigned int double_buffer : 1;
->   	unsigned int legacy_regs : 1;
->   	unsigned int late_postproc : 1;
-> +	atomic_t *shared_resource;
->   };
->   
->   /**
-> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-> index 60b95b5d8565..036ce43c9359 100644
-> --- a/drivers/media/platform/verisilicon/hantro_drv.c
-> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-> @@ -19,6 +19,7 @@
->   #include <linux/slab.h>
->   #include <linux/videodev2.h>
->   #include <linux/workqueue.h>
-> +#include <linux/iopoll.h>
->   #include <media/v4l2-event.h>
->   #include <media/v4l2-mem2mem.h>
->   #include <media/videobuf2-core.h>
-> @@ -93,6 +94,9 @@ static void hantro_job_finish(struct hantro_dev *vpu,
->   
->   	clk_bulk_disable(vpu->variant->num_clocks, vpu->clocks);
->   
-> +	if (vpu->variant->shared_resource)
-> +		atomic_cmpxchg(vpu->variant->shared_resource, 0, 1);
-> +
->   	hantro_job_finish_no_pm(vpu, ctx, result);
->   }
->   
-> @@ -166,12 +170,34 @@ void hantro_end_prepare_run(struct hantro_ctx *ctx)
->   			      msecs_to_jiffies(2000));
->   }
->   
-> +static int hantro_wait_shared_resource(struct hantro_dev *vpu)
-> +{
-> +	u32 data;
-> +	int ret;
-> +
-> +	if (!vpu->variant->shared_resource)
-> +		return 0;
-> +
-> +	ret = read_poll_timeout(atomic_cmpxchg, data, data, 10, 300 * NSEC_PER_MSEC, false,
-> +				vpu->variant->shared_resource, 1, 0);
-> +	if (ret) {
-> +		dev_err(vpu->dev, "Failed to wait shared resource\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   static void device_run(void *priv)
->   {
->   	struct hantro_ctx *ctx = priv;
->   	struct vb2_v4l2_buffer *src, *dst;
->   	int ret;
->   
-> +	ret = hantro_wait_shared_resource(ctx->dev);
-> +	if (ret < 0)
-> +		goto err_cancel_job;
-> +
->   	src = hantro_get_src_buf(ctx);
->   	dst = hantro_get_dst_buf(ctx);
->   
-> diff --git a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-> index 5be0e2e76882..1b3a0bfbf890 100644
-> --- a/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-> +++ b/drivers/media/platform/verisilicon/imx8m_vpu_hw.c
-> @@ -324,6 +324,8 @@ static const char * const imx8mq_reg_names[] = { "g1", "g2", "ctrl" };
->   static const char * const imx8mq_g1_clk_names[] = { "g1" };
->   static const char * const imx8mq_g2_clk_names[] = { "g2" };
->   
-> +static atomic_t imx8mq_shared_resource = ATOMIC_INIT(1);
-> +
->   const struct hantro_variant imx8mq_vpu_variant = {
->   	.dec_fmts = imx8m_vpu_dec_fmts,
->   	.num_dec_fmts = ARRAY_SIZE(imx8m_vpu_dec_fmts),
-> @@ -356,6 +358,7 @@ const struct hantro_variant imx8mq_vpu_g1_variant = {
->   	.num_irqs = ARRAY_SIZE(imx8mq_irqs),
->   	.clk_names = imx8mq_g1_clk_names,
->   	.num_clocks = ARRAY_SIZE(imx8mq_g1_clk_names),
-> +	.shared_resource = &imx8mq_shared_resource,
->   };
->   
->   const struct hantro_variant imx8mq_vpu_g2_variant = {
-> @@ -371,6 +374,7 @@ const struct hantro_variant imx8mq_vpu_g2_variant = {
->   	.num_irqs = ARRAY_SIZE(imx8mq_g2_irqs),
->   	.clk_names = imx8mq_g2_clk_names,
->   	.num_clocks = ARRAY_SIZE(imx8mq_g2_clk_names),
-> +	.shared_resource = &imx8mq_shared_resource,
->   };
->   
->   const struct hantro_variant imx8mm_vpu_g1_variant = {
+Link to v3: https://lore.kernel.org/all/20251016142158.740242-1-laura.nao@collabora.com/
+
+Changes in v4:
+- Dropped v1/v2 suffixes, replaced with mt7988/mt8196
+- Added lvts_raw_to_temp/lvts_temp_to_raw functions, which return the 
+  corresponding SoC-specific ops.
+- Changed probe logic to fail when temp_factor == 0, dropped checks at
+  runtime
+- Dropped R-b/T-b tags on affected patches (3 and 4)
+
+---
+Laura Nao (9):
+      dt-bindings: thermal: mediatek: Add LVTS thermal controller support for MT8196
+      thermal/drivers/mediatek/lvts: Make number of calibration offsets configurable
+      thermal/drivers/mediatek/lvts: Fail probe if temp_factor is zero
+      thermal: mediatek: lvts: Add platform ops to support alternative conversion logic
+      thermal/drivers/mediatek/lvts: Add lvts_temp_to_raw variant
+      thermal/drivers/mediatek/lvts: Add support for ATP mode
+      thermal/drivers/mediatek/lvts: Support MSR offset for 16-bit calibration data
+      thermal/drivers/mediatek/lvts_thermal: Add MT8196 support
+      dt-bindings: nvmem: mediatek: efuse: Add support for MT8196
+
+ .../devicetree/bindings/nvmem/mediatek,efuse.yaml  |   1 +
+ .../bindings/thermal/mediatek,lvts-thermal.yaml    |   2 +
+ drivers/thermal/mediatek/lvts_thermal.c            | 307 +++++++++++++++++++--
+ .../dt-bindings/thermal/mediatek,lvts-thermal.h    |  26 ++
+ 4 files changed, 315 insertions(+), 21 deletions(-)
+---
+base-commit: abadc219d77ce0e61fcac0147cc6cc69164af43e
+change-id: 20251121-mt8196-lvts-v4-a61fb5c27216
+
+Best regards,
+-- 
+Laura Nao <laura.nao@collabora.com>
 
