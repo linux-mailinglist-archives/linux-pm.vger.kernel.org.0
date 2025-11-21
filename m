@@ -1,161 +1,176 @@
-Return-Path: <linux-pm+bounces-38376-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38377-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BDEFC7A0BC
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 15:13:18 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98FD2C7A149
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 15:16:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1928534A5BD
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 14:05:33 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6DBF4345AA5
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Nov 2025 14:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5DC934CFA1;
-	Fri, 21 Nov 2025 14:00:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B0BF2D73A4;
+	Fri, 21 Nov 2025 14:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ncI78LyG"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="UG4xOrf2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010020.outbound.protection.outlook.com [52.101.193.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70E13502A7
-	for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 14:00:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763733613; cv=none; b=HjZPR8IhDbK9nSNBMn8JopN/gs6vSOkj/hYBIEOkkKoRvG0n1Xjd0i/beLFU2G3zL4SC3HUpBSlC1HqagoHiwdYz6BMD0vz2w/Bo0EnoYtQDnwdjsS+apwoorfaYZxcYwJtwKBl24ZsviiJGaKIhwESPwKc0RQFGUWzOBmu6cK4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763733613; c=relaxed/simple;
-	bh=vU4pYHitsr0hiKsk/HUXzExLHhMPcEsJvVyAtRbwpjY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S6cJhDH1ihO1f0u7pkEP8U5KhMnxass41/wNImWUrjawQqd4aq3M43gB19YWk43x08CUfPfKKCt38JrwitZMeE5kFf1LDkJlmfh6BfGURg5lTs4wzW1dMAOpXrUIEu57+BeB0QuwHl5qR6ArLb7gL6WaSnZgpWQM3PUMnTOdSuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ncI78LyG; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b73545723ebso385459766b.1
-        for <linux-pm@vger.kernel.org>; Fri, 21 Nov 2025 06:00:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763733610; x=1764338410; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aJL0FJVgKrnVFnqIMVj+hUZotuSnFwRiu+YmMsHAZn0=;
-        b=ncI78LyGUPkXjIcDqOGuax6gRooZSEpqQd5UvkFYXhLn9ofour1wfe7DrYxMwKfEOv
-         oRj3AG+7qbzs51/YO2UROD5fE+DUCM9obH7awX1ytWswQFJSmw7QRWHp2v2UVuKA1Dnb
-         5/59YS0VeI5+pUuxKdo8whhGxoLUZLW8a9XdOIjbBlBecHPi3EyOCFH6mJ32MvUZRdb6
-         nAs8TgiuurvfB6pSGB0UTxDRtDB1ljNIJdyml6UT6KiPIobNpB9okVzlKP+tvjpLJeZB
-         d4NZh3yr++3mcA9b6qhSFZTgo/hO2ktpdjmyr9xQSfrH8dBen2T4Ff3wfd90MnVtV/bY
-         +KWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763733610; x=1764338410;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aJL0FJVgKrnVFnqIMVj+hUZotuSnFwRiu+YmMsHAZn0=;
-        b=OwApZgZXbG0FsXyvsFddzqDR3cqI5dsNme2ZkPAbxTL6+j4e7uEyuR6YA/So9cWBDJ
-         +/0cbs6Ko0t8suRW6YECGmQq5q/q4y9SRE3z8bpAknFpjTrEnvXQqigJKWKh5+nEAIaH
-         cB7oouCohLSdKDqocWHXe3fk2EAFKVyUO4kKP/kbnFQoN6qMhdRU6NM6ImHrQ9AqVT0I
-         aKXzZOggk1dWBOMAl66RQ69AeYSzZ8/0QMWXkbbrq48WGlaVfXkSMotmYgLIw2n0/UOi
-         2adkD0yJeX7H7ZZB5zat8G/H3ODViG+kGx6L4o1pmc1z4DCWIEwfK+4AGpTfOn9ksKNt
-         QJGg==
-X-Forwarded-Encrypted: i=1; AJvYcCWH6ioPLl7UTWTD31lrfv/MGFfhEDJ8JMRrGR/fuYZT922JXA4ZaFZp6WkDmCVkG0f5pHxR+QwuBQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw541pnCP1CzBXM3jfz0Ojgvyy8GKi93UDQqQVmCDIPrJF7+n6H
-	jPDaXNARu9Him92Ye4lnIyEHUTlhJSPHk3AHj3sO6n5Y1vGlyticKlt8VL6n3ip4PGQsebux02q
-	qsMrjg48kUEQSBAKTiZ6Ck1W1iWLMv5EoY+9iRMi6+w==
-X-Gm-Gg: ASbGncsZaQcCLXyB3XRj/zA0ZimRCNGWlRVmdOV3mNIJYtZg+nVMhQDhWdTqOHNEHxB
-	LpB4PoZGGxcDqnGloLXoS/U6P7OU2snw3/3pP90LcasfWymZ6bO+FbjDg6QwdgUo7ubP04zDuA1
-	/GJyA12O+DpGqsfHPnb4okF7BA1jLVPbkhW9QjXgQCLHs3YZ4pKVJPc1zOvFDD6CX/BfrdpAdSo
-	3CicHrGTm1913/kTXn1HWig3sPuPCm/Vf+jZ7qkY74ejyT/9UM5vbs/baIRmPdnbbbyqrn5PXyI
-	erciqokI0Z1Mfu+GdDX0WyBo
-X-Google-Smtp-Source: AGHT+IFAnmvurUyPCUUptc+x0iNJfNhwaQBmwEu4uxZnrH0TRieIGTMUyHGeXO2SOgALfueMMABITJEJzG57A7u8Ohg=
-X-Received: by 2002:a17:907:d05:b0:b73:6b24:14b5 with SMTP id
- a640c23a62f3a-b7671a47bafmr272081766b.31.1763733610141; Fri, 21 Nov 2025
- 06:00:10 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D1B2BEC3A;
+	Fri, 21 Nov 2025 14:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763734235; cv=fail; b=Ae9DXbzm6Ftzq5RvtkQw+LISYSZylDWZx1JFo7TJcXNSC4g9Ma+eY/FSBzVnqAhQ2Yrg2uLEw3uRF35V7L642rT7tSVyXShU+KzzkarD9plfSlkJTS7P2N71mw5xN2jSa8/ANH6wAeZCeRnV5hUiMBtrGOBXPqCtsrwIN5QuFk0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763734235; c=relaxed/simple;
+	bh=kBB1euSDedJDwuYq5ikvw8KJc1sEGzCkYepusOfbHsw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=n6NmG/a13ayBmb7/QYCA8mljU18M966q81eYh71Tej+swTW6gnVZjopzJNgrgKC3hQpp6rNqrTroVHsddG24w3IkMo69VQP1SY6sZUsJN+J0WzS8kSBEF0nMW5/BXPeYbu30Xs2uc840M3F0eyIM1ZIaGiJTMqe+1OnSYaYgsxU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=UG4xOrf2; arc=fail smtp.client-ip=52.101.193.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Lau+MZSpC12Howgtez696JXaG9Vb6WwBHMzrkxmDNrkH4kVnsc8CuWJehdW/Y4f28H/KOvNkzsBwB9L2zLt7q84Hm0R/TqX49y61D07XtsdZMGtvu++xI0bxxZbCsKmiZw7T3p5HLtETiUNZMzPhjvP23ad4n/5fFM8FavE8bQpnxgcp0eVU2bf9CRBkbXLuG9kYVv5DnOBoFnNfCw8k2CkMa3qa/Wnq/GFyy+49mzna4Cufz5WOt84fXuGwDq6hTxmeob/05e9z0s0nzSTPqUOtcuoaORjf1are8eDhh6ON3Gnkg3bJLw34BLvgSzUiWkUPPoPlJ1nc54FRV/qZkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h0phbGKwUjb8ORY22iY/onSeIHpp6guHhI/3MbFU2E4=;
+ b=LMHSHwxsA9bi3/vfy0uxwUESHrRatQfxXxd1HIB2IVLXu+35K6P40f8Vvud1urd4zXnDN1jNPoC9tXRL9v8CwkvrbA8MCP81rqethll2VC8tlkVgetQnGjKaV2/0+6J9nElN0DhHDg20lMiobEbVvfqbRxvmB3aDA+153HTt2yk4XRgmH6iL1wJmArthc7UBl/BQ3IkxjuD/Ws47FHnRWFp6nnCr9WeOQo2c+ZpFphcMX8mCZ61RQh4gCWXl8rr9//5B96juaBuhyE7fJGj334t8pn0tlBRsik7LXepRHC5Zujzfm6n6zwr0fA1jJSPV2SiqYUXtoefLVFbsZN+a2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h0phbGKwUjb8ORY22iY/onSeIHpp6guHhI/3MbFU2E4=;
+ b=UG4xOrf2ySvBNOyyFHRi3Ek4ujvMQeU56lVljREmpvBIxRITHtHhgGlcMhyoEapBAhvj/VH9PnNzss9Orx4ST8twKwGaJHpIw5fOavoasNUmAVkw2PUIIp0pzkKn6oEHCEydq04V+79MJJ3ZyTUDc23Mj3k82hePmb1UPX15RfkJEI/kQshd58iH8d9gsAw4A9Qy34SPUr6sW20cdD/3lrwmF9DtGn6R0nlQAAcG4BU2H9cWSb+YrKwzS934K5nvETzQ6rZiG0+Bp+YlEjmu/2Zd9JLTPBqL2DnoYqbOiGFO0SmxO4lmBpBD+qQeRyd8ITCja18PNs9HC0CUBSvNWw==
+Received: from BY3PR03CA0015.namprd03.prod.outlook.com (2603:10b6:a03:39a::20)
+ by SA3PR12MB7921.namprd12.prod.outlook.com (2603:10b6:806:320::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.10; Fri, 21 Nov
+ 2025 14:10:27 +0000
+Received: from SJ5PEPF000001C9.namprd05.prod.outlook.com
+ (2603:10b6:a03:39a:cafe::50) by BY3PR03CA0015.outlook.office365.com
+ (2603:10b6:a03:39a::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.11 via Frontend Transport; Fri,
+ 21 Nov 2025 14:10:09 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SJ5PEPF000001C9.mail.protection.outlook.com (10.167.242.37) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9343.9 via Frontend Transport; Fri, 21 Nov 2025 14:10:27 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 21 Nov
+ 2025 06:10:07 -0800
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Fri, 21 Nov
+ 2025 06:10:06 -0800
+Received: from moonraker.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Fri, 21 Nov 2025 06:10:05 -0800
+From: Jon Hunter <jonathanh@nvidia.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>, Thierry Reding
+	<thierry.reding@gmail.com>
+CC: <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>, Jon Hunter
+	<jonathanh@nvidia.com>
+Subject: [PATCH] pmdomain: tegra: Add GENPD_FLAG_NO_STAY_ON flag
+Date: Fri, 21 Nov 2025 14:10:03 +0000
+Message-ID: <20251121141003.1808684-1-jonathanh@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <q2dp7jlblofwkmkufjdysgu2ggv6g4cvhkah3trr5wamxymngm@p2mn4r7vyo77>
- <86d759a5-9a96-49ff-9f75-8b56e2626d65@arm.com> <2ktr5znjidilpxm2ycixunqlmhu253xwov4tpnb2qablrsqmbv@ysacm5nbcjw7>
-In-Reply-To: <2ktr5znjidilpxm2ycixunqlmhu253xwov4tpnb2qablrsqmbv@ysacm5nbcjw7>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Fri, 21 Nov 2025 14:59:58 +0100
-X-Gm-Features: AWmQ_bmM4o5Z3q1ve2PQdTw2QsE7ykHgVxbu8IqvT3a4hy7EoAQ4fqrzOXFlGbg
-Message-ID: <CAKfTPtBBtMysuYgBYZR2EH=WPR7X5F_RRzGmf94UhyDiGmmqCg@mail.gmail.com>
-Subject: Re: stable 6.6: commit "sched/cpufreq: Rework schedutil governor
- performance estimation' causes a regression
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Christian Loehle <christian.loehle@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Yu-Che Cheng <giver@google.com>, Tomasz Figa <tfiga@chromium.org>, stable@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Lukasz Luba <lukasz.luba@arm.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ5PEPF000001C9:EE_|SA3PR12MB7921:EE_
+X-MS-Office365-Filtering-Correlation-Id: ece6dc17-aa01-45a2-aa68-08de2907b8bc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?IWND53b804x1frNvMdfzmaMvAb3Gz94F8J/LGrMoSUI3vPQMU8eG6cEEXd+t?=
+ =?us-ascii?Q?lyT2xRVZ8sh/3HWYWGXqWQo4Nt4MUf3ntELYCxJr1/PmXPWZcDnBiNaf0Inl?=
+ =?us-ascii?Q?7zukQz59JmHdxy4yl7UMj9dcZzngWnJDSowX6d19pIOrm/qEIVV0BGnQldD3?=
+ =?us-ascii?Q?n/C0LWmRAdL1u4Vz0WGz+Hb+bi4/7uwBf4QzTfzdr0dVoxkNlw1dfgVlnP00?=
+ =?us-ascii?Q?/Sa92wtE7IjMLro7AlyfsElp/irB+c7eF9GewIm8rAeGWNdFDsKPzAd2WnOv?=
+ =?us-ascii?Q?WQ0WvjQGkTsykilMP0p1WqJU+AG6PLMn0I0KxguDvgj4HnyVO1g7GL2ggf71?=
+ =?us-ascii?Q?WxD3aL7EZwjwNLWr3NkmVtwk7jAUkeloGPEpBBL0LYYwqn+RvyWS92H0osfj?=
+ =?us-ascii?Q?XsOPBu+vDVhL3JlILt9AF3fcYGQ237DnpiZ4sb2bANLAiK1+8rFuOviInLk9?=
+ =?us-ascii?Q?xWVHL2pg5cJYOUxQxbiXpZdmXCu3QpHyV/sg7Lqo3ceGZsWrm/yL8RR3zDHW?=
+ =?us-ascii?Q?11SfmOMtUe8Bc1upBxBpoBZiyoYTiEX73krCV8gpAw8x2MqNnSxhMSM61XsB?=
+ =?us-ascii?Q?M3fxk8VwtA5oHMAAsqbj4bIgak3ZJrm6k+yLRrnhsOiRtBQAKQ0pSn+L+XZ1?=
+ =?us-ascii?Q?WpQxY784xKC5h85QrLdMIvqGGbPx/5CSGdiKzEzaPEKguk6SUd3XytmbLQmD?=
+ =?us-ascii?Q?H/SMU6hFsqf2uzARYUKDHUtwyJefxIff3EgJJ4pdmdkhOPso6ONFKchn+irU?=
+ =?us-ascii?Q?B5UMu6Li+DgIsKroF7cv+j4B6azdRVqewrl+zv7r0nI2F0/RNhfxP08w80fI?=
+ =?us-ascii?Q?jtztdxSwEa+hCbPbvgGeTdFicHJ1IT8lzG9gk8HebS2H3IlFIu3N0j4c10t0?=
+ =?us-ascii?Q?oEVO8Dqdw23uBDdQJ7U3puAz3rVeYG7NwRcE5HsLTnSzzVChmNj3+ARmNapL?=
+ =?us-ascii?Q?Pcen7BY5WSc/dXyu+TG36E2ap+hKF4E1+ATqfxzkrS6UZ6t1R/un8k8vXzIW?=
+ =?us-ascii?Q?9VipBMJFzUvfTDReYxRvisupWW2/IT91rACHJjCtoWK6t1tHtVwpKMPoVYaL?=
+ =?us-ascii?Q?+a7e/Rl8iJ1FKKOSUNAjIdEw4L6RJ76ZGcHRHMNZxAEFkM4jJpf51+dhIpbq?=
+ =?us-ascii?Q?tY/ozgUs+hfz9yKDmDvCDy2745tSlCd9F+iuZGpPo9mpO9YUKTs3PktBwxf5?=
+ =?us-ascii?Q?luYfMb0SVALhc71KISoy969YpITD87iYfAyH1n0+oKT1t8IgJXxW4NgzLGfp?=
+ =?us-ascii?Q?ra2rc7usZCFGSZSk4vxYeifFJ6Bg/tWTfB1o/5BVpovhc9qDwJ/NpLXpOzNm?=
+ =?us-ascii?Q?6IJRrwQZaQP1XmjeaXGQz7OClEN6OA6hkyK+z2Fm4PNWr0diOYrtB492L1v8?=
+ =?us-ascii?Q?0t4kbVpuOq6THVfACWcy/GSLmSWHwftHkUgLbaTF5kF7TECbqWxDInctPO1R?=
+ =?us-ascii?Q?wECM2jKSbNOVXsskULeI987ZlXqYAOQCMPggsGrQaiKwjc0lXFtbWrBF3hjr?=
+ =?us-ascii?Q?rWKP7dqUbFMJ3ocX7xEFAyPCiwDa6XGOzm3429ZEHvNEq2uiORm4Y7GnK2xP?=
+ =?us-ascii?Q?fFHoteCWztWJFjg8Ayc=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2025 14:10:27.2785
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ece6dc17-aa01-45a2-aa68-08de2907b8bc
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ5PEPF000001C9.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7921
 
-On Fri, 21 Nov 2025 at 04:55, Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> Hi Christian,
->
-> On (25/11/20 10:15), Christian Loehle wrote:
-> > On 11/20/25 04:45, Sergey Senozhatsky wrote:
-> > > Hi,
-> > >
-> > > We are observing a performance regression on one of our arm64 boards.
-> > > We tracked it down to the linux-6.6.y commit ada8d7fa0ad4 ("sched/cpufreq:
+Commit 13a4b7fb6260 ("pmdomain: core: Leave powered-on genpds on until
+late_initcall_sync") kept power-domains on longer during boot which is
+causing some GPU related tests to fail on Tegra234. While this is being
+investigated, add the flag GENPD_FLAG_NO_STAY_ON for Tegra devices to
+restore the previous behaviour to fix this.
 
-You mentioned that you tracked down to linux-6.6.y but which kernel
-are you using ?
+Fixes: 13a4b7fb6260 ("pmdomain: core: Leave powered-on genpds on until late_initcall_sync")
+Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+---
+ drivers/pmdomain/tegra/powergate-bpmp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> > > Rework schedutil governor performance estimation").
-> > >
-> > > UI speedometer benchmark:
-> > > w/commit:   395  +/-38
-> > > w/o commit: 439  +/-14
-> > >
-> >
-> > Hi Sergey,
-> > Would be nice to get some details. What board?
->
-> It's an MT8196 chromebook.
->
-> > What do the OPPs look like?
->
-> How do I find that out?
+diff --git a/drivers/pmdomain/tegra/powergate-bpmp.c b/drivers/pmdomain/tegra/powergate-bpmp.c
+index b0138ca9f851..9f4366250bfd 100644
+--- a/drivers/pmdomain/tegra/powergate-bpmp.c
++++ b/drivers/pmdomain/tegra/powergate-bpmp.c
+@@ -184,6 +184,7 @@ tegra_powergate_add(struct tegra_bpmp *bpmp,
+ 	powergate->genpd.name = kstrdup(info->name, GFP_KERNEL);
+ 	powergate->genpd.power_on = tegra_powergate_power_on;
+ 	powergate->genpd.power_off = tegra_powergate_power_off;
++	powergate->genpd.flags = GENPD_FLAG_NO_STAY_ON;
+ 
+ 	err = pm_genpd_init(&powergate->genpd, NULL, off);
+ 	if (err < 0) {
+-- 
+2.43.0
 
-In /sys/kernel/debug/opp/cpu*/
-or
-/sys/devices/system/cpu/cpufreq/policy*/scaling_available_frequencies
-with related_cpus
-
->
-> > Does this system use uclamp during the benchmark? How?
->
-> How do I find that out?
-
-it can be set per cgroup
-/sys/fs/cgroup/system.slice/<name>/cpu.uclam.min|max
-or per task with sched_setattr()
-
-You most probably use it because it's the main reason for ada8d7fa0ad4
-to remove wrong overestimate of OPP
-
->
-> > Given how large the stddev given by speedometer (version 3?) itself is, can we get the
-> > stats of a few runs?
->
-> v2.1
->
-> w/o patch     w/ patch
-> 440 +/-30     406 +/-11
-> 440 +/-14     413 +/-16
-> 444 +/-12     403 +/-14
-> 442 +/-12     412 +/-15
->
-> > Maybe traces of cpu_frequency for both w/ and w/o?
->
-> trace-cmd record -e power:cpu_frequency attached.
->
-> "base" is with ada8d7fa0ad4
-> "revert" is ada8d7fa0ad4 reverted.
 
