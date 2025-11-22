@@ -1,59 +1,54 @@
-Return-Path: <linux-pm+bounces-38394-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38395-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98A3DC7CCA6
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Nov 2025 11:26:06 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5788FC7CCC1
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Nov 2025 11:42:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A46BA4E4442
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Nov 2025 10:25:08 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0E35E354D98
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Nov 2025 10:42:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A13402FB99F;
-	Sat, 22 Nov 2025 10:25:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9303B2D5937;
+	Sat, 22 Nov 2025 10:42:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7672F9DB0;
-	Sat, 22 Nov 2025 10:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.78.240
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1A32853F7;
+	Sat, 22 Nov 2025 10:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763807105; cv=none; b=O960V+UNQwmaDqerROsQ56PzRo7SWPN2TqCkRZKNg6Q3XBmCW+yC0kKh0Cll5FGNHbaU269ilUWBZ20PpIy5pbQCzLcy402HNeWj1ORYLKp5zhR1+JIdWRfvUkpWO/4j1DDaaQ9CK+Gltf6tzmeBZJX4tNFeZI6AKv65APVRrig=
+	t=1763808135; cv=none; b=Swjq2s4CUgkDikXK9qJHyWm0Y28HvCngH114uE2oAeInM3aOgbHcs0RKjU7ElTXxm3MTFUwB/ssFyvWeH0PgWZuepM+h3CofLKx47aSHxBFJMDPo2yEifR0qBciYq3Jh2Ea6hfttNZ452rgdWkbtnkEnwIPa7hE1TF8ypxH3/KA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763807105; c=relaxed/simple;
-	bh=hR7oyl5iFs+wgbVb4sHkOvNmkCEqJ4QQX8TMyjpZcm4=;
+	s=arc-20240116; t=1763808135; c=relaxed/simple;
+	bh=i94tbIzPUa2GHwB/6k+eol4xx55abLaPoZ9B2sujiqU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yb7rs4LZqyotvsmd4hCFxOVfP//1AB8FUZP7SHHbwxDwKyt0y0rqLFUK8eLInNncSDbflYKg6+9BJL53IAvXSR2w/VEsqmdICFSahxOlYJpriZ2iGo313UvZ/o772LAOzw7hpFtpckkGZ2ZSeeCvfh5lRcFcadyckx9tJTlQpIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.78.240
+	 Content-Type:Content-Disposition:In-Reply-To; b=SbodCmsKbR/GvjRPrfFlTML1T0OBDkIDGMwdnSVYQo/D96aZjWK3cFOj+5VVJRgLIsa3ElbmR/ZzqkEuA8HJEEnWekb9cmGko11nmABWp+gbemT5aV/5xWewEspFTK6WhS4dLRN1NV728TjEBaD4L2YKztdORPpvKwgjeyr3A9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384
 	 client-signature ECDSA (secp384r1) client-digest SHA384)
 	(Client CN "*.hostsharing.net", Issuer "GlobalSign GCC R6 AlphaSSL CA 2025" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id A58282006F59;
-	Sat, 22 Nov 2025 11:24:51 +0100 (CET)
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 48C992C075A7;
+	Sat, 22 Nov 2025 11:42:10 +0100 (CET)
 Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 8E32C1BF15; Sat, 22 Nov 2025 11:24:51 +0100 (CET)
-Date: Sat, 22 Nov 2025 11:24:51 +0100
+	id 3F87A1BF8E; Sat, 22 Nov 2025 11:42:10 +0100 (CET)
+Date: Sat, 22 Nov 2025 11:42:10 +0100
 From: Lukas Wunner <lukas@wunner.de>
-To: Farhan Ali <alifm@linux.ibm.com>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Benjamin Block <bblock@linux.ibm.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver OHalloran <oohall@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-	Linas Vepstas <linasvepstas@gmail.com>, linux-doc@vger.kernel.org
-Subject: Re: [PATCH] Documentation: PCI: Amend error recovery doc with
- pci_save_state() rules
-Message-ID: <aSGPc2qQGgdjp7iV@wunner.de>
-References: <077596ba70202be0e43fdad3bb9b93d356cbe4ec.1763746079.git.lukas@wunner.de>
- <ab3158f0-7954-4a89-88da-6d7d69111e3b@linux.ibm.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Michael Guntsche <michael.guntsche@it-loops.com>,
+	"rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+	linux-pm@vger.kernel.org, linux-efi@vger.kernel.org
+Subject: Re: Oops when returning from hibernation with changed thunderbolt
+ status
+Message-ID: <aSGTghJyX-u-leL6@wunner.de>
+References: <CALG0vJuaU_5REU55Hg170LipPLj7Tt0V3icn7XzxLY-8+jsx-A@mail.gmail.com>
+ <20251120055748.GM2912318@black.igk.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,56 +57,30 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ab3158f0-7954-4a89-88da-6d7d69111e3b@linux.ibm.com>
+In-Reply-To: <20251120055748.GM2912318@black.igk.intel.com>
 
-On Fri, Nov 21, 2025 at 10:57:24AM -0800, Farhan Ali wrote:
-> On 11/21/2025 9:31 AM, Lukas Wunner wrote:
-> > +++ b/Documentation/PCI/pci-error-recovery.rst
-> > @@ -326,6 +326,21 @@ be recovered, there is nothing more that can be done;  the platform
-> >   will typically report a "permanent failure" in such a case.  The
-> >   device will be considered "dead" in this case.
-> > +Drivers typically need to call pci_restore_state() after reset to
-> > +re-initialize the device's config space registers and thereby
-> > +bring it from D0\ :sub:`uninitialized` into D0\ :sub:`active` state
-> > +(PCIe r7.0 sec 5.3.1.1).  The PCI core invokes pci_save_state()
-> > +on enumeration after initializing config space to ensure that a
-> > +saved state is available for subsequent error recovery.
-> > +Drivers which modify config space on probe may need to invoke
-> > +pci_save_state() afterwards to record those changes for later
-> > +error recovery.  When going into system suspend, pci_save_state()
-> > +is called for every PCI device and that state will be restored
-> > +not only on resume, but also on any subsequent error recovery.
+[cc += linux-efi]
+
+On Thu, Nov 20, 2025 at 06:57:48AM +0100, Mika Westerberg wrote:
+> On Wed, Nov 19, 2025 at 06:43:16PM +0100, Michael Guntsche wrote:
+> > I started seeing this issue with kernel v6.15, it worked fine up to 6.14.
+> > If my notebook went into hibernation with the docking station plugged
+> > in and I then started it up again with the docking station unplugged
+> > it would panic. Some times but not always it would also panic if the
+> > dock was still connected.
 > 
-> Nit: Should we clarify in the above sentence on what calls the
-> pci_save_state() when going into suspend? My assumption is the
-> pci_save_state() is called by the PCI core and not the drivers?
+> Did you try to disable RTC_DRV_EFI? At least from the backtrace that's
+> where it crashes.
 
-Per section 3.1.2 of Documentation/power/pci.rst, pci_save_state()
-may be called by either the driver or the PCI core.  Normally it's
-the PCI core's responsibility, but a driver may choose to call it
-and bring the device into a low power state itself.  The PCI core
-recognizes that by looking at the state_saved flag in struct pci_dev
-and will then neither call pci_save_state() nor transition the device
-to a low power state.  That is the (only) purpose of the flag.
+The backtrace in the photo doesn't seem to betray what kind of call
+was queued up on efi_rts_wq.  It doesn't have to be a set/get time
+request.  efi_queue_work() is also called for set/get variable requests
+among other things.  I recommend instrumenting __efi_queue_work()
+with a call to dump_stack() to see where this is coming from.
+Maybe add an msleep(5000) afterwards to allow time to take a picture.
 
-I could maybe add a cross-reference pointing to Documentation/power/pci.rst.
-And/or that document could be moved to Documentation/PCI/.
-
-> What should the PCI core do if the saved state recorded is bad? should we
-> continue to restore the device with the recorded bad state?
-
-Basically the answer is, it should never happen and if it does,
-we've got a bug somewhere.
-
-> On s390 restoring the device with the bad state can break the device
-> put into error again.
-
-My (limited) understanding is that you may end up with a bad
-saved state on s390 virtualization scenarios because you're
-telling the PCI core in the ->error_detected phase() that the
-device has recovered and then you try to reset and recover the
-device on your own.  I think the solution is to enhance qemu
-to integrate better with error recovery on the host.
+Also the photo shows a UBSAN splat in drm/display/drm_mst_topology.c
+220 msec before the oops, maybe it's related?
 
 Thanks,
 
