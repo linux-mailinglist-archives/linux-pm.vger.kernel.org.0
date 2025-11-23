@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-38414-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38415-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A3F5C7DEE5
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 10:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EC335C7DF09
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 10:30:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5187A4E0313
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 09:28:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CC4364E1207
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 09:30:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E4BB2C2374;
-	Sun, 23 Nov 2025 09:28:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04A832BEFEB;
+	Sun, 23 Nov 2025 09:30:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nYO809Kt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BPoLXw+X"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79B82C1786;
-	Sun, 23 Nov 2025 09:28:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67B315665C;
+	Sun, 23 Nov 2025 09:30:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763890131; cv=none; b=JfYl3pRm+R9/ksrFKvxtaCGiv0ADFiW5LPm9zHN1BCtaxuGlhZRmvDMAwBL/gwpC2TqDJii7Uutn1UJJgj+/jefb1bTYEmOB7Kx+FXRk3Tvd/TNVosXxGURPLJi+tnJUgGhQQES2azYrCAu7ljyQNCTT6BbDISI7K77osGwGiOs=
+	t=1763890249; cv=none; b=cwtUEfYykAWcGsmX34oZVuN+k8GxvdEU7x2WGy95vXsYEnCRatNyMgv41V2vAYWE4/eWtzBGhe/NYUBpvyl+AYDq10wSYRSLZXXwhbjf5rBdIZ65Ae9JpPh2WyBSI6acJPFXylAnabd9s4OwxEObgTgLmbMgo7rtDXAX3r/JgRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763890131; c=relaxed/simple;
-	bh=ZJkP354JwVluZpn5qkk7mYQ71zCcqGPCvqTY+M/gDik=;
+	s=arc-20240116; t=1763890249; c=relaxed/simple;
+	bh=K3TpFSb9ANyNnS8xU/rAnNEn5bG4SKZpFHbcEF2yWDc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Adp6u+36QVy3UHEhdT4j+q2rza4ngaB26RyV5gtozM8fEbrRkI+Isk+3Ukze/ciYF/dAKBOvXzn+10tSsGWoPcZ6bZZZ8Ewgha8BzxvR69m8vs2KLFgVEnDHLT7QTNmQHsVQ7oJQZl4t1YMC1M2Z3DMUP05lNa0nGKB7v2sZyv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nYO809Kt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E511EC113D0;
-	Sun, 23 Nov 2025 09:28:45 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ss3syIl5opOaUclXfz7FTrRMYUR1uqMy55GNM5Syzc6lSLDcqQuGgQtpXr3Bx+QgHzIxYnWchpFQnlQWsXEQcufs6RBb78QCpkehy1wz9LpVscis8mB08G2Cg6jAxCTkbp2yslWtvIWkSvADGuX3WtjMArIvuTJVm/F+rCwtpjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BPoLXw+X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 353CFC113D0;
+	Sun, 23 Nov 2025 09:30:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763890130;
-	bh=ZJkP354JwVluZpn5qkk7mYQ71zCcqGPCvqTY+M/gDik=;
+	s=k20201202; t=1763890248;
+	bh=K3TpFSb9ANyNnS8xU/rAnNEn5bG4SKZpFHbcEF2yWDc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nYO809KtdTwfcmWhdTpYUKCtZ1NQz0vvT6t7TMW05gJZnfMBDyk3QSoyp9rlnx01G
-	 lAlIbCg8TI9fLBNBMi+GCDGmQ5IV+X4Ueb0DR6v8WKwCLfgOEkck/+BEVlbvbZQJMu
-	 meBhYv5TEazNsU7Eg3+RFnlK4EPiVcAmfslFJbQRWF0jBCG8jfBS084rSujykEbm2J
-	 KR2Wol2C3JnHyUlHIhLw/oi69vQsC3V5+JyjKKM3T2LmaT7ySIqpqTmScW80/Ep2B4
-	 Tw1pysFRjC6eOhcMEmVa5GZHr7HqtKKKo+wgGrBgIl0JW6LzcuQs5bLXA92cCnVNoV
-	 6CcWypDCarYNg==
-Message-ID: <d4455f4b-2a0f-4bc0-b897-14f2e27af3ea@kernel.org>
-Date: Sun, 23 Nov 2025 10:28:43 +0100
+	b=BPoLXw+XdWH117b9FBR/onCqy6kVXPJb3E1ZvIjTilTnCsCox4SuljHotuF3Ky5aN
+	 CO/E1LHNxYOZwtXOcMaahZLbFgaWiC2QN3RHEycUOFr8OoWyT1YKKmB/wbgv8UZBwd
+	 XsCBnqGHqnMqnQfcw8yTcYchtgcqOiO1/NkNLMSB2gHbJvPIEdujWz2KhwzMXnSVu6
+	 sGJ6tOkqO76OYbY4yc121Ku9LDIgS+Nk0E4cRj41TKGrV8GmRTY1xsujvhtG7vithP
+	 jhWM0fsXYklEHxLIxgjo8PWBxH5yONGF1D2KuCMgBx7EjbqAeE3NgWx0xlZplx/A2T
+	 UAmxq/1rwk+4w==
+Message-ID: <699d4476-aaaa-4cec-9e2c-240348950e4c@kernel.org>
+Date: Sun, 23 Nov 2025 10:30:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] dt-bindings: power: supply: Add Maxim MAX77759
- charger
+Subject: Re: [PATCH 2/6] dt-bindings: mfd: maxim,max77759: add charger child
+ node
 To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
@@ -67,7 +67,7 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
 References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
- <20251123-max77759-charger-v1-1-6b2e4b8f7f54@google.com>
+ <20251123-max77759-charger-v1-2-6b2e4b8f7f54@google.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,62 +113,53 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251123-max77759-charger-v1-1-6b2e4b8f7f54@google.com>
+In-Reply-To: <20251123-max77759-charger-v1-2-6b2e4b8f7f54@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/11/2025 09:35, Amit Sunil Dhamne via B4 Relay wrote:
 > From: Amit Sunil Dhamne <amitsd@google.com>
 > 
-> Add bindings for Maxim max77759 charger device.
+> The Maxim MAX77759 MFD includes a charger function, hence add its
+> binding as a property. Also, update the example to include charger.
 > 
 > Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
 > ---
->  .../power/supply/maxim,max77759-charger.yaml       | 36 ++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
+>  Documentation/devicetree/bindings/mfd/maxim,max77759.yaml | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
-> new file mode 100644
-> index 000000000000..71f866419774
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
-> @@ -0,0 +1,36 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/maxim,max77759-charger.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim Integrated MAX77759 Battery charger
-> +
-> +maintainers:
-> +  - Amit Sunil Dhamne <amitsd@google.com>
-> +
-> +description: |
-> +  This module is part of the MAX77759 PMIC. For additional information, see
-> +  Documentation/devicetree/bindings/mfd/maxim,max77759.yaml.
-> +
-> +  The Maxim MAX77759 is a dual input switch mode battery charger for portable
-> +  applications. It supports wired and wireless charging and can operate in buck
-> +  and boost mode.
-> +
-> +allOf:
-> +  - $ref: power-supply.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: maxim,max77759-charger
-> +
+> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+> index 525de9ab3c2b..29132f73f2c8 100644
+> --- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+> @@ -37,6 +37,9 @@ properties:
+>    nvmem-0:
+>      $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
+>  
+> +  charger:
+> +    $ref: /schemas/power/supply/maxim,max77759-charger.yaml
 
-This should be just folded into parent node, no need for separate
-charger device or is just incomplete.
+You need to explain dependencies/merging in the cover letter. This patch
+now cannot be merged alone through MFD.
 
-> +  usb-otg-vbus-regulator:
-> +    type: object
-> +    description: Provides Boost for sourcing VBUS.
-> +    $ref: /schemas/regulator/regulator.yaml#
-> +    unevaluatedProperties: false
+Or just decouple the dependency and list here only compatible, assuming
+this child node even stays.
+
 > +
+>  required:
+>    - compatible
+>    - interrupts
+> @@ -95,5 +98,14 @@ examples:
+>                      };
+>                  };
+>              };
+> +
+> +            charger {
+> +                compatible = "maxim,max77759-charger";
+> +                power-supplies = <&maxtcpc>;
+
+Feels like you miss here battery.
+
 
 Best regards,
 Krzysztof
