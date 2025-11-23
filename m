@@ -1,113 +1,84 @@
-Return-Path: <linux-pm+bounces-38420-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38421-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 154CAC7E284
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 16:24:49 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B987C7E516
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 18:42:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EB6E34E1453
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 15:24:47 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 66AFA348C87
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 17:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA77B2D8773;
-	Sun, 23 Nov 2025 15:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ntHHpqNt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93DA9280332;
+	Sun, 23 Nov 2025 17:42:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from srv01.abscue.de (abscue.de [89.58.28.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB272D7DF7;
-	Sun, 23 Nov 2025 15:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7698D1FE44B;
+	Sun, 23 Nov 2025 17:42:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.58.28.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763911484; cv=none; b=po4uSpsrsgW/BKy5SBRI5L4vPcdNRFj5VfrEBRubWXaWLJ2xxQXTVfAxRN8OQWmIJkSJ3GCOej/8wnyqSEWwZnrbZm9+mXi5lbhQBGRbn8QRIkv68qbQWQlbMYtYbruwqcdgDQeaurqUqVaSFmynjx2dIgGZrq7GBS2+Xy1OgQQ=
+	t=1763919757; cv=none; b=qkL++4x1jabAoqfsEJJkPu+y4MvD8Qecg8ZgNtaYLG47N6lCCNiH0LfCoVCAYD2F/gWjcLxR3NryYC1vebeUv6avx0nxFh3PGso94pAz20Gnq6BTBRye6MKLzyMxPZr9rDagRHF7esN6KC3G4gLP0AuMeg0OKQKIchJEn8LyqPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763911484; c=relaxed/simple;
-	bh=enoErcPElfCtw2cugcnsJZynNc8oh+KKwlxqkTYh4aU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u45AiKcbykBbmiRmos9m3hNRCCJSH5LeZbMI1I/21gl6mRsjXw3AwHrm3IesRXgy2FdRjfSnuXvV5Sz1dlCNjKaKyCsJUoCDGzJzYP4aqjT4XKjsBwOVuaRlagjHN+e9SKNpbOPwZgBNo2HwxGL6a0/YOXvoO7gp6wro58I5qQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ntHHpqNt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D08C113D0;
-	Sun, 23 Nov 2025 15:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763911484;
-	bh=enoErcPElfCtw2cugcnsJZynNc8oh+KKwlxqkTYh4aU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ntHHpqNtuUBNW0KAk/Y0Da/5q64aQbsumD9Uy3g/nTWyl65Gq1uG06bsjqF1Xuuss
-	 NX/2v6VMQ3RtW3Axauti65rbiQUkxggknepwXaeayhkjprQdggUx4V4MqC/gkvjU8T
-	 tdsDoxgUj4xlpTaDRQnetTK0cIzr7g5gt5Uk6oN3rHTN7th09LrrwkOlkAnhHrDp+A
-	 XyeNQJz7OVzzgEVmDPs1/2pg0ow0BxrG6bzjtNfiApq22xZi+5lY8PqZmByaC/7YjY
-	 ROcqGlClGjTucaYfTaeOf2LGjbBsRXExnYLdRNipZl+e71d4YuMZjVmbB5oN0HxLSG
-	 slwQWxmfuoUGA==
-Message-ID: <25a5c859-357f-4e31-9b47-822d0c32ce70@kernel.org>
-Date: Mon, 24 Nov 2025 00:24:40 +0900
+	s=arc-20240116; t=1763919757; c=relaxed/simple;
+	bh=wk6jAQWxbc/Xlho1VfPqGQyUzyaYR6+Mmm4FbIJGc2I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N3EjUlrkYcNnxffvYalKbLDeYPoZ0igYpw7kBOb/GdexqWeapBovG/iJDvdfOEEaGkGqkSUHte6mAHoSKT35N9YiRdikyCcPUoZrBEsDciKMci6EUa4Ss5dIq0j0rrmsicdmx4ZoeLW1iUOLsHwf38INrgsFk6/rhp1gOgY4UKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de; spf=pass smtp.mailfrom=abscue.de; arc=none smtp.client-ip=89.58.28.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=abscue.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=abscue.de
+Received: from srv01.abscue.de (localhost [127.0.0.1])
+	by spamfilter.srv.local (Postfix) with ESMTP id 74E381C0038;
+	Sun, 23 Nov 2025 18:34:16 +0100 (CET)
+X-Spam-Level: 
+Date: Sun, 23 Nov 2025 18:34:11 +0100
+From: Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>
+To: Lee Jones <lee@kernel.org>
+Cc: Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] mfd: sprd-sc27xx: Integrate power off and reboot
+ support
+Message-ID: <aSNFk7tZqcgBqYsI@abscue.de>
+References: <20251110-sc27xx-mfd-poweroff-v2-0-fd5842e732fe@abscue.de>
+ <20251110-sc27xx-mfd-poweroff-v2-1-fd5842e732fe@abscue.de>
+ <20251120153024.GI661940@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/2] PM: devfreq: handle invalid parameters gracefully
- in simpleondemand
-To: Riwen Lu <luriwen@kylinos.cn>, myungjoo.ham@samsung.com,
- kyungmin.park@samsung.com, cw00.choi@samsung.com
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251118032339.2799230-1-luriwen@kylinos.cn>
- <20251118032339.2799230-2-luriwen@kylinos.cn>
-From: Chanwoo Choi <chanwoo@kernel.org>
-Content-Language: en-US
-In-Reply-To: <20251118032339.2799230-2-luriwen@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251120153024.GI661940@google.com>
 
-25. 11. 18. 12:23에 Riwen Lu 이(가) 쓴 글:
-> Instead of returning -EINVAL when upthreshold > 100 or upthreshold <
-> downdifferential, fall back to default threshold values to ensure the
-> governor continues functioning.
+On Thu, Nov 20, 2025 at 03:30:24PM +0000, Lee Jones wrote:
+> On Mon, 10 Nov 2025, Otto Pfl�ger wrote:
 > 
-> Additionally, the validation is now scoped to the if (data) block,
-> preventing unnecessary checks when no user data is provided, while the
-> fallback mechanism ensures reliability with invalid configurations.
+> > The SC27xx PMICs allow restarting and powering off the device. Since
+> > this functionality is rather simple and not configurable in any way,
+> > make it part of the main PMIC driver.
 > 
-> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
-> ---
->  drivers/devfreq/governor_simpleondemand.c | 11 ++++++++---
->  1 file changed, 8 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
-> index b4d7be766f33..7205891d2ec6 100644
-> --- a/drivers/devfreq/governor_simpleondemand.c
-> +++ b/drivers/devfreq/governor_simpleondemand.c
-> @@ -36,10 +36,15 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
->  			dfso_upthreshold = data->upthreshold;
->  		if (data->downdifferential)
->  			dfso_downdifferential = data->downdifferential;
-> +
-> +		if (dfso_upthreshold > 100 ||
-> +		    dfso_upthreshold < dfso_downdifferential) {
-> +			dfso_upthreshold = DFSO_UPTHRESHOLD;
-> +			dfso_downdifferential = DFSO_DOWNDIFFERENTIAL;
-> +			pr_debug("Invalid thresholds, using defaults: up = %u, down = %u\n",
-> +				dfso_upthreshold, dfso_downdifferential);
-> +		}
->  	}
-> -	if (dfso_upthreshold > 100 ||
-> -	    dfso_upthreshold < dfso_downdifferential)
-> -		return -EINVAL;
->  
->  	/* Assume MAX if it is going to be divided by zero */
->  	if (stat->total_time == 0) {
+> This sounds like more of a drivers/power thing.
 
-If there are wrong initialization of devfreq_simple_ondemand,
-it should point out what is wrong because it makes some confusion if there are no error.
+This was originally in drivers/power, but according to [1], it should
+not be a separate device tree node. Using a separate driver without a
+separate device tree node would still involve some code here that
+instantiates a platform device and selects the right platform data for
+it.
 
+Registering the poweroff handler directly seemed less complex, and I
+assumed it was okay since some other MFD drivers (e.g. rk8xx) also
+implement the same functionality without a separate power driver.
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+Is it a good idea to use devm_mfd_add_devices here instead?
 
+[1]: https://lore.kernel.org/all/20251002025344.GA2958334-robh@kernel.org/
 
