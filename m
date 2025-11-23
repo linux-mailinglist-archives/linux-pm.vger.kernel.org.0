@@ -1,147 +1,132 @@
-Return-Path: <linux-pm+bounces-38405-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38406-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28022C7D9A3
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Nov 2025 23:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43D2BC7DDFE
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 09:36:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D004B3AB89F
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Nov 2025 22:48:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0191D3A9A47
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 08:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0B1C273D81;
-	Sat, 22 Nov 2025 22:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0E82BEC2E;
+	Sun, 23 Nov 2025 08:36:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m4EYqLjM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hQ2e94La"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D376421B918
-	for <linux-pm@vger.kernel.org>; Sat, 22 Nov 2025 22:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5AB621A449;
+	Sun, 23 Nov 2025 08:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763851677; cv=none; b=e9wMN7YSb3YY4nKYU6sPwe0tyeXOFSTOZcM/cHOb9jpIAmn82RrTmZQ460U3mF60qHbBMiWGw9cva1Gc3eVoSDFNQBQXxkTGagkyEsuEEGAhDNzIlAvYcht0mQ+Z/VIc0Afb6fULpffxQYLGzFaNueDfeJPBKAdHmDXC+5364Tg=
+	t=1763886984; cv=none; b=f1G9+bYthwZimRoPLSv+X+qAHQa4qEcJ3caeAe6IXCmwVzXvJWZp5je7s10u0tt8Q+p7IDIn8Kz4BeHw6+dIoCToIs2gW7ppMtNMnApFu8ZXI0CVDXhWz4sqn5+chGzFl0ud2d4GGDtjkgcy7d7P3HPqD9AIieLpczPcX419rK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763851677; c=relaxed/simple;
-	bh=mDmOqDRRV1GxRTkt03uYnfvm5YBI/u/mWZasnkUTwrI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eqMx0ATyO9eAgm8yyaWYKa316lAasp9AImXBB5EGKXCeeSXxQf6MQd/UumainAb4Iu9UX76JRovqr0gqQVba13R4uIIw+3Hpi1Qx56uV44yywl+C0spky1Iaggv5yfjMP3t5pmFvqMa16qo6nz4qgTSrgsj0vkqH1KKrL2gyd4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m4EYqLjM; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-59577c4c7c1so3858684e87.1
-        for <linux-pm@vger.kernel.org>; Sat, 22 Nov 2025 14:47:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763851674; x=1764456474; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mm9cJVhutkedd51ycbYwKmMqp19QwPFiX/ffFg8rVcg=;
-        b=m4EYqLjMnZAClasW5oW/RKRiG7pn1i/2sd87a2+bGT5arzuzX2s9OWunw3ssNpcdIL
-         Rt3hNDSuFUBrtfbXvhjdipl2gBlBuevvx/2V/Sci3GW099P+W5/rd7vFyuWpyVXP1yQP
-         MK62n9rzpZxAKODtmj7axGjtZm2iPhssZ7V5ietC61jcOyFvK9Nmes+GYZJ0bfVVY9W3
-         HhsNbNtfDCgWUxgyoFMe3TEbEmFHKPlLJzBCay6GBLVkLziLLWupjzRTYCBTQvVTCNtC
-         PCE0gN7ui5o9znFYb9NWADBrbgacrALeEnX1YBs7J3e4rCG9ErcZLONAjVpKnh7gKzq8
-         xDnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763851674; x=1764456474;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mm9cJVhutkedd51ycbYwKmMqp19QwPFiX/ffFg8rVcg=;
-        b=GfxwcnHspMD8CLiedbXWWY1aMg4AJfG7689SfusR4SRt//0HGq9/C0VB/VF12QRAYR
-         08P/44HdU27e2CuoMFExPD8AMVK8XzpNqXIljomOHY+miYj9dRDLU+LiSHUeh6QV2aE7
-         RtOlpu7WEg6YggHF0Esgzu/6ovqTo+3G0K9W7cUQlTwg6Y81cXrtP+Fm8v3FlXkcg1Nm
-         BfqDQXLIYpQMcEem37Y3679Hs9SKVWUFf+BkAZ4rjHlaK+EV3yWNZiKBpyc54MkSxwMO
-         u76qRVxYQYQOv18TibKJHwoEvvAUMaHiqTEJBOEFqcsm0uJLweMYcAjN8pl6sCmIRugP
-         xKdA==
-X-Forwarded-Encrypted: i=1; AJvYcCXGLKDI2aMxhkkI7dgecPS241W9EYGWZWqPdOZ4kl+CBkNyySApa2u+N0I37dW1ezwkl3YOZQat0Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzamtA3/1o5oSAmKaGRsCZXUVwdPIuTvU+1NHfDv677tZl/Fjdp
-	Jz2XPjFJZuNBUOF7mIcgPu4w2+5DHOkdaajHk+99EkPNe80ls0LSWqXs
-X-Gm-Gg: ASbGncsQCeHimxURD3IzSOguPf0ZYXUYbuObI2A9QpqSDYPlm9U24JScM9j/DFGpOkP
-	VmBfhZVMhzoG3QPBYyFi2/HJVLwboGjGMseCw7IEL/UZFWeQQ7T40amzT/lRP32SYlWwb8qvkzO
-	jbr9lCCPTrzlpAVb+w9XH1M1FPz5fzfUtTe1uvh3kqPjmPYS40LK4GY7e/rRyP9Jt+S1vwMnMav
-	99UPDk+Ec01hYAmF1T3UTlZMePLggRNYN6CgUQg+YnrPUD22c/WKHCoTu4j2f52A0G6yOcSEBkd
-	69s+nYmr1PkWSGwUzyGdR7DU/KYDNV8IUE7Sq8ewqmYOj73AFyl2jiEQBnZnzL7XNBGsgbmY5vY
-	96ooateM3+PGCUylq+9LOKu/mnTd8ePCL3DvnnlmJr354pOi5lU/nh/A26+STKo8BK6ENDvBfXN
-	lqF2cpvztOeQ==
-X-Google-Smtp-Source: AGHT+IG25dEQnHwaBToxpvBjTeZ/3RB3yCymIb0k9rzfOt31nS8ruDCrSu8IePguUMWt0EMXA9m5xw==
-X-Received: by 2002:a05:6512:308c:b0:596:a000:596 with SMTP id 2adb3069b0e04-596a0000a2bmr3428587e87.10.1763851673743;
-        Sat, 22 Nov 2025 14:47:53 -0800 (PST)
-Received: from localhost ([109.167.240.218])
-        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-5969dbc5988sm2742367e87.78.2025.11.22.14.47.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Nov 2025 14:47:52 -0800 (PST)
-From: Askar Safin <safinaskar@gmail.com>
-To: mpatocka@redhat.com
-Cc: Dell.Client.Kernel@dell.com,
-	agk@redhat.com,
-	brauner@kernel.org,
-	dm-devel@lists.linux.dev,
-	ebiggers@kernel.org,
-	kix@kix.es,
-	linux-block@vger.kernel.org,
-	linux-btrfs@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-lvm@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-pm@vger.kernel.org,
-	linux-raid@vger.kernel.org,
-	lvm-devel@lists.linux.dev,
-	milan@mazyland.cz,
-	msnitzer@redhat.com,
-	mzxreary@0pointer.de,
-	nphamcs@gmail.com,
-	pavel@ucw.cz,
-	rafael@kernel.org,
-	ryncsn@gmail.com,
-	safinaskar@gmail.com,
-	torvalds@linux-foundation.org
-Subject: Re: [PATCH 1/2] pm-hibernate: flush disk cache when suspending
-Date: Sun, 23 Nov 2025 01:47:48 +0300
-Message-ID: <20251122224748.3724202-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <c44942f2-cf4d-04c2-908f-d16e2e60aae2@redhat.com>
-References: <c44942f2-cf4d-04c2-908f-d16e2e60aae2@redhat.com>
+	s=arc-20240116; t=1763886984; c=relaxed/simple;
+	bh=BpGpxP773zsyhDqiIdTbkt1LHwhw61h1r+wf9K8eXBA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=gs17CM6ovRqKEEA5zKGVklumo5I4ilmDg9RgsFNBp9fSw2dO8f35zYfVkEoFt6KWnCu/v0ChhTSM6bVDThRiCUBhlO1B0Zk6Mf02oLqAP854lGjBRiiW4R5kx5x1T//1spxR5UUQOpsR+mNNMvGDaxYN/ZlXeQwOyKDt+uSb0Fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hQ2e94La; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4C90EC113D0;
+	Sun, 23 Nov 2025 08:36:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763886984;
+	bh=BpGpxP773zsyhDqiIdTbkt1LHwhw61h1r+wf9K8eXBA=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=hQ2e94LaWlWci7Q2fJQVO0RbwNmlcAiWS0JKfKgDd1tMjCImRXuTmxt57poYlYSSA
+	 ILX0dRv3sKWG/8l0R31AoAd3PQWPEWAnpZpW0GiuuhXdYtrIl+Of2vqnSRD27uHhLE
+	 /c8S9dRVbORd8DXUoFs5VGbCfhUztn/K9KG2mQbDrJnjRcZi1Tdk2eDA4FZNyUe7J1
+	 jABSOiZOvdAsCExuLcUBtwl1QE2NDg2viN9D3Lyi0ymiNOu9W8tMgUasJ0R2MG3BaA
+	 xYFJis95h5HPt8CSAIMTUwDGogH8RRpNoKwye9NpiQoQeBMM406jj3zyib/ENoudg8
+	 nh68fYuRS28+g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 394EFCFA46B;
+	Sun, 23 Nov 2025 08:36:24 +0000 (UTC)
+From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
+Subject: [PATCH 0/6] Introduce MAX77759 charger driver
+Date: Sun, 23 Nov 2025 08:35:47 +0000
+Message-Id: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGPHImkC/x2MQQqAIBAAvyJ7TlBBrb4SHaw220MWK4QQ/j3pO
+ AwzL2RkwgyjeIHxoUxXaqA7AesRUkRJW2MwylitlZVnKN57O8imOSLL3prFGbc5pwO07Gbcqfz
+ Laa71A6K3ftdiAAAA
+X-Change-ID: 20251105-max77759-charger-852b626d661a
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
+ Amit Sunil Dhamne <amitsd@google.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763886983; l=1935;
+ i=amitsd@google.com; s=20241031; h=from:subject:message-id;
+ bh=BpGpxP773zsyhDqiIdTbkt1LHwhw61h1r+wf9K8eXBA=;
+ b=BWVPQuQsjLSNkUQqrd15xu/QTq3ozxwwQ2vwMMcB/GYDKnpH5yHZo2OYSKPSBUfx/euLcrJbV
+ nJPACkoU7CFCwihqtmUdLp8NRbWZ13t2vr/ibMQv0GZBPk8vharpQqE
+X-Developer-Key: i=amitsd@google.com; a=ed25519;
+ pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
+X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
+ auth_id=262
+X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
+Reply-To: amitsd@google.com
 
-Mikulas Patocka <mpatocka@redhat.com>:
-> [PATCH 1/2] pm-hibernate: flush disk cache when suspending
-> 
-> There was reported failure that suspend doesn't work with dm-integrity.
-> The reason for the failure is that the suspend code doesn't issue the
-> FLUSH bio - the data still sits in the dm-integrity cache and they are
-> lost when poweroff happens.
+MAX77759 PMIC is used in Pixel 6 and 6 Pro (Oriole/Raven) boards.
+One of the functions of the MAX77759 PMIC is a battery charger. This
+patchset introduces a driver for this function. One of the unique
+features of this charger driver is that it works with a USB input where
+the Type-C controller is TCPCI based.
 
-I tested this patchset (in Qemu). It works.
+Changes to the board files will follow soon once this patchset is reviewed.
 
-Here is script I used for testing:
+For reference to the MAX77759 MFD based patchset (present in upstream):
+https://lore.kernel.org/all/20250509-max77759-mfd-v10-0-962ac15ee3ef@linaro.org/
 
-https://zerobin.net/?66669be7d2404586#xWufhCq7zCoOk3LJcJCj7W4k3vYT3U4vhGutTN3p8m0=
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+---
+Amit Sunil Dhamne (6):
+      dt-bindings: power: supply: Add Maxim MAX77759 charger
+      dt-bindings: mfd: maxim,max77759: add charger child node
+      dt-bindings: usb: maxim,max33359: Add supply property for VBUS in OTG mode
+      mfd: max77759: modify irq configs
+      power: supply: max77759: add charger driver
+      usb: typec: tcpm/tcpci_maxim: deprecate WAR for setting charger mode
 
-Here are logs:
+ .../devicetree/bindings/mfd/maxim,max77759.yaml    |  12 +
+ .../power/supply/maxim,max77759-charger.yaml       |  36 +
+ .../devicetree/bindings/usb/maxim,max33359.yaml    |   4 +
+ MAINTAINERS                                        |   7 +
+ drivers/mfd/max77759.c                             |  27 +-
+ drivers/power/supply/Kconfig                       |  11 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/max77759_charger.c            | 866 +++++++++++++++++++++
+ drivers/usb/typec/tcpm/tcpci_maxim.h               |   1 +
+ drivers/usb/typec/tcpm/tcpci_maxim_core.c          |  48 +-
+ include/linux/mfd/max77759.h                       |   9 +
+ 11 files changed, 999 insertions(+), 23 deletions(-)
+---
+base-commit: 39f90c1967215375f7d87b81d14b0f3ed6b40c29
+change-id: 20251105-max77759-charger-852b626d661a
 
-https://zerobin.net/?5d4a2abbad751890#WMcQl4FAZC9KqcAuJU3TSVr7wuVnPFwI7dlinA9QHOo=
-
-Tested-By: Askar Safin <safinaskar@gmail.com>
-
-There was no any reason to wait for me. You could easily test using script above.
-
-Also: Linux shows this scary message when booting in Qemu:
-
-[    0.512581] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-
-So, FUA is not supported? Does it mean that this patch is wrong, and works purely
-by chance?
-
+Best regards,
 -- 
-Askar Safin
+Amit Sunil Dhamne <amitsd@google.com>
+
+
 
