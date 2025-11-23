@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-38419-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38420-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F063EC7E263
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 16:20:53 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 154CAC7E284
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 16:24:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C33143AADAF
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 15:20:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EB6E34E1453
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 15:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF3F29E10B;
-	Sun, 23 Nov 2025 15:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA77B2D8773;
+	Sun, 23 Nov 2025 15:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RhMRBaMg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ntHHpqNt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC25821B918;
-	Sun, 23 Nov 2025 15:20:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB272D7DF7;
+	Sun, 23 Nov 2025 15:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763911247; cv=none; b=hxXh6+WdTnsM41I8wCxeif1Yba1vmJLAhOamz5JM6xOECYXscSVQgMn+UFWfxQSOTzCZGCE9WDXLQAC0Q7xy0G/jRfb5bEKYBhgqt1Hs9fGYp+91uPwf/sL7tVt3EoGM4ONa/T0kSabMDen8oAd6D6pbit6VyKydAykbUqhSdQs=
+	t=1763911484; cv=none; b=po4uSpsrsgW/BKy5SBRI5L4vPcdNRFj5VfrEBRubWXaWLJ2xxQXTVfAxRN8OQWmIJkSJ3GCOej/8wnyqSEWwZnrbZm9+mXi5lbhQBGRbn8QRIkv68qbQWQlbMYtYbruwqcdgDQeaurqUqVaSFmynjx2dIgGZrq7GBS2+Xy1OgQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763911247; c=relaxed/simple;
-	bh=Z4iaAtHuU2L2bBN5HeCWjqlEakR2sNKBfdG1aRpG4sc=;
+	s=arc-20240116; t=1763911484; c=relaxed/simple;
+	bh=enoErcPElfCtw2cugcnsJZynNc8oh+KKwlxqkTYh4aU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OPXRCmdmo2r8jjGn2IZ6J+hu30zGjA7PdEG+cwX/OJeZfZtzKVlLFS7CGYjjZrRdAjQ5CBKlAYTpwInSlgc2mxOi1FnqaKInHoqR/KMcdIw5GhKcw/oG+umrt5+iBuSu5kVw8v0DLrqxmCZZOE/NF3U6OrqxsWOmri6s56rwN6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RhMRBaMg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 304A8C113D0;
-	Sun, 23 Nov 2025 15:20:44 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=u45AiKcbykBbmiRmos9m3hNRCCJSH5LeZbMI1I/21gl6mRsjXw3AwHrm3IesRXgy2FdRjfSnuXvV5Sz1dlCNjKaKyCsJUoCDGzJzYP4aqjT4XKjsBwOVuaRlagjHN+e9SKNpbOPwZgBNo2HwxGL6a0/YOXvoO7gp6wro58I5qQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ntHHpqNt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D08C113D0;
+	Sun, 23 Nov 2025 15:24:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763911246;
-	bh=Z4iaAtHuU2L2bBN5HeCWjqlEakR2sNKBfdG1aRpG4sc=;
+	s=k20201202; t=1763911484;
+	bh=enoErcPElfCtw2cugcnsJZynNc8oh+KKwlxqkTYh4aU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RhMRBaMgSeUlrc1/FH8ekmIMkfYyVE245Roedi0Y8uR0kXPZ5tQgo+M1RHWs78tTK
-	 yZZjK3U/b3sUP1pPoz+kWIIPnCq2uMGc0W0Sm60CAWVVy76ezkcjqfAgSAiXddnA6+
-	 Zi9Hf6Cyf2ZqR00KH7MvOseWMlPBGZ7aA+4KjuLSTSJlsl9Xp9Np0Xi+NBLWlPsbDW
-	 Hde79185dpMEQGGVRISIvg3mxp1CxlanVZ7kkm01xDUOhm1Y3Z51VlWilU3XzOKaoM
-	 ZLmGP7Wrm5RN9EQFUQDLCi72YV9upsK9dSp9QjHIlEKpByd/dyrh4FwQ7ObI75okEp
-	 irfWnf0dmkAfQ==
-Message-ID: <42715ebe-2d52-4212-9dc4-5d9b1db880e1@kernel.org>
-Date: Mon, 24 Nov 2025 00:20:43 +0900
+	b=ntHHpqNtuUBNW0KAk/Y0Da/5q64aQbsumD9Uy3g/nTWyl65Gq1uG06bsjqF1Xuuss
+	 NX/2v6VMQ3RtW3Axauti65rbiQUkxggknepwXaeayhkjprQdggUx4V4MqC/gkvjU8T
+	 tdsDoxgUj4xlpTaDRQnetTK0cIzr7g5gt5Uk6oN3rHTN7th09LrrwkOlkAnhHrDp+A
+	 XyeNQJz7OVzzgEVmDPs1/2pg0ow0BxrG6bzjtNfiApq22xZi+5lY8PqZmByaC/7YjY
+	 ROcqGlClGjTucaYfTaeOf2LGjbBsRXExnYLdRNipZl+e71d4YuMZjVmbB5oN0HxLSG
+	 slwQWxmfuoUGA==
+Message-ID: <25a5c859-357f-4e31-9b47-822d0c32ce70@kernel.org>
+Date: Mon, 24 Nov 2025 00:24:40 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,55 +50,60 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] PM: devfreq: fix typo in DFSO_DOWNDIFFERENTIAL
- macro name
+Subject: Re: [PATCH v1 2/2] PM: devfreq: handle invalid parameters gracefully
+ in simpleondemand
 To: Riwen Lu <luriwen@kylinos.cn>, myungjoo.ham@samsung.com,
  kyungmin.park@samsung.com, cw00.choi@samsung.com
 Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20251118032339.2799230-1-luriwen@kylinos.cn>
+ <20251118032339.2799230-2-luriwen@kylinos.cn>
 From: Chanwoo Choi <chanwoo@kernel.org>
 Content-Language: en-US
-In-Reply-To: <20251118032339.2799230-1-luriwen@kylinos.cn>
+In-Reply-To: <20251118032339.2799230-2-luriwen@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 25. 11. 18. 12:23에 Riwen Lu 이(가) 쓴 글:
-> Correct the spelling error in the DFSO_DOWNDIFFERENTIAL macro
-> definition and update the corresponding variable assignment.
+> Instead of returning -EINVAL when upthreshold > 100 or upthreshold <
+> downdifferential, fall back to default threshold values to ensure the
+> governor continues functioning.
 > 
-> The macro was previously misspelled as DFSO_DOWNDIFFERENCTIAL.
-> This change ensures consistent and correct spelling throughout
-> the simpleondemand governor implementation.
+> Additionally, the validation is now scoped to the if (data) block,
+> preventing unnecessary checks when no user data is provided, while the
+> fallback mechanism ensures reliability with invalid configurations.
 > 
 > Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
 > ---
->  drivers/devfreq/governor_simpleondemand.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/devfreq/governor_simpleondemand.c | 11 ++++++++---
+>  1 file changed, 8 insertions(+), 3 deletions(-)
 > 
 > diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
-> index c23435736367..b4d7be766f33 100644
+> index b4d7be766f33..7205891d2ec6 100644
 > --- a/drivers/devfreq/governor_simpleondemand.c
 > +++ b/drivers/devfreq/governor_simpleondemand.c
-> @@ -14,7 +14,7 @@
+> @@ -36,10 +36,15 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
+>  			dfso_upthreshold = data->upthreshold;
+>  		if (data->downdifferential)
+>  			dfso_downdifferential = data->downdifferential;
+> +
+> +		if (dfso_upthreshold > 100 ||
+> +		    dfso_upthreshold < dfso_downdifferential) {
+> +			dfso_upthreshold = DFSO_UPTHRESHOLD;
+> +			dfso_downdifferential = DFSO_DOWNDIFFERENTIAL;
+> +			pr_debug("Invalid thresholds, using defaults: up = %u, down = %u\n",
+> +				dfso_upthreshold, dfso_downdifferential);
+> +		}
+>  	}
+> -	if (dfso_upthreshold > 100 ||
+> -	    dfso_upthreshold < dfso_downdifferential)
+> -		return -EINVAL;
 >  
->  /* Default constants for DevFreq-Simple-Ondemand (DFSO) */
->  #define DFSO_UPTHRESHOLD	(90)
-> -#define DFSO_DOWNDIFFERENCTIAL	(5)
-> +#define DFSO_DOWNDIFFERENTIAL	(5)
->  static int devfreq_simple_ondemand_func(struct devfreq *df,
->  					unsigned long *freq)
->  {
-> @@ -22,7 +22,7 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
->  	struct devfreq_dev_status *stat;
->  	unsigned long long a, b;
->  	unsigned int dfso_upthreshold = DFSO_UPTHRESHOLD;
-> -	unsigned int dfso_downdifferential = DFSO_DOWNDIFFERENCTIAL;
-> +	unsigned int dfso_downdifferential = DFSO_DOWNDIFFERENTIAL;
->  	struct devfreq_simple_ondemand_data *data = df->data;
->  
->  	err = devfreq_update_stats(df);
+>  	/* Assume MAX if it is going to be divided by zero */
+>  	if (stat->total_time == 0) {
 
-Applied it. Thanks.
+If there are wrong initialization of devfreq_simple_ondemand,
+it should point out what is wrong because it makes some confusion if there are no error.
+
 
 -- 
 Best Regards,
