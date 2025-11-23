@@ -1,194 +1,175 @@
-Return-Path: <linux-pm+bounces-38413-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38414-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F6E3C7DE97
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 10:15:22 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A3F5C7DEE5
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 10:28:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 187313A92D9
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 09:15:21 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5187A4E0313
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Nov 2025 09:28:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 021AC296BC1;
-	Sun, 23 Nov 2025 09:15:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E4BB2C2374;
+	Sun, 23 Nov 2025 09:28:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="anwSxmGn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nYO809Kt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12D221D599;
-	Sun, 23 Nov 2025 09:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79B82C1786;
+	Sun, 23 Nov 2025 09:28:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763889318; cv=none; b=FeblJNAneklLM8XtCK2jEmY+J/Mxkn6z+59ZDJJyDN44T3g0RCR9NPEWgNJbVlESxEYN7HQUYs8YigFZoq1TxhC7hQtad5mZyddqs+GeOd7sSN6Q17AMJICQLrytiVkQtxmszCO3KubKjq99aI9mUdai8awqlkfULCTuQoQ4GEk=
+	t=1763890131; cv=none; b=JfYl3pRm+R9/ksrFKvxtaCGiv0ADFiW5LPm9zHN1BCtaxuGlhZRmvDMAwBL/gwpC2TqDJii7Uutn1UJJgj+/jefb1bTYEmOB7Kx+FXRk3Tvd/TNVosXxGURPLJi+tnJUgGhQQES2azYrCAu7ljyQNCTT6BbDISI7K77osGwGiOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763889318; c=relaxed/simple;
-	bh=JuPxxQXTDiyNd1j7EbbZC8GNvXHp6IKbo/BaLj32NNw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=lh6AF3at+kV6TzPCOHejdPkL2Dp0NKBxwSHk9lzmSeslrrmaB8aWM+uK9+lIioHjFfKhYICbZrkWDypz5omZucECTICo3xwdtBfYj+WDY+ZhRcsSMwKYAl9Or//racDYkcttUllid+CWM2cQRH/BaMlr/JjkEK5b281xTzLWqqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=anwSxmGn; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763889316; x=1795425316;
-  h=date:from:to:cc:subject:message-id;
-  bh=JuPxxQXTDiyNd1j7EbbZC8GNvXHp6IKbo/BaLj32NNw=;
-  b=anwSxmGnhhKuDelL1krigDQ2OqZJa+hFeBMknmkEvYJt2n+hisK6og6p
-   4lJ/KR/gDSmRuRcgeUZnW7kdeOT0AQlAHqHGADFJoN6TFsFX7SQCNBCP9
-   BcSBIBxxC5G2hT1Jc8U5p7vu7vfouEvVXQCbQxMepanDsst5wFt3tXjzL
-   qT3eygr2U4E2HjrLyo9jlV2K6DESs1K1N24/TiRCMDI7VhhwwMjC5uVYX
-   9OybchD8DZ59K0E5v5Cx+hRJjhyTuGuyvdcgTSgzAIeHLYgtaL1KAk9ss
-   Hz7sdKbkv95oolVL7lU8y8hWrJilHlpWA5Pzh/qvqOjpgHCJceDd/9bSw
-   g==;
-X-CSE-ConnectionGUID: HujUFtU0QOuEbE+Zy1F4Ug==
-X-CSE-MsgGUID: gnzhy3UJTO+NaMoQ+3ZXBQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11621"; a="65810361"
-X-IronPort-AV: E=Sophos;i="6.20,220,1758610800"; 
-   d="scan'208";a="65810361"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2025 01:15:14 -0800
-X-CSE-ConnectionGUID: Uqyh/k87R1aIDtzLKbxraA==
-X-CSE-MsgGUID: I6Lx5tGcR3CTeUFyKHBh1A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,220,1758610800"; 
-   d="scan'208";a="196231237"
-Received: from lkp-server01.sh.intel.com (HELO adf6d29aa8d9) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 23 Nov 2025 01:15:13 -0800
-Received: from kbuild by adf6d29aa8d9 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vN6Ba-0008AV-2o;
-	Sun, 23 Nov 2025 09:15:10 +0000
-Date: Sun, 23 Nov 2025 17:14:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 3f50784b8159855ffd528f2ba346e006a4e3f48e
-Message-ID: <202511231732.kRy3DfSa-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1763890131; c=relaxed/simple;
+	bh=ZJkP354JwVluZpn5qkk7mYQ71zCcqGPCvqTY+M/gDik=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Adp6u+36QVy3UHEhdT4j+q2rza4ngaB26RyV5gtozM8fEbrRkI+Isk+3Ukze/ciYF/dAKBOvXzn+10tSsGWoPcZ6bZZZ8Ewgha8BzxvR69m8vs2KLFgVEnDHLT7QTNmQHsVQ7oJQZl4t1YMC1M2Z3DMUP05lNa0nGKB7v2sZyv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nYO809Kt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E511EC113D0;
+	Sun, 23 Nov 2025 09:28:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763890130;
+	bh=ZJkP354JwVluZpn5qkk7mYQ71zCcqGPCvqTY+M/gDik=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=nYO809KtdTwfcmWhdTpYUKCtZ1NQz0vvT6t7TMW05gJZnfMBDyk3QSoyp9rlnx01G
+	 lAlIbCg8TI9fLBNBMi+GCDGmQ5IV+X4Ueb0DR6v8WKwCLfgOEkck/+BEVlbvbZQJMu
+	 meBhYv5TEazNsU7Eg3+RFnlK4EPiVcAmfslFJbQRWF0jBCG8jfBS084rSujykEbm2J
+	 KR2Wol2C3JnHyUlHIhLw/oi69vQsC3V5+JyjKKM3T2LmaT7ySIqpqTmScW80/Ep2B4
+	 Tw1pysFRjC6eOhcMEmVa5GZHr7HqtKKKo+wgGrBgIl0JW6LzcuQs5bLXA92cCnVNoV
+	 6CcWypDCarYNg==
+Message-ID: <d4455f4b-2a0f-4bc0-b897-14f2e27af3ea@kernel.org>
+Date: Sun, 23 Nov 2025 10:28:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] dt-bindings: power: supply: Add Maxim MAX77759
+ charger
+To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
+ <20251123-max77759-charger-v1-1-6b2e4b8f7f54@google.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251123-max77759-charger-v1-1-6b2e4b8f7f54@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 3f50784b8159855ffd528f2ba346e006a4e3f48e  Merge branch 'pm-powercap' into bleeding-edge
+On 23/11/2025 09:35, Amit Sunil Dhamne via B4 Relay wrote:
+> From: Amit Sunil Dhamne <amitsd@google.com>
+> 
+> Add bindings for Maxim max77759 charger device.
+> 
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> ---
+>  .../power/supply/maxim,max77759-charger.yaml       | 36 ++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
+> new file mode 100644
+> index 000000000000..71f866419774
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
+> @@ -0,0 +1,36 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/maxim,max77759-charger.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Maxim Integrated MAX77759 Battery charger
+> +
+> +maintainers:
+> +  - Amit Sunil Dhamne <amitsd@google.com>
+> +
+> +description: |
+> +  This module is part of the MAX77759 PMIC. For additional information, see
+> +  Documentation/devicetree/bindings/mfd/maxim,max77759.yaml.
+> +
+> +  The Maxim MAX77759 is a dual input switch mode battery charger for portable
+> +  applications. It supports wired and wireless charging and can operate in buck
+> +  and boost mode.
+> +
+> +allOf:
+> +  - $ref: power-supply.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: maxim,max77759-charger
+> +
 
-elapsed time: 2169m
+This should be just folded into parent node, no need for separate
+charger device or is just incomplete.
 
-configs tested: 101
-configs skipped: 3
+> +  usb-otg-vbus-regulator:
+> +    type: object
+> +    description: Provides Boost for sourcing VBUS.
+> +    $ref: /schemas/regulator/regulator.yaml#
+> +    unevaluatedProperties: false
+> +
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                   randconfig-001-20251122    gcc-14.3.0
-arc                   randconfig-002-20251122    gcc-9.5.0
-arm                               allnoconfig    clang-22
-arm                        mvebu_v7_defconfig    clang-22
-arm                   randconfig-001-20251122    clang-22
-arm                   randconfig-002-20251122    clang-22
-arm                   randconfig-003-20251122    clang-22
-arm                   randconfig-004-20251122    gcc-12.5.0
-arm                         s5pv210_defconfig    gcc-15.1.0
-arm                           sama5_defconfig    gcc-15.1.0
-arm64                             allnoconfig    gcc-15.1.0
-arm64                 randconfig-001-20251123    gcc-8.5.0
-arm64                 randconfig-002-20251123    gcc-11.5.0
-arm64                 randconfig-003-20251123    clang-22
-arm64                 randconfig-004-20251123    clang-22
-csky                              allnoconfig    gcc-15.1.0
-csky                  randconfig-001-20251123    gcc-15.1.0
-csky                  randconfig-002-20251123    gcc-15.1.0
-hexagon                           allnoconfig    clang-22
-hexagon               randconfig-001-20251122    clang-22
-hexagon               randconfig-002-20251122    clang-17
-i386                              allnoconfig    gcc-14
-i386        buildonly-randconfig-001-20251123    clang-20
-i386        buildonly-randconfig-002-20251123    clang-20
-i386        buildonly-randconfig-003-20251123    gcc-14
-i386        buildonly-randconfig-004-20251123    gcc-14
-i386        buildonly-randconfig-005-20251123    clang-20
-i386        buildonly-randconfig-006-20251123    gcc-14
-i386                  randconfig-001-20251123    gcc-14
-i386                  randconfig-002-20251123    gcc-14
-i386                  randconfig-003-20251123    gcc-14
-i386                  randconfig-004-20251123    gcc-14
-i386                  randconfig-005-20251123    gcc-14
-i386                  randconfig-006-20251123    clang-20
-i386                  randconfig-007-20251123    gcc-14
-loongarch                         allnoconfig    clang-22
-loongarch             randconfig-001-20251122    gcc-12.5.0
-loongarch             randconfig-002-20251122    gcc-14.3.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                                defconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20251122    gcc-11.5.0
-nios2                 randconfig-002-20251122    gcc-8.5.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20251123    gcc-14.3.0
-parisc                randconfig-002-20251123    gcc-14.3.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                  mpc866_ads_defconfig    clang-22
-powerpc               randconfig-001-20251123    clang-22
-powerpc               randconfig-002-20251123    gcc-8.5.0
-powerpc64             randconfig-001-20251123    clang-22
-powerpc64             randconfig-002-20251123    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                               defconfig    clang-22
-riscv                 randconfig-001-20251123    clang-20
-riscv                 randconfig-002-20251123    gcc-8.5.0
-s390                              allnoconfig    clang-22
-s390                                defconfig    clang-22
-s390                  randconfig-001-20251123    gcc-8.5.0
-s390                  randconfig-002-20251123    clang-22
-sh                                allnoconfig    gcc-15.1.0
-sh                                  defconfig    gcc-15.1.0
-sh                 kfr2r09-romimage_defconfig    gcc-15.1.0
-sh                    randconfig-001-20251123    gcc-12.5.0
-sh                    randconfig-002-20251123    gcc-14.3.0
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20251123    gcc-8.5.0
-sparc                 randconfig-002-20251123    gcc-15.1.0
-sparc64                             defconfig    clang-20
-sparc64               randconfig-001-20251123    clang-22
-sparc64               randconfig-002-20251123    clang-22
-um                                allnoconfig    clang-22
-um                                  defconfig    clang-22
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251123    gcc-14
-um                           x86_64_defconfig    clang-22
-x86_64                            allnoconfig    clang-20
-x86_64      buildonly-randconfig-001-20251123    gcc-14
-x86_64      buildonly-randconfig-002-20251123    gcc-12
-x86_64      buildonly-randconfig-003-20251123    gcc-14
-x86_64      buildonly-randconfig-004-20251123    clang-20
-x86_64      buildonly-randconfig-005-20251123    gcc-14
-x86_64      buildonly-randconfig-006-20251123    clang-20
-x86_64                              defconfig    gcc-14
-x86_64                randconfig-071-20251123    clang-20
-x86_64                randconfig-072-20251123    gcc-14
-x86_64                randconfig-073-20251123    gcc-12
-x86_64                randconfig-074-20251123    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                randconfig-001-20251123    gcc-14.3.0
-xtensa                    xip_kc705_defconfig    gcc-15.1.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Krzysztof
 
