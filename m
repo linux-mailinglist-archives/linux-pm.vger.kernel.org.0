@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-38449-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38450-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F46BC801BC
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A926DC801CB
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:09:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C56F64E4459
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:09:14 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8F05C4E406F
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:09:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E3DB2FFDE0;
-	Mon, 24 Nov 2025 11:07:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9966A2FD1BE;
+	Mon, 24 Nov 2025 11:07:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="E8LEDUOd"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="DlCjuok2"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from sender3-pp-f112.zoho.com (sender3-pp-f112.zoho.com [136.143.184.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EA952FF668;
-	Mon, 24 Nov 2025 11:07:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847F72FF668;
+	Mon, 24 Nov 2025 11:07:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.112
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763982470; cv=pass; b=k50crv/usi/xm0D4N6aZrJoe5VrK7xLiTAfpTI0+7O2OLU921OUaBEeUxwvJKl/OfvsWfznhaBQr9trFL8y6qdCrAUNOw1AmKkxcZDiVPbfGIiLOp6YFTl1nmd82pwPZnVxYtt0Id/pFvPgaMQbTxpCLScA+N/xdStAkW7otplk=
+	t=1763982477; cv=pass; b=RwmedQyrYJGSLtvUaLq0MR8wvGOAn11XXh8vuiwcS9oj6P41hbnLP9EBrjGBlB5SusAPowL/wFZKVzQ9EGQ5RKfU1gA7Wh0onIxJ+N5aDuQ3Qsc2V+hzraMwduEb9IUX1xXONN1lWLfxFctg0jI2YLVY+0xXiN9DfEYlTlUsw+s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763982470; c=relaxed/simple;
-	bh=XRN7l5HCuSrAf9FdSg5zMg7Ti3S6RyZaosUN5M0VrsM=;
+	s=arc-20240116; t=1763982477; c=relaxed/simple;
+	bh=ML/QbAT6wuODK9p64mxODmHtL+wQT+HxiQ+NdN8oXYg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DG0TwpsOFCyPvHM+nDnp7nDpue36yt1Naq34tNPURslvxEvuTIi3cLsmjnVn+7dE8DiuuXxlh200IEknrVFT8szrqC8TkItEarZ2AXPgISFTt2s2nv/l32LODd7XBTy7qsHq9aLZ0yX+cFWDZbM9KfbAYDCSDf5a5KYuSy1rljA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=E8LEDUOd; arc=pass smtp.client-ip=136.143.184.112
+	 In-Reply-To:To:Cc; b=qqSXyewyoNJ6apC/T9sJjPTnxzEPP4p2J7dHAs0zW59pPev0WtgN45TVrOZOkhQ34x89U4IgGxMZ0PGqE6KiyRguPx5qSb8CHyAEEE9wLgEM5T9KS0ZdBBomxuNWGM2xM0CbTx089b1yIDd0eDbMSsE1W5iIzixk19PoKWufRBc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=DlCjuok2; arc=pass smtp.client-ip=136.143.184.112
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1763982451; cv=none; 
+ARC-Seal: i=1; a=rsa-sha256; t=1763982455; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=hRaDMdBgpJUWieMHl93K55uMn5+++VP+xmhy5V24ajBKLeAMA81aPwZ3Ib/UZUDt4wiiLh8pif5qO/mwqy1hQG/fcRd80JGejoigiuvSJh4uYBah9Ur2BQ6myEYAh3U3W1ZrgOj6YXvIUxtLX/piyNxOqRI2AzLubocPv0zXIhI=
+	b=d1oDUos2HA5s5Qbyvbb1+z4ERO4MBk+x6v7aKIX6DD3mAPj3ncG0wBMiWlBLLprVTB8WkU3i3Ol/97HpcJ+l2oNCjEwAg7OgNi/fnFmJAaAvhvgPPc5pXwL/h9ZmurM9N4587/lAxDRxq9pTlAiQtqmpcSHgG3TC/Sr8kYMIakE=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1763982451; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=l/jpHg8ggSLyVTybJftVENEdxbGTU3I5XefcjT15QOs=; 
-	b=F585uhLOtdK8SsEkgSZWOBkPSvqQ725D/D0vLyQY73Vx583Cy0v6Eh9dMrn02fAqlB7Kx18O82tPzxkcsagmtfUMPPDWrTE70iJiJpRNIP5Tjts105zS/6JUs9Wd7EoX23kM8npD1OGr6+MbckMg+WQ3IkpXGAY8VV12gvMliQ0=
+	t=1763982455; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Iiq+HYCmnZ7TcdzmTbexqDQH56XfdBR2ZblfoMLBIoA=; 
+	b=kVQHxJpV70E+mipZYoRedcBJu3o96p6imJHncUT9bsEOczmAA4D+niucFPItw4wALF74t6EfPWYBTLzL6MHoS2O4Qp3vDmRgBSrjDioZAmdvz0felAc4TCCZjTi6v6EOMRqZRhudTi8DpYY9ohkNIMqHpMVeKNCc0jIn0b+oJJk=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=collabora.com;
 	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
 	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1763982451;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1763982455;
 	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
 	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=l/jpHg8ggSLyVTybJftVENEdxbGTU3I5XefcjT15QOs=;
-	b=E8LEDUOdHlC34iedGgQowUrAZJeBj0rbdTIcsdpgePSNRR9g2gINi+uKrMkxOLSS
-	PPMhoatYXleKJDP8VoQAJ6li44binP5oEgv9Mn1PoXubr2zlwX2T7FIu3W/QMqXki2u
-	cFIlH5j+1559MMy3QCvKYadWUgwORaMPCMpeN5j4=
-Received: by mx.zohomail.com with SMTPS id 1763982450499916.9244462379016;
-	Mon, 24 Nov 2025 03:07:30 -0800 (PST)
+	bh=Iiq+HYCmnZ7TcdzmTbexqDQH56XfdBR2ZblfoMLBIoA=;
+	b=DlCjuok2x3mr2p2TjFTSvPF2ql7+rLYI2n0sUGdHTW2ytuFfBUaaGExuDL+0IbOU
+	MJWt5D+90yb15xkrUU18KBVss4OinmjxZPLhK9FUhZMUYT7N6+2In/2GQJhGksv2Tmv
+	nUjOEp56GLIHljWvxUaOMsP+Dzg1qB5kwyjv1aNg=
+Received: by mx.zohomail.com with SMTPS id 1763982453777661.8440242348057;
+	Mon, 24 Nov 2025 03:07:33 -0800 (PST)
 From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Date: Mon, 24 Nov 2025 12:06:59 +0100
-Subject: [PATCH v2 10/13] soc: mediatek: mtk-dvfsrc: Rework bandwidth
- calculations
+Date: Mon, 24 Nov 2025 12:07:00 +0100
+Subject: [PATCH v2 11/13] interconnect: mediatek: Add support for MediaTek
+ MT8196 EMI ICC
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251124-mt8196-dvfsrc-v2-10-d9c1334db9f3@collabora.com>
+Message-Id: <20251124-mt8196-dvfsrc-v2-11-d9c1334db9f3@collabora.com>
 References: <20251124-mt8196-dvfsrc-v2-0-d9c1334db9f3@collabora.com>
 In-Reply-To: <20251124-mt8196-dvfsrc-v2-0-d9c1334db9f3@collabora.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -77,240 +77,433 @@ Cc: kernel@collabora.com, devicetree@vger.kernel.org,
  Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 X-Mailer: b4 0.14.3
 
-The code, as it is, plays fast and loose with bandwidth units. It also
-doesn't specify its constraints in the actual maximum hardware value,
-but as some roundabout thing that then ends up multiplied into the
-actual hardware value constraint after some indirections. In part, this
-is due to the use of individual members for storing each limit, instead
-of making it possible to index them by type.
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Rework all of this by adding const array members indexed by the
-bandwidth type enum to the soc_data struct. This array expresses the
-actual hardware value limitations, not a factor thereof.
+Add a new driver with data to register the External Memory
+Interface (EMI) Interconnect on the MediaTek MT8196 Chromebook
+SoC.
 
-Use the clamp function macro to clamp the values between the minimum and
-maximum constraints after all the calculations, which also means the
-code doesn't write nonsense to a hardware register when the math is
-wrong, as it'll constrain after all the calculations.
-
-Pass the type as the actual enum type as well, and not as an int. If
-there's some type checking that can be extracted from the function
-signature, then we may as well use it.
-
-Don't needlessly explicitly cast return values to the return type
-either; this is both unnecessary and makes it harder to spot type safety
-issues.
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 ---
- drivers/soc/mediatek/mtk-dvfsrc.c | 107 ++++++++++++++++++++++++--------------
- 1 file changed, 67 insertions(+), 40 deletions(-)
+ drivers/interconnect/mediatek/Kconfig  |   7 +
+ drivers/interconnect/mediatek/Makefile |   1 +
+ drivers/interconnect/mediatek/mt8196.c | 383 +++++++++++++++++++++++++++++++++
+ 3 files changed, 391 insertions(+)
 
-diff --git a/drivers/soc/mediatek/mtk-dvfsrc.c b/drivers/soc/mediatek/mtk-dvfsrc.c
-index a43d6f913914..548a28f50242 100644
---- a/drivers/soc/mediatek/mtk-dvfsrc.c
-+++ b/drivers/soc/mediatek/mtk-dvfsrc.c
-@@ -64,12 +64,6 @@ enum mtk_dvfsrc_bw_type {
- 	DVFSRC_BW_MAX,
- };
- 
--struct dvfsrc_bw_constraints {
--	u16 max_dram_nom_bw;
--	u16 max_dram_peak_bw;
--	u16 max_dram_hrt_bw;
--};
--
- struct dvfsrc_opp {
- 	u32 vcore_opp;
- 	u32 dram_opp;
-@@ -98,7 +92,7 @@ struct dvfsrc_soc_data {
- 	const u8 *bw_units;
- 	const bool has_emi_ddr;
- 	const struct dvfsrc_opp_desc *opps_desc;
--	u32 (*calc_dram_bw)(struct mtk_dvfsrc *dvfsrc, int type, u64 bw);
-+	u32 (*calc_dram_bw)(struct mtk_dvfsrc *dvfsrc, enum mtk_dvfsrc_bw_type type, u64 bw);
- 	u32 (*get_target_level)(struct mtk_dvfsrc *dvfsrc);
- 	u32 (*get_current_level)(struct mtk_dvfsrc *dvfsrc);
- 	u32 (*get_vcore_level)(struct mtk_dvfsrc *dvfsrc);
-@@ -113,7 +107,22 @@ struct dvfsrc_soc_data {
- 	void (*set_vscp_level)(struct mtk_dvfsrc *dvfsrc, u32 level);
- 	int (*wait_for_opp_level)(struct mtk_dvfsrc *dvfsrc, u32 level);
- 	int (*wait_for_vcore_level)(struct mtk_dvfsrc *dvfsrc, u32 level);
--	const struct dvfsrc_bw_constraints *bw_constraints;
+diff --git a/drivers/interconnect/mediatek/Kconfig b/drivers/interconnect/mediatek/Kconfig
+index 985c849efac3..9fd3f2170443 100644
+--- a/drivers/interconnect/mediatek/Kconfig
++++ b/drivers/interconnect/mediatek/Kconfig
+@@ -27,3 +27,10 @@ config INTERCONNECT_MTK_MT8195
+ 	help
+ 	  This is a driver for the MediaTek bus interconnect on MT8195-based
+ 	  platforms.
 +
-+	/**
-+	 * @bw_max_constraints - array of maximum bandwidth for this hardware
-+	 *
-+	 * indexed by &enum mtk_dvfsrc_bw_type, storing the maximum permissible
-+	 * hardware value for each bandwidth type.
-+	 */
-+	const u32 *const bw_max_constraints;
-+
-+	/**
-+	 * @bw_min_constraints - array of minimum bandwidth for this hardware
-+	 *
-+	 * indexed by &enum mtk_dvfsrc_bw_type, storing the minimum permissible
-+	 * hardware value for each bandwidth type.
-+	 */
-+	const u32 *const bw_min_constraints;
- };
- 
- static u32 dvfsrc_readl(struct mtk_dvfsrc *dvfs, u32 offset)
-@@ -383,59 +392,62 @@ static u32 dvfsrc_get_opp_count_v4(struct mtk_dvfsrc *dvfsrc)
- 	return FIELD_GET(DVFSRC_V4_BASIC_CTRL_OPP_COUNT, val) + 1;
- }
- 
--static u32 dvfsrc_calc_dram_bw_v1(struct mtk_dvfsrc *dvfsrc, int type, u64 bw)
-+static u32
-+dvfsrc_calc_dram_bw_v1(struct mtk_dvfsrc *dvfsrc, enum mtk_dvfsrc_bw_type type, u64 bw)
- {
--	return (u32)div_u64(bw, 100 * 1000);
-+	return clamp_val(div_u64(bw, 100 * 1000), dvfsrc->dvd->bw_min_constraints[type],
-+			 dvfsrc->dvd->bw_max_constraints[type]);
- }
- 
--static u32 dvfsrc_calc_dram_bw_v4(struct mtk_dvfsrc *dvfsrc, int type, u64 bw)
-+/**
-+ * dvfsrc_calc_dram_bw_v4 - convert kbps to hardware register bandwidth value
-+ * @dvfsrc: pointer to the &struct mtk_dvfsrc of this driver instance
-+ * @type: one of %DVFSRC_BW_AVG, %DVFSRC_BW_PEAK, or %DVFSRC_BW_HRT
-+ * @bw: the bandwidth in kilobits per second
-+ *
-+ * Returns the hardware register value appropriate for expressing @bw, clamped
-+ * to hardware limits.
++config INTERCONNECT_MTK_MT8196
++	tristate "MediaTek MT8196 interconnect driver"
++	depends on INTERCONNECT_MTK_DVFSRC_EMI
++	help
++	  This is a driver for the MediaTek bus interconnect on MT8196-based
++	  platforms.
+diff --git a/drivers/interconnect/mediatek/Makefile b/drivers/interconnect/mediatek/Makefile
+index 8e2283a9a5b5..6bd656668f5d 100644
+--- a/drivers/interconnect/mediatek/Makefile
++++ b/drivers/interconnect/mediatek/Makefile
+@@ -3,3 +3,4 @@
+ obj-$(CONFIG_INTERCONNECT_MTK_DVFSRC_EMI) += icc-emi.o
+ obj-$(CONFIG_INTERCONNECT_MTK_MT8183) += mt8183.o
+ obj-$(CONFIG_INTERCONNECT_MTK_MT8195) += mt8195.o
++obj-$(CONFIG_INTERCONNECT_MTK_MT8195) += mt8196.o
+diff --git a/drivers/interconnect/mediatek/mt8196.c b/drivers/interconnect/mediatek/mt8196.c
+new file mode 100644
+index 000000000000..e9af32065be1
+--- /dev/null
++++ b/drivers/interconnect/mediatek/mt8196.c
+@@ -0,0 +1,383 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2025 Collabora Ltd.
++ *                    AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 + */
-+static u32
-+dvfsrc_calc_dram_bw_v4(struct mtk_dvfsrc *dvfsrc, enum mtk_dvfsrc_bw_type type, u64 bw)
- {
- 	u8 bw_unit = dvfsrc->dvd->bw_units[type];
- 	u64 bw_mbps;
-+	u32 bw_hw;
- 
- 	if (type < DVFSRC_BW_AVG || type >= DVFSRC_BW_MAX)
- 		return 0;
- 
- 	bw_mbps = div_u64(bw, 1000);
--	return (u32)div_u64((bw_mbps + bw_unit - 1), bw_unit);
-+	bw_hw = div_u64((bw_mbps + bw_unit - 1), bw_unit);
-+	return clamp_val(bw_hw, dvfsrc->dvd->bw_min_constraints[type],
-+			 dvfsrc->dvd->bw_max_constraints[type]);
- }
- 
- static void __dvfsrc_set_dram_bw_v1(struct mtk_dvfsrc *dvfsrc, u32 reg,
--				    int type, u16 max_bw, u16 min_bw, u64 bw)
-+				    enum mtk_dvfsrc_bw_type type, u64 bw)
- {
--	u32 new_bw = dvfsrc->dvd->calc_dram_bw(dvfsrc, type, bw);
--
--	/* If bw constraints (in mbps) are defined make sure to respect them */
--	if (max_bw)
--		new_bw = min(new_bw, max_bw);
--	if (min_bw && new_bw > 0)
--		new_bw = max(new_bw, min_bw);
-+	u32 bw_hw = dvfsrc->dvd->calc_dram_bw(dvfsrc, type, bw);
- 
--	dvfsrc_writel(dvfsrc, reg, new_bw);
-+	dvfsrc_writel(dvfsrc, reg, bw_hw);
- 
- 	if (type == DVFSRC_BW_AVG && dvfsrc->dvd->has_emi_ddr)
--		dvfsrc_writel(dvfsrc, DVFSRC_SW_EMI_BW, bw);
-+		dvfsrc_writel(dvfsrc, DVFSRC_SW_EMI_BW, bw_hw);
- }
- 
- static void dvfsrc_set_dram_bw_v1(struct mtk_dvfsrc *dvfsrc, u64 bw)
- {
--	u64 max_bw = dvfsrc->dvd->bw_constraints->max_dram_nom_bw;
--
--	__dvfsrc_set_dram_bw_v1(dvfsrc, DVFSRC_SW_BW, DVFSRC_BW_AVG, max_bw, 0, bw);
-+	__dvfsrc_set_dram_bw_v1(dvfsrc, DVFSRC_SW_BW, DVFSRC_BW_AVG, bw);
- };
- 
- static void dvfsrc_set_dram_peak_bw_v1(struct mtk_dvfsrc *dvfsrc, u64 bw)
- {
--	u64 max_bw = dvfsrc->dvd->bw_constraints->max_dram_peak_bw;
--
--	__dvfsrc_set_dram_bw_v1(dvfsrc, DVFSRC_SW_PEAK_BW, DVFSRC_BW_PEAK, max_bw, 0, bw);
-+	__dvfsrc_set_dram_bw_v1(dvfsrc, DVFSRC_SW_PEAK_BW, DVFSRC_BW_PEAK, bw);
- }
- 
- static void dvfsrc_set_dram_hrt_bw_v1(struct mtk_dvfsrc *dvfsrc, u64 bw)
- {
--	u64 max_bw = dvfsrc->dvd->bw_constraints->max_dram_hrt_bw;
--
--	__dvfsrc_set_dram_bw_v1(dvfsrc, DVFSRC_SW_HRT_BW, DVFSRC_BW_HRT, max_bw, 0, bw);
-+	__dvfsrc_set_dram_bw_v1(dvfsrc, DVFSRC_SW_HRT_BW, DVFSRC_BW_HRT, bw);
- }
- 
- static void dvfsrc_set_opp_level_v1(struct mtk_dvfsrc *dvfsrc, u32 level)
-@@ -688,11 +700,22 @@ static int mtk_dvfsrc_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--static const struct dvfsrc_bw_constraints dvfsrc_bw_constr_v1 = { 0, 0, 0 };
--static const struct dvfsrc_bw_constraints dvfsrc_bw_constr_v2 = {
--	.max_dram_nom_bw = 255,
--	.max_dram_peak_bw = 255,
--	.max_dram_hrt_bw = 1023,
-+static const u32 dvfsrc_bw_min_constr_none[DVFSRC_BW_MAX] = {
-+	[DVFSRC_BW_AVG] = 0,
-+	[DVFSRC_BW_PEAK] = 0,
-+	[DVFSRC_BW_HRT] = 0,
++
++#include <linux/device.h>
++#include <linux/interconnect.h>
++#include <linux/interconnect-provider.h>
++#include <linux/mod_devicetable.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <dt-bindings/interconnect/mediatek,mt8196.h>
++
++#include "icc-emi.h"
++
++static struct mtk_icc_node ddr_emi = {
++	.name = "ddr-emi",
++	.id = SLAVE_DDR_EMI,
++	.ep = 1,
 +};
 +
-+static const u32 dvfsrc_bw_max_constr_v1[DVFSRC_BW_MAX] = {
-+	[DVFSRC_BW_AVG] = U32_MAX,
-+	[DVFSRC_BW_PEAK] = U32_MAX,
-+	[DVFSRC_BW_HRT] = U32_MAX,
++static struct mtk_icc_node mcusys = {
++	.name = "mcusys",
++	.id = MASTER_MCUSYS,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
 +};
 +
-+static const u32 dvfsrc_bw_max_constr_v2[DVFSRC_BW_MAX] = {
-+	[DVFSRC_BW_AVG] = 65535,
-+	[DVFSRC_BW_PEAK] = 65535,
-+	[DVFSRC_BW_HRT] = 1023,
- };
- 
- static const struct dvfsrc_opp dvfsrc_opp_mt6893_lp4[] = {
-@@ -725,7 +748,8 @@ static const struct dvfsrc_soc_data mt6893_data = {
- 	.set_vscp_level = dvfsrc_set_vscp_level_v2,
- 	.wait_for_opp_level = dvfsrc_wait_for_opp_level_v2,
- 	.wait_for_vcore_level = dvfsrc_wait_for_vcore_level_v1,
--	.bw_constraints = &dvfsrc_bw_constr_v2,
-+	.bw_max_constraints = dvfsrc_bw_max_constr_v2,
-+	.bw_min_constraints = dvfsrc_bw_min_constr_none,
- };
- 
- static const struct dvfsrc_opp dvfsrc_opp_mt8183_lp4[] = {
-@@ -763,7 +787,8 @@ static const struct dvfsrc_soc_data mt8183_data = {
- 	.set_vcore_level = dvfsrc_set_vcore_level_v1,
- 	.wait_for_opp_level = dvfsrc_wait_for_opp_level_v1,
- 	.wait_for_vcore_level = dvfsrc_wait_for_vcore_level_v1,
--	.bw_constraints = &dvfsrc_bw_constr_v1,
-+	.bw_max_constraints = dvfsrc_bw_max_constr_v1,
-+	.bw_min_constraints = dvfsrc_bw_min_constr_none,
- };
- 
- static const struct dvfsrc_opp dvfsrc_opp_mt8195_lp4[] = {
-@@ -797,7 +822,8 @@ static const struct dvfsrc_soc_data mt8195_data = {
- 	.set_vscp_level = dvfsrc_set_vscp_level_v2,
- 	.wait_for_opp_level = dvfsrc_wait_for_opp_level_v2,
- 	.wait_for_vcore_level = dvfsrc_wait_for_vcore_level_v1,
--	.bw_constraints = &dvfsrc_bw_constr_v2,
-+	.bw_max_constraints = dvfsrc_bw_max_constr_v2,
-+	.bw_min_constraints = dvfsrc_bw_min_constr_none,
- };
- 
- static const u8 mt8196_bw_units[] = {
-@@ -825,7 +851,8 @@ static const struct dvfsrc_soc_data mt8196_data = {
- 	.set_vscp_level = dvfsrc_set_vscp_level_v2,
- 	.wait_for_opp_level = dvfsrc_wait_for_opp_level_v4,
- 	.wait_for_vcore_level = dvfsrc_wait_for_vcore_level_v4,
--	.bw_constraints = &dvfsrc_bw_constr_v1,
-+	.bw_max_constraints = dvfsrc_bw_max_constr_v2,
-+	.bw_min_constraints = dvfsrc_bw_min_constr_none,
- };
- 
- static const struct of_device_id mtk_dvfsrc_of_match[] = {
++static struct mtk_icc_node mcu_port0 = {
++	.name = "mcu-port0",
++	.id = MASTER_MCU_0,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node mcu_port1 = {
++	.name = "mcu-port1",
++	.id = MASTER_MCU_1,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node mcu_port2 = {
++	.name = "mcu-port2",
++	.id = MASTER_MCU_2,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node mcu_port3 = {
++	.name = "mcu-port3",
++	.id = MASTER_MCU_3,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node mcu_port4 = {
++	.name = "mcu-port4",
++	.id = MASTER_MCU_4,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node gpu = {
++	.name = "gpu",
++	.id = MASTER_GPUSYS,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node mmsys = {
++	.name = "mmsys",
++	.id = MASTER_MMSYS,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node mm_vpu = {
++	.name = "mm-vpu",
++	.id = MASTER_MM_VPU,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_MMSYS }
++};
++
++static struct mtk_icc_node mm_disp = {
++	.name = "mm-disp",
++	.id = MASTER_MM_DISP,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_MMSYS }
++};
++
++static struct mtk_icc_node mm_vdec = {
++	.name = "mm-vdec",
++	.id = MASTER_MM_VDEC,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_MMSYS }
++};
++
++static struct mtk_icc_node mm_venc = {
++	.name = "mm-venc",
++	.id = MASTER_MM_VENC,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_MMSYS }
++};
++
++static struct mtk_icc_node mm_cam = {
++	.name = "mm-cam",
++	.id = MASTER_MM_CAM,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_MMSYS }
++};
++
++static struct mtk_icc_node mm_img = {
++	.name = "mm-img",
++	.id = MASTER_MM_IMG,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_MMSYS }
++};
++
++static struct mtk_icc_node mm_mdp = {
++	.name = "mm-mdp",
++	.id = MASTER_MM_MDP,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_MMSYS }
++};
++
++static struct mtk_icc_node vpusys = {
++	.name = "vpusys",
++	.id = MASTER_VPUSYS,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node vpu_port0 = {
++	.name = "vpu-port0",
++	.id = MASTER_VPU_0,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_VPUSYS }
++};
++
++static struct mtk_icc_node vpu_port1 = {
++	.name = "vpu-port1",
++	.id = MASTER_VPU_1,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_VPUSYS }
++};
++
++static struct mtk_icc_node mdlasys = {
++	.name = "mdlasys",
++	.id = MASTER_MDLASYS,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node mdla_port0 = {
++	.name = "mdla-port0",
++	.id = MASTER_MDLA_0,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_MDLASYS }
++};
++
++static struct mtk_icc_node ufs = {
++	.name = "ufs",
++	.id = MASTER_UFS,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node pcie = {
++	.name = "pcie",
++	.id = MASTER_PCIE,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node usb = {
++	.name = "usb",
++	.id = MASTER_USB,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node wifi = {
++	.name = "wifi",
++	.id = MASTER_WIFI,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node bt = {
++	.name = "bt",
++	.id = MASTER_BT,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node netsys = {
++	.name = "netsys",
++	.id = MASTER_NETSYS,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node dbgif = {
++	.name = "dbgif",
++	.id = MASTER_DBGIF,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_DDR_EMI }
++};
++
++static struct mtk_icc_node hrt_ddr_emi = {
++	.name = "hrt-ddr-emi",
++	.id = SLAVE_HRT_DDR_EMI,
++	.ep = 2,
++};
++
++static struct mtk_icc_node hrt_mmsys = {
++	.name = "hrt-mmsys",
++	.id = MASTER_HRT_MMSYS,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_HRT_DDR_EMI }
++};
++
++static struct mtk_icc_node hrt_mm_disp = {
++	.name = "hrt-mm-disp",
++	.id = MASTER_HRT_MM_DISP,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_HRT_MMSYS }
++};
++
++static struct mtk_icc_node hrt_mm_vdec = {
++	.name = "hrt-mm-vdec",
++	.id = MASTER_HRT_MM_VDEC,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_HRT_MMSYS }
++};
++
++static struct mtk_icc_node hrt_mm_venc = {
++	.name = "hrt-mm-venc",
++	.id = MASTER_HRT_MM_VENC,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_HRT_MMSYS }
++};
++
++static struct mtk_icc_node hrt_mm_cam = {
++	.name = "hrt-mm-cam",
++	.id = MASTER_HRT_MM_CAM,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_HRT_MMSYS }
++};
++
++static struct mtk_icc_node hrt_mm_img = {
++	.name = "hrt-mm-img",
++	.id = MASTER_HRT_MM_IMG,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_HRT_MMSYS }
++};
++
++static struct mtk_icc_node hrt_mm_mdp = {
++	.name = "hrt-mm-mdp",
++	.id = MASTER_HRT_MM_MDP,
++	.ep = 0,
++	.num_links = 1,
++	.links = { MASTER_HRT_MMSYS }
++};
++
++static struct mtk_icc_node hrt_adsp = {
++	.name = "hrt-adsp",
++	.id = MASTER_HRT_ADSP,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_HRT_DDR_EMI }
++};
++
++static struct mtk_icc_node hrt_dbgif = {
++	.name = "hrt-dbgif",
++	.id = MASTER_HRT_DBGIF,
++	.ep = 0,
++	.num_links = 1,
++	.links = { SLAVE_HRT_DDR_EMI }
++};
++
++static struct mtk_icc_node *mt8196_emi_icc_nodes[] = {
++	[SLAVE_DDR_EMI] = &ddr_emi,
++	[MASTER_MCUSYS] = &mcusys,
++	[MASTER_MCU_0] = &mcu_port0,
++	[MASTER_MCU_1] = &mcu_port1,
++	[MASTER_MCU_2] = &mcu_port2,
++	[MASTER_MCU_3] = &mcu_port3,
++	[MASTER_MCU_4] = &mcu_port4,
++	[MASTER_GPUSYS] = &gpu,
++	[MASTER_MMSYS] = &mmsys,
++	[MASTER_MM_VPU] = &mm_vpu,
++	[MASTER_MM_DISP] = &mm_disp,
++	[MASTER_MM_VDEC] = &mm_vdec,
++	[MASTER_MM_VENC] = &mm_venc,
++	[MASTER_MM_CAM] = &mm_cam,
++	[MASTER_MM_IMG] = &mm_img,
++	[MASTER_MM_MDP] = &mm_mdp,
++	[MASTER_VPUSYS] = &vpusys,
++	[MASTER_VPU_0] = &vpu_port0,
++	[MASTER_VPU_1] = &vpu_port1,
++	[MASTER_MDLASYS] = &mdlasys,
++	[MASTER_MDLA_0] = &mdla_port0,
++	[MASTER_UFS] = &ufs,
++	[MASTER_PCIE] = &pcie,
++	[MASTER_USB] = &usb,
++	[MASTER_WIFI] = &wifi,
++	[MASTER_BT] = &bt,
++	[MASTER_NETSYS] = &netsys,
++	[MASTER_DBGIF] = &dbgif,
++	[SLAVE_HRT_DDR_EMI] = &hrt_ddr_emi,
++	[MASTER_HRT_MMSYS] = &hrt_mmsys,
++	[MASTER_HRT_MM_DISP] = &hrt_mm_disp,
++	[MASTER_HRT_MM_VDEC] = &hrt_mm_vdec,
++	[MASTER_HRT_MM_VENC] = &hrt_mm_venc,
++	[MASTER_HRT_MM_CAM] = &hrt_mm_cam,
++	[MASTER_HRT_MM_IMG] = &hrt_mm_img,
++	[MASTER_HRT_MM_MDP] = &hrt_mm_mdp,
++	[MASTER_HRT_ADSP] = &hrt_adsp,
++	[MASTER_HRT_DBGIF] = &hrt_dbgif
++};
++
++static struct mtk_icc_desc mt8196_emi_icc = {
++	.nodes = mt8196_emi_icc_nodes,
++	.num_nodes = ARRAY_SIZE(mt8196_emi_icc_nodes),
++};
++
++static const struct of_device_id mtk_mt8196_emi_icc_of_match[] = {
++	{ .compatible = "mediatek,mt8196-emi", .data = &mt8196_emi_icc },
++	{ /* sentinel */ },
++};
++MODULE_DEVICE_TABLE(of, mtk_mt8196_emi_icc_of_match);
++
++static struct platform_driver mtk_emi_icc_mt8196_driver = {
++	.driver = {
++		.name = "emi-icc-mt8196",
++		.of_match_table = mtk_mt8196_emi_icc_of_match,
++		.sync_state = icc_sync_state,
++	},
++	.probe = mtk_emi_icc_probe,
++	.remove = mtk_emi_icc_remove,
++
++};
++module_platform_driver(mtk_emi_icc_mt8196_driver);
++
++MODULE_AUTHOR("AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>");
++MODULE_DESCRIPTION("MediaTek MT8196 EMI ICC driver");
++MODULE_LICENSE("GPL");
 
 -- 
 2.52.0
