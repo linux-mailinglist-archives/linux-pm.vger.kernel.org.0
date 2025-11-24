@@ -1,223 +1,287 @@
-Return-Path: <linux-pm+bounces-38433-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38434-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 082ACC7F7A0
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 10:09:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ADFCC7FCD5
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:06:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C2BA84E2008
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 09:09:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B97D63A2FEF
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 10:06:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 715EA2F5333;
-	Mon, 24 Nov 2025 09:09:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 091DF2F60DB;
+	Mon, 24 Nov 2025 10:06:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="X9EVSicO"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="Fi7nIrOp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E822A2F4A16
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 09:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AA6724A043
+	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 10:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763975369; cv=none; b=Zam86xbs9cGeGhy+bRIr18lLwW2W4udJVKTAN6v1THVRmfWSNduXfTfcjXVxSHmO47tlPYi6Lk799S3ZQTAroduIi01q77IW6o6aX/z+EqvbYawfUxhvQyikP6W7IQm7FPvvJatOg9KRnOt0FCkojuFUlK/dEDXJBVAAzcj0rzA=
+	t=1763978812; cv=none; b=Kr324MWzryc0aGOThOT5KXuEOdSGZkoovxa3w6VzzVg3FJGlQa2gLlVMAWiHuRipzxu+otwyFPRdm7eooNpWuhfO3HmVDm++epS5Te4Lh7qFt5N21J05N7G1RGebS3P0N+ZXu9zCLLrnITQ2hh5KOXGaEv+bxMqj79vR7vNRc1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763975369; c=relaxed/simple;
-	bh=7cucVKRF1i3U03wQQZLLaXMd6VYekFa/vhwxJjBb0wM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UAAOpqdztp3VmRVNd1OsN80SWUZWClZPsyZCUqb4o5U0KwwkbUW028pDlbPvSyJ5RY0URuY98ydn4ySpT2+BFGDOebAdIYdKbBt6oZB2B8x9soQCdAyYRR5caZbhWDVUgvJ7Nv6wntgWcgYxsMvFvFgWwA4bHyDIFLgpz7juj6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=X9EVSicO; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42b379cd896so2158780f8f.3
-        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 01:09:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763975365; x=1764580165; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OvXHuoRgH+XIUx292dJAYC+bXU3Y0ChyF2IbAzcMS/Q=;
-        b=X9EVSicOG5kFedBvxTqDIIeuZHrgVhbmsI9Le4AlBj6Ihivl6ynbpfuufKRyy1ex3s
-         jx1nXKjlbLynhnWJUpG31IwszI9yHnUsGs3Kafbm7Gdx+oTA71dMmslVU/2YxUCf9z8L
-         8zbtDaUkx6Um0kcRoEOVmKxv/F+4/1OmtjIH6ESm0NxDivD3Q6SklCKmb/cQl9S33MKg
-         6HrSjIAXyAKgEjNPuBjYqirBPJ5pprxr4fX6mkJL5cHn1hgvRbK0pOlZZk5PVythSGy7
-         Tf4plCwzPYl8NmAzDJ90x6dzXZkBviqbXTHrqHh7nj9AYr3OmLlwKyUIBfd0n3WN/Tj4
-         m9Og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763975365; x=1764580165;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OvXHuoRgH+XIUx292dJAYC+bXU3Y0ChyF2IbAzcMS/Q=;
-        b=OQB77Xsn9iyd0vg/R2KCrDM6zweoc0KkHQ27bM6l9KLrkG77owDqUwl6RLrCuZhVyN
-         Xj9nyuxrkdWjBB3SgOKenR+HmilDWHfq7Ly/BIWm/jZkGGviSxH1dD1IURXLGvHwGBCM
-         HeSIR6GLzpBePugutgxD9JI4vu283x51JuuzlVevh6XzMMbMWqvqmE2vCJp/B2aeplPj
-         Dk8UID77z7AELNh8Fp+qKUkzfbTb6kWIlqRt3m/vAkZACRsjzU4EiNhm5AhJ0puQOIN0
-         KdsB8sXnZMEPl1eo2UCrGNtvI2j7/m9yBcvh696L8S64FW7dAkEu8L5gLv1ITVv4dMAf
-         0Dcw==
-X-Forwarded-Encrypted: i=1; AJvYcCUyzPFezfRBzijaIs+1uVgUhRbPaEcXWE6SDiyYfkDOb/T0ITxjqzT6K84aKdpUJn8yQoz1R9RbUw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMThyKjjBKgiRJj5DsD8KaHYYHNVIIOCfXXJSxAK3+Z+NAHVTl
-	z6WbfC5IoSe4xW7N0G0GuX9pr6hU+tgOzXE5y7Tr4EmdCoDIUeP6zVl+8Db9f8cgTTA=
-X-Gm-Gg: ASbGnctFSHt7Uh4W8yNj6SMRfpt+v8VEN+PA5Gfuz8vPgZLLBy+dCpewX6UswDpzEOC
-	gvVEQYN7rOz1rG2gi2NaQ0mKOmp1OtMOpb5fnnqlp6z1RaF3wAE9TaxxNuJdiUfdRwXpeYb71kj
-	Iz5dDKKV7lilvxNjsE4ztTJvadfhdVBKpKCZddt46xysvwTBYlUZfLoS6YcZW5hqc/ec6j76Gzb
-	WrAOH1cTveJ9eiA1uGH7SzRzN8z84gq4bSwV4eCJBy8PtvonBtNGjhedTv1JpRfhTERmCJWYJGz
-	8RxUDYq0FzvpH4Hq8LIhXSTWd3z0jpP9vgp/bM9sChbT7LdpiU+jnZl3o7S136bPJowQ/fOcqS/
-	chs6VBWeZcWBAF2O9QxfwuKAgrntTAhyN2wXf9m5hVJQ/pPHY/tqFJfROH2Op2kZbVA2gapLC2c
-	8V2t9QV8quEN1RobM+Rg==
-X-Google-Smtp-Source: AGHT+IGb2anSnU9yUNqdmZbv+SeaRHh1StnydsjMu/nMg2MY1ixTXj9wwNITrqgGCjoJ7tz/T/jZVA==
-X-Received: by 2002:a5d:5f44:0:b0:42b:41dc:1b58 with SMTP id ffacd0b85a97d-42cc1d19957mr11009024f8f.45.1763975365182;
-        Mon, 24 Nov 2025 01:09:25 -0800 (PST)
-Received: from draszik.lan ([212.129.72.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7fb9190sm27162766f8f.33.2025.11.24.01.09.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Nov 2025 01:09:24 -0800 (PST)
-Message-ID: <9cad7b42dbfea351fb3b708736bf6f6715bcf694.camel@linaro.org>
-Subject: Re: [PATCH 6/6] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
- setting charger mode
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>, Rob Herring	
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley	
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, Greg Kroah-Hartman	
- <gregkh@linuxfoundation.org>, Badhri Jagan Sridharan <badhri@google.com>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Peter Griffin
- <peter.griffin@linaro.org>, Tudor Ambarus	 <tudor.ambarus@linaro.org>, Alim
- Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, RD
- Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Date: Mon, 24 Nov 2025 09:09:37 +0000
-In-Reply-To: <20251123-max77759-charger-v1-6-6b2e4b8f7f54@google.com>
-References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
-	 <20251123-max77759-charger-v1-6-6b2e4b8f7f54@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-2+build3 
+	s=arc-20240116; t=1763978812; c=relaxed/simple;
+	bh=ot8hkFeIo/UEuyzJDh/y9H2Galv1zgqlnaHSJR4Vh40=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=iwAKXFfIwm1wkwZG4pOOgHdXk080eJjYfO5D14/x6ZvqFqSMqzmcXoCY8iOyxEY/j1b7fPNwrMWTrWXInuBCmhaUodM8sAkaQ3+zvCEF7A8+ZPmEArP7sOSHCBGG/NWmG4hJ010su9VjLh0L7C/YwopJ3EF4fl4GiIJjqWthW24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=Fi7nIrOp; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20251124100641epoutp042ba669b550e638ab8d357a2abe6099d8~66V-MqgTF2736027360epoutp04Y
+	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 10:06:41 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20251124100641epoutp042ba669b550e638ab8d357a2abe6099d8~66V-MqgTF2736027360epoutp04Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1763978801;
+	bh=518PqviNXgLoda/W13kyXia8krI82Z2gN0kxwjhBdwY=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=Fi7nIrOpoegc7az/EYd3pi6apnrHP7xP+8sareZg4K9ApTXV20sUTtmfHAoRZyy6a
+	 VKysoaT0zHd017Jg1YyilFHcdKU9SEylYjG4QT9BciYD+pdlia4aavHbOT3+Elze8K
+	 MtXbmQN8u1sd5eGxEyK4p8/BRWDM14NnF7ogp9cU=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTPS id
+	20251124100641epcas2p155850be961958980e0318057e970fbef~66V_uI9Os1469814698epcas2p1K;
+	Mon, 24 Nov 2025 10:06:41 +0000 (GMT)
+Received: from epcas2p4.samsung.com (unknown [182.195.38.204]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4dFM1D5XcDz2SSKY; Mon, 24 Nov
+	2025 10:06:40 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
+	20251124100639epcas2p1497455bf036f5c82178f129b59fbbe86~66V9Qgz4R1469814698epcas2p1G;
+	Mon, 24 Nov 2025 10:06:39 +0000 (GMT)
+Received: from KORCO115296 (unknown [12.80.207.128]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20251124100639epsmtip21c1959008965844f498e49b5c01927d9~66V9JltAm1979019790epsmtip2S;
+	Mon, 24 Nov 2025 10:06:39 +0000 (GMT)
+From: =?utf-8?B?7IaQ7Iug?= <shin.son@samsung.com>
+To: "'Daniel Lezcano'" <daniel.lezcano@linaro.org>, "'Bartlomiej
+ Zolnierkiewicz'" <bzolnier@gmail.com>, "'Krzysztof Kozlowski'"
+	<krzk@kernel.org>, "'Rafael J . Wysocki'" <rafael@kernel.org>, "'Zhang Rui'"
+	<rui.zhang@intel.com>, "'Lukasz Luba'" <lukasz.luba@arm.com>, "'Rob
+	Herring'" <robh@kernel.org>, "'Conor Dooley'" <conor+dt@kernel.org>, "'Alim
+	Akhtar'" <alim.akhtar@samsung.com>
+Cc: "'Henrik Grimler'" <henrik@grimler.se>, <linux-pm@vger.kernel.org>,
+	<linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<shin.son@samsung.com>
+In-Reply-To: <2180a854-8ba6-4424-add2-eb34637530c1@linaro.org>
+Subject: RE: [PATCH v7 RESEND 2/3] thermal: exynos_tmu: Support new hardware
+ and update TMU interface
+Date: Mon, 24 Nov 2025 19:06:33 +0900
+Message-ID: <000001dc5d2a$0697bf10$13c73d30$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQJR08pAfg/+KuTfxFjIW+Bmb4uKqAKoesbtAuyt0KIBiaSaQbPdi13w
+Content-Language: ko
+X-CMS-MailID: 20251124100639epcas2p1497455bf036f5c82178f129b59fbbe86
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+cpgsPolicy: CPGSC10-234,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237
+References: <20251113064022.2701578-1-shin.son@samsung.com>
+	<CGME20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237@epcas2p1.samsung.com>
+	<20251113064022.2701578-3-shin.son@samsung.com>
+	<2180a854-8ba6-4424-add2-eb34637530c1@linaro.org>
 
-Hi Amit,
+Hello, Daniel Lezcano
 
-On Sun, 2025-11-23 at 08:35 +0000, Amit Sunil Dhamne via B4 Relay wrote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
+> On 11/13/25 07:40, Shin Son wrote:
+> > +	if (data->soc =3D=3D SOC_ARCH_EXYNOSAUTOV920 && code_diff < 0)
+> > +		temp =3D temp * 65 / (57 + data->slope_comp);
 >=20
-> TCPCI maxim driver directly writes to the charger's register space to
-> set charger mode depending on the power role. As MAX77759 chg driver
-> exists, this WAR is not required.
+> No litterals, comments, etc ...
+
+I'll move those fomulas into the variant data via the .data field in the of=
+_device_id match table.
+
+> > +static void update_con_reg(struct exynos_tmu_data *data) =7B
+> > +	u32 val, t_buf_vref_sel, t_buf_slope_sel;
+> > +
+> > +	val =3D readl(data->base + EXYNOS_TMU_REG_TRIMINFO);
+> > +	t_buf_vref_sel =3D (val >> EXYNOSAUTOV920_TMU_T_BUF_VREF_SEL_SHIFT)
+> > +				& EXYNOSAUTOV920_TMU_T_BUF_VREF_SEL_MASK;
+> > +	t_buf_slope_sel =3D (val >> EXYNOSAUTOV920_TMU_T_BUF_SLOPE_SEL_SHIFT)
+> > +				& EXYNOSAUTOV920_TMU_T_BUF_SLOPE_SEL_MASK;
+> > +
+> > +	val =3D readl(data->base +  EXYNOSAUTOV920_TMU_REG_CONTROL);
+> > +	val &=3D =7E(EXYNOS_TMU_REF_VOLTAGE_MASK <<
+> EXYNOS_TMU_REF_VOLTAGE_SHIFT);
+> > +	val =7C=3D (t_buf_vref_sel << EXYNOS_TMU_REF_VOLTAGE_SHIFT);
+> > +	val &=3D =7E(EXYNOS_TMU_BUF_SLOPE_SEL_MASK <<
+> EXYNOS_TMU_BUF_SLOPE_SEL_SHIFT);
+> > +	val =7C=3D (t_buf_slope_sel << EXYNOS_TMU_BUF_SLOPE_SEL_SHIFT);
+> > +	writel(val, data->base + EXYNOSAUTOV920_TMU_REG_CONTROL);
+> > +
+> > +	val =3D readl(data->base + EXYNOSAUTOV920_TMU_REG_CONTROL1);
+> > +	val &=3D =7E(EXYNOSAUTOV920_TMU_NUM_PROBE_MASK <<
+> EXYNOSAUTOV920_TMU_NUM_PROBE_SHIFT);
+> > +	val &=3D =7E(EXYNOSAUTOV920_TMU_LPI_MODE_MASK <<
+> EXYNOSAUTOV920_TMU_LPI_MODE_SHIFT);
+> > +	val =7C=3D (data->sensor_count << EXYNOSAUTOV920_TMU_NUM_PROBE_SHIFT)=
+;
+> > +	writel(val, data->base + EXYNOSAUTOV920_TMU_REG_CONTROL1);
+> > +
+> > +	writel(1, data->base + EXYNOSAUTOV920_TMU_SAMPLING_INTERVAL);
+> > +	writel(EXYNOSAUTOV920_TMU_AVG_CON_UPDATE, data->base +
+> EXYNOSAUTOV920_TMU_REG_AVG_CONTROL);
+> > +	writel(EXYNOSAUTOV920_TMU_COUNTER_VALUE0_UPDATE,
+> > +	       data->base + EXYNOSAUTOV920_TMU_REG_COUNTER_VALUE0);
+> > +	writel(EXYNOSAUTOV920_TMU_COUNTER_VALUE1_UPDATE,
+> > +	       data->base + EXYNOSAUTOV920_TMU_REG_COUNTER_VALUE1);
+> > +=7D
+> > +
 >=20
-> Instead, use a regulator interface to set OTG Boost mode.
->=20
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> ---
-> =C2=A0drivers/usb/typec/tcpm/tcpci_maxim.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-|=C2=A0 1 +
-> =C2=A0drivers/usb/typec/tcpm/tcpci_maxim_core.c | 48 ++++++++++++++++++++=
-+----------
-> =C2=A02 files changed, 34 insertions(+), 15 deletions(-)
->=20
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcp=
-m/tcpci_maxim.h
-> index b33540a42a95..6c82a61efe46 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.h
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
-> @@ -60,6 +60,7 @@ struct max_tcpci_chip {
-> =C2=A0	struct tcpm_port *port;
-> =C2=A0	enum contamiant_state contaminant_state;
-> =C2=A0	bool veto_vconn_swap;
-> +	struct regulator *otg_reg;
-> =C2=A0};
-> =C2=A0
-> =C2=A0static inline int max_tcpci_read16(struct max_tcpci_chip *chip, uns=
-igned int reg, u16 *val)
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/type=
-c/tcpm/tcpci_maxim_core.c
-> index 19f638650796..6d819a762fa1 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> @@ -10,6 +10,7 @@
-> =C2=A0#include <linux/kernel.h>
-> =C2=A0#include <linux/module.h>
-> =C2=A0#include <linux/regmap.h>
-> +#include <linux/regulator/consumer.h>
-> =C2=A0#include <linux/usb/pd.h>
-> =C2=A0#include <linux/usb/tcpci.h>
-> =C2=A0#include <linux/usb/tcpm.h>
-> @@ -202,32 +203,49 @@ static void process_rx(struct max_tcpci_chip *chip,=
- u16 status)
-> =C2=A0	tcpm_pd_receive(chip->port, &msg, rx_type);
-> =C2=A0}
-> =C2=A0
-> +static int get_otg_regulator_handle(struct max_tcpci_chip *chip)
-> +{
-> +	if (IS_ERR_OR_NULL(chip->otg_reg)) {
-> +		chip->otg_reg =3D devm_regulator_get_exclusive(chip->dev,
-> +							=C2=A0=C2=A0=C2=A0=C2=A0 "otg-vbus");
-> +		if (IS_ERR_OR_NULL(chip->otg_reg)) {
-> +			dev_err(chip->dev,
-> +				"Failed to get otg regulator handle");
-> +			return -ENODEV;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> =C2=A0static int max_tcpci_set_vbus(struct tcpci *tcpci, struct tcpci_dat=
-a *tdata, bool source, bool sink)
-> =C2=A0{
-> =C2=A0	struct max_tcpci_chip *chip =3D tdata_to_max_tcpci(tdata);
-> -	u8 buffer_source[2] =3D {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SOURCE};
-> -	u8 buffer_sink[2] =3D {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SINK};
-> -	u8 buffer_none[2] =3D {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_OFF};
-
-You should also remove the corresponding #defines at the top of this file.
-
-> -	struct i2c_client *i2c =3D chip->client;
-> =C2=A0	int ret;
-> =C2=A0
-> -	struct i2c_msg msgs[] =3D {
-> -		{
-> -			.addr =3D MAX_BUCK_BOOST_SID,
-> -			.flags =3D i2c->flags & I2C_M_TEN,
-> -			.len =3D 2,
-> -			.buf =3D source ? buffer_source : sink ? buffer_sink : buffer_none,
-> -		},
-> -	};
-> -
-> =C2=A0	if (source && sink) {
-> =C2=A0		dev_err(chip->dev, "Both source and sink set\n");
-> =C2=A0		return -EINVAL;
-> =C2=A0	}
-> =C2=A0
-> -	ret =3D i2c_transfer(i2c->adapter, msgs, 1);
-> +	ret =3D get_otg_regulator_handle(chip);
-> +	if (ret) {
-> +		/*
-> +		 * Regulator is not necessary for sink only applications. Return
-> +		 * success in cases where sink mode is being modified.
-> +		 */
-> +		return source ? ret : 1;
-> +	}
-> +
-> +	if (source) {
-> +		if (!regulator_is_enabled(chip->otg_reg))
-> +			ret =3D regulator_enable(chip->otg_reg);
-> +	} else {
-> +		if (regulator_is_enabled(chip->otg_reg))
-> +			ret =3D regulator_disable(chip->otg_reg);
-> +	}
-
-Given otg_reg is the fake regulator created by a previous patch in this
-series, this means that the regulator API is really used to configure two
-out of 16 possible charger modes here. That doesn't look right.
-
-Cheers,
-Andre'
+> This is unreadable; please make it understandable for those who don=E2=80=
+=99t=20have=0D=0A>=20the=20documentation=20(explicit=20static=20inline=20fu=
+nctions,=20comments,=20etc=20...).=0D=0A=0D=0AI'll=20restructure=20this=20c=
+ode=20by=20introducing=20explicit=20static=20inline=20helper=20functions=20=
+and=20proper=20comments=20to=20improve=20readability.=0D=0A=0D=0A>=20>=20+s=
+tatic=20void=20exynosautov920_tmu_disable_high(struct=20exynos_tmu_data=0D=
+=0A>=20>=20+*data)=20=7B=0D=0A>=20>=20+=09/*=20Again,=20this=20is=20handled=
+=20by=20polling.=20*/=20=7D=0D=0A>=20=0D=0A>=20The=20driver=20would=20deser=
+ve=20some=20cleanups.=20Instead=20of=20having=20empty=20callbacks,=0D=0A>=
+=20check=20in=20exynos_set_trips()=20if=20the=20ops=20is=20=21NULL.=20Then=
+=20remove=20all=20no-op=20ops.=0D=0A=0D=0AOk,=20I'll=20update=20exynos_set_=
+trips()=20to=20check=20for=20NULL=20ops=20and=20remove=20the=20no-op=20call=
+backs=20accordingly.=0D=0A=0D=0A>=20>=20+static=20void=20exynosautov920_tmu=
+_set_crit_temp(struct=20exynos_tmu_data=0D=0A>=20>=20+*data,=20u8=20temp)=
+=20=7B=0D=0A>=20>=20+=09unsigned=20int=20idx;=0D=0A>=20>=20+=0D=0A>=20>=20+=
+=09for=20(idx=20=3D=200;=20idx=20<=20data->sensor_count;=20idx++)=20=7B=0D=
+=0A>=20>=20+=09=09if=20(=21data->tzd_array=5Bidx=5D)=0D=0A>=20>=20+=09=09=
+=09continue;=0D=0A>=20>=20+=0D=0A>=20>=20+=09=09exynos_tmu_update_temp(data=
+,=0D=0A>=20EXYNOSAUTOV920_TMU_REG_THRESHOLD(idx),=2016,=20temp);=0D=0A>=20>=
+=20+=09=09exynos_tmu_update_bit(data,=0D=0A>=20EXYNOSAUTOV920_TMU_REG_INTEN=
+(idx),=207,=20true);=0D=0A>=20>=20+=09=7D=0D=0A>=20>=20+=7D=0D=0A>=20=0D=0A=
+>=20There=20is=20something=20wrong=20in=20the=20driver=20design.=0D=0A>=20=
+=0D=0A>=20exynosautov920_tmu_set_crit_temp()=20is=20called=20from=0D=0A>=20=
+exynos_thermal_zone_configure()=20and=20the=20routine=20above=20sets=20the=
+=20temperature=0D=0A>=20on=20all=20the=20thermal=20zone=20while=20this=20on=
+e=20is=20retrieved=20from=20one=20thermal=20zone.=0D=0A>=20=0D=0A>=20Which=
+=20results=20in:=0D=0A>=20=0D=0A>=20=09for=20all=20tz=20do;=0D=0A>=20=09=09=
+for=20all=20tz=20do;=0D=0A>=20=09=09=09if=20=21tz=20then=20continue;=0D=0A>=
+=20=09=09=09set_crit_temp(tz)=0D=0A>=20=0D=0A>=20No,=20this=20driver=20need=
+s=20to=20be=20revisited=20and=20cleanup=20before=20sending=20changes=0D=0A>=
+=20for=20multiple=20sensors=20support.=0D=0A>=20=0D=0A>=20What=20percentage=
+=20of=20code=20sharing=20is=20there=20with=20the=20existing=20driver=20?=0D=
+=0A=0D=0AOverall,=20I=20would=20say=20that=20roughly=2060%=20of=20the=20log=
+ic=20can=20be=20shared.=0D=0AThe=20temperature=20reading=20and=20emulation=
+=20paths=20are=20similar,=20but=20the=20initialization=20sequence=20differs=
+=20significantly.=0D=0A=0D=0AGiven=20this=20level=20of=20divergence,=20woul=
+d=20introducing=20a=20separate=20driver=20=0D=0A(instead=20of=20extending=
+=20the=20current=20one=20with=20many=20special-case=20paths)=20be=20accepta=
+ble?=0D=0A=0D=0A>=20>=20+static=20void=20exynosautov920_tmu_initialize(stru=
+ct=20platform_device=0D=0A>=20>=20+*pdev)=20=7B=0D=0A>=20>=20+=09struct=20e=
+xynos_tmu_data=20*data=20=3D=20platform_get_drvdata(pdev);=0D=0A>=20>=20+=
+=09unsigned=20int=20val;=0D=0A>=20>=20+=0D=0A>=20>=20+=09data->tmu_control(=
+pdev,=20false);=0D=0A>=20>=20+=0D=0A>=20>=20+=09update_con_reg(data);=0D=0A=
+>=20>=20+=0D=0A>=20>=20+=09val=20=3D=20readl(data->base=20+=20EXYNOS_TMU_RE=
+G_TRIMINFO);=0D=0A>=20>=20+=09data->cal_type=20=3D=20TYPE_TWO_POINT_TRIMMIN=
+G;=0D=0A>=20>=20+=09data->slope_comp=20=3D=20(val=20>>=20EXYNOSAUTOV920_SLO=
+PE_COMP)=20&=0D=0A>=20>=20+EXYNOSAUTOV920_SLOPE_COMP_MASK;=0D=0A>=20>=20+=
+=0D=0A>=20>=20+=09val=20=3D=20readl(data->base=20+=20EXYNOSAUTOV920_SENSOR0=
+_TRIM_INFO);=0D=0A>=20>=20+=09data->temp_error1=20=3D=20(val=20>>=20EXYNOSA=
+UTOV920_TRIMINFO_25_SHIFT)=20&=0D=0A>=20EXYNOSAUTOV920_TRIM_MASK;=0D=0A>=20=
+>=20+=09data->temp_error2=20=3D=20(val=20>>=20EXYNOSAUTOV920_TRIMINFO_85_SH=
+IFT)=20&=0D=0A>=20>=20+EXYNOSAUTOV920_TRIM_MASK;=0D=0A>=20>=20+=0D=0A>=20>=
+=20+=09val=20=3D=20readl(data->base=20+=20EXYNOSAUTOV920_TMU_REG_TRIMINFO2)=
+;=0D=0A>=20>=20+=09val=20=3D=20(val=20>>=20EXYNOSAUTOV920_CALIB_SEL_TEMP)=
+=20&=0D=0A>=20>=20+EXYNOSAUTOV920_CALIB_SEL_TEMP_MASK;=0D=0A>=20>=20+=0D=0A=
+>=20>=20+=09data->calib_temp=20=3D=20(EXYNOS_SECOND_POINT_TRIM=20+=20(20=20=
+*=20val));=20=7D=0D=0A>=20>=20+=0D=0A>=20=0D=0A>=20This=20is=20unreadable;=
+=20please=20make=20it=20understandable=20for=20those=20who=20don=E2=80=99t=
+=20have=0D=0A>=20the=20documentation=20(explicit=20static=20inline=20functi=
+ons,=20comments,=20etc=20...).=0D=0A=0D=0AOk,=20I'll=20refactor=20this=20co=
+de=20using=20explicit=20static=20inline=20helpers=20and=20comments.=0D=0A=
+=0D=0A>=20>=20+static=20void=20exynosautov920_tmu_control(struct=20platform=
+_device=20*pdev,=0D=0A>=20>=20+bool=20on)=20=7B=0D=0A>=20>=20+=09struct=20e=
+xynos_tmu_data=20*data=20=3D=20platform_get_drvdata(pdev);=0D=0A>=20>=20+=
+=09unsigned=20int=20con;=0D=0A>=20>=20+=0D=0A>=20>=20+=09con=20=3D=20readl(=
+data->base=20+=20EXYNOSAUTOV920_TMU_REG_CONTROL);=0D=0A>=20>=20+=0D=0A>=20>=
+=20+=09if=20(on)=20=7B=0D=0A>=20>=20+=09=09con=20=7C=3D=20BIT(EXYNOS_TMU_TH=
+ERM_TRIP_EN_SHIFT);=0D=0A>=20>=20+=09=09con=20=7C=3D=20BIT(EXYNOS_TMU_CORE_=
+EN_SHIFT);=0D=0A>=20>=20+=09=7D=20else=20=7B=0D=0A>=20>=20+=09=09con=20&=3D=
+=20=7EBIT(EXYNOS_TMU_THERM_TRIP_EN_SHIFT);=0D=0A>=20>=20+=09=09con=20&=3D=
+=20=7EBIT(EXYNOS_TMU_CORE_EN_SHIFT);=0D=0A>=20>=20+=09=7D=0D=0A>=20>=20+=0D=
+=0A>=20>=20+=09writel(con,=20data->base=20+=20EXYNOSAUTOV920_TMU_REG_CONTRO=
+L);=20=7D=0D=0A>=20=0D=0A>=20Document=20a=20bit=20the=20code=20please.=0D=
+=0A=0D=0ASure,=20I=E2=80=99ll=20document=20this=20part=20properly=20by=20ad=
+ding=20clear=20comments=20and=20splitting=20the=20register=20options=20into=
+=20explicit=20helper=20functions.=0D=0A=0D=0A>=20>=20=20=20static=20irqretu=
+rn_t=20exynos_tmu_threaded_irq(int=20irq,=20void=20*id)=0D=0A>=20>=20=20=20=
+=7B=0D=0A>=20>=20=20=20=09struct=20exynos_tmu_data=20*data=20=3D=20id;=0D=
+=0A>=20>=20+=09int=20idx;=0D=0A>=20>=0D=0A>=20>=20-=09thermal_zone_device_u=
+pdate(data->tzd,=20THERMAL_EVENT_UNSPECIFIED);=0D=0A>=20>=20+=09for=20(idx=
+=20=3D=200;=20idx=20<=20data->sensor_count;=20idx++)=20=7B=0D=0A>=20>=20+=
+=09=09if=20(=21data->tzd_array=5Bidx=5D)=0D=0A>=20>=20+=09=09=09continue;=
+=0D=0A>=20>=20+=0D=0A>=20>=20+=09=09thermal_zone_device_update(data->tzd_ar=
+ray=5Bidx=5D,=0D=0A>=20>=20+THERMAL_EVENT_UNSPECIFIED);=0D=0A>=20I=20unders=
+tand=20the=20main=20reason=20is=20to=20keep=20a=20common=20isr=20but=20you=
+=20should=0D=0A>=20*not*=20update=20all=20the=20thermal=20zones.=20There=20=
+is=20an=20amount=20of=20processing=0D=0A>=20behind=20this=20function=20addi=
+ng=20a=20significant=20overhead.=0D=0A>=20=0D=0A>=20So=20somehow=20readl(da=
+ta->base=20+=20EXYNOSAUTOV920_TMU_REG_INT_PEND(idx));=0D=0A>=20should=20be=
+=20used=20here=20to=20know=20if=20the=20thermal=20zone=20has=20to=20be=20up=
+dated=20or=20not.=0D=0A=0D=0AOK,=20I'll=20update=20the=20ISR=20so=20that=20=
+it=20checks=20the=20pending=20register=20before=20calling=20'thermal_zone_d=
+evice_update()',=0D=0AAnd=20only=20update=20the=20relevant=20thermal=20zone=
+s.=20=0D=0A=0D=0A>=20>=20=20=20static=20const=20struct=20of_device_id=20exy=
+nos_tmu_match=5B=5D=20=3D=20=7B=0D=0A>=20>=20=20=20=09=7B=0D=0A>=20>=20=20=
+=20=09=09.compatible=20=3D=20=22samsung,exynos3250-tmu=22,=20=40=40=20-833,=
+6=20+1044,9=20=40=40=0D=0A>=20>=20static=20const=20struct=20of_device_id=20=
+exynos_tmu_match=5B=5D=20=3D=20=7B=0D=0A>=20>=20=20=20=09=7D,=20=7B=0D=0A>=
+=20>=20=20=20=09=09.compatible=20=3D=20=22samsung,exynos7-tmu=22,=0D=0A>=20=
+>=20=20=20=09=09.data=20=3D=20(const=20void=20*)SOC_ARCH_EXYNOS7,=0D=0A>=20=
+>=20+=09=7D,=20=7B=0D=0A>=20>=20+=09=09.compatible=20=3D=20=22samsung,exyno=
+sautov920-tmu=22,=0D=0A>=20>=20+=09=09.data=20=3D=20(const=20void=20*)SOC_A=
+RCH_EXYNOSAUTOV920,=0D=0A>=20=0D=0A>=20Time=20to=20do=20cleanups=20in=20the=
+=20driver.=20Use=20at=20your=20advantage=20the=20.data=20to=0D=0A>=20store=
+=20the=20relevant=20info=20instead=20of=20a=20awful=20else-if=20in=20the=20=
+different=0D=0A>=20functions=20above.=0D=0A=0D=0AOK,=20I'll=20refactor=20th=
+is=20by=20using=20the=20.data=20field.=0D=0AHowever,=20since=20ExynosAutov9=
+20=20diverges=20significantly=20from=20the=20existing=20driver,=0D=0AWould=
+=20introducing=20a=20separate=20driver=20instead=20of=20unifying=20everythi=
+ng=20be=20acceptable?=0D=0A=0D=0A>=20>=20=20=20=09=7D,=0D=0A>=20>=20=20=20=
+=09=7B=20=7D,=0D=0A>=20>=20=20=20=7D;=0D=0A>=20>=20=40=40=20-865,6=20+1079,=
+10=20=40=40=20static=20int=20exynos_map_dt_data(struct=0D=0A>=20>=20platfor=
+m_device=20*pdev)=0D=0A>=20>=0D=0A>=20>=20=20=20=09data->soc=20=3D=20(uintp=
+tr_t)of_device_get_match_data(&pdev->dev);=0D=0A>=20>=0D=0A>=20>=20+=09data=
+->sensor_count=20=3D=20EXYNOS_DEFAULT_SENSOR_COUNT;=0D=0A>=20>=20+=0D=0A>=
+=20>=20+=09data->calib_temp=20=3D=20EXYNOS_SECOND_POINT_TRIM;=0D=0A>=20>=20=
++=0D=0A>=20>=20=20=20=09switch=20(data->soc)=20=7B=0D=0A>=20>=20=20=20=09ca=
+se=20SOC_ARCH_EXYNOS4210:=0D=0A>=20>=20=20=20=09=09data->tmu_set_low_temp=
+=20=3D=20exynos4210_tmu_set_low_temp;=20=40=40=20-=0D=0A>=20945,6=0D=0A>=20=
+>=20+1163,19=20=40=40=20static=20int=20exynos_map_dt_data(struct=20platform=
+_device=20*pdev)=0D=0A>=20>=20=20=20=09=09data->min_efuse_value=20=3D=2015;=
+=0D=0A>=20>=20=20=20=09=09data->max_efuse_value=20=3D=20100;=0D=0A>=20>=20=
+=20=20=09=09break;=0D=0A>=20>=20+=09case=20SOC_ARCH_EXYNOSAUTOV920:=0D=0A>=
+=20>=20+=09=09data->tmu_set_low_temp=20=3D=20exynosautov920_tmu_set_low_tem=
+p;=0D=0A>=20>=20+=09=09data->tmu_set_high_temp=20=3D=20exynosautov920_tmu_s=
+et_high_temp;=0D=0A>=20>=20+=09=09data->tmu_disable_low=20=3D=20exynosautov=
+920_tmu_disable_low;=0D=0A>=20>=20+=09=09data->tmu_disable_high=20=3D=20exy=
+nosautov920_tmu_disable_high;=0D=0A>=20>=20+=09=09data->tmu_set_crit_temp=
+=20=3D=20exynosautov920_tmu_set_crit_temp;=0D=0A>=20>=20+=09=09data->tmu_in=
+itialize=20=3D=20exynosautov920_tmu_initialize;=0D=0A>=20>=20+=09=09data->t=
+mu_control=20=3D=20exynosautov920_tmu_control;=0D=0A>=20>=20+=09=09data->tm=
+u_read=20=3D=20exynosautov920_tmu_read;=0D=0A>=20>=20+=09=09data->tmu_set_e=
+mulation=20=3D=20exynos4412_tmu_set_emulation;=0D=0A>=20>=20+=09=09data->tm=
+u_clear_irqs=20=3D=20exynosautov920_tmu_clear_irqs;=0D=0A>=20>=20+=09=09dat=
+a->sensor_count=20=3D=20EXYNOS_MAX_SENSOR_COUNT;=0D=0A>=20>=20+=09=09break;=
+=0D=0A>=20=0D=0A>=20Same=20comment=20as=20above.=0D=0A=0D=0AOk,=20I'll=20re=
+factor=20this=20by=20using=20the=20.data=20field=20to=20move=20the=20SoC-sp=
+ecific=20callbacks=20into=20a=20proper=0D=0Avariant=20structure.=0D=0A=0D=
+=0A>=20--=0D=0A=0D=0AThank=20you=20for=20your=20detailed=20feedback.=20I=20=
+appreciate=20it.=0D=0A=0D=0A=0D=0A
 
