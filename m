@@ -1,240 +1,181 @@
-Return-Path: <linux-pm+bounces-38458-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38459-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D8DAC8027C
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:16:30 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55DB8C80282
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:16:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9DB7B3A9113
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:13:03 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EE3754E10BA
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:16:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3237D2FDC44;
-	Mon, 24 Nov 2025 11:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6050E2F5473;
+	Mon, 24 Nov 2025 11:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="GHstaX41";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="IR+OxEW4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oG5NnK/O"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812952FD69D
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 11:12:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE7326F467
+	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 11:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763982777; cv=none; b=UlV6dZvRBZtQeve5KuvoQ0AZzk5CUUOQC2tzyNXp4A5KZutzSOjABeuQHvHeX/aWF1jZD4e52PRAJX0QiL3g8iCmuko2Gci3QK/xwXf8hy9XFpdlvG7FDcjselQm/4i4IV5KVQbRHL2UneV7vo2tld1LCibMRNH0qMXEhKdMV9s=
+	t=1763982996; cv=none; b=H7lsvIThy1iNjID7lF4AEQ0l4JLH+tL3X1Hnaw5xlRimiJ9zBTUommY9DDjMx+2UGMCTwJ44j5fcRek+kr4ZF92jxFut6qC7l7QKtJy31Rg522ogES1dtrUI3cpq6pfaoxrYZ37UmHlge6aRuQQpLFxA0iupgYPfckzc4/l4jX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763982777; c=relaxed/simple;
-	bh=m8QF8XtXdOChb3k0Ad2Im0bC50t5/m7Y4bs/tCpVwCs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pecKm/qng84b/lh7I1GRBAK+c3A3pKDBsBqe4PAlHWYWcLpS+cTCTa2+8jokt0wYRvluStbJGCGnGWHe7CIf1hhi8eBZvYPFswLBIatXkaXJpOCYrxlpzikm4osB1HXJTRbYrMR+tnNjznzCNXrbQq7lvFqpaFEfpf5fQNJgCD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=GHstaX41; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=IR+OxEW4; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AO8K14C2117388
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 11:12:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	r4pwjsLb94viwOUeZY5LWZFqC+Yh636LcNeJkFUYm5w=; b=GHstaX410BgvFWMH
-	6TevAEtS9HDF7Zv2Lwjb4+hQWKEX8IGRvirHS1usIiK2yszf/7oyNf+Kr6PAeISN
-	VcJ57CUQg6dIRAE/mr+4FBVaH/ufzaV0ZKdWxn3yq8wVqoAh+c1oHQ4Xn+OtTpIF
-	DbpqrmxpC6o/MBiK3Mr9cBN9xCLSQqGoOYPFuveQ9Itu/aDl9P/ePwBCKLEs0yhb
-	j2j9XTNeMFglTFgBZuybl2FGfvZ8y3XUFroMJEjhQq9AnnAp2YNVWPAMnReYMr8r
-	r6xbeu1pWVA0OQenC9+B/lWjB0kOTcAy1TG0UYI5kaR1KUGxiL2Qh6oaBIXqHLjb
-	Y+6vXw==
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ak694vrbp-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 11:12:54 +0000 (GMT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2955f0b8895so52629475ad.0
-        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 03:12:54 -0800 (PST)
+	s=arc-20240116; t=1763982996; c=relaxed/simple;
+	bh=PkrzqQiN/qcj/0t3ahO3DxqiRf/xvfoXnTu2D4FlPMg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nzIJLfLeb8vHlE0j5CITO3gwBfKq+GHbXvlryMrwq8JdgFr2dLeAZ13zHQ9K8+sJIHM3lCmOOMIw9g8KFkTKeiQOFY7Wzvl2lDKoV5HlPY3WAOWqGW3/gVS3cyTavxS1zITzMdHbTnKXOOFqgHWrTHTozPfoOlAFZgAeInGjYig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oG5NnK/O; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-477a2ab455fso45007855e9.3
+        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 03:16:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1763982774; x=1764587574; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=r4pwjsLb94viwOUeZY5LWZFqC+Yh636LcNeJkFUYm5w=;
-        b=IR+OxEW4jGa2Ah6dVsQZs7SEdd/0hr14IQYaF5niiEOLADsbZ2ukxiOnTRWoycLn1T
-         ZWa1qC/Q91X+B7WaZPnVAKeCa6i4iu88ljHP08uHmK9sY0yIan7Gs0PkbKtnG8m29qlQ
-         ui/FDxQl415g2rO3ceTX7W3o7NnYHfXyLpomShDNt67S4Mk7S5yEBM4a8Qvt1RkG+UlP
-         0Hf/fnn4Lw6XMkAh/p+uxxPDQTR/MlYJiZgYqgdqPy4Kucat7D5n2jNbRDiz+O/0a44M
-         j+5x4IQ/1C1Bqt+pqJyhIYYPMXx2BLIgVBJFDxV7qM2Btx/kLV5L+Edi5HUXx5uUdmCB
-         XLrA==
+        d=linaro.org; s=google; t=1763982993; x=1764587793; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UuRrMhunT9TDWnZHLII8BIXNolS7BUSymKB5ka4d4O0=;
+        b=oG5NnK/O0Dwjxg6PFUKLHtTVLys9LDlAWbhAZjHzdzxU+KnlIY+tvhiEbgQo8z6IhM
+         +qNJLswUiuAafz0F5c6h43ky2YawIcfM+wk6mzjVnpTkvCEcxGCF4RR/5qvb1zwzdx7O
+         N+Wbdc1U91nrrIfIuZVcdmVQRFBTqCiuiJ9E91TxDm3J0XNuVAKy/YVmQEhvmcmTbd+n
+         gUvWqUlmRqrm765g2hxlHk8EYg6MQ2uQX1UB4gHsjk47vMrpHwDDNjVRVTdl57WONLdP
+         cNh0GLoWclbhLpvY7TORQ7cHw+iUeVEHk7AP/7J/Axkwkka4Z4oCiArkn2KJ8RI4QExW
+         ivCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763982774; x=1764587574;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=r4pwjsLb94viwOUeZY5LWZFqC+Yh636LcNeJkFUYm5w=;
-        b=gFP2ItO5H3IhVkCZ6lSpvNXSi0kI03BzK/gjHmGs8Tws/7tcM1qm8HpOE08uIpJL82
-         YfSUZs/jAsxxpDjVxBaX2EC76z2QpbPsMzEPIwXXAMvRjciu5pEikGq++mC8EFpf8/gE
-         6tUQPfn3I77Xqg/zJjc2pw7LNCprxU83F0cT+UN8ZlQbPZR7IKoB01Nldabc8Kfjc1Jk
-         lh4DHki4koVi+o/HO0b3AfKbt//RmFZQ1eY0QqcHbu5RIQkQ6U8bC9iGbjrWsQ797zqw
-         viDRbhhAe2cu6fgoK3JWSlRvRy3WmVLrqgKtpdvDHemRfJa5WC5Xh7StxqwhFHOoouoE
-         YsbA==
-X-Gm-Message-State: AOJu0YwS42HV5UkehAACpbHc03UiidU8hCLu1vcpU+9+hig/3FZk3FxM
-	DDiDyXFzgH1YJTglPCXjM9j0LGuBsqe7S3TYGPLvyyb7FjH1ZaJvGqA9gtKmzB9rRX8w6ccuJrn
-	v/oPNWR39Gv0jnUGh69WI8PpgNNl4v41EYVOTkzdFr3OJy0A77czRJRdingWT
-X-Gm-Gg: ASbGncuL3j6+JAdV1wUgG6AbGFvjnShRNt7RvE/4NXtSfylqS8TSn9NuzMUKE5IsXTY
-	AS9jZ0MQKgCsIzFEQoBRL41ivdh/+N3zt9T+/SmIg846dErzrSJqAWDWzJMxD8QNDK9ZiDHejby
-	6yGJXx0YL7MTQS5U9UVIFGXYdGH291qX68jAd7rf0ZfXbfH2kFmo2qTm5lWTppNoUZ6QFtWztBa
-	63XBEv5NeKQ/VBbp4vU+UcKmdegR1XgVxcN5TS/zmDR0fSG5OG4G/VjYYRTWP+btdCKO/uUor8C
-	7GjKKHZNeWTw6i0WGTSz2xj94BcJTOSHv3fWiX9mWEpiB1atksh1pPoQzAvBMPszUHJrydKrZnR
-	yzegayRRjOzP9aluNqYCnoR/nufMsGEZpegzLStM=
-X-Received: by 2002:a17:903:1aa4:b0:298:360:1662 with SMTP id d9443c01a7336-29b5e2cdc55mr157602155ad.1.1763982773760;
-        Mon, 24 Nov 2025 03:12:53 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFcsgaJnzllrON380lwt2jBn1aT2PsCW8Yu8M7kwZm6QG6xkze5SNxZadWxYwrHIjEJtwn3MQ==
-X-Received: by 2002:a17:903:1aa4:b0:298:360:1662 with SMTP id d9443c01a7336-29b5e2cdc55mr157601725ad.1.1763982773218;
-        Mon, 24 Nov 2025 03:12:53 -0800 (PST)
-Received: from hu-kotarake-hyd.qualcomm.com ([202.46.23.25])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bd7604de68bsm13133780a12.21.2025.11.24.03.12.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Nov 2025 03:12:52 -0800 (PST)
-From: Rakesh Kota <rakesh.kota@oss.qualcomm.com>
-Date: Mon, 24 Nov 2025 16:42:41 +0530
-Subject: [PATCH 2/2] power: supply: core: Add SiLION battery technology
+        d=1e100.net; s=20230601; t=1763982993; x=1764587793;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UuRrMhunT9TDWnZHLII8BIXNolS7BUSymKB5ka4d4O0=;
+        b=fErksXDPrZIZfDtOc+Jsd9IAnvGti90jxjMVAKWCPJTFFUBwwA2nia4yHrfHNaPKjQ
+         aEFFN+B21S8u1f5F6D9J30JIM3SVK+0OHpVrFThtvgk2pYTlzDWPiD9v1+uv/jlD9Phh
+         x5xAci6FGwpVnKyw3uXgMn/mLy7lcL/brTTp2s01z+H2fN5Q3fLrJ+KoWUOpaed8Bkzc
+         AVKMMfG/Hv6a9xNToKyIhtDtVVG29w1IiyEC1S1Wqd3zoUltAYmux69ZSHCsHkSfWNN6
+         Uk6heMOIMsm6J5VOgyoyg6FvONDIyr8bJCsVpml01bLIeL6kFbvYirsVdz1C24UgvoBB
+         avLA==
+X-Forwarded-Encrypted: i=1; AJvYcCX2NCRqodPLbjRvkgiO2gmDeAH0IoPc5k9EjCdpFgTwB3KVcCON6TefDFezfQr/gu4SOPlL+zOO3g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywa6ZY0DvFDQ6G7IIcZiPOt+uIJ0Bzqdg8p0OUh62jKxYTbfvAd
+	M+JC9ur62FWriMCjapuvLP3lVHYgrXQmZbEWBfiI0kexDFMudrK8faza3hEUsgO6wfM=
+X-Gm-Gg: ASbGncuBYH7JOcKaW1fyEyLnG5E2bVvFq9uspYoxsNDQiNB2W+W9fTyLuarAAcoau3Q
+	Y2dt7JihUCwmhFxarJdUKm2TnFVbBNFYRiJdcI4HoCs26hIWthZD1lvUg38EXPFVGLO8jG7qtvH
+	PukG4wtC/SNHNuhWkULs66O5XtvM+HJy0jFM75yt2B2VL957eI039TPlOqNql/CNEB+nMq3HyOe
+	C6McHFSeLpY8JROOUm8uX69q8Kcwl4PDLF71CDsI7XGNH6s6YbtVHwiMv2mSKnC0jL/hSNOm7VG
+	HO1d4i6Th0lPdqoH1GcdiBgllF5/zj9857FT9A8hNalhYj01RFYkw39iqxtK04kDAMH76K2jxTA
+	KLA80Y0lRz9XRUOklY7KxOuCc1rjaQ/y91mbH1D/1rCCq/8riYvCm+ix+tyFDb70/cua+PlMXB2
+	dY4+Fx9sWUBolxb8Z/DTHaziIdWRG7C0qFZTPezzaBKWMD03j21XhbRCuyqNTiWsn/Pg==
+X-Google-Smtp-Source: AGHT+IGoaXb9zqkluRUTXSsxY7Elb/IIHiZ+I4IVLxjc5bpkpHjrfyygfT2RwN8BHb50RMQMY1Fuxg==
+X-Received: by 2002:a05:600c:1ca5:b0:475:dde5:d91b with SMTP id 5b1f17b1804b1-477c1115ff6mr126002295e9.17.1763982992722;
+        Mon, 24 Nov 2025 03:16:32 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:a756:bb6c:7b35:af9b? ([2a05:6e02:1041:c10:a756:bb6c:7b35:af9b])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-42cb7f2e5b6sm27447425f8f.1.2025.11.24.03.16.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Nov 2025 03:16:32 -0800 (PST)
+Message-ID: <ec51f257-e961-4e21-94d9-68825cbfe287@linaro.org>
+Date: Mon, 24 Nov 2025 12:16:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251124-add_silion_battery-v1-2-3c86b70d2543@oss.qualcomm.com>
-References: <20251124-add_silion_battery-v1-0-3c86b70d2543@oss.qualcomm.com>
-In-Reply-To: <20251124-add_silion_battery-v1-0-3c86b70d2543@oss.qualcomm.com>
-To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kamal.wadhwa@oss.qualcomm.com,
-        fenglin.wu@oss.qualcomm.com,
-        Rakesh Kota <rakesh.kota@oss.qualcomm.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1763982763; l=4004;
- i=rakesh.kota@oss.qualcomm.com; s=20250919; h=from:subject:message-id;
- bh=m8QF8XtXdOChb3k0Ad2Im0bC50t5/m7Y4bs/tCpVwCs=;
- b=9MEOf2sttFyw8Td39vE7GDKqWpKZjFLA5b/6dCyf70tvT5pdnc90hBQb/LiBRePP4q+aEu578
- mt7s37ycMJUBWFYQvqhGoVnCNaNeBaYi6jgDQ2xo2ogCOWRFI9Dm68a
-X-Developer-Key: i=rakesh.kota@oss.qualcomm.com; a=ed25519;
- pk=dFhv9yPC8egZglsSLDMls08cOvZKZkG6QQn1a/ofwNU=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI0MDA5OSBTYWx0ZWRfX48AHXWLubIps
- 2wzcl5VqpJa226oOoUD82gZhQvNxoUNlQN8ZBW3REc4UYi7tGOD2XVhesj5Rw+MiOmErfQo1P42
- Q0CbOFTV0pYQ8Zygn6hkruKpBFJHEwxtYi1EjbQ/pgGNMdV8nDrnkVvlHOrk7khbK+GiRxXtxE4
- /BocHco2B7dOnM0N4MY/1JeXkxmRqnoeRIZKW52GBTjIGHvHNHI8K5wXDqrLfnmeO62LER37oN9
- IyDEEa+3Zvym/Tmy//+pbmbppGK0WV4vnvMv8GyYCT4sixa/tWJPW5dIRcdLAZS4GpYjzjAipnt
- P92BUJULCaQ7xzWPjUqbe6fgQnLe709qT10ftGBGgAspsUj9zAv+4LGEnsa08GFgnk59ETtMaer
- 0IO52ddFcwKitj/umcdMT8ZdX1Ks7w==
-X-Authority-Analysis: v=2.4 cv=YJqSCBGx c=1 sm=1 tr=0 ts=69243db6 cx=c_pps
- a=IZJwPbhc+fLeJZngyXXI0A==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=YWgE9MSi0NtjCATTJAsA:9
- a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
-X-Proofpoint-GUID: tUYlHolYB8uKSkkkgFaidr6bODxaFzpi
-X-Proofpoint-ORIG-GUID: tUYlHolYB8uKSkkkgFaidr6bODxaFzpi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-24_04,2025-11-21_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 bulkscore=0 suspectscore=0 phishscore=0 clxscore=1015
- lowpriorityscore=0 malwarescore=0 impostorscore=0 spamscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511240099
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 RESEND 2/3] thermal: exynos_tmu: Support new hardware
+ and update TMU interface
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, =?UTF-8?B?7IaQ7Iug?=
+ <shin.son@samsung.com>, 'Bartlomiej Zolnierkiewicz' <bzolnier@gmail.com>,
+ 'Krzysztof Kozlowski' <krzk@kernel.org>,
+ "'Rafael J . Wysocki'" <rafael@kernel.org>, 'Zhang Rui'
+ <rui.zhang@intel.com>, 'Lukasz Luba' <lukasz.luba@arm.com>,
+ 'Rob Herring' <robh@kernel.org>, 'Conor Dooley' <conor+dt@kernel.org>,
+ 'Alim Akhtar' <alim.akhtar@samsung.com>
+Cc: 'Henrik Grimler' <henrik@grimler.se>, linux-pm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Peter Griffin <peter.griffin@linaro.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ William McVicker <willmcvicker@google.com>, jyescas@google.com
+References: <20251113064022.2701578-1-shin.son@samsung.com>
+ <CGME20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237@epcas2p1.samsung.com>
+ <20251113064022.2701578-3-shin.son@samsung.com>
+ <2180a854-8ba6-4424-add2-eb34637530c1@linaro.org>
+ <000001dc5d2a$0697bf10$13c73d30$@samsung.com>
+ <12346382-7718-4942-a497-4de278b1d5a0@linaro.org>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <12346382-7718-4942-a497-4de278b1d5a0@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Add support for lithium-ion-silicon-anode (SiLION) battery technology
-to enable proper identification of devices using this newer battery
-chemistry. Without this change, such batteries would report as
-unknown technology.
+Hi Tudor,
 
-Introduce POWER_SUPPLY_TECHNOLOGY_SiLION and update technology
-mappings across core, sysfs, and test interfaces.
+On 11/24/25 11:43, Tudor Ambarus wrote:
+> Hi, Shin,
+> 
+> On 11/24/25 12:06 PM, 손신 wrote:
+>>>> +static void update_con_reg(struct exynos_tmu_data *data) {
+>>>> +	u32 val, t_buf_vref_sel, t_buf_slope_sel;
+>>>> +
+>>>> +	val = readl(data->base + EXYNOS_TMU_REG_TRIMINFO);
+>>>> +	t_buf_vref_sel = (val >> EXYNOSAUTOV920_TMU_T_BUF_VREF_SEL_SHIFT)
+>>>> +				& EXYNOSAUTOV920_TMU_T_BUF_VREF_SEL_MASK;
+>>>> +	t_buf_slope_sel = (val >> EXYNOSAUTOV920_TMU_T_BUF_SLOPE_SEL_SHIFT)
+>>>> +				& EXYNOSAUTOV920_TMU_T_BUF_SLOPE_SEL_MASK;
+>>>> +
+>>>> +	val = readl(data->base +  EXYNOSAUTOV920_TMU_REG_CONTROL);
+>>>> +	val &= ~(EXYNOS_TMU_REF_VOLTAGE_MASK <<
+>>> EXYNOS_TMU_REF_VOLTAGE_SHIFT);
+>>>> +	val |= (t_buf_vref_sel << EXYNOS_TMU_REF_VOLTAGE_SHIFT);
+>>>> +	val &= ~(EXYNOS_TMU_BUF_SLOPE_SEL_MASK <<
+>>> EXYNOS_TMU_BUF_SLOPE_SEL_SHIFT);
+>>>> +	val |= (t_buf_slope_sel << EXYNOS_TMU_BUF_SLOPE_SEL_SHIFT);
+>>>> +	writel(val, data->base + EXYNOSAUTOV920_TMU_REG_CONTROL);
+>>>> +
+>>>> +	val = readl(data->base + EXYNOSAUTOV920_TMU_REG_CONTROL1);
+>>>> +	val &= ~(EXYNOSAUTOV920_TMU_NUM_PROBE_MASK <<
+>>> EXYNOSAUTOV920_TMU_NUM_PROBE_SHIFT);
+>>>> +	val &= ~(EXYNOSAUTOV920_TMU_LPI_MODE_MASK <<
+>>> EXYNOSAUTOV920_TMU_LPI_MODE_SHIFT);
+>>>> +	val |= (data->sensor_count << EXYNOSAUTOV920_TMU_NUM_PROBE_SHIFT);
+>>>> +	writel(val, data->base + EXYNOSAUTOV920_TMU_REG_CONTROL1);
+>>>> +
+>>>> +	writel(1, data->base + EXYNOSAUTOV920_TMU_SAMPLING_INTERVAL);
+>>>> +	writel(EXYNOSAUTOV920_TMU_AVG_CON_UPDATE, data->base +
+>>> EXYNOSAUTOV920_TMU_REG_AVG_CONTROL);
+>>>> +	writel(EXYNOSAUTOV920_TMU_COUNTER_VALUE0_UPDATE,
+>>>> +	       data->base + EXYNOSAUTOV920_TMU_REG_COUNTER_VALUE0);
+>>>> +	writel(EXYNOSAUTOV920_TMU_COUNTER_VALUE1_UPDATE,
+>>>> +	       data->base + EXYNOSAUTOV920_TMU_REG_COUNTER_VALUE1);
+>>>> +}
+>>>> +
+>>> This is unreadable; please make it understandable for those who don’t have
+>>> the documentation (explicit static inline functions, comments, etc ...).
+>> I'll restructure this code by introducing explicit static inline helper functions and proper comments to improve readability.
+> 
+> We likely shouldn't use inlines here, see Linus's reply from 2006:
+> https://lore.kernel.org/all/Pine.LNX.4.64.0601021105000.3668@g5.osdl.org/T/#u
 
-Signed-off-by: Rakesh Kota <rakesh.kota@oss.qualcomm.com>
----
- Documentation/ABI/testing/sysfs-class-power | 2 +-
- drivers/power/supply/power_supply_core.c    | 2 ++
- drivers/power/supply/power_supply_sysfs.c   | 1 +
- drivers/power/supply/test_power.c           | 3 ++-
- include/linux/power_supply.h                | 1 +
- 5 files changed, 7 insertions(+), 2 deletions(-)
+We should not use inline functions when they can be called from 
+different places and if they contain a significant amount of code inside.
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
-index 4b21d5d2325136be65126d4d1d6e64608280fe44..1f42e6f138ea8ae0fe8c232c38d0ff6fb20180e7 100644
---- a/Documentation/ABI/testing/sysfs-class-power
-+++ b/Documentation/ABI/testing/sysfs-class-power
-@@ -525,7 +525,7 @@ Description:
- 
- 		Valid values:
- 			      "Unknown", "NiMH", "Li-ion", "Li-poly", "LiFe",
--			      "NiCd", "LiMn"
-+			      "NiCd", "LiMn", "Si-Li-ion"
- 
- 
- What:		/sys/class/power_supply/<supply_name>/voltage_avg,
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 9a28381e2607d650fa9b719b683af375bb118fad..385ab8aa7e69f3f804e7ac0ee3782446f18e2c3f 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -677,6 +677,8 @@ int power_supply_get_battery_info(struct power_supply *psy,
- 			info->technology = POWER_SUPPLY_TECHNOLOGY_LiFe;
- 		else if (!strcmp("lithium-ion-manganese-oxide", value))
- 			info->technology = POWER_SUPPLY_TECHNOLOGY_LiMn;
-+		else if (!strcmp("lithium-ion-silicon-anode", value))
-+			info->technology = POWER_SUPPLY_TECHNOLOGY_SiLION;
- 		else
- 			dev_warn(&psy->dev, "%s unknown battery type\n", value);
- 	}
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 198405f7126f96a57a549cd1ecb9b71089b9c3d0..f2a5ec519b2ef60fb5ede101ca461d899218e186 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -122,6 +122,7 @@ static const char * const POWER_SUPPLY_TECHNOLOGY_TEXT[] = {
- 	[POWER_SUPPLY_TECHNOLOGY_LiFe]		= "LiFe",
- 	[POWER_SUPPLY_TECHNOLOGY_NiCd]		= "NiCd",
- 	[POWER_SUPPLY_TECHNOLOGY_LiMn]		= "LiMn",
-+	[POWER_SUPPLY_TECHNOLOGY_SiLION]	= "Si-Li-ion",
- };
- 
- static const char * const POWER_SUPPLY_CAPACITY_LEVEL_TEXT[] = {
-diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
-index 2c0e9ad820c0db23165758303a16bddac1a1634b..64bd4a1147ca06566a909513a80760ad707a8605 100644
---- a/drivers/power/supply/test_power.c
-+++ b/drivers/power/supply/test_power.c
-@@ -437,6 +437,7 @@ static struct battery_property_map map_technology[] = {
- 	{ POWER_SUPPLY_TECHNOLOGY_LiFe, "LiFe" },
- 	{ POWER_SUPPLY_TECHNOLOGY_NiCd, "NiCd" },
- 	{ POWER_SUPPLY_TECHNOLOGY_LiMn, "LiMn" },
-+	{ POWER_SUPPLY_TECHNOLOGY_SiLION, "SiLION" },
- 	{ -1,				NULL   },
- };
- 
-@@ -733,7 +734,7 @@ MODULE_PARM_DESC(battery_present,
- 
- module_param(battery_technology, battery_technology, 0644);
- MODULE_PARM_DESC(battery_technology,
--	"battery technology <NiMH|LION|LIPO|LiFe|NiCd|LiMn>");
-+	"battery technology <NiMH|LION|LIPO|LiFe|NiCd|LiMn|SiLION>");
- 
- module_param(battery_health, battery_health, 0644);
- MODULE_PARM_DESC(battery_health,
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index 360ffdf272dab86241f1aac4650d1a91a088a84b..04996037219d5a22d2b2a7f136e5d3565a4507ca 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -83,6 +83,7 @@ enum {
- 	POWER_SUPPLY_TECHNOLOGY_LiFe,
- 	POWER_SUPPLY_TECHNOLOGY_NiCd,
- 	POWER_SUPPLY_TECHNOLOGY_LiMn,
-+	POWER_SUPPLY_TECHNOLOGY_SiLION,
- };
- 
- enum {
+But for one line functions, inside a driver it may help for the 
+readability when the function name is self-explanatory.
+
+
+> I guess you can make this easier to read if you use FIELD_GET/SET from
+> bitfield.h. Other improvement would be using the regmap api.
+
+regmap would be too overkill to write unshared registers.
+
 
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
