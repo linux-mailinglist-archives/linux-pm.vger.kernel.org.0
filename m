@@ -1,204 +1,125 @@
-Return-Path: <linux-pm+bounces-38514-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38515-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFCD4C82D39
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 00:39:35 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 544DAC82D6B
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 00:43:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EFF23AC3E9
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 23:39:34 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 026FB34BCBC
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 23:43:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D512773DA;
-	Mon, 24 Nov 2025 23:39:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96CA32E764D;
+	Mon, 24 Nov 2025 23:43:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PDyBqciv"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="nU8y+sSB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46C62550D5
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 23:39:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5400B274FF5
+	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 23:43:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764027572; cv=none; b=JBKo9CmWqkEV7U+NPzGHKg7Dh+JgN8oAXKQB0QIjuvqak+oAaG0xjSxLQ57CtJUohXjC4Lse7ZGfMCVZuPemJtfoZO9kanlrg7GqtW/6D5ed8mmSV3vvW1gFZr6Ui6BbzCv8Oq5i0RL+B3XkuL+JNhoDvWjLPyl4hXAF/YizXFY=
+	t=1764027806; cv=none; b=Aq2gap4klnoolj3lpcgW4G/BzdiEFBZDplqypq1EsMwAni0PtY2cHMG78Lnhad1UBqp4IiASbU7Tnj+5FMW+rMFPz8xgkUJTYuYTjdfP+U5TouSys2UYV3Vuen5gdJCQddYhF3YybHHPzh6g8S9xpgrFcjcuZDCyzpskHhffByQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764027572; c=relaxed/simple;
-	bh=CKkQPfuA4mTQX3dIReMiDBEqCYXR6V0F5NfG/QjHkWI=;
-	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=GixSG6EAAvFmVGyxRbLU5eZDsMyZuDz6FNSYip2nXbAZBiUbKnzO7WDaGuGyn9Xip174qAN9j/Xk9nNGLJndpv5j9xQnvRXYJk6L0zWl9mNVllt2dOHqImnsAc+uPulULhnSB3iqcyeaX+PHLP3UgCTaDlRLME0miAkRnhbrdiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PDyBqciv; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-4ee1939e70bso46907261cf.3
-        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 15:39:30 -0800 (PST)
+	s=arc-20240116; t=1764027806; c=relaxed/simple;
+	bh=0GnmzL1h+o+i6liQM8CrD5wefDSntZzSj6EmuSiJ1W4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=BljoVNOctMN496LUpvzqgu2jzHk5yHsvN4ItFywbTgiLKyaRYpoGIQ2UTtH60SVGRsPRCaRJvVtIUVi+U6bAyj3RGAJZU4Eo5QB3AqcPUG2eI+Rlk4ZdWI95LG23MQTyp3/wXIG72jaUkfFWHp0o3m62E5Xp4k3EO712PYC5pwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=nU8y+sSB; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-29555b384acso60737705ad.1
+        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 15:43:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1764027569; x=1764632369; darn=vger.kernel.org;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=35ja3COrzf0ZOkygCs0UlseCqaTusSLOaezq4deeUYY=;
-        b=PDyBqcivXEml36mbQjGT1yDB61H2aDBElA4vkCy3FdMLCGtpMnA32DRMcOPUQmu2Bh
-         bAfAFJDXjnRenhbCYN8dOqkivFa1AE4PovvuuU2ppmNL0FrSge8t/yyVUSlDPQtUTN9B
-         w2WzDRhoWTRIQFViwJD6ndXyJ1j/J83d9CzT4=
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1764027804; x=1764632604; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gZmcA4UnelU4Uyw0x3ObtizJbVjq478wDgpSBsRd5ww=;
+        b=nU8y+sSBRa+lbatcQ3hd1WggsGdcnjdm8W+1man3lBhQj0uSg4QhxCLijq2ssMZCAu
+         H128FoUOZ6LJdWWmHJ7I87vbqqY+FsMcKCnw/AO+d/rZ6kJLcdOGte5gSmfCI5DWhBqZ
+         qU4qpq8cMr43c9qCiIkR7Mkrv+QiUIbjkdxiGCHyT1GiYZuPDz+KE7xdD9vc2Co9mHoX
+         dSsTEO+qRnUj02oDTUpTv0KoDxBOIfaduCAWRYUzZuWHkVaf6AYX2TXzaNNeGEkWRCfm
+         ZHeOBT9DfZtVmCs+XFk1nrXr9/Imvp3nb7rDDSW8Ve5Nje88ROluPQq7xiUXTGJ6jtqw
+         YkNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764027569; x=1764632369;
-        h=subject:from:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=35ja3COrzf0ZOkygCs0UlseCqaTusSLOaezq4deeUYY=;
-        b=lnVZbdyA3BklydLA4LAQ6+nbr2udaaT3fA4NRGbQ2heoFmcSfMR+9mmWMGlouqejjZ
-         PRdl/iDwnzl5sR99W0R8WNjgHFZ3eVBxTXtsqtiOsp2quO0PZYc5dtvWPTBIh+8LrtkN
-         olUzIx2cbrOOLOywx/5EvT4cGW/dLjSqsEm+TBYptr4qiMrjvyhjJjoBl29ZzHNbWfSm
-         +/weTS8sIIXaZPybwb/SWnFJXCigp3toOcnH0U2ZGvNgxm7DeTUO5bOWB0aEOk95+YwS
-         H4hhx45+KQCGkygm28NyVGB8aphyxm+Up6C49dZRNthU20tIPqZgtw4o88t66VcAYbQk
-         xv0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVO32i3Z3UBiuG0tSGj/NuU7edt7MdgytlVABI4yiLCgXX3Z/Bm96k6CPps0uYqRvFnuYSUz0S2Hw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzp7tzK3/4GEZrwqyDu8Tnp+oLZVLd+zGIJtLmtejrNeDmJ4xKd
-	KOjwSu50ckZhnknhZu1xhSfyOSMDT+W9g3wNO7dzcb4TEmf3MkZcWN0oDLLWs4p9otg=
-X-Gm-Gg: ASbGncu7yVUvOE3ZjC2y7VdMB+J1K93IGM0C0OdMIWRKeXbiYKnAsLXYWXl4tiGUZ8V
-	OroAzO4VXfF8TvXQHdbyQ9y+/79brUwC4exE2NiaqhVQ0Co/kQ2kDCEUtVfHiQwW3QPzD8smcbF
-	MUF1RYSn6davkT6IkvuZoLMWdcvbyv5MGRqgZvT66y2YDkfp+MWnSHl2bsV2Y2BbspWNogIrX3U
-	5O/9L1G20/DzfDvK1CiAQWOXf9ZQOVrRSHH+dn6zxADoMnSF96vwE9i4GLfVAaHjXT5RSGajpWY
-	uIkT+GUF1kHquR4I/D4fUgh/kbCQ61xygSTD2GMbvzIWhuSybDVfK2tTeDIqp4mb1m39C8UJu9U
-	C4WrljOmF2Js198xmXbatxcKxCfLsvKsW5Todtc4u4wV8D30yZ0ENS8PETwuSxFP8Ld3/JkLbqP
-	A/ypUsT7IA3vEJIOzf7uCNOYcVf9N8PyHlnye7gE3rVBZ3CrPBqiGR6TFExi6Y+QdlcjXvvdj7H
-	99XGAa2fswx8xr95EbH/bxgRrVpO+iFMIRpXg4+8mSf
-X-Google-Smtp-Source: AGHT+IGQoO2gdIQTLz+8vfxBG1I2uXtQleWM87APvrVKhuoU5l6Ej9oUjBSz51pRupK2hvvg93HX6w==
-X-Received: by 2002:a05:622a:1a8d:b0:4ed:a7ba:69c with SMTP id d75a77b69052e-4ee58920aa3mr184152711cf.83.1764027569565;
-        Mon, 24 Nov 2025 15:39:29 -0800 (PST)
-Received: from [192.168.1.239] (207-181-222-53.s5939.c3-0.hnc-cbr1.chi-hnc.il.cable.rcncustomer.com. [207.181.222.53])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8846e574918sm109238816d6.46.2025.11.24.15.39.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Nov 2025 15:39:28 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------5AnWd0Wj910PJFnlsio3GPhj"
-Message-ID: <4f46bc24-1a27-4f59-b082-e634f46de0d5@linuxfoundation.org>
-Date: Mon, 24 Nov 2025 16:39:26 -0700
+        d=1e100.net; s=20230601; t=1764027804; x=1764632604;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gZmcA4UnelU4Uyw0x3ObtizJbVjq478wDgpSBsRd5ww=;
+        b=FPYhBCeFxqu4umUdPGnOKxf6mtOsRvTVfMbAvI3USBtxXZ10mlIayqB+b+qIn1RRJm
+         51+lKaAe8mZpfz4EZCv3v/XjfxNZ3XQ5IfHoFQ0uT526x5B/lbqUMDc+BPxv7VHZMBkx
+         ZnxLnRNi4C2oxTXep/Ss3IErOExVlbRHASetja53gWm7FpTTvhKgJpTjthMNiN/LB6Y0
+         KYRxFpAO7OJ75Wr5J1WOao/GlJK7cohK28H8Nfbd2zQldyzPo3CoN1hCUB13RIHUxkjy
+         fGreLk42ovgGSoZ1yfXkmf11GoCjVoM2tyZgliiWV+jfeGleOOpoU9T5JnNqFTmlDy2f
+         yibg==
+X-Forwarded-Encrypted: i=1; AJvYcCV2DmaGiVhknczuE8Pd3yk1aJcaWM8kHc+AB2Y6UFbpF02P4wbqbJNrOw+8fzSxPEA8ub3/fhCp2A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8wbkqEaDXZjlswVjVU+tZFWLR86XlA+stEX8nU4+K2KdgvGJy
+	sazIX9z1dfuFAISH7y6vic/VK14w6ZSVvljSbBaE9EXUAFDsmnhuwIOmWGUVbgpZXSY=
+X-Gm-Gg: ASbGncuf3qrqrPky/zcAEwMv8/+EIPTPHQfvT+EZ2RvjkvSy8QWwjRkYaeXAqz6nvEk
+	XHlS5gFsP4F3a0m0SPvRbUCiVgTdrgQ4v0h5iZs8BssKlRkDYR8vC81w/v41eJcchUsRgplZbnR
+	lbbHnqiQUmpPf0BlDJ3l8XHDOI6jXarPu0eA7TRptWrsPP11vqcGRInkcOTbn4pJ3HXGC5ix4bk
+	Ns0YqN100qwEc8M6kBpIOXKe7EVK0RHOjMxwaGwVoTLpxELH4LOnpNHjO7HVynVN1Ij9hFJOsS5
+	/GhFHrZxuqCzgGQ3DfCvzAUtyN04+pvKTBcoRAeiPlXbPciXSFk70RgZoKrZW0k+rcr2sd6tnE4
+	yNhFBZaYkiYu3xs7PwHpGfXdSt9jgFNBlB//fdoD2h1Ewh0f0LWsdrO+MCKI29z7kXUf6V0nUMl
+	LX1KJYWMIj
+X-Google-Smtp-Source: AGHT+IE54CeWlou3/0N68zXQXCzYzwWHDBiUc3WLIubNGQV4eRxSRlBCwcc7GxKyinH/+t/QnN92Og==
+X-Received: by 2002:a17:902:d4ca:b0:294:f6e2:cea1 with SMTP id d9443c01a7336-29b6c571f11mr147367015ad.38.1764027803678;
+        Mon, 24 Nov 2025 15:43:23 -0800 (PST)
+Received: from localhost ([71.212.208.158])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29b5b29b1c2sm145545895ad.81.2025.11.24.15.43.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Nov 2025 15:43:23 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, linux-pm@vger.kernel.org
+Cc: Vincent Guittot <vincent.guittot@linaro.org>, Peter Zijlstra
+ <peterz@infradead.org>, Pavel Machek <pavel@kernel.org>, Len Brown
+ <len.brown@intel.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, Maulik
+ Shah <quic_mkshah@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>,
+ Dhruva Gole <d-gole@ti.com>, Deepti Jaggi <quic_djaggi@quicinc.com>, Ulf
+ Hansson <ulf.hansson@linaro.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/6] PM: QoS: Introduce a CPU system wakeup QoS limit
+ for s2idle
+In-Reply-To: <20251121100315.316300-1-ulf.hansson@linaro.org>
+References: <20251121100315.316300-1-ulf.hansson@linaro.org>
+Date: Mon, 24 Nov 2025 15:43:22 -0800
+Message-ID: <7hcy57dmjp.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- "John B. Wyatt IV" <jwyatt@redhat.com>, John Kacur <jkacur@redhat.com>,
- Thomas Renninger <trenn@suse.de>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-From: Shuah Khan <skhan@linuxfoundation.org>
-Subject: [GIT PULL] cpupower update for Linux 6.19-rc1
+Content-Type: text/plain
 
-This is a multi-part message in MIME format.
---------------5AnWd0Wj910PJFnlsio3GPhj
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Ulf Hansson <ulf.hansson@linaro.org> writes:
 
-Hi Rafael,
+> Changes in v3:
+> 	- Take new the new QoS limit into account for cpuidle too (Rafael).
+> 	- Add a new Kconfig for the new QoS interface (Rafael)
+> 	- Improved the documentation (Dhruva) 
+> 	- Clarified commit messages and added acks.
+>
+> Changes in v2:
+> 	- Limit the new QoS to CPUs  and make some corresponding renaming of the
+> 	functions along with name of the device node for user space.
+> 	- Make sure we deal with the failure/error path correctly when there are
+> 	no state available for s2idle.
+> 	- Add documentation.
+>
+> Some platforms supports multiple low power states for CPUs that can be used
+> when entering system-wide suspend and s2idle in particular. Currently we are
+> always selecting the deepest possible state for the CPUs, which can break the
+> system wakeup latency constraint that may be required for a use case.
+>
+> Therefore, this series suggests to introduce a new interface for user space,
+> allowing us to specify the CPU system wakeup QoS limit. The QoS limit is then
+> taken into account when selecting a suitable low power state for s2idle/cpuidle.
 
-Please pull the following cpupower update for Linux 6.19-rc1.
-
-Adds support for building libcpupower statically when STATIC=true is
-specified during build.
-
-diff is attached.
-
-thanks,
--- Shuah
-
-----------------------------------------------------------------
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
-
-   Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
-
-are available in the Git repository at:
-
-   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.19-rc1
-
-for you to fetch changes up to 059835bbfa282918a1e8e5e2d9628aa600093052:
-
-   tools/power/cpupower: Support building libcpupower statically (2025-11-05 09:56:01 -0700)
-
-----------------------------------------------------------------
-linux-cpupower-6.19-rc1
-
-Adds support for building libcpupower statically when STATIC=true is
-specified during build.
-
-----------------------------------------------------------------
-Zuo An (1):
-       tools/power/cpupower: Support building libcpupower statically
-
-  tools/power/cpupower/Makefile | 32 +++++++++++++++++++++-----------
-  1 file changed, 21 insertions(+), 11 deletions(-)
-----------------------------------------------------------------
---------------5AnWd0Wj910PJFnlsio3GPhj
-Content-Type: text/x-patch; charset=UTF-8; name="linux-cpupower-6.19-rc1.diff"
-Content-Disposition: attachment; filename="linux-cpupower-6.19-rc1.diff"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlIGIvdG9vbHMvcG93
-ZXIvY3B1cG93ZXIvTWFrZWZpbGUKaW5kZXggYzQzZGIxYzQxMjA1Li5hMWRmOTE5NmRjNDUg
-MTAwNjQ0Ci0tLSBhL3Rvb2xzL3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlCisrKyBiL3Rvb2xz
-L3Bvd2VyL2NwdXBvd2VyL01ha2VmaWxlCkBAIC0zNyw5ICszNyw3IEBAIE5MUyA/PQkJdHJ1
-ZQogIyBjcHVmcmVxLWJlbmNoIGJlbmNobWFya2luZyB0b29sCiBDUFVGUkVRX0JFTkNIID89
-IHRydWUKIAotIyBEbyBub3QgYnVpbGQgbGlicmFyaWVzLCBidXQgYnVpbGQgdGhlIGNvZGUg
-aW4gc3RhdGljYWxseQotIyBMaWJyYXJpZXMgYXJlIHN0aWxsIGJ1aWx0LCBvdGhlcndpc2Ug
-dGhlIE1ha2VmaWxlIGNvZGUgd291bGQKLSMgYmUgcmF0aGVyIHVnbHkuCisjIEJ1aWxkIHRo
-ZSBjb2RlLCBpbmNsdWRpbmcgbGlicmFyaWVzLCBzdGF0aWNhbGx5LgogZXhwb3J0IFNUQVRJ
-QyA/PSBmYWxzZQogCiAjIFByZWZpeCB0byB0aGUgZGlyZWN0b3JpZXMgd2UncmUgaW5zdGFs
-bGluZyB0bwpAQCAtMjA3LDE0ICsyMDUsMjUgQEAgJChPVVRQVVQpbGliLyUubzogJChMSUJf
-U1JDKSAkKExJQl9IRUFERVJTKQogCSQoRUNITykgIiAgQ0MgICAgICAiICRACiAJJChRVUlF
-VCkgJChDQykgJChDRkxBR1MpIC1mUElDIC1vICRAIC1jIGxpYi8kKi5jCiAKLSQoT1VUUFVU
-KWxpYmNwdXBvd2VyLnNvLiQoTElCX1ZFUik6ICQoTElCX09CSlMpCitpZmVxICgkKHN0cmlw
-ICQoU1RBVElDKSksdHJ1ZSkKK0xJQkNQVVBPV0VSIDo9IGxpYmNwdXBvd2VyLmEKK2Vsc2UK
-K0xJQkNQVVBPV0VSIDo9IGxpYmNwdXBvd2VyLnNvLiQoTElCX1ZFUikKK2VuZGlmCisKKyQo
-T1VUUFVUKSQoTElCQ1BVUE9XRVIpOiAkKExJQl9PQkpTKQoraWZlcSAoJChzdHJpcCAkKFNU
-QVRJQykpLHRydWUpCisJJChFQ0hPKSAiICBBUiAgICAgICIgJEAKKwkkKFFVSUVUKSAkKEFS
-KSByY3MgJEAgJChMSUJfT0JKUykKK2Vsc2UKIAkkKEVDSE8pICIgIExEICAgICAgIiAkQAog
-CSQoUVVJRVQpICQoQ0MpIC1zaGFyZWQgJChDRkxBR1MpICQoTERGTEFHUykgLW8gJEAgXAog
-CQktV2wsLXNvbmFtZSxsaWJjcHVwb3dlci5zby4kKExJQl9NQUopICQoTElCX09CSlMpCiAJ
-QGxuIC1zZiAkKEBGKSAkKE9VVFBVVClsaWJjcHVwb3dlci5zbwogCUBsbiAtc2YgJChARikg
-JChPVVRQVVQpbGliY3B1cG93ZXIuc28uJChMSUJfTUFKKQorZW5kaWYKIAotbGliY3B1cG93
-ZXI6ICQoT1VUUFVUKWxpYmNwdXBvd2VyLnNvLiQoTElCX1ZFUikKK2xpYmNwdXBvd2VyOiAk
-KE9VVFBVVCkkKExJQkNQVVBPV0VSKQogCiAjIExldCBhbGwgLm8gZmlsZXMgZGVwZW5kIG9u
-IGl0cyAuYyBmaWxlIGFuZCBhbGwgaGVhZGVycwogIyBNaWdodCBiZSB3b3J0aCB0byBwdXQg
-dGhpcyBpbnRvIHV0aWxzL01ha2VmaWxlIGF0IHNvbWUgcG9pbnQgb2YgdGltZQpAQCAtMjI0
-LDcgKzIzMyw3IEBAICQoT1VUUFVUKSUubzogJS5jCiAJJChFQ0hPKSAiICBDQyAgICAgICIg
-JEAKIAkkKFFVSUVUKSAkKENDKSAkKENGTEFHUykgLUkuL2xpYiAtSSAuL3V0aWxzIC1vICRA
-IC1jICQqLmMKIAotJChPVVRQVVQpY3B1cG93ZXI6ICQoVVRJTF9PQkpTKSAkKE9VVFBVVCls
-aWJjcHVwb3dlci5zby4kKExJQl9WRVIpCiskKE9VVFBVVCljcHVwb3dlcjogJChVVElMX09C
-SlMpICQoT1VUUFVUKSQoTElCQ1BVUE9XRVIpCiAJJChFQ0hPKSAiICBDQyAgICAgICIgJEAK
-IGlmZXEgKCQoc3RyaXAgJChTVEFUSUMpKSx0cnVlKQogCSQoUVVJRVQpICQoQ0MpICQoQ0ZM
-QUdTKSAkKExERkxBR1MpICQoVVRJTF9PQkpTKSAtbHJ0IC1scGNpIC1MJChPVVRQVVQpIC1v
-ICRACkBAIC0yNjksNyArMjc4LDcgQEAgdXBkYXRlLXBvOiAkKE9VVFBVVClwby8kKFBBQ0tB
-R0UpLnBvdAogCWRvbmU7CiBlbmRpZgogCi1jb21waWxlLWJlbmNoOiAkKE9VVFBVVClsaWJj
-cHVwb3dlci5zby4kKExJQl9WRVIpCitjb21waWxlLWJlbmNoOiAkKE9VVFBVVCkkKExJQkNQ
-VVBPV0VSKQogCUBWPSQoVikgY29uZmRpcj0kKGNvbmZkaXIpICQoTUFLRSkgLUMgYmVuY2gg
-Tz0kKE9VVFBVVCkKIAogIyB3ZSBjb21waWxlIGludG8gc3ViZGlyZWN0b3JpZXMuIGlmIHRo
-ZSB0YXJnZXQgZGlyZWN0b3J5IGlzIG5vdCB0aGUKQEAgLTI4Nyw2ICsyOTYsNyBAQCBjbGVh
-bjoKIAktZmluZCAkKE9VVFBVVCkgXCggLW5vdCAtdHlwZSBkIFwpIC1hbmQgXCggLW5hbWUg
-Jyp+JyAtbyAtbmFtZSAnKi5bb2FzXScgXCkgLXR5cGUgZiAtcHJpbnQgXAogCSB8IHhhcmdz
-IHJtIC1mCiAJLXJtIC1mICQoT1VUUFVUKWNwdXBvd2VyCisJLXJtIC1mICQoT1VUUFVUKWxp
-YmNwdXBvd2VyLmEKIAktcm0gLWYgJChPVVRQVVQpbGliY3B1cG93ZXIuc28qCiAJLXJtIC1y
-ZiAkKE9VVFBVVClwby8qLmdtbwogCS1ybSAtcmYgJChPVVRQVVQpcG8vKi5wb3QKQEAgLTI5
-NSw3ICszMDUsMTEgQEAgY2xlYW46CiAKIGluc3RhbGwtbGliOiBsaWJjcHVwb3dlcgogCSQo
-SU5TVEFMTCkgLWQgJChERVNURElSKSR7bGliZGlyfQoraWZlcSAoJChzdHJpcCAkKFNUQVRJ
-QykpLHRydWUpCisJJChDUCkgJChPVVRQVVQpbGliY3B1cG93ZXIuYSAkKERFU1RESVIpJHts
-aWJkaXJ9LworZWxzZQogCSQoQ1ApICQoT1VUUFVUKWxpYmNwdXBvd2VyLnNvKiAkKERFU1RE
-SVIpJHtsaWJkaXJ9LworZW5kaWYKIAkkKElOU1RBTEwpIC1kICQoREVTVERJUikke2luY2x1
-ZGVkaXJ9CiAJJChJTlNUQUxMX0RBVEEpIGxpYi9jcHVmcmVxLmggJChERVNURElSKSR7aW5j
-bHVkZWRpcn0vY3B1ZnJlcS5oCiAJJChJTlNUQUxMX0RBVEEpIGxpYi9jcHVpZGxlLmggJChE
-RVNURElSKSR7aW5jbHVkZWRpcn0vY3B1aWRsZS5oCkBAIC0zMzYsMTEgKzM1MCw3IEBAIGlu
-c3RhbGwtYmVuY2g6IGNvbXBpbGUtYmVuY2gKIAlAI0RFU1RESVIgbXVzdCBiZSBzZXQgZnJv
-bSBvdXRzaWRlIHRvIHN1cnZpdmUKIAlAc2JpbmRpcj0kKHNiaW5kaXIpIGJpbmRpcj0kKGJp
-bmRpcikgZG9jZGlyPSQoZG9jZGlyKSBjb25mZGlyPSQoY29uZmRpcikgJChNQUtFKSAtQyBi
-ZW5jaCBPPSQoT1VUUFVUKSBpbnN0YWxsCiAKLWlmZXEgKCQoc3RyaXAgJChTVEFUSUMpKSx0
-cnVlKQotaW5zdGFsbDogYWxsIGluc3RhbGwtdG9vbHMgaW5zdGFsbC1tYW4gJChJTlNUQUxM
-X05MUykgJChJTlNUQUxMX0JFTkNIKQotZWxzZQogaW5zdGFsbDogYWxsIGluc3RhbGwtbGli
-IGluc3RhbGwtdG9vbHMgaW5zdGFsbC1tYW4gJChJTlNUQUxMX05MUykgJChJTlNUQUxMX0JF
-TkNIKQotZW5kaWYKIAogdW5pbnN0YWxsOgogCS0gcm0gLWYgJChERVNURElSKSR7bGliZGly
-fS9saWJjcHVwb3dlci4qCg==
-
---------------5AnWd0Wj910PJFnlsio3GPhj--
+Reviewed-by: Kevin Hilman (TI) <khilman@baylibre.com>
+Tested-by: Kevin Hilman (TI) <khilman@baylibre.com>
 
