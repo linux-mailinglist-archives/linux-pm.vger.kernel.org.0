@@ -1,262 +1,162 @@
-Return-Path: <linux-pm+bounces-38485-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38472-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD7D8C81AAD
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 17:50:49 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id C44C1C813CA
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 16:07:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 58429347CE2
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 16:50:49 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 727F6344ED0
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 15:07:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32502313277;
-	Mon, 24 Nov 2025 16:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94D3030E0F3;
+	Mon, 24 Nov 2025 15:07:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c6VK6V60"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b6NrePaN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 362C3305053
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 16:50:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 910B2296159;
+	Mon, 24 Nov 2025 15:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764003046; cv=none; b=GQLXiF7nOERYUhBBnaMeAdL2CrXPqQjyRM/k6GZhG4Icy3craFMduzaAy5yW7tEvjM5cJyxmbUzwgztK3WKK2lIcGCKwrE86RAq/9y+F3SQz8dkBdu7ZliHqFNkpvQgnJ9WWmHGBMYVGy/DmPQBXlNe32T74Ldi1CKXb0eBbUiw=
+	t=1763996871; cv=none; b=Vd4GrwYIa3sqTi5QeHBXZJ03KViN8xH21r1/GOzG3Rjg8LNVynprM72FKyMKdwTRp7ADjtXyKMbuXwWzttQf8zRQIFZxAhdm+m0rt1qevAAtuFgJiTDjgV0yo623jzwsx0cAJcWYs8AyTDsXVrYGOnjq2QhuS1VML6z8xZzA65E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764003046; c=relaxed/simple;
-	bh=U6A+dJ20pXp86qjZBRsjEm03OXYUbqKULhGIn2BanqU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=W14OYMe8soLEns0xGBxwJbOx2ZBzfW5AQmo2gkae5YICtAydfNAxtRxkvJHJhYZWWEilIjvROxwyvsp/3fWofOP9DYluAIZ8fhRjHxZgeu5AJqqqoNIIUGWewju47Sr5TUihSUZ6ns6k5vjf7n3XT0FzP9zOt5hjC4fVH2lTMzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c6VK6V60; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b735e278fa1so298302366b.0
-        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 08:50:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764003042; x=1764607842; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gMEOFKOu3v4GJbo9FdKNZBfHGx8q7d1+trMyWhqy/A8=;
-        b=c6VK6V60J08irYVQiDTfN6vVDjTmObEsZNQkI/xWfDZNrwx6FJGmKuZLAEvwgIHtuI
-         ydksWy+qXyZ/UfCBmWTASPi9QPaH5jfIcstVoPvB2nkpojV5J0f7aReCclK1L/ONqh4V
-         44xTUOAIX30E6jfEC94VYeamRMnj/f2Tx1Me0BJi1kjLgaFHLR0CWZKcy8l2tAmdHZjH
-         e8p+6y40L8AhWJiOxgXPcqHvScFLH5H7tWmh9mVyZuDAYRfZjW6NxKCIGW7yha9tWbJk
-         35L+0gjHhOGTBSL25aIltfEVQ32/oyO6XTQOIhBleE8PYjAEyc5vgYzCXK6RSZDWe6n9
-         8Kzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764003042; x=1764607842;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gMEOFKOu3v4GJbo9FdKNZBfHGx8q7d1+trMyWhqy/A8=;
-        b=GR5hl5iBrzp5LKm3tiSqHlRpVUcol7RF4zLEw+nY3oWweRg2+nD5oTjpySY6nYnBAu
-         cZ6I8RT5CCTjRBPOpjm3uHbTWrUbdgrd22VEcy4ZIlFItnf4P2BoyG2PiD+3f8QN1gbu
-         3fHB3V81L7bt9QDprpSPAaejHoCa2/NhUK0YAkcMchUMVZXyWY/k2HzjeTfP9agZyRqb
-         FuCne7LNo8SdqDlVnRcgygJBHLwc8HTxl5sggXW+UV/r5a4PEAN17au7LtioBcFp3dTt
-         oM6xaPVaneJdDffOrGQdf9vraLULEvvg72KVdHFL61n4WT9WYGWEtw7Z46V3KD8rOkoi
-         N8nQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWTDBNxi1mxFS4GVOLYCOKVy3SZVphtgbd/jFZ6gGMg/1sgTaHGAl+6Kwu8Yw61+zpeiN1Q/B8/Iw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXo9BHdGUdM6tdWyIuGdwGS9z5YmXBy1g8KviXUd5l7kq2XnAC
-	905n+jIZmS6kV0M1Z0gbUxqZRo5F12Wfg/zCoimB1FwjQiMtLsR4hl4Fdyzs9MFH
-X-Gm-Gg: ASbGnctp/YAZMOn52KB3bXdaT0z2LfomZ/mq3aSDjzdw3mZEH42PW7Ba840NUi7PcVd
-	Pk7Yv3nJL/WT6EJSESvx1pM/SmLlxcgLGaN3bhFoqn51CEseO9yZYYci7Xmltxr38vneUyjE8HX
-	nH3icMo3cswcpGUcj9OhHkG2Psd2xrwlKqzVgALESNPF3fXodHe59WdYwOsFOVjpu9QK8MNMwxF
-	ltF75RWG8o7pJMbnoKYJXysuCN0bt0euggX1XEAhnOyGUHDJQsLkZ5G4uoURQyIKMusTwHvYaad
-	a/cZ6zNyjmUHELTqC6sHmi8eAsMo9H7b+A7tsFgnZCBlvS7r4e01qNtj31KvaABcigvRPUWcOXU
-	BJRf4/NOH+1JGGPZh8HuU/ZuJ3m7hyMD1qS+M1gnD/70qS3JzIdfHh1IuxL+M0OhUuwXlK7k2vq
-	gI8CpkgqsgOKexk1lutB8FCFdF8kwJB//4O7+z6HYGcAjt8nja/X1fNFYH+WhJvYI=
-X-Google-Smtp-Source: AGHT+IG13tPufOeCe62IkziqEjMKy77jRIw/n2p1+sO/PACFs+P5/tLtartbx+qzXMxnMkmQoCTh7g==
-X-Received: by 2002:a05:6512:39d5:b0:595:9152:b921 with SMTP id 2adb3069b0e04-596a3ea79camr4199632e87.7.1763996851410;
-        Mon, 24 Nov 2025 07:07:31 -0800 (PST)
-Received: from ?IPV6:2001:14ba:437:c00::190? (2001-14ba-437-c00--190.rev.dnainternet.fi. [2001:14ba:437:c00::190])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-596a0d1493bsm3863273e87.73.2025.11.24.07.07.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Nov 2025 07:07:30 -0800 (PST)
-Message-ID: <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
-Date: Mon, 24 Nov 2025 17:07:28 +0200
+	s=arc-20240116; t=1763996871; c=relaxed/simple;
+	bh=Z56v9C0Rg97jOdx0MwIq/SrG80i12igOo1dqKgEs9Ik=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B0pdOdujL8RQZ45S8HkTxd+EaNHFA91smytrd2MKi9PchsQL0sUgkwXL88YtHY9QRDDxRTSW2CBvAqUxgr+PZ6JJlyvnBpUKxRKZemP9MR1n6Q4yFK6rho8g2zbVRHsYUdVR1RYFatDDNkSslJLVIik7pV2JhEkTBQOrSZGRHT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b6NrePaN; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1763996870; x=1795532870;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z56v9C0Rg97jOdx0MwIq/SrG80i12igOo1dqKgEs9Ik=;
+  b=b6NrePaNL+uRJY5DdLvqxObT3ecxxRAmTsXijFpLB/VEwlRFYEkJHqZP
+   2OWOEOnyDcNOzEZRbitoBxh2svLRhwP8RnIgkIVGqkWgBJAtlzTgWN7wv
+   CZf2a+vuPkIwOlw7sVfD52tlwADANnqALv6M5fzB/MgzAr6p7hGzHcw01
+   TGzfx49S8KJ3aKyLaB3bpE9JkvfnfziUmXbf7NS6bHi1e1n0RgggopzAE
+   ALDFp8GH2rIqrzRP6O7wkeXo1oZYFhdgduU6j/75rtwks8eM4IDZrYpgx
+   2HJ7L/Qn7zImokSG4GspGsFTarOABdcXHybBLxfm9aafSIof8yolyhG+E
+   g==;
+X-CSE-ConnectionGUID: PB+sxuGMSDSny6s1TBgRig==
+X-CSE-MsgGUID: myrndp5eRjCpZ0NBJkVDjg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11623"; a="88647375"
+X-IronPort-AV: E=Sophos;i="6.20,223,1758610800"; 
+   d="scan'208";a="88647375"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 07:07:49 -0800
+X-CSE-ConnectionGUID: P/h9s0EiQjK4ZI/Rp7ebrQ==
+X-CSE-MsgGUID: gvu9jDc3QauPN63N7QPpOw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,223,1758610800"; 
+   d="scan'208";a="192595689"
+Received: from egrumbac-mobl6.ger.corp.intel.com (HELO localhost) ([10.245.244.5])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 07:07:35 -0800
+Date: Mon, 24 Nov 2025 17:07:33 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Romain Gantois <romain.gantois@bootlin.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>, Peter Rosin <peda@axentia.se>,
+	Mariel Tinaco <Mariel.Tinaco@analog.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Hennerich <Michael.Hennerich@analog.com>,
+	Kevin Tsai <ktsai@capellamicro.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Eugen Hristev <eugen.hristev@linaro.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Support Opensource <support.opensource@diasemi.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Iskren Chernev <me@iskren.info>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Matheus Castello <matheus@castello.eng.br>,
+	Saravanan Sekar <sravanhome@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Casey Connolly <casey.connolly@linaro.org>,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Amit Kucheria <amitk@kernel.org>,
+	Thara Gopinath <thara.gopinath@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Olivier Moysan <olivier.moysan@foss.st.com>,
+	Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Dixit Parmar <dixitparmar19@gmail.com>, linux-hwmon@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v4 0/6] Add support for the LTM8054 voltage regulator
+Message-ID: <aSR0tcV0ULNYvf7t@smile.fi.intel.com>
+References: <20251124-ltm8054-driver-v4-0-107a8a814abe@bootlin.com>
+ <24527d76-4f6a-4008-a369-23510d492a94@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-To: Rob Herring <robh@kernel.org>
-Cc: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
- Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>,
- Charles Keepax <ckeepax@opensource.cirrus.com>,
- Richard Fitzgerald <rf@opensource.cirrus.com>,
- David Rhodes <david.rhodes@cirrus.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Ulf Hansson <ulf.hansson@linaro.org>, Mark Brown <broonie@kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>,
- Davidlohr Bueso <dave@stgolabs.net>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>,
- Alison Schofield <alison.schofield@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Dan Williams <dan.j.williams@intel.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
- Allan Nielsen <allan.nielsen@microchip.com>,
- Horatiu Vultur <horatiu.vultur@microchip.com>,
- Steen Hegelund <steen.hegelund@microchip.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, mazziesaccount@gmail.com
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-2-herve.codina@bootlin.com>
- <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
- <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-Content-Language: en-US
-From: Kalle Niemi <kaleposti@gmail.com>
-In-Reply-To: <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <24527d76-4f6a-4008-a369-23510d492a94@roeck-us.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
+
+On Mon, Nov 24, 2025 at 06:57:41AM -0800, Guenter Roeck wrote:
+> On 11/24/25 06:48, Romain Gantois wrote:
+> > 
+> > This is version four of my series which adds initial support of the Linear
+> > Technology LTM8054 voltage regulator. The driver supports a fixed voltage
+> > and a tunable output current limit using a DAC-controlled pin.
+> > 
+> > I'd say that the most unusual part of this series is the usage of the IIO
+> > consumer API in a regulator driver. I think this makes sense here, since
+> > the regulator driver has to access a DAC to read/set the output current
+> > limit.
+> 
+> I don't think that is a valid reason. Literally every driver measuring voltages
+> or current uses a DAC to do it. How else would one convert an analog value
+> into a digital value ?
+
+While I'm not objecting your vision on this, the ADC is also possible to use to
+"measure" the analog signal. DAC approach IIRC considered cheaper solution, but
+require an analogue comparator.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-On 11/24/25 16:53, Rob Herring wrote:
-> On Mon, Nov 24, 2025 at 8:48 AM Kalle Niemi <kaleposti@gmail.com> wrote:
->> On 10/15/25 10:13, Herve Codina wrote:
->>> From: Saravana Kannan <saravanak@google.com>
->>>
->>> This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
->>>
->>> While the commit fixed fw_devlink overlay handling for one case, it
->>> broke it for another case. So revert it and redo the fix in a separate
->>> patch.
->>>
->>> Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
->>> Reported-by: Herve Codina <herve.codina@bootlin.com>
->>> Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
->>> Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com/
->>> Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.com/
->>> Signed-off-by: Saravana Kannan <saravanak@google.com>
->>> Link: https://lore.kernel.org/lkml/20240411235623.1260061-2-saravanak@google.com/
->>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
->>> Acked-by: Mark Brown <broonie@kernel.org>
->>> ---
->>>    drivers/bus/imx-weim.c    | 6 ------
->>>    drivers/i2c/i2c-core-of.c | 5 -----
->>>    drivers/of/dynamic.c      | 1 -
->>>    drivers/of/platform.c     | 5 -----
->>>    drivers/spi/spi.c         | 5 -----
->>>    5 files changed, 22 deletions(-)
->>>
->>> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
->>> index 83d623d97f5f..87070155b057 100644
->>> --- a/drivers/bus/imx-weim.c
->>> +++ b/drivers/bus/imx-weim.c
->>> @@ -327,12 +327,6 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
->>>                                 "Failed to setup timing for '%pOF'\n", rd->dn);
->>>
->>>                if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
->>> -                     /*
->>> -                      * Clear the flag before adding the device so that
->>> -                      * fw_devlink doesn't skip adding consumers to this
->>> -                      * device.
->>> -                      */
->>> -                     rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>                        if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
->>>                                dev_err(&pdev->dev,
->>>                                        "Failed to create child device '%pOF'\n",
->>> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
->>> index eb7fb202355f..30b48a428c0b 100644
->>> --- a/drivers/i2c/i2c-core-of.c
->>> +++ b/drivers/i2c/i2c-core-of.c
->>> @@ -176,11 +176,6 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
->>>                        return NOTIFY_OK;
->>>                }
->>>
->>> -             /*
->>> -              * Clear the flag before adding the device so that fw_devlink
->>> -              * doesn't skip adding consumers to this device.
->>> -              */
->>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>                client = of_i2c_register_device(adap, rd->dn);
->>>                if (IS_ERR(client)) {
->>>                        dev_err(&adap->dev, "failed to create client for '%pOF'\n",
->>> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
->>> index 2eaaddcb0ec4..b5be7484fb36 100644
->>> --- a/drivers/of/dynamic.c
->>> +++ b/drivers/of/dynamic.c
->>> @@ -225,7 +225,6 @@ static void __of_attach_node(struct device_node *np)
->>>        np->sibling = np->parent->child;
->>>        np->parent->child = np;
->>>        of_node_clear_flag(np, OF_DETACHED);
->>> -     np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
->>>
->>>        raw_spin_unlock_irqrestore(&devtree_lock, flags);
->>>
->>> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
->>> index f77cb19973a5..ef9445ba168b 100644
->>> --- a/drivers/of/platform.c
->>> +++ b/drivers/of/platform.c
->>> @@ -739,11 +739,6 @@ static int of_platform_notify(struct notifier_block *nb,
->>>                if (of_node_check_flag(rd->dn, OF_POPULATED))
->>>                        return NOTIFY_OK;
->>>
->>> -             /*
->>> -              * Clear the flag before adding the device so that fw_devlink
->>> -              * doesn't skip adding consumers to this device.
->>> -              */
->>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>                /* pdev_parent may be NULL when no bus platform device */
->>>                pdev_parent = of_find_device_by_node(parent);
->>>                pdev = of_platform_device_create(rd->dn, NULL,
->>> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
->>> index 2e0647a06890..b22944a207c9 100644
->>> --- a/drivers/spi/spi.c
->>> +++ b/drivers/spi/spi.c
->>> @@ -4791,11 +4791,6 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
->>>                        return NOTIFY_OK;
->>>                }
->>>
->>> -             /*
->>> -              * Clear the flag before adding the device so that fw_devlink
->>> -              * doesn't skip adding consumers to this device.
->>> -              */
->>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
->>>                spi = of_register_spi_device(ctlr, rd->dn);
->>>                put_device(&ctlr->dev);
->>>
->> Sorry, some of you will receive this message now for second time. First
->> message was sent to older series of patches.
->> -
->>
->> Hello,
->>
->> Test system testing drivers for ROHM ICs bisected this commit to cause
->> BD71847 drivers probe to not be called.
-> This driver (and overlay support) is in linux-next or something out of
-> tree on top of linux-next?
->
-> Rob
-
-Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c
-
-Kalle
 
