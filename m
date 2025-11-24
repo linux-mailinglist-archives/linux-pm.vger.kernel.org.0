@@ -1,82 +1,48 @@
-Return-Path: <linux-pm+bounces-38459-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38460-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55DB8C80282
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:16:39 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63D5DC803A9
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:37:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EE3754E10BA
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:16:37 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0FB6B34441B
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:37:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6050E2F5473;
-	Mon, 24 Nov 2025 11:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97D632FBE12;
+	Mon, 24 Nov 2025 11:37:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oG5NnK/O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vbku2pR4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CE7326F467
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 11:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5C223B612;
+	Mon, 24 Nov 2025 11:37:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763982996; cv=none; b=H7lsvIThy1iNjID7lF4AEQ0l4JLH+tL3X1Hnaw5xlRimiJ9zBTUommY9DDjMx+2UGMCTwJ44j5fcRek+kr4ZF92jxFut6qC7l7QKtJy31Rg522ogES1dtrUI3cpq6pfaoxrYZ37UmHlge6aRuQQpLFxA0iupgYPfckzc4/l4jX4=
+	t=1763984227; cv=none; b=uPuJmi9cHQtg9qI1bakCdUVlH5khmNZfd7+YgrwiOjR+vaGCV9Op8PrIrHV88/aMnecfS7B0US+SrLAax/Do9jt5LHtl6V+kyT5yDHpWMKJCNL543W0jx6IkRVjNnXo0q2/g6Rw1MsCr4VS9Xr2Pn+cUfhTS7gxUxTpH+vlJ/EQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763982996; c=relaxed/simple;
-	bh=PkrzqQiN/qcj/0t3ahO3DxqiRf/xvfoXnTu2D4FlPMg=;
+	s=arc-20240116; t=1763984227; c=relaxed/simple;
+	bh=hJtmUzWljueWqbsAv7sDroPS+XY96NFx9pUHqQ6wKlQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nzIJLfLeb8vHlE0j5CITO3gwBfKq+GHbXvlryMrwq8JdgFr2dLeAZ13zHQ9K8+sJIHM3lCmOOMIw9g8KFkTKeiQOFY7Wzvl2lDKoV5HlPY3WAOWqGW3/gVS3cyTavxS1zITzMdHbTnKXOOFqgHWrTHTozPfoOlAFZgAeInGjYig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oG5NnK/O; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-477a2ab455fso45007855e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 03:16:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1763982993; x=1764587793; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UuRrMhunT9TDWnZHLII8BIXNolS7BUSymKB5ka4d4O0=;
-        b=oG5NnK/O0Dwjxg6PFUKLHtTVLys9LDlAWbhAZjHzdzxU+KnlIY+tvhiEbgQo8z6IhM
-         +qNJLswUiuAafz0F5c6h43ky2YawIcfM+wk6mzjVnpTkvCEcxGCF4RR/5qvb1zwzdx7O
-         N+Wbdc1U91nrrIfIuZVcdmVQRFBTqCiuiJ9E91TxDm3J0XNuVAKy/YVmQEhvmcmTbd+n
-         gUvWqUlmRqrm765g2hxlHk8EYg6MQ2uQX1UB4gHsjk47vMrpHwDDNjVRVTdl57WONLdP
-         cNh0GLoWclbhLpvY7TORQ7cHw+iUeVEHk7AP/7J/Axkwkka4Z4oCiArkn2KJ8RI4QExW
-         ivCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763982993; x=1764587793;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UuRrMhunT9TDWnZHLII8BIXNolS7BUSymKB5ka4d4O0=;
-        b=fErksXDPrZIZfDtOc+Jsd9IAnvGti90jxjMVAKWCPJTFFUBwwA2nia4yHrfHNaPKjQ
-         aEFFN+B21S8u1f5F6D9J30JIM3SVK+0OHpVrFThtvgk2pYTlzDWPiD9v1+uv/jlD9Phh
-         x5xAci6FGwpVnKyw3uXgMn/mLy7lcL/brTTp2s01z+H2fN5Q3fLrJ+KoWUOpaed8Bkzc
-         AVKMMfG/Hv6a9xNToKyIhtDtVVG29w1IiyEC1S1Wqd3zoUltAYmux69ZSHCsHkSfWNN6
-         Uk6heMOIMsm6J5VOgyoyg6FvONDIyr8bJCsVpml01bLIeL6kFbvYirsVdz1C24UgvoBB
-         avLA==
-X-Forwarded-Encrypted: i=1; AJvYcCX2NCRqodPLbjRvkgiO2gmDeAH0IoPc5k9EjCdpFgTwB3KVcCON6TefDFezfQr/gu4SOPlL+zOO3g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa6ZY0DvFDQ6G7IIcZiPOt+uIJ0Bzqdg8p0OUh62jKxYTbfvAd
-	M+JC9ur62FWriMCjapuvLP3lVHYgrXQmZbEWBfiI0kexDFMudrK8faza3hEUsgO6wfM=
-X-Gm-Gg: ASbGncuBYH7JOcKaW1fyEyLnG5E2bVvFq9uspYoxsNDQiNB2W+W9fTyLuarAAcoau3Q
-	Y2dt7JihUCwmhFxarJdUKm2TnFVbBNFYRiJdcI4HoCs26hIWthZD1lvUg38EXPFVGLO8jG7qtvH
-	PukG4wtC/SNHNuhWkULs66O5XtvM+HJy0jFM75yt2B2VL957eI039TPlOqNql/CNEB+nMq3HyOe
-	C6McHFSeLpY8JROOUm8uX69q8Kcwl4PDLF71CDsI7XGNH6s6YbtVHwiMv2mSKnC0jL/hSNOm7VG
-	HO1d4i6Th0lPdqoH1GcdiBgllF5/zj9857FT9A8hNalhYj01RFYkw39iqxtK04kDAMH76K2jxTA
-	KLA80Y0lRz9XRUOklY7KxOuCc1rjaQ/y91mbH1D/1rCCq/8riYvCm+ix+tyFDb70/cua+PlMXB2
-	dY4+Fx9sWUBolxb8Z/DTHaziIdWRG7C0qFZTPezzaBKWMD03j21XhbRCuyqNTiWsn/Pg==
-X-Google-Smtp-Source: AGHT+IGoaXb9zqkluRUTXSsxY7Elb/IIHiZ+I4IVLxjc5bpkpHjrfyygfT2RwN8BHb50RMQMY1Fuxg==
-X-Received: by 2002:a05:600c:1ca5:b0:475:dde5:d91b with SMTP id 5b1f17b1804b1-477c1115ff6mr126002295e9.17.1763982992722;
-        Mon, 24 Nov 2025 03:16:32 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:a756:bb6c:7b35:af9b? ([2a05:6e02:1041:c10:a756:bb6c:7b35:af9b])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-42cb7f2e5b6sm27447425f8f.1.2025.11.24.03.16.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Nov 2025 03:16:32 -0800 (PST)
-Message-ID: <ec51f257-e961-4e21-94d9-68825cbfe287@linaro.org>
-Date: Mon, 24 Nov 2025 12:16:31 +0100
+	 In-Reply-To:Content-Type; b=ZZyofTokKNJflw1GVzDUt2WRJ5s3sYMQUxCcnD/AT7L8erArW8AN2p24LNqAekvCKhfnYxdhtKL8zDlE/w5plkFJR3/qogLTcrB4HuJ/5aoKXsMIDZ7LmoipjBPTnbOh8xoPELXoReNyuPpHS1IQMugybRZI3IexuDgR9gn61c4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vbku2pR4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93D5FC4CEFB;
+	Mon, 24 Nov 2025 11:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763984225;
+	bh=hJtmUzWljueWqbsAv7sDroPS+XY96NFx9pUHqQ6wKlQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Vbku2pR49qRcmcrSvUHz32hM/cMIrNSkUMl6XA69LZ/O87SeSY3SnlBEMHZmE9yYX
+	 HZJbONyE52OfqzMffMjp8rOdF6yevN0tAT6IBlNlspovdv4k+oOew7sIiVbAa5KJh3
+	 Ij1JsmOiswrJiXvJXM+2UzysJ9usSa23/iy95V5QSF/tkz2f6TMnaHNdd/diKVbd7T
+	 MGwbX2VltGowbkztWGf8ei35Gd8f/+EdybH6C9Vp6NcT0C0h/eW87IZQHWc/CqGgT4
+	 WSDBugZkrfzvXXyc51i6c7d4TleZIR9f7bTCSLFZ4qpd6f7qHDwnwl6RwqFUupyKoX
+	 BLvsFfgTQB6cQ==
+Message-ID: <2deb7496-3094-4d03-b4d0-fb15cfdc6f0e@kernel.org>
+Date: Mon, 24 Nov 2025 12:37:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -84,98 +50,88 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 RESEND 2/3] thermal: exynos_tmu: Support new hardware
- and update TMU interface
-To: Tudor Ambarus <tudor.ambarus@linaro.org>, =?UTF-8?B?7IaQ7Iug?=
- <shin.son@samsung.com>, 'Bartlomiej Zolnierkiewicz' <bzolnier@gmail.com>,
- 'Krzysztof Kozlowski' <krzk@kernel.org>,
- "'Rafael J . Wysocki'" <rafael@kernel.org>, 'Zhang Rui'
- <rui.zhang@intel.com>, 'Lukasz Luba' <lukasz.luba@arm.com>,
- 'Rob Herring' <robh@kernel.org>, 'Conor Dooley' <conor+dt@kernel.org>,
- 'Alim Akhtar' <alim.akhtar@samsung.com>
-Cc: 'Henrik Grimler' <henrik@grimler.se>, linux-pm@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- William McVicker <willmcvicker@google.com>, jyescas@google.com
-References: <20251113064022.2701578-1-shin.son@samsung.com>
- <CGME20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237@epcas2p1.samsung.com>
- <20251113064022.2701578-3-shin.son@samsung.com>
- <2180a854-8ba6-4424-add2-eb34637530c1@linaro.org>
- <000001dc5d2a$0697bf10$13c73d30$@samsung.com>
- <12346382-7718-4942-a497-4de278b1d5a0@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: battery: Add SiLION battery bindings
+ technology
+To: Rakesh Kota <rakesh.kota@oss.qualcomm.com>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kamal.wadhwa@oss.qualcomm.com,
+ fenglin.wu@oss.qualcomm.com
+References: <20251124-add_silion_battery-v1-0-3c86b70d2543@oss.qualcomm.com>
+ <20251124-add_silion_battery-v1-1-3c86b70d2543@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <12346382-7718-4942-a497-4de278b1d5a0@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251124-add_silion_battery-v1-1-3c86b70d2543@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Tudor,
-
-On 11/24/25 11:43, Tudor Ambarus wrote:
-> Hi, Shin,
+On 24/11/2025 12:12, Rakesh Kota wrote:
+> Document a new battery chemistry for silicon-anode lithium-ion
+> cells.
 > 
-> On 11/24/25 12:06 PM, 손신 wrote:
->>>> +static void update_con_reg(struct exynos_tmu_data *data) {
->>>> +	u32 val, t_buf_vref_sel, t_buf_slope_sel;
->>>> +
->>>> +	val = readl(data->base + EXYNOS_TMU_REG_TRIMINFO);
->>>> +	t_buf_vref_sel = (val >> EXYNOSAUTOV920_TMU_T_BUF_VREF_SEL_SHIFT)
->>>> +				& EXYNOSAUTOV920_TMU_T_BUF_VREF_SEL_MASK;
->>>> +	t_buf_slope_sel = (val >> EXYNOSAUTOV920_TMU_T_BUF_SLOPE_SEL_SHIFT)
->>>> +				& EXYNOSAUTOV920_TMU_T_BUF_SLOPE_SEL_MASK;
->>>> +
->>>> +	val = readl(data->base +  EXYNOSAUTOV920_TMU_REG_CONTROL);
->>>> +	val &= ~(EXYNOS_TMU_REF_VOLTAGE_MASK <<
->>> EXYNOS_TMU_REF_VOLTAGE_SHIFT);
->>>> +	val |= (t_buf_vref_sel << EXYNOS_TMU_REF_VOLTAGE_SHIFT);
->>>> +	val &= ~(EXYNOS_TMU_BUF_SLOPE_SEL_MASK <<
->>> EXYNOS_TMU_BUF_SLOPE_SEL_SHIFT);
->>>> +	val |= (t_buf_slope_sel << EXYNOS_TMU_BUF_SLOPE_SEL_SHIFT);
->>>> +	writel(val, data->base + EXYNOSAUTOV920_TMU_REG_CONTROL);
->>>> +
->>>> +	val = readl(data->base + EXYNOSAUTOV920_TMU_REG_CONTROL1);
->>>> +	val &= ~(EXYNOSAUTOV920_TMU_NUM_PROBE_MASK <<
->>> EXYNOSAUTOV920_TMU_NUM_PROBE_SHIFT);
->>>> +	val &= ~(EXYNOSAUTOV920_TMU_LPI_MODE_MASK <<
->>> EXYNOSAUTOV920_TMU_LPI_MODE_SHIFT);
->>>> +	val |= (data->sensor_count << EXYNOSAUTOV920_TMU_NUM_PROBE_SHIFT);
->>>> +	writel(val, data->base + EXYNOSAUTOV920_TMU_REG_CONTROL1);
->>>> +
->>>> +	writel(1, data->base + EXYNOSAUTOV920_TMU_SAMPLING_INTERVAL);
->>>> +	writel(EXYNOSAUTOV920_TMU_AVG_CON_UPDATE, data->base +
->>> EXYNOSAUTOV920_TMU_REG_AVG_CONTROL);
->>>> +	writel(EXYNOSAUTOV920_TMU_COUNTER_VALUE0_UPDATE,
->>>> +	       data->base + EXYNOSAUTOV920_TMU_REG_COUNTER_VALUE0);
->>>> +	writel(EXYNOSAUTOV920_TMU_COUNTER_VALUE1_UPDATE,
->>>> +	       data->base + EXYNOSAUTOV920_TMU_REG_COUNTER_VALUE1);
->>>> +}
->>>> +
->>> This is unreadable; please make it understandable for those who don’t have
->>> the documentation (explicit static inline functions, comments, etc ...).
->> I'll restructure this code by introducing explicit static inline helper functions and proper comments to improve readability.
+> Signed-off-by: Rakesh Kota <rakesh.kota@oss.qualcomm.com>
+> ---
+>  Documentation/devicetree/bindings/power/supply/battery.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> We likely shouldn't use inlines here, see Linus's reply from 2006:
-> https://lore.kernel.org/all/Pine.LNX.4.64.0601021105000.3668@g5.osdl.org/T/#u
-
-We should not use inline functions when they can be called from 
-different places and if they contain a significant amount of code inside.
-
-But for one line functions, inside a driver it may help for the 
-readability when the function name is self-explanatory.
-
-
-> I guess you can make this easier to read if you use FIELD_GET/SET from
-> bitfield.h. Other improvement would be using the regmap api.
-
-regmap would be too overkill to write unshared registers.
+> diff --git a/Documentation/devicetree/bindings/power/supply/battery.yaml b/Documentation/devicetree/bindings/power/supply/battery.yaml
+> index 491488e7b970397b409c248fb0c2a524301686a9..49cbd03956eeb9fc8be72540d8bf35840ccd7156 100644
+> --- a/Documentation/devicetree/bindings/power/supply/battery.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/battery.yaml
+> @@ -44,6 +44,7 @@ properties:
+>        - const: lithium-ion-polymer
+>        - const: lithium-ion-iron-phosphate
+>        - const: lithium-ion-manganese-oxide
+> +      - const: lithium-ion-silicon-anode
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Where is any DTS user of this? You have entire cover letter to explain
+the background WHY you are doing this.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Best regards,
+Krzysztof
 
