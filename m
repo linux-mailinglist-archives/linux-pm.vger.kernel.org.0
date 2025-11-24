@@ -1,139 +1,156 @@
-Return-Path: <linux-pm+bounces-38462-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38463-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18EF0C803DF
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:43:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5144C80724
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 13:24:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8BABC344902
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:43:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DE553A1BB5
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:24:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F9542FDC26;
-	Mon, 24 Nov 2025 11:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C4729B228;
+	Mon, 24 Nov 2025 12:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="HpJilch6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UCbDuoun"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720982F83A3
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 11:43:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCA0226CFE
+	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 12:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763984584; cv=none; b=HLKWVNZdR/o7T/LlUfDMlaATkmwvIHsmZTyhz72z4Fn41Xrsi26yKK5ETMPzRLCUljLn/JsQYe+0bx+mhTG1k3MZZrbgdiYh+BSINQRS5v+bp5ApYpSKdR/dGPWOhI53+USvoDS3QmUMbRydl87WYwSCss60eS8svZ8ZFtty+Lk=
+	t=1763987060; cv=none; b=EqgHXZsjN7yWvyuRjn0uWZj94ZsHxlFbAy9E0jUWCcsO1J0e+sBRGOMXwU49WVR7taA+cpBW6LN+Ywh1sFKhRfXGMLxMrzxJ7mpAf4cgS/ulUmyR75cRm3Em6VBszWUagptshksfCmz7ZS3YaBiT5CVATP47mhxd42/IXPXY+ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763984584; c=relaxed/simple;
-	bh=0UfPZnz9PDbhxDHBtLEyEa8gvhJLlctrIXKAOZGOWN4=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=MYAdT7srZPndG270rRmcZL3PeQcpBCWrmnQdgN3L9LuWQgaAfIoCDNQBMww51vAcfNEhRz8yad4xUnSxyKzYmQkcWiSlkUaa5akRhF6QliLmnXVe1l+gJYqr2oIrlq0YVftkMO9+2tLirUl8WGykNxcu2gZJ3PjrFFIcbdfhY0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=HpJilch6; arc=none smtp.client-ip=203.254.224.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20251124114300epoutp03e13f8fdba422412e34a0363abf9334f5~67qFSQrLs0076700767epoutp03M
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 11:43:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20251124114300epoutp03e13f8fdba422412e34a0363abf9334f5~67qFSQrLs0076700767epoutp03M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1763984580;
-	bh=0UfPZnz9PDbhxDHBtLEyEa8gvhJLlctrIXKAOZGOWN4=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=HpJilch6TDX0BNZAKmAtksPr/pTIRtbn+k1MZzmRCfb/qNdQrIyStCoaDvrMl23J2
-	 KnI0A8Hd6aGlB0SRPr5Fp8wgDhtNqlYNCymCj0DJu2tOsGknbwheu6JuV7Kqn2gE4G
-	 su4enLOhBF8ngnvlypPptrDdRykNFvbrH94+UmzI=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPS id
-	20251124114259epcas2p48a7d588390bbbab0b08ee6749024b466~67qEhbMgv1875518755epcas2p43;
-	Mon, 24 Nov 2025 11:42:59 +0000 (GMT)
-Received: from epcas2p1.samsung.com (unknown [182.195.38.200]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4dFP8M3DR6z2SSKX; Mon, 24 Nov
-	2025 11:42:59 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas2p1.samsung.com (KnoxPortal) with ESMTPA id
-	20251124114258epcas2p103cab1d3b8b5414e7437a08126e36d8b~67qDVN1Ew1969819698epcas2p1T;
-	Mon, 24 Nov 2025 11:42:58 +0000 (GMT)
-Received: from KORCO115296 (unknown [12.80.207.128]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20251124114258epsmtip22c7b65a35428b6c08ca8cac404c177c9~67qDPPttI1360513605epsmtip24;
-	Mon, 24 Nov 2025 11:42:58 +0000 (GMT)
-From: =?utf-8?B?7IaQ7Iug?= <shin.son@samsung.com>
-To: "'Daniel Lezcano'" <daniel.lezcano@linaro.org>, "'Bartlomiej
- Zolnierkiewicz'" <bzolnier@gmail.com>, "'Krzysztof Kozlowski'"
-	<krzk@kernel.org>, "'Rafael J . Wysocki'" <rafael@kernel.org>, "'Zhang Rui'"
-	<rui.zhang@intel.com>, "'Lukasz	Luba'" <lukasz.luba@arm.com>, "'Rob
-	Herring'" <robh@kernel.org>, "'Conor Dooley'" <conor+dt@kernel.org>, "'Alim
-	Akhtar'" <alim.akhtar@samsung.com>
-Cc: "'Henrik Grimler'" <henrik@grimler.se>, <linux-pm@vger.kernel.org>,
-	<linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<shin.son@samsung.com>
-In-Reply-To: <2b63c064-ce62-421b-8469-e434bd0c9652@linaro.org>
-Subject: RE: [PATCH v7 RESEND 2/3] thermal: exynos_tmu: Support new hardware
- and update TMU interface
-Date: Mon, 24 Nov 2025 20:42:56 +0900
-Message-ID: <000c01dc5d37$7b1b8da0$7152a8e0$@samsung.com>
+	s=arc-20240116; t=1763987060; c=relaxed/simple;
+	bh=CdkSoOGkYCWxizMuG3oTq6c8mgAr5aYWC1EmHLuCzoM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VDmyE2/iSyhaw8WLGoJQE5EKZ4md20AtoLT0hIHbs+G0iRl49PWmb4i3IZB3w04K/V9vRXXpZKFY5qgO5eXFxz4dLIQF+4EYNXI1p0CSjAVd0gd8eI0SKZ+sSbfXCIeXSn42HPiDiK5+LHn1pfEXCZe9JqjQqqqG0aNJ/R+Ms4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UCbDuoun; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47789cd2083so24607655e9.2
+        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 04:24:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1763987056; x=1764591856; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NuDHMylOaR8g/JvAKh/yVTJ3Yy9MU0h2/4AVh9Q0YsE=;
+        b=UCbDuounVqSiqmDAXoLXRE5I9dFcU6DpDr2x69zGYpPXZTkRElRWo+DyCpkiECPoI1
+         clywfWeE5GNOrOjh/TlCuYeW/HItONNXzU1QZY8lVv1+JJz/U9VNUIrMWilDMPmh8DGN
+         hwk1Jfgzxi12C4OLttLoZNycimvbAMXfAQxVlon4j3D6YjONXKFiOCBvfh2mi2WPCRfU
+         nf2oLcSvfMNdjsroFZx6ojdeMU2RTyaCO/VmKL/yRcj2s7OAc5pN9gmtUbpAGNeBFsUn
+         mIWOT++SrBMaUqXnWP/xoa/wCiOtxjIawOUWM65dJ3/N7h+B9CPdg+vXFPfw8/oLXubn
+         Owvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763987056; x=1764591856;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NuDHMylOaR8g/JvAKh/yVTJ3Yy9MU0h2/4AVh9Q0YsE=;
+        b=i8oY9b1geetvfmJfQx/db1AHvHsTlSjbTnLYh86PWMhN/DY8dHefRyhG+dhEhsNOAN
+         Cjq7Q4TynO0pZRPZhVfNgyi3jRehxbgSIzMsTrF95tazmh9pebBatStgSXfe6Ku2GCRG
+         IxKi0C0YlGRoY/60aXfFWiU4twOW+zUwqwNCJCRXdTseqm0ljKWXmVcczJmPAQ6eRgsc
+         Rq6Zo9g1RJsAJeIDDTq+B82j1/7TbbMTRf9nfZZ6vVw8+4n0p5yM3V73N3tUVr/hSMRz
+         /DyldnT6Qr6od2rWO3McJhyelsy5O0J4LMizzAa4k9yHrO0+Vr06y+nXy14UkRX0jLsg
+         1eMA==
+X-Forwarded-Encrypted: i=1; AJvYcCV8LAMTumk33g3vj2vXFYngnrkZeGU4Yvgl1motIdHkt1Do9cP9NjgzcwwaA10DHGlV525PFpborg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjhOntaX7+B9DY9VOR88bqbcEYMBBCKc5CanpBPiRSO8vpvpX0
+	3VmZn0pUKAtJKspgi8MXiTjFDqQ5CuJbtFT3bb3Zrw2apjrpipu8iFJDAClKjTUwZVM=
+X-Gm-Gg: ASbGnctK8LZ8Qxccy/1ydwaBVamhwcLgf3kOOm3OAnJ8/QhWsav3eB4pGtXaB1lTEcx
+	xyfFWs6EAVZQ3FSeobgd+/49N7hqLyLjTTyXlTiT0Y6UXHoO83ViI5fz5prboxyL/GAAVyQLxdN
+	AeVhBEycgbW6XPO75WN0iLlHMZgN3ZmB3PrFamZ6C0u326XhmochLL17HngJonKt1q9WlE+QFif
+	nFO1QPPdrH3q1Njk85fBx9FWJNd7bPKENVq2KMDNETDT3aBVWlOE/kfdOQLz+en9/0uSER4eu1p
+	7muHy6BdkmzdiozUCm++zJtXE7C5P+6gUW/jvF8/sYGdouR8FpbI3QAs1jiCidEzVHe2745A0rE
+	S4GjzazcFGYU2iSxr7SNMGwzH1g/UV9YItWIWLcunDW4XRYA6zE0qQdIZYSCWXtDcdBYsS3q6G8
+	uZZl62qpJ8jEUCE9L9
+X-Google-Smtp-Source: AGHT+IG2uTxmSnqi9HaFJ7zlbUKITzVAUKbFdsMO7ekXsieDrVZoHZ7vGzCkFpr4leaIfxrvJJzZUQ==
+X-Received: by 2002:a05:600c:1c25:b0:46e:4586:57e4 with SMTP id 5b1f17b1804b1-477c114ed70mr173574695e9.24.1763987056305;
+        Mon, 24 Nov 2025 04:24:16 -0800 (PST)
+Received: from [10.11.12.107] ([5.12.85.52])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-477bf1f365fsm195163025e9.8.2025.11.24.04.24.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Nov 2025 04:24:15 -0800 (PST)
+Message-ID: <1baaae91-f712-4965-9105-4358a59ff1d1@linaro.org>
+Date: Mon, 24 Nov 2025 14:24:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQJR08pAfg/+KuTfxFjIW+Bmb4uKqAKoesbtAuyt0KIBiaSaQQHdj7cKAduSh9sCP+LNfQLSCcBls5d4FAA=
-Content-Language: ko
-X-CMS-MailID: 20251124114258epcas2p103cab1d3b8b5414e7437a08126e36d8b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-cpgsPolicy: CPGSC10-234,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 RESEND 2/3] thermal: exynos_tmu: Support new hardware
+ and update TMU interface
+To: =?UTF-8?B?7IaQ7Iug?= <shin.son@samsung.com>,
+ 'Daniel Lezcano' <daniel.lezcano@linaro.org>,
+ 'Bartlomiej Zolnierkiewicz' <bzolnier@gmail.com>,
+ 'Krzysztof Kozlowski' <krzk@kernel.org>,
+ "'Rafael J . Wysocki'" <rafael@kernel.org>, 'Zhang Rui'
+ <rui.zhang@intel.com>, 'Lukasz Luba' <lukasz.luba@arm.com>,
+ 'Rob Herring' <robh@kernel.org>, 'Conor Dooley' <conor+dt@kernel.org>,
+ 'Alim Akhtar' <alim.akhtar@samsung.com>
+Cc: 'Henrik Grimler' <henrik@grimler.se>, linux-pm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ 'Peter Griffin' <peter.griffin@linaro.org>,
+ =?UTF-8?Q?=27Andr=C3=A9_Draszik=27?= <andre.draszik@linaro.org>,
+ 'William McVicker' <willmcvicker@google.com>, jyescas@google.com
 References: <20251113064022.2701578-1-shin.son@samsung.com>
-	<CGME20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237@epcas2p1.samsung.com>
-	<20251113064022.2701578-3-shin.son@samsung.com>
-	<2180a854-8ba6-4424-add2-eb34637530c1@linaro.org>
-	<000001dc5d2a$0697bf10$13c73d30$@samsung.com>
-	<ab35c20e-390c-4479-9bb1-9f5e49cba2a0@linaro.org>
-	<000001dc5d32$2b4bfb20$81e3f160$@samsung.com>
-	<2b63c064-ce62-421b-8469-e434bd0c9652@linaro.org>
+ <CGME20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237@epcas2p1.samsung.com>
+ <20251113064022.2701578-3-shin.son@samsung.com>
+ <2180a854-8ba6-4424-add2-eb34637530c1@linaro.org>
+ <000001dc5d2a$0697bf10$13c73d30$@samsung.com>
+ <12346382-7718-4942-a497-4de278b1d5a0@linaro.org>
+ <000b01dc5d37$3f6f5e80$be4e1b80$@samsung.com>
+Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <000b01dc5d37$3f6f5e80$be4e1b80$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hello, Daniel Lezcano.
+Hi, Shin Son,
 
-> -----Original Message-----
-> From: Daniel Lezcano =5Bmailto:daniel.lezcano=40linaro.org=5D
-> Sent: Monday, November 24, 2025 8:09 PM
-> To: =EC=86=90=EC=8B=A0=20<shin.son=40samsung.com>;=20'Bartlomiej=20Zolnie=
-rkiewicz'=0D=0A>=20<bzolnier=40gmail.com>;=20'Krzysztof=20Kozlowski'=20<krz=
-k=40kernel.org>;=20'Rafael=20J=20.=0D=0A>=20Wysocki'=20<rafael=40kernel.org=
->;=20'Zhang=20Rui'=20<rui.zhang=40intel.com>;=20'Lukasz=0D=0A>=20Luba'=20<l=
-ukasz.luba=40arm.com>;=20'Rob=20Herring'=20<robh=40kernel.org>;=20'Conor=0D=
-=0A>=20Dooley'=20<conor+dt=40kernel.org>;=20'Alim=20Akhtar'=20<alim.akhtar=
-=40samsung.com>=0D=0A>=20Cc:=20'Henrik=20Grimler'=20<henrik=40grimler.se>;=
-=20linux-pm=40vger.kernel.org;=20linux-=0D=0A>=20samsung-soc=40vger.kernel.=
-org;=20devicetree=40vger.kernel.org;=20linux-arm-=0D=0A>=20kernel=40lists.i=
-nfradead.org;=20linux-kernel=40vger.kernel.org=0D=0A>=20Subject:=20Re:=20=
-=5BPATCH=20v7=20RESEND=202/3=5D=20thermal:=20exynos_tmu:=20Support=20new=0D=
-=0A>=20hardware=20and=20update=20TMU=20interface=0D=0A>=20=0D=0A>=20On=2011=
-/24/25=2012:04,=20=EC=86=90=EC=8B=A0=20wrote:=0D=0A>=20>=20Hello,=20Daniel=
-=20Lezcano.=0D=0A>=20>=0D=0A>=20>>=20On=2011/24/25=2011:06,=20=EC=86=90=EC=
-=8B=A0=20wrote:=0D=0A>=20>>=20=5B=20...=20=5D=0D=0A>=20>>=0D=0A>=20>>>=20Ho=
-wever,=20since=20ExynosAutov920=20diverges=20significantly=20from=20the=0D=
-=0A>=20>>>=20existing=20driver,=20Would=20introducing=20a=20separate=20driv=
-er=20instead=20of=0D=0A>=20>>>=20unifying=0D=0A>=20>>=20everything=20be=20a=
-cceptable?=0D=0A>=20>>=0D=0A>=20>>=20So=20this=20driver=20is=20one=20contro=
-ller=20for=20multiple=20sensors=20while=20the=0D=0A>=20>>=20others=20driver=
-s=20are=20one=20controller=20for=20one=20sensor,=20right=20?=0D=0A>=20>>=0D=
-=0A>=20>=0D=0A>=20>=20Yes.=20As=20far=20as=20I=20understand,=20the=20previo=
-us=20Exynos=20variants=20used=20one=20TMU=0D=0A>=20>=20controller=20per=20s=
-ensor,=20while=20on=20ExynosAutoV920=20the=20hardware=20has=20multiple=0D=
-=0A>=20TMU=20instances=20and=20each=20instance=20contains=20multiple=20sens=
-ors.=0D=0A>=20>=20Therefore,=20this=20new=20automotive=20SoC=20requires=20s=
-upporting=20multiple=20sensors=0D=0A>=20behind=20a=20single=20TMU=20control=
-ler.=0D=0A>=20=0D=0A>=20Ok=20thanks.=20It=20makes=20sense=20to=20create=20a=
-=20separate=20driver.=0D=0A=0D=0AThen,=20I'll=20prepare=20a=20new=20patch=
-=20series.=20Thank=20you=20for=20your=20feedback=0D=0A=0D=0ABest=20regards,=
-=0D=0AShin=0D=0A=0D=0A
+On 11/24/25 1:41 PM, 손신 wrote:
+>> Shin, a bit unrelated with the patch, but I wanted to let you know that I
+>> started looking at the GS101 TMU. I assume it's very similar with the TMU
+>> on exynosautov920. Do you know if they share the same IP version?
+
+I guess you omitted this question.
+
+>>
+>> I noticed GS101 uses ACPM calls to communicate with the TMU. Why did you
+>> choose to not use ACPM for exynosautov920 TMU?
+
+cut
+
+> Regarding ACPM, I did not introduce it earlier because I was trying to align the implementation with the existing framework.
+> However, if we move toward a separate driver, I will reconsider whether ACPM integration makes sense there.
+> Would it be possible to get your feedback again when I prepare the next revision of the driver?
+
+Yes, I'll try to review it. Add me to cc please.
+
+> 
+> Plus, the GS101 TMU driver isn't upstream yet, right?
+
+It isn't. I started getting familiar with it, and will try to upstream it.
+Given exynosautov9 and gs101 already share lots of IPs, I assume TMU is similar.
+I will likely follow the ACPM route because that's what the downstream code does.
+
+> Could you share where I can find the example code you mentioned? Thank you in advance.
+
+Are you referring to the GS101 TMU driver code? Here it is:
+https://android.googlesource.com/kernel/google-modules/raviole-device/+/refs/heads/android-gs-raviole-mainline/drivers/thermal/samsung/gs_tmu_v2.c
+
+DT at:
+https://android.googlesource.com/kernel/google-modules/raviole-device/+/refs/heads/android-gs-raviole-mainline/arch/arm64/boot/dts/google/gs101.dtsi#1453
+
+Is the downstream exynosautov9 code publicly available? Can you provide some links?
+
+Thanks!
+ta
 
