@@ -1,83 +1,47 @@
-Return-Path: <linux-pm+bounces-38491-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38492-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4489EC81FD4
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 18:56:39 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43EABC82019
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 19:02:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DCCB3342AA2
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 17:56:38 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 398E94E717A
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 18:02:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DB1C2C21DD;
-	Mon, 24 Nov 2025 17:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49AD2299A84;
+	Mon, 24 Nov 2025 18:02:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UIl/Lh93"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="uzT18HvT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6BA2C15B5
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 17:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC18316900;
+	Mon, 24 Nov 2025 18:02:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764006995; cv=none; b=LIBNgM3LXXSiFQAQGJCrJjvPt1ATWFk8RNT/Wy9sQ9QTKsEaB7wYBCmLBIYgEE4OvV5M6aBS/HzdGlX0iuGNceP3KhjJaDuGqUL6eVyFxYwAKScovnXFdDhCB9Ei6+ZOqaSyY25pQnA6wZfWxwJdLNB4fpL6Bd4wW+bS+yAJq4Q=
+	t=1764007336; cv=none; b=EWVf1dO5gc91FQ5FtYU6wWBvizwNlpEhT8bfYKTQL4ROb/5ClvD897RaR+MzJGNxCUa3ulaLZBs4EDSx4SVSgMTss30qJ7VrgrpnX6MUrssPlcj+RwYo7CCudUOhY7mXC2+dMYUIuQ7CzDTtElfqS8vmeK6UfPCcEhppExdFhJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764006995; c=relaxed/simple;
-	bh=dPLZPXzQgDRDqQnurUjDg3r6SH40YxJqrAijPmz7Kww=;
+	s=arc-20240116; t=1764007336; c=relaxed/simple;
+	bh=FhfVkAsfNdsFdhI8lvJ5LkMDe1YEZB4iPo9Utu9w2XM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j8AKw0N2MPRuADgxHwGHlUh3wy6SxGDT8W9492Kcf2yzn9rc2mAA97GSoqSitKrWDUfb9bnuFB83YKh+Q6DzkaHuvSoRB+7ewRmbuiIXXy+MVMdBBgxC4WFGEkXId2L2Tnfo9YXrT9xXe+FXEEaCWKpyPr0EEKnEII2TQTgByOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UIl/Lh93; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-477ba2c1ca2so48258515e9.2
-        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 09:56:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764006991; x=1764611791; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dgj16XmQKLfzuMiMJnYwYhnRMSc7HIdJxo40jdxC8fc=;
-        b=UIl/Lh934qmWi/fRDKj+vjLLHtpKfarbEWH9a1s9fVxnia8z3TC77ajVrESH/bCyEl
-         lSy2W/PzTCwg/SY1DmESxMIAVfqT1a13iwx9ldJLR6KPaxPK5aQKsHUq8UUgArcpYFu5
-         gRHW6dX8+8cdkbOhy74a8AsIRufMWc0ES6Px8ryb7FcgB0pD8PVJO8w+v/k/Rjc3av6d
-         dCDzW05OQxvYUhTTyvlBwLIMQNGQ9IWqQkyhOZ0UxQyp2cT73cFrzfUrXvv/Fhinv7xj
-         nadw1rWzqFHdQOr988iZbGVsrsi5UqJssIJLNEt5+D6GptY8LAQ198BI3w18KJFyiZ/R
-         xc7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764006991; x=1764611791;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dgj16XmQKLfzuMiMJnYwYhnRMSc7HIdJxo40jdxC8fc=;
-        b=qXJu1LuRdRDLj2lrWpu3jJabPwMagFG1tOfHpSo0mO7cexjKXIVd692RZcPviqZEEO
-         lttoc5hGZSb+9BXAjRPgBjO5OND1z9GZpQU1NueemoHtpTqZF7VqqqaQkngXdWMvrbno
-         FQwGUQMdgFXgPru8OVsKbd94y9nfjjTkb836VOUkM6XlCsJWqeIeSPIzib7tEHY7QsBs
-         8IaZPcqi+0ccrBbwuPbqDTkEYiHUWYGZ0zlbGdAchXO+ZwiWLWL200A6B2CGdzDvRGK5
-         VUtIowAopImUEBriZb+RXG55ZH+2uxhgw4wH8E8J1u/Yn4mo9UlsX98HLQ4MVXxWr4xp
-         FNNw==
-X-Forwarded-Encrypted: i=1; AJvYcCUBeIm1moJGB5cpwuXowyB6EnnN7LwZ1BFQtLgyHRpdlLTNNvXYqucohFOHMiaHcmYqaZaE/qVOig==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwGpnm/dwn7OIrWhWtjSrVfhrnroES/U85XR3h+5ItN4UPAGxRN
-	VNYGH19I853NeXGrxwoKw+OrOQ/58cdp0m9dY1FLHbt8miisAsF7rriRKt6iUi2nDjE=
-X-Gm-Gg: ASbGncvn0XtpNqS38iMP9hRXxOFUH8YM3E1l1GemQjdEYnrSak2fkDIpxQy1RN9yz3z
-	+eeto1OanSeSdrUMZSXA6AW29jmEn+5t30JNhdpvDxL7J2lapisetar6thDfYL/+wia3frSdgKD
-	IDZqaeUw4tIakPcM8XQe39rE32eo0oyxR4jnJ7MCsl1vCpOfRGdA33iy3xewft8pwRpG0fFTZxb
-	bar9PIyJnbYt+K3UKC9jyQSHdBYnGhO74HPuY7IzIJPF001ebrfCtiFWJyfKKou+IxKvhl6meqR
-	RbioLvvw8+y+gsfu5L2+eXPaL77vQf8X5v30jBgAXy/QMws2T/h6a2RS5yiuMEdcuX/8s3ztLgc
-	Pbmw75V6X/HWLs/o3zDfGAsfpkM4VgSA/rQgCPsIadvtsNLJoH/QGJWcmpDECFrGR0jF99o8/vU
-	cEBF4PqUEwMAZxyOKnMnMHslwlCH754LWROCCGEgqaVmqJcLguzD/o0D7cRyVYwOuEyXIsBp/QK
-	Hzw
-X-Google-Smtp-Source: AGHT+IF9jQYjGDYWRD+2xNGzxOUo7frTRxo+/YiP6cBgQWSgQQXQD/fGaLUkrkLZhoAvTfv/zaiUjQ==
-X-Received: by 2002:a05:600c:1f94:b0:477:28c1:26ce with SMTP id 5b1f17b1804b1-477c016bbd5mr123402035e9.7.1764006991417;
-        Mon, 24 Nov 2025 09:56:31 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:a756:bb6c:7b35:af9b? ([2a05:6e02:1041:c10:a756:bb6c:7b35:af9b])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-477bf198a67sm217894095e9.0.2025.11.24.09.56.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Nov 2025 09:56:30 -0800 (PST)
-Message-ID: <190003b6-2931-406a-a8f6-ec8909c65162@linaro.org>
-Date: Mon, 24 Nov 2025 18:56:29 +0100
+	 In-Reply-To:Content-Type; b=DyPC9nq34X41ImKVsMTRIbqw2jvogpEykMvxUY2OouRrLfUvg0tKRhYre4oY9AArHudgQ/2JZC3+n6hUqyCvMtieUaLFBQa1PEQnIBq3RIhOhYycyNPL0TlzVlYtRy3qE3uTxp2P53UqfH3aBPpX0xZYFCag7t2o7H+tIHFk7wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=uzT18HvT; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [10.50.4.39] (45-31-46-51.lightspeed.sndgca.sbcglobal.net [45.31.46.51])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4dFYYn2cB4z4X2K;
+	Mon, 24 Nov 2025 13:02:05 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1764007325; bh=FhfVkAsfNdsFdhI8lvJ5LkMDe1YEZB4iPo9Utu9w2XM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=uzT18HvTQ/HnYY8yguVhBDIjNPYEl/qVzyx3Y+wkg34bbjsupfttDA0mT+D1l7W+a
+	 a74QxUWLFQmCUVJUDvP6PCbrGaRZnr+wqxmkHn4zDHc3QrZ+Cb+nzwLgGggHOE7hIO
+	 QMGpY3L4e6/I66firxyMYgxBTEKEeZ/R+3npupws=
+Message-ID: <6e7aa10e-9938-4ab1-af14-b3d2906c211a@panix.com>
+Date: Mon, 24 Nov 2025 10:02:04 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,64 +49,45 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/9] thermal/drivers/mediatek/lvts: Fail probe if
- temp_factor is zero
-To: Laura Nao <laura.nao@collabora.com>, srini@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
- rui.zhang@intel.com, lukasz.luba@arm.com, matthias.bgg@gmail.com,
- angelogioacchino.delregno@collabora.com
-Cc: nfraprado@collabora.com, arnd@arndb.de, colin.i.king@gmail.com,
- u.kleine-koenig@baylibre.com, andrew-ct.chen@mediatek.com,
- lala.lin@mediatek.com, bchihi@baylibre.com, frank-w@public-files.de,
- wenst@chromium.org, fshao@chromium.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- kernel@collabora.com
-References: <20251121-mt8196-lvts-v4-v4-0-357f955a3176@collabora.com>
- <20251121-mt8196-lvts-v4-v4-3-357f955a3176@collabora.com>
+Subject: Re: Oops when returning from hibernation with changed thunderbolt
+ status
+To: Lukas Wunner <lukas@wunner.de>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Michael Guntsche <michael.guntsche@it-loops.com>,
+ "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+ linux-pm@vger.kernel.org, linux-efi@vger.kernel.org
+References: <CALG0vJuaU_5REU55Hg170LipPLj7Tt0V3icn7XzxLY-8+jsx-A@mail.gmail.com>
+ <20251120055748.GM2912318@black.igk.intel.com> <aSGTghJyX-u-leL6@wunner.de>
 Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20251121-mt8196-lvts-v4-v4-3-357f955a3176@collabora.com>
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <aSGTghJyX-u-leL6@wunner.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-On 11/21/25 12:16, Laura Nao wrote:
-> temp_factor is used in lvts_temp_to_raw() and lvts_raw_to_temp(). If
-> platform data is incorrect and temp_factor is zero, it could cause a
-> division by zero. Fail the probe early to prevent a kernel crash.
-> 
-> Signed-off-by: Laura Nao <laura.nao@collabora.com>
-> ---
->   drivers/thermal/mediatek/lvts_thermal.c | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
-> index 1c54d0b75b1a..b49441d82ffd 100644
-> --- a/drivers/thermal/mediatek/lvts_thermal.c
-> +++ b/drivers/thermal/mediatek/lvts_thermal.c
-> @@ -1346,6 +1346,11 @@ static int lvts_probe(struct platform_device *pdev)
->   	if (irq < 0)
->   		return irq;
->   
-> +	if (!lvts_data->temp_factor)
-> +		return dev_err_probe(
-> +			dev, -EINVAL,
-> +			"temp_factor should never be zero; check platform data.\n");
-> +
-
- From my POV, this is not really useful. The temp_factor is set for each 
-version statically in the code. The scope is limited to the driver, IOW 
-it is not a parameter other subsystems passes to the driver.
-
-If it is NULL, then shame on the submitter who did not test the driver 
-before sending ;)
+Content-Transfer-Encoding: 7bit
 
 
+
+On 11/22/25 02:42, Lukas Wunner wrote:
+
+> Also the photo shows a UBSAN splat in drm/display/drm_mst_topology.c
+> 220 msec before the oops, maybe it's related?
+
+FWIW, this sounds really familiar (resume crashes if I changed TB docks 
+between suspend and resume) and was getting an OOPS there I'd bisected to:
+
+Resume OOPS from f6971d7427 ("drm/i915/mst: adapt 
+intel_dp_mtp_tu_compute_config() for 128b/132b SST") if MST displays 
+disconnected while suspended
+
+... and this was fixed in 732b87a (Fix determining SST/MST mode during 
+MTP TU state computation) back in 6.15 (which IIRC, is when your crashes 
+started happening).
+
+I wonder if this is related? Maybe reach out to the i915 guys?
+
+-Kenny
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
