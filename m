@@ -1,145 +1,95 @@
-Return-Path: <linux-pm+bounces-38431-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38432-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92316C7F387
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 08:39:53 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A3F8C7F42C
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 08:53:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 012B53A65D0
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 07:39:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C6F254E2CF6
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 07:53:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14FD22E9730;
-	Mon, 24 Nov 2025 07:39:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB1542E7BC0;
+	Mon, 24 Nov 2025 07:53:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oP6c8ESS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMe6OuXO"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71632E8E12;
-	Mon, 24 Nov 2025 07:39:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41F727FB26;
+	Mon, 24 Nov 2025 07:53:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763969971; cv=none; b=RLq2Ih2JWi52qAHzWT3WuKDxTz+vXwQVYbuA07wMUmAUJFn4Wg5+OmQF9uCRe4vw0s1+VnrGOF5im8xbizXAQyRq1zUhcDJV3Fj5jmE8gw0Ng6jUvjHaIK/UYPGVCc2litJCao31ndEjFXpotYuoim93GCatvmMJAuRRaev0oPk=
+	t=1763970813; cv=none; b=XbYOyhhUfyWLNQpqpsadjWPHMGAHdbhzCxAlSXyzdTHwmxagaGvsHBqUamCuR7Ks5d3sRRkjxUDA5d0lZJwWW8AljZlY/Mq3XkxNefG6PpMWipX797taSSsZzOHfjUHpDJV5vKT2ScDClkqI1tZBRaBd254ZvuayfaAE2PM7oH4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763969971; c=relaxed/simple;
-	bh=sY8ilj4l0AMnsXFPN9kmU/jiVIb75XyvDgZpSSSWnSg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=N+lsBAYkrV3GtOf6fHmkxzSLSPMBHkpDc+6Xt6uB8KTYmsJ9FQ2LOewj6Y+htyVI+LwcX5+TEunrDMvivgQ+sQwcZ55wrMRl1HGTwXMf4wZI+QxlQztsXR7XBdEE4jbTilm/ls6HqxxrQLFEufn3rwfOnBXb2ljl1qv4zrqV2vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oP6c8ESS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC155C4CEF1;
-	Mon, 24 Nov 2025 07:39:26 +0000 (UTC)
+	s=arc-20240116; t=1763970813; c=relaxed/simple;
+	bh=Ba/x+lH0Or0r4SZ7ljSij6gkS+YlackfK8oPM3gblmc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VpdUVESAAO41PEIfI27OFyGfuAdeynlkbmhtfRX1XNDZ7CzkRBfjKp0WuMJtlNVP0HgsKUDFuiXVTOnuU0pGzooGv5pyFyx02wUfQ7N29/VdKH/LLNy2iVca977/V/QhRM+uaMiwDe3sg74n47b+kGNub0wEla9tP/FAKxxjf0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMe6OuXO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A78C16AAE;
+	Mon, 24 Nov 2025 07:53:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763969971;
-	bh=sY8ilj4l0AMnsXFPN9kmU/jiVIb75XyvDgZpSSSWnSg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oP6c8ESSz+1kdVH8Q0hzjVVODYpyAnTH8DGgGcbFPm7ukYHA2TjaL1+Kv+JIeSdUW
-	 DdMbmmnn6NPp2ydP1RDbDQx8rtTct/f4l6Fj6teRmVBC7CNcmjjeehqjwuPNb2rndI
-	 Y3Axynuv2H2B6XZmyoCYvtgBnCShrE3ppcVQ3B7sMesaafsldM1xDBiDNsln/rCYBq
-	 KU7pHWqY+zLbtFxuxIofk9bH2bn89lJOpjv3pW56HYiT2JO3gR1ALboL7T4+SNFYBB
-	 JoVgOq3gdwFhsDT1YG3bWzrhvTgZu0P6fZJ36x2QWHQ3vYvpLKdZwxEoUZb77oCG0i
-	 P+VOESIfyhG2w==
-Message-ID: <d2184e6b-ba22-423a-8d3c-3b8c2f8ec329@kernel.org>
-Date: Mon, 24 Nov 2025 08:39:25 +0100
+	s=k20201202; t=1763970813;
+	bh=Ba/x+lH0Or0r4SZ7ljSij6gkS+YlackfK8oPM3gblmc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=iMe6OuXOUOmehIt+QzEUuw/lQgOX01lWBrHw8vpL6J/fiWGGpnMLr1BKcIMIDklXT
+	 nyRrJKO6h1TH1Z/aoAY+kFUdN1w/UG1uldfcdYxD+Q428otXYsspogHKBWLwrLyME3
+	 xuDSxuWTo51K2rWpO5QROSuTjtxIOKb0XPIN6obkSiwAh0TWswPy4jQKmKGTR67cJW
+	 cQs6u88OOxEsAzLH6Gq41WXJnOPqogyQ2Ojze2NRDjufgVdWriZmeFCkUWY4hMHSlL
+	 OZN32NR1OQrSIPORWmGLfOZv2njsgyD1xWXZTzLvoqOJTYIQg/Dqk/qJxFau7YPvNp
+	 MUFrgTT33KyKw==
+Date: Mon, 24 Nov 2025 08:53:30 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Amit Sunil Dhamne <amitsd@google.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	=?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Badhri Jagan Sridharan <badhri@google.com>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Peter Griffin <peter.griffin@linaro.org>, 
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH 3/6] dt-bindings: usb: maxim,max33359: Add supply
+ property for VBUS in OTG mode
+Message-ID: <20251124-rook-of-exotic-innovation-fedcc5@kuoka>
+References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
+ <20251123-max77759-charger-v1-3-6b2e4b8f7f54@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/6] mfd: max77759: modify irq configs
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
- <20251123-max77759-charger-v1-4-6b2e4b8f7f54@google.com>
- <5c901a6c831775a04924880cc9f783814f75b6aa.camel@linaro.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <5c901a6c831775a04924880cc9f783814f75b6aa.camel@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251123-max77759-charger-v1-3-6b2e4b8f7f54@google.com>
 
-On 24/11/2025 07:21, André Draszik wrote:
+On Sun, Nov 23, 2025 at 08:35:50AM +0000, Amit Sunil Dhamne wrote:
+> Add a regulator supply property for VBUS when usb is in OTG mode.
 > 
->>  	if (ret)
->>  		return dev_err_probe(&client->dev, ret,
->>  				     "MAX77759_MAXQ_INT_APCMDRESI failed\n");
->> @@ -633,7 +643,7 @@ static int max77759_probe(struct i2c_client *client)
->>  		return dev_err_probe(&client->dev, -EINVAL,
->>  				     "invalid IRQ: %d\n", client->irq);
->>  
->> -	irq_flags = IRQF_ONESHOT | IRQF_SHARED;
->> +	irq_flags = IRQF_ONESHOT | IRQF_SHARED | IRQF_TRIGGER_LOW;
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+> ---
+>  Documentation/devicetree/bindings/usb/maxim,max33359.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> I don't believe IRQF_TRIGGER_LOW should be added here, as this is board-specific.
-> The polarity is meant to be set via DT (and the only current user of this driver
-> does so).
-> 
+> diff --git a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+> index 3de4dc40b791..a529f18c4918 100644
+> --- a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+> +++ b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+> @@ -32,6 +32,9 @@ properties:
+>      description:
+>        Properties for usb c connector.
+>  
+> +  otg-vbus-supply:
 
-
-If this is the main chip interrupt, then you are right and the code is
-obviously wrong. What's more, it is completely unexplained in the commit
-msg, because that vague statement cannot be taken as any reasonable
-explanation.
+How is the pin or supply called in the datasheet?
 
 Best regards,
 Krzysztof
+
 
