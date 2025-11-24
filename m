@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-38430-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38431-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68941C7F35D
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 08:39:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 92316C7F387
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 08:39:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E40B3A650F
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 07:38:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 012B53A65D0
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 07:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE9D2E8E0B;
-	Mon, 24 Nov 2025 07:38:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14FD22E9730;
+	Mon, 24 Nov 2025 07:39:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SJB/Gigq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oP6c8ESS"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 938352E8B75;
-	Mon, 24 Nov 2025 07:38:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71632E8E12;
+	Mon, 24 Nov 2025 07:39:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763969923; cv=none; b=mJ93E+RvEmN3uYUmEXI1XFWOuLZaUJcMqiFmS8dLp7+UX5+D20VX12hGA6WN74uUZIUN1wQIH4ZyqPQaeYZy6GVoKH7EZhgiYqjE+7DrekhZvfDSUeIV61JZR2W/MjLacMoRijRudk9IpgpR+BAXLaj7/bi9uRw0Gh/urEGtzUY=
+	t=1763969971; cv=none; b=RLq2Ih2JWi52qAHzWT3WuKDxTz+vXwQVYbuA07wMUmAUJFn4Wg5+OmQF9uCRe4vw0s1+VnrGOF5im8xbizXAQyRq1zUhcDJV3Fj5jmE8gw0Ng6jUvjHaIK/UYPGVCc2litJCao31ndEjFXpotYuoim93GCatvmMJAuRRaev0oPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763969923; c=relaxed/simple;
-	bh=jcqHT8d/CWoQ3azcqnOtlOMFkmeAcleUjrV6ER4fSB0=;
+	s=arc-20240116; t=1763969971; c=relaxed/simple;
+	bh=sY8ilj4l0AMnsXFPN9kmU/jiVIb75XyvDgZpSSSWnSg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KRtPS3B6LOCOuDMckScw8n8mWi2fr0QAQE1wOFqQEbqo/tIzQ5Wj+9hkFf21LfCIGIalfjSDiPOXkiFMskzImD/zTTABDaEGYpApARuk5oiaiCATImKiG5xIQ1Sje4KsB7fP/Kj+mv3AtB1NELC42isRJiKbAmw/tS4O2VkWWYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SJB/Gigq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD434C4CEF1;
-	Mon, 24 Nov 2025 07:38:38 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=N+lsBAYkrV3GtOf6fHmkxzSLSPMBHkpDc+6Xt6uB8KTYmsJ9FQ2LOewj6Y+htyVI+LwcX5+TEunrDMvivgQ+sQwcZ55wrMRl1HGTwXMf4wZI+QxlQztsXR7XBdEE4jbTilm/ls6HqxxrQLFEufn3rwfOnBXb2ljl1qv4zrqV2vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oP6c8ESS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC155C4CEF1;
+	Mon, 24 Nov 2025 07:39:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763969923;
-	bh=jcqHT8d/CWoQ3azcqnOtlOMFkmeAcleUjrV6ER4fSB0=;
+	s=k20201202; t=1763969971;
+	bh=sY8ilj4l0AMnsXFPN9kmU/jiVIb75XyvDgZpSSSWnSg=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SJB/GigqJovwxfBej0jv7UuRin8x9M2yVhnawzc02sEz3/cQrN7w+iKwlBP4L0AKo
-	 yJh5zaTiesTiLEfeWepvhwDD475Ij2sAjOBOS4uSY3dWzpfill/zBKwQkcOL35SIve
-	 xhlGgo20C6VTgJ2iwqd/N1bzxFTJeXNf3gSTkeLgBHvuTNZ6BcCI0Ctq4CBBQ6wrQ2
-	 bEpk5PqgQfy/Aw4BSQKttxIfVpkRUSXloz6Y5fQ0gxvA/mTQLAuFqiXRNeqx7Ogrmp
-	 59b1gJ7WMzx87AbmyqzmM8UUdr8nvi/sjUTcFzkf1m/f70ySoo0ZGuaqwvg+qvYD6p
-	 O7spWg3+NzJgA==
-Message-ID: <86e922e9-f314-44f6-a8de-d804d38d593c@kernel.org>
-Date: Mon, 24 Nov 2025 08:38:37 +0100
+	b=oP6c8ESSz+1kdVH8Q0hzjVVODYpyAnTH8DGgGcbFPm7ukYHA2TjaL1+Kv+JIeSdUW
+	 DdMbmmnn6NPp2ydP1RDbDQx8rtTct/f4l6Fj6teRmVBC7CNcmjjeehqjwuPNb2rndI
+	 Y3Axynuv2H2B6XZmyoCYvtgBnCShrE3ppcVQ3B7sMesaafsldM1xDBiDNsln/rCYBq
+	 KU7pHWqY+zLbtFxuxIofk9bH2bn89lJOpjv3pW56HYiT2JO3gR1ALboL7T4+SNFYBB
+	 JoVgOq3gdwFhsDT1YG3bWzrhvTgZu0P6fZJ36x2QWHQ3vYvpLKdZwxEoUZb77oCG0i
+	 P+VOESIfyhG2w==
+Message-ID: <d2184e6b-ba22-423a-8d3c-3b8c2f8ec329@kernel.org>
+Date: Mon, 24 Nov 2025 08:39:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -51,10 +51,10 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 4/6] mfd: max77759: modify irq configs
-To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
  Badhri Jagan Sridharan <badhri@google.com>,
  Heikki Krogerus <heikki.krogerus@linux.intel.com>,
@@ -67,6 +67,7 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
 References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
  <20251123-max77759-charger-v1-4-6b2e4b8f7f54@google.com>
+ <5c901a6c831775a04924880cc9f783814f75b6aa.camel@linaro.org>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -112,20 +113,32 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251123-max77759-charger-v1-4-6b2e4b8f7f54@google.com>
+In-Reply-To: <5c901a6c831775a04924880cc9f783814f75b6aa.camel@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 23/11/2025 09:35, Amit Sunil Dhamne via B4 Relay wrote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
+On 24/11/2025 07:21, André Draszik wrote:
 > 
-> Define specific bit-level masks for charger's registers and modify the
-> irq mask for charger irq_chip. Also, configure the max77759 interrupt
-> lines as active low to all interrupt registrations to ensure the
-> interrupt controllers are configured with the correct trigger type.
+>>  	if (ret)
+>>  		return dev_err_probe(&client->dev, ret,
+>>  				     "MAX77759_MAXQ_INT_APCMDRESI failed\n");
+>> @@ -633,7 +643,7 @@ static int max77759_probe(struct i2c_client *client)
+>>  		return dev_err_probe(&client->dev, -EINVAL,
+>>  				     "invalid IRQ: %d\n", client->irq);
+>>  
+>> -	irq_flags = IRQF_ONESHOT | IRQF_SHARED;
+>> +	irq_flags = IRQF_ONESHOT | IRQF_SHARED | IRQF_TRIGGER_LOW;
+> 
+> I don't believe IRQF_TRIGGER_LOW should be added here, as this is board-specific.
+> The polarity is meant to be set via DT (and the only current user of this driver
+> does so).
+> 
 
-This is just redundant explanation. You did not actually explain why you
-need to set the trigger.
+
+If this is the main chip interrupt, then you are right and the code is
+obviously wrong. What's more, it is completely unexplained in the commit
+msg, because that vague statement cannot be taken as any reasonable
+explanation.
 
 Best regards,
 Krzysztof
