@@ -1,126 +1,113 @@
-Return-Path: <linux-pm+bounces-38502-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38503-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F30FC82586
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 20:52:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8B79C82756
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 21:58:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0EDAE34A1D3
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 19:52:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79EDB3A9D8F
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 20:58:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D28332D0C0;
-	Mon, 24 Nov 2025 19:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560DE2E2840;
+	Mon, 24 Nov 2025 20:58:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a5LY26iG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bGJifXEt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D8132C931
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 19:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2848E258ECC;
+	Mon, 24 Nov 2025 20:57:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764013926; cv=none; b=M4ys/Es8dw7QFcyYi917kl9pP/57z058amyrZOZGyqQ5obJNN0yJ3Wt8qR07xlSSSiYnDohdK0i+cui/Bcb/0uZ8J/RN/SUTPiw/xO5HqUCcijhyedJ1PqVePJpmAfaenUqtfda2lyAzNFFu5PcFLymivOt2DQoBwZ2FEVYNuH8=
+	t=1764017883; cv=none; b=fVO4qmgIMIBQHvTQ2NT69CShdDSeF6P16+X/D1Jx4H/Va497k4oHN+3t60DphdfanHuQG04vObMmD7MOXKpuxHuCkOR4oEMw1bV90u7zvw6IXTdQvCtTJyBnsmI868UsTqSf+acCZWSwwBF5BIGBO7A/Pkob4FqSjoPrReWF3Rw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764013926; c=relaxed/simple;
-	bh=kwrO+Mnb6L8qVWUtNbvySCVYiWHMfhYzBQP6+X0oeys=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=cJCCXb88mP8q/wN4a/smVijQLDrZoUu0xfzBqtMLaGlCgdHjx5idRuivVCWeXreU9HKJ50uJB0xAaujeINF9ePepBq7LTC7uScVAs8wBO4gW/CD5jn9DsPzxCXlLbaXRNoTrLD7wcDVmKM9lurTvp2qU/TQB5uVLb+XxdU9XWBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a5LY26iG; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764013921;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=57MP1DopHTQAggif2CcNJ9umqlpooR5GfWP71F0mvdU=;
-	b=a5LY26iGWN5G2pChfF0u4KKTGeOiH4oLR5V15ljywutINHSpYhAutg45vSga6ectwhyypT
-	RnGpshRbIe+2WFUZbZR+mb6cqhlwULVko+wj5kZhuu0kJtII/r5GbLe9VT7jfhZvHnXJly
-	fO6Ij72eMMfQgjeXOLGT47N8bJCjWog=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-633-uL-TaeAMNeaDna5HDm89iw-1; Mon,
- 24 Nov 2025 14:51:35 -0500
-X-MC-Unique: uL-TaeAMNeaDna5HDm89iw-1
-X-Mimecast-MFC-AGG-ID: uL-TaeAMNeaDna5HDm89iw_1764013886
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6CE861800447;
-	Mon, 24 Nov 2025 19:51:25 +0000 (UTC)
-Received: from [10.44.33.72] (unknown [10.44.33.72])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8EDD918004D8;
-	Mon, 24 Nov 2025 19:51:18 +0000 (UTC)
-Date: Mon, 24 Nov 2025 20:51:16 +0100 (CET)
-From: Mikulas Patocka <mpatocka@redhat.com>
-To: Askar Safin <safinaskar@gmail.com>
-cc: Dell.Client.Kernel@dell.com, agk@redhat.com, brauner@kernel.org, 
-    dm-devel@lists.linux.dev, ebiggers@kernel.org, kix@kix.es, 
-    linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-    linux-crypto@vger.kernel.org, linux-lvm@lists.linux.dev, 
-    linux-mm@kvack.org, linux-pm@vger.kernel.org, linux-raid@vger.kernel.org, 
-    lvm-devel@lists.linux.dev, milan@mazyland.cz, msnitzer@redhat.com, 
-    mzxreary@0pointer.de, nphamcs@gmail.com, pavel@ucw.cz, rafael@kernel.org, 
-    ryncsn@gmail.com, torvalds@linux-foundation.org
-Subject: Re: [PATCH 1/2] pm-hibernate: flush disk cache when suspending
-In-Reply-To: <20251122224748.3724202-1-safinaskar@gmail.com>
-Message-ID: <4085e0de-30f5-870c-ff82-5a293fe8ac73@redhat.com>
-References: <c44942f2-cf4d-04c2-908f-d16e2e60aae2@redhat.com> <20251122224748.3724202-1-safinaskar@gmail.com>
+	s=arc-20240116; t=1764017883; c=relaxed/simple;
+	bh=raufc+3XLsouSkUORTSPo5aJVO/3e/bC5y5y7d9EAcE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nac/eiyXNh+J0afO2to25rqRlDieC7Eldu8ImOtpuc6+N7RzB/AL5SSW7XRslDN+l8QS1USCXUKiMvv8IZ6amwEpB5VvkYX51ZSpkZyPnXUL2m31cmkvWs445jvZ94V9aEo5cpwuElb03k8bf/1Fx6Zn6Dd7WMjwlA3fRdyYhGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bGJifXEt; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764017881; x=1795553881;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=raufc+3XLsouSkUORTSPo5aJVO/3e/bC5y5y7d9EAcE=;
+  b=bGJifXEtC9TYJGK9gA+D/332n+9ZcY+boWJdeeiAe6QqXza+X3Gl2FVu
+   Baaw2/L41H0j5WW87/3X1nYqX+HT1pYSVeVPmNARZv8XvaTGriEoL74S8
+   RvlZZO93Wf0o49oa/urn6otJzysA5236M4yxbL1FJ/ETpIDvyqAUKAuDD
+   hzzoRPYFfrmeBXM4iawzuujgUCSGRDREtFQ1B38+MEhTQEhPTAooNegqF
+   jb/p4P6KIvDn0epbrpxn2OuvstPro6AeofFPouB2KF26Z6aes/FvwvNM9
+   TycyPPls6hUw9N1u7vARk8oBvci1JfYM7yEBPwUhB3UI46GrtdujSomea
+   g==;
+X-CSE-ConnectionGUID: gqPrywJHTjKtMP1cK/Z1BA==
+X-CSE-MsgGUID: y5XOgx2+TCCBdzhnrrq0Sg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11623"; a="66105533"
+X-IronPort-AV: E=Sophos;i="6.20,223,1758610800"; 
+   d="scan'208";a="66105533"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Nov 2025 12:57:59 -0800
+X-CSE-ConnectionGUID: /D0Q+5vOSXmsPtkYZGDvtw==
+X-CSE-MsgGUID: d8Xr5gWgQ6e+sKdb/6tQLQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,223,1758610800"; 
+   d="scan'208";a="192902487"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa009.fm.intel.com with ESMTP; 24 Nov 2025 12:57:58 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id 2166A9F; Mon, 24 Nov 2025 21:57:57 +0100 (CET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH v1 1/1] cpuidle: Update header inclusion
+Date: Mon, 24 Nov 2025 21:57:52 +0100
+Message-ID: <20251124205752.1328701-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Content-Transfer-Encoding: 8bit
 
+While cleaning up some headers, I got a build error on this file:
 
+drivers/cpuidle/poll_state.c:52:2: error: call to undeclared library function 'snprintf' with type 'int (char *restrict, unsigned long, const char *restrict, ...)'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
 
-On Sun, 23 Nov 2025, Askar Safin wrote:
+Update header inclusions to follow IWYU (Include What You Use)
+principle.
 
-> Mikulas Patocka <mpatocka@redhat.com>:
-> > [PATCH 1/2] pm-hibernate: flush disk cache when suspending
-> > 
-> > There was reported failure that suspend doesn't work with dm-integrity.
-> > The reason for the failure is that the suspend code doesn't issue the
-> > FLUSH bio - the data still sits in the dm-integrity cache and they are
-> > lost when poweroff happens.
-> 
-> I tested this patchset (in Qemu). It works.
-> 
-> Here is script I used for testing:
-> 
-> https://zerobin.net/?66669be7d2404586#xWufhCq7zCoOk3LJcJCj7W4k3vYT3U4vhGutTN3p8m0=
-> 
-> Here are logs:
-> 
-> https://zerobin.net/?5d4a2abbad751890#WMcQl4FAZC9KqcAuJU3TSVr7wuVnPFwI7dlinA9QHOo=
-> 
-> Tested-By: Askar Safin <safinaskar@gmail.com>
-> 
-> There was no any reason to wait for me. You could easily test using script above.
-> 
-> Also: Linux shows this scary message when booting in Qemu:
-> 
-> [    0.512581] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-> 
-> So, FUA is not supported? Does it mean that this patch is wrong, and works purely
-> by chance?
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/cpuidle/poll_state.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-If FUA is not supported by a disk, the kernel would send a flush request 
-after the write request with the FUA flag. There's no problem with that - 
-the cache will be flushed correctly.
-
-Mikulas
-
-> -- 
-> Askar Safin
-> 
+diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
+index 9b6d90a72601..c7524e4c522a 100644
+--- a/drivers/cpuidle/poll_state.c
++++ b/drivers/cpuidle/poll_state.c
+@@ -4,9 +4,13 @@
+  */
+ 
+ #include <linux/cpuidle.h>
++#include <linux/export.h>
++#include <linux/irqflags.h>
+ #include <linux/sched.h>
+ #include <linux/sched/clock.h>
+ #include <linux/sched/idle.h>
++#include <linux/sprintf.h>
++#include <linux/types.h>
+ 
+ #define POLL_IDLE_RELAX_COUNT	200
+ 
+-- 
+2.50.1
 
 
