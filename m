@@ -1,185 +1,240 @@
-Return-Path: <linux-pm+bounces-38469-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38470-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E33AC81279
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 15:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D422C812A0
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 15:53:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D475E3477A8
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 14:52:16 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 334BE347ADC
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 14:53:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF7292877CF;
-	Mon, 24 Nov 2025 14:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A87F30E83A;
+	Mon, 24 Nov 2025 14:53:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m2mYLnSl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e9RuXhQW"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBCB5284689;
-	Mon, 24 Nov 2025 14:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357ED3002B9
+	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 14:53:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763995931; cv=none; b=pLXaRyiJ95sBmGyvH6ay4jmxxEvRSmvMRjw9Lbx4IZfXRdY1FoJAB1miXue0yMeAWoHcb9CVQUZSkg5u3qnGhQnuPdtFUzf3VBwlUkgIWeCazL7Qnr+T5Qh2xeSTuSBxG+i/oEiTY8+WjAe+Jk44JnTASyMbA/iWDDKT1RTUYH0=
+	t=1763996018; cv=none; b=Tjcyswpy4vB1dsiW1UjTI2gvmSNYHfKEJEE6817zQT4culT/NH3Xr/YhyDa402XbwVHyGqkN3dYK3Xf9YorKJbzPdCzbcIPrDNu6jhlrq6oC92z1dc2Lg9SIMgmgQj1ZSrNZMGCC+ffu4UrtahA8pOy7mR4O+Wbq+P+5R3nz3gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763995931; c=relaxed/simple;
-	bh=Ppl5jcUBV28m+G2H7ZpG+09UuraaMIVrQKkmLcz0k+s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fnBOGLbnPwNzb8RdYKShFOiDb9atSDau3d14WBFwJdV2Fv9KEvCjLdWf1X43QHlrsdiW68BIbZ+4MUsa45WKJ+7sR4KdftnMd0tqq2ZNXd/ezbt/xpAbYpPIVUtj2ptyJXyXT+8VQdLLGEdDYV1kY31QWAJ/x5k/Gc6SUNA+0X4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m2mYLnSl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F32C4CEF1;
-	Mon, 24 Nov 2025 14:52:07 +0000 (UTC)
+	s=arc-20240116; t=1763996018; c=relaxed/simple;
+	bh=pqB+fORk4m1HommlyJq2ylzh3yrOPYjttsDy21RyYgU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=RWPfQ/BVaL7KJ7SM55uY3NFTIkWoOUqoZTOb6PDNMZVHr33sb0dZgBtBL0ptFqmN/nYMWakzGkJR31bQjtQmviRkWPHgxigXJXI1ZbZAFmHVZ6f0/mRg9EsHjrbWNtG8OBphiCelZkgonDemal0CY9QaVYo8eZdCi2kDLBpzBa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e9RuXhQW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B77E2C116C6
+	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 14:53:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763995931;
-	bh=Ppl5jcUBV28m+G2H7ZpG+09UuraaMIVrQKkmLcz0k+s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=m2mYLnSlr6CRJyNta1vrzf+cqAlK1m85GuTlIVjE0KiMA7DxDvNrlPriqfSjTz4Xu
-	 7/YR8QoNkPMOcl101RMxlPoc0v0CEMww6Wkg9uT9zM29cO2FXvgjQ9LjN916oDKkF5
-	 QRMJFp5hwmrvSKg5LAw1EqGGmZR+oN8FnLfbVsFm34cGc19Di46nJi32SV/Zd8J1XH
-	 1mcNeBPJvijzg/kvjDOphPjl1AV8Px4iiNd3b96HzDO3m8Ei+H6Oxmlr2qEukuBhpw
-	 hp1ZGd7kJaY1697xZOkNGq73CRdZKnENz3Itbeek3BeNz+qqJDhoxYi2GXKZpV1aoK
-	 SpTXnHzvdnP8A==
-Message-ID: <4a277387-ca59-4688-bf7b-13da62589fcd@kernel.org>
-Date: Mon, 24 Nov 2025 15:52:05 +0100
+	s=k20201202; t=1763996017;
+	bh=pqB+fORk4m1HommlyJq2ylzh3yrOPYjttsDy21RyYgU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=e9RuXhQWHN50+X7USvcx98hebk25P6BerbOyisHSCucWTYF1XxTVTzi8ev/SUu1Ir
+	 wM4aJZAySmbDMq/8sktl+ZtXmacsXY53g0FibsSgumCvE1KJHeFaDmKMjjCNbwPSxh
+	 pAAPp2zTRAXhg17b0rnepgIYwWv+cu3fOlz04GXbblxMtWjbjG0ITEjD/J1oIj9fsV
+	 qtFP69SOuh/4HAx3jvmXvTIjvgW+JhonfPvxjxvqHUcwYQ902hwi4ScGKIgaZTVKm6
+	 EhckDSsXRAwrTJkCwDMl5aKYpkBoaVYI/Mct1GT5rFg31tPt+t3SDdUaF8tHT0ZxGB
+	 17KZvpF6zzpOA==
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6431b0a1948so7160170a12.3
+        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 06:53:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUMpdl97SLH6srFP0GaOeb4mRSsTQPA5qlHD7TRQgHiu0zDpZjCS0jGAD9rKcYQvCapP3q8du3SOw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTdwfOCCCoeR8T6EqN0Ex6jGvZrOIUNNWHZGZsT1LOnr6vhLrG
+	ZUEXwmp71famvYHRJSsZerVqjikQvMseEDIv8AAPZEBjRSEl667X8u0TeBMjIFcx0AZm9RgRDqx
+	fJrN2vgBbLxB40nIL3HNhb7xveQmkqA==
+X-Google-Smtp-Source: AGHT+IFMnKpbOKpALlRbon6njvQlHioDFBZ6ps4Ha77/hkzyeDp8YHGtY6SBZLINsmH8f54C5ek7l5d85xk5VAIwd4A=
+X-Received: by 2002:a05:6402:26c3:b0:639:f7b5:9c2d with SMTP id
+ 4fb4d7f45d1cf-6455444987cmr9474492a12.9.1763996016204; Mon, 24 Nov 2025
+ 06:53:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] checkpatch: add uninitialized pointer with __free
- attribute check
-To: Ally Heev <allyheev@gmail.com>, Dwaipayan Ray <dwaipayanray1@gmail.com>,
- Lukas Bulwahn <lukas.bulwahn@gmail.com>, Joe Perches <joe@perches.com>,
- Jonathan Corbet <corbet@lwn.net>, Andy Whitcroft <apw@canonical.com>
-Cc: workflows@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Dan Carpenter <dan.carpenter@linaro.org>,
- David Hunter <david.hunter.linux@gmail.com>,
- Shuah Khan <skhan@linuxfoundation.org>, Viresh Kumar <vireshk@kernel.org>,
- Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
- linux-pm <linux-pm@vger.kernel.org>, dan.j.williams@intel.com,
- Geert Uytterhoeven <geert@linux-m68k.org>,
- James Bottomley <James.Bottomley@hansenpartnership.com>
-References: <20251124-aheev-checkpatch-uninitialized-free-v5-1-0c523b1a3f5a@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251124-aheev-checkpatch-uninitialized-free-v5-1-0c523b1a3f5a@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+ <20251015071420.1173068-2-herve.codina@bootlin.com> <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
+In-Reply-To: <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Mon, 24 Nov 2025 08:53:25 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
+X-Gm-Features: AWmQ_bmYzp1pjz08UuT7I12fxIYXbO1yVvjH9IMl7-quEF7iTRxZTROtz2B7mnw
+Message-ID: <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
+Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT overlays"
+To: Kalle Niemi <kaleposti@gmail.com>
+Cc: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
+	Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Charles Keepax <ckeepax@opensource.cirrus.com>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Mark Brown <broonie@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
+	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
+	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 24/11/2025 15:44, Ally Heev wrote:
-> uninitialized pointers with __free attribute can cause undefined
-> behavior as the memory randomly assigned to the pointer is freed
-> automatically when the pointer goes out of scope.
-> add check in checkpatch to detect such issues.
-> 
-> Suggested-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Link: https://lore.kernel.org/all/8a4c0b43-cf63-400d-b33d-d9c447b7e0b9@suswa.mountain/
-> Link: https://lore.kernel.org/all/58fd478f408a34b578ee8d949c5c4b4da4d4f41d.camel@HansenPartnership.com/
-> Acked-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Ally Heev <allyheev@gmail.com>
-> ---
-> Testing:
-> ran checkpatch.pl before and after the change on 
-> crypto/asymmetric_keys/x509_public_key.c, which has
-> both initialized with NULL and uninitialized pointers
-> ---
-> Changes in v5:
-> - fixed checkpatch doc
-> - Link to v4: https://lore.kernel.org/r/20251107-aheev-checkpatch-uninitialized-free-v4-1-4822a6ac728f@gmail.com
-> 
-> Changes in v4:
-> - fixed UNINITIALIZED_PTR_WITH_FREE description 
-> - Link to v3: https://lore.kernel.org/r/20251025-aheev-checkpatch-uninitialized-free-v3-1-a67f72b1c2bd@gmail.com
-> 
-> Changes in v3:
-> - remove $FreeAttribute
-> - Link to v2: https://lore.kernel.org/r/20251024-aheev-checkpatch-uninitialized-free-v2-0-16c0900e8130@gmail.com
-> 
-> Changes in v2:
-> - change cover letter and title to reflect new changes
-> - fix regex to handle multiple declarations in a single line case
-> - convert WARN to ERROR for uninitialized pointers
-> - add a new WARN for pointers initialized with NULL 
-> - NOTE: tried handling multiple declarations on a single line by splitting
->         them and matching the parts with regex, but, it turned out to be 
-> 	complex and overkill. Moreover, multi-line declarations pose a threat
-> - Link to v1: https://lore.kernel.org/r/20251021-aheev-checkpatch-uninitialized-free-v1-1-18fb01bc6a7a@gmail.com
-> ---
->  Documentation/dev-tools/checkpatch.rst | 20 ++++++++++++++++++++
->  scripts/checkpatch.pl                  |  6 ++++++
->  2 files changed, 26 insertions(+)
-> 
-> diff --git a/Documentation/dev-tools/checkpatch.rst b/Documentation/dev-tools/checkpatch.rst
-> index d5c47e560324fb2399a5b1bc99c891ed1de10535..865aaaf6dc51b1c3f763b3cbb8713da3d00db960 100644
-> --- a/Documentation/dev-tools/checkpatch.rst
-> +++ b/Documentation/dev-tools/checkpatch.rst
-> @@ -1009,6 +1009,26 @@ Functions and Variables
->  
->        return bar;
->  
-> +  **UNINITIALIZED_PTR_WITH_FREE**
-> +    Pointers with __free attribute should be defined and assigned in one
+On Mon, Nov 24, 2025 at 8:48=E2=80=AFAM Kalle Niemi <kaleposti@gmail.com> w=
+rote:
+>
+> On 10/15/25 10:13, Herve Codina wrote:
+> > From: Saravana Kannan <saravanak@google.com>
+> >
+> > This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
+> >
+> > While the commit fixed fw_devlink overlay handling for one case, it
+> > broke it for another case. So revert it and redo the fix in a separate
+> > patch.
+> >
+> > Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
+> > Reported-by: Herve Codina <herve.codina@bootlin.com>
+> > Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgy=
+o8x6=3D9F9rZ+-KzjOg@mail.gmail.com/
+> > Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com=
+/
+> > Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.co=
+m/
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > Link: https://lore.kernel.org/lkml/20240411235623.1260061-2-saravanak@g=
+oogle.com/
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> > Acked-by: Mark Brown <broonie@kernel.org>
+> > ---
+> >   drivers/bus/imx-weim.c    | 6 ------
+> >   drivers/i2c/i2c-core-of.c | 5 -----
+> >   drivers/of/dynamic.c      | 1 -
+> >   drivers/of/platform.c     | 5 -----
+> >   drivers/spi/spi.c         | 5 -----
+> >   5 files changed, 22 deletions(-)
+> >
+> > diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> > index 83d623d97f5f..87070155b057 100644
+> > --- a/drivers/bus/imx-weim.c
+> > +++ b/drivers/bus/imx-weim.c
+> > @@ -327,12 +327,6 @@ static int of_weim_notify(struct notifier_block *n=
+b, unsigned long action,
+> >                                "Failed to setup timing for '%pOF'\n", r=
+d->dn);
+> >
+> >               if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+> > -                     /*
+> > -                      * Clear the flag before adding the device so tha=
+t
+> > -                      * fw_devlink doesn't skip adding consumers to th=
+is
+> > -                      * device.
+> > -                      */
+> > -                     rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE=
+;
+> >                       if (!of_platform_device_create(rd->dn, NULL, &pde=
+v->dev)) {
+> >                               dev_err(&pdev->dev,
+> >                                       "Failed to create child device '%=
+pOF'\n",
+> > diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> > index eb7fb202355f..30b48a428c0b 100644
+> > --- a/drivers/i2c/i2c-core-of.c
+> > +++ b/drivers/i2c/i2c-core-of.c
+> > @@ -176,11 +176,6 @@ static int of_i2c_notify(struct notifier_block *nb=
+, unsigned long action,
+> >                       return NOTIFY_OK;
+> >               }
+> >
+> > -             /*
+> > -              * Clear the flag before adding the device so that fw_dev=
+link
+> > -              * doesn't skip adding consumers to this device.
+> > -              */
+> > -             rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+> >               client =3D of_i2c_register_device(adap, rd->dn);
+> >               if (IS_ERR(client)) {
+> >                       dev_err(&adap->dev, "failed to create client for =
+'%pOF'\n",
+> > diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> > index 2eaaddcb0ec4..b5be7484fb36 100644
+> > --- a/drivers/of/dynamic.c
+> > +++ b/drivers/of/dynamic.c
+> > @@ -225,7 +225,6 @@ static void __of_attach_node(struct device_node *np=
+)
+> >       np->sibling =3D np->parent->child;
+> >       np->parent->child =3D np;
+> >       of_node_clear_flag(np, OF_DETACHED);
+> > -     np->fwnode.flags |=3D FWNODE_FLAG_NOT_DEVICE;
+> >
+> >       raw_spin_unlock_irqrestore(&devtree_lock, flags);
+> >
+> > diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> > index f77cb19973a5..ef9445ba168b 100644
+> > --- a/drivers/of/platform.c
+> > +++ b/drivers/of/platform.c
+> > @@ -739,11 +739,6 @@ static int of_platform_notify(struct notifier_bloc=
+k *nb,
+> >               if (of_node_check_flag(rd->dn, OF_POPULATED))
+> >                       return NOTIFY_OK;
+> >
+> > -             /*
+> > -              * Clear the flag before adding the device so that fw_dev=
+link
+> > -              * doesn't skip adding consumers to this device.
+> > -              */
+> > -             rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+> >               /* pdev_parent may be NULL when no bus platform device */
+> >               pdev_parent =3D of_find_device_by_node(parent);
+> >               pdev =3D of_platform_device_create(rd->dn, NULL,
+> > diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> > index 2e0647a06890..b22944a207c9 100644
+> > --- a/drivers/spi/spi.c
+> > +++ b/drivers/spi/spi.c
+> > @@ -4791,11 +4791,6 @@ static int of_spi_notify(struct notifier_block *=
+nb, unsigned long action,
+> >                       return NOTIFY_OK;
+> >               }
+> >
+> > -             /*
+> > -              * Clear the flag before adding the device so that fw_dev=
+link
+> > -              * doesn't skip adding consumers to this device.
+> > -              */
+> > -             rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+> >               spi =3D of_register_spi_device(ctlr, rd->dn);
+> >               put_device(&ctlr->dev);
+> >
+> Sorry, some of you will receive this message now for second time. First
+> message was sent to older series of patches.
+> -
+>
+> Hello,
+>
+> Test system testing drivers for ROHM ICs bisected this commit to cause
+> BD71847 drivers probe to not be called.
 
-You did not implement my proposal fully. I wanted to express that their
-declaration should be in the place of use, meaning first use.
+This driver (and overlay support) is in linux-next or something out of
+tree on top of linux-next?
 
-> +    statement. In this case declarations at the top of the function rule
-
-This does not solve it, because one can declare, define and assign in
-top part of the function not achieving what we want - place of use.
-
-Not sure if it is worth debating on, so overall (although I did not
-verify regex very thoroughly):
-
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
-
-Best regards,
-Krzysztof
+Rob
 
