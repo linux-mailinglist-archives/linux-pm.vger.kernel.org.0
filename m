@@ -1,259 +1,274 @@
-Return-Path: <linux-pm+bounces-38475-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38477-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8BEAC81640
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 16:40:51 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF10EC816BF
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 16:49:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6E8E13429EA
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 15:40:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8460F4E1B76
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 15:49:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C80313E32;
-	Mon, 24 Nov 2025 15:40:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57A17314A64;
+	Mon, 24 Nov 2025 15:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B71CXKXG"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="QRavQBf6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012043.outbound.protection.outlook.com [52.101.66.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B738313292
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 15:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763998845; cv=none; b=Oy4fVa/GgzgPpx4rdFhlGMXsv2sOU5IkDm+S+3/wv8VQKGqwNmMc4HN6Xm+VckRz88uTmmtuTfswGLKtPJ6V0JIfk0WOErwCXRESWxy3vZRK2Q6bXdz5apFQ5OI94g88BkIRXhwOfKQPyRxAr+fGXw06qL98Lyf5pnoKYstG9I0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763998845; c=relaxed/simple;
-	bh=Ur80bf67IWJP9P3NyHLEyhZMGM2yEXjoM26RAeQoVDY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q+Q3aLvKHmccVAD7zH6ddVn6sAIlMON1eyHkFvksbYpNGkLogPhOjRhjJGodNI7WDdXLfib3DUg8nuFYgBeUx3jN1PPnR4XwsQQLJxAcb28AXcDn8RIFzmC+3WyQGlqRrCiFO7OQ85W9b3hxY81gVCf/ameLi1/A6LoVa2towHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B71CXKXG; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-3414de5b27eso3496170a91.0
-        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 07:40:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763998842; x=1764603642; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Llp8FG6WVJOxC42YZnLNsTS0zXwdgkxLlwBk+kzHwR8=;
-        b=B71CXKXGRfl4sO0Qd4Bp3nwb2CR0DYeEU05+DJf3VB2iALLwOVrDANowFVPuyt8jG4
-         P4f3SEx9KrnIV6opSeFm2y6TfC2DlzsPscmZ0T8EPXWIhBVazs8GtRmLgVFVOtQy9bgM
-         bBJmEF3TYWU8z8ykZIhO8383OYuNk/paUf+6e5g18cg8M+jBwy7Ip15szx1CoTS2UPDP
-         F0XtWn9XSpSeUt59CEndLHW9k97WQQ+snM/q7pu7aH/asJGE46znCRvh8b8STAUgvm+A
-         hcKZbIMlwdPPMBHXy3Yc9kFdiqfGq1TiWRHf8nq/9tN8VW7Ag7aRkDmPdYRAsjXfc1He
-         8urA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763998842; x=1764603642;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Llp8FG6WVJOxC42YZnLNsTS0zXwdgkxLlwBk+kzHwR8=;
-        b=lW+0VpAF9bVjPQeY+4RN0+oNoFLZ8qoB2U7FL8FvM2RxkrYEweLRsyXZpgTpjiF7Z9
-         1d4NmGRg/ZMknpy5ql5IoWgMEnAxOSYjXoQqI28kABi1IbY1OyzNAt+7nvlwLC1sbfpB
-         LDVqV+MHyTbI0JM3A6l/4gP9XYL3c5TcSlBznTQH63DOuZBk0fKVpL8qmMAy0sGWo8GK
-         Zr1sMrOuL2NNCmzR0rCcRgxC7RLUG276428DPstZogBl3e1BbyDRZ5ac/okh4gMhD6Oa
-         OcL+DFqAk/X9uNt4iExhoikDZSLsn3CEit2fRd8AbxOnT1vqy+NIwwLF8tUTTLw7Wv+u
-         JhFg==
-X-Forwarded-Encrypted: i=1; AJvYcCV0NFZItvwAfQW0ejGytuo6AcS8x+YzqDD/z3H4p8Oni8Sl3i2ESZz8wp9XRaHH9cvGoquYE65WwA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVP0tnhoVio50Mri1iGxvPicN2i1psL9ZkJo5hWY1DZD9qxs23
-	gvrehYkrD1ggeOh76DY9APyzA3vUEUjnuYWg0aVkNpIRPvwntJnHoaYv
-X-Gm-Gg: ASbGncv518390JjHJtg6lS5zhKoVxeBw8ntAV+fOwODgDUvrUG284Kj66I9Kaq4aIU7
-	vsF7dFvBGVoYi4tjhyHYYMTrMKaTvpTgwAZuFRfHrJrEEchmusMXfB6bZxNM7z/nncR9YqsKBZ0
-	WfYf7MdljlztFf5j0BBi+bbEf+TNJ07etLO6UIuxpv8CqZGa5qIyouAsv1j8BmWmeTdV/IaR2by
-	chbjO9VqicYGaZoEiVQEN7AMHLOFWmMI/fFfRwqdRMjPGlXzVp8XB7sLYfNuKdTcUf5tHVi8LyH
-	nmiIbEUIV0C+5zb9+TiTmog6+F+bNHgpIVfMNfKPdYMUYzRQ6tIoixVyKc2r1njrdNtnhLpBpdu
-	Iy6TOPqEus8KmUzAZS8kmyg11FuVuxWQARUpu1qf7rtTezi15qRmRmGtRuN8n5NFnQ8zg7ou7dP
-	iW5/LECeSuX7F5MdB976/e+XShBqE2uruzr6Gx7dwa/FjtWIVwjGZzlzfFOoM=
-X-Google-Smtp-Source: AGHT+IEFPQhBfCYRI3nTm1u+iQCIbAQZlcFtON++Fnq7DdJGduD9vDQYDBrSvMWcgiV0KUw17gd6Yw==
-X-Received: by 2002:a17:90b:5112:b0:340:bde5:c9e3 with SMTP id 98e67ed59e1d1-34733f2d207mr11198788a91.23.1763998842365;
-        Mon, 24 Nov 2025 07:40:42 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3472692e5c8sm14034703a91.11.2025.11.24.07.40.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Nov 2025 07:40:41 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <da5457ea-c1ed-4c90-8743-fc982a02ed88@roeck-us.net>
-Date: Mon, 24 Nov 2025 07:40:37 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AACD4F5E0;
+	Mon, 24 Nov 2025 15:49:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763999371; cv=fail; b=sgn99QABGT6zx7EuY0Zr8DlT0NNySj2nF/hqpRXnCif5sXwoKxb4QTUomSxMyP1aJRs264ZkQ5pdCQjwNWhVjx6U6QR2xx2gzIDqAyo7AZeHHMdZw5z/XeHmzh6gRp/rqsgZ+55Ai2tTqn+w2a5MLOxIhaaFPA5crprACuW9I70=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763999371; c=relaxed/simple;
+	bh=7lE26UgBtYefATwPS9Q0Fy92FDx3AeDh04/PVMxHoqI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=WshqzyAq8vZzXxZmdLkb7kElnQl519uWaFc6uIs/d2Pq3flq98RKzAMvUceWdvRyIxi1c8p+IswLxREmYdpyY6t4QGVBQxy2rlwq41brx+qWi/q1m2wDemjehjWRn3f3ZFNzeQ8Cfc7ZBJOc513Zp2IrrPg27l2qlVck8xXRxBc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=QRavQBf6; arc=fail smtp.client-ip=52.101.66.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=awxWLZIqoui5PFwhNqfkk8Dk98lzSwMWXrqZ64VIUsW0CuyYmMGESjrFQ5Dowjfe5zQYNLJ/DCBnBzHctI4pCNOFiVbdQc8nH38PHGM5Xlr/+xkaGxROJu6y2Z7xNt1XAszLnXOBn7HWLxfip6Jl3AQpT8gMsedXuJf6FaDwCzWfzBMl70vIvWc1+4ATovP667dHdyNvLtt8Gg19SGpBsT3hn8xKyzx8Nv+FjyORYSXrheAI4FmGaQNAN6ywyQYZgZHp/M+a+c7e/xdu4VwBQEgPj5uazminNzQ6b1GXQ/32i+HnaMVu9X6sf8iraL0bHR6Iwg0TLWV/R4AqPCGOag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TghA5rkcZoe13lKhax0U8ktMUKJrlpbilfvIA6c1Vq4=;
+ b=Z2VunPALWOeRcowEufBBS6cgFC4TBMZwk3RYJAWVrifPKnSPuzD5qYfbYn3HfusHSaJVLzNCDIrqesVFXM+6AtY8nJrKpFAjjYX31/r04HSP/GwCBebRaB4yYg8HtLcfYUSXbhbSP8Qt3C4f73/XXhsyJrsdqGh/vB8ZMVcjcXim5wJid/w4YBnU+5M9qVqwf5ijD6KRLVngC7Ir3AZG5H8IyldDQkIYBOHnZmLKKbkqKR0hPREQ618UoirrMcS6zwFWzhgCPZDsvGd1htB08ph7asSmyosizmcUEfTFKWa6ABcSnfq40sNOFGmhDPaRWB+O+kkNycmHtd3dnD8cOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TghA5rkcZoe13lKhax0U8ktMUKJrlpbilfvIA6c1Vq4=;
+ b=QRavQBf6fBh4cKB3kvDPYvt2YEHMpDTldnSsNr2F6F4iJ2rC4+mKfDqz2a4Rq/0NZ0acv+0asnuo6Hvd2ygZfj3OsD/D2lhAqjicftfQVmM2iv2bhfDsP/E0RC9C9xFhBcNkEUz9bWNY1JxXXQAUOh5KLFjP/or17FnzBuKF2gVG0vo35Kk7KYPhaIwAWuSC5FIQ2/AcYwCrAyX4DHQb9HpX5TBwQFUv6uSi2rsXu9VGzCXTlR3Duq/icwtPZVZGzzzymHXzlRvWDmw+/CE8dILVdpSa9ogy06mjIOJG9wP271ormn8mwqVbOs95pSUPIvzlvfutUaybIjXXzhxVaQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8951.eurprd04.prod.outlook.com (2603:10a6:10:2e2::22)
+ by AM9PR04MB8827.eurprd04.prod.outlook.com (2603:10a6:20b:40a::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.17; Mon, 24 Nov
+ 2025 15:49:25 +0000
+Received: from DU2PR04MB8951.eurprd04.prod.outlook.com
+ ([fe80::753c:468d:266:196]) by DU2PR04MB8951.eurprd04.prod.outlook.com
+ ([fe80::753c:468d:266:196%4]) with mapi id 15.20.9343.016; Mon, 24 Nov 2025
+ 15:49:25 +0000
+Date: Mon, 24 Nov 2025 10:49:13 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: "Ming Qian(OSS)" <ming.qian@oss.nxp.com>
+Cc: linux-media@vger.kernel.org, mchehab@kernel.org,
+	hverkuil-cisco@xs4all.nl, nicolas@ndufresne.ca,
+	benjamin.gaignard@collabora.com, p.zabel@pengutronix.de,
+	sebastian.fricke@collabora.com, shawnguo@kernel.org,
+	ulf.hansson@linaro.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+	l.stach@pengutronix.de, peng.fan@nxp.com, eagle.zhou@nxp.com,
+	imx@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/2] media: verisilicon: Avoid G2 bus error while
+ decoding H.264 and HEVC
+Message-ID: <aSR+eaVxBhnahOl7@lizhi-Precision-Tower-5810>
+References: <20251121081911.1682-1-ming.qian@oss.nxp.com>
+ <20251121081911.1682-2-ming.qian@oss.nxp.com>
+ <aSCOZCJ2rSw7LAvE@lizhi-Precision-Tower-5810>
+ <d282811a-866d-4ca8-b9f6-fc1da3a7565e@oss.nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d282811a-866d-4ca8-b9f6-fc1da3a7565e@oss.nxp.com>
+X-ClientProxiedBy: BY3PR05CA0045.namprd05.prod.outlook.com
+ (2603:10b6:a03:39b::20) To DU2PR04MB8951.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e2::22)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/6] Add support for the LTM8054 voltage regulator
-To: Romain Gantois <romain.gantois@bootlin.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-iio@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>, Chanwoo Choi
- <cw00.choi@samsung.com>, Peter Rosin <peda@axentia.se>,
- Mariel Tinaco <Mariel.Tinaco@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Kevin Tsai <ktsai@capellamicro.com>, Linus Walleij
- <linus.walleij@linaro.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Support Opensource <support.opensource@diasemi.com>,
- Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Matheus Castello <matheus@castello.eng.br>,
- Saravanan Sekar <sravanhome@gmail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Casey Connolly <casey.connolly@linaro.org>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
- <pali@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Olivier Moysan <olivier.moysan@foss.st.com>,
- Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Dixit Parmar <dixitparmar19@gmail.com>, linux-hwmon@vger.kernel.org,
- linux-input@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- Andy Shevchenko <andriy.shevchenko@intel.com>
-References: <20251124-ltm8054-driver-v4-0-107a8a814abe@bootlin.com>
- <24527d76-4f6a-4008-a369-23510d492a94@roeck-us.net>
- <23111366.EfDdHjke4D@fw-rgant>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <23111366.EfDdHjke4D@fw-rgant>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8951:EE_|AM9PR04MB8827:EE_
+X-MS-Office365-Filtering-Correlation-Id: 377cb43d-e0d0-42b1-26aa-08de2b710b47
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|19092799006|376014|52116014|7416014|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?WK/MpO3zhjsYNifB/DQI8wlBWCeZI1Meo/W296chJH9uhK7FCItdhZcsoD6U?=
+ =?us-ascii?Q?j1sg1qAgXmsfuoiFS1NJ+nmzWOeqNRayda0gYT7RMDaKU9wGFNvYdP3b+I2t?=
+ =?us-ascii?Q?S+6U+qXR7O3nep4XhVV+TCbOAJ1bT4wtg7lnxEJtVyTTJFzI5F9wQTBMHOgb?=
+ =?us-ascii?Q?o22DugIDet6Ydpy5nijOcIU0DQtreagToeJ3wuEosoKJjkghnsL395sUW1+t?=
+ =?us-ascii?Q?D0iuPUQ43YKHSVqIITHEQMfR+lObh2Uf1Q7KyZQBlS90NnbNhhNLImrdAwlq?=
+ =?us-ascii?Q?Mu17OFqyFRMtZ6TtfHoXSdZ6uF2KlnLX5G6ZHi55Y7QnXfw/keNg1XzvRYty?=
+ =?us-ascii?Q?n5hRqbaYFYipL1ue3H2J4uf9kyBp7BrFRaZXJAIGjsGqJaPKvHKuVBoSUrqK?=
+ =?us-ascii?Q?F2uRo6Na7j/AQ98HN8vtkRErduby/mxxSvew75q7LNERqmWQ8rzPL0KQYzgJ?=
+ =?us-ascii?Q?otjkVWPr219CYzHE5SQoX663x+tK7pI+5z4qEA5PN1TKu6I3PrUph/fnIFTE?=
+ =?us-ascii?Q?szOVtTUgl/tyDz85BsJsl7a9XJDcmnZYZ7yyW5S+hzK5tsE+TqDXjayEjYG0?=
+ =?us-ascii?Q?tHn+A/VFwzWoISK28HsCXWbwF5yc4aI6/CPtoUUmE8ph+aFnljGMV1MCkLxi?=
+ =?us-ascii?Q?FZIU85klKV78ThSaMye9aaFdjYDzdQPf5M9Pd26nf+sDr9GDcg/IHAlLZmCp?=
+ =?us-ascii?Q?rdLeZa26GOEe8NTJxza4eHi3vnMIPXbgUz+YIEPUaJzGYQVh8QJZ2qNj0LBJ?=
+ =?us-ascii?Q?jctMRxG50xCZFszmr9eH/RKinsLOmjPuDl2uvFj41Kw4VxNQnri9RTNjuY/q?=
+ =?us-ascii?Q?awkxcqt+I8TDG95YVPyogyhtGBTj4KDdV9sLj/bHzcMKWu83hWocRLksv6pO?=
+ =?us-ascii?Q?z/Q7w0VYmI+Og1wyptQX29RRtN40shDCGy0tYEA3JgWqDA1LqwSFTwP8RMtq?=
+ =?us-ascii?Q?KYawzmDFkCrBfm1lTL03Chsf8YK+M9UbtnIdEWOB5L1TCDMPFuDa8ubUcKao?=
+ =?us-ascii?Q?PmWEKOZ15v8Nuc5sVNesz1aUaerlS/xcndDaaagJkRRfk8HRJsU+WFthYC84?=
+ =?us-ascii?Q?dolCbUfYb5Y1XeySGSDUr2ShWJF07aZaFO9Vpx5tOIiHXfanXZHCeynZtzRh?=
+ =?us-ascii?Q?w6u1P57H3Qqq/+O5RG1xhfrPT3hA6OLRNhYvvucm5lDybtZfS7ywyt/l683f?=
+ =?us-ascii?Q?RrIWyGz3YO2KjmBg3Mjo2u7NvJvifmU7Jgx65iObEewgkKyZLqqn5xlSYbv+?=
+ =?us-ascii?Q?zvV5CfpTPwWac0hjDaIYCRPf8lHl/uKpbUeTzE86HzrR+Cpq6VlbthzlPR5i?=
+ =?us-ascii?Q?hQEE7leUYeRdBPWZg0zvMeTxzk25B1cDXUAXxS6F3tDpAoMSUQoDzaRHeqA/?=
+ =?us-ascii?Q?kScM8fCrbzSlU6u6RXMU0jwAon6JVPgiGMgAQ/Xeztt1y6L5HssbuwgEIFEy?=
+ =?us-ascii?Q?C1rw7+UVNfhMRj/kmGIb4XnqGZ9MU3adEmXMWU/dTqtwNO55TvJIJg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8951.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(376014)(52116014)(7416014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?kb1m8vUxrKKqg28P61um2PcB4NSYVJAO/dDi/2osRzYtViqL0AyM5pE4oUGt?=
+ =?us-ascii?Q?EbSN5yxZKn0pKmyE+YLL3QFhNMbU55dXAv7xjjRhhcejAzlWI9mkPS6mJcam?=
+ =?us-ascii?Q?1/3RyxfD6PkQvD371AaQGz3J6pt9vwPHBLdz1GquFtpj4XHyMP0jlUA/OgCi?=
+ =?us-ascii?Q?Ad/nqL3bwtHQiR1Xnsx1+MdL4hO/98StS2TnmJnre05Fd+naszDuacRCQYrX?=
+ =?us-ascii?Q?+z95zNJIM0wvv4viHUAawk0SNn0KF/V8h8ZU9+NaApED9aGB/0TGJAEFcF7I?=
+ =?us-ascii?Q?AEJDmxS0uLdL2OOUVVKU4+zg0bgLUInAtuCu108Ew4SdelbgC7zvLYI3NZUi?=
+ =?us-ascii?Q?u3YZqhiIO4KO3t8V29QABF9v5wf1eD4ZAqY8Kp2L6sJ2i4xB2aYNL7JfCnJm?=
+ =?us-ascii?Q?G8hy6WPJ8/iuWJ/EWyNDnso3qjIeabxtm27fxjAryzo+meDSipInmgJOhK4v?=
+ =?us-ascii?Q?Y8O9HtELxEZJybInHzYstRZ8/rQa5p3sRDsO+aj6isUecSclneE7Yh1RAOqC?=
+ =?us-ascii?Q?kJzx7HKScs9hMAhNkzROATCCT6aWVRRBJa/UXquf8QTGHIZRf5xT3XBLm6gk?=
+ =?us-ascii?Q?Bb8VuEN9ymGEuecfRCfCNhsnADw+V1lzeqpmsXRqClcNnftR+rcmjaUwMhMI?=
+ =?us-ascii?Q?hoa8WKUAxXIHqwrVWUAwlr/pFvS7v6W5OkGwQnhlaNw5dMaowcm3CFskYSJ9?=
+ =?us-ascii?Q?TZflUi1TtLGB0bF/m8tW7TWdSJRoM8LZu8JfPIGAROHeCYQ4MBdzbFZeps8W?=
+ =?us-ascii?Q?b71oxFyKdVDynD55FTxlmEef5qoqdXt5L7CHOZQuOT0dzk2SFpxlJOTweiIA?=
+ =?us-ascii?Q?/2h7xIJcUJUGcBxwaK9uQgRE9rDnQ5QfDDpGx6iWduzD9pNaaTi5nniwiZxW?=
+ =?us-ascii?Q?P95C9rQCThUZJWAOtS+R7ABMq5Qigk3ZI/TwrarM49oVXSxz0/yhilm1vadX?=
+ =?us-ascii?Q?nOlyhUoTRMALnVDmnxOkD1ZUW/Cywq/S7xpca57yAFw3tsm/Nass6wmW2rk+?=
+ =?us-ascii?Q?vji7t+nJKgb6yYyWt40+RGPYSG5DVZC8LO+6+rjCECxgNf4EXNe9RlomHAny?=
+ =?us-ascii?Q?0WTHZaVAIxen/rLm1J+tAcJiaDseu0UoOG87eW7lrsA3I+cd59sqEiFkjzRn?=
+ =?us-ascii?Q?7BPwjEZR9CpBZUlQ0hnW7QGGj+z6U4BsnnRnC0hMN3uSBz/mmgOQ0MI9CtGB?=
+ =?us-ascii?Q?6gjMfWzu/tcatQyZdM4JOH/8ZclesJAc5rstnwkTLKb/op82UnDMYQyL5X3l?=
+ =?us-ascii?Q?aPPPjh78vcp1xBiMECLK8Mfj1ct7bGlLRgQWAsK+9kH2BBltLyn78BPQ5Imd?=
+ =?us-ascii?Q?kpG6Cqg19rPG/AENxpKU6ltnVbO/SW1mjOzUDYidgUg6UguvQAhlVKc8n4tf?=
+ =?us-ascii?Q?KAk37BdGbpxgjERsbrjM5mOStlGl0RpbcU4SwNUphgi3qq6yDMklw1C5BO0y?=
+ =?us-ascii?Q?xKIHnW5J+sGdEMA2M92VBaab7EAyIqr/t2+r+d9F9GNgwU7pWuXdBTWC7kSH?=
+ =?us-ascii?Q?Qa5VIadjHl9nIL6gWrf62bCt1owdaxEBBA6LaW8R5hUbkvBJ518heGCjDb01?=
+ =?us-ascii?Q?NfusBF4W8qipOenFvEEsZz9MrnN6oytGp7o0FaLu?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 377cb43d-e0d0-42b1-26aa-08de2b710b47
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8951.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2025 15:49:25.5472
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KISbn+GuyR8LsGCG07hQDfoL3LpKjahcFybS7Xi1wzip0HicuyBx1ScY03gIGAUctoEX+V3QbBeoloB2I1fPBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8827
 
-On 11/24/25 07:13, Romain Gantois wrote:
-> Hello Guenter,
-> 
-> 
-> On Monday, 24 November 2025 15:57:41 CET Guenter Roeck wrote:
-> 
->  > On 11/24/25 06:48, Romain Gantois wrote:
-> 
->  > > Hello everyone,
-> 
->  > >
-> 
->  > > This is version four of my series which adds initial support of the Linear
-> 
->  > > Technology LTM8054 voltage regulator. The driver supports a fixed voltage
-> 
->  > > and a tunable output current limit using a DAC-controlled pin.
-> 
->  > >
-> 
->  > > I'd say that the most unusual part of this series is the usage of the IIO
-> 
->  > > consumer API in a regulator driver. I think this makes sense here, since
-> 
->  > > the regulator driver has to access a DAC to read/set the output current
-> 
->  > > limit.
-> 
->  >
-> 
->  > I don't think that is a valid reason. Literally every driver measuring
-> 
->  > voltages or current uses a DAC to do it. How else would one convert an
-> 
->  > analog value into a digital value ?
-> 
-> 
-> Sorry, I don't quite understand your remark. To integrate this voltage
-> 
-> regulator component into the Linux regulator abstraction, I'm providing a
-> 
-> current limit control function. To provide such a function, the voltage level
-> 
-> on a pin has to be controlled. AFAIK, the kernel abstraction used to set
-> 
-> precise voltages on lines is an IO channel.
-> 
-> 
-> Do you think that using the IIO consumer API is not correct here? What other
-> 
-> method do you think I should use?
-> 
+On Mon, Nov 24, 2025 at 09:38:15AM +0800, Ming Qian(OSS) wrote:
+> Hi Frank,
+>
+> On 11/22/2025 12:08 AM, Frank Li wrote:
+> > On Fri, Nov 21, 2025 at 04:19:09PM +0800, ming.qian@oss.nxp.com wrote:
+> > > From: Ming Qian <ming.qian@oss.nxp.com>
+> > >
+> > > For the i.MX8MQ platform, there is a hardware limitation: the g1 VPU and
+> > > g2 VPU cannot decode simultaneously; otherwise, it will cause below bus
+> > > error and produce corrupted pictures, even led to system hang.
+> > >
+> > > [  110.527986] hantro-vpu 38310000.video-codec: frame decode timed out.
+> > > [  110.583517] hantro-vpu 38310000.video-codec: bus error detected.
+> > >
+> > > Therefore, it is necessary to ensure that g1 and g2 operate alternately.
+> > > Then this allows for successful multi-instance decoding of H.264 and HEVC.
+> > >
+> > > Fixes: cb5dd5a0fa518 ("media: hantro: Introduce G2/HEVC decoder")
+> > > Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
+> > > ---
+> > >   drivers/media/platform/verisilicon/hantro.h   |  1 +
+> > >   .../media/platform/verisilicon/hantro_drv.c   | 26 +++++++++++++++++++
+> > >   .../media/platform/verisilicon/imx8m_vpu_hw.c |  4 +++
+> > >   3 files changed, 31 insertions(+)
+> > >
+> > ...
+> > >   #include <linux/workqueue.h>
+> > > +#include <linux/iopoll.h>
+> > >   #include <media/v4l2-event.h>
+> > >   #include <media/v4l2-mem2mem.h>
+> > >   #include <media/videobuf2-core.h>
+> > > @@ -93,6 +94,9 @@ static void hantro_job_finish(struct hantro_dev *vpu,
+> > >
+> > >   	clk_bulk_disable(vpu->variant->num_clocks, vpu->clocks);
+> > >
+> > > +	if (vpu->variant->shared_resource)
+> > > +		atomic_cmpxchg(vpu->variant->shared_resource, 0, 1);
+> > > +
+> > >   	hantro_job_finish_no_pm(vpu, ctx, result);
+> > >   }
+> > >
+> > > @@ -166,12 +170,34 @@ void hantro_end_prepare_run(struct hantro_ctx *ctx)
+> > >   			      msecs_to_jiffies(2000));
+> > >   }
+> > >
+> > > +static int hantro_wait_shared_resource(struct hantro_dev *vpu)
+> > > +{
+> > > +	u32 data;
+> > > +	int ret;
+> > > +
+> > > +	if (!vpu->variant->shared_resource)
+> > > +		return 0;
+> > > +
+> > > +	ret = read_poll_timeout(atomic_cmpxchg, data, data, 10, 300 * NSEC_PER_MSEC, false,
+> > > +				vpu->variant->shared_resource, 1, 0);
+> > > +	if (ret) {
+> > > +		dev_err(vpu->dev, "Failed to wait shared resource\n");
+> > > +		return -EINVAL;
+> > > +	}
+> >
+> > why not use a mutex?
+> >
+> > mutex() lock here, unlock at hantro_job_finish(), if second instance
+> > run to here, mutex() will block thread, until previous hantro_job_finish()
+> > finish.
+> >
+> > Frank
+>
+> G1 and G2 are two different devices. If I were to use a mutex, I would
+> need to define a global mutex. Therefore, to avoid using a global mutex,
+> I only define a static atomic variable.
 
-Ok, I had a look into the datasheet. Unless I am missing something, the chip doesn't
-have a digital control or monitoring interface such as I2C or SPI.
+static atomic varible also is global.  Global mutex is allowed if it is
+really needed.
 
-At the same time, you copied the hardware monitoring mailing list on this summary and
-on (at least) one of the patches, but apparently not on all of them. This lead to my
-apparently wrong assumption that iio is used to monitor (not [just] control) something
-on the chip. I wrongly assumed that IIO is used to report chip status (voltage, current,
-temperature) using an internal DAC. Obviously that was a wrong assumption.
-Sorry for that.
+>
+> If a static mutex is acceptable, I think I can change it to a mutex.
 
-Apparently you copied the hwmon mailing list for the introduction of an IIO namespace
-and its use in a couple of hwmon drivers in one of the patches. My personal opinion
-is that this should not be part of this series but a series of its own. That is just
-my personal opinion, though.
+ref to
+https://elixir.bootlin.com/linux/v6.18-rc6/source/drivers/base/core.c#L43
 
-Guenter
-
+Frank
+>
+> Regards,
+> Ming
+>
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > >   static void device_run(void *priv)
+> > >   {
+> > >   	struct hantro_ctx *ctx = priv;
+> > >   	struct vb2_v4l2_buffer *src, *dst;
+> > >   	int ret;
+> > >
+> > > +	ret = hantro_wait_shared_resource(ctx->dev);
+> > > +	if (ret < 0)
+> > > +		goto err_cancel_job;
+> > > +
+> > >   	src = hantro_get_src_buf(ctx);
+> > >   	dst = hantro_get_dst_buf(ctx);
+> > ...
+> >
+> > >
+> > > --
+> > > 2.34.1
+> > >
 
