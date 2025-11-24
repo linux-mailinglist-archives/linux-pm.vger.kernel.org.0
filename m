@@ -1,116 +1,131 @@
-Return-Path: <linux-pm+bounces-38440-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38452-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 084B4C8012C
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:05:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48CCFC80228
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:12:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EE1D14E45BD
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:05:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 231C03AC6E1
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A2762FD686;
-	Mon, 24 Nov 2025 11:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A63822FD691;
+	Mon, 24 Nov 2025 11:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="mS0Pz9Hk"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="QBfhIGEz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from sender3-pp-f112.zoho.com (sender3-pp-f112.zoho.com [136.143.184.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1BC2FC00E
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 11:05:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763982303; cv=none; b=f1M0SjF74mjOXDRScWq+xFJhWexcTo/wUrRTG0F4ghU7oyHl7+Zo4Lzt245S+PDxW+I/rvlR+aqEXs0pDeFUzg+dqmGvsBl+HWxFgXJvCggy00BuYCCYyrBPwVy/RcQbl97wvSdy9qgDYDEtzyF5/EGzkrISZn+/tSeiyee6pIs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763982303; c=relaxed/simple;
-	bh=J32kqd07hFmR6eCMuZ/OyisnVfntR08V/NULDB+Qtzw=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=f0a8yrMhYRbxskc4ViglTRbkcXhb2cha2xm1JmIpZAkWJxd1CcG6Sq5Z8lPylmYfYD3QV/tLwJV4Wzd2kSx8xdDHEO+cfhWzSjDzLUvNCLzur86CuGaAwJqkC/E11zU5vSbv9P/g/0LMxey05DiI3SwLEeU1vkTjh8ADJTzjORc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=mS0Pz9Hk; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20251124110459epoutp04958751535df796441e274c1e2b23748c~67I4o64Fs1666016660epoutp04o
-	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 11:04:59 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20251124110459epoutp04958751535df796441e274c1e2b23748c~67I4o64Fs1666016660epoutp04o
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1763982299;
-	bh=J32kqd07hFmR6eCMuZ/OyisnVfntR08V/NULDB+Qtzw=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=mS0Pz9Hk7zb44LWjov+0QWnVyDqaOuhmHK1+gWG7CBPxuLrMvQRL3dm6+jDRXxHHa
-	 h/I44T3iGIliduswPtf0GhgQl82i8Y3Cs+3QIeH/Dnb/up/pnbxh2BPSry31pZ9bQO
-	 mfxYRrTI8dE3WmDcLJpgPJE4j5/PV0Ur+l7yVt7M=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas2p3.samsung.com (KnoxPortal) with ESMTPS id
-	20251124110458epcas2p31e56f8e02f3934038a9fbfac7de56fa5~67I37P8K50477404774epcas2p3F;
-	Mon, 24 Nov 2025 11:04:58 +0000 (GMT)
-Received: from epcas2p2.samsung.com (unknown [182.195.38.203]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4dFNJV1X4Tz2SSKX; Mon, 24 Nov
-	2025 11:04:58 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-	20251124110457epcas2p442cbe07b335d90a8b5e4c66cd02e928c~67I2noxqe0858708587epcas2p4u;
-	Mon, 24 Nov 2025 11:04:57 +0000 (GMT)
-Received: from KORCO115296 (unknown [12.80.207.128]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20251124110457epsmtip29fb37f805b54cc32a362e2c7f1e2908d~67I2g3jBS1950019500epsmtip2R;
-	Mon, 24 Nov 2025 11:04:57 +0000 (GMT)
-From: =?utf-8?B?7IaQ7Iug?= <shin.son@samsung.com>
-To: "'Daniel Lezcano'" <daniel.lezcano@linaro.org>, "'Bartlomiej
- Zolnierkiewicz'" <bzolnier@gmail.com>, "'Krzysztof Kozlowski'"
-	<krzk@kernel.org>, "'Rafael J . Wysocki'" <rafael@kernel.org>, "'Zhang Rui'"
-	<rui.zhang@intel.com>, "'Lukasz	Luba'" <lukasz.luba@arm.com>, "'Rob
-	Herring'" <robh@kernel.org>, "'Conor Dooley'" <conor+dt@kernel.org>, "'Alim
-	Akhtar'" <alim.akhtar@samsung.com>
-Cc: "'Henrik Grimler'" <henrik@grimler.se>, <linux-pm@vger.kernel.org>,
-	<linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<shin.son@samsung.com>
-In-Reply-To: <ab35c20e-390c-4479-9bb1-9f5e49cba2a0@linaro.org>
-Subject: RE: [PATCH v7 RESEND 2/3] thermal: exynos_tmu: Support new hardware
- and update TMU interface
-Date: Mon, 24 Nov 2025 20:04:53 +0900
-Message-ID: <000001dc5d32$2b4bfb20$81e3f160$@samsung.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC92C3002DE;
+	Mon, 24 Nov 2025 11:08:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763982484; cv=pass; b=tmrc9h5NMd6JbSn82eBrPpd8W/xY80VlG1/ZXqLZmPCM5QvOOqUOXDebyBFO6+kIsxiJmf/LDp6LdaGQaisl3TUC1BsliU7Si+MPuulUybLB4T9O5Rigp7jHpp/VTv1vM8jKzyGAxh+q1fJ4TNmS8XHffBuWIjy3RptIY+K7ObA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763982484; c=relaxed/simple;
+	bh=lboeIQyFJsiIxyOxs1b6G3MZaP6IONXoWfuN9akxXyQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ICWOqiC/s0LivoAn2rxbvokBFHl/dShbkYHsbrugQJEb8i4DqAagvKbJrqads9NfO9PvcRD9fx3LIuM3B9F3Bl1m0a09mlyz+9A/e1kW9ESoL50exm7OaR7ORaNNIxF7cr8KdxrNQZzybTJiEJzoXG7jwHYW6cXWLF+vqaUMJho=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=QBfhIGEz; arc=pass smtp.client-ip=136.143.184.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1763982419; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=nbDevhZXipgAYTYG3F2UDABCIZ+nOxdW/zlkaLgtplL1wZVsArQ34mLcPScPgiCAwttcVNasSU2fmuQL7cdRe0XfOhyeAniPRBHbt5rBeifVcFpUrJ1DX7G70A9b+uZYkC7PWmO3iXtqb1GAWtvJKIZpUiaW0cb2VktmaDQdG1Q=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1763982419; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=cLutaMhuDx5x+G8Hu0peOOGA7peMIDFit+69TXksySM=; 
+	b=CZrzUP5E2dBkPEAm89UQ/cQTapze93y1KKN+Uv/HE3A9W7vE8sBNVQsLGtsHPWxDB3XL4pqrn9Bjf6kF7oudM7rT9YXpX6UfJGKrW0zqDCXAd6gJRDmRKj9pXsK18cH8WwxLmv5oG5u4C7VGCVs4uUPb1W4WvAdY7bj7zpAKPxE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1763982419;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=cLutaMhuDx5x+G8Hu0peOOGA7peMIDFit+69TXksySM=;
+	b=QBfhIGEzZO+KWlqnDgMHea9pkH6AtFFt9z8WYyj01TeYQsQJb7mYgxjdxCxdgICo
+	La793j4LDvoZ/KHHHIWEM//QnOqPQeo3Tw7pgizCiEnx4++iB9Fr+MFND4z64SpxrHN
+	rzOvPB2Z5t+bQn51KqNZ/RJhWA3QfiFljGzpN5Mk=
+Received: by mx.zohomail.com with SMTPS id 1763982417218939.0906098160897;
+	Mon, 24 Nov 2025 03:06:57 -0800 (PST)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: [PATCH v2 00/13] MediaTek Interconnect Cleanup and MT8196
+ Enablement
+Date: Mon, 24 Nov 2025 12:06:49 +0100
+Message-Id: <20251124-mt8196-dvfsrc-v2-0-d9c1334db9f3@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 15.0
-Thread-Index: AQJR08pAfg/+KuTfxFjIW+Bmb4uKqAKoesbtAuyt0KIBiaSaQQHdj7cKAduSh9uzv/aP0A==
-Content-Language: ko
-X-CMS-MailID: 20251124110457epcas2p442cbe07b335d90a8b5e4c66cd02e928c
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-cpgsPolicy: CPGSC10-234,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237
-References: <20251113064022.2701578-1-shin.son@samsung.com>
-	<CGME20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237@epcas2p1.samsung.com>
-	<20251113064022.2701578-3-shin.son@samsung.com>
-	<2180a854-8ba6-4424-add2-eb34637530c1@linaro.org>
-	<000001dc5d2a$0697bf10$13c73d30$@samsung.com>
-	<ab35c20e-390c-4479-9bb1-9f5e49cba2a0@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEo8JGkC/3WOzQ6CMBAGX4Xs2TVsLeXn5HsYDqUUaSJU29pgC
+ O9uhbPH2WTm2xW8dkZ7aLIVnI7GGzsnYKcM1Cjnu0bTJwaWs4KIOE6holpgHwfvFBb1oKo6p7L
+ kCpLzdHowy967tQc7/XqnbDiO0EmvUdlpMqHJZr0EPNKM4CeMxgfrPvs/kXbjz3QkzLGrC9Fzc
+ SEuqquyj4fsrJPn1Id227YvQscW2N8AAAA=
+X-Change-ID: 20251114-mt8196-dvfsrc-59fc8901774c
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Henry Chen <henryc.chen@mediatek.com>, Georgi Djakov <djakov@kernel.org>
+Cc: kernel@collabora.com, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+X-Mailer: b4 0.14.3
 
-Hello, Daniel Lezcano.
+This series is a combination of binding changes, driver cleanups and new
+driver code to enable the interconnect on the MediaTek MT8196 SoC.
 
-> On 11/24/25 11:06, =EC=86=90=EC=8B=A0=20wrote:=0D=0A>=20=5B=20...=20=5D=
-=0D=0A>=20=0D=0A>=20>=20However,=20since=20ExynosAutov920=20diverges=20sign=
-ificantly=20from=20the=20existing=0D=0A>=20>=20driver,=20Would=20introducin=
-g=20a=20separate=20driver=20instead=20of=20unifying=0D=0A>=20everything=20b=
-e=20acceptable?=0D=0A>=20=0D=0A>=20So=20this=20driver=20is=20one=20controll=
-er=20for=20multiple=20sensors=20while=20the=20others=0D=0A>=20drivers=20are=
-=20one=20controller=20for=20one=20sensor,=20right=20?=0D=0A>=20=0D=0A=0D=0A=
-Yes.=20As=20far=20as=20I=20understand,=20the=20previous=20Exynos=20variants=
-=20used=20one=20TMU=20controller=20per=20sensor,=0D=0Awhile=20on=20ExynosAu=
-toV920=20the=20hardware=20has=20multiple=20TMU=20instances=20and=20each=20i=
-nstance=20contains=20multiple=20sensors.=0D=0ATherefore,=20this=20new=20aut=
-omotive=20SoC=20requires=20supporting=20multiple=20sensors=20behind=20a=20s=
-ingle=20TMU=20controller.=0D=0A=0D=0ABest=20regards,=0D=0AShin=0D=0A=0D=0A
+This series currently does not add any users of it (i.e., no bandwidth
+requests being made in affected device drivers), as the only one I
+quickly whippd up is in the UFS driver, which is undergoing some major
+refactoring upstream in a different series of mine.
+
+Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+---
+Changes in v2:
+- Added missing submitter SoB (i.e. mine)
+- Link to v1: https://lore.kernel.org/r/20251114-mt8196-dvfsrc-v1-0-b956d4631468@collabora.com
+
+---
+AngeloGioacchino Del Regno (8):
+      dt-bindings: soc: mediatek: dvfsrc: Add support for MT8196
+      dt-bindings: interconnect: mt8183-emi: Add support for MT8196 EMI
+      soc: mediatek: mtk-dvfsrc: Change error check for DVFSRCv4 START cmd
+      soc: mediatek: mtk-dvfsrc: Add and propagate DVFSRC bandwidth type
+      soc: mediatek: mtk-dvfsrc: Add a new callback for calc_dram_bw
+      soc: mediatek: mtk-dvfsrc: Write bandwidth to EMI DDR if present
+      soc: mediatek: mtk-dvfsrc: Add support for DVFSRCv4 and MT8196
+      interconnect: mediatek: Add support for MediaTek MT8196 EMI ICC
+
+Nicolas Frattaroli (5):
+      dt-bindings: soc: mediatek: dvfsrc: Document clock
+      soc: mediatek: mtk-dvfsrc: Get and Enable DVFSRC clock
+      soc: mediatek: mtk-dvfsrc: Rework bandwidth calculations
+      interconnect: mediatek: Don't hijack parent device
+      interconnect: mediatek: Aggregate bandwidth with saturating add
+
+ .../bindings/interconnect/mediatek,mt8183-emi.yaml |   1 +
+ .../soc/mediatek/mediatek,mt8183-dvfsrc.yaml       |   7 +
+ drivers/interconnect/mediatek/Kconfig              |   7 +
+ drivers/interconnect/mediatek/Makefile             |   1 +
+ drivers/interconnect/mediatek/icc-emi.c            |   9 +-
+ drivers/interconnect/mediatek/mt8196.c             | 383 +++++++++++++++++++++
+ drivers/soc/mediatek/mtk-dvfsrc.c                  | 364 ++++++++++++++++++--
+ include/dt-bindings/interconnect/mediatek,mt8196.h |  48 +++
+ 8 files changed, 785 insertions(+), 35 deletions(-)
+---
+base-commit: e93f8002e4d244f0642224635f457bc8b135c98b
+change-id: 20251114-mt8196-dvfsrc-59fc8901774c
+
+Best regards,
+-- 
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+
 
