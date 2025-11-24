@@ -1,274 +1,289 @@
-Return-Path: <linux-pm+bounces-38477-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38478-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF10EC816BF
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 16:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B1DF0C81724
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 16:57:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8460F4E1B76
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 15:49:34 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8D9264E540A
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 15:57:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57A17314A64;
-	Mon, 24 Nov 2025 15:49:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3372314B6A;
+	Mon, 24 Nov 2025 15:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="QRavQBf6"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="VarxPDuE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012043.outbound.protection.outlook.com [52.101.66.43])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AACD4F5E0;
-	Mon, 24 Nov 2025 15:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763999371; cv=fail; b=sgn99QABGT6zx7EuY0Zr8DlT0NNySj2nF/hqpRXnCif5sXwoKxb4QTUomSxMyP1aJRs264ZkQ5pdCQjwNWhVjx6U6QR2xx2gzIDqAyo7AZeHHMdZw5z/XeHmzh6gRp/rqsgZ+55Ai2tTqn+w2a5MLOxIhaaFPA5crprACuW9I70=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763999371; c=relaxed/simple;
-	bh=7lE26UgBtYefATwPS9Q0Fy92FDx3AeDh04/PVMxHoqI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=WshqzyAq8vZzXxZmdLkb7kElnQl519uWaFc6uIs/d2Pq3flq98RKzAMvUceWdvRyIxi1c8p+IswLxREmYdpyY6t4QGVBQxy2rlwq41brx+qWi/q1m2wDemjehjWRn3f3ZFNzeQ8Cfc7ZBJOc513Zp2IrrPg27l2qlVck8xXRxBc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=QRavQBf6; arc=fail smtp.client-ip=52.101.66.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=awxWLZIqoui5PFwhNqfkk8Dk98lzSwMWXrqZ64VIUsW0CuyYmMGESjrFQ5Dowjfe5zQYNLJ/DCBnBzHctI4pCNOFiVbdQc8nH38PHGM5Xlr/+xkaGxROJu6y2Z7xNt1XAszLnXOBn7HWLxfip6Jl3AQpT8gMsedXuJf6FaDwCzWfzBMl70vIvWc1+4ATovP667dHdyNvLtt8Gg19SGpBsT3hn8xKyzx8Nv+FjyORYSXrheAI4FmGaQNAN6ywyQYZgZHp/M+a+c7e/xdu4VwBQEgPj5uazminNzQ6b1GXQ/32i+HnaMVu9X6sf8iraL0bHR6Iwg0TLWV/R4AqPCGOag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TghA5rkcZoe13lKhax0U8ktMUKJrlpbilfvIA6c1Vq4=;
- b=Z2VunPALWOeRcowEufBBS6cgFC4TBMZwk3RYJAWVrifPKnSPuzD5qYfbYn3HfusHSaJVLzNCDIrqesVFXM+6AtY8nJrKpFAjjYX31/r04HSP/GwCBebRaB4yYg8HtLcfYUSXbhbSP8Qt3C4f73/XXhsyJrsdqGh/vB8ZMVcjcXim5wJid/w4YBnU+5M9qVqwf5ijD6KRLVngC7Ir3AZG5H8IyldDQkIYBOHnZmLKKbkqKR0hPREQ618UoirrMcS6zwFWzhgCPZDsvGd1htB08ph7asSmyosizmcUEfTFKWa6ABcSnfq40sNOFGmhDPaRWB+O+kkNycmHtd3dnD8cOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TghA5rkcZoe13lKhax0U8ktMUKJrlpbilfvIA6c1Vq4=;
- b=QRavQBf6fBh4cKB3kvDPYvt2YEHMpDTldnSsNr2F6F4iJ2rC4+mKfDqz2a4Rq/0NZ0acv+0asnuo6Hvd2ygZfj3OsD/D2lhAqjicftfQVmM2iv2bhfDsP/E0RC9C9xFhBcNkEUz9bWNY1JxXXQAUOh5KLFjP/or17FnzBuKF2gVG0vo35Kk7KYPhaIwAWuSC5FIQ2/AcYwCrAyX4DHQb9HpX5TBwQFUv6uSi2rsXu9VGzCXTlR3Duq/icwtPZVZGzzzymHXzlRvWDmw+/CE8dILVdpSa9ogy06mjIOJG9wP271ormn8mwqVbOs95pSUPIvzlvfutUaybIjXXzhxVaQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8951.eurprd04.prod.outlook.com (2603:10a6:10:2e2::22)
- by AM9PR04MB8827.eurprd04.prod.outlook.com (2603:10a6:20b:40a::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.17; Mon, 24 Nov
- 2025 15:49:25 +0000
-Received: from DU2PR04MB8951.eurprd04.prod.outlook.com
- ([fe80::753c:468d:266:196]) by DU2PR04MB8951.eurprd04.prod.outlook.com
- ([fe80::753c:468d:266:196%4]) with mapi id 15.20.9343.016; Mon, 24 Nov 2025
- 15:49:25 +0000
-Date: Mon, 24 Nov 2025 10:49:13 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: "Ming Qian(OSS)" <ming.qian@oss.nxp.com>
-Cc: linux-media@vger.kernel.org, mchehab@kernel.org,
-	hverkuil-cisco@xs4all.nl, nicolas@ndufresne.ca,
-	benjamin.gaignard@collabora.com, p.zabel@pengutronix.de,
-	sebastian.fricke@collabora.com, shawnguo@kernel.org,
-	ulf.hansson@linaro.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-	l.stach@pengutronix.de, peng.fan@nxp.com, eagle.zhou@nxp.com,
-	imx@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] media: verisilicon: Avoid G2 bus error while
- decoding H.264 and HEVC
-Message-ID: <aSR+eaVxBhnahOl7@lizhi-Precision-Tower-5810>
-References: <20251121081911.1682-1-ming.qian@oss.nxp.com>
- <20251121081911.1682-2-ming.qian@oss.nxp.com>
- <aSCOZCJ2rSw7LAvE@lizhi-Precision-Tower-5810>
- <d282811a-866d-4ca8-b9f6-fc1da3a7565e@oss.nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d282811a-866d-4ca8-b9f6-fc1da3a7565e@oss.nxp.com>
-X-ClientProxiedBy: BY3PR05CA0045.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::20) To DU2PR04MB8951.eurprd04.prod.outlook.com
- (2603:10a6:10:2e2::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538EE314A91;
+	Mon, 24 Nov 2025 15:57:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1763999865; cv=none; b=de85qJ51wdJHkkakVueBVqzziihh9ovi7hAhBtmG33fcd1eS5M0TAuIA9UMkerClxrUM+/fz/8poFB0XqbMNQTnv41ocxW8SRvcX0zG/42ilQANzV66GWyMTWLdEHBa7uSC+cyZJOMFj3ZtnLxQAxDs/E1zaMZrNr+zFaZiotsk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1763999865; c=relaxed/simple;
+	bh=yGI97hDLro8+McOQ+lHZp2VCQuWtN25N7eUBLNYm8jU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rTCsm3F2lnq7TAt/+LcdW13xRmQbXCch6c9ZUKmnAMj/ev38+TWORiKXVad0Mr8ZrqOCBtHIACfQ+775h1cgIMw/cPEzmJocUsX1XkHzOxSlMMcSz6mLyJKWzklWBv36HJvmKyNvQy/6NSHG8E8uAiEIDeC+jzWk+uzxyIGyXw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=VarxPDuE; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id D4FDDC139B0;
+	Mon, 24 Nov 2025 15:57:18 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 71C74606FC;
+	Mon, 24 Nov 2025 15:57:41 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0297B10371A40;
+	Mon, 24 Nov 2025 16:57:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1763999858; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=UX028RVBrtav4WisvLm2dO1F8K5+rUIM4Xp+GTn4l88=;
+	b=VarxPDuEXoNSmVvJFI8GatO2RP9trnXzaYCfsYMM6RiiQJ2m93PBXrieFqWdi7u6Z2RoZg
+	GAGA01Dg63AWsSjF79FfLxVFlCWOLC7nb+Zva16AiZR4LFaDIOkwTjS+1qvXT6UkmCc4TH
+	yzjFgzaGeZFlS18DchOYD0zIe6ixo0ZO9D4JFiPQlx//8nY7IyIYwgA24Z48+/kegy6SN7
+	r9KW3P+aPv0ig9jzpcYgX+xbOwsPSqiPsLbiFMkGf/rdRqa9+vF2g0o12LRVP64iuC5S5t
+	QWlRuX+uUfAmODHQDKv6cyMvrBcyY/vc3NIbj+57IejdauvBbh+DRTxNEjxg7Q==
+From: Romain Gantois <romain.gantois@bootlin.com>
+To: "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+ David Lechner <dlechner@baylibre.com>,
+ Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+ Andy Shevchenko <andy@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-iio@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Peter Rosin <peda@axentia.se>,
+ Mariel Tinaco <Mariel.Tinaco@analog.com>,
+ Lars-Peter Clausen <lars@metafoo.de>,
+ Michael Hennerich <Michael.Hennerich@analog.com>,
+ Kevin Tsai <ktsai@capellamicro.com>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+ Support Opensource <support.opensource@diasemi.com>,
+ Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Matheus Castello <matheus@castello.eng.br>,
+ Saravanan Sekar <sravanhome@gmail.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Casey Connolly <casey.connolly@linaro.org>,
+ Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+ Orson Zhai <orsonzhai@gmail.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>,
+ Thara Gopinath <thara.gopinath@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ Olivier Moysan <olivier.moysan@foss.st.com>,
+ Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Dixit Parmar <dixitparmar19@gmail.com>, linux-hwmon@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ Andy Shevchenko <andriy.shevchenko@intel.com>
+Subject: Re: [PATCH v4 0/6] Add support for the LTM8054 voltage regulator
+Date: Mon, 24 Nov 2025 16:57:16 +0100
+Message-ID: <4053840.MHq7AAxBmi@fw-rgant>
+In-Reply-To: <563331EB-2460-4CF5-87B3-5FE60B18BB70@goldelico.com>
+References:
+ <20251124-ltm8054-driver-v4-0-107a8a814abe@bootlin.com>
+ <23111366.EfDdHjke4D@fw-rgant>
+ <563331EB-2460-4CF5-87B3-5FE60B18BB70@goldelico.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8951:EE_|AM9PR04MB8827:EE_
-X-MS-Office365-Filtering-Correlation-Id: 377cb43d-e0d0-42b1-26aa-08de2b710b47
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|19092799006|376014|52116014|7416014|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?WK/MpO3zhjsYNifB/DQI8wlBWCeZI1Meo/W296chJH9uhK7FCItdhZcsoD6U?=
- =?us-ascii?Q?j1sg1qAgXmsfuoiFS1NJ+nmzWOeqNRayda0gYT7RMDaKU9wGFNvYdP3b+I2t?=
- =?us-ascii?Q?S+6U+qXR7O3nep4XhVV+TCbOAJ1bT4wtg7lnxEJtVyTTJFzI5F9wQTBMHOgb?=
- =?us-ascii?Q?o22DugIDet6Ydpy5nijOcIU0DQtreagToeJ3wuEosoKJjkghnsL395sUW1+t?=
- =?us-ascii?Q?D0iuPUQ43YKHSVqIITHEQMfR+lObh2Uf1Q7KyZQBlS90NnbNhhNLImrdAwlq?=
- =?us-ascii?Q?Mu17OFqyFRMtZ6TtfHoXSdZ6uF2KlnLX5G6ZHi55Y7QnXfw/keNg1XzvRYty?=
- =?us-ascii?Q?n5hRqbaYFYipL1ue3H2J4uf9kyBp7BrFRaZXJAIGjsGqJaPKvHKuVBoSUrqK?=
- =?us-ascii?Q?F2uRo6Na7j/AQ98HN8vtkRErduby/mxxSvew75q7LNERqmWQ8rzPL0KQYzgJ?=
- =?us-ascii?Q?otjkVWPr219CYzHE5SQoX663x+tK7pI+5z4qEA5PN1TKu6I3PrUph/fnIFTE?=
- =?us-ascii?Q?szOVtTUgl/tyDz85BsJsl7a9XJDcmnZYZ7yyW5S+hzK5tsE+TqDXjayEjYG0?=
- =?us-ascii?Q?tHn+A/VFwzWoISK28HsCXWbwF5yc4aI6/CPtoUUmE8ph+aFnljGMV1MCkLxi?=
- =?us-ascii?Q?FZIU85klKV78ThSaMye9aaFdjYDzdQPf5M9Pd26nf+sDr9GDcg/IHAlLZmCp?=
- =?us-ascii?Q?rdLeZa26GOEe8NTJxza4eHi3vnMIPXbgUz+YIEPUaJzGYQVh8QJZ2qNj0LBJ?=
- =?us-ascii?Q?jctMRxG50xCZFszmr9eH/RKinsLOmjPuDl2uvFj41Kw4VxNQnri9RTNjuY/q?=
- =?us-ascii?Q?awkxcqt+I8TDG95YVPyogyhtGBTj4KDdV9sLj/bHzcMKWu83hWocRLksv6pO?=
- =?us-ascii?Q?z/Q7w0VYmI+Og1wyptQX29RRtN40shDCGy0tYEA3JgWqDA1LqwSFTwP8RMtq?=
- =?us-ascii?Q?KYawzmDFkCrBfm1lTL03Chsf8YK+M9UbtnIdEWOB5L1TCDMPFuDa8ubUcKao?=
- =?us-ascii?Q?PmWEKOZ15v8Nuc5sVNesz1aUaerlS/xcndDaaagJkRRfk8HRJsU+WFthYC84?=
- =?us-ascii?Q?dolCbUfYb5Y1XeySGSDUr2ShWJF07aZaFO9Vpx5tOIiHXfanXZHCeynZtzRh?=
- =?us-ascii?Q?w6u1P57H3Qqq/+O5RG1xhfrPT3hA6OLRNhYvvucm5lDybtZfS7ywyt/l683f?=
- =?us-ascii?Q?RrIWyGz3YO2KjmBg3Mjo2u7NvJvifmU7Jgx65iObEewgkKyZLqqn5xlSYbv+?=
- =?us-ascii?Q?zvV5CfpTPwWac0hjDaIYCRPf8lHl/uKpbUeTzE86HzrR+Cpq6VlbthzlPR5i?=
- =?us-ascii?Q?hQEE7leUYeRdBPWZg0zvMeTxzk25B1cDXUAXxS6F3tDpAoMSUQoDzaRHeqA/?=
- =?us-ascii?Q?kScM8fCrbzSlU6u6RXMU0jwAon6JVPgiGMgAQ/Xeztt1y6L5HssbuwgEIFEy?=
- =?us-ascii?Q?C1rw7+UVNfhMRj/kmGIb4XnqGZ9MU3adEmXMWU/dTqtwNO55TvJIJg=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8951.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(376014)(52116014)(7416014)(1800799024)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?kb1m8vUxrKKqg28P61um2PcB4NSYVJAO/dDi/2osRzYtViqL0AyM5pE4oUGt?=
- =?us-ascii?Q?EbSN5yxZKn0pKmyE+YLL3QFhNMbU55dXAv7xjjRhhcejAzlWI9mkPS6mJcam?=
- =?us-ascii?Q?1/3RyxfD6PkQvD371AaQGz3J6pt9vwPHBLdz1GquFtpj4XHyMP0jlUA/OgCi?=
- =?us-ascii?Q?Ad/nqL3bwtHQiR1Xnsx1+MdL4hO/98StS2TnmJnre05Fd+naszDuacRCQYrX?=
- =?us-ascii?Q?+z95zNJIM0wvv4viHUAawk0SNn0KF/V8h8ZU9+NaApED9aGB/0TGJAEFcF7I?=
- =?us-ascii?Q?AEJDmxS0uLdL2OOUVVKU4+zg0bgLUInAtuCu108Ew4SdelbgC7zvLYI3NZUi?=
- =?us-ascii?Q?u3YZqhiIO4KO3t8V29QABF9v5wf1eD4ZAqY8Kp2L6sJ2i4xB2aYNL7JfCnJm?=
- =?us-ascii?Q?G8hy6WPJ8/iuWJ/EWyNDnso3qjIeabxtm27fxjAryzo+meDSipInmgJOhK4v?=
- =?us-ascii?Q?Y8O9HtELxEZJybInHzYstRZ8/rQa5p3sRDsO+aj6isUecSclneE7Yh1RAOqC?=
- =?us-ascii?Q?kJzx7HKScs9hMAhNkzROATCCT6aWVRRBJa/UXquf8QTGHIZRf5xT3XBLm6gk?=
- =?us-ascii?Q?Bb8VuEN9ymGEuecfRCfCNhsnADw+V1lzeqpmsXRqClcNnftR+rcmjaUwMhMI?=
- =?us-ascii?Q?hoa8WKUAxXIHqwrVWUAwlr/pFvS7v6W5OkGwQnhlaNw5dMaowcm3CFskYSJ9?=
- =?us-ascii?Q?TZflUi1TtLGB0bF/m8tW7TWdSJRoM8LZu8JfPIGAROHeCYQ4MBdzbFZeps8W?=
- =?us-ascii?Q?b71oxFyKdVDynD55FTxlmEef5qoqdXt5L7CHOZQuOT0dzk2SFpxlJOTweiIA?=
- =?us-ascii?Q?/2h7xIJcUJUGcBxwaK9uQgRE9rDnQ5QfDDpGx6iWduzD9pNaaTi5nniwiZxW?=
- =?us-ascii?Q?P95C9rQCThUZJWAOtS+R7ABMq5Qigk3ZI/TwrarM49oVXSxz0/yhilm1vadX?=
- =?us-ascii?Q?nOlyhUoTRMALnVDmnxOkD1ZUW/Cywq/S7xpca57yAFw3tsm/Nass6wmW2rk+?=
- =?us-ascii?Q?vji7t+nJKgb6yYyWt40+RGPYSG5DVZC8LO+6+rjCECxgNf4EXNe9RlomHAny?=
- =?us-ascii?Q?0WTHZaVAIxen/rLm1J+tAcJiaDseu0UoOG87eW7lrsA3I+cd59sqEiFkjzRn?=
- =?us-ascii?Q?7BPwjEZR9CpBZUlQ0hnW7QGGj+z6U4BsnnRnC0hMN3uSBz/mmgOQ0MI9CtGB?=
- =?us-ascii?Q?6gjMfWzu/tcatQyZdM4JOH/8ZclesJAc5rstnwkTLKb/op82UnDMYQyL5X3l?=
- =?us-ascii?Q?aPPPjh78vcp1xBiMECLK8Mfj1ct7bGlLRgQWAsK+9kH2BBltLyn78BPQ5Imd?=
- =?us-ascii?Q?kpG6Cqg19rPG/AENxpKU6ltnVbO/SW1mjOzUDYidgUg6UguvQAhlVKc8n4tf?=
- =?us-ascii?Q?KAk37BdGbpxgjERsbrjM5mOStlGl0RpbcU4SwNUphgi3qq6yDMklw1C5BO0y?=
- =?us-ascii?Q?xKIHnW5J+sGdEMA2M92VBaab7EAyIqr/t2+r+d9F9GNgwU7pWuXdBTWC7kSH?=
- =?us-ascii?Q?Qa5VIadjHl9nIL6gWrf62bCt1owdaxEBBA6LaW8R5hUbkvBJ518heGCjDb01?=
- =?us-ascii?Q?NfusBF4W8qipOenFvEEsZz9MrnN6oytGp7o0FaLu?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 377cb43d-e0d0-42b1-26aa-08de2b710b47
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8951.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Nov 2025 15:49:25.5472
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KISbn+GuyR8LsGCG07hQDfoL3LpKjahcFybS7Xi1wzip0HicuyBx1ScY03gIGAUctoEX+V3QbBeoloB2I1fPBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8827
+Content-Type: multipart/signed; boundary="nextPart2111402.atdPhlSkOF";
+ micalg="pgp-sha512"; protocol="application/pgp-signature"
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, Nov 24, 2025 at 09:38:15AM +0800, Ming Qian(OSS) wrote:
-> Hi Frank,
->
-> On 11/22/2025 12:08 AM, Frank Li wrote:
-> > On Fri, Nov 21, 2025 at 04:19:09PM +0800, ming.qian@oss.nxp.com wrote:
-> > > From: Ming Qian <ming.qian@oss.nxp.com>
-> > >
-> > > For the i.MX8MQ platform, there is a hardware limitation: the g1 VPU and
-> > > g2 VPU cannot decode simultaneously; otherwise, it will cause below bus
-> > > error and produce corrupted pictures, even led to system hang.
-> > >
-> > > [  110.527986] hantro-vpu 38310000.video-codec: frame decode timed out.
-> > > [  110.583517] hantro-vpu 38310000.video-codec: bus error detected.
-> > >
-> > > Therefore, it is necessary to ensure that g1 and g2 operate alternately.
-> > > Then this allows for successful multi-instance decoding of H.264 and HEVC.
-> > >
-> > > Fixes: cb5dd5a0fa518 ("media: hantro: Introduce G2/HEVC decoder")
-> > > Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
-> > > ---
-> > >   drivers/media/platform/verisilicon/hantro.h   |  1 +
-> > >   .../media/platform/verisilicon/hantro_drv.c   | 26 +++++++++++++++++++
-> > >   .../media/platform/verisilicon/imx8m_vpu_hw.c |  4 +++
-> > >   3 files changed, 31 insertions(+)
-> > >
-> > ...
-> > >   #include <linux/workqueue.h>
-> > > +#include <linux/iopoll.h>
-> > >   #include <media/v4l2-event.h>
-> > >   #include <media/v4l2-mem2mem.h>
-> > >   #include <media/videobuf2-core.h>
-> > > @@ -93,6 +94,9 @@ static void hantro_job_finish(struct hantro_dev *vpu,
-> > >
-> > >   	clk_bulk_disable(vpu->variant->num_clocks, vpu->clocks);
-> > >
-> > > +	if (vpu->variant->shared_resource)
-> > > +		atomic_cmpxchg(vpu->variant->shared_resource, 0, 1);
-> > > +
-> > >   	hantro_job_finish_no_pm(vpu, ctx, result);
-> > >   }
-> > >
-> > > @@ -166,12 +170,34 @@ void hantro_end_prepare_run(struct hantro_ctx *ctx)
-> > >   			      msecs_to_jiffies(2000));
-> > >   }
-> > >
-> > > +static int hantro_wait_shared_resource(struct hantro_dev *vpu)
-> > > +{
-> > > +	u32 data;
-> > > +	int ret;
-> > > +
-> > > +	if (!vpu->variant->shared_resource)
-> > > +		return 0;
-> > > +
-> > > +	ret = read_poll_timeout(atomic_cmpxchg, data, data, 10, 300 * NSEC_PER_MSEC, false,
-> > > +				vpu->variant->shared_resource, 1, 0);
-> > > +	if (ret) {
-> > > +		dev_err(vpu->dev, "Failed to wait shared resource\n");
-> > > +		return -EINVAL;
-> > > +	}
-> >
-> > why not use a mutex?
-> >
-> > mutex() lock here, unlock at hantro_job_finish(), if second instance
-> > run to here, mutex() will block thread, until previous hantro_job_finish()
-> > finish.
-> >
-> > Frank
->
-> G1 and G2 are two different devices. If I were to use a mutex, I would
-> need to define a global mutex. Therefore, to avoid using a global mutex,
-> I only define a static atomic variable.
+--nextPart2111402.atdPhlSkOF
+Content-Type: multipart/alternative; boundary="nextPart2186563.taCxCBeP46";
+ protected-headers="v1"
+Content-Transfer-Encoding: 7Bit
+From: Romain Gantois <romain.gantois@bootlin.com>
+To: "H. Nikolaus Schaller" <hns@goldelico.com>
+Date: Mon, 24 Nov 2025 16:57:16 +0100
+Message-ID: <4053840.MHq7AAxBmi@fw-rgant>
+In-Reply-To: <563331EB-2460-4CF5-87B3-5FE60B18BB70@goldelico.com>
+MIME-Version: 1.0
 
-static atomic varible also is global.  Global mutex is allowed if it is
-really needed.
+This is a multi-part message in MIME format.
 
->
-> If a static mutex is acceptable, I think I can change it to a mutex.
+--nextPart2186563.taCxCBeP46
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-ref to
-https://elixir.bootlin.com/linux/v6.18-rc6/source/drivers/base/core.c#L43
+Hi Nikolaus,
 
-Frank
->
-> Regards,
-> Ming
->
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > >   static void device_run(void *priv)
-> > >   {
-> > >   	struct hantro_ctx *ctx = priv;
-> > >   	struct vb2_v4l2_buffer *src, *dst;
-> > >   	int ret;
-> > >
-> > > +	ret = hantro_wait_shared_resource(ctx->dev);
-> > > +	if (ret < 0)
-> > > +		goto err_cancel_job;
-> > > +
-> > >   	src = hantro_get_src_buf(ctx);
-> > >   	dst = hantro_get_dst_buf(ctx);
-> > ...
-> >
-> > >
-> > > --
-> > > 2.34.1
-> > >
+On Monday, 24 November 2025 16:35:28 CET H. Nikolaus Schaller wrote:
+...
+> > Sorry, I don't quite understand your remark. To integrate this voltage
+> > regulator component into the Linux regulator abstraction, I'm providing a
+> > current limit control function. To provide such a function, the voltage
+> > level on a pin has to be controlled. AFAIK, the kernel abstraction used
+> > to set precise voltages on lines is an IO channel.
+> 
+> I was curious to learn about this topic and looked into the data sheet:
+> 
+> https://www.analog.com/media/en/technical-documentation/data-sheets/8054fa.p
+> df
+> 
+> As far as I see the LTM8054 does not even have a programming interface.
+> So is it reasonable to provide a dedicated driver at all?
+> 
+> The figure on page 20 seems to suggest that there is an external DAC
+> which drives the regulator. And the regulator drives for example a fan.
+> 
+> So I would think of a driver for the specific DAC and ignore the specific
+> LTM chip at all.
+> 
+
+In my use case, the LTM8054 feeds a DC output port on which various devices 
+may be plugged. Dynamic output current limitation and output voltage level 
+control for these devices is a requirement, as well as stepped voltage 
+transitions, thus the need for a proper regulator device.
+
+The LTM8054's feedback pin can be driven by a different DAC, which allows for 
+dynamic output voltage control. This is a more complex upstreaming topic 
+however, so I've left it out of this initial series. There are other component 
+functions which fit in squarely into the regulator framework, such as 
+input current limit control and soft-start. But I understand that the current 
+driver might look a bit "bare".
+
+> What could be necessary is if you really want to be able to "regulate"
+> the current going to Vout, some bridge between regulator API and some
+> IIO DAC.
+> 
+> And enabling/disabling the regulator by some GPIO can be described in
+> the DT already through a "regulator-fixed".
+> 
+
+This is a possibility, but when you bring in all of these other hardware 
+functions that I mentionned e.g. output voltage control and stepping, you'll 
+end up with several different devices which look unrelated from userspace, but 
+actually control the same chip.
+
+Userspace will also have to know about some hardware details to properly 
+control the DACs, such as the values of the sense and feedback resistors. In 
+my opinion, this bypasses the kernel's abstraction of hardware.
+
+Thanks,
+
+-- 
+Romain Gantois, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+
+--nextPart2186563.taCxCBeP46
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/html; charset="utf-8"
+
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body><p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">Hi Nikolaus,</p>
+<br /><p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">On Monday, 24 November 2025 16:35:28 CET H. Nikolaus Schaller wrote:</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">...</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; &gt; Sorry, I don't quite understand your remark. To integrate this voltage</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; &gt; regulator component into the Linux regulator abstraction, I'm providing a</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; &gt; current limit control function. To provide such a function, the voltage</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; &gt; level on a pin has to be controlled. AFAIK, the kernel abstraction used</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; &gt; to set precise voltages on lines is an IO channel.</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; I was curious to learn about this topic and looked into the data sheet:</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; https://www.analog.com/media/en/technical-documentation/data-sheets/8054fa.p</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; df</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; As far as I see the LTM8054 does not even have a programming interface.</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; So is it reasonable to provide a dedicated driver at all?</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; The figure on page 20 seems to suggest that there is an external DAC</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; which drives the regulator. And the regulator drives for example a fan.</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; So I would think of a driver for the specific DAC and ignore the specific</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; LTM chip at all.</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; </p>
+<br /><p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">In my use case, the LTM8054 feeds a DC output port on which various devices </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">may be plugged. Dynamic output current limitation and output voltage level </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">control for these devices is a requirement, as well as stepped voltage </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">transitions, thus the need for a proper regulator device.</p>
+<br /><p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">The LTM8054's feedback pin can be driven by a different DAC, which allows for </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">dynamic output voltage control. This is a more complex upstreaming topic </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">however, so I've left it out of this initial series. There are other component </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">functions which fit in squarely into the regulator framework, such as </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">input current limit control and soft-start. But I understand that the current </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">driver might look a bit &quot;bare&quot;.</p>
+<br /><p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; What could be necessary is if you really want to be able to &quot;regulate&quot;</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; the current going to Vout, some bridge between regulator API and some</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; IIO DAC.</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; And enabling/disabling the regulator by some GPIO can be described in</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; the DT already through a &quot;regulator-fixed&quot;.</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">&gt; </p>
+<br /><p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">This is a possibility, but when you bring in all of these other hardware </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">functions that I mentionned e.g. output voltage control and stepping, you'll </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">end up with several different devices which look unrelated from userspace, but </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">actually control the same chip.</p>
+<br /><p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">Userspace will also have to know about some hardware details to properly </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">control the DACs, such as the values of the sense and feedback resistors. In </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">my opinion, this bypasses the kernel's abstraction of hardware.</p>
+<br /><p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">Thanks,</p>
+<br /><p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">-- </p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">Romain Gantois, Bootlin</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">Embedded Linux and Kernel engineering</p>
+<p style="margin-top:0;margin-bottom:0;margin-left:0;margin-right:0;">https://bootlin.com</p>
+<br /></body>
+</html>
+--nextPart2186563.taCxCBeP46--
+
+--nextPart2111402.atdPhlSkOF
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEIcCsAScRrtr7W0x0KCYAIARzeA4FAmkkgFwACgkQKCYAIARz
+eA6Alg/8COym+7pL1LpZ1EUBzLeuPJJMpNXAoKBsdBPOyD3NnxUoT3dqx1KV6Qxl
+qgm6tINDewDnwWGblDKog18X7I3G9JZVLM4/LwN//KMnkzo+GcECfLyFvnNrzKhg
+X1ZpkaamjbifIadbFXhOy1HQ/A6tO90ICk4ae2Dgye9PCZAqsL/GUGtcwiJzbWTk
+mNNqqvmwxf7KGS/63peSY0oGREjOfo95tZPllfLxP5lgvdVP/kiTot7ErGsaFh5y
+zzUIaEYjpiE86eQ+0/gKRs+Xkn4sAOyPzzRwoycI9JsYuJOPLEkIdChhAKNkKUD9
+MmGR4aMVjgLxKxu2dfNwsJmVQJ8mkVor+3jqyP77XSyM7E71ZesHrujCRodKaicr
+hiTtUMGt5qkalsMDHQLJ8MR3R/hMJWK2u1uKitIC0NhXCNQfR2yGlEothJDFcdQL
+K0cOhaJGpDnxfaopsfnN9ianNPZ5MhUYJj6qvQPAjTtARK8E+uL2ysXgZ9bQ1xKx
+g+URjMLJ49zdR8rHCJw0PLPE7Cb8GcsPFlad9yWPzjhJxk5y8JTMNWAnzZTRH96b
+I/PLDFBC9fy13WU6sj9591J0oxcpRC/k6ctEDZzN5sQZ8J+2rwc9moNFpGRpuLGc
+sefn100uth/gnbi+8IJjmTB564t5KIY0Xpnk7+3vfqFC2a88B+o=
+=Wv+m
+-----END PGP SIGNATURE-----
+
+--nextPart2111402.atdPhlSkOF--
+
+
+
 
