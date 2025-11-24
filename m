@@ -1,137 +1,188 @@
-Return-Path: <linux-pm+bounces-38460-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38461-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63D5DC803A9
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:37:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D9582C803C1
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 12:41:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0FB6B34441B
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:37:12 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1D4C1344896
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Nov 2025 11:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97D632FBE12;
-	Mon, 24 Nov 2025 11:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1AA62FD69E;
+	Mon, 24 Nov 2025 11:41:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vbku2pR4"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="hzRl1sSZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5C223B612;
-	Mon, 24 Nov 2025 11:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF442FD1B6
+	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 11:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763984227; cv=none; b=uPuJmi9cHQtg9qI1bakCdUVlH5khmNZfd7+YgrwiOjR+vaGCV9Op8PrIrHV88/aMnecfS7B0US+SrLAax/Do9jt5LHtl6V+kyT5yDHpWMKJCNL543W0jx6IkRVjNnXo0q2/g6Rw1MsCr4VS9Xr2Pn+cUfhTS7gxUxTpH+vlJ/EQ=
+	t=1763984484; cv=none; b=hEY3khPxqU1GdVELbb/+15kv20qExsr8ZReIvrIPNXnfjJlnRbgtzRXXV703o6ktvGc/kLJ4vRsiZjzWJr3vcV3hOo0lhHpLNtYcDOYJEb3ZxCnFOc14HmtHe1ocyh/v3hE2q7Qe2aI47FwLGXsTIoGisWvW+hm0Mxw8cqzBa6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763984227; c=relaxed/simple;
-	bh=hJtmUzWljueWqbsAv7sDroPS+XY96NFx9pUHqQ6wKlQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZZyofTokKNJflw1GVzDUt2WRJ5s3sYMQUxCcnD/AT7L8erArW8AN2p24LNqAekvCKhfnYxdhtKL8zDlE/w5plkFJR3/qogLTcrB4HuJ/5aoKXsMIDZ7LmoipjBPTnbOh8xoPELXoReNyuPpHS1IQMugybRZI3IexuDgR9gn61c4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vbku2pR4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93D5FC4CEFB;
-	Mon, 24 Nov 2025 11:37:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763984225;
-	bh=hJtmUzWljueWqbsAv7sDroPS+XY96NFx9pUHqQ6wKlQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Vbku2pR49qRcmcrSvUHz32hM/cMIrNSkUMl6XA69LZ/O87SeSY3SnlBEMHZmE9yYX
-	 HZJbONyE52OfqzMffMjp8rOdF6yevN0tAT6IBlNlspovdv4k+oOew7sIiVbAa5KJh3
-	 Ij1JsmOiswrJiXvJXM+2UzysJ9usSa23/iy95V5QSF/tkz2f6TMnaHNdd/diKVbd7T
-	 MGwbX2VltGowbkztWGf8ei35Gd8f/+EdybH6C9Vp6NcT0C0h/eW87IZQHWc/CqGgT4
-	 WSDBugZkrfzvXXyc51i6c7d4TleZIR9f7bTCSLFZ4qpd6f7qHDwnwl6RwqFUupyKoX
-	 BLvsFfgTQB6cQ==
-Message-ID: <2deb7496-3094-4d03-b4d0-fb15cfdc6f0e@kernel.org>
-Date: Mon, 24 Nov 2025 12:37:01 +0100
+	s=arc-20240116; t=1763984484; c=relaxed/simple;
+	bh=0XQjbE5d7jgXSgXWNI3PC9cZMugmfUhE/VINaRTJzlU=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=law264HkID0pQvoEXYKPffprCVVVzWi+DWByWxeBnFFnCyG7pJCPhdx9JEpXOJ+MDfD+Ps/5seqjTXtq1uGzZScfmFePh4cPPLEq6w5yS8GKdUe9Vp3OMWu2fnEOSAFknSrDHeyufX1Vc4fndDsKWoOXYBtfjD7fmUzPBcg+Cl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=hzRl1sSZ; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20251124114120epoutp023df2f85c389821671669694e4e625338~67on4MLz-1878018780epoutp027
+	for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 11:41:20 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20251124114120epoutp023df2f85c389821671669694e4e625338~67on4MLz-1878018780epoutp027
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1763984480;
+	bh=0XQjbE5d7jgXSgXWNI3PC9cZMugmfUhE/VINaRTJzlU=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=hzRl1sSZRB4rfDpY6ssxumDAFm4tlTbDbYUh9cJyebMJpzjR/NYHunQb68jzub2qp
+	 v0474kwRcU8OhIV6dxXaBk+U7TdS1KP3uO+Uc1xp5q33V7ubhgqOI1AS3cu6mgsmHY
+	 06Pc9+WevTzt+bhWGJJnRweael/Bsfm3dH68w8Dw=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas2p2.samsung.com (KnoxPortal) with ESMTPS id
+	20251124114119epcas2p2f39f75edc81388783afe6289980513c4~67onLQenN0092100921epcas2p2k;
+	Mon, 24 Nov 2025 11:41:19 +0000 (GMT)
+Received: from epcas2p1.samsung.com (unknown [182.195.38.201]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4dFP6R1YvRz2SSKb; Mon, 24 Nov
+	2025 11:41:19 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
+	20251124114118epcas2p33c2e69559c919dbba39c673cabbab22b~67omGMQJy0056200562epcas2p3O;
+	Mon, 24 Nov 2025 11:41:18 +0000 (GMT)
+Received: from KORCO115296 (unknown [12.80.207.128]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20251124114118epsmtip2caa8be9701cc2704cd7d2990e6ce8bab~67ol_SLcu0905609056epsmtip2Q;
+	Mon, 24 Nov 2025 11:41:18 +0000 (GMT)
+From: =?utf-8?B?7IaQ7Iug?= <shin.son@samsung.com>
+To: "'Tudor Ambarus'" <tudor.ambarus@linaro.org>, "'Daniel Lezcano'"
+	<daniel.lezcano@linaro.org>, "'Bartlomiej Zolnierkiewicz'"
+	<bzolnier@gmail.com>, "'Krzysztof Kozlowski'" <krzk@kernel.org>, "'Rafael J
+ . Wysocki'" <rafael@kernel.org>, "'Zhang Rui'" <rui.zhang@intel.com>,
+	"'Lukasz	Luba'" <lukasz.luba@arm.com>, "'Rob Herring'" <robh@kernel.org>,
+	"'Conor Dooley'" <conor+dt@kernel.org>, "'Alim Akhtar'"
+	<alim.akhtar@samsung.com>
+Cc: "'Henrik Grimler'" <henrik@grimler.se>, <linux-pm@vger.kernel.org>,
+	<linux-samsung-soc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	"'Peter	Griffin'" <peter.griffin@linaro.org>,
+	=?utf-8?Q?'Andr=C3=A9_Draszik'?= <andre.draszik@linaro.org>, "'William
+ McVicker'" <willmcvicker@google.com>, <jyescas@google.com>,
+	<shin.son@samsung.com>
+In-Reply-To: <12346382-7718-4942-a497-4de278b1d5a0@linaro.org>
+Subject: RE: [PATCH v7 RESEND 2/3] thermal: exynos_tmu: Support new hardware
+ and update TMU interface
+Date: Mon, 24 Nov 2025 20:41:16 +0900
+Message-ID: <000b01dc5d37$3f6f5e80$be4e1b80$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: battery: Add SiLION battery bindings
- technology
-To: Rakesh Kota <rakesh.kota@oss.qualcomm.com>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, kamal.wadhwa@oss.qualcomm.com,
- fenglin.wu@oss.qualcomm.com
-References: <20251124-add_silion_battery-v1-0-3c86b70d2543@oss.qualcomm.com>
- <20251124-add_silion_battery-v1-1-3c86b70d2543@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251124-add_silion_battery-v1-1-3c86b70d2543@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQJR08pAfg/+KuTfxFjIW+Bmb4uKqAKoesbtAuyt0KIBiaSaQQHdj7cKAU24glWzxHO7QA==
+Content-Language: ko
+X-CMS-MailID: 20251124114118epcas2p33c2e69559c919dbba39c673cabbab22b
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+cpgsPolicy: CPGSC10-234,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237
+References: <20251113064022.2701578-1-shin.son@samsung.com>
+	<CGME20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237@epcas2p1.samsung.com>
+	<20251113064022.2701578-3-shin.son@samsung.com>
+	<2180a854-8ba6-4424-add2-eb34637530c1@linaro.org>
+	<000001dc5d2a$0697bf10$13c73d30$@samsung.com>
+	<12346382-7718-4942-a497-4de278b1d5a0@linaro.org>
 
-On 24/11/2025 12:12, Rakesh Kota wrote:
-> Document a new battery chemistry for silicon-anode lithium-ion
-> cells.
-> 
-> Signed-off-by: Rakesh Kota <rakesh.kota@oss.qualcomm.com>
-> ---
->  Documentation/devicetree/bindings/power/supply/battery.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/power/supply/battery.yaml b/Documentation/devicetree/bindings/power/supply/battery.yaml
-> index 491488e7b970397b409c248fb0c2a524301686a9..49cbd03956eeb9fc8be72540d8bf35840ccd7156 100644
-> --- a/Documentation/devicetree/bindings/power/supply/battery.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/battery.yaml
-> @@ -44,6 +44,7 @@ properties:
->        - const: lithium-ion-polymer
->        - const: lithium-ion-iron-phosphate
->        - const: lithium-ion-manganese-oxide
-> +      - const: lithium-ion-silicon-anode
+Hello, Tudor Ambarus.
 
-
-Where is any DTS user of this? You have entire cover letter to explain
-the background WHY you are doing this.
-
-Best regards,
-Krzysztof
+> -----Original Message-----
+> From: Tudor Ambarus =5Bmailto:tudor.ambarus=40linaro.org=5D
+> Sent: Monday, November 24, 2025 7:43 PM
+> To: =EC=86=90=EC=8B=A0=20<shin.son=40samsung.com>;=20'Daniel=20Lezcano'=
+=0D=0A>=20<daniel.lezcano=40linaro.org>;=20'Bartlomiej=20Zolnierkiewicz'=0D=
+=0A>=20<bzolnier=40gmail.com>;=20'Krzysztof=20Kozlowski'=20<krzk=40kernel.o=
+rg>;=20'Rafael=20J=20.=0D=0A>=20Wysocki'=20<rafael=40kernel.org>;=20'Zhang=
+=20Rui'=20<rui.zhang=40intel.com>;=20'Lukasz=0D=0A>=20Luba'=20<lukasz.luba=
+=40arm.com>;=20'Rob=20Herring'=20<robh=40kernel.org>;=20'Conor=0D=0A>=20Doo=
+ley'=20<conor+dt=40kernel.org>;=20'Alim=20Akhtar'=20<alim.akhtar=40samsung.=
+com>=0D=0A>=20Cc:=20'Henrik=20Grimler'=20<henrik=40grimler.se>;=20linux-pm=
+=40vger.kernel.org;=20linux-=0D=0A>=20samsung-soc=40vger.kernel.org;=20devi=
+cetree=40vger.kernel.org;=20linux-arm-=0D=0A>=20kernel=40lists.infradead.or=
+g;=20linux-kernel=40vger.kernel.org;=20Peter=20Griffin=0D=0A>=20<peter.grif=
+fin=40linaro.org>;=20Andr=C3=A9=20Draszik=20<andre.draszik=40linaro.org>;=
+=0D=0A>=20William=20McVicker=20<willmcvicker=40google.com>;=20jyescas=40goo=
+gle.com=0D=0A>=20Subject:=20Re:=20=5BPATCH=20v7=20RESEND=202/3=5D=20thermal=
+:=20exynos_tmu:=20Support=20new=0D=0A>=20hardware=20and=20update=20TMU=20in=
+terface=0D=0A>=20=0D=0A>=20Hi,=20Shin,=0D=0A>=20=0D=0A>=20On=2011/24/25=201=
+2:06=20PM,=20=EC=86=90=EC=8B=A0=20wrote:=0D=0A>=20>>>=20+static=20void=20up=
+date_con_reg(struct=20exynos_tmu_data=20*data)=20=7B=0D=0A>=20>>>=20+=09u32=
+=20val,=20t_buf_vref_sel,=20t_buf_slope_sel;=0D=0A>=20>>>=20+=0D=0A>=20>>>=
+=20+=09val=20=3D=20readl(data->base=20+=20EXYNOS_TMU_REG_TRIMINFO);=0D=0A>=
+=20>>>=20+=09t_buf_vref_sel=20=3D=20(val=20>>=20EXYNOSAUTOV920_TMU_T_BUF_VR=
+EF_SEL_SHIFT)=0D=0A>=20>>>=20+=09=09=09=09&=20EXYNOSAUTOV920_TMU_T_BUF_VREF=
+_SEL_MASK;=0D=0A>=20>>>=20+=09t_buf_slope_sel=20=3D=20(val=20>>=20EXYNOSAUT=
+OV920_TMU_T_BUF_SLOPE_SEL_SHIFT)=0D=0A>=20>>>=20+=09=09=09=09&=20EXYNOSAUTO=
+V920_TMU_T_BUF_SLOPE_SEL_MASK;=0D=0A>=20>>>=20+=0D=0A>=20>>>=20+=09val=20=
+=3D=20readl(data->base=20+=20=20EXYNOSAUTOV920_TMU_REG_CONTROL);=0D=0A>=20>=
+>>=20+=09val=20&=3D=20=7E(EXYNOS_TMU_REF_VOLTAGE_MASK=20<<=0D=0A>=20>>=20EX=
+YNOS_TMU_REF_VOLTAGE_SHIFT);=0D=0A>=20>>>=20+=09val=20=7C=3D=20(t_buf_vref_=
+sel=20<<=20EXYNOS_TMU_REF_VOLTAGE_SHIFT);=0D=0A>=20>>>=20+=09val=20&=3D=20=
+=7E(EXYNOS_TMU_BUF_SLOPE_SEL_MASK=20<<=0D=0A>=20>>=20EXYNOS_TMU_BUF_SLOPE_S=
+EL_SHIFT);=0D=0A>=20>>>=20+=09val=20=7C=3D=20(t_buf_slope_sel=20<<=20EXYNOS=
+_TMU_BUF_SLOPE_SEL_SHIFT);=0D=0A>=20>>>=20+=09writel(val,=20data->base=20+=
+=20EXYNOSAUTOV920_TMU_REG_CONTROL);=0D=0A>=20>>>=20+=0D=0A>=20>>>=20+=09val=
+=20=3D=20readl(data->base=20+=20EXYNOSAUTOV920_TMU_REG_CONTROL1);=0D=0A>=20=
+>>>=20+=09val=20&=3D=20=7E(EXYNOSAUTOV920_TMU_NUM_PROBE_MASK=20<<=0D=0A>=20=
+>>=20EXYNOSAUTOV920_TMU_NUM_PROBE_SHIFT);=0D=0A>=20>>>=20+=09val=20&=3D=20=
+=7E(EXYNOSAUTOV920_TMU_LPI_MODE_MASK=20<<=0D=0A>=20>>=20EXYNOSAUTOV920_TMU_=
+LPI_MODE_SHIFT);=0D=0A>=20>>>=20+=09val=20=7C=3D=20(data->sensor_count=20<<=
+=20EXYNOSAUTOV920_TMU_NUM_PROBE_SHIFT);=0D=0A>=20>>>=20+=09writel(val,=20da=
+ta->base=20+=20EXYNOSAUTOV920_TMU_REG_CONTROL1);=0D=0A>=20>>>=20+=0D=0A>=20=
+>>>=20+=09writel(1,=20data->base=20+=20EXYNOSAUTOV920_TMU_SAMPLING_INTERVAL=
+);=0D=0A>=20>>>=20+=09writel(EXYNOSAUTOV920_TMU_AVG_CON_UPDATE,=20data->bas=
+e=20+=0D=0A>=20>>=20EXYNOSAUTOV920_TMU_REG_AVG_CONTROL);=0D=0A>=20>>>=20+=
+=09writel(EXYNOSAUTOV920_TMU_COUNTER_VALUE0_UPDATE,=0D=0A>=20>>>=20+=09=20=
+=20=20=20=20=20=20data->base=20+=20EXYNOSAUTOV920_TMU_REG_COUNTER_VALUE0);=
+=0D=0A>=20>>>=20+=09writel(EXYNOSAUTOV920_TMU_COUNTER_VALUE1_UPDATE,=0D=0A>=
+=20>>>=20+=09=20=20=20=20=20=20=20data->base=20+=20EXYNOSAUTOV920_TMU_REG_C=
+OUNTER_VALUE1);=0D=0A>=20>>>=20+=7D=0D=0A>=20>>>=20+=0D=0A>=20>>=20This=20i=
+s=20unreadable;=20please=20make=20it=20understandable=20for=20those=20who=
+=20don=E2=80=99t=0D=0A>=20>>=20have=20the=20documentation=20(explicit=20sta=
+tic=20inline=20functions,=20comments,=0D=0A>=20etc=20...).=0D=0A>=20>=20I'l=
+l=20restructure=20this=20code=20by=20introducing=20explicit=20static=20inli=
+ne=20helper=0D=0A>=20functions=20and=20proper=20comments=20to=20improve=20r=
+eadability.=0D=0A>=20=0D=0A>=20We=20likely=20shouldn't=20use=20inlines=20he=
+re,=20see=20Linus's=20reply=20from=202006:=0D=0A>=20https://lore.kernel.org=
+/all/Pine.LNX.4.64.0601021105000.3668=40g5.osdl.org/T=0D=0A>=20/=23u=0D=0A>=
+=20=0D=0A>=20I=20guess=20you=20can=20make=20this=20easier=20to=20read=20if=
+=20you=20use=20FIELD_GET/SET=20from=0D=0A>=20bitfield.h.=20Other=20improvem=
+ent=20would=20be=20using=20the=20regmap=20api.=0D=0A>=20=0D=0A>=20Shin,=20a=
+=20bit=20unrelated=20with=20the=20patch,=20but=20I=20wanted=20to=20let=20yo=
+u=20know=20that=20I=0D=0A>=20started=20looking=20at=20the=20GS101=20TMU.=20=
+I=20assume=20it's=20very=20similar=20with=20the=20TMU=0D=0A>=20on=20exynosa=
+utov920.=20Do=20you=20know=20if=20they=20share=20the=20same=20IP=20version?=
+=0D=0A>=20=0D=0A>=20I=20noticed=20GS101=20uses=20ACPM=20calls=20to=20commun=
+icate=20with=20the=20TMU.=20Why=20did=20you=0D=0A>=20choose=20to=20not=20us=
+e=20ACPM=20for=20exynosautov920=20TMU?=0D=0A>=20=0D=0A>=20Thanks=21=0D=0A>=
+=20ta=0D=0A=0D=0AI=20will=20adopt=20FIELD_GET/FIELD_PREP=20to=20simplify=20=
+the=20bitfield=20handling,=20and=20I=20will=20avoid=20using=20inline=20func=
+tions=20excessively=20as=20suggested.=0D=0A=0D=0ARegarding=20ACPM,=20I=20di=
+d=20not=20introduce=20it=20earlier=20because=20I=20was=20trying=20to=20alig=
+n=20the=20implementation=20with=20the=20existing=20framework.=0D=0AHowever,=
+=20if=20we=20move=20toward=20a=20separate=20driver,=20I=20will=20reconsider=
+=20whether=20ACPM=20integration=20makes=20sense=20there.=0D=0AWould=20it=20=
+be=20possible=20to=20get=20your=20feedback=20again=20when=20I=20prepare=20t=
+he=20next=20revision=20of=20the=20driver?=0D=0A=0D=0APlus,=20the=20GS101=20=
+TMU=20driver=20isn't=20upstream=20yet,=20right?=0D=0ACould=20you=20share=20=
+where=20I=20can=20find=20the=20example=20code=20you=20mentioned?=20Thank=20=
+you=20in=20advance.=0D=0A=0D=0ABest=20regards,=0D=0AShin=0D=0A=0D=0A=0D=0A
 
