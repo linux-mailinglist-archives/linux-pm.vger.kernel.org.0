@@ -1,127 +1,129 @@
-Return-Path: <linux-pm+bounces-38649-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38650-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 865CDC86BDB
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 20:11:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23BDCC86BE1
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 20:12:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 457B63B03C0
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 19:11:34 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 069704E1B96
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 19:12:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01967329C5B;
-	Tue, 25 Nov 2025 19:11:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CCCF329C5B;
+	Tue, 25 Nov 2025 19:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g5md2b/f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JZyjQYXF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00BA28D8D9
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 19:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371DF224AF2
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 19:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764097891; cv=none; b=XmXGZf6+LkaH+Se9YnP98S++mHOA/0Zgu08Ozvvo8tBrNEF0ZsReyWH/+djs/cjfvNU/g87lqCzGBmP7PnOWF49rnrjCHjhYKcyf3r24aIAmyxySfNtjYpgY6oWTCGLSCIqFeosCcPYekrTNT2Bck+d642c7I8WrNq9IKCqs7GE=
+	t=1764097971; cv=none; b=WSuuIqFkZu8CRWfFlklTZkG8LIQh5kuyYxDutzl73Papt+ALEA6isCDWigrUkviKSdtXV6FeZB1SIqOZQBaKhN+eEylN2vrtw9TvdmBiad9AhKBQOHUFCfKvcUb51uE55yMyXWv1XKNtMYqIOtQDghjFu1B0JJ1ae8dzG4GAwlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764097891; c=relaxed/simple;
-	bh=yh6DsMIU4V7h8gcLt40p18skHHG4ywP10iWGVf8lDSM=;
+	s=arc-20240116; t=1764097971; c=relaxed/simple;
+	bh=wuqfj+QpTBNKpn1tFJ9yxbXd3bm1JMeJXIeg9uTE62A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FUHNpXB+xfZWXHc49eQk26p3FmI5w8fkzSoxJl6A3/efITUKcKQfdbdlYkgF/RuseanRBWQgSGsjchVuTQmDxTSbmTIyXepeJll1MJBENsODGrbdkooTHv7Oa0hi4ST8zLVq1fJ6/JrA6gvKj4eHOd+updOBDNKxiuMWRXgtaT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g5md2b/f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64059C116B1
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 19:11:31 +0000 (UTC)
+	 To:Cc:Content-Type; b=eNVKtGHRoswTrSvcyi8fqU0BFJBKOnI9ehZDbu7kgE/xQubI7qIMo3J/pRmRPd/AckKFJT6/4GD9tzCMW8m98hIOLBtI4TLvIoZZpKRUl24GGO5xFoVu5rsQW67siHxENWgk8dWWDPcZWL3Ltc/kxxtzISNag8EDYcs0nkS4Rro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JZyjQYXF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC6DC16AAE
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 19:12:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764097891;
-	bh=yh6DsMIU4V7h8gcLt40p18skHHG4ywP10iWGVf8lDSM=;
+	s=k20201202; t=1764097970;
+	bh=wuqfj+QpTBNKpn1tFJ9yxbXd3bm1JMeJXIeg9uTE62A=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=g5md2b/fYtkUi8QljYTUqaOPGwwIdU7q/urkikI9/e617Ff9i/0z+/ZjD6ZlKALOW
-	 J1S6FpEFTN/F8uxqS6FKPAbKNpWM0hopD1uCen2XtyWRF1sl2BRNjoKzkZLd32YZx7
-	 ji0kpDI3ePeR9zL03G8qzUaV3/69TgH9W0nk/2P1CxeApwsCaEHjT519DrM+/Kelbt
-	 rv6BxfW8QFOSJYkMomTBW2G6BxAAXgBDpUCK4tlaw4sxMon6OMZk51IZG5l7DGOy8H
-	 YxpKR8N5B1VBWpGNk2QTNFk62piEzf8NMpaAGBRzWpMPu5xU0UpgtIpUyBoLR0MRuB
-	 4K0IaCvVgrItA==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-30cce892b7dso2329776fac.1
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 11:11:31 -0800 (PST)
-X-Gm-Message-State: AOJu0YyzGREmwZoxSXEpJJSpJz0F6P2ysbbZ5g5RRWhReEVGU+U1/BHi
-	TMHRJLd0Wxqm3hujuc1MEUG9PkEEjF6TkXbIe9fw1kL2U27r6uOb6C3u/Gdt6/KfHN0nkI80sbM
-	WPEtBf64w6PfXCuJCVzVF1aj+g2YY8QE=
-X-Google-Smtp-Source: AGHT+IGoa18Y9gBynTrWR9G/nxBCBbdpnbGX94cGhDii5CH6/X/qmwiB6B7SH5pHewr5FP989rMoXX3WvJ2aew2StyE=
-X-Received: by 2002:a05:6808:1a18:b0:450:d056:e0f0 with SMTP id
- 5614622812f47-451158657cfmr6914328b6e.2.1764097890773; Tue, 25 Nov 2025
- 11:11:30 -0800 (PST)
+	b=JZyjQYXFbqFdIIUcYreKMYuvJjDP/hQF+3qjWx5xYFtFIlYa1m1PSMQGWTXtvNmW8
+	 RSp9+nQKramceBxyteZ6hQPG0uwWm8p9KU3tgGxgVHvDMOc8a6mgEvivUdI/jtvaFa
+	 6T/ypxFu8lAI2h4GOrg8e+yh/5GrqXKJiOgdmKYULSmDkDEBiQRg8i4AacjCJrqKE/
+	 78J720lo1Xi/UzxGeInJWeAC+2VVLdjNV8loKk+jQbiSwONnYEICv7uCZdIBsxaJ4o
+	 bc35Cujnt8w5TA6sf0+jiW26sOKzeXau1ofVEQzF37AaU0HJfGhwX8pBCT1X9n/xJX
+	 Seww4X49HMlKA==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-3ebd1b07919so1342813fac.0
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 11:12:50 -0800 (PST)
+X-Gm-Message-State: AOJu0YxlOLb1EZstdolFhGM38ptvlzStXCrui+04yEXBiSF2Qn7CiqCy
+	khYkRcBcfojgz1RWK0S698hRXkx0reNdZzxMQ9VIm2a98zWvm9tL/ibocXYA/2aue9l6to3AjZm
+	8dL5tNOO77jGVUUnIdFt8A7DqZKQrE+w=
+X-Google-Smtp-Source: AGHT+IEP8anlcDWFcVHFQu1/c8ePe6czH2ltUbjI4mBrjABSI76YjsdKPN9cCZUb/LW73kBpNmECuZQ7kpNgJ9F6ylY=
+X-Received: by 2002:a05:6808:3208:b0:44f:e954:ba44 with SMTP id
+ 5614622812f47-451159828c9mr5674240b6e.28.1764097970278; Tue, 25 Nov 2025
+ 11:12:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251118155813.533424-1-darcari@redhat.com> <20251118155813.533424-2-darcari@redhat.com>
-In-Reply-To: <20251118155813.533424-2-darcari@redhat.com>
+References: <20251118155813.533424-1-darcari@redhat.com> <20251118155813.533424-3-darcari@redhat.com>
+In-Reply-To: <20251118155813.533424-3-darcari@redhat.com>
 From: Len Brown <lenb@kernel.org>
-Date: Tue, 25 Nov 2025 14:11:19 -0500
-X-Gmail-Original-Message-ID: <CAJvTdK=wpC85at_oshwAhdKtU32QLnHx8MyB7QVtRVRZ=303CQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bkGWJjZuF4RRRwNqyTafTTXQiZg7JwZNJOrc_eBxr6TOiYod647ceT4xII
-Message-ID: <CAJvTdK=wpC85at_oshwAhdKtU32QLnHx8MyB7QVtRVRZ=303CQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] tools/power turbostat: avoid segfault referencing fd_instr_count_percpu
+Date: Tue, 25 Nov 2025 14:12:38 -0500
+X-Gmail-Original-Message-ID: <CAJvTdK=tw76+79sCAa3TbVQwDdv9EGCWVrFvFbHihtH3jNcDWw@mail.gmail.com>
+X-Gm-Features: AWmQ_bmYICOj8TkvMD-WkxNXPj96HHQYUXRYdiw9Z5D6l9xbl0m91rmRQCsOUno
+Message-ID: <CAJvTdK=tw76+79sCAa3TbVQwDdv9EGCWVrFvFbHihtH3jNcDWw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] tools/power turbostat: avoid an infinite loop of restarts
 To: David Arcari <darcari@redhat.com>
 Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-not your fault, but looking at this code, it seems that
-get_instr_count_fd(base_cpu)
-assumes that 0 is an invalid FD.  Fine, but based on that you'd think
-we'd use zero for invalid
-and non-zero for valid as return for the function call...
+this patch introduces a limit of 10-restarts per turbostat lifetime,
+down from infinity.
+
+some turbostat invocations span multiple uses of cpu online/offline --
+so this limit will not fly.
 
 On Tue, Nov 18, 2025 at 10:58=E2=80=AFAM David Arcari <darcari@redhat.com> =
 wrote:
 >
-> The problem is that fd_instr_count_percpu is allocated based on
-> the value of has_aperf. If has_aperf=3D0 then fd_instr_count_percpu
-> remains NULL. However, get_instr_count_fd() is called from
-> turbostat_init() based on the value of has_aperf_access.
->
-> On some VM systems has_aperf can be 0, while has_aperf_access can be
-> 1.  In order to resolve the issue simply check for to see if
-> fd_instr_count_percpu is NULL and return -1 if it is.  Accordingly,
-> the has_aperf_access check can be removed from turbostat_init.
+> There are some error cases where turbostat will attempt to reinitialize
+> by calling the re_initialize() function.  The code attempts to avoid
+> an infinite loop by checking the value of 'restarted' in one case, but
+> not others. It should be checked in all cases of restart.  Additonally,
+> the 'restarted' is reset to zero at the start of the loop which also
+> needs to be removed.
 >
 > Signed-off-by: David Arcari <darcari@redhat.com>
 > Cc: Len Brown <lenb@kernel.org>
 > Cc: linux-kernel@vger.kernel.org
 > ---
->  tools/power/x86/turbostat/turbostat.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+>  tools/power/x86/turbostat/turbostat.c | 10 +++++-----
+>  1 file changed, 5 insertions(+), 5 deletions(-)
 >
 > diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turb=
 ostat/turbostat.c
-> index f2512d78bcbd..584b0f7f9067 100644
+> index 584b0f7f9067..5567b9ecd516 100644
 > --- a/tools/power/x86/turbostat/turbostat.c
 > +++ b/tools/power/x86/turbostat/turbostat.c
-> @@ -2463,6 +2463,9 @@ static long open_perf_counter(int cpu, unsigned int=
- type, unsigned int config, i
+> @@ -6722,7 +6722,11 @@ void turbostat_loop()
+>         set_my_sched_priority(-20);
 >
->  int get_instr_count_fd(int cpu)
->  {
-> +       if (!fd_instr_count_percpu)
-> +               return -1;
-> +
->         if (fd_instr_count_percpu[cpu])
->                 return fd_instr_count_percpu[cpu];
+>  restart:
+> -       restarted++;
+> +       if (restarted++ > 10) {
+> +               if (!retval)
+> +                       retval =3D -1;
+> +               exit(retval);
+> +       }
 >
-> @@ -10027,7 +10030,7 @@ void turbostat_init()
->         for_all_cpus(get_cpu_type, ODD_COUNTERS);
->         for_all_cpus(get_cpu_type, EVEN_COUNTERS);
+>         snapshot_proc_sysfs_files();
+>         retval =3D for_all_cpus(get_counters, EVEN_COUNTERS);
+> @@ -6730,13 +6734,9 @@ void turbostat_loop()
+>         if (retval < -1) {
+>                 exit(retval);
+>         } else if (retval =3D=3D -1) {
+> -               if (restarted > 10) {
+> -                       exit(retval);
+> -               }
+>                 re_initialize();
+>                 goto restart;
+>         }
+> -       restarted =3D 0;
+>         done_iters =3D 0;
+>         gettimeofday(&tv_even, (struct timezone *)NULL);
 >
-> -       if (BIC_IS_ENABLED(BIC_IPC) && has_aperf_access && get_instr_coun=
-t_fd(base_cpu) !=3D -1)
-> +       if (BIC_IS_ENABLED(BIC_IPC) && get_instr_count_fd(base_cpu) !=3D =
--1)
->                 BIC_PRESENT(BIC_IPC);
->
->         /*
 > --
 > 2.51.0
 >
