@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-38623-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38624-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 098C7C85ED9
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 17:19:31 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B054C85EE2
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 17:19:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 706B235133B
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 16:17:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F26603490F8
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 16:18:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5312A25782D;
-	Tue, 25 Nov 2025 16:17:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0370626C3BC;
+	Tue, 25 Nov 2025 16:17:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="iNbRyOAM"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="VooVnKiv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6424278F51;
-	Tue, 25 Nov 2025 16:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBCF924397A;
+	Tue, 25 Nov 2025 16:17:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764087462; cv=none; b=bVMN2KOQVrUqQbN9Y8BmbFUSyLXNdycHnR10DhxWtaV0kpAukfb621W9DOBuTiwp29skH2xKFoMm5cMpzptnw0BI6Z+lf0KbRBxGks4jJd6Ac6Z5xKeyfKC9zWEYkUs4G7528rjcINrSsq15rjAkU/v2QH5FTFWnCI4wqWFh7uI=
+	t=1764087463; cv=none; b=RmtW6YLiyRJBREa6V/I/yktHHlv1CDLRcxzcjliUjCGsNUU08XSPfF+53qNRCWeQdg3mboKIVWLKtSFgU17Lzpv6P94Im+sEVrvRNe85Z8ofvCOptr5D2LtctHalKGZCalRUgA6lW35e68JcQ8nwToxmftMUObD9qOP8sf8BGto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764087462; c=relaxed/simple;
-	bh=wA3DIGO1oIoEB6lNDjSI7psqvT6nGHbhXESVUEEIA40=;
+	s=arc-20240116; t=1764087463; c=relaxed/simple;
+	bh=QvdZw2B8XbxQS//hiFICE90RRNKTXPSR/l/8lFZlen4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E977kscWI59dMDtoXDqCf1nq6yOpazGTTpE0y7JLQ5l7TdmpqE/OKxSjaCX9O8YiqdNy6IQJMYwoxYkRvrzUiOnMjjVMzGB2de60IILHCylLQkUWtIlGH0zaNjZBzyBtg1UPcix7M8sCxgPlRwchn6RL5UigKHTSXqvhdWLlBwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=iNbRyOAM; arc=none smtp.client-ip=148.251.105.195
+	 MIME-Version:Content-Type; b=IPUMYTEolvq84o9OQbbswnCHUwRRsBG3Bj2C9AOKcUYcDjz52D60oKTMjvjJLkH4K8TqRsJP6BNa5eoI2QF4j0WZgOA/AAKuZt8LXF9AmJ30p7+/kV1YAdls7jWoxpQ00z1dH3VK69iZ54YNykltWcz8PAON7Xhwdc14vBGXNO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=VooVnKiv; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1764087458;
-	bh=wA3DIGO1oIoEB6lNDjSI7psqvT6nGHbhXESVUEEIA40=;
+	s=mail; t=1764087460;
+	bh=QvdZw2B8XbxQS//hiFICE90RRNKTXPSR/l/8lFZlen4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=iNbRyOAMQh38tdj75MP0NNuwgPM8OdZVrXIskWaix9m9LTcbMoSKWus+lfLXECudS
-	 iKtiMhfbnWwOOXUrr8iKMX/g4X1O48GtPwGhDSC30hFinVJpEMBLkbjeV30l7/9bP5
-	 yK7uzzrh7jZ1WxndSqto7igFVH5oq/lBDDEmsAPGmPI/lliqSX2mH2uSKUSFPqjmZe
-	 gLNb7domjMX7y/4Qys0e4ShVAf+a8Zxvyda2RC9uW8ipBCTudGO0TIP/2gdMmcqJQ3
-	 qjWiHVouKt6t9mDJs/uGhgI1pWfKck+xA56Qi3jxV1w6liOSDMfNxgl5LWwbrzra5j
-	 ROD0U3DkwMLcA==
+	b=VooVnKivDx7LlbvJNPQGq4eQyQWJjD6Qx9XqqEesJVlwZccJMcr01/4JiqNwA04uc
+	 z1fc1ljLNk4P19On9JoVwKLN20Jpa/wftfAlwjkkIaRNqaMNO4y3zHdH9d1k3y0TbI
+	 +HK9gAr2D4pM5EN+xJhP6DK4Ndl0dElZTm+aX2srKxRYm9U5U6kZ7qh1xT3bWN4fde
+	 LGVWAhXuFMuzU5jVkJeqQz7S0El11tqgebK84EvzqR7+o5JB5/kXfh1aYgosvSnVvB
+	 qbRqb8kwa/JH9UaQQ5qtlPW5IlxKE3Lqnm/7vAFrRnPBfhKV4ssdwSjwvt3+Zi7YW0
+	 24dn7qTnEyg8A==
 Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:feae:4183:be92:e051])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: laura.nao)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0159C17E10E7;
-	Tue, 25 Nov 2025 17:17:36 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id E0C0B17E13CD;
+	Tue, 25 Nov 2025 17:17:38 +0100 (CET)
 From: Laura Nao <laura.nao@collabora.com>
 To: srini@kernel.org,
 	robh@kernel.org,
@@ -75,11 +75,10 @@ Cc: nfraprado@collabora.com,
 	kernel@collabora.com,
 	wenst@chromium.org,
 	fshao@chromium.org,
-	Laura Nao <laura.nao@collabora.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v5 1/8] dt-bindings: thermal: mediatek: Add LVTS thermal controller support for MT8196
-Date: Tue, 25 Nov 2025 17:16:51 +0100
-Message-Id: <20251125-mt8196-lvts-v4-v5-1-6db7eb903fb7@collabora.com>
+	Laura Nao <laura.nao@collabora.com>
+Subject: [PATCH v5 2/8] thermal/drivers/mediatek/lvts: Make number of calibration offsets configurable
+Date: Tue, 25 Nov 2025 17:16:52 +0100
+Message-Id: <20251125-mt8196-lvts-v4-v5-2-6db7eb903fb7@collabora.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20251125-mt8196-lvts-v4-v5-0-6db7eb903fb7@collabora.com>
 References: <20251125-mt8196-lvts-v4-v5-0-6db7eb903fb7@collabora.com>
@@ -92,66 +91,174 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-Add LVTS thermal controller binding for MediaTek MT8196.
+MT8196/MT6991 use 2-byte eFuse calibration data, whereas other SoCs
+supported by the driver rely on 3 bytes. Make the number of calibration
+bytes per sensor configurable, enabling support for SoCs with varying
+calibration formats.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: Frank Wunderlich <frank-w@public-files.de>
 Signed-off-by: Laura Nao <laura.nao@collabora.com>
 ---
- .../bindings/thermal/mediatek,lvts-thermal.yaml    |  2 ++
- .../dt-bindings/thermal/mediatek,lvts-thermal.h    | 26 ++++++++++++++++++++++
- 2 files changed, 28 insertions(+)
+ drivers/thermal/mediatek/lvts_thermal.c | 55 ++++++++++++++++++++++++++-------
+ 1 file changed, 44 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-index 0259cd3ce9c5..beccdabe110b 100644
---- a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-@@ -26,6 +26,8 @@ properties:
-       - mediatek,mt8192-lvts-mcu
-       - mediatek,mt8195-lvts-ap
-       - mediatek,mt8195-lvts-mcu
-+      - mediatek,mt8196-lvts-ap
-+      - mediatek,mt8196-lvts-mcu
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index ab55b20cda47..babffdea9a4d 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -96,12 +96,15 @@
  
-   reg:
-     maxItems: 1
-diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-index ddc7302a510a..0ec8ad184d47 100644
---- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-+++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
-@@ -80,4 +80,30 @@
- #define MT8192_AP_MD1   15
- #define MT8192_AP_MD2   16
+ #define LVTS_MINIMUM_THRESHOLD		20000
  
-+#define MT8196_MCU_MEDIUM_CPU6_0        0
-+#define MT8196_MCU_MEDIUM_CPU6_1        1
-+#define MT8196_MCU_DSU2                 2
-+#define MT8196_MCU_DSU3                 3
-+#define MT8196_MCU_LITTLE_CPU3          4
-+#define MT8196_MCU_LITTLE_CPU0          5
-+#define MT8196_MCU_LITTLE_CPU1          6
-+#define MT8196_MCU_LITTLE_CPU2          7
-+#define MT8196_MCU_MEDIUM_CPU4_0        8
-+#define MT8196_MCU_MEDIUM_CPU4_1        9
-+#define MT8196_MCU_MEDIUM_CPU5_0        10
-+#define MT8196_MCU_MEDIUM_CPU5_1        11
-+#define MT8196_MCU_DSU0                 12
-+#define MT8196_MCU_DSU1                 13
-+#define MT8196_MCU_BIG_CPU7_0           14
-+#define MT8196_MCU_BIG_CPU7_1           15
++#define LVTS_MAX_CAL_OFFSETS		3
++#define LVTS_NUM_CAL_OFFSETS_MT7988	3
 +
-+#define MT8196_AP_TOP0                  0
-+#define MT8196_AP_TOP1                  1
-+#define MT8196_AP_TOP2                  2
-+#define MT8196_AP_TOP3                  3
-+#define MT8196_AP_BOT0                  4
-+#define MT8196_AP_BOT1                  5
-+#define MT8196_AP_BOT2                  6
-+#define MT8196_AP_BOT3                  7
+ static int golden_temp = LVTS_GOLDEN_TEMP_DEFAULT;
+ static int golden_temp_offset;
+ 
+ struct lvts_sensor_data {
+ 	int dt_id;
+-	u8 cal_offsets[3];
++	u8 cal_offsets[LVTS_MAX_CAL_OFFSETS];
+ };
+ 
+ struct lvts_ctrl_data {
+@@ -127,6 +130,7 @@ struct lvts_data {
+ 	const struct lvts_ctrl_data *lvts_ctrl;
+ 	const u32 *conn_cmd;
+ 	const u32 *init_cmd;
++	int num_cal_offsets;
+ 	int num_lvts_ctrl;
+ 	int num_conn_cmd;
+ 	int num_init_cmd;
+@@ -646,6 +650,26 @@ static int lvts_sensor_init(struct device *dev, struct lvts_ctrl *lvts_ctrl,
+ 	return 0;
+ }
+ 
++static int lvts_decode_sensor_calibration(const struct lvts_sensor_data *sensor,
++					const u8 *efuse_calibration, u32 calib_len,
++					u8 num_offsets, u32 *calib)
++{
++	int i;
++	u32 calib_val = 0;
 +
- #endif /* __MEDIATEK_LVTS_DT_H */
++	for (i = 0; i < num_offsets; i++) {
++		u8 offset = sensor->cal_offsets[i];
++
++		if (offset >= calib_len)
++			return -EINVAL;
++		// Pack each calibration byte into the correct position
++		calib_val |= efuse_calibration[offset] << (8 * i);
++	}
++
++	*calib = calib_val;
++	return 0;
++}
++
+ /*
+  * The efuse blob values follows the sensor enumeration per thermal
+  * controller. The decoding of the stream is as follow:
+@@ -711,26 +735,27 @@ static int lvts_calibration_init(struct device *dev, struct lvts_ctrl *lvts_ctrl
+ 					u8 *efuse_calibration,
+ 					size_t calib_len)
+ {
+-	int i;
++	const struct lvts_data *lvts_data = lvts_ctrl->lvts_data;
++	int i, ret;
+ 	u32 gt;
+ 
+ 	/* A zero value for gt means that device has invalid efuse data */
+-	gt = (((u32 *)efuse_calibration)[0] >> lvts_ctrl->lvts_data->gt_calib_bit_offset) & 0xff;
++	gt = (((u32 *)efuse_calibration)[0] >> lvts_data->gt_calib_bit_offset) & 0xff;
+ 
+ 	lvts_for_each_valid_sensor(i, lvts_ctrl_data) {
+ 		const struct lvts_sensor_data *sensor =
+ 					&lvts_ctrl_data->lvts_sensor[i];
++		u32 calib = 0;
+ 
+-		if (sensor->cal_offsets[0] >= calib_len ||
+-		    sensor->cal_offsets[1] >= calib_len ||
+-		    sensor->cal_offsets[2] >= calib_len)
+-			return -EINVAL;
++		ret = lvts_decode_sensor_calibration(sensor, efuse_calibration,
++						     calib_len,
++						     lvts_data->num_cal_offsets,
++						     &calib);
++		if (ret)
++			return ret;
+ 
+ 		if (gt) {
+-			lvts_ctrl->calibration[i] =
+-				(efuse_calibration[sensor->cal_offsets[0]] << 0) +
+-				(efuse_calibration[sensor->cal_offsets[1]] << 8) +
+-				(efuse_calibration[sensor->cal_offsets[2]] << 16);
++			lvts_ctrl->calibration[i] = calib;
+ 		} else if (lvts_ctrl->lvts_data->def_calibration) {
+ 			lvts_ctrl->calibration[i] = lvts_ctrl->lvts_data->def_calibration;
+ 		} else {
+@@ -1763,6 +1788,7 @@ static const struct lvts_data mt7988_lvts_ap_data = {
+ 	.temp_factor	= LVTS_COEFF_A_MT7988,
+ 	.temp_offset	= LVTS_COEFF_B_MT7988,
+ 	.gt_calib_bit_offset = 24,
++	.num_cal_offsets = LVTS_NUM_CAL_OFFSETS_MT7988,
+ };
+ 
+ static const struct lvts_data mt8186_lvts_data = {
+@@ -1776,6 +1802,7 @@ static const struct lvts_data mt8186_lvts_data = {
+ 	.temp_offset	= LVTS_COEFF_B_MT7988,
+ 	.gt_calib_bit_offset = 24,
+ 	.def_calibration = 19000,
++	.num_cal_offsets = LVTS_NUM_CAL_OFFSETS_MT7988,
+ };
+ 
+ static const struct lvts_data mt8188_lvts_mcu_data = {
+@@ -1789,6 +1816,7 @@ static const struct lvts_data mt8188_lvts_mcu_data = {
+ 	.temp_offset	= LVTS_COEFF_B_MT8195,
+ 	.gt_calib_bit_offset = 20,
+ 	.def_calibration = 35000,
++	.num_cal_offsets = LVTS_NUM_CAL_OFFSETS_MT7988,
+ };
+ 
+ static const struct lvts_data mt8188_lvts_ap_data = {
+@@ -1802,6 +1830,7 @@ static const struct lvts_data mt8188_lvts_ap_data = {
+ 	.temp_offset	= LVTS_COEFF_B_MT8195,
+ 	.gt_calib_bit_offset = 20,
+ 	.def_calibration = 35000,
++	.num_cal_offsets = LVTS_NUM_CAL_OFFSETS_MT7988,
+ };
+ 
+ static const struct lvts_data mt8192_lvts_mcu_data = {
+@@ -1815,6 +1844,7 @@ static const struct lvts_data mt8192_lvts_mcu_data = {
+ 	.temp_offset	= LVTS_COEFF_B_MT8195,
+ 	.gt_calib_bit_offset = 24,
+ 	.def_calibration = 35000,
++	.num_cal_offsets = LVTS_NUM_CAL_OFFSETS_MT7988,
+ };
+ 
+ static const struct lvts_data mt8192_lvts_ap_data = {
+@@ -1828,6 +1858,7 @@ static const struct lvts_data mt8192_lvts_ap_data = {
+ 	.temp_offset	= LVTS_COEFF_B_MT8195,
+ 	.gt_calib_bit_offset = 24,
+ 	.def_calibration = 35000,
++	.num_cal_offsets = LVTS_NUM_CAL_OFFSETS_MT7988,
+ };
+ 
+ static const struct lvts_data mt8195_lvts_mcu_data = {
+@@ -1841,6 +1872,7 @@ static const struct lvts_data mt8195_lvts_mcu_data = {
+ 	.temp_offset	= LVTS_COEFF_B_MT8195,
+ 	.gt_calib_bit_offset = 24,
+ 	.def_calibration = 35000,
++	.num_cal_offsets = LVTS_NUM_CAL_OFFSETS_MT7988,
+ };
+ 
+ static const struct lvts_data mt8195_lvts_ap_data = {
+@@ -1854,6 +1886,7 @@ static const struct lvts_data mt8195_lvts_ap_data = {
+ 	.temp_offset	= LVTS_COEFF_B_MT8195,
+ 	.gt_calib_bit_offset = 24,
+ 	.def_calibration = 35000,
++	.num_cal_offsets = LVTS_NUM_CAL_OFFSETS_MT7988,
+ };
+ 
+ static const struct of_device_id lvts_of_match[] = {
 
 -- 
 2.39.5
