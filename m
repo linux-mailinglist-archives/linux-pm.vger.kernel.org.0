@@ -1,145 +1,146 @@
-Return-Path: <linux-pm+bounces-38545-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38546-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B5EFC84521
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 10:57:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CB0EC84551
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 10:58:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B31524E77C8
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 09:56:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0997A3B1F4A
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 09:58:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C4202ED151;
-	Tue, 25 Nov 2025 09:56:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC14B2EE60B;
+	Tue, 25 Nov 2025 09:58:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mvMXhxjU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CC2AoRKe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346A32E9ECA;
-	Tue, 25 Nov 2025 09:56:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66CF16A395
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 09:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764064614; cv=none; b=t6xECm8z26abQyxm+jORmcMEiGkJTcwe0K+p4KHagCNjdB9qGUzj/GUIZV2w6D/f8C8dEJVyIAXgJFTeOcLwHINx5evCYT+yfrw1PPlqiQAFRKVx34eEOhZx/iWyD/orhJcL5Dtwzx2seFz0NMhMkRYnwiTIt3aSK9lIx5am+ao=
+	t=1764064683; cv=none; b=ko9MyxLMjEa0tXxyWl0Nc1q5jAs/LstFP/vRXXW9DcYlY856TUJKbQCKJL7QidRRr7ZDeo1gAOFFtb3SGh/iXoi2baNHqclbCON5L/fylxEyVO3qfalGMds2vuugUQtWtEJEBFbY/055kwBTQX7J2OHVQO9Vzlu0lw2Hy/I5crI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764064614; c=relaxed/simple;
-	bh=0GPu1l3zNMQ3cknQLptiKbWwXLYqK3TMJjD3o6Letn4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N4jDc4tVEMJDZz84uQ3asvdEPP2yA7XmkRaSgemTsRUOrVz9YMMQvFtcvs43VBzd6lkeyvvvdTePT+ElD3XgDY+xgAHhlnuVF3CXn/y3MLSwu6Yr5yDrrjwPveZ0AbirEh5wXlMMrIcDOnFnCzy5S9R54ptMYA0DNztv5LDPcN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mvMXhxjU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AB25C4CEF1;
-	Tue, 25 Nov 2025 09:56:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764064613;
-	bh=0GPu1l3zNMQ3cknQLptiKbWwXLYqK3TMJjD3o6Letn4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mvMXhxjU+avdAPCZMwmTLGrOugXisDV8TxNjFd/ckVYx57F7wpBupaEDQmOp6ic5Y
-	 hAt/4BAitYk3j7TWIENR3TiWTht/Hgi2ESqIAelLSMdw8FuZ0apEqBEKROwVTvyxKu
-	 pu5ynsTF+1yT1X5eZSvVi5sVQlFSxCFQ9W0GonYMbB+XSpm+qF4g+1KLKnXArbKVMO
-	 mAOahH8DOXmFKBL/mZhbXRQFtgNXXz8DigJMKfuRlvM7ubIORdO58Aa5zlB+DuVuty
-	 mixV1treB52IwXJUUnyOyeMOtWzN4Sa1nT6+93MDHJGLzeV+mEYs1iipWgg+x1XR9o
-	 keERpBjO7epxA==
-Date: Tue, 25 Nov 2025 10:56:51 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	=?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Badhri Jagan Sridharan <badhri@google.com>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Peter Griffin <peter.griffin@linaro.org>, 
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH 1/6] dt-bindings: power: supply: Add Maxim MAX77759
- charger
-Message-ID: <20251125-amorphous-bobcat-of-whirlwind-afdab1@kuoka>
-References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
- <20251123-max77759-charger-v1-1-6b2e4b8f7f54@google.com>
- <d4455f4b-2a0f-4bc0-b897-14f2e27af3ea@kernel.org>
- <c9b059f8-9219-4219-95c8-23a3733fea58@google.com>
+	s=arc-20240116; t=1764064683; c=relaxed/simple;
+	bh=Y93r+NAz9Q3ugrrl3DN0uAHV9NDiXOsOZgcJBbkLxcI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZFhysFyMpjX3b9pJKsHzI32QXjx+eAlQo3Z94Hnc/fNBSB0Yfd45DVJSLZl/Pxb+1pcvhsPvAT+lkkvUbO8pJITQr18HCgcs9u/jCGjrD9ihGSN1gn0j4lZRnqAFbrRxirA4Lod/EEHXe8WumwnZWnwyzeXIcPUmwaKxi7804lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CC2AoRKe; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b736cd741c1so927601366b.0
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 01:58:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764064680; x=1764669480; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y93r+NAz9Q3ugrrl3DN0uAHV9NDiXOsOZgcJBbkLxcI=;
+        b=CC2AoRKePFNDKdvnu8eqFntc+hflGBBQBDPPXvTXLP912022MTKfjdxDatWU+9YrOQ
+         z9BffU0C1JUw0I4YIlKXqSdxNGVlQOdVlo6EoYCSvWuBQBbqN0Wc0Za6owWpJy6xn5WN
+         lEscYzeP0iLfmyMPXL9KDHY9xEl1dhn30LGzqcVoDU3vSlPap70mpVfpS36afHMjvLYB
+         QcOQSnj+potRAO6X6HeDPaPEQb7YuL79yBmtVxpIb3rn25s6iHsvga5rJtLvOR1zhX2F
+         6rt/AT8MkeaeiYdKSdTTc82vqRnwIjCF/hsd7P0zeD6iyLr1WZh5rPb4iGBzIpvYp0W8
+         hhEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764064680; x=1764669480;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y93r+NAz9Q3ugrrl3DN0uAHV9NDiXOsOZgcJBbkLxcI=;
+        b=b/Ux04KXDgjKmb2MDkvnkfNwXVYqumzuZU3DvQzePnazGS1DQlnw636gfMTi0CpcPu
+         CQMixWvhcLcyv5/mqVZnn1Ma317BpKu3VGOlXNoZIH7SHTAWf/hkbckgoY23VElAZlGw
+         PTb9h5GmJsk8Nj2BDuxQHRJA43MbyCGLroedD7+EqsA4tGU3Q09oTgCg5tjYKyWR/r/g
+         lGeQdvlxHuW9oEmsY95gw5QWVMl2GyyWIz6PIDQNhPStO/2PRyEgAkHdUuPqX5t6oT3Q
+         rWMCQHNWvXVH7ZjzG4fmMVjxrN61zFv749mbdxDFsvcofmRfvBrIl7aTbNCPPG7qMyJy
+         prfg==
+X-Forwarded-Encrypted: i=1; AJvYcCXEJc5JVqyT/u0UwnSl+SGCbHTT3Ia9BdfkXMnT4QCn066N83y+7y2L8mdkCqZKk6CUSdr82sJrDg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyaGoBB6SmmDf7KI7ZF02n7kp9hX19J6bax16BqoFtr0GHa3/x2
+	+zv/LjlOC27xANhG7O2t7gxo7+Z+OTNCIvTisl+ul+WjMohAUqbYVojA8vX0aZP99SPsTYyN/2z
+	tuV1to/ZVeCucTmH+ySZuB17sPhtseRJJdn6BuMPJ9Wb52Z8TaPkS
+X-Gm-Gg: ASbGncsEU++/kxJ9qiEEVAdfHIePykxsmjcaQtBku/jcS5RcHZUhTrSYEtw4N8Yblsc
+	138ZjLM3slizyFtKvP8ju8bEpViBxXamOjc7kgusiFracJVf8RbYTDRwgHNjMvg1yXmdHPFeZEL
+	C13NRPInamZRih+B8iWWZj9P7V3Ubk/gCvvuom9IxnUYYMh/7GmbAqWqGxZ60zr7LP57WlVShbM
+	C6V2W6H+4FOWfBskUgkCnlK9CaP6vsz+n2Bb5OSkZjMaqYI5tVE2mCBeWh4tWkcCr71eBDi3ty9
+	kt3kUhPCkpBGC5sWZQt9Lr8f
+X-Google-Smtp-Source: AGHT+IHplYX2hvTMgiKVA1ktpR5uivdWyLSdeM8ENWWZ4cei9rCZHX3gdTAneyNbPoNJPp85dxglQGk1cSfej4VLpTs=
+X-Received: by 2002:a17:907:96a6:b0:b50:a389:7aa4 with SMTP id
+ a640c23a62f3a-b7671547e0fmr1497299166b.13.1764064680110; Tue, 25 Nov 2025
+ 01:58:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c9b059f8-9219-4219-95c8-23a3733fea58@google.com>
+References: <20251125032437.2056626-1-kaushlendra.kumar@intel.com>
+ <71ea7728-6808-4bdf-9437-3746ff8664fc@arm.com> <LV3PR11MB8768D5F17B1F9575DE2804B6F5D1A@LV3PR11MB8768.namprd11.prod.outlook.com>
+ <CAKfTPtChUavg0TYK_BiA9NnR-9_A1nz49kMASf6g8vCwhpJzcg@mail.gmail.com> <5ce509d3-0e11-444f-a22e-6c01280dd9af@arm.com>
+In-Reply-To: <5ce509d3-0e11-444f-a22e-6c01280dd9af@arm.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Tue, 25 Nov 2025 10:57:48 +0100
+X-Gm-Features: AWmQ_bmE4ITza-ROcviwnYWTaBBkqQYaC8edNpm_j9xdAmwksRnB2rivzc4skWM
+Message-ID: <CAKfTPtAh7-gt=ivhOhm2uGt7SuHO5hVBSLSQ_7VaDvkYOVNHMw@mail.gmail.com>
+Subject: Re: [PATCH] sched/cpufreq: Fix capacity calc in shared policy update
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Kumar, Kaushlendra" <kaushlendra.kumar@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "rafael@kernel.org" <rafael@kernel.org>, 
+	"vschneid@redhat.com" <vschneid@redhat.com>, "mgorman@suse.de" <mgorman@suse.de>, 
+	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>, "juri.lelli@redhat.com" <juri.lelli@redhat.com>, 
+	"peterz@infradead.org" <peterz@infradead.org>, "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>, 
+	"mingo@redhat.com" <mingo@redhat.com>, "bsegall@google.com" <bsegall@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Nov 23, 2025 at 06:34:05PM -0800, Amit Sunil Dhamne wrote:
-> Hi Krzysztof,
-> 
-> On 11/23/25 1:28 AM, Krzysztof Kozlowski wrote:
-> > On 23/11/2025 09:35, Amit Sunil Dhamne via B4 Relay wrote:
-> >> From: Amit Sunil Dhamne <amitsd@google.com>
+On Tue, 25 Nov 2025 at 10:46, Christian Loehle <christian.loehle@arm.com> wrote:
+>
+> On 11/25/25 09:38, Vincent Guittot wrote:
+> > On Tue, 25 Nov 2025 at 10:23, Kumar, Kaushlendra
+> > <kaushlendra.kumar@intel.com> wrote:
 > >>
-> >> Add bindings for Maxim max77759 charger device.
+> >> Hi Lukasz,
 > >>
-> >> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> >> ---
-> >>  .../power/supply/maxim,max77759-charger.yaml       | 36 ++++++++++++++++++++++
-> >>  1 file changed, 36 insertions(+)
+> >> On 11/25/25 XX:XX, Lukasz Luba wrote:
+> >>> Hi Kaushlendra,
+> >>>
+> >>> On 11/25/25 03:24, Kaushlendra Kumar wrote:
+> >>>> In sugov_next_freq_shared(), the CPU capacity is retrieved only for
+> >>>> the CPU that triggered the update (sg_cpu->cpu) and then incorrectly
+> >>>> applied to all CPUs in the shared frequency domain during the loop.On
+> >>>> heterogeneous systems with CPUs of different capacities sharing a
+> >>>> frequency domain, this causes incorrect frequency selection.
+> >>>
+> >>> How is this possible?
+> >>> Is it old or new Intel SoC (a chip name would be also welcome)?
 > >>
-> >> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
-> >> new file mode 100644
-> >> index 000000000000..71f866419774
-> >> --- /dev/null
-> >> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
-> >> @@ -0,0 +1,36 @@
-> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> >> +%YAML 1.2
-> >> +---
-> >> +$id: http://devicetree.org/schemas/power/supply/maxim,max77759-charger.yaml#
-> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >> +
-> >> +title: Maxim Integrated MAX77759 Battery charger
-> >> +
-> >> +maintainers:
-> >> +  - Amit Sunil Dhamne <amitsd@google.com>
-> >> +
-> >> +description: |
-> >> +  This module is part of the MAX77759 PMIC. For additional information, see
-> >> +  Documentation/devicetree/bindings/mfd/maxim,max77759.yaml.
-> >> +
-> >> +  The Maxim MAX77759 is a dual input switch mode battery charger for portable
-> >> +  applications. It supports wired and wireless charging and can operate in buck
-> >> +  and boost mode.
-> >> +
-> >> +allOf:
-> >> +  - $ref: power-supply.yaml#
-> >> +
-> >> +properties:
-> >> +  compatible:
-> >> +    const: maxim,max77759-charger
-> >> +
-> > This should be just folded into parent node, no need for separate
-> > charger device or is just incomplete.
-> 
-> Thanks for the review! You are right, the binding is incomplete. This
-> charger block actually listens on its own I2C address, distinct from the
-> main PMIC.
-> 
-> I will update v2 to include the reg property. I will also add the
+> >> This is with respect to intel platforms which has E-cores and P-cores.
+> >
+> > Do you mean that they share the same frequency domains ?
+>
+> Just to get everybody on the same page:
+> Intel has what's called "favored cores", P-cores that allow for slightly
+> higher frequencies than the other (same uArch) P-cores.
 
-AFAIK, the main (parent) device schema does not reference children via
-any sort of addressing, so reg here would not be suitable.
+Okay so it's not E-core and P-core in the same domain but P-cores and
+favored P-cores
 
-> standard properties `constant-charge-current-max-microamp` and
-> `constant-charge-voltage-max-microvolt` to configure the hardware
-> limits, as this charger device does not manage the battery profile
-> directly (that is handled by a separate fuel gauge).
+> Rafael's EAS series decided that it wouldn't be worth the effort make EAS
+> always iterate over an extra cluster (overhead on every wakeup hot-path)
+> for CPUs where in the bigger picture the difference is negligible.
+> https://lore.kernel.org/lkml/1592aa65-9dfb-47d6-9bcf-17afd3184a0a@arm.com/
+> (capacities are 623, 1009 and 1024 here, 1009 and 1024 are lumped into one
+> cluster.)
+> I think this isn't unreasonable, as long as this technicality lives inside
+> of intel_pstate setup code and doesn't escape, like proposed here.
 
-Well, still, what's the benefit for the bindings to have it as a
-separate child? Kind of depends on your example, which is quite small -
-one regulator and supply. Grow the example with battery and other
-independent resources (if they are) to justify it. Or show arguments why
-this is re-usable.
+I agree
 
-Best regards,
-Krzysztof
-
+> Obviously EAS heavily relies on "1 cluster => 1 capacity" assumption as
+> mentioned before, even just for max-spare-cap in feec().
+> Breaking this assumption would require a huge rework, which AFAIU specifically
+> wasn't was Rafael intended, but I'm sure he'll chime in himself.
+> So if you really have issues with the different capacities within a cluster
+> trick that Rafael went with, please just reconsider that instead of trying
+> to patch things up outside of intel_pstate.
 
