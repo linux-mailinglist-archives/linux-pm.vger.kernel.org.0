@@ -1,136 +1,144 @@
-Return-Path: <linux-pm+bounces-38547-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38548-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3520EC8453F
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 10:58:23 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B844C84732
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 11:23:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BB26934F007
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 09:58:18 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 856503507FE
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 10:23:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F34992EDD40;
-	Tue, 25 Nov 2025 09:58:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037A52F49EC;
+	Tue, 25 Nov 2025 10:21:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ODnHQgPc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GLc0uZz2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED0372ED853
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 09:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0ED62F290B
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 10:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764064688; cv=none; b=lroSFstv/M+7ybF+aqmhJMkwoVAsWUji7nG+QLhzUghdwwnV/oRzLp/quQC2zi7pXlnfI7mnm39l8XPQ0qLRGUp4fRR+0JVndhmiMb3H8022CM/4vjjCTkHLefHSrKDz+0hIXkWXQCjM+Gkg55BUU1ZPa9VSnkJ2/JRVu3zAJOM=
+	t=1764066106; cv=none; b=HWJYB9SXN2lr2bnTR3yFrlry1vtEg+KZ0EzRa0YmgRB0TzHaV9X35dOrUSVLHs9Zh4JF8xPVK48NEIJe+Bfn08dO+6EShx4C7i/THs+1lFOHvW0vH2SZmYtO5pyAJOhU48uX26lP0J5zMvRx5GcYB9269jensZ3Qz2So6YeXQkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764064688; c=relaxed/simple;
-	bh=+Bvp48vIsEAty/4kptj5aE0gOoyNVogt3ZIlOlJPcbw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=elfVEWltgWSI1uF0L4LjMVMb+1eyNmr4kRoPOeBo+wykt6BgvuicHEHGjdo5z8o8ugO857W4NVIvlD7wo7lbDzGjOheFdEHZiEG2/AzVDadp5ZjS8awteykDSl8iXaH9YNrKFY5sTY6bfYD2coCf7xEaeIPvX8DrDmNKl56lKYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ODnHQgPc; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-477ba2c1ca2so55721355e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 01:58:06 -0800 (PST)
+	s=arc-20240116; t=1764066106; c=relaxed/simple;
+	bh=Nl+s8+3VqFL8i/pvXYObJT1n7cruxQ9Kkr2MdBYPQNE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lNOmswnOQEmf5CGb0itSq8/9lNCm6EtsnSuu5c2J5miU6gz38oZ5qj6+vgb2sPtYGwCYYmKZrFtTXaVz2mBUT6glB4O6dqghJyBdxSlS0s6bJGJoNeR4lJjjogRgqadGsu46NK8KZxSk2k9zc5Z6ediMtcXpVj3NWimRRNOXHwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GLc0uZz2; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-42b3c965df5so2829453f8f.1
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 02:21:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764064685; x=1764669485; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6dOkxs8WqzorGeMW44vvMt1jQg4XWV2o2YphYrM2grQ=;
-        b=ODnHQgPc+cYaDiw52ouplzhUiwUtj7HUhylh1eMaIofCH0fxWO6CUdU7Wq/fIwnTbU
-         2lB8mLVqxlkVlsydssMb04N0l43tcQsET5iX0UZl5B91CCTTwFpCAsaNlrJDOjertVSg
-         3An2DjMNZI+I7RvHCy8f951yfHU2JvkIL/ALMfXBK4sHyEbavPlvpIFPK5UEDPCnqXy0
-         EZtQnwEGdHJi1O3Ji4MnZ60aBmvG2AnuPL40AYhEN37JZ59mCcFJ1OFCepHIy5yz31XO
-         3/ZX5vLQf5YDePQ7B6P1ifwY1J8VP+d7zZp29JVzinELPMxKtk527Aa4drnj2zYesWze
-         ko8Q==
+        d=gmail.com; s=20230601; t=1764066103; x=1764670903; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mMAa1PahDcZGGFamJpPR85zyctP0GPcnw67hHv9HjNU=;
+        b=GLc0uZz2DvejL+9fdSJGkA1QRga3m+XsED20aH3XZIMmTBSjeCSuqVasEzNk8Pvscp
+         8eZb1rkWsHK0989pDvhjHUUMpLf/9MwW3Y8kMNiHpOGzRdV3JBHjUIRL9XfTTu1VX0ON
+         tqQIF80HRtyYJQPqDfavxv0m5xq9eNe+Vda3FSaKIGVoN/KsGWRGMz+hQ5RcidTAZ1U1
+         rg7RAoE6XyPOOlLJuvzsDW3DrWpAGF8mJUGz0q26WOKnGJMPYG7jff1BQue2Tf2NFHYs
+         YdMlYalvYn9ENaJ45K1NUM+3pvBIGM+iOjFbXcvj3kaeDaFdhbpOycf825LtemlGZ5gn
+         hHKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764064685; x=1764669485;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6dOkxs8WqzorGeMW44vvMt1jQg4XWV2o2YphYrM2grQ=;
-        b=nCEQVy1ctx3SLfbrWfneIQMCmoMRgVcOR3sP+fsbA474TuUyIgLBwgE5aezv6iQIrl
-         DOnbBpde7vBIHVLKp8bGsHjhsEkibqXX1fTEG75Mnn0nRXE4MG8m/mjCnusxWux3B19Q
-         /6u7aQIE6wt0VLAwMMx7QOtrXYQ08sDcCt2e3EG8Rau6NUcQrTsiELOsr0Jxr7Ek2zg8
-         vVEoshqoEXpJ23E/FnfKmNAB5RF54ILgy5V9NIGBi7X3/IxLoBhzrYjXeJ4Lm7+r/qvh
-         M3lAVhccY4F95MYX+n2/yBcAQP+4OL702zdoA5v8KNnhUpZf3Zh25ITkQ05DfDIyTzLX
-         jiqw==
-X-Gm-Message-State: AOJu0YwIjRd+9aurei1eO5cSY2JAKLN8t0ZonuT46JiivaiUhWiwxHzw
-	GOgHb8ianJNCce/+HcPD4qtl67fD5DYfqB9knYBMYjpkOjAsNm9IHmTfPmJIadGHhpY=
-X-Gm-Gg: ASbGnctwJikasLcNFqia33McJqU75awzRQGafZb0CV5klEbAvk/ly+I+7FkCK0Bf39s
-	MxKkWVw7SQmLlhdFbO+6B/Pbw/XasPrtIvjE5+GuYGMFTCjjtiWWW8ASqU0QtxWCOKnVRAowiOZ
-	rkzEx9Eb5SbgXqN8OzkBNvIaVJzl5ljIgtE30q5NHbeIMWFwef40a/1jJGvNXclq2osZnH62EaD
-	dS1gGsHq23SOrkQQCJvMJ9lWT02rI/81y4LJNCi0EC/8FsJJ56fCZx3gcwrbeOJUrYaoKfpmOJZ
-	Hq114FaHzJWcT0wWta5HgqyjlhZDzZX4ffmGnWmfgvqfC1KfzsLyN8x5qAh2PNWttcL3nWdYrRZ
-	qc87uPyVZxV60nRLXW3tLJ5zExZ9V6VZF29dOI5PpGjEOyOCopfGDDgl7WEwj0gTkCtxH/vTwYp
-	1wqsEooXp4cVZGDw+ohXXvNjpivq6ilYDMPpNtB+3cCMFyhW+pZE6lKILnN/jtVRgvjts6lquKE
-	nLt
-X-Google-Smtp-Source: AGHT+IFoE9OmJaNFhl0oCYA4I5Vz8Lh4b1/CD22Ed+dT5SBsnD4UIM73MCg/02FxSamLM9sqOV5Ppw==
-X-Received: by 2002:a05:600c:3b97:b0:477:9e8f:dae8 with SMTP id 5b1f17b1804b1-47904a685c0mr25597235e9.0.1764064685199;
-        Tue, 25 Nov 2025 01:58:05 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:1d9d:2362:4539:c68d? ([2a05:6e02:1041:c10:1d9d:2362:4539:c68d])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-477bf3ba1b4sm246185395e9.15.2025.11.25.01.58.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Nov 2025 01:58:04 -0800 (PST)
-Message-ID: <fe1efb30-9d23-4291-a21e-80a5ffb954b1@linaro.org>
-Date: Tue, 25 Nov 2025 10:58:03 +0100
+        d=1e100.net; s=20230601; t=1764066103; x=1764670903;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mMAa1PahDcZGGFamJpPR85zyctP0GPcnw67hHv9HjNU=;
+        b=SuCifXotcFIcF/vEn9G+lL2a22ZwImfzRSsCykElMWYw7N7OyZlzO8rgqDd5wQ2/bz
+         e6mMhGLCN1FTpbmfAaZrsSZ6Tgpdgg62WvvtVaC2HXcWA3K+F/BehO5S3Ra2YmBiXfYV
+         oAFTkCzzSYmoHrsxUyzZ+idixW4+9y5jpsYYLuVFUPeB3TavMrBoDU0ZxSH7532eZ2Zc
+         x8I5o0B+BfIeywa8hjbbRNvdLkw1HiOJ3H59kH2yojPYOnrC1TjE6dqvz1vohKzX5IXS
+         A0FyF3GQimhPf4D05FPo0RziD6MarR2RNhPXgulIqWqV1XyRdMzyhr+OqMmunSzmVwhp
+         iITQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVX34CPlcq8XXlvgX823IxfevMBk1VZn3iVLJgwVAbUyKM4ZgLUT/tR7g5IVe1BtxYgsw9wZuG+dQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf5GO/dPME95UvuxRqzxW2hhIyinc6JVM6sP9hYPiCjt6B4QKW
+	vqZMTT0DzwHRGGCJK3kC/eJQhUKQnEomMAexFSUC+auSHt+Yxp3RKSASf+O3q8gHJ+nOVQ40DQk
+	nwZ8dXgcpR0eo1dkwqLQOHKHCqAmqPxfaupey
+X-Gm-Gg: ASbGncs4GUPBHpCThxcDsrsNdhChoXy2Ax/+dOjjLA9YZgq2Og80lmtchQZLKKYCWZ1
+	VY0MdRCVWQktPOVxW/ySPj28xhpvFLTD7didvUUbDDz2wo3GbDdxt8Axxi9jV7Q1OiF+Pxkahuk
+	wiXXHWpm+Fzp3TM1K+ZhoD1mnrHn97BRLXt1gJ0B9ewgX4KGs1Amx+5E4sttq7eTpbQWwHF3tAc
+	lEFqN121iLMwiHyXBgZtznk3mBLVR7o6POTG4np/n49+N2XP7/iyAUy01gZNCGbb1wufnux
+X-Google-Smtp-Source: AGHT+IGs/n3s+ljPxhnH+g77kzWfSIpoVvX9+gmjeFbXMAeiCC1KIHbqdKpuwES2cbl9f+HwXmh2k55li5DiqVgzvXc=
+X-Received: by 2002:a05:6000:420d:b0:425:7e45:a4df with SMTP id
+ ffacd0b85a97d-42e0f1e3540mr2067660f8f.11.1764066102844; Tue, 25 Nov 2025
+ 02:21:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: thermal: qcom-tsens: make ipq5018 tsens
- standalone compatible
-To: george.moussalem@outlook.com, Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sricharan Ramabadhran <quic_srichara@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- Dmitry Baryshkov <lumag@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20250818-ipq5018-tsens-fix-v1-0-0f08cf09182d@outlook.com>
- <20250818-ipq5018-tsens-fix-v1-1-0f08cf09182d@outlook.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20250818-ipq5018-tsens-fix-v1-1-0f08cf09182d@outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250915080157.28195-1-clamor95@gmail.com> <20250915080157.28195-7-clamor95@gmail.com>
+ <175847725338.4354.4145979844570539358@lazor>
+In-Reply-To: <175847725338.4354.4145979844570539358@lazor>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Tue, 25 Nov 2025 12:21:30 +0200
+X-Gm-Features: AWmQ_bl56LuUHLPnztGhAMdmRur5Ggnq7b6fJH-NAjFY7Cca_zX_XBphsvjf_7k
+Message-ID: <CAPVz0n2xtmNRvawkvWD7FJbfTU0y2bD+qsFoJ4VLmivaz=K7aA@mail.gmail.com>
+Subject: Re: [PATCH v3 06/11] clk: tegra: remove EMC to MC clock mux in Tegra114
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Chanwoo Choi <cw00.choi@samsung.com>, Conor Dooley <conor+dt@kernel.org>, 
+	Dmitry Osipenko <digetx@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Kyungmin Park <kyungmin.park@samsung.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Mikko Perttunen <mperttunen@nvidia.com>, 
+	MyungJoo Ham <myungjoo.ham@samsung.com>, Prashant Gaikwad <pgaikwad@nvidia.com>, 
+	Rob Herring <robh@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Thierry Reding <treding@nvidia.com>, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-tegra@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/18/25 13:33, George Moussalem via B4 Relay wrote:
-> From: George Moussalem <george.moussalem@outlook.com>
-> 
-> The tsens IP found in the IPQ5018 SoC should not use qcom,tsens-v1 as
-> fallback since it has no RPM and, as such, must deviate from the
-> standard v1 init routine as this version of tsens needs to be explicitly
-> reset and enabled in the driver.
-> 
-> So let's make qcom,ipq5018-tsens a standalone compatible in the bindings.
-> 
-> Fixes: 77c6d28192ef ("dt-bindings: thermal: qcom-tsens: Add ipq5018 compatible")
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: George Moussalem <george.moussalem@outlook.com>
-> ---
+=D0=BD=D0=B4, 21 =D0=B2=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 20:54 Step=
+hen Boyd <sboyd@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> Quoting Svyatoslav Ryhel (2025-09-15 01:01:52)
+> > diff --git a/drivers/clk/tegra/clk-tegra114.c b/drivers/clk/tegra/clk-t=
+egra114.c
+> > index 8bde72aa5e68..6b3a140772c2 100644
+> > --- a/drivers/clk/tegra/clk-tegra114.c
+> > +++ b/drivers/clk/tegra/clk-tegra114.c
+> > @@ -1321,6 +1309,28 @@ static int tegra114_reset_deassert(unsigned long=
+ id)
+> >         return 0;
+> >  }
+> >
+> > +#ifdef CONFIG_TEGRA124_CLK_EMC
+> > +static struct clk *tegra114_clk_src_onecell_get(struct of_phandle_args=
+ *clkspec,
+> > +                                               void *data)
+> > +{
+> > +       struct clk_hw *hw;
+> > +       struct clk *clk;
+> > +
+> > +       clk =3D of_clk_src_onecell_get(clkspec, data);
+> > +       if (IS_ERR(clk))
+> > +               return clk;
+> > +
+> > +       hw =3D __clk_get_hw(clk);
+>
+> Can you just use of_clk_hw_onecell_get() instead? Then we don't need to
+> use __clk_get_hw(). Or is this whole function used to return a clk
+> pointer to something that isn't the clk framework?
+>
 
-Applied patch 1/2
+I have tried to switch __clk_get_hw to of_clk_hw_onecell_get but it
+did not work, tegra124_clk_emc_driver_available fails and I get
+EPROBE_DEFER cascade. I will keep __clk_get_hw like Tegra124 driver
+does since of_clk_hw_onecell_get did not worked in this case.
 
-Thanks
-
-   -- Daniel
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> > +
+> > +       if (clkspec->args[0] =3D=3D TEGRA114_CLK_EMC) {
+> > +               if (!tegra124_clk_emc_driver_available(hw))
+> > +                       return ERR_PTR(-EPROBE_DEFER);
+> > +       }
+> > +
+> > +       return clk;
 
