@@ -1,62 +1,122 @@
-Return-Path: <linux-pm+bounces-38662-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38663-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23262C8772A
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 00:19:03 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45A08C87811
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 00:48:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3B4894E3D62
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 23:18:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 273AB4E3C72
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 23:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9168C2EA730;
-	Tue, 25 Nov 2025 23:18:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB5322F1FE9;
+	Tue, 25 Nov 2025 23:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DR6T5z4p"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lAQ4+Bzs";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="aCev0qpp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697D42D9EC9;
-	Tue, 25 Nov 2025 23:18:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448872DF151
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 23:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764112729; cv=none; b=TUDGE/RUqet0EF+NOwRuAF6prrOgSXLRqF/LGOiVW72kYuR89qSTB5cl8QEvqxdBeSwc9RnyuFxdUX2bJbxuKIkm2kDEdOH9nFyZcSaGIULPPoX68cZThAthKgO5u+RQyVBIWTFWrowps6BN+BUcRZSKikt1Q3we4sSi/V7QPb0=
+	t=1764114511; cv=none; b=jdy02uFzFLIl3TT22L+Trb1BvZucdT8wbY9HRlRRFM0fxcRuHUWmJncLf2hTujcBz4cyknGaaSU3GRmk4y8JR4dUxdx/cqK9gkIxyPN5Ok8PjRdV7v0ypHKLmcj6YEErtUZxpkK60fBIzCZ3gUc1ocgKoQEftdlDf33qp+geToA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764112729; c=relaxed/simple;
-	bh=RZMuzKujCtfq/0f3/HyE8UbzQWwAL0xsNRv+1kA7nCg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=iG1szxWzu7qMug6u1DdnZgcMIHUHvmXFUV4RjUVxIIqjIeaPTXobHvGmsuQsqi0OIOH+fAtwj0LTdB9QjGdOHHclN0HBWV++n2KSPCamBXAopHyJUWIu2wHaqINDKkDnebvDgUNHf28HxghDCPsDsi+GrlhgEeNOn+dxa1OjC+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DR6T5z4p; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C61D9C4CEF1;
-	Tue, 25 Nov 2025 23:18:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764112727;
-	bh=RZMuzKujCtfq/0f3/HyE8UbzQWwAL0xsNRv+1kA7nCg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=DR6T5z4pLDrZICkFIX6twECM7v7aOuTb/ZhXLFhSiUFXljPe2ZEJwUhX7PdOspjnd
-	 xc+3x/e6BVEfgcY6Up3QjR7hFiaWkLAFXm8hjYeh301zRDjk9wp6GLx0mcZuBjkUor
-	 Wf5fnuw7KPYBQBXua2rZ4qM10BzH/jp/DoDgZo6t3lLg/EgvUHBFZ29wAjMap9ewvU
-	 CeVLjUiO26+0A+6O/rUXhKpN/CTPyKia5pwFaKXEQIsV42DzUj5x3cdZQYAB3/I3O4
-	 KY1Udk/kAVP/Bf+ej2gtJVCGjpoPeVlefpSgNDTTnYVqFkxY8i2B5/lsP1oKTEg12u
-	 rFK9mC8iBU4zQ==
-Date: Tue, 25 Nov 2025 17:18:46 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Riana Tauro <riana.tauro@intel.com>,
-	"Sean C. Dardis" <sean.c.dardis@intel.com>,
-	Farhan Ali <alifm@linux.ibm.com>,
-	Benjamin Block <bblock@linux.ibm.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Alek Du <alek.du@intel.com>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver OHalloran <oohall@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] PCI/PM: Reinstate clearing state_saved in legacy
- and !pm codepaths
-Message-ID: <20251125231846.GA2767905@bhelgaas>
+	s=arc-20240116; t=1764114511; c=relaxed/simple;
+	bh=1TXfVPlixmyba6i4iq08P8vC0/duqILVROJdsnsxVr8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tpxlTAUkey0yQYNRGUnUGWl3R2G7i0ADUYuLWhYAIBwuhzn67NhjIJoCvlHC1s7KK1nzbwM5MbbOYCtMRIuxr6DU8L2lYMi0aWgmrc/lnJ15OS1LJphWkjYy1w3kYmToKjL12kqYPVWKdARTaJP8e7Ebcm4wJtfMQTk4mZNo1KE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lAQ4+Bzs; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=aCev0qpp; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5APNMnNC4049271
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 23:48:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=LaLJMWzhhoL7jF0TkISIME95
+	5ZsctfKtB90v8ZvJ6RQ=; b=lAQ4+Bzsij7HP9ZKcNk/rDsdxXaz4VYoKQSOv6i0
+	pWBmUB3vRcQLDuVKc2r38Xx5gRNjTXM0Bm/B35rpW5CO7pg0FiftzD5qSrHoSowO
+	pCa4kmJ/UFPB9mQxE77Z3Xa4EtGxBehwiZGvjNOsZ668MNh7wBuISgWmY8xawfB3
+	pbj/jX6idcpKJWEC9ZebnDsmEj60pEzLuDgYQfhhaZLmic34EvZMwUsP2ShdxN7x
+	GlQuKWzPTlu0On7kleXKv2x9RcdcozAyoghJNcQsVSj4De0feitaYxYU4DRyT4eB
+	8RZU3+tX0PdY9r8/86vwY1GRNU+okmP3gZM+Z0HEsgGKhA==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4anp2ng1du-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 23:48:28 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8b2657cfcdaso730023385a.3
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 15:48:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1764114507; x=1764719307; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LaLJMWzhhoL7jF0TkISIME955ZsctfKtB90v8ZvJ6RQ=;
+        b=aCev0qppPsXyYXWCMCEwhocBwvPwmj6yFrql7CS5fu7CtYBk2OhON79I+53fTtRt0L
+         h1K53MNBimDkRPJGNLjmBX7kIKrLLYaquXiMtPweUtV7rqvbD6XhhNOtRmGc9O4Ntm3n
+         nw05wNfKLa0ueqru6wbuiTioUSXOWemQUC7Acchib3hBfkhNYLAIeNRs0Hqf/UgXBQyL
+         G/Z5TwY5gBl6imCwk8TSjc3jBCeSsT9urOGJ93Nu0cHYqV/5cddjdtB4deJiu7JXgkGh
+         VHj+hd6k/HFO/1QncqvhPNZ9PS4HJzNA+4Q/Af+5nlAtP2xiPuRK3B8EBQA18GVgx5x7
+         wKEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764114507; x=1764719307;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LaLJMWzhhoL7jF0TkISIME955ZsctfKtB90v8ZvJ6RQ=;
+        b=o9rldX5BByDnxY2hByPJOs0HrxWlGCdp42z/wU9XsqvLVIOGMdJb2Tqmo9QfeyMJZX
+         4+qAxeQItq/AifAQHOse5U5uVijYkBnMDqVSa4m0uCYKE2mlEz6MBTswTgYZ3CsTeCY9
+         JL2acSVD8/mKX6R5K+1rYgBVhuEDxjCAGlHO0dnkD5RuIw15kAscy9UEeubFPxWsBbwe
+         9/fraJ8UrjxY9WBUbwdRYJuz2/BCB04LE12EDBRPcawMmBWCKwi+8Yr1zHdUnWe7sjuf
+         85C+zbeDKP0HYLSu+PZ0k27bo40OQez60M0iJhrSdMWkgs7wfmCIMeJlmJNJDqrAMbjs
+         Iyug==
+X-Forwarded-Encrypted: i=1; AJvYcCVD5ROw3oeWVzWTsEl6nYJEuro+pRU5gv1zOnsKKHJ4cnv0B5CKpC4uP0s4ldYzQpQnLDByfWiAxQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5AmRjU+H2t7PLw+jpldHQo9AkQFCrwYUqRRT05zT7mb5bAKT2
+	+H71bbRyFN0Qp1ZfMoq66vYsVR8wj6VvCPNZnPFDJyHABblgS14CHwrSUG4+jxnGenLBNKKd4fN
+	0UbJdyeoIvnVcgAfUPGgOZOVdYmkg5tpg0nKS1u+aJFhvHkryDb9BJa0eLfuz4w==
+X-Gm-Gg: ASbGncvl/lKDKlE4GFnn67uCTCSZlphdWfEvANbRYRo/dB8uJDm9s+BQ7XesqSV0Ob1
+	qGwltzj92XqaObmAIHG+OXdl+GK8OKjGMLrjZv4f1YM1J9lHqd1HGrnHZ6TZnzyG9S99sNpojLT
+	HY9knPWHjiAXFlLQeJtgWlm9XRnx+Q49AzRNQIut/LrbAqa9a7AvCa6vDwSsyD4w3Gel13Vpe4w
+	H205dqoFYhAkGqEkF++SJTvlVET3JsNelmNEiGuZyMc9OoQKobqIuSkMJRQc/pa8qrkjYqZRwaI
+	oW0XZBQJj8NyZJ3nNHho1vMxK+bhUXQYSE3jLZ9L2/LIWI7WJPrBZBr/yyFnJBNmLC7i44bmLkl
+	BONRwgu1Do0xWLWwnvpN29fT4DO6us5hNlJDX6Z6Izai7PeuK1tQyF/MozBFKKLuxoUnbZVxYmz
+	ItUpJN05VB2piClcwRD+Lfu54=
+X-Received: by 2002:a05:620a:450c:b0:8b1:1585:225d with SMTP id af79cd13be357-8b4ebdbced6mr609942685a.82.1764114507486;
+        Tue, 25 Nov 2025 15:48:27 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE6Iz6guPEwafR2wvdP6krEPpb9fwqNVDu16YYRJcFruP0aUiA6bZ6DvM6LUsWD8DjhuU93Vg==
+X-Received: by 2002:a05:620a:450c:b0:8b1:1585:225d with SMTP id af79cd13be357-8b4ebdbced6mr609939185a.82.1764114506973;
+        Tue, 25 Nov 2025 15:48:26 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a0c3-3a00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a0c3:3a00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969dbccd9esm5511505e87.92.2025.11.25.15.48.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Nov 2025 15:48:26 -0800 (PST)
+Date: Wed, 26 Nov 2025 01:48:24 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: david@ixit.cz
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Casey Connolly <casey.connolly@linaro.org>,
+        Casey Connolly <casey@connolly.tech>,
+        Joel Selvaraj <foss@joelselvaraj.com>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Alexander Martinz <amartinz@shiftphones.com>,
+        =?utf-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
+        Richard Acayan <mailingradian@gmail.com>,
+        Alexey Minnekhanov <alexeymin@postmarketos.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        phone-devel@vger.kernel.org
+Subject: Re: [PATCH RFC 5/8] arm64: dts: qcom: sdm845-xiaomi-beryllium:
+ Enable fuel gauge
+Message-ID: <rtkhkh57hnmq4vb6nh6wh2no6z52tamt4tiiaplxpon3jrbl3g@pe6cm4hmvj4p>
+References: <20251124-pmi8998_fuel_gauge-v1-0-dd3791f61478@ixit.cz>
+ <20251124-pmi8998_fuel_gauge-v1-5-dd3791f61478@ixit.cz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,123 +125,46 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <094f2aad64418710daf0940112abe5a0afdc6bce.1763483367.git.lukas@wunner.de>
+In-Reply-To: <20251124-pmi8998_fuel_gauge-v1-5-dd3791f61478@ixit.cz>
+X-Authority-Analysis: v=2.4 cv=KerfcAYD c=1 sm=1 tr=0 ts=6926404c cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=WFa1dZBpAAAA:8 a=EUspDBNiAAAA:8 a=B0FhMAULOlTCn5wgl4IA:9 a=CjuIK1q_8ugA:10
+ a=bTQJ7kPSJx9SKPbeHEYW:22 a=MZguhEFr_PtxzKXayD1K:22
+X-Proofpoint-GUID: cI8xi5UjuU0598Kbw5c-cFv5N5f0ci65
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI1MDE5OCBTYWx0ZWRfX3sV0c0lyOCBC
+ XqJohc8Dk0Eynr83iXb8v1c4yb//plaq6ax3MPjsLH1xxz9JTEH7X6+d7Leb5t/hcV2pWKvxxKK
+ e1aIJuzOcAvx6xbMv6kXm+ruAPiUGh3Xxn5WpvIbqRcv4OPew2YsvwydUGKizPef8Ft2L5Jy4v2
+ 9v3YXCEV8L2uJ0wbCSiJ2ZNY18jSwWzqi/ElGFfZZ/UCkhmMhZb9vvKJdWlqto3f6ewOcw/6qbf
+ 4vRAX+2EjLjdMzqLAnMrsR26MWX1NQjEgXSDs0+FPpf/m8uSonV1aCZ79cgYQcY/PGhzVE1aHs0
+ j76nOtlwwtGwGntcHC2qCs5f6olpUeT4RRiBJm5GaQT88dDf+2Pt+9/6S2XC1ThRVB0b4vRdStN
+ SxVVJEkO7y5xQ55ekwYfnsni4j55bA==
+X-Proofpoint-ORIG-GUID: cI8xi5UjuU0598Kbw5c-cFv5N5f0ci65
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-11-25_02,2025-11-25_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 impostorscore=0 priorityscore=1501 spamscore=0 bulkscore=0
+ lowpriorityscore=0 phishscore=0 suspectscore=0 adultscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511250198
 
-On Wed, Nov 19, 2025 at 09:50:01AM +0100, Lukas Wunner wrote:
-> When a PCI device is suspended, it is normally the PCI core's job to save
-> Config Space and put the device into a low power state.  However drivers
-> are allowed to assume these responsibilities.  When they do, the PCI core
-> can tell by looking at the state_saved flag in struct pci_dev:  The flag
-> is cleared before commencing the suspend sequence and it is set when
-> pci_save_state() is called.  If the PCI core finds the flag set late in
-> the suspend sequence, it refrains from calling pci_save_state() itself.
-
-This has been applied already, no issue there.  I have a few questions
-to help come up with a short higher-level merge commit log.
-
-> But there are two corner cases where the PCI core neglects to clear the
-> flag before commencing the suspend sequence:
+On Mon, Nov 24, 2025 at 10:53:38PM +0100, David Heidelberg via B4 Relay wrote:
+> From: Joel Selvaraj <foss@joelselvaraj.com>
 > 
-> * If a driver has legacy PCI PM callbacks, pci_legacy_suspend() neglects
->   to clear the flag.  The (stale) flag is subsequently queried by
->   pci_legacy_suspend() itself and pci_legacy_suspend_late().
+> Enable the fuel gauge and configure the associated charger and battery.
 > 
-> * If a device has no driver or its driver has no PCI PM callbacks,
->   pci_pm_freeze() neglects to clear the flag.  The (stale) flag is
->   subsequently queried by pci_pm_freeze_noirq().
-> 
-> The flag may be set prior to suspend if the device went through error
-> recovery:  Drivers commonly invoke pci_restore_state() + pci_save_state()
-> to restore Config Space after reset.
-
-I guess the only point of pci_save_state() in this case is to set
-state_saved again so a future pci_restore_state() will work, right?
-
-The actual state being *saved* is pointless, assuming pci_save_state()
-saves exactly the same data that pci_restore_state() restored.
-
-And these are the pci_save_state() calls you removed with "treewide:
-Drop pci_save_state() after pci_restore_state()".  Too bad we have to
-document the behavior we're about to change, but that's what we need
-to do.  It's just a little clutter to keep in mind for this release.
-
-> The flag may also be set if drivers call pci_save_state() on probe to
-> allow for recovery from subsequent errors.
-> 
-> The result is that pci_legacy_suspend_late() and pci_pm_freeze_noirq()
-> don't call pci_save_state() and so the state that will be restored on
-> resume is the one recorded on last error recovery or on probe, not the one
-> that the device had on suspend.  If the two states happen to be identical,
-> there's no problem.
-
-So IIUC the effect is that after this change and the "treewide"
-change,
-
-  - If the driver uses legacy PM, the state restored on resume will be
-    the state from suspend instead of the state on probe.
-
-  - For devices with no driver or a driver without PM, if the device
-    has already been runtime-suspended, we avoid a pointless
-    pci_save_state(), so it's an optimization and not logically
-    related to the legacy PM case.
-
-Right?
-
-I'm thinking of something like this for the merge commit and eventual
-pull request; please correct me if this isn't right:
-
-  Restore the suspend config state, not the state from probe or error
-  recovery, for drivers using legacy PCI suspend.
-
-  Avoid saving config state again for devices without driver PM if
-  their state was already saved by runtime suspend.
-
-> Reinstate clearing the flag in pci_legacy_suspend() and pci_pm_freeze().
-> The two functions used to do that until commit 4b77b0a2ba27 ("PCI: Clear
-> saved_state after the state has been restored") deemed it unnecessary
-> because it assumed that it's sufficient to clear the flag on resume in
-> pci_restore_state().  The commit seemingly did not take into account that
-> pci_save_state() and pci_restore_state() are not only used by power
-> management code, but also for error recovery.
-> 
-> Devices without driver or whose driver has no PCI PM callbacks may be in
-> runtime suspend when pci_pm_freeze() is called.  Their state has already
-> been saved, so don't clear the flag to skip a pointless pci_save_state()
-> in pci_pm_freeze_noirq().
-> 
-> None of the drivers with legacy PCI PM callbacks seem to use runtime PM,
-> so clear the flag unconditionally in their case.
-> 
-> Fixes: 4b77b0a2ba27 ("PCI: Clear saved_state after the state has been restored")
-> Signed-off-by: Lukas Wunner <lukas@wunner.de>
-> Cc: stable@vger.kernel.org # v2.6.32+
+> Signed-off-by: Joel Selvaraj <foss@joelselvaraj.com>
+> Signed-off-by: David Heidelberg <david@ixit.cz>
 > ---
->  drivers/pci/pci-driver.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> index 302d61783f6c..327b21c48614 100644
-> --- a/drivers/pci/pci-driver.c
-> +++ b/drivers/pci/pci-driver.c
-> @@ -629,6 +629,8 @@ static int pci_legacy_suspend(struct device *dev, pm_message_t state)
->  	struct pci_dev *pci_dev = to_pci_dev(dev);
->  	struct pci_driver *drv = pci_dev->driver;
->  
-> +	pci_dev->state_saved = false;
-> +
->  	if (drv && drv->suspend) {
->  		pci_power_t prev = pci_dev->current_state;
->  		int error;
-> @@ -1036,6 +1038,8 @@ static int pci_pm_freeze(struct device *dev)
->  
->  	if (!pm) {
->  		pci_pm_default_suspend(pci_dev);
-> +		if (!pm_runtime_suspended(dev))
-> +			pci_dev->state_saved = false;
->  		return 0;
->  	}
->  
-> -- 
-> 2.51.0
-> 
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+
+
+-- 
+With best wishes
+Dmitry
 
