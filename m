@@ -1,318 +1,243 @@
-Return-Path: <linux-pm+bounces-38601-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38602-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42134C85797
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 15:44:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43BF5C857B8
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 15:45:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED0453AC67A
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 14:44:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E2FB3B0D4E
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 14:45:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32ED532692D;
-	Tue, 25 Nov 2025 14:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29051326D53;
+	Tue, 25 Nov 2025 14:45:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="QkaNzEYP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dL4O+H3y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FD43019BE
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 14:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86719324B2E;
+	Tue, 25 Nov 2025 14:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764081857; cv=none; b=KE2LNsZG7k8H/GPM2ukykgSa3tpahT6FSJpRE4gO6emEwQue+L6+sc0iQDBsBvCvsE5Y7V4QFHzfZjZWj9E/tt0EHtJRuFm/wQ1G6u2j0ZLphMhVkFRgl0tSnBSivxykdQFHZOs78FzQy1+A9yO/wkCLBOVyYvqXopHbtOzijGA=
+	t=1764081911; cv=none; b=rxWNtK9JKNGYChyhtknrZSVU5hM4x7extJtt09FX/d4B73d6AODF/WqE/lOfP3AtM362Dn+bCGW0/ZALHW3ohx9slEClqFCNdU5A/T5R76mjOHXwno3KVATjK6HEiQ7Y/6/bOpig6wEU41w7mkFTT2G4xFgqKwJzeNgnmVl2yr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764081857; c=relaxed/simple;
-	bh=yaP/8uXSuvFrTFOxYGh3r4go0UVZ7v1l8AG9+zlKT48=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ocYHFA3GNQJN1R1HWzUKyBysEWdLrFh68IPn7YPK0PaK4UilHH3MThEcy9oB6y5nrJyt5Gl0Q0fB5zUdQFTGBC8+jg7HClyJKCLPbGeeyP44niQLFkAoe/UC5CmaSHQyP6GsmrkRcN6Nk+ylhigMHpZxO35Td+KXGLFuybiQWbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=QkaNzEYP; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-59578e38613so6471096e87.2
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 06:44:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1764081853; x=1764686653; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qlj+wVFMNp7WWgzjnDyNCaHtbz+5iGYQ8zDZKmaAEqA=;
-        b=QkaNzEYP/CAJLHHl0ndpqBhbbkSEpl793Z4GlLrsMF/QjWrOJCLoaKZ5Fnm6jd6L0B
-         2/BLUcoG4N6+JLtjozu9NZA674nsdk5zvUlypCfQOlQZlxKMFdGE73L2sEfgGSn0tqDE
-         9DtCaXAkYsk52GpUGjA7RMPJ6p7bVFaLxvuyWOf0EznDEG8g+smqyCHwYFu225mqWNwB
-         XAl7d2jLWjaAfk82QAZvdB9gludjv64ApkIEviKo4N/BZiHnf/8MhpYzWiCUHhLSVRE+
-         4l1S9FjBRzT6+TpAZ3dBYR3r28SkmXolCPvqOEH0bNagV7//BhyZIw+Mnroc89dfEWdT
-         I/vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764081853; x=1764686653;
-        h=cc:to:subject:message-id:date:references:mime-version:in-reply-to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qlj+wVFMNp7WWgzjnDyNCaHtbz+5iGYQ8zDZKmaAEqA=;
-        b=c/F+1uCekB5zqybqGKyUggexT3ZDphPHnlcFMcuTraEvJpCDLYwt+oNXyONWpliVA5
-         Tb5SndqBT+ubVIkzO8Jof6tkTVHb+KarZO+O7ELJsLwKAfbTYqQ3HfEZHhRH5OEXMgAa
-         siUow1aEV1cjJjdzpQz9C1jRVWuL0wkX4DzXJ+R4IDWdDRE+aZi7bFXAYoU4b1pNpY4i
-         9CkemuFG6+aDsX9treMZVFW58Gv+HupVxHvw14LVplDFuE/rCT4P7tsny1u5+Is+5aAD
-         fYJLnyv7VIn8H7FV/cskWr1hXMPRrSXVF4bRY4+rIYq18tSfVhoyaAm7q5I4qzSCx94P
-         yi4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX8wXhrZ+ApWmfsQfWR2GlJOarRqZFjCD0/ZQacxOduMDQI4bWqpZpQJF4Z8rQCtvo6FOpDgW72zA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyT6kBzy1nbFpvwTBwoASjYJUWC7UpEH7iztxGq7Ts7EuXyQAd9
-	Lzl+6ppE1//2Dz7vwqa0un0nGcjTcF6jj3eFhqJnwpWsvbAggs8la1OzYn7qXlWrx2h8Cap5fnX
-	UlDhvLCiqiktFDIEAauvPySxqXdGTXSWFohbmew4Cqw==
-X-Gm-Gg: ASbGnctByJf00stHCvccmkTPKY12nTnNPOQyFpk/ezU1cPqXt1zR9Vg5Gu9YJY62ioz
-	ZdAJk/8vnBfk7tbK0S0T3X9DZr2Rh+UekHqyLo0E9tLrJzgfWAh5b9rfkw35mPZedU+n3H2q7IN
-	j3B9uT7h06z1iWCyhUp94LXXuY76qvWv20nsS5nlQ2rc5I0xRK6M/bzyajM7xB6vOVAclmiuTSd
-	JLohdYjMrzRfAUflVHR/2y238EDyNecTjHvpq03hiValSW67z+QqekU0ksPV2pfU6xCplo9/C9y
-	DTDRJRB8F7/95Xc/glMlr0BORt9zIxNLmsjZ4w==
-X-Google-Smtp-Source: AGHT+IF+t28TeLbLGYP1BCKq10BMjeeykNpp33NWJWxRESYFHKK6yjwGmxMH6LsHpAJuQK5XzXrIbhjldA5PwYW1rEU=
-X-Received: by 2002:a05:6512:238c:b0:595:7e2d:986a with SMTP id
- 2adb3069b0e04-596b505c940mr1264859e87.24.1764081853168; Tue, 25 Nov 2025
- 06:44:13 -0800 (PST)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 25 Nov 2025 06:44:12 -0800
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 25 Nov 2025 06:44:12 -0800
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-In-Reply-To: <20251122-next-15nov_expose_sysfs-v19-2-4d3d578ad9ee@oss.qualcomm.com>
+	s=arc-20240116; t=1764081911; c=relaxed/simple;
+	bh=uTECYDxx3v1bGzayL89lryGm1s4nv9vi4GpwLXVtnRY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SRv3yF9fD350BLnmnQX7BoZMBMGU7DiVGiXqmTrawn7LiRnSKBI5ttEHQYZdQyiicER/NHsTKFGTie3/2t6fZKqTNWPoRmwB8MuiSm32m4k5hOWjAZj86w9EpGdf25QbdD92sXHCaAdaWh0vd0w+sygy6DYmvlA/dxcQkZ5mX78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dL4O+H3y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EF823C4CEF1;
+	Tue, 25 Nov 2025 14:45:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764081911;
+	bh=uTECYDxx3v1bGzayL89lryGm1s4nv9vi4GpwLXVtnRY=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=dL4O+H3ykDcy2uUZ6vMaf+aASZpinT///lkx7BvJsJGjHJFGlCFNSziI7vYYtoTKs
+	 xyop0BHzyCBVG6AD99UcjYGU5Dob2fi/5X0VLgsWadAamhh7cDdg5YhAGV83jQjeqZ
+	 9WC6TfdmnO3x4Oj+SBVQykg3a8sEB/mDgGJupSkxAdyjrz0ORbnwKBhvrvNSCrn5TJ
+	 QROP18q5ZwbfMpWmU8xTHv6sa3BaPVs/hXZ3H41RygiJDIO4MlUDlmb+ZYWtuH5D3q
+	 /vi2xevwO4VTUOvcTnGClv0jXT/K5QvXDl4ij8rkpO5YDbPFmTnVnzK6r34FXfsAp7
+	 jwoSNm+h4mVkg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D51CAD0E6C6;
+	Tue, 25 Nov 2025 14:45:10 +0000 (UTC)
+From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>
+Subject: [PATCH v2 00/10] Add support for handling PCIe M.2 Key E
+ connectors in devicetree
+Date: Tue, 25 Nov 2025 20:15:04 +0530
+Message-Id: <20251125-pci-m2-e-v2-0-32826de07cc5@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251122-next-15nov_expose_sysfs-v19-0-4d3d578ad9ee@oss.qualcomm.com>
- <20251122-next-15nov_expose_sysfs-v19-2-4d3d578ad9ee@oss.qualcomm.com>
-Date: Tue, 25 Nov 2025 06:44:12 -0800
-X-Gm-Features: AWmQ_bm7vPymFKXeQGxB4f9CLQrF_cM60h3J_7_VsADx5ztHQ72YE6oIL7d6l08
-Message-ID: <CAMRc=Me=F5gTmkfO+2_3_pqebsz9GvabCK+xv6bfQeGgkSs6Dw@mail.gmail.com>
-Subject: Re: [PATCH v19 2/2] power: reset: reboot-mode: Expose sysfs for
- registered reboot_modes
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Bjorn Andersson <andersson@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPDAJWkC/23OzwrCMAwG8FcZPZuxxnZ/PPkeskPtohacm80sy
+ vDdjRNPegl8IfzyzYopBmK1yWYVKQUOw0UCrjLlT+5yJAidZIUFWq01wugD9AgEjSkb63zTlbZ
+ Scj5GOoT7Qu1ayafA0xAfi5z0e/sHSRoKaCqj1125P9RotgNzfr25sx/6Ppeh2ucHj3S9Sb3p8
+ 0H1xOyWetJ2cdF+3bQW1VusC4OOnKl+VTH3jgneizBtslTmuobotfx7vgCNIuqzFgEAAA==
+X-Change-ID: 20251112-pci-m2-e-94695ac9d657
+To: Rob Herring <robh@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nicolas Schier <nicolas.schier@linux.dev>, Hans de Goede <hansg@kernel.org>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Mark Pearson <mpearson-lenovo@squebb.ca>, 
+ "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+ Manivannan Sadhasivam <mani@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+ linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6676;
+ i=manivannan.sadhasivam@oss.qualcomm.com; h=from:subject:message-id;
+ bh=uTECYDxx3v1bGzayL89lryGm1s4nv9vi4GpwLXVtnRY=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpJcDxM2Jy7w/KJCb/fDPfjtzVC0c80RYMWpVsy
+ RvZgIAfyuaJATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaSXA8QAKCRBVnxHm/pHO
+ 9SCLB/9+huQ91JOYLD8k5L9pr5D9iwA3Gzsmtnb/InTVHyMNpl1ZcaLZLnG0TfekdU7Uucs3bqW
+ lbQhzehgnPRjA1ZceIAMl8GWm6e4bFtKBsCXDGgaczsr02Z+dmjkbvo2IbHr0fpFf//0cQM/yTm
+ 2kUEK1Q/uPAI1FdE/BuLRfuOWqsyVGWuhROsSF/+1S7nHFXNJi0e26wWBsEbh+WzTOVIgbKCDnW
+ kSweB+UBaV2L30XXTlVr0SEXmDsKu/UJpM8/2K6Vyd5k1TI99JeUuCH1j13tHLRdIWEM/JNu2L6
+ WNSTvfD68P+VA7dWeawbyXi9P2Q4dauUHpyBYI/3kRcYeRWD
+X-Developer-Key: i=manivannan.sadhasivam@oss.qualcomm.com; a=openpgp;
+ fpr=C668AEC3C3188E4C611465E7488550E901166008
+X-Endpoint-Received: by B4 Relay for
+ manivannan.sadhasivam@oss.qualcomm.com/default with auth_id=461
+X-Original-From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+Reply-To: manivannan.sadhasivam@oss.qualcomm.com
 
-On Sat, 22 Nov 2025 19:05:45 +0100, Shivendra Pratap
-<shivendra.pratap@oss.qualcomm.com> said:
-> Currently, there is no standardized mechanism for userspace to discover
-> which reboot-modes are supported on a given platform. This limitation
-> forces tools and scripts to rely on hardcoded assumptions about the
-> supported reboot-modes.
->
-> Create a class 'reboot-mode' and a device under it to expose a sysfs
-> interface to show the available reboot mode arguments to userspace. Use
-> the driver_name field of the struct reboot_mode_driver to create the
-> device.  For device-based drivers, configure the device driver name as
-> driver_name.
->
-> This results in the creation of:
->   /sys/class/reboot-mode/<driver>/reboot_modes
->
-> This read-only sysfs file will exposes the list of supported reboot
-> modes arguments provided by the driver, enabling userspace to query the
-> list of arguments.
->
-> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-> ---
->  drivers/power/reset/reboot-mode.c | 86 +++++++++++++++++++++++++++++++++++++++
->  include/linux/reboot-mode.h       |  3 ++
->  2 files changed, 89 insertions(+)
->
-> diff --git a/drivers/power/reset/reboot-mode.c b/drivers/power/reset/reboot-mode.c
-> index fba53f638da04655e756b5f8b7d2d666d1379535..71cd97ffb3ee8da530514ab918bc6d58a122b4ce 100644
-> --- a/drivers/power/reset/reboot-mode.c
-> +++ b/drivers/power/reset/reboot-mode.c
-> @@ -13,12 +13,61 @@
->
->  #define PREFIX "mode-"
->
-> +static bool reboot_mode_class_registered;
+Hi,
 
-You don't need this, please see below.
+This series is the continuation of the series [1] that added the initial support
+for the PCIe M.2 connectors. This series extends it by adding support for Key E
+connectors. These connectors are used to connect the Wireless Connectivity
+devices such as WiFi, BT, NFC and GNSS devices to the host machine over
+interfaces such as PCIe/SDIO, USB/UART and NFC. This series adds support for
+connectors that expose PCIe interface for WiFi and UART interface for BT. Other
+interfaces are left for future improvements.
 
-> +
->  struct mode_info {
->  	const char *mode;
->  	u32 magic;
->  	struct list_head list;
->  };
->
-> +static ssize_t reboot_modes_show(struct device *dev, struct device_attribute *attr, char *buf)
-> +{
-> +	struct reboot_mode_driver *reboot;
-> +	struct mode_info *info;
-> +	ssize_t size = 0;
-> +
-> +	reboot = container_of(dev, struct reboot_mode_driver, reboot_mode_device);
-> +	if (!reboot)
-> +		return -ENODATA;
-> +
-> +	list_for_each_entry(info, &reboot->head, list)
-> +		size += sysfs_emit_at(buf, size, "%s ", info->mode);
-> +
+Serdev device support for BT
+============================
 
-Don't you need locking here? What if we'll end up adding a new reboot mode at
-the same time?
+Adding support for the PCIe interface was mostly straightforward and a lot
+similar to the previous Key M connector. But adding UART interface has proved to
+be tricky. This is mostly because of the fact UART is a non-discoverable bus,
+unlike PCIe which is discoverable. So this series relied on the PCI notifier to
+create the serdev device for UART/BT. This means the PCIe interface will be
+brought up first and after the PCIe device enumeration, the serdev device will
+be created by the pwrseq driver. This logic is necessary since the connector
+driver and DT node don't describe the device, but just the connector. So to make
+the connector interface Plug and Play, the connector driver uses the PCIe device
+ID to identify the card and creates the serdev device. This logic could be
+extended in the future to support more M.2 cards. Even if the M.2 card uses SDIO
+interface for connecting WLAN, a SDIO notifier could be added to create the
+serdev device.
 
-> +	if (!size)
-> +		return -ENODATA;
-> +
-> +	return size + sysfs_emit_at(buf, size - 1, "\n");
-> +}
-> +static DEVICE_ATTR_RO(reboot_modes);
-> +
-> +static struct attribute *reboot_mode_attrs[] = {
-> +	&dev_attr_reboot_modes.attr,
-> +	NULL,
-> +};
-> +ATTRIBUTE_GROUPS(reboot_mode);
-> +
-> +static const struct class reboot_mode_class = {
-> +	.name = "reboot-mode",
-> +	.dev_groups = reboot_mode_groups,
-> +};
-> +
-> +static void reboot_mode_device_release(struct device *dev)
-> +{
-> +    /* place holder to avoid warning on device_unregister. nothing to free */
-> +}
-> +
-> +static void reboot_mode_register_device(struct reboot_mode_driver *reboot)
-> +{
-> +	reboot->reboot_mode_device.class = &reboot_mode_class;
-> +	reboot->reboot_mode_device.release = reboot_mode_device_release;
-> +	dev_set_name(&reboot->reboot_mode_device, reboot->driver_name);
-> +	if (!device_register(&reboot->reboot_mode_device))
-> +		reboot->reboot_mode_device_registered = true;
-> +	else
-> +		reboot->reboot_mode_device_registered = false;
+Open questions
+==============
 
-Just use device_create(). I would also suggest creating a private structure
-that embeds the pointer to the struct device created by device_create() and
-the pointer to the reboot_mode_driver. If you pass it as driver data to
-device_create(), you'll be able to retrieve it with dev_get_drvdata() in
-sysfs callbacks.
+Though this series adds the relevant functionality for handling the M.2 Key M
+connectors, there are still a few open questions exists on the design. 
 
-> +}
-> +
->  static unsigned int get_reboot_mode_magic(struct reboot_mode_driver *reboot,
->  					  const char *cmd)
->  {
-> @@ -78,6 +127,9 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
->
->  	INIT_LIST_HEAD(&reboot->head);
->
-> +	if (reboot_mode_class_registered)
-> +		reboot_mode_register_device(reboot);
-> +
->  	for_each_property_of_node(np, prop) {
->  		if (strncmp(prop->name, PREFIX, len))
->  			continue;
-> @@ -119,6 +171,11 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
->  	list_for_each_entry(info, &reboot->head, list)
->  		kfree_const(info->mode);
->
-> +	if (reboot->reboot_mode_device_registered) {
-> +		device_unregister(&reboot->reboot_mode_device);
-> +		reboot->reboot_mode_device_registered = false;
-> +	}
-> +
->  	return ret;
->  }
->  EXPORT_SYMBOL_GPL(reboot_mode_register);
-> @@ -136,6 +193,11 @@ int reboot_mode_unregister(struct reboot_mode_driver *reboot)
->  	list_for_each_entry(info, &reboot->head, list)
->  		kfree_const(info->mode);
->
-> +	if (reboot->reboot_mode_device_registered) {
-> +		device_unregister(&reboot->reboot_mode_device);
-> +		reboot->reboot_mode_device_registered = false;
-> +	}
-> +
->  	return 0;
->  }
->  EXPORT_SYMBOL_GPL(reboot_mode_unregister);
-> @@ -162,6 +224,7 @@ int devm_reboot_mode_register(struct device *dev,
->  	if (!dr)
->  		return -ENOMEM;
->
-> +	reboot->driver_name = reboot->dev->driver->name;
->  	rc = reboot_mode_register(reboot);
->  	if (rc) {
->  		devres_free(dr);
-> @@ -199,6 +262,29 @@ void devm_reboot_mode_unregister(struct device *dev,
->  }
->  EXPORT_SYMBOL_GPL(devm_reboot_mode_unregister);
->
-> +static int __init reboot_mode_init(void)
-> +{
-> +	if (class_register(&reboot_mode_class))
-> +		reboot_mode_class_registered = false;
-> +	else
-> +		reboot_mode_class_registered = true;
-> +
-> +	return 0;
-> +}
-> +
-> +static void __exit reboot_mode_exit(void)
-> +{
-> +	if (reboot_mode_class_registered)
-> +		class_unregister(&reboot_mode_class);
+1. I've used the M.2 card model name as the serdev device name. This is found
+out by comparing the PCIe VID:PID in the notifier. Is this approach acceptable?
+I did not use the PID as the serdev name since it will vary if the SDIO
+interface is used in the future.
 
-Please take a moment to read the code of the functions you're calling. The
-class_unregister() function will check if the class you're passing as argument
-was previously registered. If not, it will do nothing. You don't need all this
-checking.
+2. PCIe client drivers of some M.2 WLAN cards like the Qcom QCA6390, rely on
+the PCIe device DT node to extract properties such as
+'qcom,calibration-variant', 'firmware-name', etc... For those drivers, should we
+add the PCIe DT node in the Root Port in conjunction with the Port node as
+below?
 
-> +}
-> +
-> +#ifdef MODULE
-> +module_init(reboot_mode_init);
-> +module_exit(reboot_mode_exit);
-> +#else
-> +subsys_initcall(reboot_mode_init);
-> +#endif
+pcie@0 {
+	wifi@0 {
+		compatible = "pci17cb,1103";
+		...
+		qcom,calibration-variant = "LE_X13S";
+	};
 
-You don't need to do this. It's perfectly fine to just do:
+	port {
+		pcie4_port0_ep: endpoint {
+			remote-endpoint = <&m2_e_pcie_ep>;
+		};
+	};
+};
 
-subsys_initcall(reboot_mode_init);
-module_exit(reboot_mode_exit);
+This will also require marking the PMU supplies optional in the relevant ath
+bindings for M.2 cards.
 
-This is handled in the module.h header[1].
+3. Some M.2 cards require specific power up sequence like delays between
+regulator/GPIO and such. For instance, the WCN7850 card supported in this series
+requires 50ms delay between powering up an interface and driving it. I've just
+hardcoded the delay in the driver, but it is a pure hack. Since the pwrseq
+driver doesn't know anything about the device it is dealing with before powering
+it ON, how should it handle the device specific power requirements? Should we
+hardcode the device specific property in the connector node? But then, it will
+no longer become a generic M.2 connector and sort of defeats the purpose of the
+connector binding.
 
-> +
->  MODULE_AUTHOR("Andy Yan <andy.yan@rock-chips.com>");
->  MODULE_DESCRIPTION("System reboot mode core library");
->  MODULE_LICENSE("GPL v2");
-> diff --git a/include/linux/reboot-mode.h b/include/linux/reboot-mode.h
-> index 4a2abb38d1d612ec0fdf05eb18c98b210f631b7f..400cfde0e029aef14ff90a11b9d12d0c3ce8dee6 100644
-> --- a/include/linux/reboot-mode.h
-> +++ b/include/linux/reboot-mode.h
-> @@ -5,6 +5,9 @@
->  struct reboot_mode_driver {
->  	struct device *dev;
->  	struct list_head head;
-> +	const char *driver_name;
-> +	struct device reboot_mode_device;
-> +	bool reboot_mode_device_registered;
+I hope to address these questions with the help of the relevant subsystem
+maintainers and the community. 
 
-No need for this, just use device_is_registered() wherever you need to check
-it.
+Testing
+=======
 
->  	int (*write)(struct reboot_mode_driver *reboot, unsigned int magic);
->  	struct notifier_block reboot_notifier;
->  };
->
-> --
-> 2.34.1
->
->
->
+This series, together with the devicetree changes [2] was tested on the
+Qualcomm X1e based Lenovo Thinkpad T14s Laptop which has the WCN7850 WLAN/BT M.2
+card connected over PCIe and UART.
 
-Thanks,
-Bart
+Dependency
+==========
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/module.h#n103
+This series is dependent on the M.2 Key M series [1] on top of v6.18-rc1.
+
+[1] https://lore.kernel.org/linux-pci/20251125-pci-m2-v3-0-c528042aea47@oss.qualcomm.com
+[2] https://github.com/Mani-Sadhasivam/linux/commit/acbee74a5c90fc8839bb7b6f326c677ee1c0d89c
+
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+---
+Changes in v2:
+- Used '-' for GPIO names in the binding and removed led*-gpios properties
+- Described the endpoint nodes for port@0 and port@1 nodes
+- Added the OF graph port to the serial binding
+- Fixed the hci_qca driver to return err if devm_pwrseq_get() fails
+- Incorporated various review comments in pwrseq driver
+- Collected Ack
+- Link to v1: https://lore.kernel.org/r/20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com
+
+---
+Manivannan Sadhasivam (10):
+      serdev: Convert to_serdev_*() helpers to macros and use container_of_const()
+      serdev: Add serdev device based driver match support
+      serdev: Allow passing the serdev device name to serdev_device_add()
+      serdev: Add an API to find the serdev controller associated with the devicetree node
+      serdev: Add modalias support for serdev client devices
+      dt-bindings: serial: Document the graph port
+      serdev: Do not return -ENODEV from of_serdev_register_devices() if external connector is used
+      dt-bindings: connector: Add PCIe M.2 Mechanical Key E connector
+      Bluetooth: hci_qca: Add support for WCN7850 PCIe M.2 card
+      power: sequencing: pcie-m2: Add support for PCIe M.2 Key E connectors
+
+ .../bindings/connector/pcie-m2-e-connector.yaml    | 178 ++++++++++++++++++
+ .../devicetree/bindings/serial/serial.yaml         |   3 +
+ MAINTAINERS                                        |   1 +
+ drivers/bluetooth/hci_qca.c                        |  19 ++
+ drivers/platform/x86/dell/dell-uart-backlight.c    |   2 +-
+ .../x86/lenovo/yoga-tab2-pro-1380-fastcharger.c    |   2 +-
+ drivers/platform/x86/x86-android-tablets/core.c    |   2 +-
+ drivers/power/sequencing/Kconfig                   |   1 +
+ drivers/power/sequencing/pwrseq-pcie-m2.c          | 205 ++++++++++++++++++++-
+ drivers/tty/serdev/core.c                          |  76 +++++++-
+ include/linux/mod_devicetable.h                    |   8 +
+ include/linux/serdev.h                             |  30 +--
+ scripts/mod/devicetable-offsets.c                  |   3 +
+ scripts/mod/file2alias.c                           |   8 +
+ 14 files changed, 505 insertions(+), 33 deletions(-)
+---
+base-commit: cb6649f6217c0331b885cf787f1d175963e2a1d2
+change-id: 20251112-pci-m2-e-94695ac9d657
+prerequisite-message-id: 20251125-pci-m2-v3-0-c528042aea47@oss.qualcomm.com
+prerequisite-patch-id: 58778d8eb97ab86008cd48fb5d28ed6cc0bbbc1b
+prerequisite-patch-id: 2dd7d793a67f59ef6e6b5137e69436896198b965
+prerequisite-patch-id: 8ccaa5fdd95e64e69cd942f93c26e89b827d0453
+prerequisite-patch-id: 3d3e1bb7959ab1e140c5024acdd8655e7a7e99ef
+
+Best regards,
+-- 
+Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+
+
 
