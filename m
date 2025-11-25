@@ -1,217 +1,228 @@
-Return-Path: <linux-pm+bounces-38637-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38638-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D93F3C86132
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 18:00:42 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12C74C862B0
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 18:16:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E700D3B277E
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 17:00:32 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9BBE134FBF9
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 17:16:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578DB32D0C3;
-	Tue, 25 Nov 2025 16:59:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D95E632938F;
+	Tue, 25 Nov 2025 17:16:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dTyjMtaa";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="UNS8YvUH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KuoZaYsz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 989E432C322
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 16:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 079EF273805
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 17:16:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764089954; cv=none; b=adyzuBgyOCHy9qrp5Pri1u7VcUkUX5pDiMWU4jXObKpZ8RuTVkhKRUnNbexP3AIH/pea4gViTc77rvTG3ECdPm8hwjCXV1yXFsdcPGX2D/jX7VYHxZPRoNPX+8oDV4ftxayCRpHzItVdphFqfhuYZZz67+oc7lxaWUTexM3pdrk=
+	t=1764090994; cv=none; b=hz7uLMkuxHJUekqWdXMDDRRmqGDTY806pKtH8Xz350rWEPwAjA4KK67SLtxtEPoR40hW+cThaviOv5miDUeDRHYUUDLrfPp8mmez92jFj2ldbuvrviU6ICLO01evlFkzIDq8P7MdYmCRrxbMv2Ln7m3V8Q/T8PyysxF84KHerxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764089954; c=relaxed/simple;
-	bh=QrCXwTVbTY2L/QXOdA+AJKifzsbPegD16vH5IBkdGJg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=NhODZRyvgBcWmd6ep3mPETCH4UF1br75ghMJho6XW0vmpktnbRiaZ69qrC3Hj+LQXA/yLQJSAHs5mbddRIqsV+a0nQgquELTKMzSyj0t7O3WK7ydEKGsCee+aC4FqQPb+vMs4q2EJ1+bbH/0Hn8e3glm1GCEBSG85gh/gcSawBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dTyjMtaa; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=UNS8YvUH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764089950;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=hG/yosQtNPsaLgr5tkw6oyaa1Fhacq6iGIxAKL96B5c=;
-	b=dTyjMtaaxJox4SfXepcEJ5Jbtj3IrGV+KEv/zrWKrR7L9N/401SgaI/DtFyepKaUFcM3zi
-	lzZjiePPlj6ue5bn8+g4Dc7WFmOhKx2IvZD5ET0rF9rBYj0NR+WKxq+g7nBh6ARIeyvnBY
-	LH6vqIuS9s43LbAUCdG4GTs7QeZn4Fc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-588-tZ9yC7j3MXenfVgtojf_Bg-1; Tue, 25 Nov 2025 11:59:09 -0500
-X-MC-Unique: tZ9yC7j3MXenfVgtojf_Bg-1
-X-Mimecast-MFC-AGG-ID: tZ9yC7j3MXenfVgtojf_Bg_1764089948
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4779da35d27so68495705e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 08:59:08 -0800 (PST)
+	s=arc-20240116; t=1764090994; c=relaxed/simple;
+	bh=w/sfDkRtzu4hJVrbpiOQ/RxM1u70C1+28Ln9IBW7wdg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=W1LYiDwjBHU/tuf8UlWqgPcgCNmbya6FQ6w4HxPY7jJqBaq7DNhvGSJl3numvKhdNTu7lJzJKsiaQgEq8pmJmpbYTrOgUSn37K/VZbv/wM8+i2WkDcRYldEmaBaFF8EA2g6yFcAZM2OyW3MOwVkZynqu5AFsx75P80FPITnGd9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KuoZaYsz; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-477a219db05so34424475e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 09:16:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1764089947; x=1764694747; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hG/yosQtNPsaLgr5tkw6oyaa1Fhacq6iGIxAKL96B5c=;
-        b=UNS8YvUHTYtcrPkW7zJRWp51Oirzp785bbqqoJdf66vfc7LAIXwMDDERXK43YgaZ+q
-         Q6UbfgLcebAsxTTQ6KjtzqZ2EP5UlcBvyuRhze9rp2S5X2yVYseYtgvzeObkrVDogsPN
-         m7OEZF1AS3Kuqk35U0YXLfnXfG+OnH6YnIXsuVxRPuQT26C/TwE5zG/NGt0pq7oynTEy
-         Q7RiW3L/bM48PrGDUW7GutP39roAW+BvizuyVL6jIx9KnU1sDGu0VwGed6o0kveWEPHg
-         ZRjsPjd9OmpsHZ+5kZUogt6iu6xt1mDrliNCRrZNI3ZBs6tO/RHR6B5xYHahVEzVMKv4
-         QZmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764089947; x=1764694747;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+        d=linaro.org; s=google; t=1764090991; x=1764695791; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=hG/yosQtNPsaLgr5tkw6oyaa1Fhacq6iGIxAKL96B5c=;
-        b=qiNTzRAFVdf0HWO6ZN8z9It6XvXiMOQO+fxAxK/yqDIt91qZpHXbMXLuvsf4kvOUOU
-         PqPivgYPeybTbDStw4OOxCkmdsjhtJqy10g0vkRAmHM095TYacO49abJhSb48Vmfm1mZ
-         QPoCJzLWOGGgcqqqHOG8+AsA6dG1aik5cnU1xHfT80bqOLdmv5+gEBn0fpv4qk29+UJo
-         9FdTHfhV72CE2NWjlhGhePV/bPkKmkQ3XPiRuBt+0p6u6crxIyV4SVXX+sJPeKXaODX0
-         0xHYNmrCeumdGr7DCF1TTgLwIFcUqCCwUt/GOl0cXx+ddCdO0jXjfYUbxqglNxK7CaSb
-         TAJA==
-X-Gm-Message-State: AOJu0YwYcJz+XT/XKAiD9upovp2WHEGKSIiplnoTNmLH4cv843FmFCW6
-	kfuP8/VaRmZGylGJOYTjXTj+p+Cto0gj8wFkq0ieTdbcj4BATKodnD6IMv4RSuKW6/rApeJO10T
-	K/AL7TUpiXYKCZ+b8LmlwzWRjQKeb8UjnmIqpTgnHyPWZAlgYSQifqkRXElYg1UNikuG4JkIIrf
-	bPwgkTKui8l0PitvNQJtEljJoQc+v6XFCXhyU9PnWcLPnN0OIH5w==
-X-Gm-Gg: ASbGncuYC3a6djFDi0sXibcewAbi0KEBoqa/sLnwQJu4zCbISMR+ckP/RllIj1os8VS
-	DSAdMN9nzgwKRd35wqQi8DRQv3IwQp1TkGrzF8kDScujDRHhgyK7x7DvOgNcEfwpBsSXho5CDz6
-	k2L8m8W6CO5przY4fbDXgM50sN72FdmA0iP1WMlg2CM9wEB6qU51uiu+D9M8owgO8ewy2xEVsBG
-	pQnTXTJ89E+9SiW2SkPavQg/ZBO2MiI7p48AbQShrskuJr5TuShbrMS8b9CdU5MT+vzzgZfV94p
-	Hm6a1EKWw47Z2bjaO1TAnFHq+vhaztFTgF7OeBp+p0ayi/yit8srEP551BNAJsTuv38h3JV5q4A
-	vbtIdompK/wPvslJJK6Hs1xqViaRQi9jwn4PU12TuyCOXv6ohDxH0pfQ=
-X-Received: by 2002:a05:600c:4f49:b0:46e:761b:e7ff with SMTP id 5b1f17b1804b1-47904b24957mr33441345e9.28.1764089946806;
-        Tue, 25 Nov 2025 08:59:06 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHfZ6NgVrVjPGwjj83mk0cuZy70V+eAj/GkF9EsNDbbjKbkEF6o0Lstb1Ac7PYBzJ0qoAHtSg==
-X-Received: by 2002:a05:600c:4f49:b0:46e:761b:e7ff with SMTP id 5b1f17b1804b1-47904b24957mr33441015e9.28.1764089946293;
-        Tue, 25 Nov 2025 08:59:06 -0800 (PST)
-Received: from jlelli-thinkpadt14gen4.remote.csb (host-2-99-207-158.as13285.net. [2.99.207.158])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4790552c3c9sm21068055e9.0.2025.11.25.08.59.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 08:59:05 -0800 (PST)
-Date: Tue, 25 Nov 2025 16:59:04 +0000
-From: Juri Lelli <juri.lelli@redhat.com>
-To: linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-rt-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@linaro.org>
-Subject: [ANNOUNCE] Power Management and Scheduling in the Linux Kernel VIII
- edition (OSPM-summit 2026) - save the date
-Message-ID: <aSXgWOmJZnvEFYaH@jlelli-thinkpadt14gen4.remote.csb>
+        bh=FK8tpY1vO1WQebcFHT53ELWTdlM+gqsVcXdE0gNSnHI=;
+        b=KuoZaYszGRquDzhNZWQ1cxPlumcbkaoseDYFZzKHJBTjM28j2pIhpO/LZHnb9t4uYj
+         V5B9D+I1baT+EZPcMeclQXpyizJABXeyg1sKnDhRJ3Hp/CAntys6oQNnfR+ONC+c+PGr
+         72Bh9QUGfoHXsjla2yF6PKBJAiNjTdEpDbPMEuF3rk8OdGDjGJ9LTFUdocV9iBZMGnlL
+         VtnwP2KFQ2u630QXVFA3duYAVX+PjHXx7EhAA8qi/PZsBy0EM5p7V3j2QIiSIEO6Ak4I
+         m5dLflfYCCcH8xBhbNY+NXJneUmiKSes+b1M3auzv7iD2tvHDdGFvZqpyUPCsN5XdtqJ
+         wXBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764090991; x=1764695791;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FK8tpY1vO1WQebcFHT53ELWTdlM+gqsVcXdE0gNSnHI=;
+        b=SLaZDt6Foxap+30jN+cmq4R4fljJwkzOl0JuANdL8V58knBbPU6v7O+FUkVMSyw2Lo
+         IUVBZpkXf17+3uaNGrovecAmR9BJHDSzl8OA20DQSoNXQqnbqRoD535JRnn/V6WX4ROi
+         bcjfVHL8zZrhdRJ1FLXRbh+MA7vZA5nJSP7376nts+yCIldHdVx0aWPjnszc62GPX0dh
+         dmgJnkO1GpylXKfJ4tpMZSs6M6rhpZ4L3uDjKZjmCTMLrdK28yeT9k2wPj/HAhXJfXY5
+         d8Zj+aJrM3fi4Nk+RSk83oWn9AtmQ3pks7YPkEXL7f/6i0o60JhLiFd9Irrbb8tccqR0
+         7wQg==
+X-Forwarded-Encrypted: i=1; AJvYcCWGGeQhY6AwNTbgGsdB/LzUPfUd9mEYqo9id8ELrtKV1f2QPdiPkuOi+ZwJL88v0p93JUzOB2XbLA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJffZgYEBKJ/zkfdhQ/fa0BcCfFIsO/Vr6WJFdBuFiELaNjRuq
+	O/0hSiifCjGuK2Q9ZkO46NY3HIy/oys7571xWzWZFWN/ZPs3uoodoKt3wcjShg3PVNU=
+X-Gm-Gg: ASbGncsT1KEYuV1qmRM2pA9TEqnoGjayRFpRaAPvKTNRAMOKH+UBGX85L+lc3y6UIZZ
+	5COjMb9NeEvDQj2Q9BGtbzNzZwxpon6wz7yeTtdlWtNZQF1jEWhoG4pOEbEWVmZTqFiJf7P8hnC
+	p+GpHBRRIJqBCk3nLYSHUSSl1SN+tr5mD1Bubeq6iaH49uSui1ZKSpCqNOYDuTO1MSuIuYFx+6d
+	zsnf6KLOu+QwpvrFxfrZyjh42ccf52DhPuoKJSImoeFQtIiqwkLCEYBqjVdv/fZro0vl1ATj4/u
+	rgBHl5/1iLRwHKGW1D3wnF6h3OBYhBTBhU9eIeLPjGbWGGxxGc4TGMaZy4PSpEoW1p4ZbN6x8fv
+	eX7zklYGvSoWnmNNWcK9VkDX+svSOl5zEls9uMhILqeVktFYwWuOMAHHz3obnd/01D6Mv5+cSuv
+	roNsN0EfPJcPoalv8PVxO4DCzj8C8nEhPyzkHSo3rFYose8Wsq29o=
+X-Google-Smtp-Source: AGHT+IGgairekF1MJuLNaXid1oGa5EygE8Hk29JHXoMtw3VRdPrHyLASn563oUHVRUEckwECm+Iucw==
+X-Received: by 2002:a05:600c:19d4:b0:477:63b5:6f3a with SMTP id 5b1f17b1804b1-477c112635amr147250255e9.27.1764090991246;
+        Tue, 25 Nov 2025 09:16:31 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:1d9d:2362:4539:c68d? ([2a05:6e02:1041:c10:1d9d:2362:4539:c68d])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4790ab8bb21sm404395e9.0.2025.11.25.09.16.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Nov 2025 09:16:30 -0800 (PST)
+Message-ID: <23a99187-0ca5-459e-8bf0-b3bf61dd12fe@linaro.org>
+Date: Tue, 25 Nov 2025 18:16:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/5] thermal/drivers: airoha: Generalize probe function
+To: Christian Marangi <ansuelsmth@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Lorenzo Bianconi <lorenzo@kernel.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20251106225929.1778398-1-ansuelsmth@gmail.com>
+ <20251106225929.1778398-3-ansuelsmth@gmail.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20251106225929.1778398-3-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Power Management and Scheduling in the Linux Kernel (OSPM-summit) VIII edition
+On 11/6/25 23:59, Christian Marangi wrote:
+> In preparation for support of Airoha AN7583, generalize the probe
+> function to address for the 2 SoC differece.
+> 
+> Implement a match_data struct where it's possible to define a more
+> specific probe and post_probe function and specific thermal ops and
+> pllrg protect value.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>   drivers/thermal/airoha_thermal.c | 102 +++++++++++++++++++++++--------
+>   1 file changed, 75 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/thermal/airoha_thermal.c b/drivers/thermal/airoha_thermal.c
+> index 01ed49a4887e..864a01fd8fd8 100644
+> --- a/drivers/thermal/airoha_thermal.c
+> +++ b/drivers/thermal/airoha_thermal.c
+> @@ -198,12 +198,23 @@ struct airoha_thermal_priv {
+>   	struct regmap *chip_scu;
+>   	struct resource scu_adc_res;
+>   
+> +	u32 pllrg_protect;
+> +
+>   	struct thermal_zone_device *tz;
+>   	int init_temp;
+>   	int default_slope;
+>   	int default_offset;
+>   };
+>   
+> +struct airoha_thermal_soc_data {
+> +	u32 pllrg_protect;
+> +
+> +	const struct thermal_zone_device_ops *thdev_ops;
+> +	int (*probe)(struct platform_device *pdev,
+> +		     struct airoha_thermal_priv *priv);
+> +	int (*post_probe)(struct platform_device *pdev);
 
-April 14-16, 2026 - Arm, Cambridge (UK)
+What the post-probe provides compared to calling the corresponding code 
+in the probe function ?
 
-.:: SAVE THE DATE
+> +};
+> +
+>   static int airoha_get_thermal_ADC(struct airoha_thermal_priv *priv)
+>   {
+>   	u32 val;
+> @@ -220,7 +231,8 @@ static void airoha_init_thermal_ADC_mode(struct airoha_thermal_priv *priv)
+>   	regmap_read(priv->chip_scu, EN7581_PLLRG_PROTECT, &pllrg);
+>   
+>   	/* Give access to thermal regs */
+> -	regmap_write(priv->chip_scu, EN7581_PLLRG_PROTECT, EN7581_SCU_THERMAL_PROTECT_KEY);
+> +	regmap_write(priv->chip_scu, EN7581_PLLRG_PROTECT,
+> +		     priv->pllrg_protect);
+>   	adc_mux = FIELD_PREP(EN7581_MUX_TADC, EN7581_SCU_THERMAL_MUX_DIODE1);
+>   	regmap_write(priv->chip_scu, EN7581_PWD_TADC, adc_mux);
+>   
+> @@ -228,7 +240,7 @@ static void airoha_init_thermal_ADC_mode(struct airoha_thermal_priv *priv)
+>   	regmap_write(priv->chip_scu, EN7581_PLLRG_PROTECT, pllrg);
+>   }
+>   
+> -static int airoha_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+> +static int en7581_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
 
-OSPM is moving to the UK!
+Please provide a separate patch before where s/airoha/en7581/
 
-Please note that this is a “save the date” announcement only.
+[ ... ]
+> +static int en7581_thermal_post_probe(struct platform_device *pdev)
+> +{
+> +	struct airoha_thermal_priv *priv = platform_get_drvdata(pdev);
+> +
+> +	/* Enable LOW and HIGH interrupt (if supported) */
 
-Given that the Linux Plumbers Conference 2025 (LPC25) is scheduled for
-December 2025, the call for topics and registrations will open in early
-2026, after LPC25 has concluded.
+Why "(if supported)" ?
 
-More communication and further details will follow. Stay tuned!
+> +	regmap_write(priv->map, EN7581_TEMPMONINT,
+> +		     EN7581_HOFSINTEN0 | EN7581_LOFSINTEN0);
+> +
+> +	return 0;
+> +}
+> +
+> +static int airoha_thermal_probe(struct platform_device *pdev)
+> +{
+> +	const struct airoha_thermal_soc_data *soc_data;
+> +	struct airoha_thermal_priv *priv;
+> +	struct device *dev = &pdev->dev;
+> +	int ret;
+> +
+> +	soc_data = device_get_match_data(dev);
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->pllrg_protect = soc_data->pllrg_protect;
+> +
+> +	if (!soc_data->probe)
+> +		return -EINVAL;
 
-.:: FOCUS
+Shall the driver check its own code ?
+> +	ret = soc_data->probe(pdev, priv);
+> +	if (ret)
 
-The VIII edition of the Power Management and Scheduling in the Linux
-Kernel (OSPM) summit aims at fostering discussions on power management
-and (real-time) scheduling techniques. The summit will be held at Arm in
-Cambridge (UK) on April 14-16, 2026.
+[ ... ]
+> +static const struct airoha_thermal_soc_data en7581_data = {
+> +	.pllrg_protect = EN7581_SCU_THERMAL_PROTECT_KEY,
+> +	.thdev_ops = &en7581_thdev_ops,
+> +	.probe = &en7581_thermal_probe,
+> +	.post_probe = &en7581_thermal_post_probe,
+	.probe = en7581_thermal_probe,
+	.post_probe = en7581_thermal_post_probe,
 
-We welcome anybody interested in having discussions on the broad scope
-of scheduler techniques for reducing energy consumption while meeting
-performance and latency requirements, real-time systems, real-time and
-non-real-time scheduling, tooling, debugging and tracing.
+> +};
+> +
+>   static const struct of_device_id airoha_thermal_match[] = {
+> -	{ .compatible = "airoha,en7581-thermal" },
+> +	{ .compatible = "airoha,en7581-thermal", .data = &en7581_data },
+>   	{},
+>   };
+>   MODULE_DEVICE_TABLE(of, airoha_thermal_match);
 
-Feel free to take a look at what happened previous years:
 
-I   edition - https://lwn.net/Articles/721573/
-II  edition - https://lwn.net/Articles/754923/
-III edition - https://lwn.net/Articles/793281/
-IV  edition - https://lwn.net/Articles/820337/ (online)
-V   edition - https://lwn.net/Articles/934142/
-              https://lwn.net/Articles/934459/
-              https://lwn.net/Articles/935180/
-VI  edition - https://lwn.net/Articles/981371/
-VII edition - https://lwn.net/Articles/1020596/
-              https://lwn.net/Articles/1021332/
-              https://lwn.net/Articles/1022054/
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-.:: FORMAT
-
-The summit is organized to cover three days of discussions and talks.
-
-The list of topics of interest includes (but it is not limited to):
-
- - Power management techniques
- - Scheduling techniques (real-time and non real-time)
- - Energy consumption and CPU capacity aware scheduling
- - Real-time virtualization
- - Mobile/Server power management real-world use cases (successes and
-   failures)
- - Power management and scheduling tooling (configuration, integration,
-   testing, etc.)
- - Tracing
- - Recap/lightning talks
-
-Presentations (50 min) can cover recently developed technologies,
-ongoing work and new ideas. Please understand that this workshop is not
-intended for presenting sales and marketing pitches.
-
-.:: SUBMIT A TOPIC/PRESENTATION
-
-Please consider this a "save the date" notification only. Information
-regarding important dates and how to submit topics will be announced in
-early 2026.
-
-.:: ATTENDING
-
-Attending OSPM-summit is free of charge, but registration to the event
-is mandatory. The event can allow a maximum of 50 people (so, be sure to
-register early!).
-
-Registration is scheduled to open in early 2026.
-
-While it is not strictly required to submit a topic/presentation,
-registrations with a topic/presentation proposal will take precedence.
-
-.:: VENUE
-
-OSPM26 is hosted at the Arm Cambridge campus (in Cambridge, UK), in the
-lecture theatre and breakout area. We appreciate Arm's generous support
-in providing the venue.
-
-Although the event takes place on Arm's premises, it is fully
-independent of Arm's business operations. The summit is organised by and
-for the open-source community, and everyone is welcome to take part in
-an open, collaborative environment.
-
-.:: ORGANIZERS
-
-Juri Lelli (Red Hat)
-Dietmar Eggemann (Arm)
-Tommaso Cucinotta (SSSA)
-Lorenzo Pieralisi (Linaro)
-
-http://retis.sssup.it/ospm-summit/
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
