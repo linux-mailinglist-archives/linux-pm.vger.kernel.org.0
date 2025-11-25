@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-38577-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38578-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42064C84E3E
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 13:07:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1465FC84E59
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 13:08:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9B379350F51
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:07:42 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 988E5350F97
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:08:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED9D83203AB;
-	Tue, 25 Nov 2025 12:06:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D3ED320CB2;
+	Tue, 25 Nov 2025 12:06:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Go3cfmqc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GmGoHuOW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8151B31D36B
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 12:06:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C6031ED87
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 12:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764072388; cv=none; b=nYEVD5qHGqHbl+JDsfj4P/a8ZuLPZpmrHHiTHJJvMdg6q6/L0/xAHF+6qieD+jdYJaHMfkaUUev/X902T0LvBkei7z/QoTbyNgwsPNcpZHwWlZP83TtVSSZJzkc5L6G+OxQu4rLgK7ccHiqqWWEQMwmum4KaDF9v2pGmXB0VEE0=
+	t=1764072390; cv=none; b=TB1cS1jmeOCsh9ksNHaBhCrP7T1yC5k8/EU/uaCcy0/k1Op/8bTF6MYohYxGu9z3T/1Jmkc4nAutsaUgiAiuvC7VqwfXo4Wt2AJhYQyYG74G4pnRhkfEGV4GKalkhVcUU+B2xz7fDxusWcOs012KAa96iQul5jSFdJ9KtYSTwC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764072388; c=relaxed/simple;
-	bh=EpZL32Jyo1zVK7iE7f/cCfj6bklP2cCKT0AbKLrFi34=;
+	s=arc-20240116; t=1764072390; c=relaxed/simple;
+	bh=xUFvUb8oKPEbKpAh29NhrNZ2bfXoPM/j19JqA5bbRxQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DJgDCq/J4r9jK+woOqksSzfjBrsJWwxwKl0xSaE/TNn5aAAAKHarNGIXUu63XXoPM/UrfDGbQaUYJyF32SU1Th09IAwGiUF/IWqvnJ5nye1/KwWV+EGuklnXIpkq8kZuqiMc+mLv4zEQ/nfh63mlXgo+LD6BSm49kyGG1Lh7xhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Go3cfmqc; arc=none smtp.client-ip=209.85.208.174
+	 MIME-Version; b=pFKdxeyiDy8fVmja/PaqxYKnnXhBGTZ2PrX46PuedrA5F9KgYjMGVUi2MAAscr+2wB7eKNUq3LwRfwlFCcmAMBmjDGBUptWtcojpIjlmBPbiTjI9nSlsAfkm/dmV313vHEZK+PyYwXNX5x/Vbt8wiamWewm/EWCaow1YhPC/r0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GmGoHuOW; arc=none smtp.client-ip=209.85.167.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-37cd7f9de7cso30785661fa.1
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 04:06:26 -0800 (PST)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59584301f0cso5911239e87.0
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 04:06:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764072384; x=1764677184; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764072386; x=1764677186; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vVffN9Slo7nSA6jMy+HnfjnzdqrKlZ/cdmvcQBPmzT0=;
-        b=Go3cfmqcfpuW9RUC6Mk7WE7nzPEWU+fH0RWjBM59qKzSgrSJ+wjwWKL7ltJFgjcDfy
-         MhU8s8NO9mSXC3LyT7VByI5xz2w2fIDJ5RJlXU2HI0mBiq7YYpce2h6pq4HOH893JCT/
-         PRFbog3fYgrEmLxaVL5ux7UQmmzzm9Hk0kLP0nVOipE98uyZGKGoJSgv3dv8xKQx7qI+
-         UV7pr9nogDskDXyHyuB81rRqwiqmEHk6Kio8azYRm6kioUSI0BujgbWKes/5fJibIXkG
-         N1LPEHcLB34lowIVIKVb+wbl9NTb++9WEJBz/G2Eb/xDGsV6xsuEJC71nUfqwLnIeB5z
-         s2/A==
+        bh=uN+F0Xnd3WljGjWpLVxmMpsaxzHe/mQ0Vkjj3hwJW+M=;
+        b=GmGoHuOWaR995Lcc79GWMbCFK4Oss6BPSvGUKGkjTD/fy0s4ot8bE+Nlm7J/Yr5LF7
+         8F39Gcu6sECcvo64cJ8eaI5q06VXZ12D8uk6kRyRggF69MOM/jUQIVFAUffcE79K7h3j
+         YJDbVtvlQ1JyXmfO3S0OxA3BvoOTKl0ZkCMOJ7c1KYOVB5iW42ckgzIUyVe5vJtVuOa9
+         Iu+TEwCepv3v5v8syqVEtfyNimIy6XEbFDV/e6aVKLCmHuCqyQ2j26951K4O6m7tho08
+         lL1Dwhgs1g0zA93IXwtba0Mrfc2iMxu1YrxeOfxiXNRbcyZjSKVLSi35jdPidD+IXl6i
+         SVLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764072384; x=1764677184;
+        d=1e100.net; s=20230601; t=1764072386; x=1764677186;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=vVffN9Slo7nSA6jMy+HnfjnzdqrKlZ/cdmvcQBPmzT0=;
-        b=l0khmi3iLhH1t2LM0tZS6kTUdJ+Ys2YULyWlwFusMVmkMGIChHTFWhykaGseoQ+n6l
-         oNgRfS8Mj9LWFFkoOR5Spud6Ex8dLzE/ukO9UbBGeoL60hw7Zr3eABz7NW0+m71Q01UX
-         WT5QnrepUiLVgRuMV/+MxCrRij1pbTwiBg16J1UlK7+gN8MPXk65xdrQ020AkRENjBBu
-         BEjaWy4M+pqWJsmoJAuxb9sou0ebx95I/ieR67IeFc3U5jlaYXJf5HnTBDbdz4zBuKpT
-         wbo3pzbFxBVj8+2xEyHAB7byJb1yBaftDPy8YAFac4RNtCY6oFpBLrFDQAkl7SMRRcHA
-         nudw==
-X-Forwarded-Encrypted: i=1; AJvYcCVmU5tH5sCiQMpmCbG8FVkozQ5GatIInI85a1xfERjf9JwEYXur4X68eQxM4YTFcs8GIKVr2LjA5w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyP39oxSMdh1b29KPiHDI73hjSM9OSYWCqBkI71s/lOem3SUFy+
-	XNCs081ApP3D7qTthJuUfrz7quUuQlcLP3CyLq69nyrJM1hkEEiZYrJP
-X-Gm-Gg: ASbGncv7BvAUur2G7hVIZ8gPH0X25x2ap3+enHqBXNaeGSNOHmDQNTnwDM6iHWHnvtu
-	O9Xu4Qsau1WkQS4RZN/2V2SOaHlWUKGO6R9jJY1IsUuQJ9Deq6b/j77bx794p3PATC3cw8DVJcI
-	WfN60I84LG2ZbSCmZ7d3amNsql/2oaaZF+kC3W+0scZt3T4mrRgcLL5Dl05zXYuriCHBkCy1H8E
-	UG9S0fBM71sn2fo3LwtdhuBhROQMVgChluE0RznRzQBADKcHsVoouZpX6GLQnwYfUi9neKNnf2u
-	4zGY5Q74Rc3d+UtM4qP7pEoUHv2egvH+mWwWwfYFuTzjXQfI3u5OzN1xOIGlve3FVlJA+6n9VGJ
-	F6SXb0v64rr4229AZQI91e0UKHnxbVHMgWm4OjRvOHAuXTFFTij4ZOYvB2bKOns7JQFMYMY9hzW
-	M=
-X-Google-Smtp-Source: AGHT+IGOhBY4VdvmRQpYmf7pO7i0NLn6lazxvfZmPrqmAfJipbxasneXvNQ86FlomE8gw6o627DZdA==
-X-Received: by 2002:a05:6512:104e:b0:595:9152:b93b with SMTP id 2adb3069b0e04-596a3e63731mr5440707e87.0.1764072384245;
-        Tue, 25 Nov 2025 04:06:24 -0800 (PST)
+        bh=uN+F0Xnd3WljGjWpLVxmMpsaxzHe/mQ0Vkjj3hwJW+M=;
+        b=jULQny/mBLyx/tLquVtSlJccTfL7AvCOoVqWXjOlREhXgQsWJjJT10JKSrIN5PM6Ze
+         Lk5JxALxZzq4DTrxAMRUOu+Fg2wdlbt+rGALbiNma4JZtQfgj8H2uG5uNxuYMOIziBRw
+         gjmjVKpJib88BHY2NuQlE2prAqyEF+ezXV1419t1yJ2xnato1s6dEm0BGFEldfhjWx0n
+         JsUc+GQS9mgfO9JCPitGLoui36eN7mrAznuleWTTMeeKl15zNuiFHkBwQdu2XrX/wBPt
+         E1BXj6MCWjuvEew4mjIm0w6MUtmmdNP9okn/P8BAXU8lk3kyJcFcHhUqdVktahxPT6jI
+         Ja5w==
+X-Forwarded-Encrypted: i=1; AJvYcCU3hDq1rg5U3ilnFRH16N97/bbbyus21/lKlbSecNrzDSQn2VqO7Y+YDS1MhUgYy3SntrbVu7q2KQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwO7ISLAXrgBixZ4bdx1D7wEisdrnMN+zbb7BwJ09UeVlyFe/1D
+	rEws1ZZ2Dlk1kOTKGZLVrG1vhxqAKyljiaMSJVdmjqDTEhGXCz9UliO6
+X-Gm-Gg: ASbGncs8iYziamfBwdBzn9Erpd8fUC7sW8czAjYGfVpLDcuWJbL9HJI8FAP1RNusFRb
+	4r7RQPfLg1NXXZihbjw2U9cW0XywpfKK9lfDFQ//5Y6pmVdUML3qgIn84SV3SB9K80EIFWhNZfL
+	xDI0+l7GQPTFZ2W1xEUAD6dIIV2PKLs5Q7hbPf1h7UrXJ2zPG5tQw8i5MiKWUDFVTw/zqDp6mrb
+	Ht5yESHLIKBt+4YQIQQsShyZNllXuoKaUWVzRKKfs8cRw8MXjl9QKzQClvfKG6cK+HMh7mZal2e
+	e5eND5V5ujn7rUyMWDG0ZguCrtrmifktEJh2tteHAsF4ZfvqCZEe+rykGWkjHYnkCgCxCkOaE7/
+	QeNA8Ra5N17e5/rKsRmqQIMIMMnlzlD3BquuobxgoTCv+s/eqFn0OUv60Y9gHitt//FnDRQcYoN
+	I=
+X-Google-Smtp-Source: AGHT+IGkQddv0h4W/kIYw24XVr8lRF2/F0YngAnHGV9hmScDktzlX2Yt8Q6XtITCokbogoFFbpJn9Q==
+X-Received: by 2002:a05:6512:159c:b0:595:9152:b932 with SMTP id 2adb3069b0e04-596b526c87bmr786045e87.47.1764072385864;
+        Tue, 25 Nov 2025 04:06:25 -0800 (PST)
 Received: from xeon ([188.163.112.74])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969dbbecb9sm5150993e87.58.2025.11.25.04.06.23
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969dbbecb9sm5150993e87.58.2025.11.25.04.06.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 04:06:23 -0800 (PST)
+        Tue, 25 Nov 2025 04:06:25 -0800 (PST)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: Krzysztof Kozlowski <krzk@kernel.org>,
 	Rob Herring <robh@kernel.org>,
@@ -95,9 +95,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-tegra@vger.kernel.org,
 	linux-clk@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v4 05/12] dt-bindings: memory: Add Tegra114 memory client IDs
-Date: Tue, 25 Nov 2025 14:05:52 +0200
-Message-ID: <20251125120559.158860-6-clamor95@gmail.com>
+Subject: [PATCH v4 06/12] clk: tegra: set up proper EMC clock implementation for Tegra114
+Date: Tue, 25 Nov 2025 14:05:53 +0200
+Message-ID: <20251125120559.158860-7-clamor95@gmail.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251125120559.158860-1-clamor95@gmail.com>
 References: <20251125120559.158860-1-clamor95@gmail.com>
@@ -109,91 +109,92 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Each memory client has unique hardware ID, add these IDs.
+Remove current emc and emc_mux clocks and replace them with the proper EMC
+clock implementation for correct EMC driver support.
 
 Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
-Reviewed-by: Mikko Perttunen <mperttunen@nvidia.com>
 ---
- include/dt-bindings/memory/tegra114-mc.h | 67 ++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ drivers/clk/tegra/clk-tegra114.c | 39 ++++++++++++++++++++------------
+ 1 file changed, 25 insertions(+), 14 deletions(-)
 
-diff --git a/include/dt-bindings/memory/tegra114-mc.h b/include/dt-bindings/memory/tegra114-mc.h
-index dfe99c8a5ba5..5e0d6a1b91f2 100644
---- a/include/dt-bindings/memory/tegra114-mc.h
-+++ b/include/dt-bindings/memory/tegra114-mc.h
-@@ -40,4 +40,71 @@
- #define TEGRA114_MC_RESET_VDE		14
- #define TEGRA114_MC_RESET_VI		15
+diff --git a/drivers/clk/tegra/clk-tegra114.c b/drivers/clk/tegra/clk-tegra114.c
+index 8bde72aa5e68..853ef707654a 100644
+--- a/drivers/clk/tegra/clk-tegra114.c
++++ b/drivers/clk/tegra/clk-tegra114.c
+@@ -622,10 +622,6 @@ static const char *mux_plld_out0_plld2_out0[] = {
+ };
+ #define mux_plld_out0_plld2_out0_idx NULL
  
-+#define TEGRA114_MC_PTCR		0
-+#define TEGRA114_MC_DISPLAY0A		1
-+#define TEGRA114_MC_DISPLAY0AB		2
-+#define TEGRA114_MC_DISPLAY0B		3
-+#define TEGRA114_MC_DISPLAY0BB		4
-+#define TEGRA114_MC_DISPLAY0C		5
-+#define TEGRA114_MC_DISPLAY0CB		6
-+#define TEGRA114_MC_DISPLAY1B		7
-+#define TEGRA114_MC_DISPLAY1BB		8
-+#define TEGRA114_MC_EPPUP		9
-+#define TEGRA114_MC_G2PR		10
-+#define TEGRA114_MC_G2SR		11
-+#define TEGRA114_MC_MPEUNIFBR		12
-+#define TEGRA114_MC_VIRUV		13
-+#define TEGRA114_MC_AFIR		14
-+#define TEGRA114_MC_AVPCARM7R		15
-+#define TEGRA114_MC_DISPLAYHC		16
-+#define TEGRA114_MC_DISPLAYHCB		17
-+#define TEGRA114_MC_FDCDRD		18
-+#define TEGRA114_MC_FDCDRD2		19
-+#define TEGRA114_MC_G2DR		20
-+#define TEGRA114_MC_HDAR		21
-+#define TEGRA114_MC_HOST1XDMAR		22
-+#define TEGRA114_MC_HOST1XR		23
-+#define TEGRA114_MC_IDXSRD		24
-+#define TEGRA114_MC_IDXSRD2		25
-+#define TEGRA114_MC_MPE_IPRED		26
-+#define TEGRA114_MC_MPEAMEMRD		27
-+#define TEGRA114_MC_MPECSRD		28
-+#define TEGRA114_MC_PPCSAHBDMAR		29
-+#define TEGRA114_MC_PPCSAHBSLVR		30
-+#define TEGRA114_MC_SATAR		31
-+#define TEGRA114_MC_TEXSRD		32
-+#define TEGRA114_MC_TEXSRD2		33
-+#define TEGRA114_MC_VDEBSEVR		34
-+#define TEGRA114_MC_VDEMBER		35
-+#define TEGRA114_MC_VDEMCER		36
-+#define TEGRA114_MC_VDETPER		37
-+#define TEGRA114_MC_MPCORELPR		38
-+#define TEGRA114_MC_MPCORER		39
-+#define TEGRA114_MC_EPPU		40
-+#define TEGRA114_MC_EPPV		41
-+#define TEGRA114_MC_EPPY		42
-+#define TEGRA114_MC_MPEUNIFBW		43
-+#define TEGRA114_MC_VIWSB		44
-+#define TEGRA114_MC_VIWU		45
-+#define TEGRA114_MC_VIWV		46
-+#define TEGRA114_MC_VIWY		47
-+#define TEGRA114_MC_G2DW		48
-+#define TEGRA114_MC_AFIW		49
-+#define TEGRA114_MC_AVPCARM7W		50
-+#define TEGRA114_MC_FDCDWR		51
-+#define TEGRA114_MC_FDCDWR2		52
-+#define TEGRA114_MC_HDAW		53
-+#define TEGRA114_MC_HOST1XW		54
-+#define TEGRA114_MC_ISPW		55
-+#define TEGRA114_MC_MPCORELPW		56
-+#define TEGRA114_MC_MPCOREW		57
-+#define TEGRA114_MC_MPECSWR		58
-+#define TEGRA114_MC_PPCSAHBDMAW		59
-+#define TEGRA114_MC_PPCSAHBSLVW		60
-+#define TEGRA114_MC_SATAW		61
-+#define TEGRA114_MC_VDEBSEVW		62
-+#define TEGRA114_MC_VDEDBGW		63
-+#define TEGRA114_MC_VDEMBEW		64
-+#define TEGRA114_MC_VDETPMW		65
+-static const char *mux_pllmcp_clkm[] = {
+-	"pll_m_out0", "pll_c_out0", "pll_p_out0", "clk_m", "pll_m_ud",
+-};
+-
+ static const struct clk_div_table pll_re_div_table[] = {
+ 	{ .val = 0, .div = 1 },
+ 	{ .val = 1, .div = 2 },
+@@ -672,7 +668,6 @@ static struct tegra_clk tegra114_clks[tegra_clk_max] __initdata = {
+ 	[tegra_clk_csi] = { .dt_id = TEGRA114_CLK_CSI, .present = true },
+ 	[tegra_clk_i2c2] = { .dt_id = TEGRA114_CLK_I2C2, .present = true },
+ 	[tegra_clk_uartc] = { .dt_id = TEGRA114_CLK_UARTC, .present = true },
+-	[tegra_clk_emc] = { .dt_id = TEGRA114_CLK_EMC, .present = true },
+ 	[tegra_clk_usb2] = { .dt_id = TEGRA114_CLK_USB2, .present = true },
+ 	[tegra_clk_usb3] = { .dt_id = TEGRA114_CLK_USB3, .present = true },
+ 	[tegra_clk_vde_8] = { .dt_id = TEGRA114_CLK_VDE, .present = true },
+@@ -1048,14 +1043,7 @@ static __init void tegra114_periph_clk_init(void __iomem *clk_base,
+ 					     0, 82, periph_clk_enb_refcnt);
+ 	clks[TEGRA114_CLK_DSIB] = clk;
+ 
+-	/* emc mux */
+-	clk = clk_register_mux(NULL, "emc_mux", mux_pllmcp_clkm,
+-			       ARRAY_SIZE(mux_pllmcp_clkm),
+-			       CLK_SET_RATE_NO_REPARENT,
+-			       clk_base + CLK_SOURCE_EMC,
+-			       29, 3, 0, &emc_lock);
+-
+-	clk = tegra_clk_register_mc("mc", "emc_mux", clk_base + CLK_SOURCE_EMC,
++	clk = tegra_clk_register_mc("mc", "emc", clk_base + CLK_SOURCE_EMC,
+ 				    &emc_lock);
+ 	clks[TEGRA114_CLK_MC] = clk;
+ 
+@@ -1321,6 +1309,26 @@ static int tegra114_reset_deassert(unsigned long id)
+ 	return 0;
+ }
+ 
++static struct clk *tegra114_clk_src_onecell_get(struct of_phandle_args *clkspec,
++						void *data)
++{
++	struct clk_hw *hw;
++	struct clk *clk;
 +
- #endif
++	clk = of_clk_src_onecell_get(clkspec, data);
++	if (IS_ERR(clk))
++		return clk;
++
++	hw = __clk_get_hw(clk);
++
++	if (clkspec->args[0] == TEGRA114_CLK_EMC) {
++		if (!tegra124_clk_emc_driver_available(hw))
++			return ERR_PTR(-EPROBE_DEFER);
++	}
++
++	return clk;
++}
++
+ static void __init tegra114_clock_init(struct device_node *np)
+ {
+ 	struct device_node *node;
+@@ -1368,7 +1376,10 @@ static void __init tegra114_clock_init(struct device_node *np)
+ 	tegra_init_special_resets(1, tegra114_reset_assert,
+ 				  tegra114_reset_deassert);
+ 
+-	tegra_add_of_provider(np, of_clk_src_onecell_get);
++	tegra_add_of_provider(np, tegra114_clk_src_onecell_get);
++	clks[TEGRA114_CLK_EMC] = tegra124_clk_register_emc(clk_base, np,
++							   &emc_lock);
++
+ 	tegra_register_devclks(devclks, ARRAY_SIZE(devclks));
+ 
+ 	tegra_clk_apply_init_table = tegra114_clock_apply_init_table;
 -- 
 2.51.0
 
