@@ -1,83 +1,55 @@
-Return-Path: <linux-pm+bounces-38632-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38633-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE47DC85FFD
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 17:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 43603C86024
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 17:41:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 43A1A34F8E0
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 16:37:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BA6B234F0DE
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 16:41:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A6F329C54;
-	Tue, 25 Nov 2025 16:37:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2A5032937A;
+	Tue, 25 Nov 2025 16:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DsPvCFZd"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="V9ci28Ga"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6979132936F
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 16:37:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A39B1487E9;
+	Tue, 25 Nov 2025 16:41:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764088649; cv=none; b=BcYDup4bKw+/UfNd1HguNvJoaKeJSSIrt5VVnBXg9e4nUzMwF4GSymi8DpOX7nC/D+Bbtj1bnf2WFbHDmM4N7C+x8078VxJnGA/7xNFttB+7uZUdIrgHzGFyzUN7BsNhfBAaPP2BhiLcjvwk25n2c8u20Qd6LbHE6+EVQyL5DXA=
+	t=1764088913; cv=none; b=F3g4+KQxpe+SedCoU/t5HvtkAGM49od9sUTj5tRljyAfvZ0i+sGQU/IwiVWICof0xehn19bDSNzCkoVX0FWQ6xuHMz/nL3jlmd4gZCF77Lb9Tp6RYA3b/hqexFKaF8t70KzYozFfX3onXvIaWOu/T/nc/a4nY4pdpJEJnH3XkwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764088649; c=relaxed/simple;
-	bh=TAlmXzkH1KqpnNqrCrXGhz8fQgBzldHSxQYp4L9bbL8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r5o9oCpCwGKTsl8V2AGM7phwc2+gdQkWzf84NzCnoMctc6HB+Jvznl40koVLBw1L+/k1nFgb4et+ryaZAqewoIoV9mOHhWfTyUHpfq+6N9euOL3k06G4Ut9z8IR0panN+mP58xpwIYqvQK209FYExpwf8A8ni20ktvF6ZKQYmao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DsPvCFZd; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-29558061c68so77098585ad.0
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 08:37:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764088647; x=1764693447; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=BSWJkC14D263EaCk7olh/4x9IvEymCiNm9Dm8xKZmcc=;
-        b=DsPvCFZdv+ulKh8LgL7ahJPF70vGMfe5q5ajFdS3G4SmcOyjjMubEg0TsR4Kads5i1
-         8MY22+xFEm5wi0Kt1753mhPdJkIziFC1ZLhb4IHhg4fSj6wihfxeqiS4McVUSRrbv9mZ
-         6LVsKRhCHrbogEoEaJxTaipcWdUYl0mpKDTqGS6TTfiF7cPaWuC/TsiEtaTh6uUuGJrB
-         hE5wilE1sV1Y1OAlcDYXD9ekmMyaSPSqWqcBGU0SmW3g3erfJPzSgb2a0SJrOdiAECGq
-         HTmbUX7LduKtvM0eNtAq6B/EDD2DyH2gQHC7qtK9D5a9cFKPFpbk+OE/YPRq0N9Ul441
-         HvAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764088647; x=1764693447;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BSWJkC14D263EaCk7olh/4x9IvEymCiNm9Dm8xKZmcc=;
-        b=SXHkw6MZZ/6U4svjlLB/DVG3fIl7swEjDjIqUIuZgyx4OMGm9uXtxduVAt8MUWWCVa
-         3roJBOCU52On+xo/weS94Jf0DDCiicsJR3HiW+753Q1IvuTF24+nMUjZK1mvDiIlYPZi
-         r6CkptvYmnfl5Bgu2vCRo/v22F9bI+xPwJiZQpFRBX6OV404qe8gNh4mjnf/XHCRqfAP
-         ayJEQHDT0Eb2zMGd+wxvIPGYNjNjyANSk4gfsNJAoRiCjq8574WvVc78iXnYSBK9ZfPp
-         6b5M0KJINhs4e27JEQX8ZIHPxIP21m62baWYkLugUGQ87Vw8bipqLO4/GN4ne7HNbHvi
-         2Ubg==
-X-Forwarded-Encrypted: i=1; AJvYcCW+bMu8awgTiLLrDvCbdpauqk4zFmGb0uY9Br5HLUqY7K1LYRM1vE3bIwcOq+DJsGEdITIGIsCexw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWUrHkr4CjuZLLl7gq4mEu0+kGqo6EB40DUYXanRvmpXQNXEip
-	EpxTvbNGGRn08auc9hJ3O4A2sHh1M4k8/dg7QOctE4W7111m9i+WN53H
-X-Gm-Gg: ASbGnct47HiDgZDnHsvjWul9HYKYbxFP/1Jp1tV0FmV1pfhCOiv8bam6NYUA1ACCwOO
-	pMPDsck5bYpxXOAsKK+qWL1Cr5RD5MWM334//vBPn9JkbygsrVsIeBeLhOUb36wQxfBU/v5lJhd
-	9/9qdfYgPdye0AVxlp60bcJ+zZ66BupjrWQFG/t0VbmVpEUS+fxIvsmy/RN99swRQQoi0zVxHKI
-	789WXhWtFYdBpiGbavnK3NgCPUGwkSOSquzzMUI5MhL4xslk1AxGLNeo9bHoNiEQWP2iYQ5zAtO
-	UKWXf/4pK74kwmGVwIPFQYiWSCzee9pOyIPCJojJFZo4Rw4a6A1cVb9X621kt/LL64XM6mmsM1l
-	o8iX5tpV8AeElGlerMRy+KZy7ubdr8V+ImzAKUnp9MmfjvYp+DlklalKBkpGPPMoFT5U794NZSe
-	kF/JQtqTp0shhTX6TYvkAaYeZpN/1MSnkdpxBUXP4wKQDy
-X-Google-Smtp-Source: AGHT+IFHy57b+hpQflAZiQVaoxIk86czwU51KAJ0ICKXYmkBowPOIfdH8aTLY+SWpNInrUa/0Wei8g==
-X-Received: by 2002:a17:90b:3c01:b0:340:cb39:74cd with SMTP id 98e67ed59e1d1-34733f589e8mr14550720a91.32.1764088646710;
-        Tue, 25 Nov 2025 08:37:26 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3475ff34831sm1342209a91.5.2025.11.25.08.37.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Nov 2025 08:37:25 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9b43da0b-61e1-49bb-acc2-392de3817db7@roeck-us.net>
-Date: Tue, 25 Nov 2025 08:37:20 -0800
+	s=arc-20240116; t=1764088913; c=relaxed/simple;
+	bh=wwVWQ8qs5FyaFgj2VKw9vuePt2aYfqUPEd7y+BOSRVw=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=XqeHsPJSU7FWjbDwem2HEX0SMetfZIcJ9OF6IP3q15Cr7fPO0pQsX+7+dpEDVrKQYJSeSGsbFdE4UvqShwr9KNeByt/FbUmK0PeQo8xN6QlGdoi+mSahYTRm54DSIg8BNX9zdHd/nSzJ+9LpTtAxVZdcJIvgaAuE/SPrt9LIAF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=V9ci28Ga; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1764088909;
+	bh=wwVWQ8qs5FyaFgj2VKw9vuePt2aYfqUPEd7y+BOSRVw=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=V9ci28GahN2kkzienIhBTFqRLlnWrbA5eDmQqoK7gOQlGX64ye+RfULR9pQFESuwi
+	 qcX4KCMZ4yZFmbDnOFiDXeu9NDtKLY+O4nsql3JT5xIvOcj9G7Oz6yFHMWGa3dv77k
+	 QTTFKOnWtHbyz9bP3BgAxOFOW9sjaSOAUc2uwoBcFShpcbBQ7ijEr5HzJbnKKcv7H9
+	 vovNGa6miYFWculfJK47TW0Olwubbpy6XbtIZLtkIgEIw603CRWZ4BuEAo5vCp+8YD
+	 j51qzBmc8tWHIrJPNBL8Jtm4R4hpBaXLLhl6f6KVX8KCLCVsMySD62k2EJMiXOGcho
+	 PkEKbPO0cOcEA==
+Received: from [192.168.100.50] (unknown [144.48.130.189])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2A21017E0AC3;
+	Tue, 25 Nov 2025 17:41:45 +0100 (CET)
+Message-ID: <cef1d96b-b642-4e69-8c1b-2e0bf7528edf@collabora.com>
+Date: Tue, 25 Nov 2025 21:41:22 +0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,132 +57,90 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/6] Add support for the LTM8054 voltage regulator
-To: "H. Nikolaus Schaller" <hns@goldelico.com>,
- Romain Gantois <romain.gantois@bootlin.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-iio@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>, Chanwoo Choi
- <cw00.choi@samsung.com>, Peter Rosin <peda@axentia.se>,
- Mariel Tinaco <Mariel.Tinaco@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Kevin Tsai <ktsai@capellamicro.com>, Linus Walleij
- <linus.walleij@linaro.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Support Opensource <support.opensource@diasemi.com>,
- Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Matheus Castello <matheus@castello.eng.br>,
- Saravanan Sekar <sravanhome@gmail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Casey Connolly <casey.connolly@linaro.org>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
- <pali@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Olivier Moysan <olivier.moysan@foss.st.com>,
- Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Dixit Parmar <dixitparmar19@gmail.com>, linux-hwmon@vger.kernel.org,
- linux-input@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- Andy Shevchenko <andriy.shevchenko@intel.com>
-References: <20251124-ltm8054-driver-v4-0-107a8a814abe@bootlin.com>
- <4053840.MHq7AAxBmi@fw-rgant>
- <732D3F12-0361-4800-8981-EF629B4C491F@goldelico.com>
- <3021060.e9J7NaK4W3@fw-rgant>
- <0E900830-E248-4F0F-A048-075EAF1D2440@goldelico.com>
+Cc: usama.anjum@collabora.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
+ linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-input@vger.kernel.org, kernel@collabora.com,
+ superm1@kernel.org
+Subject: Re: [PATCH 2/4] ACPI: button: Cancel hibernation if button is pressed
+ during hibernation
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20251107184438.1328717-1-usama.anjum@collabora.com>
+ <20251107184438.1328717-3-usama.anjum@collabora.com>
+ <2025112433-emphasize-helpful-b748@gregkh>
+ <e1e97842-0ad3-4270-b0d1-3cc7150988cd@collabora.com>
+ <2025112506-acting-tipoff-3a49@gregkh>
 Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <0E900830-E248-4F0F-A048-075EAF1D2440@goldelico.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <2025112506-acting-tipoff-3a49@gregkh>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 11/25/25 02:25, H. Nikolaus Schaller wrote:
-...
-> Another suggestion: what extending the "regulator-fixed", "regulator-gpio",
-> "regulator-fixed-clock" pattern by some "regulator-gpio-iio-dac-current-limiter"
-> driver to make it independent of your specific chip?
+On 11/25/25 4:47 PM, Greg Kroah-Hartman wrote:
+> On Tue, Nov 25, 2025 at 04:12:54PM +0500, Muhammad Usama Anjum wrote:
+>> Hi Greg,
+>>
+>> Thank you for the review.
+>>
+>> On 11/24/25 10:03 PM, Greg Kroah-Hartman wrote:
+>>> On Fri, Nov 07, 2025 at 11:44:29PM +0500, Muhammad Usama Anjum wrote:
+>>>> acpi_pm_wakeup_event() is called from acpi_button_notify() which is
+>>>> called when power button is pressed. The system is worken up from s2idle
+>>>> in this case by setting hard parameter to pm_wakeup_dev_event().
+>>>>
+>>>> Call acpi_pm_wakeup_event() if power button is pressed and hibernation
+>>>> is in progress. Set the hard parameter such that pm_system_wakeup()
+>>>> gets called which increments pm_abort_suspend counter. The explicit call
+>>>> to acpi_pm_wakeup_event() is necessary as ACPI button device has the
+>>>> wakeup source. Hence call to input_report_key() with input device
+>>>> doesn't call pm_system_wakeup() as it doesn't have wakeup source
+>>>> registered.
+>>>>
+>>>> Hence hibernation would be cancelled as in hibernation path, this counter
+>>>> is checked if it should be aborted.
+>>>>
+>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>
+>> My thinking is that people don't press power button after triggering
+>> hibernation. They will only press power button if they want to cancel the
+>> hibernation or resume from hibernation a bit later when hibernation completes. 
+>>> This could be dangerous, as this is not what happens today, are you sure
+>>> that people aren't just used to pressing the button multiple times until
+>>> the system is hibernated? If so, that would now break with this change
+>>> as it's hard to determine what is going on.
+>> Yes, its possible. Previously the device wouldn't cancel hibernation on power
+>> button press; while now it'll cancel.
+>>
+>> So should we put this cancellation under some config option to avoid breaking
+>> the default behavior?
 > 
-The name is terrible ;-), but that is what I would have suggested as well.
-I don't see anything chip specific in this code. If there is a need for
-a regulator driver which uses gpio to enable it and a DAC for current limiting,
-it should be made generic.
+> Do not add another config option, that way lies madness.  As proof, what
+> would your distro select for this, in order to preserve old behavior?  :)
+I think, the new behavior would be desirable by most distros. They don't care
+about the old behavior. But its just my thinking. What do you think is the way forward?
 
-> By the way, are you aware of this feature of the regulator-gpio driver?
-> 
-> https://elixir.bootlin.com/linux/v6.18-rc7/source/drivers/regulator/gpio-regulator.c#L97
-> 
-> Just to note: I am neither maintainer nor doing any decisions on this, just asking
-> questions for curiosity and from experience and giving hints for alternative approaches,
-> where I hope they help to find the really best solution.
-> 
-Same here.
+Even if there are users which used to pressing power button during hibernation,
+will not press it after a few tries if they really want the hibernation to complete.
 
+> 
+>>> And why does hibernate take so long?  Why not fix that up instead?
+>> Hibernation is inherently slow: it must freeze devices, copy and
+>> compress/encrypt memory, then resume storage devices to write the image to
+>> disk.
+>>
+>> While I've thought about increasing the speed, I've no concrete ideas yet.
+>> The main problem is that its sequential in nature.
+> 
+> Then fix that?
+That's in the plan. But who knows when we get time to attempt that. 
+
+First I need a board/machine with serial console access to view all logs in real
+time. :)
+
+---
 Thanks,
-Guenter
-
+Usama
 
