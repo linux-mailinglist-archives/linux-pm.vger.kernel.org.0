@@ -1,87 +1,87 @@
-Return-Path: <linux-pm+bounces-38526-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38527-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9203AC83676
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 06:39:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E5DC0C8367C
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 06:41:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43FC33AF19A
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 05:39:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CAAE3AF1D1
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 05:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ACA721E0BB;
-	Tue, 25 Nov 2025 05:39:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D7AA2206A7;
+	Tue, 25 Nov 2025 05:41:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="R7UCo+1g"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="cIh1LmVD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011029.outbound.protection.outlook.com [52.101.62.29])
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013061.outbound.protection.outlook.com [40.107.201.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9814520FA81;
-	Tue, 25 Nov 2025 05:39:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.29
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC4320FA81;
+	Tue, 25 Nov 2025 05:41:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.61
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764049163; cv=fail; b=JleLU52v3kNkafUBUndtyslj5A5imXxTUMEc8JnVCFHHhHiQJjLQdv9H8EdoyffEyEPDV6CPEaYzIukerlCwPzUhKrOdAmQRwHra758P5Un+0oo0ulYEKCUy+5JhNgzmKfFQoVLQkd0auyObOvXt8nsialUbH2ZM0Njfd1A0Z0E=
+	t=1764049291; cv=fail; b=YqzfEBjZryfIN4Ii+L+oypp4nW1GCI9fj4sAc91rgOdENuSt6GqIbJMq0DtqruCtUh6ZcYXILiYZASyEuOHZdVk06mxnxdqv8wEorZaquVOoQgBEAV4kyjvzWTdpqJkvbyHkpBR+wXPQ0W9ikHFKhN+4Fk/HVu/jC8yft262bLQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764049163; c=relaxed/simple;
-	bh=9k9gioewkKuYt1Yt+oTrrvPaOUfsVfyYKfZ2mYZwRXk=;
+	s=arc-20240116; t=1764049291; c=relaxed/simple;
+	bh=62O3kJfWSmKu+6A5kSOKLP676dKRN7iPfjeQngemL3s=;
 	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DNtWXlkOJfo1nCxID+HGiU0bW0RowIPVikrI7y8LpkUK1NUajSXRo2mpD45N/KnkkjRkWJVAklI+wn4C74iIVEqTR5DJksZTR8Yj0TRsd8Z3iVHRwXzD/b9nPa9sUixWjtOAaLqfEjxpM87nMfYl4sAa89ctR2fhzs1PsWReEeU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=R7UCo+1g; arc=fail smtp.client-ip=52.101.62.29
+	 Content-Type:Content-Disposition:In-Reply-To; b=PXA7w/IP8WFPvWzQ6jHfqHcS52GWeqANR3OwodjlqH/JMxONPU8m2lJbDfDGA8FI8sdFaQpnm34ym3GZHMPqn5Qic4oATgV/FambfoyaG4hrw25pzNX8xDqEFph9BiGdf9/QAkJN0c3aGQd+nhkV1bGQkUCn0OZmbvXCi4IY9C8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=cIh1LmVD; arc=fail smtp.client-ip=40.107.201.61
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AoMOjazIdyIirRu5pdWFjktxbYHE/tFEtdv41kxaMJRSTNVLVsj1vpFEZrFQbZ4sAGyC49h2uAU9dsKy6dNS2Mfok9X+PleeqovJ4A+2V14A/+LLAtA85WFlaRR06ZLEE+sWwnbsdAywN3Uktyd0mxrWyIvCTfjGc2tjn6y+iGC7CzA3yxnIv8HI2hIT7uCeC2xwYaHFJIGzLL1ltnd38ep4N0opKApQma6eLcfE7dWEPGnEXNS7knSMhcUEervzH4onwPj0QLwHwgEmXRQjBQ6L02QpbtjxfnOR3VcWrN6DxQFqg6mCXRUODvDCjYMTJXTHxjqUU3Xj9btoOIKyKA==
+ b=yEOXAVTA0MAVmZFWOJswHzRoQ8mftMmiEYa4KaM8gFvL1KWOvSdJdJhejAmBmTymOF+HFy1QTkqc15oxbJknvsfW6CcCFPeTg7WrLPiTZfiRvHCIM3+oLdii7yLlyMKn9GRa3gecehRWdtFq8UkLnwVNjc9XLTX/Oel+47SS5MYokWQD/xHMTAUf8XUq+E7OEG4iQn0nfs5FtAqfJuHyGmGAsFzQ+BJL1BnJi9Zlajg2FSHzpF9akxEbn4P8LXMVpaVILtIcyVU50VfZ0G97JOe+7xPFlpwTu94hUY/wyhfk0lfhbQr2w2gtof+7/u8B7DXcYtoa90sPR4xWG3c4pA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tw48d+HnM/IgkREmFmk0M6Dc+nwAhQLWh2a3Mp6oii8=;
- b=lgEEEOn2WweT2C15S/PrSWrzAcx5D1pjjCkzoEMPqwEnDoWXCQb4r9wMvj9IXqvbjf/ZcAdD44jsuQzpiPYBSUouehPMoxE4qqzkMlbjjlxvScjYApPUwN87yUaI+c7T2dvRLbIUE5TpFQl3sV+J0mOW9e3WzYKRpXHHnFgFELLE04xRv3O8Z4ED0U5DtXBvJ0EsgTQdTiUl8kvZTSOfu9UG/u4VgO1+0gvK8aWUq655bRYYjWLuNWbE1I6xWOfRrnNz4HmkThEYflrRnZXkZsR2wzcj+HyRtkNSDg7LC6lZyBQEbEegNcc0Z6WHZ6zwIXWzkUbDMMWohhRLlYBdmQ==
+ bh=v0gxmIpCm5JwnwnngWJUI9dH4h/SZfo8tJqH/3tANt8=;
+ b=MPPIPzjYWAzNwHGr0HzCDwJX6UifHDDeQ/Dq5A9dQCkW0vI4o47afivQGcWuwJ8D+NzEG4pIgmhSi29dmY01vfdc52Tc60naLBar+8jUnqntrGyWbVOKkFLXsnV1X4JsMUzCu2Eqyti84pY8oia6IU/fmSC27ILQm4WFfxbf7bOohNcrXk3e5Gn3xyWUr7Rd4E1sk1ZhrMvWoPzMk0Y+DJZieP+fNEHl7HI4TR5Qxa7FantVFcp20nb/7OgXj9GO66PaDzDQzfqoty0Rds/VrgkLMxzOhQIWuoqTa7cvnRpgh4GcXaUSoddAtyx78tn3ZKQWfUNDtvcMlwS7XHwArg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.195) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ 198.47.23.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
  dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tw48d+HnM/IgkREmFmk0M6Dc+nwAhQLWh2a3Mp6oii8=;
- b=R7UCo+1gJ5b4gSJYcSbwVH0dfmTK5M1XkwakiXIaR7HPdKf1nuhM3NSFCLKkB4LPBuYi+FHeGJGJddexIYTt9dTNuP0er/H3xONPOhybFdfrc3KpG+rMXpvnEkJwaHNC8H2cKTbtgWGLmvDw2RfRECnjkNTKWi7h/lMns7xSBGA=
-Received: from BN9PR03CA0352.namprd03.prod.outlook.com (2603:10b6:408:f6::27)
- by MN6PR10MB8069.namprd10.prod.outlook.com (2603:10b6:208:4f9::8) with
+ bh=v0gxmIpCm5JwnwnngWJUI9dH4h/SZfo8tJqH/3tANt8=;
+ b=cIh1LmVD9vNsXj5PS3xXvtOhBKDREwg6y4pACjeNBT+TbKtsrb4gBR3pRZ6zOpakUGmAfbYKrd3YzOrycXAXL225I3OSP21Z2RqZCSgz/LZeDQot1xwKAMJFCliZ/kixIkRKwlHAWxqBCT++jJGnAWTDeL/OnUSTHDt9/aTmV+4=
+Received: from BY3PR10CA0003.namprd10.prod.outlook.com (2603:10b6:a03:255::8)
+ by PH8PR10MB6525.namprd10.prod.outlook.com (2603:10b6:510:22b::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.17; Tue, 25 Nov
- 2025 05:39:17 +0000
-Received: from BN3PEPF0000B36D.namprd21.prod.outlook.com
- (2603:10b6:408:f6:cafe::5) by BN9PR03CA0352.outlook.office365.com
- (2603:10b6:408:f6::27) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.12 via Frontend Transport; Tue,
- 25 Nov 2025 05:39:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.195)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Tue, 25 Nov
+ 2025 05:41:25 +0000
+Received: from SJ1PEPF000023D5.namprd21.prod.outlook.com
+ (2603:10b6:a03:255:cafe::50) by BY3PR10CA0003.outlook.office365.com
+ (2603:10b6:a03:255::8) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.17 via Frontend Transport; Tue,
+ 25 Nov 2025 05:41:25 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
  smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
  action=none header.from=ti.com;
 Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.195 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.195; helo=lewvzet201.ext.ti.com; pr=C
-Received: from lewvzet201.ext.ti.com (198.47.23.195) by
- BN3PEPF0000B36D.mail.protection.outlook.com (10.167.243.164) with Microsoft
+ 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
+Received: from lewvzet200.ext.ti.com (198.47.23.194) by
+ SJ1PEPF000023D5.mail.protection.outlook.com (10.167.244.70) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9388.0 via Frontend Transport; Tue, 25 Nov 2025 05:39:17 +0000
-Received: from DLEE206.ent.ti.com (157.170.170.90) by lewvzet201.ext.ti.com
- (10.4.14.104) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.9388.0 via Frontend Transport; Tue, 25 Nov 2025 05:41:25 +0000
+Received: from DLEE201.ent.ti.com (157.170.170.76) by lewvzet200.ext.ti.com
+ (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 24 Nov
- 2025 23:39:14 -0600
-Received: from DLEE207.ent.ti.com (157.170.170.95) by DLEE206.ent.ti.com
- (157.170.170.90) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 23:41:17 -0600
+Received: from DLEE202.ent.ti.com (157.170.170.77) by DLEE201.ent.ti.com
+ (157.170.170.76) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 24 Nov
- 2025 23:39:14 -0600
-Received: from lelvem-mr05.itg.ti.com (10.180.75.9) by DLEE207.ent.ti.com
- (157.170.170.95) with Microsoft SMTP Server (version=TLS1_2,
+ 2025 23:41:16 -0600
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE202.ent.ti.com
+ (157.170.170.77) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 24 Nov 2025 23:39:14 -0600
+ Transport; Mon, 24 Nov 2025 23:41:16 -0600
 Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
-	by lelvem-mr05.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5AP5dDJS3139508;
-	Mon, 24 Nov 2025 23:39:14 -0600
-Date: Tue, 25 Nov 2025 11:09:12 +0530
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5AP5fFOQ3168325;
+	Mon, 24 Nov 2025 23:41:16 -0600
+Date: Tue, 25 Nov 2025 11:11:15 +0530
 From: Dhruva Gole <d-gole@ti.com>
 To: Ulf Hansson <ulf.hansson@linaro.org>
 CC: "Rafael J . Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
@@ -91,11 +91,11 @@ CC: "Rafael J . Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
 	<daniel.lezcano@linaro.org>, Maulik Shah <quic_mkshah@quicinc.com>, "Prasad
  Sodagudi" <psodagud@quicinc.com>, Deepti Jaggi <quic_djaggi@quicinc.com>,
 	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/6] sched: idle: Respect the CPU system wakeup QoS
- limit for s2idle
-Message-ID: <20251125053912.nxtqotznyxib6nev@lcpd911>
+Subject: Re: [PATCH v3 5/6] cpuidle: Respect the CPU system wakeup QoS limit
+ for cpuidle
+Message-ID: <20251125054115.7y26ize7h5kqhe5l@lcpd911>
 References: <20251121100315.316300-1-ulf.hansson@linaro.org>
- <20251121100315.316300-5-ulf.hansson@linaro.org>
+ <20251121100315.316300-6-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -104,176 +104,91 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20251121100315.316300-5-ulf.hansson@linaro.org>
+In-Reply-To: <20251121100315.316300-6-ulf.hansson@linaro.org>
 X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B36D:EE_|MN6PR10MB8069:EE_
-X-MS-Office365-Filtering-Correlation-Id: 68d0602d-aab2-4a35-3eef-08de2be4f9e9
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D5:EE_|PH8PR10MB6525:EE_
+X-MS-Office365-Filtering-Correlation-Id: 37801e86-ed06-4d87-8f4a-08de2be54610
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|7416014|376014|1800799024;
+	BCL:0;ARA:13230040|82310400026|7416014|36860700013|376014|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Od0kv2Njhgbd+s6JKMpQJUmTzW3xTBeNxq1E5sj4lWc3OLTWiYWuBeR1Ihm4?=
- =?us-ascii?Q?t8YKNfb+Ro5ggCo1CieYxVApccrEWs0qCAmg3/hzGkqDOCtcpPc8+Gb/Hv65?=
- =?us-ascii?Q?QnspjLm+1NSvLQgLGJax34PmXDHJkOSidDz9/JpRLDgHAMkMXliw3JRDaQgA?=
- =?us-ascii?Q?974l27sayFkGLj4XGKEVLXgl9xGYtSP6+PbijhITWm8LyrmG4OsRI2fw3J+Q?=
- =?us-ascii?Q?8ZRKTz3DiowdaMmNtkMFYJxBYYz+joqeVxzG7YFiaL3XfI33gnCaDgzkiJ/Q?=
- =?us-ascii?Q?Dc6dqTs7Sp41Bp5aKTE/YvpuLUPGRRkGu8SPzKoP902YxAnYYiadlyJhj7i2?=
- =?us-ascii?Q?ct2ygrX8evA75/lt3I6sy9XOxOpyiD9LRCN3hGJgVF+qdzVN91xfFkN5HV7v?=
- =?us-ascii?Q?1JmSXeAHPSxPUcquLNtHGI373yFeqR2vtRlslkQfmNU/IDjACG5SFqAJFjpM?=
- =?us-ascii?Q?DNRRrpd3Wi/+V/XHfuQwnWl24LIaAuEvRGg6+4BdxN4r2lWwcVsyl2/mP3iM?=
- =?us-ascii?Q?nCJ0kZxxY9BnYgfuopN3E4GgL8JMkss6fV+KwmaOBgIb/XsqEzB+AHp+TfBf?=
- =?us-ascii?Q?6euPcKl2LwoJtWPkRXOxDQq+fqdHUTCa0iQF6RLbVjDMzxE9b3VVvFH7GKHA?=
- =?us-ascii?Q?6dOaGGBVM7+5B3A7VLX5HuU78A8nAnM7yN9PB4thI0eEr62O+KwEalZ577+L?=
- =?us-ascii?Q?dwgqZm7XZF2tEdI4s83nv4E1OEA0o7olRDeIViwXW7PGdXp8LSxCSwnRtK6T?=
- =?us-ascii?Q?Yckt8LNd4J3igtahFzqamouV30mzm2W0+PS4aM65HuI6O9oXercNbk6a4yTq?=
- =?us-ascii?Q?sRc3/X6gj5iMAtkZhUHp5WXXsrdTqbOqRH7V/kToOgwgGn/lxxuPYyrXMkRw?=
- =?us-ascii?Q?EX7T79ozM0oPhaBfJ3XLbmKjFcXdIYtfQ5oIxczdGASDuZmXP6PE6JzecO9O?=
- =?us-ascii?Q?FC+Dq50VLQrboaWwfVtpzHhCP+zUw5omL+GjXtsiUkOnesLTUt1lH+9nnmFY?=
- =?us-ascii?Q?r4tpQ6Jy7WT+IdruUbkh5/PLFIuwKx/htTSU4wAK1Zyf+M2mDa2i7+XwrdMJ?=
- =?us-ascii?Q?0AdeJSZfVpZ9R6BHXcSLxARrksFBbCIRd1rhKUAiWIEqSkLOVXD8dnxpMJ8S?=
- =?us-ascii?Q?jA6VLBImgBywLep9AdIQx0y1qGjLeVhOvxdV6f4Qn6W6yOkaU6ra2FtHmtjt?=
- =?us-ascii?Q?dYAX5AbB/OfWmmuKIS9a6FQIAZ0TdCZgntAZkZfIHqfbDVUX7S47QqDJhC5U?=
- =?us-ascii?Q?BnJQNf4/pFXAXKFlSFP7SQedPf5NhcbzI7g/sN4MPWv3qfxnIDkZ8WjfK6hC?=
- =?us-ascii?Q?uor2KdE8i7mpu0tKRDi9aLDtPr0LisHXfe0x2rhAfQ+dG6M8X9FurM5w4c50?=
- =?us-ascii?Q?g+17S7nYeRm5m0UHMQWU5C9lcDun+1ZnRSP+JLvFjm++UaAWEsYgijDangXj?=
- =?us-ascii?Q?Pvf798DKpFcG8JAwjnJP3Y8zCNLYfVvCEBO+KXUKJKEm3/I9uteYRRQjeuNa?=
- =?us-ascii?Q?eAl23ojOBES1pLQe1iRmCeSDW+TGO60QOsgYZw5Wo7RoyW5De8d9qmJNAn3D?=
- =?us-ascii?Q?6hpvNPZczPwJCsu5GHI=3D?=
+	=?us-ascii?Q?XJjFvBhk7zgMGEVviUcbIPC0SrFv3/ig1skhpwidp5zOQb6ms65DoERU5h7M?=
+ =?us-ascii?Q?983QPGlI85UUcC58W3D+F3RKPY7sei2fkDOYoDIbEYSjspFdrkvDBx404oTT?=
+ =?us-ascii?Q?HQQqMZL4DOHAyiMyQHqGn9TF5VMuvkiZdXe7vP1Tsgq1t+GU1KMKB17i4bld?=
+ =?us-ascii?Q?k3U3sX7jRqv5cHTah0riQcYSxotMUJTje9/HIHgupZjn92/KzhCsMtdLalt8?=
+ =?us-ascii?Q?ybFVo7pTgRbZiX1w7iFi+DBynujC80BtT4rQi+M7INC8E7kuJu+vy6mT095u?=
+ =?us-ascii?Q?U3GzjroLMFqda50/zPwM4m3LgUh1PHQEn4JHwdWiQBk0z7ZaG96E+FRclXmD?=
+ =?us-ascii?Q?g/ziVlQLwnPv8DN5UCH5RCSN16JZ13gfVRJyI1n6boLk7jWUFZbNgA2tr4WY?=
+ =?us-ascii?Q?J+pF6HJhsjJXJykaszg//yiH1rlU3ylOwycNcnP7UQJlYnPeh1PcX5Q9ElL0?=
+ =?us-ascii?Q?Li5UGu6frT8Jp9LB5uvBd/BQVE8AkzMy7nPh7oq9m1LfedYGqZ+m18L9bc+B?=
+ =?us-ascii?Q?QFv6kUn1QcnD/sDq19nToSlC1hqz8dZZtFyozyXe+rznK70j0XJ2pGgXwtPa?=
+ =?us-ascii?Q?8jSqlgGtF92hYrkTNtHlcdU8BPuhog53VebcR6xa7Sy4A4dFRuXBz8VJbSJA?=
+ =?us-ascii?Q?HUz01GB2EQZUfUu8UiIiFeEcBwofDlwpVRr9+bwwhXXHSHFYTLfEa6aACd57?=
+ =?us-ascii?Q?jBDQ3XdLGcx91I6II4YyM5T3QMwefERV/V6gD5eR+b7djExbOuA8Ag/ElM8z?=
+ =?us-ascii?Q?VR0jN0q0yuu8vTw//K7zJmeMIMj7AEtkezvRFQ7cUhA6ZyY4YKj9QIWPYA/j?=
+ =?us-ascii?Q?3DN/Y1ehYuEMyPHjjlZNaiQojt6+ghHqYmQURyEwqJoGzP/cokVdQnqudSBz?=
+ =?us-ascii?Q?vLCEhPQ3Lv7SqslNoZG/CITl9ZCGBP7YN0zZ/VjgEUG7On30jOYEql+L4l3Q?=
+ =?us-ascii?Q?h9O3hbPU9Y9lmaxF/mCH/GlLobSgYb62q6HR11lSFBoHi7ZPPUiGKFxSt54L?=
+ =?us-ascii?Q?7Q+9kgxl19PA7B9ijJAgqEMWqecpa4n6ZMXT9/qfo2GGGryq7BdZvm8OEB0t?=
+ =?us-ascii?Q?FyazaV8YRFSsx8tYm+mfd9FZXCoLVc3nhKbe4qFKrF5Lwc0xjxNalFiP+L9q?=
+ =?us-ascii?Q?/XLsN0LxRpYTw4XWocwGRpcWGdhv9Web29D+tNFsrP641Mn6GnzVL5pl8UhQ?=
+ =?us-ascii?Q?+rOXbdzZu19CkEOKRq8We9IkcTAZ92R+XXMCKDNKiZ1IZA6+jx2TS5HIdpUr?=
+ =?us-ascii?Q?B7mjvAIB87r/2ih78Wp8qWepWTKWRNNWsoK0nNjl382XAh9OyT8+BXGf7553?=
+ =?us-ascii?Q?GFRC/3Zh0H2jf2PlJQjzz2Deya10hLrNKXYUVngjYNZYOiPuc9sJ2AP3wztB?=
+ =?us-ascii?Q?QciUQ0h4YLD0iEG7LHmjb1HwtayHH93j9iuCeMbSFT6o0i1TYfg84JkEp5sA?=
+ =?us-ascii?Q?uXvGyUGS2EljYcB4pQC2oFB7cLzkmoTko/+vY7pCDjT+GympG5g2UvQF4vGF?=
+ =?us-ascii?Q?8CdIVeVTcJRP9g08FAYZ5bSbrbrdBDswnokfO13s0luLjcUP5YdJjciEtZQN?=
+ =?us-ascii?Q?FrU1tGXanx5XvBQmj4k=3D?=
 X-Forefront-Antispam-Report:
-	CIP:198.47.23.195;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet201.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(36860700013)(376014)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2025 05:39:17.7358
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2025 05:41:25.5535
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68d0602d-aab2-4a35-3eef-08de2be4f9e9
+X-MS-Exchange-CrossTenant-Network-Message-Id: 37801e86-ed06-4d87-8f4a-08de2be54610
 X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.195];Helo=[lewvzet201.ext.ti.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B36D.namprd21.prod.outlook.com
+	SJ1PEPF000023D5.namprd21.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR10MB8069
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6525
 
-On Nov 21, 2025 at 11:03:10 +0100, Ulf Hansson wrote:
-> A CPU system wakeup QoS limit may have been requested by user space. To
-> avoid breaking this constraint when entering a low power state during
-> s2idle, let's start to take into account the QoS limit.
+On Nov 21, 2025 at 11:03:11 +0100, Ulf Hansson wrote:
+> The CPU system wakeup QoS limit must be respected for the regular cpuidle
+> state selection. Therefore, let's extend the common governor helper
+> cpuidle_governor_latency_req(), to take the constraint into account.
 > 
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 > ---
-> 
-> Changes in v3:
-> 	- Updated commit message and added ack from Peter.
-> 
-> Changes in v2:
-> 	- Rework the code to take into account the failure/error path, when we
-> 	don't find a s2idle specific state.
 
 Reviewed-by: Dhruva Gole <d-gole@ti.com>
 
 > 
-> ---
->  drivers/cpuidle/cpuidle.c | 12 +++++++-----
->  include/linux/cpuidle.h   |  6 ++++--
->  kernel/sched/idle.c       | 12 +++++++-----
->  3 files changed, 18 insertions(+), 12 deletions(-)
+> Changes in v3:
+> 	- New patch.
 > 
-> diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-> index 56132e843c99..c7876e9e024f 100644
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -184,20 +184,22 @@ static noinstr void enter_s2idle_proper(struct cpuidle_driver *drv,
->   * cpuidle_enter_s2idle - Enter an idle state suitable for suspend-to-idle.
->   * @drv: cpuidle driver for the given CPU.
->   * @dev: cpuidle device for the given CPU.
-> + * @latency_limit_ns: Idle state exit latency limit
->   *
->   * If there are states with the ->enter_s2idle callback, find the deepest of
->   * them and enter it with frozen tick.
->   */
-> -int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev)
-> +int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-> +			 u64 latency_limit_ns)
->  {
->  	int index;
+> ---
+>  drivers/cpuidle/governor.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/cpuidle/governor.c b/drivers/cpuidle/governor.c
+> index 0d0f9751ff8f..5d0e7f78c6c5 100644
+> --- a/drivers/cpuidle/governor.c
+> +++ b/drivers/cpuidle/governor.c
+> @@ -111,6 +111,10 @@ s64 cpuidle_governor_latency_req(unsigned int cpu)
+>  	struct device *device = get_cpu_device(cpu);
+>  	int device_req = dev_pm_qos_raw_resume_latency(device);
+>  	int global_req = cpu_latency_qos_limit();
+> +	int global_wake_req = cpu_wakeup_latency_qos_limit();
+> +
+> +	if (global_req > global_wake_req)
+> +		global_req = global_wake_req;
 >  
->  	/*
-> -	 * Find the deepest state with ->enter_s2idle present, which guarantees
-> -	 * that interrupts won't be enabled when it exits and allows the tick to
-> -	 * be frozen safely.
-> +	 * Find the deepest state with ->enter_s2idle present that meets the
-> +	 * specified latency limit, which guarantees that interrupts won't be
-> +	 * enabled when it exits and allows the tick to be frozen safely.
->  	 */
-> -	index = find_deepest_state(drv, dev, U64_MAX, 0, true);
-> +	index = find_deepest_state(drv, dev, latency_limit_ns, 0, true);
->  	if (index > 0) {
->  		enter_s2idle_proper(drv, dev, index);
->  		local_irq_enable();
-> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-> index a9ee4fe55dcf..4073690504a7 100644
-> --- a/include/linux/cpuidle.h
-> +++ b/include/linux/cpuidle.h
-> @@ -248,7 +248,8 @@ extern int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
->  				      struct cpuidle_device *dev,
->  				      u64 latency_limit_ns);
->  extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
-> -				struct cpuidle_device *dev);
-> +				struct cpuidle_device *dev,
-> +				u64 latency_limit_ns);
->  extern void cpuidle_use_deepest_state(u64 latency_limit_ns);
->  #else
->  static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-> @@ -256,7 +257,8 @@ static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
->  					     u64 latency_limit_ns)
->  {return -ENODEV; }
->  static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
-> -				       struct cpuidle_device *dev)
-> +				       struct cpuidle_device *dev,
-> +				       u64 latency_limit_ns)
->  {return -ENODEV; }
->  static inline void cpuidle_use_deepest_state(u64 latency_limit_ns)
->  {
-> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-> index c39b089d4f09..c1c3d0166610 100644
-> --- a/kernel/sched/idle.c
-> +++ b/kernel/sched/idle.c
-> @@ -131,12 +131,13 @@ void __cpuidle default_idle_call(void)
->  }
->  
->  static int call_cpuidle_s2idle(struct cpuidle_driver *drv,
-> -			       struct cpuidle_device *dev)
-> +			       struct cpuidle_device *dev,
-> +			       u64 max_latency_ns)
->  {
->  	if (current_clr_polling_and_test())
->  		return -EBUSY;
->  
-> -	return cpuidle_enter_s2idle(drv, dev);
-> +	return cpuidle_enter_s2idle(drv, dev, max_latency_ns);
->  }
->  
->  static int call_cpuidle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-> @@ -205,12 +206,13 @@ static void cpuidle_idle_call(void)
->  		u64 max_latency_ns;
->  
->  		if (idle_should_enter_s2idle()) {
-> +			max_latency_ns = cpu_wakeup_latency_qos_limit() *
-> +					 NSEC_PER_USEC;
->  
-> -			entered_state = call_cpuidle_s2idle(drv, dev);
-> +			entered_state = call_cpuidle_s2idle(drv, dev,
-> +							    max_latency_ns);
->  			if (entered_state > 0)
->  				goto exit_idle;
-> -
-> -			max_latency_ns = U64_MAX;
->  		} else {
->  			max_latency_ns = dev->forced_idle_latency_limit_ns;
->  		}
+>  	if (device_req > global_req)
+>  		device_req = global_req;
 > -- 
 > 2.43.0
 > 
