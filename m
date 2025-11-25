@@ -1,79 +1,78 @@
-Return-Path: <linux-pm+bounces-38518-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38519-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 534D0C83289
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 03:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 017F7C8328F
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 03:59:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2BA0E4E2744
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 02:59:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E5C7E4E256C
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 02:59:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D40C1E231E;
-	Tue, 25 Nov 2025 02:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587471E5B73;
+	Tue, 25 Nov 2025 02:59:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="2QV1TApF"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="UK/ODl7I"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03DD1E0DD8
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 02:59:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26371E2614
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 02:59:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764039548; cv=none; b=MDEsBa5eAvCWEPTNSoNrWTu52VXwEUmmNLa0PWMtTkq6NvwhC0QjKx0YESEcUtFpmiSMRFxpEHRaNzNUhnbxZaTTstHhEfSl1dTwS295kZbWcEHVbMPtTVy7gKdTBHIy0I3BhGEsmyZO9rRb5KkLGYUYlgSSAa87bvExHKdqFrU=
+	t=1764039551; cv=none; b=izSKILnlMtfFmzqWHYqPLNeL3cT1sLSPClodYXoZ4yAwPSVtw/K33m+syHW1MhPfJ7Aqsd9j3xfSrkW0N6fF33im2BauDHPAFfdvLUYi/l0/Ytq2fQM7pSDSUspNmEiGSgNS9/5x+kdVFb7ke4BuAvt9piCM3kcsk0Ct6Nb2keU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764039548; c=relaxed/simple;
-	bh=6zIONrWFOjkJwgpLsCpLLhdfVRiEt33lRR9lWpCJ6hA=;
-	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=iXNzg8vjQ+wJpkSeNwkdU1+eF6WvFsPzbGl62AChT6PBU1gC6lG/tfTVK2n3hDmAzTdODBrmUxY+Dey7VRewSy4GZ2aFex/vNiY5MNhZUZd14dmnBvCi3KgmfwGvHVXmFVYHZagYFlAJ/yrqUQJbxJ8AzrJkrWYorBnh5CcNArw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=2QV1TApF; arc=none smtp.client-ip=209.85.210.174
+	s=arc-20240116; t=1764039551; c=relaxed/simple;
+	bh=7vsO8yRL5zDvY9vPKYftdlZbr4iSIkOT2GEUJeCI1G8=;
+	h=Content-Type:MIME-Version:Subject:From:To:Cc:Date:Message-ID; b=j2qeCWZo0qZNg4lqIiKm2iaiHMCOIFTwk6aCktF0qZMHOH8P8vN0QRxvLj7meYUyOBQrvFgp/9BhGUf5wlVs9M8/3Lwy3bDGf3Eg4ERvLpxPIWf72DiJW0IgYaTx4EOFLsXIl/gBdig/bhI47o/5IscemO1t8G8fjEo6IAI402w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=UK/ODl7I; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7acd9a03ba9so5662233b3a.1
-        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 18:59:05 -0800 (PST)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2953ad5517dso61502085ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 18:59:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1764039544; x=1764644344; darn=vger.kernel.org;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1764039549; x=1764644349; darn=vger.kernel.org;
         h=message-id:date:reply-to:cc:to:from:subject
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dbn/rYR1dj4se05KzQaG+W4TdzOK+ygJl5vQ9VaVe9w=;
-        b=2QV1TApFY8oyRgam+4M5mQ8Jh5h8+6q0qewgXwJQypT8zT/tQux0K/WoszjrPOtfa3
-         xwpffG7zhjMO3mZ9YngDefOJEt9XR2OmJ4Zn3m+lIMUXjzSpqUxJyYSVx2yVdsig81Rq
-         oOtYM5uH7ZptaTz5c04gKPIsoDGnL2aBJCtBhF63LlBXjSkuCVf572BVkKE0kQEIj370
-         UAZqIkk2k+6MqO+Ayf/QltVnIyYfLVkpl2a7yHyF2s8+09YaSimTCS/NPP/9tyPJh4Zh
-         Kq2xj3piMVbipe3DcAiKzX0Cp3h9wJD/9x1AXKMD9MT4V1d/eeRkujUFHKCnaLmkjdK1
-         IGGA==
+        bh=fY1t3qEw9up3zZahP6BmPOCapaIM+S0F2CsFNk/g7So=;
+        b=UK/ODl7IwwptXzp8gip9OH0gkEALzNClMf1u/JE9kZFoMa2lhJdhfWMzJ+PqLlGXdw
+         csHryf3W6e9EykrcjpdvFjchxwMVYLq6GcHcHDTPg5zytJvbYoVLCjsnLtXq5Z+9apxp
+         /37ae+IWluXQTZQHVP6UXaRZg8awDwhDC/ZdOw+Lpht+naos20VRVYjukpO5vwXXTiGQ
+         FRsU49mx8FNdvMZ7KS1uaNOSI6K1yOjgNRMfFn/pVjqalhgJVfKCANJEYy3hxMW8ATH1
+         dz+wya0HlfVwKpUZm43VkaCV1m+8joIh30R7TvZ4YpZSBYtrADPI37BuSMn3CuTaqULi
+         AYRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764039544; x=1764644344;
+        d=1e100.net; s=20230601; t=1764039549; x=1764644349;
         h=message-id:date:reply-to:cc:to:from:subject
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dbn/rYR1dj4se05KzQaG+W4TdzOK+ygJl5vQ9VaVe9w=;
-        b=Qfms51IKTPVbVR5eput1/N4vw1BHl+UMY9UbDvxTFH9qiL8j9yj7he24o2Sajo/xmS
-         HCkkb82IZRLZ5R5zWIjdE6wN3B9bfhLVOV2+mrQmcLAOTWPdhpueALfNs533QndKxr9F
-         ndyEkaWTZXmrr/bhe+yJy3L+y52Ak/yz9IudFTvstFa/rD6D6q2lDs1xFX4GNUEndHEq
-         z0bls0Vln5oH52sPajWw6ASBr1pmWS+B57Kp1Emmbo8JYG9ZE0LQBw0Qrz/mrNn9bq7Y
-         W9gLztDRp3M6RuVa5zN2gbI/Wq+CxuuvtrLo3/T06k+UVuz6Y0waQcaNy58IPMwQ1I2t
-         E+Fw==
-X-Forwarded-Encrypted: i=1; AJvYcCW6vFk8BMAJY1E67e2+myMXVZ9jPzhNA/qgWAyrGWccu5f41ZfkXuB9HG67lkP+8lYzrylXsfanwA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwgBj1qh3gCuE3qfN22G2vO9bqxlc4klIbpmhqjPF0a3k8jPle
-	VFz/PTiuZqkP8ZtnVyFJK5B7VANOq8/w7gqEZSO1VQBIuaHckPrs8u8wrB1HWL91p7dL3JYNwiK
-	71E7jYHY=
-X-Gm-Gg: ASbGncsHK8dfRRRWwz0gZKxneqjB4JJjsY6ypAAEEurnJLDr5Z8PzTT0G1fuAH2+I1N
-	FkDK59QwRmGIaD9qjYMRyKjVXP63u60IgCvW9vctIYvvKnNTdqvrmTmQyKwpeRzClpgPbKNIvmI
-	CbvIFo2WOys/y9cTFnl9ADa56d8tFpNNnX5vIL36XndykfXNh2svBLZnOzKdYF8edeZkf3i2pjA
-	scp3z7hhLHcVe1nE0R8LTKxwypdbDT3CCMY4wcgJ1nlHHOpQ3ux6LSMauxCfhZiXXoHZHFALfh5
-	u3i4mr31cnOTBO0X2jukR12nKppLTA3J0awDs/450yu07DzcczZ4iCTr5Krh2xKIG1SAcas6cb4
-	XdVD4Ght2VNz5k7SVSMFozT1aDktp+HoMMuAGgEsIPz6TlUOZOsb80V8eob7OX4XrxKPIToQVWE
-	bIZTSEQlXYuZGj7XM=
-X-Google-Smtp-Source: AGHT+IF3ZZ3fQlFIqJkyeYbjTLZOtGoT+mUpltJyLqRT26a9VGgJbaG+b2mPBhFMnJ9KbutJzXV1Gw==
-X-Received: by 2002:a05:7022:a8c:b0:119:e56b:958c with SMTP id a92af1059eb24-11c9d7153d8mr8187102c88.17.1764039544335;
-        Mon, 24 Nov 2025 18:59:04 -0800 (PST)
+        bh=fY1t3qEw9up3zZahP6BmPOCapaIM+S0F2CsFNk/g7So=;
+        b=vSXZPajQPnRgxXvFCQPsoJDZQ9T+HMjV/eVLzzJM9A135fg/+smITGeNMrbtW6R9+e
+         8Au+mbIlgdazSnJmwazJL9gJ8Syosn6KQHcLKyN8WMtsqekwJBlTxneZiXDz/FxmzFss
+         gTaDWYMWxmpPbpu35MXkMrMpPiqZyNij4rC4oZPVcfFyEdU99I0Sq8iY/otcZNBxrtVa
+         uWAaAABTfhbRC3CN6TnDOqLEZ6YxvS3oYHVZycDkB9cNsI0UPFT4fVpCGNSzHV+9jebz
+         UWBdawXuN6yyxv6pga4jJLR3Br3rWWscNoyvkAP35HvfvwepU5Eo0xBhV1lNSlW8Lpxx
+         P5YQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXbpD1Bw4wSqVHyKg2UouXOKWbfnbP78X/CtdO+Q647Adidmk+9DzctN+6igdyA9U65XbDkGBiQyA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrtjSvO7Wkpx6bySv5iyTcQnx4jot9M5fxHa6a10AiGlGkNe47
+	6RcmWjh3rHvdxOWMkCPffC304FuQAnR6mGUg7EI3FcOtKLRMdY1Gw1eGv5Xla24edIs=
+X-Gm-Gg: ASbGncs71mzQJ1ZVvSHaNZxU38WFPDxpSQv3vBELfDOE0pfann+tsdctgUuHJz2KlOp
+	ba7KFfTAZw3D4rc6z/C4biI7ofl+gzEEMRkJRv/+G+3JI7r2gTiQ5DYyWGcWyB4BJcwjtS/NPur
+	iw73Rtbvj7qjw8uPsb0JEr3Do4miIJz9gK32I7T0KGr2eNH8/8Py0BmSe+DoVmD7lkcRbOLw+Oz
+	T/N92NqeAQbH92Ks7tFyXtHhVR3fzSqV812cLMYgudRLSKmxx9ZasRo8HGuEaEJK91mkRKrZL4A
+	FVlaiDz2tSYV3h4Lkp47FGk1TgyKnpvxfltveBdpXya6BEvjEmWrw4umhFS/o2Me17dO9ATnVEe
+	KV7dx4tHjlxYCgFudvWXsOsGWYwdPhOwNkSR2AOXBBv0YAFr38XSs/RcQKst8vxUFGwTHYNXNJ7
+	Rhp6/t
+X-Google-Smtp-Source: AGHT+IGC9Hyfim/WIXU0HSZmLz3yGQUf+7zNcitVSoymJQT8gmqWVT9/r/xC9HaTimOJHRaEpjukUQ==
+X-Received: by 2002:a05:7022:7a6:b0:11a:23fb:16e2 with SMTP id a92af1059eb24-11cb3ee231amr1001440c88.9.1764039548635;
+        Mon, 24 Nov 2025 18:59:08 -0800 (PST)
 Received: from f771fd7c9232 ([20.38.40.137])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11c93e5674csm76551652c88.8.2025.11.24.18.59.03
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11cc631c236sm4359758c88.7.2025.11.24.18.59.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Nov 2025 18:59:03 -0800 (PST)
+        Mon, 24 Nov 2025 18:59:07 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -81,16 +80,17 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: [REGRESSION] thermal/testing: (build) cast from 'void (*)(struct
- callback_head
- *)' to 'void (*)(struct r...
+Content-Transfer-Encoding: 8bit
+Subject: 
+ =?utf-8?q?=5BREGRESSION=5D_thermal/testing=3A_=28build=29_=E2=80=98waiter?=
+ =?utf-8?q?=E2=80=99_declared_here_in_kernel/locking/semaphore=2Eo_=28kernel?=
+ =?utf-8?q?/locki=2E=2E=2E?=
 From: KernelCI bot <bot@kernelci.org>
 To: kernelci-results@groups.io
 Cc: gus@collabora.com, linux-pm@vger.kernel.org
 Reply-To: kernelci@lists.linux.dev
-Date: Tue, 25 Nov 2025 02:59:03 -0000
-Message-ID: <176403954305.358.17321672829642880147@f771fd7c9232>
+Date: Tue, 25 Nov 2025 02:59:07 -0000
+Message-ID: <176403954749.358.4098701715364376162@f771fd7c9232>
 
 
 
@@ -101,10 +101,10 @@ Hello,
 New build issue found on thermal/testing:
 
 ---
- cast from 'void (*)(struct callback_head *)' to 'void (*)(struct rq *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict] in kernel/sched/core.o (kernel/sched/core.c) [logspec:kbuild,kbuild.compiler.error]
+ ‘waiter’ declared here in kernel/locking/semaphore.o (kernel/locking/semaphore.c) [logspec:kbuild,kbuild.compiler.note]
 ---
 
-- dashboard: https://d.kernelci.org/i/maestro:5c62b04b94caf918bd860d772b299e78e084a809
+- dashboard: https://d.kernelci.org/i/maestro:29e511d02a40e5e8aebce9a21e484b270a4ada15
 - giturl: https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
 - commit HEAD:  ca48ad71717ddda50ee8554f37061879362439a3
 
@@ -112,36 +112,31 @@ New build issue found on thermal/testing:
 
 Log excerpt:
 =====================================================
-kernel/sched/core.c:4750:10: error: cast from 'void (*)(struct callback_head *)' to 'void (*)(struct rq *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
- 4750 |                 func = (void (*)(struct rq *))head->func;
-      |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-kernel/sched/core.c:4763:10: error: cast from 'void (*)(struct rq *)' to 'void (*)(struct callback_head *)' converts to incompatible function type [-Werror,-Wcast-function-type-strict]
- 4763 |         .func = (void (*)(struct callback_head *))balance_push,
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  AS      arch/x86/realmode/rmpiggy.o
-  HOSTCC  certs/extract-cert
-  CC      arch/x86/entry/vdso/vclock_gettime.o
-  CC      arch/x86/events/intel/ds.o
-  AR      arch/x86/realmode/built-in.a
-  AR      arch/x86/net/built-in.a
-  CC      arch/x86/events/amd/uncore.o
-  CC      mm/filemap.o
-  CC      arch/x86/kernel/fpu/regset.o
-3 errors generated.
-  CC      kernel/locking/semaphore.o
+kernel/locking/semaphore.c:212:33: note: ‘waiter’ declared here
+  212 |         struct semaphore_waiter waiter;
+      |                                 ^~~~~~
+kernel/locking/semaphore.c:240:59: note: ‘sem’ declared here
+  240 | static inline int __sched __down_common(struct semaphore *sem, long state,
+      |                                         ~~~~~~~~~~~~~~~~~~^~~
+cc1: all warnings being treated as errors
 
 =====================================================
 
 
 # Builds where the incident occurred:
 
-## x86_64_defconfig on (x86_64):
-- compiler: clang-21
-- config: https://files.kernelci.org/kbuild-clang-21-x86-69250ba0f5b8743b1f5fc223/.config
-- dashboard: https://d.kernelci.org/build/maestro:69250ba0f5b8743b1f5fc223
+## x86_64_defconfig+kselftest on (x86_64):
+- compiler: gcc-14
+- config: https://files.kernelci.org/kbuild-gcc-14-x86-build-only-69250bcaf5b8743b1f5fc256/.config
+- dashboard: https://d.kernelci.org/build/maestro:69250bcaf5b8743b1f5fc256
+
+## x86_64_defconfig+lab-setup+x86-board+kselftest on (x86_64):
+- compiler: gcc-14
+- config: https://files.kernelci.org/kbuild-gcc-14-x86-69250bc5f5b8743b1f5fc24e/.config
+- dashboard: https://d.kernelci.org/build/maestro:69250bc5f5b8743b1f5fc24e
 
 
-#kernelci issue maestro:5c62b04b94caf918bd860d772b299e78e084a809
+#kernelci issue maestro:29e511d02a40e5e8aebce9a21e484b270a4ada15
 
 Reported-by: kernelci.org bot <bot@kernelci.org>
 
