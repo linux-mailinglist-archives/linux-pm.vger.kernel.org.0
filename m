@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-38566-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38567-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5513BC84BB0
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:27:47 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68E76C84BAD
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:27:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B1A1834FE23
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 11:27:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 128EB4E8E0F
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 11:27:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5F663164CE;
-	Tue, 25 Nov 2025 11:27:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D577314D3B;
+	Tue, 25 Nov 2025 11:27:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="da2a8GT8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ux8eod0u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949D93195E3
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 11:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82140319852
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 11:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764070027; cv=none; b=qn5XNBchOPsF3DfJgnd7OmhNJWUGXu8giBRPmoFUjrg6ymtwUggxJBlHSGZgIOzeWGKWyCfQTBXuofsFblTBRrn1UiFJDCOFhvI/IvKLksymvJuHUN8v9ieWh8b4Bxoyq8JOJo4EOFHgPbPOdrzgYmXtHvCq1ILFdlIaAXH1rks=
+	t=1764070029; cv=none; b=ATfBFf9qOXsPwxEy0SeEPUcc7bQyIAzGMgZPUSafKpnXzkdnrQ6Qmc9CRj9dV0fBpl1JgU3TkO84mM8JUf7TpUQdvazWaPbl5dqwwEqFEoOzp1MnQpK42terp75u6SQJMUJ+G5gY7mgJ3wStKPEIPDAvwDUDHGurim47OtK6PbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764070027; c=relaxed/simple;
-	bh=a/jMPuNL0LXh8mbOwFnvXiyONNtTPYp9ciUcBqd+xDc=;
+	s=arc-20240116; t=1764070029; c=relaxed/simple;
+	bh=VU9S2gTiBfBqPpLuX8g7itKZUK/ev7QCKE78FGsGaTY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XuzRfLBKipl6+NwNqlqPhjka4RmX2GWRBNLpDswTK9kVDdNqPx9r2HGonQTjnkXF5mhw5flxAwcIZQtYuCXGW0W9Hecm0Ua9VaiK44RtGmp92LxkbgNL6zLl2ZqPY+wj0ZWEUT4uv/QPgua+yYJfugJMmWSsIV6ys5fmuyB3Kog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=da2a8GT8; arc=none smtp.client-ip=209.85.167.44
+	 MIME-Version; b=sG54Kn2M0FPnxR/UeuMsFV7SDJJSkGcjAu9nXOrA0iLXbzR2rpwXCackjE295owfGBjU7ICAbDjfjrGy//dVB7osP2rHDufF3XMy0BZ5ZvXX0jZ4C45ATUSiWmeNDw3UPmfHq2lBkowK+sWEci3Nje9qQnQQVb3VxLeZRJrodhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ux8eod0u; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-59578e38613so6222782e87.2
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 03:27:04 -0800 (PST)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-595825c8eb3so5443929e87.0
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 03:27:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764070023; x=1764674823; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1764070026; x=1764674826; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0SsQjAUBc4I4Ftomg4p9T07PlaUDAMfxP/280o2pMx8=;
-        b=da2a8GT8Q/R45NwSk4mrwYahro3DCk5W3ATU8pvMb+HgD2OjPj0RUlSKSKTGPTqQZl
-         JXRsha9MMwebxH4O6jRwLRyFm4Q/otynOJTV0hFpaO/aS+v+hWLoo/9icvx5/XsFrlX8
-         vwBMB1E4LNeDAj489Et+dB6tkpCo3lE+dBY8i+X8Y4YYtH68t2T9yRv9ckO7NSPi6uBa
-         VwP4fjLwOeaMNixcXr7/cwLNL/N/KQ1MMoco+wGKnM/Uxrn3kimdzI8tujd8AvjIvZAZ
-         KpZzU9MHgPzGinlOC/TYAmd1pUjhKxsI4aX+MLWp6z+BpnTLCxW+xHpdAm5p4pf9Qv3c
-         VBeg==
+        bh=MXSNim2QNAEfMWA0bqcIei0hGjp8YF0YF97p3EaO60o=;
+        b=Ux8eod0u+Fy8rtcdbn8XIk9YEHpLbVTxHkQxPwGD5Rp0W5PTMR1qbtlLVB+pXojzMu
+         nzIf1HKsrgtE3VL9gtS4fcmxZBj3H8iEdD6LcV4WyfBwSGFVtoQO1ndMQGGCstlzzcdG
+         Tk0Sk8KvSEH5G5iVojvQo9jsRUqWDZXdlx439MWqV4jt+WDOtG2AXVwWVLzomYErJjKp
+         UYe0ynJ7a9AWuwgCBk37jSNba7fNoj4f6nhxW9M//j+U2ofyifmSNOUfMKd0a91QvmFR
+         1hajsQpHZ1FiQduR2+tB44LtKxDRm4bQqp3EFC+BhjeYAcI3slAX3Cmvxii+e2mxAz3x
+         Ktmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764070023; x=1764674823;
+        d=1e100.net; s=20230601; t=1764070026; x=1764674826;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=0SsQjAUBc4I4Ftomg4p9T07PlaUDAMfxP/280o2pMx8=;
-        b=v+1dyLIqNzV8wKsqlAw6UMI9WbppJ+Ou4jDhvKaWsUypt/a3PpobOXVFIA551EHtbu
-         eNFBhQduyD3ARD6cqqQB5kawjbp8x1Xlc7l5anPWBgo61QPxmbu68yLHDpHhvBlUE3iv
-         EHmEvEDB0bnxl4EVIriwNuINoCzj7zuxiLwczbz2xEpv6RZm2G9lehms8scZlLdFQi0P
-         Vhmh85GoGhe3Azi77qTAxCMu0iE/lPAQth3deHJ739hsEr5PNfdoPID6OAq28EfqcfjT
-         CGM4AcCYhHKV23j7IMwyzGXsw/kVHaeC17Hi89PRr07aD61mgFi9HrG/0358c1ybvgRR
-         Gu5g==
-X-Forwarded-Encrypted: i=1; AJvYcCWyqE8QeWgrpJDl0THiJF5xIwsBjryCa6OmLDsss9/FLJKJlqrb6ooIr2upZTaOx6pTv7zysIlNiQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywvm4UYmgCIYj3vVOHtn41yc0GKlnRr2E3q6xgomXPKGfMpVN6t
-	HYECK81rgDV8rXAK+Qa+kZO35osXNNfyNJp22fkJhNV13nUOCS3GiQsTi0gPLGVktcU=
-X-Gm-Gg: ASbGncteY0MSItrKVISE8A3BWZRxMvlGDbTzN2rzV9uaPgctaPd17m2uDuU9G1Yx1gg
-	na075TcL7W3sK7mouzk8EzGkehH2JmO6AX4JwqOF5DPuYNdV1a1mF68CbCNIls8b0tdcym8H32f
-	dStIDe0+4CImoUFC2MDAZYsmLVzYgCXyARyizG2os7yS8jEefivY4bPVSLey1tYDucEk56eS7/a
-	E7M85CAa3GUcgY1/9HhY1URBJY+/oYD84qopZs8ntgMjpaMYeYuhn06fYFkrohaM3HqrSqYoSFB
-	yWXrWnHpHsBcsA/jFEi9xHk+EN8zQxBjllBKrwhxbbe4Z1HQDbhQDSC1PesQTscgZ38wSDQAMKs
-	eTMfdq1918pO6nowcfm5uBdFU6wugiudUEJw7izC6/Kdt4d7/iEc1/N6RlvflKNuXfHiOVuFtks
-	T/TxSBU6sjmIjQSvLmePEyeM4mvfDTr5cG10Fj0IwUka9TKIHbuT0V8ak5NkKr
-X-Google-Smtp-Source: AGHT+IEFmutfa/ZxoF2Ngxs2HZf0XLR/CkiEIKyvnVme49BuzM4cktsh/YOqq0q7xYeTdoknxiJRAA==
-X-Received: by 2002:a05:6512:3d91:b0:594:2f72:2fa2 with SMTP id 2adb3069b0e04-596b4e4b868mr949083e87.5.1764070022707;
-        Tue, 25 Nov 2025 03:27:02 -0800 (PST)
+        bh=MXSNim2QNAEfMWA0bqcIei0hGjp8YF0YF97p3EaO60o=;
+        b=wWdPbbkGazPqxU8t2ry6p1+qU1PoIl/h3tVuixK5b+nVLfDMjurRHAFVqo7CQMWSjh
+         IPhdOMRoWU13mHpkhl1o8iA/Aicsm1pp+zGK4XsLX1BN6vEMYHL99Snn/zphkHZ+kbZH
+         Cl1OXmwyYyAUz4uvRxNEJmy+Ogod8Vr5jemXrEwv4e6SZHvQogfV5Ro3ppz0UssBGqBs
+         1cccE8KcMMegigoDQNkGaUjWWRQpep3lq6ee7/B8JXOljx3+XZlztGYqnfVRsCU3Wjv/
+         TZTPFghAiVHOG1Ii2drP6GZhb+883yp5Vmnz+iqqvwUqeyBy71qZn/6f2zp81LrmyZ7W
+         Ax2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWQ8NdEPsRrbglWg+AG1MfVJ4DMx8bEzz5Z7En3fqvFwLwpWwg+tvOigs8RKbOF4kO3yBbRlzWm2A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYj8tmoZOi2T5OfqWZLXPBLfa0o3EC1n9VMXhR1+2GFxO2Jynz
+	Zs2+devJJs57Dc0qRtSASd3uhEWsPNxxp2TG14s385B7coSOx3sEfoeV0QIUuLNTQy4=
+X-Gm-Gg: ASbGncuMDo3hAtjNpOQYcYiheX+qLO42T5Hua5NpdZdB6TL1s0zlXCYIqHRFAcJDzB1
+	buy2k402BdlMCjQwRgxCU/B7RY5/W6Be43JA7mMXvqTCOyfLB64hU0MwWFAEk+PiQuTHBxzH4br
+	dawiwdSArBr44xaGV1jYHm5bIlw8v99ByiLixUEbAefKvhAVE2JCAptL9s9TcP5d/xPbgB5rwu8
+	JEf7OB1HhbcAcTiJtKjZeWNLfJiUmLQfgg/aRV3Lrru8CMg0ClXwJT+7ww50akSaz8LrZE5uVna
+	E3USmLxN+lCwJbjEoAJh0nkUGfzgrhLhTgqZYwBj0M3GZdQqzuCB4J6hong73prmBnNcSN8N4BC
+	4wI+hc9V8fAtP2oWMqu1WOeUEGH4ZT6wwI6I7ShUkFfeCTkGaw1eZDquCwSkXwrfG1/CRf9YIT3
+	cuQiOg7/CZ2x9rhmWaqz3Z6p3n1Bu1ia7RRKbKjZEpIF1CV/1L9HWIBn2rmhqy
+X-Google-Smtp-Source: AGHT+IH0spmvYE7vsLYvU6CWBQu+9dSmSus9W4Lq8aSvY9tGf9JRWtAh5DwE7Z4KHFl6BrOxsXpyVw==
+X-Received: by 2002:a05:6512:b0f:b0:594:2b58:ab83 with SMTP id 2adb3069b0e04-596b528d61amr1089814e87.40.1764070025793;
+        Tue, 25 Nov 2025 03:27:05 -0800 (PST)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969db7563fsm4993526e87.2.2025.11.25.03.27.00
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969db7563fsm4993526e87.2.2025.11.25.03.27.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 03:27:01 -0800 (PST)
+        Tue, 25 Nov 2025 03:27:04 -0800 (PST)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	linux-pm@vger.kernel.org
@@ -89,9 +89,9 @@ Cc: Vincent Guittot <vincent.guittot@linaro.org>,
 	Deepti Jaggi <quic_djaggi@quicinc.com>,
 	Ulf Hansson <ulf.hansson@linaro.org>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 4/6] sched: idle: Respect the CPU system wakeup QoS limit for s2idle
-Date: Tue, 25 Nov 2025 12:26:45 +0100
-Message-ID: <20251125112650.329269-5-ulf.hansson@linaro.org>
+Subject: [PATCH v4 5/6] cpuidle: Respect the CPU system wakeup QoS limit for cpuidle
+Date: Tue, 25 Nov 2025 12:26:46 +0100
+Message-ID: <20251125112650.329269-6-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251125112650.329269-1-ulf.hansson@linaro.org>
 References: <20251125112650.329269-1-ulf.hansson@linaro.org>
@@ -103,11 +103,10 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A CPU system wakeup QoS limit may have been requested by user space. To
-avoid breaking this constraint when entering a low power state during
-s2idle, let's start to take into account the QoS limit.
+The CPU system wakeup QoS limit must be respected for the regular cpuidle
+state selection. Therefore, let's extend the common governor helper
+cpuidle_governor_latency_req(), to take the constraint into account.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Dhruva Gole <d-gole@ti.com>
 Reviewed-by: Kevin Hilman (TI) <khilman@baylibre.com>
 Tested-by: Kevin Hilman (TI) <khilman@baylibre.com>
@@ -118,111 +117,27 @@ Changes in v4:
 	- Added tags.
 
 Changes in v3:
-	- Updated commit message and added ack from Peter.
-
-Changes in v2:
-	- Rework the code to take into account the failure/error path, when we
-	don't find a s2idle specific state.
+	- New patch.
 
 ---
- drivers/cpuidle/cpuidle.c | 12 +++++++-----
- include/linux/cpuidle.h   |  6 ++++--
- kernel/sched/idle.c       | 12 +++++++-----
- 3 files changed, 18 insertions(+), 12 deletions(-)
+ drivers/cpuidle/governor.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/cpuidle/cpuidle.c b/drivers/cpuidle/cpuidle.c
-index 56132e843c99..c7876e9e024f 100644
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -184,20 +184,22 @@ static noinstr void enter_s2idle_proper(struct cpuidle_driver *drv,
-  * cpuidle_enter_s2idle - Enter an idle state suitable for suspend-to-idle.
-  * @drv: cpuidle driver for the given CPU.
-  * @dev: cpuidle device for the given CPU.
-+ * @latency_limit_ns: Idle state exit latency limit
-  *
-  * If there are states with the ->enter_s2idle callback, find the deepest of
-  * them and enter it with frozen tick.
-  */
--int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev)
-+int cpuidle_enter_s2idle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-+			 u64 latency_limit_ns)
- {
- 	int index;
+diff --git a/drivers/cpuidle/governor.c b/drivers/cpuidle/governor.c
+index 0d0f9751ff8f..5d0e7f78c6c5 100644
+--- a/drivers/cpuidle/governor.c
++++ b/drivers/cpuidle/governor.c
+@@ -111,6 +111,10 @@ s64 cpuidle_governor_latency_req(unsigned int cpu)
+ 	struct device *device = get_cpu_device(cpu);
+ 	int device_req = dev_pm_qos_raw_resume_latency(device);
+ 	int global_req = cpu_latency_qos_limit();
++	int global_wake_req = cpu_wakeup_latency_qos_limit();
++
++	if (global_req > global_wake_req)
++		global_req = global_wake_req;
  
- 	/*
--	 * Find the deepest state with ->enter_s2idle present, which guarantees
--	 * that interrupts won't be enabled when it exits and allows the tick to
--	 * be frozen safely.
-+	 * Find the deepest state with ->enter_s2idle present that meets the
-+	 * specified latency limit, which guarantees that interrupts won't be
-+	 * enabled when it exits and allows the tick to be frozen safely.
- 	 */
--	index = find_deepest_state(drv, dev, U64_MAX, 0, true);
-+	index = find_deepest_state(drv, dev, latency_limit_ns, 0, true);
- 	if (index > 0) {
- 		enter_s2idle_proper(drv, dev, index);
- 		local_irq_enable();
-diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-index a9ee4fe55dcf..4073690504a7 100644
---- a/include/linux/cpuidle.h
-+++ b/include/linux/cpuidle.h
-@@ -248,7 +248,8 @@ extern int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
- 				      struct cpuidle_device *dev,
- 				      u64 latency_limit_ns);
- extern int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
--				struct cpuidle_device *dev);
-+				struct cpuidle_device *dev,
-+				u64 latency_limit_ns);
- extern void cpuidle_use_deepest_state(u64 latency_limit_ns);
- #else
- static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
-@@ -256,7 +257,8 @@ static inline int cpuidle_find_deepest_state(struct cpuidle_driver *drv,
- 					     u64 latency_limit_ns)
- {return -ENODEV; }
- static inline int cpuidle_enter_s2idle(struct cpuidle_driver *drv,
--				       struct cpuidle_device *dev)
-+				       struct cpuidle_device *dev,
-+				       u64 latency_limit_ns)
- {return -ENODEV; }
- static inline void cpuidle_use_deepest_state(u64 latency_limit_ns)
- {
-diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-index c39b089d4f09..c1c3d0166610 100644
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -131,12 +131,13 @@ void __cpuidle default_idle_call(void)
- }
- 
- static int call_cpuidle_s2idle(struct cpuidle_driver *drv,
--			       struct cpuidle_device *dev)
-+			       struct cpuidle_device *dev,
-+			       u64 max_latency_ns)
- {
- 	if (current_clr_polling_and_test())
- 		return -EBUSY;
- 
--	return cpuidle_enter_s2idle(drv, dev);
-+	return cpuidle_enter_s2idle(drv, dev, max_latency_ns);
- }
- 
- static int call_cpuidle(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-@@ -205,12 +206,13 @@ static void cpuidle_idle_call(void)
- 		u64 max_latency_ns;
- 
- 		if (idle_should_enter_s2idle()) {
-+			max_latency_ns = cpu_wakeup_latency_qos_limit() *
-+					 NSEC_PER_USEC;
- 
--			entered_state = call_cpuidle_s2idle(drv, dev);
-+			entered_state = call_cpuidle_s2idle(drv, dev,
-+							    max_latency_ns);
- 			if (entered_state > 0)
- 				goto exit_idle;
--
--			max_latency_ns = U64_MAX;
- 		} else {
- 			max_latency_ns = dev->forced_idle_latency_limit_ns;
- 		}
+ 	if (device_req > global_req)
+ 		device_req = global_req;
 -- 
 2.43.0
 
