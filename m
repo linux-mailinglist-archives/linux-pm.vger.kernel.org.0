@@ -1,91 +1,143 @@
-Return-Path: <linux-pm+bounces-38585-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38586-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EFBFC84ECB
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 13:10:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3B18C84F54
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 13:26:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C92124E8C54
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:10:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73B153B094D
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:26:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26AB831ED71;
-	Tue, 25 Nov 2025 12:09:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C1231A7E7;
+	Tue, 25 Nov 2025 12:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6hHID/J"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5QtxH08"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D81B931ED67
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 12:09:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5427F2DE6E3
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 12:26:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764072567; cv=none; b=ru2r/52pNtnKX0LG5tsoijn+u7nSE/hMYJcM2vxSwKlpNU/4fs2T5u2V8z7AUTCm+bbcLuLJ+FWX6h9upyvhHCLtFkhQEhFDLlhzLzfJZmERItty1AoPE9V5bqj1R1dGGX1PhqLPDE63755skToq/3w/SFYKtSIvgvrCRf9uqPE=
+	t=1764073570; cv=none; b=Xce8DmeZaLHnb1sedR9JTcOcXBOUR+zv7Tx3QorWmhvk9GGrKEeSk5Zf43GOzw1xHMuYVfkC8jBI7wI2sZk1l7N6IpwWD//TKJc9J5s3Bce5HdBCPBf+HgUF4ueT+l9vG4pP6d8D1TicUQPL1KAPJ8C43K43zmZshIwI6Wno0g0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764072567; c=relaxed/simple;
-	bh=58WdHv0Q1QIG7qWTah23c6HvbdCd4eKE4+8IkHqhiWQ=;
+	s=arc-20240116; t=1764073570; c=relaxed/simple;
+	bh=Zvrwnbbw/3orNTGSrOMAUA5Y/Het52/a2ovrMrjm5ek=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZevcpImdoLDbXsdHDYcR1YHVGWgFR9dXDePYTvAmoDB/Aj+iEwXphNOIfD7jWd+iP0jnWo9KJICXKhzDBBe0L8tf7VVcSv3c1UVJ+21AAw5F/S+3k1zs5PUr9TZi2Ko8QwxVrutuZhY+ifpDpN07nbG8A3kwIScbrPLc6AvL45Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6hHID/J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A65EC19425
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 12:09:27 +0000 (UTC)
+	 To:Cc:Content-Type; b=I2gmMb9gjcVFPIhNkm88rPSh6AT1LwcseadAMd1rUWG6zOyezof76qWGSSrY3Os2lsS3jeU5FjjfGrS7O1SaYgnUlaDOFgUytXbQ7wTzu7DYdRZRcMfoBP/cKwr+Xe81ml33lbDAJjC+SCbyw1yoJwJnX1iDOGLe2bC5wEGzd84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5QtxH08; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E601FC19424
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 12:26:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764072567;
-	bh=58WdHv0Q1QIG7qWTah23c6HvbdCd4eKE4+8IkHqhiWQ=;
+	s=k20201202; t=1764073569;
+	bh=Zvrwnbbw/3orNTGSrOMAUA5Y/Het52/a2ovrMrjm5ek=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=T6hHID/JQZubgOMOOaPq391i1mgNZZLd0MRpGvzV44HCp5azZAR3jde7+ZpgzEhqm
-	 JF8ZH9XphEzufbb6oEzylcu2xBJPosvWGSMFzeZJf1PmMeWrgEY4sp+9cjCLrX1Ho8
-	 McICG63P3sYagaPLzvwP8EoenvUBIJWC8gm8kpff+ZiP5wjLNOywvoaMSZESOsxNN4
-	 AGZJHQQOohC4lSE/1lotHWtcLkX4S7kLYVslG7CScMvS4kPJG+Ges1mYnYK6rddslJ
-	 yKDXNBDNEt+LK4zv8IFM6Yq36JXvNiqtYaNKk/cv1srapdEOk6JTxIK76QgDGDaO5d
-	 JxMLgcx84tcoQ==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-657490df6f3so1967153eaf.2
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 04:09:27 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXdICTOR+Si6hyR27bARKCTw8f6gd9kpDUi8n0syVPCDakKoowv79LsFWzgPWibTg+Uhsy6xJQg/A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoI7Ip/CfYfRzTchtdPM7IjgWeHHwFTrekYnLFx0Fe1KZLHDKk
-	eFDpaUJbdHVmnU7KsTEmYTIukgTXofiIZdyJXBX6kk39zmkndNALyk6Tc63uSubVA+oD0OJmfo/
-	uzeycgetTKgHAqCmAWTwV5XBws3+189A=
-X-Google-Smtp-Source: AGHT+IE9qn6AkAdtcEqRltyfsyjDthReLV20d+nWAVJwXv6uEuvIWWnljgo784DDXu4sqInzpI2P5viZ6Dxb+5/MCp0=
-X-Received: by 2002:a05:6808:508c:b0:450:c9f3:8eff with SMTP id
- 5614622812f47-45112ba14c6mr5869562b6e.46.1764072566640; Tue, 25 Nov 2025
- 04:09:26 -0800 (PST)
+	b=G5QtxH08EzHMgZiGK+QFhhvwUS3GHyO6m87xJxD49GA9vM6DN59Jh3m0Xgvy6FycP
+	 qU94QhS6l0ueNnuiK/n5GrmWVRIsnSRVTpXRyF83zxaDVpLxHWpB/I8ZgaErA4Ve1F
+	 1GCc+/85owQbsqlcnSS6JWJSEqBkRXn2V3jCH0yxPjUXRYqpeBl2/gr+TXeBN9u33x
+	 EYYzzTsyJC8e/QcELc6ElTYlQ/vhyIrjVrvbJkcluMJjPeYT+dJTBk2euOd0qHSUrn
+	 6kKgT+TOjmSw79UKrUGcjbCl4Ea/lKbQUHUPqOkyPoeY8Q9/egSqQdPbu7wBxh8wer
+	 xwWQlEuuuHXxA==
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-45066bee74aso821895b6e.2
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 04:26:09 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVa0gbUWeLLkNSycBeaGKy/mSeHz9cQCqxtQb341P3nPDwnKzfSQ6VHqq9XYQH3rmtxwcY4XCSw1w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAtvMGohyugiMdxlF1jujgiD0oDTwy+yzAawlIo/dcBIGPgrwj
+	I3Ysnjgw+4/GFe0Oz8X9etGIDeHdujpoPO8EpyzQdrMXK1R39c/iHmOzMxfh7IsLxbt9RXBjRot
+	25BkMMmK2/HjIwbiBqNnMyjheuAWokc0=
+X-Google-Smtp-Source: AGHT+IGYguZlNaP1Qrg6qHtt+XGD/CWfI1p4aoYHhE0zHc88503s37W5EZKx023bHPOtiCTf9Je+0Zcu3TCCmNUIDNU=
+X-Received: by 2002:a05:6808:1a1d:b0:450:4cbc:b20c with SMTP id
+ 5614622812f47-45115aa5eadmr4879327b6e.37.1764073569139; Tue, 25 Nov 2025
+ 04:26:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251125032437.2056626-1-kaushlendra.kumar@intel.com>
-In-Reply-To: <20251125032437.2056626-1-kaushlendra.kumar@intel.com>
+References: <20251107184438.1328717-1-usama.anjum@collabora.com>
+ <20251107184438.1328717-4-usama.anjum@collabora.com> <CAJZ5v0gtGjE-rSwM4Kom4cDEhp3eSOkLCmbLwrt_9u9a7VP6zQ@mail.gmail.com>
+ <6f1f3210-47c6-4c00-8fb9-35f48bae2581@collabora.com>
+In-Reply-To: <6f1f3210-47c6-4c00-8fb9-35f48bae2581@collabora.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 25 Nov 2025 13:09:13 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0g=if_+6wDVTyKQqu5WfOh0VJV2frT-19Jn0isiB0iJnA@mail.gmail.com>
-X-Gm-Features: AWmQ_bkaJMfwYXHUlqGxCJ48nAxhrl5QecXLfrH6Q_sMgrFrjQKD8R0haCHdQ1U
-Message-ID: <CAJZ5v0g=if_+6wDVTyKQqu5WfOh0VJV2frT-19Jn0isiB0iJnA@mail.gmail.com>
-Subject: Re: [PATCH] sched/cpufreq: Fix capacity calc in shared policy update
-To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, vincent.guittot@linaro.org, 
-	dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de, 
-	vschneid@redhat.com, linux-pm@vger.kernel.org
+Date: Tue, 25 Nov 2025 13:25:56 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iDUPB9s2fPJxqVqPGj5wbw54tR4thmDD2V-r4+Q2prwg@mail.gmail.com>
+X-Gm-Features: AWmQ_bmYzcRJtuYDmncfjUQOlIEg9cepukxFQx45jUU5lmAWTSjkDX0FX6bWCqk
+Message-ID: <CAJZ5v0iDUPB9s2fPJxqVqPGj5wbw54tR4thmDD2V-r4+Q2prwg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] Input: Ignore the KEY_POWER events if hibernation is
+ in progress
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Peter Zijlstra <peterz@infradead.org>, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-input@vger.kernel.org, kernel@collabora.com, superm1@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 25, 2025 at 4:27=E2=80=AFAM Kaushlendra Kumar
-<kaushlendra.kumar@intel.com> wrote:
+On Tue, Nov 25, 2025 at 11:23=E2=80=AFAM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
 >
-> In sugov_next_freq_shared(), the CPU capacity is retrieved only
-> for the CPU that triggered the update (sg_cpu->cpu) and then
-> incorrectly applied to all CPUs in the shared frequency domain
-> during the loop.On heterogeneous systems with CPUs of different
-> capacities sharing a frequency domain, this causes incorrect
-> frequency selection.
+> On 11/24/25 11:50 PM, Rafael J. Wysocki wrote:
+> > On Fri, Nov 7, 2025 at 7:45=E2=80=AFPM Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >>
+> >> Input (Serio) drivers call input_handle_event(). Although the serio
+> >> drivers have duplicate events, they have separate code path and call
+> >> input_handle_event(). Ignore the KEY_POWER such that this event isn't
+> >> sent to the userspace if hibernation is in progress.
+> >
+> > Your change affects suspend too.
+> >
+> > Also, what's the goal you want to achieve?
+> Two goals:
+> * Don't send event to userspace
+> * Set pm_wakeup for hibernation cancellation for non-acpi devices (This a=
+pi
+>   call should be tested on non-acpi devices such as arm board to see if i=
+t
+>   helps. I don't have an arm board in hand)
+>
+> >
+> >> Abort the hibernation by calling pm_wakeup_dev_event(). In case of ser=
+io,
+> >> doesn't have wakeup source registered, this call doesn't do anything.
+> >> But there may be other input drivers which will require this.
+> >>
+> >> Without this, the event is sent to the userspace and it suspends the
+> >> device after hibernation cancellation.
+> >
+> > I think that's because user space handles it this way, isn't it?
+>
+> Yes, it depends on how userspace handles such events. There are different=
+ settings
+> configured for systemd-logind when power event is received. The purpose i=
+s to consume
+> this event to cancel the hibernation without letting userspace know about=
+ it.
+>
+> Thinking more about it, I wasn't sure if all of such events are compulsor=
+y to be
+> delivered to userspace. But then I found an example: In acpi_button_notif=
+y(), all
+> such events are not sent to userspace if button is suspended. So it seems=
+ okay to
+> not send this as well and just consume in the kernel.
 
-No, this is not what happens.  sugov_next_freq_shared() is for the
-cases when the frequency *needs* to be set for all CPUs in the domain
-in one go.
+You want the given key (and it doesn't matter whether or not this is
+KEY_POWER or something else) to play two roles.  One of them is to
+send a specific key code to user space and let it handle the keypress
+as it wants.  This is how it works most of the time.  The second one
+is to wake up the system from sleep (and I'm not sure why you want to
+limit this to hibernation) in which case the key code will not be sent
+to user space.
 
-Your patch is invalid, please be more careful.
+For this to work, you need to switch between the two modes quite
+precisely and checking things like pm_sleep_transition_in_progress()
+(which is only used for debug and its raciness is not relevant there)
+is not sufficient for this purpose.  That's what the "suspended" flag
+in the ACPI button driver is for.
 
