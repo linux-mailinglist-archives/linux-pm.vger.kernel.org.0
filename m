@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-38563-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38564-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B15EC84B99
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:27:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F802C84BB6
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:28:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 80C7F34FCA7
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 11:27:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09E273AE952
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 11:27:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 496D9315D2A;
-	Tue, 25 Nov 2025 11:27:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36529314D1B;
+	Tue, 25 Nov 2025 11:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xxSqO1hu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GURsFWKs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 319713148D7
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 11:26:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488F1315D22
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 11:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764070020; cv=none; b=b3H8F4ZNKYCxcIMvYJym/nOiScw7cj+UlCLZ/3PXeuby6WBDAhVr9xqm7j2INAu/FWaNgM2ZQfILo4CfPOT+YZj8KA7XqWpZbmDanZbQBm1mGrl0h/Xm2n0+vibE4b06ZvDnsD7wsSGO5cvjDsSp7foiI7CB2fEdkz9YKh3qAmw=
+	t=1764070023; cv=none; b=C3fsUMM4GopoPo+MwPV794Q4360JiGiIb/ZqySxa1sk80rFPtE4QHvzJ9BjwMpRajvXi2Be+psEVX3ESXxf54FulKytWGvv6YXXBtVH0AHk6/b+Y3r1t45hZV2gOKnO+zTpXbtZnJbltrrNQBPjTZ9VdNT10W9TawHuBxXz9xIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764070020; c=relaxed/simple;
-	bh=36iGndTEM/3YoIZN6fKWhfnsw6ftPmJLUkt15edtXOk=;
+	s=arc-20240116; t=1764070023; c=relaxed/simple;
+	bh=qWZZt0EJ5EGhQp+jROsS7jIaWHMmW8TPlU611Gbd3ug=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LFBfwzYGTl0kylgkfAP1H1J3LGepMrR1d0c3A1Si3SEGvJhPT3QRGbbj1paWJPwVK1iKj8UEUFqSz3LWY5UAGBX/LMGkPkvCUw/wtK3Kq0WGchtAPZEcORUirLKlZ6IFIMDb9V69DCtHV9nAM1Bf6yziWNfhevqqtCyzqCGzRqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xxSqO1hu; arc=none smtp.client-ip=209.85.167.52
+	 MIME-Version; b=hVKSNCyIA/966oOXQNsGLMrrjPs6+lOMXUdNs+9bp/Bh4jeoWcmfGva1I6STX6BUIIhMLNr7fCY3qHIJAgrH+QeC3kAzkNPF8NZhtPFbk3Y21QZpN8NjISg5U/x3KsuUYjaLi9qFbBzLB6usuj9vcxSH8cbGiH1cLpv486qgZrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GURsFWKs; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5943b62c47dso5262257e87.1
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 03:26:57 -0800 (PST)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5959105629bso5188045e87.2
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 03:26:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764070016; x=1764674816; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1764070018; x=1764674818; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FE45t6R4BBEDJliCvwSFl/kztT91PBe4qbzvkRlOVSY=;
-        b=xxSqO1huq9U/U3KwH9GZJriZslv/CLFzWu7f8rUgkAx4FCXIzAbt2Fk+2D9HsSQfHy
-         8geAfVK2rjlXuGvNA5RJt/2dok1+fyP8AyR0f7FGgMBv5HmUqWnB5dWPRQHPoo3in3Te
-         F6/LrjBZQDi4Vrehw7lFzqtXZ8LKQlXzL5fd0MP3f0zmJ8z4S2o3DH8zAk82OSqBfMjB
-         vjVftziOtvVaF5pL8jq2tcP3RpIhkY3luXCF0c/nqmyNmRX2OOIozfx4Pa6a4vnBDJ4C
-         oMNYop8nKe5QoaNItObZtnhBxVWNc7ragvr+z6g0ee2MKFDhhAQPB5Er84hd+AKiLDzl
-         BeEQ==
+        bh=YkBdbnO/aTuh3Uyl4FaE6iA6IZG4p2hYiXFE9xVcIHM=;
+        b=GURsFWKs2o/H6SYDHodny8XQ0QX+t5IW/HwszqcHo6e3VchnKaKAmmBJgL82du085z
+         e6SuFq2kpHJZvZqgbJAYFGXROF9zSCeGTnwFd7nSQIIcqYBIMEUq55196MobW09eIRx4
+         pnbAgHCqc+y2r3IkbKK/73pI8lJn4PZjN5ClsgcPX1ZEHxpV1PB9aSIpM+RheKvC1i5V
+         69NaNpKZc8LUmeHLi4IceUV1nd0KOwrr3cUzj4NMhGQ9kZlbmDOVEAjRGL6qSYgk7Yw8
+         T8y8ZsBs8jqA6oqEwUVUfiLPuxsN7Ii8UPeoZ9nHE7XfHboQKAoSwRL6WV8Q0q9O3ztM
+         hpBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764070016; x=1764674816;
+        d=1e100.net; s=20230601; t=1764070018; x=1764674818;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=FE45t6R4BBEDJliCvwSFl/kztT91PBe4qbzvkRlOVSY=;
-        b=qhxaarl0qAd7jKov7c/FT3n2K8wnL1WtBHjepUtPtijaxBj84NLPGNjS0wC2Ee9C9f
-         vmGysYBbhw+3703txtBqa+YgT4OWSIDqt5omvwLqlffjg0Df0CgBbnKr4Pt2JQyi+pPD
-         SRIED8f2xa0Yd/L9lgCppvnDmvWe+vRF58kQcneYOSmPCKgc/7ziOU2Thz87Zgf82p/D
-         9zTp6uWT1H1Zb6X7GiUVOGkEmpK87H0vSP80eX8HMR+XKKYdHpHh4Wm98h2VJiEwxxRn
-         Z1NxcOAd8oYYLo0kSXRXoPnB6agUaPFUYrozaIqDe0WiPDahX4uRwMICK8sSLwXySaOn
-         G1bQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUA1KqBuq8dw0aDXoH71tTsNG2MtOOMfAQVJ/3v//ReypXt0Gu79Wx5c8EdzpOtVyJqFS2Moc5MvQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyh9k106I5f3O3KsN7A/noCDr6BK9OnZOxDpAbsTEbA5w7F8XkJ
-	BAT+LdfxRc3GQ4VLTJHGLvdCsEnZNLMAuzvoyaPer7KQ6625jRyg/wseR/fcNqAEhbI=
-X-Gm-Gg: ASbGncvfjPvPmyjHed/X2wqulWKh/Y9Ae3phkM4Gugo/GrxbRf/IAt76livRXy2iZP0
-	5tyFva0x3LMST7lmDkYeg+vAoter3ZokwKPiOIHZ4nJ7L4K5xh/g5sl+tLpK65wabqpxXjPLiph
-	qNnyLaqdX83UD9q81Hz/S82aJBaxlwZqP3O4pTcdegjKlsWKcstBYDDkzXzHR5kyxs7ojYmr42K
-	uI/ZXJLKbYvat03RC1B9JWOJJeNcFyxKLOP4xUOGkZGlQ+CeHTdI3fZDJnhbzDPUInFz+B3DT0S
-	dk6tKwx98bWjsbrqlBB+Ef9fPOnlJhxuDpwvuSK8LuqdWTrZMA75bh2UYo5ZLtCVPRX7bkV0f7E
-	iqheyNdkJyE8RvzV4FkQVaMGC+Vp8zGLSyvQiOCH6nVlhFPeQN2cxgXTR5Gr5kfMPCU7NW+jDgO
-	ib10bItnfmr0Bwa5sgW1LgNsVLJxjsLA+Fl/mstADXR/391Edp98dBjeybMNA2
-X-Google-Smtp-Source: AGHT+IHQFhuvGIxrbLvzBOY3ImdRr5h5AdplkQMA/mpy30IgWDqDJmZVd9KXsBer5wdbinI8H9eOhQ==
-X-Received: by 2002:a05:6512:3341:b0:594:27dd:2700 with SMTP id 2adb3069b0e04-596a3ee51f6mr4340223e87.47.1764070016099;
-        Tue, 25 Nov 2025 03:26:56 -0800 (PST)
+        bh=YkBdbnO/aTuh3Uyl4FaE6iA6IZG4p2hYiXFE9xVcIHM=;
+        b=skODwzEyKrwx7AtdU9Vw/kPczNJH3hGC9pYoRzsnQxCaXKiNqCt1NuX+4ghQ2smMMs
+         dIahcj8lZGTCUkziGIKSFCDM5lQHkQfvdMwShgG3uvo753h9D9l8ZnHjZtmYtVu1SkEe
+         zqh6hTfXjq41YOylxU8LYg01lqsXyWIJGAotwcXEFv3qBGWwMAPAi/H3kCjIFChlsfmN
+         cuGe8TbS9erwrXuD3mjHb/JsctuvF9PGDkjCIpPnW/C+IhhhxGeoDmk/GjIbTkNzD7rj
+         5+bPP5roWhybFPdqEWNxY+ya86jcxmu/GucSKEx6vAyenZ3cm1sbS9Bp5NJ1SEVS6keK
+         rRVg==
+X-Forwarded-Encrypted: i=1; AJvYcCX78GiMKYNpWayUbihYbjra68gI8GAulZTwfNZD/bvJDi9uZNGALzkl5qHclPU7srpSz+/3W340gw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJ29veldIVo9+Ya2oDt4Cqotm3LV4ZXEBQp9s7kzPbHGnXv1o3
+	fnCakWfLEul4whJ1UQOXD79uhCpAWcM4g2Hb0Kg+MR3+GeTANzieEX6qfeyxFRD/xxQ=
+X-Gm-Gg: ASbGncu4uug/k/0rprRNE3FS2gyxEpFbVJBI++shn0V+XEEa+ROjMsqhf9d+N714AEG
+	ldEWPaN3Ruy11HF80nviJC81/mFExaEtmO9SbgMPZZMLdHnQ1rpZaVE9g61qNrnXYQ3sSPkUIel
+	eZKizaYyKZEqRdRRp3ML+9zw3DSPixHu1SR9hYNF05nr0fnI0DOnW+oHnXok1H2W8onlSpwcjw1
+	oA+AKpPA8Uv/fG7mLnt2PdCAMg4+A8xoN7UYmvxVhyLoCEvGI4w/rLt7PrQDGa59HaUWIqx08zl
+	/WpY1zDRf8jQqzoQ2fGppx88BCjnXBPJLtlZUVAPMHJOeWp9V+tyN0k5nk+0LprmH7kT/ZhALWz
+	nZNl7NYfbbOG6e5YAfcHm1JQAxaHTIjM9SlrdyNcedPqjXSsyE96FaGjFqphZkF/GXO1y83d823
+	yYqkKdI+QLf2B9/sEz9LCkGiwU7s56p5etf6FH99lFcrSSxm6ABp28NFI0A/cl
+X-Google-Smtp-Source: AGHT+IF5/zPRqq5Gc8LX/DzP5wRoX37ptDORDPlLBcwihZhjQ8Hod/OKSQTB4ujkPlnaRcuFpIKOGw==
+X-Received: by 2002:a05:6512:3a82:b0:594:27dd:2701 with SMTP id 2adb3069b0e04-596b529d662mr891658e87.49.1764070018227;
+        Tue, 25 Nov 2025 03:26:58 -0800 (PST)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969db7563fsm4993526e87.2.2025.11.25.03.26.54
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969db7563fsm4993526e87.2.2025.11.25.03.26.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 03:26:55 -0800 (PST)
+        Tue, 25 Nov 2025 03:26:56 -0800 (PST)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	linux-pm@vger.kernel.org
@@ -89,9 +89,9 @@ Cc: Vincent Guittot <vincent.guittot@linaro.org>,
 	Deepti Jaggi <quic_djaggi@quicinc.com>,
 	Ulf Hansson <ulf.hansson@linaro.org>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/6] PM: QoS: Introduce a CPU system wakeup QoS limit
-Date: Tue, 25 Nov 2025 12:26:42 +0100
-Message-ID: <20251125112650.329269-2-ulf.hansson@linaro.org>
+Subject: [PATCH v4 2/6] pmdomain: Respect the CPU system wakeup QoS limit for s2idle
+Date: Tue, 25 Nov 2025 12:26:43 +0100
+Message-ID: <20251125112650.329269-3-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251125112650.329269-1-ulf.hansson@linaro.org>
 References: <20251125112650.329269-1-ulf.hansson@linaro.org>
@@ -103,15 +103,11 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some platforms supports multiple low power states for CPUs that can be used
-when entering system-wide suspend. Currently we are always selecting the
-deepest possible state for the CPUs, which can break the system wakeup
-latency constraint that may be required for a use case.
-
-Let's take the first step towards addressing this problem, by introducing
-an interface for user space, that allows us to specify the CPU system
-wakeup QoS limit. Subsequent changes will start taking into account the new
-QoS limit.
+A CPU system wakeup QoS limit may have been requested by user space. To
+avoid breaking this constraint when entering a low power state during
+s2idle through genpd, let's extend the corresponding genpd governor for
+CPUs. More precisely, during s2idle let the genpd governor select a
+suitable domain idle state, by taking into account the QoS limit.
 
 Reviewed-by: Dhruva Gole <d-gole@ti.com>
 Reviewed-by: Kevin Hilman (TI) <khilman@baylibre.com>
@@ -120,188 +116,94 @@ Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
 
 Changes in v4:
-	- Added Kconfig help (Dhruva).
 	- Added tags.
 
 Changes in v3:
-	- Add Kconfig for the new interface (Rafael).
-	- Updated commit message.
+	- Updated the commit message.
 
 Changes in v2:
-	- Renamings to reflect the QoS are limited to CPUs.
-	- Move code inside "CONFIG_CPU_IDLE".
----
- include/linux/pm_qos.h |   9 ++++
- kernel/power/Kconfig   |  11 +++++
- kernel/power/qos.c     | 106 +++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 126 insertions(+)
+	- Limite the change to the genpd governor for CPUs.
 
-diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-index 4a69d4af3ff8..6cea4455f867 100644
---- a/include/linux/pm_qos.h
-+++ b/include/linux/pm_qos.h
-@@ -162,6 +162,15 @@ static inline void cpu_latency_qos_update_request(struct pm_qos_request *req,
- static inline void cpu_latency_qos_remove_request(struct pm_qos_request *req) {}
- #endif
+---
+ drivers/pmdomain/core.c     | 10 ++++++++--
+ drivers/pmdomain/governor.c | 27 +++++++++++++++++++++++++++
+ include/linux/pm_domain.h   |  1 +
+ 3 files changed, 36 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+index 61c2277c9ce3..4fd546ef0448 100644
+--- a/drivers/pmdomain/core.c
++++ b/drivers/pmdomain/core.c
+@@ -1425,8 +1425,14 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
+ 			return;
+ 	}
  
-+#ifdef CONFIG_PM_QOS_CPU_SYSTEM_WAKEUP
-+s32 cpu_wakeup_latency_qos_limit(void);
-+#else
-+static inline s32 cpu_wakeup_latency_qos_limit(void)
-+{
-+	return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
-+}
-+#endif
-+
- #ifdef CONFIG_PM
- enum pm_qos_flags_status __dev_pm_qos_flags(struct device *dev, s32 mask);
- enum pm_qos_flags_status dev_pm_qos_flags(struct device *dev, s32 mask);
-diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-index 54a623680019..05337f437cca 100644
---- a/kernel/power/Kconfig
-+++ b/kernel/power/Kconfig
-@@ -202,6 +202,17 @@ config PM_WAKELOCKS_GC
- 	depends on PM_WAKELOCKS
- 	default y
- 
-+config PM_QOS_CPU_SYSTEM_WAKEUP
-+	bool "User space interface for CPU system wakeup QoS"
-+	depends on CPU_IDLE
-+	help
-+	  Enable this to allow user space via the cpu_wakeup_latency file to
-+	  specify a CPU system wakeup latency limit.
-+
-+	  This may be particularly useful for platforms supporting multiple low
-+	  power states for CPUs during system-wide suspend and s2idle in
-+	  particular.
-+
- config PM
- 	bool "Device power management core functionality"
- 	help
-diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index 4244b069442e..f7d8064e9adc 100644
---- a/kernel/power/qos.c
-+++ b/kernel/power/qos.c
-@@ -415,6 +415,105 @@ static struct miscdevice cpu_latency_qos_miscdev = {
- 	.fops = &cpu_latency_qos_fops,
- };
- 
-+#ifdef CONFIG_PM_QOS_CPU_SYSTEM_WAKEUP
-+/* The CPU system wakeup latency QoS. */
-+static struct pm_qos_constraints cpu_wakeup_latency_constraints = {
-+	.list = PLIST_HEAD_INIT(cpu_wakeup_latency_constraints.list),
-+	.target_value = PM_QOS_RESUME_LATENCY_NO_CONSTRAINT,
-+	.default_value = PM_QOS_RESUME_LATENCY_NO_CONSTRAINT,
-+	.no_constraint_value = PM_QOS_RESUME_LATENCY_NO_CONSTRAINT,
-+	.type = PM_QOS_MIN,
-+};
-+
-+/**
-+ * cpu_wakeup_latency_qos_limit - Current CPU system wakeup latency QoS limit.
-+ *
-+ * Returns the current CPU system wakeup latency QoS limit that may have been
-+ * requested by user space.
-+ */
-+s32 cpu_wakeup_latency_qos_limit(void)
-+{
-+	return pm_qos_read_value(&cpu_wakeup_latency_constraints);
-+}
-+
-+static int cpu_wakeup_latency_qos_open(struct inode *inode, struct file *filp)
-+{
-+	struct pm_qos_request *req;
-+
-+	req = kzalloc(sizeof(*req), GFP_KERNEL);
-+	if (!req)
-+		return -ENOMEM;
-+
-+	req->qos = &cpu_wakeup_latency_constraints;
-+	pm_qos_update_target(req->qos, &req->node, PM_QOS_ADD_REQ,
-+			     PM_QOS_RESUME_LATENCY_NO_CONSTRAINT);
-+	filp->private_data = req;
-+
-+	return 0;
-+}
-+
-+static int cpu_wakeup_latency_qos_release(struct inode *inode,
-+					  struct file *filp)
-+{
-+	struct pm_qos_request *req = filp->private_data;
-+
-+	filp->private_data = NULL;
-+	pm_qos_update_target(req->qos, &req->node, PM_QOS_REMOVE_REQ,
-+			     PM_QOS_RESUME_LATENCY_NO_CONSTRAINT);
-+	kfree(req);
-+
-+	return 0;
-+}
-+
-+static ssize_t cpu_wakeup_latency_qos_read(struct file *filp, char __user *buf,
-+					   size_t count, loff_t *f_pos)
-+{
-+	s32 value = pm_qos_read_value(&cpu_wakeup_latency_constraints);
-+
-+	return simple_read_from_buffer(buf, count, f_pos, &value, sizeof(s32));
-+}
-+
-+static ssize_t cpu_wakeup_latency_qos_write(struct file *filp,
-+					    const char __user *buf,
-+					    size_t count, loff_t *f_pos)
-+{
-+	struct pm_qos_request *req = filp->private_data;
-+	s32 value;
-+
-+	if (count == sizeof(s32)) {
-+		if (copy_from_user(&value, buf, sizeof(s32)))
-+			return -EFAULT;
+-	/* Choose the deepest state when suspending */
+-	genpd->state_idx = genpd->state_count - 1;
++	if (genpd->gov && genpd->gov->system_power_down_ok) {
++		if (!genpd->gov->system_power_down_ok(&genpd->domain))
++			return;
 +	} else {
-+		int ret;
-+
-+		ret = kstrtos32_from_user(buf, count, 16, &value);
-+		if (ret)
-+			return ret;
++		/* Default to the deepest state. */
++		genpd->state_idx = genpd->state_count - 1;
 +	}
 +
-+	if (value < 0)
-+		return -EINVAL;
+ 	if (_genpd_power_off(genpd, false)) {
+ 		genpd->states[genpd->state_idx].rejected++;
+ 		return;
+diff --git a/drivers/pmdomain/governor.c b/drivers/pmdomain/governor.c
+index 39359811a930..bd1b9d66d4a5 100644
+--- a/drivers/pmdomain/governor.c
++++ b/drivers/pmdomain/governor.c
+@@ -415,9 +415,36 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
+ 	return false;
+ }
+ 
++static bool cpu_system_power_down_ok(struct dev_pm_domain *pd)
++{
++	s64 constraint_ns = cpu_wakeup_latency_qos_limit() * NSEC_PER_USEC;
++	struct generic_pm_domain *genpd = pd_to_genpd(pd);
++	int state_idx = genpd->state_count - 1;
 +
-+	pm_qos_update_target(req->qos, &req->node, PM_QOS_UPDATE_REQ, value);
++	if (!(genpd->flags & GENPD_FLAG_CPU_DOMAIN)) {
++		genpd->state_idx = state_idx;
++		return true;
++	}
 +
-+	return count;
++	/* Find the deepest state for the latency constraint. */
++	while (state_idx >= 0) {
++		s64 latency_ns = genpd->states[state_idx].power_off_latency_ns +
++				 genpd->states[state_idx].power_on_latency_ns;
++
++		if (latency_ns <= constraint_ns) {
++			genpd->state_idx = state_idx;
++			return true;
++		}
++		state_idx--;
++	}
++
++	return false;
 +}
 +
-+static const struct file_operations cpu_wakeup_latency_qos_fops = {
-+	.open = cpu_wakeup_latency_qos_open,
-+	.release = cpu_wakeup_latency_qos_release,
-+	.read = cpu_wakeup_latency_qos_read,
-+	.write = cpu_wakeup_latency_qos_write,
-+	.llseek = noop_llseek,
-+};
-+
-+static struct miscdevice cpu_wakeup_latency_qos_miscdev = {
-+	.minor = MISC_DYNAMIC_MINOR,
-+	.name = "cpu_wakeup_latency",
-+	.fops = &cpu_wakeup_latency_qos_fops,
-+};
-+#endif /* CONFIG_PM_QOS_CPU_SYSTEM_WAKEUP */
-+
- static int __init cpu_latency_qos_init(void)
- {
- 	int ret;
-@@ -424,6 +523,13 @@ static int __init cpu_latency_qos_init(void)
- 		pr_err("%s: %s setup failed\n", __func__,
- 		       cpu_latency_qos_miscdev.name);
+ struct dev_power_governor pm_domain_cpu_gov = {
+ 	.suspend_ok = default_suspend_ok,
+ 	.power_down_ok = cpu_power_down_ok,
++	.system_power_down_ok = cpu_system_power_down_ok,
+ };
+ #endif
  
-+#ifdef CONFIG_PM_QOS_CPU_SYSTEM_WAKEUP
-+	ret = misc_register(&cpu_wakeup_latency_qos_miscdev);
-+	if (ret < 0)
-+		pr_err("%s: %s setup failed\n", __func__,
-+		       cpu_wakeup_latency_qos_miscdev.name);
-+#endif
-+
- 	return ret;
- }
- late_initcall(cpu_latency_qos_init);
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index f67a2cb7d781..93ba0143ca47 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -153,6 +153,7 @@ enum genpd_sync_state {
+ };
+ 
+ struct dev_power_governor {
++	bool (*system_power_down_ok)(struct dev_pm_domain *domain);
+ 	bool (*power_down_ok)(struct dev_pm_domain *domain);
+ 	bool (*suspend_ok)(struct device *dev);
+ };
 -- 
 2.43.0
 
