@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-38622-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38623-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52F7FC85EA3
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 17:17:47 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 098C7C85ED9
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 17:19:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 447D54E2D62
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 16:17:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 706B235133B
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 16:17:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF542238176;
-	Tue, 25 Nov 2025 16:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5312A25782D;
+	Tue, 25 Nov 2025 16:17:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="OD+EaOhp"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="iNbRyOAM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8FC1E9B35;
-	Tue, 25 Nov 2025 16:17:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6424278F51;
+	Tue, 25 Nov 2025 16:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764087460; cv=none; b=pasfJQ0aAvxU8AY32MY+uvhFiAUfE4gUQm3hGk0m3Djz0CXaSjQ0uR+bsiOsraACGw61qS46HAurrCQAbGnWpX8St728qg4CCz6O0HNYc6sPp8T0P0vYH3UmgARxvpSjPIzgf9O2K+tWxGNl9AdaZuMdp1gEnpEkllTf5wj1yoA=
+	t=1764087462; cv=none; b=bVMN2KOQVrUqQbN9Y8BmbFUSyLXNdycHnR10DhxWtaV0kpAukfb621W9DOBuTiwp29skH2xKFoMm5cMpzptnw0BI6Z+lf0KbRBxGks4jJd6Ac6Z5xKeyfKC9zWEYkUs4G7528rjcINrSsq15rjAkU/v2QH5FTFWnCI4wqWFh7uI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764087460; c=relaxed/simple;
-	bh=B2nk7PV+5zaefXrB72GFZ6SD1N4A8I+iUXxYutK2H0s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=VbHplXntuG2D2m4Rap2slFyqK+t4/WMBW6PGNlRYEJPxODDNT8/28jcIbGoK0w4Hx77S5bDFNxEuDg9oQF4VQ1hjBCVgq14ykAPosDdwDrEWUwT0lMq9UM97DdkclyRnCEomlOe6F9bP12D7eOaZVGTYs+jsFh/3/3aemgrfJFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=OD+EaOhp; arc=none smtp.client-ip=148.251.105.195
+	s=arc-20240116; t=1764087462; c=relaxed/simple;
+	bh=wA3DIGO1oIoEB6lNDjSI7psqvT6nGHbhXESVUEEIA40=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=E977kscWI59dMDtoXDqCf1nq6yOpazGTTpE0y7JLQ5l7TdmpqE/OKxSjaCX9O8YiqdNy6IQJMYwoxYkRvrzUiOnMjjVMzGB2de60IILHCylLQkUWtIlGH0zaNjZBzyBtg1UPcix7M8sCxgPlRwchn6RL5UigKHTSXqvhdWLlBwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=iNbRyOAM; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1764087456;
-	bh=B2nk7PV+5zaefXrB72GFZ6SD1N4A8I+iUXxYutK2H0s=;
-	h=From:To:Cc:Subject:Date:From;
-	b=OD+EaOhpDL4UiZ+EO/YsVjRFyw0CoiJAO7B8aMXG2WtH6KLmuuKmvC0qzTW4ehYRD
-	 PxxVpFmUsZ8jqwO8DGZ6bm93MrMezla+J+X9eeO/qkY4h1Fpn95brJ2iBot4Lvm5W6
-	 sL1U0Lz4hFDfETbsP8Sv0vcuC97ySF59xXKaBWCtIRNwh3zx1rFU1QlkNCpPXy/kXo
-	 N5L/p0ayZmvKgYpZlDc56uEXFIqadO70elP/vRr4ZWzy0oc4R9u2AfkPNxN+8BxHdi
-	 lxSBfqzq3MPGX94PRegcdYriPtwxiGRJ2Y+Z+N+3u4QCavanSMDxbNlVvHf/RiuBrs
-	 LpHCB1waW+teQ==
+	s=mail; t=1764087458;
+	bh=wA3DIGO1oIoEB6lNDjSI7psqvT6nGHbhXESVUEEIA40=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=iNbRyOAMQh38tdj75MP0NNuwgPM8OdZVrXIskWaix9m9LTcbMoSKWus+lfLXECudS
+	 iKtiMhfbnWwOOXUrr8iKMX/g4X1O48GtPwGhDSC30hFinVJpEMBLkbjeV30l7/9bP5
+	 yK7uzzrh7jZ1WxndSqto7igFVH5oq/lBDDEmsAPGmPI/lliqSX2mH2uSKUSFPqjmZe
+	 gLNb7domjMX7y/4Qys0e4ShVAf+a8Zxvyda2RC9uW8ipBCTudGO0TIP/2gdMmcqJQ3
+	 qjWiHVouKt6t9mDJs/uGhgI1pWfKck+xA56Qi3jxV1w6liOSDMfNxgl5LWwbrzra5j
+	 ROD0U3DkwMLcA==
 Received: from laura.lan (unknown [IPv6:2001:b07:646b:e2:feae:4183:be92:e051])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: laura.nao)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 64BF717E04D6;
-	Tue, 25 Nov 2025 17:17:35 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0159C17E10E7;
+	Tue, 25 Nov 2025 17:17:36 +0100 (CET)
 From: Laura Nao <laura.nao@collabora.com>
 To: srini@kernel.org,
 	robh@kernel.org,
@@ -74,11 +75,14 @@ Cc: nfraprado@collabora.com,
 	kernel@collabora.com,
 	wenst@chromium.org,
 	fshao@chromium.org,
-	Laura Nao <laura.nao@collabora.com>
-Subject: [PATCH v5 0/8] Add thermal sensor driver support for Mediatek MT8196
-Date: Tue, 25 Nov 2025 17:16:50 +0100
-Message-Id: <20251125-mt8196-lvts-v4-v5-0-6db7eb903fb7@collabora.com>
+	Laura Nao <laura.nao@collabora.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 1/8] dt-bindings: thermal: mediatek: Add LVTS thermal controller support for MT8196
+Date: Tue, 25 Nov 2025 17:16:51 +0100
+Message-Id: <20251125-mt8196-lvts-v4-v5-1-6db7eb903fb7@collabora.com>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20251125-mt8196-lvts-v4-v5-0-6db7eb903fb7@collabora.com>
+References: <20251125-mt8196-lvts-v4-v5-0-6db7eb903fb7@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,53 +90,69 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-X-Change-ID: 20251121-mt8196-lvts-v4-a61fb5c27216
 Content-Transfer-Encoding: 8bit
 
-This patch series extends the MediaTek LVTS thermal driver to support the
-MT8196 SoC.
+Add LVTS thermal controller binding for MediaTek MT8196.
 
-MT8196 requires a different implementation of the lvts_temp_to_raw()
-function.
-
-To support this, the series introduces:
-
-- A new struct lvts_platform_ops to allow platform-specific
-  conversion logic between raw sensor values and temperature
-- A variant of the lvts_temp_to_raw() implementation
-- Platform data and controller definitions for MT8196
-
-Link to v4: https://lore.kernel.org/r/20251121-mt8196-lvts-v4-v4-0-357f955a3176@collabora.com
-
-Changes in v5:
-- Dropped patch 3
-- Added LVTS_NUM_CAL_OFFSETS_MT7988/LVTS_NUM_CAL_OFFSETS_MT8196 defines
-- Moved code that assembles calibration bytes from the efuse data into 
-  a dedicated lvts_decode_sensor_calibration() helper
-- Fixed prefix in patch 4 commit message
-- Dropped R-b/T-b tags on patch 2
-
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: Frank Wunderlich <frank-w@public-files.de>
+Signed-off-by: Laura Nao <laura.nao@collabora.com>
 ---
-Laura Nao (8):
-      dt-bindings: thermal: mediatek: Add LVTS thermal controller support for MT8196
-      thermal/drivers/mediatek/lvts: Make number of calibration offsets configurable
-      thermal/drivers/mediatek/lvts: Add platform ops to support alternative conversion logic
-      thermal/drivers/mediatek/lvts: Add lvts_temp_to_raw variant
-      thermal/drivers/mediatek/lvts: Add support for ATP mode
-      thermal/drivers/mediatek/lvts: Support MSR offset for 16-bit calibration data
-      thermal/drivers/mediatek/lvts_thermal: Add MT8196 support
-      dt-bindings: nvmem: mediatek: efuse: Add support for MT8196
+ .../bindings/thermal/mediatek,lvts-thermal.yaml    |  2 ++
+ .../dt-bindings/thermal/mediatek,lvts-thermal.h    | 26 ++++++++++++++++++++++
+ 2 files changed, 28 insertions(+)
 
- .../devicetree/bindings/nvmem/mediatek,efuse.yaml  |   1 +
- .../bindings/thermal/mediatek,lvts-thermal.yaml    |   2 +
- drivers/thermal/mediatek/lvts_thermal.c            | 326 +++++++++++++++++++--
- .../dt-bindings/thermal/mediatek,lvts-thermal.h    |  26 ++
- 4 files changed, 333 insertions(+), 22 deletions(-)
----
-base-commit: abadc219d77ce0e61fcac0147cc6cc69164af43e
-change-id: 20251121-mt8196-lvts-v4-a61fb5c27216
+diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+index 0259cd3ce9c5..beccdabe110b 100644
+--- a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+@@ -26,6 +26,8 @@ properties:
+       - mediatek,mt8192-lvts-mcu
+       - mediatek,mt8195-lvts-ap
+       - mediatek,mt8195-lvts-mcu
++      - mediatek,mt8196-lvts-ap
++      - mediatek,mt8196-lvts-mcu
+ 
+   reg:
+     maxItems: 1
+diff --git a/include/dt-bindings/thermal/mediatek,lvts-thermal.h b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+index ddc7302a510a..0ec8ad184d47 100644
+--- a/include/dt-bindings/thermal/mediatek,lvts-thermal.h
++++ b/include/dt-bindings/thermal/mediatek,lvts-thermal.h
+@@ -80,4 +80,30 @@
+ #define MT8192_AP_MD1   15
+ #define MT8192_AP_MD2   16
+ 
++#define MT8196_MCU_MEDIUM_CPU6_0        0
++#define MT8196_MCU_MEDIUM_CPU6_1        1
++#define MT8196_MCU_DSU2                 2
++#define MT8196_MCU_DSU3                 3
++#define MT8196_MCU_LITTLE_CPU3          4
++#define MT8196_MCU_LITTLE_CPU0          5
++#define MT8196_MCU_LITTLE_CPU1          6
++#define MT8196_MCU_LITTLE_CPU2          7
++#define MT8196_MCU_MEDIUM_CPU4_0        8
++#define MT8196_MCU_MEDIUM_CPU4_1        9
++#define MT8196_MCU_MEDIUM_CPU5_0        10
++#define MT8196_MCU_MEDIUM_CPU5_1        11
++#define MT8196_MCU_DSU0                 12
++#define MT8196_MCU_DSU1                 13
++#define MT8196_MCU_BIG_CPU7_0           14
++#define MT8196_MCU_BIG_CPU7_1           15
++
++#define MT8196_AP_TOP0                  0
++#define MT8196_AP_TOP1                  1
++#define MT8196_AP_TOP2                  2
++#define MT8196_AP_TOP3                  3
++#define MT8196_AP_BOT0                  4
++#define MT8196_AP_BOT1                  5
++#define MT8196_AP_BOT2                  6
++#define MT8196_AP_BOT3                  7
++
+ #endif /* __MEDIATEK_LVTS_DT_H */
 
-Best regards,
 -- 
-Laura Nao <laura.nao@collabora.com>
+2.39.5
 
