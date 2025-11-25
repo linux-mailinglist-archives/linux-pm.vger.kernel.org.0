@@ -1,40 +1,55 @@
-Return-Path: <linux-pm+bounces-38542-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38544-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD493C84494
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 10:45:43 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2F20C844F1
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 10:54:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 902054E1F18
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 09:45:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4A6914E377B
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 09:54:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A346B259CB6;
-	Tue, 25 Nov 2025 09:45:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFBFB2ECD34;
+	Tue, 25 Nov 2025 09:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="bb9QSvs3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA037256D;
-	Tue, 25 Nov 2025 09:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B72C2E9ECA;
+	Tue, 25 Nov 2025 09:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764063939; cv=none; b=ESJeLBQr2RzYpAsOU14ekiGPuHQSkcwi7SLZTjealRh+xhnE3+mV5b79c9m7SKg9uVSWC8Y0rXUa7/OPrxHa5OS6GVtntPb0PvBHvEljHXQ2EEQpShH8ZwaNviKGhfA9y1kpHy15h5Rw73tsN6dqkgpxnXVI2FS1ZiyBlBCMJPo=
+	t=1764064449; cv=none; b=WFGXFqUa7okNO0YBvcRH0U2OKSQtmPK8GglDVmEhK9/+uI75kIxHNfs5Xwsp/9j2yq374bbC08hvgwDSKZ8ur2RMPl97lz9gQb0xppJm6o6undHxdW5Omyync5Ij8U/RI1bf4AXs4TaTk6Mu2jtSmBPtspRSVsuEI1QB8A2ozzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764063939; c=relaxed/simple;
-	bh=a48C5T6ENsbSBoimwDvD/ho55hLflc0rsQZk/dIQaYE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s1Ge+uPSpwpCKilDolg4lwOt7QRYAe59PQvqE0wGwbTD6h1pWE7hIdQSMBfnyZapujcOxuTS9rlLuwevEoG3BYL/r8evzcOBMXsuvA+/ekZZpomWXewoSRooLZYVpSxoFi7RE3OP5c87b1yPhxtDa9waQQSi9zv3GYM8pWIjvqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DFA11477;
-	Tue, 25 Nov 2025 01:45:28 -0800 (PST)
-Received: from [10.57.40.104] (unknown [10.57.40.104])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D727D3F66E;
-	Tue, 25 Nov 2025 01:45:33 -0800 (PST)
-Message-ID: <2be3bf24-a707-48df-b224-22b5ab290006@arm.com>
-Date: Tue, 25 Nov 2025 09:46:21 +0000
+	s=arc-20240116; t=1764064449; c=relaxed/simple;
+	bh=rr34/a1ie3cyaKkr8XjenTC8kZoD9Dm/nJWu3Wq5z4s=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=r4XjYWzOSiOmsbt9K4iRj3WdreW1xSzZ+2lWMUBsqUdSCWSM2YtY4duVsJAaaa2823lYVvFPrecYZfu7DcSbDART5NleFxHWp0hHWNIH24ldRam2GhGGx4HRTyvOMIah+ZISUw86l23g3wxGi8bHqLgu0ewQXdW09QHmnqa+Lpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=bb9QSvs3; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1764064439;
+	bh=rr34/a1ie3cyaKkr8XjenTC8kZoD9Dm/nJWu3Wq5z4s=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=bb9QSvs30CKZp/52Diiij5ClyF1qlRUc1UM+AWHK7eAQ27bgB2juwHPge5WFHpVr1
+	 CVCDDZxatZLCqvlIt8Dr4GDa4s7vJrRUtjuJYgr22G0hdZCb21EgXC8PSHUkwwnGML
+	 fRuKmxtoKKyPG4tDGtYOTFeX7etAx83m6uk8fP1ejb6VFKvl9MQEJqZ2OiVqsCmESn
+	 8JPW7NNkBIfx2t1S9QJtdIhNM9tiQ17qgo9Zd6bfGCErtsi+nJ2V3OniSQUSfoymyZ
+	 UEzrbdyboMkml7qZy0Wqwg7YT0/cUmdn/kSlXaqyaKTHZyT5dnFWrhgvVt/6ZoRTjZ
+	 sMZb0HJ8lBfkg==
+Received: from [192.168.100.50] (unknown [144.48.130.189])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id BB1B317E0EDB;
+	Tue, 25 Nov 2025 10:53:55 +0100 (CET)
+Message-ID: <b71b3e35-fc76-4397-9d60-20778685e37c@collabora.com>
+Date: Tue, 25 Nov 2025 14:53:40 +0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,164 +57,140 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: stable 6.6: commit "sched/cpufreq: Rework schedutil governor
- performance estimation' causes a regression
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>,
- Christian Loehle <christian.loehle@arm.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
+Cc: usama.anjum@collabora.com, Len Brown <lenb@kernel.org>,
+ Pavel Machek <pavel@kernel.org>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Yu-Che Cheng <giver@google.com>, Tomasz Figa <tfiga@chromium.org>,
- stable@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <q2dp7jlblofwkmkufjdysgu2ggv6g4cvhkah3trr5wamxymngm@p2mn4r7vyo77>
- <86d759a5-9a96-49ff-9f75-8b56e2626d65@arm.com>
- <2ktr5znjidilpxm2ycixunqlmhu253xwov4tpnb2qablrsqmbv@ysacm5nbcjw7>
+ Danilo Krummrich <dakr@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
+ linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-input@vger.kernel.org, kernel@collabora.com,
+ superm1@kernel.org
+Subject: Re: [PATCH 4/4] PM: sleep: clear pm_abort_suspend at suspend
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20251107184438.1328717-1-usama.anjum@collabora.com>
+ <20251107184438.1328717-5-usama.anjum@collabora.com>
+ <CAJZ5v0iucMXFkKuRxtAUyAqW11NHHGVuYnjJNbroeMgJoGY1kw@mail.gmail.com>
 Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <2ktr5znjidilpxm2ycixunqlmhu253xwov4tpnb2qablrsqmbv@ysacm5nbcjw7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CAJZ5v0iucMXFkKuRxtAUyAqW11NHHGVuYnjJNbroeMgJoGY1kw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Sergey,
+Hi Rafael,
 
-On 11/21/25 03:55, Sergey Senozhatsky wrote:
-> Hi Christian,
-> 
-> On (25/11/20 10:15), Christian Loehle wrote:
->> On 11/20/25 04:45, Sergey Senozhatsky wrote:
->>> Hi,
->>>
->>> We are observing a performance regression on one of our arm64 boards.
->>> We tracked it down to the linux-6.6.y commit ada8d7fa0ad4 ("sched/cpufreq:
->>> Rework schedutil governor performance estimation").
->>>
->>> UI speedometer benchmark:
->>> w/commit:	395  +/-38
->>> w/o commit:	439  +/-14
->>>
+Thank you for reviewing.
+
+On 11/24/25 11:54 PM, Rafael J. Wysocki wrote:
+> On Fri, Nov 7, 2025 at 7:45 PM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
 >>
->> Hi Sergey,
->> Would be nice to get some details. What board?
+>> Clear pm_abort_suspend counter in case a wakeup is detected during
+>> hibernation process. If this counter isn't reset, it'll affect the
+>> next hibernation cycle and next time hibernation will not happen as
+>> pm_abort_suspend is still positive.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>  drivers/base/power/main.c | 2 ++
+>>  kernel/cpu.c              | 1 +
+>>  kernel/power/hibernate.c  | 5 ++++-
+>>  kernel/power/process.c    | 1 +
+>>  4 files changed, 8 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+>> index 5760abb25b591..84e76f8df1e02 100644
+>> --- a/drivers/base/power/main.c
+>> +++ b/drivers/base/power/main.c
+>> @@ -1642,6 +1642,7 @@ static void device_suspend_late(struct device *dev, pm_message_t state, bool asy
+>>                 goto Complete;
+>>
+>>         if (pm_wakeup_pending()) {
+>> +               pm_wakeup_clear(0);
+>>                 WRITE_ONCE(async_error, -EBUSY);
+>>                 goto Complete;
+>>         }
+>> @@ -1887,6 +1888,7 @@ static void device_suspend(struct device *dev, pm_message_t state, bool async)
+>>
+>>         if (pm_wakeup_pending()) {
+>>                 dev->power.direct_complete = false;
+>> +               pm_wakeup_clear(0);
+>>                 WRITE_ONCE(async_error, -EBUSY);
+>>                 goto Complete;
+>>         }
+>> diff --git a/kernel/cpu.c b/kernel/cpu.c
+>> index db9f6c539b28c..74c9f6b4947dd 100644
+>> --- a/kernel/cpu.c
+>> +++ b/kernel/cpu.c
+>> @@ -1921,6 +1921,7 @@ int freeze_secondary_cpus(int primary)
+>>
+>>                 if (pm_wakeup_pending()) {
+>>                         pr_info("Wakeup pending. Abort CPU freeze\n");
+>> +                       pm_wakeup_clear(0);
+>>                         error = -EBUSY;
+>>                         break;
+>>                 }
+>> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+>> index e15907f28c4cd..1f6b60df45d34 100644
+>> --- a/kernel/power/hibernate.c
+>> +++ b/kernel/power/hibernate.c
+>> @@ -349,8 +349,10 @@ static int create_image(int platform_mode)
+>>                 goto Enable_irqs;
+>>         }
+>>
+>> -       if (hibernation_test(TEST_CORE) || pm_wakeup_pending())
+>> +       if (hibernation_test(TEST_CORE) || pm_wakeup_pending()) {
+>> +               pm_wakeup_clear(0);
+>>                 goto Power_up;
+>> +       }
+>>
+>>         in_suspend = 1;
+>>         save_processor_state();
+>> @@ -660,6 +662,7 @@ int hibernation_platform_enter(void)
+>>                 goto Enable_irqs;
+>>
+>>         if (pm_wakeup_pending()) {
+>> +               pm_wakeup_clear(0);
+>>                 error = -EAGAIN;
+>>                 goto Power_up;
+>>         }
+>> diff --git a/kernel/power/process.c b/kernel/power/process.c
+>> index dc0dfc349f22b..e935b27a04ae0 100644
+>> --- a/kernel/power/process.c
+>> +++ b/kernel/power/process.c
+>> @@ -67,6 +67,7 @@ static int try_to_freeze_tasks(bool user_only)
+>>                         break;
+>>
+>>                 if (pm_wakeup_pending()) {
+>> +                       pm_wakeup_clear(0);
+>>                         wakeup = true;
+>>                         break;
+>>                 }
+>> --
 > 
-> It's an MT8196 chromebook.
+> I don't think pm_wakeup_clear() needs to be called in so many places.
 > 
->> What do the OPPs look like?
-> 
-> How do I find that out?
-> 
->> Does this system use uclamp during the benchmark? How?
-> 
-> How do I find that out?
-> 
->> Given how large the stddev given by speedometer (version 3?) itself is, can we get the
->> stats of a few runs?
-> 
-> v2.1
-> 
-> w/o patch     w/ patch
-> 440 +/-30     406 +/-11
-> 440 +/-14     413 +/-16
-> 444 +/-12     403 +/-14
-> 442 +/-12     412 +/-15
-> 
->> Maybe traces of cpu_frequency for both w/ and w/o?
-> 
-> trace-cmd record -e power:cpu_frequency attached.
-> 
-> "base" is with ada8d7fa0ad4
-> "revert" is ada8d7fa0ad4 reverted.
+> Any why isn't it sufficient to call it in freeze_processes()?  For
+> suspend, it is sufficient, so what's different about hibernation in
+> that respect?
 
+It seems this patch was written by me when [1] was added which removed the
+unconditional call pm_wakeup_clear(0) from freeze_processes(). It was later
+reverted [2].
 
-I did some analysis based on your trace files.
-I have been playing some time ago with speedometer performance
-issues so that's why I'm curious about your report here.
+I've removed this patch and tested again to find out:
+- try_to_freeze_tasks() gets called from freeze_process() after
+  unconditional clearing of pm_wakeup. So pm_wakeup doesn't get cleared
+  until next hibernation or any other similar operation. So for hibernation
+  cancellation this patch isn't required. I'll drop it.
 
-I've filtered your trace purely based on cpu7 (the single biggest cpu).
-Then I have cut the data from the 'warm-up' phase in both traces, to
-have similar start point (I think).
+But shouldn't this wakeup event be consumed without waiting for next hibernation
+(or similar operation to happen)?
 
-It looks like the 2 traces can show similar 'pattern' of that benchmark
-which is good for analysis. If you align the timestamp:
-176.051s and 972.465s then both plots (frequency changes in time) look
-similar.
+[1] 56a232d93cea ("PM: sleep: Make pm_wakeup_clear() call more clear") - Aug 20
+[2] 79816d4b9e9b ("Revert "PM: sleep: Make pm_wakeup_clear() call more clear"") - Oct 22
 
-There are some differences, though:
-1. there are more deeps in the freq in time, so more often you would
-    pay extra penalty for the ramp-up again
-2. some of the ramp-up phases are a bit longer ~100ms instead of ~80ms
-    going from 2GHz to 3.6GHz
-3.
-
-
-There are idle phases missing in the trace, so we have to be careful
-when e.g. comparing avg frequency, because that might not be the real
-indication of the delivered computation and not indicate the gap in the 
-score.
-
-Here are the stats:
-1. revert:
-frequency
-count  1.318000e+03
-mean   2.932240e+06
-std    5.434045e+05
-min    2.000000e+06
-50%    3.000000e+06
-85%    3.600000e+06
-90%    3.626000e+06
-95%    3.626000e+06
-99%    3.626000e+06
-max    3.626000e+06
-
-2. base:
-           frequency
-count  1.551000e+03
-mean   2.809391e+06
-std    5.369750e+05
-min    2.000000e+06
-50%    2.800000e+06
-85%    3.500000e+06
-90%    3.600000e+06
-95%    3.626000e+06
-99%    3.626000e+06
-max    3.626000e+06
-
-
-A better indication in this case would be comparison of the frequency
-residency in time, especially for the max freq:
-1. revert: 11.92s
-2. base: 9.11s
-
-So there is 2.8s longer residency for that fmax (while we even have
-longer period for finishing that Speedometer 2 test on 'base').
-
-Here is some detail about that run*:
-+---------------+---------------------+---------------+----------------+
-| Trace         | Total Trace         | Time at Max   | % of Total     |
-|               | Duration (s)        | Freq (s)      | Time           |
-+---------------+---------------------+---------------+----------------+
-| Base Trace    | 24.72               | 9.11          | 36.9%          |
-| Revert Trace  | 22.88               | 11.92         | 52.1%          |
-+---------------+---------------------+---------------+----------------+
-
-*We don't know the idle periods which might happen for those frequencies
-
-
-I wonder if you had a fix patch for the util_est in your kernel...
-That fix has been recently backported to 6.6 stable [1].
-
-You might want to try that patch as well, w/ or w/o this revert.
-IMHO it might be worth to have it on top. It might help
-the main Chrome task ('CrRendererMain') to stay longer on the biggest
-cpu, since the util_est would be higher. You can read the discussion
-that I had back then with PeterZ and VincentG [2].
-
-Regards,
-Lukasz
-
-[1] 
-https://lore.kernel.org/stable/20251121130232.828187990@linuxfoundation.org/
-[2] 
-https://lore.kernel.org/lkml/20230912142821.GA22166@noisy.programming.kicks-ass.net/
+---
+Thanks,
+Usama
 
