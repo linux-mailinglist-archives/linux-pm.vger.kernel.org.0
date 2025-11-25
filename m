@@ -1,147 +1,110 @@
-Return-Path: <linux-pm+bounces-38642-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38643-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CD06C866AB
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 19:03:17 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5056C866DE
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 19:05:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11DED3A3C60
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 18:03:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6FFF84E3796
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 18:05:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77BCB28725A;
-	Tue, 25 Nov 2025 18:03:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58F6732AADF;
+	Tue, 25 Nov 2025 18:05:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oTEmjSzk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSHlvt1V"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5345520C48A
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 18:03:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349E1329C7A
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 18:05:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764093793; cv=none; b=GvS6KfIkeJxn9S8zRCaiBzkfru8b/4GwCorZ6Yhvyn8B/v9IOdIg2m7SeBsOhjedOvL05QHwC+jEuCnxTsU1Q0WDk80UuEir5fs7/PUP/l9N8S9mfcwrF69cCx9ISIM993ii0pkSzaRy1gnZtPFHeby/l5KJZdqeqJJ5sCX/yPA=
+	t=1764093943; cv=none; b=C3tFr02yApF7QtM1lgCIHTlJT/vYqvVIktwV7FK6rjkMD7RcQYozq1Qdc6pEhI9x9lKILOK1W8rMobAwdmwuqj8RmIlbmBFfSpFSFJPCXdQmidRwA8GiXdyxKhT9IDLjtSUp4on32I17mCMbjd394LRQ6qS3jk2TJnKxLJglodY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764093793; c=relaxed/simple;
-	bh=0JkrhCzltkWDo+Dw8ucEAhb81EDWGWcWIxkpr7glq+A=;
+	s=arc-20240116; t=1764093943; c=relaxed/simple;
+	bh=/3kxarVz7v2F9UXOEv/gGUfA/ax1cOhOAxXSIPU5/eE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MxOlrhqSabuqbArvMxQ046OzI1snKOf+sYLUOuJSfQxriE19KxzhXfUqvQF6g6bTGHWW4em9w9ExII8cyuVF08dxkmUwWQu1J9XgbON44uH1gL1hBgIT0VQ9wd8CknU8qm4+QDc3dwwcd7CWNnppYj7bBf+kkdwWaxLNXDwMXmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oTEmjSzk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8564C19425
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 18:03:12 +0000 (UTC)
+	 To:Cc:Content-Type; b=CzQ2JYl9iT7ASlhCkGgAdYePj3eYP0pduq9aloWX2LwUzKFZsWxCWPFmny0uVIvzs0r33eooZaCV6XSz06f6Tm1FjnBcetiHGYnMUrd1ns7mXsmSLQex/JvL0kjuptEbs6j7Lrdf30EuP+4yqR/EW4uRTIhoM8PhJqrNnKVUBwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSHlvt1V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA9C3C16AAE
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 18:05:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764093792;
-	bh=0JkrhCzltkWDo+Dw8ucEAhb81EDWGWcWIxkpr7glq+A=;
+	s=k20201202; t=1764093942;
+	bh=/3kxarVz7v2F9UXOEv/gGUfA/ax1cOhOAxXSIPU5/eE=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oTEmjSzkO7PuyFagvuM80ZVZba/4Gn1GSDzabkCY19MTt/oXonMRyL0+NBuX36qLc
-	 Opa4CmbuK554jfVwW8ld9/6Iu09N87n7zHCJxbph7/kulYRb760Cdt4lGrpNL9ngEc
-	 MXx5xYOvLf7DGRbOfnCrYs6FAudSvsVH66lMvp/URecXUK1FuLU2Diqq4ARuH1gxSI
-	 ZNXxWRD/DLddmtShM0KBS57IwjjFtV1nvRf9IqthZM5eREDBvgtSY4OyGeUBbOOhVF
-	 To1bevjHS4rQ2tBBX0ERyf+cet2qnXDore4tqoq4UWCINNm24YsZ8IVP8TDUOeVryd
-	 eUJZS70fQF+eQ==
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-3e3dac349easo4599577fac.2
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 10:03:12 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVtaQm1mZ+jB6pJfSt8VUhW5cHp51LkYp6rhIlL+5T54c9Y5KxfX0xuqS+i+szULmwBqchyrjVWgQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJcVnTfDDYriKoAd3ui71ibv3zCkhc3dI4M/MM4YNdWo8AMGC2
-	zKlurKz3CcduuBO2N2ya2TZvg8kLLrbjL6ufC03JiYQG1F2sHrOcdI42qsZtbcRPvqVnDBz3Oc2
-	CEM5qvMrEg7X7d2zllnslnfjbWVY68Ng=
-X-Google-Smtp-Source: AGHT+IFDsJ4jLmbW178zrQWJ9I9C7ZENJibSMzqAIw1jBWqyQLd9c8jHQIAvzNKALqtg8n31enhfAXdhfoFEHEFrlBE=
-X-Received: by 2002:a05:6808:1982:b0:450:c916:10b with SMTP id
- 5614622812f47-45115b2f8e4mr6202905b6e.54.1764093792158; Tue, 25 Nov 2025
- 10:03:12 -0800 (PST)
+	b=lSHlvt1V+77eFw4bHQ14pcxly2uo85pe3n93w8JnaMKQo97CRvhH0EUHvHLox7YQ1
+	 blGxQfqEadd2PVFlg4zVI8zS71qLhm1PVp3198xdIyuKle3eSkvDpFgOMAcaF5+uYD
+	 9JJRsQ1M6O8Rj62kDVH3f+EIlmsD7uKZPJhq27uIzexwYrRjgasnDdoP5DmEdwPb7a
+	 QpltsRKWYqItIL1glCcOY7FSai03U+49Divk4TLuglFHfqjjQl9lrYmQCzQASc2D3g
+	 uyJuh+J0poCne/ziU2xEj4OJfuuvQawszv1t/AB/XKeU8yXTVj0/0znrVNTMpKc6wN
+	 SsELc6ZRaxViA==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-65752954c43so33559eaf.0
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 10:05:42 -0800 (PST)
+X-Gm-Message-State: AOJu0YwH5IHTYVuhCx9gQEVaUW+c5myOFlEY5b4cdB3QPLfrlRluskb9
+	2zFO8yXOO6Uk4InQHlAFQSfkC0beh9lcoQPTY2sUbhvWjkrEKczFdkoyjkKgN9C7nu5vrCtPjfy
+	TmUAdImnaptn0bm3QWX9oi1CpoE8FFCs=
+X-Google-Smtp-Source: AGHT+IEXMLh/t+yulWWNnaSColJBcxSSuxC1hl3QlWZflGzFuKovSFkbKIN2GU1lhWT8uMkZ97mgWdLy7VsAyYjtPVk=
+X-Received: by 2002:a05:6820:2005:b0:657:45e1:1979 with SMTP id
+ 006d021491bc7-65785873cdcmr8506478eaf.3.1764093942038; Tue, 25 Nov 2025
+ 10:05:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251125112650.329269-1-ulf.hansson@linaro.org>
-In-Reply-To: <20251125112650.329269-1-ulf.hansson@linaro.org>
+References: <20251124205752.1328701-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20251124205752.1328701-1-andriy.shevchenko@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 25 Nov 2025 19:03:00 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0he17_Nc_Hpf0D1sgLBwpup_Hexzx1ZrKJ85t1sOjdNVw@mail.gmail.com>
-X-Gm-Features: AWmQ_blOlpxVnTbeEvTIyIyHY0DVCf-v79LfUDDQy2ddHpl1m3IrnXpIpISsfRI
-Message-ID: <CAJZ5v0he17_Nc_Hpf0D1sgLBwpup_Hexzx1ZrKJ85t1sOjdNVw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] PM: QoS: Introduce a CPU system wakeup QoS limit
- for s2idle
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Pavel Machek <pavel@kernel.org>, Len Brown <len.brown@intel.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Maulik Shah <quic_mkshah@quicinc.com>, 
-	Prasad Sodagudi <psodagud@quicinc.com>, Dhruva Gole <d-gole@ti.com>, 
-	Deepti Jaggi <quic_djaggi@quicinc.com>, linux-kernel@vger.kernel.org
+Date: Tue, 25 Nov 2025 19:05:31 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jFm90q2uSmSzqwpTpqXbW2pOnqE9P_dbrYoSpee2=+8w@mail.gmail.com>
+X-Gm-Features: AWmQ_bmyG_AM5HbMT6dy_VfsqXEM3z654CLeFMF-pxKatMSb-ENuLc7P5m27poc
+Message-ID: <CAJZ5v0jFm90q2uSmSzqwpTpqXbW2pOnqE9P_dbrYoSpee2=+8w@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] cpuidle: Update header inclusion
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 25, 2025 at 12:26=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.or=
-g> wrote:
+On Mon, Nov 24, 2025 at 9:58=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> Changes in v4:
->         - Add Kconfig help text. (Dhruva)
->         - Fixed grammar in documentation patch (Dhruva)
->         - Added reviewed/tested-by tags from Dhruva/Kevin. I leave Rafael=
- to add
->         his tags when applying.
+> While cleaning up some headers, I got a build error on this file:
 >
-> Changes in v3:
->         - Take new the new QoS limit into account for cpuidle too (Rafael=
-).
->         - Add a new Kconfig for the new QoS interface (Rafael)
->         - Improved the documentation (Dhruva)
->         - Clarified commit messages and added acks.
+> drivers/cpuidle/poll_state.c:52:2: error: call to undeclared library func=
+tion 'snprintf' with type 'int (char *restrict, unsigned long, const char *=
+restrict, ...)'; ISO C99 and later do not support implicit function declara=
+tions [-Wimplicit-function-declaration]
 >
-> Changes in v2:
->         - Limit the new QoS to CPUs  and make some corresponding renaming=
- of the
->         functions along with name of the device node for user space.
->         - Make sure we deal with the failure/error path correctly when th=
-ere are
->         no state available for s2idle.
->         - Add documentation.
+> Update header inclusions to follow IWYU (Include What You Use)
+> principle.
 >
-> Some platforms supports multiple low power states for CPUs that can be us=
-ed
-> when entering system-wide suspend and s2idle in particular. Currently we =
-are
-> always selecting the deepest possible state for the CPUs, which can break=
- the
-> system wakeup latency constraint that may be required for a use case.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/cpuidle/poll_state.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> Therefore, this series suggests to introduce a new interface for user spa=
-ce,
-> allowing us to specify the CPU system wakeup QoS limit. The QoS limit is =
-then
-> taken into account when selecting a suitable low power state for s2idle/c=
-puidle.
+> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
+> index 9b6d90a72601..c7524e4c522a 100644
+> --- a/drivers/cpuidle/poll_state.c
+> +++ b/drivers/cpuidle/poll_state.c
+> @@ -4,9 +4,13 @@
+>   */
 >
-> Kind regards
-> Ulf Hansson
+>  #include <linux/cpuidle.h>
+> +#include <linux/export.h>
+> +#include <linux/irqflags.h>
+>  #include <linux/sched.h>
+>  #include <linux/sched/clock.h>
+>  #include <linux/sched/idle.h>
+> +#include <linux/sprintf.h>
+> +#include <linux/types.h>
 >
-> Ulf Hansson (6):
->   PM: QoS: Introduce a CPU system wakeup QoS limit
->   pmdomain: Respect the CPU system wakeup QoS limit for s2idle
->   pmdomain: Respect the CPU system wakeup QoS limit for cpuidle
->   sched: idle: Respect the CPU system wakeup QoS limit for s2idle
->   cpuidle: Respect the CPU system wakeup QoS limit for cpuidle
->   Documentation: power/cpuidle: Document the CPU system wakeup latency
->     QoS
->
->  Documentation/admin-guide/pm/cpuidle.rst |   9 ++
->  Documentation/power/pm_qos_interface.rst |   9 +-
->  drivers/cpuidle/cpuidle.c                |  12 +--
->  drivers/cpuidle/governor.c               |   4 +
->  drivers/pmdomain/core.c                  |  10 ++-
->  drivers/pmdomain/governor.c              |  33 ++++++-
->  include/linux/cpuidle.h                  |   6 +-
->  include/linux/pm_domain.h                |   1 +
->  include/linux/pm_qos.h                   |   9 ++
->  kernel/power/Kconfig                     |  11 +++
->  kernel/power/qos.c                       | 106 +++++++++++++++++++++++
->  kernel/sched/idle.c                      |  12 +--
->  12 files changed, 203 insertions(+), 19 deletions(-)
+>  #define POLL_IDLE_RELAX_COUNT  200
 >
 > --
 
