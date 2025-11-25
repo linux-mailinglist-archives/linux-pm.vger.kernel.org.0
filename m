@@ -1,135 +1,159 @@
-Return-Path: <linux-pm+bounces-38561-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38562-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id F24F9C84AD8
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:15:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19CC4C84B98
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:27:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EE27F34FD4C
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 11:14:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE2663A1D6E
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 11:27:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C026E3164B5;
-	Tue, 25 Nov 2025 11:13:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8899313527;
+	Tue, 25 Nov 2025 11:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="b/hRfxuJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oKEB0Gpu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AFD1314B9F;
-	Tue, 25 Nov 2025 11:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E53B12EAB83
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 11:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764069211; cv=none; b=RKkE0hPJbHc4lo03aez25mcP9+9haO1drazk4KqFkaiNtMsSytvB4G93+pM11bR2JK2grdaw+t1rVwOtSjJ7vrzKaRGrx3TSoVlP5w2dz1O7GGTW5Jn7nmIflJUEs+IeZ4kBmAGylsqNEEnDU59ehSO2B7c54+nPjUMJpYHxyaE=
+	t=1764070017; cv=none; b=XMvQYNnftTNgjeKZlUCaW6GAJ+ULVSYc7xDGhMgDwfHfaMp/YbrtGHp4xzOReLf3/bcNEDtuA8QLQNNuTeTA1oU5lygEOS7yfXJmLqusEqGCMCQYc/xW79IioSp7lDfFNbi+TaApF4vLlwkz6+5JoIX3eOOeU6vdw2MPJjjF27U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764069211; c=relaxed/simple;
-	bh=OJOYAzww7u5+PTngMYuK5Kr9ktZ50LD7ZGC26gWbY94=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=TC4yLZSldaTvO3kJ9QqtbL4OyRxYWLasVJFLx7uwWVJAQMAWEcIBvjoAz49rhc1tCW0xFHdmqAM1BDw+yKLCya83P5YLWv1Cqm6Z2j+LZOYk2vQAv+6ddisbj6a23QOqQLyddJV2acYkOWH/GDwuWNR9Xn8CirmF9A5b8WewpGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=b/hRfxuJ; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1764069208;
-	bh=OJOYAzww7u5+PTngMYuK5Kr9ktZ50LD7ZGC26gWbY94=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=b/hRfxuJcsjap9QQ3nO3ycLRQfEhfc05/DyE7kPBFeSlMEKN2RIL5vd7EVpiZV0PD
-	 qZ0ONKcIm9ZmwS9+XFq6gPWYBLSVKE5KTuwcAWPJyX+uF0wgSfJ8cs3XsqTY/8ZKhB
-	 h8bkvgAc0j1/kUB2IrdISbVsGTR7VdEgwxstVOlHYODlYbciVcA3y7YUZ5Rk8lPkea
-	 T0lUdRSwhLAuFa5J6tUYmWmrLVF1HzgN5eDP8odiMCkBXUMJL43yea296dfCC3Wn6v
-	 1VLI00PBfiAxcTY5rgiEsgUvY+ZH8of0ML5i97e7SROwgQkjMNah8spEyQNSZaolY/
-	 a0wlpVBbR3NqA==
-Received: from [192.168.100.50] (unknown [144.48.130.189])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9919717E12D5;
-	Tue, 25 Nov 2025 12:13:24 +0100 (CET)
-Message-ID: <e1e97842-0ad3-4270-b0d1-3cc7150988cd@collabora.com>
-Date: Tue, 25 Nov 2025 16:12:54 +0500
+	s=arc-20240116; t=1764070017; c=relaxed/simple;
+	bh=xW+uwgn5nLCEhc5+K4ee+B5yy/7mQJcQCJVTcHLn2uE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WwQsQaa+CHv0FE12ULecpBNrKTnAJaVyUH40GcP7pAHfcqgUxr9/r3Ri3YGFVBBpENTi5Zfla0/fby2Rm2KwfnvjZrUNHKYRcFNO7+BNjfNa+OtF8sckwlBNo+vemDlpAohq+zxL7FsCWEIldQbdY5RvOf2JDXnXdG2YhmwLhtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oKEB0Gpu; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-37b495ce059so43231571fa.0
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 03:26:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764070014; x=1764674814; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B+3PVOrRrjbJKjJdSa2Pd3IMznI6Bu8bu6yfjK+kYuw=;
+        b=oKEB0GpuextMDit84fIrHijbBVqqGD58H+P7qQDp/3ub9ezm3ACJumX+11NE/cdZ71
+         ku0nU3iELZBeYSiQ2V1Cx5Z9ExYzHp94TKLm5Xl4JJ9ic2zwYUjzNyx3VmGLydRq+nYs
+         AYIR7teqoB6hnUlriZDhLu2EPEIK2WqtIcYgRusGFnlc84LDQBo4T8SGVzuvuc1R+dUx
+         GQ2VheyP03/MLsRAmeeqMS+uHvrjftE6c/JHKqRRpYoAjGzYD9r9RE3rYqDf/Y+u1rUK
+         a6pHFvyY54ckQ8NzL1ukeaBRNpDjOeSj3Wc0kOeaOtWE9GF0ppPwacRprlaAnDvYXsO0
+         0BHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764070014; x=1764674814;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B+3PVOrRrjbJKjJdSa2Pd3IMznI6Bu8bu6yfjK+kYuw=;
+        b=LaCsDoxXZE9r3ouHIhCsL3tVACzrIsu7WaG0gxrtASyNox8nhubfJkrYtXWByrFmjZ
+         rtLLx0yuy3/U7jtwk7qmo8sN6TOzl0PSiaiQzY4bNkE3VX6ODOeg8nlCaR9ZjKYBcyDk
+         NxEAEOLI1ipGnakFy0pGmwO2Gw5q/joCQuATzw9dUwG5U2cYq93hVR1vaGKoiaZ4QVKY
+         rpE7+D+Xo8jd959KcPQqAyxfi44jqt9WVyhFLMvQiKDYrflfOfPcWf/xDttfbNVXUsj4
+         TDOuitaJO6MoSxAKc1kV+SB30br69lp9LsLDIZmGhlNWDwZrfTaqKNdu7r3WH/DlqaDD
+         zTKA==
+X-Forwarded-Encrypted: i=1; AJvYcCUi1TykV7zGfDRGmLf3gbvcS/r9PgYlM7Tt4CNOA0bEXuBTu4+6RRygYMawkgyjtJX0iGva6kg2HQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxeY03dqLukAV02vW2PJXyq55XfJDl6CVnO7QxlMeOOhFOkZuh
+	NXIXJULieFNbkZOAz3Q6zdCTNwzxm/ny+3MihnI9PIOWuOtge/38UZcXDgNM5K8SAuM=
+X-Gm-Gg: ASbGncs70BqVWKVhu1kFKj7a7hR3nVPUfyd6ZVhDTTTIcybF1ckZQJ/bx9dNF46s7pd
+	CS1U6ctyQVQLSEF1IMwjQqSu9U5E/ZJFSGDdYfpunoImAm4X+MMneTZ0ZphBRNurXd4zy9TCHXB
+	opt1U1Ds0o89eWJplyJUSNMZqFe3vEPkgVN2DKFdogerbjremue2rvecu1Edmw39ZIYYxCayS2+
+	cqhmVOxNRFBnkDa+Ev1B7/emzaFzXJJjQ1gVzfnCfiziA+JuBPEH1KJTRrFViEdBzsQ28R6v+re
+	ym4woKwfCR1hAH5Kyo3PMqdSXGsLRj31+K3U1AIJl0e7DpBfAhyBuA98XkPI28duwJ0g0IyE1ZC
+	wJTOl+pjISm0WA6y9YahRAu89pSuJJzc7jZeQFj4mv6hdXmB/iSqwl5I2h/3wuRqNRBTsIF09t/
+	3ovxZ+Cq+8qagKr967Jh8u/TwhFDzoF51csN3suOeUce9pVxQ7ePoAL5RDkKKr
+X-Google-Smtp-Source: AGHT+IHBId0lWUF9ihM7WgWJwxGdWCRxFu0nQ8B9jrvfOAAVAh1Moxh1xxnB0gF11THRTX6yOlue/A==
+X-Received: by 2002:a05:6512:234b:b0:595:7a6c:7dd3 with SMTP id 2adb3069b0e04-596b505991amr896212e87.5.1764070013901;
+        Tue, 25 Nov 2025 03:26:53 -0800 (PST)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969db7563fsm4993526e87.2.2025.11.25.03.26.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Nov 2025 03:26:53 -0800 (PST)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	linux-pm@vger.kernel.org
+Cc: Vincent Guittot <vincent.guittot@linaro.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Pavel Machek <pavel@kernel.org>,
+	Len Brown <len.brown@intel.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Maulik Shah <quic_mkshah@quicinc.com>,
+	Prasad Sodagudi <psodagud@quicinc.com>,
+	Dhruva Gole <d-gole@ti.com>,
+	Deepti Jaggi <quic_djaggi@quicinc.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/6] PM: QoS: Introduce a CPU system wakeup QoS limit for s2idle
+Date: Tue, 25 Nov 2025 12:26:41 +0100
+Message-ID: <20251125112650.329269-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@collabora.com, "Rafael J. Wysocki" <rafael@kernel.org>,
- Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
- linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-input@vger.kernel.org, kernel@collabora.com,
- superm1@kernel.org
-Subject: Re: [PATCH 2/4] ACPI: button: Cancel hibernation if button is pressed
- during hibernation
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20251107184438.1328717-1-usama.anjum@collabora.com>
- <20251107184438.1328717-3-usama.anjum@collabora.com>
- <2025112433-emphasize-helpful-b748@gregkh>
-Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <2025112433-emphasize-helpful-b748@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Greg,
+Changes in v4:
+	- Add Kconfig help text. (Dhruva)
+	- Fixed grammar in documentation patch (Dhruva)
+	- Added reviewed/tested-by tags from Dhruva/Kevin. I leave Rafael to add
+	his tags when applying.
 
-Thank you for the review.
+Changes in v3:
+	- Take new the new QoS limit into account for cpuidle too (Rafael).
+	- Add a new Kconfig for the new QoS interface (Rafael)
+	- Improved the documentation (Dhruva) 
+	- Clarified commit messages and added acks.
 
-On 11/24/25 10:03 PM, Greg Kroah-Hartman wrote:
-> On Fri, Nov 07, 2025 at 11:44:29PM +0500, Muhammad Usama Anjum wrote:
->> acpi_pm_wakeup_event() is called from acpi_button_notify() which is
->> called when power button is pressed. The system is worken up from s2idle
->> in this case by setting hard parameter to pm_wakeup_dev_event().
->>
->> Call acpi_pm_wakeup_event() if power button is pressed and hibernation
->> is in progress. Set the hard parameter such that pm_system_wakeup()
->> gets called which increments pm_abort_suspend counter. The explicit call
->> to acpi_pm_wakeup_event() is necessary as ACPI button device has the
->> wakeup source. Hence call to input_report_key() with input device
->> doesn't call pm_system_wakeup() as it doesn't have wakeup source
->> registered.
->>
->> Hence hibernation would be cancelled as in hibernation path, this counter
->> is checked if it should be aborted.
->>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->
-My thinking is that people don't press power button after triggering
-hibernation. They will only press power button if they want to cancel the
-hibernation or resume from hibernation a bit later when hibernation completes. 
-> This could be dangerous, as this is not what happens today, are you sure
-> that people aren't just used to pressing the button multiple times until
-> the system is hibernated? If so, that would now break with this change
-> as it's hard to determine what is going on.
-Yes, its possible. Previously the device wouldn't cancel hibernation on power
-button press; while now it'll cancel.
+Changes in v2:
+	- Limit the new QoS to CPUs  and make some corresponding renaming of the
+	functions along with name of the device node for user space.
+	- Make sure we deal with the failure/error path correctly when there are
+	no state available for s2idle.
+	- Add documentation.
 
-So should we put this cancellation under some config option to avoid breaking
-the default behavior?
+Some platforms supports multiple low power states for CPUs that can be used
+when entering system-wide suspend and s2idle in particular. Currently we are
+always selecting the deepest possible state for the CPUs, which can break the
+system wakeup latency constraint that may be required for a use case.
 
-> 
-> And why does hibernate take so long?  Why not fix that up instead?
-Hibernation is inherently slow: it must freeze devices, copy and
-compress/encrypt memory, then resume storage devices to write the image to
-disk.
+Therefore, this series suggests to introduce a new interface for user space,
+allowing us to specify the CPU system wakeup QoS limit. The QoS limit is then
+taken into account when selecting a suitable low power state for s2idle/cpuidle.
 
-While I've thought about increasing the speed, I've no concrete ideas yet.
-The main problem is that its sequential in nature.
+Kind regards
+Ulf Hansson
 
-> 
-> thanks,
-> 
-> greg k-h
+Ulf Hansson (6):
+  PM: QoS: Introduce a CPU system wakeup QoS limit
+  pmdomain: Respect the CPU system wakeup QoS limit for s2idle
+  pmdomain: Respect the CPU system wakeup QoS limit for cpuidle
+  sched: idle: Respect the CPU system wakeup QoS limit for s2idle
+  cpuidle: Respect the CPU system wakeup QoS limit for cpuidle
+  Documentation: power/cpuidle: Document the CPU system wakeup latency
+    QoS
 
+ Documentation/admin-guide/pm/cpuidle.rst |   9 ++
+ Documentation/power/pm_qos_interface.rst |   9 +-
+ drivers/cpuidle/cpuidle.c                |  12 +--
+ drivers/cpuidle/governor.c               |   4 +
+ drivers/pmdomain/core.c                  |  10 ++-
+ drivers/pmdomain/governor.c              |  33 ++++++-
+ include/linux/cpuidle.h                  |   6 +-
+ include/linux/pm_domain.h                |   1 +
+ include/linux/pm_qos.h                   |   9 ++
+ kernel/power/Kconfig                     |  11 +++
+ kernel/power/qos.c                       | 106 +++++++++++++++++++++++
+ kernel/sched/idle.c                      |  12 +--
+ 12 files changed, 203 insertions(+), 19 deletions(-)
 
 -- 
----
-Thanks,
-Usama
+2.43.0
+
 
