@@ -1,128 +1,116 @@
-Return-Path: <linux-pm+bounces-38530-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38531-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0572FC83C76
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 08:47:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DF88C83D42
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 08:58:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EBFC44E2EC1
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 07:47:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93AFF3B21FC
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 07:55:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA946248F66;
-	Tue, 25 Nov 2025 07:47:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D04B2FC891;
+	Tue, 25 Nov 2025 07:55:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TzMDC3uy"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="g7jn8VKO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440DE1D6AA
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 07:47:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F902F9C37
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 07:55:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764056875; cv=none; b=INXTiiPQFk0qYVxX0tqpJ48kmL/1Gfp8Y2amt9WAe19ET6u7QBIL4LzT5Rz30x7EO//vrwIagW4bQEhe81DgZ9Dei5V/Sx3pccHfZOgOtIXo00H3/+QwQ0agtThzeXay0nOeTVUsXavbXJYAVe3iDHGc1o5h1u/xBsqwAzZoIMc=
+	t=1764057334; cv=none; b=SZPgImoiiu0pcqU8WrU9A+kYFjiBPqzVsklx2p6tcFvCsutlix5+/oU2exyuKROyNUUH+8qEZcC0ZU/B0q2qJ4pvCkIlbXCwKp0BT+5C+Vb1bIQQPqzq0wrpa1hEMqx0t5ee2ii6pf59hzvJsOrU8v0qA5GptiULb7i9N6f0V1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764056875; c=relaxed/simple;
-	bh=RIYW9f+wzQPaAN7MLWU8bHp7PfQfO0S7nfnl86inDf4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=bnM7Wu7rwOVO4poxGTcP9EDAfUHIjiRxbyNv/hX3ELXS2qGs9fDhSuc9eEfrMxNGvpWCcBUMIK6uVOBXxivsfSclQbeHfjZYVm2bSpE8pQOeIoR6UMNw5vqXMP+dnP92ROp8zngrS0IGcXpXhzrirqA/UuqyKluAvoy1yWyofaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TzMDC3uy; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7b8eff36e3bso8173642b3a.2
-        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 23:47:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764056873; x=1764661673; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7icyLinbIj6S2jIsVgWAxNprsgfjFJ1khU1rBcgqEPg=;
-        b=TzMDC3uyM6rYGHfDKjWKZalLtEwZpIfVPLKXrROuG8IizmzbGNPyeF7HpXM/golTzf
-         /VW9i0m+9a2jtKSKyGz/X0H6OBkf6Wkm+cQRhGqK/L+8spp4umTfwT1eSRu6iVBo1fcU
-         VvjYWR59/9RibcyLJlDslxUkb7n4euTTwtc2FjhJ+77xsNXrJZbQ9O/VB60UX6WQcMxg
-         LYAEYp0xF8kpHOPBK1J7vCzis2Ipahrf0yLemO+yANcBh3g7g8QdSxJUPi/50Yyj5fLE
-         xmhYCx7GspSJ4+e75Ns4JXB6MAhpzvgmCrLA8Lm5e5vu4k8OowN8KgbAxr3mBaDwxCky
-         9J2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764056873; x=1764661673;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7icyLinbIj6S2jIsVgWAxNprsgfjFJ1khU1rBcgqEPg=;
-        b=aWRMN3XvF3UQQCmvjKUuLsuKg/OBYuy/Mumb59eB4XgpwqRBWJBOcKJMBeGGq+ASiz
-         6qMPOkujIem2RSI7sWp1KerK2LUgSNFRUyfo0c1vu1BF+xusi7PViztVd8DJ/tlh2be6
-         0Ac5Np3fVoQTdkQvJIQx1aqvRaviuKsThDCw66hS8LesMXNZGU7L2289Fu9VAoKbhl6p
-         ZToHLDh89CVN35lqFbmia3+Fjl7FPs/h4sCFVWb2q0Z1KvKfVRf9fay+G2lRzC1NCq1m
-         T8qM1zN+7aMcTVGobWRS1/XLO6KNvjjmkcKNArlfYiW5b9zoZtX9dX9GqW11DLr239p/
-         fshg==
-X-Gm-Message-State: AOJu0Yw3U5/IzMLOwv/cwA5pdKL1sDDdeXEIyHYdOKM/XfzXvwqYM5r0
-	2OxU1B1Dp6p+BPhO/SrfnqjrBvAt4+d8RP7kORpvib3bG4816ojpxEdzqD6XDvt73BBVQZJXlwo
-	9W/Jq
-X-Gm-Gg: ASbGncvw1EOGJzCxOucqmONW2d6YMqVylToNsoFSnVjXLrolbMIeEP6eUWEBY0P7CdB
-	cGp9K9WHVCuW+yVuMzDm6qNmpRtVkSBkL6a3iySrQyvC7EyAg+gsesfVH255EiGWxMw/GAVXSLm
-	7eYgmVJpihOcTgWbdGapThCJ170GDRs4W6/ZSmluUa6wsEeHOjoRoluVgixXL5CPw8fgpDsmwM2
-	8lmWddOQXImdAZqk2JuO3K6sXf4G5Cjoi6EDA25O6tuuFeykN3SbtaDzW+hFRf6ppfrnjm66ObY
-	WjWpBMPOn95HTryHmKsX9GBcF16vhNiW2SGKTTIfFgotP60IOw2pYv/9f22NdVXfDZe480rPAEo
-	4eCOS+rTJY8IMTLZCGFtoj4yPS1JP9sWiO+5styUXxpBxPrAxYJKaprP63izek3M27MwDWmq5QN
-	5ztOT0ulsMEPw=
-X-Google-Smtp-Source: AGHT+IGfyd+ebU1bMdYT1r81FU/xJ7fVe6a2Z/IwJoGczOXL6VQFsoZD5SPqFF9jXPvj/h8WGY3Dmw==
-X-Received: by 2002:a05:6a20:5493:b0:34f:28f7:ed75 with SMTP id adf61e73a8af0-3637db26015mr2087940637.8.1764056873406;
-        Mon, 24 Nov 2025 23:47:53 -0800 (PST)
-Received: from localhost ([122.172.86.94])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bd7610a6f80sm15270384a12.32.2025.11.24.23.47.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Nov 2025 23:47:52 -0800 (PST)
-Date: Tue, 25 Nov 2025 13:17:50 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>
-Subject: [GIT PULL] OPP updates for 6.19
-Message-ID: <gypfpu4vlircby4x7oyaydeihzmcnuifym6qeui7w33qh3jbke@ekpc5xijbdvl>
+	s=arc-20240116; t=1764057334; c=relaxed/simple;
+	bh=Vy4TCRee8wzLOUhIXvHI0gEdw3K3rTx/ei2NoWNXZ+c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HLjlWTb74oRbvfDjpkX8T2mMq457f+nT37Z5rsnMqnWs/2DyF9n+wFgzfFXM8dm7kfdMRd4cqsXqnpROhfkpQ9/zeiBPXoChzvzQv+dNokRK8Up988xK0tuNFTnCwD8KwUNq4jjV57iGKA7sq4gp+JolVnwO/e5d171RsFi45tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=g7jn8VKO; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id BBD4AC15D46
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 07:55:01 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 613D960705;
+	Tue, 25 Nov 2025 07:55:24 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3A5DF10371383;
+	Tue, 25 Nov 2025 08:55:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1764057323; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=DkQimB8WCfZHwJR6M2eL/gng3KSNZMieCo1JlCGsAio=;
+	b=g7jn8VKOSKX1uEcSvzemg+SVKCpbBqiZInOu7t657+6eNDSBpEC/SIt3r5Rk2Z6djg+ImH
+	Ou1IiyPzTK0aM+vdTN9aqVLSzYCi1HcWa9W4YnLRut1l3Gnz+wpynJd/fUyyodHAMTQ+J5
+	uq1V5+EcQ8bRl0ZVSv5SnKS3qJxtNH4kg8XWRYD4jWVCbfbNJglCjvnkk61GoZPSkl+9XJ
+	WqZ41khDLMzfW4N8jXFkbmR92uuP3cdLxCoL/2B7MUiHjopQNhySWnqBbllA2AckP1VCNp
+	UdJxN6tfU3FvjvEizAyN9H9pYM85nTr+bX0gbKSAgl7fZIKxWLG89pJEd1hRpA==
+Date: Tue, 25 Nov 2025 08:55:21 +0100
+From: Herve Codina <herve.codina@bootlin.com>
+To: Kevin Hilman <khilman@baylibre.com>
+Cc: Rob Herring <robh@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org, arm-scmi@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] of: Add of_parse_map_iter() helper for nexus node
+ map iteration
+Message-ID: <20251125085521.451ea208@bootlin.com>
+In-Reply-To: <7hjyzedgoc.fsf@baylibre.com>
+References: <20251119-topic-lpm-of-map-iterator-v6-18-v1-1-1f0075d771a3@baylibre.com>
+	<CAL_Jsq+2sFzQb8j5bBWbwgyYn5apLTfWOTZW3+9n74uVyph16A@mail.gmail.com>
+	<7hjyzedgoc.fsf@baylibre.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Rafael,
+Hi Kevin,
 
-The following changes since commit 211ddde0823f1442e4ad052a2f30f050145ccada:
+On Mon, 24 Nov 2025 17:50:11 -0800
+Kevin Hilman <khilman@baylibre.com> wrote:
 
-  Linux 6.18-rc2 (2025-10-19 15:19:16 -1000)
+> >
+> > There's also this in flight for interrupt-map:
+> >
+> > https://lore.kernel.org/all/20251027123601.77216-2-herve.codina@bootlin.com/
+> >
+> > There's probably enough quirks with interrupt-map that we can't use
+> > the same code. Though it may boil down to handling #address-cells and
+> > how the parent is looked up.  
+> 
+> Hmm, I wasn't aware of this, thanks for point it out.  It looks very
+> similar to what i need, except for it's hard-coding the properties as
+> "#interrupt-*".
+> 
+> Seems like this should be generalized to handle the generic nexus-node
+> map. But it also seems to rely on an existing function
+> of_irq_parse_imap_parent() which is also specific to interrupt maps.
+> 
+> That being said, I'm not sure if interrupt-maps are really special, or
+> if they are just a specific case of the nexus node map.  This drivers/of
+> code is breaking my brain, so it's more likely that I simply don't
+> understand enough of it to know how to do this correctly.
+> 
 
-are available in the Git repository at:
+The main difference between interrupt-map [1] and the other nexus node maps
+is that in interrupt-map a child unit address is involved and translated to
+the parent unit address of the matched interrupt-map item.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.19
+This child unit address is simply not present in other nexus node maps [2].
 
-for you to fetch changes up to 33ffb0aa8ce8b18aaa65e0f9346d52b4e314ad7d:
+[1] https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#interrupt-map
+[2] https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#nexus-node-properties
 
-  rust: opp: simplify callers of `to_c_str_array` (2025-10-23 20:51:17 +0530)
-
-----------------------------------------------------------------
-OPP updates for 6.19
-
-- Minor improvements to the Rust interface (Tamir Duberstein).
-
-- Fixes to scope-based pointers (Viresh Kumar).
-
-----------------------------------------------------------------
-Tamir Duberstein (2):
-      rust: opp: fix broken rustdoc link
-      rust: opp: simplify callers of `to_c_str_array`
-
-Viresh Kumar (1):
-      OPP: Initialize scope-based pointers inline
-
- drivers/opp/core.c |  69 ++++++++++++++++++++++++++++++++++++++-------------------------------
- drivers/opp/cpu.c  |  16 +++++++++-------
- drivers/opp/of.c   | 125 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------------------------------
- rust/kernel/opp.rs | 114 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------------------------------
- 4 files changed, 176 insertions(+), 148 deletions(-)
-
--- 
-viresh
+Best regards,
+Hervé
 
