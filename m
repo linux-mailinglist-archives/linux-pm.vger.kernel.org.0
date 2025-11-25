@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-38564-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38565-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F802C84BB6
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:28:07 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E268C84BA4
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 12:27:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09E273AE952
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 11:27:20 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 8F5F534FD35
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 11:27:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36529314D1B;
-	Tue, 25 Nov 2025 11:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FB17318135;
+	Tue, 25 Nov 2025 11:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GURsFWKs"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ozy0T/E3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488F1315D22
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 11:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB9E3164B5
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 11:27:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764070023; cv=none; b=C3fsUMM4GopoPo+MwPV794Q4360JiGiIb/ZqySxa1sk80rFPtE4QHvzJ9BjwMpRajvXi2Be+psEVX3ESXxf54FulKytWGvv6YXXBtVH0AHk6/b+Y3r1t45hZV2gOKnO+zTpXbtZnJbltrrNQBPjTZ9VdNT10W9TawHuBxXz9xIs=
+	t=1764070024; cv=none; b=EbUlx0HZPe+H3bSFPHx/eK/z5cdq2k7LS1PPQTYeJgWO6LiGiHuqOAOyicdwKgk2JAuFn+jzIof3apzcFjnSleXKUqysI5yKxwa35tJeCV0t7GgGHnA8fO1vLN8gw860772gHK6wX0ZOnVTnc43/ObjOGZrMtVruGJJFt+cXXPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764070023; c=relaxed/simple;
-	bh=qWZZt0EJ5EGhQp+jROsS7jIaWHMmW8TPlU611Gbd3ug=;
+	s=arc-20240116; t=1764070024; c=relaxed/simple;
+	bh=0ObsQzJ1S8aelaCoYcrZLP2G/ftVmS6hZ0U7EyZsDXg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hVKSNCyIA/966oOXQNsGLMrrjPs6+lOMXUdNs+9bp/Bh4jeoWcmfGva1I6STX6BUIIhMLNr7fCY3qHIJAgrH+QeC3kAzkNPF8NZhtPFbk3Y21QZpN8NjISg5U/x3KsuUYjaLi9qFbBzLB6usuj9vcxSH8cbGiH1cLpv486qgZrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GURsFWKs; arc=none smtp.client-ip=209.85.167.42
+	 MIME-Version; b=QoSgyLrTyRZjD1DCPZhSOcbWtRIYcnetBvjr7Ky3QXx9JdESigV2mnZhIJSu9+R1qJ/cCEXPk3EP/b+cvV+k0v1p6quj7jxXNvUnp8suo7mmxdO6bGsEPnlB71wJeiDmpLpz2BdzmDr/RytIF8YrDVHUaiYxkxLKhloFPTTM2Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ozy0T/E3; arc=none smtp.client-ip=209.85.167.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5959105629bso5188045e87.2
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 03:26:59 -0800 (PST)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-59431f57bf6so5763703e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 03:27:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764070018; x=1764674818; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1764070020; x=1764674820; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YkBdbnO/aTuh3Uyl4FaE6iA6IZG4p2hYiXFE9xVcIHM=;
-        b=GURsFWKs2o/H6SYDHodny8XQ0QX+t5IW/HwszqcHo6e3VchnKaKAmmBJgL82du085z
-         e6SuFq2kpHJZvZqgbJAYFGXROF9zSCeGTnwFd7nSQIIcqYBIMEUq55196MobW09eIRx4
-         pnbAgHCqc+y2r3IkbKK/73pI8lJn4PZjN5ClsgcPX1ZEHxpV1PB9aSIpM+RheKvC1i5V
-         69NaNpKZc8LUmeHLi4IceUV1nd0KOwrr3cUzj4NMhGQ9kZlbmDOVEAjRGL6qSYgk7Yw8
-         T8y8ZsBs8jqA6oqEwUVUfiLPuxsN7Ii8UPeoZ9nHE7XfHboQKAoSwRL6WV8Q0q9O3ztM
-         hpBg==
+        bh=AN6dvpy0YMflZKUplqB9lPyC8X+L5QXrs3PpGRd9+i4=;
+        b=Ozy0T/E3L9xE8Tc4aGvNiOgyu3oECFsqVHGctY3/t9a6VRxNGp1fWHgpURig6BfC30
+         oGrVb3IO0+QTOYxcHR4mU3m3Tf1oTFJ/Soghw7ZR87tnKLKC9tuc3NbvHaR6BsZJAEGh
+         +9whh5RJ/bZXQ3XRIwVeP03z0jND22M3NKHuXqcnninPN+L11ILj4DbasSJ+19+WITrI
+         cw6LFn7WtGXNku2cwBSrHHWMKgR9/T9Rmni+mUV7H57w3lPhPY5571cfM18jvYw58/4Y
+         9aaxtAhyVrnkyNcvXkmS3qxOk10UUTecHSjLuD5SBwQOlsbul1NCoeitMG6YR/8i4gBT
+         KBtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764070018; x=1764674818;
+        d=1e100.net; s=20230601; t=1764070020; x=1764674820;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=YkBdbnO/aTuh3Uyl4FaE6iA6IZG4p2hYiXFE9xVcIHM=;
-        b=skODwzEyKrwx7AtdU9Vw/kPczNJH3hGC9pYoRzsnQxCaXKiNqCt1NuX+4ghQ2smMMs
-         dIahcj8lZGTCUkziGIKSFCDM5lQHkQfvdMwShgG3uvo753h9D9l8ZnHjZtmYtVu1SkEe
-         zqh6hTfXjq41YOylxU8LYg01lqsXyWIJGAotwcXEFv3qBGWwMAPAi/H3kCjIFChlsfmN
-         cuGe8TbS9erwrXuD3mjHb/JsctuvF9PGDkjCIpPnW/C+IhhhxGeoDmk/GjIbTkNzD7rj
-         5+bPP5roWhybFPdqEWNxY+ya86jcxmu/GucSKEx6vAyenZ3cm1sbS9Bp5NJ1SEVS6keK
-         rRVg==
-X-Forwarded-Encrypted: i=1; AJvYcCX78GiMKYNpWayUbihYbjra68gI8GAulZTwfNZD/bvJDi9uZNGALzkl5qHclPU7srpSz+/3W340gw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJ29veldIVo9+Ya2oDt4Cqotm3LV4ZXEBQp9s7kzPbHGnXv1o3
-	fnCakWfLEul4whJ1UQOXD79uhCpAWcM4g2Hb0Kg+MR3+GeTANzieEX6qfeyxFRD/xxQ=
-X-Gm-Gg: ASbGncu4uug/k/0rprRNE3FS2gyxEpFbVJBI++shn0V+XEEa+ROjMsqhf9d+N714AEG
-	ldEWPaN3Ruy11HF80nviJC81/mFExaEtmO9SbgMPZZMLdHnQ1rpZaVE9g61qNrnXYQ3sSPkUIel
-	eZKizaYyKZEqRdRRp3ML+9zw3DSPixHu1SR9hYNF05nr0fnI0DOnW+oHnXok1H2W8onlSpwcjw1
-	oA+AKpPA8Uv/fG7mLnt2PdCAMg4+A8xoN7UYmvxVhyLoCEvGI4w/rLt7PrQDGa59HaUWIqx08zl
-	/WpY1zDRf8jQqzoQ2fGppx88BCjnXBPJLtlZUVAPMHJOeWp9V+tyN0k5nk+0LprmH7kT/ZhALWz
-	nZNl7NYfbbOG6e5YAfcHm1JQAxaHTIjM9SlrdyNcedPqjXSsyE96FaGjFqphZkF/GXO1y83d823
-	yYqkKdI+QLf2B9/sEz9LCkGiwU7s56p5etf6FH99lFcrSSxm6ABp28NFI0A/cl
-X-Google-Smtp-Source: AGHT+IF5/zPRqq5Gc8LX/DzP5wRoX37ptDORDPlLBcwihZhjQ8Hod/OKSQTB4ujkPlnaRcuFpIKOGw==
-X-Received: by 2002:a05:6512:3a82:b0:594:27dd:2701 with SMTP id 2adb3069b0e04-596b529d662mr891658e87.49.1764070018227;
-        Tue, 25 Nov 2025 03:26:58 -0800 (PST)
+        bh=AN6dvpy0YMflZKUplqB9lPyC8X+L5QXrs3PpGRd9+i4=;
+        b=FuJ3qlBLBAm6pf/c9e1rpTZ0JsBuIzjZfE7NwDeJe1Z9WL52MRpyA60tTbM0EI+gQC
+         ojydn6inm4JF34Dct3Bn39FmWCgshtjZgpcmMPUZ110mYEH6/vkP6kjmmd5pcj6n2hc1
+         h11xL95o/+TZw4JTWDJ8nT0Dx1Dc39voi+AudS+m4stfO5km9GrjaF3o0P+IPCOqFy8g
+         CsRDsFdO9CCAI21gYqQ0zsK8QSGOp7WKF9dmkJJCm2Mk424IyTI9ZbpoaCd6I33lduvn
+         Xbk86y/88c3esycgk1tIWSTfr225e5LnVrGGl5zIPqOnSLBz9SHCSCnhdCE15YenpGCp
+         kZNw==
+X-Forwarded-Encrypted: i=1; AJvYcCVdRAZwBvfcMdtKt8toU3XbX4IWHzsyNjZbRbi13KJyclPBc6uZaQ8T9nHwz6hHdkSJsy2EdmmrAQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx79koPZSvoOuFjox0MPS9dOnHvcienhbWTiFaLueBGJyluScCR
+	YZQEABjlZWJk2804o4+12q/Zg++l00NJDpxHi/+PIOto1AOZSiXU5PR+Gt7pjxFwQXE=
+X-Gm-Gg: ASbGncvWYCpkgEBXlHXBZ38yg2vsbuQhMIIh6fA/xblrQYvLJG7UhbBEdCsAmr440Pt
+	OjBGTEoVdCcCN2YbFGVp5AEEie7OcpU+xBAm040WY57tXSTRgiL15zDo2B0jMSFKMLpHTYKPzSQ
+	EM4aSmlMxavBifH9gdhr0VfGuxvrKo0E5sG6e7KhjbVrS3PE/bYZysfFAh4oAFDr4GB605VdU2f
+	tuV7oOfdn4HFYJ3Stil/hDLo5iMgArAUV2KzeafbUkjWl7oow7roaPWtopHMoD7yfD0wgKHBgwi
+	4m/xCLw1cEC4b69ua4i1tfnEqcRcTgUAaMR2HvRokDQvFwYituwZegCTTcrgiQXgYv486jHHs+U
+	Qij6Q8MlablMXTeID+H7Qc/PX9kllpJ650swqkf/vOVABn0utUeuYdW/sYV2ZHzkizU6QmIETIR
+	GpTrTV6CoNJajKxJ9Hm+Ih+AJ8OOA7lw4dd7vSp71kr1WNqJwlrhaLodg0CEEc
+X-Google-Smtp-Source: AGHT+IGxFbAVgLhFkE94TlbZzTA30uW9uPeS6eJKhZuh9qvjSZm3x7Z35cTuGkrMp5RHYfZTfiLMSA==
+X-Received: by 2002:a05:6512:3a82:b0:594:27dd:2701 with SMTP id 2adb3069b0e04-596b529d662mr891695e87.49.1764070020428;
+        Tue, 25 Nov 2025 03:27:00 -0800 (PST)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969db7563fsm4993526e87.2.2025.11.25.03.26.56
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5969db7563fsm4993526e87.2.2025.11.25.03.26.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 03:26:56 -0800 (PST)
+        Tue, 25 Nov 2025 03:26:58 -0800 (PST)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	linux-pm@vger.kernel.org
@@ -89,9 +89,9 @@ Cc: Vincent Guittot <vincent.guittot@linaro.org>,
 	Deepti Jaggi <quic_djaggi@quicinc.com>,
 	Ulf Hansson <ulf.hansson@linaro.org>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 2/6] pmdomain: Respect the CPU system wakeup QoS limit for s2idle
-Date: Tue, 25 Nov 2025 12:26:43 +0100
-Message-ID: <20251125112650.329269-3-ulf.hansson@linaro.org>
+Subject: [PATCH v4 3/6] pmdomain: Respect the CPU system wakeup QoS limit for cpuidle
+Date: Tue, 25 Nov 2025 12:26:44 +0100
+Message-ID: <20251125112650.329269-4-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251125112650.329269-1-ulf.hansson@linaro.org>
 References: <20251125112650.329269-1-ulf.hansson@linaro.org>
@@ -103,11 +103,10 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A CPU system wakeup QoS limit may have been requested by user space. To
-avoid breaking this constraint when entering a low power state during
-s2idle through genpd, let's extend the corresponding genpd governor for
-CPUs. More precisely, during s2idle let the genpd governor select a
-suitable domain idle state, by taking into account the QoS limit.
+The CPU system wakeup QoS limit must be respected for the regular cpuidle
+state selection. Therefore, let's extend the genpd governor for CPUs to
+take the constraint into account when it selects a domain idle state for
+the corresponding PM domain.
 
 Reviewed-by: Dhruva Gole <d-gole@ti.com>
 Reviewed-by: Kevin Hilman (TI) <khilman@baylibre.com>
@@ -119,91 +118,37 @@ Changes in v4:
 	- Added tags.
 
 Changes in v3:
-	- Updated the commit message.
-
-Changes in v2:
-	- Limite the change to the genpd governor for CPUs.
+	- New patch.
 
 ---
- drivers/pmdomain/core.c     | 10 ++++++++--
- drivers/pmdomain/governor.c | 27 +++++++++++++++++++++++++++
- include/linux/pm_domain.h   |  1 +
- 3 files changed, 36 insertions(+), 2 deletions(-)
+ drivers/pmdomain/governor.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index 61c2277c9ce3..4fd546ef0448 100644
---- a/drivers/pmdomain/core.c
-+++ b/drivers/pmdomain/core.c
-@@ -1425,8 +1425,14 @@ static void genpd_sync_power_off(struct generic_pm_domain *genpd, bool use_lock,
- 			return;
- 	}
- 
--	/* Choose the deepest state when suspending */
--	genpd->state_idx = genpd->state_count - 1;
-+	if (genpd->gov && genpd->gov->system_power_down_ok) {
-+		if (!genpd->gov->system_power_down_ok(&genpd->domain))
-+			return;
-+	} else {
-+		/* Default to the deepest state. */
-+		genpd->state_idx = genpd->state_count - 1;
-+	}
-+
- 	if (_genpd_power_off(genpd, false)) {
- 		genpd->states[genpd->state_idx].rejected++;
- 		return;
 diff --git a/drivers/pmdomain/governor.c b/drivers/pmdomain/governor.c
-index 39359811a930..bd1b9d66d4a5 100644
+index bd1b9d66d4a5..05e68680f34b 100644
 --- a/drivers/pmdomain/governor.c
 +++ b/drivers/pmdomain/governor.c
-@@ -415,9 +415,36 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
- 	return false;
- }
+@@ -351,7 +351,7 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
+ 	ktime_t domain_wakeup, next_hrtimer;
+ 	ktime_t now = ktime_get();
+ 	struct device *cpu_dev;
+-	s64 cpu_constraint, global_constraint;
++	s64 cpu_constraint, global_constraint, wakeup_constraint;
+ 	s64 idle_duration_ns;
+ 	int cpu, i;
  
-+static bool cpu_system_power_down_ok(struct dev_pm_domain *pd)
-+{
-+	s64 constraint_ns = cpu_wakeup_latency_qos_limit() * NSEC_PER_USEC;
-+	struct generic_pm_domain *genpd = pd_to_genpd(pd);
-+	int state_idx = genpd->state_count - 1;
-+
-+	if (!(genpd->flags & GENPD_FLAG_CPU_DOMAIN)) {
-+		genpd->state_idx = state_idx;
-+		return true;
-+	}
-+
-+	/* Find the deepest state for the latency constraint. */
-+	while (state_idx >= 0) {
-+		s64 latency_ns = genpd->states[state_idx].power_off_latency_ns +
-+				 genpd->states[state_idx].power_on_latency_ns;
-+
-+		if (latency_ns <= constraint_ns) {
-+			genpd->state_idx = state_idx;
-+			return true;
-+		}
-+		state_idx--;
-+	}
-+
-+	return false;
-+}
-+
- struct dev_power_governor pm_domain_cpu_gov = {
- 	.suspend_ok = default_suspend_ok,
- 	.power_down_ok = cpu_power_down_ok,
-+	.system_power_down_ok = cpu_system_power_down_ok,
- };
- #endif
+@@ -362,7 +362,11 @@ static bool cpu_power_down_ok(struct dev_pm_domain *pd)
+ 	if (!(genpd->flags & GENPD_FLAG_CPU_DOMAIN))
+ 		return true;
  
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index f67a2cb7d781..93ba0143ca47 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -153,6 +153,7 @@ enum genpd_sync_state {
- };
- 
- struct dev_power_governor {
-+	bool (*system_power_down_ok)(struct dev_pm_domain *domain);
- 	bool (*power_down_ok)(struct dev_pm_domain *domain);
- 	bool (*suspend_ok)(struct device *dev);
- };
++	wakeup_constraint = cpu_wakeup_latency_qos_limit();
+ 	global_constraint = cpu_latency_qos_limit();
++	if (global_constraint > wakeup_constraint)
++		global_constraint = wakeup_constraint;
++
+ 	/*
+ 	 * Find the next wakeup for any of the online CPUs within the PM domain
+ 	 * and its subdomains. Note, we only need the genpd->cpus, as it already
 -- 
 2.43.0
 
