@@ -1,200 +1,298 @@
-Return-Path: <linux-pm+bounces-38527-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38528-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5DC0C8367C
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 06:41:34 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B64C1C8383C
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 07:43:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8CAAE3AF1D1
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 05:41:33 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3666D34CAC3
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 06:43:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D7AA2206A7;
-	Tue, 25 Nov 2025 05:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80CA529A33E;
+	Tue, 25 Nov 2025 06:42:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="cIh1LmVD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PXM4Oi51"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013061.outbound.protection.outlook.com [40.107.201.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC4320FA81;
-	Tue, 25 Nov 2025 05:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764049291; cv=fail; b=YqzfEBjZryfIN4Ii+L+oypp4nW1GCI9fj4sAc91rgOdENuSt6GqIbJMq0DtqruCtUh6ZcYXILiYZASyEuOHZdVk06mxnxdqv8wEorZaquVOoQgBEAV4kyjvzWTdpqJkvbyHkpBR+wXPQ0W9ikHFKhN+4Fk/HVu/jC8yft262bLQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764049291; c=relaxed/simple;
-	bh=62O3kJfWSmKu+6A5kSOKLP676dKRN7iPfjeQngemL3s=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PXA7w/IP8WFPvWzQ6jHfqHcS52GWeqANR3OwodjlqH/JMxONPU8m2lJbDfDGA8FI8sdFaQpnm34ym3GZHMPqn5Qic4oATgV/FambfoyaG4hrw25pzNX8xDqEFph9BiGdf9/QAkJN0c3aGQd+nhkV1bGQkUCn0OZmbvXCi4IY9C8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=cIh1LmVD; arc=fail smtp.client-ip=40.107.201.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=yEOXAVTA0MAVmZFWOJswHzRoQ8mftMmiEYa4KaM8gFvL1KWOvSdJdJhejAmBmTymOF+HFy1QTkqc15oxbJknvsfW6CcCFPeTg7WrLPiTZfiRvHCIM3+oLdii7yLlyMKn9GRa3gecehRWdtFq8UkLnwVNjc9XLTX/Oel+47SS5MYokWQD/xHMTAUf8XUq+E7OEG4iQn0nfs5FtAqfJuHyGmGAsFzQ+BJL1BnJi9Zlajg2FSHzpF9akxEbn4P8LXMVpaVILtIcyVU50VfZ0G97JOe+7xPFlpwTu94hUY/wyhfk0lfhbQr2w2gtof+7/u8B7DXcYtoa90sPR4xWG3c4pA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v0gxmIpCm5JwnwnngWJUI9dH4h/SZfo8tJqH/3tANt8=;
- b=MPPIPzjYWAzNwHGr0HzCDwJX6UifHDDeQ/Dq5A9dQCkW0vI4o47afivQGcWuwJ8D+NzEG4pIgmhSi29dmY01vfdc52Tc60naLBar+8jUnqntrGyWbVOKkFLXsnV1X4JsMUzCu2Eqyti84pY8oia6IU/fmSC27ILQm4WFfxbf7bOohNcrXk3e5Gn3xyWUr7Rd4E1sk1ZhrMvWoPzMk0Y+DJZieP+fNEHl7HI4TR5Qxa7FantVFcp20nb/7OgXj9GO66PaDzDQzfqoty0Rds/VrgkLMxzOhQIWuoqTa7cvnRpgh4GcXaUSoddAtyx78tn3ZKQWfUNDtvcMlwS7XHwArg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 198.47.23.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
- dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v0gxmIpCm5JwnwnngWJUI9dH4h/SZfo8tJqH/3tANt8=;
- b=cIh1LmVD9vNsXj5PS3xXvtOhBKDREwg6y4pACjeNBT+TbKtsrb4gBR3pRZ6zOpakUGmAfbYKrd3YzOrycXAXL225I3OSP21Z2RqZCSgz/LZeDQot1xwKAMJFCliZ/kixIkRKwlHAWxqBCT++jJGnAWTDeL/OnUSTHDt9/aTmV+4=
-Received: from BY3PR10CA0003.namprd10.prod.outlook.com (2603:10b6:a03:255::8)
- by PH8PR10MB6525.namprd10.prod.outlook.com (2603:10b6:510:22b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9298.12; Tue, 25 Nov
- 2025 05:41:25 +0000
-Received: from SJ1PEPF000023D5.namprd21.prod.outlook.com
- (2603:10b6:a03:255:cafe::50) by BY3PR10CA0003.outlook.office365.com
- (2603:10b6:a03:255::8) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9343.17 via Frontend Transport; Tue,
- 25 Nov 2025 05:41:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
- smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
- action=none header.from=ti.com;
-Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
- 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
- client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
-Received: from lewvzet200.ext.ti.com (198.47.23.194) by
- SJ1PEPF000023D5.mail.protection.outlook.com (10.167.244.70) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9388.0 via Frontend Transport; Tue, 25 Nov 2025 05:41:25 +0000
-Received: from DLEE201.ent.ti.com (157.170.170.76) by lewvzet200.ext.ti.com
- (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 24 Nov
- 2025 23:41:17 -0600
-Received: from DLEE202.ent.ti.com (157.170.170.77) by DLEE201.ent.ti.com
- (157.170.170.76) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 24 Nov
- 2025 23:41:16 -0600
-Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE202.ent.ti.com
- (157.170.170.77) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
- Transport; Mon, 24 Nov 2025 23:41:16 -0600
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
-	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 5AP5fFOQ3168325;
-	Mon, 24 Nov 2025 23:41:16 -0600
-Date: Tue, 25 Nov 2025 11:11:15 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-CC: "Rafael J . Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>, Peter Zijlstra
-	<peterz@infradead.org>, Kevin Hilman <khilman@baylibre.com>, Pavel Machek
-	<pavel@kernel.org>, Len Brown <len.brown@intel.com>, Daniel Lezcano
-	<daniel.lezcano@linaro.org>, Maulik Shah <quic_mkshah@quicinc.com>, "Prasad
- Sodagudi" <psodagud@quicinc.com>, Deepti Jaggi <quic_djaggi@quicinc.com>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 5/6] cpuidle: Respect the CPU system wakeup QoS limit
- for cpuidle
-Message-ID: <20251125054115.7y26ize7h5kqhe5l@lcpd911>
-References: <20251121100315.316300-1-ulf.hansson@linaro.org>
- <20251121100315.316300-6-ulf.hansson@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E81299AB1
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 06:42:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764052979; cv=none; b=jwcXraXjtPiO8MyPfEWuGicxR4LB0od3GvkwZcl7aJr5C4NXtrYnjxJxRp8N8E4+p6xjkdOXrfc3dOReiuoTa2k9M2M3pGcrKxuzUy+SBE6/j8LnfkfT2eQGdvWgc16X4OfpQZfigYKGIdBDlgM7fni9KNkQkoUoBFwZquSBfOo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764052979; c=relaxed/simple;
+	bh=bMVM6nwiRnBB3ygequtCXeKaSYZ8JKMr74Alu8bdTfM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=t/2zg+mKFIKszBo3EOBmZnU0T9573NQKBfXeHInT/AIXOygtyMGJf6GHpKtgT4K3YeA58exDAl6tR+zj1o6MmNbqfcMIjNGYKsE+cUfANk+R4buXjtq4+SlF/hoJ55EEhIhqHCsFIscfYzmySX/BGvpcrmrTfFQVi2wyZQGZIns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PXM4Oi51; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-37a415a22ecso42865761fa.0
+        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 22:42:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764052975; x=1764657775; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oDwgPrbqR3WPQpKO2RN5Ep6D/2LO+UnqChlfZRK6eKg=;
+        b=PXM4Oi51/FPSyFM+6n3W1MkZ8lRcQmQDf5xTo4W0x/8klPd2i17BG+PpU/k99qVrEd
+         8FhrIhgvL/oMBEixwIderB1Ww0ZYJApyL96SU76Usb+75ViTYcgBbNIJmkdB2sqglt39
+         EHyCtOP7rzTY2LMk/dKOF1maizgzB3exwy6gBuLAE/kfnFoF1jwJzDmiGDfDXLV4J1hr
+         fHJIyFU4x2tpUq0fiJRIhox+RXrqjVWTwCFxxGlJtK13wa3x8sCRrXjhS17HwHoQn1a3
+         abGsydVqkqA5KRHnBiiW/E6itTeHdADHv/d7USbpF/FQoDWy/pxy9oSZYL14nXXU1RoR
+         xnBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764052975; x=1764657775;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oDwgPrbqR3WPQpKO2RN5Ep6D/2LO+UnqChlfZRK6eKg=;
+        b=H1jVvCKH7TFi6lch/B+TNkwHmi5j+0EXp2HfNnKOXJc0tckxPX+YH28tzjA1CEHaBN
+         uTpiUN4pkmTrOjPTmkUe45bOcURGXIfu1QoQa/+5SUvbZCkWwTSf8AdZqXZCAX/stwhF
+         iC/6XFp41WeF8AKU/tmd2uuZrz5PgAtaj4jKBAPdL76h6WGHgrBVDxTvEjktYFzdnGy+
+         YR3tKiGm8j6zbVUygiRPJ54duwRquGcNrpHjVCVg5yt4Rglbur4w3xETqrXToJiYGg6v
+         hffILkQ78SqMXshGynozRvm/CEbUO19iW4WB6KYYxFlAAxriJGamOJiDLyZTyz6nh9Rc
+         UA9w==
+X-Forwarded-Encrypted: i=1; AJvYcCUscPnwtHQQYJAaam1GbLRFCUA8D7VeavWqTl7XfqOKrNGNNlDW+eFaqtBlH4Sd6GwCSN4rZDXuTQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyRSErwZkxVJ7PnsFCfEkxArw/ygTw/iMWfHA2GHCCY1sLkXPI
+	uLMVSsU7MzV7WvTii9gOw+ZeKysZAXcqUF+KegnDWip63QSljfZA9T2e
+X-Gm-Gg: ASbGncv6PTnnbvTj/4sta0VZr7CzQd9x35RDW6fFSnldebyy0EoYGw4inZj2POUedo8
+	LtVY4IAlyUwtdIv1cn36HfSydQLUYpKm3V8lumSsC1LeqMspc6mgmrIfp+2OiTOAqAtVjCUoihY
+	s+zyrKAyGcgCpydtnoohoBbYs+IYgf9geayxlTvn6nG33S0+3IrxgLJy+3z+8DyjJRg1E1OOEVF
+	QyagssjUMWJhmBAPKB/wpJSRblnJomhnRLcksYoXQ8QesUS9Hg5sKz5iY+uZpx3md/c3TsDH3WS
+	1U/btpRL5N4nHovnhgx3FF48oboHBznFo1aJfSGE2DHCgdY7IMJ0T6Cmbpk2jYuFy+Jhsb2moOM
+	EcJXmau2eLbu0ouueZNPhCsXOM2v4Zf7sg3Te71ooJNolRj7XrZWF90l7hkxf/cOZm5izGUHhEw
+	dzxEHZPn74otGGk1jl9F3kulbVVbLUxqgayxewEA28Ak2gtxfdOsWjbdw6NdE1LPrxzJTT
+X-Google-Smtp-Source: AGHT+IGn4O/LdPwrRfIUFu/wkzsPRHVD6YOLdNx92wJy+rnsWi85zUpEuMS1eU2wO8cl4kItz2sVag==
+X-Received: by 2002:a2e:a805:0:b0:37a:3910:6c77 with SMTP id 38308e7fff4ca-37cc82af4a6mr55071391fa.5.1764052974535;
+        Mon, 24 Nov 2025 22:42:54 -0800 (PST)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-37cc6b59ff5sm31356131fa.15.2025.11.24.22.42.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Nov 2025 22:42:53 -0800 (PST)
+Message-ID: <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
+Date: Tue, 25 Nov 2025 08:42:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20251121100315.316300-6-ulf.hansson@linaro.org>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF000023D5:EE_|PH8PR10MB6525:EE_
-X-MS-Office365-Filtering-Correlation-Id: 37801e86-ed06-4d87-8f4a-08de2be54610
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|7416014|36860700013|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?XJjFvBhk7zgMGEVviUcbIPC0SrFv3/ig1skhpwidp5zOQb6ms65DoERU5h7M?=
- =?us-ascii?Q?983QPGlI85UUcC58W3D+F3RKPY7sei2fkDOYoDIbEYSjspFdrkvDBx404oTT?=
- =?us-ascii?Q?HQQqMZL4DOHAyiMyQHqGn9TF5VMuvkiZdXe7vP1Tsgq1t+GU1KMKB17i4bld?=
- =?us-ascii?Q?k3U3sX7jRqv5cHTah0riQcYSxotMUJTje9/HIHgupZjn92/KzhCsMtdLalt8?=
- =?us-ascii?Q?ybFVo7pTgRbZiX1w7iFi+DBynujC80BtT4rQi+M7INC8E7kuJu+vy6mT095u?=
- =?us-ascii?Q?U3GzjroLMFqda50/zPwM4m3LgUh1PHQEn4JHwdWiQBk0z7ZaG96E+FRclXmD?=
- =?us-ascii?Q?g/ziVlQLwnPv8DN5UCH5RCSN16JZ13gfVRJyI1n6boLk7jWUFZbNgA2tr4WY?=
- =?us-ascii?Q?J+pF6HJhsjJXJykaszg//yiH1rlU3ylOwycNcnP7UQJlYnPeh1PcX5Q9ElL0?=
- =?us-ascii?Q?Li5UGu6frT8Jp9LB5uvBd/BQVE8AkzMy7nPh7oq9m1LfedYGqZ+m18L9bc+B?=
- =?us-ascii?Q?QFv6kUn1QcnD/sDq19nToSlC1hqz8dZZtFyozyXe+rznK70j0XJ2pGgXwtPa?=
- =?us-ascii?Q?8jSqlgGtF92hYrkTNtHlcdU8BPuhog53VebcR6xa7Sy4A4dFRuXBz8VJbSJA?=
- =?us-ascii?Q?HUz01GB2EQZUfUu8UiIiFeEcBwofDlwpVRr9+bwwhXXHSHFYTLfEa6aACd57?=
- =?us-ascii?Q?jBDQ3XdLGcx91I6II4YyM5T3QMwefERV/V6gD5eR+b7djExbOuA8Ag/ElM8z?=
- =?us-ascii?Q?VR0jN0q0yuu8vTw//K7zJmeMIMj7AEtkezvRFQ7cUhA6ZyY4YKj9QIWPYA/j?=
- =?us-ascii?Q?3DN/Y1ehYuEMyPHjjlZNaiQojt6+ghHqYmQURyEwqJoGzP/cokVdQnqudSBz?=
- =?us-ascii?Q?vLCEhPQ3Lv7SqslNoZG/CITl9ZCGBP7YN0zZ/VjgEUG7On30jOYEql+L4l3Q?=
- =?us-ascii?Q?h9O3hbPU9Y9lmaxF/mCH/GlLobSgYb62q6HR11lSFBoHi7ZPPUiGKFxSt54L?=
- =?us-ascii?Q?7Q+9kgxl19PA7B9ijJAgqEMWqecpa4n6ZMXT9/qfo2GGGryq7BdZvm8OEB0t?=
- =?us-ascii?Q?FyazaV8YRFSsx8tYm+mfd9FZXCoLVc3nhKbe4qFKrF5Lwc0xjxNalFiP+L9q?=
- =?us-ascii?Q?/XLsN0LxRpYTw4XWocwGRpcWGdhv9Web29D+tNFsrP641Mn6GnzVL5pl8UhQ?=
- =?us-ascii?Q?+rOXbdzZu19CkEOKRq8We9IkcTAZ92R+XXMCKDNKiZ1IZA6+jx2TS5HIdpUr?=
- =?us-ascii?Q?B7mjvAIB87r/2ih78Wp8qWepWTKWRNNWsoK0nNjl382XAh9OyT8+BXGf7553?=
- =?us-ascii?Q?GFRC/3Zh0H2jf2PlJQjzz2Deya10hLrNKXYUVngjYNZYOiPuc9sJ2AP3wztB?=
- =?us-ascii?Q?QciUQ0h4YLD0iEG7LHmjb1HwtayHH93j9iuCeMbSFT6o0i1TYfg84JkEp5sA?=
- =?us-ascii?Q?uXvGyUGS2EljYcB4pQC2oFB7cLzkmoTko/+vY7pCDjT+GympG5g2UvQF4vGF?=
- =?us-ascii?Q?8CdIVeVTcJRP9g08FAYZ5bSbrbrdBDswnokfO13s0luLjcUP5YdJjciEtZQN?=
- =?us-ascii?Q?FrU1tGXanx5XvBQmj4k=3D?=
-X-Forefront-Antispam-Report:
-	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(36860700013)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: ti.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2025 05:41:25.5535
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37801e86-ed06-4d87-8f4a-08de2be54610
-X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF000023D5.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR10MB6525
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
+ overlays"
+To: Rob Herring <robh@kernel.org>, Kalle Niemi <kaleposti@gmail.com>
+Cc: Herve Codina <herve.codina@bootlin.com>, Andrew Lunn <andrew@lunn.ch>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>,
+ Saravana Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ Charles Keepax <ckeepax@opensource.cirrus.com>,
+ Richard Fitzgerald <rf@opensource.cirrus.com>,
+ David Rhodes <david.rhodes@cirrus.com>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Mark Brown <broonie@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Daniel Scally <djrscally@gmail.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>,
+ Davidlohr Bueso <dave@stgolabs.net>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Dave Jiang <dave.jiang@intel.com>,
+ Alison Schofield <alison.schofield@intel.com>,
+ Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
+ Dan Williams <dan.j.williams@intel.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
+ patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org,
+ Allan Nielsen <allan.nielsen@microchip.com>,
+ Horatiu Vultur <horatiu.vultur@microchip.com>,
+ Steen Hegelund <steen.hegelund@microchip.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+ <20251015071420.1173068-2-herve.codina@bootlin.com>
+ <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
+ <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
+ <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
+ <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Nov 21, 2025 at 11:03:11 +0100, Ulf Hansson wrote:
-> The CPU system wakeup QoS limit must be respected for the regular cpuidle
-> state selection. Therefore, let's extend the common governor helper
-> cpuidle_governor_latency_req(), to take the constraint into account.
+On 24/11/2025 19:01, Rob Herring wrote:
+> On Mon, Nov 24, 2025 at 10:44 AM Kalle Niemi <kaleposti@gmail.com> wrote:
+>>
+>>
+>> On 11/24/25 16:53, Rob Herring wrote:
+>>> On Mon, Nov 24, 2025 at 8:48 AM Kalle Niemi <kaleposti@gmail.com> wrote:
+>>>> On 10/15/25 10:13, Herve Codina wrote:
+>>>>> From: Saravana Kannan <saravanak@google.com>
+>>>>>
+>>>>> This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
+>>>>>
+>>>>> While the commit fixed fw_devlink overlay handling for one case, it
+>>>>> broke it for another case. So revert it and redo the fix in a separate
+>>>>> patch.
+>>>>>
+>>>>> Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overlays")
+>>>>> Reported-by: Herve Codina <herve.codina@bootlin.com>
+>>>>> Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
+>>>>> Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin.com/
+>>>>> Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootlin.com/
+>>>>> Signed-off-by: Saravana Kannan <saravanak@google.com>
+>>>>> Link: https://lore.kernel.org/lkml/20240411235623.1260061-2-saravanak@google.com/
+>>>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+>>>>> Acked-by: Mark Brown <broonie@kernel.org>
+>>>>> ---
+>>>>>     drivers/bus/imx-weim.c    | 6 ------
+>>>>>     drivers/i2c/i2c-core-of.c | 5 -----
+>>>>>     drivers/of/dynamic.c      | 1 -
+>>>>>     drivers/of/platform.c     | 5 -----
+>>>>>     drivers/spi/spi.c         | 5 -----
+>>>>>     5 files changed, 22 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+>>>>> index 83d623d97f5f..87070155b057 100644
+>>>>> --- a/drivers/bus/imx-weim.c
+>>>>> +++ b/drivers/bus/imx-weim.c
+>>>>> @@ -327,12 +327,6 @@ static int of_weim_notify(struct notifier_block *nb, unsigned long action,
+>>>>>                                  "Failed to setup timing for '%pOF'\n", rd->dn);
+>>>>>
+>>>>>                 if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+>>>>> -                     /*
+>>>>> -                      * Clear the flag before adding the device so that
+>>>>> -                      * fw_devlink doesn't skip adding consumers to this
+>>>>> -                      * device.
+>>>>> -                      */
+>>>>> -                     rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>>>>>                         if (!of_platform_device_create(rd->dn, NULL, &pdev->dev)) {
+>>>>>                                 dev_err(&pdev->dev,
+>>>>>                                         "Failed to create child device '%pOF'\n",
+>>>>> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+>>>>> index eb7fb202355f..30b48a428c0b 100644
+>>>>> --- a/drivers/i2c/i2c-core-of.c
+>>>>> +++ b/drivers/i2c/i2c-core-of.c
+>>>>> @@ -176,11 +176,6 @@ static int of_i2c_notify(struct notifier_block *nb, unsigned long action,
+>>>>>                         return NOTIFY_OK;
+>>>>>                 }
+>>>>>
+>>>>> -             /*
+>>>>> -              * Clear the flag before adding the device so that fw_devlink
+>>>>> -              * doesn't skip adding consumers to this device.
+>>>>> -              */
+>>>>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>>>>>                 client = of_i2c_register_device(adap, rd->dn);
+>>>>>                 if (IS_ERR(client)) {
+>>>>>                         dev_err(&adap->dev, "failed to create client for '%pOF'\n",
+>>>>> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+>>>>> index 2eaaddcb0ec4..b5be7484fb36 100644
+>>>>> --- a/drivers/of/dynamic.c
+>>>>> +++ b/drivers/of/dynamic.c
+>>>>> @@ -225,7 +225,6 @@ static void __of_attach_node(struct device_node *np)
+>>>>>         np->sibling = np->parent->child;
+>>>>>         np->parent->child = np;
+>>>>>         of_node_clear_flag(np, OF_DETACHED);
+>>>>> -     np->fwnode.flags |= FWNODE_FLAG_NOT_DEVICE;
+>>>>>
+>>>>>         raw_spin_unlock_irqrestore(&devtree_lock, flags);
+>>>>>
+>>>>> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+>>>>> index f77cb19973a5..ef9445ba168b 100644
+>>>>> --- a/drivers/of/platform.c
+>>>>> +++ b/drivers/of/platform.c
+>>>>> @@ -739,11 +739,6 @@ static int of_platform_notify(struct notifier_block *nb,
+>>>>>                 if (of_node_check_flag(rd->dn, OF_POPULATED))
+>>>>>                         return NOTIFY_OK;
+>>>>>
+>>>>> -             /*
+>>>>> -              * Clear the flag before adding the device so that fw_devlink
+>>>>> -              * doesn't skip adding consumers to this device.
+>>>>> -              */
+>>>>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>>>>>                 /* pdev_parent may be NULL when no bus platform device */
+>>>>>                 pdev_parent = of_find_device_by_node(parent);
+>>>>>                 pdev = of_platform_device_create(rd->dn, NULL,
+>>>>> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+>>>>> index 2e0647a06890..b22944a207c9 100644
+>>>>> --- a/drivers/spi/spi.c
+>>>>> +++ b/drivers/spi/spi.c
+>>>>> @@ -4791,11 +4791,6 @@ static int of_spi_notify(struct notifier_block *nb, unsigned long action,
+>>>>>                         return NOTIFY_OK;
+>>>>>                 }
+>>>>>
+>>>>> -             /*
+>>>>> -              * Clear the flag before adding the device so that fw_devlink
+>>>>> -              * doesn't skip adding consumers to this device.
+>>>>> -              */
+>>>>> -             rd->dn->fwnode.flags &= ~FWNODE_FLAG_NOT_DEVICE;
+>>>>>                 spi = of_register_spi_device(ctlr, rd->dn);
+>>>>>                 put_device(&ctlr->dev);
+>>>>>
+>>>> Sorry, some of you will receive this message now for second time. First
+>>>> message was sent to older series of patches.
+>>>> -
+>>>>
+>>>> Hello,
+>>>>
+>>>> Test system testing drivers for ROHM ICs bisected this commit to cause
+>>>> BD71847 drivers probe to not be called.
+>>> This driver (and overlay support) is in linux-next or something out of
+>>> tree on top of linux-next?
+>>>
+>>> Rob
+>>
+>> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c
 > 
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
+> I don't see any support to apply overlays in that driver.
 
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
+Ah. Sorry for the confusion peeps. I asked Kalle to report this without 
+proper consideration. 100% my bad.
 
-> 
-> Changes in v3:
-> 	- New patch.
-> 
-> ---
->  drivers/cpuidle/governor.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/cpuidle/governor.c b/drivers/cpuidle/governor.c
-> index 0d0f9751ff8f..5d0e7f78c6c5 100644
-> --- a/drivers/cpuidle/governor.c
-> +++ b/drivers/cpuidle/governor.c
-> @@ -111,6 +111,10 @@ s64 cpuidle_governor_latency_req(unsigned int cpu)
->  	struct device *device = get_cpu_device(cpu);
->  	int device_req = dev_pm_qos_raw_resume_latency(device);
->  	int global_req = cpu_latency_qos_limit();
-> +	int global_wake_req = cpu_wakeup_latency_qos_limit();
-> +
-> +	if (global_req > global_wake_req)
-> +		global_req = global_wake_req;
->  
->  	if (device_req > global_req)
->  		device_req = global_req;
-> -- 
-> 2.43.0
-> 
+While the bd718x7 drive indeed is mainline (and tested), the actual 
+'glue-code' doing the overlay is part of the downstream test 
+infrastructure. So yes, this is not a bug in upstream kernel - this 
+falls in the category of an upstream change causing downstream things to 
+break. So, feel free to say: "Go fix your code" :)
+
+Now that this is sorted, if someone is still interested in helping us to 
+get our upstream drivers tested - the downstream piece is just taking 
+the compiled device-tree overlay at runtime (via bin-attribute file), 
+and applying it using the of_overlay_fdt_apply(). The approach is 
+working for our testing purposes when the device is added to I2C/SPI 
+node which is already enabled. However, in case where we have the I2C 
+disabled, and enable it in the same overlay where we add the new device 
+- then the new device does not get probed.
+
+I would be really grateful if someone had a pointer for us.
+
+Yours,
+	-- Matti
 
 -- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+---
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
