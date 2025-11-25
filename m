@@ -1,313 +1,336 @@
-Return-Path: <linux-pm+bounces-38516-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38517-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E098C830BB
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 02:50:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB600C831F2
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 03:40:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1832C3480EE
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 01:50:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C34543A8BA1
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 02:40:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FAED1684B4;
-	Tue, 25 Nov 2025 01:50:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FFDA1D5ACE;
+	Tue, 25 Nov 2025 02:40:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="I/2saI4I"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="O7Y6Q6ZT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011063.outbound.protection.outlook.com [52.101.70.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4228632B
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 01:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764035415; cv=none; b=gMvGkSuZEaXtC28yMYPIOV6M916nu6u7xHgQmFFZsppM/0GKzMFXHX70TyJKknrlzZSXxvOCuyzwiAarsj31KvQsuWPkz18ulrp1EXohkbUDcM9iVlrkbj1Glfjh3IgEKS7CzSBdKA3Hb6ydSsl5RseJeqdixrm6Dk87wLZ0Ho4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764035415; c=relaxed/simple;
-	bh=sa5gZ8o2hZhgM8t0SxAZs8zWrbOBTRpLrJI3JHm7Stc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=I9LncMAIs/+DI9mtG1JS5XQJzZFQ+CjpunzLQninDGEjh5H6FVFs5XTKZPu/I9aZzQLuqtmQD8aBzaztANuj5pdUxgJYuA4qOunHndg+YD6f3bBAl5HuMWjJ6tq1ZQP7gAGaFKwqmDCRaD+bM+EYkUWPs2sMc2v9nSc5KofHXxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=I/2saI4I; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3437ea05540so4250879a91.0
-        for <linux-pm@vger.kernel.org>; Mon, 24 Nov 2025 17:50:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1764035413; x=1764640213; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4BWHUL2GN8wanhvZvhL4KmgPjjWd1azXkQipkoFyfG8=;
-        b=I/2saI4Ih6eP0HAevw/JuJrImTzmoCs3BWtZuerybxXeyiaf5QHkFUCoBkmEnhR9vt
-         0Ezg33Yd3f6fsJVTN4jE9Q8+AOOcxgtFjyx6sQF9MXqeZwCjamCWUDlZ8e/Y0wGKHYN5
-         JsqZuErvElvGS22wpt6WKRM5Psl1SFCkYJJPOnmzBi+LKhD3FFc9IlLK0YYtmYL0rEBl
-         e4XxAiv7zfyugcGiAVMc6qKOVIGxkubdcHbh4iacxMZSRazuZd0Xt1qRscZ9SbZcm0cR
-         RPJy7R17Pu3BDVvqbYisTngE+2eyPEZaIoRs4b55tJOheqtbtClo8WXxiE41vtgxst0D
-         ULyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764035413; x=1764640213;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4BWHUL2GN8wanhvZvhL4KmgPjjWd1azXkQipkoFyfG8=;
-        b=Qi0CAXZVgUQxULKAMJbQo7VnG47UredAadI45qjCfTyVo4Y1nDe22UFqNhrn5Mtbcp
-         S/J7qf1993443DhKtPO8wv/A16jk3rHEPJbj/Bu+lpp2ILPd8Tx4VTTmb0FqkstA0sGU
-         3Q2JnOSOxR4+RGDzVQUF50hW4TUVPQ19pPhsJoqpw/Ue3ToJDUjyEf026pTARTIQoqYT
-         kGFwBspFsK0EvMTkWw8rYYXXbTP2cDbkwDzm6rQbIhfgmn/OMJJSbWsDzQesYyZBqvWH
-         GPxI2l6sOsTujZFjDjZCtBeNZVcx8uwduolMYn9fkuFLJUUwj4JHhBjpyN8toYB4LV52
-         NkSg==
-X-Forwarded-Encrypted: i=1; AJvYcCWIifqD1ObJQsH5nXunEPKZfA2BlYmvMdi3goYwPkhaSlcdjhcY4Rn0UeNr7uNLvFHI6ahiwohxNg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwssBMk5Ox7jnQz96CmPqLeaPcBaUv3ObH6qk1m0w6aCWUj75rx
-	LmxOWq5sGvu6r0ZSqxII7mt8UoOn1r2y2S1+kU3D51JNbZZ44QOPqM+RJdzGMYRwtB3VM999zQK
-	IlvfSxs4=
-X-Gm-Gg: ASbGnctwuoGlAh+lOWY5EUZ/kSQBpWROtdqWcJFVMscYvr/FsB1epAxhxt8GQMAlRzm
-	LKeJv1nf3ATZmUGHhZT27In2n+fG2pfCM26NMizck9NcFues0gidFVxhY1OsR9g5jO/bNNNgb0O
-	MgMQ6bpfZRAPHtsJb7aN2AAIiG2FiIicjGNRtJUjOwnGeTRWPjrS36xvg5ERc3KtpztmIlibigS
-	CseN7UJRvzWUmxhgH5HWcWrtmhaUXkEpEmR9HNeqRKiAIrcnIVy8CknBfV6MBMOcGobhcp7d7oM
-	3IWpjrseowPiL772QV1HhZSWl9FvXsj0nh6gSNUhz3/kRGqxXjogjqFYazn++EoompQ2w7IVlU3
-	bo+C63V5FdHBYhlxO7+M+/EOccV/8jSndl0lAiJPpX3KCPQChXNkeI0D7Z4MjGn3aWZQiU1eEGH
-	eDqFTz9Iu9
-X-Google-Smtp-Source: AGHT+IEHU6A+/8n3mB4jZSrnb+icOKiIn2/QWEg33wEEYpctM5v8n3SmiGWeZYOnJ42kEqB3e5fFuw==
-X-Received: by 2002:a17:90b:5628:b0:32d:e07f:3236 with SMTP id 98e67ed59e1d1-34733f30dccmr13629885a91.22.1764035412693;
-        Mon, 24 Nov 2025 17:50:12 -0800 (PST)
-Received: from localhost ([71.212.208.158])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34727a36bbfsm14828683a91.0.2025.11.24.17.50.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Nov 2025 17:50:11 -0800 (PST)
-From: Kevin Hilman <khilman@baylibre.com>
-To: Rob Herring <robh@kernel.org>, Herve Codina <herve.codina@bootlin.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, devicetree@vger.kernel.org,
- linux-pm@vger.kernel.org, arm-scmi@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] of: Add of_parse_map_iter() helper for nexus node
- map iteration
-In-Reply-To: <CAL_Jsq+2sFzQb8j5bBWbwgyYn5apLTfWOTZW3+9n74uVyph16A@mail.gmail.com>
-References: <20251119-topic-lpm-of-map-iterator-v6-18-v1-1-1f0075d771a3@baylibre.com>
- <CAL_Jsq+2sFzQb8j5bBWbwgyYn5apLTfWOTZW3+9n74uVyph16A@mail.gmail.com>
-Date: Mon, 24 Nov 2025 17:50:11 -0800
-Message-ID: <7hjyzedgoc.fsf@baylibre.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA9E1A00F0;
+	Tue, 25 Nov 2025 02:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764038403; cv=fail; b=IjhYeyfmzCeWYpfc1H5ZvzTOik5HNW51v7rKv0HKt8w/r1CzDCeqpzdzFpPolrLVlrzESXQpT+ZtUenaNdJ0Tu+Wr9KL5z8cPKIaIyHSDWM5LOntj4BjM5sC4rSITuDbbU4QPizhGXpzQdcS/RWuy9Ju1nDwWKauttQxd1UONE4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764038403; c=relaxed/simple;
+	bh=JtQL5B8QKmLr2pQGTJM2hXpXk1xJIQKUMPPJ0csWoM0=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=c/9GqWguWB9WXX2qhWKvDphr0gu5vM7+Q0dTT6aWelaKY2UABzCEirEYF+dxvmADm1enMbjVGRi4B+AuPS4VkH2x3D7GqyVkC/t+bAiClzdRTezrdIJVnN1RFokHPRyTSVxMvqaAl/tIu+YlaMlwQ8Bgj31ktzjad+NY1mx8EwI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=O7Y6Q6ZT; arc=fail smtp.client-ip=52.101.70.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BLD/pGli7Y9BJ7SzJh+VCu0Y+7+F8mC96CprTMy10DQLAPnIgHTxRlrPY2YCnngJLH97I/NDDo+SAaakra+UyPj8rEWrZ6ljpztpQvyybw4jkQXHjzdBOeY5v3t/kjc9Y42/+22y2fg2gbTCbP77eIEmOEmOY25zJwHz+Hnl+LWnDANqRm+ZJKeBQTGw9//EoL1Fl9gz/aOl/pIptqB3GSk6Af2XWhQC7hzpLhHXvc5qRIyy+ozr7t8iKBf2pDbYd1r1V0Dg6eONguT/jy+BDAIgHoBH02WKqtbNbLoRhMHZGuwHUPOkW1LCTfmVyhqzpW45x9yJe9WWNf98m5VJyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CGR7iRSvfk3qMO7SlipsNFOL5+ltXot+A9qlTVivCaA=;
+ b=U33aNk3td6d+fHKPjeJwQX1rwfQSTY+XvyZwSw3oAlh1DzfB0iq8c1Gj6YHkKgn0atXpMOSEkIQiaRDNucEHLEyyekpsbE0GFxDKSKj74bVZVh+mdOfr4pjzAilAyOuIlvPVy86fTf/XamwGzDrUWlhEfLFGqnHea2JvNWzuDnpjqkvgxHVpLhwNrd3Ko22Zi2HQhOOyDNehhwB8gYkCfuUtsoy3+jO50nwPA2zJemYK+fNLKa+B5qxwKeacFNrS9v8TKRF8tBjXNnGw1gJdK1hlT0mBcmHIrg/DCMTigH8lAQ5DkBW6c2YJ2iN7EkBOlVI0LeJreekjAlgH4Q9xtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CGR7iRSvfk3qMO7SlipsNFOL5+ltXot+A9qlTVivCaA=;
+ b=O7Y6Q6ZT9Cm+O9YnPr5OHFjfi1fCdAHNB5FX1VIwWluSW42u9f5lqa+atLCOgzugwQ5EfBr0XAVYXuH1c8m/iLfUXtArTEbJfe9C5YolQwp2oeaubOu/Jk5x2zxaAqZu+TBmMAobkZ8mOIaGfGDBWs0cA1nQ0+DUFofgv4OiG8MaiOHcUr4o9iF6W+6S+yYY9z92GEEezfOBTBLVqUq/eGWTi/S/sD9EA5Ro8E5f6VoTj5aNRN7Vy4ThOWthgniMI92CxeUY4YjL39OnEH946ktZbJscbiQ3rvnarTrm98KVKzClAJpEpQgyHav3b9H6cN33l8fmC9rNTaVxO51HxQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PAXPR04MB8254.eurprd04.prod.outlook.com (2603:10a6:102:1cd::24)
+ by PA4PR04MB7664.eurprd04.prod.outlook.com (2603:10a6:102:f1::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.18; Tue, 25 Nov
+ 2025 02:39:53 +0000
+Received: from PAXPR04MB8254.eurprd04.prod.outlook.com
+ ([fe80::2755:55ac:5d6f:4f87]) by PAXPR04MB8254.eurprd04.prod.outlook.com
+ ([fe80::2755:55ac:5d6f:4f87%4]) with mapi id 15.20.9343.016; Tue, 25 Nov 2025
+ 02:39:51 +0000
+Message-ID: <7ceb9424-22d0-467f-b42c-33f0a903f5d9@oss.nxp.com>
+Date: Tue, 25 Nov 2025 10:39:41 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] media: verisilicon: Avoid G2 bus error while decoding
+ H.264 and HEVC
+To: Nicolas Dufresne <nicolas@ndufresne.ca>, Frank Li <Frank.li@nxp.com>
+Cc: linux-media@vger.kernel.org, mchehab@kernel.org,
+ hverkuil-cisco@xs4all.nl, benjamin.gaignard@collabora.com,
+ p.zabel@pengutronix.de, sebastian.fricke@collabora.com, shawnguo@kernel.org,
+ ulf.hansson@linaro.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+ festevam@gmail.com, linux-imx@nxp.com, l.stach@pengutronix.de,
+ peng.fan@nxp.com, eagle.zhou@nxp.com, imx@lists.linux.dev,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20251121081911.1682-1-ming.qian@oss.nxp.com>
+ <20251121081911.1682-2-ming.qian@oss.nxp.com>
+ <aSCOZCJ2rSw7LAvE@lizhi-Precision-Tower-5810>
+ <d282811a-866d-4ca8-b9f6-fc1da3a7565e@oss.nxp.com>
+ <aSR+eaVxBhnahOl7@lizhi-Precision-Tower-5810>
+ <baec095da2b7b84be19b205b18e765f9a2305574.camel@ndufresne.ca>
+ <020d1263315b8a5ff3fdfb46d61d0108cdfa5bb3.camel@ndufresne.ca>
+From: "Ming Qian(OSS)" <ming.qian@oss.nxp.com>
+In-Reply-To: <020d1263315b8a5ff3fdfb46d61d0108cdfa5bb3.camel@ndufresne.ca>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR02CA0001.apcprd02.prod.outlook.com
+ (2603:1096:4:194::10) To PAXPR04MB8254.eurprd04.prod.outlook.com
+ (2603:10a6:102:1cd::24)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8254:EE_|PA4PR04MB7664:EE_
+X-MS-Office365-Filtering-Correlation-Id: e20b8abb-f97a-49cf-d6c8-08de2bcbe821
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|19092799006|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Yko5UE43ZGNZczVLdU1NZzJzeEdJUTdDRGJzbHZLTC9KRTFDMVBwZEJTZU94?=
+ =?utf-8?B?TmlBV0hlZzN1MUFXc213ZU8reWgzczhVaE0zUlRoNy83WTcwU1NXV0tpUk13?=
+ =?utf-8?B?M2g0Z09uL0RMMm55bE1CdHF0OWlpVTczN2pJWTNKUXNiN0hqWE15TDBXdHlj?=
+ =?utf-8?B?S2FIZStrTXRZMnBCd0V5Vmw0aHBPR25zaDQwUUY1VmVLbTljNnRLMlBJQ1Vo?=
+ =?utf-8?B?OERMNTk1Mk9Uc21qcnhGRWhMRnZBdlpodnZHZldsa3diOGJTOHdIWDFOakVF?=
+ =?utf-8?B?NDNlVUREWjdNT3F0YkxRamtZR21PelYzZnBSWlNMVUJaNytNaHZUZnE5V2Ro?=
+ =?utf-8?B?UFQvbExvNHI2aS8vYTgyLzlYY1p0blNnSTdpdVBuWWhvS214NXAzbHFWVXF0?=
+ =?utf-8?B?S0czYXdNTHFZS2Z1dDdTR01RdFQvdGJvUmlvMXRxK2YrZ3RBdVoyRERkdVc2?=
+ =?utf-8?B?QWp2S0pqZFRkcmZvOS91dmE2bHFsSkw3OUJQbEpFWXdMYldHcWhoOUtDYW5v?=
+ =?utf-8?B?UDBCV2VoQWFWSGdOcVBXL2RPajJMUzJUZVdFTmpXNGRSN3R1K3hDNGVBelgy?=
+ =?utf-8?B?bkdjL001M0FoTVk2b280OXRnY1grZGoxN2lEcUR5dHI0VlZOcEh2amJ5QTRJ?=
+ =?utf-8?B?TDhuMUQvd29saHczQjRtOFdiT0hkVkFOb0xRNVBKazJEdlE1RjltVFhyc29j?=
+ =?utf-8?B?OWdzUTNFVjZXNjRLL01EWVNiR0JOMGVqVFdGRE5lNGljWUprZjd0M0IvRWg0?=
+ =?utf-8?B?VEl1ajIxU3A5ZG5mWU1XRjZHaFNHdUNobUMvNCt0V0hYQUNURmtla25YcFdq?=
+ =?utf-8?B?cWJZUlNqRFBGSFJtZ1lsem5lTjVmTkt3YnhrMGdyTCtDaGdtRHVpenN2OUZq?=
+ =?utf-8?B?RXYwbnY0dUsvVHZjWmg1VmlVR2NydmRXd3o0Z1ExRVJIWS8wdGttd1FFUHM4?=
+ =?utf-8?B?ZzRZd2JpVzNZVTIvSk1NOFFRSTVhb1U0THIwRXhlbDFwajNJU1RMRDgzcmhu?=
+ =?utf-8?B?Y2g2UFIrbEE0bjZ0SmZlUlVaeXFnK3htU1pSaHd1cTB6bkJGSWxKL0xCaEtK?=
+ =?utf-8?B?c3d6a2dYVFRtdVJJcHR6WlRaalFINXNXZmRvTUR0RU1UZm9zYVhtRWxUOUJN?=
+ =?utf-8?B?YzNQUy9qYmJWY3ZJRU8yWndNRm0rc2pBWVpPaVNFUHFIU05VY09UVTRjUkVs?=
+ =?utf-8?B?dXpTeU5tWFM3d0R5N0FzWUNIb2Q0WEU5eUM5VWFlVktJd0E1Tm1rcnFXVmtG?=
+ =?utf-8?B?Y0llRmNhT09HbWc5R3QzOHdCeVpRcXgyMDhONFV5QzNZcEdsaFJzdjdVb1U4?=
+ =?utf-8?B?UnQ5TEZHbTJhSEdldnNlTlFNZVVoYlhnek1LWUJqU0FzUUhOampJTFY2SjJm?=
+ =?utf-8?B?L3dyNk9BRXVHWmRpRlRNSkM3dklvZVNmMTBHTWw3ZzNNRGF2ZTM3YnFwT3lw?=
+ =?utf-8?B?bE4zS1F1SlRJdHhRTEVmb1BZMllUQmlES3RiT25ETmhMWUhnSGdXd3pFY1c3?=
+ =?utf-8?B?YkdWeEFLSmhpdmVaRjJaaWlZL0VjUHp2cXVsUkZKT1NLWlRJSm5YOWMvbk1q?=
+ =?utf-8?B?MitKaCs3cC9ock4ydnE1RU43V3dndWw5eS92WERYKzkzVzZxNzY2djJlcU5x?=
+ =?utf-8?B?R3A1eWJLRmg4UUpXR1Fxb0tiZDk2Y1pGc3A1QXdZMHRxMVVxS0xKZlVKU3RR?=
+ =?utf-8?B?M25qUjhiUURSU0pOZjNCTXptc0hYVXpnQnZ6WW9SQUFoWjFvU0NZcjlZUFhr?=
+ =?utf-8?B?QmZlTXUzQnRkZS9mM09qNTRwQWp3bTR1U0dSMlo0VnV5QUFXSXJZN0lFL2Jp?=
+ =?utf-8?B?STg5WkVQbGx6eHBFc21ISlpVNEJWME13TzlPQkxpOE5ZVzBEMFE1ekMxN3pI?=
+ =?utf-8?B?aW1rL3BlelRLd09OVThQN1ZuQzkzY2EwZytrUlpvOUxRQ3c9PQ==?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8254.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(19092799006)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZTZvRkprOWdGbjRoYmRTSE9hdCthcVZweHFieC9JeTJvMlgyS1IxV05mMHhk?=
+ =?utf-8?B?S0MvbUFuTTJkbmlxbWFRcUowZHB3alo2T0liMjlXbXVxRU5hcjFwb1lBRjk0?=
+ =?utf-8?B?bVRRVXBYeDF1UFhpcG9vZmxiUjFib0NlcEluY3lIWHFEY2txd0diWHJJMHpS?=
+ =?utf-8?B?V1BjakJUYmNkZG9Edjd2YlI5SUFoczBsUTNDTkoxNC8waWMzb20yVXUvVXFL?=
+ =?utf-8?B?YjhpSzlyczdXdlNMdmZFcStXSUwwby82UE9wcEpuN3lJRkNQYWJIRzZYd0Zw?=
+ =?utf-8?B?R2xHeFVYR3RtdGZ0My9kYjJUOUcyK1UyUEk3YW1lRXM1eUd1MXdzS1JVdUZq?=
+ =?utf-8?B?alJiZC9kZ25iSGIwUllZRnFlSVd5N3Y4bjlTNGZYd2NTdTduZkp0WUVOdGR1?=
+ =?utf-8?B?VUVXQml4N2xRS0F1eEhuZEVoSVphTTAyRGFCb2M2dnNzYzFCZEs1T0VyNnlq?=
+ =?utf-8?B?MmsxVmsvdWpBYjJrVUhzNk9wS3NNdDdiR3grbThKQmIyaC84VVh6ZW92c2Nv?=
+ =?utf-8?B?RmVidlhRZGFDY0k5SjVtK0U5ZUFOM1djT2Q1ZW9ORVYvQm5YTG9RNE9DODRS?=
+ =?utf-8?B?TTE2MEI0cFNSRXYwRStjS21BYk1kVVZXcWU4d3lXVjdia2REWG1MdXhHQy93?=
+ =?utf-8?B?U3prMDQvQXdKbjBEcFlxZ2gvQjBFekhCM0MwY0hvYnhXVWRZeTlxb0NrRDIz?=
+ =?utf-8?B?ampLT3Z2L1YyTjNWUDQ5a08rQk5pZFlVaE0xTHpLMXMzRFFta3ZXSXVQbjRV?=
+ =?utf-8?B?Sjg4blBVaVVaU1RoTVFBbG5RN01WWUVKcVM4dGNKUzNnajZPSzVCcGw1MDZq?=
+ =?utf-8?B?YlBqRHlHbWw1QWp0M1gvK1B4cWhkMlc2TVVtWGx5MXgxUWlycS8rZnczNE5x?=
+ =?utf-8?B?RlFjeUE3c0w5dGt6SUdHaW5XMGVMa1VVZ1NkNTJnYWlFQlpzZ0p3eWFWVGRL?=
+ =?utf-8?B?cW1UQVgxNDF1bHMrTHNBWEdwRW1ERFdPM2xWdDlyLzZXUE1uVXhZTVdwMjFi?=
+ =?utf-8?B?RDBzd2lxcUgvWDI2YWtWOThKUkN3MHFRdlF1WFB4aVNPMkdXalVkYktKV2Yv?=
+ =?utf-8?B?WFY5NXRRc0R0K01HT25CbExmRHM0OFJXTVFjR3ZEWjJ6TUg3WFZQSVA1QXY4?=
+ =?utf-8?B?NUFlcFc3Vmh5ak9FMmpNNmlHSlRWVmZBdEppckZMNkRNNkZQKzNGemF4ZGRV?=
+ =?utf-8?B?MEhkSG5CN3d3N2VlQXZTU0M2OHQzbjIyTnNJdGRVcmhqN0JFd1g5YkEzS0hs?=
+ =?utf-8?B?cjFwaXFBNmxqSzI5VWJ5bXBHS2hsdXREWHpKQk93UDAvc0QycFFLNko3OEU2?=
+ =?utf-8?B?VUZQYWNCQWk1V0RsM3BySDVudDhjaGFhNzI3UW5rb0YxZnVxN3QycUNtZ1hI?=
+ =?utf-8?B?Ymh2NHRycUpSbXlkM1NTTGE1M3dQMC95NWQvRlIxZzZiNGRFMzRmcWZDT1cw?=
+ =?utf-8?B?Y1hvVTcxbG9kTTk1K0grQ0tRbDZ1OXZEekd0V3JsZytwQmxOZFpUbURTcEx5?=
+ =?utf-8?B?d1p1ditpd0hSc0Vya1BlYnZUMjJLYTkrb0ZURUp0ZE1US1NVKzlOZXo5bXZC?=
+ =?utf-8?B?NlBKUzFBT1NsYjBYd1ZUR3A4WXJuQnVLZjMwbE1rN3JRdkxTTVEvaVJJcldC?=
+ =?utf-8?B?MlZZZWFBZWt6MTdma3AwbGZwb20rWG1DNGFLTGZoUDNMRnNicU5ORjRjTnF5?=
+ =?utf-8?B?YisrelhvZlNCdWVzWC91cHBRK0ZjVDdMdURVYU0reWd5WlhGRkFraHdvZ3ZD?=
+ =?utf-8?B?QmlhcXpQKzZtTXduVlNXdTB5cDI0dUExUU84ZC9sSFdTUmJDNWR5WmJHR2ov?=
+ =?utf-8?B?WlR1VUNmbEtmcW1WTUYybWhuNHNSMVpKQVR0L0s5S29WTzJvaUY5dWdNTDNm?=
+ =?utf-8?B?NUhScVYxS25scUxkbUNiUTlYUVNvZzh3bkhqOE9hU2crS2swNUh6ZkxjOGhH?=
+ =?utf-8?B?N3lXUC9ZOHNaVHFPVTg3RnByVmp2RlN1aWJtWDlmbXA4U0dRdWsySFY1L292?=
+ =?utf-8?B?T3RUSlo3S0JxcFVYc09ucHpXOWk1YVQ3ZDRYSVZJV096UkJKRnN1Rmg1SDVD?=
+ =?utf-8?B?NU9xZ2FuRU56dGlUV0RFSXArbzZCcnhvSmdRWnVBRVhZSFl0ME9VYWhlaXpv?=
+ =?utf-8?Q?9P1ZZML+HJIF/vwDAkCsSre7A?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e20b8abb-f97a-49cf-d6c8-08de2bcbe821
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8254.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2025 02:39:51.1739
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pRulYb/YCcWn6zjOUFsWo3C8UiU5WXtVlrEU9PpkjdhrS299XBYW9nIShkhkCgGQWQd3lsMKIat9TaAKDQRojw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7664
 
-Rob Herring <robh@kernel.org> writes:
+Hi Nicolas and Frank,
 
-> +Herve
->
-> On Wed, Nov 19, 2025 at 6:41=E2=80=AFPM Kevin Hilman (TI.com)
-> <khilman@baylibre.com> wrote:
+On 11/25/2025 12:55 AM, Nicolas Dufresne wrote:
+> Le lundi 24 novembre 2025 à 11:39 -0500, Nicolas Dufresne a écrit :
+>> Hi,
 >>
->> Add a new helper function of_parse_map_iter() to iterate over nexus
->> node maps (c.f. DT spec, section 2.5.1.)
+>> Le lundi 24 novembre 2025 à 10:49 -0500, Frank Li a écrit :
+>>> On Mon, Nov 24, 2025 at 09:38:15AM +0800, Ming Qian(OSS) wrote:
+>>>> Hi Frank,
+>>>>
+>>>> On 11/22/2025 12:08 AM, Frank Li wrote:
+>>>>> On Fri, Nov 21, 2025 at 04:19:09PM +0800, ming.qian@oss.nxp.com wrote:
+>>>>>> From: Ming Qian <ming.qian@oss.nxp.com>
+>>>>>>
+>>>>>> For the i.MX8MQ platform, there is a hardware limitation: the g1 VPU and
+>>>>>> g2 VPU cannot decode simultaneously; otherwise, it will cause below bus
+>>>>>> error and produce corrupted pictures, even led to system hang.
+>>>>>>
+>>>>>> [  110.527986] hantro-vpu 38310000.video-codec: frame decode timed out.
+>>>>>> [  110.583517] hantro-vpu 38310000.video-codec: bus error detected.
+>>>>>>
+>>>>>> Therefore, it is necessary to ensure that g1 and g2 operate alternately.
+>>>>>> Then this allows for successful multi-instance decoding of H.264 and
+>>>>>> HEVC.
+>>>>>>
+>>>>>> Fixes: cb5dd5a0fa518 ("media: hantro: Introduce G2/HEVC decoder")
+>>>>>> Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
+>>>>>> ---
+>>>>>>    drivers/media/platform/verisilicon/hantro.h   |  1 +
+>>>>>>    .../media/platform/verisilicon/hantro_drv.c   | 26 +++++++++++++++++++
+>>>>>>    .../media/platform/verisilicon/imx8m_vpu_hw.c |  4 +++
+>>>>>>    3 files changed, 31 insertions(+)
+>>>>>>
+>>>>> ...
+>>>>>>    #include <linux/workqueue.h>
+>>>>>> +#include <linux/iopoll.h>
+>>>>>>    #include <media/v4l2-event.h>
+>>>>>>    #include <media/v4l2-mem2mem.h>
+>>>>>>    #include <media/videobuf2-core.h>
+>>>>>> @@ -93,6 +94,9 @@ static void hantro_job_finish(struct hantro_dev *vpu,
+>>>>>>
+>>>>>>    	clk_bulk_disable(vpu->variant->num_clocks, vpu->clocks);
+>>>>>>
+>>>>>> +	if (vpu->variant->shared_resource)
+>>>>>> +		atomic_cmpxchg(vpu->variant->shared_resource, 0, 1);
+>>>>>> +
+>>>>>>    	hantro_job_finish_no_pm(vpu, ctx, result);
+>>>>>>    }
+>>>>>>
+>>>>>> @@ -166,12 +170,34 @@ void hantro_end_prepare_run(struct hantro_ctx
+>>>>>> *ctx)
+>>>>>>    			      msecs_to_jiffies(2000));
+>>>>>>    }
+>>>>>>
+>>>>>> +static int hantro_wait_shared_resource(struct hantro_dev *vpu)
+>>>>>> +{
+>>>>>> +	u32 data;
+>>>>>> +	int ret;
+>>>>>> +
+>>>>>> +	if (!vpu->variant->shared_resource)
+>>>>>> +		return 0;
+>>>>>> +
+>>>>>> +	ret = read_poll_timeout(atomic_cmpxchg, data, data, 10, 300 *
+>>>>>> NSEC_PER_MSEC, false,
+>>>>>> +				vpu->variant->shared_resource, 1, 0);
+>>>>>> +	if (ret) {
+>>>>>> +		dev_err(vpu->dev, "Failed to wait shared resource\n");
+>>>>>> +		return -EINVAL;
+>>>>>> +	}
+>>>>>
+>>>>> why not use a mutex?
+>>>>>
+>>>>> mutex() lock here, unlock at hantro_job_finish(), if second instance
+>>>>> run to here, mutex() will block thread, until previous hantro_job_finish()
+>>>>> finish.
+>>>>>
+>>>>> Frank
+>>>>
+>>>> G1 and G2 are two different devices. If I were to use a mutex, I would
+>>>> need to define a global mutex. Therefore, to avoid using a global mutex,
+>>>> I only define a static atomic variable.
+>>>
+>>> static atomic varible also is global.  Global mutex is allowed if it is
+>>> really needed.
+>>>
+>>>>
+>>>> If a static mutex is acceptable, I think I can change it to a mutex.
+>>>
+>>> ref to
+>>> https://elixir.bootlin.com/linux/v6.18-rc6/source/drivers/base/core.c#L43
 >>
->> This function provides an iterator interface for traversing map
->> entries, handling the complexity of variable-sized entries based on
->> <stem>-cells properties, as well as handling the <stem>-skip and
->> <stem>-pass-thru properties.
+>> My main concern with either of these approaches is that it kills the ability to
+>> rmmod the driver forever. The only working approach would be that both drivers
+>> depends on a third driver that provide the synchronization services.
+> 
+> I do realize after the fact that my answer is a little off considering its a
+> drivers against itself (not cross-driver, that would be a huge pain if it was
+> the case).
+> 
+> Checking further, the ref to the counter (or mutex) should cleanly be gone by
+> the time the driver is removed, so perhaps its fine, though best to test it.
+> Though, in both cases, I'm not happy to see code that will wait for multiple
+> milliseconds on either home made mutex or a real mutex. Adding another arbitrary
+> timeout is also not very nice either. The current software watchdog already get
+> in the way when testing simulated IP.
+> 
+> I know its work, but what about a recounted singleton, with a notifier so we can
+> schedule work when the resource is free ?
+> 
+> Nicolas
+> 
+
+Thank you for your comments. I will consider a better solution.
+
+Regards,
+Ming
+
 >>
->> RFC: There's a lot of overlap between this function and
->> of_parse_phandle_with_args_map().  However the key differences are:
+>> Nicolas
 >>
->>   - of_parse_phandle_with_args_map() does matching
->>     it searches for an entry that matches specific child args
->>   - of_parse_map_iter() does iteration
->>     it simply walks through all entries sequentially
->
-> There's also this in flight for interrupt-map:
->
-> https://lore.kernel.org/all/20251027123601.77216-2-herve.codina@bootlin.c=
-om/
->
-> There's probably enough quirks with interrupt-map that we can't use
-> the same code. Though it may boil down to handling #address-cells and
-> how the parent is looked up.
-
-Hmm, I wasn't aware of this, thanks for point it out.  It looks very
-similar to what i need, except for it's hard-coding the properties as
-"#interrupt-*".
-
-Seems like this should be generalized to handle the generic nexus-node
-map. But it also seems to rely on an existing function
-of_irq_parse_imap_parent() which is also specific to interrupt maps.
-
-That being said, I'm not sure if interrupt-maps are really special, or
-if they are just a specific case of the nexus node map.  This drivers/of
-code is breaking my brain, so it's more likely that I simply don't
-understand enough of it to know how to do this correctly.
-
-Any more detailed help/guidance for how to go forward here would be
-greatly appreciated.
-
->> There are likely ways to extract some shared code between these two
->> functions into some shared helpers, but I'm hoping someone more
->> familiar with this OF code can help here.
->
-> I would expect of_parse_phandle_with_args_map() could be implemented
-> in terms of the iterator.
-
-I'm not really sure how because the of_parse_phandle* stuff just has to
-handle a single phandle, where what I need (and what the imap stuff is
-doing) is iterating over the whole map.
-
->> However, before refactoring the shared code, it would be good to have
->> some feedback on this approach.
->>
->> Signed-off-by: Kevin Hilman (TI.com) <khilman@baylibre.com>
->> ---
->>  drivers/of/base.c  | 167 ++++++++++++++++++++++++++++++++++++++++++++++=
-++++++
->>  include/linux/of.h |  13 ++++
->>  2 files changed, 180 insertions(+)
->>
->> diff --git a/drivers/of/base.c b/drivers/of/base.c
->> index 7043acd971a0..bdb4fde1bfa9 100644
->> --- a/drivers/of/base.c
->> +++ b/drivers/of/base.c
->> @@ -1594,6 +1594,173 @@ int of_parse_phandle_with_args_map(const struct =
-device_node *np,
->>  }
->>  EXPORT_SYMBOL(of_parse_phandle_with_args_map);
->>
->> +/**
->> + * of_parse_map_iter() - Iterate through entries in a nexus node map
->> + * @np:                        pointer to a device tree node containing=
- the map
->> + * @stem_name:         stem of property names (e.g., "power-domain" for=
- "power-domain-map")
->> + * @index:             pointer to iteration index (set to 0 for first c=
-all)
->> + * @child_args:                pointer to structure to fill with child =
-specifier (can be NULL)
->> + * @parent_args:       pointer to structure to fill with parent phandle=
- and specifier
->> + *
->> + * This function iterates through a nexus node map property as defined =
-in DT spec 2.5.1.
->> + * Each map entry has the format: <child_specifier phandle parent_speci=
-fier>
->> + *
->> + * On each call, it extracts one map entry and fills child_args (if pro=
-vided) with the
->> + * child specifier and parent_args with the parent phandle and specifie=
-r.
->> + * The index pointer is updated to point to the next entry for the foll=
-owing call.
->> + *
->> + * Example usage::
->> + *
->> + *  int index =3D 0;
->> + *  struct of_phandle_args child_args, parent_args;
->> + *
->> + *  while (!of_parse_map_iter(np, "power-domain", &index, &child_args, =
-&parent_args)) {
->> + *      // Process child_args and parent_args
->> + *      of_node_put(parent_args.np);
->> + *  }
->> + *
->> + * Caller is responsible for calling of_node_put() on parent_args.np.
->> + *
->> + * Return: 0 on success, -ENOENT when iteration is complete, or negativ=
-e error code on failure.
->> + */
->> +int of_parse_map_iter(const struct device_node *np,
->> +                      const char *stem_name,
->> +                      int *index,
->> +                      struct of_phandle_args *child_args,
->> +                      struct of_phandle_args *parent_args)
->> +{
->> +       char *cells_name __free(kfree) =3D kasprintf(GFP_KERNEL, "#%s-ce=
-lls", stem_name);
->> +       char *map_name __free(kfree) =3D kasprintf(GFP_KERNEL, "%s-map",=
- stem_name);
->> +       char *mask_name __free(kfree) =3D kasprintf(GFP_KERNEL, "%s-map-=
-mask", stem_name);
->> +       char *pass_name __free(kfree) =3D kasprintf(GFP_KERNEL, "%s-map-=
-pass-thru", stem_name);
->> +       static const __be32 dummy_mask[] =3D { [0 ... MAX_PHANDLE_ARGS] =
-=3D cpu_to_be32(~0) };
->> +       static const __be32 dummy_pass[] =3D { [0 ... MAX_PHANDLE_ARGS] =
-=3D cpu_to_be32(0) };
->> +       const __be32 *map, *mask, *pass;
->> +       __be32 child_spec[MAX_PHANDLE_ARGS];
->> +       u32 child_cells, parent_cells;
->> +       int map_len, i, entry_idx;
->> +
->> +       if (!np || !stem_name || !index || !parent_args)
->> +               return -EINVAL;
->> +
->> +       if (!cells_name || !map_name || !mask_name || !pass_name)
->> +               return -ENOMEM;
->> +
->> +       /* Get the map property */
->> +       map =3D of_get_property(np, map_name, &map_len);
->> +       if (!map)
->> +               return -ENOENT;
->> +
->> +       map_len /=3D sizeof(u32);
->> +
->> +       /* Get child #cells */
->> +       if (of_property_read_u32(np, cells_name, &child_cells))
->> +               return -EINVAL;
->> +
->> +       /* Get the mask property (optional) */
->> +       mask =3D of_get_property(np, mask_name, NULL);
->> +       if (!mask)
->> +               mask =3D dummy_mask;
->> +
->> +       /* Get the pass-thru property (optional) */
->> +       pass =3D of_get_property(np, pass_name, NULL);
->> +       if (!pass)
->> +               pass =3D dummy_pass;
->
-> Generally the DT iterators need some state maintained, so there's an
-> init function to do all/most of the above and stash that into a state
-> struct for the iterator.
-
-Are you referring to of_phandle_iterator_init()
-
->> +
->> +       /* Iterate through map to find the entry at the requested index =
-*/
->> +       entry_idx =3D 0;
->> +       while (map_len > child_cells + 1) {
->> +               /* If this is the entry we're looking for, extract it */
->> +               if (entry_idx =3D=3D *index) {
->> +                       /* Save masked child specifier for pass-thru pro=
-cessing */
->> +                       for (i =3D 0; i < child_cells && i < MAX_PHANDLE=
-_ARGS; i++)
->> +                               child_spec[i] =3D map[i] & mask[i];
->> +
->> +                       /* Extract child specifier if requested */
->> +                       if (child_args) {
->> +                               child_args->np =3D (struct device_node *=
-)np;
->> +                               child_args->args_count =3D child_cells;
->> +                               for (i =3D 0; i < child_cells && i < MAX=
-_PHANDLE_ARGS; i++)
->> +                                       child_args->args[i] =3D be32_to_=
-cpu(map[i]);
->> +                       }
->> +
->> +                       /* Move past child specifier */
->> +                       map +=3D child_cells;
->> +                       map_len -=3D child_cells;
->> +
->> +                       /* Extract parent phandle */
->> +                       parent_args->np =3D of_find_node_by_phandle(be32=
-_to_cpup(map));
->
-> Before you update the parent node, you need to put the previous parent.
-
-OK.
-
-Kevin
-
+>>>
+>>> Frank
+>>>>
+>>>> Regards,
+>>>> Ming
+>>>>
+>>>>>> +
+>>>>>> +	return 0;
+>>>>>> +}
+>>>>>> +
+>>>>>>    static void device_run(void *priv)
+>>>>>>    {
+>>>>>>    	struct hantro_ctx *ctx = priv;
+>>>>>>    	struct vb2_v4l2_buffer *src, *dst;
+>>>>>>    	int ret;
+>>>>>>
+>>>>>> +	ret = hantro_wait_shared_resource(ctx->dev);
+>>>>>> +	if (ret < 0)
+>>>>>> +		goto err_cancel_job;
+>>>>>> +
+>>>>>>    	src = hantro_get_src_buf(ctx);
+>>>>>>    	dst = hantro_get_dst_buf(ctx);
+>>>>> ...
+>>>>>
+>>>>>>
+>>>>>> --
+>>>>>> 2.34.1
+>>>>>>
 
