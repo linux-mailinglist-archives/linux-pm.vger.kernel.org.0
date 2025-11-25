@@ -1,83 +1,40 @@
-Return-Path: <linux-pm+bounces-38536-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38537-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 067F9C841E8
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 10:00:59 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85A86C84206
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 10:03:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B83FA3A7CC9
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 09:00:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5C1E04E6F70
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Nov 2025 09:03:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7871D25A359;
-	Tue, 25 Nov 2025 09:00:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NDuuYrk3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77DBF2FE05B;
+	Tue, 25 Nov 2025 09:03:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC61B185E4A
-	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 09:00:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197782FE075
+	for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 09:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764061255; cv=none; b=PFJUYlWTKo/TD5CAzKovU0ZqEo5M5VYOSw1UbiQiieX+mHTVJy/+afm3K2FNPI8exPIoeuRRWX1RE3MAE3DXTIidTvpl0/8Cx8RDXoX3yJdW/KQ+5JCG8YmDkJKVZuVlJO/vtNVmH8NTwqPqzxJRR36PTMSL/k/0NsxnzRByIxY=
+	t=1764061427; cv=none; b=g6+QprK8NK2pcsizmp8+WJXBoC3sNC9QSQxHiP1RifGRw1jJ+WOVEFnEFBcz4OMxxCgQy9dwO+mD8tAXagL2d6VObx6fgdurU62dsZcS1I/0p7K6s+LMXdnHhYqddYCZBCbkc4lLGMIPMcGPNtwR1J85La/lKdYIxMHD0sNH6V8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764061255; c=relaxed/simple;
-	bh=dk6nkfYiFAmcasODS1YyCKH+/FBpW7aSup38ZdC9cew=;
+	s=arc-20240116; t=1764061427; c=relaxed/simple;
+	bh=Vj7NW6lihrGqiDwObGb7TUl3WohCMVwL3aqwpIq4YKc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cxIu+85M6hwpDHRNRG0WHRWdPKtDkAcaSddWy8PxY0ZwSQr7acy3epKJHEo6tpTdsFPMzbRvgEmq3HsYVqyoNHtHKMMjf3+W+H8+cl1YazUEG9LYS2SyOBS6Bh1DF+gu8am1mu7CnzwCwJ+3CQYZpJFAeqiJsRqLmMqu8lwB8QA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NDuuYrk3; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-42b31507ed8so4417117f8f.1
-        for <linux-pm@vger.kernel.org>; Tue, 25 Nov 2025 01:00:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764061252; x=1764666052; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TCEDitzChtc1KTVtUsK8wzF8EeuAz+wThYhGWzqzcE4=;
-        b=NDuuYrk3CKWxeK64juOTZ2WelvfZUAAnFV6v3O/OXF6jZIAMiHVwQYybjWU/ar8ADn
-         iEuW2Ztby3+JcrbVLNEBOfMEUI/0K3Lrl0CW2Som1qZMIkewzSb4tle22kyauXJ/Pjhs
-         7Uzmg4sSlljxlGn5tmYzJ7rMqCSPnKXXcOx/PgVoCGAKottvf886+SvvlBrGXxZuI8kX
-         5gv62IQUJgapQRFq0WHyiwr+aKPQjoLHn8Vymz8PbMr7txuydwDKckL6h8Flc9Xwx2+6
-         TFXKWA4EH11p/hjifHHSx37/Qygb/xxwfbulef4WR0R6tm8XH+cGnXcs/TmKqbQBXqg9
-         xLcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764061252; x=1764666052;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TCEDitzChtc1KTVtUsK8wzF8EeuAz+wThYhGWzqzcE4=;
-        b=L2352BsDucbd6kvad3L3k2Ph7pi66z1Txjye2unc+tQOroULXHMGB4TxrcvQn3j7B5
-         LzyZ2NrjFAR11bjMVR/pq3+LvyB4pLGqX9Lbc2mBNtAS8m4UV+U70ob09NahbaKt44OY
-         XrSYtLeW8WUDAIxtaSbqSRSFHSnBwEi+yscn/Cd4VD9zr4gF062GcBho/YIkMPVvMXjt
-         M9X/la1q9IkebXguYAYE+CmbIJo61/SvIeYmRX0UmSUlHgr7HmputU65cA2SNJMKqV6M
-         RvxHXgzHaNR+xFoIl24IvISjgOj3gM4M+xM6eN7Gj3isFk2Xrz6mI3xVE/DqI8mQCY/w
-         8Qtg==
-X-Forwarded-Encrypted: i=1; AJvYcCV1fg1Le0koLp1OIWJArhFSf+8KOOyr9oDL7oBiW/GFkCrOWBppkxmcS7d29Jp4azJ62AwSmYPjNQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrS7vFMGvizY+5cMHqAKtQO8C46CihQN7gMsw/OhlxupUbu6Fu
-	XJNOG7kK/+f888jYkrLhR8IUUJLt/ZyYuHO8EUgQGwcHmYIzZgbNBWHLqQvTca4iS/Q=
-X-Gm-Gg: ASbGncuBMwaq8JBP2GmkLnzuVLzg6wO2C7hHwf47I8oJzGYPRskJ3J8yGUntohazKxw
-	4gbCMvR8NORS5bFQRf5GhjXKv2+fyKE3opTegyIMIdl/jJMcgmQ+3Ic1mYdawF2NzWtUwH51IJd
-	dZn+t6+lqWp21q5c/U45A+XuDhJmmBMb3tdVsI4AOTRODG1a9ViOybptAZofpf08LuG0jooro91
-	u5xjlh6vVeEZ15zQAZ5Qv8Cg2sRwRj8XPCeMCRysKulY+aGwQwkvbHZxshPD+dBthT6mbd/WCcs
-	ktlnOIEMj4D16o4VqbPKRcB4/Yj5f9j6lBR/4ytDgw9EV+5aYeyZYmyV3KfP7OUXV3mObuQg3xh
-	4TNq2wM/4hvmlzc71F4Oj9/EMvV2LhaowVm43n4sYatDEfPHUHyBSmPo1cO3M8QU91dWVs/9/zn
-	qFIGePkEyzTbGz0d86PxIqNel+tqQgmuiBGglziLvt5KJSgYia94kW4fviPM4KYphHnRSyBm0Tp
-	6rW
-X-Google-Smtp-Source: AGHT+IEDZw8Pg29oAjYeXO9i7AFpBJlOFkIHHzqN0kQJFDAhwljS32TNpCpkBZUG4s7krs4HSu3QfA==
-X-Received: by 2002:a05:6000:1845:b0:429:92d8:3371 with SMTP id ffacd0b85a97d-42e0f1fd01fmr1916943f8f.11.1764061252074;
-        Tue, 25 Nov 2025 01:00:52 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:1d9d:2362:4539:c68d? ([2a05:6e02:1041:c10:1d9d:2362:4539:c68d])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-42cb7fb9022sm33018480f8f.36.2025.11.25.01.00.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Nov 2025 01:00:51 -0800 (PST)
-Message-ID: <d53b5b10-00b6-48bb-8d69-660cbf757ec2@linaro.org>
-Date: Tue, 25 Nov 2025 10:00:50 +0100
+	 In-Reply-To:Content-Type; b=CzNBA5+cht52VmqnSm5DZGJNTC6aM0oOzji3ZE1fAQk+n0rNa4v4WCaXvJlx5rkU3Tp8oaSSb0SNro17iLbPAGo6o7A9cDZ+UY4snuRpPmlGo7E81DEaWgyt2QaT3RCQYyZJhfswiP/c4NUhSPKo2iCXA5JLiZgCqEI5zzn+354=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B0CF51477;
+	Tue, 25 Nov 2025 01:03:36 -0800 (PST)
+Received: from [10.57.40.104] (unknown [10.57.40.104])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 157A83F66E;
+	Tue, 25 Nov 2025 01:03:41 -0800 (PST)
+Message-ID: <71ea7728-6808-4bdf-9437-3746ff8664fc@arm.com>
+Date: Tue, 25 Nov 2025 09:04:30 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,39 +42,82 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] tools/thermal/thermal-engine: Fix format string bug in
- thermal-engine
-To: Malaya Kumar Rout <mrout@redhat.com>, linux-kernel@vger.kernel.org
-Cc: malayarout91@gmail.com, "Rafael J. Wysocki" <rafael@kernel.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- linux-pm@vger.kernel.org
-References: <20251124104401.374856-1-mrout@redhat.com>
+Subject: Re: [PATCH] sched/cpufreq: Fix capacity calc in shared policy update
+To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Cc: linux-pm@vger.kernel.org, rafael@kernel.org, vschneid@redhat.com,
+ mgorman@suse.de, dietmar.eggemann@arm.com, juri.lelli@redhat.com,
+ peterz@infradead.org, viresh.kumar@linaro.org, mingo@redhat.com,
+ vincent.guittot@linaro.org, bsegall@google.com
+References: <20251125032437.2056626-1-kaushlendra.kumar@intel.com>
 Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20251124104401.374856-1-mrout@redhat.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20251125032437.2056626-1-kaushlendra.kumar@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 11/24/25 11:43, Malaya Kumar Rout wrote:
-> The error message in the daemon() failure path uses %p format specifier
-> without providing a corresponding pointer argument, resulting in undefined
-> behavior and printing garbage values.
+Hi Kaushlendra,
+
+On 11/25/25 03:24, Kaushlendra Kumar wrote:
+> In sugov_next_freq_shared(), the CPU capacity is retrieved only
+> for the CPU that triggered the update (sg_cpu->cpu) and then
+> incorrectly applied to all CPUs in the shared frequency domain
+> during the loop.On heterogeneous systems with CPUs of different
+> capacities sharing a frequency domain, this causes incorrect
+> frequency selection.
+
+How is this possible?
+Is it old or new Intel SoC (a chip name would be also welcome)?
+
+I would like to hear Rafael's view on such platform configuration.
+
+It looks like a hack and the next needed step would be a similar
+hack to calm down EAS and EM in the energy estimation code...
+
+Do we really want to support such configuration in the generic code?
+
 > 
-> Replace %p with %m to properly print the errno error message, which is
-> the intended behavior when daemon() fails.
+> Calculate per-CPU capacity in the loop and track maximum across
+> all CPUs for proper frequency calculation.
+
+I've changed that loop to speed-up the hot code path triggered
+from the scheduler. For most platforms (till now) it's fine
+to get the cpu capacity once for all cpus in the policy.
+A lot of code is based on this assumption.
+
 > 
-> This fix ensures proper error reporting when daemonization fails.
-> 
-> Signed-off-by: Malaya Kumar Rout <mrout@redhat.com>
+> Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 > ---
+>   kernel/sched/cpufreq_schedutil.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 0ab5f9d4bc59..9fdbc7a6063d 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -492,15 +492,15 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+>   {
+>   	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>   	struct cpufreq_policy *policy = sg_policy->policy;
+> -	unsigned long util = 0, max_cap;
+> +	unsigned long util = 0, max_cap = 0;
+>   	unsigned int j;
+>   
+> -	max_cap = arch_scale_cpu_capacity(sg_cpu->cpu);
+> -
+>   	for_each_cpu(j, policy->cpus) {
+>   		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+> -		unsigned long boost;
+> +		unsigned long boost, j_max_cap;
+>   
+> +		j_max_cap = arch_scale_cpu_capacity(j);
+> +		max_cap = max(max_cap, j_max_cap);
+>   		boost = sugov_iowait_apply(j_sg_cpu, time, max_cap);
+>   		sugov_get_util(j_sg_cpu, boost);
+>   
 
-Applied, thanks
+My gut feeling tells me that it won't be the last needed code change
+if we go that path...
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Regards,
+Lukasz
 
