@@ -1,198 +1,110 @@
-Return-Path: <linux-pm+bounces-38703-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38704-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00D0BC89DDB
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 13:52:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A397FC89DED
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 13:54:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3D5C34EA8FA
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 12:52:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DC893A8C40
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 12:54:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86B21328618;
-	Wed, 26 Nov 2025 12:52:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF5A328B40;
+	Wed, 26 Nov 2025 12:54:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=louisalexis.eyraud@collabora.com header.b="W7GQD0z/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JngBKuv6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender3-pp-f112.zoho.com (sender3-pp-f112.zoho.com [136.143.184.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0030315D2E;
-	Wed, 26 Nov 2025 12:51:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764161520; cv=pass; b=mc2Tak6vNjeKQBLvQ8CN5zC1JBL8vkU/Wu+2UTGIms+XV5RFwL7OkHFsjnvRy9ajJdDp3aD7g1USLxI8ijkkF1yZstmMo3w64iISFbcrGf9paYULYFsNGHaTzjBxBRdxOyQnvheAowRzIrcPOnKoK3E80aM0+rk4eF340ubs0QQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764161520; c=relaxed/simple;
-	bh=nNixrzkheuDIMggpW8OTcJsoV89FsDiu1NNHJQOhrwo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pTDkYtK8W60DpFgagLd8pIdQs913P5DqzofWX1LG2m3FuGdDAhSnmXeyBxU2lNWS0ahHOFJRScJoq3ZTLIqee4HHRzBuStJKSbAFZYq1IqaactPBnBqcJI51i8UVlV7ygQ6K39UOHYOupRLH8WgDJQOGnCjP/1YxFtFUphd7ZWI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=louisalexis.eyraud@collabora.com header.b=W7GQD0z/; arc=pass smtp.client-ip=136.143.184.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1764161490; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=TVw7O+xRO81xQKDOxL6b3InI4Tkrk5n982EQ1YzF4192HP0Jfizh9Q/Ql8HkKswJf6P27lUkKYmZriF7XbX9Xuke4EV9osC7ssDyV7kghvLmedE7QQajFG6EK+E4XE/19MfMgCVEnC21opNKaV2aupeEvhVn2Xjj4KywTPll6Gc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1764161490; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=Q3Pb48Eict5MIHFTWo5KBCPk+CLXMHDQJS2pecWv7U0=; 
-	b=i1a7vdxlI+8qmcB2okofPQQZCq971AAQbkriNnwC00eztMdI1bK/3bGPNCprZXXo5MZwNDjHoSXJX4yXQkWalDi8p3UdoKP8CkZCJNfC58LTR87r1uZBph3mLAlsaUSmxYOE8cX+gLJMG5ZzRsZkHS8ayYk+0++T6owD0aXL7Fc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=louisalexis.eyraud@collabora.com;
-	dmarc=pass header.from=<louisalexis.eyraud@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1764161490;
-	s=zohomail; d=collabora.com; i=louisalexis.eyraud@collabora.com;
-	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-	bh=Q3Pb48Eict5MIHFTWo5KBCPk+CLXMHDQJS2pecWv7U0=;
-	b=W7GQD0z/SvUaIDKs8vlKz4H/4Mfizeh6EcozCtPUx8YrLe2ha0NkRCvD17Au7W8A
-	aGTwJbF9718OhNX0YHHXLL+6v4XjI3SLU7OBOpPXKNoju8JA+ypfWICV4EOC3trunEc
-	ncX55Yi0GDJU+wASgRo6B5RAqDBR0aiahpaNWrEs=
-Received: by mx.zohomail.com with SMTPS id 1764161488066506.1829610871971;
-	Wed, 26 Nov 2025 04:51:28 -0800 (PST)
-Message-ID: <47cb520046a1dab6ea49abd402d3a9647aabf7b0.camel@collabora.com>
-Subject: Re: [PATCH] pmdomains: mtk-pm-domains: improve spinlock recursion
- fix in probe
-From: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
-To: Macpaul Lin <macpaul.lin@mediatek.com>, Ulf Hansson
- <ulf.hansson@linaro.org>,  Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- =?ISO-8859-1?Q?N=EDcolas?= "F . R . A . Prado"	 <nfraprado@collabora.com>,
- Chen-Yu Tsai <wenst@chromium.org>, 	linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, 	linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org
-Cc: Weiyi Lu <Weiyi.Lu@mediatek.com>, Jian Hui Lee
- <jianhui.lee@canonical.com>,  Irving-CH Lin <Irving-CH.Lin@mediatek.com>,
- conor@kernel.org, krzk@kernel.org, Bear Wang <bear.wang@mediatek.com>, 
- Pablo Sun <pablo.sun@mediatek.com>, Ramax Lo <ramax.lo@mediatek.com>,
- Macpaul Lin <macpaul@gmail.com>,  MediaTek Chromebook Upstream
- <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date: Wed, 26 Nov 2025 13:51:23 +0100
-In-Reply-To: <20251125105617.1564725-1-macpaul.lin@mediatek.com>
-References: <20251125105617.1564725-1-macpaul.lin@mediatek.com>
-Organization: Collabora Ltd
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAB68328251
+	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 12:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764161675; cv=none; b=N3nUHDZv5b5/PiZfzrpIKdYopkaX8G0+koK7QzXhs6ZHVM01LuRYpElm+Fnw3d5x9qJf3M+SDLYHSK2OTOeq5wppDwlflrvDg3gPFRghZq1lvNkmntJgFWfCK9vZfaVGasNVdREOqmcq33tHB96zv3+1ty2pYeGrSc8aObft+Fw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764161675; c=relaxed/simple;
+	bh=906uSaW+hNrl4mjuQuq3qwvQ5iYqcjyFvx5atEfrYfk=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=GOfmdYNgjjUrf7UQNW2bQV2du0vSvSoUyb/1PBM8w9GAob0ACxL0hmlBJ7dDyT4ewSedxrJ80hQehbHcQVKkIhECNpg/7sBqGrwdlDKUMFVcKrlnX7NIdlHJX/lUhst5oAkqJ4oIWf9xP/ZuzJFgZ3aApRGbed3cKMehyIxw1Vg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JngBKuv6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A10C116C6
+	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 12:54:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764161675;
+	bh=906uSaW+hNrl4mjuQuq3qwvQ5iYqcjyFvx5atEfrYfk=;
+	h=From:Date:Subject:To:Cc:From;
+	b=JngBKuv6xVmP+eTCVGwaA2vUbaynxSQ1xo0izme62RpMvIwaQaG2bgvZVv8zOF4U1
+	 J0qRs20dnuKzDigBdgphrK33HQ9mVoaqZdm23O8rZwyCAoUn/zsq+qYBbTMtMaFJNe
+	 Xi0J1vDVN8YpmUdZd0A+7NEHCAPWpO5H8EJp2hGZ76tVPnDgDAZOt5F+PORcL9Hkjo
+	 40yNgMaWqKkPGcb3mWS/fiQeSlvxZqygeiAF5cvxshYcQu5EiI/pLqebkvnOVHkGwj
+	 RkYGKxzCP/JrNUHra0OK0T+KtZ8qFVrmcBrOg9DbZJ4vw7Ir8hnQxmjug3KUFgbKmB
+	 1E1Nw59k/A6Ig==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6574de1cda1so2626667eaf.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 04:54:35 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVtIA/nPRaaddPFfih2PHlLOvrQe9jXDFUp+RVrmAm+M1Kpeuo/xCYcBA3i9B2F7UtsfetF3Ec+4Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw92USPn9ULlHRmUhE3s2B6t++gG2BNmQLKTz/hF2NwXzgdV0nR
+	YqIGFjHIwPPZ6L+TL4GSkbk16e9ApyUW/WTG9wQ9QPW3pZ/dUYB0wP2XzIRljNzxSX/YRgSlFmn
+	zeq8IDTY84ie2dUSHaVjnCzMXJoJPx+I=
+X-Google-Smtp-Source: AGHT+IHpg2fKWULpdy3I30LPDJtfMpLOQjHplNcYURc8E63EG9lpKixxTl1yrHKZoJKG6tA64bGEzY3SwM9aomiiAiQ=
+X-Received: by 2002:a05:6820:188e:b0:650:73:b922 with SMTP id
+ 006d021491bc7-657bdba56dbmr2527788eaf.6.1764161674730; Wed, 26 Nov 2025
+ 04:54:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ZohoMailClient: External
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 26 Nov 2025 13:54:24 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0g6c1HNbxxh088xh_nTgD-SE6c2qtDr81AgD1+by-jnKA@mail.gmail.com>
+X-Gm-Features: AWmQ_bl4Y6SZK4RBxbvx3EgK7bKtAtyXDZHzbQemCiZyocUfM8lJLcQC7Xh3KPA
+Message-ID: <CAJZ5v0g6c1HNbxxh088xh_nTgD-SE6c2qtDr81AgD1+by-jnKA@mail.gmail.com>
+Subject: [GIT PULL] Urgent ACPI support fix for v6.18
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Macpaul,
+Hi Linus,
 
-On Tue, 2025-11-25 at 18:56 +0800, Macpaul Lin wrote:
-> Remove scpsys_get_legacy_regmap() and update usages with
-> of_find_node_with_property(). Use an explicit of_node_get(np) to
-> ensure
-> correct node referencing against of_node_put() and ensuring it is
-> called
-> in a safe context (i.e., not while holding devtree_lock).
->=20
-> If fwnode_count_parents() obtains parent nodes via
-> fwnode_for_each_parent_node() and this process requires device tree
-> operations, it may result in repeated acquisition of devtree_lock in
-> the same thread/context, leading to spinlock recursion errors.
->=20
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> ---
-> =C2=A0drivers/pmdomain/mediatek/mtk-pm-domains.c | 21 ++++++-------------=
--
-> -
-> =C2=A01 file changed, 6 insertions(+), 15 deletions(-)
->=20
-> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> index 80561d27f2b2..f64f24d520dd 100644
-> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> @@ -984,18 +984,6 @@ static void scpsys_domain_cleanup(struct scpsys
-> *scpsys)
-> =C2=A0	}
-> =C2=A0}
-> =C2=A0
-> -static struct device_node *scpsys_get_legacy_regmap(struct
-> device_node *np, const char *pn)
-> -{
-> -	struct device_node *local_node;
-> -
-> -	for_each_child_of_node(np, local_node) {
-> -		if (of_property_present(local_node, pn))
-> -			return local_node;
-> -	}
-> -
-> -	return NULL;
-> -}
-> -
-> =C2=A0static int scpsys_get_bus_protection_legacy(struct device *dev,
-> struct scpsys *scpsys)
-> =C2=A0{
-> =C2=A0	const u8 bp_blocks[3] =3D {
-> @@ -1017,7 +1005,8 @@ static int
-> scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
-> =C2=A0	 * this makes it then possible to allocate the array of
-> bus_prot
-> =C2=A0	 * regmaps and convert all to the new style handling.
-> =C2=A0	 */
-> -	node =3D scpsys_get_legacy_regmap(np, "mediatek,infracfg");
-> +	of_node_get(np);
-> +	node =3D of_find_node_with_property(np, "mediatek,infracfg");
+Please pull from the tag
 
-with a kernel based on next-20251125 plus this patch, my Mediatek Genio
-350, 510 and 1200 EVK boards booted OK.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-6.18-rc8
 
-About the patch itself, it looks that you try to balance the
-of_node_put() done by of_find_node_with_property() on its `from`
-parameter (np in this case):=20
-https://elixir.bootlin.com/linux/v6.18-rc7/source/drivers/of/base.c#L1066
+with top-most commit 43ff36c4a5a574ee83b4b0d3f3d74f09a3a8c2d3
 
-Your patch description is a bit unclear about that and could be
-reworded.
+ Revert "ACPI: processor: idle: Optimize ACPI idle driver registration"
 
-I'm not sure if it is the proper way to use the
-of_find_node_with_property API, seems a bit hacky. Though, I found=20
-similar sequences for other of_find_* calls (like
-of_find_compatible_node or of_find_node_by_name) in the `from is not
-null` case but not all the times. Hope someone else can confirm if
-using of_node_get before calling these API is OK.
+on top of commit ac3fd01e4c1efce8f2c054cdeb2ddd2fc0fb150d
 
-Finally the patch also misses the Fixes tag since it is a follow up
-one.
+ Linux 6.18-rc7
 
-Regards,
-Louis-Alexis
+to receive an urgent ACPI support fix for 6.18.
 
-> =C2=A0	if (node) {
-> =C2=A0		regmap[0] =3D syscon_regmap_lookup_by_phandle(node,
-> "mediatek,infracfg");
-> =C2=A0		of_node_put(node);
-> @@ -1030,7 +1019,8 @@ static int
-> scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
-> =C2=A0		regmap[0] =3D NULL;
-> =C2=A0	}
-> =C2=A0
-> -	node =3D scpsys_get_legacy_regmap(np, "mediatek,smi");
-> +	of_node_get(np);
-> +	node =3D of_find_node_with_property(np, "mediatek,smi");
-> =C2=A0	if (node) {
-> =C2=A0		smi_np =3D of_parse_phandle(node, "mediatek,smi", 0);
-> =C2=A0		of_node_put(node);
-> @@ -1048,7 +1038,8 @@ static int
-> scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
-> =C2=A0		regmap[1] =3D NULL;
-> =C2=A0	}
-> =C2=A0
-> -	node =3D scpsys_get_legacy_regmap(np, "mediatek,infracfg-
-> nao");
-> +	of_node_get(np);
-> +	node =3D of_find_node_with_property(np, "mediatek,infracfg-
-> nao");
-> =C2=A0	if (node) {
-> =C2=A0		regmap[2] =3D syscon_regmap_lookup_by_phandle(node,
-> "mediatek,infracfg-nao");
-> =C2=A0		num_regmaps++;
+This reverts a commit that attempted to make the code in the ACPI
+processor driver more straightforward, but it turned out to cause
+the kernel to crash on at least one system, along with some further
+cleanups on top of it.
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (5):
+      Revert "ACPI: processor: Do not expose global variable acpi_idle_driver"
+      Revert "ACPI: processor: idle: Redefine two functions as void"
+      Revert "ACPI: processor: idle: Rearrange declarations in header file"
+      Revert "ACPI: processor: Remove unused empty stubs of some functions"
+      Revert "ACPI: processor: idle: Optimize ACPI idle driver registration"
+
+---------------
+
+ drivers/acpi/processor_driver.c |   6 +--
+ drivers/acpi/processor_idle.c   | 115 ++++++++++++++++------------------------
+ include/acpi/processor.h        |  34 +++++++++---
+ 3 files changed, 76 insertions(+), 79 deletions(-)
 
