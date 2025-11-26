@@ -1,98 +1,103 @@
-Return-Path: <linux-pm+bounces-38723-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38724-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 759ABC8AAD7
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 16:35:52 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6903EC8AB19
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 16:37:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 33A97355D41
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 15:34:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 440E74ECB5A
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 15:37:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 154F4339B49;
-	Wed, 26 Nov 2025 15:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5498F33C1A5;
+	Wed, 26 Nov 2025 15:36:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="u6sODHKa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IKGEJjlf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2292123372C;
-	Wed, 26 Nov 2025 15:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E14733BBDA;
+	Wed, 26 Nov 2025 15:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764171261; cv=none; b=Y0jLDgL6JR+UtDV5C0D2Go0Gxdvu89BswST9vLZCvIwUU+LjR9U92C4eBsdD+kf+7pMr2dlZIu6JBn2MpgpnFEnZwOgp0jguL8bJe2TrNKrw6RRLI3nk8YluPiUXLCFoiC2A0eROiejux5kWIz0p6zeadZhbbKpQKxmcUADcX/A=
+	t=1764171385; cv=none; b=MXhoOj6Q853iWUb1glNVAfOZ4HtfW+cG1av+AsG3g517SvYCkjuSczU0ebJi3BhKDdPBHI7sLUY80KzhpFz7z3Bk/5ub7zmZ1D4NLC9jgNvOmK1CW1bEc9rasv6doPGWzN2nUHNJUKb+KucJqF0Rm/mFVp92GGTTqXAb8O7ttq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764171261; c=relaxed/simple;
-	bh=paKrs7yXqi9ntWtPsmuVhsk6+zHX1rvw13z0IhPUBUQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p+UJvjpZr00ublCpqjw4+sCKMDu2Q/SB4IwT+rGmbI/S7W6DbLXcQNGFsOse3EK7m93TCb9WYgoFx/h8CHuFdTGnU/EoU0LMbcunI1R/gd9FnYXyGum0Zyeo0XZkRJZEj4Iqh04fm0hY2YiKVpN/R3nm5FaRnUrxe7R+TzW1XTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=u6sODHKa; arc=none smtp.client-ip=199.89.3.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4dGkBF2Q44zm1Hc4;
-	Wed, 26 Nov 2025 15:34:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1764171251; x=1766763252; bh=XsWD+FfiDmZSdZWNNBeoyZ7+
-	as6zrRAU4D5VAHLXwHc=; b=u6sODHKaaW7byFI0aMx5DzmeP+HZ/bFnu48EgdYC
-	EozerBCeUvYqI6rWeEw/6LoxnxNSbmbk6Dfmi7OTehWPHOFhNbtuM3o5Vq8WxT85
-	yVq5GWSEOyvNxwE2yRir5lLpWSVQJHxVTS5QJoKY1zdNNgB14+SJhWL9FtRaFjPU
-	EoxNDxGJgjYu+8/Ias+iTQbnT0cq5Fd9LgPTZ3lM6gauifSBZ6japxoKI5/e0POu
-	jYzWcexM+i48YzvwVhyOS/7siOqCd9ZLuZSC7r202ZwTlwVCacyyNMm+jwHpU7um
-	OF0CsZcw467b7+xs/7DIzhEY6YgHnox083c6DOvNLVTFvw==
-X-Virus-Scanned: by MailRoute
-Received: from 004.mia.mailroute.net ([127.0.0.1])
- by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id JFad-4fXKcap; Wed, 26 Nov 2025 15:34:11 +0000 (UTC)
-Received: from [192.168.51.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4dGkB118dGzm0XCV;
-	Wed, 26 Nov 2025 15:34:00 +0000 (UTC)
-Message-ID: <9b6e7d55-6a1f-490e-98c7-3c04f85f7444@acm.org>
-Date: Wed, 26 Nov 2025 07:33:58 -0800
+	s=arc-20240116; t=1764171385; c=relaxed/simple;
+	bh=2MQISJEaGUjzori/Q/GS0jFijTPjs4Nrhe+U8h7pujk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aP90enan0BVwziP62aK69D9AKhODM8LflJxNf+D8ugwlBFYswm5A5eFLx/yKbaXRBkB298hIWxS2wuIx7Ty+VUAuPskLjPQU7aB+kkqIJ8sjfrBl4gs+qOQKY38shRxXB7Q8jAU6xsP61hrV3LYiit/evybpoWI1/QJg8/Frzbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IKGEJjlf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F0ABC116C6;
+	Wed, 26 Nov 2025 15:36:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764171384;
+	bh=2MQISJEaGUjzori/Q/GS0jFijTPjs4Nrhe+U8h7pujk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IKGEJjlfv1lyK718tdCuIv8ElkKZ+ZjryiqCf9dHn6Y7p1WEnjTwr/lR0emcdWSPH
+	 apI4eVAW31/Ext9e2YU/09g3bemCFm7FSprt5e+npuF7+/m+dqqEhviVYXxhputFdY
+	 SrfExbI27Fq3G1uN6/09H87ioUWagEe675hquFmqgbwyexxUr3hWJHBjvDP8JykW7g
+	 uPJ1qRCIJ9Z5Am8jth56gz8PzQ+AXsWvk+mkBXZoUQEQ4shBg3CQwVzBS+l3biocRn
+	 p5R4OG/3fQ1P8sKFNmDY0/MRkVnbkwQIHgDKkhHhcJwYdCpU9X7UCzNvStAoclifof
+	 92CL86NgLvVmA==
+Date: Wed, 26 Nov 2025 15:36:19 +0000
+From: Lee Jones <lee@kernel.org>
+To: Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>
+Cc: Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] mfd: sprd-sc27xx: Integrate power off and reboot
+ support
+Message-ID: <20251126153619.GH3070764@google.com>
+References: <20251110-sc27xx-mfd-poweroff-v2-0-fd5842e732fe@abscue.de>
+ <20251110-sc27xx-mfd-poweroff-v2-1-fd5842e732fe@abscue.de>
+ <20251120153024.GI661940@google.com>
+ <aSNFk7tZqcgBqYsI@abscue.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] PM: runtime: Fix I/O hang due to race between resume
- and runtime disable
-To: "Rafael J. Wysocki" <rafael@kernel.org>, YangYang <yang.yang@vivo.com>
-Cc: Jens Axboe <axboe@kernel.dk>, Pavel Machek <pavel@kernel.org>,
- Len Brown <lenb@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20251126101636.205505-1-yang.yang@vivo.com>
- <20251126101636.205505-2-yang.yang@vivo.com>
- <CAJZ5v0i1YLiri9oiiq2W6_KSbqGuWOqdrMPrOf=do-DdW=_rfA@mail.gmail.com>
- <1a2d2059-0548-4c5f-a986-5081447c3325@vivo.com>
- <CAJZ5v0iSgrLzsjh+bvF2=rxxhYcBetJ6V-joWaQud4ahkm1GkQ@mail.gmail.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <CAJZ5v0iSgrLzsjh+bvF2=rxxhYcBetJ6V-joWaQud4ahkm1GkQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aSNFk7tZqcgBqYsI@abscue.de>
 
-On 11/26/25 4:36 AM, Rafael J. Wysocki wrote:
-> Well, the code as is now schedules an async resume of the device and
-> then waits for it to complete.  It would be more straightforward to
-> resume the device synchronously IMV.
+On Sun, 23 Nov 2025, Otto Pflüger wrote:
 
-That would increase the depth of the call stack significantly. I'm not
-sure that's safe in this context.
+> On Thu, Nov 20, 2025 at 03:30:24PM +0000, Lee Jones wrote:
+> > On Mon, 10 Nov 2025, Otto Pflüger wrote:
+> > 
+> > > The SC27xx PMICs allow restarting and powering off the device. Since
+> > > this functionality is rather simple and not configurable in any way,
+> > > make it part of the main PMIC driver.
+> > 
+> > This sounds like more of a drivers/power thing.
+> 
+> This was originally in drivers/power, but according to [1], it should
+> not be a separate device tree node. Using a separate driver without a
+> separate device tree node would still involve some code here that
+> instantiates a platform device and selects the right platform data for
+> it.
+> 
+> Registering the poweroff handler directly seemed less complex, and I
+> assumed it was okay since some other MFD drivers (e.g. rk8xx) also
+> implement the same functionality without a separate power driver.
+> 
+> Is it a good idea to use devm_mfd_add_devices here instead?
+> 
+> [1]: https://lore.kernel.org/all/20251002025344.GA2958334-robh@kernel.org/
 
-Thanks,
+Well that is quite the predicament.
 
-Bart.
+Let me catch-up with Rob out-of-band and see if we can come up with a
+solution.
+
+-- 
+Lee Jones [李琼斯]
 
