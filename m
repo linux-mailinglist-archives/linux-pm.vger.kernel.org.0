@@ -1,125 +1,117 @@
-Return-Path: <linux-pm+bounces-38757-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38758-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0EFDC8C41A
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 23:53:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46DBCC8C45B
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 00:00:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BE7EC4E0F77
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 22:53:37 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2C5AC4E0700
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 23:00:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EEB4301718;
-	Wed, 26 Nov 2025 22:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99BDC2BCF7F;
+	Wed, 26 Nov 2025 23:00:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f6RiDFTX"
+	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="XkTJr23L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1753D2FFF89;
-	Wed, 26 Nov 2025 22:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B824207A
+	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 23:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764197615; cv=none; b=V3+c25MMuts5FL50EhQzqjc8OD+eM1nnePOP/tEOLiJHTpY5Fh9blJ1ZeEK6j9FFUj8AsxCqvWLgmn1K8MgjxO++JqcsqYANFqkUQ0Nq+zgNWdPp6jbB0oIGWJimYrV2uzBW5qNgXHaFA3U4o4bXSfjg0J9N1jK24F21h51aTQ0=
+	t=1764198037; cv=none; b=YCAWoLMFurmO+jAA/FfK0D6ghL0vhNdKs/97HNJMl6vPOrRTMUnIrp2IsiR8TKhC+i6N9Bbr2IlGjnG7dhTTBKnilV6mqqqPQSHQgYY3STQH4J+3LOYtX3THP9rjtP7vdt7P19dLQiWyMzlwPlUeLSvVaSR/vVkE/NvQ2O6sPQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764197615; c=relaxed/simple;
-	bh=sIWJDETkSZjUysA1861IYhNARDTVrkDW8iwNBjEg7Ik=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OgtTVjllp0ctJ3Mr6BrkWPHW3fDmB+HoF3w8d7CfJGgVlbkF7bxb/MVkDbknAjBWCio/cu89tValvp2WuEPdcsfp8jmVoPhjI0CRTM7lCgQJhd+a+K+NVvTNCZ+sOAhyrI/qfRvWCeDXcslWWklOXGwL541VbRsExB2KSjKVfvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f6RiDFTX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DE3FC4CEF7;
-	Wed, 26 Nov 2025 22:53:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764197614;
-	bh=sIWJDETkSZjUysA1861IYhNARDTVrkDW8iwNBjEg7Ik=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f6RiDFTXJmfG8hzrmXMh4vvW7C6tqTW8VxlhHwIck7UNKlLDrQgu8vnSXucyw7Paz
-	 rxlT2sNj7SR7INCyudTxtO6og7BgteyO81ZG1TtwWY1HDKEROgZC3c02ypTwHtb52w
-	 0E1YiufzAE3afqKy5FTE8F0yz06qgf0KMRGvFYlxqepPx2tVBiC15x6GofG4ZjR2w6
-	 yLWVzTgDElkjoQOOUJaFtZ1zGjO9UfgHtiDIOUUL7mqhdf2qTNqnYdlyze/pKt7HBs
-	 JiWYi6Ebu46ICxChObfF1rJW4ySbqSsNqAGHKmOIhz+B7NrY/pydJDO+qF76sktWWw
-	 IQQbsZSRlacEQ==
-Received: by venus (Postfix, from userid 1000)
-	id F094B1802F8; Wed, 26 Nov 2025 23:53:31 +0100 (CET)
-Date: Wed, 26 Nov 2025 23:53:31 +0100
-From: Sebastian Reichel <sre@kernel.org>
-To: Hans de Goede <hansg@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: Linux 6.18-rc7
-Message-ID: <fovf5vq2zfxogkon3vmy2tctjeieplisowymk4t4y755syuwvg@qt5rsfzjhkbc>
-References: <CAHk-=wiFS7=wrjCoEguQUqwd=L4tJHNP8mCdagg0FR8NQTGLtw@mail.gmail.com>
- <0e90cb97-c0bc-48a9-92ec-2493e89ce6d5@roeck-us.net>
- <CAHk-=wj0coxhdnHMvhKAGfEy3AMgk+BX2n=Qvemt0Z=ZxsM8+A@mail.gmail.com>
- <d79d3d38-1fd3-4708-930c-621a4c28cce1@kernel.org>
+	s=arc-20240116; t=1764198037; c=relaxed/simple;
+	bh=PCSoXnpEk3pcBjDBHwldkbFyBOfxd01QtGIpFU03GsY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=uIwiQYwsU3sBtoIrKuZppDbL8OrAvwdipixLDaOMYAVN9T9IU2XkHpLpXZVZz5iJqA+aITIKIbG04WZFqmOkrug4BdHunI1BZlfo4+ABmsofm4EloeuZyMqDwjWox0bBENnoE5FJ3yqH6LpSTcV3N3p2Qzy+fZGiCXr2ynuPx6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=XkTJr23L; arc=none smtp.client-ip=209.85.166.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-434717509afso1695055ab.2
+        for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 15:00:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1764198035; x=1764802835; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:organization
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PCSoXnpEk3pcBjDBHwldkbFyBOfxd01QtGIpFU03GsY=;
+        b=XkTJr23Ltz3Gws0weCYDMAQRz3HrZADjE+qlLXWmy3CqViWpDaHsk8CTDa9Z6SK8af
+         CwdgcZQhSLaIlixnf/l7XjsZ24f8nPLoP7JQQTNTnbFh+RvFvDybKAEF28kBcB608kxO
+         sm/e7qV99i+jf5g3fhsv9iAGm/dHxyhCTiSDAc9DL9Y/lJj9493+A0SJPoXm0FX6CEfZ
+         8cjAZc43gKGtWsUWj2241RQMryE8R6uOFqmKsOpo0KkmfrOZkfAuKX6Q+lDc3oNEajq/
+         6sgvczQDFawlORlLwdH+QW6R5sWQ6PV5gvCe/8LGoA/pLLFwbh350qx4Sz1tA+YppMA6
+         NHRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764198035; x=1764802835;
+        h=content-transfer-encoding:mime-version:in-reply-to:organization
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PCSoXnpEk3pcBjDBHwldkbFyBOfxd01QtGIpFU03GsY=;
+        b=C2yBn1B41BuLxHN7ivVQkiu/ML1z4HeJNxDXSjn7ZI/BQLsCpwt91UZg2KZQIjBHjO
+         H/gD01+3/6q+xLvP9XMJBE9/uvOPfqBuzEWqft+f4p5D7+OOn/10UNahOqcyVwXhWCN5
+         QYOOEEOKXhj9HjcV0W6/gXHqe7SFzkd4KpH4B+Uva9sfqybxfcFXzdRIrEnZiNf5sftS
+         dUy95GsTpxby3AnVUhP3WjofCmlTvgLrAJZmIMAwVzHvgv94iVY4PBUyDEMSWM7iDe2K
+         ntNz4qb0vAKaRVIob8cJHSCbUVJMneuGmLKlw9vdD0XcoF00EMqP9CVYk/na5Oxtxynd
+         MMMw==
+X-Forwarded-Encrypted: i=1; AJvYcCXsMcpWJ5eIylWpB9wmJ3870F4Yoqi7+gYV1Wr5NEX0Nv3zL1EAfkCUXRLjsnLMEk0BpV0TfKlR/g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwK2HK4dRUUZsRX2f8iT15lGIVC9nJmfjf81AXpCuiTj+yPAm4F
+	yw44+7nazdY3eudu1C5BYJ6D4/GVuj14LPEOMiF1ClyXSP90zgoxMFDx2ewNISpHOYI=
+X-Gm-Gg: ASbGncvpPpkgXMNsoy1pGLSg8Y9ZEUgnTBakIz5QCbD+NXcRN473CncjrRV/JpExVVb
+	5+iMIU38p+jaYbDZmJNkbnSe0AEMP2+auTC/PYJUSTeoQLgmEoe2y6g4paE25mRGASRCROU7tbO
+	eIMRv3F994cNUK9nrKodcBQAB1FeWduYKsxloV8/qFmxSNPoozzCXmFObpG5iqg3rpKnimu5zjI
+	7xZnfePl/fsooRcZdC+ka3zO0hgn5jS8Z4DNVfzSz+NTNQKI7uB7CHughg7x+K1sxOg6K05/RQF
+	TsrS65C3CI9nn9IeXHhDj1m6LrgGAKSNl92fg8yIIFM4JF1kvyiH8Z3NhKolxJqeQagNOwwKz1T
+	+tTRL5PmwdAa2u7hezJ+jpCLbzhxV16THLvNklAfeiemDVG3XbTjgrCiCwmUhxnGWOAV4AqwxR3
+	NbZvGPVbcH
+X-Google-Smtp-Source: AGHT+IEWc+r1Rn9tHnOOwuTgILo9tXvn4RuBZcp34oCrRbA7eLq90EYdlKPbB6iWPkQIPBS3z+8L1A==
+X-Received: by 2002:a05:6e02:198a:b0:433:2341:bc12 with SMTP id e9e14a558f8ab-435b9851db9mr197827775ab.2.1764198034546;
+        Wed, 26 Nov 2025 15:00:34 -0800 (PST)
+Received: from kf-m2g5 ([2607:fb90:bf0b:8b65:49b1:b694:940a:bfe6])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-435a90b6dedsm91960055ab.18.2025.11.26.15.00.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Nov 2025 15:00:34 -0800 (PST)
+Date: Wed, 26 Nov 2025 17:00:31 -0600
+From: Aaron Rainbolt <arainbolt@kfocus.org>
+To: srinivas.pandruvada@linux.intel.com
+Cc: arainbolt@kfocus.org, kernel-team@lists.ubuntu.com, lenb@kernel.org,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
+ mmikowski@kfocus.org
+Subject: Re: [BUG] intel_pstate: CPU frequencies miscalculated/incorrectly
+ detected on Arrow Lake hardware
+Message-ID: <20251126170031.145b6a56@kf-m2g5>
+Organization: Kubuntu Focus
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
+In-Reply-To: <4f534cc70650111e420d5ac9040df4e546eed336.camel@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="u7m4hd3i4ptkba3j"
-Content-Disposition: inline
-In-Reply-To: <d79d3d38-1fd3-4708-930c-621a4c28cce1@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+(Sorry for this rather malformed email, Claws *still* can't find the
+thread for some reason so I'm having to resort to a "mailto" link off
+of lore.kernel.org.)
 
---u7m4hd3i4ptkba3j
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: Linux 6.18-rc7
-MIME-Version: 1.0
+> I asked for some dumps before. We can try to inform the OEM of the
+> system as this is a BIOS tables issue. What is the make and model of
+> your system?
+>
+> Thanks,
+> Srinivas
 
-Hi,
+We're actively working on getting the dumps you mentioned previously
+for all three affected machines, along with the model info and some
+benchmarking results with our current production kernel and the latest
+mainline kernel. It's taking a bit longer than we expected, but we're
+pretty close. I should have more info by Monday if all goes according
+to plan on our end.
 
-On Wed, Nov 26, 2025 at 09:45:16PM +0100, Hans de Goede wrote:
-> Hi,
->=20
-> On 26-Nov-25 9:37 PM, Linus Torvalds wrote:
-> > On Tue, 25 Nov 2025 at 15:49, Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> i386:allyesconfig still suffers from
-> >>
-> >> Building i386:allyesconfig ... failed
-> >=20
-> > Bah. I'll give up on waiting for proper channels, and am just fixing
-> > this myself.
->=20
-> Note there is a perfectly fine and reviewed fix for this sitting
-> in the linux-power-supply/next tree, unfortunately this never
-> got send to you this cycle:
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.gi=
-t/commit/?h=3Dfor-next&id=3D3fd1695f5da0538ef72e1268baa00528b589347a
-
-mh, I don't remember why I haven't queued this as a fix (i.e. to my
-fixes branch instead of for-next). Sorry for the mess.
-
--- Sebastian
-
---u7m4hd3i4ptkba3j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmknhOgACgkQ2O7X88g7
-+prt5xAAo6BparuMO3e+N4KQtaDzWhx6fiEy8bXH+O5YeF8i/Y9PMcDje7j6D5ff
-9m7Arq3aydW1gcUbQYGzLRoS/ofZ0CjwAwKHBZzjUyIAD8TnEt+YqkR6DSxTS7WS
-HnazWXfK46tWLTI5wW5y8bOj7a6dlF8Q8x7Kp42YirizRjbiNcWDWZiwgIJrpx4Q
-NZiSLX5bfnu1g+Z0qPGoCYWYKr+o+3+4e3ESR3NHd71jYgXjuj+r4S1WEf9sOxub
-yk001YDiY50juXDM82d+hQKcLVzfG+TShzjHxSzoOYdnQNsQcGPL1HYehmxiCEuP
-zt0PPLM9A6mFxWFExip6Lg1KG/+PxnxoHV2RhFqJccIAPCQ6kgSw+VvvThNizCXY
-dK8gMFIUd3E1SXoxhl77B2Qi16sPZCEmOBVBFE5ii6xAiMWsAmbCSpcvEuzpHtyo
-QH4d+mYR4W0FoX9nKjethj16Kw2+rRrBg9WkXeiBjCDSDopLaBbxu7Q0lskQPW++
-JMzUtLxfLBv3Fw5GhQCf8gNNatE0IpgoYF/zIAGVJCFG2wUHt932r/8jq2vLE3XZ
-zyB2CCaOzhENdbaj/ONhyxY48hgs8brqRyS6Tam8SWKEAmmeBC7pI2Mop8s8ivxz
-XDA6yuhk9lrHhEIe3vCz5eR+8R7hRPFW9Q+obkMmUoRHILqvtGM=
-=juG1
------END PGP SIGNATURE-----
-
---u7m4hd3i4ptkba3j--
+Thanks for your help!
 
