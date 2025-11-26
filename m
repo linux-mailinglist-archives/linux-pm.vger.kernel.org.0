@@ -1,82 +1,55 @@
-Return-Path: <linux-pm+bounces-38687-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38688-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4B21C88E75
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 10:21:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 129F1C88EBB
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 10:25:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1855F354694
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 09:21:47 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4E45E343AAC
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 09:25:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 000042E03F2;
-	Wed, 26 Nov 2025 09:21:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pURHCUCD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E0E92D6619;
+	Wed, 26 Nov 2025 09:24:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F2D22172C
-	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 09:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11861280CF6;
+	Wed, 26 Nov 2025 09:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764148902; cv=none; b=EVhtUGDkincPQsqOd/MPbMX0scvIfsGfxk9EwlAjY2jXrgXB6QpexVLw4U8gHrgEtmBdUK+zgE470fmFQ1FRWICKVeAAjtiVkGN50odp/tS2v+YeeMRE4matKwUSMgoPNQK9dCcyzH5XVeH6YQn6Ri0H9XzJRAmHukeEzdTDSPM=
+	t=1764149076; cv=none; b=Dp3O+J9L2qOIe5tusTWKrERTk9aCvqtC67VfZ+I1rcn6dO4VRhEY4jhgrP1mY9B3I8NFGccMMcWjyJYMKgOBGDtyXCysW+vfmkP+lCi+Q9XK+1YteRO1xCZYj/GpClQcp5Po3jFYAZ7T+T875LBLWPBQ1SE1peFGlvtv1/sczJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764148902; c=relaxed/simple;
-	bh=CF1ETXPe1PugLHsavs1SU5GJc3PtBPy6SGKx8TYf/E0=;
+	s=arc-20240116; t=1764149076; c=relaxed/simple;
+	bh=ZbvWSOa3bdB3MogkqGNG4XO6vIUgxi8jYGAGmvrbm/0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cafn11awZCtLShQ0I8haM89trTglO2wOwLATR7rmlZWeByv1G+pvxDMoK37tDDRm/Y5O6VHJWW3Wrrs8dKA9DH9YYW1cZ2bE4OjbRJULVxkljCUL/8Yob6dSWRO27ZDV0n39Bb0xkwv3rGOU3HJuBjwyT/LRodCchGCHi2G+YVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pURHCUCD; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-477bf34f5f5so38269655e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 01:21:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764148899; x=1764753699; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JPZr/XNvb8iNxFUbgomB4BCl6EzqteQOa6tv7krwi+o=;
-        b=pURHCUCD7dh5yvlceB996fV6H2s/Jtxu3c1EEyE0Vlu5xeZWdAPQygVhTSkH315hOE
-         FovsgPHs5yrrSO0Q4P40ZbKcZfO/dkDE8oS+FRytE2m6qba+soWAVet2lzpL2teADnO8
-         ioMe4wzEWYuRkSkJhG2Miax2CP6ccsVzIPdhLgWAheV7jwmMKajm34o2atuc4R7Gl+5C
-         NrqDwYcfz+5v1xsqzY0w4NeMD2EtJLHr/8tWYpijoDEHPPqs2/+wpz0xPduuwyhK29eR
-         iB2Lutu5lPRdRv1bwP7EVf/ayndHvx9YG8qJvqBJYcuJJO8SSI1PiT4V9DtN/ATiGDF2
-         zNfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764148899; x=1764753699;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JPZr/XNvb8iNxFUbgomB4BCl6EzqteQOa6tv7krwi+o=;
-        b=ReVp5naEUAnxIDlUSGLQwST2ZhwGGYjtOup/OvSzVwwXE+yVuwhZSxXX/m6LWpfZsg
-         nOo1Cwo4B79Umbbxu80B5zOpC+aCVV/YjKmConAbZ5AvOAl6uV7KzNz8sEksPpootpcF
-         Ge5QRMwHkzALq+KX2Q8qrIHO0gCChR5sU0KxwW8rZPcEYJlvFDX61tmbp2sRhyaA6wBg
-         mzI/DZBQgZeZNfpUD8yDaHBuTUX4LjNXQp47xhKb3H8gupU9cj03Xqw3cgoydvDbUEjz
-         m/mcnJCr8ZO4Zrwo3RfW3pNdnkfUe1uvOQXaKLrtkaa6AwkgNWRy3C+XK0nrliEafpar
-         Z18g==
-X-Forwarded-Encrypted: i=1; AJvYcCXM8urvNVnRp9hyIFbVQS71VkK4Q37er4RNcg72iwK25BTLSzaW2DJHY4Aq4ZHs3MorVwQRnp8uDg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuqWQqXCGm9xMavzaygFXVsqs0mL/cIzMtN3P15QYpRLghEq6C
-	/rdmyXbWNn6F4Z5T7HQEhCzcZ55uUonBHEInj9lxCd9+u4UBdtlVIbOvM4aHmlKnS00=
-X-Gm-Gg: ASbGncsW8zUEWohSsBlI2psZlfOV5yMju4C1Kefb8dszfm8F/Qkj8/GnzSgoabhfMd8
-	1I66qmIng0jzicVPHRIVw02HwpIxvdmCOD6s83Fv2Yt9gMg7m4WCtGtmyrMrZKgTjqPz+53lijN
-	0dO5wXpcuIhaIoq6GQDO/VHfHUE+IWPbLWKCz1Llqp6N01sg5znxh+gbnH52Osi6rnlH2HsSdcb
-	NIjSVjgKTQnfsdnfhJCUt8Srlg8gZFH28LqwYlNyUJLTDf/VWSE3gTtTQL1o5NpChsCmS0YS4Js
-	jXT67puDZGi1SircC7G/TeX3nFzz1/cAKrBbvNZIVsJwNelVGAZ5ONKeUcgLwWtgGbfFnvEr5eV
-	K04W3vcEE7FkYI4WYw1Z6JXScJcAB7ycE1IvV05qBkcXgZ+zrRHKPQhDpFGenSllmw3inyHZNr6
-	GJIBsnDDRSNY8w35ti
-X-Google-Smtp-Source: AGHT+IHu5mjVSJftAmmd8mkUWGgVLFw7C7td0QXt6C37n/EMphfyxyx6zRNAnmmqGIwLaBqQANGUSw==
-X-Received: by 2002:a05:600c:6287:b0:477:7bca:8b34 with SMTP id 5b1f17b1804b1-47904acae5fmr50881635e9.6.1764148899568;
-        Wed, 26 Nov 2025 01:21:39 -0800 (PST)
-Received: from [10.11.12.107] ([5.12.85.52])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479040b3092sm39152885e9.1.2025.11.26.01.21.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Nov 2025 01:21:38 -0800 (PST)
-Message-ID: <401ed9b9-19a4-4a19-b397-0f353e9f0c97@linaro.org>
-Date: Wed, 26 Nov 2025 11:21:36 +0200
+	 In-Reply-To:Content-Type; b=faQ85DKPmhUhxxbhouTsgKFAZhFfDixm6aDON1/n3nymxxnKtE+moYpKgs2QQc9w3WcEG7xJXIOFkdq52ZqQEQw+1pn3zgoB0LnFAjZoI3R0MQB/lowf+cPWiWdXm8EopBJ9ROKnmyCnYl8a03AEg047OocZgeSgDs/XBUC6CM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: b2460c3acaa911f0a38c85956e01ac42-20251126
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:e4444327-b6e3-415f-81fa-8da61bf44ee5,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:f47ca7371079c753383697253af4dd65,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|898,TC:nil,Content:0|15|
+	52,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
+	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: b2460c3acaa911f0a38c85956e01ac42-20251126
+X-User: luriwen@kylinos.cn
+Received: from [10.42.13.61] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <luriwen@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 1996568405; Wed, 26 Nov 2025 17:24:23 +0800
+Message-ID: <b832176d-dc48-4c5b-ae69-aca885667cc0@kylinos.cn>
+Date: Wed, 26 Nov 2025 17:24:21 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -84,73 +57,86 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 RESEND 2/3] thermal: exynos_tmu: Support new hardware
- and update TMU interface
-To: =?UTF-8?B?7IaQ7Iug?= <shin.son@samsung.com>,
- 'Bartlomiej Zolnierkiewicz' <bzolnier@gmail.com>,
- 'Krzysztof Kozlowski' <krzk@kernel.org>,
- "'Rafael J . Wysocki'" <rafael@kernel.org>,
- 'Daniel Lezcano' <daniel.lezcano@linaro.org>,
- 'Zhang Rui' <rui.zhang@intel.com>, 'Lukasz Luba' <lukasz.luba@arm.com>,
- 'Rob Herring' <robh@kernel.org>, 'Conor Dooley' <conor+dt@kernel.org>,
- 'Alim Akhtar' <alim.akhtar@samsung.com>, youngmin.nam@samsung.com
-Cc: 'Henrik Grimler' <henrik@grimler.se>, linux-pm@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- 'Peter Griffin' <peter.griffin@linaro.org>,
- =?UTF-8?Q?=27Andr=C3=A9_Draszik=27?= <andre.draszik@linaro.org>,
- 'William McVicker' <willmcvicker@google.com>, jyescas@google.com
-References: <20251113064022.2701578-1-shin.son@samsung.com>
- <CGME20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237@epcas2p1.samsung.com>
- <20251113064022.2701578-3-shin.son@samsung.com>
- <5a6a749b-b2b7-41bb-bcb4-a2342e7f4e98@linaro.org>
- <015501dc5ea5$0c7dd460$25797d20$@samsung.com>
+Subject: Re: [PATCH v1 2/2] PM: devfreq: handle invalid parameters gracefully
+ in simpleondemand
+To: Chanwoo Choi <chanwoo@kernel.org>, myungjoo.ham@samsung.com,
+ kyungmin.park@samsung.com, cw00.choi@samsung.com
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251118032339.2799230-1-luriwen@kylinos.cn>
+ <20251118032339.2799230-2-luriwen@kylinos.cn>
+ <25a5c859-357f-4e31-9b47-822d0c32ce70@kernel.org>
 Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <015501dc5ea5$0c7dd460$25797d20$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
+From: luriwen <luriwen@kylinos.cn>
+In-Reply-To: <25a5c859-357f-4e31-9b47-822d0c32ce70@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hi, Shin Son,
-
-On 11/26/25 9:19 AM, 손신 wrote:
->> Looking at the exynosautov9 registers that you described and comparing
->> them with
->> gs101 I see just 2 differences:
->> 1/ exnosautov2 has a TRIMINFO_CONFIG2 register, while gs101 doesn't 2/
->> EXYNOSAUTOV920_PEND register fields differ from GS101
-> TRIMINFO_CONFIG2 doesn't exist on eav920 either; I simply misnamed it.
-> However, the PEND register indeed differs from GS101.
-> 
->> Given the similarities, and considering the EXYNOS9_ registers rename from:
->> https://lore.kernel.org/linux-samsung-soc/20251117074140.4090939-5-
->> youngmin.nam@samsung.com/
->> would it make sense to use the SoC-era name instead of specific SoC, i.e.
->> s/EXYNOSAUTOV920_/EXYNOS9_ and use the latter for both exynosautov9 and
->> gs101?
+在 2025/11/23 23:24, Chanwoo Choi 写道:
+> 25. 11. 18. 12:23에 Riwen Lu 이(가) 쓴 글:
+>> Instead of returning -EINVAL when upthreshold > 100 or upthreshold <
+>> downdifferential, fall back to default threshold values to ensure the
+>> governor continues functioning.
 >>
-> First of all, as far as I know, EXYNOS9 is not the same as exynosautov9, and exynosautov920 also differs from exynosautov9.
+>> Additionally, the validation is now scoped to the if (data) block,
+>> preventing unnecessary checks when no user data is provided, while the
+>> fallback mechanism ensures reliability with invalid configurations.
+>>
+>> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+>> ---
+>>   drivers/devfreq/governor_simpleondemand.c | 11 ++++++++---
+>>   1 file changed, 8 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
+>> index b4d7be766f33..7205891d2ec6 100644
+>> --- a/drivers/devfreq/governor_simpleondemand.c
+>> +++ b/drivers/devfreq/governor_simpleondemand.c
+>> @@ -36,10 +36,15 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
+>>   			dfso_upthreshold = data->upthreshold;
+>>   		if (data->downdifferential)
+>>   			dfso_downdifferential = data->downdifferential;
+>> +
+>> +		if (dfso_upthreshold > 100 ||
+>> +		    dfso_upthreshold < dfso_downdifferential) {
+>> +			dfso_upthreshold = DFSO_UPTHRESHOLD;
+>> +			dfso_downdifferential = DFSO_DOWNDIFFERENTIAL;
+>> +			pr_debug("Invalid thresholds, using defaults: up = %u, down = %u\n",
+>> +				dfso_upthreshold, dfso_downdifferential);
+>> +		}
+>>   	}
+>> -	if (dfso_upthreshold > 100 ||
+>> -	    dfso_upthreshold < dfso_downdifferential)
+>> -		return -EINVAL;
+>>   
+>>   	/* Assume MAX if it is going to be divided by zero */
+>>   	if (stat->total_time == 0) {
+> If there are wrong initialization of devfreq_simple_ondemand,
+> it should point out what is wrong because it makes some confusion if there are no error.
+>
+>
+The original intention behind falling back to default values was to ensure the governor remains functional even with invalid configurations. However, I agree that silently using defaults could hide configuration issues from users.
 
-See also see this patch, or maybe the entire patch set:
-https://lore.kernel.org/linux-samsung-soc/20251117074140.4090939-2-youngmin.nam@samsung.com/
+I'd like to keep fallback but add explicit warning or error.
 
-It's not just autov9 and gs101 that have similar TMU registers (with the two
-exceptions AFAICT), it's also exynos850 that seems identical with autov9.
+```c
 
-All seem to be part of the same "Exynos9-era" SoCs. Let's think about how
-gs101/exynos850 TMU addition will follow. Shall one use the EXYNOSAUTOV920
-registers? That seems misleading. Shall one redefine the entire register set?
-That won't fly because of the code duplication.
+if (dfso_upthreshold > 100 ||
+     dfso_upthreshold < dfso_downdifferential) {
+         pr_warn("Invalid thresholds (up = %u, down = %u), using 
+defaults: up = %u, down = %u\n",
+                 dfso_upthreshold, dfso_downdifferential,
+                 DFSO_UPTHRESHOLD, DFSO_DOWNDIFFERENTIAL);
+         dfso_upthreshold = DFSO_UPTHRESHOLD;
+         dfso_downdifferential = DFSO_DOWNDIFFERENTIAL;
+}
 
-Thus I propose to use the EXYNOS9 prefix for the register definitions, and if
-there are SoCs with slight differences, that can be handled with compatible
-match data and specific SoC definitions, but only where things differ.
+--
 
-> So while sharing a common prefix is a good suggestion in general, I believe it's not appropriate here
-> Because the register definitions are not fully compatible across these SoCs. Using a common name array may introduce confusion later.
+Best Regards,
 
-Please reconsider this. Maybe Youngmin Nam or others can intervene.
+Riwen Lu
 
-Thanks!
-ta
+
+
+
+
 
