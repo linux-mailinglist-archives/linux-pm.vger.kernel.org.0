@@ -1,55 +1,40 @@
-Return-Path: <linux-pm+bounces-38688-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38689-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 129F1C88EBB
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 10:25:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99789C88FB0
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 10:36:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4E45E343AAC
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 09:25:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 665743B7AC5
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 09:34:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E0E92D6619;
-	Wed, 26 Nov 2025 09:24:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CD2A2E54BD;
+	Wed, 26 Nov 2025 09:34:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11861280CF6;
-	Wed, 26 Nov 2025 09:24:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8C9B2E0417;
+	Wed, 26 Nov 2025 09:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764149076; cv=none; b=Dp3O+J9L2qOIe5tusTWKrERTk9aCvqtC67VfZ+I1rcn6dO4VRhEY4jhgrP1mY9B3I8NFGccMMcWjyJYMKgOBGDtyXCysW+vfmkP+lCi+Q9XK+1YteRO1xCZYj/GpClQcp5Po3jFYAZ7T+T875LBLWPBQ1SE1peFGlvtv1/sczJ0=
+	t=1764149673; cv=none; b=JSLOZzzW8xk0z5K1nkzL853OFw1mieJDbj3e6YGLo0YpJEfxpJHOhMNEBXOC3FSasUPcfCrpBGgeRzJ41TQWDy2C04yXDmVKGxiEDpU9S6TD29x0o/C/f+v/rngpSbF/Kg2RtzgSDb360OmIv6yzWKthzDf+fICAuFQEdBrjGfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764149076; c=relaxed/simple;
-	bh=ZbvWSOa3bdB3MogkqGNG4XO6vIUgxi8jYGAGmvrbm/0=;
+	s=arc-20240116; t=1764149673; c=relaxed/simple;
+	bh=/1VQv9PSEYx+8v+/u6kGKftMTmVtNx/6cSGQ+Aon0mY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=faQ85DKPmhUhxxbhouTsgKFAZhFfDixm6aDON1/n3nymxxnKtE+moYpKgs2QQc9w3WcEG7xJXIOFkdq52ZqQEQw+1pn3zgoB0LnFAjZoI3R0MQB/lowf+cPWiWdXm8EopBJ9ROKnmyCnYl8a03AEg047OocZgeSgDs/XBUC6CM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: b2460c3acaa911f0a38c85956e01ac42-20251126
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:e4444327-b6e3-415f-81fa-8da61bf44ee5,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:f47ca7371079c753383697253af4dd65,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|898,TC:nil,Content:0|15|
-	52,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
-	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: b2460c3acaa911f0a38c85956e01ac42-20251126
-X-User: luriwen@kylinos.cn
-Received: from [10.42.13.61] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <luriwen@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 1996568405; Wed, 26 Nov 2025 17:24:23 +0800
-Message-ID: <b832176d-dc48-4c5b-ae69-aca885667cc0@kylinos.cn>
-Date: Wed, 26 Nov 2025 17:24:21 +0800
+	 In-Reply-To:Content-Type; b=NG7+/HQE5QzfQrUqtiQLUn2nC9XZ9gybXF2KdFQraKSKcNQyll2JA+Z5VY6X4K6zPznVkcisgSRFqw4epW5Uv8kRfNYI8WY7cZ7eW/SKdHuqldbl+W7m2mxAqakhi3Dt6fmA7pGMfWlzNd7uvt3W1a4HAiFBZt7M6IvulQOf76Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8922C168F;
+	Wed, 26 Nov 2025 01:34:23 -0800 (PST)
+Received: from [10.57.40.225] (unknown [10.57.40.225])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B36123F6A8;
+	Wed, 26 Nov 2025 01:34:28 -0800 (PST)
+Message-ID: <7980c3b8-46fa-4c78-b000-60d678854620@arm.com>
+Date: Wed, 26 Nov 2025 09:35:17 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,86 +42,94 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/2] PM: devfreq: handle invalid parameters gracefully
- in simpleondemand
-To: Chanwoo Choi <chanwoo@kernel.org>, myungjoo.ham@samsung.com,
- kyungmin.park@samsung.com, cw00.choi@samsung.com
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251118032339.2799230-1-luriwen@kylinos.cn>
- <20251118032339.2799230-2-luriwen@kylinos.cn>
- <25a5c859-357f-4e31-9b47-822d0c32ce70@kernel.org>
+Subject: Re: stable 6.6: commit "sched/cpufreq: Rework schedutil governor
+ performance estimation' causes a regression
+To: Yu-Che Cheng <giver@chromium.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Christian Loehle <christian.loehle@arm.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Tomasz Figa <tfiga@chromium.org>, stable@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <q2dp7jlblofwkmkufjdysgu2ggv6g4cvhkah3trr5wamxymngm@p2mn4r7vyo77>
+ <86d759a5-9a96-49ff-9f75-8b56e2626d65@arm.com>
+ <2ktr5znjidilpxm2ycixunqlmhu253xwov4tpnb2qablrsqmbv@ysacm5nbcjw7>
+ <2be3bf24-a707-48df-b224-22b5ab290006@arm.com>
+ <CAKchOA31NGBWMdeSjky7MwOjU=dYmHVLbE7uUQHUXSZOzUHUeA@mail.gmail.com>
 Content-Language: en-US
-From: luriwen <luriwen@kylinos.cn>
-In-Reply-To: <25a5c859-357f-4e31-9b47-822d0c32ce70@kernel.org>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAKchOA31NGBWMdeSjky7MwOjU=dYmHVLbE7uUQHUXSZOzUHUeA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-在 2025/11/23 23:24, Chanwoo Choi 写道:
-> 25. 11. 18. 12:23에 Riwen Lu 이(가) 쓴 글:
->> Instead of returning -EINVAL when upthreshold > 100 or upthreshold <
->> downdifferential, fall back to default threshold values to ensure the
->> governor continues functioning.
+Hi Yu-Che,
+
+On 11/25/25 13:01, Yu-Che Cheng wrote:
+> Hi Lukasz,
+> 
+
+[snip]
+
 >>
->> Additionally, the validation is now scoped to the if (data) block,
->> preventing unnecessary checks when no user data is provided, while the
->> fallback mechanism ensures reliability with invalid configurations.
+>> There are some differences, though:
+>> 1. there are more deeps in the freq in time, so more often you would
+>>      pay extra penalty for the ramp-up again
+>> 2. some of the ramp-up phases are a bit longer ~100ms instead of ~80ms
+>>      going from 2GHz to 3.6GHz
+> 
+> Agree. From the visualized frequency changes in the Perfetto traces,
+> it's more obvious that the ramp-up from 2GHz to 3.6GHz becomes much
+> slower and a bit unstable in v6.6.99, and it's also easier to go down
+> to a low frequency after a short idle.
+> 
+
+[snip]
+
 >>
->> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
->> ---
->>   drivers/devfreq/governor_simpleondemand.c | 11 ++++++++---
->>   1 file changed, 8 insertions(+), 3 deletions(-)
+>> I wonder if you had a fix patch for the util_est in your kernel...
+>> That fix has been recently backported to 6.6 stable [1].
 >>
->> diff --git a/drivers/devfreq/governor_simpleondemand.c b/drivers/devfreq/governor_simpleondemand.c
->> index b4d7be766f33..7205891d2ec6 100644
->> --- a/drivers/devfreq/governor_simpleondemand.c
->> +++ b/drivers/devfreq/governor_simpleondemand.c
->> @@ -36,10 +36,15 @@ static int devfreq_simple_ondemand_func(struct devfreq *df,
->>   			dfso_upthreshold = data->upthreshold;
->>   		if (data->downdifferential)
->>   			dfso_downdifferential = data->downdifferential;
->> +
->> +		if (dfso_upthreshold > 100 ||
->> +		    dfso_upthreshold < dfso_downdifferential) {
->> +			dfso_upthreshold = DFSO_UPTHRESHOLD;
->> +			dfso_downdifferential = DFSO_DOWNDIFFERENTIAL;
->> +			pr_debug("Invalid thresholds, using defaults: up = %u, down = %u\n",
->> +				dfso_upthreshold, dfso_downdifferential);
->> +		}
->>   	}
->> -	if (dfso_upthreshold > 100 ||
->> -	    dfso_upthreshold < dfso_downdifferential)
->> -		return -EINVAL;
->>   
->>   	/* Assume MAX if it is going to be divided by zero */
->>   	if (stat->total_time == 0) {
-> If there are wrong initialization of devfreq_simple_ondemand,
-> it should point out what is wrong because it makes some confusion if there are no error.
->
->
-The original intention behind falling back to default values was to ensure the governor remains functional even with invalid configurations. However, I agree that silently using defaults could hide configuration issues from users.
+>> You might want to try that patch as well, w/ or w/o this revert.
+>> IMHO it might be worth to have it on top. It might help
+>> the main Chrome task ('CrRendererMain') to stay longer on the biggest
+>> cpu, since the util_est would be higher. You can read the discussion
+>> that I had back then with PeterZ and VincentG [2].
+> 
+> No, the util_est fix isn't in our kernel yet.
+> It looks like after cherry-picking the fix, without the revert, the
+> Speedometer 2.0 score becomes even slightly higher than that on
+> v6.6.88 (450 ~ 460 vs 435 ~ 440).
+> On the other hand, with both the fix and the revert, the Speedometer
+> score becomes about 475 ~ 480, which is almost the same as using the
+> performance governor (i.e. pinning at the maximum frequency).
 
-I'd like to keep fallback but add explicit warning or error.
+Sounds really good to get such score.
 
-```c
+> It looks like more tasks that originally run on the little cores are
+> migrated to the middle and big cores more often, which also makes CPU7
+> more likely to stay at a higher frequency during some short idle in
+> the main thread.
 
-if (dfso_upthreshold > 100 ||
-     dfso_upthreshold < dfso_downdifferential) {
-         pr_warn("Invalid thresholds (up = %u, down = %u), using 
-defaults: up = %u, down = %u\n",
-                 dfso_upthreshold, dfso_downdifferential,
-                 DFSO_UPTHRESHOLD, DFSO_DOWNDIFFERENTIAL);
-         dfso_upthreshold = DFSO_UPTHRESHOLD;
-         dfso_downdifferential = DFSO_DOWNDIFFERENTIAL;
-}
+Yes, that's the desired behavior.
 
---
+> 
+> Also attach the Perfetto trace for both of them:
+> 
+> fix without revert:
+> https://ui.perfetto.dev/#!/?s=ff4d10bd58982555eada61648786adf6f7187ac3
+> fix with revert:
+> https://ui.perfetto.dev/#!/?s=05da3cedfb3851ad694f523ef59d3cd1092d74ae
 
-Best Regards,
+Thanks for the traces, there are idle periods there as well - cool.
 
-Riwen Lu
+I will link your email with the results for the history in that stable
+patch backport.
 
+Thanks for sharing those tests' scores. Community works :)
 
-
-
-
+Regards,
+Lukasz
 
