@@ -1,123 +1,148 @@
-Return-Path: <linux-pm+bounces-38754-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38755-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1946BC8C078
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 22:31:02 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFCD0C8C25D
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 23:05:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D83284E25A1
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 21:31:00 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 444EF357071
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 22:05:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53AD12BEC52;
-	Wed, 26 Nov 2025 21:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 679202FD661;
+	Wed, 26 Nov 2025 22:04:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P07r6XRH"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WS9TcaZy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E9201F584C
-	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 21:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B532E54BD
+	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 22:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764192658; cv=none; b=U4NC7rEhfkT1Du63BJMQZt0Uz0NDPQBMaoKMCGe3DZScjIGzdaB9kOn6UpCTyJUrajkXwrljf+/7E/w6nfppHwFbHhltxggI6KYfKAfTPbQLcxdjS8RNdN0jIyJy02JxTOLUgAw/X2fCJNqcx96qYA19JYWtabRRZZCUzG0wKos=
+	t=1764194696; cv=none; b=A6ZTKjtlSe2V6bfOy+m2A46PYGFRRCKLzhRshoSxBSWTi14uBcDHclPMAiF8CkXSMHnxRkSh7yR02X0jeVtMhHHxZX820TKf9wqH1FLvs1H0v7jkA1hJkoV67JHU1KOOMmqiMbbQf7n0gMjJzaF1K/fjFMTwL9jg5BsajQKxanY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764192658; c=relaxed/simple;
-	bh=qb5ftFJ0Nl79KySb86CBhcQIlCVISgOMjmQy0gJs15c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gCzUoPR5YNGO0HZrOG5Y/aQArT0H1+QcoxXpJWh3iX2AAn3eqWugeVmm550V9rHSRSQqvXXxuH3X0uMNOUseQAdMrw398KxEWDcI8ys6WD63Zqjm//XmMm2Vk7ywQwnSa+wb+Yn3Jto3O5o81OrvnWJksFVk15GJQCL6jZKQxaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P07r6XRH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D118EC16AAE
-	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 21:30:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764192657;
-	bh=qb5ftFJ0Nl79KySb86CBhcQIlCVISgOMjmQy0gJs15c=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=P07r6XRHwwljDwl/P4qk/7kabzUh7HmsBjjZGT33VLXDKGd5nSFWrlxtZxaNCrhWo
-	 v2jlVmptd1dJucSYP8MKsIoyy0FjIa2b/SKZnFvedAnxgtB3HtSrc/oDScLzBTySSf
-	 nGJSoEUzH2m/jm8ojU66lUxWxMvi7d18BuKT41aVI9GzZuTf1HUvqJuKi2jIKsN8Rm
-	 CQVmrs0cmKKgGU+plwdBAI1I5LUPrcviGZFiCkgPdXsYQ6U1cONg9IebznXHema5tI
-	 RPtZQ852OCzK3Naz9KW/KVvJLtUnwEQ9my7w5Iny/wg7o+5VgJPyIkcJZK81N+8CnN
-	 1u8Blu++25/aw==
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-450bbac0368so604425b6e.1
-        for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 13:30:57 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXh9+IR+oWI7Bj9Dz8L3lDEgf17js46HmyZBwRsr1SMS4fanOtjLpe6Ni3NB5KFRGWqVKS0ppLvwQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDm/WrJDoa0kSLQxcBn20Uj/t1WSW41C7Qvwls/a1MZT+/YAhQ
-	ElkPhmVEMXhGK+wpwiyru+ZinZIJO/8D02aSdsi3o5JylU5ZgStYc7EK8Wjawh2GivUUhFF5pBd
-	8XEb24Tw0l37N9ErL0vF0z3mYOAWqtcE=
-X-Google-Smtp-Source: AGHT+IGgDsz9fB5qGpX8vapXdGcjDYTkNbOpTHs5VhRLo5iGQ/2HEsT2/lK5UDMfEAvnuf9yFtuVfhbyXXUEjYHFepQ=
-X-Received: by 2002:a05:6808:1906:b0:43d:2e06:4e84 with SMTP id
- 5614622812f47-45101d20e45mr10600905b6e.13.1764192657157; Wed, 26 Nov 2025
- 13:30:57 -0800 (PST)
+	s=arc-20240116; t=1764194696; c=relaxed/simple;
+	bh=gqLSwHsrGZkhN+aFNTbmKSZgZc3SbCkcYs3ExiI7vJk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LiQ1Z47ILgDifMKsV+NsUX6xGsoUI7By0yRC8tPWjpt4yVidxjti0XXmqJyMFCLopk0SDaxEBj7n4aVEZhRrOBOfBb9uxfup63JMEfWih1ejynj4NXnr2IkiZeFaaJr9pWA475BptN1FUYLIVhtKedpg7fsjE3MMNcFqTBL3Y5A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WS9TcaZy; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7aae5f2633dso195050b3a.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 14:04:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1764194694; x=1764799494; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ay1HyD/YXcJtqug9NBApq+fmqHdHRxdWGXWcfRUTS3Q=;
+        b=WS9TcaZy5nuL1InS9I6cg8WwqY/z6Ctxns7IUCSRhChQqYh2yMEnMxO6jaD0ZdbyR+
+         lVu8SiRoFXlsdMDMV1CePKlW1YyuOBd+ndZfLwgYqh/2/FY5mpExu57DZS0IeCcO8OeG
+         1/KVfvchS0fOaNRA1IO2NFXi3qA6Zf4hfhQl8kqXdChI7hNItu+Gmsr6tSxjSY/Ke2xq
+         gQjTpgMcNNtAex69WlIKxy1C/15AF300gW8aVpKg3n+cKng6u/z7id6POkFNbK1W9LtM
+         G6QlTjUF8jXOw7youvpnryZqExjsOFb7YBWMDNgK2UXe5jjurBkHkqsJMEdTheqORaVX
+         x+3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764194694; x=1764799494;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ay1HyD/YXcJtqug9NBApq+fmqHdHRxdWGXWcfRUTS3Q=;
+        b=MH7M5Q0jGYF9UrvSqjiIks3iAy3zwkH2Y8tyelHT8h0lftSTtkbi4Mpg7WVMEeIGkw
+         ae2ZoA7IFv5U26khHmU/xCUv5npeebuIvFxnAmEHXIKt+ntHRniaOLTEe1k2lSATMyM4
+         xutxOKw9CUx2Zb6rSGECy1F5a7FvllP85mAwmyP00XoM3SrAjzyFt6W94bI/ikXK84Hq
+         a1gAWIOcHjLBFlPThwnnHa31BCdh5Gi4/wn/nQd8TRP8WYePm03QZCGP4h7JcYE6ZOo8
+         eX7w4DEUqmwod2qa5del+Hqu6OQOPZ2V3MqqHDwQ+JWiejX4+iT4FrZuNDL2u5jJgcTe
+         E0Fg==
+X-Forwarded-Encrypted: i=1; AJvYcCVY+Zi7t2XVU3onvAgtLQZnYLHrGbP3WkdrBblula10/B3JQk5rVF0JwkgqulsjPQvwqwFZyktinA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4Y1VfoAfPRJSDdO6CJSnpSl6EEp5Esbq3mfg7uL7gRPNKHOfb
+	pfNoAel+RSTnJ2HQJgcV/9/w7Zc7/MV7dI1Fk8+9d3lX3K/SAlfCTKyRMt4oWO21Pw==
+X-Gm-Gg: ASbGncvviiTRhJOmQUK7D7apAHAlFLfjZ9+VjONjyOiefUx6zxI+AYkwRYBBAalDDig
+	3CqU2YBymojmjeafDHl3RDKrtMra9HSrMDj7SeRQSN6Yd5vhElgMSM1ogXB0S6yrsNEfWTVNG/v
+	exjq520MqA00y4HDEIwqdrQtbEbEeMcJxlC2tHLFIWCXr/GLOX/w2vQaBWs3yShBybsiIPQXe1I
+	R0fxO5iIwB6tTnMUu4w5athuKG1bhrcuQR82hIED3t5GrRAqAkKB8UP7eeTPvLyDiljiTatdPjz
+	13BX6kE12s2FFQJf7a7BSfKGOe5X68T4HHWUPIQwO1d3y7DJqqRZa1PoEnMbEPbW849aGa+KvcV
+	e2Qzzx2LwGnGTH1DnAH/Giyoc8tQn09moxdFTyis13u/07lN1Ap762nUynmHZy3ZAwr4lYqeTLD
+	uX+IOSupoteuMmTBFiy3JvCJ3eVOTz1Im11XjNSiqbeUFJco3ysKfHVg58JR0x4UkrCxK/kJfbD
+	JlxQMfVJA+vXg==
+X-Google-Smtp-Source: AGHT+IHgCBAVlJ/1/Oj2H+nvmtjVOEfs8Cj4GuvQ7p3t9lR/WHGAMof8mvn31hs8D+Fx43GprBkfMw==
+X-Received: by 2002:a05:6a20:244d:b0:343:64dc:8cc with SMTP id adf61e73a8af0-3614eb15e9fmr24287915637.12.1764194693250;
+        Wed, 26 Nov 2025 14:04:53 -0800 (PST)
+Received: from ?IPV6:2a00:79e0:2e7c:8:c116:b1c9:632d:a902? ([2a00:79e0:2e7c:8:c116:b1c9:632d:a902])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bd75def6346sm20451772a12.4.2025.11.26.14.04.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Nov 2025 14:04:52 -0800 (PST)
+Message-ID: <be908072-fd0a-48dc-97e0-b120539f5584@google.com>
+Date: Wed, 26 Nov 2025 14:04:51 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251126101636.205505-1-yang.yang@vivo.com> <CAJZ5v0jiLAgHCQ51cYqUX-xjir7ooAC3xKH9wMbwrebOEuxFdw@mail.gmail.com>
- <CAJZ5v0hKpGbwFmxcH8qe=DPf_5GX=LD=Fqj3dgOApUoE1RmJAQ@mail.gmail.com>
- <4697314.LvFx2qVVIh@rafael.j.wysocki> <dc4dba4f-8334-40ea-8c53-6e8d135f1d41@acm.org>
-In-Reply-To: <dc4dba4f-8334-40ea-8c53-6e8d135f1d41@acm.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 26 Nov 2025 22:30:45 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jV-80kfk-AY70b5pQtyXxUtU_ACBVP_TeTAnaY0Up8Lw@mail.gmail.com>
-X-Gm-Features: AWmQ_bkBmIj-zJ9TMY9m_F7HbH_77kr49d3m5ANYRQhuc1KWC6bHz3Ba0_2gpRA
-Message-ID: <CAJZ5v0jV-80kfk-AY70b5pQtyXxUtU_ACBVP_TeTAnaY0Up8Lw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] PM: runtime: Fix I/O hang due to race between resume
- and runtime disable
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Yang Yang <yang.yang@vivo.com>, Jens Axboe <axboe@kernel.dk>, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/6] power: supply: max77759: add charger driver
+To: kernel test robot <lkp@intel.com>,
+ Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+References: <20251123-max77759-charger-v1-5-6b2e4b8f7f54@google.com>
+ <202511261521.hSYp4ttf-lkp@intel.com>
+Content-Language: en-US
+From: Amit Sunil Dhamne <amitsd@google.com>
+In-Reply-To: <202511261521.hSYp4ttf-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 26, 2025 at 10:11=E2=80=AFPM Bart Van Assche <bvanassche@acm.or=
-g> wrote:
+
+On 11/25/25 11:38 PM, kernel test robot wrote:
+> Hi Amit,
 >
-> On 11/26/25 12:17 PM, Rafael J. Wysocki wrote:
-> > --- a/block/blk-core.c
-> > +++ b/block/blk-core.c
-> > @@ -309,6 +309,8 @@ int blk_queue_enter(struct request_queue
-> >               if (flags & BLK_MQ_REQ_NOWAIT)
-> >                       return -EAGAIN;
-> >
-> > +             /* if necessary, resume .dev (assume success). */
-> > +             blk_pm_resume_queue(pm, q);
-> >               /*
-> >                * read pair of barrier in blk_freeze_queue_start(), we n=
-eed to
-> >                * order reading __PERCPU_REF_DEAD flag of .q_usage_count=
-er and
+> kernel test robot noticed the following build errors:
 >
-> blk_queue_enter() may be called from the suspend path so I don't think
-> that the above change will work.
-
-Why would the existing code work then?
-
-Are you suggesting that q->rpm_status should still be checked before
-calling pm_runtime_resume() or do you mean something else?
-
-> As an example, the UFS driver submits a
-> SCSI START STOP UNIT command from its runtime suspend callback. The call
-> chain is as follows:
+> [auto build test ERROR on 39f90c1967215375f7d87b81d14b0f3ed6b40c29]
 >
->    ufshcd_wl_runtime_suspend()
->      __ufshcd_wl_suspend()
->        ufshcd_set_dev_pwr_mode()
->          ufshcd_execute_start_stop()
->            scsi_execute_cmd()
->              scsi_alloc_request()
->                blk_queue_enter()
->              blk_execute_rq()
->              blk_mq_free_request()
->                blk_queue_exit()
-
-In any case, calling pm_request_resume() from blk_pm_resume_queue() in
-the !pm case is a mistake.
+> url:    https://github.com/intel-lab-lkp/linux/commits/Amit-Sunil-Dhamne-via-B4-Relay/dt-bindings-power-supply-Add-Maxim-MAX77759-charger/20251123-163840
+> base:   39f90c1967215375f7d87b81d14b0f3ed6b40c29
+> patch link:    https://lore.kernel.org/r/20251123-max77759-charger-v1-5-6b2e4b8f7f54%40google.com
+> patch subject: [PATCH 5/6] power: supply: max77759: add charger driver
+> config: um-randconfig-001-20251126 (https://download.01.org/0day-ci/archive/20251126/202511261521.hSYp4ttf-lkp@intel.com/config)
+> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251126/202511261521.hSYp4ttf-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202511261521.hSYp4ttf-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>     /usr/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
+>     /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `max77759_charger_probe':
+>>> max77759_charger.c:(.ltext+0x27b): undefined reference to `devm_regulator_register'
+>     /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `enable_usb_otg':
+>>> max77759_charger.c:(.ltext+0x983): undefined reference to `rdev_get_drvdata'
+>     /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `disable_usb_otg':
+>     max77759_charger.c:(.ltext+0x9c3): undefined reference to `rdev_get_drvdata'
+>     /usr/bin/ld: drivers/power/supply/max77759_charger.o: in function `usb_otg_status':
+>     max77759_charger.c:(.ltext+0xa06): undefined reference to `rdev_get_drvdata'
+>     clang: error: linker command failed with exit code 1 (use -v to see invocation)
+I believe this is because of a missing "depends on REGULATOR". Will fix 
+it in the next revision.
 
