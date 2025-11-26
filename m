@@ -1,118 +1,79 @@
-Return-Path: <linux-pm+bounces-38751-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38752-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95E86C8BFB2
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 22:11:06 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id F04ACC8BFC7
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 22:14:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3D2E635656A
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 21:11:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6F9154E59AF
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 21:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92587231858;
-	Wed, 26 Nov 2025 21:11:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CEF29DB6C;
+	Wed, 26 Nov 2025 21:13:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="ZaXwlZd0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NzvlgtX4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FA545BE3;
-	Wed, 26 Nov 2025 21:10:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A9345BE3;
+	Wed, 26 Nov 2025 21:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764191461; cv=none; b=m9f8DNM49JtKCjwEC/rCVf2oNYye5soxPkWo4aXD0KYYNSkn5UFdCQgJNvTPn5nvUC/8sz8LSczjgFW6ffJ/aPapnCgdiyLP1paG8wqkWgiCKZFyXLPnhebJB1g/tugnZEyqGWHV/jGc5ZomBfbV/74QfgP5Q0qG99Vu3zI8d9U=
+	t=1764191629; cv=none; b=EbHn+DwYRoVeEevg9UXQRbSw0KVu0SsH8BjMtg9FgNIoYA2qhjD5/oIJPD3PUb/9KoGWKqVv0YadZdSqeQBBhIUGiCdWqxjCm9UgdknOn4C7io6QWDPLbR4W37gj4gLxWUEA+pZQmv6BTvlBBw8hjo0KknwSiuqfwFWGQvboa4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764191461; c=relaxed/simple;
-	bh=6jZ2UjY6CdyDRO7VbKwwRYo8BI5Ykkbi3FfuqFwAO4E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ji/T6ZvngUOlAqzQvWOPs38kxqncUhwANPPNDJ3mDX2JpOhev1AshARx7vAKHQqIRc2VcbbjNoWhZjR317ZU3V5fbSZUFUuGfJPJbfHB3kmVrdxkqsoWK1WWAnTET3nrFhg03E3XTNoF0Fvt1PY7/1VGS839Jgxf1LfKz28DClc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=ZaXwlZd0; arc=none smtp.client-ip=199.89.3.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 004.mia.mailroute.net (Postfix) with ESMTP id 4dGsfp3j70zm1LJR;
-	Wed, 26 Nov 2025 21:10:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1764191456; x=1766783457; bh=4eKSvwSTrdgaIITxMvr6DUjr
-	XDaM2duNCkPlaoOCYGY=; b=ZaXwlZd054vlfSvNYjBeQptiLli1Vfwej8e3bG6O
-	rQkceSJwlfKPO1swHq1S/2+jqP9Y+xItGO4V/JyJQF+e2Ei6cSiCrwHUE3/u91HA
-	agx/q3s3mdJIm7arzU4DJUPnhc85Z93B4QC97wQkqi/5NMkosyI2thEuqxrcRTlb
-	zW36G5MrBGDGJy+oALaS2eRTGe7AisozJv/pNxguZ/stHoMQtsr9ZijagFDXQJ6Z
-	eZ/KX6KLhpYVpgjPjGI/1lNx1aGdqVD3OlKtFeX6rTH6ZmgNU80B6k3eg//NNekR
-	JB7S9hzxEvPLeQwgYB2kR7CNQy08lEVK1AU8fqyS+qyysg==
-X-Virus-Scanned: by MailRoute
-Received: from 004.mia.mailroute.net ([127.0.0.1])
- by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id yk1xAddWqc_q; Wed, 26 Nov 2025 21:10:56 +0000 (UTC)
-Received: from [192.168.51.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4dGsfc13QMzm0N9y;
-	Wed, 26 Nov 2025 21:10:47 +0000 (UTC)
-Message-ID: <dc4dba4f-8334-40ea-8c53-6e8d135f1d41@acm.org>
-Date: Wed, 26 Nov 2025 13:10:46 -0800
+	s=arc-20240116; t=1764191629; c=relaxed/simple;
+	bh=lSVP+F5nmlRmmOR9RxM46Xh6YBYF6fmIOs3IjYXyRYI=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=MgkK7EE1kx10Bmf4hEE0IvYoyYFHoCxLgQ9rBivlragdn8QW3XHbxkXwYPc1WMnkub757z4VgvV2xRYpRTGXK7WQ7omioNG76TKlNkebG9sqSW0QUiWURxJzH0JqIjbTyGzfRFiSqeDQc/AYLJTXbzlCDDPzjAQoXf5H7ZFP3tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NzvlgtX4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3137CC113D0;
+	Wed, 26 Nov 2025 21:13:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764191629;
+	bh=lSVP+F5nmlRmmOR9RxM46Xh6YBYF6fmIOs3IjYXyRYI=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=NzvlgtX4PgnFugxM1kKWeEa6DMsY8aXOruPpanRbYhhQHSOnpsieGdnJqhgxVCi5g
+	 5kprooyTvw51Aa5Effxu891JzsVmtkB5e9z2wh4dKv8peYz7Vc0WdMwu5cCPcvMYUH
+	 Hcb7fwC9qP8Yq2UC8R/sCDUzNxudmoHY0yAgYh6TpjQIVvhXcHB6oNPi5I7GKTRGny
+	 eYHhTZntJVtEbE8IqPo6Os1vshvLrEhVwzkpJBsgCShaerkipuAys5Zjd2800UsmQu
+	 Si36OPNpT+66oqAwsqgFXJhY5rmyqMz1QFaDXT6UJuD648gmgYapFJ1aPN9BdraHy1
+	 zvCIhwvFz/9Kg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C09380CEF4;
+	Wed, 26 Nov 2025 21:13:12 +0000 (UTC)
+Subject: Re: [GIT PULL] Urgent ACPI support fix for v6.18
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0g6c1HNbxxh088xh_nTgD-SE6c2qtDr81AgD1+by-jnKA@mail.gmail.com>
+References: <CAJZ5v0g6c1HNbxxh088xh_nTgD-SE6c2qtDr81AgD1+by-jnKA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0g6c1HNbxxh088xh_nTgD-SE6c2qtDr81AgD1+by-jnKA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.18-rc8
+X-PR-Tracked-Commit-Id: 43ff36c4a5a574ee83b4b0d3f3d74f09a3a8c2d3
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a10d15a08f62bf97c707ef3c2a7493604c1bcc89
+Message-Id: <176419159078.1847725.527308176120073524.pr-tracker-bot@kernel.org>
+Date: Wed, 26 Nov 2025 21:13:10 +0000
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] PM: runtime: Fix I/O hang due to race between resume
- and runtime disable
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Yang Yang <yang.yang@vivo.com>, Jens Axboe <axboe@kernel.dk>,
- Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Danilo Krummrich <dakr@kernel.org>, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20251126101636.205505-1-yang.yang@vivo.com>
- <CAJZ5v0jiLAgHCQ51cYqUX-xjir7ooAC3xKH9wMbwrebOEuxFdw@mail.gmail.com>
- <CAJZ5v0hKpGbwFmxcH8qe=DPf_5GX=LD=Fqj3dgOApUoE1RmJAQ@mail.gmail.com>
- <4697314.LvFx2qVVIh@rafael.j.wysocki>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <4697314.LvFx2qVVIh@rafael.j.wysocki>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 11/26/25 12:17 PM, Rafael J. Wysocki wrote:
-> --- a/block/blk-core.c
-> +++ b/block/blk-core.c
-> @@ -309,6 +309,8 @@ int blk_queue_enter(struct request_queue
->   		if (flags & BLK_MQ_REQ_NOWAIT)
->   			return -EAGAIN;
->   
-> +		/* if necessary, resume .dev (assume success). */
-> +		blk_pm_resume_queue(pm, q);
->   		/*
->   		 * read pair of barrier in blk_freeze_queue_start(), we need to
->   		 * order reading __PERCPU_REF_DEAD flag of .q_usage_counter and
+The pull request you sent on Wed, 26 Nov 2025 13:54:24 +0100:
 
-blk_queue_enter() may be called from the suspend path so I don't think
-that the above change will work. As an example, the UFS driver submits a
-SCSI START STOP UNIT command from its runtime suspend callback. The call
-chain is as follows:
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.18-rc8
 
-   ufshcd_wl_runtime_suspend()
-     __ufshcd_wl_suspend()
-       ufshcd_set_dev_pwr_mode()
-         ufshcd_execute_start_stop()
-           scsi_execute_cmd()
-             scsi_alloc_request()
-               blk_queue_enter()
-             blk_execute_rq()
-             blk_mq_free_request()
-               blk_queue_exit()
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a10d15a08f62bf97c707ef3c2a7493604c1bcc89
 
-Thanks,
+Thank you!
 
-Bart.
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
