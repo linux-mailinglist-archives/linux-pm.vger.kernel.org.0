@@ -1,103 +1,96 @@
-Return-Path: <linux-pm+bounces-38724-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38725-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6903EC8AB19
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 16:37:57 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5C46C8AB64
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 16:42:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 440E74ECB5A
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 15:37:23 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 680D23586F6
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 15:41:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5498F33C1A5;
-	Wed, 26 Nov 2025 15:36:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D91F333A01A;
+	Wed, 26 Nov 2025 15:41:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IKGEJjlf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JtIjMHS4"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E14733BBDA;
-	Wed, 26 Nov 2025 15:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B4025DB0D
+	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 15:41:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764171385; cv=none; b=MXhoOj6Q853iWUb1glNVAfOZ4HtfW+cG1av+AsG3g517SvYCkjuSczU0ebJi3BhKDdPBHI7sLUY80KzhpFz7z3Bk/5ub7zmZ1D4NLC9jgNvOmK1CW1bEc9rasv6doPGWzN2nUHNJUKb+KucJqF0Rm/mFVp92GGTTqXAb8O7ttq0=
+	t=1764171696; cv=none; b=bHCorp1mkMfhdL6//srYuZoQtfYMmlHPIr6QmefcgRSsa7PN8XFPCDjI1zHlgptbb5bDr4fW/bxJMSr3IOLlQhZuGpV7TROQa1vcpq7qBOpGhVkOmPEvItiKpDHDX1KkHISvyqgdHMvlc/6Tr4gGm/PdFhTZxOqFzFt6jVL1YA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764171385; c=relaxed/simple;
-	bh=2MQISJEaGUjzori/Q/GS0jFijTPjs4Nrhe+U8h7pujk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aP90enan0BVwziP62aK69D9AKhODM8LflJxNf+D8ugwlBFYswm5A5eFLx/yKbaXRBkB298hIWxS2wuIx7Ty+VUAuPskLjPQU7aB+kkqIJ8sjfrBl4gs+qOQKY38shRxXB7Q8jAU6xsP61hrV3LYiit/evybpoWI1/QJg8/Frzbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IKGEJjlf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F0ABC116C6;
-	Wed, 26 Nov 2025 15:36:21 +0000 (UTC)
+	s=arc-20240116; t=1764171696; c=relaxed/simple;
+	bh=S24uXRYdPei3+GkdbKOxdJvQMqEOHA+fuJO6N9F+wik=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GTHO4276BVJ8vGzAMbBR1mteAZBU0bfdfo54ffWHp06ACKTkmgIOL/dDMZsg7nDME/APGpFkyPuBcT9BRL5RYbpP+uEFgQVWPaRmj5VwbBtmBft8wmvW9P4UFPFKo9BuAQuYCgDItm7Zs7dv7JQ+mw3+KoZi00xbJgedfX3PuAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JtIjMHS4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AFFBC4CEF7
+	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 15:41:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764171384;
-	bh=2MQISJEaGUjzori/Q/GS0jFijTPjs4Nrhe+U8h7pujk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IKGEJjlfv1lyK718tdCuIv8ElkKZ+ZjryiqCf9dHn6Y7p1WEnjTwr/lR0emcdWSPH
-	 apI4eVAW31/Ext9e2YU/09g3bemCFm7FSprt5e+npuF7+/m+dqqEhviVYXxhputFdY
-	 SrfExbI27Fq3G1uN6/09H87ioUWagEe675hquFmqgbwyexxUr3hWJHBjvDP8JykW7g
-	 uPJ1qRCIJ9Z5Am8jth56gz8PzQ+AXsWvk+mkBXZoUQEQ4shBg3CQwVzBS+l3biocRn
-	 p5R4OG/3fQ1P8sKFNmDY0/MRkVnbkwQIHgDKkhHhcJwYdCpU9X7UCzNvStAoclifof
-	 92CL86NgLvVmA==
-Date: Wed, 26 Nov 2025 15:36:19 +0000
-From: Lee Jones <lee@kernel.org>
-To: Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>
-Cc: Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] mfd: sprd-sc27xx: Integrate power off and reboot
- support
-Message-ID: <20251126153619.GH3070764@google.com>
-References: <20251110-sc27xx-mfd-poweroff-v2-0-fd5842e732fe@abscue.de>
- <20251110-sc27xx-mfd-poweroff-v2-1-fd5842e732fe@abscue.de>
- <20251120153024.GI661940@google.com>
- <aSNFk7tZqcgBqYsI@abscue.de>
+	s=k20201202; t=1764171696;
+	bh=S24uXRYdPei3+GkdbKOxdJvQMqEOHA+fuJO6N9F+wik=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JtIjMHS4M+leu+qtQcBKHMBUn/A4O/lyCub3Lswue7yrZDJqKuBam8Ni88jABjWX1
+	 bs4Zuer6UwfbcVaEIGk2+o1FfqzPxBOaanAafuhIQt5/3zbWk5XRGhlDCZy3foJzWc
+	 1kOg3RaBHu6N4QSHD05IYEWPCVOjlKvXa5T48gU6h2HPd+JVITSVBKV0JR/Y2zKro8
+	 HYFVsY45nkmrcYJGkk+xhdEva1DBgHRanfELx3rsvRrGHT1U5ig7GpSpkSfmc6xu5l
+	 usngvDGVlraQhEVp4w2srHWgs08ILjEvixCi4qPgdR7hjPVlX+sMf+tnDjElo4dvEl
+	 UkMKq3n0efNCA==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6574de1cda1so2688206eaf.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 07:41:36 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUVVlFsZTehCGsUSOCDPWNV8BAq0g/erNUwypXAW6fEvJGZB8SI9h8MwQtbZqVUnEmZpL13J9zsew==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoTZM3fz6ilMX/GY6ZI0dogAMqj/MIdcz0fuwZ6TGG+Qh1rDib
+	D2xNh6H7mPtfw/SrOH7qLKxpp0rJg7y0szdDhpJOeTzPT9UFEDvzuIGfanUGuYlwJUmjA7bl0eU
+	AzdYvOlf8/HusTBiGWrDCHvbQp/Q5fp0=
+X-Google-Smtp-Source: AGHT+IGIVP1StFKaOCVbl2pFJj1bElnpsXdqL10mCG3C1NX2m3Z7f+ieqVbTYCSRFBySBuPo+rK75c2RvYri9y1zat4=
+X-Received: by 2002:a05:6820:811b:b0:654:f6f1:dd07 with SMTP id
+ 006d021491bc7-657bdb68d36mr2463702eaf.4.1764171695725; Wed, 26 Nov 2025
+ 07:41:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aSNFk7tZqcgBqYsI@abscue.de>
+References: <20251126101636.205505-1-yang.yang@vivo.com> <20251126101636.205505-2-yang.yang@vivo.com>
+ <CAJZ5v0i1YLiri9oiiq2W6_KSbqGuWOqdrMPrOf=do-DdW=_rfA@mail.gmail.com>
+ <1a2d2059-0548-4c5f-a986-5081447c3325@vivo.com> <CAJZ5v0iSgrLzsjh+bvF2=rxxhYcBetJ6V-joWaQud4ahkm1GkQ@mail.gmail.com>
+ <9b6e7d55-6a1f-490e-98c7-3c04f85f7444@acm.org>
+In-Reply-To: <9b6e7d55-6a1f-490e-98c7-3c04f85f7444@acm.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 26 Nov 2025 16:41:24 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hJw0WdHpqgUc5bz5qCSUNNKHg7i5-sNYeZcDYwRj21qw@mail.gmail.com>
+X-Gm-Features: AWmQ_bmDOGJHpcrQGXo8ugxWHhlUTb1Js0jsrnsQQz-TNjvaI1DJy7kSFkXYkoM
+Message-ID: <CAJZ5v0hJw0WdHpqgUc5bz5qCSUNNKHg7i5-sNYeZcDYwRj21qw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] PM: runtime: Fix I/O hang due to race between resume
+ and runtime disable
+To: Bart Van Assche <bvanassche@acm.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, YangYang <yang.yang@vivo.com>, Jens Axboe <axboe@kernel.dk>, 
+	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
+	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 23 Nov 2025, Otto Pflüger wrote:
+On Wed, Nov 26, 2025 at 4:34=E2=80=AFPM Bart Van Assche <bvanassche@acm.org=
+> wrote:
+>
+> On 11/26/25 4:36 AM, Rafael J. Wysocki wrote:
+> > Well, the code as is now schedules an async resume of the device and
+> > then waits for it to complete.  It would be more straightforward to
+> > resume the device synchronously IMV.
+>
+> That would increase the depth of the call stack significantly. I'm not
+> sure that's safe in this context.
 
-> On Thu, Nov 20, 2025 at 03:30:24PM +0000, Lee Jones wrote:
-> > On Mon, 10 Nov 2025, Otto Pflüger wrote:
-> > 
-> > > The SC27xx PMICs allow restarting and powering off the device. Since
-> > > this functionality is rather simple and not configurable in any way,
-> > > make it part of the main PMIC driver.
-> > 
-> > This sounds like more of a drivers/power thing.
-> 
-> This was originally in drivers/power, but according to [1], it should
-> not be a separate device tree node. Using a separate driver without a
-> separate device tree node would still involve some code here that
-> instantiates a platform device and selects the right platform data for
-> it.
-> 
-> Registering the poweroff handler directly seemed less complex, and I
-> assumed it was okay since some other MFD drivers (e.g. rk8xx) also
-> implement the same functionality without a separate power driver.
-> 
-> Is it a good idea to use devm_mfd_add_devices here instead?
-> 
-> [1]: https://lore.kernel.org/all/20251002025344.GA2958334-robh@kernel.org/
-
-Well that is quite the predicament.
-
-Let me catch-up with Rob out-of-band and see if we can come up with a
-solution.
-
--- 
-Lee Jones [李琼斯]
+As it stands, you have a basic problem with respect to system
+suspend/hibernation.  As I said before, the PM workqueue is frozen
+during system suspend/hibernation transitions, so waiting for an async
+resume request to complete then is pointless.
 
