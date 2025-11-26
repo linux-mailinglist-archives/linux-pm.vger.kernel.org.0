@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-38684-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38685-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7E71C88967
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 09:14:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4E98C88B92
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 09:47:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 19BAF3540E0
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 08:14:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF02C3B1715
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 08:47:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0372C29A322;
-	Wed, 26 Nov 2025 08:14:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 537D131960C;
+	Wed, 26 Nov 2025 08:47:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IgxTNO5e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UQszyheI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0B228643C;
-	Wed, 26 Nov 2025 08:14:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B72219A86;
+	Wed, 26 Nov 2025 08:47:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764144867; cv=none; b=lxK/hhcPIVZjFcRR6Hkg30ISnJtJiaWXyd3++jNZw38btdO5epopsdL8TBfPtxhlzYo/+uoNggRAM0clVUsmhUOMfs7vc8I/qdKY66HCwcMwg+D0P0gW2qUH5mKvygicIlhaPjirek1uvMJiaRyUzz5tR3zi/UZwGGaes6bwhr8=
+	t=1764146846; cv=none; b=SSRkfM+BcBx78GIlCJV9czWaoj0IMcnTgosb4hNmSTIIKLz6R/Oyj4PzlcqlQdGAv2kPpK+0mZu5QgvHUfBWWZKIwAAA+Q84Gt8YsRaZnLzYGpWj4f2WwOv/Ggf3zSYR8eU2BPjJiOwSk4ux4zU4HOc99eXFYgmVCUW0Evvkqpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764144867; c=relaxed/simple;
-	bh=l+tJyojqcE/EWfv35i9TlP/pCnVTqivz5ZxL3S3f81I=;
+	s=arc-20240116; t=1764146846; c=relaxed/simple;
+	bh=AMnEwc3yxvKUi8QcmR3a2Nuh4qc+8KqkMA6lOviITUU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fslyOr0BMsYBQLrcrjMqQFA4mX4nk+F7w9w0XHTl2ZWiDg1GelKBawwpqPmCwquuMzdH/lFIuLAGsk8YKdiV6AShTEi7iq49QDmQBQEqvpTWWRR+ODq4pOhh/QwHVouQeiY1KTmQyE9bOdKtoai7ahSeefbh+pzlUN6iNtCUyTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IgxTNO5e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 133D8C113D0;
-	Wed, 26 Nov 2025 08:14:24 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=XV2LSQiORKY1O1qLnUa0zXSopJUD/zW9irs5cMia+2i49ooUp63QTYtNJQ80fX2tgni23sd7/6Uoqlyq+h2il7aplnXOliTGn4l9KeOXzlrksXG1w+ZdMSfBhThzh+tlGNrPx1c3sF3Kqna3ioll/dbiQ92aWotbfPoSyOp96MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UQszyheI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96893C116D0;
+	Wed, 26 Nov 2025 08:47:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764144867;
-	bh=l+tJyojqcE/EWfv35i9TlP/pCnVTqivz5ZxL3S3f81I=;
+	s=k20201202; t=1764146845;
+	bh=AMnEwc3yxvKUi8QcmR3a2Nuh4qc+8KqkMA6lOviITUU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IgxTNO5eYeQxyhrIsunKu3u9cFC2gc7IRljph581duO/OuopJM71Nr+cB/Ch1OkBH
-	 so45wvvoj6XOt/JV7atSu+8+IOQQNqLm61xmYYNkHKkYQHfgwDYOPnh2DJcB99GRIf
-	 HXNoxYzG3yho04Kp511xPkpmBq/0DPtwSEzryXwpfw1iMu06lFRMJu5t3FwtU7Pwn6
-	 du5aMkUujy6Jit7FXOWjmdyVBo3UJRZ0Y6y3Y9Q1ERBzlSe224rotUh1TwfN1n7+p2
-	 ttSph3QTP1sy0EUa7GsXS178UbApAWrFPU3RgGhorDJmuJEh5GuAkZYPMKZZbFESLm
-	 T/JcWomM4cz6A==
-Message-ID: <953f2e57-77a5-42c7-ba3a-9fa40be9d7af@kernel.org>
-Date: Wed, 26 Nov 2025 09:14:23 +0100
+	b=UQszyheIUx8FLfKGIkNEMZ9n0HbuvNp1BPpr5ykAXsVOhMSfHmCuT25gSTQjW5b8C
+	 hx8TeFlciO07iqT442gAO+4e3cq+1XEtKD+yVKwzmfVGkERTPwOXF0o5SazBOskbsJ
+	 4Q1kO2+hV+OBM/iXp7LfPgsT3jEjf+UCc3ymVykYfSa/5mJ/gqfeF2MgDvUAQi5VVw
+	 aoIT50/lmnxxLkX/mkpleCrYIE+pqWIhFYNrHR7sr4LEGAzOtsGU4O+MIYpKyOwZHO
+	 jjOVGv8tTnu/GnafKlOB2p2RNsDNW5PbE3Ozkfnn/qy0BL+pXTkB7LQeCm/auEwYh/
+	 Y/PJb+CnZ62pg==
+Message-ID: <fb3a497a-1e48-444d-ae98-f764d9b5ebf4@kernel.org>
+Date: Wed, 26 Nov 2025 09:47:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,18 +50,22 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: battery: Add SiLION battery bindings
- technology
-To: Rakesh Kota <rakesh.kota@oss.qualcomm.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, kamal.wadhwa@oss.qualcomm.com,
- fenglin.wu@oss.qualcomm.com
-References: <20251124-add_silion_battery-v1-0-3c86b70d2543@oss.qualcomm.com>
- <20251124-add_silion_battery-v1-1-3c86b70d2543@oss.qualcomm.com>
- <2deb7496-3094-4d03-b4d0-fb15cfdc6f0e@kernel.org>
- <20251125145929.p4sl43qim4oiyspa@hu-kotarake-hyd.qualcomm.com>
+Subject: Re: [PATCH v4 00/12] Tegra114: implement EMC support
+To: Svyatoslav Ryhel <clamor95@gmail.com>, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Thierry Reding <treding@nvidia.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ Prashant Gaikwad <pgaikwad@nvidia.com>,
+ Mikko Perttunen <mperttunen@nvidia.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Dmitry Osipenko <digetx@gmail.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-tegra@vger.kernel.org, linux-clk@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20251125120559.158860-1-clamor95@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,38 +111,22 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251125145929.p4sl43qim4oiyspa@hu-kotarake-hyd.qualcomm.com>
+In-Reply-To: <20251125120559.158860-1-clamor95@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 25/11/2025 15:59, Rakesh Kota wrote:
-> On Mon, Nov 24, 2025 at 12:37:01PM +0100, Krzysztof Kozlowski wrote:
->> On 24/11/2025 12:12, Rakesh Kota wrote:
->>> Document a new battery chemistry for silicon-anode lithium-ion
->>> cells.
->>>
->>> Signed-off-by: Rakesh Kota <rakesh.kota@oss.qualcomm.com>
->>> ---
->>>  Documentation/devicetree/bindings/power/supply/battery.yaml | 1 +
->>>  1 file changed, 1 insertion(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/power/supply/battery.yaml b/Documentation/devicetree/bindings/power/supply/battery.yaml
->>> index 491488e7b970397b409c248fb0c2a524301686a9..49cbd03956eeb9fc8be72540d8bf35840ccd7156 100644
->>> --- a/Documentation/devicetree/bindings/power/supply/battery.yaml
->>> +++ b/Documentation/devicetree/bindings/power/supply/battery.yaml
->>> @@ -44,6 +44,7 @@ properties:
->>>        - const: lithium-ion-polymer
->>>        - const: lithium-ion-iron-phosphate
->>>        - const: lithium-ion-manganese-oxide
->>> +      - const: lithium-ion-silicon-anode
->>
->>
->> Where is any DTS user of this? You have entire cover letter to explain
->> the background WHY you are doing this.
-> This new lithium-ion-silicon-anode chemistry is intended for the
-> Kaanapali platform, where we validate the silicon-anode Li-ion cells.
-> The bindings and driver changes were tested with the Kaanapali device.
-Again: DTS. Please answer that part.
+On 25/11/2025 13:05, Svyatoslav Ryhel wrote:
+> Add support for External Memory Controller found in Tegra 4 SoC along
+> with adjustments required for it to work properly.
+> 
+> Tested on ASUS TF701T (T40X) and Nvidia Tegratab (T40S). Both work fine.
+
+You mixed here FOUR independent subsystems and without any explanation
+of the dependencies it means things are just harder for us to handle for
+no reason.
+
+Please split independent subsystems or clearly document the merging
+issues/dependencies.
 
 Best regards,
 Krzysztof
