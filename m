@@ -1,117 +1,233 @@
-Return-Path: <linux-pm+bounces-38758-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38759-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46DBCC8C45B
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 00:00:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98969C8C606
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 00:46:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 2C5AC4E0700
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 23:00:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 509C43AE27C
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 23:46:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99BDC2BCF7F;
-	Wed, 26 Nov 2025 23:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9434026A0DB;
+	Wed, 26 Nov 2025 23:46:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="XkTJr23L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HWxIZAIv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B824207A
-	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 23:00:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A815248F51;
+	Wed, 26 Nov 2025 23:46:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764198037; cv=none; b=YCAWoLMFurmO+jAA/FfK0D6ghL0vhNdKs/97HNJMl6vPOrRTMUnIrp2IsiR8TKhC+i6N9Bbr2IlGjnG7dhTTBKnilV6mqqqPQSHQgYY3STQH4J+3LOYtX3THP9rjtP7vdt7P19dLQiWyMzlwPlUeLSvVaSR/vVkE/NvQ2O6sPQw=
+	t=1764200765; cv=none; b=hOMMOoVHdvYRMjpIhHHdQCtiixj+TjTMEPq6vunWBTw1g/r5gby+GAgL6RsUY/fsPMzBiDFo+dBOk+RLIr6pTgJKQTLtn8NbZFo8Rk02i/3wcDM3aXiBz2Apg6Gskn/bIq/C9pUQafCTsTf22EpzLvRMgFm/jBQJm7BpTD8nWMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764198037; c=relaxed/simple;
-	bh=PCSoXnpEk3pcBjDBHwldkbFyBOfxd01QtGIpFU03GsY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=uIwiQYwsU3sBtoIrKuZppDbL8OrAvwdipixLDaOMYAVN9T9IU2XkHpLpXZVZz5iJqA+aITIKIbG04WZFqmOkrug4BdHunI1BZlfo4+ABmsofm4EloeuZyMqDwjWox0bBENnoE5FJ3yqH6LpSTcV3N3p2Qzy+fZGiCXr2ynuPx6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=XkTJr23L; arc=none smtp.client-ip=209.85.166.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-434717509afso1695055ab.2
-        for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 15:00:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1764198035; x=1764802835; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:organization
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PCSoXnpEk3pcBjDBHwldkbFyBOfxd01QtGIpFU03GsY=;
-        b=XkTJr23Ltz3Gws0weCYDMAQRz3HrZADjE+qlLXWmy3CqViWpDaHsk8CTDa9Z6SK8af
-         CwdgcZQhSLaIlixnf/l7XjsZ24f8nPLoP7JQQTNTnbFh+RvFvDybKAEF28kBcB608kxO
-         sm/e7qV99i+jf5g3fhsv9iAGm/dHxyhCTiSDAc9DL9Y/lJj9493+A0SJPoXm0FX6CEfZ
-         8cjAZc43gKGtWsUWj2241RQMryE8R6uOFqmKsOpo0KkmfrOZkfAuKX6Q+lDc3oNEajq/
-         6sgvczQDFawlORlLwdH+QW6R5sWQ6PV5gvCe/8LGoA/pLLFwbh350qx4Sz1tA+YppMA6
-         NHRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764198035; x=1764802835;
-        h=content-transfer-encoding:mime-version:in-reply-to:organization
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=PCSoXnpEk3pcBjDBHwldkbFyBOfxd01QtGIpFU03GsY=;
-        b=C2yBn1B41BuLxHN7ivVQkiu/ML1z4HeJNxDXSjn7ZI/BQLsCpwt91UZg2KZQIjBHjO
-         H/gD01+3/6q+xLvP9XMJBE9/uvOPfqBuzEWqft+f4p5D7+OOn/10UNahOqcyVwXhWCN5
-         QYOOEEOKXhj9HjcV0W6/gXHqe7SFzkd4KpH4B+Uva9sfqybxfcFXzdRIrEnZiNf5sftS
-         dUy95GsTpxby3AnVUhP3WjofCmlTvgLrAJZmIMAwVzHvgv94iVY4PBUyDEMSWM7iDe2K
-         ntNz4qb0vAKaRVIob8cJHSCbUVJMneuGmLKlw9vdD0XcoF00EMqP9CVYk/na5Oxtxynd
-         MMMw==
-X-Forwarded-Encrypted: i=1; AJvYcCXsMcpWJ5eIylWpB9wmJ3870F4Yoqi7+gYV1Wr5NEX0Nv3zL1EAfkCUXRLjsnLMEk0BpV0TfKlR/g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwK2HK4dRUUZsRX2f8iT15lGIVC9nJmfjf81AXpCuiTj+yPAm4F
-	yw44+7nazdY3eudu1C5BYJ6D4/GVuj14LPEOMiF1ClyXSP90zgoxMFDx2ewNISpHOYI=
-X-Gm-Gg: ASbGncvpPpkgXMNsoy1pGLSg8Y9ZEUgnTBakIz5QCbD+NXcRN473CncjrRV/JpExVVb
-	5+iMIU38p+jaYbDZmJNkbnSe0AEMP2+auTC/PYJUSTeoQLgmEoe2y6g4paE25mRGASRCROU7tbO
-	eIMRv3F994cNUK9nrKodcBQAB1FeWduYKsxloV8/qFmxSNPoozzCXmFObpG5iqg3rpKnimu5zjI
-	7xZnfePl/fsooRcZdC+ka3zO0hgn5jS8Z4DNVfzSz+NTNQKI7uB7CHughg7x+K1sxOg6K05/RQF
-	TsrS65C3CI9nn9IeXHhDj1m6LrgGAKSNl92fg8yIIFM4JF1kvyiH8Z3NhKolxJqeQagNOwwKz1T
-	+tTRL5PmwdAa2u7hezJ+jpCLbzhxV16THLvNklAfeiemDVG3XbTjgrCiCwmUhxnGWOAV4AqwxR3
-	NbZvGPVbcH
-X-Google-Smtp-Source: AGHT+IEWc+r1Rn9tHnOOwuTgILo9tXvn4RuBZcp34oCrRbA7eLq90EYdlKPbB6iWPkQIPBS3z+8L1A==
-X-Received: by 2002:a05:6e02:198a:b0:433:2341:bc12 with SMTP id e9e14a558f8ab-435b9851db9mr197827775ab.2.1764198034546;
-        Wed, 26 Nov 2025 15:00:34 -0800 (PST)
-Received: from kf-m2g5 ([2607:fb90:bf0b:8b65:49b1:b694:940a:bfe6])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-435a90b6dedsm91960055ab.18.2025.11.26.15.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Nov 2025 15:00:34 -0800 (PST)
-Date: Wed, 26 Nov 2025 17:00:31 -0600
-From: Aaron Rainbolt <arainbolt@kfocus.org>
-To: srinivas.pandruvada@linux.intel.com
-Cc: arainbolt@kfocus.org, kernel-team@lists.ubuntu.com, lenb@kernel.org,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
- mmikowski@kfocus.org
-Subject: Re: [BUG] intel_pstate: CPU frequencies miscalculated/incorrectly
- detected on Arrow Lake hardware
-Message-ID: <20251126170031.145b6a56@kf-m2g5>
-Organization: Kubuntu Focus
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
-In-Reply-To: <4f534cc70650111e420d5ac9040df4e546eed336.camel@linux.intel.com>
+	s=arc-20240116; t=1764200765; c=relaxed/simple;
+	bh=jLSo+HaqFDdXCrl+AzMOfDRdPEoc0iJrUIlW7wVPTAo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=jBON1T3Y6ihB6FzUsbOWSyY60B5Y7YGeG9l6AgKL4o+6uSYrdg+pFbR1k08NlO71nY4AxO05gLL3cQHsEW9/SATLUosWu3X6f/gnQSuWWmvm+DNoTDVfWW+IPqxOVK9H58k7yW5XqNoiHqmYfv+g82c+Syqfg22WqETP8DvHdFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HWxIZAIv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D66C4CEF7;
+	Wed, 26 Nov 2025 23:46:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764200765;
+	bh=jLSo+HaqFDdXCrl+AzMOfDRdPEoc0iJrUIlW7wVPTAo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=HWxIZAIv7DqHXVOIWKg0XqGmcA/cw760bg7EOuLUqfbnON0a2r98gNBTz0B1B3sFn
+	 q+QdMqL+0xR4iLicVYTxUdNcPAu1wUanrVk71GPSJ7pA+W7jtR9864FPLJgddNXb6e
+	 u8EHh9Oc2OcD97pAWdQ0EkLCIw3nC2bu7G3Cp9/h4H3RdDFeXNE9MkzGl/iIIGG4Hl
+	 +9GiB82Jgps53tHtwrewVL3erFApaNs5llhDIafDhise/G4foSILF/dhxtvKrN2a18
+	 gbvz3V2UGpy7ug9xF2IVn8xTsavKE+q0KSWomVXN0jjWmkcOk+0YWbcxz5NbXBpdFj
+	 BKQfu2uhCgqiA==
+Date: Wed, 26 Nov 2025 17:46:03 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Lukas Wunner <lukas@wunner.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Riana Tauro <riana.tauro@intel.com>,
+	"Sean C. Dardis" <sean.c.dardis@intel.com>,
+	Farhan Ali <alifm@linux.ibm.com>,
+	Benjamin Block <bblock@linux.ibm.com>,
+	Niklas Schnelle <schnelle@linux.ibm.com>,
+	Alek Du <alek.du@intel.com>,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver OHalloran <oohall@gmail.com>, linuxppc-dev@lists.ozlabs.org,
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] PCI/PM: Reinstate clearing state_saved in legacy
+ and !pm codepaths
+Message-ID: <20251126234603.GA2832326@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aSb3Qt6n55Fsl7IF@wunner.de>
 
-(Sorry for this rather malformed email, Claws *still* can't find the
-thread for some reason so I'm having to resort to a "mailto" link off
-of lore.kernel.org.)
+On Wed, Nov 26, 2025 at 01:49:06PM +0100, Lukas Wunner wrote:
+> On Tue, Nov 25, 2025 at 05:18:46PM -0600, Bjorn Helgaas wrote:
+> > On Wed, Nov 19, 2025 at 09:50:01AM +0100, Lukas Wunner wrote:
+> > > But there are two corner cases where the PCI core neglects to clear the
+> > > flag before commencing the suspend sequence:
+> > > 
+> > > * If a driver has legacy PCI PM callbacks, pci_legacy_suspend() neglects
+> > >   to clear the flag.  The (stale) flag is subsequently queried by
+> > >   pci_legacy_suspend() itself and pci_legacy_suspend_late().
+> > > 
+> > > * If a device has no driver or its driver has no PCI PM callbacks,
+> > >   pci_pm_freeze() neglects to clear the flag.  The (stale) flag is
+> > >   subsequently queried by pci_pm_freeze_noirq().
+> > > 
+> > > The flag may be set prior to suspend if the device went through error
+> > > recovery:  Drivers commonly invoke pci_restore_state() + pci_save_state()
+> > > to restore Config Space after reset.
+> > 
+> > I guess the only point of pci_save_state() in this case is to set
+> > state_saved again so a future pci_restore_state() will work, right?
+> > 
+> > The actual state being *saved* is pointless, assuming pci_save_state()
+> > saves exactly the same data that pci_restore_state() restored.
+> > 
+> > And these are the pci_save_state() calls you removed with "treewide:
+> > Drop pci_save_state() after pci_restore_state()".  Too bad we have to
+> > document the behavior we're about to change, but that's what we need
+> > to do.  It's just a little clutter to keep in mind for this release.
+> 
+> Yes.  All of your comments above are correct.
+> 
+> > > The flag may also be set if drivers call pci_save_state() on probe to
+> > > allow for recovery from subsequent errors.
+> > > 
+> > > The result is that pci_legacy_suspend_late() and pci_pm_freeze_noirq()
+> > > don't call pci_save_state() and so the state that will be restored on
+> > > resume is the one recorded on last error recovery or on probe, not the one
+> > > that the device had on suspend.  If the two states happen to be identical,
+> > > there's no problem.
+> > 
+> > So IIUC the effect is that after this change and the "treewide"
+> > change,
+> > 
+> >   - If the driver uses legacy PM, the state restored on resume will be
+> >     the state from suspend instead of the state on probe.
+> 
+> Right.
+> 
+> >   - For devices with no driver or a driver without PM, if the device
+> >     has already been runtime-suspended, we avoid a pointless
+> >     pci_save_state(), so it's an optimization and not logically
+> >     related to the legacy PM case.
+> 
+> It's slightly different:
+> 
+>   - For devices with no driver or a driver without PM, the state restored
+>     on "thaw" and "restore" will be the state from "freeze" instead of the
+>     state on probe.
+> 
+> So the same problem that we have for drivers using legacy PM, we also
+> have for devices with no driver or a driver without (modern) PM callbacks,
+> but only in the "freeze" codepath (for hibernation).
+> 
+> In the patch, I made the "pci_dev->state_saved = false" assignment
+> conditional on !pm_runtime_suspended() in the "freeze" codepath.
+> I didn't do the same in the legacy codepath because none of the
+> drivers using legacy PM callbacks seem to be using runtime PM.
 
-> I asked for some dumps before. We can try to inform the OEM of the
-> system as this is a BIOS tables issue. What is the make and model of
-> your system?
->
-> Thanks,
-> Srinivas
+Maybe it's moot because we hope there will be no new users of PCI
+legacy PM with runtime PM, but I don't think there's anything to
+*prevent* that or to protect against out-of-tree drivers.
 
-We're actively working on getting the dumps you mentioned previously
-for all three affected machines, along with the model info and some
-benchmarking results with our current production kernel and the latest
-mainline kernel. It's taking a bit longer than we expected, but we're
-pretty close. I should have more info by Monday if all goes according
-to plan on our end.
+The implicit assumption that there are no such drivers makes it look
+like there's something magic involving state_saved, legacy PM, and
+runtime PM.  It might be worth doing the same in the legacy PM path
+just for readability.
 
-Thanks for your help!
+> The purpose of making it conditional on !pm_runtime_suspended()
+> is just that we'd otherwise call pci_save_state() twice:  Once in
+> pci_pm_runtime_suspend() and once more in pci_pm_freeze().
+> That would be pointless.
+> 
+> In the commit message, I provided a rationale for the conditionality,
+> but inadvertently caused confusion.
+> 
+> > I'm thinking of something like this for the merge commit and eventual
+> > pull request; please correct me if this isn't right:
+> > 
+> >   Restore the suspend config state, not the state from probe or error
+> >   recovery, for drivers using legacy PCI suspend.
+> > 
+> >   Avoid saving config state again for devices without driver PM if
+> >   their state was already saved by runtime suspend.
+> 
+> I'd suggest instead (feel free to wordsmith as you see fit):
+> 
+>   Restore the suspend config state, not the state from probe or error
+>   recovery, for drivers using legacy PCI suspend.   [ <- unmodified ]
+> 
+>   Same for devices with no driver or a driver without PM callbacks
+>   when the system is hibernated.                   [ <- replacement ]
+
+Stepping back, I guess that when drivers use generic PM, we already
+save config state during suspend and restore that state during resume,
+and do the same when entering/leaving hibernation.
+
+And the point of this patch is to do the same when drivers lack PM or
+use legacy PCI PM, or when devices have no driver?
+
+Maybe third try is the charm?
+
+  For drivers using PCI legacy suspend, save config state at suspend
+  so that state, not any earlier state from enumeration, probe, or
+  error recovery, will be restored when resuming.
+
+  For devices with no driver or a driver that lacks PM, save config
+  state at hibernate so that state, not any earlier state from
+  enumeration, probe, or error recovery, will be restored when
+  resuming.
+
+IIUC, after "Ensure error recoverability", the PCI core will always
+save the state during enumeration, so drivers shouldn't use
+pci_save_state() at all unless they make config changes that they want
+restored during error recovery?
+
+Or, I guess (sigh) if they do their own power management?
+
+> Mentioning the runtime PM conditionality in the high-level changelog
+> is probably not worth it.
+> 
+> Was I able to clarify all questions?  Please ask again if not.
+> 
+> Also, in case the meaning of "freeze", "thaw", "restore" isn't clear,
+> here's the order of a hibernation sequence (suspend to disk):
+> 
+>   pci_pm_prepare()
+>   pci_pm_freeze()
+>   pci_pm_freeze_noirq()
+>   <system image is generated>
+>   pci_pm_thaw_noirq()
+>   pci_pm_thaw()
+>   pci_pm_complete()
+>   pci_pm_prepare()
+>   pci_pm_poweroff()
+>   pci_pm_poweroff_late()
+>   pci_pm_poweroff_noirq()
+>   <system is asleep, then restarted with boot kernel>
+>   pci_pm_prepare()
+>   pci_pm_freeze()
+>   pci_pm_freeze_noirq()
+>   <system image is restored, replacing the boot kernel>
+>   pci_pm_restore_noirq()
+>   pci_pm_restore()
+>   pci_pm_complete()
+> 
+> Note that "freeze" happens twice in the whole sequence.
+
+Thanks, this is extremely helpful.  Copied into my notes.  I guess
+this is essentially condensed from
+Documentation/driver-api/pm/devices.rst, but it's very helpful to see
+the bare bones and your annotations.
+
+Bjorn
 
