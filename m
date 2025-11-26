@@ -1,118 +1,132 @@
-Return-Path: <linux-pm+bounces-38673-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38674-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDD11C87EE2
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 04:19:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE5A1C88279
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 06:29:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 659D5345DF5
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 03:19:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D3E53A3D0C
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 05:29:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9254330B505;
-	Wed, 26 Nov 2025 03:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FB173126C5;
+	Wed, 26 Nov 2025 05:29:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="3N4s5Tub"
+	dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b="F4fk6Ow+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98D62FDC30;
-	Wed, 26 Nov 2025 03:19:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266503126D4
+	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 05:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764127172; cv=none; b=THhNolmq0NEfAJWm4ohLj3mgB/43ONlGkti1BvXjf0phmpcXok/hGPvncrj66Xv7/A76HYRQYc7jSXb1qh5rZScSGLDlRF5IcmkrXeBOmd+dgeYF3e0aPkJmMqxaxqGOCLxwTctbdVM/PVHJ28ODwmBddO3mP5NidPwGTA7SN4w=
+	t=1764134991; cv=none; b=qMlAZRlOQ8sJGEdZYlSUJsUEKXIdK2kgHSP/bO/ei/VPPnRD4Jttp4rGDsCqpcPVfAQIbiq5+LKY87u1mrRLAhjG/XbRuira1RiyoU29tmQi0N74rYkzyi+ynZbBdzd8On5pZUY+HLt/Tww7w3FPkLJ/UHeN3yupFIZ/piCKu+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764127172; c=relaxed/simple;
-	bh=9jfs19wTbS6oSIU2Wqul+QVgs3u1wwQIGGbrxKpQYZo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dt9zHwIWpXgNwvWzKTMSmS2/j0CwKgf99pbgORnJao/Ygb+BcNyUZPWNVf5F/fxgbJGX3qBhxdsHbnbg5AKCFWWiJguisKHbtDjiJ9akfPbAC7jTXj5xFV6H/ty9XeVyn5XjCRLdFpMy/KzF/MWUUJ2/lGIMsrb61ShvrkDOixM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=3N4s5Tub; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=VcXRjcDFFQ1PQSh9wuYY1aQWvTuqM0TiPzkrSBmMDA4=;
-	b=3N4s5TubRyjD9KDAn78++zYqnoZn3ZtDgWE7k5LmMZQXcm9OefXTXJGGf/EoXBPfjKfevYQoD
-	ZcClsXQ481PL0tEyioVbOf5DuqhTRhz8WA2S8RqsDvSyoPTRpPsCvsnNEoHcF4w33KwxAhwI2tg
-	wb4wctTAknBOfzfoztWCKJU=
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4dGPrS3RQyz1T4HQ;
-	Wed, 26 Nov 2025 11:17:44 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id DF02C180471;
-	Wed, 26 Nov 2025 11:19:26 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- kwepemf200001.china.huawei.com (7.202.181.227) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 26 Nov 2025 11:19:26 +0800
-From: Lifeng Zheng <zhenglifeng1@huawei.com>
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>,
-	<zhangpengjie2@huawei.com>, <wangzhi12@huawei.com>,
-	<linhongye@h-partners.com>, <zhenglifeng1@huawei.com>
-Subject: [PATCH] cpufreq: Return -EINVAL if no policy is boost supported
-Date: Wed, 26 Nov 2025 11:19:16 +0800
-Message-ID: <20251126031916.3641176-1-zhenglifeng1@huawei.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1764134991; c=relaxed/simple;
+	bh=MH6PhZqOH7/qk/hUl019I0pJ58AW5th3I1mxlblZdZg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BUSXXTmYaxicJ6zcv/C1h8b+tM5PPxsAQurvXZBSv2KH13WJSGt/Nd5rVDIQQJz+Nem6jtcNPYc6K19YerYpPcKPxOP7H2YvktXv+RHhR4yqEPMHZ+mW2XubII1g830DT7k9G+bbtqLkBquO2GNQuqpsLwzS7AU1BFpNCcRIenw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool; spf=pass smtp.mailfrom=packett.cool; dkim=pass (2048-bit key) header.d=packett.cool header.i=@packett.cool header.b=F4fk6Ow+; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=packett.cool
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=packett.cool
+Message-ID: <aef3f079-c81f-4e3e-8484-d02fca793c20@packett.cool>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=packett.cool;
+	s=key1; t=1764134977;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qLvSRiNEkjQwYv9rHqZs7Cd/sAeizIgY1FHze5NDxl8=;
+	b=F4fk6Ow+XzA9seczvFgSd6MmILJQza2HhxAQ3VCkDklx28lclHX+eKhv6qAjl/min4owss
+	fFbK6w/P1CPAE+5t4E5FJSEcaSydWTE/P+XnwIY7WPktFc02fhmJzLD221sXMWBdYDv8Ri
+	t/BNEYFnkoOJP2LlcGlGsRBbx3S4AGGefIJkqDSViWHAzqtu+bEIAIzL3NK36eIVZygnFh
+	sPIRBp1P/vtRxBnJFnfNMPnftCAEJ2iLhUJm/8aIC+EN+22EqVMAN0aRC6fyZ2ew0ct/QW
+	PiPT9FM4oS2UyT4aCbqLxTHt22KT4TCqSeYV+5ar0lgJrl8HDBS7g5lxyIV8fA==
+Date: Wed, 26 Nov 2025 02:29:25 -0300
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v1] cpuidle: Warn instead of bailing out if target
+ residency check fails
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Christian Loehle <christian.loehle@arm.com>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251121010756.6687-1-val@packett.cool>
+ <CAJZ5v0h1VTozCKweKvma3dQiUCz8KkR88Hue1cL_jDaKiP+BEw@mail.gmail.com>
+ <2808566.mvXUDI8C0e@rafael.j.wysocki>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Val Packett <val@packett.cool>
+In-Reply-To: <2808566.mvXUDI8C0e@rafael.j.wysocki>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemf200001.china.huawei.com (7.202.181.227)
+X-Migadu-Flow: FLOW_OUT
 
-In cpufreq_boost_trigger_state(), if all the policies are boost
-unsupported, policy_set_boost() will not be called and this function will
-return 0. But it is better to return an error to indicate that the platform
-doesn't support boost.
 
-Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
----
- drivers/cpufreq/cpufreq.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+On 11/25/25 1:23 PM, Rafael J. Wysocki wrote:
+> On Friday, November 21, 2025 2:10:57 PM CET Rafael J. Wysocki wrote:
+>> On Fri, Nov 21, 2025 at 2:08 AM Val Packett <val@packett.cool> wrote:
+>>> On Device Tree platforms, the latency and target residency values come
+>>> directly from device trees, which are numerous and weren't all written
+>>> with cpuidle invariants in mind. For example, qcom/hamoa.dtsi currently
+>>> trips this check: exit latency 680000 > residency 600000.
+>> So this breaks cpuidle expectations and it doesn't work correctly on
+>> the affected platforms.
+>>
+>>> Instead of harshly rejecting the entire cpuidle driver with a mysterious
+>>> error message, print a warning and set the target residency value to be
+>>> equal to the exit latency.
+>> This generally doesn't work because the new target residency may be
+>> greater than the target residency of the next state.
+>>
+>>> Fixes: 76934e495cdc ("cpuidle: Add sanity check for exit latency and target residency")
+>>> Signed-off-by: Val Packett <val@packett.cool>
+>>> ---
+>>>   drivers/cpuidle/driver.c | 7 +++++--
+>>>   1 file changed, 5 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
+>>> index 1c295a93d582..06aeb59c1017 100644
+>>> --- a/drivers/cpuidle/driver.c
+>>> +++ b/drivers/cpuidle/driver.c
+>>> @@ -199,8 +199,11 @@ static int __cpuidle_driver_init(struct cpuidle_driver *drv)
+>>>                   * exceed its target residency which is assumed in cpuidle in
+>>>                   * multiple places.
+>>>                   */
+>>> -               if (s->exit_latency_ns > s->target_residency_ns)
+>>> -                       return -EINVAL;
+>>> +               if (s->exit_latency_ns > s->target_residency_ns) {
+>>> +                       pr_warn("cpuidle: state %d: exit latency %lld > residency %lld (fixing)\n",
+>>> +                               i, s->exit_latency_ns, s->target_residency_ns);
+>>> +                       s->target_residency_ns = s->exit_latency_ns;
+>> And you also need to update s->target_residency.
+>>
+>> Moreover, that needs to be done when all of the target residency and
+>> exit latency values have been computed and full sanitization of all
+>> the states would need to be done (including the ordering checks), but
+>> the kernel has insufficient information to do that (for instance, if
+>> the ordering is not as expected, it is not clear how to fix it up).
+>> Even the above sanitization is unlikely to result in the intended
+>> behavior.
+>>
+>> So if returning the error code doesn't work, printing a warning is as
+>> much as can be done, like in the attached patch.
+>>
+>> If this works for you, I'll submit it properly later.
+>>
+> No response, so I assume no objections. [..]
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index e8d7544b77b8..2df714b24074 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2806,7 +2806,9 @@ static int cpufreq_boost_trigger_state(int state)
- {
- 	struct cpufreq_policy *policy;
- 	unsigned long flags;
--	int ret = 0;
-+
-+	/* Return -EINVAL if no policy is boost supported. */
-+	int ret = -EINVAL;
- 
- 	/*
- 	 * Don't compare 'cpufreq_driver->boost_enabled' with 'state' here to
-@@ -2824,14 +2826,12 @@ static int cpufreq_boost_trigger_state(int state)
- 
- 		ret = policy_set_boost(policy, state);
- 		if (ret)
--			goto err_reset_state;
-+			break;
- 	}
- 	cpus_read_unlock();
- 
--	return 0;
--
--err_reset_state:
--	cpus_read_unlock();
-+	if (!ret)
-+		return 0;
- 
- 	write_lock_irqsave(&cpufreq_driver_lock, flags);
- 	cpufreq_driver->boost_enabled = !state;
--- 
-2.33.0
+Right, only printing a warning is fine of course.
+
+~val
 
 
