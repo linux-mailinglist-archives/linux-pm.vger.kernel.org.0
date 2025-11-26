@@ -1,282 +1,142 @@
-Return-Path: <linux-pm+bounces-38738-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38739-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6363BC8B57E
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 18:52:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1C2DC8B605
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 19:06:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 586B73BDDB0
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 17:47:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC7613B2BE2
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 18:06:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B556328272;
-	Wed, 26 Nov 2025 17:43:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57236306486;
+	Wed, 26 Nov 2025 18:06:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cT7W2fXq";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="EHl+qfC5"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="NzjIMmTO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from 003.mia.mailroute.net (003.mia.mailroute.net [199.89.3.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE476315789
-	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 17:43:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A2E2777FC;
+	Wed, 26 Nov 2025 18:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764179004; cv=none; b=Vq31oIa5J4OClE5YleZariPffU+HVod8nlKPLM89jnmSRMO9oQvlHHOgNImHcckXKLJ5R1PQ4bNEYfDC+FkxY1iiFxLs7+nqsB3/RRI5xrDd42oiog5XJ34WC7/sa4/19ehu0vO6DqW7mSODu6ILMCdb6mqEw9j9WktarxlkQj0=
+	t=1764180407; cv=none; b=IiVcWVgFMTDuNsLJesYFilY1oXsr1VXY5LlOGV3w8F96kYkKTxjZmqMCE9liP+dZRGZx1bGCSp5KUtOmHiD34oiVI4ckXnOeA6HrTG5r8m98wkC1D9sICw4rsS/dCr0KrABpXGU9euML+bstclWGftq2TJEhxXRAljlXv+uv+bc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764179004; c=relaxed/simple;
-	bh=Dbd+U+20t5jh3oo5fqXo2LWhcFGP1dtMaiMN1N4Ea2s=;
+	s=arc-20240116; t=1764180407; c=relaxed/simple;
+	bh=qiAEPo6bUlTbnEwSxlQZOcEid+NdlVZAsk/GSoGNkoY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B9UWV5winf/QtaX3/vvsTvU2S50KPo3gdJB8WpuS6IdpXZKSpD7kmnHvFb+cTIxNHxYP1Db+hPtZ5KSi5evSXKHYDee+dffNIb6RXTnrj28Yw4oeD6ozUy0BX61K/jdz7a2z5ECEtkPMwGXoYjFfrQsaY5GVwsqhflb+J+Csa4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cT7W2fXq; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=EHl+qfC5; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AQFMH7E3738420
-	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 17:43:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	/4C1ziBJx+mjYUbjAmhSYYfbHlaOdGG35KslyrE3v6A=; b=cT7W2fXqRsVUJVhr
-	soy3LpKx4+EudPDBbmHgPxQC658fh1GhRt3sz0AtOpj5oAlo2lsw/IvKlUlmMLvq
-	9jpZi1PA4ZSz+vkCu7/euX6E9XelQAyIr1Qlmi5sbXlJTIAsPom3kppk35kT6D3o
-	3JgSjtVyPxVE2bo9+QtsviFVMUc4FoWuvCz1BKFp0V/AiJERp+JR91wgboEHUTcz
-	jthMGHIxQwe1BrkYD3b3W/9k3+7Yo839uA7u0IuA2VuEQ76xW2Jipsmyxo799EWY
-	XFvjAoNOV3q8jymyoQAFrdRW8HkmiHMA6Xyow/IPuP95CwPfm3YJ306ePs/+NyQB
-	RKkwnQ==
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4anggykptb-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 17:43:21 +0000 (GMT)
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-7b9208e1976so14399784b3a.1
-        for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 09:43:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1764179001; x=1764783801; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/4C1ziBJx+mjYUbjAmhSYYfbHlaOdGG35KslyrE3v6A=;
-        b=EHl+qfC5aXz3Q2q1jWQOr2bKLMiHt4sD5B6Qq3J3pt+5eCBdXuhz8XU0ENb7wgMsff
-         /l4HFhU/26spOGfAlokZzWMjFdUHyjqlQ2xy3eLwbwY9hLGACvbFQoSlmf5k1MlCCM9+
-         Es0Khzh0XToW7B242Ukhd5wEEAjvhPgoQQmdYJXHTYvLoOwP4K+RD4dAwCJKx89vlLCH
-         NI5kQXYNUXHMUvhR8aAaGVZx/BYOGlt6cYFzq4CIy9yZpAIugs8MYahDzWVqgj4Dp8IJ
-         FHCj+oidKIL8p6vnj1rnvCeZUxQPAfkV9JSFsLRCK4dec9icpBqFWjjWJrUegv5Z8X0t
-         k3Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764179001; x=1764783801;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/4C1ziBJx+mjYUbjAmhSYYfbHlaOdGG35KslyrE3v6A=;
-        b=C29qYENNMyumnr/52JqSMREphcv1Zi/pm2+LajegE7Md6VAMVwk7BM96HOj3Q1iD/5
-         dqqYhtQfr3TjYTdKE1fZ7nZ7YDVqBH/fEpqJKP0ir4wNp9O26WDVFdohmkC+93SZVEWX
-         en4AD5y3mKC2Qicrq7d/6WzlqJNRPl2wIcvv30i0tUlaVUp1UO6LpfVAn5Viwgc8JsXN
-         BMZyNPGg+P0F8sHUhGXj6zZbscli6D5yaMbh9panc8TVFbh0X6NZUdT5HNJI93Jt015D
-         kswuYIXaKbc0duUPQ5zySSi8HHCtL4vfaNAWCEYf/bCVyTbw8YAd7VDhJj6RwefFy6cX
-         HsgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXb5/xpysT2HUjaFHXobW1M47WxUkiLoqpKz0N+TrDNvf+T0sgqWTSrJjpB4PmYSbd1Aw0TRXmf6w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhZSmjOP5X+D8TmYtLoPYi1nSOMcIybtb6xoFvEOG5vJ/VyxeS
-	CCQFLo8mS411m7GhDfyVj7LqCAGHc1DzYSBvLgjb+GNsgXGq9FGzVmGXQp4lD/J5Hueb4nLMmUC
-	Apq4RCAqNVhSuCRgHO4JFt2+gTj4OTlgBDY4fL8GKyCVEbJlr/4koLOyZlWYskQ==
-X-Gm-Gg: ASbGncu5PcTicyxUoMLsIr0MvK1gCT4P3EcS012SSRkxnqkr1hYA3/F52UPBL8HUtky
-	KYA8hxarr2yzlxQnJHX96R3sFtjnxVVWCdDMCQco47C/XTzCLvDUpi4TFzDDn3BrKjHgFfAhdaa
-	Agz+7l3IDrdtfFlt8XI+QVrYsXRARAlG6/HXcMQxBDvD5hXv1VsYnLoNXiI2QSe0R/QNzG9hm/F
-	Gastx6oZOWKzUpoy8/faPyTZllJfTTqnt6PyTzzRJdyjqgWJdt0v/Z+H3YUyoBQ8TkXr3Pt6jn/
-	e7VHZ14OkwF/iEXCHvRqaXVWIeNffD/jPToHO4gNzJaIvWTpTfFudAYU0C5uRmK+D3ZluCsVAGa
-	ERikOXhA/bG+iQDuzC+6fpv5YIRt1YjVKfaReiVQK40U=
-X-Received: by 2002:a05:6a00:2e28:b0:7b2:2d85:ae53 with SMTP id d2e1a72fcca58-7c58c999ebfmr24059808b3a.8.1764179000438;
-        Wed, 26 Nov 2025 09:43:20 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFE9auC0BPVxJ4KxcFP48LwF0xTVOASw2feRr55RR8ZX+bZHEyVlBeSIXXDN1cl0ZFO26GaMg==
-X-Received: by 2002:a05:6a00:2e28:b0:7b2:2d85:ae53 with SMTP id d2e1a72fcca58-7c58c999ebfmr24059760b3a.8.1764178999869;
-        Wed, 26 Nov 2025 09:43:19 -0800 (PST)
-Received: from [10.216.6.208] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7c3ed471022sm22183967b3a.21.2025.11.26.09.43.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Nov 2025 09:43:19 -0800 (PST)
-Message-ID: <acd1b134-2c8f-af01-0de9-d9779dd2ebdc@oss.qualcomm.com>
-Date: Wed, 26 Nov 2025 23:13:05 +0530
+	 In-Reply-To:Content-Type; b=FMEIKBV0eZL3C3QIpRgVAi25Mtr3Fs4WMV7TJ02lDIkDEZDSYd92GS0WgRWnSzvC2Sn05Il8zrUUFV4oENL2iTuuXpeTgzhCEmf1NllX8tm2k7kBxl7yqda2R6JSDm9QVwwYRWulB/MXWFX7eQcsz0dF9ye8pIYKNrtSPWUWmGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=NzjIMmTO; arc=none smtp.client-ip=199.89.3.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 003.mia.mailroute.net (Postfix) with ESMTP id 4dGnZD2zBTzlgqjZ;
+	Wed, 26 Nov 2025 18:06:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1764180402; x=1766772403; bh=aVK2hHm1cgb3RtYqbaZmKtmo
+	Yt+aEzoWqlX5VZ43Uss=; b=NzjIMmTOQ6LPu75TeB4gL0+GxukzAIW1TdslrDLb
+	taf74Hr3tMzXAmYxJk07Pg6bsGTKt1E4EVJcH3BLiC235y46u2E6zTrNJGkZmGTT
+	/1vgMtqFhizLkXDTfuBkVG0Ra2NmZq0SF7wMlhHfE8cKYEa+S6eax/7pofnhWXMI
+	nMP5/vxc8nGXuJBlpApj863hdoLy2tp5LOcO2Vi9pXel7sotZ7Rn9tw5yQYdp6cE
+	vvJE2FS5Rlw0NNl36Go9Ycd79sy4YFz3JpC3qle+p36L5PCH8Hu913uD6noyMHTA
+	ZXXaUgxSaVUYY9YJBR3g/BTXsnFuisxT4Zh9oPsrYxjwFg==
+X-Virus-Scanned: by MailRoute
+Received: from 003.mia.mailroute.net ([127.0.0.1])
+ by localhost (003.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id tQqhY0iQRbrZ; Wed, 26 Nov 2025 18:06:42 +0000 (UTC)
+Received: from [192.168.51.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 003.mia.mailroute.net (Postfix) with ESMTPSA id 4dGnYz44MgzlgqjW;
+	Wed, 26 Nov 2025 18:06:30 +0000 (UTC)
+Message-ID: <6373a999-f19a-450c-9e83-7448fb70a772@acm.org>
+Date: Wed, 26 Nov 2025 10:06:29 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v17 07/12] firmware: psci: Implement vendor-specific
- resets as reboot-mode
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] PM: runtime: Fix I/O hang due to race between resume
+ and runtime disable
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Yang Yang <yang.yang@vivo.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Pavel Machek <pavel@kernel.org>,
+ Len Brown <lenb@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20251126101636.205505-1-yang.yang@vivo.com>
+ <20251126101636.205505-2-yang.yang@vivo.com>
+ <CAJZ5v0i1YLiri9oiiq2W6_KSbqGuWOqdrMPrOf=do-DdW=_rfA@mail.gmail.com>
 Content-Language: en-US
-To: Lorenzo Pieralisi <lpieralisi@kernel.org>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Mark Rutland <mark.rutland@arm.com>, Arnd Bergmann <arnd@arndb.de>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org, Vinod Koul <vkoul@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Moritz Fischer <moritz.fischer@ettus.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andre Draszik
- <andre.draszik@linaro.org>,
-        Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Xin Liu <xin.liu@oss.qualcomm.com>,
-        Srinivas Kandagatla <srini@kernel.org>,
-        Umang Chheda <umang.chheda@oss.qualcomm.com>,
-        Nirmesh Kumar Singh <nirmesh.singh@oss.qualcomm.com>
-References: <20251109-arm-psci-system_reset2-vendor-reboots-v17-0-46e085bca4cc@oss.qualcomm.com>
- <20251109-arm-psci-system_reset2-vendor-reboots-v17-7-46e085bca4cc@oss.qualcomm.com>
- <aRIfc9iuC2b9DqI+@lpieralisi>
- <80e68e44-a8e0-464a-056e-9f087ad40d51@oss.qualcomm.com>
- <aRxmWrAkD0Vu4pF+@lpieralisi>
- <1da024e7-efb1-3a1c-cc13-0ae5212ed8bd@oss.qualcomm.com>
- <aR2P4CxQNebac6oU@lpieralisi>
- <682b1a0c-644f-2aff-1860-cbf9a53bc62b@oss.qualcomm.com>
- <aSc2Yh3AvLXOBvcz@lpieralisi>
-From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-In-Reply-To: <aSc2Yh3AvLXOBvcz@lpieralisi>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: eS7fN4qMH7WfaLci7Wihe4nNaveuzOqW
-X-Proofpoint-ORIG-GUID: eS7fN4qMH7WfaLci7Wihe4nNaveuzOqW
-X-Authority-Analysis: v=2.4 cv=bNUb4f+Z c=1 sm=1 tr=0 ts=69273c39 cx=c_pps
- a=m5Vt/hrsBiPMCU0y4gIsQw==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
- a=IkcTkHD0fZMA:10 a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=aq4WiCt_VBwjG6PfwrMA:9 a=QEXdDO2ut3YA:10
- a=IoOABgeZipijB_acs4fv:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI2MDE0NCBTYWx0ZWRfX9+v2FvfxLUk6
- SMyT/z5Y0bWp3NCS7J/uGYpk7FYYJEjZfg4A1aOE09Uflhzx5dBA2JS7zhQ9bzNWy6Gy6vMHImR
- JGpuO/xmuvoi0dXBkIJURNwGZoVXsLGV6B2rgU5xGKB7tBF3q2eUP05c5Qkc4x3VtVQ+T75sNQo
- 9evokLxi1AABv2s4SqIYhKsdmvejFf/XE9oPopStzkJ+k0dZ0tgzH5DSDjpjc7ktRDd1Ey0Tq6I
- Ec5t5K7meOg6lJbrRhoxjuvl65d5PW6xJF8tj1X9KwBlazPVd2tJlMwxLYYIt3LhL70+/tn6bhC
- KG1A5CB5juTNWYWt9q69PhFfnMA6C7dFiJfg7aj8PKWGd6kPfbWHz5CNckpTKBGuPypxtaPseyq
- UHClPh6XeqKoiyl0OHP+nAjoovw5sg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-25_02,2025-11-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 adultscore=0 malwarescore=0 phishscore=0 spamscore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=0 clxscore=1015 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511260144
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <CAJZ5v0i1YLiri9oiiq2W6_KSbqGuWOqdrMPrOf=do-DdW=_rfA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
 
+On 11/26/25 3:30 AM, Rafael J. Wysocki wrote:
+> On Wed, Nov 26, 2025 at 11:17=E2=80=AFAM Yang Yang <yang.yang@vivo.com>=
+ wrote:
+>>   T1:                                   T2:
+>>   blk_queue_enter
+>>   blk_pm_resume_queue
+>>   pm_request_resume
+>=20
+> Shouldn't this be pm_runtime_resume() rather?
 
+I tried to make that change on an Android device. As a result, the
+kernel complaint shown below appeared. My understanding is that sleeping
+in atomic context can trigger a deadlock and hence is not allowed.
 
-On 11/26/2025 10:48 PM, Lorenzo Pieralisi wrote:
-> On Wed, Nov 19, 2025 at 05:32:42PM +0530, Shivendra Pratap wrote:
->>
->>
->> On 11/19/2025 3:07 PM, Lorenzo Pieralisi wrote:
->>> On Tue, Nov 18, 2025 at 11:11:33PM +0530, Shivendra Pratap wrote:
->>>
->>> [...]
->>>
->>>>> Yes this could be a potential way forward but that's decoupled from the
->>>>> options below. If we take this route PSCI maintainers should be added
->>>>> as maintainers for this reboot mode driver.
->>>>
->>>> you mean the new psci_reset driver? yes. Maintainer would be PSCI maintainer,
->>>> if we create a new  psci_reset reboot mode driver.
->>>
->>> Yes.
->>>
->>>>>> - struct with pre-built psci reset_types - (warm, soft, cold). Currently
->>>>>>   only two modes supported, anything other than warm/soft defaults to cold.
->>>>>> - vendor resets to be added as per vendor choice, inside psci device tree(SOC specific).
->>>>>> - psci_reset registers with reboot-mode for registering  vendor resets. Here, we
->>>>>>   have a problem, the pre-built psci reset_types - (warm, soft, cold) cannot be added via
->>>>>>   reboot-mode framework.
->>>>>
->>>>> Why ?
->>>>
->>>> If we want the new psci_reset to take the reboot-mode framework route, is it ok to
->>>> add default modes (warm, cold) in the device tree?
->>>> If not, then the design of reboot-mode framework(power:reset:reboot-mode.c) needs to be
->>>> further changed to equip this new feature. 
->>>
->>> Well, yes, all it needs to do is allowing prepopulated reboot modes on top
->>> of which DT based ones are added.
->>
->> The mode-cold , adds a third variable to reboot-modes as the first parameter for 
->> invoke_psci_fn is different for cold vs warm/vendor.
->>
->> cold reset call       : invoke_psci_fn(PSCI_0_2_FN_SYSTEM_RESET, 0, 0, 0);
->> vendor/warm reset call: invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2), vendor, cookiee, 0);
->>
->> Each mode will have 3 argument - like:
->> _ _ _ _ _ _ _ _ _ _ _ _ _  _ _ _ _ _ _ 
->> MODE   , cold reset, reset_type, cookie
->> _ _ _ _ _ _ _ _ _ _ _ _ _  _ _ _ _ _ _ - 
->> COLD   ,   1       ,    0      ,     0
->> WARM   ,   0       ,    0      ,     0
->> vendor1,   0       ,0x80000000 ,     1
->> vendor2,   0       ,0x80000010 ,     0
->>
->> So reboot-mode framework will now define and support upto three 32 bit arguments for each mode?
-> 
-> The cookie value is unused for SYSTEM_WARM_RESET, you can encode there whether
-> it is a cold (SYSTEM_RESET) or warm (SYSTEM_RESET2 - SYSTEM_WARM_RESET) architectural
-> reset when the magic value(aka reset_type) == 0x0 ?
+[   13.728890][    T1] WARNING: CPU: 6 PID: 1 at=20
+kernel/sched/core.c:9714 __might_sleep+0x78/0x84
+[   13.758800][    T1] Call trace:
+[   13.759027][    T1]  __might_sleep+0x78/0x84
+[   13.759340][    T1]  __pm_runtime_resume+0x40/0xb8
+[   13.759781][    T1]  __bio_queue_enter+0xc0/0x1cc
+[   13.760153][    T1]  blk_mq_submit_bio+0x884/0xadc
+[   13.760548][    T1]  __submit_bio+0x2c8/0x49c
+[   13.760879][    T1]  __submit_bio_noacct_mq+0x38/0x88
+[   13.761242][    T1]  submit_bio_noacct_nocheck+0x4fc/0x7b8
+[   13.761631][    T1]  submit_bio+0x214/0x4c0
+[   13.761941][    T1]  mpage_readahead+0x1b8/0x1fc
+[   13.762284][    T1]  blkdev_readahead+0x18/0x28
+[   13.762660][    T1]  page_cache_ra_unbounded+0x310/0x4d8
+[   13.763072][    T1]  page_cache_ra_order+0xc0/0x5b0
+[   13.763434][    T1]  page_cache_sync_ra+0x17c/0x268
+[   13.763782][    T1]  filemap_read+0x4c4/0x12f4
+[   13.764125][    T1]  blkdev_read_iter+0x100/0x164
+[   13.764475][    T1]  vfs_read+0x188/0x348
+[   13.764789][    T1]  __se_sys_pread64+0x84/0xc8
+[   13.765180][    T1]  __arm64_sys_pread64+0x1c/0x2c
+[   13.765556][    T1]  invoke_syscall+0x58/0xf0
+[   13.765876][    T1]  do_el0_svc+0x8c/0xe0
+[   13.766172][    T1]  el0_svc+0x50/0xd4
+[   13.766583][    T1]  el0t_64_sync_handler+0x20/0xf4
+[   13.766932][    T1]  el0t_64_sync+0x1bc/0x1c0
+[   13.767294][    T1] irq event stamp: 2589614
+[   13.767592][    T1] hardirqs last  enabled at (2589613):=20
+[<ffffffc0800eaf24>] finish_lock_switch+0x70/0x108
+[   13.768283][    T1] hardirqs last disabled at (2589614):=20
+[<ffffffc0814b66f4>] el1_dbg+0x24/0x80
+[   13.768875][    T1] softirqs last  enabled at (2589370):=20
+[<ffffffc080082a7c>] ____do_softirq+0x10/0x20
+[   13.769529][    T1] softirqs last disabled at (2589349):=20
+[<ffffffc080082a7c>] ____do_softirq+0x10/0x20
 
-sure that should work. if reset_type is 0, cookie to decide warm vs cold.
+I think that the filemap_invalidate_lock_shared() call in
+page_cache_ra_unbounded() forbids sleeping in submit_bio().
 
-> 
-> The reboot mode parameters do not necessarily need to map to PSCI function
-> calls parameters - provided we define that explicitly.
+Thanks,
 
-got it.
+Bart.
 
-Sorry for out of inline question - 
-So the psci_sys_reset() may be looking like below after the changes suggested?
-Is this on track?
-
-if( panic_in_progress() || !psci_reset_cmd.valid) {
-        if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
-            psci_system_reset2_supported) {
-                /*
-                 * reset_type[31] = 0 (architectural)
-                 * reset_type[30:0] = 0 (SYSTEM_WARM_RESET)
-                 * cookie = 0 (ignored by the implementation)
-                 */
-                invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2), 0, 0, 0);
-        } else {
-                invoke_psci_fn(PSCI_0_2_FN_SYSTEM_RESET, 0, 0, 0);
-        }
-} else {
-        invoke_psci_fn(<psci_reset_cmd.system_reset>, <psci_reset_cmd.reset_type>, <psci_reset_cmd.cookie>, 0);
-}
-
-------
-where psci_reset_cmd is defined like below?
-
-struct psci_sysreset {
-        u32 system_reset; // this will be set as PSCI_FN_NATIVE(1_1, SYSTEM_RESET2) or PSCI_0_2_FN_SYSTEM_RESET.
-        u32 reset_type;
-        u32 cookie;
-        bool valid;
-};
-
-static struct psci_sysreset psci_reset_cmd;
---
-
-thanks,
-Shivendra
 
