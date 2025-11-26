@@ -1,96 +1,96 @@
-Return-Path: <linux-pm+bounces-38725-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38726-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5C46C8AB64
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 16:42:10 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC6B4C8ABF1
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 16:49:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 680D23586F6
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 15:41:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B61C64E9897
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 15:49:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D91F333A01A;
-	Wed, 26 Nov 2025 15:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05E4A33A6E6;
+	Wed, 26 Nov 2025 15:48:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JtIjMHS4"
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="JXxvVnaj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from 004.mia.mailroute.net (004.mia.mailroute.net [199.89.3.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B4025DB0D
-	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 15:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3335E331A55;
+	Wed, 26 Nov 2025 15:48:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.3.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764171696; cv=none; b=bHCorp1mkMfhdL6//srYuZoQtfYMmlHPIr6QmefcgRSsa7PN8XFPCDjI1zHlgptbb5bDr4fW/bxJMSr3IOLlQhZuGpV7TROQa1vcpq7qBOpGhVkOmPEvItiKpDHDX1KkHISvyqgdHMvlc/6Tr4gGm/PdFhTZxOqFzFt6jVL1YA4=
+	t=1764172136; cv=none; b=QjowCDEw4dA9679GwNyVj2yhUUo/3oxrdNPqXqUdfTucTdNi7Mi6qcgZ9nQ5R6/8nZPKiZnXMjCCw6eYIqER2pUSAlWsJtoLsxwarFOQHQ5qm1yTLgcOT7q8C4Jq3g5lH+MvFq9PRrIP9oiC1VbZQb3qHs8rthUGDcJLST7xfwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764171696; c=relaxed/simple;
-	bh=S24uXRYdPei3+GkdbKOxdJvQMqEOHA+fuJO6N9F+wik=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GTHO4276BVJ8vGzAMbBR1mteAZBU0bfdfo54ffWHp06ACKTkmgIOL/dDMZsg7nDME/APGpFkyPuBcT9BRL5RYbpP+uEFgQVWPaRmj5VwbBtmBft8wmvW9P4UFPFKo9BuAQuYCgDItm7Zs7dv7JQ+mw3+KoZi00xbJgedfX3PuAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JtIjMHS4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AFFBC4CEF7
-	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 15:41:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764171696;
-	bh=S24uXRYdPei3+GkdbKOxdJvQMqEOHA+fuJO6N9F+wik=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JtIjMHS4M+leu+qtQcBKHMBUn/A4O/lyCub3Lswue7yrZDJqKuBam8Ni88jABjWX1
-	 bs4Zuer6UwfbcVaEIGk2+o1FfqzPxBOaanAafuhIQt5/3zbWk5XRGhlDCZy3foJzWc
-	 1kOg3RaBHu6N4QSHD05IYEWPCVOjlKvXa5T48gU6h2HPd+JVITSVBKV0JR/Y2zKro8
-	 HYFVsY45nkmrcYJGkk+xhdEva1DBgHRanfELx3rsvRrGHT1U5ig7GpSpkSfmc6xu5l
-	 usngvDGVlraQhEVp4w2srHWgs08ILjEvixCi4qPgdR7hjPVlX+sMf+tnDjElo4dvEl
-	 UkMKq3n0efNCA==
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6574de1cda1so2688206eaf.3
-        for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 07:41:36 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUVVlFsZTehCGsUSOCDPWNV8BAq0g/erNUwypXAW6fEvJGZB8SI9h8MwQtbZqVUnEmZpL13J9zsew==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxoTZM3fz6ilMX/GY6ZI0dogAMqj/MIdcz0fuwZ6TGG+Qh1rDib
-	D2xNh6H7mPtfw/SrOH7qLKxpp0rJg7y0szdDhpJOeTzPT9UFEDvzuIGfanUGuYlwJUmjA7bl0eU
-	AzdYvOlf8/HusTBiGWrDCHvbQp/Q5fp0=
-X-Google-Smtp-Source: AGHT+IGIVP1StFKaOCVbl2pFJj1bElnpsXdqL10mCG3C1NX2m3Z7f+ieqVbTYCSRFBySBuPo+rK75c2RvYri9y1zat4=
-X-Received: by 2002:a05:6820:811b:b0:654:f6f1:dd07 with SMTP id
- 006d021491bc7-657bdb68d36mr2463702eaf.4.1764171695725; Wed, 26 Nov 2025
- 07:41:35 -0800 (PST)
+	s=arc-20240116; t=1764172136; c=relaxed/simple;
+	bh=XKCHOrUC7lUwfA2lyRiev1RPUU8XOHcokBwQZZTfIMU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=St5NuQFjDopZ6SmbRWvUyzFRECb2C5k5Lre1Rb/gVlsueE4VWek2/ZTePfNxOnhVGnCkSRSX2pb2fkOJ28X33NeHGrhhnt+blULucTtylq74jjrTOrokxFaxtvLNZlv1aL56QJz/70N6AcenctxAVqsh+dyWRK+8BWARR8F19aE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=JXxvVnaj; arc=none smtp.client-ip=199.89.3.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+Received: from localhost (localhost [127.0.0.1])
+	by 004.mia.mailroute.net (Postfix) with ESMTP id 4dGkWB2PCNzm1Hcj;
+	Wed, 26 Nov 2025 15:48:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1764172132; x=1766764133; bh=nidLKHZbzxxAle9niWpnvANE
+	hDq+v54g9Sj+5WdX6oY=; b=JXxvVnajL6QHirCbDZ4oF0Gy3Ot9s7JkwmJs4eNv
+	bt2QKbCgx/YyE4HvqTvfZlPR/RqaJ/0cXXEma5cHEJnoglywNfl1yTzOeFC2s6cf
+	Uma281zxvE7Ar5xHmXjek4OIlZUECxTQQ3szKQ5fwWzrOV5xL1XYEbQ88dryOlkA
+	Ry3Hey3zB6Blswf6A9HXfqIGV6Hwy8hMH5L5C600qdzCE3c/hL4R19tlegKRWKAK
+	KLR04bFxXe3OV2i4m7WDFT2dBfMp4xFXYX6kH2KmieMBUObwhhmOdWVAUxn1rP98
+	ys9lWnFGE1UgT2HYRoDurGdY3izM8d/ytx2Z5fAdFeEAWQ==
+X-Virus-Scanned: by MailRoute
+Received: from 004.mia.mailroute.net ([127.0.0.1])
+ by localhost (004.mia [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id 2ApCToxj5203; Wed, 26 Nov 2025 15:48:52 +0000 (UTC)
+Received: from [192.168.51.14] (c-73-231-117-72.hsd1.ca.comcast.net [73.231.117.72])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 004.mia.mailroute.net (Postfix) with ESMTPSA id 4dGkVy5RLVzm0c5R;
+	Wed, 26 Nov 2025 15:48:41 +0000 (UTC)
+Message-ID: <94c6680c-1b86-4cee-8e9c-860daf629b59@acm.org>
+Date: Wed, 26 Nov 2025 07:48:40 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251126101636.205505-1-yang.yang@vivo.com> <20251126101636.205505-2-yang.yang@vivo.com>
- <CAJZ5v0i1YLiri9oiiq2W6_KSbqGuWOqdrMPrOf=do-DdW=_rfA@mail.gmail.com>
- <1a2d2059-0548-4c5f-a986-5081447c3325@vivo.com> <CAJZ5v0iSgrLzsjh+bvF2=rxxhYcBetJ6V-joWaQud4ahkm1GkQ@mail.gmail.com>
- <9b6e7d55-6a1f-490e-98c7-3c04f85f7444@acm.org>
-In-Reply-To: <9b6e7d55-6a1f-490e-98c7-3c04f85f7444@acm.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 26 Nov 2025 16:41:24 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hJw0WdHpqgUc5bz5qCSUNNKHg7i5-sNYeZcDYwRj21qw@mail.gmail.com>
-X-Gm-Features: AWmQ_bmDOGJHpcrQGXo8ugxWHhlUTb1Js0jsrnsQQz-TNjvaI1DJy7kSFkXYkoM
-Message-ID: <CAJZ5v0hJw0WdHpqgUc5bz5qCSUNNKHg7i5-sNYeZcDYwRj21qw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] PM: runtime: Fix I/O hang due to race between resume
- and runtime disable
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, YangYang <yang.yang@vivo.com>, Jens Axboe <axboe@kernel.dk>, 
-	Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] PM: runtime: Fix potential I/O hang
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Yang Yang <yang.yang@vivo.com>
+Cc: Jens Axboe <axboe@kernel.dk>, Pavel Machek <pavel@kernel.org>,
+ Len Brown <lenb@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20251126101636.205505-1-yang.yang@vivo.com>
+ <CAJZ5v0jsdsyVd3hPWni1Vj+daQS8PdWJCjboJHHHbBjBMeSxzg@mail.gmail.com>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <CAJZ5v0jsdsyVd3hPWni1Vj+daQS8PdWJCjboJHHHbBjBMeSxzg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 26, 2025 at 4:34=E2=80=AFPM Bart Van Assche <bvanassche@acm.org=
-> wrote:
->
-> On 11/26/25 4:36 AM, Rafael J. Wysocki wrote:
-> > Well, the code as is now schedules an async resume of the device and
-> > then waits for it to complete.  It would be more straightforward to
-> > resume the device synchronously IMV.
->
-> That would increase the depth of the call stack significantly. I'm not
-> sure that's safe in this context.
+On 11/26/25 3:31 AM, Rafael J. Wysocki wrote:
+> Please address the issue differently.
 
-As it stands, you have a basic problem with respect to system
-suspend/hibernation.  As I said before, the PM workqueue is frozen
-during system suspend/hibernation transitions, so waiting for an async
-resume request to complete then is pointless.
+It seems unfortunate to me that __pm_runtime_barrier() can cause 
+pm_request_resume() to hang. Would it be safe to remove the
+cancel_work_sync() call from __pm_runtime_barrier() since
+pm_runtime_work() calls functions that check disable_depth
+when processing RPM_REQ_SUSPEND and RPM_REQ_AUTOSUSPEND? Would
+this be sufficient to fix the reported deadlock?
+
+Thanks,
+
+Bart.
 
