@@ -1,338 +1,147 @@
-Return-Path: <linux-pm+bounces-38727-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38728-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 464D6C8AE62
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 17:16:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF0C9C8AEAB
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 17:20:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 974133A766D
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 16:14:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AC063A307E
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 16:18:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7436933BBB6;
-	Wed, 26 Nov 2025 16:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6433933D6DC;
+	Wed, 26 Nov 2025 16:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="a+adtWVJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qgGElSiy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B98F933B6DA;
-	Wed, 26 Nov 2025 16:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B6A28031C
+	for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 16:18:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764173664; cv=none; b=AWJ5sTRilwx7QL+ox2+UmQZyjOMJG0a/UAmUD/HQCg3j6Xu22hiyyWCl9RGYykcVR2/Y0LZDJRSVOjrf9l+EkQgcOTVOgpEZYDQtP9Rkvl+eulDJY1nc1a+ggDOltHTR2mCrLPtc47RT/Ix091U4jEadGDdVI+Jt0Sy0av/OsPk=
+	t=1764173929; cv=none; b=ifT062VJnWUrQ7KjLSMaVyUeraC4H/AoOls5Bi2QZYEP722ElHJD6DSCYyI0xxpcOeyQrY1VnKPJZGw+60i5zraIRltbVkrbSIo39N4mVAHwovpCT7PUUinVRhAv9y3zKHFBfhc1eiiobDzNva1Ajn2JzOSotJ3O+VIcT50l/XA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764173664; c=relaxed/simple;
-	bh=x0kK1Zt9GMug1E5KSufQyhfENjqsQBZR+UYh60o3iuw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QW6AA1Dpb7Vu7ObFOWRZWnpg14hSxil2lneBA9JUsPYyWzfzHON/sMlgRLEUqY0U3oZFCNM41hrN5RPI5op3UdPunfQl6HpcsZKBdK8cAl6T9Xw3Jep3bh9oeKKwySN3JiFrF8kL+4jyyyKEJP9dNIWKrQvs8sP9Ux4CtPgm9Jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=a+adtWVJ; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 2CCC620E95;
-	Wed, 26 Nov 2025 17:14:20 +0100 (CET)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id plvOBBVR04nM; Wed, 26 Nov 2025 17:14:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1764173659; bh=x0kK1Zt9GMug1E5KSufQyhfENjqsQBZR+UYh60o3iuw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=a+adtWVJRPL5kbbUY2jOqIkmrmPlTEZpk3zUcm9uIYtnZHEa7GPIOeT6siRgbKfny
-	 UHZVKelDJF5J7A2zoLHoVxsgsdJAAvmgYr2NUFscOuCvcu25NGG8lzRdkBsHG72FCU
-	 mnT6wIYwmQTcnmzZQvoYW2HcbSEa+6YLNMUssyyb80RovbqPnb1BuoyYsbW95keBUV
-	 M0yy1fo6EIlUCvnTKtdQmDygJiAB04HmseDBEDXcgtAfUN+wEhMstJ8+ZLjp3RMBk5
-	 SSOih19lEyPDE63aSxJIKyzuSfwee4knPASEzbCg85Z8aC3dp6lebLpFC9dbMUmAls
-	 k5o5hRuPXwwCg==
-Date: Wed, 26 Nov 2025 16:13:54 +0000
-From: Yao Zi <ziyao@disroot.org>
-To: Shuwei Wu <shuweiwoo@163.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] thermal: K1: Add driver for K1 SoC thermal sensor
-Message-ID: <aScnQgLuV3kMLBJg@pie>
-References: <20251127-b4-k1-thermal-v1-0-f32ce47b1aba@163.com>
- <20251127-b4-k1-thermal-v1-2-f32ce47b1aba@163.com>
+	s=arc-20240116; t=1764173929; c=relaxed/simple;
+	bh=A8a/vfmrnuuCKlhPtRmNUE7pjBPlzlE2qXTzeU2dArw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OWHSJV+Jhmem+LigUdWbo/xHbafYjc3yfn2JciBGEBSmGGsSTg3I3aRbOtN37A+e2XLREOLNuBS96LCh1s8yHII3k+a6/wkGU9Y9OseAstQl64jPc9SPHyLdwnVSH+2TqVTV9k1ffyo5TnFtLj+8p5UTnGL9mgkm2ScAqq4l0sA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qgGElSiy; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4775ae77516so65516815e9.1
+        for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 08:18:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764173924; x=1764778724; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=A8a/vfmrnuuCKlhPtRmNUE7pjBPlzlE2qXTzeU2dArw=;
+        b=qgGElSiyIIO8yHhW8+S/qQGLCjkjk9IxhK+nnnSm2NDKHJ7AUSU6NxdxT/i/Z7sD4g
+         heltZSG8f/ZewycFWjjl8RO8FY5puX5L9eLhWhjf6ZGBa2Cyrk7GoqVnecvSrgCUj+PG
+         LIqE2eipL6xW4SN1x4Y9dB2Y75L6zliNi2oWdP1bEsZ+Za5BupMBnulyNBPn9wC+td3Q
+         heYgBWbLHyKpq3m4WxchKXS5WeQE+fgzCyWMhq4PiOPJtwNtfn8U4W/XxCABFXCBr8Wv
+         tt3hW7iIQO1S6X2cobmtuttLVCTXmvzRMJQqNjcjHxXS0gF+MM22XjHSg2A6n0dpXewv
+         Hz8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764173924; x=1764778724;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A8a/vfmrnuuCKlhPtRmNUE7pjBPlzlE2qXTzeU2dArw=;
+        b=F4KLr6PS92DG3MbaDXWKg7q0f5V3Zozn01JPCH58RX4bO+SflD3Kgu5IS0M1F0x6VH
+         +GjmtwIgJCWJkeWUu1UfRNiexGQfC5YFZk8fZ2GGBRZDWIfO9itOb8MOa9XmxN7EHRu+
+         j6q9UQwlSCFs9eKwpnIljL8MegfISynrl44YyHbaayjojnc+HSvFxqhUvG+DoTBS0Uzv
+         Z86ypho1RVn98/2CrYxUfbQX9X8y1iVAvQqFUxLzgocMEIFZVFS930yhQ3LgCQFGWVXq
+         0O9bKry2IK7LTj3y45QJlDovvRYjd0m23hUQHot+qyXBfwEzkoEK50/iKP3RuU68QY60
+         wfug==
+X-Forwarded-Encrypted: i=1; AJvYcCUFZSKDajjGwgmpeAs1Qem4hmyyQPrhfCbRQ54Iy+M7Pc68JNV5EUGB21Dkp66zQKTuh+rW9M3jBA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAwf5r0RY9PeEDaqma9G8QeNnTuFhV1/3YObUZK/lNkH+w9tZF
+	CwJK4sk1QxPuhftdE8NfB/PFluF+jdQTQs136qSK1wtb7cK/iqlxOkwPMiGuqRIPmt8=
+X-Gm-Gg: ASbGnctAO025OdbsLDWwsNqR+NatLG53SUFSRfo+QsyHSsi8zqb5XIDOJSfRMLZvoc+
+	pMStoiGn/cP0SrRT+CLtspZMnjHN/hMl2z94yAiMKT+YAau/c/OnLhxYnuVZn1B9VT0IcIQvBXv
+	6P/2gSxz2eaIALi0KwHdZ3rjU0uxtWM/0X9BzviG3fBGfkIomN6NPVR6A9r1VnYqPSNA5tPeH9b
+	Oqp7Z4Zv7t6csBhW8c5ETMZYypN2jdNAmdk25uIwy6JjPF2kCjcNaCz/6vIX0regJN19QhZuO6n
+	P81UUWmxK0cyzupq7S9s4lqSzWAoesOqa4+g70b1AEPD3s0hiz6IANxEOi4xVOePpd7e6NXkah3
+	mCoCNat/9G1LmAaYwVfC7DzCjVWwOIzNZgX1BNPWD5zqoe/DX02QvcF9dRL1wq7hGkeCat5FlJX
+	w1K6UOlN65uNEzaY/l
+X-Google-Smtp-Source: AGHT+IHPbIx23EDNZaUTAJ6Psvz/ev1Z/O51tl6vv+BcSPNYJjiwrPTdLBSRYd1ljvmAqn0aCxUGmw==
+X-Received: by 2002:a05:600c:4f89:b0:477:9bfc:dcb6 with SMTP id 5b1f17b1804b1-477c10e2bb4mr209401045e9.14.1764173924510;
+        Wed, 26 Nov 2025 08:18:44 -0800 (PST)
+Received: from draszik.lan ([212.129.87.89])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4790add2c98sm49691755e9.5.2025.11.26.08.18.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Nov 2025 08:18:44 -0800 (PST)
+Message-ID: <8d8201de13b4694b26812722356a3a55637406c4.camel@linaro.org>
+Subject: Re: [PATCH 3/6] dt-bindings: usb: maxim,max33359: Add supply
+ property for VBUS in OTG mode
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Amit Sunil Dhamne <amitsd@google.com>, Krzysztof Kozlowski
+ <krzk@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski	 <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones	 <lee@kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, Peter Griffin	
+ <peter.griffin@linaro.org>, Tudor Ambarus <tudor.ambarus@linaro.org>, Alim
+ Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, 	devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org, 	linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>, Kyle
+ Tso <kyletso@google.com>
+Date: Wed, 26 Nov 2025 16:18:59 +0000
+In-Reply-To: <adc2d6ec-e666-4dd0-aaad-7ef014efafb6@google.com>
+References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
+	 <20251123-max77759-charger-v1-3-6b2e4b8f7f54@google.com>
+	 <20251124-rook-of-exotic-innovation-fedcc5@kuoka>
+	 <adc2d6ec-e666-4dd0-aaad-7ef014efafb6@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-2+build3 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251127-b4-k1-thermal-v1-2-f32ce47b1aba@163.com>
 
-On Thu, Nov 27, 2025 at 02:44:08AM +0800, Shuwei Wu wrote:
-> The thermal sensor unit (TSU) on K1 supports monitoring five temperature
-> zones. The driver registers these sensors with the thermal framework
-> and supports standard operations:
-> - Reading temperature (millidegree Celsius)
-> - Setting high/low thresholds for interrupts
-> 
-> Signed-off-by: Shuwei Wu <shuweiwoo@163.com>
-> ---
->  drivers/thermal/Kconfig      |  14 ++
->  drivers/thermal/Makefile     |   1 +
->  drivers/thermal/k1_thermal.c | 307 +++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 322 insertions(+)
+On Tue, 2025-11-25 at 12:13 -0800, Amit Sunil Dhamne wrote:
+> Hi Krzysztof,
+>=20
+> On 11/23/25 11:53 PM, Krzysztof Kozlowski wrote:
+> > On Sun, Nov 23, 2025 at 08:35:50AM +0000, Amit Sunil Dhamne wrote:
+> > > Add a regulator supply property for VBUS when usb is in OTG mode.
+> > >=20
+> > > Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> > > Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+> > > ---
+> > > =C2=A0 Documentation/devicetree/bindings/usb/maxim,max33359.yaml | 4 =
+++++
+> > > =C2=A0 1 file changed, 4 insertions(+)
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/usb/maxim,max33359.yam=
+l
+> > > b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+> > > index 3de4dc40b791..a529f18c4918 100644
+> > > --- a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+> > > +++ b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+> > > @@ -32,6 +32,9 @@ properties:
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 description:
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Properties for usb c conne=
+ctor.
+> > > =C2=A0=20
+> > > +=C2=A0 otg-vbus-supply:
+> > How is the pin or supply called in the datasheet?
+>=20
+> The pin that supplies the VBUS power in OTG is referred to as Vchgin in=
+=20
 
-...
+I think that should be chgin (without V prefix)
 
-> diff --git a/drivers/thermal/k1_thermal.c b/drivers/thermal/k1_thermal.c
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..a0e9585cbc5a4e0f7c3a47debb3cfa8e82082d88
-> --- /dev/null
-> +++ b/drivers/thermal/k1_thermal.c
-> @@ -0,0 +1,307 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Thermal sensor driver for SpacemiT K1 SoC
-> + *
-> + * Copyright (C) 2025 Shuwei Wu <shuweiwoo@163.com>
-> + */
-> +#include <linux/clk.h>
-> +#include <linux/err.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset.h>
-> +#include <linux/thermal.h>
+> the datasheet.
 
-devm_kzalloc() is used in the file, but include for linux/slab.h is
-missing.
-
-> +#include "thermal_hwmon.h"
-> +
-> +#define MAX_SENSOR_NUMBER		5
-> +#define TEMPERATURE_OFFSET		278
-> +
-> +#define K1_TSU_INT_EN			0x14
-> +#define K1_TSU_INT_CLR			0x10
-> +#define K1_TSU_INT_STA			0x18
-
-...
-
-> +#define K1_TSU_EN			0x8
-
-...
-
-> +#define K1_TSU_DATA_BASE		0x20
-
-...
-
-> +#define K1_TSU_THRSH_BASE		0x40
-
-...
-
-> +#define K1_TSU_TIME			0x0C
-
-...
-
-> +#define K1_TSU_PCTRL			0x00
-
-...
-
-> +#define K1_TSU_PCTRL2			0x04
-
-Why not sort these register offsets?
-
-> +struct k1_thermal_sensor {
-> +	struct k1_thermal_priv *priv;
-> +	struct thermal_zone_device *tzd;
-> +	int id;
-> +};
-
-> +struct k1_thermal_priv {
-> +	void __iomem *base;
-> +	struct device *dev;
-
-This variable is set but used nowhere, so I think this could be dropped.
-
-> +	struct clk *clk;
-> +	struct clk *bus_clk;
-> +	struct reset_control *reset;
-
-With devres-managed API, these three variables are only used in the
-probe function, thus could be dropped, too.
-
-> +	struct k1_thermal_sensor sensors[MAX_SENSOR_NUMBER];
-> +};
-> +
-> +static int k1_init_sensors(struct platform_device *pdev)
-
-Suggest passing k1_thermal_priv directly into the function, since
-struct platform_device isn't really necessary for it. Also it could
-return void, since there's no error to happen.
-
-> +{
-
-...
-
-> +	/*
-> +	 * Enable all sensors' auto mode, enable dither control,
-> +	 * consecutive mode, and power up sensor.
-> +	 */
-> +	temp = readl(priv->base + K1_TSU_PCTRL);
-> +	temp |= K1_TSU_PCTRL_RAW_SEL |
-> +		K1_TSU_PCTRL_TEMP_MODE |
-> +		K1_TSU_PCTRL_HW_AUTO_MODE |
-> +		K1_TSU_PCTRL_ENABLE;
-> +	temp &= ~K1_TSU_PCTRL_SW_CTRL;
-> +	temp &= ~K1_TSU_PCTRL_CTUNE;
-> +	writel(temp, priv->base + K1_TSU_PCTRL);
-
-It's a nitpick, but I think it'll be better if you follow the same
-pattern as in other readl-modification-writel blocks, to clear the bits
-then set the desired ones later,
-
-> +	/* Select 24M clk for high speed mode */
-
-This looks a little confusing, in dt-bindings you only listed a core
-clock and a bus clock, but neither core nor bus clock runs at 24MHz. So
-I suspect there's another clock source supplying the "24MHz clk",
-possibly the 24MHz oscillator, and it should be described in
-dt-bindings, too.
-
-> +	temp = readl(priv->base + K1_TSU_PCTRL2);
-> +	temp &= ~K1_TSU_PCTRL2_CLK_SEL_MASK;
-> +	temp |= K1_TSU_PCTRL2_CLK_SEL_24M;
-> +	writel(temp, priv->base + K1_TSU_PCTRL2);
-
-...
-
-> +	/* Enable each sensor */
-> +	for (i = 0; i < MAX_SENSOR_NUMBER; ++i) {
-> +		temp = readl(priv->base + K1_TSU_EN);
-> +		temp &= ~K1_TSU_EN_MASK(i);
-> +		temp |= K1_TSU_EN_MASK(i);
-
-What's the point of clearing a bit and setting it again?
-
-Furthermore, this is the only place K1_TSU_EN_MASK is used. If you fold
-the modified bits into a macro, let's say, K1_TSU_EN_ALL, to be
-GENMASK(MAX_SENSOR_NUNBER - 1, 0), this loop could be replaced with
-readl-or-writel operation, which seems much simpler to me.
-
-> +		writel(temp, priv->base + K1_TSU_EN);
-> +	}
-> +
-> +	return 0;
-> +}
-
-...
-
-> +/*
-> + * The conversion formula used is:
-> + * T(m°C) = (((raw_value & mask) >> shift) - TEMPERATURE_OFFSET) * 1000
-> + */
-> +static int k1_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
-> +{
-> +	struct k1_thermal_sensor *sensor = thermal_zone_device_priv(tz);
-> +	struct k1_thermal_priv *priv = sensor->priv;
-> +
-> +	*temp = readl(priv->base + K1_TSU_DATA(sensor->id));
-> +	*temp &= K1_TSU_DATA_MASK(sensor->id);
-> +	*temp >>= K1_TSU_DATA_SHIFT(sensor->id);
-
-FIELD_GET() would help here.
-
-> +
-> +	*temp -= TEMPERATURE_OFFSET;
-> +
-> +	*temp *= 1000;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * For each sensor, the hardware threshold register is 32 bits:
-> + * - Lower 16 bits [15:0] configure the low threshold temperature.
-> + * - Upper 16 bits [31:16] configure the high threshold temperature.
-> + */
-> +static int k1_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
-> +{
-
-...
-
-> +	high_code = high_code / 1000 + TEMPERATURE_OFFSET;
-> +	temp = readl(priv->base + K1_TSU_THRSH(sensor->id));
-> +	temp &= ~K1_TSU_THRSH_HIGH_MASK;
-> +	temp |= (high_code << K1_TSU_THRSH_HIGH_SHIFT);
-> +	writel(temp, priv->base + K1_TSU_THRSH(sensor->id));
-> +
-> +	low_code = low_code / 1000 + TEMPERATURE_OFFSET;
-> +	temp = readl(priv->base + K1_TSU_THRSH(sensor->id));
-> +	temp &= ~K1_TSU_THRSH_LOW_MASK;
-> +	temp |= (low_code << K1_TSU_THRSH_LOW_SHIFT);
-> +	writel(temp, priv->base + K1_TSU_THRSH(sensor->id));
-
-Similarly, FIELD_PUT() could simplify these threshold setting code.
-
-> +
-> +	return 0;
-> +}
-
-...
-
-> +static irqreturn_t k1_thermal_irq_thread(int irq, void *data)
-> +{
-> +	struct k1_thermal_priv *priv = (struct k1_thermal_priv *)data;
-> +	int msk, status, i;
-> +
-> +	status = readl(priv->base + K1_TSU_INT_STA);
-> +
-> +	for (i = 0; i < MAX_SENSOR_NUMBER; i++) {
-> +		if (status & K1_TSU_INT_MASK(i)) {
-> +			msk = readl(priv->base + K1_TSU_INT_CLR);
-> +			msk |= K1_TSU_INT_MASK(i);
-> +			writel(msk, priv->base + K1_TSU_INT_CLR);
-> +			/* Notify thermal framework to update trips */
-
-Purpose of the code looks obvious, do you think the comment should be
-dropped?
-
-> +			thermal_zone_device_update(priv->sensors[i].tzd, THERMAL_EVENT_UNSPECIFIED);
-> +		}
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int k1_thermal_probe(struct platform_device *pdev)
-> +{
-
-...
-
-> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(priv->base))
-> +		return PTR_ERR(priv->base);
-
-Why not using dev_err_probe() here?
-
-...
-
-> +	ret = k1_init_sensors(pdev);
-
-k1_init_sensors would never fail, suggest changing it to return void,
-and get rid of assignment to ret here.
-
-Best regards,
-Yao Zi
+Cheers,
+Andre'
 
