@@ -1,233 +1,290 @@
-Return-Path: <linux-pm+bounces-38759-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38760-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98969C8C606
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 00:46:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4002FC8C9A5
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 02:54:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 509C43AE27C
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Nov 2025 23:46:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED42E3B4781
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 01:54:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9434026A0DB;
-	Wed, 26 Nov 2025 23:46:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 303A021CA0D;
+	Thu, 27 Nov 2025 01:54:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HWxIZAIv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e3Oy2PuI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A815248F51;
-	Wed, 26 Nov 2025 23:46:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0808FBA34
+	for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 01:54:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764200765; cv=none; b=hOMMOoVHdvYRMjpIhHHdQCtiixj+TjTMEPq6vunWBTw1g/r5gby+GAgL6RsUY/fsPMzBiDFo+dBOk+RLIr6pTgJKQTLtn8NbZFo8Rk02i/3wcDM3aXiBz2Apg6Gskn/bIq/C9pUQafCTsTf22EpzLvRMgFm/jBQJm7BpTD8nWMk=
+	t=1764208487; cv=none; b=h4vgLlbBEnuzd2Dhm933zAAFZWS390Bs/CrrlT8LfvnD9kgdMJ4Cb/9a4UoU/rrUOq4EVRYYzUTptw9tQF3wgjqEdKdLwEa6cwwPgUH+doJTTzwILa5hYdFL4+q1B95MWDSEMG0eXvyhk1sPZB2qkneB7UKBWj54UL+kFcp+MpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764200765; c=relaxed/simple;
-	bh=jLSo+HaqFDdXCrl+AzMOfDRdPEoc0iJrUIlW7wVPTAo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=jBON1T3Y6ihB6FzUsbOWSyY60B5Y7YGeG9l6AgKL4o+6uSYrdg+pFbR1k08NlO71nY4AxO05gLL3cQHsEW9/SATLUosWu3X6f/gnQSuWWmvm+DNoTDVfWW+IPqxOVK9H58k7yW5XqNoiHqmYfv+g82c+Syqfg22WqETP8DvHdFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HWxIZAIv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3D66C4CEF7;
-	Wed, 26 Nov 2025 23:46:04 +0000 (UTC)
+	s=arc-20240116; t=1764208487; c=relaxed/simple;
+	bh=f0EdgUznNZO54LZecInfA4y5+ELOv8o96l9SDsv2F0k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uocZ5L3VRbbeiYTgxpgL4nP3FfArnDnMT7+EvYGbCh6sJROul3ns2OEmAoSjw+TSyVXAkq1gzQEiosfn/Ruhdp0d8DadGWD0Lq/aGwsEej57Wh0LUuHxJeVf2SYRcy3jqjzkotPvVK+5aWKeHTR2AaSuwBJH2qSosP6GiIvr18g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e3Oy2PuI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA766C19421
+	for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 01:54:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764200765;
-	bh=jLSo+HaqFDdXCrl+AzMOfDRdPEoc0iJrUIlW7wVPTAo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=HWxIZAIv7DqHXVOIWKg0XqGmcA/cw760bg7EOuLUqfbnON0a2r98gNBTz0B1B3sFn
-	 q+QdMqL+0xR4iLicVYTxUdNcPAu1wUanrVk71GPSJ7pA+W7jtR9864FPLJgddNXb6e
-	 u8EHh9Oc2OcD97pAWdQ0EkLCIw3nC2bu7G3Cp9/h4H3RdDFeXNE9MkzGl/iIIGG4Hl
-	 +9GiB82Jgps53tHtwrewVL3erFApaNs5llhDIafDhise/G4foSILF/dhxtvKrN2a18
-	 gbvz3V2UGpy7ug9xF2IVn8xTsavKE+q0KSWomVXN0jjWmkcOk+0YWbcxz5NbXBpdFj
-	 BKQfu2uhCgqiA==
-Date: Wed, 26 Nov 2025 17:46:03 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Riana Tauro <riana.tauro@intel.com>,
-	"Sean C. Dardis" <sean.c.dardis@intel.com>,
-	Farhan Ali <alifm@linux.ibm.com>,
-	Benjamin Block <bblock@linux.ibm.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Alek Du <alek.du@intel.com>,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver OHalloran <oohall@gmail.com>, linuxppc-dev@lists.ozlabs.org,
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] PCI/PM: Reinstate clearing state_saved in legacy
- and !pm codepaths
-Message-ID: <20251126234603.GA2832326@bhelgaas>
+	s=k20201202; t=1764208486;
+	bh=f0EdgUznNZO54LZecInfA4y5+ELOv8o96l9SDsv2F0k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=e3Oy2PuIRVyYpX9jNitvWPFzXas2PMbyATpc2928NtxLJraxbQwSUdIwnW6wG2wao
+	 muCzWNAzr3gs7gh9NhR3L5m30waMtP6zV+5ml4QlYDe1LvsJVGugH3q3MPepKnOBhN
+	 sqBEX9h2jiicZUil2xgm/E43ZekOqTPu6Ksi+0Kbl8xIvG8siN1gZLyAu0DZgRMhpq
+	 xJ0qFDhXSiGr8LcYluXXH2sNbDB7xofFj34H8BnvxKE6T93lBlwukgVHVpdQxtiYrC
+	 0o5ReshKqWaf+Ch5mkV059dZn1R+0ls7+OlqVxg+oM50dIpXci6fcrdTLwLXog8+XN
+	 rwrVAU8azfpmg==
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6417313bddaso648996a12.3
+        for <linux-pm@vger.kernel.org>; Wed, 26 Nov 2025 17:54:46 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW+5OXobAT7Br8orrilVhDXCSHfDipdYSLoE9VCOwrV4TCT8aM8nNTdlXjnN3wDkYEliMr07AtKHQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9np5OyReWOxWcGM43+EssbsmaPl2gGqolYTUk68Zy2Ns7Ezbz
+	xOSViESNzndIk2kHoRZSarFTLGM6M6Lm1MFvn5qQAHtyQ7WwzPmywHYo1aKkAPhPuD17ClC6TwO
+	PIdrOYnGDBGJZHB3OkWblV6AF4mjlBg==
+X-Google-Smtp-Source: AGHT+IEKWFjQTeH/gw4l8j+96xvyDrFErJSXFFFwjwYJm2zw06q8mwVDlJH1+0djMgauaqAXyS9qMnoqGjEF33qExow=
+X-Received: by 2002:a05:6402:2803:b0:634:ce70:7c5 with SMTP id
+ 4fb4d7f45d1cf-645eb2b8003mr8895933a12.17.1764208485058; Wed, 26 Nov 2025
+ 17:54:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aSb3Qt6n55Fsl7IF@wunner.de>
+References: <20251015071420.1173068-1-herve.codina@bootlin.com>
+ <20251015071420.1173068-2-herve.codina@bootlin.com> <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
+ <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
+ <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com> <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
+ <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
+In-Reply-To: <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 26 Nov 2025 19:54:33 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
+X-Gm-Features: AWmQ_bmOuLhKUl5W5zrcj5AQOjs5kC_X5Om5_otgYtq0JTdMygrEymDVT57WU48
+Message-ID: <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
+Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT overlays"
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Kalle Niemi <kaleposti@gmail.com>, Herve Codina <herve.codina@bootlin.com>, 
+	Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, 
+	Wolfram Sang <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, 
+	Arnd Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Charles Keepax <ckeepax@opensource.cirrus.com>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Mark Brown <broonie@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Daniel Scally <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Alison Schofield <alison.schofield@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org, 
+	patches@opensource.cirrus.com, linux-gpio@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	Allan Nielsen <allan.nielsen@microchip.com>, Horatiu Vultur <horatiu.vultur@microchip.com>, 
+	Steen Hegelund <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 26, 2025 at 01:49:06PM +0100, Lukas Wunner wrote:
-> On Tue, Nov 25, 2025 at 05:18:46PM -0600, Bjorn Helgaas wrote:
-> > On Wed, Nov 19, 2025 at 09:50:01AM +0100, Lukas Wunner wrote:
-> > > But there are two corner cases where the PCI core neglects to clear the
-> > > flag before commencing the suspend sequence:
-> > > 
-> > > * If a driver has legacy PCI PM callbacks, pci_legacy_suspend() neglects
-> > >   to clear the flag.  The (stale) flag is subsequently queried by
-> > >   pci_legacy_suspend() itself and pci_legacy_suspend_late().
-> > > 
-> > > * If a device has no driver or its driver has no PCI PM callbacks,
-> > >   pci_pm_freeze() neglects to clear the flag.  The (stale) flag is
-> > >   subsequently queried by pci_pm_freeze_noirq().
-> > > 
-> > > The flag may be set prior to suspend if the device went through error
-> > > recovery:  Drivers commonly invoke pci_restore_state() + pci_save_state()
-> > > to restore Config Space after reset.
-> > 
-> > I guess the only point of pci_save_state() in this case is to set
-> > state_saved again so a future pci_restore_state() will work, right?
-> > 
-> > The actual state being *saved* is pointless, assuming pci_save_state()
-> > saves exactly the same data that pci_restore_state() restored.
-> > 
-> > And these are the pci_save_state() calls you removed with "treewide:
-> > Drop pci_save_state() after pci_restore_state()".  Too bad we have to
-> > document the behavior we're about to change, but that's what we need
-> > to do.  It's just a little clutter to keep in mind for this release.
-> 
-> Yes.  All of your comments above are correct.
-> 
-> > > The flag may also be set if drivers call pci_save_state() on probe to
-> > > allow for recovery from subsequent errors.
-> > > 
-> > > The result is that pci_legacy_suspend_late() and pci_pm_freeze_noirq()
-> > > don't call pci_save_state() and so the state that will be restored on
-> > > resume is the one recorded on last error recovery or on probe, not the one
-> > > that the device had on suspend.  If the two states happen to be identical,
-> > > there's no problem.
-> > 
-> > So IIUC the effect is that after this change and the "treewide"
-> > change,
-> > 
-> >   - If the driver uses legacy PM, the state restored on resume will be
-> >     the state from suspend instead of the state on probe.
-> 
-> Right.
-> 
-> >   - For devices with no driver or a driver without PM, if the device
-> >     has already been runtime-suspended, we avoid a pointless
-> >     pci_save_state(), so it's an optimization and not logically
-> >     related to the legacy PM case.
-> 
-> It's slightly different:
-> 
->   - For devices with no driver or a driver without PM, the state restored
->     on "thaw" and "restore" will be the state from "freeze" instead of the
->     state on probe.
-> 
-> So the same problem that we have for drivers using legacy PM, we also
-> have for devices with no driver or a driver without (modern) PM callbacks,
-> but only in the "freeze" codepath (for hibernation).
-> 
-> In the patch, I made the "pci_dev->state_saved = false" assignment
-> conditional on !pm_runtime_suspended() in the "freeze" codepath.
-> I didn't do the same in the legacy codepath because none of the
-> drivers using legacy PM callbacks seem to be using runtime PM.
+On Tue, Nov 25, 2025 at 12:43=E2=80=AFAM Matti Vaittinen
+<mazziesaccount@gmail.com> wrote:
+>
+> On 24/11/2025 19:01, Rob Herring wrote:
+> > On Mon, Nov 24, 2025 at 10:44=E2=80=AFAM Kalle Niemi <kaleposti@gmail.c=
+om> wrote:
+> >>
+> >>
+> >> On 11/24/25 16:53, Rob Herring wrote:
+> >>> On Mon, Nov 24, 2025 at 8:48=E2=80=AFAM Kalle Niemi <kaleposti@gmail.=
+com> wrote:
+> >>>> On 10/15/25 10:13, Herve Codina wrote:
+> >>>>> From: Saravana Kannan <saravanak@google.com>
+> >>>>>
+> >>>>> This reverts commit 1a50d9403fb90cbe4dea0ec9fd0351d2ecbd8924.
+> >>>>>
+> >>>>> While the commit fixed fw_devlink overlay handling for one case, it
+> >>>>> broke it for another case. So revert it and redo the fix in a separ=
+ate
+> >>>>> patch.
+> >>>>>
+> >>>>> Fixes: 1a50d9403fb9 ("treewide: Fix probing of devices in DT overla=
+ys")
+> >>>>> Reported-by: Herve Codina <herve.codina@bootlin.com>
+> >>>>> Closes: https://lore.kernel.org/lkml/CAMuHMdXEnSD4rRJ-o90x4OprUacN_=
+rJgyo8x6=3D9F9rZ+-KzjOg@mail.gmail.com/
+> >>>>> Closes: https://lore.kernel.org/all/20240221095137.616d2aaa@bootlin=
+.com/
+> >>>>> Closes: https://lore.kernel.org/lkml/20240312151835.29ef62a0@bootli=
+n.com/
+> >>>>> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> >>>>> Link: https://lore.kernel.org/lkml/20240411235623.1260061-2-saravan=
+ak@google.com/
+> >>>>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> >>>>> Acked-by: Mark Brown <broonie@kernel.org>
+> >>>>> ---
+> >>>>>     drivers/bus/imx-weim.c    | 6 ------
+> >>>>>     drivers/i2c/i2c-core-of.c | 5 -----
+> >>>>>     drivers/of/dynamic.c      | 1 -
+> >>>>>     drivers/of/platform.c     | 5 -----
+> >>>>>     drivers/spi/spi.c         | 5 -----
+> >>>>>     5 files changed, 22 deletions(-)
+> >>>>>
+> >>>>> diff --git a/drivers/bus/imx-weim.c b/drivers/bus/imx-weim.c
+> >>>>> index 83d623d97f5f..87070155b057 100644
+> >>>>> --- a/drivers/bus/imx-weim.c
+> >>>>> +++ b/drivers/bus/imx-weim.c
+> >>>>> @@ -327,12 +327,6 @@ static int of_weim_notify(struct notifier_bloc=
+k *nb, unsigned long action,
+> >>>>>                                  "Failed to setup timing for '%pOF'=
+\n", rd->dn);
+> >>>>>
+> >>>>>                 if (!of_node_check_flag(rd->dn, OF_POPULATED)) {
+> >>>>> -                     /*
+> >>>>> -                      * Clear the flag before adding the device so=
+ that
+> >>>>> -                      * fw_devlink doesn't skip adding consumers t=
+o this
+> >>>>> -                      * device.
+> >>>>> -                      */
+> >>>>> -                     rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DE=
+VICE;
+> >>>>>                         if (!of_platform_device_create(rd->dn, NULL=
+, &pdev->dev)) {
+> >>>>>                                 dev_err(&pdev->dev,
+> >>>>>                                         "Failed to create child dev=
+ice '%pOF'\n",
+> >>>>> diff --git a/drivers/i2c/i2c-core-of.c b/drivers/i2c/i2c-core-of.c
+> >>>>> index eb7fb202355f..30b48a428c0b 100644
+> >>>>> --- a/drivers/i2c/i2c-core-of.c
+> >>>>> +++ b/drivers/i2c/i2c-core-of.c
+> >>>>> @@ -176,11 +176,6 @@ static int of_i2c_notify(struct notifier_block=
+ *nb, unsigned long action,
+> >>>>>                         return NOTIFY_OK;
+> >>>>>                 }
+> >>>>>
+> >>>>> -             /*
+> >>>>> -              * Clear the flag before adding the device so that fw=
+_devlink
+> >>>>> -              * doesn't skip adding consumers to this device.
+> >>>>> -              */
+> >>>>> -             rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+> >>>>>                 client =3D of_i2c_register_device(adap, rd->dn);
+> >>>>>                 if (IS_ERR(client)) {
+> >>>>>                         dev_err(&adap->dev, "failed to create clien=
+t for '%pOF'\n",
+> >>>>> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+> >>>>> index 2eaaddcb0ec4..b5be7484fb36 100644
+> >>>>> --- a/drivers/of/dynamic.c
+> >>>>> +++ b/drivers/of/dynamic.c
+> >>>>> @@ -225,7 +225,6 @@ static void __of_attach_node(struct device_node=
+ *np)
+> >>>>>         np->sibling =3D np->parent->child;
+> >>>>>         np->parent->child =3D np;
+> >>>>>         of_node_clear_flag(np, OF_DETACHED);
+> >>>>> -     np->fwnode.flags |=3D FWNODE_FLAG_NOT_DEVICE;
+> >>>>>
+> >>>>>         raw_spin_unlock_irqrestore(&devtree_lock, flags);
+> >>>>>
+> >>>>> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
+> >>>>> index f77cb19973a5..ef9445ba168b 100644
+> >>>>> --- a/drivers/of/platform.c
+> >>>>> +++ b/drivers/of/platform.c
+> >>>>> @@ -739,11 +739,6 @@ static int of_platform_notify(struct notifier_=
+block *nb,
+> >>>>>                 if (of_node_check_flag(rd->dn, OF_POPULATED))
+> >>>>>                         return NOTIFY_OK;
+> >>>>>
+> >>>>> -             /*
+> >>>>> -              * Clear the flag before adding the device so that fw=
+_devlink
+> >>>>> -              * doesn't skip adding consumers to this device.
+> >>>>> -              */
+> >>>>> -             rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+> >>>>>                 /* pdev_parent may be NULL when no bus platform dev=
+ice */
+> >>>>>                 pdev_parent =3D of_find_device_by_node(parent);
+> >>>>>                 pdev =3D of_platform_device_create(rd->dn, NULL,
+> >>>>> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+> >>>>> index 2e0647a06890..b22944a207c9 100644
+> >>>>> --- a/drivers/spi/spi.c
+> >>>>> +++ b/drivers/spi/spi.c
+> >>>>> @@ -4791,11 +4791,6 @@ static int of_spi_notify(struct notifier_blo=
+ck *nb, unsigned long action,
+> >>>>>                         return NOTIFY_OK;
+> >>>>>                 }
+> >>>>>
+> >>>>> -             /*
+> >>>>> -              * Clear the flag before adding the device so that fw=
+_devlink
+> >>>>> -              * doesn't skip adding consumers to this device.
+> >>>>> -              */
+> >>>>> -             rd->dn->fwnode.flags &=3D ~FWNODE_FLAG_NOT_DEVICE;
+> >>>>>                 spi =3D of_register_spi_device(ctlr, rd->dn);
+> >>>>>                 put_device(&ctlr->dev);
+> >>>>>
+> >>>> Sorry, some of you will receive this message now for second time. Fi=
+rst
+> >>>> message was sent to older series of patches.
+> >>>> -
+> >>>>
+> >>>> Hello,
+> >>>>
+> >>>> Test system testing drivers for ROHM ICs bisected this commit to cau=
+se
+> >>>> BD71847 drivers probe to not be called.
+> >>> This driver (and overlay support) is in linux-next or something out o=
+f
+> >>> tree on top of linux-next?
+> >>>
+> >>> Rob
+> >>
+> >> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c
+> >
+> > I don't see any support to apply overlays in that driver.
+>
+> Ah. Sorry for the confusion peeps. I asked Kalle to report this without
+> proper consideration. 100% my bad.
+>
+> While the bd718x7 drive indeed is mainline (and tested), the actual
+> 'glue-code' doing the overlay is part of the downstream test
+> infrastructure. So yes, this is not a bug in upstream kernel - this
+> falls in the category of an upstream change causing downstream things to
+> break. So, feel free to say: "Go fix your code" :)
+>
+> Now that this is sorted, if someone is still interested in helping us to
+> get our upstream drivers tested - the downstream piece is just taking
+> the compiled device-tree overlay at runtime (via bin-attribute file),
+> and applying it using the of_overlay_fdt_apply(). The approach is
+> working for our testing purposes when the device is added to I2C/SPI
+> node which is already enabled. However, in case where we have the I2C
+> disabled, and enable it in the same overlay where we add the new device
+> - then the new device does not get probed.
+>
+> I would be really grateful if someone had a pointer for us.
 
-Maybe it's moot because we hope there will be no new users of PCI
-legacy PM with runtime PM, but I don't think there's anything to
-*prevent* that or to protect against out-of-tree drivers.
+Seems to be fw_devlink related. I suppose if you turn it off it works?
+There's info about the dependencies in sysfs or maybe debugfs. I don't
+remember the details, but that should help to tell you why things
+aren't probing.
 
-The implicit assumption that there are no such drivers makes it look
-like there's something magic involving state_saved, legacy PM, and
-runtime PM.  It might be worth doing the same in the legacy PM path
-just for readability.
+I've dropped the changes for 6.18 for now. No one really seems to be
+in need of them yet AFAICT.
 
-> The purpose of making it conditional on !pm_runtime_suspended()
-> is just that we'd otherwise call pci_save_state() twice:  Once in
-> pci_pm_runtime_suspend() and once more in pci_pm_freeze().
-> That would be pointless.
-> 
-> In the commit message, I provided a rationale for the conditionality,
-> but inadvertently caused confusion.
-> 
-> > I'm thinking of something like this for the merge commit and eventual
-> > pull request; please correct me if this isn't right:
-> > 
-> >   Restore the suspend config state, not the state from probe or error
-> >   recovery, for drivers using legacy PCI suspend.
-> > 
-> >   Avoid saving config state again for devices without driver PM if
-> >   their state was already saved by runtime suspend.
-> 
-> I'd suggest instead (feel free to wordsmith as you see fit):
-> 
->   Restore the suspend config state, not the state from probe or error
->   recovery, for drivers using legacy PCI suspend.   [ <- unmodified ]
-> 
->   Same for devices with no driver or a driver without PM callbacks
->   when the system is hibernated.                   [ <- replacement ]
-
-Stepping back, I guess that when drivers use generic PM, we already
-save config state during suspend and restore that state during resume,
-and do the same when entering/leaving hibernation.
-
-And the point of this patch is to do the same when drivers lack PM or
-use legacy PCI PM, or when devices have no driver?
-
-Maybe third try is the charm?
-
-  For drivers using PCI legacy suspend, save config state at suspend
-  so that state, not any earlier state from enumeration, probe, or
-  error recovery, will be restored when resuming.
-
-  For devices with no driver or a driver that lacks PM, save config
-  state at hibernate so that state, not any earlier state from
-  enumeration, probe, or error recovery, will be restored when
-  resuming.
-
-IIUC, after "Ensure error recoverability", the PCI core will always
-save the state during enumeration, so drivers shouldn't use
-pci_save_state() at all unless they make config changes that they want
-restored during error recovery?
-
-Or, I guess (sigh) if they do their own power management?
-
-> Mentioning the runtime PM conditionality in the high-level changelog
-> is probably not worth it.
-> 
-> Was I able to clarify all questions?  Please ask again if not.
-> 
-> Also, in case the meaning of "freeze", "thaw", "restore" isn't clear,
-> here's the order of a hibernation sequence (suspend to disk):
-> 
->   pci_pm_prepare()
->   pci_pm_freeze()
->   pci_pm_freeze_noirq()
->   <system image is generated>
->   pci_pm_thaw_noirq()
->   pci_pm_thaw()
->   pci_pm_complete()
->   pci_pm_prepare()
->   pci_pm_poweroff()
->   pci_pm_poweroff_late()
->   pci_pm_poweroff_noirq()
->   <system is asleep, then restarted with boot kernel>
->   pci_pm_prepare()
->   pci_pm_freeze()
->   pci_pm_freeze_noirq()
->   <system image is restored, replacing the boot kernel>
->   pci_pm_restore_noirq()
->   pci_pm_restore()
->   pci_pm_complete()
-> 
-> Note that "freeze" happens twice in the whole sequence.
-
-Thanks, this is extremely helpful.  Copied into my notes.  I guess
-this is essentially condensed from
-Documentation/driver-api/pm/devices.rst, but it's very helpful to see
-the bare bones and your annotations.
-
-Bjorn
+Rob
 
