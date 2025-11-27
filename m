@@ -1,768 +1,1267 @@
-Return-Path: <linux-pm+bounces-38811-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38812-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77B8EC8E89C
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 14:43:36 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 083BDC8E909
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 14:47:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6763D4E8CB9
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 13:42:18 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 13ADC4E78B8
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 13:47:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1EAC329C7D;
-	Thu, 27 Nov 2025 13:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ACBF28751A;
+	Thu, 27 Nov 2025 13:46:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="O72+TC3q";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="AyrDV/sS"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=louisalexis.eyraud@collabora.com header.b="UoXkgCDt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from sender3-pp-f112.zoho.com (sender3-pp-f112.zoho.com [136.143.184.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D6AF2BE7CB
-	for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 13:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764250923; cv=none; b=JrzBvHwHym2EsBr9tNhFamOoyWZFPO2I7LeraZKzH2T+R+m805JQ6CRx/3bDw6F0PAwNMq6OnoKRAZc9amfnP/hlCiyUro+OobCUYlZteoh+dYwC6G9bbnaT7D5YiVVYPRPOj1L/SwO9dNKrQlHl3tE+QPt4cXbR+Zenu6mPnOo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764250923; c=relaxed/simple;
-	bh=eFE5oWLaCjttfJkjsnfJp2+e8Nx+toCXMoj1KNKIbmo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CfwkSly6RVudaHY56BtLbX5G+PbhKjYKN5HRrAJJC0v1iYE4i1Kg9bO4/U7a2he3WYAKgGmkS+2z8pDClbJdT/qu9RdtQoDhfrPqNcAEUeRXEzNghc0gB+KTS5PPQFcGa01K0lowY8LNskTOgl6gxFLirytUsj/pZ44/l0ossG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=O72+TC3q; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=AyrDV/sS; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5AR5gscX2855082
-	for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 13:42:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=T1eS4m0MlwX
-	BImur1I1mcCoDy8vCqgpRl3bodsHm5Zg=; b=O72+TC3qRKOyUFCqmdWOfvi1wPP
-	aEkcJujrVD/6fMaW/eEK0KT40a+7L5Z75Qhlb2qqr4Ju8/I84+0/Qbpoft6B7ERy
-	hzLubGoeP9gHw2CLiuTb8TGaXkRJ99pe1f1hMLfsZCiHe2SS5lYfmCKzc2hrZCWm
-	KM00lhAAg3AwWqFvsbWG/cm2vaNWXBbt3+D905PBZmQZk+kzy2u42tBW6hreu8+V
-	YeY1WLPKwul3Umt6XNLqJQ4aCyOEuw8SI7VwAUgLVls/xe/dT1YbmNF9+YhyocHD
-	yaZ7+20k0Lhyck6fYXW5BjO75Y1ihJzm4pPURNVffj+CAAUeFHCWCgmsMpw==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4ap4vhb219-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 13:41:59 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-297e1cf9aedso15238985ad.2
-        for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 05:41:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1764250919; x=1764855719; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T1eS4m0MlwXBImur1I1mcCoDy8vCqgpRl3bodsHm5Zg=;
-        b=AyrDV/sSvBkp7QS6o42/YhlfMcEDitP6qsAuzNfY0YiFOgA5PHSPLABciXbVgyEK+A
-         s9IWEqfFjba4ZH7xgXW1HphhPST8eZhJ77Wljv8/6WUH/XR7+hS6RwILHh1oIDKdBM44
-         diEfZSFwumtITeCW8yLsjw6o9DypIwOPgYxZVQpJmIMYqyQBgZUsc+x+PT8Z3Q6YUAyY
-         U6VnZO1B07lvBB3fnz4Kj0uC8TwUt8Tvl4XMHxPXtVqWdgvob7fgI7S+WtdC1hdJAU32
-         yjUznGbHQBeeIt9AWgFELLvtRv6s4Jz5O2NZrdaswT+DJf8+dkh+rs3jnm1g5xRQ8UBA
-         ELYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764250919; x=1764855719;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=T1eS4m0MlwXBImur1I1mcCoDy8vCqgpRl3bodsHm5Zg=;
-        b=Sab5xFOt0Lq30AvuT3UefeeMyv+2hJm9wXWWBA8p96CjLk8EAeqPiuhFBsol4ZmgQz
-         6j5eBo0nBiVrVI6B/bXNWW2Dwb+VdIswpwkrodeLCUBEZL1A5JNfH9TyeDaYIF8d5V7I
-         EKSKjwZoETWeccjNafLdWv26brJkhjQXEHAolArVA6IQ/z6eWV14BA/b/BBiwtrQmth7
-         WUFdohWJ0mYo60FGrqixpWSaDXxY3UrZOxU3p3SamC+cHKlWud1gZJUVs1PE9sNwurB4
-         +lyZ2h3QV3k947STnIpRSSL4KnajV6ZMZwzCJUnT1ldPsBnitTp1cX6xMtzH/S30XTSy
-         TFgg==
-X-Forwarded-Encrypted: i=1; AJvYcCV9siyfG2Wfa5VM2Gdc3Q+L18rF8HdQjT8OMK3kxnFHeF2OFmBP6G6IKVJzSh2kmbrZ4PHGPgji7Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUosxkpCpz5jgjqMkY9/bfS0ne11uOCA5byMkenFvmf9ZVuNdM
-	VS1ttFXvyWGtOqkeBu/VvTcF7RSdxMl/Mew+i5VhDBMKkTBgYYt+AaRboST2+PuRoUuxDxuXTDc
-	fnHPcunE/XYN3uxirGRhHoAiivF1wYa7xcWBlsHgAHJ9xeTAssjc5cpehX+5nUg==
-X-Gm-Gg: ASbGncuvNgttsAovGmOjiNdh0MvFzrppoLhOKVLmiSElchE4n0J0jkRmp6WuWSfCJeE
-	BdYkOO2Ii4Pxo+y4qjLVxYQg+uxI8I1db40yALklFQp1+Asnp7l67HDXqRqEBPWKei7yZ03v7tU
-	TI2zm0JW87SsRukzGBO5X5zUKw6STYtRO7XIsZZSpECILDHldEWkUTPsKAMePTOJmz1wIJDxj0c
-	7OoPBc7zhupjHWeONMDoj1D9QEQNU/l+gB7A9tSryYsuSWHJrC5GeIwtXprt8N28OKeEv94ferp
-	z/kSJACQz7Xcx9tNp0j57t9J7e7y1hXr8B7QnPQV9t2WfsCYpDFHAnq5Zxll0WPeLuhM6sdgDGS
-	3CYwGNVIbBlJTqxyFHbTdv9QZx7lBPGRxU3BqgrEKvtPF
-X-Received: by 2002:a17:903:11cd:b0:298:68e:4057 with SMTP id d9443c01a7336-29b6bfadca0mr259173185ad.59.1764250918402;
-        Thu, 27 Nov 2025 05:41:58 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IF05bAL2WGJ3RPjoLWilaW3EGLd1bsTFOeSGz46NFDXFN0J+Zyo7+t/JY+Rcgfaz3hO72KCtg==
-X-Received: by 2002:a17:903:11cd:b0:298:68e:4057 with SMTP id d9443c01a7336-29b6bfadca0mr259172745ad.59.1764250917754;
-        Thu, 27 Nov 2025 05:41:57 -0800 (PST)
-Received: from hu-jprakash-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29bce441600sm18934875ad.29.2025.11.27.05.41.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Nov 2025 05:41:57 -0800 (PST)
-From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-To: jic23@kernel.org, robh@kernel.org, krzysztof.kozlowski@linaro.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, agross@kernel.org,
-        andersson@kernel.org, lumag@kernel.org,
-        dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
-        daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
-        thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
-        subbaraman.narayanamurthy@oss.qualcomm.com,
-        david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
-        kamal.wadhwa@oss.qualcomm.com
-Cc: rui.zhang@intel.com, lukasz.luba@arm.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        cros-qcom-dts-watchers@chromium.org, jishnu.prakash@oss.qualcomm.com,
-        quic_kotarake@quicinc.com, neil.armstrong@linaro.org,
-        stephan.gerhold@linaro.org
-Subject: [PATCH V8 4/4] thermal: qcom: add support for PMIC5 Gen3 ADC thermal monitoring
-Date: Thu, 27 Nov 2025 19:10:36 +0530
-Message-Id: <20251127134036.209905-5-jishnu.prakash@oss.qualcomm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20251127134036.209905-1-jishnu.prakash@oss.qualcomm.com>
-References: <20251127134036.209905-1-jishnu.prakash@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C353F27FD68;
+	Thu, 27 Nov 2025 13:46:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764251218; cv=pass; b=dc6vGVw3opjfmk0SULIW3pPSWamyQElOI6UPNou3XQqZS3l1o8xKM0m+DtccCTertS2EPm0A6nKnI3HiGLCcmEslzZUlUTE8FD5+9aLbuCSx+b6JfCGDye6kYwCFuFZM885pmU128QJf2hFLFNef957VuMWy9O4kBDsvvPvHGPI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764251218; c=relaxed/simple;
+	bh=M6554yFvwQKPGDruFN7HIlb3KEJ5y3aOwVlwr9eaPJ0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Sipwp553j0WbftNRh73ATG2cwFfBkJESkpDMoDW7W+R+vdkSRxUOWmu7RHG4ENkyxRT/drDt6aQjskDcvv/MtE8GOTKkuSXDZHDCXdeEgjt2A4VxEiKThFn2gVrluuPP1PBQ+LCKmsi0gvrLCgHuSdLm/jq9JifykZObhXW1rqk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=louisalexis.eyraud@collabora.com header.b=UoXkgCDt; arc=pass smtp.client-ip=136.143.184.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1764251197; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=BYHFrAKIpoatZWTiWluNWX+GNcQOribNUnENpYK3USV2STA7C6rTrK4ZaKRpZaDICJzMm6/EO3xkKQiBzJnMY97uSxHeOAq311stRr5wSA//EdDJIAwO2mPflRHM5UWxNpMvi8aNDjKTqu6VDd8I9tKJ8SZlaZz0GvOHrwd+xFo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1764251197; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=CNMiZhV62LdqLItJ+1R0IH0MHm2no8ynzfa3xh8TFKg=; 
+	b=A9/zj9hGV3HD5jx3W0rQo0eMIFU8jebTE0kxhSAaEjS6PKm1Er1oWFuvR2KmrAt3evMtLkAwNM7YZiXhwHb3794rGt6+UrxMAmblTZNns/UMnP1JGFqAlWBne/XEIoofA3Cq5yxwqoAOY+HhNOiTV89HWOkgKrtBI3LeV2T35gY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=louisalexis.eyraud@collabora.com;
+	dmarc=pass header.from=<louisalexis.eyraud@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1764251197;
+	s=zohomail; d=collabora.com; i=louisalexis.eyraud@collabora.com;
+	h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+	bh=CNMiZhV62LdqLItJ+1R0IH0MHm2no8ynzfa3xh8TFKg=;
+	b=UoXkgCDtChRi2HzP9USOX1QMHNxROo+L4oQ8QAbH/XGSyOISJCz/kiPvIq8gmy0F
+	wILK/Ik35odCrqyUgdDMoE5pp3lsPzpjpZXt9185ktaJzZog12MXOVgpiS7D4WyfiVB
+	ED/F9NhTHWZy8XWKnELcPbcjEf5v+fHFFazYFsAk=
+Received: by mx.zohomail.com with SMTPS id 1764251193506312.3389897901518;
+	Thu, 27 Nov 2025 05:46:33 -0800 (PST)
+Message-ID: <bcd9e90530a963c4331c6df13827fb1d9c6b794b.camel@collabora.com>
+Subject: Re: [PATCH v3 05/21] clk: mediatek: Add MT8189 topckgen clock
+ support
+From: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
+To: "irving.ch.lin" <irving-ch.lin@mediatek.com>, Michael Turquette	
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring	
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley	
+ <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Ulf
+ Hansson <ulf.hansson@linaro.org>, Richard Cochran	
+ <richardcochran@gmail.com>
+Cc: Qiqi Wang <qiqi.wang@mediatek.com>, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-pm@vger.kernel.org, netdev@vger.kernel.org, 
+	Project_Global_Chrome_Upstream_Group@mediatek.com,
+ sirius.wang@mediatek.com, 	vince-wl.liu@mediatek.com, jh.hsu@mediatek.com
+Date: Thu, 27 Nov 2025 14:46:28 +0100
+In-Reply-To: <20251106124330.1145600-6-irving-ch.lin@mediatek.com>
+References: <20251106124330.1145600-1-irving-ch.lin@mediatek.com>
+	 <20251106124330.1145600-6-irving-ch.lin@mediatek.com>
+Organization: Collabora Ltd
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMTI3MDEwMSBTYWx0ZWRfX64FD2IdXa9rs
- TIS8vVektTSIu94E1/Jz6m0fNijy2jexm/Oh6DWzZHsLKjROKfxMNqAkyg4QU6xSDtJaU03GUQG
- FXQjXRgoGi9gZgh8wr7ReOV1voHUuYUQNGeSdUyrFJEiKFrWcIAi5x64+h4LOrQxxDMKPw4XGDt
- s+0iJXz2COM/qUIljow6FQu3V0duRCHZPMYgZbQwJKOruhatqw3GfXZ20dqkh5/DpPA2H2MBqjd
- BybBm3OYOZGRioc7Ja65JbZDHR9yq7xZ9BJsPWQBg486B13ZUyDNQWMQe608NRZh8COo3IZH/Bn
- QqLdxvcG5LaHK6fSbm3Ml/Yp+XpOaAXNl6EQE6Ld+E41ms527X22HIB2E3Gu2DJoEBHLnDCqgza
- 3b2jNUUJCyvtHueTVM25MG6JbwtPjQ==
-X-Proofpoint-ORIG-GUID: BUAmO2Hq_hLF36PRt45iSD_jWigOoXC6
-X-Proofpoint-GUID: BUAmO2Hq_hLF36PRt45iSD_jWigOoXC6
-X-Authority-Analysis: v=2.4 cv=Lt6fC3dc c=1 sm=1 tr=0 ts=69285527 cx=c_pps
- a=JL+w9abYAAE89/QcEU+0QA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=6UeiqGixMTsA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=osoZdi1E9HUM2AVx-jAA:9 a=324X-CrmTo6CU4MGRt3R:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-25_02,2025-11-27_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 lowpriorityscore=0 impostorscore=0 phishscore=0
- priorityscore=1501 suspectscore=0 adultscore=0 spamscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2511270101
+X-ZohoMailClient: External
 
-Add support for ADC_TM part of PMIC5 Gen3.
+Hi Irving-CH,
 
-This is an auxiliary driver under the Gen3 ADC driver, which implements the
-threshold setting and interrupt generating functionalities of QCOM ADC_TM
-drivers, used to support thermal trip points.
+On Thu, 2025-11-06 at 20:41 +0800, irving.ch.lin wrote:
+> From: Irving-CH Lin <irving-ch.lin@mediatek.com>
+>=20
+> Add support for the MT8189 topckgen clock controller, which provides
+> muxes and dividers for clock selection in other IP blocks.
+>=20
+> Signed-off-by: Irving-CH Lin <irving-ch.lin@mediatek.com>
+> ---
+> =C2=A0drivers/clk/mediatek/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 2 +-
+> =C2=A0drivers/clk/mediatek/clk-mt8189-topckgen.c | 1018
+> ++++++++++++++++++++
+> =C2=A02 files changed, 1019 insertions(+), 1 deletion(-)
+> =C2=A0create mode 100644 drivers/clk/mediatek/clk-mt8189-topckgen.c
+>=20
+> diff --git a/drivers/clk/mediatek/Makefile
+> b/drivers/clk/mediatek/Makefile
+> index 66577ccb9b93..9d3d2983bfb2 100644
+> --- a/drivers/clk/mediatek/Makefile
+> +++ b/drivers/clk/mediatek/Makefile
+> @@ -123,7 +123,7 @@ obj-$(CONFIG_COMMON_CLK_MT8188_VDOSYS) +=3D clk-
+> mt8188-vdo0.o clk-mt8188-vdo1.o
+> =C2=A0obj-$(CONFIG_COMMON_CLK_MT8188_VENCSYS) +=3D clk-mt8188-venc.o
+> =C2=A0obj-$(CONFIG_COMMON_CLK_MT8188_VPPSYS) +=3D clk-mt8188-vpp0.o clk-
+> mt8188-vpp1.o
+> =C2=A0obj-$(CONFIG_COMMON_CLK_MT8188_WPESYS) +=3D clk-mt8188-wpe.o
+> -obj-$(CONFIG_COMMON_CLK_MT8189) +=3D clk-mt8189-apmixedsys.o
+> +obj-$(CONFIG_COMMON_CLK_MT8189) +=3D clk-mt8189-apmixedsys.o clk-
+> mt8189-topckgen.o
+> =C2=A0obj-$(CONFIG_COMMON_CLK_MT8192) +=3D clk-mt8192-apmixedsys.o clk-
+> mt8192.o
+> =C2=A0obj-$(CONFIG_COMMON_CLK_MT8192_AUDSYS) +=3D clk-mt8192-aud.o
+> =C2=A0obj-$(CONFIG_COMMON_CLK_MT8192_CAMSYS) +=3D clk-mt8192-cam.o
+> diff --git a/drivers/clk/mediatek/clk-mt8189-topckgen.c
+> b/drivers/clk/mediatek/clk-mt8189-topckgen.c
+> new file mode 100644
+> index 000000000000..a849b92bf7de
+> --- /dev/null
+> +++ b/drivers/clk/mediatek/clk-mt8189-topckgen.c
+> @@ -0,0 +1,1018 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2025 MediaTek Inc.
+> + * Author: Qiqi Wang <qiqi.wang@mediatek.com>
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +
+> +#include "clk-mtk.h"
+> +#include "clk-mux.h"
+> +#include "clk-gate.h"
+> +
+> +#include <dt-bindings/clock/mediatek,mt8189-clk.h>
+> +
+> +static DEFINE_SPINLOCK(mt8189_clk_lock);
+> +
+> +static const struct mtk_fixed_factor top_divs[] =3D {
+> +	FACTOR(CLK_TOP_MAINPLL_D3, "mainpll_d3", "mainpll", 1, 3),
+> +	FACTOR(CLK_TOP_MAINPLL_D4, "mainpll_d4", "mainpll", 1, 4),
+> +	FACTOR(CLK_TOP_MAINPLL_D4_D2, "mainpll_d4_d2", "mainpll", 1,
+> 8),
+> +	FACTOR(CLK_TOP_MAINPLL_D4_D4, "mainpll_d4_d4", "mainpll", 1,
+> 16),
+> +	FACTOR(CLK_TOP_MAINPLL_D4_D8, "mainpll_d4_d8", "mainpll",
+> 43, 1375),
+> +	FACTOR(CLK_TOP_MAINPLL_D5, "mainpll_d5", "mainpll", 1, 5),
+> +	FACTOR(CLK_TOP_MAINPLL_D5_D2, "mainpll_d5_d2", "mainpll", 1,
+> 10),
+> +	FACTOR(CLK_TOP_MAINPLL_D5_D4, "mainpll_d5_d4", "mainpll", 1,
+> 20),
+> +	FACTOR(CLK_TOP_MAINPLL_D5_D8, "mainpll_d5_d8", "mainpll", 1,
+> 40),
+> +	FACTOR(CLK_TOP_MAINPLL_D6, "mainpll_d6", "mainpll", 1, 6),
+> +	FACTOR(CLK_TOP_MAINPLL_D6_D2, "mainpll_d6_d2", "mainpll", 1,
+> 12),
+> +	FACTOR(CLK_TOP_MAINPLL_D6_D4, "mainpll_d6_d4", "mainpll", 1,
+> 24),
+> +	FACTOR(CLK_TOP_MAINPLL_D6_D8, "mainpll_d6_d8", "mainpll", 1,
+> 48),
+> +	FACTOR(CLK_TOP_MAINPLL_D7, "mainpll_d7", "mainpll", 1, 7),
+> +	FACTOR(CLK_TOP_MAINPLL_D7_D2, "mainpll_d7_d2", "mainpll", 1,
+> 14),
+> +	FACTOR(CLK_TOP_MAINPLL_D7_D4, "mainpll_d7_d4", "mainpll", 1,
+> 28),
+> +	FACTOR(CLK_TOP_MAINPLL_D7_D8, "mainpll_d7_d8", "mainpll", 1,
+> 56),
+> +	FACTOR(CLK_TOP_MAINPLL_D9, "mainpll_d9", "mainpll", 1, 9),
+> +	FACTOR(CLK_TOP_UNIVPLL_D2, "univpll_d2", "univpll", 1, 2),
+> +	FACTOR(CLK_TOP_UNIVPLL_D3, "univpll_d3", "univpll", 1, 3),
+> +	FACTOR(CLK_TOP_UNIVPLL_D4, "univpll_d4", "univpll", 1, 4),
+> +	FACTOR(CLK_TOP_UNIVPLL_D4_D2, "univpll_d4_d2", "univpll", 1,
+> 8),
+> +	FACTOR(CLK_TOP_UNIVPLL_D4_D4, "univpll_d4_d4", "univpll", 1,
+> 16),
+> +	FACTOR(CLK_TOP_UNIVPLL_D4_D8, "univpll_d4_d8", "univpll", 1,
+> 32),
+> +	FACTOR(CLK_TOP_UNIVPLL_D5, "univpll_d5", "univpll", 1, 5),
+> +	FACTOR(CLK_TOP_UNIVPLL_D5_D2, "univpll_d5_d2", "univpll", 1,
+> 10),
+> +	FACTOR(CLK_TOP_UNIVPLL_D5_D4, "univpll_d5_d4", "univpll", 1,
+> 20),
+> +	FACTOR(CLK_TOP_UNIVPLL_D6, "univpll_d6", "univpll", 1, 6),
+> +	FACTOR(CLK_TOP_UNIVPLL_D6_D2, "univpll_d6_d2", "univpll", 1,
+> 12),
+> +	FACTOR(CLK_TOP_UNIVPLL_D6_D4, "univpll_d6_d4", "univpll", 1,
+> 24),
+> +	FACTOR(CLK_TOP_UNIVPLL_D6_D8, "univpll_d6_d8", "univpll", 1,
+> 48),
+> +	FACTOR(CLK_TOP_UNIVPLL_D6_D16, "univpll_d6_d16", "univpll",
+> 1, 96),
+> +	FACTOR(CLK_TOP_UNIVPLL_D7, "univpll_d7", "univpll", 1, 7),
+> +	FACTOR(CLK_TOP_UNIVPLL_D7_D2, "univpll_d7_d2", "univpll", 1,
+> 14),
+> +	FACTOR(CLK_TOP_UNIVPLL_D7_D3, "univpll_d7_d3", "univpll", 1,
+> 21),
+> +	FACTOR(CLK_TOP_LVDSTX_DG_CTS, "lvdstx_dg_cts", "univpll", 1,
+> 21),
+> +	FACTOR(CLK_TOP_UNIVPLL_192M, "univpll_192m", "univpll", 1,
+> 13),
+> +	FACTOR(CLK_TOP_UNIVPLL_192M_D2, "univpll_192m_d2",
+> "univpll", 1, 26),
+> +	FACTOR(CLK_TOP_UNIVPLL_192M_D4, "univpll_192m_d4",
+> "univpll", 1, 52),
+> +	FACTOR(CLK_TOP_UNIVPLL_192M_D8, "univpll_192m_d8",
+> "univpll", 1, 104),
+> +	FACTOR(CLK_TOP_UNIVPLL_192M_D10, "univpll_192m_d10",
+> "univpll", 1, 130),
+> +	FACTOR(CLK_TOP_UNIVPLL_192M_D16, "univpll_192m_d16",
+> "univpll", 1, 208),
+> +	FACTOR(CLK_TOP_UNIVPLL_192M_D32, "univpll_192m_d32",
+> "univpll", 1, 416),
+> +	FACTOR(CLK_TOP_APLL1_D2, "apll1_d2", "apll1", 1, 2),
+> +	FACTOR(CLK_TOP_APLL1_D4, "apll1_d4", "apll1", 1, 4),
+> +	FACTOR(CLK_TOP_APLL1_D8, "apll1_d8", "apll1", 1, 8),
+> +	FACTOR(CLK_TOP_APLL1_D3, "apll1_d3", "apll1", 1, 3),
+> +	FACTOR(CLK_TOP_APLL2_D2, "apll2_d2", "apll2", 1, 2),
+> +	FACTOR(CLK_TOP_APLL2_D4, "apll2_d4", "apll2", 1, 4),
+> +	FACTOR(CLK_TOP_APLL2_D8, "apll2_d8", "apll2", 1, 8),
+> +	FACTOR(CLK_TOP_APLL2_D3, "apll2_d3", "apll2", 1, 3),
+> +	FACTOR(CLK_TOP_MMPLL_D4, "mmpll_d4", "mmpll", 1, 4),
+> +	FACTOR(CLK_TOP_MMPLL_D4_D2, "mmpll_d4_d2", "mmpll", 1, 8),
+> +	FACTOR(CLK_TOP_MMPLL_D4_D4, "mmpll_d4_d4", "mmpll", 1, 16),
+> +	FACTOR(CLK_TOP_VPLL_DPIX, "vpll_dpix", "mmpll", 1, 16),
+> +	FACTOR(CLK_TOP_MMPLL_D5, "mmpll_d5", "mmpll", 1, 5),
+> +	FACTOR(CLK_TOP_MMPLL_D5_D2, "mmpll_d5_d2", "mmpll", 1, 10),
+> +	FACTOR(CLK_TOP_MMPLL_D5_D4, "mmpll_d5_d4", "mmpll", 1, 20),
+> +	FACTOR(CLK_TOP_MMPLL_D6, "mmpll_d6", "mmpll", 1, 6),
+> +	FACTOR(CLK_TOP_MMPLL_D6_D2, "mmpll_d6_d2", "mmpll", 1, 12),
+> +	FACTOR(CLK_TOP_MMPLL_D7, "mmpll_d7", "mmpll", 1, 7),
+> +	FACTOR(CLK_TOP_MMPLL_D9, "mmpll_d9", "mmpll", 1, 9),
+> +	FACTOR(CLK_TOP_TVDPLL1_D2, "tvdpll1_d2", "tvdpll1", 1, 2),
+> +	FACTOR(CLK_TOP_TVDPLL1_D4, "tvdpll1_d4", "tvdpll1", 1, 4),
+> +	FACTOR(CLK_TOP_TVDPLL1_D8, "tvdpll1_d8", "tvdpll1", 1, 8),
+> +	FACTOR(CLK_TOP_TVDPLL1_D16, "tvdpll1_d16", "tvdpll1", 92,
+> 1473),
+> +	FACTOR(CLK_TOP_TVDPLL2_D2, "tvdpll2_d2", "tvdpll2", 1, 2),
+> +	FACTOR(CLK_TOP_TVDPLL2_D4, "tvdpll2_d4", "tvdpll2", 1, 4),
+> +	FACTOR(CLK_TOP_TVDPLL2_D8, "tvdpll2_d8", "tvdpll2", 1, 8),
+> +	FACTOR(CLK_TOP_TVDPLL2_D16, "tvdpll2_d16", "tvdpll2", 92,
+> 1473),
+> +	FACTOR(CLK_TOP_ETHPLL_D2, "ethpll_d2", "ethpll", 1, 2),
+> +	FACTOR(CLK_TOP_ETHPLL_D8, "ethpll_d8", "ethpll", 1, 8),
+> +	FACTOR(CLK_TOP_ETHPLL_D10, "ethpll_d10", "ethpll", 1, 10),
+> +	FACTOR(CLK_TOP_MSDCPLL_D2, "msdcpll_d2", "msdcpll", 1, 2),
+> +	FACTOR(CLK_TOP_UFSPLL_D2, "ufspll_d2", "ufspll", 1, 2),
+> +	FACTOR(CLK_TOP_F26M_CK_D2, "f26m_d2", "clk26m", 1, 2),
+> +	FACTOR(CLK_TOP_OSC_D2, "osc_d2", "ulposc", 1, 2),
+> +	FACTOR(CLK_TOP_OSC_D4, "osc_d4", "ulposc", 1, 4),
+> +	FACTOR(CLK_TOP_OSC_D8, "osc_d8", "ulposc", 1, 8),
+> +	FACTOR(CLK_TOP_OSC_D16, "osc_d16", "ulposc", 61, 973),
+> +	FACTOR(CLK_TOP_OSC_D3, "osc_d3", "ulposc", 1, 3),
+> +	FACTOR(CLK_TOP_OSC_D7, "osc_d7", "ulposc", 1, 7),
+> +	FACTOR(CLK_TOP_OSC_D10, "osc_d10", "ulposc", 1, 10),
+> +	FACTOR(CLK_TOP_OSC_D20, "osc_d20", "ulposc", 1, 20),
+> +};
+> +
+> +static const char * const ap2conn_host_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d7_d4"
+> +};
+> +
+> +static const char * const apll_m_parents[] =3D {
+> +	"aud_1_sel",
+> +	"aud_2_sel"
+> +};
+> +
+> +static const char * const aud_1_parents[] =3D {
+> +	"clk26m",
+> +	"apll1"
+> +};
+> +
+> +static const char * const aud_2_parents[] =3D {
+> +	"clk26m",
+> +	"apll2"
+> +};
+> +
+> +static const char * const mfg_sel_mfgpll_parents[] =3D {
+> +	"mfg_ref_sel",
+> +	"mfgpll"
+> +};
+> +
+> +static const char * const pwm_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d4_d8"
+> +};
+> +
+> +static const char * const snps_eth_250m_parents[] =3D {
+> +	"clk26m",
+> +	"ethpll_d2"
+> +};
+> +
+> +static const char * const snps_eth_50m_rmii_parents[] =3D {
+> +	"clk26m",
+> +	"ethpll_d10"
+> +};
+> +
+> +static const char * const uart_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d6_d8"
+> +};
+> +
+> +static const char * const atb_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d2",
+> +	"mainpll_d5_d2"
+> +};
+> +
+> +static const char * const aud_intbus_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d4",
+> +	"mainpll_d7_d4"
+> +};
+> +
+> +static const char * const msdc5hclk_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d2",
+> +	"mainpll_d6_d2"
+> +};
+> +
+> +static const char * const pcie_mac_tl_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d4",
+> +	"univpll_d5_d4"
+> +};
+> +
+> +static const char * const pll_dpix_parents[] =3D {
+> +	"clk26m",
+> +	"vpll_dpix",
+> +	"mmpll_d4_d4"
+> +};
+> +
+> +static const char * const usb_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d5_d4",
+> +	"univpll_d6_d4"
+> +};
+> +
+> +static const char * const vdstx_dg_cts_parents[] =3D {
+> +	"clk26m",
+> +	"lvdstx_dg_cts",
+> +	"univpll_d7_d3"
+> +};
+> +
+> +static const char * const audio_h_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d7_d2",
+> +	"apll1",
+> +	"apll2"
+> +};
+> +
+> +static const char * const aud_engen1_parents[] =3D {
+> +	"clk26m",
+> +	"apll1_d2",
+> +	"apll1_d4",
+> +	"apll1_d8"
+> +};
+> +
+> +static const char * const aud_engen2_parents[] =3D {
+> +	"clk26m",
+> +	"apll2_d2",
+> +	"apll2_d4",
+> +	"apll2_d8"
+> +};
+> +
+> +static const char * const axi_peri_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d4",
+> +	"mainpll_d7_d2",
+> +	"osc_d4"
+> +};
+> +
+> +static const char * const axi_u_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d8",
+> +	"mainpll_d7_d4",
+> +	"osc_d8"
+> +};
+> +
+> +static const char * const camtm_parents[] =3D {
+> +	"clk26m",
+> +	"osc_d2",
+> +	"univpll_d6_d2",
+> +	"univpll_d6_d4"
+> +};
+> +
+> +static const char * const dsi_occ_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d6_d2",
+> +	"univpll_d5_d2",
+> +	"univpll_d4_d2"
+> +};
+> +
+> +static const char * const dxcc_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d8",
+> +	"mainpll_d4_d4",
+> +	"mainpll_d4_d2"
+> +};
+> +
+> +static const char * const i2c_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d8",
+> +	"univpll_d5_d4",
+> +	"mainpll_d4_d4"
+> +};
+> +
+> +static const char * const mcupm_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d6_d2",
+> +	"mainpll_d5_d2",
+> +	"mainpll_d6_d2"
+> +};
+> +
+> +static const char * const mfg_ref_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d6_d2",
+> +	"mainpll_d6",
+> +	"mainpll_d5_d2"
+> +};
+> +
+> +static const char * const msdc30_h_parents[] =3D {
+> +	"clk26m",
+> +	"msdcpll_d2",
+> +	"mainpll_d4_d4",
+> +	"mainpll_d6_d4"
+> +};
+> +
+> +static const char * const msdc_macro_p_parents[] =3D {
+> +	"clk26m",
+> +	"msdcpll",
+> +	"mmpll_d5_d4",
+> +	"univpll_d4_d2"
+> +};
+> +
+> +static const char * const snps_eth_62p4m_ptp_parents[] =3D {
+> +	"clk26m",
+> +	"ethpll_d8",
+> +	"apll1_d3",
+> +	"apll2_d3"
+> +};
+> +
+> +static const char * const ufs_mbist_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d2",
+> +	"univpll_d4_d2",
+> +	"ufspll_d2"
+> +};
+> +
+> +static const char * const aes_msdcfde_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d2",
+> +	"mainpll_d6",
+> +	"mainpll_d4_d4",
+> +	"msdcpll"
+> +};
+> +
+> +static const char * const bus_aximem_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d7_d2",
+> +	"mainpll_d5_d2",
+> +	"mainpll_d4_d2",
+> +	"mainpll_d6"
+> +};
+> +
+> +static const char * const dp_parents[] =3D {
+> +	"clk26m",
+> +	"tvdpll1_d16",
+> +	"tvdpll1_d8",
+> +	"tvdpll1_d4",
+> +	"tvdpll1_d2"
+> +};
+> +
+> +static const char * const msdc30_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d6_d2",
+> +	"mainpll_d6_d2",
+> +	"mainpll_d7_d2",
+> +	"msdcpll_d2"
+> +};
+> +
+> +static const char * const ecc_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d6_d2",
+> +	"univpll_d4_d2",
+> +	"univpll_d6",
+> +	"mainpll_d4",
+> +	"univpll_d4"
+> +};
+> +
+> +static const char * const emi_n_parents[] =3D {
+> +	"clk26m",
+> +	"osc_d2",
+> +	"mainpll_d9",
+> +	"mainpll_d6",
+> +	"mainpll_d5",
+> +	"emipll"
+> +};
+> +
+> +static const char * const sr_pka_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d4",
+> +	"mainpll_d4_d2",
+> +	"mainpll_d7",
+> +	"mainpll_d6",
+> +	"mainpll_d5"
+> +};
+> +
+> +static const char * const aes_ufsfde_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4",
+> +	"mainpll_d4_d2",
+> +	"mainpll_d6",
+> +	"mainpll_d4_d4",
+> +	"univpll_d4_d2",
+> +	"univpll_d6"
+> +};
+> +
+> +static const char * const axi_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d4",
+> +	"mainpll_d7_d2",
+> +	"mainpll_d4_d2",
+> +	"mainpll_d5_d2",
+> +	"mainpll_d6_d2",
+> +	"osc_d4"
+> +};
+> +
+> +static const char * const disp_pwm_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d6_d4",
+> +	"osc_d2",
+> +	"osc_d4",
+> +	"osc_d16",
+> +	"univpll_d5_d4",
+> +	"mainpll_d4_d4"
+> +};
+> +
+> +static const char * const edp_parents[] =3D {
+> +	"clk26m",
+> +	"tvdpll2_d16",
+> +	"tvdpll2_d8",
+> +	"tvdpll2_d4",
+> +	"tvdpll2_d2"
+> +};
+> +
+> +static const char * const gcpu_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d6",
+> +	"mainpll_d4_d2",
+> +	"univpll_d4_d2",
+> +	"univpll_d5_d2",
+> +	"univpll_d5_d4",
+> +	"univpll_d6"
+> +};
+> +
+> +static const char * const msdc50_0_parents[] =3D {
+> +	"clk26m",
+> +	"msdcpll",
+> +	"msdcpll_d2",
+> +	"mainpll_d6_d2",
+> +	"mainpll_d4_d4",
+> +	"mainpll_d6",
+> +	"univpll_d4_d4"
+> +};
+> +
+> +static const char * const ufs_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4_d8",
+> +	"mainpll_d4_d4",
+> +	"mainpll_d5_d2",
+> +	"mainpll_d6_d2",
+> +	"univpll_d6_d2",
+> +	"msdcpll_d2"
+> +};
+> +
+> +static const char * const dsp_parents[] =3D {
+> +	"clk26m",
+> +	"osc_d4",
+> +	"osc_d3",
+> +	"osc_d2",
+> +	"univpll_d7_d2",
+> +	"univpll_d6_d2",
+> +	"mainpll_d6",
+> +	"univpll_d5"
+> +};
+> +
+> +static const char * const mem_sub_peri_u_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d4_d4",
+> +	"mainpll_d5_d2",
+> +	"mainpll_d4_d2",
+> +	"mainpll_d6",
+> +	"mainpll_d5",
+> +	"univpll_d5",
+> +	"mainpll_d4"
+> +};
+> +
+> +static const char * const seninf_parents[] =3D {
+> +	"clk26m",
+> +	"osc_d2",
+> +	"univpll_d6_d2",
+> +	"mainpll_d4_d2",
+> +	"univpll_d4_d2",
+> +	"mmpll_d7",
+> +	"univpll_d6",
+> +	"univpll_d5"
+> +};
+> +
+> +static const char * const sflash_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d7_d8",
+> +	"univpll_d6_d8",
+> +	"mainpll_d7_d4",
+> +	"mainpll_d6_d4",
+> +	"univpll_d6_d4",
+> +	"univpll_d7_d3",
+> +	"univpll_d5_d4"
+> +};
+> +
+> +static const char * const spi_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d6_d2",
+> +	"univpll_192m",
+> +	"mainpll_d6_d2",
+> +	"univpll_d4_d4",
+> +	"mainpll_d4_d4",
+> +	"univpll_d5_d4",
+> +	"univpll_d6_d4"
+> +};
+> +
+> +static const char * const img1_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d4",
+> +	"mmpll_d5",
+> +	"mmpll_d6",
+> +	"univpll_d6",
+> +	"mmpll_d7",
+> +	"mmpll_d4_d2",
+> +	"univpll_d4_d2",
+> +	"mainpll_d4_d2",
+> +	"mmpll_d6_d2",
+> +	"mmpll_d5_d2"
+> +};
+> +
+> +static const char * const ipe_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d4",
+> +	"mainpll_d4",
+> +	"mmpll_d6",
+> +	"univpll_d6",
+> +	"mainpll_d6",
+> +	"mmpll_d4_d2",
+> +	"univpll_d4_d2",
+> +	"mainpll_d4_d2",
+> +	"mmpll_d6_d2",
+> +	"mmpll_d5_d2"
+> +};
+> +
+> +static const char * const mem_sub_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_d4_d4",
+> +	"mainpll_d6_d2",
+> +	"mainpll_d5_d2",
+> +	"mainpll_d4_d2",
+> +	"mainpll_d6",
+> +	"mmpll_d7",
+> +	"mainpll_d5",
+> +	"univpll_d5",
+> +	"mainpll_d4",
+> +	"univpll_d4"
+> +};
+> +
+> +static const char * const cam_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d4",
+> +	"mmpll_d4",
+> +	"univpll_d4",
+> +	"univpll_d5",
+> +	"mmpll_d7",
+> +	"mmpll_d6",
+> +	"univpll_d6",
+> +	"univpll_d4_d2",
+> +	"mmpll_d9",
+> +	"mainpll_d4_d2",
+> +	"osc_d2"
+> +};
+> +
+> +static const char * const mmsys_parents[] =3D {
+> +	"clk26m",
+> +	"mainpll_d5_d2",
+> +	"univpll_d5_d2",
+> +	"mainpll_d4_d2",
+> +	"univpll_d4_d2",
+> +	"mainpll_d6",
+> +	"univpll_d6",
+> +	"mmpll_d6",
+> +	"tvdpll1",
+> +	"tvdpll2",
+> +	"univpll_d4",
+> +	"mmpll_d4"
+> +};
+> +
+> +static const char * const mminfra_parents[] =3D {
+> +	"clk26m",
+> +	"osc_d2",
+> +	"mainpll_d5_d2",
+> +	"mmpll_d6_d2",
+> +	"mainpll_d4_d2",
+> +	"mmpll_d4_d2",
+> +	"mainpll_d6",
+> +	"mmpll_d7",
+> +	"univpll_d6",
+> +	"mainpll_d5",
+> +	"mmpll_d6",
+> +	"univpll_d5",
+> +	"mainpll_d4",
+> +	"univpll_d4",
+> +	"mmpll_d4",
+> +	"emipll"
+> +};
+> +
+> +static const char * const vdec_parents[] =3D {
+> +	"clk26m",
+> +	"univpll_192m_d2",
+> +	"univpll_d5_d4",
+> +	"mainpll_d5",
+> +	"mainpll_d5_d2",
+> +	"mmpll_d6_d2",
+> +	"univpll_d5_d2",
+> +	"mainpll_d4_d2",
+> +	"univpll_d4_d2",
+> +	"univpll_d7",
+> +	"mmpll_d7",
+> +	"mmpll_d6",
+> +	"univpll_d6",
+> +	"mainpll_d4",
+> +	"univpll_d4",
+> +	"mmpll_d5_d2"
+> +};
+> +
+> +static const char * const venc_parents[] =3D {
+> +	"clk26m",
+> +	"mmpll_d4_d2",
+> +	"mainpll_d6",
+> +	"univpll_d4_d2",
+> +	"mainpll_d4_d2",
+> +	"univpll_d6",
+> +	"mmpll_d6",
+> +	"mainpll_d5_d2",
+> +	"mainpll_d6_d2",
+> +	"mmpll_d9",
+> +	"mmpll_d4",
+> +	"mainpll_d4",
+> +	"univpll_d4",
+> +	"univpll_d5",
+> +	"univpll_d5_d2",
+> +	"mainpll_d5"
+> +};
+> +
+> +static const struct mtk_mux top_muxes[] =3D {
+> +	/* CLK_CFG_0 */
+> +	MUX_CLR_SET_UPD(CLK_TOP_AXI_SEL, "axi_sel",
+> +			axi_parents, 0x010, 0x014, 0x018, 0, 3,
+> 0x04, 0),
+> +	MUX_CLR_SET_UPD(CLK_TOP_AXI_PERI_SEL, "axi_peri_sel",
+> +			axi_peri_parents, 0x010, 0x014, 0x018,
+> +			8, 2, 0x04, 1),
+> +	MUX_CLR_SET_UPD(CLK_TOP_AXI_U_SEL, "axi_u_sel",
+> +			axi_u_parents, 0x010, 0x014, 0x018,
+> +			16, 2, 0x04, 2),
+> +	MUX_CLR_SET_UPD(CLK_TOP_BUS_AXIMEM_SEL, "bus_aximem_sel",
+> +			bus_aximem_parents, 0x010, 0x014, 0x018,
+> +			24, 3, 0x04, 3),
+> +	/* CLK_CFG_1 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_DISP0_SEL, "disp0_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 mmsys_parents, 0x020, 0x024, 0x028,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 4, 7, 0x04, 4),
+> +	MUX_CLR_SET_UPD(CLK_TOP_MMINFRA_SEL, "mminfra_sel",
+> +			mminfra_parents, 0x020, 0x024, 0x028,
+> +			8, 4, 0x04, 5),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_UART_SEL, "uart_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 uart_parents, 0x020, 0x024, 0x028,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 1, 23, 0x04, 6),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_SPI0_SEL, "spi0_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 spi_parents, 0x020, 0x024, 0x028,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 3, 31, 0x04, 7),
+> +	/* CLK_CFG_2 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_SPI1_SEL, "spi1_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 spi_parents, 0x030, 0x034, 0x038,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 3, 7, 0x04, 8),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_SPI2_SEL, "spi2_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 spi_parents, 0x030, 0x034, 0x038,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 3, 15, 0x04, 9),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_SPI3_SEL, "spi3_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 spi_parents, 0x030, 0x034, 0x038,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 3, 23, 0x04, 10),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_SPI4_SEL, "spi4_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 spi_parents, 0x030, 0x034, 0x038,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 3, 31, 0x04, 11),
+> +	/* CLK_CFG_3 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_SPI5_SEL, "spi5_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 spi_parents, 0x040, 0x044, 0x048,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 3, 7, 0x04, 12),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC_MACRO_0P_SEL,
+> "msdc_macro_0p_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 msdc_macro_p_parents, 0x040, 0x044,
+> 0x048,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 2, 15, 0x04, 13),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0_HCLK_SEL,
+> "msdc5hclk_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 msdc5hclk_parents, 0x040, 0x044, 0x048,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 2, 23, 0x04, 14),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC50_0_SEL, "msdc50_0_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 msdc50_0_parents, 0x040, 0x044, 0x048,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 3, 31, 0x04, 15),
+> +	/* CLK_CFG_4 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_AES_MSDCFDE_SEL,
+> "aes_msdcfde_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 aes_msdcfde_parents, 0x050, 0x054,
+> 0x058,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 3, 7, 0x04, 16),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC_MACRO_1P_SEL,
+> "msdc_macro_1p_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 msdc_macro_p_parents, 0x050, 0x054,
+> 0x058,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 2, 15, 0x04, 17),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_1_SEL, "msdc30_1_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 msdc30_parents, 0x050, 0x054, 0x058,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 3, 23, 0x04, 18),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_1_HCLK_SEL,
+> "msdc30_1_h_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 msdc30_h_parents, 0x050, 0x054, 0x058,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 2, 31, 0x04, 19),
+> +	/* CLK_CFG_5 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC_MACRO_2P_SEL,
+> "msdc_macro_2p_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 msdc_macro_p_parents, 0x060, 0x064,
+> 0x068,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 2, 7, 0x04, 20),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_2_SEL, "msdc30_2_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 msdc30_parents, 0x060, 0x064, 0x068,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 3, 15, 0x04, 21),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MSDC30_2_HCLK_SEL,
+> "msdc30_2_h_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 msdc30_h_parents, 0x060, 0x064, 0x068,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 2, 23, 0x04, 22),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUD_INTBUS_SEL,
+> "aud_intbus_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 aud_intbus_parents, 0x060, 0x064,
+> 0x068,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 2, 31, 0x04, 23),
+> +	/* CLK_CFG_6 */
+> +	MUX_CLR_SET_UPD(CLK_TOP_ATB_SEL, "atb_sel",
+> +			atb_parents, 0x070, 0x074, 0x078, 0, 2,
+> 0x04, 24),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_DISP_PWM_SEL, "disp_pwm_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 disp_pwm_parents, 0x070, 0x074, 0x078,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 3, 15, 0x04, 25),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_USB_TOP_P0_SEL, "usb_p0_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 usb_parents, 0x070, 0x074, 0x078,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 2, 23, 0x04, 26),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_USB_XHCI_P0_SEL,
+> "ssusb_xhci_p0_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 usb_parents, 0x070, 0x074, 0x078,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 2, 31, 0x04, 27),
+> +	/* CLK_CFG_7 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_USB_TOP_P1_SEL, "usb_p1_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 usb_parents, 0x080, 0x084, 0x088,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 2, 7, 0x04, 28),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_USB_XHCI_P1_SEL,
+> "ssusb_xhci_p1_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 usb_parents, 0x080, 0x084, 0x088,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 2, 15, 0x04, 29),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_USB_TOP_P2_SEL, "usb_p2_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 usb_parents, 0x080, 0x084, 0x088,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 2, 23, 0x04, 30),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_USB_XHCI_P2_SEL,
+> "ssusb_xhci_p2_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 usb_parents, 0x080, 0x084, 0x088,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 2, 31, 0x08, 0),
+> +	/* CLK_CFG_8 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_USB_TOP_P3_SEL, "usb_p3_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 usb_parents, 0x090, 0x094, 0x098,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 2, 7, 0x08, 1),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_USB_XHCI_P3_SEL,
+> "ssusb_xhci_p3_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 usb_parents, 0x090, 0x094, 0x098,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 2, 15, 0x08, 2),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_USB_TOP_P4_SEL, "usb_p4_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 usb_parents, 0x090, 0x094, 0x098,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 2, 23, 0x08, 3),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_USB_XHCI_P4_SEL,
+> "ssusb_xhci_p4_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 usb_parents, 0x090, 0x094, 0x098,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 2, 31, 0x08, 4),
+> +	/* CLK_CFG_9 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_I2C_SEL, "i2c_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 i2c_parents, 0x0a0, 0x0a4, 0x0a8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 2, 7, 0x08, 5),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_SENINF_SEL, "seninf_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 seninf_parents, 0x0a0, 0x0a4, 0x0a8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 3, 15, 0x08, 6),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_SENINF1_SEL, "seninf1_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 seninf_parents, 0x0a0, 0x0a4, 0x0a8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 3, 23, 0x08, 7),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUD_ENGEN1_SEL,
+> "aud_engen1_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 aud_engen1_parents, 0x0a0, 0x0a4,
+> 0x0a8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 2, 31, 0x08, 8),
+> +	/* CLK_CFG_10 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUD_ENGEN2_SEL,
+> "aud_engen2_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 aud_engen2_parents, 0x0b0, 0x0b4,
+> 0x0b8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 2, 7, 0x08, 9),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_AES_UFSFDE_SEL,
+> "aes_ufsfde_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 aes_ufsfde_parents, 0x0b0, 0x0b4,
+> 0x0b8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 3, 15, 0x08, 10),
+> +	MUX_CLR_SET_UPD(CLK_TOP_U_SEL, "ufs_sel",
+> +			ufs_parents, 0x0b0, 0x0b4, 0x0b8,
+> +			16, 3, 0x08, 11),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_U_MBIST_SEL, "ufs_mbist_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 ufs_mbist_parents, 0x0b0, 0x0b4, 0x0b8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 2, 31, 0x08, 12),
+> +	/* CLK_CFG_11 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUD_1_SEL, "aud_1_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 aud_1_parents, 0x0c0, 0x0c4, 0x0c8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 1, 7, 0x08, 13),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUD_2_SEL, "aud_2_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 aud_2_parents, 0x0c0, 0x0c4, 0x0c8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 1, 15, 0x08, 14),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_VENC_SEL, "venc_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 venc_parents, 0x0c0, 0x0c4, 0x0c8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 4, 23, 0x08, 15),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_VDEC_SEL, "vdec_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 vdec_parents, 0x0c0, 0x0c4, 0x0c8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 4, 31, 0x08, 16),
+> +	/* CLK_CFG_12 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_PWM_SEL, "pwm_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 pwm_parents, 0x0d0, 0x0d4, 0x0d8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 1, 7, 0x08, 17),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_AUDIO_H_SEL, "audio_h_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 audio_h_parents, 0x0d0, 0x0d4, 0x0d8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 2, 15, 0x08, 18),
+> +	MUX_CLR_SET_UPD(CLK_TOP_MCUPM_SEL, "mcupm_sel",
+> +			mcupm_parents, 0x0d0, 0x0d4, 0x0d8,
+> +			16, 2, 0x08, 19),
+> +	MUX_CLR_SET_UPD(CLK_TOP_MEM_SUB_SEL, "mem_sub_sel",
+> +			mem_sub_parents, 0x0d0, 0x0d4, 0x0d8,
+> +			24, 4, 0x08, 20),
+> +	/* CLK_CFG_13 */
+> +	MUX_CLR_SET_UPD(CLK_TOP_MEM_SUB_PERI_SEL,
+> "mem_sub_peri_sel",
+> +			mem_sub_peri_u_parents, 0x0e0, 0x0e4, 0x0e8,
+> +			0, 3, 0x08, 21),
+> +	MUX_CLR_SET_UPD(CLK_TOP_MEM_SUB_U_SEL, "mem_sub_u_sel",
+> +			mem_sub_peri_u_parents, 0x0e0, 0x0e4, 0x0e8,
+> +			8, 3, 0x08, 22),
+> +	MUX_CLR_SET_UPD(CLK_TOP_EMI_N_SEL, "emi_n_sel",
+> +			emi_n_parents, 0x0e0, 0x0e4, 0x0e8,
+> +			16, 3, 0x08, 23),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_DSI_OCC_SEL, "dsi_occ_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 dsi_occ_parents, 0x0e0, 0x0e4, 0x0e8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 2, 31, 0x08, 24),
+> +	/* CLK_CFG_14 */
+> +	MUX_CLR_SET_UPD(CLK_TOP_AP2CONN_HOST_SEL,
+> "ap2conn_host_sel",
+> +			ap2conn_host_parents, 0x0f0, 0x0f4, 0x0f8,
+> +			0, 1, 0x08, 25),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_IMG1_SEL, "img1_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 img1_parents, 0x0f0, 0x0f4, 0x0f8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 4, 15, 0x08, 26),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_IPE_SEL, "ipe_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 ipe_parents, 0x0f0, 0x0f4, 0x0f8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 4, 23, 0x08, 27),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_CAM_SEL, "cam_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 cam_parents, 0x0f0, 0x0f4, 0x0f8,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 4, 31, 0x08, 28),
+> +	/* CLK_CFG_15 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_CAMTM_SEL, "camtm_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 camtm_parents, 0x100, 0x104, 0x108,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 2, 7, 0x08, 29),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_DSP_SEL, "dsp_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 dsp_parents, 0x100, 0x104, 0x108,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 3, 15, 0x08, 30),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_SR_PKA_SEL, "sr_pka_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 sr_pka_parents, 0x100, 0x104, 0x108,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 3, 23, 0x0c, 0),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_DXCC_SEL, "dxcc_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 dxcc_parents, 0x100, 0x104, 0x108,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 2, 31, 0x0c, 1),
+> +	/* CLK_CFG_16 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MFG_REF_SEL, "mfg_ref_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 mfg_ref_parents, 0x110, 0x114, 0x118,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 2, 7, 0x0c, 2),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MDP0_SEL, "mdp0_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 mmsys_parents, 0x110, 0x114, 0x118,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 4, 15, 0x0c, 3),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_DP_SEL, "dp_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 dp_parents, 0x110, 0x114, 0x118,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 3, 23, 0x0c, 4),
+> +	MUX_CLR_SET_UPD(CLK_TOP_EDP_SEL, "edp_sel",
+> +			edp_parents, 0x110, 0x114, 0x118,
+> +			24, 3, 0x0c, 5),
+> +	/* CLK_CFG_17 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_EDP_FAVT_SEL, "edp_favt_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 edp_parents, 0x180, 0x184, 0x188,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 3, 7, 0x0c, 6),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_ETH_250M_SEL,
+> "snps_eth_250m_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 snps_eth_250m_parents, 0x180, 0x184,
+> 0x188,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 1, 15, 0x0c, 7),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_ETH_62P4M_PTP_SEL,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 "snps_eth_62p4m_ptp_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 snps_eth_62p4m_ptp_parents,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0x180, 0x184, 0x188, 16, 2, 23, 0x0c,
+> 8),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_ETH_50M_RMII_SEL,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 "snps_eth_50m_rmii_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 snps_eth_50m_rmii_parents,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0x180, 0x184, 0x188, 24, 1, 31, 0x0c,
+> 9),
+> +	/* CLK_CFG_18 */
+> +	MUX_CLR_SET_UPD(CLK_TOP_SFLASH_SEL, "sflash_sel",
+> +			sflash_parents, 0x190, 0x194, 0x198,
+> +			0, 3, 0x0c, 10),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_GCPU_SEL, "gcpu_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 gcpu_parents, 0x190, 0x194, 0x198,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 3, 15, 0x0c, 11),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_MAC_TL_SEL, "pcie_mac_tl_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 pcie_mac_tl_parents, 0x190, 0x194,
+> 0x198,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 16, 2, 23, 0x0c, 12),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_VDSTX_DG_CTS_SEL,
+> "vdstx_dg_cts_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 vdstx_dg_cts_parents, 0x190, 0x194,
+> 0x198,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 24, 2, 31, 0x0c, 13),
+> +	/* CLK_CFG_19 */
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_PLL_DPIX_SEL, "pll_dpix_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 pll_dpix_parents, 0x240, 0x244, 0x248,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 0, 2, 7, 0x0c, 14),
+> +	MUX_GATE_CLR_SET_UPD(CLK_TOP_ECC_SEL, "ecc_sel",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 ecc_parents, 0x240, 0x244, 0x248,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0 8, 3, 15, 0x0c, 15),
+> +	/* CLK_MISC_CFG_3 */
+> +	GATE_CLR_SET_UPD_FLAGS(CLK_TOP_MFG_SEL_MFGPLL,
+> "mfg_sel_mfgpll",
+> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mfg_sel_mfgpll_parents,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x510, 0x514, 0x0518, 16, 1, 0, =
+-1, -
+> 1,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 CLK_SET_RATE_PARENT |
+> CLK_SET_RATE_NO_REPARENT,
+> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mtk_mux_clr_set_upd_ops)
+> +};
+> +
+> +static const struct mtk_composite top_composites[] =3D {
+> +	/* CLK_AUDDIV_0 */
+> +	MUX(CLK_TOP_APLL_I2SIN0_MCK_SEL, "apll_i2sin0_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 16, 1),
+> +	MUX(CLK_TOP_APLL_I2SIN1_MCK_SEL, "apll_i2sin1_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 17, 1),
+> +	MUX(CLK_TOP_APLL_I2SIN2_MCK_SEL, "apll_i2sin2_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 18, 1),
+> +	MUX(CLK_TOP_APLL_I2SIN3_MCK_SEL, "apll_i2sin3_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 19, 1),
+> +	MUX(CLK_TOP_APLL_I2SIN4_MCK_SEL, "apll_i2sin4_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 20, 1),
+> +	MUX(CLK_TOP_APLL_I2SIN6_MCK_SEL, "apll_i2sin6_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 21, 1),
+> +	MUX(CLK_TOP_APLL_I2SOUT0_MCK_SEL, "apll_i2sout0_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 22, 1),
+> +	MUX(CLK_TOP_APLL_I2SOUT1_MCK_SEL, "apll_i2sout1_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 23, 1),
+> +	MUX(CLK_TOP_APLL_I2SOUT2_MCK_SEL, "apll_i2sout2_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 24, 1),
+> +	MUX(CLK_TOP_APLL_I2SOUT3_MCK_SEL, "apll_i2sout3_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 25, 1),
+> +	MUX(CLK_TOP_APLL_I2SOUT4_MCK_SEL, "apll_i2sout4_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 26, 1),
+> +	MUX(CLK_TOP_APLL_I2SOUT6_MCK_SEL, "apll_i2sout6_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 27, 1),
+> +	MUX(CLK_TOP_APLL_FMI2S_MCK_SEL, "apll_fmi2s_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 28, 1),
+> +	MUX(CLK_TOP_APLL_TDMOUT_MCK_SEL, "apll_tdmout_m_sel",
+> +	=C2=A0=C2=A0=C2=A0 apll_m_parents, 0x0320, 29, 1),
+> +	/* CLK_AUDDIV_2 */
+> +	DIV_GATE(CLK_TOP_APLL12_CK_DIV_I2SIN0, "apll12_div_i2sin0",
+> +		 "apll_i2sin0_m_sel", 0x0320, 0, 0x0328, 8, 0),
+> +	DIV_GATE(CLK_TOP_APLL12_CK_DIV_I2SIN1, "apll12_div_i2sin1",
+> +		 "apll_i2sin1_m_sel", 0x0320, 1, 0x0328, 8, 8),
+> +	/* CLK_AUDDIV_3 */
+> +	DIV_GATE(CLK_TOP_APLL12_CK_DIV_I2SOUT0,
+> "apll12_div_i2sout0",
+> +		 "apll_i2sout0_m_sel", 0x0320, 6, 0x0334, 8, 16),
+> +	DIV_GATE(CLK_TOP_APLL12_CK_DIV_I2SOUT1,
+> "apll12_div_i2sout1",
+> +		 "apll_i2sout1_m_sel", 0x0320, 7, 0x0334, 8, 24),
+> +	/* CLK_AUDDIV_5 */
+> +	DIV_GATE(CLK_TOP_APLL12_CK_DIV_FMI2S, "apll12_div_fmi2s",
+> +		 "apll_fmi2s_m_sel", 0x0320, 12, 0x033c, 8, 0),
+> +	DIV_GATE(CLK_TOP_APLL12_CK_DIV_TDMOUT_M,
+> "apll12_div_tdmout_m",
+> +		 "apll_tdmout_m_sel", 0x0320, 13, 0x033c, 8, 8),
+> +	DIV_GATE(CLK_TOP_APLL12_CK_DIV_TDMOUT_B,
+> "apll12_div_tdmout_b",
+> +		 "apll12_div_tdmout_m", 0x0320, 14, 0x033c, 8, 16),
+> +};
+> +
+> +static const struct mtk_gate_regs top_cg_regs =3D {
+> +	.set_ofs =3D 0x514,
+> +	.clr_ofs =3D 0x518,
+> +	.sta_ofs =3D 0x510,
+> +};
+> +
+> +#define GATE_TOP_FLAGS(_id, _name, _parent, _shift, _flag) {	\
+> +		.id =3D _id,				\
+> +		.name =3D _name,				\
+> +		.parent_name =3D _parent,			\
+> +		.regs =3D &top_cg_regs,			\
+> +		.shift =3D _shift,			\
+> +		.flags =3D _flag,				\
+> +		.ops =3D &mtk_clk_gate_ops_setclr_inv,	\
+> +	}
+> +
+> +#define GATE_TOP(_id, _name, _parent, _shift)		\
+> +	GATE_TOP_FLAGS(_id, _name, _parent, _shift, 0)
+> +
+> +static const struct mtk_gate top_clks[] =3D {
+> +	GATE_TOP_FLAGS(CLK_TOP_FMCNT_P0_EN, "fmcnt_p0_en",
+> "univpll_192m_d4", 0, CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_FMCNT_P1_EN, "fmcnt_p1_en",
+> "univpll_192m_d4", 1, CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_FMCNT_P2_EN, "fmcnt_p2_en",
+> "univpll_192m_d4", 2, CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_FMCNT_P3_EN, "fmcnt_p3_en",
+> "univpll_192m_d4", 3, CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_FMCNT_P4_EN, "fmcnt_p4_en",
+> "univpll_192m_d4", 4, CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_USB_F26M_CK_EN, "ssusb_f26m",
+> "clk26m", 5, CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_SSPXTP_F26M_CK_EN, "sspxtp_f26m",
+> "clk26m", 6, CLK_IS_CRITICAL),
+> +	GATE_TOP(CLK_TOP_USB2_PHY_RF_P0_EN, "usb2_phy_rf_p0_en",
+> "clk26m", 7),
+> +	GATE_TOP(CLK_TOP_USB2_PHY_RF_P1_EN, "usb2_phy_rf_p1_en",
+> "clk26m", 10),
+> +	GATE_TOP(CLK_TOP_USB2_PHY_RF_P2_EN, "usb2_phy_rf_p2_en",
+> "clk26m", 11),
+> +	GATE_TOP(CLK_TOP_USB2_PHY_RF_P3_EN, "usb2_phy_rf_p3_en",
+> "clk26m", 12),
+> +	GATE_TOP(CLK_TOP_USB2_PHY_RF_P4_EN, "usb2_phy_rf_p4_en",
+> "clk26m", 13),
+> +	GATE_TOP_FLAGS(CLK_TOP_USB2_26M_CK_P0_EN, "usb2_26m_p0_en",
+> "clk26m", 14, CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_USB2_26M_CK_P1_EN, "usb2_26m_p1_en",
+> "clk26m", 15, CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_USB2_26M_CK_P2_EN, "usb2_26m_p2_en",
+> "clk26m", 18, CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_USB2_26M_CK_P3_EN, "usb2_26m_p3_en",
+> "clk26m", 19, CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_USB2_26M_CK_P4_EN, "usb2_26m_p4_en",
+> "clk26m", 20, CLK_IS_CRITICAL),
 
-Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
----
-Changes since v7:
-- Addressed following comments from Jonathan:
-  - Replaced {0} with { } in tm_handler_work()
-  - Simplified logic for setting upper_set and lower_set into
-    a single line each, in tm_handler_work()
-  - Cleaned up local variable declarations and high/low threshold
-    check in adc_tm5_gen3_configure()
-  - Moved cleanup action to disable all ADC_TM channels to probe
-    end and added comment to describe it.
-  - Fixed { } formatting in adctm5_auxiliary_id_table[].
+In the v1 patch review, Angelo raised a concern about all those USB
+clocks being always-on and got no answer on this matter.
+Could you please explain why they are configured as critical ?=20
 
-Changes since v6:
-- Addressed following comments from Jonathan:
-  - Added error check for devm_thermal_add_hwmon_sysfs() call.
-  - Used local variable `dev` in multiple places in adc_tm5_probe().
-    in place of `&aux_dev->dev` and `adc_tm5->dev`.
-  - Added a comment to explain cleanup action calling adc5_gen3_clear_work()
-    near probe end.
-  - Fixed return statement at probe end to return last called API's
-    return value directly.
+> +	GATE_TOP(CLK_TOP_F26M_CK_EN, "pcie_f26m", "clk26m", 21),
+> +	GATE_TOP_FLAGS(CLK_TOP_AP2CON_EN, "ap2con", "clk26m", 24,
+> CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_EINT_N_EN, "eint_n", "clk26m", 25,
+> CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_TOPCKGEN_FMIPI_CSI_UP26M_CK_EN,
+> +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "TOPCKGEN_fmipi_csi_up26m", "osc_=
+d10", 26,
+> CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_EINT_E_EN, "eint_e", "clk26m", 28,
+> CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_EINT_W_EN, "eint_w", "clk26m", 30,
+> CLK_IS_CRITICAL),
+> +	GATE_TOP_FLAGS(CLK_TOP_EINT_S_EN, "eint_s", "clk26m", 31,
+> CLK_IS_CRITICAL),
+> +};
+> +
+> +/* Register mux notifier for MFG mux */
+> +static int clk_mt8189_reg_mfg_mux_notifier(struct device *dev,
+> +					=C2=A0=C2=A0 struct clk *clk)
+> +{
+> +	struct mtk_mux_nb *mfg_mux_nb;
+> +
+> +	mfg_mux_nb =3D devm_kzalloc(dev, sizeof(*mfg_mux_nb),
+> GFP_KERNEL);
+> +	if (!mfg_mux_nb)
+> +		return -ENOMEM;
+> +
+> +	mfg_mux_nb->ops =3D &mtk_mux_clr_set_upd_ops;
+> +	mfg_mux_nb->bypass_index =3D 0; /* Bypass to
+> CLK_TOP_MFG_REF_SEL */
+> +
+> +	return devm_mtk_clk_mux_notifier_register(dev, clk,
+> mfg_mux_nb);
+> +}
+> +
+> +static const struct mtk_clk_desc topck_desc =3D {
+> +	.factor_clks =3D top_divs,
+> +	.num_factor_clks =3D ARRAY_SIZE(top_divs),
+> +	.mux_clks =3D top_muxes,
+> +	.num_mux_clks =3D ARRAY_SIZE(top_muxes),
+> +	.composite_clks =3D top_composites,
+> +	.num_composite_clks =3D ARRAY_SIZE(top_composites),
+> +	.clks =3D top_clks,
+> +	.num_clks =3D ARRAY_SIZE(top_clks),
+> +	.clk_notifier_func =3D clk_mt8189_reg_mfg_mux_notifier,
+> +	.mfg_clk_idx =3D CLK_TOP_MFG_SEL_MFGPLL,
+> +	.clk_lock =3D &mt8189_clk_lock,
+> +};
+> +
+> +static const struct of_device_id of_match_clk_mt8189_topck[] =3D {
+> +	{ .compatible =3D "mediatek,mt8189-topckgen", .data =3D
+> &topck_desc },
+> +	{ /* sentinel */ }
+> +};
+> +
+> +static struct platform_driver clk_mt8189_topck_drv =3D {
+> +	.probe =3D mtk_clk_simple_probe,
+It misses a remove callback implementation for the driver, so use=20
+mtk_clk_simple_remove function then:
+```
+	.remove =3D mtk_clk_simple_remove,
+```
+Same remarks for the other drivers in the patch series that use
+mtk_clk_simple_probe as probe callback.
 
-Changes since v5:
-- Addressed following comments from Jonathan:
-  - Corrected all files to follow kernel-doc formatting fully.
-  - Cleaned up formatting in struct definitions.
-  - Used sizeof() to specify length in register read/write calls
-    instead of using integers directly.
-  - Added comments in adc_tm5_probe() for skipping first SDAM for
-    IRQ request and for usage of auxiliary_set_drvdata().
-  - Corrected line wrap length driver file.
-  - Moved INIT_WORK() and auxiliary_set_drvdata() to earlier
-    locations to ensure they are ready when needed.
+Regards,
+Louis-Alexis
 
-Changes since v4:
-- Fixed a compilation error and updated dependencies in config as suggested
-  by Krzysztof.
-
- drivers/thermal/qcom/Kconfig                  |   9 +
- drivers/thermal/qcom/Makefile                 |   1 +
- drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c | 530 ++++++++++++++++++
- 3 files changed, 540 insertions(+)
- create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
-
-diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
-index a6bb01082ec6..1acb11e4ac80 100644
---- a/drivers/thermal/qcom/Kconfig
-+++ b/drivers/thermal/qcom/Kconfig
-@@ -21,6 +21,15 @@ config QCOM_SPMI_ADC_TM5
- 	  Thermal client sets threshold temperature for both warm and cool and
- 	  gets updated when a threshold is reached.
- 
-+config QCOM_SPMI_ADC_TM5_GEN3
-+	tristate "Qualcomm SPMI PMIC Thermal Monitor ADC5 Gen3"
-+	depends on QCOM_SPMI_ADC5_GEN3
-+	help
-+	  This enables the auxiliary thermal driver for the ADC5 Gen3 thermal
-+	  monitoring device. It shows up as a thermal zone with multiple trip points.
-+	  Thermal client sets threshold temperature for both warm and cool and
-+	  gets updated when a threshold is reached.
-+
- config QCOM_SPMI_TEMP_ALARM
- 	tristate "Qualcomm SPMI PMIC Temperature Alarm"
- 	depends on OF && SPMI && IIO
-diff --git a/drivers/thermal/qcom/Makefile b/drivers/thermal/qcom/Makefile
-index 0fa2512042e7..828d9e7bc797 100644
---- a/drivers/thermal/qcom/Makefile
-+++ b/drivers/thermal/qcom/Makefile
-@@ -4,5 +4,6 @@ obj-$(CONFIG_QCOM_TSENS)	+= qcom_tsens.o
- qcom_tsens-y			+= tsens.o tsens-v2.o tsens-v1.o tsens-v0_1.o \
- 				   tsens-8960.o
- obj-$(CONFIG_QCOM_SPMI_ADC_TM5)	+= qcom-spmi-adc-tm5.o
-+obj-$(CONFIG_QCOM_SPMI_ADC_TM5_GEN3)	+= qcom-spmi-adc-tm5-gen3.o
- obj-$(CONFIG_QCOM_SPMI_TEMP_ALARM)	+= qcom-spmi-temp-alarm.o
- obj-$(CONFIG_QCOM_LMH)		+= lmh.o
-diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
-new file mode 100644
-index 000000000000..c6cc8ef76f7e
---- /dev/null
-+++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
-@@ -0,0 +1,530 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/iio/adc/qcom-adc5-gen3-common.h>
-+#include <linux/iio/consumer.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/thermal.h>
-+#include <linux/unaligned.h>
-+
-+#include "../thermal_hwmon.h"
-+
-+struct adc_tm5_gen3_chip;
-+
-+/**
-+ * struct adc_tm5_gen3_channel_props - ADC_TM channel structure
-+ * @timer: time period of recurring TM measurement.
-+ * @tm_chan_index: TM channel number used (ranging from 1-7).
-+ * @sdam_index: SDAM on which this TM channel lies.
-+ * @common_props: structure withcommon  ADC channel properties.
-+ * @high_thr_en: TM high threshold crossing detection enabled.
-+ * @low_thr_en: TM low threshold crossing detection enabled.
-+ * @chip: ADC TM device.
-+ * @tzd: pointer to thermal device corresponding to TM channel.
-+ * @last_temp: last temperature that caused threshold violation,
-+ *	or a thermal TM channel.
-+ * @last_temp_set: indicates if last_temp is stored.
-+ */
-+struct adc_tm5_gen3_channel_props {
-+	unsigned int timer;
-+	unsigned int tm_chan_index;
-+	unsigned int sdam_index;
-+	struct adc5_channel_common_prop common_props;
-+	bool high_thr_en;
-+	bool low_thr_en;
-+	struct adc_tm5_gen3_chip *chip;
-+	struct thermal_zone_device *tzd;
-+	int last_temp;
-+	bool last_temp_set;
-+};
-+
-+/**
-+ * struct adc_tm5_gen3_chip - ADC Thermal Monitoring device structure
-+ * @dev_data: Top-level ADC device data.
-+ * @chan_props: Array of ADC_TM channel structures.
-+ * @nchannels: number of TM channels allocated
-+ * @dev: SPMI ADC5 Gen3 device.
-+ * @tm_handler_work: handler for TM interrupt for threshold violation.
-+ */
-+struct adc_tm5_gen3_chip {
-+	struct adc5_device_data *dev_data;
-+	struct adc_tm5_gen3_channel_props *chan_props;
-+	unsigned int nchannels;
-+	struct device *dev;
-+	struct work_struct tm_handler_work;
-+};
-+
-+static int get_sdam_from_irq(struct adc_tm5_gen3_chip *adc_tm5, int irq)
-+{
-+	int i;
-+
-+	for (i = 0; i < adc_tm5->dev_data->num_sdams; i++) {
-+		if (adc_tm5->dev_data->base[i].irq == irq)
-+			return i;
-+	}
-+	return -ENOENT;
-+}
-+
-+static irqreturn_t adctm5_gen3_isr(int irq, void *dev_id)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = dev_id;
-+	int ret, sdam_num;
-+	u8 tm_status[2];
-+	u8 status, val;
-+
-+	sdam_num = get_sdam_from_irq(adc_tm5, irq);
-+	if (sdam_num < 0) {
-+		dev_err(adc_tm5->dev, "adc irq %d not associated with an sdam\n",
-+			irq);
-+		return IRQ_HANDLED;
-+	}
-+
-+	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_num, ADC5_GEN3_STATUS1,
-+			     &status, sizeof(status));
-+	if (ret) {
-+		dev_err(adc_tm5->dev, "adc read status1 failed with %d\n", ret);
-+		return IRQ_HANDLED;
-+	}
-+
-+	if (status & ADC5_GEN3_STATUS1_CONV_FAULT) {
-+		dev_err_ratelimited(adc_tm5->dev,
-+				    "Unexpected conversion fault, status:%#x\n",
-+				    status);
-+		val = ADC5_GEN3_CONV_ERR_CLR_REQ;
-+		adc5_gen3_status_clear(adc_tm5->dev_data, sdam_num,
-+				       ADC5_GEN3_CONV_ERR_CLR, &val, 1);
-+		return IRQ_HANDLED;
-+	}
-+
-+	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_num, ADC5_GEN3_TM_HIGH_STS,
-+			     tm_status, sizeof(tm_status));
-+	if (ret) {
-+		dev_err(adc_tm5->dev, "adc read TM status failed with %d\n", ret);
-+		return IRQ_HANDLED;
-+	}
-+
-+	if (tm_status[0] || tm_status[1])
-+		schedule_work(&adc_tm5->tm_handler_work);
-+
-+	dev_dbg(adc_tm5->dev, "Interrupt status:%#x, high:%#x, low:%#x\n",
-+		status, tm_status[0], tm_status[1]);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int adc5_gen3_tm_status_check(struct adc_tm5_gen3_chip *adc_tm5,
-+				     int sdam_index, u8 *tm_status, u8 *buf)
-+{
-+	int ret;
-+
-+	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_index, ADC5_GEN3_TM_HIGH_STS,
-+			     tm_status, 2);
-+	if (ret) {
-+		dev_err(adc_tm5->dev, "adc read TM status failed with %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = adc5_gen3_status_clear(adc_tm5->dev_data, sdam_index, ADC5_GEN3_TM_HIGH_STS_CLR,
-+				     tm_status, 2);
-+	if (ret) {
-+		dev_err(adc_tm5->dev, "adc status clear conv_req failed with %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_index, ADC5_GEN3_CH_DATA0(0),
-+			     buf, 16);
-+	if (ret)
-+		dev_err(adc_tm5->dev, "adc read data failed with %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static void tm_handler_work(struct work_struct *work)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = container_of(work, struct adc_tm5_gen3_chip,
-+							 tm_handler_work);
-+	struct adc_tm5_gen3_channel_props *chan_prop;
-+	u8 tm_status[2] = { };
-+	u8 buf[16] = { };
-+	int sdam_index = -1;
-+	int i, ret;
-+
-+	for (i = 0; i < adc_tm5->nchannels; i++) {
-+		bool upper_set, lower_set;
-+		int temp, offset;
-+		u16 code = 0;
-+
-+		chan_prop = &adc_tm5->chan_props[i];
-+		offset = chan_prop->tm_chan_index;
-+
-+		adc5_gen3_mutex_lock(adc_tm5->dev);
-+		if (chan_prop->sdam_index != sdam_index) {
-+			sdam_index = chan_prop->sdam_index;
-+			ret = adc5_gen3_tm_status_check(adc_tm5, sdam_index,
-+							tm_status, buf);
-+			if (ret) {
-+				adc5_gen3_mutex_unlock(adc_tm5->dev);
-+				break;
-+			}
-+		}
-+
-+		upper_set = ((tm_status[0] & BIT(offset)) && chan_prop->high_thr_en);
-+		lower_set = ((tm_status[1] & BIT(offset)) && chan_prop->low_thr_en);
-+		adc5_gen3_mutex_unlock(adc_tm5->dev);
-+
-+		if (!(upper_set || lower_set))
-+			continue;
-+
-+		code = get_unaligned_le16(&buf[2 * offset]);
-+		pr_debug("ADC_TM threshold code:%#x\n", code);
-+
-+		ret = adc5_gen3_therm_code_to_temp(adc_tm5->dev,
-+						   &chan_prop->common_props,
-+						   code, &temp);
-+		if (ret) {
-+			dev_err(adc_tm5->dev,
-+				"Invalid temperature reading, ret = %d, code=%#x\n",
-+				ret, code);
-+			continue;
-+		}
-+
-+		chan_prop->last_temp = temp;
-+		chan_prop->last_temp_set = true;
-+		thermal_zone_device_update(chan_prop->tzd, THERMAL_TRIP_VIOLATED);
-+	}
-+}
-+
-+static int adc_tm5_gen3_get_temp(struct thermal_zone_device *tz, int *temp)
-+{
-+	struct adc_tm5_gen3_channel_props *prop = thermal_zone_device_priv(tz);
-+	struct adc_tm5_gen3_chip *adc_tm5;
-+
-+	if (!prop || !prop->chip)
-+		return -EINVAL;
-+
-+	adc_tm5 = prop->chip;
-+
-+	if (prop->last_temp_set) {
-+		pr_debug("last_temp: %d\n", prop->last_temp);
-+		prop->last_temp_set = false;
-+		*temp = prop->last_temp;
-+		return 0;
-+	}
-+
-+	return adc5_gen3_get_scaled_reading(adc_tm5->dev, &prop->common_props,
-+					    temp);
-+}
-+
-+static int _adc_tm5_gen3_disable_channel(struct adc_tm5_gen3_channel_props *prop)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = prop->chip;
-+	int ret;
-+	u8 val;
-+
-+	prop->high_thr_en = false;
-+	prop->low_thr_en = false;
-+
-+	ret = adc5_gen3_poll_wait_hs(adc_tm5->dev_data, prop->sdam_index);
-+	if (ret)
-+		return ret;
-+
-+	val = BIT(prop->tm_chan_index);
-+	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
-+			      ADC5_GEN3_TM_HIGH_STS_CLR, &val, sizeof(val));
-+	if (ret)
-+		return ret;
-+
-+	val = MEAS_INT_DISABLE;
-+	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
-+			      ADC5_GEN3_TIMER_SEL, &val, sizeof(val));
-+	if (ret)
-+		return ret;
-+
-+	/* To indicate there is an actual conversion request */
-+	val = ADC5_GEN3_CHAN_CONV_REQ | prop->tm_chan_index;
-+	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
-+			      ADC5_GEN3_PERPH_CH, &val, sizeof(val));
-+	if (ret)
-+		return ret;
-+
-+	val = ADC5_GEN3_CONV_REQ_REQ;
-+	return adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
-+			       ADC5_GEN3_CONV_REQ, &val, sizeof(val));
-+}
-+
-+static int adc_tm5_gen3_disable_channel(struct adc_tm5_gen3_channel_props *prop)
-+{
-+	return _adc_tm5_gen3_disable_channel(prop);
-+}
-+
-+#define ADC_TM5_GEN3_CONFIG_REGS 12
-+
-+static int adc_tm5_gen3_configure(struct adc_tm5_gen3_channel_props *prop,
-+				  int low_temp, int high_temp)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = prop->chip;
-+	u8 buf[ADC_TM5_GEN3_CONFIG_REGS];
-+	u8 conv_req;
-+	u16 adc_code;
-+	int ret;
-+
-+	ret = adc5_gen3_poll_wait_hs(adc_tm5->dev_data, prop->sdam_index);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = adc5_gen3_read(adc_tm5->dev_data, prop->sdam_index,
-+			     ADC5_GEN3_SID, buf, sizeof(buf));
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Write SID */
-+	buf[0] = FIELD_PREP(ADC5_GEN3_SID_MASK, prop->common_props.sid);
-+
-+	/* Select TM channel and indicate there is an actual conversion request */
-+	buf[1] = ADC5_GEN3_CHAN_CONV_REQ | prop->tm_chan_index;
-+
-+	buf[2] = prop->timer;
-+
-+	/* Digital param selection */
-+	adc5_gen3_update_dig_param(&prop->common_props, &buf[3]);
-+
-+	/* Update fast average sample value */
-+	buf[4] &= ~ADC5_GEN3_FAST_AVG_CTL_SAMPLES_MASK;
-+	buf[4] |= prop->common_props.avg_samples | ADC5_GEN3_FAST_AVG_CTL_EN;
-+
-+	/* Select ADC channel */
-+	buf[5] = prop->common_props.channel;
-+
-+	/* Select HW settle delay for channel */
-+	buf[6] = FIELD_PREP(ADC5_GEN3_HW_SETTLE_DELAY_MASK,
-+			    prop->common_props.hw_settle_time_us);
-+
-+	/* High temperature corresponds to low voltage threshold */
-+	prop->low_thr_en = (high_temp != INT_MAX);
-+	if (prop->low_thr_en) {
-+		adc_code = qcom_adc_tm5_gen2_temp_res_scale(high_temp);
-+		put_unaligned_le16(adc_code, &buf[8]);
-+	}
-+
-+	/* Low temperature corresponds to high voltage threshold */
-+	prop->high_thr_en = (low_temp != -INT_MAX);
-+	if (prop->high_thr_en) {
-+		adc_code = qcom_adc_tm5_gen2_temp_res_scale(low_temp);
-+		put_unaligned_le16(adc_code, &buf[10]);
-+	}
-+
-+	buf[7] = 0;
-+	if (prop->high_thr_en)
-+		buf[7] |= ADC5_GEN3_HIGH_THR_INT_EN;
-+	if (prop->low_thr_en)
-+		buf[7] |= ADC5_GEN3_LOW_THR_INT_EN;
-+
-+	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index, ADC5_GEN3_SID,
-+			      buf, sizeof(buf));
-+	if (ret < 0)
-+		return ret;
-+
-+	conv_req = ADC5_GEN3_CONV_REQ_REQ;
-+	return adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
-+			       ADC5_GEN3_CONV_REQ, &conv_req, sizeof(conv_req));
-+}
-+
-+static int adc_tm5_gen3_set_trip_temp(struct thermal_zone_device *tz,
-+				      int low_temp, int high_temp)
-+{
-+	struct adc_tm5_gen3_channel_props *prop = thermal_zone_device_priv(tz);
-+	struct adc_tm5_gen3_chip *adc_tm5;
-+	int ret;
-+
-+	if (!prop || !prop->chip)
-+		return -EINVAL;
-+
-+	adc_tm5 = prop->chip;
-+
-+	dev_dbg(adc_tm5->dev, "channel:%s, low_temp(mdegC):%d, high_temp(mdegC):%d\n",
-+		prop->common_props.label, low_temp, high_temp);
-+
-+	adc5_gen3_mutex_lock(adc_tm5->dev);
-+	if (high_temp == INT_MAX && low_temp <= -INT_MAX)
-+		ret = adc_tm5_gen3_disable_channel(prop);
-+	else
-+		ret = adc_tm5_gen3_configure(prop, low_temp, high_temp);
-+	adc5_gen3_mutex_unlock(adc_tm5->dev);
-+
-+	return ret;
-+}
-+
-+static const struct thermal_zone_device_ops adc_tm_ops = {
-+	.get_temp = adc_tm5_gen3_get_temp,
-+	.set_trips = adc_tm5_gen3_set_trip_temp,
-+};
-+
-+static int adc_tm5_register_tzd(struct adc_tm5_gen3_chip *adc_tm5)
-+{
-+	unsigned int i, channel;
-+	struct thermal_zone_device *tzd;
-+	int ret;
-+
-+	for (i = 0; i < adc_tm5->nchannels; i++) {
-+		channel = ADC5_GEN3_V_CHAN(adc_tm5->chan_props[i].common_props);
-+		tzd = devm_thermal_of_zone_register(adc_tm5->dev, channel,
-+						    &adc_tm5->chan_props[i],
-+						    &adc_tm_ops);
-+
-+		if (IS_ERR(tzd)) {
-+			if (PTR_ERR(tzd) == -ENODEV) {
-+				dev_warn(adc_tm5->dev,
-+					 "thermal sensor on channel %d is not used\n",
-+					 channel);
-+				continue;
-+			}
-+			return dev_err_probe(adc_tm5->dev, PTR_ERR(tzd),
-+					     "Error registering TZ zone:%ld for channel:%d\n",
-+					     PTR_ERR(tzd), channel);
-+		}
-+		adc_tm5->chan_props[i].tzd = tzd;
-+		ret = devm_thermal_add_hwmon_sysfs(adc_tm5->dev, tzd);
-+		if (ret)
-+			return ret;
-+	}
-+	return 0;
-+}
-+
-+static void adc5_gen3_clear_work(void *data)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = data;
-+
-+	cancel_work_sync(&adc_tm5->tm_handler_work);
-+}
-+
-+static void adc5_gen3_disable(void *data)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = data;
-+	int i;
-+
-+	adc5_gen3_mutex_lock(adc_tm5->dev);
-+	/* Disable all available TM channels */
-+	for (i = 0; i < adc_tm5->nchannels; i++)
-+		_adc_tm5_gen3_disable_channel(&adc_tm5->chan_props[i]);
-+
-+	adc5_gen3_mutex_unlock(adc_tm5->dev);
-+}
-+
-+static void adctm_event_handler(struct auxiliary_device *adev)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = auxiliary_get_drvdata(adev);
-+
-+	schedule_work(&adc_tm5->tm_handler_work);
-+}
-+
-+static int adc_tm5_probe(struct auxiliary_device *aux_dev,
-+			 const struct auxiliary_device_id *id)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5;
-+	struct tm5_aux_dev_wrapper *aux_dev_wrapper;
-+	struct device *dev = &aux_dev->dev;
-+	int i, ret;
-+
-+	adc_tm5 = devm_kzalloc(dev, sizeof(*adc_tm5), GFP_KERNEL);
-+	if (!adc_tm5)
-+		return -ENOMEM;
-+
-+	aux_dev_wrapper = container_of(aux_dev, struct tm5_aux_dev_wrapper,
-+				       aux_dev);
-+
-+	adc_tm5->dev = dev;
-+	adc_tm5->dev_data = aux_dev_wrapper->dev_data;
-+	adc_tm5->nchannels = aux_dev_wrapper->n_tm_channels;
-+	adc_tm5->chan_props = devm_kcalloc(dev, aux_dev_wrapper->n_tm_channels,
-+					   sizeof(*adc_tm5->chan_props), GFP_KERNEL);
-+	if (!adc_tm5->chan_props)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < adc_tm5->nchannels; i++) {
-+		adc_tm5->chan_props[i].common_props = aux_dev_wrapper->tm_props[i];
-+		adc_tm5->chan_props[i].timer = MEAS_INT_1S;
-+		adc_tm5->chan_props[i].sdam_index = (i + 1) / 8;
-+		adc_tm5->chan_props[i].tm_chan_index = (i + 1) % 8;
-+		adc_tm5->chan_props[i].chip = adc_tm5;
-+	}
-+
-+	INIT_WORK(&adc_tm5->tm_handler_work, tm_handler_work);
-+
-+	/*
-+	 * Skipping first SDAM IRQ as it is requested in parent driver.
-+	 * If there is a TM violation on that IRQ, the parent driver calls
-+	 * the notifier (tm_event_notify) exposed from this driver to handle it.
-+	 */
-+	for (i = 1; i < adc_tm5->dev_data->num_sdams; i++) {
-+		ret = devm_request_threaded_irq(dev,
-+						adc_tm5->dev_data->base[i].irq,
-+						NULL, adctm5_gen3_isr, IRQF_ONESHOT,
-+						adc_tm5->dev_data->base[i].irq_name,
-+						adc_tm5);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	/*
-+	 * This drvdata is only used in the function (adctm_event_handler)
-+	 * called by parent ADC driver in case of TM violation on the first SDAM.
-+	 */
-+	auxiliary_set_drvdata(aux_dev, adc_tm5);
-+
-+	/*
-+	 * This is to cancel any instances of tm_handler_work scheduled by
-+	 * TM interrupt, at the time of module removal.
-+	 */
-+
-+	ret = devm_add_action(dev, adc5_gen3_clear_work, adc_tm5);
-+	if (ret)
-+		return ret;
-+
-+	ret = adc_tm5_register_tzd(adc_tm5);
-+	if (ret)
-+		return ret;
-+
-+	/* This is to disable all ADC_TM channels in case of probe failure. */
-+
-+	return devm_add_action(dev, adc5_gen3_disable, adc_tm5);
-+}
-+
-+static const struct auxiliary_device_id adctm5_auxiliary_id_table[] = {
-+	{ .name = "qcom_spmi_adc5_gen3.adc5_tm_gen3", },
-+	{ }
-+};
-+
-+MODULE_DEVICE_TABLE(auxiliary, adctm5_auxiliary_id_table);
-+
-+static struct adc_tm5_auxiliary_drv adctm5gen3_auxiliary_drv = {
-+	.adrv = {
-+		.id_table = adctm5_auxiliary_id_table,
-+		.probe = adc_tm5_probe,
-+	},
-+	.tm_event_notify = adctm_event_handler,
-+};
-+
-+static int __init adctm5_init_module(void)
-+{
-+	return auxiliary_driver_register(&adctm5gen3_auxiliary_drv.adrv);
-+}
-+
-+static void __exit adctm5_exit_module(void)
-+{
-+	auxiliary_driver_unregister(&adctm5gen3_auxiliary_drv.adrv);
-+}
-+
-+module_init(adctm5_init_module);
-+module_exit(adctm5_exit_module);
-+
-+MODULE_DESCRIPTION("SPMI PMIC Thermal Monitor ADC driver");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("QCOM_SPMI_ADC5_GEN3");
--- 
-2.25.1
-
+> +	.driver =3D {
+> +		.name =3D "clk-mt8189-topck",
+> +		.of_match_table =3D of_match_clk_mt8189_topck,
+> +	},
+> +};
+> +
+> +module_platform_driver(clk_mt8189_topck_drv);
+> +MODULE_LICENSE("GPL");
 
