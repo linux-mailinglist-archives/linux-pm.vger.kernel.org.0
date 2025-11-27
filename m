@@ -1,248 +1,208 @@
-Return-Path: <linux-pm+bounces-38770-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38771-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B5CAC8D611
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 09:41:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 113D5C8D6ED
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 10:05:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CB1CC34B710
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 08:41:07 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 90A3A34F3E9
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 09:05:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAC5431DDA4;
-	Thu, 27 Nov 2025 08:41:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0274A321428;
+	Thu, 27 Nov 2025 09:04:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Onn6ddKg"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ctPln5BG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE44F27FD40;
-	Thu, 27 Nov 2025 08:41:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE4B2302158
+	for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 09:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764232863; cv=none; b=f4aDdROJW27uZE36sqPsQ+yRD40fdT/xyEYXo7CzUq8xOByfWE4Ri0UugvE4IlUM8TUsB5AtfQgxgBUMJarUQGEY4l2vBKuqWbt7eJjQU1AAt2W1/14hR57ubrLKyATgJaif+lsbwb50ZK/NEwPFdEkLyHwj7dd4jXQEkOSLesg=
+	t=1764234298; cv=none; b=k5tJCT/q+ZB5XP5oZ87aLnEtGe476CvloresdrKsw1aygahf/Rcd0eRJV86A4+WQMzQp6CSiCbIwT/SwxfGVj+KSeP2onOM0ilPeHpjfBO8HxSlP8p2PNKCeARXh5GQ8HR7N0UpW65VCe1aioW9F7fGVPEym/jyHLol2jC91GrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764232863; c=relaxed/simple;
-	bh=no70wW7/i7eIpN6AOpshfb0j9DnumnLSUX5yx6QFFyY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=HaGf4Ky4ITFUmgSQKwY+/xqai0wARVnRsEG+8Sux98Vcdnexl7YTbCZh2Fi+mx9XnS/1AkXu1FVedA42ULiJ7FV6jPHxIeLCf5+MMoTeCNU0jfy6yf+MyHgz7O03KVVedQ6tBOlRQ6GdIcw4U61ktIfm9Vns7g7SwwARbpKxgrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Onn6ddKg; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764232862; x=1795768862;
-  h=date:from:to:cc:subject:message-id;
-  bh=no70wW7/i7eIpN6AOpshfb0j9DnumnLSUX5yx6QFFyY=;
-  b=Onn6ddKgd+yYyuWMWvNb3tvVBz1Qs57bVjv6YIapwJV+CQwMBeveOAk4
-   fVFVOY8FzuL3GisoZ4diz806z/XreexgQR3/hrw+X7bYVFJgBaMMOdl6Q
-   m3O2xzpiXAVIKVZ2UZjQsuxTZtQZrGT7Hbbnoog6TLhKRVMFZjb12VErS
-   SZCYS1OKCfysS8GKtuwIyhZ8HVEUdFIvkL4RelUx2OximtrVWy6XOabbL
-   19JMSa4UBeZVImltNQwfWRBaVkGjGn5jdAY4ueO1gPExLbmLeA5LdgLyY
-   kkKzxp3K4wuMt0mBXGd0O655lobI7ts02xwgZMzpjvgP0BkWOOLNviG0B
-   w==;
-X-CSE-ConnectionGUID: rfQ0p7tQTjSFA53UeBRUPA==
-X-CSE-MsgGUID: pK6CHMreQ2KvHms7X0cDrg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="76905416"
-X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
-   d="scan'208";a="76905416"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 00:41:01 -0800
-X-CSE-ConnectionGUID: WVn0awOvREeMRDIObOgiBA==
-X-CSE-MsgGUID: Uwz7ps/sQtiDeZxnrnj1Ww==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,230,1758610800"; 
-   d="scan'208";a="223879832"
-Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 27 Nov 2025 00:40:59 -0800
-Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vOXYf-000000003yS-1ZMf;
-	Thu, 27 Nov 2025 08:40:57 +0000
-Date: Thu, 27 Nov 2025 16:40:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:fixes] BUILD SUCCESS
- f06ad625deff6c704a9d9ff8d003a880ec5d380f
-Message-ID: <202511271620.b1LNRIpS-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1764234298; c=relaxed/simple;
+	bh=XC13jwgiZsbi0CzJcSV+qxZe5K6jOYa8S7iDkcDqslo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=noUXH94lyd31P+/N4iMe3GqivpxToHUee5EIB4ocmP3vGBgcnCZLGeY2sDQPjrMqAAYZaQ0OTryN8yWGMZZb9SqJhza6ydHVm5yJvj95p5Ja49i4QkA3Zvq1G0MS6uBmB3F5EoJuUaMopGoq5GCWPK7+HvpnZHLvyGEE58wJlH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ctPln5BG; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47778b23f64so3254415e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 01:04:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764234295; x=1764839095; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qzNVt4edw+6opeQvEovqvvtpzMRtvUD8paPkTQc5bO0=;
+        b=ctPln5BGwBuVTPFyjXQyNcI+G1+cjMJI5OEt9jDbGV+xQtsUQwOen57MYeVHsmmekf
+         aivxh/l1GWtZZVKv85H/KB3uVfWDVLKpV/qYqKJv2zX890J1UK90/N1lSq+Z+q5xCFK8
+         nWJ920iKik04zO8mPwTIVlV0obLV/iTRHHEYcmLRxowcVa47fXmbnk6wyghZnW1ICloH
+         /9cr3vCaWAmMAH2vEQS1fwp17Rg5s+DvfPUIuM0JAm7sIwnQDNpFpewl9bw+sMHCPVQw
+         mUvVimXafKNAXYBcMwdYjgkVGQMg1eVLG8CTgTJHr5yNmzWlrEOy2zYMzt1HL4vAHFJp
+         zScg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764234295; x=1764839095;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qzNVt4edw+6opeQvEovqvvtpzMRtvUD8paPkTQc5bO0=;
+        b=Hv2pEzgpba0ba7RODBd4BePXoOlgD/13MJjUcdrxPJGxVvrN4eolllvn5IjgYgreZe
+         uzmjuV3SKnkkddaL7NmAEjxMZRDOgovVFp14uwdxAruuWi51m41caxWKHX+PUr4cEtjc
+         2jbFiO2YbHCTgTGXL7k7BcZvGLtcre9M8q4pVO2Crny2JWIHPVEkGHgqLaXjnNqA+O6J
+         amUXfM4Jg8lJ2Ww/XxPqrjPqXVcsB4UX/lVQmA0vMOAHl0m5s/6ImxbOAZZjurbmsplT
+         Si9viGv31qAeLyCeLcKHL/63c6KoyIr6ijq2J1N3bMSJaSS2lEEWKzPVG7rJM2h8dTwI
+         8fIg==
+X-Forwarded-Encrypted: i=1; AJvYcCXjxpWWC8sOHTsOY7RaF36eHyOxiqpHB2hzclBQpsgsr0+oMcuno+LH0+foeAprCW0queQH8s1Mgw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5cwfNY6s7WPGTgKWnPw5BTeV3w0kPu8jnjDne1Z5cYT4zTkf+
+	tsrp/ccUX0k5sX3eGOUixbi3ca/CpEZMehkVSQrHsQm+HYzl4ESm2DdcMmYPvTMh9Oc=
+X-Gm-Gg: ASbGnctZZcLtoGF4rJillmEZMVq3nronkWNClLpU0p/qD8qtfndJrIomCbifvz6nUgX
+	aJaflfaqJ7K74lOrphHXnEC+r+2xQ3mWTxh/nsmb+QZ8nQcy19yX8jFi5Ht+UCf86Rn+T81tJR9
+	nXjBli9sYFoOrZg1HvAEFJlyp+43jik6n4yjMua8tgtWv7j2gZDWQuRVzUUYb1ELEw/Cfjd1Qj7
+	ci7erANpE+WJxO+iGDzI6OphpEPdJq6cl0z7CatdsYOoQnVrMs7pu77Vn1nbk0OQmWyKTUFjU4l
+	Mz+oShJWS+J7s51FeWWxQySJWG4zBSy6zEk0hILVhpBP4E+h7h+dnQyhyN17AOac7ZVZPGbhkBZ
+	/0MMd7eDV9iqn4OGMQ63coEz1kNdQaMwUkWD5EPBQCXmArarvVaMbLSynPevyUwXuDj7+XBxS1a
+	bQW4fFIeqH5wMUzfWw
+X-Google-Smtp-Source: AGHT+IFbciJc0QuPqY8817jh9ayaj34ju268qD8qT/yXzTe2XR/9rQ64lR1MMMrRT5JTdMmt+0pm/A==
+X-Received: by 2002:a05:600c:1c25:b0:46e:4586:57e4 with SMTP id 5b1f17b1804b1-477c114ed70mr327208565e9.24.1764234295194;
+        Thu, 27 Nov 2025 01:04:55 -0800 (PST)
+Received: from [10.11.12.107] ([5.12.85.52])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-479111438b9sm24372775e9.2.2025.11.27.01.04.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Nov 2025 01:04:54 -0800 (PST)
+Message-ID: <1704827d-f273-4360-bcd5-c18818a85034@linaro.org>
+Date: Thu, 27 Nov 2025 11:04:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 RESEND 2/3] thermal: exynos_tmu: Support new hardware
+ and update TMU interface
+To: =?UTF-8?B?7IaQ7Iug?= <shin.son@samsung.com>,
+ 'Bartlomiej Zolnierkiewicz' <bzolnier@gmail.com>,
+ 'Krzysztof Kozlowski' <krzk@kernel.org>,
+ "'Rafael J . Wysocki'" <rafael@kernel.org>,
+ 'Daniel Lezcano' <daniel.lezcano@linaro.org>,
+ 'Zhang Rui' <rui.zhang@intel.com>, 'Lukasz Luba' <lukasz.luba@arm.com>,
+ 'Rob Herring' <robh@kernel.org>, 'Conor Dooley' <conor+dt@kernel.org>,
+ 'Alim Akhtar' <alim.akhtar@samsung.com>, youngmin.nam@samsung.com
+Cc: 'Henrik Grimler' <henrik@grimler.se>, linux-pm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ 'Peter Griffin' <peter.griffin@linaro.org>,
+ =?UTF-8?Q?=27Andr=C3=A9_Draszik=27?= <andre.draszik@linaro.org>,
+ 'William McVicker' <willmcvicker@google.com>, jyescas@google.com
+References: <20251113064022.2701578-1-shin.son@samsung.com>
+ <CGME20251113064044epcas2p1b87addb21473eca7cc52052e4e2e9237@epcas2p1.samsung.com>
+ <20251113064022.2701578-3-shin.son@samsung.com>
+ <5a6a749b-b2b7-41bb-bcb4-a2342e7f4e98@linaro.org>
+ <015501dc5ea5$0c7dd460$25797d20$@samsung.com>
+ <401ed9b9-19a4-4a19-b397-0f353e9f0c97@linaro.org>
+ <019301dc5f4a$e9aadd60$bd009820$@samsung.com>
+Content-Language: en-US
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <019301dc5f4a$e9aadd60$bd009820$@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
-branch HEAD: f06ad625deff6c704a9d9ff8d003a880ec5d380f  Merge branch 'acpi-processor-fixes' into fixes
 
-elapsed time: 2440m
 
-configs tested: 155
-configs skipped: 1
+On 11/27/25 5:07 AM, 손신 wrote:
+> Hello, Tudor Ambarus
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Hi!
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-arc                              allmodconfig    clang-19
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    clang-19
-arc                   randconfig-001-20251126    gcc-13.4.0
-arc                   randconfig-001-20251127    clang-22
-arc                   randconfig-002-20251126    gcc-11.5.0
-arc                   randconfig-002-20251127    clang-22
-arm                               allnoconfig    clang-22
-arm                               allnoconfig    gcc-15.1.0
-arm                              allyesconfig    clang-16
-arm                      integrator_defconfig    clang-22
-arm                   randconfig-001-20251126    clang-22
-arm                   randconfig-001-20251127    clang-22
-arm                   randconfig-002-20251126    clang-22
-arm                   randconfig-002-20251127    clang-22
-arm                   randconfig-003-20251126    clang-19
-arm                   randconfig-003-20251127    clang-22
-arm                   randconfig-004-20251126    clang-22
-arm                   randconfig-004-20251127    clang-22
-arm                         s3c6400_defconfig    clang-22
-arm64                            allmodconfig    clang-16
-arm64                             allnoconfig    gcc-15.1.0
-csky                             allmodconfig    gcc-15.1.0
-csky                              allnoconfig    gcc-15.1.0
-hexagon                           allnoconfig    clang-22
-hexagon                           allnoconfig    gcc-15.1.0
-hexagon               randconfig-001-20251126    clang-22
-hexagon               randconfig-002-20251126    clang-22
-i386                              allnoconfig    gcc-14
-i386                              allnoconfig    gcc-15.1.0
-i386        buildonly-randconfig-001-20251127    clang-20
-i386        buildonly-randconfig-002-20251127    clang-20
-i386        buildonly-randconfig-003-20251127    clang-20
-i386        buildonly-randconfig-004-20251127    clang-20
-i386        buildonly-randconfig-005-20251127    clang-20
-i386        buildonly-randconfig-006-20251127    clang-20
-i386                  randconfig-011-20251127    clang-20
-i386                  randconfig-012-20251127    clang-20
-i386                  randconfig-013-20251127    clang-20
-i386                  randconfig-014-20251127    clang-20
-i386                  randconfig-015-20251127    clang-20
-i386                  randconfig-016-20251127    clang-20
-i386                  randconfig-017-20251127    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                         allnoconfig    clang-22
-loongarch                         allnoconfig    gcc-15.1.0
-loongarch             randconfig-001-20251126    gcc-15.1.0
-loongarch             randconfig-002-20251126    clang-22
-m68k                             allmodconfig    clang-19
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    clang-19
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-mips                             allmodconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                             allyesconfig    gcc-15.1.0
-nios2                            allmodconfig    clang-22
-nios2                             allnoconfig    clang-22
-nios2                             allnoconfig    gcc-11.5.0
-nios2                 randconfig-001-20251126    gcc-11.5.0
-nios2                 randconfig-002-20251126    gcc-9.5.0
-openrisc                         allmodconfig    clang-22
-openrisc                          allnoconfig    clang-22
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    clang-22
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                randconfig-001-20251126    gcc-8.5.0
-parisc                randconfig-001-20251127    gcc-13.4.0
-parisc                randconfig-002-20251126    gcc-15.1.0
-parisc                randconfig-002-20251127    gcc-13.4.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    clang-22
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                      bamboo_defconfig    clang-22
-powerpc                   bluestone_defconfig    clang-22
-powerpc                 linkstation_defconfig    clang-22
-powerpc                 mpc836x_rdk_defconfig    clang-22
-powerpc               randconfig-001-20251126    gcc-10.5.0
-powerpc               randconfig-001-20251127    gcc-13.4.0
-powerpc               randconfig-002-20251126    gcc-8.5.0
-powerpc               randconfig-002-20251127    gcc-13.4.0
-powerpc64             randconfig-001-20251126    clang-19
-powerpc64             randconfig-001-20251127    gcc-13.4.0
-powerpc64             randconfig-002-20251126    clang-22
-powerpc64             randconfig-002-20251127    gcc-13.4.0
-riscv                            allmodconfig    clang-16
-riscv                             allnoconfig    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    gcc-15.1.0
-riscv                 randconfig-001-20251126    gcc-10.5.0
-riscv                 randconfig-001-20251127    gcc-12.5.0
-riscv                 randconfig-002-20251126    clang-22
-riscv                 randconfig-002-20251127    gcc-12.5.0
-s390                             allmodconfig    gcc-15.1.0
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    gcc-15.1.0
-s390                  randconfig-001-20251126    gcc-8.5.0
-s390                  randconfig-001-20251127    gcc-12.5.0
-s390                  randconfig-002-20251126    gcc-8.5.0
-s390                  randconfig-002-20251127    gcc-12.5.0
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    clang-22
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-14
-sh                          kfr2r09_defconfig    clang-22
-sh                    randconfig-001-20251126    gcc-14.3.0
-sh                    randconfig-001-20251127    gcc-12.5.0
-sh                    randconfig-002-20251126    gcc-11.5.0
-sh                    randconfig-002-20251127    gcc-12.5.0
-sparc                             allnoconfig    clang-22
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20251126    gcc-8.5.0
-sparc                 randconfig-001-20251127    clang-22
-sparc                 randconfig-002-20251126    gcc-14.3.0
-sparc                 randconfig-002-20251127    clang-22
-sparc64                          allmodconfig    clang-22
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20251126    gcc-8.5.0
-sparc64               randconfig-001-20251127    clang-22
-sparc64               randconfig-002-20251126    clang-22
-sparc64               randconfig-002-20251127    clang-22
-um                                allnoconfig    clang-22
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251126    clang-19
-um                    randconfig-001-20251127    clang-22
-um                    randconfig-002-20251126    clang-22
-um                    randconfig-002-20251127    clang-22
-um                           x86_64_defconfig    gcc-14
-x86_64                            allnoconfig    clang-20
-x86_64                            allnoconfig    clang-22
-x86_64                              defconfig    gcc-14
-x86_64                randconfig-001-20251127    gcc-14
-x86_64                randconfig-002-20251127    gcc-14
-x86_64                randconfig-003-20251127    gcc-14
-x86_64                randconfig-004-20251127    gcc-14
-x86_64                randconfig-005-20251127    gcc-14
-x86_64                randconfig-006-20251127    gcc-14
-xtensa                            allnoconfig    clang-22
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                           allyesconfig    clang-22
-xtensa                randconfig-001-20251126    gcc-14.3.0
-xtensa                randconfig-001-20251127    clang-22
-xtensa                randconfig-002-20251126    gcc-10.5.0
-xtensa                randconfig-002-20251127    clang-22
-xtensa                    xip_kc705_defconfig    clang-22
+> 
+>> -----Original Message-----
+>> From: Tudor Ambarus [mailto:tudor.ambarus@linaro.org]
+>> Sent: Wednesday, November 26, 2025 6:22 PM
+>> To: 손신 <shin.son@samsung.com>; 'Bartlomiej Zolnierkiewicz'
+>> <bzolnier@gmail.com>; 'Krzysztof Kozlowski' <krzk@kernel.org>; 'Rafael J .
+>> Wysocki' <rafael@kernel.org>; 'Daniel Lezcano' <daniel.lezcano@linaro.org>;
+>> 'Zhang Rui' <rui.zhang@intel.com>; 'Lukasz Luba' <lukasz.luba@arm.com>;
+>> 'Rob Herring' <robh@kernel.org>; 'Conor Dooley' <conor+dt@kernel.org>;
+>> 'Alim Akhtar' <alim.akhtar@samsung.com>; youngmin.nam@samsung.com
+>> Cc: 'Henrik Grimler' <henrik@grimler.se>; linux-pm@vger.kernel.org; linux-
+>> samsung-soc@vger.kernel.org; devicetree@vger.kernel.org; linux-arm-
+>> kernel@lists.infradead.org; linux-kernel@vger.kernel.org; 'Peter Griffin'
+>> <peter.griffin@linaro.org>; 'André Draszik' <andre.draszik@linaro.org>;
+>> 'William McVicker' <willmcvicker@google.com>; jyescas@google.com
+>> Subject: Re: [PATCH v7 RESEND 2/3] thermal: exynos_tmu: Support new
+>> hardware and update TMU interface
+>>
+>> Hi, Shin Son,
+>>
+>> On 11/26/25 9:19 AM, 손신 wrote:
+>>>> Looking at the exynosautov9 registers that you described and
+>>>> comparing them with
+>>>> gs101 I see just 2 differences:
+>>>> 1/ exnosautov2 has a TRIMINFO_CONFIG2 register, while gs101 doesn't
+>>>> 2/ EXYNOSAUTOV920_PEND register fields differ from GS101
+>>> TRIMINFO_CONFIG2 doesn't exist on eav920 either; I simply misnamed it.
+>>> However, the PEND register indeed differs from GS101.
+>>>
+>>>> Given the similarities, and considering the EXYNOS9_ registers rename
+>> from:
+>>>> https://lore.kernel.org/linux-samsung-soc/20251117074140.4090939-5-
+>>>> youngmin.nam@samsung.com/
+>>>> would it make sense to use the SoC-era name instead of specific SoC,
+>> i.e.
+>>>> s/EXYNOSAUTOV920_/EXYNOS9_ and use the latter for both exynosautov9
+>>>> and gs101?
+>>>>
+>>> First of all, as far as I know, EXYNOS9 is not the same as exynosautov9,
+>> and exynosautov920 also differs from exynosautov9.
+>>
+>> See also see this patch, or maybe the entire patch set:
+>> https://lore.kernel.org/linux-samsung-soc/20251117074140.4090939-2-
+>> youngmin.nam@samsung.com/
+>>
+>> It's not just autov9 and gs101 that have similar TMU registers (with the
+>> two exceptions AFAICT), it's also exynos850 that seems identical with
+>> autov9.
+> 
+> Yes, Do you have any plans to upstream the GS101 TMU code? From what I understand,
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yes, I'm currently working on upstreaming the GS101 TMU code. My plan is to
+do the acpm tmu helpers and then integrate the gs101 TMU support with what
+will be the new exynos TMU driver.
+
+> Autov9 and exynos850 are unlikely to be upstreamed in their current form.
+
+From what I understand from your email exchanges with Daniel, you're going to
+propose a new driver. Is my understanding correct? Do you have a timeline for it?
+I'll then follow with the gs101 support.
+
+> 
+>> All seem to be part of the same "Exynos9-era" SoCs. Let's think about how
+>> gs101/exynos850 TMU addition will follow. Shall one use the EXYNOSAUTOV920
+>> registers? That seems misleading. Shall one redefine the entire register
+>> set?
+>> That won't fly because of the code duplication.
+> 
+> I kind of admit that.
+> 
+>> Thus I propose to use the EXYNOS9 prefix for the register definitions, and
+>> if there are SoCs with slight differences, that can be handled with
+>> compatible match data and specific SoC definitions, but only where things
+>> differ.
+> 
+> However, I am not sure whether Exynos2200, 7885, 990, 9810, 8890, 8895, or FSD share the same TMU hardware layout as exynosautov920.
+> So I’m wondering whether the EXYNOS9 prefix should be limited to GS101 and eav920, or if we should consider a different prefix that better reflects the grouping.
+
+exynos850 has the same reg layout as eav920 and gs101 too. If Exynos9-era is
+a common terminology used inside Samsung then we should be good to go with
+Exynos9 prefix I think. Especially since we have a predecessor, the renaming
+tried in pinctrl. But if you're not sure about it, use just EXYNOS_ then.
+
+Cheers,
+ta
 
