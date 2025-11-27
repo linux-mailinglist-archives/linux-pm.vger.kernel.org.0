@@ -1,164 +1,247 @@
-Return-Path: <linux-pm+bounces-38836-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38838-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01A0CC8FFB9
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 20:04:29 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F80C8FFC5
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 20:05:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8F09E4E539C
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 19:03:25 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3608D4E93EF
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 19:03:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4637F302155;
-	Thu, 27 Nov 2025 19:03:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BA21302755;
+	Thu, 27 Nov 2025 19:03:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mff.cuni.cz header.i=@mff.cuni.cz header.b="Vv4DYNI2"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="HXm5Ij3y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp1.ms.mff.cuni.cz (smtp-in1.ms.mff.cuni.cz [195.113.20.234])
+Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013029.outbound.protection.outlook.com [40.93.201.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD2279C8;
-	Thu, 27 Nov 2025 19:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.113.20.234
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764270202; cv=none; b=EawYjJvxXaARc7vyQllj8BYpcaSWbhX4gxLiRfERdbH3lnH69cYyWQb087WcM5fALzuaWMF9CAGO2mUabHBRTopiJHcla8j8xTJvXRXvEOcrGPB8O3nIZZ5CTWQMGqIAEKG/2ywOMcHBtSF8uMeXw/Dh5aFUDbSzZnjGBefOGQU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764270202; c=relaxed/simple;
-	bh=wfgiRGOQLwiLM+4FUs/uJ61GxSLx10RXTN/JQQ7sn5c=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W3S0rugkPSRXRpajkQqXAGUYr0KLLJQjVN3aJROKuDC1yExKitQbNnpTu/X1Xyx7lvyAR+gKhIaItrc9DtHxEdef4+/A+jLVo4Mmlgt1Dqdttdeu5IaV0+jjc5K0+RVvUKYoC/GDhAc/7R3NMMROnjT8l9dlxI82cvLiALfd8xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=matfyz.cz; spf=pass smtp.mailfrom=matfyz.cz; dkim=pass (2048-bit key) header.d=mff.cuni.cz header.i=@mff.cuni.cz header.b=Vv4DYNI2; arc=none smtp.client-ip=195.113.20.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=matfyz.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=matfyz.cz
-X-SubmittedBy: id balejk@matfyz.cz subject /postalCode=110+2000/O=Univerzita+20Karlova/street=Ovocn+5CxC3+5CxBD+20trh+20560+5C/5/ST=Praha,+20Hlavn+5CxC3+5CxAD+20m+5CxC4+5Cx9Bsto/C=CZ/CN=Karel+20Balej/emailAddress=balejk@matfyz.cz
-	serial F5FD910E8FE2121B897F7E55B84E351D
-	issued by /C=NL/O=GEANT+20Vereniging/CN=GEANT+20Personal+20CA+204
-	auth type TLS.CUNI
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mff.cuni.cz;
-	s=submission; t=1764270177; x=1765570177;
-	bh=12NHg5mpkkfFuDbyCvK5djSM2M++P/Z48X9ciVtOpl4=; h=From;
-	b=Vv4DYNI2rWg9QpBcBsDdAWrqJa5Wu67LMVgifVZOx5r4yu6PrSmW8afuQu5z7TMSJ
-	 xnyrJvrsGi1/oOI7eVkD1IvZgzzkjgtpYdoJSctWaM+YodaneOmndrblSKjP5IysgI
-	 zgjs5d/+jl8nZRwBIv5OYvk4xyz3RY+RlZcezbGwuZ7g6U3LbwV5qCNoJWOVQAZJOV
-	 /nzojzoFyRQHF4Dwugu/1Z+dmRyWs75j4yobsFKv8HO9Ci7veMLN4tlKDoKin45PtP
-	 KUc39RlSwV6RYes+Af14y/bk7fCpn5mgum03Mt2ZMZktr/smAXGKhOEgc6XdPyTGb6
-	 ojQ0UMV4XEcbA==
-Received: from localhost (nat2.prg.suse.com [195.250.132.146])
-	(authenticated)
-	by smtp1.ms.mff.cuni.cz (8.18.1/8.18.1) with ESMTPS id 5ARJ2tWM008160
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
-	Thu, 27 Nov 2025 20:02:57 +0100 (CET)
-	(envelope-from balejk@matfyz.cz)
-From: Karel Balej <balejk@matfyz.cz>
-To: =?UTF-8?q?Duje=20Mihanovi=C4=87?= <duje@dujemihanovic.xyz>,
-        Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Karel Balej <balejk@matfyz.cz>
-Subject: [PATCH 2/2] pmdomain: add audio power island for Marvell PXA1908 SoC
-Date: Thu, 27 Nov 2025 20:02:03 +0100
-Message-ID: <20251127190237.745-2-balejk@matfyz.cz>
-X-Mailer: git-send-email 2.51.2
-In-Reply-To: <20251127190237.745-1-balejk@matfyz.cz>
-References: <20251127190237.745-1-balejk@matfyz.cz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730BA8462;
+	Thu, 27 Nov 2025 19:03:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.29
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764270216; cv=fail; b=G19bbP/PzQuAvI1h2zwCjlVBHfr8swZ64X9O8+0KF5MiYNJQc+UI6KfspTA1cGkpD44n0W+kGyQbsbrUguftWR5tqjlZ679qX2+JC4hnxAA1MiSNjKY5kLSu4x0X/m7BrLSavCRIS7/U4m/BUoCj4bh/H+XEz0q4A2MpKX9nXw8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764270216; c=relaxed/simple;
+	bh=9IGAAZrbUqPU6W3RQIyUh7SelE02YCysmEuBGyxtOUI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=ck5rlhulBcihv4jwhW/qjQdSeLM6jViJZXZkiRf1ciQsgUhDOYC/3AbaGczRz6z+Va8Glu/JgwQtsuCmraR6TdFcI7FcCMCq1RtXhcw6UAsqErysSV/MPVME3djE2SMbwvwllpy3ounhDgGOLTN1PgCa1mDj+mRhY+fZxd8SSiM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=HXm5Ij3y; arc=fail smtp.client-ip=40.93.201.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Z9iNFk8cb8a3SsNsrp7HiIL4DVdUrmtYU90GwzyP1jkJ2nt5uvBdD1M3IjO190DqZ/Bh6+EsAOxtdEyZ6tuxtq7FIcVUnykw0SNdAAEpIcwpMypAvIB1r92wIesitZ5lcYnuL3pgNjhkQIjQ4q8Nv6pBB4KFBltVzvnh6bC1iMVPG4rIrpgTGg24Ydt/XZVIrEpW0wf9SzEWeJEuVFo1gd4H8YxPZkR2czEzEkSz0RGZ8Vu6UbXykeYgxyPCsv7F7vQNasOjX1B1tq75YNtOhgsOhdhe5EMxyhJIqCgujzTz72WRdu7nGOzUoa8/NFzyVXTzjMQz9YfTqEIY7zgQYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0USHeBaZQmkkO1YCBZ31wINjuwazMx8VRwgp9U4uZR4=;
+ b=RVHwAlDFZY7QuaguqxViwfJkNY56+laTIfeYq2cPcSzaXC876BckItCaWfX9kLAFYWaL3SbhpxBudZCHEkkUEN6zxnXNNfdQMkzSbs9whn8tIBYDmwbuNMM9kYLf4v9kJSlZQgdlsKJwrO6pV5goTEQ0/3+dxoqDD14Dr++AhSlAHymDcuxgoX/pU46IK7EcUb+QwHHToOR8Bli8pPyUtOPEyZ00cNnufWTXUpr+lLn8ZC7aWoco9KjyCP4jvWIkoRZ7YorUrICp/foc9RwfzBDv6KGjq97YzkcwqmBnLNc7rjrf6r4HMR8eM33ESXgXwVvnnqgeGZDX+TeAbuzRUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=huawei.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0USHeBaZQmkkO1YCBZ31wINjuwazMx8VRwgp9U4uZR4=;
+ b=HXm5Ij3y04Xq2zP4MsfqFXNNtBLvWFg5Mez0uu+8sBPpChfj5D7KgaZ1IF8S1tlS4eTiLo10qCNcF/4/jH5BudgM1X49LsD6E7pgXGRQwuC3JA2yhfblbygCSAwJ4/wgq21i0ShdGsuN3r5e5bavMel13aXakEhklz2O8rJYp0E=
+Received: from DS7PR05CA0091.namprd05.prod.outlook.com (2603:10b6:8:56::12) by
+ CH3PR12MB8995.namprd12.prod.outlook.com (2603:10b6:610:17e::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9366.13; Thu, 27 Nov 2025 19:03:29 +0000
+Received: from DS3PEPF000099D9.namprd04.prod.outlook.com
+ (2603:10b6:8:56:cafe::32) by DS7PR05CA0091.outlook.office365.com
+ (2603:10b6:8:56::12) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9388.4 via Frontend Transport; Thu,
+ 27 Nov 2025 19:03:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ DS3PEPF000099D9.mail.protection.outlook.com (10.167.17.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9366.7 via Frontend Transport; Thu, 27 Nov 2025 19:03:28 +0000
+Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Thu, 27 Nov
+ 2025 13:03:27 -0600
+Received: from [10.252.222.129] (10.180.168.240) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Thu, 27 Nov 2025 11:03:24 -0800
+Message-ID: <7487e99d-421b-4ac5-bb77-e61c3131bb13@amd.com>
+Date: Fri, 28 Nov 2025 00:33:24 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [GIT PULL] Urgent ACPI support fix for v6.18
+Content-Language: en-US
+To: "lihuisong (C)" <lihuisong@huawei.com>, "Rafael J. Wysocki"
+	<rafael@kernel.org>
+CC: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM
+	<linux-pm@vger.kernel.org>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, Linus Torvalds
+	<torvalds@linux-foundation.org>, <kprateek.nayak@amd.com>, <dhsrivas@amd.com>
+References: <CAJZ5v0g6c1HNbxxh088xh_nTgD-SE6c2qtDr81AgD1+by-jnKA@mail.gmail.com>
+ <1ea445d0-0949-4a28-9f76-325861a3c57f@huawei.com>
+From: "Longia, Amandeep Kaur" <AmandeepKaur.Longia@amd.com>
+In-Reply-To: <1ea445d0-0949-4a28-9f76-325861a3c57f@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Level: ****
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099D9:EE_|CH3PR12MB8995:EE_
+X-MS-Office365-Filtering-Correlation-Id: 042096bc-aea6-4dc9-6750-08de2de7a638
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|376014|1800799024|30052699003|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?YjZCSHU5MjhuWUQrcVZUbzZud3ZaRWFBNTlYQ0hlUWFYUVFUdlNYVlpDdUZL?=
+ =?utf-8?B?VzlRYXFvSXFnb2cvN2FvTHR6MnhwTzNVZEV0SzNNeDU1QnRpY3ROVDE2ajVq?=
+ =?utf-8?B?ZWZLSm9pUTlramc5eVpsc3B6T3ZPZU5IVmZMM0E2Z2FHeXorZXBuSXdUUTR0?=
+ =?utf-8?B?RU9EVFl4OGZWUm5DSXFwUEhRK3Y5N3crdDZrUWZxTTUzZzNpK1ErTFhZWTNj?=
+ =?utf-8?B?NmkzR1lhbnVKTHR5WGg4Mmw3QmVYQkhGZk1WaXpGczUrcG9wdXFxWVJpVEdN?=
+ =?utf-8?B?VHJ1bkxWbDZDZnVBQ1FvK3U0cEY3dkpSa1VFcW5CS2FFOGtjWXB3WjNlVDFk?=
+ =?utf-8?B?R3NNampIWUVvODNqRjlMYjROY3R6R3llN0JUdVBsV3g4SWlsMXFLOGdyV3FB?=
+ =?utf-8?B?Q21rOUlJdzlMbmlyT0lJbWZZekFhQXV5V3VoK0hwOEFzQ1pDdUNEcHlxd2to?=
+ =?utf-8?B?TjlqK09PNlRPT0hSSzlpN0I2WGJkeGpON3Fsb0g2M0FkL0FBY0pIZ1BqWnVB?=
+ =?utf-8?B?YlBuN09Ed3JVNU50NmhIYzZlVzlyZS9oYThGdlRWekdkU2lIM29HTEdvbzN5?=
+ =?utf-8?B?bjEvanJaSE1mcmFna2U4U2F6MzNRWWxHeEZwWVZvb0xYR0FJYmlZSTFLZEky?=
+ =?utf-8?B?eloyMHo4eU15RFZpYkEzQTdTVmU2TG54VjZLaTVQSUlaVGxSak1FK2M4c0ZG?=
+ =?utf-8?B?ZmhrNXFxV3NWVzBYWnExWjFBZ3dsTlZhaVdqOTQ0MEt5UUtyUGJLeXZLVjMw?=
+ =?utf-8?B?UjlqSVk5NlJWL05tRW5IWmVVTkxNYk9NeC9zTFVLVVpBa2VwYitHZjYrUWRJ?=
+ =?utf-8?B?bmV3dHRlNDM5RVh2NTZmTlBsdFdwYVp0RGtqWjZjMnZtNy81c1NIZDl4NEdm?=
+ =?utf-8?B?VkprWEpyZW9nWGdrVHpWVVd3SlNHL1l1c2c0MTcvdGFEZzZNWE9iYVIvbEdF?=
+ =?utf-8?B?K2MxUGV0YlliZU05dW0xM1FrRlhVSEFzWWFtMUZWZEVtQUdvbVBoSUtqR2gv?=
+ =?utf-8?B?RFhaTDNmTTJtRTZQNktkQ2RVS3dOa1ZMMnNRTWlCdC9BNlNFZlp2Ym1VdkdQ?=
+ =?utf-8?B?NDkvanJvTnpaZituc01hOUdMYlkxVWVPTk1uVFVlMVd5Qy9OcFBVMng4YnM0?=
+ =?utf-8?B?clpsZzdjcTNmU3ppdzN3ZGRnSVBWb2E4eVdCckNaQUlWdldXQ29PNDNZVUxG?=
+ =?utf-8?B?ZW9QU2o0aU1CTmM3TzZJbnNVK3k1YTZ5T0JQekhFVFUyQTVETGxocFJQV1pt?=
+ =?utf-8?B?MXQyNjFWTlYzQ0l3ZlhzM1dTWFk0bVN6Y2tUeEhIazFIYkJHY2trNHZubDYx?=
+ =?utf-8?B?RndYczlDSHYrUDIxc0c5bUZKZW1CcEY0OW1mTS9QZmR5UlVsNVBLdyswN3RU?=
+ =?utf-8?B?TnlpMHhNWlJsVW4yejJZcXBBbXdFZHNzbXlrcU85YVRuNUVqazd6MU53WE1T?=
+ =?utf-8?B?Y3ZGL3FNcTl4TDhINytPVVhLaXN2MlhPOGRtYm1mTFFJQkdkUTdDMkU4cVcv?=
+ =?utf-8?B?L0pxbVFxWUNPVjBsYWFSQksxOFJyNXdmNFJxNXdQaEVTdm4xVTVodG1JSklV?=
+ =?utf-8?B?ZDBBUDM0elBrQzNCbnpwU0RrelhJQU95MVcvNnZzWlRqV1UzMlc3dnp0UVA3?=
+ =?utf-8?B?ckE1NXMrc1NEYlZUODcrajFCR0t0eGlJb2lTMFhLZUVmaWVLVGc0MVcwVWli?=
+ =?utf-8?B?OG12M2FmQXVhOWJNQkUzZ1lJM0VDUkJBUDZ2a1E0cXFvdVNDbU5sU3UxWUZn?=
+ =?utf-8?B?T2NUbFRnYUplMzdjdTdUaUliaWxmbkhrMXExMThheW1ZV0Y1ZmdGS21xa25n?=
+ =?utf-8?B?MGRWK1Z1eGhua3hteXdGMzZDNjlaSG5EWC9JS2VHeEZ1VVA2b1cxa0NHeG1B?=
+ =?utf-8?B?QTJ3dUFOdW5nWmx3OU5IN21ZZ0VaSGNNbnlGbXBWTHdMRXNxbkR2TGZsNW1u?=
+ =?utf-8?B?VTlkY0NXNXhEdzdrSU5vb2RyT2Iwc0pDVjZrcHlCY01nQVZ0bUNxVFR1SnNx?=
+ =?utf-8?B?THBpNVlpbzF4MldEeE84VkFwYXN0WjhvMzF2WmhWMGw3RTVlN29heGhIVG1K?=
+ =?utf-8?B?UURnTjNYNE11ZEVPYldCZmtQVEl2ZENpUUVqOWNwaGlWYk0rdlVnQlhhOTdJ?=
+ =?utf-8?Q?iq9k=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024)(30052699003)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2025 19:03:28.1809
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 042096bc-aea6-4dc9-6750-08de2de7a638
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS3PEPF000099D9.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8995
 
-Define power domain which needs to be enabled in order for audio to work
-on the PXA1908-based samsung,coreprimevelte smartphone. In the
-downstream code, this power-on method is marked as specific to the ulcx
-series which is likely some variant of the board or some part of it. No
-other audio components needed for sound to work on this phone are
-currently available mainline but some successful testing was performed
-with the vendor variants of the respective drivers and with the domain
-forced always-on.
+Hi all,
 
-Signed-off-by: Karel Balej <balejk@matfyz.cz>
----
- .../marvell/pxa1908-power-controller.c        | 38 +++++++++++++++++--
- 1 file changed, 34 insertions(+), 4 deletions(-)
+On 11/27/2025 7:39 AM, lihuisong (C) wrote:
+> Hello Rafael,
+> 
+> 在 2025/11/26 20:54, Rafael J. Wysocki 写道:
+>> Hi Linus,
+>>
+>> Please pull from the tag
+>>
+>>   git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+>>   acpi-6.18-rc8
+>>
+>> with top-most commit 43ff36c4a5a574ee83b4b0d3f3d74f09a3a8c2d3
+>>
+>>   Revert "ACPI: processor: idle: Optimize ACPI idle driver registration"
+>>
+>> on top of commit ac3fd01e4c1efce8f2c054cdeb2ddd2fc0fb150d
+>>
+>>   Linux 6.18-rc7
+>>
+>> to receive an urgent ACPI support fix for 6.18.
+>>
+>> This reverts a commit that attempted to make the code in the ACPI
+>> processor driver more straightforward, but it turned out to cause
+>> the kernel to crash on at least one system, along with some further
+>> cleanups on top of it.
+> I just found that "ACPI: processor: idle: Optimize ACPI idle driver 
+> registration" depends on the change
+> about cpuhp_setup_state in the commit [1]. Or many CPUs don't create 
+> cpuidle directory.
+> What is the crash? Do you have releated trace?
+> 
+> [1] https://lore.kernel.org/all/20240529133446.28446-2- 
+> Jonathan.Cameron@huawei.com/
 
-diff --git a/drivers/pmdomain/marvell/pxa1908-power-controller.c b/drivers/pmdomain/marvell/pxa1908-power-controller.c
-index ff5e6e82d3f8..e32eb227f235 100644
---- a/drivers/pmdomain/marvell/pxa1908-power-controller.c
-+++ b/drivers/pmdomain/marvell/pxa1908-power-controller.c
-@@ -29,7 +29,10 @@
- #define POWER_POLL_TIMEOUT_US	(25 * USEC_PER_MSEC)
- #define POWER_POLL_SLEEP_US	6
- 
--#define NR_DOMAINS	5
-+#define APMU_AUD_CLK		0x80
-+#define AUDIO_ULCX_ENABLE	0x0d
-+
-+#define NR_DOMAINS	6
- 
- #define to_pxa1908_pd(_genpd) container_of(_genpd, struct pxa1908_pd, genpd)
- 
-@@ -59,9 +62,13 @@ static inline bool pxa1908_pd_is_on(struct pxa1908_pd *pd)
- {
- 	struct pxa1908_pd_ctrl *ctrl = pd->ctrl;
- 
--	return pd->data.id != PXA1908_POWER_DOMAIN_DSI
--		? regmap_test_bits(ctrl->base, APMU_PWR_STATUS_REG, pd->data.pwr_state)
--		: regmap_test_bits(ctrl->base, APMU_DEBUG, DSI_PHY_DVM_MASK);
-+	switch (pd->data.id) {
-+	case PXA1908_POWER_DOMAIN_AUDIO:
-+		return regmap_test_bits(ctrl->base, APMU_AUD_CLK, AUDIO_ULCX_ENABLE);
-+	case PXA1908_POWER_DOMAIN_DSI:
-+		return regmap_test_bits(ctrl->base, APMU_DEBUG, DSI_PHY_DVM_MASK);
-+	}
-+	return regmap_test_bits(ctrl->base, APMU_PWR_STATUS_REG, pd->data.pwr_state);
- }
- 
- static int pxa1908_pd_power_on(struct generic_pm_domain *genpd)
-@@ -123,6 +130,22 @@ static inline int pxa1908_dsi_power_off(struct generic_pm_domain *genpd)
- 	return regmap_clear_bits(ctrl->base, APMU_DEBUG, DSI_PHY_DVM_MASK);
- }
- 
-+static inline int pxa1908_audio_power_on(struct generic_pm_domain *genpd)
-+{
-+	struct pxa1908_pd *pd = to_pxa1908_pd(genpd);
-+	struct pxa1908_pd_ctrl *ctrl = pd->ctrl;
-+
-+	return regmap_set_bits(ctrl->base, APMU_AUD_CLK, AUDIO_ULCX_ENABLE);
-+}
-+
-+static inline int pxa1908_audio_power_off(struct generic_pm_domain *genpd)
-+{
-+	struct pxa1908_pd *pd = to_pxa1908_pd(genpd);
-+	struct pxa1908_pd_ctrl *ctrl = pd->ctrl;
-+
-+	return regmap_clear_bits(ctrl->base, APMU_AUD_CLK, AUDIO_ULCX_ENABLE);
-+}
-+
- #define DOMAIN(_id, _name, ctrl, mode, state) \
- 	[_id] = { \
- 		.data = { \
-@@ -159,6 +182,13 @@ static struct pxa1908_pd domains[NR_DOMAINS] = {
- 			.keep_on = true,
- 		},
- 	},
-+	[PXA1908_POWER_DOMAIN_AUDIO] = {
-+		.genpd = {
-+			.name = "audio",
-+			.power_on = pxa1908_audio_power_on,
-+			.power_off = pxa1908_audio_power_off,
-+		},
-+	},
- };
- 
- static void pxa1908_pd_remove(struct auxiliary_device *auxdev)
--- 
-2.51.2
+We have observed the same issue. After booting the system with the 
+latest kernel, the sysfs path /sys/devices/system/cpu/cpu*/cpuidle does 
+not exist. Bisecting between v6.18-rc7 (good) and master (bad) led us to 
+the following commit:
+
+43ff36c4a5a574ee83b4b0d3f3d74f09a3a8c2d3 Revert "ACPI: processor: idle: 
+Optimize ACPI idle driver registration"
+
+After debugging, we identified a code change that resolves the issue on 
+our systems. Below is the code diff:
+
+diff --git a/drivers/acpi/processor_driver.c 
+b/drivers/acpi/processor_driver.c
+index 7644de24d2fa..65e779be64ff 100644
+--- a/drivers/acpi/processor_driver.c
++++ b/drivers/acpi/processor_driver.c
+@@ -166,7 +166,7 @@ static int __acpi_processor_start(struct acpi_device 
+*device)
+         if (result && !IS_ENABLED(CONFIG_ACPI_CPU_FREQ_PSS))
+                 dev_dbg(&device->dev, "CPPC data invalid or not 
+present\n");
+
+-       if (cpuidle_get_driver() == &acpi_idle_driver)
++       if (!cpuidle_get_driver() || cpuidle_get_driver() == 
+&acpi_idle_driver)
+                 acpi_processor_power_init(pr);
+
+Thanks,
+Amandeep
+
+>>
+>>
+>> ---------------
+>>
+>> Rafael J. Wysocki (5):
+>>        Revert "ACPI: processor: Do not expose global variable 
+>> acpi_idle_driver"
+>>        Revert "ACPI: processor: idle: Redefine two functions as void"
+>>        Revert "ACPI: processor: idle: Rearrange declarations in header 
+>> file"
+>>        Revert "ACPI: processor: Remove unused empty stubs of some 
+>> functions"
+>>        Revert "ACPI: processor: idle: Optimize ACPI idle driver 
+>> registration"
+>>
+>> ---------------
+>>
+>>   drivers/acpi/processor_driver.c |   6 +--
+>>   drivers/acpi/processor_idle.c   | 115 +++++++++++++++ 
+>> +------------------------
+>>   include/acpi/processor.h        |  34 +++++++++---
+>>   3 files changed, 76 insertions(+), 79 deletions(-)
+>>
 
 
