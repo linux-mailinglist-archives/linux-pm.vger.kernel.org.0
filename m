@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-38783-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38784-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87275C8DFC3
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 12:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F1BA2C8DFEE
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 12:22:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D0DD3B600B
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 11:19:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 22AE03B6861
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 11:19:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8FB32D450;
-	Thu, 27 Nov 2025 11:18:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 277BB32C95C;
+	Thu, 27 Nov 2025 11:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dVgnyx1b"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wU3C7GTH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF50C3009ED
-	for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 11:18:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DA432C95E
+	for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 11:18:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764242326; cv=none; b=Yd1R7Q3zpV9BXRnxxu6PdXXxlh+TVMGpxLh6RrsimjLckFUBG90xzOVliBN3izC7zhbSuTO0puWXgUKst7ZFgkjfaeDFFgSaap0vZ0CU719jyR8Tz2l+KwvWp8xMdNyS8RIz2H6og7eq/P1jGbGgVvP2++yPNoBPaZRxWAceU8E=
+	t=1764242341; cv=none; b=OYtO1OFF9iWrBoPHNIkOiOQ+zQt7a2C0W373O9FYOP0e+Z5fWqtKcwlJAntjqd2z7kYCm3Oqs2n7cv1jAK9WHZY+2+lqEFkfElL7K1ugi0KRl62wLnEoLHUGKV/6rg5Eohz0H2RBLFUa3SG3hlIJm3TNZTp8eYj1+lt0NloXaZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764242326; c=relaxed/simple;
-	bh=84/FiJ7Wz12hpihHK173qSyLT7SNK3LQvodxQCupaeA=;
+	s=arc-20240116; t=1764242341; c=relaxed/simple;
+	bh=DyvL/Ta3eRXfwdz4u069RB97Z6vVKEhMegXkDdnHKPU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aQ7XYcwOnD3nKuGEh8zQY64tCq5LNlmZ3ZdptsxF+ptZKYbv1KnPjdEK/SgPcDWDislpEC8uzvhCv5Ue+gunEDSCx0rzfjJoUzPEhA+Rl44gwqRc/0yi99hd8PkHoucQsAN/Dm7bZ1mwP4rFHwWc4Tn9YiUGzvW81fOFtR4tPy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dVgnyx1b; arc=none smtp.client-ip=91.218.175.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=a6yo+AgpIXj+D9jArXbMVPguBxkcg4Ko1bsiNKQZtrgiazK1lsRJqD7kc7QadSbyuzXZ0fZerj2r8J52b918UBzUqem9/gx+GKimzlILQC0D3YQn9EQhiPkWI36VmEMCm1oCkbnBeonL299afiISt1ej2+MlVTsK7rgFDso7naE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wU3C7GTH; arc=none smtp.client-ip=95.215.58.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Thu, 27 Nov 2025 13:18:34 +0200
+Date: Thu, 27 Nov 2025 13:18:48 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1764242322; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	t=1764242336; h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=J4XJtN8r/GhA21vQyepW0SUPAkl49XRlmzDtT0JpHew=;
-	b=dVgnyx1bzMBX6vfni7/xpSwLvCitlel89bqlN01GPfWBSxOMLRwhZjeGFLkPo1eR9UFDZA
-	QVmI5iAZpsdgCn4CuPoSmxeozAqFsSVLz7nuMb/QC+IB3HxYc5MUhtcquzPS5a6rg4dNgU
-	XoE6E/fNAPB0Y1N2SPQNBcaAV2AZDcg=
+	bh=DyvL/Ta3eRXfwdz4u069RB97Z6vVKEhMegXkDdnHKPU=;
+	b=wU3C7GTHrn2xy27dZMgC7DbJuUZapFOyY7hp1V/7qATr1eGpNq/i2C/e95YVziLFwqI6Qf
+	Fdz8YbJhm05lnFFHAeHsDnUmDV9MQUNMCDDE18K8M+uU1W2tUcZR7jckkH1eTYkaAuiHDm
+	kcofG7VM9fwwutpUoLI03fS9iOKn/FI=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Matti Vaittinen <matti.vaittinen@linux.dev>
 To: Matti Vaittinen <mazziesaccount@gmail.com>,
@@ -61,8 +61,8 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
 	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH v6 07/17] mfd: rohm-bd71828: Use regmap_reg_range()
-Message-ID: <051154a1dc2706c87d1ec5369866a17297cf64b2.1764241265.git.mazziesaccount@gmail.com>
+Subject: [PATCH v6 08/17] mfd: rohm-bd71828: Use standard file header format
+Message-ID: <5d37d7a017caa081c03db67a4ff346277019e4e3.1764241265.git.mazziesaccount@gmail.com>
 Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
 References: <cover.1764241265.git.mazziesaccount@gmail.com>
 Precedence: bulk
@@ -72,131 +72,70 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jmj6tq80uQ3EwEbq"
+	protocol="application/pgp-signature"; boundary="yZqfrnVomjvN5Cww"
 Content-Disposition: inline
 In-Reply-To: <cover.1764241265.git.mazziesaccount@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 
 
---jmj6tq80uQ3EwEbq
+--yZqfrnVomjvN5Cww
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 =46rom: Matti Vaittinen <mazziesaccount@gmail.com>
 
-The regmap range tables tend to be somewhat verbose. Using the
-regmap_reg_range() can make the definitions slightly mode compact.
+The MFD subsystem uses C-style comments also in the 'file header'
+section. Switch to this for the sake of the consistency. The header
+content is not changed.
 
-Tidy the regmap range tables by using the regmap_reg_range().
-
+Suggested-by: Lee Jones <lee@kernel.org>
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
 ---
 Revision history:
- v2 =3D> :
- - no changes
- RFCv1 =3D> v2:
+ v5 =3D> v6
  - New patch
 ---
- drivers/mfd/rohm-bd71828.c | 64 +++++++++++---------------------------
- 1 file changed, 18 insertions(+), 46 deletions(-)
+ drivers/mfd/rohm-bd71828.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/mfd/rohm-bd71828.c b/drivers/mfd/rohm-bd71828.c
-index 84a64c3b9c9f..2a43005b67ee 100644
+index 2a43005b67ee..218945a8ec94 100644
 --- a/drivers/mfd/rohm-bd71828.c
 +++ b/drivers/mfd/rohm-bd71828.c
-@@ -157,55 +157,27 @@ static struct mfd_cell bd71828_mfd_cells[] =3D {
- };
+@@ -1,8 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+-//
+-// Copyright (C) 2019 ROHM Semiconductors
+-//
+-// ROHM BD71828/BD71815 PMIC driver
++/*
++ * Copyright (C) 2019 ROHM Semiconductors
++ *
++ * ROHM BD71828/BD71815 PMIC driver
++ */
 =20
- static const struct regmap_range bd71815_volatile_ranges[] =3D {
--	{
--		.range_min =3D BD71815_REG_SEC,
--		.range_max =3D BD71815_REG_YEAR,
--	}, {
--		.range_min =3D BD71815_REG_CONF,
--		.range_max =3D BD71815_REG_BAT_TEMP,
--	}, {
--		.range_min =3D BD71815_REG_VM_IBAT_U,
--		.range_max =3D BD71815_REG_CC_CTRL,
--	}, {
--		.range_min =3D BD71815_REG_CC_STAT,
--		.range_max =3D BD71815_REG_CC_CURCD_L,
--	}, {
--		.range_min =3D BD71815_REG_VM_BTMP_MON,
--		.range_max =3D BD71815_REG_VM_BTMP_MON,
--	}, {
--		.range_min =3D BD71815_REG_INT_STAT,
--		.range_max =3D BD71815_REG_INT_UPDATE,
--	}, {
--		.range_min =3D BD71815_REG_VM_VSYS_U,
--		.range_max =3D BD71815_REG_REX_CTRL_1,
--	}, {
--		.range_min =3D BD71815_REG_FULL_CCNTD_3,
--		.range_max =3D BD71815_REG_CCNTD_CHG_2,
--	},
-+	regmap_reg_range(BD71815_REG_SEC, BD71815_REG_YEAR),
-+	regmap_reg_range(BD71815_REG_CONF, BD71815_REG_BAT_TEMP),
-+	regmap_reg_range(BD71815_REG_VM_IBAT_U, BD71815_REG_CC_CTRL),
-+	regmap_reg_range(BD71815_REG_CC_STAT, BD71815_REG_CC_CURCD_L),
-+	regmap_reg_range(BD71815_REG_VM_BTMP_MON, BD71815_REG_VM_BTMP_MON),
-+	regmap_reg_range(BD71815_REG_INT_STAT, BD71815_REG_INT_UPDATE),
-+	regmap_reg_range(BD71815_REG_VM_VSYS_U, BD71815_REG_REX_CTRL_1),
-+	regmap_reg_range(BD71815_REG_FULL_CCNTD_3, BD71815_REG_CCNTD_CHG_2),
- };
-=20
- static const struct regmap_range bd71828_volatile_ranges[] =3D {
--	{
--		.range_min =3D BD71828_REG_PS_CTRL_1,
--		.range_max =3D BD71828_REG_PS_CTRL_1,
--	}, {
--		.range_min =3D BD71828_REG_PS_CTRL_3,
--		.range_max =3D BD71828_REG_PS_CTRL_3,
--	}, {
--		.range_min =3D BD71828_REG_RTC_SEC,
--		.range_max =3D BD71828_REG_RTC_YEAR,
--	}, {
--		/*
--		 * For now make all charger registers volatile because many
--		 * needs to be and because the charger block is not that
--		 * performance critical.
--		 */
--		.range_min =3D BD71828_REG_CHG_STATE,
--		.range_max =3D BD71828_REG_CHG_FULL,
--	}, {
--		.range_min =3D BD71828_REG_INT_MAIN,
--		.range_max =3D BD71828_REG_IO_STAT,
--	},
-+	regmap_reg_range(BD71828_REG_PS_CTRL_1, BD71828_REG_PS_CTRL_1),
-+	regmap_reg_range(BD71828_REG_PS_CTRL_3, BD71828_REG_PS_CTRL_3),
-+	regmap_reg_range(BD71828_REG_RTC_SEC, BD71828_REG_RTC_YEAR),
-+	/*
-+	 * For now make all charger registers volatile because many
-+	 * needs to be and because the charger block is not that
-+	 * performance critical.
-+	 */
-+	regmap_reg_range(BD71828_REG_CHG_STATE, BD71828_REG_CHG_FULL),
-+	regmap_reg_range(BD71828_REG_INT_MAIN, BD71828_REG_IO_STAT),
- };
-=20
- static const struct regmap_access_table bd71815_volatile_regs =3D {
+ #include <linux/gpio_keys.h>
+ #include <linux/i2c.h>
 --=20
 2.52.0
 
 
---jmj6tq80uQ3EwEbq
+--yZqfrnVomjvN5Cww
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkoM4oACgkQeFA3/03a
-ocWrOQf9HX3J8kxocBJTFX59Pt2B0200an3P3gpnnbchIVdHYVLtGjX7HmhqvRhg
-tfbZSZObEC0E8ZfMsx9f7rPW2bP9HutlNVvB1W+E72yoBP3Mnye59CDLIz+tuZdJ
-jduIDetqNJuCeWLyXTHHBgftDSEtTvU2r/LsSm32XRHdi0OBdxNEXiK2l3OHM7lM
-g/Chzav4OB5t2o3ea2pvJi27IbXiCZMDRvMebmYoZsHHO+npFFCYuoY94O6gH+vm
-0S4kKRMsAAbwO92QtjEfEik9zD2/frVCBJhpzfNSjTuBf6OOlmfX/o0rboEdw5PH
-RwusMmzIdsgK77Qttpd3NfeUqklDXg==
-=Fjk3
+iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmkoM5gACgkQeFA3/03a
+ocW6mggAqCNEjP5xVnKh5+CKXJdSGxhbhrOfCmaVlZ6GLwz+RY5uIsq6tfdwN2JD
+LTt/u4b0/2MJtY9cfNDCm/67qd6zPZ54tgDTXZ6id3skpuD20tcCKVrnIvYYIven
+iwFhvBN1xtQRPl69+cTwjQZa/iLvyk/wGYzze/RfZutgVu4I2comKzKCoElRZB+e
+3cuiC11UqPviReTVxp9LTXDCKkPE+ttMsvw49oBOpIfhwKtvFOvKW0/4cnoCvErD
+D5se4+hYHgI9srgAPyaWsdboxLbm/BGv2RWdetd3Y2Bu1ZYrkFCb/4NBpZT7mKJY
+WW5ORMZwjl0MAmXVLn5f45QAFG0D+Q==
+=ZwmJ
 -----END PGP SIGNATURE-----
 
---jmj6tq80uQ3EwEbq--
+--yZqfrnVomjvN5Cww--
 
