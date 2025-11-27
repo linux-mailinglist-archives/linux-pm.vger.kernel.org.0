@@ -1,262 +1,463 @@
-Return-Path: <linux-pm+bounces-38794-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38795-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCF33C8E0C5
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 12:29:46 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99DC0C8E110
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 12:38:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A95A834F097
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 11:29:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 622484E59F9
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 11:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2EE632AACC;
-	Thu, 27 Nov 2025 11:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="Yc8D2y15"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB9B32B9B1;
+	Thu, 27 Nov 2025 11:38:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012015.outbound.protection.outlook.com [52.101.126.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E6A325735;
-	Thu, 27 Nov 2025 11:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764242980; cv=fail; b=NMpgbv3ta1a7hLjrnSTKfPKfkdl9AD3UAs0ckqzXjawX8xOl7Cx16P8zVVo6RGrj6C7Kso4TGiVlPbLwozgi+VZU/YL3mj7Zsd6w+z3ya2IAJ2bLAAfdXuJiK/C7suqQSO/mNipSxgqP0brVggZRhK1EwXpM99b4vvO+Exw2XWU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764242980; c=relaxed/simple;
-	bh=RJZH1B6/1q0Yv+871qsBLGGnKcvW/5THGden5BgtnBs=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=sZjZzzXW76NELCq4touoX4H9aL80KSD3X7Fhnul1isamhqvAJVcGX1+nQUQouwGnj7WdYV6U2FM7LyjAFIjWM3xa/SkGfUKsy9OTF8Ux5wEtLzyO9qcUKRf1q7gl8OdPpMi+9+R4XTrBb2HYwR4HR0JSyFgSD+dDaELbnBBsvl0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=Yc8D2y15; arc=fail smtp.client-ip=52.101.126.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VSxTzqjvgYlchOmxTmtsxIHkXa2G3VJcta9anzTtnSpUbePJUFOxd9Y24uMkB9z74Sc6ZOMFOGddqW8UxPkimYZ49sWmJz9tHLShHwAq1xrDiGsAhCU8IqiFEdIGeggKirbfABtAknSx2Z+VvDehLf4+G5NDTASLSZRf+prB2g0vc1pIqaniBQu/tF2BerLaYQGpriXwwhG2/j+9Z3PYn6+V8NvRSiCtebyv4C4DpzuIUh9tyKwGKZnIyzejN5fd9w3dhwI4Apli/TPw79OVK9Qw4sxQbYLrwH+CZozJWEPQEbF+9/t3lPMpROOZV3BSWLUFwZbrlrAyXGt7K9E+HA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GWTiNR8EsTUumRlsu/gyYxv+RFLSNq4wAdg5IuGlreM=;
- b=lHOyjmHkqLiW3M1c6BcEE2g/R5r8sGAi6sz6ZKb2OKbvEvfdspV8rVjulXXgm038vgraHJ17T4WAxZgGOqNGk8jw234vOO9ZsVNg5NDCSI0/5/ZZTalXbtTLp1+S6MyyEhMLcyYZ6JuJ8R0qH8kOvbavBCsLbOeaHr94tx4xD26rl72P8JqT9Ztn3PJwjP8dYJXZFxw/YvYSrey6a/ewncd2T7Sij5A2vdNyqr0BELtydfIJZgSJKb2dgtk8U5jnVqAexMUK4Tq6jKP3KCW8j5uRT74B86Sp4tV+Mom26Mww9/egiVOqdhREfZ3l9ZPhIcAky9/aSuezLDnolGZLGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GWTiNR8EsTUumRlsu/gyYxv+RFLSNq4wAdg5IuGlreM=;
- b=Yc8D2y15Vqg9MM6uiC0PklGXLB7QscyHi43UwsAQ63HSxiuY9TAmqvYU7gZ/ewFMOfHCN5j5psI/CyrSmWenSHhBSB0PEVorcdBIoHdpY+heAFnnkFH0wdaOVGux05codoh0xosmTSIAs4wCwrVF5lC9/FokPV83k1In0UB6Uz41o3lNsye6GXTCTst/6hG8VnuKT2ruS01Q2ppbKYTDiq331zg76rJ9IedAP+urOm5UeE5xQF1BJauycs35P86HjnqmMHtB9Kh0fYPjnshUVAJp1oNgETHP07fyevzeflaaS/TfRwPhsdV6nKx2wMlxGXERnLp937XKMEIaj5P1ZQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from KL1PR06MB7401.apcprd06.prod.outlook.com (2603:1096:820:146::12)
- by SEZPR06MB4998.apcprd06.prod.outlook.com (2603:1096:101:4b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.15; Thu, 27 Nov
- 2025 11:29:35 +0000
-Received: from KL1PR06MB7401.apcprd06.prod.outlook.com
- ([fe80::6f03:984f:82ec:6846]) by KL1PR06MB7401.apcprd06.prod.outlook.com
- ([fe80::6f03:984f:82ec:6846%7]) with mapi id 15.20.9366.012; Thu, 27 Nov 2025
- 11:29:35 +0000
-Message-ID: <4f4dea0a-21b1-438c-94ae-9a785ad42569@vivo.com>
-Date: Thu, 27 Nov 2025 19:29:31 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] PM: runtime: Fix I/O hang due to race between resume
- and runtime disable
-Content-Language: en-US
-To: Bart Van Assche <bvanassche@acm.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Jens Axboe <axboe@kernel.dk>, Pavel Machek <pavel@kernel.org>,
- Len Brown <lenb@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>,
- linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20251126101636.205505-1-yang.yang@vivo.com>
- <20251126101636.205505-2-yang.yang@vivo.com>
- <CAJZ5v0i1YLiri9oiiq2W6_KSbqGuWOqdrMPrOf=do-DdW=_rfA@mail.gmail.com>
- <1a2d2059-0548-4c5f-a986-5081447c3325@vivo.com>
- <CAJZ5v0iSgrLzsjh+bvF2=rxxhYcBetJ6V-joWaQud4ahkm1GkQ@mail.gmail.com>
- <9b6e7d55-6a1f-490e-98c7-3c04f85f7444@acm.org>
- <CAJZ5v0hJw0WdHpqgUc5bz5qCSUNNKHg7i5-sNYeZcDYwRj21qw@mail.gmail.com>
- <6df79ec0-f5b3-4d75-95b1-03e488d45e7f@acm.org>
-From: YangYang <yang.yang@vivo.com>
-In-Reply-To: <6df79ec0-f5b3-4d75-95b1-03e488d45e7f@acm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR04CA0203.apcprd04.prod.outlook.com
- (2603:1096:4:187::22) To KL1PR06MB7401.apcprd06.prod.outlook.com
- (2603:1096:820:146::12)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCFD32AAC4;
+	Thu, 27 Nov 2025 11:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764243494; cv=none; b=hNZbHq10h+c4Q++K/jNz5/QeJTqUZrf18Q/JuvQpwWNqo1L4KoqH72RT6WaPdVKYtBkDroXdYPBMcClDJLguKQoMagZP8lSyAxnfru7qFytqYSe2PU3T4hx25liArU9B2x5vz6nwvzbipnO0jfrQKTZHEmASTnJ+kw1D2QvnizM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764243494; c=relaxed/simple;
+	bh=baktSXSGzehKpc845xZ9D5zy9Pp0XDza9T9sHnWZzJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z7UwkYCeds6LhZJihJ6Xp46gy3bk9ER1OhMSO124b9BCNU2bl51czDy2w/njAejInhHr0VX/o+fcvPfsN5yafWUBSrE6gexChSGdqrX2/ikdxLSprD2Jf6WKeMKGY4Rp6rcOeeKucFrl0Gfh/SoPA2ORI2PPkMN59d5POpY8m8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
+Received: from localhost (unknown [116.232.18.222])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dlan)
+	by smtp.gentoo.org (Postfix) with ESMTPSA id C3216341FD3;
+	Thu, 27 Nov 2025 11:38:11 +0000 (UTC)
+Date: Thu, 27 Nov 2025 19:38:00 +0800
+From: Yixun Lan <dlan@gentoo.org>
+To: Shuwei Wu <shuweiwoo@163.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] thermal: K1: Add driver for K1 SoC thermal sensor
+Message-ID: <20251127113800-GYA1795104@gentoo.org>
+References: <20251127-b4-k1-thermal-v1-0-f32ce47b1aba@163.com>
+ <20251127-b4-k1-thermal-v1-2-f32ce47b1aba@163.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR06MB7401:EE_|SEZPR06MB4998:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd161e03-f508-4cc4-b6d3-08de2da83ddc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?d1FPNkJ1SnV6ck1PV3R1MHZFMjJON3I3WklmYzAwZjRONGhJbU40ZlVHT1or?=
- =?utf-8?B?V2xRUmNoeVhWSitpOGtXcnVQOG1KM2ZYcXlpdDc2Q2txalVaVzFrcGREL1ha?=
- =?utf-8?B?WXdZQmpFdk1pQ2dLZVp4R3d4cGx3N2htczZsbXBudGN3bHF3VXVjMTJuMWxT?=
- =?utf-8?B?bThzOTBvOWJBT2dteTQwQTVCUWFiMytqWG1hUGVFZjdadVJwdE4xNDBpdmNK?=
- =?utf-8?B?RFAySUs3U2pTdmh2djVKUFl6RFdNWG1wUlRINkhoZmdsVVQ5SkdhckZVeENK?=
- =?utf-8?B?Mkp6K1g3V3JBZWpDd2xRV2wrRC9UVjVzZ3BxZHo1dDI5M3IrcmIyWFRTVkI2?=
- =?utf-8?B?UlMrOFQ4NVp3RVZVOTBaaTl1M3ltdnFpZGl5bk1jRGJBY2s3Q3o3dWtpY1Bt?=
- =?utf-8?B?c1lpSUdqb3UwYnNyRWhxdHJuWTZ4dkh2RDl0eUt3d1NYSFZyL0VpTi84dm83?=
- =?utf-8?B?YmlwYnEzb2xqV3E0cTZLanRwNDJIeUNSQWN2RjZiS1JVdWZycVFnYW41c2Vl?=
- =?utf-8?B?dS9LdGEzRk1obk93aHNGTEpKN0I3RzhYZENDUmNjMmpJOSs5Kzc0K3NDcmJw?=
- =?utf-8?B?Zm9oeWZ5dFB0eE9JOFNDbk9vbmJtM0xRM3FSM0RkNS9QZldOcmRPU1d4OVpy?=
- =?utf-8?B?OGV4QlVyR2Z2QkJXT0M0cHgwTVhhai9vVy8rOVFkbytPVlVxWmN6VVd4VlhJ?=
- =?utf-8?B?cW95QUo1dVllVithZjdrYTd2UkRwWEIwNHFHMVVWQlJ4c2FMc1hNbWk0ellS?=
- =?utf-8?B?QkRDbG5UOHp2dnRYUU1LTXI2YktEc0o0OVhLdmxhWGJlNlRaUFROTzhLN3FH?=
- =?utf-8?B?cmZxSVJ1OXJyNDVrSnFXY1BwNldia1NFcHJtcTRBSzI2YVZHUnEvUGJSNFI0?=
- =?utf-8?B?bkpXanFvQjhwMjhOd0ZWVkVxQTRaeXNTb3hqdmVHb0dQNW01dWpVdTNiYmx5?=
- =?utf-8?B?M3FaRjc3cVdFeFpra0NYb3NTeVIybGtDQ0VFN082YnZLVi9JRlBLTVhudXhr?=
- =?utf-8?B?MVhrOXhWQUdpZ0gwTVhOMkRsQjF6dC9XUk0raXI0L0QxZEcxdkEraVJDUlJI?=
- =?utf-8?B?dm4rNGJqbTc2cUR5WWFnR0Y5QmI3anJIMERQbXg1K0ZMRnA2NENwZHpod01J?=
- =?utf-8?B?aEJrb3BwaTRGbk5NNzBTT0ExYmVXTE1VTW9LYnk1bHY4ajhxRWo5WXI5Unlz?=
- =?utf-8?B?QlJtVk51VGNBOHlwdlV2ZGpScWhqSjNLVjFqaVZ0N3p4aHJlTDdQQUN6eVYx?=
- =?utf-8?B?SThuZVpGeWdGd1NGdjFhKzMwS3hPSVloUGlVVEpzY3Y1TVQwTnIwOTlmaEM5?=
- =?utf-8?B?TlpnMHI3MWlUR2kwMHpQM21mQjRnMElqZXpWNFZBVVpJSmI2K05SMEJrN0xn?=
- =?utf-8?B?R0h5K2NkT2NGUXpwRkFtN2ZXUnpwUVFXajR0MlM4MzkzU1RqYlNteGJNMWxS?=
- =?utf-8?B?M2JXN3VVSWw3WHRTS2dLdFFreGVxTjBGMDZpdUtmTnJpVE01ZXNJVDYwaUhI?=
- =?utf-8?B?NEhFL0ppalBhMW1Eczc0Z0hzMXBiUE9ZaU5oSUEzMnUxM210V1cwZngwakVF?=
- =?utf-8?B?T3g5WDQ4QXpBZ0VyRFpueXJ0OEYwNkZHZWxJWjZWOGE3UmJKSXgxRUJ5dGVE?=
- =?utf-8?B?UjIrZVhPeGRJdUMzNTBRQ0VmLzZKOTFCQzRVMkhWcnFmOS92YmJsSjJPNXhL?=
- =?utf-8?B?T0pkUHVOUUtlWGo0UXV1alVNT1pVbDRXVlYrMUFKQ0dpZ1JzOGtRU1F3MGdq?=
- =?utf-8?B?QmdTdkZYQnNEcEtRT2MyN2NVc3Y0NDJINnBXWFd3eEtvT2FTL0FSdERjWWpo?=
- =?utf-8?B?bldUYTRkOStIMmYyM2xmVitYMUplaGZHYXpFRHQ3VG90RDFkVXdFVVM4Q2Qv?=
- =?utf-8?B?VGpMNzlJSTUyUDJLZHU4bk5WdHoxUytrVm92RmNOOWpiV2ovVnkyQ1VxZ2Nt?=
- =?utf-8?Q?Qzoape/07fSgpVjTaYrn7Sxj+rUv1SCr?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB7401.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?K0R4dGlpM2ZiVExOZHQ2ZDZTK2N0NGwvZDAzd2xGRmlFZVZvQlhxV0VocDZx?=
- =?utf-8?B?c3FSbERlUEVNMXFicGppQVVXc0xvbmVGbTZWUTB5OFpyUjlVSlJjaEZmVzRw?=
- =?utf-8?B?Qjk4Z0E1cVJyVTZJWHF1QWYxdUxReXhWRERBa2hwOG1sM3dUZmFOWXpCTE1V?=
- =?utf-8?B?T3R2VmZwQWNMaHZtVmxIQ041NGttcVVrQ3prZ2pTTzNQUFdLSG5Qajc4VGps?=
- =?utf-8?B?cGJvemxicGJ1V3FTUjVUY0xXVEFMemROZGlNNFdEdGg1cFQvRDh5N1ZoRXN6?=
- =?utf-8?B?V05DZmZHam9lZ1pVMXBOazBWc29RU3JiS1ZXeHkvdFA3eUdZVFBwTUMxUE9z?=
- =?utf-8?B?aVcxZzV3SFBWZlo5K2V2cmFHbDJ6cDVpaFRJU0tGRUM0bklNMXhVTHVXMEQx?=
- =?utf-8?B?MnFWNE1WMytzS3I5MjhGMStRbm5GZ0ZrbWk5SEhWS0s2RmdBdkYwNDFmQVhp?=
- =?utf-8?B?Zm54bUpFQzFSR0NZcW5IbVJyYklQNkFzTVZ5SG55NEFqRGJITHpralp3bWEw?=
- =?utf-8?B?M1liR1F4QWUwM2xYOFlBOU1MajNwWTFPVUpyWEwvZDdmTnZtZGU5L25YdGNH?=
- =?utf-8?B?eW1SR1JxRHcxUFJnUWVMbTJqNEk4d09pc3JWQjB5dk5oVU5oTTVFT3NvZWhp?=
- =?utf-8?B?N1h1VzZSeXlSYW1VSDgvTk0zdFlERjYrK05mRFZjYnBnSFAvZEJ4MVE1NWd4?=
- =?utf-8?B?OTVmU0tMaGNveG9hYzhnMEpyMG9oTEN3L2dJdXlYOU5KK0tuUDFzdERoNis3?=
- =?utf-8?B?RGNNN2ZFVEQvd05SdmZaU2xyYzZUSUFlYU5USzMzTWhUMVRIbTV0UkU3c1Va?=
- =?utf-8?B?R1lBeXA3emxVT2J2b2ZkVTdrVitxMzZVd1dCbnVrVUs0c0N3Z2g0RDFCQk1F?=
- =?utf-8?B?bEZPWU9VUnM3MXNZNnFQc2J5YkdDNXp1ZTJuQm53UmI3Tm1CT3lLak5UcHFs?=
- =?utf-8?B?WHFPc1h5cG5COUN5am4rSWdqVlB2TzVpQi9lUit4eE1TUWY5c2lreHpOU0Jq?=
- =?utf-8?B?OXdpODd3MlZlbW8xbUxyYUM0WWIvenNPaGhvNE1tYTNpejlmS1dNNWVMbHJu?=
- =?utf-8?B?MWI1bHVYdkRGRHNCQi9ZTXJmcTl6VjVBZVgrbWJmK0VDRmlWY3BCeVBMQjEx?=
- =?utf-8?B?WGF0UGtFc1lwSGNURmQ4cmJmc1FvM2R0ekFtMFVzcnRGRWNneXU5Q241TUJV?=
- =?utf-8?B?NHh0dEphU2FKQ1gyMVhjZEZNZmEzTHFVWWx6VWRlOThLc2wwb051RlNkSVZY?=
- =?utf-8?B?dEl0N0dGVHZuWXIyK3k0Y01xYVdPQjhQMk5QVEMwV3ZkVU5tcHp6N3VzTHlm?=
- =?utf-8?B?clRCeWsrZlVqbVhkUE9EYm5vRHBQQlE0b0lwSjNod0hlbzU0cUVwcjI1ZEhn?=
- =?utf-8?B?WHBOT2RhRDJSRHlEKzdnSG5JVFlWdWJlNWgrTGIvbksvUVFKcVdyM3hNTWlI?=
- =?utf-8?B?TVNETVo0R1VCWC9oaTRTNDFucUs2RnV4V1plVVhjZ0Z1cDZJdnMzTzBKZTgv?=
- =?utf-8?B?a0RmSW81WWNZSHpxKzZyYm10Z3ZHYmc3QlF6Nm9VMk5Ha25neXNCZ0kxV0F4?=
- =?utf-8?B?VVU4azZ6UWpzL3E5Q3dqb1RMRmZiRzZzSXFtdjVva2FBR3U1N3Q0VnF0WmVP?=
- =?utf-8?B?blF5N2U1TWluN2NtQm1GZ2pVd0tXMU9ibEJNRzlmeEdnRlgwRDR1R3VHODNo?=
- =?utf-8?B?ZzBWbnJGWWZqOExJVWhVcWtITlU1aVJURkVyc0xJT1dpZHBkdDZlQlR2VjhP?=
- =?utf-8?B?OTlmV2trK2ZXMVU2R3ZqanpldFlQVlB5ckY3a01CaE01YXVjTGRWTzJMYkhu?=
- =?utf-8?B?c2kxUVc1YkJNYmJ1MDFPV0hIUkswNmpsdDBPTHQ1Z3hEbFVTUVFCTW1qZGg4?=
- =?utf-8?B?UmUrZWZUOGpLMElmR3NMSnJTbVFPNXdSd291SlVjc2VQeTZ3R0I4NExEdnpW?=
- =?utf-8?B?SWxidG1EVGtBdTQvRU9zaW1jWUhTdGtEQkU3c3M1SzlGUFI3MGNuUWpMaFp2?=
- =?utf-8?B?QU5mZVVIYS9RRENDcU1ZUlFTY0ZKRUFiUytvVzFBbi95OHhFcWhvMnljWFVI?=
- =?utf-8?B?MWV3T1JBZTZDdkhjUHJHUlVoc3RtY0ZhdFdldkROd1lxbzdVUWZLU2M5Um5n?=
- =?utf-8?Q?QgkCPK+44GGyg+oDb6Iiyv4lB?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd161e03-f508-4cc4-b6d3-08de2da83ddc
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR06MB7401.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2025 11:29:35.0184
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +M28tGNXGKUkpw+4tW36tRty/m3Snmtc5b0YuiReo9mfBBw/AVwYl/2PZMjYH8BoqGbwCYHsJF3HAic2KIl2Jw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB4998
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251127-b4-k1-thermal-v1-2-f32ce47b1aba@163.com>
 
-On 2025/11/27 2:40, Bart Van Assche wrote:
-> On 11/26/25 7:41 AM, Rafael J. Wysocki wrote:
->> As it stands, you have a basic problem with respect to system
->> suspend/hibernation.Â  As I said before, the PM workqueue is frozen
->> during system suspend/hibernation transitions, so waiting for an async
->> resume request to complete then is pointless.
+Hi Shuwei,
+
+On 02:44 Thu 27 Nov     , Shuwei Wu wrote:
+> The thermal sensor unit (TSU) on K1 supports monitoring five temperature
+> zones. The driver registers these sensors with the thermal framework
+> and supports standard operations:
+> - Reading temperature (millidegree Celsius)
+> - Setting high/low thresholds for interrupts
 > 
-> Agreed. I noticed that any attempt to call request_firmware() from
-> driver system resume callback functions causes a deadlock if these
-> calls happen before the block device has been resumed.
+> Signed-off-by: Shuwei Wu <shuweiwoo@163.com>
+> ---
+>  drivers/thermal/Kconfig      |  14 ++
+>  drivers/thermal/Makefile     |   1 +
+>  drivers/thermal/k1_thermal.c | 307 +++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 322 insertions(+)
 > 
-> Thanks,
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index a09c188b9ad11377afe232d89c60504eb7000417..76095d2888980718b39470c09731092a21f7159b 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -495,6 +495,20 @@ config SPRD_THERMAL
+>  	  Support for the Spreadtrum thermal sensor driver in the Linux thermal
+>  	  framework.
+>  
+> +config K1_THERMAL
+please name it as SPACEMIT_K1_THERMAL, having K1 only is too short
+
+> +	tristate "SpacemiT K1 thermal sensor driver"
+> +	depends on ARCH_SPACEMIT || COMPILE_TEST
+> +	help
+> +	  This driver provides support for the thermal sensor unit (TSU)
+> +	  integrated in the SpacemiT K1 SoC.
+> +
+> +	  The TSU monitors temperatures for five thermal zones: soc, package,
+> +	  gpu, cluster0, and cluster1. It supports reporting temperature
+> +	  values and handling high/low threshold interrupts.
+> +
+> +	  Say Y here if you want to enable thermal monitoring on SpacemiT K1.
+> +	  If compiled as a module, it will be called k1_thermal.
+> +
+>  config KHADAS_MCU_FAN_THERMAL
+>  	tristate "Khadas MCU controller FAN cooling support"
+>  	depends on OF
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index d7718978db245faffba98ff95a07c7bcbc776fd2..bf28ffe7a39f916acd608ea6d592c82049b0be17 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -65,6 +65,7 @@ obj-$(CONFIG_GENERIC_ADC_THERMAL)	+= thermal-generic-adc.o
+>  obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>  obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>  obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+> +obj-$(CONFIG_K1_THERMAL)	+= k1_thermal.o
+same reason to adjust filename
+>  obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
+>  obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
+>  obj-$(CONFIG_THERMAL_CORE_TESTING)	+= testing/
+> diff --git a/drivers/thermal/k1_thermal.c b/drivers/thermal/k1_thermal.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..a0e9585cbc5a4e0f7c3a47debb3cfa8e82082d88
+> --- /dev/null
+> +++ b/drivers/thermal/k1_thermal.c
+> @@ -0,0 +1,307 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Thermal sensor driver for SpacemiT K1 SoC
+> + *
+> + * Copyright (C) 2025 Shuwei Wu <shuweiwoo@163.com>
+> + */
+> +#include <linux/clk.h>
+> +#include <linux/err.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/thermal.h>
+> +
+> +#include "thermal_hwmon.h"
+> +
+> +#define MAX_SENSOR_NUMBER		5
+> +#define TEMPERATURE_OFFSET		278
+this seems a magic number? could you improve the name a bit,
+or better put a comment to have a explanation
+
+> +
+> +#define K1_TSU_INT_EN			0x14
+> +#define K1_TSU_INT_CLR			0x10
+> +#define K1_TSU_INT_STA			0x18
+> +
+> +#define K1_TSU_INT_EN_MASK		BIT(0)
+> +#define K1_TSU_INT_MASK(x)		(GENMASK(2, 1) << ((x) * 2))
+> +
+> +#define K1_TSU_EN			0x8
+> +#define K1_TSU_EN_MASK(x)		BIT(x)
+> +
+> +#define K1_TSU_DATA_BASE		0x20
+..
+> +#define K1_TSU_DATA(x)			(K1_TSU_DATA_BASE + ((x) / 2) * 4)
+so this is a register after taking a look at the code..
+can you add a 'REG' explicitly? same reason for others
+
+> +#define K1_TSU_DATA_MASK(x)		(((x) % 2) ? GENMASK(31, 16) : GENMASK(15, 0))
+> +#define K1_TSU_DATA_SHIFT(x)		(((x) % 2) ? 16 : 0)
+There is only one call, can you just fold it there? instead of using this magic
+
+> +
+> +#define K1_TSU_THRSH_BASE		0x40
+> +#define K1_TSU_THRSH(x)			(K1_TSU_THRSH_BASE + ((x) * 4))
+> +#define K1_TSU_THRSH_HIGH_MASK		GENMASK(31, 16)
+> +#define K1_TSU_THRSH_LOW_MASK		GENMASK(15, 0)
+> +#define K1_TSU_THRSH_HIGH_SHIFT		16
+> +#define K1_TSU_THRSH_LOW_SHIFT		0
+> +
+> +#define K1_TSU_TIME			0x0C
+> +#define K1_TSU_TIME_MASK		GENMASK(23, 0)
+> +#define K1_TSU_TIME_FILTER_PERIOD	GENMASK(21, 20)
+> +#define K1_TSU_TIME_ADC_CNT_RST		GENMASK(7, 4)
+> +#define K1_TSU_TIME_WAIT_REF_CNT	GENMASK(3, 0)
+> +
+> +#define K1_TSU_PCTRL			0x00
+> +#define K1_TSU_PCTRL_RAW_SEL		BIT(7)
+> +#define K1_TSU_PCTRL_TEMP_MODE		BIT(3)
+> +#define K1_TSU_PCTRL_ENABLE		BIT(0)
+> +
+> +#define K1_TSU_PCTRL_SW_CTRL		GENMASK(21, 18)
+> +#define K1_TSU_PCTRL_CTUNE		GENMASK(11, 8)
+> +#define K1_TSU_PCTRL_HW_AUTO_MODE	BIT(23)
+> +
+> +#define K1_TSU_PCTRL2			0x04
+> +#define K1_TSU_PCTRL2_CLK_SEL_MASK	GENMASK(15, 14)
+> +#define K1_TSU_PCTRL2_CLK_SEL_24M	(0 << 14)
+> +
+> +struct k1_thermal_sensor {
+> +	struct k1_thermal_priv *priv;
+> +	struct thermal_zone_device *tzd;
+> +	int id;
+> +};
+> +
+> +struct k1_thermal_priv {
+> +	void __iomem *base;
+> +	struct device *dev;
+> +	struct clk *clk;
+> +	struct clk *bus_clk;
+> +	struct reset_control *reset;
+> +	struct k1_thermal_sensor sensors[MAX_SENSOR_NUMBER];
+> +};
+> +
+> +static int k1_init_sensors(struct platform_device *pdev)
+> +{
+> +	struct k1_thermal_priv *priv = platform_get_drvdata(pdev);
+> +	unsigned int temp;
+so is 'temp' short for temperature? if not, for intermediate register value,
+please simply use 'val' for less confusion, sometimes people prefer 'tmp',
+but I'd avoid here
+
+> +	int i;
+> +
+> +	/* Disable all the interrupts */
+> +	writel(0xffffffff, priv->base + K1_TSU_INT_EN);
+> +
+> +	/* Configure ADC sampling time and filter period */
+> +	temp = readl(priv->base + K1_TSU_TIME);
+> +	temp &= ~K1_TSU_TIME_MASK;
+> +	temp |= K1_TSU_TIME_FILTER_PERIOD |
+> +		K1_TSU_TIME_ADC_CNT_RST |
+> +		K1_TSU_TIME_WAIT_REF_CNT;
+> +	writel(temp, priv->base + K1_TSU_TIME);
+> +
+> +	/*
+> +	 * Enable all sensors' auto mode, enable dither control,
+> +	 * consecutive mode, and power up sensor.
+> +	 */
+> +	temp = readl(priv->base + K1_TSU_PCTRL);
+> +	temp |= K1_TSU_PCTRL_RAW_SEL |
+> +		K1_TSU_PCTRL_TEMP_MODE |
+> +		K1_TSU_PCTRL_HW_AUTO_MODE |
+> +		K1_TSU_PCTRL_ENABLE;
+> +	temp &= ~K1_TSU_PCTRL_SW_CTRL;
+> +	temp &= ~K1_TSU_PCTRL_CTUNE;
+> +	writel(temp, priv->base + K1_TSU_PCTRL);
+> +
+> +	/* Select 24M clk for high speed mode */
+> +	temp = readl(priv->base + K1_TSU_PCTRL2);
+> +	temp &= ~K1_TSU_PCTRL2_CLK_SEL_MASK;
+> +	temp |= K1_TSU_PCTRL2_CLK_SEL_24M;
+> +	writel(temp, priv->base + K1_TSU_PCTRL2);
+> +
+> +	/* Enable thermal interrupt */
+> +	temp = readl(priv->base + K1_TSU_INT_EN);
+> +	temp |= K1_TSU_INT_EN_MASK;
+> +	writel(temp, priv->base + K1_TSU_INT_EN);
+> +
+> +	/* Enable each sensor */
+> +	for (i = 0; i < MAX_SENSOR_NUMBER; ++i) {
+> +		temp = readl(priv->base + K1_TSU_EN);
+> +		temp &= ~K1_TSU_EN_MASK(i);
+> +		temp |= K1_TSU_EN_MASK(i);
+> +		writel(temp, priv->base + K1_TSU_EN);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static void k1_enable_sensor_irq(struct k1_thermal_sensor *sensor)
+> +{
+> +	struct k1_thermal_priv *priv = sensor->priv;
+> +	unsigned int temp;
+> +
+> +	temp = readl(priv->base + K1_TSU_INT_CLR);
+> +	temp |= K1_TSU_INT_MASK(sensor->id);
+> +	writel(temp, priv->base + K1_TSU_INT_CLR);
+> +
+> +	temp = readl(priv->base + K1_TSU_INT_EN);
+> +	temp &= ~K1_TSU_INT_MASK(sensor->id);
+> +	writel(temp, priv->base + K1_TSU_INT_EN);
+> +}
+> +
+> +/*
+> + * The conversion formula used is:
+> + * T(m°C) = (((raw_value & mask) >> shift) - TEMPERATURE_OFFSET) * 1000
+> + */
+> +static int k1_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
+> +{
+> +	struct k1_thermal_sensor *sensor = thermal_zone_device_priv(tz);
+> +	struct k1_thermal_priv *priv = sensor->priv;
+> +
+ditto, suggest to introduce intermediate variable 'val', then assign at last step
+> +	*temp = readl(priv->base + K1_TSU_DATA(sensor->id));
+> +	*temp &= K1_TSU_DATA_MASK(sensor->id);
+> +	*temp >>= K1_TSU_DATA_SHIFT(sensor->id);
+> +
+> +	*temp -= TEMPERATURE_OFFSET;
+> +
+> +	*temp *= 1000;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * For each sensor, the hardware threshold register is 32 bits:
+> + * - Lower 16 bits [15:0] configure the low threshold temperature.
+> + * - Upper 16 bits [31:16] configure the high threshold temperature.
+> + */
+> +static int k1_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
+> +{
+> +	struct k1_thermal_sensor *sensor = thermal_zone_device_priv(tz);
+> +	struct k1_thermal_priv *priv = sensor->priv;
+> +	int high_code = high;
+> +	int low_code = low;
+> +	unsigned int temp;
+> +
+> +	if (low >= high)
+> +		return -EINVAL;
+> +
+> +	if (low < 0)
+> +		low_code = 0;
+> +
+> +	high_code = high_code / 1000 + TEMPERATURE_OFFSET;
+> +	temp = readl(priv->base + K1_TSU_THRSH(sensor->id));
+> +	temp &= ~K1_TSU_THRSH_HIGH_MASK;
+> +	temp |= (high_code << K1_TSU_THRSH_HIGH_SHIFT);
+> +	writel(temp, priv->base + K1_TSU_THRSH(sensor->id));
+> +
+> +	low_code = low_code / 1000 + TEMPERATURE_OFFSET;
+> +	temp = readl(priv->base + K1_TSU_THRSH(sensor->id));
+> +	temp &= ~K1_TSU_THRSH_LOW_MASK;
+> +	temp |= (low_code << K1_TSU_THRSH_LOW_SHIFT);
+> +	writel(temp, priv->base + K1_TSU_THRSH(sensor->id));
+> +
+any reason why not to combine above two readl/writel() into one?
+> +	return 0;
+> +}
+> +
+> +static const struct thermal_zone_device_ops k1_thermal_ops = {
+> +	.get_temp = k1_thermal_get_temp,
+> +	.set_trips = k1_thermal_set_trips,
+> +};
+> +
+> +static irqreturn_t k1_thermal_irq_thread(int irq, void *data)
+> +{
+> +	struct k1_thermal_priv *priv = (struct k1_thermal_priv *)data;
+> +	int msk, status, i;
+s/msk/mask/, for better consistency
+> +
+> +	status = readl(priv->base + K1_TSU_INT_STA);
+> +
+> +	for (i = 0; i < MAX_SENSOR_NUMBER; i++) {
+> +		if (status & K1_TSU_INT_MASK(i)) {
+> +			msk = readl(priv->base + K1_TSU_INT_CLR);
+> +			msk |= K1_TSU_INT_MASK(i);
+> +			writel(msk, priv->base + K1_TSU_INT_CLR);
+> +			/* Notify thermal framework to update trips */
+> +			thermal_zone_device_update(priv->sensors[i].tzd, THERMAL_EVENT_UNSPECIFIED);
+> +		}
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int k1_thermal_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct k1_thermal_priv *priv;
+> +	int i, irq, ret;
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+..
+> +	priv->dev = dev;
+> +	platform_set_drvdata(pdev, priv);
+I'd suggest moving above behind to resource acquisition
+> +
+> +	priv->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(priv->base))
+> +		return PTR_ERR(priv->base);
+> +
+> +	priv->reset = devm_reset_control_get_exclusive_deasserted(dev, NULL);
+> +	if (IS_ERR(priv->reset))
+> +		return dev_err_probe(dev, PTR_ERR(priv->reset),
+> +				     "Failed to get/deassert reset control\n");
+> +
+> +	priv->clk = devm_clk_get_enabled(dev, "core");
+> +	if (IS_ERR(priv->clk))
+> +		return dev_err_probe(dev, PTR_ERR(priv->clk),
+> +				     "Failed to get core clock\n");
+> +
+> +	priv->bus_clk = devm_clk_get_enabled(dev, "bus");
+> +	if (IS_ERR(priv->bus_clk))
+> +		return dev_err_probe(dev, PTR_ERR(priv->bus_clk),
+> +				     "Failed to get bus clock\n");
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +	if (irq < 0)
+> +		return irq;
+> +
+> +	ret = k1_init_sensors(pdev);
+> +
+> +	for (i = 0; i < MAX_SENSOR_NUMBER; ++i) {
+> +		priv->sensors[i].id = i;
+> +		priv->sensors[i].priv = priv;
+> +		priv->sensors[i].tzd = devm_thermal_of_zone_register(dev,
+> +									i, priv->sensors + i,
+> +									&k1_thermal_ops);
+> +		if (IS_ERR(priv->sensors[i].tzd))
+> +			return dev_err_probe(dev, PTR_ERR(priv->sensors[i].tzd),
+> +						"Failed to register thermal zone: %d\n", i);
+> +
+> +		/* Attach sysfs hwmon attributes for userspace monitoring */
+> +		ret = devm_thermal_add_hwmon_sysfs(dev, priv->sensors[i].tzd);
+> +		if (ret)
+> +			dev_warn(dev, "Failed to add hwmon sysfs attributes\n");
+> +
+> +		k1_enable_sensor_irq(priv->sensors + i);
+> +	}
+> +
+> +	ret = devm_request_threaded_irq(dev, irq, NULL,
+> +					k1_thermal_irq_thread,
+> +					IRQF_ONESHOT, "k1_thermal", priv);
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "Failed to request IRQ\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id k1_thermal_dt_ids[] = {
+> +	{ .compatible = "spacemit,k1-thermal" },
+> +	{ /* sentinel */ }
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, k1_thermal_dt_ids);
+> +
+> +static struct platform_driver k1_thermal_driver = {
+> +	.driver = {
+> +		.name		= "k1_thermal",
+> +		.of_match_table = k1_thermal_dt_ids,
+> +	},
+> +	.probe	= k1_thermal_probe,
+> +};
+> +module_platform_driver(k1_thermal_driver);
+> +
+> +MODULE_DESCRIPTION("SpacemiT K1 Thermal Sensor Driver");
+> +MODULE_AUTHOR("Shuwei Wu <shuweiwoo@163.com>");
+> +MODULE_LICENSE("GPL");
 > 
-> Bart.
+> -- 
+> 2.51.0
+> 
 
-Does this patch look reasonable to you? It hasn't been fully tested 
-yet, but the resume is now performed synchronously.
-
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 66fb2071d..041d29ba4 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -323,12 +323,15 @@ int blk_queue_enter(struct request_queue *q, 
-blk_mq_req_flags_t flags)
-                  * reordered.
-                  */
-                 smp_rmb();
--               wait_event(q->mq_freeze_wq,
--                          (!q->mq_freeze_depth &&
--                           blk_pm_resume_queue(pm, q)) ||
--                          blk_queue_dying(q));
-+check:
-+               wait_event(q->mq_freeze_wq, !q->mq_freeze_depth);
-+
-                 if (blk_queue_dying(q))
-                         return -ENODEV;
-+               if (!blk_pm_resume_queue(pm, q)) {
-+                       pm_runtime_resume(q->dev);
-+                       goto check;
-+               }
-         }
-
-         rwsem_acquire_read(&q->q_lockdep_map, 0, 0, _RET_IP_);
-@@ -356,12 +359,15 @@ int __bio_queue_enter(struct request_queue *q, 
-struct bio *bio)
-                  * reordered.
-                  */
-                 smp_rmb();
--               wait_event(q->mq_freeze_wq,
--                          (!q->mq_freeze_depth &&
--                           blk_pm_resume_queue(false, q)) ||
--                          test_bit(GD_DEAD, &disk->state));
-+check:
-+               wait_event(q->mq_freeze_wq, !q->mq_freeze_depth);
-+
-                 if (test_bit(GD_DEAD, &disk->state))
-                         goto dead;
-+               if (!blk_pm_resume_queue(false, q)) {
-+                       pm_runtime_resume(q->dev);
-+                       goto check;
-+               }
-         }
-
-         rwsem_acquire_read(&q->io_lockdep_map, 0, 0, _RET_IP_);
-diff --git a/block/blk-pm.h b/block/blk-pm.h
-index 8a5a0d4b3..c28fad105 100644
---- a/block/blk-pm.h
-+++ b/block/blk-pm.h
-@@ -12,7 +12,6 @@ static inline int blk_pm_resume_queue(const bool pm, 
-struct request_queue *q)
-                 return 1;       /* Nothing to do */
-         if (pm && q->rpm_status != RPM_SUSPENDED)
-                 return 1;       /* Request allowed */
--       pm_request_resume(q->dev);
-         return 0;
-  }
-
+-- 
+Yixun Lan (dlan)
 
