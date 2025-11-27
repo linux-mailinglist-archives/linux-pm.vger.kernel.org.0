@@ -1,151 +1,197 @@
-Return-Path: <linux-pm+bounces-38829-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38830-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2D03C8F470
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 16:31:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F67DC8F58A
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 16:51:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C5CFE4E2059
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 15:31:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9A7F44E9464
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 15:51:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA1E4243954;
-	Thu, 27 Nov 2025 15:31:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD97A2848A1;
+	Thu, 27 Nov 2025 15:50:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L7y68FME"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KfgaRhEp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 952CDEACE
-	for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 15:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F2032E149
+	for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 15:50:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764257463; cv=none; b=V9aJVb1lgmJMHmlPHRzPN2dC+Tn1QlSVFE0MiZPoC/URSwARAvu0FbvZjW/5i7qlirMPYDTmEzyodY05KioFb0msOEvV5ZaliYZydubqgIo6UvmgddLkLgI3eYKs1wcDRAcDnOz/O2d8FR3drG0szQdgMqFWxh8plzkLUmLpBeo=
+	t=1764258647; cv=none; b=CvE9CSvbfNDCiAW9ua1hv7gkoWZABxVgQnayR+JE8uFvzC76wK4dEm/XyAILDWRYhB89E+j6xmKUyRDp4KK70YfI0ze1spWOHcFoiDKsAEzvy+GcHD4P7Y3/lvgO1Ji3+PyJ+S2ux2vW05CJN9IZD8ObwRMhR2+Wk7plop0LMJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764257463; c=relaxed/simple;
-	bh=sYtTNBOadogZzM6TCrdu9JnqEAS1uG7ULElUIB5gWcM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LsvAMqNa3iIhkQDOhn+Ky8ARM1HGLDfy2zSZz96iSCJvxPXKBSwWvWufc9PkLhm3CK1OfC2ylfX5T3Myhc1fNTNKQ4ayp14Gd8I45N2bHEePNfQYN8KOltss6CcTaYsrulH/g1QWMDTVonuDRUq33vwXgE5R4RyH2WtLznsBULY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L7y68FME; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E529C116D0
-	for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 15:31:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764257463;
-	bh=sYtTNBOadogZzM6TCrdu9JnqEAS1uG7ULElUIB5gWcM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=L7y68FMEJ3T0Jyf6/Cm9BucJfPeorPlgq5QJ0ZIw64dzsSrVEtIK5JnK62ou5RD7H
-	 /g6sxG3AToNm69ipcr1B910B0ipX8HuYthivLN7oiSY4ZWkkrruP6bo9yj0hlVaOLx
-	 YL6cugPHqfID7QbUHDDpN4orXAFLfSv1R0sZT56V8eXY1fupP/mvGxPqZWVre7jiwa
-	 T+vhjEmqk72yQLNqb1cT4BtOOQN58+OLYLK0m7FEvFnlKfrD4tloXh3mqAKR6tx7+l
-	 fjSrJd6Urt2LS1qBBjNerZ5U7/vE0uHXn70OLh2FRhZfKYfO3FEc68w3s/kOeDPyFV
-	 WgrxJMHIFuJbA==
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-450ccefe6ffso448624b6e.1
-        for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 07:31:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUgsg5EZLAeQkM0IdpI5CLZ2P7EvxhZSDVIM+nznUlkXIfjKrAWjp1SoBg28SAXLnuDb1oMjaKRDQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxONxRxmXkLtu7MencJFGPQVP8p8efjyR+aEnlMD8oWfnhGI1mr
-	oxtgOC8hKI279fUT90W0Uhe+OJIADbKMrPzLCklvds4X2coVVYXVIXLLddUigtuKxoRWXNZGKpU
-	/7RswDKms50L9E+4OS0yt6Quz1zjg2hU=
-X-Google-Smtp-Source: AGHT+IGdV+s1K35Hs5DKsPZG2EAHD46cBmAnn6WPCpmeGBa2nMi4i+TUShA/I+4qb27bFZ9xiISXxhfgNGyo/kIj9YM=
-X-Received: by 2002:a05:6808:151f:b0:450:c16b:7ade with SMTP id
- 5614622812f47-45101ed206dmr10528277b6e.28.1764257462421; Thu, 27 Nov 2025
- 07:31:02 -0800 (PST)
+	s=arc-20240116; t=1764258647; c=relaxed/simple;
+	bh=WP3ABGEoiX/jw/ImKhUBUAQI5YA1XYD8g0jDPSyftPw=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=MnfBEObJlU3u46VLFkXutdMxYHtauNrsEwdWyQp/rwZRN7YAgULjq/RhvWLYY6zkHba3Mjw1Cw9DOLBHePF9fqsA9xsAo+ofXPcMQX/wBZbaUGHeYnPxSYz4led9EgR9kMqLrAuCiMMhhJJoLaCv3Ap1jQzr25Q14Y3i9D08jM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KfgaRhEp; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-47774d3536dso8302415e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 27 Nov 2025 07:50:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764258644; x=1764863444; darn=vger.kernel.org;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LhzmSsxu/7OD1CaWKOg+1THQqyol6J9De/tx7qqkEvs=;
+        b=KfgaRhEpBQUh1++2bIsWEFKsG8hKWg78xnduyRiwCFSKNSfYZR9xEt42J2YH9HRW1f
+         2qK5u+JmS7Tjn2aOlXYD+LUERKj8TuRbJ/lqVkRphRWg80Fd8v9pFiwRZVhLGI+38C0a
+         PX4ttobqPVapW6ASSBZsURTUVQgXufRe7DTLqJGrSnb63pAHrLz0NM3He7Mq1ucxh1yD
+         zCr5Z+XAUE5p8A18SOXC1LMRt5ogW40/765cKsLwL+PlKQXS9e0S02sAwnmocgqa3skV
+         I1AnJD3dp/trxt3PBGCjBV2t5L6XY8PDdjVmQjREhCSUMHCC95FyyrFhs1EhPlGs+0Ep
+         U/xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764258644; x=1764863444;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LhzmSsxu/7OD1CaWKOg+1THQqyol6J9De/tx7qqkEvs=;
+        b=Vh5YdjnnL3wisLcb7HGIxIkiMqX989y/8FXQrkRx5774QWDv5wIgaarD9q6UAyU7oj
+         ODVHYm7plAC9JW8dRxMO9tGYyRn7zyx/W3NMphVub/14J3HUj9IyxDXacdmGY4H0SRlD
+         qMLu4/01ao6gChnh+MOGBVozgBVTzPnWh3yRPFZYT/P217A+BhNOoAK/85xnmfR7R+za
+         0LwUR+pQbmsdgEEdiGyVNLUM5tKyX28pT/kj+tt6LmUaIMqiISr1ibvFIT/7JOIVRGAe
+         ZLc5rSUx3z5rbb1f5BBnnla5+0KgZtbQt6oOsUeWN8nvCUhr3Zr1jES+myHgHaNMl6pu
+         YNPw==
+X-Forwarded-Encrypted: i=1; AJvYcCXcW0WLgZl6vDNW7xbvS1soCr+tL7exJHUfiSCUBfRInZUP2cWkY13wvHfmMhKg0kI3RFGhIRoOSA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywd5n6gwI6ERi8+wj/T7vENHB5AqgIQzUsF79pQ8mM/ts3S5xxv
+	84f9A0PvNqiASJWAvAWPQKU/4BoM6UTKlmb/DlnHulMettegD2MgvrBmtHAun9dagXM=
+X-Gm-Gg: ASbGncsUZv6fNvVoXJCc5HYNA0obz6E+Pko5Vy0ANrsiHzQTWspI8/njFablmUbtLA8
+	T+qNc9vK1b7BceXkzQjsBf2gVg5CWCW5KLTXS6UiqlbGEUO9bQ7jIsIXdTBgVP78yfgM6WoQmbV
+	A/mKZuOBWAZ87tV74qoB9IMiHKiiEUEYpfipkHDv4sFFhkD3h/htRLMcqtN39c/PBpDup0olIOO
+	FkDo8c+rdAHiTZTrxxTTtD+kD6gYIMZzdEUbz+PUsgiPkg8YKM8Nz9xtadEB/FAPClm8d2hkhXk
+	sJb6PQU+2Hs09WLTxPtcvTrTyNCD2jX9LhFYIrsNRmlAIlqAsRlRu/XnDVP4vC49LwL69tn6h6J
+	AYPCfMOfRqTezRCgY23dUrb+QZywikk7/OFSfxEtDYdyEM4aZZWr1Fzkl4GnxC7HODO674lwbJ5
+	COLNk1NJ49X3GJhql6hlOr9M95V44UMOAF81fPjpFS3NSa0235kjOLSB3jUAL0xhFfKA==
+X-Google-Smtp-Source: AGHT+IH/8+cai4JFmPGQbtxu0G2fftRXDEiHCNPF2leFrmIz2MSi/7QY4bMG836446KS1dXYkvmVig==
+X-Received: by 2002:a05:600c:4f45:b0:45d:5c71:769d with SMTP id 5b1f17b1804b1-477c04db9a0mr259432855e9.8.1764258643977;
+        Thu, 27 Nov 2025 07:50:43 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:86ca:c3a9:3116:833f? ([2a05:6e02:1041:c10:86ca:c3a9:3116:833f])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-42e1c5d6049sm4352112f8f.10.2025.11.27.07.50.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Nov 2025 07:50:43 -0800 (PST)
+Message-ID: <0b771d57-b280-4c54-886e-6b2c4602212b@linaro.org>
+Date: Thu, 27 Nov 2025 16:50:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <80e7bf9c-50b3-4e34-aa33-ff9c82479dc9@kernel.org>
-In-Reply-To: <80e7bf9c-50b3-4e34-aa33-ff9c82479dc9@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 27 Nov 2025 16:30:50 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ims3hag9xqk1p6k0dzETbEjopbBN2_FPbA3FCEkLaGdQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bkSXJ7pBJmQpL7pG2CahbCDT-eiR8bqE9xvAifoq_KSblpbn898sHrtFoA
-Message-ID: <CAJZ5v0ims3hag9xqk1p6k0dzETbEjopbBN2_FPbA3FCEkLaGdQ@mail.gmail.com>
-Subject: Re: [GIT PULL] devfreq next for 6.19
-To: Chanwoo Choi <chanwoo@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	"open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
-	Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Gaurav Kohli <quic_gkohli@quicinc.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Malaya Kumar Rout <mrout@redhat.com>,
+ Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>,
+ marek.vasut+renesas@gmail.com, Ovidiu Panait <ovidiu.panait.rb@renesas.com>,
+ Pengfei Li <pengfei.li_1@nxp.com>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux PM mailing list <linux-pm@vger.kernel.org>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] thermal drivers update for v6.19-rc1
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Chanwoo,
 
-On Thu, Nov 27, 2025 at 4:10=E2=80=AFPM Chanwoo Choi <chanwoo@kernel.org> w=
-rote:
->
-> Dear Rafael,
->
-> This is devfreq-next pull request. I add detailed description of
-> this pull request on the following tag. Please pull devfreq with
-> following updates.
->
-> Best Regards,
-> Chanwoo Choi
->
->
-> The following changes since commit 6146a0f1dfae5d37442a9ddcba012add260bce=
-b0:
->
->   Linux 6.18-rc4 (2025-11-02 11:28:02 -0800)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/de=
-vfreq-next-for-6.19
->
-> for you to fetch changes up to d9600d57668c49308f705a660c5ad17fa3a53f73:
->
->   PM / devfreq: Fix typo in DFSO_DOWNDIFFERENTIAL macro name (2025-11-26 =
-13:58:59 +0900)
->
-> ----------------------------------------------------------------
-> Update devfreq next for v6.19
->
-> Detailed description for this pull request:
-> - Move governor.h under include/linux/ and rename to devfreq-governor.h
->   in order to allow devfreq governor definitions in out of drivers/devfre=
-q/.
->
-> - Fix potential use-after-free issue of OPP handling on hisi_uncore_freq.=
-c
->
-> - Use min() to improve the readability on tegra30-devfreq.c
->
-> - Fix typo in DFSO_DOWNDIFFERENTIAL macro name on governor_simpleondemand=
-.c
-> ----------------------------------------------------------------
->
-> Dmitry Baryshkov (1):
->       PM / devfreq: Move governor.h to a public header location
->
-> Pengjie Zhang (1):
->       PM / devfreq: hisi: Fix potential UAF in OPP handling
->
-> Riwen Lu (1):
->       PM / devfreq: Fix typo in DFSO_DOWNDIFFERENTIAL macro name
->
-> Thorsten Blum (1):
->       PM / devfreq: tegra30: use min to simplify actmon_cpu_to_emc_rate
->
->  drivers/devfreq/devfreq.c                          |  2 +-
->  drivers/devfreq/governor_passive.c                 | 27 ++++++++++++++++=
-+-
->  drivers/devfreq/governor_performance.c             |  2 +-
->  drivers/devfreq/governor_powersave.c               |  2 +-
->  drivers/devfreq/governor_simpleondemand.c          |  6 ++--
->  drivers/devfreq/governor_userspace.c               |  2 +-
->  drivers/devfreq/hisi_uncore_freq.c                 |  6 ++--
->  drivers/devfreq/tegra30-devfreq.c                  | 15 ++++------
->  .../governor.h =3D> include/linux/devfreq-governor.h | 33 +++-----------=
---------
->  9 files changed, 45 insertions(+), 50 deletions(-)
->  rename drivers/devfreq/governor.h =3D> include/linux/devfreq-governor.h =
-(80%)
+Hi Rafael,
 
-Pulled and added to linux-pm.git/linux-next, thanks!
+The following changes since commit dcb6fa37fd7bc9c3d2b066329b0d27dedf8becaa:
+
+   Linux 6.18-rc3 (2025-10-26 15:59:49 -0700)
+
+are available in the Git repository at:
+
+  
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/thermal-v6.19-rc1
+
+for you to fetch changes up to c411d8bf06992dade7abb88690dc2d467a868cc4:
+
+   thermal/drivers/imx91: Add support for i.MX91 thermal monitoring unit 
+(2025-11-26 15:51:28 +0100)
+
+----------------------------------------------------------------
+- Document the RZ/V2H TSU DT bindings (Ovidiu Panait)
+
+- Document the Kaanapali Temperature Sensor (Manaf Meethalavalappu
+   Pallikunhi)
+
+- Document R-Car Gen4 and RZ/G2 support in driver comment (Marek
+Vasut)
+
+- Convert to DEFINE_SIMPLE_DEV_PM_OPS in the R-Car [Gen3] (Geert
+   Uytterhoeven)
+
+- Fix format string bug in thermal-engine (Malaya Kumar Rout)
+
+- Make ipq5018 tsens standalone compatible (George Moussalem)
+
+- Add the QCS8300 compatible for the QCom Tsens (Gaurav Kohli)
+
+- Add the support for the NXP i.MX91 thermal module, including the DT
+   bindings (Pengfei Li)
+
+----------------------------------------------------------------
+Gaurav Kohli (1):
+       dt-bindings: thermal: tsens: Add QCS8300 compatible
+
+Geert Uytterhoeven (2):
+       thermal/drivers/rcar: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
+       thermal/drivers/rcar_gen3: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
+
+George Moussalem (1):
+       dt-bindings: thermal: qcom-tsens: make ipq5018 tsens standalone 
+compatible
+
+Malaya Kumar Rout (1):
+       tools/thermal/thermal-engine: Fix format string bug in thermal-engine
+
+Manaf Meethalavalappu Pallikunhi (1):
+       dt-bindings: thermal: qcom-tsens: document the Kaanapali 
+Temperature Sensor
+
+Marek Vasut (1):
+       thermal/drivers/rcar_gen3: Document R-Car Gen4 and RZ/G2 support 
+in driver comment
+
+Ovidiu Panait (1):
+       dt-bindings: thermal: r9a09g047-tsu: Document RZ/V2H TSU
+
+Pengfei Li (2):
+       dt-bindings: thermal: fsl,imx91-tmu: add bindings for NXP i.MX91 
+thermal module
+       thermal/drivers/imx91: Add support for i.MX91 thermal monitoring unit
+
+  .../devicetree/bindings/thermal/fsl,imx91-tmu.yaml |  87 +++++
+  .../devicetree/bindings/thermal/qcom-tsens.yaml    |   9 +-
+  .../bindings/thermal/renesas,r9a09g047-tsu.yaml    |   6 +-
+  drivers/thermal/Kconfig                            |  10 +
+  drivers/thermal/Makefile                           |   1 +
+  drivers/thermal/imx91_thermal.c                    | 384 
++++++++++++++++++++++
+  drivers/thermal/renesas/rcar_gen3_thermal.c        |  10 +-
+  drivers/thermal/renesas/rcar_thermal.c             |   8 +-
+  tools/thermal/thermal-engine/thermal-engine.c      |   2 +-
+  9 files changed, 504 insertions(+), 13 deletions(-)
+  create mode 100644 
+Documentation/devicetree/bindings/thermal/fsl,imx91-tmu.yaml
+  create mode 100644 drivers/thermal/imx91_thermal.c
+
+
+
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
