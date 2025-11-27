@@ -1,233 +1,123 @@
-Return-Path: <linux-pm+bounces-38826-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38827-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0A20C8F316
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 16:14:54 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16E89C8F310
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 16:14:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 906134F0C7D
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 15:07:54 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3940134F187
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Nov 2025 15:10:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4652334C32;
-	Thu, 27 Nov 2025 15:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF6E2262FFC;
+	Thu, 27 Nov 2025 15:10:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KsDxrTwJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RLxLrFhP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B93A32BF40;
-	Thu, 27 Nov 2025 15:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874DF214813;
+	Thu, 27 Nov 2025 15:10:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764256039; cv=none; b=ANVc03oYI5cATzhWpZDeA73nea3Sm1Lhqyf5ZGSlvgRnAVLx2QFwF7/meeVHAAMPNtOFxptCtSqTOWkNlJ7P4ZbFZArjrZ3nEwop7Is57riR4D9IVd2RhtdGehVJy/zr9cLVEIreWQVrQM/ISRh5nqUoYD5Ec5VeY/4osleCmqE=
+	t=1764256247; cv=none; b=cg4YTWp8RrPpqO2oKzHYRr+Cdn0gc1GAvZzLOGE3TmKgKIuoXLiJxo6gD9BK2FPNdHymhqc8AaCmiwHh8I4YUldbyH6KwoWSgy/atOvQOcNvjXXBBDJuUGD3ge2MyYDS2UMkhT0hm6lbaBRUJqjlmTLVQh1fRuADXwj4BmXYdkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764256039; c=relaxed/simple;
-	bh=NyPHAxEuBfxhiJKrWsktUqr6mdKRf3cbmidwmHAlulY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t15wy+0pnSRZ/B+lcJW6rRj9Vrd+eo/KMBluXZhg2SZ8cMWqp26Hby8fVKV9m+T+jD/07E3CNGvoK0JqHfbTUrRaXXh/7e880PGhFQfuf/CuHDO3+v0j3762zCsrI0HIND4fZjjhbeR6OYsc+rJqrC4042WsiiVRPKKzsMNQwNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KsDxrTwJ; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id BDC9E1A1DC0;
-	Thu, 27 Nov 2025 15:07:15 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 8520D6072A;
-	Thu, 27 Nov 2025 15:07:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EE57C102F218C;
-	Thu, 27 Nov 2025 16:06:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764256032; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=Xb2gYHXIhVp2zaSFmlDMNszWhEx2yHpcG9wfBD9WQ6Q=;
-	b=KsDxrTwJZ35P4V4zqNgBRz6dueQQQ479lYnTv33vH6BaAZQ6mqaBR8WEopD6/WxoiDZf3C
-	Ic4RTSKoLEfjd0/q+TBQmqIrfWBRSTeCoErZlb34wHoEcX2HAzuN2RzutFpS6+d2ln9KMJ
-	TSvAsAUfwMfwSBd4rCMr2Fdi3SKnKSNaEM9vqWiV42ClnoYd2t6PVCTiOsInGdUD2yiqj4
-	ZzTUOWwdLINFYrJ9uWeuCkQFxLH7ib2+v5JAxnvTykYWonFW1xB3OWNxxohmbmwdgPC/rA
-	Ba8/f4uTLQUuaOMbgPFSeaBwbd+ExYFXfFw+9W2+71ncOaO/+QIwmKbAGZv6Rw==
-From: Romain Gantois <romain.gantois@bootlin.com>
-To: "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- David Lechner <dlechner@baylibre.com>,
- Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-iio@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Peter Rosin <peda@axentia.se>,
- Mariel Tinaco <Mariel.Tinaco@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Kevin Tsai <ktsai@capellamicro.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Support Opensource <support.opensource@diasemi.com>,
- Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Matheus Castello <matheus@castello.eng.br>,
- Saravanan Sekar <sravanhome@gmail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Casey Connolly <casey.connolly@linaro.org>,
- Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
- Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Olivier Moysan <olivier.moysan@foss.st.com>,
- Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Dixit Parmar <dixitparmar19@gmail.com>, linux-hwmon@vger.kernel.org,
- linux-input@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- Andy Shevchenko <andriy.shevchenko@intel.com>
-Subject: Re: [PATCH v4 0/6] Add support for the LTM8054 voltage regulator
-Date: Thu, 27 Nov 2025 16:06:47 +0100
-Message-ID: <8695751.T7Z3S40VBb@fw-rgant>
-In-Reply-To: <0E900830-E248-4F0F-A048-075EAF1D2440@goldelico.com>
-References:
- <20251124-ltm8054-driver-v4-0-107a8a814abe@bootlin.com>
- <3021060.e9J7NaK4W3@fw-rgant>
- <0E900830-E248-4F0F-A048-075EAF1D2440@goldelico.com>
+	s=arc-20240116; t=1764256247; c=relaxed/simple;
+	bh=6BDXEl8qoH9pzQVxJfeOO5sc3Xp0O/o0Ixyv5Uf30fo=;
+	h=Message-ID:Date:MIME-Version:From:To:Cc:Subject:Content-Type; b=EU2Gnkab3ogrHjzukq9tuaMouBotivk3fv5l8WvlWdajIXvYcT4JHVxcivh1QVb1juIyp5rCi3DF+iIOO1zVixfq1g6hEt6jruWbdMf6LEdOUOpbeFL+49a5G8SqRTA9p6JNROZffv62H/W/eTuT5dGy+70RNzm5m8kT/kOhaaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RLxLrFhP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 342E6C4CEF8;
+	Thu, 27 Nov 2025 15:10:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764256246;
+	bh=6BDXEl8qoH9pzQVxJfeOO5sc3Xp0O/o0Ixyv5Uf30fo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=RLxLrFhPf2o68CyKnUQ2LZbmt9OU1+GchB5UFtH7hcKuCA/YzpKewu0Q2otBjtrkd
+	 secNKIp7txzpeFPhXFb+lWKXnNVKVlfxbG8gTlGzb/S4qsJR5Mo9PNLcDfU0bWyrn3
+	 cQO+YNzA+xT08nYHs6RCLBwqjul2ol3Hf4ZPRyE9bfb0n3fzhOnQQXJrp7MT7+O/t5
+	 O4Fzh8KlTMI4r1zh+sv0muxc5Od5+phNpnm1Mt+xAPAeUvqqbHm49A4D0nLEGXnumq
+	 6XUl5wUyyN3KpC8BQTuj2x+XbDAI7tQaxdifN0SjSieqcDzM6OVbKlz9yKXE8O4CEL
+	 TBrgj2PyFuUAg==
+Message-ID: <80e7bf9c-50b3-4e34-aa33-ff9c82479dc9@kernel.org>
+Date: Fri, 28 Nov 2025 00:10:42 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart10847283.nUPlyArG6x";
- micalg="pgp-sha512"; protocol="application/pgp-signature"
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+From: Chanwoo Choi <chanwoo@kernel.org>
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+ Chanwoo Choi <chanwoo@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>
+Subject: [GIT PULL] devfreq next for 6.19
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
---nextPart10847283.nUPlyArG6x
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Romain Gantois <romain.gantois@bootlin.com>
-To: "H. Nikolaus Schaller" <hns@goldelico.com>
-Date: Thu, 27 Nov 2025 16:06:47 +0100
-Message-ID: <8695751.T7Z3S40VBb@fw-rgant>
-In-Reply-To: <0E900830-E248-4F0F-A048-075EAF1D2440@goldelico.com>
-MIME-Version: 1.0
+Dear Rafael,
 
-On Tuesday, 25 November 2025 11:25:24 CET H. Nikolaus Schaller wrote:
-> Hi,
-> 
-> > Am 25.11.2025 um 09:41 schrieb Romain Gantois
-> > <romain.gantois@bootlin.com>:
-> > 
-> > 
-> > This is planned support for a voltage regulator chip.
-> 
-> Well, but one which is not by itself programmable. So IMHO, it does not
-> support that chip, but the circuit it is used in.
-> 
+This is devfreq-next pull request. I add detailed description of
+this pull request on the following tag. Please pull devfreq with
+following updates.
 
-The boundary is a bit blurry in this case, sure.
-
-> > > Are you looking for a virtual "glue" driver to logically combine several
-> > > low level functions?
-> > 
-> > I'm looking for a clean userspace abstraction for this component, the low-
-> > level functions in this case are those of a voltage regulator.
-> 
-> As far as I understood it has
-> - constant voltage
-> - current can be limited
-> - it can be turned on/off
-> 
-> That means it is a fixed-regulator (for constant voltage and turn on/off)
-> and a mechanism to program the current limit (iio-dac). Both have clean
-> userspace abstraction.
-> 
-> What am I missing?
-> 
-
-In my case, the regulator has a DAC tapping into the feedback divider with 
-allows modifying the output voltage level. This isn't specific to the LTM8054 
-though, you can theoretically do this with any regulator chip that has a 
-feedback pin.
-
-...
-> The question remains if you want to solve something for a single board which
-> happens to have an LTM8054 or if you are solving a more general design
-> pattern.
-> 
-> In summary my view is that the LTM8054 is just a "fixed-regulator" which
-> gets an additional current-limiter feature by adding a DAC chip (which needs
-> a driver of course). So software control is required not by the LTM8054 but
-> by adding a DAC chip.
-> 
-> Another suggestion: what extending the "regulator-fixed", "regulator-gpio",
-> "regulator-fixed-clock" pattern by some
-> "regulator-gpio-iio-dac-current-limiter" driver to make it independent of
-> your specific chip?
-> 
-> By the way, are you aware of this feature of the regulator-gpio driver?
-> 
-> https://elixir.bootlin.com/linux/v6.18-rc7/source/drivers/regulator/gpio-reg
-> ulator.c#L97
-> 
-
-That could be a preferable solution given that similar current limit and 
-output voltage limit control methods could apply to other regulator chips... 
-I'll have to think about it some more.
-
-> Just to note: I am neither maintainer nor doing any decisions on this, just
-> asking questions for curiosity and from experience and giving hints for
-> alternative approaches, where I hope they help to find the really best
-> solution.
-
-Sure, I appreciate that.
-
-Thanks,
-
--- 
-Romain Gantois, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
---nextPart10847283.nUPlyArG6x
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEIcCsAScRrtr7W0x0KCYAIARzeA4FAmkoaQcACgkQKCYAIARz
-eA4wIA//cR+gzKtW78qSkS/qn3QD4fmem8sIoJemjJ96zZS/fPrrD7BVbwlzmT8Z
-PX35PtLLxRdN0CRWsdmEqAAwFLRMn0/UBGpROLNSqKZT9c3SisrVH5XlVV0s95LB
-fS6l3xzgbIjdqhGxwXgV+43B2OuuBLE9AopgYIwRunAam9+nECFHo9hU/4glxqrS
-O54WKxLhs7/BMJdpAv4T8UYjqKiC7Lvpd4oq43g64sacplSnZNv4iwqkga0oOtd8
-2IayCT5+gRm6xd9Xt/cVkQUQAFsoiieLLt87+JZP1ECtjcfwIsDiPBf49DvppELP
-SLg8qwG44QYRhfsPvdBRLFuvkmsu1rGZaBdRQZ+npfBkkwljuh6EllMbFgUOpuCR
-aFQleHJ/6naNsAZGxp4mW6x1YPwsiYeCQuQdffSq2DrTLEAnG3EV3wIB5TbMsF72
-p6glXdEj3uYECnRJ9Lql1PWO9MHGnubF2xCDqRIn7HDxq+DLmZkkZzg4c69/V1fy
-O7go8T5OfK1233Kqb1VDvY9SDRL5+nLo1tacht8yyrhq3LEUumAf7TFLXzBmN+QQ
-5TURL5uovvulw4c6SXs9sa7yriUKuayb9s5CKLsJJI4uYBt+Csyhm/fOfpuvKVm5
-Bryk0xixSfV1ekLMojoBFaS3AFNPGNCHqSmjGOEsaK8hrJ5HgkM=
-=KPmo
------END PGP SIGNATURE-----
-
---nextPart10847283.nUPlyArG6x--
+Best Regards,
+Chanwoo Choi
 
 
+The following changes since commit 6146a0f1dfae5d37442a9ddcba012add260bceb0:
 
+  Linux 6.18-rc4 (2025-11-02 11:28:02 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.19
+
+for you to fetch changes up to d9600d57668c49308f705a660c5ad17fa3a53f73:
+
+  PM / devfreq: Fix typo in DFSO_DOWNDIFFERENTIAL macro name (2025-11-26 13:58:59 +0900)
+
+----------------------------------------------------------------
+Update devfreq next for v6.19
+
+Detailed description for this pull request:
+- Move governor.h under include/linux/ and rename to devfreq-governor.h
+  in order to allow devfreq governor definitions in out of drivers/devfreq/.
+
+- Fix potential use-after-free issue of OPP handling on hisi_uncore_freq.c
+
+- Use min() to improve the readability on tegra30-devfreq.c
+
+- Fix typo in DFSO_DOWNDIFFERENTIAL macro name on governor_simpleondemand.c
+----------------------------------------------------------------
+
+Dmitry Baryshkov (1):
+      PM / devfreq: Move governor.h to a public header location
+
+Pengjie Zhang (1):
+      PM / devfreq: hisi: Fix potential UAF in OPP handling
+
+Riwen Lu (1):
+      PM / devfreq: Fix typo in DFSO_DOWNDIFFERENTIAL macro name
+
+Thorsten Blum (1):
+      PM / devfreq: tegra30: use min to simplify actmon_cpu_to_emc_rate
+
+ drivers/devfreq/devfreq.c                          |  2 +-
+ drivers/devfreq/governor_passive.c                 | 27 +++++++++++++++++-
+ drivers/devfreq/governor_performance.c             |  2 +-
+ drivers/devfreq/governor_powersave.c               |  2 +-
+ drivers/devfreq/governor_simpleondemand.c          |  6 ++--
+ drivers/devfreq/governor_userspace.c               |  2 +-
+ drivers/devfreq/hisi_uncore_freq.c                 |  6 ++--
+ drivers/devfreq/tegra30-devfreq.c                  | 15 ++++------
+ .../governor.h => include/linux/devfreq-governor.h | 33 +++-------------------
+ 9 files changed, 45 insertions(+), 50 deletions(-)
+ rename drivers/devfreq/governor.h => include/linux/devfreq-governor.h (80%)
 
