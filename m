@@ -1,79 +1,155 @@
-Return-Path: <linux-pm+bounces-38895-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38896-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13F2BC9296B
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 17:35:51 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41BC5C92BD6
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 18:04:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0761E4E2FF6
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 16:35:50 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 4A49B34853D
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 17:01:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F83626D4CA;
-	Fri, 28 Nov 2025 16:35:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEEC728DB52;
+	Fri, 28 Nov 2025 17:01:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O7Tq6jos"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="TlTZ/tFa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4492E264F81;
-	Fri, 28 Nov 2025 16:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5072284889;
+	Fri, 28 Nov 2025 17:01:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764347745; cv=none; b=ZNwhGDFJksziySrLmbkluyjlIMFK3OILswoPYZr2BqlC4hUMxIGCz9Y3fxOwid4WRDNhcruPPlVtmJax4sVfx/p/o5o0yp0veVduBvqetaMo2++WJkBzdkQEkyCc7tppHwKQzojZR4oPWQnR8ynmXNKMYKw91Vidcr2ZgHZhY1o=
+	t=1764349296; cv=none; b=QIzIjpvtbtM1jHCbnltXmrcc5nJD+zgbxM0Zuiaje6/5QfqH1QV7RuthuAZkjJ27YOQzUhpL90OLn69VuS1aABN9OlQrKg/cycGvr//rkzONKIs8Y/G4xbtL9d/18f/jMvmJbCk0CO/bFIJy8fU9Kkj0r8xt/3K5+NLGtOPxPus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764347745; c=relaxed/simple;
-	bh=8AglEL5IwEX/vkqGIeaiCAxI21pxttwEglvsC78jOSs=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=tc9GJXpOLFAuKD7jdLkjQaMlGCNB16PuY/FFCTFOIAoHurNIbjx0CP/5JwGfAaevxDnjqcuotPxsx1QLL9WDWmgaA5HTHzclBLMqbu+40mFqQoQc2wmIBkQ0z+/l/YIIHVmBurTXEG/dVjFGEgv+gBKWE2H7oMNpqsO9Z4rMO6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O7Tq6jos; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5191C4CEF1;
-	Fri, 28 Nov 2025 16:35:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764347744;
-	bh=8AglEL5IwEX/vkqGIeaiCAxI21pxttwEglvsC78jOSs=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=O7Tq6josgtJI+PxZngNkQko/k0MtUDmdouXTAbpLHFxHqQg5WuORNOv6H4ZoHIVkt
-	 b6Z4bciQuhg6XNI4vi3WvEHShKcGdb740D05ouMN93RNm+kKSm7CNKZwjMbNL5gniI
-	 IUJfTjgbZOBPKPqZ9HAWShjlezLtZnybdp2eZRErZSxSClMSLIt3/Cndh2xD0WSZCR
-	 1wPvgwrYOm4W1oQNTh4TJUnXXTzrN6AUSWu/zolu+rujDr1MZ7VjMmv3Oq9jK9AxrF
-	 RUokBV0LzoVnNxCPtWwlSbZlwATxgF2nt4Z94ntu5NTb8FYpstQLsj5m2WKYCsFpgZ
-	 xTTnYhOiIfWWQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id F2AAB3806929;
-	Fri, 28 Nov 2025 16:32:47 +0000 (UTC)
-Subject: Re: [GIT PULL] pmdomain fixes for v6.18-rc8
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <20251128131049.7584-1-ulf.hansson@linaro.org>
-References: <20251128131049.7584-1-ulf.hansson@linaro.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20251128131049.7584-1-ulf.hansson@linaro.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.18-rc6
-X-PR-Tracked-Commit-Id: c98c99d5dbdf9fb0063650594edfd7d49b5f4e29
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f849f26f77205e25f6ad0b9011b1b68a560d35ff
-Message-Id: <176434756651.719139.9248716127967964483.pr-tracker-bot@kernel.org>
-Date: Fri, 28 Nov 2025 16:32:46 +0000
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Linus <torvalds@linux-foundation.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>, linux-arm-kernel@lists.infradead.org
+	s=arc-20240116; t=1764349296; c=relaxed/simple;
+	bh=w+/+uB72XXqP5XOu6Dj/JQYa1DwZHV2PT5EEegSpDsI=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=nZjFoL2SZHs3vmQ29arFXsm/vyp9ZNDbsxFz7DCnyj+zxEwpnf+2FxqbSwzB53j/XS4yxX1f5QhPPkP3e9Ks46PepPlhzmPPvvb1Vgos+dhJLuhnuS/Cs0ETRbdZ2SQ/dTCZPVynxIDnN4qhI8LkWhHCdK+gpxnsBtsWRmEsd58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=TlTZ/tFa; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1764349292;
+	bh=w+/+uB72XXqP5XOu6Dj/JQYa1DwZHV2PT5EEegSpDsI=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=TlTZ/tFaBjUTQjrEtaY6uiqao2rYr/Oq3aK8OjUImxux9pzdGbCtmjUWVw1BS6lAY
+	 7bEpT7OD0FCBP1P4it+EsdjjL2yXzARWVe/hIUA6Cbln2X0pwn4pq09gAx5XjN8ghg
+	 5Vj2YZOmYN9+KqQ1KZh1x6XrHn0J2fVhzr6L8WrRNEfU0huVdLBcPMXIEt98u8beaF
+	 yJhtk6oyI/rfBO/PjigeP6FTOPzcE4u9YgKHUYwvDQo6YoMmoPrs4zeYaNMCkw6Yg1
+	 Z0cl0bAfmNXReXuIVzCIuScQc+Ew9e5GOGglJI8ew6g2OKZ7S1W6wqbpcpWxPbxdW5
+	 e28w2n2SdH7cA==
+Received: from [192.168.100.50] (unknown [144.48.130.189])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 8FD7717E06C3;
+	Fri, 28 Nov 2025 18:01:29 +0100 (CET)
+Message-ID: <a26e1b2f-50dc-4956-8bea-49d0e9ac2e4e@collabora.com>
+Date: Fri, 28 Nov 2025 22:00:54 +0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@collabora.com, Len Brown <lenb@kernel.org>,
+ Pavel Machek <pavel@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>,
+ linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-input@vger.kernel.org, kernel@collabora.com,
+ superm1@kernel.org
+Subject: Re: [PATCH 3/4] Input: Ignore the KEY_POWER events if hibernation is
+ in progress
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20251107184438.1328717-1-usama.anjum@collabora.com>
+ <20251107184438.1328717-4-usama.anjum@collabora.com>
+ <CAJZ5v0gtGjE-rSwM4Kom4cDEhp3eSOkLCmbLwrt_9u9a7VP6zQ@mail.gmail.com>
+ <6f1f3210-47c6-4c00-8fb9-35f48bae2581@collabora.com>
+ <CAJZ5v0iDUPB9s2fPJxqVqPGj5wbw54tR4thmDD2V-r4+Q2prwg@mail.gmail.com>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <CAJZ5v0iDUPB9s2fPJxqVqPGj5wbw54tR4thmDD2V-r4+Q2prwg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Fri, 28 Nov 2025 14:10:49 +0100:
+On 11/25/25 5:25 PM, Rafael J. Wysocki wrote:
+> On Tue, Nov 25, 2025 at 11:23 AM Muhammad Usama Anjum
+> <usama.anjum@collabora.com> wrote:
+>>
+>> On 11/24/25 11:50 PM, Rafael J. Wysocki wrote:
+>>> On Fri, Nov 7, 2025 at 7:45 PM Muhammad Usama Anjum
+>>> <usama.anjum@collabora.com> wrote:
+>>>>
+>>>> Input (Serio) drivers call input_handle_event(). Although the serio
+>>>> drivers have duplicate events, they have separate code path and call
+>>>> input_handle_event(). Ignore the KEY_POWER such that this event isn't
+>>>> sent to the userspace if hibernation is in progress.
+>>>
+>>> Your change affects suspend too.
+>>>
+>>> Also, what's the goal you want to achieve?
+>> Two goals:
+>> * Don't send event to userspace
+>> * Set pm_wakeup for hibernation cancellation for non-acpi devices (This api
+>>   call should be tested on non-acpi devices such as arm board to see if it
+>>   helps. I don't have an arm board in hand)
+>>
+>>>
+>>>> Abort the hibernation by calling pm_wakeup_dev_event(). In case of serio,
+>>>> doesn't have wakeup source registered, this call doesn't do anything.
+>>>> But there may be other input drivers which will require this.
+>>>>
+>>>> Without this, the event is sent to the userspace and it suspends the
+>>>> device after hibernation cancellation.
+>>>
+>>> I think that's because user space handles it this way, isn't it?
+>>
+>> Yes, it depends on how userspace handles such events. There are different settings
+>> configured for systemd-logind when power event is received. The purpose is to consume
+>> this event to cancel the hibernation without letting userspace know about it.
+>>
+>> Thinking more about it, I wasn't sure if all of such events are compulsory to be
+>> delivered to userspace. But then I found an example: In acpi_button_notify(), all
+>> such events are not sent to userspace if button is suspended. So it seems okay to
+>> not send this as well and just consume in the kernel.
+> 
+> You want the given key (and it doesn't matter whether or not this is
+> KEY_POWER or something else) to play two roles.  One of them is to
+> send a specific key code to user space and let it handle the keypress
+> as it wants.  This is how it works most of the time.  The second one
+> is to wake up the system from sleep (and I'm not sure why you want to
+> limit this to hibernation) in which case the key code will not be sent
+> to user space.
+> 
+> For this to work, you need to switch between the two modes quite
+> precisely and checking things like pm_sleep_transition_in_progress()
+> (which is only used for debug and its raciness is not relevant there)
+> is not sufficient for this purpose.  That's what the "suspended" flag
+> in the ACPI button driver is for.
+I've been testing and trying out `suspended` flag. But this flag gets set very late.
+If we depend on it, we'll not be able to wakeup in time after cancelling hibernation.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.18-rc6
+Initially we were using hibernation_in_progress() in RFC and we switched to
+pm_sleep_transition_in_progress() in order to cancel the sleep as well (which wasn't 
+the original intention).
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f849f26f77205e25f6ad0b9011b1b68a560d35ff
+The sleep detection isn't working through pm_suspend_target_state or pm_suspend_in_progress()
+as it is set very late in suspend process. While hibernation_in_progress() gets set in
+start of hibernation.
 
-Thank you!
+Then as you said, they are unreliable. I'm thinking what other options. But I've not
+found any. Please share ideas what other way can work instead of suspended flag better? 
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+---
+Thanks,
+Usama
 
