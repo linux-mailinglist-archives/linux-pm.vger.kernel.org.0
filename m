@@ -1,598 +1,472 @@
-Return-Path: <linux-pm+bounces-38891-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38892-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72B40C92679
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 16:07:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D18C2C926C7
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 16:11:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 28E094E3F1C
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 15:06:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 885B73A607D
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 15:11:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C87132D447;
-	Fri, 28 Nov 2025 15:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A1732E681;
+	Fri, 28 Nov 2025 15:11:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="jQ6rCYgF";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="jQ6rCYgF"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="hHCTDtIb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010035.outbound.protection.outlook.com [52.101.69.35])
+Received: from sender3-pp-f112.zoho.com (sender3-pp-f112.zoho.com [136.143.184.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CAC6329E48;
-	Fri, 28 Nov 2025 15:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.35
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764342417; cv=fail; b=iwWAGYx3enev1GagdGzLpwdKw0k9uaZR8Cv5IJISi9oBzYuC3bd81s1zAXT7FNwBDlFiCnc3EnMTUjvBq9BtJ5vsK/9EIr1hTQ12J7OX6SJutWDyzGEBHXIROrIIA5ejvXmIEjwdoHNWsE7DvGpQJTuzM1DOyo1/q8ukJzCuUUo=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764342417; c=relaxed/simple;
-	bh=E9nKXj1zpBE3Ey7cK6MvFuY9LJYC5ednSlJkdO7tnec=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=TyAarMQSnkERNx9AiY1x7umReqUJNkW5G/cjZGVdg8AFg89DI/AA1eS4wHD4G6o1beKsLMtEUKqa5BVis2vfELKW72519+P/SdguASObwSQR6i8vHf2QrDpqeJGa6nabk77idrgGhBxrWMrVwV2Wfu4be0BsjtiKRCKX7XaKVdQ=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=jQ6rCYgF; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=jQ6rCYgF; arc=fail smtp.client-ip=52.101.69.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=lcg5XrX9QDCBQbxDTSh7PWY7ywWYlW+7fmedDOj1Yi3YZgOInYfVSYWusNB6hSjwyRsBVmcqaGqhXcQJcLD/VVh/ukY06Q7h9OZBlymETbwfoK5TNwGF8h/mN/spTwSUnh7K23+XxbUcPs01AHU02V7+v3Qzk3Ur89YhITtMu+Kjb6H35npPGCKc6yQ21pvq2R4pdK7843au4m+BvLQTnadqWO55CnuEgGSACVuWu9fCK60g42zVifDeMzfP3jLeeXaUMouCv9r7+aTdc8YxhIT4ZpAfqxR2Xv0qpkQlXVG0qwDsQOY7yX10q/VTOdvfhdLL5G0j4VS3EB0jTlrR9w==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LA+qm1XYb4FOfmD3mNNS0j9xZ7Wpiy1asxIPU+AcGt0=;
- b=LoCPZvbQ8rBXlxtzB7bMCTNtkCvw4Dv2P4vEVoJN2Cdj8pC6Ancqy1MfxDpx+CGHcVenU0u/4JuhMcOn5GbL6AGQZcnLD/F8lY8xJ7M03aExxnIRI+xmrwJcSd/HqAhsTbAGlHfjN3jwcZkZ9jRDCpHMf0XBfRBv7YyY3EAFFmp2vvYSqFF47HrHP717bz3DGj+tQNchuh2XfaMSTWYtHKHoZyPnQYCGQmHSp80i7No0U/l+DJpzYKICepaPxrJnXHn+UV3umHpDOFSNpS46/fnMXxqZcIoqMRcz0JLPfb+r2z2NJSgIgTZCSka1TBZarRCn4gkWZPssRhM8u8jj1A==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=nvidia.com smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LA+qm1XYb4FOfmD3mNNS0j9xZ7Wpiy1asxIPU+AcGt0=;
- b=jQ6rCYgFcEvMG6TZ4OlG9isFszh8JSOtvpuKYdxlG02K1IHUyG4fDGcffFFFxFv9Ez4gwMYCUnpTYihn91fsae6UrLth4vhMKApjavY3FQEMDyQzmYVuooIjPyFcEd49y7fjicpMskJOgkWEtY8p4G5d/1noC8GJsfSHsniORuk=
-Received: from DUZPR01CA0006.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:3c3::13) by GV1PR08MB10608.eurprd08.prod.outlook.com
- (2603:10a6:150:15e::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.16; Fri, 28 Nov
- 2025 15:06:48 +0000
-Received: from DU6PEPF00009523.eurprd02.prod.outlook.com
- (2603:10a6:10:3c3:cafe::99) by DUZPR01CA0006.outlook.office365.com
- (2603:10a6:10:3c3::13) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.15 via Frontend Transport; Fri,
- 28 Nov 2025 15:06:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- DU6PEPF00009523.mail.protection.outlook.com (10.167.8.4) with Microsoft SMTP
- Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9366.7 via
- Frontend Transport; Fri, 28 Nov 2025 15:06:48 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Hda0GCY6YfsZ7iLwDeAVECsC8s7oy1CTuG3EvyHX39AKYA5Mrg9eH5Lk/Pq3RjUUodZWTsRvwoMYQQc7BHhPffmVJ9jlYpqo+Sl+779d0yr4Uu0im5fCkY4go8j9mW/Jz2wU5YM2pwUI2I4zKh/libH2ohJ+2ftLQpGRSWDEacmrBx5xuf4W/1NZ213oeMaboPA/NinvMcZ4AoxEBjcbwl13Emmx7LVgtiPh/tI3qldx2uHjIPzmG0c/wEYuC9a+MQ7DyZdjhZf8XbTl9K9y/18z8A2nt1YejG+la9wt392AL2ZuWZQx1i9XHXKclwnUXQvId1An/zcRdX/fiESksg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LA+qm1XYb4FOfmD3mNNS0j9xZ7Wpiy1asxIPU+AcGt0=;
- b=lAR9va+M1p5Z7cBszuzj1n6LPSvZuVynzoaeW+RZFnVsF9B92k+XvBEOn+jDP7X7oOODZfZzKXBfpKty3zrlA1loAOztvYlDZrKM5Q7wkZ/mssyRJwBtg7vJQYE74xrzTbEjkcd44Jv7Dw+i5FEgy7nPUAVPfSxVqOn6c1LHi37UIAxzjXllMs+2DiwonbyKM1HZ2kHEgC4fYToe2TrdQrD1H25TaDhwK4vZgXbIwlj3Zj8NXfN2FsAlxbBz0qdZi1GzelhX8QiqJono5rput5r9WRtXMBf4h9luYw4wlo+FbERihzebcDIm7SrK4HyH8WahcEHWFptiv89quvzsIA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LA+qm1XYb4FOfmD3mNNS0j9xZ7Wpiy1asxIPU+AcGt0=;
- b=jQ6rCYgFcEvMG6TZ4OlG9isFszh8JSOtvpuKYdxlG02K1IHUyG4fDGcffFFFxFv9Ez4gwMYCUnpTYihn91fsae6UrLth4vhMKApjavY3FQEMDyQzmYVuooIjPyFcEd49y7fjicpMskJOgkWEtY8p4G5d/1noC8GJsfSHsniORuk=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from VI0PR08MB10391.eurprd08.prod.outlook.com (2603:10a6:800:20c::6)
- by AS2PR08MB8575.eurprd08.prod.outlook.com (2603:10a6:20b:55e::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.16; Fri, 28 Nov
- 2025 15:05:45 +0000
-Received: from VI0PR08MB10391.eurprd08.prod.outlook.com
- ([fe80::fa6b:9ba8:5c2f:ac91]) by VI0PR08MB10391.eurprd08.prod.outlook.com
- ([fe80::fa6b:9ba8:5c2f:ac91%4]) with mapi id 15.20.9366.012; Fri, 28 Nov 2025
- 15:05:45 +0000
-Message-ID: <22a86779-102e-48ce-a79e-4a324c554984@arm.com>
-Date: Fri, 28 Nov 2025 16:05:42 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 8/8] cpufreq: CPPC: add autonomous mode boot parameter
- support
-To: Sumit Gupta <sumitg@nvidia.com>
-Cc: linux-kernel@vger.kernel.org, corbet@lwn.net,
- acpica-devel@lists.linux.dev, linux-doc@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
- zhanjie9@hisilicon.com, ionela.voinescu@arm.com, perry.yuan@amd.com,
- mario.limonciello@amd.com, ray.huang@amd.com, rdunlap@infradead.org,
- zhenglifeng1@huawei.com, robert.moore@intel.com, lenb@kernel.org,
- viresh.kumar@linaro.org, linux-tegra@vger.kernel.org, treding@nvidia.com,
- jonathanh@nvidia.com, vsethi@nvidia.com, ksitaraman@nvidia.com,
- sanjayc@nvidia.com, nhartman@nvidia.com, bbasu@nvidia.com,
- rafael@kernel.org, gautham.shenoy@amd.com
-References: <20251105113844.4086250-1-sumitg@nvidia.com>
- <20251105113844.4086250-9-sumitg@nvidia.com>
- <08c65096-dc70-42dd-a085-900605c3fe4b@arm.com>
- <0e24a618-4a42-4fa8-b9ed-6d7db9b1a8fc@nvidia.com>
-Content-Language: en-US
-From: Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <0e24a618-4a42-4fa8-b9ed-6d7db9b1a8fc@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO6P123CA0049.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:310::9) To VI0PR08MB10391.eurprd08.prod.outlook.com
- (2603:10a6:800:20c::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D273127F16C;
+	Fri, 28 Nov 2025 15:11:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764342702; cv=pass; b=BdGjkmbyqe1yfNnCJ5vQ1idBpYdVzEkLU0tougSeDQcHt5qJBcnFqPMfsCLrM8wcZVmxhytivOTeSvMuyVevitHQljEeA8lt2+CFzZj3L15/6kEubhaWZ46nzWXt/pQdOcZBz7rwV0bCBHEbAKVSxY03XZRatMWyYgQTuw8AenQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764342702; c=relaxed/simple;
+	bh=wYu86pI3gfsKzzNd6+8gThCWRG5HoAnZPy5f/sf/MNo=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=dG07hKUWA7aqPO+kXHpfYpwtpEtRI6oDkInCmo9CSq5Ixtzdwj++dmtbvvA85DIagV2XtH22XCAh0u0a4Y+DsYMDJURxGV6L1MejK9zXfgrsFqbQC2K/gocNTOr15+LqgHGNbhpEUka4WDEmY7bJOQO/6SegYiWpuoXY7x+sD4c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=hHCTDtIb; arc=pass smtp.client-ip=136.143.184.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1764342602; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=gZcBbihTsSkA4tWyQpixd48pmDK3jY0gszTIO+4gFvcsMy0UZMKqmD7LslLMXHrjcApQ5r1Byqs9cXcbEfUhcKRvoALAbJcd9xn1nxJwO8Upvru2QlQrneg/UWH+TtFaNQ7WPPzndyORrhEiS+yuOnEygLM3anR6Lknf2pxtYU4=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1764342602; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=wCxJ4NzqKxdh4wewyY3/df10XmJJltVNgKThcSpiCYU=; 
+	b=N/zTCn5KT81zuQCqyf8u1fsZRxnQ+GudJczU1+g0wVFcFFGzXo2ehUOCWJwzzdvIigGzXokygwbMLCmSJ+kwRrbB/eSeJ4Psye0cTo2CYuVe+NuIeiNQtWi0gX9lVEuGox0tILEumXrW8JGk5jUsVLhKtGfeSC+Rl4wxjp6KBSM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1764342602;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=wCxJ4NzqKxdh4wewyY3/df10XmJJltVNgKThcSpiCYU=;
+	b=hHCTDtIbHO/FdiDg6NPihWgzooJflCTGzw830CNOzCDyMrHHH30lbnbg3aKYA0TC
+	qyh9eX0r+PCEIPrGscLNU+69Mvhl2i66FvJsMbLvxtBtdjggDGIllYPo5QZpyH1+liE
+	fr9ELYpVmojzN8i3l4gOifnmZArQdy+Hv5cWlz0g=
+Received: by mx.zohomail.com with SMTPS id 176434259940774.21658293213216;
+	Fri, 28 Nov 2025 07:09:59 -0800 (PST)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	VI0PR08MB10391:EE_|AS2PR08MB8575:EE_|DU6PEPF00009523:EE_|GV1PR08MB10608:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0671b341-3c4c-484d-930c-08de2e8fc0b4
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|366016|7416014|376014|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info-Original:
- =?utf-8?B?cHJ1aVpsajU1cTV1TW1ZRXVCUmhuaXlSdUV0Q09DY3Vtb016aEtBbHhkc3ZN?=
- =?utf-8?B?eGNqUEY5QSsySyt4dnFaa1Y1ZG94eWpheDhsc3NrdnNkMVB5d21yazRLM3di?=
- =?utf-8?B?TDU4TmptSW5KdklaSXEzWXh5aVhUQmtQZXVZZE80MFcwK1JVMU5ycnZubFZk?=
- =?utf-8?B?SUZudk53OFJEaWFLQzYveVFRMTRMQzFEZ1BRR2dIb3ZaZUtyKzZTZnFRcHR3?=
- =?utf-8?B?L3MzYlNQSGFGajVKSTIwZUJmUGZzN2V3N2RHUENRZWRmWTJZdjY3OVhVQUpK?=
- =?utf-8?B?S2xiYk4vTEkzd0xxa2NwNWZDSjhKVk4zZ2RFYU1ZS2J2ZDJncTU2RU81YVJZ?=
- =?utf-8?B?SS9NVG1jVUZMOGVKV0VzVCs2OEFpREdQby9FT3haZU5HeThiVDF0Vk9hWHNU?=
- =?utf-8?B?SFF1aHNiczVnR3daeVdnQzRXWTMrMEhjZWlBdGJkNjZjVTNGT3VlTndQUnB4?=
- =?utf-8?B?RG5HWEhtZkFRZW5XTG5CZlBjMXlJMU9HOEEwdXY1bnlhTER2aE5LaWFKOXdk?=
- =?utf-8?B?dno5U2g0S3dYbVcvYm5jYUdqTC9aeUo3WkloWVY5L1VDVWR6VGs2SDNuc3Ir?=
- =?utf-8?B?aW9YQ3Y2T1piRkdYcE5xS0VHYVdqK0hncnhsd050b3U4YVg0WVpMU1Q4L0cz?=
- =?utf-8?B?ejh3K01XdlR0dUdZeTBZbjY3NEVvNEQyMlJMQnMvYzVTYURCc2VPc0RIaEhz?=
- =?utf-8?B?LzUxQ3RhS1p4aTBreTdLaUdkYVFFZGthc2M3VEJiV3pidUdhNGVoV3A3QThL?=
- =?utf-8?B?bjZ2a0VoSWQwOFBValRlOVprNTFDOTFjRjI2VkxTUzh1eHNQaHhlekppd3Bx?=
- =?utf-8?B?dTVqWnJDQzdKdGMyQm9wRjFoTWUzTVRvTzVMNFQ1ck5IaFgwOFdvelBFenph?=
- =?utf-8?B?dXlSVVZHb0wxM2ZsV2lwTkd5RStOeEY5ZW1OZXN0alJvaWkwaVA2NUpMYWxv?=
- =?utf-8?B?d0N4TUVLUitwczREU2cxcTlGZ1ZvMWFVcktIWk5vYjFnQXJFRFc3QzRGc0ZN?=
- =?utf-8?B?RlExbGpSUFRnUlVjQ2lMRlZxY3FlbHBkaTB6Sm96VnU5M3NjeUpSc1Q0VDJz?=
- =?utf-8?B?aW1uUmZnd3dCdDF1eWt1WDhXaTZFNEFIdzJCV1phZ2JJek5sZkZSRFBpNEJO?=
- =?utf-8?B?V0hvVCtkZ01oNTVNWll5NERJZWoxdUd5bnl2WU4rVXdVaEVXSmRpZ1l3VmRZ?=
- =?utf-8?B?L0RJTThneUVvVWUwQWpMNitXdTRnVVRvN0pDVUZra0o4YmdnMHFBVWpUb1Iz?=
- =?utf-8?B?K0pWdmVKb25zYXBUdWlnV296Q3ZTOUh6enZja2YzTVJqdmgvK081OUQ3WTRa?=
- =?utf-8?B?UytiR2ZKVnRYSzByZEhZdGduYzJUbFVGSGREZHhOenZWVUlFWk5hWTBkTDJH?=
- =?utf-8?B?dnNnNkV4T0dtZkE1S3J1TS9Rbk4vRWVDeS80RzhyV2VqNTkvczlGNmpvMTRn?=
- =?utf-8?B?MFNsbnAwMjNvZlMrVmt0NE9IVTJBWWZOdUV4M1NQckEzcktsTXFSY3dEdzBh?=
- =?utf-8?B?YURTTC9GLzVwdnBOcFNBY1dXWXM2MDVHRWNpRUNoR1VyMk5tSkNxSVZnK1dS?=
- =?utf-8?B?NnVCM0xtOXF2TVlIOUZKeDFWSnVNMDk4a1VIOVNWM2l2YmNtaWZuaGl6MDl2?=
- =?utf-8?B?d2lhYTV2WlhRdzVtZVZUMndVNFJ0S3FRMHROUWsxczV1WmJwK2FMQzM4OVFw?=
- =?utf-8?B?YkdRMzRjYnp2dDJpZHhjSTBEbXkybkpGbXIyTEFwSS9KekR4bi9TOGFaYURX?=
- =?utf-8?B?ZS9Sd0wvL2JlWUVWbXJhTEwvOHVhVnhuaGNwbXRsR2YzM2dnVSsxWDFqSkRl?=
- =?utf-8?B?a2g4MEdOK2RnelRWT3F3aTNRakFJMDc3Q3NvNkZjL3NHa0RFeDI5MHFwTHh3?=
- =?utf-8?B?b3hSaUx3Z2YyV1U0ZkZjNzlKY3BWa25nMVMwMDNSeXJZWVltQUNSYTl1cE9G?=
- =?utf-8?Q?ck3wGomhylHKY8mdVTGDXP9wFuQlLgWA?=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI0PR08MB10391.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB8575
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DU6PEPF00009523.eurprd02.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	d488ba02-496b-4d52-a274-08de2e8f9b2b
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|35042699022|1800799024|82310400026|376014|7416014|14060799003|36860700013|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?M0JwMDg1TTdoQlB2ZVpwcG9PT1JLSHkzUnhJZGxWQU9GNEdRL3IyaHg2UXFm?=
- =?utf-8?B?RU1FLzk5SThIT3BxSDZ4YWNiT3FUV1VtczNnVWVlSVNPa3A0UTk2ZkNnbEJL?=
- =?utf-8?B?L20xZ0lySjRKOWN4RXBMWVF1STFNZlo2dXpiOEhDTWlJQzdSUjMyZHVVWXRv?=
- =?utf-8?B?T0N5K2dkOTBCZU4xeStUYW5yUzNwN3NKbWNLcGx6d1FUTEZNZXVIek13ZC9h?=
- =?utf-8?B?YXd4QjF3ZWtBcVNVZzFCNmVzRDJFZjZQaWVRdm10Z0tNb1I4QzgzbG92Z2Nq?=
- =?utf-8?B?azBRbTFQc0FIT0JJS3R4VzVHbkNnWGh5aDJGc0VLekp4NWZYVVd0NFFsUllp?=
- =?utf-8?B?MHdNL2hrTWhjdnNYQ2hqL2h4b1FjVG0yNmFTbElSR2Zab1ZZb2M0NktsanNY?=
- =?utf-8?B?cjZZTGZFT2UycU0weFVTejAzMlE3b013TW9zVUJ0NHBSY1BaLzk1NEluYzVk?=
- =?utf-8?B?MzFDc24zR2NCbGdoVDQ1Q2tUYmZMN052Mkk4Qkt2bzIrS21YL2JPUjhSUjZB?=
- =?utf-8?B?TzZhUlhzOHdxVTFMMnlYdFYrc0F1azVGSDRpOXhZUEZQc1p6YTFNSzRVTytR?=
- =?utf-8?B?NDVwQi9jL1JnajJuVHdvUk84TGJmMHdsSENFbVpYbmpzemQxZXpodkVwQlJB?=
- =?utf-8?B?M053ckdlT2o5VDVZMkRUWEVmVDRQRXFmZ3lldit1QWdHa2dQRlM1Ykd0RWJK?=
- =?utf-8?B?clkwcEJHbm9iYVpCSkE1blg5OExkV05XQUpmUUhGRTRPdVBmNFV1QWFxdXQ2?=
- =?utf-8?B?VWhpRUt2ZXd1RVhBajYwZXErbEt2VSs0aERJdFZHaTdXZzFxM0RDSTF2TTdv?=
- =?utf-8?B?ZEw0NmxybmVuRm8yRWlvcm5xQm1ZSkhQVGdRZFp0WFgvZCtzYWNEZnQ4dmN1?=
- =?utf-8?B?Q05tdjN0cW1YekxkQ20zS3pxM29Gdjg1NThrZkc4aTBraFU4dkswSno2S0JZ?=
- =?utf-8?B?K0ZNbjNSUjc1Y0ViU3NaQWtVdU1IWjJRM0RlQWwxdTFEV0JNZkxwMzQ4d2ZN?=
- =?utf-8?B?bWIwU29Zb1BHOHRuT0Z0WHlFZ3BtNUN0ZDBxOTZhNkNHNldaWEtqaXFJSmJM?=
- =?utf-8?B?ekJJUUVHN2R1NEd5SUxDV3lQa1JYdXpzYnp5UTJRTkR3UHBFNkVOd0RJQ3NJ?=
- =?utf-8?B?RUViazE5VForbm5ENUZmYjRDM1Z0OW1jMXA5QmZ3dmhZU0hNMERzWXBnMzFn?=
- =?utf-8?B?U29jWGgraHBuZ3V3dHJlTTZ1Nm4yV2pvdVNRUUJudTFxb1lVbVRDc2ZzSzRX?=
- =?utf-8?B?WXhsa0I5dzhCRGhuMFRPTlJSekRXbWk5OXFpSC8weG9PdFhpZkRBRitBNzBy?=
- =?utf-8?B?cERTc2pPNTdxYUR0aS9PK0plVnFIczB6cnBCbHVIWEdjWFpJUGJ2cFprWllx?=
- =?utf-8?B?RGd5U0hueUo1KzU2bklqYUpmNVZqdFZtT1VUa1ZYcnJFRHFyOFZFOW1WWlVZ?=
- =?utf-8?B?RDgyUVo3OUhrQWdGdzhBc2R5T2grN0Urd3BoS015QmxBSmh4MkRwSlFWS2VF?=
- =?utf-8?B?dFI1QTJuclFjMFl1MHkxbS80Wjc0Zm9UaUYwYzVGTGY1Wng4SklGNWJCcklI?=
- =?utf-8?B?bGJHNlVFbkZpL2RDK1o0bkZUbXN4a0NFbytLYjVhdTBic2hZY2VIdTR4cC9Z?=
- =?utf-8?B?NzUrcUlwRVIxWUZ4WS83Sy94NS9lOWJSNm9lcHlEcnFoTjlvbFV5UUZvanUz?=
- =?utf-8?B?MkxBWWFralZ5bDhIUTlYYjhKbjdzWXN5Qm9FTGpIRmt0aG1qbGF1d0Q1bDVB?=
- =?utf-8?B?blJhMWlSUnFFdXJqejFyQStGYXVFNmo5ZjdPUTRrVzVuRVI5QWYrUlBGakV1?=
- =?utf-8?B?c2tmNElUTW9vcnZVc3NPSUNhMjAzbm55OGpUTjBkWWN2bVlVeGM0T0F6YThn?=
- =?utf-8?B?cDBOV3pUeXpGbmg1bnV0UmhDRjBaT3crQ1FseXVTZjYxbCt4SnNucmo4bFVy?=
- =?utf-8?B?VEJlcHR6c0VTOVl4S2duVUpsTVVIbnBxRllwdUtRU0IrRkUrNC9LeGtPa1dt?=
- =?utf-8?B?cmJYRTlSWGJPckNGbFptOElFTnRVN3ZWUEtYdTZramlvdmg4TzVVL0dGd3cx?=
- =?utf-8?B?OWFhbVBvRmdzM2pYN1o0YXM2R0FnN3FOUzliRGUzWDIrZWxsYXZreDdvTFhx?=
- =?utf-8?Q?teZY=3D?=
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(35042699022)(1800799024)(82310400026)(376014)(7416014)(14060799003)(36860700013)(7053199007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2025 15:06:48.0114
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0671b341-3c4c-484d-930c-08de2e8fc0b4
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DU6PEPF00009523.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR08MB10608
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH v13 1/4] rust: types: Add Ownable/Owned types
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <20251117-unique-ref-v13-1-b5b243df1250@pm.me>
+Date: Fri, 28 Nov 2025 12:09:38 -0300
+Cc: Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>,
+ Benno Lossin <lossin@kernel.org>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dave Ertman <david.m.ertman@intel.com>,
+ Ira Weiny <ira.weiny@intel.com>,
+ Leon Romanovsky <leon@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ Jan Kara <jack@suse.cz>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Viresh Kumar <vireshk@kernel.org>,
+ Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>,
+ =?utf-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ Paul Moore <paul@paul-moore.com>,
+ Serge Hallyn <sergeh@kernel.org>,
+ Asahi Lina <lina+kernel@asahilina.net>,
+ rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-block@vger.kernel.org,
+ dri-devel@lists.freedesktop.org,
+ linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org,
+ linux-pm@vger.kernel.org,
+ linux-pci@vger.kernel.org,
+ linux-security-module@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C95B13F7-B3F5-4508-A862-EAD22EF56FE2@collabora.com>
+References: <20251117-unique-ref-v13-0-b5b243df1250@pm.me>
+ <20251117-unique-ref-v13-1-b5b243df1250@pm.me>
+To: Oliver Mangold <oliver.mangold@pm.me>
+X-Mailer: Apple Mail (2.3826.700.81)
+X-ZohoMailClient: External
 
-Hello Sumit,
+Hi Oliver,
 
+> On 17 Nov 2025, at 07:07, Oliver Mangold <oliver.mangold@pm.me> wrote:
+>=20
+> From: Asahi Lina <lina+kernel@asahilina.net>
+>=20
+> By analogy to `AlwaysRefCounted` and `ARef`, an `Ownable` type is a
+> (typically C FFI) type that *may* be owned by Rust, but need not be. =
+Unlike
+> `AlwaysRefCounted`, this mechanism expects the reference to be unique
+> within Rust, and does not allow cloning.
+>=20
+> Conceptually, this is similar to a `KBox<T>`, except that it delegates
+> resource management to the `T` instead of using a generic allocator.
+>=20
+> [ om:
+>  - Split code into separate file and `pub use` it from types.rs.
+>  - Make from_raw() and into_raw() public.
+>  - Remove OwnableMut, and make DerefMut dependent on Unpin instead.
+>  - Usage example/doctest for Ownable/Owned.
+>  - Fixes to documentation and commit message.
+> ]
+>=20
+> Link: =
+https://lore.kernel.org/all/20250202-rust-page-v1-1-e3170d7fe55e@asahilina=
+.net/
+> Signed-off-by: Asahi Lina <lina+kernel@asahilina.net>
+> Co-developed-by: Oliver Mangold <oliver.mangold@pm.me>
+> Signed-off-by: Oliver Mangold <oliver.mangold@pm.me>
+> Co-developed-by: Andreas Hindborg <a.hindborg@kernel.org>
+> Signed-off-by: Andreas Hindborg <a.hindborg@kernel.org>
+> Reviewed-by: Boqun Feng <boqun.feng@gmail.com>
+> ---
+> rust/kernel/lib.rs       |   1 +
+> rust/kernel/owned.rs     | 195 =
++++++++++++++++++++++++++++++++++++++++++++++++
+> rust/kernel/sync/aref.rs |   5 ++
+> rust/kernel/types.rs     |   2 +
+> 4 files changed, 203 insertions(+)
+>=20
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index 3dd7bebe7888..e0ee04330dd0 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -112,6 +112,7 @@
+> pub mod of;
+> #[cfg(CONFIG_PM_OPP)]
+> pub mod opp;
+> +pub mod owned;
+> pub mod page;
+> #[cfg(CONFIG_PCI)]
+> pub mod pci;
+> diff --git a/rust/kernel/owned.rs b/rust/kernel/owned.rs
+> new file mode 100644
+> index 000000000000..a2cdd2cb8a10
+> --- /dev/null
+> +++ b/rust/kernel/owned.rs
+> @@ -0,0 +1,195 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Unique owned pointer types for objects with custom drop logic.
+> +//!
+> +//! These pointer types are useful for C-allocated objects which by =
+API-contract
+> +//! are owned by Rust, but need to be freed through the C API.
+> +
+> +use core::{
+> +    mem::ManuallyDrop,
+> +    ops::{Deref, DerefMut},
+> +    pin::Pin,
+> +    ptr::NonNull,
+> +};
+> +
+> +/// Type allocated and destroyed on the C side, but owned by Rust.
+> +///
+> +/// Implementing this trait allows types to be referenced via the =
+[`Owned<Self>`] pointer type. This
+> +/// is useful when it is desirable to tie the lifetime of the =
+reference to an owned object, rather
+> +/// than pass around a bare reference. [`Ownable`] types can define =
+custom drop logic that is
+> +/// executed when the owned reference [`Owned<Self>`] pointing to the =
+object is dropped.
+> +///
+> +/// Note: The underlying object is not required to provide internal =
+reference counting, because it
+> +/// represents a unique, owned reference. If reference counting (on =
+the Rust side) is required,
+> +/// [`AlwaysRefCounted`](crate::types::AlwaysRefCounted) should be =
+implemented.
+> +///
+> +/// # Safety
+> +///
+> +/// Implementers must ensure that the [`release()`](Self::release) =
+function frees the underlying
+> +/// object in the correct way for a valid, owned object of this type.
+> +///
+> +/// # Examples
+> +///
+> +/// A minimal example implementation of [`Ownable`] and its usage =
+with [`Owned`] looks like this:
+> +///
+> +/// ```
+> +/// # #![expect(clippy::disallowed_names)]
+> +/// # use core::cell::Cell;
+> +/// # use core::ptr::NonNull;
+> +/// # use kernel::sync::global_lock;
+> +/// # use kernel::alloc::{flags, kbox::KBox, AllocError};
+> +/// # use kernel::types::{Owned, Ownable};
+> +///
+> +/// // Let's count the allocations to see if freeing works.
+> +/// kernel::sync::global_lock! {
+> +///     // SAFETY: we call `init()` right below, before doing =
+anything else.
+> +///     unsafe(uninit) static FOO_ALLOC_COUNT: Mutex<usize> =3D 0;
+> +/// }
+> +/// // SAFETY: We call `init()` only once, here.
+> +/// unsafe { FOO_ALLOC_COUNT.init() };
+> +///
+> +/// struct Foo {
+> +/// }
 
-On 11/28/25 15:29, Sumit Gupta wrote:
->
-> On 27/11/25 20:23, Pierre Gondois wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> On 11/5/25 12:38, Sumit Gupta wrote:
->>> Add kernel boot parameter 'cppc_cpufreq.auto_sel_mode' to enable CPPC
->>> autonomous performance selection at system startup. When autonomous 
->>> mode
->>> is enabled, the hardware automatically adjusts CPU performance based on
->>> workload demands using Energy Performance Preference (EPP) hints.
->>>
->>> This parameter allows to configure the autonomous mode on all CPUs
->>> without requiring runtime sysfs manipulation if the 'auto_sel' register
->>> is present.
->>>
->>> When auto_sel_mode=1:
->>> - All CPUs are configured for autonomous operation during module init
->>> - EPP is set to performance preference (0x0) by default
->>> - Min/max performance bounds use defaults
->>> - CPU frequency scaling is handled by hardware instead of OS governor
->>>
->>> For Documentation/:
->>> Reviewed-by: Randy Dunlap<rdunlap@infradead.org>
->>> Signed-off-by: Sumit Gupta<sumitg@nvidia.com>
->>> ---
->>>   .../admin-guide/kernel-parameters.txt         |  12 ++
->>>   drivers/cpufreq/cppc_cpufreq.c                | 197 
->>> +++++++++++++++---
->>>   2 files changed, 182 insertions(+), 27 deletions(-)
->>>
->>> diff --git a/Documentation/admin-guide/kernel-parameters.txt 
->>> b/Documentation/admin-guide/kernel-parameters.txt
->>> index b8f8f5d74093..048f84008a7e 100644
->>> --- a/Documentation/admin-guide/kernel-parameters.txt
->>> +++ b/Documentation/admin-guide/kernel-parameters.txt
->>> @@ -929,6 +929,18 @@
->>>                       Format:
->>> <first_slot>,<last_slot>,<port>,<enum_bit>[,<debug>]
->>>
->>> +     cppc_cpufreq.auto_sel_mode=
->>> +                     [CPU_FREQ] Enable ACPI CPPC autonomous 
->>> performance selection.
->>> +                     When enabled, hardware automatically adjusts 
->>> CPU frequency
->>> +                     on all CPUs based on workload demands. In 
->>> Autonomous mode,
->>> +                     Energy Performance Preference(EPP) hints guide 
->>> hardware
->>> +                     toward performance(0x0) or energy efficiency 
->>> (0xff).
->>> +                     Requires ACPI CPPC autonomous selection 
->>> register support.
->>> +                     Format: <bool>
->>> +                     Default: 0 (disabled)
->>> +                     0: use cpufreq governors
->>> +                     1: enable if supoorted by hardware
->>> +
->>>       cpuidle.off=1   [CPU_IDLE]
->>>                       disable the cpuidle sub-system
->>>
->>> diff --git a/drivers/cpufreq/cppc_cpufreq.c 
->>> b/drivers/cpufreq/cppc_cpufreq.c
->>> index d1b44beaddda..0a55ab011317 100644
->>> --- a/drivers/cpufreq/cppc_cpufreq.c
->>> +++ b/drivers/cpufreq/cppc_cpufreq.c
->>> @@ -28,8 +28,12 @@
->>>   #include <acpi/cppc_acpi.h>
->>>
->>>   static struct cpufreq_driver cppc_cpufreq_driver;
->>> +
->>>   static DEFINE_MUTEX(cppc_cpufreq_update_autosel_config_lock);
->>>
->>> +/* Autonomous Selection */
->>> +static bool auto_sel_mode;
->>> +
->>>   #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
->>>   static enum {
->>>       FIE_UNSET = -1,
->>> @@ -272,8 +276,13 @@ static int cppc_cpufreq_set_target(struct 
->>> cpufreq_policy *policy,
->>>       freqs.old = policy->cur;
->>>       freqs.new = target_freq;
->>>
->>> +     /*
->>> +      * In autonomous selection mode, hardware handles frequency 
->>> scaling directly
->>> +      * based on workload and EPP hints. So, skip the OS frequency 
->>> set requests.
->>> +      */
->>>       cpufreq_freq_transition_begin(policy, &freqs);
->>> -     ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
->>> +     if (!cpu_data->perf_caps.auto_sel)
->>> +             ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
->>>       cpufreq_freq_transition_end(policy, &freqs, ret != 0);
->>>
->>>       if (ret)
->>> @@ -565,6 +574,12 @@ static struct cppc_cpudata 
->>> *cppc_cpufreq_get_cpu_data(unsigned int cpu)
->>>               goto free_mask;
->>>       }
->>>
->>> +     ret = cppc_get_perf(cpu, &cpu_data->perf_ctrls);
->>> +     if (ret) {
->>> +             pr_debug("Err reading CPU%d perf ctrls:ret:%d\n", cpu, 
->>> ret);
->>> +             goto free_mask;
->>> +     }
->>> +
->>>       return cpu_data;
->>>
->>>   free_mask:
->>> @@ -666,11 +681,81 @@ static int 
->>> cppc_cpufreq_update_autosel_val(struct cpufreq_policy *policy, bool a
->>>       return 0;
->>>   }
->>>
->>> +static int cppc_cpufreq_update_epp_val(struct cpufreq_policy 
->>> *policy, u32 epp)
->>> +{
->>> +     struct cppc_cpudata *cpu_data = policy->driver_data;
->>> +     unsigned int cpu = policy->cpu;
->>> +     int ret;
->>> +
->>> +     pr_debug("cpu%d, eppcurr:%u,new:%u\n", cpu, 
->>> cpu_data->perf_ctrls.energy_perf, epp);
->>> +
->>> + guard(mutex)(&cppc_cpufreq_update_autosel_config_lock);
->> Do we need to take the mutex ? Or is it reserved to auto_sel ?
->
-> Will move this to parent function.
-> Explained more in reply of the previous patch '7/8'.
->
->>> +
->>> +     ret = cppc_set_epp(cpu, epp);
->>> +     if (ret) {
->>> +             pr_warn("failed to set energy_perf forcpu:%d (%d)\n", 
->>> cpu, ret);
->>> +             return ret;
->>> +     }
->>> +     cpu_data->perf_ctrls.energy_perf = epp;
->>> +
->>> +     return 0;
->>> +}
->>> +
->>> +/**
->>> + * cppc_cpufreq_update_autosel_config - Update Autonomous selection 
->>> configuration
->>> + * @policy: cpufreq policy for the CPU
->>> + * @min_perf: minimum performance value to set
->>> + * @max_perf: maximum performance value to set
->>> + * @auto_sel: autonomous selection mode enable/disable (also 
->>> controls min/max perf reg updates)
->>> + * @epp_val: energy performance preference value
->>> + * @update_epp: whether to update EPP register
->>> + * @update_policy: whether to update policy constraints
->>> + *
->>> + * Return: 0 on success, negative error code on failure
->>> + */
->>> +static int cppc_cpufreq_update_autosel_config(struct cpufreq_policy 
->>> *policy,
->>> +                                           u64 min_perf, u64 
->>> max_perf, bool auto_sel,
->>> +                                           u32 epp_val, bool 
->>> update_epp, bool update_policy)
->>> +{
->>> +     const unsigned int cpu = policy->cpu;
->>> +     int ret;
->>> +
->>> +     /*
->>> +      * Set min/max performance registers and update policy 
->>> constraints.
->>> +      *   When enabling: update both registers and policy.
->>> +      *   When disabling: update policy only.
->>> +      * Continue even if min/max are not supported, as EPP and autosel
->>> +      * might still be supported.
->>> +      */
->>> +     ret = cppc_cpufreq_set_min_perf(policy, min_perf, auto_sel, 
->>> update_policy);
->>> +     if (ret && ret != -EOPNOTSUPP)
->>> +             return ret;
->>> +
->>> +     ret = cppc_cpufreq_set_max_perf(policy, max_perf, auto_sel, 
->>> update_policy);
->>> +     if (ret && ret != -EOPNOTSUPP)
->>> +             return ret;
->>> +
->>> +     if (update_epp) {
->>> +             ret = cppc_cpufreq_update_epp_val(policy, epp_val);
->>> +             if (ret)
->>> +                     return ret;
->>> +     }
->>> +
->>> +     ret = cppc_cpufreq_update_autosel_val(policy, auto_sel);
->>> +     if (ret)
->>> +             return ret;
->>> +
->>> +     pr_debug("Updated autonomous config [%llu-%llu] for CPU%d\n", 
->>> min_perf, max_perf, cpu);
->>> +
->>> +     return 0;
->>> +}
->>> +
->>>   static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
->>>   {
->>>       unsigned int cpu = policy->cpu;
->>>       struct cppc_cpudata *cpu_data;
->>>       struct cppc_perf_caps *caps;
->>> +     u64 min_perf, max_perf;
->>>       int ret;
->>>
->>>       cpu_data = cppc_cpufreq_get_cpu_data(cpu);
->>> @@ -734,11 +819,31 @@ static int cppc_cpufreq_cpu_init(struct 
->>> cpufreq_policy *policy)
->>>       policy->cur = cppc_perf_to_khz(caps, caps->highest_perf);
->>>       cpu_data->perf_ctrls.desired_perf = caps->highest_perf;
->>>
->>> -     ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
->>> -     if (ret) {
->>> -             pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
->>> -                      caps->highest_perf, cpu, ret);
->>> -             goto out;
->>> +     if (cpu_data->perf_caps.auto_sel) {
->>> +             ret = cppc_set_enable(cpu, true);
->> The CPPC enable register is optional.
->> However this doesn't mean CPPC is not working.
->
-> Ya, changed this in v5.
->
->>> +             if (ret) {
->>> +                     pr_err("Failed to enable CPPC on cpu%d 
->>> (%d)\n", cpu, ret);
->>> +                     goto out;
->>> +             }
->>> +
->>> +             min_perf = cpu_data->perf_ctrls.min_perf ?
->>> +                        cpu_data->perf_ctrls.min_perf : 
->>> caps->lowest_nonlinear_perf;
->>> +             max_perf = cpu_data->perf_ctrls.max_perf ?
->>> +                        cpu_data->perf_ctrls.max_perf : 
->>> caps->nominal_perf;
->>> +
->>> +             ret = cppc_cpufreq_update_autosel_config(policy, 
->>> min_perf, max_perf, true,
->>> + CPPC_EPP_PERFORMANCE_PREF, true, false);
->>> +             if (ret) {
->>> +                     cppc_set_enable(cpu, false);
->>> +                     goto out;
->>> +             }
->>> +     } else {
->>> +             ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
->>> +             if (ret) {
->>> +                     pr_debug("Err setting perf value:%d on CPU:%d. 
->>> ret:%d\n",
->>> +                              caps->highest_perf, cpu, ret);
->>> +                     goto out;
->>> +             }
->>>       }
->>>
->>>       cppc_cpufreq_cpu_fie_init(policy);
->>> @@ -910,7 +1015,6 @@ static int 
->>> cppc_cpufreq_update_auto_select(struct cpufreq_policy *policy, bool e
->>>       struct cppc_perf_caps *caps = &cpu_data->perf_caps;
->>>       u64 min_perf = caps->lowest_nonlinear_perf;
->>>       u64 max_perf = caps->nominal_perf;
->>> -     int ret;
->>>
->>>       if (enable) {
->>>               if (cpu_data->perf_ctrls.min_perf)
->>> @@ -919,26 +1023,8 @@ static int 
->>> cppc_cpufreq_update_auto_select(struct cpufreq_policy *policy, bool e
->>>                       max_perf = cpu_data->perf_ctrls.max_perf;
->>>       }
->>>
->>> -     /*
->>> -      * Set min/max performance registers and update policy 
->>> constraints.
->>> -      *   When enabling: update both registers and policy.
->>> -      *   When disabling: update policy only.
->>> -      * Continue even if min/max are not supported, as EPP and autosel
->>> -      * might still be supported.
->>> -      */
->>> -     ret = cppc_cpufreq_set_min_perf(policy, min_perf, enable, true);
->>> -     if (ret && ret != -EOPNOTSUPP)
->>> -             return ret;
->>> -
->>> -     ret = cppc_cpufreq_set_max_perf(policy, max_perf, enable, true);
->>> -     if (ret && ret != -EOPNOTSUPP)
->>> -             return ret;
->>> -
->>> -     ret = cppc_cpufreq_update_autosel_val(policy, enable);
->>> -     if (ret)
->>> -             return ret;
->>> -
->>> -     return 0;
->>> +     return cppc_cpufreq_update_autosel_config(policy, min_perf, 
->>> max_perf, enable,
->>> +                                               0, false, true);
->>>   }
->>>
->>>   static ssize_t store_auto_select(struct cpufreq_policy *policy, 
->>> const char *buf, size_t count)
->>> @@ -1146,13 +1232,61 @@ static struct cpufreq_driver 
->>> cppc_cpufreq_driver = {
->>>       .name = "cppc_cpufreq",
->>>   };
->>>
->>> +static int cppc_cpufreq_set_epp_autosel_allcpus(bool auto_sel, u64 
->>> epp)
->>> +{
->>> +     int cpu, ret;
->>> +
->>> +     for_each_present_cpu(cpu) {
->>> +             ret = cppc_set_epp(cpu, epp);
->> Isn't the EPP optional ?
->
-> Moving this to cppc_cpufreq_cpu_init in v5. Will add handling for 
-> EOPNOTSUPP.
->
->
->> If autonomous selection is available but not EPP, we will bail out.
->
-> I couldn't find in spec that EPP is mandatory when auto_select is 
-> enabled.
+nit: this can be simply:
 
-I was thinking about the case where the platform:
-- supports auto_sel
-- doesn't support EPP
-Then won't this function return an error code and not set auto_sel even 
-though
-we could have enabled it (without setting the EPP value) ?
+struct Foo;
 
+> +///
+> +/// impl Foo {
+> +///     fn new() -> Result<Owned<Self>, AllocError> {
+> +///         // We are just using a `KBox` here to handle the actual =
+allocation, as our `Foo` is
+> +///         // not actually a C-allocated object.
+> +///         let result =3D KBox::new(
+> +///             Foo {},
+> +///             flags::GFP_KERNEL,
+> +///         )?;
+> +///         let result =3D NonNull::new(KBox::into_raw(result))
+> +///             .expect("Raw pointer to newly allocation KBox is =
+null, this should never happen.");
+> +///         // Count new allocation
+> +///         *FOO_ALLOC_COUNT.lock() +=3D 1;
+> +///         // SAFETY: We just allocated the `Self`, thus it is valid =
+and there cannot be any other
+> +///         // Rust references. Calling `into_raw()` makes us =
+responsible for ownership and we won't
+> +///         // use the raw pointer anymore. Thus we can transfer =
+ownership to the `Owned`.
+> +///         Ok(unsafe { Owned::from_raw(result) })
+> +///     }
+> +/// }
+> +///
+> +/// // SAFETY: What out `release()` function does is safe of any =
+valid `Self`.
+> +/// unsafe impl Ownable for Foo {
+> +///     unsafe fn release(this: NonNull<Self>) {
+> +///         // The `Foo` will be dropped when `KBox` goes out of =
+scope.
+> +///         // SAFETY: The [`KBox<Self>`] is still alive. We can pass =
+ownership to the [`KBox`], as
+> +///         // by requirement on calling this function, the `Self` =
+will no longer be used by the
+> +///         // caller.
+> +///         unsafe { KBox::from_raw(this.as_ptr()) };
+> +///         // Count released allocation
+> +///         *FOO_ALLOC_COUNT.lock() -=3D 1;
+> +///     }
+> +/// }
+> +///
+> +/// {
+> +///    let foo =3D Foo::new().expect("Failed to allocate a Foo. This =
+shouldn't happen");
+> +///    assert!(*FOO_ALLOC_COUNT.lock() =3D=3D 1);
+> +/// }
+> +/// // `foo` is out of scope now, so we expect no live allocations.
+> +/// assert!(*FOO_ALLOC_COUNT.lock() =3D=3D 0);
+> +/// ```
+> +pub unsafe trait Ownable {
+> +    /// Releases the object.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// Callers must ensure that:
+> +    /// - `this` points to a valid `Self`.
+> +    /// - `*this` is no longer used after this call.
+> +    unsafe fn release(this: NonNull<Self>);
+> +}
+> +
+> +/// An owned reference to an owned `T`.
+> +///
+> +/// The [`Ownable`] is automatically freed or released when an =
+instance of [`Owned`] is
+> +/// dropped.
+> +///
+> +/// # Invariants
+> +///
+> +/// - The [`Owned<T>`] has exclusive access to the instance of `T`.
+> +/// - The instance of `T` will stay alive at least as long as the =
+[`Owned<T>`] is alive.
+> +pub struct Owned<T: Ownable> {
+> +    ptr: NonNull<T>,
+> +}
+> +
+> +// SAFETY: It is safe to send an [`Owned<T>`] to another thread when =
+the underlying `T` is [`Send`],
+> +// because of the ownership invariant. Sending an [`Owned<T>`] is =
+equivalent to sending the `T`.
+> +unsafe impl<T: Ownable + Send> Send for Owned<T> {}
+> +
+> +// SAFETY: It is safe to send [`&Owned<T>`] to another thread when =
+the underlying `T` is [`Sync`],
+> +// because of the ownership invariant. Sending an [`&Owned<T>`] is =
+equivalent to sending the `&T`.
+> +unsafe impl<T: Ownable + Sync> Sync for Owned<T> {}
+> +
+> +impl<T: Ownable> Owned<T> {
 
->
->
->>> +             if (ret) {
->>> +                     pr_warn("Failed to set EPP on CPU%d (%d)\n", 
->>> cpu, ret);
->>> +                     goto disable_all;
->>> +             }
->>> +
->>> +             ret = cppc_set_auto_sel(cpu, auto_sel);
->>
->> Also, it is possible that a platform only supports autonomous selection.
->> In this case, writing to auto_sel will fail, but auto_sel is still 
->> relevant.
->
-> I am not sure if we will have such platform which only supports 
-> Autonomous
-> mode and has auto_sel as read only. Will add handling for EOPNOTSUPP 
-> if we
-> have such cases as the cppc_get_reg_val() will returns this error.
->
-> Thank you,
-> Sumit Gupta
->
-> ....
->
+Can you make sure that impl Owned<T> follows the struct declaration?
+
+IOW: please move the Send and Sync impls to be after the impl above.
+
+> +    /// Creates a new instance of [`Owned`].
+> +    ///
+> +    /// It takes over ownership of the underlying object.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// Callers must ensure that:
+> +    /// - `ptr` points to a valid instance of `T`.
+> +    /// - Ownership of the underlying `T` can be transferred to the =
+`Self<T>` (i.e. operations
+> +    ///   which require ownership will be safe).
+> +    /// - No other Rust references to the underlying object exist. =
+This implies that the underlying
+> +    ///   object is not accessed through `ptr` anymore after the =
+function call (at least until the
+> +    ///   the `Self<T>` is dropped.
+
+It looks like this can be written more succinctly as:
+
+"This implies that the underlying object is not accessed through `ptr` =
+anymore until `Self<T>` is dropped."
+
+> +    /// - The C code follows the usual shared reference requirements. =
+That is, the kernel will never
+> +    ///   mutate or free the underlying object (excluding interior =
+mutability that follows the usual
+> +    ///   rules) while Rust owns it.
+> +    /// - In case `T` implements [`Unpin`] the previous requirement =
+is extended from shared to
+> +    ///   mutable reference requirements. That is, the kernel will =
+not mutate or free the underlying
+> +    ///   object and is okay with it being modified by Rust code.
+> +    pub unsafe fn from_raw(ptr: NonNull<T>) -> Self {
+> +        Self {
+> +            ptr,
+> +        }
+> +    }
+> +
+> +    /// Consumes the [`Owned`], returning a raw pointer.
+> +    ///
+> +    /// This function does not actually relinquish ownership of the =
+object. After calling this
+> +    /// function, the caller is responsible for ownership previously =
+managed
+> +    /// by the [`Owned`].
+> +    pub fn into_raw(me: Self) -> NonNull<T> {
+> +        ManuallyDrop::new(me).ptr
+> +    }
+> +
+> +    /// Get a pinned mutable reference to the data owned by this =
+`Owned<T>`.
+> +    pub fn get_pin_mut(&mut self) -> Pin<&mut T> {
+> +        // SAFETY: The type invariants guarantee that the object is =
+valid, and that we can safely
+> +        // return a mutable reference to it.
+> +        let unpinned =3D unsafe { self.ptr.as_mut() };
+> +
+> +        // SAFETY: We never hand out unpinned mutable references to =
+the data in
+> +        // `Self`, unless the contained type is `Unpin`.
+> +        unsafe { Pin::new_unchecked(unpinned) }
+> +    }
+> +}
+> +
+> +impl<T: Ownable> Deref for Owned<T> {
+> +    type Target =3D T;
+> +
+> +    fn deref(&self) -> &Self::Target {
+> +        // SAFETY: The type invariants guarantee that the object is =
+valid.
+> +        unsafe { self.ptr.as_ref() }
+> +    }
+> +}
+> +
+> +impl<T: Ownable + Unpin> DerefMut for Owned<T> {
+> +    fn deref_mut(&mut self) -> &mut Self::Target {
+> +        // SAFETY: The type invariants guarantee that the object is =
+valid, and that we can safely
+> +        // return a mutable reference to it.
+> +        unsafe { self.ptr.as_mut() }
+> +    }
+> +}
+> +
+> +impl<T: Ownable> Drop for Owned<T> {
+> +    fn drop(&mut self) {
+> +        // SAFETY: The type invariants guarantee that the `Owned` =
+owns the object we're about to
+> +        // release.
+> +        unsafe { T::release(self.ptr) };
+> +    }
+> +}
+> diff --git a/rust/kernel/sync/aref.rs b/rust/kernel/sync/aref.rs
+> index 0d24a0432015..e175aefe8615 100644
+> --- a/rust/kernel/sync/aref.rs
+> +++ b/rust/kernel/sync/aref.rs
+> @@ -29,6 +29,11 @@
+> /// Rust code, the recommendation is to use [`Arc`](crate::sync::Arc) =
+to create reference-counted
+> /// instances of a type.
+> ///
+> +/// Note: Implementing this trait allows types to be wrapped in an =
+[`ARef<Self>`]. It requires an
+> +/// internal reference count and provides only shared references. If =
+unique references are required
+> +/// [`Ownable`](crate::types::Ownable) should be implemented which =
+allows types to be wrapped in an
+> +/// [`Owned<Self>`](crate::types::Owned).
+> +///
+> /// # Safety
+> ///
+> /// Implementers must ensure that increments to the reference count =
+keep the object alive in memory
+> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
+> index dc0a02f5c3cf..7bc07c38cd6c 100644
+> --- a/rust/kernel/types.rs
+> +++ b/rust/kernel/types.rs
+> @@ -11,6 +11,8 @@
+> };
+> use pin_init::{PinInit, Wrapper, Zeroable};
+>=20
+> +pub use crate::owned::{Ownable, Owned};
+> +
+> pub use crate::sync::aref::{ARef, AlwaysRefCounted};
+>=20
+> /// Used to transfer ownership to and from foreign (non-Rust) =
+languages.
+>=20
+> --=20
+> 2.51.2
+>=20
+>=20
+>=20
+
+With the changes above,
+
+Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>=
 
