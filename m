@@ -1,158 +1,172 @@
-Return-Path: <linux-pm+bounces-38860-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38861-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D3BAC90D02
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 05:03:13 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21620C90D39
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 05:17:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8AFD54E5307
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 04:03:12 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9482734F373
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 04:17:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A7472DF152;
-	Fri, 28 Nov 2025 04:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC1F02FC893;
+	Fri, 28 Nov 2025 04:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="OCVuDER3"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="uAuHG3V4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615BA2DC345;
-	Fri, 28 Nov 2025 04:03:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8DC2E92B4;
+	Fri, 28 Nov 2025 04:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764302590; cv=none; b=UUTP63AiTSv18PlHmSymUGhV/QrNWrN072ahLzcZfcUnz8XMlo8OSU0Mge5Fl60Mpg8R0lcYYANGzR6itLrtC9TjvsW5GCEppy1fD/w3XwhXyyyCbwCkffbO+L72ScGbAxaGkmZKt3EXG3l1My+v91+EczQ9Enr6d+yXodGv2ac=
+	t=1764303466; cv=none; b=kWaxaUTSMn7R7CkkOy+UCJFPVvkV3MksHY/t5fdF+U4ZQqDCqtCpCYDK4WeEJn1ABDyPILDV9DrMQ578aycYVFhOzSYosnmZkSMNZoNy+HUL2zkqgnuWlkboeEXg2/GIIsLL8fgj4ifAka4x6vGAKCNIMwRblrtZIr9CThBeKbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764302590; c=relaxed/simple;
-	bh=y1yxwBqoYzCm7Qv8bkk1HE89PVsRPmrzPr0yomRdUAY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=jiJex787GtBU+MR77Q/tcuCELH8xc+2KGTrErkYAwEreBNjcJQ+9Fv5tihUxjEqM5PHww7PJcF1O9MzNJQlgDx5LPrrrgqIMYPLjBncMrqR9FVZsYZxtV9Si+bRZxBo+itqcjl6cD9dQJL3rdIS70vSetOpIejlnWUOk/b88TgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=OCVuDER3; arc=none smtp.client-ip=113.46.200.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=8MAvUW4rV8G0L/xgam721c+vsNUeLWAth3J2R5V0TkM=;
-	b=OCVuDER3rywZwGDf+qnHHpeOnLrGn2Dfch8wI1XKZVcdLmfg0AmrQo6UsKkfhHeNzKNFCm+lX
-	H815frAASLDYBbEh0/XQBrdJbbjAUT3Q5y97r1fIckHrXgdH082MJ33EjxKYt2UbEFwtZW4W4+2
-	nQEf9zEoLjhpbTzfN+O8UGE=
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4dHfjb64GMzmV79;
-	Fri, 28 Nov 2025 12:01:07 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id 072731A0174;
-	Fri, 28 Nov 2025 12:02:57 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
- (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 28 Nov
- 2025 12:02:56 +0800
-Message-ID: <2dbbb205-5a04-457a-b643-e965aaa2a14e@huawei.com>
-Date: Fri, 28 Nov 2025 12:02:55 +0800
+	s=arc-20240116; t=1764303466; c=relaxed/simple;
+	bh=Zf4IkwpT8UKKZSnCyMuagxPXOWk7DyEamr/50V6CcEU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hS13eIJgg7UaFXhu5PpIClqk69au+gpUDKl/BuLVRRkIu8V2wdonAQiWK7S0agURpJximzykHL7VjBwfxI7nh3cb2n3nHLj+WHwHGr3AFUvkEV2MI8LjvDu6KF8EXCr9OJA8gNonHF/WCuezhmXZgSiYi7kVheVzfy67izu9YeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=uAuHG3V4; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 2bf9eba6cc1111f0b2bf0b349165d6e0-20251128
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=8SXboeAZgfntpAeaS84XqhIpOOcXl92xvZI5XQYTmYU=;
+	b=uAuHG3V4bO6zlP83OgKcZa/ACPD4hWfofM1uROTGq6RUhtw/ZylWO24j5kDh+IAIkezB7AtFDNSnIWYSvX6Tvjhls3D6NCssnVqGRohs0zQPBFIOvEcGaEpIXgrQKlLMiTMegbnwmsPq5dCcghYmUStga6AtEa+Ttt9y3m2ryXU=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:5b5bd644-d021-4f5d-8d74-4200b9bc0e84,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:59eccca7-1697-4a34-a2ba-2404d254a770,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|888|898,TC:-5,Content:0|15|5
+	0,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OS
+	A:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 2bf9eba6cc1111f0b2bf0b349165d6e0-20251128
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+	(envelope-from <macpaul.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 96179658; Fri, 28 Nov 2025 12:17:37 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1748.26; Fri, 28 Nov 2025 12:17:35 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1748.26 via Frontend Transport; Fri, 28 Nov 2025 12:17:35 +0800
+From: Macpaul Lin <macpaul.lin@mediatek.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>,
+	=?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?=
+	<nfraprado@collabora.com>, Macpaul Lin <macpaul.lin@mediatek.com>, "Chen-Yu
+ Tsai" <wenst@chromium.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>
+CC: Weiyi Lu <Weiyi.Lu@mediatek.com>, Jian Hui Lee
+	<jianhui.lee@canonical.com>, Irving-CH Lin <Irving-CH.Lin@mediatek.com>,
+	<conor@kernel.org>, <krzk@kernel.org>, Louis-Alexis Eyraud
+	<louisalexis.eyraud@collabora.com>, Bear Wang <bear.wang@mediatek.com>,
+	"Pablo Sun" <pablo.sun@mediatek.com>, Ramax Lo <ramax.lo@mediatek.com>,
+	Macpaul Lin <macpaul@gmail.com>, MediaTek Chromebook Upstream
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>, <Stable@vger.kernel.org>
+Subject: [PATCH v2] pmdomain: mtk-pm-domains: improve spinlock recursion fix in probe with correcting reference count
+Date: Fri, 28 Nov 2025 12:17:22 +0800
+Message-ID: <20251128041722.3540037-1-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: Return -EINVAL if no policy is boost supported
-To: Viresh Kumar <viresh.kumar@linaro.org>
-CC: <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>, <yubowen8@huawei.com>, <zhangpengjie2@huawei.com>,
-	<wangzhi12@huawei.com>, <linhongye@h-partners.com>
-References: <20251126031916.3641176-1-zhenglifeng1@huawei.com>
- <wnnfdvp3r3bg5wztazoijei2uji5xypl4b4wlvlxuwxaizu6g7@2xxyrk7kdxhf>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <wnnfdvp3r3bg5wztazoijei2uji5xypl4b4wlvlxuwxaizu6g7@2xxyrk7kdxhf>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemf200001.china.huawei.com (7.202.181.227)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-On 2025/11/26 14:29, Viresh Kumar wrote:
-> On 26-11-25, 11:19, Lifeng Zheng wrote:
->> In cpufreq_boost_trigger_state(), if all the policies are boost
->> unsupported, policy_set_boost() will not be called and this function will
->> return 0. But it is better to return an error to indicate that the platform
->> doesn't support boost.
-> 
-> I am not sure if it is a good idea. If boost isn't supported by any policy then
-> the driver shouldn't enable it at all.
+Remove scpsys_get_legacy_regmap(), replacing its usage with
+of_find_node_with_property().  Explicitly call of_node_get(np) before each
+of_find_node_with_property() to maintain correct node reference counting.
 
-Yes. So I think return an error is more reasonable when try to 'echo 1 >
-boost' in this situation.
+The of_find_node_with_property() function "consumes" its input by calling
+of_node_put() internally, whether or not it finds a match.
+Currently, dev->of_node (np) is passed multiple times in sequence without
+incrementing its reference count, causing it to be decremented multiple times
+and risking early memory release.
 
-> Also, cpufreq_table_validate_and_sort()
-> sets boost supported only if at least one policy supports it.
+Adding of_node_get(np) before each call balances the reference count,
+preventing premature node release.
 
-Sorry, I don't see any connection to cpufreq_table_validate_and_sort().
+Fixes: c1bac49fe91f ("pmdomains: mtk-pm-domains: Fix spinlock recursion in probe")
+Cc: Stable@vger.kernel.org
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Tested-by: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
+---
+ drivers/pmdomain/mediatek/mtk-pm-domains.c | 21 ++++++---------------
+ 1 file changed, 6 insertions(+), 15 deletions(-)
 
-> 
-> We can still have this case where the policy that supports boost is offline, but
-> we shouldn't be returning error there and confuse userspace.
+Changes for v2:
+ - Rewording commit message.
+ - Add Fixes: and Tested-by: tag, thanks.
 
-Make sense. But it is also confusing when setting 1 to global boost success
-but the platform doesn't support boost at all. It seems like there is no
-way to distinguish between these two scenarios: the platform does not
-support turbo or the turbo-supporting cores are not yet online.
-
-> 
-> Having said that, there are a few things I would like to point.
-> 
->> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
->> ---
->>  drivers/cpufreq/cpufreq.c | 12 ++++++------
->>  1 file changed, 6 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> index e8d7544b77b8..2df714b24074 100644
->> --- a/drivers/cpufreq/cpufreq.c
->> +++ b/drivers/cpufreq/cpufreq.c
->> @@ -2806,7 +2806,9 @@ static int cpufreq_boost_trigger_state(int state)
->>  {
->>  	struct cpufreq_policy *policy;
->>  	unsigned long flags;
->> -	int ret = 0;
-> 
-> In the current code, `ret` isn't required to be initialized to 0.
-> 
->> +
->> +	/* Return -EINVAL if no policy is boost supported. */
->> +	int ret = -EINVAL;
->>  
->>  	/*
->>  	 * Don't compare 'cpufreq_driver->boost_enabled' with 'state' here to
->> @@ -2824,14 +2826,12 @@ static int cpufreq_boost_trigger_state(int state)
->>  
->>  		ret = policy_set_boost(policy, state);
->>  		if (ret)
->> -			goto err_reset_state;
->> +			break;
->>  	}
->>  	cpus_read_unlock();
->>  
->> -	return 0;
->> -
->> -err_reset_state:
->> -	cpus_read_unlock();
-> 
-> It was a bad idea to mix two things in a single patch. You should have avoided
-> optimizing the use of cpus_read_unlock() in this patch.
-
-OK. I'll split that to another patch in the next version. Thanks!
-
-> 
->> +	if (!ret)
->> +		return 0;
->>  
->>  	write_lock_irqsave(&cpufreq_driver_lock, flags);
->>  	cpufreq_driver->boost_enabled = !state;
->> -- 
->> 2.33.0
-> 
+diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+index 80561d27f2b2..f64f24d520dd 100644
+--- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
++++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+@@ -984,18 +984,6 @@ static void scpsys_domain_cleanup(struct scpsys *scpsys)
+ 	}
+ }
+ 
+-static struct device_node *scpsys_get_legacy_regmap(struct device_node *np, const char *pn)
+-{
+-	struct device_node *local_node;
+-
+-	for_each_child_of_node(np, local_node) {
+-		if (of_property_present(local_node, pn))
+-			return local_node;
+-	}
+-
+-	return NULL;
+-}
+-
+ static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *scpsys)
+ {
+ 	const u8 bp_blocks[3] = {
+@@ -1017,7 +1005,8 @@ static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
+ 	 * this makes it then possible to allocate the array of bus_prot
+ 	 * regmaps and convert all to the new style handling.
+ 	 */
+-	node = scpsys_get_legacy_regmap(np, "mediatek,infracfg");
++	of_node_get(np);
++	node = of_find_node_with_property(np, "mediatek,infracfg");
+ 	if (node) {
+ 		regmap[0] = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg");
+ 		of_node_put(node);
+@@ -1030,7 +1019,8 @@ static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
+ 		regmap[0] = NULL;
+ 	}
+ 
+-	node = scpsys_get_legacy_regmap(np, "mediatek,smi");
++	of_node_get(np);
++	node = of_find_node_with_property(np, "mediatek,smi");
+ 	if (node) {
+ 		smi_np = of_parse_phandle(node, "mediatek,smi", 0);
+ 		of_node_put(node);
+@@ -1048,7 +1038,8 @@ static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
+ 		regmap[1] = NULL;
+ 	}
+ 
+-	node = scpsys_get_legacy_regmap(np, "mediatek,infracfg-nao");
++	of_node_get(np);
++	node = of_find_node_with_property(np, "mediatek,infracfg-nao");
+ 	if (node) {
+ 		regmap[2] = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg-nao");
+ 		num_regmaps++;
+-- 
+2.45.2
 
 
