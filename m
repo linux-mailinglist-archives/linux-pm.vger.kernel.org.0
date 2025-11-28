@@ -1,126 +1,143 @@
-Return-Path: <linux-pm+bounces-38872-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38873-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AE25C91800
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 10:46:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E597AC91899
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 10:55:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6D7524E2B78
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 09:46:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8805F3AB0E6
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 09:55:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A1882C235D;
-	Fri, 28 Nov 2025 09:46:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1E5D3064BD;
+	Fri, 28 Nov 2025 09:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lH+zof+k"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qHkOmX2s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690D53C1F;
-	Fri, 28 Nov 2025 09:46:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28D7A305943
+	for <linux-pm@vger.kernel.org>; Fri, 28 Nov 2025 09:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764323172; cv=none; b=NtsX5R+M9Vs5VWVK50Jx23uly6psa/aOs4H8gjSQ5mZqItqUPr2i6jwT+WNi34FqOx0JMp2SxMMQXmnY288O15bSJTsB/dYCSCoMoI9T4cnUIc8j7uYXgQEEMp7mtSgpv+1wyEQIfXuwpXeA4msmcTvFVau5JIZpUmFHy8H/iTw=
+	t=1764323752; cv=none; b=SXpA2UGgS5VWTeDLpkP3rP48yBLNlRzCzKzO398w7w0hVLt3Yt8MTjpFl5M9sek8idkrDBDWR7gM2T8GzitxN9TMVC8VbdWRFxx86SuPLhF20fdtzE86sqNV5P00rCgVSOnx0eddnG3/zZeNR+/PWQPaiF1RuMQ/CGt0xaCLBiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764323172; c=relaxed/simple;
-	bh=JZmVVDf/2IVFWddvgioDxXF7J1xFnKWvCQQnTxck6wE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nhdg2AJp43+jdJUMa/M6bewf9I9VdXIA3Bv1b/XgAtrJL5mFUiDzKOliaJa7GHh6ib5tbuGgNwc4Fd0pwNemi0nDCUzwc6zBwluEX1E2iH5rKZRsgGt7uYRr1WCR7XGrUP8u2rn5q+RqrjPN41IkYEX5gOR6BnLpFAudk8kRdaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lH+zof+k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30DF7C4CEF1;
-	Fri, 28 Nov 2025 09:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764323172;
-	bh=JZmVVDf/2IVFWddvgioDxXF7J1xFnKWvCQQnTxck6wE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lH+zof+kyQOTcnpH9BgQaQDFUIKPhS0pyJMibR32EstBiQ7yeOaS9NZuGFyYknbXo
-	 WLCupw29wviTX4hRjX273n+Mo8jBc5AnzFfhj+/8rcz9FHUSmEhVtDsd7ct7dAQH0c
-	 tvi6KUxAveQhkzEFJtBMpSm76Ta+Xpph35AXj/DWNUQTO0BCl8p1mlKScfy5m09hsP
-	 CL61ugNYszkyn1xzFzcSt0zmP2/xRfVoy0qJT8JdIZXULYgcMSl956gynyjhRPmPJZ
-	 pvy4I8WeCPuldZCMeMdheVc1qnOhgdm7HmS5eR4Xo/SMh8//duIborbXV9g9s6rBql
-	 nn/xPiZKxl9Nw==
-Message-ID: <b71a40ce-a70e-49ee-be61-5ec1f45ef2ec@kernel.org>
-Date: Fri, 28 Nov 2025 10:46:07 +0100
+	s=arc-20240116; t=1764323752; c=relaxed/simple;
+	bh=Yh0qa9+7TnDcYJAi5o9Jbm9rjPvdBTg211WI511CX9k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kkVqa08bwhNmZLnSpoqBUNlQW4mUuIXiv6ThUOHdk0dofZJPo3a/8+E+PoUs5t3WLsDV9Q/Y3gPH4l8W9brY3e2OHUDEgv8W4okOYNqMqpBY7E47r1e6eIaceC7jYj/cmREt9CLTRLs8VFoi+YeOzexarU8SPqp++jEURYWip24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qHkOmX2s; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3437ea05540so1327075a91.0
+        for <linux-pm@vger.kernel.org>; Fri, 28 Nov 2025 01:55:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764323750; x=1764928550; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1GQvR/dGLaXXvOzopxgqRz4uco6G3zBSS5BQmIwFNkE=;
+        b=qHkOmX2s37bw/Mw/FgyClagkl4/zQ8c1rVor706ZWomblTbvFrWelL0DsbqMmv+BJJ
+         V7dbK6dz6ygz92L2JLeqbMKE/YLf4NLyOgLP0cWaU7swe9kL97IlpuCLiCqoWdzsN80S
+         LvYw35MkMjOCFEEwnULHgA9GsQXdiNXvXEUoYPitkR7AZoPjWOYOqcHvGlJFsqzkx0Da
+         Uq0ybqbfNW1wVeaNCzhIffQqBkBDvg6zqbAd1JuJQIEbw36zb7+kZaFQkY3lnayhiXf1
+         e2aDPw/W9h6v4sTxu9/7P4yz9gvvQ0DqwAkRM22Q1w19feHQ83HMOnxBsMrp00hf0pXi
+         JBcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764323750; x=1764928550;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1GQvR/dGLaXXvOzopxgqRz4uco6G3zBSS5BQmIwFNkE=;
+        b=qVSFe6QMlQojIGS+SQMMRzn8NejyKqj8nbW94tWwdbiBOveHGho8byD0+j9PvFGCzy
+         nQDhEe81SIrFbjqy5inm344tje/issCruhe/R4Xn3UsmXsH+Ta1WF9vli5Lyd2fKVlCf
+         nZh3afIRC++IDIwX2X/oV8J1uOyP1SpvD/DSqZ+yRZ7VhVGr+ve81+nn8L0YYTTD1eXU
+         C1Y8xcgCQoeo55RVrTrbNojEGYCiOT2zY9IbWAzbKXE6Ktm0pNyLAtsxgUP3ritz9zCI
+         aiM6wKzkPhyK9F0Gfrx6VcA4mQX8DVwjdIyIwY+RVDc0/WYJ1BToKONZrZ9BvqlqVV6Y
+         q2eg==
+X-Forwarded-Encrypted: i=1; AJvYcCWncXmVQQkzSj6Ea1Yky0jobcReNR/0vvCindo1/jBk4vkKQ4hBlw5pLiEH/XI0WXSH3I+7MvF5xQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzycRc6pf6QSD36fg19MeJ32sSFdaxOrPsJurdzNAztsMl0X+r1
+	lLi69XeuZPqt3BMdxauNK8D6Dy4AlR3ib4E+Dsqb5PVhUqmSVre1SdY26xAT6lbATbM=
+X-Gm-Gg: ASbGncsfyQLetIK0llycLHzb/r3MoaAI6P8J1SZuqBWO/JuJY2XGVJnqYp8mPgln/oT
+	nAKUjPRRehAS2KD836h+3xjhseiz5++jPC8wMwAq7vSBAxwuNcAkkqo17NBHJfT8ADul1vNQsXg
+	qwcnzx2zIxSmEGYP73WQBlEwRkhR5yflP0gzzFSBgWEt2bpvLrZuHecEOsPIhS+S3U6xy8azBqj
+	OzvhXhEBSbpDRsQNTrXSIwvQPkftkGBYQjXrJRY0geQqSAJ03IFRZQON8UUTAS7nc7xP+ekzk9d
+	L+dblwcGkVwmsJUXA6YMO9O6wP/4D/JbxxQApjQRZMgJ2FotGscNPr6mkO2jEb5suwy689rQA3d
+	gKkrSuqzVYiQu3X4QhM9VAM/3pDh54zVyYhwVM7URMWDYPoCB2gpn6HiR+kNvkR7jPA8ZzVxFZx
+	GbgV8N5soofCU=
+X-Google-Smtp-Source: AGHT+IHVI3H13LgN3uGIrowpvtCCzadADr6HEh7p6FG1497Y5qGScUqwnaT2Tt4XLibuJQzW97Ij8A==
+X-Received: by 2002:a17:90b:540b:b0:343:eb40:8e01 with SMTP id 98e67ed59e1d1-34733f4ab79mr29222159a91.27.1764323750109;
+        Fri, 28 Nov 2025 01:55:50 -0800 (PST)
+Received: from localhost ([122.172.86.94])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-347600c9180sm4104512a91.13.2025.11.28.01.55.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Nov 2025 01:55:49 -0800 (PST)
+Date: Fri, 28 Nov 2025 15:25:46 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Alexandre Courbot <acourbot@nvidia.com>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] rust: cpufreq: always inline functions using
+ build_assert with arguments
+Message-ID: <4govqgwq7yd2dbymkw622usjgiebfzulm2wmsnjje5q2vku3kf@3dap2mxn4wxa>
+References: <20251128-io-build-assert-v2-0-a9ea9ce7d45d@nvidia.com>
+ <20251128-io-build-assert-v2-3-a9ea9ce7d45d@nvidia.com>
+ <zis5k4oo3kq6dykzm3kav7rlblqvvnk43mrcvlwyxxfgwbpmjt@6r3f5432vr45>
+ <aSlsQmiSCC2ZdfLr@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: power: define ID for Marvell PXA1908
- audio domain
-To: Karel Balej <balejk@matfyz.cz>, =?UTF-8?Q?Duje_Mihanovi=C4=87?=
- <duje@dujemihanovic.xyz>, Ulf Hansson <ulf.hansson@linaro.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org
-Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20251127190237.745-1-balejk@matfyz.cz>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251127190237.745-1-balejk@matfyz.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aSlsQmiSCC2ZdfLr@google.com>
 
-On 27/11/2025 20:02, Karel Balej wrote:
-> Define an identifier for the SoC's audio power island so that it can be
-> referenced through device tree.
+On 28-11-25, 09:32, Alice Ryhl wrote:
+> On Fri, Nov 28, 2025 at 11:42:55AM +0530, Viresh Kumar wrote:
+> > On 28-11-25, 11:11, Alexandre Courbot wrote:
+> > > `build_assert` relies on the compiler to optimize out its error path.
+> > > Functions using it with its arguments must thus always be inlined,
+> > > otherwise the error path of `build_assert` might not be optimized out,
+> > > triggering a build error.
+> > > 
+> > > Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+> > > ---
+> > >  rust/kernel/cpufreq.rs | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > > 
+> > > diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
+> > > index 1a555fcb120a..df5d9f6f43f3 100644
+> > > --- a/rust/kernel/cpufreq.rs
+> > > +++ b/rust/kernel/cpufreq.rs
+> > > @@ -1015,6 +1015,8 @@ impl<T: Driver> Registration<T> {
+> > >          ..pin_init::zeroed()
+> > >      };
+> > >  
+> > > +    // Always inline to optimize out error path of `build_assert`.
+> > > +    #[inline(always)]
+> > >      const fn copy_name(name: &'static CStr) -> [c_char; CPUFREQ_NAME_LEN] {
+> > >          let src = name.to_bytes_with_nul();
+> > >          let mut dst = [0; CPUFREQ_NAME_LEN];
+> > 
+> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > 
+> > Lemme know if you want me to pick this instead.
 > 
-> Signed-off-by: Karel Balej <balejk@matfyz.cz>
-> ---
->  include/dt-bindings/power/marvell,pxa1908-power.h | 1 +
->  1 file changed, 1 insertion(+)
+> There's no reason these can't be picked up independently, so it would be
+> fine if you pick up this one.
 
+Applied. Thanks.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-
-Best regards,
-Krzysztof
+-- 
+viresh
 
