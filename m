@@ -1,171 +1,132 @@
-Return-Path: <linux-pm+bounces-38878-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38879-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5F41C91F11
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 13:06:43 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D890C92130
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 14:11:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 996554E5636
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 12:06:05 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EA87334F48D
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 13:11:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BFCE30CD95;
-	Fri, 28 Nov 2025 12:06:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B504328B5C;
+	Fri, 28 Nov 2025 13:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KlzIja29"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="o7SJ91sV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464CA30BF62
-	for <linux-pm@vger.kernel.org>; Fri, 28 Nov 2025 12:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88405309EF2
+	for <linux-pm@vger.kernel.org>; Fri, 28 Nov 2025 13:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764331563; cv=none; b=E+QeeMQ7ScMW9SHw/HShaAMm4zNzmcu1pQTBb9MFDnn6seCnWA8mWMapgnKBWpDXJuesv+qiAR9V2acHmCn4hx0pQCiyH5jZkmhtyCo1Q2LP006oINMAz2qX2Ticm6dqXHHVlka2oSqpHC6WVdmFrFJkgp2UWAJ02mhftSM/QE4=
+	t=1764335456; cv=none; b=Zhw71NKxfinh9cjpxrJEA9FsVOp+1+aElIRE5LIJQ5yPP+OYAfK56KT8ofrGwN1Ljs2vYAq4epYGyiKZT9YwmzrglspRGlTwJqomtZgxBvyBd3dkJEAaNzRw6Eux2o+S6MmgslWuMWMUKtIWGwCgfpoIJ6ut5J93tL/zWIGjFWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764331563; c=relaxed/simple;
-	bh=7oWurJlrCrne/H/0oPlGiBUmGNe8ZE2w4wilOWHimmA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J00zqP6YWV+AfzAjzs18h3Cw3z9c2uL7WE94qNayM5OE6ClX+i708A+SlsyJbAYIvBKBsJVG6NfudRaoAW1K4/yqjp74BFfboVRowsqO15soYdAMJGO0uYNhPAvKIp/bXwGlxgQRJ55clzajTAK0157zcPyS0UKOkH7KzPcv/ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KlzIja29; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A3C9C19422
-	for <linux-pm@vger.kernel.org>; Fri, 28 Nov 2025 12:06:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764331563;
-	bh=7oWurJlrCrne/H/0oPlGiBUmGNe8ZE2w4wilOWHimmA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=KlzIja29xCWrgafxrYWp8it8Js846MhCj1NCHT9tC2AmZ+vSjgFJzE5bdV42GAUeA
-	 Z4dMcSX008CQfry8AXjB37qGL2q5gKByo5FmzPXD1owMxOLv7f8nWh76xTD1Suhh85
-	 BJEZxM/YRptVmPmqm8IHHCRUoJ6MMEQLSoHjD+0k14sH+0BAhf/QOiUbB9HbG759vf
-	 UEHCGprp3vZlebSaYFgj+n3Y4R9TSFWXz3RDU+A/h7RLsLozKl/nJ/o0CBpXKBF3he
-	 kd2Vs6sifPyednzVPTla3HJeElUavTxl8YDFjCq5k4gOSivYpPmxm/qEoA2fJ2AUeh
-	 luco9WHU+ZQ4g==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-3ed151e8fc3so906412fac.2
-        for <linux-pm@vger.kernel.org>; Fri, 28 Nov 2025 04:06:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUpDeVesvLhqPdMWyZrrFB1HGBkDl1K9yXyUCBWRSLRwasMoFpuyDsa7hVTCROuohRr17yT+HjbfQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzanOd0G0EdiDsyeqmnWSsl51bL/8BfOGlNlkn3rk69cMb9JHMs
-	WTEIlrMdVo8dykBFdtV9Y/zOuk6Bc6Zu894mXU4w+jMZERkVQ8VOdFvfokGXmyhr3W0EVqAW45T
-	G2n91VXODdPutIxfhEBlTIFaE1f6I/Pw=
-X-Google-Smtp-Source: AGHT+IETqATLOm1485jDqq5eMTXHikfkOFyXFBL4DbElQhIXDtAVxsNowFFUvTTUbLliWwvopgBKr27gVGJG0uVXyu8=
-X-Received: by 2002:a05:6808:d50:b0:450:c4bb:7550 with SMTP id
- 5614622812f47-4514e8343e7mr6013379b6e.62.1764331562412; Fri, 28 Nov 2025
- 04:06:02 -0800 (PST)
+	s=arc-20240116; t=1764335456; c=relaxed/simple;
+	bh=dvLiXeGbMyL6LjS4KZj+XBz2Xm2VvTPyKLMdIxMSwcY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EeFhR5y4tCuxg/VHFyN+Kfzp+wqRp6o+46pguA8w5009FJivBUvBlOGWkUgfiYb+t8kJyhBpJcipVUB9gyRbFk7smk0JgdhfYe4nzOM+XAVq8OJZjl6smaiFU2kOeDFavtWseNc3NnVmfaUoo0t6y0cEkSeqW3Z8va1tB+8b848=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=o7SJ91sV; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5957c929a5eso2840250e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 28 Nov 2025 05:10:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764335453; x=1764940253; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UzjFUATixGEhENXHEUG95u0sMOrZqZmW0LecHI/bMco=;
+        b=o7SJ91sVMcu6FkSgDO0lLgMtiwg/WSJfrOrnINll1gkt25CZS5wr6NYDOXqi6XaNT5
+         R/DYm7bU1wEqfbFEBJ0n874YEb8od/3ObW09K2IAWXIx5vuDrNbU6tsv+oUjUSBNv+w0
+         mOJfMOAHmcdkYsKzxceBQScvyM6D9p/xetWUDg0l+vV4u48KdvL2+tbn3ozpySP2mApn
+         m2n1lxOXzIdacs38jlPfqhyh3V2R7sSMi1NNVqZUMsBZvNLGZpSzogFOYzieu/14ZP4I
+         FVHI2NCePtjDrprbDfB36YaVxsBOLfYc5te3VRlMbOo+VlOpd4K8cxcAqudCh3zr5yDQ
+         w3Og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764335453; x=1764940253;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UzjFUATixGEhENXHEUG95u0sMOrZqZmW0LecHI/bMco=;
+        b=k1zOZVDRIzQBgdN4RI7J6m0iHYg7EWwZLykd9pJ9peZaxk9ogp0xNqWpLTaEfJyLiX
+         8pjSsWso4t93m/MMnsRkLZdYwS52zPQlcwmWUBqQJbIqBtB+wLf+3EEbIoJ2BqHf6aLE
+         lsv2DkrgJL6+gEytKcV/E3oPJyEV+fFfIjyft8Gu9UUiqslUVHAFoI0WiwhuRiOlBxUF
+         MDskeCE5vm7W+YcdbJ0dzdwc1i6/ILImOkAWMzHfCgT/hpYkNbzSSdQBrTv4dbBedkE1
+         ikQ57uM25U6OzaLqVsmujeAABs2awM7j4RxoYMXnw0m0GP1jGNPaZ5qDkyOofbzYbD0D
+         Mv3A==
+X-Forwarded-Encrypted: i=1; AJvYcCU7QWfoEYh6PhFPBmjV179QIcfILMU3OLp3dUiXCVKrazYhtizlCMv6fXJiuAmHHln6B4wXKbsi4w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzR9EU0d2c8Ley0peIrSDHSide3knc1mDpTahFwkVPMXsGP51SE
+	JPHri4prnicIT7TdRt3yiTaG1jR9WNx9ptp+yUhIgnPy7kquds3o37q/9Ocoq2xi0WEZKe6jXl+
+	qBFIl
+X-Gm-Gg: ASbGncupgf/MOHh+53mKYqyXSnGhCHxG/EIZ6Rm2B3RZv0by1Ie8bzWE9K9FdkiL0Wi
+	mMX+9PWsHWiwf+NqjvodTcS4XxQZiNVUnbmoNZ5GIq/4wl1nZZwepzIpzEX8OhXTrgrCWaxRL24
+	UwyVaVrH3TrI+ypyyyMrZewe5hPyEzgh+/EwLu0pAaSuf53FYfWzvOxVeHCUPYUGLIm/VAe/l3C
+	MDlArKyvnjVFWl9i69lLUsR+Wmo21QyAml2xnkKKkMitZVBUZ/rZzTjPC2DoNUu7rYrbCMjOvWF
+	J52PLVDVhakwNCyyHoWWZ4iq3MnD9tKymznP7fTZEaGhe+rBAxK6AYbMcqR4gu+sUDQMdJ15irq
+	Fvdoj9A80q1LPaAWQ8kTDXhLzZMX+1K/R8wLjy4UJV5hgnyRYWQEMSWC7akWzArUCJ3mZjvg1p5
+	dk6vpkX4piXHtBDKzqBUo=
+X-Google-Smtp-Source: AGHT+IEQsRJAXuvpMC9nA3qXOjzTHFWk0uaOKBkHUrEcO1F3nDkA6mgaLwYnxUkSq0kYQOipq5jdRQ==
+X-Received: by 2002:a05:6512:a85:b0:594:2f72:2f7f with SMTP id 2adb3069b0e04-596b505992dmr5760486e87.6.1764335452545;
+        Fri, 28 Nov 2025 05:10:52 -0800 (PST)
+Received: from uffe-tuxpro14.. ([2a02:1406:25e:19ec:960:b9ff:34c:57a6])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-596bfa43f12sm1209002e87.53.2025.11.28.05.10.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Nov 2025 05:10:51 -0800 (PST)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Linus <torvalds@linux-foundation.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] pmdomain fixes for v6.18-rc8
+Date: Fri, 28 Nov 2025 14:10:49 +0100
+Message-ID: <20251128131049.7584-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0b771d57-b280-4c54-886e-6b2c4602212b@linaro.org>
-In-Reply-To: <0b771d57-b280-4c54-886e-6b2c4602212b@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 28 Nov 2025 13:05:51 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jjmrSHO-YoU7ThJkYedhd1Y9fyRsdP-YTEr-j1wyAxOw@mail.gmail.com>
-X-Gm-Features: AWmQ_bk4ObMzIHFjvsGacnIsuMUXBT7nhD3fVvdIQxhNFei5h_tsq5dkhPJ8xuw
-Message-ID: <CAJZ5v0jjmrSHO-YoU7ThJkYedhd1Y9fyRsdP-YTEr-j1wyAxOw@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal drivers update for v6.19-rc1
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Gaurav Kohli <quic_gkohli@quicinc.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Malaya Kumar Rout <mrout@redhat.com>, 
-	Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>, marek.vasut+renesas@gmail.com, 
-	Ovidiu Panait <ovidiu.panait.rb@renesas.com>, Pengfei Li <pengfei.li_1@nxp.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Daniel,
+Hi Linus,
 
-On Thu, Nov 27, 2025 at 4:50=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> Hi Rafael,
->
-> The following changes since commit dcb6fa37fd7bc9c3d2b066329b0d27dedf8bec=
-aa:
->
->    Linux 6.18-rc3 (2025-10-26 15:59:49 -0700)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.19-rc1
->
-> for you to fetch changes up to c411d8bf06992dade7abb88690dc2d467a868cc4:
->
->    thermal/drivers/imx91: Add support for i.MX91 thermal monitoring unit
-> (2025-11-26 15:51:28 +0100)
->
-> ----------------------------------------------------------------
-> - Document the RZ/V2H TSU DT bindings (Ovidiu Panait)
->
-> - Document the Kaanapali Temperature Sensor (Manaf Meethalavalappu
->    Pallikunhi)
->
-> - Document R-Car Gen4 and RZ/G2 support in driver comment (Marek
-> Vasut)
->
-> - Convert to DEFINE_SIMPLE_DEV_PM_OPS in the R-Car [Gen3] (Geert
->    Uytterhoeven)
->
-> - Fix format string bug in thermal-engine (Malaya Kumar Rout)
->
-> - Make ipq5018 tsens standalone compatible (George Moussalem)
->
-> - Add the QCS8300 compatible for the QCom Tsens (Gaurav Kohli)
->
-> - Add the support for the NXP i.MX91 thermal module, including the DT
->    bindings (Pengfei Li)
->
-> ----------------------------------------------------------------
-> Gaurav Kohli (1):
->        dt-bindings: thermal: tsens: Add QCS8300 compatible
->
-> Geert Uytterhoeven (2):
->        thermal/drivers/rcar: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
->        thermal/drivers/rcar_gen3: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
->
-> George Moussalem (1):
->        dt-bindings: thermal: qcom-tsens: make ipq5018 tsens standalone
-> compatible
->
-> Malaya Kumar Rout (1):
->        tools/thermal/thermal-engine: Fix format string bug in thermal-eng=
-ine
->
-> Manaf Meethalavalappu Pallikunhi (1):
->        dt-bindings: thermal: qcom-tsens: document the Kaanapali
-> Temperature Sensor
->
-> Marek Vasut (1):
->        thermal/drivers/rcar_gen3: Document R-Car Gen4 and RZ/G2 support
-> in driver comment
->
-> Ovidiu Panait (1):
->        dt-bindings: thermal: r9a09g047-tsu: Document RZ/V2H TSU
->
-> Pengfei Li (2):
->        dt-bindings: thermal: fsl,imx91-tmu: add bindings for NXP i.MX91
-> thermal module
->        thermal/drivers/imx91: Add support for i.MX91 thermal monitoring u=
-nit
->
->   .../devicetree/bindings/thermal/fsl,imx91-tmu.yaml |  87 +++++
->   .../devicetree/bindings/thermal/qcom-tsens.yaml    |   9 +-
->   .../bindings/thermal/renesas,r9a09g047-tsu.yaml    |   6 +-
->   drivers/thermal/Kconfig                            |  10 +
->   drivers/thermal/Makefile                           |   1 +
->   drivers/thermal/imx91_thermal.c                    | 384
-> +++++++++++++++++++++
->   drivers/thermal/renesas/rcar_gen3_thermal.c        |  10 +-
->   drivers/thermal/renesas/rcar_thermal.c             |   8 +-
->   tools/thermal/thermal-engine/thermal-engine.c      |   2 +-
->   9 files changed, 504 insertions(+), 13 deletions(-)
->   create mode 100644
-> Documentation/devicetree/bindings/thermal/fsl,imx91-tmu.yaml
->   create mode 100644 drivers/thermal/imx91_thermal.c
+Here's a pull-request with a couple of pmdomain fixes intended for v6.18-rc8.
+Details about the highlights are as usual found in the signed tag.
 
-Pulled and added to linux-pm.git/thermal, thanks!
+Please pull this in!
+
+Kind regards
+Ulf Hansson
+
+
+The following changes since commit 6a23ae0a96a600d1d12557add110e0bb6e32730c:
+
+  Linux 6.18-rc6 (2025-11-16 14:25:38 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.18-rc6
+
+for you to fetch changes up to c98c99d5dbdf9fb0063650594edfd7d49b5f4e29:
+
+  pmdomain: tegra: Add GENPD_FLAG_NO_STAY_ON flag (2025-11-24 11:14:01 +0100)
+
+----------------------------------------------------------------
+pmdomain providers:
+ - mediatek: Fix spinlock recursion in probe
+ - tegra: Use GENPD_FLAG_NO_STAY_ON to restore old behaviour
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (1):
+      pmdomains: mtk-pm-domains: Fix spinlock recursion in probe
+
+Jon Hunter (1):
+      pmdomain: tegra: Add GENPD_FLAG_NO_STAY_ON flag
+
+ drivers/pmdomain/mediatek/mtk-pm-domains.c | 18 +++++++++++++++---
+ drivers/pmdomain/tegra/powergate-bpmp.c    |  1 +
+ 2 files changed, 16 insertions(+), 3 deletions(-)
 
