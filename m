@@ -1,111 +1,128 @@
-Return-Path: <linux-pm+bounces-38868-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38871-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DB4EC9160C
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 10:14:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68EEBC9175E
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 10:33:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5CF6C4E1726
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 09:14:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 247193A9FCC
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 09:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 541FD3002B0;
-	Fri, 28 Nov 2025 09:14:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB3730217B;
+	Fri, 28 Nov 2025 09:32:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="lDPpvwcg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ccE7HX3e"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DEAB2FBE13;
-	Fri, 28 Nov 2025 09:14:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D182E7658
+	for <linux-pm@vger.kernel.org>; Fri, 28 Nov 2025 09:32:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764321250; cv=none; b=oAoEkuw6Sx8pXPzgzWTg6OjJMXargbPVILciskqFhyBzc/0BSYhULehxEyc3It5TSV4EOyK6UsLDynn9jS4Rp+IpZLwEozUtsi+x0/E1t+/Z3ZKIPweX6MSDShFGClskpfXCTt8B9doLid4UfqJgcj22srMheEML7t3FFOmEToA=
+	t=1764322374; cv=none; b=qhTlGKr3UQQIrx4edtbtizhVIbdSgXS4jMTOO77dt0ohyo50BZ9JO+JIQZ7tWf9bzTewSYuURYrGCqEGfwfUyRAs2s9LePRwSwWcKDtVVvoi3CamlfbsBEzk3VefbbDYmL6qX40REgaSm1gt7YnOtrhtRIKSmXa8o23oEp6nFnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764321250; c=relaxed/simple;
-	bh=7GuXicHoxsxW3VAQDZpurSlJBI5/TCJsjXPF5e/M9do=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=R/w90IG5XPBv63Hv83EnKQSgn3QN0d6XYv0aUVzF5MLhy4x32C/jebtlcnuSS0fu+qwDEATNmAhsp9pAekouqJj9fHGmVRZp3tkKwB8Urlaquhlo+KSe0l03t4+076Us0YR/zFLdSbQJNYTkGQSyARS2hORABSJZCPer7CR9nQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=lDPpvwcg; arc=none smtp.client-ip=113.46.200.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=DCrT5CqgpxdU83vj3Pfcc21G2fpDOWSmPS/kVvC3t9Q=;
-	b=lDPpvwcgi5RhN6ChN/28WuVuRhF/xp8hBfM9jc1MPPf5cYAldPkREmFdOwi3g7tGoV3u+iQLi
-	DY5rvB5TUAoCmBg1DH5bptNf4PdUmW1LnRBn5GGfqz9Wm+2q257thGO/QG7t9Ni2yqL1xWhllrq
-	V5++YgIufEIAeNqY9PPd68w=
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4dHncb3Hy8zmV6h;
-	Fri, 28 Nov 2025 17:12:15 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id BA488140279;
-	Fri, 28 Nov 2025 17:14:04 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- kwepemf200001.china.huawei.com (7.202.181.227) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 28 Nov 2025 17:14:04 +0800
-From: Lifeng Zheng <zhenglifeng1@huawei.com>
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>,
-	<zhangpengjie2@huawei.com>, <wangzhi12@huawei.com>,
-	<linhongye@h-partners.com>, <zhenglifeng1@huawei.com>
-Subject: [PATCH v2 2/2] cpufreq: cpufreq_boost_trigger_state() optimization
-Date: Fri, 28 Nov 2025 17:13:52 +0800
-Message-ID: <20251128091352.1969333-3-zhenglifeng1@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20251128091352.1969333-1-zhenglifeng1@huawei.com>
-References: <20251128091352.1969333-1-zhenglifeng1@huawei.com>
+	s=arc-20240116; t=1764322374; c=relaxed/simple;
+	bh=bgZ3WYmLt9USwCbeIAxle387xMGQ0BbyXHLdtjgQl2M=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=XLP0kQPLMaRFgBbNT8FzTnxWfFSKgd8xVBZl52s/uR/d+5aXQuxeWZyRpY+OfJ6lrpgMyY13HuFVH9rvoreVio9mfRD2VBXtlUh+9vwvlYm884YVVFanEnwyFEQwUMVMg5BcYci7vu2TtThMiI9yNR2jGwxVb7MzjOt8wzf5m4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ccE7HX3e; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-477563a0c75so9524835e9.1
+        for <linux-pm@vger.kernel.org>; Fri, 28 Nov 2025 01:32:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1764322371; x=1764927171; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8wnjYfuFv+6HxV3iMOKxCxf7adXLY3By339Z3YdD6BY=;
+        b=ccE7HX3eiKA6dAlLVuGVlpmi6Ak1QmxllfT7OtWOUpSOupVEjCDmUYWd2DfPax5vt6
+         sg2x96u9in5PFPHTqBLBNId1GD651lE4RvxinQMbbGUTZm5DUGxEoChZ7BYiHW4DkHNn
+         dfjnaucBJAkGRJJUxiP6ZJizgptAiiKtigcCyGRVB5y6kBBOUOyA7W8e5nIzuBlBX+/M
+         q9arc4oMKWXqJxEvzOAKqxBRJvxzC3jXEljdNwqahal4/3Jb0scUnawHfZVc5dPGngr0
+         ievAoHdo36VNn6WSTqNaUKhHTRu26/Afkt0KusIp3kIiWs/aTpN3xS4tBxaDpeDQYSNh
+         Bruw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764322371; x=1764927171;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8wnjYfuFv+6HxV3iMOKxCxf7adXLY3By339Z3YdD6BY=;
+        b=jzzhQ8ez38++t1Gm3vbRhsJgA5O6as3xmS82TPgIkji4mBGO1OL4mdPB3PYMDt20MG
+         Mx1Mgcum3fNjoboqTLtxnLHO4CmaIdV9bT5nUCteN87dHfGhUUCXvgZlkKZKvj1uCJ1g
+         f5ZnVVMl0tAJgYTuvtnKZhhWsg+V3sgwBC+BmnFI/fCl+20UmgM20tB6SJHZ6ozFlqMy
+         TVqcm7cI2ntN3AsdWCoHaPDcBnPI4i5maKCp/lXVdSJ+4Lmu7KJp83YJlqrUFggG53SF
+         0QSBSQ3qw5cipzhfrArcYNW0WGp5QjWl36a24aO1JwWb0LH1hGyg5EYlnUT/O0uInGyA
+         qExA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0PsRIlmR1XgnsgdFN844kI4kNJvbkSx6f4crabEhRUj/MZlFC2JH7kcOuMfVGQxVFqXjgfiXIZA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBKYjd6f28yGODqGSTgOMqZox3DEE5iP7etkQTOShjCg6c/qf5
+	jCe5UFwewcaItIc2guEDwK6LLH/fUu4wfFgVxWwNSCGLuMGJMPdNDXaIeBmeW58xIjLpLY3aCCP
+	PNR4S9UU9y83WY2AZLQ==
+X-Google-Smtp-Source: AGHT+IFhwMEn3+05xv26tdB0wCa+JQEY/PCYnU+E/8TUE7g4HW0hG8CkVmY8LFitRDkG/ICQaGMRH2p3BmwWQoY=
+X-Received: from wmbc11.prod.google.com ([2002:a7b:c00b:0:b0:477:c551:bdb9])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:1c19:b0:477:7bca:8b3c with SMTP id 5b1f17b1804b1-47904b10379mr181587965e9.19.1764322371479;
+ Fri, 28 Nov 2025 01:32:51 -0800 (PST)
+Date: Fri, 28 Nov 2025 09:32:50 +0000
+In-Reply-To: <zis5k4oo3kq6dykzm3kav7rlblqvvnk43mrcvlwyxxfgwbpmjt@6r3f5432vr45>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemf200001.china.huawei.com (7.202.181.227)
+Mime-Version: 1.0
+References: <20251128-io-build-assert-v2-0-a9ea9ce7d45d@nvidia.com>
+ <20251128-io-build-assert-v2-3-a9ea9ce7d45d@nvidia.com> <zis5k4oo3kq6dykzm3kav7rlblqvvnk43mrcvlwyxxfgwbpmjt@6r3f5432vr45>
+Message-ID: <aSlsQmiSCC2ZdfLr@google.com>
+Subject: Re: [PATCH v2 3/7] rust: cpufreq: always inline functions using
+ build_assert with arguments
+From: Alice Ryhl <aliceryhl@google.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Alexandre Courbot <acourbot@nvidia.com>, Danilo Krummrich <dakr@kernel.org>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-Simplify the error handling branch code in cpufreq_boost_trigger_state().
+On Fri, Nov 28, 2025 at 11:42:55AM +0530, Viresh Kumar wrote:
+> On 28-11-25, 11:11, Alexandre Courbot wrote:
+> > `build_assert` relies on the compiler to optimize out its error path.
+> > Functions using it with its arguments must thus always be inlined,
+> > otherwise the error path of `build_assert` might not be optimized out,
+> > triggering a build error.
+> > 
+> > Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+> > ---
+> >  rust/kernel/cpufreq.rs | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
+> > index 1a555fcb120a..df5d9f6f43f3 100644
+> > --- a/rust/kernel/cpufreq.rs
+> > +++ b/rust/kernel/cpufreq.rs
+> > @@ -1015,6 +1015,8 @@ impl<T: Driver> Registration<T> {
+> >          ..pin_init::zeroed()
+> >      };
+> >  
+> > +    // Always inline to optimize out error path of `build_assert`.
+> > +    #[inline(always)]
+> >      const fn copy_name(name: &'static CStr) -> [c_char; CPUFREQ_NAME_LEN] {
+> >          let src = name.to_bytes_with_nul();
+> >          let mut dst = [0; CPUFREQ_NAME_LEN];
+> 
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> 
+> Lemme know if you want me to pick this instead.
 
-Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
----
- drivers/cpufreq/cpufreq.c | 11 +++--------
- 1 file changed, 3 insertions(+), 8 deletions(-)
+There's no reason these can't be picked up independently, so it would be
+fine if you pick up this one.
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index a4399e5490da..a725747572c9 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2824,18 +2824,13 @@ static int cpufreq_boost_trigger_state(int state)
- 
- 		ret = policy_set_boost(policy, state);
- 		if (ret)
--			goto err_reset_state;
-+			break;
- 	}
- 
--	if (ret)
--		goto err_reset_state;
--
- 	cpus_read_unlock();
- 
--	return 0;
--
--err_reset_state:
--	cpus_read_unlock();
-+	if (!ret)
-+		return 0;
- 
- 	write_lock_irqsave(&cpufreq_driver_lock, flags);
- 	cpufreq_driver->boost_enabled = !state;
--- 
-2.33.0
-
+Alice
 
