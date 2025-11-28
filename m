@@ -1,128 +1,126 @@
-Return-Path: <linux-pm+bounces-38871-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38872-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68EEBC9175E
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 10:33:53 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AE25C91800
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 10:46:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 247193A9FCC
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 09:32:56 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6D7524E2B78
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Nov 2025 09:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBB3730217B;
-	Fri, 28 Nov 2025 09:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A1882C235D;
+	Fri, 28 Nov 2025 09:46:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ccE7HX3e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lH+zof+k"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D182E7658
-	for <linux-pm@vger.kernel.org>; Fri, 28 Nov 2025 09:32:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690D53C1F;
+	Fri, 28 Nov 2025 09:46:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764322374; cv=none; b=qhTlGKr3UQQIrx4edtbtizhVIbdSgXS4jMTOO77dt0ohyo50BZ9JO+JIQZ7tWf9bzTewSYuURYrGCqEGfwfUyRAs2s9LePRwSwWcKDtVVvoi3CamlfbsBEzk3VefbbDYmL6qX40REgaSm1gt7YnOtrhtRIKSmXa8o23oEp6nFnw=
+	t=1764323172; cv=none; b=NtsX5R+M9Vs5VWVK50Jx23uly6psa/aOs4H8gjSQ5mZqItqUPr2i6jwT+WNi34FqOx0JMp2SxMMQXmnY288O15bSJTsB/dYCSCoMoI9T4cnUIc8j7uYXgQEEMp7mtSgpv+1wyEQIfXuwpXeA4msmcTvFVau5JIZpUmFHy8H/iTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764322374; c=relaxed/simple;
-	bh=bgZ3WYmLt9USwCbeIAxle387xMGQ0BbyXHLdtjgQl2M=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XLP0kQPLMaRFgBbNT8FzTnxWfFSKgd8xVBZl52s/uR/d+5aXQuxeWZyRpY+OfJ6lrpgMyY13HuFVH9rvoreVio9mfRD2VBXtlUh+9vwvlYm884YVVFanEnwyFEQwUMVMg5BcYci7vu2TtThMiI9yNR2jGwxVb7MzjOt8wzf5m4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ccE7HX3e; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-477563a0c75so9524835e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 28 Nov 2025 01:32:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764322371; x=1764927171; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8wnjYfuFv+6HxV3iMOKxCxf7adXLY3By339Z3YdD6BY=;
-        b=ccE7HX3eiKA6dAlLVuGVlpmi6Ak1QmxllfT7OtWOUpSOupVEjCDmUYWd2DfPax5vt6
-         sg2x96u9in5PFPHTqBLBNId1GD651lE4RvxinQMbbGUTZm5DUGxEoChZ7BYiHW4DkHNn
-         dfjnaucBJAkGRJJUxiP6ZJizgptAiiKtigcCyGRVB5y6kBBOUOyA7W8e5nIzuBlBX+/M
-         q9arc4oMKWXqJxEvzOAKqxBRJvxzC3jXEljdNwqahal4/3Jb0scUnawHfZVc5dPGngr0
-         ievAoHdo36VNn6WSTqNaUKhHTRu26/Afkt0KusIp3kIiWs/aTpN3xS4tBxaDpeDQYSNh
-         Bruw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764322371; x=1764927171;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8wnjYfuFv+6HxV3iMOKxCxf7adXLY3By339Z3YdD6BY=;
-        b=jzzhQ8ez38++t1Gm3vbRhsJgA5O6as3xmS82TPgIkji4mBGO1OL4mdPB3PYMDt20MG
-         Mx1Mgcum3fNjoboqTLtxnLHO4CmaIdV9bT5nUCteN87dHfGhUUCXvgZlkKZKvj1uCJ1g
-         f5ZnVVMl0tAJgYTuvtnKZhhWsg+V3sgwBC+BmnFI/fCl+20UmgM20tB6SJHZ6ozFlqMy
-         TVqcm7cI2ntN3AsdWCoHaPDcBnPI4i5maKCp/lXVdSJ+4Lmu7KJp83YJlqrUFggG53SF
-         0QSBSQ3qw5cipzhfrArcYNW0WGp5QjWl36a24aO1JwWb0LH1hGyg5EYlnUT/O0uInGyA
-         qExA==
-X-Forwarded-Encrypted: i=1; AJvYcCU0PsRIlmR1XgnsgdFN844kI4kNJvbkSx6f4crabEhRUj/MZlFC2JH7kcOuMfVGQxVFqXjgfiXIZA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBKYjd6f28yGODqGSTgOMqZox3DEE5iP7etkQTOShjCg6c/qf5
-	jCe5UFwewcaItIc2guEDwK6LLH/fUu4wfFgVxWwNSCGLuMGJMPdNDXaIeBmeW58xIjLpLY3aCCP
-	PNR4S9UU9y83WY2AZLQ==
-X-Google-Smtp-Source: AGHT+IFhwMEn3+05xv26tdB0wCa+JQEY/PCYnU+E/8TUE7g4HW0hG8CkVmY8LFitRDkG/ICQaGMRH2p3BmwWQoY=
-X-Received: from wmbc11.prod.google.com ([2002:a7b:c00b:0:b0:477:c551:bdb9])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:1c19:b0:477:7bca:8b3c with SMTP id 5b1f17b1804b1-47904b10379mr181587965e9.19.1764322371479;
- Fri, 28 Nov 2025 01:32:51 -0800 (PST)
-Date: Fri, 28 Nov 2025 09:32:50 +0000
-In-Reply-To: <zis5k4oo3kq6dykzm3kav7rlblqvvnk43mrcvlwyxxfgwbpmjt@6r3f5432vr45>
+	s=arc-20240116; t=1764323172; c=relaxed/simple;
+	bh=JZmVVDf/2IVFWddvgioDxXF7J1xFnKWvCQQnTxck6wE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nhdg2AJp43+jdJUMa/M6bewf9I9VdXIA3Bv1b/XgAtrJL5mFUiDzKOliaJa7GHh6ib5tbuGgNwc4Fd0pwNemi0nDCUzwc6zBwluEX1E2iH5rKZRsgGt7uYRr1WCR7XGrUP8u2rn5q+RqrjPN41IkYEX5gOR6BnLpFAudk8kRdaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lH+zof+k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30DF7C4CEF1;
+	Fri, 28 Nov 2025 09:46:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764323172;
+	bh=JZmVVDf/2IVFWddvgioDxXF7J1xFnKWvCQQnTxck6wE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lH+zof+kyQOTcnpH9BgQaQDFUIKPhS0pyJMibR32EstBiQ7yeOaS9NZuGFyYknbXo
+	 WLCupw29wviTX4hRjX273n+Mo8jBc5AnzFfhj+/8rcz9FHUSmEhVtDsd7ct7dAQH0c
+	 tvi6KUxAveQhkzEFJtBMpSm76Ta+Xpph35AXj/DWNUQTO0BCl8p1mlKScfy5m09hsP
+	 CL61ugNYszkyn1xzFzcSt0zmP2/xRfVoy0qJT8JdIZXULYgcMSl956gynyjhRPmPJZ
+	 pvy4I8WeCPuldZCMeMdheVc1qnOhgdm7HmS5eR4Xo/SMh8//duIborbXV9g9s6rBql
+	 nn/xPiZKxl9Nw==
+Message-ID: <b71a40ce-a70e-49ee-be61-5ec1f45ef2ec@kernel.org>
+Date: Fri, 28 Nov 2025 10:46:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251128-io-build-assert-v2-0-a9ea9ce7d45d@nvidia.com>
- <20251128-io-build-assert-v2-3-a9ea9ce7d45d@nvidia.com> <zis5k4oo3kq6dykzm3kav7rlblqvvnk43mrcvlwyxxfgwbpmjt@6r3f5432vr45>
-Message-ID: <aSlsQmiSCC2ZdfLr@google.com>
-Subject: Re: [PATCH v2 3/7] rust: cpufreq: always inline functions using
- build_assert with arguments
-From: Alice Ryhl <aliceryhl@google.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Alexandre Courbot <acourbot@nvidia.com>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, 
-	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: power: define ID for Marvell PXA1908
+ audio domain
+To: Karel Balej <balejk@matfyz.cz>, =?UTF-8?Q?Duje_Mihanovi=C4=87?=
+ <duje@dujemihanovic.xyz>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20251127190237.745-1-balejk@matfyz.cz>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251127190237.745-1-balejk@matfyz.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Nov 28, 2025 at 11:42:55AM +0530, Viresh Kumar wrote:
-> On 28-11-25, 11:11, Alexandre Courbot wrote:
-> > `build_assert` relies on the compiler to optimize out its error path.
-> > Functions using it with its arguments must thus always be inlined,
-> > otherwise the error path of `build_assert` might not be optimized out,
-> > triggering a build error.
-> > 
-> > Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
-> > ---
-> >  rust/kernel/cpufreq.rs | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
-> > index 1a555fcb120a..df5d9f6f43f3 100644
-> > --- a/rust/kernel/cpufreq.rs
-> > +++ b/rust/kernel/cpufreq.rs
-> > @@ -1015,6 +1015,8 @@ impl<T: Driver> Registration<T> {
-> >          ..pin_init::zeroed()
-> >      };
-> >  
-> > +    // Always inline to optimize out error path of `build_assert`.
-> > +    #[inline(always)]
-> >      const fn copy_name(name: &'static CStr) -> [c_char; CPUFREQ_NAME_LEN] {
-> >          let src = name.to_bytes_with_nul();
-> >          let mut dst = [0; CPUFREQ_NAME_LEN];
+On 27/11/2025 20:02, Karel Balej wrote:
+> Define an identifier for the SoC's audio power island so that it can be
+> referenced through device tree.
 > 
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> 
-> Lemme know if you want me to pick this instead.
+> Signed-off-by: Karel Balej <balejk@matfyz.cz>
+> ---
+>  include/dt-bindings/power/marvell,pxa1908-power.h | 1 +
+>  1 file changed, 1 insertion(+)
 
-There's no reason these can't be picked up independently, so it would be
-fine if you pick up this one.
 
-Alice
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+
+Best regards,
+Krzysztof
 
