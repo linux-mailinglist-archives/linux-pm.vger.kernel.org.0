@@ -1,155 +1,301 @@
-Return-Path: <linux-pm+bounces-38918-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38919-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EDB7C93FC3
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Nov 2025 15:31:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE2C3C94576
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Nov 2025 18:07:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EB923A5D47
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Nov 2025 14:31:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id A42164E0415
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Nov 2025 17:07:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9840D30FC2D;
-	Sat, 29 Nov 2025 14:31:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAF9823D7FF;
+	Sat, 29 Nov 2025 17:07:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PWj4NUCZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PoUUFewG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C30E2475CF;
-	Sat, 29 Nov 2025 14:31:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AAA23AB8D
+	for <linux-pm@vger.kernel.org>; Sat, 29 Nov 2025 17:07:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764426674; cv=none; b=Sxo1hPp3WSd5PqN2GqITi1mZoFmIeGeo/36jarfEx8lnSxPMgawifVPSIz06jZ/DF7BV1RhbdK1rU0HRklUySiXM+6Q+3dm7o4xbODItXmaY36zkXJt6zGyibeOUbEhOUOP7tcy3Ln0klK5Swd4/FnL2Zo7cfcMPeEZG7gkFQ6c=
+	t=1764436072; cv=none; b=E64PgMIkkawVk9tV9lwsDlKv2+3GaT9kolMCiFgEdpEXbE8NU1YcagtntOnoMKUDZ7JgHw4Hj8lhyEuwwfR8bkN9YIUIhTDIGj61QnCx6eW/EzRUDdDnXxYvponGQloajSlT4CRIscp/w3K1tZYJs2XCme5jLvuwMTj98mZM1ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764426674; c=relaxed/simple;
-	bh=OOXM+8VJNr1jofMq1aDwIoY/tJO1ZvIsD3b19brw7lc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FCdDzs/duUsn4BXITUAsA78yUYV+ycWDFrOKQqPRv09WDwaYOG8NQ5VyRJWb7smtVbyLITP7KxwocUlAhoNl4N5VHqA9AR8qi9carSdI/ASsPPzqDzDXaSf/eUJ+F+MgnUkLypMKFzWgcPPnlfupXu38/SqX9mNx6/XDnkA91Og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PWj4NUCZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E083AC4CEF7;
-	Sat, 29 Nov 2025 14:31:05 +0000 (UTC)
+	s=arc-20240116; t=1764436072; c=relaxed/simple;
+	bh=aEi3fUeihkx7Xs7jMI1NkgKX1nDZ4HrkE6CG0v5DbFI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dMPvFqmUMUa1aG/u56kgoKyQAUOzFwcRSTaaxzO5KJYiAR3rf6nVFea+8qNTWZqGEREEqNPNabhXQN4VEFSwy662wbvkoIY0WWRmFiw9RYeKu3qXBKXw6GFCpWrPHv2LNPcj9o5zqQpVYN/P+9m34Fe+YA/9hBCryDYpnsnMTgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PoUUFewG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FF38C2BC86
+	for <linux-pm@vger.kernel.org>; Sat, 29 Nov 2025 17:07:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764426671;
-	bh=OOXM+8VJNr1jofMq1aDwIoY/tJO1ZvIsD3b19brw7lc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=PWj4NUCZXJCf0cQOQb/LwGSzkgtSkTq3JT0SBX/1zyzCien82/KxUzpcFPaPNswO1
-	 LPsmXmQGJaV/nsBwXaRc+feT5qhOHUyfve6rwdiYNZTuZDq4ve43Lr9B6KzaOEx1BT
-	 3zmN40bldzF85pdUb/lerOgzou1GFRyUUPNCnRVlHr1SUTob626mzl5IcZJvMWTvAt
-	 OANnR3Mpymo9zIAywoq14c/rXgiM7+MbSLIw+wWZzQrHmOWro44T3QcT70eaQ626DY
-	 MvjC4jKdWWhEH5sfrKC/+iEzAFN9Gm2uGILsrHvsHzIGHMqlgMtiMcR6i1cpV+wLao
-	 gm220dgQpILkw==
-Message-ID: <9efa0a3c-ffef-488a-97f3-45b9649d35fd@kernel.org>
-Date: Sat, 29 Nov 2025 15:31:03 +0100
+	s=k20201202; t=1764436072;
+	bh=aEi3fUeihkx7Xs7jMI1NkgKX1nDZ4HrkE6CG0v5DbFI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PoUUFewGdGpVbfMyV7x/XSqVZCIL7hqh56LUb41NOntsEbxLWIJjBFh1MN5SvMfJN
+	 2b1OJMYeQstPtLtkEhrF7Ijb+9s8qFIxWZ/sMr93A+CEImgcSxQb4+iQmCQ65O30JW
+	 zGsBwsN9X05x+qPGqSxDWKNXdDtb2WfXub3HS4hwv+s2tiiklNApSk/gOQB7moPFR3
+	 PdVGo4YxRds2P89tWZh3PKVHh38DnzTUY7+4Xs8PXO5/V1IeHO44y0SfqIVN/fsVTz
+	 3xa17bq2k6JqLz1wREAVDjZbvKFszNaV4cfkEN3HAR0+2GIniI2POS/Tqa9Hp3HB/w
+	 n3SSktgQKJ52w==
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-786943affbaso18714947b3.0
+        for <linux-pm@vger.kernel.org>; Sat, 29 Nov 2025 09:07:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUgNU9Tcyyfl3DbJMj7P1CCqvXu/8Q8EdFmxBqoKShzfkSm88aIWWRH7JxE0zT/LYwkLjPz18aofA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwInQ1qgYO1GE59828FMddJXvDPXSleJnn0PZx30cWOxsuVOLYW
+	6wErQtYZ+0WAfxx2T0q1fyNyYW/HbxWhDZOrad7AuEqHGjYjgV4fxCLorsrEpA7JoxpoL/Q9f8n
+	Aa6MoQBH4cpy/MBEtf5YCswzW3ysmA8Pf9n2cEs9b7Q==
+X-Google-Smtp-Source: AGHT+IGoLbSxanxq+rFI3LIH/mqm9+e3tjcYNJ/ehzOR5pFY7jyX7qnhO//KzRpv3gftUKmEKG6CYc+E+Sr/fomqbUo=
+X-Received: by 2002:a05:690c:7249:b0:788:1eae:3d7f with SMTP id
+ 00721157ae682-78ab6fe526dmr171463927b3.70.1764436071502; Sat, 29 Nov 2025
+ 09:07:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 10/10] power: sequencing: pcie-m2: Add support for PCIe
- M.2 Key E connectors
-To: manivannan.sadhasivam@oss.qualcomm.com, Rob Herring <robh@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nicolas.schier@linux.dev>, Hans de Goede <hansg@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Mark Pearson <mpearson-lenovo@squebb.ca>,
- "Derek J. Clark" <derekjohn.clark@gmail.com>,
- Manivannan Sadhasivam <mani@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Marcel Holtmann <marcel@holtmann.org>,
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
- Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org,
- linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-References: <20251125-pci-m2-e-v2-0-32826de07cc5@oss.qualcomm.com>
- <20251125-pci-m2-e-v2-10-32826de07cc5@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251125-pci-m2-e-v2-10-32826de07cc5@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20251125-swap-table-p2-v3-0-33f54f707a5c@tencent.com>
+In-Reply-To: <20251125-swap-table-p2-v3-0-33f54f707a5c@tencent.com>
+From: Chris Li <chrisl@kernel.org>
+Date: Sat, 29 Nov 2025 21:07:40 +0400
+X-Gmail-Original-Message-ID: <CACePvbUK6uSDtz0QkBq-eqzQ_Hi9+t1gthGGt+ok7xdZtO1V8Q@mail.gmail.com>
+X-Gm-Features: AWmQ_bkRNDXrXhesX6xwbiCQ91_SSNsi6Rzr-o_fwzw9asPFCsw3uZWkKu5-3HE
+Message-ID: <CACePvbUK6uSDtz0QkBq-eqzQ_Hi9+t1gthGGt+ok7xdZtO1V8Q@mail.gmail.com>
+Subject: Re: [PATCH v3 00/19] mm, swap: swap table phase II: unify swapin use
+ swap cache and cleanup flags
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Kairui Song <ryncsn@gmail.com>, linux-mm@kvack.org, Baoquan He <bhe@redhat.com>, 
+	Barry Song <baohua@kernel.org>, Nhat Pham <nphamcs@gmail.com>, 
+	Yosry Ahmed <yosry.ahmed@linux.dev>, David Hildenbrand <david@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Youngjun Park <youngjun.park@lge.com>, 
+	Hugh Dickins <hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Ying Huang <ying.huang@linux.alibaba.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-kernel@vger.kernel.org, 
+	Kairui Song <kasong@tencent.com>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 25/11/2025 15:45, Manivannan Sadhasivam via B4 Relay wrote:
->  static const struct pwrseq_pcie_m2_pdata pwrseq_pcie_m2_m_of_data = {
->  	.targets = pwrseq_pcie_m2_m_targets,
->  };
-> @@ -92,6 +174,96 @@ static int pwrseq_pcie_m2_match(struct pwrseq_device *pwrseq,
->  	return PWRSEQ_NO_MATCH;
->  }
->  
-> +static int pwrseq_m2_pcie_notify(struct notifier_block *nb, unsigned long action,
-> +			      void *data)
-> +{
-> +	struct pwrseq_pcie_m2_ctx *ctx = container_of(nb, struct pwrseq_pcie_m2_ctx, nb);
-> +	struct pci_dev *pdev = to_pci_dev(data);
-> +	struct device_node *pci_remote __free(device_node) = NULL;
+Hi Andrew,
 
+Can you add this swap table phase II series to mm-unstable for more
+exposure? The patch series has gone through V3, overall looks OK, but
+I have not finished reviewing them all yet. I will keep you posted
+when the series is fully reviewed.
 
-This is an undesired syntax explicitly documented as one to avoid. You
-need here proper assignment, not NULL. Please don't use cleanup.h if you
-do not intend to follow it because it does not make the code simpler.
+Thanks
 
-> +	struct device_node *serdev_remote __free(device_node) = NULL;
+Chris
 
-This is even worse. Instead of making it local scope, you have automatic
-cleanup for entire function with completely redundant constructor.
-
-Please, use cleanup.h only if you really want to follow its spirit.
-Otherwise it does not make the code easier.
-
-
-Best regards,
-Krzysztof
+On Mon, Nov 24, 2025 at 11:15=E2=80=AFPM Kairui Song <ryncsn@gmail.com> wro=
+te:
+>
+> This series removes the SWP_SYNCHRONOUS_IO swap cache bypass swapin code =
+and
+> special swap flag bits including SWAP_HAS_CACHE, along with many historic=
+al
+> issues. The performance is about ~20% better for some workloads, like
+> Redis with persistence. This also cleans up the code to prepare for
+> later phases, some patches are from a previously posted series.
+>
+> Swap cache bypassing and swap synchronization in general had many
+> issues. Some are solved as workarounds, and some are still there [1]. To
+> resolve them in a clean way, one good solution is to always use swap
+> cache as the synchronization layer [2]. So we have to remove the swap
+> cache bypass swap-in path first. It wasn't very doable due to
+> performance issues, but now combined with the swap table, removing
+> the swap cache bypass path will instead improve the performance,
+> there is no reason to keep it.
+>
+> Now we can rework the swap entry and cache synchronization following
+> the new design. Swap cache synchronization was heavily relying on
+> SWAP_HAS_CACHE, which is the cause of many issues. By dropping the usage
+> of special swap map bits and related workarounds, we get a cleaner code
+> base and prepare for merging the swap count into the swap table in the
+> next step.
+>
+> And swap_map is now only used for swap count, so in the next phase,
+> swap_map can be merged into the swap table, which will clean up more
+> things and start to reduce the static memory usage. Removal of
+> swap_cgroup_ctrl is also doable, but needs to be done after we also
+> simplify the allocation of swapin folios: always use the new
+> swap_cache_alloc_folio helper so the accounting will also be managed by
+> the swap layer by then.
+>
+> Test results:
+>
+> Redis / Valkey bench:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> Testing on a ARM64 VM 1.5G memory:
+> Server: valkey-server --maxmemory 2560M
+> Client: redis-benchmark -r 3000000 -n 3000000 -d 1024 -c 12 -P 32 -t get
+>
+>         no persistence              with BGSAVE
+> Before: 460475.84 RPS               311591.19 RPS
+> After:  451943.34 RPS (-1.9%)       371379.06 RPS (+19.2%)
+>
+> Testing on a x86_64 VM with 4G memory (system components takes about 2G):
+> Server:
+> Client: redis-benchmark -r 3000000 -n 3000000 -d 1024 -c 12 -P 32 -t get
+>
+>         no persistence              with BGSAVE
+> Before: 306044.38 RPS               102745.88 RPS
+> After:  309645.44 RPS (+1.2%)       125313.28 RPS (+22.0%)
+>
+> The performance is a lot better when persistence is applied. This should
+> apply to many other workloads that involve sharing memory and COW. A
+> slight performance drop was observed for the ARM64 Redis test: We are
+> still using swap_map to track the swap count, which is causing redundant
+> cache and CPU overhead and is not very performance-friendly for some
+> arches. This will be improved once we merge the swap map into the swap
+> table (as already demonstrated previously [3]).
+>
+> vm-scabiity
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> usemem --init-time -O -y -x -n 32 1536M (16G memory, global pressure,
+> simulated PMEM as swap), average result of 6 test run:
+>
+>                            Before:         After:
+> System time:               282.22s         283.47s
+> Sum Throughput:            5677.35 MB/s    5688.78 MB/s
+> Single process Throughput: 176.41 MB/s     176.23 MB/s
+> Free latency:              518477.96 us    521488.06 us
+>
+> Which is almost identical.
+>
+> Build kernel test:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> Test using ZRAM as SWAP, make -j48, defconfig, on a x86_64 VM
+> with 4G RAM, under global pressure, avg of 32 test run:
+>
+>                 Before            After:
+> System time:    1379.91s          1364.22s (-0.11%)
+>
+> Test using ZSWAP with NVME SWAP, make -j48, defconfig, on a x86_64 VM
+> with 4G RAM, under global pressure, avg of 32 test run:
+>
+>                 Before            After:
+> System time:    1822.52s          1803.33s (-0.11%)
+>
+> Which is almost identical.
+>
+> MySQL:
+> =3D=3D=3D=3D=3D=3D
+> sysbench /usr/share/sysbench/oltp_read_only.lua --tables=3D16
+> --table-size=3D1000000 --threads=3D96 --time=3D600 (using ZRAM as SWAP, i=
+n a
+> 512M memory cgroup, buffer pool set to 3G, 3 test run and 180s warm up).
+>
+> Before: 318162.18 qps
+> After:  318512.01 qps (+0.01%)
+>
+> In conclusion, the result is looking better or identical for most cases,
+> and it's especially better for workloads with swap count > 1 on SYNC_IO
+> devices, about ~20% gain in above test. Next phases will start to merge
+> swap count into swap table and reduce memory usage.
+>
+> One more gain here is that we now have better support for THP swapin.
+> Previously, the THP swapin was bound with swap cache bypassing, which
+> only works for single-mapped folios. Removing the bypassing path also
+> enabled THP swapin for all folios. The THP swapin is still limited to
+> SYNC_IO devices, the limitation can be removed later.
+>
+> This may cause more serious THP thrashing for certain workloads, but that=
+'s
+> not an issue caused by this series, it's a common THP issue we should res=
+olve
+> separately.
+>
+> Link: https://lore.kernel.org/linux-mm/CAMgjq7D5qoFEK9Omvd5_Zqs6M+TEoG03+=
+2i_mhuP5CQPSOPrmQ@mail.gmail.com/ [1]
+> Link: https://lore.kernel.org/linux-mm/20240326185032.72159-1-ryncsn@gmai=
+l.com/ [2]
+> Link: https://lore.kernel.org/linux-mm/20250514201729.48420-1-ryncsn@gmai=
+l.com/ [3]
+>
+> Suggested-by: Chris Li <chrisl@kernel.org>
+> Signed-off-by: Kairui Song <kasong@tencent.com>
+> ---
+> Still basically same with V2, mostly comment update and build fix, and
+> rebase to resolve conflicts and for easier review and testing. Stress tes=
+t and
+> performance test is looking good and basically same as before.
+>
+> Changes in v3:
+> - Imporve and update comments [ Barry Song, YoungJun Park, Chris Li ]
+> - Simplify the changes of cluster_reclaim_range a bit, as YoungJun points
+>   out the change looked confusing.
+> - Fix a few typos I found during self review.
+> - Fix a few build error and warns.
+> - Link to v2: https://lore.kernel.org/r/20251117-swap-table-p2-v2-0-37730=
+e6ea6d5@tencent.com
+>
+> Changes in v2:
+> - Rebased on latest mm-new to resolve conflicts, also appliable to
+>   mm-unstable.
+> - Imporve comment, and commit messages in multiple commits, many thanks t=
+o
+>   [Barry Song, YoungJun Park, Yosry Ahmed ]
+> - Fix cluster usable check in allocator [ YoungJun Park]
+> - Improve cover letter [ Chris Li ]
+> - Collect Reviewed-by [ Yosry Ahmed ]
+> - Fix a few build warning and issues from build bot.
+> - Link to v1: https://lore.kernel.org/r/20251029-swap-table-p2-v1-0-3d43f=
+3b6ec32@tencent.com
+>
+> ---
+> Kairui Song (18):
+>       mm, swap: rename __read_swap_cache_async to swap_cache_alloc_folio
+>       mm, swap: split swap cache preparation loop into a standalone helpe=
+r
+>       mm, swap: never bypass the swap cache even for SWP_SYNCHRONOUS_IO
+>       mm, swap: always try to free swap cache for SWP_SYNCHRONOUS_IO devi=
+ces
+>       mm, swap: simplify the code and reduce indention
+>       mm, swap: free the swap cache after folio is mapped
+>       mm/shmem: never bypass the swap cache for SWP_SYNCHRONOUS_IO
+>       mm, swap: swap entry of a bad slot should not be considered as swap=
+ped out
+>       mm, swap: consolidate cluster reclaim and usability check
+>       mm, swap: split locked entry duplicating into a standalone helper
+>       mm, swap: use swap cache as the swap in synchronize layer
+>       mm, swap: remove workaround for unsynchronized swap map cache state
+>       mm, swap: cleanup swap entry management workflow
+>       mm, swap: add folio to swap cache directly on allocation
+>       mm, swap: check swap table directly for checking cache
+>       mm, swap: clean up and improve swap entries freeing
+>       mm, swap: drop the SWAP_HAS_CACHE flag
+>       mm, swap: remove no longer needed _swap_info_get
+>
+> Nhat Pham (1):
+>       mm/shmem, swap: remove SWAP_MAP_SHMEM
+>
+>  arch/s390/mm/gmap_helpers.c |   2 +-
+>  arch/s390/mm/pgtable.c      |   2 +-
+>  include/linux/swap.h        |  77 ++--
+>  kernel/power/swap.c         |  10 +-
+>  mm/madvise.c                |   2 +-
+>  mm/memory.c                 | 276 +++++++-------
+>  mm/rmap.c                   |   7 +-
+>  mm/shmem.c                  |  75 ++--
+>  mm/swap.h                   |  70 +++-
+>  mm/swap_state.c             | 338 +++++++++++------
+>  mm/swapfile.c               | 856 +++++++++++++++++++-------------------=
+------
+>  mm/userfaultfd.c            |  10 +-
+>  mm/vmscan.c                 |   1 -
+>  mm/zswap.c                  |   4 +-
+>  14 files changed, 854 insertions(+), 876 deletions(-)
+> ---
+> base-commit: 1fa8c5771a65fc5a56f6e39825561cdc8fa91e14
+> change-id: 20251007-swap-table-p2-7d3086e5c38a
+>
+> Best regards,
+> --
+> Kairui Song <kasong@tencent.com>
+>
 
