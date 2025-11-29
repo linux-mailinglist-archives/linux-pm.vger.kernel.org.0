@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-38912-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38913-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2342FC93B73
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Nov 2025 10:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9993EC93B82
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Nov 2025 10:37:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C30453485F2
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Nov 2025 09:34:41 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F0D84348672
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Nov 2025 09:37:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4A212737F9;
-	Sat, 29 Nov 2025 09:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E202737F9;
+	Sat, 29 Nov 2025 09:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BnhAOVIN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uoycDsvh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1CB5265CA7;
-	Sat, 29 Nov 2025 09:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261DA135A53;
+	Sat, 29 Nov 2025 09:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764408876; cv=none; b=TYijJPGm6yXcKt3l6dK2eZdb/g+k101HcNtRyoQZCvTLfO3O5azosiucyF0udSGkMgOPNcyc6tkUBYAKospUrcZqXIO+od9y0xfTIG8ieKYAZdKnely22mgVHmJT63PisgymMUzWnHbS49vprQdoLoUQl8chZMfd58aAY3Vx6h4=
+	t=1764409033; cv=none; b=QoC892StB/uHod4exbZuhoC7iqB6Vj6SbTmUq50XBtQlcWHCCDI2S0jkqiwUuPTnuogmQ/HjwmyulITmcX0qidj6N2RQ/ahtQt7FzNy6jCwnJT48LBpdfdRtCgbsgh8gpkHvK4wWFRQ9oVtmYC0C9ckK+zA1WPJ89BxzXfW0ue4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764408876; c=relaxed/simple;
-	bh=9QYrd0J1ZSElNvXcBOabxoN2SfkR3kHo8BJcId5JdTA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hwRZ9mayTE6rrdF6YXOeBBrZXyEwK08axIW10p0dTLnOIQ6tntj1wF8BM+WvfGP7cYIM7vCkbUEwist+SESQahrF2KjVFsUftnklE6siYqUSp4vinTEugutCQ9TcH1VMpn/J3gp4RHQIurADD1J71kTLL0Bnbz37TcSCLAC24ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BnhAOVIN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2CDCC4CEF7;
-	Sat, 29 Nov 2025 09:34:32 +0000 (UTC)
+	s=arc-20240116; t=1764409033; c=relaxed/simple;
+	bh=XU6L1ORzG6XUHYqw12O3Pbk8+Jqyg+/oeqb+V6AXOpE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=DHhEF7/FWfdTHlRSwCKULBwnm9op8HU6ngGX0X2NamIjRVCHXoH+Yj0Gi1cV+0zEVa4jgUXVnqm56g1y6vEqUItsHFWYmTrCRML2gHRvcEA09QVa93YJU/Y9V14JLWVquARVxFmSogkrvka62vKih9dFhaaazVa13dIMBTvVQAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uoycDsvh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA04FC4CEF7;
+	Sat, 29 Nov 2025 09:37:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764408876;
-	bh=9QYrd0J1ZSElNvXcBOabxoN2SfkR3kHo8BJcId5JdTA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BnhAOVINLOAU7YszfS7gvi3ZMbA5H76phtmi/8OSBlQYgeJYRDo1NNRFRaWJJqHOJ
-	 gR1w6nU4ehGM8fDsLYG7lcIlrJLll18PnKcoMzsFfnWPuHQr4d9pPFoaTXypjI/Gar
-	 334ODS8jxNMfL67KILZOXJGuY8amScd65TUd8bi7qouzpTxcEna7AQcNDVM0icTIHR
-	 Oyva3MqZn+ZEyDW8xw4U6uaCbLKXCPZvknxlBjriq4CdCK8szUDSQM5H2vH9HxGTzv
-	 MxTBcNclMiF7EJmjXQTGSWjTdLjuRrdlCQgADWC5slDZTA6YtaF5/V+DMyhYLf9ME9
-	 WymQtlVAiLZ9A==
-Message-ID: <8b8d35d4-ee88-4d91-aef5-0e77f03f59b0@kernel.org>
-Date: Sat, 29 Nov 2025 10:34:30 +0100
+	s=k20201202; t=1764409032;
+	bh=XU6L1ORzG6XUHYqw12O3Pbk8+Jqyg+/oeqb+V6AXOpE=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=uoycDsvhIFdHYXtAEkH5yQpzVyABg5qR8VQ2lqaYiPXDyCMNna1abZYN9BAAISTkV
+	 BvOkNzvlRVEFlVnBwL87Ea5+r/gTBYqlyI/spQc3euEFxz1r3vyKNeT4C17zDCOZ6m
+	 Y2y9o1JDf6/K++VvJ9nky3OyH+PU13+A41NiwpHicZ/WShX8iVKsxYMkYuV9kyRsH2
+	 MAYJBb/wB5dofhTjdKR+Nyp9+r6WU0LlPS06kCKPQ/3fP+qL4LyMmruQUMZfesmdDK
+	 Vrj7beBRZY2rEOaWEzeia2v9uXwa5Px4XvvmOubo4wKjjLqWJreFSy/5kietkC3UQj
+	 KXLTEuz9ZAO1w==
+Message-ID: <898e8826-2914-4db1-b371-6456b42a934f@kernel.org>
+Date: Sat, 29 Nov 2025 10:37:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,9 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: qcs8300: Add clocks for QoS
- configuration
+Subject: Re: [PATCH 1/3] dt-bindings: interconnect: add clocks property to
+ enable QoS on qcs8300
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
  Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -64,8 +65,8 @@ Cc: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  Mike Tipton <mike.tipton@oss.qualcomm.com>
 References: <20251128150106.13849-1-odelu.kukatla@oss.qualcomm.com>
- <20251128150106.13849-4-odelu.kukatla@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <20251128150106.13849-2-odelu.kukatla@oss.qualcomm.com>
+ <bf8fbe4b-d89e-424f-8445-0da2f80422c1@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -110,34 +111,46 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251128150106.13849-4-odelu.kukatla@oss.qualcomm.com>
+In-Reply-To: <bf8fbe4b-d89e-424f-8445-0da2f80422c1@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 28/11/2025 16:01, Odelu Kukatla wrote:
-> Add clocks which need to be enabled for configuring QoS on
-> qcs8300 SoC.
+On 29/11/2025 10:33, Krzysztof Kozlowski wrote:
+> On 28/11/2025 16:01, Odelu Kukatla wrote:
+>> Add 'clocks' property to enable QoS configuration. This property
+>> enables the necessary clocks for QoS configuration.
+>>
+>> QoS configuration is essential for ensuring that latency sensitive
+>> components such as CPUs and multimedia engines receive prioritized
+>> access to memory and interconnect resources. This helps to manage
+>> bandwidth and latency across subsystems, improving system responsiveness
+>> and performance in concurrent workloads.
 > 
-> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-> ---
->  arch/arm64/boot/dts/qcom/monaco.dtsi | 6 ++++++
->  1 file changed, 6 insertions(+)
+> I don't see how clocks property help here at all. Are you getting clock
+> rates in the driver of some other clocks to make QoS decisions?
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/monaco.dtsi b/arch/arm64/boot/dts/qcom/monaco.dtsi
-> index 816fa2af8a9a..6139511ea525 100644
-> --- a/arch/arm64/boot/dts/qcom/monaco.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/monaco.dtsi
-> @@ -2226,6 +2226,10 @@
->  			reg = <0x0 0x016c0000 0x0 0x17080>;
->  			#interconnect-cells = <2>;
->  			qcom,bcm-voters = <&apps_bcm_voter>;
-> +			clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_NOC_QUPV3_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB2_PRIM_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
+>>
+>> Both 'reg' and 'clocks' properties are optional. If either is missing,
+> 
+> No! They are not. How they can be optional in the hardware? How SoC can
+> have for ONE GIVEN device optional reg, meaning one board with the same
+> Soc has the IO address space but other board with the same SoC does not
+> have it.
+> 
+>> QoS configuration will be skipped. This behavior is controlled by the
+>> 'qos_requires_clocks' flag in the driver, which ensures that QoS
+>> configuration is bypassed when required clocks are not defined.
+> 
+> This suggests that - driver is not helping. Please describe the
+> hardware, not your drivers.
+> 
 
-Your binding said all interconnects have clocks, so please update all of
-them. Not only three out of 10-or-whatever-in-total-you-have.
+And now I see you sent the same buggy code for sa8775p:
+https://lore.kernel.org/all/20251001073344.6599-2-odelu.kukatla@oss.qualcomm.com/
+
+And this was already merged!
+
+No, you just make bindings worse.
 
 
 Best regards,
