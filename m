@@ -1,180 +1,125 @@
-Return-Path: <linux-pm+bounces-38923-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38924-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D9DDC949C8
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 01:57:45 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06164C94B87
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 06:27:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A88203A4696
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 00:57:43 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 85456343F4F
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 05:27:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19A1D1F0995;
-	Sun, 30 Nov 2025 00:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A4B21E082;
+	Sun, 30 Nov 2025 05:27:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a16u6zen"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kzbO+NaE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3261CEAC2
-	for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 00:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10DC4212FB9
+	for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 05:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764464259; cv=none; b=Br1McdiO4h1TNZAPFig5oQmD/nEJ4ttfVVnm90MGvz9yjiRbwGhgDmfdcV90GwxKt2+8JFOPQVKocK8eTjiOMIsdwrQ0Rc5fR+HvEUnHld00cyVbMxLDJSgI7R40XhDQz+GW+IYLxzsgrQgMP0nKJCFVr7cFPRQYofP4vb3JHeU=
+	t=1764480441; cv=none; b=q5aBb+psIX8ZzD/Zc3e8ZsHrH1hLmP4edtF0s6AQjPHr/POeuN44oYZOrEnHdeZadWh00uqIB5m41JkK9z2SYt1/r8hReNk6pYvdd3I2BavJs7mN9Iw5jvDBeGekxDMSuaT/s3gKDfsYfbiQp52wo8y+6Qqiuvh3Ca4IOxpgL34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764464259; c=relaxed/simple;
-	bh=k6FYX/RC2meRZKmLL/rdujICr6cSnEexoqs5r2vGL4g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gPCrw9G9/hBd32+47durweFKh+gPtN0eqaQ8jZ6c5LoAlUUGzZaO27cQK0yjWxZrFH5Mp4hrRMj7ubaCQbLLN+kRGTfLxvIs9I7rWcrSChj0XHhyI15ehMn9yWSk95g/ecMdgbA1jlGhSIi3MQWDqBCalUVtTTUmRBzWk5TMAc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a16u6zen; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-37b935df7bfso28222681fa.2
-        for <linux-pm@vger.kernel.org>; Sat, 29 Nov 2025 16:57:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764464255; x=1765069055; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+g49Om8KV5+AE4pKbmfS5SsSZ6jAm9G/Fr+ete77Gs0=;
-        b=a16u6zenbhA1R3HmfSHImbulDJf6qYZKuG8bfBXSkn8wqzvkPR8nGf0wYEWZWJsNNO
-         9H759adf6+ptPxWNMZGO+zLUkHqaTlQMM+WXeCoxI2cgxZI3hg48ncL26T3NE+eYenm8
-         ABWh5VH0G0O4YM7itDh2cPCoJjLKylaFhrVKkOHfCGTX0r0ObA+nwxWKONoxIuWdpi7y
-         yhJRNvWw/Vi6oxuo5zehNdEhQH4ry37dTGvM9maDSi29mqEb/NBtwmeJQNsDx9zmxTBU
-         eyB/M3usaPYNar2ACuJRiUnNnBZZIt4w51XlRTJG1s9+8IbxCzZRA1Pd+7QUOSnOZCLi
-         eQGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764464255; x=1765069055;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=+g49Om8KV5+AE4pKbmfS5SsSZ6jAm9G/Fr+ete77Gs0=;
-        b=sJtjloRzUHiy+Qs+bbaMqtaY7trbSo+UDDTz/gUXF7cv/c0Be92zo/d75Yr62gSG7r
-         U8ngSD3QzuZMSNAuaZ3mbBL3ZWaBDdTyw5fsccuxSV1Onmxc8MXYuIeKSqCV2WLtOd8e
-         kIpR5/4Ee2NPzO7rAOAN8BbvKCVlR+7s2dRUPpT+7TiVXHf0s8lSNPBfwxZR/Q9RL7W4
-         L+R18ufByYQCthPf9i1gJcsOP28GBks4g9Wj99AfbP7PLLkxa9V3IeKD/6YBCw5Gba1Z
-         P6w0bFLBw5qEnHEmS5+zBhD0AgQGA60qLHfOw3SFG+YxSMH1qcpLNU8KSE8D3yIx2PMI
-         4wlw==
-X-Forwarded-Encrypted: i=1; AJvYcCVxo5GoY6sgJIeQmKDcJ4SumZzTgLKKyWZDxDrRkH1PNzbzzIdkxNABQAVvpGYvg7k30BUBnEVAhg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHVIUxBQYNeC19fZ94XBq59BjpC4ANrLvGHxgIABvrmwfL+lyO
-	w8Zd6y35bgGvTqFLJA2lrCsLr0hsaHVDGD0QeGmiIcjDv5VP3gsBBPPK
-X-Gm-Gg: ASbGncvaygwr4wpJNAfp5YwfLuSpk+W5sn8MiKM+4LVK7s7PTRAP/ynFGQGIN/xp7Wd
-	gV78rDcYhcU7KDi7nD2HTWxCiMJpuL8vL8Ahmz8Whm1oM0EITpKG3gBLw9Zg3+mnKIowf6lUjIO
-	ODqR+yYoc6sx/uzNAGmCVan3I2GtoKqDrj7AXdNM2vnBBGBaz3fUmvyxMd6LOoay2j2UmcICE31
-	qQWpMvr6XpE6R5N4wT50waj0roZe++0srURqhVUKEiQno5U6MlVixHEpWQFjSSBC4R58LIEFIx/
-	Tq+0dS8gRAMYGqtJ6dt4yr7QEcVxOIjcj2iqqC40Y69ChHap9Hnr8nTLfGFDbOuVQLKjMZY/u5h
-	DiStLdIGpQr3ekgGWJPASeGHhD3RUM3YfzCza34Y6kJY9q3FNs75cnfWPAk3b7YpQbbxDCQyutX
-	ctIoXxgJM=
-X-Google-Smtp-Source: AGHT+IHqqLvvP2sfFnTWOisjSIYIhy2i6Epx2GFFCPJmKULbpNgQPdTlRmyFokY5qYTyoqCENRLjrA==
-X-Received: by 2002:a05:6512:ad0:b0:591:c3f1:474d with SMTP id 2adb3069b0e04-596a3eac18bmr9392825e87.15.1764464254932;
-        Sat, 29 Nov 2025 16:57:34 -0800 (PST)
-Received: from localhost ([194.190.17.114])
-        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-596bfa440d8sm2303111e87.46.2025.11.29.16.57.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 29 Nov 2025 16:57:33 -0800 (PST)
-From: Askar Safin <safinaskar@gmail.com>
-To: mpatocka@redhat.com
-Cc: dm-devel@lists.linux.dev,
-	linux-block@vger.kernel.org,
-	linux-lvm@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-pm@vger.kernel.org,
-	linux-raid@vger.kernel.org,
-	lvm-devel@lists.linux.dev,
-	rafael@kernel.org,
-	Milan Broz <gmazyland@gmail.com>,
-	linux-fsdevel@vger.kernel.org,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Christian Brauner <brauner@kernel.org>
-Subject: Re: [RFC PATCH 2/2] swsusp: make it possible to hibernate to device mapper devices
-Date: Sun, 30 Nov 2025 03:56:56 +0300
-Message-ID: <20251130005656.3644711-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <b32d0701-4399-9c5d-ecc8-071162df97a7@redhat.com>
-References: <b32d0701-4399-9c5d-ecc8-071162df97a7@redhat.com>
+	s=arc-20240116; t=1764480441; c=relaxed/simple;
+	bh=VAVyHSpca8Z58pvC1Yy7myjBeHrbjXjeXWFK/UXtdKM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TR++tV43/DgapIfD3nQf4vJFHs3ismNLLgBBMHTsJbqxJBwKLVdIHk7QCqHBomVTP+vevi/pMh8S6jk+1mor6T9LqS6/I7sKTyZFUT51FQ60pOFXPrBjlaQKrjaqzItR8zZi1II/2x/+XxQJOdK5BDqQwqLfdWMUIhCsxnOPLEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kzbO+NaE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0A83C19421
+	for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 05:27:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764480440;
+	bh=VAVyHSpca8Z58pvC1Yy7myjBeHrbjXjeXWFK/UXtdKM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=kzbO+NaEf6FQocKdsciIJSzh5IOwQXzYvu+66qBqmTtKyumEsjHl5n2NUbA71NNtV
+	 bqq2RoEPBZ3wlZVyth9PMwbixM4O+WipHWANL0dHOMc+TdLkzQ+0ZALIH7K6rvCZnp
+	 iW2SVILkQ0jglUDux9Ku7pFtRFG2r68HhrlTIiI7dRqD2shOV3y1To8ScXvyaj5EiV
+	 7t9VFyM1xj2g7gzWAWYiL8/JEtTXusFQ4HQnCjx4v2beopWn9TShW8jCrkorjGpG9H
+	 mPepFwUNsl81YxgknDquUqjqy4ddHIfkqBcN4kkp6QVie3O0p/wohiABHR7v+WGGaF
+	 +5zSkM13s7/uQ==
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-3e3dac349easo1871590fac.2
+        for <linux-pm@vger.kernel.org>; Sat, 29 Nov 2025 21:27:20 -0800 (PST)
+X-Gm-Message-State: AOJu0Yxk2P06gWEQCyF6E2GynW6R9kDQwwtWQlbMeP637ojV1KZxAjlf
+	OobrGOHTHgYoH4PibWGofiiYFLw2Ns+da3UbNx5shx2TVdtTyii+SHtNsZuVQt7mr6DeAVVFgGF
+	T4E9Xka0OTs/UliR2l+9TT7Bphb9cgk0=
+X-Google-Smtp-Source: AGHT+IH5+Sc8lS/8IvZKnG3Vf9xMC79yMlTsu9CurXlmV4cwkw6MxDT4TnZvdrvFIaUwIRM2TJVQy5hClORkgoB3tvE=
+X-Received: by 2002:a05:6808:6f84:b0:450:c49f:9a38 with SMTP id
+ 5614622812f47-45115995a6emr14564050b6e.17.1764480440055; Sat, 29 Nov 2025
+ 21:27:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251113191609.28574-1-ehemily@amazon.de> <20251113191609.28574-2-ehemily@amazon.de>
+ <CAJvTdK=_v9q2eGMB6qG3iaDhXMzQHz-EJ4NeDEfBe2fbv+wKfQ@mail.gmail.com> <BEYP281MB5509D3D7A01DEC1FAAEB9DBDBADCA@BEYP281MB5509.DEUP281.PROD.OUTLOOK.COM>
+In-Reply-To: <BEYP281MB5509D3D7A01DEC1FAAEB9DBDBADCA@BEYP281MB5509.DEUP281.PROD.OUTLOOK.COM>
+From: Len Brown <lenb@kernel.org>
+Date: Sun, 30 Nov 2025 00:27:08 -0500
+X-Gmail-Original-Message-ID: <CAJvTdKnjreryLA9KuuobwJShbVseHOyujmXBAXRuSUDsCZxSVA@mail.gmail.com>
+X-Gm-Features: AWmQ_bml1oVL0eKzdparYdSoLT_jY79yQzST4p-PLvM2atSWa-bVaoYLi3eLiD0
+Message-ID: <CAJvTdKnjreryLA9KuuobwJShbVseHOyujmXBAXRuSUDsCZxSVA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tools/power/turbostat: Fix division by zero when TDP
+ calculation fails
+To: "Ehlert, Emily" <ehemily@amazon.de>, "Zhang, Rui" <rui.zhang@intel.com>
+Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Emily Ehlert <ehemily@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Mikulas Patocka <mpatocka@redhat.com>:
-https://lore.kernel.org/linux-pm/b32d0701-4399-9c5d-ecc8-071162df97a7@redhat.com/ :
-> Askar Safin requires swap and hibernation on the dm-integrity device mapper
-> target because he needs to protect his data.
-> 
-> This hits two problems:
-> 1. The kernel doesn't send the flush bio to the hibernation device after
->    writing the image and before powering off - this is easy to fix
-> 2. The dm-integrity target keeps parts of the device in-memory - it keeps
->    a journal and a dm-bufio cache in memory. If we hibernate and resume,
->    the content of memory no longer matches the data on the hibernate
->    partition and that may cause spurious errors - this is hard to fix
+On Fri, Nov 28, 2025 at 9:00=E2=80=AFAM Ehlert, Emily <ehemily@amazon.de> w=
+rote:
+>
+> We are running turbostat inside a VM on the AWS Nitro Hypervisor.
+> Guests are not provided with any power measurements. So reading the
+> MSR_RAPL_POWER_UNIT will read 0. Since turbostat expects working
+> RAPL for this CPU family, failing to read them leads to an exit (because
+> setting the the timer fails). I agree that the patch should disable RAPL
+> not after TPM but after the RAPL_POWER_UNIT MSR read.
+>
+> I am not experienced with the way turbostat uses the BIC counter macros.
+> It seems like these are mostly used for enabling / disabling individual c=
+ounters?
+> How would I go about using them to disable RAPL in general without affect=
+ing
+> other MSRs such as CPU%c1 which we can and want to read? I would apprecia=
+te
+> some pointers or rough outline on how I can approach the issue.
 
-Let me add some more info on this patchset.
+Thanks, that is helpful.
+I think we agree that this check should be earlier.
 
-First of all, I already solved the problem for me personally:
-I wrote hackish patch, which fixes the problem. My patch is tested on
-my real hardware under load. I successfully use it for 2 weeks
-(I hibernated a lot of times during this period.)
-The patch is absolutely rock solid, and I absolutely sure it is correct.
-Unfortunately, it is not generic, it is tied to my particular configuration,
-it hard codes paths (!!!), and hence is non-upstreamable.
+In this scenario, we want to override platform->rapl_msrs -- clearing it be=
+cause
+the MSRs are not actually available...
 
-Here is this patch for your information:
-https://zerobin.net/?ad6142bd67df015a#68Az6yBUxHA3AXB7jY1+clSRnR745olFHAByxwPGM08= .
+I cut a patch to replace all the tests of platform->rapl_msrs with a
+global variable
+that was initialized to (read-only) platform->rapl_msrs, but was
+cleared before the test
+in rapl_probe_intel(), and when I run with --no-perf (so that
+turbostat must use MSRs)
+it seems to disable all the RAPL stuff cleanly.
 
-Feel free to use code from it.
+So the question becomes what test to use to determine that we should
+not believe platform->,
+and we should instead nuke RAPL support?
 
-So I personally is not in hurry, I already have solution, which works for me.
-(But I am still available for testing.)
+Once upon a time we used to actually probe the RAPL msrs by trying to read =
+them.
+If they failed to read or were zero, we would fail the probe and
+disable the couter.
+But that turned out to be problematic b/c some platforms had non-zero
+unsupported MSRs etc.
+so we moved to hard-coding the platform capabilities in a table.
 
-
-Your patch has a problem: after "notify_swap_device" call, the pages can
-still be swapped out. "pm_restrict_gfp_mask" call in "hibernation_snapshot"
-prevents further swapping. Thus "notify_swap_device" should be called
-after "pm_restrict_gfp_mask" (but read on).
-
-I attempted to create test case, which would expose this problem. And I was
-unable to do so. Still I believe this is a real problem.
-
-
-Also, our problem is very similar to reason of introducing "filesystems_freeze"
-( https://elixir.bootlin.com/linux/v6.18-rc7/source/kernel/power/hibernate.c#L824 ).
-
-See problem description here:
-https://lore.kernel.org/all/0a76e074ef262ca857c61175dd3d0dc06b67ec42.camel@HansenPartnership.com/ .
-
-See also https://lwn.net/Articles/1018341/ .
-
-(See also this huge thread
-https://lore.kernel.org/all/20250327140613.25178-1-James.Bottomley@HansenPartnership.com/ .)
-
-"filesystems_freeze" logic is already implemented in mainline. It is gated
-behind /sys/power/freeze_filesystems .
-
-As you can see, authors of "filesystems_freeze" attempted to solve similar
-problem. Thus, we should probably flush buffers in "filesystems_freeze" call.
-Ideally, flushing of dm-integrity should be correctly ordered with freezing of filesystems
-to support complex storage hierarchies (i. e. swap on dm-integrity on loop
-device on some filesystem, etc).
-
-But... call to "filesystems_freeze" happens before "pm_restrict_gfp_mask" call.
-
-So... in this point I gave up, and I don't know what to do (i. e. what the upstream
-kernel should do).
-
-
-Feel free to ask any questions.
-
-
-I changed CCs for further exposure.
-
--- 
-Askar Safin
+In the VM, does the MSR read fail entirely, or does it just return 0
+values for unsupported MSRs?
+thanks,
+Len Brown, Intel Open Source Technology Center
 
