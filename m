@@ -1,125 +1,170 @@
-Return-Path: <linux-pm+bounces-38924-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38925-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06164C94B87
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 06:27:26 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id D52B7C94C87
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 09:39:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 85456343F4F
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 05:27:25 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 727864E11FC
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 08:39:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A4B21E082;
-	Sun, 30 Nov 2025 05:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81A5233721;
+	Sun, 30 Nov 2025 08:39:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kzbO+NaE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DzZtkNC8"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10DC4212FB9
-	for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 05:27:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A058A537E9;
+	Sun, 30 Nov 2025 08:39:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764480441; cv=none; b=q5aBb+psIX8ZzD/Zc3e8ZsHrH1hLmP4edtF0s6AQjPHr/POeuN44oYZOrEnHdeZadWh00uqIB5m41JkK9z2SYt1/r8hReNk6pYvdd3I2BavJs7mN9Iw5jvDBeGekxDMSuaT/s3gKDfsYfbiQp52wo8y+6Qqiuvh3Ca4IOxpgL34=
+	t=1764491952; cv=none; b=Q4AmavNUu6ZWlcCxeurjxlnDQFEF0UkEAp64NoDUMjFbQ5nhmHcD1oGmJp++tGQWvrmTEvtwANleoTbR5gNXqHjOvYHhqvjthY1SkOS3zQaGuV468xtvRPWZ0mQTngwD1vVYIjpeWlJhfvIAQLJzW8W9WD2ad2uJqKBA2ZngmLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764480441; c=relaxed/simple;
-	bh=VAVyHSpca8Z58pvC1Yy7myjBeHrbjXjeXWFK/UXtdKM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TR++tV43/DgapIfD3nQf4vJFHs3ismNLLgBBMHTsJbqxJBwKLVdIHk7QCqHBomVTP+vevi/pMh8S6jk+1mor6T9LqS6/I7sKTyZFUT51FQ60pOFXPrBjlaQKrjaqzItR8zZi1II/2x/+XxQJOdK5BDqQwqLfdWMUIhCsxnOPLEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kzbO+NaE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0A83C19421
-	for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 05:27:20 +0000 (UTC)
+	s=arc-20240116; t=1764491952; c=relaxed/simple;
+	bh=8vOTHzmCf5/xvLzxXR0X3YKXDP9IWOBID+jKXczDy3s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UqpufrjnvO2tVZDaBjhzz9JPzFsPldW6qnsIb4hRPDvVsgkgh1Z3UFRBMgHgchn7UESEeHmVV2f29nbKeB3IoonU3wL4nVRn6lVqIZ30zuJOBxwjvc4mcGBrPIvVUZseuEuW99x9Pw10U5ONLIFg8IC0H2iIQUGwpQSxaJdY780=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DzZtkNC8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD02CC4CEF8;
+	Sun, 30 Nov 2025 08:39:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764480440;
-	bh=VAVyHSpca8Z58pvC1Yy7myjBeHrbjXjeXWFK/UXtdKM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kzbO+NaEf6FQocKdsciIJSzh5IOwQXzYvu+66qBqmTtKyumEsjHl5n2NUbA71NNtV
-	 bqq2RoEPBZ3wlZVyth9PMwbixM4O+WipHWANL0dHOMc+TdLkzQ+0ZALIH7K6rvCZnp
-	 iW2SVILkQ0jglUDux9Ku7pFtRFG2r68HhrlTIiI7dRqD2shOV3y1To8ScXvyaj5EiV
-	 7t9VFyM1xj2g7gzWAWYiL8/JEtTXusFQ4HQnCjx4v2beopWn9TShW8jCrkorjGpG9H
-	 mPepFwUNsl81YxgknDquUqjqy4ddHIfkqBcN4kkp6QVie3O0p/wohiABHR7v+WGGaF
-	 +5zSkM13s7/uQ==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-3e3dac349easo1871590fac.2
-        for <linux-pm@vger.kernel.org>; Sat, 29 Nov 2025 21:27:20 -0800 (PST)
-X-Gm-Message-State: AOJu0Yxk2P06gWEQCyF6E2GynW6R9kDQwwtWQlbMeP637ojV1KZxAjlf
-	OobrGOHTHgYoH4PibWGofiiYFLw2Ns+da3UbNx5shx2TVdtTyii+SHtNsZuVQt7mr6DeAVVFgGF
-	T4E9Xka0OTs/UliR2l+9TT7Bphb9cgk0=
-X-Google-Smtp-Source: AGHT+IH5+Sc8lS/8IvZKnG3Vf9xMC79yMlTsu9CurXlmV4cwkw6MxDT4TnZvdrvFIaUwIRM2TJVQy5hClORkgoB3tvE=
-X-Received: by 2002:a05:6808:6f84:b0:450:c49f:9a38 with SMTP id
- 5614622812f47-45115995a6emr14564050b6e.17.1764480440055; Sat, 29 Nov 2025
- 21:27:20 -0800 (PST)
+	s=k20201202; t=1764491951;
+	bh=8vOTHzmCf5/xvLzxXR0X3YKXDP9IWOBID+jKXczDy3s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DzZtkNC8Xd0tiq6r9WOePBDc46yzXn2Iuy8Tj2QtqFS3WYMtSpzLXLs1l6wpUg80R
+	 kum8IIn3wIGsZPo503JiNE2C1eKLIAQsB+wvlvJeDHfr+Z8SKFFTL7cs+apTljo3fv
+	 f2miwH4pYWPtGvQkRzQCV8vWcU4x8qr6qb8BKsfwtfSvpkGhOhdFfjb6D0HUQUVz5P
+	 Fo0IVYKrrv2Gxxrh+vSvBsS7pdPGcp+84BOFAre87N5xqTwvrzesGxp+5YE8z1FOOp
+	 NjG8YKqlxMXUGdjKw3Tb1Vw3Ai8oQD421CnAkl7qPOoVdQj/MUJUmLvg1h7gfu/ABT
+	 9vAcYtyxyP/jA==
+Date: Sun, 30 Nov 2025 09:39:08 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Biju <biju.das.au@gmail.com>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+	linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
+Message-ID: <wah57av7ypb42zcaosx7n64j6qmmcq5ylhgnde2brbiy6o7sun@7rqkr6ke3g5k>
+References: <20250923144524.191892-1-biju.das.jz@bp.renesas.com>
+ <20250923144524.191892-7-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251113191609.28574-1-ehemily@amazon.de> <20251113191609.28574-2-ehemily@amazon.de>
- <CAJvTdK=_v9q2eGMB6qG3iaDhXMzQHz-EJ4NeDEfBe2fbv+wKfQ@mail.gmail.com> <BEYP281MB5509D3D7A01DEC1FAAEB9DBDBADCA@BEYP281MB5509.DEUP281.PROD.OUTLOOK.COM>
-In-Reply-To: <BEYP281MB5509D3D7A01DEC1FAAEB9DBDBADCA@BEYP281MB5509.DEUP281.PROD.OUTLOOK.COM>
-From: Len Brown <lenb@kernel.org>
-Date: Sun, 30 Nov 2025 00:27:08 -0500
-X-Gmail-Original-Message-ID: <CAJvTdKnjreryLA9KuuobwJShbVseHOyujmXBAXRuSUDsCZxSVA@mail.gmail.com>
-X-Gm-Features: AWmQ_bml1oVL0eKzdparYdSoLT_jY79yQzST4p-PLvM2atSWa-bVaoYLi3eLiD0
-Message-ID: <CAJvTdKnjreryLA9KuuobwJShbVseHOyujmXBAXRuSUDsCZxSVA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] tools/power/turbostat: Fix division by zero when TDP
- calculation fails
-To: "Ehlert, Emily" <ehemily@amazon.de>, "Zhang, Rui" <rui.zhang@intel.com>
-Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Emily Ehlert <ehemily@amazon.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rpnzmdgir2lvb6ia"
+Content-Disposition: inline
+In-Reply-To: <20250923144524.191892-7-biju.das.jz@bp.renesas.com>
 
-On Fri, Nov 28, 2025 at 9:00=E2=80=AFAM Ehlert, Emily <ehemily@amazon.de> w=
-rote:
->
-> We are running turbostat inside a VM on the AWS Nitro Hypervisor.
-> Guests are not provided with any power measurements. So reading the
-> MSR_RAPL_POWER_UNIT will read 0. Since turbostat expects working
-> RAPL for this CPU family, failing to read them leads to an exit (because
-> setting the the timer fails). I agree that the patch should disable RAPL
-> not after TPM but after the RAPL_POWER_UNIT MSR read.
->
-> I am not experienced with the way turbostat uses the BIC counter macros.
-> It seems like these are mostly used for enabling / disabling individual c=
-ounters?
-> How would I go about using them to disable RAPL in general without affect=
-ing
-> other MSRs such as CPU%c1 which we can and want to read? I would apprecia=
-te
-> some pointers or rough outline on how I can approach the issue.
 
-Thanks, that is helpful.
-I think we agree that this check should be earlier.
+--rpnzmdgir2lvb6ia
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
+MIME-Version: 1.0
 
-In this scenario, we want to override platform->rapl_msrs -- clearing it be=
-cause
-the MSRs are not actually available...
+On Tue, Sep 23, 2025 at 03:45:10PM +0100, Biju wrote:
+> +static int rzg2l_gpt_suspend(struct device *dev)
+> +{
+> +	struct pwm_chip *chip = dev_get_drvdata(dev);
+> +	struct rzg2l_gpt_chip *rzg2l_gpt = to_rzg2l_gpt_chip(chip);
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < RZG2L_MAX_HW_CHANNELS; i++) {
+> +		if (!rzg2l_gpt->channel_enable_count[i])
+> +			continue;
+> +
+> +		rzg2l_gpt->hw_cache[i].gtpr = rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTPR(i));
+> +		rzg2l_gpt->hw_cache[i].gtccr[0] = rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTCCR(i, 0));
+> +		rzg2l_gpt->hw_cache[i].gtccr[1] = rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTCCR(i, 1));
+> +		rzg2l_gpt->hw_cache[i].gtcr = rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTCR(i));
+> +		rzg2l_gpt->hw_cache[i].gtior = rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTIOR(i));
+> +	}
+> +
+> +	clk_disable_unprepare(rzg2l_gpt->clk);
+> +	clk_disable_unprepare(rzg2l_gpt->bus_clk);
+> +	reset_control_assert(rzg2l_gpt->rst_s);
+> +	reset_control_assert(rzg2l_gpt->rst);
+> +
+> +	return 0;
+> +}
+> +
+> +static int rzg2l_gpt_resume(struct device *dev)
+> +{
+> +	struct pwm_chip *chip = dev_get_drvdata(dev);
+> +	struct rzg2l_gpt_chip *rzg2l_gpt = to_rzg2l_gpt_chip(chip);
+> +	unsigned int i;
+> +	int ret;
+> +
+> +	ret = reset_control_deassert(rzg2l_gpt->rst);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = reset_control_deassert(rzg2l_gpt->rst_s);
+> +	if (ret)
+> +		goto fail_reset;
+> +
+> +	ret = clk_prepare_enable(rzg2l_gpt->bus_clk);
+> +	if (ret)
+> +		goto fail_reset_all;
+> +
+> +	ret = clk_prepare_enable(rzg2l_gpt->clk);
+> +	if (ret)
+> +		goto fail_bus_clk;
+> +
+> +	for (i = 0; i < RZG2L_MAX_HW_CHANNELS; i++) {
+> +		if (!rzg2l_gpt->channel_enable_count[i])
+> +			continue;
+> +
+> +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTPR(i), rzg2l_gpt->hw_cache[i].gtpr);
+> +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCCR(i, 0), rzg2l_gpt->hw_cache[i].gtccr[0]);
+> +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCCR(i, 1), rzg2l_gpt->hw_cache[i].gtccr[1]);
+> +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCR(i), rzg2l_gpt->hw_cache[i].gtcr);
+> +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTIOR(i), rzg2l_gpt->hw_cache[i].gtior);
+> +	}
+> +
+> +	return 0;
+> +fail_bus_clk:
+> +	clk_disable_unprepare(rzg2l_gpt->bus_clk);
+> +fail_reset_all:
+> +	reset_control_assert(rzg2l_gpt->rst_s);
+> +fail_reset:
+> +	reset_control_assert(rzg2l_gpt->rst);
+> +	return ret;
 
-I cut a patch to replace all the tests of platform->rapl_msrs with a
-global variable
-that was initialized to (read-only) platform->rapl_msrs, but was
-cleared before the test
-in rapl_probe_intel(), and when I run with --no-perf (so that
-turbostat must use MSRs)
-it seems to disable all the RAPL stuff cleanly.
+I wonder what happens if these calls in the error path fail. I think the
+correct way would be to track the actual state to handle the state on
+the next invokation for .resume() properly. But note that suspend/resume
+is a somewhat blind spot for me, so I'm unsure here. (And I'm aware that
+most resume callbacks don't cope cleanly here.)
 
-So the question becomes what test to use to determine that we should
-not believe platform->,
-and we should instead nuke RAPL support?
+I added linux-pm to Cc:, maybe someone can speak up about the
+expectations here?
 
-Once upon a time we used to actually probe the RAPL msrs by trying to read =
-them.
-If they failed to read or were zero, we would fail the probe and
-disable the couter.
-But that turned out to be problematic b/c some platforms had non-zero
-unsupported MSRs etc.
-so we moved to hard-coding the platform capabilities in a table.
+Best regards
+Uwe
 
-In the VM, does the MSR read fail entirely, or does it just return 0
-values for unsupported MSRs?
-thanks,
-Len Brown, Intel Open Source Technology Center
+--rpnzmdgir2lvb6ia
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmksAqkACgkQj4D7WH0S
+/k60Ogf9EdyzCceL/FLLmM6ywlVMBetlhlj4ZfpVCmPlBWdb++La6jxCUTGORaR/
+OWqSwsXCRbIY+tIMSf+tIfUSgkbia3RdeXE3FJZwkn+N2zvuEBJ4h8k074JZGP96
+xsYiYyTaNkclG2toCuCezWfVeSZRG24Uj6SKbF/uwEjEUl2zczY8DXEucBb6NtK6
+0IdRNbV7l2K1doE3B5uDmG3H4kYpSfnnKAxOj+QUvTQFO9HOaO0QkCNJ6m6r83nQ
+C4t06Ef7qpMJBO75vmK6Hpg9S/HTuElfZbBOSf0/H+Hq8rpg0nS2jAYOrBAitrVL
+HjU98hnT35ob0Kzi+XqJroMWhFF7RA==
+=0pJy
+-----END PGP SIGNATURE-----
+
+--rpnzmdgir2lvb6ia--
 
