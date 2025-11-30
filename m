@@ -1,125 +1,181 @@
-Return-Path: <linux-pm+bounces-38927-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38928-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32588C94FAA
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 13:55:45 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E251C95218
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 17:10:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB13D3A4635
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 12:55:43 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 53873342904
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 16:10:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AAB1E260A;
-	Sun, 30 Nov 2025 12:55:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9905823EA88;
+	Sun, 30 Nov 2025 16:10:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gww/dvdD"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="Sw07uOnG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74FA1DB375
-	for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 12:55:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764507340; cv=none; b=GzHQbe75AU2nrFuTDHS/eDJgWXzfTm94cIUUtf1KP2mhN49CZncu4QGItI252EWexj8kCRfr5tly9E2TJk8LD8HMMPpUGsJv5g2XkpEv2LJroHeIifbpFIGj52DCjNHra4tCSW/GH3eyfUFFPFTTEPZ6WivOt/FI8OJlTRH3dOc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764507340; c=relaxed/simple;
-	bh=+CUU91VE9U+UPRFztWIsw6a0HFlxr+X7N2lteq6FDVE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cM6PXtcmvrV7imIicuRUJNSoOngTWeGvIyF8FtsgcILFsgiCmgwIgFBzxGs7iGVQpJideUWMMFVvuMFJF22GOfU9DkyaJOTSXKWvGwSM5CclaGgN+g00EyNBTpW/3ub+fd8vSJAwbQov96OEo5IJj4CLyUz0uXZaJfpioZeUyYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gww/dvdD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A8E1C19423
-	for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 12:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764507339;
-	bh=+CUU91VE9U+UPRFztWIsw6a0HFlxr+X7N2lteq6FDVE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Gww/dvdD+675GJvFeEUzoJ9+9j1fimzRlqZN4XMYb6eQ22Y67C+MtVRScVEvjgMj1
-	 ZpYvL+nwB2pztVPvokl4UbEkKUzonZlmU5BFppJ+9Lj4kIxmWwfdBjPYKKj54W7re6
-	 pCCNXn8T8DUMXZbwGdNQTa6g0p5S1DYOA0f5Hfr506b7n58qIcvUcbv8I+2GP1lQr/
-	 zN1r7Jpu0BI8REbIRc1G32Hi5dMOEcFzmasdNLVlXuv3R46/uzyCsVukiB757JeGhN
-	 2uDujYZ14AcjgVrLFPsqEQlrLMsGQFouXavU4LbUHBbzAin4+3g/0GH9NV7GhWXo1f
-	 wmvNB24EyWnFw==
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7c76f65feb5so2452550a34.0
-        for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 04:55:39 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUja/DxAt0Ko7VYDuU+h1DYpyyE7nln0vjpUYR7sBhM9jOL/KrHDRWuUJ7wJ3Z+K8cilWQkF1dUYQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxN1Vu9zYrJbJqsyWcC9vNiq5rX3CAAgzYXh7XLMMygmhvxhvgJ
-	HlFj6b65b6yI90fn4F6avOn1PF0Nj1Dz+yjlT0gKXzBP9VrFakvEUdMXRPoCj1IPRnyUYBEt5/i
-	dH5jv2j3F/vDchH2/khJt96HVtAb01SU=
-X-Google-Smtp-Source: AGHT+IGgWthYmyiiRHTuIz/8bWmUoFRUwbcURTcZh3qG98AznU0lJvk231Fz5Su9DD5JkuIHGit6aHtLEtrfKZseF8E=
-X-Received: by 2002:a05:6830:924:b0:7c7:dff:2ac1 with SMTP id
- 46e09a7af769-7c798b8a7dbmr18909653a34.3.1764507338846; Sun, 30 Nov 2025
- 04:55:38 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BD81E51EB;
+	Sun, 30 Nov 2025 16:10:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764519011; cv=pass; b=iQbztFOnOgJYVvpoSUFv5yMv/Q7vDL6Rl5QLK6jOSd3a7PS8Vapm/+mlmBDcZM3rrC2AWlTlsLwHwkG82c9oRlZYnegn9Xf8RSveok6QyboaaepVoGLevmJQIO5UObHsE6fdv8FS263iRBOvCj2K+SGaD+CFWjkwN5VOhXAKDp4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764519011; c=relaxed/simple;
+	bh=Ky5BCREuCQSf6V05RZSL5DPlBZvRAcJsTXd3VV3wAds=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=dP/zff+51fjTi1k6d5BiZNycYXJdf2jbeOhlA5mBkHIf9nkDdTii118XnyKyxhhpWkzPIe5EUfz0k1/im3j5ugS46I4+sO386tc8sJI42MG9BrKyngElH8MPlQmr0lWum9tpkTJp6qko3m8dJJGNlEsP4bon6x1+JTyynvEVOKc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=Sw07uOnG; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1764518970; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=lZNGPS8/yzplH+/lZnmpT0u0XgfKQzV5Ebc62X7LhYm4h9mo+s5ulxjvCWO31ZngO30oC6jsBiyoRXh6+x2lq3rQmmHLxAadt7oAa2v0xL4VEFanYSFXzr4ffLQXM29Q1FmZlJmWW4StaTDf8Zqre+KBQvvGJs96TFBCwDiD8BA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1764518970; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Ng1aOetX8xPcmZ+/SsN+zhM8qMmEe1qTFrEk8t2JxZM=; 
+	b=SjGrEAdbb9i3f5Gvevo4Ix2gNMDXPWl+H9fG5jiX1vgVKmKLU4ZC4Dfa6InO+y8HC24sy8cQBPYXEh4DNWrUysUS6XU1RYmJAnmvzJRxfZJtFEW0xwGYvkmJ1Xd+nAANv0SaTrvQZBbjqkvGqOEIlpwb9ieMyi0k1PPv9Bd4/zs=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1764518970;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=Ng1aOetX8xPcmZ+/SsN+zhM8qMmEe1qTFrEk8t2JxZM=;
+	b=Sw07uOnG3HQBIV67l0L5pf6jOXLN3f498urFbg9hk1eDdUf9x7pgs4SMHetJ0YDZ
+	F/HP/644vDP8qSB3RNJJCkUTYeS3ZUmcxdmEJwQTTnId/2hjE+Qw0Mf3HQApo0/Y+fR
+	9rjGpbZDcnGWYxugCD8zFK2jBP5avH+lk1VpDzSk=
+Received: by mx.zohomail.com with SMTPS id 1764518968022925.5408583981418;
+	Sun, 30 Nov 2025 08:09:28 -0800 (PST)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20251120-thermal-device-v1-0-bbdad594d57a@gmx.de>
- <CAJZ5v0jOPrBcozzJMsB1eE12MuZRWDAV-+=jfrhJbi=S0p5J9Q@mail.gmail.com>
- <5f3ef610-4024-4ca0-a934-2649f5d25f40@gmx.de> <CAJZ5v0iJVV=kf-aJBx8F8dtGfaZpGVyhfi6DBWEg4j3c_nH8_A@mail.gmail.com>
- <e360b9b3-ada4-4cd1-8971-097484cf3f5f@gmx.de> <CAJZ5v0ij_Frdrya3=FaekbU2DFHUyBJnBq-oe9jRsB9eqXDisA@mail.gmail.com>
- <ed619280-6f25-4df6-98ca-890bdc343435@gmx.de> <CAJZ5v0hMPCRU_p_krX3nKzB=5TX7hGU38iyNmhSJSHO2j7K3eA@mail.gmail.com>
- <de14f2c4-e7b3-43a1-a9ee-9caba196b0f5@gmx.de>
-In-Reply-To: <de14f2c4-e7b3-43a1-a9ee-9caba196b0f5@gmx.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sun, 30 Nov 2025 13:55:24 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h3=9V8FFehyaPiG2SreRgeyvKK+oAkR_gzKQQNDBmczQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bm74BLkYigBlEZwhgK9orhm-MSGQUfAzuwxqXDI_Qt7_9TxZm-rm-hXNS4
-Message-ID: <CAJZ5v0h3=9V8FFehyaPiG2SreRgeyvKK+oAkR_gzKQQNDBmczQ@mail.gmail.com>
-Subject: Re: [PATCH RFC RESEND 0/8] thermal: core: Allow setting the parent
- device of thermal zone/cooling devices
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Len Brown <lenb@kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-tegra@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-doc@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, ath10k@lists.infradead.org, 
-	ath11k@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
-	linux-pci@vger.kernel.org, imx@lists.linux.dev, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH v2 0/7] rust: build_assert: document and fix use with
+ function arguments
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <20251128-io-build-assert-v2-0-a9ea9ce7d45d@nvidia.com>
+Date: Sun, 30 Nov 2025 13:09:11 -0300
+Cc: Danilo Krummrich <dakr@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Trevor Gross <tmgross@umich.edu>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Will Deacon <will@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ rust-for-linux@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <0A952509-8A00-48A0-B975-C23608A6048E@collabora.com>
+References: <20251128-io-build-assert-v2-0-a9ea9ce7d45d@nvidia.com>
+To: Alexandre Courbot <acourbot@nvidia.com>
+X-Mailer: Apple Mail (2.3826.700.81)
+X-ZohoMailClient: External
 
-On Sat, Nov 29, 2025 at 12:36=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wrote:
->
-> Am 28.11.25 um 12:40 schrieb Rafael J. Wysocki:
->
-> > On Fri, Nov 28, 2025 at 12:50=E2=80=AFAM Armin Wolf <W_Armin@gmx.de> wr=
-ote:
-> >> Am 27.11.25 um 22:46 schrieb Rafael J. Wysocki:
 
-[cut]
 
-> >> What do you think?
-> > One advantage of using parents is that it will help user space to
-> > figure out connections between the abstract cooling devices and the
-> > associated hardware or firmware entities.  I think that this is an
-> > important one.
-> >
-> > It also doesn't prevent fwnode_handle from being used because the
-> > fwnode_handle may just be stored in the parent.  I like this more than
-> > associating fwnode_handles directly with abstract cooling devices.
-> >
-> > If the cooling device parent (that is, the provider of the cooling
-> > mechanism used by it) does not have an fwnode_handle, then either it
-> > needs to be driven directly from user space, or the driver creating a
-> > thermal zone device needs to provide a specific .should_bind()
-> > callback that will know what to look for.
-> >
-> OK. When sending the next revision of this patch series, should i also ke=
-ep
-> the patches for the thermal zone device or should i only keep the patches
-> concerning the cooling devices?
+> On 27 Nov 2025, at 23:11, Alexandre Courbot <acourbot@nvidia.com> =
+wrote:
+>=20
+> `build_assert` relies on the compiler to optimize out its error path,
+> lest build fails with the dreaded error:
+>=20
+>    ERROR: modpost: "rust_build_error" [path/to/module.ko] undefined!
+>=20
+> It has been observed that very trivial code performing I/O accesses
+> (sometimes even using an immediate value) would seemingly randomly =
+fail
+> with this error whenever `CLIPPY=3D1` was set. The same behavior was =
+also
+> observed until different, very similar conditions [1][2].
+>=20
+> The cause, as pointed out by Gary Guo [3], appears to be that the
+> failing function is eventually using `build_assert` with its argument,
+> but is only annotated with `#[inline]`. This gives the compiler =
+freedom
+> to not inline the function, which it notably did when Clippy was =
+active,
+> triggering the error.
+>=20
+> The fix is to annotate functions passing their argument to
+> `build_assert` with `#[inline(always)]`, telling the compiler to be as
+> aggressive as possible with their inlining. This is also the correct
+> behavior as inlining is mandatory for correct behavior in these cases.
+>=20
+> This series fixes all possible points of failure in the kernel crate,
+> and adds documentation to `build_assert` explaining how to properly
+> inline functions for which this behavior may arise.
+>=20
+> [1] https://lore.kernel.org/all/DEEUYUOAEZU3.1J1HM2YQ10EX1@nvidia.com/
+> [2] =
+https://lore.kernel.org/all/A1A280D4-836E-4D75-863E-30B1C276C80C@collabora=
+.com/
+> [3] =
+https://lore.kernel.org/all/20251121143008.2f5acc33.gary@garyguo.net/
+>=20
+> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+> ---
+> Changes in v2:
+> - Turn into a series and address other similar cases in the kernel =
+crate.
+> - Link to v1: =
+https://patch.msgid.link/20251127-io-build-assert-v1-1-04237f2e5850@nvidia=
+.com
+>=20
+> ---
+> Alexandre Courbot (7):
+>      rust: build_assert: add instructions for use with function =
+arguments
+>      rust: io: always inline functions using build_assert with =
+arguments
+>      rust: cpufreq: always inline functions using build_assert with =
+arguments
+>      rust: bits: always inline functions using build_assert with =
+arguments
+>      rust: sync: refcount: always inline functions using build_assert =
+with arguments
+>      rust: irq: always inline functions using build_assert with =
+arguments
+>      rust: num: bounded: add missing comment for always inlined =
+function
+>=20
+> rust/kernel/bits.rs          | 6 ++++--
+> rust/kernel/build_assert.rs  | 7 ++++++-
+> rust/kernel/cpufreq.rs       | 2 ++
+> rust/kernel/io.rs            | 9 ++++++---
+> rust/kernel/io/resource.rs   | 2 ++
+> rust/kernel/irq/flags.rs     | 2 ++
+> rust/kernel/num/bounded.rs   | 1 +
+> rust/kernel/sync/refcount.rs | 3 ++-
+> 8 files changed, 25 insertions(+), 7 deletions(-)
+> ---
+> base-commit: 54e3eae855629702c566bd2e130d9f40e7f35bde
+> change-id: 20251127-io-build-assert-3579a5bfb81c
+>=20
+> Best regards,
+> --=20
+> Alexandre Courbot <acourbot@nvidia.com>
+>=20
+>=20
 
-The cooling device changes are kind of unrelated to the thermal zone
-device changes, so it would be better to send them as separate series,
-but you may as well send those series at the same time as far as I'm
-concerned.
+Ah, should this have a Fixes: tag?
+
+=E2=80=94 Daniel=
 
