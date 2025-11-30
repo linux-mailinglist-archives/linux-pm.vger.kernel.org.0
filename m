@@ -1,131 +1,113 @@
-Return-Path: <linux-pm+bounces-38937-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38938-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D6E0C95585
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 23:43:00 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22598C955A3
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 23:55:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0694F3A192C
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 22:42:59 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EC7C74E01AB
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 22:55:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D66246788;
-	Sun, 30 Nov 2025 22:42:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 214762459E7;
+	Sun, 30 Nov 2025 22:55:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J2Qdm3Uv"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Hq606jXL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5CA23AB98
-	for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 22:42:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1739F23645D
+	for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 22:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764542576; cv=none; b=syCjVOeVYiWOeOiAs4g3zxmD+2nSiWAIYQppjlvDDdtSV3Tm23jjUK+auJCsy1LpjNU8dfEtr7/iwbRSsiixgdIONVa6SQG5xXaGeqazX5oNvu9lsjbSygFj+wBgDQLenkU7/d0C/wSYNO0UJkvx7g0s1rqgh99oDR9WikmxPWQ=
+	t=1764543321; cv=none; b=gp8T6vZSRsd5Q2IJ/ODUMO2Ta8o2qvW5wBNK3NlztVxi110tgGKWqREiI4r62kjePW3rJDVuqjpZ8dyQjUWgf7pzMYAAwoibFkM8BK0HaSjgAY6sr+K0sWDxXiIqxLu0n5t8Lo1I6kAZtkm1Z10RPBiR6CZrzt78JfScw8roAS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764542576; c=relaxed/simple;
-	bh=HcZEsjG65+yGMetX0Zj+M1YtSmKxm1zYnDNrk90J+K4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KR3CmcRs8OEOu1SVVrNvHmTRhc1hl9GE8bAf06tDgrPdDiFVFNobvbfYQSMBkDQqIvHfy9TgTZ3uGJBBO88pwtvtQf5TktsUOJMWfxeVi0vpLbBUBVCCnU6iWUXHnSWHZu704rdzRM+sLLl//keBk1qNVQ1mVuICTogoEX/2EQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J2Qdm3Uv; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-29800ac4ef3so9562165ad.1
-        for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 14:42:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764542574; x=1765147374; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HcZEsjG65+yGMetX0Zj+M1YtSmKxm1zYnDNrk90J+K4=;
-        b=J2Qdm3UvvWcNiXqpHemOcFqvipW62EEIAy2V5gFzHvAzJ4JWuyCmL9qnzz+lcsHWWI
-         DMkvLm5n70PAoZm5HFk4xsT8JhUlrS0uz8SF9QUnNoP/8jomdEMZSVUnpIM8U/1lCZyy
-         ZtOLvbCWgJz8KnfuDhVF8h7SGN+CcVegxj5fgcXDHZZAWu6Xu6c2+8COyJc3Ty+punbt
-         srjzgc2QUGryFx39oD/aRrOH93mTIkvfdNHatFCe0L0Usm559Cw3qu2N/larcfhz5fWK
-         Dj3Lea1icZpn4oLQ4aXlf+/bpEoylGbQE0PA1KnLRPaT+9xXgKVJDp2PP7oz5YzOHfTy
-         GKmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764542574; x=1765147374;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=HcZEsjG65+yGMetX0Zj+M1YtSmKxm1zYnDNrk90J+K4=;
-        b=M96zaPDbjbeMhb78Fw5+BHKicubv2vigj2Y0TJEU68pGxSujxeX/si9/REZ7mI3SAM
-         z4dy37sLxdWmE9yJDX9PZl3dB0bS894KnUOeqNReZCxtOZ5sE+9KoBUZj6YwAWpNEmwu
-         5HCBMCtXWYYeX6XeMF4AFzLx4amH9YbsQc3FSdqvxwz08axUr7OsDOy+9ZT6kWZ5FbML
-         DQ7Ym3DaWGo9sLBuigfaQzrNWsLW/AyV/eMATUNvbzxd57sx29NkwQ0EEroklZQT2zzk
-         2MVzQUO7rF1Mxw3IF5BsoO18KcXlba3tcQSrIWoA1XN2wZClzr72C+S2Op1sAcFezdik
-         tk5w==
-X-Forwarded-Encrypted: i=1; AJvYcCX6DuYhLVRmStJwJLkKPMhKbLPMFRSh7/d8zJhTRwjjVtyurFGzOz8znmiU7YTlZEibwUSCGYx+wA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyu80l974ZBqnoH9cMdoZ3XNR76T/Z1rm9CmpeJHbcOeLV8LB/x
-	LjWAjDEhjU8mED+FqrWU+3Xso0/2oIf9jHdnSro58U5Kp8G6NZ2s1XECmq9AO73oHDmr11eV5Jq
-	L29BAidByCXe8hRZzSQegZEEonj1f7VQ=
-X-Gm-Gg: ASbGnct2A4NjXNokGGHf/K2T6EZgGyzitW3/Qt+yqE/WPk86EE5jpHXFsKyIxvAt5H4
-	4uoW1Q1TGa1H4Bb3gAIuUkFh29U3wcO/rfD2KpDBWCvVG+3w7djwYHbP7QUbFjIXMHcOOgFGei4
-	OjuDjac2ffQuc10H7gA2sNWSwPsF6oQY17bresYEiQDncylFBUyqq58Q7gbLDm4qJ65+GyBPiQj
-	wR6DvuOR0e8/kOBSY2l/wj0zdhqTQf6F+Avk6BQiYIqfvqfqH0eVQ51u822k+91FIAceaHQXjAE
-	h9ZlGTknchao/v1vxt31EMn2soloTxOBcqg82BFF5jI/Kx5IB/6Ruw1s7zBZvI/7J55QrGIXDpk
-	sXvbYd1f8nel1oQ==
-X-Google-Smtp-Source: AGHT+IHBGd+2vzlTZsau2QokhF/IkqB6hHbgHqn950T+l/SVi3sOaZJ6kcggPwucnCYRE2cxkq5mSzjCakwfION2s5Q=
-X-Received: by 2002:a05:7301:e24:b0:2a4:3593:2c07 with SMTP id
- 5a478bee46e88-2a7243ec7b9mr20206056eec.0.1764542574091; Sun, 30 Nov 2025
- 14:42:54 -0800 (PST)
+	s=arc-20240116; t=1764543321; c=relaxed/simple;
+	bh=iqGXw7/nlSwy7cUOgS9lavGIOvcajtj6ZI3/n851DF4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G5NIW/7903zaKFkK/qirPhMapDaGhwi4kETjPjy+y2JF7GlpRu4oLbamANP05+sz6TjAU7lsJx6pTI56dGZVyRFpMFmw65Ke2D09+lEQfprpEGLhuvPR0/V7Q8oe9pwiqeFbNQu9QaWvVtlaqJfv9/FJZ4fpdu2acAOlHj/1L7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Hq606jXL; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1764543314;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Y3zi54fqg3Dk2cRhgMV9Qr4FUT5aZsi0jpnqIp0ID9w=;
+	b=Hq606jXLAwrThWHNyJtMCpuwys4cwSkneu/YjuItjVgYvxPTx400OdaeCStqVB5tF65tXM
+	WNAo/urFr5JOCp9gjtfb5vhfp9iMHHWH5PSqnGuYml7Y79S3qqOwo/dPWrBgfGpludcxcw
+	3IKOvpFJpIcfw8C3ujTlI9S3D1AxeYc=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: Markus Mayer <mmayer@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal/drivers/brcmstb_thermal: Use max to simplify brcmstb_get_temp
+Date: Sun, 30 Nov 2025 23:54:58 +0100
+Message-ID: <20251130225459.46241-1-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251128-io-build-assert-v2-0-a9ea9ce7d45d@nvidia.com>
- <20251128-io-build-assert-v2-1-a9ea9ce7d45d@nvidia.com> <db6a6b28-c0be-4bd8-a0b4-70431df7737a@nvidia.com>
- <CANiq72nGUuK9VTYJGob7pnXU5zuuCzqfw6fezAFpbqvte1sDFg@mail.gmail.com> <46b5eef7-2e8d-4801-93d0-6cea10f62dc9@nvidia.com>
-In-Reply-To: <46b5eef7-2e8d-4801-93d0-6cea10f62dc9@nvidia.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sun, 30 Nov 2025 23:42:41 +0100
-X-Gm-Features: AWmQ_bmQFx95A3T-2iwjutvbpyVPYU1hJ59utd8H9Qu-WWRt5GFpLBBIhJuMARY
-Message-ID: <CANiq72mhXajwj7HjiW_HQq9nO4o-HwBFUya3wjT8pRkWx3xjZw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] rust: build_assert: add instructions for use with
- function arguments
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Alexandre Courbot <acourbot@nvidia.com>, Danilo Krummrich <dakr@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sun, Nov 30, 2025 at 11:01=E2=80=AFPM John Hubbard <jhubbard@nvidia.com>=
- wrote:
->
-> It seems pretty clear that if one writes a *build* assertion about
-> a function argument, then that is just conceptually wrong unless it
-> is inlined. Because it can only really be a run-time assertion.
->
-> This is what Alex pointed out, and looking at the code I agree.
+Use max() to simplify brcmstb_get_temp() and improve its readability.
+Since avs_tmon_code_to_temp() returns an int, change the data type of
+the local variable 't' from long to int.  No functional changes.
 
-No, the function here was already inline.
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ drivers/thermal/broadcom/brcmstb_thermal.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-What Alexandre wrote, which is correct, is that the fix is about
-asking for *more* inlining.
+diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+index f46f2ddc174e..a9ffa596f7c0 100644
+--- a/drivers/thermal/broadcom/brcmstb_thermal.c
++++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+@@ -16,6 +16,7 @@
+ #include <linux/irqreturn.h>
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
++#include <linux/minmax.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+@@ -154,7 +155,7 @@ static int brcmstb_get_temp(struct thermal_zone_device *tz, int *temp)
+ {
+ 	struct brcmstb_thermal_priv *priv = thermal_zone_device_priv(tz);
+ 	u32 val;
+-	long t;
++	int t;
+ 
+ 	val = __raw_readl(priv->tmon_base + AVS_TMON_STATUS);
+ 
+@@ -164,10 +165,7 @@ static int brcmstb_get_temp(struct thermal_zone_device *tz, int *temp)
+ 	val = (val & AVS_TMON_STATUS_data_msk) >> AVS_TMON_STATUS_data_shift;
+ 
+ 	t = avs_tmon_code_to_temp(priv, val);
+-	if (t < 0)
+-		*temp = 0;
+-	else
+-		*temp = t;
++	*temp = max(0, t);
+ 
+ 	return 0;
+ }
+-- 
+Thorsten Blum <thorsten.blum@linux.dev>
+GPG: 1D60 735E 8AEF 3BE4 73B6  9D84 7336 78FD 8DFE EAD4
 
-The build assertion itself is fine. What is "wrong" is that the
-inlining wasn't enough.
-
-Nevertheless, it is (or at least some of these are) definitely a "fix"
-in the sense that it did fix cases we hit where the inlining wasn't
-enough, like Clippy ones which may change codegen (which in turn is
-why we say it cannot be used in "production" kernel builds:
-https://github.com/rust-lang/rust-clippy/pull/8037 -- back then it
-disabled MIR optimizations).
-
-Cheers,
-Miguel
 
