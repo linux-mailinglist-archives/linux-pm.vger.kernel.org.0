@@ -1,170 +1,187 @@
-Return-Path: <linux-pm+bounces-38925-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38926-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D52B7C94C87
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 09:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 505C2C94F7F
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 13:37:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 727864E11FC
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 08:39:16 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 345EA4E12B0
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Nov 2025 12:37:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81A5233721;
-	Sun, 30 Nov 2025 08:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F29B827BF93;
+	Sun, 30 Nov 2025 12:36:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DzZtkNC8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Roz1E5KB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A058A537E9;
-	Sun, 30 Nov 2025 08:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D195F23A98E;
+	Sun, 30 Nov 2025 12:36:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764491952; cv=none; b=Q4AmavNUu6ZWlcCxeurjxlnDQFEF0UkEAp64NoDUMjFbQ5nhmHcD1oGmJp++tGQWvrmTEvtwANleoTbR5gNXqHjOvYHhqvjthY1SkOS3zQaGuV468xtvRPWZ0mQTngwD1vVYIjpeWlJhfvIAQLJzW8W9WD2ad2uJqKBA2ZngmLA=
+	t=1764506217; cv=none; b=rvtcnTW9QCchM6q5ScCbYrMeh+lxGhrJWku/xPJuLYlAkxtD2ZQvGSbYp89bFgKid3kWU6oF5GqXNn2+Yg/CoqI/lJQbrGXIGXhsK2CRpQE1XFdi3MZbbX3IOCDj7WB0HQfOAz0chDFkmYrhk/relHjl17YJ6NcXs1ZCluHGOTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764491952; c=relaxed/simple;
-	bh=8vOTHzmCf5/xvLzxXR0X3YKXDP9IWOBID+jKXczDy3s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UqpufrjnvO2tVZDaBjhzz9JPzFsPldW6qnsIb4hRPDvVsgkgh1Z3UFRBMgHgchn7UESEeHmVV2f29nbKeB3IoonU3wL4nVRn6lVqIZ30zuJOBxwjvc4mcGBrPIvVUZseuEuW99x9Pw10U5ONLIFg8IC0H2iIQUGwpQSxaJdY780=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DzZtkNC8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD02CC4CEF8;
-	Sun, 30 Nov 2025 08:39:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764491951;
-	bh=8vOTHzmCf5/xvLzxXR0X3YKXDP9IWOBID+jKXczDy3s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DzZtkNC8Xd0tiq6r9WOePBDc46yzXn2Iuy8Tj2QtqFS3WYMtSpzLXLs1l6wpUg80R
-	 kum8IIn3wIGsZPo503JiNE2C1eKLIAQsB+wvlvJeDHfr+Z8SKFFTL7cs+apTljo3fv
-	 f2miwH4pYWPtGvQkRzQCV8vWcU4x8qr6qb8BKsfwtfSvpkGhOhdFfjb6D0HUQUVz5P
-	 Fo0IVYKrrv2Gxxrh+vSvBsS7pdPGcp+84BOFAre87N5xqTwvrzesGxp+5YE8z1FOOp
-	 NjG8YKqlxMXUGdjKw3Tb1Vw3Ai8oQD421CnAkl7qPOoVdQj/MUJUmLvg1h7gfu/ABT
-	 9vAcYtyxyP/jA==
-Date: Sun, 30 Nov 2025 09:39:08 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: Biju <biju.das.au@gmail.com>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
-	linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
-Message-ID: <wah57av7ypb42zcaosx7n64j6qmmcq5ylhgnde2brbiy6o7sun@7rqkr6ke3g5k>
-References: <20250923144524.191892-1-biju.das.jz@bp.renesas.com>
- <20250923144524.191892-7-biju.das.jz@bp.renesas.com>
+	s=arc-20240116; t=1764506217; c=relaxed/simple;
+	bh=WiBLBlZ3PZ0mdxDQpPjqKx0x1HZfO+7FMgqLaV8JgWc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Jw4WSpHz4IffwAokN9M8A+PO8bg+NgqTuN3ukInN40wnXxENZW111GgXQA9UsdhhcQrKBIGZ8hFl3wqOPhPRsqlRTgOn9/n46ugVhiicuq8aKkGckkIoR6zjqjzIa22FNmHp+xXxAExTyHUdYq1DjJHkJ9Vhds/A2Nf8G4uLrIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Roz1E5KB; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764506216; x=1796042216;
+  h=date:from:to:cc:subject:message-id;
+  bh=WiBLBlZ3PZ0mdxDQpPjqKx0x1HZfO+7FMgqLaV8JgWc=;
+  b=Roz1E5KBLOv0hPB0/vEioVXK10NDvApyvYn7LXyGkNyyiJ91uv6loYX7
+   ob9dL9oGXZKB4C5ipDQsvyBF9rTappROsdIdfr+Dx0RsXXQgazUyizjhh
+   l5HVl0PBR8MAjDYQj3jvVu1iy5SZUkj0mnkt9zJdjajbKsOC3/o5q3CNg
+   4ffkDPXyAeK8rqAFgE88LVUC5aQqB+qo7/nSq6XO1ZeXvzDN2/pQoa30K
+   OSZUikm2SQQIqpdXows2LhTdA/dLsPD6tPaUInWKqL6EL4ePh95KwxJih
+   7/pLXgK+5K96JVHtZozS3H/eawYf4+O2KyQvig8/UrN1ffEKqmZLyzsJH
+   Q==;
+X-CSE-ConnectionGUID: ov4VNui7Qe2QqVcF/VsqhA==
+X-CSE-MsgGUID: wR+dAU96TyChLVk6wDEU3w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11628"; a="84060878"
+X-IronPort-AV: E=Sophos;i="6.20,238,1758610800"; 
+   d="scan'208";a="84060878"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2025 04:36:55 -0800
+X-CSE-ConnectionGUID: GGdA9P/tQOC7V3b6l3IyVQ==
+X-CSE-MsgGUID: gj+vb/arSI+dsD1duCxLZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,238,1758610800"; 
+   d="scan'208";a="193721276"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 30 Nov 2025 04:36:54 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vPgfb-000000007xF-2Urn;
+	Sun, 30 Nov 2025 12:36:51 +0000
+Date: Sun, 30 Nov 2025 20:35:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ b8ed7c24b81a7718f8b13f6b0c9147698b273180
+Message-ID: <202511302046.4IFLS2nu-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rpnzmdgir2lvb6ia"
-Content-Disposition: inline
-In-Reply-To: <20250923144524.191892-7-biju.das.jz@bp.renesas.com>
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: b8ed7c24b81a7718f8b13f6b0c9147698b273180  Merge branch 'thermal' into linux-next
 
---rpnzmdgir2lvb6ia
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
-MIME-Version: 1.0
+elapsed time: 2882m
 
-On Tue, Sep 23, 2025 at 03:45:10PM +0100, Biju wrote:
-> +static int rzg2l_gpt_suspend(struct device *dev)
-> +{
-> +	struct pwm_chip *chip = dev_get_drvdata(dev);
-> +	struct rzg2l_gpt_chip *rzg2l_gpt = to_rzg2l_gpt_chip(chip);
-> +	unsigned int i;
-> +
-> +	for (i = 0; i < RZG2L_MAX_HW_CHANNELS; i++) {
-> +		if (!rzg2l_gpt->channel_enable_count[i])
-> +			continue;
-> +
-> +		rzg2l_gpt->hw_cache[i].gtpr = rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTPR(i));
-> +		rzg2l_gpt->hw_cache[i].gtccr[0] = rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTCCR(i, 0));
-> +		rzg2l_gpt->hw_cache[i].gtccr[1] = rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTCCR(i, 1));
-> +		rzg2l_gpt->hw_cache[i].gtcr = rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTCR(i));
-> +		rzg2l_gpt->hw_cache[i].gtior = rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTIOR(i));
-> +	}
-> +
-> +	clk_disable_unprepare(rzg2l_gpt->clk);
-> +	clk_disable_unprepare(rzg2l_gpt->bus_clk);
-> +	reset_control_assert(rzg2l_gpt->rst_s);
-> +	reset_control_assert(rzg2l_gpt->rst);
-> +
-> +	return 0;
-> +}
-> +
-> +static int rzg2l_gpt_resume(struct device *dev)
-> +{
-> +	struct pwm_chip *chip = dev_get_drvdata(dev);
-> +	struct rzg2l_gpt_chip *rzg2l_gpt = to_rzg2l_gpt_chip(chip);
-> +	unsigned int i;
-> +	int ret;
-> +
-> +	ret = reset_control_deassert(rzg2l_gpt->rst);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = reset_control_deassert(rzg2l_gpt->rst_s);
-> +	if (ret)
-> +		goto fail_reset;
-> +
-> +	ret = clk_prepare_enable(rzg2l_gpt->bus_clk);
-> +	if (ret)
-> +		goto fail_reset_all;
-> +
-> +	ret = clk_prepare_enable(rzg2l_gpt->clk);
-> +	if (ret)
-> +		goto fail_bus_clk;
-> +
-> +	for (i = 0; i < RZG2L_MAX_HW_CHANNELS; i++) {
-> +		if (!rzg2l_gpt->channel_enable_count[i])
-> +			continue;
-> +
-> +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTPR(i), rzg2l_gpt->hw_cache[i].gtpr);
-> +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCCR(i, 0), rzg2l_gpt->hw_cache[i].gtccr[0]);
-> +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCCR(i, 1), rzg2l_gpt->hw_cache[i].gtccr[1]);
-> +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCR(i), rzg2l_gpt->hw_cache[i].gtcr);
-> +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTIOR(i), rzg2l_gpt->hw_cache[i].gtior);
-> +	}
-> +
-> +	return 0;
-> +fail_bus_clk:
-> +	clk_disable_unprepare(rzg2l_gpt->bus_clk);
-> +fail_reset_all:
-> +	reset_control_assert(rzg2l_gpt->rst_s);
-> +fail_reset:
-> +	reset_control_assert(rzg2l_gpt->rst);
-> +	return ret;
+configs tested: 94
+configs skipped: 1
 
-I wonder what happens if these calls in the error path fail. I think the
-correct way would be to track the actual state to handle the state on
-the next invokation for .resume() properly. But note that suspend/resume
-is a somewhat blind spot for me, so I'm unsure here. (And I'm aware that
-most resume callbacks don't cope cleanly here.)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I added linux-pm to Cc:, maybe someone can speak up about the
-expectations here?
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                               defconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                                 defconfig    gcc-15.1.0
+arc                   randconfig-001-20251129    gcc-8.5.0
+arc                   randconfig-002-20251129    gcc-8.5.0
+arm                               allnoconfig    clang-22
+arm                                 defconfig    clang-22
+arm                   randconfig-001-20251129    clang-20
+arm                   randconfig-002-20251129    gcc-10.5.0
+arm                   randconfig-003-20251129    gcc-13.4.0
+arm                   randconfig-004-20251129    gcc-8.5.0
+arm64                             allnoconfig    gcc-15.1.0
+arm64                               defconfig    gcc-15.1.0
+csky                             allmodconfig    gcc-15.1.0
+csky                              allnoconfig    gcc-15.1.0
+csky                                defconfig    gcc-15.1.0
+hexagon                           allnoconfig    clang-22
+hexagon                             defconfig    clang-22
+i386                              allnoconfig    gcc-14
+i386        buildonly-randconfig-001-20251129    clang-20
+i386        buildonly-randconfig-002-20251129    clang-20
+i386        buildonly-randconfig-003-20251129    gcc-14
+i386        buildonly-randconfig-004-20251129    gcc-12
+i386        buildonly-randconfig-005-20251129    gcc-14
+i386        buildonly-randconfig-006-20251129    clang-20
+i386                                defconfig    clang-20
+i386                  randconfig-011-20251129    clang-20
+i386                  randconfig-012-20251129    gcc-13
+i386                  randconfig-013-20251129    clang-20
+i386                  randconfig-014-20251129    clang-20
+i386                  randconfig-015-20251129    gcc-14
+i386                  randconfig-016-20251129    clang-20
+i386                  randconfig-017-20251129    gcc-14
+loongarch                         allnoconfig    clang-22
+loongarch                           defconfig    clang-19
+m68k                              allnoconfig    gcc-15.1.0
+m68k                                defconfig    gcc-15.1.0
+m68k                        stmark2_defconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                             allmodconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                             allyesconfig    gcc-15.1.0
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    gcc-11.5.0
+openrisc                         alldefconfig    gcc-15.1.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20251129    gcc-10.5.0
+parisc                randconfig-001-20251130    gcc-13.4.0
+parisc                randconfig-002-20251129    gcc-13.4.0
+parisc                randconfig-002-20251130    gcc-12.5.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc               randconfig-001-20251129    gcc-8.5.0
+powerpc               randconfig-001-20251130    clang-22
+powerpc               randconfig-002-20251129    clang-22
+powerpc               randconfig-002-20251130    clang-16
+powerpc64             randconfig-001-20251129    gcc-8.5.0
+powerpc64             randconfig-001-20251130    gcc-14.3.0
+powerpc64             randconfig-002-20251129    gcc-13.4.0
+powerpc64             randconfig-002-20251130    gcc-14.3.0
+riscv                             allnoconfig    gcc-15.1.0
+riscv                               defconfig    clang-22
+riscv                          randconfig-001    gcc-8.5.0
+riscv                 randconfig-001-20251129    gcc-8.5.0
+riscv                          randconfig-002    clang-22
+riscv                 randconfig-002-20251129    gcc-11.5.0
+s390                              allnoconfig    clang-22
+s390                                defconfig    clang-22
+s390                           randconfig-001    gcc-11.5.0
+s390                           randconfig-002    clang-22
+s390                  randconfig-002-20251129    gcc-8.5.0
+sh                                allnoconfig    gcc-15.1.0
+sh                                  defconfig    gcc-15.1.0
+sh                             randconfig-001    gcc-15.1.0
+sh                    randconfig-001-20251129    gcc-12.5.0
+sh                             randconfig-002    gcc-14.3.0
+sh                    randconfig-002-20251129    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+um                                allnoconfig    clang-22
+um                                  defconfig    clang-22
+x86_64                            allnoconfig    clang-20
+x86_64                randconfig-011-20251129    gcc-14
+x86_64                randconfig-012-20251129    gcc-14
+x86_64                randconfig-013-20251129    gcc-14
+x86_64                randconfig-014-20251129    clang-20
+x86_64                randconfig-015-20251129    gcc-12
+x86_64                randconfig-016-20251129    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
 
-Best regards
-Uwe
-
---rpnzmdgir2lvb6ia
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmksAqkACgkQj4D7WH0S
-/k60Ogf9EdyzCceL/FLLmM6ywlVMBetlhlj4ZfpVCmPlBWdb++La6jxCUTGORaR/
-OWqSwsXCRbIY+tIMSf+tIfUSgkbia3RdeXE3FJZwkn+N2zvuEBJ4h8k074JZGP96
-xsYiYyTaNkclG2toCuCezWfVeSZRG24Uj6SKbF/uwEjEUl2zczY8DXEucBb6NtK6
-0IdRNbV7l2K1doE3B5uDmG3H4kYpSfnnKAxOj+QUvTQFO9HOaO0QkCNJ6m6r83nQ
-C4t06Ef7qpMJBO75vmK6Hpg9S/HTuElfZbBOSf0/H+Hq8rpg0nS2jAYOrBAitrVL
-HjU98hnT35ob0Kzi+XqJroMWhFF7RA==
-=0pJy
------END PGP SIGNATURE-----
-
---rpnzmdgir2lvb6ia--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
