@@ -1,145 +1,134 @@
-Return-Path: <linux-pm+bounces-39022-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39023-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2106EC9985D
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 00:07:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FCC8C998AB
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 00:12:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 7C188344ADD
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 23:07:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3A563A2D2B
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 23:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E769288502;
-	Mon,  1 Dec 2025 23:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E77DA29A9E9;
+	Mon,  1 Dec 2025 23:12:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PVxc9xua"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r1fX+fXb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3B41C84C0
-	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 23:06:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C3C288514
+	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 23:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764630400; cv=none; b=B5AQgUp3+m2+PR+TI/nJWcZoDa+KRdKFE5xQ2Nap6XyY0GLTqg8HP4nxG+eQuVfZkThC2Jj+WizDmHzQ4/Ymz4EBUdWGOivNWDhVczITGUcXfp3rdO2izKSW2jr0GG2ytMqbO5RJ2u9QrN/9GowkauUy6w1OC9J8K5LQ5nBI/P0=
+	t=1764630724; cv=none; b=kimBNvMPD4SK0j+S2/kQAvhuCFWnb4xRG2ct+PkAUq9G72U2QIcqzNtxoDa5Y+Gi9JBfEYghyFJh9HU7oYhJHkX3A4EUAOJ+p//dJ2FbLHx+vtMukJzqoVEc7XBMsl8hv+4kDwirt5zRuUZH58NWDqNnXdxJViT5yucMpt4+zww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764630400; c=relaxed/simple;
-	bh=OMF5l7S3MDON+Bo+C3n6j/BgcNtrlF0sgYuH5OVBzBE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m2oxaPEE7QLHqnXDdWn2yTevcLBaBejnrMCmUjL2HTzY0L8Y7M3MKXKl99Qspz5iCmAKVCMYoXMxu+A2Ximt34Fja3jil5AxhqaiYHpJAw6KqMLeXAIstYHAiQbNuIOlVtcsaXpuKRaH9qxZ7Ovl4aHwYo2glOYC3E1ySgJfXkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PVxc9xua; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-297cf964774so7621125ad.2
-        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 15:06:38 -0800 (PST)
+	s=arc-20240116; t=1764630724; c=relaxed/simple;
+	bh=J+kLpkIMy3513Bm09of6YHNMGo8AAMwx8rUXVBwzd2Q=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=eVdTgRcL/ZOT4sr6WPLprEv8btfIa0uyvN97+uT4H2fMKJKZe7bQJgMYqw88c1KXh918ygnudCjBJtwTiRq+PdW1UPsptn7HtfaW094fNX9eT9DyPFJcCWTHgbR4c42SOvdxALz4ePIBHEVsh1Q/A+6Ke8WdytFtZC9vRzkFUqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r1fX+fXb; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ynaffit.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-b630b4d8d52so4299117a12.3
+        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 15:12:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764630398; x=1765235198; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OMF5l7S3MDON+Bo+C3n6j/BgcNtrlF0sgYuH5OVBzBE=;
-        b=PVxc9xua+Z6nyumnCiBtym91KqEFHJgcocp+NxyLwe1kMcANlhU0KJe0Y1jckp2r5L
-         cFPQh1uPX4GPW7DXQc3SCkq3YM2nzQ9IosxC723TdhPloLrZdesj1A0ZYj7lDTEaFA/t
-         5/UsXvhB9tkvkPZhMxjgMZwEr+NLJ3/XpYVtp/zlt1h1Kxb1qGbi7y7PVNXLZZuWY6q8
-         XmO5t3eNYFWTnOhGxul7LccXxN8lYkp04NJO3UGZum+hPgfS7KS2RYpUw2Yv4P1FiGrr
-         YXUW8gH/TEnAXlZU2XbJ/AEhdy3GE0QbyI8/SpvWtKqC3GYfuQ9G/hhKSww1bMw8818/
-         w8FQ==
+        d=google.com; s=20230601; t=1764630721; x=1765235521; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:user-agent:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zLM1EPntpvB3fDVLGw42FElIkaQKNx9U9DS+XMsl0fM=;
+        b=r1fX+fXbEJlouqcyHm3JSiPgfdPmHqObRKzGGfTP+vyJ3nKoJtwz5YKpRg3V9YNauf
+         LJC3PB/m6vlOtnd6FBQ4n0zTD9gxg9kknLe96Dm76uoed9/G8Kph4/zHm1y6bGlTra8J
+         8VPPFd3SAwqJ40jYZeBJqtBxf/FlDLTzHB86+H5lmYzCJVbyujwfcpY9HB5Qz7wNzr+D
+         81EJU6/vw5rzcH5msgJrtW3unzt/USSSFVzY85OBA5XNxoBwnTqSiSnOEJgRnlsKf2K2
+         gcFXi0CAc65NbjnpYgVXpR0vsVmLLNpqZ8jF1Ajf2VfWvRi9UlC8z8fXVCtpRYMqWsrB
+         8UDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764630398; x=1765235198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=OMF5l7S3MDON+Bo+C3n6j/BgcNtrlF0sgYuH5OVBzBE=;
-        b=UQNz5a+8pTqeHvi31PqGaZJOmjbx7BV6K/t2z/RBjc8cgbBwFzTqxY2gGSip1Zd+Ya
-         3D/MnavtnwG1urdoxbAFVHwTzRLvfD/HAYh35eEtN6z9sbWih4CzgppWtQRJHoJwn8US
-         k7heyKhGW/jJNxDD9E6yT2mQQufgKeIseBf7qXu5gd4NBGUQ7URVdMkLpxmbbDLAn3Lz
-         pWmgysQJklwp4cWAX2yTZZZrn6EDwWxo1gCL2vPuStrZC1AR1LhIIQMPQBRbIqf3ZHCe
-         DFVlUHQD4q6bAyMjn15+6Zj4uZv1p/dsasFUqL1IPwI3VNIWTJ0vokiT762oK/y/SlGP
-         s+Bg==
-X-Forwarded-Encrypted: i=1; AJvYcCUaQBuGy/49dG5v1OFvrNoMuYHlvEiSmjEQSOV+GyhElYGl0v6Mm3y43ag+IXo3vEutjJ5lS2FAag==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU365aQkl8kDayBtBuHLadXUaHPzbZPin3yTgh5dIa7mh225Gx
-	EQi/CMx77H7EubFE9TAUZKDBk+bLf5vD6yS3Tmha8l93rXd6jvSLgjVy/iwOnewNm+eJp+1nnmJ
-	BofygZGZZ9w24lMhZimTCt28tkU7K4U4=
-X-Gm-Gg: ASbGncvfcHVWXF9KDkn2dequdDyJ6JYkciHs4SzRUIbdj81Ybf84cMk8DhGyApEtFJz
-	w1yuUN8a2D725N8Yd9uY2rndSsvv3pcp9VY/h00DPRrI/O9REQfknKcPH+fYVnxbu/bF6Xo2YNo
-	kP0NcOdMY0keD8aHRhSk/bemQoL7HB9x7isil7lhdwZw8/GLWu33j8tfJc8Amn/r5XcIon1/VqP
-	zVjM66qxSvBC6mhdypfDGVuw72c8vYu6oYwbahpg8WfWzyygfygBXtDjgvDnVciUtl+VHY3m4H9
-	tmvPd1TAawRqkkzkdGRzV3NLljpcSjSbp9n6ObHkQ1tJjM4elV/Jpo2je32laLwbUdbxQq82KFy
-	0HlbUDrfTQeOXEw==
-X-Google-Smtp-Source: AGHT+IHgZ5GEJsO9WoLP6Z6Fh3KBUDDTwrz2Af9JYVEXFj34J5+7RHjFB7QeNqVNkB2lqkY2QyE/zTIrIUKGp3O3AbY=
-X-Received: by 2002:a05:7300:ec16:b0:2a4:5129:fe99 with SMTP id
- 5a478bee46e88-2a724bc5450mr24399676eec.2.1764630397828; Mon, 01 Dec 2025
- 15:06:37 -0800 (PST)
+        d=1e100.net; s=20230601; t=1764630721; x=1765235521;
+        h=cc:to:from:subject:message-id:user-agent:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zLM1EPntpvB3fDVLGw42FElIkaQKNx9U9DS+XMsl0fM=;
+        b=Q9sbXmWAt1FGuGuFc1VIOIxKV25g8UWZtMBz9EUyw0mIz+ws18SVOSYCEX7YIWtB6u
+         PnqG7/lt7SPLRRhfYo4TFdFWZ3RRRc1uRZOrp97jdsXuMdDP1xvyaHTiSoFXBPxD8/r+
+         wG9TzAL879iVLUcj/yPIzy4AE72Q2OA8nKbIifKFY5U05i34Xg+UmJ5UTnAu48cmrkx/
+         EIizGSyLMC8WtYqxn4p5Dx4a/jYrWPqzbFOOkLndAhhXf6eiL6j/k8yDOEptN38NDFVm
+         D+z0wmdQ0VJZf6LfYN7YE6QvgY8YSCS8d8nnDdwReKuCraoLeQQNvNAtI6KALCFKF1ra
+         hDXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW7JDdI9ELC4B6NM1z0V8JVeEXlnLjrg5qGxEZg53VNyWyS0MJ6RH9hqW+22drTJDhQamsTA505dQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yze5D7NeJdBIqjElWKB0+SMGRtK6K2quvTHJqsPucaM8ixS2mQO
+	1AzC45RLnrsJuyF9yO13oHwgCUe5yA9VWOxakXstIvVaomN4VNdSfoTK+KEf26VnL7WfC2Z/i+r
+	xLgb0EyxLlA==
+X-Google-Smtp-Source: AGHT+IE1+zlv+/Ra8/4fDxzAvPN8JlMMEIwYI0833qsjS+sqfkYoQe/VtqWugCSuUH/u1MaLnSztSAazoE5b
+X-Received: from dlbcy37.prod.google.com ([2002:a05:7022:ba5:b0:11b:9bdf:e45c])
+ (user=ynaffit job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7022:6898:b0:11b:ceee:a469
+ with SMTP id a92af1059eb24-11c9d85feeemr24650965c88.22.1764630720912; Mon, 01
+ Dec 2025 15:12:00 -0800 (PST)
+Date: Mon, 01 Dec 2025 15:11:45 -0800
+In-Reply-To: <20251201202437.3750901-3-wusamuel@google.com> (via kernel-team's
+ message of "Mon, 1 Dec 2025 12:24:35 -0800")
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20251128-io-build-assert-v2-0-a9ea9ce7d45d@nvidia.com>
- <20251128-io-build-assert-v2-1-a9ea9ce7d45d@nvidia.com> <db6a6b28-c0be-4bd8-a0b4-70431df7737a@nvidia.com>
- <CANiq72nGUuK9VTYJGob7pnXU5zuuCzqfw6fezAFpbqvte1sDFg@mail.gmail.com>
- <46b5eef7-2e8d-4801-93d0-6cea10f62dc9@nvidia.com> <CANiq72mhXajwj7HjiW_HQq9nO4o-HwBFUya3wjT8pRkWx3xjZw@mail.gmail.com>
- <7d157605-4c59-4e04-8c41-1f7a4c86b34c@nvidia.com> <CANiq72n0UkuAtW=2JZK9Y7TK4VO8rKsMSvpv52BsW5+C2z9Dew@mail.gmail.com>
- <ea455598-fc0e-4768-b540-5091f7ccd025@nvidia.com> <CANiq72kAnY2035vc2vvXDpUV-_vM=0W2_-mBts846jHo1ri3Yw@mail.gmail.com>
- <fccc4878-a205-45cf-b651-53c151e48d25@nvidia.com>
-In-Reply-To: <fccc4878-a205-45cf-b651-53c151e48d25@nvidia.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 2 Dec 2025 00:06:25 +0100
-X-Gm-Features: AWmQ_bm5mGKq7jyTKTNAST9qtSVF9nh8zt7Z5_rO8g8aiXjiIq_TKthUyj9O_fE
-Message-ID: <CANiq72kKsJz=SCjsTiPk=C=KWdJ_h2=A7AZsdEz_u0iemvuzJQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] rust: build_assert: add instructions for use with
- function arguments
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: Alexandre Courbot <acourbot@nvidia.com>, Danilo Krummrich <dakr@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20251201202437.3750901-1-wusamuel@google.com> <20251201202437.3750901-3-wusamuel@google.com>
+User-Agent: mu4e 1.12.12; emacs 30.1
+Message-ID: <dbx88qflajbi.fsf@ynaffit-andsys.c.googlers.com>
+Subject: Re: [PATCH v3 2/2] cpufreq: Documentation update for trace_policy_frequency
+From: Tiffany Yang <ynaffit@google.com>
+To: "'Samuel Wu' via kernel-team" <kernel-team@android.com>
+Cc: Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>, 
+	Jonathan Corbet <corbet@lwn.net>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	Samuel Wu <wusamuel@google.com>, christian.loehle@arm.com, linux-pm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-On Mon, Dec 1, 2025 at 8:31=E2=80=AFPM John Hubbard <jhubbard@nvidia.com> w=
-rote:
->
-> Mainly just: is there a way to automatically "derive" (generate) an
-> always-inline directive for any function that attempts to call
-> build_assert!() on any of its arguments? And in fact, *force* the
-> always-inline, if it is not forced hard enough today.
->
-> Something along those lines.
+Hi Sam,
 
-"Wide-scoped" macros can do passes like that, i.e. like some projects
-do to add extra syntax everywhere. Not sure we want to get into that
-world, though.
+IMO this type of documentation should be in the same patch as the
+related change because having a single commit makes it easier to track
+(especially if/when these changes are cherry-picked to other
+trees). There may be reasons to keep them separate that I'm not thinking
+of, so if others disagree, defer to them!
 
-Instead, if we are just talking about checking, then I think we could
-have an attribute macro to mark such functions, and then
-`build_assert!` could fail "by default" unless inside one of those,
-and it would get rewritten into the proper form by the macro, so any
-call without it would fail. It is always nice to mark special
-functions anyway, just like our `export` one.
 
-Otherwise, for more than just checking, I guess a custom tool like
-Klint could also do it for us (I am sure Gary has ideas here).
+"'Samuel Wu' via kernel-team" <kernel-team@android.com> writes:
 
-> I will bring this up (along with the KSYM_NAME_LEN hashed symbol project)
-> to our internal Rust groups. Both of these seem like nice, self-contained
-> projects that someone could really get into.
+> Documentation update corresponding to replace the cpu_frequency trace
+> event with the policy_frequency trace event.
 
-That is great -- thanks!
+> Signed-off-by: Samuel Wu <wusamuel@google.com>
+> ---
+>   Documentation/admin-guide/pm/amd-pstate.rst   | 10 +++++-----
+>   Documentation/admin-guide/pm/intel_pstate.rst | 14 +++++++-------
+>   Documentation/trace/events-power.rst          |  2 +-
+>   3 files changed, 13 insertions(+), 13 deletions(-)
+<snip>
 
-On related news, Antoni (Cc'd) told me yesterday that he noticed
-`inline(always)` was needed when using the GCC backend too, so this
-series will help him too.
+>   A suspend event is used to indicate the system going in and out of the
+>   suspend mode:
 
-Cheers,
-Miguel
+Otherwise, this change lgtm.
+
+-- 
+Tiffany Y. Yang
 
