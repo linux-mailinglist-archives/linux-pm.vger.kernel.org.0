@@ -1,102 +1,99 @@
-Return-Path: <linux-pm+bounces-38977-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38978-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F620C97F8F
-	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 16:09:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AA1CC97FC2
+	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 16:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 9E078343E79
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 15:09:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AC9E3A3595
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 15:13:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1B9B315793;
-	Mon,  1 Dec 2025 15:09:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E99331A547;
+	Mon,  1 Dec 2025 15:13:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nJTjUsNj";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ayrfJ4T3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EERhaR8S";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gpfa9Iy2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DF4305043
-	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 15:09:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F9D1F03C5
+	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 15:13:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764601783; cv=none; b=Hmhh2szNiPjKRS6ewDijl7AhwIhISS396AGYeTdoNQsJ0OURhZJFxOriT7MBcvduUIzGiuJNSY7mxd3EcHzY2m4+FMgWBGHB2UmX3UQIHJdfAam0Ow86XpE195vSoiz92Z/T8alIIJl+r8kFLAiLAcpmXwYUOh8ouQJ3fZF+wQY=
+	t=1764602005; cv=none; b=oIf0ce/KqW7NzxgQE73PHOavDjvFDdKiMVSdVCcAOH6xNWToJ2pvCplZi8Vz/aZRxDR8ubEl2KoWKR2YuFoGfDLHIfCQK8nelh9Se74VPrHaTvzubR/9UWIwlkd5aTgTX3HLyc6B9IMNi6aNpstpn3LHt+SJYIVLJJO8qaSnJAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764601783; c=relaxed/simple;
-	bh=YGSSDKFg5jrGbiSq4AkXaxodG2ZTxYZiOQtMhSy+4z4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=a9Jo7DOSmv8GVQ9wr8bozsqnnmwZUFpJRh02XZn+8f2yp4R1S0GJlGmZ4DYL2jT+dFN+STjnWaXgF1GqV9ggkWpZraBO5JrDkniKRbJcMlCPrqEzUH9xQAFZREDEs1I19NPOKcyt9UtTn2nVDKxToG07ZwivEcAHWPhAJFoJcP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nJTjUsNj; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ayrfJ4T3; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B18OWxr4062946
-	for <linux-pm@vger.kernel.org>; Mon, 1 Dec 2025 15:09:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	z3t1Xs6zgjRdXhFfVBguGwwnqAOk/Svbih2vGB4uC6Y=; b=nJTjUsNjRIHHpY2D
-	J1AaiSet+6NiDLpnynoJhuerpyahkAZJTZUSrSvCFDRLJ6basaXXifhR4b/ibpDl
-	WWnKwjiQ4x0TgMlfBwUJQOdqlHAt50McNg8Rlgk4FXgW1P+neRJEQezVWEgsq75z
-	97tVh9xpLvOsBDHyuY1PSAcaijAGOEfqyVYs+LTP1rsgomLMbhCdBKjWO9AQ0KrO
-	xSuJlcw7cKV8UlqRrrpa7NC9dancKajDaDNXuFnKF8WSnmWlbaWntE/CtY0cvf16
-	SbmmZsj4wIYVFPSKWk+fvcJHIdZn5Lh8azZpO3xfJuWEMVeyAA6/VzbR68AiD0wZ
-	wvNuEQ==
-Received: from mail-vs1-f70.google.com (mail-vs1-f70.google.com [209.85.217.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4as7fws5k0-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 15:09:40 +0000 (GMT)
-Received: by mail-vs1-f70.google.com with SMTP id ada2fe7eead31-5e167b739d8so429617137.0
-        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 07:09:40 -0800 (PST)
+	s=arc-20240116; t=1764602005; c=relaxed/simple;
+	bh=cJh61bIQVnWr73ImXoCzB2IPG7bPT9LbhOGEaaQhRbw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=dYE24i2JMe/k1BRCHbPux0iOjMyxpWjF+VTS7uNZojutOvuWxFsBNc54R8UkPVJZSMG12dqwW2/4cNlmjlprvsWVSwJZhqQm22nI4BYRldt0qrOp9qbG//7LRn35roII3iOGk+RmrFWt9hq8LJP9rVhwNbHZcNk+bormeUnZYgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EERhaR8S; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gpfa9Iy2; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1764602002;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DyJz4TiV3W1A/RgLWbgSd9svl3wFJjMmLRwv8jmPQ9k=;
+	b=EERhaR8SDBvDN6BQCNebjF0uIVVgoEg7eJjlL+k8jgn1DaB5RWneG5p43KIXLvaQvsNjC2
+	l1Fm7oa6REOByLoWpCxDt01ZP4xCN1EW/8pFf6z+sjYKlhKQjNLMa5V8W6pQb8UtAAkGKD
+	6GFfsEiDfm3PkTmVjt2fjZcMOPMZmvQ=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-659-buqbvJI3PSWcJJ-FZvjB8g-1; Mon, 01 Dec 2025 10:13:21 -0500
+X-MC-Unique: buqbvJI3PSWcJJ-FZvjB8g-1
+X-Mimecast-MFC-AGG-ID: buqbvJI3PSWcJJ-FZvjB8g_1764602001
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8b233e206ddso799713585a.3
+        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 07:13:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1764601780; x=1765206580; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z3t1Xs6zgjRdXhFfVBguGwwnqAOk/Svbih2vGB4uC6Y=;
-        b=ayrfJ4T3damwOmbo3ViiNKZNnRGh7XeqKJz4Bh715EnnwaY4+BhD/m5HK+ur74z8BF
-         pwE1AiuteOUvZ/MKwkMr2LB/a90gNAipTIotiJuNBTX6YnHyRl61EhbrGpubPKF78c+/
-         5ukpPnyAojiLjUWC9Ya2jBByZcryuwGLu0R6jNlZ31ZJMecEkFrpyIkQ5JKANxuZhXwL
-         VPl/MpfI4JzOd81oTrfnRVMByN729jZFHw0okUCcDuB0NSqTl0xWuzbaLqinw1ToHk4B
-         XE61cQpKfAfbIclwlCN9RKeUe8g82ODrvOApfF4Ckhr8y5wkK4hDwFglbk/Zi/B9j18e
-         amGg==
+        d=redhat.com; s=google; t=1764602001; x=1765206801; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=DyJz4TiV3W1A/RgLWbgSd9svl3wFJjMmLRwv8jmPQ9k=;
+        b=Gpfa9Iy2T7M6g4FXWMl1xJquk0RgKmCvbmuQi4sOcHowJVEPvi0zA0jD7B08RV2NWb
+         VUiZikOFJTNhAuoX6RM/0beM/GHqEH0VEUfY4HJ5huuD7TV1ETeHmrFiJZeMYNFOAMcU
+         qeilEl3SGkFGfS1P5cR8TeXQlZ8GG/rNyVKbm/Gqf7ToNGI/+dYUOovObFFYG+ssZxFk
+         X7GdJaCvvLmwv7V1t7IzROp2+I+tqiccvk9c9E+d/dGbL6seJqGMtIYXDX7L/BTcX4dP
+         GxWKc/zo6TX8SYNRNKlZH9QfKoDo12yHcPUx0DgZe0Df1GLSJgpngWPadKX4AaEOkMa0
+         WWkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764601780; x=1765206580;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=z3t1Xs6zgjRdXhFfVBguGwwnqAOk/Svbih2vGB4uC6Y=;
-        b=qsS06xUZ4MCBOXOwE4rEvYGmu6Hr+NXrXvCZLZddwZCxeNqz72EMT3Pe0xNrzdsPDC
-         1BIIQIZMG9wMZqfPYaoLFeI89heuSd3O6tT3nPBwTcjTnQZp7Hw82Rh0p9cpz2BoyClv
-         Fr/LbRVRCJqPA3AuQ0HH9mum1FGo8HA+D3ZdmOD0zoAmyqpIpvFQ730bcl23cyKpDFyj
-         c2T2hP5+Tk9CHFj3qu2XDEYXHbbkkUw6Bne3UScSHiK/HoB2WJKAg++1WZvxHU9j9Jw9
-         8DRwhYTQjBNCraTzqIRFuEcyk8GGhSPfgI4VmZ84YfwByhdxuZs5S1jyos/ZqFFAT5Tg
-         jT5g==
-X-Forwarded-Encrypted: i=1; AJvYcCVOupfA59Sd2yRT+RYV2jPJb0HYKXvmQQ753fR/idtKSyyR8vvXs3r97n1KFQoRB7H2KeM/YTsWoQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfcvMJpKXVKzVwkHNbAUyFDCdVUILiUOZCzu5wxoHi/QWB+zcj
-	Ja8OfeTOWsccisHO0L5caR0FxEVi2I+OZ0ijzEtrQ+RVhOaOSUchVmj8u3jGIWeocvnJKye34vh
-	mNJSsYSvlg7C41y4my9WYMJVQh7cOs9scbvv3dv2j4WJJD9nrAwk/9ZqSS9Bmk4lGnu79gg==
-X-Gm-Gg: ASbGnctLw41sznHXESLXuL+bma3P7IUkfE2v5DwuR4E6pK+kx1q8+aypmkwnDn5pJX9
-	+xdgH1u3BPDBAJoo36wEnQGn+Wac/zHgIL387DxsWwEuN3PT+xn3NvwJy+eJqzvTcUdzuOqm1S4
-	WCTb26p8N1YtZ1kmoB11N1uT7WHMCUuYPbd35aRt9QavOGjJvifwgv4pjb5E99035YjnYIFTavi
-	hAVEkOihSbSIxZARloIcKIMyzJpn+wz7AZwLzhnzAwVHns/NYLON3SVHVhdzcwHEoZZi6l/xV+I
-	jpQRE/ejL7DFhgxsYYDREegCEc/iApuYJnpkz6cxQgKBYS2uMPRETpr3uk84ZCgprOERYin1kTo
-	ipkIqh32WnX2yIhWeHEVaK617sESWXmMMSXUhQH4OqcXH2DbXkGQ4jJ5b72YinTW/5bo=
-X-Received: by 2002:a05:6102:5ccc:b0:5db:d7a5:ba2e with SMTP id ada2fe7eead31-5e1de57c9c5mr7861934137.8.1764601779879;
-        Mon, 01 Dec 2025 07:09:39 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFqJ/bOtUtruLfvAMP21Fx4vb+d1CVVf6E0IukYWZBWR+luXF1KzuKUUzQCJI+z3Ap2EQMNNg==
-X-Received: by 2002:a05:6102:5ccc:b0:5db:d7a5:ba2e with SMTP id ada2fe7eead31-5e1de57c9c5mr7861677137.8.1764601777393;
-        Mon, 01 Dec 2025 07:09:37 -0800 (PST)
-Received: from [192.168.119.202] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b76f5a265d4sm1236160666b.60.2025.12.01.07.09.35
+        d=1e100.net; s=20230601; t=1764602001; x=1765206801;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DyJz4TiV3W1A/RgLWbgSd9svl3wFJjMmLRwv8jmPQ9k=;
+        b=erBKhGS/2uECYry3rQgSEfS9GgsFs6ruWu8q7qOy9fqgIDOnb5rQXGPGtKq+N9ig9m
+         1Hv1BH0ce5SHSazCrLaYzgX8pkHUzi7TCF8+BbL9X3FhVzke4BKP6YMTteudRM5chnQE
+         bzl6uexrj8Tv0UjESJ8F4h/a/1tYd0526hGnQqaFmE2WzfJVrt6LcX+XATMwY3UNeoG/
+         Jeu+m/YjHYWidYS0SGN35MHdIIC0n/PAukgsiERquE3yK7m2OwTWQxcBtFm89vbAtR7D
+         kr8wTNEjVPI/z0uKsJg2jr+0jXGzmvSxUu6KFVtvl6OqK5Ch2M7Rq3k+Ed48E1R0p8M5
+         0wWg==
+X-Gm-Message-State: AOJu0YyPx9tJIbrInLOx0LLHRJStEAl7rWhJSOKGAddMdsX5WSgKAjvt
+	NHavENmDxTGURyaF155LwHl84A0oD4sgptCjpfPSHAGGCFGWaPM3UTYZYJ2MGsn5LIVuoJnxSO4
+	z3VaPYfJ+HFCAsGBtp+nXd/+GdcwUHdwaLZmW2I0hwb2S9za0DU4jvjwoAwtS
+X-Gm-Gg: ASbGncvQ7nBRAovHWG/OgqQYb+Vw5xVXfUMvnuYBkma6fgK990b2gcPes4tnuMXt/gu
+	8KNCfTMCslcc48KWnXzczvsq0N0TCKw4naRN8jeg0Rmr0tQpQcRR9A4SJMdq+OGXHAw2pF0Qaku
+	USjJmGiba4Jd5kGhId7V6dbQWRPbZlePtHzgWokukNhXtrrqJddavDzv/gyopwpJBF6DTSuoE9H
+	EkHPg/nrAR70kCIuPsi5PT5zNiXqYvf4Zzy9MYy5VCL20XE/cDwCoS6bUglINe+jR/XCsT/Rohb
+	7Z9Zcr83r4TgB87eZgGpPdWj/bRfBv4x6yvZ+Jn9GXKGGGFfLB0MtTdICSAQjGElzKfuIVp4CKh
+	rqLKXJh1mAg==
+X-Received: by 2002:a05:620a:17aa:b0:8b2:e8a0:f4e with SMTP id af79cd13be357-8b33d5fb804mr5507779485a.77.1764602000662;
+        Mon, 01 Dec 2025 07:13:20 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHxg9QLwHbhqfQ4ocJlh4I+L2V71ydNVbq8MmzhlOZ+ffbnPuJwEbG35cEXG/8osYHofYV8hA==
+X-Received: by 2002:a05:620a:17aa:b0:8b2:e8a0:f4e with SMTP id af79cd13be357-8b33d5fb804mr5507774585a.77.1764602000210;
+        Mon, 01 Dec 2025 07:13:20 -0800 (PST)
+Received: from [10.26.1.94] ([66.187.232.136])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b529a9c030sm872397185a.21.2025.12.01.07.13.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Dec 2025 07:09:36 -0800 (PST)
-Message-ID: <4f8a5842-2132-46f3-a3a4-1243e5342f6c@oss.qualcomm.com>
-Date: Mon, 1 Dec 2025 16:09:34 +0100
+        Mon, 01 Dec 2025 07:13:19 -0800 (PST)
+Message-ID: <25d6584f-7763-4b6e-92da-e8f1e31ea3df@redhat.com>
+Date: Mon, 1 Dec 2025 10:13:18 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -104,61 +101,63 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: qcs8300: Add clocks for QoS
- configuration
-To: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
-        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Tipton <mike.tipton@oss.qualcomm.com>
-References: <20251128150106.13849-1-odelu.kukatla@oss.qualcomm.com>
- <20251128150106.13849-4-odelu.kukatla@oss.qualcomm.com>
+Subject: Re: [PATCH 3/3] tools/power turbostat: allow turbostat to work when
+ aperf is not available
+From: David Arcari <darcari@redhat.com>
+To: Len Brown <lenb@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251118155813.533424-1-darcari@redhat.com>
+ <20251118155813.533424-4-darcari@redhat.com>
+ <CAJvTdKmt+3i+TjbYSa--=uS22q1ZgEQuferNhCxKVK_G5Lx2jQ@mail.gmail.com>
+ <b2ff2579-0d19-4648-9411-c02133c28c1d@redhat.com>
 Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20251128150106.13849-4-odelu.kukatla@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <b2ff2579-0d19-4648-9411-c02133c28c1d@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAxMDEyMyBTYWx0ZWRfXzsbTBmWKKbfz
- cY12ifYUehyx8oYRHSLF2hKytolAyJOL3wEMVXV9T8Nwqz8dIkSfzJ9bOIJNbZNqdE2twVroSdS
- 6xywX1EjbxEIX1EqNhbAy+C3Si9R8RLlZXRuYADmibpbH4l5m18foWWO0DI/2duyhV9neTAqgS9
- IPkTt+zM2mCLPYiNWBc9tgzf0HR2L6a1ORJ0d4ZvOpWUDs16iXao0o4QPu0Q91ezUCE3F5L9TfP
- zRfnE8BGHDEtmNFnQWHEPJb0qS9eYuJcsGwRAJ/RE5NPTBjSU4WgI2y4r4YaHMKSzd+cV6NwdKF
- WghdgyyM8nSSCt5kIBVSbOQdUnrDFpFABHSIMkqpMv3A+SQWb/E0DOGBOrDEcii6GIqdCTTWwxy
- jAUJggsWP/Uct4k4V7K0PvmsGgGz9A==
-X-Authority-Analysis: v=2.4 cv=TbabdBQh c=1 sm=1 tr=0 ts=692dafb4 cx=c_pps
- a=N1BjEkVkxJi3uNfLdpvX3g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=PHHq1DDFEsKsDgH6OmAA:9
- a=QEXdDO2ut3YA:10 a=crWF4MFLhNY0qMRaF8an:22
-X-Proofpoint-ORIG-GUID: g7TLyFEO9hPsJlaZa-kXesNSwrXwnwnA
-X-Proofpoint-GUID: g7TLyFEO9hPsJlaZa-kXesNSwrXwnwnA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-28_08,2025-11-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 spamscore=0 lowpriorityscore=0 suspectscore=0 adultscore=0
- bulkscore=0 priorityscore=1501 impostorscore=0 malwarescore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512010123
 
-On 11/28/25 4:01 PM, Odelu Kukatla wrote:
-> Add clocks which need to be enabled for configuring QoS on
-> qcs8300 SoC.
+
+
+On 11/25/25 4:55 PM, David Arcari wrote:
 > 
-> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-> ---
+> 
+> On 11/25/25 2:14 PM, Len Brown wrote:
+>> It would be helpful if you could describe exactly what environment you
+>> are running in.
+> 
+> It' a VMWARE instance.
+> 
+> CPUID(0): AuthenticAMD 0xd CPUID levels
+> CPUID(1): family:model:stepping 0x17:0:0 (23:0:0) microcode 0x0
+> CPUID(0x80000000): max_extended_levels: 0x8000001f
+> CPUID(1): SSE3 - - - - TSC MSR - - -
+> CPUID(6): No-APERF, No-TURBO, No-DTS, No-PTM, No-HWP, No-HWPnotify, No- 
+> HWPwindow, No-HWPepp, No-HWPpkg, No-EPB
+> CPUID(7): No-SGX No-Hybrid
+> 
+> 
+>>
+>> are there any MSRs?
+> 
+> I'm not certain, is there something in particular you are looking for?
+> 
 
-I don't have a good reference for this, but it seems like there's
-a lot more various AXI_CLKs (PCIe, ethernet, camera) - do we need
-any of them too?
+rdmsr returns zero for MSR_IA32_APERF and MSR_IA32_MPERF.
 
-Konrad
+>> Is APERF available via perf, but not via MSR?
+>> etc.
+
+No.  add_msr_perf_counter() returns -1 as the call to open_perf_counter 
+returns -1.
+
+> 
+> I don't believe that APERF was available via perf. I'll go back and 
+> verify when I have a chance.
+> 
+> -DA
+> 
+Is there anything else you need?
+
+Thanks,
+-DA
+
 
