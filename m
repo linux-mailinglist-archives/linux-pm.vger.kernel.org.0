@@ -1,897 +1,389 @@
-Return-Path: <linux-pm+bounces-38962-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38963-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D88EC96C8C
-	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 12:00:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E14DFC96D5D
+	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 12:11:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 92790342FF5
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 11:00:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 99D1C3A311D
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 11:11:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B77EE30649A;
-	Mon,  1 Dec 2025 11:00:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5505A307AE9;
+	Mon,  1 Dec 2025 11:09:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KFiMHgbh"
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="PvQp0iEJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11010056.outbound.protection.outlook.com [52.101.229.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523AC306B04;
-	Mon,  1 Dec 2025 11:00:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764586816; cv=none; b=J6jauKeL9/qC7tkKWLqModeCtk+9JZUA1cYDP+wAf47kXl+A5yqXG2lJvNfQAV6YmCCS48Dh+dljWBInVrMFjhNEI3TEa9e6djlzCc+FSoVaJe9mBXjdyyyJdol4seW1fNRN6uHDbS+M1YHtpFR+uBch+5KMcYZEWpxZaFShubY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764586816; c=relaxed/simple;
-	bh=mg2bw5EY/AYkQL1XadRrQMd8em/JPKjTJKL2srtGMrM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=L7C9brQqveMrxSMCwD9DY5LtObeTc8Qg6Mp59VDish7mUvs60xcJGaTsxuKDGa41Y9J0W+JJtEfjRdgeR+YHqHLn3NwH7l2MTk4MlBceBpYzwdCxs5Ra1QUr+JMir0XiNM1epQkszTwNJomha55ViA73cTYqf3/kyK9ARh3rvKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KFiMHgbh; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 5D5781A12DD;
-	Mon,  1 Dec 2025 11:00:09 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 302CB606D3;
-	Mon,  1 Dec 2025 11:00:09 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 64675119180C0;
-	Mon,  1 Dec 2025 11:59:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764586805; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=CvA8lZJ2B/Hy9cyKOW8N90ypnLUhnwvIRBm5eauGVU0=;
-	b=KFiMHgbh016MBeiuXHX6GzYSqkTaVVatBoI2CW6Tz+y/t26aKEXRj7wo8zCPCTzoip1ul7
-	8N0G6PPTNZkWP/xD5ToKiT7M0c67nUlLtBFhCzAY6uXsHB/A4idDAs6u3Hq4CSFW/252ao
-	gll/0mg7SbLCoc1wnp2Lm5TK0LGMDB1vUqbeZXtdJ4hpYCEqwsCIZrjfo2J6LHGg4dND4S
-	nrYHxQjIw/IMGGlpWS4JkmQfdlTVsoFzMjYQxoxM6yAUkpGoNM2tPL4+64nVjudvIuOIha
-	102nxcAe0lX8Ju0wvR53jU7fJVCE37i3ezugKzW0XLHHOTsLBglKChI9ZHYnVg==
-From: Romain Gantois <romain.gantois@bootlin.com>
-Date: Mon, 01 Dec 2025 11:59:43 +0100
-Subject: [PATCH] iio: inkern: Use namespaced exports
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E33307ACE;
+	Mon,  1 Dec 2025 11:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.56
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764587397; cv=fail; b=IBi12QzizjQ8CS9gN9Tz32NhL+dCT64RGc/8h2HQyjeXynS3m7Xrc51KS5nls9aJiZOQy9fhC3wASooR3VU7V+h4zFfE6QY6sEW2SmhbN+cyGSrV7ZEak+P8iCN6eZub0nxu4fEnwUufcPfyZO81PALsqNuKPXV2UbTRmX4ZnUk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764587397; c=relaxed/simple;
+	bh=WH7yVKFEoazISgTWDZMHAoJnWX39rm0IIVHtnxEgrZs=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=oYNxzRG6SP4O+sxMPYPDPJIcQ1zoV2bJiFfF+j3EW5BMlTwvQXDBmzF3wqcSutxpeHRancLRDCPog8M16g2/7o4WKShipdmhUEtSazIouO9l/4wCGHNGxWhnYMWaY3qxnBrcmtXV4qmqoAYUSly3F5en5j+bJ5f9vMJ7VRQH5/A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=PvQp0iEJ; arc=fail smtp.client-ip=52.101.229.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Z8Sy8sVtilwToiWf3uKQ2WPN4PJn15n0LP61cQSbKxASwG2a6jAdpyCPqGWKSXFWeaC1+vAhbv5XWCOw99daNjIptPrIKLORcdJv3SJt8Gz03MD1cF/me+9DttByAELBQvV/tSsU6CK3yLhX6t3UwOrxYjDJQHujB1U3jpgu5OcUYK2kx4nB0HkODI5D+aQOUd5Ob70F5vGx60DQ17bfg485DBcG/PW7lfkWWjMEfIZIM89Qk9wSCdlYYQs4u59eIZN/9GKuK1qE5V9Jmkt5X+uFeOWgVLesKd99HjSvdbQivEU6Ij5P1emiaO3hGG9uc2ajjoflDbKDGLjhsNKX9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mF5kL/TLTUc8ZFpNhr4IMVcK4P7E9x5SEYhR4xO1c+8=;
+ b=bskBFinJ78jQcl+RmfanWUhbw0CVoGqmusJPqSTKCQnlZBA7n6ZDKlOVugBlwcr424dn/FW8sFXiqBC/jQB4BEpCGqUyKuxGvtrg979CzmVU1fA3mmhRVn0SHI/zrbX7RlyiSZZmgChogSyEcRT8Y6j9mz/YyeqMXKDX24n3UdjUgJzr6gUc6hxPQ48gI7Z96SBy3bgMHIhyMOoS9VB+OzXHVn3itrCtoZ1cLWH997FnwFsTZO1TP7Td+UOpvFQZDj/wKKaVwgCe4+6+HZ0HPI2L/ULrnj7yGEprqdsIU6oVuz8ANZB3oyEaNyafX9kRQdnI0vUXKhMfqFsrTZbByg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mF5kL/TLTUc8ZFpNhr4IMVcK4P7E9x5SEYhR4xO1c+8=;
+ b=PvQp0iEJH+OJ2HOLh7Wj7ZZZYL2Tg71+FwjcIVWBmKQijW5z2sxniHBLykZ5Mldo72quE4OP+ybu8JqdFmRp5Ew34Ye/7cHaQWwt7GN3xyV335kL6/cM4aEqIF5a3vIyC66fiIU15sT4W3qR5/rCEjYJSpa4tr405nimY51bt+E=
+Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
+ by TYCPR01MB6897.jpnprd01.prod.outlook.com (2603:1096:400:b6::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.9; Mon, 1 Dec
+ 2025 11:09:51 +0000
+Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
+ ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
+ ([fe80::86ef:ca98:234d:60e1%6]) with mapi id 15.20.9388.003; Mon, 1 Dec 2025
+ 11:09:51 +0000
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: =?iso-8859-1?Q?Uwe_Kleine-K=F6nig?= <ukleinek@kernel.org>, biju.das.au
+	<biju.das.au@gmail.com>
+CC: Philipp Zabel <p.zabel@pengutronix.de>, "linux-pwm@vger.kernel.org"
+	<linux-pwm@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
+Thread-Topic: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
+Thread-Index: AQHcLJi5Wq0nvzczj0CSEUAgjJVVOrULUGQAgAG46lA=
+Date: Mon, 1 Dec 2025 11:09:50 +0000
+Message-ID:
+ <TY3PR01MB1134692D7D9F5B67116D2BC7786DBA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+References: <20250923144524.191892-1-biju.das.jz@bp.renesas.com>
+ <20250923144524.191892-7-biju.das.jz@bp.renesas.com>
+ <wah57av7ypb42zcaosx7n64j6qmmcq5ylhgnde2brbiy6o7sun@7rqkr6ke3g5k>
+In-Reply-To: <wah57av7ypb42zcaosx7n64j6qmmcq5ylhgnde2brbiy6o7sun@7rqkr6ke3g5k>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TYCPR01MB6897:EE_
+x-ms-office365-filtering-correlation-id: 12dd096f-d745-4b62-3378-08de30ca25dd
+x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700021;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?jCQ4LXTzArmt+eR+TybbCmrVBgQoUlkVUJM9o9zCfpRw00KeIZgAQ+sISr?=
+ =?iso-8859-1?Q?pyKY2VEPUgfpbJ3WTCViSd7/zP7S9J3tYmLUDCuxBUvwDy00C9BYLA1n0j?=
+ =?iso-8859-1?Q?3ALSdW6SUZ1zEndrR99br6qAzY8H+fAhpsHbLEtLI4Zy0CddpRVky5d2Ve?=
+ =?iso-8859-1?Q?77lYWu0n9VEfJWT2nN6IqEslLgiRroo72f4EmVPzqmo2lRWqd8RIk6b+9/?=
+ =?iso-8859-1?Q?6B4Iu+bH38zw9CntZaXor+FV51ZNz+r6CnYvJtqXcv9SPiI3ptCJYKfUNd?=
+ =?iso-8859-1?Q?Ofe7xQnHSOu2QTnJdpkDnRfnvukH5DRDKS40a9ID4KcHrpOl0fH3bmekwB?=
+ =?iso-8859-1?Q?+PAHACtV33J0nQ6fkFszKWCAd8Tv3RTW85/ti5SsmVtBFE0jmgHHmUIXeQ?=
+ =?iso-8859-1?Q?MyyqFtdA2NmfjaSzS3Bjp+AtJYdUJ6UEKkQca2dyVBQY18Uh59bT0i5YHu?=
+ =?iso-8859-1?Q?Kv06H3Ss2YyXA5V+5Hxnstp9SgKSUofqt8ZEDkAQAV+DE4faRK7aDlCVe/?=
+ =?iso-8859-1?Q?XHkiHiFiPudr3N4islH0epsizsRx3qbKiaUkfTUTkVcqmQYQtoR899VmMF?=
+ =?iso-8859-1?Q?6Xd286tKwWWAxW7zdDLLMaDwQZxdD+AvkSO3G0ryuFvOh39zZEN73OCeV8?=
+ =?iso-8859-1?Q?Qe2qOpGh/PA5/qruVC0eAgPz5t/+UuUzDEzqDybLFmUCxo2aJSSp52y68K?=
+ =?iso-8859-1?Q?qLWWLOC1ojeKAsygZdKiCwHLiq/pESa+6q/Rz7oDacy2v69b+FKeDZrJ6x?=
+ =?iso-8859-1?Q?5RLUvb6ayJKOssMdc3eeqJWzp3Bo+hn3TgdIvOsuHtcHb5DfwyITG39M0c?=
+ =?iso-8859-1?Q?ZjHmnrznfurICks0/9/TbrlHllHY+km4j9cH02ENga1o6RP8JBzA8gHtF3?=
+ =?iso-8859-1?Q?FaUFsgGzXLnpNfTjUWOJlKIo7z7aCs8727JsGimqOvy9sPpA7MsVQk5h6d?=
+ =?iso-8859-1?Q?aVm8bikdet81VQa5DlrbenKZ0pecyopkYHmoUUJ9lznURHyTcZem6Z7fXE?=
+ =?iso-8859-1?Q?xwHwkyTQh/vxxY3Xmt3zrCYyBSJhe5wXLHNRv+s3m9tESPWc8pT46NErr1?=
+ =?iso-8859-1?Q?ASQlhpMQ8T1Q7ciECfxnnJ3k6R/hT9yPkTxHcUrI6HzCBVe5EhxPC/GrH4?=
+ =?iso-8859-1?Q?Pe+a8YNSg5xNBHrNpeiiEbBMBUar7QmuUj1nJiYnbUJ7Takb90I0zbQh/W?=
+ =?iso-8859-1?Q?2ZSUaQWKk0keWcIXa2c5uOO6nI6fa53eKloD9vTnb3ykgpOgYUUu90Ql/m?=
+ =?iso-8859-1?Q?MDYgYfmpxUMuuY1UwkD3vzK+DsbDKsXjhtjD5s2DcwUfrb2AAaq2gC0mZh?=
+ =?iso-8859-1?Q?ngwy05cENQv+EOeWFHX7EP5tC9OkAEcu/lY+jsR+ZOwFxk2yZtT4031Hre?=
+ =?iso-8859-1?Q?hzEDY79u1cANwKD4xJ3M6yy51M8LTFGE2sgfMCczebJXVTItX09hOMbaZk?=
+ =?iso-8859-1?Q?WGhimS4lKjfD2curyTKDUzaaQzd1jk8B3HbNSebgaR11lGnlc8hteyPX8J?=
+ =?iso-8859-1?Q?YXWU18J5G6Gb7V+JTYvD6RxE4GY5SGfv1CPzaMqQsOR4/azSPIvTFqSwpb?=
+ =?iso-8859-1?Q?STc3erzgioQG4TCmxRF+TJgpIlJ3?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?gkvSD9QbSgNWSEYIjV9xYa1F1DkbLg741txLGorz4WUN2g0JExU1m2DUTD?=
+ =?iso-8859-1?Q?B4bLbo+F/zbkLKJ3HB3FNZIuMTFN477IKjwkoEosn8UC75bxLhKryleKaC?=
+ =?iso-8859-1?Q?Ka5YSlPx+kDVkoWtWEIeVfum2fH2qiFMvT1nrElZDEoxoCxdLNXikMHvD3?=
+ =?iso-8859-1?Q?pErE2OHMgqNoIKvKQTS9VnY5/BbodtHruaApTJ2Io0Rdkm+fn/e9o6pBV1?=
+ =?iso-8859-1?Q?2nJ1U1JJBTiKXPYdNEF7oD5LVkzKGFTjLmM6rhnjB5XhBhLdaurh3PJV+K?=
+ =?iso-8859-1?Q?aXTJqsg5H9FZJXAYYDsytE6Iw/Peab3vOluqpzabd/rVXE9fwtru+h2olN?=
+ =?iso-8859-1?Q?oS8K3kbBYhg9aS8GTUXQoPA1kiaxe2qziOahhB8APY1h7ZWcdBA7WTdj9j?=
+ =?iso-8859-1?Q?F/iWBw8GXcM02nvKOqb9m0F1fMz1pxuQEIIXTNHYKOCMC7ji8KBCLssRe/?=
+ =?iso-8859-1?Q?9SKRhK3bYERalLPDSuCQbtz83oNKQbwd3jDCujzJTEkZCmpaVr94AkNVQr?=
+ =?iso-8859-1?Q?5ilsEZfnZshfDL0XGtkCeB+NaKT4uBVDJpLQxiv6iggHU0Yt9GUBMdl9sG?=
+ =?iso-8859-1?Q?m1HS6fwkerSOPJgb48Re9WtiQSD5J83y141s5bCvTCmEphjtT8IjynkTTN?=
+ =?iso-8859-1?Q?e2V+kmPcII+qwxQCrVIDltsf7XrnAJPGObLKLPiM/1UBsenapd8+jWoDG2?=
+ =?iso-8859-1?Q?9zfbNANM5ROim+5WbfSklnFXOgJXERU2GePwwAjNulDMMR1e29JGB9HqD/?=
+ =?iso-8859-1?Q?IN1FNVm4PFZkTHxeVAcbJAKrXBtf+JtlgG8UcZ/XfKY7oNflQLZf3AiPI0?=
+ =?iso-8859-1?Q?kg7eqOXmNcRa2hJ+80HfIYmXbjuVelgV0aVspYlsVD6e6A6Ba5fYM27g77?=
+ =?iso-8859-1?Q?57wudI+ISqauDwGYR+1HR+RjY9s7osH1pNQfj+qnjgMULrjaSqQW2BSM23?=
+ =?iso-8859-1?Q?j6e5+lTZMOd3mVbuUS9VsHYCIe6Y3X85fxQjI8ZE5yKDPTZra+NELG6Zvz?=
+ =?iso-8859-1?Q?0O/bUO8s0fDmqhIlxBG4uRSxHtovPWJaeJ/Yx0O4LeyqzCebt9xZCXCAUr?=
+ =?iso-8859-1?Q?SK8lty4aCbvu6IHKfFbLNISDbDRVuW7nJH6pl0ofenyI5GyvB7qlV6LP2e?=
+ =?iso-8859-1?Q?/bUF7Tu0CEok3+kBzJ0S8pr3Wc8kYHuJ6r9vaK4X340BDmg1ZmeaKsQR57?=
+ =?iso-8859-1?Q?noF2TokDmFn53J5RaBN74OFcq+jDAtiRMj/rdIm7HhA0D5SyWyQli2X4DS?=
+ =?iso-8859-1?Q?lBE57XzG36w+1HAwALMWRkuKpb4JFpQcYGOGCljyd8HulLWoDwysjyT727?=
+ =?iso-8859-1?Q?z0lMaEWe3FRbNUXnQAaXVcs2Qli4Bdbas3XAX0pee85ZfDg9Mnl5SAPz+E?=
+ =?iso-8859-1?Q?wEcUqJ4vq1ThjUVK7KkRDzhMjUu66gdEVvS3WsLrjnySLnUTkmAY9v7chl?=
+ =?iso-8859-1?Q?GHy+3kEA8jDhqwoFXO3Oc29phNIdBIxONwWZW4KXBL/GXmOTMq4hQmhu09?=
+ =?iso-8859-1?Q?Fd/zOoh7GDcIfcAq2YJs5aB0WcdDkMxe5Qa7+P38/LPg+zT3JfV0h52APL?=
+ =?iso-8859-1?Q?1BXyWBNCyarrgmW6KX2my+vjQ5NODNV8wuALxCKTJJJUFsDqRkYB7hR5+g?=
+ =?iso-8859-1?Q?cg/xjxOK9bUaKDyOpoRrjfn+B6uibSDoxzhpZO2YVtpkxbMfiax8t4Ig?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251201-iio-inkern-use-namespaced-exports-v1-1-da1935f70243@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAB51LWkC/x3NQQrCMBBG4auUWTvQpBbRq4iLmP7VQZyEGZVC6
- d0bXH6b91ZymMDp0q1k+IlL0YZw6Cg/kz7AMjVT7OMYQjyxSGHRF0z562BNb3hNGRNjqcU+zsc
- w5/4c43AfQa1TDbMs/8f1tm074L8TRnMAAAA=
-X-Change-ID: 20251127-iio-inkern-use-namespaced-exports-41fc09223b5e
-To: MyungJoo Ham <myungjoo.ham@samsung.com>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Guenter Roeck <linux@roeck-us.net>, 
- Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>, 
- David Lechner <dlechner@baylibre.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
- Andy Shevchenko <andy@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, 
- Michael Hennerich <Michael.Hennerich@analog.com>, 
- Mariel Tinaco <Mariel.Tinaco@analog.com>, 
- Kevin Tsai <ktsai@capellamicro.com>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
- Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- Hans de Goede <hansg@kernel.org>, 
- Support Opensource <support.opensource@diasemi.com>, 
- Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Marek Szyprowski <m.szyprowski@samsung.com>, 
- Matheus Castello <matheus@castello.eng.br>, 
- Saravanan Sekar <sravanhome@gmail.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Casey Connolly <casey.connolly@linaro.org>, 
- =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
- Orson Zhai <orsonzhai@gmail.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>, 
- Thara Gopinath <thara.gopinath@gmail.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, 
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Sylwester Nawrocki <s.nawrocki@samsung.com>, 
- Olivier Moysan <olivier.moysan@foss.st.com>, 
- Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
- linux-iio@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
- linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org, 
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
- linux-stm32@st-md-mailman.stormreply.com, 
- Romain Gantois <romain.gantois@bootlin.com>
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12dd096f-d745-4b62-3378-08de30ca25dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2025 11:09:50.9811
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: WA+E7dNM4RG4R+gxwA9XpFv1zbNfCeRBk57AUVCjM73k9l7+UZoUL9KZiwG7Zkh5mtbGOvb0bPArFQI97+AiaKGPLu0H1qn0TDjsy5rrkqo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB6897
 
-Use namespaced exports for IIO consumer API functions.
+Hi All,
 
-Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
----
- drivers/extcon/extcon-adc-jack.c                |  1 +
- drivers/hwmon/iio_hwmon.c                       |  1 +
- drivers/hwmon/ntc_thermistor.c                  |  1 +
- drivers/iio/adc/envelope-detector.c             |  1 +
- drivers/iio/afe/iio-rescale.c                   |  1 +
- drivers/iio/buffer/industrialio-buffer-cb.c     |  1 +
- drivers/iio/buffer/industrialio-hw-consumer.c   |  1 +
- drivers/iio/dac/ad8460.c                        |  1 +
- drivers/iio/dac/dpot-dac.c                      |  1 +
- drivers/iio/dac/ds4424.c                        |  2 +-
- drivers/iio/inkern.c                            | 54 ++++++++++++-------------
- drivers/iio/light/cm3605.c                      |  1 +
- drivers/iio/light/gp2ap002.c                    |  1 +
- drivers/iio/multiplexer/iio-mux.c               |  1 +
- drivers/iio/potentiostat/lmp91000.c             |  1 +
- drivers/input/joystick/adc-joystick.c           |  1 +
- drivers/input/keyboard/adc-keys.c               |  1 +
- drivers/input/touchscreen/colibri-vf50-ts.c     |  1 +
- drivers/input/touchscreen/resistive-adc-touch.c |  1 +
- drivers/phy/motorola/phy-cpcap-usb.c            |  1 +
- drivers/power/supply/ab8500_btemp.c             |  1 +
- drivers/power/supply/ab8500_charger.c           |  1 +
- drivers/power/supply/ab8500_fg.c                |  1 +
- drivers/power/supply/axp20x_ac_power.c          |  1 +
- drivers/power/supply/axp20x_battery.c           |  1 +
- drivers/power/supply/axp20x_usb_power.c         |  1 +
- drivers/power/supply/axp288_fuel_gauge.c        |  1 +
- drivers/power/supply/cpcap-battery.c            |  1 +
- drivers/power/supply/cpcap-charger.c            |  1 +
- drivers/power/supply/da9150-charger.c           |  1 +
- drivers/power/supply/generic-adc-battery.c      |  1 +
- drivers/power/supply/ingenic-battery.c          |  1 +
- drivers/power/supply/intel_dc_ti_battery.c      |  1 +
- drivers/power/supply/lego_ev3_battery.c         |  1 +
- drivers/power/supply/lp8788-charger.c           |  1 +
- drivers/power/supply/max17040_battery.c         |  1 +
- drivers/power/supply/mp2629_charger.c           |  1 +
- drivers/power/supply/mt6370-charger.c           |  1 +
- drivers/power/supply/qcom_smbx.c                |  1 +
- drivers/power/supply/rn5t618_power.c            |  1 +
- drivers/power/supply/rx51_battery.c             |  1 +
- drivers/power/supply/sc27xx_fuel_gauge.c        |  1 +
- drivers/power/supply/twl4030_charger.c          |  1 +
- drivers/power/supply/twl4030_madc_battery.c     |  1 +
- drivers/power/supply/twl6030_charger.c          |  1 +
- drivers/thermal/qcom/qcom-spmi-adc-tm5.c        |  1 +
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c     |  1 +
- drivers/thermal/renesas/rzg3s_thermal.c         |  1 +
- drivers/thermal/thermal-generic-adc.c           |  1 +
- sound/soc/codecs/audio-iio-aux.c                |  1 +
- sound/soc/samsung/aries_wm8994.c                |  1 +
- sound/soc/samsung/midas_wm1811.c                |  1 +
- sound/soc/stm/stm32_adfsdm.c                    |  1 +
- 53 files changed, 79 insertions(+), 28 deletions(-)
+> -----Original Message-----
+> From: Uwe Kleine-K=F6nig <ukleinek@kernel.org>
+> Sent: 30 November 2025 08:39
+> Subject: Re: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
+>=20
+> On Tue, Sep 23, 2025 at 03:45:10PM +0100, Biju wrote:
+> > +static int rzg2l_gpt_suspend(struct device *dev) {
+> > +	struct pwm_chip *chip =3D dev_get_drvdata(dev);
+> > +	struct rzg2l_gpt_chip *rzg2l_gpt =3D to_rzg2l_gpt_chip(chip);
+> > +	unsigned int i;
+> > +
+> > +	for (i =3D 0; i < RZG2L_MAX_HW_CHANNELS; i++) {
+> > +		if (!rzg2l_gpt->channel_enable_count[i])
+> > +			continue;
+> > +
+> > +		rzg2l_gpt->hw_cache[i].gtpr =3D rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTPR=
+(i));
+> > +		rzg2l_gpt->hw_cache[i].gtccr[0] =3D rzg2l_gpt_read(rzg2l_gpt, RZG2L_=
+GTCCR(i, 0));
+> > +		rzg2l_gpt->hw_cache[i].gtccr[1] =3D rzg2l_gpt_read(rzg2l_gpt, RZG2L_=
+GTCCR(i, 1));
+> > +		rzg2l_gpt->hw_cache[i].gtcr =3D rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTCR=
+(i));
+> > +		rzg2l_gpt->hw_cache[i].gtior =3D rzg2l_gpt_read(rzg2l_gpt, RZG2L_GTI=
+OR(i));
+> > +	}
+> > +
+> > +	clk_disable_unprepare(rzg2l_gpt->clk);
+> > +	clk_disable_unprepare(rzg2l_gpt->bus_clk);
+> > +	reset_control_assert(rzg2l_gpt->rst_s);
+> > +	reset_control_assert(rzg2l_gpt->rst);
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int rzg2l_gpt_resume(struct device *dev) {
+> > +	struct pwm_chip *chip =3D dev_get_drvdata(dev);
+> > +	struct rzg2l_gpt_chip *rzg2l_gpt =3D to_rzg2l_gpt_chip(chip);
+> > +	unsigned int i;
+> > +	int ret;
+> > +
+> > +	ret =3D reset_control_deassert(rzg2l_gpt->rst);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	ret =3D reset_control_deassert(rzg2l_gpt->rst_s);
+> > +	if (ret)
+> > +		goto fail_reset;
+> > +
+> > +	ret =3D clk_prepare_enable(rzg2l_gpt->bus_clk);
+> > +	if (ret)
+> > +		goto fail_reset_all;
+> > +
+> > +	ret =3D clk_prepare_enable(rzg2l_gpt->clk);
+> > +	if (ret)
+> > +		goto fail_bus_clk;
+> > +
+> > +	for (i =3D 0; i < RZG2L_MAX_HW_CHANNELS; i++) {
+> > +		if (!rzg2l_gpt->channel_enable_count[i])
+> > +			continue;
+> > +
+> > +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTPR(i), rzg2l_gpt->hw_cache[i].gtp=
+r);
+> > +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCCR(i, 0), rzg2l_gpt->hw_cache[i]=
+.gtccr[0]);
+> > +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCCR(i, 1), rzg2l_gpt->hw_cache[i]=
+.gtccr[1]);
+> > +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCR(i), rzg2l_gpt->hw_cache[i].gtc=
+r);
+> > +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTIOR(i), rzg2l_gpt->hw_cache[i].gt=
+ior);
+> > +	}
+> > +
+> > +	return 0;
+> > +fail_bus_clk:
+> > +	clk_disable_unprepare(rzg2l_gpt->bus_clk);
+> > +fail_reset_all:
+> > +	reset_control_assert(rzg2l_gpt->rst_s);
+> > +fail_reset:
+> > +	reset_control_assert(rzg2l_gpt->rst);
+> > +	return ret;
+>=20
+> I wonder what happens if these calls in the error path fail. I think the =
+correct way would be to track
+> the actual state to handle the state on the next invokation for .resume()=
+ properly. But note that
+> suspend/resume is a somewhat blind spot for me, so I'm unsure here. (And =
+I'm aware that most resume
+> callbacks don't cope cleanly here.)
 
-diff --git a/drivers/extcon/extcon-adc-jack.c b/drivers/extcon/extcon-adc-jack.c
-index 7e3c9f38297b..e735f43dcdeb 100644
---- a/drivers/extcon/extcon-adc-jack.c
-+++ b/drivers/extcon/extcon-adc-jack.c
-@@ -210,3 +210,4 @@ module_platform_driver(adc_jack_driver);
- MODULE_AUTHOR("MyungJoo Ham <myungjoo.ham@samsung.com>");
- MODULE_DESCRIPTION("ADC Jack extcon driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/hwmon/iio_hwmon.c b/drivers/hwmon/iio_hwmon.c
-index e376d4cde5ad..4c7843fbcc50 100644
---- a/drivers/hwmon/iio_hwmon.c
-+++ b/drivers/hwmon/iio_hwmon.c
-@@ -222,3 +222,4 @@ module_platform_driver(iio_hwmon_driver);
- MODULE_AUTHOR("Jonathan Cameron <jic23@kernel.org>");
- MODULE_DESCRIPTION("IIO to hwmon driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/hwmon/ntc_thermistor.c b/drivers/hwmon/ntc_thermistor.c
-index d21f7266c411..417807fad80b 100644
---- a/drivers/hwmon/ntc_thermistor.c
-+++ b/drivers/hwmon/ntc_thermistor.c
-@@ -706,3 +706,4 @@ MODULE_DESCRIPTION("NTC Thermistor Driver");
- MODULE_AUTHOR("MyungJoo Ham <myungjoo.ham@samsung.com>");
- MODULE_LICENSE("GPL");
- MODULE_ALIAS("platform:ntc-thermistor");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/iio/adc/envelope-detector.c b/drivers/iio/adc/envelope-detector.c
-index 5b16fe737659..fea20e7e6cd9 100644
---- a/drivers/iio/adc/envelope-detector.c
-+++ b/drivers/iio/adc/envelope-detector.c
-@@ -406,3 +406,4 @@ module_platform_driver(envelope_detector_driver);
- MODULE_DESCRIPTION("Envelope detector using a DAC and a comparator");
- MODULE_AUTHOR("Peter Rosin <peda@axentia.se>");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/iio/afe/iio-rescale.c b/drivers/iio/afe/iio-rescale.c
-index ecaf59278c6f..d7f55109af3e 100644
---- a/drivers/iio/afe/iio-rescale.c
-+++ b/drivers/iio/afe/iio-rescale.c
-@@ -609,3 +609,4 @@ module_platform_driver(rescale_driver);
- MODULE_DESCRIPTION("IIO rescale driver");
- MODULE_AUTHOR("Peter Rosin <peda@axentia.se>");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/iio/buffer/industrialio-buffer-cb.c b/drivers/iio/buffer/industrialio-buffer-cb.c
-index 3e27385069ed..608ea9afc15a 100644
---- a/drivers/iio/buffer/industrialio-buffer-cb.c
-+++ b/drivers/iio/buffer/industrialio-buffer-cb.c
-@@ -153,3 +153,4 @@ EXPORT_SYMBOL_GPL(iio_channel_cb_get_iio_dev);
- MODULE_AUTHOR("Jonathan Cameron <jic23@kernel.org>");
- MODULE_DESCRIPTION("Industrial I/O callback buffer");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/iio/buffer/industrialio-hw-consumer.c b/drivers/iio/buffer/industrialio-hw-consumer.c
-index 526b2a8d725d..d7ff086ed783 100644
---- a/drivers/iio/buffer/industrialio-hw-consumer.c
-+++ b/drivers/iio/buffer/industrialio-hw-consumer.c
-@@ -211,3 +211,4 @@ EXPORT_SYMBOL_GPL(iio_hw_consumer_disable);
- MODULE_AUTHOR("Lars-Peter Clausen <lars@metafoo.de>");
- MODULE_DESCRIPTION("Hardware consumer buffer the IIO framework");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/iio/dac/ad8460.c b/drivers/iio/dac/ad8460.c
-index 6e45686902dd..ad654819ca22 100644
---- a/drivers/iio/dac/ad8460.c
-+++ b/drivers/iio/dac/ad8460.c
-@@ -955,3 +955,4 @@ MODULE_AUTHOR("Mariel Tinaco <mariel.tinaco@analog.com");
- MODULE_DESCRIPTION("AD8460 DAC driver");
- MODULE_LICENSE("GPL");
- MODULE_IMPORT_NS("IIO_DMAENGINE_BUFFER");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/iio/dac/dpot-dac.c b/drivers/iio/dac/dpot-dac.c
-index d1b8441051ae..49dbdb7df955 100644
---- a/drivers/iio/dac/dpot-dac.c
-+++ b/drivers/iio/dac/dpot-dac.c
-@@ -254,3 +254,4 @@ module_platform_driver(dpot_dac_driver);
- MODULE_DESCRIPTION("DAC emulation driver using a digital potentiometer");
- MODULE_AUTHOR("Peter Rosin <peda@axentia.se>");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/iio/dac/ds4424.c b/drivers/iio/dac/ds4424.c
-index a8198ba4f98a..33d6692f46fe 100644
---- a/drivers/iio/dac/ds4424.c
-+++ b/drivers/iio/dac/ds4424.c
-@@ -14,7 +14,6 @@
- #include <linux/iio/iio.h>
- #include <linux/iio/driver.h>
- #include <linux/iio/machine.h>
--#include <linux/iio/consumer.h>
- 
- #define DS4422_MAX_DAC_CHANNELS		2
- #define DS4424_MAX_DAC_CHANNELS		4
-@@ -321,3 +320,4 @@ MODULE_AUTHOR("Ismail H. Kose <ismail.kose@maximintegrated.com>");
- MODULE_AUTHOR("Vishal Sood <vishal.sood@maximintegrated.com>");
- MODULE_AUTHOR("David Jung <david.jung@maximintegrated.com>");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/iio/inkern.c b/drivers/iio/inkern.c
-index 1e5eb5a41271..c75c3a8d233f 100644
---- a/drivers/iio/inkern.c
-+++ b/drivers/iio/inkern.c
-@@ -281,7 +281,7 @@ struct iio_channel *fwnode_iio_channel_get_by_name(struct fwnode_handle *fwnode,
- 
- 	return ERR_PTR(-ENODEV);
- }
--EXPORT_SYMBOL_GPL(fwnode_iio_channel_get_by_name);
-+EXPORT_SYMBOL_NS_GPL(fwnode_iio_channel_get_by_name, "IIO_CONSUMER");
- 
- static struct iio_channel *fwnode_iio_channel_get_all(struct device *dev)
- {
-@@ -386,7 +386,7 @@ struct iio_channel *iio_channel_get(struct device *dev,
- 
- 	return iio_channel_get_sys(name, channel_name);
- }
--EXPORT_SYMBOL_GPL(iio_channel_get);
-+EXPORT_SYMBOL_NS_GPL(iio_channel_get, "IIO_CONSUMER");
- 
- void iio_channel_release(struct iio_channel *channel)
- {
-@@ -395,7 +395,7 @@ void iio_channel_release(struct iio_channel *channel)
- 	iio_device_put(channel->indio_dev);
- 	kfree(channel);
- }
--EXPORT_SYMBOL_GPL(iio_channel_release);
-+EXPORT_SYMBOL_NS_GPL(iio_channel_release, "IIO_CONSUMER");
- 
- static void devm_iio_channel_free(void *iio_channel)
- {
-@@ -418,7 +418,7 @@ struct iio_channel *devm_iio_channel_get(struct device *dev,
- 
- 	return channel;
- }
--EXPORT_SYMBOL_GPL(devm_iio_channel_get);
-+EXPORT_SYMBOL_NS_GPL(devm_iio_channel_get, "IIO_CONSUMER");
- 
- struct iio_channel *devm_fwnode_iio_channel_get_by_name(struct device *dev,
- 							struct fwnode_handle *fwnode,
-@@ -437,7 +437,7 @@ struct iio_channel *devm_fwnode_iio_channel_get_by_name(struct device *dev,
- 
- 	return channel;
- }
--EXPORT_SYMBOL_GPL(devm_fwnode_iio_channel_get_by_name);
-+EXPORT_SYMBOL_NS_GPL(devm_fwnode_iio_channel_get_by_name, "IIO_CONSUMER");
- 
- struct iio_channel *iio_channel_get_all(struct device *dev)
- {
-@@ -506,7 +506,7 @@ struct iio_channel *iio_channel_get_all(struct device *dev)
- 		iio_device_put(chans[i].indio_dev);
- 	return ERR_PTR(ret);
- }
--EXPORT_SYMBOL_GPL(iio_channel_get_all);
-+EXPORT_SYMBOL_NS_GPL(iio_channel_get_all, "IIO_CONSUMER");
- 
- void iio_channel_release_all(struct iio_channel *channels)
- {
-@@ -518,7 +518,7 @@ void iio_channel_release_all(struct iio_channel *channels)
- 	}
- 	kfree(channels);
- }
--EXPORT_SYMBOL_GPL(iio_channel_release_all);
-+EXPORT_SYMBOL_NS_GPL(iio_channel_release_all, "IIO_CONSUMER");
- 
- static void devm_iio_channel_free_all(void *iio_channels)
- {
-@@ -541,7 +541,7 @@ struct iio_channel *devm_iio_channel_get_all(struct device *dev)
- 
- 	return channels;
- }
--EXPORT_SYMBOL_GPL(devm_iio_channel_get_all);
-+EXPORT_SYMBOL_NS_GPL(devm_iio_channel_get_all, "IIO_CONSUMER");
- 
- static int iio_channel_read(struct iio_channel *chan, int *val, int *val2,
- 			    enum iio_chan_info_enum info)
-@@ -585,7 +585,7 @@ int iio_read_channel_raw(struct iio_channel *chan, int *val)
- 
- 	return iio_channel_read(chan, val, NULL, IIO_CHAN_INFO_RAW);
- }
--EXPORT_SYMBOL_GPL(iio_read_channel_raw);
-+EXPORT_SYMBOL_NS_GPL(iio_read_channel_raw, "IIO_CONSUMER");
- 
- int iio_read_channel_average_raw(struct iio_channel *chan, int *val)
- {
-@@ -597,7 +597,7 @@ int iio_read_channel_average_raw(struct iio_channel *chan, int *val)
- 
- 	return iio_channel_read(chan, val, NULL, IIO_CHAN_INFO_AVERAGE_RAW);
- }
--EXPORT_SYMBOL_GPL(iio_read_channel_average_raw);
-+EXPORT_SYMBOL_NS_GPL(iio_read_channel_average_raw, "IIO_CONSUMER");
- 
- int iio_multiply_value(int *result, s64 multiplier,
- 		       unsigned int type, int val, int val2)
-@@ -701,7 +701,7 @@ int iio_convert_raw_to_processed(struct iio_channel *chan, int raw,
- 	return iio_convert_raw_to_processed_unlocked(chan, raw, processed,
- 						     scale);
- }
--EXPORT_SYMBOL_GPL(iio_convert_raw_to_processed);
-+EXPORT_SYMBOL_NS_GPL(iio_convert_raw_to_processed, "IIO_CONSUMER");
- 
- int iio_read_channel_attribute(struct iio_channel *chan, int *val, int *val2,
- 			       enum iio_chan_info_enum attribute)
-@@ -714,13 +714,13 @@ int iio_read_channel_attribute(struct iio_channel *chan, int *val, int *val2,
- 
- 	return iio_channel_read(chan, val, val2, attribute);
- }
--EXPORT_SYMBOL_GPL(iio_read_channel_attribute);
-+EXPORT_SYMBOL_NS_GPL(iio_read_channel_attribute, "IIO_CONSUMER");
- 
- int iio_read_channel_offset(struct iio_channel *chan, int *val, int *val2)
- {
- 	return iio_read_channel_attribute(chan, val, val2, IIO_CHAN_INFO_OFFSET);
- }
--EXPORT_SYMBOL_GPL(iio_read_channel_offset);
-+EXPORT_SYMBOL_NS_GPL(iio_read_channel_offset, "IIO_CONSUMER");
- 
- int iio_read_channel_processed_scale(struct iio_channel *chan, int *val,
- 				     unsigned int scale)
-@@ -748,20 +748,20 @@ int iio_read_channel_processed_scale(struct iio_channel *chan, int *val,
- 							     scale);
- 	}
- }
--EXPORT_SYMBOL_GPL(iio_read_channel_processed_scale);
-+EXPORT_SYMBOL_NS_GPL(iio_read_channel_processed_scale, "IIO_CONSUMER");
- 
- int iio_read_channel_processed(struct iio_channel *chan, int *val)
- {
- 	/* This is just a special case with scale factor 1 */
- 	return iio_read_channel_processed_scale(chan, val, 1);
- }
--EXPORT_SYMBOL_GPL(iio_read_channel_processed);
-+EXPORT_SYMBOL_NS_GPL(iio_read_channel_processed, "IIO_CONSUMER");
- 
- int iio_read_channel_scale(struct iio_channel *chan, int *val, int *val2)
- {
- 	return iio_read_channel_attribute(chan, val, val2, IIO_CHAN_INFO_SCALE);
- }
--EXPORT_SYMBOL_GPL(iio_read_channel_scale);
-+EXPORT_SYMBOL_NS_GPL(iio_read_channel_scale, "IIO_CONSUMER");
- 
- static int iio_channel_read_avail(struct iio_channel *chan,
- 				  const int **vals, int *type, int *length,
-@@ -790,7 +790,7 @@ int iio_read_avail_channel_attribute(struct iio_channel *chan,
- 
- 	return iio_channel_read_avail(chan, vals, type, length, attribute);
- }
--EXPORT_SYMBOL_GPL(iio_read_avail_channel_attribute);
-+EXPORT_SYMBOL_NS_GPL(iio_read_avail_channel_attribute, "IIO_CONSUMER");
- 
- int iio_read_avail_channel_raw(struct iio_channel *chan,
- 			       const int **vals, int *length)
-@@ -807,7 +807,7 @@ int iio_read_avail_channel_raw(struct iio_channel *chan,
- 
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(iio_read_avail_channel_raw);
-+EXPORT_SYMBOL_NS_GPL(iio_read_avail_channel_raw, "IIO_CONSUMER");
- 
- static int iio_channel_read_max(struct iio_channel *chan,
- 				int *val, int *val2, int *type,
-@@ -863,7 +863,7 @@ int iio_read_max_channel_raw(struct iio_channel *chan, int *val)
- 
- 	return iio_channel_read_max(chan, val, NULL, &type, IIO_CHAN_INFO_RAW);
- }
--EXPORT_SYMBOL_GPL(iio_read_max_channel_raw);
-+EXPORT_SYMBOL_NS_GPL(iio_read_max_channel_raw, "IIO_CONSUMER");
- 
- static int iio_channel_read_min(struct iio_channel *chan,
- 				int *val, int *val2, int *type,
-@@ -919,7 +919,7 @@ int iio_read_min_channel_raw(struct iio_channel *chan, int *val)
- 
- 	return iio_channel_read_min(chan, val, NULL, &type, IIO_CHAN_INFO_RAW);
- }
--EXPORT_SYMBOL_GPL(iio_read_min_channel_raw);
-+EXPORT_SYMBOL_NS_GPL(iio_read_min_channel_raw, "IIO_CONSUMER");
- 
- int iio_get_channel_type(struct iio_channel *chan, enum iio_chan_type *type)
- {
-@@ -933,7 +933,7 @@ int iio_get_channel_type(struct iio_channel *chan, enum iio_chan_type *type)
- 
- 	return 0;
- }
--EXPORT_SYMBOL_GPL(iio_get_channel_type);
-+EXPORT_SYMBOL_NS_GPL(iio_get_channel_type, "IIO_CONSUMER");
- 
- static int iio_channel_write(struct iio_channel *chan, int val, int val2,
- 			     enum iio_chan_info_enum info)
-@@ -957,13 +957,13 @@ int iio_write_channel_attribute(struct iio_channel *chan, int val, int val2,
- 
- 	return iio_channel_write(chan, val, val2, attribute);
- }
--EXPORT_SYMBOL_GPL(iio_write_channel_attribute);
-+EXPORT_SYMBOL_NS_GPL(iio_write_channel_attribute, "IIO_CONSUMER");
- 
- int iio_write_channel_raw(struct iio_channel *chan, int val)
- {
- 	return iio_write_channel_attribute(chan, val, 0, IIO_CHAN_INFO_RAW);
- }
--EXPORT_SYMBOL_GPL(iio_write_channel_raw);
-+EXPORT_SYMBOL_NS_GPL(iio_write_channel_raw, "IIO_CONSUMER");
- 
- unsigned int iio_get_channel_ext_info_count(struct iio_channel *chan)
- {
-@@ -978,7 +978,7 @@ unsigned int iio_get_channel_ext_info_count(struct iio_channel *chan)
- 
- 	return i;
- }
--EXPORT_SYMBOL_GPL(iio_get_channel_ext_info_count);
-+EXPORT_SYMBOL_NS_GPL(iio_get_channel_ext_info_count, "IIO_CONSUMER");
- 
- static const struct iio_chan_spec_ext_info *
- iio_lookup_ext_info(const struct iio_channel *chan, const char *attr)
-@@ -1013,7 +1013,7 @@ ssize_t iio_read_channel_ext_info(struct iio_channel *chan,
- 	return ext_info->read(chan->indio_dev, ext_info->private,
- 			      chan->channel, buf);
- }
--EXPORT_SYMBOL_GPL(iio_read_channel_ext_info);
-+EXPORT_SYMBOL_NS_GPL(iio_read_channel_ext_info, "IIO_CONSUMER");
- 
- ssize_t iio_write_channel_ext_info(struct iio_channel *chan, const char *attr,
- 				   const char *buf, size_t len)
-@@ -1027,7 +1027,7 @@ ssize_t iio_write_channel_ext_info(struct iio_channel *chan, const char *attr,
- 	return ext_info->write(chan->indio_dev, ext_info->private,
- 			       chan->channel, buf, len);
- }
--EXPORT_SYMBOL_GPL(iio_write_channel_ext_info);
-+EXPORT_SYMBOL_NS_GPL(iio_write_channel_ext_info, "IIO_CONSUMER");
- 
- ssize_t iio_read_channel_label(struct iio_channel *chan, char *buf)
- {
-@@ -1038,4 +1038,4 @@ ssize_t iio_read_channel_label(struct iio_channel *chan, char *buf)
- 
- 	return do_iio_read_channel_label(chan->indio_dev, chan->channel, buf);
- }
--EXPORT_SYMBOL_GPL(iio_read_channel_label);
-+EXPORT_SYMBOL_NS_GPL(iio_read_channel_label, "IIO_CONSUMER");
-diff --git a/drivers/iio/light/cm3605.c b/drivers/iio/light/cm3605.c
-index 0c17378e27d1..1bd11292d005 100644
---- a/drivers/iio/light/cm3605.c
-+++ b/drivers/iio/light/cm3605.c
-@@ -325,3 +325,4 @@ module_platform_driver(cm3605_driver);
- MODULE_AUTHOR("Linus Walleij <linus.walleij@linaro.org>");
- MODULE_DESCRIPTION("CM3605 ambient light and proximity sensor driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/iio/light/gp2ap002.c b/drivers/iio/light/gp2ap002.c
-index a0d8a58f2704..04b1f6eade0e 100644
---- a/drivers/iio/light/gp2ap002.c
-+++ b/drivers/iio/light/gp2ap002.c
-@@ -717,3 +717,4 @@ module_i2c_driver(gp2ap002_driver);
- MODULE_AUTHOR("Linus Walleij <linus.walleij@linaro.org>");
- MODULE_DESCRIPTION("GP2AP002 ambient light and proximity sensor driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/iio/multiplexer/iio-mux.c b/drivers/iio/multiplexer/iio-mux.c
-index b742ca9a99d1..e193913f5af7 100644
---- a/drivers/iio/multiplexer/iio-mux.c
-+++ b/drivers/iio/multiplexer/iio-mux.c
-@@ -464,3 +464,4 @@ module_platform_driver(mux_driver);
- MODULE_DESCRIPTION("IIO multiplexer driver");
- MODULE_AUTHOR("Peter Rosin <peda@axentia.se>");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/iio/potentiostat/lmp91000.c b/drivers/iio/potentiostat/lmp91000.c
-index eccc2a34358f..7d993f2acda4 100644
---- a/drivers/iio/potentiostat/lmp91000.c
-+++ b/drivers/iio/potentiostat/lmp91000.c
-@@ -423,3 +423,4 @@ module_i2c_driver(lmp91000_driver);
- MODULE_AUTHOR("Matt Ranostay <matt.ranostay@konsulko.com>");
- MODULE_DESCRIPTION("LMP91000 digital potentiostat");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/input/joystick/adc-joystick.c b/drivers/input/joystick/adc-joystick.c
-index ff44f9978b71..4fa42f88bcfa 100644
---- a/drivers/input/joystick/adc-joystick.c
-+++ b/drivers/input/joystick/adc-joystick.c
-@@ -329,3 +329,4 @@ module_platform_driver(adc_joystick_driver);
- MODULE_DESCRIPTION("Input driver for joysticks connected over ADC");
- MODULE_AUTHOR("Artur Rojek <contact@artur-rojek.eu>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/input/keyboard/adc-keys.c b/drivers/input/keyboard/adc-keys.c
-index f1753207429d..d687459a0c80 100644
---- a/drivers/input/keyboard/adc-keys.c
-+++ b/drivers/input/keyboard/adc-keys.c
-@@ -202,3 +202,4 @@ module_platform_driver(adc_keys_driver);
- MODULE_AUTHOR("Alexandre Belloni <alexandre.belloni@free-electrons.com>");
- MODULE_DESCRIPTION("Input driver for resistor ladder connected on ADC");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/input/touchscreen/colibri-vf50-ts.c b/drivers/input/touchscreen/colibri-vf50-ts.c
-index 98d5b2ba63fb..89c4d7b2b89e 100644
---- a/drivers/input/touchscreen/colibri-vf50-ts.c
-+++ b/drivers/input/touchscreen/colibri-vf50-ts.c
-@@ -372,3 +372,4 @@ module_platform_driver(vf50_touch_driver);
- MODULE_AUTHOR("Sanchayan Maity");
- MODULE_DESCRIPTION("Colibri VF50 Touchscreen driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/input/touchscreen/resistive-adc-touch.c b/drivers/input/touchscreen/resistive-adc-touch.c
-index 7e761ec73273..2fefd652864c 100644
---- a/drivers/input/touchscreen/resistive-adc-touch.c
-+++ b/drivers/input/touchscreen/resistive-adc-touch.c
-@@ -301,3 +301,4 @@ module_platform_driver(grts_driver);
- MODULE_AUTHOR("Eugen Hristev <eugen.hristev@microchip.com>");
- MODULE_DESCRIPTION("Generic ADC Resistive Touch Driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/phy/motorola/phy-cpcap-usb.c b/drivers/phy/motorola/phy-cpcap-usb.c
-index 7cb020dd3423..9591672b0511 100644
---- a/drivers/phy/motorola/phy-cpcap-usb.c
-+++ b/drivers/phy/motorola/phy-cpcap-usb.c
-@@ -717,3 +717,4 @@ MODULE_ALIAS("platform:cpcap_usb");
- MODULE_AUTHOR("Tony Lindgren <tony@atomide.com>");
- MODULE_DESCRIPTION("CPCAP usb phy driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/ab8500_btemp.c b/drivers/power/supply/ab8500_btemp.c
-index e5202a7b6209..36b0c52a4b8b 100644
---- a/drivers/power/supply/ab8500_btemp.c
-+++ b/drivers/power/supply/ab8500_btemp.c
-@@ -829,3 +829,4 @@ MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Johan Palsson, Karl Komierowski, Arun R Murthy");
- MODULE_ALIAS("platform:ab8500-btemp");
- MODULE_DESCRIPTION("AB8500 battery temperature driver");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply/ab8500_charger.c
-index 5f4537766e5b..6e49d1b28254 100644
---- a/drivers/power/supply/ab8500_charger.c
-+++ b/drivers/power/supply/ab8500_charger.c
-@@ -3751,3 +3751,4 @@ MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Johan Palsson, Karl Komierowski, Arun R Murthy");
- MODULE_ALIAS("platform:ab8500-charger");
- MODULE_DESCRIPTION("AB8500 charger management driver");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 9dd99722667a..5fa559f796aa 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -3252,3 +3252,4 @@ MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Johan Palsson, Karl Komierowski");
- MODULE_ALIAS("platform:ab8500-fg");
- MODULE_DESCRIPTION("AB8500 Fuel Gauge driver");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/axp20x_ac_power.c b/drivers/power/supply/axp20x_ac_power.c
-index 5f6ea416fa30..e9049d6229df 100644
---- a/drivers/power/supply/axp20x_ac_power.c
-+++ b/drivers/power/supply/axp20x_ac_power.c
-@@ -421,3 +421,4 @@ module_platform_driver(axp20x_ac_power_driver);
- MODULE_AUTHOR("Quentin Schulz <quentin.schulz@free-electrons.com>");
- MODULE_DESCRIPTION("AXP20X and AXP22X PMICs' AC power supply driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
-index 50ca8e110085..ee8701a6e907 100644
---- a/drivers/power/supply/axp20x_battery.c
-+++ b/drivers/power/supply/axp20x_battery.c
-@@ -1155,3 +1155,4 @@ module_platform_driver(axp20x_batt_driver);
- MODULE_DESCRIPTION("Battery power supply driver for AXP20X and AXP22X PMICs");
- MODULE_AUTHOR("Quentin Schulz <quentin.schulz@free-electrons.com>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-index e75d1e377ac1..599adcf84968 100644
---- a/drivers/power/supply/axp20x_usb_power.c
-+++ b/drivers/power/supply/axp20x_usb_power.c
-@@ -1080,3 +1080,4 @@ module_platform_driver(axp20x_usb_power_driver);
- MODULE_AUTHOR("Hans de Goede <hdegoede@redhat.com>");
- MODULE_DESCRIPTION("AXP20x PMIC USB power supply status driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
-index a3d71fc72064..c6897dd808fc 100644
---- a/drivers/power/supply/axp288_fuel_gauge.c
-+++ b/drivers/power/supply/axp288_fuel_gauge.c
-@@ -817,3 +817,4 @@ MODULE_AUTHOR("Ramakrishna Pallala <ramakrishna.pallala@intel.com>");
- MODULE_AUTHOR("Todd Brandt <todd.e.brandt@linux.intel.com>");
- MODULE_DESCRIPTION("Xpower AXP288 Fuel Gauge Driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
-index 8106d1edcbc2..542c3c70e3cb 100644
---- a/drivers/power/supply/cpcap-battery.c
-+++ b/drivers/power/supply/cpcap-battery.c
-@@ -1176,3 +1176,4 @@ module_platform_driver(cpcap_battery_driver);
- MODULE_LICENSE("GPL v2");
- MODULE_AUTHOR("Tony Lindgren <tony@atomide.com>");
- MODULE_DESCRIPTION("CPCAP PMIC Battery Driver");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
-index d0c3008db534..89bc0fc3c9f8 100644
---- a/drivers/power/supply/cpcap-charger.c
-+++ b/drivers/power/supply/cpcap-charger.c
-@@ -977,3 +977,4 @@ MODULE_AUTHOR("Tony Lindgren <tony@atomide.com>");
- MODULE_DESCRIPTION("CPCAP Battery Charger Interface driver");
- MODULE_LICENSE("GPL v2");
- MODULE_ALIAS("platform:cpcap-charger");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/da9150-charger.c b/drivers/power/supply/da9150-charger.c
-index 27f36ef5b88d..58449df6068c 100644
---- a/drivers/power/supply/da9150-charger.c
-+++ b/drivers/power/supply/da9150-charger.c
-@@ -644,3 +644,4 @@ module_platform_driver(da9150_charger_driver);
- MODULE_DESCRIPTION("Charger Driver for DA9150");
- MODULE_AUTHOR("Adam Thomson <Adam.Thomson.Opensource@diasemi.com>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-index f5f2566b3a32..d18c8ee40405 100644
---- a/drivers/power/supply/generic-adc-battery.c
-+++ b/drivers/power/supply/generic-adc-battery.c
-@@ -298,3 +298,4 @@ module_platform_driver(gab_driver);
- MODULE_AUTHOR("anish kumar <yesanishhere@gmail.com>");
- MODULE_DESCRIPTION("generic battery driver using IIO");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/ingenic-battery.c b/drivers/power/supply/ingenic-battery.c
-index b111c7ce2be3..5be269f17bff 100644
---- a/drivers/power/supply/ingenic-battery.c
-+++ b/drivers/power/supply/ingenic-battery.c
-@@ -190,3 +190,4 @@ module_platform_driver(ingenic_battery_driver);
- MODULE_DESCRIPTION("Battery driver for Ingenic JZ47xx SoCs");
- MODULE_AUTHOR("Artur Rojek <contact@artur-rojek.eu>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/intel_dc_ti_battery.c b/drivers/power/supply/intel_dc_ti_battery.c
-index 56b0c92e9d28..1a16ded563bc 100644
---- a/drivers/power/supply/intel_dc_ti_battery.c
-+++ b/drivers/power/supply/intel_dc_ti_battery.c
-@@ -387,3 +387,4 @@ MODULE_ALIAS("platform:" DEV_NAME);
- MODULE_AUTHOR("Hans de Goede <hansg@kernel.org>");
- MODULE_DESCRIPTION("Intel Dollar Cove (TI) battery driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/lego_ev3_battery.c b/drivers/power/supply/lego_ev3_battery.c
-index 28454de05761..414816662b06 100644
---- a/drivers/power/supply/lego_ev3_battery.c
-+++ b/drivers/power/supply/lego_ev3_battery.c
-@@ -231,3 +231,4 @@ module_platform_driver(lego_ev3_battery_driver);
- MODULE_LICENSE("GPL");
- MODULE_AUTHOR("David Lechner <david@lechnology.com>");
- MODULE_DESCRIPTION("LEGO MINDSTORMS EV3 Battery Driver");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/lp8788-charger.c b/drivers/power/supply/lp8788-charger.c
-index f0a680c155c4..8c6ec98362d0 100644
---- a/drivers/power/supply/lp8788-charger.c
-+++ b/drivers/power/supply/lp8788-charger.c
-@@ -727,3 +727,4 @@ MODULE_DESCRIPTION("TI LP8788 Charger Driver");
- MODULE_AUTHOR("Milo Kim");
- MODULE_LICENSE("GPL");
- MODULE_ALIAS("platform:lp8788-charger");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-index c1640bc6accd..1fe658bfecc1 100644
---- a/drivers/power/supply/max17040_battery.c
-+++ b/drivers/power/supply/max17040_battery.c
-@@ -635,3 +635,4 @@ module_i2c_driver(max17040_i2c_driver);
- MODULE_AUTHOR("Minkyu Kang <mk7.kang@samsung.com>");
- MODULE_DESCRIPTION("MAX17040 Fuel Gauge");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/mp2629_charger.c b/drivers/power/supply/mp2629_charger.c
-index d281c1059629..ed49f9a04c8c 100644
---- a/drivers/power/supply/mp2629_charger.c
-+++ b/drivers/power/supply/mp2629_charger.c
-@@ -660,3 +660,4 @@ module_platform_driver(mp2629_charger_driver);
- MODULE_AUTHOR("Saravanan Sekar <sravanhome@gmail.com>");
- MODULE_DESCRIPTION("MP2629 Charger driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
-index e6db961d5818..2d02fdf37d70 100644
---- a/drivers/power/supply/mt6370-charger.c
-+++ b/drivers/power/supply/mt6370-charger.c
-@@ -941,3 +941,4 @@ module_platform_driver(mt6370_chg_driver);
- MODULE_AUTHOR("ChiaEn Wu <chiaen_wu@richtek.com>");
- MODULE_DESCRIPTION("MediaTek MT6370 Charger Driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/qcom_smbx.c b/drivers/power/supply/qcom_smbx.c
-index b1cb925581ec..63b88754155c 100644
---- a/drivers/power/supply/qcom_smbx.c
-+++ b/drivers/power/supply/qcom_smbx.c
-@@ -1050,3 +1050,4 @@ module_platform_driver(qcom_spmi_smb);
- MODULE_AUTHOR("Casey Connolly <casey.connolly@linaro.org>");
- MODULE_DESCRIPTION("Qualcomm SMB2 Charger Driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/rn5t618_power.c b/drivers/power/supply/rn5t618_power.c
-index 40dec55a9f73..a3f30e390c11 100644
---- a/drivers/power/supply/rn5t618_power.c
-+++ b/drivers/power/supply/rn5t618_power.c
-@@ -821,3 +821,4 @@ module_platform_driver(rn5t618_power_driver);
- MODULE_ALIAS("platform:rn5t618-power");
- MODULE_DESCRIPTION("Power supply driver for RICOH RN5T618");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/rx51_battery.c b/drivers/power/supply/rx51_battery.c
-index b0220ec2d926..57266921dc8e 100644
---- a/drivers/power/supply/rx51_battery.c
-+++ b/drivers/power/supply/rx51_battery.c
-@@ -246,3 +246,4 @@ MODULE_ALIAS("platform:rx51-battery");
- MODULE_AUTHOR("Pali Rohár <pali@kernel.org>");
- MODULE_DESCRIPTION("Nokia RX-51 battery driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/sc27xx_fuel_gauge.c b/drivers/power/supply/sc27xx_fuel_gauge.c
-index a7ed9de8a289..1719ec4173e6 100644
---- a/drivers/power/supply/sc27xx_fuel_gauge.c
-+++ b/drivers/power/supply/sc27xx_fuel_gauge.c
-@@ -1350,3 +1350,4 @@ module_platform_driver(sc27xx_fgu_driver);
- 
- MODULE_DESCRIPTION("Spreadtrum SC27XX PMICs Fual Gauge Unit Driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/supply/twl4030_charger.c
-index 04216b2bfb6c..151f7b24e9b9 100644
---- a/drivers/power/supply/twl4030_charger.c
-+++ b/drivers/power/supply/twl4030_charger.c
-@@ -1144,3 +1144,4 @@ MODULE_AUTHOR("Gražvydas Ignotas");
- MODULE_DESCRIPTION("TWL4030 Battery Charger Interface driver");
- MODULE_LICENSE("GPL");
- MODULE_ALIAS("platform:twl4030_bci");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/twl4030_madc_battery.c b/drivers/power/supply/twl4030_madc_battery.c
-index 3935162e350b..9b3785d1643c 100644
---- a/drivers/power/supply/twl4030_madc_battery.c
-+++ b/drivers/power/supply/twl4030_madc_battery.c
-@@ -237,3 +237,4 @@ MODULE_LICENSE("GPL");
- MODULE_AUTHOR("Lukas Märdian <lukas@goldelico.com>");
- MODULE_DESCRIPTION("twl4030_madc battery driver");
- MODULE_ALIAS("platform:twl4030_madc_battery");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/power/supply/twl6030_charger.c b/drivers/power/supply/twl6030_charger.c
-index b4ec26ff257c..82911a811f4e 100644
---- a/drivers/power/supply/twl6030_charger.c
-+++ b/drivers/power/supply/twl6030_charger.c
-@@ -579,3 +579,4 @@ module_platform_driver(twl6030_charger_driver);
- 
- MODULE_DESCRIPTION("TWL6030 Battery Charger Interface driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-index d7f2e6ca92c2..bb6222c8cc5f 100644
---- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-+++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-@@ -1069,3 +1069,4 @@ module_platform_driver(adc_tm5_driver);
- 
- MODULE_DESCRIPTION("SPMI PMIC Thermal Monitor ADC driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-index f39ca0ddd17b..fb003ca96454 100644
---- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-+++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-@@ -904,3 +904,4 @@ module_platform_driver(qpnp_tm_driver);
- MODULE_ALIAS("platform:spmi-temp-alarm");
- MODULE_DESCRIPTION("QPNP PMIC Temperature Alarm driver");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/thermal/renesas/rzg3s_thermal.c b/drivers/thermal/renesas/rzg3s_thermal.c
-index e25e36c99a88..7ced8f76a0ec 100644
---- a/drivers/thermal/renesas/rzg3s_thermal.c
-+++ b/drivers/thermal/renesas/rzg3s_thermal.c
-@@ -270,3 +270,4 @@ module_platform_driver(rzg3s_thermal_driver);
- MODULE_DESCRIPTION("Renesas RZ/G3S Thermal Sensor Unit Driver");
- MODULE_AUTHOR("Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
-index 7c844589b153..cfdb8e674dd2 100644
---- a/drivers/thermal/thermal-generic-adc.c
-+++ b/drivers/thermal/thermal-generic-adc.c
-@@ -228,3 +228,4 @@ module_platform_driver(gadc_thermal_driver);
- MODULE_AUTHOR("Laxman Dewangan <ldewangan@nvidia.com>");
- MODULE_DESCRIPTION("Generic ADC thermal driver using IIO framework with DT");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/sound/soc/codecs/audio-iio-aux.c b/sound/soc/codecs/audio-iio-aux.c
-index 588e48044c13..864a5a676495 100644
---- a/sound/soc/codecs/audio-iio-aux.c
-+++ b/sound/soc/codecs/audio-iio-aux.c
-@@ -312,3 +312,4 @@ module_platform_driver(audio_iio_aux_driver);
- MODULE_AUTHOR("Herve Codina <herve.codina@bootlin.com>");
- MODULE_DESCRIPTION("IIO ALSA SoC aux driver");
- MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/sound/soc/samsung/aries_wm8994.c b/sound/soc/samsung/aries_wm8994.c
-index 3723329b266d..b6f0f3c0d393 100644
---- a/sound/soc/samsung/aries_wm8994.c
-+++ b/sound/soc/samsung/aries_wm8994.c
-@@ -700,3 +700,4 @@ module_platform_driver(aries_audio_driver);
- MODULE_DESCRIPTION("ALSA SoC ARIES WM8994");
- MODULE_LICENSE("GPL");
- MODULE_ALIAS("platform:aries-audio-wm8994");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/sound/soc/samsung/midas_wm1811.c b/sound/soc/samsung/midas_wm1811.c
-index 239e958b88d3..12c4962f901d 100644
---- a/sound/soc/samsung/midas_wm1811.c
-+++ b/sound/soc/samsung/midas_wm1811.c
-@@ -773,3 +773,4 @@ module_platform_driver(midas_driver);
- MODULE_AUTHOR("Simon Shields <simon@lineageos.org>");
- MODULE_DESCRIPTION("ASoC support for Midas");
- MODULE_LICENSE("GPL v2");
-+MODULE_IMPORT_NS("IIO_CONSUMER");
-diff --git a/sound/soc/stm/stm32_adfsdm.c b/sound/soc/stm/stm32_adfsdm.c
-index c914d1c46850..dabcd2759187 100644
---- a/sound/soc/stm/stm32_adfsdm.c
-+++ b/sound/soc/stm/stm32_adfsdm.c
-@@ -407,3 +407,4 @@ MODULE_DESCRIPTION("stm32 DFSDM DAI driver");
- MODULE_AUTHOR("Arnaud Pouliquen <arnaud.pouliquen@st.com>");
- MODULE_LICENSE("GPL v2");
- MODULE_ALIAS("platform:" STM32_ADFSDM_DRV_NAME);
-+MODULE_IMPORT_NS("IIO_CONSUMER");
+In str case, there is no power on the system during suspend and exit is, So=
+C reset followed by
+restoring registers from DDR. So, it does not matter for the suspend path.
 
----
-base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
-change-id: 20251127-iio-inkern-use-namespaced-exports-41fc09223b5e
+In the resume case, If the calls to error path fail, then device won't work=
+.
 
-Best regards,
--- 
-Romain Gantois <romain.gantois@bootlin.com>
+>=20
+> I added linux-pm to Cc:, maybe someone can speak up about the expectation=
+s here?
 
+Adding logs here to provide some input
+
+root@smarc-rzg3e:/# /pwm-pm-test.sh
+
+Suspend to Idle case: There is always power during suspend/resume
+
+### Executing suspend to Idle ##[ 2234.873041] PM: suspend entry (s2idle)
+#
+[ 2234.880814] Filesystems sync: 0.002 seconds
+[ 2234.886280] Freezing user space processes
+[ 2234.890772] Freezing user space processes completed (elapsed 0.004 secon=
+ds)
+[ 2234.898042] OOM killer disabled.
+[ 2234.901418] Freezing remaining freezable tasks
+[ 2234.987346] Freezing remaining freezable tasks completed (elapsed 0.081 =
+seconds)
+[ 2234.994928] printk: Suspending console(s) (use no_console_suspend to deb=
+ug)
+[ 2235.063373] renesas-gbeth 15c30000.ethernet end0: Link is Down
+[ 2241.003506] dwmac4: Master AXI performs any burst length
+[ 2241.003589] renesas-gbeth 15c30000.ethernet end0: No Safety Features sup=
+port found
+[ 2241.003686] renesas-gbeth 15c30000.ethernet end0: IEEE 1588-2008 Advance=
+d Timestamp supported
+[ 2241.003837] renesas-gbeth 15c30000.ethernet end0: configuring for phy/rg=
+mii-id link mode
+[ 2241.012644] dwmac4: Master AXI performs any burst length
+[ 2241.012719] renesas-gbeth 15c40000.ethernet end1: No Safety Features sup=
+port found
+[ 2241.012804] renesas-gbeth 15c40000.ethernet end1: IEEE 1588-2008 Advance=
+d Timestamp supported
+[ 2241.012948] renesas-gbeth 15c40000.ethernet end1: configuring for phy/rg=
+mii-id link mode
+[ 2241.060964] usb usb1: root hub lost power or was reset
+[ 2241.061005] usb usb2: root hub lost power or was reset
+[ 2241.245594] OOM killer enabled.
+[ 2241.248732] Restarting tasks: Starting
+[ 2241.253795] Restarting tasks: Done
+[ 2241.261232] random: crng reseeded on system resumption
+[ 2241.266589] PM: suspend exit
+[ 2243.565376] renesas-gbeth 15c30000.ethernet end0: Link is Up - 1Gbps/Ful=
+l - flow control rx/tx
+
+
+STR case: There is no power during suspend and during resume the PWM is act=
+ive and enabled.
+
+### Executing STR ###
+[ 2249.336476] PM: suspend entry (deep)
+[ 2249.341533] Filesystems sync: 0.000 seconds
+[ 2249.346768] Freezing user space processes
+[ 2249.350597] Freezing user space processes completed (elapsed 0.003 secon=
+ds)
+[ 2249.358292] OOM killer disabled.
+[ 2249.361536] Freezing remaining freezable tasks
+[ 2249.367334] Freezing remaining freezable tasks completed (elapsed 0.001 =
+seconds)
+[ 2249.374754] printk: Suspending console(s) (use no_console_suspend to deb=
+ug)
+NOTICE:  BL2: v2.10.5(release):2.10.5/rz_soc_dev-329-gb288fa6dd
+NOTICE:  BL2: Built : 12:27:28, Nov 28 2025
+NOTICE:  BL2: SYS_LSI_MODE: 0x13e06
+NOTICE:  BL2: SYS_LSI_DEVID: 0x8679447
+NOTICE:  BL2: SYS_LSI_PRR: 0x0
+NOTICE:  BL2: Booting BL31
+[ 2249.443353] renesas-gbeth 15c30000.ethernet end0: Link is Down
+[ 2249.457488] Disabling non-boot CPUs ...
+[ 2249.462415] psci: CPU3 killed (polled 0 ms)
+[ 2249.469054] psci: CPU2 killed (polled 0 ms)
+[ 2249.475079] psci: CPU1 killed (polled 0 ms)
+[ 2249.476779] Enabling non-boot CPUs ...
+[ 2249.476986] Detected VIPT I-cache on CPU1
+[ 2249.477029] GICv3: CPU1: found redistributor 100 region 0:0x000000001496=
+0000
+[ 2249.477068] CPU1: Booted secondary processor 0x0000000100 [0x412fd050]
+[ 2249.477934] CPU1 is up
+[ 2249.478033] Detected VIPT I-cache on CPU2
+[ 2249.478054] GICv3: CPU2: found redistributor 200 region 0:0x000000001498=
+0000
+[ 2249.478075] CPU2: Booted secondary processor 0x0000000200 [0x412fd050]
+[ 2249.478603] CPU2 is up
+[ 2249.478700] Detected VIPT I-cache on CPU3
+[ 2249.478723] GICv3: CPU3: found redistributor 300 region 0:0x00000000149a=
+0000
+[ 2249.478743] CPU3: Booted secondary processor 0x0000000300 [0x412fd050]
+[ 2249.479398] CPU3 is up
+[ 2249.497101] dwmac4: Master AXI performs any burst length
+[ 2249.497138] renesas-gbeth 15c30000.ethernet end0: No Safety Features sup=
+port found
+[ 2249.497180] renesas-gbeth 15c30000.ethernet end0: IEEE 1588-2008 Advance=
+d Timestamp supported
+[ 2249.497248] renesas-gbeth 15c30000.ethernet end0: configuring for phy/rg=
+mii-id link mode
+[ 2249.514222] dwmac4: Master AXI performs any burst length
+[ 2249.514248] renesas-gbeth 15c40000.ethernet end1: No Safety Features sup=
+port found
+[ 2249.514278] renesas-gbeth 15c40000.ethernet end1: IEEE 1588-2008 Advance=
+d Timestamp supported
+[ 2249.514339] renesas-gbeth 15c40000.ethernet end1: configuring for phy/rg=
+mii-id link mode
+[ 2249.561172] usb usb1: root hub lost power or was reset
+[ 2249.561180] usb usb2: root hub lost power or was reset
+[ 2249.824165] OOM killer enabled.
+[ 2249.827341] Restarting tasks: Starting
+[ 2249.831552] Restarting tasks: Done
+[ 2249.835021] random: crng reseeded on system resumption
+[ 2249.840269] PM: suspend exit
+
+[ 2252.066180] renesas-gbeth 15c30000.ethernet end0: Link is Up - 1Gbps/Ful=
+l - flow control rx/tx
+root@smarc-rzg3e:/#
+
+
+Cheers,
+Biju
 
