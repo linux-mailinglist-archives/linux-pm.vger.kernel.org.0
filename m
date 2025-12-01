@@ -1,272 +1,221 @@
-Return-Path: <linux-pm+bounces-38995-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38996-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15DA5C98919
-	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 18:43:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE224C989DF
+	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 18:54:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DF1573450AF
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 17:43:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 066373A7049
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 17:52:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD546337BB6;
-	Mon,  1 Dec 2025 17:43:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 417593385B9;
+	Mon,  1 Dec 2025 17:51:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cvsn5zY4";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="I8ES+ls3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fO7631K1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD81F3358DA
-	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 17:43:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A6433859B
+	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 17:51:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764610995; cv=none; b=R46w7hMbCVI91vu2ZJHy1pNWMwPc2AmT6y9eRpK1zCg7TIo/9B2Y/yhoPjBjw3lDaD0glWggQ+zE9Dsv8fZjPv/hoNUkGCsXKJ60IFbufmh+dDqf4sx6VFiLSShAyLr1XZGxo26MVv8J6dr7DYaBgoH822sl6Z7wWg469JFtcSE=
+	t=1764611493; cv=none; b=MR+rZPc75rn5/8oOgh/AFNZ1FBONQD1ErJsZQpwdmHh2XTHxwSYX7iAoFGbo9OtEszMC1+52G1OrZu2wrW9coF7zgTUsqw8rhF5woeMuLrJ8iFqvlm3AVJlbj/nYMkZ89NFxLVR/sAk19qiwzKwGaSxCYInk4DNTWr5P3mGVDCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764610995; c=relaxed/simple;
-	bh=lZj07wlYxkGBlkZeZ4j2r8185kCxyL9CoHfB6xGZCj4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OZTWbujBIxoWyIWMrFPUbeKIbuMb34n9bsrfdvwt8Rqe9c6TM8/9dTah5HieEwt4Uo6N1X+6KqJgtjmnK1jRzUR7tAC2zremwYdpKMxPfsqWE2BZUvkGSheurumP/5jgwYOBKisimh744zL2J8fcynnISx3yvsXmSWtuRJkUa+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cvsn5zY4; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=I8ES+ls3; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B1B5dKC396708
-	for <linux-pm@vger.kernel.org>; Mon, 1 Dec 2025 17:43:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	F1VO/o5e75gGVIgNjtwUAwm2TSdnBzXjm3cTgEXji5M=; b=cvsn5zY4ymV3PQ5i
-	PoIUP4FPus7jWmxQh0LNN7RCPgXtNKb3AeFP7peg9UFMey0pMFdvXx+Yb8mRgbGa
-	gp8egszIHm3xSW0YD2nRFG5xqVNCSZL6fb69RJe90vQsUudgY2SchnJuEUFRGQuh
-	mFG/VR7MAx+rbwZczwi+bXtZSbvFg1PxAdpA/L2AORnocsPDhFl3SG8p6O0SrkwZ
-	g88UbT5VZSxO4T6ugaJrEgpYxBwu626piegsHlQJ/29ZhEGp2cLJV7fBBsmo+On6
-	TGJ4XtvE1Gcq6P9ltrBATbt2vqXXYpEIMy4GlCiOlO5dix0VnL9K1b0pB2Bt3LcN
-	A+H9iw==
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4as9ug15hk-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 17:43:11 +0000 (GMT)
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-7b80de683efso6495137b3a.3
-        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 09:43:11 -0800 (PST)
+	s=arc-20240116; t=1764611493; c=relaxed/simple;
+	bh=NWxBOV8G+uX6EdRDI3s/sdgxK15h9hF+3FIWvt4TO+g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JpapiUgg3yxHdpLdQ/+JYww87ZdevR03/MvZ8XCQp/RXte2X0y1PWyxMdON1/9FtTJST+yshl5Rjnx1AgMto3Tt13+9cLP/hNP9pdogF/sXKFUycGlIw2yFLCvE0rlXSV5WVKgxNxHPN6/YG4t5OvptrkD6hr1DxhC5dmn4HZuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fO7631K1; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5957f617ff0so5108487e87.2
+        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 09:51:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1764610990; x=1765215790; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F1VO/o5e75gGVIgNjtwUAwm2TSdnBzXjm3cTgEXji5M=;
-        b=I8ES+ls3rwC0rmwHJrZuyBmucNO7QfCtCXXJszCS3fQX3f3f2oC1jwbSWT4d9440Ca
-         Bav7WkzOaZYbX5/YaK5C2rP/0IA0Flm3aWcxIgrRVk0KBzd4JieSQu4jOAE5JmqSqJES
-         gz1QGxKSwLUJIntE/BSoErncFK32WG6qvKwc8NQEALmpn+FGh+rC8A/ptRXMilLmpsiX
-         InPWnlagufKngXydLpmahtY+dDShq0vWzID6fTRiXeSv5jVQ5wT1kbuRx/5mCr5I5Lmg
-         xvGAIxLHk2ldpU7+WW4kam6uXq/ERHsLqMcBI8XX89vAx5isCIobBpFXzi6W8lAV95cc
-         RMVw==
+        d=linaro.org; s=google; t=1764611489; x=1765216289; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CQAmSf/I/r1AJACdEyDQZKuMSYhZU2RwlU93Oa7O8sU=;
+        b=fO7631K1tuyVb4hlRETIHVpdQ+y2ATigRfkKWLwfKrLFCbTZouPwUPZ/Yg24YuiGAV
+         JNqnx4hh9k/Nc8VqDmO6KOO0u7IjpNSwud1dsr2xHytEXHfTXRvnO4kQ2b/DMFWwu1wy
+         BlGyAxvpm0bUYVZZ/qE+UgLPPdPAUedNGimDcevMmeXmMzLL/YK7oPnWubjpJZa13gSF
+         +Oaptora1czYPsbqBxm2Aam5BFnyHfEI50auh//BaKaMQOXz8qkZ75zRoVSlDSEXVzWP
+         u6nHTd9dgdkox2fDPCSDHzTpqb0B+HAM73gFaaK2tff0aVammHaM46dliWz+ikBFf9WP
+         ascw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764610990; x=1765215790;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F1VO/o5e75gGVIgNjtwUAwm2TSdnBzXjm3cTgEXji5M=;
-        b=ta8AjCGLQhT5tle/NXMJ/L9XXiQ4owyKKAmOdZ4hrc+tVg6L7dLFcFC1a8khr2DbzY
-         5uSQWUTSg6C30FFU72hWQO19wYffH5w7cdyrPKSHCwqwhjJO4XRjN+hzbPb1SuamHNgX
-         x2abPCqctBgQzU455l7Fz3QUHViockoytzkRd9w5iPQ3dTy6TQVy1xNsfM6cE9/y3ire
-         dFnWZCvldyivxTcuGKqzRwVNZkEauPlG6s4FVYZBeottcnOSi3cw1VMsDgKkz7apx57m
-         GjSJ1/Gkd7zRIYUsyX8bsDxYcG8JpXWo9yZoYPCvkm3v4KIEjvd9yzDuXFBDBrxN++Cy
-         akuA==
-X-Forwarded-Encrypted: i=1; AJvYcCW1SApPPdoknyvUx7jurnvWyCcbuT4SayfbkcV/AbRzpQmi7syHTcqsrCZ/54jWtHoHUfslLNs+dQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvRa/uMhBR3O0Y99uMHtvVmEr7ouU6BXk1fnNtE/Q7X0hbaV4z
-	QTjh7n63EofFmQE7j7gntDhvhxG7OzLRALAFMEJGdEw62TpRd2q3Ides9Mt8Crn016SXiiH6KvW
-	BdJOSqKxmZgjfREMtGlrH9mka28RhHYdD8E3lDTqVcG4IgyJedWAnoi4pivAfcjJLZwnk9g==
-X-Gm-Gg: ASbGnct6DlMEY6poOkOfycRb1WArb4gqVJUQUszqLoVt+6rorHLS3ayhbqBSVilV1sz
-	ZvJBrXnr5uQ0K4lG5RKL2hijgKNLCTuFAzkorc+O5QM8lbnRz7/DUpKluNvRZfGuFAyVIrWxTJH
-	/QkOrj3AwSRjU2ne+PwEotd8axYJHe1lYHb5QmzsHm02CsN0Xx8np36IVKhWomcufQ7TPcG5bBL
-	xv+lgmiFbDgS2c8G6fN3XCQiUzsh9SPoA8d4Ph0kEZGeojDL7XRBKc4J3TBovqnBDdG7FzkYgXh
-	lDQQMDQezEOoZFcPc/349vD3bVEYypyCaJIV/+9Wxm3Lmq50HS47B6W3unHx7oglREvZ0FZ9tQX
-	n5wjiqRxZQbYLO2VwXJU1TLwl/bViMbcl
-X-Received: by 2002:a05:6a00:4b43:b0:7ab:63fe:d7d5 with SMTP id d2e1a72fcca58-7c58e113bb0mr38016376b3a.20.1764610990477;
-        Mon, 01 Dec 2025 09:43:10 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHV7pn7d/Dh/csFTF0k/OWDogbO2glNn3BMQE69LQoc9YhaOlwRVVDof/8TZKHInrDSsFmp8Q==
-X-Received: by 2002:a05:6a00:4b43:b0:7ab:63fe:d7d5 with SMTP id d2e1a72fcca58-7c58e113bb0mr38016348b3a.20.1764610989949;
-        Mon, 01 Dec 2025 09:43:09 -0800 (PST)
-Received: from [10.216.44.100] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d15e9c3f23sm14292031b3a.36.2025.12.01.09.43.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Dec 2025 09:43:09 -0800 (PST)
-Message-ID: <4f8f9217-f6d1-1321-c2be-5ee1dd807eca@oss.qualcomm.com>
-Date: Mon, 1 Dec 2025 23:13:04 +0530
+        d=1e100.net; s=20230601; t=1764611489; x=1765216289;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CQAmSf/I/r1AJACdEyDQZKuMSYhZU2RwlU93Oa7O8sU=;
+        b=DxxtjwJYhdjq8ncLPIWIeNTiK3ijFx4xnY8wV4E23IMazCC2b8AlZeQxQHOKfsFzOy
+         UyJddObkPeAmHf3aSQSL+rch62Mj6GsJm9r5qW5vVlyzMNcodjEV1dUFIiFbdr9H/JJs
+         KGPb2vWNO/lqPWpIfE+aakBhnto2S4S1apfL2I23slxvMpJuWszUH4dXBNmxJSM+7wTh
+         Z8NhzK/cQv4oMD3ewfkwzHl42KWKKHOvMgZ7AYI8pHOEACkP54VPpZew6f8sB2BkJLdA
+         8+vs5edbLIgl9jCX3R71YjavQTBlXq8BZlVq+b5HGuDUrh3U50PQICRFpaADHlE3AzQf
+         5weg==
+X-Forwarded-Encrypted: i=1; AJvYcCX2bssxpa/LCFfj84wXBg8ZhlTF14kcrukU7YNoQM67S86z3T/ZdPH1Ns1EX1bEdcNXOL7gkC7phQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw34OKch1Ly8pwGE+sqyQZZf4QarKOOkrnPBd+reAId3cFhWEWa
+	5IT/NJ/9fDsUr8X86e4z3Zg7gHuGDlLPkSuS5qCy5CE+JTQUCq1ST81dH9oVaNKpxdHz3VxNoOY
+	mCAiK
+X-Gm-Gg: ASbGncuq5iRBPW4Zt0STSVuGVsoVc0ynGEX2RswofYzViD6n16POLKAtoVY/ah/jRsU
+	D5qjutNP1fju3ZmZS4lLu+EEhzOD0lF3kF3vw+mTt+JJ/lKKsSS14q5PN03I/zp032GShPf6nyo
+	r3ETNCXHlETRMk5aUfbH2FkZ5uQU8htsv71ankBgMOlb3tdJXn8uijJFX/gZHwn1NyfZ9Bffd2r
+	lCEg/TFKIaWk4XLkpj1sUDzv7ddmwMFojTahPtVFJU/ms1b9RZY21X3e1+zwxR5a8pXEuATsIyI
+	yND6F3mibi1ziKFmdi6TpzPEBXi7KUTmiirRirP7nTBt6AEgD2EpSZu+or712zQB/0X1Rhp1ogE
+	8Cp8LaOr2qumgGViaa/fRrzF00EHfzyYOkMdwzoDsAdjQSGURKbcsEa6ceIfUrCTYDyWOA0wKyL
+	TaRfv1ZulJoNo7B4o+dCrVnFyyGAl/uG53neV7NBF2GAUWSCvCY70kwecn3dGy
+X-Google-Smtp-Source: AGHT+IGJ/2qcLJ93I8tQ9xcZfNdaAnY6D2Sz4qECv7ecbOoK2+SCkO7fr0vpFnxNjafmmj1k2a9cOA==
+X-Received: by 2002:a05:6512:104f:b0:593:f74:9088 with SMTP id 2adb3069b0e04-596a3ee5881mr12619568e87.43.1764611488885;
+        Mon, 01 Dec 2025 09:51:28 -0800 (PST)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-596bfa48f7bsm3731430e87.85.2025.12.01.09.51.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 01 Dec 2025 09:51:28 -0800 (PST)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Linus <torvalds@linux-foundation.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] pmdomain/cpuidle-psci updates for v6.19
+Date: Mon,  1 Dec 2025 18:51:25 +0100
+Message-ID: <20251201175125.34284-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v20 2/2] power: reset: reboot-mode: Expose sysfs for
- registered reboot_modes
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>,
-        Bartosz Golaszewski <bgolasze@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20251130-next-15nov_expose_sysfs-v20-0-18c80f8248dd@oss.qualcomm.com>
- <20251130-next-15nov_expose_sysfs-v20-2-18c80f8248dd@oss.qualcomm.com>
- <CAMRc=MeUoFhmxcxsvboKx1E3KCsqkd081d8e9PypuYCCiL1XFw@mail.gmail.com>
-Content-Language: en-US
-From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-In-Reply-To: <CAMRc=MeUoFhmxcxsvboKx1E3KCsqkd081d8e9PypuYCCiL1XFw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAxMDE0NCBTYWx0ZWRfX9NaZoma7bIVl
- BOnBmCn3lYpN1qHQ0aMTdr9XYRH5YD24wS+o3mPBFDTPp6hxQejaAaOfvde4xapa5349l2DFDUA
- oWAuDaUjrkORiNEK/OfDQrJPvHx9f826Fj+3/NZCyz6J27stcTvgRLo7nww1w0gBATUwS2tUNEr
- R+ti07BskS3GdmBK+gx66eqH506A7a/WZkcq0aYdRneiVBd1rG02v/mJNSndHx9ldMoNaTU4oQ+
- BG8gboVyoI8HP6N1nAsNRgCqf3469JPZvn/pQCz6ZflUfWi9sM0KM9CPo0oaSIE6wR+atf6FtL8
- OoDu9vq+JbQMztw4PIy+YYIM7Hmazu7H5JLyB4aF92A1S28env3PoC4EOLYCftU0nEqqNQRv/fJ
- Mf1xgV2pv9XoelbBNwOG5VQM4CT9YQ==
-X-Proofpoint-GUID: OKh2rcwx6q0oInxB4jVw3EFLv9Z9EiLg
-X-Proofpoint-ORIG-GUID: OKh2rcwx6q0oInxB4jVw3EFLv9Z9EiLg
-X-Authority-Analysis: v=2.4 cv=EunfbCcA c=1 sm=1 tr=0 ts=692dd3af cx=c_pps
- a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=HCQ8OXiHCcgNmGA-GAsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=zc0IvFSfCIW2DFIPzwfm:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-28_08,2025-11-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 priorityscore=1501 suspectscore=0 bulkscore=0
- clxscore=1015 spamscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2510240001 definitions=main-2512010144
+
+Hi Linus,
+
+Here's the pull-request with pmdomain and cpuidle-psci updates for v6.19.
+Details about the highlights are as usual found in the signed tag.
+
+Please pull this in!
+
+Kind regards
+Ulf Hansson
 
 
+The following changes since commit c98c99d5dbdf9fb0063650594edfd7d49b5f4e29:
 
-On 12/1/2025 6:51 PM, Bartosz Golaszewski wrote:
-> On Sun, Nov 30, 2025 at 7:21 PM Shivendra Pratap
-> <shivendra.pratap@oss.qualcomm.com> wrote:
->>
+  pmdomain: tegra: Add GENPD_FLAG_NO_STAY_ON flag (2025-11-24 11:14:01 +0100)
 
-[SNIP..]
->>
->> +static ssize_t reboot_modes_show(struct device *dev, struct device_attribute *attr, char *buf)
->> +{
->> +       struct reboot_mode_driver *reboot;
-> 
-> This is not related to this patch but please consider proposing
-> renaming of this structure to struct reboot_mode_devicd because
-> calling it a driver is quite confusing where in reality it's a device.
-> 
->> +       struct mode_info *info;
->> +       ssize_t size = 0;
->> +
->> +       reboot = container_of(dev, struct reboot_mode_driver, reboot_mode_device);
->> +       if (!reboot)
->> +               return -ENODATA;
-> 
-> container_of(p, t, m) returns the address of the structure of type t
-> containing the member pointed to by p known under the name m in the
-> type of t. It just calculates the offset between the address of m in t
-> and p. It's not possible for it to return NULL.
+are available in the Git repository at:
 
-Ack. Will remove this check. thanks.
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.19
 
-> 
->> +       scoped_guard(mutex, &reboot->reboot_mode_mutex) {
->> +               list_for_each_entry(info, &reboot->head, list)
->> +                       size += sysfs_emit_at(buf, size, "%s ", info->mode);
->> +       }
->> +
->> +       if (!size)
->> +               return -ENODATA;
->> +
->> +       return size + sysfs_emit_at(buf, size - 1, "\n");
->> +}
->> +static DEVICE_ATTR_RO(reboot_modes);
->> +
->> +static struct attribute *reboot_mode_attrs[] = {
->> +       &dev_attr_reboot_modes.attr,
->> +       NULL,
->> +};
->> +ATTRIBUTE_GROUPS(reboot_mode);
->> +
->> +static const struct class reboot_mode_class = {
->> +       .name = "reboot-mode",
->> +       .dev_groups = reboot_mode_groups,
->> +};
->> +
->> +static void reboot_mode_device_release(struct device *dev)
->> +{
->> +    /* place holder to avoid warning on device_unregister. nothing to free */
->> +}
->> +
->> +static void reboot_mode_register_device(struct reboot_mode_driver *reboot)
->> +{
->> +       int ret;
->> +
->> +       reboot->reboot_mode_device.class = &reboot_mode_class;
->> +       reboot->reboot_mode_device.release = reboot_mode_device_release;
->> +       dev_set_name(&reboot->reboot_mode_device, reboot->driver_name);
->> +       /* Check return value to avoid compiler warning */
->> +       ret = device_register(&reboot->reboot_mode_device);
->> +       if (ret)
->> +               pr_debug("device_register failed for %s : %d\n", reboot->driver_name, ret);
->> +}
-> 
-> I'm not sure if this has been addressed before but why is this even
-> optional? Why don't we just return -1 here if we fail to register the
-> device?
+for you to fetch changes up to 1f67707fafa598e2338dba08e3de0db3e468afd1:
 
-Sure. we can return -1 and then continue to register reboot-modes.
+  pmdomain: Merge branch fixes into next (2025-11-24 11:14:36 +0100)
 
-As per reviews on old thread, we wanted to continue reboot-mode
-registration, even if creation of reboot_mode_device fails.
-https://lore.kernel.org/all/qhlxxfsyc42xemerhi36myvil3bf45isgmpugkuqzsvgcc3ifn@njrtwuooij2q/
- 
-> 
-> And just for the record: I'm still convinced that using
-> device_create() here will result in nicer code and allow us to contain
-> the associated reboot_mode_device inside this compilation unit.
-> 
-> If Bjorn really insists on keeping it this way though, then you need
-> at least a call to device_initialize() here.
-> 
->> +
->>  static unsigned int get_reboot_mode_magic(struct reboot_mode_driver *reboot,
->>                                           const char *cmd)
->>  {
->> @@ -76,6 +128,7 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
->>         size_t len = strlen(PREFIX);
->>         int ret;
->>
->> +       mutex_init(&reboot->reboot_mode_mutex);
->>         INIT_LIST_HEAD(&reboot->head);
->>
->>         for_each_property_of_node(np, prop) {
->> @@ -112,6 +165,7 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
->>
->>         reboot->reboot_notifier.notifier_call = reboot_mode_notify;
->>         register_reboot_notifier(&reboot->reboot_notifier);
->> +       reboot_mode_register_device(reboot);
->>
->>         return 0;
->>
->> @@ -132,9 +186,13 @@ int reboot_mode_unregister(struct reboot_mode_driver *reboot)
->>         struct mode_info *info;
->>
->>         unregister_reboot_notifier(&reboot->reboot_notifier);
->> +       if (device_is_registered(&reboot->reboot_mode_device))
->> +               device_unregister(&reboot->reboot_mode_device);
-> 
-> If you bail out of reboot_mode_register_device(), you don't need the
-> above check anymore because the device could
+----------------------------------------------------------------
+pmdomain core:
+ - Allow power-off for out-of-band wakeup-capable devices
+ - Drop the redundant call to dev_pm_domain_detach() for the amba bus
+ - Extend the genpd governor for CPUs to account for IPIs
 
-We wanted to continue on failure, as per reviews.
+pmdomain providers:
+ - bcm: Add support for BCM2712
+ - mediatek: Add support for MFlexGraphics power domains
+ - mediatek: Add support for MT8196 power domains
+ - qcom: Add RPMh power domain support for Kaanapali
+ - rockchip: Add support for RV1126B
 
-thanks,
-Shivendra
+pmdomain consumers:
+ - usb: dwc3: Enable out of band wakeup for i.MX95
+ - usb: chipidea: Enable out of band wakeup for i.MX95
+
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (5):
+      dt-bindings: power: Add support for MT8196 power controllers
+      pmdomain: mediatek: Add support for Hardware Voter power domains
+      pmdomain: mediatek: Add support for secure HWCCF infra power on
+      pmdomain: mediatek: Add support for MT8196 SCPSYS power domains
+      pmdomain: mediatek: Add support for MT8196 HFRPSYS power domains
+
+Brian Masney (1):
+      pmdomain: mediatek: convert from clk round_rate() to determine_rate()
+
+Claudiu Beznea (1):
+      amba: bus: Drop dev_pm_domain_detach() call
+
+Finley Xiao (2):
+      dt-bindings: power: rockchip: Add support for RV1126B
+      pmdomain: rockchip: Add support for RV1126B
+
+Jishnu Prakash (3):
+      dt-bindings: power: qcom,rpmpd: document the Kaanapali RPMh Power Domains
+      dt-bindings: power: qcom,rpmpd: add new RPMH levels
+      pmdomain: qcom: rpmhpd: Add RPMh power domain support for Kaanapali
+
+Nicolas Frattaroli (3):
+      dt-bindings: power: Add MT8196 GPU frequency control binding
+      pmdomain: mediatek: Add support for MFlexGraphics
+      pmdomain: mediatek: mtk-mfg: select MAILBOX in Kconfig
+
+Peng Fan (4):
+      PM: wakeup: Add out-of-band system wakeup support for devices
+      pmdomain: core: Allow power-off for out-of-band wakeup-capable devices
+      usb: chipidea: ci_hdrc_imx: Set out of band wakeup for i.MX95
+      usb: dwc3: imx8mp: Set out of band wakeup for i.MX95
+
+Stanimir Varbanov (2):
+      dt-bindings: soc: bcm: Add bcm2712 compatible
+      pmdomain: bcm: bcm2835-power: Prepare to support BCM2712
+
+Thorsten Blum (1):
+      cpuidle: psci: Replace deprecated strcpy in psci_idle_init_cpu
+
+Ulf Hansson (5):
+      pmdomain: Merge branch dt into next
+      pmdomain: mediatek: Fix build-errors
+      smp: Introduce a helper function to check for pending IPIs
+      pmdomain: Extend the genpd governor for CPUs to account for IPIs
+      pmdomain: Merge branch fixes into next
+
+Xu Yang (1):
+      usb: chipidea: core: detach power domain for ci_hdrc platform device
+
+ .../bindings/power/mediatek,mt8196-gpufreq.yaml    |  117 +++
+ .../bindings/power/mediatek,power-controller.yaml  |    4 +
+ .../devicetree/bindings/power/qcom,rpmpd.yaml      |    1 +
+ .../bindings/power/rockchip,power-controller.yaml  |    2 +
+ .../bindings/soc/bcm/brcm,bcm2835-pm.yaml          |   38 +-
+ drivers/amba/bus.c                                 |    9 +-
+ drivers/base/power/main.c                          |    1 +
+ drivers/cpuidle/cpuidle-psci.c                     |    4 +-
+ drivers/pmdomain/bcm/bcm2835-power.c               |   17 +-
+ drivers/pmdomain/core.c                            |    6 +-
+ drivers/pmdomain/governor.c                        |   20 +-
+ drivers/pmdomain/mediatek/Kconfig                  |   17 +
+ drivers/pmdomain/mediatek/Makefile                 |    1 +
+ drivers/pmdomain/mediatek/mt8196-pm-domains.h      |  625 ++++++++++++
+ drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c       | 1044 ++++++++++++++++++++
+ drivers/pmdomain/mediatek/mtk-pm-domains.c         |  306 +++++-
+ drivers/pmdomain/mediatek/mtk-pm-domains.h         |   49 +-
+ drivers/pmdomain/qcom/rpmhpd.c                     |   28 +-
+ drivers/pmdomain/rockchip/pm-domains.c             |   41 +
+ drivers/usb/chipidea/ci_hdrc_imx.c                 |   11 +-
+ drivers/usb/chipidea/core.c                        |    3 +
+ drivers/usb/dwc3/dwc3-imx8mp.c                     |    9 +-
+ include/dt-bindings/power/mediatek,mt8196-power.h  |   58 ++
+ include/dt-bindings/power/qcom,rpmhpd.h            |    3 +
+ .../power/rockchip,rv1126b-power-controller.h      |   17 +
+ include/linux/pm.h                                 |    1 +
+ include/linux/pm_wakeup.h                          |   17 +
+ include/linux/smp.h                                |    5 +
+ include/linux/usb/chipidea.h                       |    1 +
+ kernel/smp.c                                       |   22 +
+ 30 files changed, 2417 insertions(+), 60 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/mediatek,mt8196-gpufreq.yaml
+ create mode 100644 drivers/pmdomain/mediatek/mt8196-pm-domains.h
+ create mode 100644 drivers/pmdomain/mediatek/mtk-mfg-pmdomain.c
+ create mode 100644 include/dt-bindings/power/mediatek,mt8196-power.h
+ create mode 100644 include/dt-bindings/power/rockchip,rv1126b-power-controller.h
 
