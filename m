@@ -1,134 +1,173 @@
-Return-Path: <linux-pm+bounces-38960-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38961-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD4F1C96927
-	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 11:09:53 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BC69C96A12
+	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 11:24:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 863DE341535
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 10:09:53 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B27F9343120
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 10:24:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE4AC3019C2;
-	Mon,  1 Dec 2025 10:09:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03FC5304BB9;
+	Mon,  1 Dec 2025 10:23:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oS07c3Ti"
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="RpHDpQZz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-43102.protonmail.ch (mail-43102.protonmail.ch [185.70.43.102])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC202F3617;
-	Mon,  1 Dec 2025 10:09:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A92D303A3A
+	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 10:23:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764583789; cv=none; b=ZCk1YF2pVBF5FJld73fLY3/sTUZDKwetP3OU7SfCibeQEKf2q6BrFJBMnAcBiEMQMlG8QmQm4/JHz+Hy2fqhSCxIWQV6ChnGi33xxEB+Os6YE+1dmrtKlFyEk+zd80e3ecUO0iKZG04aKjWB5+5WTpCRgoi4WV0uGtQs0Eeqdvg=
+	t=1764584619; cv=none; b=P6Wwr9r9AWMeaoMUki/IuDYhBi2SLwIXb+h2GVysKzmZ7ej+BdssH/1Y62QK6yku0A/OWUk/O3C9NnCIHsmm4MRU7il7wPDWOIXbOGdckCSKz34COJBASyvm8ymzBthIxbGh7g2GeIgdW7jNU8XVHxDKEZXdz/O6DiKoCI+zntU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764583789; c=relaxed/simple;
-	bh=gml+0AKSpROQtvHs2H692pn8ZeWP728QrdYLf9bsMlc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pVmYdO7/qt3cbl3BjBABukpRUtg0cXMAqfEdPQKLmMH/899fZrNlXgik7J0kDQZiAbMAZyX0G9Fhe651S7X/pPOZEkNxTbpR+XlEWWRoSFJm5admwto3SNl+48D0YjZ1w4iya3rHcsrjdof9HmEDVTXbZDrQikRSnmDStkMP/70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oS07c3Ti; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50300C4CEF1;
-	Mon,  1 Dec 2025 10:09:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764583789;
-	bh=gml+0AKSpROQtvHs2H692pn8ZeWP728QrdYLf9bsMlc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oS07c3TixY11P6gnH8fKZOakjtPI2r/uWDFvb0nsKs/suRHvmqLV6G/fHc9A4xv+U
-	 0qrd7mNGNj+Sarjik5tc/zKeDw4HOAfPFDvcnB+CRkq0I4qnUU95IS5RCL81AnO6E1
-	 1WCsOFPqcRQtRPV3RoigL0KMndlPL9w5XhGxO72fGjlpPs6mtSnhMpkeDLyOTTSXJl
-	 SBqahEnpbqkdm8bX5EuA42pXisZwQXDNWrPqbMk3zU4qqpeJeUm93wFUgqKj5c9xzE
-	 78CvMVcwl6RP3g6frtRtoJ7lIbhaTxBTLncoAP+podm1Jw9qRNpzLii4wW3IGwV6dU
-	 +DK6phUo5mBkg==
-Message-ID: <ea8e4201-f1c2-41cc-83ff-b509fd22bca2@kernel.org>
-Date: Mon, 1 Dec 2025 11:09:41 +0100
+	s=arc-20240116; t=1764584619; c=relaxed/simple;
+	bh=eKa/8ApbLqMOFRazYI2GV6d4odoAOzMspi5pP0Z2KQg=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=G/sgXjAFiabDyTnX7Wck4DNGFztcvJhGoJUEuba3Exa3pAJV0sIUrQ+IA6H46sZqSX/OpVmYfxI/76fPuyxiOVipfn8Jr7JCo/Hu2V5TPPIiTcp7HxzGq1SuUFKyzGbhLAVbZg41tNb+e8zfALWFSC+jW5X76eJM9zk+BsWQAgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=RpHDpQZz; arc=none smtp.client-ip=185.70.43.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1764584606; x=1764843806;
+	bh=QnPScfECMfGXASlBfNyIG7Imc1U13Cp1f8LkX6qmIUk=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=RpHDpQZzYuktwGoF6ihhp2LS52OTDz4RVT/GsNzw44D9RYrEC1d0h/X3FKZUNWqPq
+	 C/3rllP/4P22OrASzib/QAqi2dIGjis2zjL5mY7IIcUEAcL83/qda8oBG4rRQYE1+/
+	 kQfmdU2sN54teUEA3Qy+r6rCZdCytGsRdsQdv2yax5W/NEyYn8WumNdFtVs8q3XZBX
+	 JssZh5RD7Mv63jptrzfwaQaE+KTnySpGQ86wrEoxHZPpPQxzf0D7qSwEYj0RrWvDaN
+	 yJPVjChTQiiMSStQ6r5/HBN8EE64sr0hoQ9jOrXBjmhPw1E/49oN7sFYSsdfwwpWJm
+	 vcxWADWzG0sTQ==
+Date: Mon, 01 Dec 2025 10:23:20 +0000
+To: Daniel Almeida <daniel.almeida@collabora.com>
+From: Oliver Mangold <oliver.mangold@pm.me>
+Cc: Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Benno Lossin <lossin@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, Leon Romanovsky <leon@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, Viresh Kumar
+	<vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, =?utf-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, Asahi Lina <lina+kernel@asahilina.net>, rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, linux-block@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v13 4/4] rust: Add `OwnableRefCounted`
+Message-ID: <aS1slBD1t-Y_K-aC@mango>
+In-Reply-To: <A5A7C4C9-1504-439C-B4FF-C28482AF7444@collabora.com>
+References: <20251117-unique-ref-v13-0-b5b243df1250@pm.me> <20251117-unique-ref-v13-4-b5b243df1250@pm.me> <A5A7C4C9-1504-439C-B4FF-C28482AF7444@collabora.com>
+Feedback-ID: 31808448:user:proton
+X-Pm-Message-ID: 4625f7cc3b95621c135f74a512f54cf7f5392afa
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] arm64: dts: mediatek: mt8189: Add thermal
- controller node
-To: Hanchien Lin <hanchien.lin@mediatek.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Balsam CHIHI <bchihi@baylibre.com>
-Cc: Irving-CH.lin@mediatek.com, Jh Hsu <Jh.Hsu@mediatek.com>,
- WH Wu <vincent.wu@mediatek.com>, Raymond Sun <Raymond.Sun@mediatek.com>,
- Sirius Wang <Sirius.Wang@mediatek.com>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20251201100620.1557608-1-hanchien.lin@mediatek.com>
- <20251201100620.1557608-2-hanchien.lin@mediatek.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251201100620.1557608-2-hanchien.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On 01/12/2025 11:06, Hanchien Lin wrote:
-> Add device tree node for the thermal controller on MediaTek MT8189 SoC.
-> 
-> Signed-off-by: Hanchien Lin <hanchien.lin@mediatek.com>
+On 251128 1506, Daniel Almeida wrote:
+
+> > /// Type allocated and destroyed on the C side, but owned by Rust.
+> > ///
+> > -/// Implementing this trait allows types to be referenced via the [`Ow=
+ned<Self>`] pointer type. This
+> > -/// is useful when it is desirable to tie the lifetime of the referenc=
+e to an owned object, rather
+> > -/// than pass around a bare reference. [`Ownable`] types can define cu=
+stom drop logic that is
+> > -/// executed when the owned reference [`Owned<Self>`] pointing to the =
+object is dropped.
+> > +/// Implementing this trait allows types to be referenced via the [`Ow=
+ned<Self>`] pointer type.
+> > +///  - This is useful when it is desirable to tie the lifetime of an o=
+bject reference to an owned
+> > +///    object, rather than pass around a bare reference.
+> > +///  - [`Ownable`] types can define custom drop logic that is executed=
+ when the owned reference
+> > +///    of type [`Owned<_>`] pointing to the object is dropped.
+> > ///
+> > /// Note: The underlying object is not required to provide internal ref=
+erence counting, because it
+> > /// represents a unique, owned reference. If reference counting (on the=
+ Rust side) is required,
+> > -/// [`RefCounted`](crate::types::RefCounted) should be implemented.
+> > +/// [`RefCounted`] should be implemented. [`OwnableRefCounted`] should=
+ be implemented if conversion
+> > +/// between unique and shared (reference counted) ownership is needed.
+> > ///
+> > /// # Safety
+> > ///
+> > @@ -143,9 +146,7 @@ impl<T: Ownable> Owned<T> {
+> >     ///   mutable reference requirements. That is, the kernel will not =
+mutate or free the underlying
+> >     ///   object and is okay with it being modified by Rust code.
+> >     pub unsafe fn from_raw(ptr: NonNull<T>) -> Self {
+> > -        Self {
+> > -            ptr,
+> > -        }
+> > +        Self { ptr }
+> >     }
+>=20
+> Unrelated change?
+
+Ah, yes, rustfmt must I done that, and I missed it. Will fix.
+
+> > +///
+> > +/// impl OwnableRefCounted for Foo {
+> > +///     fn try_from_shared(this: ARef<Self>) -> Result<Owned<Self>, AR=
+ef<Self>> {
+> > +///         if this.refcount.get() =3D=3D 1 {
+> > +///             // SAFETY: The `Foo` is still alive and has no other R=
+ust references as the refcount
+> > +///             // is 1.
+> > +///             Ok(unsafe { Owned::from_raw(ARef::into_raw(this)) })
+> > +///         } else {
+> > +///             Err(this)
+> > +///         }
+> > +///     }
+> > +/// }
+> > +///
+>=20
+> We wouldn=E2=80=99t need this implementation if we added a =E2=80=9Crefco=
+unt()=E2=80=9D
+> member to this trait. This lets you abstract away this logic for all
+> implementors, which has the massive upside of making sure we hardcode (an=
+d thus
+> enforce) the refcount =3D=3D 1 check.
+
+This wouldn't work for the block `Request` use case. There a reference can
+be acquired "out of thin air" using a `TagSet`. Thus "check for unique
+refcount" + "create an owned reference" needs to be one atomic operation.
+
+Also I think it might be generally problematic to require a refcount()
+function. The API of the underlying kernel object we want to wrap might not
+offer that, so we would need to access internal data.
 
 
-Nothing improved. You just completely ignored feedback expecting
-reviewers to repeat themself.
+> > +/// // SAFETY: This implementation of `release()` is safe for any vali=
+d `Self`.
+> > +/// unsafe impl Ownable for Foo {
+> > +///     unsafe fn release(this: NonNull<Self>) {
+> > +///         // SAFETY: Using `dec_ref()` from [`RefCounted`] to releas=
+e is okay, as the refcount is
+> > +///         // always 1 for an [`Owned<Foo>`].
+> > +///         unsafe{ Foo::dec_ref(this) };
+> > +///     }
+> > +/// }
+> > +///
+> > +/// let foo =3D Foo::new().expect("Failed to allocate a Foo. This shou=
+ldn't happen");
+>=20
+> All these =E2=80=9Cexpects()=E2=80=9D and custom error strings would go a=
+way if you
+> place this behind a fictional function that returns Result.
 
-NAK
+Not sure what you mean by fictional function. Do you mean a non-existent
+function? We want to compile this code as a unit test.
 
-Best regards,
-Krzysztof
+The rest of your suggested changes make sense, I guess. I will implement
+them.
+
+Thanks,
+
+Oliver
+
 
