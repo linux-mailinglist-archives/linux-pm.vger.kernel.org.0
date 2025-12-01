@@ -1,121 +1,140 @@
-Return-Path: <linux-pm+bounces-38945-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38946-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C2A7C95A3B
-	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 04:20:48 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA32BC95A98
+	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 04:42:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF2503A1CCE
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 03:20:46 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 5075D3420EE
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 03:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 583F2184524;
-	Mon,  1 Dec 2025 03:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00A6419E97F;
+	Mon,  1 Dec 2025 03:42:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BuM3NxFs"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ho+M+1j1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A16163CF
-	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 03:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B0C13FEE
+	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 03:42:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764559238; cv=none; b=Pb4qd/CLy4pQuRLJ6Mgl3a9d0hHmzt1fdAYY40lYP0F6V0dNyyMnDOu+hQLuabEywovZJoi21WswjQnUxa56hz1vwTM4Nl87mc+BQyxhZTOBiVZIfFIIyzkKPx5e3Awd5sCL9Ko+tsI0BuhYf5desUVPAAMugyCF4ME/8KXrSdU=
+	t=1764560564; cv=none; b=RKojUzfZEwuOBZKbMG+tN8z3NNY6qkDe6t+i0HwfQOPF9m+k8bA8w+ujXtlCCN+9TKbDwAl6raekkSKsnpMdcfPjrKh/Az32u3UfQTxoRXAimpWwVfiXGVzXGe7Q94f+1DSmnxV6HoeF6AFdL5YF2EFCpjOWUZ9Wo6CWp+PYwjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764559238; c=relaxed/simple;
-	bh=3USdm9gqufyPNtDfmx9xSpvQM4a1eZVomSbRFc7hAb0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JQw/O2FyXlcJRNqpRxGjtxltVDGK02nuEknKjqKWGGOmR+I6ZErpFYMmyu5cmr5tP0SYufgnIrvyY6g2KULpkXJ8iZbTOSa8BRV7Pw+Y72xLWUKeJPlT9jnk7k6lD+Esx/0XLslpz23d+k8vOP/P9wyWqrtyPOzVK2SXhyBHw9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BuM3NxFs; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764559236; x=1796095236;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3USdm9gqufyPNtDfmx9xSpvQM4a1eZVomSbRFc7hAb0=;
-  b=BuM3NxFsNVsoc0RudYqjdSWBZUy/Y7Hay9U+coy+Dt1cky/yQVYmksD7
-   yLmy6tkA8UqtHLuO0N3gvzo7gCB9sxqPXoA77vphbPGpV2bqvReew5aKR
-   D3ZekGcQr4acshYr+6f46GbZzu6x3btqLtG4UsNl0w+AVYaYXrY6r966C
-   1I42iRZbI65DcHGHDuvFc+5P59QN1Q99Z9thPj+bu4ahyYLcx544ZdBze
-   G7Sg2rMXSs/BGUn77hF1mB+iV+C31nTtsGpXLSZomcPMpTqtQomp2xyai
-   Dp5wBcw69i2mJq4SBZKaj1ghhDEtDlp25l8TgT9RwZP5KfO+i9FyAnjyN
-   w==;
-X-CSE-ConnectionGUID: WaYWpxdjTceO/w/tUoUbeQ==
-X-CSE-MsgGUID: UOmr4NpjRcOXGWDKVu8hjg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11629"; a="66441526"
-X-IronPort-AV: E=Sophos;i="6.20,240,1758610800"; 
-   d="scan'208";a="66441526"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2025 19:20:36 -0800
-X-CSE-ConnectionGUID: VbQ7g10mSU+p4Q1ob7r0MA==
-X-CSE-MsgGUID: BnKN1v+0QAuXZtbfyQv1Mg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,240,1758610800"; 
-   d="scan'208";a="198894667"
-Received: from baandr0id001.iind.intel.com ([10.66.253.151])
-  by fmviesa004.fm.intel.com with ESMTP; 30 Nov 2025 19:20:34 -0800
-From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-To: lenb@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-Subject: [PATCH] tools/power turbostat: Refine iteration parsing
-Date: Mon,  1 Dec 2025 08:48:11 +0530
-Message-Id: <20251201031811.1362803-1-kaushlendra.kumar@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1764560564; c=relaxed/simple;
+	bh=zJy4lX254HGlA7b2+TfHzCFfQZXzsi0/8hlJs/UAVEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NX7wUXJulEA1gb0jjmZ22r6U5yGe5X5ksxXDnV4vlTl5dkzLSAgN4C6PtqQoUYr8ju3hPtTCqrQpdKsj2LtFMQ5IF47IMmDZODucb+RX0077px0i0pfGja5N4MQyLG5iTIx3G2cgx4dHjJLkVbDQdjgEouN65jFr9JAr6ECmXsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ho+M+1j1; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2958db8ae4fso36204035ad.2
+        for <linux-pm@vger.kernel.org>; Sun, 30 Nov 2025 19:42:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764560562; x=1765165362; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iYxISHR5qdK/0G8jzk0V8tf5itaDFqQvQ3I97psPY+8=;
+        b=Ho+M+1j1x70TNKPJMtUTyiAI8W0CRb+bn/OPkyUkgXS5cQwsxgBkUAR5RW6/v9Uy3l
+         BhQz9FxzmeOkRwbecl8JQT9t8w9kFveC3vLj7pk8nofz7eTWbZ2GrZezIHCL5FXT8Zne
+         f9GUlrIGyL0paOPU+9ckgzzkqqN+/rSWA4qDo6y+Ijau3fNYySYyA9hebm6Bn/D0/f4P
+         LduFelsUwRNukHfknAncKmOaDsZFRDmKepYzdUJxiGkn/T+P//65CXqLRfbrsNF+c9L7
+         t8NqduaBB6YAOukV0q8TEc1aQquUR+0STHDOa/3T16FkL/jhoV1LcmoO3fVJLzXm5cA1
+         dHWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764560562; x=1765165362;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iYxISHR5qdK/0G8jzk0V8tf5itaDFqQvQ3I97psPY+8=;
+        b=Q+a0hKvVWhDU9N6I8Ww2ALyNJrGkSo0sHjK37K6+Ze5zrZAqllut2yfmwV7hLuZXHF
+         VMzrBDlHozkZ9eNAHAxavA3H4v7Tb48xZsGlfLFWuN1WXtuYwvzudc743w4d6Ixq/W0H
+         iTI3YL24YCr4zbVzwSzWeki6wbDh3a98j4IqvSpNzq5+6dcLgtkLHI3Gipq5ylLzwZQQ
+         0rCYCTMhF3TjruPjWPFfaSn5Giyd6R5GzgajvuLMFgicFU1YmLHpQ/4Oc/ZnjDb2wn0i
+         zHQlaGrwYoQ2JbwlZ4iyBhHGmL33QdcwjIjjj41K2FsLyI4F+CRKgUgGFaBbgoa8kA+l
+         IDhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVtVYAlErI8oPEPX+OLz94kO7uuD+A6514my/x2qi25JoIhl7qmP+ko/wRRyWZPz2uW9HYCIdYe2w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrL4rvQCLBXJprF/taySBzzOz/iuD8RRkZCwpItRiQ2paYVADl
+	5iQtQM3P+QhN1dnc0KzI8Zbonf3nf5/3w75sSsZBnBrGQPBWzdlq0hZ7c2pSMiIhPyQ=
+X-Gm-Gg: ASbGncuHx6E+BTWxyR/0dlOxvRAaCheOS8cf8NiClcbSavycrs9AlmHij7T0qSf+4Fw
+	2T1fVJwuDjB+mPDuzJ41IeK6cG5JXc0kk/Yphxtuc8MrMuySETr/ZZCNf79mN3OrkgMkpZRXnA8
+	GTQWbF1Hca8a2LAqDPekUPkp/el4tW9BCIFhIULvRjOKCD4s8g4EEGv6rRnLW41usFlF8zjiI7C
+	m/fuFJnlAyXrmivrHSFdo1vj826pCDo++eGTTtx6pHbghR9btHyFzSVFNlcI6la+S5D0sNpSIkQ
+	Rb+duG5jVgQVGVg49qt23se2NwAVl1CZHxFmJUl6M88Whgg8eLK78qkDDZSjeKXqVAyDp2zT7hr
+	eSlbXMyuqIbiowMSlKTjKhCKDdVDo6a16qDSnoBKY6TgwwHPWUESo14PBFSmUBdOFU5ubaY2kjW
+	6oNUeHfDYX+BI=
+X-Google-Smtp-Source: AGHT+IH7L/RC/EGkcM2CMz9J0BN/xblMHKgkEXrXrV6/rdF+0DuIiABB1MEVvppcBXT5gu2Qdgh9hQ==
+X-Received: by 2002:a17:903:2c9:b0:298:cb9:6ff2 with SMTP id d9443c01a7336-29b6c3e3f1bmr365856565ad.15.1764560562317;
+        Sun, 30 Nov 2025 19:42:42 -0800 (PST)
+Received: from localhost ([122.172.86.94])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29bce40ab81sm106778145ad.3.2025.11.30.19.42.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Nov 2025 19:42:41 -0800 (PST)
+Date: Mon, 1 Dec 2025 09:12:39 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Lifeng Zheng <zhenglifeng1@huawei.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linuxarm@huawei.com, jonathan.cameron@huawei.com, 
+	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com, 
+	zhangpengjie2@huawei.com, wangzhi12@huawei.com, linhongye@h-partners.com
+Subject: Re: [PATCH v2 2/2] cpufreq: cpufreq_boost_trigger_state()
+ optimization
+Message-ID: <3t6quaz6j5mbzewgrszuzmjmv74bzqrskx5k4ewgsfbaijmoli@y7goctaq35mj>
+References: <20251128091352.1969333-1-zhenglifeng1@huawei.com>
+ <20251128091352.1969333-3-zhenglifeng1@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251128091352.1969333-3-zhenglifeng1@huawei.com>
 
-Validate the `-n/-N` arguments as signed ints before casting to
-unsigned,so the user sees the correct value in error paths and
-negative input is rejected cleanly.
+On 28-11-25, 17:13, Lifeng Zheng wrote:
+> Simplify the error handling branch code in cpufreq_boost_trigger_state().
+> 
+> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index a4399e5490da..a725747572c9 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2824,18 +2824,13 @@ static int cpufreq_boost_trigger_state(int state)
+>  
+>  		ret = policy_set_boost(policy, state);
+>  		if (ret)
+> -			goto err_reset_state;
+> +			break;
+>  	}
+>  
+> -	if (ret)
+> -		goto err_reset_state;
+> -
+>  	cpus_read_unlock();
+>  
+> -	return 0;
+> -
+> -err_reset_state:
+> -	cpus_read_unlock();
+> +	if (!ret)
 
-Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+Maybe we can make this `if (likely(!ret))`
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index f2512d78bcbd..807b2d7f1809 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -11123,20 +11123,22 @@ void cmdline(int argc, char **argv)
- 			/* Parsed earlier */
- 			break;
- 		case 'n':
--			num_iterations = strtod(optarg, NULL);
-+			int iterations = strtod(optarg, NULL);
- 
--			if (num_iterations <= 0) {
--				fprintf(outf, "iterations %d should be positive number\n", num_iterations);
-+			if (iterations <= 0) {
-+				fprintf(outf, "iterations %d should be positive number\n", iterations);
- 				exit(2);
- 			}
-+			num_iterations = (unsigned int)iterations;
- 			break;
- 		case 'N':
--			header_iterations = strtod(optarg, NULL);
-+			int h_iterations = strtod(optarg, NULL);
- 
--			if (header_iterations <= 0) {
--				fprintf(outf, "iterations %d should be positive number\n", header_iterations);
-+			if (h_iterations <= 0) {
-+				fprintf(outf, "iterations %d should be positive number\n", h_iterations);
- 				exit(2);
- 			}
-+			header_iterations = (unsigned int)h_iterations;
- 			break;
- 		case 's':
- 			/*
+> +		return 0;
+>  
+>  	write_lock_irqsave(&cpufreq_driver_lock, flags);
+>  	cpufreq_driver->boost_enabled = !state;
+
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+
 -- 
-2.34.1
-
+viresh
 
