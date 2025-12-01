@@ -1,119 +1,101 @@
-Return-Path: <linux-pm+bounces-39001-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39002-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id C58FBC98CEA
-	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 20:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 41BF8C98D13
+	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 20:14:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 592174E2069
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 19:10:03 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3503E4E1EFA
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 19:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66E33239E6F;
-	Mon,  1 Dec 2025 19:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E2323C4FF;
+	Mon,  1 Dec 2025 19:14:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=it-loops.com header.i=@it-loops.com header.b="YA5tU3cZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B35oOzKt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF8F221D92
-	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 19:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C33C23AB87
+	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 19:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764616201; cv=none; b=LtcOGBEegnAP9ysNwYC+IMzrLy6tn0molB90sNkrfncjkr2YnGegdvsnde+mM2IBFJuWBX5XPEaCsi5z89IPRTq0BYiJ9D7YKxWAcLB/x+7pONgmBB1M3qwZzYoyN+45s5CiXLDIE4dXiMrkh0Qzi1GpcBBGu4r16OhvPRdMD8M=
+	t=1764616477; cv=none; b=Y13ZOBM6julRqk5UW7FhakQY1JLp/u3n+IM82TLtgynBH1eM8IXHO11EHteNKc+3StSUVddny2ODRQJCSYTUZh+Tab+aBFTI4Bvnnbdugz9aQhyHgjxjE5qPCqiNMo2OaL3JKlNFbbva+pVErcfnvqbl/aKcwgzLKIUa2qPCZZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764616201; c=relaxed/simple;
-	bh=SVRmWcU4reDKs5HHBiPJg4YERntaC6a4bjb65WL5Ll8=;
+	s=arc-20240116; t=1764616477; c=relaxed/simple;
+	bh=7jfkaZtqobutyxAPwnyT8Q3otUIU/JsJ5ygLDNdwHNQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LrpmN46uegbyKrhvNklIa8eF1/S8L7gZhWWDrTCZRCxwljClYsXAkLCKDsNjF1JyfNlxO4rWJN9dCdyov3npvxwiBNmLDKOaH+3otZbOqQfgFRPLOkENgdIvKh/DIgxQYXg733/yQ1pM7gfT6eoMMjTiXC6Fsfi0187kHHrjGhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=it-loops.com; spf=pass smtp.mailfrom=it-loops.com; dkim=fail (0-bit key) header.d=it-loops.com header.i=@it-loops.com header.b=YA5tU3cZ reason="key not found in DNS"; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=it-loops.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=it-loops.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-640a0812658so1298484a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 11:09:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=it-loops.com; s=google; t=1764616198; x=1765220998; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g9lyjwDqKk+QqPVACOcdksqjAbpRjmOBLHeLAVEc6wc=;
-        b=YA5tU3cZ+g3sK66fC72nxQy9/2Bf9ohExSHsHHJTV8YILVHuCUrfDAxEzrXgceadhF
-         Bpb1Mf6R76mjtka8lO0+yk/AxMa5oQuWTE41VHlhnoWHAFNN4pxgbolpBKSAWKGdcOLJ
-         C1QGNUmMgoOO14IKpjGyLAgEEozOWISy5qr2k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764616198; x=1765220998;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=g9lyjwDqKk+QqPVACOcdksqjAbpRjmOBLHeLAVEc6wc=;
-        b=DTNEDheBXGhALuMPcDs1xVpUK1PyQGuaO392WoZqgl/PPRpIoijYpRnfKH7qvrcTlD
-         szy+YAAieKU7SxiOAIlvbxRd/1ZtLsjSrvRfyalNneMxIc9u/EGj0q7MKbS8Dl43PjI2
-         FMABMGXhbqWppcbXg5vUSYbz9vt0272tyJTA1yXE3M3pzbmiJ/Z24ZSRUt9f7qMNC44c
-         wJ3oXBsQ67nbTZjJtsMbUoF5YWUgjS+KOOWYYZZp9qgVx+r0QopIqTuJrSR9QOMUzY5K
-         fggtuZQJTtKb9M3N8RjNxpBvyCsLWASEixRxzyIhtUIX5KuYAPvT70QXl7CEKNTcSv5H
-         uwrw==
-X-Forwarded-Encrypted: i=1; AJvYcCVdvs30dcjmArV8aOROqU6IkJ7lkGgYwnSAZkSBIQHxSa08dqrgYFM6/i3aiobzI379QDbYAqNHUw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxjr2gsWd1BlbIp1omGleB8WcQ3tgyBxBSdcnipqA6gwvQ//R+L
-	ee4/LcGyfhHsOXmzZbGyFTToyyGDE22HG1rht4meQQCaAL8rVD+wsoH6ZxYsDl1YyYtM4plsLgH
-	K6m91TmM6s0npvNdt8qEREuCzIraD9gUjgumdTWY8dQ==
-X-Gm-Gg: ASbGncs4gi2znRj4pFnA3EPj3l5q7Qp435lVIx3EIRLRQmxjlek8ezYGL0IUGTHextc
-	mTVskxddk5eHgVo8CqKiM66Oj3jfGBkMtRcKpb+rGviX+dBc6kQsBpkCWdva9So4HZ8EZBXSETz
-	96AWYEqMuU8kv3l4MeaOvixG9F0jpbS1HlrONUif5pigI0f/6fHrBu/lPfU/R+hQR892EFJ7rMm
-	4kaojm9YkAzByUo/8gobxy2OgbPDJy/UnGqGr5ib/H0y0BYNnIGQim1RBxygEKAIYOwvQFm
-X-Google-Smtp-Source: AGHT+IGOTyOpca8Bkm84/CeGDYKF35ETxinW7GVj+Vtn2G6U42NT9STdY6vw7lpQ0JlDfrhENEba8b6RRkfXj6TIzFg=
-X-Received: by 2002:a05:6402:2353:b0:645:d578:13c3 with SMTP id
- 4fb4d7f45d1cf-645eb2b58e2mr24564984a12.26.1764616197808; Mon, 01 Dec 2025
- 11:09:57 -0800 (PST)
+	 To:Cc:Content-Type; b=rfS+D//WLBxZWwKZxT0TsWQKun0QRQlGBL3Lmt2xdJbfifqy1PlvVxhuiKFz3iC9zst3zavU7qjKtBkWi0uRsa0c/oZTrXgJ+BX1Dr1vIWJPxoaMtMR2JBgzv3bYkHCPFbgPeM2X3mTAIiK90cxhSBCK/2eGwaoAvmYWthfx9R8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B35oOzKt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8958C4CEF1
+	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 19:14:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764616476;
+	bh=7jfkaZtqobutyxAPwnyT8Q3otUIU/JsJ5ygLDNdwHNQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=B35oOzKtMD1v1LzHpQYz01Y8yp/ViMWvrWQZCK98v9CJy9Efl8aJD/89FJv8nkc66
+	 JoyxNsRcPMDzZ5Y6Kg+gdnpgsNZMHRkXDuBaIsBO7T/6R+F+cJr64an3tgM7krLI/Y
+	 fHuJc+ZYb5BMcZpcXoFELFDJVY3i1fr3lveVCKJNDqT0Rjs15KiaKl3PBWAush9Ob3
+	 zWILSavYYZkD1ylrJvOfTQGj/nAPbv5aBKVVJy2jvL/w+Kn7Yu7we9PcCVuzod80Aj
+	 EP7QLlAjXoLrOHfKnVHtRrZy+h45N6fn4t994sORzbRTm35OPzmIVm9p2hK6WrKm7d
+	 gpa5bnGamPUUA==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-656b52c0f88so1703876eaf.0
+        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 11:14:36 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW3+tLpI8ebLvAUzwoJ+Z60gPotVuGav31kE1SU3wT9+15L8VsRZCmNn0nqifhsj7XYvWtkt0/lSg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8J+oBuLMp0Sr0qL87gsszoyft13p+EGp0OGfnaHp67XSujTwJ
+	bPebxErZnlOZO6++hdUNfI0HRO3axOzcvXpuO6thgCUj4bUzVW/e6e6nv9BJ5rHey8WQ64MSLKe
+	NYbAjF6mVfvy+RMbw7dS2thhdG9evgC0=
+X-Google-Smtp-Source: AGHT+IGbyBgggpUMgnDvsKXrjtsFhGtCrzvwsrsXmb3NJcxvjktKqe3EEYSwR+31pXMs2DaWKYxVufVo+2C/ofi3d1I=
+X-Received: by 2002:a05:6808:309d:b0:44d:baae:fb0a with SMTP id
+ 5614622812f47-4514e5f9020mr12688863b6e.5.1764616476325; Mon, 01 Dec 2025
+ 11:14:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CALG0vJuaU_5REU55Hg170LipPLj7Tt0V3icn7XzxLY-8+jsx-A@mail.gmail.com>
- <20251120055748.GM2912318@black.igk.intel.com> <aSGTghJyX-u-leL6@wunner.de> <6e7aa10e-9938-4ab1-af14-b3d2906c211a@panix.com>
-In-Reply-To: <6e7aa10e-9938-4ab1-af14-b3d2906c211a@panix.com>
-From: Michael Guntsche <michael.guntsche@it-loops.com>
-Date: Mon, 1 Dec 2025 20:09:46 +0100
-X-Gm-Features: AWmQ_blakwbWOT6KrL76uyA3F8k_mQ8r2CJl6T5K_SnWqDq6g2_2g2KzHQYk0KY
-Message-ID: <CALG0vJv7ZA8byAF25pKqh9fEBpfgbXk+cAE6s9K1N6ZvVRroUw@mail.gmail.com>
-Subject: Re: Oops when returning from hibernation with changed thunderbolt status
-To: Kenneth Crudup <kenny@panix.com>
-Cc: Lukas Wunner <lukas@wunner.de>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	"rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
-	linux-efi@vger.kernel.org, maarten.lankhorst@linux.intel.com
+References: <20251113191609.28574-1-ehemily@amazon.de> <20251113191609.28574-2-ehemily@amazon.de>
+ <CAJvTdK=_v9q2eGMB6qG3iaDhXMzQHz-EJ4NeDEfBe2fbv+wKfQ@mail.gmail.com>
+ <BEYP281MB5509D3D7A01DEC1FAAEB9DBDBADCA@BEYP281MB5509.DEUP281.PROD.OUTLOOK.COM>
+ <CAJvTdKnjreryLA9KuuobwJShbVseHOyujmXBAXRuSUDsCZxSVA@mail.gmail.com>
+ <BEYP281MB550957A6BA42B6371400472FBADBA@BEYP281MB5509.DEUP281.PROD.OUTLOOK.COM>
+ <CAJvTdK=Ty4W=5diU0D0JYHh70ZN4avKjodUoLhuz_D7+=3xcdA@mail.gmail.com>
+In-Reply-To: <CAJvTdK=Ty4W=5diU0D0JYHh70ZN4avKjodUoLhuz_D7+=3xcdA@mail.gmail.com>
+From: Len Brown <lenb@kernel.org>
+Date: Mon, 1 Dec 2025 14:14:26 -0500
+X-Gmail-Original-Message-ID: <CAJvTdKmr=AVo7UQP28EeD6oLzyeOM+vGCjZZMBo1bV=4n1pcmg@mail.gmail.com>
+X-Gm-Features: AWmQ_bkXzyBAA4uCvx8rm8nPgZ7viyFTbRj9LgTD7jCC7b0T2y3P04Itv3otEf0
+Message-ID: <CAJvTdKmr=AVo7UQP28EeD6oLzyeOM+vGCjZZMBo1bV=4n1pcmg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tools/power/turbostat: Fix division by zero when TDP
+ calculation fails
+To: "Ehlert, Emily" <ehemily@amazon.de>
+Cc: "Zhang, Rui" <rui.zhang@intel.com>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Emily Ehlert <ehemily@amazon.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-[cc +=3Dmaarten.lankhorst@linux.intel.com]
+> I'll send you a patch for this later today.
 
-On Mon, Nov 24, 2025 at 7:02=E2=80=AFPM Kenneth Crudup <kenny@panix.com> wr=
-ote:
->
->
->
-> On 11/22/25 02:42, Lukas Wunner wrote:
->
-> > Also the photo shows a UBSAN splat in drm/display/drm_mst_topology.c
-> > 220 msec before the oops, maybe it's related?
->
-> FWIW, this sounds really familiar (resume crashes if I changed TB docks
-> between suspend and resume) and was getting an OOPS there I'd bisected to=
-:
->
-> Resume OOPS from f6971d7427 ("drm/i915/mst: adapt
-> intel_dp_mtp_tu_compute_config() for 128b/132b SST") if MST displays
-> disconnected while suspended
->
-> ... and this was fixed in 732b87a (Fix determining SST/MST mode during
-> MTP TU state computation) back in 6.15 (which IIRC, is when your crashes
-> started happening).
->
-> I wonder if this is related? Maybe reach out to the i915 guys?
+Please try the latest turbostat in my public tree:
+git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
 
-I tried this now with 6.18 and got the same issues, now it even fails
-for me  if I unplug the dock while hibernating.
-The last entry I see is the UBSAN message and an out of bounds index error.
+The top commit should be this:
+
+commit 4b295ae45d3e6eb4d811c8fc2408b9e4e91c9474 (turbostat, next)
+Author: Len Brown <len.brown@intel.com>
+Date:   Sun Nov 30 00:11:22 2025 -0500
+
+    tools/power turbostat: Validate that RAPL MSRs really exist
+
+    Even though the platform->plat_rapl_msrs enumeration may be accurate,
+    a VM may deny access to the underlying MSRs.
+
+    Probe if PKG_ENERGY is readable and non-zero.
+    If no, ignore all RAPL MSRs.
+
+    Reported-by: Emily Ehlert <ehemily@amazon.de>
+    Signed-off-by: Len Brown <len.brown@intel.com>
 
