@@ -1,41 +1,41 @@
-Return-Path: <linux-pm+bounces-38993-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38990-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 543AAC98717
-	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 18:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5071BC9870D
+	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 18:12:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B35D63A42AB
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 17:12:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F36B3A1565
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 17:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15793335BBE;
-	Mon,  1 Dec 2025 17:12:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A577335576;
+	Mon,  1 Dec 2025 17:12:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740FF335556
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7400D334C24
 	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 17:12:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764609133; cv=none; b=BmCfLBwG0XfkxgLavjX0Lm7X7ks87QOjgGUd4gR6wjOmSdT/GMm+Z/1fZ6Q4ibWGohZo7mLSU2Z5yE6K58OMYSteujJFanicvs7qgSprmmPxJqcsrnEgwybPjcZ/Ah+1hpn8QRDhcFoA1TzlMnX7n+OkAG3uoegU3FAFOE6We60=
+	t=1764609132; cv=none; b=Nk8zebc0DuYtVuPXgyw7CTU+5HMYAUCiKlQBnR0+Mtx8CQ1zL9l1pVsFy5mPr3JMdtqQ53xvDFdc7akOzUhiMi4bkrAPibqJcJvrVcHNhYhXqw5yRsICPz/Eq4gkq6KJMkc1qcaUzq862Z/HjFnfY5/HbNZLlw6e9gBE9wA+iwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764609133; c=relaxed/simple;
-	bh=e8qpdiCrIoL30n3IAsDaOKDW8BKByqih+SzRyU9v5kw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EmoiaOJjQ7pEnxGJY6JATbb6lBx8Rimz1kZ2AExZfgOwvXC282tF7DAQaBCoUR606GDiSOGx1j6VtyApvpFRz64PGTJq2VShGlIlfyj2R3jbo+Sop3DfUIquQ0Mp7ytWL6tLH9zS21T40aFSzEpY8WkTHLThlpRaHTTwJcguYYA=
+	s=arc-20240116; t=1764609132; c=relaxed/simple;
+	bh=uZHiJQ81bRqjTlgexaza3IUJQAdfG1zMOTHD7mLRpVU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=SBcZ3XcL1yBKagdWR7LBn5Yms13wzXJXuhiCsHQ8eojiawJcOcBYBosVae+Ff4njS7eRX9X/mN3zRde1GaOII0FP+LdE1UI+l1LqEmkFAB70LB6Ewgtvb2pKsw0BP3JP5b4YeUydhWaJMf/hFl+nvPfLG8fPyIu2AeekU8sUZ1o=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from dude02.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::28])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <m.felsch@pengutronix.de>)
-	id 1vQ7RX-0002dz-AR; Mon, 01 Dec 2025 18:12:07 +0100
+	id 1vQ7RX-0002dz-By; Mon, 01 Dec 2025 18:12:07 +0100
 From: Marco Felsch <m.felsch@pengutronix.de>
-Subject: [PATCH 0/3] i.MX91/93 BLK-CTRL improvements
-Date: Mon, 01 Dec 2025 18:12:04 +0100
-Message-Id: <20251201-v6-18-topic-imx93-blkctrl-v1-0-b57a72e60105@pengutronix.de>
+Date: Mon, 01 Dec 2025 18:12:05 +0100
+Subject: [PATCH 1/3] pmdomain: imx93-blk-ctrl: cleanup error path
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -44,10 +44,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAGTMLWkC/x3MQQqDMBBA0avIrB3IjLa1XkVcaDK2Q62GREQI3
- t3g8i3+TxAlqERoiwRBdo26LhlUFmC/w/IRVJcNbPhBbAj3J1KD2+rVov6Pd4Xj/LNbmLGqidl
- ML9PUDnLvg0x63O+uP88LNDKcwWsAAAA=
-X-Change-ID: 20251201-v6-18-topic-imx93-blkctrl-341220f7084d
+Message-Id: <20251201-v6-18-topic-imx93-blkctrl-v1-1-b57a72e60105@pengutronix.de>
+References: <20251201-v6-18-topic-imx93-blkctrl-v1-0-b57a72e60105@pengutronix.de>
+In-Reply-To: <20251201-v6-18-topic-imx93-blkctrl-v1-0-b57a72e60105@pengutronix.de>
 To: Ulf Hansson <ulf.hansson@linaro.org>, Shawn Guo <shawnguo@kernel.org>, 
  Sascha Hauer <s.hauer@pengutronix.de>, 
  Pengutronix Kernel Team <kernel@pengutronix.de>, 
@@ -61,39 +60,33 @@ X-SA-Exim-Mail-From: m.felsch@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Hi,
-
-there were several approaches to bring the sub-devices population
-mainline [1,2] but non of them made it upstream. Both approaches were
-part of either the i.MX93 LVDS or MIPI-CSI enablement.
-
-This small patchset decouples the blk-ctrl changes which allows the
-MIPI-CSI and LVDS patchstack to be rebased ontop of this patchset.
-
-Before adding the sub-device supprt, I converted the driver to devm_*
-only API.
-
-Regards,
-  Marco
-
-[1] https://lore.kernel.org/all/20250701-95_cam-v1-3-c5172bab387b@nxp.com/
-[2] https://lore.kernel.org/all/20250304154929.1785200-4-alexander.stein@ew.tq-group.com/
+Call dev_err_probe() directly during return to make the code more
+compact.
 
 Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
 ---
-Marco Felsch (3):
-      pmdomain: imx93-blk-ctrl: cleanup error path
-      pmdomain: imx93-blk-ctrl: convert to devm_* only
-      pmdomain: imx93-blk-ctrl: add support for optional subnodes
+ drivers/pmdomain/imx/imx93-blk-ctrl.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
- drivers/pmdomain/imx/imx93-blk-ctrl.c | 75 ++++++++++++++++-------------------
- 1 file changed, 34 insertions(+), 41 deletions(-)
----
-base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
-change-id: 20251201-v6-18-topic-imx93-blkctrl-341220f7084d
+diff --git a/drivers/pmdomain/imx/imx93-blk-ctrl.c b/drivers/pmdomain/imx/imx93-blk-ctrl.c
+index e094fe5a42bf646c712f3eca4e66a313fa5a914c..2aa163aef8de4ee901b9cde76ce2aad246c8c08a 100644
+--- a/drivers/pmdomain/imx/imx93-blk-ctrl.c
++++ b/drivers/pmdomain/imx/imx93-blk-ctrl.c
+@@ -240,10 +240,8 @@ static int imx93_blk_ctrl_probe(struct platform_device *pdev)
+ 	bc->num_clks = bc_data->num_clks;
+ 
+ 	ret = devm_clk_bulk_get(dev, bc->num_clks, bc->clks);
+-	if (ret) {
+-		dev_err_probe(dev, ret, "failed to get bus clock\n");
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(dev, ret, "failed to get bus clock\n");
+ 
+ 	for (i = 0; i < bc_data->num_domains; i++) {
+ 		const struct imx93_blk_ctrl_domain_data *data = &bc_data->domains[i];
 
-Best regards,
 -- 
-Marco Felsch <m.felsch@pengutronix.de>
+2.47.3
 
 
