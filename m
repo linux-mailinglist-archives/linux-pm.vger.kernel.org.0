@@ -1,218 +1,203 @@
-Return-Path: <linux-pm+bounces-38971-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38972-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29C26C97C8D
-	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 15:13:13 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id C08DBC97CD1
+	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 15:15:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23A6B3A175E
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 14:13:11 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D906F341488
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 14:15:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0125731770E;
-	Mon,  1 Dec 2025 14:13:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40D0E2DAFC1;
+	Mon,  1 Dec 2025 14:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="N7gUrqSI";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="gcCT9rYb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fc+YxzkS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A5232EC54D
-	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 14:13:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1E5246BC5;
+	Mon,  1 Dec 2025 14:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764598387; cv=none; b=Dz7mGVTIZzFnXV7P+QjbmSCkyTNDUus7580E0Y5SyH8mQSQ0lv1EqTsRlmUbo4YTauxMk4mi+MU5nym9ZMZCQgUuLJs/LCfZ1rKnY1AYiXti1P+36LWMY2Eu6NrRvsKbzxE70oYhKGXOkBTEsUfy+nL/e9yc5II2bWEsjVKpWFg=
+	t=1764598538; cv=none; b=uaJM7ApnugNimZr/A55LA09xfVP94P7lAW7bk8JQgzA2yoXRFBFX06MOF0N16Kj9D1HK9veF8rUY1WiTqj558cyrzZQCWGCynMP+RwE6yRCtdIFAXr8lWOuvrvAYxYI+6//BfR1ifMMccrMeOXRgTZgeLwlhtrt0Z4soO5JFmT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764598387; c=relaxed/simple;
-	bh=Rc8tQOb4KW598mjC8YsSgSNwBXwy5J7HyE2s6WHzBK8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YwFaroi8o0qMo32AvyK4vzzXKcjKxGMCV04s5WN3er5tPP15VqruErPCqpmENWxLrEFqd+N/AX3e565bXgZQ4l/bONjfZeXYuDKthbLjEPlmeWU97uncYvoYBl+joVl2T967KSvMS4Y6wAy6ofqp+tEJSrgjz48phiFtuxNEe6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=N7gUrqSI; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=gcCT9rYb; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1764598385;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=61JYzq1X4An4pJbqjhEXU3J3+I6bDh/T5IuX0+k4kE8=;
-	b=N7gUrqSIZ/J77bsebfKkVt8El0VYE369WmzUe7EBdA17x73qmKkyvxu2QfgQ7ZtSfICgWM
-	c6Igb5JRHAxBd/dNM7KMsWT7R1tvBiFRM4vYTQprA7MdkeVrUL4ypIMsayw2oTEy+QMrwL
-	IwmeuSzwoJEKeSgYZhDA4WJtBCvC17w=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-643-hm6pZwcpNY-MFbQx6lpFAw-1; Mon, 01 Dec 2025 09:13:03 -0500
-X-MC-Unique: hm6pZwcpNY-MFbQx6lpFAw-1
-X-Mimecast-MFC-AGG-ID: hm6pZwcpNY-MFbQx6lpFAw_1764598383
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-8b2e19c8558so754756485a.2
-        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 06:13:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1764598383; x=1765203183; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=61JYzq1X4An4pJbqjhEXU3J3+I6bDh/T5IuX0+k4kE8=;
-        b=gcCT9rYbVrkf9XrwAUgJ2RemyaQOsOeolJC3kRZnPq0YuIQIJh6iO/7FqPBG0X7cRo
-         HzOIqwTxPlZtF6I5XuEIMDWLRUhwSjv8UToYseBxZiHhrBgK2JGt7WBMqOg2EUEeMKfc
-         zskaMjuDJK2+ugCLTJIDzKSV+JErW/Xe0OMIeucDtQ6knvekQWYDIBhIXYehpInCNacT
-         ZB6FoJOSRomI4RxlGbi176IZnkfrppZE1FNooZ/83gPm9/pZ0V38FPE8bYBrV92PWXQJ
-         Y14pfHNc8VCLnglfxyWL+6ajxcDWY9xuXpnewnyfMCrSbNXt/IC7sjR9UhBd1+OD6+Nr
-         kRUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764598383; x=1765203183;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=61JYzq1X4An4pJbqjhEXU3J3+I6bDh/T5IuX0+k4kE8=;
-        b=d/eazjBDnQWCapuEwsST4e5VLFfdp61zKWR9Ss35Q6Wi3QNvJtC55JDalLLe6KW4Fi
-         ZanGSYBqDjmsXeQH5bHcO2fheiTq8Pa/w8QJ9VZpZfNYpxIBVExnFioHDhnshM1EaxYw
-         McAjrZOFqr6sDHxVhALmqoe/P2K5uTK9umVTrNPef05fLlZhImbOgjB6m2a2y+PF9QvR
-         bazv2zqa+jRUqNQSh3WEj8XVxRj+VKHmRjBFZByCQ3ZxV9rgF/oZaH2WyDXD2tK1ScAA
-         0mcUVe4IJhrSjYt2k7nq0O+4Zfh0UJewr2IpvFuVF+ZrXXgt8ZQg0Xvvcay+6S80Cl7e
-         7i3A==
-X-Gm-Message-State: AOJu0YxXDdpXSTycl7KKOQhtFpGVf8jhh2Of+s0yeUf+21UHT/1X8qZd
-	GC+Ld25XyRtwm4yGxvLhP6lNSRmwwO8kmt3Cn+7GheuV+IK88Hc16z8XygHuPsNAKQsL/mgRZlY
-	NsSe4YOTGJDapsgLyuftZsn+mTAYiLZWuccuXJFihr5oc34nicT1is1P85ddA
-X-Gm-Gg: ASbGncuWA5zoibnvPrMBFOmHbl+C16HygI/y3LGDC+YpP8jGGZmb0zHYk3a6fxIMDJb
-	wL8PT5Dm/QbfLh4TpT8a+++mvbNLsHuZIzsAC/fYcuzH2DLgdx4l5Ib1bmaEGcgIy1CG990hKTx
-	n4YaUOKYn4aoXC/zDINDgnBpSxeZxfd2wVidEhOeKusjch07FiHHMum+yM0cvySvyO1Xi18BLzA
-	8Z/Kr5fcmjH9TGtk/1zoPBvqTJp9qeFqwWzv5xO36FInW7cFcf7pq8IJ6XADY1gkW/muv2I9aT3
-	qm006qwMK2GQ0xW4wH7vVooDT0Wjq+uWVBIJ/GoBThPDsdOUGakvGYVQPZf3TqzOAWuXxP/xw4L
-	/zXaJRIZ9xA==
-X-Received: by 2002:a05:620a:708a:b0:89f:db05:1643 with SMTP id af79cd13be357-8b33d48e2f2mr5244009885a.89.1764598383237;
-        Mon, 01 Dec 2025 06:13:03 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEQ1J6QLX6Tv54HUvnqgzshcUPHK7E1VpPS4qLWxfkDn4ZOdMBygaWC5SDcdU9pi/1XIBeWfQ==
-X-Received: by 2002:a05:620a:708a:b0:89f:db05:1643 with SMTP id af79cd13be357-8b33d48e2f2mr5244003785a.89.1764598382738;
-        Mon, 01 Dec 2025 06:13:02 -0800 (PST)
-Received: from [10.26.1.94] ([66.187.232.136])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b529993c92sm868303485a.1.2025.12.01.06.13.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Dec 2025 06:13:02 -0800 (PST)
-Message-ID: <eae451c6-9bf8-4910-b9c1-4a558c308929@redhat.com>
-Date: Mon, 1 Dec 2025 09:13:01 -0500
+	s=arc-20240116; t=1764598538; c=relaxed/simple;
+	bh=0QusJJfomKNOihe2z3HB4fHONQd+v4I5aXhw5Qbk+N8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oi4/gajIvDvUukZrwjlxoADN3wCF9AhrpNeorb660QV1qthlcfFEg3RujjWvo4YvZao2aDDJu4Qz1ke+lriimBfrwXn79+D62JAp2IBEpAZZB3nMoZ2ZfxGQju6egOwv7FkiU5Rsws4MtMozaWM2CNXBxtL9p1eTW5c+9RKfXvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fc+YxzkS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 341E7C4CEF1;
+	Mon,  1 Dec 2025 14:15:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764598537;
+	bh=0QusJJfomKNOihe2z3HB4fHONQd+v4I5aXhw5Qbk+N8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fc+YxzkSbC+YxLgIwByGCrcBPeTAG8IJ948dsZoLTRnIrQCE320IHw8U2yew/lk4s
+	 +j9BSnNRfPsH65L22yI10ttzVc2nOaR9njiY3xV8rQjRqX7cfXi29nX4vtknoaK9GK
+	 CudNzDKlYZ+6cI/rxNP0IWq90bAmyYgCqndMfPW1cKhdbqpI2cH9tBw+lwLdak0vtw
+	 2mA89niTddwLtbdsHjfRqXHLH63NcE1U5sWNpu37p+8kDViAQ/iatFRC4q0PXW4tGA
+	 QZ9UrcO88W738f1paul0c4r2cSs6ANERoOqIUbVjVW+2z8Nig3Za67WDQkWa4aEWUV
+	 WsWSh9rLmSUHw==
+Date: Mon, 1 Dec 2025 15:15:35 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: "biju.das.au" <biju.das.au@gmail.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
+Message-ID: <pilx2etxezmr6rhbwculwjqcxotzkxus5bqdpjrt5na5c7fqhj@mdfm2yh2aptp>
+References: <20250923144524.191892-1-biju.das.jz@bp.renesas.com>
+ <20250923144524.191892-7-biju.das.jz@bp.renesas.com>
+ <wah57av7ypb42zcaosx7n64j6qmmcq5ylhgnde2brbiy6o7sun@7rqkr6ke3g5k>
+ <TY3PR01MB1134692D7D9F5B67116D2BC7786DBA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] tools/power turbostat: avoid segfault referencing
- fd_instr_count_percpu
-To: Len Brown <lenb@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20251118155813.533424-1-darcari@redhat.com>
- <20251118155813.533424-2-darcari@redhat.com>
- <CAJvTdK=wpC85at_oshwAhdKtU32QLnHx8MyB7QVtRVRZ=303CQ@mail.gmail.com>
-Content-Language: en-US
-From: David Arcari <darcari@redhat.com>
-In-Reply-To: <CAJvTdK=wpC85at_oshwAhdKtU32QLnHx8MyB7QVtRVRZ=303CQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="kvje3a3qxek72qep"
+Content-Disposition: inline
+In-Reply-To: <TY3PR01MB1134692D7D9F5B67116D2BC7786DBA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
 
 
-So get_instr_count_fd() calls open_perf_counter() which in turn calls 
-perf_event_open() which returns the value from syscall().  From the 
-documentation this seems to return -1 in the case of a failure.
+--kvje3a3qxek72qep
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
+MIME-Version: 1.0
 
-Looking at get_instr_count_fd() I see:
+Hello Biju,
 
-int get_instr_count_fd(int cpu)
-{
-	if (fd_instr_count_percpu[cpu])
-		return fd_instr_count_percpu[cpu];
+On Mon, Dec 01, 2025 at 11:09:50AM +0000, Biju Das wrote:
+> > -----Original Message-----
+> > From: Uwe Kleine-K=F6nig <ukleinek@kernel.org>
+> > Sent: 30 November 2025 08:39
+> > Subject: Re: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
+> >=20
+> > On Tue, Sep 23, 2025 at 03:45:10PM +0100, Biju wrote:
+> > > +static int rzg2l_gpt_suspend(struct device *dev) {
+> > > +	struct pwm_chip *chip =3D dev_get_drvdata(dev);
+> > > +	struct rzg2l_gpt_chip *rzg2l_gpt =3D to_rzg2l_gpt_chip(chip);
+> > > +	unsigned int i;
+> > > +
+> > > +	for (i =3D 0; i < RZG2L_MAX_HW_CHANNELS; i++) {
+> > > +		if (!rzg2l_gpt->channel_enable_count[i])
+> > > +			continue;
+> > > +
+> > > +		rzg2l_gpt->hw_cache[i].gtpr =3D rzg2l_gpt_read(rzg2l_gpt, RZG2L_GT=
+PR(i));
+> > > +		rzg2l_gpt->hw_cache[i].gtccr[0] =3D rzg2l_gpt_read(rzg2l_gpt, RZG2=
+L_GTCCR(i, 0));
+> > > +		rzg2l_gpt->hw_cache[i].gtccr[1] =3D rzg2l_gpt_read(rzg2l_gpt, RZG2=
+L_GTCCR(i, 1));
+> > > +		rzg2l_gpt->hw_cache[i].gtcr =3D rzg2l_gpt_read(rzg2l_gpt, RZG2L_GT=
+CR(i));
+> > > +		rzg2l_gpt->hw_cache[i].gtior =3D rzg2l_gpt_read(rzg2l_gpt, RZG2L_G=
+TIOR(i));
+> > > +	}
+> > > +
+> > > +	clk_disable_unprepare(rzg2l_gpt->clk);
+> > > +	clk_disable_unprepare(rzg2l_gpt->bus_clk);
+> > > +	reset_control_assert(rzg2l_gpt->rst_s);
+> > > +	reset_control_assert(rzg2l_gpt->rst);
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > > +static int rzg2l_gpt_resume(struct device *dev) {
+> > > +	struct pwm_chip *chip =3D dev_get_drvdata(dev);
+> > > +	struct rzg2l_gpt_chip *rzg2l_gpt =3D to_rzg2l_gpt_chip(chip);
+> > > +	unsigned int i;
+> > > +	int ret;
+> > > +
+> > > +	ret =3D reset_control_deassert(rzg2l_gpt->rst);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	ret =3D reset_control_deassert(rzg2l_gpt->rst_s);
+> > > +	if (ret)
+> > > +		goto fail_reset;
+> > > +
+> > > +	ret =3D clk_prepare_enable(rzg2l_gpt->bus_clk);
+> > > +	if (ret)
+> > > +		goto fail_reset_all;
+> > > +
+> > > +	ret =3D clk_prepare_enable(rzg2l_gpt->clk);
+> > > +	if (ret)
+> > > +		goto fail_bus_clk;
+> > > +
+> > > +	for (i =3D 0; i < RZG2L_MAX_HW_CHANNELS; i++) {
+> > > +		if (!rzg2l_gpt->channel_enable_count[i])
+> > > +			continue;
+> > > +
+> > > +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTPR(i), rzg2l_gpt->hw_cache[i].g=
+tpr);
+> > > +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCCR(i, 0), rzg2l_gpt->hw_cache[=
+i].gtccr[0]);
+> > > +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCCR(i, 1), rzg2l_gpt->hw_cache[=
+i].gtccr[1]);
+> > > +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTCR(i), rzg2l_gpt->hw_cache[i].g=
+tcr);
+> > > +		rzg2l_gpt_write(rzg2l_gpt, RZG2L_GTIOR(i), rzg2l_gpt->hw_cache[i].=
+gtior);
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +fail_bus_clk:
+> > > +	clk_disable_unprepare(rzg2l_gpt->bus_clk);
+> > > +fail_reset_all:
+> > > +	reset_control_assert(rzg2l_gpt->rst_s);
+> > > +fail_reset:
+> > > +	reset_control_assert(rzg2l_gpt->rst);
+> > > +	return ret;
+> >=20
+> > I wonder what happens if these calls in the error path fail. I think th=
+e correct way would be to track
+> > the actual state to handle the state on the next invokation for .resume=
+() properly. But note that
+> > suspend/resume is a somewhat blind spot for me, so I'm unsure here. (An=
+d I'm aware that most resume
+> > callbacks don't cope cleanly here.)
+>=20
+> In str case, there is no power on the system during suspend and exit is, =
+SoC reset followed by
+> restoring registers from DDR. So, it does not matter for the suspend path.
+>=20
+> In the resume case, If the calls to error path fail, then device won't wo=
+rk.
 
-	fd_instr_count_percpu[cpu] = open_perf_counter(cpu, PERF_TYPE_HARDWARE, 
-PERF_COUNT_HW_INSTRUCTIONS, -1, 0);
+I'm not sure you understand my concern. IFAIUI a device that fails to
+resume stays suspended from the POV of the kernel. When in this state
+the resume is tried again at a later point in time you get
+inconsistencies if the first reset was already deasserted from the
+previous resume run (because reset_control_assert() failed in the resume
+callback's error path).
 
-	return fd_instr_count_percpu[cpu];
-}
+Best regards
+Uwe
 
+--kvje3a3qxek72qep
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So open_perf_counter() is only called when fd_instr_count_percpu[cpu] is 
-0.  In that case the return value is stored in 
-fd_instr_count_percpu[cpu].  So in the case of an error this value would 
-be -1; otherwise, it should be a valid file descriptor.  In fact, I 
-don't think the function should ever return 0.
+-----BEGIN PGP SIGNATURE-----
 
-As far as I can tell fd_instr_count_percpu[] is initialized to zero so 
-that  get_instr_count_fd() can discern whether or not 
-open_perf_counter() needs to be called.
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmktowQACgkQj4D7WH0S
+/k40IAf/RoxYrccRGL0zB9nn9LJ/Hi+YjpJXuMkmUzRePDnfVa+bNxoI52qC2M2+
+cdanc7aHyFV/xMQHV2DF+dXlwou3S4dn/2lMRDyPAqdgKdWGJFUmlCZaMzXwKWLa
+cVKJu1O5uke9kfq7Ns2FkgcdJ6uewQwiyRvnQ/XbhH7NB3YkejH3nOwoA1KMc5o8
+bNlowrVAPAPoMDuL8ZdS827mkoNzM8T9BC1sAAGW5D+MnI5pS1Ql5N8G2WKXB7sh
+DOnH2n279SwCL41M1LK7WihhicpduK3K2yFBknoUkgMwi1kp5nDQAB54ysfi2bFS
+inxU4+ptY0TtQsUq669REsr6/akWRw==
+=kpqX
+-----END PGP SIGNATURE-----
 
-Am I missing something?
-
-I do see that free_fd_instr_count_percpu() has a bug as I think the code 
-should be:
-
-		if (fd_instr_count_percpu[i] > 0)
-
-instead of:
-
-		if (fd_instr_count_percpu[i] != 0)
-
-
-Thanks,
--DA
-
-On 11/25/25 2:11 PM, Len Brown wrote:
-> not your fault, but looking at this code, it seems that
-> get_instr_count_fd(base_cpu)
-> assumes that 0 is an invalid FD.  Fine, but based on that you'd think
-> we'd use zero for invalid
-> and non-zero for valid as return for the function call...
-> 
-> On Tue, Nov 18, 2025 at 10:58 AM David Arcari <darcari@redhat.com> wrote:
->>
->> The problem is that fd_instr_count_percpu is allocated based on
->> the value of has_aperf. If has_aperf=0 then fd_instr_count_percpu
->> remains NULL. However, get_instr_count_fd() is called from
->> turbostat_init() based on the value of has_aperf_access.
->>
->> On some VM systems has_aperf can be 0, while has_aperf_access can be
->> 1.  In order to resolve the issue simply check for to see if
->> fd_instr_count_percpu is NULL and return -1 if it is.  Accordingly,
->> the has_aperf_access check can be removed from turbostat_init.
->>
->> Signed-off-by: David Arcari <darcari@redhat.com>
->> Cc: Len Brown <lenb@kernel.org>
->> Cc: linux-kernel@vger.kernel.org
->> ---
->>   tools/power/x86/turbostat/turbostat.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
->> index f2512d78bcbd..584b0f7f9067 100644
->> --- a/tools/power/x86/turbostat/turbostat.c
->> +++ b/tools/power/x86/turbostat/turbostat.c
->> @@ -2463,6 +2463,9 @@ static long open_perf_counter(int cpu, unsigned int type, unsigned int config, i
->>
->>   int get_instr_count_fd(int cpu)
->>   {
->> +       if (!fd_instr_count_percpu)
->> +               return -1;
->> +
->>          if (fd_instr_count_percpu[cpu])
->>                  return fd_instr_count_percpu[cpu];
->>
->> @@ -10027,7 +10030,7 @@ void turbostat_init()
->>          for_all_cpus(get_cpu_type, ODD_COUNTERS);
->>          for_all_cpus(get_cpu_type, EVEN_COUNTERS);
->>
->> -       if (BIC_IS_ENABLED(BIC_IPC) && has_aperf_access && get_instr_count_fd(base_cpu) != -1)
->> +       if (BIC_IS_ENABLED(BIC_IPC) && get_instr_count_fd(base_cpu) != -1)
->>                  BIC_PRESENT(BIC_IPC);
->>
->>          /*
->> --
->> 2.51.0
->>
->>
-> 
-> 
-
+--kvje3a3qxek72qep--
 
