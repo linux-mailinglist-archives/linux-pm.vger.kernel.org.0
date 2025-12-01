@@ -1,146 +1,130 @@
-Return-Path: <linux-pm+bounces-38979-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-38980-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74BD3C980BC
-	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 16:27:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56594C980D7
+	for <lists+linux-pm@lfdr.de>; Mon, 01 Dec 2025 16:29:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 332C03A330F
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 15:27:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 209543A355C
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Dec 2025 15:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 637C532C930;
-	Mon,  1 Dec 2025 15:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F2F732C934;
+	Mon,  1 Dec 2025 15:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hyniix/X"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E692432C948
-	for <linux-pm@vger.kernel.org>; Mon,  1 Dec 2025 15:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204C332C326;
+	Mon,  1 Dec 2025 15:29:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764602844; cv=none; b=gxmNYmOi+gnI+SJa+J7aj4zW8KFEH9ISCs/QVCZ4TsmDaal7NRgJcn9Fd83TCLNAB7robWhSp1r0v9uHq0l62taWbsR0wYXj4rO5PHwYuVq4pB5G62SuJ3s+6DZxng9hxB+orjHslBE/X90DjwdlfkfoGbg5dyO4ODTSqthfqhs=
+	t=1764602941; cv=none; b=cTe75j0sgx7fPI7lvmHSlIsnigV+ISD0xOIQIw+nCdZlcU76z07EkLcIWI3iklif2EP+fN1wIMnT0PPdY0oq44KdV40XPao6IptfdOIC4v/i2kD8W391RLyIsvHKDy+3EQfIU5C6GSf/YvhmMbQqz4VmfmTMMXLzNUf0Lo92+/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764602844; c=relaxed/simple;
-	bh=5BNrUbY/pkzmu+eeFr5vbjQI8NG4FM5+FLGCVekR+CQ=;
+	s=arc-20240116; t=1764602941; c=relaxed/simple;
+	bh=dthHaPZq0iIUFz9B7qI5qF+rXA+tieje7A3EBFh1RXM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nYPkY2TBnzJkGdty/SDgo47gz5AAsAjnQQXVMDsFpk4walxuF2PHEBCEfYVG6u58bz9T2VCM7eQlT4/PK0Org6jCxtHqu4t+IQ2fLwf5XzCMJpE/Kqamib77r+UQsJKAvlKzcMARpUkQPE4oPaWoUX4rlJt3sPC/oFEuRVwr0fQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F280153B;
-	Mon,  1 Dec 2025 07:27:13 -0800 (PST)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C054F3F836;
-	Mon,  1 Dec 2025 07:27:14 -0800 (PST)
-Date: Mon, 1 Dec 2025 16:27:12 +0100
-From: Beata Michalska <beata.michalska@arm.com>
-To: Lifeng Zheng <zhenglifeng1@huawei.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, rafael@kernel.org,
-	viresh.kumar@linaro.org, sudeep.holla@arm.com,
-	gregkh@linuxfoundation.org, dakr@kernel.org,
-	ionela.voinescu@arm.com, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, linuxarm@huawei.com,
-	jonathan.cameron@huawei.com, vincent.guittot@linaro.org,
-	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com,
-	zhangpengjie2@huawei.com, wangzhi12@huawei.com,
-	linhongye@h-partners.com
-Subject: Re: [PATCH v6 0/3] arm64: topology: Handle AMU FIE setup on CPU
- hotplug
-Message-ID: <aS2z0EURwHbbGZab@arm.com>
-References: <20251119081356.2495290-1-zhenglifeng1@huawei.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=VGrfwlLtcIMCmBcD73XADm4eTp4tkAcYz6kd+upSa9UH/CAlS8A+wYHEjGsr11jDZj0J+qGWRTx7o5hRoKN/fGPNWf4v+tXQCl3YcYbGwdCrpooTcI9xT6PY6MtoNASrixQeQD3vx7LEnAAR8Lk+B2j63MNj5cYYCjDeGeYgFts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hyniix/X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D146C4CEF1;
+	Mon,  1 Dec 2025 15:29:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764602940;
+	bh=dthHaPZq0iIUFz9B7qI5qF+rXA+tieje7A3EBFh1RXM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hyniix/X7vu80IvA23tpFgKyACHvyU7rAySiFNrhgEjOQt1JhKsJWALmrvYFQBQcG
+	 gQpUGnQu1Q9pdVMDqVUwB4tJLiX48+45wdIsqekdUJmXMnsu5KyPt+BHi7e3KG+Hnm
+	 zIc2HMmT5PMkUxaEQl4zVKwNI62tDdrN6Lx2FaEfhTbk8TNQcSQZSwzYhu4YUSpxHS
+	 4i1xDR9mHq95ykUgN2cuOoafPtSPhJOyP+TGTomYb8jol6txGL/lwwLhWwHJ2R5l+m
+	 +0dmfnbiLzCaQSaMFoStJGqL7FVZ3tgCJAeRqLMhmmX9cWyDbfPnEq0olYKUZFQJx0
+	 w5phXdHw8AhFA==
+Date: Mon, 1 Dec 2025 16:28:58 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: "biju.das.au" <biju.das.au@gmail.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
+Message-ID: <ydqyvme43ul6ui7bl37kv3kuhn7js7tvkje2u4a3vasiw4kgdv@w2govkhaa3xz>
+References: <20250923144524.191892-1-biju.das.jz@bp.renesas.com>
+ <20250923144524.191892-7-biju.das.jz@bp.renesas.com>
+ <wah57av7ypb42zcaosx7n64j6qmmcq5ylhgnde2brbiy6o7sun@7rqkr6ke3g5k>
+ <TY3PR01MB1134692D7D9F5B67116D2BC7786DBA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <pilx2etxezmr6rhbwculwjqcxotzkxus5bqdpjrt5na5c7fqhj@mdfm2yh2aptp>
+ <TY3PR01MB11346DE28875EFD9B9D86DE5186DBA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+ <TY3PR01MB113464F283A3ED4A8AAC813D886DBA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="vhnkbpeucn2g26vw"
 Content-Disposition: inline
-In-Reply-To: <20251119081356.2495290-1-zhenglifeng1@huawei.com>
+In-Reply-To: <TY3PR01MB113464F283A3ED4A8AAC813D886DBA@TY3PR01MB11346.jpnprd01.prod.outlook.com>
 
-Hi,
 
-Apologies for the delay in reviewing this - currently in progress....
-Out of curiosity: what's the cpufreq driver used for testing this series ?
+--vhnkbpeucn2g26vw
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Subject: Re: [PATCH v3 6/8] pwm: rzg2l-gpt: Add suspend/resume support
+MIME-Version: 1.0
 
----
-BR
-Beata
-On Wed, Nov 19, 2025 at 04:13:53PM +0800, Lifeng Zheng wrote:
-> Solve a problem that causes CPUs Setup AMU FIE failed in a corner case,
-> even though they're eligible.
-> 
-> Changelog:
-> 
-> v6:
-> 
->  - discard the modifications in cpufreq.c, and instead, make
->    supports_scale_freq_counters() checks that at least one CPU in the
->    policy supports AMU FIE, instead of all
->  - based on Beata's feedback, optimize cpuhp_topology_online() to make it
->    more readable
->  - use pr_warn instead of WARN_ON to show warning message when the
->    freq_counters_valid() check fails in cpuhp_topology_online()
->  - modify commit message as Beata and Rafael suggested
-> 
-> v5:
-> 
->  - add a default implementation for cpufreq_cpu_policy() when
->    CONFIG_CPU_FREQ is not defined
-> 
-> v4:
-> 
->  - change the function's name in patch 2 from
->    'cpufreq_cpu_get_raw_no_check' to 'cpufreq_cpu_policy'
->  - use only one line in the function body of cpufreq_cpu_policy()
->  - use cpus mask instead of related_cpus when calling arch_set_freq_scale()
->    in cpufreq.c
->  - add a warning when the freq_counters_valid() check fails in
->    cpuhp_topology_online()
-> 
-> v3:
-> 
->  - add a patch to optimize amu_fie_setup()
->  - add a patch to add a function to get cpufreq policy without checking if
->    the CPU is online
->  - discard the reuse of amu_fie_setup() in cpuhp_topology_online() and keep
->    all the new logic in cpuhp_topology_online()
->  - test only the CPU which is going online in cpuhp_topology_online()
->  - when the freq_counters_valid() check fails, not only clear the scale
->    freq source but also clear all the related CPUs from amu_fie_cpus mask
->  - add some comments
-> 
-> v2:
-> 
->  - keep init_amu_fie_notifier for setting up AMU FIE when the cpufreq
->    policy is being created
->  - set up AMU FIE only for online CPUs instead of related_cpus in
->    init_amu_fie_callback()
->  - check and set all the online CPUs in the same policy when hotplug one
->  - clear scale freq source for all the online CPUs in the same policy to
->    avoid using different source of the freq scale
-> 
-> ---
-> Discussions of previous version:
-> v1: https://lore.kernel.org/all/20250607094533.416368-1-zhenglifeng1@huawei.com/
-> v2: https://lore.kernel.org/all/20250725102813.1404322-1-zhenglifeng1@huawei.com/
-> v3: https://lore.kernel.org/all/20250805093330.3715444-1-zhenglifeng1@huawei.com/
-> v4: https://lore.kernel.org/all/20250814072853.3426386-1-zhenglifeng1@huawei.com/
-> v5: https://lore.kernel.org/all/20250819072931.1647431-1-zhenglifeng1@huawei.com/
-> 
-> Lifeng Zheng (3):
->   arm64: topology: Skip already covered CPUs when setting freq source
->   cpufreq: Add new helper function returning cpufreq policy
->   arm64: topology: Handle AMU FIE setup on CPU hotplug
-> 
->  arch/arm64/kernel/topology.c | 67 ++++++++++++++++++++++++++++++++++--
->  drivers/base/arch_topology.c |  9 ++++-
->  drivers/cpufreq/cpufreq.c    |  6 ++++
->  include/linux/cpufreq.h      |  5 +++
->  4 files changed, 83 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.33.0
-> 
+Hello Biju,
+
+On Mon, Dec 01, 2025 at 03:04:08PM +0000, Biju Das wrote:
+> You mean to avoid unbalance between suspend()/resume(), we should not
+> do error handling in resume()??
+
+Consider the following resume function:
+
+	static int myresume(...)
+	{
+		ret = enable_some_resource(...);
+		if (ret)
+			return ret;
+
+		ret = enable_some_other_resource(...)
+		if (ret) {
+			disable_some_resource();
+			return ret;
+
+		}
+
+		return 0;
+	}
+
+If disable_some_resource() can fail it might happen that the first call
+to myresume() is left with some_resource enabled and some_other_resource
+disabled (i.e. if both enable_some_other_resource() and
+disable_some_resource() fail). Now if the resume is retried
+some_resource is enabled a second time without being tracked and a later
+suspend (or remove) won't bring the enable count to 0 and thus leak a
+resource.
+
+Best regards
+Uwe
+
+--vhnkbpeucn2g26vw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmkttDUACgkQj4D7WH0S
+/k7wiggAow5m2NLPYZqwNeypwJ5l/czsQUJEwYgh9B1KSx1X79ajLzn6SAO/Efen
+uB1p/91mmafesP7Cj8ovlNDFq2q8ZBNlKClN5lreGodopGcBiMDuOviTmDf7rHvl
+SQGyMM/s6ysMhDOfcI1Xpdb1BPiTFyvWmWdi88Rct9VTXR9qTYS4SOwpQFmKOyyx
+F7y1WmMv53C7RBO5jXfaeA2WhmCU6KGG32CVet4zRziDCQT2ZklmCC6pulbb2zdc
+JZRk5AaIWdlx0yKOpqb3Y/bGwwWUPBNTkwP6lgcIabKzRovWF0+n1zrLDBxc/sN6
+OVRqefhu+qOiPu49ypP/YoEdS4NFjg==
+=WPcL
+-----END PGP SIGNATURE-----
+
+--vhnkbpeucn2g26vw--
 
