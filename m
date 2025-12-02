@@ -1,49 +1,50 @@
-Return-Path: <linux-pm+bounces-39093-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39094-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21A9EC9C6CA
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 18:37:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 373F2C9C6DF
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 18:37:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E62EC3460F6
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 17:37:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1E643A7E30
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 17:37:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B0672C21C3;
-	Tue,  2 Dec 2025 17:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE62C2C0F9C;
+	Tue,  2 Dec 2025 17:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P+bXBErP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A1WslJjW"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E2402C1788;
-	Tue,  2 Dec 2025 17:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 713EC2C15A8;
+	Tue,  2 Dec 2025 17:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764697009; cv=none; b=Xr6eW5+kxGCuP1Z1QjmejTXSsHV+UT0eEh4ga9XD+R9SZhzSnjnhSEs2s9CglauvSlHc9BqLll0yRpz8xAUIzFU8PkcfYQerNFwh0otRUiVJ66oTZOo0DTuiGsi0X/Yjri2vVVhCmeP0QTwvHS/iIvd7w2QM71ZglvsQFab/bM4=
+	t=1764697016; cv=none; b=nODdp3suTnxh2FYPQijzpOzO6lxEoN9Mr88Kobcm/upTBNz4fiPobMIfw5Gni1s4dBg/QZj50Acz5mZC6I5wugAoNjcEyUD7IS8ZX4Y7bxy5TJceNMcR/2Gi0lGyOjpBiKjf65s8palnnocEWmm2LxKqTQBB71qD9WwPYV7MJJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764697009; c=relaxed/simple;
-	bh=X12PndyHroreQFIJf00P4HquKZkPkL6meJAYJRfj8Fs=;
+	s=arc-20240116; t=1764697016; c=relaxed/simple;
+	bh=Osd/+dLwf+emrEqGi6mbQhzltUndMTaIVjgBdIIWp50=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bDOojYOklk1CDf82ta1tb6u/+dE/FuSH0cOAuBdvalUqQh2oqkHnrE2WxLvZr/vFn7a5nAm7EaEFXk9jiLLN7H/aaplD75XGHJK6ep8xo+3qRt0wvhYhqGENX8ternOjMh0ZbWQA6ou381EEHRG7QrI8iHhwwvOQeAKSmYj8qyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P+bXBErP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBAC7C116B1;
-	Tue,  2 Dec 2025 17:36:41 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=ou2p7Bc4xEzyIxEShDIE4sLRBGCHoGMYx7983cwhMFnem5MT1ccADDScxGj2zrDvNv7W6LKiOhe7zKAZoPQXtImuek+v3Iss9XZcXNhWkB3RIdWRZ+lv8hJbYnQY5UUZBkYmkHKAkWJSP/GG1TuAm11ykZ/d5mnVzN769/VcmfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A1WslJjW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9221EC4CEF1;
+	Tue,  2 Dec 2025 17:36:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764697008;
-	bh=X12PndyHroreQFIJf00P4HquKZkPkL6meJAYJRfj8Fs=;
+	s=k20201202; t=1764697016;
+	bh=Osd/+dLwf+emrEqGi6mbQhzltUndMTaIVjgBdIIWp50=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=P+bXBErPLKaIrybQErE8NxIS+t2VWyLB9o4QSnw+zDNHrqYmHR+nWDz28t7Au8WEa
-	 p1N/kgQOIHuyZVVGxnZqOMZtfRQ964Rd1Rju+vBQjQzxFocKvdnumqtwdkYVpbFcUt
-	 eZ5XNqwRFd1sHUbuBbh5GXejOWjev7bgZXoFQ+a+Gc4EO4hWrkLlJBKpw8DReMvi5Q
-	 HEv2WeJVq1/s5V0NqPQKi0UyqR/+jsLZewb6nC6k1ZBK1rlF9EwNewClqZetER57Cq
-	 4QEiSB2LY4js0UDa52nr1sjrmFeCzsJfcwiQzswVDsR6ujMlbLuantGdqacCZFX8Np
-	 Ix7hL2nCV2cEQ==
+	b=A1WslJjWIMyM5vgqXkEtiXzs833daXmlxw86hBQr/I6UyG22zGQQ9KgeoHrpEOq3j
+	 q1Hs9f48I3djiAQO/sFxgUgH5vYWQZU+pDsXw+XeD7KQQsbFuu9UlSJbIj7h3zZb0O
+	 XW9bgEoqluMwtSFqzdK2O+goiAgSX1ive113jGhQwW0RUxLIQMncPy8xbIBUU3A76D
+	 FGmD86Qv7VN0OKqpnzKw7ReG7CjUNkBok1l/4Tsgowq03qs+QEI3Mdhu1QFbIu3tXs
+	 SO+3bXgJ/GmXlevmywcZmU2c9dGItFLXgUULjNtMN9CokV1XQTK+UhWa0jEQRo7ecB
+	 0QrpwZtm1HvQQ==
 From: Konrad Dybcio <konradybcio@kernel.org>
-Date: Tue, 02 Dec 2025 18:36:21 +0100
-Subject: [PATCH v2 2/3] pmdomain: qcom: rpmhpd: Add MXC to SC8280XP
+Date: Tue, 02 Dec 2025 18:36:22 +0100
+Subject: [PATCH v2 3/3] arm64: dts: qcom: sc8280xp: Add missing VDD_MXC
+ links
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251202-topic-8280_mxc-v2-2-46cdf47a829e@oss.qualcomm.com>
+Message-Id: <20251202-topic-8280_mxc-v2-3-46cdf47a829e@oss.qualcomm.com>
 References: <20251202-topic-8280_mxc-v2-0-46cdf47a829e@oss.qualcomm.com>
 In-Reply-To: <20251202-topic-8280_mxc-v2-0-46cdf47a829e@oss.qualcomm.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -71,53 +72,60 @@ To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
 Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-arm-msm@vger.kernel.org, 
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org, 
- linux-pm@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+ linux-pm@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1764696985; l=1180;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1764696985; l=1420;
  i=konrad.dybcio@oss.qualcomm.com; s=20230215; h=from:subject:message-id;
- bh=TrNqU+NFvZt8X8boVtl/37MvasfHczPy5pB7FCnZowU=;
- b=Qtx2uxu68B2JiwzSVnp6ufe8l69XZS94GHMT8oAmljmDxUF3TKawE99iUQF+2fAboP5Q4Dbm9
- APg1DWBweMkDOAdTwrt060O1fWDTAjQUvabK9GrXWgBT2pbis45Ymur
+ bh=HYXtOMvv9i2sz5XDKARcwKlUFUyXuRdAodCPiWpvS/I=;
+ b=YMQLwFmNHWSjAyFuLELvapYGWcZRaa7QaCineg3voyWrqcYnLgZ4tJTB0vDh0mlgPKa6k7ttn
+ pADbJclsiZJBBzbz/yvjrbdqJ6Sk0tDqOmkrZUenlWV0fLtWeMfxcox
 X-Developer-Key: i=konrad.dybcio@oss.qualcomm.com; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-This was apparently accounted for in dt-bindings, but never made its
-way into the driver.
+To make sure that power rail is voted for, wire it up to its consumers.
 
-Fix it for SC8280XP and its VDD_GFX-less cousin, SA8540P.
-
-Fixes: f68f1cb3437d ("soc: qcom: rpmhpd: add sc8280xp & sa8540p rpmh power-domains")
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Fixes: 152d1faf1e2f ("arm64: dts: qcom: add SC8280XP platform")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 ---
- drivers/pmdomain/qcom/rpmhpd.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 16 ++++++++++++----
+ 1 file changed, 12 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
-index a8b37037c6fe..19849703be4a 100644
---- a/drivers/pmdomain/qcom/rpmhpd.c
-+++ b/drivers/pmdomain/qcom/rpmhpd.c
-@@ -246,6 +246,8 @@ static struct rpmhpd *sa8540p_rpmhpds[] = {
- 	[SC8280XP_MMCX_AO] = &mmcx_ao,
- 	[SC8280XP_MX] = &mx,
- 	[SC8280XP_MX_AO] = &mx_ao,
-+	[SC8280XP_MXC] = &mxc,
-+	[SC8280XP_MXC_AO] = &mxc_ao,
- 	[SC8280XP_NSP] = &nsp,
- };
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+index 5334adebf278..b9e0d9c7c065 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+@@ -5788,8 +5788,12 @@ remoteproc_nsp0: remoteproc@1b300000 {
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "xo";
  
-@@ -700,6 +702,8 @@ static struct rpmhpd *sc8280xp_rpmhpds[] = {
- 	[SC8280XP_MMCX_AO] = &mmcx_ao,
- 	[SC8280XP_MX] = &mx,
- 	[SC8280XP_MX_AO] = &mx_ao,
-+	[SC8280XP_MXC] = &mxc,
-+	[SC8280XP_MXC_AO] = &mxc_ao,
- 	[SC8280XP_NSP] = &nsp,
- 	[SC8280XP_QPHY] = &qphy,
- };
+-			power-domains = <&rpmhpd SC8280XP_NSP>;
+-			power-domain-names = "nsp";
++			power-domains = <&rpmhpd SC8280XP_NSP>,
++					<&rpmhpd SC8280XP_CX>,
++					<&rpmhpd SC8280XP_MXC>;
++			power-domain-names = "nsp",
++					     "cx",
++					     "mxc";
+ 
+ 			memory-region = <&pil_nsp0_mem>;
+ 
+@@ -5919,8 +5923,12 @@ remoteproc_nsp1: remoteproc@21300000 {
+ 			clocks = <&rpmhcc RPMH_CXO_CLK>;
+ 			clock-names = "xo";
+ 
+-			power-domains = <&rpmhpd SC8280XP_NSP>;
+-			power-domain-names = "nsp";
++			power-domains = <&rpmhpd SC8280XP_NSP>,
++					<&rpmhpd SC8280XP_CX>,
++					<&rpmhpd SC8280XP_MXC>;
++			power-domain-names = "nsp",
++					     "cx",
++					     "mxc";
+ 
+ 			memory-region = <&pil_nsp1_mem>;
+ 
 
 -- 
 2.52.0
