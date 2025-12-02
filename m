@@ -1,164 +1,126 @@
-Return-Path: <linux-pm+bounces-39055-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39056-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61BDEC9AD87
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 10:27:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 563D1C9B0C3
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 11:15:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 43CD44E32DF
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 09:26:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E93EF3A4420
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 10:15:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A1EC30C62A;
-	Tue,  2 Dec 2025 09:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A5A130E0E7;
+	Tue,  2 Dec 2025 10:15:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="MfTUlGhn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ic6jN//l"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 094852FFDC0;
-	Tue,  2 Dec 2025 09:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C91530C619
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 10:15:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764667606; cv=none; b=k7h2PemchUSjP2VPl1mcX8DmPW7jpPDJW6/8Ci6tNPCjQZqgC9Mg1Jhubamw5OqUAN7DrHgtHjR0iuNVWJ/Suc+sK3ceyQM7xGGd5cVsdPpLQeJTxm8VrrpDVMmmfzWwYb1PCwzYC89rs/Uv7KBJuNOZeaiImGVra5BqXDTGfDo=
+	t=1764670505; cv=none; b=tHeUUdkvw++3+tgrvAH+0i4zU/FQxBy6LS3cd1DaiVWguaXpIYQ8+hT2dobqGcK29jH7SOvLnLN8VbKjzNGhbEkvYIVrac+O3dkZ4a70GxLcWm7vMKqd/BewiSw/3c3ERhc/25UAKDExsdQa5+JO/kd04/x97+H5/2G3xe9kfeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764667606; c=relaxed/simple;
-	bh=e4ADKf5KnBtmyNx7K3nhN5sMxYdX8FSZtoZA9jdJSmQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UzFHiQ/CwZkXF2p48PaaBjrA2LV/tsAigklVlFpoNkuEk3tBCxZPTyyK9J0bXiE2sZAaSRFTkcJKk0QuJ3l/XvbWaDGnIR0pATFylKDqr2q1A9pqOcGQI9YrRMRjMPkzmSQJG2nIYpEt+lIbSf3ebW1wgT58JPV/cnbAE8Vc+AE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=MfTUlGhn; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 243561A1EC1;
-	Tue,  2 Dec 2025 09:26:41 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E6457606E3;
-	Tue,  2 Dec 2025 09:26:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3DD6211918D13;
-	Tue,  2 Dec 2025 10:26:21 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764667597; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=0QhNzQsm8Oj1GGB/bH80Qc9yOMbCIo84NGjawpRGa0U=;
-	b=MfTUlGhnnw/aVreeaATbhw0gwkpem3K9EKovmRrLAuPocP4mtIEFaUBJAllgvpXiOFVYVs
-	/+wYe6BWiOjXN0TQXfqEbI4kTBiForiN43QgIRFG1Tif71C+pWFPguQb30OO5GR384TVLH
-	FZYaHMZgblFJnDTIPRv3nxFL2X7+IteBlMRlRxUIW82bL9nD/zWvqmrNnYX95WKYHUolBR
-	aWzmo2dED90Ls+6evrTylVevWGCfFb+t5/b4hRTOr5NOspn3gp8X2yP/8vpWUgnmn8SNQp
-	t2T7sfHrwl492i35smJdL2e7LttoyWu75OyA4aNg7/ydqIjfu3dWfVR//psj2w==
-Date: Tue, 2 Dec 2025 10:26:19 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Kalle Niemi <kaleposti@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Matti Vaittinen
- <mazziesaccount@gmail.com>, Andrew Lunn <andrew@lunn.ch>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>, Shawn Guo
- <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
- Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
- Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, Bjorn
- Helgaas <bhelgaas@google.com>, Charles Keepax
- <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
- Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Mark Brown <broonie@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, Davidlohr
- Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-Message-ID: <20251202102619.5cd971cc@bootlin.com>
-In-Reply-To: <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
-	<20251015071420.1173068-2-herve.codina@bootlin.com>
-	<f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
-	<CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-	<5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
-	<CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
-	<072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
-	<CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
-	<55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1764670505; c=relaxed/simple;
+	bh=tluCUMdbZtzI70MpMNxT6XbTimg3FvfG4a7kkBpBftI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SoTzV8dYGgK+MeMSB9HOoVFhNLk0o+unTo/qzdXGlmOGe5XT8lta8JN8/J+02Vobw5jx6R2NbqWcq0Ezqg/sDWKv4kWnzVgEhrD+pCYzEtw5cGknK3DYziqzm6mKKM+djYEGyWrsKhEyz6getbvPKGptLv8YUV8OhBjvuRpML/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ic6jN//l; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4777771ed1aso33661355e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 02:15:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1764670502; x=1765275302; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xj/gqbMEvC2U1EurKb6UYz7u2S6QJAk3SBUPxA7BZ0k=;
+        b=Ic6jN//l6u8CV3nf+ShALrI0NZPtmGhd0SF3XhXrm/DTRp/WvCFHYh34Tno3H7KAx1
+         XgA8LnPNy702J4zs5sVyBYfa8lu1nfLjnO1HZEYddbPvEueMLzH+XLTTUWmNSWjKGC0+
+         82bYaK5fMvbS87p+Jv8W95K88InGGZxULVgWgJ+C+C/xDihbtGaUPE91swFviLk/LV1B
+         18U7y9MaY9GYMwO6KbfyfHZQAaQsY0MOc03eo6ywxw3muSOln2Ac6KAwuAkbjgbJRVK3
+         tEnbld4TVL5wfTDupW1vBMC04x4pcNq4Y7L8oxt+cSVyre7JZQVRF8MlQ8+6Wpe6VVey
+         u9ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764670502; x=1765275302;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Xj/gqbMEvC2U1EurKb6UYz7u2S6QJAk3SBUPxA7BZ0k=;
+        b=EXWUJy/1FgZ32D5SYQguFXBd9dVZ5nzWVs/E895qTY6T7htyZAsdqbSTg3JHgWtnZG
+         ESQsvgCk2PJIb+yPxTTOSgWRjImpFCIenFN4rntGyOqRSpe46rqZmN8rC7dx0xUPtGkf
+         yPs16FJduRQovbmy+chIJM5scO9n0meeZOyEK1gyWJgsav0HO7yeba6zd0jJazwo6SlC
+         0D7Jt3UkDaBnDwI5F3oGglaZEeLJYwdNRG3n6H8o/g5yTn72R4mu3RPDcPwpXpSKjOhK
+         TqkyaQDnzDJnb/nDqDzqOhpePuutGKkEYUPk3WoJkJNAcV16/ujIh14ve02P3ZSsnX/P
+         jWRw==
+X-Forwarded-Encrypted: i=1; AJvYcCWexEvJ/heWaP1S+Zj4E25qi4YpJjryDXGwCBEADBE98gcEoct0CG3lI8t3qKKD3Ph8YDwBro7A1Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YytiiBvZQ48P1H25JpVnXo2TbDupsDMm5c4EPeRA1dbQa0fp7Sr
+	bXhd5uh+GST1GwzdZGYU4JP42+QZtM9rgV5CQTD9WB9LtwuvEoM5Bs4Hh7WotpFFlaUwnq8jxJs
+	8ZPNbsrziFpDrQ3HrBlA14PQFr8WIczwQOl86zkRE
+X-Gm-Gg: ASbGnct1Z7p/3gBoeEithgAGLi4KKYbOFYsk7h3Aduslrgt5ZP1uqZypsZVEoD/n57W
+	PMXMmCbV5sNGe0WBf1hap/EA6kcnScrWiGlQfMlTWt+gxPYhPW5128H6eUowOC6tMWbKYI7yHSI
+	dqaLE0Ql/dxgeRX+Tl1CJCEbfqfv6lkFc+KXZAHHH/lVEjupvgDa4Qo4CBXAM3bQrHvBQs5Uykt
+	Nyjh2evx4voVO/d8bYhD8OqPIHr/a8aflGSm44t4qdzMzMTdx1JZa3E4OFPTshbw8ENxxKQTLXC
+	YLvzMs2uKieASuNsF64GG9RfjjoObQVoyhBCteLIkOMYXRWE3EqLbuKPqQ==
+X-Google-Smtp-Source: AGHT+IH41ppbKo2ntsTFFVkqDJyv15OsfwqRLDbKCfbp32OEMtJv+7r8A3+XIAbI1BpBDvsTQpoln+8HEetvbhddqzA=
+X-Received: by 2002:a5d:64e6:0:b0:42b:36f4:cd20 with SMTP id
+ ffacd0b85a97d-42cc1d2e292mr45860682f8f.27.1764670501670; Tue, 02 Dec 2025
+ 02:15:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20251128-io-build-assert-v2-0-a9ea9ce7d45d@nvidia.com>
+ <20251128-io-build-assert-v2-2-a9ea9ce7d45d@nvidia.com> <af76b544-a7ee-43da-878f-cadc1599d7f0@nvidia.com>
+In-Reply-To: <af76b544-a7ee-43da-878f-cadc1599d7f0@nvidia.com>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Tue, 2 Dec 2025 11:14:47 +0100
+X-Gm-Features: AWmQ_bncCycjJtLo57Ks_3lnLDfKrcsh2eIAuKqvMlje8DUUWqYWLDIlb5gTms8
+Message-ID: <CAH5fLgjNXcWgCLp=GkOiycPtcR9dpSn-wZ0HK6YnQC9z+dWyTw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] rust: io: always inline functions using
+ build_assert with arguments
+To: Edwin Peer <epeer@nvidia.com>
+Cc: Alexandre Courbot <acourbot@nvidia.com>, Danilo Krummrich <dakr@kernel.org>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kalle,
+On Mon, Dec 1, 2025 at 9:07=E2=80=AFPM Edwin Peer <epeer@nvidia.com> wrote:
+>
+>
+> On 11/27/25 18:11, Alexandre Courbot wrote:
+> > diff --git a/rust/kernel/io/resource.rs b/rust/kernel/io/resource.rs
+> > index bea3ee0ed87b..d9851923562c 100644
+> > --- a/rust/kernel/io/resource.rs
+> > +++ b/rust/kernel/io/resource.rs
+> > @@ -223,6 +223,8 @@ impl Flags {
+> >      /// Resource represents a memory region that must be ioremaped usi=
+ng `ioremap_np`.
+> >      pub const IORESOURCE_MEM_NONPOSTED: Flags =3D Flags::new(bindings:=
+:IORESOURCE_MEM_NONPOSTED);
+> >
+> > +    // Always inline to optimize out error path of `build_assert`.
+> > +    #[inline(always)]
+> >      const fn new(value: u32) -> Self {
+>
+> Does the build_assert problem actually manifest for const functions?
 
-On Fri, 28 Nov 2025 10:34:57 +0200
-Kalle Niemi <kaleposti@gmail.com> wrote:
+Yes, the const marker only allows you to call it from const context.
+It does not change behavior when it is called from non-const context.
 
-...
-> >>>>>>
-> >>>>>> Hello,
-> >>>>>>
-> >>>>>> Test system testing drivers for ROHM ICs bisected this commit to cause
-> >>>>>> BD71847 drivers probe to not be called.  
-> >>>>> This driver (and overlay support) is in linux-next or something out of
-> >>>>> tree on top of linux-next?
-> >>>>>
-> >>>>> Rob  
-> >>>> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c  
-> >>> I don't see any support to apply overlays in that driver.  
-> >> Ah. Sorry for the confusion peeps. I asked Kalle to report this without
-> >> proper consideration. 100% my bad.
-> >>
-> >> While the bd718x7 drive indeed is mainline (and tested), the actual
-> >> 'glue-code' doing the overlay is part of the downstream test
-> >> infrastructure. So yes, this is not a bug in upstream kernel - this
-> >> falls in the category of an upstream change causing downstream things to
-> >> break. So, feel free to say: "Go fix your code" :)
-> >>
-> >> Now that this is sorted, if someone is still interested in helping us to
-> >> get our upstream drivers tested - the downstream piece is just taking
-> >> the compiled device-tree overlay at runtime (via bin-attribute file),
-> >> and applying it using the of_overlay_fdt_apply(). The approach is
-> >> working for our testing purposes when the device is added to I2C/SPI
-> >> node which is already enabled. However, in case where we have the I2C
-> >> disabled, and enable it in the same overlay where we add the new device
-> >> - then the new device does not get probed.
-> >>
-> >> I would be really grateful if someone had a pointer for us.  
-> > Seems to be fw_devlink related. I suppose if you turn it off it works?
-> > There's info about the dependencies in sysfs or maybe debugfs. I don't
-> > remember the details, but that should help to tell you why things
-> > aren't probing.
-
-Rob reverted patches but I plan to continue my work on it.
-On my side, I need the reverted patches but I fully understand that, on
-your side, you need a working system.
-
-In order to move forward and find a solution for my next iteration, can you
-send your overlay (dtso) used in your working and non working cases?
-
-Best regards,
-Hervé
+Alice
 
