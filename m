@@ -1,134 +1,166 @@
-Return-Path: <linux-pm+bounces-39077-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39078-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BE52C9BA00
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 14:37:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48AD7C9BAEA
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 14:57:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F38614E359A
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 13:37:35 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 34D744E2298
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 13:57:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CC36315772;
-	Tue,  2 Dec 2025 13:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tvJ/O/iy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C154A31D36D;
+	Tue,  2 Dec 2025 13:57:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31C530FC39
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 13:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07CCA31B836
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 13:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764682652; cv=none; b=KBvdIZZ5Z4rqlGIW210spZ5qypFpfvmYIWDpo/4OzSecCUxbHl+wq5IeN+bmKEZqvQXeU5FWrNz0XdKgRH0VT01GGp5XDeLxYOJ+9gzhotOP9Bz+iCiDIUM2NKfYZ0VfLhceah2lRF3v1UwskaIkF83HNeWlwhkYBu9vpz1mwPQ=
+	t=1764683828; cv=none; b=NK4KsiR8wYt1nXic1kCiMMB8vcvB0QbKdUNfp5iRFKJQf27xa6LNrMCWlP9yEWmnC5Q7ygB+dZUeZQ+MVTWMfWJeN+ZbkAQC8JYL0815SIN5zjJg0iuf73xMPWOaoTRmH9pJ3J28wUrUAIA5mtFAGgXNslKAApbSX3PBuUZWjm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764682652; c=relaxed/simple;
-	bh=+JM7juOdkDR9m3PEB8eMvh/J6NNMXy7yEZtuYo1Vkh4=;
+	s=arc-20240116; t=1764683828; c=relaxed/simple;
+	bh=ak/Rt6uWiX+MT4pBJfZ+PD2Fezju7a0RibofMkxgxGI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=teMMaz/w0PMFEFWYqLrZSYHOo7Fr8A3feMRhNDj9SvO+Tph9mv/iflpSQLpSFkR0M3D6M3RIx1jt12lJLZYndbLuZLRn/qPRuTQ3FwHOVx2GCHSq1HCOXo60AwiG3j8iyLN6SJWdKUtup1pbBbScUwSHuc46bh9gItg/bCnRgv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tvJ/O/iy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87279C16AAE
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 13:37:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764682651;
-	bh=+JM7juOdkDR9m3PEB8eMvh/J6NNMXy7yEZtuYo1Vkh4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=tvJ/O/iyDS9Lw0hj5nlvYUOGZtk8897R0W58SfRYVM9fE6y0PuF9RZJIQttQNFN++
-	 B5VJzYTHw2P95yUlfKT5DOVC7/YaYEMmSzCx25KohPShsvsVhYwNrj+xo+nLczOQv4
-	 CAHMDMKYIswl6ZjhK7zwQHtgReppumZjZo9aj+lFuIKnOigYKpTN99cNXblp+AmHZg
-	 Z2j87PseAza9zU3ohTbAS0Fu/u8vjRR+XiNBuUACaUhCsk/VALu1ZTnnYOQwMYjxAJ
-	 DI/MZM2R42IE+82nP8QC6L4O0vpK92RmeMD/4iaOziATYW2GK2VPYbcD6Ey9CXRC/9
-	 B8G4aMTPMK1dw==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-656d9230ceaso1017179eaf.2
-        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 05:37:31 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXKuY9uwYeWj4iB3GeyRgLAORSXjbxmLSqHZmG5YLGNnSAhSYBAbX3Kl/qf76hTkjGuNDOYLI2Z1A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDdLjzbVIYlPWILAmH/Ge7S3XdDu0X+bkVztne/Wu2FwEO22kq
-	NjeM12fNzZMlydAR9FvZWAZxQ7u70Q/QMj6mYyz1FCmKBK4BXhFRYIe9z8a3C8qa8vEP5qCglPE
-	Nl18rMa60OIQWTqYvFfL8nvTl7KzpS50=
-X-Google-Smtp-Source: AGHT+IGBxwBb3iJqpVZ/4Ah3PMzgvnzmdDaUns6dI29UOrC6b0HbYoUBvRCJw7fOcaVUOYXlZgdWnAw6qUEjpJP+AUM=
-X-Received: by 2002:a05:6808:c28c:b0:44f:e5c8:2902 with SMTP id
- 5614622812f47-4511294e6e1mr16757367b6e.9.1764682650837; Tue, 02 Dec 2025
- 05:37:30 -0800 (PST)
+	 To:Cc:Content-Type; b=K/Qox0FWmiieSS33+eZhNiXHtcGVoS4TxK734ArXuPg8AmYGA81lNCVEgdClSSgf4xwOkJwTE+bsEf1LxEN9UMbdJRBywrH2cNPnoBNOePmic07Q2zR70GW5JOLQ3ZwBqygchvei6CNhBFWjTn/nQntRhoeuCpNyKIAY2a779ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-5dfc6be7df3so1870493137.0
+        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 05:57:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764683825; x=1765288625;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DcG/XQXLp9HYcvharszf8uW0YuqvJnIwjKHOdBnLhz4=;
+        b=L8dQwmgAWqlTkKM0cHeQ2b/HkJ/IZwHy5pVlI5l1chd0sJFyngSKQo9VoqrkdVbMFU
+         F8HJ55rqqC7HnkiVCRM5o16m3rL0IR4wVHdgiYBuZs6/6+Ktsp3lRn9ZLaeLxuxxFC2D
+         8B0K3P+jqRkhF/pGvEQsbtak42Ewh9v1cJ+SBbnBMdaIRYPTB3KUjXeh3k39a0q+vNTV
+         DxAojVeSSMQuEOPSalDMtPsGCWNY26PSunyKJ3tF9pjwPiPpDLMhvXIT23I3s2VNfJfZ
+         RYRkBkl0TY+Vazpktl4rTZICMnPvo0mbLEyTvvfp9dLr9loHC5XDJWGSU6gxnZkXgS8a
+         OjtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWlQHHGJzoGtf8e4JvtedC6cnUkdKvuC0f7z0W79j7rPP/sBNPv9f1hrgsSbV/n8XEY/K76+jJySw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5+FEos40L29g/Zno6PzY0klLPoXbf2aGiadTjmRKNi/Tj14Bg
+	0Imz8x/Ge1EPggggP8mJvkUavWBoeH73Cl6JNyyGdtiq00HqTJQRsYmCZsZ8JidR
+X-Gm-Gg: ASbGncvwPYl2OJeKSlDrryDsk7ECRL/Yp1pP2B3QNNQlufivA6U6Ufj5RYrzs/5ulpY
+	LiRLoaLYo1hUgzHmAcyyxfIrrbTa+6455A2NiZ3U3Su7IsHh+Vh9/YIxSIerOQmayRTmKKuHZMN
+	NqOY0dcoInKd1nLbSI5qW7AwCc2VhSgBEJgm90+XldoKzRsFfMEAVmHvefO85HquhoF5I9qDBAu
+	Jrt0sA1kZlD68UXfG5efkIHpfYIyDNFOTEiQE0u7eJela/7w6NlHK21NTHhgm5RA6NDnThw11SP
+	kCTwrA2jvWqYiIk7g6EaoJXtMdPhxowBQT4+EFTnFkbCTypaMquu8lJZPZfh0VwAIa1Ggvn6DoM
+	+RA2Uk8/OHELdl6mCZC81ednORTyBymBxamnOxMAHASd6vvYRxkVahRJQI79uuI0u4lkY3SwgBx
+	D2Fp7osqxrX1WlMpJg3DuUpCeXgpvzlNloR1y+OZoYWTRaxiPD
+X-Google-Smtp-Source: AGHT+IFYuO7iSHZ9ZhKUijIwKDSfRB5c2JndbIB0QN6dQoxPswC1/qlBHnQr2XmP0o+MAdKZ+E1kuw==
+X-Received: by 2002:a05:6102:3e1a:b0:5db:cf38:f4f3 with SMTP id ada2fe7eead31-5e1de3444bbmr17185387137.28.1764683824732;
+        Tue, 02 Dec 2025 05:57:04 -0800 (PST)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-93cd6cef362sm6756317241.6.2025.12.02.05.57.03
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Dec 2025 05:57:04 -0800 (PST)
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-93719360f9cso1402095241.1
+        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 05:57:03 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVY/Ps2Qw5GwTbnJDCe+ckg74/UNvwGTpps3FP40leNt9klo2ClDBWuO5Ln17OGkZFjudQ8Mjsn7w==@vger.kernel.org
+X-Received: by 2002:a05:6102:26c9:b0:5dd:89c1:eb77 with SMTP id
+ ada2fe7eead31-5e1de39d9cemr17004298137.29.1764683823416; Tue, 02 Dec 2025
+ 05:57:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251126101636.205505-1-yang.yang@vivo.com> <CAJZ5v0jiLAgHCQ51cYqUX-xjir7ooAC3xKH9wMbwrebOEuxFdw@mail.gmail.com>
- <CAJZ5v0hKpGbwFmxcH8qe=DPf_5GX=LD=Fqj3dgOApUoE1RmJAQ@mail.gmail.com>
- <4697314.LvFx2qVVIh@rafael.j.wysocki> <dc4dba4f-8334-40ea-8c53-6e8d135f1d41@acm.org>
- <CAJZ5v0jV-80kfk-AY70b5pQtyXxUtU_ACBVP_TeTAnaY0Up8Lw@mail.gmail.com>
- <1e7583e8-9ae9-4641-8ec2-7c62a637c9fc@acm.org> <CAJZ5v0hKe+2orwKP352dBe_PB1pZqMehMo8tSDv5G+cdaJ=OsQ@mail.gmail.com>
- <82bcdf73-54c5-4220-86c0-540a5cb59bb7@vivo.com> <CAJZ5v0hm=jfSyBXF0qMYnpATJf56JTxQ-+4JBy3YMjS0cMUMHg@mail.gmail.com>
- <09ff685f-a688-4b92-a38f-c58b598b464f@acm.org> <CAJZ5v0jvPJ+2j-J8vx7f2w50bTiAVbwNjuZW-WqsPZg1koZu8Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jvPJ+2j-J8vx7f2w50bTiAVbwNjuZW-WqsPZg1koZu8Q@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 2 Dec 2025 14:37:19 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0haFgyoXqapvpESUec0_Pxw-uckTGSpVOWDQPbxWU-=Dg@mail.gmail.com>
-X-Gm-Features: AWmQ_blDiExDLdVj0z0LddRfYz8TZqEuMWzZ97GkUjRexWJ6Iy-mqBNbnxv1XmY
-Message-ID: <CAJZ5v0haFgyoXqapvpESUec0_Pxw-uckTGSpVOWDQPbxWU-=Dg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] PM: runtime: Fix I/O hang due to race between resume
- and runtime disable
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: YangYang <yang.yang@vivo.com>, Jens Axboe <axboe@kernel.dk>, Pavel Machek <pavel@kernel.org>, 
-	Len Brown <lenb@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Danilo Krummrich <dakr@kernel.org>, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
+References: <20251112-b4-of-match-matchine-data-v2-0-d46b72003fd6@linaro.org> <20251112-b4-of-match-matchine-data-v2-2-d46b72003fd6@linaro.org>
+In-Reply-To: <20251112-b4-of-match-matchine-data-v2-2-d46b72003fd6@linaro.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 2 Dec 2025 14:56:52 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVJD4+J9QpUUs-sX0feKfuPD72CO0dcqN7shvF_UYpZ3Q@mail.gmail.com>
+X-Gm-Features: AWmQ_bnP_BfEGwKLqJN8UevZeVXg10-IsXC-lVqCY3H9e2HFkqZ11liOD_Kw768
+Message-ID: <CAMuHMdVJD4+J9QpUUs-sX0feKfuPD72CO0dcqN7shvF_UYpZ3Q@mail.gmail.com>
+Subject: Re: [PATCH v2 02/11] cpufreq: dt-platdev: Simplify with of_machine_get_match_data()
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@kernel.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Maximilian Luz <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Daniel Lezcano <daniel.lezcano@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-arm-msm@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-tegra@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 2, 2025 at 1:14=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
->
-> On Tue, Dec 2, 2025 at 1:41=E2=80=AFAM Bart Van Assche <bvanassche@acm.or=
-g> wrote:
-> >
-> > On 12/1/25 10:47 AM, Rafael J. Wysocki wrote:
-> > > Generally speaking, if blk_queue_enter() or __bio_queue_enter() may
-> > > run in parallel with device_suspend_late() for q->dev, the driver of
-> > > that device is defective, because it is responsible for preventing
-> > > this situation from happening.  The most straightforward way to
-> > > achieve that is to provide a .suspend() callback for q->dev that will
-> > > runtime-resume it (and, of course, q->dev will need to be prepared fo=
-r
-> > > system suspend as appropriate after that).
-> >
-> > Isn't the suspend / hibernation order such that no block I/O is
-> > submitted while block devices transition to a lower power state? I'm
-> > surprised to read that individual drivers are responsible for preventin=
-g
-> > that blk_queue_enter() or __bio_queue_enter() run concurrently with
-> > device_suspend_late().
->
-> To be more precise, they don't need to be prevented from running
-> concurrently with device_suspend_late() in general.  The driver needs
-> to ensure though that q->dev is not runtime-suspended in
-> device_suspend_late() if blk_queue_enter() or __bio_queue_enter() are
-> expected to run in parallel with it or later.
->
-> > Regarding the UFSHCI driver: if a UFS controller is already runtime
-> > suspended, we want it to remain suspended during system suspend.
->
-> That can be done, but still the driver is responsible for preparing
-> the device for system suspend.
->
-> The most popular strategy is to use pm_runtime_force_suspend/resume()
-> as driver suspend callbacks for the device, either as
-> .suspend()/.resume() or as .suspend_late()/resume_early(),
-> respectively.  In both cases, runtime PM will be disabled and runtime
-> PM callbacks will be used for stopping the device - or not, if it is
-> suspended already - but after that it must not be accessed in any way
-> until the resume part runs.
+Hi Krzystof,
 
-One more thing that needs to be said here: The PM core expects the
-decision on whether or not to leave a runtime-suspended device in
-suspend across system-wide suspend-resume to be made before
-device_suspend_late() is called for that device.  If the device is
-suspended at that point, the expectation is that it will be left in
-suspend.  Otherwise, the expectation is that it will be taken care of
-by the .suspend_late() and .suspend_noirq() callbacks (and this goes
-beyond runtime PM, quite obviously).
+On Wed, 12 Nov 2025 at 11:37, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> Replace open-coded getting root OF node, matching against it and getting
+> the match data with two new helpers: of_machine_get_match_data() and
+> of_machine_device_match().
+>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Thanks for your patch, which is now commit 6ea891a6dd370ab2
+("cpufreq: dt-platdev: Simplify with of_machine_get_match_data()")
+in dt-rh/for-next.
+
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -219,20 +219,13 @@ static bool __init cpu0_node_has_opp_v2_prop(void)
+>
+>  static int __init cpufreq_dt_platdev_init(void)
+>  {
+> -       struct device_node *np __free(device_node) = of_find_node_by_path("/");
+> -       const struct of_device_id *match;
+> -       const void *data = NULL;
+> +       const void *data;
+>
+> -       if (!np)
+> -               return -ENODEV;
+> -
+> -       match = of_match_node(allowlist, np);
+> -       if (match) {
+> -               data = match->data;
+> +       data = of_machine_get_match_data(allowlist);
+> +       if (data)
+>                 goto create_pdev;
+> -       }
+
+I think this is a change in behavior:
+Before, the pdev was created immediately if the node's compatible
+value is found in allowlist, regardless of the value of data (which
+is always NULL, except on RK3399),
+After, the pdev is created immediately if the node's compatible value
+is found in allowlist, AND data is non-NULL.
+
+>
+> -       if (cpu0_node_has_opp_v2_prop() && !of_match_node(blocklist, np))
+> +       if (cpu0_node_has_opp_v2_prop() && !of_machine_device_match(blocklist))
+>                 goto create_pdev;
+>
+>         return -ENODEV;
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
