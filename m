@@ -1,74 +1,77 @@
-Return-Path: <linux-pm+bounces-39098-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39099-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85D2AC9CC4B
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 20:31:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95158C9CC51
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 20:31:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7348C4E01F2
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 19:31:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D7ED3A90F6
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 19:31:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F97C2DC798;
-	Tue,  2 Dec 2025 19:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A5212DFA3A;
+	Tue,  2 Dec 2025 19:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NG60G3Ak"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fwDx83VN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B3131DED49
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 19:31:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799232DF149
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 19:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764703901; cv=none; b=KUbaO+f0TgUj0FJsdNkeyPkmzhHKJCgKF6AJAuE/gywu7Kv41uuj4DozpyppKWg7XSjZJxJWpPBuTJszOEP9kugSIhY5nqKlEyRzmDPy0JJrvnH2Hcow1O3Iu+JknqPkOlEttwVvDMFLrjnzNLTJmaqAhIKHolamalalCnQqVQk=
+	t=1764703903; cv=none; b=saTDvOdsi6MTNZJiXTkJt0m4v24rMUN2P+ONbLr+UXO1+4gs8GzHB9AnW4ZlERf90oa5FDrCZOi7whXCJTihPZWmIr1UdaDCdN8S2dx4Gfntc5h2T+0eWXQ7UIXkuJlqIuZ+kycYKiy5O8u5vWPBk5RKEhe9Eqb2nQvas4JnJj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764703901; c=relaxed/simple;
-	bh=fEcCW49GLxnu7FGzwMj26z1F3Yk1MWApE98oMgQh5bs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PPfXqh8mr9aMnRLVK5TABY/HwnPYBXrrdRzG5BoIvFnJd4mUAYJjZbF+J8LAXC4aD9ddh9ZKRuVokG7ulZ2SGnXSNSFgPTM4NnzpZzeZlJ5Y6viRjY02yMWawp7Zj2QcLzJN8d+V+CMMTYlTjqCa77QYz2B0RLrxW7V5pBnIeug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=NG60G3Ak; arc=none smtp.client-ip=209.85.214.179
+	s=arc-20240116; t=1764703903; c=relaxed/simple;
+	bh=89tgRTYNqhu9hOepvJ+82fephEkPsuHCdL6LCEACfzw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ASGdnv1dD/N0krjAi0b5zrDOZuaMOR75CLl/SUBu7YwH5IQ85Kijp0Epa+B5ImYRq9oGCPQb0wqfBHGa8fB0Vpc6VF/9eknwmXX12diRa59byxjattSxkrue5IoSfCW/LS/Uw2nnr9ROpK37zvgcBKZF6D/MJ0Uf5X37PJwiLrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fwDx83VN; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-29555415c5fso69863685ad.1
-        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 11:31:39 -0800 (PST)
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-b99bfb451e5so3967988a12.2
+        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 11:31:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1764703899; x=1765308699; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UyAV6b1dCSPUCut9ORTRvQyMGZe7GCYluMBZNHP/w0U=;
-        b=NG60G3AkZ+ojKcjb4X92s+pUJBRTzg0wzCAi4D8U3bGg0dinWD2k++VsLBHedghUbj
-         Ei3ky9/pqP8RDEOUSRjz9n1rIR9TSlN+8em4vRjFG6pRntndrg6ae3F1Zb0zA1FHariN
-         G4IwJdHv8nRDifKBYve0H01O9IsAHtZddHz1U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764703899; x=1765308699;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1764703901; x=1765308701; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UyAV6b1dCSPUCut9ORTRvQyMGZe7GCYluMBZNHP/w0U=;
-        b=A1okA23NFy9Ys+QHeNvn/L7IhZ+leYUQSUpeWAaxHpIXkuxICnG4qTBb05yHnOIBTE
-         81UqNI0ohFs6J5VVqogr23x1znchY5ewJlEa76YayDJ+z1XLlqNmkv3EPgIJ1U9sB3Xu
-         cVwZY4ET9/b+a0Si+3MDr4WG/volZQGr1LouHKjC3JhWDYdm3AbNmY2BTsEKf8TJHdo5
-         FEr3vwbuNiJMN7Qr1UeB8UodKTir3efruWMv1lXrr6MLLxcqHRk57zN4Fa9NyxgoB+ye
-         GK4q+7ezusp0oS+JIyZ9aown1R5eAnmbip2lKbf49YlCx3h+DA7yqkGZJyKDGLqmXT4U
-         FPYg==
-X-Forwarded-Encrypted: i=1; AJvYcCU+r5sPNl5cxs04/eAcWSTN+CmXaboMAtWyFH1cJOMTk8DJKKXEZy/QzhOwRR/wwgNYU1S3+bk3YA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNXrfe4P0rIvpa1BwUaKx3XQzP2cXlaVi73BSG0Aaan06A+Des
-	kEdgqn2Kqx66cO+IpymFpMnXP8Av6oli1D8VbTj2aFh3mwOpItKzT4oY5DrqjXyygw==
-X-Gm-Gg: ASbGnctK3eA6J6xyG6Ndq0/is9YN4+fhvwRa6PzkdfaeyaUiJFizGTolpBGEsTwOYHV
-	Hxh3ZifIi4gcUB2lriBx8wICKORGjpgl69hsTFE4upaTuT6WfwzwRSUewm46aOZL8H11+aIBTg8
-	ZNNuzBxXuHIDPvzOLgrZ3DQQgtY8X7IK9yjKfug5Lh6wkTXPweGppY/w0p4atXKObQdSA+z93H1
-	REvynrlcEdY3d5OBxcvHNtK2H/gAFA2TdVjqOKKrnm6jZUcAXB5jLmyIfSG5WdB33iOaXTlBWIr
-	IZlnaiyt5C7U5cTIVej7fYj6+001woZ9WPnYTMb854ioUalWcRCTNi6DizfnlnZ4o9hwbW66Ol/
-	wqcCyIlK03KcBjXrAO68XuTO9RtyLFt1KACdy3MmN3ilJxNdeJWvOSGbrVg64nrtsfd99v9Up/r
-	xLTZ6BciRua25m09nCldHl0bdthJDD2F4W+knK7/0WarZo7iD0+jNGs7WthGsAxuKCHBpYY5M=
-X-Google-Smtp-Source: AGHT+IFwi+4LK0qpugw0KBj5fazsKFox+KJ1G9nPqHCdptaKIAv1XlFaC9KoFdl/LTA5slQRRkbFbw==
-X-Received: by 2002:a05:7022:688:b0:11b:9386:8267 with SMTP id a92af1059eb24-11defd3855bmr389146c88.44.1764703898701;
-        Tue, 02 Dec 2025 11:31:38 -0800 (PST)
+        bh=na5v78OCyeT9zlR5GeRvaaoUwV8EP7IcuCIa4acHer8=;
+        b=fwDx83VNw7GSrFX+jc02HYlV5np3oLwwRkVjJabOK0Z+If0TUrHEcyZRb6QGMdY1vB
+         +dGvPP7LopvXSgVUcA3ZCDd+Z1+o5p/nxOoQxfPoVcxBoF0fobMWdOlSaMrQXFUDFQGS
+         wWDklzylYdsVSmkvibyefhyL6Pc7y2T6OVbuQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764703901; x=1765308701;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=na5v78OCyeT9zlR5GeRvaaoUwV8EP7IcuCIa4acHer8=;
+        b=KTfR00QbAmpQ3HKi+dPBoYPtnYgjzC+6bSypKSMio+uu29EasI77CGEKZy0TkGE5JP
+         E3wat9ohmwyV4R+FCW3VMLCwLN0uaUzn89oqakh/WF9j90tIxor+XDy6ayutk6cyL6Tb
+         Q0dMVXUOJUUwaMxV8/BhpHmEBYgwXOd3ZptEFY8g0aHPL/XbsH46hTsVwKMEWrBwAccS
+         18AVqr+LGoZId+KY3B2kxYyMFAj/gyqNh779hSn+hN4Cw9h1YF1rsycP5Seh0PZL7iQM
+         JpgJh11gUG72NgrxHCwROevKjwXZ7ZB+uYJwPCJOJW5jqrDmCTTzvkayAC+IrUb5qWZ5
+         JXUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWPt1rWCKvCqjSeJ8DB9hDZvKuk8g2VPYg1l81B6k0avsGUZ0KDtSHKWKZecjd3/TkV89TYvm3VLg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvP+/eTDVtuzsSRbhU/BFchUu3Q4/P8bbBTcQhSLfB+k7eO42O
+	87vGfq4XM+amo9VeDTZQL/l2PgnNSCBYxxDp5fkeUbHVwvJkw3X0DAVDm8O8uJKRFXM7HL4o0Cq
+	tUOg=
+X-Gm-Gg: ASbGncsUDq66I5WBGkcJaqQ7lfYfNolL8FQ9axBJb856TpBPV3fEkF09o4VA81tkkPV
+	4fdzM7Qjfse5OoFLsg5jZgojDAx+K3jnZrGPx9z9l2Eb9yyQNcW+uj5RlvyEI0yjrZtSjVG3wlG
+	UkN8xfqGifHvqbRAjoRFEGonFUzVXWR2O5Tii3QDqitLsC7L3BbKSb+zn/5wDzN4HeAfpzwknUq
+	tONwIR85zlwbcY+vhGp6YajQyJLeZyd6u++9TWL44r8I7nbMBon3DsKwg/4ygZGMdrvWH3L6ZR7
+	Pv682lmDmk/S1JWXzxQvztZzEHyMutTrqg059J5dyDMDcH0ipfM9aaYmIIFSU25uxXrvJnl0Qbz
+	ttSxX67WhOwRlZVWvBXrLWzUi/EOGbHUPpzZXrImmfqvhXzVOcD+G1I4Sc7t4Ug0X4YvbQxf8Bp
+	PanSt7ZpLjQmn3WYEusWDoSSf8hMJ2TdDAU6S5Dm4x6UdV7zS4dImFDR/9IN6X
+X-Google-Smtp-Source: AGHT+IFoyTaQnXdPaLai2dhHok1uu5yke3eT/aKrXaUbt+aHtcAOgACJtFffvCzT1E5Z3FpUKLU+6g==
+X-Received: by 2002:a05:7022:4191:b0:119:fb9c:4ebb with SMTP id a92af1059eb24-11cbba47b12mr18529414c88.30.1764703900506;
+        Tue, 02 Dec 2025 11:31:40 -0800 (PST)
 Received: from localhost ([2a00:79e0:2e7c:8:eb2b:1140:65a2:dd2e])
-        by smtp.gmail.com with UTF8SMTPSA id a92af1059eb24-11dcaed5f6bsm91630110c88.1.2025.12.02.11.31.37
+        by smtp.gmail.com with UTF8SMTPSA id a92af1059eb24-11dcaee7076sm74258741c88.4.2025.12.02.11.31.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Dec 2025 11:31:38 -0800 (PST)
+        Tue, 02 Dec 2025 11:31:39 -0800 (PST)
 From: Brian Norris <briannorris@chromium.org>
 To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: Guenter Roeck <linux@roeck-us.net>,
@@ -80,10 +83,12 @@ Cc: Guenter Roeck <linux@roeck-us.net>,
 	linux-kernel@vger.kernel.org,
 	cocci@inria.fr,
 	Brian Norris <briannorris@chromium.org>
-Subject: [PATCH 1/3] PM: runtime: Stop checking pm_runtime_barrier() return code
-Date: Tue,  2 Dec 2025 11:30:24 -0800
-Message-ID: <20251202193129.1411419-1-briannorris@chromium.org>
+Subject: [PATCH 2/3] PM: runtime: Make pm_runtime_barrier() return void
+Date: Tue,  2 Dec 2025 11:30:25 -0800
+Message-ID: <20251202193129.1411419-2-briannorris@chromium.org>
 X-Mailer: git-send-email 2.52.0.158.g65b55ccf14-goog
+In-Reply-To: <20251202193129.1411419-1-briannorris@chromium.org>
+References: <20251202193129.1411419-1-briannorris@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,60 +97,99 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Apparently this test is the only code that checks the return code from
-pm_runtime_barrier(), and it turns out that's for good reason -- it's
-inherently racy, and a bad idea. We're going to make
-pm_runtime_barrier() return void, so prepare for that by dropping any
-return code checks.
+No callers check the return code, and that's a good thing. Doing so
+would be racy and unhelpful.
 
-This resolves some test failures seen like the following:
+Drop the return code entirely, so we don't make anyone think about its
+complexities.
 
-[   34.559694]     # pm_runtime_error_test: EXPECTATION FAILED at drivers/base/power/runtime-test.c:177
-[   34.559694]     Expected 1 == pm_runtime_barrier(dev), but
-[   34.559694]         pm_runtime_barrier(dev) == 0 (0x0)
-[   34.563604]     # pm_runtime_error_test: pass:0 fail:1 skip:0 total:1
-
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Closes: https://lore.kernel.org/lkml/93259f2b-7017-4096-a31b-cabbf6152e9b@roeck-us.net/
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
 
- drivers/base/power/runtime-test.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ Documentation/power/runtime_pm.rst |  6 ++----
+ drivers/base/power/runtime.c       | 14 ++------------
+ include/linux/pm_runtime.h         |  4 ++--
+ 3 files changed, 6 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/base/power/runtime-test.c b/drivers/base/power/runtime-test.c
-index 477feca804c7..1535ad2b0264 100644
---- a/drivers/base/power/runtime-test.c
-+++ b/drivers/base/power/runtime-test.c
-@@ -37,10 +37,6 @@ static void pm_runtime_already_suspended_test(struct kunit *test)
- 	pm_runtime_enable(dev);
- 	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
+index 8246df3cecd7..455b9d135d85 100644
+--- a/Documentation/power/runtime_pm.rst
++++ b/Documentation/power/runtime_pm.rst
+@@ -443,13 +443,11 @@ drivers/base/power/runtime.c and include/linux/pm_runtime.h:
+       necessary to execute the subsystem-level resume callback for the device
+       to satisfy that request, otherwise 0 is returned
  
--	pm_runtime_get_noresume(dev);
--	KUNIT_EXPECT_EQ(test, 0, pm_runtime_barrier(dev)); /* no wakeup needed */
--	pm_runtime_put(dev);
+-  `int pm_runtime_barrier(struct device *dev);`
++  `void pm_runtime_barrier(struct device *dev);`
+     - check if there's a resume request pending for the device and resume it
+       (synchronously) in that case, cancel any other pending runtime PM requests
+       regarding it and wait for all runtime PM operations on it in progress to
+-      complete; returns 1 if there was a resume request pending and it was
+-      necessary to execute the subsystem-level resume callback for the device to
+-      satisfy that request, otherwise 0 is returned
++      complete
+ 
+   `void pm_suspend_ignore_children(struct device *dev, bool enable);`
+     - set/unset the power.ignore_children flag of the device
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 62707738caa4..84676cc24221 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1467,30 +1467,20 @@ static void __pm_runtime_barrier(struct device *dev)
+  * Next, make sure that all pending requests for the device have been flushed
+  * from pm_wq and wait for all runtime PM operations involving the device in
+  * progress to complete.
+- *
+- * Return value:
+- * 1, if there was a resume request pending and the device had to be woken up,
+- * 0, otherwise
+  */
+-int pm_runtime_barrier(struct device *dev)
++void pm_runtime_barrier(struct device *dev)
+ {
+-	int retval = 0;
 -
  	pm_runtime_get_noresume(dev);
- 	KUNIT_EXPECT_EQ(test, 1, pm_runtime_put_sync(dev));
+ 	spin_lock_irq(&dev->power.lock);
  
-@@ -174,7 +170,7 @@ static void pm_runtime_error_test(struct kunit *test)
- 	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+ 	if (dev->power.request_pending
+-	    && dev->power.request == RPM_REQ_RESUME) {
++	    && dev->power.request == RPM_REQ_RESUME)
+ 		rpm_resume(dev, 0);
+-		retval = 1;
+-	}
  
- 	KUNIT_EXPECT_EQ(test, 0, pm_runtime_get(dev));
--	KUNIT_EXPECT_EQ(test, 1, pm_runtime_barrier(dev)); /* resume was pending */
-+	pm_runtime_barrier(dev);
- 	pm_runtime_put(dev);
- 	pm_runtime_suspend(dev); /* flush the put(), to suspend */
- 	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
-@@ -225,7 +221,7 @@ static void pm_runtime_probe_active_test(struct kunit *test)
- 	KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
+ 	__pm_runtime_barrier(dev);
  
- 	/* Nothing to flush. We stay active. */
--	KUNIT_EXPECT_EQ(test, 0, pm_runtime_barrier(dev));
-+	pm_runtime_barrier(dev);
- 	KUNIT_EXPECT_TRUE(test, pm_runtime_active(dev));
+ 	spin_unlock_irq(&dev->power.lock);
+ 	pm_runtime_put_noidle(dev);
+-
+-	return retval;
+ }
+ EXPORT_SYMBOL_GPL(pm_runtime_barrier);
  
- 	/* Ask for idle? Now we suspend. */
+diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+index 911d7a4d32c1..41037c513f06 100644
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -76,7 +76,7 @@ extern int pm_runtime_get_if_active(struct device *dev);
+ extern int pm_runtime_get_if_in_use(struct device *dev);
+ extern int pm_schedule_suspend(struct device *dev, unsigned int delay);
+ extern int __pm_runtime_set_status(struct device *dev, unsigned int status);
+-extern int pm_runtime_barrier(struct device *dev);
++extern void pm_runtime_barrier(struct device *dev);
+ extern bool pm_runtime_block_if_disabled(struct device *dev);
+ extern void pm_runtime_unblock(struct device *dev);
+ extern void pm_runtime_enable(struct device *dev);
+@@ -284,7 +284,7 @@ static inline int pm_runtime_get_if_active(struct device *dev)
+ }
+ static inline int __pm_runtime_set_status(struct device *dev,
+ 					    unsigned int status) { return 0; }
+-static inline int pm_runtime_barrier(struct device *dev) { return 0; }
++static inline void pm_runtime_barrier(struct device *dev) {}
+ static inline bool pm_runtime_block_if_disabled(struct device *dev) { return true; }
+ static inline void pm_runtime_unblock(struct device *dev) {}
+ static inline void pm_runtime_enable(struct device *dev) {}
 -- 
 2.52.0.158.g65b55ccf14-goog
 
