@@ -1,114 +1,198 @@
-Return-Path: <linux-pm+bounces-39041-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39043-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 511E1C9A708
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 08:27:58 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1933C9A732
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 08:31:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C93B3A6248
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 07:27:52 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 93A3B4E2F89
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 07:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684EC3016E3;
-	Tue,  2 Dec 2025 07:27:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2561F2989B7;
+	Tue,  2 Dec 2025 07:31:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="FiBeeH/u"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bY3TTYiS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62EA6254B18;
-	Tue,  2 Dec 2025 07:27:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9261C7012;
+	Tue,  2 Dec 2025 07:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764660467; cv=none; b=fE7Lq2H9fV9teBmqvN79182OdBSzw4BcIoeFvojP+QQN8LGM+JTviPDmnopPUgRHSo/ro51bdVn7ihxgD4oTL4SqCnsARXzLH7EMERzY2t/oP3O8cR8cXkr13TZTAyT4WTzgAtb48sg6+/r7FOYt5WfLca0/1JaWMNLhJQ0Y7/g=
+	t=1764660685; cv=none; b=RaYVFLfOuxVB5r1WC3+/DWlv75AM5iKSTjorZxSrwRA1hu4j9z3CtIY1T7wc+KodNfQjYOcPVi3noRqKwaARY1AIIQ1nGBHAA/7B6xHbXGWJhPPH23+skecptbqgJ9Ssp6qUFoVHUYlLrtgmJ4uk0dbb0ObxwJ1ibpwF20ScAaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764660467; c=relaxed/simple;
-	bh=ZuxBc1P6orFr54kEMeK1EYIOEP3LLwLrHGpx8Bp7N2c=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PrKnVCMA7bNPhTcM9digOCCBDlOSgrPcREl14FNwJZeeGdIV8fXwNgZxP9BJnD7hmY7AsoVGvophVbocAZT54+5q8AuR+82Jdrb5cwongsrs4yjmpqnzcOG4Zpdquvyz3T/Z0tD374WqllMg3qG8ri4lplPGBg2l5l2NY4PKwQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=FiBeeH/u; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=dgEwo616JrDGpFgdHl6UcsQdFxYIIq6oh0gOVD5Eqfo=;
-	b=FiBeeH/u9zpPxGM1380Gj2FCa949sN3dPc6Gc3q5969qNSLAEdZtNtvlq6RwscjcYFODHx9Fj
-	scvP1LvqdihsxJJ7NpcP91YGriZALUyZ5TZSIku8NlFhT++hLt9sMcyG6BQy/R4uLgadmRrHtK7
-	xq/tAG04/Ww4sLxWJAG2ss8=
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4dLC3z55vcz1K9CW;
-	Tue,  2 Dec 2025 15:25:51 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8EC9C1A0188;
-	Tue,  2 Dec 2025 15:27:41 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- kwepemf200001.china.huawei.com (7.202.181.227) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 2 Dec 2025 15:27:40 +0800
-From: Lifeng Zheng <zhenglifeng1@huawei.com>
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>,
-	<zhangpengjie2@huawei.com>, <wangzhi12@huawei.com>,
-	<linhongye@h-partners.com>, <zhenglifeng1@huawei.com>
-Subject: [PATCH v3 2/2] cpufreq: cpufreq_boost_trigger_state() optimization
-Date: Tue, 2 Dec 2025 15:27:27 +0800
-Message-ID: <20251202072727.1368285-3-zhenglifeng1@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20251202072727.1368285-1-zhenglifeng1@huawei.com>
-References: <20251202072727.1368285-1-zhenglifeng1@huawei.com>
+	s=arc-20240116; t=1764660685; c=relaxed/simple;
+	bh=rWht80TdDMbsCZaWcUFcjjhYySkfTb93xasOXU5Ylxc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=a3HLIaOZwrfYtozKIAvsRlYQuKmbwvbu3/ugjfxFd+JbYrkV1Tyie0uddKjBQoCh3IJ8WHloEvBYkoZfrb9wiAvmF37+zJqwTBmrms84+PInSdhFjG+fiS7iSux/HTMnR0dUovu8MwQp5D4aBiMXxzonx5FbvNXN7GTD65za+x0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bY3TTYiS; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 07D5A1A1EB5;
+	Tue,  2 Dec 2025 07:31:20 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id C3C60606E3;
+	Tue,  2 Dec 2025 07:31:19 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 403D9103C8F04;
+	Tue,  2 Dec 2025 08:30:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1764660676; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 in-reply-to:references; bh=gutkuk21iRBLBzb9hvOl6cUp6HFUU/VZ7OrEhTRZmwQ=;
+	b=bY3TTYiSLFXa5B94KQgeAayt80JXK78ig76Aq2SyfufNuWcT41c/auFS4kPqbVeYIZlJKX
+	QrXrN/qRIP4zNsj2m/7od8XOWVPza9ZQvvaa8nia4r3ByMuNdtTuF/t2v7gxBFCMMsW9RB
+	i0p/8OBYWY3+n3FRUeyswfCRhz6Fv2at184ftP1FUUlpPAnLeFkqXVNSm5O6zbN24Wre4+
+	N8LDjO5ty4mD4BpDEbuBV6eat2hrRdfThqf+Hnymm7a9OslgagnMsXhZ11fV4HVQz7RWeL
+	AMcHDMFpAB93S2dU0dURDWQPs1MVtcc1ZnrYa/w6k4129RIITI9OMaZRIN58Wg==
+From: Romain Gantois <romain.gantois@bootlin.com>
+To: MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Guenter Roeck <linux@roeck-us.net>,
+ Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>,
+ Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
+ Andy Shevchenko <andy@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+ Michael Hennerich <Michael.Hennerich@analog.com>,
+ Mariel Tinaco <Mariel.Tinaco@analog.com>,
+ Kevin Tsai <ktsai@capellamicro.com>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+ Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+ Hans de Goede <hansg@kernel.org>,
+ Support Opensource <support.opensource@diasemi.com>,
+ Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Matheus Castello <matheus@castello.eng.br>,
+ Saravanan Sekar <sravanhome@gmail.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Casey Connolly <casey.connolly@linaro.org>,
+ Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+ Orson Zhai <orsonzhai@gmail.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>,
+ Thara Gopinath <thara.gopinath@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Sylwester Nawrocki <s.nawrocki@samsung.com>,
+ Olivier Moysan <olivier.moysan@foss.st.com>,
+ Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ David Lechner <dlechner@baylibre.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] iio: inkern: Use namespaced exports
+Date: Tue, 02 Dec 2025 08:30:58 +0100
+Message-ID: <5948030.DvuYhMxLoT@fw-rgant>
+In-Reply-To: <78240755-44dc-4835-aca5-99540cca0304@baylibre.com>
+References:
+ <20251201-iio-inkern-use-namespaced-exports-v1-1-da1935f70243@bootlin.com>
+ <78240755-44dc-4835-aca5-99540cca0304@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemf200001.china.huawei.com (7.202.181.227)
+Content-Type: multipart/signed; boundary="nextPart6220005.lOV4Wx5bFT";
+ micalg="pgp-sha512"; protocol="application/pgp-signature"
+X-Last-TLS-Session-Version: TLSv1.3
 
-Optimize the error handling branch code in cpufreq_boost_trigger_state().
+--nextPart6220005.lOV4Wx5bFT
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
+From: Romain Gantois <romain.gantois@bootlin.com>
+Subject: Re: [PATCH] iio: inkern: Use namespaced exports
+Date: Tue, 02 Dec 2025 08:30:58 +0100
+Message-ID: <5948030.DvuYhMxLoT@fw-rgant>
+In-Reply-To: <78240755-44dc-4835-aca5-99540cca0304@baylibre.com>
+MIME-Version: 1.0
 
-Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/cpufreq/cpufreq.c | 13 ++++---------
- 1 file changed, 4 insertions(+), 9 deletions(-)
+On Monday, 1 December 2025 18:15:54 CET David Lechner wrote:
+> On 12/1/25 4:59 AM, Romain Gantois wrote:
+> > Use namespaced exports for IIO consumer API functions.
+> > 
+> > Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+> > ---
+> 
+> ...
+> 
+> > diff --git a/drivers/iio/dac/ds4424.c b/drivers/iio/dac/ds4424.c
+> > index a8198ba4f98a..33d6692f46fe 100644
+> > --- a/drivers/iio/dac/ds4424.c
+> > +++ b/drivers/iio/dac/ds4424.c
+> > @@ -14,7 +14,6 @@
+> > 
+> >  #include <linux/iio/iio.h>
+> >  #include <linux/iio/driver.h>
+> >  #include <linux/iio/machine.h>
+> > 
+> > -#include <linux/iio/consumer.h>
+> 
+> Unrelated change?
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index a4399e5490da..a2507a5b42d9 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -2823,19 +2823,14 @@ static int cpufreq_boost_trigger_state(int state)
- 			continue;
- 
- 		ret = policy_set_boost(policy, state);
--		if (ret)
--			goto err_reset_state;
-+		if (unlikely(ret))
-+			break;
- 	}
- 
--	if (ret)
--		goto err_reset_state;
--
- 	cpus_read_unlock();
- 
--	return 0;
--
--err_reset_state:
--	cpus_read_unlock();
-+	if (likely(!ret))
-+		return 0;
- 
- 	write_lock_irqsave(&cpufreq_driver_lock, flags);
- 	cpufreq_driver->boost_enabled = !state;
+Indeed, I'll leave that out in v2.
+
+> >  #define DS4422_MAX_DAC_CHANNELS		2
+> >  #define DS4424_MAX_DAC_CHANNELS		4
+> > 
+> > @@ -321,3 +320,4 @@ MODULE_AUTHOR("Ismail H. Kose
+> > <ismail.kose@maximintegrated.com>");> 
+> >  MODULE_AUTHOR("Vishal Sood <vishal.sood@maximintegrated.com>");
+> >  MODULE_AUTHOR("David Jung <david.jung@maximintegrated.com>");
+> >  MODULE_LICENSE("GPL v2");
+> > 
+> > +MODULE_IMPORT_NS("IIO_CONSUMER");
+> 
+> Is this actually needed if we don't use anything from consumer.h?
+
+No, it's not.
+
+Thanks,
+
 -- 
-2.33.0
+Romain Gantois, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
+--nextPart6220005.lOV4Wx5bFT
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEIcCsAScRrtr7W0x0KCYAIARzeA4FAmkulbIACgkQKCYAIARz
+eA6r+A//aMF01GyQ28Vt1qVRnR+uQNAhVi/B2aUu4XYyy1hc2lVzhHwvSjyYiXET
+h1jorSaLD9m5MsoTo9Scxhpu1d5KWIy5DaNATac1wmHh9t0IdE8gw1kNaUcNmefr
+NFOanFttvVt7e9cko6PsxmX9GOioawS3CVrJuObkGGftqR3KVD3WMOg+n551pkK4
+63Xbfe6PPADF06Lyu2kyyxUXLwIsuXQ8Z4dQ+kX4Bky34L0v4w0Yxos4Uhkwv5ur
+SOUtezyExAQTgAJi9KW5MPADpCdXfB3moTv29CdWRs1K8XLkxxLeprZnutXRFxOu
+CrmiA30lNs2pp7wut+8PfmeYX6btqOCMQ8KENXNV9StrRc9UqD6K6TbbJGE/Vbzg
+gxDVp9t0i0nxcQAwhtvnlmAjf3pxeJWXf1iII5ooXoxv2yW1G+FsL9RBztyEnTA1
+0iLFg1Yyx/28b7iZsf6oD5luqSRnQ7Qi0js5sAA3rVHfMtOlO/rGcUH1BprrpLPa
+m5jycApgp26OuCSxacOhlAZ6iXy1pyepTaDlS9wz1kbdwVJOf3IaWuRhDHrRugCd
+zya/579XFCsbobzejkSRHzgwylhuGsDMAniIn0MaeQw3E5wyBTCVJTXx9qebFj3v
+sUVcLNhFQBy/G8YWighvreSaPr43mWS4ueBmAMClqYmOzq2nF2k=
+=n+bE
+-----END PGP SIGNATURE-----
+
+--nextPart6220005.lOV4Wx5bFT--
+
+
 
 
