@@ -1,191 +1,220 @@
-Return-Path: <linux-pm+bounces-39046-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39047-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDF44C9A8F0
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 08:50:25 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28727C9A980
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 08:57:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 263A43A600A
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 07:50:11 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BFBF7347B6D
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 07:57:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88223303A37;
-	Tue,  2 Dec 2025 07:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="rvcAOdQK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2B3305077;
+	Tue,  2 Dec 2025 07:57:35 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx-relay09-hz2.antispameurope.com (mx-relay09-hz2.antispameurope.com [83.246.65.95])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87AD630170B
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 07:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=83.246.65.95
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764661807; cv=pass; b=qU6R9HvhBar8vQ84lazUWo/XAXTNjp3+uYpVyc2g1MF3ykPXxVr6gI/wBPMQuiEqylyHbCEpDhwZeOgcRwz3ZOCWlwLM5gXTlO9AuBkplISlZcCyNPg1HP8QzUpHZObiyR/gXhAnraUlgIjN3DCm9DUjs1xcq+Srfw6JnwziBfY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764661807; c=relaxed/simple;
-	bh=PxmqLwTGHCcOlhvRAYqtPMxIQXNBtYQuY9nf7xWR7F4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aG6rmijsZ/SPzh6H/QOg0+wyU9ubQ/x8lCVB06I/h1j/Gzn00D7c5dE9hWXlXfuVUQwEOAbSkte5qyCtJ2xfp4ylxzN3SQBDx45W2XNEUVvuUBOLGwLbSPI/FaEgfZjzO+6+obZSFCCqAHRQvSTF8hHBD4Oq1GzuG1S6vRyjPS4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=rvcAOdQK; arc=pass smtp.client-ip=83.246.65.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-ARC-Authentication-Results: i=1; mx-gate09-hz2.hornetsecurity.com 1; spf=pass
- reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
- smtp.mailfrom=ew.tq-group.com
- smtp.helo=hmail-p-smtp01-out04-hz1.hornetsecurity.com; dmarc=pass
- header.from=ew.tq-group.com orig.disposition=pass
-ARC-Message-Signature: a=rsa-sha256;
- bh=T7axZz2df+9J33mOBW3vXS7fIUw+GxQw5eU/LsYk4ww=; c=relaxed/relaxed;
- d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
- t=1764661754;
- b=gnIktLejq49oqb1EFBHg8dWBhfe/jUlULN4gAFlg34brNNwHcu1pw74f4sgDjUZiNRVQDEBq
- zJ1+tySa/soyRnsDdADgjzP00N3M+ntSggElBtMU1EGDkAx307gBryPxc9kCFjoY/Eex4Nsa1c0
- 5PxpDEKk+M8pSC7i1ECo7qH9SyNUPalhzjGANtl4M9d9urBMsbctn0jYQFmMSu5M6nB+P2pNOGn
- pUC20BF+smcpPHHHfs8mmMy757zCMmfrnIUH8oB0+enaxZpdZj1Yb7Ze8tKXOpaYa+gIgA5O4yR
- IXQWg3CoU4zkHjzCkvLEnJhTBXmaI3Cby3MbkuKbRCqrQ==
-ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
- t=1764661754;
- b=oZj1TtjBybeTeFWeC/XnLyneUTfovMrjj9XyTUPUY8MEcAEI4BsccNNed1V9SHFD+mGxYxi/
- yfcrjdkYzF9fQIKGBe6bTznrx2YVeSi/n9iHhhFk5FRNQprsJaLsLwCpd0IrPLHvY55LxGRalD8
- Wq6YNTRtsGzCXL3Jjj92PQtAaIBBEBO2QM9NyFEYpYI1vceI+94k0EpY33YP2tQuGADdXKQ306b
- cbeFA4bZVBePNY9obq6QT/5hKSI9yI1YBSE2x8oux1DrpxUrVAgDHqurBl0Kh+18atwYs6p+Zdn
- gK0JW7JHQJx3OosZR+S/nxXU2/G2xajlmr0BDvPJohsrA==
-Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay09-hz2.antispameurope.com;
- Tue, 02 Dec 2025 08:49:14 +0100
-Received: from steina-w.localnet (host-82-135-125-110.customer.m-online.net [82.135.125.110])
-	(Authenticated sender: alexander.stein@ew.tq-group.com)
-	by hmail-p-smtp01-out04-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 0FBFA220D91;
-	Tue,  2 Dec 2025 08:49:02 +0100 (CET)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, linux-arm-kernel@lists.infradead.org
-Cc: linux-pm@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Marco Felsch <m.felsch@pengutronix.de>,
- Marco Felsch <m.felsch@pengutronix.de>
-Subject:
- Re: [PATCH 3/3] pmdomain: imx93-blk-ctrl: add support for optional subnodes
-Date: Tue, 02 Dec 2025 08:49:01 +0100
-Message-ID: <5948751.DvuYhMxLoT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To:
- <20251201-v6-18-topic-imx93-blkctrl-v1-3-b57a72e60105@pengutronix.de>
-References:
- <20251201-v6-18-topic-imx93-blkctrl-v1-0-b57a72e60105@pengutronix.de>
- <20251201-v6-18-topic-imx93-blkctrl-v1-3-b57a72e60105@pengutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100DF304BD3
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 07:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764662255; cv=none; b=eeJ83WttvdZt3T8RpWNy3Ayp9ktXRzXEyVssgTvya2TaYNhUKPJ6ejfR2pYeB8M5fH6jYhXuQl2aZBHAgzWaP1zbJWZZjUqIrjxZChxX5UUM7v4e/sXf63FeDRwBof5wjfkppCdTRLjmiBJ+2ucCJPR3Vhbc55ua93e98LtgHvI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764662255; c=relaxed/simple;
+	bh=xRnByJYkV6Sz6EGG7idVjVOc+n/gNsJDkv6Rq8vLXmE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zw71vVO9H/09XbtNc3zecuqEP+VdRjq3Me4aBh9aimk95Mm4DkwNeGNswk8QJP7xI/ZCzpPEaP6g9HFg8IqrPvtr4669eVRmuiSx4ye+83AkMFZpF6wu0eCIv5S+05olNNTOkkUyRceWzTEe2KBNLnnuNlrh8a6NXjz9e42NxrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vQLGG-00054h-BS; Tue, 02 Dec 2025 08:57:24 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vQLGG-003Zr7-03;
+	Tue, 02 Dec 2025 08:57:24 +0100
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1vQLGF-001XiD-2n;
+	Tue, 02 Dec 2025 08:57:23 +0100
+Date: Tue, 2 Dec 2025 08:57:23 +0100
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Frank Li <Frank.li@nxp.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, linux-pm@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] pmdomain: imx93-blk-ctrl: convert to devm_* only
+Message-ID: <20251202075723.myevt4wa2kpyehdd@pengutronix.de>
+References: <20251201-v6-18-topic-imx93-blkctrl-v1-0-b57a72e60105@pengutronix.de>
+ <20251201-v6-18-topic-imx93-blkctrl-v1-2-b57a72e60105@pengutronix.de>
+ <aS4ZpyhrJ1IpUCKv@lizhi-Precision-Tower-5810>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart6220726.lOV4Wx5bFT";
- micalg="pgp-sha512"; protocol="application/pgp-signature"
-X-cloud-security-sender:alexander.stein@ew.tq-group.com
-X-cloud-security-recipient:linux-pm@vger.kernel.org
-X-cloud-security-crypt: load encryption module
-X-cloud-security-Mailarchiv: E-Mail archived for: alexander.stein@ew.tq-group.com
-X-cloud-security-Mailarchivtype:outbound
-X-cloud-security-Virusscan:CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay09-hz2.antispameurope.com with 4dLCZk50ntz20pyl
-X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
-X-cloud-security-Digest:60d645e73f706042f63d5b5154e78e90
-X-cloud-security:scantime:1.971
-DKIM-Signature: a=rsa-sha256;
- bh=T7axZz2df+9J33mOBW3vXS7fIUw+GxQw5eU/LsYk4ww=; c=relaxed/relaxed;
- d=ew.tq-group.com;
- h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
- t=1764661753; v=1;
- b=rvcAOdQKFgBsXVT936cZTLEDfmHbzPUpp/5Mx474E1o31bymglJRmiGZWN1WEeIcPy2sCwnV
- B2G/5wDG2eFCKlx1FFhgHs0nsMzxnSD+64rMO+MNr7n8B6Rcwwlw97HF96dctV6B22K62jHHePe
- zmOupkdYklp0tO1614KrNQG/99dkwUNyPz9icV5s9pT2jBcGWHup7MMxjqZBX3lKuO3YTywAVnU
- qF14Oog3sb84cD0M6/ihw8w4HE2DLzKm94pHjKK65p33ejyheEp5TBxzgvrpMblsMr/oKal29eg
- Oi74uvoBV9zFnEfzep2xxE5+G7iZRZjGjQ3P6/nUaXSEQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aS4ZpyhrJ1IpUCKv@lizhi-Precision-Tower-5810>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
---nextPart6220726.lOV4Wx5bFT
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"; protected-headers="v1"
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-Date: Tue, 02 Dec 2025 08:49:01 +0100
-Message-ID: <5948751.DvuYhMxLoT@steina-w>
-Organization: TQ-Systems GmbH
-MIME-Version: 1.0
+On 25-12-01, Frank Li wrote:
+> On Mon, Dec 01, 2025 at 06:12:06PM +0100, Marco Felsch wrote:
+> > Some APIs used by this driver don't have devm_ helpers yet. Instead of
+> > using the devm_add_action_or_reset() the current driver is based on hand
+> > crafted error goto paths and a .remove() callback.
+> >
+> > Convert the driver to devm_ APIs only by making use of
+> > devm_add_action_or_reset() and devm_pm_runtime_enable() to simplify the
+> > release and error path.
+> 
+> Nit: I think keep this paragaph should be enough.
 
-Am Montag, 1. Dezember 2025, 18:12:07 CET schrieb Marco Felsch:
-> This particular block can have DT subnodes describing the LVDS LDB, MIPI
-> DSI and parallel DPI bridge.
->=20
-> Scan for possible sub-devices within the driver, instead of misusing the
-> simple-bus to perform the scan.
->=20
-> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+I can re-phrase it.
 
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+> > ---
+> >  drivers/pmdomain/imx/imx93-blk-ctrl.c | 64 +++++++++++++++--------------------
+> >  1 file changed, 27 insertions(+), 37 deletions(-)
+> >
+> > diff --git a/drivers/pmdomain/imx/imx93-blk-ctrl.c b/drivers/pmdomain/imx/imx93-blk-ctrl.c
+> > index 2aa163aef8de4ee901b9cde76ce2aad246c8c08a..13b0de6dd689cf944e034f7666a4e97b0118e3bd 100644
+> > --- a/drivers/pmdomain/imx/imx93-blk-ctrl.c
+> > +++ b/drivers/pmdomain/imx/imx93-blk-ctrl.c
+> > @@ -188,6 +188,20 @@ static int imx93_blk_ctrl_power_off(struct generic_pm_domain *genpd)
+> >  	return 0;
+> >  }
+> >
+> ...
+> >  static struct lock_class_key blk_ctrl_genpd_lock_class;
+> >
+> >  static int imx93_blk_ctrl_probe(struct platform_device *pdev)
+> > @@ -256,10 +270,8 @@ static int imx93_blk_ctrl_probe(struct platform_device *pdev)
+> >  			domain->clks[j].id = data->clk_names[j];
+> >
+> >  		ret = devm_clk_bulk_get(dev, data->num_clks, domain->clks);
+> > -		if (ret) {
+> > -			dev_err_probe(dev, ret, "failed to get clock\n");
+> > -			goto cleanup_pds;
+> > -		}
+> > +		if (ret)
+> > +			return dev_err_probe(dev, ret, "failed to get clock\n");
+> >
+> >  		domain->genpd.name = data->name;
+> >  		domain->genpd.power_on = imx93_blk_ctrl_power_on;
+> > @@ -267,11 +279,12 @@ static int imx93_blk_ctrl_probe(struct platform_device *pdev)
+> >  		domain->bc = bc;
+> >
+> >  		ret = pm_genpd_init(&domain->genpd, NULL, true);
+> > -		if (ret) {
+> > -			dev_err_probe(dev, ret, "failed to init power domain\n");
+> > -			goto cleanup_pds;
+> > -		}
+> > +		if (ret)
+> > +			return dev_err_probe(dev, ret, "failed to init power domain\n");
+> >
+> > +		ret = devm_add_action_or_reset(dev, imx93_release_pm_genpd, &domain->genpd);
+> > +		if (ret)
+> > +			return dev_err_probe(dev, ret, "failed to add pm_genpd release callback\n");
+> >  		/*
+> >  		 * We use runtime PM to trigger power on/off of the upstream GPC
+> >  		 * domain, as a strict hierarchical parent/child power domain
+> > @@ -288,39 +301,17 @@ static int imx93_blk_ctrl_probe(struct platform_device *pdev)
+> >  		bc->onecell_data.domains[i] = &domain->genpd;
+> >  	}
+> >
+> > -	pm_runtime_enable(dev);
+> > +	devm_pm_runtime_enable(dev);
+> 
+> Need check return value
 
-> ---
->  drivers/pmdomain/imx/imx93-blk-ctrl.c | 5 +++++
->  1 file changed, 5 insertions(+)
->=20
-> diff --git a/drivers/pmdomain/imx/imx93-blk-ctrl.c b/drivers/pmdomain/imx=
-/imx93-blk-ctrl.c
-> index 13b0de6dd689cf944e034f7666a4e97b0118e3bd..8f79cabe07face872cb396bfb=
-7329c230c4a97fe 100644
-> --- a/drivers/pmdomain/imx/imx93-blk-ctrl.c
-> +++ b/drivers/pmdomain/imx/imx93-blk-ctrl.c
-> @@ -7,6 +7,7 @@
->  #include <linux/device.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
-> +#include <linux/of_platform.h>
->  #include <linux/platform_device.h>
->  #include <linux/pm_domain.h>
->  #include <linux/pm_runtime.h>
-> @@ -311,6 +312,10 @@ static int imx93_blk_ctrl_probe(struct platform_devi=
-ce *pdev)
->  	if (ret)
->  		return dev_err_probe(dev, ret, "failed to add genpd_provider release c=
-allback\n");
-> =20
-> +	ret =3D devm_of_platform_populate(dev);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "failed to populate blk-ctrl sub-device=
-s\n");
-> +
->  	return 0;
->  }
-> =20
->=20
->=20
+Missed this one, thanks.
 
+> >  	ret = of_genpd_add_provider_onecell(dev->of_node, &bc->onecell_data);
+> > -	if (ret) {
+> > -		dev_err_probe(dev, ret, "failed to add power domain provider\n");
+> > -		goto cleanup_pds;
+> > -	}
+> > +	if (ret)
+> > +		return dev_err_probe(dev, ret, "failed to add power domain provider\n");
+> >
+> > -	dev_set_drvdata(dev, bc);
+> 
+> why remove dev_set_drvdata(dev, bc)
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
---nextPart6220726.lOV4Wx5bFT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+Because it's no longer needed, it was required due to the .remove()
+callback. I wasn't sure if I should mention this within the commit
+message. I'm going to add it to the commit message since you asked.
 
------BEGIN PGP SIGNATURE-----
+Regards,
+  Marco
 
-iQEzBAABCgAdFiEEByESxqszIvkmWRwbaS+g2M0Z/iUFAmkume0ACgkQaS+g2M0Z
-/iX2lggAjXJx/4qelXC+7BDMe922feOOwInko8Lie9ONTE7qj6W7OFZpk+lw3FzN
-uckuThVlH8J/DFn1iGpYrVg3QnZAdh5wsgibfcZm67i894UiianaQOlqgtRpA7Oq
-E+Kb9+gVB3vr5Nj9eaghmTFfXHFrVvDAsi7SIhq7oXJLO288+LbacOL5SzJVV/Gt
-HvcoZwTu+eudlm0Dlu2/99zRaxHhQqpzSko46NY6Zn+UsR+0kx7FsqgQEwOo/Hg9
-h4Uvf6VYLdFs/CYu9L5W1o9Ovov/axFFFkDW67miip5KQO9WpcYppaWSHJ9QxqSL
-LS/86Nft9wctDFklkTJPdEYpWZc7xA==
-=DoZw
------END PGP SIGNATURE-----
+> 
+> Frank
+> > +	ret = devm_add_action_or_reset(dev, imx93_release_genpd_provider, dev->of_node);
+> > +	if (ret)
+> > +		return dev_err_probe(dev, ret, "failed to add genpd_provider release callback\n");
+> >
+> >  	return 0;
+> > -
+> > -cleanup_pds:
+> > -	for (i--; i >= 0; i--)
+> > -		pm_genpd_remove(&bc->domains[i].genpd);
+> > -
+> > -	return ret;
+> > -}
+> > -
+> > -static void imx93_blk_ctrl_remove(struct platform_device *pdev)
+> > -{
+> > -	struct imx93_blk_ctrl *bc = dev_get_drvdata(&pdev->dev);
+> > -	int i;
+> > -
+> > -	of_genpd_del_provider(pdev->dev.of_node);
+> > -
+> > -	pm_runtime_disable(&pdev->dev);
+> > -
+> > -	for (i = 0; i < bc->onecell_data.num_domains; i++) {
+> > -		struct imx93_blk_ctrl_domain *domain = &bc->domains[i];
+> > -
+> > -		pm_genpd_remove(&domain->genpd);
+> > -	}
+> >  }
+> >
+> >  static const struct imx93_blk_ctrl_domain_data imx93_media_blk_ctl_domain_data[] = {
+> > @@ -455,7 +446,6 @@ MODULE_DEVICE_TABLE(of, imx93_blk_ctrl_of_match);
+> >
+> >  static struct platform_driver imx93_blk_ctrl_driver = {
+> >  	.probe = imx93_blk_ctrl_probe,
+> > -	.remove = imx93_blk_ctrl_remove,
+> >  	.driver = {
+> >  		.name = "imx93-blk-ctrl",
+> >  		.of_match_table = imx93_blk_ctrl_of_match,
+> >
+> > --
+> > 2.47.3
+> >
+> 
 
---nextPart6220726.lOV4Wx5bFT--
+-- 
+#gernperDu 
+#CallMeByMyFirstName
 
-
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | https://www.pengutronix.de/ |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-9    |
 
