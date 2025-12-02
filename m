@@ -1,126 +1,282 @@
-Return-Path: <linux-pm+bounces-39056-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39057-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 563D1C9B0C3
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 11:15:08 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39277C9B2A2
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 11:33:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E93EF3A4420
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 10:15:06 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 15ABB4E176F
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 10:33:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A5A130E0E7;
-	Tue,  2 Dec 2025 10:15:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38EB8287265;
+	Tue,  2 Dec 2025 10:33:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ic6jN//l"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="je8kMR/C"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013063.outbound.protection.outlook.com [40.107.44.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C91530C619
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 10:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764670505; cv=none; b=tHeUUdkvw++3+tgrvAH+0i4zU/FQxBy6LS3cd1DaiVWguaXpIYQ8+hT2dobqGcK29jH7SOvLnLN8VbKjzNGhbEkvYIVrac+O3dkZ4a70GxLcWm7vMKqd/BewiSw/3c3ERhc/25UAKDExsdQa5+JO/kd04/x97+H5/2G3xe9kfeQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764670505; c=relaxed/simple;
-	bh=tluCUMdbZtzI70MpMNxT6XbTimg3FvfG4a7kkBpBftI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SoTzV8dYGgK+MeMSB9HOoVFhNLk0o+unTo/qzdXGlmOGe5XT8lta8JN8/J+02Vobw5jx6R2NbqWcq0Ezqg/sDWKv4kWnzVgEhrD+pCYzEtw5cGknK3DYziqzm6mKKM+djYEGyWrsKhEyz6getbvPKGptLv8YUV8OhBjvuRpML/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ic6jN//l; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4777771ed1aso33661355e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 02:15:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764670502; x=1765275302; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xj/gqbMEvC2U1EurKb6UYz7u2S6QJAk3SBUPxA7BZ0k=;
-        b=Ic6jN//l6u8CV3nf+ShALrI0NZPtmGhd0SF3XhXrm/DTRp/WvCFHYh34Tno3H7KAx1
-         XgA8LnPNy702J4zs5sVyBYfa8lu1nfLjnO1HZEYddbPvEueMLzH+XLTTUWmNSWjKGC0+
-         82bYaK5fMvbS87p+Jv8W95K88InGGZxULVgWgJ+C+C/xDihbtGaUPE91swFviLk/LV1B
-         18U7y9MaY9GYMwO6KbfyfHZQAaQsY0MOc03eo6ywxw3muSOln2Ac6KAwuAkbjgbJRVK3
-         tEnbld4TVL5wfTDupW1vBMC04x4pcNq4Y7L8oxt+cSVyre7JZQVRF8MlQ8+6Wpe6VVey
-         u9ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764670502; x=1765275302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Xj/gqbMEvC2U1EurKb6UYz7u2S6QJAk3SBUPxA7BZ0k=;
-        b=EXWUJy/1FgZ32D5SYQguFXBd9dVZ5nzWVs/E895qTY6T7htyZAsdqbSTg3JHgWtnZG
-         ESQsvgCk2PJIb+yPxTTOSgWRjImpFCIenFN4rntGyOqRSpe46rqZmN8rC7dx0xUPtGkf
-         yPs16FJduRQovbmy+chIJM5scO9n0meeZOyEK1gyWJgsav0HO7yeba6zd0jJazwo6SlC
-         0D7Jt3UkDaBnDwI5F3oGglaZEeLJYwdNRG3n6H8o/g5yTn72R4mu3RPDcPwpXpSKjOhK
-         TqkyaQDnzDJnb/nDqDzqOhpePuutGKkEYUPk3WoJkJNAcV16/ujIh14ve02P3ZSsnX/P
-         jWRw==
-X-Forwarded-Encrypted: i=1; AJvYcCWexEvJ/heWaP1S+Zj4E25qi4YpJjryDXGwCBEADBE98gcEoct0CG3lI8t3qKKD3Ph8YDwBro7A1Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YytiiBvZQ48P1H25JpVnXo2TbDupsDMm5c4EPeRA1dbQa0fp7Sr
-	bXhd5uh+GST1GwzdZGYU4JP42+QZtM9rgV5CQTD9WB9LtwuvEoM5Bs4Hh7WotpFFlaUwnq8jxJs
-	8ZPNbsrziFpDrQ3HrBlA14PQFr8WIczwQOl86zkRE
-X-Gm-Gg: ASbGnct1Z7p/3gBoeEithgAGLi4KKYbOFYsk7h3Aduslrgt5ZP1uqZypsZVEoD/n57W
-	PMXMmCbV5sNGe0WBf1hap/EA6kcnScrWiGlQfMlTWt+gxPYhPW5128H6eUowOC6tMWbKYI7yHSI
-	dqaLE0Ql/dxgeRX+Tl1CJCEbfqfv6lkFc+KXZAHHH/lVEjupvgDa4Qo4CBXAM3bQrHvBQs5Uykt
-	Nyjh2evx4voVO/d8bYhD8OqPIHr/a8aflGSm44t4qdzMzMTdx1JZa3E4OFPTshbw8ENxxKQTLXC
-	YLvzMs2uKieASuNsF64GG9RfjjoObQVoyhBCteLIkOMYXRWE3EqLbuKPqQ==
-X-Google-Smtp-Source: AGHT+IH41ppbKo2ntsTFFVkqDJyv15OsfwqRLDbKCfbp32OEMtJv+7r8A3+XIAbI1BpBDvsTQpoln+8HEetvbhddqzA=
-X-Received: by 2002:a5d:64e6:0:b0:42b:36f4:cd20 with SMTP id
- ffacd0b85a97d-42cc1d2e292mr45860682f8f.27.1764670501670; Tue, 02 Dec 2025
- 02:15:01 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C9DB204583;
+	Tue,  2 Dec 2025 10:33:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764671636; cv=fail; b=bx0B+kn/zNRElkAYmK2/oF1BSwZFGfCLql5zYQYhn14p4pUG3GXXG637tKhVbIovbK+VgDiZAFzpQt7TAPfvlPWUA2khGkKhpMvBwRrnLAl9fxUjIZIFBkMxVPKRnRB1hIuiciEzKjsSSw129w8EQJjS3fGrv+B71y/xrjHVyVs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764671636; c=relaxed/simple;
+	bh=75oPH7yDTCtA1LiSfU8FfZimNt4m2+hp61GQ0qFIIEE=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=JAVHKmmTqSlZyviG/cfwBDcU3O3wv7sk6keEHEKja8LEtJILTiNU2lQGTevG1+T4XtSjKng4IW+Jcd09NO+HdlRK+cjylmnEl0+54JXKEXG4tJ0PwdOxfMLbrI8mI58m4w6uApKsmw4O3qt1Gpqojqof3xMG/WfWA5Hn7Wg2bnc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=je8kMR/C; arc=fail smtp.client-ip=40.107.44.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QdAQASnFHnGmHQ0MRNc88YXmbC+mWXLKuYCTCM5z4cvwiRFqxlojrl7K2wY450Sx9yXiB6IYQgL8x3Ba4OVATjU/Q5H63hO96XbmvqT/MYf2Ov4/Ge0yeqbIJM0PIJM3wf6N7wgi3+GuyntGdhlN/aBgJViM04H/k2v9MnlmmfcdjmFPlyDGdsGHduA880sf0rDHfUUoj0wvQzg1DwU5znWbaGSJo6T4+rD2baI8Fyru2RdqgIhDpM4IBYabDeD1bRRFv/lO2ZCNuZO92Ko7FM8fqeZQBjfTxD84keD4vAzHqBtGY+2Ox+Ws6ZmjaRrykg5nvYAGXdIpbPdrsPntaA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6bMawu/c727koitRdvUqbvH+wSqE3/m9kxalw/Thqy4=;
+ b=V8YxWo7tuCZNMhrCod9BFmFXYuItQmYc61JwmzQMS05cCkFs2RPd6vWFzpxFKAj8xMagFmYhuaDBC/Hms4z3rnRKGe5R6oxNvcpzukVoJghZwfwaVqDMoNGvSvIXg3yLUzdQ5x11a6klpK9OMBrojs/zjFDpxWpl7aqiQRwNzJ5kjngShSVVl5EbGH67HbZ7LOzNqw6TwZgLFp6lpvIxubYceVyRUD0s+OTzS18BA4CKrXYdnjWALVAR+CEhSueLu31bEh3YesXpZRfxxF1cWHJ1NtpigFh2uRwBI9iYzFACcEeZBNh2lFCAnQ3zAsKO83YkTvEFDkthwjDvsnQdFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6bMawu/c727koitRdvUqbvH+wSqE3/m9kxalw/Thqy4=;
+ b=je8kMR/C0s2I59yRDjwQsdTMXCnkEKJAOsPfbkmih6myhA+EQwRkAkpOiWXh47g5h/hoT6/XAxZuNl6xUVwPS1Jl4zi+8kS1/lEldxS3yXgvui1WgVjKLyITaummjbJ5INhagshjBEvw5NjuEmKywpNf2IjpQc6gsB3yltcWoZl8jhcib6SWJXnYvUMhUX5fQOdTmprfQGIUNn11KC1yrLab3GMKT1dk7WrDfS0+4EnMy2Aa7m6/WNYGDlYqouuU1xvnJWQXwOtvOkNEW1x846kuaxZV7clH+xYwsdHzskMW1Ihy7P6L+GYLdFOTAM6lL50W6qeMgDMxYmk9K3NQLA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from KL1PR06MB7401.apcprd06.prod.outlook.com (2603:1096:820:146::12)
+ by SEYPR06MB5868.apcprd06.prod.outlook.com (2603:1096:101:d1::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9343.22; Tue, 2 Dec
+ 2025 10:33:41 +0000
+Received: from KL1PR06MB7401.apcprd06.prod.outlook.com
+ ([fe80::6f03:984f:82ec:6846]) by KL1PR06MB7401.apcprd06.prod.outlook.com
+ ([fe80::6f03:984f:82ec:6846%7]) with mapi id 15.20.9366.012; Tue, 2 Dec 2025
+ 10:33:41 +0000
+Message-ID: <5bef0b09-710b-40a7-bdbc-7428301aee7a@vivo.com>
+Date: Tue, 2 Dec 2025 18:33:37 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] PM: runtime: Fix I/O hang due to race between resume
+ and runtime disable
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Bart Van Assche <bvanassche@acm.org>, Jens Axboe <axboe@kernel.dk>,
+ Pavel Machek <pavel@kernel.org>, Len Brown <lenb@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Danilo Krummrich <dakr@kernel.org>, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20251126101636.205505-1-yang.yang@vivo.com>
+ <CAJZ5v0jiLAgHCQ51cYqUX-xjir7ooAC3xKH9wMbwrebOEuxFdw@mail.gmail.com>
+ <CAJZ5v0hKpGbwFmxcH8qe=DPf_5GX=LD=Fqj3dgOApUoE1RmJAQ@mail.gmail.com>
+ <4697314.LvFx2qVVIh@rafael.j.wysocki>
+ <dc4dba4f-8334-40ea-8c53-6e8d135f1d41@acm.org>
+ <CAJZ5v0jV-80kfk-AY70b5pQtyXxUtU_ACBVP_TeTAnaY0Up8Lw@mail.gmail.com>
+ <1e7583e8-9ae9-4641-8ec2-7c62a637c9fc@acm.org>
+ <CAJZ5v0hKe+2orwKP352dBe_PB1pZqMehMo8tSDv5G+cdaJ=OsQ@mail.gmail.com>
+ <82bcdf73-54c5-4220-86c0-540a5cb59bb7@vivo.com>
+ <8fa4023f-50f2-4e25-9f9b-4e5236015e27@vivo.com>
+ <CAJZ5v0i+BhxX54wyogVR4_fmTJHVFfozNrP5LN4pGDPnnL=EDQ@mail.gmail.com>
+From: YangYang <yang.yang@vivo.com>
+In-Reply-To: <CAJZ5v0i+BhxX54wyogVR4_fmTJHVFfozNrP5LN4pGDPnnL=EDQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: TYCP286CA0303.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:38b::11) To KL1PR06MB7401.apcprd06.prod.outlook.com
+ (2603:1096:820:146::12)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251128-io-build-assert-v2-0-a9ea9ce7d45d@nvidia.com>
- <20251128-io-build-assert-v2-2-a9ea9ce7d45d@nvidia.com> <af76b544-a7ee-43da-878f-cadc1599d7f0@nvidia.com>
-In-Reply-To: <af76b544-a7ee-43da-878f-cadc1599d7f0@nvidia.com>
-From: Alice Ryhl <aliceryhl@google.com>
-Date: Tue, 2 Dec 2025 11:14:47 +0100
-X-Gm-Features: AWmQ_bncCycjJtLo57Ks_3lnLDfKrcsh2eIAuKqvMlje8DUUWqYWLDIlb5gTms8
-Message-ID: <CAH5fLgjNXcWgCLp=GkOiycPtcR9dpSn-wZ0HK6YnQC9z+dWyTw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/7] rust: io: always inline functions using
- build_assert with arguments
-To: Edwin Peer <epeer@nvidia.com>
-Cc: Alexandre Courbot <acourbot@nvidia.com>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR06MB7401:EE_|SEYPR06MB5868:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7c0fe49b-1f89-4296-efad-08de318e42a2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|7416014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Unl6dHRxK3owNnRFZjR1TzUvQlo0a050ZWxidFlrMUZ1S1VrQ2F4Qnc0Y0tt?=
+ =?utf-8?B?Nzcvbit4c2MxdGdnOUZZN2N0VnRqU29XVDdBM3A1allWMzNWdHQ2ekphdC9W?=
+ =?utf-8?B?aHhscFBvUU53N0pySW1SUzhHVlZLT2ZlLytLczc0YXNxWW13VUlVMFdQRWpJ?=
+ =?utf-8?B?Y0tUWFROV09FU2dsZ1A1Q1RsQVNZRVcyVjRGcUFMckdqb2dUYmxhV25aQ0dv?=
+ =?utf-8?B?MmlZV1lzc0tBbWo5U1hkYlFkSWs5K3ZXTXNPMFNmVWRBVG1LZDlQZDRQUmhm?=
+ =?utf-8?B?R1MwaFVjQk5tZE80U3FFK3kwUkV5cGdtQnN0VHlKMlRCSXZ2eXFoK2Z1Wkx4?=
+ =?utf-8?B?THA3WklqMHJ4SnFROWRIejN4ektjRTgrY2ZOelYwOWRZZ0NJNDVRNnZMaHZV?=
+ =?utf-8?B?NE5UdEVtdC9IbllBU0Vtdlc1OVhaeWs4YWFpS1pRVHI0YWh6UkF4RTJZSUpm?=
+ =?utf-8?B?bWxjekNoVHI5OWcvY0g3N2tCUG1QejBWb3pDMW9YVFBWcklzeGJ2WnEvazlC?=
+ =?utf-8?B?cGNiSERxaDFNY0hYTTNPQnpOSmJkaTFHRktOQjJhSWE1NDdhd2lxRGpwTDAw?=
+ =?utf-8?B?SXhHeWtEakxUZnpFOEI2WUhva0Z0MWYxbkQvOE1TZkJrb0xiQW5jQkZWaEZ4?=
+ =?utf-8?B?TmYyWGkrYjMzTnFUTDZoMkhPbGU0SzREMUZKTUhnZVkzSGlxelpTSFRSWFBE?=
+ =?utf-8?B?SDJ6dnBQK0VpOGVHQ0ViYW5EYnNFbXoxQkhqN2FobkpKUnRCck5WTFhVWDAr?=
+ =?utf-8?B?Q0J0aEpjK2RNd0hQUG42WmlEWXE3Uk1IcmF1S0hnY3d2WitLZlErRXZTT2lL?=
+ =?utf-8?B?MGVKTHdJaWVwdDRieHNqTkdXYUxtdDZ4dDlXNEx2QVV1Z3loKzZrMFZrZUdl?=
+ =?utf-8?B?KytkOWx6MWtiNC9aU0JwTUpwckgzUnlRWjBrOVhWeFVzdXNZOVRxZ0ZmeHh0?=
+ =?utf-8?B?Zk9qd3kwOE1MU2FyUVFRSm1DbUFYSDd3TUJmUTU2STNoWUlXeHFJbUNLUXFL?=
+ =?utf-8?B?bmR0TE5PUGM1dFBRV3FERTRidE9DeDhUTGdkdW1mYjIveHpaaFNoUHVrQ2Js?=
+ =?utf-8?B?KzA4WGt2ZEs4M1A5S002OGJDTGhjTjVkM0p3YWNIMmZscTQ3dWx4MkZNN1Aw?=
+ =?utf-8?B?SXRYeVEzcnEvK2ZoUGswV0JlYTZqNG90S0xySElHVW9NbU5xNHVHRGlHK2tD?=
+ =?utf-8?B?SHNSTXU0TmJOWHVTUjR5aVh3Sk1iTm5GTzNpd29yTGl2MXloQ01DWUlVemtH?=
+ =?utf-8?B?T28xRGVMQUwwYzJqalhYb0NTc0JJVFhJcFdvSVdkSS9lNWUzeWw4ZEE0VU92?=
+ =?utf-8?B?SEFaWVpXVUFya0svdDdZdXdMelJ1QTZhbTh3aTc0V3hVR0FwMTFJczRDUDRT?=
+ =?utf-8?B?M245RTJkbU9JWXRQS3pnQkRRNXhpeXRwa3VWTk8wR3Z1UFRGUmV1TUI3by9N?=
+ =?utf-8?B?aWdTNFRIUDY4cHZ2bUF0eDA5THdaemhwV3Bnc3pTdTREYUtpZ2NQN3JNZnBw?=
+ =?utf-8?B?OUN0ekhBL0RtaXZRREczRjRzbnd2QUoweXVBTlp0WHNNUk1mYUNDWWY5VDBn?=
+ =?utf-8?B?TDdyY0l3ZUdYNElRcXBJVEQ5RjlheUhDZWpENVcxS1pTeGJRdkVYeHFyU1pC?=
+ =?utf-8?B?SEhFTW56NVI2b1NhcU44Z2FHMDJaM3RwS01icjZIRFNGUHdnd1ZUOEdUdTY2?=
+ =?utf-8?B?TkZaaEVEMy9NM3ZvUDJWUTF0QjczV282WjU1SjhvaDl1M3VtdWJ0TFpUSy9v?=
+ =?utf-8?B?SVQwRFFKWDBHRVBFYjJ4UHJyUTBja2dHNVJtYkxYT2FydUFiSkJYSEdpRUJV?=
+ =?utf-8?B?S3RNL2FlZEZlWnNuODg4d3I0NXl3R1FJeThEQmRHL1RCZG5rckJrSDFySG10?=
+ =?utf-8?B?RUYyZU1yaHd1WVRnc0FiZlM1VHYvUE8rYWQyaDBYd1VvQnB5UDY3ckM1V0lE?=
+ =?utf-8?Q?7oDNPNcalt+1ZTmxlK+cs63pnokw6LyW?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR06MB7401.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?eWV3Ky9rSS94YmpjVUt4QklXU0NoOU83L1VncEtmRUhMRXdXS0lKbUJlbk5Q?=
+ =?utf-8?B?L2lwWlJDTndZY3Q2UHM3YldMWEJjNm41SUhPdEppWjVabElCRUp3OTJuNVg5?=
+ =?utf-8?B?WFhyZjd2OTFiUGx4RHVPV1pHV0xSekxCaU9QbVFqQW5zNVdsaCtQME52ci9Z?=
+ =?utf-8?B?VnUwQy9RYmlrd01nVzl6MytNNjZNSWxnYStmV3d6dk9PblY0Y1VlTjMzd05Y?=
+ =?utf-8?B?TGxZMHdIK1ArVTExSkE2RllFTjhYRjJtQUZ0MmVUYlB5VUZVVjRlNjFRMmcv?=
+ =?utf-8?B?T0hqQlZzeTNiRk5WYkgyQnJYbTBocnQyZVBPSnJQV2ZMSkFNZ2t3Q0g2UXVX?=
+ =?utf-8?B?KzdJMS9OOUVXbHVDOHlJTUV3dFlkbHJyOEFQenMrbFVIVkFwbXpCeS9XYlQ2?=
+ =?utf-8?B?ZUNNdEd4QUxhY0V0UzVhMzhFU1hQbDFFQjNxV0JGTEE0TmpLdlhqelpabEtr?=
+ =?utf-8?B?Tkx4MktDUE84cFNtM0YxcUlSOUZVQXpmd1VFNTdrRTRuYzVLYUYxNUZDV2p1?=
+ =?utf-8?B?TVVYbytUekhwaHNzcDI1MmdFSzZWSlNJbWtMaGV1UERtWWMvSG5qTUl3NWF0?=
+ =?utf-8?B?R1d6Q2RGb0UyZjNkaFFWRGFaQ2t5Z3RUUUhnNTc1ZkpYWnN5S3lNQVdJbUNi?=
+ =?utf-8?B?c1VyZHI0aEpKMGhtbURZZjBTdVlFTm83YWxEY3BjS1F1a01GS0hJQ0lUcUtN?=
+ =?utf-8?B?bkF6S0FkOFFsL3pxcUlEU2YzYjF6elV0WEtUSXNBTy9CNkVHei81MmNmb1hF?=
+ =?utf-8?B?NzRpQ0tmb3MyckRaWWtVRVFBb2pkaGtTVmpRRFJpbkpyL3h6eGYrMlZWUmU4?=
+ =?utf-8?B?M2kwaTk4MU9ZQ2E2alJGU1FINVJ2MElCUDVueGhZam9pNkprbktyZGFxaFdw?=
+ =?utf-8?B?Vy9mYzdrQ1ZsaVRpUUZMTXQwbkVMS1MwazBJWDhWNkhyRzZZZlBrOUhENjg1?=
+ =?utf-8?B?UG0xVHFCUmVqNjFOVGR6U29VTmdzRk16L2lROTZVUVF5b0RPL3d3T2FhY0t5?=
+ =?utf-8?B?b0NZeFNtTnRSQUFJaU1vbm81TUVYUmJnUis4SU1RdDVjeWFHamVobWIzaTdt?=
+ =?utf-8?B?OG95L215VEp2K00vU0M0NzBTVDZxNXRXYnRDdmh3dVRtWGpodDB4Z2hhb2t4?=
+ =?utf-8?B?ZFVFN1NmVXFhc2d4MjVPQlF5ZCtGQ1FUN0FOYWRaNkYrVjBvdURYOUxCcEk3?=
+ =?utf-8?B?UTJIcTlMZFhtRDdUeTRlTG5ZbWgvYmV2QjRWQ05OOWNxRE1DVm9lZ0lPRmU2?=
+ =?utf-8?B?VnpidkR6dnJNRkRDOVpBMlZWY05OSUpDanVGRllxenJRRSt4NTdTZmZyQmU1?=
+ =?utf-8?B?dVZ6WW1Eb1ozWW1XaHZ3d2ZjclVScDREcTRGeUFSKzVpVFFOeU1lRnFPR3lI?=
+ =?utf-8?B?RDdGZkRXeUJlelFVby9aTW9mQTdqanNFY1NLTlBHMzFjM0dHTTlPa1Zkd3Bh?=
+ =?utf-8?B?aFVBMWllT2tYazgvNmZnYmNaZHBERGNTNmpRRW1seU90c1R6OC9lSGUxSllK?=
+ =?utf-8?B?d01JT2dEU0wydkNHdGJJVzNvb3dXYUZJeHZCSVhPSWZuWlVxS0pXdUNjLzhL?=
+ =?utf-8?B?OFAweDJTNVNsZ05KOGh1c0ZXTXpMd1ZBcERSV0c3VmJJRHNrd2FBY0pVNmR1?=
+ =?utf-8?B?NW9aUkYySXNyWnhMOHR3bDZXb1RaQlJBSm83YlVsNWZVdm1oM3didStwcnZl?=
+ =?utf-8?B?eTk0UytKbHc0L0dFQkh0VEY1K0htSDRMUVB6WWxjN0tMOXAxbXJaRVJyUVhB?=
+ =?utf-8?B?QlpidjlES05LYitPRm1nUzBoWUtlWllZdXR0WEp5cGRzeXlNUXRqdHA3Y3Ay?=
+ =?utf-8?B?UXd2OXVZa3JVblpWRFF3MVpJWEU0VmpvOUkyQVlvdWhZNFBRcm1BSmlTN3Q4?=
+ =?utf-8?B?M1lMYzVERWcxalRmUC81QVBReXlDL2s3T0JZWHVOTFRQMmI3WmZFV2RjVmo4?=
+ =?utf-8?B?ZGQydld5bVhUUkl3M2RjSlVESS9scTR1L2hicVlNNTFmeXRPVkFwY0JEKzJV?=
+ =?utf-8?B?d2dTdXFEZXY0dk1rcG5VZFJ4WkI2SEhVa2dyemRBdksvTk5NTjVBaXZzYks5?=
+ =?utf-8?B?anZXTHRvOGt0VHpGMTJJZUJCVVc4dXNXampCbWc5b2wzeHMydHFuM1Bsd1pi?=
+ =?utf-8?Q?hGmRAkRAVLwDmfmBQVH9xzETq?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7c0fe49b-1f89-4296-efad-08de318e42a2
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR06MB7401.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2025 10:33:40.8620
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: F4yTehtbxC7RCZuia9OHxp08+ooU4cl6nbhYRl8QMpcR9DcwyvsNEbTLElgkrjqEyDLlNkOiUPVMCjUgcLFxFg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5868
 
-On Mon, Dec 1, 2025 at 9:07=E2=80=AFPM Edwin Peer <epeer@nvidia.com> wrote:
->
->
-> On 11/27/25 18:11, Alexandre Courbot wrote:
-> > diff --git a/rust/kernel/io/resource.rs b/rust/kernel/io/resource.rs
-> > index bea3ee0ed87b..d9851923562c 100644
-> > --- a/rust/kernel/io/resource.rs
-> > +++ b/rust/kernel/io/resource.rs
-> > @@ -223,6 +223,8 @@ impl Flags {
-> >      /// Resource represents a memory region that must be ioremaped usi=
-ng `ioremap_np`.
-> >      pub const IORESOURCE_MEM_NONPOSTED: Flags =3D Flags::new(bindings:=
-:IORESOURCE_MEM_NONPOSTED);
-> >
-> > +    // Always inline to optimize out error path of `build_assert`.
-> > +    #[inline(always)]
-> >      const fn new(value: u32) -> Self {
->
-> Does the build_assert problem actually manifest for const functions?
+On 2025/12/2 2:55, Rafael J. Wysocki wrote:
+> On Mon, Dec 1, 2025 at 1:56 PM YangYang <yang.yang@vivo.com> wrote:
+>>
+>> On 2025/12/1 17:46, YangYang wrote:
+>>> On 2025/11/27 20:34, Rafael J. Wysocki wrote:
+>>>> On Wed, Nov 26, 2025 at 11:47 PM Bart Van Assche <bvanassche@acm.org> wrote:
+>>>>>
+>>>>> On 11/26/25 1:30 PM, Rafael J. Wysocki wrote:
+>>>>>> On Wed, Nov 26, 2025 at 10:11 PM Bart Van Assche <bvanassche@acm.org> wrote:
+>>>>>>>
+>>>>>>> On 11/26/25 12:17 PM, Rafael J. Wysocki wrote:
+>>>>>>>> --- a/block/blk-core.c
+>>>>>>>> +++ b/block/blk-core.c
+>>>>>>>> @@ -309,6 +309,8 @@ int blk_queue_enter(struct request_queue
+>>>>>>>>                  if (flags & BLK_MQ_REQ_NOWAIT)
+>>>>>>>>                          return -EAGAIN;
+>>>>>>>>
+>>>>>>>> +             /* if necessary, resume .dev (assume success). */
+>>>>>>>> +             blk_pm_resume_queue(pm, q);
+>>>>>>>>                  /*
+>>>>>>>>                   * read pair of barrier in blk_freeze_queue_start(), we need to
+>>>>>>>>                   * order reading __PERCPU_REF_DEAD flag of .q_usage_counter and
+>>>>>>>
+>>>>>>> blk_queue_enter() may be called from the suspend path so I don't think
+>>>>>>> that the above change will work.
+>>>>>>
+>>>>>> Why would the existing code work then?
+>>>>>
+>>>>> The existing code works reliably on a very large number of devices.
+>>>>
+>>>> Well, except that it doesn't work during system suspend and
+>>>> hibernation when the PM workqueue is frozen.  I think that we agree
+>>>> here.
+>>>>
+>>>> This needs to be addressed because it may very well cause system
+>>>> suspend to deadlock.
+>>>>
+>>>> There are two possible ways to address it I can think of:
+>>>>
+>>>> 1. Changing blk_pm_resume_queue() and its users to carry out a
+>>>> synchronous resume of q->dev instead of calling pm_request_resume()
+>>>> and (effectively) waiting for the queued-up runtime resume of q->dev
+>>>> to take effect.
+>>>>
+>>>> This would be my preferred option, but at this point I'm not sure if
+>>>> it's viable.
+>>>>
+>>>
+>>> After __pm_runtime_disable() is called from device_suspend_late(), dev->power.disable_depth is set, preventing
+>>> rpm_resume() from making progress until the system resume completes, regardless of whether rpm_resume() is invoked
+>>> synchronously or asynchronously.
+>>> Performing a synchronous resume of q->dev seems to have a similar effect to removing the following code block from
+>>> __pm_runtime_barrier(), which is invoked by __pm_runtime_disable():
+>>>
+>>> 1428     if (dev->power.request_pending) {
+>>> 1429         dev->power.request = RPM_REQ_NONE;
+>>> 1430         spin_unlock_irq(&dev->power.lock);
+>>> 1431
+>>> 1432         cancel_work_sync(&dev->power.work);
+>>> 1433
+>>> 1434         spin_lock_irq(&dev->power.lock);
+>>> 1435         dev->power.request_pending = false;
+>>> 1436     }
+>>>
+>>
+>> Since both synchronous and asynchronous resumes face similar issues,
+> 
+> No, they don't.
+> 
+>> it may be sufficient to keep using the asynchronous resume path as long as
+>> pending work items are not canceled while the PM workqueue is frozen.
+> 
+> Except for two things:
+> 
+> 1. If blk_queue_enter() or __bio_queue_enter() is allowed to race with
+> disabling runtime PM, queuing up the resume work item may fail in the
+> first place.
+> 
 
-Yes, the const marker only allows you to call it from const context.
-It does not change behavior when it is called from non-const context.
+Perhaps my understanding is incorrect, but during the execution of
+device_suspend_late(), the PM workqueue should already be frozen.
+In that case, queuing a resume work item would not fail; it would
+simply not be executed until the workqueue is unfrozen, as long as
+it is not canceled.
 
-Alice
+> 2. If a device runtime resume work item is queued up before the whole
+> system is suspended, it may not make sense to run that work item after
+> resuming the whole system because the state of the system as a whole
+> is generally different at that point.
+> 
+>> This allows the pending work to proceed normally once the PM workqueue
+>> is unfrozen.
+> 
+> Not really.
+
 
