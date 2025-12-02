@@ -1,128 +1,184 @@
-Return-Path: <linux-pm+bounces-39103-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39104-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C019C9CCBE
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 20:41:06 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE7CEC9CE31
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 21:21:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 48EFB34AF72
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 19:40:47 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0799F34834E
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 20:21:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0EFA2EA171;
-	Tue,  2 Dec 2025 19:38:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70B2E279792;
+	Tue,  2 Dec 2025 20:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="z1AM+O7X"
+	dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b="pDRixGw2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f73.google.com (mail-ed1-f73.google.com [209.85.208.73])
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2644B2EAB79
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 19:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36F6212574
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 20:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764704285; cv=none; b=uGvzqyq4IlkZo/zPGOo4ExAhpvl7xRxAtv5U7S8VLbS2e65GLqVn/bVKVZBupyMy66jpRV3bWQsr6CuPZ+u+o6Nd3W6ZQGchUM+LnU+pB7ZSp01Ygx7KRBPulTveBHtKurMj3clWMDI0arTYYCkx39vMXSgbSsFwY2LxB89+KAw=
+	t=1764706906; cv=none; b=CyFUnEp7++8etEr3ntxaxXV6OyR5mWv5emBpeRKxMoN3yMrTGpNujW7ag0t4hDpoHxsAY5SB19/Ts+lZEAx+TXCxuGjcLOh3sppldB7lsFMg8pOWdNBC74Rr3ALMKzG6A+/vUMP5c//R/j5bYM7XVs7yTkm7YR7VYMKkiiIzack=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764704285; c=relaxed/simple;
-	bh=/uRkXMMnQbHggezbPMDlJAAX7sbhCQ8KF+LNPrndfLE=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=kcgSgi9r+q9BRTC8twEhYQYVgloVncuwhN4LWIySpb00QbXh6R9/sDFd9KDaoiawNedE+YCcs6Wg5PfF4I2+YvdJXu6S6LI2DT3z3q0l1Fr4AneXJFwIdJtmcZDZ6c7Ccrsfpc16CKypEAczJYfFBsKXkkqKgHlhR0DH8RrMZtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=z1AM+O7X; arc=none smtp.client-ip=209.85.208.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
-Received: by mail-ed1-f73.google.com with SMTP id 4fb4d7f45d1cf-6416b2de86bso8779654a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 11:38:03 -0800 (PST)
+	s=arc-20240116; t=1764706906; c=relaxed/simple;
+	bh=A0PSVgMbPgZnF/0MjPtEhWWUYOjFqFjkifaKlO/6NJE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ETHn0fqD0CWwWe+tIWpJuXDuGH7N+KROYEkZLimjGiSJ5ASukOEHS2cX36KYhDvaHIUc9pwGRrkRsLojFfJpxzaQ2AxG3gGAV71OCorZgmSRi7tWNxKoMKO8Jt3COArQxbBAkOARvoI9QY5Znid8jpkZW6BvrZo2qRPOTvsVBWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca; spf=pass smtp.mailfrom=ndufresne.ca; dkim=pass (2048-bit key) header.d=ndufresne-ca.20230601.gappssmtp.com header.i=@ndufresne-ca.20230601.gappssmtp.com header.b=pDRixGw2; arc=none smtp.client-ip=209.85.222.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ndufresne.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ndufresne.ca
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8b2dec4d115so594990985a.0
+        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 12:21:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764704282; x=1765309082; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=54syvTsAoYC8sXnOsRu1oetBVSsGxpCbEliB3X2MzVM=;
-        b=z1AM+O7XGonDp4xbrG89jUQyhdGSrdvFybl8/REMj03lsF0Al+bzGZGB8drj/+53z7
-         kN7Jkbzur9hxIWzHQXRkU/IUMmBg7Zr/vujdPqvdOfjp1g50bZQM9fxK5gkoflB+gQar
-         wnE20T+UgTUUFlqInraX8TNibfGw1nsjZwSQmfX7WpiiXSoi9t3LahFiPjafnvCT1sET
-         7wXCPQFWjNptn5egy5yiIxr49WdmnBUpoDnMD0W5btkDnaGiytcK14suQiLY4sLGHMDU
-         K2U7FAnZ5FjDejAGc2klMleAHe1h+L1Oav0o1iVFNMgMeQNojRAovAOE3oDS+5llpGTk
-         OHAw==
+        d=ndufresne-ca.20230601.gappssmtp.com; s=20230601; t=1764706904; x=1765311704; darn=vger.kernel.org;
+        h=mime-version:user-agent:autocrypt:references:in-reply-to:date:cc:to
+         :from:subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=A0PSVgMbPgZnF/0MjPtEhWWUYOjFqFjkifaKlO/6NJE=;
+        b=pDRixGw29NAgkCv0LmsAM3Wf61/LRS/OOnpKh7PU0TMSJapAbiK+gPuo+UBlDjhi/y
+         HNqwJEBKwtoIlI8JGH2/AKncqNctnZSQalTC+kUoBX06q2llsytoWlrKbXmILRMhQQEU
+         rp76SoiEHBw3LhKVtDUgeaD7frU30AF/bg8rTTwJlTqK91TNHyIj+nm7V5cpEVgLo+VS
+         HsYQuz8REKPkB2BExS55nNEej4R1RnE6cE7yrR+i78yjm0trg3H7oA97VdWGU6t2cehf
+         ZDqCMwxCmYn4dPuuNW4r3X0bQ3OqgKAXA9wyuKSrYs5OzwJpL88VM5+EoBBEDv8wpjQB
+         QyNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764704282; x=1765309082;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=54syvTsAoYC8sXnOsRu1oetBVSsGxpCbEliB3X2MzVM=;
-        b=gOrQCpOeg44P26y17WKb832rF2dkT8Dl9VRCMTp0wBnuIG2BYzdru4JCptPNbtFyKv
-         giar9dG5ZlGsHMjqXJDppYmNQ1Z92zbjiXKQzrxJlnptIazxOm2ZgkcjorEY4WQVkYMX
-         KNhx4OeG8QMiffrhID+Uasvkxcd6RwM3iktTsjpHo7gb6/8LFgWz1kfFabKm4xn67Ekw
-         q57fUt2XZCq8E08itgYU45j0MxtWR7aWQjPS893QrE1w4PZ9m8WHts3qSaVnRBZZaPqU
-         MNPW4+eeB5rqs6YHCKMnPaEHiQZa3NM+wekGiHnE5XaSKFbgNkxLaS+84vYE/NFgW+pm
-         AF7A==
-X-Forwarded-Encrypted: i=1; AJvYcCXz4GKRME73uDKw7CK6RSQYy42IgUP+oh04YJunYwIlbNX3UslJbYQ6BDc5i36wpjYbLHnSHwyZVQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1ecwK+L51TkCPLpWz2A2rqx4DBSAOa/aJLnhNMTXZvavjcD10
-	x0fSJNNmjMPufJVaj9tU+9a0UL8Ipr0QySILW0vgGMdACkzbvJQGdMm+9KSu8boUUQRmFH8osS0
-	GdiNmyDJ8lglNL5pMKA==
-X-Google-Smtp-Source: AGHT+IGJc3qMQV4Tiew7vJsG1JacIYJGPoxXANnYISLPrZ170ZFOcWUF9+xQRkP5vtmpknWxelIwF6l2qj4993k=
-X-Received: from edaa24.prod.google.com ([2002:a05:6402:24d8:b0:641:8ee4:8ffa])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:2708:b0:646:6de:a09f with SMTP id 4fb4d7f45d1cf-64794f2b59dmr697109a12.2.1764704282535;
- Tue, 02 Dec 2025 11:38:02 -0800 (PST)
-Date: Tue, 02 Dec 2025 19:37:35 +0000
-In-Reply-To: <20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com>
+        d=1e100.net; s=20230601; t=1764706904; x=1765311704;
+        h=mime-version:user-agent:autocrypt:references:in-reply-to:date:cc:to
+         :from:subject:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A0PSVgMbPgZnF/0MjPtEhWWUYOjFqFjkifaKlO/6NJE=;
+        b=E6dS62MkCnSt3FYudYq9B0TuOqGIGtjC2GwuuKOMY4XaP9QlwOLzPwm3ymJ33JlsG8
+         22Oaq0cbVNpAbzKRRK5UGF1FWzsLjTZjxJlwMCtBxwd9AQIx4b4zZ3rDlWa0P8niNxIx
+         4uUTsTcxdM/s4G/1x6vtoEegPKl7iYGLLrj47fPrNrREyhdJ+mUjO2jkcoV7qBCXJ1P6
+         ml3GNLwYiGtKxXk08FcuGfkehOqAn2/Wa0B4MmixGHdJzuaBBCO4a621wvLOUZ6UQAmv
+         JpLLHckliXn9fx/wXf04A3xChJj7X4dtQ268Hi8rRQ/b3tEyVsxIVVpCZL1CSkbiG6XM
+         FQfw==
+X-Forwarded-Encrypted: i=1; AJvYcCXULcBafCz22Uxb2JaiL3pn3+E2ZFibs0nI9yJTTbaRTI7FYxYvzdSRn1uKTtIbyoSC0OdLXisWYw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPJIME3PylcdAyzm49NRZtKi+dDo+fuRZK43yUwKPh762ZbX5/
+	MRrslmN6wiQjBLuSMcVFZApMr5mbDpm6HzeX9MpTdkDT6p4rEwGT0D4XXZGKH23ZNKs=
+X-Gm-Gg: ASbGnctB8ur8+9CI9p20l87xeCLrziqu4uudg4EKUSLwm1HKZQA7IU824PKX7Wzk3wD
+	K7PGySc1KA6t3ppyH6AWNlWIlSb8jzbyMh2sTaCaQLUJo5EkF8zaBsUobHzDJeM8ZvD/4nj1XA3
+	jjuvuEYtcWBeoG7cwkuMw0r+IMVgBpge5yzzMEuTIlaV596dleII42PoHOosK24OWsxU68pyf/C
+	//mq0Qcjj2xW84NY6IwDCyVbqedqk35QtihZxtdRUidE/piZh0xanyFwJArznAtd+yCv0t7kr9e
+	vyCDdON5aLpmP7CB2ogJ2Ij2QGDYo3pMn3QWMhD5slkufoR14oDo2wUAN8hrUTSJApdZk7p9F6+
+	FU9CEWhoMrevtEgDXFnsHbsm5y4DkMuIUpuaI9qlk+OKf+3/IRno2VdAnlfhpvRujGEAWhrqQ9N
+	zers4DwzYbjkhecD5l
+X-Google-Smtp-Source: AGHT+IGB/lTPqo8FUB1K8vcEzaAXKNJ3jkLu9HLwdfEC+eATOB31NhxyLoJxF149M0NnfHLXi/G67A==
+X-Received: by 2002:a05:620a:1a9b:b0:89f:1204:504a with SMTP id af79cd13be357-8b5d2f12a5fmr116472585a.57.1764706903517;
+        Tue, 02 Dec 2025 12:21:43 -0800 (PST)
+Received: from ?IPv6:2606:6d00:17:7b4b::5ac? ([2606:6d00:17:7b4b::5ac])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8b52a1b74f3sm1140019585a.26.2025.12.02.12.21.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Dec 2025 12:21:42 -0800 (PST)
+Message-ID: <570d444a92b0e49a11379cabc8f7f838e5228f7a.camel@ndufresne.ca>
+Subject: Re: [PATCH v2 2/2] media: verisilicon: Avoid G2 bus error while
+ decoding H.264 and HEVC
+From: Nicolas Dufresne <nicolas@ndufresne.ca>
+To: "Ming Qian(OSS)" <ming.qian@oss.nxp.com>, linux-media@vger.kernel.org
+Cc: mchehab@kernel.org, hverkuil-cisco@xs4all.nl, 
+	benjamin.gaignard@collabora.com, p.zabel@pengutronix.de, 
+	sebastian.fricke@collabora.com, shawnguo@kernel.org,
+ ulf.hansson@linaro.org, 	s.hauer@pengutronix.de, kernel@pengutronix.de,
+ festevam@gmail.com, 	linux-imx@nxp.com, l.stach@pengutronix.de,
+ Frank.li@nxp.com, peng.fan@nxp.com, 	eagle.zhou@nxp.com,
+ imx@lists.linux.dev, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date: Tue, 02 Dec 2025 15:21:40 -0500
+In-Reply-To: <64ad3d66-4edf-4a0b-8992-0db0e90a32b0@oss.nxp.com>
+References: <20251128025117.535-1-ming.qian@oss.nxp.com>
+	 <20251128025117.535-2-ming.qian@oss.nxp.com>
+	 <46e9a5a881946d879d1b2af3421d574b26256ae3.camel@ndufresne.ca>
+	 <64ad3d66-4edf-4a0b-8992-0db0e90a32b0@oss.nxp.com>
+Autocrypt: addr=nicolas@ndufresne.ca; prefer-encrypt=mutual;
+ keydata=mDMEaCN2ixYJKwYBBAHaRw8BAQdAM0EHepTful3JOIzcPv6ekHOenE1u0vDG1gdHFrChD
+ /e0J05pY29sYXMgRHVmcmVzbmUgPG5pY29sYXNAbmR1ZnJlc25lLmNhPoicBBMWCgBEAhsDBQsJCA
+ cCAiICBhUKCQgLAgQWAgMBAh4HAheABQkJZfd1FiEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrjo
+ CGQEACgkQ2UGUUSlgcvQlQwD/RjpU1SZYcKG6pnfnQ8ivgtTkGDRUJ8gP3fK7+XUjRNIA/iXfhXMN
+ abIWxO2oCXKf3TdD7aQ4070KO6zSxIcxgNQFtDFOaWNvbGFzIER1ZnJlc25lIDxuaWNvbGFzLmR1Z
+ nJlc25lQGNvbGxhYm9yYS5jb20+iJkEExYKAEECGwMFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4
+ AWIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaCyyxgUJCWX3dQAKCRDZQZRRKWBy9ARJAP96pFmLffZ
+ smBUpkyVBfFAf+zq6BJt769R0al3kHvUKdgD9G7KAHuioxD2v6SX7idpIazjzx8b8rfzwTWyOQWHC
+ AAS0LU5pY29sYXMgRHVmcmVzbmUgPG5pY29sYXMuZHVmcmVzbmVAZ21haWwuY29tPoiZBBMWCgBBF
+ iEE7w1SgRXEw8IaBG8S2UGUUSlgcvQFAmibrGYCGwMFCQll93UFCwkIBwICIgIGFQoJCAsCBBYCAw
+ ECHgcCF4AACgkQ2UGUUSlgcvRObgD/YnQjfi4+L8f4fI7p1pPMTwRTcaRdy6aqkKEmKsCArzQBAK8
+ bRLv9QjuqsE6oQZra/RB4widZPvphs78H0P6NmpIJ
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-fFM28PG+mNKcm637EtVe"
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com>
-X-Developer-Key: i=aliceryhl@google.com; a=openpgp; fpr=49F6C1FAA74960F43A5B86A1EE7A392FDE96209F
-X-Developer-Signature: v=1; a=openpgp-sha256; l=873; i=aliceryhl@google.com;
- h=from:subject:message-id; bh=/uRkXMMnQbHggezbPMDlJAAX7sbhCQ8KF+LNPrndfLE=;
- b=owEBbQKS/ZANAwAKAQRYvu5YxjlGAcsmYgBpL0AHjZMlnHHFMoh929di8EjUsCLjmEfSxg3tT
- 2GhNI8gm7iJAjMEAAEKAB0WIQSDkqKUTWQHCvFIvbIEWL7uWMY5RgUCaS9ABwAKCRAEWL7uWMY5
- Rj86D/45UKCvMffghxd1TOM9Kpgv7sTNWQRLKPICF/FwK/EUK0t9tCRyN8DOXECqh81J1HPWBLH
- fwy0VurRe2Uf2/N1tu8YV/B/rjJQ9bau7gz+JB/z/OYuqDM7vP/ZItEK+2mgxSEKkcoy26qyrsy
- 9ts+t9ddjYnA3Nav79AkmodsJd/yRujVVzJ+qkOtujY25VTEa0vzm2aP0MF8Z1nsl7L+NFqsBRP
- /tfq0/CyWnPCEg4cYuJiJWHOJVoGUUcfPKTHnl75HfLngLBs8e88t4eMY8MCYz/gviTTYs2oQmd
- k9sC0j2uRjzfaZd0rq3iw8czk3Lzr3v/Sf+8E3E4btY4JhXZ3EuiDWCXrpuYO/flyUyIVG4nO90
- E/9QD0knl9DBegIUsUD7fHwQa7/M6NW3scA4khH+92YbjVo2rZo6LoEt8Eq1yh168NECZY0wpe8
- biJs4zuB2mZ49ZAvd+wFjOJXGYleBMK8hrbJJ3R48HGkpPRO0L0T3iH0BYMhWKCt63VJsJsVRX0
- 9J/0+4h2EFSmY0CR8Yb0fOYzFZimBaTkhAFPVhgml+xxnbRLdSy+JqDC4b9zRd2qANDfH70F55A
- TCTRH+E1HLAoGhmkej8TNgNGMus0YvztTSZuMepiXDfdau3polP4u7y2z8xuwo8vrET8oeGIeG2 ilPM0gn4CQU1RcA==
-X-Mailer: b4 0.14.2
-Message-ID: <20251202-define-rust-helper-v1-11-a2e13cbc17a6@google.com>
-Subject: [PATCH 11/46] rust: cpufreq: add __rust_helper to helpers
-From: Alice Ryhl <aliceryhl@google.com>
-To: rust-for-linux@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Alice Ryhl <aliceryhl@google.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 
-This is needed to inline these helpers into Rust code.
 
-Signed-off-by: Alice Ryhl <aliceryhl@google.com>
----
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-pm@vger.kernel.org
----
- rust/helpers/cpufreq.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+--=-fFM28PG+mNKcm637EtVe
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/rust/helpers/cpufreq.c b/rust/helpers/cpufreq.c
-index 7c1343c4d65eaff6f62255b6c9a9a67f89af1541..0e16aeef2b5a696bf8974f37d9e5e3c24d999f40 100644
---- a/rust/helpers/cpufreq.c
-+++ b/rust/helpers/cpufreq.c
-@@ -3,7 +3,8 @@
- #include <linux/cpufreq.h>
- 
- #ifdef CONFIG_CPU_FREQ
--void rust_helper_cpufreq_register_em_with_opp(struct cpufreq_policy *policy)
-+__rust_helper void
-+rust_helper_cpufreq_register_em_with_opp(struct cpufreq_policy *policy)
- {
- 	cpufreq_register_em_with_opp(policy);
- }
+Hi Ming,
 
--- 
-2.52.0.158.g65b55ccf14-goog
+Le lundi 01 d=C3=A9cembre 2025 =C3=A0 09:52 +0800, Ming Qian(OSS) a =C3=A9c=
+rit=C2=A0:
+> > Then instead of this, I would like to add a kref to v4l2_m2m_dec, I che=
+cked
+> > already and this is both safe and backward compatible.
+> >=20
+> > Then in the get function, you will walk over the compatible that are
+> > different
+> > from the currently probe node. If you find one that is initialized, you=
+ will
+> > call v4l2_m2m_get() to obtained a shared reference. In _remove() you wi=
+ll
+> > simply
+> > do v4l2_m2m_put() instead of v4l2_m2m_release().
+> >=20
+> > Hope the others are happy with this. For Hantro drivers, this will make=
+ it a
+> > much more powerfull mechanism.
+> >=20
+> > Nicolas
+> >=20
+>=20
+> For v4l2_m2m_get() and v4l2_m2m_put(), do you mean defining these two
+> functions in v4l2 m2m, instead of just adding them in the hantro driver?
 
+my idea was to add a kref to be able to share v4l2_m2m_dev. One thing I not=
+ice
+is that its the v4l2_m2m dev that creates the media controller on all other
+drivers. Note sure why Hantro does it own still, maybe it predates, maybe i=
+ts
+something else.
+
+Its quite weirdly glued together, since the v4l2_m2m_release() function jus=
+t
+happily free the m2m_dev without even trying to cleanup the media controlle=
+r. It
+totally orthogonal to the job queue, maybe it shouldn't be there.
+
+I'll make an RFC for the kref anyway, if that has a change, I'll try and sp=
+lit
+out the v4l2_m2m_mc_dev on it own, so driver can share a m2m and use the
+helpers.
+
+Nicolas
+
+
+--=-fFM28PG+mNKcm637EtVe
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTvDVKBFcTDwhoEbxLZQZRRKWBy9AUCaS9KVAAKCRDZQZRRKWBy
+9FwpAQCE8mMTD4iXjzvjVTfRBA1nQ1p6o6DmW7kVwZdUjhgwmAD/ZZDhUJ/ZxJ5m
+bTyOTlRWmN/+KTAIgA9It8hO1jE00g0=
+=pT2D
+-----END PGP SIGNATURE-----
+
+--=-fFM28PG+mNKcm637EtVe--
 
