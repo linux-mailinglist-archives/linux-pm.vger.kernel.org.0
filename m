@@ -1,111 +1,180 @@
-Return-Path: <linux-pm+bounces-39063-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39064-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0E24C9B650
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 12:56:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8725CC9B6AA
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 13:03:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DF033348BD2
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 11:55:32 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0F0453484B4
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 12:02:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9782314B6C;
-	Tue,  2 Dec 2025 11:54:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD995311C21;
+	Tue,  2 Dec 2025 12:02:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kjpn2l2V"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yUT7E4eA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703563148D8
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 11:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA595285CAA
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 12:02:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764676453; cv=none; b=DWKkIJGIyARK0NNryBJthMV6Gks6jQ4on/NGGUmFEFYu82U68YOYDwiGmX86FcwB2yKrmn+b9u+kj/nqLY23Sczrgm/v3lgbwJC2ucYT3mZh65DLUyMrU+EtCJLtQw+hZ2LB6tmqfYTGXiGpHS93FAv1ehmUctbi5/JmgGv8S5o=
+	t=1764676959; cv=none; b=Zpzr76GuPmsmHqQcDN2yUyX8hZlw7+svouKvE+xw3DUlpkn0v/Rl1WJ6S3Qkd5zIvYoleQUgf1ns7bsv5Y76zN3+zQeshkB751ZJOabOPYQqJPb41fbke+ijbQGk3YU5kOQaVesla+rjZ00VgzjCQdmc+y34LptIL9cTDPdrRlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764676453; c=relaxed/simple;
-	bh=f604AMXJ8Naj25VU08DctYWWhunFC1FlIAv9VKdF5SM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t0PpoR6WbsID1eB8Erqo6DRrr04gB9RlQNNI8SDRjblVeGjBDR/BO+11q9eBuOrKfWo2X25YJwCU8MjtjrVNP13LBO5xhlC0nLMLKNnxbb910zUcFoYtSVvu61IpqmjYuxXu+hhw8Qivjoi4L8p8OthX1G7sWjgyj5hNxkvxZ0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kjpn2l2V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC57BC19422
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 11:54:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764676450;
-	bh=f604AMXJ8Naj25VU08DctYWWhunFC1FlIAv9VKdF5SM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kjpn2l2V3P+VlndZywjoM+rrbhMAZW1aZEDm7IXea343ZwDAu0v4+CVCLowYsB/Y7
-	 G/1jwDsoEJFbq+U1LXsaqHnAOu+86nfhJDIqJugbvQ1MFfPdq6TqWOwT0HK6ESAPa3
-	 x+aBlZ2vybXWoCPMoAu2eQzIeLzaPziSPONlhM+MwxZ039vr6/+rgDSfZzrrlnJ6pl
-	 EJf/sAviX7bohSilj0YS8LrsIhZeC47xGbx2mI97Q3G1QCAOihwM30VpfpQRBGBe/k
-	 20lZi+YRu12nxbwSu3nYd9o4YgJp3rC22XrQ0MckB/beCUiCGQPiwH8IXKaNbG/+7w
-	 EE/wN7vWqEogA==
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7c6da5e3353so3296932a34.3
-        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 03:54:10 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXbITiPkm8VvROlKcbAw2044WqVlZ2Nsrb6LksLulceNdj+TeJwy28nsttY7ki0jaoslNtG4Hb1rg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1Az3rdw/YWVxwUV9M6RoCAQfJzJTQcODrT16kPvqm24Hf8O9S
-	Ev3nj4y5Ngix8OvO0H1Vj0g/73vb6Fp8bslFClPOzFH6Rwx1yxubYIKIzg5z3nfP/2jI47smnZk
-	zAF60qhqzXkf/Nq9YA4LAGmkB2hYFq2A=
-X-Google-Smtp-Source: AGHT+IFkVQ5NafdmHY3yONdDYzVGIPmIcObIxvnz+SiH8b0PWwO7P5SXmydvFrWtbdILchYd8fGZPUW7CW6ppO0AHE4=
-X-Received: by 2002:a05:6830:7199:b0:7c7:68d8:f702 with SMTP id
- 46e09a7af769-7c7c410c455mr15317350a34.9.1764676450256; Tue, 02 Dec 2025
- 03:54:10 -0800 (PST)
+	s=arc-20240116; t=1764676959; c=relaxed/simple;
+	bh=ge1x2oWZ+hs365NmMpqJ4TN/I4SI4ABtvBiRX4AlaQM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=mSwyip6zxD6gyQr21oL13BYJXbqWojE58dg3plfK6oXN2YQhJV0FUlNigCIoUCLwcFp4+GfdjsAvyAgUatS3X5UZIBp4BSCEb2IkmO/Uufsd+BSWP0+LQNBrlXFJFbwx+3QQ7c++AoVl4GWbU4iInba+sRdVw0UpJpWLHZe3BMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yUT7E4eA; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-477b198f4bcso39528005e9.3
+        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 04:02:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764676956; x=1765281756; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FVGsHORFfS62JoCVlAaVjxuR8v8htnbnxQ0FZyoahLk=;
+        b=yUT7E4eA4MQkVLW9xM06lCewijzwC3ksi6FRttLU+8hy83Fme4nnqWOTqLUeHufyJg
+         wkw84N2Ks1X1HePbEiA3p2lt4pxVdGOXtvWlf/jG1PERNGebvH05DQFStiFcwoYZD1je
+         d1xI8pwiMPS+k13s/VewWPU7yR4oXYsynch9mDjgVZ4pGZk/GSIkx8RZz1RjtLJJLcQH
+         4XLdCbKBZ36hsmrg+qeaxbNv9o4oB2B4srYP2td/kJbFG7A3ICK5R4CPCTDMqkLSnPSo
+         YrVk6jWpoYwz+C+9CAzAcXHpT7naoPs1aaFq7n9o3ioi/aCKmHlLnbDZIHurK7TDOJkg
+         gJcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764676956; x=1765281756;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FVGsHORFfS62JoCVlAaVjxuR8v8htnbnxQ0FZyoahLk=;
+        b=VeT2eHB0Zbch9tXvG4fV+9USowuY2hINTwwbu88/Fmn1eOyxb76g5bCAuhlDXCGHMu
+         B8/dnSHIOXTsw6ttT6lUOsfBbju5oPfalMDpz9CIAYd4lFuu1zwiOWb3Ivcu6grTA2fQ
+         7OOPXu1CXHANYAEkd1CJjCwRHPcg5g9xIqGKag59tVc071tP5FsxDnAs+qeUr5lVYAsK
+         Zp4P851JqGxGT3NKu+Mp+lo4IJuAWhVQflDpsxw8ZHk/0bFfmmzt1SCqJFuD0hYiFeeU
+         xQKU5awaWfyagPTGuJ2C3UVPbLXgFo9BuKP1GMlgeVeg3plaHNsWU+lFzK9i/2tO+6jX
+         C+Mg==
+X-Gm-Message-State: AOJu0Yxl5lIb5MzYDOdQdbHY2v6xfBJc5S3LJHEBQkK+DQRAcZu4QyJG
+	exagruogvlU9Wqp06KYnG9BR84nHNNs5RT7vraN+95JafZXEB3CgvnIDwbpIp2oq6qGH6Q/5fJT
+	AAOxN
+X-Gm-Gg: ASbGncsNZSAOzMQPTzbNBXzw2dutW3XNOk7TN5BUJwaJ+goQy6bJxZ5xGUPm44AysY1
+	pr8lleoWxqTJdKHZYMHDX3L4E4vWkq46bGV+b1L3XY1M7Ls+GurWmrqIAYdV3H3kTVXwJX0mek0
+	MK83GvBffL6KGDWpHKPQX1BMxsc5uG5A73xtt2Tao8z9YPr/5EHAI4wk4AwRu73Q6KLjjFRZCYi
+	o8wzzcAH8Sw+OyJ26lm2hsCqGT9htltHIf3wQ96mVMce7/KiFfCV9eqYy9Mcwg8kou3FTCv4HNE
+	KQGttooHq585t0t1avov7BoCcinTnTzuYs3hWXO+m99z6//WgjCMK1A0wvOcOygbYKvPMXZe5cl
+	r8YosIjBkhb+4YDL6ofHuVY4H+S/20FDxGvoMkdJ4D/fbWNXlRb+63Jc3S1c5CyFhtX5gHWk5C/
+	19Sf7UeXUY+UNsrR+5QUsqKu2zkU2Xs18k0iqtYNi81QIEKsCNwX1rVpG++MLo307Qjzs0fhGew
+	eXeFQ==
+X-Google-Smtp-Source: AGHT+IFE5uAtt+SD+gnxgEcSOfhYD+5ANP6IoR0nePsdS8RDBM8wp8CK1WLeWWdDh/y2R4AL51kMLQ==
+X-Received: by 2002:a05:600c:4588:b0:477:a21c:2066 with SMTP id 5b1f17b1804b1-477c0165d5bmr376336125e9.5.1764676956095;
+        Tue, 02 Dec 2025 04:02:36 -0800 (PST)
+Received: from ta2.c.googlers.com (17.83.155.104.bc.googleusercontent.com. [104.155.83.17])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4790add608bsm362778215e9.5.2025.12.02.04.02.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Dec 2025 04:02:35 -0800 (PST)
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+Date: Tue, 02 Dec 2025 12:02:29 +0000
+Subject: [PATCH] thermal: thresholds: change thermal_thresholds_init to
+ return void
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251126101636.205505-1-yang.yang@vivo.com> <82bcdf73-54c5-4220-86c0-540a5cb59bb7@vivo.com>
- <CAJZ5v0hm=jfSyBXF0qMYnpATJf56JTxQ-+4JBy3YMjS0cMUMHg@mail.gmail.com>
- <6216669.lOV4Wx5bFT@rafael.j.wysocki> <a461add5-95a0-4750-8d66-850cce2fe9fb@acm.org>
-In-Reply-To: <a461add5-95a0-4750-8d66-850cce2fe9fb@acm.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 2 Dec 2025 12:53:58 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0g6ELEFDeTXaWxLAH7wO1eZ+to8xcXd9Nnv8dZYmhg7GQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bk1XxDGqeh6Q-AZcLDWvNlGkZ2NsTSirozhZiL0PaXT0_Y3cGigK54YO-M
-Message-ID: <CAJZ5v0g6ELEFDeTXaWxLAH7wO1eZ+to8xcXd9Nnv8dZYmhg7GQ@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: sleep: Do not flag runtime PM workqueue as freezable
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, YangYang <yang.yang@vivo.com>, Jens Axboe <axboe@kernel.dk>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251202-th-threshold-init-v1-1-7e5d7e878b6c@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAFXVLmkC/x2MQQqAMAwEvyI5G9CqF78iHqSJNiBVEhGh+HeDM
+ CzMYaeAsQobjFUB5VtMjuzS1hXEtOSNUcgdQhOG1gev5ChbOnZCyXJh5Kaj0PUL9QT+O5VXef7
+ mNL/vByRdtlFjAAAA
+X-Change-ID: 20251202-th-threshold-init-ce03d234ad4d
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1764676954; l=2592;
+ i=tudor.ambarus@linaro.org; s=20241212; h=from:subject:message-id;
+ bh=ge1x2oWZ+hs365NmMpqJ4TN/I4SI4ABtvBiRX4AlaQM=;
+ b=s/he3mk1qHiaCP+v3rvROdSJCSCPjte6+AMp4pVY0Xd4Jm1RNEm05yWvKlhQi2036qIPVtk+3
+ FvHmQZu4PR/DcOYT9wKOYNKouwRUZ519xECDIT223a7AMrtZYQF/l/b
+X-Developer-Key: i=tudor.ambarus@linaro.org; a=ed25519;
+ pk=uQzE0NXo3dIjeowMTOPCpIiPHEz12IA/MbyzrZVh9WI=
 
-On Tue, Dec 2, 2025 at 2:06=E2=80=AFAM Bart Van Assche <bvanassche@acm.org>=
- wrote:
->
-> On 12/1/25 11:58 AM, Rafael J. Wysocki wrote:
-> > So I've been testing the patch below for a few days and it will elimina=
-te
-> > the latter, but even after this patch runtime PM will be disabled in
-> > device_suspend_late() and if the problem you are facing is still there
-> > after this patch, it will need to dealt with at the driver level.
-> >
-> > Generally speaking, driver involvement is needed to make runtime PM and
-> > system suspend/resume work together in the majority of cases.
->
-> Thank you for having developed and shared this patch. Is the following
-> quote from the Linux kernel documentation still correct with this patch
-> applied or should an update for Documentation/power/runtime_pm.rst
-> perhaps be included in this patch?
->
->   "The power management workqueue pm_wq in which bus types and device
-> drivers can
->    put their PM-related work items.  It is strongly recommended that
-> pm_wq be
->    used for queuing all work items related to runtime PM, because this
-> allows
->    them to be synchronized with system-wide power transitions (suspend
-> to RAM,
->    hibernation and resume from system sleep states).  pm_wq is declared i=
-n
->    include/linux/pm_runtime.h and defined in kernel/power/main.c."
+The function always returns 0, so change its return type to void and
+remove the return value check in the caller.
 
-It doesn't say what the synchronization mechanism is in particular and
-some synchronization is still provided after this patch, via the
-pm_runtime_barrier() in device_suspend(), for example.
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+---
+ drivers/thermal/thermal_core.c       | 6 +-----
+ drivers/thermal/thermal_thresholds.c | 4 +---
+ drivers/thermal/thermal_thresholds.h | 2 +-
+ 3 files changed, 3 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 17ca5c082643592b46cbbe708c716230fac215ef..05c1e2ff6a0a29e640646132a8d4a0ee63a200a8 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1618,9 +1618,7 @@ thermal_zone_device_register_with_trips(const char *type,
+ 			goto unregister;
+ 	}
+ 
+-	result = thermal_thresholds_init(tz);
+-	if (result)
+-		goto remove_hwmon;
++	thermal_thresholds_init(tz);
+ 
+ 	thermal_zone_init_complete(tz);
+ 
+@@ -1630,8 +1628,6 @@ thermal_zone_device_register_with_trips(const char *type,
+ 
+ 	return tz;
+ 
+-remove_hwmon:
+-	thermal_remove_hwmon_sysfs(tz);
+ unregister:
+ 	device_del(&tz->device);
+ release_device:
+diff --git a/drivers/thermal/thermal_thresholds.c b/drivers/thermal/thermal_thresholds.c
+index 38f5fd0e89303aca32be3c6b11928196b825502b..351f4a464b11df1b64f45f980a349d19a3521b4b 100644
+--- a/drivers/thermal/thermal_thresholds.c
++++ b/drivers/thermal/thermal_thresholds.c
+@@ -13,11 +13,9 @@
+ #include "thermal_core.h"
+ #include "thermal_thresholds.h"
+ 
+-int thermal_thresholds_init(struct thermal_zone_device *tz)
++void thermal_thresholds_init(struct thermal_zone_device *tz)
+ {
+ 	INIT_LIST_HEAD(&tz->user_thresholds);
+-
+-	return 0;
+ }
+ 
+ static void __thermal_thresholds_flush(struct thermal_zone_device *tz)
+diff --git a/drivers/thermal/thermal_thresholds.h b/drivers/thermal/thermal_thresholds.h
+index cb372659a20d648e92d7800628d29f4343f4137b..5e2629ca369875f4336a2b334fa0da4bcfe9e54b 100644
+--- a/drivers/thermal/thermal_thresholds.h
++++ b/drivers/thermal/thermal_thresholds.h
+@@ -8,7 +8,7 @@ struct user_threshold {
+ 	int direction;
+ };
+ 
+-int thermal_thresholds_init(struct thermal_zone_device *tz);
++void thermal_thresholds_init(struct thermal_zone_device *tz);
+ void thermal_thresholds_exit(struct thermal_zone_device *tz);
+ void thermal_thresholds_handle(struct thermal_zone_device *tz, int *low, int *high);
+ void thermal_thresholds_flush(struct thermal_zone_device *tz);
+
+---
+base-commit: 63d26c3811421ceeb5b82a85489b88bf545e33c7
+change-id: 20251202-th-threshold-init-ce03d234ad4d
+
+Best regards,
+-- 
+Tudor Ambarus <tudor.ambarus@linaro.org>
+
 
