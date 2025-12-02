@@ -1,86 +1,87 @@
-Return-Path: <linux-pm+bounces-39078-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39079-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48AD7C9BAEA
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 14:57:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5B11C9BBD3
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 15:15:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 34D744E2298
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 13:57:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 931103A7424
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 14:14:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C154A31D36D;
-	Tue,  2 Dec 2025 13:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 336E2322C78;
+	Tue,  2 Dec 2025 14:14:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com [209.85.217.49])
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07CCA31B836
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 13:57:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C316322C7D
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 14:14:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764683828; cv=none; b=NK4KsiR8wYt1nXic1kCiMMB8vcvB0QbKdUNfp5iRFKJQf27xa6LNrMCWlP9yEWmnC5Q7ygB+dZUeZQ+MVTWMfWJeN+ZbkAQC8JYL0815SIN5zjJg0iuf73xMPWOaoTRmH9pJ3J28wUrUAIA5mtFAGgXNslKAApbSX3PBuUZWjm8=
+	t=1764684882; cv=none; b=hLZ8+2QGKoWGDkHtCEWMT0oh/GzG3ZrZAU6itCk7q24QRKjD8tCQ3OyQZMzVy862QtkcA3HBhIZEGmmZA2RFrfFbKoF0jyx8VHraU15tUmR9jt49Ucfi5g9W/OGL+9n1ORD15JjwvnXIuUfNIK8U08xQMcdY/ojcGyiqPNM23M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764683828; c=relaxed/simple;
-	bh=ak/Rt6uWiX+MT4pBJfZ+PD2Fezju7a0RibofMkxgxGI=;
+	s=arc-20240116; t=1764684882; c=relaxed/simple;
+	bh=vHUrQ6w324fYnCNxiHl4mdFInNGEkkrZLMojf3dBXGg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K/Qox0FWmiieSS33+eZhNiXHtcGVoS4TxK734ArXuPg8AmYGA81lNCVEgdClSSgf4xwOkJwTE+bsEf1LxEN9UMbdJRBywrH2cNPnoBNOePmic07Q2zR70GW5JOLQ3ZwBqygchvei6CNhBFWjTn/nQntRhoeuCpNyKIAY2a779ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.49
+	 To:Cc:Content-Type; b=Va+YQ4QHnd09ktAtKXlwOwUIwnhFdig0mYZv1rtxwtNZahXds1Xy0P4t0BYBka/94YoHfndB2BMN2uU2gE7g1IbrOsh80YbOfh5WbNschZ0AYl7eDqKhHZfpX6KZ75eLsy/yuDYArR0mSYmHwp8B6gEAv6uy9y+reROWtLKXYIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-5dfc6be7df3so1870493137.0
-        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 05:57:05 -0800 (PST)
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7c76f65feb5so3992153a34.0
+        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 06:14:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764683825; x=1765288625;
+        d=1e100.net; s=20230601; t=1764684880; x=1765289680;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DcG/XQXLp9HYcvharszf8uW0YuqvJnIwjKHOdBnLhz4=;
-        b=L8dQwmgAWqlTkKM0cHeQ2b/HkJ/IZwHy5pVlI5l1chd0sJFyngSKQo9VoqrkdVbMFU
-         F8HJ55rqqC7HnkiVCRM5o16m3rL0IR4wVHdgiYBuZs6/6+Ktsp3lRn9ZLaeLxuxxFC2D
-         8B0K3P+jqRkhF/pGvEQsbtak42Ewh9v1cJ+SBbnBMdaIRYPTB3KUjXeh3k39a0q+vNTV
-         DxAojVeSSMQuEOPSalDMtPsGCWNY26PSunyKJ3tF9pjwPiPpDLMhvXIT23I3s2VNfJfZ
-         RYRkBkl0TY+Vazpktl4rTZICMnPvo0mbLEyTvvfp9dLr9loHC5XDJWGSU6gxnZkXgS8a
-         OjtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWlQHHGJzoGtf8e4JvtedC6cnUkdKvuC0f7z0W79j7rPP/sBNPv9f1hrgsSbV/n8XEY/K76+jJySw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5+FEos40L29g/Zno6PzY0klLPoXbf2aGiadTjmRKNi/Tj14Bg
-	0Imz8x/Ge1EPggggP8mJvkUavWBoeH73Cl6JNyyGdtiq00HqTJQRsYmCZsZ8JidR
-X-Gm-Gg: ASbGncvwPYl2OJeKSlDrryDsk7ECRL/Yp1pP2B3QNNQlufivA6U6Ufj5RYrzs/5ulpY
-	LiRLoaLYo1hUgzHmAcyyxfIrrbTa+6455A2NiZ3U3Su7IsHh+Vh9/YIxSIerOQmayRTmKKuHZMN
-	NqOY0dcoInKd1nLbSI5qW7AwCc2VhSgBEJgm90+XldoKzRsFfMEAVmHvefO85HquhoF5I9qDBAu
-	Jrt0sA1kZlD68UXfG5efkIHpfYIyDNFOTEiQE0u7eJela/7w6NlHK21NTHhgm5RA6NDnThw11SP
-	kCTwrA2jvWqYiIk7g6EaoJXtMdPhxowBQT4+EFTnFkbCTypaMquu8lJZPZfh0VwAIa1Ggvn6DoM
-	+RA2Uk8/OHELdl6mCZC81ednORTyBymBxamnOxMAHASd6vvYRxkVahRJQI79uuI0u4lkY3SwgBx
-	D2Fp7osqxrX1WlMpJg3DuUpCeXgpvzlNloR1y+OZoYWTRaxiPD
-X-Google-Smtp-Source: AGHT+IFYuO7iSHZ9ZhKUijIwKDSfRB5c2JndbIB0QN6dQoxPswC1/qlBHnQr2XmP0o+MAdKZ+E1kuw==
-X-Received: by 2002:a05:6102:3e1a:b0:5db:cf38:f4f3 with SMTP id ada2fe7eead31-5e1de3444bbmr17185387137.28.1764683824732;
-        Tue, 02 Dec 2025 05:57:04 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-93cd6cef362sm6756317241.6.2025.12.02.05.57.03
+        bh=P35uIC8+DPfTCMfHgmdtX7Glr2h/6n9nJWKZMAhyHf0=;
+        b=bemnfZFzvJbh+J7jYTg5FfIx18HW1fUQWdSsoFojjFGkg55N/cVK+WBLLsfXcjILsB
+         AWUscjZp01AE2vsLoMdVeoXcu/8T21m3OxKIDdilOpneCJBbyEzS+Q+wavUntw8M654e
+         n73eoMdoszVpFlBSN+WuBY/ExqIsKSvag3FvSL3yQzlnKYo3imTeAeB7WeDWYbJOj2WW
+         IS1LOMQuHAvAQW4f+Xlk1TAquCU69CAyze8EyorLgvGTE8VSxUvrEs0NMYzQ3ymEvxxk
+         gseYNqy2rOX3Po6AY+vR8D36VL67wXEGll28aIxGX1mO/HiQzomz4209h9EBqPoJqpjW
+         OADw==
+X-Forwarded-Encrypted: i=1; AJvYcCWfVYRxCABPE6x2zyGMqXQGXqVZ/3qVCwdYLTXEhNjywKG8yxKazuIgN1uTDmZ5WOuoRPlGjtmwJg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUQuHzR7DZDhNfyEVEkpM6B/Q/hPuDI7OSR5NocGA7dfUml5wE
+	2cGpP5xLEQyiAzIm0By8ncC5ixTYDlcwb2DkceGKOPQ82SayfzQuTC96gAPLk83u
+X-Gm-Gg: ASbGnctN9pSciRIoVwEze/ZgAJQemlBG6opdaiJJXpuB/p20kw1tus62M58zVF1rUVQ
+	0c/NIFF+rg5pClhYlrIx5jqbZJ22qIq+liEmGaG99NBShuxGUz0iKcbV2qEFK5wZHgqWweNU3fp
+	j76tUboBKMlWSfc7x1A0koEk5InT0AdF89/i6wHeXRBct2mzZm/MDG8Z9THr+UCsHhQ/zWe8A12
+	3kPiEH9NetO0osnLY+79xst3Sp9/zaqDoxok7Rd6T6S+bTwlHiVe61GtEVRYWBjvkmsq3yC6jyg
+	fQw2LD7TMaansHBiYa3wm77W0bIMvwVrHH8qphr68blYHlRRCru0jL/l8TEZdrFTMeHDcMgYJ1+
+	w3nb/mr3seIwvfFNUB1K4r8XqZPu/U8pGQlM5DcmOSYvND0lEQF3ViqouO/gZP3BHpxtymYuMma
+	qAvz5jFsz0CSlDV/0XrmGavQg0T9dwMB/5Bb3UZQX1pA1HkdJi
+X-Google-Smtp-Source: AGHT+IHbCadFczJqamkCG5jIhlCgob/iESAp8i5Opd67B2m0NofkHGIedww+1h5b42gyXkoZyFRkZQ==
+X-Received: by 2002:a05:6830:264a:b0:7c7:e29:70ca with SMTP id 46e09a7af769-7c798ccd9a4mr20124188a34.22.1764684879588;
+        Tue, 02 Dec 2025 06:14:39 -0800 (PST)
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com. [209.85.160.46])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7c90fceddf6sm6570518a34.14.2025.12.02.06.14.39
         for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Dec 2025 05:57:04 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-93719360f9cso1402095241.1
-        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 05:57:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVY/Ps2Qw5GwTbnJDCe+ckg74/UNvwGTpps3FP40leNt9klo2ClDBWuO5Ln17OGkZFjudQ8Mjsn7w==@vger.kernel.org
-X-Received: by 2002:a05:6102:26c9:b0:5dd:89c1:eb77 with SMTP id
- ada2fe7eead31-5e1de39d9cemr17004298137.29.1764683823416; Tue, 02 Dec 2025
- 05:57:03 -0800 (PST)
+        Tue, 02 Dec 2025 06:14:39 -0800 (PST)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-3ed15120e55so3290681fac.2
+        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 06:14:39 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCURGRXxo/EicAuFTfkRNUT9yMvUcwinxGuUUkdfp1UcHapB4mOovfwMC5erYX+VQhGiqH48sgywQg==@vger.kernel.org
+X-Received: by 2002:a53:dd48:0:b0:63e:17d8:d977 with SMTP id
+ 956f58d0204a3-64302abbb9cmr22209916d50.41.1764684434875; Tue, 02 Dec 2025
+ 06:07:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251112-b4-of-match-matchine-data-v2-0-d46b72003fd6@linaro.org> <20251112-b4-of-match-matchine-data-v2-2-d46b72003fd6@linaro.org>
-In-Reply-To: <20251112-b4-of-match-matchine-data-v2-2-d46b72003fd6@linaro.org>
+References: <20251112-b4-of-match-matchine-data-v2-0-d46b72003fd6@linaro.org> <20251112-b4-of-match-matchine-data-v2-1-d46b72003fd6@linaro.org>
+In-Reply-To: <20251112-b4-of-match-matchine-data-v2-1-d46b72003fd6@linaro.org>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 2 Dec 2025 14:56:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVJD4+J9QpUUs-sX0feKfuPD72CO0dcqN7shvF_UYpZ3Q@mail.gmail.com>
-X-Gm-Features: AWmQ_bnP_BfEGwKLqJN8UevZeVXg10-IsXC-lVqCY3H9e2HFkqZ11liOD_Kw768
-Message-ID: <CAMuHMdVJD4+J9QpUUs-sX0feKfuPD72CO0dcqN7shvF_UYpZ3Q@mail.gmail.com>
-Subject: Re: [PATCH v2 02/11] cpufreq: dt-platdev: Simplify with of_machine_get_match_data()
+Date: Tue, 2 Dec 2025 15:07:03 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVAZpp7M+pp27+kHZwoet2Q8Rm-Y4ePu7=W_1oXhebLmQ@mail.gmail.com>
+X-Gm-Features: AWmQ_bnQtK_C28o8ts-DX6QMHSfgR5FWBqGmuyp3cjxdu41cx4XkoPs5W_lQhYE
+Message-ID: <CAMuHMdVAZpp7M+pp27+kHZwoet2Q8Rm-Y4ePu7=W_1oXhebLmQ@mail.gmail.com>
+Subject: Re: [PATCH v2 01/11] of: Add wrappers to match root node with OF
+ device ID tables
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
 	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
@@ -102,56 +103,94 @@ Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
 	platform-driver-x86@vger.kernel.org, linux-tegra@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Krzystof,
+Hi Krzysztof,
 
-On Wed, 12 Nov 2025 at 11:37, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> Replace open-coded getting root OF node, matching against it and getting
-> the match data with two new helpers: of_machine_get_match_data() and
-> of_machine_device_match().
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Thanks for your patch, which is now commit 6ea891a6dd370ab2
-("cpufreq: dt-platdev: Simplify with of_machine_get_match_data()")
+Thanks for your patch, which is now commit 4a93adcbd201aad5
+("of: Add wrappers to match root node with OF device ID tables")
 in dt-rh/for-next.
 
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -219,20 +219,13 @@ static bool __init cpu0_node_has_opp_v2_prop(void)
+On Wed, 12 Nov 2025 at 11:30, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+> Several drivers duplicate same code for getting reference to the root
+> node, matching it against 'struct of_device_id' table and getting out
+> the match data from the table entry.
 >
->  static int __init cpufreq_dt_platdev_init(void)
->  {
-> -       struct device_node *np __free(device_node) = of_find_node_by_path("/");
-> -       const struct of_device_id *match;
-> -       const void *data = NULL;
-> +       const void *data;
+> There is a of_machine_compatible_match() wrapper but it takes array of
+> strings, which is not suitable for many drivers since they want the
+> driver data associated with each compatible.
 >
-> -       if (!np)
-> -               return -ENODEV;
-> -
-> -       match = of_match_node(allowlist, np);
-> -       if (match) {
-> -               data = match->data;
-> +       data = of_machine_get_match_data(allowlist);
-> +       if (data)
->                 goto create_pdev;
-> -       }
+> Add two wrappers, similar to existing of_device_get_match_data():
+> 1. of_machine_device_match() doing only matching against 'struct
+>    of_device_id' and returning bool.
+> 2. of_machine_get_match_data() doing the matching and returning
+>    associated driver data for found compatible.
 
-I think this is a change in behavior:
-Before, the pdev was created immediately if the node's compatible
-value is found in allowlist, regardless of the value of data (which
-is always NULL, except on RK3399),
-After, the pdev is created immediately if the node's compatible value
-is found in allowlist, AND data is non-NULL.
+Shouldn't the first function be called of_match_machine(), and return
+a const struct of_device_id *, cfr. of_match_device()?
 
 >
-> -       if (cpu0_node_has_opp_v2_prop() && !of_match_node(blocklist, np))
-> +       if (cpu0_node_has_opp_v2_prop() && !of_machine_device_match(blocklist))
->                 goto create_pdev;
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+> --- a/drivers/of/base.c
+> +++ b/drivers/of/base.c
+> @@ -434,6 +434,53 @@ bool of_machine_compatible_match(const char *const *compats)
+>  }
+>  EXPORT_SYMBOL(of_machine_compatible_match);
 >
->         return -ENODEV;
+> +/**
+> + * of_machine_device_match - Test root of device tree against a of_device_id array
+> + * @matches:   NULL terminated array of of_device_id match structures to search in
+> + *
+> + * Returns true if the root node has any of the given compatible values in its
+> + * compatible property.
+> + */
+> +bool of_machine_device_match(const struct of_device_id *matches)
+> +{
+> +       struct device_node *root;
+> +       const struct of_device_id *match = NULL;
+> +
+> +       root = of_find_node_by_path("/");
+> +       if (root) {
+> +               match = of_match_node(matches, root);
+> +               of_node_put(root);
+> +       }
+> +
+> +       return match != NULL;
+> +}
+> +EXPORT_SYMBOL(of_machine_device_match);
+> +
+> +/**
+> + * of_machine_get_match_data - Tell if root of device tree has a matching of_match structure
+> + * @matches:   NULL terminated array of of_device_id match structures to search in
+> + *
+> + * Returns data associated with matched entry or NULL
+> + */
+> +const void *of_machine_get_match_data(const struct of_device_id *matches)
+> +{
+> +       const struct of_device_id *match;
+> +       struct device_node *root;
+> +
+> +       root = of_find_node_by_path("/");
+> +       if (!root)
+> +               return NULL;
+> +
+> +       match = of_match_node(matches, root);
+> +       of_node_put(root);
+> +
+> +       if (!match)
+> +               return NULL;
+> +
+> +       return match->data;
+> +}
+> +EXPORT_SYMBOL(of_machine_get_match_data);
+
+These two functions are very similar, but look different.  If the
+former would return a pointer instead of a bool, the latter could be
+built on top.
+
+Even if you still prefer returning a bool, they could share a common
+private helper returning a pointer.
 
 Gr{oetje,eeting}s,
 
