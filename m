@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-39120-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39121-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6E21C9D0DD
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 22:19:31 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8099BC9D0FC
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 22:19:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DC5C54E4E7F
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 21:19:19 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 77B6F34A711
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 21:19:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B472F83AA;
-	Tue,  2 Dec 2025 21:18:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F072FB094;
+	Tue,  2 Dec 2025 21:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m+diBAZD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NaTGy78r"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08352D47E1
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 21:18:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D45E2FB08C
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 21:18:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764710327; cv=none; b=t/ggkQ4AkaWoNXC6gKyg3gMde8x+v1hyqv3tUoZd5iguB3WFFi+/slqoRCe78ks3PHzY3BR0HFw+456InnaaSWjLzzkcNV2NAtIVuN2iIIORllcjqrXp07Vsqk3C2RbvOVsYboOMqiIrmJWOh7qCEE7xXiJN/9pE5EPbVmYmFCM=
+	t=1764710329; cv=none; b=liGC9o9YZT9CnnWdDZF5NW3IV3hln6ZUrDLD3s6w8Bv94d2m4J7xo5bvtDvDWYwEYZgNF1v1Df1SueDZJCW1S2i6Y1DFK7ve1XNkraazweZMCL3CAntDMR8JcXeOZ/V9t+0aAfrIQr6GdAM1CdJ+/w6GpGQkNMwCs6oDtpl2Gu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764710327; c=relaxed/simple;
-	bh=XgokCzI8uqtMRICqu+mIOuad8lgLw1y11zSFguAUcmo=;
+	s=arc-20240116; t=1764710329; c=relaxed/simple;
+	bh=SFsAmoFY0vnx0osWcm7DC8gtNvd7y5x8u8yHvU0DxYY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bsym9HFNPb/NuUtVOPRMFo9Fgdar63fpbd1bZeKBdE45B25ZiLMdhy5jmmoYV3P7FfWEzHk8leukUNrnXz9YyN44rIVr36YgSryXWcvRL7N6KJ9z6lCvFVcL2nFYjwWQWyMnEk9S6MHvQR/n6SL9MaFvfBWQ8QQRaS5ZH1ifKgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m+diBAZD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D83BC113D0;
-	Tue,  2 Dec 2025 21:18:46 +0000 (UTC)
+	 MIME-Version; b=TAKlkgTzvar/wg4U9aGrkBVAjEKAAys0ORNoRq+8lbcqd33ZHsxuysluR6/o785duxVdgg7DGqZgkn/BR/bZ1zCcBM0Lj5dvEgZA81+CwcuaLQdP94LKNEQTKadqlUMTqEmzDPOyyDVG4/A5cayBDwZU60GPBDGKnPDsxLKBiqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NaTGy78r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BF0DC16AAE;
+	Tue,  2 Dec 2025 21:18:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764710327;
-	bh=XgokCzI8uqtMRICqu+mIOuad8lgLw1y11zSFguAUcmo=;
+	s=k20201202; t=1764710328;
+	bh=SFsAmoFY0vnx0osWcm7DC8gtNvd7y5x8u8yHvU0DxYY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=m+diBAZD52BH2ACoV2719t6ddaAjDrGwZw4cv2Yxffd9a3OuwtAnY5m7XaBjcUorz
-	 KKX8nuIyvt1IQIcjDnM5RCd+lNGyzKAfNKGuJxDTSaVanZwOLXAQkVr28f2e+2O/kZ
-	 LlGPqiDgWwcF8bJHDdIPEonP7Ycyt/wdGALVXAR94ktXbvIZY6Q3YCbewqdC2L7V5+
-	 Kkqq3CLc9fHeoHUda4S/QCsKHffdKYeX++KeIiFum2YfW25EI96DyOyQQzPATJQPUO
-	 S4EW6FOcWjbR2H53hfu6cDqKnBJ7Kiybs5vVWqRWeEk9P/hxAU6HNfQIHqQvpxBfeH
-	 Uh2Dzgrr37E2A==
+	b=NaTGy78rroZKHx3tXSfPnXoAv9OzdjgA1T+yCYTk1/JemBvFF0Sv289EbsAJxlvpc
+	 rb3Ij+gwtUsHm/YbY10wYt5H3TEIRiiZuKRrha5hbCCqudzwyfwy/pFWTJQVUU1l3S
+	 rmGVk6KvUzqiR7UTP2to6lM3UvecOtgMvyjETxsbypvYduIwR1KLIrl3+335MNWfc0
+	 4hp0GeC6RVxt8C39/tJK/fXA7poUqPn0NtsVTOWgvlz7ZAZN0f+hS/PxGqqgwx4s+s
+	 6O3RIz2ApSiGv7sqxofsderqaiJEkrDSR7/358QVidVotU3RvFapqPCXCcLVL0uN99
+	 5V3dlQ1P8IhtQ==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
-Cc: Malaya Kumar Rout <mrout@redhat.com>,
-	Len Brown <len.brown@intel.com>
-Subject: [PATCH 14/21] tools/power x86_energy_perf_policy: Fix potential NULL pointer dereference
-Date: Tue,  2 Dec 2025 16:13:32 -0500
-Message-ID: <51860d6330b6cda355a7e30b3e09e7a22ec4b6ae.1764710012.git.len.brown@intel.com>
+Cc: Len Brown <len.brown@intel.com>,
+	Emily Ehlert <ehemily@amazon.de>
+Subject: [PATCH 15/21] tools/power turbostat: Validate RAPL MSRs for AWS Nitro Hypervisor
+Date: Tue,  2 Dec 2025 16:13:33 -0500
+Message-ID: <19476a592bf255b9eb0308999a9ccf96b314d314.1764710012.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1764710012.git.len.brown@intel.com>
 References: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1764710012.git.len.brown@intel.com>
@@ -61,48 +61,553 @@ Reply-To: Len Brown <lenb@kernel.org>
 Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
 
-From: Malaya Kumar Rout <mrout@redhat.com>
+From: Len Brown <len.brown@intel.com>
 
-In err_on_hypervisor(), strstr() is called to search for "flags" in the
-buffer, but the return value is not checked before being used in pointer
-arithmetic (flags - buffer). If strstr() returns NULL because "flags" is
-not found in /proc/cpuinfo, this will cause undefined behavior and likely
-a crash.
+Even though the platform->plat_rapl_msrs enumeration may be accurate,
+a VM, such as AWS Nitro Hypervisor, may deny access to the underlying MSRs.
 
-Add a NULL check after the strstr() call and handle the error appropriately
-by cleaning up resources and reporting a meaningful error message.
+Probe if PKG_ENERGY is readable and non-zero.
+If no, ignore all RAPL MSRs.
 
-Signed-off-by: Malaya Kumar Rout <mrout@redhat.com>
+Reported-by: Emily Ehlert <ehemily@amazon.de>
+Tested-by: Emily Ehlert <ehemily@amazon.de>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- .../x86/x86_energy_perf_policy/x86_energy_perf_policy.c    | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ tools/power/x86/turbostat/turbostat.c | 156 ++++++++++++++++----------
+ 1 file changed, 98 insertions(+), 58 deletions(-)
 
-diff --git a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-index b2125275c69e..ac37132207a4 100644
---- a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-+++ b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-@@ -520,7 +520,7 @@ void for_packages(unsigned long long pkg_set, int (func)(int))
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index e85bdb00f24a..4411ef44294f 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -492,6 +492,7 @@ unsigned int quiet;
+ unsigned int shown;
+ unsigned int sums_need_wide_columns;
+ unsigned int rapl_joules;
++unsigned int valid_rapl_msrs;
+ unsigned int summary_only;
+ unsigned int list_header_only;
+ unsigned int dump_only;
+@@ -588,7 +589,7 @@ struct platform_features {
+ 	bool has_cst_prewake_bit;	/* Cstate prewake bit in MSR_IA32_POWER_CTL */
+ 	int trl_msrs;		/* MSR_TURBO_RATIO_LIMIT/LIMIT1/LIMIT2/SECONDARY, Atom TRL MSRs */
+ 	int plr_msrs;		/* MSR_CORE/GFX/RING_PERF_LIMIT_REASONS */
+-	int rapl_msrs;		/* RAPL PKG/DRAM/CORE/GFX MSRs, AMD RAPL MSRs */
++	int plat_rapl_msrs;	/* RAPL PKG/DRAM/CORE/GFX MSRs, AMD RAPL MSRs */
+ 	bool has_per_core_rapl;	/* Indicates cores energy collection is per-core, not per-package. AMD specific for now */
+ 	bool has_rapl_divisor;	/* Divisor for Energy unit raw value from MSR_RAPL_POWER_UNIT */
+ 	bool has_fixed_rapl_unit;	/* Fixed Energy Unit used for DRAM RAPL Domain */
+@@ -743,7 +744,7 @@ static const struct platform_features snb_features = {
+ 	.cst_limit = CST_LIMIT_SNB,
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+-	.rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
++	.plat_rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
+ };
  
- void print_version(void)
+ static const struct platform_features snx_features = {
+@@ -755,7 +756,7 @@ static const struct platform_features snx_features = {
+ 	.cst_limit = CST_LIMIT_SNB,
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_CORE_ALL | RAPL_DRAM_ALL,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_CORE_ALL | RAPL_DRAM_ALL,
+ };
+ 
+ static const struct platform_features ivb_features = {
+@@ -768,7 +769,7 @@ static const struct platform_features ivb_features = {
+ 	.cst_limit = CST_LIMIT_SNB,
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+-	.rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
++	.plat_rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
+ };
+ 
+ static const struct platform_features ivx_features = {
+@@ -780,7 +781,7 @@ static const struct platform_features ivx_features = {
+ 	.cst_limit = CST_LIMIT_SNB,
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE | TRL_LIMIT1,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_CORE_ALL | RAPL_DRAM_ALL,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_CORE_ALL | RAPL_DRAM_ALL,
+ };
+ 
+ static const struct platform_features hsw_features = {
+@@ -794,7 +795,7 @@ static const struct platform_features hsw_features = {
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+ 	.plr_msrs = PLR_CORE | PLR_GFX | PLR_RING,
+-	.rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
++	.plat_rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
+ };
+ 
+ static const struct platform_features hsx_features = {
+@@ -808,7 +809,7 @@ static const struct platform_features hsx_features = {
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE | TRL_LIMIT1 | TRL_LIMIT2,
+ 	.plr_msrs = PLR_CORE | PLR_RING,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL,
+ 	.has_fixed_rapl_unit = 1,
+ };
+ 
+@@ -823,7 +824,7 @@ static const struct platform_features hswl_features = {
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+ 	.plr_msrs = PLR_CORE | PLR_GFX | PLR_RING,
+-	.rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
++	.plat_rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
+ };
+ 
+ static const struct platform_features hswg_features = {
+@@ -837,7 +838,7 @@ static const struct platform_features hswg_features = {
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+ 	.plr_msrs = PLR_CORE | PLR_GFX | PLR_RING,
+-	.rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
++	.plat_rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
+ };
+ 
+ static const struct platform_features bdw_features = {
+@@ -850,7 +851,7 @@ static const struct platform_features bdw_features = {
+ 	.cst_limit = CST_LIMIT_HSW,
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+-	.rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
++	.plat_rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
+ };
+ 
+ static const struct platform_features bdwg_features = {
+@@ -863,7 +864,7 @@ static const struct platform_features bdwg_features = {
+ 	.cst_limit = CST_LIMIT_HSW,
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+-	.rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
++	.plat_rapl_msrs = RAPL_PKG | RAPL_CORE_ALL | RAPL_GFX | RAPL_PKG_POWER_INFO,
+ };
+ 
+ static const struct platform_features bdx_features = {
+@@ -877,7 +878,7 @@ static const struct platform_features bdx_features = {
+ 	.has_irtl_msrs = 1,
+ 	.has_cst_auto_convension = 1,
+ 	.trl_msrs = TRL_BASE,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL,
+ 	.has_fixed_rapl_unit = 1,
+ };
+ 
+@@ -894,7 +895,7 @@ static const struct platform_features skl_features = {
+ 	.has_ext_cst_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+ 	.tcc_offset_bits = 6,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_CORE_ALL | RAPL_DRAM | RAPL_DRAM_PERF_STATUS | RAPL_GFX | RAPL_PSYS,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_CORE_ALL | RAPL_DRAM | RAPL_DRAM_PERF_STATUS | RAPL_GFX | RAPL_PSYS,
+ 	.enable_tsc_tweak = 1,
+ };
+ 
+@@ -911,7 +912,7 @@ static const struct platform_features cnl_features = {
+ 	.has_ext_cst_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+ 	.tcc_offset_bits = 6,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_CORE_ALL | RAPL_DRAM | RAPL_DRAM_PERF_STATUS | RAPL_GFX | RAPL_PSYS,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_CORE_ALL | RAPL_DRAM | RAPL_DRAM_PERF_STATUS | RAPL_GFX | RAPL_PSYS,
+ 	.enable_tsc_tweak = 1,
+ };
+ 
+@@ -929,7 +930,7 @@ static const struct platform_features adl_features = {
+ 	.has_ext_cst_msrs		= cnl_features.has_ext_cst_msrs,
+ 	.trl_msrs			= cnl_features.trl_msrs,
+ 	.tcc_offset_bits		= cnl_features.tcc_offset_bits,
+-	.rapl_msrs			= cnl_features.rapl_msrs,
++	.plat_rapl_msrs			= cnl_features.plat_rapl_msrs,
+ 	.enable_tsc_tweak		= cnl_features.enable_tsc_tweak,
+ };
+ 
+@@ -947,7 +948,7 @@ static const struct platform_features lnl_features = {
+ 	.has_ext_cst_msrs		= adl_features.has_ext_cst_msrs,
+ 	.trl_msrs			= adl_features.trl_msrs,
+ 	.tcc_offset_bits		= adl_features.tcc_offset_bits,
+-	.rapl_msrs			= adl_features.rapl_msrs,
++	.plat_rapl_msrs			= adl_features.plat_rapl_msrs,
+ 	.enable_tsc_tweak		= adl_features.enable_tsc_tweak,
+ };
+ 
+@@ -962,7 +963,7 @@ static const struct platform_features skx_features = {
+ 	.has_irtl_msrs = 1,
+ 	.has_cst_auto_convension = 1,
+ 	.trl_msrs = TRL_BASE | TRL_CORECOUNT,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL,
+ 	.has_fixed_rapl_unit = 1,
+ };
+ 
+@@ -978,7 +979,7 @@ static const struct platform_features icx_features = {
+ 	.has_irtl_msrs = 1,
+ 	.has_cst_prewake_bit = 1,
+ 	.trl_msrs = TRL_BASE | TRL_CORECOUNT,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_PSYS,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_PSYS,
+ 	.has_fixed_rapl_unit = 1,
+ };
+ 
+@@ -995,7 +996,7 @@ static const struct platform_features spr_features = {
+ 	.has_cst_prewake_bit = 1,
+ 	.has_fixed_rapl_psys_unit = 1,
+ 	.trl_msrs = TRL_BASE | TRL_CORECOUNT,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_PSYS,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_PSYS,
+ };
+ 
+ static const struct platform_features dmr_features = {
+@@ -1010,7 +1011,7 @@ static const struct platform_features dmr_features = {
+ 	.has_fixed_rapl_psys_unit	= spr_features.has_fixed_rapl_psys_unit,
+ 	.trl_msrs			= spr_features.trl_msrs,
+ 	.has_msr_module_c6_res_ms	= 1,	/* DMR has Dual-Core-Module and MC6 MSR */
+-	.rapl_msrs			= 0,	/* DMR does not have RAPL MSRs */
++	.plat_rapl_msrs			= 0,	/* DMR does not have RAPL MSRs */
+ 	.plr_msrs			= 0,	/* DMR does not have PLR  MSRs */
+ 	.has_irtl_msrs			= 0,	/* DMR does not have IRTL MSRs */
+ 	.has_config_tdp			= 0,	/* DMR does not have CTDP MSRs */
+@@ -1029,7 +1030,7 @@ static const struct platform_features srf_features = {
+ 	.has_irtl_msrs = 1,
+ 	.has_cst_prewake_bit = 1,
+ 	.trl_msrs = TRL_BASE | TRL_CORECOUNT,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_PSYS,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_PSYS,
+ };
+ 
+ static const struct platform_features grr_features = {
+@@ -1045,7 +1046,7 @@ static const struct platform_features grr_features = {
+ 	.has_irtl_msrs = 1,
+ 	.has_cst_prewake_bit = 1,
+ 	.trl_msrs = TRL_BASE | TRL_CORECOUNT,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_PSYS,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_PSYS,
+ };
+ 
+ static const struct platform_features slv_features = {
+@@ -1058,7 +1059,7 @@ static const struct platform_features slv_features = {
+ 	.has_msr_c6_demotion_policy_config = 1,
+ 	.has_msr_atom_pkg_c6_residency = 1,
+ 	.trl_msrs = TRL_ATOM,
+-	.rapl_msrs = RAPL_PKG | RAPL_CORE,
++	.plat_rapl_msrs = RAPL_PKG | RAPL_CORE,
+ 	.has_rapl_divisor = 1,
+ 	.rapl_quirk_tdp = 30,
+ };
+@@ -1071,7 +1072,7 @@ static const struct platform_features slvd_features = {
+ 	.cst_limit = CST_LIMIT_SLV,
+ 	.has_msr_atom_pkg_c6_residency = 1,
+ 	.trl_msrs = TRL_BASE,
+-	.rapl_msrs = RAPL_PKG | RAPL_CORE,
++	.plat_rapl_msrs = RAPL_PKG | RAPL_CORE,
+ 	.rapl_quirk_tdp = 30,
+ };
+ 
+@@ -1092,7 +1093,7 @@ static const struct platform_features gmt_features = {
+ 	.cst_limit = CST_LIMIT_GMT,
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE | TRL_CORECOUNT,
+-	.rapl_msrs = RAPL_PKG | RAPL_PKG_POWER_INFO,
++	.plat_rapl_msrs = RAPL_PKG | RAPL_PKG_POWER_INFO,
+ };
+ 
+ static const struct platform_features gmtd_features = {
+@@ -1105,7 +1106,7 @@ static const struct platform_features gmtd_features = {
+ 	.has_irtl_msrs = 1,
+ 	.has_msr_core_c1_res = 1,
+ 	.trl_msrs = TRL_BASE | TRL_CORECOUNT,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_CORE_ENERGY_STATUS,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_CORE_ENERGY_STATUS,
+ };
+ 
+ static const struct platform_features gmtp_features = {
+@@ -1117,7 +1118,7 @@ static const struct platform_features gmtp_features = {
+ 	.cst_limit = CST_LIMIT_GMT,
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+-	.rapl_msrs = RAPL_PKG | RAPL_PKG_POWER_INFO,
++	.plat_rapl_msrs = RAPL_PKG | RAPL_PKG_POWER_INFO,
+ };
+ 
+ static const struct platform_features tmt_features = {
+@@ -1128,7 +1129,7 @@ static const struct platform_features tmt_features = {
+ 	.cst_limit = CST_LIMIT_GMT,
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_CORE_ALL | RAPL_DRAM | RAPL_DRAM_PERF_STATUS | RAPL_GFX,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_CORE_ALL | RAPL_DRAM | RAPL_DRAM_PERF_STATUS | RAPL_GFX,
+ 	.enable_tsc_tweak = 1,
+ };
+ 
+@@ -1140,7 +1141,7 @@ static const struct platform_features tmtd_features = {
+ 	.cst_limit = CST_LIMIT_GMT,
+ 	.has_irtl_msrs = 1,
+ 	.trl_msrs = TRL_BASE | TRL_CORECOUNT,
+-	.rapl_msrs = RAPL_PKG_ALL,
++	.plat_rapl_msrs = RAPL_PKG_ALL,
+ };
+ 
+ static const struct platform_features knl_features = {
+@@ -1152,7 +1153,7 @@ static const struct platform_features knl_features = {
+ 	.cst_limit = CST_LIMIT_KNL,
+ 	.has_msr_knl_core_c6_residency = 1,
+ 	.trl_msrs = TRL_KNL,
+-	.rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL,
++	.plat_rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL,
+ 	.has_fixed_rapl_unit = 1,
+ 	.need_perf_multiplier = 1,
+ };
+@@ -1161,7 +1162,7 @@ static const struct platform_features default_features = {
+ };
+ 
+ static const struct platform_features amd_features_with_rapl = {
+-	.rapl_msrs = RAPL_AMD_F17H,
++	.plat_rapl_msrs = RAPL_AMD_F17H,
+ 	.has_per_core_rapl = 1,
+ 	.rapl_quirk_tdp = 280,	/* This is the max stock TDP of HEDT/Server Fam17h+ chips */
+ };
+@@ -2136,7 +2137,7 @@ off_t idx_to_offset(int idx)
+ 
+ 	switch (idx) {
+ 	case IDX_PKG_ENERGY:
+-		if (platform->rapl_msrs & RAPL_AMD_F17H)
++		if (valid_rapl_msrs & RAPL_AMD_F17H)
+ 			offset = MSR_PKG_ENERGY_STAT;
+ 		else
+ 			offset = MSR_PKG_ENERGY_STATUS;
+@@ -2202,19 +2203,19 @@ int idx_valid(int idx)
  {
--	printf("x86_energy_perf_policy 2025.9.19 Len Brown <lenb@kernel.org>\n");
-+	printf("x86_energy_perf_policy 2025.11.22 Len Brown <lenb@kernel.org>\n");
- }
+ 	switch (idx) {
+ 	case IDX_PKG_ENERGY:
+-		return platform->rapl_msrs & (RAPL_PKG | RAPL_AMD_F17H);
++		return valid_rapl_msrs & (RAPL_PKG | RAPL_AMD_F17H);
+ 	case IDX_DRAM_ENERGY:
+-		return platform->rapl_msrs & RAPL_DRAM;
++		return valid_rapl_msrs & RAPL_DRAM;
+ 	case IDX_PP0_ENERGY:
+-		return platform->rapl_msrs & RAPL_CORE_ENERGY_STATUS;
++		return valid_rapl_msrs & RAPL_CORE_ENERGY_STATUS;
+ 	case IDX_PP1_ENERGY:
+-		return platform->rapl_msrs & RAPL_GFX;
++		return valid_rapl_msrs & RAPL_GFX;
+ 	case IDX_PKG_PERF:
+-		return platform->rapl_msrs & RAPL_PKG_PERF_STATUS;
++		return valid_rapl_msrs & RAPL_PKG_PERF_STATUS;
+ 	case IDX_DRAM_PERF:
+-		return platform->rapl_msrs & RAPL_DRAM_PERF_STATUS;
++		return valid_rapl_msrs & RAPL_DRAM_PERF_STATUS;
+ 	case IDX_PSYS_ENERGY:
+-		return platform->rapl_msrs & RAPL_PSYS;
++		return valid_rapl_msrs & RAPL_PSYS;
+ 	default:
+ 		return 0;
+ 	}
+@@ -2517,7 +2518,7 @@ int add_rapl_msr_counter(int cpu, const struct rapl_counter_arch_info *cai)
+ {
+ 	int ret;
  
- void cmdline(int argc, char **argv)
-@@ -662,6 +662,11 @@ void err_on_hypervisor(void)
+-	if (!(platform->rapl_msrs & cai->feature_mask))
++	if (!(valid_rapl_msrs & cai->feature_mask))
+ 		return -1;
+ 
+ 	ret = add_msr_counter(cpu, cai->msr);
+@@ -2850,10 +2851,10 @@ void print_header(char *delim)
+ 	if (DO_BIC(BIC_CORE_THROT_CNT))
+ 		outp += sprintf(outp, "%sCoreThr", (printed++ ? delim : ""));
+ 
+-	if (platform->rapl_msrs && !rapl_joules) {
++	if (valid_rapl_msrs && !rapl_joules) {
+ 		if (DO_BIC(BIC_CorWatt) && platform->has_per_core_rapl)
+ 			outp += sprintf(outp, "%sCorWatt", (printed++ ? delim : ""));
+-	} else if (platform->rapl_msrs && rapl_joules) {
++	} else if (valid_rapl_msrs && rapl_joules) {
+ 		if (DO_BIC(BIC_Cor_J) && platform->has_per_core_rapl)
+ 			outp += sprintf(outp, "%sCor_J", (printed++ ? delim : ""));
+ 	}
+@@ -7572,7 +7573,7 @@ double get_tdp_intel(void)
+ {
+ 	unsigned long long msr;
+ 
+-	if (platform->rapl_msrs & RAPL_PKG_POWER_INFO)
++	if (valid_rapl_msrs & RAPL_PKG_POWER_INFO)
+ 		if (!get_msr(base_cpu, MSR_PKG_POWER_INFO, &msr))
+ 			return ((msr >> 0) & RAPL_POWER_GRANULARITY) * rapl_power_units;
+ 	return get_quirk_tdp();
+@@ -7603,12 +7604,12 @@ void rapl_probe_intel(void)
+ 		CLR_BIC(BIC_GFX_J, &bic_enabled);
  	}
  
- 	flags = strstr(buffer, "flags");
-+	if (!flags) {
-+		fclose(cpuinfo);
-+		free(buffer);
-+		err(1, "Failed to find 'flags' in /proc/cpuinfo");
+-	if (!platform->rapl_msrs || no_msr)
++	if (!valid_rapl_msrs || no_msr)
+ 		return;
+ 
+-	if (!(platform->rapl_msrs & RAPL_PKG_PERF_STATUS))
++	if (!(valid_rapl_msrs & RAPL_PKG_PERF_STATUS))
+ 		CLR_BIC(BIC_PKG__, &bic_enabled);
+-	if (!(platform->rapl_msrs & RAPL_DRAM_PERF_STATUS))
++	if (!(valid_rapl_msrs & RAPL_DRAM_PERF_STATUS))
+ 		CLR_BIC(BIC_RAM__, &bic_enabled);
+ 
+ 	/* units on package 0, verify later other packages match */
+@@ -7657,7 +7658,7 @@ void rapl_probe_amd(void)
+ 		CLR_BIC(BIC_Cor_J, &bic_enabled);
+ 	}
+ 
+-	if (!platform->rapl_msrs || no_msr)
++	if (!valid_rapl_msrs || no_msr)
+ 		return;
+ 
+ 	if (get_msr(base_cpu, MSR_RAPL_PWR_UNIT, &msr))
+@@ -7847,7 +7848,7 @@ int print_rapl(PER_THREAD_PARAMS)
+ 	UNUSED(c);
+ 	UNUSED(p);
+ 
+-	if (!platform->rapl_msrs)
++	if (!valid_rapl_msrs)
+ 		return 0;
+ 
+ 	/* RAPL counters are per package, so print only for 1st thread/package */
+@@ -7860,7 +7861,7 @@ int print_rapl(PER_THREAD_PARAMS)
+ 		return -1;
+ 	}
+ 
+-	if (platform->rapl_msrs & RAPL_AMD_F17H) {
++	if (valid_rapl_msrs & RAPL_AMD_F17H) {
+ 		msr_name = "MSR_RAPL_PWR_UNIT";
+ 		if (get_msr(cpu, MSR_RAPL_PWR_UNIT, &msr))
+ 			return -1;
+@@ -7873,7 +7874,7 @@ int print_rapl(PER_THREAD_PARAMS)
+ 	fprintf(outf, "cpu%d: %s: 0x%08llx (%f Watts, %f Joules, %f sec.)\n", cpu, msr_name, msr,
+ 		rapl_power_units, rapl_energy_units, rapl_time_units);
+ 
+-	if (platform->rapl_msrs & RAPL_PKG_POWER_INFO) {
++	if (valid_rapl_msrs & RAPL_PKG_POWER_INFO) {
+ 
+ 		if (get_msr(cpu, MSR_PKG_POWER_INFO, &msr))
+ 			return -5;
+@@ -7886,7 +7887,7 @@ int print_rapl(PER_THREAD_PARAMS)
+ 			((msr >> 48) & RAPL_TIME_GRANULARITY) * rapl_time_units);
+ 
+ 	}
+-	if (platform->rapl_msrs & RAPL_PKG) {
++	if (valid_rapl_msrs & RAPL_PKG) {
+ 
+ 		if (get_msr(cpu, MSR_PKG_POWER_LIMIT, &msr))
+ 			return -9;
+@@ -7910,7 +7911,7 @@ int print_rapl(PER_THREAD_PARAMS)
+ 			cpu, ((msr >> 0) & 0x1FFF) * rapl_power_units, (msr >> 31) & 1 ? "" : "UN");
+ 	}
+ 
+-	if (platform->rapl_msrs & RAPL_DRAM_POWER_INFO) {
++	if (valid_rapl_msrs & RAPL_DRAM_POWER_INFO) {
+ 		if (get_msr(cpu, MSR_DRAM_POWER_INFO, &msr))
+ 			return -6;
+ 
+@@ -7921,7 +7922,7 @@ int print_rapl(PER_THREAD_PARAMS)
+ 			((msr >> 32) & RAPL_POWER_GRANULARITY) * rapl_power_units,
+ 			((msr >> 48) & RAPL_TIME_GRANULARITY) * rapl_time_units);
+ 	}
+-	if (platform->rapl_msrs & RAPL_DRAM) {
++	if (valid_rapl_msrs & RAPL_DRAM) {
+ 		if (get_msr(cpu, MSR_DRAM_POWER_LIMIT, &msr))
+ 			return -9;
+ 		fprintf(outf, "cpu%d: MSR_DRAM_POWER_LIMIT: 0x%08llx (%slocked)\n",
+@@ -7929,20 +7930,20 @@ int print_rapl(PER_THREAD_PARAMS)
+ 
+ 		print_power_limit_msr(cpu, msr, "DRAM Limit");
+ 	}
+-	if (platform->rapl_msrs & RAPL_CORE_POLICY) {
++	if (valid_rapl_msrs & RAPL_CORE_POLICY) {
+ 		if (get_msr(cpu, MSR_PP0_POLICY, &msr))
+ 			return -7;
+ 
+ 		fprintf(outf, "cpu%d: MSR_PP0_POLICY: %lld\n", cpu, msr & 0xF);
+ 	}
+-	if (platform->rapl_msrs & RAPL_CORE_POWER_LIMIT) {
++	if (valid_rapl_msrs & RAPL_CORE_POWER_LIMIT) {
+ 		if (get_msr(cpu, MSR_PP0_POWER_LIMIT, &msr))
+ 			return -9;
+ 		fprintf(outf, "cpu%d: MSR_PP0_POWER_LIMIT: 0x%08llx (%slocked)\n",
+ 			cpu, msr, (msr >> 31) & 1 ? "" : "UN");
+ 		print_power_limit_msr(cpu, msr, "Cores Limit");
+ 	}
+-	if (platform->rapl_msrs & RAPL_GFX) {
++	if (valid_rapl_msrs & RAPL_GFX) {
+ 		if (get_msr(cpu, MSR_PP1_POLICY, &msr))
+ 			return -8;
+ 
+@@ -7957,6 +7958,43 @@ int print_rapl(PER_THREAD_PARAMS)
+ 	return 0;
+ }
+ 
++/*
++ * probe_rapl_msrs
++ *
++ * initialize global valid_rapl_msrs to platform->plat_rapl_msrs
++ * only if PKG_ENERGY counter is enumerated and reads non-zero
++ */
++void probe_rapl_msrs(void)
++{
++	int ret;
++	off_t offset;
++	unsigned long long msr_value;
++
++	if (no_msr)
++		return;
++
++	if ((platform->plat_rapl_msrs & (RAPL_PKG | RAPL_AMD_F17H)) == 0)
++		return;
++
++	offset = idx_to_offset(IDX_PKG_ENERGY);
++	if (offset < 0)
++		return;
++
++	ret = get_msr(base_cpu, offset, &msr_value);
++	if (ret) {
++		if (debug)
++			fprintf(outf, "Can not read RAPL_PKG_ENERGY MSR(0x%llx)\n", (unsigned long long)offset);
++		return;
 +	}
- 	rewind(cpuinfo);
- 	fseek(cpuinfo, flags - buffer, SEEK_SET);
- 	if (!fgets(buffer, 4096, cpuinfo)) {
++	if (msr_value == 0) {
++		if (debug)
++			fprintf(outf, "RAPL_PKG_ENERGY MSR(0x%llx) == ZERO: disabling all RAPL MSRs\n", (unsigned long long)offset);
++		return;
++	}
++
++	valid_rapl_msrs = platform->plat_rapl_msrs;		/* success */
++}
++
+ /*
+  * probe_rapl()
+  *
+@@ -7964,6 +8002,8 @@ int print_rapl(PER_THREAD_PARAMS)
+  */
+ void probe_rapl(void)
+ {
++	probe_rapl_msrs();
++
+ 	if (genuine_intel)
+ 		rapl_probe_intel();
+ 	if (authentic_amd || hygon_genuine)
+@@ -7974,7 +8014,7 @@ void probe_rapl(void)
+ 
+ 	print_rapl_sysfs();
+ 
+-	if (!platform->rapl_msrs || no_msr)
++	if (!valid_rapl_msrs || no_msr)
+ 		return;
+ 
+ 	for_all_cpus(print_rapl, ODD_COUNTERS);
+@@ -10157,7 +10197,7 @@ int get_and_dump_counters(void)
+ 
+ void print_version()
+ {
+-	fprintf(outf, "turbostat version 2025.11.29 - Len Brown <lenb@kernel.org>\n");
++	fprintf(outf, "turbostat version 2025.12.01 - Len Brown <lenb@kernel.org>\n");
+ }
+ 
+ #define COMMAND_LINE_SIZE 2048
 -- 
 2.45.2
 
