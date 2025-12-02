@@ -1,103 +1,94 @@
-Return-Path: <linux-pm+bounces-39036-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39037-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 898E7C9A5DC
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 07:45:15 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A14F0C9A5DF
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 07:46:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B5950345EC6
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 06:44:54 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 723884E01C8
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 06:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 274463019C2;
-	Tue,  2 Dec 2025 06:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33403279324;
+	Tue,  2 Dec 2025 06:46:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Cumvfgwy"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="trWRIn7B"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73452302CAE
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 06:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5092245019
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 06:46:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764657825; cv=none; b=FVfu4iJeh0Nsg2pgGqamjysh1kut6pgZXy9UOg2AKinmSv4FonBDxr51AVyFwjO3SffWlPWWRsJl4DSri+naInIxBVHNZz7FykeUCkzX6JQAJwkbpGfiuiP5uJ2mZnnBBteqXoP8qb0ApUGLXQoAv9S6aAokmr4rKsITofOcApo=
+	t=1764657973; cv=none; b=SgtRDx7XzQXUW9K1e0uucenLbuJ1OvsDM82IPoaXX2ocO1c58xY3b46lKUrQzHLHpR+GgUUEiYO2LJX0F62lGM/qMd4SQg6MhHsFydHXNLdj1LUl8APlHKtnFgeEKAXDohF1u/wn1ICurcnDVWROdUcMRy5F3Vbqlp3UoIRoOcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764657825; c=relaxed/simple;
-	bh=Jf9gVgouUS6WA1WmAKl+iapmoVqz/JtN0fwXRs+b4qY=;
+	s=arc-20240116; t=1764657973; c=relaxed/simple;
+	bh=LPti0K6WY5CYkDxc/hg7dVammTH3ohTWFxCjFOamokQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sZEg4h18kGe1eRG7c6EXs/PgOiY7RQxlTJsyjeHPJ2on6cqgRhhAN2raAHSCJfOB70KfM2Sok+uXDZ5CBPzZEDUsji2aR1zdRnxfH4GT7q6lGav5dfF09L7qhWQtyJUFw2Mb/bNkQYO8eDm0E92MxrECxircxgDrdg5vGHPUEuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Cumvfgwy; arc=none smtp.client-ip=209.85.214.175
+	 Content-Type:Content-Disposition:In-Reply-To; b=JEAle9PwfNSP3Peb4IJT4kH8bVztoZlESaMKyReg3wo+OTfhq9O3ahdoI93NdQvXVqZG+5s+9WVyo9P7h8GfqVwaM4GsrsXxGUBXfb97i8wQ3Ie6lqcS4tlx1zeJYbyoKGtGHcZSqx2DGVTeakKniWubPgwovqLqXAktXfvbNBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=trWRIn7B; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-297f35be2ffso77056405ad.2
-        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 22:43:42 -0800 (PST)
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3437ea05540so4115916a91.0
+        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 22:46:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1764657821; x=1765262621; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1764657970; x=1765262770; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=htyZzDjpItfBeC/qRXvnJ6nxzkqeSejC8MJ5WVXPcQY=;
-        b=CumvfgwykknWCLlGYfxl+aWzXM+wsXYC464qBApiNydWyo/GCG1/7RTtXpXKc+dHrx
-         991hAxia7u5AdoccVPsITEX81DXNJZiWLee1gga39SLmNdYh4wvcwVEe6YcYHtDNtmk/
-         UhEl3Wa2dAa4we0KkOidLr8rkfrEcU/r/iLX3OS3+dXn4CjlZkw941vAi4dUsmagCMCC
-         V3DpQQ/B5cYX8ef5Niy23jwcZGhwC+6mMHvo1IYQVKF8Rl7CqQpTtt5KZ+Ao0Nov0Pj/
-         Z2Yd2aCcCtCkf3hZ7KuZbH8rzgvwo5tk8Q23Ip+T/rn6ftht8h1Qxp91cAuTVcu6RQJ8
-         N6pg==
+        bh=c+xjrJF5Ba8Lcz3qV7HKUxI9SOOGkNCfXItb9Gfndl4=;
+        b=trWRIn7BkqOpeXqM4qSaQyFu/QekVgpFpaHC+ZhRcZh+fGgcUxwXpCQSsRFXWTqXkJ
+         6ywcYX9awI/SI5UxIWRqEJ8391MKXuGj5jlGIjKpTq8YIXnzfbE9gNpS9AdkH0w7IFPz
+         +kyfYv4/1qIQSfkz4VgGMk7t7FfRSNF34WqhwnIJqS9gASFdfTbI6Gu6c9GOO9G95fpZ
+         vemRwMQbnSv/dp/WO+qEQcAJl7/7qvcT5H+7gM0KMf2WP+Ix03Fjqqu4ikRQ5m4CEZ/+
+         V/cGEYFvOVtswaxyPfILBrqRJvFR4LIyr0TTgsuB47YvH1AwxiUx00qEx2JsIsFvSb3o
+         EQGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764657821; x=1765262621;
+        d=1e100.net; s=20230601; t=1764657970; x=1765262770;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=htyZzDjpItfBeC/qRXvnJ6nxzkqeSejC8MJ5WVXPcQY=;
-        b=qr+wnGdDcBXcOCbGAj8oJAiqtt6kx7WSVOE7iSZ2AbbEnTkgieDfI0vwXUcmjuNHnS
-         SSUHi2qD+X3TMue6gYyAjTZACmWuNkCsv3N1mMdoavjXOM5vW4BU6hnj7mUmDmFs/lNE
-         0nCm6E9Cz63W22Eka6q4CLAObPqiNRWq9lcDvvDlTaoHz/azr+AZLz4nB8oPlJwa9gnH
-         vEjsAfnr0+DL2TtnrfMaTA/m+yU7wbd4nwT4MqV6wJo6cu+ilCutGXI0ErX1rI1XRfca
-         F/0uRQQcrRlsl6cUz3cvLFX9mNUJX41dGYGpOeTbphJs72z/qEpm0gZ8YQDWsjqffkDK
-         XNTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWqFKDVT+1UnMOkPhSto9KBZhdmfdSoDnDDUhdjqhgGF41cQUWW4fwS/U/ehKJO5aIa2x/L+YIyKA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/y/xMTIeo3OyjJ7dxS11uc/iR4rh/bNBJh274VXDEoOBGb71W
-	zIoKs27gtqCnxeTpzND6VEMUwX7r+wxycyXLAc+nELPQroaq2WEHwFEhU1JfWEaL4T4=
-X-Gm-Gg: ASbGncsgz753skDxo7Qa/R2G8O/wVd9aYgiQFOwiguFz48hc8P1XTMuw+QJsj0Uhjg5
-	vtEdsj4BNk/D5TjIMqejrD0ULfafMo0EauTlatcsI6nm05whF05sibqSji4xZjKgWCPfqDL7nIT
-	/kyjp+UeSNqBuOeczqlWI/ncQTxe1nw6PGdNI9kwJbZheBQRHEz2qo0FuA22niyla+O/DEXIn9i
-	ABih2z7C2zzl/SuMZqwD+VDeUUg57Ehb6jAsu2E8PmPKB+v5mwaxyi51ZrRuy3NoBIIVt4W5NMB
-	vfMRZIMQZXLwmERsYfeAyoc8QgrzQMyB3p5i4UyH0m/h4AekSt7+0NDOEbQqXckhXxEU4IwDoht
-	d7CM/DOxsP22Cx7NHDk0ZforHZ55lccHleFVFreQsQp30CUqQVVZshS1Z/M7A+lB5yTG01U4yUh
-	pM91JjBpxWDByM0a/jKLc3bA==
-X-Google-Smtp-Source: AGHT+IElB/55iOL3pFkt4jDnVftx8SMwzLAFev+IFE16AlTrASn4wJp/yshPqxy/pYWD5aWdbmoY1g==
-X-Received: by 2002:a17:903:2b0f:b0:297:e66a:2065 with SMTP id d9443c01a7336-29b6c6d0d46mr435400315ad.56.1764657821143;
-        Mon, 01 Dec 2025 22:43:41 -0800 (PST)
+        bh=c+xjrJF5Ba8Lcz3qV7HKUxI9SOOGkNCfXItb9Gfndl4=;
+        b=sB8zSzpq3znwfHIi9lMt8bQIYyCRY+XlO5FjzABEF8lAoHOPO1h19p5cCYl3eQZt4g
+         CZEGf6MdwopdTF5EWY7wtE3WWwwD29FpdUxZiz4WUnC6HJw9nOzIblCa0QBj+RRHSr8i
+         F+rFz7SLx1Q+jKLNLPsAJW9pEQLO2SW6xU7/wO7yF+7DXXvQTDzA+31dcDk4o3Vs8ciJ
+         8hN3B9TNApY054a7h+TcYK2dQee3Zr+aM5IsyCMyfEmAPIfu5Zhl7pVVAbUBj8tJv6MW
+         53oZnaRQrKZGMz7n33zs5fP9WhVqIEmH8dGJipoR10c9jy5HgYCxPj8DLKea/45gBfK+
+         WM8g==
+X-Forwarded-Encrypted: i=1; AJvYcCW025XlIsBBGb5oZq0fp0SyrXPBxqg0Kg7rbZYcJ90CBoO07QpT542R40njkGcYWrZj6XzJ03s0kA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfDro5DFvFAHm2ZnX/6ANyX2mZGy/ThgkGBlwq4VDuRGeC9XMf
+	kAW7+QLAlaM7YbPyH/4LjE3AKZuFeDbEWZsTN6C/icYllD8VXBvSx/ddW4yKEyF3cdc=
+X-Gm-Gg: ASbGncuGoFNU+V+Ol8mPYBP7cH9aWqcxr+/72X/NDetxr5yCJ577ZDyvjPW88XFofz4
+	acOQm4XRFsob+B4R7G7mwXL+RdCAIahj0mHzhrJT2qn+b267rU6qD15pqhpzb05TfMqRkUj4Z+a
+	qUVY65eovr+rlmqMsvBAjX3mdFLdJDUYi6vgXyZ0tLmRDVsw/cl7gvFRKlXoH1w8/4gkdsFqGwm
+	Chs0vGGvfp3I5XH7kt6DPHhEuyVehZQ33S38ab0qf3BQIHlNMB4OeOqNprbSZmUuCkXSHqI1lIB
+	b14+OYoJJzBrjg6BAam7u/Eg8ArH2swDbZ4GzBFY07AcCsXoXJ315a7YkWALfikElBCGwH5mdq5
+	k+cqwmuhDz/HVD7su/VCSuC38DDzQtvR+l69NQM1zYBADKDs4tQN7Kg4ZG2Jnk5e72a+2sV5mUy
+	pdPsnq+nSx0e4=
+X-Google-Smtp-Source: AGHT+IGfGot1Giy2bEbRlTda6UWAG7CzAx1snBfunDMI9BkYU6vxsJnDa4jixBG/yERPTOHcv5xKRA==
+X-Received: by 2002:a17:90b:2690:b0:341:212b:fdd1 with SMTP id 98e67ed59e1d1-34733e74fc0mr43794743a91.16.1764657969475;
+        Mon, 01 Dec 2025 22:46:09 -0800 (PST)
 Received: from localhost ([122.172.86.94])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29bce4418c4sm139899275ad.24.2025.12.01.22.43.39
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34907d4a569sm722890a91.0.2025.12.01.22.46.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Dec 2025 22:43:40 -0800 (PST)
-Date: Tue, 2 Dec 2025 12:13:37 +0530
+        Mon, 01 Dec 2025 22:46:08 -0800 (PST)
+Date: Tue, 2 Dec 2025 12:16:06 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Samuel Wu <wusamuel@google.com>
-Cc: Huang Rui <ray.huang@amd.com>, 
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
-	Perry Yuan <perry.yuan@amd.com>, Jonathan Corbet <corbet@lwn.net>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, christian.loehle@arm.com, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] Replace trace_cpu_frequency with
- trace_policy_frequency
-Message-ID: <inifvm4pxifvdazsfyi2ppzfwum6ukzujx5sfiux4s2iv55z4p@otoaj35vr47c>
-References: <20251201202437.3750901-1-wusamuel@google.com>
+To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linuxarm@huawei.com, jonathan.cameron@huawei.com, 
+	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com, 
+	zhangpengjie2@huawei.com, wangzhi12@huawei.com, linhongye@h-partners.com
+Subject: Re: [PATCH v2 2/2] cpufreq: cpufreq_boost_trigger_state()
+ optimization
+Message-ID: <uehurs7co55efvav7actgvfridw4ekieg5lldcldx4cunjhsqs@bk45k47mlfmy>
+References: <20251128091352.1969333-1-zhenglifeng1@huawei.com>
+ <20251128091352.1969333-3-zhenglifeng1@huawei.com>
+ <3t6quaz6j5mbzewgrszuzmjmv74bzqrskx5k4ewgsfbaijmoli@y7goctaq35mj>
+ <3f51db20-3822-4be7-ba13-e858aab25dad@huawei.com>
+ <a6p3btn4ykt6rzdduww6ozunusfubv2dmczqfr4uuttgcnyjqh@kevefkumtidj>
+ <9590b0fb-f297-4e6a-9265-ba7a17abef31@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -106,55 +97,55 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251201202437.3750901-1-wusamuel@google.com>
+In-Reply-To: <9590b0fb-f297-4e6a-9265-ba7a17abef31@huawei.com>
 
-On 01-12-25, 12:24, Samuel Wu wrote:
-> This series replaces the cpu_frequency trace event with a new trace event,
-> policy_frequency. Since by definition all CPUs in a policy are of the same
-> frequency, we can emit a frequency change per policy instead of per CPU.
-> This saves some compute and memory from the kernel side, while simplifying
-> analysis from the post-processing of the trace log side.
+On 02-12-25, 14:24, zhenglifeng (A) wrote:
+> On 2025/12/2 12:58, Viresh Kumar wrote:
+> > On 02-12-25, 09:32, zhenglifeng (A) wrote:
+> >> On 2025/12/1 11:42, Viresh Kumar wrote:
+> >>> On 28-11-25, 17:13, Lifeng Zheng wrote:
+> >>>> Simplify the error handling branch code in cpufreq_boost_trigger_state().
+> >>>>
+> >>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> >>>> ---
+> >>>>  drivers/cpufreq/cpufreq.c | 11 +++--------
+> >>>>  1 file changed, 3 insertions(+), 8 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> >>>> index a4399e5490da..a725747572c9 100644
+> >>>> --- a/drivers/cpufreq/cpufreq.c
+> >>>> +++ b/drivers/cpufreq/cpufreq.c
+> >>>> @@ -2824,18 +2824,13 @@ static int cpufreq_boost_trigger_state(int state)
+> >>>>  
+> >>>>  		ret = policy_set_boost(policy, state);
+> >>>>  		if (ret)
+> >>>> -			goto err_reset_state;
+> >>>> +			break;
+> >>>>  	}
+> >>>>  
+> >>>> -	if (ret)
+> >>>> -		goto err_reset_state;
+> >>>> -
+> >>>>  	cpus_read_unlock();
+> >>>>  
+> >>>> -	return 0;
+> >>>> -
+> >>>> -err_reset_state:
+> >>>> -	cpus_read_unlock();
+> >>>> +	if (!ret)
+> >>>
+> >>> Maybe we can make this `if (likely(!ret))`
+> >>
+> >> For the platforms which are not boost supported, this will never be
+> >> matched. Is `likely` OK in this situation?
+> > 
+> > Ideally they won't have a `boost` file in sysfs, and if they have it, we don't
+> > really need to optimize the failure case.
 > 
-> Any process that relied on cpu_frequency trace event needs to switch to the
-> new policy_frequency trace event in order to maintain functionality. The
-> decision of replacing instead of adding the trace event is intentional. Since
-> emitting once per policy instead of once per CPU is anyways a semantics change
-> that would require a tooling update, the trace event was also appropriately
-> renamed. The presence of the policy_frequency event in a trace log is a clear
-> and obvious signal for tooling to determine kernel version and which trace
-> event to parse.
-> 
-> 1/2: Replaces trace_cpu_frequency with trace_policy_frequency
-> 2/2: Corresponding documentation patch that updates references to
->      cpu_frequency with policy_frequency
-> 
-> Changes in v3:
-> - Resending v2 properly (accidentally ommited cover letter in v2)
-> 
-> Changes in v2:
-> - Replaced trace_cpu_frequency with trace_policy_frequency (per Christian
->   and Viresh)
-> - Updated references to cpu_frequency in documentation with
->   policy_frequency
-> - v1 link: https://lore.kernel.org/all/20251112235154.2974902-1-wusamuel@google.com
-> 
-> Samuel Wu (2):
->   cpufreq: Replace trace_cpu_frequency with trace_policy_frequency
->   cpufreq: Documentation update for trace_policy_frequency
-> 
->  Documentation/admin-guide/pm/amd-pstate.rst   | 10 ++++----
->  Documentation/admin-guide/pm/intel_pstate.rst | 14 +++++------
->  Documentation/trace/events-power.rst          |  2 +-
->  drivers/cpufreq/cpufreq.c                     | 14 ++---------
->  drivers/cpufreq/intel_pstate.c                |  6 +++--
->  include/trace/events/power.h                  | 24 ++++++++++++++++---
->  kernel/trace/power-traces.c                   |  2 +-
->  samples/bpf/cpustat_kern.c                    |  8 +++----
->  samples/bpf/cpustat_user.c                    |  6 ++---
->  tools/perf/builtin-timechart.c                | 12 +++++-----
->  10 files changed, 54 insertions(+), 44 deletions(-)
+> I see. Then I think the `if (ret)` in the loop should be
+> `if (unlikely(ret))` too.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+That can be done too.
 
 -- 
 viresh
