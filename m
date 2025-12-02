@@ -1,205 +1,281 @@
-Return-Path: <linux-pm+bounces-39079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39080-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5B11C9BBD3
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 15:15:24 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D34BC9BCEE
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 15:38:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 931103A7424
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 14:14:43 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E6DF5345BD4
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 14:38:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 336E2322C78;
-	Tue,  2 Dec 2025 14:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508A021CC71;
+	Tue,  2 Dec 2025 14:38:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bTNuxDtf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C316322C7D
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 14:14:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764684882; cv=none; b=hLZ8+2QGKoWGDkHtCEWMT0oh/GzG3ZrZAU6itCk7q24QRKjD8tCQ3OyQZMzVy862QtkcA3HBhIZEGmmZA2RFrfFbKoF0jyx8VHraU15tUmR9jt49Ucfi5g9W/OGL+9n1ORD15JjwvnXIuUfNIK8U08xQMcdY/ojcGyiqPNM23M4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764684882; c=relaxed/simple;
-	bh=vHUrQ6w324fYnCNxiHl4mdFInNGEkkrZLMojf3dBXGg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Va+YQ4QHnd09ktAtKXlwOwUIwnhFdig0mYZv1rtxwtNZahXds1Xy0P4t0BYBka/94YoHfndB2BMN2uU2gE7g1IbrOsh80YbOfh5WbNschZ0AYl7eDqKhHZfpX6KZ75eLsy/yuDYArR0mSYmHwp8B6gEAv6uy9y+reROWtLKXYIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-7c76f65feb5so3992153a34.0
-        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 06:14:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764684880; x=1765289680;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P35uIC8+DPfTCMfHgmdtX7Glr2h/6n9nJWKZMAhyHf0=;
-        b=bemnfZFzvJbh+J7jYTg5FfIx18HW1fUQWdSsoFojjFGkg55N/cVK+WBLLsfXcjILsB
-         AWUscjZp01AE2vsLoMdVeoXcu/8T21m3OxKIDdilOpneCJBbyEzS+Q+wavUntw8M654e
-         n73eoMdoszVpFlBSN+WuBY/ExqIsKSvag3FvSL3yQzlnKYo3imTeAeB7WeDWYbJOj2WW
-         IS1LOMQuHAvAQW4f+Xlk1TAquCU69CAyze8EyorLgvGTE8VSxUvrEs0NMYzQ3ymEvxxk
-         gseYNqy2rOX3Po6AY+vR8D36VL67wXEGll28aIxGX1mO/HiQzomz4209h9EBqPoJqpjW
-         OADw==
-X-Forwarded-Encrypted: i=1; AJvYcCWfVYRxCABPE6x2zyGMqXQGXqVZ/3qVCwdYLTXEhNjywKG8yxKazuIgN1uTDmZ5WOuoRPlGjtmwJg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUQuHzR7DZDhNfyEVEkpM6B/Q/hPuDI7OSR5NocGA7dfUml5wE
-	2cGpP5xLEQyiAzIm0By8ncC5ixTYDlcwb2DkceGKOPQ82SayfzQuTC96gAPLk83u
-X-Gm-Gg: ASbGnctN9pSciRIoVwEze/ZgAJQemlBG6opdaiJJXpuB/p20kw1tus62M58zVF1rUVQ
-	0c/NIFF+rg5pClhYlrIx5jqbZJ22qIq+liEmGaG99NBShuxGUz0iKcbV2qEFK5wZHgqWweNU3fp
-	j76tUboBKMlWSfc7x1A0koEk5InT0AdF89/i6wHeXRBct2mzZm/MDG8Z9THr+UCsHhQ/zWe8A12
-	3kPiEH9NetO0osnLY+79xst3Sp9/zaqDoxok7Rd6T6S+bTwlHiVe61GtEVRYWBjvkmsq3yC6jyg
-	fQw2LD7TMaansHBiYa3wm77W0bIMvwVrHH8qphr68blYHlRRCru0jL/l8TEZdrFTMeHDcMgYJ1+
-	w3nb/mr3seIwvfFNUB1K4r8XqZPu/U8pGQlM5DcmOSYvND0lEQF3ViqouO/gZP3BHpxtymYuMma
-	qAvz5jFsz0CSlDV/0XrmGavQg0T9dwMB/5Bb3UZQX1pA1HkdJi
-X-Google-Smtp-Source: AGHT+IHbCadFczJqamkCG5jIhlCgob/iESAp8i5Opd67B2m0NofkHGIedww+1h5b42gyXkoZyFRkZQ==
-X-Received: by 2002:a05:6830:264a:b0:7c7:e29:70ca with SMTP id 46e09a7af769-7c798ccd9a4mr20124188a34.22.1764684879588;
-        Tue, 02 Dec 2025 06:14:39 -0800 (PST)
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com. [209.85.160.46])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7c90fceddf6sm6570518a34.14.2025.12.02.06.14.39
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Dec 2025 06:14:39 -0800 (PST)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-3ed15120e55so3290681fac.2
-        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 06:14:39 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCURGRXxo/EicAuFTfkRNUT9yMvUcwinxGuUUkdfp1UcHapB4mOovfwMC5erYX+VQhGiqH48sgywQg==@vger.kernel.org
-X-Received: by 2002:a53:dd48:0:b0:63e:17d8:d977 with SMTP id
- 956f58d0204a3-64302abbb9cmr22209916d50.41.1764684434875; Tue, 02 Dec 2025
- 06:07:14 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 978E6202F65;
+	Tue,  2 Dec 2025 14:38:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764686296; cv=fail; b=fwazkRDkw62DnQhTAKzRW2dOCjHGIZj4m++Wa1SHGgQQtq/4IQhIY4dWtzFt2ip/K1Evu0bVKkuMU1je/lwylEUGueTBRN3BC/gB0a1fHxHuqQkz+sYurjQSv6n2zxcS/POv1tWpuFsIUqLwwJ7FtC4kN2Iwk5hWamI9MtICiv8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764686296; c=relaxed/simple;
+	bh=bq2ghed0tplHaJsGYiS3e4YQfi+k9/FiMB2UB3WBnfg=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=ZcmhJTBowP4JFyPkUWABZSUrpBfJQ+Tyldv5rHli6u+RwhOjeXzZSmesPsGRHXOz751CW/Wx+KvTaYU1mPjnurMXvo0ncmHMISeGirZxYsLdQ2fKYWkGbf0pH23gTkhWukUb3UUfsi3u2QqT3YZUw+cvc7Cjea7yLPVCgbBM3oc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bTNuxDtf; arc=fail smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764686295; x=1796222295;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=bq2ghed0tplHaJsGYiS3e4YQfi+k9/FiMB2UB3WBnfg=;
+  b=bTNuxDtfx0v3SSD8DUsW73Zt2sTYO7Z2sx81U1RaXL5/seFV9JfuGbTk
+   LF1vLRz/8NPZcVi7W4ezWcm+BQfWwqTAXUg2YcKdekQaXOWCJYW4Nfr6j
+   yBoj+jdnlvWfGaDe+RMYat2DJyiOd53UlFzgizoV5ObBydgfmjM6XB2iX
+   JmhNwam+fxGc2v8oCzRCaxXQO9lCOBe7rSHdpQ4g5011vOMxiJBpFRVW+
+   eKQOrW3SfaOp3TMSvn1f3tVDWeEiWl/x6dW8ICPzBOcNKp0jePf1XIsZS
+   KfRU7EoO3D3AMWI3F8h3ji62zxJ//taKqXBT/ObJcn7JjxpIKNDfRCj1d
+   A==;
+X-CSE-ConnectionGUID: 20aSLvwXQCWHwW6yNKgyBA==
+X-CSE-MsgGUID: Fei9E51CSbKzzaqAOz75/Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11630"; a="66368021"
+X-IronPort-AV: E=Sophos;i="6.20,243,1758610800"; 
+   d="scan'208";a="66368021"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 06:38:13 -0800
+X-CSE-ConnectionGUID: 74Kdxs3eRWKBGTTNWd/2Nw==
+X-CSE-MsgGUID: iYHxNlLqQ9eww+JsCRQYNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,243,1758610800"; 
+   d="scan'208";a="194484156"
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 06:38:13 -0800
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.29; Tue, 2 Dec 2025 06:38:11 -0800
+Received: from fmsedg901.ED.cps.intel.com (10.1.192.143) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.29 via Frontend Transport; Tue, 2 Dec 2025 06:38:11 -0800
+Received: from DM1PR04CU001.outbound.protection.outlook.com (52.101.61.7) by
+ edgegateway.intel.com (192.55.55.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.29; Tue, 2 Dec 2025 06:38:10 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=F/aSZ/oNkWheC7/fLWjBjZE2v5DI2fD/nHOvvo0+Hn56KsCTZ6VKuoljHrJk04gnkvA1jvSbO+uAS2sKo7WR6IXM+2YjlCnDo3otaKX+NXiZA6sAOeIryfGzbulkxZJBMLDBK9pRBbTCHYq7pjaXUvBmN/9HIS5nO/HF+tvuOqWDpPXcdyMtIHeUjXaDBm2ei1M/ccPf998UiO/tTeB61GqdcnuTYtVGKdXk5cv0lGJV9hdSZrSFUXpJd2F/m9B5JX/msAonxZF/mFmBjo+NA+lEOeeX8/bG5GyBZ3ig8dp0eCFBWH/bilC78dVcfCMKLSBY8Ega0VTsRmIDblj4Fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k6AI/TU6VqRPeNu6gDwnuH/SbLS9xpWxiKsWQBbLavQ=;
+ b=bHMnu7exZnT64tqRVwKAVBmwIKEqFi2IdLk6l4KwCpspbBacXiKfPyDmmQjnRYHX5jegtcUiubsoTXkDzZtKwc64urT5lUJgmI7Jbx5HJ/E+bgss8zZ72QyYfezrDxMW8iWoHrCWueJvSeqd62BUkXtoOTltl5L5O98Kb0SX2et3DKhwK5sUYKMEftmUUa4WLAcRq/E1sLZN8dgnqOj2dxAwV0PRKyJUGBKNPYZgJjIt0S5sPNbGX2emkPv9r7uKEKVi96tGRQz4f56btRb44p86S0aSTCnYPP+uAAeiSPc5iCUXGGsGCfZZjd3yGM3Qqco7K/Vykt4HP/b9fpycJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM3PPF63A6024A9.namprd11.prod.outlook.com
+ (2603:10b6:f:fc00::f27) by IA3PR11MB9399.namprd11.prod.outlook.com
+ (2603:10b6:208:577::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Tue, 2 Dec
+ 2025 14:38:03 +0000
+Received: from DM3PPF63A6024A9.namprd11.prod.outlook.com
+ ([fe80::eed8:bee8:188e:b09c]) by DM3PPF63A6024A9.namprd11.prod.outlook.com
+ ([fe80::eed8:bee8:188e:b09c%2]) with mapi id 15.20.9388.003; Tue, 2 Dec 2025
+ 14:38:03 +0000
+Message-ID: <fb19346c-908a-47e1-ad45-bc44f0a10f7c@intel.com>
+Date: Tue, 2 Dec 2025 15:37:58 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: Linux 6.18
+To: Brian Norris <briannorris@chromium.org>
+CC: Linus Torvalds <torvalds@linux-foundation.org>, Linux Kernel Mailing List
+	<linux-kernel@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, Guenter Roeck
+	<linux@roeck-us.net>
+References: <CAHk-=whnC+hRftevTLeVs3tyyqwn+7un=jUES2-WX+pZhDdKNw@mail.gmail.com>
+ <93259f2b-7017-4096-a31b-cabbf6152e9b@roeck-us.net>
+ <aS5wCcwpgkS9n67u@google.com>
+Content-Language: en-US
+From: "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
+In-Reply-To: <aS5wCcwpgkS9n67u@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR09CA0140.eurprd09.prod.outlook.com
+ (2603:10a6:803:12c::24) To DM3PPF63A6024A9.namprd11.prod.outlook.com
+ (2603:10b6:f:fc00::f27)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251112-b4-of-match-matchine-data-v2-0-d46b72003fd6@linaro.org> <20251112-b4-of-match-matchine-data-v2-1-d46b72003fd6@linaro.org>
-In-Reply-To: <20251112-b4-of-match-matchine-data-v2-1-d46b72003fd6@linaro.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 2 Dec 2025 15:07:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVAZpp7M+pp27+kHZwoet2Q8Rm-Y4ePu7=W_1oXhebLmQ@mail.gmail.com>
-X-Gm-Features: AWmQ_bnQtK_C28o8ts-DX6QMHSfgR5FWBqGmuyp3cjxdu41cx4XkoPs5W_lQhYE
-Message-ID: <CAMuHMdVAZpp7M+pp27+kHZwoet2Q8Rm-Y4ePu7=W_1oXhebLmQ@mail.gmail.com>
-Subject: Re: [PATCH v2 01/11] of: Add wrappers to match root node with OF
- device ID tables
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@kernel.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Maximilian Luz <luzmaximilian@gmail.com>, Hans de Goede <hansg@kernel.org>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Daniel Lezcano <daniel.lezcano@kernel.org>, Thierry Reding <thierry.reding@gmail.com>, 
-	Jonathan Hunter <jonathanh@nvidia.com>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-arm-msm@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-tegra@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM3PPF63A6024A9:EE_|IA3PR11MB9399:EE_
+X-MS-Office365-Filtering-Correlation-Id: f3c8ee19-1c22-4966-6429-08de31b06611
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?WHBGVTY4dEczM040QlZWaXY0ZHVTNmo1RkJBMC9QZmo5RDlNTXcvL08vZ2R3?=
+ =?utf-8?B?R2pKejFaMWRVUDZSOVE2aWNmY2ZWZ0J6TXlZRS9aS3dTU2VyNFlGYVgrSTBM?=
+ =?utf-8?B?amxRdXpPMlhMZHJDbUYyS2RvL3dBWmVIZ0dlYWFRVGl1enJydHppdWFNTnBu?=
+ =?utf-8?B?U1JsNEQrL1lrVWtQUUtEeXF2bUFiNWFVbUtXVU9NUndPOHVvaHJ1d2FSN2xS?=
+ =?utf-8?B?SGMrZ2NremxkbkViQmVMWnQzOEJmZHZQL21xSG1mU21DNG93REo2aGlwSkgr?=
+ =?utf-8?B?akFZYW0raTAwaUVjTlhFeUtaOGJXUFBONXlYQThUTXJJSEl6WjdZd1JRYkpq?=
+ =?utf-8?B?bDhoSU5ENUo1eE8zdnpIM0JPd1lMRElVOENJUnNZWk85WndKOWV2cmNzeXpL?=
+ =?utf-8?B?UkxGc0F1bmpLZURETFQvTWJpQktMNGxQUVJDNzh5SkVlM2QydjdhMC9XYW9D?=
+ =?utf-8?B?NEduOG1DcExvQ05xdUhZUG56Q2QvZFpNQjF6eFdTdlVscCs2cCtCQWxybnJR?=
+ =?utf-8?B?c2M0QldOR3VNbVRJYXJ4VndVOG5uWnAyQXM5RHJQT21QQUlnSUpRZjdMZFlB?=
+ =?utf-8?B?QVFsdHdSa1YyS0g2QWFjUzkrVDRJeG8yWnZQRHBPZlNlTm5YckErcTQ2UHZK?=
+ =?utf-8?B?RnM3ZVdDMGdxMHo5dDBqdkZmbU5YdDNoREcyR1VzdmlEekRxRzBrdE5kZ1JO?=
+ =?utf-8?B?dW5tSEsyWFZDYTNmM1lTUmRUM09uKzNwWEIrL00zWnlyQkQ2dXVEUHNXTDB2?=
+ =?utf-8?B?Z3psK2hLMCt1QS9ma3IxU3g4ZGlsRzhYcUdYVmhOV1RURjFkNVdHQmlJeGts?=
+ =?utf-8?B?RnhVNGg1RFY5VStwbHJCNjZKVDhwa3JuRTloSW1HUE94OC9jdDd1bjZFZFYy?=
+ =?utf-8?B?bElMYjRYdTBqQjVRWThDNGhJUW82c2I3YXJrWmlRQ25JRjJBMnBjRTNUM0Zo?=
+ =?utf-8?B?dk1ndFFHTThNZ0hDdWgwUFpNOGMwK1M4aENTYjJta01pYzBwNmh2eXNBM2Zw?=
+ =?utf-8?B?dldSZTlZbk1qd3hEQXBKOHZhcDJacFVTd0NmWEtBU0x0TFd1YnZaUjdEUjdP?=
+ =?utf-8?B?SjBLWCtvcVJnT1NkZXprZlhNQ2krdCtWTEhSTmdaeE1TMittbnAybzdobTJt?=
+ =?utf-8?B?clZ6dFUwb2NORTd2Ry9zSkh5eWVibXFXTFQ4V3VLL1B5S1p4L1VNRGx5WHJJ?=
+ =?utf-8?B?QlJkYXV1VC9Cc0xONEp5M2JHaDZKbW5YMnN4dnZ6bVdxZVpwN3d1K2J3SHAx?=
+ =?utf-8?B?QStUQTJZMUhpa1VwUGZGL0hUSGQyU3VxQ3BzQzNaOUM1ZXJ4TDJ2TENtdkRY?=
+ =?utf-8?B?djBVS1BFMUlrTTlpZ0JONmplSEgrL0hiWnlCOEZSTzgyL2NQaHg5bktHOGs3?=
+ =?utf-8?B?QXIxZ1JUdllZcWkvK2pBT1F6cWRLamx4a2xDckxuMWlYWVRMSXNBVXdiODlU?=
+ =?utf-8?B?UWI1bklhQytENjk1UUZKNkhhUnpobEk5TDdQMG52bU1UTXViM2E4a0xUcGFE?=
+ =?utf-8?B?UlcyUVZwMDNWaFRsc0t3djBMRzZUTSsyc0ppS3VDK3ArdGtIUnRMc2lKa2ti?=
+ =?utf-8?B?bzFleHZvY0t6emJwbUFXU3RBTlFPTnVsQ2tkdlF6TFRIZHp6Zlg5dGVJQVo3?=
+ =?utf-8?B?VEhYbUcrRFUzWDg5bEx0eS8vNmF2WVQyS251WnNSSDdrTTNTYStPclR4bkhB?=
+ =?utf-8?B?enE3VTN0VjRSUzhzak16OGZVNGhxRExhVTkwMzBkbmNVbVYzaTBidUwveEs1?=
+ =?utf-8?B?ZzhqVkxLRmxxTDdiMEJFYWZnYkVSTjF0NXBwT0NJUEFkbU1YNkhuK2M1SEs4?=
+ =?utf-8?B?OUJKRVlPRmRXY2kwMi9RMEwzVVo4N2hEQjhJUDIzVTJLR0lDRFA4cGFSMW50?=
+ =?utf-8?B?ejh3WldzalFGaXNqR2dmMlFneDhtQ0thWnhsc1p3MWdqak4vbjlQbzJ4OGNH?=
+ =?utf-8?Q?1e+XoJjT+KhTJ8BYRamApVjZqF2LuhCh?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM3PPF63A6024A9.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Ykw4U2s0WlhMM2Z1T2I4RHJtOGhuZElNbzlQOEJlVTNVRGwrTE9CZ2RGYTgy?=
+ =?utf-8?B?SWR1TE15ejRBK0NkbklNSkNsUXdqZm4vV2VjeW9HNDBEZGRoVCs2OEFwVG04?=
+ =?utf-8?B?SUU3aWVmaCtsOUZyMkhadHU3YThvVDBNV1VsZHpGVlR2T3hPYkZ6RndUQzE3?=
+ =?utf-8?B?cC94K3VHbmxkVzVoTTB2SXM3UHBEc3ZqcmR6My92UU9DN1hqU0xHVUhEVm4y?=
+ =?utf-8?B?QkM1Z2xEY2tFMkxjcnpINk1pQ0NIblNiSHdNQ2VOcGltU3loVm9BUWFxb1Y4?=
+ =?utf-8?B?OTVKWXA0S08xbUNtYllVdmJzcGRWUHVSSmFhOFlkVzZsYWlya1ZaR3RLdkhW?=
+ =?utf-8?B?MmhvLzRRYlR5TnlMVDRxZEg0WGYvTFFmZ3JQQ3RSODZhQnRQeDFrRTN4M0pj?=
+ =?utf-8?B?YlRKUXdmVzgybWRpYnFyV3lsMzNob0NqNmJWR1FiQjA2TzFQY1E1VlZkaVl5?=
+ =?utf-8?B?YmxHSnVhSXVwenV4RU50cktyZTN2K0lUMUduT3cvZDlDT3FXb1J6QTFQNFNS?=
+ =?utf-8?B?a2lxMlJWd0NPd1dmaUlrNkhJcDdobG51NVppemFhN2xxcGRYdzlTWHdiWnFN?=
+ =?utf-8?B?b3VnOHl5clRlZU1yMHl2SGxYbjRDTlcrK3VjaWJtYjJyKzZSTVhlVyt6TmFk?=
+ =?utf-8?B?Y2F5L0cwM0lEdGhOU1VmTC9ocW14SEJmWEgwRHEySkFveTUrcXFtSlVnblZ4?=
+ =?utf-8?B?dG1pK2grM016V0dSTVFpdXo1a0p4WkRYUWJwOWNMa3BFU2NSenVuSWFjWThL?=
+ =?utf-8?B?enhyUWVTZ1BCWHQ0Y3E3WnJpejNTcEVaQ3JFNkYxZlJReWhQbVdxaHg1M2Zn?=
+ =?utf-8?B?KzhqcjgzUy9jVGZZRHlpbGtrRlhjZjFyU2pUa3R2aGVVQXRuYm5vd2pJZ05W?=
+ =?utf-8?B?a1lqWGI5dDlmR0lET1UrNW9scll4WVZsNVF2WXB0bmhIQ3k3Y1pabU5tdDg4?=
+ =?utf-8?B?a0szOFdxR2tpTnR5dEdpZ2F2QVRYWlVCWDd0cGtTRkgrMzEyL1lybm1HZjJT?=
+ =?utf-8?B?dlUrd2lGS1Nqdkllb1cwa0FDeU9zb0ZPejVtRkx0RmRsWnZDTEJOY1NzaTly?=
+ =?utf-8?B?K3JwTjRyYytDUmdOZlNSQkpSb3pJdmVTcUxBL2RISkQ3T2V1UnVLRXRTSTl0?=
+ =?utf-8?B?eFg4dE9jUmwzdU9mTTNlOUZTNitYeHRxOGtnK2sxTnhmeG01cGtYMFdUUFVk?=
+ =?utf-8?B?K0JDUW91bFBObUE2K09TQTU1bWlEVk9kWkJJUVlBbUlaRnFuWTJLU2NteWpJ?=
+ =?utf-8?B?dUs2YXJCbHYvZzZRdzd3RlNHZ3hBekZ0aGc0Qy9WWDMvMndyWjBEbU5kL29B?=
+ =?utf-8?B?MksySEFuSHc0T3V1OVMrVThTQS9QSXpINkNKNnpzb0h1dkczREtpZnViREUw?=
+ =?utf-8?B?Qjllb3hhM1VCdGlCR1I3Sm1ERDEyWHlXQk9qOG1tdXBESlpCZUZESXpKTURa?=
+ =?utf-8?B?d240QzZ6NFE5aGNSZ01iaHQ3eVk0RVk4WEptSHBrOUp6eEl5MEdCdHMrajRZ?=
+ =?utf-8?B?WTlQS1lycVJ2N3EzQjdhR1V6Z3RPSkZHczVhRWlPK3FQSnRBUWQ2Y2owUm5D?=
+ =?utf-8?B?ZHpnSlFCSkRabmpReXNOdnEvME5RRUNQVHNZRmZQUVZMWFNJclRlMVI3V2tx?=
+ =?utf-8?B?QjVnMUZ0clEvbUM0UytUekpwdTlEb3ZScVk4c2xwS0w5Zjh0TFVoOXJuVlhs?=
+ =?utf-8?B?dktxNGtnUWt6QU9TVnN2bGUwSzlBU0VXY2dqYS9LTXJtbis1aGt5M3A4ZG5r?=
+ =?utf-8?B?YzN4bVRKeGxXcVR4Vm9UNTgxZUkyT29DQnh4NTUrd3hIM1BrRFBQWUZ0cEwx?=
+ =?utf-8?B?cnM0RVdrZXlJK0R0Y2c1ajgzZUJKazJpamtsR3dGUFRKVnc3N0Zkd1Y2MEF5?=
+ =?utf-8?B?ZmxiZytiZHYvR29VZzRZaVdJcUJJL1Z0TWIwOUpRay8wV2hkVWhaU1FPYU9K?=
+ =?utf-8?B?QndsNzExMDhySHA4eEVNa1JqMnVKN3lic2dIVkl6a3JOQk41Q01jVmVOUjRm?=
+ =?utf-8?B?eDRMVnp4V1BvK2x2K1ppaVduVU0xYnYyTE9Md29uUXVrbGpNRmNEWnVlS2Rt?=
+ =?utf-8?B?RDE4eUFDV0xNZG9wbFdyRGs2TmF1OGErdzdYSzE1aDZTN0lVL04zOFFHbUpz?=
+ =?utf-8?B?cXpWNHZlRUxuT1ppZGpLaHgyaXN1RGZlOUZWZnA2UzkwYkpTZ29YYlNQSXpn?=
+ =?utf-8?B?QXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3c8ee19-1c22-4966-6429-08de31b06611
+X-MS-Exchange-CrossTenant-AuthSource: DM3PPF63A6024A9.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2025 14:38:03.1948
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: O8qY5Xuz0JHk50QcDKbrxTQmb3x2Z4Dugx8h6p+L3nSmJy9nEaQ4Ga5kug9hKGL09hU15yIuA1u5LU5mwxVkfo3dePwRvM7QiRMVYWWCpEg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA3PR11MB9399
+X-OriginatorOrg: intel.com
 
-Hi Krzysztof,
-
-Thanks for your patch, which is now commit 4a93adcbd201aad5
-("of: Add wrappers to match root node with OF device ID tables")
-in dt-rh/for-next.
-
-On Wed, 12 Nov 2025 at 11:30, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> Several drivers duplicate same code for getting reference to the root
-> node, matching it against 'struct of_device_id' table and getting out
-> the match data from the table entry.
+On 12/2/2025 5:50 AM, Brian Norris wrote:
+> On Mon, Dec 01, 2025 at 06:39:49PM -0800, Guenter Roeck wrote:
+>> On Sun, Nov 30, 2025 at 03:59:17PM -0800, Linus Torvalds wrote:
+>> ...
+>>> Anyway, *today* the important kernel is the newly minted 6.18 release.
+>>> Please do keep testing,
+>>>
+>> Build results:
+>> 	total: 158 pass: 158 fail: 0
+>> Qemu test results:
+>> 	total: 610 pass: 610 fail: 0
+>> Unit test results:
+>> 	pass: 666778 fail: 113
+>>
+>> In terms of testing, that is worse that it sounds. I enabled
+>> CONFIG_PM_RUNTIME_KUNIT_TEST last week, and it results in widespread
+>> test failures. Picking one (from x86_64):
+>>
+>> [   34.559694]     # pm_runtime_error_test: EXPECTATION FAILED at drivers/base/power/runtime-test.c:177
+>> [   34.559694]     Expected 1 == pm_runtime_barrier(dev), but
+>> [   34.559694]         pm_runtime_barrier(dev) == 0 (0x0)
+>> [   34.563604]     # pm_runtime_error_test: pass:0 fail:1 skip:0 total:1
+>>
+>> Looks like that fails pretty much on every architecture/platform where
+>> it is enabled. Copying the author (Brian) for feedback.
+> I wonder how you manage to be the one who hits all these problems,
+> because none of the configurations and environments generated by
+> ./tools/testing/kunit/kunit.py seem to hit it naturally. (I tested
+> hundreds of cycles in various configurations with no failures
+> previously, and I still didn't reproduce it today.) Do you make special
+> effort to direct cosmic rays into your test setups while holding an
+> unlucky charm? :)
 >
-> There is a of_machine_compatible_match() wrapper but it takes array of
-> strings, which is not suitable for many drivers since they want the
-> driver data associated with each compatible.
+> But since you pointed out the failure, I *can* induce the failure by
+> forcing some scheduling delay.
 >
-> Add two wrappers, similar to existing of_device_get_match_data():
-> 1. of_machine_device_match() doing only matching against 'struct
->    of_device_id' and returning bool.
-> 2. of_machine_get_match_data() doing the matching and returning
->    associated driver data for found compatible.
-
-Shouldn't the first function be called of_match_machine(), and return
-a const struct of_device_id *, cfr. of_match_device()?
-
+> --- a/drivers/base/power/runtime-test.c
+> +++ b/drivers/base/power/runtime-test.c
+> @@ -3,6 +3,7 @@
+>    * Copyright 2025 Google, Inc.
+>    */
+>   
+> +#include <linux/delay.h>
+>   #include <linux/cleanup.h>
+>   #include <linux/pm_runtime.h>
+>   #include <kunit/device.h>
+> @@ -174,6 +175,7 @@ static void pm_runtime_error_test(struct kunit *test)
+>   	KUNIT_EXPECT_TRUE(test, pm_runtime_suspended(dev));
+>   
+>   	KUNIT_EXPECT_EQ(test, 0, pm_runtime_get(dev));
+> +	msleep(1000);
+>   	KUNIT_EXPECT_EQ(test, 1, pm_runtime_barrier(dev)); /* resume was pending */
+>   	pm_runtime_put(dev);
+>   	pm_runtime_suspend(dev); /* flush the put(), to suspend */
 >
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Looking closer at this part of the API, I think checking the return code
+> of pm_runtime_barrier() is a bad idea, since it's inherently racy, and
+> there's really no way to control that race. On the plus side, this test
+> is the only one that does it. So I can probably just go ahead and make
+> pm_runtime_barrier() a void function, and stop pretending it's part of
+> the API surface. One fewer weird part of the runtime PM API to think
+> about...
 
-> --- a/drivers/of/base.c
-> +++ b/drivers/of/base.c
-> @@ -434,6 +434,53 @@ bool of_machine_compatible_match(const char *const *compats)
->  }
->  EXPORT_SYMBOL(of_machine_compatible_match);
->
-> +/**
-> + * of_machine_device_match - Test root of device tree against a of_device_id array
-> + * @matches:   NULL terminated array of of_device_id match structures to search in
-> + *
-> + * Returns true if the root node has any of the given compatible values in its
-> + * compatible property.
-> + */
-> +bool of_machine_device_match(const struct of_device_id *matches)
-> +{
-> +       struct device_node *root;
-> +       const struct of_device_id *match = NULL;
-> +
-> +       root = of_find_node_by_path("/");
-> +       if (root) {
-> +               match = of_match_node(matches, root);
-> +               of_node_put(root);
-> +       }
-> +
-> +       return match != NULL;
-> +}
-> +EXPORT_SYMBOL(of_machine_device_match);
-> +
-> +/**
-> + * of_machine_get_match_data - Tell if root of device tree has a matching of_match structure
-> + * @matches:   NULL terminated array of of_device_id match structures to search in
-> + *
-> + * Returns data associated with matched entry or NULL
-> + */
-> +const void *of_machine_get_match_data(const struct of_device_id *matches)
-> +{
-> +       const struct of_device_id *match;
-> +       struct device_node *root;
-> +
-> +       root = of_find_node_by_path("/");
-> +       if (!root)
-> +               return NULL;
-> +
-> +       match = of_match_node(matches, root);
-> +       of_node_put(root);
-> +
-> +       if (!match)
-> +               return NULL;
-> +
-> +       return match->data;
-> +}
-> +EXPORT_SYMBOL(of_machine_get_match_data);
+Yes, pm_runtime_barrier() should be void, the return value is a leftover 
+thing.
 
-These two functions are very similar, but look different.  If the
-former would return a pointer instead of a bool, the latter could be
-built on top.
 
-Even if you still prefer returning a bool, they could share a common
-private helper returning a pointer.
+> Maybe I can get around to that tomorrow.
 
-Gr{oetje,eeting}s,
+I can do it unless you specifically want to take care of it yourself.
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
