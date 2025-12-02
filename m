@@ -1,169 +1,97 @@
-Return-Path: <linux-pm+bounces-39084-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39085-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ED0FC9BF70
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 16:33:12 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF738C9C2CC
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 17:21:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C6783A91DC
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 15:32:13 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E1AB54E13FD
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 16:21:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F69125D546;
-	Tue,  2 Dec 2025 15:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C97DA274B4D;
+	Tue,  2 Dec 2025 16:21:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hiWb4MOK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB22725A338
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 15:31:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4707274B23
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 16:21:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764689512; cv=none; b=mEl0id8Hwlm4krt41Uuy8E6DtcB1w8IUS9HnNRA/VCFnZh+jWnkIN2N8VfaRdkBeWvCAyt4BBrhY4SkEYD9AseGNslFKor/4yXuyMPFIy69K7k/3alVMPnRZGaRdjj/P58jksuNrSgm5vuNZLzdd4Qhxnx6GnO7PKlZ43Bpbl4I=
+	t=1764692466; cv=none; b=ETxSXp5H5eEF6aUCOJsbSYfMEGTLDcquKu+oqUgMXfIGYqOQfV9oqz8GBWOFZ9wkX7BurnxthFvTbbBcG1jQsd6ky1wGfrfrMFDzn5LsKNfv0TIN0o1a7BMbiRFp4v1Rmfrwj2BvZ1xGvfbyWsBVxY/C4Xc9vFFRjsr3QH+/MB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764689512; c=relaxed/simple;
-	bh=+Z7QSyFsn+EJDzp+U1QZ7QZSCcvRgHbeLZRY2fCBkUo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JtSkTgL2taV1DX5G0lM33qP70Z7ayql1zpKYauGrxBHtmAFCIO+HAm9sYw0KHc3M3PrpUb5zLcNzgcxSRk6Sluzu1yO7OsfpmgWSlM7Kup2h1ZcvawfMIPT83jHAhLZBBa6wsIug4msZIXKI9T/MY9edHXWKeSnP+M5N24xnmRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6AD1D1477;
-	Tue,  2 Dec 2025 07:31:41 -0800 (PST)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2BED73F66E;
-	Tue,  2 Dec 2025 07:31:42 -0800 (PST)
-Date: Tue, 2 Dec 2025 16:31:48 +0100
-From: Beata Michalska <beata.michalska@arm.com>
-To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, rafael@kernel.org,
-	viresh.kumar@linaro.org, sudeep.holla@arm.com,
-	gregkh@linuxfoundation.org, dakr@kernel.org,
-	ionela.voinescu@arm.com, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, linuxarm@huawei.com,
-	jonathan.cameron@huawei.com, vincent.guittot@linaro.org,
-	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com,
-	zhangpengjie2@huawei.com, wangzhi12@huawei.com,
-	linhongye@h-partners.com
-Subject: Re: [PATCH v6 0/3] arm64: topology: Handle AMU FIE setup on CPU
- hotplug
-Message-ID: <aS8GZOuaS1-j14MD@arm.com>
-References: <20251119081356.2495290-1-zhenglifeng1@huawei.com>
- <aS2z0EURwHbbGZab@arm.com>
- <9b6882dc-a91a-42d6-bf76-347338930d71@huawei.com>
+	s=arc-20240116; t=1764692466; c=relaxed/simple;
+	bh=gfaG8daflZPQGqMnXYaAfv6hIBJXDWXpfTzY/OdP4z4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L0W4Ll/BIoaJNYMXRKv7jOgh/Z4O+WFnzKljqZIUpapvqulM1qy8ggpUmhMIhPR6XjnavGgBz3ywdxnEMswsyJnmwqs+vyP+xLflF+hB77axF1xuBWH31PaBpA+eANZ9XsegbfUdqf/o/mTbOMsm5iTSSKFEAnvZyUT+2JAXtAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hiWb4MOK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42E65C4CEF1
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 16:21:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764692466;
+	bh=gfaG8daflZPQGqMnXYaAfv6hIBJXDWXpfTzY/OdP4z4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=hiWb4MOKWIy1/YB11i+RTw7opqM8N2dMELei1qKb3nXlKi1fVyxX+fMW2djmlzOV5
+	 5jFnPOuxWgDgqfWSAdzPdgIKwmOTt78jAf/uVW5uKzsoprJkthpPyGg1bdAW8F0w+9
+	 Gv/0U1CqLzJPdgrkO+q34DSxDUgAUteAhV1oP1j6Q6mzMTH3sFz4i3D+A04cPAkHss
+	 UamUsuvVikzeftKfOjQPcF2Ml/JfMLONXDMNLzv2OJIipYLtfKDcBMHDq8MeitNKNn
+	 YrVYiFX4W6QizAbOr0bV4NG2cSIfU58Em4VMkpZcJ150bG8xbAOWeWpUPNLIhB/MED
+	 gSYBKup4bKOuA==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-3ec3cdcda4eso4026069fac.1
+        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 08:21:06 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWvvGZuUyNBwGWKFsGHj8qht2GY0RTPCB/0m3w7d8uh8gm0kFOUvxuQeCR2+oTS7oQyM7PlInE4lg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkmmoMjy4QiM0riD5uEONbgrBONh5wIhSDn00peAZUPFFV0vpS
+	1YeDDZW5Ris8wvViKfJYKZVWirMNZ6REk5ZnNkDz3ZEch4VGn4oEnTv+fTe11N0fE8A2g6WQ22p
+	bcub0OoB0RuST0+AgByZ9YEXODPgXV5w=
+X-Google-Smtp-Source: AGHT+IEAq6bXGaPRjLxyZ+YjoTaqSq9f4BTvJqWCvttJdXTyjcrDKVhlNS/wgZY2ahwQTGYjKj+wrH3w3FjmkY0IZe0=
+X-Received: by 2002:a05:6808:1b22:b0:44f:e376:14db with SMTP id
+ 5614622812f47-4514e79dfccmr13187791b6e.44.1764692465703; Tue, 02 Dec 2025
+ 08:21:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9b6882dc-a91a-42d6-bf76-347338930d71@huawei.com>
+References: <20251113191609.28574-1-ehemily@amazon.de> <20251113191609.28574-2-ehemily@amazon.de>
+ <CAJvTdK=_v9q2eGMB6qG3iaDhXMzQHz-EJ4NeDEfBe2fbv+wKfQ@mail.gmail.com>
+ <BEYP281MB5509D3D7A01DEC1FAAEB9DBDBADCA@BEYP281MB5509.DEUP281.PROD.OUTLOOK.COM>
+ <CAJvTdKnjreryLA9KuuobwJShbVseHOyujmXBAXRuSUDsCZxSVA@mail.gmail.com>
+ <BEYP281MB550957A6BA42B6371400472FBADBA@BEYP281MB5509.DEUP281.PROD.OUTLOOK.COM>
+ <CAJvTdK=Ty4W=5diU0D0JYHh70ZN4avKjodUoLhuz_D7+=3xcdA@mail.gmail.com>
+ <CAJvTdKmr=AVo7UQP28EeD6oLzyeOM+vGCjZZMBo1bV=4n1pcmg@mail.gmail.com> <FR2P281MB268504A9A1DD29C5BB7F0241BAD8A@FR2P281MB2685.DEUP281.PROD.OUTLOOK.COM>
+In-Reply-To: <FR2P281MB268504A9A1DD29C5BB7F0241BAD8A@FR2P281MB2685.DEUP281.PROD.OUTLOOK.COM>
+From: Len Brown <lenb@kernel.org>
+Date: Tue, 2 Dec 2025 11:20:54 -0500
+X-Gmail-Original-Message-ID: <CAJvTdKmLG8JUiDkEtB8Co8tLoEXi-BWnJnu8jPvQxZ8zZKC=7w@mail.gmail.com>
+X-Gm-Features: AWmQ_bkWxuzraS4El1H2tDY_u-EJClHBktr1kEVTiNk1QfYWUCQVWkBO_5EzGG0
+Message-ID: <CAJvTdKmLG8JUiDkEtB8Co8tLoEXi-BWnJnu8jPvQxZ8zZKC=7w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tools/power/turbostat: Fix division by zero when TDP
+ calculation fails
+To: "Ehlert, Emily" <ehemily@amazon.de>
+Cc: "Zhang, Rui" <rui.zhang@intel.com>, 
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Emily Ehlert <ehemily@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 02, 2025 at 11:05:25AM +0800, zhenglifeng (A) wrote:
-> On 2025/12/1 23:27, Beata Michalska wrote:
-> > Hi,
-> > 
-> > Apologies for the delay in reviewing this - currently in progress....
-> > Out of curiosity: what's the cpufreq driver used for testing this series ?
-> 
-> I used cppc_cpufreq for testing this. But with some modifications in
-> processor_driver.c, or you'll find that the driver will fail to load with
-> maxcpus set. The modification below is only a temporary solution. I'm still
-> working on that.
->
-Right, so overall the implementation looks good - thanks for that.
-There are two issues though with the cppc cpufreq driver.
+On Tue, Dec 2, 2025 at 4:09=E2=80=AFAM Ehlert, Emily <ehemily@amazon.de> wr=
+ote:
 
-One: as you have already noticed - it fails to register when
-cpumask_present != cpumask_online.
+> -       if (msr_value =3D=3D 0)
+> +       if (msr_value =3D=3D 0) {
 
-Second: it will mix the sources of the freq scale if not all CPUs within the
-policy have AMUs enabled/valid. This is due to the fact that at the time of
-registering the driver and initializing the FIE support policy->cpus ==
-policy->related_cpus. Assuming scenario when there are two CPUs within the
-policy, one being offline and missing valid AMU counters,
-the topology_set_scale_freq_source from cppc cpufreq driver will register
-the tick handler for both CPUs, whereas AMU support will (rightly so) register
-only for the firs one. When the second CPU comes online, the mismatch will be
-detected and the arch callback will get cleared for the first CPU, but the
-second one will remain unchanged.
+Thanks!  (and sorry for that careless mistake!)
 
-That said, I do not think any of those issues is a blocker for this series.
-But both would need fixing.
+> Log output of turbostat with this patch applied:
+...
+> RAPL_PKG_ENERGY MSR(0x611) =3D=3D ZERO: disabling all RAPL MSRs
 
----
-BR
-Beata
+Looks good -- thanks!
 
-
-> ---
-> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
-> index 5d824435b26b..2f286a1b0b02 100644
-> --- a/drivers/acpi/processor_driver.c
-> +++ b/drivers/acpi/processor_driver.c
-> @@ -33,6 +33,7 @@ MODULE_AUTHOR("Paul Diefenbaugh");
->  MODULE_DESCRIPTION("ACPI Processor Driver");
->  MODULE_LICENSE("GPL");
->  
-> +static int acpi_processor_start(struct device *dev);
->  static int acpi_processor_stop(struct device *dev);
->  
->  static const struct acpi_device_id processor_device_ids[] = {
-> @@ -46,6 +47,7 @@ static struct device_driver acpi_processor_driver = {
->  	.name = "processor",
->  	.bus = &cpu_subsys,
->  	.acpi_match_table = processor_device_ids,
-> +	.probe = acpi_processor_start,
->  	.remove = acpi_processor_stop,
->  };
->  
-> @@ -191,6 +193,21 @@ static int __acpi_processor_start(struct acpi_device *device)
->  	return result;
->  }
->  
-> +static int acpi_processor_start(struct device *dev)
-> +{
-> +	struct acpi_device *device = ACPI_COMPANION(dev);
-> +	int ret;
-> +
-> +	if (!device)
-> +		return -ENODEV;
-> +
-> +	/* Protect against concurrent CPU hotplug operations */
-> +	cpu_hotplug_disable();
-> +	ret = __acpi_processor_start(device);
-> +	cpu_hotplug_enable();
-> +	return ret;
-> +}
-> +
->  static int acpi_processor_stop(struct device *dev)
->  {
->  	struct acpi_device *device = ACPI_COMPANION(dev);
-> @@ -264,9 +281,9 @@ static int __init acpi_processor_driver_init(void)
->  
->  	acpi_processor_register_idle_driver();
->  
-> -	result = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-> -				   "acpi/cpu-drv:online",
-> -				   acpi_soft_cpu_online, NULL);
-> +	result = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-> +					   "acpi/cpu-drv:online",
-> +					   acpi_soft_cpu_online, NULL);
->  	if (result < 0)
->  		goto err;
->  	hp_online = result;
-> 
-> > 
-> > ---
-> > BR
-> > Beata
-> > On Wed, Nov 19, 2025 at 04:13:53PM +0800, Lifeng Zheng wrote:
-> >> Solve a problem that causes CPUs Setup AMU FIE failed in a corner case,
-> >> even though they're eligible.
-> >>
-> >>
-> > 
-> 
+-Len
 
