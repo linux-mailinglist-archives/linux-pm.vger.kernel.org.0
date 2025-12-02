@@ -1,174 +1,152 @@
-Return-Path: <linux-pm+bounces-39044-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39045-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D136C9A8AE
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 08:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96B42C9A8ED
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 08:50:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EBC33A65EA
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 07:46:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACC283A4973
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 07:50:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BCDD2FE041;
-	Tue,  2 Dec 2025 07:46:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26EF1303A03;
+	Tue,  2 Dec 2025 07:50:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="EHFGlgX0";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="CG1goVKN"
+	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="S9SUL1mh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx-relay93-hz2.antispameurope.com (mx-relay93-hz2.antispameurope.com [94.100.136.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5DBA25BF13
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 07:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764661581; cv=none; b=KkDnIPVxF4Vb8esmbZijOHr+tSo/nwozM8PHWtpWicjVuTvBk/A/XNu9Jbz98JXb/lnwkU7tgreNApZPpqLQqHhHdgOs12pY9GHmhuMQKOURkD9JsXdShqGCzwmdKFUbVcgH2uByrlYjqC4jxGwtIBBViBRQU5HA+7dMMzx82sY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764661581; c=relaxed/simple;
-	bh=d/2BZjmIEzBvFQVwm3mbgEak9vBocF8DSyDyQlVO3sw=;
-	h=Message-ID:Date:MIME-Version:Subject:References:To:From:
-	 In-Reply-To:Content-Type; b=rYGgPNsB4Oo3sIo/rHqtGMK3T2cB500RT0jz8Sv01xFyFyMvnKCMaD/0ecxVVTiExKFYREthRBDdLW7KtVhaPoUc8YWqRxlReCeWEiqMIKHbaBjoRwAoLBUhl7AlUV2LIY+LuEWMfKDHiBYD7cVKt2oYuqO6/3SM3tk0IIRwOwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=EHFGlgX0; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=CG1goVKN; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B27M2nK2692832
-	for <linux-pm@vger.kernel.org>; Tue, 2 Dec 2025 07:46:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	id76BGdt0nrk8tS4r6DIJzrzlaIfFZcLjq7vmsuLOWs=; b=EHFGlgX0clYmO3e3
-	tb/+JaxYMFry7Vl2+dS0VC6R/V4pxQKPeTLeCmt3LWcNSPZEvtqrwf5bHOK2T5f+
-	TQMmQZ0W4sCJMUloSA7flwIfm9NVAqtyKz2tyX8CYPfWS5A5XNhmEyhoEOsCYY8x
-	/M7OzTYR5z/1Nu9yH4V8pGtYVsZMEmsDuLq8PRT4A1o6K8mbc/2k2ScE9Kc5XQLr
-	VltYinEoPp2hnZgQvn33zUoSiK8ckZILvgwJ8jizsZM3EWnC3oIlHXoLd8iXcw6B
-	lJZ4Tf9O2mC4cjOm9pmFnzui4/MtzvpZkHME+BNLjT0ewQMQeQB5qEHkKpcOcB17
-	/oIGmw==
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4asun902hh-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 07:46:19 +0000 (GMT)
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-7b873532cc8so4051517b3a.1
-        for <linux-pm@vger.kernel.org>; Mon, 01 Dec 2025 23:46:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1764661578; x=1765266378; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:to:content-language
-         :references:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=id76BGdt0nrk8tS4r6DIJzrzlaIfFZcLjq7vmsuLOWs=;
-        b=CG1goVKNZ4AuaCuO4vtQnCam7DeWTachM9S6JVSz16D2htfSc4alkaf3hwJCDEg+7Q
-         MfzH7Vgql8JjUIerhSJWtW4A8XOnb9F0CPg3SOwN7UHkq/sgrnCSiaINP6KsCZ4Ydy6K
-         zOe2DinKc9tAjpKTg1S3GoMrn+tS/If/kEGTcTd2qZIiY0N0x8iScXJ2pKmId4Z22Yk+
-         HdC4srfXZisPKd3pCv+7h3tvcWF0KnQbPfSfpIlY6Vc3egx09yyfqxaryJtsmksHc7wf
-         mEncQr4r/X2Vs4zK+eF/d8U3t14Ar05vZiLXuJaubPWNlb7L3TzMBS2wOkt37jmeAdhX
-         Iz2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764661578; x=1765266378;
-        h=content-transfer-encoding:in-reply-to:from:to:content-language
-         :references:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=id76BGdt0nrk8tS4r6DIJzrzlaIfFZcLjq7vmsuLOWs=;
-        b=Uv3VKMr6JvORmK8gqIsDssiZTiKA5zdIhKwnOMEQOn3WlDN03yi1UDCzPGMwqOYrpu
-         ZcQUxs9T1+WAVF64ATBz5HdKPBS6ONcWzxydTuzydlM1DuPH3TZowfixG21c3n/h0d4Q
-         oDwwKDb3D1IMMZDYlhKGfgV7bSDtOFRm1OhMSy2DsgjbamCemkDrnZXsmyxfsTNV/Qvn
-         6LkzlY1W2bxoPHNue4xGptwcj6keQPj22j5dNZYra5z1smbxVGxf0HqXT2S5gEvuEIzC
-         9v4gm2Vxc3Zu4/PdPfL4HU0H333mjnsR/g7smKUbojKfhX9MscKCj9ONrGjM/JO4ELhX
-         zvTA==
-X-Gm-Message-State: AOJu0Yzv/Ji3T8LdTF1AsljYo6ApDvThZHassAy5oV+gzJ5Xcr7sVOa+
-	jSXu95ZkOyjKiaEVchIb1JcJPwlkrJvgvaEavHTMNqjynJ5TxpFLkhgMQGo90iGKG6MzAluMWf6
-	8xsneyKNvshSrBUrHs57/xsakN7kBUxx/TgGg9a/RoxSmYaNleeHhaxnC2hHibO3fsfXmL5vR
-X-Gm-Gg: ASbGncuE0yGIo6uniJEGg6JRXLfBMUQqIMxOmmVSNQaMpH8zKUrnHR6JFSLav+dWrcj
-	pajfFuQFH6M+SVSCjHctn2Et3AabPz4FelVa9yzX1GpjdhwE+mkbh6qac7h8pkYWAfl02o2yvGW
-	MxwSq3E1w8vBwsYveewEJjdC+eoj7rQCG4NlJ2q2v0awTZB2vrawA+dtlFw/8uZEmTkVO4pR+S1
-	/zc9H7tHImhrXWjMMlQDz1Et5gbbU8/W3Qk0B05JBlAWltpuwdXbYP+ZUQMzoGrcYvb333hhcIB
-	tFYQJah1Qqy4kVTVkciLKuYSCCK5bVA+uaDFJzYnoEfGi+rlyc7TzbFsXfLIuLWHWCUwPlKjrz6
-	eXBi1Bv7o4fZpfNo17Ru2zVaFntvPLB7tgkZM1ET7YPlypivzbTwoMmiiLdNR5iImL5PU1Ng4gw
-	==
-X-Received: by 2002:a05:6a00:2e18:b0:781:1110:f175 with SMTP id d2e1a72fcca58-7dd788c50bbmr2088099b3a.14.1764661578273;
-        Mon, 01 Dec 2025 23:46:18 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHm79XYk9z/+eZc94gRo3b5kgQhD/j5Xo6YUtkEE1wENbEY4x/Z1sS11g0rwImVrsIPXPFSfw==
-X-Received: by 2002:a05:6a00:2e18:b0:781:1110:f175 with SMTP id d2e1a72fcca58-7dd788c50bbmr2088067b3a.14.1764661577764;
-        Mon, 01 Dec 2025 23:46:17 -0800 (PST)
-Received: from [10.133.33.100] (tpe-colo-wan-fw-bordernet.qualcomm.com. [103.229.16.4])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7d1516f6c47sm15938310b3a.18.2025.12.01.23.46.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Dec 2025 23:46:17 -0800 (PST)
-Message-ID: <371e1dcd-c18d-49db-a45c-e8cc7ec147f8@oss.qualcomm.com>
-Date: Tue, 2 Dec 2025 15:46:13 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16FC30277E
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 07:50:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.100.136.193
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764661807; cv=pass; b=B4tdq1kahrTmc7NrpIddCYGYw5h3VudL3YBtHlxJw3P08nYCO/U0FtGgGcM+TgX3qV0Cu1TL9e5AffPES5EDH3nAIuqJlafYoQ4Y5+qtdbHW9eeUPWRIxhDLpc7ngWI/euU2yXghR7O5bQeTLQlYKOZ0TAvDYeJKja4jPxOx+bQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764661807; c=relaxed/simple;
+	bh=5E8tONvGDYNXqEcU4jADlGAWcbtLghmGBN2qCeMt8X4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=M6S8dVNRg193jLcsadvY+YM5D7L2hlGPE1JwtrEPvQ5AiogwdGiEkZdQJ5/7tHW7mNVIOOmGYFv3ZS8QEkpN0JbJeJE2j/XNQZwbwKV8SLILnGaoAMpxlus8ol2qHuXI5Y0RcXRSoPTaiwdjNbmh2Ni3jAs6U0LAa4qeAvoDi3I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=S9SUL1mh; arc=pass smtp.client-ip=94.100.136.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+ARC-Authentication-Results: i=1; mx-gate93-hz2.hornetsecurity.com 1; spf=pass
+ reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
+ smtp.mailfrom=ew.tq-group.com
+ smtp.helo=hmail-p-smtp01-out03-hz1.hornetsecurity.com; dmarc=pass
+ header.from=ew.tq-group.com orig.disposition=pass
+ARC-Message-Signature: a=rsa-sha256;
+ bh=ZuuiLfEXz8Diy3RFrr3LRL4zmPRzauswvFKI19W6Rz8=; c=relaxed/relaxed;
+ d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
+ t=1764661748;
+ b=Du1sqCc5W5NOQq0B8IjCK9tXBvlsBTA+DyQR1LshAT1yv1jY5FQOXK1bQScK+Hx9iJ5TiP/7
+ UasrfDl0miJW+ZYcgyamv/h5jGjfxfs2kgH0y4lMKcoouWZ2SuYeRk0nWxf85CvFXoKQDIfbnMv
+ YRPZceRb0mr45qSy60TxL+PQ3tl+m9/AB9Jru+iMQzgxgZfjOWK+IgoNxXGrwtJ6/X0FL59yRs7
+ k8Tl6RvRWAhQVtRI3JIfNqDjPDZv2P8HoyZ7rrqEvyr+jZr6ppCmC3UUotnEc0VwnZxFymGMmOk
+ zK0b4mCBibDA0P69VxpO+psaj1qwVyMYGWyPrBGhMCqQQ==
+ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
+ t=1764661748;
+ b=VlOPJXzcNBF3r9M+2WH4ZbtvVkBiFLkfILmg4fbRtToWuXP1Qq5KRN63T4Bfgk5l3fYNYE9M
+ uXVBIoSiHCv6Bf/yaKxUUNAhZo7tRU537ABDf7aimlDRhAVSmbASPrzqVZL2SinvC38IIASoRd5
+ HHpHrk5FvjRmO1xqHw0V414lLdmLEbUCy14Yeynt1KD5An4IIZZsEJkqVzzQUqvN+zVOKB/6PdR
+ 0Qe0Fdf4Kc8O/czRbA5OEPdEOBdHKnHCWRJ8I89788cPY+jytPVov4D2d52hIe64bXFbulYuP+b
+ y3b9uPrK/xFIx4ObLEXqw4W+rXw/hvmj33/XcuLKxaJww==
+Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay93-hz2.antispameurope.com;
+ Tue, 02 Dec 2025 08:49:07 +0100
+Received: from steina-w.localnet (host-82-135-125-110.customer.m-online.net [82.135.125.110])
+	(Authenticated sender: alexander.stein@ew.tq-group.com)
+	by hmail-p-smtp01-out03-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 5F6F9CC0E91;
+	Tue,  2 Dec 2025 08:48:55 +0100 (CET)
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, linux-arm-kernel@lists.infradead.org
+Cc: linux-pm@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Marco Felsch <m.felsch@pengutronix.de>,
+ Marco Felsch <m.felsch@pengutronix.de>
+Subject: Re: [PATCH 1/3] pmdomain: imx93-blk-ctrl: cleanup error path
+Date: Tue, 02 Dec 2025 08:48:54 +0100
+Message-ID: <2812632.mvXUDI8C0e@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To:
+ <20251201-v6-18-topic-imx93-blkctrl-v1-1-b57a72e60105@pengutronix.de>
+References:
+ <20251201-v6-18-topic-imx93-blkctrl-v1-0-b57a72e60105@pengutronix.de>
+ <20251201-v6-18-topic-imx93-blkctrl-v1-1-b57a72e60105@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: test-by-test
-References: <62eb142e-329b-4faa-8750-2d92d4a37d3c@oss.qualcomm.com>
-Content-Language: en-US
-To: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_okukatla@quicinc.com
-From: Yin Li <yin.li@oss.qualcomm.com>
-In-Reply-To: <62eb142e-329b-4faa-8750-2d92d4a37d3c@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAyMDA2MSBTYWx0ZWRfX0U26VyDpTCOA
- iGDzUQdJs38RPao8gBb/kF26yhzC15d0DyTEoSREQBRt9zEs/k5g/DROZ4OlohofOn4RrVuAejr
- VzrOD19pP+XKvxE9Bdpn/O1bwnP2Om5kdvxRBp2c6s2mofBr2KQCawf4/Sg5bgZv8OcHXjDe0dG
- WwKHEZp41B69fwx6a5Ob8u8HQSBrVOi9YXUo2Xayn+wBD9oHpRSJoaTq4JiLOFcSdT/04PwFRDo
- cFOAuTq8EgPaOTVXeH+Q4pSYCaZa+sFFJthKBt31Q9zndPVnPplZmLr/zkxw+BJGvOye7lLAlG/
- BO+USd70H9oQakwzKv9Obdic9I21HRlm+myvG/qo8Vp3GdCut2tANONLfvtzrTWIoJjJAdsE+sK
- kzq9YRYwm9mlZNz/bCHXBln8y4wKEQ==
-X-Authority-Analysis: v=2.4 cv=DKOCIiNb c=1 sm=1 tr=0 ts=692e994b cx=c_pps
- a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=nuhDOHQX5FNHPW3J6Bj6AA==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=_ACZHSV4MdW8pSOez1gA:9 a=QEXdDO2ut3YA:10
- a=OpyuDcXvxspvyRM73sMx:22
-X-Proofpoint-GUID: EbDUZrpXRDLjHWjkA9VfPovPm0sGPHZC
-X-Proofpoint-ORIG-GUID: EbDUZrpXRDLjHWjkA9VfPovPm0sGPHZC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-11-28_08,2025-11-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 lowpriorityscore=0 spamscore=0 suspectscore=0
- malwarescore=0 bulkscore=0 impostorscore=0 adultscore=0 phishscore=0
- clxscore=1015 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2510240001
- definitions=main-2512020061
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-cloud-security-sender:alexander.stein@ew.tq-group.com
+X-cloud-security-recipient:linux-pm@vger.kernel.org
+X-cloud-security-body-digest:8acd2ce67e20b48317200392c5473c1b
+X-cloud-security-crypt: load encryption module
+X-cloud-security-Mailarchiv: E-Mail archived for: alexander.stein@ew.tq-group.com
+X-cloud-security-Mailarchivtype:outbound
+X-cloud-security-Virusscan:CLEAN
+X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay93-hz2.antispameurope.com with 4dLCZc0Cw6z4Qbbv
+X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
+X-cloud-security-Digest:49e900fe4f7bb522495f22f55c5fbd5b
+X-cloud-security:scantime:2.076
+DKIM-Signature: a=rsa-sha256;
+ bh=ZuuiLfEXz8Diy3RFrr3LRL4zmPRzauswvFKI19W6Rz8=; c=relaxed/relaxed;
+ d=ew.tq-group.com;
+ h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
+ t=1764661747; v=1;
+ b=S9SUL1mhS59FpiTbymyg2+CI7ctRdrLNJxklbQRJg2piNVJQ0deb12UZtexaoLZPM+Gcjd+c
+ ysNHZ6zg4dTTivLlB702DUuTysTMg92xMfGPMlTTpnW4UtCrnPNvNlC7x7GqNM6eenJbIy0XmOp
+ 7RATWxUjlOXDe7SdnQDPT0Mm/omBHaNr1eGePc50j9dkDr3w9Lk+3T9nhySwDKzyhXfSyHvGvHR
+ 9uThG2ofxcS2vyXWxAayxVKc0TnZR0cke+EnQrFUGopUFXbUKDY2gKCXpEdwgl2pyFltjk8rTkD
+ bajj89iWis2efsj7dMXTRNLlnsEGivE7kecpeduV/ea5Q==
+
+Am Montag, 1. Dezember 2025, 18:12:05 CET schrieb Marco Felsch:
+> Call dev_err_probe() directly during return to make the code more
+> compact.
+>=20
+> Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
+
+Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+
+> ---
+>  drivers/pmdomain/imx/imx93-blk-ctrl.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/pmdomain/imx/imx93-blk-ctrl.c b/drivers/pmdomain/imx=
+/imx93-blk-ctrl.c
+> index e094fe5a42bf646c712f3eca4e66a313fa5a914c..2aa163aef8de4ee901b9cde76=
+ce2aad246c8c08a 100644
+> --- a/drivers/pmdomain/imx/imx93-blk-ctrl.c
+> +++ b/drivers/pmdomain/imx/imx93-blk-ctrl.c
+> @@ -240,10 +240,8 @@ static int imx93_blk_ctrl_probe(struct platform_devi=
+ce *pdev)
+>  	bc->num_clks =3D bc_data->num_clks;
+> =20
+>  	ret =3D devm_clk_bulk_get(dev, bc->num_clks, bc->clks);
+> -	if (ret) {
+> -		dev_err_probe(dev, ret, "failed to get bus clock\n");
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to get bus clock\n");
+> =20
+>  	for (i =3D 0; i < bc_data->num_domains; i++) {
+>  		const struct imx93_blk_ctrl_domain_data *data =3D &bc_data->domains[i];
+>=20
+>=20
 
 
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-On 12/2/2025 3:13 PM, Yin Li wrote:
-> Hi Georgi,
-> 
-> on 16 May 2025 18:50:15 +0300, Georgi Djakov wrote:
->  >Hi Mike,
->  >...
->  >
->  >> To prevent this priority inversion, switch to using rt_mutex for
->  >> icc_bw_lock. This isn't needed for icc_lock since that's not used in 
-> the
->  >> critical, latency-sensitive voting paths.
->  >
->  >If the issue does not occur anymore with this patch, then this is a good
->  >sign, but we still need to get some numbers and put them in the commit
->  >message.
->...
-
-
-Hi all,
-
-I'm sorry,I realized that the previous patch I sent was incorrect due to 
-an email sending mistake.
-
-Please NAK the previous patch, I will resend a corrected version shortly.
-
-Sorry for the inconvenience and thank you for your understanding.
-
-
-
--- 
-Thx and BRs,
-Yin
 
 
