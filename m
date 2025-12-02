@@ -1,111 +1,133 @@
-Return-Path: <linux-pm+bounces-39106-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39107-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E645BC9D0AD
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 22:18:51 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EDC1C9D0B6
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 22:19:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 591313A2D5F
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 21:18:49 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E646C4E4FCF
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 21:18:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D73B22F8BD2;
-	Tue,  2 Dec 2025 21:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31F8F2F998D;
+	Tue,  2 Dec 2025 21:18:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YpzfHEiE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hx881+pq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F6C2737F3
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 21:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4172F7477
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 21:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764710310; cv=none; b=f5nRPCT5RxKGaquV2SD9XQP+9iVbg3aGF4absrfzXf+NV+UjF2lxE5jPDuvQXS/kxHEnLqSx0t3qxNHeN05RHl6GqKvX8GjW9kVlHBLyD/roYL/CqMMNv+4y0Y6A45dXC/68PSJAYAAyuLwfeoeZWWj+LNj4VUaKRqMW3OWvChs=
+	t=1764710312; cv=none; b=cCPVdUkRWvmLGqQ2m5jQZsIWoO1659HMjKNSvQpbNhkkkrXBpmQ286oNRYYDCVlz1iziyt+jqxTjM+XK1trmZ3cUkrAQ/wmfQlNWLs8lQIqrbLQf1jKMrMlvcHS3LnD5Q2xIZfB4EnejnTtNhlY17/dgcn6yGe7Iq3w14nPuaPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764710310; c=relaxed/simple;
-	bh=i61XAwNuMKwisx8NtooE4TUiCGeQpb0YlglZy3hgY1I=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=U4rIAULQWeVqgK5HhWkcXxSSiJjSlviUnIDwo0mSEyhO1GX9Refgj7VJU760iu76DaWCPypwEYanwuS8uClvW4agdCW2h9Jut53y4ulD5amAtQLaiHXnQ/jx4hKRFKn5EFoYhVtBLBcU074nP3G27iS1HnNJOgRDNyX33okL48o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YpzfHEiE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8AF4C4CEF1
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 21:18:29 +0000 (UTC)
+	s=arc-20240116; t=1764710312; c=relaxed/simple;
+	bh=Huh+5HfGYEwAMer0mcqMProfy5+osLVMVKj5LK1f3zI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IGt+T7qxAa/Ld34EPwyN+ppMoZmM9as7rhOH45LeWF1wK2fQjuMksWwQGfvovyTaKEP0sNXYfEuXGGDmGLaFgXvSTAwd+fGdBrGaaoOZkgZZpseLNfLCG1PrqAn4+b/Xfc5xnVe0VHV66dohn/aRAFcGmIQevZ6zWpWMIbIqV6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hx881+pq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADF13C113D0;
+	Tue,  2 Dec 2025 21:18:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764710310;
-	bh=i61XAwNuMKwisx8NtooE4TUiCGeQpb0YlglZy3hgY1I=;
-	h=From:To:Subject:Date:From;
-	b=YpzfHEiE64qCMU6d/1Gbox/fbcMPQ1K7hCSWsaX/eo+mPLh2s95Em88D0g2ZzJnzI
-	 H0n2C0wKrucaOGAp8apKUVXTwK8HBK5VFMGVqNP3pze4vwo0pswZHBcolbSVGQy4Jx
-	 QmtEDooptwvyKNB6U1ocECSDGXLliCaFWPuf+uIwy19DTf0ROrxCwzb8qpRW3REj86
-	 CscIIGuCXPEdWxCjqj5JboHsTwJQT6hPTV88qH9YePfDZIwrCJ3TlVURCKF/5g69H8
-	 rligHsTePaHPe9y1lyZEeDJDwNy9VDQIZhGzrDTyPK239Jir52tlYrOgXrNrX+u5At
-	 7q+pfKRqCw3uQ==
+	s=k20201202; t=1764710311;
+	bh=Huh+5HfGYEwAMer0mcqMProfy5+osLVMVKj5LK1f3zI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
+	b=hx881+pqzNlA71iqC68W3oX2W/+GgtaVXLQJpUVryG+11e6KKXE2CHLdHOBtmk4Ky
+	 J+9EKl8ALUhEMAd66sCN9C5/xCvPWcPqGr8XR3gUSlhWQhQtu2MrOVBFH58V6j/TQG
+	 8P8TFtP5IVWEDD7LeIkIgZdcmWbqlEs408EI+Sz8zlHJYmNshiEWW/vk/sX0byDhA6
+	 E7i2mox6FAfgKV0ulBvbMQCTEse/udkeA6PB8W/oX9fjCE+CTzFmRybWqGnCzuQ7B5
+	 4Y3MIEHdLLdpoi/1ZqMFCST8U8cLbXAjdyZXVmdMD+ymeVRaS4/i5+0bWjJlQq67BM
+	 dCghiHGgD1XNw==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
-Subject: [PATCH 0/21] turbostat-v2025.12.02 x86_energy_policy-v2025.11.22
-Date: Tue,  2 Dec 2025 16:13:18 -0500
-Message-ID: <20251202211824.321697-1-lenb@kernel.org>
+Cc: Len Brown <len.brown@intel.com>,
+	Andrej Tkalcec <andrej.tkalcec@intel.com>
+Subject: [PATCH 01/21] tools/power turbostat: Regression fix Uncore MHz printed in hex
+Date: Tue,  2 Dec 2025 16:13:19 -0500
+Message-ID: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1764710012.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20251202211824.321697-1-lenb@kernel.org>
+References: <20251202211824.321697-1-lenb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Reply-To: Len Brown <lenb@kernel.org>
+Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
 
-This patch series is staged for upstream in my public git tree:
+From: Len Brown <len.brown@intel.com>
 
-git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
+A patch to allow specifying FORMAT_AVERAGE to added counters...
+broke the internally added counter for Cluster Uncore MHz -- printing it in HEX.
 
-In summary, since turbostat-v2025.09.09:
-    
-    Add LLC statistics columns:
-        LLCkRPS = Last Level Cache Thousands of References Per Second
-        LLC%hit = Last Level Cache Hit %
-    Recognize Wildcat Lake and Nova Lake platforms
-    Add MSR check for Android
-    Add APERF check for VMWARE
-    Add RAPL check for AWS
-    minor fixes to turbostat and x86_energy_perf_policy
+Fixes: dcd1c379b0f1 ("tools/power turbostat: add format "average" for external attributes")
+Reported-by: Andrej Tkalcec <andrej.tkalcec@intel.com>
+Signed-off-by: Len Brown <len.brown@intel.com>
+---
+ tools/power/x86/turbostat/turbostat.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Please let me know if you see any issues.
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index f2512d78bcbd..1b5ca2f4e92f 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -3285,13 +3285,13 @@ int format_counters(PER_THREAD_PARAMS)
+ 
+ 	/* Added counters */
+ 	for (i = 0, mp = sys.tp; mp; i++, mp = mp->next) {
+-		if (mp->format == FORMAT_RAW || mp->format == FORMAT_AVERAGE) {
++		if (mp->format == FORMAT_RAW) {
+ 			if (mp->width == 32)
+ 				outp +=
+ 				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""), (unsigned int)t->counter[i]);
+ 			else
+ 				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), t->counter[i]);
+-		} else if (mp->format == FORMAT_DELTA) {
++		} else if (mp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE) {
+ 			if ((mp->type == COUNTER_ITEMS) && sums_need_wide_columns)
+ 				outp += sprintf(outp, "%s%8lld", (printed++ ? delim : ""), t->counter[i]);
+ 			else
+@@ -3382,13 +3382,13 @@ int format_counters(PER_THREAD_PARAMS)
+ 		outp += sprintf(outp, "%s%lld", (printed++ ? delim : ""), c->core_throt_cnt);
+ 
+ 	for (i = 0, mp = sys.cp; mp; i++, mp = mp->next) {
+-		if (mp->format == FORMAT_RAW || mp->format == FORMAT_AVERAGE) {
++		if (mp->format == FORMAT_RAW) {
+ 			if (mp->width == 32)
+ 				outp +=
+ 				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""), (unsigned int)c->counter[i]);
+ 			else
+ 				outp += sprintf(outp, "%s0x%016llx", (printed++ ? delim : ""), c->counter[i]);
+-		} else if (mp->format == FORMAT_DELTA) {
++		} else if (mp->format == FORMAT_DELTA || mp->format == FORMAT_AVERAGE) {
+ 			if ((mp->type == COUNTER_ITEMS) && sums_need_wide_columns)
+ 				outp += sprintf(outp, "%s%8lld", (printed++ ? delim : ""), c->counter[i]);
+ 			else
+@@ -3581,7 +3581,7 @@ int format_counters(PER_THREAD_PARAMS)
+ 		outp += sprintf(outp, "%s%d", (printed++ ? delim : ""), p->uncore_mhz);
+ 
+ 	for (i = 0, mp = sys.pp; mp; i++, mp = mp->next) {
+-		if (mp->format == FORMAT_RAW || mp->format == FORMAT_AVERAGE) {
++		if (mp->format == FORMAT_RAW) {
+ 			if (mp->width == 32)
+ 				outp +=
+ 				    sprintf(outp, "%s0x%08x", (printed++ ? delim : ""), (unsigned int)p->counter[i]);
+@@ -3758,7 +3758,7 @@ int delta_package(struct pkg_data *new, struct pkg_data *old)
+ 	    new->rapl_dram_perf_status.raw_value - old->rapl_dram_perf_status.raw_value;
+ 
+ 	for (i = 0, mp = sys.pp; mp; i++, mp = mp->next) {
+-		if (mp->format == FORMAT_RAW || mp->format == FORMAT_AVERAGE)
++		if (mp->format == FORMAT_RAW)
+ 			old->counter[i] = new->counter[i];
+ 		else if (mp->format == FORMAT_AVERAGE)
+ 			old->counter[i] = new->counter[i];
+-- 
+2.45.2
 
-thanks!
--Len Brown, Intel Open Source Technology Center
-
-----------------------------------------------------------------
-Emily Ehlert (1):
-      tools/power turbostat: Set per_cpu_msr_sum to NULL after free
-
-Kaushlendra Kumar (1):
-      tools/power x86_energy_perf_policy: Add Android MSR device support
-
-Len Brown (17):
-      tools/power turbostat: Regression fix Uncore MHz printed in hex
-      tools/power turbostat: Add Wildcat Lake and Nova Lake support
-      tools/power turbostat: Refactor added column header printing
-      tools/power turbostat: Refactor added-counter value printing code
-      tools/power turbostat.8: Update example
-      tools/power turbostat: Refactor floating point printout code
-      tools/power turbostat: Remove dead code
-      tools/power turbostat: Add LLC stats
-      tools/power turbostat: Add run-time MSR driver probe
-      tools/power x86_energy_perf_policy: Simplify Android MSR probe
-      tools/power turbostat: Validate RAPL MSRs for AWS Nitro Hypervisor
-      tools/power turbostat: Enhance perf probe
-      tools/power turbostat: Validate APERF access for VMWARE
-      tools/power turbostat: Print "nan" for out of range percentages
-      tools/power turbostat: Print percentages in 8-columns
-      tools/power turbostat: Print wide names only for RAW 64-bit columns
-      tools/power turbostat: version 2025.12.02
-
-Malaya Kumar Rout (2):
-      tools/power x86_energy_perf_policy: Fix format string in error message
-      tools/power x86_energy_perf_policy: Fix potential NULL pointer dereference
-
- tools/power/x86/turbostat/turbostat.8              |   27 +-
- tools/power/x86/turbostat/turbostat.c              | 1205 ++++++++++----------
- .../x86_energy_perf_policy.c                       |   47 +-
- 3 files changed, 660 insertions(+), 619 deletions(-)
 
