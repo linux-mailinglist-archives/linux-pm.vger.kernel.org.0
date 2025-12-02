@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-39116-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39117-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90BE5C9D0CB
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 22:19:15 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id E806BC9D0F2
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 22:19:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A3AE3A340C
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 21:19:14 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CE05D34A6DA
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 21:19:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4BDA2FABE0;
-	Tue,  2 Dec 2025 21:18:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F08802FA0EF;
+	Tue,  2 Dec 2025 21:18:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aQJyv3TQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l3QeeOve"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B06772F7ADD
-	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 21:18:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C112B2FBDE1
+	for <linux-pm@vger.kernel.org>; Tue,  2 Dec 2025 21:18:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764710322; cv=none; b=uUb3Z/U1DbFO+6Pd56Jee7SLoP0+BZcalDzCELvFbhg4Py9DYQzy1gTZPQSXCEbXJ6a8zwhQp06edHUIzte8W0S4z7dxN69RQvOu0w9k1VhMNazjNfkOlKy21kCvU/vZ5+vHXtORTEsGQc8DUOlQi/qNsZiIq4c2pBg+M1mpTD4=
+	t=1764710323; cv=none; b=sAadzCxB/q+M697D6FmrOJH09I943K76juQsT8IPv8VRF47GbaaS3+RVrBtiBKCTOx2kHhOuaydpvC667IQT5CSF8g/i4yfa0UzWEd3U0lVxZ4gdHykALIYOYaBgXtB8svoonzOIbze+H8b9xaGyk4FT2KbcOY+VNDmBLeknc2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764710322; c=relaxed/simple;
-	bh=0NV7MVHhaCKa4zPP6gXCVmmu7yfcNvGq9j3exfQbFgc=;
+	s=arc-20240116; t=1764710323; c=relaxed/simple;
+	bh=PcxOvf3fAnfMJ7ZAb5+wH5ezBZ3XpB4aBJfmKkhF8kY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VECURBAhD1mIgVMj+nkseAglSuZdCCABBHs4s8Rl5cPBVdfteo4DmbycEH0XL5qTpetOlwELpVT8t8fhloCZfvVBuJoAit4nohumm57pBRxUSn3p3oR9KcHrLNSPKhLyvn0SdLHKhzdUHCKa+wj7Rd9msvFfFSyZ+CX+6cYfOfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aQJyv3TQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1B1BC4CEF1;
-	Tue,  2 Dec 2025 21:18:41 +0000 (UTC)
+	 MIME-Version; b=lPmmQYD9SEM80s6JzzURvZGJgdnJStJT6DTZ+d/u2XNp6aDZL/5OwQexppg5IEgvk1YsftD6ZHNZvKW9vcEH+SAbKZS4vcAtb0ooDSurDZOX+2K8+/5bfGq6jqeQ0ZFdVIId0dff6Rbnz3n55mL6p+Z0RSSwaP/CTeSA4E8swUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l3QeeOve; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4463C113D0;
+	Tue,  2 Dec 2025 21:18:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764710322;
-	bh=0NV7MVHhaCKa4zPP6gXCVmmu7yfcNvGq9j3exfQbFgc=;
+	s=k20201202; t=1764710323;
+	bh=PcxOvf3fAnfMJ7ZAb5+wH5ezBZ3XpB4aBJfmKkhF8kY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=aQJyv3TQiUQrskRwlW6fKgBeXjaKxmpst7VH/SP3O1fSdGxfnAtMQ+KmOCpZzb7MS
-	 xZ9pGgZcQ4aHcFglcP2pG7WR0JjgfsT2PmKuKB7+iHSNZr+ARBjcOGp5MDx/6M3DkO
-	 Y7wp+dRMCNJauWkXIsrwNgjzf9olCBezhhrlIHBoTnTYZ8I/TC4l9I8NuZvnQ2nFOq
-	 MxpiRiCiv3SrXr75nvtQ2rZylZi+itsmuTslAH6a2iuWaGVAcUomLPwPJjF6NE7OP2
-	 hbzE73kHC0NHIj8e1KrMmUTK84fD1ueBDYGAhcp1y7OyHA5LBBy3BcKi5VT1GYCs5Z
-	 tdXOTnt/uJZIw==
+	b=l3QeeOved2j+Z3pqLnqThzocZtdG5ws73aFPNhJoroKrdNq7iNCGgeYOq0XzFn96T
+	 KsmXvN98R4wCdjwidY1nlDPXUMLIVtbIbEB00ZUh1gvpC72F0dO/lwWDn0QEo0WmNJ
+	 LpoBtj1Z749QnqcoNjsY+V7E5gOaqUhRWozigNI8fgOzml+/VlclChkoE0eDggbv/I
+	 yD6d0kPRzbC1hYknBJIo9PU8Q4GgrL3CV68d/9Ze33zBpbs8uu2KmUJK/9AflvPFHw
+	 YiTjNnU6yXwOxoDL8tbWixRPofXUpdSH8HAlJ6fYwa96izBAajkH/4cwRh+TgPENFe
+	 j4tIRYiceymKw==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
-Cc: Len Brown <len.brown@intel.com>
-Subject: [PATCH 10/21] tools/power turbostat: Add run-time MSR driver probe
-Date: Tue,  2 Dec 2025 16:13:28 -0500
-Message-ID: <d71cb404f002d0aa012e6b394752ff3cfc8d9f73.1764710012.git.len.brown@intel.com>
+Cc: Kaushlendra Kumar <kaushlendra.kumar@intel.com>,
+	Len Brown <len.brown@intel.com>
+Subject: [PATCH 11/21] tools/power x86_energy_perf_policy: Add Android MSR device support
+Date: Tue,  2 Dec 2025 16:13:29 -0500
+Message-ID: <2ff4b59f2e6222a13d76c4178bcd1878be3d23ac.1764710012.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1764710012.git.len.brown@intel.com>
 References: <92664f2e6ab2228a3330734fc72dabeaf8a49ee1.1764710012.git.len.brown@intel.com>
@@ -60,138 +61,125 @@ Reply-To: Len Brown <lenb@kernel.org>
 Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
 
-From: Len Brown <len.brown@intel.com>
+From: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 
-Rather than starting down the conditional-compile road...
+Add support for Android MSR device paths which use /dev/msrN format
+instead of the standard Linux /dev/cpu/N/msr format. The tool now
+probes both path formats at startup and uses the appropriate one.
 
-Probe the location of the MSR files at run-time.
+This enables x86_energy_perf_policy to work on Android systems where
+MSR devices follow a different naming convention while maintaining
+full compatibility with standard Linux systems.
 
+Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 68 +++++++++++++++------------
- 1 file changed, 39 insertions(+), 29 deletions(-)
+ .../x86_energy_perf_policy.c                  | 54 ++++++++++++++++---
+ 1 file changed, 46 insertions(+), 8 deletions(-)
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 8154d110dd07..e85bdb00f24a 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -142,6 +142,7 @@ struct msr_counter {
- #define	FLAGS_SHOW	(1 << 1)
- #define	SYSFS_PERCPU	(1 << 1)
- };
+diff --git a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
+index 884a4c746f32..5301efc741ce 100644
+--- a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
++++ b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
+@@ -95,6 +95,9 @@ unsigned int bdx_highest_ratio;
+ #define PATH_TO_CPU "/sys/devices/system/cpu/"
+ #define SYSFS_PATH_MAX 255
+ 
++/* keep Default as a linux path */
 +static int use_android_msr_path;
++
+ /*
+  * maintain compatibility with original implementation, but don't document it:
+  */
+@@ -678,16 +681,41 @@ void err_on_hypervisor(void)
+ 		    "not supported on this virtual machine");
+ }
  
- struct msr_counter bic[] = {
- 	{ 0x0, "usec", NULL, 0, 0, 0, NULL, 0 },
-@@ -2413,20 +2414,11 @@ int get_msr_fd(int cpu)
++static void probe_msr_path_format(void)
++{
++	struct stat sb;
++	char test_path[32];
++
++	/* Test standard Linux path */
++	sprintf(test_path, "/dev/cpu/%d/msr", base_cpu);
++	if (stat(test_path, &sb) == 0) {
++		use_android_msr_path = 0;
++		return;
++	}
++
++	/* Test Android-style path */
++	sprintf(test_path, "/dev/msr%d", base_cpu);
++	if (stat(test_path, &sb) == 0) {
++		use_android_msr_path = 1;
++		return;
++	}
++
++	/* If neither exists, keep the default Linux format */
++	use_android_msr_path = 0;
++}
++
+ int get_msr(int cpu, int offset, unsigned long long *msr)
+ {
+ 	int retval;
+ 	char pathname[32];
+ 	int fd;
  
- 	if (fd)
- 		return fd;
--#if defined(ANDROID)
--	sprintf(pathname, "/dev/msr%d", cpu);
--#else
 -	sprintf(pathname, "/dev/cpu/%d/msr", cpu);
--#endif
 +	sprintf(pathname, use_android_msr_path ? "/dev/msr%d" : "/dev/cpu/%d/msr", cpu);
  	fd = open(pathname, O_RDONLY);
  	if (fd < 0)
--#if defined(ANDROID)
--		err(-1, "%s open failed, try chown or chmod +r /dev/msr*, "
--		    "or run with --no-msr, or run as root", pathname);
--#else
--		err(-1, "%s open failed, try chown or chmod +r /dev/cpu/*/msr, "
--		    "or run with --no-msr, or run as root", pathname);
--#endif
-+		err(-1, "%s open failed, try chown or chmod +r %s, "
-+		    "or run with --no-msr, or run as root", pathname, use_android_msr_path ? "/dev/msr*" : "/dev/cpu/*/msr");
- 	fd_percpu[cpu] = fd;
- 
- 	return fd;
-@@ -6777,21 +6769,43 @@ void turbostat_loop()
- 	}
- }
- 
--void check_dev_msr()
-+int probe_dev_msr(void)
-+{
-+	struct stat sb;
-+	char pathname[32];
+-		err(-1, "%s open failed, try chown or chmod +r /dev/cpu/*/msr, or run as root", pathname);
++		err(-1, "%s open failed, try chown or chmod +r %s, or run as root",
++		   pathname, use_android_msr_path ? "/dev/msr*" : "/dev/cpu/*/msr");
 +
-+        sprintf(pathname, "/dev/msr%d", base_cpu);
-+        return !stat(pathname, &sb);
-+}
-+
-+int probe_dev_cpu_msr(void)
- {
+ 
+ 	retval = pread(fd, msr, sizeof(*msr), offset);
+ 	if (retval != sizeof(*msr)) {
+@@ -708,10 +736,11 @@ int put_msr(int cpu, int offset, unsigned long long new_msr)
+ 	int retval;
+ 	int fd;
+ 
+-	sprintf(pathname, "/dev/cpu/%d/msr", cpu);
++	sprintf(pathname, use_android_msr_path ? "/dev/msr%d" : "/dev/cpu/%d/msr", cpu);
+ 	fd = open(pathname, O_RDWR);
+ 	if (fd < 0)
+-		err(-1, "%s open failed, try chown or chmod +r /dev/cpu/*/msr, or run as root", pathname);
++		err(-1, "%s open failed, try chown or chmod +r %s, or run as root",
++		   pathname, use_android_msr_path ? "/dev/msr*" : "/dev/cpu/*/msr");
+ 
+ 	retval = pwrite(fd, &new_msr, sizeof(new_msr), offset);
+ 	if (retval != sizeof(new_msr))
+@@ -1427,10 +1456,15 @@ void probe_dev_msr(void)
  	struct stat sb;
  	char pathname[32];
  
--	if (no_msr)
--		return;
--#if defined(ANDROID)
--	sprintf(pathname, "/dev/msr%d", base_cpu);
--#else
- 	sprintf(pathname, "/dev/cpu/%d/msr", base_cpu);
--#endif
+-	sprintf(pathname, "/dev/cpu/%d/msr", base_cpu);
 -	if (stat(pathname, &sb))
 -		if (system("/sbin/modprobe msr > /dev/null 2>&1"))
--			no_msr = 1;
-+	return !stat(pathname, &sb);
-+}
-+
-+int probe_msr_driver(void)
-+{
-+	if (probe_dev_msr()) {
-+		use_android_msr_path = 1;
-+		return 1;
-+	}
-+	return probe_dev_cpu_msr();
-+}
-+
-+void check_msr_driver(void)
-+{
-+	if (probe_msr_driver())
-+		return;
-+
-+	if (system("/sbin/modprobe msr > /dev/null 2>&1"))
-+		no_msr = 1;
-+
-+	if (!probe_msr_driver())
-+		no_msr = 1;
- }
- 
- /*
-@@ -6846,11 +6860,7 @@ void check_msr_permission(void)
- 	failed += check_for_cap_sys_rawio();
- 
- 	/* test file permissions */
--#if defined(ANDROID)
--	sprintf(pathname, "/dev/msr%d", base_cpu);
--#else
--	sprintf(pathname, "/dev/cpu/%d/msr", base_cpu);
--#endif
+-			err(-5, "no /dev/cpu/0/msr, Try \"# modprobe msr\" ");
 +	sprintf(pathname, use_android_msr_path ? "/dev/msr%d" : "/dev/cpu/%d/msr", base_cpu);
- 	if (euidaccess(pathname, R_OK)) {
- 		failed++;
- 	}
-@@ -9476,7 +9486,7 @@ bool has_added_counters(void)
- 
- void check_msr_access(void)
- {
--	check_dev_msr();
-+	check_msr_driver();
- 	check_msr_permission();
- 
- 	if (no_msr)
-@@ -10147,7 +10157,7 @@ int get_and_dump_counters(void)
- 
- void print_version()
- {
--	fprintf(outf, "turbostat version 2025.10.24 - Len Brown <lenb@kernel.org>\n");
-+	fprintf(outf, "turbostat version 2025.11.29 - Len Brown <lenb@kernel.org>\n");
++	if (stat(pathname, &sb)) {
++		if (system("/sbin/modprobe msr > /dev/null 2>&1")) {
++			if (use_android_msr_path)
++				err(-5, "no /dev/msr0, Try \"# modprobe msr\" ");
++			else
++				err(-5, "no /dev/cpu/0/msr, Try \"# modprobe msr\" ");
++		}
++	}
  }
  
- #define COMMAND_LINE_SIZE 2048
+ static void get_cpuid_or_exit(unsigned int leaf,
+@@ -1547,6 +1581,10 @@ void parse_cpuid(void)
+ int main(int argc, char **argv)
+ {
+ 	set_base_cpu();
++
++	/* probe MSR path */
++	probe_msr_path_format();
++
+ 	probe_dev_msr();
+ 	init_data_structures();
+ 
 -- 
 2.45.2
 
