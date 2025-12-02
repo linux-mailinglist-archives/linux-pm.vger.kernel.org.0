@@ -1,209 +1,180 @@
-Return-Path: <linux-pm+bounces-39049-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39050-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FDC3C9A9A7
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 09:03:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD345C9ACBC
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 10:09:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 588633A4869
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 08:03:31 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9E6F14E2B72
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 09:09:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36CB6305E1B;
-	Tue,  2 Dec 2025 08:03:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DFF23093DD;
+	Tue,  2 Dec 2025 09:09:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="WrsP5to+";
-	dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b="X5KJbDHw"
+	dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b="tnUusfzc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com [63.176.194.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6B8292B2E;
-	Tue,  2 Dec 2025 08:03:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38C6309DC4;
+	Tue,  2 Dec 2025 09:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=63.176.194.123
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764662609; cv=fail; b=kEGeKYiEnpjO2Wz0yezN8fbkVJOz29m5lry6xpO9vjNRJOEAjNukZrzT6QI7SY5m+kZ3aGZDdPyciV4M3wSV4ruchjFUZ5uLzTDnLJbnJj+IK9+zFNaUFsFnvItsV6/SVNAVMGUAL5Yug+ami4zp2H6EAdnXSB6GZgMtvF+X36Q=
+	t=1764666590; cv=fail; b=Sv/ElpbYMfLSUPjp4ozpU9GStslr2+7889Iq8Jm1yG4vRmxQPZbxEynaKG5QgdAN+15k6pGyn0hikSZb/GggicTJhWC0rjvbsTPg6W9kfShSybOYwhjjAxqM/aQKXlNoYCGyhj04bjA/ai9Gy3SIdzvU0zALEnBvaJ7UQx7oIIU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764662609; c=relaxed/simple;
-	bh=U4akiJbId3JRVKIbW7dnPhLU8nTgNsEYnpAdUT7upGY=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=HrUxrXXvAbThanE/7CmYju10kBINxGURh1Vw5cEeNeEg1E27GpnO1EmuMMMpXlrnEhIH9lW0v99x1vPlqTzf76MWS5sMRINwd1dC+ugeYhDfgpv4mDC8i4rey0F4zuFVSEf0JKoGRVGEO7Aiq8GlchC3LLd/bZLNly1Y76ckAEU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=WrsP5to+; dkim=pass (1024-bit key) header.d=mediateko365.onmicrosoft.com header.i=@mediateko365.onmicrosoft.com header.b=X5KJbDHw; arc=fail smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 5e38e3c8cf5511f0b2bf0b349165d6e0-20251202
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=MIME-Version:Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=U4akiJbId3JRVKIbW7dnPhLU8nTgNsEYnpAdUT7upGY=;
-	b=WrsP5to+oV99hs5uZTz/TtN2oeLdD9x4lgTJR093ZOYVYRKbsj55LfuRrd13BNFiRMRDDHShHcn3VNlKa9c4ZFle37FXQ0h+pCg7FCgFDlVIdsXOtBULkpZFu5P/sU+IzXCoAs7N6mE/Ar0pJAvzG+FFZt2I4T/DeoKtNXcGcx0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:8b2f9e96-a25b-4503-99fe-70cab40973f5,IP:0,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:-5
-X-CID-META: VersionHash:a9d874c,CLOUDID:310bf0a7-1697-4a34-a2ba-2404d254a770,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|110|111|836|888|898,
-	TC:-5,Content:0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BE
-	C:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 5e38e3c8cf5511f0b2bf0b349165d6e0-20251202
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-	(envelope-from <hanchien.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1866605677; Tue, 02 Dec 2025 16:03:20 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1748.26; Tue, 2 Dec 2025 16:03:19 +0800
-Received: from SG2PR04CU010.outbound.protection.outlook.com (172.21.101.237)
- by mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server id
- 15.2.1748.26 via Frontend Transport; Tue, 2 Dec 2025 16:03:19 +0800
+	s=arc-20240116; t=1764666590; c=relaxed/simple;
+	bh=pee/xNvcaWD1VcD1hPOUTmuoHK/fBDZpVUNxu5wJIdA=;
+	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Jpojc5UHjsALhemUEdT+HE2OtT0EkZfKJwK8G4d0xOAD1/zEXTmi7Vc4c3ugHkKh5J3Ij0pA1anO4vVHVk2iOjK3ielB7pjBkNuG3NZtt2m1CeZkhjhPQwIgrfFQCJhisYSBSginn3krWvctzhvlGJ6Ju+LlpOPtAEJOV4XAIVg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (2048-bit key) header.d=amazon.de header.i=@amazon.de header.b=tnUusfzc; arc=fail smtp.client-ip=63.176.194.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazoncorp2;
+  t=1764666587; x=1796202587;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   mime-version:content-transfer-encoding:subject;
+  bh=XVT60RiKSsqH5Hn/89krf1LRDicMVXOZZNRsCURY5tU=;
+  b=tnUusfzciyliwzuH1H6cKupASk7x8PpCXqAJ2f9nVf2/yqejKthGXDEe
+   08Rda0umP0Bt22AIp5zjGlNDxnOiQrZ3Efd2ZnpeAkcTzOEue2a0EiJmL
+   tmbZOdLSnEsoiVNGK0qEzFidOWbiySOMyakECwLyga88NEIzPVqWWUMZt
+   PKTmIgO0yiLN0hkFxoxBY4d7ZjWn2hfPrInH+Z6sQTCKfsKaMI4PlPbE3
+   vp4Nqh2rui1Jjxp8f8hmspqBUJwijEGI6QJLu/qxUG9471hEoZv7DVxQR
+   H5VJh3T4hynk9k7N2Nu1yeXNEHoIAWSIC3x3n+XfcC1LYKPYU5sP0LzBC
+   g==;
+X-CSE-ConnectionGUID: oTiZJacMQ4Wx9ds2BY28rg==
+X-CSE-MsgGUID: hMzwz7pNQVC5NkRvFZLckA==
+X-IronPort-AV: E=Sophos;i="6.20,242,1758585600"; 
+   d="scan'208";a="6105330"
+Subject: Re: [PATCH 2/2] tools/power/turbostat: Fix division by zero when TDP
+ calculation fails
+Thread-Topic: [PATCH 2/2] tools/power/turbostat: Fix division by zero when TDP calculation
+ fails
+Received: from ip-10-6-3-216.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.3.216])
+  by internal-fra-out-005.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 09:09:28 +0000
+Received: from EX19MTAEUA001.ant.amazon.com [54.240.197.233:17791]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.33.168:2525] with esmtp (Farcaster)
+ id cd8de5a0-e9c0-4d8f-abad-c80e80297cf9; Tue, 2 Dec 2025 09:09:28 +0000 (UTC)
+X-Farcaster-Flow-ID: cd8de5a0-e9c0-4d8f-abad-c80e80297cf9
+Received: from EX19EXOEUC001.ant.amazon.com (10.252.51.133) by
+ EX19MTAEUA001.ant.amazon.com (10.252.50.192) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
+ Tue, 2 Dec 2025 09:09:25 +0000
+Received: from EX19EXOEUB002.ant.amazon.com (10.252.51.83) by
+ EX19EXOEUC001.ant.amazon.com (10.252.51.133) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29;
+ Tue, 2 Dec 2025 09:09:24 +0000
+Received: from BEUP281CU002.outbound.protection.outlook.com (10.252.51.94) by
+ EX19EXOEUB002.ant.amazon.com (10.252.51.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.29
+ via Frontend Transport; Tue, 2 Dec 2025 09:09:24 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=K9HjVf2juC0rTz8siSw4QhvuJgKoabQYY3snRS2wtcY/kPCVu6+Zr7gXKuShl534QhkkbS4O8jWXlbAatr3fHcDMVvDKgtK4kADjGWkVaiF0kGAhWFpRzzVlVt4IuhXl4EtjF2DFXVNKElvejbLcsp8PXQtA3TRjLjaLy72l7v+VkpVL0FJVEFUYqjMbbYviEDLevEnAh+K8Q2vzWH0WcdJzsnouBs37UB5C7d16VYYrbC1oy0AK1p3f6RjN9Ts+xcnb5G/TNudpBFDyrM2r4PsDEVmLneaQuiJzA/BO4AOFxQqJWuU1Ma16E5Uj0gJgrUNHJiDeQgGFcGitsGoEVg==
+ b=tf2Ms3PEBTKEBDqgUm2M6+HzUM/WVcELznWqjPxfeipaoiZFeIG78tndz4xKRSi+XtSWQRrbuRTM6RCdrk6Yjmxcx3Ja4WS0jx3+XfgZ+CyrS9lugibQmYcOfts7yH/cvQl7XYgg+wOVGXY515xwniGJnF58+rSDe2zF4vNIdVmUTJFlvIGr5uqgd0q9H7saqxVKI6m50ibaq+Pi1j1fy7Y6Zlim/b1Kr0N3rqxx2yTUUuA/G5s/zVe9p+LxKnUDmaLXY4hoYhBpYDlqenizIR98JZVrrgBC5wv6iWvB40vkwEFcWm6R+i4u9BteQgiNQD8nLdFeFDDXs3Q7Bax27Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U4akiJbId3JRVKIbW7dnPhLU8nTgNsEYnpAdUT7upGY=;
- b=Squ7Ydi832XCM2pFhzkjRPM2VTP2GMd/nT0MNUBR6/w3hMQ0icqhNZ5BL1iUz6PI8TWVsxoVqzHqc983Mfus7RWrpYc0r/AWq4j34sNnm+lheYK7WS9mTXeDdyZwk559CYtL0Hx3isvCdhYuGi+zPdKhlxRCidNiDIkLIY4OmH1BMa00DrW3JRUgixVX8IuZt/DxlBzZNlBvqB3KHzkglaB9p4mZgacbKCamqQrQtzmUEESeHEJtHxhYIVp6glYMSsEmURWbL38wevQ5UwEyb+TgT5f84cR4wR+ffMgjS+z5boJYfnjsXtlZvViaUs0BN8Y/mvspPowf2coWHKnk/A==
+ bh=n7fJB4U3yEEMidUib6992gTDQmPjXQaHRAptzgTcuFQ=;
+ b=tp7XAccISzIBUPq7qXYzMlEwk3lkqOz+UBzm4EiLLb9TPvFvB2R/z7CEoRv3QNL8MehOkbcOdIgaD6CwZ5wZCTt1TfExu9n2Cbkah8gvGVSVsaBl54M7PJygO6ebUtkOQk5c9aRPs5U6m5zIQOhlJqqzmM58tJamaaK72NFowbM0ww5ZGbRuxDBhEZceE+BeadkaTmH4XcYYMqi0sMCdfRTH6YBWX2Zck8kPNdSAL+vWATkHHdwX/s2M0xh23PtiAR/+jKZut4ilRnILetgcJHiETXswZkuO0XrioINmnABAMlLtht6X6v96nzcsPU6KDxCu7RSxbsKtoxmSkM8pJQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U4akiJbId3JRVKIbW7dnPhLU8nTgNsEYnpAdUT7upGY=;
- b=X5KJbDHwT8ApcbKGx+xFbrBqAJidbFp+T3ePZVHm0MIIIWTwydre9HqQPe07taCYYqaX9iU6JoH9yxyfc47r2b4XLMgupBzuqsQeSRlE6AzmQwT0qQthrb7i+/Z62dYbv5eWeHiUtmoKJqDAzLMjTwltnzQ3zzg+6TprOOXv3Ac=
-Received: from TY2PPF3CC6FBD4C.apcprd03.prod.outlook.com (2603:1096:408::9cc)
- by SEZPR03MB8274.apcprd03.prod.outlook.com (2603:1096:101:18d::10) with
+ smtp.mailfrom=amazon.de; dmarc=pass action=none header.from=amazon.de;
+ dkim=pass header.d=amazon.de; arc=none
+Received: from FR2P281MB2685.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:62::10)
+ by FR5P281MB4547.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:11a::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Tue, 2 Dec
- 2025 08:03:14 +0000
-Received: from TY2PPF3CC6FBD4C.apcprd03.prod.outlook.com
- ([fe80::f951:8433:7cd7:5159]) by TY2PPF3CC6FBD4C.apcprd03.prod.outlook.com
- ([fe80::f951:8433:7cd7:5159%4]) with mapi id 15.20.9366.012; Tue, 2 Dec 2025
- 08:03:14 +0000
-From: =?utf-8?B?SGFuY2hpZW4gTGluICjmnpfnv7DorJkp?= <Hanchien.Lin@mediatek.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, "Matthias
- Brugger" <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, Balsam CHIHI <bchihi@baylibre.com>
-CC: =?utf-8?B?SXJ2aW5nLUNIIExpbiAo5p6X5bu65byYKQ==?=
-	<Irving-CH.Lin@mediatek.com>, =?utf-8?B?SmggSHN1ICjoqLHluIzlrZwp?=
-	<Jh.Hsu@mediatek.com>, =?utf-8?B?V0ggV3UgKOWQs+aWh+Wujyk=?=
-	<vincent.wu@mediatek.com>, =?utf-8?B?UmF5bW9uZCBTdW4gKOWtq+S/iuaWjCk=?=
-	<Raymond.Sun@mediatek.com>, =?utf-8?B?U2lyaXVzIFdhbmcgKOeOi+eak+aYsSk=?=
-	<Sirius.Wang@mediatek.com>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-mediatek@lists.infradead.org"
-	<linux-mediatek@lists.infradead.org>, Project_Global_Chrome_Upstream_Group
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: RE: [PATCH v2 1/2] arm64: dts: mediatek: mt8189: Add thermal
- controller node
-Thread-Topic: [PATCH v2 1/2] arm64: dts: mediatek: mt8189: Add thermal
- controller node
-Thread-Index: AQHcYqpP/uQt0tQ2sUykq05Ho3Gb27UMj+KAgAFu90A=
-Date: Tue, 2 Dec 2025 08:03:13 +0000
-Message-ID: <TY2PPF3CC6FBD4CC72C1EDEF5130C36D83BE0D8A@TY2PPF3CC6FBD4C.apcprd03.prod.outlook.com>
-References: <20251201100620.1557608-1-hanchien.lin@mediatek.com>
- <20251201100620.1557608-2-hanchien.lin@mediatek.com>
- <ea8e4201-f1c2-41cc-83ff-b509fd22bca2@kernel.org>
-In-Reply-To: <ea8e4201-f1c2-41cc-83ff-b509fd22bca2@kernel.org>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-dg-rorf: true
+ 2025 09:09:20 +0000
+Received: from FR2P281MB2685.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::c9:cd39:a76d:1af5]) by FR2P281MB2685.DEUP281.PROD.OUTLOOK.COM
+ ([fe80::c9:cd39:a76d:1af5%7]) with mapi id 15.20.9366.012; Tue, 2 Dec 2025
+ 09:09:20 +0000
+From: "Ehlert, Emily" <ehemily@amazon.de>
+To: Len Brown <lenb@kernel.org>
+CC: "Zhang, Rui" <rui.zhang@intel.com>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Emily Ehlert <ehemily@amazon.com>
+Thread-Index: AQHcYuUfHRPTFLhV6UW24ebNZtDfyLUNJ6AAgADnUmA=
+Date: Tue, 2 Dec 2025 09:09:19 +0000
+Message-ID: <FR2P281MB268504A9A1DD29C5BB7F0241BAD8A@FR2P281MB2685.DEUP281.PROD.OUTLOOK.COM>
+References: <20251113191609.28574-1-ehemily@amazon.de>
+ <20251113191609.28574-2-ehemily@amazon.de>
+ <CAJvTdK=_v9q2eGMB6qG3iaDhXMzQHz-EJ4NeDEfBe2fbv+wKfQ@mail.gmail.com>
+ <BEYP281MB5509D3D7A01DEC1FAAEB9DBDBADCA@BEYP281MB5509.DEUP281.PROD.OUTLOOK.COM>
+ <CAJvTdKnjreryLA9KuuobwJShbVseHOyujmXBAXRuSUDsCZxSVA@mail.gmail.com>
+ <BEYP281MB550957A6BA42B6371400472FBADBA@BEYP281MB5509.DEUP281.PROD.OUTLOOK.COM>
+ <CAJvTdK=Ty4W=5diU0D0JYHh70ZN4avKjodUoLhuz_D7+=3xcdA@mail.gmail.com>
+ <CAJvTdKmr=AVo7UQP28EeD6oLzyeOM+vGCjZZMBo1bV=4n1pcmg@mail.gmail.com>
+In-Reply-To: <CAJvTdKmr=AVo7UQP28EeD6oLzyeOM+vGCjZZMBo1bV=4n1pcmg@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
+ header.d=none;dmarc=none action=none header.from=amazon.de;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PPF3CC6FBD4C:EE_|SEZPR03MB8274:EE_
-x-ms-office365-filtering-correlation-id: 8b75add3-47c8-4512-3058-08de31793e5b
-x-ld-processed: a7687ede-7a6b-4ef6-bace-642f677fbe31,ExtAddr
+x-ms-traffictypediagnostic: FR2P281MB2685:EE_|FR5P281MB4547:EE_
+x-ms-office365-filtering-correlation-id: 0f156a48-78ab-48fe-2e0e-08de31827a33
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|921020|38070700021;
-x-microsoft-antispam-message-info: =?utf-8?B?a2JhWmhJcnlVcmVuUTMyV2tjcjczREU4NEtqczhIOElBWVd5UlhwQ3dpeW1N?=
- =?utf-8?B?QjI4dkxvZlBKQkxzdFNkVnhscDJiUmRvRGE1aEt1YWVSdi9YcTFQdlBweHRI?=
- =?utf-8?B?U2pKalpPMnd6Wm1jL0NVZGgzSU9VZUl6Y3dndkN0di9yK1JHOW1vRlVRNmhQ?=
- =?utf-8?B?eExjYlN0U1Z0YTlaZXhlUzViNDB5UllCVHdXS2Rza3RhWElwSGpHTU8vTWpi?=
- =?utf-8?B?b0JXemk5eHVuM1NJUEVsL1lKVGZ3RXJQTy82dnRHZ09SWWtBYUpiMi9RbzVH?=
- =?utf-8?B?NkpqMHlVSHlNeHNRQkc3d0NDMDJhSk9SRXNhaDJtUHRDZkR6MHV4RGlmYy9N?=
- =?utf-8?B?b09pKzF5MGVSc1FRN1RsNGVXdFNSS1UwVzVkYzNBSmE0SUZzUGJ3N0g1M0Nm?=
- =?utf-8?B?NSs0S2FLYjkzSEpoSHVuaEc2YXhVbW1VMk9wa0U1VS8vaDBIK0ZDSjJsTkl3?=
- =?utf-8?B?NEYraXF4V1ZIbUZCZm84d0l4WDR2RUlZZXFMNkZJc1d0aGtIRHRLbjBGTnlX?=
- =?utf-8?B?RERNaUx1cEkvK3JUaFRwVGNDTjRsTnljM082SjgrM1BOK2dHTXp3SEtwSnRU?=
- =?utf-8?B?MmErMmY0WW0wemhrd3pGVEhITTJGeStGS1doaUk3Q2hmVEMvN0c3blBLOFdX?=
- =?utf-8?B?MkNPV3hhWWx4UUNwalhQWXIzQWcvVHM2dExXaG5YdzVEakV6ODNwdy9YM1Z6?=
- =?utf-8?B?TU55SjFSQzJsZlNzZkJ4elBMdkFTU3ZGSkZQUWxnK3JCZ3FWUGEzWW5wN3dD?=
- =?utf-8?B?WkdvZWF1RURPcHNpS29ibENLNFVaU2FXMlhOT3cvdHVuVEpPUmFWVWFyYWdj?=
- =?utf-8?B?NDVuejdmN01kdk9uRHE1emc2dG9hZ1hBNjlvalFoY1N0VHJjbXVJWmRtS0dv?=
- =?utf-8?B?Nmg2WGo5VGZuQm9VOENlQjREbHo4MHd5cy9OaVJMRmF2a0xYM1g2VkpCdmh1?=
- =?utf-8?B?Q05BekxvSmtNbk5GMTZucXFlMUtibVUvS3RCcGxtdks0UFl4aDJlK2FZblJV?=
- =?utf-8?B?aUZWUndMbmlnUGNSMENIM0lkNWFvY2h1eTQ0b29hNmV0Y0NZM3JITS9NMFln?=
- =?utf-8?B?bzExVGRvNm5HWjdtM0JzOHV3V2hYb0xOclR6NUdlblJzVVdsOFVFMGdUSlNC?=
- =?utf-8?B?RHRqSDJQdEphc2huY3RDSmRsYzJBZkxkbUx3TXQrcEFFMjMvMFY1VFlSZ21V?=
- =?utf-8?B?d2VTRDdjSXlLWXNuTmNKL01wUHNMVEZ3bStpWXM3d25ZcER4ektvNU1lTmN2?=
- =?utf-8?B?ZkN6VWVvTDZsRGVYNVIvUXE2dStSMWJuZVkwajNHS2NPUnFNSGUrRmdtUTZp?=
- =?utf-8?B?NmlzdXFWcUdBMyswcy84T0t6WDlPTXF1OGllcElyczJhZTRoMWk0dTUzNzNq?=
- =?utf-8?B?V0sxV2Q2c0haNWVHUVExVTlHRkJ4NGRUQjkvaDNENVpTN3F6OXJIOTdWN243?=
- =?utf-8?B?UGFtcXdtRndrY1VGZ1h2L1hhZUlnMUtEOFM5Y3NNTHNSSHZKZGhlaGN1Q29r?=
- =?utf-8?B?bnlFQm9HbFk5bE8rNnlvQ0NQVXBBK1hmbVpVVlIxcDVJUUwxTldpWlVSU1l0?=
- =?utf-8?B?eHR5cFI3N1JGcHRaWW9FRklzYysrSXA3Y3Q0aU5oSUtuWGZ0ZWFiRVJuc2hz?=
- =?utf-8?B?VndGV2hWYzgrbk55R3dBYUoyNUtNS0Zsbm1wdnlHUlc5dnpzSnUzZGFOck40?=
- =?utf-8?B?WlhDcngrQW5KKzZuUC9FR1BqTWR0T0wrVkU2a21idSsrcHgxTGhYSEliRnVl?=
- =?utf-8?B?YmVDQnZjRi9FZlpSbndSb3lMbEpXRGRmc09WWUhqNVorTzBZTi9CQjN3RkVj?=
- =?utf-8?B?bUVTUmtwcFNBckdvN3RIaC95ejIwK0lhdXQ4MzVJK05qTVBXNW9YaXZlRFZw?=
- =?utf-8?B?R3ErbzlKSUxVVW1UdWNwOWlzRU9qY1oxRzJCc1R4dE5HRFZZYTdjUXVFYnhV?=
- =?utf-8?B?TTdmSnBDcjRaaVl0cEFoRlE4d2M5dFRlbmxGcmJWU3NOMFE1ZStsY01rM0lp?=
- =?utf-8?B?bkIwWE5WODg3Nzk2cXFyZFJOUGczWHNzMWxGVzYvbDBDN1NxZmM3RTE1TWFv?=
- =?utf-8?B?dzdqTnhIZ3QxQURRaW5MdXN1emFyQ0ZSMGYrUT09?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:zh-tw;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PPF3CC6FBD4C.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(921020)(38070700021);DIR:OUT;SFP:1101;
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700021;
+x-microsoft-antispam-message-info: =?us-ascii?Q?S9IWg0N/sUmA1qB2XXjBH2J3e+/Gzq6aoqa3gEO23xXtuXWF2+fR7qOSfsqp?=
+ =?us-ascii?Q?oPOIoli0Yp8WzSVRaAQauj05IvCmoDuCOmLoiaG0Rtu2BEs/5WVT2ZkoIO9b?=
+ =?us-ascii?Q?67OUeJz1lFFgYAs0aUTuHNBrWIyAai1U+EaQcZlzn1MUaW4zA+9P6bMx6SSh?=
+ =?us-ascii?Q?ggGWNypcCWBCD4gFs3dgBGw1nlvWo97dMNrpe33hsCBIW1rOLE9dMxMIGkSc?=
+ =?us-ascii?Q?Q56mR87nCvJKL+6DnSlnLMdU++ebLi5LGV2MscAwBRLyqTLOYDn28RVlwKvC?=
+ =?us-ascii?Q?8K7l3vAbIcCPQGB0u1myZGUqMuTArPeWI05yMe+15J+lLzO3MtbhdrVWLtPs?=
+ =?us-ascii?Q?sDs8HoIt9o1NeNUfBD008mP1apnTFpt9ZRsAUeHbD+0gTyZE7ox206k15vTb?=
+ =?us-ascii?Q?l7lThAP3nF9krqExtU8R13pq8HiFdRaFgpWlTy/YnbJQQSSmPkC/C6liQITq?=
+ =?us-ascii?Q?cIbSAt/9jxgC+jDHx541zO0i3lswrQGA0b7mX9rkAwzqZ2NOde+F6CbD0DPM?=
+ =?us-ascii?Q?uFX35qMsnTzcJbabdQweL/iirl0yxZpTUILciAUQwlnHBYCDaPt8ht5RD2z5?=
+ =?us-ascii?Q?ksAdGyya+RhzvyB8kTtNZUTvzmQuBpzdu/ROmRTyk9spzNE05MJCwstGXIYD?=
+ =?us-ascii?Q?INrCI9uV3Q+i4Sw4Itb8bv07+xcphF1uBN3Cr+ada2E3l3XC4QmDV5Glpw8h?=
+ =?us-ascii?Q?l+M9//J8mywBE/Z5wRhJcb8tJlKJs1RtprVqID5Z2Hx2/grnHOcGASJCb5eY?=
+ =?us-ascii?Q?el6A+9c7X1OjUWyvOTeDMPfHdVl5KdFeK+w6WLKvTOikbZSBe1H3montI277?=
+ =?us-ascii?Q?X9e1tBb3yTKW1cvBQiXl+5Ikq8nUhVFKgbHCRfsNIe4OdGygYgL/v6mWy0Da?=
+ =?us-ascii?Q?hn6wwTZjPGgHIMKbPMA3ZcGeLv3VD4s4N7Fdw6Ov1J25D7Ua8+DkEbB9P5le?=
+ =?us-ascii?Q?5bIdBKyTUvGZoWYoNVZuMxRgguHvQOLnObdswtAEnrhq4oPxzTblANXaUGv0?=
+ =?us-ascii?Q?x+Sq58uUm87At/LrFpDGjKgiD3Xs/BvUF2q0bOk6TCsG+69HsLdc9yW47Wnn?=
+ =?us-ascii?Q?zR7gFcixmSqVXAVKrBeHsTyE+Tgp5ZFXejdlovjkTEuwC7G/vEL7WWlMsKh0?=
+ =?us-ascii?Q?nAEHoLD2X0Jj2FZkMuUKJnMJOVNnqvHIrpqd0nPDn4KFBp7rox0+KHCZcETD?=
+ =?us-ascii?Q?M9WSXbBJTRtPKN0CThNfTtRWk0FU+9FlsEJAPC6NXX9K9/WuJb6ApBhjihil?=
+ =?us-ascii?Q?oSufWpDo/y331DzpF2opflnm99VP1L5IruSXXbRAo5swfADiULBQ9LdZli3G?=
+ =?us-ascii?Q?3k0vx9h7xIT7zq8/ObStYkd7wiQ+94ylO72+XEomMxDhkkjFJG9apt61rwpy?=
+ =?us-ascii?Q?PJN+fr6lDPihPBwIKwOP/ETvZKebHW16u9mtRILQp+c7E7bDPhJnugFej2EB?=
+ =?us-ascii?Q?zPGFz2j+CPnMImMhrwjIvYHdpeKE1P1wxlGV56vOMkAm1l8fOooOMufyTuWA?=
+ =?us-ascii?Q?5mY2hgPXdA12z0j4F/yGNGHc5awQJzW9uZnc?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:FR2P281MB2685.DEUP281.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700021);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YmxxcUE4SnNCKzdWdUh1NXZFRVduOXl5ZDFmRG1NdHp4c2hRUkUzZVBKM0xE?=
- =?utf-8?B?OTBPNTd3eTNSd1U4ZGlZaWl3b0dzTWN1dWVJQmk3TW9JYzFqQndmU0p4NlQ2?=
- =?utf-8?B?bXJJMVVIMGt6WkdXdzlJVUlXNDNMS3NMWXpXY2FXQ1kyVThub1hhYUhHcC9a?=
- =?utf-8?B?a3ZOcFZyUGQ0M2Y0U0xWWk80NnAxbXhqb01raEF6djkrWU9iZUhFbmNsZ04v?=
- =?utf-8?B?NVZYVmdmdDlJM2JTdmt1TGd6bjJNQ3JLaDBaMC9hUTgwSkQrbFdtMzh4V0NF?=
- =?utf-8?B?R0k1NXNhRkozbUJNK09QOTZXbm82SFN5WGJkV1Q0WEYxQlpvb2drRjE0b1hH?=
- =?utf-8?B?M2Z3YkU5dGI2VWVTLzNDYzkyQW9pYlZWNHBrbEFWcGVRSXEzY3lsWVYrSHZD?=
- =?utf-8?B?OXNHTkxzU2ZwUnJaRjI5U21BS1J3TEErZXNzTXFBVDZRbTNwREp3L0xNV2FV?=
- =?utf-8?B?VFl1OEhFSm01MFJZQkMrT3owK0l6QVlFMk5BVGwvVFMxMURJQXR3U1FaM0NU?=
- =?utf-8?B?ZXJUcVB1VnhWbnJCRkdiRmFpQkxudDhRZmtQRnpuaGpzb3FtVUNRWXZLL3BK?=
- =?utf-8?B?SS9CSXNlemplOXJUYTVkZ0w1VTNuYkJXUVNZdUU2TFl6NXpTS1B2b2RtQjFV?=
- =?utf-8?B?SFU2OUxrem45a2Q4OWE1OGVXdFRsU3JTY1YvM3lZSWpESysrNkxucG1mNGRj?=
- =?utf-8?B?WVU1WEQ2K0YzV1BlaWVMNCtCenVJUzd4KzdsR3hNd0R2bEVNSWNOY0lDaTdq?=
- =?utf-8?B?bWVieXVOQ3c0V0NBVXBwYnowOGZXcjhHYVpIVVVxbForVHBmR2txU0xWSU8r?=
- =?utf-8?B?VDhERlBCWk1OUUFyZ3BwdGkzQ3k3RHo5dDJySnVzZURVcUR2Q3JVTXkwREpi?=
- =?utf-8?B?ell4ZG5IYlB5N210M0hkbDhTUGVNdzQ4QUdIeTdnTzNmR0pBcnNZc3FZQjU1?=
- =?utf-8?B?bm90UTFDdnBKZkMrSFdmWE56UmtkbmlkNHBoNmFVaGg4TzhnYm45cGRTREha?=
- =?utf-8?B?b2F3M1Z6b3lXeFF2SXc5bnNnL0FTNUcrSTVFbmNEWU5ROUxReTI2a1R4dmF3?=
- =?utf-8?B?dnhadU5naEY2Mm1aUGhNNk1pOVFGcmRQWlBUd2pmZVNvWWJKeXBvZUg0Yzlr?=
- =?utf-8?B?ZWhTSDVRdzNGWFI5em9XcnFjdVpmWXhWOHhSVElobmtqWEZsbzZHams2OCtZ?=
- =?utf-8?B?aytrb09xZWNaRm5RMWI5NGtwNHltRlc3b3RBVko0RDhHb3dDN1BZUlBpNmsv?=
- =?utf-8?B?WFZTaU8vRUpoQVZ3UUJ2b21xU3NjTlFBYUkyaXhSYUM5TzdkcmpmRG1admZu?=
- =?utf-8?B?aGptTzRnMGh5ZUJnUGU3a05NV2lUWXhkVVVDeG8yU3Q2MGNqeU55RW1OUXF0?=
- =?utf-8?B?VzRnYzNlR3JlV01LbCt2L2JFU1A2TXM5THBaclZHb1drQmFvbHlYY01mRWN4?=
- =?utf-8?B?K0ZZcURJZmwwTXdvK3B2RFF4WlJJVmdUcG9jZkFLL2gvR2tRRytZejVoS1Ex?=
- =?utf-8?B?UWNGZmxFTVZ1V2pCNUNhSWwwTjZLTndyR1Q4OWZ0b0ovZkdDeGpCMmtPa0hR?=
- =?utf-8?B?TjBuaXc3RnFmb3lrbzVjbTBCaEZLMER6cnZReDhwaGlCazVWUEF5WGxUeGdi?=
- =?utf-8?B?V3RXZmM0ZE9HQWtIS2V0dk9wOE5yYXUzUVhYYUhvQnNwbVBCeGdsWDcrNmlQ?=
- =?utf-8?B?Mmg0WlJYSGMzYlRpUENhU2ZOVGliQnFWS21oZWYyK09jNjhSa25XanFKeFhu?=
- =?utf-8?B?ZGtYZFFRQ3ZwQzhORFV5cU44YXFzSmZvekVlcjZiVTdrTnJnTTlaRlNka25x?=
- =?utf-8?B?SVZZeW9JdDlxS3E2eVhST3dWejB3U3R5Z2V5S2JSMXdsa0pkeDNONWtNblBQ?=
- =?utf-8?B?Z3NoMVJYN2l5VFVzckg1SUNwUUF5d1lMYWpiTWlEWFA0bWlrd3BrVDByNklD?=
- =?utf-8?B?ejV1dnpQTWVZeXlxV05TMVZhZWVZUmQ2S1FIRGh4cCtOYS8wZDV5MkQrVUVI?=
- =?utf-8?B?K3lCeThyT2VTUi8xenViSUhNdktLT0hkMkhxYzFRRVZKeGMxVVJFNmtoTlo5?=
- =?utf-8?B?cWtXZnRyWEdOMldzTUpFQldvSDJWSTRnNkIrdDVSV2I4UkRKblNoR3dLRUtm?=
- =?utf-8?Q?j9oIw15ZyiUwx1JPQx3q6Ek9u?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hC6BUnykfWWSPWO0WJw22xw8AnJB0j6R/+9YVYgYPG+RPekCVSFFLMxwC/pz?=
+ =?us-ascii?Q?GJ7vkv+/5naCDkuUCO33GnnbNQ2yo143dfSe68fyJjWfcbWk18OOyySySjFH?=
+ =?us-ascii?Q?iHzk08YHebW6eGE54p5gyw/Jjv9zKzxSTiRofnegptLesGslfARbgvLTgQb7?=
+ =?us-ascii?Q?FrXNsiZTo28MDTApyzw2hwpsMQsnxF8iAAu4EV1HnFbTKmaTxKLpZoSxunpI?=
+ =?us-ascii?Q?HHIdmziGRfxETxsEtmXy1QnrAVhsicoy16n3BXOzCHTb+I+ZpAwKhkNuPxUi?=
+ =?us-ascii?Q?HeOHaGnpTDx+15yiGXjAK+/YpK4M8xxT4WVG60L5YrkavCswr2Z3ipxYVZw/?=
+ =?us-ascii?Q?5EBKKsWfV1QuY8eYvkVXXp2Kr5y6vxDCrO37sz5Ixjm6/DeBEhYYzbRo6sQI?=
+ =?us-ascii?Q?qnGBaNvSvSMl7xqCjgox3tsJ6R8fV3KxB3yBRitHsEIqu04QdHlplL75NEgs?=
+ =?us-ascii?Q?LSbQKa0A2BmwztZGPkIHdX4Q4SoIIYEbv+xUFkEe+HwEikQp9Z0woUv9t+CN?=
+ =?us-ascii?Q?bueUbbiPb2vm/+mS/yTr3uSYBZekffEzaXNW/xW/OX57rPqEKZny9F55VZum?=
+ =?us-ascii?Q?69bRjdK8BGrmMisCrqYK6YXf5W7V7xNi7CgDOvmGQtG3+pJAiqXIko9zEifE?=
+ =?us-ascii?Q?LDGatL1r0o67LGpGA4YEAcK0QqIDPxzArkePVrmh0oGrRt3LzXMfxm/mViTQ?=
+ =?us-ascii?Q?YFYDnPz2ijlh20UyBDyVyuOa6mOQEDsMI4npyBwLqQxrZmo+3oIY5OIdnVxQ?=
+ =?us-ascii?Q?fSnEf4Ib8WY2vjxsTeCQ4RWwBDnB/gTGfbip5hc8dwPBQ8LJ9mzI2rLFIU2C?=
+ =?us-ascii?Q?hSQ+b58vHDGXo7nU2Os5m78x8kp83iHIgiEu8m7ASXupkwQZcMqBcweTI/wv?=
+ =?us-ascii?Q?BEacLBuzrUrAQnBTVFM1qBgYR9yNt6dhitEXp93ppnnOXFWy+zRUgMKx5T5Y?=
+ =?us-ascii?Q?6nFlUtFGEy4sWJ57QNfJdH1futF86ld4bMrB9S10cBq+rscEVS8ILmHTZD5x?=
+ =?us-ascii?Q?RyUtFV3aJ4HgrTKZ+sgpqTAHJ4/YnNHgMgRS0mGngvbYpi/45b03z2zyAGH0?=
+ =?us-ascii?Q?VdUjuuyFJ+xYD865DnLVhzJHoj67VRstL1xFZVylsppjzeGFSItKXyRHRhL3?=
+ =?us-ascii?Q?kEHw3/7GjMegPhxpy/ILLIrOjLdhNmFApr1jvGZ4a/QO8U9zBKGMR0b0GtFs?=
+ =?us-ascii?Q?xr5HThpigXrsdFBcqOAx6bF0r0RQw+FpNdwDc58DLJU2k+R/6JanpTJQFpKK?=
+ =?us-ascii?Q?Do3kvCWqHJudAGCo6jOj4HXh+miWtQpxLB46P+lQMjsLtmN7CvQDM9MmxUiw?=
+ =?us-ascii?Q?pc+m8dU4Rhmy1c5Z+acQFBveWPJst3l6qT9ugIqohkFVTZcQeeXBKTrib75o?=
+ =?us-ascii?Q?EKSMak58sHbBHJnpRJ4VEu0sbsB5/bWVXxO+Ad7V/A1afrctrQCzJp3T36Qj?=
+ =?us-ascii?Q?b+cD1sSjABMeZHQ3CVQuAwOUrebCXlcdSHRms7rIpVXZJHkpxQv6UI0TBOh1?=
+ =?us-ascii?Q?Kmj0ox341smNNZWdnN58M2768njBOfhZpcw+NnwBNdUVSF5qYr7dQ+9VxQ+v?=
+ =?us-ascii?Q?K9ilFHNI3nW1FgWUkg4=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -211,48 +182,646 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PPF3CC6FBD4C.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8b75add3-47c8-4512-3058-08de31793e5b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2025 08:03:13.9829
+X-MS-Exchange-CrossTenant-AuthSource: FR2P281MB2685.DEUP281.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0f156a48-78ab-48fe-2e0e-08de31827a33
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2025 09:09:19.8424
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
+X-MS-Exchange-CrossTenant-id: 5280104a-472d-4538-9ccf-1e1d0efe8b1b
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OhW+bvRd8wZYrAq9KyGrpkoxQ/z8FsMthWfZPZGt97JVhw2VHNycPB/LUnKk7ErfYbzyCdVb/4xwYNsRvl/GTTIZgqcq2v+adCsRPISJr04=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR03MB8274
+X-MS-Exchange-CrossTenant-userprincipalname: p4uRPiXTfSKSdf2BroByi/QPMpnnmP/Q1YUAhOlerqmFcGBaP7wfvP6/fM8fO39wA6x1dD5tLVDaHT3nW283rw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FR5P281MB4547
+X-OriginatorOrg: amazon.de
+Content-Transfer-Encoding: quoted-printable
 
-SGkgS3J6eXN6dG9mLA0KDQpUaGFuayB5b3UgZm9yIHlvdXIgZmVlZGJhY2ssIGFuZCBJIGFwb2xv
-Z2l6ZSBmb3IgbWlzc2luZyB5b3VyIHByZXZpb3VzIGNvbW1lbnRzLiBJIHdpbGwgY2FyZWZ1bGx5
-IHJldmlldyBhbGwgdGhlIGZlZWRiYWNrIGFuZCBtYWtlIHRoZSBuZWNlc3NhcnkgY2hhbmdlcyBp
-biB0aGUgbmV4dCB2ZXJzaW9uIG9mIHRoZSBwYXRjaC4NCg0KU29ycnkgZm9yIHRoZSBpbmNvbnZl
-bmllbmNlIGNhdXNlZC4NCg0KQmVzdCByZWdhcmRzLA0KSGFuY2hpZW4gTGluLg0KDQotLS0tLU9y
-aWdpbmFsIE1lc3NhZ2UtLS0tLQ0KRnJvbTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6a0BrZXJu
-ZWwub3JnPiANClNlbnQ6IE1vbmRheSwgRGVjZW1iZXIgMSwgMjAyNSA2OjEwIFBNDQpUbzogSGFu
-Y2hpZW4gTGluICjmnpfnv7DorJkpIDxIYW5jaGllbi5MaW5AbWVkaWF0ZWsuY29tPjsgUmFmYWVs
-IEogLiBXeXNvY2tpIDxyYWZhZWxAa2VybmVsLm9yZz47IERhbmllbCBMZXpjYW5vIDxkYW5pZWwu
-bGV6Y2Fub0BsaW5hcm8ub3JnPjsgWmhhbmcgUnVpIDxydWkuemhhbmdAaW50ZWwuY29tPjsgTHVr
-YXN6IEx1YmEgPGx1a2Fzei5sdWJhQGFybS5jb20+OyBSb2IgSGVycmluZyA8cm9iaEBrZXJuZWwu
-b3JnPjsgS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6aytkdEBrZXJuZWwub3JnPjsgQ29ub3IgRG9v
-bGV5IDxjb25vcitkdEBrZXJuZWwub3JnPjsgUGhpbGlwcCBaYWJlbCA8cC56YWJlbEBwZW5ndXRy
-b25peC5kZT47IE1hdHRoaWFzIEJydWdnZXIgPG1hdHRoaWFzLmJnZ0BnbWFpbC5jb20+OyBBbmdl
-bG9HaW9hY2NoaW5vIERlbCBSZWdubyA8YW5nZWxvZ2lvYWNjaGluby5kZWxyZWdub0Bjb2xsYWJv
-cmEuY29tPjsgQmFsc2FtIENISUhJIDxiY2hpaGlAYmF5bGlicmUuY29tPg0KQ2M6IElydmluZy1D
-SCBMaW4gKOael+W7uuW8mCkgPElydmluZy1DSC5MaW5AbWVkaWF0ZWsuY29tPjsgSmggSHN1ICjo
-qLHluIzlrZwpIDxKaC5Ic3VAbWVkaWF0ZWsuY29tPjsgV0ggV3UgKOWQs+aWh+WujykgPHZpbmNl
-bnQud3VAbWVkaWF0ZWsuY29tPjsgUmF5bW9uZCBTdW4gKOWtq+S/iuaWjCkgPFJheW1vbmQuU3Vu
-QG1lZGlhdGVrLmNvbT47IFNpcml1cyBXYW5nICjnjovnmpPmmLEpIDxTaXJpdXMuV2FuZ0BtZWRp
-YXRlay5jb20+OyBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmc7IGRldmljZXRyZWVAdmdlci5rZXJu
-ZWwub3JnOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51eC1hcm0ta2VybmVsQGxp
-c3RzLmluZnJhZGVhZC5vcmc7IGxpbnV4LW1lZGlhdGVrQGxpc3RzLmluZnJhZGVhZC5vcmc7IFBy
-b2plY3RfR2xvYmFsX0Nocm9tZV9VcHN0cmVhbV9Hcm91cCA8UHJvamVjdF9HbG9iYWxfQ2hyb21l
-X1Vwc3RyZWFtX0dyb3VwQG1lZGlhdGVrLmNvbT4NClN1YmplY3Q6IFJlOiBbUEFUQ0ggdjIgMS8y
-XSBhcm02NDogZHRzOiBtZWRpYXRlazogbXQ4MTg5OiBBZGQgdGhlcm1hbCBjb250cm9sbGVyIG5v
-ZGUNCg0KDQpFeHRlcm5hbCBlbWFpbCA6IFBsZWFzZSBkbyBub3QgY2xpY2sgbGlua3Mgb3Igb3Bl
-biBhdHRhY2htZW50cyB1bnRpbCB5b3UgaGF2ZSB2ZXJpZmllZCB0aGUgc2VuZGVyIG9yIHRoZSBj
-b250ZW50Lg0KDQoNCk9uIDAxLzEyLzIwMjUgMTE6MDYsIEhhbmNoaWVuIExpbiB3cm90ZToNCj4g
-QWRkIGRldmljZSB0cmVlIG5vZGUgZm9yIHRoZSB0aGVybWFsIGNvbnRyb2xsZXIgb24gTWVkaWFU
-ZWsgTVQ4MTg5IFNvQy4NCj4NCj4gU2lnbmVkLW9mZi1ieTogSGFuY2hpZW4gTGluIDxoYW5jaGll
-bi5saW5AbWVkaWF0ZWsuY29tPg0KDQoNCk5vdGhpbmcgaW1wcm92ZWQuIFlvdSBqdXN0IGNvbXBs
-ZXRlbHkgaWdub3JlZCBmZWVkYmFjayBleHBlY3RpbmcgcmV2aWV3ZXJzIHRvIHJlcGVhdCB0aGVt
-c2VsZi4NCg0KTkFLDQoNCkJlc3QgcmVnYXJkcywNCktyenlzenRvZg0K
+Thanks for the patch. I think there is one small mistake leading to RAPL no=
+t being disabled properly if the read is 0. This patch here should fix it a=
+nd makes turbostat run with good values.
+
+```
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbos=
+tat/turbostat.c
+index c2b72b4e80c4..b5da37ce5ac7 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -7986,9 +7986,11 @@ void probe_rapl_msrs(void)
+                        fprintf(outf, "Can not read RAPL_PKG_ENERGY MSR(0x%=
+llx)\n", (unsigned long long)offset);
+                return;
+        }
+-       if (msr_value =3D=3D 0)
++       if (msr_value =3D=3D 0) {
+                if (debug)
+                        fprintf(outf, "RAPL_PKG_ENERGY MSR(0x%llx) =3D=3D Z=
+ERO: disabling all RAPL MSRs\n", (unsigned long long)offset);
++               return;
++       }
+
+        valid_rapl_msrs =3D platform->plat_rapl_msrs;             /* succes=
+s */
+ }
+```
+
+Log output of turbostat with this patch applied:
+```
+turbostat version 2025.12.01 - Len Brown <lenb@kernel.org>
+Kernel command line: BOOT_IMAGE=3D/vmlinuz-6.14.0-1015-aws root=3DPARTUUID=
+=3Dcd553419-794d-4da4-9ba5-c355f5f9f74d ro console=3Dtty1 console=3DttyS0 n=
+vme_core.io_timeout=3D4294967295 panic=3D-1
+add_counter(msr0, cpuidle/state3/time, C6%, width64, scope0, type3, format2=
+, flags2, id0)
+add_counter(msr0, cpuidle/state2/time, C1E%, width64, scope0, type3, format=
+2, flags2, id0)
+find_msrp_by_name: C1E% C6%
+add_counter(msr0, cpuidle/state1/time, C1%, width64, scope0, type3, format2=
+, flags2, id0)
+find_msrp_by_name: C1% C1E%
+find_msrp_by_name: C1% C6%
+add_counter(msr0, cpuidle/state0/time, POLL%, width64, scope0, type3, forma=
+t2, flags2, id0)
+find_msrp_by_name: POLL% C1%
+find_msrp_by_name: POLL% C1E%
+find_msrp_by_name: POLL% C6%
+add_counter(msr0, cpuidle/state3/below, C6+, width64, scope0, type0, format=
+1, flags2, id0)
+find_msrp_by_name: C6+ POLL%
+find_msrp_by_name: C6+ C1%
+find_msrp_by_name: C6+ C1E%
+find_msrp_by_name: C6+ C6%
+add_counter(msr0, cpuidle/state3/usage, C6, width64, scope0, type0, format1=
+, flags2, id0)
+find_msrp_by_name: C6 C6+
+find_msrp_by_name: C6 POLL%
+find_msrp_by_name: C6 C1%
+find_msrp_by_name: C6 C1E%
+find_msrp_by_name: C6 C6%
+add_counter(msr0, cpuidle/state3/above, C6-, width64, scope0, type0, format=
+1, flags2, id0)
+find_msrp_by_name: C6- C6
+find_msrp_by_name: C6- C6+
+find_msrp_by_name: C6- POLL%
+find_msrp_by_name: C6- C1%
+find_msrp_by_name: C6- C1E%
+find_msrp_by_name: C6- C6%
+add_counter(msr0, cpuidle/state2/below, C1E+, width64, scope0, type0, forma=
+t1, flags2, id0)
+find_msrp_by_name: C1E+ C6-
+find_msrp_by_name: C1E+ C6
+find_msrp_by_name: C1E+ C6+
+find_msrp_by_name: C1E+ POLL%
+find_msrp_by_name: C1E+ C1%
+find_msrp_by_name: C1E+ C1E%
+find_msrp_by_name: C1E+ C6%
+add_counter(msr0, cpuidle/state2/usage, C1E, width64, scope0, type0, format=
+1, flags2, id0)
+find_msrp_by_name: C1E C1E+
+find_msrp_by_name: C1E C6-
+find_msrp_by_name: C1E C6
+find_msrp_by_name: C1E C6+
+find_msrp_by_name: C1E POLL%
+find_msrp_by_name: C1E C1%
+find_msrp_by_name: C1E C1E%
+find_msrp_by_name: C1E C6%
+add_counter(msr0, cpuidle/state2/above, C1E-, width64, scope0, type0, forma=
+t1, flags2, id0)
+find_msrp_by_name: C1E- C1E
+find_msrp_by_name: C1E- C1E+
+find_msrp_by_name: C1E- C6-
+find_msrp_by_name: C1E- C6
+find_msrp_by_name: C1E- C6+
+find_msrp_by_name: C1E- POLL%
+find_msrp_by_name: C1E- C1%
+find_msrp_by_name: C1E- C1E%
+find_msrp_by_name: C1E- C6%
+add_counter(msr0, cpuidle/state1/below, C1+, width64, scope0, type0, format=
+1, flags2, id0)
+find_msrp_by_name: C1+ C1E-
+find_msrp_by_name: C1+ C1E
+find_msrp_by_name: C1+ C1E+
+find_msrp_by_name: C1+ C6-
+find_msrp_by_name: C1+ C6
+find_msrp_by_name: C1+ C6+
+find_msrp_by_name: C1+ POLL%
+find_msrp_by_name: C1+ C1%
+find_msrp_by_name: C1+ C1E%
+find_msrp_by_name: C1+ C6%
+add_counter(msr0, cpuidle/state1/usage, C1, width64, scope0, type0, format1=
+, flags2, id0)
+find_msrp_by_name: C1 C1+
+find_msrp_by_name: C1 C1E-
+find_msrp_by_name: C1 C1E
+find_msrp_by_name: C1 C1E+
+find_msrp_by_name: C1 C6-
+find_msrp_by_name: C1 C6
+find_msrp_by_name: C1 C6+
+find_msrp_by_name: C1 POLL%
+find_msrp_by_name: C1 C1%
+find_msrp_by_name: C1 C1E%
+find_msrp_by_name: C1 C6%
+add_counter(msr0, cpuidle/state1/above, C1-, width64, scope0, type0, format=
+1, flags2, id0)
+find_msrp_by_name: C1- C1
+find_msrp_by_name: C1- C1+
+find_msrp_by_name: C1- C1E-
+find_msrp_by_name: C1- C1E
+find_msrp_by_name: C1- C1E+
+find_msrp_by_name: C1- C6-
+find_msrp_by_name: C1- C6
+find_msrp_by_name: C1- C6+
+find_msrp_by_name: C1- POLL%
+find_msrp_by_name: C1- C1%
+find_msrp_by_name: C1- C1E%
+find_msrp_by_name: C1- C6%
+add_counter(msr0, cpuidle/state0/usage, POLL, width64, scope0, type0, forma=
+t1, flags2, id0)
+find_msrp_by_name: POLL C1-
+find_msrp_by_name: POLL C1
+find_msrp_by_name: POLL C1+
+find_msrp_by_name: POLL C1E-
+find_msrp_by_name: POLL C1E
+find_msrp_by_name: POLL C1E+
+find_msrp_by_name: POLL C6-
+find_msrp_by_name: POLL C6
+find_msrp_by_name: POLL C6+
+find_msrp_by_name: POLL POLL%
+find_msrp_by_name: POLL C1%
+find_msrp_by_name: POLL C1E%
+find_msrp_by_name: POLL C6%
+add_counter(msr0, cpuidle/state0/above, POLL-, width64, scope0, type0, form=
+at1, flags2, id0)
+find_msrp_by_name: POLL- POLL
+find_msrp_by_name: POLL- C1-
+find_msrp_by_name: POLL- C1
+find_msrp_by_name: POLL- C1+
+find_msrp_by_name: POLL- C1E-
+find_msrp_by_name: POLL- C1E
+find_msrp_by_name: POLL- C1E+
+find_msrp_by_name: POLL- C6-
+find_msrp_by_name: POLL- C6
+find_msrp_by_name: POLL- C6+
+find_msrp_by_name: POLL- POLL%
+find_msrp_by_name: POLL- C1%
+find_msrp_by_name: POLL- C1E%
+find_msrp_by_name: POLL- C6%
+cpu 0 pkg 0 die 0 l3 0 node 0 lnode 0 core 0 thread 0
+cpu 1 pkg 0 die 0 l3 0 node 0 lnode 0 core 1 thread 0
+cpu 2 pkg 0 die 0 l3 0 node 0 lnode 0 core 2 thread 0
+cpu 3 pkg 0 die 0 l3 0 node 0 lnode 0 core 3 thread 0
+cpu 4 pkg 0 die 0 l3 0 node 0 lnode 0 core 0 thread 1
+cpu 5 pkg 0 die 0 l3 0 node 0 lnode 0 core 1 thread 1
+cpu 6 pkg 0 die 0 l3 0 node 0 lnode 0 core 2 thread 1
+cpu 7 pkg 0 die 0 l3 0 node 0 lnode 0 core 3 thread 1
+CPUID(0): GenuineIntel 0x1f CPUID levels
+CPUID(1): family:model:stepping 0x6:8f:8 (6:143:8) microcode 0x2b000643
+CPUID(0x80000000): max_extended_levels: 0x80000008
+CPUID(1): SSE3 MONITOR - - - TSC MSR - HT -
+CPUID(6): APERF, TURBO, No-DTS, No-PTM, No-HWP, No-HWPnotify, No-HWPwindow,=
+ No-HWPepp, No-HWPpkg, No-EPB
+cpu0: MSR_IA32_MISC_ENABLE: 0x00000001 (No-TCC No-EIST No-MWAIT PREFETCH TU=
+RBO)
+CPUID(7): No-SGX No-Hybrid
+CPUID(0x16): base_mhz: 0 max_mhz: 0 bus_mhz: 0
+cpu0: MSR_PLATFORM_INFO: 0x80080001800
+8 * 100.0 =3D 800.0 MHz max efficiency frequency
+24 * 100.0 =3D 2400.0 MHz base frequency
+cpu0: MSR_TURBO_RATIO_LIMIT: 0x2020212123242526
+cpu0: MSR_TURBO_RATIO_LIMIT1: 0x302e2c2a26221e18
+32 * 100.0 =3D 3200.0 MHz max turbo 48 active cores
+32 * 100.0 =3D 3200.0 MHz max turbo 46 active cores
+33 * 100.0 =3D 3300.0 MHz max turbo 44 active cores
+33 * 100.0 =3D 3300.0 MHz max turbo 42 active cores
+35 * 100.0 =3D 3500.0 MHz max turbo 38 active cores
+36 * 100.0 =3D 3600.0 MHz max turbo 34 active cores
+37 * 100.0 =3D 3700.0 MHz max turbo 30 active cores
+38 * 100.0 =3D 3800.0 MHz max turbo 24 active cores
+cpu0: MSR_CONFIG_TDP_NOMINAL: 0x00000000 (base_ratio=3D0)
+cpu0: MSR_CONFIG_TDP_LEVEL_1: 0x00000000 ()
+cpu0: MSR_CONFIG_TDP_LEVEL_2: 0x00000000 ()
+cpu0: MSR_CONFIG_TDP_CONTROL: 0x00000000 ( lock=3D0)
+cpu0: MSR_TURBO_ACTIVATION_RATIO: 0x00000000 (MAX_NON_TURBO_RATIO=3D0 lock=
+=3D0)
+NSFOD /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
+cpu0: MSR_MISC_PWR_MGMT: 0x00000100 (ENable-EIST_Coordination DISable-EPB E=
+Nable-OOB)
+cpu0: MSR_IA32_POWER_CTL: 0x00000000 (C1E auto-promotion: DISabled)
+C-state Pre-wake: ENabled
+cpu0: MSR_PKG_CST_CONFIG_CONTROL: 0x00008000 (locked, pkg-cstate-limit=3D0 =
+(pc0))
+/dev/cpu_dma_latency: 2000000000 usec (default)
+current_driver: intel_idle
+current_governor: menu
+current_governor_ro: menu
+cpu0: POLL: CPUIDLE CORE POLL IDLE
+cpu0: C1: MWAIT 0x00
+cpu0: C1E: MWAIT 0x01
+cpu0: C6: MWAIT 0x20
+cpu0: MSR_PKGC6_IRTL: 0x00000000 (NOTvalid, 0 ns)
+RAPL_PKG_ENERGY MSR(0x611) =3D=3D ZERO: disabling all RAPL MSRs
+cpu0: MSR_MISC_FEATURE_CONTROL: 0x00000000 (L2-Prefetch L2-Prefetch-pair L1=
+-Prefetch L1-IP-Prefetch)
+add_msr_perf_counter: msr/aperf: 6 (cpu: 0)
+add_msr_perf_counter: msr/aperf: 7 (cpu: 1)
+add_msr_perf_counter: msr/aperf: 8 (cpu: 2)
+add_msr_perf_counter: msr/aperf: 9 (cpu: 3)
+add_msr_perf_counter: msr/aperf: 10 (cpu: 4)
+add_msr_perf_counter: msr/aperf: 11 (cpu: 5)
+add_msr_perf_counter: msr/aperf: 12 (cpu: 6)
+add_msr_perf_counter: msr/aperf: 13 (cpu: 7)
+add_msr_perf_counter: msr/mperf: 14 (cpu: 0)
+add_msr_perf_counter: msr/mperf: 15 (cpu: 1)
+add_msr_perf_counter: msr/mperf: 16 (cpu: 2)
+add_msr_perf_counter: msr/mperf: 17 (cpu: 3)
+add_msr_perf_counter: msr/mperf: 18 (cpu: 4)
+add_msr_perf_counter: msr/mperf: 19 (cpu: 5)
+add_msr_perf_counter: msr/mperf: 20 (cpu: 6)
+add_msr_perf_counter: msr/mperf: 21 (cpu: 7)
+add_msr_perf_counter: msr/smi: 22 (cpu: 0)
+add_msr_perf_counter: msr/smi: 23 (cpu: 1)
+add_msr_perf_counter: msr/smi: 24 (cpu: 2)
+add_msr_perf_counter: msr/smi: 25 (cpu: 3)
+add_msr_perf_counter: msr/smi: 26 (cpu: 4)
+add_msr_perf_counter: msr/smi: 27 (cpu: 5)
+add_msr_perf_counter: msr/smi: 28 (cpu: 6)
+add_msr_perf_counter: msr/smi: 29 (cpu: 7)
+Failed to parse perf counter info /sys/bus/event_source/devices/power/event=
+s/energy-pkg.scale
+Failed to parse perf counter info /sys/bus/event_source/devices/power/event=
+s/energy-pkg.scale
+Failed to parse perf counter info /sys/bus/event_source/devices/power/event=
+s/energy-cores.scale
+Failed to parse perf counter info /sys/bus/event_source/devices/power/event=
+s/energy-ram.scale
+Failed to parse perf counter info /sys/bus/event_source/devices/power/event=
+s/energy-gpu.scale
+Failed to parse perf counter info /sys/bus/event_source/devices/power/event=
+s/energy-psys.scale
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_core=
+/type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+Failed to parse perf counter info /sys/bus/event_source/devices/cstate_pkg/=
+type
+usec    Time_Of_Day_Seconds     Core    CPU     APIC    X2APIC  Avg_MHz Bus=
+y%   Bzy_MHz TSC_MHz IPC     IRQ     NMI     SMI     LLCkRPS LLC%hit POLL- =
+          POLL            C1-             C1              C1+             C=
+1E-            C1E             C1E+            C6-             C6          =
+    C6+             POLL%           C1%             C1E%            C6%    =
+         CPU%c1  CPU%c6
+ 1632   1764666333.980537       -       -       -       -       17      0.4=
+9    3502    2400    0.08    517     0       0       0       -nan    0     =
+          0               0               0               0               3=
+               221             59              643             10722       =
+    0               0.00    0.00    0.17    99.70   0.35    99.00
+  148   1764666333.979303       0       0       0       0       20      0.5=
+8    3506    2400    0.12    99      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               24              11              130             1398        =
+    0               0.00    0.00    0.21    99.61   0.30    98.99
+   94   1764666333.979428       0       4       1       1       17      0.4=
+8    3504    2400    0.12    13      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               5               2               83              1337        =
+    0               0.00    0.00    0.04    99.84   0.30
+  169   1764666333.979757       1       1       2       2       17      0.4=
+8    3502    2400    0.06    65      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               10              2               89              1353        =
+    0               0.00    0.00    0.07    99.80   0.16    99.22
+   93   1764666333.979898       1       5       3       3       16      0.4=
+5    3501    2400    0.05    37      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               5               2               82              1337        =
+    0               0.00    0.00    0.04    99.86   0.16
+  106   1764666333.980159       2       2       4       4       15      0.4=
+4    3498    2400    0.05    25      0       0       0       -nan    0     =
+          0               0               0               0               1=
+               9               4               30              1288        =
+    0               0.00    0.00    0.11    99.80   0.15    99.28
+   91   1764666333.980281       2       6       5       5       15      0.4=
+3    3499    2400    0.05    29      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               10              1               35              1290        =
+    0               0.00    0.00    0.05    99.86   0.15
+  104   1764666333.980417       3       3       6       6       19      0.5=
+5    3501    2400    0.08    172     0       0       0       -nan    0     =
+          0               0               0               0               1=
+               116             29              109             1369        =
+    0               0.00    0.00    0.64    99.18   0.78    98.50
+   90   1764666333.980537       3       7       7       7       17      0.4=
+8    3504    2400    0.08    77      0       0       0       -nan    0     =
+          0               0               0               0               1=
+               42              8               85              1350        =
+    0               0.00    0.00    0.21    99.67   0.78
+usec    Time_Of_Day_Seconds     Core    CPU     APIC    X2APIC  Avg_MHz Bus=
+y%   Bzy_MHz TSC_MHz IPC     IRQ     NMI     SMI     LLCkRPS LLC%hit POLL- =
+          POLL            C1-             C1              C1+             C=
+1E-            C1E             C1E+            C6-             C6          =
+    C6+             POLL%           C1%             C1E%            C6%    =
+         CPU%c1  CPU%c6
+ 1894   1764666338.987679       -       -       -       -       16      0.4=
+7    3501    2400    0.06    370     0       0       0       -nan    0     =
+          0               0               0               0               0=
+               111             49              449             10553       =
+    0               0.00    0.00    0.12    99.76   0.29    99.08
+  142   1764666338.986310       0       0       0       0       20      0.5=
+8    3501    2400    0.08    134     0       0       0       -nan    0     =
+          0               0               0               0               0=
+               47              30              113             1389        =
+    0               0.00    0.00    0.55    99.27   0.63    98.65
+   98   1764666338.986439       0       4       1       1       16      0.4=
+6    3497    2400    0.05    8       0       0       0       -nan    0     =
+          0               0               0               0               0=
+               3               0               69              1326        =
+    0               0.00    0.00    0.02    99.89   0.63
+  162   1764666338.986756       1       1       2       2       16      0.4=
+6    3502    2400    0.06    41      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               6               0               49              1312        =
+    0               0.00    0.00    0.03    99.86   0.08    99.34
+   95   1764666338.986903       1       5       3       3       15      0.4=
+3    3501    2400    0.05    8       0       0       0       -nan    0     =
+          0               0               0               0               0=
+               2               0               28              1286        =
+    0               0.00    0.00    0.01    99.91   0.08
+  109   1764666338.987175       2       2       4       4       16      0.4=
+4    3499    2400    0.05    28      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               2               1               36              1295        =
+    0               0.00    0.00    0.02    99.89   0.06    99.38
+   94   1764666338.987314       2       6       5       5       15      0.4=
+4    3500    2400    0.05    25      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               1               0               36              1293        =
+    0               0.00    0.00    0.01    99.90   0.06
+  104   1764666338.987548       3       3       6       6       16      0.4=
+7    3503    2400    0.05    76      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               37              11              57              1321        =
+    0               0.00    0.00    0.24    99.64   0.40    98.95
+   92   1764666338.987679       3       7       7       7       17      0.4=
+9    3507    2400    0.09    50      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               13              7               61              1331        =
+    0               0.00    0.00    0.11    99.75   0.40
+usec    Time_Of_Day_Seconds     Core    CPU     APIC    X2APIC  Avg_MHz Bus=
+y%   Bzy_MHz TSC_MHz IPC     IRQ     NMI     SMI     LLCkRPS LLC%hit POLL- =
+          POLL            C1-             C1              C1+             C=
+1E-            C1E             C1E+            C6-             C6          =
+    C6+             POLL%           C1%             C1E%            C6%    =
+         CPU%c1  CPU%c6
+ 1824   1764666343.994695       -       -       -       -       16      0.4=
+7    3501    2400    0.06    311     0       0       0       -nan    0     =
+          0               0               0               0               1=
+               86              36              439             10519       =
+    0               0.00    0.00    0.09    99.80   0.23    99.15
+  169   1764666343.993351       0       0       0       0       21      0.5=
+9    3502    2400    0.08    114     0       0       0       -nan    0     =
+          0               0               0               0               0=
+               52              29              83              1355        =
+    0               0.00    0.00    0.49    99.32   0.58    98.70
+   93   1764666343.993469       0       4       1       1       16      0.4=
+6    3497    2400    0.05    20      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               7               1               61              1315        =
+    0               0.00    0.00    0.04    99.86   0.58
+  139   1764666343.993843       1       1       2       2       17      0.4=
+7    3503    2400    0.05    60      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               5               0               68              1332        =
+    0               0.00    0.00    0.03    99.85   0.10    99.30
+   95   1764666343.993969       1       5       3       3       15      0.4=
+4    3501    2400    0.05    11      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               3               1               39              1293        =
+    0               0.00    0.00    0.03    99.88   0.10
+  103   1764666343.994201       2       2       4       4       17      0.4=
+8    3499    2400    0.06    67      0       0       0       -nan    0     =
+          0               0               0               0               1=
+               10              3               94              1351        =
+    0               0.00    0.00    0.07    99.80   0.14    99.26
+   92   1764666343.994334       2       6       5       5       15      0.4=
+2    3497    2400    0.05    7       0       0       0       -nan    0     =
+          0               0               0               0               0=
+               1               0               57              1314        =
+    0               0.00    0.00    0.00    99.91   0.14
+  107   1764666343.994572       3       3       6       6       15      0.4=
+4    3502    2400    0.05    21      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               6               1               19              1280        =
+    0               0.00    0.00    0.05    99.86   0.09    99.33
+   95   1764666343.994695       3       7       7       7       16      0.4=
+4    3504    2400    0.07    11      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               2               1               18              1279        =
+    0               0.00    0.00    0.02    99.88   0.09
+usec    Time_Of_Day_Seconds     Core    CPU     APIC    X2APIC  Avg_MHz Bus=
+y%   Bzy_MHz TSC_MHz IPC     IRQ     NMI     SMI     LLCkRPS LLC%hit POLL- =
+          POLL            C1-             C1              C1+             C=
+1E-            C1E             C1E+            C6-             C6          =
+    C6+             POLL%           C1%             C1E%            C6%    =
+         CPU%c1  CPU%c6
+ 1754   1764666349.001690       -       -       -       -       17      0.4=
+8    3500    2400    0.06    430     0       0       0       -nan    0     =
+          0               0               0               0               0=
+               87              39              532             10614       =
+    0               0.00    0.00    0.09    99.79   0.22    99.15
+  146   1764666349.000359       0       0       0       0       18      0.5=
+2    3498    2400    0.06    69      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               5               5               74              1344        =
+    0               0.00    0.00    0.07    99.80   0.16    99.19
+   96   1764666349.000500       0       4       1       1       17      0.4=
+7    3499    2400    0.05    32      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               6               2               62              1315        =
+    0               0.00    0.00    0.04    99.85   0.16
+  128   1764666349.000765       1       1       2       2       17      0.4=
+8    3502    2400    0.06    59      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               1               0               72              1338        =
+    0               0.00    0.00    0.00    99.87   0.49    98.83
+   95   1764666349.000902       1       5       3       3       18      0.5=
+2    3505    2400    0.07    99      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               58              27              64              1324        =
+    0               0.00    0.00    0.46    99.37   0.49
+  112   1764666349.001167       2       2       4       4       17      0.4=
+8    3498    2400    0.06    73      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               6               2               89              1346        =
+    0               0.00    0.00    0.05    99.82   0.11    99.29
+   93   1764666349.001306       2       6       5       5       15      0.4=
+3    3498    2400    0.05    16      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               1               0               57              1314        =
+    0               0.00    0.00    0.00    99.91   0.11
+  108   1764666349.001574       3       3       6       6       17      0.4=
+8    3502    2400    0.06    61      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               6               2               74              1332        =
+    0               0.00    0.00    0.04    99.83   0.10    99.27
+   90   1764666349.001690       3       7       7       7       16      0.4=
+5    3503    2400    0.07    21      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               4               1               40              1301        =
+    0               0.00    0.00    0.02    99.88   0.10
+usec    Time_Of_Day_Seconds     Core    CPU     APIC    X2APIC  Avg_MHz Bus=
+y%   Bzy_MHz TSC_MHz IPC     IRQ     NMI     SMI     LLCkRPS LLC%hit POLL- =
+          POLL            C1-             C1              C1+             C=
+1E-            C1E             C1E+            C6-             C6          =
+    C6+             POLL%           C1%             C1E%            C6%    =
+         CPU%c1  CPU%c6
+ 1978   1764666354.008912       -       -       -       -       17      0.4=
+8    3499    2400    0.06    410     0       0       0       -nan    0     =
+          0               0               0               0               0=
+               108             43              556             10701       =
+    0               0.00    0.00    0.11    99.77   0.26    99.09
+  141   1764666354.007538       0       0       0       0       20      0.5=
+6    3499    2400    0.06    100     0       0       0       -nan    0     =
+          0               0               0               0               0=
+               45              22              65              1341        =
+    0               0.00    0.00    0.40    99.44   0.46    98.83
+  102   1764666354.007684       0       4       1       1       17      0.5=
+0    3497    2400    0.05    55      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               4               1               73              1328        =
+    0               0.00    0.00    0.04    99.84   0.46
+  135   1764666354.007989       1       1       2       2       16      0.4=
+6    3499    2400    0.06    44      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               5               1               51              1314        =
+    0               0.00    0.00    0.03    99.86   0.20    99.18
+  111   1764666354.008132       1       5       3       3       16      0.4=
+7    3499    2400    0.05    46      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               25              8               40              1296        =
+    0               0.00    0.00    0.16    99.73   0.20
+  107   1764666354.008362       2       2       4       4       18      0.5=
+1    3501    2400    0.07    80      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               14              6               141             1411        =
+    0               0.00    0.00    0.14    99.73   0.24    99.12
+   97   1764666354.008502       2       6       5       5       16      0.4=
+5    3499    2400    0.05    20      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               3               0               117             1379        =
+    0               0.00    0.00    0.02    99.89   0.24
+  109   1764666354.008776       3       3       6       6       17      0.4=
+8    3501    2400    0.06    47      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               6               1               41              1325        =
+    0               0.00    0.00    0.04    99.85   0.15    99.22
+   97   1764666354.008912       3       7       7       7       16      0.4=
+6    3500    2400    0.07    18      0       0       0       -nan    0     =
+          0               0               0               0               0=
+               6               4               28              1307        =
+    0               0.00    0.00    0.08    99.82   0.15
+
+```
+
+________________________________________
+From: Len Brown <lenb@kernel.org>
+Sent: Monday, December 1, 2025 8:14 PM
+To: Ehlert, Emily
+Cc: Zhang, Rui; linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; Emi=
+ly Ehlert
+Subject: RE: [EXTERNAL] [PATCH 2/2] tools/power/turbostat: Fix division by =
+zero when TDP calculation fails
+
+CAUTION: This email originated from outside of the organization. Do not cli=
+ck links or open attachments unless you can confirm the sender and know the=
+ content is safe.
+
+
+
+> I'll send you a patch for this later today.
+
+Please try the latest turbostat in my public tree:
+git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
+
+The top commit should be this:
+
+commit 4b295ae45d3e6eb4d811c8fc2408b9e4e91c9474 (turbostat, next)
+Author: Len Brown <len.brown@intel.com>
+Date:   Sun Nov 30 00:11:22 2025 -0500
+
+    tools/power turbostat: Validate that RAPL MSRs really exist
+
+    Even though the platform->plat_rapl_msrs enumeration may be accurate,
+    a VM may deny access to the underlying MSRs.
+
+    Probe if PKG_ENERGY is readable and non-zero.
+    If no, ignore all RAPL MSRs.
+
+    Reported-by: Emily Ehlert <ehemily@amazon.de>
+    Signed-off-by: Len Brown <len.brown@intel.com>
+
+
+
+Amazon Web Services Development Center Germany GmbH
+Tamara-Danz-Str. 13
+10243 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Christof Hellmis
+Eingetragen am Amtsgericht Charlottenburg unter HRB 257764 B
+Sitz: Berlin
+Ust-ID: DE 365 538 597
+
 
