@@ -1,229 +1,121 @@
-Return-Path: <linux-pm+bounces-39088-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39089-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A84DC9C4FD
-	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 17:59:08 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 940F8C9C601
+	for <lists+linux-pm@lfdr.de>; Tue, 02 Dec 2025 18:21:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 355BE349A12
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 16:59:07 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3DE81346863
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 17:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0184B2BE62E;
-	Tue,  2 Dec 2025 16:59:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80AD32C0261;
+	Tue,  2 Dec 2025 17:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="N1mYlPAL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bqnqqqjo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D682BDC2A;
-	Tue,  2 Dec 2025 16:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A8592BE629;
+	Tue,  2 Dec 2025 17:21:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764694741; cv=none; b=KXMji2+SfjP0T8t+XpkzyOH4uLE/+HxaeJBP2rrjEQqyzFYtjMnyBt4cEIuSWo6ce/5ImPbJE2XejOVIr1r/IjcPtIbYcklp+AE9UciHeA/kpU74nnAO+ErEHOL2gz5Y0ggbCfPccGCaDkEI7rq+5ssuGckCwZfQHuIXpC8MH/4=
+	t=1764696114; cv=none; b=dSplVS9AQ5E31lYC3JKQIW3vHo9pLbv/rRys3wYjsBHrXv7BIs4awqT6XgsX7kqhUNkTVFF82gf2nRM3WfHUmckSpGpL5aOHCSHrYQY9miX/XuDpn67KtNxn+JVyok9PrmsiA8GwDrROFYrM9aUlnbp6u0ZqxII6h0AeN8MjBTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764694741; c=relaxed/simple;
-	bh=cJ+0lBBaACY/ruBAXciOILojsdgM4uyZ+IwWjpWT8rE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mw0qFJrm+NX/6n0kZzv+0f+vnUL2DA2mO66lquRapJ9jLnSliE4r7HWMgLD91uh3e62q+nV5RLLCVdDNhbI6Lzx2DEKqp9SUD336HlmVSsIaGaw4VGtTlDWQegUVrgFN4EuAURJev8cxCoYjBsOVA22a61xwX0XiULwBG0c+SL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=N1mYlPAL; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id E0626C16A21;
-	Tue,  2 Dec 2025 16:58:33 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 12D7360706;
-	Tue,  2 Dec 2025 16:58:57 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 533AC11919DE5;
-	Tue,  2 Dec 2025 17:58:37 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764694734; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=60d2epEciVcChcX/fhst0++0Pm7K5XN1skvCoKwYwIY=;
-	b=N1mYlPALz8BnTtZIdm1USL0q3OY2IZREyFfDG7zXuFkJYT9sNYehdXOg20XgTaJ63O1RjJ
-	bUmx7cMIqpc/rsqqZCp/8Jj9AormvV8YpywUJYYitC9u6WrsHbugREOW2hNMdu6QkK30ZI
-	M5zoEtIFTofdrhMl04uyDUgpJgkNUh5/bF47WpYIukp33KLifd5rWCuoT+5CIGBihgXYWz
-	DsPea9REd0INtCAQqrWPX5O5uc+tIiKwIbYSAylL2j2Fc9b9Bt+xdiKGYX+ahbsGLZ43OI
-	Mm9hCve73o18r2eaD+yNSlpj1C/GhiEErqVpiHh0OMKPEWU3s2GH3q0FfuC8TA==
-Date: Tue, 2 Dec 2025 17:58:36 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>
-Cc: Matti Vaittinen <mazziesaccount@gmail.com>, Andrew Lunn
- <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich
- <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
- <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Michael Turquette
- <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi Shyti
- <andi.shyti@kernel.org>, Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Peter Rosin <peda@axentia.se>, Arnd Bergmann <arnd@arndb.de>, Saravana
- Kannan <saravanak@google.com>, Bjorn Helgaas <bhelgaas@google.com>, Charles
- Keepax <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
- Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Mark Brown <broonie@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, Davidlohr
- Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-Message-ID: <20251202175836.747593c0@bootlin.com>
-In-Reply-To: <088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
-	<20251015071420.1173068-2-herve.codina@bootlin.com>
-	<f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
-	<CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-	<5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
-	<CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
-	<072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
-	<CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
-	<55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
-	<20251202102619.5cd971cc@bootlin.com>
-	<088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1764696114; c=relaxed/simple;
+	bh=kX8K5t17HV0DWjX3NltWvhbVwDGEkQRSKNr7trTJUJk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DE3xxtdnCrKLdSpNUhwy/Lfy4Bmu8rT0jP6iM7pEROTc/vbjOoDef6wnMMWfv0ugvd1Y8veLh/WB5ApA3KgXh7/7vqHeqZjC7m9DlJtp+MVw1NJ64KyiTDx/7l7mC5Swhi/TXme/hm++pXuBdDkKjs+dcemcFk+M3llvDl+0mLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bqnqqqjo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2EE5C4CEF1;
+	Tue,  2 Dec 2025 17:21:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764696113;
+	bh=kX8K5t17HV0DWjX3NltWvhbVwDGEkQRSKNr7trTJUJk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bqnqqqjokjYyxU9R1l3VM1F3qt721FcblTx3E12wSHlUyfOJlsqw4sccvT/wYYB+6
+	 18pyEsVSKxqZXiESPBb7+1XX7mZ9WE91/nKr8jWNPnFRDlzYYMdQkLCztSi4hADKGL
+	 83dIdnY6m0fuIwTRb8Eb+BaZ2JkK6vFFmIhdMQaX5sOEK0hfs7jqJFmdXGnFWLyjnr
+	 3ZCPCYQKo35TxodoER/4EZuvZb5rOB02sG5w2O9cEGsZb3gtVCUdEa1/rT0QhWMOQq
+	 iEBf+PerqQUUG6fZ6FA/j/T+/vda7oulSznSDJm3GLV2FeeDZEoBFYl8bp3OCRbcau
+	 5Ly+aWg4gGNCQ==
+Date: Tue, 2 Dec 2025 11:27:54 -0600
+From: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Johan Hovold <johan+linaro@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Taniya Das <quic_tdas@quicinc.com>, Imran Shaik <quic_imrashai@quicinc.com>, 
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>, Jagadeesh Kona <quic_jkona@quicinc.com>, 
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Subject: Re: (subset) [PATCH 0/5] Define VDD_MXC for SC8280XP
+Message-ID: <fcwblitx5v2brfl67ckv7vy4ljwqgq26p33brbjubywjvweurx@74hprmodblf3>
+References: <20251104-topic-8280_mxc-v1-0-df545af0ef94@oss.qualcomm.com>
+ <176418784438.1591314.8587929353938909456.b4-ty@kernel.org>
+ <20251201201440.GA4041208-robh@kernel.org>
+ <CAPDyKFoGQJA5UY-96HvfoA7WMb5wYFXFFfFREpMmK29GE7-Nag@mail.gmail.com>
+ <bb6f83cc-4f6a-44f8-9997-fb91e7c2b4cb@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+In-Reply-To: <bb6f83cc-4f6a-44f8-9997-fb91e7c2b4cb@oss.qualcomm.com>
 
-Hi Kalle, Matti,
-
-On Tue, 2 Dec 2025 13:21:16 +0200
-Kalle Niemi <kaleposti@gmail.com> wrote:
-
-> On 12/2/25 11:26, Herve Codina wrote:
-> > Hi Kalle,
-> > 
-> > On Fri, 28 Nov 2025 10:34:57 +0200
-> > Kalle Niemi <kaleposti@gmail.com> wrote:
-> > 
-> > ...  
-> >>>>>>>>
-> >>>>>>>> Hello,
-> >>>>>>>>
-> >>>>>>>> Test system testing drivers for ROHM ICs bisected this commit to cause
-> >>>>>>>> BD71847 drivers probe to not be called.  
-> >>>>>>> This driver (and overlay support) is in linux-next or something out of
-> >>>>>>> tree on top of linux-next?
-> >>>>>>>
-> >>>>>>> Rob  
-> >>>>>> Yes the driver is in mainline linux: /drivers/mfd/rohm-bd718x7.c  
-> >>>>> I don't see any support to apply overlays in that driver.  
-> >>>> Ah. Sorry for the confusion peeps. I asked Kalle to report this without
-> >>>> proper consideration. 100% my bad.
+On Tue, Dec 02, 2025 at 02:27:59PM +0100, Konrad Dybcio wrote:
+> On 12/2/25 10:19 AM, Ulf Hansson wrote:
+> > On Mon, 1 Dec 2025 at 21:14, Rob Herring <robh@kernel.org> wrote:
+> >>
+> >> On Wed, Nov 26, 2025 at 02:10:41PM -0600, Bjorn Andersson wrote:
+> >>>
+> >>> On Tue, 04 Nov 2025 20:31:05 +0100, Konrad Dybcio wrote:
+> >>>> This has somehow been omitted, leading to potentially stale votes.
+> >>>> On the flip side, the domain will now be powered off, which will
+> >>>> uncover any omissions we've made in the DTs so far.
 > >>>>
-> >>>> While the bd718x7 drive indeed is mainline (and tested), the actual
-> >>>> 'glue-code' doing the overlay is part of the downstream test
-> >>>> infrastructure. So yes, this is not a bug in upstream kernel - this
-> >>>> falls in the category of an upstream change causing downstream things to
-> >>>> break. So, feel free to say: "Go fix your code" :)
+> >>>> Reasonably tested on an x13s without pd_ignore_unused (camera still
+> >>>> works).
 > >>>>
-> >>>> Now that this is sorted, if someone is still interested in helping us to
-> >>>> get our upstream drivers tested - the downstream piece is just taking
-> >>>> the compiled device-tree overlay at runtime (via bin-attribute file),
-> >>>> and applying it using the of_overlay_fdt_apply(). The approach is
-> >>>> working for our testing purposes when the device is added to I2C/SPI
-> >>>> node which is already enabled. However, in case where we have the I2C
-> >>>> disabled, and enable it in the same overlay where we add the new device
-> >>>> - then the new device does not get probed.
-> >>>>
-> >>>> I would be really grateful if someone had a pointer for us.  
-> >>> Seems to be fw_devlink related. I suppose if you turn it off it works?
-> >>> There's info about the dependencies in sysfs or maybe debugfs. I don't
-> >>> remember the details, but that should help to tell you why things
-> >>> aren't probing.  
+> >>>> [...]
+> >>>
+> >>> Applied, thanks!
+> >>>
+> >>> [2/5] dt-bindings: remoteproc: qcom,sc8280xp-pas: Fix CDSP power desc
+> >>>       commit: ca079ec3ebed19a12c1bf080496dacbc6fdfbb39
+> >>
+> >> This has was picked up, but the .dts change was not, so there's a bunch
+> >> of new warnings. What's the plan? I know it's separate trees. Can you
+> >> please take binding and .dts changes like these together if there aren't
+> >> driver changes?
 > > 
-> > Rob reverted patches but I plan to continue my work on it.
-> > On my side, I need the reverted patches but I fully understand that, on
-> > your side, you need a working system.
+> > I was planning to pick up the driver (pmdomain) and dt doc changes, as
+> > usual. Although, I was waiting for the discussion to reach consensus
+> > around dts patch (patch5), maybe it did?
 > > 
-> > In order to move forward and find a solution for my next iteration, can you
-> > send your overlay (dtso) used in your working and non working cases?
-> > 
-> > Best regards,
-> > Hervé  
+> > Bj�rn, perhaps easier if you pick the series via your qc-soc tree and
+> > send them as fixes? If so, feel free to add my ack on patch4 (the
+> > pmdomain patch).
 > 
-> Hello Hervé,
+> FWIW the part where the CDSP power-domain list changes still applies,
+> even though I was wrong about the CAMCC requiring that too..
 > 
-> I have attached the overlay source file: bd71847_overlay.dts
+> I can resend if needed
+> 
 
-Thanks a lot for your overlay.
+Yes, please respin a version without the camera change, I can pick up
+the remaining patches as -fixes.
 
-I did an update of the reverted patches and I didn't detect any regression
-with the update applied on my use case but I don't have the needed code to
-perform tests similar to your use case. Indeed, you apply the overlay using
-an out of tree code.
-
-May I ask you to perform a test of this update on your side?
-
-First you can use the last linux-next kernel where reverted patches are present.
-The next-20251127 tag is a good candidate. Indeed both patches are present:
-  - 76841259ac092 ("of: dynamic: Fix overlayed devices not probing because of fw_devlink")
-  - 7d67ddc5f0148 ("Revert "treewide: Fix probing of devices in DT overlays"")
-
-Of course, be sure to have the issue using this kernel with your overlays.
-
-Then can you add the following modification on your faulty kernel:
----- 8< ----
-diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
-index 1528d8ad9f26..aea7bb26d9c4 100644
---- a/drivers/of/overlay.c
-+++ b/drivers/of/overlay.c
-@@ -190,6 +190,20 @@ static void overlay_fw_devlink_refresh(struct overlay_changeset *ovcs)
-        for (int i = 0; i < ovcs->count; i++) {
-                struct device_node *np = ovcs->fragments[i].target;
- 
-+               /*
-+                * The device related to target node itself could have been
-+                * removed and re-added. This happens when the 'status' property
-+                * in the target node has been changed by the overlay.
-+                *
-+                * In that case the parent node needs to be fixed.
-+                *
-+                * Before fixing the target node itself, fix its parent. To keep
-+                * things simple, fix the parent in any case. If nothing needs
-+                * to be fixed, fw_devlink_refresh_fwnode() acts as a no-op.
-+                */
-+               if (np->parent)
-+                       fw_devlink_refresh_fwnode(of_fwnode_handle(np->parent));
-+
-                fw_devlink_refresh_fwnode(of_fwnode_handle(np));
-        }
- }
----- 8< ----
-
-My hope is that this modification will fix your issue.
-If so, I will add it in my next iteration.
-
-If you cannot perform the test on your side, can you provide me the out of
-tree code you use to apply the overlay?
-
-Best regards,
-Hervé
+Regards,
+Bjorn
 
