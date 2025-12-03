@@ -1,276 +1,128 @@
-Return-Path: <linux-pm+bounces-39145-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39146-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C9B9C9DA4B
-	for <lists+linux-pm@lfdr.de>; Wed, 03 Dec 2025 04:25:47 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7778C9DA69
+	for <lists+linux-pm@lfdr.de>; Wed, 03 Dec 2025 04:34:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A8DC3A930C
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Dec 2025 03:25:42 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 80ECE348CC0
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Dec 2025 03:34:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B86256C9E;
-	Wed,  3 Dec 2025 03:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFAA123EAB5;
+	Wed,  3 Dec 2025 03:34:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B0yVelLG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3012417FB;
-	Wed,  3 Dec 2025 03:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A12022FE0E
+	for <linux-pm@vger.kernel.org>; Wed,  3 Dec 2025 03:34:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764732335; cv=none; b=COYXxu+siRjF+r9uGiPtxA8lg9E3PgFYxp+ynhsfjCJllxBoIYVOvVaGIAeHPt0ZexGLBFRyRp4/7bb+/pqYSD8gaRuJ7aY7IbGWkRa3P5C7lskgTXh+WLAl9666EXfWWEetNvBFu0oF0toVFVTWeGxe+hM/QUochNpvxJAN3CU=
+	t=1764732851; cv=none; b=OgDCI6TOeE4r+CpMygdgBV7TQ8emfpBR0mPgpQFFf7ZYoYjd35yRiJJBZlGQoMoHZOHI+p31pWauZJbMDTv2KeibCc4p6tE4erETsihG5G/dQPELA1KTrRQub+rZoO4XLvxJCfuIikseYBU2RKL57zFbrygqk5oAyo0dHA3g0v8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764732335; c=relaxed/simple;
-	bh=cpgSJbct+ErUbb8i/hls1/s2X5Og7HFjwl6wIEvcHt8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DcCFjFIBkAaTwZfuOcH2bwoQwx9HMGC4Oh1Oi5TNQInjmdHVr44/ouZj+20B5gFw9m+s3zjxUtpqqC41b5XRckUQghHzAnwte1zqxLPY8t08xcPTro/deuTJzO04XFl8b1eso2hCew3MZG1vt81rkFS8QDcxsXk6fjaHciT+nx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4dLjdx0J4TzLlWD;
-	Wed,  3 Dec 2025 11:23:33 +0800 (CST)
-Received: from kwepemf200017.china.huawei.com (unknown [7.202.181.10])
-	by mail.maildlp.com (Postfix) with ESMTPS id AF48D1A0174;
-	Wed,  3 Dec 2025 11:25:24 +0800 (CST)
-Received: from localhost.localdomain (10.90.31.46) by
- kwepemf200017.china.huawei.com (7.202.181.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 3 Dec 2025 11:25:23 +0800
-From: Jie Zhan <zhanjie9@hisilicon.com>
-To: <viresh.kumar@linaro.org>, <rafael@kernel.org>, <ionela.voinescu@arm.com>,
-	<beata.michalska@arm.com>, <pierre.gondois@arm.com>,
-	<zhenglifeng1@huawei.com>
-CC: <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-	<zhanjie9@hisilicon.com>, <jonathan.cameron@huawei.com>,
-	<prime.zeng@hisilicon.com>, <yubowen8@huawei.com>, <lihuisong@huawei.com>,
-	<zhangpengjie2@huawei.com>, <wangzhi12@huawei.com>
-Subject: [PATCH v4 3/3] cpufreq: CPPC: Update FIE arch_freq_scale in ticks for non-PCC regs
-Date: Wed, 3 Dec 2025 11:24:22 +0800
-Message-ID: <20251203032422.3232957-4-zhanjie9@hisilicon.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20251203032422.3232957-1-zhanjie9@hisilicon.com>
-References: <20251203032422.3232957-1-zhanjie9@hisilicon.com>
+	s=arc-20240116; t=1764732851; c=relaxed/simple;
+	bh=JRvYcBYR986xL8Q9QurkwlNYv9CajrHMpz9RKcFgCp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WCKavbkUrbluNV+XdtqUPwD1ANH75zCp+9USNn679DwfzymK5iKy16TdapcpjdaKl4uJdGzlqazGXIExkbiJfvF4m3JT7h9m5OUwnBMlRZR2K/g0iYnOVKfyc+IDIbjodNqQwLXihS2XIaXQ/fOV4FUI1VhWbwb3V27ufERsV4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B0yVelLG; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-bc1f6dfeb3dso3704418a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 02 Dec 2025 19:34:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764732849; x=1765337649; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YrypMwcN4TiTIMcIjUFPxlrx91p/QDVVVhJWJD6ny4I=;
+        b=B0yVelLGk1Leg8UDV/KpdMPlLF49FdiQQPblZbzH/9q/RFgtCTQSJCU5v1v+FzumeB
+         sN9sZNKjmhTb6McYjJ8imzKu8a2zBAww7kVTjL6ywLl2uSe8FFez1MOeq9fuvaZWdTm6
+         Xoj5Uk4rbtcNbyRTikKyWbW2eOh5fMxCbFzM02kXNF/B7RFS3oUcEZUQVEjM/+KDD/Kp
+         cOudgezhlB8ksrO9jAaUkwFlxThHgkZEaeOGabohMTcB9Or/yQXg5Hq60cpZ7XANr2wF
+         rpfMtgwVikoJFcUBl1Ic8HfNSUkONX5h47jfpwrU9zKdesfaTknJ1eD3DQgn2KJwJ63J
+         OaVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764732849; x=1765337649;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YrypMwcN4TiTIMcIjUFPxlrx91p/QDVVVhJWJD6ny4I=;
+        b=mQMX9NFJ4nM5gAY9i1xmjulSpIFyGIb7A8WuPHHjSS7Gy5MuzS/e0q0RmAAkr4sas6
+         c/lCnSILoQnz0RnpAGsCUvN+iNNon8VvL2EfjYVIbzMnJraTC4R6YIg6NoXiQWeI8kQr
+         vsQSTt+sB9KSv0XmoY7wAH0FzEpxhbg/yVHZG3XpNWc7iK0QEOUObr2nLBhOZPDJY1b9
+         lUEVG0mrbfNTh9BOkeaz8X9yD5WcdiC12pnJCefOh7/nPT/xgiDjni8lPI9SOCwFBvcf
+         2IGpurzsTf59Ms9JuPeBwXLxiIrAkuXllIRbgVgZRdlE5pHK/eC9pLHtaYq64DLbYhuI
+         VvFg==
+X-Forwarded-Encrypted: i=1; AJvYcCWiVgyx7FzN93rQ8MOjPB/au8ZpbicZbviK3UytQGloecjl2O4FJsnXS20OqBoRrWDw1ws6PJ2brA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YynqFx2Z3lF2Wgkd7lVd6LuSIBPPttixjbzGKqYjViRD44TTVnV
+	L/vYr0vyLjnHfGgMBL9mb7LC644uzun7Sw56UW6ZYfZzULv7+RNRtzkU
+X-Gm-Gg: ASbGncv/FTs/BdyRVoIRbZpsIzQgP1+rTINYZQjL7OoBQ5EhMFKx2bKgBEYzNlA0jkg
+	/q1YOzAuxPhxJMP4GJuxyZGMUtzk+tliijluCwJvmnb+qlsa/uNxunbIU1kJBWPeOHJQ1DetZ1b
+	nY9upthBsWTNWfQQChX+JIgkdVVZYqrSLrx/QC/l5bcseMVTrpBUYMpoxTkC4m/tiHeB3mbRSYy
+	sYMfJheHoJNoJzdulOQEx5x41LMmrieOn0vU7gapl2zqDP3B7ayY9pzyWOMFX2252Drn9NQ+YOf
+	8474cWfO69FTP1BCRRzBoKiRjmsekHlorWs7exbJ8HK+/mXLMlFhJboj5sSzW7blbf6cj/Zs1wn
+	FAozsbr5RBR9aqvzXHpzN1reQ6Hg9ejIBe7zlo3jgJT/mtlf4+zx7DzEjSHfqrENt2hqx5agqQs
+	Yo/JuHSNGiHk5lOyxOZhHc0ok=
+X-Google-Smtp-Source: AGHT+IHb2Bm444wTR/SyhoFk/OdfrkP+670oMUjj/BL8tdpSmodPv0u+GrGuSHULggAy1sTlh5P04w==
+X-Received: by 2002:a05:7022:f415:b0:11b:9386:a38b with SMTP id a92af1059eb24-11df0c4c8c4mr768810c88.46.1764732849328;
+        Tue, 02 Dec 2025 19:34:09 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11dcaed5fcasm92986328c88.2.2025.12.02.19.34.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Dec 2025 19:34:08 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Tue, 2 Dec 2025 19:34:07 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Brian Norris <briannorris@chromium.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	Nicolas Palix <nicolas.palix@imag.fr>, linux-pm@vger.kernel.org,
+	Julia Lawall <Julia.Lawall@inria.fr>, linux-kernel@vger.kernel.org,
+	cocci@inria.fr
+Subject: Re: [PATCH 1/3] PM: runtime: Stop checking pm_runtime_barrier()
+ return code
+Message-ID: <0f729108-6928-4644-b02a-fa7020cdffc4@roeck-us.net>
+References: <20251202193129.1411419-1-briannorris@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemf200017.china.huawei.com (7.202.181.10)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251202193129.1411419-1-briannorris@chromium.org>
 
-Currently, the CPPC Frequency Invariance Engine (FIE) is invoked from the
-scheduler tick but defers the update of arch_freq_scale to a separate
-thread because cppc_get_perf_ctrs() would sleep if the CPC regs are in PCC.
+On Tue, Dec 02, 2025 at 11:30:24AM -0800, Brian Norris wrote:
+> Apparently this test is the only code that checks the return code from
+> pm_runtime_barrier(), and it turns out that's for good reason -- it's
+> inherently racy, and a bad idea. We're going to make
+> pm_runtime_barrier() return void, so prepare for that by dropping any
+> return code checks.
+> 
+> This resolves some test failures seen like the following:
+> 
+> [   34.559694]     # pm_runtime_error_test: EXPECTATION FAILED at drivers/base/power/runtime-test.c:177
+> [   34.559694]     Expected 1 == pm_runtime_barrier(dev), but
+> [   34.559694]         pm_runtime_barrier(dev) == 0 (0x0)
+> [   34.563604]     # pm_runtime_error_test: pass:0 fail:1 skip:0 total:1
+> 
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Closes: https://lore.kernel.org/lkml/93259f2b-7017-4096-a31b-cabbf6152e9b@roeck-us.net/
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 
-However, this deferred update mechanism is unnecessary and introduces extra
-overhead for non-PCC register spaces (e.g. System Memory or FFH), where
-accessing the regs won't sleep and can be safely performed from the tick
-context.
+With this series on top of v6.18:
 
-Furthermore, with the CPPC FIE registered, it throws repeated warnings of
-"cppc_scale_freq_workfn: failed to read perf counters" on our platform with
-the CPC regs in System Memory and a power-down idle state enabled.  That's
-because the remote CPU can be in a power-down idle state, and reading its
-perf counters returns 0.  Moving the FIE handling back to the scheduler
-tick process makes the CPU handle its own perf counters, so it won't be
-idle and the issue would be inherently solved.
+Qemu test results:
+	total: 610 pass: 610 fail: 0
+Unit test results:
+	pass: 666898 fail: 0
 
-To address the above issues, update arch_freq_scale directly in ticks for
-non-PCC regs and keep the deferred update mechanism for PCC regs.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
----
- drivers/cpufreq/cppc_cpufreq.c | 77 +++++++++++++++++++++++-----------
- 1 file changed, 52 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 947b4e2e1d4e..36e8a75a37f1 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -54,31 +54,24 @@ static int cppc_perf_from_fbctrs(struct cppc_perf_fb_ctrs *fb_ctrs_t0,
- 				 struct cppc_perf_fb_ctrs *fb_ctrs_t1);
- 
- /**
-- * cppc_scale_freq_workfn - CPPC arch_freq_scale updater for frequency invariance
-- * @work: The work item.
-+ * __cppc_scale_freq_tick - CPPC arch_freq_scale updater for frequency invariance
-+ * @cppc_fi: per-cpu CPPC FIE data.
-  *
-- * The CPPC driver register itself with the topology core to provide its own
-+ * The CPPC driver registers itself with the topology core to provide its own
-  * implementation (cppc_scale_freq_tick()) of topology_scale_freq_tick() which
-  * gets called by the scheduler on every tick.
-  *
-  * Note that the arch specific counters have higher priority than CPPC counters,
-  * if available, though the CPPC driver doesn't need to have any special
-  * handling for that.
-- *
-- * On an invocation of cppc_scale_freq_tick(), we schedule an irq work (since we
-- * reach here from hard-irq context), which then schedules a normal work item
-- * and cppc_scale_freq_workfn() updates the per_cpu arch_freq_scale variable
-- * based on the counter updates since the last tick.
-  */
--static void cppc_scale_freq_workfn(struct kthread_work *work)
-+static void __cppc_scale_freq_tick(struct cppc_freq_invariance *cppc_fi)
- {
--	struct cppc_freq_invariance *cppc_fi;
- 	struct cppc_perf_fb_ctrs fb_ctrs = {0};
- 	struct cppc_cpudata *cpu_data;
- 	unsigned long local_freq_scale;
- 	u64 perf;
- 
--	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
- 	cpu_data = cppc_fi->cpu_data;
- 
- 	if (cppc_get_perf_ctrs(cppc_fi->cpu, &fb_ctrs)) {
-@@ -102,6 +95,24 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
- 	per_cpu(arch_freq_scale, cppc_fi->cpu) = local_freq_scale;
- }
- 
-+static void cppc_scale_freq_tick(void)
-+{
-+	__cppc_scale_freq_tick(&per_cpu(cppc_freq_inv, smp_processor_id()));
-+}
-+
-+static struct scale_freq_data cppc_sftd = {
-+	.source = SCALE_FREQ_SOURCE_CPPC,
-+	.set_freq_scale = cppc_scale_freq_tick,
-+};
-+
-+static void cppc_scale_freq_workfn(struct kthread_work *work)
-+{
-+	struct cppc_freq_invariance *cppc_fi;
-+
-+	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
-+	__cppc_scale_freq_tick(cppc_fi);
-+}
-+
- static void cppc_irq_work(struct irq_work *irq_work)
- {
- 	struct cppc_freq_invariance *cppc_fi;
-@@ -110,7 +121,14 @@ static void cppc_irq_work(struct irq_work *irq_work)
- 	kthread_queue_work(kworker_fie, &cppc_fi->work);
- }
- 
--static void cppc_scale_freq_tick(void)
-+/*
-+ * Reading perf counters may sleep if the CPC regs are in PCC.  Thus, we
-+ * schedule an irq work in scale_freq_tick (since we reach here from hard-irq
-+ * context), which then schedules a normal work item cppc_scale_freq_workfn()
-+ * that updates the per_cpu arch_freq_scale variable based on the counter
-+ * updates since the last tick.
-+ */
-+static void cppc_scale_freq_tick_pcc(void)
- {
- 	struct cppc_freq_invariance *cppc_fi = &per_cpu(cppc_freq_inv, smp_processor_id());
- 
-@@ -121,13 +139,14 @@ static void cppc_scale_freq_tick(void)
- 	irq_work_queue(&cppc_fi->irq_work);
- }
- 
--static struct scale_freq_data cppc_sftd = {
-+static struct scale_freq_data cppc_sftd_pcc = {
- 	.source = SCALE_FREQ_SOURCE_CPPC,
--	.set_freq_scale = cppc_scale_freq_tick,
-+	.set_freq_scale = cppc_scale_freq_tick_pcc,
- };
- 
- static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
- {
-+	struct scale_freq_data *sftd = &cppc_sftd;
- 	struct cppc_freq_invariance *cppc_fi;
- 	int cpu, ret;
- 
-@@ -138,8 +157,11 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
- 		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
- 		cppc_fi->cpu = cpu;
- 		cppc_fi->cpu_data = policy->driver_data;
--		kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
--		init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
-+		if (cppc_perf_ctrs_in_pcc_cpu(cpu)) {
-+			kthread_init_work(&cppc_fi->work, cppc_scale_freq_workfn);
-+			init_irq_work(&cppc_fi->irq_work, cppc_irq_work);
-+			sftd = &cppc_sftd_pcc;
-+		}
- 
- 		ret = cppc_get_perf_ctrs(cpu, &cppc_fi->prev_perf_fb_ctrs);
- 
-@@ -155,7 +177,7 @@ static void cppc_cpufreq_cpu_fie_init(struct cpufreq_policy *policy)
- 	}
- 
- 	/* Register for freq-invariance */
--	topology_set_scale_freq_source(&cppc_sftd, policy->cpus);
-+	topology_set_scale_freq_source(sftd, policy->cpus);
- }
- 
- /*
-@@ -178,6 +200,8 @@ static void cppc_cpufreq_cpu_fie_exit(struct cpufreq_policy *policy)
- 	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_CPPC, policy->related_cpus);
- 
- 	for_each_cpu(cpu, policy->related_cpus) {
-+		if (!cppc_perf_ctrs_in_pcc_cpu(cpu))
-+			continue;
- 		cppc_fi = &per_cpu(cppc_freq_inv, cpu);
- 		irq_work_sync(&cppc_fi->irq_work);
- 		kthread_cancel_work_sync(&cppc_fi->work);
-@@ -206,6 +230,7 @@ static void cppc_fie_kworker_init(void)
- 		pr_warn("%s: failed to create kworker_fie: %ld\n", __func__,
- 			PTR_ERR(kworker_fie));
- 		fie_disabled = FIE_DISABLED;
-+		kworker_fie = NULL;
- 		return;
- 	}
- 
-@@ -215,20 +240,24 @@ static void cppc_fie_kworker_init(void)
- 			ret);
- 		kthread_destroy_worker(kworker_fie);
- 		fie_disabled = FIE_DISABLED;
-+		kworker_fie = NULL;
- 	}
- }
- 
- static void __init cppc_freq_invariance_init(void)
- {
--	if (fie_disabled != FIE_ENABLED && fie_disabled != FIE_DISABLED) {
--		fie_disabled = FIE_ENABLED;
--		if (cppc_perf_ctrs_in_pcc()) {
-+	bool perf_ctrs_in_pcc = cppc_perf_ctrs_in_pcc();
-+
-+	if (fie_disabled == FIE_UNSET) {
-+		if (perf_ctrs_in_pcc) {
- 			pr_info("FIE not enabled on systems with registers in PCC\n");
- 			fie_disabled = FIE_DISABLED;
-+		} else {
-+			fie_disabled = FIE_ENABLED;
- 		}
- 	}
- 
--	if (fie_disabled)
-+	if (fie_disabled || !perf_ctrs_in_pcc)
- 		return;
- 
- 	cppc_fie_kworker_init();
-@@ -236,10 +265,8 @@ static void __init cppc_freq_invariance_init(void)
- 
- static void cppc_freq_invariance_exit(void)
- {
--	if (fie_disabled)
--		return;
--
--	kthread_destroy_worker(kworker_fie);
-+	if (kworker_fie)
-+		kthread_destroy_worker(kworker_fie);
- }
- 
- #else
--- 
-2.33.0
-
+Guenter
 
