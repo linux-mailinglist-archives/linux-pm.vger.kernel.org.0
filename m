@@ -1,65 +1,46 @@
-Return-Path: <linux-pm+bounces-39131-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39132-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8549C9D583
-	for <lists+linux-pm@lfdr.de>; Wed, 03 Dec 2025 00:32:38 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4414DC9D821
+	for <lists+linux-pm@lfdr.de>; Wed, 03 Dec 2025 02:37:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 0580734AA49
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Dec 2025 23:32:38 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E211934AE67
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Dec 2025 01:37:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4FBD2FC871;
-	Tue,  2 Dec 2025 23:32:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614AC221FBF;
+	Wed,  3 Dec 2025 01:37:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f97PG2Fd"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="J+KuWgrI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9AAE2F7AB1;
-	Tue,  2 Dec 2025 23:32:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1AE21ADA7;
+	Wed,  3 Dec 2025 01:37:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764718350; cv=none; b=HjX0MxMZj01L0dqhFQHwDWSCLObZt2WtnBoJM0mQqh6pjb6/8i4uLLCCGkPDtQ2Vl3v7T9kH3C8k/Z/kp6Ij0dr2c299lhZf4Xc5zBtIMqCAa+Q/QdK30g4BFyTuSkrr3Dt4psEeHbCvvDIChU7Y8IB2R1rbkg7SoSjKuvxW2Bg=
+	t=1764725856; cv=none; b=Qm5/28s3JgC5Usd6J+mrXiGRNO+06P/FAkU1CeN06QSC5BIRJBeILrKQyqlsx5vepx4pwrynMwDTlWOxCunIvZDtakSxJoXBBID8dyh+Kgs/e2gh2WdMOKCUlJ6UrRxn09zHX8Hf7eer7gBBzB6puTDhDOHPeEIWNWTicrfsbo8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764718350; c=relaxed/simple;
-	bh=FgR+dGAXoqq8Uln8w08gsGEUZzntgHCN6ndnerHSwBQ=;
+	s=arc-20240116; t=1764725856; c=relaxed/simple;
+	bh=XDWR0vEcq4vO6PEkDmATJhmByTtRltAnzDRhyh9PSmU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CYHnZwg9Kn+s6aZL8VIdzhziK/pzePQySjrCXBI2KHs/zOUcSU9S+vEGo2LxKuIH4E1ZBhVrLnwQ7KKehKd/+Uh9MT4nM0SjVXzZTdq1qs+cbMidh/oryHRpgF5MJAHYHUwEUNHhB0oo9NuyPJzdwaYo8JOfiuv/ldHuKKdzJ5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f97PG2Fd; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764718349; x=1796254349;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FgR+dGAXoqq8Uln8w08gsGEUZzntgHCN6ndnerHSwBQ=;
-  b=f97PG2Fdeg6HHmOhms6OWfEQwXAESQzeTwwFZ2LWDAUkqC1Nnk9NqKmH
-   FQ7wJqgXW+L12s2JEP73B4y7tGAl2bAQy/IgKsa35mLlhZi8gzsteRak0
-   wd59RU2BfSHmsVbB/v7RZe/yqOp+RZqR/5/LRUfdnsQj2jaP4QBrZapqM
-   F2Mdw/kWKNvMa8if6xpDB71jL86G7ZXwhES6mCdI8r3PM2mazcKB2i/WX
-   46+xdxTCvlw+/hhjW35zc+niTcdA/Yp2gHes9PWSOfO0OOk0Otz57NDIJ
-   1Fv5QAxhSDOstGi7Tz8omJSRgi2sFiqz9jp08KeFfjYwJxysQOKcwCyPP
-   A==;
-X-CSE-ConnectionGUID: 5Ip8D6pkS2mOUd4ebuKpnA==
-X-CSE-MsgGUID: ClMEtR94TGWqM92uHFHuWA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="89356375"
-X-IronPort-AV: E=Sophos;i="6.20,244,1758610800"; 
-   d="scan'208";a="89356375"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 15:32:28 -0800
-X-CSE-ConnectionGUID: 7Wd1OQ3LSTOYg334Vj5lKw==
-X-CSE-MsgGUID: PE3hF536SX6iI9l3weR3yQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,244,1758610800"; 
-   d="scan'208";a="195304298"
-Received: from ldmartin-desk2.corp.intel.com (HELO [10.125.111.202]) ([10.125.111.202])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2025 15:32:25 -0800
-Message-ID: <f35d86cd-03f8-4e0b-8373-8d8e749aaa8e@intel.com>
-Date: Tue, 2 Dec 2025 16:32:24 -0700
+	 In-Reply-To:Content-Type; b=J2KY0GiTISn1ZsjKBIlIjdTbMK2/X41gH3oqNxmrlfcPEqbEKD7PoXkpU3fz9s2NXJ4OYoTZPyqB7SLPNKBc8v+Ej30AoZg63km/QT2JBfS6/twmAimyRxunkUF4+hDoYOmSSAa6sr1GcWcFCaIWnaRa+JkYWjdLp4Z8wPcSqSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=J+KuWgrI; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1764725850; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=an4R6xa2fLB/70bklypUmneKfSy9mWtoggXotgtPyIY=;
+	b=J+KuWgrIGfkDR9o1Mcj4U9f7VCbU1pfj5MYZkWEIgXf/9xYYFPzdwevnIUFryQNuZD20FtzEeN4H7qpMVwNh2QIqqlsIS9Lw2op1yYfel8MwmVGbNz/gofBoSFTVNjGK9AOemoEJOk5ql1tzpnbHFzXt9VJukaPnx6nXHqeCSa0=
+Received: from 30.74.144.121(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Wtyqdim_1764725849 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 03 Dec 2025 09:37:29 +0800
+Message-ID: <587213a8-9332-4384-b26b-21f55d8b480b@linux.alibaba.com>
+Date: Wed, 3 Dec 2025 09:37:28 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,66 +48,52 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/9] dax/hmem: Gate Soft Reserved deferral on
- DEV_DAX_CXL
-To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
- linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
- nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Cc: Alison Schofield <alison.schofield@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Dan Williams <dan.j.williams@intel.com>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Yazen Ghannam <yazen.ghannam@amd.com>, Davidlohr Bueso <dave@stgolabs.net>,
- Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, Li Ming <ming.li@zohomail.com>,
- Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
- Ying Huang <huang.ying.caritas@gmail.com>,
- Yao Xingtao <yaoxt.fnst@fujitsu.com>, Peter Zijlstra <peterz@infradead.org>,
- Greg KH <gregkh@linuxfoundation.org>,
- Nathan Fontenot <nathan.fontenot@amd.com>,
- Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
- Benjamin Cheatham <benjamin.cheatham@amd.com>,
- Zhijian Li <lizhijian@fujitsu.com>, Borislav Petkov <bp@alien8.de>,
- Ard Biesheuvel <ardb@kernel.org>
-References: <20251120031925.87762-1-Smita.KoralahalliChannabasappa@amd.com>
- <20251120031925.87762-4-Smita.KoralahalliChannabasappa@amd.com>
-From: Dave Jiang <dave.jiang@intel.com>
-Content-Language: en-US
-In-Reply-To: <20251120031925.87762-4-Smita.KoralahalliChannabasappa@amd.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH] thermal: sprd: Fix raw temperature clamping in
+ sprd_thm_rawdata_to_temp
+To: Thorsten Blum <thorsten.blum@linux.dev>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Orson Zhai <orsonzhai@gmail.com>,
+ Chunyan Zhang <zhang.lyra@gmail.com>, Freeman Liu <freeman.liu@unisoc.com>
+Cc: stable@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20251202114644.374869-2-thorsten.blum@linux.dev>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20251202114644.374869-2-thorsten.blum@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 11/19/25 8:19 PM, Smita Koralahalli wrote:
-> From: Dan Williams <dan.j.williams@intel.com>
+On 2025/12/2 19:46, Thorsten Blum wrote:
+> The raw temperature data was never clamped to SPRD_THM_RAW_DATA_LOW or
+> SPRD_THM_RAW_DATA_HIGH because the return value of clamp() was not used.
+> Fix this by assigning the clamped value to 'rawdata'.
 > 
-> Replace IS_ENABLED(CONFIG_CXL_REGION) with IS_ENABLED(CONFIG_DEV_DAX_CXL)
-> so that HMEM only defers Soft Reserved ranges when CXL DAX support is
-> enabled. This makes the coordination between HMEM and the CXL stack more
-> precise and prevents deferral in unrelated CXL configurations.
+> Casting SPRD_THM_RAW_DATA_LOW and SPRD_THM_RAW_DATA_HIGH to u32 is also
+> redundant and can be removed.
 > 
-> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+> Cc: stable@vger.kernel.org
+> Fixes: 554fdbaf19b1 ("thermal: sprd: Add Spreadtrum thermal driver support")
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> ---
+>   drivers/thermal/sprd_thermal.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
+> index e546067c9621..f7fa83b2428e 100644
+> --- a/drivers/thermal/sprd_thermal.c
+> +++ b/drivers/thermal/sprd_thermal.c
+> @@ -178,7 +178,7 @@ static int sprd_thm_sensor_calibration(struct device_node *np,
+>   static int sprd_thm_rawdata_to_temp(struct sprd_thermal_sensor *sen,
+>   				    u32 rawdata)
+>   {
+> -	clamp(rawdata, (u32)SPRD_THM_RAW_DATA_LOW, (u32)SPRD_THM_RAW_DATA_HIGH);
+> +	rawdata = clamp(rawdata, SPRD_THM_RAW_DATA_LOW, SPRD_THM_RAW_DATA_HIGH);
+>   
+>   	/*
+>   	 * According to the thermal datasheet, the formula of converting
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>> ---
->  drivers/dax/hmem/hmem.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/dax/hmem/hmem.c b/drivers/dax/hmem/hmem.c
-> index 02e79c7adf75..c2c110b194e5 100644
-> --- a/drivers/dax/hmem/hmem.c
-> +++ b/drivers/dax/hmem/hmem.c
-> @@ -66,7 +66,7 @@ static int hmem_register_device(struct device *host, int target_nid,
->  	long id;
->  	int rc;
->  
-> -	if (IS_ENABLED(CONFIG_CXL_REGION) &&
-> +	if (IS_ENABLED(CONFIG_DEV_DAX_CXL) &&
->  	    region_intersects(res->start, resource_size(res), IORESOURCE_MEM,
->  			      IORES_DESC_CXL) != REGION_DISJOINT) {
->  		dev_dbg(host, "deferring range to CXL: %pr\n", res);
-
+Ah, good catch. Thanks.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
