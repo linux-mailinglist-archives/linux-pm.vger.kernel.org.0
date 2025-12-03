@@ -1,125 +1,106 @@
-Return-Path: <linux-pm+bounces-39167-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39168-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A1F8CA0B8F
-	for <lists+linux-pm@lfdr.de>; Wed, 03 Dec 2025 19:00:29 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 506AECA039A
+	for <lists+linux-pm@lfdr.de>; Wed, 03 Dec 2025 17:58:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5F8DE31782B8
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Dec 2025 16:55:46 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B9CA93002A4F
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Dec 2025 16:55:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFAEE350288;
-	Wed,  3 Dec 2025 16:44:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ObVrXR/G"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF214329C61;
+	Wed,  3 Dec 2025 16:44:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D711134EEE4
-	for <linux-pm@vger.kernel.org>; Wed,  3 Dec 2025 16:43:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E386C19258E;
+	Wed,  3 Dec 2025 16:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764780240; cv=none; b=qVEmXg3Y65noUzSr/2mAaG0YNa43JS9zmnccOGroHk91ZJQ76YLtHAY515b2XqGLht0Fh+8FbpHwipWQWsEvNrAJNgt8bvLxnSOvbh2b7a7XL/0IeQo4IqGHhNQ9D939seu/LnqbFI30i4QILDbDa0nsyYQ2m6U62b7swjrh6rk=
+	t=1764780276; cv=none; b=XcanDDeWbXcrqEuwAAGLTJqSLQiblNKKDUZUDatSMX09n59QoKQPbBA9cX+ugZwGZVEavTleLJ7hcqYFXhID5CjDUIvvUrO2jEc5aov+jFRScyywp9My+UPA1xFJTgNG0GcsvgrsjqcjtJHs5jlOZn1jDVwoNWaN7GMAaw1dD+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764780240; c=relaxed/simple;
-	bh=IAArZcm2wSkF6VtcJYsSwPQFosqWc4J2GeZQUSxMWAM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s6CmKMhUoKOrKH14IIKwyuvEA98YNtS+0TzBlIpq5Y3SEhDS6eGfaT0kmCEhB6wapsXYxG/NR0SVS7mdSNR0OA65EIhwFuKBa0VhLsatvej6/ZLm6mw4v0FKHUdPKmQ3i7J3GtvQBXImwNAKayXb7RtSiuzy4s9GpHbx0b50BBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ObVrXR/G; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-640b06fa959so5588865a12.3
-        for <linux-pm@vger.kernel.org>; Wed, 03 Dec 2025 08:43:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1764780236; x=1765385036; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tre/rf8HRcrussbSV2D3pHxXOcQLeC/eEv+L6zskgMA=;
-        b=ObVrXR/Gsi3r5Oj+eL8gT7L+fxd8SLyEneI43+9GIyjQgDxiQhZQJzoL1FlRP1ouzq
-         PIPtbJDA3195dzo148gxFxzXYGnBbaoueuxOj5BodtmaHc+y6JafKXsWFglGN6g0WCKr
-         kQMIE2M2yQv6pJTIp6eWo9I9Cr26EEHVUSCbA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764780236; x=1765385036;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tre/rf8HRcrussbSV2D3pHxXOcQLeC/eEv+L6zskgMA=;
-        b=bFzYWh6IePJdiznlkKs20BiB2WU/+vI7AuN60CIKEOTyqwfMBqzlHyela21u5ZMtDB
-         FIRdGmGVXpwD89526fw4v5nTI5wsxnlmuivt/TP6WBWlfWWEvqku+VqiKnENju1cU8bs
-         Em8tzXKL0ChGehfOoOBKRHaddT2tJMXK5hHCrVcqicywTvaWXYHQm26qSU0ITjgm0qx/
-         BQyeXVihDg8CfRHYHBUpIz38nzcuickv120aLRAlUCq7pvoAR9ETjop1h9HkQXNueF4C
-         c02bli9DM4NWQh2fr2IaauY9iyJ1s1H0ME5zfNNHFJBlDBgEknvLdWGLihddNGlBaN1P
-         GUfg==
-X-Forwarded-Encrypted: i=1; AJvYcCUvfAKmWjIye4Vbk3CNLZhMHHrVi9gHdqYH4hJp2K3dn7Wv4yweHJgbQWg8miNuS8W5T8D+tDh3xg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwmB4Yg8TCvbN5b+mGIzvTSKV6S2fB544qWlAGh2k7OjLZwnGZj
-	NtUt2QIS8BVVc3N+20nQM95kHvosbNoQ/wNTgsF52rTTcfrE7GFN8Vb81kGnJog6IMVYQSCOM7Z
-	w8vLQMSo=
-X-Gm-Gg: ASbGnctZGjBSANu04vYN3LXT4iWL9ydFpyDGBmTF5uhtjtUNnAuoDFPyFg6OOv2i7mc
-	Y2PqhBfDLhod5jzbnzUIUzOuD39X3uR2WDd+O2iCAPNxLZyc7XcEDUBbDXNcSOWaHgjuJZUl729
-	CHjBWW0Kk9Qb5x/rcXP8CAZL1UXY1kwbqqSYLmnzKAj8LadbnlYLfB3pTGT/1OcNf19+Cn3i1jO
-	zhuBGSj1qrWLr1ylM6Ut/avXymK90VViBkSDcl6dL84zrnRZ+5fPIQuwPkd+h2o8BPf4beZwGax
-	J00P0t3+hhHOnbHDKIflvGK0E/Adpwi1Nx1QrdbdnxDOi+eSCfWAW97q4wxv2plo0Mb0xfT4nlJ
-	eMoRclq2+6GSZ50fAfZYr+mpqTMbVV34XblWN6hX0mM7LP7uRkDCtQHtVh1MlHXnqI5B2MPDcPb
-	SeGy48iutOcOz3iUZNRmSpeqYEJWDr4QxHYdknSkSzyB5zyblriE5NzvtsNAI+
-X-Google-Smtp-Source: AGHT+IFo+K47zfVws9bbJrml5reAuBNCtBft6dLUdeV+zRleoSlvCBOm4TjrSOHyJDQ2s8d7KzMrig==
-X-Received: by 2002:a05:6402:2712:b0:640:c918:e3b with SMTP id 4fb4d7f45d1cf-6479c49bf60mr2436107a12.26.1764780236026;
-        Wed, 03 Dec 2025 08:43:56 -0800 (PST)
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com. [209.85.218.46])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-647510510easm19989508a12.25.2025.12.03.08.43.53
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Dec 2025 08:43:54 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b79e7112398so68053566b.3
-        for <linux-pm@vger.kernel.org>; Wed, 03 Dec 2025 08:43:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXshnBRClA8JZ/vmYSNUiWsgEu90nHwGfowLyqoyiRHtQ24mKC70ycwxVb0KCJw6TCOUjjiVf5JUg==@vger.kernel.org
-X-Received: by 2002:a17:907:9706:b0:b76:3478:7d52 with SMTP id
- a640c23a62f3a-b79dc51a4fcmr293870366b.38.1764780233541; Wed, 03 Dec 2025
- 08:43:53 -0800 (PST)
+	s=arc-20240116; t=1764780276; c=relaxed/simple;
+	bh=HEuqkLKJeLwonYbhFqrBWQcMiVnNbV38FGG2d9ZwBGs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Tm9IUvPEbYBojeBxrnukvqgHn12cxD7zk3kNqWy5hmCEYpNToZ4bKLzhgn3hwpETWkK3RGn6V0r0bnFzLl6Y0Hwvi85vc8eYTniSnVNd/T7zGGI2C1kjuZ4R79d10AZSWw0Y0rEi9ME3zHs0M75wm0XdiKKMdAjNQFTWjhsoiRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CDB55339;
+	Wed,  3 Dec 2025 08:44:26 -0800 (PST)
+Received: from [10.1.32.62] (e127648.arm.com [10.1.32.62])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2DC113F66E;
+	Wed,  3 Dec 2025 08:44:33 -0800 (PST)
+Message-ID: <39c7d882-6711-4178-bce6-c1e4fc909b84@arm.com>
+Date: Wed, 3 Dec 2025 16:44:31 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251203152437.3751325-1-robh@kernel.org>
-In-Reply-To: <20251203152437.3751325-1-robh@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 3 Dec 2025 08:43:37 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjLCSGkNMpcKd11EhrQJieXn7J-7px-d_sJ=o+2UT5g=g@mail.gmail.com>
-X-Gm-Features: AWmQ_bnLY8KW8oEzYYPFpNFQCtPmlo2omVWH0TluZ2sLvA-oifz7NT-KjCUAHKU
-Message-ID: <CAHk-=wjLCSGkNMpcKd11EhrQJieXn7J-7px-d_sJ=o+2UT5g=g@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: Remove invalid tab character
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Akhil P Oommen <akhilpo@oss.qualcomm.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Gaurav Kohli <quic_gkohli@quicinc.com>, linux-pm@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: Performance regressions introduced via Revert "cpuidle: menu:
+ Avoid discarding useful information" on 5.15 LTS
+To: Harshvardhan Jha <harshvardhan.j.jha@oracle.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Sasha Levin <sashal@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <d4690be7-9b81-498e-868b-fb4f1d558e08@oracle.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <d4690be7-9b81-498e-868b-fb4f1d558e08@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, 3 Dec 2025 at 07:24, Rob Herring (Arm) <robh@kernel.org> wrote:
->
-> Commit 1ee90870ce79 ("dt-bindings: thermal: tsens: Add QCS8300
-> compatible") uses a tab character which is illegal in YAML (at the
-> beginning of a line).
+On 12/3/25 16:18, Harshvardhan Jha wrote:
+> Hi there,
+> 
+> While running performance benchmarks for the 5.15.196 LTS tags , it was
+> observed that several regressions across different benchmarks is being
+> introduced when compared to the previous 5.15.193 kernel tag. Running an
+> automated bisect on both of them narrowed down the culprit commit to:
+> - 5666bcc3c00f7 Revert "cpuidle: menu: Avoid discarding useful
+> information" for 5.15
+> 
+> Regressions on 5.15.196 include:
+> -9.3% : Phoronix pts/sqlite using 2 processes on OnPrem X6-2
+> -6.3% : Phoronix system/sqlite on OnPrem X6-2
+> -18%  : rds-stress -M 1 (readonly rdma-mode) metrics with 1 depth & 1
+> thread & 1M buffer size on OnPrem X6-2
+> -4 -> -8% : rds-stress -M 2 (writeonly rdma-mode) metrics with 1 depth &
+> 1 thread & 1M buffer size on OnPrem X6-2
+> Up to -30% : Some Netpipe metrics on OnPrem X5-2
+> 
+> The culprit commits' messages mention that these reverts were done due
+> to performance regressions introduced in Intel Jasper Lake systems but
+> this revert is causing issues in other systems unfortunately. I wanted
+> to know the maintainers' opinion on how we should proceed in order to
+> fix this. If we reapply it'll bring back the previous regressions on
+> Jasper Lake systems and if we don't revert it then it's stuck with
+> current regressions. If this problem has been reported before and a fix
+> is in the works then please let me know I shall follow developments to
+> that mail thread.
 
-Applied.
+The discussion regarding this can be found here:
+https://lore.kernel.org/lkml/36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7/
+we explored an alternative to the full revert here:
+https://lore.kernel.org/lkml/4687373.LvFx2qVVIh@rafael.j.wysocki/
+unfortunately that didn't lead anywhere useful, so Rafael went with the
+full revert you're seeing now.
 
-But I want to object to the garbage that is 'yaml' and 'invisible
-whitespace has semantics'.
+Ultimately it seems to me that this "aggressiveness" on deep idle tradeoffs
+will highly depend on your platform, but also your workload, Jasper Lake
+in particular seems to favor deep idle states even when they don't seem
+to be a 'good' choice from a purely cpuidle (governor) perspective, so
+we're kind of stuck with that.
 
-Maybe we can have a "kernel yaml" that just turns tabs into spaces
-with 'expand -t 8' and make the rule be that kernel yaml files don't
-have to participate in the mindless garbage that is "yaml by the
-specs".
+For teo we've discussed a tunable knob in the past, which comes naturally with
+the logic, for menu there's nothing obvious that would be comparable.
+But for teo such a knob didn't generate any further interest (so far).
 
-Yes, I know it matters for 'make'. That was a mistake too. But at
-least we could *fix* the braindamage that is yaml, and we already have
-a defined tab width for the kernel anyway.
-
-          Linus
+That's the status, unless I missed anything?
 
