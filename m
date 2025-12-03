@@ -1,247 +1,1742 @@
-Return-Path: <linux-pm+bounces-39170-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39171-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DE07CA09F4
-	for <lists+linux-pm@lfdr.de>; Wed, 03 Dec 2025 18:46:47 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6425ACA08AB
+	for <lists+linux-pm@lfdr.de>; Wed, 03 Dec 2025 18:39:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 605133015135
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Dec 2025 17:45:32 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 4A9793000900
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Dec 2025 17:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C1A23385B3;
-	Wed,  3 Dec 2025 17:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25B23148B8;
+	Wed,  3 Dec 2025 17:39:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="o4xPyqOj";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="kMTW7Jat"
+	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="waeN7KXC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23946337BAA;
-	Wed,  3 Dec 2025 17:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764783094; cv=fail; b=anOQr1xT/RPuYj17XkLA63oB1nNQm+Ik+8oz61U4Ihj981baARNCDB/ElRhgJc1P/7lyxXfbV8/WBYD8NdBxOUrPMDBMPgU1KU1JRA3HM3+9LPYu/5nuvFjdTwnIqyC/sbTzZwFQKQgTQaX78uUaGu9kZfqP1Q3jXXOcFGFDPvo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764783094; c=relaxed/simple;
-	bh=Lux+Lb+NzFIzxLo/7ZUc0uw2I1xpG0wwk/A78RjoTXM=;
-	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=t1eR5t1cknmwUiagcv9JsaBWMwLQ1+/SSBdzqkywR2k7PAKZtUtrIQAAaTytl909WMzrpOo3/ehrEG8z5V0uQz+cfnqFMs1fmbt86zfTRmYXJsAhq4TJt/mdf+q5AIC7ANN/quVc0brqILeqPPw3CeCL7dyFUegQTEvYesubyOA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=o4xPyqOj; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=kMTW7Jat; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5B3F10NK2884528;
-	Wed, 3 Dec 2025 17:31:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=corp-2025-04-25; bh=Uo/3YZEM5ha6JNhR
-	JVgxvZfDWugJPhQMt+Tl10CK9hk=; b=o4xPyqOjn02LyBGlQqeBnHEXvaYB8yqF
-	ItmWJtF/LjlXZSvoAT0HBAHoIO2oAiXMkQ6QNB+8Y9/w1H5rpKvnPr9GqIcZ9R92
-	1UwUoFRxB8gI07lpZQUCPaYOcX/Wb3h9LrEEHsp8aHkUSARMwa+qkIN/5EPUwrd8
-	IXIEuPydO+bCfUD2qGbOHv03ymwwIFuU8N2QjNIKaNnTNGuslyuDO3A4szqcS/t0
-	ZMuHLpVmf42y6zNdLYCyyiJ3OmF6WNoOhKKZvHHYqr4Wzwm0BnO38vO8oDbzyU4f
-	gJHsY9mEJNXOz6ybVYhVvI/WrLp1eq6Em3ZP0yIo6/famHtZtRZ32g==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4as7wnduha-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 03 Dec 2025 17:31:24 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 5B3HPk6V015153;
-	Wed, 3 Dec 2025 17:31:23 GMT
-Received: from ph8pr06cu001.outbound.protection.outlook.com (mail-westus3azon11012043.outbound.protection.outlook.com [40.107.209.43])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4aqq9ayhpa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 03 Dec 2025 17:31:23 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WtqxafSIqeN2xTB0R9q26CGhPYLaX38tva0xa1GRVgBH93Ckag/zc4hAvtP3O6OXPbMCEOOcQm0PPDskQJo8ESQNxrZDeVN8SuC4QLlVnQXB1lPEzapxgHF+RqAlFrQjRM7dvOnM2qc/2HaKLUeQvnaPGtslnMW/5zO02UqCUsDsQG6T7jIvAKOC13JLgMYEZ1FYFEyuYycuyLnXlHjFxlfDrNoxQK4okLyeUx8bjpZUbAD9AMh6Ws3atcHgmCGHx8Mr1EdR4QQFIL9x+lETBEQbiVnnzeyQ0nUHnl9Cag+URrdFYqaDr0HUOL+jah4+ToS9vnuf5UB8qZ1cf0dnrg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Uo/3YZEM5ha6JNhRJVgxvZfDWugJPhQMt+Tl10CK9hk=;
- b=iBjeaRq5dMDfPpYDe1hCXuIxIRxw8hl6sUtiLHBRo79BMuvUrjWuWfPY7semyrAcrVJQyAr0TbimW9SVRjH0LwPbVqSh8jRc/uQsTqX0njb+92/2+d3SkF/Uk6DPa2Qi7SjxT59COnWZevW9d9TCr9hqyAz+zrCrnpSuVrH7nEcG2YzOf1HRIWvhmIXPJOHp+q4MIo2jI0A/WhEuzTHIAB/TZDEHOReQFRyvo+H7Wp5+UGyYlXe6xa15HQIf3Wavb+ud8sh2RBsr0cP1Ihl9nTtJOpgezSBol5UCYilWgZdDfvbR9Ef9ep2DQF7vTWWeEQA/DBAS56JASlB5ccxzbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 045023164B6
+	for <linux-pm@vger.kernel.org>; Wed,  3 Dec 2025 17:39:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764783552; cv=none; b=GCUTS3u0IbLfW6KfFWEvLSbv9vbDV/iqlMLf04l79HJK2RKQhBhFkl3yQv1WwWxzvkjBSXXSYrcMlgSDCmybecTLsYicYoLqMABrWe6jU6ZqCHPhLQQdVFHqCAvM+wzvpRZX1JUbh7yfFvCgcBmbCsRF9O2/wntdi8Sp2ujvRds=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764783552; c=relaxed/simple;
+	bh=lqB/4mhUE2yTmXKPm3REMAfwEcdLCYeaas36LVXjf1A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dV/JBlIPdfg7gecQ4u1v5k8IkrWSOd4UziK3JmsEUniFkMNdb6XlV5XkIrmhcSESNu7SfsX84kE5OiFghEv2ajr3F9fjARMG5FrxtE8XF9ctNPDbMkKTSrg03vFaRrM5iFdH3uUboRWK/e1f4lnTAPpVexDBVtVKeMnQtVuNDdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=waeN7KXC; arc=none smtp.client-ip=209.85.161.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-657490df6f3so3004490eaf.2
+        for <linux-pm@vger.kernel.org>; Wed, 03 Dec 2025 09:39:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Uo/3YZEM5ha6JNhRJVgxvZfDWugJPhQMt+Tl10CK9hk=;
- b=kMTW7JatwT/bArQXYakXZE+1Tc9EDo5pI3EYliBCWB7fA58LFBmMlEXRpKZ1ZoqW/roQMyNE8jW6wW0liF/Q6rwOfDMpDaIXeZKYL486J8D/okom/qxy6XW01c2gfR30Z/IwVLGoQYDd2QfeG4AQCAj5rtGnYPMSX5hNm13rokA=
-Received: from DS7PR10MB5328.namprd10.prod.outlook.com (2603:10b6:5:3a6::12)
- by PH7PR10MB5814.namprd10.prod.outlook.com (2603:10b6:510:125::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9366.17; Wed, 3 Dec
- 2025 17:31:20 +0000
-Received: from DS7PR10MB5328.namprd10.prod.outlook.com
- ([fe80::ea13:c6c1:9956:b29c]) by DS7PR10MB5328.namprd10.prod.outlook.com
- ([fe80::ea13:c6c1:9956:b29c%6]) with mapi id 15.20.9366.012; Wed, 3 Dec 2025
- 17:31:19 +0000
-Message-ID: <c0b5c308-ea18-4736-b507-01cb06cb8dfc@oracle.com>
-Date: Wed, 3 Dec 2025 23:01:13 +0530
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: christian.loehle@arm.com, rafael.j.wysocki@intel.com,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
-Cc: gregkh@linuxfoundation.org, sashal@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "stable@vger.kernel.org"
- <stable@vger.kernel.org>
-From: ALOK TIWARI <alok.a.tiwari@oracle.com>
-Subject: [report] Performance regressions introduced via "cpuidle: menu:
- Remove iowait influence" on 6.12.y
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO0P265CA0002.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:355::15) To DS7PR10MB5328.namprd10.prod.outlook.com
- (2603:10b6:5:3a6::12)
+        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1764783545; x=1765388345; darn=vger.kernel.org;
+        h=mime-version:organization:references:in-reply-to:message-id:subject
+         :cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rh+6msNDHnVjjuN/R81jZjgmx9PmAz+Em8qshbGawRY=;
+        b=waeN7KXCTF4oCIiC4t0X8lSJDl9DNn23eUfmypZZxA+5jZDyMzu3Lvfg5ii2SgEVpB
+         xuNqVfRMHX20Tgwki6GBMc0SIcWSiQqj9VY8xQBjUXVUSrBCYBSVA5SQFyZj7gInfroo
+         JKGYOKRu7o+PS8CdrAJ8Zmq8FQ1uoI40xsLJl3lTh0Yt0dLdl0WkRx0v/U7mCDEad91E
+         blPZCw1a1MCDB0+aPSRoIP9au/wgJS5Hy5lZq7bEys8ZddLS0scadzpuMaVmpBhI2Uqf
+         jQEd1oJkvFA3T9mzFAKSAlmt15Iozcp2a8zMlESHuz7DxwA/xkXWu3UlmVoGh88uvKoq
+         kq9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764783545; x=1765388345;
+        h=mime-version:organization:references:in-reply-to:message-id:subject
+         :cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rh+6msNDHnVjjuN/R81jZjgmx9PmAz+Em8qshbGawRY=;
+        b=stGNi46WwQhGpzZTSBIsIfWs9U2gZGQs1incWCDWElOTYnfHbFrZrIEM6vCrb9ppZu
+         z8R9DLqFybslprLtqT9SAZLLVUoTC0taXQAKtKHnDIh0GgBGjlFrPzvsv6Sbvc1ylj0o
+         Mxwj8kzJsjfeUDydxOzYZUkePrrPtXtzPoYjVYoHyLU+LE2L9/EJZ1nPM9yy3RTxTn2I
+         VKc6jhwk4wimrxJj2OccP/i+KurteST9HoG/T98bQzeW7n5LS45w5pdoMLxTa53mKCoB
+         mBJc0WQmAuQHwaQjmwfaFKfLjVDiwpDDHkVeVU8+vIENj9tBFQmxKHx6KiKJjWS+SKUp
+         ulYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU3w++YuawgCKJCs1XzrR0iFV4yJwtkhhtXqWdH5O6SgOfQMbe6fYlAYX7UAabcVRu+vYy44Wd2vQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8Nv6zdNCE5Oqf4qlVIyjOHu/SbIGn7tmRFmOgh0WTOWe8Xjki
+	ep1nV4nt33/X6D+Dcf4cNx6nBF++UToi0FeoAdj1tlGw17oULQ+/j2cyfTNyQK6iVhg=
+X-Gm-Gg: ASbGnct1enpTXBwX/ilhSGVrQXfGt+iji1UVDjTXv0LL1pe2dsVeyQFtXdYb2wkoeOO
+	LLz/K/ThdxqX5KvUYTL4Y6QKs7UZjZTsH8fyajyK4tydxWeHaMxQD7KaY6kI079U3y4rAvJmsM6
+	tf8094gL+wav6BReu2CSnK2kOwEAjeo8As/tELoTFCo9xUvHyKrgDjSRZnrUdXxvqgK+jR5CMPJ
+	FdKCcJb/LsT4lGVV8LHVUzrmgWp1O9ubVXadAhPJZBrUIJMcJrUJhRWK8AFbSckDzMaecsN5xdH
+	DO8xd7+3D7nNlmHMjguEejDZ7ipDMi0b/GD5HTY02JO7AlwxTf6z+N2wQKYjSCkrv9T547v7Ecf
+	wz2PXcu5W7GVilnQiUDjBkeh6SXBJen4ewBbP97uLTm84ZfSGc5/yEJU6zUTPlfJ83GIJbEX2+c
+	TJC+o0TOU=
+X-Google-Smtp-Source: AGHT+IHHApwLreZgH4ovi5WX/rc0u4hgi3kiCi6fhtVUAAkNtO7jMHi5ltJMyRyZCiGkgFY1pjoyXA==
+X-Received: by 2002:a05:6808:308e:b0:44d:c185:f816 with SMTP id 5614622812f47-4536e4f7ccfmr1731021b6e.34.1764783544673;
+        Wed, 03 Dec 2025 09:39:04 -0800 (PST)
+Received: from kf-m2g5 ([2607:fb90:bf8f:aac:11b2:8ea3:5a93:ee05])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4537820ffddsm204623b6e.11.2025.12.03.09.39.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 03 Dec 2025 09:39:04 -0800 (PST)
+Date: Wed, 3 Dec 2025 11:38:51 -0600
+From: Aaron Rainbolt <arainbolt@kfocus.org>
+To: srinivas.pandruvada@linux.intel.com
+Cc: kernel-team@lists.ubuntu.com, lenb@kernel.org,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
+ mmikowski@kfocus.org
+Subject: Re: [BUG] intel_pstate: CPU frequencies miscalculated/incorrectly
+ detected on Arrow Lake hardware
+Message-ID: <20251203113851.52bf872b@kf-m2g5>
+In-Reply-To: <20251126170031.145b6a56@kf-m2g5>
+References: <4f534cc70650111e420d5ac9040df4e546eed336.camel@linux.intel.com>
+	<20251126170031.145b6a56@kf-m2g5>
+Organization: Kubuntu Focus
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR10MB5328:EE_|PH7PR10MB5814:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b1246ba-0016-4a5b-3a57-08de3291c568
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?aXd3bGROREZjZWJYNlF2b3lGUVNMbTVmbk11QVJaSmhhcWs1WmExTlJwM3ZR?=
- =?utf-8?B?dEthd0ExUHpEYTExZCtOWVV6dC8xQ21hS3pXNEJOQ1g3ZStGdGxsVWZWekFY?=
- =?utf-8?B?M2lHaGNra3V4UXRGT0I1bXRJd3EyNGd5NGFlUE9ieVZ3elgwbHIrRU0veUhJ?=
- =?utf-8?B?OVFOTjNtVHVIK1o3Q3EzL0lWdERjTG5jNkYxZTNLLzgwdjlBenhhbVhHaUZI?=
- =?utf-8?B?bXoxK0ZKRFYxWmJvRjlidlBIVCswSDlkMERVcjBJcmlxOWVrb2MyNjhhSUVp?=
- =?utf-8?B?bEowVjdVWGRMSDhYQm1LM3hpVjVVRHNNTjJyTzBveHZ6a2ovNVdsZmNBYzBK?=
- =?utf-8?B?emlqVnNvKytTSFg5bkF2Q0NHL0ZRK3FNbGZsd1lIVEs4NzR0WUxVSTh0Ykpn?=
- =?utf-8?B?UUtJREdZL3o0dnV1YmlQVEd3Y1JOMktnaTJiRC9qWldTc1dNRkx1VzU2cFB2?=
- =?utf-8?B?TGxXK2E3ZmR4YmYwdlYvb2ZoRW83V3dLdmpZUVEyT2I3ejh4dFBXQWxYWTZp?=
- =?utf-8?B?cUZnbWM0Z0FjZUtua01EMjhzSGZrU2twUE9ZK04wN05BM3FrcE5kY0xKMUhU?=
- =?utf-8?B?U0JVRVNIVE1kTFIrTlRJTVhtRmcyam1MUEJlUmJDK1NGNnpzeitjb1dEak5l?=
- =?utf-8?B?WTkrd0R4cWpBWkxqNkpvNkdtSzhKcVBNNUkrdFIyUW1NbkxZalhnb0lCc1p5?=
- =?utf-8?B?NjRuUFR1ZUNEQ2x1QmVQVm00Q0xxK2RiblcwYUdibWZpNldWbWgrTUMzekti?=
- =?utf-8?B?NGQrYysxSXVlemo2Tm9Ud0luaVZkT2pGaGNYSlAyUTVTMXJKemxtTFdjb3Np?=
- =?utf-8?B?ZGFTY25MRDBTRHdoblBwQmlTWTdUNGMrOVhJbk9IRVdMQkJPSmxKZno5elhL?=
- =?utf-8?B?b2tqeXRMdWRlT2pkVmtlcyt4SVZ3VTNMVGtnTVpVOHE3TmFnMExsMEFVNGtS?=
- =?utf-8?B?eTFuTnMyUUtMeDFQbVZ1QzVBNWdOSFF6K3JXYUhzeEpWbXBCMXFzTjJFSlR4?=
- =?utf-8?B?UW1kUzNxYlpjS0toYlZTL2dPY1VqS1Bjd0NvN3EzLzk3b3ZBb3piQ0RKei85?=
- =?utf-8?B?bmV2Z1lPUmlhSlZPUTcwUHdoTFJGMzE3MjJtT2RXVXBNd25RKzlCNVpBcnoy?=
- =?utf-8?B?MkxSL01PUm1SUGRiaTgyZkxwcjk4bUQ1OWNVc0Z6NFlKd3puc1ZZSmNJK0Fp?=
- =?utf-8?B?MTdhUTVKQnJtTWhMSXhmaHEwQ0p6M0FhVUNoUEhDQWpGM1R0cmFnUlJaWFYv?=
- =?utf-8?B?UlFIREdPUEIzTElMc0VQUzQ4Y2FqeHZ5N0xFbkZDWWdZL3FYRGl4RmhJUCts?=
- =?utf-8?B?eWpnSFJ2eFFqZWRheHBaZ2FYM1d0YVVDSTZaNmxISG9XbzRHYVV1UG4zWXZE?=
- =?utf-8?B?YmJiUHdWUUg1M0FmRWV0ZW5OUTB3dXZWRWRGUGdneE1RQVVzVWpwVlFkUWhy?=
- =?utf-8?B?NFhIdkpxeG02dng2VkJTSUM2RTlTNlRDSDdLUGgxb0x0cmZ1Q2Qxc0V1TUNM?=
- =?utf-8?B?bGdlN2ZGWWNZbmhhdXE2aWJjSzhUbjdqTWIrQU9HU1h6VHJKb0x5R0F5OFRM?=
- =?utf-8?B?VUZqbGdjYU0yMUZJdmVrYmF1Vm1VeGxHZ2JvSnd5a0FRajJPVEhMNHRiRFZW?=
- =?utf-8?B?QUp5bnB6Y25LYlN4OEN4K3JpYnFaR0dTM1lwaVNPZmduMU13VUo4VmduU01p?=
- =?utf-8?B?RHM5Z1pRNmRWaVB5M1JyQTgwK0NWd1d5MVJ5MjJzWElSK0Yrc3pLTnZEVWVm?=
- =?utf-8?B?aGkzWk5yRkhNdnRGMlpyN1BlSW0xN090cS91QWoreXl5UzVUSEtkOEViT3FS?=
- =?utf-8?B?ZHhxM05IazB5TjNYcktaUkNhT3FnNGpZYnlnUGIzTDhWaXU4cFdKOTh4bmtu?=
- =?utf-8?B?VjZkbzVBTHZJRlgxTkFNUng5Z2MxcFFVRkN0UUFBamhCaU5LRXlZMXh6UFVU?=
- =?utf-8?Q?eXI5e0LSjVvmPS7coNHsd+/EoN1/ZdxG?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5328.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?K3NNemhBVVZ4bXJQQThKYmwya1NNQk5uS1ZHWDJseVZIY0VNMzBSTmRBU215?=
- =?utf-8?B?RVJaVEZxWVRPOTRua2l5VTdLK1MzOGlVR3l0N1diay9xYmFJM3BtOGFxYnFF?=
- =?utf-8?B?UzlCRzMzY2JRLzc0SGxNKzBnVGpuWVlUODdZbURwRVUxMXlCSEhQY2pzUFFW?=
- =?utf-8?B?dTd5Z2hMQ0ZXMnBmRWFkQ2tkYmlvejQyT1A4OW16Q2FsWEd1RzdUYjJ2MTlL?=
- =?utf-8?B?Y3B3Z3dUTUFyY2F0dzV6bXpXVXJwcXFSRjNCSlU4R1YxR291bjRDbWZZbGFa?=
- =?utf-8?B?TVE5TkVBMUpIeXhxcEJmOW1jcUFmL2Z0UG9mamV5NHYraDF6bjA4cWtjc2xN?=
- =?utf-8?B?OEFZZ1pLTHg0NVBMS0h0cGsrTHV3UXMrM1JxQlJmU1JLVlRxelMwMWVyRW9Z?=
- =?utf-8?B?d0FXaXEzNytRY1k5UHhyWHpNMnFrVENtVnp3aC9MTjROTmU3NUE4eU9lY0ZD?=
- =?utf-8?B?NzRpeVhjYitDVVdNWjlmVURyK0FOTGwzMFdQd1NkUnhucHQwM3BhYkNZdm9T?=
- =?utf-8?B?eGZqVFpTMnpIc3VwdlNydU5KTnNVMnFVZTVsZlZ1VENyLy8zZW9hVUNrU3hQ?=
- =?utf-8?B?Z1RiMjg1MnBOaStnQjhlcFFBajhJRUoySFRqVWpWN1BqK3V0eUpoSFVjVlpr?=
- =?utf-8?B?OFRkQ3V3aU1oVURYMnVTY3ZyQ1hqNWlvOVl6aHFvL0xMMWRqTkdaaE9NVklj?=
- =?utf-8?B?UXNSY3EwOE5LcWpjY1BleDRjVHZrV0pnQjcvdXBPbVR3NHFTSWcvRDNtVi9h?=
- =?utf-8?B?Q0lyTXNkd2xZQktlWjNSWE1qWHBEb1hlNGpSRDVnN2V2Ykp3eGxCT2ZvZEFv?=
- =?utf-8?B?RXhVRGNDMndFSitTaVFmOFhkM0ExbDR1U01samFlaDUrV211OGJDMzE2SU9C?=
- =?utf-8?B?dEdJVzZ1bHkzU3gzcFhpZGo3TkhiMHpyRFRiUGZNUDNxdFFGcmkxd2k3bVZY?=
- =?utf-8?B?aU4zL0NyZ2g2UXAra0xGYUZodjhoRlRQVEl0NjFoZWhPMStVVVFUVHFlR2Vv?=
- =?utf-8?B?SGNKemlQdnk3MjFhM08reTBUZWhXNzhqVkpXYUI3azVnL2ExejNiaGM3ZFRp?=
- =?utf-8?B?ME1zWEZBVW5sV3RocjI1SEVrMjBkekszekxPU1BnQmo5Q1VyMDdlbzJVUFBv?=
- =?utf-8?B?TExQSU44VUZLRTBuSzFVRFk2SFZ4Ulc0clZxdG9RVmlCY3hST1hGcXh1WkIz?=
- =?utf-8?B?NFdScGY5a2tmcXAxM2JQakpoNG0ydnFJZjhOcmtTU2poaGR6N050alFPRW1q?=
- =?utf-8?B?RjRaaDdxZ3JkY2pzdzVPcXpzcmZuZnpWUVdLUENJVlVSdzZYMkdPMnZjdWNq?=
- =?utf-8?B?ZjdzbGpkMGNYZ1JoSGJjSnFrQnc3Y0dMak8zSm4ydUF1dVhkRjVscXBHU1U2?=
- =?utf-8?B?MEp5N1QwdG56SEtFVWY4bHRDNkF1emJ4aEsvZTkxdVhiWjlmbnpJcUhMcnlH?=
- =?utf-8?B?ZUI5N1Yya0JYNlA0UVpqbVd4K2VNL1dmNmZjSnhTeDBsNWNvMURLTTBvRGty?=
- =?utf-8?B?QUFUWEVOQWpZcGE3U3lJYTFuOGk2RmdVMmxkbno5U0dYZGhHUVo5cjFNSDQ2?=
- =?utf-8?B?MVNDa21nTGdydnpEWlRGSCtGTnpLVHM5L1V5dmJQUE8xVEZKaklrS0wvblh6?=
- =?utf-8?B?OHpGUjYwZkxIT2dkNFZJbnNIQTkrN1NXTVkxYjhKSDRhaW8yNlpma0pvNjdN?=
- =?utf-8?B?WWdWbGYzT083KzZvM1JzKzJhaXFjNy83WTZocnRGN3ZOclRqUWl0eFlFMk1a?=
- =?utf-8?B?QVlMc2ZRNDF3Wm9LUTBJUXRBZ0lMQmNUTzIrZlp6ejlIR2YwZ3p4U2FPRmti?=
- =?utf-8?B?bjZrMkpDLzRBRWhqY2lsS0xnRklBeE5tN3RVL2dTWE0zN2ppK2FnVDBpUUxO?=
- =?utf-8?B?YWYvdlN3dHlzcmgrMDh0Y2pVRXlINjh5aWRscjErUGhuZnJENmVsNjhRRUtJ?=
- =?utf-8?B?VWtVR2VYWTY0VFM1OTFiTDBvVVlHTnMwTm4raURPTzJ1Wm9paGpEbEVYSHg5?=
- =?utf-8?B?VmNwRDJCZEN0Y3N2Z3l6ZVdhL29UWTN6VGNyNmFWcWFxR1lySHZTYkVkSHl2?=
- =?utf-8?B?cTJmc2ZTZjJpNGpxMnFFOThITUsxMlhydHBScWpOZ0xxekpESXFHT001ZDZJ?=
- =?utf-8?B?SUExU1d6b0VnVXZseDJHNUxneFdGeWxFbGJkMlk2bHRaOUl2OVI2SFd4YmMw?=
- =?utf-8?B?a3c9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	yp+v3vM0mtKwMlFajZNs908Oqim3TIFzCZzd2qDiG8n5dS7mfjucI4VlcowhfUo4H5dqsGhXOHaYEadJJUzophV8VkaR/3Zl9Mxjq1fT20obvDqa3LFr10i3XKGI5g0HyS6StWEvY5Be+q5C+08O3YX2xwdMBkzv5SS6HSnem2meshvom0HaNUDW3pbRFjv/L76dehYfYkJ8gGb0BrECIJM9FuTRDiwgvnNbKNsG62fHyn6cLXMC9NEwvfOAKAMIvThXmO/evs2riQe/F/CR5GF+Hj5v2SUdfhTAMBJ8NGVO5EgfaR9a+ErX9oO9XMxRykqA2vQHZIooJcmjmI214fREbMSY52Nw+gyvNHFzA8eoln5wMqqnF730K4I4eKc7g4CTvae1skshcTkwfF/YnTh6H5VncTvtUuwW8XCUSAhaDuxD+h5rLdBMJoin2sQkIoDqyl+LJ/T39KZ7kniyiBswF+Vd/1YLdsu124F90K8JRWRiH5RbKmbzGgjN8l59UG33V1BhYUW37yrLJhvPxELuy1A4Pj7pq5boQiMHYsCY2umPBml2T7LuASzzHT3N0wo0zpTQKDC/z40tKQBNU5o6VhxQUBnKlaPEjIU838M=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b1246ba-0016-4a5b-3a57-08de3291c568
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5328.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Dec 2025 17:31:19.8643
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 18fOKi35lfIMrVwO2M1ije2xJ6VMLIkvmQoWFJuUX4emlv42Fe56svCdVTSvGY7rwLswHBjgLacBOcMupSnI8Z1Vv1qMLHhgYfWWOxF0Tlw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5814
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-03_02,2025-12-03_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 adultscore=0
- mlxscore=0 suspectscore=0 phishscore=0 mlxlogscore=999 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2510240000
- definitions=main-2512030138
-X-Proofpoint-GUID: NPmzfyJho2sJN4Q-l2_DcUwr9X2g2n_X
-X-Proofpoint-ORIG-GUID: NPmzfyJho2sJN4Q-l2_DcUwr9X2g2n_X
-X-Authority-Analysis: v=2.4 cv=SbX6t/Ru c=1 sm=1 tr=0 ts=693073ec b=1 cx=c_pps
- a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=wP3pNCr1ah4A:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=XijJ0rKuI5-6PQn_0NcA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjAzMDEzOCBTYWx0ZWRfX3kOMLT3wEAYX
- F42Ct0QEOU2+cVS3lFxD263bBVgg42911O/mM1Mp+yxhm+9lJXI5fTM6/utGMK6e3OOXPENZ7DH
- heizHOfrNCfpmybHMVxIm1C1D16f656KpZUC/oW/SIBTcxNdBV3TFmvxt8Qv5/6J/+l+rPZKDin
- PHisI0bZmC5e6pum3PmLfJm0phsbKGfzxVrB/VfyylfjL7xtOC1mIowz5TwfbztnG3yZydBTixT
- iEZSyFdAJcRwt5FUxVQha4euvOm22y8Zoc3up9d0f+jBXf0vxZ48YJ53Dc+0hP5q9W3rpci6b5h
- f7oSIW6NG8ccHUz4IakFNUUeCrrthWTuoW1tf7zJan5sZHFXSEUE2xcYNqUaiIPx2C/U0c6bCpm
- +WzI96dmsgJHxTB1gcJu8phO+hJuXw==
+Content-Type: multipart/mixed; boundary="MP_/gSFvir+VM81sdu0qQQTVXTb"
 
-Hi,
+--MP_/gSFvir+VM81sdu0qQQTVXTb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-I’m reporting a performance regression of up to 6% sequential I/O
-vdbench regression observed on 6.12.y kernel.
-While running performance benchmarks on v6.12.60 kernel the sequential 
-I/O vdbench metrics are showing a 5-6% performance regression when 
-compared to v6.12.48
+On Wed, 26 Nov 2025 17:00:31 -0600
+Aaron Rainbolt <arainbolt@kfocus.org> wrote:
 
-Bisect root cause commit
-========================
-- commit b39b62075ab4 ("cpuidle: menu: Remove iowait influence")
+> (Sorry for this rather malformed email, Claws *still* can't find the
+> thread for some reason so I'm having to resort to a "mailto" link off
+> of lore.kernel.org.)
+> 
+> > I asked for some dumps before. We can try to inform the OEM of the
+> > system as this is a BIOS tables issue. What is the make and model of
+> > your system?
+> >
+> > Thanks,
+> > Srinivas  
+> 
+> We're actively working on getting the dumps you mentioned previously
+> for all three affected machines, along with the model info and some
+> benchmarking results with our current production kernel and the latest
+> mainline kernel. It's taking a bit longer than we expected, but we're
+> pretty close. I should have more info by Monday if all goes according
+> to plan on our end.
 
-Things work fine again when the previously removed 
-performance-multiplier code is added back.
+Hi Srinivas,
 
-Test details
-============
-The system is connected to a number of disks in disk array using 
-multipathing and directio configuration in the vdbench profile.
+We ended up finding out that the frequency misreporting issue impacted
+more machines than we thought, in different ways than we thought, so we
+ended up a bit delayed. We did get many of the dumps you requested, and
+also did some tests to see exactly how frequencies were getting
+mis-reported. The actual dumps and the results of testing are long, so
+I've attached them instead of pasting them in.
 
-wd=wd1,sd=sd*,rdpct=0,seekpct=sequential,xfersize=128k
-rd=128k64T,wd=wd1,iorate=max,elapsed=600,interval=1,warmup=300,threads=64
+Some key things to note are:
+
+* The manufacturer and model codes for each machine we tested are in the
+  "2025-11-26_cpu_freq_report.md" file.
+* We're seeing the misreporting problems on at least five models of
+  machines from three different manufacturers (ASUS, Clevo, and
+  TongFang). Every Arrow Lake system we've checked is affected. This
+  doesn't rule out BIOS issues I guess, but it seems somewhat unlikely
+  that three manufacturers would mess up their BIOS in the same way.
+  The reports are for three models of Clevo machines and one ASUS NUC,
+  we haven't gotten final test results for the TongFang machine in
+  question.
+* On all affected systems we've seen, *either* P-core frequency is
+  mis-reported, *or* E-core frequency is mis-reported, but never both.
+  One core type always has its frequencies reported correctly, the
+  other core type's frequencies are reported incorrectly.
+* All systems tested were using the latest BIOS from the manufacturer,
+  to our awareness.
+
+Thanks again, and let me know if there's any other info we can provide.
 
 
-Thanks,
-Alok
+--MP_/gSFvir+VM81sdu0qQQTVXTb
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename=2025-11-24_6.14.0-34-X560WNR-G-acpi_cppc.dump.txt
+
+/sys/devices/system/cpu/cpu0/acpi_cppc/feedback_ctrs:ref:270641204082 del:275722878614
+/sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu0/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu10/acpi_cppc/feedback_ctrs:ref:133912418268 del:139184280166
+/sys/devices/system/cpu/cpu10/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu10/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu10/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu10/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu11/acpi_cppc/feedback_ctrs:ref:115895924324 del:119120299188
+/sys/devices/system/cpu/cpu11/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu11/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu11/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu11/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu12/acpi_cppc/feedback_ctrs:ref:135163412604 del:139673124030
+/sys/devices/system/cpu/cpu12/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu12/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu12/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu12/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu13/acpi_cppc/feedback_ctrs:ref:134216335076 del:136878099645
+/sys/devices/system/cpu/cpu13/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu13/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu13/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu13/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu14/acpi_cppc/feedback_ctrs:ref:127454330124 del:130825399213
+/sys/devices/system/cpu/cpu14/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu14/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu14/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu14/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu14/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu14/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu15/acpi_cppc/feedback_ctrs:ref:173110410800 del:180407121677
+/sys/devices/system/cpu/cpu15/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu15/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu15/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu15/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu15/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu15/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu16/acpi_cppc/feedback_ctrs:ref:150555889972 del:157978027842
+/sys/devices/system/cpu/cpu16/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu16/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu16/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu16/acpi_cppc/nominal_perf:21
+/sys/devices/system/cpu/cpu16/acpi_cppc/reference_perf:31
+/sys/devices/system/cpu/cpu16/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu17/acpi_cppc/feedback_ctrs:ref:157707186600 del:163187443243
+/sys/devices/system/cpu/cpu17/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu17/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu17/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu17/acpi_cppc/nominal_perf:21
+/sys/devices/system/cpu/cpu17/acpi_cppc/reference_perf:31
+/sys/devices/system/cpu/cpu17/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu18/acpi_cppc/feedback_ctrs:ref:144500108048 del:151193319807
+/sys/devices/system/cpu/cpu18/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu18/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu18/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu18/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu18/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu18/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu19/acpi_cppc/feedback_ctrs:ref:128414316672 del:133079393109
+/sys/devices/system/cpu/cpu19/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu19/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu19/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu19/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu19/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu19/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu1/acpi_cppc/feedback_ctrs:ref:235732033557 del:245559669554
+/sys/devices/system/cpu/cpu1/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu1/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu1/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu1/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu20/acpi_cppc/feedback_ctrs:ref:142529934172 del:147286014327
+/sys/devices/system/cpu/cpu20/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu20/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu20/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu20/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu20/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu20/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu21/acpi_cppc/feedback_ctrs:ref:134110261880 del:138912585023
+/sys/devices/system/cpu/cpu21/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu21/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu21/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu21/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu21/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu21/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu22/acpi_cppc/feedback_ctrs:ref:118184508996 del:123263423709
+/sys/devices/system/cpu/cpu22/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu22/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu22/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu22/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu22/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu22/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu23/acpi_cppc/feedback_ctrs:ref:172933187148 del:164921744944
+/sys/devices/system/cpu/cpu23/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu23/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu23/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu23/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu23/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu23/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu2/acpi_cppc/feedback_ctrs:ref:280142498645 del:334674936327
+/sys/devices/system/cpu/cpu2/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu2/acpi_cppc/highest_perf:63
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu2/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu2/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu3/acpi_cppc/feedback_ctrs:ref:256054357938 del:287527389253
+/sys/devices/system/cpu/cpu3/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu3/acpi_cppc/highest_perf:63
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu3/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu3/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu4/acpi_cppc/feedback_ctrs:ref:186745001362 del:194811608030
+/sys/devices/system/cpu/cpu4/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu4/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu4/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu4/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu5/acpi_cppc/feedback_ctrs:ref:230118055201 del:248255491877
+/sys/devices/system/cpu/cpu5/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu5/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu5/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu5/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu6/acpi_cppc/feedback_ctrs:ref:175095729168 del:176795360535
+/sys/devices/system/cpu/cpu6/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu6/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu6/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu6/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu7/acpi_cppc/feedback_ctrs:ref:150105939201 del:145936640289
+/sys/devices/system/cpu/cpu7/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu7/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu7/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu7/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs:ref:142290990884 del:147807338169
+/sys/devices/system/cpu/cpu8/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu8/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu8/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu8/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu9/acpi_cppc/feedback_ctrs:ref:154708348652 del:158632827571
+/sys/devices/system/cpu/cpu9/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu9/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu9/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu9/acpi_cppc/wraparound_time:18446744073709551615
+
+--MP_/gSFvir+VM81sdu0qQQTVXTb
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename=2025-11-24_6.14.0-34-X580WNT-G-acpi_cppc.dump.txt
+
+/sys/devices/system/cpu/cpu0/acpi_cppc/feedback_ctrs:ref:374866724597 del:465489532684
+/sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu0/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu10/acpi_cppc/feedback_ctrs:ref:226946192396 del:271342932276
+/sys/devices/system/cpu/cpu10/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu10/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu10/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu10/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu11/acpi_cppc/feedback_ctrs:ref:175237076520 del:197664430464
+/sys/devices/system/cpu/cpu11/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu11/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu11/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu11/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu12/acpi_cppc/feedback_ctrs:ref:207357763720 del:239563603235
+/sys/devices/system/cpu/cpu12/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu12/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu12/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu12/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu13/acpi_cppc/feedback_ctrs:ref:249535094828 del:298991040346
+/sys/devices/system/cpu/cpu13/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu13/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu13/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu13/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu14/acpi_cppc/feedback_ctrs:ref:221214580324 del:261701879687
+/sys/devices/system/cpu/cpu14/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu14/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu14/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu14/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu14/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu14/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu15/acpi_cppc/feedback_ctrs:ref:183465357044 del:213189463519
+/sys/devices/system/cpu/cpu15/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu15/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu15/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu15/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu15/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu15/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu16/acpi_cppc/feedback_ctrs:ref:236845413840 del:276985499939
+/sys/devices/system/cpu/cpu16/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu16/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu16/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu16/acpi_cppc/nominal_perf:21
+/sys/devices/system/cpu/cpu16/acpi_cppc/reference_perf:31
+/sys/devices/system/cpu/cpu16/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu17/acpi_cppc/feedback_ctrs:ref:258748495336 del:309148087977
+/sys/devices/system/cpu/cpu17/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu17/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu17/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu17/acpi_cppc/nominal_perf:21
+/sys/devices/system/cpu/cpu17/acpi_cppc/reference_perf:31
+/sys/devices/system/cpu/cpu17/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu18/acpi_cppc/feedback_ctrs:ref:282665725696 del:334695362296
+/sys/devices/system/cpu/cpu18/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu18/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu18/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu18/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu18/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu18/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu19/acpi_cppc/feedback_ctrs:ref:187457675552 del:217590026137
+/sys/devices/system/cpu/cpu19/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu19/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu19/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu19/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu19/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu19/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu1/acpi_cppc/feedback_ctrs:ref:402083637737 del:555040601378
+/sys/devices/system/cpu/cpu1/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu1/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu1/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu1/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu20/acpi_cppc/feedback_ctrs:ref:229259680856 del:274888319458
+/sys/devices/system/cpu/cpu20/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu20/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu20/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu20/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu20/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu20/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu21/acpi_cppc/feedback_ctrs:ref:268441358832 del:332569878567
+/sys/devices/system/cpu/cpu21/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu21/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu21/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu21/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu21/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu21/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu22/acpi_cppc/feedback_ctrs:ref:249194573096 del:308902686939
+/sys/devices/system/cpu/cpu22/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu22/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu22/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu22/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu22/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu22/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu23/acpi_cppc/feedback_ctrs:ref:187445466884 del:222071704319
+/sys/devices/system/cpu/cpu23/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu23/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu23/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu23/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu23/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu23/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu2/acpi_cppc/feedback_ctrs:ref:322158653189 del:429905792341
+/sys/devices/system/cpu/cpu2/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu2/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu2/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu2/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu3/acpi_cppc/feedback_ctrs:ref:319077406391 del:404513577749
+/sys/devices/system/cpu/cpu3/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu3/acpi_cppc/highest_perf:63
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu3/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu3/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu4/acpi_cppc/feedback_ctrs:ref:268043681191 del:343751704951
+/sys/devices/system/cpu/cpu4/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu4/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu4/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu4/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu5/acpi_cppc/feedback_ctrs:ref:230209976184 del:285555852631
+/sys/devices/system/cpu/cpu5/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu5/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu5/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu5/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu6/acpi_cppc/feedback_ctrs:ref:207999236211 del:252907975184
+/sys/devices/system/cpu/cpu6/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu6/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu6/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu6/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu7/acpi_cppc/feedback_ctrs:ref:250771637584 del:296309565135
+/sys/devices/system/cpu/cpu7/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu7/acpi_cppc/highest_perf:63
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu7/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu7/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs:ref:179869433180 del:205359472395
+/sys/devices/system/cpu/cpu8/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu8/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu8/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu8/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu9/acpi_cppc/feedback_ctrs:ref:234553386432 del:278617537574
+/sys/devices/system/cpu/cpu9/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu9/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu9/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu9/acpi_cppc/wraparound_time:18446744073709551615
+
+--MP_/gSFvir+VM81sdu0qQQTVXTb
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename=2025-11-24_6.18.0-061800rc7-X560WNR-G-acpi_cppc.dump.txt
+
+/sys/devices/system/cpu/cpu0/acpi_cppc/feedback_ctrs:ref:85764085462 del:81092364612
+/sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu0/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu10/acpi_cppc/feedback_ctrs:ref:30648952280 del:32319093196
+/sys/devices/system/cpu/cpu10/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu10/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu10/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu10/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu11/acpi_cppc/feedback_ctrs:ref:24418501228 del:26064639390
+/sys/devices/system/cpu/cpu11/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu11/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu11/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu11/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu12/acpi_cppc/feedback_ctrs:ref:30772876268 del:31630648127
+/sys/devices/system/cpu/cpu12/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu12/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu12/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu12/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu13/acpi_cppc/feedback_ctrs:ref:32208013456 del:33858924907
+/sys/devices/system/cpu/cpu13/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu13/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu13/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu13/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu14/acpi_cppc/feedback_ctrs:ref:34318996648 del:37357638199
+/sys/devices/system/cpu/cpu14/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu14/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu14/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu14/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu14/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu14/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu15/acpi_cppc/feedback_ctrs:ref:41344894184 del:40523832261
+/sys/devices/system/cpu/cpu15/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu15/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu15/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu15/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu15/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu15/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu16/acpi_cppc/feedback_ctrs:ref:36965175248 del:37144286195
+/sys/devices/system/cpu/cpu16/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu16/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu16/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu16/acpi_cppc/nominal_perf:21
+/sys/devices/system/cpu/cpu16/acpi_cppc/reference_perf:31
+/sys/devices/system/cpu/cpu16/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu17/acpi_cppc/feedback_ctrs:ref:29796395364 del:30507895794
+/sys/devices/system/cpu/cpu17/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu17/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu17/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu17/acpi_cppc/nominal_perf:21
+/sys/devices/system/cpu/cpu17/acpi_cppc/reference_perf:31
+/sys/devices/system/cpu/cpu17/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu18/acpi_cppc/feedback_ctrs:ref:30008884864 del:31394469575
+/sys/devices/system/cpu/cpu18/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu18/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu18/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu18/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu18/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu18/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu19/acpi_cppc/feedback_ctrs:ref:33127087692 del:36493571195
+/sys/devices/system/cpu/cpu19/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu19/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu19/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu19/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu19/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu19/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu1/acpi_cppc/feedback_ctrs:ref:47084742987 del:52088422560
+/sys/devices/system/cpu/cpu1/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu1/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu1/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu1/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu20/acpi_cppc/feedback_ctrs:ref:35405865204 del:37891455176
+/sys/devices/system/cpu/cpu20/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu20/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu20/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu20/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu20/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu20/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu21/acpi_cppc/feedback_ctrs:ref:31453151676 del:32354440344
+/sys/devices/system/cpu/cpu21/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu21/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu21/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu21/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu21/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu21/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu22/acpi_cppc/feedback_ctrs:ref:29395705360 del:30249765611
+/sys/devices/system/cpu/cpu22/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu22/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu22/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu22/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu22/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu22/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu23/acpi_cppc/feedback_ctrs:ref:34147115164 del:34129428131
+/sys/devices/system/cpu/cpu23/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu23/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu23/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu23/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu23/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu23/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu2/acpi_cppc/feedback_ctrs:ref:52863482561 del:63458169943
+/sys/devices/system/cpu/cpu2/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu2/acpi_cppc/highest_perf:63
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu2/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu2/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu3/acpi_cppc/feedback_ctrs:ref:53310134126 del:60839001140
+/sys/devices/system/cpu/cpu3/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu3/acpi_cppc/highest_perf:63
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu3/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu3/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu4/acpi_cppc/feedback_ctrs:ref:37661765305 del:39273578265
+/sys/devices/system/cpu/cpu4/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu4/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu4/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu4/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu5/acpi_cppc/feedback_ctrs:ref:37315012790 del:40229366158
+/sys/devices/system/cpu/cpu5/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu5/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu5/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu5/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu6/acpi_cppc/feedback_ctrs:ref:31209054793 del:33190454758
+/sys/devices/system/cpu/cpu6/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu6/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu6/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu6/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu7/acpi_cppc/feedback_ctrs:ref:27945691272 del:28942342249
+/sys/devices/system/cpu/cpu7/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu7/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu7/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu7/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs:ref:30470288492 del:31360721157
+/sys/devices/system/cpu/cpu8/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu8/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu8/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu8/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu9/acpi_cppc/feedback_ctrs:ref:33008945576 del:35214567794
+/sys/devices/system/cpu/cpu9/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu9/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu9/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu9/acpi_cppc/wraparound_time:18446744073709551615
+
+--MP_/gSFvir+VM81sdu0qQQTVXTb
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename=2025-11-24_6.18.0-061800rc7-X580WNT-G-acpi_cppc.dump.txt
+
+/sys/devices/system/cpu/cpu0/acpi_cppc/feedback_ctrs:ref:74783349627 del:74791433151
+/sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu0/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu10/acpi_cppc/feedback_ctrs:ref:17495243700 del:19070054739
+/sys/devices/system/cpu/cpu10/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu10/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu10/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu10/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu11/acpi_cppc/feedback_ctrs:ref:17384466440 del:19403776545
+/sys/devices/system/cpu/cpu11/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu11/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu11/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu11/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu12/acpi_cppc/feedback_ctrs:ref:21845290924 del:25086237232
+/sys/devices/system/cpu/cpu12/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu12/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu12/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu12/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu13/acpi_cppc/feedback_ctrs:ref:17433839396 del:19247766490
+/sys/devices/system/cpu/cpu13/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu13/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu13/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu13/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu14/acpi_cppc/feedback_ctrs:ref:18058167740 del:18521617185
+/sys/devices/system/cpu/cpu14/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu14/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu14/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu14/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu14/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu14/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu15/acpi_cppc/feedback_ctrs:ref:15963076884 del:16338653622
+/sys/devices/system/cpu/cpu15/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu15/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu15/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu15/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu15/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu15/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu16/acpi_cppc/feedback_ctrs:ref:20801035216 del:21984217755
+/sys/devices/system/cpu/cpu16/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu16/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu16/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu16/acpi_cppc/nominal_perf:21
+/sys/devices/system/cpu/cpu16/acpi_cppc/reference_perf:31
+/sys/devices/system/cpu/cpu16/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu17/acpi_cppc/feedback_ctrs:ref:18574290088 del:18550697798
+/sys/devices/system/cpu/cpu17/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu17/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu17/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu17/acpi_cppc/nominal_perf:21
+/sys/devices/system/cpu/cpu17/acpi_cppc/reference_perf:31
+/sys/devices/system/cpu/cpu17/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu18/acpi_cppc/feedback_ctrs:ref:16725258508 del:16419667955
+/sys/devices/system/cpu/cpu18/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu18/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu18/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu18/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu18/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu18/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu19/acpi_cppc/feedback_ctrs:ref:18028089184 del:18997492510
+/sys/devices/system/cpu/cpu19/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu19/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu19/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu19/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu19/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu19/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu1/acpi_cppc/feedback_ctrs:ref:32768244495 del:38393600658
+/sys/devices/system/cpu/cpu1/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu1/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu1/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu1/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu20/acpi_cppc/feedback_ctrs:ref:15631584212 del:15908355040
+/sys/devices/system/cpu/cpu20/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu20/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu20/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu20/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu20/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu20/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu21/acpi_cppc/feedback_ctrs:ref:23249605556 del:26489009609
+/sys/devices/system/cpu/cpu21/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu21/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu21/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu21/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu21/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu21/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu22/acpi_cppc/feedback_ctrs:ref:15766351504 del:16036289967
+/sys/devices/system/cpu/cpu22/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu22/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu22/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu22/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu22/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu22/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu23/acpi_cppc/feedback_ctrs:ref:15008859188 del:16012788345
+/sys/devices/system/cpu/cpu23/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu23/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu23/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu23/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu23/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu23/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu2/acpi_cppc/feedback_ctrs:ref:22957483783 del:28388697340
+/sys/devices/system/cpu/cpu2/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu2/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu2/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu2/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu3/acpi_cppc/feedback_ctrs:ref:38446441149 del:53438056561
+/sys/devices/system/cpu/cpu3/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu3/acpi_cppc/highest_perf:63
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu3/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu3/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu4/acpi_cppc/feedback_ctrs:ref:20838805244 del:25651369450
+/sys/devices/system/cpu/cpu4/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu4/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu4/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu4/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu5/acpi_cppc/feedback_ctrs:ref:19550796381 del:23272468368
+/sys/devices/system/cpu/cpu5/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu5/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu5/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu5/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu6/acpi_cppc/feedback_ctrs:ref:17609094176 del:20962277250
+/sys/devices/system/cpu/cpu6/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu6/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu6/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu6/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu7/acpi_cppc/feedback_ctrs:ref:38715367978 del:55778897631
+/sys/devices/system/cpu/cpu7/acpi_cppc/guaranteed_perf:32
+/sys/devices/system/cpu/cpu7/acpi_cppc/highest_perf:63
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu7/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu7/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs:ref:19160123376 del:21192607910
+/sys/devices/system/cpu/cpu8/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu8/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu8/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu8/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu9/acpi_cppc/feedback_ctrs:ref:19086913404 del:21235914198
+/sys/devices/system/cpu/cpu9/acpi_cppc/guaranteed_perf:21
+/sys/devices/system/cpu/cpu9/acpi_cppc/highest_perf:46
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_nonlinear_perf:15
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu9/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu9/acpi_cppc/wraparound_time:18446744073709551615
+
+--MP_/gSFvir+VM81sdu0qQQTVXTb
+Content-Type: text/markdown
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=2025-11-26_cpu_freq_report.md
+
+## Overview
+This document details the incorrect CPU frequency limit reporting we have seen
+on multiple systems and multiple Linux kernels. We analyzed the following
+systems and report on them below.
+
+ODM   | Model      | CPU           | Kernel
+----- | ---------- | ------------- | ------
+Clevo | X580WNT-G  | Ultra 9 275HX | 6.14.0-34-kfocus
+"     | "          | "             | 6.18.0-061800rc7-generic (Mainline)
+Clevo | X580WNS-G  | Ultra 9 275HX | 6.14.0-34-kfocus
+"     | "          | "             | 6.18.0-061800rc7-generic (Mainline)
+Clevo | X560WNR-G  | Ultra 9 275HX | 6.14.0-34-kfocus
+"     | "          | "             | 6.18.0-061800rc7-generic (Mainline)
+Asus  | NUC15CRKU5 | Ultra 5 225H  | 6.14.0-34-kfocus
+"     | "          | "             | 6.18.0-061800rc7-generic (Mainline)
+Asus  | NUC15CRKU7 | Ultra 7 255H  | 6.14.0-34-kfocus
+"     | "          | "             | 6.18.0-061800rc7-generic (Mainline)
+
+See separate reports for the output of the following:
+
+```bash
+ grep . /sys/devices/system/cpu/cpu*/acpi_cppc/*
+ ```
+
+The mainline kernels were download and installed from [this Ubuntu
+site][_0090].
+
+Generally, the E-cores report frequncies as expected: the claimed frequency
+limits provided by the CPU (`cpuinfo_max_freq`, `base_frequency`), the
+Spec-Sheet frequencies, and the measured frequencies attained
+(`scaling_cur_freq`) all agree.
+
+However, the P-cores are have issues with the claimed frequency limits
+provided by the CPU (`cpuinfo_max_freq`, `base_frequency`). These do NOT match
+the Spec-Sheet frequencies or the measured frequencies attained
+(`scaling_cur_freq`).
+
+These errors are a problem because they are used by multiple tools to help
+manage the CPU power usage. Performance can lowered if the claimed frequency
+limits are lower than they should be; conversely, power-saving tools that rely
+on these values will not work if the reported values are too high.
+
+## Scan Results Key
+Each section contains a 'Scan Results' table that shows the specified,
+claimed, and reported frequencies. Notice that all cores of a given type are
+scanned, since not only are there P and E cores, but within these groups there
+may also be "golden" cores that provide higher frequency capabilities. For
+example, the Ultra 9 275HX's 2 golden P-cores have a max freq of 5.4 GHz,
+whereas other P-cores can only attain 5.2 GHz.
+
+Column  | Values | Purpose
+--------|--------|---------
+Type    | P|E    | The subset of cores this row applied to.
+        |        |   For example, `P` means `all P-cores`.
+Turbo   | off|ON | The turbo setting of this core subset.
+B-Claim | int Hz | The max `base_frequency` value of this core subset.
+     Id | int    | The core id that provided the Base-Claim value.
+B-Spec  | int Hz | Intel SPEC'D BASE freq for this CPU's core Type.
+M-Claim | int Hz | The max `cpuinfo_max_freq` value of this core subset.
+     Id | int    | The core id that provided the Max-Claim value.
+M-Spec  | int Hz | Intel SPEC'D MAX freq for this CPU's core Type.
+M-Test  | int Hz | The max `scaling_cur_freq` value of this core subset.
+        |        |   The entire core subset is sampled 200x.
+     Id | int    | The core id that provided the Max-Test value.
+
+## Clevo | X580WNT-G  | Ultra 9 275HX | 6.14.0-34-kfocus
+The Intel specified values were copied from [this page][_0100].
+
+### Scan Results
+CPU: Intel Core Ultra 9 275HX
+Type | Turbo | B-Claim . Id | B-Spec  | M-Claim . Id | M-Spec  | M-Test  . Id
+-----| ----- | ------------ | ------- | ------------ |-------- | ------------
+P    | off   | 2000000 . 07 | 2700000 | 2000000 . 07 | 2700000 | 2708723 . 00
+P    | ON    | 2000000 . 07 | 2700000 | 3900000 . 07 | 5400000 | 5414342 . 03
+E    | off   | 2100000 . 17 | 2100000 | 2100000 . 17 | 2100000 | 2175694 . 09
+E    | ON    | 2100000 . 17 | 2100000 | 4600000 . 17 | 4600000 | 4723780 . 14
+
+### Assessment
+1. The E-cores correctly report `base_frequency` and `cpuinfo_max_freq`.
+- pass: With Turbo ON or off, Claimed capabilities (B-Claim, M-Claim) match
+  Intel specs (B-Spec, M-Spec).
+- pass: With Turbo ON or off, the measured frequencies (M-Test) are in-line with
+  Intel pecs (M-Spec), and match claimed capabilities.
+
+2. The P-cores under report `base_frequency` and `cpuinfo_max_freq`.
+- FAIL: With Turbo ON or off, the claimed `base_freqency` (B-Claim) of 2000000 does
+  NOT match the Intel spec (B-Spec) of 2700000.
+- FAIL: With Turbo off, the claimed `cpuinfo_max_freq` (M-Claim) of 2000000 does
+  NOT match the Intel spec (M-Spec) of 2700000.
+- FAIL: With Turbo ON, the claimed `cpuinfo_max_freq` (M-Claim) of 3900000 does
+  NOT match the Intel spec (M-Spec) of 5400000.
+- pass: With Turbo ON or off, the measured `scaling_cur_freq` (M-Test) values are
+  in-line with Intel specs (M-Spec).
+
+## Clevo | X580WNT-G  | Ultra 9 275HX | 6.18.0-061800rc7-generic (Mainline)
+The Intel specified values were copied from [this page][_0100].
+
+### Scan Results
+CPU: Intel Core Ultra 9 275HX
+Type | Turbo | B-Claim . Id | B-Spec  | M-Claim . Id | M-Spec  | M-Test  . Id
+-----| ----- | ------------ | ------- | ------------ |-------- | ------------
+P    | off   | 2000000 . 07 | 2700000 | 2000000 . 07 | 2700000 | 2700054 . 01
+P    | ON    | 2000000 . 07 | 2700000 | 3900000 . 07 | 5400000 | 5400054 . 07
+E    | off   | 2100000 . 17 | 2100000 | 2100000 . 17 | 2100000 | 2140243 . 17
+E    | ON    | 2100000 . 17 | 2100000 | 4600000 . 17 | 4600000 | 4653899 . 16
+
+### Assessment
+The assessment is the same as found for section `Clevo | X580WNT-G  | Ultra 9
+275HX | 6.14.0-34-kfocus`:
+
+1. The E-cores pass all tests.
+2. The P-cores under report `base_frequency` and `cpuinfo_max_freq` in the
+   exact same way.
+
+## Clevo | X580WNS-G  | Ultra 9 275HX | 6.14.0-34-kfocus
+### Scan Results
+CPU: Intel Core Ultra 9 275HX
+Type | Turbo | B-Claim . Id | B-Spec  | M-Claim . Id | M-Spec  | M-Test  . Id
+-----| ----- | ------------ | ------- | ------------ |-------- | ------------
+P    | off   | 2700000 . 07 | 2700000 | 2700000 . 07 | 2700000 | 2700054 . 02
+P    | ON    | 2700000 . 07 | 2700000 | 5400000 . 03 | 5400000 | 5400054 . 00
+E    | off   | 3000000 . 17 | 2100000 | 3000000 . 17 | 2100000 | 2138214 . 22
+E    | ON    | 3000000 . 17 | 2100000 | 6500000 . 17 | 4600000 | 4765000 . 21
+
+### Assessment
+In contrast to the X580WNT-G, the P-Cores here report correctly, whereas the
+E-cores are incorrect.
+
+## Clevo | X560WNR-G  | Ultra 9 275HX | 6.14.0-34-kfocus
+The Intel specified values were copied from [this page][_0100].
+
+### Scan Results
+CPU: Intel Core Ultra 9 275HX
+Type | Turbo | B-Claim . Id | B-Spec  | M-Claim . Id | M-Spec  | M-Test  . Id
+-----| ----- | ------------ | ------- | ------------ |-------- | ------------
+P    | off   | 2000000 . 07 | 2700000 | 2000000 . 07 | 2700000 | 2703982 . 00
+P    | ON    | 2000000 . 07 | 2700000 | 3900000 . 03 | 5400000 | 5400000 . 03
+E    | off   | 2100000 . 17 | 2100000 | 2100000 . 17 | 2100000 | 2132738 . 18
+E    | ON    | 2100000 . 17 | 2100000 | 4600000 . 17 | 4600000 | 4710638 . 15
+
+### Assessment
+The assessment is the same as found for section `Clevo | X580WNT-G  | Ultra 9
+275HX | 6.14.0-34-kfocus`:
+
+1. The E-cores pass all tests.
+2. The P-cores pass all tests.
+
+## Clevo | X560WNR-G  | Ultra 9 275HX | 6.18.0-061800rc7-generic (Mainline)
+The Intel specified values were copied from [this page][_0100].
+
+### Scan Results
+CPU: Intel Core Ultra 9 275HX
+Type | Turbo | B-Claim . Id | B-Spec  | M-Claim . Id | M-Spec  | M-Test  . Id
+-----| ----- | ------------ | ------- | ------------ |-------- | ------------
+P    | off   | 2000000 . 07 | 2700000 | 2000000 . 07 | 2700000 | 2700027 . 03
+P    | ON    | 2000000 . 07 | 2700000 | 3900000 . 03 | 5400000 | 5400000 . 03
+E    | off   | 2100000 . 17 | 2100000 | 2100000 . 17 | 2100000 | 2134000 . 08
+E    | ON    | 2100000 . 17 | 2100000 | 4600000 . 17 | 4600000 | 4711250 . 14
+
+### Assessment
+The assessment is the same as found for section `Clevo | X580WNT-G  | Ultra 9
+275HX | 6.14.0-34-kfocus`:
+
+1. The E-cores pass all tests.
+2. The P-cores under report `base_frequency` and `cpuinfo_max_freq` in the
+   exact same way.
+
+## Asus  | NUC15CRKU5 | Ultra 5 225H  | 6.14.0-34-kfocus
+"     | "          | "             | 6.18.0-061800rc7-generic (Mainline)
+The Intel specified values were copied from [this page][_0100].
+
+### Scan Results
+CPU: Intel Core Ultra 5 225H
+Type | Turbo | B-Claim . Id | B-Spec  | M-Claim . Id | M-Spec  | M-Test  . Id
+-----| ----- | ------------ | ------- | ------------ |-------- | ------------
+P    | off   | 1700000 . 03 | 1700000 | 1700000 . 03 | 1700000 | 1805625 . 00
+P    | ON    | 1700000 . 03 | 1700000 | 4900000 . 03 | 4900000 | 4900049 . 03
+E    | off   | 1300000 . 11 | 1300000 | 1300000 . 11 | 1300000 | 1502459 . 09
+E    | ON    | 1300000 . 11 | 1300000 | 4400000 . 11 | 4300000 | 4320736 . 10
+
+### Assessment
+1. The P-cores look mostly correct.
+  1.a. Minor issue: with Turbo off, the claimed and spec freq match, but the
+    tested max freq is around 6% greater (1700000 = 1700000 < 1805625).
+2. The E-cores look mostly correct.
+  1.a. Minor issue: with Turbo off, the spec and claimed max freq match, but
+    the max freq is around 16% greater (1300000 = 1300000 < 1502459).
+  2.a Minor issue: with Turbo ON, the claimed max freq is greater than the
+    spec, but measured freq is closer to spec (4400000 > 4300000 < 4320736).
+
+## Asus  | NUC15CRKU5 | Ultra 5 225H  | 6.18.0-061800rc7-generic (Mainline)
+TODO
+
+## Asus  | NUC15CRKU7 | Ultra 7 255H  | 6.14.0-34-kfocus
+TODO
+## Asus  | NUC15CRKU7 | Ultra 7 255H  | 6.18.0-061800rc7-generic (Mainline)
+TODO
+
+[_0090]:https://kernel.ubuntu.com/mainline/v6.18-rc7
+[_0100]:https://www.intel.com/content/www/us/en/products/sku/242293/intel-core-ultra-9-processor-275hx-36m-cache-up-to-5-40-ghz/specifications.html
+
+--MP_/gSFvir+VM81sdu0qQQTVXTb
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename=2025-11-28_6.14.0-34-X580WNS-G-acpi_cppc.dump.txt
+
+/sys/devices/system/cpu/cpu0/acpi_cppc/feedback_ctrs:ref:222947587336 del:265250152806
+/sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:44
+/sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf:87
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf:36
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu0/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu10/acpi_cppc/feedback_ctrs:ref:104962667500 del:107644788904
+/sys/devices/system/cpu/cpu10/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu10/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu10/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu10/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu11/acpi_cppc/feedback_ctrs:ref:141643551420 del:158019120345
+/sys/devices/system/cpu/cpu11/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu11/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu11/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu11/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu12/acpi_cppc/feedback_ctrs:ref:131172829600 del:144873032373
+/sys/devices/system/cpu/cpu12/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu12/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu12/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu12/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu13/acpi_cppc/feedback_ctrs:ref:118134829636 del:123696118604
+/sys/devices/system/cpu/cpu13/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu13/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu13/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu13/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu14/acpi_cppc/feedback_ctrs:ref:108324957012 del:112096131391
+/sys/devices/system/cpu/cpu14/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu14/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu14/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu14/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu14/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu14/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu14/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu15/acpi_cppc/feedback_ctrs:ref:107683535392 del:109947519143
+/sys/devices/system/cpu/cpu15/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu15/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu15/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu15/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu15/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu15/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu15/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu16/acpi_cppc/feedback_ctrs:ref:113895174652 del:120992585122
+/sys/devices/system/cpu/cpu16/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu16/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu16/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu16/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu16/acpi_cppc/nominal_perf:21
+/sys/devices/system/cpu/cpu16/acpi_cppc/reference_perf:31
+/sys/devices/system/cpu/cpu16/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu17/acpi_cppc/feedback_ctrs:ref:131296978896 del:145875295539
+/sys/devices/system/cpu/cpu17/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu17/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu17/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu17/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu17/acpi_cppc/nominal_perf:21
+/sys/devices/system/cpu/cpu17/acpi_cppc/reference_perf:31
+/sys/devices/system/cpu/cpu17/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu18/acpi_cppc/feedback_ctrs:ref:113960474168 del:115437841597
+/sys/devices/system/cpu/cpu18/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu18/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu18/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu18/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu18/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu18/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu18/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu19/acpi_cppc/feedback_ctrs:ref:147915637084 del:157709569881
+/sys/devices/system/cpu/cpu19/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu19/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu19/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu19/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu19/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu19/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu19/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu1/acpi_cppc/feedback_ctrs:ref:206604282618 del:232997420518
+/sys/devices/system/cpu/cpu1/acpi_cppc/guaranteed_perf:44
+/sys/devices/system/cpu/cpu1/acpi_cppc/highest_perf:85
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_nonlinear_perf:36
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu1/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu1/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu20/acpi_cppc/feedback_ctrs:ref:124808200628 del:128042012373
+/sys/devices/system/cpu/cpu20/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu20/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu20/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu20/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu20/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu20/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu20/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu21/acpi_cppc/feedback_ctrs:ref:123412285880 del:125394922582
+/sys/devices/system/cpu/cpu21/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu21/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu21/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu21/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu21/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu21/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu21/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu22/acpi_cppc/feedback_ctrs:ref:112905323572 del:112169094451
+/sys/devices/system/cpu/cpu22/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu22/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu22/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu22/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu22/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu22/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu22/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu23/acpi_cppc/feedback_ctrs:ref:116724560648 del:118456830846
+/sys/devices/system/cpu/cpu23/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu23/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu23/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu23/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu23/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu23/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu23/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu2/acpi_cppc/feedback_ctrs:ref:143283901726 del:159326350243
+/sys/devices/system/cpu/cpu2/acpi_cppc/guaranteed_perf:44
+/sys/devices/system/cpu/cpu2/acpi_cppc/highest_perf:85
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_nonlinear_perf:36
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu2/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu2/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu3/acpi_cppc/feedback_ctrs:ref:141528700853 del:167670592115
+/sys/devices/system/cpu/cpu3/acpi_cppc/guaranteed_perf:44
+/sys/devices/system/cpu/cpu3/acpi_cppc/highest_perf:87
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_nonlinear_perf:36
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu3/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu3/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu4/acpi_cppc/feedback_ctrs:ref:126676438413 del:143961097482
+/sys/devices/system/cpu/cpu4/acpi_cppc/guaranteed_perf:44
+/sys/devices/system/cpu/cpu4/acpi_cppc/highest_perf:85
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_nonlinear_perf:36
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu4/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu4/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu5/acpi_cppc/feedback_ctrs:ref:110235347450 del:123186510315
+/sys/devices/system/cpu/cpu5/acpi_cppc/guaranteed_perf:44
+/sys/devices/system/cpu/cpu5/acpi_cppc/highest_perf:85
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_nonlinear_perf:36
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu5/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu5/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu6/acpi_cppc/feedback_ctrs:ref:108592201564 del:124204354188
+/sys/devices/system/cpu/cpu6/acpi_cppc/guaranteed_perf:44
+/sys/devices/system/cpu/cpu6/acpi_cppc/highest_perf:85
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_nonlinear_perf:36
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu6/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu6/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu7/acpi_cppc/feedback_ctrs:ref:103287535070 del:114820052579
+/sys/devices/system/cpu/cpu7/acpi_cppc/guaranteed_perf:44
+/sys/devices/system/cpu/cpu7/acpi_cppc/highest_perf:85
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_nonlinear_perf:36
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_freq:2700
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_perf:43
+/sys/devices/system/cpu/cpu7/acpi_cppc/reference_perf:49
+/sys/devices/system/cpu/cpu7/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs:ref:107162778792 del:109392728704
+/sys/devices/system/cpu/cpu8/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu8/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu8/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu8/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu9/acpi_cppc/feedback_ctrs:ref:105909941816 del:108195936064
+/sys/devices/system/cpu/cpu9/acpi_cppc/guaranteed_perf:30
+/sys/devices/system/cpu/cpu9/acpi_cppc/highest_perf:65
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_nonlinear_perf:21
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_freq:2100
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_perf:29
+/sys/devices/system/cpu/cpu9/acpi_cppc/reference_perf:43
+/sys/devices/system/cpu/cpu9/acpi_cppc/wraparound_time:18446744073709551615
+
+--MP_/gSFvir+VM81sdu0qQQTVXTb
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename=2025-11-29_6.14.0-34-NUC15CRKU5-acpi_cppc.dump.txt
+
+/sys/devices/system/cpu/cpu0/acpi_cppc/feedback_ctrs:ref:424447862820 del:258167215786
+/sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:28
+/sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf:79
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf:28
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq:1700
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf:27
+/sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf:59
+/sys/devices/system/cpu/cpu0/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu10/acpi_cppc/feedback_ctrs:ref:312044313108 del:171000014067
+/sys/devices/system/cpu/cpu10/acpi_cppc/guaranteed_perf:19
+/sys/devices/system/cpu/cpu10/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_nonlinear_perf:16
+/sys/devices/system/cpu/cpu10/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_freq:1300
+/sys/devices/system/cpu/cpu10/acpi_cppc/nominal_perf:18
+/sys/devices/system/cpu/cpu10/acpi_cppc/reference_perf:51
+/sys/devices/system/cpu/cpu10/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu11/acpi_cppc/feedback_ctrs:ref:309517511032 del:166250307340
+/sys/devices/system/cpu/cpu11/acpi_cppc/guaranteed_perf:19
+/sys/devices/system/cpu/cpu11/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_nonlinear_perf:19
+/sys/devices/system/cpu/cpu11/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_freq:1300
+/sys/devices/system/cpu/cpu11/acpi_cppc/nominal_perf:18
+/sys/devices/system/cpu/cpu11/acpi_cppc/reference_perf:51
+/sys/devices/system/cpu/cpu11/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu12/acpi_cppc/feedback_ctrs:ref:263086731844 del:101193644381
+/sys/devices/system/cpu/cpu12/acpi_cppc/guaranteed_perf:7
+/sys/devices/system/cpu/cpu12/acpi_cppc/highest_perf:25
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_nonlinear_perf:11
+/sys/devices/system/cpu/cpu12/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_freq:700
+/sys/devices/system/cpu/cpu12/acpi_cppc/nominal_perf:7
+/sys/devices/system/cpu/cpu12/acpi_cppc/reference_perf:37
+/sys/devices/system/cpu/cpu12/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu13/acpi_cppc/feedback_ctrs:ref:246098759488 del:93604084753
+/sys/devices/system/cpu/cpu13/acpi_cppc/guaranteed_perf:7
+/sys/devices/system/cpu/cpu13/acpi_cppc/highest_perf:25
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_nonlinear_perf:11
+/sys/devices/system/cpu/cpu13/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_freq:700
+/sys/devices/system/cpu/cpu13/acpi_cppc/nominal_perf:7
+/sys/devices/system/cpu/cpu13/acpi_cppc/reference_perf:37
+/sys/devices/system/cpu/cpu13/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu1/acpi_cppc/feedback_ctrs:ref:617719533980 del:353005123281
+/sys/devices/system/cpu/cpu1/acpi_cppc/guaranteed_perf:28
+/sys/devices/system/cpu/cpu1/acpi_cppc/highest_perf:79
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_nonlinear_perf:29
+/sys/devices/system/cpu/cpu1/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_freq:1700
+/sys/devices/system/cpu/cpu1/acpi_cppc/nominal_perf:27
+/sys/devices/system/cpu/cpu1/acpi_cppc/reference_perf:59
+/sys/devices/system/cpu/cpu1/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu2/acpi_cppc/feedback_ctrs:ref:372139536100 del:214723142940
+/sys/devices/system/cpu/cpu2/acpi_cppc/guaranteed_perf:28
+/sys/devices/system/cpu/cpu2/acpi_cppc/highest_perf:79
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_nonlinear_perf:26
+/sys/devices/system/cpu/cpu2/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_freq:1700
+/sys/devices/system/cpu/cpu2/acpi_cppc/nominal_perf:27
+/sys/devices/system/cpu/cpu2/acpi_cppc/reference_perf:59
+/sys/devices/system/cpu/cpu2/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu3/acpi_cppc/feedback_ctrs:ref:362744142010 del:218863510762
+/sys/devices/system/cpu/cpu3/acpi_cppc/guaranteed_perf:28
+/sys/devices/system/cpu/cpu3/acpi_cppc/highest_perf:79
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_nonlinear_perf:24
+/sys/devices/system/cpu/cpu3/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_freq:1700
+/sys/devices/system/cpu/cpu3/acpi_cppc/nominal_perf:27
+/sys/devices/system/cpu/cpu3/acpi_cppc/reference_perf:59
+/sys/devices/system/cpu/cpu3/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu4/acpi_cppc/feedback_ctrs:ref:295694693020 del:160190872521
+/sys/devices/system/cpu/cpu4/acpi_cppc/guaranteed_perf:19
+/sys/devices/system/cpu/cpu4/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_nonlinear_perf:17
+/sys/devices/system/cpu/cpu4/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_freq:1300
+/sys/devices/system/cpu/cpu4/acpi_cppc/nominal_perf:18
+/sys/devices/system/cpu/cpu4/acpi_cppc/reference_perf:51
+/sys/devices/system/cpu/cpu4/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu5/acpi_cppc/feedback_ctrs:ref:292433149088 del:157272489864
+/sys/devices/system/cpu/cpu5/acpi_cppc/guaranteed_perf:19
+/sys/devices/system/cpu/cpu5/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_nonlinear_perf:17
+/sys/devices/system/cpu/cpu5/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_freq:1300
+/sys/devices/system/cpu/cpu5/acpi_cppc/nominal_perf:18
+/sys/devices/system/cpu/cpu5/acpi_cppc/reference_perf:51
+/sys/devices/system/cpu/cpu5/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu6/acpi_cppc/feedback_ctrs:ref:325717497052 del:177550079935
+/sys/devices/system/cpu/cpu6/acpi_cppc/guaranteed_perf:19
+/sys/devices/system/cpu/cpu6/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_nonlinear_perf:17
+/sys/devices/system/cpu/cpu6/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_freq:1300
+/sys/devices/system/cpu/cpu6/acpi_cppc/nominal_perf:18
+/sys/devices/system/cpu/cpu6/acpi_cppc/reference_perf:51
+/sys/devices/system/cpu/cpu6/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu7/acpi_cppc/feedback_ctrs:ref:402080679356 del:204300141100
+/sys/devices/system/cpu/cpu7/acpi_cppc/guaranteed_perf:19
+/sys/devices/system/cpu/cpu7/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_nonlinear_perf:17
+/sys/devices/system/cpu/cpu7/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_freq:1300
+/sys/devices/system/cpu/cpu7/acpi_cppc/nominal_perf:18
+/sys/devices/system/cpu/cpu7/acpi_cppc/reference_perf:51
+/sys/devices/system/cpu/cpu7/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs:ref:367742812040 del:186031914500
+/sys/devices/system/cpu/cpu8/acpi_cppc/guaranteed_perf:19
+/sys/devices/system/cpu/cpu8/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_nonlinear_perf:17
+/sys/devices/system/cpu/cpu8/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_freq:1300
+/sys/devices/system/cpu/cpu8/acpi_cppc/nominal_perf:18
+/sys/devices/system/cpu/cpu8/acpi_cppc/reference_perf:51
+/sys/devices/system/cpu/cpu8/acpi_cppc/wraparound_time:18446744073709551615
+/sys/devices/system/cpu/cpu9/acpi_cppc/feedback_ctrs:ref:318192500840 del:169490000896
+/sys/devices/system/cpu/cpu9/acpi_cppc/guaranteed_perf:19
+/sys/devices/system/cpu/cpu9/acpi_cppc/highest_perf:61
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_nonlinear_perf:17
+/sys/devices/system/cpu/cpu9/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_freq:1300
+/sys/devices/system/cpu/cpu9/acpi_cppc/nominal_perf:18
+/sys/devices/system/cpu/cpu9/acpi_cppc/reference_perf:51
+/sys/devices/system/cpu/cpu9/acpi_cppc/wraparound_time:18446744073709551615
+
+--MP_/gSFvir+VM81sdu0qQQTVXTb--
 
