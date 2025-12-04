@@ -1,135 +1,180 @@
-Return-Path: <linux-pm+bounces-39196-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39197-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9FF4CA35F7
-	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 12:04:10 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC364CA37B6
+	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 12:50:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E5B47302DF0D
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 11:04:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 236B2301738F
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 11:50:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 794E533ADBD;
-	Thu,  4 Dec 2025 11:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58EBC2F25F0;
+	Thu,  4 Dec 2025 11:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ranostay.sg header.i=@ranostay.sg header.b="g9oLqBjL"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="IMgP9Rqq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-4320.protonmail.ch (mail-4320.protonmail.ch [185.70.43.20])
+Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B57FC334695;
-	Thu,  4 Dec 2025 11:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.70.43.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC94E2C08D0;
+	Thu,  4 Dec 2025 11:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764846246; cv=none; b=HhlcJVJ6cOxXnpNp4P4/0V78pCRg14Ku8R0l0OUM0/q1vb4N404Dj//GkfHMqc6IifW/JHZijV470PSqfi//sfTubC7z0AfrHKNyp3P1qxjbw5LpYyEf+ZEtb8MDYo/jtLWd3voF/CbFEtU2SCes+x9Z1wKE71DsXChb/p7cA5o=
+	t=1764849031; cv=none; b=iVbOziPv/BTXGSfHav9218YT2ejV1dY3fqOWBCUAkS5ewzk1/v/PaGvU8qYtvlNaDuMH7krlvzC5q10wpvnAQABE1y1R9tGMnyxczgoXUxeG+OXoEKBz1ulBzIn7SORweSriis4SJ6fXWmojXWGsj+SlgfUvQH9xcYWe6djxL7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764846246; c=relaxed/simple;
-	bh=5FzTcSVMzM6nyPMirYnQRY06ESV1QxJo7pfqxG3/Odg=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bfYBxQcewfTsnurk3cwe312av899Ah49BA4V7nAUV1r/axHCK0GQymWPcQM6ar2HprujHfguJlUnXkKwYvFoMykUyd9h87cauiRq3nPF+VrRXpDCaYoAxhPkl8iE1LWpW00USjXBD4m3RPcSVkQfCL1igwL7j3XjkGgIJXH0EPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ranostay.sg; spf=pass smtp.mailfrom=ranostay.sg; dkim=pass (2048-bit key) header.d=ranostay.sg header.i=@ranostay.sg header.b=g9oLqBjL; arc=none smtp.client-ip=185.70.43.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ranostay.sg
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ranostay.sg
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ranostay.sg;
-	s=protonmail2; t=1764846230; x=1765105430;
-	bh=5FzTcSVMzM6nyPMirYnQRY06ESV1QxJo7pfqxG3/Odg=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector;
-	b=g9oLqBjLhOJ3tiASQ+HEgs+OfypXwjCaDzVoiGI+2ZxHsa+Erx88RXs67GcToR9uv
-	 tE153hW1Cvq5Be8DEGyjlw4m52YR3AY63mxfoOYFoh0GVhS5WLdJ65GUGe1xg7kI4N
-	 DCjO/cqqI/ki0HcbVBhm5v871MK8zgx6OGEQH6K1OWa5VwLfNZjoor7Z663UQp/QM5
-	 xF+iHg+osgrlCHB4TBXk/3cIHkwaqYncbKoBQO4elDFTCLyi2KEb+wAqsnnkkko2jK
-	 2rlS/ayjG0tTNnPwAQo6RQZ0jDeZ6zDFb6eKHGmrK1c9unPzTgRHpX6Aj1T2e5aNlD
-	 PSDAKICsk9vVw==
-Date: Thu, 04 Dec 2025 11:03:44 +0000
-To: Haotian Zhang <vulab@iscas.ac.cn>
-From: Matt Ranostay <matt@ranostay.sg>
-Cc: sre@kernel.org, pali@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: bq27xxx: fix wrong errno when bus ops are unsupported
-Message-ID: <NRoZvEd3G9hUveVmurvooyzuQ0LfrghfASmcQHggvJhrPCiqvunmHFg3iyhi49ufJ0zKOpzwkUc4btlf1bkR_-CTcCM2hJcifqPdqbxinXQ=@ranostay.sg>
-In-Reply-To: <20251204083436.1367-1-vulab@iscas.ac.cn>
-References: <20251204083436.1367-1-vulab@iscas.ac.cn>
-Feedback-ID: 87502384:user:proton
-X-Pm-Message-ID: 8a2a6e405d4cc30700f45ad06061e4a119845f0d
+	s=arc-20240116; t=1764849031; c=relaxed/simple;
+	bh=lThXzWYmXcZ3gpSxBohvbapXKi045t4JMgKRquj3SXY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=surdiDpcr/wU1jbDsUS4QAnWGM9jrZ+aKwIZrcpFr2VFkjXiBdkLtydFJIcgOt5WLI1I3t2f09xa6qao0JWF/KaddJvxwaztyEogaOANNcSPhaRIjPGLG7+Zkk/fI1cSYZNq82HMI1SCL1FXx2OEeYx21z4FpVVrwqd4Mety8dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=IMgP9Rqq; arc=none smtp.client-ip=113.46.200.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=aQ8PT4t/IbhLw5Egcdeo8SIqAZa+ebhhoHKQOPuhdIs=;
+	b=IMgP9RqqcmqitzoKdK/Gcxw534BIWe0/CPv2NK/TqqGnQtaBTTLN0DShfdLAxpQmTVVBnJhL6
+	ahuo/HfIt0xxybvNmytvDi4E7J9d01AKAp5gks0T2/BOIGpY3JBkYdWgD141kIxrVIplIZU72K1
+	PqurqFXlhzFDyGJrir4AR1A=
+Received: from mail.maildlp.com (unknown [172.19.163.48])
+	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4dMXp60r20z1T4GD;
+	Thu,  4 Dec 2025 19:48:30 +0800 (CST)
+Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id 2644A180488;
+	Thu,  4 Dec 2025 19:50:24 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
+ (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 4 Dec
+ 2025 19:50:23 +0800
+Message-ID: <080d40e0-f004-42dc-aecc-3c3af291d374@huawei.com>
+Date: Thu, 4 Dec 2025 19:50:23 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 2/4] cpufreq: Add boost_freq_req QoS request
+To: Pierre Gondois <pierre.gondois@arm.com>
+CC: <linux-kernel@vger.kernel.org>, Christian Loehle
+	<christian.loehle@arm.com>, Ionela Voinescu <ionela.voinescu@arm.com>, Jie
+ Zhan <zhanjie9@hisilicon.com>, Huang Rui <ray.huang@amd.com>, "Gautham R.
+ Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello
+	<mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+	<linux-pm@vger.kernel.org>
+References: <20251204101344.192678-1-pierre.gondois@arm.com>
+ <20251204101344.192678-3-pierre.gondois@arm.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <20251204101344.192678-3-pierre.gondois@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemf200001.china.huawei.com (7.202.181.227)
 
-Seems reasonable enough..
-Only possible concern is breaking ABI if some application is wrongly expect=
-ing -EPERM for an error condition, but seems unlikely enough to not correct=
- this.
-
-Reviewed-by: Matt Ranostay <matt@ranostay.sg>
-
-Sent with Proton Mail secure email.
-
-On Thursday, December 4th, 2025 at 16:35, Haotian Zhang <vulab@iscas.ac.cn>=
- wrote:
-
-> bq27xxx_write(), bq27xxx_read_block(), and bq27xxx_write_block()
-> return -EPERM when the bus callback pointer is NULL. A NULL callback
-> indicates the operation is not supported by the bus/driver,
-> not that permission is denied.
->=20
-> Return -EOPNOTSUPP instead of -EPERM when di->bus.write/
->=20
-> read_bulk/write_bulk is NULL.
->=20
-> Fixes: 14073f6614f6 ("power: supply: bq27xxx: Add bulk transfer bus metho=
-ds")
-> Signed-off-by: Haotian Zhang vulab@iscas.ac.cn
->=20
+On 2025/12/4 18:13, Pierre Gondois wrote:
+> The Power Management Quality of Service (PM QoS) allows to
+> aggregate constraints from multiple entities. It is currently
+> used to manage the min/max frequency of a given policy.
+> 
+> Frequency constraints can come for instance from:
+> - Thermal framework: acpi_thermal_cpufreq_init()
+> - Firmware: _PPC objects: acpi_processor_ppc_init()
+> - User: by setting policyX/scaling_[min|max]_freq
+> The minimum of the max frequency constraints is used to compute
+> the resulting maximum allowed frequency.
+> 
+> When enabling boost frequencies, the same frequency request object
+> (policy->max_freq_req) as to handle requests from users is used.
+> As a result, when setting:
+> - scaling_max_freq
+> - boost
+> The last sysfs file used overwrites the request from the other
+> sysfs file.
+> 
+> To avoid this, create a per-policy boost_freq_req to save the boost
+> constraints instead of overwriting the last scaling_max_freq
+> constraint.
+> 
+> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 > ---
-> drivers/power/supply/bq27xxx_battery.c | 6 +++---
-> 1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/suppl=
-y/bq27xxx_battery.c
-> index ad2d9ecf32a5..1d7aa240126a 100644
-> --- a/drivers/power/supply/bq27xxx_battery.c
-> +++ b/drivers/power/supply/bq27xxx_battery.c
-> @@ -1172,7 +1172,7 @@ static inline int bq27xxx_write(struct bq27xxx_devi=
-ce_info *di, int reg_index,
-> return -EINVAL;
->=20
-> if (!di->bus.write)
->=20
-> - return -EPERM;
-> + return -EOPNOTSUPP;
->=20
-> ret =3D di->bus.write(di, di->regs[reg_index], value, single);
->=20
-> if (ret < 0)
-> @@ -1191,7 +1191,7 @@ static inline int bq27xxx_read_block(struct bq27xxx=
-_device_info *di, int reg_ind
-> return -EINVAL;
->=20
-> if (!di->bus.read_bulk)
->=20
-> - return -EPERM;
-> + return -EOPNOTSUPP;
->=20
-> ret =3D di->bus.read_bulk(di, di->regs[reg_index], data, len);
->=20
-> if (ret < 0)
-> @@ -1210,7 +1210,7 @@ static inline int bq27xxx_write_block(struct bq27xx=
-x_device_info *di, int reg_in
-> return -EINVAL;
->=20
-> if (!di->bus.write_bulk)
->=20
-> - return -EPERM;
-> + return -EOPNOTSUPP;
->=20
-> ret =3D di->bus.write_bulk(di, di->regs[reg_index], data, len);
->=20
-> if (ret < 0)
-> --
-> 2.50.1.windows.1
+>  drivers/cpufreq/cpufreq.c | 35 +++++++++++++++++++++++++++++++++++
+>  include/linux/cpufreq.h   |  1 +
+>  2 files changed, 36 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 11b29c7dbea9e..23f64346b80f8 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1370,6 +1370,18 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+>  		freq_qos_remove_request(policy->max_freq_req);
+>  	}
+>  
+> +	if (policy->boost_freq_req) {
+> +		/*
+> +		 * Remove boost_freq_req after sending CPUFREQ_REMOVE_POLICY
+> +		 * notification, since CPUFREQ_CREATE_POLICY notification was
+> +		 * sent after adding boost_freq_req earlier.
+> +		 */
+> +		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
+> +					     CPUFREQ_REMOVE_POLICY, policy);
+
+The CPUFREQ_REMOVE_POLICY notification is sent before removing
+max_freq_req, I don't think it should be sent again here.
+
+> +		freq_qos_remove_request(policy->boost_freq_req);
+> +		kfree(policy->boost_freq_req);
+> +	}
+> +
+
+I think boost_freq_req should be removed before removing max_freq_req,
+since it was added after adding max_freq_req as shown below.
+
+>  	freq_qos_remove_request(policy->min_freq_req);
+>  	kfree(policy->min_freq_req);
+>  
+> @@ -1476,6 +1488,29 @@ static int cpufreq_policy_online(struct cpufreq_policy *policy,
+>  			goto out_destroy_policy;
+>  		}
+>  
+> +		if (policy->boost_supported) {
+> +			policy->boost_freq_req = kzalloc(sizeof(*policy->boost_freq_req),
+> +				GFP_KERNEL);
+> +			if (!policy->boost_freq_req) {
+> +				ret = -ENOMEM;
+> +				goto out_destroy_policy;
+> +			}
+> +
+> +			ret = freq_qos_add_request(&policy->constraints,
+> +						   policy->boost_freq_req,
+> +						   FREQ_QOS_MAX,
+> +						   FREQ_QOS_MAX_DEFAULT_VALUE);
+> +			if (ret < 0) {
+> +				/*
+> +				 * So we don't call freq_qos_remove_request() for an
+> +				 * uninitialized request.
+> +				 */
+> +				kfree(policy->boost_freq_req);
+> +				policy->boost_freq_req = NULL;
+> +				goto out_destroy_policy;
+> +			}
+> +		}
+> +
+>  		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
+>  				CPUFREQ_CREATE_POLICY, policy);
+>  	}
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 0465d1e6f72ac..c292a6a19e4f5 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -81,6 +81,7 @@ struct cpufreq_policy {
+>  	struct freq_constraints	constraints;
+>  	struct freq_qos_request	*min_freq_req;
+>  	struct freq_qos_request	*max_freq_req;
+> +	struct freq_qos_request *boost_freq_req;
+>  
+>  	struct cpufreq_frequency_table	*freq_table;
+>  	enum cpufreq_table_sorting freq_table_sorted;
+
 
