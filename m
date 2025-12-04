@@ -1,173 +1,166 @@
-Return-Path: <linux-pm+bounces-39190-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39191-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB9EACA3286
-	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 11:10:42 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7D0ACA32C0
+	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 11:14:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B183C301BEB9
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 10:06:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A70603026225
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 10:14:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 794B23314C1;
-	Thu,  4 Dec 2025 10:06:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Osh22c/g"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2FEF32C94C;
+	Thu,  4 Dec 2025 10:13:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6A11A9FAF;
-	Thu,  4 Dec 2025 10:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D8F82BDC13;
+	Thu,  4 Dec 2025 10:13:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764842762; cv=none; b=H6dB8SmvBQer6o8lAwopJdD89PJ07qOeD2OT9Ht0OU8yJN0dia7pOyqU9x154aOUXWgTqHf8KszhNnWL6XZRIIkG4a5dKzojIE1z4pY/FvtSaT6NW9NZcq/tdXWu3i/0eybv/1ZMoScJCsuXGBB1Tz1WsBm1+WI4uDO2T+76x0s=
+	t=1764843239; cv=none; b=VpyYp28OF7cNqyZphhfQzrkT73O7LcZqykHAQzG9xV0dlfjQvOWXWnWk3cjpvjYb6vh17wUKUK0MX6qsNETcitkWLsp0YXlM0KA5uM5BMWwu05ab+hbvCeSv9fpCnP3n9Jirw69dDl5XYImhTllg42DpLOq4hXCMIdoF+J0KAfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764842762; c=relaxed/simple;
-	bh=HdxuyW48hjewxA37dD/zbSml/Oj0HqVBN0P1TbtJSfw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hu1oU3fCB3QYOBT/z4oPmr8VBoHZZLin1tam1oVq0OgnxFonGxb/7ROpXEeNreG8I2zXxA190KbPIlTp5nEd7QYbUrlpR7oKiWmhAFWmLucaVQY3gKTHE52seiQ8wdWqhos80eSi16CVQI/Ki8Nr3wjhFGMoePFPBBHASr8D0z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Osh22c/g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C558BC4CEFB;
-	Thu,  4 Dec 2025 10:05:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764842761;
-	bh=HdxuyW48hjewxA37dD/zbSml/Oj0HqVBN0P1TbtJSfw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Osh22c/gHyR+VPM2kPcT0dPiD6K9BvVhe5Ewzn9HXTkYe8a046bP8uE4VgCP19aDi
-	 K7xBIYI24RyUjLFUPu8Jsurggk4oUE//29xVfPPkiZv362d67AnRunbs4b5rs1+Gjw
-	 YS2XQ/6kgerJ6XOyYneyYfkre1v2DNabxE2eCArlBtO1fZs0/9oUkgnRGacd11N388
-	 /GqZScuD1gNPgkWGXr8EGPBS8fC6oU43ADwQuKp3i8wBSNVTdMRqREmWXwUbXqmGUE
-	 ffmQYPQtEzvEiW/FXBg4sDYheO7g+t6NXrH78pesoPO/l7JrqMckbFuomSJrJhGli1
-	 QsAy+pTCZPGgA==
-From: Christian Brauner <brauner@kernel.org>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Christian Brauner <brauner@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dave Ertman <david.m.ertman@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Elle Rhumsaa <elle@weathered-steel.dev>,
-	Carlos Llamas <cmllamas@google.com>,
-	Yury Norov <yury.norov@gmail.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	linux-block@vger.kernel.org,
-	FUJITA Tomonori <fujita.tomonori@gmail.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	linux-clk@vger.kernel.org,
-	Benno Lossin <lossin@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
+	s=arc-20240116; t=1764843239; c=relaxed/simple;
+	bh=X2jhDNQz8Fz9amrXxn4dKoXKzyWRc4H4dE/W7kQoDVk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EZUwlrgcWKQP9BQOWUy9nJwtLFwWQvdU/7ScUhtg4Iv/sVN2G32v/zQEr472/o6Q3xkCyjN8kUC8pkCu3FJwYdLXJyOffm/3JTuX3JkV8AoXLM2EE7kVg/nfSIEfpOWow0ECfT8wlY7o+B8TAsf0daSdtm7OAdVkbnpV9emZ+uI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3CFFC339;
+	Thu,  4 Dec 2025 02:13:49 -0800 (PST)
+Received: from e135073.nice.arm.com (e135073.arm.com [10.34.125.22])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C1C333F73B;
+	Thu,  4 Dec 2025 02:13:53 -0800 (PST)
+From: Pierre Gondois <pierre.gondois@arm.com>
+To: linux-kernel@vger.kernel.org
+Cc: Christian Loehle <christian.loehle@arm.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	zhenglifeng1@huawei.com,
+	Jie Zhan <zhanjie9@hisilicon.com>,
+	Pierre Gondois <pierre.gondois@arm.com>,
+	Huang Rui <ray.huang@amd.com>,
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-pm@vger.kernel.org,
-	Paul Moore <paul@paul-moore.com>,
-	Serge Hallyn <sergeh@kernel.org>,
-	linux-security-module@vger.kernel.org,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Abdiel Janulgue <abdiel.janulgue@gmail.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Lyude Paul <lyude@redhat.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	linux-fsdevel@vger.kernel.org,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jason Baron <jbaron@akamai.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	linux-kselftest@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Andrew Ballance <andrewjballance@gmail.com>,
-	maple-tree@lists.infradead.org,
-	linux-mm@kvack.org,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vitaly Wool <vitaly.wool@konsulko.se>,
-	Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	devicetree@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	linux-pci@vger.kernel.org,
-	Remo Senekowitsch <remo@buenzli.dev>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	rcu@vger.kernel.org,
-	Will Deacon <will@kernel.org>,
-	Fiona Behrens <me@kloenk.dev>,
-	Gary Guo <gary@garyguo.net>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Christoph Lameter <cl@gentwo.org>,
-	David Rientjes <rientjes@google.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Waiman Long <longman@redhat.com>,
-	Mitchell Levy <levymitchell0@gmail.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	John Stultz <jstultz@google.com>,
-	linux-usb@vger.kernel.org,
-	Tejun Heo <tj@kernel.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Tamir Duberstein <tamird@gmail.com>,
-	Rae Moar <raemoar63@gmail.com>,
-	rust-for-linux@vger.kernel.org
-Subject: Re: (subset) [PATCH 00/46] Allow inlining C helpers into Rust when using LTO
-Date: Thu,  4 Dec 2025 11:05:29 +0100
-Message-ID: <20251204-denkbar-stinktier-8a7c07650891@brauner>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com>
-References: <20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com>
+	linux-pm@vger.kernel.org
+Subject: [PATCH v1 0/4] cpufreq: Introduce boot frequency QoS
+Date: Thu,  4 Dec 2025 11:13:36 +0100
+Message-ID: <20251204101344.192678-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1456; i=brauner@kernel.org; h=from:subject:message-id; bh=HdxuyW48hjewxA37dD/zbSml/Oj0HqVBN0P1TbtJSfw=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWQaxnzoC5KPC9BQ6Xq2IqjgffnvpRpvskU9368/659bp HtRXnNJRykLgxgXg6yYIotDu0m43HKeis1GmRowc1iZQIYwcHEKwESuWjAyXDA8eVezNuVTq5R5 o8gOmf3FN+71+Ire2yjd+7GFVzhvPyPDbR6JQvt2uT/tr3YuKJvw1D1B7vuZ55NmCNlPeyuwRvU UKwA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
 
-On Tue, 02 Dec 2025 19:37:24 +0000, Alice Ryhl wrote:
-> This patch series adds __rust_helper to every single rust helper. The
-> patches do not depend on each other, so maintainers please go ahead and
-> pick up any patches relevant to your subsystem! Or provide your Acked-by
-> so that Miguel can pick them up.
-> 
-> These changes were generated by adding __rust_helper and running
-> ClangFormat. Unrelated formatting changes were removed manually.
-> 
-> [...]
+The Power Management Quality of Service (PM QoS) allows to
+aggregate constraints from multiple entities. It is currently
+used to manage the min/max frequency of a given policy.
 
-Applied to the vfs-6.20.rust branch of the vfs/vfs.git tree.
-Patches in the vfs-6.20.rust branch should appear in linux-next soon.
+Frequency constraints can come from:
+- Thermal framework: acpi_thermal_cpufreq_init()
+- Firmware: _PPC objects: acpi_processor_ppc_init()
+- User: by setting policyX/scaling_[min|max]_freq
+The minimum of the max frequency constraints is used to compute
+the resulting maximum allowed frequency.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+When enabling boost frequencies, the same frequency request object
+(policy->max_freq_req) as to handle requests from users is used.
+As a result, when setting:
+- scaling_max_freq
+- boost
+The last sysfs file used overwrites the request from the other
+sysfs file.
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+To avoid this:
+1. Create a per-policy boost_freq_req to save the boost
+constraints instead of overwriting the last scaling_max_freq
+constraint.
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+2. policy_set_boost() calls the cpufreq set_boost callback.
+Update the newly added boost_freq_req request from there:
+- whenever boost is toggled
+- to cover all possible paths
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-6.20.rust
+3. In the existing set_boost() callbacks:
+- Don't update policy->max as this is done through the qos notifier
+  cpufreq_notifier_max() which calls cpufreq_set_policy().
+- Remove freq_qos_update_request() calls as the qos request is now
+  done in policy_set_boost() and updates the new boost_freq_req
 
-[18/46] rust: fs: add __rust_helper to helpers
-        https://git.kernel.org/vfs/vfs/c/02c444cc60e5
-[27/46] rust: pid_namespace: add __rust_helper to helpers
-        https://git.kernel.org/vfs/vfs/c/f28a178408e4
-[29/46] rust: poll: add __rust_helper to helpers
-        https://git.kernel.org/vfs/vfs/c/de98ed59d678
+------------
+
+E.g.:
+On a Juno with available frequencies: 600.000, 1.000.000
+Boost frequencies: 1.200.000
+Using the cppc-cpufreq driver.
+
+---
+Without the patches:
+# ## Init state
+scaling_max_freq:1000000
+cpuinfo_max_freq:1000000
+
+# echo 700000 > scaling_max_freq
+scaling_max_freq:700000
+cpuinfo_max_freq:1000000
+
+# echo 1 > ../boost
+scaling_max_freq:1200000
+cpuinfo_max_freq:1200000
+
+# echo 800000 > scaling_max_freq
+scaling_max_freq:800000
+cpuinfo_max_freq:1200000
+
+# echo 0 > ../boost
+scaling_max_freq:1000000
+cpuinfo_max_freq:1000000
+
+---
+With the patches:
+# ## Init
+scaling_max_freq:1000000
+cpuinfo_max_freq:1000000
+
+# echo 700000 > scaling_max_freq
+scaling_max_freq:700000
+cpuinfo_max_freq:1000000
+
+# echo 1 > ../boost
+scaling_max_freq:700000
+cpuinfo_max_freq:1200000
+
+# echo 800000 > scaling_max_freq
+scaling_max_freq:800000
+cpuinfo_max_freq:1200000
+
+# echo 0 > ../boost
+scaling_max_freq:800000
+cpuinfo_max_freq:1000000
+
+---
+
+With the patches, the maximum scaling frequency requested is
+conserved even though boosting is enabled/disabled.
+
+The patches might be eligible for a stable tag.
+
+Pierre Gondois (4):
+  Revert "cpufreq: Fix re-boost issue after hotplugging a CPU"
+  cpufreq: Add boost_freq_req QoS request
+  cpufreq: Centralize boost freq QoS requests
+  cpufreq: Update set_boost callbacks to rely on boost_freq_req
+
+ drivers/cpufreq/amd-pstate.c   |  2 --
+ drivers/cpufreq/cppc_cpufreq.c | 20 +++---------
+ drivers/cpufreq/cpufreq.c      | 59 ++++++++++++++++++++++++++--------
+ include/linux/cpufreq.h        |  1 +
+ 4 files changed, 50 insertions(+), 32 deletions(-)
+
+--
+2.43.0
 
