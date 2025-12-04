@@ -1,224 +1,215 @@
-Return-Path: <linux-pm+bounces-39220-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39221-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33EEBCA568E
-	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 22:06:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FCE8CA593C
+	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 22:58:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7CB733032FE7
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 21:06:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 163113084A37
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 21:58:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C04835772F;
-	Thu,  4 Dec 2025 21:06:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83EAC2DAFAF;
+	Thu,  4 Dec 2025 21:58:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="djqu+2Vm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CHcOltT6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657E93128C2
-	for <linux-pm@vger.kernel.org>; Thu,  4 Dec 2025 21:06:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A43C2D1916;
+	Thu,  4 Dec 2025 21:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764882403; cv=none; b=KTZQKQYzrSe+Bsn/alk51PFhOMjtshw5zGXsQV3xBHykikq7U7tN49afXLNOEAAalqkkobxFlC0/W2iSkMdMZ0bnXB9wve2Bf0vw3cGkY1jKQBjBHEpvPRpDRmdJfmc9PPwlYzYLMdbIWr8KMQW6UP14hEn6sUWGE5f1Wh+8VVY=
+	t=1764885501; cv=none; b=XqcGPEgm2z8v5ObukdT8gNhLmO7sKY3Bev1nfwdI18Tv+vuAJBuHQNy1FcBmWw+Y9LhkSz8vRGkJB6IoMUksSbCjJNIHUY7c667Q9X7bhQVJ5VYBglXPSmSMe2YoThzmNSEwzkI1Y7IJBgCI8WQCdW0depQFX5Z2SlysFPCnBGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764882403; c=relaxed/simple;
-	bh=4gvVbQE7D0PuHRtcnXsG0f97rNAS/tXWI1ikykCyHu8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=txp6WMdlybsrFz9rXB76/PLuQ0ekW2TLMZ5iBP54LP5ZOsEGU7HowCosXiw3G2aEfppqV2y54nX87aRFn0ixGMxXdCh7Jnfhk5eBCI4iUKCrKrbCDl36fFCbvHipMi5dnAO2/s/MurKNrYaoPz/zxjy2m+yVhr3SdrA0+nn0ST0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=djqu+2Vm; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7aace33b75bso1302444b3a.1
-        for <linux-pm@vger.kernel.org>; Thu, 04 Dec 2025 13:06:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1764882402; x=1765487202; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cEywpXmQqNwB/TS6CB+654YlLSBuSDJ8XZY6ihxAXlI=;
-        b=djqu+2VmnFSX1eNkLgMcZSC76MyQqZJwykltkAiEH9TEDyBHxUj+wsPz+0imNjTNFh
-         tArfYbDVmjQ0qhybhEQ/SvjVa0g/j+CO2nIOiMU+FM2a/a/51FRvgonQvVNoKxI2XB5b
-         mjnfZeXwZLpra7NH/B9wtV2kPmMPVPvnhL6+bXNHGYUxGtsphW+Y6soTDEd13ESvp3+D
-         ewgdb0+iGv5wQZwyWbRHD5Ninq8frMBqqGE8xM6Jki7K2SouOq5nTrzMTMYZJZUI7lh9
-         56yvp1OJbSw6olQLmwzqwax6W94vovgJUIXIO3amNxs/L0VjFypqsbQy/FgLh5WRTHCT
-         rjAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764882402; x=1765487202;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cEywpXmQqNwB/TS6CB+654YlLSBuSDJ8XZY6ihxAXlI=;
-        b=qh7pT5Lkh8liDHuUf3i3CZGNzD62HklradtsIiySuGdyEGAkB9mDq+VAUf2h97F6DP
-         fynM52h4KHalmEKTwIKPLs5LXOKPdj+U1uVbwhS8ENWvByiY7yakm6t06Xfkw30SuuHl
-         p8lyG76Qq2a+0FoTwr+Tl5d+l5EB6fcxsXePDtJ3avzziWqibqjG3JAfSgHINcaemNS8
-         DVd3FpFdzIID2jtMUYr9mDuk0kRCqWvnbj2IqQIWgeb6Kv8U7ST5ZK7aiG8GoplCgxu4
-         KsSgP9E+/J7JoehhB3tEFNTrdTQxMXzC06M553NqgAT7znK4tnpZygsSmc7QoAg3cKAF
-         PXVA==
-X-Forwarded-Encrypted: i=1; AJvYcCV6g2R+G3pHtLNtzE7D0AG3klaBBhGEHjfojJIdtOi3UILVbJVn6RJh0hZTo2nmPi7GTKe/fIj9qw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbVEka+xtyHnrObEWMo3ngdp0Ik6LmV+PSYGwvN1n3QFbPKJUC
-	UbHrxi8LabcVIJ+qlUD2D06hKsQrs+om5OxblSXReOIpfnS7ELHE7C3nONmQJi1CRw==
-X-Gm-Gg: ASbGncuK0R8aQI8ioAUAqpRrar91aiOqqkrkO5/RQMt1X3YMZ4sPl26KWK02NOoM8Q3
-	pQ3gLeaeEPAr4mcq1+SBeEutlRxDDbuic1ealAnYDaOTESQ82LliA4reTvroyDx+jlM9WKeWoo/
-	og6RsifyXXt79w430jWpK199+Jf9oSprmrW0W22hwmm5b1rL1Pu4w6YEDSKhp60aOERb0ZKDQBF
-	b4SLWmCaSsr6VWyuoEk6ugn2RUESBs30Nu773zkrsgOpWJxtr2OnuF/4SFEyrgXVQYaBOHU1qfR
-	nHemQKOJ6f3Y/kXIE6FH26YXtsReZlsEu3vEDB6M+bEm1J78QXLK4jfEOh+TDshPacDVz18IN7E
-	nMhGniiglYuw22pBEoXeUxEbSyngTeWyFfLAM53ms0/8qjW5KIjk6feGhdfcoeUaOzTRCF5saZd
-	WwQYJesoiOtWsnosvrOC0kKNQr2/t1bfgO/2XEnNkgWOEbe1vIS1b/Y3PrEwA9LEJq5BueIDlLV
-	I04Ehe3uiEGmw==
-X-Google-Smtp-Source: AGHT+IHnjdg9J5Dv3DjKTAgPlUY1x6NH1Rmw5oo9i+e3bENd1vNzyqMp5aLbF57/RFRsp96OPvtSGQ==
-X-Received: by 2002:a05:6a20:12ca:b0:347:9ae1:cffb with SMTP id adf61e73a8af0-363f5db7158mr9697293637.24.1764882401346;
-        Thu, 04 Dec 2025 13:06:41 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e7c:8:d11d:bcc2:2743:bf88? ([2a00:79e0:2e7c:8:d11d:bcc2:2743:bf88])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bf817c3e6c3sm1857768a12.17.2025.12.04.13.06.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Dec 2025 13:06:40 -0800 (PST)
-Message-ID: <19e501f4-da1b-4a91-8681-da78922bc302@google.com>
-Date: Thu, 4 Dec 2025 13:06:39 -0800
+	s=arc-20240116; t=1764885501; c=relaxed/simple;
+	bh=gfs6rAjwYWaIUTgv8HxrK+FjEtpB5r8ybGFamMTRmUY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sQp11KtmMwOXSxpMzs3jTw4Oc73y0b0VP7y0B7U4favkR5eXLsYWWNfCW02aeEwHKZ3f+4zKBq9eHbYi5jtUc2A2E8V8uov6syKt9um7XZST5SZNOSIOZN9xsbow9dcdSgXda8/1kXqsJMaacidi0KkAgTIJJ1I306QEOMSOU6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CHcOltT6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC7D8C4CEFB;
+	Thu,  4 Dec 2025 21:58:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764885500;
+	bh=gfs6rAjwYWaIUTgv8HxrK+FjEtpB5r8ybGFamMTRmUY=;
+	h=Date:From:To:Cc:Subject:From;
+	b=CHcOltT6+W5RNtfPK0kcXL3GybDcI02os14PUrVoa2eymOp2/8FNdMzEfFk5q+C1Y
+	 W/zidFfctmiywY+gzS44OraJIOEUqVqaxmy7QDXKtMfi8MWxBRJdoF+sacif2uyEfM
+	 MdVljR4aPdnczpC9HMG5gP9sBzB+eNf90b307XCZMivS5mzYzegO9yhzSDvw7qeQna
+	 y8xX9K9ympm9TCmnOiAkWAWvXNvY2lyN6J3lKnlWxbhW7ohrEA2NYDk5fXXvGGA4n+
+	 o/j4JWcq+m+9tg5ZtzN5rhDH3iD0+Mp3axb6q4uxZLT5ABrx7mDZjuuk7dBrPjCMDu
+	 u2GnbKh1YnBew==
+Received: by venus (Postfix, from userid 1000)
+	id C7DD1184BEE; Thu, 04 Dec 2025 22:58:18 +0100 (CET)
+Date: Thu, 4 Dec 2025 22:58:18 +0100
+From: Sebastian Reichel <sre@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply changes for 6.19
+Message-ID: <rxziuamy4owgazy3oqvawwyxyih4fylzg7jselbubo666ofhid@orwemcdl2bx5>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] dt-bindings: power: supply: Add Maxim MAX77759
- charger
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
- Kyle Tso <kyletso@google.com>
-References: <20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com>
- <20251123-max77759-charger-v1-1-6b2e4b8f7f54@google.com>
- <d4455f4b-2a0f-4bc0-b897-14f2e27af3ea@kernel.org>
- <c9b059f8-9219-4219-95c8-23a3733fea58@google.com>
- <20251125-amorphous-bobcat-of-whirlwind-afdab1@kuoka>
- <7ad91325-e881-461d-b39e-6ff15d98b3c5@google.com>
- <076777c3-b238-4d1d-a11b-602027348ee4@kernel.org>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <076777c3-b238-4d1d-a11b-602027348ee4@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="htkcijv6gdbhafx6"
+Content-Disposition: inline
 
 
-On 12/2/25 5:00 AM, Krzysztof Kozlowski wrote:
-> On 26/11/2025 00:48, Amit Sunil Dhamne wrote:
->> On 11/25/25 1:56 AM, Krzysztof Kozlowski wrote:
->>> On Sun, Nov 23, 2025 at 06:34:05PM -0800, Amit Sunil Dhamne wrote:
->>>> Hi Krzysztof,
->>>>
->>>> On 11/23/25 1:28 AM, Krzysztof Kozlowski wrote:
->>>>> On 23/11/2025 09:35, Amit Sunil Dhamne via B4 Relay wrote:
->>>>>> From: Amit Sunil Dhamne <amitsd@google.com>
->>>>>>
->>>>>> Add bindings for Maxim max77759 charger device.
->>>>>>
->>>>>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->>>>>> ---
->>>>>>    .../power/supply/maxim,max77759-charger.yaml       | 36 ++++++++++++++++++++++
->>>>>>    1 file changed, 36 insertions(+)
->>>>>>
->>>>>> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..71f866419774
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
->>>>>> @@ -0,0 +1,36 @@
->>>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>>>>> +%YAML 1.2
->>>>>> +---
->>>>>> +$id: http://devicetree.org/schemas/power/supply/maxim,max77759-charger.yaml#
->>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>> +
->>>>>> +title: Maxim Integrated MAX77759 Battery charger
->>>>>> +
->>>>>> +maintainers:
->>>>>> +  - Amit Sunil Dhamne <amitsd@google.com>
->>>>>> +
->>>>>> +description: |
->>>>>> +  This module is part of the MAX77759 PMIC. For additional information, see
->>>>>> +  Documentation/devicetree/bindings/mfd/maxim,max77759.yaml.
->>>>>> +
->>>>>> +  The Maxim MAX77759 is a dual input switch mode battery charger for portable
->>>>>> +  applications. It supports wired and wireless charging and can operate in buck
->>>>>> +  and boost mode.
->>>>>> +
->>>>>> +allOf:
->>>>>> +  - $ref: power-supply.yaml#
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    const: maxim,max77759-charger
->>>>>> +
->>>>> This should be just folded into parent node, no need for separate
->>>>> charger device or is just incomplete.
->>>> Thanks for the review! You are right, the binding is incomplete. This
->>>> charger block actually listens on its own I2C address, distinct from the
->>>> main PMIC.
->>>>
->>>> I will update v2 to include the reg property. I will also add the
->>> AFAIK, the main (parent) device schema does not reference children via
->>> any sort of addressing, so reg here would not be suitable.
->> I agree that currently nvmem and gpio devices (which are children of
->> PMIC device) are not referenced using any address. But I was guessing
->> that's because they share the i2c client id with the PMIC and sharing
->> its address space (implied).
->>
->> The charger device while being part of the MAX77759 PMIC package has
->> it's own i2c client id and address space that's why I proposed "reg".
->> The underlying assumption I made was separate client id implies that a
->> "reg" property required. But maybe that's incorrect.
->>
->> I can understand the argument against having a "reg" property. As the
->> i2c client id will remain same for a max77759 charger device (as it's a
->> chip property and not a board property) it will always remain a
->> constant. I will drop the "reg" proposal.
->>
->>
->>>> standard properties `constant-charge-current-max-microamp` and
->>>> `constant-charge-voltage-max-microvolt` to configure the hardware
->>>> limits, as this charger device does not manage the battery profile
->>>> directly (that is handled by a separate fuel gauge).
->>> Well, still, what's the benefit for the bindings to have it as a
->>> separate child? Kind of depends on your example, which is quite small -
->>> one regulator and supply. Grow the example with battery and other
->>> independent resources (if they are) to justify it. Or show arguments why
->>> this is re-usable.
->> The primary reasons for keeping the charger as a distinct child node are
->> to model the hardware topology for the power supply subsystem and to
-> You do not need children for that at all.
+--htkcijv6gdbhafx6
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: [GIT PULL] power-supply changes for 6.19
+MIME-Version: 1.0
 
-Actually what you said makes sense. I will fold the charger's schema 
-into mfd/maxim,max77759's schema.
+Hi Linus,
 
+The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
 
-Thanks,
+  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
 
-Amit
+are available in the Git repository at:
 
->> house the OTG regulator provided by the charger block.
->> The charger needs to be referenced by the Fuel Gauge (which handles the
->> battery profile) via power-supplies. Additionally, the charger block
->> provides a regulator for USB OTG VBUS, which is cleaner to represent as
->> a child node of the charger rather than mixing it into the top-level
->> PMIC node.
-> Sorry but argument that you need a child device to be able to construct
-> a phandle is just wrong. You can create phandles on every other way as well.
->
->
-> Best regards,
-> Krzysztof
+  https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.gi=
+t tags/for-v6.19
+
+for you to fetch changes up to 8e8856396b54bea5c00a7ae88d87c6254aef2d94:
+
+  Revert "power: supply: qcom_battmgr: support disabling charge control" (2=
+025-11-03 15:32:47 +0100)
+
+This pull request will conflict with your branch due to 'power:
+supply: use ktime_divns() to avoid 64-bit division' as you added
+your own fix. I expect you do the same as Stephen Rothwell [0] and
+drop the patch I queued in favour of your own.
+
+[0] https://lore.kernel.org/linux-next/20251127113054.5112674d@canb.auug.or=
+g.au/
+
+Greetings and have a good trip to Tokyo,
+
+-- Sebastian
+
+----------------------------------------------------------------
+power supply and reset changes for the 6.19 series
+
+ * power-supply core
+  - documentation fixes
+ * power-supply drivers
+  - add BD71828 charger driver
+  - add Richtek RT9756 driver
+  - max77705: add adaptive input current support
+  - max77705: add support for multiple devices
+  - misc. small fixes
+ * reset drivers
+  - add spacemit-p1 poweroff/reboot driver
+
+----------------------------------------------------------------
+Ahelenia Ziemia=C5=84ska (1):
+      power: supply: apm_power: only unset own apm_get_power_status
+
+Andreas Kemnade (2):
+      power: supply: Add bd718(15/28/78) charger driver
+      MAINTAINERS: Add entry for BD71828 charger
+
+Aurelien Jarno (1):
+      driver: reset: spacemit-p1: add driver for poweroff/reboot
+
+ChiYuan Huang (3):
+      dt-bindings: power: supply: Add Richtek RT9756 smart cap divider char=
+ger
+      power: supply: rt9756: Add Richtek RT9756 smart cap divider charger
+      Documentation: power: rt9756: Document exported sysfs entries
+
+Dzmitry Sankouski (1):
+      power: supply: max77705_charger: implement aicl feature
+
+Haotian Zhang (1):
+      power: supply: rt5033_charger: Fix device node reference leaks
+
+Ivan Abramov (4):
+      power: supply: cw2015: Check devm_delayed_work_autocancel() return co=
+de
+      power: supply: max17040: Check iio_read_channel_processed() return co=
+de
+      power: supply: rt9467: Return error on failure in rt9467_set_value_fr=
+om_ranges()
+      power: supply: wm831x: Check wm831x_set_bits() return value
+
+Krzysztof Kozlowski (1):
+      power: supply: max77705: Fix potential IRQ chip conflict when probing=
+ two devices
+
+Michal Kubecek (1):
+      power: supply: use ktime_divns() to avoid 64-bit division
+
+Murad Masimov (1):
+      power: supply: rt9467: Prevent using uninitialized local variable in =
+rt9467_set_value_from_ranges()
+
+Randy Dunlap (1):
+      docs: power: clean up power_supply_class.rst
+
+Sebastian Reichel (1):
+      Revert "power: supply: qcom_battmgr: support disabling charge control"
+
+Val Packett (2):
+      power: supply: qcom_battmgr: clamp charge control thresholds
+      power: supply: qcom_battmgr: support disabling charge control
+
+ Documentation/ABI/testing/sysfs-class-power-rt9756 |   30 +
+ .../bindings/power/supply/richtek,rt9756.yaml      |   72 ++
+ Documentation/power/power_supply_class.rst         |   84 +-
+ MAINTAINERS                                        |    6 +
+ drivers/power/reset/Kconfig                        |    9 +
+ drivers/power/reset/Makefile                       |    1 +
+ drivers/power/reset/spacemit-p1-reboot.c           |   88 ++
+ drivers/power/supply/Kconfig                       |   24 +
+ drivers/power/supply/Makefile                      |    2 +
+ drivers/power/supply/apm_power.c                   |    3 +-
+ drivers/power/supply/bd71828-power.c               | 1049 ++++++++++++++++=
+++++
+ drivers/power/supply/cw2015_battery.c              |    8 +-
+ drivers/power/supply/intel_dc_ti_battery.c         |    4 +-
+ drivers/power/supply/max17040_battery.c            |    6 +-
+ drivers/power/supply/max77705_charger.c            |   56 +-
+ drivers/power/supply/qcom_battmgr.c                |   14 +-
+ drivers/power/supply/rt5033_charger.c              |    2 +
+ drivers/power/supply/rt9467-charger.c              |    6 +-
+ drivers/power/supply/rt9756.c                      |  955 ++++++++++++++++=
+++
+ drivers/power/supply/wm831x_power.c                |   10 +-
+ include/linux/power/max77705_charger.h             |    2 +
+ 21 files changed, 2365 insertions(+), 66 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9756
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,=
+rt9756.yaml
+ create mode 100644 drivers/power/reset/spacemit-p1-reboot.c
+ create mode 100644 drivers/power/supply/bd71828-power.c
+ create mode 100644 drivers/power/supply/rt9756.c
+
+--htkcijv6gdbhafx6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmkyA/oACgkQ2O7X88g7
++prA+RAAnjczSvAUunnuaEN9cCUKyPzTUbQceoxifvfiO00FM97++90MYoPnZo6k
+WMdb7oxs/j/1HgDZWGAFdFhHpMki2zBIKxMeZxqEGzRwXsCYbTYuX6mKKrn5oHpB
+m2r4K8wsHraNLXaRP+fdVw32xxIuSGA3bRzqu/gQjeVT3zbrLGwzKVV1Qv6NsJ9c
++acRPfcBjl/CBc7M3hgn5ZzfGSVDZEWaGDhBhdF8IULf+4BOvaDuYzuntCXdBJN9
+94XWmmfbVWmaeSr/2aMgiq7mPSCHOwmaBLJq83oTR51KkRL9Yz2jSlrKAsgtojBL
+2Tqg3XVmz8LtECzdv7KcoxD2xG8j3jIXBmevQAXbOBwgdB/vxs67a+trDvGneN0C
+ltzzh5rwLemwRlqY5cLUQK2R18r5Ein/v9QtDhhQ2YrIjUdxoQ1nIMXCUhjoIv8o
+mZx6PZlUNb2EDi619F6TO+g6BIXQTojdOEL3FwhJKQM6iCUzhz5IFF/9cR79MgKW
+/fPH+xwSuyO7w0zp90s76nHsEkl6rpguZd9fnMvsB+2n74mDdYz28tk7S0GsMOaQ
+TmPtbD696Kjyspg9KzcP/IymhOsNOcAUsTEmXZO3hYiLxulsz/GEm1SCae6Jluz9
+LE9M514UnuxqHmMxKxF/lANtR3bNuXBQoRN1talZ1JFOGaC2mUk=
+=J8Yd
+-----END PGP SIGNATURE-----
+
+--htkcijv6gdbhafx6--
 
