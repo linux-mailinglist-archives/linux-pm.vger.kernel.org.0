@@ -1,250 +1,498 @@
-Return-Path: <linux-pm+bounces-39175-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39176-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2D67CA2087
-	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 01:23:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CC99CA20BA
+	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 01:33:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EE2DF300EE64
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 00:23:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DF731301E169
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 00:33:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847F718A93F;
-	Thu,  4 Dec 2025 00:23:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C15116A956;
+	Thu,  4 Dec 2025 00:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iwopbdaZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PpP+knOR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28C84C92;
-	Thu,  4 Dec 2025 00:23:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764807790; cv=fail; b=ixd8YoFL1CcyAvn2Z9/s6l/zSOtZXPnU7oQTS6mFZEEpxFI+Kr1RSawfhtzwAsO6t6B6YSAcbUJUQ1x5kPJwt0spAUzQeeojFXd5NHDo7QCAoekKli8Rwxv5yNC2g91gi1WoV5NTH5o9paNnh4/n0KAQ09oMWUPfq5guIwFq7Kk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764807790; c=relaxed/simple;
-	bh=qHmHwuv6Ltsn4bfoEkBpTgS4KEP6n7ihX8EwPWCize8=;
-	h=From:Date:To:CC:Message-ID:In-Reply-To:References:Subject:
-	 Content-Type:MIME-Version; b=MD+dukGo6dkwHgdZjPdIc6eR0nLKAlXg0rz10Gm/5j4n5pvACm6ImUxPk1eOXoWHIUO/ABaM2MBAH3XZuLWYhNH2YaTSia2/3VduI+qIRCsLF6sXAp9LnaTJFeSiPamklyJeCEQKd+z2dJJMDSFshIV1jht5ZvKq92/oyQgxix8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iwopbdaZ; arc=fail smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764807788; x=1796343788;
-  h=from:date:to:cc:message-id:in-reply-to:references:
-   subject:content-transfer-encoding:mime-version;
-  bh=qHmHwuv6Ltsn4bfoEkBpTgS4KEP6n7ihX8EwPWCize8=;
-  b=iwopbdaZOMU5LtG01mZlf8VxYa4tmB6Kiy0b2WVCHqQSrTZe1J23kcks
-   yeZQ21WARz7v6p3N4CSDnqq14L4uvkkBrgYGnj7T7+FjmhpJ+FfjLw95e
-   L2FkzswVzcJMPFA8DXr+5tf91y3OA3HQdsm1IuPZmWQMmMB1ogTYQa1wY
-   9KVJbSR713cMDko3Cddl2NRwt6HwjpAzLyWBfvbLTx3Efm6fgc0Kefs2H
-   OVwQBCbNtSrsFRhIaZ8ZzQc0+dt26aHZU+7YjcluvDkYwtl4h7KNpeZCj
-   6se2QqIOmfMvzlDfTq7Q5eqfUYztKprNd1l7QRZ/Cwelw78K6u468kQBD
-   g==;
-X-CSE-ConnectionGUID: d/vAEf98TeOnCwzor04feg==
-X-CSE-MsgGUID: +4gAq02QSgiMFBsipHyupA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11631"; a="84419865"
-X-IronPort-AV: E=Sophos;i="6.20,247,1758610800"; 
-   d="scan'208";a="84419865"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 16:23:06 -0800
-X-CSE-ConnectionGUID: WJZH/i1UTqGgu/zwMELz+Q==
-X-CSE-MsgGUID: B2pTs/afTiKS4QYxfZ3P0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,247,1758610800"; 
-   d="scan'208";a="194931367"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2025 16:23:06 -0800
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Wed, 3 Dec 2025 16:23:05 -0800
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29 via Frontend Transport; Wed, 3 Dec 2025 16:23:05 -0800
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (52.101.43.1) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Wed, 3 Dec 2025 16:23:05 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uDpyy4qlc8BzXZu1RUiAINu2kDGdwDB8ucThupk1Nd3x3Sqh/Fho9jSpdVf4rwonpwSJYewXiED9TMQJFOT7oINTBtH38IIDYPmi9ue0ph2peuNGg1OHdDLfSL848fRs/PqWtn+/pFTmbI2aAoT4LXfKway1sQuEvhNSg5GDZQknj4FZ5GqcCYLhj9KsQtudPuCWUC7OLfHFfK14qyuDJdEybZ9syPT5gX03Q/Knf/21A4nolYcnst464UMjQzy77RR4DadWub4hLqiE3dICJKESyfVpvIfgmzxJ35uLaGcSZUpMvVvg71eWt8km9e7QvNJX8fKnjajGoiL/fydkDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Fq0MPlqBosOgX8xTLBjyjcamxP+PrG/GiEAIAsfMw4s=;
- b=XFVpqCdMIHWXL5eeQDXsXOHDM4TiY3eoTZXQxbz0jXNnCRhpkJWdcCfL8UJERj5X2JGhF4JrR5w6fXaXK7arHVRjv7+yj9FGrXuKYLZgIMECgVjFoev+RRpWwWFaoXifRy0OcodfIzGRhR0EdNB2JFyu/VqkmCqd49fVKvuaP1MYLr/wOuy9hMJrisdRqxE9ld19jXX55sljAenHVEkwGb0u3kpu3TSCflcQJsrCnhodew1C2CvGRZZIb2e52k4gIpqA+EYHyMU+hnQy7M98iTdZCuQ3+Z3jQUlQCVFoG3XP1+c3sMUty5XGeYaUY0yw4ZXhJWthOCA/nwKtL5WsNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by PH0PR11MB5806.namprd11.prod.outlook.com (2603:10b6:510:14b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.9; Thu, 4 Dec
- 2025 00:22:57 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::1ff:1e09:994b:21ff]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::1ff:1e09:994b:21ff%4]) with mapi id 15.20.9366.012; Thu, 4 Dec 2025
- 00:22:57 +0000
-From: <dan.j.williams@intel.com>
-Date: Wed, 3 Dec 2025 16:22:55 -0800
-To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-	<linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>
-CC: Alison Schofield <alison.schofield@intel.com>, Vishal Verma
-	<vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
-	<dan.j.williams@intel.com>, Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>, Dave Jiang <dave.jiang@intel.com>,
-	Davidlohr Bueso <dave@stgolabs.net>, Matthew Wilcox <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>, "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown
-	<len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, Li Ming
-	<ming.li@zohomail.com>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, "Ying
- Huang" <huang.ying.caritas@gmail.com>, Yao Xingtao <yaoxt.fnst@fujitsu.com>,
-	Peter Zijlstra <peterz@infradead.org>, Greg KH <gregkh@linuxfoundation.org>,
-	Nathan Fontenot <nathan.fontenot@amd.com>, Terry Bowman
-	<terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>, Benjamin Cheatham
-	<benjamin.cheatham@amd.com>, Zhijian Li <lizhijian@fujitsu.com>, "Borislav
- Petkov" <bp@alien8.de>, Ard Biesheuvel <ardb@kernel.org>
-Message-ID: <6930d45fb836f_1981100b7@dwillia2-mobl4.notmuch>
-In-Reply-To: <20251120031925.87762-7-Smita.KoralahalliChannabasappa@amd.com>
-References: <20251120031925.87762-1-Smita.KoralahalliChannabasappa@amd.com>
- <20251120031925.87762-7-Smita.KoralahalliChannabasappa@amd.com>
-Subject: Re: [PATCH v4 6/9] cxl/region: Add register_dax flag to defer DAX
- setup
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0141.namprd13.prod.outlook.com
- (2603:10b6:a03:2c6::26) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69D6824BD
+	for <linux-pm@vger.kernel.org>; Thu,  4 Dec 2025 00:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764808419; cv=none; b=a87NtUGPU1oMlAV+akhoWzyIuHXWM1nqo4EKyVxUxoMCzIo/k7QrX/KVBkkODw0PZInzO53rrJuGtmYc67rWP6njdzLFgS2GvDxwvQ1IVzM2Tx5enib4qVCbHSY12U15E8g3podTQpwjqFmsFqC0Kh4YEuYp1A160XgeB56i47U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764808419; c=relaxed/simple;
+	bh=Gyu07sgO89udA4VpdmLEzJ2y+Ygct3bzDi4mURvrIpI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Smg+oABHH/SiYgTGfyoYN7vj8FuDcAJNmLpyqBY2O3aoZcce0D5bfWQDmYANfCo6s0q8+Se14U7jbPX2yqI+oswEK/uJw3R7OMbEEWeIOBncWihJh/3yrkT8UVjaRmBpoygq7ZgqQ+IYoSyIVgbpZ7XwNaVHfSMsvtiEb+qYQoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PpP+knOR; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b728a43e410so53572366b.1
+        for <linux-pm@vger.kernel.org>; Wed, 03 Dec 2025 16:33:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1764808414; x=1765413214; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=umN819w48S7XpRn5se0oiD1rh9hIyAruGfJiHIcVXLk=;
+        b=PpP+knOR37fIwWPJ1GcYPRMmF8K54s073MVve/sn+koeVyYYfZ/PJ1MBIjf58cG5Q+
+         RwL5o/9BJmYuHsjl5zPolLB7vNFx++HBd04yQsOY5z0siFbFca0+6/ExGREbScS/mips
+         ordLiud9qcbFfkJgFg5qsoSYqMqqTPH9iFPMRvq+XLv2oFn5lQUjsynkFDDqWQJAzH0/
+         t0350LjKb9zjwlbsSQ5cd1v84YaCkH1PdpWiO8fEpkxC/DZgNXLI6G6z+9bRtpByGVav
+         xZJLFf/vTrBXWKNSwwF1/Yds7msXdEeG6mMWN/5taEbhxwwyD63AlM9139MJuIUf6G6H
+         3WqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764808414; x=1765413214;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=umN819w48S7XpRn5se0oiD1rh9hIyAruGfJiHIcVXLk=;
+        b=enLzLQ+87FYKxUkfdrXXdrrHNr3pfvxRyTuKc63TtZyAfGA4GbxY3s+puMpXQMrKhG
+         J1IxGJET4Gd3ECVuzmsMP7esJMaVjE0bvSqVxu7pcwH+AG+CN0UqSvW4O+jt9ONvVBIW
+         DgM2ORprNzq1lkVypociRNhp8sXUuCrvr6MHvGRxx+spBY7izt0ZVcqlCF5bcJcH+ule
+         AhhhF/4jtweyJwxNJjHWNUtaOKLrnNYmCGn0c48Vl0mSkaYL8HCeSfF10PdLtvCsQSJW
+         EIT1AoAUFPZ1tMNlnKIxv7WeZNoTCuh1tQTE5iblF8N0b2DXZHIZS8xLiCiOyaNRNI/P
+         2CYg==
+X-Forwarded-Encrypted: i=1; AJvYcCVNzATW1pSH31wupd6xB0SkZZXftu379XznpWRgOyK2xbYLzVTfZuT5Fz8E1e8YbW9z9q+I3rChXA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YycphyoIeuy8mopxZ+IDFqzN7LDpP1ebR73QDlZ1+g0hgFI3quO
+	K7BLBEsEtyE+gY97rlvPoMM4QleyOsqCRqwzaCBx7ARVwMoXJdT8k9JEvY2YG0VelMs3Gm3gGNq
+	rDtK8YiA7fAfwuuTrlws9f/Q2opLZ6lX1vtg27g69
+X-Gm-Gg: ASbGncsiNYKPmyW0uMOMXI9bxqz4aJDCsnLSt5+yRaBJoxgJZg5Gj3S4ptlAKlomYO/
+	q/makoLCNq/3GzzmNSNujtsDaZzk8r/ZZUL6vWtk1hIMpJBIxQxEJt9JAtI8EhqL0zfYetp4jMb
+	27eEnuyDJwqG9+7ewPUIOUQMW3oMO74IUK6GedCOAjoRkFo8oHbWcdZzlQc5nLBnNXi2TJrlfmh
+	PDSP0Iq5GHXPqlsjzrJ4vBcZ18eWk3Oq6up/j5/PEEDpajJ112fVrt4qFEv1V/BGEACUbhb0LQ1
+	UCj6a9cu6pOu9bDZOK94w8q36qLfdw==
+X-Google-Smtp-Source: AGHT+IHiW686iz9sbIrGvDGc5m0yQyoZa9JTastn+MWfElK1LeOcbwJzc9K8FNpVwBziTCtyvIuv20SpJtsdYCwKNF4=
+X-Received: by 2002:a17:907:d8e:b0:b73:1baa:6424 with SMTP id
+ a640c23a62f3a-b79dc7c29b5mr565562266b.55.1764808413540; Wed, 03 Dec 2025
+ 16:33:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|PH0PR11MB5806:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7ae862b0-2cc3-47b8-3f69-08de32cb463b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?KzhrR2FLVXYzem5rK21iTXR2Wjh5by9EUkRnWmtkb1I5QnNCd3RLNU15TXJ6?=
- =?utf-8?B?VHc5Zmh2UVFuUHJza1N2SjZudmYyVHNPaGtPOUZyTnhBZ1pWU1hDakhrMk8v?=
- =?utf-8?B?NXlMOTJNMXcyZUZWMTJpaXVZVmZOQVg4dm52M252V3o1YjJCL3M2OW51WE9t?=
- =?utf-8?B?Y0ZUR1pQdGVqcjRQeWpwZm9kQ0IwcHB0ZjdQM1VxWUNyZEZObWYxQWJHR2ZQ?=
- =?utf-8?B?SG5jOXBTQ0JwYzJMdHNNK0pBbHZZSGQ4RUNWSTMyTktocEJVNzdkVFFPZ1l3?=
- =?utf-8?B?NDZmMmNSWVFMZlVvMDBiR2hOSlhEa3JOQWJrRllTRzUwd1dnMUR4UzQwZ2Y1?=
- =?utf-8?B?RnZscmhuKzlVaGp6ckQzdkd6Q1MrNlpkd0pGdzdobjlWWFlRRWlXejFOVDRX?=
- =?utf-8?B?ajY1L1VqWE05Rld1dzRtdCtERkhyTWJweFlVTlcxNTg1TlVvK0VMVTF2bytK?=
- =?utf-8?B?S21ObnN4QUI0ZVhYZ1dyWFlUdU5ETmpkMnBTcGhEbDZTSXIwc1FnWHJlS1dR?=
- =?utf-8?B?Si82KzBWekZiS3p2bVdxeGthUnQ1V3NtMHVoZXVrczBRU0ZYZjAzem9PUVdR?=
- =?utf-8?B?bTQ4NjRSTlRHU1Q2c1ByeC9kaWN4bjIrVExrQW1CdjJ0dXRkbkdmcDYrVkVk?=
- =?utf-8?B?L2czRUdvckdMRDJUbkVnNFVpRXBWNitKMzcwMjR5T2NsODA0clR0RDFSQ2VZ?=
- =?utf-8?B?d0JqNnBDaUxHZlN0U1Fmd1BvWTdROGpoWHFrc3gzWldPdnlVR2tUQ1NGU2t5?=
- =?utf-8?B?Slk0UHRPdTdDNkV6SEwxTXJuWFEyWC9lZEx2VXdOZGlrd3hXZnc0TWtFVU9U?=
- =?utf-8?B?d3JJVEpURGpucmNaU0U5UEFhQU14aXNrYWlzL3NiQXR5UWpFRFA3ZWpwNUh4?=
- =?utf-8?B?SHRPVU56NjVJeVVUUDJoa1o2MWxSN3Y1aE9mSnVzT3FnZjkxckVHZEFmMmRo?=
- =?utf-8?B?ZHJuTEdJaENoT2dmQXBPRkxQL21WR0cxNFgwZ3JMYnI5dWJubEN1bWpyb0RP?=
- =?utf-8?B?dTU3RTYrTG0rNXl5WkVscDhtY2I5VnlhVVhnTlppZGVJTHYvMXFZN2hSUDdS?=
- =?utf-8?B?RnNjVXQ5b2xBTE5FSTRXU29ac285SVZwSXgwenp2ZnlUQ2NFQ2VRVm1Oclp0?=
- =?utf-8?B?NXc3WDA1WFlsb0Y3YzRQQ3VWMnRIc3cxTE5nVWFzcUJLVGxmTjdWemVJMkda?=
- =?utf-8?B?ZkVhZXFxdTgrNDZBKzR0ZUV4MUQ3clhRbm9CY3hOYWJQc29FNnROQ0xSTkRL?=
- =?utf-8?B?dHVkbEsrbEduODJhcE9TUHkyZS9RY05GM3V0V3dldUZhdkZUdWVIak5LbkNm?=
- =?utf-8?B?R01ic1U3a2F4dlRla1NWa2tDWWVWZk1vMUNPUjFHcm5JbEMybjlKV21sQjMy?=
- =?utf-8?B?bzBLWUp0REhEL3gveUtiOWdadmtZUzhOUkRKYUtDc1l0aXhmcWx4WE5FT1FZ?=
- =?utf-8?B?L05WU2xiQldvTTE3T3ZmREtBS0R4dWRrU3hsQ1RXRHF5VEJUVENzQ3RtR2ZN?=
- =?utf-8?B?dFpVdldkdDNSdm5FZ2RFTFdqUUg5aHdRNklVU3JGbmQvYk96aVRkbFBzeVNx?=
- =?utf-8?B?QXpnZ1BlUmdiblFITWU0blAvZ1puV3I0aEt1djBtbXZxQmlxV1VlVm5NUTlC?=
- =?utf-8?B?TWRjY2toejM2SmNoZE9takNnTW1aZTBWWjFOdXNhcWw5VEh4blJid0gzYlc3?=
- =?utf-8?B?Nml1YWFGRUpCVFlUaXQ1TlFqcDE2L1hSdjNMY1ZIUVRwRVdQaUVNTWhHWGda?=
- =?utf-8?B?ZmlBTldNQzJBa3BENnV5QnR6YkJKazR0TG55cjBXWGx1VGxraStiMGd3eExz?=
- =?utf-8?B?Zi9VSHkwZndpcExJbVYzUVVDa0dvMDQzUUFVcjRKcVZzRDd4NDRvZGczaHJV?=
- =?utf-8?B?NjdQWTZyUkJmbVdhb0Y2NVI4Yk5tc0pvMzJxMzY3S0prbUlUV3dOL3VCblFO?=
- =?utf-8?Q?nNFXDMnlFeKCPhcOKnhtMxBQaMkVjMmo?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z015dFgxRkFSUjFWYmh6QzlCL1d6M2Joc3JMRGNGaWZEUWpjczNVcFZjaENT?=
- =?utf-8?B?L2pYS21rMDFtSGRRSXJZUTdXeHQyaU5XNTBOYlhEdUFRY1pOSW9oOE41eTRk?=
- =?utf-8?B?dGdXYXFRTWpnWm1kcmRzcnB0UjBZbDhuQS82aGpkUENIRU1Ucnd0V25XQ2t3?=
- =?utf-8?B?Y2dScmd2VU05WnJ0T3lmZEpnTmdZbmpoU0JMUTVybjNzb1dDak83Ulk2eVhC?=
- =?utf-8?B?M1FpTU5XNi90bXE5RWR3VzBIbjFMcHNvWEZ3c0huS0pCODJzdGZOUXFzc1c1?=
- =?utf-8?B?TlZVUGRDdUtoODhaYU5Ia2F1TmpDMHJkWTBJNmpZcUg0ZVZRbVI1YXIvd3VS?=
- =?utf-8?B?RytYQzU5SXRHWkliSHlOY1ZTeTBxOFhZUVpoV0oyckhpRzhiTk5iMVhmVEVi?=
- =?utf-8?B?MzVQdHJXdzhKTFpwblN0RmRzRVBGOXcwQUFpT1JOczVydjRDczNhMk5BT0dr?=
- =?utf-8?B?MmlraFpTaTBXZVRjSXlQUTdrS2JHc3BXczVRd01CcERjY0cxUk1uY0FKVit5?=
- =?utf-8?B?UkFCMkN4T1RRSmdLL2RMWVk5ZnEydlh5M1pjL0g5eHMxYUtzWmoveHF6SVZs?=
- =?utf-8?B?NytPV0lWNGRpN0VsbVA0OVRtTHBPb0JUeUp1dkFaYTVEWTU2eVJmODNxdWpN?=
- =?utf-8?B?UkluTml2UDZ6aWVvVnhFV21KeWFYcG5LY0d0MUFwV04vMXVWcjBqN1c1bGNp?=
- =?utf-8?B?bWpzN3N3aXh3SDdIRVJ5a2poWXlaUXN4YkcxWWNmVXpPeS9zSS9MeHZPMXhQ?=
- =?utf-8?B?cytXbG83TytVYjhuZ0JXMk5OcGdPMFhBYXhHRUdaRytNSU1HV3JWZ0VHMFRU?=
- =?utf-8?B?cS9abzFhTVBqSHJZRGRZbW90YWRrYjJ1TDhEN3NEVnVpRzdwZDVseGxIOGlT?=
- =?utf-8?B?R0g1OStMMXp1RHNoZmQ4MkdWNnA4Ry93ekk4L0tnOGVCbmtDTmRxVDllU2t6?=
- =?utf-8?B?NW85VXUwRUx3b1gyRDd5UUtrNEZGRmwyYS9UZEx3ZmxDVkhjdkpHMXd4cmRQ?=
- =?utf-8?B?L2F5Qm43RUdzeExLWkwvT04zMWJYdVJ5Ynk5RFZndzY2NjIxRzNCSThNRzVY?=
- =?utf-8?B?cGRKNTB5M3llc1psMXByN3M5ZzdkTG1qdEhSbTEvSGNRcG5MaWtQTTlPbUVN?=
- =?utf-8?B?QjBHMXZqUVBQZlJ4SW5PMEwxQXhqSllFRG9kU25pNjRuUHBXc3JtUFRoUGVE?=
- =?utf-8?B?ZFdqUCtjZmhJVnpJQytPaTNHYlBuK0FabFd6cUJqTE9SLzQ4RHhsWUFOdmYx?=
- =?utf-8?B?aHpwWHlIQ201ZkprOXZYQW5rMGJDeW9IanFBazM1MC8yYy9vZy96K0FzbVNO?=
- =?utf-8?B?K2MxaldnaXRjbWJydG93TGtKNDNBWkVzLy9BQ2p6UHBzVEdFa2ZrMEpRa2l3?=
- =?utf-8?B?LzNNZElGdnptNHkrY0xkZmdKWmRsWDkwWHdUVCtneGdFNGgvV3RuWHVrcjIx?=
- =?utf-8?B?alRwSy9sSkVRRUdMeUtIMXcycnRBejF6bWNvcUdSZ09KSFdGUjhGa2JteVh4?=
- =?utf-8?B?Z3lCbm1yQS9EU0VEOUFmWDlsUEJYWXFoTFFUdDFyWXZrcW5ERWVmMTZYdUxp?=
- =?utf-8?B?dDRYLzBtTEpzVFo3SVJ5djZLd29pVWNMbDc2Tk9IMFVmSUZ1SGplWkdPUkkx?=
- =?utf-8?B?dzVGOGdtNG4zQXdCQ25RbmRCVldqY0JITVVSTCtaSGxwNld6dVgxcmpBR3hO?=
- =?utf-8?B?L2tzTW5PSVVLMkZ5ZG1mOXIzbHBVQktrLzlGUEp4dFF6dEp0REVLVXN1ejdw?=
- =?utf-8?B?RGFtZlFqNjNCUmxqVWhqZVh6amdSN2dZcy9JTlpkcDJwcjlWNGdrbW5ob2la?=
- =?utf-8?B?WG1hb04rT1EwZ3R3ZDR3ZW91UDNKVlA1aG1hbHFHdzAyQVA1dVpWWTRGSlZw?=
- =?utf-8?B?Z0QyYnRPWlM1NTBVRnE0RTBNV2UwWXV3ZUlKMVZaUjh1OW11M0tIWGhUdVJF?=
- =?utf-8?B?eldoL0JQUkthMFNVbFFpUXlqQzBTQWxVV3FwUCt5dS95cTVMd0lDVEd3d1Nw?=
- =?utf-8?B?dUYyRktJcTR2ZXdqU0lSVUg5MlJtVjhlQ1Q2NjNTdFJ2UE1nQ3RLeEhMbVFD?=
- =?utf-8?B?bEdaKzV5c1pOVnBmSHRlSEgxNkFIdkJLWEdFWjB2cjVXWHhGRytsWDBLdnV1?=
- =?utf-8?B?cXg1N1FrK2pJaVAzc2tBSUVOV2s3LzRGVzA4Z3lPMEdMcmNSYmlmaHdMUkZB?=
- =?utf-8?B?Umc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ae862b0-2cc3-47b8-3f69-08de32cb463b
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2025 00:22:57.3733
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hOUuG9LxE7cTX5Je+YjfueuH1Lq+gVqapMjWfHAq/7nEOjI7aSKPC/7SdWrKmUFXEu6m8QpibXsrdRYWVXHu0mJ+lFh4jLcxbnSpJPWyqBQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5806
-X-OriginatorOrg: intel.com
+References: <20251201202437.3750901-1-wusamuel@google.com> <20251201202437.3750901-2-wusamuel@google.com>
+ <51711ea1-2e5c-457d-902d-68797eb496cb@arm.com>
+In-Reply-To: <51711ea1-2e5c-457d-902d-68797eb496cb@arm.com>
+From: Samuel Wu <wusamuel@google.com>
+Date: Wed, 3 Dec 2025 16:33:22 -0800
+X-Gm-Features: AWmQ_bm1mpitIcii6HDOivmMy4RjSPBoPtqJ3zy6c1_aiBXckMIMe8FKRJn1KVY
+Message-ID: <CAG2KctqZfkHDXjhv+aTDAeNgxkA_V9kQjQH0rm5moaRX38MS3Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] cpufreq: Replace trace_cpu_frequency with trace_policy_frequency
+To: Douglas Raillard <douglas.raillard@arm.com>
+Cc: Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>, 
+	Jonathan Corbet <corbet@lwn.net>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	christian.loehle@arm.com, kernel-team@android.com, linux-pm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, Lalit Maganti <lalitm@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Smita Koralahalli wrote:
-> Stop creating cxl_dax during cxl_region_probe(). Early DAX registration
-> can online memory before ownership of Soft Reserved ranges is finalized.
-> This makes it difficult to tear down regions later when HMEM determines
-> that a region should not claim that range.
-> 
-> Introduce a register_dax flag in struct cxl_region_params and gate DAX
-> registration on this flag. Leave probe time registration disabled for
-> regions discovered during early CXL enumeration; set the flag only for
-> regions created dynamically at runtime to preserve existing behaviour.
-> 
-> This patch prepares the region code for later changes where cxl_dax
-> setup occurs from the HMEM path only after ownership arbitration
-> completes.
+On Tue, Dec 2, 2025 at 4:03=E2=80=AFAM Douglas Raillard
+<douglas.raillard@arm.com> wrote:
+>
+> Hi Samuel,
+>
+> On 01-12-2025 20:24, Samuel Wu wrote:
+> > The existing cpu_frequency trace_event can be verbose, emitting a nearl=
+y
+> > identical trace event for every CPU in the policy even when their
+> > frequencies are identical.
+> >
+> > This patch replaces the cpu_frequency trace event with policy_frequency
+> > trace event, a more efficient alternative. From the kernel's
+> > perspective, emitting a trace event once per policy instead of once per
+> > cpu saves some memory and is less overhead.
+>
+> I'd be fully behind that as a general guideline.
+>
+> > From the post-processing
+> > perspective, analysis of the trace log is simplified without any loss o=
+f
+> > information.
+>
+> Unfortunately I'm not so sure about the "simplified" part (as of today),
+> more on that below.
+>
+> >
+> > Signed-off-by: Samuel Wu <wusamuel@google.com>
+> > ---
+> >   drivers/cpufreq/cpufreq.c      | 14 ++------------
+> >   drivers/cpufreq/intel_pstate.c |  6 ++++--
+> >   include/trace/events/power.h   | 24 +++++++++++++++++++++---
+> >   kernel/trace/power-traces.c    |  2 +-
+> >   samples/bpf/cpustat_kern.c     |  8 ++++----
+> >   samples/bpf/cpustat_user.c     |  6 +++---
+> >   tools/perf/builtin-timechart.c | 12 ++++++------
+> >   7 files changed, 41 insertions(+), 31 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 4472bb1ec83c..dd3f08f3b958 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -309,8 +309,6 @@ static void cpufreq_notify_transition(struct cpufre=
+q_policy *policy,
+> >                                     struct cpufreq_freqs *freqs,
+> >                                     unsigned int state)
+> >   {
+> > -     int cpu;
+> > -
+> >       BUG_ON(irqs_disabled());
+> >
+> >       if (cpufreq_disabled())
+> > @@ -344,10 +342,7 @@ static void cpufreq_notify_transition(struct cpufr=
+eq_policy *policy,
+> >               adjust_jiffies(CPUFREQ_POSTCHANGE, freqs);
+> >               pr_debug("FREQ: %u - CPUs: %*pbl\n", freqs->new,
+> >                        cpumask_pr_args(policy->cpus));
+> > -
+> > -             for_each_cpu(cpu, policy->cpus)
+> > -                     trace_cpu_frequency(freqs->new, cpu);
+> > -
+> > +             trace_policy_frequency(freqs->new, policy->cpu, policy->c=
+pus);
+> >               srcu_notifier_call_chain(&cpufreq_transition_notifier_lis=
+t,
+> >                                        CPUFREQ_POSTCHANGE, freqs);
+> >
+> > @@ -2201,7 +2196,6 @@ unsigned int cpufreq_driver_fast_switch(struct cp=
+ufreq_policy *policy,
+> >                                       unsigned int target_freq)
+> >   {
+> >       unsigned int freq;
+> > -     int cpu;
+> >
+> >       target_freq =3D clamp_val(target_freq, policy->min, policy->max);
+> >       freq =3D cpufreq_driver->fast_switch(policy, target_freq);
+> > @@ -2213,11 +2207,7 @@ unsigned int cpufreq_driver_fast_switch(struct c=
+pufreq_policy *policy,
+> >       arch_set_freq_scale(policy->related_cpus, freq,
+> >                           arch_scale_freq_ref(policy->cpu));
+> >       cpufreq_stats_record_transition(policy, freq);
+> > -
+> > -     if (trace_cpu_frequency_enabled()) {
+> > -             for_each_cpu(cpu, policy->cpus)
+> > -                     trace_cpu_frequency(freq, cpu);
+> > -     }
+> > +     trace_policy_frequency(freq, policy->cpu, policy->cpus);
+> >
+> >       return freq;
+> >   }
+> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pst=
+ate.c
+> > index ec4abe374573..9724b5d19d83 100644
+> > --- a/drivers/cpufreq/intel_pstate.c
+> > +++ b/drivers/cpufreq/intel_pstate.c
+> > @@ -2297,7 +2297,8 @@ static int hwp_get_cpu_scaling(int cpu)
+> >
+> >   static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
+> >   {
+> > -     trace_cpu_frequency(pstate * cpu->pstate.scaling, cpu->cpu);
+> > +     trace_policy_frequency(pstate * cpu->pstate.scaling, cpu->cpu,
+> > +                            cpumask_of(cpu->cpu));
+> >       cpu->pstate.current_pstate =3D pstate;
+> >       /*
+> >        * Generally, there is no guarantee that this code will always ru=
+n on
+> > @@ -2587,7 +2588,8 @@ static void intel_pstate_adjust_pstate(struct cpu=
+data *cpu)
+> >
+> >       target_pstate =3D get_target_pstate(cpu);
+> >       target_pstate =3D intel_pstate_prepare_request(cpu, target_pstate=
+);
+> > -     trace_cpu_frequency(target_pstate * cpu->pstate.scaling, cpu->cpu=
+);
+> > +     trace_policy_frequency(target_pstate * cpu->pstate.scaling, cpu->=
+cpu,
+> > +                            cpumask_of(cpu->cpu));
+> >       intel_pstate_update_pstate(cpu, target_pstate);
+> >
+> >       sample =3D &cpu->sample;
+> > diff --git a/include/trace/events/power.h b/include/trace/events/power.=
+h
+> > index 370f8df2fdb4..317098ffdd5f 100644
+> > --- a/include/trace/events/power.h
+> > +++ b/include/trace/events/power.h
+> > @@ -182,11 +182,29 @@ TRACE_EVENT(pstate_sample,
+> >               { PM_EVENT_RECOVER, "recover" }, \
+> >               { PM_EVENT_POWEROFF, "poweroff" })
+> >
+> > -DEFINE_EVENT(cpu, cpu_frequency,
+> > +TRACE_EVENT(policy_frequency,
+> >
+> > -     TP_PROTO(unsigned int frequency, unsigned int cpu_id),
+> > +     TP_PROTO(unsigned int frequency, unsigned int cpu_id,
+> > +              const struct cpumask *policy_cpus),
+> >
+> > -     TP_ARGS(frequency, cpu_id)
+> > +     TP_ARGS(frequency, cpu_id, policy_cpus),
+> > +
+> > +     TP_STRUCT__entry(
+> > +             __field(u32, state)
+> > +             __field(u32, cpu_id)
+> > +             __cpumask(cpumask)
+>
+> Using a cpumask is the most technically correct option here, but it also =
+carries a big issue.
+> Userspace tooling will have a very hard time doing anything with it. A lo=
+t of that is down
+> to having no appropriate counterpart in "table libraries" in general (e.g=
+. what would you
+> map that to in pandas, polars or SQL ?). Some of the lack of support is p=
+robably also down to how
+> infrequently used it is. For example I don't think Perfetto would be able=
+ to handle that
+> in the ftrace_event and args table, as the documented supported value typ=
+es are:
 
-This seems backwards to me. The dax subsystem knows when it wants to
-move ahead with CXL or not, dax_cxl_mode is that indicator. So, just
-share that variable with drivers/dax/cxl.c, arrange for
-cxl_dax_region_probe() to fail while waiting for initial CXL probing to
-succeed.
+I've been in touch with the Perfetto team through this process, and it
+is an easy update for them to handle. If there are other libraries
+using this event, I think their approach would be similar to how
+Perfetto's SQL tables handle this new trace event.
 
-Once that point is reached move dax_cxl_mode to DAX_CXL_MODE_DROP, which
-means drop the hmem alias, and go with the real-deal CXL region. Rescan
-the dax-bus to retry cxl_dax_region_probe(). No need to bother 'struct
-cxl_region' with a 'dax' flag, it just registers per normal and lets the
-dax-subsystem handle accepting / rejecting.
+> args table:
+> value_type      STRING  The type of the value of the arg. Will be one of =
+'int', 'uint', 'string', 'real', 'pointer', 'bool' or 'json'.
+> https://perfetto.dev/docs/analysis/stdlib-docs
 
-Now, we do need a mechanism from dax-to-cxl to trigger region removal in
-the DAX_CXL_MODE_REGISTER case (proceed with the hmem registration), but
-that is separate from blocking the attachment of dax to CXL regions.
-Keep all that complexity local to dax.
+In the same URL as above, there is a 'cpu_frequency_counters' SQL
+table documentation. The new tracepoint would be parsed by Perfetto's
+C++ parser before being inserted into the aforementioned SQL table as
+four separate rows, given a policy with 4 CPUs. This effectively
+creates the same table with the same data (just slightly different
+timestamps) as prior to this patch.
+
+>
+> So while I definitely support improving the situation around cpumasks (I =
+lobbied a bit for that),
+> I don't think the ecosystem is ready for it yet and having such a core ev=
+ent switched to using it
+> is going to cause a lot of pain.
+>
+> Some alternatives for tooling could be:
+> 1. Record the policy cpumasks in a tool-friendly format in the trace head=
+er, but no current format I know
+>     of provides that, and ftrace does not provide a "JSON blob to be pass=
+ed through" we could easily append to.
+>     Any such addition will therefore require libraries update which will =
+take time.
+>
+> 3. Doing without the data in the trace. That means collecting and bundlin=
+g another sidecar file, which
+>     is really not convenient and still requires 3rd party tool modificati=
+ons for end users.
+>
+> 2. Add policy_frequency event, but not remove cpu_frequency yet. Possibly=
+ with a deprecation warning
+>     when enabling the event.
+>
+
+These alternatives should work, but I feel are probably too complex to
+be worth the effort.
+
+> > +     ),
+> > +
+> > +     TP_fast_assign(
+> > +             __entry->state =3D frequency;
+> > +             __entry->cpu_id =3D cpu_id;
+> > +             __assign_cpumask(cpumask, policy_cpus);
+>
+> ipi_send_cpumask uses cpumask_bits():
+>
+>                 __assign_cpumask(cpumask, cpumask_bits(cpumask));
+>
+> It's not clear what is best practice, as struct cpumask contains a single=
+ member anyway and
+> __assign_cpumask() expands to a memcpy() so they are functionally identic=
+al.
+>
+> > +     ),
+> > +
+> > +     TP_printk("state=3D%lu cpu_id=3D%lu policy_cpus=3D%*pb",
+> > +               (unsigned long)__entry->state,
+> > +               (unsigned long)__entry->cpu_id,
+> > +               cpumask_pr_args((struct cpumask *)__get_dynamic_array(c=
+pumask)))
+>
+> Looking at ipi_send_cpumask, this should be:
+>
+>    __get_cpumask(cpumask)
+>
+> The cast and cpumask_pr_args() may look like it's working, but there is o=
+nly a very slim
+> chance any downstream tool will know what to do with this. Looking at lib=
+traceevent
+> (which trace-cmd is based on):
+>
+> ./utest/traceevent-utest.c:116: "print fmt: \"cpumask=3D%s\", __get_cpuma=
+sk(cpumask)\n";
+> ./src/event-parse.c:3674:       if (strcmp(token, "__get_cpumask") =3D=3D=
+ 0 ||
+> ./src/event-parse.c:7568:               printf("__get_cpumask(%s)", args-=
+>bitmask.bitmask);
+>
+> But there is no match for "cpumask_pr_args".
+
+Thanks for pointing out libtraceevent- I didn't know about this tool,
+but I'll take a look at compatibility and adjust appropriately. The
+macros are a little tricky, but I agree that it seems best to follow
+the template set out by the pre-existing ipi_send_cpumask.
+
+>
+> Considering the gap between what works when using the in-kernel text rend=
+ering and what can be
+> reasonably expected to work in any other userspace tool, it's a good idea=
+ to try
+> as many as possible unfortunately.
+>
+
+Overall, I appreciate the thorough and insightful feedback Douglas! If
+there are any other tools consuming cpu_frequency, I can help update
+them appropriately. AFAICT Perfetto is by far, the most widespread
+tool consuming cpu_frequency.
+
+> >   );
+> >
+> >   TRACE_EVENT(cpu_frequency_limits,
+> > diff --git a/kernel/trace/power-traces.c b/kernel/trace/power-traces.c
+> > index f2fe33573e54..a537e68a6878 100644
+> > --- a/kernel/trace/power-traces.c
+> > +++ b/kernel/trace/power-traces.c
+> > @@ -16,5 +16,5 @@
+> >
+> >   EXPORT_TRACEPOINT_SYMBOL_GPL(suspend_resume);
+> >   EXPORT_TRACEPOINT_SYMBOL_GPL(cpu_idle);
+> > -EXPORT_TRACEPOINT_SYMBOL_GPL(cpu_frequency);
+> > +EXPORT_TRACEPOINT_SYMBOL_GPL(policy_frequency);
+> >
+> > diff --git a/samples/bpf/cpustat_kern.c b/samples/bpf/cpustat_kern.c
+> > index 7ec7143e2757..f485de0f89b2 100644
+> > --- a/samples/bpf/cpustat_kern.c
+> > +++ b/samples/bpf/cpustat_kern.c
+> > @@ -75,9 +75,9 @@ struct {
+> >   } pstate_duration SEC(".maps");
+> >
+> >   /*
+> > - * The trace events for cpu_idle and cpu_frequency are taken from:
+> > + * The trace events for cpu_idle and policy_frequency are taken from:
+> >    * /sys/kernel/tracing/events/power/cpu_idle/format
+> > - * /sys/kernel/tracing/events/power/cpu_frequency/format
+> > + * /sys/kernel/tracing/events/power/policy_frequency/format
+> >    *
+> >    * These two events have same format, so define one common structure.
+> >    */
+> > @@ -162,7 +162,7 @@ int bpf_prog1(struct cpu_args *ctx)
+> >        */
+> >       if (ctx->state !=3D (u32)-1) {
+> >
+> > -             /* record pstate after have first cpu_frequency event */
+> > +             /* record pstate after have first policy_frequency event =
+*/
+> >               if (!*pts)
+> >                       return 0;
+> >
+> > @@ -208,7 +208,7 @@ int bpf_prog1(struct cpu_args *ctx)
+> >       return 0;
+> >   }
+> >
+> > -SEC("tracepoint/power/cpu_frequency")
+> > +SEC("tracepoint/power/policy_frequency")
+> >   int bpf_prog2(struct cpu_args *ctx)
+> >   {
+> >       u64 *pts, *cstate, *pstate, cur_ts, delta;
+> > diff --git a/samples/bpf/cpustat_user.c b/samples/bpf/cpustat_user.c
+> > index 356f756cba0d..f7e81f702358 100644
+> > --- a/samples/bpf/cpustat_user.c
+> > +++ b/samples/bpf/cpustat_user.c
+> > @@ -143,12 +143,12 @@ static int cpu_stat_inject_cpu_idle_event(void)
+> >
+> >   /*
+> >    * It's possible to have no any frequency change for long time and ca=
+nnot
+> > - * get ftrace event 'trace_cpu_frequency' for long period, this introd=
+uces
+> > + * get ftrace event 'trace_policy_frequency' for long period, this int=
+roduces
+> >    * big deviation for pstate statistics.
+> >    *
+> >    * To solve this issue, below code forces to set 'scaling_max_freq' t=
+o 208MHz
+> > - * for triggering ftrace event 'trace_cpu_frequency' and then recovery=
+ back to
+> > - * the maximum frequency value 1.2GHz.
+> > + * for triggering ftrace event 'trace_policy_frequency' and then recov=
+ery back
+> > + * to the maximum frequency value 1.2GHz.
+> >    */
+> >   static int cpu_stat_inject_cpu_frequency_event(void)
+> >   {
+> > diff --git a/tools/perf/builtin-timechart.c b/tools/perf/builtin-timech=
+art.c
+> > index 22050c640dfa..3ef1a2fd0493 100644
+> > --- a/tools/perf/builtin-timechart.c
+> > +++ b/tools/perf/builtin-timechart.c
+> > @@ -612,10 +612,10 @@ process_sample_cpu_idle(struct timechart *tchart =
+__maybe_unused,
+> >   }
+> >
+> >   static int
+> > -process_sample_cpu_frequency(struct timechart *tchart,
+> > -                          struct evsel *evsel,
+> > -                          struct perf_sample *sample,
+> > -                          const char *backtrace __maybe_unused)
+> > +process_sample_policy_frequency(struct timechart *tchart,
+> > +                             struct evsel *evsel,
+> > +                             struct perf_sample *sample,
+> > +                             const char *backtrace __maybe_unused)
+> >   {
+> >       u32 state  =3D evsel__intval(evsel, sample, "state");
+> >       u32 cpu_id =3D evsel__intval(evsel, sample, "cpu_id");
+> > @@ -1541,7 +1541,7 @@ static int __cmd_timechart(struct timechart *tcha=
+rt, const char *output_name)
+> >   {
+> >       const struct evsel_str_handler power_tracepoints[] =3D {
+> >               { "power:cpu_idle",             process_sample_cpu_idle }=
+,
+> > -             { "power:cpu_frequency",        process_sample_cpu_freque=
+ncy },
+> > +             { "power:policy_frequency",     process_sample_policy_fre=
+quency },
+> >               { "sched:sched_wakeup",         process_sample_sched_wake=
+up },
+> >               { "sched:sched_switch",         process_sample_sched_swit=
+ch },
+> >   #ifdef SUPPORT_OLD_POWER_EVENTS
+> > @@ -1804,7 +1804,7 @@ static int timechart__record(struct timechart *tc=
+hart, int argc, const char **ar
+> >       unsigned int backtrace_args_no =3D ARRAY_SIZE(backtrace_args);
+> >
+> >       const char * const power_args[] =3D {
+> > -             "-e", "power:cpu_frequency",
+> > +             "-e", "power:policy_frequency",
+> >               "-e", "power:cpu_idle",
+> >       };
+> >       unsigned int power_args_nr =3D ARRAY_SIZE(power_args);
+>
+> --
+>
+> Douglas
+>
 
