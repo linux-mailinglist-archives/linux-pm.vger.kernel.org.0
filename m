@@ -1,36 +1,36 @@
-Return-Path: <linux-pm+bounces-39193-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39194-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 774B7CA3329
-	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 11:22:10 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93C56CA32E0
+	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 11:15:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B1ADF303265C
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 10:21:59 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 00C8630141F9
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 10:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1414D338937;
-	Thu,  4 Dec 2025 10:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0635338F2F;
+	Thu,  4 Dec 2025 10:14:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA26326D73;
-	Thu,  4 Dec 2025 10:14:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FC86338F4D;
+	Thu,  4 Dec 2025 10:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764843247; cv=none; b=Tdezpj/SIFwTywL0cNWA1/ap3OPwou7jeZGcN+p4KPPy2RXNt2dKmgW7jkPWcthwYCHawNJKXnQykuEOE7wE2mWcqbx77ZQVs/N6EC9ZJd9KqFBD2NCOHvdkp3mrOeFiY2JaPIXDXFXkI13fFwplIgJrSJ5UbUzPZCp5Iz07R/E=
+	t=1764843249; cv=none; b=S5P4MZ5nXQqRsjh3lCjgGcCHHCtNhwAgJNgY5uvsFytAZ/utRV/9+o5Y30pZWy7sxMWrK6YdbskDQfsaYTY/c008b8xVw8u9d/i6aOc4AckQNx8rPd5IJtjPS3sCtAbrlYCT9furimkWekfxA69GSo8NshR/3xzHNqAlVLWmiIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764843247; c=relaxed/simple;
-	bh=9XY4nMc+9Bb3G6FNU9WFpUEwhPv2wCvQ0zwByOnuiUY=;
+	s=arc-20240116; t=1764843249; c=relaxed/simple;
+	bh=jJ+J4azMi46GNdDcZBbnfKfZeONx47CY4QJVdrsGGu8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=vAyZT+zvY+WMu5J+K7BSA+zCTWqv0GD/dCXTm1Dd79vwDfCQEKxRn3DT22TnPUop8uLjjcNV+HHifXkznBgDJSQ50GEXsN+0lFf2BVFy6/k7RIZEBZGyvgwyu6Qd8mFuA9d/HdR+KGuDkDipQogvApDZSsbgArJFl2R1JtMgGPc=
+	 MIME-Version; b=UlQuzFENMSg6eAiAKkGZanISjdrxhxq5muYH7a7oriL4rZS+rFsIMaWX+GFXD/I77lMhZ6mihWsveNEAcDjO0LGkDbGe0sCrMOZzgBjPv6xz7cHHxSu6MdiTWKYcAEgtFYPTiq6LrAF/Ztx1SP+KamaRa1oq7YMRgBmjl8H2srA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C944F339;
-	Thu,  4 Dec 2025 02:13:56 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 860B61575;
+	Thu,  4 Dec 2025 02:14:00 -0800 (PST)
 Received: from e135073.nice.arm.com (e135073.arm.com [10.34.125.22])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 67A793F73B;
-	Thu,  4 Dec 2025 02:14:01 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 025A33F73B;
+	Thu,  4 Dec 2025 02:14:04 -0800 (PST)
 From: Pierre Gondois <pierre.gondois@arm.com>
 To: linux-kernel@vger.kernel.org
 Cc: Christian Loehle <christian.loehle@arm.com>,
@@ -45,9 +45,9 @@ Cc: Christian Loehle <christian.loehle@arm.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v1 2/4] cpufreq: Add boost_freq_req QoS request
-Date: Thu,  4 Dec 2025 11:13:38 +0100
-Message-ID: <20251204101344.192678-3-pierre.gondois@arm.com>
+Subject: [PATCH v1 3/4] cpufreq: Centralize boost freq QoS requests
+Date: Thu,  4 Dec 2025 11:13:39 +0100
+Message-ID: <20251204101344.192678-4-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251204101344.192678-1-pierre.gondois@arm.com>
 References: <20251204101344.192678-1-pierre.gondois@arm.com>
@@ -59,100 +59,39 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Power Management Quality of Service (PM QoS) allows to
-aggregate constraints from multiple entities. It is currently
-used to manage the min/max frequency of a given policy.
-
-Frequency constraints can come for instance from:
-- Thermal framework: acpi_thermal_cpufreq_init()
-- Firmware: _PPC objects: acpi_processor_ppc_init()
-- User: by setting policyX/scaling_[min|max]_freq
-The minimum of the max frequency constraints is used to compute
-the resulting maximum allowed frequency.
-
-When enabling boost frequencies, the same frequency request object
-(policy->max_freq_req) as to handle requests from users is used.
-As a result, when setting:
-- scaling_max_freq
-- boost
-The last sysfs file used overwrites the request from the other
-sysfs file.
-
-To avoid this, create a per-policy boost_freq_req to save the boost
-constraints instead of overwriting the last scaling_max_freq
-constraint.
+policy_set_boost() calls the cpufreq set_boost callback.
+Update the newly added boost_freq_req request from there:
+- whenever boost is toggled
+- to cover all possible paths
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- drivers/cpufreq/cpufreq.c | 35 +++++++++++++++++++++++++++++++++++
- include/linux/cpufreq.h   |  1 +
- 2 files changed, 36 insertions(+)
+ drivers/cpufreq/cpufreq.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 11b29c7dbea9e..23f64346b80f8 100644
+index 23f64346b80f8..9d98b98e7981c 100644
 --- a/drivers/cpufreq/cpufreq.c
 +++ b/drivers/cpufreq/cpufreq.c
-@@ -1370,6 +1370,18 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
- 		freq_qos_remove_request(policy->max_freq_req);
- 	}
+@@ -603,10 +603,16 @@ static int policy_set_boost(struct cpufreq_policy *policy, bool enable)
+ 	policy->boost_enabled = enable;
  
-+	if (policy->boost_freq_req) {
-+		/*
-+		 * Remove boost_freq_req after sending CPUFREQ_REMOVE_POLICY
-+		 * notification, since CPUFREQ_CREATE_POLICY notification was
-+		 * sent after adding boost_freq_req earlier.
-+		 */
-+		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
-+					     CPUFREQ_REMOVE_POLICY, policy);
-+		freq_qos_remove_request(policy->boost_freq_req);
-+		kfree(policy->boost_freq_req);
+ 	ret = cpufreq_driver->set_boost(policy, enable);
+-	if (ret)
++	if (ret) {
+ 		policy->boost_enabled = !policy->boost_enabled;
++		return ret;
 +	}
-+
- 	freq_qos_remove_request(policy->min_freq_req);
- 	kfree(policy->min_freq_req);
  
-@@ -1476,6 +1488,29 @@ static int cpufreq_policy_online(struct cpufreq_policy *policy,
- 			goto out_destroy_policy;
- 		}
- 
-+		if (policy->boost_supported) {
-+			policy->boost_freq_req = kzalloc(sizeof(*policy->boost_freq_req),
-+				GFP_KERNEL);
-+			if (!policy->boost_freq_req) {
-+				ret = -ENOMEM;
-+				goto out_destroy_policy;
-+			}
+-	return ret;
++	ret = freq_qos_update_request(policy->boost_freq_req, policy->cpuinfo.max_freq);
++	if (ret < 0)
++		return ret;
 +
-+			ret = freq_qos_add_request(&policy->constraints,
-+						   policy->boost_freq_req,
-+						   FREQ_QOS_MAX,
-+						   FREQ_QOS_MAX_DEFAULT_VALUE);
-+			if (ret < 0) {
-+				/*
-+				 * So we don't call freq_qos_remove_request() for an
-+				 * uninitialized request.
-+				 */
-+				kfree(policy->boost_freq_req);
-+				policy->boost_freq_req = NULL;
-+				goto out_destroy_policy;
-+			}
-+		}
-+
- 		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
- 				CPUFREQ_CREATE_POLICY, policy);
- 	}
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 0465d1e6f72ac..c292a6a19e4f5 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -81,6 +81,7 @@ struct cpufreq_policy {
- 	struct freq_constraints	constraints;
- 	struct freq_qos_request	*min_freq_req;
- 	struct freq_qos_request	*max_freq_req;
-+	struct freq_qos_request *boost_freq_req;
++	return 0;
+ }
  
- 	struct cpufreq_frequency_table	*freq_table;
- 	enum cpufreq_table_sorting freq_table_sorted;
+ static ssize_t store_local_boost(struct cpufreq_policy *policy,
 -- 
 2.43.0
 
