@@ -1,520 +1,271 @@
-Return-Path: <linux-pm+bounces-39207-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39208-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E345CA4C09
-	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 18:25:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8FB3CA4C4B
+	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 18:28:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3001B301618C
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 17:21:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E1205303B2EA
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 17:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27AE1327BF5;
-	Thu,  4 Dec 2025 17:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61D882DECAA;
+	Thu,  4 Dec 2025 17:23:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HnnMAqia"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="fbrukrAm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013018.outbound.protection.outlook.com [40.107.159.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3D72DC328;
-	Thu,  4 Dec 2025 17:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764868880; cv=none; b=pSL4il5EAaCTIKnIBd0we3cxOdIUW5fYDZksO72XdH/3chXA2t7Ler8aozxRMiFwen4cxNsio7M+ip58c7obWUUA90GEiAoTwEc1K12EqcgiBhc0qZL4J8JqcNOzjWFBM7tLSBG+cAZxtIhb2x2fAz1uwV9EdUIs6bBhbdSTmx4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764868880; c=relaxed/simple;
-	bh=dJP+cF1XpPS4uR1YGghgewhX3tzZYivafXjr5CECvb8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Nkzvfl17e21tEIiPLrCXcm4oUOAB7EaqzmQN//6ZF1SRU3OJBysB5xISBbGSSMt3NysOhooNj8lb1gKuDGSzPxIw58gxJeQgCeshgOpGRD/vSpSldo36n45ZSVSogszz1/yCilYng/zer5C2+4kcGNs/vgGrWE1cn7ZOc3WEtlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HnnMAqia; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764868877; x=1796404877;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=dJP+cF1XpPS4uR1YGghgewhX3tzZYivafXjr5CECvb8=;
-  b=HnnMAqia8ywdk61rxLhcgmeOh908ltN/gynH5e7q0sCycAwb4+2ymdZp
-   RsYwMIN9/mBbEqxexI81+mFQifmAvJECn2nPQE6mFh4snUNm8mQXy+RJf
-   FaEvP+xDZtgD43U25P3d5M8M186xt/69lwhrXcm7DM+jEPcvV0Pxwxjtq
-   Yjc0cgGFQwQFXH+5UUfL7TjaLPGg/Nu4N2sd0aRhKu/kyx+1ehkp3zLer
-   DmA7BGGfImO+Ruz59izjtW84djA0katB0SpWmedlHxofFFOwPB5b01iUv
-   +Eq/GPYPkf9lfBORmgpMgCzyPDiHS7pqwKwWKxFwsRgWo9o3U1Qh92KNn
-   Q==;
-X-CSE-ConnectionGUID: GzPBoaW+Rl2OLu6uekySmw==
-X-CSE-MsgGUID: 7ixloMCERSeOd2reDEeLvg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11632"; a="92376854"
-X-IronPort-AV: E=Sophos;i="6.20,249,1758610800"; 
-   d="scan'208";a="92376854"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 09:21:14 -0800
-X-CSE-ConnectionGUID: iHZae6+nRTWbtGgZB3HPzg==
-X-CSE-MsgGUID: /cT1YChFRxCL5BaCzLOd8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,249,1758610800"; 
-   d="scan'208";a="194112143"
-Received: from spandruv-desk2.jf.intel.com ([10.88.27.176])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2025 09:21:14 -0800
-Message-ID: <2b31224a6cf361a5d2859c84aa1bcdf52916423e.camel@linux.intel.com>
-Subject: Re: [PATCH v3 1/2] cpufreq: Replace trace_cpu_frequency with
- trace_policy_frequency
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Christian Loehle
-	 <christian.loehle@arm.com>
-Cc: Samuel Wu <wusamuel@google.com>, Huang Rui <ray.huang@amd.com>, "Gautham
- R. Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello
- <mario.limonciello@amd.com>, Perry Yuan	 <perry.yuan@amd.com>, Jonathan
- Corbet <corbet@lwn.net>, Viresh Kumar	 <viresh.kumar@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Len Brown	
- <lenb@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann	
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau	 <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	 <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
-	 <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev	 <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>,  Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
- <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,  Namhyung
- Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander
- Shishkin	 <alexander.shishkin@linux.intel.com>, Ian Rogers
- <irogers@google.com>,  Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Date: Thu, 04 Dec 2025 09:21:13 -0800
-In-Reply-To: <CAJZ5v0hAmgjozeX0egBs_ii_zzKXGPsPBUWwmGD+23KD++Rzqw@mail.gmail.com>
-References: <20251201202437.3750901-1-wusamuel@google.com>
-	 <20251201202437.3750901-2-wusamuel@google.com>
-	 <f28577c1-ca95-43ca-b179-32e2cd46d054@arm.com>
-	 <CAJZ5v0hAmgjozeX0egBs_ii_zzKXGPsPBUWwmGD+23KD++Rzqw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE6D398F81;
+	Thu,  4 Dec 2025 17:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1764869018; cv=fail; b=r8bQajXFECWpBrcYSMTWQfjE+74MbG6QeRpVdnbD2W00H3W/wPBQgpfJ9Mwv7qbm1F8odcr6mHnhgzxUdg8jZk1S9tkZcs3Jtq/VXLoCLQPxRzRkRanf9w3W6I5rTZTi/5wfnKqiDNDTLmOa5/lN2dLWSlIQej643RWfJY2O2i4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1764869018; c=relaxed/simple;
+	bh=cukJ/OqYymoznefLbE5REetxehPKXPLXL/ZNEvEEYfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=LgAtvULr6TsyTy15qxL6P5gUSeti9ZsEOzo8HF4N7osKrASW3e5108mXqIjsdPITEplzyUELhQc1xPvcH9uDtaHge/nYHfRaQUgeU6c8IIrWKC/GYbQSostdWofJJGLlrWS5mgCWBDbo5lE5BX7W1gbwmsWy1eQV+RM5DhQGpRA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=fbrukrAm; arc=fail smtp.client-ip=40.107.159.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FZ75UiWXJ1vahhYz/kxHp3ZPjJ9epNLKnmbR+Qc9sHOr2aTZ0DP+sFUCw/QjQeIfeMSSZDW+LU+sOoRfz0a9VJYtp0zfLJr0AqGBXZeir3DEQLM6vrUMylH3+hMFCcYsFHJ04zY7ZggjaY1H+apqiFdIwusheGwCP8gy2IXFlrQAVPTVh9up2hRVTjSQdX0hnzUMSyZp0hnXkHfphfxVbeMEA5rhtNcZ+ea9pz1qCA/xqO7TEEQI+JCmM+/6w/y0P/faccT2WEjsEdzCM8dWLCCUkfcQ9EmefPgzRRkvg2yWs4Er861peDcqa3k/BCvZo2wfhzTzME0Cv3hAEVDAqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GTR/crLhK/jv5t/UyXOjQru8DsDEkTS/DdlZpttXbu0=;
+ b=KGGyhImoUjBX8H77d445S7u7EaeB/PI6bw2j7019zOitPU4xz841OHDqWbgrQBzTy/zBrruZfXdzkNUTzqBB0SPatWR0mbdmVo/E/qM82XvGnEqUKwNmBHRxXznZhu+CAoI0PwRsFULWoyHecKFDihy1ez2aPynGZd+aUtfFwe3Uqov9vg393fNmfu1IcugQ96aYElDR2BGEi61zsd9s1e9zLSkfQRJtgtPBluybz88U6/PxwtF9FZIfEGwyPjfXBZGn6D3rwshc9RETtNGQXzL9ORuKC1H6H/hczfIQLGcsidwOEtlg97j6JdDMuZzIgyas+6qpHcTnSBQiaHg//w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GTR/crLhK/jv5t/UyXOjQru8DsDEkTS/DdlZpttXbu0=;
+ b=fbrukrAmTPCBrV1NTY+tRVP/ZYBqtzxId4SyIhBKW88PY8NVq2YqFfESZGA903WRLdxNWD4YYDneitaoSJIWAl6rlhXtd93JMaq45xWMzFBXOEco0MWi3w+tYHcvLIZc4KBvTROUGBVvfpZE3YkFYvKgWfCUO05SxKNzJq9gWLf4Pwu/zsUl5WY0u32mgrJ04EO/kLsjpOcJ8sPvevmPx8f91tXyjQJyoV34gXhJK4Fb1wZZgqzI1K2fLbbq6GoAnzq6P+76lq0fBD+VTwfykMoo3YzNjpQGLUnIlT+Ukhyh63FYLvl1I4Z5Fm8ZhIP4qv1QTsSo09WedM5gMtUXiA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8957.eurprd04.prod.outlook.com (2603:10a6:102:20c::5)
+ by VI1PR04MB7072.eurprd04.prod.outlook.com (2603:10a6:800:12c::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.9; Thu, 4 Dec
+ 2025 17:23:32 +0000
+Received: from PAXPR04MB8957.eurprd04.prod.outlook.com
+ ([fe80::9c5d:8cdf:5a78:3c5]) by PAXPR04MB8957.eurprd04.prod.outlook.com
+ ([fe80::9c5d:8cdf:5a78:3c5%3]) with mapi id 15.20.9388.003; Thu, 4 Dec 2025
+ 17:23:32 +0000
+Date: Thu, 4 Dec 2025 12:23:21 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: ming.qian@oss.nxp.com
+Cc: linux-media@vger.kernel.org, mchehab@kernel.org,
+	hverkuil-cisco@xs4all.nl, nicolas@ndufresne.ca,
+	benjamin.gaignard@collabora.com, p.zabel@pengutronix.de,
+	sebastian.fricke@collabora.com, shawnguo@kernel.org,
+	ulf.hansson@linaro.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+	l.stach@pengutronix.de, peng.fan@nxp.com, eagle.zhou@nxp.com,
+	imx@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v3 1/3] media: v4l2-mem2mem: Add a kref to the
+ v4l2_m2m_dev structure
+Message-ID: <aTHDiVI6ZB3E7Anh@lizhi-Precision-Tower-5810>
+References: <20251204090813.595-1-ming.qian@oss.nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251204090813.595-1-ming.qian@oss.nxp.com>
+X-ClientProxiedBy: BYAPR02CA0033.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::46) To DU2PR04MB8951.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e2::22)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8957:EE_|VI1PR04MB7072:EE_
+X-MS-Office365-Filtering-Correlation-Id: e26b470a-ffe8-44bc-f6ea-08de3359d8c0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|52116014|1800799024|19092799006|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?S6vY92RSLLlX7VRoVto4y/0aTLxz9aWVwwnV6aXqQsS2r+AIt3yMx7cMcMws?=
+ =?us-ascii?Q?BDAY5YMGx+M+nsAG9jNbCPuJMzVw480r6Zrr6V2wp7Ao+Y3CrY6lQ8ip1P7z?=
+ =?us-ascii?Q?qq1Elrbgx2NNHQM7NsY77yrgNfH32S6fGogqu5qwYYhEdsfrlJHyeadBpZTN?=
+ =?us-ascii?Q?fA5vuSwQyBfWWv10Mkmfye3Ldun6/Q2uSFDXj0eYsferBJr6KYw15rcJOkAJ?=
+ =?us-ascii?Q?bQsW9HsidMnJfpkuIuAEudxgBsmotXscqmxv3k/ze0s8jsNlyzLMZlJuijHz?=
+ =?us-ascii?Q?2QU4RgRxTkdUd0Dj8Gxq7a+CCBHHXZBhtvFGt0Vy0DILua5j0+QX/wOmLCJj?=
+ =?us-ascii?Q?S+VV2pTFyqjdtHFiKvdG/4UCkgqpKxJin6H7N7sqElk0dGDly2mL+ILjwv8M?=
+ =?us-ascii?Q?75kZOYtJmpZkl6cZ0SIJBuei26KC6Mr6hx1HItUmFRTfHmD/VFoDHcEj4lAf?=
+ =?us-ascii?Q?L14iGTpEo+D8Gs/gwrUDxqBZkolajFRB96FHwA5/rgGbFKQQzzjrCYUpUrYJ?=
+ =?us-ascii?Q?2vYLMPWicKEf+Mc34B1CisZVHdoDBcPWoXgqRSbne5Xp9AK9p8vhqRoCaTR/?=
+ =?us-ascii?Q?ihclNPjCwDdBk2USQ3eEwosj7B/a4/Yxbfbfw3haX3oBH3gJbGG8BkXkUgn0?=
+ =?us-ascii?Q?uwmdKPw1R2conK8zYxso6yH9dcaDvPO/u2fAmxCGgZGbanO0+fsJ3xUA/1Jo?=
+ =?us-ascii?Q?rlEMKFH3alAeD0oAvTu0013+g4U+8nGACIMteHYl12Nd8QGbjvduj+jaJEca?=
+ =?us-ascii?Q?eq8HKiYytp598txLFou9AyllVc6M2Pm9M8SjDfjiPmuu+hvFwkWLLqdk+72X?=
+ =?us-ascii?Q?Cjkc+9lbY4EGAoBu72Lgt4RUkIQlhSZYfhLkeuKwIC0WRW/cbvFcSPjggovO?=
+ =?us-ascii?Q?QblCfp4T5COLh21glpSehlPKML59rF6N1n7h8Q/4kAWjBAYXKzVdFLR1sQnV?=
+ =?us-ascii?Q?18WBRQcNl22V0GklrIrBfx8x1LbI/diIlxMskNU2SguHWff+XWghZnswID5X?=
+ =?us-ascii?Q?eIFbiQ5qD2InXwYA8atEKJwgelbpWCsbii6X55owRil5oR0/hxi/wmI+MQ/7?=
+ =?us-ascii?Q?KZIxZM9JDlOpo+EeeEZ1NnUNr7cCrWNMlnJ4cskwQ9qpvEFFz7NsZGK1mYJV?=
+ =?us-ascii?Q?wXpPsT5O/VTQxtSa9CPZWZ0MItqoeSCqNWW6MChyi+6qGG3d8JFkhlCW8GLC?=
+ =?us-ascii?Q?O6mxsG0ytikIWoTFVywhen6z2c/xf6oGbE9Vry0SHVqIbeFp16/zliket3rG?=
+ =?us-ascii?Q?eRczJgChptYTXjvWsL7WCy/VaiJ4EVkAH3ptU/BMOle1cUrhbCJSOHq2EWeQ?=
+ =?us-ascii?Q?cnyVl4h16krp3wDkGm1sBcMU7Ofy/dNMIyA3G3ZLgn7aBvzFhpCL0uMjdPtd?=
+ =?us-ascii?Q?G6teL9dh+KdeJkxcTaIh8nllU9hP+/lNjWl5jjSpQAm8i0AVW/ShroLjYFWM?=
+ =?us-ascii?Q?BDyh2txl/D7LUjNOXcA3TGflPIlOXW9WvL3T575e/5mt24e5ecU0gXZXXr/U?=
+ =?us-ascii?Q?bwlMh4f8Mmcf6axsaIhXP+uTYfFMjAInJEsb?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8957.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(52116014)(1800799024)(19092799006)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?ShBUhi+xbMOf3dziE8hbBoY9VF6/RFp54f1aJf8vuBz0Ua9DXTv4b96k+9c/?=
+ =?us-ascii?Q?/un1BRK3CD+uJ9uIXR8MttkAX4jzzMJboI/vN32PTPdmzWb8P0fuZIx7TdlW?=
+ =?us-ascii?Q?E5q0jVpP3XzowY6OWlGfSN0qGJkcbyhqqBcPUHN3Sh1tTPNi0XauTYh4RTQL?=
+ =?us-ascii?Q?bIke+dpuZWdWHQwMNYQ1sDKthJLVwzsrWSus1EAV+c5JAt1K4x8mJMXDF27g?=
+ =?us-ascii?Q?0vPxYu729hqqkUMDFcrE3bdKSCkIz3md7hnwQK+9A76GXf3drAw4W/dgzlDO?=
+ =?us-ascii?Q?L47zAO9Oi+RGvdID/f/wG8v9nP0IQP+GyU4aeJ6bvND7L6HMfmMd97Ii+iNJ?=
+ =?us-ascii?Q?hPlmMOkl5poOmTSh2sF8tUlRpqcDKbjZN9Z6dOUrA+Mlfd3esLkoaJ+X+gwx?=
+ =?us-ascii?Q?Uw573u+2aHhaY9+CyH6u7BZixqXWMTASrNX7g96oFqukpIR7YpprK+4OqILw?=
+ =?us-ascii?Q?xXmXsiQjNAdb0Z1dz02B6k2LZw4rWO3clrSsCRiODQE38AzDh9761wUV3/f0?=
+ =?us-ascii?Q?hoGQH0nlARncLQ8/voFCE/rWI+ETY2GRJUFCldY/PfZYRrefCC6sCGR4JBB6?=
+ =?us-ascii?Q?GOprNMTvaXxmgLh6m2pCQyH8CmXQ65HcLKCgC/kXlF+9JC9w5cFBQn3gAfVQ?=
+ =?us-ascii?Q?07im8p42CwB0GdcYniFSAP45BUSMrYTpVbLRF4MypAyec7koUkoFK9AVjZOa?=
+ =?us-ascii?Q?bcJiiPzsA1AB0V23LstzJ5WDEKAFzh2WBOZPzf2XHVmjUSVOTqlO+iiIpWN9?=
+ =?us-ascii?Q?pOAYH/JZDVSGQ/uXBnXyU4g64Ije74B0wlExcEsgK3zICgd2ZAFUslcH93NP?=
+ =?us-ascii?Q?nvvx3M5O5LuQO+/qRPRTHGa43ezOwvmrGyV5Kb0SEkl+2uQdLtG7l3+Qs25q?=
+ =?us-ascii?Q?nrtT262u19thqhUYs3DRJAPBQVyf54/XQ/ox/lkcCrrhTp1H2q3vWiFk2/uO?=
+ =?us-ascii?Q?BYHbX/+gLBHOo3bi7rLBy+WY3/VhnVGDzhyN2neL4C0Tap8+4EVrd3gh1Spg?=
+ =?us-ascii?Q?g5ZSnIJLTwENHX8ilCTYMN0QfarOUllXTjSS4KSWRkjQ4KyiWMSV8hOSMg2A?=
+ =?us-ascii?Q?sggtX92cXjecQajfZbrJYwxozpq6FSMZYc6W75XW29X3O/2XI7Vv9C3m04c0?=
+ =?us-ascii?Q?u8Lzx7HmPWdIbZyey3vbyfupO42Z6ohyAe/vR+C5oQeuBbVUb7i4owCQ5+rH?=
+ =?us-ascii?Q?sFtaRdZPngk323zU/Lgg+fn+h/zqB1yjxxoQ4kfNz50uoS/cODSPC+7DCwAR?=
+ =?us-ascii?Q?LZr9Aa+Lvw8RfqsROa2r4YEVETEwTOsNQVIA4eo/0aQYuLzYxWHHMUJh98yB?=
+ =?us-ascii?Q?CTxHWCMRj5n/r1E2kBCSKUpV8rtoYtqCFg70s4lJPVfvmoJEVknGOCyzaIKB?=
+ =?us-ascii?Q?YWXBvbDMDpSC2eb5iF7/HhTxo6WO99v2sbD/R3EHlJkKa1g3WiTNakNVIRhu?=
+ =?us-ascii?Q?xHZfzIaSrxvHa+KyFH0oU9XQ6/9sDhLogY19zU1TseHlqDWw6uSAvZZ1nnpR?=
+ =?us-ascii?Q?wLNo/4Gobz+MoQqfhJL+0I1x9pj70OqQJ7v5b3dslxhJAPopeAFlTaQ6mGkB?=
+ =?us-ascii?Q?pPvpzoXxjG496iEADoJQa6IQujNqmBuoX0LyAjUM?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e26b470a-ffe8-44bc-f6ea-08de3359d8c0
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8951.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2025 17:23:32.4826
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m2p9/YmXDdH3jrLTBNrAq/ByS5FcuKLDeUqyF531Qty6s1gQImyLEnXUmY9ssu9vV+Y1PyCf+oHfGqbMXc6/nw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7072
 
-On Thu, 2025-12-04 at 15:57 +0100, Rafael J. Wysocki wrote:
-> On Thu, Dec 4, 2025 at 1:49=E2=80=AFPM Christian Loehle
-> <christian.loehle@arm.com> wrote:
-> >=20
-> > On 12/1/25 20:24, Samuel Wu wrote:
-> > > The existing cpu_frequency trace_event can be verbose, emitting a
-> > > nearly
-> > > identical trace event for every CPU in the policy even when their
-> > > frequencies are identical.
-> > >=20
-> > > This patch replaces the cpu_frequency trace event with
-> > > policy_frequency
-> > > trace event, a more efficient alternative. From the kernel's
-> > > perspective, emitting a trace event once per policy instead of
-> > > once per
-> > > cpu saves some memory and is less overhead. From the post-
-> > > processing
-> > > perspective, analysis of the trace log is simplified without any
-> > > loss of
-> > > information.
-> > >=20
-> > > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > > ---
-> > > =C2=A0drivers/cpufreq/cpufreq.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 14 ++=
-------------
-> > > =C2=A0drivers/cpufreq/intel_pstate.c |=C2=A0 6 ++++--
-> > > =C2=A0include/trace/events/power.h=C2=A0=C2=A0 | 24 +++++++++++++++++=
-++++---
-> > > =C2=A0kernel/trace/power-traces.c=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
-> > > =C2=A0samples/bpf/cpustat_kern.c=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 8 ++=
-++----
-> > > =C2=A0samples/bpf/cpustat_user.c=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 6 ++=
-+---
-> > > =C2=A0tools/perf/builtin-timechart.c | 12 ++++++------
-> > > =C2=A07 files changed, 41 insertions(+), 31 deletions(-)
-> > >=20
-> > > diff --git a/drivers/cpufreq/cpufreq.c
-> > > b/drivers/cpufreq/cpufreq.c
-> > > index 4472bb1ec83c..dd3f08f3b958 100644
-> > > --- a/drivers/cpufreq/cpufreq.c
-> > > +++ b/drivers/cpufreq/cpufreq.c
-> > > @@ -309,8 +309,6 @@ static void cpufreq_notify_transition(struct
-> > > cpufreq_policy *policy,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct c=
-pufreq_freqs *freqs,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned=
- int state)
-> > > =C2=A0{
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0 int cpu;
-> > > -
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 BUG_ON(irqs_disabled());
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cpufreq_disabled())
-> > > @@ -344,10 +342,7 @@ static void cpufreq_notify_transition(struct
-> > > cpufreq_policy *policy,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 adjust_jiffies(CPUFREQ_POSTCHANGE, freqs);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 pr_debug("FREQ: %u - CPUs: %*pbl\n", freqs->new,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cpumask_pr_=
-args(policy->cpus));
-> > > -
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 for_each_cpu(cpu, policy->cpus)
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trace_cpu_frequency(=
-freqs->new, cpu);
-> > > -
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 trace_policy_frequency(freqs->new, policy->cpu,
-> > > policy->cpus);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0
-> > > srcu_notifier_call_chain(&cpufreq_transition_notifier_list,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 CPUFREQ_POSTCHANGE,
-> > > freqs);
-> > >=20
-> > > @@ -2201,7 +2196,6 @@ unsigned int
-> > > cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 unsigned int target_freq)
-> > > =C2=A0{
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int freq;
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0 int cpu;
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 target_freq =3D clamp_val(target_freq,=
- policy->min, policy-
-> > > >max);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 freq =3D cpufreq_driver->fast_switch(p=
-olicy, target_freq);
-> > > @@ -2213,11 +2207,7 @@ unsigned int
-> > > cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 arch_set_freq_scale(policy->related_cp=
-us, freq,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 arch_scale_freq_ref(policy->cpu));
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cpufreq_stats_record_transition(policy=
-, freq);
-> > > -
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0 if (trace_cpu_frequency_enabled()) {
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 for_each_cpu(cpu, policy->cpus)
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 trace_cpu_frequency(=
-freq, cpu);
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 trace_policy_frequency(freq, policy->cpu, p=
-olicy->cpus);
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return freq;
-> > > =C2=A0}
-> > > diff --git a/drivers/cpufreq/intel_pstate.c
-> > > b/drivers/cpufreq/intel_pstate.c
-> > > index ec4abe374573..9724b5d19d83 100644
-> > > --- a/drivers/cpufreq/intel_pstate.c
-> > > +++ b/drivers/cpufreq/intel_pstate.c
-> > > @@ -2297,7 +2297,8 @@ static int hwp_get_cpu_scaling(int cpu)
-> > >=20
-> > > =C2=A0static void intel_pstate_set_pstate(struct cpudata *cpu, int
-> > > pstate)
-> > > =C2=A0{
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0 trace_cpu_frequency(pstate * cpu->pstate.sc=
-aling, cpu-
-> > > >cpu);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 trace_policy_frequency(pstate * cpu->pstate=
-.scaling, cpu-
-> > > >cpu,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 cpumask_of(cpu->cpu));
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 cpu->pstate.current_pstate =3D pstate;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /*
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Generally, there is no guarant=
-ee that this code will
-> > > always run on
-> > > @@ -2587,7 +2588,8 @@ static void
-> > > intel_pstate_adjust_pstate(struct cpudata *cpu)
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 target_pstate =3D get_target_pstate(cp=
-u);
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 target_pstate =3D intel_pstate_prepare=
-_request(cpu,
-> > > target_pstate);
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0 trace_cpu_frequency(target_pstate * cpu->ps=
-tate.scaling,
-> > > cpu->cpu);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 trace_policy_frequency(target_pstate * cpu-=
->pstate.scaling,
-> > > cpu->cpu,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 cpumask_of(cpu->cpu));
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 intel_pstate_update_pstate(cpu, target=
-_pstate);
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 sample =3D &cpu->sample;
-> > > diff --git a/include/trace/events/power.h
-> > > b/include/trace/events/power.h
-> > > index 370f8df2fdb4..317098ffdd5f 100644
-> > > --- a/include/trace/events/power.h
-> > > +++ b/include/trace/events/power.h
-> > > @@ -182,11 +182,29 @@ TRACE_EVENT(pstate_sample,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 { PM_EVENT_RECOVER, "recover" }, \
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 { PM_EVENT_POWEROFF, "poweroff" })
-> > >=20
-> > > -DEFINE_EVENT(cpu, cpu_frequency,
-> > > +TRACE_EVENT(policy_frequency,
-> > >=20
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0 TP_PROTO(unsigned int frequency, unsigned i=
-nt cpu_id),
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 TP_PROTO(unsigned int frequency, unsigned i=
-nt cpu_id,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 const struct cpumask *policy_cpus),
-> > >=20
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0 TP_ARGS(frequency, cpu_id)
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 TP_ARGS(frequency, cpu_id, policy_cpus),
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 TP_STRUCT__entry(
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 __field(u32, state)
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 __field(u32, cpu_id)
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 __cpumask(cpumask)
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 ),
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 TP_fast_assign(
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 __entry->state =3D frequency;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 __entry->cpu_id =3D cpu_id;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 __assign_cpumask(cpumask, policy_cpus);
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 ),
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0 TP_printk("state=3D%lu cpu_id=3D%lu policy_=
-cpus=3D%*pb",
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 (unsigned long)__entry->state,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 (unsigned long)__entry->cpu_id,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 cpumask_pr_args((struct cpumask
-> > > *)__get_dynamic_array(cpumask)))
-> > > =C2=A0);
-> > >=20
-> > > =C2=A0TRACE_EVENT(cpu_frequency_limits,
-> > > diff --git a/kernel/trace/power-traces.c b/kernel/trace/power-
-> > > traces.c
-> > > index f2fe33573e54..a537e68a6878 100644
-> > > --- a/kernel/trace/power-traces.c
-> > > +++ b/kernel/trace/power-traces.c
-> > > @@ -16,5 +16,5 @@
-> > >=20
-> > > =C2=A0EXPORT_TRACEPOINT_SYMBOL_GPL(suspend_resume);
-> > > =C2=A0EXPORT_TRACEPOINT_SYMBOL_GPL(cpu_idle);
-> > > -EXPORT_TRACEPOINT_SYMBOL_GPL(cpu_frequency);
-> > > +EXPORT_TRACEPOINT_SYMBOL_GPL(policy_frequency);
-> > >=20
-> > > diff --git a/samples/bpf/cpustat_kern.c
-> > > b/samples/bpf/cpustat_kern.c
-> > > index 7ec7143e2757..f485de0f89b2 100644
-> > > --- a/samples/bpf/cpustat_kern.c
-> > > +++ b/samples/bpf/cpustat_kern.c
-> > > @@ -75,9 +75,9 @@ struct {
-> > > =C2=A0} pstate_duration SEC(".maps");
-> > >=20
-> > > =C2=A0/*
-> > > - * The trace events for cpu_idle and cpu_frequency are taken
-> > > from:
-> > > + * The trace events for cpu_idle and policy_frequency are taken
-> > > from:
-> > > =C2=A0 * /sys/kernel/tracing/events/power/cpu_idle/format
-> > > - * /sys/kernel/tracing/events/power/cpu_frequency/format
-> > > + * /sys/kernel/tracing/events/power/policy_frequency/format
-> > > =C2=A0 *
-> > > =C2=A0 * These two events have same format, so define one common
-> > > structure.
-> > > =C2=A0 */
-> > > @@ -162,7 +162,7 @@ int bpf_prog1(struct cpu_args *ctx)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ctx->state !=3D (u32)-1) {
-> > >=20
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 /* record pstate after have first cpu_frequency
-> > > event */
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 /* record pstate after have first policy_frequency
-> > > event */
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 if (!*pts)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
-> > >=20
-> > > @@ -208,7 +208,7 @@ int bpf_prog1(struct cpu_args *ctx)
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return 0;
-> > > =C2=A0}
-> > >=20
-> > > -SEC("tracepoint/power/cpu_frequency")
-> > > +SEC("tracepoint/power/policy_frequency")
-> > > =C2=A0int bpf_prog2(struct cpu_args *ctx)
-> > > =C2=A0{
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u64 *pts, *cstate, *pstate, cur_ts, de=
-lta;
-> > > diff --git a/samples/bpf/cpustat_user.c
-> > > b/samples/bpf/cpustat_user.c
-> > > index 356f756cba0d..f7e81f702358 100644
-> > > --- a/samples/bpf/cpustat_user.c
-> > > +++ b/samples/bpf/cpustat_user.c
-> > > @@ -143,12 +143,12 @@ static int
-> > > cpu_stat_inject_cpu_idle_event(void)
-> > >=20
-> > > =C2=A0/*
-> > > =C2=A0 * It's possible to have no any frequency change for long time
-> > > and cannot
-> > > - * get ftrace event 'trace_cpu_frequency' for long period, this
-> > > introduces
-> > > + * get ftrace event 'trace_policy_frequency' for long period,
-> > > this introduces
-> > > =C2=A0 * big deviation for pstate statistics.
-> > > =C2=A0 *
-> > > =C2=A0 * To solve this issue, below code forces to set
-> > > 'scaling_max_freq' to 208MHz
-> > > - * for triggering ftrace event 'trace_cpu_frequency' and then
-> > > recovery back to
-> > > - * the maximum frequency value 1.2GHz.
-> > > + * for triggering ftrace event 'trace_policy_frequency' and then
-> > > recovery back
-> > > + * to the maximum frequency value 1.2GHz.
-> > > =C2=A0 */
-> > > =C2=A0static int cpu_stat_inject_cpu_frequency_event(void)
-> > > =C2=A0{
-> > > diff --git a/tools/perf/builtin-timechart.c b/tools/perf/builtin-
-> > > timechart.c
-> > > index 22050c640dfa..3ef1a2fd0493 100644
-> > > --- a/tools/perf/builtin-timechart.c
-> > > +++ b/tools/perf/builtin-timechart.c
-> > > @@ -612,10 +612,10 @@ process_sample_cpu_idle(struct timechart
-> > > *tchart __maybe_unused,
-> > > =C2=A0}
-> > >=20
-> > > =C2=A0static int
-> > > -process_sample_cpu_frequency(struct timechart *tchart,
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 struct evsel *evsel,
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 struct perf_sample *sample,
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 const char *backtrace __maybe_unused)
-> > > +process_sample_policy_frequency(struct timechart *tchart,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct evsel *evsel,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct perf_sample *sample,
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 const char *backtrace
-> > > __maybe_unused)
-> > > =C2=A0{
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 state=C2=A0 =3D evsel__intval(evse=
-l, sample, "state");
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u32 cpu_id =3D evsel__intval(evsel, sa=
-mple, "cpu_id");
-> > > @@ -1541,7 +1541,7 @@ static int __cmd_timechart(struct timechart
-> > > *tchart, const char *output_name)
-> > > =C2=A0{
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struct evsel_str_handler power_t=
-racepoints[] =3D {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 { "power:cpu_idle",=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> > > process_sample_cpu_idle },
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 { "power:cpu_frequency",=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
-> > > process_sample_cpu_frequency },
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 { "power:policy_frequency",=C2=A0=C2=A0=C2=A0=C2=A0
-> > > process_sample_policy_frequency },
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 { "sched:sched_wakeup",=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0
-> > > process_sample_sched_wakeup },
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 { "sched:sched_switch",=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0
-> > > process_sample_sched_switch },
-> > > =C2=A0#ifdef SUPPORT_OLD_POWER_EVENTS
-> > > @@ -1804,7 +1804,7 @@ static int timechart__record(struct
-> > > timechart *tchart, int argc, const char **ar
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int backtrace_args_no =3D
-> > > ARRAY_SIZE(backtrace_args);
-> > >=20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const char * const power_args[] =3D {
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 "-e", "power:cpu_frequency",
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 "-e", "power:policy_frequency",
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 "-e", "power:cpu_idle",
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 };
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned int power_args_nr =3D ARRAY_S=
-IZE(power_args);
-> >=20
-> > perf timechart seem to do per-CPU reporting though?
-> > So this is broken by not emitting an event per-CPU? At least with a
-> > simple s/cpu_frequency/policy_frequency/
-> > like here.
-> > Similar for the bpf samples technically...
->=20
-> This kind of boils down to whether or not tracepoints can be regarded
-> as ABI and to what extent.
->=20
+On Thu, Dec 04, 2025 at 05:08:09PM +0800, ming.qian@oss.nxp.com wrote:
+> From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>
+> Adding a reference count to the v4l2_m2m_dev structure allow safely
+> sharing it across multiple hardware nodes. This can be used to prevent
+> running jobs concurrently on m2m cores that have some internal resource
+> sharing.
+>
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-We have tools using tracing. We may need to check those tools.
+Also need your s-o-b, or just said refer to other thread if it already
+posted.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/to=
-ols/power/x86/intel_pstate_tracer/intel_pstate_tracer.py?h=3Dnext-20251204
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/to=
-ols/power/x86/amd_pstate_tracer/amd_pstate_trace.py?h=3Dnext-20251204
-
-Thanks,
-Srinivas
-
-
-> In this particular case, I'm not sure I agree with the stated
-> motivation.
->=20
-> First of all, on systems with one CPU per cpufreq policy (the vast
-> majority of x86, including AMD, and the ARM systems using the CPPC
-> driver AFAICS), the "issue" at hand is actually a non-issue and
-> changing the name of the tracepoint alone would confuse things in
-> user
-> space IIUC.=C2=A0 Those need to work the way they do today.
->=20
-> On systems with multiple CPUs per cpufreq policy there is some extra
-> overhead related to the cpu_frequency tracepoint, but the if someone
-> is only interested in the "policy" frequency, they can filter out all
-> CPUs belonging to the same policy except for one from the traces,
-> don't they?
+Frank
+> ---
+>  drivers/media/v4l2-core/v4l2-mem2mem.c | 23 +++++++++++++++++++++++
+>  include/media/v4l2-mem2mem.h           | 21 +++++++++++++++++++++
+>  2 files changed, 44 insertions(+)
+>
+> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> index fec93c1a9231..ae0de54d4c3e 100644
+> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> @@ -90,6 +90,7 @@ static const char * const m2m_entity_name[] = {
+>   * @job_work:		worker to run queued jobs.
+>   * @job_queue_flags:	flags of the queue status, %QUEUE_PAUSED.
+>   * @m2m_ops:		driver callbacks
+> + * @kref:		device reference count
+>   */
+>  struct v4l2_m2m_dev {
+>  	struct v4l2_m2m_ctx	*curr_ctx;
+> @@ -109,6 +110,8 @@ struct v4l2_m2m_dev {
+>  	unsigned long		job_queue_flags;
+>
+>  	const struct v4l2_m2m_ops *m2m_ops;
+> +
+> +	struct kref kref;
+>  };
+>
+>  static struct v4l2_m2m_queue_ctx *get_queue_ctx(struct v4l2_m2m_ctx *m2m_ctx,
+> @@ -1200,6 +1203,7 @@ struct v4l2_m2m_dev *v4l2_m2m_init(const struct v4l2_m2m_ops *m2m_ops)
+>  	INIT_LIST_HEAD(&m2m_dev->job_queue);
+>  	spin_lock_init(&m2m_dev->job_spinlock);
+>  	INIT_WORK(&m2m_dev->job_work, v4l2_m2m_device_run_work);
+> +	kref_init(&m2m_dev->kref);
+>
+>  	return m2m_dev;
+>  }
+> @@ -1211,6 +1215,25 @@ void v4l2_m2m_release(struct v4l2_m2m_dev *m2m_dev)
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_m2m_release);
+>
+> +void v4l2_m2m_get(struct v4l2_m2m_dev *m2m_dev)
+> +{
+> +	kref_get(&m2m_dev->kref);
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_m2m_get);
+> +
+> +static void v4l2_m2m_release_from_kref(struct kref *kref)
+> +{
+> +	struct v4l2_m2m_dev *m2m_dev = container_of(kref, struct v4l2_m2m_dev, kref);
+> +
+> +	v4l2_m2m_release(m2m_dev);
+> +}
+> +
+> +void v4l2_m2m_put(struct v4l2_m2m_dev *m2m_dev)
+> +{
+> +	kref_put(&m2m_dev->kref, v4l2_m2m_release_from_kref);
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_m2m_put);
+> +
+>  struct v4l2_m2m_ctx *v4l2_m2m_ctx_init(struct v4l2_m2m_dev *m2m_dev,
+>  		void *drv_priv,
+>  		int (*queue_init)(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq))
+> diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
+> index bf6a09a04dcf..ca295c660c7f 100644
+> --- a/include/media/v4l2-mem2mem.h
+> +++ b/include/media/v4l2-mem2mem.h
+> @@ -547,6 +547,27 @@ v4l2_m2m_register_media_controller(struct v4l2_m2m_dev *m2m_dev,
+>   */
+>  void v4l2_m2m_release(struct v4l2_m2m_dev *m2m_dev);
+>
+> +/**
+> + * v4l2_m2m_get() - take a reference to the m2m_dev structure
+> + *
+> + * @m2m_dev: opaque pointer to the internal data to handle M2M context
+> + *
+> + * This is used to share the M2M device across multiple devices. This
+> + * can be used to avoid scheduling two hardware nodes concurrently.
+> + */
+> +void v4l2_m2m_get(struct v4l2_m2m_dev *m2m_dev);
+> +
+> +/**
+> + * v4l2_m2m_put() - remove a reference to the m2m_dev structure
+> + *
+> + * @m2m_dev: opaque pointer to the internal data to handle M2M context
+> + *
+> + * Once the M2M device have no more references, v4l2_m2m_realse() will be
+> + * called automatically. Users of this method should never call
+> + * v4l2_m2m_release() directly. See v4l2_m2m_get() for more details.
+> + */
+> +void v4l2_m2m_put(struct v4l2_m2m_dev *m2m_dev);
+> +
+>  /**
+>   * v4l2_m2m_ctx_init() - allocate and initialize a m2m context
+>   *
+> --
+> 2.52.0
+>
 
