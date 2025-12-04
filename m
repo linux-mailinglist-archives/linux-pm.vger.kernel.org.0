@@ -1,381 +1,183 @@
-Return-Path: <linux-pm+bounces-39204-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39205-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29AD1CA41EC
-	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 15:57:58 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7156CA4325
+	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 16:16:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 9B347300ADB0
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 14:57:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 01393302418D
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 15:16:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC34B283FF4;
-	Thu,  4 Dec 2025 14:57:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55A112DAFDD;
+	Thu,  4 Dec 2025 15:10:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qAPxZZiW"
+	dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b="Qaw0OJQ5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70F0283FDB
-	for <linux-pm@vger.kernel.org>; Thu,  4 Dec 2025 14:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9162DAFDE;
+	Thu,  4 Dec 2025 15:10:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764860275; cv=none; b=VWq89evV1oVteCw5yR5voT1IARrKGdrhAYkTDwJXNB8VfOZxmwXNjlhsEXG45QSlepEh0kHUTO961TCE/N7oiAYYZbm7cuORW/aHmRoXzfddzlE4ZohePlNTG+8J91SG3BhosBOd9kYWIn9qXR9J/CZthY8nzwNgEseq8m1VFe8=
+	t=1764861046; cv=none; b=EUoEy67XboAOVP3Efp2ZVeVCZ+iK45+Ij6Yu7aSshEMywF6RLkA00ACj+sG6fYvoPEBT/PB8r0O27mRyFxVqbZ4YVzi+KTwShwhUjX2KXiklO5X0JAkSBzrHJZotFCNRHtRZFBtdv23EXrjYR/QNg47hanYla95IaBFjXVK3joA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764860275; c=relaxed/simple;
-	bh=z7l7FCdyewXjjMIsBNJqm/jv+qEPad7BrW7U07PFXaU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WD9keLp8D9X1i0wiQPLMLXHJ+QUUrODrHp0wfcId7z0yc+JsGnDkg17Z/XW/wgkVInnkznJDMnbmTgSl2aWiJqGEDQAxQ4XpVXUnwpiQtpOyzy5uzSlAxs2MwRB32GtJhCCiEiITDrmtISrAV4J0+//NEYoZq24+Yj9MxYUAv/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qAPxZZiW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 790A9C116B1
-	for <linux-pm@vger.kernel.org>; Thu,  4 Dec 2025 14:57:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764860275;
-	bh=z7l7FCdyewXjjMIsBNJqm/jv+qEPad7BrW7U07PFXaU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qAPxZZiW7Aw9bKUNm2eMlHhQAks20cI35BA60Vl/6nuhuriOlp2FaQqptqz8brASq
-	 xDnjGAZbRnyTdvKtZLwoRhQRh5ZhlFfzftU+yT3pAanU8W4d/E3qmQJtUB6xYgTFGM
-	 EOorCBWtvISB5zcvw/dAdNLyAY6iwl/reQEQKN/PM96ri+zjaOO0Ff6GEkCCs5RKaF
-	 cOZfazhegYFzLboLrpBFuXcnroQ81R3HOlsYVczrH02qG3+GK2DqaYgv3jDHE+d8tz
-	 egmKCjbW7qYSCZH10TTFFldvJYc3hQsraM+luYHptZ3D8Sxu1jjH44nyJbZ26AxxmV
-	 ulaSKLeOwEZGA==
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7c6cc44ff62so785434a34.3
-        for <linux-pm@vger.kernel.org>; Thu, 04 Dec 2025 06:57:55 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVpGeLpApiNfl2OW50MPc3G95MGlmFSybD7cTzDvm0nFnZI9qSu/nLi/evtePg/kn1nTg95+3CinA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq6Ver6H2TIIwfqr21+urtl8uMWP4b+Y2pvBGP11DQlv9C9+0N
-	xNUpiyCjILkiyHLVDKXUeAonCV9W0rBF6HxIBsGoAq43vj++6diJDOCFSB7iuM4XRClSyVCqikr
-	ArtGj0YZOC1SKjpUF4yOehZ3/Se02/uQ=
-X-Google-Smtp-Source: AGHT+IFBzTKVYbAlmW6GnoRBVsv+8odsnPtzEWXKRlbjJ7jim0bjG+/IxeJqJdJm+CURjeKU9DoRlo+CFoscK62r2cA=
-X-Received: by 2002:a05:6830:441f:b0:7c5:2dbf:4a83 with SMTP id
- 46e09a7af769-7c958a9a145mr1670516a34.2.1764860274038; Thu, 04 Dec 2025
- 06:57:54 -0800 (PST)
+	s=arc-20240116; t=1764861046; c=relaxed/simple;
+	bh=bfZFmNe7jatOQTK9tozxaSEopVXRcYgccuFzKdZNPdc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VEvhgIF92iF4inzSN5kAOEk+RLY/2LPUtCFPMaBcn9vfx2SrNxUG1Q1rEPXokboD+ZIeA2CEB6uA1+aRKEasrQzVSzr47TH/aSvz+4lP6j0tBun0y1P2FCYotpgDlIzxJPB3imy7sPYl0/zhUkAfwOAK390AUz8ss62FsPPtpGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; dkim=pass (2048-bit key) header.d=leemhuis.info header.i=@leemhuis.info header.b=Qaw0OJQ5; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=leemhuis.info; s=he214686; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=8VtqlbU7Up61NyYtebV4S/F1DYWfcykVq5pmrMT+3rI=; t=1764861044;
+	x=1765293044; b=Qaw0OJQ53n19YCCLzUeOLd2Par3Uxc/N4WbXbm7kReG7b5EBW8AYo6An5ZqjJ
+	KoyRVBqYeiAUWizxB/Qfl4KUfQWlWyYz58MXsWv5GOE1cmyLcKvPVtszC8WZ7soVbYMbywKooKXzA
+	5WlfvXHIUUBv9WZHG0quUD+1/TdmQPXJxBBDIieaW1XCq83NwBIt8IaYNxln9/wsliuuOtfR0uzLB
+	aenQFFzqN2LdPaVGiWXArC7AnyPqKk1lmzN9D+6Km6g1ZelYuzy9XCa2yyfMjYhb+UmHBFVWAgEmi
+	ayzpu2mkNKTUwommIsF5+T2rAzxOfxKsF8UwbsyPtHYn1jeDLg==;
+Received: from [2a02:8108:8984:1d00:a0cf:1912:4be:477f]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
+	id 1vRAyg-009Jto-0T;
+	Thu, 04 Dec 2025 16:10:42 +0100
+Message-ID: <08000f1a-2c1e-4a0d-a5b5-fc7dcea3d8a8@leemhuis.info>
+Date: Thu, 4 Dec 2025 16:10:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251201202437.3750901-1-wusamuel@google.com> <20251201202437.3750901-2-wusamuel@google.com>
- <f28577c1-ca95-43ca-b179-32e2cd46d054@arm.com>
-In-Reply-To: <f28577c1-ca95-43ca-b179-32e2cd46d054@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 4 Dec 2025 15:57:41 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hAmgjozeX0egBs_ii_zzKXGPsPBUWwmGD+23KD++Rzqw@mail.gmail.com>
-X-Gm-Features: AWmQ_bnFqLUrnVTnppguy3nv7MG8K0n3xeKNtFyQKZ7NAu0BKOA8qrL8EFDr6Ew
-Message-ID: <CAJZ5v0hAmgjozeX0egBs_ii_zzKXGPsPBUWwmGD+23KD++Rzqw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] cpufreq: Replace trace_cpu_frequency with trace_policy_frequency
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: Samuel Wu <wusamuel@google.com>, Huang Rui <ray.huang@amd.com>, 
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
-	Perry Yuan <perry.yuan@amd.com>, Jonathan Corbet <corbet@lwn.net>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
-	kernel-team@android.com, linux-pm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: Regression: SYNA3602 I2C touchpad broken in Linux 6.17.7 (works
+ in 6.17.6 and previous versions)
+To: Vijay <vijayg0127@gmail.com>
+Cc: regressions@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-acpi@vger.kernel.org,
+ Benjamin Tissoires <benjamin.tissoires@redhat.com>, jikos@kernel.org
+References: <CAMBhvbYA=onQkkcgkODaTj=+tkybwo28Cdi6P3vodGpVZi8OVA@mail.gmail.com>
+ <CAO-hwJJRisVpZWeSA+3_fLaa8_52f7ypUocDcD+PojuF3KjHYw@mail.gmail.com>
+From: Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Language: de-DE, en-US
+In-Reply-To: <CAO-hwJJRisVpZWeSA+3_fLaa8_52f7ypUocDcD+PojuF3KjHYw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1764861044;d5267d98;
+X-HE-SMSGID: 1vRAyg-009Jto-0T
 
-On Thu, Dec 4, 2025 at 1:49=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 12/1/25 20:24, Samuel Wu wrote:
-> > The existing cpu_frequency trace_event can be verbose, emitting a nearl=
-y
-> > identical trace event for every CPU in the policy even when their
-> > frequencies are identical.
-> >
-> > This patch replaces the cpu_frequency trace event with policy_frequency
-> > trace event, a more efficient alternative. From the kernel's
-> > perspective, emitting a trace event once per policy instead of once per
-> > cpu saves some memory and is less overhead. From the post-processing
-> > perspective, analysis of the trace log is simplified without any loss o=
-f
-> > information.
-> >
-> > Signed-off-by: Samuel Wu <wusamuel@google.com>
-> > ---
-> >  drivers/cpufreq/cpufreq.c      | 14 ++------------
-> >  drivers/cpufreq/intel_pstate.c |  6 ++++--
-> >  include/trace/events/power.h   | 24 +++++++++++++++++++++---
-> >  kernel/trace/power-traces.c    |  2 +-
-> >  samples/bpf/cpustat_kern.c     |  8 ++++----
-> >  samples/bpf/cpustat_user.c     |  6 +++---
-> >  tools/perf/builtin-timechart.c | 12 ++++++------
-> >  7 files changed, 41 insertions(+), 31 deletions(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 4472bb1ec83c..dd3f08f3b958 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -309,8 +309,6 @@ static void cpufreq_notify_transition(struct cpufre=
-q_policy *policy,
-> >                                     struct cpufreq_freqs *freqs,
-> >                                     unsigned int state)
-> >  {
-> > -     int cpu;
-> > -
-> >       BUG_ON(irqs_disabled());
-> >
-> >       if (cpufreq_disabled())
-> > @@ -344,10 +342,7 @@ static void cpufreq_notify_transition(struct cpufr=
-eq_policy *policy,
-> >               adjust_jiffies(CPUFREQ_POSTCHANGE, freqs);
-> >               pr_debug("FREQ: %u - CPUs: %*pbl\n", freqs->new,
-> >                        cpumask_pr_args(policy->cpus));
-> > -
-> > -             for_each_cpu(cpu, policy->cpus)
-> > -                     trace_cpu_frequency(freqs->new, cpu);
-> > -
-> > +             trace_policy_frequency(freqs->new, policy->cpu, policy->c=
-pus);
-> >               srcu_notifier_call_chain(&cpufreq_transition_notifier_lis=
-t,
-> >                                        CPUFREQ_POSTCHANGE, freqs);
-> >
-> > @@ -2201,7 +2196,6 @@ unsigned int cpufreq_driver_fast_switch(struct cp=
-ufreq_policy *policy,
-> >                                       unsigned int target_freq)
-> >  {
-> >       unsigned int freq;
-> > -     int cpu;
-> >
-> >       target_freq =3D clamp_val(target_freq, policy->min, policy->max);
-> >       freq =3D cpufreq_driver->fast_switch(policy, target_freq);
-> > @@ -2213,11 +2207,7 @@ unsigned int cpufreq_driver_fast_switch(struct c=
-pufreq_policy *policy,
-> >       arch_set_freq_scale(policy->related_cpus, freq,
-> >                           arch_scale_freq_ref(policy->cpu));
-> >       cpufreq_stats_record_transition(policy, freq);
-> > -
-> > -     if (trace_cpu_frequency_enabled()) {
-> > -             for_each_cpu(cpu, policy->cpus)
-> > -                     trace_cpu_frequency(freq, cpu);
-> > -     }
-> > +     trace_policy_frequency(freq, policy->cpu, policy->cpus);
-> >
-> >       return freq;
-> >  }
-> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pst=
-ate.c
-> > index ec4abe374573..9724b5d19d83 100644
-> > --- a/drivers/cpufreq/intel_pstate.c
-> > +++ b/drivers/cpufreq/intel_pstate.c
-> > @@ -2297,7 +2297,8 @@ static int hwp_get_cpu_scaling(int cpu)
-> >
-> >  static void intel_pstate_set_pstate(struct cpudata *cpu, int pstate)
-> >  {
-> > -     trace_cpu_frequency(pstate * cpu->pstate.scaling, cpu->cpu);
-> > +     trace_policy_frequency(pstate * cpu->pstate.scaling, cpu->cpu,
-> > +                            cpumask_of(cpu->cpu));
-> >       cpu->pstate.current_pstate =3D pstate;
-> >       /*
-> >        * Generally, there is no guarantee that this code will always ru=
-n on
-> > @@ -2587,7 +2588,8 @@ static void intel_pstate_adjust_pstate(struct cpu=
-data *cpu)
-> >
-> >       target_pstate =3D get_target_pstate(cpu);
-> >       target_pstate =3D intel_pstate_prepare_request(cpu, target_pstate=
-);
-> > -     trace_cpu_frequency(target_pstate * cpu->pstate.scaling, cpu->cpu=
-);
-> > +     trace_policy_frequency(target_pstate * cpu->pstate.scaling, cpu->=
-cpu,
-> > +                            cpumask_of(cpu->cpu));
-> >       intel_pstate_update_pstate(cpu, target_pstate);
-> >
-> >       sample =3D &cpu->sample;
-> > diff --git a/include/trace/events/power.h b/include/trace/events/power.=
-h
-> > index 370f8df2fdb4..317098ffdd5f 100644
-> > --- a/include/trace/events/power.h
-> > +++ b/include/trace/events/power.h
-> > @@ -182,11 +182,29 @@ TRACE_EVENT(pstate_sample,
-> >               { PM_EVENT_RECOVER, "recover" }, \
-> >               { PM_EVENT_POWEROFF, "poweroff" })
-> >
-> > -DEFINE_EVENT(cpu, cpu_frequency,
-> > +TRACE_EVENT(policy_frequency,
-> >
-> > -     TP_PROTO(unsigned int frequency, unsigned int cpu_id),
-> > +     TP_PROTO(unsigned int frequency, unsigned int cpu_id,
-> > +              const struct cpumask *policy_cpus),
-> >
-> > -     TP_ARGS(frequency, cpu_id)
-> > +     TP_ARGS(frequency, cpu_id, policy_cpus),
-> > +
-> > +     TP_STRUCT__entry(
-> > +             __field(u32, state)
-> > +             __field(u32, cpu_id)
-> > +             __cpumask(cpumask)
-> > +     ),
-> > +
-> > +     TP_fast_assign(
-> > +             __entry->state =3D frequency;
-> > +             __entry->cpu_id =3D cpu_id;
-> > +             __assign_cpumask(cpumask, policy_cpus);
-> > +     ),
-> > +
-> > +     TP_printk("state=3D%lu cpu_id=3D%lu policy_cpus=3D%*pb",
-> > +               (unsigned long)__entry->state,
-> > +               (unsigned long)__entry->cpu_id,
-> > +               cpumask_pr_args((struct cpumask *)__get_dynamic_array(c=
-pumask)))
-> >  );
-> >
-> >  TRACE_EVENT(cpu_frequency_limits,
-> > diff --git a/kernel/trace/power-traces.c b/kernel/trace/power-traces.c
-> > index f2fe33573e54..a537e68a6878 100644
-> > --- a/kernel/trace/power-traces.c
-> > +++ b/kernel/trace/power-traces.c
-> > @@ -16,5 +16,5 @@
-> >
-> >  EXPORT_TRACEPOINT_SYMBOL_GPL(suspend_resume);
-> >  EXPORT_TRACEPOINT_SYMBOL_GPL(cpu_idle);
-> > -EXPORT_TRACEPOINT_SYMBOL_GPL(cpu_frequency);
-> > +EXPORT_TRACEPOINT_SYMBOL_GPL(policy_frequency);
-> >
-> > diff --git a/samples/bpf/cpustat_kern.c b/samples/bpf/cpustat_kern.c
-> > index 7ec7143e2757..f485de0f89b2 100644
-> > --- a/samples/bpf/cpustat_kern.c
-> > +++ b/samples/bpf/cpustat_kern.c
-> > @@ -75,9 +75,9 @@ struct {
-> >  } pstate_duration SEC(".maps");
-> >
-> >  /*
-> > - * The trace events for cpu_idle and cpu_frequency are taken from:
-> > + * The trace events for cpu_idle and policy_frequency are taken from:
-> >   * /sys/kernel/tracing/events/power/cpu_idle/format
-> > - * /sys/kernel/tracing/events/power/cpu_frequency/format
-> > + * /sys/kernel/tracing/events/power/policy_frequency/format
-> >   *
-> >   * These two events have same format, so define one common structure.
-> >   */
-> > @@ -162,7 +162,7 @@ int bpf_prog1(struct cpu_args *ctx)
-> >        */
-> >       if (ctx->state !=3D (u32)-1) {
-> >
-> > -             /* record pstate after have first cpu_frequency event */
-> > +             /* record pstate after have first policy_frequency event =
-*/
-> >               if (!*pts)
-> >                       return 0;
-> >
-> > @@ -208,7 +208,7 @@ int bpf_prog1(struct cpu_args *ctx)
-> >       return 0;
-> >  }
-> >
-> > -SEC("tracepoint/power/cpu_frequency")
-> > +SEC("tracepoint/power/policy_frequency")
-> >  int bpf_prog2(struct cpu_args *ctx)
-> >  {
-> >       u64 *pts, *cstate, *pstate, cur_ts, delta;
-> > diff --git a/samples/bpf/cpustat_user.c b/samples/bpf/cpustat_user.c
-> > index 356f756cba0d..f7e81f702358 100644
-> > --- a/samples/bpf/cpustat_user.c
-> > +++ b/samples/bpf/cpustat_user.c
-> > @@ -143,12 +143,12 @@ static int cpu_stat_inject_cpu_idle_event(void)
-> >
-> >  /*
-> >   * It's possible to have no any frequency change for long time and can=
-not
-> > - * get ftrace event 'trace_cpu_frequency' for long period, this introd=
-uces
-> > + * get ftrace event 'trace_policy_frequency' for long period, this int=
-roduces
-> >   * big deviation for pstate statistics.
-> >   *
-> >   * To solve this issue, below code forces to set 'scaling_max_freq' to=
- 208MHz
-> > - * for triggering ftrace event 'trace_cpu_frequency' and then recovery=
- back to
-> > - * the maximum frequency value 1.2GHz.
-> > + * for triggering ftrace event 'trace_policy_frequency' and then recov=
-ery back
-> > + * to the maximum frequency value 1.2GHz.
-> >   */
-> >  static int cpu_stat_inject_cpu_frequency_event(void)
-> >  {
-> > diff --git a/tools/perf/builtin-timechart.c b/tools/perf/builtin-timech=
-art.c
-> > index 22050c640dfa..3ef1a2fd0493 100644
-> > --- a/tools/perf/builtin-timechart.c
-> > +++ b/tools/perf/builtin-timechart.c
-> > @@ -612,10 +612,10 @@ process_sample_cpu_idle(struct timechart *tchart =
-__maybe_unused,
-> >  }
-> >
-> >  static int
-> > -process_sample_cpu_frequency(struct timechart *tchart,
-> > -                          struct evsel *evsel,
-> > -                          struct perf_sample *sample,
-> > -                          const char *backtrace __maybe_unused)
-> > +process_sample_policy_frequency(struct timechart *tchart,
-> > +                             struct evsel *evsel,
-> > +                             struct perf_sample *sample,
-> > +                             const char *backtrace __maybe_unused)
-> >  {
-> >       u32 state  =3D evsel__intval(evsel, sample, "state");
-> >       u32 cpu_id =3D evsel__intval(evsel, sample, "cpu_id");
-> > @@ -1541,7 +1541,7 @@ static int __cmd_timechart(struct timechart *tcha=
-rt, const char *output_name)
-> >  {
-> >       const struct evsel_str_handler power_tracepoints[] =3D {
-> >               { "power:cpu_idle",             process_sample_cpu_idle }=
-,
-> > -             { "power:cpu_frequency",        process_sample_cpu_freque=
-ncy },
-> > +             { "power:policy_frequency",     process_sample_policy_fre=
-quency },
-> >               { "sched:sched_wakeup",         process_sample_sched_wake=
-up },
-> >               { "sched:sched_switch",         process_sample_sched_swit=
-ch },
-> >  #ifdef SUPPORT_OLD_POWER_EVENTS
-> > @@ -1804,7 +1804,7 @@ static int timechart__record(struct timechart *tc=
-hart, int argc, const char **ar
-> >       unsigned int backtrace_args_no =3D ARRAY_SIZE(backtrace_args);
-> >
-> >       const char * const power_args[] =3D {
-> > -             "-e", "power:cpu_frequency",
-> > +             "-e", "power:policy_frequency",
-> >               "-e", "power:cpu_idle",
-> >       };
-> >       unsigned int power_args_nr =3D ARRAY_SIZE(power_args);
->
-> perf timechart seem to do per-CPU reporting though?
-> So this is broken by not emitting an event per-CPU? At least with a simpl=
-e s/cpu_frequency/policy_frequency/
-> like here.
-> Similar for the bpf samples technically...
+Lo!
 
-This kind of boils down to whether or not tracepoints can be regarded
-as ABI and to what extent.
+@AM Vijay: 6.17.y will be EOL in about ten days, so this is unlikely to
+get fixed there. The big question is:
 
-In this particular case, I'm not sure I agree with the stated motivation.
+Is 6.18 affected?
 
-First of all, on systems with one CPU per cpufreq policy (the vast
-majority of x86, including AMD, and the ARM systems using the CPPC
-driver AFAICS), the "issue" at hand is actually a non-issue and
-changing the name of the tracepoint alone would confuse things in user
-space IIUC.  Those need to work the way they do today.
+If it is, we need your help identifying want went wrong; if not, then
+it's likely not worth looking closer into this
 
-On systems with multiple CPUs per cpufreq policy there is some extra
-overhead related to the cpu_frequency tracepoint, but the if someone
-is only interested in the "policy" frequency, they can filter out all
-CPUs belonging to the same policy except for one from the traces,
-don't they?
+Ciao, Thorsten
+
+On 11/28/25 09:05, Benjamin Tissoires wrote:
+> Hi,
+> 
+> On Fri, Nov 28, 2025 at 7:40 AM Vijay <vijayg0127@gmail.com> wrote:
+>>
+>> Hello,
+>>
+>> I would like to report a regression in the Linux kernel affecting I2C-HID
+>> touchpads that run through the Intel ISH + DesignWare I2C controller.
+>>
+>> Hardware:
+>> - Laptop: Infinix Y4 Max
+>> - CPU: Intel (13th gen core i5)
+>> - Touchpad: SYNA3602:00 093A:35ED (I2C HID)
+>> - Bus path: SYNA3602 → i2c_designware → Intel ISH → HID
+>> - OS: Linux (Arch/CachyOS)
+>> - Kernel config: Default distro config
+>>
+>> Regression summary:
+>> - Touchpad works perfectly in Linux 6.17.6 and below versions
+>> - Touchpad stops working in Linux 6.17.7 and all newer versions (6.17.8, 6.17.9, etc.)
+>> - Desktop environment does not matter (Hyprland/GNOME both fail)
+>> - The failure happens before userspace loads
+>> - Touchpad also works fine in Linux 6.12 LTS
+>>
+>> This is a kernel-level regression introduced between:
+>>     Good: Linux 6.17.6
+>>     Bad:  Linux 6.17.7
+>>
+>> **Dmesg logs from broken kernel (6.17.7 and newer):**
+>>
+>>     i2c-SYNA3602:00: can't add hid device: -110
+>>     hid_sensor_hub: reading report descriptor failed
+>>     intel-hid INTC1078:00: failed to enable HID power button
+> 
+> Looks like i2c-hid can't even communicate with any I2C device, so this
+> is slightly worrying.
+> 
+>>
+>> And the DesignWare I2C controller logs around the failure:
+>>     i2c_designware 0000:00:15.0: controller timed out
+>>     i2c_designware 0000:00:15.0: lost arbitration
+>>     i2c_designware 0000:00:15.0: transfer aborted (status = -110)
+>>
+>> These errors appear only on 6.17.7+ and not on 6.17.6.
+>>
+>> On working versions (6.17.6 and 6.12 LTS), the touchpad initializes normally:
+>>
+>>     input: SYNA3602:00 093A:35ED Touchpad as /devices/.../input/inputX
+>>     hid-multitouch: I2C HID v1.00 device initialized
+>>     i2c_designware 0000:00:15.0: controller operating normally
+>>
+>> This narrow regression window should make it possible to identify the offending
+>> change in either:
+>> - HID core
+>> - I2C-HID
+>> - Intel ISH HID
+>> - DesignWare I2C controller
+>> - ACPI timing changes
+>>
+>> I can provide:
+>> - Full dmesg (working and broken)
+>> - acpidump
+> 
+> Are you running on a full vanilla kernel?
+> 
+> The changelog between 6.17.6 and 6.17.7 is rather small, so it should
+> be easy enough to bisect and get the offending commit.
+> 
+> I have my suspicions on:
+> f1971d5ba2ef ("genirq/manage: Add buslock back in to enable_irq()")
+> b990b4c6ea6b ("genirq/manage: Add buslock back in to __disable_irq_nosync()")
+> 3c97437239df ("genirq/chip: Add buslock back in to irq_set_handler()")
+> 
+> Because anything else is unrelated to any component involved in i2c-hid.
+> (But that's also assuming you are running vanilla kernels without any
+> extra patches.)
+> 
+> OTOH, I've booted a 6.17.8 and 6.17.7 shipped by Fedora and I don't
+> see any issues related to i2c-hid, so those 3 commits might not be the
+> culprits.
+> 
+> 
+>>
+>> Please let me know what additional data is needed.
+> 
+> Can you do a bisect between v6.17.7 and v6.17.6?
+> 
+> Cheers,
+> Benjamin
+> 
+>>
+>> Thank you,
+>> Vijay.
+> 
+> 
+> 
+
 
