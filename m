@@ -1,172 +1,242 @@
-Return-Path: <linux-pm+bounces-39180-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39181-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F5C0CA2A92
-	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 08:39:22 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27A99CA2B20
+	for <lists+linux-pm@lfdr.de>; Thu, 04 Dec 2025 08:54:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7B230305D421
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 07:39:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F417630214D5
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Dec 2025 07:54:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 083203074AA;
-	Thu,  4 Dec 2025 07:39:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AC030AAA6;
+	Thu,  4 Dec 2025 07:54:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PtQg8yrU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NQUAni4/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBEFB29346F;
-	Thu,  4 Dec 2025 07:39:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E8627FD75;
+	Thu,  4 Dec 2025 07:54:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764833948; cv=none; b=XO5dE/z6HhNgzXxs20faUqqiI5/2q2x22B9NYuHLLqqsDWvfEk4F4EdO9MaaStOkGHnV9EED1c2UBCpJPRMg4U0Fdkm1+RlCmshU68dzjNjrQM3ELxBWLDM/zd04pcqxklsYOEdcu5xkeh/mtfaI6NIhP0EnBOtKfVW6/77JcCc=
+	t=1764834855; cv=none; b=q4nfAUKQKrx1e5IfxjszsJsqSzCRUbhImHrRFO1cNi9j+TWUfP9zEyrg/Y06XhwbiGznbG6LtyPniX6byRXOwVlNmxlmElhl4dREFJbQhfozHTllaVHtdlCG+pEw1ONwNctK8Wr2oo9PS/SOLaZP00ecyhE+96hMfr3Zw798RuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764833948; c=relaxed/simple;
-	bh=ZBbFP2u19PYaompzZPpRS3munLLvOSa0dafo71gqR4A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jz6b72SMf5E7xXR7cu3EIUkv/kYYMspkKplYndV8yG2/YzmSE6JLh6Hr97T4byf/J1PE3BH67uv1SEEcRCon/tkDGGWvs8vD6WAYZ0LomcBZq5VWYcErfaxMxWgwYJQ1mQsrfA8Hl4toADXHOLwfX0h1SZe36WLjubU7MLstiAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PtQg8yrU; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 3DC0DC1785A;
-	Thu,  4 Dec 2025 07:38:40 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 830D060731;
-	Thu,  4 Dec 2025 07:39:03 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B9D2611921EB0;
-	Thu,  4 Dec 2025 08:38:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764833941; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=k7CE06tyTx4yxeiWtpPuf1dnd1n3hRXeTtqv9aVcNzw=;
-	b=PtQg8yrUoGAKG/Uii8S7XQtskQAWYlZadXyZzx8jkUIfm66LC9Z6ad4cKNE4THRD7VoZSf
-	VpOBLrkjXDpI5hwZCvijtYB2Vy5ZG58J80S2F53J9dwWk7dpTNG30pcf/51U93DGiwEgRT
-	fQpgrXdq5ncqdGM17SDz8p09cF/kH78uKk1HPXF2geoo/Iq2hdicWw0z1OcT8qIlGWX4io
-	9e/70u+5e6wZE/l9cV4otQ1JJW0py/fWZuwlCOsKVDmZydp44Fq5GitqLtJS5kFRhZ2OUd
-	f1Zx5ECtIQ4aGzbOVCxCdOdmcvN4wJ599iZIa+qSHKGSWZgKnUBDj/ecIp/4rQ==
-Date: Thu, 4 Dec 2025 08:38:39 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>, Matti
- Vaittinen <mazziesaccount@gmail.com>, Geert Uytterhoeven
- <geert+renesas@glider.be>, linux-arm-kernel@lists.infradead.org
-Cc: Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
- Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
- Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
- Bergmann <arnd@arndb.de>, Saravana Kannan <saravanak@google.com>, Bjorn
- Helgaas <bhelgaas@google.com>, Charles Keepax
- <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
- Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Mark Brown <broonie@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, Davidlohr
- Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
- Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, imx@lists.linux.dev,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-Message-ID: <20251204083839.4fb8a4b1@bootlin.com>
-In-Reply-To: <dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
-	<20251015071420.1173068-2-herve.codina@bootlin.com>
-	<f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
-	<CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-	<5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
-	<CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
-	<072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
-	<CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
-	<55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
-	<20251202102619.5cd971cc@bootlin.com>
-	<088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
-	<20251202175836.747593c0@bootlin.com>
-	<dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1764834855; c=relaxed/simple;
+	bh=1Ib33Her8OuTDOdAAgFO5hGU9wgziL8tIdQe50lbKrA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BvJZmKOKldJAAV21TVIX1MPswrvOpX5BtE/1bE9DP/yUOVzUtj4RrxjdX3m70SWZH0Xs+CQbdyTT5bDywA3YkcXcqHhVozbCoMdZFSsiTBDXwBbMvyqPJg+I0k/j3lFkzaDqFUyxQOStwwphGqlpy1ugoojY7lXdjY2BTRYMbFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NQUAni4/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E36C1C4CEFB;
+	Thu,  4 Dec 2025 07:54:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764834854;
+	bh=1Ib33Her8OuTDOdAAgFO5hGU9wgziL8tIdQe50lbKrA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NQUAni4/k/cqI8PgkKYNjiG3JRMdxqVeUHQcbNWHP2v1s5SNBVXaYvhc9KtkN1ouU
+	 IBkEkyR+RPhVx0XYAC2WNoHEKeQf69e1g4r96Xc714M+ZNW1BvDB+FCkVIP91RPwnI
+	 potgy5EuZmem/YSvYMg0uRaN3+xWUNnRgq8pPK5Qx76MKiFf7mgjRe2lFRCpcs1JVc
+	 eVmtvBCDiXB8IxNhgNdLIUPnUsmMehQVswGDACV1Dq06GSEoqoKi5jGt01muzTWbh3
+	 ou3F+1edIwifSpZcJrNfUyqmJRK4Y7Zl8tBgudpqNd4IHd0ZAMEd2LDgVf4UvDBHnU
+	 UuECRoxXZjbVg==
+Date: Thu, 4 Dec 2025 08:54:12 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+Cc: jic23@kernel.org, robh@kernel.org, krzysztof.kozlowski@linaro.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org, 
+	lumag@kernel.org, dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org, 
+	daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org, thara.gopinath@gmail.com, 
+	lee@kernel.org, rafael@kernel.org, subbaraman.narayanamurthy@oss.qualcomm.com, 
+	david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com, 
+	kamal.wadhwa@oss.qualcomm.com, rui.zhang@intel.com, lukasz.luba@arm.com, 
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org, 
+	quic_kotarake@quicinc.com, neil.armstrong@linaro.org, stephan.gerhold@linaro.org
+Subject: Re: [PATCH V8] dt-bindings: iio/adc: Move QCOM ADC channel
+ definitions out of bindings folder
+Message-ID: <20251204-calculating-sloth-of-valor-0e30ac@quoll>
+References: <20251127133903.208760-1-jishnu.prakash@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20251127133903.208760-1-jishnu.prakash@oss.qualcomm.com>
 
-Hi Kalle,
+On Thu, Nov 27, 2025 at 07:09:03PM +0530, Jishnu Prakash wrote:
+> There are several header files containing QCOM ADC macros for channel names
+> right now in the include/dt-bindings/iio folder. Since these are hardware
+> constants mostly used in devicetree and not exactly bindings, move the
+> files to the arch/arm(64)/boot/dts/qcom folders.
+> 
+> Correct the header file paths in all affected devicetree files to fix
+> compilation errors seen with this move. Update documentation files
+> similarly to fix dtbinding check errors for the same. Make a copy
+> of the header file with constants used in ADC driver files in the
+> /include/linux/iio/adc folder and update driver files to use this
+> path to include it.
+> 
+> Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+> ---
+> Changes since v7:
+> - Based on a discussion with Krzysztof concluded here: 
+>   https://lore.kernel.org/all/d10e2eea-4b86-4e1a-b7a0-54c55907a605@oss.qualcomm.com/,
+>   moved ADC macro header files to arch/arm(64)/boot/dts/qcom folders. The file
+>   include/dt-bindings/iio/qcom,spmi-vadc.h is moved to arch/arm/boot/dts/qcom/
+>   as it is used in both arm and arm64 SoCs and other per-PMIC adc7 header files
+>   are moved to arch/arm64/boot/dts/qcom.
+> - Updated affected devicetree and documentation files based on path changes above.
+> - Made a copy of qcom,spmi-vadc.h in /include/linux/iio/adc folder
+>   for inclusion in ADC driver files and updated affected driver files to use it.
+> - Dropped Acked-by tags from Lee, Rob and Jonathan due to these significant changes
+>   made in latest patch version.
+> - Updated some more devicetree files affected by this change.
+> - Pushing this as a standalone change separate from ADC5 Gen3 series, as that
+>   series will no longer depend upon this patch for the location of
+>   qcom,spmi-vadc.h, as ADC5 Gen3 macros will be added in separate new files.
+> - Link to v7: https://lore.kernel.org/all/20250826083657.4005727-2-jishnu.prakash@oss.qualcomm.com/
+> 
+> Changes since v6:
+> - Collected Acked-by tag from Jonathan.
+> 
+> Changes since v5:
+> - Updated one more devicetree file requiring this change.
+>   Ran full dt_binding_check and dtbs_check and verified that no
+>   errors were reported related to this patch.
+> 
+>   Mentioning this explicitly as there was an invalid error reported on
+>   this patch in the last two patch series, from upstream kernel
+>   automation:
+> 
+>   fatal error: dt-bindings/iio/adc/qcom,spmi-vadc.h: No such file or directory
+> 
+>   The error is invalid as this file does get added in this patch, in
+>   previous patch series too.
+> 
+>   Links to discussion for same in v5:
+>   https://lore.kernel.org/all/cc328ade-a05e-4b1d-a8f0-55b18b4a0873@oss.qualcomm.com/
+>   https://lore.kernel.org/all/9f24e85d-f762-4c29-a58f-ed7652f50919@oss.qualcomm.com/
+> 
+>   Links to discussion for same in v4:
+>   https://lore.kernel.org/all/16aaae04-4fe8-4227-9374-0919960a4ca2@quicinc.com/
+> 
+> Changes since v4:
+> - Updated some more devicetree files requiring this change.
+> 
+> Changes since v3:
+> - Updated files affected by adc file path change in /arch/arm, which
+>   were missed earlier. Updated some more new devicetree files requiring
+>   this change in /arch/arm64.
+> 
+> Changes since v2:
+> - Updated some more new devicetree files requiring this change.
+> - Collected Acked-by tags from Rob and Lee.
+> 
+>  .../bindings/iio/adc/qcom,spmi-vadc.yaml      |   4 +-
+>  .../bindings/mfd/qcom,spmi-pmic.yaml          |   2 +-
+>  .../bindings/thermal/qcom-spmi-adc-tm-hc.yaml |   2 +-
+>  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |   6 +-
 
-On Wed, 3 Dec 2025 12:11:45 +0200
-Kalle Niemi <kaleposti@gmail.com> wrote:
+You have a checkpatch warning for a reason. You should not make these
+combined into one change.
+
+>  arch/arm/boot/dts/qcom/pm8226.dtsi            |   2 +-
+>  arch/arm/boot/dts/qcom/pm8941.dtsi            |   3 +-
+>  arch/arm/boot/dts/qcom/pma8084.dtsi           |   2 +-
+>  arch/arm/boot/dts/qcom/pmx55.dtsi             |   2 +-
+>  .../arm/boot/dts/qcom}/qcom,spmi-vadc.h       |   0
+>  arch/arm64/boot/dts/qcom/pm4125.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pm6125.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pm6150.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pm6150l.dtsi         |   2 +-
+>  arch/arm64/boot/dts/qcom/pm660.dtsi           |   2 +-
+>  arch/arm64/boot/dts/qcom/pm660l.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pm7250b.dtsi         |   2 +-
+>  arch/arm64/boot/dts/qcom/pm8150.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pm8150b.dtsi         |   2 +-
+>  arch/arm64/boot/dts/qcom/pm8150l.dtsi         |   2 +-
+>  arch/arm64/boot/dts/qcom/pm8916.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pm8937.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pm8950.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pm8953.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pm8994.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pm8998.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pmi632.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/pmi8950.dtsi         |   2 +-
+>  arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi     |   2 +-
+>  arch/arm64/boot/dts/qcom/pmp8074.dtsi         |   2 +-
+>  arch/arm64/boot/dts/qcom/pms405.dtsi          |   2 +-
+>  .../boot/dts/qcom/qcm6490-fairphone-fp5.dts   |   4 +-
+>  .../dts/qcom/qcm6490-particle-tachyon.dts     |   4 +-
+>  .../boot/dts/qcom/qcm6490-shift-otter.dts     |   4 +-
+>  .../boot/dts/qcom}/qcom,spmi-adc7-pm7325.h    |   2 +-
+>  .../boot/dts/qcom}/qcom,spmi-adc7-pm8350.h    |   2 +-
+>  .../boot/dts/qcom}/qcom,spmi-adc7-pm8350b.h   |   2 +-
+>  .../boot/dts/qcom}/qcom,spmi-adc7-pmk8350.h   |   2 +-
+>  .../boot/dts/qcom}/qcom,spmi-adc7-pmr735a.h   |   2 +-
+>  .../boot/dts/qcom}/qcom,spmi-adc7-pmr735b.h   |   2 +-
+>  .../boot/dts/qcom}/qcom,spmi-adc7-smb139x.h   |   2 +-
+>  .../dts/qcom/qcs6490-radxa-dragon-q6a.dts     |   4 +-
+>  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts  |   4 +-
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dts       |   2 +-
+>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |   2 +-
+>  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |   4 +-
+>  arch/arm64/boot/dts/qcom/sc8180x-pmics.dtsi   |   2 +-
+>  .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts |   2 +-
+>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |   2 +-
+>  .../dts/qcom/sc8280xp-microsoft-blackrock.dts |   2 +-
+>  arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi  |   6 +-
+>  .../boot/dts/qcom/sm7225-fairphone-fp4.dts    |   2 +-
+>  .../boot/dts/qcom/sm7325-nothing-spacewar.dts |   6 +-
+>  arch/arm64/boot/dts/qcom/sm8450-hdk.dts       |   9 +-
+>  drivers/iio/adc/qcom-spmi-adc5.c              |   3 +-
+>  drivers/iio/adc/qcom-spmi-vadc.c              |   3 +-
+>  include/linux/iio/adc/qcom,spmi-vadc.h        | 303 ++++++++++++++++++
+>  56 files changed, 374 insertions(+), 73 deletions(-)
+>  rename {include/dt-bindings/iio => arch/arm/boot/dts/qcom}/qcom,spmi-vadc.h (100%)
+>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pm7325.h (98%)
+>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pm8350.h (98%)
+>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pm8350b.h (99%)
+>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pmk8350.h (98%)
+>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pmr735a.h (96%)
+>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pmr735b.h (96%)
+>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-smb139x.h (93%)
+
+Huh, what? How can you drop the header? Are you sure you checked
+previous commits, e.g. pinctrl headers, how this should be done? Where
+did you see such commit dropping the ABI?
+
+>  create mode 100644 include/linux/iio/adc/qcom,spmi-vadc.h
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+> index b9dc04b0d307..0860243819f6 100644
+> --- a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+> +++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
+> @@ -276,8 +276,8 @@ examples:
+>      };
+>  
+>    - |
+> -    #include <dt-bindings/iio/qcom,spmi-adc7-pmk8350.h>
+> -    #include <dt-bindings/iio/qcom,spmi-adc7-pm8350.h>
+> +    #include <arm64/qcom/qcom,spmi-adc7-pmk8350.h>
+> +    #include <arm64/qcom/qcom,spmi-adc7-pm8350.h>
+
+I would not touch these and I also wonder whether this actually works.
 
 ...
-> 
-> I tried this patch on next-20251127 by manually adding the added lines 
-> to /drivers/of/overlay.c, and it did not solve the issue. I will 
-> continue to test this.
-> 
 
-Did you observe same traces reported by Geert?
+> index 000000000000..c69b4fea65b0
+> --- /dev/null
+> +++ b/include/linux/iio/adc/qcom,spmi-vadc.h
 
-To move forward, I think I will need help.
+Why Linux header is part of this patchset? This is completely irrelevant
+to DTS. You mixed here two or three subsystems. :/
 
-Indeed, Kalle, Geert, I don't have your hardware, your related overlay or
-a similar one that could be used for test and also I don't have your out of
-tree code used to handle this overlay.
-
-I know overlays and fw_devlink have issues. Links created by fw_devlink
-when an overlay is applied were not correct on my side.
-
-Can you check your <supplier>--<consumer> links with 'ls /sys/class/devlinks'
-
-On my side, without my patches some links were not correct.
-They linked to the parent of the supplier instead of the supplier itself.
-The consequence is a kernel crash, use after free, refcounting failure, ...
-when the supplier device is removed.
-
-Indeed, with wrong links consumers were not removed before suppliers they
-used.
-
-Looking at Geert traces:
---- 8< ---
-rcar_sound ec500000.sound: Failed to create device link (0x180) with
-supplier soc for /soc/sound@ec500000/rcar_sound,src/src-0
-rcar_sound ec500000.sound: Failed to create device link (0x180) with
-supplier soc for /soc/sound@ec500000/rcar_sound,src/src-1
-[...]
---- 8< ---
-
-Even if it is not correct, why the soc device cannot be a provider?
-I don't have the answer to this question yet.
-
-Without having the exact tree structure of the base device-tree, the overlay
-and the way it is applied, and so without been able to reproduce the issue
-on my side, investigating the issue is going to be difficult.
-
-I hope to find some help to move forward and fix the issue.
-
-Saravana's email (Saravana Kannan <saravanak@google.com>) seems incorrect.
-Got emails delivery failure with this email address.
 
 Best regards,
-Hervé
+Krzysztof
+
 
