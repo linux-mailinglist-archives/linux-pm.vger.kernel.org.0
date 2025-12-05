@@ -1,85 +1,81 @@
-Return-Path: <linux-pm+bounces-39243-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39244-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 463D3CA83EA
-	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 16:45:40 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F37A4CA8568
+	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 17:17:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 771A8300879F
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 15:45:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E46D032A88B6
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 15:45:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C750E34B40F;
-	Fri,  5 Dec 2025 15:07:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A33C34CFCC;
+	Fri,  5 Dec 2025 15:08:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="RBJK/j6R"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="QfxhTYCc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010037.outbound.protection.outlook.com [52.101.69.37])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010055.outbound.protection.outlook.com [52.101.84.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A576C34A771;
-	Fri,  5 Dec 2025 15:07:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86416345CD8;
+	Fri,  5 Dec 2025 15:08:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.55
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764947269; cv=fail; b=S8o5QsaTiCwJk2a2snUMpKcd3PaoeyfCFA8bXFwmOS1X/6Ak3+K9k511PSltHRaexPzwY2ydpSHhKEeyiNbpHoOWPHGPUqY/EYmfWrjVklxrcWtn+BPEA9tDyJ+zjIqKL2qt7wOAL7YJFN7+J5Jg6zh7IVl71XAQZpGykrCh+so=
+	t=1764947305; cv=fail; b=Qs+DC4s7by+OZqdpvfgvU6UEZks/Fwzr+Cc7xgqS/A5gKFlTYMcWj3VIEX3bcOcf1cQyPXNbJVZcELTezuOFQVNAb2F4lrtQxStkSyKuh7sPJ9hWi1+mnkDqwgRgf3Mpk0AQbpl1E6nU1YWbebvlV7nV4Wx3iDUB1xlW4oS7ejc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764947269; c=relaxed/simple;
-	bh=igHeO10QKYcZdKMMjhz90C6sdjTPJcUdPNq7rfiE0A8=;
+	s=arc-20240116; t=1764947305; c=relaxed/simple;
+	bh=gsix+RhW/KSd17d912TP6u+JVsx/LszykCK4Fr2kh4g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=YItaXf5SfrVGVlWYEI3BRDNhhvT8atiekYzs5yeAh0+ZVC/uP4+jyxusDQJMosqZeEHMnoCiYoPHYllAqbUFwDXQIZ8pL40z/tWJ+V37YMFE7aGnaa3pmGo2nXTPK2+UvyuOjeATb9ayz3D0WZdxzdDaE7YzbUm6J+GkI0S7N5A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=fail (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=RBJK/j6R reason="signature verification failed"; arc=fail smtp.client-ip=52.101.69.37
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Tiby55UpuaTPUR4EeyWmntveqpIFX8JYQUon1jJm2NDrEarvO6yoW73hYHPl3r8TcfgP6UnZk98aCunv+3SpyxM5OwVeaY4HjTtViojOJhZNEbxd1uN4BsTSo6pr0EYz8doDBPaNlHIoxe3/2CmzQlc7U3GWl1eGKk2Z+2sigiY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=QfxhTYCc; arc=fail smtp.client-ip=52.101.84.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=I6oxgi63gB/IA3BGAczzQwUzhlkWmnmS9hzBns5wpCF6yso4A8p5elVRYWmn4ZlefYIFIO+xLG4Hul+V5gf+vUfy3EsbsQ4HEt7iPW3EMRTy8yJvtYzEM8ttR9AtKPm1X7h/viYwAmBsauRZSoAbQY5mFYo5o3Zn07tMRYd7WHYkcArSmFBeDEXLF6jH3aWWRFZjDHuHNEqO2gzPGN5kP495aq6AfD/mM9YuF4l6YPm70EnvM27tHuMcbEOB0tDtxQHVn5wCNP0ILOgqRCGIqS+NPz5Jkso9sK94wB/Yy6nqxWhlZBF+hPQkSChj08xDbaE8Mm1zWoqxY0wp7w4m4A==
+ b=UoMe0dhU34FkA5kg312MdQWbM0SIygqzEGGxEWN28+lWvtfUlT0TOu9ovPHRxkoZt/QtWvwwoxE7/vA/vF2PcfuyO0vcaCtF5LgCp1NeRTGNgPQn4Z62aOfVVcLfNo/GC1z7vlPaW46WpWlmNqNmtXOzB5L4NyiN+lR1yW+DFvvQjXu65TOiArQ418XgkoyeJcRpPOyJThVo5WI3Kut6HFFCfB2kd+WlyOmUdi4Gfmgnf9ExnEfapVdo6cK/Gt2q35aWuRLmv/o6IZOH06XhqI2tPePJGUEZyAMoapiphUKBxpO3QhnrqqXfraCOjXidUMc1wxpx8oUGGoT14jO91A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2yb6HSKnkby4sGZ2UNQq0wNSjmEmvE/LjFi+qA8XXZY=;
- b=JRD/MzR2gds6b7muh1UwCqnHjaN7VzT4Pjkzn9+vg+8SusrZDRj9mBCYvao/4U4si5X4hyps2Zhv5sTCyE8+zLc9+A9FcgXfF4SxveeWanPxdwqExuL/1cRtJqgxr37WFfjraE+JU773s1IuU1dh5yLv7PeKj+0MY/2bK9m1pSrbyOHlntv13PQ5XyvSgzUXEilz97pD1HW7j5IHy088umi1WlER7XU2GfkUXdlBTOFHkKSVXem9tyxkEznlOoBp9yGmdnPoROAYjOLGCbrpG5Ut6soFsVmk+wysrmhG9e87Y7VZUBzx7Lzxvx5T1sn7f7Vo1SwOV1LCq5XXruPmKw==
+ bh=wTfY6EWmq2gzRb9AeJBUVjP2xs908KwCCUHhuQ8w7Yg=;
+ b=LLBOu40A3JS0ULR9IyJqdeclv+pAmZN3qm4gUYeAkz6yxpyTQodiMNaFLjkOZO8IZJXL9Xk+hi7gYW4x76fAaXHR19+myQfgNuj88pcacdI8P4E4BiXfxB4qKH7bYhcoDnUs2qbEfzedSEbnTP0nSIpBppMNB02gQ2PjU0JrnQP0uL4DCyzm5+vXQDDtIqg5p6tz8sdMsJqBsZTwcciMGK+Bj6kqGy6SBCI8xCqNXofO/lSHbrtMYUZ8T+EJy6baZVerx19okmKxcwAVES6dBLqLtdgjFaVnLWp0mbDxGYJv1C4p2ssJznPz4NDF3w9IgERWqWWBHDVfevu0JHDlNQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2yb6HSKnkby4sGZ2UNQq0wNSjmEmvE/LjFi+qA8XXZY=;
- b=RBJK/j6Rtd3eItpBz5sHffpM263DhNOIeBFIkuvv8ONU0hcVYKfODwncQsaMMEZ3WfozmcgzeucWadMHl34NoxQwIiHUKXr/AuW/fJuH85ceqAvj8I8+goTNiGQcpoOsHyKd3MfFdGxgcTTZc/YN+5umcx6qD4Ia+Z5FUvCTg7TQsBLd/qPkSrPw5QIaJ4YWIyjEWt5oi22omNBwAiTqEb1B1wBlV3w6LuFbW1XovRngH+8fEFT+5nP/qPGFu1iKmBwwRvR1oA8OuyFWUlOzuwTRvcaglhlpx++cZPv2UQKH9ny3BTYTyad9CUBMSU83+klNnrV3gUQK9NG1Oqny/w==
+ bh=wTfY6EWmq2gzRb9AeJBUVjP2xs908KwCCUHhuQ8w7Yg=;
+ b=QfxhTYCcuX7si7H4xRwh+k/4Orr1XA3d5GapRURlM03u4mwNQx605Cy/r3ayqGtjYmYFU8PpN4aLwD+TVrOtrBwb5RpmGBylQOvrh7Dcw1b+yc8CXGCVkGuwwESMQrT0OhxpmJW8Q4qjNrTmxya6OoPZ6Lca9JhaWmlc5l7jLVZEQbdsPqMNXtD5pkTdBI2Kzxgl4Yq+WFv7p8Xoxq4spzhA4eljaRBWhpN2D4xxwBJuGYsiiEQhhTQtu95ijnmx2EH27Qrqal9besCbrwGnzPbijdzukn7KqJgKhx6aZJNHe9mYvSOh/VV02Q2sKwl5wpgpGkjspQuURa7odoXyFg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from DU2PR04MB8951.eurprd04.prod.outlook.com (2603:10a6:10:2e2::22)
- by DB8PR04MB7068.eurprd04.prod.outlook.com (2603:10a6:10:fe::7) with
+ by GVXPR04MB9779.eurprd04.prod.outlook.com (2603:10a6:150:111::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.11; Fri, 5 Dec
- 2025 15:07:42 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.9; Fri, 5 Dec
+ 2025 15:08:16 +0000
 Received: from DU2PR04MB8951.eurprd04.prod.outlook.com
  ([fe80::753c:468d:266:196]) by DU2PR04MB8951.eurprd04.prod.outlook.com
  ([fe80::753c:468d:266:196%4]) with mapi id 15.20.9388.003; Fri, 5 Dec 2025
- 15:07:42 +0000
-Date: Fri, 5 Dec 2025 10:07:34 -0500
+ 15:08:16 +0000
+Date: Fri, 5 Dec 2025 10:08:06 -0500
 From: Frank Li <Frank.li@nxp.com>
-To: Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc: ming.qian@oss.nxp.com, linux-media@vger.kernel.org, mchehab@kernel.org,
-	hverkuil-cisco@xs4all.nl, benjamin.gaignard@collabora.com,
-	p.zabel@pengutronix.de, sebastian.fricke@collabora.com,
-	shawnguo@kernel.org, ulf.hansson@linaro.org, s.hauer@pengutronix.de,
+To: ming.qian@oss.nxp.com
+Cc: linux-media@vger.kernel.org, mchehab@kernel.org,
+	hverkuil-cisco@xs4all.nl, nicolas@ndufresne.ca,
+	benjamin.gaignard@collabora.com, p.zabel@pengutronix.de,
+	sebastian.fricke@collabora.com, shawnguo@kernel.org,
+	ulf.hansson@linaro.org, s.hauer@pengutronix.de,
 	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
 	l.stach@pengutronix.de, peng.fan@nxp.com, eagle.zhou@nxp.com,
 	imx@lists.linux.dev, linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 3/3] media: verisilicon: Avoid G2 bus error while
- decoding H.264 and HEVC
-Message-ID: <aTL1NrZyeq8g/4Ft@lizhi-Precision-Tower-5810>
-References: <20251204090813.595-1-ming.qian@oss.nxp.com>
- <20251204090813.595-3-ming.qian@oss.nxp.com>
- <aTHGJzVKa7PbEifJ@lizhi-Precision-Tower-5810>
- <9f38bda2f1753645a1ae392ce5364ea0165fdc01.camel@ndufresne.ca>
- <aTIRwcocnye0Y6yV@lizhi-Precision-Tower-5810>
- <b45a73845e66355080cfad0f0040b6e7a9d78241.camel@ndufresne.ca>
-Content-Type: text/plain; charset=iso-8859-1
+Subject: Re: [PATCH v4 1/3] media: v4l2-mem2mem: Add a kref to the
+ v4l2_m2m_dev structure
+Message-ID: <aTL1VleoygCIap3N@lizhi-Precision-Tower-5810>
+References: <20251205015428.643-1-ming.qian@oss.nxp.com>
+ <20251205015428.643-2-ming.qian@oss.nxp.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b45a73845e66355080cfad0f0040b6e7a9d78241.camel@ndufresne.ca>
-X-ClientProxiedBy: PH7PR03CA0011.namprd03.prod.outlook.com
- (2603:10b6:510:339::12) To DU2PR04MB8951.eurprd04.prod.outlook.com
+In-Reply-To: <20251205015428.643-2-ming.qian@oss.nxp.com>
+X-ClientProxiedBy: PH0P220CA0014.NAMP220.PROD.OUTLOOK.COM
+ (2603:10b6:510:d3::28) To DU2PR04MB8951.eurprd04.prod.outlook.com
  (2603:10a6:10:2e2::22)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -88,170 +84,191 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8951:EE_|DB8PR04MB7068:EE_
-X-MS-Office365-Filtering-Correlation-Id: e3fbae2b-da0c-4d59-766c-08de341009e7
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8951:EE_|GVXPR04MB9779:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7bee49de-00c6-4caa-3768-08de34101dbb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|19092799006|7416014|376014|52116014|38350700014;
+	BCL:0;ARA:13230040|366016|376014|7416014|52116014|19092799006|1800799024|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?iso-8859-1?Q?ygX5e90x21fOM2wOBsPvKPf9/RgZe4ogcYPnLqGs/EEGOUe/WvhpgGM9l9?=
- =?iso-8859-1?Q?CAZufUzCSq9sLC9Gm2/rlE4Ugp0B8NSNIgQHxZorxabUHi4W25evw4ob4e?=
- =?iso-8859-1?Q?UCOiaHdzPMvUEregMsYNeCmOu/ebLKgvDvaMpun4CP8gIq/clrOo2p+mPu?=
- =?iso-8859-1?Q?HPlUKFQbhy6S48OKcQfAjiliSW0qMGUtW/dr96h9fBvjiMFHtG3B+DRFrP?=
- =?iso-8859-1?Q?fYUTlAKYmVm+E8BRUJMEkPuveWji0QDkSFoe1o0tYOEsp1PCAAJ3kakf8g?=
- =?iso-8859-1?Q?bZnzRjljIWIT+/gyxGjP5Uvpmpwh/AUHtgD3J3hBCnEfACL+XfuGJ9g6DY?=
- =?iso-8859-1?Q?/dL7PFHV0hCHJYQkE3swUPjN5Rci+hhkj72u6I8+hKpGWwRIGI5aSWTQib?=
- =?iso-8859-1?Q?3ZSzI2hzdx5Qo5OWD/jEcluZCuLgW/lNDh7ARHDeeMsVrdw8tmFYe8cbwO?=
- =?iso-8859-1?Q?OW6rg5If6Hb6jVTeuYw9+f8sx5Ei/NCwale9Jhr3NsTVJlrIr69o8VKw7L?=
- =?iso-8859-1?Q?qSQCZhNxtBHWh49Y3uuGavATMUTwEyILSfZUto5gJ4qTi072NLGmwdYUEJ?=
- =?iso-8859-1?Q?ht0LhDgTvrAiatJ/E8XBkqLrxBGGHNngCRlXQ/urPtOLuTg05MdgvGN59j?=
- =?iso-8859-1?Q?qvR8795H7MUKiEoP1w+OZBHJax+J4mWOkQDcUrR55uSTz6Fue2V3QSBo4C?=
- =?iso-8859-1?Q?FR7hqcnICTZtqIhtlKeu93gaVBzsSqlfnVtmoI6DCIqQsv/5tt+fyuD7gL?=
- =?iso-8859-1?Q?XRRl1M6jjJxLP+ISPGBKtprGd4zgWfnSNRPZ+q1G1v1czwRQ+p9NpZCHY2?=
- =?iso-8859-1?Q?6Dr+RI6e8RH2+y0zJlfMUQ/tTgEObjV/skhU9kF5YMLZhMlH8Fp9j2jcTy?=
- =?iso-8859-1?Q?6uHt09qhJjV2kdVHxyRguD8T02VRYpUHESODFKsS9uhM2tIHtSIQgEYIWL?=
- =?iso-8859-1?Q?8Bdrix98XaLeX2hSodPo/KQbbAKwtraSXaW252QJj6MeFiKWiN8E5PKxoP?=
- =?iso-8859-1?Q?4AeuWCiAufomGs7dKjwKZJIZ5LYAQ29LSzZ6sx4zElUUTj8NjOsERT3Ju6?=
- =?iso-8859-1?Q?u7FwTfJU/WIcjzfdu05PlSH2PW0PdBfQtCtjuPi3Q5Zjq57s2KgxBXfRR1?=
- =?iso-8859-1?Q?yelHutlKHUCN0Qv5B/ITn9BzPDIgL5iCPe+5JrVS1TzL51khBTMysc4aN+?=
- =?iso-8859-1?Q?EFzJfSRx4d3WLlv5UOqI+HZtOwuCInzLG3pdDNyTfvn0Mh9/KRot7cK9za?=
- =?iso-8859-1?Q?86t4FX5geg2mtb1UFaJmL7vQRfJMgMVVHLEuQ6Lw5Dx2ggfmP6rHajvLgI?=
- =?iso-8859-1?Q?jfBisW7K4b1jbe8izieq9SiuKgnbIZIBESnnlYdE7+gn9tgIZqXl8I0HT9?=
- =?iso-8859-1?Q?4Anws9sAcwoqoVmEKsSmtAKW1OEaa3HCFat7crEqlRnIMjUQc4RqD4SBhh?=
- =?iso-8859-1?Q?suhw+8A4KZ8GZpPQN1KKwHB4HWcwQOLJCvm7BFWJz5L5do8QmXjh5ddE8b?=
- =?iso-8859-1?Q?7niSVvHxkkatGXGeEhOYa2ynXHHrQySXDxcas8as3/vF4MIwsf4Ph5gltJ?=
- =?iso-8859-1?Q?HKDIUkE72+bg8lVlmXoueeABf/qS?=
+	=?us-ascii?Q?On2X8vTN2DFlsHv7K9dqH7PVc8OgdInisDg0CnCFgqq2CsR8FIrSM9PJln5O?=
+ =?us-ascii?Q?KLhlzEXreyRpyectZ2lye34Jiyv5s9ddHAH222vWrSjHGk1QVaJIgSvdDQv8?=
+ =?us-ascii?Q?rY0SV0UbH3fnveDaLgDhzALKxCp2IKa6fHIFkWXpgnPaSVCYyzqN9bvjQgWI?=
+ =?us-ascii?Q?HhOePRlDxjC257/yLKGzx5v2rnsk7T/+ZhiB4+Cr/ziXUvVZoNXDlTmcyf5i?=
+ =?us-ascii?Q?3otX1YW8+4Vol6gdQxb8AZnOIObNBx7SOq4YTymfK2mIGnqmGTIC6HLoUmgp?=
+ =?us-ascii?Q?zNNYZUXJE7mIp5jsQ/ESZ/ciAknDUHQwCOSqf2pAMjqaUrSAIIKa1zkdyDsn?=
+ =?us-ascii?Q?pg2W90Ru3OFnZsOP96THtww8W+ASo1RyZAIdLW1WFDHTcwYAQAd+QZsrbA8v?=
+ =?us-ascii?Q?vElfKNZTZq5yLWiP/EnqC8dt6vX4bh0i9iXguR/6bZJcW2PfRqEpoy8PjLxS?=
+ =?us-ascii?Q?1zEk9Pp0ihj+uMGz9Z8ZEnEQ1M0yjnROALgMFFcxjfVmGTPHckSWngDKqqeB?=
+ =?us-ascii?Q?M/fcC7XUlSsmnyk1haOEteqVAHOmXJOBNuAl0ktaLR4FoRnpUD4i1Q+jb9Yl?=
+ =?us-ascii?Q?7Z8nGUIC5YVPVTehD83bnVlque1qjRcABUhtuhfBRERcTv3SfLQ7woP1Hea3?=
+ =?us-ascii?Q?Mt0RaXtFkeK1BTyhyxkdtuVk/IRosHyVlA+dRinS3CPVPFJu5UgI+yjTtQ1Y?=
+ =?us-ascii?Q?WlVe2AI8FpjDN5Er38iDORTMp8HXa861/Sv/ThpDJKo3BvBUuMfiWlw4sHJg?=
+ =?us-ascii?Q?Zdg9DnUeoZjks+UD8ikLleY7V3MgtC6zUBRDEyBSrciNyRzIs2sJ9hBXdwKj?=
+ =?us-ascii?Q?B8EPDq2D7uxMCYNkar82d6+Ni2nuct/+rtvCq48pc86rphVlTz/kXv+WonLl?=
+ =?us-ascii?Q?Y76YyurSyuXPHHaXgF7fE8uStfevyjUw7aDVnuh3KKX4fmmiI2MmRaKC9n1z?=
+ =?us-ascii?Q?cD90B/suRRwKjCb8vyo9glb9E/rTukmGzVbB6Blj4eaVOYa8Tm3z2cZ0RkCm?=
+ =?us-ascii?Q?+qn2VYnX4dCeTnzl5g3EvVfiLlEz11l1/L7NQ6ClbygGOCPTcjXy8kQMkOq8?=
+ =?us-ascii?Q?sSqXxpjhi8fUlNkFjCCLUQST+pSoS26o42HIiErXLSjVvkvT3CYVDFcsaccQ?=
+ =?us-ascii?Q?T6raL1kvmeJ7sL6ONconnvQ+eVdYzt4dggBv0T551eRjcJY8RF9PyyYm+lGZ?=
+ =?us-ascii?Q?ZVhSGSXpoOHhernEjSCnPhnpcVjipviUlYvWl2ETrsLei2DZrHbyhjaVIRXR?=
+ =?us-ascii?Q?OZo7f0waUPYQKrNA7QSuI8tTy7Be4B5RlxwYvu15+qCHGABqnvzQrRFenIXb?=
+ =?us-ascii?Q?oVo9MPkM4lx6kLqQXb30iU8fSmE1CeKSYeC7bgT8/K/T7GdPa8qbPOehO/Ui?=
+ =?us-ascii?Q?dtHwRytB878OQ63+PDY/jZLmm9DHm2/JPfpbQ+VG3xr8VjBNNU94U8dcWaGO?=
+ =?us-ascii?Q?KaVa/NSJttU2KruMhe5puwpkBzM74VvJoiM+yauTaXlov35onyHZ5/J4va0l?=
+ =?us-ascii?Q?JbBDdypjbFonxvDbEQJROqyj1kDkNyQR5uat?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8951.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(19092799006)(7416014)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8951.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(52116014)(19092799006)(1800799024)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?iso-8859-1?Q?Yv8TJtr126SC62l6oCBbjKBDir//ZKaALqy3ATxaqME7+zK2mNppc2bA82?=
- =?iso-8859-1?Q?OL0fXKy7fy8Z+k+jd4WIc6r0UNyXA+/6biwVlQ0ilfBEweMWh9Rdus66Ps?=
- =?iso-8859-1?Q?uhK2hyI8hFNivp8gR5YWRxmmL0a1L4AJ7jY4ifDS6zuyAZ3c9wHWzXiRpQ?=
- =?iso-8859-1?Q?ZTHZW78jL8zxsPFRsOLA1O1W7vj1sw3RElCwkkPYDz8oAcjfuhZdBqU1CU?=
- =?iso-8859-1?Q?fE0afL+UOnHJxWrUaZW8juuoGDxabNHFfKehKqXVWzcv9qPQ5oS6RG+OG4?=
- =?iso-8859-1?Q?ez9+fTIdA17VK+jwHAdkBkxhtuOel1GyO9vbf/iWZaZDz4NoOZLLpnW0hF?=
- =?iso-8859-1?Q?77UU3AiUov4z8oRvw538itrNWqwWD2gTvPpiZ2sFjB3/l1MsQDYY/jGi10?=
- =?iso-8859-1?Q?8KEj43g8wPyV6BsNMZyBVTypirtzOY80OXXlqga3xwr+jwGQ8lEVdElBJv?=
- =?iso-8859-1?Q?K48DD2e+CqWKoE3DV0cncH7HHqZv1M8Y8dNrhm119dvk2l8eCLhXtRCqhN?=
- =?iso-8859-1?Q?GT4bOJSqpt6nILIDL86t/jJDPI3x7BH37613mZU1b+SpBaggj25bt06Ud4?=
- =?iso-8859-1?Q?MR9RmgGNkxPcRSHszbAAdE3wDvLLZfDEgrtGohIBNpJSWKnPs0sSV1R6/x?=
- =?iso-8859-1?Q?WZU1NO49csWrF1E3o+mEEYmig+4aQJTJ1hSTbl3wYjpHMLbuEcW1tO2NzJ?=
- =?iso-8859-1?Q?TUVtctKEsc4r8kF8MVlazANvoXAnPHmdRv6sbECsp/dNdThFgdopd0mRKo?=
- =?iso-8859-1?Q?MtfgF2ekA1ebg0itBFoWA0Jt8mHCIIQQI1uiBti1RVJ4ADzgwOYwSa+j+y?=
- =?iso-8859-1?Q?/6NhIBlEfqdszxJP/GLURvrkwycc3RTL4fYyyp33HRonFAcJchyqwtCfIi?=
- =?iso-8859-1?Q?Ibkl7uzObkWL0LdnjOQRTr5eD1mBNAqyyDE9a4I3+Y7yclgzrrkKB133p2?=
- =?iso-8859-1?Q?9lHDKMWmUCZlFgFTMZfpXN9Zl6bNwYU5dNz4WbFmvEONjA6hsgD9aG2tkd?=
- =?iso-8859-1?Q?Det8g7mHXU+XMrzB0nsLhCk5w02iZHcNJtpUVSxZvc8HBG8qkc62wa2Y6C?=
- =?iso-8859-1?Q?ctcOJQkX3rexjPqnmt4ERKfOeJRe/Ro98OUf9A6zR+IkB+DPVMq/foE+T2?=
- =?iso-8859-1?Q?OY+KfexElISIVrbIL9tykRodYiwqz9DTmkx7jAmSy+etaS+B8VFgR3+oyp?=
- =?iso-8859-1?Q?dzdOerEiZXYk8gbEFw1ngCBrzTxOTiUC/HoNrDO/vTyQ7iGWRrS5jdyEgp?=
- =?iso-8859-1?Q?Qf1zX+F2I0zEjYLqxANi2kwPzL7zogT7BqsXXktPmxbbay1A5cBxIJclOZ?=
- =?iso-8859-1?Q?NlQeNEbhEuyfbD9LsFJdUVjLgFRloYMCdVnSKyOny999UNZzaE0ztY5qdv?=
- =?iso-8859-1?Q?rpuIvGWA6yoFO9nkbAkJWtrRp5heRjocogtNp/CWlRSYq9/iN/Nv+7u0j2?=
- =?iso-8859-1?Q?5kSiIc9HgY+uWfHiS33r7cLumfVlyaYKy1kACfNKNyO2BrgIzSaZF1BqEq?=
- =?iso-8859-1?Q?0Bqa0/PqSQH448lgbNSPtlPL2TQjjF5hifCT5jUbAvVM2FaFllh0TTph4t?=
- =?iso-8859-1?Q?U10NK7DJ3yEQPfznWdT1nVcVtmZxMBrAoNJDXNVCICXhy4fdqG/JjtOVAv?=
- =?iso-8859-1?Q?AP2IAnIL17B2aHIZMIYS1TzjG+4IjCsXIN?=
+	=?us-ascii?Q?iwkYT0mzCzncSzpNdU4iPv1CiM8hh4lApene8D60U17y+VrntXhIoSlK/lM9?=
+ =?us-ascii?Q?BAMjyBRbBumAdYH1IKXNpEdVpLRtrf3eMkXxVEC06W4PRHmBpt6HUaQIqB0O?=
+ =?us-ascii?Q?oA/9t/LeqpzHqNiHTTmmLS2ImZOX7a16RenE0omWMcnfQLlXM34A7JRA1a3/?=
+ =?us-ascii?Q?MtwaCAtyOXWt6sM+6y1kg0Oxh6PCJ73o7uMoZcTeHXYCCGqn5i6GaeGX79wY?=
+ =?us-ascii?Q?osZtNY1qkYOYc3IF6qNSrfD9yoblxgsDlOtOMAH/iiRuY9MNDuh+MFnGxA9p?=
+ =?us-ascii?Q?RVklghBSYYMBleGx64s7VbpkhoVOf8Hojj2EJk7GHDDrEsze0eeG2WHRjf75?=
+ =?us-ascii?Q?MapHqqqM11qXj+IUVDjHrBGdOLrEJDUw+LOHbo7y9N/+w01J9aMJYsnIW0w8?=
+ =?us-ascii?Q?X3nYKhqIxtU9lje19SWyNhMHLoJsX2bU4raYL+yS3hjIY0O59gOk9pvpZdo4?=
+ =?us-ascii?Q?FQ6vhqby7AxMr7g5l/Ky63Tx7jl/fz7qpsYltBpVHaU1f9SF2zC5A1XFhczu?=
+ =?us-ascii?Q?1ZxLofB7SlH7O1QYd1wbmlQCD+lTSKObBrP93hYx7b4bR3lK62pRAqE3W9MS?=
+ =?us-ascii?Q?ST3HL6Rb7LPpPs5NoUybpjfI1LNt+T6+F9u7Bo4vSYtVQBA5hojRCsiiflg8?=
+ =?us-ascii?Q?Hv2/AP0B4F/SnXKnfQ2aIYhoZLAus1sh4k7aiYfZL9zc672i9F8RXTxskeMC?=
+ =?us-ascii?Q?AQkAgrUHLypms+fsoKLWHX6tdtYuqp8ieYS04OiVfsrrzsU+CchcZCLgFbDu?=
+ =?us-ascii?Q?6E8UlrfcwwStOVoI8FG3egqRzesBV7CLeK8sbiuK5GshzKwgZZKUuGnqh+dj?=
+ =?us-ascii?Q?yjFsijwjclYKVdNgvmqYt0QSZCQqMhdhxBV+NMr3KFhYOv3QMUaoJbJz/dmu?=
+ =?us-ascii?Q?E2wPYUM3LsfTMAqw83VvrwfHzaEhGko5B5fQF310Gl0gR0FADwta4Lb5cfqO?=
+ =?us-ascii?Q?dYfd5HMQ00LaxbEjnTa8xdKZjXYHP4t117g+2dB1lGXvuz1bdH5rhz/PKvm+?=
+ =?us-ascii?Q?an5HyAQnlBuCD0puRplsIugPGoxuQbrtR9vQT/8DMEtUrpVI7Z4X3dLVvpTQ?=
+ =?us-ascii?Q?ELSoRMxo1p5ltX83nyNvXp+arRH0TW8ivVFAs34kQIeQFhOZ5iqKFOQeqfe0?=
+ =?us-ascii?Q?PFjP3Ifvw0DZWcWBBqdKZReEgpo5eRUFTaTnZxmXJ+el3SExoCL6luuksfxU?=
+ =?us-ascii?Q?NaIoGJPC3vMAMVlxfT9TcfejCGKba0GU7aSOsrfmbLZ5NXkpeWkYWDWlYWhu?=
+ =?us-ascii?Q?P6/QAFv1KCaZ0bLnLVQtPMmQy1FmJIdsyqmsXvwEjt3ri9au7YEtAnjTB3k+?=
+ =?us-ascii?Q?Y2rX23ZZ8rjQCFejQFGxpl1+dWzU2OM2/9sEA1UI/rPDilQF8iaULo+2XBuK?=
+ =?us-ascii?Q?tmBn3bKp07vVJ0SLFqK93fq17SBdl2bHTfbEpRvBXtjbQZ4OhNuMmTSkm1jF?=
+ =?us-ascii?Q?HB8+MBVbxM6jJf2BuLZUFlxN7qGSMgWNTNHIeS7Bgs5HpbRZWlCvl4+GAblF?=
+ =?us-ascii?Q?zjN7EpaY5lbdXWgvvTSsCHqYYl1ss419vB/zRja215RjDlOQSzutPBrUunqy?=
+ =?us-ascii?Q?YPsZfSsdMot+AlHSxHM=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e3fbae2b-da0c-4d59-766c-08de341009e7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7bee49de-00c6-4caa-3768-08de34101dbb
 X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8951.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2025 15:07:42.4936
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2025 15:08:15.7529
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZmnT3jBaPgwf4TdSa6OebaCaRrDaZcKvRoF6BLBf+PvYwR0w/xoa/CdQS7FZ7xEkw+n8iw1Q933ESKeuE/u/8Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB7068
+X-MS-Exchange-CrossTenant-UserPrincipalName: paYhtDbB4qZjMO/DCT88x75BVnYaETJQHpptSA4Q6+vtRYZlfhioRxcs9a+cn9/EczXhr9ya5PKKNTsIUPI+GA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB9779
 
-On Thu, Dec 04, 2025 at 07:05:01PM -0500, Nicolas Dufresne wrote:
-> Le jeudi 04 décembre 2025 à 17:57 -0500, Frank Li a écrit :
-> > On Thu, Dec 04, 2025 at 01:15:35PM -0500, Nicolas Dufresne wrote:
-> > > Hi Frank,
-> > >
-> > > Le jeudi 04 décembre 2025 à 12:34 -0500, Frank Li a écrit :
-> > > > > +static struct v4l2_m2m_dev *hantro_get_v4l2_m2m_dev(struct hantro_dev *vpu)
-> > > > > +{
-> > > > > +	struct device_node *node;
-> > > > > +	struct hantro_dev *shared_vpu;
-> > > > > +
-> > > > > +	if (!vpu->variant || !vpu->variant->shared_devices)
-> > > > > +		goto init_new_m2m_dev;
-> > > >
-> > > > I found only use shared_devices here, how to  ensure that g1 and g2 operate
-> > > > alternately by using shared_devices?
-> > >
-> > > shared_devices is an array of of_device_id we match against. All the matching
-> > > devices will share the same v4l2_m2m_dev (aka m2m scheduler). Typically, both
-> > > cores will be schedule as one. This achieve what alternate operations without
-> > > active polling or blocking locks/mutex.
-> >
-> > Okay, but this code require shared_devices==NULL's device probe firstly.
-> > generally not order guaranteed, if there are not depentance at DT.
+On Fri, Dec 05, 2025 at 09:54:24AM +0800, ming.qian@oss.nxp.com wrote:
+> From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 >
-> shared_devices is a constant array that is set inside the variant. It is
-> normally NULL, except for the imx8mq SoC, for which its always set.
+> Adding a reference count to the v4l2_m2m_dev structure allow safely
+> sharing it across multiple hardware nodes. This can be used to prevent
+> running jobs concurrently on m2m cores that have some internal resource
+> sharing.
 >
-> >
-> > Does VPU always probe before g1/g2?
-> >
-> > and if there are two VPU instances, what's happen?
->
-> Since there is two VPU, g1 and g2, we will enter this loop:
->
-> > +	for_each_matching_node(node, vpu->variant->shared_devices) {
->
-> On imx8mq, this will match twice.
->
-> > +		struct platform_device *pdev;
-> > +		struct v4l2_m2m_dev *m2m_dev;
-> > +
-> > +		pdev = of_find_device_by_node(node);
-> > +		of_node_put(node);
-> > +
-> > +		if (!pdev)
-> > +			continue;
->
-> If the match does not have a device yet (not probe yet), we skip.
->
-> > +
-> > +		shared_vpu = platform_get_drvdata(pdev);
-> > +		if (IS_ERR_OR_NULL(shared_vpu) || shared_vpu == vpu) {
-> > +			platform_device_put(pdev);
-> > +			continue;
-> > +		}
->
-> If its the current VPU, we also skip.
->
-> > +
-> > +		v4l2_m2m_get(shared_vpu->m2m_dev);
-> > +		m2m_dev = shared_vpu->m2m_dev;
-> > +		platform_device_put(pdev);
->
-> Finally, if the other VPU was initialized, we ref the v4l2_m2m_dev. We will then
-> create m2m_ctx from it which will cause the two VPU to be scheduled one after
-> the other.
->
-> > +
-> > +		return m2m_dev;
-> > +	}
->
-> > +
-> > +init_new_m2m_dev:
-> > +	return v4l2_m2m_init(&vpu_m2m_ops);
->
-> Otherwhise we create a fresh one.
->
-> Does it make sense now ?
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
+> ---
 
-Yes, thanks for detial explain.
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
-Frank
-
+> v4
+> - Add my Signed-off-by
 >
-> Nicolas
-
-
+>  drivers/media/v4l2-core/v4l2-mem2mem.c | 23 +++++++++++++++++++++++
+>  include/media/v4l2-mem2mem.h           | 21 +++++++++++++++++++++
+>  2 files changed, 44 insertions(+)
+>
+> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> index fec93c1a9231..ae0de54d4c3e 100644
+> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> @@ -90,6 +90,7 @@ static const char * const m2m_entity_name[] = {
+>   * @job_work:		worker to run queued jobs.
+>   * @job_queue_flags:	flags of the queue status, %QUEUE_PAUSED.
+>   * @m2m_ops:		driver callbacks
+> + * @kref:		device reference count
+>   */
+>  struct v4l2_m2m_dev {
+>  	struct v4l2_m2m_ctx	*curr_ctx;
+> @@ -109,6 +110,8 @@ struct v4l2_m2m_dev {
+>  	unsigned long		job_queue_flags;
+>
+>  	const struct v4l2_m2m_ops *m2m_ops;
+> +
+> +	struct kref kref;
+>  };
+>
+>  static struct v4l2_m2m_queue_ctx *get_queue_ctx(struct v4l2_m2m_ctx *m2m_ctx,
+> @@ -1200,6 +1203,7 @@ struct v4l2_m2m_dev *v4l2_m2m_init(const struct v4l2_m2m_ops *m2m_ops)
+>  	INIT_LIST_HEAD(&m2m_dev->job_queue);
+>  	spin_lock_init(&m2m_dev->job_spinlock);
+>  	INIT_WORK(&m2m_dev->job_work, v4l2_m2m_device_run_work);
+> +	kref_init(&m2m_dev->kref);
+>
+>  	return m2m_dev;
+>  }
+> @@ -1211,6 +1215,25 @@ void v4l2_m2m_release(struct v4l2_m2m_dev *m2m_dev)
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_m2m_release);
+>
+> +void v4l2_m2m_get(struct v4l2_m2m_dev *m2m_dev)
+> +{
+> +	kref_get(&m2m_dev->kref);
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_m2m_get);
+> +
+> +static void v4l2_m2m_release_from_kref(struct kref *kref)
+> +{
+> +	struct v4l2_m2m_dev *m2m_dev = container_of(kref, struct v4l2_m2m_dev, kref);
+> +
+> +	v4l2_m2m_release(m2m_dev);
+> +}
+> +
+> +void v4l2_m2m_put(struct v4l2_m2m_dev *m2m_dev)
+> +{
+> +	kref_put(&m2m_dev->kref, v4l2_m2m_release_from_kref);
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_m2m_put);
+> +
+>  struct v4l2_m2m_ctx *v4l2_m2m_ctx_init(struct v4l2_m2m_dev *m2m_dev,
+>  		void *drv_priv,
+>  		int (*queue_init)(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq))
+> diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
+> index bf6a09a04dcf..ca295c660c7f 100644
+> --- a/include/media/v4l2-mem2mem.h
+> +++ b/include/media/v4l2-mem2mem.h
+> @@ -547,6 +547,27 @@ v4l2_m2m_register_media_controller(struct v4l2_m2m_dev *m2m_dev,
+>   */
+>  void v4l2_m2m_release(struct v4l2_m2m_dev *m2m_dev);
+>
+> +/**
+> + * v4l2_m2m_get() - take a reference to the m2m_dev structure
+> + *
+> + * @m2m_dev: opaque pointer to the internal data to handle M2M context
+> + *
+> + * This is used to share the M2M device across multiple devices. This
+> + * can be used to avoid scheduling two hardware nodes concurrently.
+> + */
+> +void v4l2_m2m_get(struct v4l2_m2m_dev *m2m_dev);
+> +
+> +/**
+> + * v4l2_m2m_put() - remove a reference to the m2m_dev structure
+> + *
+> + * @m2m_dev: opaque pointer to the internal data to handle M2M context
+> + *
+> + * Once the M2M device have no more references, v4l2_m2m_realse() will be
+> + * called automatically. Users of this method should never call
+> + * v4l2_m2m_release() directly. See v4l2_m2m_get() for more details.
+> + */
+> +void v4l2_m2m_put(struct v4l2_m2m_dev *m2m_dev);
+> +
+>  /**
+>   * v4l2_m2m_ctx_init() - allocate and initialize a m2m context
+>   *
+> --
+> 2.52.0
+>
 
