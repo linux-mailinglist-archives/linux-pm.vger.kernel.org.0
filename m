@@ -1,77 +1,107 @@
-Return-Path: <linux-pm+bounces-39225-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39226-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08930CA5BD8
-	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 01:18:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DBE4CA5DAA
+	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 02:50:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4E6EE31A97BD
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 00:17:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2679630213FE
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 01:50:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F71207A38;
-	Fri,  5 Dec 2025 00:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kFXVgDPn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73FC81E5734;
+	Fri,  5 Dec 2025 01:50:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout04.his.huawei.com (canpmsgout04.his.huawei.com [113.46.200.219])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDD8D1E5B70;
-	Fri,  5 Dec 2025 00:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544132DF68;
+	Fri,  5 Dec 2025 01:50:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764893849; cv=none; b=T6PvUw4wUzEsyy44+/IsK5R+Jk20xJgwyojHYJ9kX6rVjiLXE1KQQR6RFiGO7O/9xqv8n1Iwykr4LGE/UFyd4NBoJPe4liwf3M4tMtZieVr6ezRCLeEyJxqmHvhp5+uDOc/rfHq+yNQZnsq8ip5HpSCXZHtjhAVsB3e2SYKRivc=
+	t=1764899409; cv=none; b=TQkhavKQXtDMnYuwbv0GcmqyYB9tSM63bf4FvEGFul30uqWtDi1VD1u8f/pxQyLl76g11vwMo/6qdLZLMa7IQ3o0L/DH+BwJX3a9Jib9HZDZDr+eQqMnpAVvL/yq3h7mMidwAgtHNwBUln4jBSGk5dkHus1WY13r2Q2XOTbfN0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764893849; c=relaxed/simple;
-	bh=V5J41ZxniHrC90cPOl79BPpuhBIbt16HGzp9uIYvpPw=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=LXYjnIVlDOzxMvr6rhEgxH2oODrIPIjIaKY5MXUGcWPTIOKWcv6PhCM9smLEkHIJeZvDId49Ozf5ZGtbX6dld/wY2umoOnhsRftwyWuxaTj7D2FHsJdtagD8vvPN6Dqlh/JNINQo5j+KLsoQCvnutZLtyAJ4Dx8QH6GPcn0prls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kFXVgDPn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E5BC4CEFB;
-	Fri,  5 Dec 2025 00:17:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764893849;
-	bh=V5J41ZxniHrC90cPOl79BPpuhBIbt16HGzp9uIYvpPw=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=kFXVgDPnGaIMKLHy8t5ChuHTzmBKREzdPQcYNKW+pFCqT/9cQh5qhoxlbjEZp6p41
-	 vJHtHAnRDpRKiupxEoPeFsdCmiVdBOqZigBeJOdzU7dbSmYLZiV/N0QosfXmNxACY6
-	 DPbaEqO/3lsWhxHJIlgGCbYJhl9ac6SD5BAzLriR37gofinODZNjIPmcXwuC2A2ubk
-	 1qS1CPtI4ZoCHVHM+yPoZd9WcPfDRHC6gh8GWMX0fy31QnQ4MM9yYnSoQCgCQDdc1w
-	 YQxn463AORo2/ustyHI74LnU8204O7YcrdbEgZgxcT8yznwXbvgbFZ91hlV2yQ0bkR
-	 AQ26/OWgB9ScQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id B61373AA9A85;
-	Fri,  5 Dec 2025 00:14:28 +0000 (UTC)
-Subject: Re: [GIT PULL] power-supply changes for 6.19
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <rxziuamy4owgazy3oqvawwyxyih4fylzg7jselbubo666ofhid@orwemcdl2bx5>
-References: <rxziuamy4owgazy3oqvawwyxyih4fylzg7jselbubo666ofhid@orwemcdl2bx5>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <rxziuamy4owgazy3oqvawwyxyih4fylzg7jselbubo666ofhid@orwemcdl2bx5>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.19
-X-PR-Tracked-Commit-Id: 8e8856396b54bea5c00a7ae88d87c6254aef2d94
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b0206c4eb6375155b9d50cad1500d2bca5cc8b3f
-Message-Id: <176489366734.1032351.17650460692157773727.pr-tracker-bot@kernel.org>
-Date: Fri, 05 Dec 2025 00:14:27 +0000
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+	s=arc-20240116; t=1764899409; c=relaxed/simple;
+	bh=6p8RiLr4LspxOLl/fuqHbZklbyCVfvUSNKBL9FbYdwE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=OyDQcjvhInc00RwryLlCAMlhHv5HvagxCXEBPrNP1KI7cwHrSFo4cqSuUg5qpcOLdK1tSRZH6QLfPf02Gxk628yA6ZAorkodjJa+q3ytN+WcClXW+4iGpPxnN3IO8vLfe3QJalKjguy2VY0gQPpqtIP3E44LHE9uKk7szUcrTpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=113.46.200.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by canpmsgout04.his.huawei.com (SkyGuard) with ESMTPS id 4dMvQw5s19z1prMW;
+	Fri,  5 Dec 2025 09:48:08 +0800 (CST)
+Received: from kwepemf200017.china.huawei.com (unknown [7.202.181.10])
+	by mail.maildlp.com (Postfix) with ESMTPS id 54B491402CC;
+	Fri,  5 Dec 2025 09:50:03 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemf200017.china.huawei.com
+ (7.202.181.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 5 Dec
+ 2025 09:50:02 +0800
+Message-ID: <bad4857d-ba90-4587-b36f-6999fc66a898@hisilicon.com>
+Date: Fri, 5 Dec 2025 09:50:02 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] cpufreq: Return -EOPNOTSUPP if no policy is boost
+ supported
+To: Lifeng Zheng <zhenglifeng1@huawei.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>, <lihuisong@huawei.com>,
+	<yubowen8@huawei.com>, <zhangpengjie2@huawei.com>, <wangzhi12@huawei.com>,
+	<linhongye@h-partners.com>
+References: <20251202072727.1368285-1-zhenglifeng1@huawei.com>
+ <20251202072727.1368285-2-zhenglifeng1@huawei.com>
+Content-Language: en-US
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <20251202072727.1368285-2-zhenglifeng1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemf200017.china.huawei.com (7.202.181.10)
 
-The pull request you sent on Thu, 4 Dec 2025 22:58:18 +0100:
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.19
+On 12/2/2025 3:27 PM, Lifeng Zheng wrote:
+> In cpufreq_boost_trigger_state(), if all the policies are boost
+> unsupported, policy_set_boost() will not be called and this function will
+> return 0. But it is better to return an error to indicate that the platform
+> doesn't support boost.
+> 
+> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+LGTM.  Thanks!
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b0206c4eb6375155b9d50cad1500d2bca5cc8b3f
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reviewed-by: Jie Zhan <zhanjie9@hisilicon.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index e8d7544b77b8..a4399e5490da 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2806,7 +2806,7 @@ static int cpufreq_boost_trigger_state(int state)
+>  {
+>  	struct cpufreq_policy *policy;
+>  	unsigned long flags;
+> -	int ret = 0;
+> +	int ret = -EOPNOTSUPP;
+>  
+>  	/*
+>  	 * Don't compare 'cpufreq_driver->boost_enabled' with 'state' here to
+> @@ -2826,6 +2826,10 @@ static int cpufreq_boost_trigger_state(int state)
+>  		if (ret)
+>  			goto err_reset_state;
+>  	}
+> +
+> +	if (ret)
+> +		goto err_reset_state;
+> +
+>  	cpus_read_unlock();
+>  
+>  	return 0;
 
