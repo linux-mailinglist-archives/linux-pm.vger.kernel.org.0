@@ -1,172 +1,199 @@
-Return-Path: <linux-pm+bounces-39254-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39255-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 263F8CA9156
-	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 20:33:48 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA17FCA925F
+	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 20:52:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 28AF9309B10F
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 19:28:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 24C113011750
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 19:50:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC39275AF5;
-	Fri,  5 Dec 2025 19:28:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D8C3522DE;
+	Fri,  5 Dec 2025 19:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcO5C3KJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="keVaQHEY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB12242D91
-	for <linux-pm@vger.kernel.org>; Fri,  5 Dec 2025 19:28:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E6863522CF;
+	Fri,  5 Dec 2025 19:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764962911; cv=none; b=HXGudp8Ye66YcyAtEqDkhm1tl9+nw5hWec8E5eC3Td0Ucd8GRzRFt8WDTFdekrvR4XwSwsFRWfaYubMkUwUkZTY3KysPDdZh+I8eGumjxtuFkK6TzqkXj8ICYUtiOGceTewaQSSRUhOPzbCHxRRtUesqTpWpNTBK+GcnGofWQEQ=
+	t=1764964233; cv=none; b=louKQs392QaLXmvGd3dTP1CQKpzoDmK5MN3ehgD9U5ekcNobDxcRdc5eryQfjH2p0XdrGVoL2US683c1fRXH9wUgqXEbcN77mIvT1Jm17agEIkTWFg1wOnWmY1hpLKaO2cvcuS13MdHKp3g+huvwBCKKf30SDIh07LquLWQZIQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764962911; c=relaxed/simple;
-	bh=+ZydZENrJ/o1f8l/C5k8KPPOEzcoH5udzy3jsq6uMP8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PmJAURgPLY4Y8BWTIsjz58fBPdAXbZj935ucWXuxhEXnagigoDh3w1pOrNX5+iaiihP3F8dDDAgGU/sN5xELqV7qwscdcN5F69deG3D2Rd7B/moXDiiUJJZWfbc3Iqc8FD4i/FBIfg5z0nBwklOuAFQk5qdCVF6wFrSeGZ8Jrsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcO5C3KJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42DE0C4CEF1
-	for <linux-pm@vger.kernel.org>; Fri,  5 Dec 2025 19:28:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764962911;
-	bh=+ZydZENrJ/o1f8l/C5k8KPPOEzcoH5udzy3jsq6uMP8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TcO5C3KJTvEnQ5subjonPC1ngXXsB/MSEs9E9YIa0wofUzCywkHknnEafVLK5ILSW
-	 nI7eG6s3sM+xg9NhPvvyJpnMGj0vBPzYwRxUnlKCs0MljP0/M83rQP94c7omPFbbmB
-	 w2gTHSGkyMBjVve+Z4jeQV+0Am7vUOnVQhiwYhkMplS5fKgd6fEGNsBupQrE8++a7J
-	 gwtYTgkVkp8nA1EFfgO3GlYoBZd3iJf7qXiW2+P8s4uS2IC2wRSSpH0H2BOiWS7+9N
-	 XZyB9+5oruYhBoDewNvtJeLL041UrQTeJEEyllkdd3oaYQru8o0jouI0WDqZrZwQK9
-	 HTWVWoN9EOwxA==
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-6598413b604so882393eaf.0
-        for <linux-pm@vger.kernel.org>; Fri, 05 Dec 2025 11:28:31 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCULIkedA0/MTo2/CCTIiylB52dhlEqyustD4oDHH6pK8yYykFYnf68DW+pHB1ogrAlJljNhG9wgxQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3wIfThMtCdGn5Yb1c4rgi4cj8iOODBj98mxyvw2f7fc8XfcV/
-	LUglaxFGDEx0NlBcEvRpUPpGmqdPNWi63AEF3lp9wxNPSD013IX373iRxC9SS9o/mM0AxaBhgV5
-	s8MDQgX9YjQ825PecGr/nNCCDYJQEvo0=
-X-Google-Smtp-Source: AGHT+IFoPpIUBwxKFatmVHTKYNK+BIXykx5Kjw6K+0cefKdBwWa0qUPZQgpV/NxRpdwfxg8dmVrJBfL7uRFThzxCfE8=
-X-Received: by 2002:a05:6820:999:b0:659:9a49:9054 with SMTP id
- 006d021491bc7-6599a8ea084mr157037eaf.31.1764962910609; Fri, 05 Dec 2025
- 11:28:30 -0800 (PST)
+	s=arc-20240116; t=1764964233; c=relaxed/simple;
+	bh=lI6NRNfMRbsVVLIQwOqyY7Me4RzC27guyU1yl3O/jbk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rAgNDT+2PUBcNb/7LTV2SZE4PP5SAhscDKMmTSXRfgt0DaSablreQzAzoeL1Yhdm5ZDGDStCS5PrWQt8pYVt+s68C9hsHyHPS+zn4WcnlSDwpQkjH5sGIqZJKvQn1RtamPoxdkdElRridNp/Qnm56VGp5VIXNux3/hSxLPbh2YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=keVaQHEY; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764964229; x=1796500229;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=lI6NRNfMRbsVVLIQwOqyY7Me4RzC27guyU1yl3O/jbk=;
+  b=keVaQHEYCUgxCqjFeDMNhJkmhH6XshahrA+97hgjpBpqpIhwXbP2fKEC
+   msWCa8o9NLMLROWibHrrkQ926PZM4D0P7KpG20EewDhw37WXkjtIy2UTb
+   4Usw7YQF72IRyXeQRC/fQ1fuktJLvGVauTyTaIyCO3TM7oZM+2hP3co0H
+   M18bCPdMYj9vKOlgIrgzBrVcgHIJ/tEXRDFRIfCmlRfegBczUXxr9cdz5
+   3Hbs0MLTJNzC2lXu4pynUNjZ4rj7zglt1erWGGw8e1Z0v2gEfoKlpUswx
+   cZviD0E8xcghFo/+APu9j0/wuFt3A0FMUI2OovCCA61066fwSr2vjYN2g
+   g==;
+X-CSE-ConnectionGUID: HfwcarLdTPu33ae8bwxQ0A==
+X-CSE-MsgGUID: Ao+Ja744QSKlYZ3hXARzcQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11633"; a="67042441"
+X-IronPort-AV: E=Sophos;i="6.20,252,1758610800"; 
+   d="scan'208";a="67042441"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 11:50:26 -0800
+X-CSE-ConnectionGUID: LR01TraKRh+wC0izfz6cgA==
+X-CSE-MsgGUID: VWtreVLeQmmx8rmonbzngA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,252,1758610800"; 
+   d="scan'208";a="195817750"
+Received: from spandruv-desk2.jf.intel.com ([10.88.27.176])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 11:50:10 -0800
+Message-ID: <c7bdb6cb02437d1ab41495d526c3d2ee3f1f7c60.camel@linux.intel.com>
+Subject: Re: [BUG] intel_pstate: CPU frequencies miscalculated/incorrectly
+ detected on Arrow Lake hardware
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Aaron Rainbolt <arainbolt@kfocus.org>, kernel-team@lists.ubuntu.com, 
+	lenb@kernel.org, linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, 
+	rjw@rjwysocki.net, mmikowski@kfocus.org
+Date: Fri, 05 Dec 2025 11:50:07 -0800
+In-Reply-To: <CAJZ5v0hUc3oz=Z8UUv3n4rY3on1vZpCtSdKjgOFp+OWYC5D9tw@mail.gmail.com>
+References: <4f534cc70650111e420d5ac9040df4e546eed336.camel@linux.intel.com>
+	 <20251126170031.145b6a56@kf-m2g5> <20251203113851.52bf872b@kf-m2g5>
+	 <849e7394b8c7c4b74d1d55648a8d4b55b49aa91a.camel@linux.intel.com>
+	 <CAJZ5v0hUc3oz=Z8UUv3n4rY3on1vZpCtSdKjgOFp+OWYC5D9tw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 (3.56.2-2.fc42) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4f534cc70650111e420d5ac9040df4e546eed336.camel@linux.intel.com>
- <20251126170031.145b6a56@kf-m2g5> <20251203113851.52bf872b@kf-m2g5> <849e7394b8c7c4b74d1d55648a8d4b55b49aa91a.camel@linux.intel.com>
-In-Reply-To: <849e7394b8c7c4b74d1d55648a8d4b55b49aa91a.camel@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 5 Dec 2025 20:28:18 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hUc3oz=Z8UUv3n4rY3on1vZpCtSdKjgOFp+OWYC5D9tw@mail.gmail.com>
-X-Gm-Features: AWmQ_bnL-jdt_AOPDwqrhDQD4a2YqMip2xco13cxfiDxZ4zsiO6D-dJ1SB3S2Y4
-Message-ID: <CAJZ5v0hUc3oz=Z8UUv3n4rY3on1vZpCtSdKjgOFp+OWYC5D9tw@mail.gmail.com>
-Subject: Re: [BUG] intel_pstate: CPU frequencies miscalculated/incorrectly
- detected on Arrow Lake hardware
-To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Aaron Rainbolt <arainbolt@kfocus.org>, kernel-team@lists.ubuntu.com, lenb@kernel.org, 
-	linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, rjw@rjwysocki.net, 
-	mmikowski@kfocus.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 5, 2025 at 8:11=E2=80=AFPM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Hi Aaron,
->
-> On Wed, 2025-12-03 at 11:38 -0600, Aaron Rainbolt wrote:
-> > On Wed, 26 Nov 2025 17:00:31 -0600
-> > Aaron Rainbolt <arainbolt@kfocus.org> wrote:
-> >
-> >
-> >
-> ...
->
->
->
-> There are too many platforms here, don't have time to get to all. So
-> let's focus on one first.
->
-> ## Clevo | X580WNT-G  | Ultra 9 275HX | 6.18.0-061800rc7-generic
->
-> Summary:
-> There is no scaling factor related issue as reported before on ASROCK
-> platform before. The achieved maximum frequencies are correct.
->
-> The base_freq display is wrong (see below because of BIOS config).
-> The cpuinfo_max_freq wrong display is not related to scaling factor but
-> something else
->
->
-> To check, I need dump of:
-> m=3D$(getconf _NPROCESSORS_ONLN); for ((i=3D0; i<m; i++)); do echo CPU$i;
-> sudo rdmsr -p $i 0x771;  sudo rdmsr -p $i 0x774; done
->
-> But I expect them to match the acpi_cppc/highest_perf, which is showing
-> 3.9GHz.
->
-> What command you to report " M-Test  . Id"?
->
-> I think some busy 100% workload running on a single CPU.
->
->
->
-> Analsis:
->
-> Intel=C2=AE Core=E2=84=A2 Ultra 9 Processor 275HX
-> 8+16 no HT
-> Performance-core Base Frequency : 2.7 GHz
-> Efficient-core Base Frequency : 2.1 GHz
->
->
-> P-cores: 0-7
-> Nominal freq: 2700
-> Nominal perf: 43
-> Scaling : ~1.6 (correct)
->
-> E-cores:
-> 8-
-> Nominal freq: 2100
-> Nominal perf: 29
-> Scaling : ~1.38 (close to 1.4 so there will be some rounding issue)
->
-> So,  this is not related to scaling factor as before like on ASROCK
->
->
-> The P-cores under report `base_frequency` and `cpuinfo_max_freq`.
->
-> - FAIL: With Turbo ON or off, the claimed `base_freqency` (B-Claim) of
-> 2000000 does
->   NOT match the Intel spec (B-Spec) of 2700000.
->
-> From CPPC:
->
-> /sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:32
-> The base freq reported by cpufreq: 3200/1.6 =3D 2000
->
->
->
->
-> - FAIL: With Turbo off, the claimed `cpuinfo_max_freq` (M-Claim) of
-> 2000000 does
->   NOT match the Intel spec (M-Spec) of 2700000.
->
-> We don=E2=80=99t depend on ACPI CPPC to achieve the measured value. When =
-you
-> are busy you are getting 2700, so the behavior is correct as the per
-> the CPU spec.
->
->
->
-> - FAIL: With Turbo ON, the claimed `cpuinfo_max_freq` (M-Claim) of
-> 3900000 does
->   NOT match the Intel spec (M-Spec) of 5400000.
->
-> ACPI CPPC also tells 3.9 GHz as max. But we don=E2=80=99t depend on it.
+On Fri, 2025-12-05 at 20:28 +0100, Rafael J. Wysocki wrote:
+> On Fri, Dec 5, 2025 at 8:11=E2=80=AFPM srinivas pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> >=20
+> > Hi Aaron,
+> >=20
+> > On Wed, 2025-12-03 at 11:38 -0600, Aaron Rainbolt wrote:
+> > > On Wed, 26 Nov 2025 17:00:31 -0600
+> > > Aaron Rainbolt <arainbolt@kfocus.org> wrote:
+> > >=20
+> > >=20
+> > >=20
+> > ...
+> >=20
+> >=20
+> >=20
+> > There are too many platforms here, don't have time to get to all.
+> > So
+> > let's focus on one first.
+> >=20
+> > ## Clevo | X580WNT-G=C2=A0 | Ultra 9 275HX | 6.18.0-061800rc7-generic
+> >=20
+> > Summary:
+> > There is no scaling factor related issue as reported before on
+> > ASROCK
+> > platform before. The achieved maximum frequencies are correct.
+> >=20
+> > The base_freq display is wrong (see below because of BIOS config).
+> > The cpuinfo_max_freq wrong display is not related to scaling factor
+> > but
+> > something else
+> >=20
+> >=20
+> > To check, I need dump of:
+> > m=3D$(getconf _NPROCESSORS_ONLN); for ((i=3D0; i<m; i++)); do echo
+> > CPU$i;
+> > sudo rdmsr -p $i 0x771;=C2=A0 sudo rdmsr -p $i 0x774; done
+> >=20
+> > But I expect them to match the acpi_cppc/highest_perf, which is
+> > showing
+> > 3.9GHz.
+> >=20
+> > What command you to report " M-Test=C2=A0 . Id"?
+> >=20
+> > I think some busy 100% workload running on a single CPU.
+> >=20
+> >=20
+> >=20
+> > Analsis:
+> >=20
+> > Intel=C2=AE Core=E2=84=A2 Ultra 9 Processor 275HX
+> > 8+16 no HT
+> > Performance-core Base Frequency : 2.7 GHz
+> > Efficient-core Base Frequency : 2.1 GHz
+> >=20
+> >=20
+> > P-cores: 0-7
+> > Nominal freq: 2700
+> > Nominal perf: 43
+> > Scaling : ~1.6 (correct)
+> >=20
+> > E-cores:
+> > 8-
+> > Nominal freq: 2100
+> > Nominal perf: 29
+> > Scaling : ~1.38 (close to 1.4 so there will be some rounding issue)
+> >=20
+> > So,=C2=A0 this is not related to scaling factor as before like on ASROC=
+K
+> >=20
+> >=20
+> > The P-cores under report `base_frequency` and `cpuinfo_max_freq`.
+> >=20
+> > - FAIL: With Turbo ON or off, the claimed `base_freqency` (B-Claim)
+> > of
+> > 2000000 does
+> > =C2=A0 NOT match the Intel spec (B-Spec) of 2700000.
+> >=20
+> > From CPPC:
+> >=20
+> > /sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:32
+> > The base freq reported by cpufreq: 3200/1.6 =3D 2000
+> >=20
+> >=20
+> >=20
+> >=20
+> > - FAIL: With Turbo off, the claimed `cpuinfo_max_freq` (M-Claim) of
+> > 2000000 does
+> > =C2=A0 NOT match the Intel spec (M-Spec) of 2700000.
+> >=20
+> > We don=E2=80=99t depend on ACPI CPPC to achieve the measured value. Whe=
+n
+> > you
+> > are busy you are getting 2700, so the behavior is correct as the
+> > per
+> > the CPU spec.
+> >=20
+> >=20
+> >=20
+> > - FAIL: With Turbo ON, the claimed `cpuinfo_max_freq` (M-Claim) of
+> > 3900000 does
+> > =C2=A0 NOT match the Intel spec (M-Spec) of 5400000.
+> >=20
+> > ACPI CPPC also tells 3.9 GHz as max. But we don=E2=80=99t depend on it.
+>=20
+> But we depend on HWP_CAP.highest_perf =3D=3D CPPC.highest_perf (because
+> the CPPC value comes from HWP).
 
-But we depend on HWP_CAP.highest_perf =3D=3D CPPC.highest_perf (because
-the CPPC value comes from HWP).
+That's why asked for dump of MSRs above. This should match CPPC value.
+But seems setting HWP_REQ.max_perf=3D61 or 62 on P-core still results in
+5.4 Ghz.
+
+Thanks,
+Srinivas
+
+
 
