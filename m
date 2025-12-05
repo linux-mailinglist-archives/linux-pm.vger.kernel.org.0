@@ -1,56 +1,62 @@
-Return-Path: <linux-pm+bounces-39233-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39234-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3133CA60B4
-	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 04:52:52 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64F98CA60BA
+	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 04:52:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C1AFF307B8DD
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 03:52:51 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 8E0D63009386
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 03:52:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B64628751B;
-	Fri,  5 Dec 2025 03:52:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ABD028751B;
+	Fri,  5 Dec 2025 03:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W5Wq7lbd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T2RxtvSM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F4F1286D40;
-	Fri,  5 Dec 2025 03:52:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A377081E;
+	Fri,  5 Dec 2025 03:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764906770; cv=none; b=DWpNEt2Slez76miiiCbaopiskvfNFueiAbsc6K82ZQ4W64V28mach+YlNkujRCtjHkn+fSa8lwMs4QAmMAwfvaMDcc0DJqk/TAN4udoPT5YscB7nZLkbthpnNtIeZbHxNd7v1FImMQX6sYvVXzKayNv5feySuggdiUGrbpQaoVY=
+	t=1764906773; cv=none; b=JW5fu21H1hUt84d216iQyFoWoeMx4tOMYygm5BghwzMaYKr98EsYNv0HHPCNT3/56Sxlo9QQtVeD80nSjP4pOFGWfV5bV7ElZ9lW7pcohuq5+oV1XcQNdzNmlC0LjFIvXqndQMMeT4ZiNzJcK88/EcyBACXoRm3hRnue84ZKBNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764906770; c=relaxed/simple;
-	bh=Xw2tiDofM9huEod2qZ3ZtmwpWgJkbGH/y/kn7RzbcsQ=;
+	s=arc-20240116; t=1764906773; c=relaxed/simple;
+	bh=aCnktdb+wTVLC3gj9nec1duNC0hS3OcJnFItNItmnAQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fWrBvtaRReKB1GnmjBWmEiJfLgqnwj+33NUJANHnVwUBEbE6wKQ5MCiXsc1mrWuiKtHGsJ75Ba4oNZrSbyWTjviqgJHV15CnquIX5sCDntXAzk5+N3fIzK/KWhsFTa8qQ7llHVFibykymBcllkSk+8LbM8K0Ikc4sTqU4Pb1Efo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W5Wq7lbd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB96C16AAE;
-	Fri,  5 Dec 2025 03:52:48 +0000 (UTC)
+	 MIME-Version:Content-Type; b=VOtP9RnA+DhhfJUgkg4BuBQPQrH+7Jjtgr5zw4MSdKcpTGoFkdE0lIlSUCGOLLKenRbJUUMe2R7yKlvLAm9QlSYYAz1JRivTFg9bzdWBoZ996doP8tJhev/WcYMqAp1z9mYwsEc59PvB6YMTEWMVAi03k4KfTH4yfRTnOHAqmzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T2RxtvSM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E18DCC116B1;
+	Fri,  5 Dec 2025 03:52:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764906770;
-	bh=Xw2tiDofM9huEod2qZ3ZtmwpWgJkbGH/y/kn7RzbcsQ=;
+	s=k20201202; t=1764906773;
+	bh=aCnktdb+wTVLC3gj9nec1duNC0hS3OcJnFItNItmnAQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=W5Wq7lbd6dwAqgMW+F80V2Y4pGYci4cjTdX5k451CANMNP4Ys/RGlG7Gizm/S9KrL
-	 AbWiQgvBbsLvkTybsZAdusZKhQVBhHpjLgvDNUrWX6h4zudOSb9blxmXz1rgM6gYb/
-	 qANZq9l1OBkwadqdB1FRChspUXl6T21xqyrOuDuXwQVs+CUUVFMFkFu8yz7iPlUx4Q
-	 VU5P1asEKAsLc3xWWieJ2Ddo9inCDkgP+awTgkA9QJ5EUTZnIv2rLtbgw3hsfIVu5c
-	 8WUKczjTK4DWoxlxk/dSRha/VwPRzcijNWXU3ZNCC9gMoIfbcVGPj+PrgNufdBI1P9
-	 gR2RV3t4UvBVQ==
+	b=T2RxtvSMdslKaWhoOtZaHjmqC/MSnyHnAd9TLVevkydFuHJVs0P4nxWnDAhkzIvKl
+	 zVdbFFUVq4w5tVg3ormyLggB4Xp8OujJMTUsUcvrQgIqSTdUsPhD+pVSUxqgqoJ3b1
+	 wrp1x4EU4NiaWo6qeFVTyQWTOVH9qullRl+codpIW8Iqf1ihXhQN5iS2ndBdzSdRUS
+	 edzNBDushAKlMltIAmRH4lpJTAHMgg1OBWX9WTYlPadxktRcuSWmKofDfe3r+lNUK6
+	 r+DJWrvEP4bHqydVtgwq2vW8IxvfHqlP6UHaPSL/GIWAWTpBbx8V4hG0XYZ4KHI3WH
+	 QKKmEma42gNKA==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Hal Feng <hal.feng@starfivetech.com>,
-	Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+Cc: Shuhao Fu <sfual@cse.ust.hk>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
 	Sasha Levin <sashal@kernel.org>,
 	rafael@kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.18-6.6] cpufreq: dt-platdev: Add JH7110S SOC to the allowlist
-Date: Thu,  4 Dec 2025 22:52:33 -0500
-Message-ID: <20251205035239.341989-4-sashal@kernel.org>
+	krzk@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.18-5.10] cpufreq: s5pv210: fix refcount leak
+Date: Thu,  4 Dec 2025 22:52:34 -0500
+Message-ID: <20251205035239.341989-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251205035239.341989-1-sashal@kernel.org>
 References: <20251205035239.341989-1-sashal@kernel.org>
@@ -66,15 +72,23 @@ X-stable-base: Linux 6.18
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Hal Feng <hal.feng@starfivetech.com>
+From: Shuhao Fu <sfual@cse.ust.hk>
 
-[ Upstream commit 6e7970cab51d01b8f7c56f120486c571c22e1b80 ]
+[ Upstream commit 2de5cb96060a1664880d65b120e59485a73588a8 ]
 
-Add the compatible strings for supporting the generic
-cpufreq driver on the StarFive JH7110S SoC.
+In function `s5pv210_cpu_init`, a possible refcount inconsistency has
+been identified, causing a resource leak.
 
-Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
-Reviewed-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Why it is a bug:
+1. For every clk_get, there should be a matching clk_put on every
+successive error handling path.
+2. After calling `clk_get(dmc1_clk)`, variable `dmc1_clk` will not be
+freed even if any error happens.
+
+How it is fixed: For every failed path, an extra goto label is added to
+ensure `dmc1_clk` will be freed regardlessly.
+
+Signed-off-by: Shuhao Fu <sfual@cse.ust.hk>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
@@ -85,212 +99,161 @@ LLM Generated explanations, may be completely bogus:
 
 ### 1. COMMIT MESSAGE ANALYSIS
 
-**Subject**: `cpufreq: dt-platdev: Add JH7110S SOC to the allowlist`
+The commit message describes a refcount leak:
+- Subject: "cpufreq: s5pv210: fix refcount leak"
+- Explains the bug: `dmc1_clk` is not freed on error paths
+- Explains the fix: adds a new `out:` label to ensure cleanup
+- Signed-off-by: Shuhao Fu and Viresh Kumar (cpufreq maintainer)
 
-**Key observations**:
-- Uses "Add" (new hardware support), not "Fix"
-- No "Cc: stable@vger.kernel.org" tag
-- No "Fixes:" tag
-- No bug report references ("Reported-by:", "Link:")
-- Reviewed-by from Heinrich Schuchardt (Canonical)
-- Signed-off by Viresh Kumar (cpufreq maintainer)
-
-**Commit message**: Adds compatible strings to enable the generic
-cpufreq driver on StarFive JH7110S SoC.
+Missing tags:
+- No "Cc: stable@vger.kernel.org"
+- No "Fixes:" tag pointing to the commit that introduced the bug
+  (4911ca1031c2ad from 2011)
 
 ### 2. CODE CHANGE ANALYSIS
 
-**Files changed**: 1 file (`drivers/cpufreq/cpufreq-dt-platdev.c`)
+The bug:
+- In `s5pv210_cpu_init()`, after `dmc1_clk = clk_get(...)` succeeds, two
+  error paths jump to `out_dmc1`:
+  1. `policy->cpu != 0` (line 521)
+  2. Unsupported memory type (line 533)
+- `out_dmc1` only frees `dmc0_clk` and `policy->clk`, not `dmc1_clk`,
+  causing a refcount leak.
 
-**Change**: Single line addition:
-```c
-+       { .compatible = "starfive,jh7110s", },
-```
+The fix:
+- Adds a new `out:` label that calls `clk_put(dmc1_clk)`
+- Changes the two error paths to `goto out;` instead of `goto out_dmc1;`
+- `out:` falls through to `out_dmc1` for the rest of cleanup
 
-**Context**: Added to the `allowlist[]` array (line 90), right after
-`starfive,jh7110`.
-
-**Code logic** (from `cpufreq_dt_platdev_init()`):
-1. If root node matches allowlist → create cpufreq-dt device
-2. Else if CPU0 has `operating-points-v2` and root node is not in
-   blocklist → create cpufreq-dt device
-3. Else → return -ENODEV
-
-**Impact**: Adding `starfive,jh7110s` to the allowlist ensures the
-cpufreq-dt platform device is always created, regardless of operating-
-points version.
-
-**Root cause**: Without this entry, cpufreq-dt may not be created for
-jh7110s devices, breaking CPU frequency scaling.
+Change size: 4 lines added, 2 lines modified (minimal change)
 
 ### 3. CLASSIFICATION
 
-**Is this fixing a bug or adding a feature?**
-
-- No explicit bug report or "Fixes:" tag
-- Enables hardware support for a new SoC variant
-- Similar to the jh7110 addition (commit `4b4c0d37164c2`, April 2023)
-
-**Exception category check**:
-
-1. Device IDs/compatible strings: Yes — compatible strings are device
-   tree device IDs. Stable rules allow "just add a device ID"
-   (Documentation/process/stable-kernel-rules.rst line 15).
-2. Hardware quirks/workarounds: No
-3. Device tree updates: Related — enables DT-based cpufreq support
-4. Build fixes: No
-5. Documentation: No
-
-**Classification**: Compatible string addition (device tree device ID),
-which stable rules explicitly allow.
+- Bug fix: fixes a resource leak
+- Not a feature addition
+- Not a new API
+- Standard error handling pattern
 
 ### 4. SCOPE AND RISK ASSESSMENT
 
-**Lines changed**: 1 line added, 0 removed
-
-**Complexity**: Trivial — single array entry
-
-**Files touched**: 1 file
-
-**Subsystem**: `drivers/cpufreq` — mature, well-tested
-
-**Risk assessment**:
-- Low risk: no logic changes, only a list entry
-- No dependencies: standalone change
-- Driver exists in stable: `cpufreq-dt-platdev.c` added in 2016 (commit
-  `f56aad1d98f1c`)
-- Pattern matches existing entries (e.g., jh7110)
-
-**Potential issues**:
-- None identified — this is a pure addition
+- Scope: single function, error paths only
+- Risk: low
+  - Only affects error paths
+  - Standard cleanup pattern
+  - No logic changes beyond cleanup
+- Subsystem: cpufreq (mature)
+- Dependencies: none; self-contained
 
 ### 5. USER IMPACT
 
-**Who is affected**:
-- Users with StarFive JH7110S hardware running stable kernels
-- Without this, cpufreq may not initialize, disabling CPU frequency
-  scaling
+- Affected users: systems using the S5PV210/S5PC110 cpufreq driver
+- Severity: resource leak (not a crash, but still a bug)
+- Trigger conditions:
+  1. `policy->cpu != 0` (non-zero CPU)
+  2. Unsupported memory type (not LPDDR/LPDDR2)
+- Impact: clock reference leak on error paths
 
-**Severity if bug hits**:
-- Medium — cpufreq not working means:
-  - No dynamic frequency scaling
-  - Potential performance/power impact
-  - Not a crash, but degraded functionality
-
-**Evidence of user impact**:
-- No bug reports found in the commit
-- No device tree files for jh7110s in the kernel tree
-- Commit is recent (October 2025)
-
-**Assessment**: Enables hardware support; if jh7110s hardware exists on
-stable kernels, this fixes missing cpufreq functionality.
+Historical context:
+- Driver introduced in v2.6.37 (2010)
+- Bug introduced in commit 4911ca1031c2ad (2011-06-06)
+- Present in all stable trees since 2011
 
 ### 6. STABILITY INDICATORS
 
-**Tested-by**: None
-
-**Reviewed-by**: Heinrich Schuchardt (Canonical) — positive signal
-
-**Age in mainline**: Very recent (October 2025)
-
-**Maintainer sign-off**: Viresh Kumar (cpufreq maintainer)
+- Tested: no "Tested-by:" tag
+- Reviewed: signed by Viresh Kumar (maintainer)
+- Age: commit is recent (Oct 2025), but the bug is old
 
 ### 7. DEPENDENCY CHECK
 
-**Prerequisites**: None — standalone change
+- No dependencies
+- Code exists in stable trees (driver present since v2.6.37)
+- Fix applies cleanly to stable trees
 
-**Code existence in stable**: Yes — `cpufreq-dt-platdev.c` exists in
-stable trees (added 2016)
+### 8. COMPARISON WITH SIMILAR FIXES
 
-**API dependencies**: None — only adds a compatible string
+Similar refcount leak fixes in cpufreq:
+- `cpufreq: nforce2: fix reference count leak` (9600156bb9985)
+- `cpufreq: mediatek: fix device leak on probe failure` (ebc4ed14a4dbf)
+- `cpufreq: qcom-nvmem: fix memory leaks in probe error paths`
+  (e3fd01a810537)
 
-**Backport adjustments**: None — applies cleanly
-
-### 8. HISTORICAL CONTEXT
-
-**Similar commits**:
-- `4b4c0d37164c2` (April 2023): Added `starfive,jh7110` — same pattern,
-  no stable tag
-- Other SoC additions to allowlist follow the same pattern
-
-**Pattern**: SoC additions to cpufreq allowlist typically do not include
-"Cc: stable" tags, but many are still acceptable for stable as device ID
-additions.
+These follow the same pattern and are appropriate for stable.
 
 ### 9. STABLE KERNEL RULES COMPLIANCE
 
-**Rule 1: Obviously correct and tested**
-- Yes — trivial, follows established pattern, maintainer sign-off
+- Obviously correct: yes — standard cleanup pattern
+- Fixes a real bug: yes — resource leak
+- Important issue: moderate — resource leak, not a crash
+- Small and contained: yes — 6 lines changed
+- No new features: yes — only fixes cleanup
+- Applies cleanly: yes — no dependencies
 
-**Rule 2: Fixes a real bug**
-- Borderline — enables hardware support; if hardware exists, fixes
-  broken cpufreq
+### 10. RISK VS BENEFIT TRADE-OFF
 
-**Rule 3: Fixes an important issue**
-- Medium importance — enables CPU frequency scaling
+Benefits:
+- Fixes a long-standing bug (14 years)
+- Prevents resource leaks
+- Low risk, small change
+- Standard pattern
 
-**Rule 4: Small and contained**
-- Yes — 1 line addition
+Risks:
+- Minimal — only touches error paths
+- No functional changes
 
-**Rule 5: No new features**
-- Borderline — enables new hardware support, but compatible strings are
-  explicitly allowed as device IDs
+Concerns:
+- No explicit stable request tag
+- Driver targets older ARM SoCs (may have limited current use)
+- Leak only occurs on error paths
 
-**Rule 6: Applies cleanly**
-- Yes — no conflicts expected
+### FINAL ASSESSMENT
 
-**Exception applies**: Yes — compatible string additions are treated
-like device ID additions, which stable rules allow.
+This is a valid bug fix that meets stable criteria:
+1. Fixes a real resource leak
+2. Small, contained change
+3. Low risk
+4. No new features
+5. Standard error handling pattern
 
-### 10. FINAL ASSESSMENT
-
-**Arguments for YES**:
-1. Compatible strings are device tree device IDs; stable rules allow
-   device ID additions
-2. Very low risk — single line, no logic changes
-3. Follows established pattern (jh7110 precedent)
-4. Fixes broken cpufreq for jh7110s hardware on stable kernels
-5. Driver exists in stable trees
-6. No dependencies
-7. Maintainer sign-off
-
-**Arguments for NO**:
-1. No "Cc: stable" tag
-2. No explicit bug report
-3. Enables new hardware support rather than fixing a documented bug
-4. Very recent commit (limited testing time)
-
-**Decision rationale**:
-
-This is a compatible string addition, equivalent to a device ID
-addition. Stable rules explicitly allow "just add a device ID"
-(Documentation/process/stable-kernel-rules.rst line 15). The change is
-trivial, low-risk, and fixes broken cpufreq functionality for jh7110s
-hardware on stable kernels. The absence of a "Cc: stable" tag is not
-disqualifying; many device ID additions are backported without it.
-
-The commit enables hardware support, but compatible string additions are
-treated as device ID additions and are acceptable for stable trees. If
-jh7110s hardware exists and users run stable kernels, this fixes missing
-cpufreq support.
+The lack of a "Cc: stable" tag is not a blocker; maintainers may add it,
+or it may have been missed. The fix is appropriate for stable backport.
 
 **YES**
 
- drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/cpufreq/s5pv210-cpufreq.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-index cd1816a12bb99..dc11b62399ad5 100644
---- a/drivers/cpufreq/cpufreq-dt-platdev.c
-+++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-@@ -87,6 +87,7 @@ static const struct of_device_id allowlist[] __initconst = {
- 	{ .compatible = "st-ericsson,u9540", },
+diff --git a/drivers/cpufreq/s5pv210-cpufreq.c b/drivers/cpufreq/s5pv210-cpufreq.c
+index 4215621deb3fe..ba8a1c96427a1 100644
+--- a/drivers/cpufreq/s5pv210-cpufreq.c
++++ b/drivers/cpufreq/s5pv210-cpufreq.c
+@@ -518,7 +518,7 @@ static int s5pv210_cpu_init(struct cpufreq_policy *policy)
  
- 	{ .compatible = "starfive,jh7110", },
-+	{ .compatible = "starfive,jh7110s", },
+ 	if (policy->cpu != 0) {
+ 		ret = -EINVAL;
+-		goto out_dmc1;
++		goto out;
+ 	}
  
- 	{ .compatible = "ti,omap2", },
- 	{ .compatible = "ti,omap4", },
+ 	/*
+@@ -530,7 +530,7 @@ static int s5pv210_cpu_init(struct cpufreq_policy *policy)
+ 	if ((mem_type != LPDDR) && (mem_type != LPDDR2)) {
+ 		pr_err("CPUFreq doesn't support this memory type\n");
+ 		ret = -EINVAL;
+-		goto out_dmc1;
++		goto out;
+ 	}
+ 
+ 	/* Find current refresh counter and frequency each DMC */
+@@ -544,6 +544,8 @@ static int s5pv210_cpu_init(struct cpufreq_policy *policy)
+ 	cpufreq_generic_init(policy, s5pv210_freq_table, 40000);
+ 	return 0;
+ 
++out:
++	clk_put(dmc1_clk);
+ out_dmc1:
+ 	clk_put(dmc0_clk);
+ out_dmc0:
 -- 
 2.51.0
 
