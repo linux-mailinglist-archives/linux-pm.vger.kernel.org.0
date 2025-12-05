@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-39239-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39240-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82106CA7194
-	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 11:10:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E80DCA6C82
+	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 09:57:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0DD9836CD8D5
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 08:51:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4E53330F8F35
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 08:57:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA3C73081D2;
-	Fri,  5 Dec 2025 08:39:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A478A3128A9;
+	Fri,  5 Dec 2025 08:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sJ7ngaXI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NDxUs0et"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1483219301;
-	Fri,  5 Dec 2025 08:39:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BF6B28695;
+	Fri,  5 Dec 2025 08:57:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764923948; cv=none; b=LiMvdMzEfqi3NkSeJR/gBfCR1YB7vCj7G+AV6Tp2pqSYTfJnnitxg7xbyEyBA1Vn5CPbAdwdOOsslxuNX37GrzQnKq7+Xu+e8QkJSDXTrjJOcJ7vHXLx1uoc1zG9kQeKyTJyd14tLa34Y/Mg8fvNiVmapECOU10J2yy2bD20h4U=
+	t=1764925030; cv=none; b=XDQ9V0lBk4IWR3xM6wqQiGHf7ZUlpMbhsyT9VXU+k/jFKEVMIOWYiw72JOHqJ+Uccl5zQqn7SlwXrUR8UlPZY6mZzGPoXP42XrK6HDBcu2SRyUmTPynDK2c71D+HZR6ONvjsTcOfL1DqUewH3NoIOM+hjCxJrfokBP+DVCnzWN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764923948; c=relaxed/simple;
-	bh=9HJ5sgZEsPfwomqdOTPvYrHHBOud2TBPVuz56dCYrqA=;
+	s=arc-20240116; t=1764925030; c=relaxed/simple;
+	bh=lpKjmPXsQUzMI0XuJPHsR3L6oiyQDFc+I3FpnEdPT1w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JthjrHFimCHtgTA59QnMwjvO1xgAnqgw+/M/bmBoGqtibI7SUNrVMc9kSZcQrcyv3xKrJYs8qJPDeCnM10/mSNZysPLTbjYdjShjW2IEUp3NA8qvvuEd8V+R9zdDKYk7OuoGPvlb0hnU3qJ8GGZ2QL44Wh0PoDWWvgreldE5fAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sJ7ngaXI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973CCC4CEF1;
-	Fri,  5 Dec 2025 08:39:05 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=pkUZPsMLEuS4lBCvsqEgv85bPS18Qk5Y0csnlDoQ4Qgq/h5jpF8sMfntR4OPZaYZqaxXQ8sgOfV/nOuDZs/xrqi22umTI8jZPwQ+EeQHjwolqn6V+xxZZ4b7qOqNL7w6ys/K/VYsmvrenaWVLvObPa2ZYWH/a+/EMGd2qBJI8Jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NDxUs0et; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14FADC4CEF1;
+	Fri,  5 Dec 2025 08:57:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764923946;
-	bh=9HJ5sgZEsPfwomqdOTPvYrHHBOud2TBPVuz56dCYrqA=;
+	s=k20201202; t=1764925028;
+	bh=lpKjmPXsQUzMI0XuJPHsR3L6oiyQDFc+I3FpnEdPT1w=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sJ7ngaXI/A9Yxr7OMM/TK12mMBKIkr/0kbXk0ZpSmsVburcI6VuNnbvF8h2Qp8VNt
-	 QQFZ3Hbg6V2lAGnGhkf049YGjmQmReQXvRma3ret49QAbl+YQ+HJNZYhE5DnZM5xHh
-	 4aesaFfigu/DaUnFrDIK58QUWYacqIxjP2zBd0LfojkmXmXtk620DpBX0GPuW8CBap
-	 wd8szEs5t5M8LjomU+vrzCDzijDESm8FAsbOQmgejpJ3CQHO8Omxx0mOlAVi3Lttdy
-	 mL8AHgbFva9isRibOgH1vt4lPcMz6kWGq/aGY7pqdhkNpigMRWhIZIPbHYeKJ+9p8H
-	 SkesHflqNsANA==
-Date: Fri, 5 Dec 2025 09:39:03 +0100
+	b=NDxUs0etU8IbVRvDA6aOScBeSCgpwgo4oT6E6DP6lXnCBzOnffiA8MeDNO43RzgQr
+	 sTJRawv80B2CsPkRXMi9/LelqzOkaS9PDauJ8vyX9iGWvDsL+iGo2swCxp7z+fUWhM
+	 JsdMCNbsuxxvFc45rtPknRU/YUnCCsl+pPQsj7euTkm2V6FeVx6S/u04s/qheTIidD
+	 6eYoxlZ+6DckRflmFoN+uCHVmU84uccZgaGWBQ9XzXLPzqURqAFmmrsyXpBEZJZLXG
+	 7TUU9QiLNT7zNA55gRQcHLcRJz9siyCoW/J78P77UfwSJzvITuKHKVD1HnFfuIsVNq
+	 j2TgtSpairqDw==
+Date: Fri, 5 Dec 2025 09:57:06 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Hanchien Lin <hanchien.lin@mediatek.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Balsam CHIHI <bchihi@baylibre.com>, Irving-CH.lin@mediatek.com, 
-	Jh Hsu <Jh.Hsu@mediatek.com>, WH Wu <vincent.wu@mediatek.com>, 
-	Raymond Sun <Raymond.Sun@mediatek.com>, Sirius Wang <Sirius.Wang@mediatek.com>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v3 1/2] dt-bindings: thermal: mediatek: Add MT8189 LVTS
- thermal controller bindings
-Message-ID: <20251205-nostalgic-just-mussel-5cbf89@quoll>
-References: <20251202091056.1761229-1-hanchien.lin@mediatek.com>
- <20251202091056.1761229-2-hanchien.lin@mediatek.com>
+To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+Cc: jic23@kernel.org, robh@kernel.org, krzysztof.kozlowski@linaro.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org, 
+	lumag@kernel.org, dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org, 
+	daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org, thara.gopinath@gmail.com, 
+	lee@kernel.org, rafael@kernel.org, subbaraman.narayanamurthy@oss.qualcomm.com, 
+	david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com, 
+	kamal.wadhwa@oss.qualcomm.com, rui.zhang@intel.com, lukasz.luba@arm.com, 
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org, 
+	quic_kotarake@quicinc.com, neil.armstrong@linaro.org, stephan.gerhold@linaro.org, 
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH V8 2/4] dt-bindings: iio: adc: Add support for QCOM PMIC5
+ Gen3 ADC
+Message-ID: <20251205-savvy-festive-lyrebird-96bfa0@quoll>
+References: <20251127134036.209905-1-jishnu.prakash@oss.qualcomm.com>
+ <20251127134036.209905-3-jishnu.prakash@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,112 +66,26 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251202091056.1761229-2-hanchien.lin@mediatek.com>
+In-Reply-To: <20251127134036.209905-3-jishnu.prakash@oss.qualcomm.com>
 
-On Tue, Dec 02, 2025 at 05:10:55PM +0800, Hanchien Lin wrote:
-> Add support for the MediaTek MT8189 LVTS thermal controller to the device tree bindings.
-
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
-
-> This includes new compatible strings and required properties for MT8189.
-
-Drop, redundant. Don't explain the obvious. Can you document new device
-wihout "new compatible strings"?
-
-Your commit msg should explain non obvious things, e.g. why this is not
-compatible with existing devices.
-
-A nit, subject: drop second/last, redundant "bindings". The
-"dt-bindings" prefix is already stating that these are bindings.
-See also:
-https://elixir.bootlin.com/linux/v6.17-rc3/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
-
-
+On Thu, Nov 27, 2025 at 07:10:34PM +0530, Jishnu Prakash wrote:
+> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
+> following PMICs: PMK8550, PM8550, PM8550B and PM8550VX PMICs.
 > 
-> Signed-off-by: Hanchien Lin <hanchien.lin@mediatek.com>
+> It is similar to PMIC5-Gen2, with SW communication to ADCs on all PMICs
+> going through PBS(Programmable Boot Sequence) firmware through a single
+> register interface. This interface is implemented on SDAM (Shared
+> Direct Access Memory) peripherals on the master PMIC PMK8550 rather
+> than a dedicated ADC peripheral.
+> 
+> Add documentation for PMIC5 Gen3 ADC and update SPMI PMIC bindings to
+> allow ADC5 Gen3 as adc@ subnode.
+> 
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
 > ---
->  .../thermal/mediatek,lvts-thermal.yaml        | 27 +++++++++++++++++--
->  .../thermal/mediatek,lvts-thermal.h           | 20 ++++++++++++++
->  2 files changed, 45 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> index 0259cd3ce9c5..0f7fd69f5fdf 100644
-> --- a/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
-> @@ -22,6 +22,8 @@ properties:
->        - mediatek,mt8186-lvts
->        - mediatek,mt8188-lvts-ap
->        - mediatek,mt8188-lvts-mcu
-> +      - mediatek,mt8189-lvts-ap
-> +      - mediatek,mt8189-lvts-mcu
->        - mediatek,mt8192-lvts-ap
->        - mediatek,mt8192-lvts-mcu
->        - mediatek,mt8195-lvts-ap
-> @@ -58,6 +60,21 @@ properties:
->  allOf:
->    - $ref: thermal-sensor.yaml#
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt8189-lvts-ap
-> +              - mediatek,mt8189-lvts-mcu
 
-Why new if:then? Why cannot it be part of existing block? I don't see
-differences.
-
-> +    then:
-> +      properties:
-> +        nvmem-cells:
-> +          minItems: 2
-> +
-> +        nvmem-cell-names:
-> +          minItems: 2
-> +
->    - if:
->        properties:
->          compatible:
-> @@ -75,6 +92,10 @@ allOf:
->          nvmem-cell-names:
->            maxItems: 1
->  
-> +      required:
-> +        - clocks
-> +        - resets
-> +
->    - if:
->        properties:
->          compatible:
-> @@ -91,12 +112,14 @@ allOf:
->          nvmem-cell-names:
->            minItems: 2
->  
-> +      required:
-> +        - clocks
-> +        - resets
-> +
->  required:
->    - compatible
->    - reg
->    - interrupts
-> -  - clocks
-> -  - resets
-
-
-Maybe that's the difference, but commit msg explained nothing. Your
-commit is just redundant - tells zero, but all the unexpected things are
-totally not explained.
-
-Device cannot work without resets and clocks. If you think otherwise,
-prove your point in commit msg (in terms of datasheet, hardware, not
-drivers!).
-
->    - nvmem-cells
->    - nvmem-cell-names
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
 Best regards,
 Krzysztof
