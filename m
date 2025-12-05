@@ -1,195 +1,143 @@
-Return-Path: <linux-pm+bounces-39246-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39247-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FF86CA8285
-	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 16:20:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADE11CA82E8
+	for <lists+linux-pm@lfdr.de>; Fri, 05 Dec 2025 16:25:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ACA2530BA117
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 15:20:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 45FCE32A1376
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Dec 2025 15:22:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64EC5314B84;
-	Fri,  5 Dec 2025 15:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FC5A3559C9;
+	Fri,  5 Dec 2025 15:17:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pwywkSkO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D9u6bxDU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CA82ECEAC
-	for <linux-pm@vger.kernel.org>; Fri,  5 Dec 2025 15:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D3B34E779;
+	Fri,  5 Dec 2025 15:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764947617; cv=none; b=RC76dJzF3Lo+WphV/CJY2CwjhZsXBqCU1yJI/XQeEguNt7IXtwhl2O4g3zaXI7Juj5RVYah4MMPyqtc2l1RYVyBY+xOzS0VcJwfI0WMiRsjT/Eadp7RdlfpxNsF1pIFWlmQNmLoFL4swxgnxbk0rlX6l+JtaPp9wk9sA/8nJZuM=
+	t=1764947820; cv=none; b=cSuHM875YX3q45PRpgGTUvrHZ9Y6KoqpeSgp3xh5WEVfLP5yHYigSMrIqISbPM8KEEKmFY6W9jvF8I2ZZhpwxbmbIjzUsSWYbKpWfplS5vleY8zZ+Wj6aFdLmYtGrGL8zCI5fakQ7kTNj6L75vCElEA4SUdGzMCDm77xU5Gt+ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764947617; c=relaxed/simple;
-	bh=gToDeN6Xc25jVYcui6qGpeppUtC7Whn5YW0S6Qumrkk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b2kDfwu+BqVNLYmTyi2f5fqG8k+M4z3Ko/sxp0jXN7CWOwaOq37Zi/ATBzWU3JG/w3nQs3RQlvLqI0eK8t1ov23VkqofpdUDH0jCOQmmShm6CS7QZRWUfl3ceaQiZCxtBq7VVV7+jRFC4P8nH9QxlnVTK9n5lojY5Mf4BCiuXmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pwywkSkO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CE79C116B1
-	for <linux-pm@vger.kernel.org>; Fri,  5 Dec 2025 15:13:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764947616;
-	bh=gToDeN6Xc25jVYcui6qGpeppUtC7Whn5YW0S6Qumrkk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=pwywkSkOrM9W497oFGAp6bFMeHPHsAjetaQ83LHhMMByeP58M7PlIeS9uS/+7tSVH
-	 kbrv4yuLV4F4i/vb3BpgP+xlgLcde2S2TWOz+WK6P6aB7DgSQG0Sk5irxZQKNehrWa
-	 a0DKNRR6xFd55jAEh6d0ME2x9mPMrnIFeRPyqFYXb1Q53x97tscyjnATwpuXOxlSQn
-	 Oug5c5Si0KpXD1n2c07GZukXOv0lpK9cOSfFGY/siQ5v7WUZRDkD+Oy6/ZkAi/2tFl
-	 ngsOZZwhYcnGVmkdqem/UUJiqhxVb6mmL3K6IpAlYsdtOG7a4Rznje4JGIAK8J+GJu
-	 aBxYg6z3ZIFbQ==
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7c6da42fbd4so1195782a34.1
-        for <linux-pm@vger.kernel.org>; Fri, 05 Dec 2025 07:13:36 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWTu6IjV4pPpXdkwbTJKVYORt/NhDlMlA+QV5q+ETy8Jr62DSTg3pzT5kV0obuh9TzhbafVDd2lHQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZJYDOJ9iO7E01dA4cLipGptlFJB1uNpbwX+mRrEj2mg+XMSfL
-	9Y6KhQ/XnnlhNV0IeLRo81EdWrvFHyyNs6IG0eVUneYRRkYc4xx7crl87PXt+8ckzES5ykuOO20
-	T4TAqthniwXHeS9g7E/beZoynnYfpM0o=
-X-Google-Smtp-Source: AGHT+IHrXWrqtMGXJxmwV1GVuCRVKcQU0z6/rzwbxUJ6/BP2yyYwuq+UjnxGK8r3GeEdRUHh75+CQgXDFSasFrCHpBs=
-X-Received: by 2002:a05:6830:719c:b0:7c5:3798:fa4e with SMTP id
- 46e09a7af769-7c94dc0bf51mr8467872a34.17.1764947615507; Fri, 05 Dec 2025
- 07:13:35 -0800 (PST)
+	s=arc-20240116; t=1764947820; c=relaxed/simple;
+	bh=/0pxwljYE52fbEeH0J8mXoQ8htkOtzQ1bNaVYct7iBE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GnZIl3q9GMBRB6BeBOeVmq+JqC9nNxlKA5TsHowKu5m1xWBJcO1Xv4GCe897NSV2HDYYZ78wDhf+B7JYOuz97NUGu/wr/mzAUboRKdrnd2/m/K6hph9l/i5IZ/qv1W+QMU+Iv+QtFqCkPxamYUfGSX9+sZVMusHIDkGLSVrUyzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D9u6bxDU; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1764947817; x=1796483817;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/0pxwljYE52fbEeH0J8mXoQ8htkOtzQ1bNaVYct7iBE=;
+  b=D9u6bxDU9loJBcIwUeabItM0PGRSa/h7TOMCy8wwyWZfQ3JXc6SgP2HC
+   FM4KRgmLJeGEXaQe2eztE9yvxRBua9xqUSI+NrDSkyg3rhrSpX80qVK85
+   MEyQU/fWbU96QJnfVU0lg6vJL83jC11sNsXYb0uuo8AITV9GXNzF1wUMF
+   6pEM/iumEUu7mbZKzu/NVMY01GgbH2AVel4aIrei0sMa1M5muFQn+3cYZ
+   qTux4XN1J/QLacsC9f3URquWDRpGa8Y5UBOAMrd4n93tiSj+6aUUa3K77
+   Hx+KWurlpCWb+/CkkcjaGyf09IWTa99TEuzoEpYoXWdkIHQW8ZUv7YcdK
+   A==;
+X-CSE-ConnectionGUID: KSvOqprVQ3KPHolB3q3kmw==
+X-CSE-MsgGUID: lOLg37DxSwWEug/sENprDg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11633"; a="66876348"
+X-IronPort-AV: E=Sophos;i="6.20,252,1758610800"; 
+   d="scan'208";a="66876348"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2025 07:16:56 -0800
+X-CSE-ConnectionGUID: zpOsOMIUS5qvMUsJ6/FmbQ==
+X-CSE-MsgGUID: 3eCM89lgQLSFZ1phwu8Nog==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.20,252,1758610800"; 
+   d="scan'208";a="194970746"
+Received: from lkp-server01.sh.intel.com (HELO 4664bbef4914) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 05 Dec 2025 07:16:52 -0800
+Received: from kbuild by 4664bbef4914 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vRXYA-00000000F81-1MYM;
+	Fri, 05 Dec 2025 15:16:50 +0000
+Date: Fri, 5 Dec 2025 23:16:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pierre Gondois <pierre.gondois@arm.com>, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Christian Loehle <christian.loehle@arm.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>, zhenglifeng1@huawei.com,
+	Jie Zhan <zhanjie9@hisilicon.com>,
+	Pierre Gondois <pierre.gondois@arm.com>,
+	Huang Rui <ray.huang@amd.com>,
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1 4/4] cpufreq: Update set_boost callbacks to rely on
+ boost_freq_req
+Message-ID: <202512052257.WliHSJi6-lkp@intel.com>
+References: <20251204101344.192678-5-pierre.gondois@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251203032422.3232957-1-zhanjie9@hisilicon.com> <20251203032422.3232957-2-zhanjie9@hisilicon.com>
-In-Reply-To: <20251203032422.3232957-2-zhanjie9@hisilicon.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 5 Dec 2025 16:13:24 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jvk+gs+h+76__LLZDa=OGzLxQQsWEMDHXzeV8aV6UYsA@mail.gmail.com>
-X-Gm-Features: AWmQ_bmOH7nN5gWZs3xRPWHos4wTiEv97BodDPulN0JnoJDgcE3MNy86R_44060
-Message-ID: <CAJZ5v0jvk+gs+h+76__LLZDa=OGzLxQQsWEMDHXzeV8aV6UYsA@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] ACPI: CPPC: Factor out and export per-cpu cppc_perf_ctrs_in_pcc_cpu()
-To: Jie Zhan <zhanjie9@hisilicon.com>
-Cc: viresh.kumar@linaro.org, rafael@kernel.org, ionela.voinescu@arm.com, 
-	beata.michalska@arm.com, pierre.gondois@arm.com, zhenglifeng1@huawei.com, 
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com, 
-	jonathan.cameron@huawei.com, prime.zeng@hisilicon.com, yubowen8@huawei.com, 
-	lihuisong@huawei.com, zhangpengjie2@huawei.com, wangzhi12@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251204101344.192678-5-pierre.gondois@arm.com>
 
-On Wed, Dec 3, 2025 at 4:25=E2=80=AFAM Jie Zhan <zhanjie9@hisilicon.com> wr=
-ote:
->
-> Factor out cppc_perf_ctrs_in_pcc_cpu() for checking whether per-cpu CPC
-> regs are defined in PCC channels, and export it out for further use.
->
-> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
-> ---
->  drivers/acpi/cppc_acpi.c | 45 +++++++++++++++++++++-------------------
->  include/acpi/cppc_acpi.h |  5 +++++
->  2 files changed, 29 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 3bdeeee3414e..aa80dbcf42c0 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1422,6 +1422,29 @@ int cppc_get_perf_caps(int cpunum, struct cppc_per=
-f_caps *perf_caps)
->  }
->  EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
->
-> +bool cppc_perf_ctrs_in_pcc_cpu(unsigned int cpu)
-> +{
-> +       struct cpc_desc *cpc_desc =3D per_cpu(cpc_desc_ptr, cpu);
-> +       struct cpc_register_resource *ref_perf_reg;
-> +
-> +       /*
-> +        * If reference perf register is not supported then we should use=
- the
-> +        * nominal perf value
-> +        */
-> +       ref_perf_reg =3D &cpc_desc->cpc_regs[REFERENCE_PERF];
-> +       if (!CPC_SUPPORTED(ref_perf_reg))
-> +               ref_perf_reg =3D &cpc_desc->cpc_regs[NOMINAL_PERF];
-> +
-> +       if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> +           CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> +           CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]) ||
-> +           CPC_IN_PCC(ref_perf_reg))
-> +               return true;
-> +
-> +       return false;
+Hi Pierre,
 
-Why not
+kernel test robot noticed the following build warnings:
 
-return CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-          CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-          CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]) ||
-          CPC_IN_PCC(ref_perf_reg);
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.18 next-20251205]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc_cpu);
-> +
->  /**
->   * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC regio=
-n.
->   *
-> @@ -1436,27 +1459,7 @@ bool cppc_perf_ctrs_in_pcc(void)
->         int cpu;
->
->         for_each_online_cpu(cpu) {
-> -               struct cpc_register_resource *ref_perf_reg;
-> -               struct cpc_desc *cpc_desc;
-> -
-> -               cpc_desc =3D per_cpu(cpc_desc_ptr, cpu);
-> -
-> -               if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> -                   CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> -                   CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-> -                       return true;
-> -
-> -
-> -               ref_perf_reg =3D &cpc_desc->cpc_regs[REFERENCE_PERF];
-> -
-> -               /*
-> -                * If reference perf register is not supported then we sh=
-ould
-> -                * use the nominal perf value
-> -                */
-> -               if (!CPC_SUPPORTED(ref_perf_reg))
-> -                       ref_perf_reg =3D &cpc_desc->cpc_regs[NOMINAL_PERF=
-];
-> -
-> -               if (CPC_IN_PCC(ref_perf_reg))
-> +               if (cppc_perf_ctrs_in_pcc_cpu(cpu))
->                         return true;
->         }
->
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index 13fa81504844..4bcdcaf8bf2c 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -154,6 +154,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_pe=
-rf_fb_ctrs *perf_fb_ctrs);
->  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
->  extern int cppc_set_enable(int cpu, bool enable);
->  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-> +extern bool cppc_perf_ctrs_in_pcc_cpu(unsigned int cpu);
->  extern bool cppc_perf_ctrs_in_pcc(void);
->  extern unsigned int cppc_perf_to_khz(struct cppc_perf_caps *caps, unsign=
-ed int perf);
->  extern unsigned int cppc_khz_to_perf(struct cppc_perf_caps *caps, unsign=
-ed int freq);
-> @@ -204,6 +205,10 @@ static inline int cppc_get_perf_caps(int cpu, struct=
- cppc_perf_caps *caps)
->  {
->         return -EOPNOTSUPP;
->  }
-> +static inline bool cppc_perf_ctrs_in_pcc_cpu(unsigned int cpu)
-> +{
-> +       return false;
-> +}
->  static inline bool cppc_perf_ctrs_in_pcc(void)
->  {
->         return false;
-> --
-> 2.33.0
->
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Pierre-Gondois/Revert-cpufreq-Fix-re-boost-issue-after-hotplugging-a-CPU/20251204-182201
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20251204101344.192678-5-pierre.gondois%40arm.com
+patch subject: [PATCH v1 4/4] cpufreq: Update set_boost callbacks to rely on boost_freq_req
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20251205/202512052257.WliHSJi6-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 14bf95b06a18b9b59c89601cbc0e5a6f2176b118)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251205/202512052257.WliHSJi6-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512052257.WliHSJi6-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/cpufreq/cppc_cpufreq.c:771:6: warning: unused variable 'ret' [-Wunused-variable]
+     771 |         int ret;
+         |             ^~~
+   1 warning generated.
+
+
+vim +/ret +771 drivers/cpufreq/cppc_cpufreq.c
+
+33477d84c26bbf George Cherian  2018-07-11  766  
+54e74df5d76dea Xiongfeng Wang  2020-05-30  767  static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
+54e74df5d76dea Xiongfeng Wang  2020-05-30  768  {
+a28b2bfc099c6b Ionela Voinescu 2020-12-14  769  	struct cppc_cpudata *cpu_data = policy->driver_data;
+bb025fb6c276ac Ionela Voinescu 2020-11-05  770  	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
+54e74df5d76dea Xiongfeng Wang  2020-05-30 @771  	int ret;
+54e74df5d76dea Xiongfeng Wang  2020-05-30  772  
+54e74df5d76dea Xiongfeng Wang  2020-05-30  773  	if (state)
+75f25e3bda7140 Pierre Gondois  2025-12-04  774  		policy->cpuinfo.max_freq = cppc_perf_to_khz(caps, caps->highest_perf);
+54e74df5d76dea Xiongfeng Wang  2020-05-30  775  	else
+75f25e3bda7140 Pierre Gondois  2025-12-04  776  		policy->cpuinfo.max_freq = cppc_perf_to_khz(caps, caps->nominal_perf);
+54e74df5d76dea Xiongfeng Wang  2020-05-30  777  
+54e74df5d76dea Xiongfeng Wang  2020-05-30  778  	return 0;
+54e74df5d76dea Xiongfeng Wang  2020-05-30  779  }
+54e74df5d76dea Xiongfeng Wang  2020-05-30  780  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
