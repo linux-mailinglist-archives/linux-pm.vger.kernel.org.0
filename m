@@ -1,95 +1,77 @@
-Return-Path: <linux-pm+bounces-39267-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39268-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F209DCAAB4D
-	for <lists+linux-pm@lfdr.de>; Sat, 06 Dec 2025 18:45:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2707BCAACA2
+	for <lists+linux-pm@lfdr.de>; Sat, 06 Dec 2025 20:08:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3572930A0847
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Dec 2025 17:45:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B1A11308D5BA
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Dec 2025 19:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4B226FD9A;
-	Sat,  6 Dec 2025 17:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC66C303A35;
+	Sat,  6 Dec 2025 19:07:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mSzcXALd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZjv6B9v"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A36DA237713
-	for <linux-pm@vger.kernel.org>; Sat,  6 Dec 2025 17:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4A42BEC45;
+	Sat,  6 Dec 2025 19:07:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765043105; cv=none; b=WN7NxQQqX/RxON1qfSkkzctwm8MLotiMOZ6ZZiDETXcpkKIYc7VcrRWD7hXPXcNSbNl0Hou4Euumwar5VWTB1iyXtwdK2PImy8UJcgfeB+VvMi2s0nOVlx1ciJHf62poqVvs1P7vwpYFVeeriCnFxw+oPHRQxkM47RvsYXoLLv4=
+	t=1765048022; cv=none; b=fIR3fXX5X20WJVHM9JPw6f9p5iCzNyNzIoa/6VygzGmg+P3TJcCaoi1m2t1UI9Sp4vkdvAGGFDpj7HCEr5M7r11A4rPyNViQ8KbkTAI1vFztfJ2C9h5oWq9OTIzdslU8D/aqwZrjYSMMnJO/g42A2b8alcG41GuvoOON5rX0tnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765043105; c=relaxed/simple;
-	bh=qswf3Tb+Q9pb83Y7WJ37Ch6qQmgONgcUqch58+s2XMs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=epoXkouXraOFajhpgErN/dFNHxCL8A58CCxjhI+RgWo+1b0O8xD5/VliPIe3N/cmbfTPTfd0uWz6cG9oeyaPLN9Apx6mq3DDNIvYvVWpD6h9DLCOSr8rdceuYgDmWGgY98Mb5Oun2AAG2uFeA4u9MeEFhhQb/h9ebLTZttrJTrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mSzcXALd; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1765043091;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=pxZyHJEELq7EvWTolS5dAbDs7d83TO9QGKdDxI0rYC8=;
-	b=mSzcXALdBFsgnErTPMEiPgVla8MkhvQ5ybJpfR7XM5v4ZyP5VWs0lMbJDBH5N22z1igr4m
-	RTuX0JPrq0YQ/WYATUXmF0/5w1i+LOzuiHCy7lgTNxiDQs+GG2CcVZl6XauLZ26S4qEAeC
-	XRGoY3HCnXWANEwtXhebEHm2pVzV/Y4=
-From: Thorsten Blum <thorsten.blum@linux.dev>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal: core: Fix typo and indentation in comments
-Date: Sat,  6 Dec 2025 18:42:45 +0100
-Message-ID: <20251206174245.116391-2-thorsten.blum@linux.dev>
+	s=arc-20240116; t=1765048022; c=relaxed/simple;
+	bh=qrhhcKcNBfVXQT4eSJlpNHbUO9n+c3ZifsCeZcpf+l0=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=XlfUSvaoSwOgczQrTVcQFGlVH/owNKojqmd7J11R33xtSOup9l7qNLCt4McE5x9nwvX9QgzoQpYC1kGQDLSA6SWh2qu/NmBPYtzeb+EzwZeEk8T0duNgI8k70bR58LUiadskasc/qrsEG/kxWhGH129Onxi5OfLaRR9jhggRtKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZjv6B9v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54973C4CEF5;
+	Sat,  6 Dec 2025 19:07:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765048021;
+	bh=qrhhcKcNBfVXQT4eSJlpNHbUO9n+c3ZifsCeZcpf+l0=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=PZjv6B9vrvmIyQQJ5bsnxAi1ampdL81fQqwqWjEANWeuJ5RJ0jBZegohkArg3KkSl
+	 +Tpogv1gJXOCDpcltC72NFXIz2JOXMum2naGeEEefKeAmZA0Ae06n3LPV4dLLjQNVO
+	 ATKf5drsewp1F/ipHd5iXi0hShVLlcT1kpNukFbWoMl4uV0QFegZ6nC6GhUde9NjcU
+	 T2NF12I3/y/8MIfgrbe9twidqQSKG1cPyppM8fFEJxilR1dRlBoFpYHEFbqwwu50j0
+	 +fWqWBVZ8avCcWzutMRSe06RREUV9/HSXpnEE/C52vz2p+KEF9QjH6wDeGp1QD8kQk
+	 s5Q0akuHG3/Qw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7870E3808200;
+	Sat,  6 Dec 2025 19:03:59 +0000 (UTC)
+Subject: Re: [GIT PULL] utility updates for Linux-6.19-merge
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <CAJvTdKkNX-iyB5Zuk+fRQCaihXSkdZz19FsvB8wD8H+OGw0hzg@mail.gmail.com>
+References: <CAJvTdKkNX-iyB5Zuk+fRQCaihXSkdZz19FsvB8wD8H+OGw0hzg@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJvTdKkNX-iyB5Zuk+fRQCaihXSkdZz19FsvB8wD8H+OGw0hzg@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-v2025.12.02
+X-PR-Tracked-Commit-Id: 9c0bad7508a81110b3216231bde2a10baf7126f0
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 10003ff8ce7273d1fe045d63d1a5c9d979e3d47e
+Message-Id: <176504783795.2170003.12454129453307062336.pr-tracker-bot@kernel.org>
+Date: Sat, 06 Dec 2025 19:03:57 +0000
+To: Len Brown <lenb@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM list <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-s/tmperature/temperature/ and adjust the indentation of the @ops
-parameter description to improve readability.
+The pull request you sent on Fri, 5 Dec 2025 10:46:13 -0500:
 
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
----
- drivers/thermal/thermal_core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-v2025.12.02
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 90e7edf16a52..dc9f7416f7ff 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -500,7 +500,7 @@ void thermal_zone_set_trip_hyst(struct thermal_zone_device *tz,
- 	WRITE_ONCE(trip->hysteresis, hyst);
- 	thermal_notify_tz_trip_change(tz, trip);
- 	/*
--	 * If the zone temperature is above or at the trip tmperature, the trip
-+	 * If the zone temperature is above or at the trip temperature, the trip
- 	 * is in the trips_reached list and its threshold is equal to its low
- 	 * temperature.  It needs to stay in that list, but its threshold needs
- 	 * to be updated and the list ordering may need to be restored.
-@@ -1043,7 +1043,7 @@ static void thermal_cooling_device_init_complete(struct thermal_cooling_device *
-  * @np:		a pointer to a device tree node.
-  * @type:	the thermal cooling device type.
-  * @devdata:	device private data.
-- * @ops:		standard thermal cooling devices callbacks.
-+ * @ops:	standard thermal cooling devices callbacks.
-  *
-  * This interface function adds a new thermal cooling device (fan/processor/...)
-  * to /sys/class/thermal/ folder as cooling_device[0-*]. It tries to bind itself
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/10003ff8ce7273d1fe045d63d1a5c9d979e3d47e
+
+Thank you!
+
 -- 
-Thorsten Blum <thorsten.blum@linux.dev>
-GPG: 1D60 735E 8AEF 3BE4 73B6  9D84 7336 78FD 8DFE EAD4
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
