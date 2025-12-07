@@ -1,77 +1,122 @@
-Return-Path: <linux-pm+bounces-39268-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39269-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2707BCAACA2
-	for <lists+linux-pm@lfdr.de>; Sat, 06 Dec 2025 20:08:43 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id B667BCAAFF2
+	for <lists+linux-pm@lfdr.de>; Sun, 07 Dec 2025 01:47:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B1A11308D5BA
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Dec 2025 19:07:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id BD09E3005D0E
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Dec 2025 00:47:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC66C303A35;
-	Sat,  6 Dec 2025 19:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4F0E1D63F3;
+	Sun,  7 Dec 2025 00:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PZjv6B9v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="coy/8GRZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4A42BEC45;
-	Sat,  6 Dec 2025 19:07:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9FC35965;
+	Sun,  7 Dec 2025 00:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765048022; cv=none; b=fIR3fXX5X20WJVHM9JPw6f9p5iCzNyNzIoa/6VygzGmg+P3TJcCaoi1m2t1UI9Sp4vkdvAGGFDpj7HCEr5M7r11A4rPyNViQ8KbkTAI1vFztfJ2C9h5oWq9OTIzdslU8D/aqwZrjYSMMnJO/g42A2b8alcG41GuvoOON5rX0tnY=
+	t=1765068464; cv=none; b=ONaDBsv34mWBfF7hKqd7D4zDjHkgGlDAz2nqU4Y+89es/+xCT3tEgB+PXBJ/S/gDiPkWCsr5jv8pri3XSM3o1HueNtkPQ4vuL4jomUtc76tI+rajYwEBYnd3Kkp17e/74fryHLTgezBh729a05A4dc99W7jJnl6BDH5LesDq5YE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765048022; c=relaxed/simple;
-	bh=qrhhcKcNBfVXQT4eSJlpNHbUO9n+c3ZifsCeZcpf+l0=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=XlfUSvaoSwOgczQrTVcQFGlVH/owNKojqmd7J11R33xtSOup9l7qNLCt4McE5x9nwvX9QgzoQpYC1kGQDLSA6SWh2qu/NmBPYtzeb+EzwZeEk8T0duNgI8k70bR58LUiadskasc/qrsEG/kxWhGH129Onxi5OfLaRR9jhggRtKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PZjv6B9v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54973C4CEF5;
-	Sat,  6 Dec 2025 19:07:01 +0000 (UTC)
+	s=arc-20240116; t=1765068464; c=relaxed/simple;
+	bh=7fLftqxZw1yXBlTthiEFPzfncPEc9sSS3KOwUnxqTwM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=juv8iNfHcLcfD4FegEL7SGhiFPp5uTgy9mFt2LZr6hFMncIzencaIiM5Fc27IJo6P+BmZYz/U9Fj+Gs8vUbPQxtZVCsaWo/SvVG/I9pJpTHYC1XRN/369FW3TbufePLbDwkXw4Kbbmsvs2dDrGXcCL+eP7Sdwgr2tFZrxWkIxPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=coy/8GRZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC10FC4CEF5;
+	Sun,  7 Dec 2025 00:47:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765048021;
-	bh=qrhhcKcNBfVXQT4eSJlpNHbUO9n+c3ZifsCeZcpf+l0=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=PZjv6B9vrvmIyQQJ5bsnxAi1ampdL81fQqwqWjEANWeuJ5RJ0jBZegohkArg3KkSl
-	 +Tpogv1gJXOCDpcltC72NFXIz2JOXMum2naGeEEefKeAmZA0Ae06n3LPV4dLLjQNVO
-	 ATKf5drsewp1F/ipHd5iXi0hShVLlcT1kpNukFbWoMl4uV0QFegZ6nC6GhUde9NjcU
-	 T2NF12I3/y/8MIfgrbe9twidqQSKG1cPyppM8fFEJxilR1dRlBoFpYHEFbqwwu50j0
-	 +fWqWBVZ8avCcWzutMRSe06RREUV9/HSXpnEE/C52vz2p+KEF9QjH6wDeGp1QD8kQk
-	 s5Q0akuHG3/Qw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7870E3808200;
-	Sat,  6 Dec 2025 19:03:59 +0000 (UTC)
-Subject: Re: [GIT PULL] utility updates for Linux-6.19-merge
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAJvTdKkNX-iyB5Zuk+fRQCaihXSkdZz19FsvB8wD8H+OGw0hzg@mail.gmail.com>
-References: <CAJvTdKkNX-iyB5Zuk+fRQCaihXSkdZz19FsvB8wD8H+OGw0hzg@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJvTdKkNX-iyB5Zuk+fRQCaihXSkdZz19FsvB8wD8H+OGw0hzg@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-v2025.12.02
-X-PR-Tracked-Commit-Id: 9c0bad7508a81110b3216231bde2a10baf7126f0
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 10003ff8ce7273d1fe045d63d1a5c9d979e3d47e
-Message-Id: <176504783795.2170003.12454129453307062336.pr-tracker-bot@kernel.org>
-Date: Sat, 06 Dec 2025 19:03:57 +0000
-To: Len Brown <lenb@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM list <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+	s=k20201202; t=1765068464;
+	bh=7fLftqxZw1yXBlTthiEFPzfncPEc9sSS3KOwUnxqTwM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=coy/8GRZuoMbr6M64r5eXBG6gA+bH+freCUXfZVK7mAIXq2OG4rphN+q1SjIQPodp
+	 HJoEu1k0rKCm50ZTozkQ3BB8eZYYD78sUD3CJGNFPpUOB1v940+1eHXeU/l8d9FFhe
+	 jcW4kHClrCaB9TozywOLsZBeTe+FsKfAfjVEA9zBHrhI1yzeiyvetZ+c1brm+5msst
+	 zVgo9uf6WnXzO8ih/IJJkDCCwnC3m2Zpifw2ERUfbtw0N50qv/z7pnx4k8uoQT/Nzg
+	 dk4C3majEPHfFkLItUJ17QgmSmWNAqLcCA1I+73OdrmivPmpoeV1PmXJId3nX2cId0
+	 9VnUtJmDKPqxA==
+From: Jakub Kicinski <kuba@kernel.org>
+To: davem@davemloft.net
+Cc: netdev@vger.kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch,
+	horms@kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	lukasz.luba@arm.com,
+	rafael@kernel.org,
+	pavel@kernel.org,
+	lenb@kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH net] ynl: add regen hint to new headers
+Date: Sat,  6 Dec 2025 16:47:40 -0800
+Message-ID: <20251207004740.1657799-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Fri, 5 Dec 2025 10:46:13 -0500:
+Recent commit 68e83f347266 ("tools: ynl-gen: add regeneration comment")
+added a hint how to regenerate the code to the headers. Update
+the new headers from this release cycle to also include it.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-v2025.12.02
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+CC: lukasz.luba@arm.com
+CC: rafael@kernel.org
+CC: pavel@kernel.org
+CC: lenb@kernel.org
+CC: linux-pm@vger.kernel.org
+---
+ include/uapi/linux/energy_model.h | 1 +
+ kernel/power/em_netlink_autogen.h | 1 +
+ kernel/power/em_netlink_autogen.c | 1 +
+ 3 files changed, 3 insertions(+)
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/10003ff8ce7273d1fe045d63d1a5c9d979e3d47e
-
-Thank you!
-
+diff --git a/include/uapi/linux/energy_model.h b/include/uapi/linux/energy_model.h
+index 4ec4c0eabbbb..0bcad967854f 100644
+--- a/include/uapi/linux/energy_model.h
++++ b/include/uapi/linux/energy_model.h
+@@ -2,6 +2,7 @@
+ /* Do not edit directly, auto-generated from: */
+ /*	Documentation/netlink/specs/em.yaml */
+ /* YNL-GEN uapi header */
++/* To regenerate run: tools/net/ynl/ynl-regen.sh */
+ 
+ #ifndef _UAPI_LINUX_ENERGY_MODEL_H
+ #define _UAPI_LINUX_ENERGY_MODEL_H
+diff --git a/kernel/power/em_netlink_autogen.h b/kernel/power/em_netlink_autogen.h
+index 78ce609641f1..140ab548103c 100644
+--- a/kernel/power/em_netlink_autogen.h
++++ b/kernel/power/em_netlink_autogen.h
+@@ -2,6 +2,7 @@
+ /* Do not edit directly, auto-generated from: */
+ /*	Documentation/netlink/specs/em.yaml */
+ /* YNL-GEN kernel header */
++/* To regenerate run: tools/net/ynl/ynl-regen.sh */
+ 
+ #ifndef _LINUX_EM_GEN_H
+ #define _LINUX_EM_GEN_H
+diff --git a/kernel/power/em_netlink_autogen.c b/kernel/power/em_netlink_autogen.c
+index a7a09ab1d1c2..ceb3b2bb6ebe 100644
+--- a/kernel/power/em_netlink_autogen.c
++++ b/kernel/power/em_netlink_autogen.c
+@@ -2,6 +2,7 @@
+ /* Do not edit directly, auto-generated from: */
+ /*	Documentation/netlink/specs/em.yaml */
+ /* YNL-GEN kernel source */
++/* To regenerate run: tools/net/ynl/ynl-regen.sh */
+ 
+ #include <net/netlink.h>
+ #include <net/genetlink.h>
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.52.0
+
 
