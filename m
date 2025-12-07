@@ -1,94 +1,156 @@
-Return-Path: <linux-pm+bounces-39270-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39271-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB309CAB3D8
-	for <lists+linux-pm@lfdr.de>; Sun, 07 Dec 2025 12:23:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 06D53CAB5BA
+	for <lists+linux-pm@lfdr.de>; Sun, 07 Dec 2025 15:01:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2F735305AE77
-	for <lists+linux-pm@lfdr.de>; Sun,  7 Dec 2025 11:23:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 35F863049B30
+	for <lists+linux-pm@lfdr.de>; Sun,  7 Dec 2025 14:01:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C09C23C50A;
-	Sun,  7 Dec 2025 11:23:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506E82E9759;
+	Sun,  7 Dec 2025 14:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nowSBs0H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EsCx8mM8"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 273177640E
-	for <linux-pm@vger.kernel.org>; Sun,  7 Dec 2025 11:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06DCA16132F;
+	Sun,  7 Dec 2025 14:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765106596; cv=none; b=O5UgbBH1xt1+iZ9HJnkBm+FNGdVaeHu55K0WnyjMTspOgY6dRQH3pWqWuIs4LnBJOrn5Q6JAHHtyhc2nV1ZAUdgDoSlUK9OnC23v//JYzENNdChbAFS52fNjoyrcD/1R+obrGIDbj495UwKpcE9iMmkXPh4IA4gMcl9CR0GxJMA=
+	t=1765116074; cv=none; b=G1Q79u0ZNVqScYkzk7jDB/QTdoX8s2g0FbBfWbiTT/xsX4dNdYXgPBJBGUy9oychWtPifJ/6v10goNsgFzBAkNhFLPUlecFnWh3GIBfUiQLkW7PbweoKMvHa/FwAPVSAvfjHJF2T30OnQnz4lSgUw4UWrNBz/aWfqSA4rEwxTf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765106596; c=relaxed/simple;
-	bh=e9HBNQgjUh1rsH/YnTHVmfpzTgApm/xoqNTylAfXTcg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p4Nk1c8JQpGhidy8d5OEuFg1lg/1VCj/oNk90QctwGYt/2mviMNJHtwEI/X+vv+Dfjqy0NPLOE0L+j5KwbVVUITSxlT/cAk3KLYV4uI9vdGFoLSD9worQypmfzsdRCM7RN0Sfuc9qH4E1OiQ7hjKgchwhr+586Fga4uWk9+CNSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nowSBs0H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D44AAC116B1
-	for <linux-pm@vger.kernel.org>; Sun,  7 Dec 2025 11:23:15 +0000 (UTC)
+	s=arc-20240116; t=1765116074; c=relaxed/simple;
+	bh=XIPzPHGdu9MVAiWYzmLVkJFzpk/+VDBaaF5v6Z7S21s=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ce4FcUxQ1282a91kbMuMJ3xs1MO0Vu5NJ+DKabqD9sgv2tuywNwEutXWhartsJ5TTS8iCWsuYdMEaAyXLkNrftercW7VS9Ng70vfhrLlzE2WPBc87zESMPFC1msWa8D3c7VodcZSSEtsCPwAC/6GYbTm5OY9b+gIQCSPnCHoTG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EsCx8mM8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AD22C4CEFB;
+	Sun,  7 Dec 2025 14:00:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765106595;
-	bh=e9HBNQgjUh1rsH/YnTHVmfpzTgApm/xoqNTylAfXTcg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=nowSBs0HbbS4urUlI7eYDqEYmuJDXW8ZrfFhjgtwu2Xq75ZoEXRhR45fhM+VFoDXc
-	 uL5cqzoV+VaeQ57grcpYNykmZbgf/SYkCYh/W59pWZecf1WkbWYlqoVe99AklzrWwj
-	 sIkmKamplwlPjg/Bl32KqFP3sQEM0igjAbV/4zRqiAzeaNM3LK4U83lOvYveYucBTK
-	 tPWLkvfpOQf0E/a/JIp0PCedL0D68FkTx8FiFMbBBNtMRu12q+p8AGM7qLl31QY/cd
-	 7g4Cm0qsFaZfIGyWh+5vj7+8S98xN6xKbpItlu/uJD4l+p3OO2ycoKxmy2O4BH5ULn
-	 iL83ZPjLfsfgA==
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7c704bdd57aso2093520a34.3
-        for <linux-pm@vger.kernel.org>; Sun, 07 Dec 2025 03:23:15 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU+wEq8aAasjtOh7KxyuEGYVezZS27B4dULY4XaOAyQq/mdWRpEIu+ZmF5nlFwLUvGPmLvt91gXYw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTCnjd0FuiNqfWyvhMkCnbvZjW9yfzzWPD2I/0VNmS2FVJ9mYN
-	gDGXm5dRhi4B2yO8vUUgu8T38f+QbnktLNcw0DQQDqoogHKZt22j/Rms8nF9RPW2/4m4lAJ0K3G
-	5kH+Y/OlI8HrWbK59DXTxulhNZgKLq4w=
-X-Google-Smtp-Source: AGHT+IFOqX6bOvqk1FUQ9VHLw8abr4UWv14E6gdAhuKmEwnGkoicIKL75B0LBMR8Kohk2nJgzKZB1a/DQtki1s71fcA=
-X-Received: by 2002:a05:6820:1b19:b0:659:9a49:8f3f with SMTP id
- 006d021491bc7-6599a999b0emr2140301eaf.80.1765106595174; Sun, 07 Dec 2025
- 03:23:15 -0800 (PST)
+	s=k20201202; t=1765116073;
+	bh=XIPzPHGdu9MVAiWYzmLVkJFzpk/+VDBaaF5v6Z7S21s=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EsCx8mM87A8HyrcrJI3CQaCEoWdzjxwjyxeqqWomtZPKX5oKnNhnVYczlV7yr+api
+	 h1nrsAZDZtwq8anuESeyBIikhqAGux8Sco7E2Rn/vfqVt3PrLc2LEXvN4NSCJv8VNd
+	 QVVaCfRbNh41EPha2La8wU9XYpzaRw5oeg/WKfl2DGoA8/1tRRDfQAYNuQDEo9c9yk
+	 dqBAsLPZNDc43gMPXaP5nnzCsVtGWyKsl2w7so4uosQ6fq9FfMfKiMuPsd2YnYkyMA
+	 RKvB9A/O4JQAg0lFIEGn3i1jJw/CzAX645QjvGuZeOKfDEgbv9poaPspTv29soMaUq
+	 UJU9YlFfffWtg==
+Date: Sun, 7 Dec 2025 14:00:46 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Romain Gantois <romain.gantois@bootlin.com>
+Cc: MyungJoo Ham <myungjoo.ham@samsung.com>, Chanwoo Choi
+ <cw00.choi@samsung.com>, Guenter Roeck <linux@roeck-us.net>, Peter Rosin
+ <peda@axentia.se>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy
+ Shevchenko <andy@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael
+ Hennerich <Michael.Hennerich@analog.com>, Mariel Tinaco
+ <Mariel.Tinaco@analog.com>, Kevin Tsai <ktsai@capellamicro.com>, Linus
+ Walleij <linus.walleij@linaro.org>, Dmitry Torokhov
+ <dmitry.torokhov@gmail.com>, Eugen Hristev <eugen.hristev@linaro.org>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Hans de
+ Goede <hansg@kernel.org>, Support Opensource
+ <support.opensource@diasemi.com>, Paul Cercueil <paul@crapouillou.net>,
+ Iskren Chernev <me@iskren.info>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, Matheus Castello
+ <matheus@castello.eng.br>, Saravanan Sekar <sravanhome@gmail.com>, Matthias
+ Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@collabora.com>, Casey Connolly
+ <casey.connolly@linaro.org>, Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+ Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, Amit
+ Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Sylwester
+ Nawrocki <s.nawrocki@samsung.com>, Olivier Moysan
+ <olivier.moysan@foss.st.com>, Arnaud Pouliquen
+ <arnaud.pouliquen@foss.st.com>, Maxime Coquelin
+ <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+ <alexandre.torgue@foss.st.com>, David Lechner <dlechner@baylibre.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] iio: inkern: Use namespaced exports
+Message-ID: <20251207140046.56322d6f@jic23-huawei>
+In-Reply-To: <5948030.DvuYhMxLoT@fw-rgant>
+References: <20251201-iio-inkern-use-namespaced-exports-v1-1-da1935f70243@bootlin.com>
+	<78240755-44dc-4835-aca5-99540cca0304@baylibre.com>
+	<5948030.DvuYhMxLoT@fw-rgant>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251126101636.205505-1-yang.yang@vivo.com> <82bcdf73-54c5-4220-86c0-540a5cb59bb7@vivo.com>
- <CAJZ5v0hm=jfSyBXF0qMYnpATJf56JTxQ-+4JBy3YMjS0cMUMHg@mail.gmail.com>
- <12794222.O9o76ZdvQC@rafael.j.wysocki> <fcecd822-a2ec-43e6-8dc4-290516e2187d@acm.org>
-In-Reply-To: <fcecd822-a2ec-43e6-8dc4-290516e2187d@acm.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sun, 7 Dec 2025 12:23:04 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iT_SgQPP6R8Ys37h80Db7aDu7o0UaVW1EeiN=TtV+Lbg@mail.gmail.com>
-X-Gm-Features: AQt7F2oRevcA5FNEmmTCrFU3lKMiva1wqDaOG8IVl98MO5Xc4XUdEPXLwm3X7zc
-Message-ID: <CAJZ5v0iT_SgQPP6R8Ys37h80Db7aDu7o0UaVW1EeiN=TtV+Lbg@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: sleep: Do not flag runtime PM workqueue as freezable
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	YangYang <yang.yang@vivo.com>, Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Dec 5, 2025 at 8:11=E2=80=AFPM Bart Van Assche <bvanassche@acm.org>=
- wrote:
->
-> On 12/5/25 5:24 AM, Rafael J. Wysocki wrote:
-> > For example, it has been reported that blk_queue_enter() may deadlock
-> > during a system suspend transition because of the pm_request_resume()
-> > usage in it [1].
->
-> System resume is also affected. If pm_request_resume() is called before
-> the device it applies to is resumed by the system resume code then the
-> pm_request_resume() call also hangs.
+On Tue, 02 Dec 2025 08:30:58 +0100
+Romain Gantois <romain.gantois@bootlin.com> wrote:
 
-Rather, the work item queued by it will not make progress.
+> On Monday, 1 December 2025 18:15:54 CET David Lechner wrote:
+> > On 12/1/25 4:59 AM, Romain Gantois wrote:  
+> > > Use namespaced exports for IIO consumer API functions.
+> > > 
+> > > Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+> > > ---  
+> > 
+> > ...
+> >   
+> > > diff --git a/drivers/iio/dac/ds4424.c b/drivers/iio/dac/ds4424.c
+> > > index a8198ba4f98a..33d6692f46fe 100644
+> > > --- a/drivers/iio/dac/ds4424.c
+> > > +++ b/drivers/iio/dac/ds4424.c
+> > > @@ -14,7 +14,6 @@
+> > > 
+> > >  #include <linux/iio/iio.h>
+> > >  #include <linux/iio/driver.h>
+> > >  #include <linux/iio/machine.h>
+> > > 
+> > > -#include <linux/iio/consumer.h>  
+> > 
+> > Unrelated change?  
+> 
+> Indeed, I'll leave that out in v2.
 
-OK, I'll add this information to the patch changelog while applying it.
+Please spin a precursor patch that makes that change.
+That way we can easily check all files either both include that header
+and have the namespace enabled, or neither.
 
-> Otherwise this patch looks good to me.
+I might merge this is a slightly funny way that leave it initially
+not meeting that rule so that the precursor isn't in the immutable branch
+for other subsystems but lets keep it logical in the patch set!
 
-Thank you!
+Jonathan
+
+> 
+> > >  #define DS4422_MAX_DAC_CHANNELS		2
+> > >  #define DS4424_MAX_DAC_CHANNELS		4
+> > > 
+> > > @@ -321,3 +320,4 @@ MODULE_AUTHOR("Ismail H. Kose
+> > > <ismail.kose@maximintegrated.com>");> 
+> > >  MODULE_AUTHOR("Vishal Sood <vishal.sood@maximintegrated.com>");
+> > >  MODULE_AUTHOR("David Jung <david.jung@maximintegrated.com>");
+> > >  MODULE_LICENSE("GPL v2");
+> > > 
+> > > +MODULE_IMPORT_NS("IIO_CONSUMER");  
+> > 
+> > Is this actually needed if we don't use anything from consumer.h?  
+> 
+> No, it's not.
+> 
+> Thanks,
+> 
+
 
