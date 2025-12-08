@@ -1,150 +1,239 @@
-Return-Path: <linux-pm+bounces-39306-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39307-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AB32CAD1C9
-	for <lists+linux-pm@lfdr.de>; Mon, 08 Dec 2025 13:26:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9DE6CAD328
+	for <lists+linux-pm@lfdr.de>; Mon, 08 Dec 2025 13:49:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 3455E3005017
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Dec 2025 12:26:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 97F313045F58
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Dec 2025 12:47:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A26092E5437;
-	Mon,  8 Dec 2025 12:26:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QVxz2jbk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A77311C30;
+	Mon,  8 Dec 2025 12:47:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7892D46BD
-	for <linux-pm@vger.kernel.org>; Mon,  8 Dec 2025 12:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8D3D221FCF;
+	Mon,  8 Dec 2025 12:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765196768; cv=none; b=KJbRp8aueJEEWhr9vrau4egv+8Dd1T9lSyyPykWkr/oLqSo4CZ7bKkZh5XeCOOlbHR1IRuTAWYdJb+NzR3N1BjwqgSEdSD1o1tEJFp9Mq4rcXTpp9OipqXn74z9yawI9O1wZIlJq+BDqjqyOxfN2D0MlaUhP8BDTucbkCHOXINw=
+	t=1765198038; cv=none; b=fIo6yRDNujnyqOpqPAIcANZ5uS9WaNz0IEggUtUvVc3c9/ZyeeWVQI+glBpkwbr6+Iu6vb4+RgGbXwLxiBBU2ZEKAth0r2JbXXRzOQnKyQ6ZgtHc3sfh47xCuopcUxkXKB+y2geFX6nw+F9h/QoDENf4B3a6wOlZPI4R2vkyY2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765196768; c=relaxed/simple;
-	bh=H4eRlFes40XZLasvmYWo0/7K4YgDUXXtPkHgEcOXS6U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Fy8lHPecYfod1zlU7ridBXtPYDCj5fG8oB8zamCeiSRgnOQvy/JWvwCdk6fGEvJ7HlmUz/26miNZXwR/F+4mj0DoS7Efq7Rj+XzyBvpOSIfjz/pPUn8OvRvf/wlYt2ZkTGqO5vk417ikaVTE06m0/2rLVajlaufWq/+AQz151LY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QVxz2jbk; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-78a6c7ac3caso41088687b3.0
-        for <linux-pm@vger.kernel.org>; Mon, 08 Dec 2025 04:26:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1765196766; x=1765801566; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vZt3TabWTyFSBA7SZOawQNFxfo8ZjRuT909uZclWvj8=;
-        b=QVxz2jbkesCgPV+DPr/vF25FOEWX73CmKGqF5A5PVnwTDMIxSxUMfB8ovl2V9hr/Oj
-         8osKy+IHHiP2mC44KRNGQQfEayx9dbn3VF3r2tbJy4JuLARGDstnaaF3H+0sqQadUFpc
-         Z5VIo47t+8dQbbKNOUbKrQzMlWK8W8EgbUJU+efTzSgdTeajr2O6tbwaRY41ZzuLdPBP
-         XVuPiog1Ugmj6ghAU8LhY1K3VwYeuu5AweNXbyLgos4BAvOrrho1rOv0MW9Rd5giPsxX
-         UyHpS4etCnRJp+mhi1ZbtBkw3p3R+iSVIHW4rOhzbBAg3w0CgbCjj5gITfTvAETKOW1s
-         JiLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765196766; x=1765801566;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vZt3TabWTyFSBA7SZOawQNFxfo8ZjRuT909uZclWvj8=;
-        b=XCGHoRJc4PkJgZkZinz0qYDPEm+ezNNXFVlWc0xHHlx0W2jHvIagMjA6lHTmEXB+c5
-         wnTr/Y1AomovlW9aE7helRawm+bOSiaw337IkRyJSg4RRyHjEooczGzToqHY9N1avzoL
-         yzc3723vVDyaTB5R8hEn4OrAJlVNlwgEfIQrThFOfokYN2wusmERuXIZwSoWWaw/D9FT
-         ie3vkEfISPvv/Sr2QGpoMu5lei3vYf1ekji0iYBb+lq0ditYUiV5ZvD89Ruu3k65Uvr6
-         NU8ODiSe9leUh4yjPJMw0Xr5pMD/JDPdXpvga0Qnw7Rn8tpcyXYGLlJnnnAJwOMr6smR
-         7Oaw==
-X-Forwarded-Encrypted: i=1; AJvYcCVDC8+6ZeT9BCInPJJiEHef+WWh32rKOZgUDIZTl/0lAbTxfACbowMD+ngke7dXbODyT9wRnkj/eg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGPXXKr5jRhhv5h+Q/3zF5uvwU8+i78iuKcelumMsc8x2uwceu
-	oKiaui0q/CcMqHq0x17zt3mFyLUIRAyDrGxVxWzJyWojUqMwn4U0mTuYy/Om4G/OmVk5pLCy0OG
-	W5eZlQj7+f35Swb8KrowtEgNSEbPh2p706DcSPi4zsQ==
-X-Gm-Gg: ASbGncvsIyKWQG/zP7TIkhNdq1Mcm3VbXqQm3/KQnTmZ1kdiEfQdmfs5rPwgruBR9W2
-	ETdmPZIX9+slvhSopLrrKpfzZS9GLfb0CONZA5lqANMU98T7kOjLxgiZ3IUcjWtV+9HXoDO6jWu
-	onN/cHTDQbRomlEbfsqC4qqrDSDviiss2jux4dD0ch4rZAZsnQShVrfBMKIuZn644XML4uWHzi+
-	TzZFfsYwNSkrcb+0JWPYUCRpTGfwX/D06lcYe1LNZqFJiLV+2aTUP8ZOUpPKF1gNRlptzIz
-X-Google-Smtp-Source: AGHT+IF6MqQA4bkmhAJPeVaQca00cmapujBX1CfRi0eGTrtCM9ILNfiWIU9u8UsYIv2GuQ7ieXOfeMLccw2NZ7Ci7AU=
-X-Received: by 2002:a05:690e:1244:b0:641:f5bc:698c with SMTP id
- 956f58d0204a3-6444e7efa27mr5658268d50.72.1765196765550; Mon, 08 Dec 2025
- 04:26:05 -0800 (PST)
+	s=arc-20240116; t=1765198038; c=relaxed/simple;
+	bh=P0ubJJKxEVDXiytzW+1D+A2oljwWKuKAhLPU2XzbyTw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QTanAc6nkL28e15+iIlPjFjjG3Yr+YzNTxg8QQ9uooRpK0V8oZEP0g8bn4J+FGiqVMwy/ygl1afm/eXXIW+idKPAbSV7MnzfISWeYfcW1eEezyAQzC/m5oGwR3X+et1n25BqME7ZbQp0LYt3jnlg3pzEgLRbl8WORsbL6GlN+OI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DDE931691;
+	Mon,  8 Dec 2025 04:47:07 -0800 (PST)
+Received: from [10.1.31.65] (e127648.arm.com [10.1.31.65])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8840F3F740;
+	Mon,  8 Dec 2025 04:47:13 -0800 (PST)
+Message-ID: <6347bf83-545b-4e85-a5af-1d0c7ea24844@arm.com>
+Date: Mon, 8 Dec 2025 12:47:11 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251119-pmdomain-hierarchy-onecell-v4-0-f25a1d5022f8@baylibre.com>
-In-Reply-To: <20251119-pmdomain-hierarchy-onecell-v4-0-f25a1d5022f8@baylibre.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 8 Dec 2025 13:25:29 +0100
-X-Gm-Features: AQt7F2qsC1ugYAKEuQ1qk2c6Z1cB6OEvu0GB4iPLjG4SxCgrMPQ_kWL48UjxFTI
-Message-ID: <CAPDyKFor41f=-vpaborhOziYu1RSnxL6-mezBQTHLPVM_TEAuA@mail.gmail.com>
-Subject: Re: [PATCH RFC v4 0/2] pmdomain: core: add support for domain
- hierarchies in DT
-To: "Kevin Hilman (TI.com)" <khilman@baylibre.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org, arm-scmi@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: Performance regressions introduced via Revert "cpuidle: menu:
+ Avoid discarding useful information" on 5.15 LTS
+To: Harshvardhan Jha <harshvardhan.j.jha@oracle.com>,
+ Doug Smythies <dsmythies@telus.net>
+Cc: 'Sasha Levin' <sashal@kernel.org>,
+ 'Greg Kroah-Hartman' <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org,
+ stable@vger.kernel.org, "'Rafael J. Wysocki'" <rafael@kernel.org>,
+ 'Daniel Lezcano' <daniel.lezcano@linaro.org>
+References: <d4690be7-9b81-498e-868b-fb4f1d558e08@oracle.com>
+ <39c7d882-6711-4178-bce6-c1e4fc909b84@arm.com>
+ <005401dc64a4$75f1d770$61d58650$@telus.net>
+ <b36a7037-ca96-49ec-9b39-6e9808d6718c@oracle.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <b36a7037-ca96-49ec-9b39-6e9808d6718c@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, 20 Nov 2025 at 01:58, Kevin Hilman (TI.com)
-<khilman@baylibre.com> wrote:
->
-> Currently, PM domains can only support hierarchy for simple
-> providers (e.g. ones with #power-domain-cells = 0).
->
-> Add more generic support by creating an of_genpd helper which can
-> parse a nexus node map, and create domain hierarchy.
->
-> described in section 2.5.1 of the DT spec.
+On 12/8/25 11:33, Harshvardhan Jha wrote:
+> Hi Doug,
+> 
+> On 04/12/25 4:00 AM, Doug Smythies wrote:
+>> On 2025.12.03 08:45 Christian Loehle wrote:
+>>> On 12/3/25 16:18, Harshvardhan Jha wrote:
+>>>> Hi there,
+>>>>
+>>>> While running performance benchmarks for the 5.15.196 LTS tags , it was
+>>>> observed that several regressions across different benchmarks is being
+>>>> introduced when compared to the previous 5.15.193 kernel tag. Running an
+>>>> automated bisect on both of them narrowed down the culprit commit to:
+>>>> - 5666bcc3c00f7 Revert "cpuidle: menu: Avoid discarding useful
+>>>> information" for 5.15
+>>>>
+>>>> Regressions on 5.15.196 include:
+>>>> -9.3% : Phoronix pts/sqlite using 2 processes on OnPrem X6-2
+>>>> -6.3% : Phoronix system/sqlite on OnPrem X6-2
+>>>> -18%  : rds-stress -M 1 (readonly rdma-mode) metrics with 1 depth & 1
+>>>> thread & 1M buffer size on OnPrem X6-2
+>>>> -4 -> -8% : rds-stress -M 2 (writeonly rdma-mode) metrics with 1 depth &
+>>>> 1 thread & 1M buffer size on OnPrem X6-2
+>>>> Up to -30% : Some Netpipe metrics on OnPrem X5-2
+>>>>
+>>>> The culprit commits' messages mention that these reverts were done due
+>>>> to performance regressions introduced in Intel Jasper Lake systems but
+>>>> this revert is causing issues in other systems unfortunately. I wanted
+>>>> to know the maintainers' opinion on how we should proceed in order to
+>>>> fix this. If we reapply it'll bring back the previous regressions on
+>>>> Jasper Lake systems and if we don't revert it then it's stuck with
+>>>> current regressions. If this problem has been reported before and a fix
+>>>> is in the works then please let me know I shall follow developments to
+>>>> that mail thread.
+>>> The discussion regarding this can be found here:
+>>> https://urldefense.com/v3/__https://lore.kernel.org/lkml/36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7/__;!!ACWV5N9M2RV99hQ!MWXEz_wRbaLyJxDign2EXci2qNzAPpCyhi8qIORMdReh0g_yIVIt-Oqov23KT23A_rGBRRxJ4bHb_e6UQA-b9PW7hw$ 
+>>> we explored an alternative to the full revert here:
+>>> https://urldefense.com/v3/__https://lore.kernel.org/lkml/4687373.LvFx2qVVIh@rafael.j.wysocki/__;!!ACWV5N9M2RV99hQ!MWXEz_wRbaLyJxDign2EXci2qNzAPpCyhi8qIORMdReh0g_yIVIt-Oqov23KT23A_rGBRRxJ4bHb_e6UQA9PSf_uMQ$ 
+>>> unfortunately that didn't lead anywhere useful, so Rafael went with the
+>>> full revert you're seeing now.
+>>>
+>>> Ultimately it seems to me that this "aggressiveness" on deep idle tradeoffs
+>>> will highly depend on your platform, but also your workload, Jasper Lake
+>>> in particular seems to favor deep idle states even when they don't seem
+>>> to be a 'good' choice from a purely cpuidle (governor) perspective, so
+>>> we're kind of stuck with that.
+>>>
+>>> For teo we've discussed a tunable knob in the past, which comes naturally with
+>>> the logic, for menu there's nothing obvious that would be comparable.
+>>> But for teo such a knob didn't generate any further interest (so far).
+>>>
+>>> That's the status, unless I missed anything?
+>> By reading everything in the links Chrsitian provided, you can see
+>> that we had difficulties repeating test results on other platforms.
+>>
+>> Of the tests listed herein, the only one that was easy to repeat on my
+>> test server, was the " Phoronix pts/sqlite" one. I got (summary: no difference):
+>>
+>> Kernel 6.18									Reverted			
+>> pts/sqlite-2.3.0			menu rc4		menu rc1		menu rc1		menu rc3	
+>> 				performance		performance		performance		performance	
+>> test	what			ave			ave			ave			ave	
+>> 1	T/C 1			2.147	-0.2%		2.143	0.0%		2.16	-0.8%		2.156	-0.6%
+>> 2	T/C 2			3.468	0.1%		3.473	0.0%		3.486	-0.4%		3.478	-0.1%
+>> 3	T/C 4			4.336	0.3%		4.35	0.0%		4.355	-0.1%		4.354	-0.1%
+>> 4	T/C 8			5.438	-0.1%		5.434	0.0%		5.456	-0.4%		5.45	-0.3%
+>> 5	T/C 12			6.314	-0.2%		6.299	0.0%		6.307	-0.1%		6.29	0.1%
+>>
+>> Where:
+>> T/C means: Threads / Copies
+>> performance means: intel_pstate CPU frequency scaling driver and the performance CPU frequencay scaling governor.
+>> Data points are in Seconds.
+>> Ave means the average test result. The number of runs per test was increased from the default of 3 to 10.
+>> The reversion was manually applied to kernel 6.18-rc1 for that test.
+>> The reversion was included in kernel 6.18-rc3.
+>> Kernel 6.18-rc4 had another code change to menu.c
+>>
+>> In case the formatting gets messed up, the table is also attached.
+>>
+>> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz, 6 cores 12 CPUs.
+>> HWP: Enabled.
+> 
+> I was able to recover performance on 5.15 and 5.4 LTS based kernels
+> after reapplying the revert on X6-2 systems.
+> 
+> Architecture:                x86_64
+>   CPU op-mode(s):            32-bit, 64-bit
+>   Address sizes:             46 bits physical, 48 bits virtual
+>   Byte Order:                Little Endian
+> CPU(s):                      56
+>   On-line CPU(s) list:       0-55
+> Vendor ID:                   GenuineIntel
+>   Model name:                Intel(R) Xeon(R) CPU E5-2690 v4 @ 2.60GHz
+>     CPU family:              6
+>     Model:                   79
+>     Thread(s) per core:      2
+>     Core(s) per socket:      14
+>     Socket(s):               2
+>     Stepping:                1
+>     CPU(s) scaling MHz:      98%
+>     CPU max MHz:             2600.0000
+>     CPU min MHz:             1200.0000
+>     BogoMIPS:                5188.26
+>     Flags:                   fpu vme de pse tsc msr pae mce cx8 apic sep
+> mtrr pg
+>                              e mca cmov pat pse36 clflush dts acpi mmx
+> fxsr sse 
+>                              sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp
+> lm cons
+>                              tant_tsc arch_perfmon pebs bts rep_good
+> nopl xtopol
+>                              ogy nonstop_tsc cpuid aperfmperf pni
+> pclmulqdq dtes
+>                              64 monitor ds_cpl vmx smx est tm2 ssse3
+> sdbg fma cx
+>                              16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic
+> movbe po
+>                              pcnt tsc_deadline_timer aes xsave avx f16c
+> rdrand l
+>                              ahf_lm abm 3dnowprefetch cpuid_fault epb
+> cat_l3 cdp
+>                              _l3 pti intel_ppin ssbd ibrs ibpb stibp
+> tpr_shadow 
+>                              flexpriority ept vpid ept_ad fsgsbase
+> tsc_adjust bm
+>                              i1 hle avx2 smep bmi2 erms invpcid rtm cqm
+> rdt_a rd
+>                              seed adx smap intel_pt xsaveopt cqm_llc
+> cqm_occup_l
+>                              lc cqm_mbm_total cqm_mbm_local dtherm arat
+> pln pts 
+>                              vnmi md_clear flush_l1d
+> Virtualization features:     
+>   Virtualization:            VT-x
+> Caches (sum of all):         
+>   L1d:                       896 KiB (28 instances)
+>   L1i:                       896 KiB (28 instances)
+>   L2:                        7 MiB (28 instances)
+>   L3:                        70 MiB (2 instances)
+> NUMA:                        
+>   NUMA node(s):              2
+>   NUMA node0 CPU(s):         0-13,28-41
+>   NUMA node1 CPU(s):         14-27,42-55
+> Vulnerabilities:             
+>   Gather data sampling:      Not affected
+>   Indirect target selection: Not affected
+>   Itlb multihit:             KVM: Mitigation: Split huge pages
+>   L1tf:                      Mitigation; PTE Inversion; VMX conditional
+> cache fl
+>                              ushes, SMT vulnerable
+>   Mds:                       Mitigation; Clear CPU buffers; SMT vulnerable
+>   Meltdown:                  Mitigation; PTI
+>   Mmio stale data:           Mitigation; Clear CPU buffers; SMT vulnerable
+>   Reg file data sampling:    Not affected
+>   Retbleed:                  Not affected
+>   Spec rstack overflow:      Not affected
+>   Spec store bypass:         Mitigation; Speculative Store Bypass
+> disabled via p
+>                              rctl
+>   Spectre v1:                Mitigation; usercopy/swapgs barriers and
+> __user poi
+>                              nter sanitization
+>   Spectre v2:                Mitigation; Retpolines; IBPB conditional;
+> IBRS_FW; 
+>                              STIBP conditional; RSB filling; PBRSB-eIBRS
+> Not aff
+>                              ected; BHI Not affected
+>   Srbds:                     Not affected
+>   Tsa:                       Not affected
+>   Tsx async abort:           Mitigation; Clear CPU buffers; SMT vulnerable
+>   Vmscape:                   Mitigation; IBPB before exit to userspace
+> 
 
-Even if that is generally described, shouldn't we update the generic
-DT doc for power-domains [1] to mention this too?
-
-At least we should show some examples of how this can be used.
-
->
-> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
-> ---
-> Changes in v4:
-> - use new OF iterator for parsing map. See:
->   https://lore.kernel.org/r/20251119-topic-lpm-of-map-iterator-v6-18-v1-1-1f0075d771a3@baylibre.com
-> - instead of mapping on probe, create of_genpd helper to be called by providers
-> - Link to v3: https://lore.kernel.org/r/20250613-pmdomain-hierarchy-onecell-v3-0-5c770676fce7@baylibre.com
->
-> Changes in v3:
-> - use of_parse_phandle_with_args_map() instead of custom parsing
-> - probe when device is attatched to PM domain
-> - Link to v2: https://lore.kernel.org/r/20250528-pmdomain-hierarchy-onecell-v2-0-7885ae45e59c@baylibre.com
->
-> Changes in v2:
-> - Use nexus map instead of creating new property as suggested by Rob H.
-> - Link to v1: https://lore.kernel.org/r/20250528-pmdomain-hierarchy-onecell-v1-1-851780700c68@baylibre.com
->
-> ---
-> Kevin Hilman (TI.com) (2):
->       pmdomain: core: support domain hierarchy via power-domain-map
->       pmdomain: arm_scmi: add support for domain hierarchies
->
->  drivers/pmdomain/arm/scmi_pm_domain.c | 11 ++++--
->  drivers/pmdomain/core.c               | 64 ++++++++++++++++++++++++++++++++++
->  include/linux/pm_domain.h             |  9 +++++
->  3 files changed, 82 insertions(+), 2 deletions(-)
-> ---
-> base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
-> change-id: 20250528-pmdomain-hierarchy-onecell-a46fad47d855
-> prerequisite-change-id: 20251119-topic-lpm-of-map-iterator-v6-18-a61447423adc:v1
-> prerequisite-patch-id: e2c4a8c727d0f172166cfa622e60d97048a97b26
->
-> Best regards,
-> --
-> Kevin Hilman (TI.com) <khilman@baylibre.com>
->
-
-Thanks for continuing to work on this! I will look into the series asap.
-
-Kind regards
-Uffe
-
-[1]
-Documentation/devicetree/bindings/power/power-domain.yaml
+It would be nice to get the idle states here, ideally how the states' usage changed
+from base to revert.
+The mentioned thread did this and should show how it can be done, but a dump of
+cat /sys/devices/system/cpu/cpu*/cpuidle/state*/*
+before and after the workload is usually fine to work with:
+https://lore.kernel.org/linux-pm/8da42386-282e-4f97-af93-4715ae206361@arm.com/
 
