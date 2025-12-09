@@ -1,314 +1,249 @@
-Return-Path: <linux-pm+bounces-39322-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39323-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52773CAE28B
-	for <lists+linux-pm@lfdr.de>; Mon, 08 Dec 2025 21:28:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCB68CAE900
+	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 01:52:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D6AC03049D35
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Dec 2025 20:28:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F22CD3031709
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 00:52:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 856D42D8367;
-	Mon,  8 Dec 2025 20:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517902367CE;
+	Tue,  9 Dec 2025 00:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cKSQiL3F"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="rXcvOcRB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011035.outbound.protection.outlook.com [52.101.62.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CAA226056D;
-	Mon,  8 Dec 2025 20:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765225687; cv=none; b=d+dHHiLrBMiGRgTnrypxhlhPVa6MF5dqQS7v7Tqy64DGWNY9z7VPdXcDp3FuDlhyrSlrATlGhe4vEuembI0oyWEBwPdEtHE8wsXhlUQJkwE9SgGtXUdYv+LfCbH1qXO9fNVABAxmts7eNW7hGmnb4wT3K40NzR0JRPNAY0y5jpc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765225687; c=relaxed/simple;
-	bh=YIXliSchTOGG+1D3mmfdvl+VICDaZKaTzDSnNx+OpKw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CW2gyI8ypjI0lkE+Eidni43MS5rea9Oe7HXS7yYIHmQEb6kp4T2tZnJEFnLVC1VwKkWPdY74ONVfZp4AFdwF8p16utjn5LhEzig3ccNVMxbW3q1RJH9X+NLrK3zndL9CBsp0yC/E4/OnqujQQBckOl2nFC5e0mqLxKpoq9RbIOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cKSQiL3F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96B46C4CEF1;
-	Mon,  8 Dec 2025 20:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765225686;
-	bh=YIXliSchTOGG+1D3mmfdvl+VICDaZKaTzDSnNx+OpKw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cKSQiL3F7jbs9gE3oqTSJIXkLb7tk+tk91qixKYoK8qtGJAUSs5aJ9ePUjh2Qyia8
-	 nHuumMDiLGW1aiPxpaKX3WZKl+PSFWJ2IZJf5qmM9A3ntp+DnWf4EWqg8Mt20FNsiV
-	 o/BElrDBTbH82vMlXrixaqJYwwWoybic9v8tQbVhKn8pHPN5/PLJU3eAYfXUA78Zi4
-	 +tyZs8g1KoMMLqcFIe1M/jPs4Gp2QwLh9hKNINqnMoqyHy+KrNjxUG/R7NNuh/CfU2
-	 gqOTAR3nA/ZFH8fqhudoLG513fmgCYvOOeMyYP8VijHvl6qcbVorCvBQWiAJErnTbN
-	 mrFyypLkTFIww==
-Date: Mon, 8 Dec 2025 14:28:03 -0600
-From: Rob Herring <robh@kernel.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Hans de Goede <hansg@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	"Derek J. Clark" <derekjohn.clark@gmail.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org,
-	Stephan Gerhold <stephan.gerhold@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: [PATCH v2 08/10] dt-bindings: connector: Add PCIe M.2 Mechanical
- Key E connector
-Message-ID: <20251208202803.GA2541017-robh@kernel.org>
-References: <20251125-pci-m2-e-v2-0-32826de07cc5@oss.qualcomm.com>
- <20251125-pci-m2-e-v2-8-32826de07cc5@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A473A2139CE;
+	Tue,  9 Dec 2025 00:52:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.35
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765241542; cv=fail; b=RgYBqIaxJKSwd43DANa20IBI3SH3jGzqPSnOTupdebx5ZSbCYo3XfehqI8Ou9gw6urfkRS9u8BeqveZwmpxJRNo5fRzq9JmDlGlq9kvKzlNFKRnJsmSUFLcU0Bbtgkx1sseDSl+WvRCx1fVJYpzcs2vRlaMiFpawBxSwct4vxbA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765241542; c=relaxed/simple;
+	bh=VFUoA/Zj6Dxxvqxg9mAc5ESGl2cm9bWvcqCI9q/+h54=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
+	 In-Reply-To:MIME-Version; b=Zgyf7GQ13DzQ+bYQuXvParPg3ZKK2HqeWVPUTO4jLib09v8JwDG6w+9XsXkxTdEsbars2Na26xfYCawluaSCq9ZZN9QUMM72Vhr7m3UDigylrGi7s4LkKvkDNVaYNUDq6Nn5q2+WLUGuEVEtVGnSeacNStk4PAZ6n/OgHVnnaJI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=rXcvOcRB; arc=fail smtp.client-ip=52.101.62.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vqQmfboilmjK06QOrbaJZvsGNS029IdoQFF9WFROQYus3MT256qbo+1dloI/8WedCaBvONgZgCXWQvDT3ZouzpSSCLjz91ASy+jV18IRA8+hffrwlFOCmh4yQC78/t4rVmCudRNz6IIYcvcV/vn+6/gvLq90IG8MHNl8rNmHdGJ/bMzlZXyXatExChS3Bc271I9OE0W4zDw54Lw5EFXBltpAFsZ14wyjQ6yXnjaIr8H4IGS9s+muMOMsu4Jjr9YSI20oWhFNH9Bk8SgVs92yQ11en41eKQ6u2pZVlbCABUKGOLvomTfpik+MbHe6VGMETWROTSeG3RdGj/XD/I/mxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=k9Pkc+5sWQ9Jl/1oNihLHw4tGe39Wq/KRNDnki8F5uo=;
+ b=enZobG3iE10TbFtMKJnoujQ4H52XZy5k4R2p55bIFDTkbKAemufPEigyEe66Q1ymSoX+tc/rVaIAyVEfrDqRvpGib/kNs4WzzoPjk6Xp238ua3QwOFzodiYJWthzvAWlTFgLFbKPq5c3SI4Y5+Vw1rlyZOsU3HIp4FSwHPqtYguL9MPEQD1BKcJ5uL2yFEuQrltZlggSvtdo0Q7Eyo+9/mHHQqWXlOzz8EUeNE51PNrEpSZZOc2T7lnUw4VtKgU55+ZHIuOOviPB64Uldfinq4mPRN7/7qhar4QK1Pk3nrQA2HGvkwecFV+ifGdFIHdsrFyDNRdyj/eRZ+JcqbqT2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=k9Pkc+5sWQ9Jl/1oNihLHw4tGe39Wq/KRNDnki8F5uo=;
+ b=rXcvOcRBHPbv+8nYVMtthpQ9OsMxvjoZL8d4Y6ZQXkmmBGrFFI+mLxmxrlk+PAwW3e94zq6dWeq8Rg8DIhU46X2PV+A7B681mJL107fij6jbo0ciaTVMTJc2lfi5fnHgaVaHavjjxjC3kf+uY7EbsxQIrlPAioxs9lsEneoXWJGO1kxMfu+VvEPxC70013nmBacOPc48LBbDaMN0XI5th74jJXdubj2d3KIhC5CAVtBR8hVAmSGEnZSoOe8nd5CwcKjASZQgJpRNR/znSlB8FLNgMsUbpUOFblD06gl8V0SU5uYHlDPcNNfRBS7XygWtOe7RLjRmmgXwxXVJA3Jm/Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH2PR12MB3990.namprd12.prod.outlook.com (2603:10b6:610:28::18)
+ by IA1PR12MB7760.namprd12.prod.outlook.com (2603:10b6:208:418::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9388.14; Tue, 9 Dec
+ 2025 00:52:17 +0000
+Received: from CH2PR12MB3990.namprd12.prod.outlook.com
+ ([fe80::7de1:4fe5:8ead:5989]) by CH2PR12MB3990.namprd12.prod.outlook.com
+ ([fe80::7de1:4fe5:8ead:5989%6]) with mapi id 15.20.9388.011; Tue, 9 Dec 2025
+ 00:52:17 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 09 Dec 2025 09:52:13 +0900
+Message-Id: <DET9WD6T0KR4.1MILPHIC2LIWB@nvidia.com>
+Cc: "Danilo Krummrich" <dakr@kernel.org>, "Alice Ryhl"
+ <aliceryhl@google.com>, "Daniel Almeida" <daniel.almeida@collabora.com>,
+ "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>,
+ "Boqun Feng" <boqun.feng@gmail.com>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, "Viresh Kumar"
+ <viresh.kumar@linaro.org>, "Will Deacon" <will@kernel.org>, "Peter
+ Zijlstra" <peterz@infradead.org>, "Mark Rutland" <mark.rutland@arm.com>,
+ <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-pm@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH v3 3/7] rust: cpufreq: always inline functions using
+ build_assert with arguments
+From: "Alexandre Courbot" <acourbot@nvidia.com>
+To: "Gary Guo" <gary@garyguo.net>, "Alexandre Courbot" <acourbot@nvidia.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20251208-io-build-assert-v3-0-98aded02c1ea@nvidia.com>
+ <20251208-io-build-assert-v3-3-98aded02c1ea@nvidia.com>
+ <20251208135521.5d1dd7f6.gary@garyguo.net>
+In-Reply-To: <20251208135521.5d1dd7f6.gary@garyguo.net>
+X-ClientProxiedBy: TYWPR01CA0008.jpnprd01.prod.outlook.com
+ (2603:1096:400:a9::13) To CH2PR12MB3990.namprd12.prod.outlook.com
+ (2603:10b6:610:28::18)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251125-pci-m2-e-v2-8-32826de07cc5@oss.qualcomm.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PR12MB3990:EE_|IA1PR12MB7760:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3f72c3e6-8c1b-4e05-8bde-08de36bd3349
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|366016|10070799003|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?c1dyRkcyemtYMjNPK3NzdTN2enBvZFl0dDEreEJLRFBsRmcwd3JuNWxWWkpi?=
+ =?utf-8?B?bVZsbHJ5WUY2aDM2aDNHa2lYUldYY3FRWjNjRVZWQW1rRm9LRkFHdWNUQyt2?=
+ =?utf-8?B?SGFXTFFnMHFBbEw2V3NldVBud005cGJhZEFzTWFBWm1WMWJ4cnRLVjVLaENB?=
+ =?utf-8?B?MVprWDJCaVp4WEkyTUFsalM2SjdZMnNiOEhFeDdiMjZWdHRDM0tmU0ZPOXJj?=
+ =?utf-8?B?ZkR6QWdLQkhGTHdEcmRVR0l5VU1LTU1STkE4Q0ZVcU9tY0gydUszSzRVbUFI?=
+ =?utf-8?B?RWJORi9HRHFoajFVNGxvODZYMnFrNWY1SFkxOTlsZGgrd0tFSDdrdFgxNWNv?=
+ =?utf-8?B?TkpyU05UYXgvMXlMRnIxOURXV0tMSlYzLzR6bHpuVjc5Zit1cHF5YVBhQVkv?=
+ =?utf-8?B?WnkzMmdqWFFIL0VxaFEzR0dWaUZVRzhaTldpVmtoQnJlV2xFaUd4d3o2YUhU?=
+ =?utf-8?B?cXgrZFQ3UjNFdnBIbE54MERNNGZSdStKcjhURERDZ1YvTjJrTGpqdmg0OE1W?=
+ =?utf-8?B?QVZnTzFZZGxWd2xhbDlSTnJKNE14ZEhKdm9hbW90eTFseTdxSU55Tm96MWlz?=
+ =?utf-8?B?MDhqQXhwZVg5eEJCUmVkTkN0V0d3ZFUyUzdiWml2QmMveDRjbHlLWDFTMXBx?=
+ =?utf-8?B?a2thM0pzbWp5M1lacUlyMVRYZWJyZXpPd2phMW1rVlRaZEN5WlhNelQwK09m?=
+ =?utf-8?B?YVVPUm13dmRzYXoxMExidDhxTlRHcmhFbEhOdVdSbUZsUnpYQ0x5bUloeXRi?=
+ =?utf-8?B?cC9sMzVQVG5odUE3aEZXcHJ5cW4xa2pZQUpLRVM0eXpUQWd1Smxvb09tNW12?=
+ =?utf-8?B?K2V6bXFPenMrWlZmWXNndGxTVDc2RkthekVHVUw5aldkV1lralNUWGRNRHpx?=
+ =?utf-8?B?aW56U1NtcXd4Q1F4NlJRTTRLM1ZxVjc4TVl3UURyUnFiRStvY0JuNk5OTFRY?=
+ =?utf-8?B?VGY2ajJQVXBBNW5TWllMWTNuNW90NEJHYVFnTEg3NkUwUzVveGhKd0Y3UmhH?=
+ =?utf-8?B?WklVbkhZRFNQbDVpNDIxQ3NXckQ0bHVZZ2w3c1ZKZjZGMTdUNjUvQ3FtRXJQ?=
+ =?utf-8?B?TDdLWU9BRnhxcDJhQzc0MGRYRmJiTmRodEtTcjFqdVR4YmxLNVR1ZjdEczly?=
+ =?utf-8?B?OUFFL1pqTmVoejRRQlhGdWU5STkvL1BWcFJWMDlRL0ZxR08zZnZMQmpUcGh1?=
+ =?utf-8?B?MWFCNEVCTFBpWXdRQU5wVi81N2dIYTl0U3VRMWFaRXpMekFqMHFNcmdXWFlx?=
+ =?utf-8?B?d1lnNVlUVVlxWlVJTkxTT09MTXp0b3p2dXVxRDFPaWtaZGgrZG5qbnB0VTY2?=
+ =?utf-8?B?NWhHTmZ4SkNhZkVoN2pDM29scjVjVDBmaHNRZ2pvbUsvZnR0SG1Ra1VScElx?=
+ =?utf-8?B?ZU9PeFZuZ1duaHRHVVNadmVWZGtTVk5KV0t5ZElPMGxuajh5NEtucjhxNjNl?=
+ =?utf-8?B?K2c2c3MzTk11YmN0S0J5eXFlRW00cXd6YytNUStFTndpTEQwazNZbmgzT09l?=
+ =?utf-8?B?UGE1UXBPbmtCSEdtdXNvMW44RnVSdFJ5aFp0WHZDbW9DalZNMDBxSHMraURE?=
+ =?utf-8?B?cGNjL0hLKzVzcnJvZ0dtb2NtcmsvZE9OQk9UdlBpR1lReW1WZXJnYWQ3bEhU?=
+ =?utf-8?B?Q3VzYzNVVXFQNVpwcXIxdnoza3YvZHd1cEU3UStmdjNBZmNXUGk4dEpoRWdj?=
+ =?utf-8?B?ek5rZnE3d1JTZVhQQ2VNcG1BbzByQkU1QVBnTXlvSlRuMFlZRGhJR2NVWHVw?=
+ =?utf-8?B?SjRSNjNzUUtPQUpFT0c0U1JLMU1FdnJnZ1FmQkJFMnNJV3RRM2JBeWMyTnRC?=
+ =?utf-8?B?eDBRQkpNZll1aTVpR3VaSDlWWTJJdGZFQzVQSjA4TnBmdGVadXl0c0FRUUtH?=
+ =?utf-8?B?cnJnUTJXOWxNWjFIREdqOTZTd2dvMERTWFN3TUh3T2NvQ25WTWhkMHBXOU5h?=
+ =?utf-8?Q?IxJZS5tUXNPJaphTEaFFfDo5MT6FonCd?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB3990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(10070799003)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?czBURS85WjliODZEUjFEaDZ1cHgrUTFFS1dtREUzeVNZekFFQmVwL0MwQTBw?=
+ =?utf-8?B?NEtxR09OQSttNzlCSCtKYW41Y0RVb2FEWWNyalZFT1BhLzZ1UjQvR0Y0dDBX?=
+ =?utf-8?B?U2dCVEdUMVJXT2xhSmh4UTREeFVJekJQQnU1dVpaQXRhZ21NTFBCT0lHcGZi?=
+ =?utf-8?B?QytyVTJpTjllQzNQS055VEUxZHFvRTFJbWVCc1RRazBHQzNkd3VUZHhYODAv?=
+ =?utf-8?B?Y0Rtd2hXaUU0MFozM0huU09rVTVSelNlN0wwdWpVWU5wTDBXSUx1a3RwZUlN?=
+ =?utf-8?B?bVhaUmdKS0RJOERxazk4STRrQ0IzUlg4elF6SW9PYjMxV1ZzaGdiajFUWmlk?=
+ =?utf-8?B?SFM1MDV2eXo5WjBZdGNDaGw2bFpGdTJ3d3BwMThrTzJOUXdLMlRzQUhNL0ta?=
+ =?utf-8?B?YlY3WndMVnF6UHlIZGlDdWpNMmNXTnBvelJGMnpQTTFsbHovay82aVcrb1dy?=
+ =?utf-8?B?d0prcG9sWko3REd2VFZJUjB4NkJlSFk5ejc4OVhBVVVBcExOcHZ6MEF6cWJo?=
+ =?utf-8?B?c0VQM0VnUmlMSE10b3lkaWV3OTJ5eW1sTWNoTGkxMStTaVhPZmd2VElKcG9G?=
+ =?utf-8?B?UFlCZHhvS25EQWszWDl2TUtuSzAvVGFVQzlGM0FHS0cweWhaNWhXVlQ0cFl3?=
+ =?utf-8?B?bUt6Q3lMVkxiQVMrR1JZdzNMNlg1NmxlMDJHTkN1TEhsZEEycGkvTFBpVUZP?=
+ =?utf-8?B?OE5RbFBvODQ5UUVNUFRVMWpKR1JXRWFQWE9YdllLMnlzM2dsNEgzbnBzZC9u?=
+ =?utf-8?B?UXRoNmxKdzJLMUxZRDhFMVB4YU1EWGlJb21RT3k0QlZQV3htVWJMRkYvNzBZ?=
+ =?utf-8?B?UStOQkw1MWovUUVhaGdiZ0hXNUtISU11WGZCZnluc1hwZGh1R0FBUld5c1R0?=
+ =?utf-8?B?Q0ZtVGttek9tRVJFZkpMYzdaV1lLQVh2ZVB1c0JqUkplS20wWkpsMElhd2lh?=
+ =?utf-8?B?c3owTjBpendPWWc3TmNabGRkdENEdlhqbDAvZXh1ZEtQZGFRYWxhRGRsNS85?=
+ =?utf-8?B?dUtsWnBVcnN3QXpVdTZWWWtrVzl3WWtwVXBEWnF5L3pPUFR1bGhmSlJ4OHRG?=
+ =?utf-8?B?N0hPVnhyRE5LU3FnbnlQRE9DZ0xVQmNIZTNiVEcwMng4WVdnOW1YR2dESW93?=
+ =?utf-8?B?bFYrcS9NWStSQndCNHVGcWg5ZXZsSU83WE9OckE4MjZMVlRybmFoWjNYcTNa?=
+ =?utf-8?B?a3hzWHpqdnV2TkRzSURLM3I3SlkvZ0FKMzZkMDBCampxZnRqUkxEK2VQOU1H?=
+ =?utf-8?B?ejc4ZkFxZm81WGVPUWhlYXF6Y1EvRmZJcnVBcEs3Z1UyZmd4VTBhZWNoamxI?=
+ =?utf-8?B?TVVjQUp3bTNtQjJxcE92bUloLy95TWxjNlpXVlFlejhmUlU1RVVuZVZSMDRY?=
+ =?utf-8?B?Z2hKMDBPbFc5NFVaTDYrc09kZ1I1c1ZCcHNVSlFvS08vclhFSWlGMHR0cSsy?=
+ =?utf-8?B?cHVSNmpjbng1alQ4UlVHNXFIanIwVE1qUXlidGNTcytBUnA0akEycDFXdzcv?=
+ =?utf-8?B?Q3J2Y1RJRHp1OHBUVk9ITEdqNlFDZ1N0RWFtVWNYUmlMcHlib2VLOHVxS1JR?=
+ =?utf-8?B?cXhPbVowV05SSFhmd1VDa3ArK0ltTnI1STN4bXRaQ29tMzZlWmNneGo2V29W?=
+ =?utf-8?B?NUxsTzJTRHBxNEdYMjhaU0NoMmJTZ3ZoUmUza2VpWUYyK3Q1VzRPVE1MaEt6?=
+ =?utf-8?B?WS96bnc3aUNaeWJTanR0RkNkcm55SkJ4Vi9vZEI1ZjcwdWUzQ3JsbWljSUFS?=
+ =?utf-8?B?YWxuRWpOd0ZEMk8vZXlmV2hCc3EyaXNmYTI2bFFNWTl0SFZDdnV1UzYzbW4v?=
+ =?utf-8?B?SzA4SEdIYTFCNmcyQVU5TkN0c0dob0xxUnhibldIVE9tU3dWOUU2Si9xWGxJ?=
+ =?utf-8?B?QUcydlUyY0d1bWxIemFlU3VzYlJIcG1MSWpYbTArQlBza0Fra3lqTUk1R01l?=
+ =?utf-8?B?UlZEeFRzcWpCSU1hYW9UMGRaV2I4L1hnUEtWUXNUMUhXa2l2OHdRUXpKWlZY?=
+ =?utf-8?B?NEpYQm13YXF3SFgxSHFCcjAzemg3a09paWtrZ3Z4MEo4Uy9PRnpXdUtjTThQ?=
+ =?utf-8?B?MFphSk9RS0VKMjNKbGFSbHFxTWNldWFhU0JBMmQyb0g2R2FkWVY4SzQzbTdm?=
+ =?utf-8?B?NGFVaVc1Qk5LMnJnSWdhWTduZWhVSllvaUhzY1FzaU80M1VWdVpMK3VxdGJC?=
+ =?utf-8?Q?HSs9u1vtcn3yrvzqKRbBAB/61trGXGju79e7c5uX5tz5?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3f72c3e6-8c1b-4e05-8bde-08de36bd3349
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB3990.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2025 00:52:17.3339
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fi8S8epRkQ/kGmo/nIU9c/73y/UXnWk935X7VG5bjjjpLkgoLDUuVlOiGVJp0vwMIYsRdaZ1KALwFQyOkgwNaA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7760
 
-On Tue, Nov 25, 2025 at 08:15:12PM +0530, Manivannan Sadhasivam wrote:
-> Add the devicetree binding for PCIe M.2 Mechanical Key E connector defined
-> in the PCI Express M.2 Specification, r4.0, sec 5.1.2. This connector
-> provides interfaces like PCIe or SDIO to attach the WiFi devices to the
-> host machine, USB or UART+PCM interfaces to attach the Bluetooth (BT)
-> devices along with additional interfaces like I2C for NFC solution. At any
-> point of time, the connector can only support either PCIe or SDIO as the
-> WiFi interface and USB or UART as the BT interface.
+On Mon Dec 8, 2025 at 10:55 PM JST, Gary Guo wrote:
+> On Mon, 08 Dec 2025 11:47:01 +0900
+> Alexandre Courbot <acourbot@nvidia.com> wrote:
+>
+>> `build_assert` relies on the compiler to optimize out its error path.
+>> Functions using it with its arguments must thus always be inlined,
+>> otherwise the error path of `build_assert` might not be optimized out,
+>> triggering a build error.
+>>=20
+>> Cc: stable@vger.kernel.org
+>> Fixes: c6af9a1191d0 ("rust: cpufreq: Extend abstractions for driver regi=
+stration")
+>> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+>> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+>> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+>> ---
+>>  rust/kernel/cpufreq.rs | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>=20
+>> diff --git a/rust/kernel/cpufreq.rs b/rust/kernel/cpufreq.rs
+>> index f968fbd22890..0879a79485f8 100644
+>> --- a/rust/kernel/cpufreq.rs
+>> +++ b/rust/kernel/cpufreq.rs
+>> @@ -1015,6 +1015,8 @@ impl<T: Driver> Registration<T> {
+>>          ..pin_init::zeroed()
+>>      };
+>> =20
+>> +    // Always inline to optimize out error path of `build_assert`.
+>> +    #[inline(always)]
+>>      const fn copy_name(name: &'static CStr) -> [c_char; CPUFREQ_NAME_LE=
+N] {
+>>          let src =3D name.to_bytes_with_nul();
+>>          let mut dst =3D [0; CPUFREQ_NAME_LEN];
+>>=20
+>
+> This change is not needed as this is a private function only used in
+> const-eval only.
 
-AFAICT, there's no muxing of interfaces. Maybe that's a defacto 
-limitation on x86 systems? There's no reason to encode that into the 
-binding if the pins aren't mux'ed on the connector.
+... for now. :)
 
-> 
-> The connector provides a primary power supply of 3.3v, along with an
-> optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
-> 1.8v sideband signaling.
-> 
-> The connector also supplies optional signals in the form of GPIOs for fine
-> grained power management.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> ---
->  .../bindings/connector/pcie-m2-e-connector.yaml    | 178 +++++++++++++++++++++
->  MAINTAINERS                                        |   1 +
->  2 files changed, 179 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
-> new file mode 100644
-> index 000000000000..fe2c9a943a21
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
-> @@ -0,0 +1,178 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/connector/pcie-m2-e-connector.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: PCIe M.2 Mechanical Key E Connector
-> +
-> +maintainers:
-> +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> +
-> +description:
-> +  A PCIe M.2 E connector node represents a physical PCIe M.2 Mechanical Key E
-> +  connector. Mechanical Key E connectors are used to connect Wireless
-> +  Connectivity devices including combinations of Wi-Fi, BT, NFC to the host
-> +  machine over interfaces like PCIe/SDIO, USB/UART+PCM, and I2C.
-> +
-> +properties:
-> +  compatible:
-> +    const: pcie-m2-e-connector
-> +
-> +  vpcie3v3-supply:
-> +    description: A phandle to the regulator for 3.3v supply.
-> +
-> +  vpcie1v8-supply:
-> +    description: A phandle to the regulator for VIO 1.8v supply.
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    description: OF graph bindings modeling the interfaces exposed on the
-> +      connector. Since a single connector can have multiple interfaces, every
-> +      interface has an assigned OF graph port number as described below.
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: Connector interfaces for Wi-Fi
-> +
-> +        properties:
-> +          endpoint@0:
-> +            $ref: /schemas/graph.yaml#/properties/endpoint
-> +            description: PCIe interface
-> +
-> +          endpoint@1:
-> +            $ref: /schemas/graph.yaml#/properties/endpoint
-> +            description: SDIO interface
-> +
-> +        anyOf:
-> +          - required:
-> +              - endpoint@0
-> +          - required:
-> +              - endpoint@1
-> +
-> +      port@1:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: Connector interfaces for BT
-> +
-> +        properties:
-> +          endpoint@0:
-> +            $ref: /schemas/graph.yaml#/properties/endpoint
-> +            description: USB 2.0 interface
-> +
-> +          endpoint@1:
-> +            $ref: /schemas/graph.yaml#/properties/endpoint
-> +            description: UART interface
-> +
-> +        anyOf:
-> +          - required:
-> +              - endpoint@0
-> +          - required:
-> +              - endpoint@1
-> +
-> +      port@2:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: PCM/I2S interface
+>
+> I wonder if I should add another macro to assert that the function is
+> only used in const eval instead? Do you think it might be useful to have
+> something like:
+>
+> 	#[const_only]
+> 	const fn foo() {}
+>
+> or
+>
+> 	const fn foo() {
+> 	    const_only!();
+> 	}
+>
+> ? If so, I can send a patch that adds this feature.=20
+>
+> Implementation-wise, this will behave similar to build_error, where a
+> function is going to be added that is never-linked but has a body for
+> const eval.
 
-Does this work with any existing DAI bindings? Or conflict with the 
-audio graph card binding?
-
-> +
-> +      port@3:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: I2C interface
-
-Like the other one, use i2c-parent.
-
-> +
-> +    oneOf:
-> +      - required:
-> +          - port@0
-> +
-> +  clocks:
-> +    description: 32.768 KHz Suspend Clock (SUSCLK) input from the host system to
-> +      the M.2 card. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.1 for
-> +      more details.
-> +    maxItems: 1
-> +
-> +  w-disable1-gpios:
-> +    description: GPIO controlled connection to W_DISABLE1# signal. This signal
-> +      is used by the system to disable WiFi radio in the M.2 card. Refer, PCI
-> +      Express M.2 Specification r4.0, sec 3.1.12.3 for more details.
-> +    maxItems: 1
-> +
-> +  w-disable2-gpios:
-> +    description: GPIO controlled connection to W_DISABLE2# signal. This signal
-> +      is used by the system to disable BT radio in the M.2 card. Refer, PCI
-> +      Express M.2 Specification r4.0, sec 3.1.12.3 for more details.
-> +    maxItems: 1
-> +
-> +  viocfg-gpios:
-> +    description: GPIO controlled connection to IO voltage configuration
-> +      (VIO_CFG) signal. This signal is used by the M.2 card to indicate to the
-> +      host system that the card supports an independent IO voltage domain for
-> +      the sideband signals. Refer, PCI Express M.2 Specification r4.0, sec
-> +      3.1.15.1 for more details.
-> +    maxItems: 1
-> +
-> +  uim-power-src-gpios:
-> +    description: GPIO controlled connection to UIM_POWER_SRC signal. This signal
-> +      is used when the NFC solution is implemented and receives the power output
-> +      from WWAN_UIM_PWR signal of the another WWAN M.2 card. Refer, PCI Express
-> +      M.2 Specification r4.0, sec 3.1.11.1 for more details.
-> +    maxItems: 1
-> +
-> +  uim-power-snk-gpios:
-> +    description: GPIO controlled connection to UIM_POWER_SNK signal. This signal
-> +      is used when the NFC solution is implemented and supplies power to the
-> +      Universal Integrated Circuit Card (UICC). Refer, PCI Express M.2
-> +      Specification r4.0, sec 3.1.11.2 for more details.
-> +    maxItems: 1
-> +
-> +  uim-swp-gpios:
-> +    description: GPIO controlled connection to UIM_SWP signal. This signal is
-> +      used when the NFC solution is implemented and implements the Single Wire
-> +      Protocol (SWP) interface to the UICC. Refer, PCI Express M.2 Specification
-> +      r4.0, sec 3.1.11.3 for more details.
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - vpcie3v3-supply
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  # PCI M.2 Key E connector for Wi-Fi/BT with PCIe/UART interfaces
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    connector {
-> +        compatible = "pcie-m2-e-connector";
-> +        vpcie3v3-supply = <&vreg_wcn_3p3>;
-> +        vpcie1v8-supply = <&vreg_l15b_1p8>;
-> +        w-disable1-gpios = <&tlmm 117 GPIO_ACTIVE_LOW>;
-> +        w-disable2-gpios = <&tlmm 116 GPIO_ACTIVE_LOW>;
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            port@0 {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                reg = <0>;
-> +
-> +                endpoint@0 {
-> +                    reg = <0>;
-> +                    remote-endpoint = <&pcie4_port0_ep>;
-> +                };
-> +            };
-> +
-> +            port@1 {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                reg = <1>;
-> +
-> +                endpoint@1 {
-> +                    reg = <1>;
-> +                    remote-endpoint = <&uart14_ep>;
-> +                };
-> +            };
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 9b3f689d1f50..f707f29d0a37 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20478,6 +20478,7 @@ PCIE M.2 POWER SEQUENCING
->  M:	Manivannan Sadhasivam <mani@kernel.org>
->  L:	linux-pci@vger.kernel.org
->  S:	Maintained
-> +F:	Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
->  F:	Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
->  F:	drivers/power/sequencing/pwrseq-pcie-m2.c
->  
-> 
-> -- 
-> 2.48.1
-> 
+It could be useful in the general sense, but for this particular case
+the rule "if you do build_assert on a function argument, then always
+inline it" also covers us in case `copy_name` gets used outside of const
+context, so isn't it the preferable workaround?
 
