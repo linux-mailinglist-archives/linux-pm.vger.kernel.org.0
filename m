@@ -1,304 +1,90 @@
-Return-Path: <linux-pm+bounces-39371-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39372-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5F2CCB1478
-	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 23:18:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 071DACB14F5
+	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 23:39:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4A85C30B79F0
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 22:18:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 958D530D7021
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 22:38:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A5532E540C;
-	Tue,  9 Dec 2025 22:18:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98B52ECD1D;
+	Tue,  9 Dec 2025 22:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZYVl3DSq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RrzM7SZI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A902E0B5B
-	for <linux-pm@vger.kernel.org>; Tue,  9 Dec 2025 22:18:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854DE2DF13E;
+	Tue,  9 Dec 2025 22:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765318703; cv=none; b=uIHiNmcSIE4fv8uNElMdayOPfkr6FS13G2gS/ABqVREu6+526RwoSUhEKcGdyjcmOfnnxSdLhZi13IOfOmxz8NI4vPkCIDKrPF3GlpKaEdUY33k3F1SgK/eaiQxizGQHZMaLtW9vB7evT/2/NtEzjvGaMoaBcoveumYR+dF6knc=
+	t=1765319907; cv=none; b=GdRN9ZTmdX2B1mr440tbX2IYPzpJYsGL2OSUTNSxd8h6QN3gUOYoiReACKMSn21VnGt8N7kzDkcFaZoZQHBwEzsD9ZkpmAijG5nCftryv7IWqYIhoaGpconjMu78tbeAbuA0YU59DQBGG7iktmNaU+WkekJR+ROrlVx6/whJT9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765318703; c=relaxed/simple;
-	bh=xBJTl5KnoTYWVQf2uwQsAY/CqxdRSZb8arP25agma/Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bh5XqWk2bkIV8mYSTP6KnGFUSQu3YJkYltYnH7AqR09d/Lvikuphzy3nBYkKeWJDK5mSuEAqdI2ouuGxakxvGuJ/LgQBPqFPSlogs3+NtqsJB5ARSN7rYldM9TMGSD6tBDxaSSqMKNqu3I68i3fdGqKrDJ7qm0SunAJd1anv6Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZYVl3DSq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D073C19421
-	for <linux-pm@vger.kernel.org>; Tue,  9 Dec 2025 22:18:23 +0000 (UTC)
+	s=arc-20240116; t=1765319907; c=relaxed/simple;
+	bh=vD24s0bunHknwtVdHkYxMUpz5WPWdJEacfKCk1wqSw0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=isZ/UvwUKlwD5dYRe859kYJiqWW2HvCm0vF9CDu+LJpuq7ZqmFn16y9QqtIQMqVq+j7uzvAnYKX4HmqhXSWUPe3bVxFucXByuVADphqrT4mx2UMhEduMYiCE3+uVaxPxEgdZ83t/FJrObDgxvp3pcykc6dd/8/jD4QBs85Ao7U4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RrzM7SZI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFD9FC4CEF5;
+	Tue,  9 Dec 2025 22:38:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765318703;
-	bh=xBJTl5KnoTYWVQf2uwQsAY/CqxdRSZb8arP25agma/Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ZYVl3DSq4rsIDE5Y3Yo8hiaG+Z5s/kj93YUIACEIIxbYPprPCG8r05rGIj4GnJN4p
-	 3oZDgAW3I27fjl3cHGKKnfqywNhJ6PvUFQ2vJdB8bpaFwvaZhgoZa0ra69uhWnE3XL
-	 v26qI68+NQ3Txw7Mlh8IFSSXKmL1vKpIVWL2YMeAMU4tz4A0D6jNrUh/4AjIPXUp2G
-	 7KKcuUTv9NFNiQ7Uen1qnpBBB35ERat43oId7iitOTQUv+GeSfeHDa8v7g/cEVhEm0
-	 bAQ3REertRhqwWoXkQowggrXgNr0LxOOQfqLx1uChD1NNICKT2aCJizWYrigoxTi3h
-	 yJZyrLsGrXlEg==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-657464a9010so2269274eaf.3
-        for <linux-pm@vger.kernel.org>; Tue, 09 Dec 2025 14:18:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVSjKb+T1sBefYhUfgqLKEMhfEnSZIx2EMEfn5/1eOif6gVqIZia8ReRGTKAZrM5DE29NfJyO/TsQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzM4RkfqMbSWGt6uxGbwYnuLYcZ523rLan3QeQLCRrnyCXp/yVH
-	smQp/hssyzsMPvlf+IkX3kBxin5zVCJFJCd51NB2XADYoEGxkMEBPcA1T1wRisUA1aQRG5wZxvq
-	Y+kaqh7AnSfKFuHJCnCP8QQ0CkxBzzrs=
-X-Google-Smtp-Source: AGHT+IEad+Jn6q48+7s7QgpTy8nR94FyxrDyPQ9+Mq+gbbKtX5uUu2IkzFSX6etA2Y1+hAxNAg7ELwm14NXxpYO3+4k=
-X-Received: by 2002:a05:6820:824:b0:659:9a49:90c7 with SMTP id
- 006d021491bc7-65b2ad3fbfamr247750eaf.70.1765318702367; Tue, 09 Dec 2025
- 14:18:22 -0800 (PST)
+	s=k20201202; t=1765319907;
+	bh=vD24s0bunHknwtVdHkYxMUpz5WPWdJEacfKCk1wqSw0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RrzM7SZIr3gCaB4y4ZKjrfBlRSJglrviC1fd65ko1+YVEmEyS7dvFINUjoGYkbP1O
+	 afns0Lxb6wMihPIwwyCSRQTk3GnTp19WtYfB4NdHZyQcmFCCRAdqA66NEhJRvd7CET
+	 e+6Pc2c7ts4ifvV4ooaYrtbxX0b2BUaQN7cIwQChNLCgT3o/mrg4nZkrmhba6wOvtl
+	 kc9psazzIFHSOoJZMSG2y5laPKAiSTvC/DLnU68xFd+ULJQgRljr5d6eMWLJh/WihM
+	 MqYsK3jEzleBWDqGY//JC1/dSKx6wsuQhMkH2R6IMYPkUWPJOpkq44B0mrqCXrZc74
+	 Npjp3iaEFy2jw==
+Date: Tue, 9 Dec 2025 16:38:22 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+Cc: devicetree@vger.kernel.org, lukasz.luba@arm.com, conor+dt@kernel.org,
+	sboyd@kernel.org, linux-kernel@vger.kernel.org,
+	magnus.damm@gmail.com, geert+renesas@glider.be,
+	mturquette@baylibre.com, linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org, daniel.lezcano@linaro.org,
+	linux-pm@vger.kernel.org, krzk+dt@kernel.org,
+	john.madieu.xa@bp.renesas.com, rui.zhang@intel.com,
+	rafael@kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: thermal: r9a09g047-tsu: Document RZ/V2N
+ TSU
+Message-ID: <176531990213.1290341.12301174162121325549.robh@kernel.org>
+References: <20251209091115.8541-1-ovidiu.panait.rb@renesas.com>
+ <20251209091115.8541-2-ovidiu.panait.rb@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2395536.ElGaqSPkdT@rafael.j.wysocki> <ab8b770c-08e9-4cf6-bd4f-f36c951fda4c@gmx.de>
- <CAJZ5v0jAH9FZrO5AvVF90zgy-0EeM+rsB6Zf8cMf+sR8=FFuDA@mail.gmail.com>
- <168f173d-0d1a-49b0-9461-72f8fb0fc701@gmx.de> <99b0d755-3e18-4bba-b8e7-ab344e6c2592@gmx.de>
-In-Reply-To: <99b0d755-3e18-4bba-b8e7-ab344e6c2592@gmx.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 9 Dec 2025 23:18:10 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ijOF+nRZrjnub9uqa_Pu54etmudWUUNWmNgiogVAwxFQ@mail.gmail.com>
-X-Gm-Features: AQt7F2qkiHmdqmGpZGoSJzRxhPH7WaT2Irn0DJNLZGPF0LhhonwhxQvPAderpgE
-Message-ID: <CAJZ5v0ijOF+nRZrjnub9uqa_Pu54etmudWUUNWmNgiogVAwxFQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] PCI: ACPI: PM: Rework root bus wakeup notification
- setup and wakeup source registration
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251209091115.8541-2-ovidiu.panait.rb@renesas.com>
 
-On Tue, Dec 9, 2025 at 11:00=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wrote:
->
-> Am 09.12.25 um 14:56 schrieb Armin Wolf:
->
-> > Am 09.12.25 um 12:31 schrieb Rafael J. Wysocki:
-> >
-> >> On Mon, Dec 8, 2025 at 9:01=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wro=
-te:
-> >>> Am 08.12.25 um 13:09 schrieb Rafael J. Wysocki:
-> >>>
-> >>>> Hi All,
-> >>>>
-> >>>> Patch [1/2] updates the registration of PCI root bus wakeup
-> >>>> notification setup
-> >>>> in order to simplify code in pci_acpi_wake_bus() and to prepare for
-> >>>> the other
-> >>>> change.  This is not expected to affect functionality.
-> >>>>
-> >>>> Patch [2/2] modifies the ACPI PM notifier registration to add
-> >>>> wakeup sources
-> >>>> under devices that are going to be affected by wakeup handling
-> >>>> instead of
-> >>>> registering them under ACPI companions of those devices (rationale
-> >>>> explained
-> >>>> in the patch changelog).  This will change the sysfs layout (wakeup
-> >>>> source
-> >>>> devices associated with PCI wakeup are now going to appear under
-> >>>> PCI devices
-> >>>> and the host bridge device), but it is not expected to affect user
-> >>>> space
-> >>>> adversely.
-> >>>>
-> >>>> Thanks!
-> >>> I tested both patches, and the sysfs layout changes as expected:
-> >>>
-> >>> $ readlink /sys/class/wakeup/wakeup*/device
-> >>> ../../../device:00
-> >>> ../../../device:1a
-> >>> ../../../device:1f
-> >>> ../../../device:20
-> >>> ../../../0000:00:08.1
-> >>> ../../../device:36
-> >>> ../../../device:31
-> >>> ../../../device:32
-> >>> ../../../device:3c
-> >>> ../../../0000:01:00.0
-> >>> ../../../device:3d
-> >>> ../../../PNP0C02:00
-> >>> ../../../0000:02:00.0
-> >>> ../../../device:3e
-> >>> ../../../device:3f
-> >>> ../../../device:46
-> >>> ../../../0000:04:00.0
-> >>> ../../../device:47
-> >>> ../../../0000:05:00.0
-> >>> ../../../device:57
-> >>> ../../../0000:05:08.0
-> >>> ../../../device:59
-> >>> ../../../device:01
-> >>> ../../../0000:05:09.0
-> >>> ../../../device:5b
-> >>> ../../../0000:05:0a.0
-> >>> ../../../device:5d
-> >>> ../../../0000:05:0b.0
-> >>> ../../../device:5f
-> >>> ../../../0000:05:0c.0
-> >>> ../../../device:74
-> >>> ../../../0000:05:0d.0
-> >>> ../../../device:5a
-> >>> ../../../device:3a
-> >>> ../../../device:5c
-> >>> ../../../device:60
-> >>> ../../../device:75
-> >>> ../../../LNXVIDEO:00
-> >>> ../../../device:22
-> >>> ../../../PNP0C02:02
-> >>> ../../../device:25
-> >>> ../../../device:2b
-> >>> ../../../device:24
-> >>> ../../../device:37
-> >>> ../../../0000:00:01.1
-> >>> ../../../PNP0A08:00
-> >>> ../../../LNXPWRBN:00
-> >>> ../../../AMDI0010:00
-> >>> ../../../AMDI0030:00
-> >>> ../../../00:02
-> >>> ../../../alarmtimer.0.auto
-> >>> ../../../PNP0C0C:00
-> >>> ../../../0000:0b:00.0
-> >>> ../../../AMDIF031:00
-> >>> ../../../PNP0C14:00
-> >>> ../../../device:0a
-> >>> ../../../PNP0C14:01
-> >>> ../../../PNP0C14:02
-> >>> ../../../PNP0C14:03
-> >>> ../../../0000:0e:00.3
-> >>> ../../../0000:0e:00.4
-> >>> ../../../0000:0f:00.0
-> >>> ../../../5-2
-> >>> ../../../1-5.3
-> >>> ../../hidpp_battery_0
-> >>> ../../../device:44
-> >>> ../../../0000:00:02.1
-> >>> ../../../device:76
-> >>> ../../../device:0b
-> >>>
-> >>> turns into:
-> >>>
-> >>> $ readlink /sys/class/wakeup/wakeup*/device
-> >>> ../../../0000:00:00.0
-> >>> ../../../0000:00:04.0
-> >>> ../../../0000:00:08.0
-> >>> ../../../0000:00:08.1
-> >>> ../../../0000:00:08.1
-> >>> ../../../0000:00:08.3
-> >>> ../../../0000:00:14.0
-> >>> ../../../0000:00:14.3
-> >>> ../../../0000:01:00.0
-> >>> ../../../0000:01:00.0
-> >>> ../../../0000:02:00.0
-> >>> ../../../0000:00:00.2
-> >>> ../../../0000:02:00.0
-> >>> ../../../0000:03:00.0
-> >>> ../../../0000:03:00.1
-> >>> ../../../0000:04:00.0
-> >>> ../../../0000:04:00.0
-> >>> ../../../0000:05:00.0
-> >>> ../../../0000:05:00.0
-> >>> ../../../0000:05:08.0
-> >>> ../../../0000:05:08.0
-> >>> ../../../0000:05:09.0
-> >>> ../../../0000:00:01.0
-> >>> ../../../0000:05:09.0
-> >>> ../../../0000:05:0a.0
-> >>> ../../../0000:05:0a.0
-> >>> ../../../0000:05:0b.0
-> >>> ../../../0000:05:0b.0
-> >>> ../../../0000:05:0c.0
-> >>> ../../../0000:05:0c.0
-> >>> ../../../0000:05:0d.0
-> >>> ../../../0000:05:0d.0
-> >>> ../../../0000:08:00.0
-> >>> ../../../0000:00:01.1
-> >>> ../../../0000:09:00.0
-> >>> ../../../0000:0b:00.0
-> >>> ../../../0000:0c:00.0
-> >>> ../../../0000:0e:00.0
-> >>> ../../../0000:0e:00.1
-> >>> ../../../0000:0e:00.2
-> >>> ../../../0000:0e:00.3
-> >>> ../../../0000:0e:00.4
-> >>> ../../../0000:0e:00.6
-> >>> ../../../0000:0f:00.0
-> >>> ../../../0000:00:01.1
-> >>> ../../../pci0000:00
-> >>> ../../../LNXPWRBN:00
-> >>> ../../../AMDI0010:00
-> >>> ../../../AMDI0030:00
-> >>> ../../../00:02
-> >>> ../../../alarmtimer.0.auto
-> >>> ../../../PNP0C0C:00
-> >>> ../../../0000:0b:00.0
-> >>> ../../../AMDIF031:00
-> >>> ../../../PNP0C14:00
-> >>> ../../../0000:00:02.0
-> >>> ../../../PNP0C14:01
-> >>> ../../../PNP0C14:02
-> >>> ../../../PNP0C14:03
-> >>> ../../../0000:0e:00.3
-> >>> ../../../0000:0e:00.4
-> >>> ../../../0000:0f:00.0
-> >>> ../../../5-2
-> >>> ../../../1-5.3
-> >>> ../../hidpp_battery_0
-> >>> ../../../0000:00:02.1
-> >>> ../../../0000:00:02.1
-> >>> ../../../0000:00:02.2
-> >>> ../../../0000:00:03.0
-> >>>
-> >>> The remaining ACPI devices are likely caused by device drivers based
-> >>> upon struct acpi_driver.
-> >>> I was unable to test the wakeup itself since suspend is currently
-> >>> broken due to issues with
-> >>> cpuidle,
-> >> Have you reported those?  What cpuidle driver is involved?
-> >>
-> >> If you happen to be using the ACPI idle driver, there is a regression
-> >> between 6.18-rc7 and final 6.18 due to a missing revert, but final
-> >> 6.18 should be as expected.
-> >
-> > If i remember correctly the official 6.18 kernel was not affected by
-> > this, i used the the bleeding-edge
-> > branch when building the test kernel.
-> >
-> > I will do some further debugging once i am back home.
-> >
-> > Thanks,
-> > Armin Wolf
-> >
-> Well, it turned out that the cpuidle driver was not involved in this, i j=
-ust got confused
-> by a separate stacktrace caused by the hid-roccat driver (i already repor=
-ted that).
->
-> This seems to be the real issue:
->
-> [  514.910759] ACPI Error: Aborting method \M402 due to previous error (A=
-E_AML_LOOP_TIMEOUT) (20250807/psparse-529)
-> [  514.910810] ACPI Error: Aborting method \_SB.PCI0.GPP0.M241 due to pre=
-vious error (AE_AML_LOOP_TIMEOUT) (20250807/psparse-529)
-> [  514.910890] ACPI Error: Aborting method \_SB.PCI0.GPP0.M237._OFF due t=
-o previous error (AE_AML_LOOP_TIMEOUT) (20250807/psparse-529)
 
-It looks like there is a problem with turning a power resource off.
+On Tue, 09 Dec 2025 09:11:13 +0000, Ovidiu Panait wrote:
+> The Renesas RZ/V2N SoC includes a Thermal Sensor Unit (TSU) block designed
+> to measure the junction temperature. The device provides real-time
+> temperature measurements for thermal management, utilizing two dedicated
+> channels for temperature sensing.
+> 
+> The Renesas RZ/V2N SoC is using the same TSU IP found on the RZ/G3E SoC,
+> the only difference being that it has two channels instead of one.
+> 
+> Add new compatible string "renesas,r9a09g056-tsu" for RZ/V2N and use
+> "renesas,r9a09g047-tsu" as a fallback compatible to indicate hardware
+> compatibility with the RZ/G3E implementation.
+> 
+> Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+> ---
+>  .../devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml    | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
 
-> Sleeping itself works, it just takes a long time for the machine to actua=
-lly suspend due to the timeout.
-> I attached the acpidump of the affected machine in case you are intereste=
-d.
->
-> Since 6.18 is not affected by this i will wait till 6.19-rc1 is released =
-before i start debugging this issue.
-> Do you think that this approach is OK?
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-It should be fine although you may as well check my pm-6.19-rc1,
-acpi-6.19-rc1 and thermal-6.19-rc1 tags on top of 6.18.  If the
-problem is in one of them, it should be possible to find it quicker
-than by dealing with the entire 6.19-rc1.
 
