@@ -1,188 +1,268 @@
-Return-Path: <linux-pm+bounces-39341-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39342-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4FCDCAFA4A
-	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 11:32:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DCDFCAFC7D
+	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 12:31:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 417A93011186
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 10:32:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9CD5E307317F
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 11:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04ABB2857CD;
-	Tue,  9 Dec 2025 10:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B97F2D238A;
+	Tue,  9 Dec 2025 11:31:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ed1D5u/A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLV5FeBE"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDAB1EE033;
-	Tue,  9 Dec 2025 10:32:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16AF52BF3F4
+	for <linux-pm@vger.kernel.org>; Tue,  9 Dec 2025 11:31:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765276362; cv=none; b=HYXsARApYjKf8XVfVjb452B+9pon7S7CR0fiQomEd5dSe7mfC9UzHQnwLw5jf8eKg79UAgKZ/LMxGsLAbtAXcPkZ0WfuypHe0YgcWVyo+AdaNJsLimdUs/bWfkwPsklKcanAaqnJCerBZc8s7XJRbbq7whsZMayQK0SyJEzJiP4=
+	t=1765279893; cv=none; b=ASAVUevnBkURR9sFWcWB27XpDgwORrBv91HAd16TPHX3Dqxnsatrg62EyhZ515sF9KK8TlawL+1w13PNVkl2TtYYNgUrg27OmmAizkizwPXkdmSwcO4NLl5pUv6pgM9053yarfBK7zBEJQR5/Dky2vm+Yc1TsC7U42N5swkbBQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765276362; c=relaxed/simple;
-	bh=PndLdpaaxi55sQ8QpGxvUhn/SLKC13Su10SE7RFjHVo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WYjee9uN0t2rxNdPt3qXj4G8jABZQ2zSZliABxh4fm6a6TkRuvapza4ZHZmRzccOhgHwguuH9r/l594lfVH/ipaTqu7BUVL2jwlcGyh0V3etk5oJH6XvLlQm5i7ouYnZb2Fy62g2L25OlPh9bBbU2pNJfkemauiF2ipvNayDGtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ed1D5u/A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFE1AC4CEF5;
-	Tue,  9 Dec 2025 10:32:40 +0000 (UTC)
+	s=arc-20240116; t=1765279893; c=relaxed/simple;
+	bh=J/IOe5CTGP3RFLifuosyft8NxWk4Yo2Zm5latyruAVs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uS/viTecIy2Mz9olsQ2yoekFHqrFGJvFEwAo95W8Z3JM4MYsX3S0NbwfdJvrIEg0CFcA/MYIVQBQv01WID2uyOWkI5xbuwDz6yDtuKDC9bUpy17zqN+uogkkphfnfF29ZN4cCv3aJs1OBVICTI6KYItVY2QT8nAX+m6iJ+ewvsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLV5FeBE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E26C19425
+	for <linux-pm@vger.kernel.org>; Tue,  9 Dec 2025 11:31:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765276362;
-	bh=PndLdpaaxi55sQ8QpGxvUhn/SLKC13Su10SE7RFjHVo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ed1D5u/AREKnGNM6mMd4BFALwWhx4xfs0IdQT8zZkt7Z5YUXFaoH2msadFscEg4yd
-	 n8Ot/rn7EM22I3K9+mceMWalKJCRqygUYWO+nNOtxOdtBmPYGdUgOFNWAVBQ1XRfU7
-	 NIYXxGYvhjuKgLKmuTdS0qU4ZQv/qV3vtxfW4vURiNLOcn67w46SnJImdSEsSQ+12Y
-	 uX3Nbggt9ZPNOC7BSb9yhV9cSqFzk8qe1FyOWGfo8iyR5YaH/6a69yLSeX6rNoMHdl
-	 vODNKt2Y0LMaiDgM7WlkTSPBqUUsuFQAIRHBvBiu2J4EmagRM7l1980qpuXJ/b8FyN
-	 mjzXmpOILf0CQ==
-Date: Tue, 9 Dec 2025 11:32:37 +0100
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Lucas Zampieri <lzampier@redhat.com>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Jiri Kosina <jikos@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-	Bastien Nocera <hadess@hadess.net>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] HID: input: Convert battery code to devm_*
-Message-ID: <hn2vabg7wvyqzdvp4erwuhfsyahsx35l6ehmo5fmklfnbybqgo@on5mev5x7svd>
-References: <20251121131556.601130-1-lzampier@redhat.com>
- <20251121131556.601130-2-lzampier@redhat.com>
+	s=k20201202; t=1765279891;
+	bh=J/IOe5CTGP3RFLifuosyft8NxWk4Yo2Zm5latyruAVs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=TLV5FeBE4E/FN1VE6rmUP6hPI6odOg1TY/fc6prnPSSdzcsG1S3rFHhteDqjTUPkI
+	 /25mp1jBGKTbbRRVd45vp3lKlSkL9qBtkQe/o87SZKk+fnstf8MhNPFBnKVIfCpaaG
+	 Ama7d6Tk03pZH1euCt/HgKFDXRKkcUSmEIMwnQnQNfDjaJjFUb71GExM2JHZ+fSaJ8
+	 us0TRDZzj7T31W/tuaXh1fKTiQykWCIDaNoylMywpMa2q+jzoltXwNp4gO23/OhBFJ
+	 FTl7uemMxHoC2HstzraOkWrlDMyKT7Y6fEhYUu5FZ3XtDLM0ak89VymWb1l9rGy9zz
+	 9oIjbDyZVUT+w==
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-453928468baso2350497b6e.3
+        for <linux-pm@vger.kernel.org>; Tue, 09 Dec 2025 03:31:31 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVmaoDFC/8CvxOWQ9y3fAl0wOjqJUvvDgczP3+dRLHJZB/9O71H+kd43kYH+VzzvJiuvDTySyPFoA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhmfTt60LA+g/WjLePMFkPQQLhqm3BP5yD2k3JjS/ScZnGLRp0
+	jND0DdjkVOODISGM59s5oKnXE3mxkHQ+pIrntqogKJEGc31gVq6JIAfBFrLxW2N9XEielDjU+Iw
+	o2rpTNRRqTy2qdmHUZC/p7ncr21fQqmk=
+X-Google-Smtp-Source: AGHT+IGsBG1uJpRAlc5vsAML/Hp087Kg6cb5xR4T6EedaOpUEnRMdjXG61qBORELGfgV07cLQnq5NA5SuyajyvOJf00=
+X-Received: by 2002:a05:6808:238a:b0:44f:6a19:433e with SMTP id
+ 5614622812f47-4539df3cce5mr4237855b6e.15.1765279890960; Tue, 09 Dec 2025
+ 03:31:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251121131556.601130-2-lzampier@redhat.com>
+References: <2395536.ElGaqSPkdT@rafael.j.wysocki> <ab8b770c-08e9-4cf6-bd4f-f36c951fda4c@gmx.de>
+In-Reply-To: <ab8b770c-08e9-4cf6-bd4f-f36c951fda4c@gmx.de>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 9 Dec 2025 12:31:18 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jAH9FZrO5AvVF90zgy-0EeM+rsB6Zf8cMf+sR8=FFuDA@mail.gmail.com>
+X-Gm-Features: AQt7F2p3VPpnP4yl_PF4fpf1p7sxQR7LJIHVngPgfQZ51QSxFjiMDxvnIX6VadE
+Message-ID: <CAJZ5v0jAH9FZrO5AvVF90zgy-0EeM+rsB6Zf8cMf+sR8=FFuDA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] PCI: ACPI: PM: Rework root bus wakeup notification
+ setup and wakeup source registration
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>, 
+	Linux PM <linux-pm@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Nov 21 2025, Lucas Zampieri wrote:
-> Convert the HID battery code to use devm_* managed resource APIs.
-> 
-> This changes the following allocations:
-> - kzalloc() -> devm_kzalloc() for power_supply_desc
-> - kasprintf() -> devm_kasprintf() for battery name
-> - power_supply_register() -> devm_power_supply_register()
-> 
-> No functional behavior changes.
-> 
-> Signed-off-by: Lucas Zampieri <lzampier@redhat.com>
-> ---
->  drivers/hid/hid-input.c | 49 +++++++++--------------------------------
->  1 file changed, 10 insertions(+), 39 deletions(-)
-> 
-> diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
-> index e56e7de53279..5f313c3c35e2 100644
-> --- a/drivers/hid/hid-input.c
-> +++ b/drivers/hid/hid-input.c
-> @@ -530,17 +530,15 @@ static int hidinput_setup_battery(struct hid_device *dev, unsigned report_type,
->  	if (quirks & HID_BATTERY_QUIRK_IGNORE)
->  		return 0;
->  
-> -	psy_desc = kzalloc(sizeof(*psy_desc), GFP_KERNEL);
-> +	psy_desc = devm_kzalloc(&dev->dev, sizeof(*psy_desc), GFP_KERNEL);
->  	if (!psy_desc)
->  		return -ENOMEM;
->  
-> -	psy_desc->name = kasprintf(GFP_KERNEL, "hid-%s-battery",
-> -				   strlen(dev->uniq) ?
-> -					dev->uniq : dev_name(&dev->dev));
-> -	if (!psy_desc->name) {
-> -		error = -ENOMEM;
-> -		goto err_free_mem;
-> -	}
-> +	psy_desc->name = devm_kasprintf(&dev->dev, GFP_KERNEL, "hid-%s-battery",
-> +					strlen(dev->uniq) ?
-> +						dev->uniq : dev_name(&dev->dev));
-> +	if (!psy_desc->name)
-> +		return -ENOMEM;
->  
->  	psy_desc->type = POWER_SUPPLY_TYPE_BATTERY;
->  	psy_desc->properties = hidinput_battery_props;
-> @@ -576,36 +574,15 @@ static int hidinput_setup_battery(struct hid_device *dev, unsigned report_type,
->  	if (quirks & HID_BATTERY_QUIRK_AVOID_QUERY)
->  		dev->battery_avoid_query = true;
->  
-> -	dev->battery = power_supply_register(&dev->dev, psy_desc, &psy_cfg);
-> +	dev->battery = devm_power_supply_register(&dev->dev, psy_desc, &psy_cfg);
->  	if (IS_ERR(dev->battery)) {
-> -		error = PTR_ERR(dev->battery);
-> -		hid_warn(dev, "can't register power supply: %d\n", error);
-> -		goto err_free_name;
-> +		hid_warn(dev, "can't register power supply: %ld\n",
-> +			 PTR_ERR(dev->battery));
-> +		return PTR_ERR(dev->battery);
->  	}
->  
->  	power_supply_powers(dev->battery, &dev->dev);
->  	return 0;
-> -
-> -err_free_name:
-> -	kfree(psy_desc->name);
-> -err_free_mem:
-> -	kfree(psy_desc);
-> -	dev->battery = NULL;
-> -	return error;
+On Mon, Dec 8, 2025 at 9:01=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wrote:
+>
+> Am 08.12.25 um 13:09 schrieb Rafael J. Wysocki:
+>
+> > Hi All,
+> >
+> > Patch [1/2] updates the registration of PCI root bus wakeup notificatio=
+n setup
+> > in order to simplify code in pci_acpi_wake_bus() and to prepare for the=
+ other
+> > change.  This is not expected to affect functionality.
+> >
+> > Patch [2/2] modifies the ACPI PM notifier registration to add wakeup so=
+urces
+> > under devices that are going to be affected by wakeup handling instead =
+of
+> > registering them under ACPI companions of those devices (rationale expl=
+ained
+> > in the patch changelog).  This will change the sysfs layout (wakeup sou=
+rce
+> > devices associated with PCI wakeup are now going to appear under PCI de=
+vices
+> > and the host bridge device), but it is not expected to affect user spac=
+e
+> > adversely.
+> >
+> > Thanks!
+>
+> I tested both patches, and the sysfs layout changes as expected:
+>
+> $ readlink /sys/class/wakeup/wakeup*/device
+> ../../../device:00
+> ../../../device:1a
+> ../../../device:1f
+> ../../../device:20
+> ../../../0000:00:08.1
+> ../../../device:36
+> ../../../device:31
+> ../../../device:32
+> ../../../device:3c
+> ../../../0000:01:00.0
+> ../../../device:3d
+> ../../../PNP0C02:00
+> ../../../0000:02:00.0
+> ../../../device:3e
+> ../../../device:3f
+> ../../../device:46
+> ../../../0000:04:00.0
+> ../../../device:47
+> ../../../0000:05:00.0
+> ../../../device:57
+> ../../../0000:05:08.0
+> ../../../device:59
+> ../../../device:01
+> ../../../0000:05:09.0
+> ../../../device:5b
+> ../../../0000:05:0a.0
+> ../../../device:5d
+> ../../../0000:05:0b.0
+> ../../../device:5f
+> ../../../0000:05:0c.0
+> ../../../device:74
+> ../../../0000:05:0d.0
+> ../../../device:5a
+> ../../../device:3a
+> ../../../device:5c
+> ../../../device:60
+> ../../../device:75
+> ../../../LNXVIDEO:00
+> ../../../device:22
+> ../../../PNP0C02:02
+> ../../../device:25
+> ../../../device:2b
+> ../../../device:24
+> ../../../device:37
+> ../../../0000:00:01.1
+> ../../../PNP0A08:00
+> ../../../LNXPWRBN:00
+> ../../../AMDI0010:00
+> ../../../AMDI0030:00
+> ../../../00:02
+> ../../../alarmtimer.0.auto
+> ../../../PNP0C0C:00
+> ../../../0000:0b:00.0
+> ../../../AMDIF031:00
+> ../../../PNP0C14:00
+> ../../../device:0a
+> ../../../PNP0C14:01
+> ../../../PNP0C14:02
+> ../../../PNP0C14:03
+> ../../../0000:0e:00.3
+> ../../../0000:0e:00.4
+> ../../../0000:0f:00.0
+> ../../../5-2
+> ../../../1-5.3
+> ../../hidpp_battery_0
+> ../../../device:44
+> ../../../0000:00:02.1
+> ../../../device:76
+> ../../../device:0b
+>
+> turns into:
+>
+> $ readlink /sys/class/wakeup/wakeup*/device
+> ../../../0000:00:00.0
+> ../../../0000:00:04.0
+> ../../../0000:00:08.0
+> ../../../0000:00:08.1
+> ../../../0000:00:08.1
+> ../../../0000:00:08.3
+> ../../../0000:00:14.0
+> ../../../0000:00:14.3
+> ../../../0000:01:00.0
+> ../../../0000:01:00.0
+> ../../../0000:02:00.0
+> ../../../0000:00:00.2
+> ../../../0000:02:00.0
+> ../../../0000:03:00.0
+> ../../../0000:03:00.1
+> ../../../0000:04:00.0
+> ../../../0000:04:00.0
+> ../../../0000:05:00.0
+> ../../../0000:05:00.0
+> ../../../0000:05:08.0
+> ../../../0000:05:08.0
+> ../../../0000:05:09.0
+> ../../../0000:00:01.0
+> ../../../0000:05:09.0
+> ../../../0000:05:0a.0
+> ../../../0000:05:0a.0
+> ../../../0000:05:0b.0
+> ../../../0000:05:0b.0
+> ../../../0000:05:0c.0
+> ../../../0000:05:0c.0
+> ../../../0000:05:0d.0
+> ../../../0000:05:0d.0
+> ../../../0000:08:00.0
+> ../../../0000:00:01.1
+> ../../../0000:09:00.0
+> ../../../0000:0b:00.0
+> ../../../0000:0c:00.0
+> ../../../0000:0e:00.0
+> ../../../0000:0e:00.1
+> ../../../0000:0e:00.2
+> ../../../0000:0e:00.3
+> ../../../0000:0e:00.4
+> ../../../0000:0e:00.6
+> ../../../0000:0f:00.0
+> ../../../0000:00:01.1
+> ../../../pci0000:00
+> ../../../LNXPWRBN:00
+> ../../../AMDI0010:00
+> ../../../AMDI0030:00
+> ../../../00:02
+> ../../../alarmtimer.0.auto
+> ../../../PNP0C0C:00
+> ../../../0000:0b:00.0
+> ../../../AMDIF031:00
+> ../../../PNP0C14:00
+> ../../../0000:00:02.0
+> ../../../PNP0C14:01
+> ../../../PNP0C14:02
+> ../../../PNP0C14:03
+> ../../../0000:0e:00.3
+> ../../../0000:0e:00.4
+> ../../../0000:0f:00.0
+> ../../../5-2
+> ../../../1-5.3
+> ../../hidpp_battery_0
+> ../../../0000:00:02.1
+> ../../../0000:00:02.1
+> ../../../0000:00:02.2
+> ../../../0000:00:03.0
+>
+> The remaining ACPI devices are likely caused by device drivers based upon=
+ struct acpi_driver.
+> I was unable to test the wakeup itself since suspend is currently broken =
+due to issues with
+> cpuidle,
 
-As mentioned in my other reply (and this is more of an open question):
-what if there is a failure in devm_power_supply_register? Everything
-will be allocated and kept until the end of life of the HID device, but
-we'll try to recreate the battery for every matching field in the HID
-device, meaning we are waiting a lot of space for nothing.
+Have you reported those?  What cpuidle driver is involved?
 
-The previous appraoch was cleaning things up, so we were trying a lot,
-but at least we were not keeping the memory allocated.
+If you happen to be using the ACPI idle driver, there is a regression
+between 6.18-rc7 and final 6.18 due to a missing revert, but final
+6.18 should be as expected.
 
-I think we should keep the error path for devm_power_supply_register()
-and dealloc (with devm_kfree) the few memories we've done and also clear
-dev->battery.  This way we keep the current path and can make use of
-devm and get the benefits of removing the hidinput_cleanup_battery()
-function.
+> but i suspect that this has nothing to do with the patch series.
 
-Cheers,
-Benjamin
+Right, cpuidle is entirely orthogonal to this.
 
-> -}
-> -
-> -static void hidinput_cleanup_battery(struct hid_device *dev)
-> -{
-> -	const struct power_supply_desc *psy_desc;
-> -
-> -	if (!dev->battery)
-> -		return;
-> -
-> -	psy_desc = dev->battery->desc;
-> -	power_supply_unregister(dev->battery);
-> -	kfree(psy_desc->name);
-> -	kfree(psy_desc);
-> -	dev->battery = NULL;
->  }
->  
->  static bool hidinput_update_battery_charge_status(struct hid_device *dev,
-> @@ -660,10 +637,6 @@ static int hidinput_setup_battery(struct hid_device *dev, unsigned report_type,
->  	return 0;
->  }
->  
-> -static void hidinput_cleanup_battery(struct hid_device *dev)
-> -{
-> -}
-> -
->  static void hidinput_update_battery(struct hid_device *dev, unsigned int usage,
->  				    int value)
->  {
-> @@ -2379,8 +2352,6 @@ void hidinput_disconnect(struct hid_device *hid)
->  {
->  	struct hid_input *hidinput, *next;
->  
-> -	hidinput_cleanup_battery(hid);
-> -
->  	list_for_each_entry_safe(hidinput, next, &hid->inputs, list) {
->  		list_del(&hidinput->list);
->  		if (hidinput->registered)
-> -- 
-> 2.51.1
-> 
+> So for the whole series:
+> Reviewed-by: Armin Wolf <W_Armin@gmx.de>
+
+Thank you!
 
