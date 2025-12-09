@@ -1,151 +1,155 @@
-Return-Path: <linux-pm+bounces-39327-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39328-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B91A9CAEE5B
-	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 05:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D6D4ECAEF48
+	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 06:38:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D09E83024357
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 04:38:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DAEF8306C16C
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 05:37:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC6A27E066;
-	Tue,  9 Dec 2025 04:38:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A4A2D839F;
+	Tue,  9 Dec 2025 05:37:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hKQRLve1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TygR5e0p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72D0277818
-	for <linux-pm@vger.kernel.org>; Tue,  9 Dec 2025 04:38:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36972E613A
+	for <linux-pm@vger.kernel.org>; Tue,  9 Dec 2025 05:37:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765255122; cv=none; b=qRHF80X11sQzYE5o1hvX8aVU7mbcUCo8SbnxJYmOv64MGOl4l6Nn2F2fg2qNNtfS6U+pLQZqL6QKwKsd2ZEWWfDH1SjjC8WEaq00x9e9ieY5VABHcet+Ha1DwRKkD2Xd19JFigspdC/gRBLq8gptCB+HNzQpXYY9asXbx8MIF9Y=
+	t=1765258628; cv=none; b=UZcDXSFLlrQFfx9aBmBiY2jdp+Z6doGA3UC8OlKktxhgDZGSbuKiNNt1nj3511+7hyXGtyJuV37/kAVCgJfmk385gvEnQUdd2bo/UYLMQwEN/CyxW2RuXzO1Gize242Ck1plPrDiVgpNp4I8BEOUpm8heVq8S6fxLdEItllowcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765255122; c=relaxed/simple;
-	bh=lCeS2rZs0DOuchGORWhUOHFafJbHcX8mIQByqB5tQ6w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LTiw1qDrwoOyVoYDghMfCj4Ww3ivO/dWJCr030sczgoLvM0BFtsYtXU2B8xmsxYHz3JhXble8/QszlQVon8shxqsyvxGrPMOkdG7COd8m2gu/6WPqAbn/lsQO47Xu+Wb3gqCVpMhADvIpJ6lYflAMi3Uenf8ogM/D/iwZzVQ4pY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hKQRLve1; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-5942bac322dso5124087e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 08 Dec 2025 20:38:40 -0800 (PST)
+	s=arc-20240116; t=1765258628; c=relaxed/simple;
+	bh=CefoIGQ0zOQjtmKmWVEDUPlyuLPa7NE4zw3r0FVAacg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XJZ6k5jYBLA8ffdjxngZfbJUrM0UVgfVFwEoZT2oIn/rqhz+DumG4j7NOWYk1D9UuyB+D/eOYT2Jn9VhZHT+7zaHWY2SPbMBI1ANNf7UiUf0JMCIcGVaK61WzYOl0GkseAU1oTsApI/UOpNoih96dtwHX7G4HOscbFhjdGqrY40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TygR5e0p; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-29555415c5fso60311505ad.1
+        for <linux-pm@vger.kernel.org>; Mon, 08 Dec 2025 21:37:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765255119; x=1765859919; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SzHsigVrv0A4MNDWjYlB5QyJq7OvnSZmzl7cSMbglZ8=;
-        b=hKQRLve1O5jcfydsLE/2hrtvhQGb9Z3SQTjEGk6zX4puFbnd4XmkKJM2nSWFB0uQ4K
-         2qRxUnxc51jB+NsZVeQZARuGInstpkW8n5Jpc2JAe7CC+vJMG6FrUrjpy2f+ImCU2IsN
-         j0SjMUtWqJzu7q6PyTSyh/E8lWJLTqCcCESIMYAbdYZSD8oa5UabW9GTJkHBv5h6gVgw
-         OvkFhMMa6JT1Ppedq96JtLt17oJIrodIwey8bWyIZ0O+X8JjBV/fCi29a94taTrTkPXp
-         KdgYGY5Z1VnVRhSUiL6IXuS4epnP5GBRniDyAKlAU7o07fj63ZZnv8q2m7Wh4xUSwKLF
-         SGng==
+        d=linaro.org; s=google; t=1765258626; x=1765863426; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gYp0OCC+sWKk+L/Nrm2Iw3UAwf4IWVfQUc4OYEyL64A=;
+        b=TygR5e0pdfNG0DkYfT8QeEU0i14YT8E/MuqoIQVSr6oD9LKyBLnyIV9fJ4PfeFL9uO
+         gXvKAroGKLLl564WaCyUJNyf5maKa9o1TcBac8u9WA+QMXu9dz3VYvJvw73WTCt04S7q
+         YKpIu64uPS5+uKbXnMcENZqsm9jyY5QYQIO9iLltEw/DSxPqZXu/286iKWB9RMAGBOIh
+         3IA1n6VCA0ywjF8XHwUMHJ6WhcDsKTKA2D+6GC/heww/HtPCZEJg9Qtz3i1k8yWyrYdz
+         lMqSATmf1BhO1L0zA0eo1brTYpJMzjNQ11clf5kLrxLyqFRR6vLiwjnFiVX2ru1rmDTd
+         NifA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765255119; x=1765859919;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=SzHsigVrv0A4MNDWjYlB5QyJq7OvnSZmzl7cSMbglZ8=;
-        b=RA5UBd8sGPwW1yW/GC3aBjb1TK3x+Ecd4i0gQoHrHk9sZRyBfxlkhLn/HV8fJi/P6M
-         g7GRr8TX47ajGqLnx0n/OvSiZQEbaHl52eKWZjiyAlLMxnr31g+9mvRJkuFyonpYnauQ
-         0ihLEgB++ywb9TTIiwTgdQH4HCCQWR9mYxKm9Tu5sSuUI0FciVqA0QvqFIZyyWtXBgBG
-         FIdNTTyYVcsmXF/lvLUbtyNMqmgCgVwszCVAb/yyA51GeXtUZrkBcbakJyfmPD48T0eF
-         CtNkifPgM2NFNpl1BGBVlOxE03lMN133Dfi/DIddaOEBEhwsGqt1QteHy9bu7F33KaRs
-         ZypA==
-X-Forwarded-Encrypted: i=1; AJvYcCX5IKrpeAMlcft9a3k376N30MgVwKXCAC7xwBsbzk5vmoBUCVhRcH0Uh+78PUGloMGm4GxDfWBGYg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzX9kthGVSKzkz5RStLZhhXbyTRenNVJH2Uej2O/TGrKH+kIHNx
-	BGdj0JzXG1sNr36ID9+SFzyjQSSSVPvdQFQjupIV1/inFW6ZOjzjm/1KEsLzwcjye893OVSgQ3p
-	jAjFMut+kl4HqZmqv6ylPvyh1xSITAH4=
-X-Gm-Gg: ASbGncvn7BGniVFbJVn8wASGuoWzvviPLjrusVx8t6FqYlGzn14KcRHKEyM7+gfSA5T
-	/nFviagaYDqIoQEtumBDrt36vdu/4jZzafG4h4w59TPf9A+j+iw0WHbZQHAAQ8LMYWD7VhRgSvF
-	AunoqebN2LMAG+gYytzYK4sKU3pGLw1Cua8HAs1gHh8RcPQCHqtnuVjkMImOPQUzQahkTqIjVXb
-	DJrjbvrjJywTuQQ2iWe5jdmiX4G5vAp9RTbIiHn69CMRIp2H0fwxi+bzdoZC52dPuBnetg=
-X-Google-Smtp-Source: AGHT+IHc8wnLSC3QKPaNCjZkhPEnAZ8Y/+7SK+LNIP9wQWMucLG9PhpZ4JxKAADqY3Ze08e24Vac7MAoxfivyy3iyM4=
-X-Received: by 2002:a05:6512:124b:b0:595:9d86:2cc7 with SMTP id
- 2adb3069b0e04-598853c1be6mr3876881e87.39.1765255118790; Mon, 08 Dec 2025
- 20:38:38 -0800 (PST)
+        d=1e100.net; s=20230601; t=1765258626; x=1765863426;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gYp0OCC+sWKk+L/Nrm2Iw3UAwf4IWVfQUc4OYEyL64A=;
+        b=qQq2JWKai3V9spaTDCLApPJpuixA27ZCwiNHydCYNnf6f/p9LQOpCHOkI9nWpXlxMW
+         JSeJ8wSg6aku/pAU3chAy4fREsHOBZKbo1bX5GEvPQdaP/vAp5pO3OP/x33jyMofk8s1
+         mNG2IAk6170XzfHiL1rBoKBwRQYx0z8eLKvpb0cWUqXeJE5xs4JNZa2yGCfN8Y4ApPPJ
+         mYbyUQZHb7Uww6ACnmnP6lnEsdlvLd016i2qYAToPv4wO4DJUvzhM5wqPR6mQyS+D9Ar
+         Y/g5hRO5DpZFC1j2rbuDZn3fIce3R49XBT2PyLRFjnWo/tIAd3/en688V7URANKMZJvh
+         PU7A==
+X-Forwarded-Encrypted: i=1; AJvYcCV1sTG6sy8iiFdDHqN3xFXxmXyDbaiHA2gVWiJVxu4vjt6UVd3unBbg9U1qK+QdBSWlJRQ+aiJNmQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YynP4rAPQySqPxEq0PGPWWsLoAkISV50FYeSXCIJERBR4F+jzfl
+	BFlcSp71wC7RiAF2Tm2NZZtryVMDgp1HUJQybQ3tyHDB1fczmE9xInHkqRWB5BugjvDWtn/sS5U
+	q/mP/
+X-Gm-Gg: ASbGnctThaz+16WnIx0nC5AnmtzDjdEvxSq8CigZt87nSi+2xvmH877iOE0ukVPSkwu
+	eYaG0PiVkSUlrOHBXHTH2SoIXYNtVGdrGxCuN8pKeuOpt85b/OKeSCg19CxnPApaEaNgbUs4GFK
+	l9Zc2J6EA31Zv2tPQFGK38Hr/M9PUVCe0bHZNkP7eP5QJKABUhP10dvfupmDy8qp7SOGj81wuYP
+	ozROCcBqZx1gxZdA1auSEfplpuDoyFtJCNjwilV3O06VIb/3fsLEYKzJapZARI99A8P8HJxUc3V
+	Ux17M4BWAWWsn14lrVt/c8q666mc9eXvhYfwTDmz5Jf6ddprmL+kgqEW1/5LfXrHHqMMqB/WcMn
+	Q21s0lzfx80BlKWN8bnoKG0cJmXeeZ3uJpEFk9+nH628d3VKQZpb2AHGg+lrwL6GZdptcvt9IrH
+	o89SkwhWR6yIA=
+X-Google-Smtp-Source: AGHT+IF+CGH2QzU3Dl95CmIg5IQq6FWrXkY+cXpVMFk5o3ZnZs5sjLTXCyRmo4AHtVL1EzlP3sSzPg==
+X-Received: by 2002:a17:902:c950:b0:295:7b8c:6611 with SMTP id d9443c01a7336-29df55765d7mr86969205ad.15.1765258625617;
+        Mon, 08 Dec 2025 21:37:05 -0800 (PST)
+Received: from localhost ([122.172.86.94])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-29dae4d3934sm139522225ad.24.2025.12.08.21.37.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Dec 2025 21:37:05 -0800 (PST)
+Date: Tue, 9 Dec 2025 11:07:02 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Pavel Pisa <pisa@fel.cvut.cz>
+Cc: Michal Simek <michal.simek@amd.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, Pavel Hronek <hronepa1@fel.cvut.cz>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: arm:xlnx,zynq-7000: missing CPU freq in /sys after
+ 6.18.0-g8f7aa3d3c732 from 2025-12-04
+Message-ID: <6hnk7llbwdezh74h74fhvofbx4t4jihel5kvr6qwx2xuxxbjys@rmwbd7lkhrdz>
+References: <202512081758.02574.pisa@fel.cvut.cz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250731-pci-tegra-module-v7-2-cad4b088b8fb@gmail.com>
- <20250926212519.GA2268653@bhelgaas> <CALHNRZ-1sLDz7rSO97tWFeRzgP4rGo=winc7ZsANtAtQkU+pFw@mail.gmail.com>
-In-Reply-To: <CALHNRZ-1sLDz7rSO97tWFeRzgP4rGo=winc7ZsANtAtQkU+pFw@mail.gmail.com>
-From: Aaron Kling <webgeek1234@gmail.com>
-Date: Mon, 8 Dec 2025 22:38:27 -0600
-X-Gm-Features: AQt7F2pvGcZWndtbfMMeJ1f-6NSlT5r1quLqId4BydBljPNcuT6AVY1N-3SAoqM
-Message-ID: <CALHNRZ8JBMQRBXeO2cx11UJ2Ag6vzkuOj8Dg5BnYke8b41_AeQ@mail.gmail.com>
-Subject: Re: [PATCH v7 2/3] cpuidle: tegra: Export tegra_cpuidle_pcie_irqs_in_use
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202512081758.02574.pisa@fel.cvut.cz>
 
-On Mon, Oct 20, 2025 at 1:53=E2=80=AFPM Aaron Kling <webgeek1234@gmail.com>=
- wrote:
->
-> On Fri, Sep 26, 2025 at 4:25=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org=
-> wrote:
-> >
-> > [cc->to: Rafael, Daniel, any feedback or ack?  Would like to resolve
-> > this (part of Aaron's series at
-> > https://lore.kernel.org/r/20250731-pci-tegra-module-v7-0-cad4b088b8fb@g=
-mail.com)]
-> >
-> > On Thu, Jul 31, 2025 at 04:59:25PM -0500, Aaron Kling via B4 Relay wrot=
-e:
-> > > From: Aaron Kling <webgeek1234@gmail.com>
-> > >
-> > > Add export for tegra_cpuidle_pcie_irqs_in_use() so that drivers like
-> > > pci-tegra can be loaded as a module.
-> > >
-> > > Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
-> > > ---
-> > >  drivers/cpuidle/cpuidle-tegra.c | 1 +
-> > >  1 file changed, 1 insertion(+)
-> > >
-> > > diff --git a/drivers/cpuidle/cpuidle-tegra.c b/drivers/cpuidle/cpuidl=
-e-tegra.c
-> > > index b203a93deac5f378572be90e22c73e7417adb99e..aca907a62bb5de4ee4c71=
-c1900eacedd4b90bc0a 100644
-> > > --- a/drivers/cpuidle/cpuidle-tegra.c
-> > > +++ b/drivers/cpuidle/cpuidle-tegra.c
-> > > @@ -336,6 +336,7 @@ void tegra_cpuidle_pcie_irqs_in_use(void)
-> > >       pr_info("disabling CC6 state, since PCIe IRQs are in use\n");
-> > >       tegra_cpuidle_disable_state(TEGRA_CC6);
-> > >  }
-> > > +EXPORT_SYMBOL_GPL(tegra_cpuidle_pcie_irqs_in_use);
-> >
-> > tegra_cpuidle_pcie_irqs_in_use() looks like a workaround for a Tegra20
-> > hardware defect, and having no knowledge of typical Tegra20 systems,
-> > my questions would be "Why do we even bother with this?  Should
-> > cpuidle-tegra.c just disable CC6 always, unconditionally?  The whole
-> > thing, and all of include/soc/tegra/cpuidle.h, looks like it might be
-> > more trouble than it's worth."
->
-> It's been almost a month again with no responses. Does this have any
-> path forward that doesn't include signoff from the cpuidle
-> maintainers? It's been over four months since they were first asked to
-> look at this, so I presume there will never be any response.
+On 08-12-25, 17:58, Pavel Pisa wrote:
+> Dear maintainers and developers,
+> 
+> we are running CAN/CAN FD subsystem daily correct function
+> and latency evaluation on Zynq platform with our CAN FD IPs
+> on mainline and RT kernels for years already
+> 
+>   https://canbus.pages.fel.cvut.cz/#can-bus-channels-mutual-latency-testing
+> 
+> and we experience problem that attempt to set performance
+> scaling governor though
+> 
+>   /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+>   /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+> 
+> started to fail on mainline kernels. The last day
+> when setting worked has been 2025-12-04 with
+> 6.18.0-g8f7aa3d3c732 kernel. Then the cpufreq
+> /sys interface seems to be missing.
+> 
+> I have checked boot even with latest DTB and the
+> intreface is missing still. The driver seems to be
+> present
+> 
+>   /sys/bus/platform/drivers/cpufreq-dt
+> 
+> the code builds cpufreq-dt-platdev.o which contains
+> "xlnx,zynq-7000". The directory
+> 
+>   /sys/devices/system/cpu/cpufreq
+> 
+> is present, but it is empty. The module is present and
+> linked into kernel
+> 
+>   /sys/module/cpufreq
+> 
+> The next config options are set
+> 
+>   CONFIG_CPUFREQ_DT=y
+>   CONFIG_CPUFREQ_DT_PLATDEV=y
+> 
+> The whole kernel configuration is attached.
+> 
+> Please, have you some idea what could be a problem?
+> Is it necessary to update something or is something missing
+> in the device tree?
+> 
+> I can try to bisect to exact commit or add some debugging
+> printks into kernel to obtain more information,
+> but it would take some time. What else do you suggest?
 
-It has been another month and a half without any response. Is there
-any kernel policy for handling completely dead subsystems? Can the
-maintainer of -next sign off? Can it be sent directly to Torvalds? I
-have been trying to get this merged for almost 8 months now. And the
-majority of that time has been waiting on one single ack for a trivial
-one line change that wont affect anything outside of this series. This
-is seriously ridiculous.
+Try reverting:
 
-Aaron
+commit 6ea891a6dd37 ("cpufreq: dt-platdev: Simplify with of_machine_get_match_data()")
+
+Also if you can provide your boot logs, it could be useful. Either the probing
+of the cpufreq driver isn't attempted, or it just fails somewhere now.
+
+-- 
+viresh
 
