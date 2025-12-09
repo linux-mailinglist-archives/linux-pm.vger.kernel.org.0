@@ -1,268 +1,106 @@
-Return-Path: <linux-pm+bounces-39342-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39343-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DCDFCAFC7D
-	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 12:31:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43D03CAFC96
+	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 12:36:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9CD5E307317F
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 11:31:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 015DE3020351
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 11:35:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B97F2D238A;
-	Tue,  9 Dec 2025 11:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B332D24B7;
+	Tue,  9 Dec 2025 11:35:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLV5FeBE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jlZRyWrV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16AF52BF3F4
-	for <linux-pm@vger.kernel.org>; Tue,  9 Dec 2025 11:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0622288C27
+	for <linux-pm@vger.kernel.org>; Tue,  9 Dec 2025 11:35:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765279893; cv=none; b=ASAVUevnBkURR9sFWcWB27XpDgwORrBv91HAd16TPHX3Dqxnsatrg62EyhZ515sF9KK8TlawL+1w13PNVkl2TtYYNgUrg27OmmAizkizwPXkdmSwcO4NLl5pUv6pgM9053yarfBK7zBEJQR5/Dky2vm+Yc1TsC7U42N5swkbBQI=
+	t=1765280140; cv=none; b=achYeubAuoLJ9MSRnQXQg6+nWKL2OAhM6nDpb30LF3jlPATPni28wDkCfLsYIuTcBGyZyYC2V/PJV7HBeFrPMYwmrLBSLZhrgHEsDvwQR1CSoCN6IAnJEHJBOyuJPdjNsptGqo1Apkuz4j8mWvNRAZKtwb0/Ii0Y3wnJGYXy8EY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765279893; c=relaxed/simple;
-	bh=J/IOe5CTGP3RFLifuosyft8NxWk4Yo2Zm5latyruAVs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uS/viTecIy2Mz9olsQ2yoekFHqrFGJvFEwAo95W8Z3JM4MYsX3S0NbwfdJvrIEg0CFcA/MYIVQBQv01WID2uyOWkI5xbuwDz6yDtuKDC9bUpy17zqN+uogkkphfnfF29ZN4cCv3aJs1OBVICTI6KYItVY2QT8nAX+m6iJ+ewvsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLV5FeBE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E26C19425
-	for <linux-pm@vger.kernel.org>; Tue,  9 Dec 2025 11:31:31 +0000 (UTC)
+	s=arc-20240116; t=1765280140; c=relaxed/simple;
+	bh=v8npctYpvGX4CBErXX+OEIlvdM00kLYgMZzuz/QNabY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=R4EReNHNYloe4HcdJGXstBXz9fDfzNqbU47qMa2zATRnBDDPfq45zXt2obcoxmf5vfAEv/mrVQ/ZVOrji38Ma/WeAe7HBzzIGzRzqqAJ55PXJvxnrsEe3Iz8VPqz0UFThT3c6AIoifKwKRyFuC9ZSneqiqUe8c7Xvg9ICA3XMQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jlZRyWrV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FF9C4CEF5
+	for <linux-pm@vger.kernel.org>; Tue,  9 Dec 2025 11:35:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765279891;
-	bh=J/IOe5CTGP3RFLifuosyft8NxWk4Yo2Zm5latyruAVs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TLV5FeBE4E/FN1VE6rmUP6hPI6odOg1TY/fc6prnPSSdzcsG1S3rFHhteDqjTUPkI
-	 /25mp1jBGKTbbRRVd45vp3lKlSkL9qBtkQe/o87SZKk+fnstf8MhNPFBnKVIfCpaaG
-	 Ama7d6Tk03pZH1euCt/HgKFDXRKkcUSmEIMwnQnQNfDjaJjFUb71GExM2JHZ+fSaJ8
-	 us0TRDZzj7T31W/tuaXh1fKTiQykWCIDaNoylMywpMa2q+jzoltXwNp4gO23/OhBFJ
-	 FTl7uemMxHoC2HstzraOkWrlDMyKT7Y6fEhYUu5FZ3XtDLM0ak89VymWb1l9rGy9zz
-	 9oIjbDyZVUT+w==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-453928468baso2350497b6e.3
-        for <linux-pm@vger.kernel.org>; Tue, 09 Dec 2025 03:31:31 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVmaoDFC/8CvxOWQ9y3fAl0wOjqJUvvDgczP3+dRLHJZB/9O71H+kd43kYH+VzzvJiuvDTySyPFoA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhmfTt60LA+g/WjLePMFkPQQLhqm3BP5yD2k3JjS/ScZnGLRp0
-	jND0DdjkVOODISGM59s5oKnXE3mxkHQ+pIrntqogKJEGc31gVq6JIAfBFrLxW2N9XEielDjU+Iw
-	o2rpTNRRqTy2qdmHUZC/p7ncr21fQqmk=
-X-Google-Smtp-Source: AGHT+IGsBG1uJpRAlc5vsAML/Hp087Kg6cb5xR4T6EedaOpUEnRMdjXG61qBORELGfgV07cLQnq5NA5SuyajyvOJf00=
-X-Received: by 2002:a05:6808:238a:b0:44f:6a19:433e with SMTP id
- 5614622812f47-4539df3cce5mr4237855b6e.15.1765279890960; Tue, 09 Dec 2025
- 03:31:30 -0800 (PST)
+	s=k20201202; t=1765280139;
+	bh=v8npctYpvGX4CBErXX+OEIlvdM00kLYgMZzuz/QNabY=;
+	h=From:Date:Subject:To:Cc:From;
+	b=jlZRyWrVZtMD+BNp1GlI4clncyPOn5zx2I5zbFnJ1xDOCeihnDYKdU1R1PJrY9eta
+	 CDlmZM3eTJ6ZVuZP7Q9HZm7dpS228gGO1ftepEBnkKS4lHvXcV5j2BoYgBqMxI7mmg
+	 5tpvO2ocUo9+YF/GnHRI99Uu+ZW3dgTrqWOFZLXrsXE+suyOwUiDOV3VhwZbYZf8ah
+	 Gc7lXY6Ox0FuwbVCCylopNxdjo+RVrf41w6gqXzwCtWZ95i0PfqfbVepYqqzyWxvW3
+	 VxAG5BsL1RAeInsluX2mx0wzLouX/mNKRd/xEbSw1z3fM2qfHtBXZ+PTT0KUWCgxc6
+	 1kGpB69WlKNJw==
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-65745a436f7so2998917eaf.3
+        for <linux-pm@vger.kernel.org>; Tue, 09 Dec 2025 03:35:39 -0800 (PST)
+X-Gm-Message-State: AOJu0Yx7VS0ztG5aGV15nnZuL+gP6i8qLDR2lOnaJjGMZen8I2AQb+PE
+	uMM0c8V9uL0ZYbxaYbOIRw28mxjvTsSHc7xoIkh/4O8oEDd5dF0EgsYJsPIbYMk+Hry2B3DYWF+
+	6cxliKl0VGgzdoRGel/AYEK4aSj2mWec=
+X-Google-Smtp-Source: AGHT+IFkayyMEtnSxiedolMZygWkEQLUJN0i6DVFLdFwjop81Gpw+lszVNxQtZ3fyVJ4rHIL7wO364/fKkbuCMvF0fw=
+X-Received: by 2002:a05:6820:1795:b0:659:9a49:8f5f with SMTP id
+ 006d021491bc7-6599a92cc3emr5100231eaf.36.1765280138904; Tue, 09 Dec 2025
+ 03:35:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2395536.ElGaqSPkdT@rafael.j.wysocki> <ab8b770c-08e9-4cf6-bd4f-f36c951fda4c@gmx.de>
-In-Reply-To: <ab8b770c-08e9-4cf6-bd4f-f36c951fda4c@gmx.de>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 9 Dec 2025 12:31:18 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jAH9FZrO5AvVF90zgy-0EeM+rsB6Zf8cMf+sR8=FFuDA@mail.gmail.com>
-X-Gm-Features: AQt7F2p3VPpnP4yl_PF4fpf1p7sxQR7LJIHVngPgfQZ51QSxFjiMDxvnIX6VadE
-Message-ID: <CAJZ5v0jAH9FZrO5AvVF90zgy-0EeM+rsB6Zf8cMf+sR8=FFuDA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] PCI: ACPI: PM: Rework root bus wakeup notification
- setup and wakeup source registration
-To: Armin Wolf <W_Armin@gmx.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
+Date: Tue, 9 Dec 2025 12:35:26 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hok19sojJzv6rScSxoVezJ4U815zmKXEX_c0jnK-09QQ@mail.gmail.com>
+X-Gm-Features: AQt7F2rLD5hCZpstot1qLwRlk0CcKuk6s_0sXIFxwA4_ljp_brm6DheS4cdIsMU
+Message-ID: <CAJZ5v0hok19sojJzv6rScSxoVezJ4U815zmKXEX_c0jnK-09QQ@mail.gmail.com>
+Subject: [GIT PULL] More power management updates for v6.19-rc1
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 8, 2025 at 9:01=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wrote:
->
-> Am 08.12.25 um 13:09 schrieb Rafael J. Wysocki:
->
-> > Hi All,
-> >
-> > Patch [1/2] updates the registration of PCI root bus wakeup notificatio=
-n setup
-> > in order to simplify code in pci_acpi_wake_bus() and to prepare for the=
- other
-> > change.  This is not expected to affect functionality.
-> >
-> > Patch [2/2] modifies the ACPI PM notifier registration to add wakeup so=
-urces
-> > under devices that are going to be affected by wakeup handling instead =
-of
-> > registering them under ACPI companions of those devices (rationale expl=
-ained
-> > in the patch changelog).  This will change the sysfs layout (wakeup sou=
-rce
-> > devices associated with PCI wakeup are now going to appear under PCI de=
-vices
-> > and the host bridge device), but it is not expected to affect user spac=
-e
-> > adversely.
-> >
-> > Thanks!
->
-> I tested both patches, and the sysfs layout changes as expected:
->
-> $ readlink /sys/class/wakeup/wakeup*/device
-> ../../../device:00
-> ../../../device:1a
-> ../../../device:1f
-> ../../../device:20
-> ../../../0000:00:08.1
-> ../../../device:36
-> ../../../device:31
-> ../../../device:32
-> ../../../device:3c
-> ../../../0000:01:00.0
-> ../../../device:3d
-> ../../../PNP0C02:00
-> ../../../0000:02:00.0
-> ../../../device:3e
-> ../../../device:3f
-> ../../../device:46
-> ../../../0000:04:00.0
-> ../../../device:47
-> ../../../0000:05:00.0
-> ../../../device:57
-> ../../../0000:05:08.0
-> ../../../device:59
-> ../../../device:01
-> ../../../0000:05:09.0
-> ../../../device:5b
-> ../../../0000:05:0a.0
-> ../../../device:5d
-> ../../../0000:05:0b.0
-> ../../../device:5f
-> ../../../0000:05:0c.0
-> ../../../device:74
-> ../../../0000:05:0d.0
-> ../../../device:5a
-> ../../../device:3a
-> ../../../device:5c
-> ../../../device:60
-> ../../../device:75
-> ../../../LNXVIDEO:00
-> ../../../device:22
-> ../../../PNP0C02:02
-> ../../../device:25
-> ../../../device:2b
-> ../../../device:24
-> ../../../device:37
-> ../../../0000:00:01.1
-> ../../../PNP0A08:00
-> ../../../LNXPWRBN:00
-> ../../../AMDI0010:00
-> ../../../AMDI0030:00
-> ../../../00:02
-> ../../../alarmtimer.0.auto
-> ../../../PNP0C0C:00
-> ../../../0000:0b:00.0
-> ../../../AMDIF031:00
-> ../../../PNP0C14:00
-> ../../../device:0a
-> ../../../PNP0C14:01
-> ../../../PNP0C14:02
-> ../../../PNP0C14:03
-> ../../../0000:0e:00.3
-> ../../../0000:0e:00.4
-> ../../../0000:0f:00.0
-> ../../../5-2
-> ../../../1-5.3
-> ../../hidpp_battery_0
-> ../../../device:44
-> ../../../0000:00:02.1
-> ../../../device:76
-> ../../../device:0b
->
-> turns into:
->
-> $ readlink /sys/class/wakeup/wakeup*/device
-> ../../../0000:00:00.0
-> ../../../0000:00:04.0
-> ../../../0000:00:08.0
-> ../../../0000:00:08.1
-> ../../../0000:00:08.1
-> ../../../0000:00:08.3
-> ../../../0000:00:14.0
-> ../../../0000:00:14.3
-> ../../../0000:01:00.0
-> ../../../0000:01:00.0
-> ../../../0000:02:00.0
-> ../../../0000:00:00.2
-> ../../../0000:02:00.0
-> ../../../0000:03:00.0
-> ../../../0000:03:00.1
-> ../../../0000:04:00.0
-> ../../../0000:04:00.0
-> ../../../0000:05:00.0
-> ../../../0000:05:00.0
-> ../../../0000:05:08.0
-> ../../../0000:05:08.0
-> ../../../0000:05:09.0
-> ../../../0000:00:01.0
-> ../../../0000:05:09.0
-> ../../../0000:05:0a.0
-> ../../../0000:05:0a.0
-> ../../../0000:05:0b.0
-> ../../../0000:05:0b.0
-> ../../../0000:05:0c.0
-> ../../../0000:05:0c.0
-> ../../../0000:05:0d.0
-> ../../../0000:05:0d.0
-> ../../../0000:08:00.0
-> ../../../0000:00:01.1
-> ../../../0000:09:00.0
-> ../../../0000:0b:00.0
-> ../../../0000:0c:00.0
-> ../../../0000:0e:00.0
-> ../../../0000:0e:00.1
-> ../../../0000:0e:00.2
-> ../../../0000:0e:00.3
-> ../../../0000:0e:00.4
-> ../../../0000:0e:00.6
-> ../../../0000:0f:00.0
-> ../../../0000:00:01.1
-> ../../../pci0000:00
-> ../../../LNXPWRBN:00
-> ../../../AMDI0010:00
-> ../../../AMDI0030:00
-> ../../../00:02
-> ../../../alarmtimer.0.auto
-> ../../../PNP0C0C:00
-> ../../../0000:0b:00.0
-> ../../../AMDIF031:00
-> ../../../PNP0C14:00
-> ../../../0000:00:02.0
-> ../../../PNP0C14:01
-> ../../../PNP0C14:02
-> ../../../PNP0C14:03
-> ../../../0000:0e:00.3
-> ../../../0000:0e:00.4
-> ../../../0000:0f:00.0
-> ../../../5-2
-> ../../../1-5.3
-> ../../hidpp_battery_0
-> ../../../0000:00:02.1
-> ../../../0000:00:02.1
-> ../../../0000:00:02.2
-> ../../../0000:00:03.0
->
-> The remaining ACPI devices are likely caused by device drivers based upon=
- struct acpi_driver.
-> I was unable to test the wakeup itself since suspend is currently broken =
-due to issues with
-> cpuidle,
+Hi Linus,
 
-Have you reported those?  What cpuidle driver is involved?
+Please pull from the tag
 
-If you happen to be using the ACPI idle driver, there is a regression
-between 6.18-rc7 and final 6.18 due to a missing revert, but final
-6.18 should be as expected.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.19-rc1-2
 
-> but i suspect that this has nothing to do with the patch series.
+with top-most commit 316f0b43fe0131af869a5a58e20ec6e0b6038fa8
 
-Right, cpuidle is entirely orthogonal to this.
+ coccinelle: Drop pm_runtime_barrier() error code checks
 
-> So for the whole series:
-> Reviewed-by: Armin Wolf <W_Armin@gmx.de>
+on top of commit d348c22394ad3c8eaf7bc693cb0ca0edc2ec5246
 
-Thank you!
+ Merge tag 'pm-6.19-rc1' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive additional power management updates fix for 6.19-rc1.
+
+These fix a runtime PM unit test added during the 6.18 development cycle
+and change the pm_runtime_barrier() return type to void (Brian Norris).
+
+Thanks!
+
+
+---------------
+
+Brian Norris (3):
+      PM: runtime: Stop checking pm_runtime_barrier() return code
+      PM: runtime: Make pm_runtime_barrier() return void
+      coccinelle: Drop pm_runtime_barrier() error code checks
+
+---------------
+
+ Documentation/power/runtime_pm.rst      |  6 ++----
+ drivers/base/power/runtime-test.c       |  8 ++------
+ drivers/base/power/runtime.c            | 14 ++------------
+ include/linux/pm_runtime.h              |  4 ++--
+ scripts/coccinelle/api/pm_runtime.cocci |  1 -
+ 5 files changed, 8 insertions(+), 25 deletions(-)
 
