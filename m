@@ -1,37 +1,37 @@
-Return-Path: <linux-pm+bounces-39337-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39339-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1338CAF667
-	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 10:11:41 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9935ECAF694
+	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 10:13:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F09C1300CA29
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 09:11:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C9C2A309A7C8
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 09:11:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5152C0274;
-	Tue,  9 Dec 2025 09:11:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73CC82D6E58;
+	Tue,  9 Dec 2025 09:11:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FB282D12ED;
-	Tue,  9 Dec 2025 09:11:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA3F26F2B8;
+	Tue,  9 Dec 2025 09:11:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765271495; cv=none; b=WooppnqwKzzwDR4IcAu9hVERZUVJosFCdV4NrEMSuvTuBfqfUzFrYFsNGpyPAuwQMmI245mdCoQebfXI2yGUkjleT8+chSBAckJ9XiZT9jgN3juk8HkL99R5Paw71tQFO87/DznpHcrWU3o6v2ptFuxmsfOtliWOSeR5OVmPHkk=
+	t=1765271503; cv=none; b=pVwN9s7lRjjkGlTZoIVaeDJVUy121Z7gS25gj8w6y/0J7wiBmPkg0VRgZWXCaRfJhD9+7h35KcpNp2YdfvPT0NaDdgMAFnOJElWFcxkOY1cWuLAPTvZqEYFQMb9TaVkdltAEf/SKe8V17SRu0a5KNn3X2tk3ULM0UQSfNzKPiy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765271495; c=relaxed/simple;
-	bh=jjCcNU6521+jhdzUHgDC++nvbAEjOdLIhUK5/nIcTMg=;
+	s=arc-20240116; t=1765271503; c=relaxed/simple;
+	bh=b1Pzn2+PxNwyEgJQcrpu2UWu+2svMokxcbNopM/8f8A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fAVVNHdQP76Sro8KwwJbj19g1nBn7ENtLU6eYoc0gB6INmh1U6yB+ATUYR1x3jDac32sepcCrve1BLtxN1s4Pk0l2gqfLZf0bKHoSQtpMYBjRUcV6VOMFQq94FR3Fab4jW5uR6uXCHos6ESAEA8mIth0dgWpMhnPx5hsVhY1QzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
+	 MIME-Version; b=MUU72UJiGrdbZonM1d7viRpFSWJrbhR+ItbSvz3HrWLWeaTI1OlUKPFY04ZuxMDwEoZQzsdg5ErruyduuxG/HSsfF6Z6JfNBBoD/NP2RrF1kOd8w473+qoFPjK6RODxY4nAboQRa3QOBFm//g40fOc84Aw2tOw0c4WGtTeQwM+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: 7GT+ANnEQc2bnUysy6oDww==
-X-CSE-MsgGUID: zw9vNks8QFOJPMS711FY6A==
+X-CSE-ConnectionGUID: MxVW9n1sQZexSEN6mO5Wwg==
+X-CSE-MsgGUID: VSTmk3wHQ6qDWvQiXX7gVw==
 Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie5.idc.renesas.com with ESMTP; 09 Dec 2025 18:11:27 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 09 Dec 2025 18:11:33 +0900
 Received: from vm01.adwin.renesas.com (unknown [10.226.92.124])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 9C5CA40071EC;
-	Tue,  9 Dec 2025 18:11:22 +0900 (JST)
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 7F02240071EC;
+	Tue,  9 Dec 2025 18:11:28 +0900 (JST)
 From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 To: john.madieu.xa@bp.renesas.com,
 	rafael@kernel.org,
@@ -50,9 +50,9 @@ Cc: linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	linux-clk@vger.kernel.org
-Subject: [PATCH 1/3] dt-bindings: thermal: r9a09g047-tsu: Document RZ/V2N TSU
-Date: Tue,  9 Dec 2025 09:11:13 +0000
-Message-ID: <20251209091115.8541-2-ovidiu.panait.rb@renesas.com>
+Subject: [PATCH 2/3] clk: renesas: r9a09g056: Add clock and reset entries for TSU
+Date: Tue,  9 Dec 2025 09:11:14 +0000
+Message-ID: <20251209091115.8541-3-ovidiu.panait.rb@renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251209091115.8541-1-ovidiu.panait.rb@renesas.com>
 References: <20251209091115.8541-1-ovidiu.panait.rb@renesas.com>
@@ -64,38 +64,38 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Renesas RZ/V2N SoC includes a Thermal Sensor Unit (TSU) block designed
-to measure the junction temperature. The device provides real-time
-temperature measurements for thermal management, utilizing two dedicated
-channels for temperature sensing.
-
-The Renesas RZ/V2N SoC is using the same TSU IP found on the RZ/G3E SoC,
-the only difference being that it has two channels instead of one.
-
-Add new compatible string "renesas,r9a09g056-tsu" for RZ/V2N and use
-"renesas,r9a09g047-tsu" as a fallback compatible to indicate hardware
-compatibility with the RZ/G3E implementation.
+Add module clock and reset entries for the TSU0 and TSU1 blocks on the
+Renesas RZ/V2N (R9A09G056) SoC.
 
 Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 ---
- .../devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml    | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/clk/renesas/r9a09g056-cpg.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-index a04e5048eadf..d560c58be4d6 100644
---- a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-+++ b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-@@ -21,7 +21,9 @@ properties:
-           - renesas,r9a09g047-tsu # RZ/G3E
-           - renesas,r9a09g077-tsu # RZ/T2H
-       - items:
--          - const: renesas,r9a09g057-tsu # RZ/V2H
-+          - enum:
-+              - renesas,r9a09g056-tsu # RZ/V2N
-+              - renesas,r9a09g057-tsu # RZ/V2H
-           - const: renesas,r9a09g047-tsu # RZ/G3E
-       - items:
-           - const: renesas,r9a09g087-tsu # RZ/N2H
+diff --git a/drivers/clk/renesas/r9a09g056-cpg.c b/drivers/clk/renesas/r9a09g056-cpg.c
+index f48a082e65d7..77e0154a28dd 100644
+--- a/drivers/clk/renesas/r9a09g056-cpg.c
++++ b/drivers/clk/renesas/r9a09g056-cpg.c
+@@ -397,6 +397,10 @@ static const struct rzv2h_mod_clk r9a09g056_mod_clks[] __initconst = {
+ 						BUS_MSTOP(3, BIT(4))),
+ 	DEF_MOD("gpu_0_ace_clk",		CLK_PLLDTY_ACPU_DIV2, 15, 2, 7, 18,
+ 						BUS_MSTOP(3, BIT(4))),
++	DEF_MOD("tsu_0_pclk",			CLK_QEXTAL, 16, 9, 8, 9,
++						BUS_MSTOP(5, BIT(2))),
++	DEF_MOD("tsu_1_pclk",			CLK_QEXTAL, 16, 10, 8, 10,
++						BUS_MSTOP(2, BIT(15))),
+ };
+ 
+ static const struct rzv2h_reset r9a09g056_resets[] __initconst = {
+@@ -454,6 +458,8 @@ static const struct rzv2h_reset r9a09g056_resets[] __initconst = {
+ 	DEF_RST(13, 13, 6, 14),		/* GPU_0_RESETN */
+ 	DEF_RST(13, 14, 6, 15),		/* GPU_0_AXI_RESETN */
+ 	DEF_RST(13, 15, 6, 16),		/* GPU_0_ACE_RESETN */
++	DEF_RST(15, 7, 7, 8),		/* TSU_0_PRESETN */
++	DEF_RST(15, 8, 7, 9),		/* TSU_1_PRESETN */
+ };
+ 
+ const struct rzv2h_cpg_info r9a09g056_cpg_info __initconst = {
 -- 
 2.51.0
 
