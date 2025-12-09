@@ -1,179 +1,107 @@
-Return-Path: <linux-pm+bounces-39331-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39332-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4BB1CAF235
-	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 08:30:35 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2AE2CAF444
+	for <lists+linux-pm@lfdr.de>; Tue, 09 Dec 2025 09:20:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C514430450A2
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 07:29:42 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B53C23009766
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Dec 2025 08:20:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D44B12882BE;
-	Tue,  9 Dec 2025 07:29:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="XbITDAAx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80DE12222C4;
+	Tue,  9 Dec 2025 08:20:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2372868AB;
-	Tue,  9 Dec 2025 07:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C536B202963;
+	Tue,  9 Dec 2025 08:20:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765265381; cv=none; b=G7G3wdIk0jN00E1vegXYaW+6YYR0exm2Nv2eSLb7+inLkRrwIq7oxMD8O00O5q8a+mWUIpY/MNoVRpRz3JzC2t7UuirR9svN0UorbD/JIT6xwEaVKiFVrRBF1qfbix77BAr6cL0I/HLfcjwsj8/3V7kbX9SanQ7DZW71LbebRwY=
+	t=1765268408; cv=none; b=dLqCsZIMgAcwwdA2vYHM45KfHZiniPnpN9ageYj69S2ChaP5FK6BMknhJ4uTEJIMeEFHiOIIvo/1H0/JSCIuXyQy2lcPJMDXWzTudNwfomZfY+bokXdpakjlB6dVJrE418AH4WPWDlCT5eJdXudLSIr4b/y+YRO3kwutfgz9jIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765265381; c=relaxed/simple;
-	bh=Y7zyQ3Cc5DlKIsNW/GqayFZcqof4q0SiDOyea2py6q4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Irbk/v4N+V2ArM0Cd9G6Rihsps9W/V6CFf6bFFZYEGMjwgYHOQm0a3Q+kig6xPH7R3kJthJoSNQUN8opz1QQjoQ3d0LBhexDAFYQFb7xbMV5v6PakXsZ8IMBOPxDWZ6i1cy4I3j957EYV95dTqDnoiS0t+6MGNQaXFri2K+Pg40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=XbITDAAx; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
-dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=khkDOJh1/uYzmB+/MJQsODnByd/QEEA368wUov7qEg8=;
-	b=XbITDAAxKMXbJQw3hmqrBSUzOJ2BSUIeKOMULD/gTHZ+SbiTM46kWxY5u8cvvlZx9RJyNDoFA
-	yNqbHAa/WQk7bnXS3JYWWyyoUjBgB5HKZNyFxU8oLBmldmY30eYet4kFB6uk6VpwyRDlGX0F6Jt
-	bakeX9vPGScBYefSd4Q2MII=
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4dQVmp3d2qzLlTc;
-	Tue,  9 Dec 2025 15:27:38 +0800 (CST)
-Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
-	by mail.maildlp.com (Postfix) with ESMTPS id E949F140155;
-	Tue,  9 Dec 2025 15:29:33 +0800 (CST)
-Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
- dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 9 Dec 2025 15:29:33 +0800
-Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
- (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 9 Dec
- 2025 15:29:33 +0800
-Message-ID: <09d66576-5d17-4a80-b41f-2f76a09d963b@huawei.com>
-Date: Tue, 9 Dec 2025 15:29:32 +0800
+	s=arc-20240116; t=1765268408; c=relaxed/simple;
+	bh=Je31Vvn8gJ3ohzlZ2ypGKiH0qZ95j/Z4ZrUmZTsKYQY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DD08203XdlGyEEwRDy5oz20H8hOEJnVVptc4hNM1fETzFjqp9iZ/tC9bP42RAc74jfpgA1snOWleI4ix+wuTR6fncz4iRzLSxnIenkA9NXVXU15A8wRGfZEby2i0DJt264bOZ5XkaCteA2wPzTWu+p8S/z0te5yGi4aaBy2lu1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from dfae2b116770.home.arpa (unknown [124.16.138.129])
+	by APP-03 (Coremail) with SMTP id rQCowAC309qk2zdpTRcXAA--.1979S2;
+	Tue, 09 Dec 2025 16:19:48 +0800 (CST)
+From: Wentao Liang <vulab@iscas.ac.cn>
+To: ulf.hansson@linaro.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com
+Cc: linux-pm@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Wentao Liang <vulab@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH v2] pmdomain: imx: Fix reference count leak in imx_gpc_probe()
+Date: Tue,  9 Dec 2025 08:19:09 +0000
+Message-Id: <20251209081909.24982-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [GIT PULL] Urgent ACPI support fix for v6.18
-To: "Longia, Amandeep Kaur" <AmandeepKaur.Longia@amd.com>
-CC: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM
-	<linux-pm@vger.kernel.org>, Linux Kernel Mailing List
-	<linux-kernel@vger.kernel.org>, <kprateek.nayak@amd.com>, <dhsrivas@amd.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, <lihuisong@huawei.com>
-References: <CAJZ5v0g6c1HNbxxh088xh_nTgD-SE6c2qtDr81AgD1+by-jnKA@mail.gmail.com>
- <1ea445d0-0949-4a28-9f76-325861a3c57f@huawei.com>
- <7487e99d-421b-4ac5-bb77-e61c3131bb13@amd.com>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <7487e99d-421b-4ac5-bb77-e61c3131bb13@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemn100009.china.huawei.com (7.202.194.112)
+X-CM-TRANSID:rQCowAC309qk2zdpTRcXAA--.1979S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Xr45Zr4xtr47XF48XrWUurg_yoW8JrW7pF
+	W7GFWYkrWxGF47Kayktr18ZFy5K347A3yakr4UKayIvrn5tFyxXry5Z34jkwsIyFy8Ga15
+	tr17KryrC3W29FJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBj14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+	6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr1j6F4UJwAm72CE4IkC6x0Yz7v_Jr
+	0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E
+	8cxan2IY04v7MxkF7I0En4kS14v26r1q6r43MxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwI
+	xGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480
+	Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7
+	IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k2
+	6cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxV
+	AFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUyE__UUUUU=
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiBwoLA2k3qEfCLAAAsa
 
-在 2025/11/28 3:03, Longia, Amandeep Kaur 写道:
-> Hi all,
->
-> On 11/27/2025 7:39 AM, lihuisong (C) wrote:
->> Hello Rafael,
->>
->> 在 2025/11/26 20:54, Rafael J. Wysocki 写道:
->>> Hi Linus,
->>>
->>> Please pull from the tag
->>>
->>> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
->>>   acpi-6.18-rc8
->>>
->>> with top-most commit 43ff36c4a5a574ee83b4b0d3f3d74f09a3a8c2d3
->>>
->>>   Revert "ACPI: processor: idle: Optimize ACPI idle driver 
->>> registration"
->>>
->>> on top of commit ac3fd01e4c1efce8f2c054cdeb2ddd2fc0fb150d
->>>
->>>   Linux 6.18-rc7
->>>
->>> to receive an urgent ACPI support fix for 6.18.
->>>
->>> This reverts a commit that attempted to make the code in the ACPI
->>> processor driver more straightforward, but it turned out to cause
->>> the kernel to crash on at least one system, along with some further
->>> cleanups on top of it.
->> I just found that "ACPI: processor: idle: Optimize ACPI idle driver 
->> registration" depends on the change
->> about cpuhp_setup_state in the commit [1]. Or many CPUs don't create 
->> cpuidle directory.
->> What is the crash? Do you have releated trace?
->>
->> [1] https://lore.kernel.org/all/20240529133446.28446-2- 
->> Jonathan.Cameron@huawei.com/
->
-> We have observed the same issue. After booting the system with the 
-> latest kernel, the sysfs path /sys/devices/system/cpu/cpu*/cpuidle 
-> does not exist. Bisecting between v6.18-rc7 (good) and master (bad) 
-> led us to the following commit:
->
-> 43ff36c4a5a574ee83b4b0d3f3d74f09a3a8c2d3 Revert "ACPI: processor: 
-> idle: Optimize ACPI idle driver registration"
->
->
-Hello Amandeep,
+of_get_child_by_name() returns a node pointer with refcount incremented,
+we should use the __free() attribute to manage the pgc_node reference.
+This ensures automatic of_node_put() cleanup when pgc_node goes out of
+scope, eliminating the need for explicit error handling paths and
+avoiding reference count leaks.
 
-I guess that your kernel doesn't have the following patch [1] if you 
-also encountered this issue.
+Fixes: 721cabf6c660 ("soc: imx: move PGC handling to a new GPC driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
 
-The __acpi_processor_start() of all CPUs are called when run 
-driver_register(&acpi_processor_driver).
-But acpi_processor_register_idle_driver() is called after 
-driver_register(&acpi_processor_driver).
-As a result, the acpi_processor_power_init() would not register cpuidle 
-device and create these directory.
+---
+Change in V2:
+- Use __free() attribute instead of explicit of_node_put() calls
+---
+ drivers/pmdomain/imx/gpc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I tested it ok on my platform under the following modification.
-Can you test it again using following modification based on kernel 
-without revert any ACPI idle patch?
-  I am looking forward to your reply. Thanks.
--->
-diff --git a/drivers/acpi/processor_driver.c 
-b/drivers/acpi/processor_driver.c
-index 4b906b56186a..b56a2a228693 100644
---- a/drivers/acpi/processor_driver.c
-+++ b/drivers/acpi/processor_driver.c
-@@ -268,12 +268,12 @@ static int __init acpi_processor_driver_init(void)
-                 acpi_processor_ignore_ppc_init();
-         }
-
-+       acpi_processor_register_idle_driver();
-+
-         result = driver_register(&acpi_processor_driver);
-         if (result < 0)
-                 return result;
-
--       acpi_processor_register_idle_driver();
--
-         result = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-                                            "acpi/cpu-drv:online",
-                                            acpi_soft_cpu_online, NULL);
-diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-index 66d8df5a37a6..a34983abb0b9 100644
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -1404,6 +1404,7 @@ void acpi_processor_register_idle_driver(void)
-                 if (!pr)
-                         continue;
-
-+               acpi_processor_cstate_first_run_checks();
-                 ret = acpi_processor_get_power_info(pr);
-                 if (!ret) {
-                         pr->flags.power_setup_done = 1;
-
-[1] 
-https://lore.kernel.org/all/20240529133446.28446-2-Jonathan.Cameron@huawei.com/
+diff --git a/drivers/pmdomain/imx/gpc.c b/drivers/pmdomain/imx/gpc.c
+index f18c7e6e75dd..89d5d68c055d 100644
+--- a/drivers/pmdomain/imx/gpc.c
++++ b/drivers/pmdomain/imx/gpc.c
+@@ -403,7 +403,7 @@ static int imx_gpc_old_dt_init(struct device *dev, struct regmap *regmap,
+ static int imx_gpc_probe(struct platform_device *pdev)
+ {
+ 	const struct imx_gpc_dt_data *of_id_data = device_get_match_data(&pdev->dev);
+-	struct device_node *pgc_node;
++	struct device_node *pgc_node __free(pgc_node);
+ 	struct regmap *regmap;
+ 	void __iomem *base;
+ 	int ret;
+-- 
+2.34.1
 
 
