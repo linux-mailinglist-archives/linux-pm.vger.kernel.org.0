@@ -1,148 +1,140 @@
-Return-Path: <linux-pm+bounces-39399-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39400-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A86DCB212B
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 07:30:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7BF5CB27B0
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 10:03:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 49E74303EBB7
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 06:30:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 820DE300D413
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 09:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47EB3223DD4;
-	Wed, 10 Dec 2025 06:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED9CA28934F;
+	Wed, 10 Dec 2025 09:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QBFnEeAq"
+	dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b="qodHpl4s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpx.fel.cvut.cz (smtpx.feld.cvut.cz [147.32.210.153])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19CF2AE78
-	for <linux-pm@vger.kernel.org>; Wed, 10 Dec 2025 06:30:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD1D1A724C;
+	Wed, 10 Dec 2025 09:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=147.32.210.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765348228; cv=none; b=NzeQjRxjLUo4vt1tazjdLrRMt0PskHutIXh2fssOANd3QQgBG9EjntAZ6b089rvosZpNQX2vhavUQ3jTXrxhHhj3AlgwT7CAxGnEEk+QatiUsJiyJKaI5LWSccEgUjRUXZ5WXVHEXSBYoehu468FtPFOG3IUzRGmq+dEgeplEm0=
+	t=1765357427; cv=none; b=r0rjrSHonlRulNv2nq28Jj+uNPMx6JjihqVZ2iBq+4E0tgf92mP+EyVCCh+d2lsIK09fcpZKTM5G5+P6UNv7oRd5/q/ifrGOA9WXtJtKbl6A9nhe2VvrVB5/YJW5Gsgc2AHp3SboCpLnfx8mor/kjDZJEZfqT3XuH2xuWDRr9VM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765348228; c=relaxed/simple;
-	bh=OjBO8uYS+caWK2PhpOhVEk3v6aRLFdXrtDoP1MynssI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TepWc5emlyzoOe1YrwpKvyDLPIMKylzeaK8DIT180+nPRPTe4vjbSUz8clu7mGHUnO76j61JgfDlLgqBQ/zkM0rUGb77CFG1oVNXz8fPujvzk8sUigeihHeohFmBs1PoOiKXa8JQzFxTA1Eu5abzwfAsXklesxCgb5LGbE1mLKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QBFnEeAq; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-7ade456b6abso5578482b3a.3
-        for <linux-pm@vger.kernel.org>; Tue, 09 Dec 2025 22:30:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1765348226; x=1765953026; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bku0C59aMVyQUvdKG0bvojGNybjSZ9I395Pji5p8HxU=;
-        b=QBFnEeAqEJ657WMlvQ+ONq64Som8AZzuW6ayYRMFLwXxPdep2qzh4eKVutXivgg63a
-         2SG8RpOLSGdSYXOOdibvZyomI3OeeQ5SwySCcI6lw8dAqWxYMJqIjYRbLP2Pvxw63N96
-         nP28GVHHVfVrNMgOlsZXx9GtWXR5Hy+HSJhra1Hfzv/J84N2+gbooYQ3HBYtF3aC9UgQ
-         oT9d+c+Q2TrkpWyCOObDNe1T4baEXjaCGBlnQ+v9f79cbwDzgzXld5PoKy/rTeeSPHW/
-         y9qfrgvdFo9JE8sJf8V6hZsoPdtOA6DEVhrTA0GkkAvys4vJkxkq+XAUvaZEH+ZSzGio
-         XeVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765348226; x=1765953026;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bku0C59aMVyQUvdKG0bvojGNybjSZ9I395Pji5p8HxU=;
-        b=umNJDoy/S4HnYpOT2ggJR5vcJvXkswGeLxsLevGcCeZ/AW9AbeF3KnhfzfEmLyYwsK
-         9QJT4VThTsYKUO4jjl6sZUgURSmUn/hJPCZtw1U/y5QWRx7eb6imXv5BMWCYHzcDIsFl
-         zyjMhhSn2iwX4PTFYuRIsvujuDVcSeJI+Xj2YEi0iUhhe2Yxe11tKY70rwcs1v1GMhZV
-         K03+7Wau3MVZ4smOoWdgdhP4HOXgx/M5u0uAQz7mT6qdTjAViLTqF/MB72ljiRFsOchb
-         IWRubuGmFlNAQWaROT+7XD6MC24qCvSy9t5cGx5DR9+Uw2pAKGZyNWcNN/S5+WHMD+GW
-         sC8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVo2biBKvZumfaiqynI3dzWJe/AMw0B0bJy1SHExQdhRdjQh7mRFrKTzslFiOvEkt+A5XSBCUTbEg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5wX7DyshGmYTk1ZrlhvDAIdFQhS4PtxaApODvoT7ESpo9Rlr8
-	DJ7AUKBYGMrxiTQcwqzexvGq4Lq76DKp5fVJ1Hq0VUFsVZSGFu3DOOGiibbDO9WGsS0=
-X-Gm-Gg: ASbGncuRFCLlTf8G3PrupqPxzHeDxOhomRGnmrqYSlq48DbBzsRWLT828FizgFoQKo0
-	2nhYy6w4OfYIRpeKExQAkJf5irj0NxFeD3dtbCLKKxPsp37pvGa+uMvV9o68YgSjRd2JhUqeBoh
-	jGvR6//VLPgZKPwdXvSGiSqNmd+3lMu3YYWKAMe2uzKA4OPxJQ+pvYZ2AJSR7wF9oii/nNEJfAd
-	4TTJ9qYFsqPN5ItkUmXQSjLheNyuyRmRtCkR7ZPvOj7RmlHN7L3BiBoU4RSOVpdk/Y1yedmkb/Y
-	eQKc9+1TkjA7QHmaVCPgt8HzyoAry4vYEANZRP4SVM0QCVzKDnwkamzNVGx/PiQtXDKCmXIVtLp
-	bHGDieHNrkYKqt/0FGuUoCZFLzC7aiEE6Fh5d7rnnb9rcmKf4lqoLl+by+2+/XK/uGc8heyI4hG
-	TqtbrFIYXC08M=
-X-Google-Smtp-Source: AGHT+IHnGEp86jFRkH5rOtu4eme6ej2y3wjRg0Ss5Xh1/I/PpPdnoJUppTb/16j23tWEKKa7hkYHpA==
-X-Received: by 2002:a05:6a00:2e0d:b0:7e8:4471:8e1 with SMTP id d2e1a72fcca58-7f22f904308mr1219092b3a.66.1765348225735;
-        Tue, 09 Dec 2025 22:30:25 -0800 (PST)
-Received: from localhost ([122.172.86.94])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-bf686b3e683sm16560376a12.8.2025.12.09.22.30.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Dec 2025 22:30:25 -0800 (PST)
-Date: Wed, 10 Dec 2025 12:00:22 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
-	Pavel Pisa <pisa@fel.cvut.cz>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, "Rob Herring (Arm)" <robh@kernel.org>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH] cpufreq: dt-platdev: Fix creating device on OPPv1
- platforms
-Message-ID: <rcnqsevjxtyfu56pcw5wfjh7wvg4q32xu2xkol7tfvaozewrxz@3qn5qbjc5mpd>
+	s=arc-20240116; t=1765357427; c=relaxed/simple;
+	bh=+o6mbVgJFTXivMQqKUFA1Xz2Hdad1XRAS2GVVF+0+o0=;
+	h=From:To:Subject:Date:Cc:References:In-Reply-To:MIME-Version:
+	 Content-Type:Content-Disposition:Message-Id; b=eTb3hn3ia/lcNNlK0xh8we5SV0i0eUxB0ISq7cgJD17aVOwZ9KpyvJgah/p8YCtZ3ok75HRgSyN1qWDgdygcjUpMBC6LGh5Az+T0hFE6KiQjBbuah5gwyFRTK4OUOEfTEIjTnMTtlyqtkumP1HxGYR/Zy8Zf/9lQhut2Jsx6z3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz; spf=pass smtp.mailfrom=fel.cvut.cz; dkim=pass (2048-bit key) header.d=fel.cvut.cz header.i=@fel.cvut.cz header.b=qodHpl4s; arc=none smtp.client-ip=147.32.210.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fel.cvut.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fel.cvut.cz
+Received: from localhost (unknown [192.168.200.27])
+	by smtpx.fel.cvut.cz (Postfix) with ESMTP id 863FF13957;
+	Wed, 10 Dec 2025 10:03:36 +0100 (CET)
+X-Virus-Scanned: IMAP STYX AMAVIS
+Received: from smtpx.fel.cvut.cz ([192.168.200.2])
+ by localhost (cerokez-250.feld.cvut.cz [192.168.200.27]) (amavis, port 10060)
+ with ESMTP id 7ZfK-wxiiX5w; Wed, 10 Dec 2025 10:03:35 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fel.cvut.cz;
+	s=felmail; t=1765357415;
+	bh=KdK6lC5r121QNCLORrS1blZX3VYEoPUfyGWLtVLeS9I=;
+	h=From:To:Subject:Date:Cc:References:In-Reply-To:From;
+	b=qodHpl4sHFd79+myXiqtcYqK75ROTNIxQDiwcdLjHOfRfxHBTxni85S+vJh8LJtDf
+	 nCNk1rpCfRPFtjH1l8+aPkBWSI7ezyci3OYprvvgstpPlAbHK9FtacnDysWqalJxp2
+	 gg2m6X9Vpk5bOL2M4G83WX8LsV0dpGJpBV3nV8/bIPLpuE9h2ay3zZ6nMotVIMJFZn
+	 EPSNAHHAzpBMvVjSGqGItEp57MaGMjqa7/0O0SBrlEx1yaim4grTM9e80oXFD6Ck//
+	 25FAdMNKq+29mNjjQlh2QttALJPv6uFe7CrX5CFvgGBLg+HixbBWcNsVywJf2xbJE0
+	 ndbZfQPg79/Gw==
+Received: from [147.32.86.141] (unknown [147.32.86.141])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pisa)
+	by smtpx.fel.cvut.cz (Postfix) with ESMTPSA id D7E5613AC5;
+	Wed, 10 Dec 2025 10:03:34 +0100 (CET)
+From: Pavel Pisa <pisa@fel.cvut.cz>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+ Viresh Kumar <viresh.kumar@linaro.org>
+Subject: Re: [PATCH] cpufreq: dt-platdev: Fix creating device on OPPv1 platforms
+Date: Wed, 10 Dec 2025 10:03:34 +0100
+User-Agent: KMail/1.9.10
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ "Rob Herring (Arm)" <robh@kernel.org>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ Geert Uytterhoeven <geert@linux-m68k.org>
 References: <20251210051718.132795-2-krzysztof.kozlowski@oss.qualcomm.com>
+In-Reply-To: <20251210051718.132795-2-krzysztof.kozlowski@oss.qualcomm.com>
+X-KMail-QuotePrefix: > 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Content-Disposition: inline
-In-Reply-To: <20251210051718.132795-2-krzysztof.kozlowski@oss.qualcomm.com>
+Message-Id: <202512101003.34566.pisa@fel.cvut.cz>
 
-On 10-12-25, 06:17, Krzysztof Kozlowski wrote:
+Thanks much for the fast response and fix. I have run checks
+successfully without revert 6ea891a6dd37 and this patch applied.
+
+On Wednesday 10 of December 2025 06:17:19 Krzysztof Kozlowski wrote:
 > Commit 6ea891a6dd37 ("cpufreq: dt-platdev: Simplify with
 > of_machine_get_match_data()") broke several platforms which did not have
 > OPPv2 proprety, because it incorrectly checked for device match data
 > after first matching from "allowlist".  Almost all of "allowlist" match
 > entries do not have match data and it is expected to create platform
 > device for them with empty data.
-> 
+>
 > Fix this by first checking if platform is on the allowlist with
 > of_machine_device_match() and only then taking the match data.  This
 > duplicates the number of checks (we match against the allowlist twice),
 > but makes the code here much smaller.
-> 
+>
 > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Closes: https://lore.kernel.org/all/CAMuHMdVJD4+J9QpUUs-sX0feKfuPD72CO0dcqN7shvF_UYpZ3Q@mail.gmail.com/
-> Reported-by: Pavel Pisa <pisa@fel.cvut.cz>
-> Closes: https://lore.kernel.org/all/6hnk7llbwdezh74h74fhvofbx4t4jihel5kvr6qwx2xuxxbjys@rmwbd7lkhrdz/
-> Fixes: 6ea891a6dd37 ("cpufreq: dt-platdev: Simplify with of_machine_get_match_data()")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-> ---
+> Closes:
+> https://lore.kernel.org/all/CAMuHMdVJD4+J9QpUUs-sX0feKfuPD72CO0dcqN7shvF_UY
+>pZ3Q@mail.gmail.com/ Reported-by: Pavel Pisa <pisa@fel.cvut.cz>
+> Closes:
+> https://lore.kernel.org/all/6hnk7llbwdezh74h74fhvofbx4t4jihel5kvr6qwx2xuxxb
+>jys@rmwbd7lkhrdz/ Fixes: 6ea891a6dd37 ("cpufreq: dt-platdev: Simplify with
+> of_machine_get_match_data()") Signed-off-by: Krzysztof Kozlowski
+> <krzysztof.kozlowski@oss.qualcomm.com> ---
 >  drivers/cpufreq/cpufreq-dt-platdev.c | 7 ++++---
 >  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index a1d11ecd1ac8..b06a43143d23 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -219,11 +219,12 @@ static bool __init cpu0_node_has_opp_v2_prop(void)
->  
->  static int __init cpufreq_dt_platdev_init(void)
->  {
-> -	const void *data;
-> +	const void *data = NULL;
->  
-> -	data = of_machine_get_match_data(allowlist);
-> -	if (data)
-> +	if (of_machine_device_match(allowlist)) {
-> +		data = of_machine_get_match_data(allowlist);
->  		goto create_pdev;
-> +	}
->  
->  	if (cpu0_node_has_opp_v2_prop() && !of_machine_device_match(blocklist))
->  		goto create_pdev;
 
-Pavel, please give this a try as well.
+Tested-by: Pavel Pisa <pisa@fel.cvut.cz>
+on AMD Xilinx Zynq MicroZed xlnx,zynq-7000 platform.
 
-Since the original patch went via your tree, take this one too please:
+As for the initial report, I have located addresses for CPUfreq
+maintainers from the mainline MAINTAINERS file - Rafael J. Wysocki
+and Viresh Kumar and PM list, I have added Michal Simek as AMD Xilinx
+platform maintainer. I have done quick glimpse into history and have
+seen some recent patches but have not time to do bisect so 
+I decided start with some maintainers the first to not spam too much
+people. Then repeated to the already extended addresses list.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Best wishes,
 
--- 
-viresh
+                Pavel
+
+                Pavel Pisa
+    phone:      +420 603531357
+    e-mail:     pisa@cmp.felk.cvut.cz
+    Department of Control Engineering FEE CVUT
+    Karlovo namesti 13, 121 35, Prague 2
+    university: http://control.fel.cvut.cz/
+    personal:   http://cmp.felk.cvut.cz/~pisa
+    social:     https://social.kernel.org/ppisa
+    projects:   https://www.openhub.net/accounts/ppisa
+    CAN related:http://canbus.pages.fel.cvut.cz/
+    RISC-V education: https://comparch.edu.cvut.cz/
+    Open Technologies Research Education and Exchange Services
+    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
 
