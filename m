@@ -1,391 +1,198 @@
-Return-Path: <linux-pm+bounces-39373-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39374-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E3DECB17DB
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 01:29:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C20BFCB19D4
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 02:43:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id A0008301E091
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 00:29:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7842730CFAA2
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 01:43:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0A3C1A9F97;
-	Wed, 10 Dec 2025 00:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7796227BB5;
+	Wed, 10 Dec 2025 01:43:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="hWbDpYKH"
+	dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b="IJwLtN6E"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f67.google.com (mail-wm1-f67.google.com [209.85.128.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA9A188A3A;
-	Wed, 10 Dec 2025 00:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCEB226165
+	for <linux-pm@vger.kernel.org>; Wed, 10 Dec 2025 01:43:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765326561; cv=none; b=EwZW2KHja0NSWpScoPWLxdDE6U674lv0g8Xf+LJFRR0pB35tCY7TTmcbgdF0zxnniCyPmqT1/aXzTfg3DNGjF8Z26AZnpp/fPOA8QTsHNa/U5MPceYqngzBuL6RAzyBwG0aC0bFcuuxP2WVpgRz8RTXHzwgj6PYai4uO0k0Br8E=
+	t=1765331019; cv=none; b=o9Q+DgLNVZll83YXCrFFmzENf5cWRu9yVxfY90c5d9w2wuMI8kOHePo/4U9Mmdp1LW5k63Kje7VrH2gKyPlB+6G71V35iC1/UtQ6Ic0B+m9iCJMAh5IC5ea+vlmkFyEweIiNWwh/j53e+iC7Lb5PmybeJLox/oc0ri7F+yDbzyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765326561; c=relaxed/simple;
-	bh=tsscXXHMpRxVmCME2TLeabzArAwobz6KibXT1gzw5JM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L6S9OXE9vgEpYfJpstOVhLDrVKuy+BN+sMPrM/JlVaEODaEbnzlaIawtu+qUZK+lsPlIybHJ2Z5nkXFLIqS8FJJLOCX3otiehxu+7d+yrjo4nIDT6vwZz+BGTN5204oGgPc3QsQW4GGvBrSNURzKptzIjAJ1aaCBXCaBGzWRk1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=hWbDpYKH; arc=none smtp.client-ip=212.227.15.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1765326551; x=1765931351; i=w_armin@gmx.de;
-	bh=nkgBLCA7rBuUoVO+OWr/GL+YtlenSvkZCt4RYFOw8hs=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=hWbDpYKHhhO2Ov6LOdH2V+yTkeUA56Gap2AtvJDHF5yFcFZ7i2vVFWvXmmnLz2QL
-	 P2zm6q7Dhp2mi1hDPK0I+9ko2ScUl1PcUaHhVmDIjAbP+XzwkFe3cJy0Be/buu7pn
-	 Mf0vKzbP2uUh6IJaObjaV1bouOUdY01GNZkc1Q34shXAsskmP1B/l9XraL1GZ9uis
-	 zxSaOOZeC+3VXoNdox+s8QtbjkkDBHxvEybPviSba5xgFkR7B53N1pCNaZir5PxLI
-	 CYD5zX/v90kwK/G802etYlbwiCvY/12WS4i5JK8I0CXVDrntaL/OOKV50psDOzRRc
-	 5TiOk9G1fK0noC2OkA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.0.69] ([93.202.247.91]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M89Kr-1vPXIz3C43-00H3A7; Wed, 10
- Dec 2025 01:29:10 +0100
-Message-ID: <2ec8cf4c-62b2-4448-b4d6-563f519fd947@gmx.de>
-Date: Wed, 10 Dec 2025 01:29:09 +0100
+	s=arc-20240116; t=1765331019; c=relaxed/simple;
+	bh=W8/D6Zte+WLuzj1BAkQdHKSbz78N81zx1LJo/v0yIRU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nnsM0MhZiL3AZIZEWCWL69wkhJhOig9oxO+FvUWpbI2Xw71mKtBbi+l4s4Z1fE6WIdHoXvrDDh3znVD/klDBoM2ezdnmuswdClgZrC3Q+eQ1Qcz2E8sfp/eyNeOL4pnpRdHSs4Ib7C3sPTJPj89YPN5pVZwROiYJjFR1WzcAvr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com; spf=pass smtp.mailfrom=fairphone.com; dkim=pass (2048-bit key) header.d=fairphone.com header.i=@fairphone.com header.b=IJwLtN6E; arc=none smtp.client-ip=209.85.128.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fairphone.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fairphone.com
+Received: by mail-wm1-f67.google.com with SMTP id 5b1f17b1804b1-477b198f4bcso54227395e9.3
+        for <linux-pm@vger.kernel.org>; Tue, 09 Dec 2025 17:43:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1765331016; x=1765935816; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=urnGBbYBlge0MPMnEMgs9eDhJcIT7BulOmvs3UtoNbk=;
+        b=IJwLtN6EdeV9vU5oSoi58gNLustcSwmWA1Thi8i5/TGrsjiJbizz4ZMmFBZUrZdeTF
+         znT/+KyTeIvIjyDyat1rs4FKnZu1IqOO9igv0tppQm+V2OrnsTKZeAYTRb2Y+b26kecI
+         LX96d6dSTj8JerlESD5Me44d/XA3XsQ7wNG2gAf5qW1IG7IaN8MMTa2JLJbtw6bQUQ6E
+         etlS8FqVzHZ3IokR1OWAcTlMoM/w4MgR1Uun5gFr5QRDh6oQCwRcgLzlZiJm3MXxTecr
+         1oSltMo7YyabTtpt0CyYP/Zg+kbiUx+/kO0BWGT3FRdW2tc2zU32SFNtIWlgvbzfdlbE
+         5mZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765331016; x=1765935816;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=urnGBbYBlge0MPMnEMgs9eDhJcIT7BulOmvs3UtoNbk=;
+        b=wriBk6123HIrEt0WkMQh/DALfBdKKDn02VAF036NlPxn5Uun0wm5pz+KWneOC1yiTq
+         a8dewb1JOaB6F/bU3mf47WJsLwTfiXrnST3zRENSPMrXk7dhiR7DXxnFa+XvOFXrMHzJ
+         QmCAKTBXUKUaDW9UybztxeiS17NhwyTycr5rAPtbrqW9khJl+TWpc6b35G3HCL8yC+RM
+         2EDFKbY0S6vsf97BTXqrjizhfQvEClQJa/HLD88/f1WBy2/nDb5NiBNwjF7y2wMiwc4E
+         3vKmOTI28pljEFNVeJQiDZGJ6xR0w1M5gzVZTEgJPt4GcykuHzQZJCOI0mtvugHlu32S
+         bmIg==
+X-Forwarded-Encrypted: i=1; AJvYcCUtxfPpgXKZnkTMm/3Na3ULnzGxBGs60LuYAy9183g+ISru3gO0YJxSaWvO8iaBlp9ACeVUtWM0wg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLw4Dla2xJ23WK8S0oNiswo0Ah+1TGGPP6fsUcGWuXp0HxOL9c
+	wpamL5yDJ5DEG6RGl0uJCXeqd9+hrZIgxlvPMBwdIYZB4kJFMi282bhkJFyPrKWV6/o=
+X-Gm-Gg: ASbGncuPvp8dXdaUFZZQ1Cy1wIEeEvWD8zIg1+I4W8tYLQkfQZYfB5dPvFKZIrNsOVl
+	PtXa2gFVeCFQBF9Se6A5l8nJ50FwIeE/1VHVnj2T0Yn/rYxL/G2SjL8PYjoRCsnY+1mMR4mTMzQ
+	9r6qehcogI2BAoYdgPtiXsVbkk786I0WdFO3wPymUWMJtRNZL2g7qQZIa2qzn66Q3YpJplZAViA
+	IwojwhUuI50Ke9NjzWhvhNVhe0hyLOfbW3a5aZCit31zOEnM84D0YwTynA06uQzJcOm24vgwSYr
+	uB41KjJML7oIYwoQqmOfdGpT5QGLSVXqLEhytu5VzFgSEOJdozXjJD70/9oSioMcDwdFCkccNsI
+	JfXQtMNNKhKdJlaPBUVWpZWH1/D4JI29j31FIMllCrppWs44NyQAd+yXWBSogaQo18CfdmQh8P7
+	i6jCAVtzS8TEVWLF9PkLfL38vNcoge4NnfRahV9kbjPcwRyycyiiTBrcZIaT00
+X-Google-Smtp-Source: AGHT+IHVpoG1RYPG0Fo88j3DEV1z2Ax9xc3BWFe84CbZR5zOE94zc2qjuEfQYpMaSAgy5ZkutBnSVA==
+X-Received: by 2002:a05:600c:444f:b0:477:7a78:3016 with SMTP id 5b1f17b1804b1-47a8374ce6bmr7128495e9.8.1765331016267;
+        Tue, 09 Dec 2025 17:43:36 -0800 (PST)
+Received: from [10.200.8.8] (p99249-ipoefx.ipoe.ocn.ne.jp. [153.246.134.248])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34a7000c984sm705234a91.6.2025.12.09.17.43.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Dec 2025 17:43:35 -0800 (PST)
+From: Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH v4 0/9] Various dt-bindings for Milos and The Fairphone
+ (Gen. 6) addition
+Date: Wed, 10 Dec 2025 10:43:24 +0900
+Message-Id: <20251210-sm7635-fp6-initial-v4-0-b05fddd8b45c@fairphone.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/2] PCI: ACPI: PM: Rework root bus wakeup notification
- setup and wakeup source registration
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux ACPI <linux-acpi@vger.kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>, Linux PCI <linux-pci@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, Bjorn Helgaas <helgaas@kernel.org>
-References: <2395536.ElGaqSPkdT@rafael.j.wysocki>
- <ab8b770c-08e9-4cf6-bd4f-f36c951fda4c@gmx.de>
- <CAJZ5v0jAH9FZrO5AvVF90zgy-0EeM+rsB6Zf8cMf+sR8=FFuDA@mail.gmail.com>
- <168f173d-0d1a-49b0-9461-72f8fb0fc701@gmx.de>
- <99b0d755-3e18-4bba-b8e7-ab344e6c2592@gmx.de>
- <CAJZ5v0ijOF+nRZrjnub9uqa_Pu54etmudWUUNWmNgiogVAwxFQ@mail.gmail.com>
-Content-Language: en-US
-From: Armin Wolf <W_Armin@gmx.de>
-In-Reply-To: <CAJZ5v0ijOF+nRZrjnub9uqa_Pu54etmudWUUNWmNgiogVAwxFQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:5hjMrZt7eroIRah5pWkqrnI82O4ElypLcjJf6sSDk6uvQ9wqKIY
- FNW53UC3lJ+LG1BmQoBAx7oO1x7PDIlgahuVT7vTetPg33NSX3KFTXgfD/3j4QoJ5o2AcV3
- lhSu5kN8UlpFIUenMOfhSur9iE2iTZIaVshmNdheccrfF+J2r8mZlmTm/Esa9vyeZKySF0A
- KgAGfzzMZb4v66rgEIt1w==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:+RsnLzTQW9I=;w1mL8O4Y/KtsilmNK0XbzEC9K73
- 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
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAD3QOGkC/23PzY7CIBQF4FdpWIvhR4q4mveYuKD0Mr2JpRWQO
+ DF998FqYjLp8pCc71weJEFESOTUPEiEggmnUMNh1xA32PADFPuaiWBCsVZImkbdSkX93FIMmNF
+ eKFdwYB68kq4ntThH8Hhf0e/zK0e43qqdX4+kswmom8YR86kJcM/06XPBDHkWBkx5ir/rUYWvj
+ fe+2tovnDLaG9dLIcA63n15i3EepgD7OrKSRXwYzTe/UURl4OiN1UejmNpk5IcxbPsaWRnGuXY
+ CvOed/s8sy/IHAZUpu3cBAAA=
+X-Change-ID: 20250623-sm7635-fp6-initial-15e40fef53cd
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ "David S. Miller" <davem@davemloft.net>, Vinod Koul <vkoul@kernel.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-crypto@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1765331010; l=3801;
+ i=luca.weiss@fairphone.com; s=20250611; h=from:subject:message-id;
+ bh=W8/D6Zte+WLuzj1BAkQdHKSbz78N81zx1LJo/v0yIRU=;
+ b=iidJCYi5UY3L2gSm3zjrS8o9I3QIjjHa+ajT0HkiP1WdsM3r384T3hm3AJhYRmiDnw4wKu6cH
+ yxNWjdO9eZ5Ab46KfOFpWdoij5U2fQS5w4/32PzBKqpbp5SpBTf2udJ
+X-Developer-Key: i=luca.weiss@fairphone.com; a=ed25519;
+ pk=O1aw+AAust5lEmgrNJ1Bs7PTY0fEsJm+mdkjExA69q8=
 
-Am 09.12.25 um 23:18 schrieb Rafael J. Wysocki:
+Document various bits of the Milos SoC in the dt-bindings, which don't
+really need any other changes.
 
-> On Tue, Dec 9, 2025 at 11:00=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wrot=
-e:
->> Am 09.12.25 um 14:56 schrieb Armin Wolf:
->>
->>> Am 09.12.25 um 12:31 schrieb Rafael J. Wysocki:
->>>
->>>> On Mon, Dec 8, 2025 at 9:01=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wr=
-ote:
->>>>> Am 08.12.25 um 13:09 schrieb Rafael J. Wysocki:
->>>>>
->>>>>> Hi All,
->>>>>>
->>>>>> Patch [1/2] updates the registration of PCI root bus wakeup
->>>>>> notification setup
->>>>>> in order to simplify code in pci_acpi_wake_bus() and to prepare for
->>>>>> the other
->>>>>> change.  This is not expected to affect functionality.
->>>>>>
->>>>>> Patch [2/2] modifies the ACPI PM notifier registration to add
->>>>>> wakeup sources
->>>>>> under devices that are going to be affected by wakeup handling
->>>>>> instead of
->>>>>> registering them under ACPI companions of those devices (rationale
->>>>>> explained
->>>>>> in the patch changelog).  This will change the sysfs layout (wakeup
->>>>>> source
->>>>>> devices associated with PCI wakeup are now going to appear under
->>>>>> PCI devices
->>>>>> and the host bridge device), but it is not expected to affect user
->>>>>> space
->>>>>> adversely.
->>>>>>
->>>>>> Thanks!
->>>>> I tested both patches, and the sysfs layout changes as expected:
->>>>>
->>>>> $ readlink /sys/class/wakeup/wakeup*/device
->>>>> ../../../device:00
->>>>> ../../../device:1a
->>>>> ../../../device:1f
->>>>> ../../../device:20
->>>>> ../../../0000:00:08.1
->>>>> ../../../device:36
->>>>> ../../../device:31
->>>>> ../../../device:32
->>>>> ../../../device:3c
->>>>> ../../../0000:01:00.0
->>>>> ../../../device:3d
->>>>> ../../../PNP0C02:00
->>>>> ../../../0000:02:00.0
->>>>> ../../../device:3e
->>>>> ../../../device:3f
->>>>> ../../../device:46
->>>>> ../../../0000:04:00.0
->>>>> ../../../device:47
->>>>> ../../../0000:05:00.0
->>>>> ../../../device:57
->>>>> ../../../0000:05:08.0
->>>>> ../../../device:59
->>>>> ../../../device:01
->>>>> ../../../0000:05:09.0
->>>>> ../../../device:5b
->>>>> ../../../0000:05:0a.0
->>>>> ../../../device:5d
->>>>> ../../../0000:05:0b.0
->>>>> ../../../device:5f
->>>>> ../../../0000:05:0c.0
->>>>> ../../../device:74
->>>>> ../../../0000:05:0d.0
->>>>> ../../../device:5a
->>>>> ../../../device:3a
->>>>> ../../../device:5c
->>>>> ../../../device:60
->>>>> ../../../device:75
->>>>> ../../../LNXVIDEO:00
->>>>> ../../../device:22
->>>>> ../../../PNP0C02:02
->>>>> ../../../device:25
->>>>> ../../../device:2b
->>>>> ../../../device:24
->>>>> ../../../device:37
->>>>> ../../../0000:00:01.1
->>>>> ../../../PNP0A08:00
->>>>> ../../../LNXPWRBN:00
->>>>> ../../../AMDI0010:00
->>>>> ../../../AMDI0030:00
->>>>> ../../../00:02
->>>>> ../../../alarmtimer.0.auto
->>>>> ../../../PNP0C0C:00
->>>>> ../../../0000:0b:00.0
->>>>> ../../../AMDIF031:00
->>>>> ../../../PNP0C14:00
->>>>> ../../../device:0a
->>>>> ../../../PNP0C14:01
->>>>> ../../../PNP0C14:02
->>>>> ../../../PNP0C14:03
->>>>> ../../../0000:0e:00.3
->>>>> ../../../0000:0e:00.4
->>>>> ../../../0000:0f:00.0
->>>>> ../../../5-2
->>>>> ../../../1-5.3
->>>>> ../../hidpp_battery_0
->>>>> ../../../device:44
->>>>> ../../../0000:00:02.1
->>>>> ../../../device:76
->>>>> ../../../device:0b
->>>>>
->>>>> turns into:
->>>>>
->>>>> $ readlink /sys/class/wakeup/wakeup*/device
->>>>> ../../../0000:00:00.0
->>>>> ../../../0000:00:04.0
->>>>> ../../../0000:00:08.0
->>>>> ../../../0000:00:08.1
->>>>> ../../../0000:00:08.1
->>>>> ../../../0000:00:08.3
->>>>> ../../../0000:00:14.0
->>>>> ../../../0000:00:14.3
->>>>> ../../../0000:01:00.0
->>>>> ../../../0000:01:00.0
->>>>> ../../../0000:02:00.0
->>>>> ../../../0000:00:00.2
->>>>> ../../../0000:02:00.0
->>>>> ../../../0000:03:00.0
->>>>> ../../../0000:03:00.1
->>>>> ../../../0000:04:00.0
->>>>> ../../../0000:04:00.0
->>>>> ../../../0000:05:00.0
->>>>> ../../../0000:05:00.0
->>>>> ../../../0000:05:08.0
->>>>> ../../../0000:05:08.0
->>>>> ../../../0000:05:09.0
->>>>> ../../../0000:00:01.0
->>>>> ../../../0000:05:09.0
->>>>> ../../../0000:05:0a.0
->>>>> ../../../0000:05:0a.0
->>>>> ../../../0000:05:0b.0
->>>>> ../../../0000:05:0b.0
->>>>> ../../../0000:05:0c.0
->>>>> ../../../0000:05:0c.0
->>>>> ../../../0000:05:0d.0
->>>>> ../../../0000:05:0d.0
->>>>> ../../../0000:08:00.0
->>>>> ../../../0000:00:01.1
->>>>> ../../../0000:09:00.0
->>>>> ../../../0000:0b:00.0
->>>>> ../../../0000:0c:00.0
->>>>> ../../../0000:0e:00.0
->>>>> ../../../0000:0e:00.1
->>>>> ../../../0000:0e:00.2
->>>>> ../../../0000:0e:00.3
->>>>> ../../../0000:0e:00.4
->>>>> ../../../0000:0e:00.6
->>>>> ../../../0000:0f:00.0
->>>>> ../../../0000:00:01.1
->>>>> ../../../pci0000:00
->>>>> ../../../LNXPWRBN:00
->>>>> ../../../AMDI0010:00
->>>>> ../../../AMDI0030:00
->>>>> ../../../00:02
->>>>> ../../../alarmtimer.0.auto
->>>>> ../../../PNP0C0C:00
->>>>> ../../../0000:0b:00.0
->>>>> ../../../AMDIF031:00
->>>>> ../../../PNP0C14:00
->>>>> ../../../0000:00:02.0
->>>>> ../../../PNP0C14:01
->>>>> ../../../PNP0C14:02
->>>>> ../../../PNP0C14:03
->>>>> ../../../0000:0e:00.3
->>>>> ../../../0000:0e:00.4
->>>>> ../../../0000:0f:00.0
->>>>> ../../../5-2
->>>>> ../../../1-5.3
->>>>> ../../hidpp_battery_0
->>>>> ../../../0000:00:02.1
->>>>> ../../../0000:00:02.1
->>>>> ../../../0000:00:02.2
->>>>> ../../../0000:00:03.0
->>>>>
->>>>> The remaining ACPI devices are likely caused by device drivers based
->>>>> upon struct acpi_driver.
->>>>> I was unable to test the wakeup itself since suspend is currently
->>>>> broken due to issues with
->>>>> cpuidle,
->>>> Have you reported those?  What cpuidle driver is involved?
->>>>
->>>> If you happen to be using the ACPI idle driver, there is a regression
->>>> between 6.18-rc7 and final 6.18 due to a missing revert, but final
->>>> 6.18 should be as expected.
->>> If i remember correctly the official 6.18 kernel was not affected by
->>> this, i used the the bleeding-edge
->>> branch when building the test kernel.
->>>
->>> I will do some further debugging once i am back home.
->>>
->>> Thanks,
->>> Armin Wolf
->>>
->> Well, it turned out that the cpuidle driver was not involved in this, i=
- just got confused
->> by a separate stacktrace caused by the hid-roccat driver (i already rep=
-orted that).
->>
->> This seems to be the real issue:
->>
->> [  514.910759] ACPI Error: Aborting method \M402 due to previous error =
-(AE_AML_LOOP_TIMEOUT) (20250807/psparse-529)
->> [  514.910810] ACPI Error: Aborting method \_SB.PCI0.GPP0.M241 due to p=
-revious error (AE_AML_LOOP_TIMEOUT) (20250807/psparse-529)
->> [  514.910890] ACPI Error: Aborting method \_SB.PCI0.GPP0.M237._OFF due=
- to previous error (AE_AML_LOOP_TIMEOUT) (20250807/psparse-529)
-> It looks like there is a problem with turning a power resource off.
->
->> Sleeping itself works, it just takes a long time for the machine to act=
-ually suspend due to the timeout.
->> I attached the acpidump of the affected machine in case you are interes=
-ted.
->>
->> Since 6.18 is not affected by this i will wait till 6.19-rc1 is release=
-d before i start debugging this issue.
->> Do you think that this approach is OK?
-> It should be fine although you may as well check my pm-6.19-rc1,
-> acpi-6.19-rc1 and thermal-6.19-rc1 tags on top of 6.18.  If the
-> problem is in one of them, it should be possible to find it quicker
-> than by dealing with the entire 6.19-rc1.
+@Rob: Please pick up the cpufreq, crypto, and pdc dt-bindings, they've
+been on the list since many months and weren't picked up by any
+maintainers, so it would be nice if you could take them through your
+tree. The patch for arm/qcom.yaml will be handled by Bjorn I think.
 
-I tested all three tags atop of 6.18, and all can suspend just fine. I wil=
-l thus wait for 6.19-rc1
-before doing any further debugging.
+Then we can add the dtsi for the Milos SoC and finally add a dts for the
+The Fairphone (Gen. 6) smartphone.
 
-Thanks,
-Armin Wolf
+Dependencies:
+* No dependencies on other series anymore
+
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+Changes in v4:
+- Fold in PM7550 & PMIV0104 dts additions from their series, since they
+  were the last patches of those series (Konrad)
+- Rebase on next-20251209
+- Pick up tags
+- Link to v3: https://lore.kernel.org/r/20250905-sm7635-fp6-initial-v3-0-0117c2eff1b7@fairphone.com
+
+Changes in v3:
+- Rebase on linux-next, drop patches already applied
+- Pick up tags
+- Drop simple-framebuffer to drop dependency on interconnect patchset,
+  will add back later
+- #interrupt-cells = <4> for intc
+- Move protected-clocks to dts
+- usb_1: reg size and assigned-clock-rates update
+- tsens: reg size & interrupt fixes
+- thermal trips cleanup based on review comments
+- Link to v2: https://lore.kernel.org/r/20250713-sm7635-fp6-initial-v2-0-e8f9a789505b@fairphone.com
+
+Changes in v2:
+- Rebrand SM7635 to Milos as requested: https://lore.kernel.org/linux-arm-msm/aGMI1Zv6D+K+vWZL@hu-bjorande-lv.qualcomm.com/
+- Disable pm8550vs instances by default
+- Enable gpi_dma by default, sort pinctrl, update gpio-reserved-ranges
+  style, update USB2.0 comment, newlines before status, remove dummy
+  panel for simpledrm
+- Link to v1: https://lore.kernel.org/r/20250625-sm7635-fp6-initial-v1-0-d9cd322eac1b@fairphone.com
+
+---
+Luca Weiss (9):
+      dt-bindings: cpufreq: qcom-hw: document Milos CPUFREQ Hardware
+      dt-bindings: crypto: qcom,prng: document Milos
+      dt-bindings: qcom,pdc: document the Milos Power Domain Controller
+      dt-bindings: arm: qcom: Add Milos and The Fairphone (Gen. 6)
+      arm64: dts: qcom: pm8550vs: Disable different PMIC SIDs by default
+      arm64: dts: qcom: Add PM7550 PMIC
+      arm64: dts: qcom: Add PMIV0104 PMIC
+      arm64: dts: qcom: Add initial Milos dtsi
+      arm64: dts: qcom: Add The Fairphone (Gen. 6)
+
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    5 +
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml          |    2 +
+ .../devicetree/bindings/crypto/qcom,prng.yaml      |    1 +
+ .../bindings/interrupt-controller/qcom,pdc.yaml    |    1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/milos-fairphone-fp6.dts   |  790 ++++++
+ arch/arm64/boot/dts/qcom/milos.dtsi                | 2633 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm7550.dtsi               |   67 +
+ arch/arm64/boot/dts/qcom/pm8550vs.dtsi             |    8 +
+ arch/arm64/boot/dts/qcom/pmiv0104.dtsi             |   73 +
+ arch/arm64/boot/dts/qcom/qcs8550-aim300.dtsi       |   16 +
+ arch/arm64/boot/dts/qcom/sm8550-hdk.dts            |   16 +
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts            |   16 +
+ arch/arm64/boot/dts/qcom/sm8550-qrd.dts            |   16 +
+ arch/arm64/boot/dts/qcom/sm8550-samsung-q5q.dts    |   16 +
+ .../dts/qcom/sm8550-sony-xperia-yodo-pdx234.dts    |   16 +
+ arch/arm64/boot/dts/qcom/sm8650-hdk.dts            |   16 +
+ arch/arm64/boot/dts/qcom/sm8650-mtp.dts            |   16 +
+ arch/arm64/boot/dts/qcom/sm8650-qrd.dts            |   16 +
+ 19 files changed, 3725 insertions(+)
+---
+base-commit: 8ebfd5290c6162d65f83f9a8acdbbf243b49a586
+change-id: 20250623-sm7635-fp6-initial-15e40fef53cd
+
+Best regards,
+-- 
+Luca Weiss <luca.weiss@fairphone.com>
 
 
