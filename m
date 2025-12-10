@@ -1,206 +1,225 @@
-Return-Path: <linux-pm+bounces-39387-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39388-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83999CB1C3B
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 04:01:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87A2FCB1CAE
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 04:22:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id D33EC301C9D3
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 03:01:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8614A3016DFB
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 03:22:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438781C860C;
-	Wed, 10 Dec 2025 03:01:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C6312FFDF8;
+	Wed, 10 Dec 2025 03:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="RhdvN3S9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b+j1W407"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout11.his.huawei.com (canpmsgout11.his.huawei.com [113.46.200.226])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16FDF8C1F;
-	Wed, 10 Dec 2025 03:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D483F2F6909;
+	Wed, 10 Dec 2025 03:22:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765335705; cv=none; b=a7AMloO8Gl00gWaAAKdCj9FMIVghkGSva8rcUtIMc+q6ocu4sIZ28nL09f1IbK5voUvhPKAPK9lQs9PuK/Y5MobQBo9fcv6bzNnoPAtkbJvO5oYq3+W1HwiB4317KxD0+3VK/rp16TLQmMNrVmP/3vI4qbWPIJDu2mcwlekmLV0=
+	t=1765336971; cv=none; b=gF/AthBHf2/0BQBJtrxP+VtoVaBvjx1/necJhTf+h43ae9y2JfhFYfvGXyVpEfhFxPq8DobvFQIvphSXXkvT1VRpr9gPVjs//TbE+YvoBEsR3cobozxEH5Hub6jD5wnDj7RPtYWuNbjhWzWoFTW3MBPjiOg5SVCuRmvi6JK6DEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765335705; c=relaxed/simple;
-	bh=P4Hf4zP6vqPRW2Shp3L9stGuEfdOM2tcPMHCdfnLzvg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=c/x1dt7TnsU+k94k6YkqpJ1WmKrPTNlPIQwWDZZBSlztDzzdl0d9mA0kWIlq+HgDSo6wZLv6+uJYzxb/ehRh/2UBY87uqFB7nC33qagQOszl3acLNfkwXfZ2Mb9pF2RUOYUkNLHQOuk1oQuw1yWz0NLEMFUBG4lY/Tw3+sg0dJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=RhdvN3S9; arc=none smtp.client-ip=113.46.200.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=EdssyuywRcxh4SYIbjsD+sxsKX1U/KH8s68W/Dq95Os=;
-	b=RhdvN3S9KCGgcrNEW6mPUiiuSbu6Y6Gg8YTi+7caWaTALg6BZDcWfbd1C/OV4yN4otRPzUtWo
-	51jvcRgD4qVSq9LvxGp2ee69bX2hDyWw5LhJrQNbZVWuAgil+dEVARWDr+ldO/2oC/0pSiOMKkN
-	e7N7qVHlvGLjcPvAi0HaoBY=
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by canpmsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4dR0nB17fRzKm6G;
-	Wed, 10 Dec 2025 10:59:42 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id 079E4140144;
-	Wed, 10 Dec 2025 11:01:39 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
- (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 10 Dec
- 2025 11:01:38 +0800
-Message-ID: <416196db-ad73-42d3-8e52-bc120a822f31@huawei.com>
-Date: Wed, 10 Dec 2025 11:01:37 +0800
+	s=arc-20240116; t=1765336971; c=relaxed/simple;
+	bh=sbK6QaAAL/wmX/O+pHRM7+O7HDJ2oB98YPlC02WA7ZY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IaRh6EBwSTO8nElX6wFO1sqf9HFnIi3CxRZ5uOPFwXqBb6dxZqMflgrkfgHo0ZjasPYtnRW7rI34qc15q/H5X9SEhtz63azwGW9p818hpR4LrNXlsCZA3rd08/4ikebyJYcJS/R0pVGfOJxfMet0vTUqWgbCr4X+sEK8a0IQMOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b+j1W407; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1765336967; x=1796872967;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sbK6QaAAL/wmX/O+pHRM7+O7HDJ2oB98YPlC02WA7ZY=;
+  b=b+j1W407Ro4OThHBBqKflklENeUGLSob6oqGJlTlH1+YVjS2n9EmSVOD
+   iBAhE57on8707m+0Z17ZnjyBZXnjRZBXyjKyoewMtkKdPZY13ErL3wY2v
+   6NodNLXGWu7nxedcuIzefdaA/9fQBfgoYqFuB7PkuZHK4EPBPDJ7MMvP4
+   OoU2PsB/ZVPa04rJbsSUBoWNQxIXMbwQs/kHGqcCTlTIJI7nrP9krP5vl
+   +lrdvlaz/qNdhVA6Ft74JIObLVg1EXvnKiF1W9Y6uCaquXOnrPGea/QUS
+   e0d/2iOw8yz5qY+gyn2jzmHuyT1flRHXATzQU642odA4jcQpkUNou9O1Z
+   w==;
+X-CSE-ConnectionGUID: VS6AsWNpTry2VfJpd+QMUw==
+X-CSE-MsgGUID: z5PgvTbXRWOGOZrd3m2xzA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11637"; a="70924152"
+X-IronPort-AV: E=Sophos;i="6.20,263,1758610800"; 
+   d="scan'208";a="70924152"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2025 19:22:40 -0800
+X-CSE-ConnectionGUID: WYKkJPvESyiVYjKEhqmbCg==
+X-CSE-MsgGUID: fLPQvF/0QWWiF2ZdVeX+ig==
+X-ExtLoop1: 1
+Received: from lkp-server01.sh.intel.com (HELO d335e3c6db51) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 09 Dec 2025 19:22:37 -0800
+Received: from kbuild by d335e3c6db51 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vTAmg-000000002bh-3uju;
+	Wed, 10 Dec 2025 03:22:34 +0000
+Date: Wed, 10 Dec 2025 11:21:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wentao Liang <vulab@iscas.ac.cn>, ulf.hansson@linaro.org,
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+	festevam@gmail.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, Wentao Liang <vulab@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] pmdomain: imx: Fix reference count leak in
+ imx_gpc_probe()
+Message-ID: <202512101101.zAlerEtu-lkp@intel.com>
+References: <20251209081909.24982-1-vulab@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] cpufreq: Add boost_freq_req QoS request
-To: Pierre Gondois <pierre.gondois@arm.com>
-CC: <linux-kernel@vger.kernel.org>, Christian Loehle
-	<christian.loehle@arm.com>, Ionela Voinescu <ionela.voinescu@arm.com>, Jie
- Zhan <zhanjie9@hisilicon.com>, Huang Rui <ray.huang@amd.com>, "Gautham R.
- Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello
-	<mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
-	<linux-pm@vger.kernel.org>
-References: <20251208105933.1369125-1-pierre.gondois@arm.com>
- <20251208105933.1369125-2-pierre.gondois@arm.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <20251208105933.1369125-2-pierre.gondois@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemf200001.china.huawei.com (7.202.181.227)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251209081909.24982-1-vulab@iscas.ac.cn>
 
-On 2025/12/8 18:59, Pierre Gondois wrote:
-> The Power Management Quality of Service (PM QoS) allows to
-> aggregate constraints from multiple entities. It is currently
-> used to manage the min/max frequency of a given policy.
-> 
-> Frequency constraints can come for instance from:
-> - Thermal framework: acpi_thermal_cpufreq_init()
-> - Firmware: _PPC objects: acpi_processor_ppc_init()
-> - User: by setting policyX/scaling_[min|max]_freq
-> The minimum of the max frequency constraints is used to compute
-> the resulting maximum allowed frequency.
-> 
-> When enabling boost frequencies, the same frequency request object
-> (policy->max_freq_req) as to handle requests from users is used.
-> As a result, when setting:
-> - scaling_max_freq
-> - boost
-> The last sysfs file used overwrites the request from the other
-> sysfs file.
-> 
-> To avoid this, create a per-policy boost_freq_req to save the boost
-> constraints instead of overwriting the last scaling_max_freq
-> constraint.
-> 
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 28 ++++++++++++++++++++++++++++
->  include/linux/cpufreq.h   |  1 +
->  2 files changed, 29 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 852e024facc3c..942416f2741b0 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1359,6 +1359,11 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
->  	/* Cancel any pending policy->update work before freeing the policy. */
->  	cancel_work_sync(&policy->update);
->  
-> +	if (policy->boost_freq_req) {
-> +		freq_qos_remove_request(policy->boost_freq_req);
-> +		kfree(policy->boost_freq_req);
-> +	}
-> +
->  	if (policy->max_freq_req) {
->  		/*
->  		 * Remove max_freq_req after sending CPUFREQ_REMOVE_POLICY
+Hi Wentao,
 
-If adding boost_freq_req fails, CPUFREQ_CREATE_POLICY notification will
-never be sent but CPUFREQ_REMOVE_POLICY notification will be sent here. So
-maybe something like this is better:
+kernel test robot noticed the following build errors:
 
-@@ -1365,17 +1365,28 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
-        /* Cancel any pending policy->update work before freeing the policy. */
-        cancel_work_sync(&policy->update);
- 
--       if (policy->max_freq_req) {
-+       if (policy->boost_freq_req) {
-                /*
--                * Remove max_freq_req after sending CPUFREQ_REMOVE_POLICY
-+                * Remove boost_freq_req after sending CPUFREQ_REMOVE_POLICY
-                 * notification, since CPUFREQ_CREATE_POLICY notification was
--                * sent after adding max_freq_req earlier.
-+                * sent after adding boost_freq_req earlier.
-                 */
-                blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
-                                             CPUFREQ_REMOVE_POLICY, policy);
--               freq_qos_remove_request(policy->max_freq_req);
-+               freq_qos_remove_request(policy->boost_freq_req);
-+               kfree(policy->boost_freq_req);
-        }
- 
-+       if (policy->max_freq_req && !policy->boost_supported) {
-+               /*
-+                * Send CPUFREQ_REMOVE_POLICY notification here if
-+                * boost_freq_req is not present.
-+                */
-+               blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
-+                                            CPUFREQ_REMOVE_POLICY, policy);
-+       }
-+
-+       freq_qos_remove_request(policy->max_freq_req);
-        freq_qos_remove_request(policy->min_freq_req);
-        kfree(policy->min_freq_req);
+[auto build test ERROR on shawnguo/for-next]
+[also build test ERROR on linus/master v6.18 next-20251209]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
----
-It's a bit verbose, but I can't think of a better way.
+url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/pmdomain-imx-Fix-reference-count-leak-in-imx_gpc_probe/20251209-162152
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux.git for-next
+patch link:    https://lore.kernel.org/r/20251209081909.24982-1-vulab%40iscas.ac.cn
+patch subject: [PATCH v2] pmdomain: imx: Fix reference count leak in imx_gpc_probe()
+config: arm-randconfig-003-20251210 (https://download.01.org/0day-ci/archive/20251210/202512101101.zAlerEtu-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251210/202512101101.zAlerEtu-lkp@intel.com/reproduce)
 
-> @@ -1476,6 +1481,29 @@ static int cpufreq_policy_online(struct cpufreq_policy *policy,
->  			goto out_destroy_policy;
->  		}
->  
-> +		if (policy->boost_supported) {
-> +			policy->boost_freq_req = kzalloc(sizeof(*policy->boost_freq_req),
-> +				GFP_KERNEL);
-> +			if (!policy->boost_freq_req) {
-> +				ret = -ENOMEM;
-> +				goto out_destroy_policy;
-> +			}
-> +
-> +			ret = freq_qos_add_request(&policy->constraints,
-> +						   policy->boost_freq_req,
-> +						   FREQ_QOS_MAX,
-> +						   FREQ_QOS_MAX_DEFAULT_VALUE);
-> +			if (ret < 0) {
-> +				/*
-> +				 * So we don't call freq_qos_remove_request() for an
-> +				 * uninitialized request.
-> +				 */
-> +				kfree(policy->boost_freq_req);
-> +				policy->boost_freq_req = NULL;
-> +				goto out_destroy_policy;
-> +			}
-> +		}
-> +
->  		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
->  				CPUFREQ_CREATE_POLICY, policy);
->  	} else {
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 0465d1e6f72ac..c292a6a19e4f5 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -81,6 +81,7 @@ struct cpufreq_policy {
->  	struct freq_constraints	constraints;
->  	struct freq_qos_request	*min_freq_req;
->  	struct freq_qos_request	*max_freq_req;
-> +	struct freq_qos_request *boost_freq_req;
->  
->  	struct cpufreq_frequency_table	*freq_table;
->  	enum cpufreq_table_sorting freq_table_sorted;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512101101.zAlerEtu-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+   drivers/pmdomain/imx/gpc.c: In function 'imx_gpc_probe':
+>> drivers/pmdomain/imx/gpc.c:405:9: error: cleanup argument not a function
+     struct device_node *pgc_node __free(pgc_node);
+            ^~~~~~~~~~~
+
+
+vim +405 drivers/pmdomain/imx/gpc.c
+
+   401	
+   402	static int imx_gpc_probe(struct platform_device *pdev)
+   403	{
+   404		const struct imx_gpc_dt_data *of_id_data = device_get_match_data(&pdev->dev);
+ > 405		struct device_node *pgc_node __free(pgc_node);
+   406		struct regmap *regmap;
+   407		void __iomem *base;
+   408		int ret;
+   409	
+   410		pgc_node = of_get_child_by_name(pdev->dev.of_node, "pgc");
+   411	
+   412		/* bail out if DT too old and doesn't provide the necessary info */
+   413		if (!of_property_present(pdev->dev.of_node, "#power-domain-cells") &&
+   414		    !pgc_node)
+   415			return 0;
+   416	
+   417		base = devm_platform_ioremap_resource(pdev, 0);
+   418		if (IS_ERR(base))
+   419			return PTR_ERR(base);
+   420	
+   421		regmap = devm_regmap_init_mmio_clk(&pdev->dev, NULL, base,
+   422						   &imx_gpc_regmap_config);
+   423		if (IS_ERR(regmap)) {
+   424			ret = PTR_ERR(regmap);
+   425			dev_err(&pdev->dev, "failed to init regmap: %d\n",
+   426				ret);
+   427			return ret;
+   428		}
+   429	
+   430		/*
+   431		 * Disable PU power down by runtime PM if ERR009619 is present.
+   432		 *
+   433		 * The PRE clock will be paused for several cycles when turning on the
+   434		 * PU domain LDO from power down state. If PRE is in use at that time,
+   435		 * the IPU/PRG cannot get the correct display data from the PRE.
+   436		 *
+   437		 * This is not a concern when the whole system enters suspend state, so
+   438		 * it's safe to power down PU in this case.
+   439		 */
+   440		if (of_id_data->err009619_present)
+   441			imx_gpc_domains[GPC_PGC_DOMAIN_PU].base.flags |=
+   442					GENPD_FLAG_RPM_ALWAYS_ON;
+   443	
+   444		/* Keep DISP always on if ERR006287 is present */
+   445		if (of_id_data->err006287_present)
+   446			imx_gpc_domains[GPC_PGC_DOMAIN_DISPLAY].base.flags |=
+   447					GENPD_FLAG_ALWAYS_ON;
+   448	
+   449		if (!pgc_node) {
+   450			ret = imx_gpc_old_dt_init(&pdev->dev, regmap,
+   451						  of_id_data->num_domains);
+   452			if (ret)
+   453				return ret;
+   454		} else {
+   455			struct imx_pm_domain *domain;
+   456			struct platform_device *pd_pdev;
+   457			struct clk *ipg_clk;
+   458			unsigned int ipg_rate_mhz;
+   459			int domain_index;
+   460	
+   461			ipg_clk = devm_clk_get(&pdev->dev, "ipg");
+   462			if (IS_ERR(ipg_clk))
+   463				return PTR_ERR(ipg_clk);
+   464			ipg_rate_mhz = clk_get_rate(ipg_clk) / 1000000;
+   465	
+   466			for_each_child_of_node_scoped(pgc_node, np) {
+   467				ret = of_property_read_u32(np, "reg", &domain_index);
+   468				if (ret)
+   469					return ret;
+   470	
+   471				if (domain_index >= of_id_data->num_domains)
+   472					continue;
+   473	
+   474				pd_pdev = platform_device_alloc("imx-pgc-power-domain",
+   475								domain_index);
+   476				if (!pd_pdev)
+   477					return -ENOMEM;
+   478	
+   479				ret = platform_device_add_data(pd_pdev,
+   480							       &imx_gpc_domains[domain_index],
+   481							       sizeof(imx_gpc_domains[domain_index]));
+   482				if (ret) {
+   483					platform_device_put(pd_pdev);
+   484					return ret;
+   485				}
+   486				domain = pd_pdev->dev.platform_data;
+   487				domain->regmap = regmap;
+   488				domain->ipg_rate_mhz = ipg_rate_mhz;
+   489	
+   490				pd_pdev->dev.parent = &pdev->dev;
+   491				pd_pdev->dev.of_node = np;
+   492				pd_pdev->dev.fwnode = of_fwnode_handle(np);
+   493	
+   494				ret = platform_device_add(pd_pdev);
+   495				if (ret) {
+   496					platform_device_put(pd_pdev);
+   497					return ret;
+   498				}
+   499			}
+   500		}
+   501	
+   502		return 0;
+   503	}
+   504	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
