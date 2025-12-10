@@ -1,257 +1,211 @@
-Return-Path: <linux-pm+bounces-39405-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39406-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21D80CB2E0D
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 13:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B235ECB3084
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 14:33:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A463B30FB128
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 12:22:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BCA7A30CE57A
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Dec 2025 13:32:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D703E3246E1;
-	Wed, 10 Dec 2025 12:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 746582F25F0;
+	Wed, 10 Dec 2025 13:32:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="B2lhjLv0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mD+QFVXk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B9993233EE;
-	Wed, 10 Dec 2025 12:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CA4315ECCC;
+	Wed, 10 Dec 2025 13:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765369334; cv=none; b=qrjIco1NP2njhd5n/kwazyzoITzWP2/w6SJb9F9OTolwG5nheT3C3iwWLLkFpMenk/0uNZn7Xry4n7XTdfeKTIJl1Q6DXFYcs1ys6YOPNuqsxww1PSOxNrMWknC+xAud6ijL28z7bPQuCucvyHBxTwNt1U0GExJirbem1e/ju7A=
+	t=1765373528; cv=none; b=aofkFtUcWDpDs2pXGJ+7xrIhZXsvyPUuqCP73ReAUs3bRwdrmSC7SealrQjyNqIfMtx6BleKFUC82+n7hkkRkAfPzIi0ne4FUXPqB7telpYMhKDYsFyl8ocA+TsPrmBN/NjwyGvSw+1UB9DkujeQwJemhH1jGxLAPdT/iewMjO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765369334; c=relaxed/simple;
-	bh=jd9K+mF97WGriGBzAJzag5o6OTccybfMhIaxrYKCKPg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jVUOqfLhjjOjPZT9PBsp9z9oFQ8JMuuAjXUudlwugCxinFvg1mgiiWyQ+DeseqOKBkVF4loJwr9BHPZqHIaWugblrLBF2y3BU7jgJJ5RXJHkP5ZVEY6FXiXADZmsnN7zzMRDko1CieXHWqVfbAyVSvxlKiclu9veuC1Q3PWOp5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=B2lhjLv0; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 5DC144E41B32;
-	Wed, 10 Dec 2025 12:22:03 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 1E7F96072F;
-	Wed, 10 Dec 2025 12:22:03 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 12FF8119315B3;
-	Wed, 10 Dec 2025 13:21:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765369320; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=pOlUsVypsTSlBECjYHHoMGhNKvvFlUu0wSglyApNP7w=;
-	b=B2lhjLv08HCS4nwPMQdM5rtA1PxYKChropbNXfAwuDvzNvXOVjVCwFTmvmtb2ORCVRW7Qi
-	k66+Mas8QHLL/Sd+Ps87vPuBDRCwI7saahl3amPRs7SDyRx2/03xb8vTHThuJw2ga28vUp
-	mWJuGni+C/1JJduukHwT93M8LHqErcT1tCB506+eg0lsH1ug4WelgtBydwGEI8bQLgP21q
-	xgMbfofeVReqc6sRn9VIhYltwLdn5+wRI8qcr7mp32U/cqKfXDSUrrYJn+eHIG12gJQGaT
-	OtIuCTUfZrFJAHa0b3F7XsnAhwmX5iend8orwE0uMkCFCSYS7ZIq32q+F/8bOg==
-Date: Wed, 10 Dec 2025 13:21:40 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Kalle Niemi <kaleposti@gmail.com>, Rob Herring <robh@kernel.org>, Matti
- Vaittinen <mazziesaccount@gmail.com>, linux-arm-kernel@lists.infradead.org,
- Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Danilo Krummrich <dakr@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha
- Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Andi
- Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
- Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, Charles
- Keepax <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
- Walleij <linus.walleij@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Mark Brown <broonie@kernel.org>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Sakari Ailus
- <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>, Davidlohr
- Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>,
- Dave Jiang <dave.jiang@intel.com>, Alison Schofield
- <alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Ira
- Weiny <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
- Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, imx@lists.linux.dev,
- linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-Message-ID: <20251210132140.32dbc3d7@bootlin.com>
-In-Reply-To: <CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
- <20251015071420.1173068-2-herve.codina@bootlin.com>
- <f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
- <CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
- <5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
- <CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
- <072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
- <CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
- <55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
- <20251202102619.5cd971cc@bootlin.com>
- <088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
- <20251202175836.747593c0@bootlin.com>
- <dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com>
- <20251204083839.4fb8a4b1@bootlin.com>
- <CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1765373528; c=relaxed/simple;
+	bh=VT43Utki0KSpNyeJAOFAem9qF5q/X1l3pkw2rHh004c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A7D548uVZ/U9BFd/4aanYly/H8wTS85t8ytMjDh4BGA+cLu7GbaOAP9IkOjo2jNKG175YuVS/kgzntX/SbdEY3wWoIa0yT/YEqjG34BBkUYw7KjA3chdTluou7kkrHvb84uIOrmJiospOSYhCjOWzl/j7VPuXnh6TLNLwyAvJHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mD+QFVXk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D2FC4CEF1;
+	Wed, 10 Dec 2025 13:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765373527;
+	bh=VT43Utki0KSpNyeJAOFAem9qF5q/X1l3pkw2rHh004c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mD+QFVXkwXZG8ggAGR+mYTcvBgpm9wNCD/xaOIkHMlCw/96VKvcSPxosz5xR+5m0S
+	 2cLVkf/lNaXd/NCEseRMTVFihl7aRKLmh5Z2b4Ruqb2Ya3+JDKxDoQKRRWWYF8JufG
+	 L1YDlkuAfDCgd7c24xe8kR2jebG9YDP74A/1FNADchqnx2sun4tWh+dMufbJ/R0eK0
+	 q8gs+/WxnmX1WdwG0Fym0ZSpCC8p9OTwhjCPsAMtTcjGwzuiPqUaxg2WIWx2ClT6ds
+	 oXKrJg5Gzjs+4YJ3e2K1IElr8cymwuiKCjeKMzv9XKU+rwjh0xxyVlXtyQQwlyG174
+	 aRF/5UyUsAUQg==
+Date: Wed, 10 Dec 2025 14:32:05 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Marcelo Tosatti <mtosatti@redhat.com>
+Cc: linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] sched/idle: disable tick in idle=poll idle entry
+Message-ID: <aTl2VdDTRrVu6og_@localhost.localdomain>
+References: <aQJWWIDMMUxqDxnR@tpad>
+ <aQONGWu1lM27erA3@localhost.localdomain>
+ <aQiSPucmKCy4Rn6u@tpad>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+In-Reply-To: <aQiSPucmKCy4Rn6u@tpad>
 
-Hi Geert, Kalle, Rob,
-
-On Thu, 4 Dec 2025 11:49:13 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-
-> Hi Herv√©,
+Le Mon, Nov 03, 2025 at 08:30:06AM -0300, Marcelo Tosatti a Ècrit :
+> On Thu, Oct 30, 2025 at 05:06:49PM +0100, Frederic Weisbecker wrote:
+> > (Adding more people in Cc)
+> > 
+> > Le Wed, Oct 29, 2025 at 03:00:56PM -0300, Marcelo Tosatti a Ècrit :
+> > > 
+> > > Commit a5183862e76fdc25f36b39c2489b816a5c66e2e5 
+> > > ("tick/nohz: Conditionally restart tick on idle exit") allows
+> > > a nohz_full CPU to enter idle and return from it with the 
+> > > scheduler tick disabled (since the tick might be undesired noise).
+> > > 
+> > > The idle=poll case still unconditionally restarts the tick when entering
+> > > idle.
+> > > 
+> > > To reduce the noise for that case as well, stop the tick when entering
+> > > idle, for the idle=poll case.
+> > > 
+> > > Change tick_nohz_full_kick_cpu to set NEED_RESCHED bit, to handle the
+> > > case where a new timer is added from an interrupt. This breaks out of
+> > > cpu_idle_poll and rearms the timer if necessary.
+> > > 
+> > > ---
+> > > 
+> > > v2: Handle the case where a new timer is added from an interrupt (Frederic Weisbecker)
+> > > 
+> > >  include/linux/sched.h    |    2 ++
+> > >  kernel/sched/core.c      |   10 ++++++++++
+> > >  kernel/sched/idle.c      |    2 +-
+> > >  kernel/time/tick-sched.c |    1 +
+> > >  4 files changed, 14 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/include/linux/sched.h b/include/linux/sched.h
+> > > index cbb7340c5866..1f6938dc20cd 100644
+> > > --- a/include/linux/sched.h
+> > > +++ b/include/linux/sched.h
+> > > @@ -2428,4 +2428,6 @@ extern void migrate_enable(void);
+> > >  
+> > >  DEFINE_LOCK_GUARD_0(migrate, migrate_disable(), migrate_enable())
+> > >  
+> > > +void set_tif_resched_if_polling(int cpu);
+> > > +
+> > >  #endif
+> > > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > > index f1ebf67b48e2..f0b84600084b 100644
+> > > --- a/kernel/sched/core.c
+> > > +++ b/kernel/sched/core.c
+> > > @@ -988,6 +988,11 @@ static bool set_nr_if_polling(struct task_struct *p)
+> > >  	return true;
+> > >  }
+> > >  
+> > > +void set_tif_resched_if_polling(int cpu)
+> > > +{
+> > > +	set_nr_if_polling(cpu_rq(cpu)->idle);
+> > > +}
+> > > +
+> > >  #else
+> > >  static inline bool set_nr_and_not_polling(struct thread_info *ti, int tif)
+> > >  {
+> > > @@ -999,6 +1004,11 @@ static inline bool set_nr_if_polling(struct task_struct *p)
+> > >  {
+> > >  	return false;
+> > >  }
+> > > +
+> > > +void set_tif_resched_if_polling(int cpu)
+> > > +{
+> > > +	set_tsk_need_resched(cpu_rq(cpu)->idle);
+> > > +}
+> > >  #endif
+> > >  
+> > >  static bool __wake_q_add(struct wake_q_head *head, struct task_struct *task)
+> > > diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+> > > index c39b089d4f09..428c2d1cbd1b 100644
+> > > --- a/kernel/sched/idle.c
+> > > +++ b/kernel/sched/idle.c
+> > > @@ -324,7 +324,7 @@ static void do_idle(void)
+> > >  		 * idle as we know that the IPI is going to arrive right away.
+> > >  		 */
+> > >  		if (cpu_idle_force_poll || tick_check_broadcast_expired()) {
+> > > -			tick_nohz_idle_restart_tick();
+> > > +			tick_nohz_idle_stop_tick();
+> > 
+> > Shouldn't we simply remove the tick_nohz_idle_restart_tick() line? The nohz_full
+> > CPU should have entered here with the tick disabled already.
+> > 
+> > Also non-nohz_full systems shouldn't care.
 > 
-> On Thu, 4 Dec 2025 at 08:39, Herve Codina <herve.codina@bootlin.com> wrote:
-> > Indeed, Kalle, Geert, I don't have your hardware, your related overlay or
-> > a similar one that could be used for test and also I don't have your out of
-> > tree code used to handle this overlay.
-> >
-> > I know overlays and fw_devlink have issues. Links created by fw_devlink
-> > when an overlay is applied were not correct on my side.
-> >
-> > Can you check your <supplier>--<consumer> links with 'ls /sys/class/devlinks'
-> >
-> > On my side, without my patches some links were not correct.
-> > They linked to the parent of the supplier instead of the supplier itself.
-> > The consequence is a kernel crash, use after free, refcounting failure, ...
-> > when the supplier device is removed.
-> >
-> > Indeed, with wrong links consumers were not removed before suppliers they
-> > used.
-> >
-> > Looking at Geert traces:
-> > --- 8< ---
-> > rcar_sound ec500000.sound: Failed to create device link (0x180) with
-> > supplier soc for /soc/sound@ec500000/rcar_sound,src/src-0
-> > rcar_sound ec500000.sound: Failed to create device link (0x180) with
-> > supplier soc for /soc/sound@ec500000/rcar_sound,src/src-1
-> > [...]
-> > --- 8< ---
-> >
-> > Even if it is not correct, why the soc device cannot be a provider?
-> > I don't have the answer to this question yet.  
+> With tick_nohz_idle_restart_tick removed:
 > 
-> I have no idea. These failures (sound) are also not related to the
-> device I am adding through the overlay (SPI EEPROM).
-> Note that these failures appear only with your suggested fix, and are
-> not seen with just the patch in the subject of this email thread.
+> <idle>-0 [001] d.h2. 51.356672: hrtimer_start: hrtimer=ffff927ae205c418 function=tick_nohz_handler expires=51360062500 softexpires=51360062500 mode=ABS
+> <idle>-0 [001] d.h2. 51.357671: hrtimer_cancel: hrtimer=ffff927ae205c418
+> <idle>-0 [001] d.h1. 51.357671: hrtimer_expire_entry: hrtimer=ffff927ae205c418 function=tick_nohz_handler now=51360063398
+> <idle>-0 [001] d.h1. 51.357671: hrtimer_expire_exit: hrtimer=ffff927ae205c418
+> <idle>-0 [001] d.h2. 51.357671: hrtimer_start: hrtimer=ffff927ae205c418 function=tick_nohz_handler expires=51361062500 softexpires=51361062500 mode=ABS
+> <idle>-0 [001] d.h2. 51.358671: hrtimer_cancel: hrtimer=ffff927ae205c418
+> <idle>-0 [001] d.h1. 51.358671: hrtimer_expire_entry: hrtimer=ffff927ae205c418 function=tick_nohz_handler now=51361063420
+> <idle>-0 [001] d.h1. 51.358672: hrtimer_expire_exit: hrtimer=ffff927ae205c418
+> <idle>-0 [001] d.h2. 51.358672: hrtimer_start: hrtimer=ffff927ae205c418 function=tick_nohz_handler expires=51362062500 softexpires=51362062500 mode=ABS
+> <idle>-0 [001] d.h2. 51.359671: hrtimer_cancel: hrtimer=ffff927ae205c418
+> <idle>-0 [001] d.h1. 51.359671: hrtimer_expire_entry: hrtimer=ffff927ae205c418 function=tick_nohz_handler now=51362063447
+> <idle>-0 [001] d.h1. 51.359672: hrtimer_expire_exit: hrtimer=ffff927ae205c418
+> <idle>-0 [001] d.h2. 51.359672: hrtimer_start: hrtimer=ffff927ae205c418 function=tick_nohz_handler expires=51363062500 softexpires=51363062500 mode=ABS
 > 
-> > Without having the exact tree structure of the base device-tree, the overlay
-> > and the way it is applied, and so without been able to reproduce the issue
-> > on my side, investigating the issue is going to be difficult.
-> >
-> > I hope to find some help to move forward and fix the issue.  
+> CPU 1 is idle and isolated.
+
+Suprising, somehow the CPU's tick never interrupted a non-idle section. I guess
+it's possible after boot. Or the CPU had tick dependencies before. I was about
+to propose stopping the tick right before exiting to userspace but since you're
+using idle=poll, I guess userspace must be reached as fast as possible and
+therefore you prefer to stop the tick before the next wake-up rather that after?
+
+Also instead of polling in kernel, why not polling in userspace for events? This
+sounds like a saner isolation design. Entering/exiting the kernel is always a
+risk for something going wrong.
+
 > 
-> Base DTS is [1], overlay DTS is [2].
-> Applying and removing the overlay is done using OF_CONFIGFS[3],
-> and "overlay [add|rm] 25lc040"[4].
+> > >  			cpu_idle_poll();
+> > >  		} else {
+> > >  			cpuidle_idle_call();
+> > > diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> > > index c527b421c865..efc3653999dc 100644
+> > > --- a/kernel/time/tick-sched.c
+> > > +++ b/kernel/time/tick-sched.c
+> > > @@ -408,6 +408,7 @@ void tick_nohz_full_kick_cpu(int cpu)
+> > >  	if (!tick_nohz_full_cpu(cpu))
+> > >  		return;
+> > >  
+> > > +	set_tif_resched_if_polling(cpu);
+> > 
+> > Perhaps stuff that within wake_up_full_nohz_cpu() and call
+> > set_nr_if_polling() directly.
 > 
-> I assume you can reproduce the issue on any board that has an SPI
-> EEPROM, after moving the SPI bus enablement and SPI EEPROM node to an
-> overlay. Probably even with an I2C EEPROM instead.  Or even without
-> an actual EEPROM connected, as even the SPI bus fails to appear.
+> Can't call set_nr_if_polling() directly since if TIF_POLLING_NRFLAG is
+> undefined:
 > 
-> > Saravana's email (Saravana Kannan <saravanak@google.com>) seems incorrect.
-> > Got emails delivery failure with this email address.  
+> static inline bool set_nr_if_polling(struct task_struct *p)
+> {
+>         return false;
+> }
 > 
-> Yeah, he moved company.
-> He is still alive, I met him in the LPC Training Session yesterday ;-)
-> 
-> Thanks!
-> 
-> [1] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/tree/arch/arm64/boot/dts/renesas/r8a77990-ebisu.dts
-> [2] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/tree/arch/arm64/boot/dts/renesas/r8a77990-ebisu-cn41-msiof0-25lc040.dtso?h=topic/renesas-overlays-v6.17-rc1
-> [3] https://web.git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/log/?h=topic/overlays-v6.17-rc1
-> [4] https://elinux.org/R-Car/DT-Overlays#Helper_Script
-> [5] https://lore.kernel.org/CAMuHMdXEnSD4rRJ-o90x4OprUacN_rJgyo8x6=9F9rZ+-KzjOg@mail.gmail.com/
-> 
+> So the wakeup won't occur. Or am i missing something?
 
-I did some tests with boards I have.
+Ok but can you at least move that to wake_up_full_nohz_cpu()?
+tick_nohz_full_kick_cpu() is more general and doesn't only concern
+new timers.
 
-First I used a Marvel board based on an Armada 3720.
-
-In my overlay, I added the pinmux related to the SPI controller, enabled
-this SPI controller and added a SPI flash.
-
-It didn't work with or without culprit patches from my series applied.
-Indeed, the pinctrl driver used is an MFD driver an mixed pinmux definition
-nodes with device description (a clock) node.
-
-When a new node is added, a new device is created. Indeed, because the
-driver is an MFD driver, it is a bus driver and handled by of_platform bus.
-
-My new node is considered by devlink as a node that will have a device ready
-to work (driver attached and device probed). A link is created between this
-node and the consumers of this node (i.e. the SPI controller). devlink is
-waiting for this provider to be ready before allowing the its consumer to probe.
-This node (simple pinmux description) will never lead to a device and devlink
-will never see this "provider" ready.
-
-Did a test with a Renesas RZ/N1D (r9a06g032) based board and built a similar
-overlay involving I2C controller pinmux, I2C controller and an EEPROM.
-
-Here, also the overlay didn't work but the issue is different.
-
-The pinmux definition for pinctrl (i.e. pinctrl subnodes) are looked when
-the pinctrl driver probes. Adding a new node later is not handled by the
-pinctrl driver.
-Applying the overlay leads to a simple:
-  [   16.934168] rzn1-pinctrl 40067000.pinctrl: unable to find group for node /soc/pinctrl@40067000/pins_i2c2
-
-Indeed, the 'pins_i2c2' has been added by the overlay and was not present
-when the pinctrl probed.
-
-Tried without adding a new pinmux node (pinctrl subnode) from the overlay
-and used nodes already existing in the base DT.
-
-On my Marvell Armada 3720 board, it works with or without my patches.
-No regression detected due to my patches.
-
-On my RZ/N1D board, it works also with or without my patches.
-Here also, no regression detected.
-
-Also, on my Marvell Armada 3720 board, I can plug my LAN966x PCI board.
-The LAN966x PCI driver used an overlay to describe the LAN966x PCI board.
-
-With the upstream patch not reverted, i.e. 1a50d9403fb9 ("treewide: Fix
-probing of devices in DT overlays")" applied, devlinks created for the
-LAN966x PCI board internal devices are incorrect and lead to crashes when
-the LAN966x PCI driver is removed due to wrong provider/consumer dependencies.
-
-When this patch is reverted and replaced by "of: dynamic: Fix overlayed
-devices not probing because of fw_devlink", devlinks created for the LAN966x
-PCI board internal devices are corrects and crashes are no more present on
-removal.
-
-Kalle, Geert, can you perform a test on your hardware with my patches
-applied and moving your pinmux definition from the overlay to the base
-device-tree?
-
-The kernel you can use is for instance the kernel at the next-20251127 tag.
-Needed patches for test are present in this kernel:
-    - 76841259ac092 ("of: dynamic: Fix overlayed devices not probing because of fw_devlink")
-    - 7d67ddc5f0148 ("Revert "treewide: Fix probing of devices in DT overlays"")
-
-Best regards,
-Herv√©
+-- 
+Frederic Weisbecker
+SUSE Labs
 
