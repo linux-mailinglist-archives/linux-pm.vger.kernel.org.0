@@ -1,119 +1,121 @@
-Return-Path: <linux-pm+bounces-39426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88FAFCB49E2
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Dec 2025 04:23:22 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10821CB4AA0
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Dec 2025 05:03:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3644F300E01D
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Dec 2025 03:23:21 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8AB5130011AE
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Dec 2025 04:03:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A1921D590;
-	Thu, 11 Dec 2025 03:23:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oiDjJDVF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8A3522127B;
+	Thu, 11 Dec 2025 04:03:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E40433A6;
-	Thu, 11 Dec 2025 03:23:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32754A23;
+	Thu, 11 Dec 2025 04:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765423400; cv=none; b=dPzQv3P/q+06HgihA6sm40zxOxb/9VxCCFdTxuvmSL0gsnMQqPz2WcmMzodntxvCkJY9SmkD+L45YTbGrIEKaaEvpjlzvQGt7yrMzGdYDIEdwVhkGjptjJsVTI9fokkSq/OWn7EvlhSjBrGQhERygL2PJ6MbQ3T9gS0ZAdlVPbM=
+	t=1765425805; cv=none; b=AVhKdZXX8s8GIu+kX7qkwZWmy0dnhFghRvXEPkIA3xUqg3ot+LPgsPJJ+WRvRt+kfUZzmndzlr7OLkN/qc0fHHEC261ET9LPMaU101pHG+uYNBMsOSg5hShew2PdPFAqJ3FC1VMeyNgVqxKGtLYPSCYsKfKwJto+Te77GwtnHdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765423400; c=relaxed/simple;
-	bh=a0Epa1us7wO6a0BPZ/bo7QqH9zJkTuAwclOeQKiSfno=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oKiSAmpzMMgK185sTvSPhQ82D996OwgVIab9l6FlHPI3V6zUzw1KGRj7++wPno6J/6w2s3FK3zRNaBOYJI7qakGDeR0pGYK5ONLycszLhnWC8vmEB0FulqSrTZ7PyzezynrHkKQUk0o8X9riV0TNTnIK/L9QWLxg+C5O719wgWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oiDjJDVF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8457DC4CEFB;
-	Thu, 11 Dec 2025 03:23:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765423399;
-	bh=a0Epa1us7wO6a0BPZ/bo7QqH9zJkTuAwclOeQKiSfno=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oiDjJDVFQ6AaZidE0Fizdtb+qH891QQics9CdLa2R+SA3x5SGBqSKEeQ7PQlBhUE4
-	 XvolnX/0pASSY/WRFHZRDhhss37KAPJotO8LwH6+FvHz4183XOzkGKs8IxHgh0A2qE
-	 GmL8xYl/qeAK73dTyrr1q/62HfXwd+AA2d1UbtI9nQvtYVTvhMw3oQdD3L/Ujr5v4I
-	 d+cMVZSq21eYW4dUOJGkZXpFvLRBL7ogNtt/ahHSi3MZRtgo6eWeeQpDiER7lp5iHB
-	 WL/Kqqp5TbdYGrLL8sdPClRR7ov1j+p9Bcsg502JzhQqiJMgXe840g6zpgi9cC664R
-	 B+kWyrR6kwQEQ==
-Date: Wed, 10 Dec 2025 21:23:16 -0600
-From: Rob Herring <robh@kernel.org>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
-	Pavel Pisa <pisa@fel.cvut.cz>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: Re: [PATCH] cpufreq: dt-platdev: Fix creating device on OPPv1
- platforms
-Message-ID: <20251211032316.GA3866149-robh@kernel.org>
-References: <20251210051718.132795-2-krzysztof.kozlowski@oss.qualcomm.com>
- <rcnqsevjxtyfu56pcw5wfjh7wvg4q32xu2xkol7tfvaozewrxz@3qn5qbjc5mpd>
+	s=arc-20240116; t=1765425805; c=relaxed/simple;
+	bh=ym5Zf98E+O3li35Q3eae+JPTiuNUaQ3tPxY/mcTQ63o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dC6iMm3S23WZcX217YKPr9fBFjae7ez263Nu8700BkdUCyEmZiTKEagnqnuzSf+kT/DEnfmrB0b3QszOK4O0lxOMkaYBiLlKpGyvUHrbnFYnxasUNj+sBPg6fePasOAzh3Rkp3a+xxxUQnzuKiPyImsQDMQiU0iAqGxcUaLtwIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from dfae2b116770.home.arpa (unknown [124.16.138.129])
+	by APP-05 (Coremail) with SMTP id zQCowACnOQ1uQjpprjhGAA--.25317S2;
+	Thu, 11 Dec 2025 12:02:55 +0800 (CST)
+From: Wentao Liang <vulab@iscas.ac.cn>
+To: ulf.hansson@linaro.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com
+Cc: linux-pm@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Wentao Liang <vulab@iscas.ac.cn>,
+	stable@vger.kernel.org
+Subject: [PATCH v4] pmdomain: imx: Fix reference count leak in imx_gpc_probe()
+Date: Thu, 11 Dec 2025 04:02:52 +0000
+Message-Id: <20251211040252.497759-1-vulab@iscas.ac.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <rcnqsevjxtyfu56pcw5wfjh7wvg4q32xu2xkol7tfvaozewrxz@3qn5qbjc5mpd>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zQCowACnOQ1uQjpprjhGAA--.25317S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww13Kw4fAw45ZFyDZryxKrg_yoW8WF4kpF
+	WxGayakrW7CF47KaykKr4UZFy5K3y5A3y7tF40kay3Zr15tF97JFy5Z34jkrnakry8Ja15
+	trWUKryrXas7CaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+	1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+	Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+	n2kIc2xKxwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+	kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+	67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+	CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1x
+	MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
+	VFxhVjvjDU0xZFpf9x0JUd-B_UUUUU=
+X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiDAYNA2k6CZbaQgAAsQ
 
-On Wed, Dec 10, 2025 at 12:00:22PM +0530, Viresh Kumar wrote:
-> On 10-12-25, 06:17, Krzysztof Kozlowski wrote:
-> > Commit 6ea891a6dd37 ("cpufreq: dt-platdev: Simplify with
-> > of_machine_get_match_data()") broke several platforms which did not have
-> > OPPv2 proprety, because it incorrectly checked for device match data
-> > after first matching from "allowlist".  Almost all of "allowlist" match
-> > entries do not have match data and it is expected to create platform
-> > device for them with empty data.
-> > 
-> > Fix this by first checking if platform is on the allowlist with
-> > of_machine_device_match() and only then taking the match data.  This
-> > duplicates the number of checks (we match against the allowlist twice),
-> > but makes the code here much smaller.
-> > 
-> > Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Closes: https://lore.kernel.org/all/CAMuHMdVJD4+J9QpUUs-sX0feKfuPD72CO0dcqN7shvF_UYpZ3Q@mail.gmail.com/
-> > Reported-by: Pavel Pisa <pisa@fel.cvut.cz>
-> > Closes: https://lore.kernel.org/all/6hnk7llbwdezh74h74fhvofbx4t4jihel5kvr6qwx2xuxxbjys@rmwbd7lkhrdz/
-> > Fixes: 6ea891a6dd37 ("cpufreq: dt-platdev: Simplify with of_machine_get_match_data()")
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-> > ---
-> >  drivers/cpufreq/cpufreq-dt-platdev.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> > index a1d11ecd1ac8..b06a43143d23 100644
-> > --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> > +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> > @@ -219,11 +219,12 @@ static bool __init cpu0_node_has_opp_v2_prop(void)
-> >  
-> >  static int __init cpufreq_dt_platdev_init(void)
-> >  {
-> > -	const void *data;
-> > +	const void *data = NULL;
-> >  
-> > -	data = of_machine_get_match_data(allowlist);
-> > -	if (data)
-> > +	if (of_machine_device_match(allowlist)) {
-> > +		data = of_machine_get_match_data(allowlist);
-> >  		goto create_pdev;
-> > +	}
-> >  
-> >  	if (cpu0_node_has_opp_v2_prop() && !of_machine_device_match(blocklist))
-> >  		goto create_pdev;
-> 
-> Pavel, please give this a try as well.
-> 
-> Since the original patch went via your tree, take this one too please:
+of_get_child_by_name() returns a node pointer with refcount incremented.
+Use the __free() attribute to manage the pgc_node reference, ensuring
+automatic of_node_put() cleanup when pgc_node goes out of scope.
 
-Applied.
+This eliminates the need for explicit error handling paths and avoids
+reference count leaks.
 
-Rob
+Fixes: 721cabf6c660 ("soc: imx: move PGC handling to a new GPC driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
+
+---
+Change in V4:
+- Fix typo error in code
+
+Change in V3:
+- Ensure variable is assigned when using cleanup attribute
+
+Change in V2:
+- Use __free() attribute instead of explicit of_node_put() calls
+---
+ drivers/pmdomain/imx/gpc.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/pmdomain/imx/gpc.c b/drivers/pmdomain/imx/gpc.c
+index f18c7e6e75dd..56a78cc86584 100644
+--- a/drivers/pmdomain/imx/gpc.c
++++ b/drivers/pmdomain/imx/gpc.c
+@@ -403,13 +403,12 @@ static int imx_gpc_old_dt_init(struct device *dev, struct regmap *regmap,
+ static int imx_gpc_probe(struct platform_device *pdev)
+ {
+ 	const struct imx_gpc_dt_data *of_id_data = device_get_match_data(&pdev->dev);
+-	struct device_node *pgc_node;
++	struct device_node *pgc_node __free(device_node)
++		= of_get_child_by_name(pdev->dev.of_node, "pgc");
+ 	struct regmap *regmap;
+ 	void __iomem *base;
+ 	int ret;
+ 
+-	pgc_node = of_get_child_by_name(pdev->dev.of_node, "pgc");
+-
+ 	/* bail out if DT too old and doesn't provide the necessary info */
+ 	if (!of_property_present(pdev->dev.of_node, "#power-domain-cells") &&
+ 	    !pgc_node)
+-- 
+2.34.1
+
 
