@@ -1,175 +1,136 @@
-Return-Path: <linux-pm+bounces-39439-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39440-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95FB8CB64E3
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Dec 2025 16:22:04 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AA68CB664A
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Dec 2025 16:55:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E03583037CD3
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Dec 2025 15:19:27 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id B8DF430024BE
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Dec 2025 15:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D605303A30;
-	Thu, 11 Dec 2025 15:19:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B7A313537;
+	Thu, 11 Dec 2025 15:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GZ04GN+Y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AI0uKfIv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C582FBDF4;
-	Thu, 11 Dec 2025 15:19:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A207C31352D
+	for <linux-pm@vger.kernel.org>; Thu, 11 Dec 2025 15:55:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765466366; cv=none; b=aFu2zDKlLEhV4I4GuNKilJ5UtlgVc+YFFC5QPBK12z1DIRHDFnqcCllQjwth+Fg0o8EraVVL9Pv5lf6YngUOA8QG6XsI4Ec7SrGka877VEobe4V6XVSGiuG9BRIaJKKllt+e7U61OOmQq79rgJBkbgCoTp8Tqf54K6x7/gNKEhE=
+	t=1765468509; cv=none; b=pL+VmDnfZ6FiqTGRJrAr9nWXTMeDrvzTApHL1C/QLw9TpJ2cdrc0Xqu+ABlot9pvyWKuvh6JwhT+0aQdZ5HXYtjmpHcQUmxyzdRuaDjHdzfrUJPKdDbyEF/6yesc0P2bCBW0v44QtkzRq5QgcxFglpk58aoQSbGgNx8DwsBg8cY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765466366; c=relaxed/simple;
-	bh=fWpmLL1z7q9BxSPVUYz8JHtTujuBUEm3CzFbbQaDgtc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PjGR9AdkR5Zm0Py/M6B+dh3Uanst0wXn8Pa4N9IXiczW3kU1tOdc17aXsfM8XoInM3AZB44KP4UYxOCS2GK7tgJLHeChf07hi7BTbhVaVKyc9PzrtXB3xJZZQKENPUPVoUHI5h32ffC2ZbOL9pXy1z5lG8y3absxC/Dlz6J/e9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GZ04GN+Y; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 1479FC1934D;
-	Thu, 11 Dec 2025 15:18:58 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id EDAF160738;
-	Thu, 11 Dec 2025 15:19:21 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 641CD103C8C7B;
-	Thu, 11 Dec 2025 16:19:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765466359; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=7YFG4wLJmjR/E/MqOc1NCEw1lot9ZBUWy77cdvC/abM=;
-	b=GZ04GN+YsE0cv0BQQYoZpyVYAYEsovdzJ9rXmDON0bJIZxnJU7VPl2eg1p8e0NQ9k+K5Dp
-	/LRca+qQVGSjdqk8rZVoLiG+Y+sqtI/yxaymDKJc9jZxsUrEC0ffilz5i/Pg3I8zRmwpJS
-	taMVcM89WUFFX51Ek3tAsGArlvFRqyRVPdmd6IrgjHKE7xrG4LzqbztURSYcKnyHSuVeO0
-	J67fZCzMN/AGR3a33M4QUHtoTEJbjcuY3+UKEhaz2RTDuiDFFZpLeGkOJMjJFnFSz1vbjo
-	hs+44nERIBIh7DW/ujTn09iVGaGgu0W9sZBJpf2sMe5nwN92PyYkCL/V4aE1wA==
-Date: Thu, 11 Dec 2025 16:19:02 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: Matti Vaittinen <mazziesaccount@gmail.com>, Geert Uytterhoeven
- <geert@linux-m68k.org>, Rob Herring <robh@kernel.org>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Kalle Niemi <kaleposti@gmail.com>, linux-arm-kernel@lists.infradead.org,
- Andrew Lunn <andrew@lunn.ch>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, Shawn Guo
- <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
- Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>, Peter Rosin <peda@axentia.se>, Arnd
- Bergmann <arnd@arndb.de>, Bjorn Helgaas <bhelgaas@google.com>, Charles
- Keepax <ckeepax@opensource.cirrus.com>, Richard Fitzgerald
- <rf@opensource.cirrus.com>, David Rhodes <david.rhodes@cirrus.com>, Linus
- Walleij <linus.walleij@linaro.org>, Mark Brown <broonie@kernel.org>, Andy
- Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally
- <djrscally@gmail.com>, Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Sakari Ailus <sakari.ailus@linux.intel.com>, Len Brown <lenb@kernel.org>,
- Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron
- <jonathan.cameron@huawei.com>, Dave Jiang <dave.jiang@intel.com>, Alison
- Schofield <alison.schofield@intel.com>, Vishal Verma
- <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
- <dan.j.williams@intel.com>, Wolfram Sang <wsa@kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- imx@lists.linux.dev, linux-clk@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-pci@vger.kernel.org, linux-sound@vger.kernel.org,
- patches@opensource.cirrus.com, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-spi@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org, Allan Nielsen
- <allan.nielsen@microchip.com>, Horatiu Vultur
- <horatiu.vultur@microchip.com>, Steen Hegelund
- <steen.hegelund@microchip.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 01/29] Revert "treewide: Fix probing of devices in DT
- overlays"
-Message-ID: <20251211161902.11ef4248@bootlin.com>
-In-Reply-To: <1b9fa77b-d74a-4fa7-b2e7-8b389d59a5a0@gmail.com>
-References: <20251015071420.1173068-1-herve.codina@bootlin.com>
-	<f74ab0a2-b74b-4b96-8469-a716c850e230@gmail.com>
-	<CAL_JsqJDOYuzutMHMeFAogd5a_OX6Hwi8Gwz1Vy7HpXgNeYKsg@mail.gmail.com>
-	<5cf2a12a-7c66-4622-b4a9-14896c6df005@gmail.com>
-	<CAL_JsqJjm12LxpDg6LmpY=Ro_keHwnrWiYMLVnG=s_pSP4X2WQ@mail.gmail.com>
-	<072dde7c-a53c-4525-83ac-57ea38edc0b5@gmail.com>
-	<CAL_JsqKyG98pXGKpL=gxSc92izpzN7YCdq62ZJByhE6aFYs1fw@mail.gmail.com>
-	<55076f4b-d523-4f8c-8bd4-0645b790737e@gmail.com>
-	<20251202102619.5cd971cc@bootlin.com>
-	<088af3ff-bd04-4bc9-b304-85f6ed555f2a@gmail.com>
-	<20251202175836.747593c0@bootlin.com>
-	<dc813fc2-28d2-4f2c-a2a3-08e33eec8ec7@gmail.com>
-	<20251204083839.4fb8a4b1@bootlin.com>
-	<CAMuHMdXdwf7La1EYBWTJadsTAJG3nKQVW6wtBn-bUqshA=XHRw@mail.gmail.com>
-	<20251210132140.32dbc3d7@bootlin.com>
-	<c50c40cc-69f6-436c-a94e-94a3a10f6727@gmail.com>
-	<20251211132044.10f5b1ea@bootlin.com>
-	<1b9fa77b-d74a-4fa7-b2e7-8b389d59a5a0@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1765468509; c=relaxed/simple;
+	bh=fwJlp95bBAG7kWYEepDiexqrENbAswzXKepyzd027WM=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=BoGuv7usE8ZnpuixlPAHzy3BA1Am5AbtJFVKYU9DsPCqoYd8N2NMKZ/PGGvUmOuEcWCP4OWH1omETnWfW/BO8zjOjedHX/IoO3Q37PhLrsgn7wail+OKgzFX5c+t0KGF7R/gGmlPvm/UwX9qjm9BhM4lAaBA1v9QQ5vMDlthVRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AI0uKfIv; arc=none smtp.client-ip=209.85.167.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-4503ee5c160so126624b6e.1
+        for <linux-pm@vger.kernel.org>; Thu, 11 Dec 2025 07:55:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765468504; x=1766073304; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ie7TKY4J0xZBKToVZGBoQ4XnO54sW4jqYAqWGv0+/io=;
+        b=AI0uKfIvYNqy0i8sBatIb5hKXR2JeAG7zgcLRBGC9YpVNU50w6jDy1+uXx190gkGOc
+         C+W2rnF1QGAI544VrmsX5M+gVk0rwQKuICWqRohUd23lkL7owUcNbxUac8UsFzBrOBiZ
+         dem1PKTAL0dNKLf1SM+gaLg/4Ain+mOrCswx3od/V7KBDT8XM9ei9epxd3bZB1DZUGWz
+         6SxYmKUMk/U7MYsMYagGymf5dGK96Kjh1YAc4CjmChQc7rnYS9DAT3IlB7uHCNAYUZnB
+         q+44VAQ9rnO+Azd5T//8uEj0bBGdavsBOTU2tKcnV96wMuOi4h1u96/xMIVQ5WtyTxxp
+         t8aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765468504; x=1766073304;
+        h=to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ie7TKY4J0xZBKToVZGBoQ4XnO54sW4jqYAqWGv0+/io=;
+        b=Sq0V620dzf8W0rxff+U+BNhWgbSNcxJdL4r5W41VAkcTBQ2sgV4tP55R5aCZtgR2Sd
+         OMmG/gUVBoAWlaYRPkGvtyY0OLY8vEwbpBemcvbJZHLnvtDDnCOAQkxX5xY5nOrr2103
+         Vx3oxIfnsQdXlJRs5nRGLz9Rc/zoJN4Q8fzlDOrgOtXj7VMVQBeP7XruQ2YbrokZoXCA
+         qBiKTCkY9TZTLIHEQaOad8v+352DLKLXZC5CNmeopTAGk7t//da6HBGXrVlTlp1n1yW5
+         F6sVBTUpUuZlh63Zj3G0+vImadFiCGZo/UGZSk9ek9PUiGyvdr6us3jIB3uQl2VHRwnG
+         lRgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXCR9C45ye7wQM6DwDzLR7PecNPOAlNph6FMhrahuhbvUpYWvD262YgCInmPsqe6JsaJSR4qM8+iw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCK/9kPALvv05ZCWPrBB6yHyZkKNQNKZnwC3k/t6fOsVVT7KkR
+	+/QIiGlHVca1QW190LVdmvg0CfMIMXarf4+07JU1SY3q0xo1G1PR9/Z2YWaUJ2DenKkSwkNbdOg
+	BhDPwYjOtumnH8qdieeoYpvNXy8dqZ1I=
+X-Gm-Gg: AY/fxX6s+bWqyX8IU8BeDumVHtMtq7DcRcdtta+eqXPQiVBSOYov1KtnntNslAiKL79
+	GNWgy4aCyX1y4OYEtwU1cj63ooUE5M7kB0CwVVakL40TsA3R3L78VRGJeH4cRyRq759NzmhHKFE
+	bnuytzfCV4fyBCe4UTTliNKI9yqP4Wk3+W9b+BZ30wl9hnkOzXkywCuPzwsI5UjxgxVv+g2XtfM
+	7C+7OYhkvym0nF1DH9qETuEteUa2ekqC2VwLZSNDLP+sncYAjVo2Ls1AdQ0FseTUHsKnBjBYi01
+	A0H/5rrJyPoa0+wt0S5RyVAbxw==
+X-Google-Smtp-Source: AGHT+IHXmInc6hNUIZUoLpP+BYGgYAGze6nb2R2ueRO5VxDEQRxgtOjiPMFdP1lK2Otb1LgPycnughbDIgBoXGBKCXE=
+X-Received: by 2002:a05:6808:1490:b0:439:af2f:d1d5 with SMTP id
+ 5614622812f47-455866d189amr3237813b6e.39.1765468504472; Thu, 11 Dec 2025
+ 07:55:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+From: Donald Hunter <donald.hunter@gmail.com>
+Date: Thu, 11 Dec 2025 15:54:53 +0000
+X-Gm-Features: AQt7F2ougg8Kbtn1zopP4MM0jMFAvN_Q8zACcGkXN_X9ACZRAZQLHfVWaA3hLE0
+Message-ID: <CAD4GDZy-aeWsiY=-ATr+Y4PzhMX71DFd_mmdMk4rxn3YG8U5GA@mail.gmail.com>
+Subject: Concerns with em.yaml YNL spec
+To: Changwoo Min <changwoo@igalia.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	sched-ext@lists.linux.dev, Jakub Kicinski <kuba@kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Matti, Geert, all,
+Hi,
 
-On Thu, 11 Dec 2025 15:52:28 +0200
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+I just spotted the new em.yaml YNL spec that got merged in
+bd26631ccdfd ("PM: EM: Add em.yaml and autogen files") as part of [1]
+because it introduced new yamllint reports:
 
-> On 11/12/2025 14:20, Herve Codina wrote:
-> > Hi Matti,
-> > 
-> > On Thu, 11 Dec 2025 10:34:46 +0200
-> > Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> >   
-> /snip
-> 
-> > 
-> > Do you see the same trace with:
-> > - "pinctrl-0 = <&i2c1_pins>;" in your overlay
-> > - fragment0 removed from the overlay (i2c1_pins definition removed from
-> >    the overlay.
-> > - i2c1_pins node defined in your base DT.  
-> 
-> Just tested. The i2c1 appears and the test-overlay probe gets called, 
-> when the i2c1_pins is in the base-dt and not in the overlay.
+make -C tools/net/ynl/ lint
+make: Entering directory '/home/donaldh/net-next/tools/net/ynl'
+yamllint ../../../Documentation/netlink/specs
+../../../Documentation/netlink/specs/em.yaml
+  3:1       warning  missing document start "---"  (document-start)
+  107:13    error    wrong indentation: expected 10 but found 12  (indentation)
 
-Geert, do you expirement same results?
+I guess the patch series was never cced to netdev or the YNL
+maintainers so this is my first opportunity to review it.
 
-> 
-> > In other word, is the issues related to adding a pinctrl sub-node (pinctrl
-> > pins definition) in the overlay or is it something else?  
-> 
-> Seems to be related to the pinctrl.
-> 
+Other than the lint messages, there are a few concerns with the
+content of the spec:
 
-I don't think that the issue is related to pinctrl itself.
+- pds, pd and ps might be meaningful to energy model experts but they
+are pretty meaningless to the rest of us. I see they are spelled out
+in the energy model header file so it would be better to use
+perf-domain, perf-table and perf-state here.
 
-IMHO, I think the issue is related to overlays and fw_devlink.
-The distinction between "a new node is going to lead to a device" vs "a new
-node is just data and will never been attached to a new device" when an
-overlay is applied is broken.
+- I think the spec could have been called energy-model.yaml and the
+family called "energy-model" instead of "em".
 
-This is broken with the upstream "treewide: Fix probing of devices in DT
-overlays" commit I've tried to revert. Indeed, on the LAN966x PCI device
-use case devlinks created are not correct with this commit applied.
+- the get-pds should probably be both do and dump which would give
+multi responses without the need for the pds attribute set (unless I'm
+missing something).
 
-I am not sure also that devlinks created with a more complex overlay will be
-correct. For instance, Matti, with your overlay not sure that a phandle from
-the oscillator node referencing the pmic node will lead to a correct
-provider/consumer devlink between the pmic device and the oscillator device.
+- there are 2 flags attributes that are bare u64 which should have
+flags definitions in the YNL. Have a look at e.g. netdev.yaml to see
+examples of flags definitions.
 
-On the other hand, this is broken with "of: dynamic: Fix overlayed devices
-not probing because of fw_devlink" works for the LAN966x PCI device use case
-an lead to correct devlinks but breaks your use cases.
+- the cpus attribute is a string which would appear to be a "%*pb"
+stringification of a bitmap. That's not very consumable for a UAPI and
+should probably use netlink bitmask or an array of cpu numbers or
+something.
 
-Does anyone have an idea about how to fix those issues?
+- there are no doc strings for any of the attributes. It would be
+great to do better for new YNL specs, esp. since there is better
+information in energy_model.h
 
-Best regards,
-Hervé
+Given that netlink is UAPI, I think we need to address these issues
+before v6.19 gets released.
+
+Thanks,
+Donald Hunter.
+
+[1] https://lore.kernel.org/all/20251020220914.320832-4-changwoo@igalia.com/
 
