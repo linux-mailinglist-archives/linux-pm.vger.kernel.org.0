@@ -1,195 +1,149 @@
-Return-Path: <linux-pm+bounces-39456-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39457-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D01FBCB876A
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Dec 2025 10:29:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D175BCB87A0
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Dec 2025 10:33:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 15E8B30038D3
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Dec 2025 09:27:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8119430B2118
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Dec 2025 09:29:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10E53275870;
-	Fri, 12 Dec 2025 09:27:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F99231328F;
+	Fri, 12 Dec 2025 09:29:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="0InrPM34"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cb/dtfAV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EAAB258EC3
-	for <linux-pm@vger.kernel.org>; Fri, 12 Dec 2025 09:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C591313272
+	for <linux-pm@vger.kernel.org>; Fri, 12 Dec 2025 09:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765531637; cv=none; b=is3395fxtAH4YwuxJ/3RAjlFdRu1gPAQ1TMtNRsg2Ei4WAgwXZKAlxoSiXiQZu1Ql9xJahR32njEpoWfV3ee9T/moK5H8QSqKhfDdNyPUCoSufnpEb591wX4DUoed9mNMQCMzZk/542OWy8ImqKnhJ/5oLe8gUEQIZ5gfIQWSQ4=
+	t=1765531766; cv=none; b=ePEgYQ+c1Ar7M2qN3OmnikdXJOOW9BQZ9q0lFvZDk2nDGga+UsVcVjj5cFn2QtoLSUNzOQyhDTjDxWn91xWGwD8XD/H3SWuqqZNRLNRaGW4HDi7ibzn0Ma7QuUJyXIDGOxOvcuIwNo7Xj1DU4dXW6mP+uE7RXOebbi3+Hm3RY9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765531637; c=relaxed/simple;
-	bh=aoZzT+D9sRVZNOPtuBFiKaugHgEPYd9vd3LuU1InX+c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=GYstnstZYEXWNmAMZwCdufve8Z9CThJArt0JBNdiO6uI5ih8vAe4ZQs8HTX/z4htQ7+XF+RyCbL84B/AsPruHuhqXKGcPXMe0oyJexmlWo8SkEAqaWfouevO7wYokoPX9iXrB0xQSKgt9ZhLdMBViudN7fKTUIxy5ybDO5HKOyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=0InrPM34; arc=none smtp.client-ip=113.46.200.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=BNmEZvj2E4J4X7wXMXz907hl9ndLNYZFhW8wantRAZE=;
-	b=0InrPM34Tj96MN7vGIfHYmQPH1kO4FehKpazmt36g+8MvTpe6BTGr9bPKsrgnCCiT5j8Q8nxc
-	aJZCAgdhyUEedyCnE9FFxuNUYOHYD3ctqclM8SxCcbO6msvcPk65q/K7V29yvfyxSOPiFxwCYLl
-	pvgb6CI/Bg81DM68YpCsjkU=
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4dSPDk35Ljz12LDc;
-	Fri, 12 Dec 2025 17:24:54 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id 090FE1402CC;
-	Fri, 12 Dec 2025 17:27:11 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
- (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 12 Dec
- 2025 17:27:10 +0800
-Message-ID: <29253319-ced9-4ab6-a58e-28afdf235cde@huawei.com>
-Date: Fri, 12 Dec 2025 17:27:09 +0800
+	s=arc-20240116; t=1765531766; c=relaxed/simple;
+	bh=xbfbJ+D25xL5Y2kJ+E8oaCoCd5FlSh9bYUODypEu0zU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kzrgkuA0U0XgpHYp4MjWCArWhgUEcELD2+n2vjzY1QeENgDo7mHKPq0+hBRqU+QtVHU1YzpjhUklooHU/GmRjNe+BwCiyCxQsjrwAtuu9mX+cHF4rloF0abOQ++D1lXBxxe2Xh4E9g5IfnpekJP1GkQ1HXUvOi2F1GSiAPagkoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cb/dtfAV; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7aab061e7cbso1274973b3a.1
+        for <linux-pm@vger.kernel.org>; Fri, 12 Dec 2025 01:29:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765531763; x=1766136563; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TqBCCuMDo8XkanA9t4q1Yalkj0pckYKIk41K6zsONlc=;
+        b=cb/dtfAVIUQZFlLOHUPkfGReKTW+SvEDtxNcQAkDJjxWRbviR56ev/6RCyQxwKzipo
+         b2ScCJipi4UBaECatIfpMX0Va59TfsOkVcfYI9/xeQyIKycodPRnVl+edRtqGC6E1VFG
+         M6BKCQHU2na0CW85gm250hyOd6eh3Y6p0/96TJUSruZ/FLUi5oyf//oOgHw4ngjFaVVJ
+         GIJ3fM1w+PUSFLTNr2WoxYnH6JKLetT356+bKSODsMId/YokfavFBRl1A1yETMmGHL43
+         jkTtZ1oZ5J5/O3Ajo+qrt33/wKh4IgzMjBlZ9VgrDaSgMxm3NLww0CHlwFxYQkgkwXwJ
+         6L7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765531763; x=1766136563;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TqBCCuMDo8XkanA9t4q1Yalkj0pckYKIk41K6zsONlc=;
+        b=BNbzwpkN13daZ7w7W2SeSTj+mjL2HpDdgxCht7b99ZbO8r/gM6T4Los/P9WyDwvaPf
+         Pr1ITxiB4XBYnYdFSZoYPlhcCDEck3VxrNeXACcW69ULzMZT+GT/oZv3KqeaBR3DaYKk
+         pvPpsTNECLdtKuyZvkSN0GpRkNnDdse7K/E4CRyY9320ImHTxuy+dqBI+Obg6OWXA+Jq
+         gNT2saXB086ELn8+Ly/fnSK9zyT+pz0r445/R51212ebTK2S7otqPN642DYgL7xz19wd
+         /AStabH1H7CTotRVnbRDba15VYlzR4aPBbjyKDVIUAqzoP9/nOjiEEMW26F5aRdjxLCk
+         rDAw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKNmheBkbH5iUDRuMqiTC10EiTXuRTGdeJRgsUDBSsvzQPLjI1Y8bHBRAXqIoIjHLEFDh9Pz1EgA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyK3hRaF9snSPoL9LEG5Q5Gilih6QcbAAScEx5FVIBzqL4GjqDL
+	apTqjX1bugYY/oVDh5CNHE856atb59ITkbPGYfZtLjWm/u6GjZXJr65C
+X-Gm-Gg: AY/fxX6/kyP29e6/QxYj+1T6XsEa78cbYt0c4QhPN1jLMawjjqvx8+ta9vl8p4IsYeR
+	9BU3EJIzVq89pMV97A1ucCJ6OZnKP0zf/JUUnIAOtBSyGtkSkrkjRzaOBpYDD1ThtrfJ4xwLygx
+	637COxjHBoRaXLbU+B4dXfRozeBNy1mTuMhosA6oq44/MpSursA6WrHn1JE9ZdUUZ9FAhMgoAGn
+	0f5YiDfMy+s+sCydEEV3XFU5Y6HpJ0JozXuVh0WknmbcxxpsayvHpB0BkXzYaKVEY07a6Be+Wsa
+	4zHkIIUrgMsdvMRFGGshJWaRgZFm9gHXCA6YwIpZSTtofNKOz2vw28fjVPNSBeiMeWgamds25gV
+	Prb3ntW+CpwkUaqzMfBJrbYcG1CcvxheBGZY+7UaBAvoEuDWo8ii2tB8/02aG1PCyE+DQWlJOmE
+	RJ8hZO3hRo
+X-Google-Smtp-Source: AGHT+IE4GkrmjiEKubwBC3E06sLn47erp8gSJb/6WMPDYnjsxpuc5QHpftFLPESuDZbHLqLMyjd9pg==
+X-Received: by 2002:a05:6a21:e083:b0:34f:e712:348d with SMTP id adf61e73a8af0-369ae1a9b27mr1432502637.30.1765531763439;
+        Fri, 12 Dec 2025 01:29:23 -0800 (PST)
+Received: from c45b92c47440.. ([202.120.234.58])
+        by smtp.googlemail.com with ESMTPSA id 41be03b00d2f7-c0c206cf429sm4753659a12.0.2025.12.12.01.29.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Dec 2025 01:29:22 -0800 (PST)
+From: Miaoqian Lin <linmq006@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Paul Mackerras <paulus@ozlabs.org>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	linux-pm@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org
+Cc: linmq006@gmail.com,
+	stable@vger.kernel.org
+Subject: [PATCH] cpufreq: pmac64-cpufreq: Fix refcount leak on error paths
+Date: Fri, 12 Dec 2025 13:29:09 +0400
+Message-Id: <20251212092910.2454034-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/3] arm64: topology: Handle AMU FIE setup on CPU
- hotplug
-To: <catalin.marinas@arm.com>
-CC: Beata Michalska <beata.michalska@arm.com>, <will@kernel.org>,
-	<rafael@kernel.org>, <viresh.kumar@linaro.org>, <sudeep.holla@arm.com>,
-	<gregkh@linuxfoundation.org>, <dakr@kernel.org>, <ionela.voinescu@arm.com>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<vincent.guittot@linaro.org>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>, <yubowen8@huawei.com>, <zhangpengjie2@huawei.com>,
-	<wangzhi12@huawei.com>, <linhongye@h-partners.com>
-References: <20251119081356.2495290-1-zhenglifeng1@huawei.com>
- <aS2z0EURwHbbGZab@arm.com> <9b6882dc-a91a-42d6-bf76-347338930d71@huawei.com>
- <aS8GZOuaS1-j14MD@arm.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <aS8GZOuaS1-j14MD@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemf200001.china.huawei.com (7.202.181.227)
+Content-Transfer-Encoding: 8bit
 
-On 2025/12/2 23:31, Beata Michalska wrote:
-> On Tue, Dec 02, 2025 at 11:05:25AM +0800, zhenglifeng (A) wrote:
->> On 2025/12/1 23:27, Beata Michalska wrote:
->>> Hi,
->>>
->>> Apologies for the delay in reviewing this - currently in progress....
->>> Out of curiosity: what's the cpufreq driver used for testing this series ?
->>
->> I used cppc_cpufreq for testing this. But with some modifications in
->> processor_driver.c, or you'll find that the driver will fail to load with
->> maxcpus set. The modification below is only a temporary solution. I'm still
->> working on that.
->>
-> Right, so overall the implementation looks good - thanks for that.
-> There are two issues though with the cppc cpufreq driver.
-> 
-> One: as you have already noticed - it fails to register when
-> cpumask_present != cpumask_online.
-> 
-> Second: it will mix the sources of the freq scale if not all CPUs within the
-> policy have AMUs enabled/valid. This is due to the fact that at the time of
-> registering the driver and initializing the FIE support policy->cpus ==
-> policy->related_cpus. Assuming scenario when there are two CPUs within the
-> policy, one being offline and missing valid AMU counters,
-> the topology_set_scale_freq_source from cppc cpufreq driver will register
-> the tick handler for both CPUs, whereas AMU support will (rightly so) register
-> only for the firs one. When the second CPU comes online, the mismatch will be
-> detected and the arch callback will get cleared for the first CPU, but the
-> second one will remain unchanged.
-> 
-> That said, I do not think any of those issues is a blocker for this series.
-> But both would need fixing.
+of_cpu_device_node_get obtain a reference to the device node which
+must be released with of_node_put().
 
-Hi Catalin,
+Add missing of_node_put() on error paths to fix.
 
-I believe Beata is OK with this series. So I think we can move ahead with it
-now.
+Found via static analysis and code review.
 
-Thanks.
+Fixes: 760287ab90a3 ("cpufreq: pmac64-cpufreq: remove device tree parsing for cpu nodes")
+Fixes: 4350147a816b ("[PATCH] ppc64: SMU based macs cpufreq support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/cpufreq/pmac64-cpufreq.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-> 
-> ---
-> BR
-> Beata
-> 
-> 
->> ---
->> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
->> index 5d824435b26b..2f286a1b0b02 100644
->> --- a/drivers/acpi/processor_driver.c
->> +++ b/drivers/acpi/processor_driver.c
->> @@ -33,6 +33,7 @@ MODULE_AUTHOR("Paul Diefenbaugh");
->>  MODULE_DESCRIPTION("ACPI Processor Driver");
->>  MODULE_LICENSE("GPL");
->>  
->> +static int acpi_processor_start(struct device *dev);
->>  static int acpi_processor_stop(struct device *dev);
->>  
->>  static const struct acpi_device_id processor_device_ids[] = {
->> @@ -46,6 +47,7 @@ static struct device_driver acpi_processor_driver = {
->>  	.name = "processor",
->>  	.bus = &cpu_subsys,
->>  	.acpi_match_table = processor_device_ids,
->> +	.probe = acpi_processor_start,
->>  	.remove = acpi_processor_stop,
->>  };
->>  
->> @@ -191,6 +193,21 @@ static int __acpi_processor_start(struct acpi_device *device)
->>  	return result;
->>  }
->>  
->> +static int acpi_processor_start(struct device *dev)
->> +{
->> +	struct acpi_device *device = ACPI_COMPANION(dev);
->> +	int ret;
->> +
->> +	if (!device)
->> +		return -ENODEV;
->> +
->> +	/* Protect against concurrent CPU hotplug operations */
->> +	cpu_hotplug_disable();
->> +	ret = __acpi_processor_start(device);
->> +	cpu_hotplug_enable();
->> +	return ret;
->> +}
->> +
->>  static int acpi_processor_stop(struct device *dev)
->>  {
->>  	struct acpi_device *device = ACPI_COMPANION(dev);
->> @@ -264,9 +281,9 @@ static int __init acpi_processor_driver_init(void)
->>  
->>  	acpi_processor_register_idle_driver();
->>  
->> -	result = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
->> -				   "acpi/cpu-drv:online",
->> -				   acpi_soft_cpu_online, NULL);
->> +	result = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
->> +					   "acpi/cpu-drv:online",
->> +					   acpi_soft_cpu_online, NULL);
->>  	if (result < 0)
->>  		goto err;
->>  	hp_online = result;
->>
->>>
->>> ---
->>> BR
->>> Beata
->>> On Wed, Nov 19, 2025 at 04:13:53PM +0800, Lifeng Zheng wrote:
->>>> Solve a problem that causes CPUs Setup AMU FIE failed in a corner case,
->>>> even though they're eligible.
->>>>
->>>>
->>>
->>
-> 
+diff --git a/drivers/cpufreq/pmac64-cpufreq.c b/drivers/cpufreq/pmac64-cpufreq.c
+index 80897ec8f00e..0e0205b888ba 100644
+--- a/drivers/cpufreq/pmac64-cpufreq.c
++++ b/drivers/cpufreq/pmac64-cpufreq.c
+@@ -356,8 +356,10 @@ static int __init g5_neo2_cpufreq_init(struct device_node *cpunode)
+ 		use_volts_smu = 1;
+ 	else if (of_machine_is_compatible("PowerMac11,2"))
+ 		use_volts_vdnap = 1;
+-	else
+-		return -ENODEV;
++	else {
++		rc = -ENODEV;
++		goto bail_noprops;
++	}
+ 
+ 	/* Check 970FX for now */
+ 	valp = of_get_property(cpunode, "cpu-version", NULL);
+@@ -430,8 +432,11 @@ static int __init g5_neo2_cpufreq_init(struct device_node *cpunode)
+ 	 * supporting anything else.
+ 	 */
+ 	valp = of_get_property(cpunode, "clock-frequency", NULL);
+-	if (!valp)
+-		return -ENODEV;
++	if (!valp) {
++		rc = -ENODEV;
++		goto bail_noprops;
++	}
++
+ 	max_freq = (*valp)/1000;
+ 	g5_cpu_freqs[0].frequency = max_freq;
+ 	g5_cpu_freqs[1].frequency = max_freq/2;
+-- 
+2.25.1
 
 
