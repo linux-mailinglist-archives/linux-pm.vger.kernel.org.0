@@ -1,253 +1,191 @@
-Return-Path: <linux-pm+bounces-39458-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39459-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCA39CB8C77
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Dec 2025 13:19:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FFFFCB9186
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Dec 2025 16:22:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7037C306AE16
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Dec 2025 12:19:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 524583010CD8
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Dec 2025 15:22:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20EE486334;
-	Fri, 12 Dec 2025 12:19:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A0E315D48;
+	Fri, 12 Dec 2025 15:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b="TI/IVAbt"
+	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="onT3DUAd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010029.outbound.protection.outlook.com [52.101.84.29])
+Received: from ixit.cz (ip-94-112-25-9.bb.vodafone.cz [94.112.25.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18DEDDA9;
-	Fri, 12 Dec 2025 12:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.29
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765541984; cv=fail; b=JWRJjwfXsIDyv8LL3qfD0RNgFK2NGb4GOvPk9iRVhr3nD1cIJgyXh8hlnKLjmsoJsspaUTzNuyEvSB6rOQkfQnlNlR/GCM+vLgZuPwVtXMVNmXFDK0336dcXV6eqOSdAcBUbzvPDgm+0rgGoQaDQxhDUJOY7B9MHgNXEo0BHY84=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765541984; c=relaxed/simple;
-	bh=9lHPEuyDADTLUpNNyx+EDhJ2Ob11DYbF4NOYvvoPi5g=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=WGN6SEkRwLNZoLojVfoExJVPqjfd4j5UewQyxHpohxIV9ci16FOeW9PZWg4WpWdS2ZlhoHSngGflTiiZb09pD14Ly2IU3H8Pxp3Gc2VVPeTfvFkTWeukkq66Bg3sFydsSQwYVLwx8G1ylQIaOAWaZRyoEZjPKmldxVjvNXCRQSw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de; spf=pass smtp.mailfrom=cherry.de; dkim=pass (1024-bit key) header.d=cherry.de header.i=@cherry.de header.b=TI/IVAbt; arc=fail smtp.client-ip=52.101.84.29
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cherry.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cherry.de
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jZof6YrMj9dQ2CALgT2bTjtoGV/Kx8jTh5VAguIG7VbVHBSc9NLPQTT9M+9MQPsjgABegFzgqOaajXHUeK2Zd1NV5Y8OqFh1JwZG7j9hbrB3LxvTl5it3+7rfhuBwD1xF6izE4/HbVvlKIskH8QPCehgJgNR43iRi+zExex+HEa6MHm3Xs0weDQawGBgqwrRk8py13JmpmpaEtp09ACs22/q4vkpkeZUOq/vEpxD/t2DA+4EaPEzQAzsAme2ggTebzbgyalodWB16KEicKkIfgXz4aahTWLWpjCOZCO3B7EJ387YZvax1ChBMepp+qGEZ5LQLR3wvRquwuN53dhArg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MbPa1HiXMOFiFo5iIpjok6q8cUg7hHLsF8dd7gqUdvM=;
- b=sLBTrMFMMvw1wA86PPYI+I3AOeNjp//QuDbpoblRvBO1Tb+ayUhw3cmU0K4Mw82gjA8Knq8f4J0FSx6cKD4mNoC6belukxQpYIgjQH0U/dgnN49PSEfmKkZzS1Q7NrkPUsUkZ7AyQCId3akVDCNxFfRiuXRkvEeaI4Gos6FemYIUc6wHQXSw14SLWX5rjG4vv12WCWajnvvyHyExZpmKmlooh2pouDHKWpLXGsJiPk6FcBUGirB16odDlDNfZFlGdOiDqvRWSiGZcwSFtpwZMnZJqUfC/Y6mTzzvASzuyUcc6LK7rtRKRX4D5loH91WP8puSqmOhHSwx8IUOcUrlQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cherry.de; dmarc=pass action=none header.from=cherry.de;
- dkim=pass header.d=cherry.de; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cherry.de;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MbPa1HiXMOFiFo5iIpjok6q8cUg7hHLsF8dd7gqUdvM=;
- b=TI/IVAbt3vijutZSTVI1xc7dBTIVMomdzyZ9d1VYo56h7k1SZ3wEMzOe+liN3mzr+VsUgNxvLYJHbtemiszRZswQCW0h3Rbny9g0cgX3cp06Dno+C3EtHq576FHB3Gwgas3lX+m41REWBLmylyH/lUnM3qa7XQNnnY2pNoHcKpU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cherry.de;
-Received: from GVXPR04MB12038.eurprd04.prod.outlook.com (2603:10a6:150:2be::5)
- by DBBPR04MB8043.eurprd04.prod.outlook.com (2603:10a6:10:1e7::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9412.11; Fri, 12 Dec
- 2025 12:19:38 +0000
-Received: from GVXPR04MB12038.eurprd04.prod.outlook.com
- ([fe80::1033:5a9a:dc18:dad]) by GVXPR04MB12038.eurprd04.prod.outlook.com
- ([fe80::1033:5a9a:dc18:dad%4]) with mapi id 15.20.9412.005; Fri, 12 Dec 2025
- 12:19:37 +0000
-Message-ID: <51f5109f-66dc-4ec5-9f1f-91085f2fc6c2@cherry.de>
-Date: Fri, 12 Dec 2025 13:19:21 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] pmdomain:rockchip: Fix init genpd as GENPD_STATE_ON
- before regulator ready
-To: Chaoyi Chen <chaoyi.chen@rock-chips.com>, Frank Zhang <rmxpzlb@gmail.com>
-Cc: ulf.hansson@linaro.org, heiko@sntech.de,
- linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251205064739.20270-1-rmxpzlb@gmail.com>
- <27dff4a5-1e9d-458d-936a-941c3f10c139@rock-chips.com>
-Content-Language: en-US
-From: Quentin Schulz <quentin.schulz@cherry.de>
-In-Reply-To: <27dff4a5-1e9d-458d-936a-941c3f10c139@rock-chips.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0124.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:94::15) To GVXPR04MB12038.eurprd04.prod.outlook.com
- (2603:10a6:150:2be::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517E719F40A;
+	Fri, 12 Dec 2025 15:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.112.25.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765552950; cv=none; b=kCj/l9ZbN0VBPejhdmYdifghCX4sCGnxyUXQZrMSRX4usof6tjYX2JfFg9DkKEvLglihes9VO9QdXC5dIRh5EYbSmr4Up8/JqdO0g8aSHZoXHrnhFGSqQfoks24CwNtgOLVD5vw/fbr2lt4UFBaUcLCsWvNa9eeWyjHIlcQH3q4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765552950; c=relaxed/simple;
+	bh=+IblNVT1S6CLR1JEjL42CUwdGpM2anjc5n8A6MmD+2c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QmLGr6l0qQb1X+/Lvzowzp2Vk0hUaWv/qa1lmc9DhJ5XW3bPzFsnj3mLM9YyVit8nYA8ThEuqmAm45irmU1SblJbstlN/+69IH3891rdjYQXUCFUASQCiKrZcE37a5lzUQGnr/gOcfwaqGcfrWq8tX5xrVl/P6Ooaq3XtVJVGwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=onT3DUAd; arc=none smtp.client-ip=94.112.25.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ixit.cz
+Received: from [10.0.0.200] (unknown [10.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ixit.cz (Postfix) with ESMTPSA id 4EAE25340C9A;
+	Fri, 12 Dec 2025 16:22:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+	t=1765552934;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=McnJ1LW6C8Q5h1Cv7cup4coDzbIea7AHQdJ49VdSV+U=;
+	b=onT3DUAdQorz+yRSuqdKQfS8xkjPf1ykFsOZYdBVONlTfgGMokO5k/6iQBysAeQnqWc1KH
+	OyiM628thmrYuCQncLqjkvIS5jdvDtgQl5b2q32wTtqLe+d/TTQ0s7t90OCdnPRHaswTF+
+	4CTWHELiVFYQfYiLjy3m99zCGUds2cM=
+Message-ID: <d84c25d7-62c7-433d-9978-dd6b20f5681c@ixit.cz>
+Date: Fri, 12 Dec 2025 16:22:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GVXPR04MB12038:EE_|DBBPR04MB8043:EE_
-X-MS-Office365-Filtering-Correlation-Id: ed2a3a94-8f54-4995-a099-08de3978b7ef
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|10070799003|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TnJTclBUR2tXY3A3TWVnWGdJY1NCdkZqNEZremVqQTgzVC9yVHJySzQra0Vh?=
- =?utf-8?B?YU5pYWtoamhvYWhSK09jN1hLU2RocHdRSjJ2T1ptckdOcTVLUFVZL0J1NVFX?=
- =?utf-8?B?NG0vVVRMTmNYRjJUSUd3amc4SzZHTHZtYzlrQ1huajh1bGdVZDNteGNIcldJ?=
- =?utf-8?B?NlNFVXFYVjF5QTJEZVE0STExayszM3hsako3RG1iZWw2WEp3aEpnOGFSQkRZ?=
- =?utf-8?B?MU9JK3lMdWMwSEh6dGRzOURzazFsTXdzUDdtMlNyT29mODdET2dUK0ZCa2RB?=
- =?utf-8?B?K1pnQ3Nsek9SczNud3FRa3N2UEdrUzVXS2s3c2ZHKzYxQS9VeFZaWmhxdFI2?=
- =?utf-8?B?N2Mxa0JuazVaY3ZVV2FKSWo1VHl5MTg5bzdXYXpTaW5YQWxIdU5YNXZrQzZN?=
- =?utf-8?B?OWtEc09TSXVkZGkzRUNYaEF6NEpLSTJsZ05rRmN2VU1TVVBnSi9pRkNITHBK?=
- =?utf-8?B?dXVaNU1QRHpha3hvYlNvVVAxTUQ2YkJURk1xVTZBSkdSTmtOL3hxc3lCaUtH?=
- =?utf-8?B?MkJaT2x1UzZVYmVRZ1I3RWpxMlNBbUtkWUF2ZjBJVlkzVFlObnpQRDJ1d280?=
- =?utf-8?B?TE53cFczUG1KUkF0S0F3bytOZ3ptOXdRTFNiTEx2NjZOOUZCTHBKY3B1cGk5?=
- =?utf-8?B?NW5JbUFvZ01HTGF4ZStLYTFwODA3V25ZM1BUZ09Uc3M2TFBWaUM1bisxbzZq?=
- =?utf-8?B?SlZIWHZlaUNHcC94ckIyY21WbjZ1RVk1dnFnQkIvTTBEQm1MV2Z0RjNOVjRU?=
- =?utf-8?B?c25EMHN4U0RMc0hmaVVnUWFIK1kwQlF5ZzRQUFpNS0U4QnpTNzdGVWRUc1hy?=
- =?utf-8?B?Sk0wWkw0SC9oMjIzUXZ6UGtUNnUzMFhUM0c1M0JXVGpzQkdQblZyWW82OVJh?=
- =?utf-8?B?c1BmWmdScUFRVVlOazRFblVFTkhudEdUTUlKR2gzTHNwQ01KTDR5N2pyWEJ1?=
- =?utf-8?B?QlRKWTZnd2xHdzgvN1NlQ1J3YmVvbTlJd3ZiVktRbHpnYThnMU1obklXdUps?=
- =?utf-8?B?VTBYK0tPdERWQlpTV09CcXJ4RFNaQ2U5MmNLSnNvdXhETllKRU1PcTV4Ukh1?=
- =?utf-8?B?MGZ5SXV2WVBmYmIrZkZXRFZPUFA2OTh6b0l1d3ZnNGkxekxmZzY4a0gweXlm?=
- =?utf-8?B?dWllWG03SytuRUpTamdkYnhQTXdLQ1hpc2tBRTlPdnhPTCtlVDBNZURQbFZy?=
- =?utf-8?B?azUrdW9aazRZT3FGRERhUE5NZThlQUhkalZXeEI0YXlYQmhiNVArcllLOFRN?=
- =?utf-8?B?Q041aEVOZ2hFbzJHSnBBaVN1YWVSUTJEWGM1NGxVZ0JZbFcwNzVLMGwzdW5a?=
- =?utf-8?B?Y3NRU2xPdzI3MU1HaEswK2lMS0JKODgwM29kQk80d0puOFRiTXlKUjhaTURX?=
- =?utf-8?B?QTFXek1pK3RSdk1taVM1Z2huUHRoNHQxZnlkRmsxeEVQVzZaVGROQWZCMi81?=
- =?utf-8?B?S095YVFxWFBUSklLZnJXY0xkNUc3dXVqRmg4QzkzS0NyamozNUtrV2lFSnR2?=
- =?utf-8?B?dGhSR2RzVkwveDF6ZGVsdkgwOVU3ZjFyeHRUMDFrUmlkYkxnMjZBbW5rUksz?=
- =?utf-8?B?dzV4ZUprYWswaWo5Mkw4SVVnei9hOHJmMjdNTytwTXZNY1NWUzBLejhJb1lJ?=
- =?utf-8?B?ejZZTVI1YzRDQ2l6UDlhWjZQMGptTnpvTW04T1ozMytNSkRKOUsrb0gzZTlj?=
- =?utf-8?B?YlRxS3A3U0w2Sk56WitpQ0N0MjlOeXRiTkRlK2RIOEd5Nm1XU3FRT1lJQnlP?=
- =?utf-8?B?bTFSSUo2QkQ2dWlxMTdzVlkzV3kyVWlCRnZPRHV4Y3lFZTZiUHBoZE1PTjVD?=
- =?utf-8?B?Wmloa21WOUVKYjdmZDBsV3lsR0FxSEtrRGg2SWhDYU11d1RScHlsL3FxS0tM?=
- =?utf-8?B?a0RGR2dRZzkrVFViWEUxdXAwQnJxSmNpaURmOG5lRlVkQWhXMFFmZUhYdksv?=
- =?utf-8?B?UWtadE5NYk5ocXVTZ2FmVXpVS1lScnNkUXFNTktBWFNOUmFiTVFmMkVNTUg3?=
- =?utf-8?B?MUlaMkRONXRRPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVXPR04MB12038.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZWg4YlEwN3dreSt5RVlGaUxHTDZZZmZjbmZBRXFRa3pTR3IyTTg1T0RSQUds?=
- =?utf-8?B?SW11djdodXJGS1haay9BZ0dpa2E4MzYzZ1hBL0Q1dlNCMi9tUTBrTjFQVnJa?=
- =?utf-8?B?amtjbGtyVDlSdExST1BVODlYT3NKYVprdndrOXNZRVNHTWdBbFVLcnEyTkQx?=
- =?utf-8?B?ZU1GNExoTGs2cXRwMEEzMTdydmdtN25BMG5NZGtQeE93SkFhZktEMTRpL2t4?=
- =?utf-8?B?T2xMQVZPZ0YvWXZmRVlFNkJBdjFGTzFReUJxT0xLaXhmcnZEcFpSL0R3eWQv?=
- =?utf-8?B?YUZ3Y2swdk9yYlBSOGlxK2MyaEhpZ2c4OEtEMisrdENGQnRLbEllbGEzTjNY?=
- =?utf-8?B?SlNxZ2dWTEI1YjJvV1RtM3hURHM0dzhvTkppc3g1TzdINXZDeWpsYUVVWlVo?=
- =?utf-8?B?ZWM5bDBNMkRPWmdOYWxFeHpTVFAzUEdHQ1RJWTNjM0REYWtyZDA3b0o2cFFY?=
- =?utf-8?B?M3NWMDRXWGVmOG5nRW5vaXovQW1rMXNiU0lGMlpBdllNeERGVlFxM2NNWWxR?=
- =?utf-8?B?d2N3VmR6eUlJZWFjSEZoOHliNi9CZWl0aXhSNlY5OXMyRlRhT05wRm11bGl0?=
- =?utf-8?B?MmdDTWFXZTArQ1JSSi9Tbzl4SHlMam9DN29XR3lWNEF3SENRSGRTRU1wOXNQ?=
- =?utf-8?B?UlVvd1R5d3o4WFZGM1JMYU9La1JiYkpJSnZ1SmpFRE1nL0JtTmxmTmxBMU5q?=
- =?utf-8?B?M3B5bDY5VXdFK0pkNXNDUmU4c2tCRVpHVy93OWR2eVhWMGJyN2RFWlAvcWlR?=
- =?utf-8?B?S09tL2J5VXpxNXUvSzRCaDY0czVhcWdoQ2F0b2twaVo0cnlLMExWUlhKNFJx?=
- =?utf-8?B?bS8xZ0hVYWJWRUFlRU1lYlVwTDl6MjBpUTA0dytIKyswLzk1WlVSTDJYS0VY?=
- =?utf-8?B?OVB4eDliRlN5ZVhyc2ZiM0YyLys5eW8xWUR6ZlhhWGZPMXFjelJ2YmhaT1ZJ?=
- =?utf-8?B?MkxKYmM3a2hBR21IWWM2TWpSWVZMY2s5M0xBcTlEVXZURGdocHRHZEhXd0kx?=
- =?utf-8?B?dGZFL2hzOEF2ZG5yaU43RnR4aTZpZWxnU3dMbzBrc1hsdDhUWVlwWURhOFRN?=
- =?utf-8?B?dnNRTy9ibmVrZDh2ZXR1ZUQ0dWgwZTZOQVh2d0xla3l5bUlWMUVod2s1Vi9x?=
- =?utf-8?B?SFFTZ0E4MDJyOUtadjNlNEJYckNYK1JiUDlFaTdlL0p2VnlwYzdSbmZvanJF?=
- =?utf-8?B?andEMER3dmFQUEc1a2RRYVRXbVFSbzB2YWRGU2NuWEhaNFZrM1dHTWpGdjZZ?=
- =?utf-8?B?TDRmV01UL3ljQ1Z0SmFQWjFOSVdxd1hBSWZtOUg2T3VOdHBCYmxTVDVFbXpi?=
- =?utf-8?B?a2FJTzJsME9MTkpTS3BxVXJxYU91NFZFVVpUaHZUOGs1VkhYcHB3aUJpSU83?=
- =?utf-8?B?K241RkNHbGtrMXJGd2UxMVRtRGp6aUJMQ0c0U05TV0ZSY1ZtUXBOaGN1bW9B?=
- =?utf-8?B?Y0tYODNiYnVaUEFoU2s0ZHNxcitCYmJZdmRQK2dXU2NJdVE0cnBwWWpWUnJo?=
- =?utf-8?B?K1BiMTRuWmhyS0J3RHBIaFpDbWJjZXltQ0FPck9iYnQrMFNRV3d3Q2dseFBZ?=
- =?utf-8?B?Tmp3RTV2VGg4Z3F1Q3RZUUVlbGhEUVFSYytjYmZsOCtwMng0bE1UTVFwNTVh?=
- =?utf-8?B?dHJBUC9Mb0Eyd0NTcnhkMnlPUVZjOWZTRGZIVEtXaVpUTUZZOEpyenk5VlRj?=
- =?utf-8?B?UWRMRHo0TkFlVVFCS0l0cGkxeG9VSkR1VHZEM3pqN2M0SWx4Ny9SK0t5OTNE?=
- =?utf-8?B?UVA5dDFpRHRjYUJHL3JHTjV4cTNLZUJSK1B4d3k0WG5Oa2NYL0ZkV1JiWVRU?=
- =?utf-8?B?SkRIejd0bXFUZjAzb0NsVjZ3VEtLKzlrdExJNHZFcXFIckRMMDFvUkJlNjM0?=
- =?utf-8?B?SnNFL0x2Z2IzZGxxbzRtVHg2eWtXTFJ0MzJoTnIrN0FycUtVYXRya3BaSFd3?=
- =?utf-8?B?bngrYjU4bDVaNFBuVEE1cHBNK3IrSXhsU2s1ZjZPNVBISmlaMjRVRVFxN2pX?=
- =?utf-8?B?MWw1NXVLejAyMXJLMThma1o3K0UvZWVmamtlUkN2T2Q5a2JXR3FoMjF5aUtm?=
- =?utf-8?B?MlVzZHI5VVp3eC95TG4xYnhqWGhXVHIxUXhpT3FMbDRBNmRMSCswTG9CZEw3?=
- =?utf-8?B?ZWptanJNUGY3NUl6UWsxYXU5bVZIdzFMM2x6UEFwTy9sbWZtcXd1eTJGNUVy?=
- =?utf-8?Q?9wNSoOAo8FezPIB7c58hsGE=3D?=
-X-OriginatorOrg: cherry.de
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed2a3a94-8f54-4995-a099-08de3978b7ef
-X-MS-Exchange-CrossTenant-AuthSource: GVXPR04MB12038.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2025 12:19:37.8971
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MaQQOlMED49fYBDF3axdFkRbu80pxS0dZLGnxTISTnFVPuNvACnlf2qcVtcvNQ4pvfC39TLvIfD9PQvGR+zC0Rx2B+thBl3qBWrdgWsUIEc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB8043
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/8] power: supply: Add driver for Qualcomm PMI8998
+ fuel gauge
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Casey Connolly <casey.connolly@linaro.org>,
+ Casey Connolly <casey@connolly.tech>, Joel Selvaraj <foss@joelselvaraj.com>,
+ Yassine Oudjana <y.oudjana@protonmail.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Alexander Martinz <amartinz@shiftphones.com>,
+ =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <barnabas.czeman@mainlining.org>,
+ Richard Acayan <mailingradian@gmail.com>,
+ Alexey Minnekhanov <alexeymin@postmarketos.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ phone-devel@vger.kernel.org
+References: <20251124-pmi8998_fuel_gauge-v1-0-dd3791f61478@ixit.cz>
+ <20251124-pmi8998_fuel_gauge-v1-2-dd3791f61478@ixit.cz>
+ <5d6c3dda-71cd-4684-8546-bc4918b560de@oss.qualcomm.com>
+Content-Language: en-US
+From: David Heidelberg <david@ixit.cz>
+Autocrypt: addr=david@ixit.cz; keydata=
+ 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
+In-Reply-To: <5d6c3dda-71cd-4684-8546-bc4918b560de@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Chaoyi, Frank,
+On 27/11/2025 16:28, Konrad Dybcio wrote:
+> On 11/24/25 10:53 PM, David Heidelberg via B4 Relay wrote:
+>> From: Joel Selvaraj <foss@joelselvaraj.com>
+>>
+>> Ths driver supports the fuel gauge hardware available on PMICs known as
+>> 3rd generation fuel gauge hardware available on PMI8998.
+>>
+[...]
 
-On 12/8/25 4:17 AM, Chaoyi Chen wrote:
-> On 12/5/2025 2:47 PM, Frank Zhang wrote:
->> RK3588_PD_NPU initialize as GENPD_STATE_ON before regulator ready.
->> rknn_iommu initlized success and suspend RK3588_PD_NPU. When rocket
->> driver register, it will resume rknn_iommu.
->>
->> If regulator is still not ready at this point, rknn_iommu resume fail,
->> pm runtime status will be error: -EPROBE_DEFER.
->>
->> This patch check regulator when pmdomain init, if regulator is not ready
->> or not enabled, power off pmdomain. Consumer device can power on it's
->> pmdomain after regulator ready
->>
->> Signed-off-by: Frank Zhang <rmxpzlb@gmail.com>
->> ---
->>   drivers/pmdomain/rockchip/pm-domains.c | 14 ++++++++++++++
->>   1 file changed, 14 insertions(+)
->>
->> diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
->> index 1955c6d453e4..bc69f5d840e6 100644
->> --- a/drivers/pmdomain/rockchip/pm-domains.c
->> +++ b/drivers/pmdomain/rockchip/pm-domains.c
->> @@ -659,6 +659,11 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
->>   	return ret;
->>   }
->>   
->> +static bool rockchip_pd_regulator_is_enabled(struct rockchip_pm_domain *pd)
->> +{
->> +	return IS_ERR_OR_NULL(pd->supply) ? false : regulator_is_enabled(pd->supply);
->> +}
->> +
->>   static int rockchip_pd_regulator_disable(struct rockchip_pm_domain *pd)
->>   {
->>   	return IS_ERR_OR_NULL(pd->supply) ? 0 : regulator_disable(pd->supply);
->> @@ -861,6 +866,15 @@ static int rockchip_pm_add_one_domain(struct rockchip_pmu *pmu,
->>   		pd->genpd.name = pd->info->name;
->>   	else
->>   		pd->genpd.name = kbasename(node->full_name);
->> +
->> +	if (pd->info->need_regulator) {
->> +		if (IS_ERR_OR_NULL(pd->supply))
->> +			pd->supply = devm_of_regulator_get(pmu->dev, pd->node, "domain");
->> +
->> +		if (!rockchip_pd_regulator_is_enabled(pd))
->> +			rockchip_pd_power(pd, false);
->> +	}
->> +
->>   	pd->genpd.power_off = rockchip_pd_power_off;
->>   	pd->genpd.power_on = rockchip_pd_power_on;
->>   	pd->genpd.attach_dev = rockchip_pd_attach_dev;
->>
+> Downstream checks if the address is > 0xBA which is what you want
+> at least for pmi8998
+
+My downstream [1] checks this value.
+
+[1] 
+https://github.com/LineageOS/android_kernel_xiaomi_sdm845/blob/lineage-22.2/drivers/power/supply/qcom/qpnp-fg.c#L760> 
+
+> You can de-abbreviate this to 'secure_access' (not to be confused
+> with 'secondary' or so). There's a locking mechanism which needs a
+> 0xa5 byte written to the base+0xd0 register (applies to all FG
+> peripherals with the 'last non-secure register' value possibly
+> varying).
 > 
-> @Quentin, Could you please try this patch? This should resolve the
-> problem you're currently facing where the NPU fails to work in
-> built-in module.
+> [...]
 > 
+>> +	u8 sec_addr_val = 0xa5;
+>> +	int ret;
+>> +
+>> +	if (((chip->base + addr) & 0xff00) == 0)
+> 
+> The 'fuel gauge' consists of:
+> 
+> FG_BATT_SOC @ 0x4000 (state of charge monitor)
+> FG_BATT_INFO @ 0x4100 ("general fg minus SoC")
+> FG_BCL @ 0x4200 (battery current limiter)
+> FG_LMH @ 0x4300 (limits management hardware)
+> FG_MEM_IF @ 0x4400 (DMA engine)
+> RRADC @ 0x4500 (today handled by its own driver)
+> 
+> and a couple other peripherals that Linux doesn't need to worry about
+> 
+> Each one of them should have its own 'reg' entry (which is assumed
+> to be 0x100-long), which will let you skip such interesting checks
+> and rely on the regmap framework disallowing address spillover (or
+> you can just then make the addr argument a u8)
 
-Thanks for the heads up, Chaoyi!
+Sounds good.
 
-I tested that for a few hours with a bootloop script (700+) and seems 
-like I couldn't reproduce the issue 4 reported in 
-https://lore.kernel.org/linux-rockchip/0b20d760-ad4f-41c0-b733-39db10d6cc41@cherry.de/ 
-when building wih DRM_ACCEL_ROCKET=y.
+> 
+> It would be good to keep in mind their relationship and think about how
+> to model them together. I don't think they must all necessarily be part
+> of a single big "fg" dt node, particularly the LMH/BCL part seems to be
+> rather self-contained
 
-So:
+Would you recommend some readings to prepare for this task?
 
-Tested-by: Quentin Schulz <quentin.schulz@cherry.de> # NPU on RK3588 Jaguar
+I see the FG_BATT* + FG_MEM_IF seems to be pretty relying on each other, 
+so I assume I need to take good care of that relation, when spliting 
+pieces up.
 
-@Frank, please add me in Cc if there's a v2 so I can recheck if you want.
+Thanks
+David
 
-Thanks for having a look!
 
-Cheers,
-Quentin
+[...]
 
