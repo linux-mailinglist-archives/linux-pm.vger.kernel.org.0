@@ -1,42 +1,43 @@
-Return-Path: <linux-pm+bounces-39557-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39558-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35DE2CBDF95
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 14:17:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5468DCBDFB0
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 14:18:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 59B7330109A8
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 13:17:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9B334300C6C2
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 13:17:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0CC2D979F;
-	Mon, 15 Dec 2025 13:17:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1D6F2BD5A1;
+	Mon, 15 Dec 2025 13:17:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GnLwksGI"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FHHAP7eM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90142D7D2E;
-	Mon, 15 Dec 2025 13:17:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392753B8D6D
+	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 13:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765804631; cv=none; b=pkOLGLF/oV1CHzj0XHmMhwNjNdKBftF3vyxyNFDfO1YsQZG2tIeGczXfiTrwkKSrjHIRA5eClg02rFeLUfVeLmgiDGGp25AiGuRBuFy8OssRP+a4fbOUZsiex2QMBU9m1gA1VPyIuDUp5qXVsTeKnUP6O7dzZoq2cfQjWDa/vA8=
+	t=1765804653; cv=none; b=SbRT5OTj+EB6YfpWhB1yV1dHDR6U+0d9gWyP1PPOq47z4/GZgZOFU6tj0uIYZLD46mT3IWMFC1Y5z13QMm0oyfNSVgG0iR4fASzhdq3sfow+ov22eVzQ30wZz4HXelIKjWrlmmnCsGiptpRCiZzOFFo5nk76YFWT8JUSCSFcUqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765804631; c=relaxed/simple;
-	bh=t+3/rBH8Fou7YH7QS+lXRreFqP+9OwpFHCCxzxu16JE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qMCAXxViGQ1yAbk8+ZbR+VBG53k4W3gS47qQUhxVBMD9PF3rAokgilVdiccgN7Yl4mKO/JSmzm7qSaGSZBzj1mILdC1hAaq7jZyBQIalV30Qd92xinuYS0cUOMBVE6n6kJJrzEvrPWXB3sCE+biWaLeWv0mn7JIWH5t1caFYLHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GnLwksGI; arc=none smtp.client-ip=91.218.175.174
+	s=arc-20240116; t=1765804653; c=relaxed/simple;
+	bh=ZCGxLeR+397jry1gYMp9hmPyz+XJrpXCUByTwEiszpc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NWiwc2TX6BOZeBmlaNKb8bisMkHmlooT7iju0tDOaIa1vhict7HHCHRlp3jrI8UCD5D2ko0XOSReEHyIN3A9//kqJYU+bbTJOwv0MrCph1dlwKul2QyNGnuxiqfAQBcGp+DJvmljq/NMbswlTha/7H5Sbq3yW9p4invUBHp6z7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FHHAP7eM; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Mon, 15 Dec 2025 15:16:41 +0200
+Date: Mon, 15 Dec 2025 15:17:17 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1765804612; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	t=1765804644; h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type; bh=WiDNFAxR5yiVwu+hAtbQBY28p8F8f+gFH61h9WqQhIo=;
-	b=GnLwksGIPDesCnH5nLgzqbszxAc83W9+2jFI9EeJ23KcYY3MPN/RZqRYRp3wxqjBVKThnW
-	d0GMoVbLfZ2uwxsKyNMpxRjmg5ZkFUxMpGNxof3KJNi4Hpvlw59D9WtPC8nmDOUqm+whn0
-	fWJHCjchn8dFDflUHsGH9XCA/xdhL1A=
+	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
+	bh=dsbLSXXLIqE8Ycu9xO8wvPQ5CDhRIpbKtZ7Z7Mr+vGM=;
+	b=FHHAP7eMyxBTjz/0KjaC0N+GBBlFvStfhFkoQx0RKr+eC1knlbH10dE7tUjl2m08tQo7IM
+	SzvK+K+fE1PKufJ7Wpviy7/7AZQDlqA+1RvXfy805XBn7opw/ukAjEEV3YYZ2XoWrNKFp/
+	kJY+5+900rYeJmrAb/IWvEwz5ckWKss=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Matti Vaittinen <matti.vaittinen@linux.dev>
 To: Matti Vaittinen <mazziesaccount@gmail.com>,
@@ -58,9 +59,10 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
 	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH RESEND v6 00/17] Support ROHM BD72720 PMIC
-Message-ID: <cover.1765804226.git.mazziesaccount@gmail.com>
+Subject: [PATCH RESEND v6 01/17] dt-bindings: regulator: ROHM BD72720
+Message-ID: <81cb38d0ae1b3fa426e40d5b0a93f69a0f374657.1765804226.git.mazziesaccount@gmail.com>
 Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
+References: <cover.1765804226.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,145 +70,237 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6ZIbSEWw5sj//Cs4"
+	protocol="application/pgp-signature"; boundary="lKUN5pDJUZwx0bzV"
 Content-Disposition: inline
+In-Reply-To: <cover.1765804226.git.mazziesaccount@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 
 
---6ZIbSEWw5sj//Cs4
+--lKUN5pDJUZwx0bzV
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Resending the v6
+=46rom: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Series is same as v6 _except_ being rebased on v6.19-rc1 - and adding rb
-tags which were replied to v6.
+The ROHM BD72720 is a new PMIC with 10 BUCk and 11 LDO regulators.
 
-The ROHM BD72720 is a new power management IC for portable, battery
-powered devices. It integrates 10 BUCKs and 11 LDOs, RTC, charger, LEDs,
-GPIOs and a clock gate. To me the BD72720 seems like a successor to the
-BD71828 and BD71815 PMICs.
+The BD72720 is designed to support using the BUCK10 as a supply for
+the LDOs 1 to 4. When the BUCK10 is used for this, it can be set to a
+LDON_HEAD mode. In this mode, the BUCK10 voltage can't be controlled by
+software, but the voltage is adjusted by PMIC to match the LDO1 .. LDO4
+voltages with a given offset. Offset can be 50mV .. 300mV and is
+changeable at 50mV steps.
 
-This series depends on
-5bff79dad20a ("power: supply: Add bd718(15/28/78) charger driver")
-which is in power-supply tree, for-next. Thus, the series is based on
-it.
+Add 'ldon-head-microvolt' property to denote a board which is designed
+to utilize the LDON_HEAD mode.
 
-The testing since v4 has suffered some hardware-issues after I
-accidentally enabled charging while the PMIC's battery pin was connected
-to the I/O domain. Some heat was generated, not terribly lot smoke
-though...
+All other properties are already existing.
 
-After the incident I've had occasional I2C failures. I, however, suspect
-the root cause is HW damage in I/O lines.
+Add dt-binding doc for ROHM BD72720 regulators to make it usable.
 
-Revision history:
-  v6 resend:
-  - Rebased on v6.19-rc1 and collected rb-tags from v6.
-
-  v5 =3D> v6:
-  - MFD fixes as suggested by Lee
-    - Styling mostly
-    - New patch to Fix comment style for MFD driver
-  More accurate changelog in individual patches
-
-  v4 =3D> v5:
-  - dt-binding fixes as discussed in v4 reviews.
-    - Drop rohm,vdr-battery.yaml and add vdr properties to battery.yaml
-    - Drop 'rohm,' -vendor-prefix from vdr properties
-  - Link to v4:
-    https://lore.kernel.org/all/cover.1763022807.git.mazziesaccount@gmail.c=
-om/
-  More accurate changelog in individual patches
-
-  v3 =3D> v4:
-  - dt-binding fixes to the BD72720 MFD example and regulator bindings
-  More accurate changelog in individual patches
-
-  v2 =3D> v3:
-  - rebased to power-supply/for-next as dependencies are merged to there
-  - plenty of dt-binding changes as suggested by reviewers
-  - add new patch to better document existing 'trickle-charging' property
-  More accurate changelog in individual patches
-
-  RFCv1 =3D> v2:
-  - Drop RFC status
-  - Use stacked regmaps to hide secondary map from the sub-drivers
-  - Quite a few styling fixes and improvements as suggested by
-    reviewers. More accurate changelog in individual patches.
-  - Link to v1:
-    https://lore.kernel.org/all/cover.1759824376.git.mazziesaccount@gmail.c=
-om/
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
 ---
+Revision history:
+ v4 =3D>
+ - No changes
 
-Matti Vaittinen (17):
-  dt-bindings: regulator: ROHM BD72720
-  dt-bindings: battery: Clarify trickle-charge
-  dt-bindings: battery: Add trickle-charge upper limit
-  dt-bindings: battery: Voltage drop properties
-  dt-bindings: mfd: ROHM BD72720
-  dt-bindings: leds: bd72720: Add BD72720
-  mfd: rohm-bd71828: Use regmap_reg_range()
-  mfd: rohm-bd71828: Use standard file header format
-  mfd: rohm-bd71828: Support ROHM BD72720
-  regulator: bd71828: rename IC specific entities
-  regulator: bd71828: Support ROHM BD72720
-  gpio: Support ROHM BD72720 gpios
-  clk: clk-bd718x7: Support BD72720 clk gate
-  rtc: bd70528: Support BD72720 rtc
-  power: supply: bd71828: Support wider register addresses
-  power: supply: bd71828-power: Support ROHM BD72720
-  MAINTAINERS: Add ROHM BD72720 PMIC
+ v3 =3D> v4:
+ - Drop type from ldon-head
+ - Fix the name patterns for regulator nodes and names
 
- .../bindings/leds/rohm,bd71828-leds.yaml      |    7 +-
- .../bindings/mfd/rohm,bd72720-pmic.yaml       |  339 ++++++
- .../bindings/power/supply/battery.yaml        |   33 +-
- .../regulator/rohm,bd72720-regulator.yaml     |  148 +++
- MAINTAINERS                                   |    2 +
- drivers/clk/Kconfig                           |    4 +-
- drivers/clk/clk-bd718x7.c                     |   10 +-
- drivers/gpio/Kconfig                          |    9 +
- drivers/gpio/Makefile                         |    1 +
- drivers/gpio/gpio-bd72720.c                   |  281 +++++
- drivers/mfd/Kconfig                           |   18 +-
- drivers/mfd/rohm-bd71828.c                    |  555 ++++++++-
- drivers/power/supply/bd71828-power.c          |  160 ++-
- drivers/regulator/Kconfig                     |    8 +-
- drivers/regulator/bd71828-regulator.c         | 1025 ++++++++++++++++-
- drivers/rtc/Kconfig                           |    3 +-
- drivers/rtc/rtc-bd70528.c                     |   21 +-
- include/linux/mfd/rohm-bd72720.h              |  634 ++++++++++
- include/linux/mfd/rohm-generic.h              |    1 +
- 19 files changed, 3127 insertions(+), 132 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic=
-=2Eyaml
+ v2 =3D> v3:
+ - drop unnecessary descriptions
+ - use microvolts for the 'ldon-head' dt-property
+
+ RFCv1 =3D> v2:
+ - No changes
+---
+ .../regulator/rohm,bd72720-regulator.yaml     | 148 ++++++++++++++++++
+ 1 file changed, 148 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd7272=
 0-regulator.yaml
- create mode 100644 drivers/gpio/gpio-bd72720.c
- create mode 100644 include/linux/mfd/rohm-bd72720.h
 
-
-base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd72720-regul=
+ator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd72720-regula=
+tor.yaml
+new file mode 100644
+index 000000000000..5518082129bd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.ya=
+ml
+@@ -0,0 +1,148 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/regulator/rohm,bd72720-regulator.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ROHM BD72720 Power Management Integrated Circuit regulators
++
++maintainers:
++  - Matti Vaittinen <mazziesaccount@gmail.com>
++
++description: |
++  This module is part of the ROHM BD72720 MFD device. For more details
++  see Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml.
++
++  The regulator controller is represented as a sub-node of the PMIC node
++  on the device tree.
++
++  Regulator nodes should be named to BUCK_<number> and LDO_<number>.
++  The valid names for BD72720 regulator nodes are
++  buck1, buck2, buck3, buck4, buck5, buck6, buck7, buck8, buck9, buck10
++  ldo1, ldo2, ldo3, ldo4, ldo5, ldo6, ldo7, ldo8, ldo9, ldo10, ldo11
++
++patternProperties:
++  "^ldo([1-9]|1[0-1])$":
++    type: object
++    description:
++      Properties for single LDO regulator.
++    $ref: regulator.yaml#
++
++    properties:
++      regulator-name:
++        pattern: "^ldo([1-9]|1[0-1])$"
++
++      rohm,dvs-run-voltage:
++        description:
++          PMIC default "RUN" state voltage in uV. See below table for
++          LDOs which support this. 0 means disabled.
++        $ref: /schemas/types.yaml#/definitions/uint32
++        minimum: 0
++        maximum: 3300000
++
++      rohm,dvs-idle-voltage:
++        description:
++          PMIC default "IDLE" state voltage in uV. See below table for
++          LDOs which support this. 0 means disabled.
++        $ref: /schemas/types.yaml#/definitions/uint32
++        minimum: 0
++        maximum: 3300000
++
++      rohm,dvs-suspend-voltage:
++        description:
++          PMIC default "SUSPEND" state voltage in uV. See below table for
++          LDOs which support this. 0 means disabled.
++        $ref: /schemas/types.yaml#/definitions/uint32
++        minimum: 0
++        maximum: 3300000
++
++      rohm,dvs-lpsr-voltage:
++        description:
++          PMIC default "deep-idle" state voltage in uV. See below table for
++          LDOs which support this. 0 means disabled.
++        $ref: /schemas/types.yaml#/definitions/uint32
++        minimum: 0
++        maximum: 3300000
++
++        # Supported default DVS states:
++        #     ldo        |    run     |   idle    | suspend   | lpsr
++        # --------------------------------------------------------------
++        # 1, 2, 3, and 4 | supported  | supported | supported | supported
++        # --------------------------------------------------------------
++        # 5 - 11         |                    supported (*)
++        # --------------------------------------------------------------
++        #
++        # (*) All states use same voltage but have own enable / disable
++        #      settings. Voltage 0 can be specified for a state to make
++        #      regulator disabled on that state.
++
++    unevaluatedProperties: false
++
++  "^buck([1-9]|10)$":
++    type: object
++    description:
++      Properties for single BUCK regulator.
++    $ref: regulator.yaml#
++
++    properties:
++      regulator-name:
++        pattern: "^buck([1-9]|10)$"
++
++      rohm,ldon-head-microvolt:
++        description:
++          Set this on boards where BUCK10 is used to supply LDOs 1-4. The =
+bucki
++          voltage will be changed by the PMIC to follow the LDO output vol=
+tages
++          with the offset voltage given here. This will improve the LDO ef=
+ficiency.
++        minimum: 50000
++        maximum: 300000
++
++      rohm,dvs-run-voltage:
++        description:
++          PMIC default "RUN" state voltage in uV. See below table for
++          bucks which support this. 0 means disabled.
++        $ref: /schemas/types.yaml#/definitions/uint32
++        minimum: 0
++        maximum: 3300000
++
++      rohm,dvs-idle-voltage:
++        description:
++          PMIC default "IDLE" state voltage in uV. See below table for
++          bucks which support this. 0 means disabled.
++        $ref: /schemas/types.yaml#/definitions/uint32
++        minimum: 0
++        maximum: 3300000
++
++      rohm,dvs-suspend-voltage:
++        description:
++          PMIC default "SUSPEND" state voltage in uV. See below table for
++          bucks which support this. 0 means disabled.
++        $ref: /schemas/types.yaml#/definitions/uint32
++        minimum: 0
++        maximum: 3300000
++
++      rohm,dvs-lpsr-voltage:
++        description:
++          PMIC default "deep-idle" state voltage in uV. See below table for
++          bucks which support this. 0 means disabled.
++        $ref: /schemas/types.yaml#/definitions/uint32
++        minimum: 0
++        maximum: 3300000
++
++        # Supported default DVS states:
++        #     buck       |    run     |   idle    | suspend   | lpsr
++        # --------------------------------------------------------------
++        # 1, 2, 3, and 4 | supported  | supported | supported | supported
++        # --------------------------------------------------------------
++        # 5 - 10    |                    supported (*)
++        # --------------------------------------------------------------
++        #
++        # (*) All states use same voltage but have own enable / disable
++        #      settings. Voltage 0 can be specified for a state to make
++        #      regulator disabled on that state.
++
++    required:
++      - regulator-name
++
++    unevaluatedProperties: false
++
++additionalProperties: false
 --=20
 2.52.0
 
 
---6ZIbSEWw5sj//Cs4
+--lKUN5pDJUZwx0bzV
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmlACjQACgkQeFA3/03a
-ocVvXAf/aLg1mLcDMQctdZXd7r8pJ+3IdKs/8MIgXbLFX7s5jdJQe0eKVKmVjxpT
-irXNoLXsm/9rr9isLWL3cw7Mp43js/nt8XHEODlhnUR3X0xgqziT1WYFQQrFZHP0
-Vji6T+4dPH26Rf5Im1Sj38pl7mujbmKrqjtcfX5SCxAg8mUzm7BWdZVoNfyj1VbH
-IAPtHGngvqBPH3E17qFo7ki24BNFHQsn7rj5PKFAVFDpHL/A5m9MlaUXhlb5AKxA
-3/eawVNqe5+D/OvamKViZ0JAxdTxwc/d1oW3tSy0hYPsEHkqKmQPDokjuBZo+wfx
-YRBJk5U3v2ciuwq4SBuy/VzH9xw55w==
-=1Nk1
+iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmlACl0ACgkQeFA3/03a
+ocUZAAf+OPrStiJbU0ZVTDrmPDHRPC0edWLgxe67AM52cBRdR9WlOutI+4Mpzp3W
+OfRWTwakOYuQk4zRkRd8zBsmKxVvfAFB2ntQHdRvVZ+j9QOiEyVruIRApE2DRUe8
+4YIcUCdHK1spXWUACBqZpBiBB9ZJihjHTD6EGFn/h77ZQD1iVZ5bQxxluQxlTRUA
+0L1y6amq4jwM2ZrfYKTG/Y4Sx2faBFBsau6qw4ZK6v+h7oYdXVn47FUcSAj8aSgZ
+DuKrQ7f/qfLqZN1Jwdb0TCkhyAj6hqkvRHFndUXGCvaGC5Wr0nrjh8Sr+lDYzyym
+z3la23jF9MpXfClNnY3rLCnsiYkRvg==
+=o8ZA
 -----END PGP SIGNATURE-----
 
---6ZIbSEWw5sj//Cs4--
+--lKUN5pDJUZwx0bzV--
 
