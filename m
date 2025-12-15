@@ -1,131 +1,117 @@
-Return-Path: <linux-pm+bounces-39548-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39549-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 466BECBD836
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 12:35:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1588CBDA9A
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 13:00:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id DDF183009C1B
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 11:35:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9032230C1E7C
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 11:52:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC0D3314D0D;
-	Mon, 15 Dec 2025 11:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95EDA331A51;
+	Mon, 15 Dec 2025 11:42:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S+w7LOL+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OagItfxx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7328270ED7
-	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 11:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71524331A45
+	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 11:42:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765798510; cv=none; b=mjkCA+qSKpZFGrNsHSm11tucbEPhhMpPNxka6MrvwcHkg8/kHynC+nlVFCeZDU+eFJShsapdUx8REecEBrht4PvfjXO3OU+etm/2A/d6bx4KDe41C0VndHn/txyrk67UFpqCTOaItrDez09ozRewefP+RV8OgUymPRIKRpvfR4I=
+	t=1765798923; cv=none; b=JDpUGliqGaXgeiQKg28qKGkrdVvNGbji/MYtghu5lAJi5J4j4YYsUAIwDkF2EbLyzyhffwyR+EJfKwXWIs1ziYDpzbtbH9kgx5w/nWHvCnMh874gqxM/SHrOmlhsqDCIuWNfIRRL7FXmVo8iH+n/RnKsh9zcKWgo9XYmpHepjcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765798510; c=relaxed/simple;
-	bh=kLeJfBwH8DHB8JwyM1MWCIP0EssP2q6JynXQ9k8wneo=;
+	s=arc-20240116; t=1765798923; c=relaxed/simple;
+	bh=p9/MYyp2BEHSR/d5xPRRRim8RMr1Y3WO9jOHq9jH2jQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=luygzlQkC4M0XH3YfRlBJaRjZApilqgSaaZ1rUGfu+vbK9iE8+6J7Wqurhwia9//7eLQ+fTaetgGNrXUhEK+E98P2rpbqaito9y2XbTQoSH27lWnV+RqY17nTBUiPLzBVz+qGFy31QnZAFo4HjpwM9FosWfpYrMN3Qy0Xr4rCt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S+w7LOL+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65547C4CEFB
-	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 11:35:10 +0000 (UTC)
+	 To:Cc:Content-Type; b=lSov6im/6fpqu9TGHh571vtvb381dmsOJSiAMtefQw1hUdaRmR6fFB3d1Krt9aoEQmZI8GImzSfUQHlJ80mnjA9czqG8W+uFbxAFWmNoNJogC54rXhlhtqX9EIwY1zi4HuvIAjZ2Yi1r8/AcAYumZ2pkpvWdhPLCX1kBAkyWuys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OagItfxx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22994C4AF09
+	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 11:42:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765798510;
-	bh=kLeJfBwH8DHB8JwyM1MWCIP0EssP2q6JynXQ9k8wneo=;
+	s=k20201202; t=1765798923;
+	bh=p9/MYyp2BEHSR/d5xPRRRim8RMr1Y3WO9jOHq9jH2jQ=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=S+w7LOL+M3LzfA97ZvD+3+zX/KiPjqcnqELdgxt9Z5HSFA3fkEJsZPUIpJqczXs/v
-	 hn/GRrDSmY1HgO0/CTkOSXXpa96xMIIfm5IYGT6477O+1DKnGqs9yO6somIyGQh8Hr
-	 jFnScu6dvPxyuGgak8qgtCesqjL4R8Uk+PHDvJRJkKNjHyUd+KazZ6a+/48vIP4lvI
-	 UYQJ4CPmEHWZk+uoqH9PKN58hcLbi5OjlReDheZ4miJyrR7RiakkiW+X7Ob9sGYrvE
-	 HyZwcJzsdptZvLbfBJ8wQaMCfdFVVb6l14OwQCUCVQa9Tn0Umbv5P1L9UGwpMV4Hku
-	 gY73P6ccpZi6w==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-65b3843853bso2140491eaf.2
-        for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 03:35:10 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVPVdxvqsq7c6D4NR8EA3j809q8Ri1sv5tv8DmsjjXVxRR3zagX2vuCI+h0iW1py9facmjVXDKFNA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YycrKTuKPgh5A8BjjVk1BqxUeXCYbBg7J8CocVcr8mHpUmLxZYq
-	bkAeDlxptYPe/t1XtGMybqyGVPPMyVbNpOvs2Uw2ZeEDGn7ioLn21RbDrmDDxZO3oh5s3/60wck
-	0Gwj+Pi9/DG9mklTPf257gwGJmZvhaGw=
-X-Google-Smtp-Source: AGHT+IGJQev1UGcTkTBAZa81wG8r1swB0Ko3bVKuefcOK7/k6N2bOzcAIl3YQCZgLl4ILtq/mO0t1oMVQEyZZaLy3HE=
-X-Received: by 2002:a05:6820:5041:b0:65b:4540:30be with SMTP id
- 006d021491bc7-65b454034dfmr4708074eaf.7.1765798509733; Mon, 15 Dec 2025
- 03:35:09 -0800 (PST)
+	b=OagItfxx8EVllZXhQX2k7MpYDkT0ccFzBLupdIaUg1P/99i0Ja0H0ZVhFbFdcvodK
+	 J+IfI4g5IFCybmJO147u2hK2bqv0emq39jhySPhi57D7NDSpQbhDz4lLS/JZOh7fcN
+	 d6GZ39HsLirxkZcQmINMu2c5vTWb7QrUdkdmoK3Fg53VElBUvJtbG7qyXMnMUYV2w3
+	 v/Gi3WNBNIhwD7Wh9OKdmqCSQEPW35qjaQGKx6APWJFwP/BTyXtoAUhPyhkVJlnjFi
+	 79ODyCnzdMjE0JuPGWcpG8xIbpK+tgcqM6RQ+m1ObOr+SY1m/pFcvhbv7EMkdXe9Si
+	 J46+Hh+ymfsbA==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6597b877066so2097439eaf.2
+        for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 03:42:03 -0800 (PST)
+X-Gm-Message-State: AOJu0YwJn3N4KsUs/rkqllHGjyg8aVhSqxjtdOqnm9YaNhoMePGPB6E4
+	g9yLBUu8Nw+lWErLl9zZRJnCwnIUkcqEBK4pxQQfPWCJSfye9NglIKO7aaQO/6uqY1CDGt68idf
+	stcB4ci0BrQUb4OPp+Yfy4twdddRT9JI=
+X-Google-Smtp-Source: AGHT+IEVnt41Mx8YYOPcN9sXTNlHM4xTuT9LejmKKbxFm8rqflC4Jopm99aSaZzJ5e5Tubb+440vYW1ZGeFSeNXcBpo=
+X-Received: by 2002:a05:6820:990:b0:659:9a49:8f87 with SMTP id
+ 006d021491bc7-65b4576d9c1mr5368888eaf.76.1765798922390; Mon, 15 Dec 2025
+ 03:42:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251207151549.202452-1-sumeet4linux@gmail.com>
-In-Reply-To: <20251207151549.202452-1-sumeet4linux@gmail.com>
+References: <20251207190210.471764-1-sumeet4linux@gmail.com>
+In-Reply-To: <20251207190210.471764-1-sumeet4linux@gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 15 Dec 2025 12:34:58 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i6EA4QZUOrT28HfhuoYG_BPsC2g6aGTHdMRrzuzcTs6g@mail.gmail.com>
-X-Gm-Features: AQt7F2pMClmB5M-wxgcgbDDEtcw8JRZZW1FwK2NARXHlMD45HFUOYMlOutneoIs
-Message-ID: <CAJZ5v0i6EA4QZUOrT28HfhuoYG_BPsC2g6aGTHdMRrzuzcTs6g@mail.gmail.com>
-Subject: Re: [PATCH] powercap: sscanf return value error handling
+Date: Mon, 15 Dec 2025 12:41:50 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jvt6+Gzj==ht4y6O-Lx3Y9ZkiwFB18c48G-uVmyMs-YQ@mail.gmail.com>
+X-Gm-Features: AQt7F2rxvUBE6YyImXu-1V9aDalhlsk_Gkn9MJIBeCXrPTxVfgkywBJij45xTpE
+Message-ID: <CAJZ5v0jvt6+Gzj==ht4y6O-Lx3Y9ZkiwFB18c48G-uVmyMs-YQ@mail.gmail.com>
+Subject: Re: [PATCH] powercap: fix memory leak in intel_rapl_common
 To: Sumeet Pawnikar <sumeet4linux@gmail.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Dec 7, 2025 at 4:16=E2=80=AFPM Sumeet Pawnikar <sumeet4linux@gmail.=
+On Sun, Dec 7, 2025 at 8:02=E2=80=AFPM Sumeet Pawnikar <sumeet4linux@gmail.=
 com> wrote:
 >
-> Inconsistent error handling for sscanf() return value check.
-> It uses implicit boolean conversion instead of explicit return
-> value check. The code checks if (!sscanf(...)) which is incorrect
-> because:
->  1. sscanf returns the number of successfully parsed items
->  2. On success, it returns 1 (one item passed)
->  3. On failure, it returns 0 or EOF
->  4. The check 'if (!sscanf(...))' is wrong because it treats
->     success (1) as failure
+> The err_cleanup path in rapl_package_register_powercap() function
+> doesn't free rp->domains before returning when child domain
+> registration fails. Also, there is a missing the cleanup for the
+> parent package power zone which was successfully registered earlier.
 >
-> All occurrences of sscanf() now uses explicit return value check.
-> With this behavior it returns '-EINVAL' when parsing fails (returns
-> 0 or EOF), and continues when parsing succeeds (returns 1).
+> When registration of child domains fails, now the previously
+> registered package domain (parent zone) is being unregistered.
+
+I'm not sure if this is desirable.
+
+The package domain may be still functional without children AFAICS.
+
+> This makes both parent and child powercap zones are properly
+> unregistered before returning the error.
+> Also, fix the rp->power_zone dangling pointer issue by setting it
+> to NULL.
 >
 > Signed-off-by: Sumeet Pawnikar <sumeet4linux@gmail.com>
 > ---
->  drivers/powercap/powercap_sys.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+>  drivers/powercap/intel_rapl_common.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 >
-> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_=
-sys.c
-> index bdc65e040d17..e998454e4bf6 100644
-> --- a/drivers/powercap/powercap_sys.c
-> +++ b/drivers/powercap/powercap_sys.c
-> @@ -68,7 +68,7 @@ static ssize_t show_constraint_##_attr(struct device *d=
-ev, \
->         int id; \
->         struct powercap_zone_constraint *pconst;\
->         \
-> -       if (!sscanf(dev_attr->attr.name, "constraint_%d_", &id)) \
-> +       if (sscanf(dev_attr->attr.name, "constraint_%d_", &id) !=3D 1) \
->                 return -EINVAL; \
->         if (id >=3D power_zone->const_id_cnt)     \
->                 return -EINVAL; \
-> @@ -93,7 +93,7 @@ static ssize_t store_constraint_##_attr(struct device *=
-dev,\
->         int id; \
->         struct powercap_zone_constraint *pconst;\
->         \
-> -       if (!sscanf(dev_attr->attr.name, "constraint_%d_", &id)) \
-> +       if (sscanf(dev_attr->attr.name, "constraint_%d_", &id) !=3D 1) \
->                 return -EINVAL; \
->         if (id >=3D power_zone->const_id_cnt)     \
->                 return -EINVAL; \
-> @@ -162,7 +162,7 @@ static ssize_t show_constraint_name(struct device *de=
-v,
->         ssize_t len =3D -ENODATA;
->         struct powercap_zone_constraint *pconst;
+> diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/inte=
+l_rapl_common.c
+> index b9d87e56cbbc..5ea31433abf2 100644
+> --- a/drivers/powercap/intel_rapl_common.c
+> +++ b/drivers/powercap/intel_rapl_common.c
+> @@ -1406,6 +1406,13 @@ static int rapl_package_register_powercap(struct r=
+apl_package *rp)
+>                                          &rd->power_zone);
+>         }
 >
-> -       if (!sscanf(dev_attr->attr.name, "constraint_%d_", &id))
-> +       if (sscanf(dev_attr->attr.name, "constraint_%d_", &id) !=3D 1)
->                 return -EINVAL;
->         if (id >=3D power_zone->const_id_cnt)
->                 return -EINVAL;
+> +       /* Also unregister the package domain if it was registered */
+> +       if (rp->power_zone) {
+> +               powercap_unregister_zone(rp->priv->control_type,
+> +                                        rp->power_zone);
+> +               rp->power_zone =3D NULL;
+> +       }
+> +
+>         return ret;
+>  }
+>
 > --
-
-Applied as 6.19-rc material, thanks!
 
