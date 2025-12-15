@@ -1,149 +1,148 @@
-Return-Path: <linux-pm+bounces-39582-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39576-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55BBCCBE3AE
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 15:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A3E74CBE2F7
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 15:06:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3B6713019E10
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 14:12:37 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id ACDE130AEBAE
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 14:00:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13545335BBE;
-	Mon, 15 Dec 2025 14:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46FB230EF88;
+	Mon, 15 Dec 2025 13:59:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vE6Dlzif"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K0ZSvqo9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8E5433556C;
-	Mon, 15 Dec 2025 14:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF51C2DFA5B;
+	Mon, 15 Dec 2025 13:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765807461; cv=none; b=jkoSj9Q6vSYWiLR0cj80eS+2weKURYH2+TJnhIXTs6ghiDi5LB2g6NmsWqo/wIJPwU3ngWLqufkdOBFZX6uuQgkWfy3ttKT9N29NPMVyeCdh8vpCx0u/0JLv4mkYMZg83NitoxmlvIXvKBXYuceZ2M07XxDKzH3682plvVBrwRo=
+	t=1765807154; cv=none; b=FmSeeKOoG031+F3RbQ55OVWHTBfdYY1tNbi/oQSoCwn71+rptDdZfqMBjFOrK5jsBk3/3q/xKBSvKqto77B/FLcAx2pg3dhO/lp+FGwByc+evEwR0XBHj9NX7EE64woz8ASB/b1B3kmG3lU2Ab4PNN4OewuF3QC9EXzULHTOjW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765807461; c=relaxed/simple;
-	bh=6vvbtUhyx+Vh39xk3H6F4iiMvieFsent7KLa+qxDcY4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=opC1fu6cNZjl+fRVtFgxZapTsLugZ3b1N9mj2NZWOGHSxqE0IvwG7SfGDkoQQ5ToOw+y0X+YoyuwtZJTIKVr1MqW/suyJGKc5sTfn24j17OkKfG7wkdJd8/Xq/ob7sbNKG9AASwkrvgRYvmKlaGnO9iiNzv8hucaMiJm/sIQ3s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vE6Dlzif; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68AD6C16AAE;
-	Mon, 15 Dec 2025 14:04:19 +0000 (UTC)
+	s=arc-20240116; t=1765807154; c=relaxed/simple;
+	bh=YQ0YmiEKTBiByyCk2XIiAXJahBqdOSyVHDmgyhFstuo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=XzPmMP3YiU3w/pPj9bVYZNR37Ocfcegxmehd7SN8cNL4BDQb4jYt7QkT869spT7vDT6GvDOeML/Yzc7UevPoWIcAYHvWEyQqsVCzyc/mzihy8SaXhMAZoOdTjupu7zfNtXXM30piaX1Js/QMCOjB6e5EEKIo4C+ue3oA1QLym1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K0ZSvqo9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84039C4CEF5;
+	Mon, 15 Dec 2025 13:59:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765807460;
-	bh=6vvbtUhyx+Vh39xk3H6F4iiMvieFsent7KLa+qxDcY4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=vE6DlzifwZmzMb4xs9dw0ykAxqiRL+2H/di8enVz7Geo+HPKjJVJFGUiFRbq2vJhG
-	 xc6a/koJaNrULcnYSMU9k3TxJExkIBjL0XbPL3zX8lYIrU3Ef3+aB1++j3HiYimmNd
-	 jpYcoerCEH9YvHfbb9lZkTVhEQB9AyIiqS/0oHukMa2cOoXIExsChc59MlISDDtU7h
-	 nvsX8m1THb3QniwEPqw6IRKoR483UM1NjaZx//DmItEZKbJicBJCuKq66TLwn9Vnd1
-	 sxz3dSuYMB7qGR4OsJjhbHiRrxunBfRMA4QhP5qJWK+VKJ+niGWcQ1k+jnYBn/jU0r
-	 33IQpcKEI/N3Q==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux ACPI <linux-acpi@vger.kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>,
- Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
- Armin Wolf <w_armin@gmx.de>
-Subject:
- [PATCH v2 05/10] ACPI: tiny-power-button: Convert the driver to a platform
- one
-Date: Mon, 15 Dec 2025 14:59:00 +0100
-Message-ID: <5629403.Sb9uPGUboI@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <2685338.Lt9SDvczpP@rafael.j.wysocki>
-References: <2685338.Lt9SDvczpP@rafael.j.wysocki>
+	s=k20201202; t=1765807153;
+	bh=YQ0YmiEKTBiByyCk2XIiAXJahBqdOSyVHDmgyhFstuo=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=K0ZSvqo9FNH+vPZrOVLOU5ZraIN5/Hx4lzXEVk8deQoFTzZrfVB3Sn8wUVb8UaBDT
+	 IPKJL1FeYjBc4++kymDagnMFo+aO6gmHV+UWQO7cqHTOD6VMMtizrJjRFLGRY7Ee7L
+	 w4mP9rPOGGMbKthLu+r5v9Ru7rhk3vDAc1XCmmrB5wHkqvV8acOQhuC1BVzlP5ME/H
+	 H7EzKs7+bvfSkQA41DZXMI2/LRypKRi0eSe24U8EkDVDNspUAYXac7itmfYbMOTmxv
+	 x+MHyD8AednEYtbIisGEt5V/tIfQDU8l0ImBMScwR5yt2mJk+grnKjhIaLlaCyGSER
+	 QNwLC455/HDNw==
+From: Mark Brown <broonie@kernel.org>
+To: rust-for-linux@vger.kernel.org, Alice Ryhl <aliceryhl@google.com>
+Cc: linux-kernel@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+ Leon Romanovsky <leon@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+ Boqun Feng <boqun.feng@gmail.com>, Elle Rhumsaa <elle@weathered-steel.dev>, 
+ Carlos Llamas <cmllamas@google.com>, Yury Norov <yury.norov@gmail.com>, 
+ Andreas Hindborg <a.hindborg@kernel.org>, linux-block@vger.kernel.org, 
+ FUJITA Tomonori <fujita.tomonori@gmail.com>, 
+ Miguel Ojeda <ojeda@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org, 
+ Benno Lossin <lossin@kernel.org>, Danilo Krummrich <dakr@kernel.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+ Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, 
+ linux-security-module@vger.kernel.org, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Abdiel Janulgue <abdiel.janulgue@gmail.com>, 
+ Robin Murphy <robin.murphy@arm.com>, Lyude Paul <lyude@redhat.com>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+ linux-fsdevel@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>, 
+ Jason Baron <jbaron@akamai.com>, Steven Rostedt <rostedt@goodmis.org>, 
+ Ard Biesheuvel <ardb@kernel.org>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+ Andrew Ballance <andrewjballance@gmail.com>, maple-tree@lists.infradead.org, 
+ linux-mm@kvack.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+ Uladzislau Rezki <urezki@gmail.com>, Vitaly Wool <vitaly.wool@konsulko.se>, 
+ Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+ devicetree@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
+ linux-pci@vger.kernel.org, Remo Senekowitsch <remo@buenzli.dev>, 
+ "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org, 
+ Will Deacon <will@kernel.org>, Fiona Behrens <me@kloenk.dev>, 
+ Gary Guo <gary@garyguo.net>, Liam Girdwood <lgirdwood@gmail.com>, 
+ Alexandre Courbot <acourbot@nvidia.com>, Vlastimil Babka <vbabka@suse.cz>, 
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
+ Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>, 
+ Mitchell Levy <levymitchell0@gmail.com>, 
+ Frederic Weisbecker <frederic@kernel.org>, 
+ Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+ John Stultz <jstultz@google.com>, linux-usb@vger.kernel.org, 
+ Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+ Matthew Wilcox <willy@infradead.org>, Tamir Duberstein <tamird@gmail.com>, 
+ Rae Moar <raemoar63@gmail.com>
+In-Reply-To: <20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com>
+References: <20251202-define-rust-helper-v1-0-a2e13cbc17a6@google.com>
+Subject: Re: (subset) [PATCH 00/46] Allow inlining C helpers into Rust when
+ using LTO
+Message-Id: <176580714194.161338.1959594276727103368.b4-ty@kernel.org>
+Date: Mon, 15 Dec 2025 22:59:01 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-47773
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, 02 Dec 2025 19:37:24 +0000, Alice Ryhl wrote:
+> This patch series adds __rust_helper to every single rust helper. The
+> patches do not depend on each other, so maintainers please go ahead and
+> pick up any patches relevant to your subsystem! Or provide your Acked-by
+> so that Miguel can pick them up.
+> 
+> These changes were generated by adding __rust_helper and running
+> ClangFormat. Unrelated formatting changes were removed manually.
+> 
+> [...]
 
-While binding drivers directly to struct acpi_device objects allows
-basic functionality to be provided, at least in the majority of cases,
-there are some problems with it, related to general consistency, sysfs
-layout, power management operation ordering, and code cleanliness.
+Applied to
 
-Overall, it is better to bind drivers to platform devices than to their
-ACPI companions, so convert the ACPI tiny-power-button driver to a
-platform one.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
-While this is not expected to alter functionality, it changes sysfs
-layout and so it will be visible to user space.
+Thanks!
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+[35/46] rust: regulator: add __rust_helper to helpers
+        commit: 03d281f384768610bf90697bce9e35d3d596de77
 
-v1 -> v2: No changes
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
----
- drivers/acpi/tiny-power-button.c |   27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
---- a/drivers/acpi/tiny-power-button.c
-+++ b/drivers/acpi/tiny-power-button.c
-@@ -1,7 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0-or-later
-+#include <linux/acpi.h>
- #include <linux/module.h>
-+#include <linux/platform_device.h>
- #include <linux/sched/signal.h>
--#include <linux/acpi.h>
- #include <acpi/button.h>
- 
- MODULE_AUTHOR("Josh Triplett");
-@@ -35,8 +36,9 @@ static u32 acpi_tiny_power_button_event(
- 	return ACPI_INTERRUPT_HANDLED;
- }
- 
--static int acpi_tiny_power_button_add(struct acpi_device *device)
-+static int acpi_tiny_power_button_probe(struct platform_device *pdev)
- {
-+	struct acpi_device *device = ACPI_COMPANION(&pdev->dev);
- 	acpi_status status;
- 
- 	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
-@@ -55,8 +57,10 @@ static int acpi_tiny_power_button_add(st
- 	return 0;
- }
- 
--static void acpi_tiny_power_button_remove(struct acpi_device *device)
-+static void acpi_tiny_power_button_remove(struct platform_device *pdev)
- {
-+	struct acpi_device *device = ACPI_COMPANION(&pdev->dev);
-+
- 	if (device->device_type == ACPI_BUS_TYPE_POWER_BUTTON) {
- 		acpi_remove_fixed_event_handler(ACPI_EVENT_POWER_BUTTON,
- 						acpi_tiny_power_button_event);
-@@ -67,14 +71,13 @@ static void acpi_tiny_power_button_remov
- 	acpi_os_wait_events_complete();
- }
- 
--static struct acpi_driver acpi_tiny_power_button_driver = {
--	.name = "tiny-power-button",
--	.class = "tiny-power-button",
--	.ids = tiny_power_button_device_ids,
--	.ops = {
--		.add = acpi_tiny_power_button_add,
--		.remove = acpi_tiny_power_button_remove,
--	},
-+static struct platform_driver acpi_tiny_power_button_driver = {
-+	.probe = acpi_tiny_power_button_probe,
-+	.remove = acpi_tiny_power_button_remove,
-+	.driver = {
-+		.name = "acpi-tiny-power-button",
-+		.acpi_match_table = tiny_power_button_device_ids,
-+ 	},
- };
- 
--module_acpi_driver(acpi_tiny_power_button_driver);
-+module_platform_driver(acpi_tiny_power_button_driver);
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
+Thanks,
+Mark
 
 
