@@ -1,232 +1,215 @@
-Return-Path: <linux-pm+bounces-39594-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39595-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA54DCBEC55
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 16:54:35 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AEBECBECBB
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 16:57:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 32A45301699F
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 15:49:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id A4A4F3017B74
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 15:57:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6A64308F02;
-	Mon, 15 Dec 2025 15:49:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B8CB30FC18;
+	Mon, 15 Dec 2025 15:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BRHO+1CH"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RdSQ/fU/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEDA72EFD9C
-	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 15:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DB630BB8D
+	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 15:57:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765813759; cv=none; b=cc8gyHd785gv7KOR2vOQr8gDXL5XMQ3fetWLJyWrk/x9Oka1neIOgQ3zwTUHZty2otMnlgRwTuknAyOmonzQhwptdiI+Jr/vdetnhUtnNgBVKfQTkruD9CXc52YdUFAzlB988iN2AeLZv7ThswQQIy0jf4Vm0g8owUdQIlPYyVg=
+	t=1765814265; cv=none; b=aDN9zf3ia9yidhw6HPFQt7l7CuyUxhNRpA9sfhKOvCGrZP4LyCp4vel8jscQo8olg8sQQl9++VDmA3JujUX3SbIdheqdRUvW/n7o1Q/BV694WI08bC5EkTyfKMNz6yOE+PgB9b0iPpKbl5UvPv+n4q7s0rjJAXhW+pmG3dx0ZM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765813759; c=relaxed/simple;
-	bh=8j/vzTKPUpZPTn7s+qpAiEl5hgbgjwM9lNT4jLzmpr8=;
+	s=arc-20240116; t=1765814265; c=relaxed/simple;
+	bh=wWPC/2Smq4jtjLX5cNQnH721pExURZn2+t/Lpx8wgiY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zwuf3kvKyavZEHj/pPI0m/vVi9d561nkeoHsS9vGHRhJ3gOf3DZJUgl+GJ1QnFwb1xnNvVV9nPR22nTfw90aedIaNHhIGstMuqNALDv9adtGU/UBpqFT9qYGhK+OLmIQ1kEHZWuTejZJvRxmcNoT4NgQqTBwRIByR6FRAq0qzBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BRHO+1CH; arc=none smtp.client-ip=74.125.224.41
+	 To:Cc:Content-Type; b=hwJUstvZ9kDIlJ6X/zwZzSX8VcoXbUrPHHbpBZpTzoXh3xPa1lyzUMM15A+7SJVdT0fGlkXiY/fdC85X0DlW4fhZgsiXRFpOw8QUWf8uvE+ydXGa+iIk7rELvvsUaAtNDu4H+nGNrr/DF+BhLNtRQpRZqUMOa0moVLKt+swDdyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RdSQ/fU/; arc=none smtp.client-ip=74.125.224.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-641e942242cso2829428d50.1
-        for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 07:49:17 -0800 (PST)
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-644715aad1aso4042329d50.0
+        for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 07:57:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1765813757; x=1766418557; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1765814261; x=1766419061; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e08qkOpj3WfbTFuZmyrzV5+JluhiQ0mupHHDg3KLdTw=;
-        b=BRHO+1CH1QpI6NyUzM+HFXVBq1oD3Y4kWjRAc2GZvyUkoGoYsjzVtkg2kBEPOXgh4Y
-         ANovG/fRt26eSogTaHGdfRk/0gQUS9zYTaQqSPOXfmwNrXZ3t2wFxAKmEeiYSjOVmVdn
-         FhykiTKTT4Gd1U1WmrThYcO6KWC3EklT184okTlS3iToq1uxrFsCZTA5JgT8+nmfsWr/
-         PDOEH0dpMd5IVAfB+vCp8WnaIZmHkIm1DqgRBi8+X2NdUHtslujFXWtm+Wbn/Aegg7A+
-         OVGngRJINV3nAhzryP+Ya/xfeloKIzszlMBEuGqk7XFmhEEcyZB1AKJx4GjYtkw5/okx
-         IH+Q==
+        bh=jD2gSrbwz8qwRcQAUIoCa/YtmLX1qZ3zgXWUCARLWUM=;
+        b=RdSQ/fU/1PDz3di3Ks5pKKDb8xLXR7WdRNI/1j/0Od0eUew+mRRpGtc49Yc9hTleWE
+         GNd4sWCXVWZ8vvW/SnTb/SEXsdKHBVfQcQeWPUP63rPFcRrOThlyhKkWvme74lWsZdg2
+         Z/FOWHJSzw1CVwIXQo7alxZhy0ioHiBUb92sdbaH45WZqsYcA9eFgxcl9TL6QnSq359m
+         P+ussN5KRMqTaw3dQ076/tslENmEl4Lp0IsMe8XjCeNHy+FUFRNRhy2ocHx8XF0+1m7K
+         9I7XFpVA7yJPstSVNt5ntk83PRH031iQkpmI6mDOEbZCyICiwXFCYBLpEYDVMCTyOjpc
+         NAOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765813757; x=1766418557;
+        d=1e100.net; s=20230601; t=1765814261; x=1766419061;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e08qkOpj3WfbTFuZmyrzV5+JluhiQ0mupHHDg3KLdTw=;
-        b=uXMF2lTyoszXKw0td7aGAFabpNs4vk1wk+mfjIzi0DVDtpC9iQBE1WAePSazcpJN/i
-         akovwKZWj0zXzorVfaqQ3V6VtkSdEESVnPK9qhlfSi/G7z6SGhTcQU8dODxmei7QlAq8
-         MeAejkAf5t/awV/Lkj+eOWOCkcGgSkhtYZv3UBtghxls+qdOnLZm5bqXL7WUjDCcapZj
-         HfozXstBaocpJjJS5FTS+iwJmEz8+StTTs6eaV9r+7dYlKyrN8dGrV8JhFcTmXQU/slp
-         QWWM5GVQcopMhP0lQt2nlEJmSvSv2BT5d/547En3pXP70Z3P88+VPywdFBrWXRMd3lHu
-         xgWg==
-X-Forwarded-Encrypted: i=1; AJvYcCX3lveLLq1zLo2JNEC+Z+/hYOKQLX9UFMEyLkIkg1PucG9jAp7HVtDTSobaIHBpHYH1jLOzNm83jA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaparLI5PMe/dIeSR1XUwU8IOyVxYOJRtOPOptBtuecpl/pBkW
-	+0qe3V0rJXiOJcbx1j3BTj5dVDqKb/R/+yRkovJMrYJb+zonZj1nRUt4iArbp34jqVDfNCruhj4
-	Aox1gr2MvULukwuTmz6mZBtF5JpFVn1cbS5dwVagY7g==
-X-Gm-Gg: AY/fxX58wa/R4zQmCG6XCyhXVn8JGJaD56dDmJX5XEkfo8gtdFlxg+6Pclp3wEYXzzk
-	yow8BpONbzEp99FjBS3QQtKJIqyRLDC4B1uDBFSKoGP7iqazkIRzpDB7K9FTnwiQQMK7+iAmSmg
-	a47n1+5Prb+ZPM9nlIpFdaLKHkBg9qxz42PVRkGxm85UtLoeO5gk+OBUQpjNKg/BBGjFiOo8bFj
-	+dbUUo42V8Z7OGI4Djn60oGDqCPGmbLVeo1dgvj4p3zObqt0nnq+yeBuZ3Icj6c7NSofS4Mf6wC
-	dw+R2Ng=
-X-Google-Smtp-Source: AGHT+IG42Dlb5H8RBa3dDWJe/njq8QKAlsDYFOIdkUNzlr/ALH53QmEtN3T7DTv+XnZyzYJx5usU9tSBf+EChkTQgJU=
-X-Received: by 2002:a05:690e:1244:b0:644:43f7:11aa with SMTP id
- 956f58d0204a3-645555cdd52mr8764242d50.13.1765813756587; Mon, 15 Dec 2025
- 07:49:16 -0800 (PST)
+        bh=jD2gSrbwz8qwRcQAUIoCa/YtmLX1qZ3zgXWUCARLWUM=;
+        b=Kzzi7prCZq3GSfI9F9AD258PNin4yKo4PUbYjnQ90yQvwJ1Fy6CRD+8ert+aUhxYRp
+         jygm5Wb1Xoz6quvlPquNQzN5hKjmHhBB4XonWUxNuUIqRQ6jM6P8jxlz9+UPufmUhpTj
+         nbUmJgeyugXKIuk0MmFnM4Pwh/oszdyNU36dMZ+3oxVcJLtI6/S4UHPjX+jnr7TZbf1E
+         Rc5VDPaxbzAWdbb0qAzQd+KU1HZKgsXRe+dkqFpW1TLlT634NEF2dUXxSmpri+bfjQy0
+         CqSST4lKr8h2XMtWpx373OzSlhCKNPbK+vB685SuYu02HYsmHF5h/TjQIZrtDzmL8BL1
+         hnkw==
+X-Forwarded-Encrypted: i=1; AJvYcCVtWGhf23aXtn57SohjMZ4uE4WlXJOiKSWE6VRi76HnAVsIOB1NDfxFsYkh23bEH2o8m+4B1G63LQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YylI+BFqyEiAaJOGk5n62HNEfqLK6hkCulceFAIHcSykERHVZSI
+	ZfLEnOr5BynyXWHP8g0fS7ksXXpFAf2Q3sIouDjPKZ7XdPVCs/ozbDEwq8vA4JTLrJZPjSyoqTx
+	aKO07c4OZhHjDfS6dqffsBm8hQY2hHtMXXgTYjIUymA==
+X-Gm-Gg: AY/fxX6VvW6XYu7+j7HXhQm+Gx86YR/uNK3kO6WzOeomU9dUUpBxDx+rzqI1wXcEIWl
+	IobXK4w34VSkKojViwSo+W60xbbE+iaqI3VD1lb9q2AibPPGCSrfNhHdHUhWf/7cqtV0BVtnqcI
+	OAqGZFog+GQhesq+SVagKy94f1I1HcyWGxu+PdU8USUbJnwgncqWHEo/MvTWS/tK4abm5QO0asN
+	z+bTVob0j5eacNlB4pvFDOS/GzYnIFxfmwZaLzhvTDgQGqNS7uPpvvFYw6aisKuyJqoeQnW
+X-Google-Smtp-Source: AGHT+IHnzK21TfrVLiBrKEfsBY0yy3nNModkqTwvqLIVjQPjpPnPxA37IWTaMsN5LsanoFGI3JzdpIiVMlmjMLIYn+0=
+X-Received: by 2002:a53:acc2:0:20b0:63f:af94:79d2 with SMTP id
+ 956f58d0204a3-6447a58f4a3mr9014275d50.34.1765814261319; Mon, 15 Dec 2025
+ 07:57:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215122154.3180001-1-ed.tsai@mediatek.com> <12807571.O9o76ZdvQC@rafael.j.wysocki>
-In-Reply-To: <12807571.O9o76ZdvQC@rafael.j.wysocki>
+References: <20251215034944.2973003-1-irving-ch.lin@mediatek.com>
+In-Reply-To: <20251215034944.2973003-1-irving-ch.lin@mediatek.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 15 Dec 2025 16:48:39 +0100
-X-Gm-Features: AQt7F2p9LaiGdJ2wDLThy2UohaIFGncIyGbhH9qnDbL_6WQ4z7c1iocSPb_Ocjg
-Message-ID: <CAPDyKFpdixuO_ySig9dajFsv40J7d5ML67h6MwCkemrq3fft_Q@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: runtime: Do not clear needs_force_resume with
- enabled runtime PM
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Ed Tsai <ed.tsai@mediatek.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org, 
-	chun-hung.wu@mediatek.com, freddy.shin@mediatek.com, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Date: Mon, 15 Dec 2025 16:57:03 +0100
+X-Gm-Features: AQt7F2pOE88ysP1TXeUkBFRRwGo0OeDBvPna4LwWc08y3UTdwUmGokrHz2XyogY
+Message-ID: <CAPDyKFrsRTmvc4JmFAT_mCEEaG9yGkZn_JJqqyqCnB-AmpZgsQ@mail.gmail.com>
+Subject: Re: [PATCH v4 00/21] Add support for MT8189 clock/power controller
+To: "irving.ch.lin" <irving-ch.lin@mediatek.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Richard Cochran <richardcochran@gmail.com>, Qiqi Wang <qiqi.wang@mediatek.com>, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org, 
+	netdev@vger.kernel.org, Project_Global_Chrome_Upstream_Group@mediatek.com, 
+	sirius.wang@mediatek.com, vince-wl.liu@mediatek.com, jh.hsu@mediatek.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 15 Dec 2025 at 15:21, Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Mon, 15 Dec 2025 at 04:50, irving.ch.lin <irving-ch.lin@mediatek.com> wrote:
 >
-> On Monday, December 15, 2025 1:21:42 PM CET ed.tsai@mediatek.com wrote:
-> > From: Ed Tsai <ed.tsai@mediatek.com>
-> >
-> > needs_force_resume is a bitfield member in struct dev_pm_info and must
-> > be accessed under the same lock as its bitfield group.
-> >
-> > A real concurrent write was observed between needs_force_resume and
-> > idle_notification; stacks below:
-> >
-> > write needs_force_resume:
-> >   pm_runtime_reinit+0x110/0x360
-> >   really_probe+0xe0/0x464
-> >   __driver_probe_device+0x9c/0x104
-> >   driver_probe_device+0x3c/0x1a8
-> >   __device_attach_driver+0x100/0x17c
-> >   bus_for_each_drv+0x10c/0x168
-> >   __device_attach_async_helper+0x7c/0xf4
-> >   async_run_entry_fn+0x4c/0x1b4
-> >   process_scheduled_works+0x1dc/0x498
-> >   worker_thread+0x220/0x320
-> >   kthread+0x150/0x27c
-> >   ret_from_fork+0x10/0x20
-> >
-> > write idle_notification:
-> >   rpm_idle+0x464/0x5f8
-> >   __pm_runtime_idle+0x7c/0x170
-> >   scsi_autopm_put_device+0x18/0x28
-> >   scsi_sysfs_add_sdev+0x1a0/0x1d8
-> >   scsi_probe_and_add_lun+0xbd8/0xcd0
-> >   __scsi_add_device+0xb8/0x11c
-> >   ufshcd_async_scan+0xb4/0x3a4
-> >   async_run_entry_fn+0x4c/0x1b4
-> >   process_scheduled_works+0x1dc/0x498
-> >   worker_thread+0x220/0x320
-> >   kthread+0x150/0x27c
-> >   ret_from_fork+0x10/0x20
-> >
-> > Fixes: 89d9cec3b1e9 ("PM: runtime: Clear power.needs_force_resume in pm_runtime_reinit()")
-> > Signed-off-by: Ed Tsai <ed.tsai@mediatek.com>
-> > ---
-> >  drivers/base/power/runtime.c | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> >
-> > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > index 84676cc24221..3328543b1ed8 100644
-> > --- a/drivers/base/power/runtime.c
-> > +++ b/drivers/base/power/runtime.c
-> > @@ -1879,11 +1879,22 @@ void pm_runtime_reinit(struct device *dev)
-> >                               pm_runtime_put(dev->parent);
-> >               }
-> >       }
-> > +
-> >       /*
-> >        * Clear power.needs_force_resume in case it has been set by
-> >        * pm_runtime_force_suspend() invoked from a driver remove callback.
-> >        */
-> > +     if (dev->power.irq_safe)
-> > +             spin_lock(&dev->power.lock);
-> > +     else
-> > +             spin_lock_irq(&dev->power.lock);
-> > +
-> >       dev->power.needs_force_resume = false;
-> > +
-> > +     if (dev->power.irq_safe)
-> > +             spin_unlock(&dev->power.lock);
-> > +     else
-> > +             spin_unlock_irq(&dev->power.lock);
-> >  }
-> >
-> >  /**
-> >
+> From: Irving-CH Lin <irving-ch.lin@mediatek.com>
 >
-> Thanks for the patch, but this happens because the flag is cleared when
-> runtime PM is enabled which shouldn't be necessary, so I'd prefer to make
-> the change below.
->
-> ---
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH v1] PM: runtime: Do not clear needs_force_resume with enabled runtime PM
->
-> Commit 89d9cec3b1e9 ("PM: runtime: Clear power.needs_force_resume in
-> pm_runtime_reinit()") added provisional clearing of power.needs_force_resume
-> to pm_runtime_reinit(), but it is done unconditionally which is a
-> mistake because pm_runtime_reinit() may race with driver probing
-> and removal [1].
->
-> To address this, notice that power.needs_force_resume should never
-> be set when runtime PM is enabled and so it only needs to be cleared
-> when runtime PM is disabled, and update pm_runtime_init() to only
-> clear that flag when runtime PM is disabled.
->
-> Fixes: 89d9cec3b1e9 ("PM: runtime: Clear power.needs_force_resume in pm_runtime_reinit()")
-> Reported-by: Ed Tsai <ed.tsai@mediatek.com>
-> Closes: https://lore.kernel.org/linux-pm/20251215122154.3180001-1-ed.tsai@mediatek.com/ [1]
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Changes since v4:
+> - Fix dt_binding_check warning.
+> - Check prepare_enable before set_parent to ensure our reference clock is ready.
+> - Enable fhctl in apmixed driver.
+> - Refine clock drivers:
+>   - Change subsys name, regs base/size (clock related part, instead of whole subsys).
+>   - Simply code with GATE_MTK macro.
+>   - Add MODULE_DEVICE_TABLE, MODULE_DESCRIPTION
+>   - Register remove callback mtk_clk_simple_remove.
+>   - Remove most of CLK_OPS_PARENT_ENABLE and CLK_IGNORE_UNUSED which may block bringup,
+>       but some subsys will power off before we disable unused clocks, so still need here.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+I assume I can pick the pmdomain related changes (patch2, patch20 and
+patch21) from this series, as they are independent from the clock
+changes, right?
 
 Kind regards
 Uffe
 
-> ---
->  drivers/base/power/runtime.c |   22 ++++++++++++----------
->  1 file changed, 12 insertions(+), 10 deletions(-)
+
 >
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1878,16 +1878,18 @@ void pm_runtime_init(struct device *dev)
->   */
->  void pm_runtime_reinit(struct device *dev)
->  {
-> -       if (!pm_runtime_enabled(dev)) {
-> -               if (dev->power.runtime_status == RPM_ACTIVE)
-> -                       pm_runtime_set_suspended(dev);
-> -               if (dev->power.irq_safe) {
-> -                       spin_lock_irq(&dev->power.lock);
-> -                       dev->power.irq_safe = 0;
-> -                       spin_unlock_irq(&dev->power.lock);
-> -                       if (dev->parent)
-> -                               pm_runtime_put(dev->parent);
-> -               }
-> +       if (pm_runtime_enabled(dev))
-> +               return;
-> +
-> +       if (dev->power.runtime_status == RPM_ACTIVE)
-> +               pm_runtime_set_suspended(dev);
-> +
-> +       if (dev->power.irq_safe) {
-> +               spin_lock_irq(&dev->power.lock);
-> +               dev->power.irq_safe = 0;
-> +               spin_unlock_irq(&dev->power.lock);
-> +               if (dev->parent)
-> +                       pm_runtime_put(dev->parent);
->         }
->         /*
->          * Clear power.needs_force_resume in case it has been set by
+> changes since v3:
+> - Add power-controller dt-schema to mediatek,power-controller.yaml.
+> - Separates clock commit to small parts (by sub-system).
+> - Change to mtk-pm-domains for new MTK pm framework.
 >
+> changes since v2:
+> - Fix dt-schema checking fails
+> - Merge dt-binding files and dt-schema files into one patch.
+> - Add vendor information to dt-binding file name.
+> - Remove NR define in dt-binding header.
+> - Add struct member description.
 >
+>   This series add support for the clock and power controllers
+> of MediaTek's new SoC, MT8189. With these changes,
+> other modules can easily manage clock and power resources
+> using standard Linux APIs, such as the Common Clock Framework (CCF)
+> and pm_runtime on MT8189 platform.
+>
+> Irving-CH Lin (21):
+>   dt-bindings: clock: mediatek: Add MT8189 clock definitions
+>   dt-bindings: power: mediatek: Add MT8189 power domain definitions
+>   clk: mediatek: clk-mux: Make sure bypass clk enabled while setting MFG
+>     rate
+>   clk: mediatek: Add MT8189 apmixedsys clock support
+>   clk: mediatek: Add MT8189 topckgen clock support
+>   clk: mediatek: Add MT8189 vlpckgen clock support
+>   clk: mediatek: Add MT8189 vlpcfg clock support
+>   clk: mediatek: Add MT8189 bus clock support
+>   clk: mediatek: Add MT8189 cam clock support
+>   clk: mediatek: Add MT8189 dbgao clock support
+>   clk: mediatek: Add MT8189 dvfsrc clock support
+>   clk: mediatek: Add MT8189 i2c clock support
+>   clk: mediatek: Add MT8189 img clock support
+>   clk: mediatek: Add MT8189 mdp clock support
+>   clk: mediatek: Add MT8189 mfg clock support
+>   clk: mediatek: Add MT8189 dispsys clock support
+>   clk: mediatek: Add MT8189 scp clock support
+>   clk: mediatek: Add MT8189 ufs clock support
+>   clk: mediatek: Add MT8189 vcodec clock support
+>   pmdomain: mediatek: Add bus protect control flow for MT8189
+>   pmdomain: mediatek: Add power domain driver for MT8189 SoC
+>
+>  .../bindings/clock/mediatek,mt8189-clock.yaml |   90 ++
+>  .../clock/mediatek,mt8189-sys-clock.yaml      |   58 +
+>  .../power/mediatek,power-controller.yaml      |    1 +
+>  drivers/clk/mediatek/Kconfig                  |  146 +++
+>  drivers/clk/mediatek/Makefile                 |   14 +
+>  drivers/clk/mediatek/clk-mt8189-apmixedsys.c  |  192 ++++
+>  drivers/clk/mediatek/clk-mt8189-bus.c         |  196 ++++
+>  drivers/clk/mediatek/clk-mt8189-cam.c         |  108 ++
+>  drivers/clk/mediatek/clk-mt8189-dbgao.c       |   94 ++
+>  drivers/clk/mediatek/clk-mt8189-dispsys.c     |  172 +++
+>  drivers/clk/mediatek/clk-mt8189-dvfsrc.c      |   54 +
+>  drivers/clk/mediatek/clk-mt8189-iic.c         |  118 ++
+>  drivers/clk/mediatek/clk-mt8189-img.c         |  107 ++
+>  drivers/clk/mediatek/clk-mt8189-mdpsys.c      |   91 ++
+>  drivers/clk/mediatek/clk-mt8189-mfg.c         |   53 +
+>  drivers/clk/mediatek/clk-mt8189-scp.c         |   73 ++
+>  drivers/clk/mediatek/clk-mt8189-topckgen.c    | 1020 +++++++++++++++++
+>  drivers/clk/mediatek/clk-mt8189-ufs.c         |   89 ++
+>  drivers/clk/mediatek/clk-mt8189-vcodec.c      |   93 ++
+>  drivers/clk/mediatek/clk-mt8189-vlpcfg.c      |  111 ++
+>  drivers/clk/mediatek/clk-mt8189-vlpckgen.c    |  280 +++++
+>  drivers/clk/mediatek/clk-mux.c                |    9 +-
+>  drivers/pmdomain/mediatek/mt8189-pm-domains.h |  485 ++++++++
+>  drivers/pmdomain/mediatek/mtk-pm-domains.c    |   36 +-
+>  drivers/pmdomain/mediatek/mtk-pm-domains.h    |    5 +
+>  .../dt-bindings/clock/mediatek,mt8189-clk.h   |  580 ++++++++++
+>  .../dt-bindings/power/mediatek,mt8189-power.h |   38 +
+>  27 files changed, 4306 insertions(+), 7 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8189-clock.yaml
+>  create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8189-sys-clock.yaml
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-apmixedsys.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-bus.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-cam.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-dbgao.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-dispsys.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-dvfsrc.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-iic.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-img.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-mdpsys.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-mfg.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-scp.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-topckgen.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-ufs.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-vcodec.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-vlpcfg.c
+>  create mode 100644 drivers/clk/mediatek/clk-mt8189-vlpckgen.c
+>  create mode 100644 drivers/pmdomain/mediatek/mt8189-pm-domains.h
+>  create mode 100644 include/dt-bindings/clock/mediatek,mt8189-clk.h
+>  create mode 100644 include/dt-bindings/power/mediatek,mt8189-power.h
+>
+> --
+> 2.45.2
 >
 
