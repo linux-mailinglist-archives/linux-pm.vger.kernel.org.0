@@ -1,746 +1,244 @@
-Return-Path: <linux-pm+bounces-39493-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39494-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FE92CBC292
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 01:45:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F11C0CBC2F5
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 02:35:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4501530056F4
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 00:45:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 52A1E3007C48
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 01:35:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757D72C026E;
-	Mon, 15 Dec 2025 00:45:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D641ACDFD;
+	Mon, 15 Dec 2025 01:35:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="MpLIMTPy"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="KIbgtD9+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011060.outbound.protection.outlook.com [52.101.70.60])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 034F429E109
-	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 00:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765759533; cv=none; b=ljpkQQz+e+Kjp1s2gC48NNtqqFxqohh2hmvgX2djjE9ddgb2hZJIKInZTUg4WAOsRxC6aIctOpo6qUNRmLuFxH5s2Gv2NanABLZOZoEoQfTPjnhYYyLqPDe8xZuCzUQoyHDzax8HJYhj3LghP4uBTV2cReTN71W927jZaNPcBpk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765759533; c=relaxed/simple;
-	bh=iyxPQy6Yd3a0eiTPXN/dk7y1AzhEkRTcUh5cOvtY2bw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=qnEaMGVH6mIKYySbxdg1Q2vTXC7SUiLmP08eQeRHgLqx+yJZeUNGApD4FQBrVanwtNrG8c+JyT98DrS662D/QcsMJAnp0J9qWQDqUQ95r3kZG7MFrUsGiOUcXscA+JfiX9o/DawGwX5SesTe0ZYEFIjnLU90lQtk2OaNVpwzppQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=MpLIMTPy; arc=none smtp.client-ip=209.85.210.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7c75a5cb752so2127407a34.2
-        for <linux-pm@vger.kernel.org>; Sun, 14 Dec 2025 16:45:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1765759530; x=1766364330; darn=vger.kernel.org;
-        h=mime-version:in-reply-to:organization:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VmZTFS0b/i5lSM5BT6gno5ribOwK4ydISKz/x5xn/b8=;
-        b=MpLIMTPym3yMSRWcLNZktbOxeUR9X0ajRXACtpFYOuVMMaUl9DgvzaWrvfbJftLrsG
-         XCj8KOCP+X87mbjaU02d7QlPUlg1viVn8XdIE6amPjc20/Yh1JHGKrQHr0WIWQCeY1ZS
-         nusiGhFNpXo3sbjQZZCNUeIK8AOQCyY+01/O1RtjcXXorWpq3v5VwflwrrVQZSWHpraY
-         cy+hRu2+Ax31rqCGN6JMexWIs1HojXHGW3qyzELOjDvqNmCgIHLAZ/0wC+9gHyFZDS6f
-         O66clL2Aps6e+f6JVZR2I/nAW9h7cxTq9c3Fb/FGdl6mKfGwSzyR5dYaT1DIpthenYMJ
-         ZzTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765759530; x=1766364330;
-        h=mime-version:in-reply-to:organization:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VmZTFS0b/i5lSM5BT6gno5ribOwK4ydISKz/x5xn/b8=;
-        b=vge7hDhM0P6o0J0MpwDJYw+hPgRuerfakXFYjzgPDCc39S+bfEA2JfP/Oc7lVB/fDw
-         otHEIbhaGzcJplvTIOuA2OMgfE9NdVrkxwgGi5GTS6Fh/PCi4Tm0HmuDFYQRdOc+k5dW
-         XRtFPqFLZV2VA1qrltIX/WBNslNhOqwRxFwdX28DuowfC9AgidnYr/vCqQHZ3xs3XB18
-         KhhDZ/8mTv+4aNLmQyhZ/icQvtTGNdLRBtQo/5kvekgtfsPHVw3C187RgfpQt/Pnf6CR
-         W3+6eQzSrPMzTzsQrrYEt3l7oIN2cS6aE++wNDTp3ICejlVkKN2UICj5/diul49DEK+T
-         BtWA==
-X-Forwarded-Encrypted: i=1; AJvYcCXrXlE2ilpKgxjSSwjTx2a/Hcz34NeqOcYCHPVz8372uH05Lp2MDAlkcnojiGGiP0280UiffwMt1g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9B8zzrLLVAn5sHr0gH4fHghn9rLqQy5dJPGnLlIoaMzjOg7IZ
-	59MTzFmU8UV482PwB5fqUZ+tSxejsbc1cXez2q2770hMf+gmwZzf2sP/8QxeMNV0yos=
-X-Gm-Gg: AY/fxX5cJYGvt+kug/Z44G4TWOPfHZVDuF43+gC5XfOd5M+gZjslHSrsUThHNUvYnsk
-	eedawzlXkdQgjBXh+tEfJPiWkzg8zmgc90pEn9OK/9l4dzizhruYcfzuQ2QbmxC6Vz37+KYpHF5
-	5xqvYlE+WumYHOlFRgRYKcBlOOd3rzBPgw/5bfoWN3pu6qHrCY/WOEvSzQJVvavMPCehWqeyU42
-	PkT2FNuFSwYoy1WT6N0NnmCEPhHKlJXwur9xX9ZohFOwnJxSd8BupqKWH3DE0KcheByGcAXqrhT
-	tXNGZCbJfvY7yC2Ouy9NQGhOQube636U+gWb96AJe1bW/7hvgXGJQ7KyRfJmvIKucZcCzJI7D+f
-	VyumFl/qbYEwzF5ANb/CSJJLMntlaN6KEVsK/rCxtUPLRhzmHJ3pg/dlm4VP7xzr0q6k6mFQgJY
-	NOaedYuPg=
-X-Google-Smtp-Source: AGHT+IGmZNawdo2RFrnNEzfDccZPy4+2roIVbTcNyhzqspkgpEUzL0qvCZJlEyXQZ5dkHLhZjOxA9w==
-X-Received: by 2002:a05:6830:2701:b0:7c7:6348:5946 with SMTP id 46e09a7af769-7cae82d5406mr5569185a34.5.1765759529884;
-        Sun, 14 Dec 2025 16:45:29 -0800 (PST)
-Received: from kf-m2g5 ([2607:fb90:bf8f:aac:a5bd:66af:ecd2:362b])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7cadb3246b3sm8254060a34.21.2025.12.14.16.45.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Dec 2025 16:45:29 -0800 (PST)
-Date: Sun, 14 Dec 2025 18:45:07 -0600
-From: Aaron Rainbolt <arainbolt@kfocus.org>
-To: srinivas.pandruvada@linux.intel.com
-Cc: arainbolt@kfocus.org, kernel-team@lists.ubuntu.com, lenb@kernel.org,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, mmikowski@kfocus.org,
- rjw@rjwysocki.net
-Subject: Re: [BUG] intel_pstate: CPU frequencies miscalculated/incorrectly
- detected on Arrow Lake hardware
-Message-ID: <20251214184507.21f95134@kf-m2g5>
-Organization: Kubuntu Focus
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
-In-Reply-To: <849e7394b8c7c4b74d1d55648a8d4b55b49aa91a.camel@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D03618C2C;
+	Mon, 15 Dec 2025 01:35:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1765762513; cv=fail; b=T3EeZ6YjAU0ZRiNAlFE2+xWQx1rHJ7ugQvPXvE8PXwQW73/YdZa+uBOmYcYdgASKYkgIQkpbmsJCMSkG4KG78USLHKfwFKkBKkjZH+yuwXfP3HwqPN4LqmyxwuJjDz0RGioPFmqYBHmnhDN3uq0ZDttM1TaaQezhy3PhIG8X1d0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1765762513; c=relaxed/simple;
+	bh=jDnZGcyzoJE2Htz4wVnW4sT7+7+IGCqXaX1jAJ/Nzfk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ZQLncBBCv4qZ2nHllIvtOnzIpZdUIYx6NrBGRYrxClhRL7nHCdosYv9AeYRl5YB0oE6Z1vQrtUoWY5jZSt8MzmejGEtSAOAyJp6y3rfdBHDFz2wyV433BicBO3dICUL+qJNJ1Hij/MS4gRtv6IQWOyHRn8SIjoxYnLh3y4G1hAA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=fail (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=KIbgtD9+ reason="signature verification failed"; arc=fail smtp.client-ip=52.101.70.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uCvBNtDWKUBJx3rpdFC9iKLAA9r7p0dJruEH4oge9xub7UYdXTDEsqg0w55/HkOj/VrmEm4E4JlxEekO3uukhfsGV6P36qT8/gb4Zk31YoZttyr9OIP/NumKYzEyZLvZI9kopUk7m1Zuyk4baBR8F4AOuKAJGbGGo67WAv4WQAHq0KI8M4z/c4SQG0CyixdKtCMvB1Xnua/NXg/2jCmiByDmJdpgYjeir/0aKWBCmpfQC8CY3CooL7SLBJrkOBlLFakJjzx0GamWjO4v9KIzUxwL9kWHlVntcv55k00HD7A4ZaC0w8SICL2QAZf10WK/+eFw7EzXaH2UiGdi4mrqiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LX+WDGc+wpxottILdIbB9Td0KX+jeYljb3auWe4oZ3c=;
+ b=AA/h3w2f5FY1AlqsSdczNADvIop9FgdC9/ctbzEfuAuqFl7gLbSM5rPRF2T/demGeK1JPr1WEB+hvh0tizlXSIeVPreuxU/WW1tR1d3WvrCPBj7zLai/rZshYG37vlFkbtdZz6cJYxgQYwu3O1Yrt5QOQjRdTEE7Qs0vDzNVeJRB2V738lEOoprXqUcm0VZ0iNLOFnA9XQAt1JSkB4/Sjf6QUI5Mh23osY2P8IeFTnZluKaIfT9AEHgfo2V3rArkYjcG4ptyjCV8dagofPSJt/rGP6By5jWiPdnZGvzxFXio5FDGD/D3djBljPtOpaWWo8Y+OG5beLQoPwO6PvfXCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LX+WDGc+wpxottILdIbB9Td0KX+jeYljb3auWe4oZ3c=;
+ b=KIbgtD9+sn0DMuLQZKfZyvImCAK3jwYhHHBByZyaGyQcvj9/iRuHPmA4WlgAYfQCQ7jlEMTt2rdFNQ4tHL+05WhCMBX/vpoSWoDnPxgPUXG6Cfphk2IQlCtSKhrfv4i/hwbdViX1+R3ojlX/YH5JZ3HUsJG+dd10xAzAcj+zdj6KhbwVCAi/XSVqIWq9S4OrOKxj9S77Rxa09smNmH2xbYzAK1GI6LZVr4FtzVStV/2x6cZNR5sO+bXNtz4PNDfxKJ3hm3AS0YoK3J0oAk8rChPPDpRsOuLBdLur/RqB/7KPkt1HNuZK0zf5rHS4DiU15ittKkxQJJ2yJ0iVlcR9ug==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
+ by GV1PR04MB11016.eurprd04.prod.outlook.com (2603:10a6:150:206::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9412.13; Mon, 15 Dec
+ 2025 01:35:07 +0000
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.9412.011; Mon, 15 Dec 2025
+ 01:35:07 +0000
+Date: Mon, 15 Dec 2025 09:36:19 +0800
+From: Peng Fan <peng.fan@oss.nxp.com>
+To: Frank Li <Frank.li@nxp.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>, linux-pm@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH 1/3] thermal/drivers/imx91: Check status before reading
+ data
+Message-ID: <aT9mE63WtVqCxIPC@shlinux89>
+References: <20251212-imx91-thermal-v1-0-c208545b44cb@nxp.com>
+ <20251212-imx91-thermal-v1-1-c208545b44cb@nxp.com>
+ <aTxQHLh0OD89oc/g@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aTxQHLh0OD89oc/g@lizhi-Precision-Tower-5810>
+X-ClientProxiedBy: SG2PR01CA0164.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:28::20) To PAXPR04MB8459.eurprd04.prod.outlook.com
+ (2603:10a6:102:1da::15)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="MP_/U19GPm6YGZI.dbqsi7FYSoh"
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|GV1PR04MB11016:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7d6f5fe2-526c-46a9-ac42-08de3b7a2d86
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|19092799006|7416014|376014|1800799024|52116014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?iso-8859-1?Q?HLHecfef+ip78EdRYfaP53mbAUn36wyKKakxu/5dcCqGo1poOq5z40NJsE?=
+ =?iso-8859-1?Q?GvCrQgXNp1jxyEy5CL1KYKu34Xj7vqgWQDdEyzzqD45GP7/GfhhVZFmdjg?=
+ =?iso-8859-1?Q?ER+FcuZqOV8TYAPxzAlmjg+zWigsHo7EJ8IwFogUW7HFK6gsQ+U7WA7jX4?=
+ =?iso-8859-1?Q?vEC1bn1RJWGqgaLdtQ5VydX5Opt7NBrXTvwbJ3ghyfn4OZX6H7Wu+K6G10?=
+ =?iso-8859-1?Q?u2vfq+uGbChZlvs6IPwElHYNAVpB1U9XcygAW7W7og9EMwR3B94DMIAdpA?=
+ =?iso-8859-1?Q?F9mFVC4aNDjLGNEYYQ24aUcG+jWd7ocJzb7dNX8PCAyK0VxdDwxwRZWc9Z?=
+ =?iso-8859-1?Q?5lRMcxSvL58ZZo9RRqeFuAt07vzq6YZlZNEuiJok/1wadVLH3bMe2TLEXn?=
+ =?iso-8859-1?Q?HVYQDsW7NLIumg+WxGlh0F57mXLNw04DEtGcRvYSwResoTOa4p7ab6GRNL?=
+ =?iso-8859-1?Q?ngb+jiCGa3I7qKsirvANlF9gCw6bnBr5GggYMpmpVEOkKy2WAdNhXDQcw5?=
+ =?iso-8859-1?Q?6PDZyv/3kSmzZMWXxFSbkvF69Qy7VgVMIl7lGEJPW4ggG/bHk+6XScKJ6F?=
+ =?iso-8859-1?Q?KwKArksrC2qo6cLQLZlhsIjLKb4JR37Df9gJoNBGsQ/cp2yqrkIwiGFdev?=
+ =?iso-8859-1?Q?28lkqdsUOlGjosCCTJg/eh6VXCTk8kj8BiVIvuBXTuNLg9sOGuN77K87nn?=
+ =?iso-8859-1?Q?UDTgql3cbIqm5QMVKSvb/kstYCqr91bS8dHEj+abPkYTnN1j63saHzDNiT?=
+ =?iso-8859-1?Q?EGYpu3dmVPW+VJ8DvJmi21oLXpJo9NVkkJ138J7rzPStQC88jUTVkoU5wW?=
+ =?iso-8859-1?Q?X4KYOgOgiwqMsbbO3dFQCkKyqcX6RpPmfal332m1OM8qqf4mijsWjY/NdQ?=
+ =?iso-8859-1?Q?DLZ8hng8HoZWF27EW85kATtffPxIqwkAXRM8pfN2wRFaa9kMx+31YyQ/aU?=
+ =?iso-8859-1?Q?U2sbPwAHBSVYeLoCqgKRsAs6mDLlH9nhXkWajyvRqrixPLtUVA+e0k5XC2?=
+ =?iso-8859-1?Q?PVcOBnXVT5u0hEySh2HJ0FyJVyAyLxJL6Qj5h08sZCBfVTY/NHKz8kh1cp?=
+ =?iso-8859-1?Q?pKwFNdsL9PMCwZMSyrEK1or08RMDVt/oy62p0BFX/OaCP8X1BOKuCaHRUh?=
+ =?iso-8859-1?Q?aoXm1tnxB0zFn1AxThzkoDXzcXwRyxPkgaNSI7uvjt2lClsAOxkgX8NDqd?=
+ =?iso-8859-1?Q?QoC32pcx8Ho3kBkiq27rDIwgLEPnSqjT4d1mcwhaQCUdkqj7Qu7SkQCH3O?=
+ =?iso-8859-1?Q?wzDfCi3zmhOXMrpgTpMZZ1bkZ8SX3OS8S3dnoSOcYw3hu+3tO17o2I8wbH?=
+ =?iso-8859-1?Q?zbotWRovC4jHgwdKhNJtB05JQKpckKILU+3mwHYc9gqoWmZDK7A/4ilH47?=
+ =?iso-8859-1?Q?oKIFX4edD6q/SwiP1+xRuIaARRptVAMKKiHERRhhLhsVtb+MRwmj0+8p8o?=
+ =?iso-8859-1?Q?BVOR5jeUcpMfVYc5VFpxKoZ1oeS/2LaFm95+kfq32gswg+xm3QlYcntSYX?=
+ =?iso-8859-1?Q?uPYMVB2KtKYYr8WxM9wqM/URcgxcaQSNN9dKVWPE4alF4hYh0Xfe41wjyh?=
+ =?iso-8859-1?Q?Qj7/oEItKvKINoUh/ADe8HHYiI2K?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(19092799006)(7416014)(376014)(1800799024)(52116014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?iso-8859-1?Q?fKGSGH/V7/n5peTRPyXvp3FqTmyga79VK/NP780clI5MQle+0wNdQTH51N?=
+ =?iso-8859-1?Q?MzW7XRFISCAmZuaf8LcPxhAnVwUXYJfNzvTS1pW3ZH/tbz90BAYgIXaSpu?=
+ =?iso-8859-1?Q?gC7BpMAF2iyMtmHW+YM5vt37yWDMUFlbaYuOfYivBUAmiPkQoat6flHl+s?=
+ =?iso-8859-1?Q?EhZRAeOQgg45j9KZh+KeSq3ILdZj5BS5ntPXOjt2/FGZgyvmahe+i/OdnS?=
+ =?iso-8859-1?Q?9RNQJTLWm29l652C8DFHduo7xbynbsXFB9d/OBI8G7Gvf3AuR5R6yYoVR+?=
+ =?iso-8859-1?Q?0I2ntDA5A9hr3V+EtBaWfrdmXySd3gRw6aAy8Dq8rWC7xkORTlHHqq5I99?=
+ =?iso-8859-1?Q?hhvGMwec985+6GtImC6lcEeWiBTlI9GiJUXEU0tB6UK+48ShcFl4XVtlW+?=
+ =?iso-8859-1?Q?/J1KSX96sH53CSoDxBsSYSe0PQv2y/Hz3CAz29C6qwf+SaPuIeLfS84KTs?=
+ =?iso-8859-1?Q?71fee/iBdgWbuDiQ65EPYpBqdM183/au/+zs9D8Wl960i9ovGrvZOKnDj5?=
+ =?iso-8859-1?Q?iQyvMUulNiI8YdI6lFghpgpQbHNFptQD74Qmh+p8+79N67thLVjH/+4zZE?=
+ =?iso-8859-1?Q?Q6MMslVE3ZIb2XQb0YcNbNb6tKsBcUFFRY81VjWfSRe3TXrn7RumEv8Lej?=
+ =?iso-8859-1?Q?Y5b7U5xPpabhomKbgZKUaZUhdUjQA3Wf13FQDUA/NMucTGfGqHNtUnC8Yf?=
+ =?iso-8859-1?Q?ByQn2HHIX98P1Xow2RN5NLjkLEIiv3PRGAOXW3p39QfX41POZ2YF0fjx9+?=
+ =?iso-8859-1?Q?jcMYJ+FJFRtJvMEo9CZ8IsdcbFsAsTFYF1jW5XmNy8KwmL1BUj6CrcL2yk?=
+ =?iso-8859-1?Q?mPWJSDieNzRTHAmFDdk29nXYZKUYUaRM8/0QgKdy/R5MBxcOLJI9KqxEKy?=
+ =?iso-8859-1?Q?5wwSvIbQG3GKcU/R1GEKfhzHrhB3Nphqmx8lazsWOhdrScED8nu8NICsb4?=
+ =?iso-8859-1?Q?JJNVcNaEST6JfEKglfc5Gx3yxXZkQrv7DgC/IXxbidbsdVzZlFqylh213g?=
+ =?iso-8859-1?Q?uS7GK751z2/AXKpsFotZc1iXz+jyiQVSvnFl1wMuLzeB+pAX7XeJ5fveeN?=
+ =?iso-8859-1?Q?V5VTnxRUMP8aiSns189c6pRkajeojQ6j4Nbuoa3ZhhNXRySaGf7dM7Pjq9?=
+ =?iso-8859-1?Q?ud28Ki4z/K7MWS7Tn/SnxgViVJLLBpw75fNoXihR1exBY5ecFBulhA/EJc?=
+ =?iso-8859-1?Q?bL+RB6bMHfJcpET+8VxKLS0Gezoslh2Gds5DTgwVGvgE1y993vXwVrF82Q?=
+ =?iso-8859-1?Q?S2Me4gNJtMQJY7G/77ZJvnfuNhvaPQwE5mpPXdfFuiQsBkgCSv9dwCg7bM?=
+ =?iso-8859-1?Q?AskmBxuc83I3IjmpYI9ZSaUHkIllXK8GbdZG/1mDtyZHDNgryFAi9EWgfN?=
+ =?iso-8859-1?Q?5KcRhHcTEs2FdYlZ6fyYv88ZdUSd3X9MUGbGnz/o3kJRYAqcAeezyiSW7o?=
+ =?iso-8859-1?Q?bNDBlE92gBtOjo6GV37N5WqYymxVbbR7yIJ8NxhnLnmHY0fVkYzgh4ybtt?=
+ =?iso-8859-1?Q?Msebbsy9WVdaeAQRThtO9HiWeNkwSVJc7OT7noVY+TUikc7CsK3MxwIQp9?=
+ =?iso-8859-1?Q?Yc5S2yzAsWfiI9v/emTs19L606j8M+zjzbwruya1IUstan7s6UYW8tjLyi?=
+ =?iso-8859-1?Q?bRQv0wS/zTDUTKbd8XJGeJ+AaNLIbQtlCt?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7d6f5fe2-526c-46a9-ac42-08de3b7a2d86
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2025 01:35:07.3882
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: We3SDG9Xh/+vCCILC40ldvN0eu+klZQwkwYRHRJOp/ml+C10W/u5f+aTSjfh3DGIERYsle6mdLquld4qNkXHNw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB11016
 
---MP_/U19GPm6YGZI.dbqsi7FYSoh
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
+On Fri, Dec 12, 2025 at 12:25:48PM -0500, Frank Li wrote:
+>On Fri, Dec 12, 2025 at 03:51:14PM +0800, Peng Fan (OSS) wrote:
+>> From: Peng Fan <peng.fan@nxp.com>
+>>
+>> Per periodic mode from reference mannual:
+>> Write 1b to CTRL1[START]. Wait until STATm[DRDYn] becomes 1.
+>> Read DATAn[DATA_VAL]. It clears the corresponding STATm[DRDYn].
+>> DATAn[DATA_VAL] and STATm[DRDYn_IF] keep refreshing at a periodic interval
+>> of time, corresponding to PERIOD_CTRL[MEAS_FREQ].
+>
+>It should get last time sample value without check DRDYn_IF bit. it should
+>only be a PERIOD_CTRL[MEAS_FREQ] delay.
+>
+>worst case get value at previous's PERIOD_CTRL[MEAS_FREQ] sample.
+>
+>PERIOD_CTRL[MEAS_FREQ] is quite short compare to call get_temp frequency.
+>
+>Do you get invalidate data?
 
-Hi Srinivas:
+No, this is just to align what we tested in LTS tree.
+It should be fine to use last value, so drop this patch.
 
-We do not have the X580WNT-G available at the moment. It was included
-to show the wide sample of devices showing this bug but has left the
-office for now. However, we do have a bench model of the X560WNR-G
-always available, so I have included results for that model instead.
-The issues present are the same. I hope that's ok.
+Thanks,
+Peng
 
-> To check, I need dump of:
-> m=$(getconf _NPROCESSORS_ONLN); for ((i=0; i<m; i++)); do echo CPU$i;
-> sudo rdmsr -p $i 0x771;  sudo rdmsr -p $i 0x774; done
-
-Here are the results of running the above script on the X560WNR-G on
-the mainline kernel 6.18.0-061800-generic installed from
-https://kernel.ubuntu.com/mainline/v6.18. The results are EXACTLY the
-same as the 6.14 kernel:
-
-  CPU0
-  11a203d
-  40003d0d
-  CPU1
-  11a203d
-  40003d0d
-  CPU2
-  11a203f
-  40003f0e
-  CPU3
-  11a203f
-  40003f0e
-  CPU4
-  11a203d
-  40003d0d
-  CPU5
-  11a203d
-  40003d0d
-  CPU6
-  11a203d
-  40003d0d
-  CPU7
-  11a203d
-  40003d0d
-  CPU8
-  10f152e
-  40002e0c
-  CPU9
-  10f152e
-  40002e0c
-  CPU10
-  10f152e
-  40002e0c
-  CPU11
-  10f152e
-  40002e0c
-  CPU12
-  10f152e
-  40002e0c
-  CPU13
-  10f152e
-  40002e0c
-  CPU14
-  10f152e
-  40002e0c
-  CPU15
-  10f152e
-  40002e0c
-  CPU16
-  10f152e
-  40002e0a
-  CPU17
-  10f152e
-  40002e0a
-  CPU18
-  10f152e
-  40002e0c
-  CPU19
-  10f152e
-  40002e0c
-  CPU20
-  10f152e
-  40002e0c
-  CPU21
-  10f152e
-  40002e0c
-  CPU22
-  10f152e
-  40002e0c
-  CPU23
-  10f152e
-  40002e0c
-
-> What command you to report " M-Test  . Id"?
-
-We wrote the attached `check-intel-cpu-freq` script to find this value.
-It scans P- and E-core groups and finds the maximum current frequency
-and what core provided it. That value is read from the sysfs file found
-for each core like so:
-`/sys/devices/system/cpu/cpufreq/policy7/scaling_cur_freq`. This script
-scan each group 200 times, so there are 200 x 8 = 1600 P-core samples
-and 200 x 16 = 3200 E-core samples. The script directs one to use
-Geekbench5 to stress the cores while it is running. Here are the
-results with the mainline 6.18 kernel. The Assesment is identical with
-the results we got with the 6.14 and 6.18-rc7 kernels:
-
-  ## Clevo | X560WNR-G | Ultra 9 275HX | kernel 6.18.0-061800-generic (Mainline)
-
-  Type |Turbo|B-Claim . Id|B-Spec |M-Claim . Id|M-Spec |M-Test  . Id
-  -----|-----|------------|-------|------------|-------|------------
-  P    |off  |2000000 . 07|2700000|2000000 . 07|2700000|2700027 . 01
-  P    |ON   |2000000 . 07|2700000|3900000 . 03|5400000|5400000 . 03
-  E    |off  |2100000 . 17|2100000|2100000 . 17|2100000|2133426 . 11
-  E    |ON   |2100000 . 17|2100000|4600000 . 17|4600000|4694736 . 15
-
-  ## Assessment
-
-  1. The E-cores are all expressed as expected
-  2. The P-cores show base freq claimed (B-Claim) at 2000000, but specified
-     (B-Spec) and measured (M-Test) are 2700000.
-  3. The P-cores show max freq claimed (M-Claim) at 3900000, but specified
-     (M-Spec) and measured (M-Test) are 5400000.
-
-  ## Key
-
-  Column  | Values | Purpose
-  --------|--------|---------
-  Type    | P|E    | The subset of cores this row applied to.
-          |        |   For example, `P` means `all P-cores`.
-  Turbo   | off|ON | The turbo setting of this core subset.
-  B-Claim | int Hz | The max `base_frequency` value of this core subset.
-       Id | int    | The core id that provided the Base-Claim value.
-  B-Spec  | int Hz | Intel SPEC'D BASE freq for this CPU's core Type.
-  M-Claim | int Hz | The max `cpuinfo_max_freq` value of this core subset.
-       Id | int    | The core id that provided the Max-Claim value.
-  M-Spec  | int Hz | Intel SPEC'D MAX freq for this CPU's core Type.
-  M-Test  | int Hz | The max `scaling_cur_freq` value of this core subset.
-          |        |   The entire core subset is sampled 200x.
-       Id | int    | The core id that provided the Max-Test value.
-
-
-> One addition, to show measured freq, use
-> sudo turbostat --show frequency
-
-We couldn't easily run this on the 6.18 mainline kernel because the
-linux-tools package in Ubuntu is not available. However, we ran this
-with the 6.14 kernel, which showed the same P-core frequency issues in
-our testing. When we continued to run and pushed the cores, the Bzy_Mhz
-values approached the theoretical maximums. Let me know if you require
-more than this:
-
-  X560WNR-G $ sudo turbostat --show frequency
-  turbostat version 2025.02.02 - Len Brown <lenb@kernel.org>
-  Kernel command line: BOOT_IMAGE=/@boot/vmlinuz-6.14.0-34-kfocus root=UUID=09e835be-39d5-42fa-8b81-39f5a40f98de ro rootflags=subvol=@ quiet cryptdevice=UUID=2cd8437a-4d06-4050-bf06-247f233d7d76:luks-2cd8437a-4d06-4050-bf06-247f233d7d76 root=/dev/mapper/luks-2cd8437a-4d06-4050-bf06-247f233d7d76 splash modprobe.blacklist=nouveau nouveau.modeset=0 modprobe.blacklist=ucsi_acpi vt.handoff=7
-  CPUID(0): GenuineIntel 0x23 CPUID levels
-  CPUID(1): family:model:stepping 0x6:c6:2 (6:198:2) microcode 0x119
-  CPUID(0x80000000): max_extended_levels: 0x80000008
-  CPUID(1): SSE3 MONITOR SMX EIST TM2 TSC MSR ACPI-TM HT TM
-  CPUID(6): APERF, TURBO, DTS, PTM, HWP, HWPnotify, HWPwindow, HWPepp, HWPpkg, EPB
-  cpu0: MSR_IA32_MISC_ENABLE: 0x00850089 (TCC EIST MWAIT PREFETCH TURBO)
-  CPUID(7): No-SGX Hybrid
-  CPUID(0x15): eax_crystal: 2 ebx_tsc: 160 ecx_crystal_hz: 38400000
-  TSC: 3072 MHz (38400000 Hz * 160 / 2 / 1000000)
-  CPUID(0x16): base_mhz: 3100 max_mhz: 4600 bus_mhz: 100
-  cpu0: MSR_PLATFORM_INFO: 0x804083cf1811f00
-  8 * 100.0 = 800.0 MHz max efficiency frequency
-  31 * 100.0 = 3100.0 MHz base frequency
-  cpu0: MSR_TURBO_RATIO_LIMIT: 0x3434343434343636
-  52 * 100.0 = 5200.0 MHz max turbo 8 active cores
-  52 * 100.0 = 5200.0 MHz max turbo 7 active cores
-  52 * 100.0 = 5200.0 MHz max turbo 6 active cores
-  52 * 100.0 = 5200.0 MHz max turbo 5 active cores
-  52 * 100.0 = 5200.0 MHz max turbo 4 active cores
-  52 * 100.0 = 5200.0 MHz max turbo 3 active cores
-  54 * 100.0 = 5400.0 MHz max turbo 2 active cores
-  54 * 100.0 = 5400.0 MHz max turbo 1 active cores
-  cpu0: MSR_SECONDARY_TURBO_RATIO_LIMIT: 0x2e2e2e2e2e2e2e2e
-  46 * 100.0 = 4600.0 MHz max turbo 8 active cores
-  46 * 100.0 = 4600.0 MHz max turbo 7 active cores
-  46 * 100.0 = 4600.0 MHz max turbo 6 active cores
-  46 * 100.0 = 4600.0 MHz max turbo 5 active cores
-  46 * 100.0 = 4600.0 MHz max turbo 4 active cores
-  46 * 100.0 = 4600.0 MHz max turbo 3 active cores
-  46 * 100.0 = 4600.0 MHz max turbo 2 active cores
-  46 * 100.0 = 4600.0 MHz max turbo 1 active cores
-  cpu0: MSR_CONFIG_TDP_NOMINAL: 0x0000001b (base_ratio=27)
-  cpu0: MSR_CONFIG_TDP_LEVEL_1: 0x00110168 (PKG_MIN_PWR_LVL1=0 PKG_MAX_PWR_LVL1=0 LVL1_RATIO=17 PKG_TDP_LVL1=360)
-  cpu0: MSR_CONFIG_TDP_LEVEL_2: 0x001f0208 (PKG_MIN_PWR_LVL2=0 PKG_MAX_PWR_LVL2=0 LVL2_RATIO=31 PKG_TDP_LVL2=520)
-  cpu0: MSR_CONFIG_TDP_CONTROL: 0x00000000 ( lock=0)
-  cpu0: MSR_TURBO_ACTIVATION_RATIO: 0x0000001a (MAX_NON_TURBO_RATIO=26 lock=0)
-  cpu0: cpufreq driver: intel_pstate
-  cpu0: cpufreq governor: powersave
-  cpufreq intel_pstate no_turbo: 0
-  cpu0: MSR_MISC_PWR_MGMT: 0x000030c2 (ENable-EIST_Coordination ENable-EPB DISable-OOB)
-  cpu0: MSR_PM_ENABLE: 0x00000001 (HWP)
-  cpu0: MSR_HWP_CAPABILITIES: 0x011a203d (high 61 guar 32 eff 26 low 1)
-  cpu0: MSR_HWP_REQUEST: 0x40003d0d (min 13 max 61 des 0 epp 0x40 window 0x0 pkg 0x0)
-  cpu0: MSR_HWP_REQUEST_PKG: 0x8000ff01 (min 1 max 255 des 0 epp 0x80 window 0x0)
-  cpu0: MSR_HWP_INTERRUPT: 0x00000005 (EN_Guaranteed_Perf_Change, Dis_Excursion_Min)
-  cpu0: MSR_HWP_STATUS: 0x00000000 (No-Guaranteed_Perf_Change, No-Excursion_Min)
-  cpu0: EPB: 6 (balanced)
-  cpu0: MSR_IA32_POWER_CTL: 0x00e4005f (C1E auto-promotion: ENabled)
-  cpu0: MSR_PKG_CST_CONFIG_CONTROL: 0x74008008 (UNdemote-C1, demote-C1, locked, pkg-cstate-limit=8 (unlimited))
-  /dev/cpu_dma_latency: 2000000000 usec (default)
-  current_driver: intel_idle
-  current_governor: menu
-  current_governor_ro: menu
-  cpu0: POLL: CPUIDLE CORE POLL IDLE
-  cpu0: C1ACPI: ACPI FFH MWAIT 0x0
-  cpu0: C2ACPI: ACPI FFH MWAIT 0x21
-  cpu0: C3ACPI: ACPI FFH MWAIT 0x60
-  cpu0: MSR_PKGC3_IRTL: 0x00000000 (NOTvalid, 0 ns)
-  cpu0: MSR_PKGC6_IRTL: 0x00000000 (NOTvalid, 0 ns)
-  cpu0: MSR_PKGC8_IRTL: 0x00000000 (NOTvalid, 0 ns)
-  cpu0: MSR_PKGC10_IRTL: 0x00000000 (NOTvalid, 0 ns)
-  Uncore Frequency package0 die0: 800 - 3800 MHz (800 - 3800 MHz) 1800 MHz
-  RAPL: 4766 sec. Joule Counter Range, at 55 Watts
-  cpu0: MSR_RAPL_POWER_UNIT: 0x000a0e03 (0.125000 Watts, 0.000061 Joules, 0.000977 sec.)
-  cpu0: MSR_PKG_POWER_INFO: 0x120000000001b8 (55 W TDP, RAPL 0 - 0 W, 0.017578 sec.)
-  cpu0: MSR_PKG_POWER_LIMIT: 0x438500001f8640 (UNlocked)
-  cpu0: PKG Limit #1: ENabled (200.000 Watts, 32.000000 sec, clamp ENabled)
-  cpu0: PKG Limit #2: ENabled (160.000 Watts, 0.002441* sec, clamp ENabled)
-  cpu0: MSR_VR_CURRENT_CONFIG: 0x00000850
-  cpu0: PKG Limit #4: 266.000000 Watts (UNlocked)
-  cpu0: MSR_DRAM_POWER_LIMIT: 0x00000000 (UNlocked)
-  cpu0: DRAM Limit: DISabled (0.000 Watts, 0.000977 sec, clamp DISabled)
-  cpu0: MSR_PP0_POLICY: 0
-  cpu0: MSR_PP0_POWER_LIMIT: 0x00000000 (UNlocked)
-  cpu0: Cores Limit: DISabled (0.000 Watts, 0.000977 sec, clamp DISabled)
-  cpu0: MSR_PP1_POLICY: 0
-  cpu0: MSR_PP1_POWER_LIMIT: 0x00000000 (UNlocked)
-  cpu0: GFX Limit: DISabled (0.000 Watts, 0.000977 sec, clamp DISabled)
-  cpu0: MSR_IA32_TEMPERATURE_TARGET: 0x0d690000 (92 C) (105 default - 13 offset)
-  cpu0: MSR_IA32_PACKAGE_THERM_STATUS: 0x88320002 (55 C)
-  cpu0: MSR_IA32_PACKAGE_THERM_INTERRUPT: 0x02000003 (105 C, 105 C)
-  cpu0: MSR_MISC_FEATURE_CONTROL: 0x00000000 (L2-Prefetch L2-Prefetch-pair L1-Prefetch L1-IP-Prefetch)
-  Avg_MHz Busy%   Bzy_MHz TSC_MHz GFXMHz  GFXAMHz SAMMHz  SAMAMHz UncMHz
-  3       0.20    1594    3071    550     550     1300    1300    1800
-  2       0.11    1945    3072    550     550     1300    1300    1800
-  10      0.53    1818    3072
-  1       0.06    1380    3072
-  2       0.15    1416    3072
-  1       0.09    1315    3072
-  5       0.33    1410    3072
-  6       0.45    1338    3072
-  2       0.12    1531    3072
-  2       0.15    1471    3072
-  1       0.08    1375    3072
-  4       0.17    2113    3072
-  3       0.16    2085    3072
-  1       0.04    2058    3072
-  5       0.23    2016    3072
-  14      0.98    1410    3072
-  1       0.04    1422    3072
-  1       0.10    1435    3072
-  2       0.11    1471    3072
-  2       0.17    1418    3072
-  6       0.33    1684    3072
-  2       0.13    1465    3072
-  1       0.08    1714    3072
-  0       0.02    2270    3072
-  3       0.13    1969    3072
-
-To keep everything in one place, here is the acpi_cppc report you
-requested earlier also for the X560WNR-G using the 6.18 mainline
-kernel. This is identical again to the 6.14 kernel EXCEPT for the
-`feedback_crts` field, which appears to be dynamic.
-
-  X560WNR-G $ grep . /sys/devices/system/cpu/cpu*/acpi_cppc/*
-  /sys/devices/system/cpu/cpu0/acpi_cppc/feedback_ctrs:ref:85764085462 del:81092364612
-  /sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:32
-  /sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf:61
-  /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf:26
-  /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq:2700
-  /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf:43
-  /sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf:49
-  /sys/devices/system/cpu/cpu0/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu10/acpi_cppc/feedback_ctrs:ref:30648952280 del:32319093196
-  /sys/devices/system/cpu/cpu10/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu10/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu10/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu10/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu10/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu10/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu10/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu10/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu10/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu11/acpi_cppc/feedback_ctrs:ref:24418501228 del:26064639390
-  /sys/devices/system/cpu/cpu11/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu11/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu11/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu11/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu11/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu11/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu11/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu11/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu11/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu12/acpi_cppc/feedback_ctrs:ref:30772876268 del:31630648127
-  /sys/devices/system/cpu/cpu12/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu12/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu12/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu12/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu12/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu12/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu12/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu12/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu12/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu13/acpi_cppc/feedback_ctrs:ref:32208013456 del:33858924907
-  /sys/devices/system/cpu/cpu13/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu13/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu13/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu13/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu13/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu13/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu13/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu13/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu13/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu14/acpi_cppc/feedback_ctrs:ref:34318996648 del:37357638199
-  /sys/devices/system/cpu/cpu14/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu14/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu14/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu14/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu14/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu14/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu14/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu14/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu14/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu15/acpi_cppc/feedback_ctrs:ref:41344894184 del:40523832261
-  /sys/devices/system/cpu/cpu15/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu15/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu15/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu15/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu15/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu15/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu15/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu15/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu15/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu16/acpi_cppc/feedback_ctrs:ref:36965175248 del:37144286195
-  /sys/devices/system/cpu/cpu16/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu16/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu16/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu16/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu16/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu16/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu16/acpi_cppc/nominal_perf:21
-  /sys/devices/system/cpu/cpu16/acpi_cppc/reference_perf:31
-  /sys/devices/system/cpu/cpu16/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu17/acpi_cppc/feedback_ctrs:ref:29796395364 del:30507895794
-  /sys/devices/system/cpu/cpu17/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu17/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu17/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu17/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu17/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu17/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu17/acpi_cppc/nominal_perf:21
-  /sys/devices/system/cpu/cpu17/acpi_cppc/reference_perf:31
-  /sys/devices/system/cpu/cpu17/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu18/acpi_cppc/feedback_ctrs:ref:30008884864 del:31394469575
-  /sys/devices/system/cpu/cpu18/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu18/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu18/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu18/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu18/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu18/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu18/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu18/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu18/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu19/acpi_cppc/feedback_ctrs:ref:33127087692 del:36493571195
-  /sys/devices/system/cpu/cpu19/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu19/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu19/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu19/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu19/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu19/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu19/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu19/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu19/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu1/acpi_cppc/feedback_ctrs:ref:47084742987 del:52088422560
-  /sys/devices/system/cpu/cpu1/acpi_cppc/guaranteed_perf:32
-  /sys/devices/system/cpu/cpu1/acpi_cppc/highest_perf:61
-  /sys/devices/system/cpu/cpu1/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu1/acpi_cppc/lowest_nonlinear_perf:26
-  /sys/devices/system/cpu/cpu1/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu1/acpi_cppc/nominal_freq:2700
-  /sys/devices/system/cpu/cpu1/acpi_cppc/nominal_perf:43
-  /sys/devices/system/cpu/cpu1/acpi_cppc/reference_perf:49
-  /sys/devices/system/cpu/cpu1/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu20/acpi_cppc/feedback_ctrs:ref:35405865204 del:37891455176
-  /sys/devices/system/cpu/cpu20/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu20/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu20/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu20/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu20/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu20/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu20/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu20/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu20/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu21/acpi_cppc/feedback_ctrs:ref:31453151676 del:32354440344
-  /sys/devices/system/cpu/cpu21/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu21/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu21/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu21/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu21/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu21/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu21/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu21/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu21/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu22/acpi_cppc/feedback_ctrs:ref:29395705360 del:30249765611
-  /sys/devices/system/cpu/cpu22/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu22/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu22/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu22/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu22/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu22/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu22/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu22/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu22/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu23/acpi_cppc/feedback_ctrs:ref:34147115164 del:34129428131
-  /sys/devices/system/cpu/cpu23/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu23/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu23/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu23/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu23/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu23/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu23/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu23/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu23/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu2/acpi_cppc/feedback_ctrs:ref:52863482561 del:63458169943
-  /sys/devices/system/cpu/cpu2/acpi_cppc/guaranteed_perf:32
-  /sys/devices/system/cpu/cpu2/acpi_cppc/highest_perf:63
-  /sys/devices/system/cpu/cpu2/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu2/acpi_cppc/lowest_nonlinear_perf:26
-  /sys/devices/system/cpu/cpu2/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu2/acpi_cppc/nominal_freq:2700
-  /sys/devices/system/cpu/cpu2/acpi_cppc/nominal_perf:43
-  /sys/devices/system/cpu/cpu2/acpi_cppc/reference_perf:49
-  /sys/devices/system/cpu/cpu2/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu3/acpi_cppc/feedback_ctrs:ref:53310134126 del:60839001140
-  /sys/devices/system/cpu/cpu3/acpi_cppc/guaranteed_perf:32
-  /sys/devices/system/cpu/cpu3/acpi_cppc/highest_perf:63
-  /sys/devices/system/cpu/cpu3/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu3/acpi_cppc/lowest_nonlinear_perf:26
-  /sys/devices/system/cpu/cpu3/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu3/acpi_cppc/nominal_freq:2700
-  /sys/devices/system/cpu/cpu3/acpi_cppc/nominal_perf:43
-  /sys/devices/system/cpu/cpu3/acpi_cppc/reference_perf:49
-  /sys/devices/system/cpu/cpu3/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu4/acpi_cppc/feedback_ctrs:ref:37661765305 del:39273578265
-  /sys/devices/system/cpu/cpu4/acpi_cppc/guaranteed_perf:32
-  /sys/devices/system/cpu/cpu4/acpi_cppc/highest_perf:61
-  /sys/devices/system/cpu/cpu4/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu4/acpi_cppc/lowest_nonlinear_perf:26
-  /sys/devices/system/cpu/cpu4/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu4/acpi_cppc/nominal_freq:2700
-  /sys/devices/system/cpu/cpu4/acpi_cppc/nominal_perf:43
-  /sys/devices/system/cpu/cpu4/acpi_cppc/reference_perf:49
-  /sys/devices/system/cpu/cpu4/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu5/acpi_cppc/feedback_ctrs:ref:37315012790 del:40229366158
-  /sys/devices/system/cpu/cpu5/acpi_cppc/guaranteed_perf:32
-  /sys/devices/system/cpu/cpu5/acpi_cppc/highest_perf:61
-  /sys/devices/system/cpu/cpu5/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu5/acpi_cppc/lowest_nonlinear_perf:26
-  /sys/devices/system/cpu/cpu5/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu5/acpi_cppc/nominal_freq:2700
-  /sys/devices/system/cpu/cpu5/acpi_cppc/nominal_perf:43
-  /sys/devices/system/cpu/cpu5/acpi_cppc/reference_perf:49
-  /sys/devices/system/cpu/cpu5/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu6/acpi_cppc/feedback_ctrs:ref:31209054793 del:33190454758
-  /sys/devices/system/cpu/cpu6/acpi_cppc/guaranteed_perf:32
-  /sys/devices/system/cpu/cpu6/acpi_cppc/highest_perf:61
-  /sys/devices/system/cpu/cpu6/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu6/acpi_cppc/lowest_nonlinear_perf:26
-  /sys/devices/system/cpu/cpu6/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu6/acpi_cppc/nominal_freq:2700
-  /sys/devices/system/cpu/cpu6/acpi_cppc/nominal_perf:43
-  /sys/devices/system/cpu/cpu6/acpi_cppc/reference_perf:49
-  /sys/devices/system/cpu/cpu6/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu7/acpi_cppc/feedback_ctrs:ref:27945691272 del:28942342249
-  /sys/devices/system/cpu/cpu7/acpi_cppc/guaranteed_perf:32
-  /sys/devices/system/cpu/cpu7/acpi_cppc/highest_perf:61
-  /sys/devices/system/cpu/cpu7/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu7/acpi_cppc/lowest_nonlinear_perf:26
-  /sys/devices/system/cpu/cpu7/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu7/acpi_cppc/nominal_freq:2700
-  /sys/devices/system/cpu/cpu7/acpi_cppc/nominal_perf:43
-  /sys/devices/system/cpu/cpu7/acpi_cppc/reference_perf:49
-  /sys/devices/system/cpu/cpu7/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu8/acpi_cppc/feedback_ctrs:ref:30470288492 del:31360721157
-  /sys/devices/system/cpu/cpu8/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu8/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu8/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu8/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu8/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu8/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu8/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu8/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu8/acpi_cppc/wraparound_time:18446744073709551615
-  /sys/devices/system/cpu/cpu9/acpi_cppc/feedback_ctrs:ref:33008945576 del:35214567794
-  /sys/devices/system/cpu/cpu9/acpi_cppc/guaranteed_perf:21
-  /sys/devices/system/cpu/cpu9/acpi_cppc/highest_perf:46
-  /sys/devices/system/cpu/cpu9/acpi_cppc/lowest_freq:0
-  /sys/devices/system/cpu/cpu9/acpi_cppc/lowest_nonlinear_perf:15
-  /sys/devices/system/cpu/cpu9/acpi_cppc/lowest_perf:1
-  /sys/devices/system/cpu/cpu9/acpi_cppc/nominal_freq:2100
-  /sys/devices/system/cpu/cpu9/acpi_cppc/nominal_perf:29
-  /sys/devices/system/cpu/cpu9/acpi_cppc/reference_perf:43
-  /sys/devices/system/cpu/cpu9/acpi_cppc/wraparound_time:18446744073709551615
-
-Thanks again,
-
---
-Aaron
-
---MP_/U19GPm6YGZI.dbqsi7FYSoh
-Content-Type: application/octet-stream; name=check-intel-cpu-freq
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename=check-intel-cpu-freq
-
-IyEvYmluL2Jhc2gKCl9lY2hvTWF4Q29yZUZyZXFGbiAoKSB7CiAgIyBzaGVsbGNoZWNrIGRpc2Fi
-bGU9U0MyMDM0CiAgZGVjbGFyZSBfYmVnaW5faW50IF9lbmRfaW50IF9tc2cgX2xvb3BfaWR4IF9j
-b3JlX2lkeDsKICBfYmVnaW5faW50PSIkezE6LX0iOwogIF9lbmRfaW50PSIkezI6LX0iOwogIF9t
-c2c9IlNhbXBsaW5nIGZyZXEgb2YgY29yZXMgfCR7X2JlZ2luX2ludH0uLiR7X2VuZF9pbnR9fCAy
-MDAgdGltZXMgLi4uIjsKICAxPiYyIGVjaG8gIiR7X21zZ30iOwoKICBmb3IgKCggX2xvb3BfaWR4
-ID0gMDsgX2xvb3BfaWR4IDwgMjAwOyBfbG9vcF9pZHgrKyApKTsgZG8KICAgIGZvciAoKCBfY29y
-ZV9pZHggPSBfYmVnaW5faW50OyBfY29yZV9pZHggPD0gX2VuZF9pbnQ7IF9jb3JlX2lkeCsrICkp
-OyBkbwogICAgICBfc3RyPSIkKGNhdCAiJHtfZnJlcURpcn0vcG9saWN5JHtfY29yZV9pZHh9L3Nj
-YWxpbmdfY3VyX2ZyZXEiKSI7CiAgICAgIGVjaG8gIiR7X3N0cn0gJHtfY29yZV9pZHh9ICI7CiAg
-ICBkb25lCiAgICBzbGVlcCAwLjA1OwogIGRvbmUgfHNvcnQgLXJuIHxoZWFkIC1uMQp9CgpfbWFp
-bkZuICgpIHsKICBkZWNsYXJlIF9yZXBvcnRfc3RyIF9yZXBvcnRfbGlzdCBfbm90dXJib19pbnQg
-X2RvX3R1cmJvIFwKICAgIF9jb3JlX3R5cGUgX2NvcmVfZGlyIF9yYW5nZV9zdHIgX2JlZ2luX2lu
-dCBfZW5kX2ludCBcCiAgICBfbWF4X2NsYWltX2NvcmUgX21heF9jbGFpbV9mcmVxIF9iYXNlX2Ns
-YWltX2NvcmUgXAogICAgX2Jhc2VfY2xhaW1fZnJlcSBfaWR4IF9zY3JhdGNoX2ludCBfc2NyYXRj
-aF9zdHIgX2JpdF9saXN0IFwKICAgIF9tYXhfc3BlY19mcmVxIF9iYXNlX3NwZWNfZnJlcSBfbWF4
-X3Rlc3RfZnJlcSBfbWF4X3Rlc3RfY29yZTsKCiAgZWNobzsgZWNobyAnPT0gQkVHSU4gPT0nOwog
-IGVjaG8gJ1JlcG9ydCAoUHxFKSAodHVyYm98bm8tdHVyYm8pIChtYXh8YmFzZSkgZnJlcXVlbmNp
-ZXMnCiAgcmVhZCAtcnAgJ1N0YXJ0IEdlZWtiZW5jaCA1IGluIGEgc2VwYXJhdGUgdGVybWluYWwg
-YW5kIHJldHVybiBoZXJlJzsKICBfcmVwb3J0X2xpc3Q9KCk7CgogICMjIEJlZ2luIExvb3AgdGhy
-b3VnaCBQIGFuZCBFIGNvcmUgdHlwZXMKICBmb3IgX2NvcmVfdHlwZSBpbiAnUCcgJ0UnOyBkbwog
-ICAgIyBXZSByZWFkIHRoZSBjb3JlIHR5cGVzIHBlciB0aGlzIHNwZWM6CiAgICAjICAgaHR0cHM6
-Ly9naXRodWIuY29tL3RvcnZhbGRzL2xpbnV4L2Jsb2IvbWFzdGVyLyBcCiAgICAjICAgdG9vbHMv
-cGVyZi9Eb2N1bWVudGF0aW9uL2ludGVsLWh5YnJpZC50eHQKICAgIF9jb3JlX2Rpcj0nY3B1X2F0
-b20nOwogICAgWyAiJHtfY29yZV90eXBlfSIgPSAnUCcgXSAmJiBfY29yZV9kaXI9J2NwdV9jb3Jl
-JzsKICAgIF9yYW5nZV9zdHI9IiQoY2F0ICIke19ldmVudERpcn0vJHtfY29yZV9kaXJ9L2NwdXMi
-KSI7CiAgICBfYmVnaW5faW50PSIkKGN1dCAtZjEgLWQtIDw8PCAiJHtfcmFuZ2Vfc3RyfSIpIjsK
-ICAgIF9lbmRfaW50PSIkKCAgY3V0IC1mMiAtZC0gPDw8ICIke19yYW5nZV9zdHJ9IikiOwoKICAg
-ICMjIEJlZ2luIExvb3AgdGhyb3VnaCB0dXJibyBzdGF0ZXMgKG9uLCBvZmYpCiAgICBmb3IgX25v
-dHVyYm9faW50IGluICcxJyAnMCc7IGRvCiAgICAgIF9kb190dXJibz0neSc7CiAgICAgIFsgIiR7
-X25vdHVyYm9faW50fSIgPSAxIF0gJiYgX2RvX3R1cmJvPSduJzsKICAgICAgZWNobyAiJHtfbm90
-dXJib19pbnR9IiB8IDE+L2Rldi9udWxsIHN1ZG8gdGVlICIke19ub3R1cmJvRmlsZX0iIHx8IHRy
-dWU7CiAgICAgIHNsZWVwIDE7CiAgICAgIGlmICEgZ3JlcCAtcSAiJHtfbm90dXJib19pbnR9IiAi
-JHtfbm90dXJib0ZpbGV9IjsgdGhlbgogICAgICAgIGVjaG8gIkFCT1JUOiBUdXJibyBpcyBub3Qg
-c2V0IGFzIGV4cGVjdGVkIHwke19ub3R1cmJvX2ludH18IjsKICAgICAgICByZXR1cm4gMTsKICAg
-ICAgZmkKCiAgICAgICMgRGV0ZXJtaW5lIGludGVsLXNwZWNpZmllZCBmcmVxdWVuY2llcwogICAg
-ICBlY2hvOwogICAgICBpZiBbICIke19jb3JlX3R5cGV9IiA9ICdQJyBdOyB0aGVuCiAgICAgICAg
-X2Jhc2Vfc3BlY19mcmVxPSIke19zcGVjUENvcmVCYXNlTWF4fSI7CiAgICAgICAgaWYgWyAiJHtf
-ZG9fdHVyYm99IiA9ICd5JyBdOyB0aGVuCiAgICAgICAgICBfbWF4X3NwZWNfZnJlcT0iJHtfc3Bl
-Y1BDb3JlVHVyYm9NYXh9IjsgIyA1NDAwMDAwCiAgICAgICAgZWxzZQogICAgICAgICAgX21heF9z
-cGVjX2ZyZXE9IiR7X3NwZWNQQ29yZUJhc2VNYXh9IjsgIyAyNzAwMDAwCiAgICAgICAgZmkKICAg
-ICAgICBlY2hvICdNYWtlIHN1cmUgR2Vla0JlbmNoIFNJTkdMRSBjb3JlIGlzIHJ1bm5pbmcnOwog
-ICAgICAgIHJlYWQgLXJwICcgIHRoZW4gcHJlc3MgWyBFbnRlciBdJzsKICAgICAgZWxzZQogICAg
-ICAgIF9iYXNlX3NwZWNfZnJlcT0iJHtfc3BlY0VDb3JlQmFzZU1heH0iOwogICAgICAgIGlmIFsg
-IiRfZG9fdHVyYm8iID0gJ3knIF07IHRoZW4KICAgICAgICAgIF9tYXhfc3BlY19mcmVxPSIke19z
-cGVjRUNvcmVUdXJib01heH0iOyAjIDQ2MDAwMDAKICAgICAgICBlbHNlCiAgICAgICAgICBfbWF4
-X3NwZWNfZnJlcT0iJHtfc3BlY0VDb3JlQmFzZU1heH0iOyAjIDIxMDAwMDAKICAgICAgICBmaQog
-ICAgICAgIGVjaG8gJ01ha2Ugc3VyZSBHZWVrQmVuY2ggTVVMVEkgY29yZSBpcyBydW5uaW5nJzsK
-ICAgICAgICByZWFkIC1ycCAnICB0aGVuIHByZXNzIFsgRW50ZXIgXSc7CiAgICAgIGZpCgogICAg
-ICAjIyBCZWdpbiBMb29wIHRocm91Z2ggY29yZXMgdG8gZmluZCBjbGFpbWVkCiAgICAgICMgICBt
-YXggc2NhbGluZyBhbmQgYmFzZSBmcmVxcyBhbmQgY29ycmVzcG9uZGluZyBjb3JlcwogICAgICBf
-bWF4X2NsYWltX2NvcmU9MDsgX21heF9jbGFpbV9mcmVxPTA7IF9iYXNlX2NsYWltX2NvcmU9MDsg
-X2Jhc2VfY2xhaW1fZnJlcT0wOwogICAgICBmb3IgKCggX2lkeCA9IF9iZWdpbl9pbnQ7IF9pZHgg
-PD0gX2VuZF9pbnQ7IF9pZHgrKyApKTsgZG8KICAgICAgICBfc2NyYXRjaF9pbnQ9IiQoY2F0ICIk
-e19mcmVxRGlyfS9wb2xpY3kke19pZHh9L2NwdWluZm9fbWF4X2ZyZXEiKSI7CiAgICAgICAgaWYg
-KCggX3NjcmF0Y2hfaW50ID49IF9tYXhfY2xhaW1fZnJlcSApKTsgdGhlbgogICAgICAgICAgX21h
-eF9jbGFpbV9mcmVxPSIke19zY3JhdGNoX2ludH0iOwogICAgICAgICAgX21heF9jbGFpbV9jb3Jl
-PSIke19pZHh9IjsKICAgICAgICBmaQogICAgICAgIF9zY3JhdGNoX2ludD0iJChjYXQgIiR7X2Zy
-ZXFEaXJ9L3BvbGljeSR7X2lkeH0vYmFzZV9mcmVxdWVuY3kiKSI7CiAgICAgICAgaWYgKCggX3Nj
-cmF0Y2hfaW50ID49IF9iYXNlX2NsYWltX2ZyZXEgKSk7IHRoZW4KICAgICAgICAgIF9iYXNlX2Ns
-YWltX2ZyZXE9IiR7X3NjcmF0Y2hfaW50fSI7CiAgICAgICAgICBfYmFzZV9jbGFpbV9jb3JlPSIk
-e19pZHh9IjsKICAgICAgICBmaQogICAgICBkb25lCiAgICAgICMjIC4gRW5kIExvb3AgdGhyb3Vn
-aCBjb3JlcyB0byBmaW5kCgogICAgICAjIFNldCBleHBlY3RlZCB2YWx1ZXMKICAgICAgZWNobzsg
-ZWNobyAiU2FtcGxlIGZyZXE6IFR5cGUgfCR7X2NvcmVfdHlwZX18IFR1cmJvIHwke19kb190dXJi
-b15efXwiOwogICAgICByZWFkIC1ycCAnICBwcmVzcyBbIEVudGVyIF0gdG8gdGFrZSBmcmVxdWVu
-Y3kgc2FtcGxlcy4uLiAnOwogICAgICBfc2NyYXRjaF9zdHI9IiQoX2VjaG9NYXhDb3JlRnJlcUZu
-ICIke19iZWdpbl9pbnR9IiAiJHtfZW5kX2ludH0iKSI7CiAgICAgIElGUz0nICcgcmVhZCAtcmEg
-X2JpdF9saXN0IDw8PCAiJHtfc2NyYXRjaF9zdHJ9IjsKICAgICAgX21heF90ZXN0X2ZyZXE9IiR7
-X2JpdF9saXN0WzBdfSI7CiAgICAgIF9tYXhfdGVzdF9jb3JlPSIke19iaXRfbGlzdFsxXX0iOwoK
-ICAgICAgIyBSZXBvcnQgdmFsdWVzIGZyb20gc2VhcmNoCiAgICAgIFsgIiR7X2RvX3R1cmJvfSIg
-PSAneScgXSAmJiBfc2NyYXRjaF9zdHI9J09OJyB8fCBfc2NyYXRjaF9zdHI9J29mZic7CiAgICAg
-IF9yZXBvcnRfc3RyPSIkKAogICAgICAgICMgc2hlbGxjaGVjayBkaXNhYmxlPVNDMjA1OQogICAg
-ICAgIHByaW50ZiAiJHtfZm9ybWF0U3RyfSIgIiR7X2NvcmVfdHlwZX0iICIke19zY3JhdGNoX3N0
-cn0iIFwKICAgICAgICAgICIke19iYXNlX2NsYWltX2ZyZXF9IiAiJHtfYmFzZV9jbGFpbV9jb3Jl
-fSIgIiR7X2Jhc2Vfc3BlY19mcmVxfSIgXAogICAgICAgICAgIiR7X21heF9jbGFpbV9mcmVxfSIg
-IiR7X21heF9jbGFpbV9jb3JlfSIgIiR7X21heF9zcGVjX2ZyZXF9IiBcCiAgICAgICAgICAiJHtf
-bWF4X3Rlc3RfZnJlcX0iICAiJHtfbWF4X3Rlc3RfY29yZX0iCiAgICAgICkiOwogICAgICBfcmVw
-b3J0X2xpc3QrPSgiJHtfcmVwb3J0X3N0cn0iKTsKICAgIGRvbmUKICAgICMjIC4gRW5kIExvb3Ag
-dGhyb3VnaCB0dXJibyBzdGF0ZXMgKG9uLCBvZmYpCiAgZG9uZQogICMjIC4gRW5kIExvb3AgdGhy
-b3VnaCBQIGFuZCBFIGNvcmUgdHlwZXMKCiAgZWNobzsgZWNobyAnPT0gUkVQT1JUID09JzsKICBl
-Y2hvICIke19oZWFkZXJTdHJ9IjsKICAoIElGUz0kJ1xuJzsgZWNobyAiJHtfcmVwb3J0X2xpc3Rb
-Kl19IjsgKQoKICBlY2hvOwogIGNhdCA8PCAnRU9GJwojIyBLZXkKCkNvbHVtbiAgfCBWYWx1ZXMg
-fCBQdXJwb3NlCi0tLS0tLS0tfC0tLS0tLS0tfC0tLS0tLS0tLQpUeXBlICAgIHwgUHxFICAgIHwg
-VGhlIHN1YnNldCBvZiBjb3JlcyB0aGlzIHJvdyBhcHBsaWVkIHRvLgogICAgICAgIHwgICAgICAg
-IHwgICBGb3IgZXhhbXBsZSwgYFBgIG1lYW5zIGBhbGwgUC1jb3Jlc2AuClR1cmJvICAgfCBvZmZ8
-T04gfCBUaGUgdHVyYm8gc2V0dGluZyBvZiB0aGlzIGNvcmUgc3Vic2V0LgpCLUNsYWltIHwgaW50
-IEh6IHwgVGhlIG1heCBgYmFzZV9mcmVxdWVuY3lgIHZhbHVlIG9mIHRoaXMgY29yZSBzdWJzZXQu
-CiAgICAgSWQgfCBpbnQgICAgfCBUaGUgY29yZSBpZCB0aGF0IHByb3ZpZGVkIHRoZSBCYXNlLUNs
-YWltIHZhbHVlLgpCLVNwZWMgIHwgaW50IEh6IHwgSW50ZWwgU1BFQydEIEJBU0UgZnJlcSBmb3Ig
-dGhpcyBDUFUncyBjb3JlIFR5cGUuCk0tQ2xhaW0gfCBpbnQgSHogfCBUaGUgbWF4IGBjcHVpbmZv
-X21heF9mcmVxYCB2YWx1ZSBvZiB0aGlzIGNvcmUgc3Vic2V0LgogICAgIElkIHwgaW50ICAgIHwg
-VGhlIGNvcmUgaWQgdGhhdCBwcm92aWRlZCB0aGUgTWF4LUNsYWltIHZhbHVlLgpNLVNwZWMgIHwg
-aW50IEh6IHwgSW50ZWwgU1BFQydEIE1BWCBmcmVxIGZvciB0aGlzIENQVSdzIGNvcmUgVHlwZS4K
-TS1UZXN0ICB8IGludCBIeiB8IFRoZSBtYXggYHNjYWxpbmdfY3VyX2ZyZXFgIHZhbHVlIG9mIHRo
-aXMgY29yZSBzdWJzZXQuCiAgICAgICAgfCAgICAgICAgfCAgIFRoZSBlbnRpcmUgY29yZSBzdWJz
-ZXQgaXMgc2FtcGxlZCAyMDB4LgogICAgIElkIHwgaW50ICAgIHwgVGhlIGNvcmUgaWQgdGhhdCBw
-cm92aWRlZCB0aGUgTWF4LVRlc3QgdmFsdWUuCgpFT0YKICBlY2hvICc9PSBFTkQgICA9PSc7IGVj
-aG87Cn0KCmRlY2xhcmUgX2V2ZW50RGlyIF9jcHVEaXIgX2ZyZXFEaXIgX25vdHVyYm9GaWxlIFwK
-ICBfaGVhZGVyU3RyIF9mb3JtYXRTdHIgX2NwdUlkIF9zcGVjUENvcmVUdXJib01heCBfYml0TGlz
-dCBcCiAgX3NwZWNFQ29yZVR1cmJvTWF4IF9zcGVjUENvcmVCYXNlTWF4IF9zcGVjRUNvcmVCYXNl
-TWF4OwpkZWNsYXJlIC1BIF9zcGVjTWF0cml4OwoKIyBHZXQgc3BlY3MgZm9yIENQVXMgZnJvbSBh
-IHBhZ2UgbGlrZSB0aGlzIGZvciB0aGUgJ1VsdHJhIDkgMjc1SFgnOgojICAgaHR0cHM6Ly93d3cu
-aW50ZWwuY29tL2NvbnRlbnQvd3d3L3VzL2VuL3Byb2R1Y3RzL3NrdS8yNDIyOTMvaW50ZWwtY29y
-ZQojICAgLXVsdHJhLTktcHJvY2Vzc29yLTI3NWh4LTM2bS1jYWNoZS11cC10by01LTQwLWdoei9z
-cGVjaWZpY2F0aW9ucy5odG1sCl9zcGVjTWF0cml4PSgKICAjIENQVSBOYW1lO1AtdHVyYm8tbWF4
-O0UtdHVyYm8tbWF4O1AtYmFzZTtFLWJhc2UKICBbJ0ludGVsIENvcmUgVWx0cmEgOSAyNzVIWCdd
-PSc1NDAwMDAwOzQ2MDAwMDA7MjcwMDAwMDsyMTAwMDAwJwogIFsnSW50ZWwgQ29yZSBVbHRyYSA3
-IDI1NUgnXT0nNTEwMDAwMDs0NDAwMDAwOzIwMDAwMDA7MTUwMDAwMCcKICBbJ0ludGVsIENvcmUg
-VWx0cmEgNSAyMjVIJ109JzQ5MDAwMDA7NDMwMDAwMDsxNzAwMDAwOzEzMDAwMDAnCiAgWydJbnRl
-bCBDb3JlIGk5LTE0OTAwSFgnXT0nNTgwMDAwMDs0MTAwMDAwOzIyMDAwMDA7MTYwMDAwMCcKKTsK
-X2NwdUlkPSIkKAogIGxzY3B1IFwKICAgIHwgZ3JlcCAnTW9kZWwgbmFtZTonIFwKICAgIHwgZ3Jl
-cCAtdiAnQklPUyBNb2RlbCBuYW1lOicgXAogICAgfCBhd2sgLUYnOicgJ3sgcHJpbnQgJDIgfScg
-XAogICAgfCBzZWQgJ3MvXiAqLy87IHMvKFwoUlx8VE1cKSkvL2cnCikiOwpfc3BlY0xpbmU9IiR7
-X3NwZWNNYXRyaXhbIiR7X2NwdUlkfSJdfSI7CmlmIFsgLXogIiR7X3NwZWNMaW5lOi19IiBdOyB0
-aGVuCiAgZWNobyAiQUJPUlQ6IENhbm5vdCBmaW5kIHByb2Nlc3NvciB8JHtfY3B1SWR9fCBzcGVj
-cyEiOwogIGVjaG8gIiAgUGxlYXNlIGdldCB0aGUgc3BlY3MgZnJvbSBJbnRlbCBhbmQgYWRkIHRv
-IHRoZSBfc3BlY01hdHJpeC4iCiAgZXhpdCAxOwpmaQpJRlM9JzsnIHJlYWQgLXJhIF9iaXRMaXN0
-IDw8PCAiJHtfc3BlY0xpbmV9IjsKX3NwZWNQQ29yZVR1cmJvTWF4PSIke19iaXRMaXN0WzBdfSI7
-Cl9zcGVjRUNvcmVUdXJib01heD0iJHtfYml0TGlzdFsxXX0iOwpfc3BlY1BDb3JlQmFzZU1heD0i
-JHtfYml0TGlzdFsyXX0iOwpfc3BlY0VDb3JlQmFzZU1heD0iJHtfYml0TGlzdFszXX0iOwoKX2V2
-ZW50RGlyPScvc3lzL2J1cy9ldmVudF9zb3VyY2UvZGV2aWNlcyc7Cl9jcHVEaXI9Jy9zeXMvZGV2
-aWNlcy9zeXN0ZW0vY3B1JzsKX2ZyZXFEaXI9IiR7X2NwdURpcn0vY3B1ZnJlcSI7Cl9ub3R1cmJv
-RmlsZT0iJHtfY3B1RGlyfS9pbnRlbF9wc3RhdGUvbm9fdHVyYm8iOwpfaGVhZGVyU3RyPSIkKGNh
-dCA8PCBFT0YKQ1BVOiAke19jcHVJZH0KVHlwZSB8IFR1cmJvIHwgQi1DbGFpbSAuIElkIHwgQi1T
-cGVjICB8IE0tQ2xhaW0gLiBJZCB8IE0tU3BlYyAgfCBNLVRlc3QgIC4gSWQKLS0tLS18IC0tLS0t
-IHwgLS0tLS0tLS0tLS0tIHwgLS0tLS0tLSB8IC0tLS0tLS0tLS0tLSB8LS0tLS0tLS0gfCAtLS0t
-LS0tLS0tLS0KRU9GCikiOwpfZm9ybWF0U3RyPSIkKGNhdCA8PCdFT0YnCiUtNHMgfCAlLTVzIHwg
-JTA2ZCAuICUwMmQgfCAlMDZkIHwgJTA2ZCAuICUwMmQgfCAlMDZkIHwgJTA2ZCAuICUwMmQKRU9G
-CikiOwoKX21haW5GbjsK
-
---MP_/U19GPm6YGZI.dbqsi7FYSoh--
+>
+>>
+>> Need to check STAT[DRDY] before reading the DATA register.
+>>
+>> And check the returned temperature to make sure it fits into the supported
+>> range (-40°C to +125°C).
+>
+>https://lore.kernel.org/imx/aAIkAF_AHta8_vuS@mai.linaro.org/
+>
+>Do you answer Daniel Lezcano's question
+>  ""When the measured temperature can be out of limits ?"  at v6 resend
+>patch.
+>
+>Frank
+>>
+>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>> ---
+>>  drivers/thermal/imx91_thermal.c | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/drivers/thermal/imx91_thermal.c b/drivers/thermal/imx91_thermal.c
+>> index 9b20be03d6dec18553967548d0ca31d1c1fb387c..77e8e6a921c6af308b830c36721293c007256ca6 100644
+>> --- a/drivers/thermal/imx91_thermal.c
+>> +++ b/drivers/thermal/imx91_thermal.c
+>> @@ -108,10 +108,20 @@ static int imx91_tmu_get_temp(struct thermal_zone_device *tz, int *temp)
+>>  {
+>>  	struct imx91_tmu *tmu = thermal_zone_device_priv(tz);
+>>  	s16 data;
+>> +	int ret;
+>> +	u32 val;
+>> +
+>> +	ret = readl_relaxed_poll_timeout(tmu->base + IMX91_TMU_STAT0, val,
+>> +					 val & IMX91_TMU_STAT0_DRDY0_IF_MASK, 1000,
+>> +					 40000);
+>> +	if (ret)
+>> +		return -EAGAIN;
+>>
+>>  	/* DATA0 is 16bit signed number */
+>>  	data = readw_relaxed(tmu->base + IMX91_TMU_DATA0);
+>>  	*temp = imx91_tmu_to_mcelsius(data);
+>> +	if (*temp < IMX91_TMU_TEMP_LOW_LIMIT || *temp > IMX91_TMU_TEMP_HIGH_LIMIT)
+>> +		return -EAGAIN;
+>>
+>>  	return 0;
+>>  }
+>>
+>> --
+>> 2.37.1
+>>
 
