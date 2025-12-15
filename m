@@ -1,178 +1,132 @@
-Return-Path: <linux-pm+bounces-39543-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39544-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6248CBD78F
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 12:15:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0441ACBD792
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 12:15:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 24F1D3047930
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 11:12:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D0B00300941E
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 11:12:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E10433030C;
-	Mon, 15 Dec 2025 11:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036E532FA16;
+	Mon, 15 Dec 2025 11:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gH/8abIb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="caSLTLM8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EDB7330309
-	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 11:12:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4178C42AB7
+	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 11:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765797134; cv=none; b=kAa0JuxrPoFFQpG6Gmy4l8qJXn69tgaeLzRfdgAaF/eQoyQJYyCUf2xo6bjAVxa3NCG5WKWYAsaGf8M6quvgTEUADl941iJYrp/KVkKjIKdoAEx5eaJksmAexMCSJXpvo/I1ewzChLfSywoZkv4YtnhuusMbVM/gRPCNqbA7Bxc=
+	t=1765797170; cv=none; b=lhCysToTPuN6YCha4RH1eEuRq7bVRVw1wl7LqZH7dljlz+u+R1I3WAxS/IE3IrESJz7al0wdogY5sDISbCUXsYgPoizb3M6pohgwChBxjNspQXnjZLXMkWVZpomaKqd3rapUcUIaWWEqJfYIz5ykUER7U4pZJ07+it8Y/2U8Bzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765797134; c=relaxed/simple;
-	bh=PfyeLEgI6Wzc6o2hbREqBJyP/hoLKlVKC4Tey8dRMWo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oE8Mj56YW3JDSdkYhQRtzD2UbV3rdarO+f9Mg3+pWLCWRrXQFOzd4Fuo7XiJcLwBvH/fYTNCg1VhxBTa7mcN+fx7vkU+9zXQhPBsEPyiCoybCviDD/5O0xVCpV2sK107e3/ElesJAxFabgLMV2R+XscSncgrs3KORfq5AUwjj0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gH/8abIb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C108EC4CEFB
-	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 11:12:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765797131;
-	bh=PfyeLEgI6Wzc6o2hbREqBJyP/hoLKlVKC4Tey8dRMWo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=gH/8abIb888eXzKc5+UnrJtBkuQQoc8dLfX2sIn2OD97GS+zNSaYwt37kfrP3Es5X
-	 zdpIm/Rp8bCQFeCbFy/AROWZCL251Ty0lW7c0tZB+KwVj+4Wo7Y+ZpopMOPUggm6q8
-	 NRZ9DaHA5ByJAXP6/dQf33lHznLM8qFCAfJ9iCbm+JGqdjJc4V1psB9cNEZPH1E0hO
-	 jbHYUWGzWv9/qeoXd8kiBYwOlI/pHH3aX+j6IMJuq4gVa5XeOWSlz3E3XTx4JiXeRl
-	 w01K5aoAZSY0XytIYQdd/Np2jPCXr3M6Fz8a0M8UWq/ybV/CU+vxUKKVabwCXaYVh1
-	 C2WMsbeIhwKBw==
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6597cf49101so1947705eaf.2
-        for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 03:12:11 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV+Ng3FSF0gJ1WvOb9fefSQUN+En8cB6RveeixnS1At0Mtdnvd0sbMaZJYOpj5QdTtvwXnpkv+iLA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLc4jIbK4XevGA9VFlG/TVpVOxodw0w2+CLEoBoSoml3y5WWmG
-	7BT2XgSamCN2Jpc6mBY5o350oDEhFcUOVTlkE/k18oQIcpW/neEPVJDb5U9Q4mHJWEdotOAsUEt
-	4+FyWOgcCmagj6Kd+lBjjrOoxv9wuNQw=
-X-Google-Smtp-Source: AGHT+IGZT1oNvB00Vs0bo+1zSzNBqfaw6T6Q5aS4m9jK/Kze3wHdZKUoJCgVLJBOELGz/mfBFrHcJOmixXKZ8YRAhzQ=
-X-Received: by 2002:a05:6820:1623:b0:659:9a49:8ea8 with SMTP id
- 006d021491bc7-65b4523bfd8mr5105858eaf.44.1765797130168; Mon, 15 Dec 2025
- 03:12:10 -0800 (PST)
+	s=arc-20240116; t=1765797170; c=relaxed/simple;
+	bh=MJVk8MuO79pEG/+6Ze4gkydvIydSGQTCyLAgE9BvPY8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=N+RHiF29c3AfcWE7oxbCplATby5HOxdoOwdB6b1QtgG9WtDnBqviTXvzZx/2fWix4a2qjZli9Grw/S4sqv8mHzuZVw1Z5Lut9+/TSzjFGxAgagqc3Brualt8ZPgJrTKhtSdfouHUb40MKcCgdhP6oZXIVEEa4mA6IkQQBheOfaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=caSLTLM8; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5945510fd7aso2860760e87.0
+        for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 03:12:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1765797166; x=1766401966; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6b7rNdshD8IyVVxO6s1MwSq7awp4iLV0wHXJDYiizR4=;
+        b=caSLTLM8oBmK/c0W4ZsQZKYiLlt4I+S1btTov2jLtuXJD5wNOE/6O5o9byeRA+n3p9
+         vaJK9vkfh87uqGw/DAp+OWuMxpRu77nFaza4r6ccFpM52nxgXp3P2Hin50uMooHWhrRw
+         97Vo/F/hvPwLhucqobJ2CmPNS8zPd8H1oM4dlvq8B5huDg8E6Fe/h93gpZFRA8Wkp7Gx
+         BU3XrCxpz9sed3IF1afFUVEDZcjZ9ffw9JwXfMj3RStiIG5Ln3XUSHHd4p/PPqUm3NQj
+         6pwWz44V2B2U8jU0sgd6pkdJ0/ruLcBBi0hAgi3CU2A4wf7NdsmgjI2y1W8uX7uWk7bf
+         vBRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765797166; x=1766401966;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6b7rNdshD8IyVVxO6s1MwSq7awp4iLV0wHXJDYiizR4=;
+        b=GRa7B5TuZc8lbsXru47RHP+4c+Hz4+4j1o1AQH4Z/ahZCrvn0SFygyJ8c1GG8zKyG/
+         TkTGlmO54ykudohS/hNgD9s1pbehZm6TJb3uhuo99/Ux60RFGwnxyfwxR1R1BVAz88Lq
+         /SG4PA8EE0UpMvLyg0s23DQtu+fvyhJzJ8pUMEvDbwEYUUdp8dn0XnMJav4weT0MrST+
+         LxzYtUAhgRgw6UCmiLkg2Zt7G72OAne4ZyaLU7fxCK83uQne3w5UIWMG/HQ+Xbao8VuT
+         TWfJ9lmbbTsIovYzI6z4iB3ok3JH+VIvVfHk1vCfN5wdtOkm+kj3Rzh4KzNw0sYaWxal
+         jtvw==
+X-Gm-Message-State: AOJu0YydDGwP9P5DAzjqPacGBiER+jCtZfHja6BMIKWUmZrpdlDEuf0u
+	nHDuRvP22MbkPsAepp+5Wj4Wa/FQsFj+N6fFQY7q6PyNei43FPEhzH5Vg9sXTQbFtKA=
+X-Gm-Gg: AY/fxX5YRkf1ujYIEOO7rH9IzAhOf4DYI6ryMQggD+OIoMHHnknoTphuamNpRA+2R2O
+	6rDQWJPfVaXDjf49Cqq28lU9u4cleapZuONqeNGTWqKV3x7pREqhyrvwf+TItaFEa5IwdlZZ3PS
+	DYcO10O0ZlS6neY7yioon316EsMrMcd69qY8TBio6VuaJa3Zdz98lrLeuI7ZUnpNRGp1DwKO8IN
+	bEneV+sIAi7gA2v25ishIQuMuiTAoNd6ul2W9Y7zuqoxfe5iXRuyVssF0uu/VxOWkzITr+PpN9M
+	ICxtmdWlAQNpnacU2Fyhid4duJ0+PK5c7yKOKyyQk857anX1sDCRf5tJbF2g0P1zLfS+Ca+zM3y
+	rBI+EHNoGXDu2oHNm4sCiI5JOZOR+fDoNS9ht0tyo9gNgOzA1STJ49swvP1Ts2O/GHUgnR8rQAk
+	A6Sl1uRhzEqVD9sNOLBIsSRMoce8JDtAs745cv4RlsED3s9tueuHvqDWdjRZisHMzAtNsl5Pfid
+	pd+Ua0=
+X-Google-Smtp-Source: AGHT+IFEBCTqUQhNgiAM8fyydQA6hn6G6U3+Pcj848Us+ssjkPExMfUus639cN0KkP2wimgketg3tw==
+X-Received: by 2002:a05:6512:230d:b0:595:7cb8:3eae with SMTP id 2adb3069b0e04-598faa4ad30mr3470884e87.20.1765797166050;
+        Mon, 15 Dec 2025 03:12:46 -0800 (PST)
+Received: from abityuts-desk (2001-14bb-ab-c176-62a0-4b37-648c-102.rev.dnainternet.fi. [2001:14bb:ab:c176:62a0:4b37:648c:102])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-598f2f379f5sm5417194e87.11.2025.12.15.03.12.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Dec 2025 03:12:45 -0800 (PST)
+From: Artem Bityutskiy <dedekind1@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM Mailing List <linux-pm@vger.kernel.org>
+Subject: [PATCH resend 1] intel_idle: Remove unused driver version constant
+Date: Mon, 15 Dec 2025 13:12:29 +0200
+Message-ID: <20251215111229.132705-1-dedekind1@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215044919.460086-1-ankur.a.arora@oracle.com> <20251215044919.460086-13-ankur.a.arora@oracle.com>
-In-Reply-To: <20251215044919.460086-13-ankur.a.arora@oracle.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 15 Dec 2025 12:11:59 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0imk5kdqunNGvK+6_BPh2_k89RPPC8B4MDDF1GLZrUhLQ@mail.gmail.com>
-X-Gm-Features: AQt7F2rG4xuAbbsQmykYUcenlgwWyBYqZnb2M67LAaRf0_2PJQ6JaqpYbcxHgdI
-Message-ID: <CAJZ5v0imk5kdqunNGvK+6_BPh2_k89RPPC8B4MDDF1GLZrUhLQ@mail.gmail.com>
-Subject: Re: [PATCH v8 12/12] cpuidle/poll_state: Wait for need-resched via tif_need_resched_relaxed_wait()
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
-	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org, 
-	peterz@infradead.org, akpm@linux-foundation.org, mark.rutland@arm.com, 
-	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org, 
-	daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com, 
-	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com, 
-	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 15, 2025 at 5:55=E2=80=AFAM Ankur Arora <ankur.a.arora@oracle.c=
-om> wrote:
->
-> The inner loop in poll_idle() polls over the thread_info flags,
-> waiting to see if the thread has TIF_NEED_RESCHED set. The loop
-> exits once the condition is met, or if the poll time limit has
-> been exceeded.
->
-> To minimize the number of instructions executed in each iteration,
-> the time check is rate-limited. In addition, each loop iteration
-> executes cpu_relax() which on certain platforms provides a hint to
-> the pipeline that the loop busy-waits, allowing the processor to
-> reduce power consumption.
->
-> Switch over to tif_need_resched_relaxed_wait() instead, since that
-> provides exactly that.
->
-> However, given that when running in idle we want to minimize our power
-> consumption, continue to depend on CONFIG_ARCH_HAS_CPU_RELAX as that
-> serves as an indicator that the platform supports an optimized version
-> of tif_need_resched_relaxed_wait() (via
-> smp_cond_load_acquire_timeout()).
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> Suggested-by: "Rafael J. Wysocki" <rafael@kernel.org>
-> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
-> ---
->
-> Notes:
->   - use tif_need_resched_relaxed_wait() instead of
->     smp_cond_load_relaxed_timeout()
->
->  drivers/cpuidle/poll_state.c | 27 +++++----------------------
->  1 file changed, 5 insertions(+), 22 deletions(-)
->
-> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
-> index c7524e4c522a..20136b3a08c2 100644
-> --- a/drivers/cpuidle/poll_state.c
-> +++ b/drivers/cpuidle/poll_state.c
-> @@ -6,41 +6,24 @@
->  #include <linux/cpuidle.h>
->  #include <linux/export.h>
->  #include <linux/irqflags.h>
-> -#include <linux/sched.h>
-> -#include <linux/sched/clock.h>
->  #include <linux/sched/idle.h>
->  #include <linux/sprintf.h>
->  #include <linux/types.h>
->
-> -#define POLL_IDLE_RELAX_COUNT  200
-> -
->  static int __cpuidle poll_idle(struct cpuidle_device *dev,
->                                struct cpuidle_driver *drv, int index)
->  {
-> -       u64 time_start;
-> -
-> -       time_start =3D local_clock_noinstr();
-> -
->         dev->poll_time_limit =3D false;
->
->         raw_local_irq_enable();
->         if (!current_set_polling_and_test()) {
-> -               unsigned int loop_count =3D 0;
-> -               u64 limit;
-> +               s64 limit;
-> +               bool nr_set;
+From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-It doesn't look like the nr_set variable is really needed.
+The INTEL_IDLE_VERSION constant has not been updated since 2020 and serves
+no useful purpose. The driver version is implicitly defined by the kernel
+version, making this constant redundant.
 
->
-> -               limit =3D cpuidle_poll_time(drv, dev);
-> +               limit =3D (s64)cpuidle_poll_time(drv, dev);
+Remove the constant to eliminate potential confusion about version
+tracking.
 
-Is the explicit cast needed to suppress a warning?  If not, I'd drop it.
+Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+---
+ drivers/idle/intel_idle.c | 5 -----
+ 1 file changed, 5 deletions(-)
 
->
-> -               while (!need_resched()) {
-> -                       cpu_relax();
-> -                       if (loop_count++ < POLL_IDLE_RELAX_COUNT)
-> -                               continue;
-> -
-> -                       loop_count =3D 0;
-> -                       if (local_clock_noinstr() - time_start > limit) {
-> -                               dev->poll_time_limit =3D true;
-> -                               break;
-> -                       }
-> -               }
-> +               nr_set =3D tif_need_resched_relaxed_wait(limit);
-> +               dev->poll_time_limit =3D !nr_set;
+Re-sending, for some reason the first submission did not arrive to the linux-pm
+mailing list, I cannot find it in the archives.
 
-This can be
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 9ba83954c2555..aa44b3c2cb2c4 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -63,8 +63,6 @@
+ #include <asm/fpu/api.h>
+ #include <asm/smp.h>
+ 
+-#define INTEL_IDLE_VERSION "0.5.1"
+-
+ static struct cpuidle_driver intel_idle_driver = {
+ 	.name = "intel_idle",
+ 	.owner = THIS_MODULE,
+@@ -2478,9 +2476,6 @@ static int __init intel_idle_init(void)
+ 		return -ENODEV;
+ 	}
+ 
+-	pr_debug("v" INTEL_IDLE_VERSION " model 0x%X\n",
+-		 boot_cpu_data.x86_model);
+-
+ 	intel_idle_cpuidle_devices = alloc_percpu(struct cpuidle_device);
+ 	if (!intel_idle_cpuidle_devices)
+ 		return -ENOMEM;
+-- 
+2.52.0
 
-dev->poll_time_limit =3D !tif_need_resched_relaxed_wait(limit);
-
->         }
->         raw_local_irq_disable();
->
-> --
 
