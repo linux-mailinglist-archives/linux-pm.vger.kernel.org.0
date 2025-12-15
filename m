@@ -1,43 +1,43 @@
-Return-Path: <linux-pm+bounces-39572-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39573-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 227EFCBE07C
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 14:22:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A116CBE0EB
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 14:27:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 999E7301D631
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 13:21:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EE2EC3025333
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 13:21:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8580B31BCAF;
-	Mon, 15 Dec 2025 13:21:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EBDE330B37;
+	Mon, 15 Dec 2025 13:21:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LH8JqM5G"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BsgRnjVc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B4732D43B;
-	Mon, 15 Dec 2025 13:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D649330B0E
+	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 13:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765804880; cv=none; b=oJrs80xecBP5EyS8T752KQULHgs3PBbpQhKAczoJwGugqilmHodBkxb39f6TPBwPxLEFqMDwvcV6H5Yuu+SDytpdFvrmTXW3FO+8vYi06cKiKvqZ1RyF5wNjM0eYQZJIxAgmEPRTs3XYfvdsmCjw1km5e0bi8gidVDIPiD4HRTU=
+	t=1765804895; cv=none; b=tFsM1Fok1h9VAawuNTqc1LZEdcHL7t0jbubGWd9RQdgJuQo//WcOFbP/P1co5Op+gNXsn962GzhimOy/fvQ7bVM5C5hbddW1X4jrCCGCEIB119lyALY4dtseAHer/PGHns1aZ7RpjETxj5vPhVOqtF5721EaSBLFHldwzFyjWF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765804880; c=relaxed/simple;
-	bh=Jw+CX3PHdG2rHH3xrE0jpWheNpQR9tkuVjIZOkOxeqE=;
+	s=arc-20240116; t=1765804895; c=relaxed/simple;
+	bh=Pz3gQ4UaGQ2hkxiVzTs8Lj6RCQFiOP/CbVE6TNAzfkg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CPtGjbWToNGIdXqykU97LbspOkDsnyV9fIfS1yPcSuKVrKF0OIIv3OMtKc2FePv5MHNyNsx4wHDYgPkETfGPQwom5oGLFnwsihtbkwMj4GI/FzueT/i/oRLOxKSl7hwOpTl6hRrUtOotvcA3rIQbScXalgrAY9oGIQkokigdLmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LH8JqM5G; arc=none smtp.client-ip=95.215.58.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=nY3IATiBpAtI6W67BAcj9cA1pLMdb6HnxuM+4m2np11FkW7Zg03UIXklxbDzkw5xymeIC4XD1JcY0ujpGxucOEaqoV3tmoV6SYYo3Zph+7PBw16cKSKXRCLf8xBse0/jhXmEGGQmcSjfzidQgC0U8JbVafO6AoPMNAH20nfsRGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BsgRnjVc; arc=none smtp.client-ip=91.218.175.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Mon, 15 Dec 2025 15:21:03 +0200
+Date: Mon, 15 Dec 2025 15:21:19 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1765804872; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	t=1765804886; h=from:from:reply-to:reply-to:subject:subject:date:date:
 	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
 	 content-type:content-type:in-reply-to:in-reply-to:  references:references;
-	bh=aIDX8dlrQfZYDV9HKQkvFvrDlGxMhp6dMUe5xU4EmoA=;
-	b=LH8JqM5GKm+62fg3Y9/5ch2nGoFMzwpXp615ZbEYkM5Z1S58/BzvBFWvgLrM+mRURC65Um
-	5kJ2Ehs2DvchUvmV+BKlJ/DWHQYVuGkC3ykYRXVKFN94gLice1KM1FrtYh+F0dHuqm8dBN
-	HwCwvTcj0PP401mb8LmYDTgdjcfbb7c=
+	bh=pIwEGnmUirLxlsJLxQXRRvB4Qa+WoJcGK+rhw6MyUi8=;
+	b=BsgRnjVc3HrpF5QHHelhiird5p8g095eNfH8nX5fzXE9F1kwbK4yZ47LrpLJwYf+fwfxUX
+	UyDHpEE12u/SdSNgwvu94fhmkwLYqKSQu1sNsfFsEgng8GO0ZH6CozPE7VJxuIhaQTeAYY
+	hsuQlPzhSIOHUx3uJ8MHefDWAJGMKes=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Matti Vaittinen <matti.vaittinen@linux.dev>
 To: Matti Vaittinen <mazziesaccount@gmail.com>,
@@ -59,9 +59,9 @@ Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
 	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH RESEND v6 15/17] power: supply: bd71828: Support wider
- register addresses
-Message-ID: <57c87f7e2082a666f0adeafcd11f673c0af7d326.1765804226.git.mazziesaccount@gmail.com>
+Subject: [PATCH RESEND v6 16/17] power: supply: bd71828-power: Support ROHM
+ BD72720
+Message-ID: <fb74c0cab3dfe534135d26dbbb9c66699678c2de.1765804226.git.mazziesaccount@gmail.com>
 Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
 References: <cover.1765804226.git.mazziesaccount@gmail.com>
 Precedence: bulk
@@ -71,111 +71,344 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="54kIi+IO5qC+nA/M"
+	protocol="application/pgp-signature"; boundary="YuTfMdNXLFO9FosI"
 Content-Disposition: inline
 In-Reply-To: <cover.1765804226.git.mazziesaccount@gmail.com>
 X-Migadu-Flow: FLOW_OUT
 
 
---54kIi+IO5qC+nA/M
+--YuTfMdNXLFO9FosI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 =46rom: Matti Vaittinen <mazziesaccount@gmail.com>
 
-The BD71828 power-supply driver assumes register addresses to be 8-bit.
-The new BD72720 will use stacked register maps to hide paging which is
-done using secondary I2C slave address. This requires use of 9-bit
-register addresses in the power-supply driver (added offset 0x100 to
-the 8-bit hardware register addresses).
+The ROHM BD72720 is a power management IC with a charger and coulomb
+counter block which is closely related to the charger / coulomb counter
+found from the BD71815, BD71828, BD71879 which are all supported by the
+bd71828-power driver. Due to the similarities it makes sense to support
+also the BD72720 with the same driver.
 
-The cost is slightly used memory consumption as the members in the
-struct pwr_regs will be changed from u8 to unsigned int, which means 3
-byte increase / member / instance.
-This is currently 14 members (expected to possibly be increased when
-adding new variants / new functionality which may introduce new
-registers, but not expected to grow much) and 2 instances (will be 3
-instances when BD72720 gets added).
-
-So, even if the number of registers grew to 50 it'd be 150 bytes /
-instance. Assuming we eventually supported 5 variants, it'd be
-5 * 150 bytes, which stays very reasonable considering systems we are
-dealing with.
-
-As a side note, we can reduce the "wasted space / member / instance" from
-3 bytes to 1 byte, by using u16 instead of the unsigned int if needed. I
-rather use unsigned int to be initially prepared for devices with 32 bit
-registers if there is no need to count bytes.
+Add basic support for the charger logic on ROHM BD72720.
 
 Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
 ---
 Revision history:
  v2 =3D> :
  - No changes
 
  RFCv1 =3D> v2:
- - New patch
+ - Support using 9-bit register addresses (offset of 0x100) with the
+   BD72720
+ - Simplify probe and IC data as we don't need two regmaps
+ - Drop two BD72720 specific functions as we no longer need different
+   regmap for it.
+
+Note: This patch depends on the series: "power: supply: add charger for
+BD71828" by Andreas:
+https://lore.kernel.org/all/20250918-bd71828-charger-v5-0-851164839c28@kemn=
+ade.info/
+
+NOTE: Fuel-gauging is not supported. You can find an unmaintained
+downstream reference-driver with a fuel-gauge example from:
+https://github.com/RohmSemiconductor/Linux-Kernel-PMIC-Drivers/releases/tag=
+/bd72720-reference-driver-v1
 ---
- drivers/power/supply/bd71828-power.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ drivers/power/supply/bd71828-power.c | 134 +++++++++++++++++++++++----
+ 1 file changed, 116 insertions(+), 18 deletions(-)
 
 diff --git a/drivers/power/supply/bd71828-power.c b/drivers/power/supply/bd=
 71828-power.c
-index f667baedeb77..ce73c0f48397 100644
+index ce73c0f48397..438e220a9cb7 100644
 --- a/drivers/power/supply/bd71828-power.c
 +++ b/drivers/power/supply/bd71828-power.c
-@@ -44,19 +44,19 @@
- #define VBAT_LOW_TH			0x00D4
-=20
- struct pwr_regs {
--	u8 vbat_avg;
--	u8 ibat;
--	u8 ibat_avg;
--	u8 btemp_vth;
--	u8 chg_state;
--	u8 bat_temp;
--	u8 dcin_stat;
--	u8 dcin_collapse_limit;
--	u8 chg_set1;
--	u8 chg_en;
--	u8 vbat_alm_limit_u;
--	u8 conf;
--	u8 vdcin;
-+	unsigned int vbat_avg;
-+	unsigned int ibat;
-+	unsigned int ibat_avg;
-+	unsigned int btemp_vth;
-+	unsigned int chg_state;
-+	unsigned int bat_temp;
-+	unsigned int dcin_stat;
-+	unsigned int dcin_collapse_limit;
-+	unsigned int chg_set1;
-+	unsigned int chg_en;
-+	unsigned int vbat_alm_limit_u;
-+	unsigned int conf;
-+	unsigned int vdcin;
+@@ -5,6 +5,7 @@
+ #include <linux/kernel.h>
+ #include <linux/mfd/rohm-bd71815.h>
+ #include <linux/mfd/rohm-bd71828.h>
++#include <linux/mfd/rohm-bd72720.h>
+ #include <linux/module.h>
+ #include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+@@ -51,12 +52,14 @@ struct pwr_regs {
+ 	unsigned int chg_state;
+ 	unsigned int bat_temp;
+ 	unsigned int dcin_stat;
++	unsigned int dcin_online_mask;
+ 	unsigned int dcin_collapse_limit;
+ 	unsigned int chg_set1;
+ 	unsigned int chg_en;
+ 	unsigned int vbat_alm_limit_u;
+ 	unsigned int conf;
+ 	unsigned int vdcin;
++	unsigned int vdcin_himask;
  };
 =20
  static const struct pwr_regs pwr_regs_bd71828 =3D {
+@@ -67,12 +70,14 @@ static const struct pwr_regs pwr_regs_bd71828 =3D {
+ 	.chg_state =3D BD71828_REG_CHG_STATE,
+ 	.bat_temp =3D BD71828_REG_BAT_TEMP,
+ 	.dcin_stat =3D BD71828_REG_DCIN_STAT,
++	.dcin_online_mask =3D BD7182x_MASK_DCIN_DET,
+ 	.dcin_collapse_limit =3D BD71828_REG_DCIN_CLPS,
+ 	.chg_set1 =3D BD71828_REG_CHG_SET1,
+ 	.chg_en   =3D BD71828_REG_CHG_EN,
+ 	.vbat_alm_limit_u =3D BD71828_REG_ALM_VBAT_LIMIT_U,
+ 	.conf =3D BD71828_REG_CONF,
+ 	.vdcin =3D BD71828_REG_VDCIN_U,
++	.vdcin_himask =3D BD7182x_MASK_VDCIN_U,
+ };
+=20
+ static const struct pwr_regs pwr_regs_bd71815 =3D {
+@@ -85,6 +90,7 @@ static const struct pwr_regs pwr_regs_bd71815 =3D {
+ 	.chg_state =3D BD71815_REG_CHG_STATE,
+ 	.bat_temp =3D BD71815_REG_BAT_TEMP,
+ 	.dcin_stat =3D BD71815_REG_DCIN_STAT,
++	.dcin_online_mask =3D BD7182x_MASK_DCIN_DET,
+ 	.dcin_collapse_limit =3D BD71815_REG_DCIN_CLPS,
+ 	.chg_set1 =3D BD71815_REG_CHG_SET1,
+ 	.chg_en   =3D BD71815_REG_CHG_SET1,
+@@ -92,6 +98,31 @@ static const struct pwr_regs pwr_regs_bd71815 =3D {
+ 	.conf =3D BD71815_REG_CONF,
+=20
+ 	.vdcin =3D BD71815_REG_VM_DCIN_U,
++	.vdcin_himask =3D BD7182x_MASK_VDCIN_U,
++};
++
++static struct pwr_regs pwr_regs_bd72720 =3D {
++	.vbat_avg =3D BD72720_REG_VM_SA_VBAT_U,
++	.ibat =3D BD72720_REG_CC_CURCD_U,
++	.ibat_avg =3D BD72720_REG_CC_SA_CURCD_U,
++	.btemp_vth =3D BD72720_REG_VM_BTMP_U,
++	/*
++	 * Note, state 0x40 IMP_CHK. not documented
++	 * on other variants but was still handled in
++	 * existing code. No memory traces as to why.
++	 */
++	.chg_state =3D BD72720_REG_CHG_STATE,
++	.bat_temp =3D BD72720_REG_CHG_BAT_TEMP_STAT,
++	.dcin_stat =3D BD72720_REG_INT_VBUS_SRC,
++	.dcin_online_mask =3D BD72720_MASK_DCIN_DET,
++	.dcin_collapse_limit =3D -1, /* Automatic. Setting not supported */
++	.chg_set1 =3D BD72720_REG_CHG_SET_1,
++	.chg_en =3D BD72720_REG_CHG_EN,
++	/* 15mV note in data-sheet */
++	.vbat_alm_limit_u =3D BD72720_REG_ALM_VBAT_TH_U,
++	.conf =3D BD72720_REG_CONF, /* o XSTB, only PON. Seprate slave addr */
++	.vdcin =3D BD72720_REG_VM_VBUS_U, /* 10 bits not 11 as with other ICs */
++	.vdcin_himask =3D BD72720_MASK_VDCIN_U,
+ };
+=20
+ struct bd71828_power {
+@@ -298,7 +329,7 @@ static int get_chg_online(struct bd71828_power *pwr, in=
+t *chg_online)
+ 		dev_err(pwr->dev, "Failed to read DCIN status\n");
+ 		return ret;
+ 	}
+-	*chg_online =3D ((r & BD7182x_MASK_DCIN_DET) !=3D 0);
++	*chg_online =3D ((r & pwr->regs->dcin_online_mask) !=3D 0);
+=20
+ 	return 0;
+ }
+@@ -329,8 +360,8 @@ static int bd71828_bat_inserted(struct bd71828_power *p=
+wr)
+ 	ret =3D val & BD7182x_MASK_CONF_PON;
+=20
+ 	if (ret)
+-		regmap_update_bits(pwr->regmap, pwr->regs->conf,
+-				   BD7182x_MASK_CONF_PON, 0);
++		if (regmap_update_bits(pwr->regmap, pwr->regs->conf, BD7182x_MASK_CONF_P=
+ON, 0))
++			dev_err(pwr->dev, "Failed to write CONF register\n");
+=20
+ 	return ret;
+ }
+@@ -358,11 +389,13 @@ static int bd71828_init_hardware(struct bd71828_power=
+ *pwr)
+ 	int ret;
+=20
+ 	/* TODO: Collapse limit should come from device-tree ? */
+-	ret =3D regmap_write(pwr->regmap, pwr->regs->dcin_collapse_limit,
+-			   BD7182x_DCIN_COLLAPSE_DEFAULT);
+-	if (ret) {
+-		dev_err(pwr->dev, "Failed to write DCIN collapse limit\n");
+-		return ret;
++	if (pwr->regs->dcin_collapse_limit !=3D (unsigned int)-1) {
++		ret =3D regmap_write(pwr->regmap, pwr->regs->dcin_collapse_limit,
++				   BD7182x_DCIN_COLLAPSE_DEFAULT);
++		if (ret) {
++			dev_err(pwr->dev, "Failed to write DCIN collapse limit\n");
++			return ret;
++		}
+ 	}
+=20
+ 	ret =3D pwr->bat_inserted(pwr);
+@@ -419,7 +452,7 @@ static int bd71828_charger_get_property(struct power_su=
+pply *psy,
+ 		break;
+ 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+ 		ret =3D bd7182x_read16_himask(pwr, pwr->regs->vdcin,
+-					    BD7182x_MASK_VDCIN_U, &tmp);
++					    pwr->regs->vdcin_himask, &tmp);
+ 		if (ret)
+ 			return ret;
+=20
+@@ -630,6 +663,9 @@ BD_ISR_AC(dcin_ovp_det, "DCIN OVER VOLTAGE", true)
+ BD_ISR_DUMMY(dcin_mon_det, "DCIN voltage below threshold")
+ BD_ISR_DUMMY(dcin_mon_res, "DCIN voltage above threshold")
+=20
++BD_ISR_DUMMY(vbus_curr_limit, "VBUS current limited")
++BD_ISR_DUMMY(vsys_ov_res, "VSYS over-voltage cleared")
++BD_ISR_DUMMY(vsys_ov_det, "VSYS over-voltage")
+ BD_ISR_DUMMY(vsys_uv_res, "VSYS under-voltage cleared")
+ BD_ISR_DUMMY(vsys_uv_det, "VSYS under-voltage")
+ BD_ISR_DUMMY(vsys_low_res, "'VSYS low' cleared")
+@@ -878,6 +914,51 @@ static int bd7182x_get_irqs(struct platform_device *pd=
+ev,
+ 		BDIRQ("bd71828-temp-125-over", bd71828_temp_vf125_det),
+ 		BDIRQ("bd71828-temp-125-under", bd71828_temp_vf125_res),
+ 	};
++	static const struct bd7182x_irq_res bd72720_irqs[] =3D {
++		BDIRQ("bd72720_int_vbus_rmv", BD_ISR_NAME(dcin_removed)),
++		BDIRQ("bd72720_int_vbus_det", bd7182x_dcin_detected),
++		BDIRQ("bd72720_int_vbus_mon_res", BD_ISR_NAME(dcin_mon_res)),
++		BDIRQ("bd72720_int_vbus_mon_det", BD_ISR_NAME(dcin_mon_det)),
++		BDIRQ("bd72720_int_vsys_mon_res", BD_ISR_NAME(vsys_mon_res)),
++		BDIRQ("bd72720_int_vsys_mon_det", BD_ISR_NAME(vsys_mon_det)),
++		BDIRQ("bd72720_int_vsys_uv_res", BD_ISR_NAME(vsys_uv_res)),
++		BDIRQ("bd72720_int_vsys_uv_det", BD_ISR_NAME(vsys_uv_det)),
++		BDIRQ("bd72720_int_vsys_lo_res", BD_ISR_NAME(vsys_low_res)),
++		BDIRQ("bd72720_int_vsys_lo_det", BD_ISR_NAME(vsys_low_det)),
++		BDIRQ("bd72720_int_vsys_ov_res", BD_ISR_NAME(vsys_ov_res)),
++		BDIRQ("bd72720_int_vsys_ov_det", BD_ISR_NAME(vsys_ov_det)),
++		BDIRQ("bd72720_int_bat_ilim", BD_ISR_NAME(vbus_curr_limit)),
++		BDIRQ("bd72720_int_chg_done", bd718x7_chg_done),
++		BDIRQ("bd72720_int_extemp_tout", BD_ISR_NAME(chg_wdg_temp)),
++		BDIRQ("bd72720_int_chg_wdt_exp", BD_ISR_NAME(chg_wdg)),
++		BDIRQ("bd72720_int_bat_mnt_out", BD_ISR_NAME(rechg_res)),
++		BDIRQ("bd72720_int_bat_mnt_in", BD_ISR_NAME(rechg_det)),
++		BDIRQ("bd72720_int_chg_trns", BD_ISR_NAME(chg_state_changed)),
++
++		BDIRQ("bd72720_int_vbat_mon_res", BD_ISR_NAME(bat_mon_res)),
++		BDIRQ("bd72720_int_vbat_mon_det", BD_ISR_NAME(bat_mon)),
++		BDIRQ("bd72720_int_vbat_sht_res", BD_ISR_NAME(bat_short_res)),
++		BDIRQ("bd72720_int_vbat_sht_det", BD_ISR_NAME(bat_short)),
++		BDIRQ("bd72720_int_vbat_lo_res", BD_ISR_NAME(bat_low_res)),
++		BDIRQ("bd72720_int_vbat_lo_det", BD_ISR_NAME(bat_low)),
++		BDIRQ("bd72720_int_vbat_ov_res", BD_ISR_NAME(bat_ov_res)),
++		BDIRQ("bd72720_int_vbat_ov_det", BD_ISR_NAME(bat_ov)),
++		BDIRQ("bd72720_int_bat_rmv", BD_ISR_NAME(bat_removed)),
++		BDIRQ("bd72720_int_bat_det", BD_ISR_NAME(bat_det)),
++		BDIRQ("bd72720_int_dbat_det", BD_ISR_NAME(bat_dead)),
++		BDIRQ("bd72720_int_bat_temp_trns", BD_ISR_NAME(temp_transit)),
++		BDIRQ("bd72720_int_lobtmp_res", BD_ISR_NAME(temp_bat_low_res)),
++		BDIRQ("bd72720_int_lobtmp_det", BD_ISR_NAME(temp_bat_low)),
++		BDIRQ("bd72720_int_ovbtmp_res", BD_ISR_NAME(temp_bat_hi_res)),
++		BDIRQ("bd72720_int_ovbtmp_det", BD_ISR_NAME(temp_bat_hi)),
++		BDIRQ("bd72720_int_ocur1_res", BD_ISR_NAME(bat_oc1_res)),
++		BDIRQ("bd72720_int_ocur1_det", BD_ISR_NAME(bat_oc1)),
++		BDIRQ("bd72720_int_ocur2_res", BD_ISR_NAME(bat_oc2_res)),
++		BDIRQ("bd72720_int_ocur2_det", BD_ISR_NAME(bat_oc2)),
++		BDIRQ("bd72720_int_ocur3_res", BD_ISR_NAME(bat_oc3_res)),
++		BDIRQ("bd72720_int_ocur3_det", BD_ISR_NAME(bat_oc3)),
++		BDIRQ("bd72720_int_cc_mon2_det", BD_ISR_NAME(bat_cc_mon)),
++	};
+ 	int num_irqs;
+ 	const struct bd7182x_irq_res *irqs;
+=20
+@@ -890,6 +971,10 @@ static int bd7182x_get_irqs(struct platform_device *pd=
+ev,
+ 		irqs =3D &bd71815_irqs[0];
+ 		num_irqs =3D ARRAY_SIZE(bd71815_irqs);
+ 		break;
++	case ROHM_CHIP_TYPE_BD72720:
++		irqs =3D &bd72720_irqs[0];
++		num_irqs =3D ARRAY_SIZE(bd72720_irqs);
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -958,21 +1043,27 @@ static int bd71828_power_probe(struct platform_devic=
+e *pdev)
+ 	struct power_supply_config ac_cfg =3D {};
+ 	struct power_supply_config bat_cfg =3D {};
+ 	int ret;
+-	struct regmap *regmap;
+-
+-	regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
+-	if (!regmap) {
+-		dev_err(&pdev->dev, "No parent regmap\n");
+-		return -EINVAL;
+-	}
+=20
+ 	pwr =3D devm_kzalloc(&pdev->dev, sizeof(*pwr), GFP_KERNEL);
+ 	if (!pwr)
+ 		return -ENOMEM;
+=20
+-	pwr->regmap =3D regmap;
+-	pwr->dev =3D &pdev->dev;
++	/*
++	 * The BD72720 MFD device registers two regmaps. Power-supply driver
++	 * uses the "wrap-map", which provides access to both of the I2C slave
++	 * addresses used by the BD72720
++	 */
+ 	pwr->chip_type =3D platform_get_device_id(pdev)->driver_data;
++	if (pwr->chip_type !=3D ROHM_CHIP_TYPE_BD72720)
++		pwr->regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
++	else
++		pwr->regmap =3D dev_get_regmap(pdev->dev.parent, "wrap-map");
++	if (!pwr->regmap) {
++		dev_err(&pdev->dev, "No parent regmap\n");
++		return -EINVAL;
++	}
++
++	pwr->dev =3D &pdev->dev;
+=20
+ 	switch (pwr->chip_type) {
+ 	case ROHM_CHIP_TYPE_BD71828:
+@@ -985,6 +1076,12 @@ static int bd71828_power_probe(struct platform_device=
+ *pdev)
+ 		pwr->get_temp =3D bd71815_get_temp;
+ 		pwr->regs =3D &pwr_regs_bd71815;
+ 		break;
++	case ROHM_CHIP_TYPE_BD72720:
++		pwr->bat_inserted =3D bd71828_bat_inserted;
++		pwr->regs =3D &pwr_regs_bd72720;
++		pwr->get_temp =3D bd71828_get_temp;
++		dev_dbg(pwr->dev, "Found ROHM BD72720\n");
++		break;
+ 	default:
+ 		dev_err(pwr->dev, "Unknown PMIC\n");
+ 		return -EINVAL;
+@@ -1030,6 +1127,7 @@ static int bd71828_power_probe(struct platform_device=
+ *pdev)
+ static const struct platform_device_id bd71828_charger_id[] =3D {
+ 	{ "bd71815-power", ROHM_CHIP_TYPE_BD71815 },
+ 	{ "bd71828-power", ROHM_CHIP_TYPE_BD71828 },
++	{ "bd72720-power", ROHM_CHIP_TYPE_BD72720 },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(platform, bd71828_charger_id);
 --=20
 2.52.0
 
 
---54kIi+IO5qC+nA/M
+--YuTfMdNXLFO9FosI
 Content-Type: application/pgp-signature; name=signature.asc
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmlACz8ACgkQeFA3/03a
-ocVqxggAj3bxN7BT3GSQ2QVWHScrNKrRMRVFc3iP68Nd9RFiIi5Ov/+uWUR24H7+
-8Yiz5/dSaRG1LCvaritIa/mUdmma8fcsTF9dGialP36OhRGSPcu0uEYqkCR3acMY
-asB8C6XrQYIIXD/48D1SWX2ar1sdkIMzqmeQ3RlYpgZmalNEsaBqUeCGanDtguVu
-OMtxomHQJ6Glm8nvaYKLbGEkL4g9A0mZh9ArQwLlvaGaswdMd1AH+lDlUeIG3Zdd
-tkrfAb1zlu2irUfwo+0+gPw/A6mBry6eMGBrEN4vHxmpKgYb5HweysGcCQ9hIzgC
-JFYNxkgJ0Lynd4Do5u77t3ysxOJcmg==
-=eSjJ
+iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmlAC08ACgkQeFA3/03a
+ocWo+gf+ONpcuk1py6/mEQcP/uKiO0+CPlZsGSFRep8a60gKra4lY/WOzHoWk2ex
+Y9GxA4U0fwxkzL/VM63TX2A6EsBw3KstTkCmcWYN5e/jrqOc4ca5cgzjphA5o1zK
+TLI3b1T0otSdd+PnvY6KtPzMsuJFoblD2teorl0pBT9doL3ZY4Uv/dBCuawrC6ZF
+KiLSOl0ZkVAcYd4lFFfIdMp0bHwUhOf3iCCKRAm/fZ+Xle9xxcITKhcwNh4anY/b
+YZ4v9CrzvRJtz+gV/rlvdl2wCfSCyv1NhbOB8zt7HMn7QlEID+RnhyBZfFM6bphf
+d1GcKOOZFRiqZTeBT1qOqMOrHELLLA==
+=BnkP
 -----END PGP SIGNATURE-----
 
---54kIi+IO5qC+nA/M--
+--YuTfMdNXLFO9FosI--
 
