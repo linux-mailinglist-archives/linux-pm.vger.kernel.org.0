@@ -1,109 +1,97 @@
-Return-Path: <linux-pm+bounces-39551-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39552-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D0FCCBD9D7
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 12:50:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 561C4CBDC4D
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 13:24:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id EA0E7300BEF6
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 11:50:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6319230532A8
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Dec 2025 12:17:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3FF2331236;
-	Mon, 15 Dec 2025 11:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 899EC19A2A3;
+	Mon, 15 Dec 2025 12:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bh5BER6m"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UM72Uxo2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF18731AAAD
-	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 11:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E39710957
+	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 12:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765799395; cv=none; b=ruQe72wIocT/fN1qgkzGSIgdHoMd/7rjIzxfi4+yhKRi0kKsMHVUQ6jIAOIVOMyVjlshVTFuvlwNPdbM9DZl4ObwPS2UCqtt+rcYFt/bO/cuaD7J7v5sMnScXAXuYd8lYGtGhr25jbp3Obn8L2lHk842l4RyditPhFztt6rxi/Q=
+	t=1765801029; cv=none; b=FIQDjVssCJ4nJO1Z/uYBZtaziIMUNPHDGWmhFbjEjhkvn4pV1WerU3u5S4gEAIVVll/G8xNbn7luknKajHJ8G4q8D221kjCJw+SQUmkyU4/Xhw3YdPcw5J3uCMZRMmJ2WpH+Q7A56Rft1AhfP7A6mzKPPD/M4nCz4nAHNPULA0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765799395; c=relaxed/simple;
-	bh=5UBdRbgT9LGoF60llEjJFQmwkihjwIcLjozkzy9qz5M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H1zqw9pvdp59L36Rtp3zWOCaEdI+FGg1NMCGZtjz1CLvLmb3cbuUrdxmTbK5MozLdPUwU1pdfYyWzBetBgLa6F7kvmzErKzzCPTlyOcawOTe6dKY5UaerqYBQgfi7LIqIcdMJDLGZ+6EF0Wz/ZoDuGu+72ho6/nA/ZvmlY1Fle8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bh5BER6m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BECDC19423
-	for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 11:49:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765799395;
-	bh=5UBdRbgT9LGoF60llEjJFQmwkihjwIcLjozkzy9qz5M=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=bh5BER6mkITEXC2caqCr93h8ZspeH2BzKjbkcrQsCxBtuqeZt7MoyW+pUBVrjxO5m
-	 DQJSZJggbWOJCI1YsrVUainExq4sh+i9BTL+Clg6Cdc2/i2LmGi+t4kRbsfYY0jbBK
-	 4Y5xvV5j27MHfrstnY49+OMQYdb4myTlLTlNOrdGwyauLowovMn+73FbG/NB9H5pbC
-	 qgBCZmKEYG5us8QmOCu1ejCnXA52ZUTDo1BQB/sY851h/mPbOSrL0xIeQel4Ipjvui
-	 VNsTenzAnoF8lMTTsj6qlPjGCk/d17H8Dm03lJJQyMN29O9MDSdfydAnTzOeJtIsq7
-	 5oM+x8WrpA3qg==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-3e84d56c4b8so2400472fac.2
-        for <linux-pm@vger.kernel.org>; Mon, 15 Dec 2025 03:49:55 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVN4x7JCQEox7iaKq5XJqGbXtOXT6rUFlCNx3Jvxevd4g7CQYqq7/AyZzX+XYwD/3mwEKxTXVvqlg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbuVc6kHMVReQ9oWsAD51mZgbzt4ncQkNTif30uJLlUjzngmFX
-	XTAjGMaeha0n2S9GXCxdd9CZSh8oJuWL3LlTCFisHa98b73oIZ1c1dG91052BBpIjiZSQTx1JMu
-	Yn2mjKk39M5J299ECH4hrC69fASAq2T8=
-X-Google-Smtp-Source: AGHT+IFZLHhilVjr/fUfhKL8apNfmYZ6lJz2k55qtkQCobGeQQtMRLhciQTE98rg528mtC9daonq7wo21p7bG+86Zdo=
-X-Received: by 2002:a05:6820:8186:b0:659:9a49:9050 with SMTP id
- 006d021491bc7-65b45186d80mr4909738eaf.27.1765799394849; Mon, 15 Dec 2025
- 03:49:54 -0800 (PST)
+	s=arc-20240116; t=1765801029; c=relaxed/simple;
+	bh=xKd21L+BfgO9tYmMGuabt4dmULRVfJo5yaNtaQjm5Pw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f5fxoeFlrL6hTZ+SfMxgavYHmzwFtIJBOzNM+j9/vxjMUFhB4tqWpoSLb+coSgrvey9mZWAQqxHzohuau+JkTY8hw8VyEYAj8dI3K2S5/OPXylW1U25vyK0dK02Pq0cV+6jmFdhsAPnBcYbMyTpXJqZUtgkOnKk7TpKXDhK+5BU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UM72Uxo2; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1765801012;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=sSkpNYskDg1ZQG+F+jcVFB1gclBvY7a46b7Rerkj6PQ=;
+	b=UM72Uxo2PjeXPtv3jtoZnqtxL8nS9iCxMcpkzcQRFsnRI4GzDPMPjN/sfEu5O2dUEQPlK2
+	hbfUsguSZPtdbJoNfECHI54EMsXWxITswFjN8Yx+orWD00OLuHiul3saFyUEx2li181C+l
+	fio97nKfImBqHNdCCcYlmIS4nJK7l3E=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal: core: Use strnlen in thermal_zone_device_register_with_trips
+Date: Mon, 15 Dec 2025 13:16:33 +0100
+Message-ID: <20251215121633.375193-1-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251205230007.2218533-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20251205230007.2218533-1-srinivas.pandruvada@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 15 Dec 2025 12:49:41 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hxOeDhxq5UgY5-RuaCj8bUOT6xHYPwGKGSVVFCktbxfw@mail.gmail.com>
-X-Gm-Features: AQt7F2r3keIv-ubw7247O-dDW4UfoNTVIIluG6Kr91hQfROcDRGK4qW7r0cKpNg
-Message-ID: <CAJZ5v0hxOeDhxq5UgY5-RuaCj8bUOT6xHYPwGKGSVVFCktbxfw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: int340x: Enable power slider interface
- for Wildcat Lake
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sat, Dec 6, 2025 at 12:00=E2=80=AFAM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Set the PROC_THERMAL_FEATURE_SOC_POWER_SLIDER feature flag in
-> proc_thermal_pci_ids[] for Wildcat Lake to enable power slider interface.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
->  .../intel/int340x_thermal/processor_thermal_device_pci.c       | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_devi=
-ce_pci.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_p=
-ci.c
-> index 0d4dcc66e097..c693d934103a 100644
-> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.=
-c
-> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.=
-c
-> @@ -503,7 +503,8 @@ static const struct pci_device_id proc_thermal_pci_id=
-s[] =3D {
->         { PCI_DEVICE_DATA(INTEL, WCL_THERMAL, PROC_THERMAL_FEATURE_MSI_SU=
-PPORT |
->           PROC_THERMAL_FEATURE_RAPL | PROC_THERMAL_FEATURE_DLVR |
->           PROC_THERMAL_FEATURE_DVFS | PROC_THERMAL_FEATURE_WT_HINT |
-> -         PROC_THERMAL_FEATURE_POWER_FLOOR | PROC_THERMAL_FEATURE_PTC) },
-> +         PROC_THERMAL_FEATURE_POWER_FLOOR | PROC_THERMAL_FEATURE_PTC |
-> +         PROC_THERMAL_FEATURE_SOC_POWER_SLIDER) },
->         { PCI_DEVICE_DATA(INTEL, NVL_H_THERMAL, PROC_THERMAL_FEATURE_RAPL=
- |
->           PROC_THERMAL_FEATURE_DLVR | PROC_THERMAL_FEATURE_DVFS |
->           PROC_THERMAL_FEATURE_MSI_SUPPORT | PROC_THERMAL_FEATURE_WT_HINT=
- |
-> --
+Replace strlen() with the safer strnlen() and calculate the length of
+the thermal zone name 'type' only once.  No functional changes.
 
-Applied, thanks!
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ drivers/thermal/thermal_core.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 17ca5c082643..63eb35b449c6 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1505,15 +1505,17 @@ thermal_zone_device_register_with_trips(const char *type,
+ 	const struct thermal_trip *trip = trips;
+ 	struct thermal_zone_device *tz;
+ 	struct thermal_trip_desc *td;
++	size_t type_len;
+ 	int id;
+ 	int result;
+ 
+-	if (!type || strlen(type) == 0) {
++	type_len = type ? strnlen(type, THERMAL_NAME_LENGTH) : 0;
++	if (type_len == 0) {
+ 		pr_err("No thermal zone type defined\n");
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+-	if (strlen(type) >= THERMAL_NAME_LENGTH) {
++	if (type_len == THERMAL_NAME_LENGTH) {
+ 		pr_err("Thermal zone name (%s) too long, should be under %d chars\n",
+ 		       type, THERMAL_NAME_LENGTH);
+ 		return ERR_PTR(-EINVAL);
+-- 
+Thorsten Blum <thorsten.blum@linux.dev>
+GPG: 1D60 735E 8AEF 3BE4 73B6  9D84 7336 78FD 8DFE EAD4
+
 
