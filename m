@@ -1,121 +1,174 @@
-Return-Path: <linux-pm+bounces-39634-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39635-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A93F7CC3201
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Dec 2025 14:17:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 541EECC3723
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Dec 2025 15:11:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 13057304229E
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Dec 2025 13:09:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8862430F21A6
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Dec 2025 14:04:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D810D3446DB;
-	Tue, 16 Dec 2025 12:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 109403559C4;
+	Tue, 16 Dec 2025 13:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JORHmz3Y"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="WcKTp9jV";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="MKf5qMCK";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="khe3Lupb";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="uuBBJWHw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E643446D3
-	for <linux-pm@vger.kernel.org>; Tue, 16 Dec 2025 12:19:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A6A6355053
+	for <linux-pm@vger.kernel.org>; Tue, 16 Dec 2025 13:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765887544; cv=none; b=UMD3wdKgQQBZRbB3Q/8n4Jo6E3CtQSOfSvIUiYW+OHv5k/yaQUX2BjpcZApOpvWzGsqEzgYOR1qYZnCvoOdQz7CT1PdMh+o3N2RZoug6knwi05/aCYXlUaoDHGMKNhUVgYiyU/zGEsIjnGQObci28ChonwCp83BLJHoKvBTQzc0=
+	t=1765890050; cv=none; b=ma7Bc7lc1osBQOahcXa0oDanS/ysNU3A9kh0yFNWS2RjbZaN8Z895qAeEJ0JcBathaww6iTJcjsIkPasCKJ59j/No3Sj0NliIOpi7uThTNrMzD3vP1xj7eUCVw+Wzp5np7n2hPF2jBICtmiYzRSUU1J2iAh0ses2JuV5G7DXV5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765887544; c=relaxed/simple;
-	bh=cbfTLWarFJGwc9xWrcnkLcdWupdCDcKErBjldS2Ykdg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YZdQV40hCwm29SIh0TACh9lYsnkfLIKptGrHbLwOss/PVRi9oGYDcHVDzU6rC2r2OyCR8xcC5Q0kMGlITxejyE2zQts55+MCexe4yZ1yPc2ybJnUEXLeYjXnaVPmRd4PTpHOQciHqmENnjH4Ykca5xdJA1y7syuyqlKitzQzdEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JORHmz3Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B20CC19423
-	for <linux-pm@vger.kernel.org>; Tue, 16 Dec 2025 12:19:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765887544;
-	bh=cbfTLWarFJGwc9xWrcnkLcdWupdCDcKErBjldS2Ykdg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JORHmz3YbCVdG0gaq1kFwkhZDvV0UeLK6O19ZWJswMHR5FKmzNSnG/cRea9qtpzKB
-	 r78Kw3eMVDH1XVUIrsixpDmFmqsjVSr63/67//mz/4JgQGFsLSv/ORdMjYqm8rGOL7
-	 1Z9wjtvymErFoVFg5lw7FGH74UPXRA/aPEVzPoMPZ0XwwvQGaxoh2q3xHu/drcC62V
-	 RtLewxJKH7vUwkToEaBq1P9gqAZzXJuSn6efssU+qLpqcR3pPOmr1DGl5N1dSNpTFR
-	 JZ9bZgpYfahs/NLRGD+HrJWvgNk2mzB6z+dxkQD3tYDS1b99qIbZcL0szYGRs77IyT
-	 33padsTYowz2Q==
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-3f584ab62c6so1798522fac.1
-        for <linux-pm@vger.kernel.org>; Tue, 16 Dec 2025 04:19:04 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXs0ikPAsiSFF/4OPAYcXNuDw4V8Ny/K/1uW1J8Eqh7sdAch6euzJ6IGUoxJM0FR9AgS2HkT833tg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEHpKYec99ZaG4yFJ3dlp1vneuaLXU1fhnIFckhtg/Fm+hNXp2
-	kluae/RBsNpsDwwHedZwfgXVU/mw/wwwE8RrAH7hNymqW75/j386Ni7NwQNJOHoVVLgY/H4TZ1r
-	2d7x9ZilrZluxAkyWeIIcCF6tcnm5OA0=
-X-Google-Smtp-Source: AGHT+IE3RVLCrld8HqJMEUwOtY5GnXiOrNzUs+b68FRGRTzbi0ToySIstKUf3kP4nyrzbW2bagnEYGPJN0P44x3i/To=
-X-Received: by 2002:a05:6820:198f:b0:659:7f3a:7d55 with SMTP id
- 006d021491bc7-65b451518b0mr6675143eaf.6.1765887543565; Tue, 16 Dec 2025
- 04:19:03 -0800 (PST)
+	s=arc-20240116; t=1765890050; c=relaxed/simple;
+	bh=iQBFDWwef80LR5+luiz5ytPLcDzHlOj5h4YwPBNOX5U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tsm9INwBjh8E4UsssOe5qoneOhqJNu+cw0Dg0LS27D/ScDspWWZ6azIULoawRcqeyzbAhKfxRYg72i4fxc+uLL6mL+8sZjChggTa2zzMdIQX0wMHyJSbWYSCJbRE3f9tr9pkOYofBKtajOGeRUkrKtojS3vcGw07bpLkSYbmlLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=WcKTp9jV; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=MKf5qMCK; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=khe3Lupb; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=uuBBJWHw; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 600455BCD2;
+	Tue, 16 Dec 2025 13:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1765890045; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0FlmFMFG8z9tp2PIyRR+od1etRA+qYa6YsLRDcg0vsI=;
+	b=WcKTp9jV6ypdwb1YpmuArdGB0TdBpfTQi4MQvOUd8SbW6lxJlH5fLa9xd6dCLsUSzvqvKi
+	Wfub2UVDi/6Ii1Rcx4IWSJXWtOzys6irCD9kXoJA5wS1t9SDLihV/N/niQGU3c50SelzKf
+	iz/M8OlHe3R5bXMAdcX1DpU+3IIbFg0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1765890045;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0FlmFMFG8z9tp2PIyRR+od1etRA+qYa6YsLRDcg0vsI=;
+	b=MKf5qMCKH7Gp8rBI7KmgriIAJ2Z/eGoKy/r7hez2/+QkcMQl/WqIVQ95WoUzlz7uQRc04J
+	bpTOAMdld7UQd7Dw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=khe3Lupb;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=uuBBJWHw
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1765890044; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0FlmFMFG8z9tp2PIyRR+od1etRA+qYa6YsLRDcg0vsI=;
+	b=khe3LupbGRUn3uWTIMA1i0VYHLXhJ1GZf3alY6iBbXAzAZVUECVnewm7fWudpWf9okIp1u
+	u+P28qFVQzPQ/sE5yaZ6QVzDYLpD3BA0UrIh8ax2aPRRPUsxoVv0bxbYmCowRsQk8VVlnn
+	5pkiN9UKASgLZix+nX2+AVo1pGrnPB0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1765890044;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0FlmFMFG8z9tp2PIyRR+od1etRA+qYa6YsLRDcg0vsI=;
+	b=uuBBJWHwLtlLveYFSpnrriSUi2Klz7bqzA4FfbRxYWkeWLnBts2MXO28uEoKl2RYEtPaGC
+	yRdqK4wVapxQTKCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6E4AC3EA63;
+	Tue, 16 Dec 2025 13:00:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id twmoGPtXQWnLeQAAD6G6ig
+	(envelope-from <svarbanov@suse.de>); Tue, 16 Dec 2025 13:00:43 +0000
+Message-ID: <189702e0-e6f0-44c5-bed6-eef058d90b76@suse.de>
+Date: Tue, 16 Dec 2025 15:00:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251215121633.375193-1-thorsten.blum@linux.dev>
-In-Reply-To: <20251215121633.375193-1-thorsten.blum@linux.dev>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 16 Dec 2025 13:18:52 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gKsG43isrXPezvAtkZ6juRnTkaorXE_7QO_RSvDq-www@mail.gmail.com>
-X-Gm-Features: AQt7F2pZEccnnHsJ1OosNBc72QhrkKUQ4OX0rYr39_AlWBYf8JdfnIDnH-Aib4c
-Message-ID: <CAJZ5v0gKsG43isrXPezvAtkZ6juRnTkaorXE_7QO_RSvDq-www@mail.gmail.com>
-Subject: Re: [PATCH] thermal: core: Use strnlen in thermal_zone_device_register_with_trips
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/4] arm64: dts: broadcom: bcm2712: Add watchdog DT
+ node
+To: Florian Fainelli <florian.fainelli@broadcom.com>,
+ bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rpi-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Ray Jui <rjui@broadcom.com>,
+ Scott Branden <sbranden@broadcom.com>, Lee Jones <lee@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Willow Cunningham <willow.e.cunningham@gmail.com>,
+ Stefan Wahren <wahrenst@gmx.net>, Saenz Julienne <nsaenz@kernel.org>,
+ Andrea della Porta <andrea.porta@suse.com>,
+ Phil Elwell <phil@raspberrypi.com>, Jonathan Bell
+ <jonathan@raspberrypi.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>
+References: <20251031183309.1163384-1-svarbanov@suse.de>
+ <20251031183309.1163384-5-svarbanov@suse.de>
+ <20251105165553.3910996-1-florian.fainelli@broadcom.com>
+Content-Language: en-US
+From: Stanimir Varbanov <svarbanov@suse.de>
+In-Reply-To: <20251105165553.3910996-1-florian.fainelli@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
+X-Rspamd-Queue-Id: 600455BCD2
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.net];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,broadcom.com,linaro.org,gmx.net,suse.com,raspberrypi.com];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:mid,suse.de:dkim,suse.de:email];
+	DWL_DNSWL_BLOCKED(0.00)[suse.de:dkim];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[dt];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Level: 
 
-On Mon, Dec 15, 2025 at 1:16=E2=80=AFPM Thorsten Blum <thorsten.blum@linux.=
-dev> wrote:
->
-> Replace strlen() with the safer strnlen() and calculate the length of
-> the thermal zone name 'type' only once.  No functional changes.
->
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
->  drivers/thermal/thermal_core.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
-e.c
-> index 17ca5c082643..63eb35b449c6 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1505,15 +1505,17 @@ thermal_zone_device_register_with_trips(const cha=
-r *type,
->         const struct thermal_trip *trip =3D trips;
->         struct thermal_zone_device *tz;
->         struct thermal_trip_desc *td;
-> +       size_t type_len;
+Hi Florian,
 
-size_t type_len =3D 0;
+On 11/5/25 6:55 PM, Florian Fainelli wrote:
+> From: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> On Fri, 31 Oct 2025 20:33:09 +0200, Stanimir Varbanov <svarbanov@suse.de> wrote:
+>> Add watchdog device-tree node for bcm2712 SoC.
+>>
+>> Signed-off-by: Stanimir Varbanov <svarbanov@suse.de>
+>> ---
+> 
+> Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
 
->         int id;
->         int result;
->
-> -       if (!type || strlen(type) =3D=3D 0) {
-> +       type_len =3D type ? strnlen(type, THERMAL_NAME_LENGTH) : 0;
+For some reason this is not part of v6.19-rc1.
 
-if (type)
-        type_len =3D strnlen(type, THERMAL_NAME_LENGTH);
-
-Pretty please.
-
-> +       if (type_len =3D=3D 0) {
->                 pr_err("No thermal zone type defined\n");
->                 return ERR_PTR(-EINVAL);
->         }
->
-> -       if (strlen(type) >=3D THERMAL_NAME_LENGTH) {
-> +       if (type_len =3D=3D THERMAL_NAME_LENGTH) {
->                 pr_err("Thermal zone name (%s) too long, should be under =
-%d chars\n",
->                        type, THERMAL_NAME_LENGTH);
->                 return ERR_PTR(-EINVAL);
-> --
+~Stan
 
