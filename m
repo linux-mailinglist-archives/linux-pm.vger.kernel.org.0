@@ -1,82 +1,86 @@
-Return-Path: <linux-pm+bounces-39622-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39623-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A67F2CC1895
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Dec 2025 09:26:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27EC3CC189D
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Dec 2025 09:26:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6D56D30625BC
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Dec 2025 08:23:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1C8B030358EA
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Dec 2025 08:23:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F37234A765;
-	Tue, 16 Dec 2025 08:04:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CA7534A774;
+	Tue, 16 Dec 2025 08:04:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jjQDXj5m"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AN0SQ3BA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEC38337113
-	for <linux-pm@vger.kernel.org>; Tue, 16 Dec 2025 08:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59372337113
+	for <linux-pm@vger.kernel.org>; Tue, 16 Dec 2025 08:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765872256; cv=none; b=IkjVvMqdkQyN8njHFylxagIb4mtOBgCOMNFaQbVqt8zgusZcH4ObJZi+beFgx+oPEaUG6q8I8M35A3rAX3IYKALWlnqY+fRTzWuvFez4hq779AdM6dLu1Pp1NX6z8TCpmav31ArNoQ3DlNurqnsxRufckHptKMDmR95D1ILAY7A=
+	t=1765872263; cv=none; b=MbtrM5mtY0YnkwZDIhlNSC9zrKgAlvAiWmR55j2fc0ASrOMdPMoNbyhe9OwUMz+SwdfyqX2juRM/i2YLzAgZma2LKZ/cgCyXHqkEiFhhuD3Z+o5UZa+SlvFdkmw/pCjEXPe+xCQBHwWLta5Sx22bpIaCMe2P9Iz9JoSnXsFK3CM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765872256; c=relaxed/simple;
-	bh=gDpy2CFZGLVkrvvfrpkX+np6ujy0NPfPSy8K4PF/qKc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UgdDEun8UX3AlnzBAIErHQJcBrwjDyG7E/g8ruQuthI8CMDIOJ2/KCKvito9tUGoakTfPWiAN5XKFdhnJmkfULF/C3XygzmDvUupT36aoBDJo3lyxHsGBMhMQasW5pjq4zvAR4jF9qC4mlUFfDdmFW4RVBRHviWfU3pHgopk2U4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jjQDXj5m; arc=none smtp.client-ip=209.85.208.176
+	s=arc-20240116; t=1765872263; c=relaxed/simple;
+	bh=pQOu/CzqzcR7GGaU7MOKT7UOkKMi+/TDnPZn3RlhLFs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qbyJkz4AsbU21rYfm5njifB8+AqmuBHugQ2aRzYaY0iRDGkxW/fprSXsmfJC8kd9T5WZ6YTUE4u2v7gBHiFmG5bry8WavtA4RLlxnzqRc07ysE5JkShe8v+ZQJBFYhOm6MVYwAQYmcNbDsxH0QOLFkd46Ni/5RfTDAXYQY3SWcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AN0SQ3BA; arc=none smtp.client-ip=209.85.167.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-37fdb95971eso24584901fa.1
-        for <linux-pm@vger.kernel.org>; Tue, 16 Dec 2025 00:04:14 -0800 (PST)
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-597d57d8bb3so3749903e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 16 Dec 2025 00:04:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765872253; x=1766477053; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=p2T4QBQA2QaUTEbCgXDdDGm3M4lbz4HexNz0b3ZPm30=;
-        b=jjQDXj5m/O28t4GYWaXj5bl/wODoYtuPqRu+G46zdfn0IALwLYHxbxjjmr6VWGBd6z
-         yekSIcGyYffzkwoyI2AYDPSMKAUXj001v5e9n4ekIQjjtP9ZNOR7DedMkIuNZYxVuOBx
-         +Ki8HKgasuzIl5n7VjEFcRlegEx2mjVb8WILjz3NNspDlO6ziyA14iAXc5pPzTqdaSyw
-         eswqWmh9DSPK2J7XYRxHEOF9E8defE3FW0MdiKG8lRUoRGtJx3++cbo+KmMTD+nBK5Lp
-         JFEXKnrbISex86mDhwAVmW2wYHy/ig9zMTDjKnDdNVa4ZRAlu8FFQ1RkXDgoEczXkxP6
-         9ZUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765872253; x=1766477053;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1765872259; x=1766477059; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p2T4QBQA2QaUTEbCgXDdDGm3M4lbz4HexNz0b3ZPm30=;
-        b=tcK3NMP5l7qlaiZAa2OFluzpK7gsRAePlVXF5G+cSR5r73qnxugAO8u5sAVzLbV74/
-         IKGUJw1oKyzzSxX5Y0pZXTOyz6dWr/5uPwJi8nPCPKtGriuj8qfk24YA80+M0zqBc1NF
-         cUtDRNETpDyx2umM/8yyF6TTvON6qtLAM0LSfPOPbJGbdDVFPJgOjxx8MWlBqdrZ2hhM
-         OV4xMItTSTJMq1uTuwh1SdI4QjzRFzMCPEUmfO6E/2mGiketSar+0nmuRZq18diHkHIT
-         Xrx8+4yo+OdpwYmwFtuBhHAvZ0m37W5t0th0I9K0MhotYeUl73zBPLKgrfbvkRt6Zysa
-         x2Yw==
-X-Gm-Message-State: AOJu0YydVo2XJShwJ0olqEkoy18drFcVlRlPAcQkrdpJjFX489C81wOX
-	TwnKMc8uM3p9DeqiN+UA1BFPO8VboURwwFYxyRLA8nqvXtvDcNPphQWzphLElRJgKeo=
-X-Gm-Gg: AY/fxX6pgpPSOBnuqFCIDtvUHXACfJW3yOhUcw9P+aq6Km0Y4lrbTn3IKLT/3k8cILx
-	pp1Y83bGCy8ws7Z9K7+h2IRwr8odESRZCdWCCPizP+jddhX9frtudoZptYD1mX8n43S6SE9NdQk
-	Xw5/Z4oDMB3Elhe/YTjSFhWjyXYfeESnaYih+cEV/ILZ6GCe7DiSDmAFNmxXJeVYOJLfvb5CCXq
-	Hau32k0qNgexOFJIxeqjuta4rtXo8/wAWSDwMEp+E4TAb8qrDYlOWdtmIO/wxTGGxOhPg1/Md4b
-	4l/JCls5oDgoHuBSJ5Cpe9ELIMadvDDZo+i1aDW7Yy1Tp3lqGBahpesyfGMomijWDf1irU16Hv6
-	5UTFYn6WW+9GyOR9eJocixSehNFeUcFxTn5ZM7CYenKzv8IUqmTrJKY9IGciHvIrXVoCpju4CMJ
-	GGHB0/P4+DmUWOuMp/kY27CwQwNu3M+uMtKQ0AQtD8jDU963NTFzGdRVawUKgu+T0fi3T/HfK3d
-	Z8puCo=
-X-Google-Smtp-Source: AGHT+IHi7k/PLktktAFCCec/j/Y7YQbT1AmZUGxJjgv6N9M2LZatKIlSQzlby8lJo3z6HZAuG+y/KA==
-X-Received: by 2002:a05:6512:32c9:b0:595:831d:2308 with SMTP id 2adb3069b0e04-598faa360c2mr3979949e87.1.1765872252497;
-        Tue, 16 Dec 2025 00:04:12 -0800 (PST)
+        bh=TuQo6ii1YWdpxq81EXNiLoC7H2wzc7ZhDW9Pv0mDqDI=;
+        b=AN0SQ3BAfHarVjYjix4Xq39FAt6Un4oeuYZBAqk0wydmwNSJ72hTUXMPE1TuMZMmA/
+         bnD1+4RajdTuPDGW7C+HnTOIMsOrkMMh+33j2Rc0Xs8Y3eZ7+jHACKWYOf8S7fpCMJPK
+         bpIkF70jQGFcDRw04GLJyWaI5h9H9VPbc5Mij+Sh4MsiOOZ38h59nNrrFtHA+Bp43C/W
+         gNbpSj/DkW5BKbDuVVzR4NM+8EOMsFKGtL2ZkKBOZnf1PUIANU9uE2DxFg06o37y72Tj
+         18VwvJb0R5ApzV2TDUP45DFEaBnB4cGvsV1laBnlVDRhFogxQT9bTTekB72C002BXT2I
+         ePdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1765872259; x=1766477059;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TuQo6ii1YWdpxq81EXNiLoC7H2wzc7ZhDW9Pv0mDqDI=;
+        b=Lmaqbm4Oj2l59MHBcsbQOa1Rd4569ayxrajnGkdnYOCbhKdcyBu6zHiJsyypXw9D2q
+         4jsjHhJzOWf5xqmo2IOrGLz/eWPw/P/QEPnxw4qG1hxWLnHQYDg1aMGzu3n2NXYuMn8E
+         5tKDEPCywBGS2jucBOClYiDKwtefU79H0GNQP0gYUED5WB6bR2Gbj85NJauz6dW+gdZq
+         1s1SHs82p7FdX7TD0VmacdrpCOof7C/e8xWME4KHDxO62vmS11GRwFAzezS/kEMwdndv
+         yRRDJXA+Dl+IcbsE7zt5KJ9iHIZ44YT8RMzynflDafjWLdqGUxqvA76vHeNUEmCCMZgL
+         7cMw==
+X-Gm-Message-State: AOJu0Yy+Fsj5GSDf8lWb6jjVUFXtBm79/6pga1f2INLGd/f7rOGkRJtG
+	tf9OMMYZRt/LahUM7A17bDyBQK0bF82hNb9uJsvA/P2+Q7E8LOfqeqxZ
+X-Gm-Gg: AY/fxX6iMLMdqWOjSFpEuh9V9MHTwXJoi5UBnyzeiEz86EXoaHpnERXdfrjPEPFpgCj
+	vKE4YBJGztk909aPQXefhSpt//+M7hUvxcPxAYFNO6YB0zENl24lli0Pj3GDmtCNZcItMMA280+
+	BFr3RYaclG8STP5xLO1hHzfMaJmPxfD3D/4IPCj1rwbohBxG0y0cNuU9ZO5skuLVNDD7hRQWh2s
+	4Y49CXebXe+fPhglA71cyhoc5NU1c8SAxjTNO0pO0QVHvjQZ4VmfRu0+MA3n52noaMdaCpm2z9c
+	Pu5IuJSkJB3M4i/EyjWsuJPI2uuYwjW0D4b5mh5K9P/7pWiCdvzKQ+acvnHvVpIKZad/XBwZEVq
+	cQy1KdowO1E/1ZDmygNJcRyNtHjrlF+UB2n+r5ETaED+Tvmzyu1Tx0GEjmvM81XK5zwhmamMUJp
+	kHbjOnI/uDaV7+ifJk2MJwVCVbGbFQo41BnCKTkZiKE3P3xukbsofrhgYyWgJuNlUPXgYOLd2Uq
+	UdG/Zc=
+X-Google-Smtp-Source: AGHT+IFnlu3FeGtRN9E3ZH3Tm1gdaGckwZFau0870jGOutE+9ZIUf4QwIqzp1Wm5wK1sg5YzH2VTPA==
+X-Received: by 2002:a05:6512:23a6:b0:594:2f38:4604 with SMTP id 2adb3069b0e04-598faa82310mr4480055e87.41.1765872259023;
+        Tue, 16 Dec 2025 00:04:19 -0800 (PST)
 Received: from abityuts-desk (2001-14bb-ab-c176-62a0-4b37-648c-102.rev.dnainternet.fi. [2001:14bb:ab:c176:62a0:4b37:648c:102])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5990da5dc09sm657426e87.75.2025.12.16.00.04.11
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5990da5dc09sm657426e87.75.2025.12.16.00.04.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Dec 2025 00:04:12 -0800 (PST)
+        Tue, 16 Dec 2025 00:04:18 -0800 (PST)
 From: Artem Bityutskiy <dedekind1@gmail.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: Linux PM Mailing List <linux-pm@vger.kernel.org>
-Subject: [PATCH v2 0/3] intel_idle: Add cmdline option to adjust C-states table
-Date: Tue, 16 Dec 2025 10:03:59 +0200
-Message-ID: <20251216080402.156988-1-dedekind1@gmail.com>
+Subject: [PATCH 1/3] intel_idle: Initialize sysfs after cpuidle driver initialization
+Date: Tue, 16 Dec 2025 10:04:00 +0200
+Message-ID: <20251216080402.156988-2-dedekind1@gmail.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251216080402.156988-1-dedekind1@gmail.com>
+References: <20251216080402.156988-1-dedekind1@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -87,25 +91,45 @@ Content-Transfer-Encoding: 8bit
 
 From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-Add a new module parameter to customize the C-states table configuration used
-by the intel_idle driver.
+Reorder initialization calls to initialize the internal driver data before
+sysfs:
 
-* Patch 1/3: Small preparation step for the new feature.
-* Patch 2/3: Implement the new module parameter.
-* Patch 3/3: Add validation for data passed via the new parameter.
+Was:
+intel_idle_sysfs_init();
+intel_idle_cpuidle_driver_init();
 
-Refer to patch 2/3 for details on the parameter name and syntax.
+Now:
+intel_idle_cpuidle_driver_init();
+intel_idle_sysfs_init();
 
-Patches are based on top of v6.19-rc1.
+Follow the general principle that drivers should initialize internal state
+before registering external interfaces like sysfs, avoiding potential usage
+before full initialization.
 
-Artem Bityutskiy (3):
-  intel_idle: Initialize sysfs after cpuidle driver initialization
-  intel_idle: Add cmdline option to adjust C-states table
-  intel_idle: Add C-states validation
+Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+---
+ drivers/idle/intel_idle.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
- drivers/idle/intel_idle.c | 227 +++++++++++++++++++++++++++++++++++++-
- 1 file changed, 225 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 9ba83954c2555..45903685fe680 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -2485,12 +2485,12 @@ static int __init intel_idle_init(void)
+ 	if (!intel_idle_cpuidle_devices)
+ 		return -ENOMEM;
+ 
++	intel_idle_cpuidle_driver_init(&intel_idle_driver);
++
+ 	retval = intel_idle_sysfs_init();
+ 	if (retval)
+ 		pr_warn("failed to initialized sysfs");
+ 
+-	intel_idle_cpuidle_driver_init(&intel_idle_driver);
+-
+ 	retval = cpuidle_register_driver(&intel_idle_driver);
+ 	if (retval) {
+ 		struct cpuidle_driver *drv = cpuidle_get_driver();
 -- 
 2.52.0
 
