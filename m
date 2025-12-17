@@ -1,221 +1,252 @@
-Return-Path: <linux-pm+bounces-39656-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39657-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE30ECC87AF
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Dec 2025 16:36:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85816CC877F
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Dec 2025 16:35:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4A40530FFE45
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Dec 2025 15:22:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 492C4301141E
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Dec 2025 15:35:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00C9633DEF2;
-	Wed, 17 Dec 2025 15:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51BDB38E168;
+	Wed, 17 Dec 2025 15:35:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZT2c3zN0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cxYTTKIm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8AEC33B95B;
-	Wed, 17 Dec 2025 15:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9766737C0E7;
+	Wed, 17 Dec 2025 15:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765984616; cv=none; b=bMSYpQwZKXJ7qSjqaqZfjJ2oaYmg8cwdy/oAnEX3VjbfeitB0DhI9ZRD+iT3dw8VxU9bI3+7lzVczYh7kAKew896zcCZQQkgUYgIAVZZUKqQg2q16lXery4/XLcLwlz2uM4DzgsdwBw6kU2GviCgEaX5dcX/HegE0i6uIsVnAgw=
+	t=1765985716; cv=none; b=WPtwBocW4Uxaey9OFqVtHACIbNSuPoX4Bb8SmvlXMLHBP2IJHbd2mpCoSn7+3bZASOtI0BtgnXugYCNKXn86diNp0oZqyXwXqRZ4dHuav4KcRignwFxyNfHnc2nYAf2PfILrHieU+WSyP/os+E1FP2mToxhRqvht/pY/0A9CLJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765984616; c=relaxed/simple;
-	bh=Jn4ogLDd8r3CCYiLkWdVqZ7MN33WWwkMK5ahLaeXfh4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HdaMa9dEZ4Cd7UkDwH6sF67KtEc4eQjdk15J8JYGK0rhpgTmt992cxsYn/QjHeQb/b/eJDMWjLBSkKdJWaosHrQ20Dg9XlMcNXzwuCFuIQL/spueGoDlUtDHQgz4z7qvU7r7wgbbOWKz2kD6vPhIhFWf7PbPpUHBX3/UF0Yp4t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=fail smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZT2c3zN0; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=intel.com
+	s=arc-20240116; t=1765985716; c=relaxed/simple;
+	bh=rsvW0F/99KkweA4eP9/pit8zUtwZ65GB07yMa60aOEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ScUkr4Hv3smkWnTxZ6+D8sH5uWIoVzgMUQWYk8AVtpGyFr9HtFK/OHWApEWRQeHL46fKx48OfqfSbpH6VVybZteaf+Mw+vB0KzaYV5786/NPWZeto8AqfWzzA46y0EN7tHkL8IbAo9wPjCNnpep31NF7SfI8KULraw+A8i8zUF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cxYTTKIm; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765984615; x=1797520615;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Jn4ogLDd8r3CCYiLkWdVqZ7MN33WWwkMK5ahLaeXfh4=;
-  b=ZT2c3zN0+jkG+cG4d7YihGqlkSkh6sKoN1g6urNixWeKKhgHL+7Rm/CA
-   mr9jkNcqDJD/ZeYiJWPZAX6aWsEN+u7PXbGgTTrxoBya6g3YDqiwNIVsp
-   xBVZDq9n9CwyWGffdBwgHcJM1PLgQ7tPV1SS5R0GdBltmDD1pM35SgGXo
-   jcjmJAQXXzlWdf7HzJ8ta8saIE4C5JzpXQcgCsAVyy9NEuT/G6r4lyBCe
-   4eF6oaOvo51MNg9CBthCsdHh97gC2Lll82kklGF3OUkIGwgmOK5di3gOW
-   kvKY98DZBJ95FzXcmvEJtAQX/CkkjsEr/pl7Fx7NaPi0/WG4UufVKx0yY
-   g==;
-X-CSE-ConnectionGUID: EIQ+wYwmQVGrWDCT21rYRA==
-X-CSE-MsgGUID: rx4wt8CQQO2gW+q+7a64cA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11645"; a="71782192"
+  t=1765985713; x=1797521713;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rsvW0F/99KkweA4eP9/pit8zUtwZ65GB07yMa60aOEc=;
+  b=cxYTTKIm2n/4pFx1dBHwZRKdGEEuGL5EdZg3H57uNdqCJajoslAKLeFf
+   v91/uYLHAQlByltrNdqrEuOncmrXFi7GezVYHuTYS8nns/b/3eZX0qtxB
+   iqjdWmb4IXfCPfSZ/JPtk1Zuh6146/NudoXv00OL2eu3/pYXzKx0VS9lH
+   lmY6e+ZYMkIx29juQHtU/s8KPJYi75EuCDwJ78BP3l4tz9CDXEr5blOqt
+   C0A2kFdQwNzpOrYCwdxX3wUbMOqPr1UqqMrgj7mfTaA8RcEzwZVgCHdxy
+   HbJU9DCOuNMGaDZUufc1hlH/7mHVh0hMfjv4Tafyac3z0bew+2hcLj2PJ
+   A==;
+X-CSE-ConnectionGUID: CbsBYGGFSXKfZhcdH0z/IQ==
+X-CSE-MsgGUID: tlROyHfkQyGPxfR5K/LZAg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11645"; a="67891321"
 X-IronPort-AV: E=Sophos;i="6.21,156,1763452800"; 
-   d="scan'208";a="71782192"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2025 07:16:54 -0800
-X-CSE-ConnectionGUID: 9Zz3CuE/QJmSWpTPqvGO9A==
-X-CSE-MsgGUID: FyV3p9PCScOjgZR8fF/CRg==
+   d="scan'208";a="67891321"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2025 07:35:13 -0800
+X-CSE-ConnectionGUID: KtIKqAKFTj+N06A7oPaw/w==
+X-CSE-MsgGUID: sWGrSkiNTYmEBODkKhK0aQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,156,1763452800"; 
-   d="scan'208";a="198326677"
-Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 17 Dec 2025 07:16:53 -0800
-Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vVtGj-000000000pl-3LLX;
-	Wed, 17 Dec 2025 15:16:49 +0000
-Date: Wed, 17 Dec 2025 23:16:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 32/75] drivers/dma/sh/shdma-base.c:146:9:
- error: assigning to 'int' from incompatible type 'void'
-Message-ID: <202512172351.Q3FbZRLS-lkp@intel.com>
+   d="scan'208";a="197449367"
+Received: from spandruv-desk.jf.intel.com ([10.54.55.20])
+  by orviesa006.jf.intel.com with ESMTP; 17 Dec 2025 07:35:13 -0800
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To: rafael@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
+	RavitejaX Veesam <ravitejax.veesam@intel.com>
+Subject: [PATCH] powercap: intel_rapl: Fix possible recursive lock warning
+Date: Wed, 17 Dec 2025 07:34:55 -0800
+Message-ID: <20251217153455.3560176-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   3c2d6399cecba91a426987e4fba035b21682335f
-commit: f2729bf572500e3f9d4d5140129c72bd18942a17 [32/75] PM: runtime: Change pm_runtime_put() return type to void
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20251217/202512172351.Q3FbZRLS-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251217/202512172351.Q3FbZRLS-lkp@intel.com/reproduce)
+With the RAPL PMU addition, there is a recursive locking when CPU online
+callback function calls rapl_package_add_pmu(). Here cpu_hotplug_lock
+is already acquired by cpuhp_thread_fun() and rapl_package_add_pmu()
+tries to acquire again.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512172351.Q3FbZRLS-lkp@intel.com/
+<4>[ 8.197433] ============================================
+<4>[ 8.197437] WARNING: possible recursive locking detected
+<4>[ 8.197440] 6.19.0-rc1-lgci-xe-xe-4242-05b7c58b3367dca84+ #1 Not tainted
+<4>[ 8.197444] --------------------------------------------
+<4>[ 8.197447] cpuhp/0/20 is trying to acquire lock:
+<4>[ 8.197450] ffffffff83487870 (cpu_hotplug_lock){++++}-{0:0}, at:
+rapl_package_add_pmu+0x37/0x370 [intel_rapl_common]
+<4>[ 8.197463]
+but task is already holding lock:
+<4>[ 8.197466] ffffffff83487870 (cpu_hotplug_lock){++++}-{0:0}, at:
+cpuhp_thread_fun+0x6d/0x290
+<4>[ 8.197477]
+other info that might help us debug this:
+<4>[ 8.197480] Possible unsafe locking scenario:
 
-All errors (new ones prefixed by >>):
+<4>[ 8.197483] CPU0
+<4>[ 8.197485] ----
+<4>[ 8.197487] lock(cpu_hotplug_lock);
+<4>[ 8.197490] lock(cpu_hotplug_lock);
+<4>[ 8.197493]
+*** DEADLOCK ***
+..
+..
+<4>[ 8.197542] __lock_acquire+0x146e/0x2790
+<4>[ 8.197548] lock_acquire+0xc4/0x2c0
+<4>[ 8.197550] ? rapl_package_add_pmu+0x37/0x370 [intel_rapl_common]
+<4>[ 8.197556] cpus_read_lock+0x41/0x110
+<4>[ 8.197558] ? rapl_package_add_pmu+0x37/0x370 [intel_rapl_common]
+<4>[ 8.197561] rapl_package_add_pmu+0x37/0x370 [intel_rapl_common]
+<4>[ 8.197565] rapl_cpu_online+0x85/0x87 [intel_rapl_msr]
+<4>[ 8.197568] ? __pfx_rapl_cpu_online+0x10/0x10 [intel_rapl_msr]
+<4>[ 8.197570] cpuhp_invoke_callback+0x41f/0x6c0
+<4>[ 8.197573] ? cpuhp_thread_fun+0x6d/0x290
+<4>[ 8.197575] cpuhp_thread_fun+0x1e2/0x290
+<4>[ 8.197578] ? smpboot_thread_fn+0x26/0x290
+<4>[ 8.197581] smpboot_thread_fn+0x12f/0x290
+<4>[ 8.197584] ? __pfx_smpboot_thread_fn+0x10/0x10
+<4>[ 8.197586] kthread+0x11f/0x250
+<4>[ 8.197589] ? __pfx_kthread+0x10/0x10
+<4>[ 8.197592] ret_from_fork+0x344/0x3a0
+<4>[ 8.197595] ? __pfx_kthread+0x10/0x10
+<4>[ 8.197597] ret_from_fork_asm+0x1a/0x30
+<4>[ 8.197604] </TASK>
 
->> drivers/dma/sh/shdma-base.c:146:9: error: assigning to 'int' from incompatible type 'void'
-     146 |                                 ret = pm_runtime_put(schan->dev);
-         |                                     ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
->> sound/soc/rockchip/rockchip_sai.c:1491:2: error: statement requires expression of scalar type ('void' invalid)
-    1491 |         if (pm_runtime_put(&pdev->dev))
-         |         ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
---
->> drivers/watchdog/rzv2h_wdt.c:271:6: error: assigning to 'int' from incompatible type 'void'
-     271 |         ret = pm_runtime_put(&pdev->dev);
-         |             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
+Fix this issue in the same way as rapl powercap package domain is added
+from the same CPU online callback by introducing another interface which
+doesn't call cpus_read_lock(). Add rapl_package_add_pmu_locked() and
+rapl_package_remove_pmu_locked() which don't call cpus_read_lock().
 
+Fixes: 748d6ba43afd ("powercap: intel_rapl: Enable MSR-based RAPL PMU support")
+Reported-by: Borah, Chaitanya Kumar <chaitanya.kumar.borah@intel.com>
+Closes: https://lore.kernel.org/linux-pm/5427ede1-57a0-43d1-99f3-8ca4b0643e82@intel.com/T/#u
+Tested-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Tested-by: RavitejaX Veesam <ravitejax.veesam@intel.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/powercap/intel_rapl_common.c | 24 ++++++++++++++++++------
+ drivers/powercap/intel_rapl_msr.c    |  4 ++--
+ include/linux/intel_rapl.h           |  4 ++++
+ 3 files changed, 24 insertions(+), 8 deletions(-)
 
-vim +146 drivers/dma/sh/shdma-base.c
-
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   69  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   70  static dma_cookie_t shdma_tx_submit(struct dma_async_tx_descriptor *tx)
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   71  {
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   72  	struct shdma_desc *chunk, *c, *desc =
-91ea74e9ec5c58 Kuninori Morimoto     2014-04-02   73  		container_of(tx, struct shdma_desc, async_tx);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   74  	struct shdma_chan *schan = to_shdma_chan(tx->chan);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   75  	dma_async_tx_callback callback = tx->callback;
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   76  	dma_cookie_t cookie;
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   77  	bool power_up;
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   78  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   79  	spin_lock_irq(&schan->chan_lock);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   80  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   81  	power_up = list_empty(&schan->ld_queue);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   82  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   83  	cookie = dma_cookie_assign(tx);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   84  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   85  	/* Mark all chunks of this descriptor as submitted, move to the queue */
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   86  	list_for_each_entry_safe(chunk, c, desc->node.prev, node) {
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   87  		/*
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   88  		 * All chunks are on the global ld_free, so, we have to find
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   89  		 * the end of the chain ourselves
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   90  		 */
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   91  		if (chunk != desc && (chunk->mark == DESC_IDLE ||
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   92  				      chunk->async_tx.cookie > 0 ||
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   93  				      chunk->async_tx.cookie == -EBUSY ||
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   94  				      &chunk->node == &schan->ld_free))
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   95  			break;
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09   96  		chunk->mark = DESC_SUBMITTED;
-91ea74e9ec5c58 Kuninori Morimoto     2014-04-02   97  		if (chunk->chunks == 1) {
-91ea74e9ec5c58 Kuninori Morimoto     2014-04-02   98  			chunk->async_tx.callback = callback;
-91ea74e9ec5c58 Kuninori Morimoto     2014-04-02   99  			chunk->async_tx.callback_param = tx->callback_param;
-91ea74e9ec5c58 Kuninori Morimoto     2014-04-02  100  		} else {
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  101  			/* Callback goes to the last chunk */
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  102  			chunk->async_tx.callback = NULL;
-91ea74e9ec5c58 Kuninori Morimoto     2014-04-02  103  		}
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  104  		chunk->cookie = cookie;
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  105  		list_move_tail(&chunk->node, &schan->ld_queue);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  106  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  107  		dev_dbg(schan->dev, "submit #%d@%p on %d\n",
-91ea74e9ec5c58 Kuninori Morimoto     2014-04-02  108  			tx->cookie, &chunk->async_tx, schan->id);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  109  	}
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  110  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  111  	if (power_up) {
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  112  		int ret;
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  113  		schan->pm_state = SHDMA_PM_BUSY;
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  114  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  115  		ret = pm_runtime_get(schan->dev);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  116  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  117  		spin_unlock_irq(&schan->chan_lock);
-d143f939a95696 Vinod Koul            2022-03-10  118  		if (ret < 0)
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  119  			dev_err(schan->dev, "%s(): GET = %d\n", __func__, ret);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  120  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  121  		pm_runtime_barrier(schan->dev);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  122  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  123  		spin_lock_irq(&schan->chan_lock);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  124  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  125  		/* Have we been reset, while waiting? */
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  126  		if (schan->pm_state != SHDMA_PM_ESTABLISHED) {
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  127  			struct shdma_dev *sdev =
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  128  				to_shdma_dev(schan->dma_chan.device);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  129  			const struct shdma_ops *ops = sdev->ops;
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  130  			dev_dbg(schan->dev, "Bring up channel %d\n",
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  131  				schan->id);
-d9a3e992945278 Thomas Andreatta      2025-08-27  132  
-d9a3e992945278 Thomas Andreatta      2025-08-27  133  			ret = ops->setup_xfer(schan, schan->slave_id);
-d9a3e992945278 Thomas Andreatta      2025-08-27  134  			if (ret < 0) {
-d9a3e992945278 Thomas Andreatta      2025-08-27  135  				dev_err(schan->dev, "setup_xfer failed: %d\n", ret);
-d9a3e992945278 Thomas Andreatta      2025-08-27  136  
-d9a3e992945278 Thomas Andreatta      2025-08-27  137  				/* Remove chunks from the queue and mark them as idle */
-d9a3e992945278 Thomas Andreatta      2025-08-27  138  				list_for_each_entry_safe(chunk, c, &schan->ld_queue, node) {
-d9a3e992945278 Thomas Andreatta      2025-08-27  139  					if (chunk->cookie == cookie) {
-d9a3e992945278 Thomas Andreatta      2025-08-27  140  						chunk->mark = DESC_IDLE;
-d9a3e992945278 Thomas Andreatta      2025-08-27  141  						list_move(&chunk->node, &schan->ld_free);
-d9a3e992945278 Thomas Andreatta      2025-08-27  142  					}
-d9a3e992945278 Thomas Andreatta      2025-08-27  143  				}
-d9a3e992945278 Thomas Andreatta      2025-08-27  144  
-d9a3e992945278 Thomas Andreatta      2025-08-27  145  				schan->pm_state = SHDMA_PM_ESTABLISHED;
-d9a3e992945278 Thomas Andreatta      2025-08-27 @146  				ret = pm_runtime_put(schan->dev);
-d9a3e992945278 Thomas Andreatta      2025-08-27  147  
-d9a3e992945278 Thomas Andreatta      2025-08-27  148  				spin_unlock_irq(&schan->chan_lock);
-d9a3e992945278 Thomas Andreatta      2025-08-27  149  				return ret;
-d9a3e992945278 Thomas Andreatta      2025-08-27  150  			}
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  151  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  152  			if (schan->pm_state == SHDMA_PM_PENDING)
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  153  				shdma_chan_xfer_ld_queue(schan);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  154  			schan->pm_state = SHDMA_PM_ESTABLISHED;
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  155  		}
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  156  	} else {
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  157  		/*
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  158  		 * Tell .device_issue_pending() not to run the queue, interrupts
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  159  		 * will do it anyway
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  160  		 */
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  161  		schan->pm_state = SHDMA_PM_PENDING;
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  162  	}
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  163  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  164  	spin_unlock_irq(&schan->chan_lock);
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  165  
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  166  	return cookie;
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  167  }
-9a7b8e002e331d Guennadi Liakhovetski 2012-05-09  168  
-
-:::::: The code at line 146 was first introduced by commit
-:::::: d9a3e9929452780df16f3414f0d59b5f69d058cf dmaengine: sh: setup_xref error handling
-
-:::::: TO: Thomas Andreatta <thomasandreatta2000@gmail.com>
-:::::: CC: Vinod Koul <vkoul@kernel.org>
-
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index b9d87e56cbbc..3ff6da3bf4e6 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -2032,7 +2032,7 @@ static int rapl_pmu_update(struct rapl_package *rp)
+ 	return ret;
+ }
+ 
+-int rapl_package_add_pmu(struct rapl_package *rp)
++int rapl_package_add_pmu_locked(struct rapl_package *rp)
+ {
+ 	struct rapl_package_pmu_data *data = &rp->pmu_data;
+ 	int idx;
+@@ -2040,8 +2040,6 @@ int rapl_package_add_pmu(struct rapl_package *rp)
+ 	if (rp->has_pmu)
+ 		return -EEXIST;
+ 
+-	guard(cpus_read_lock)();
+-
+ 	for (idx = 0; idx < rp->nr_domains; idx++) {
+ 		struct rapl_domain *rd = &rp->domains[idx];
+ 		int domain = rd->id;
+@@ -2091,17 +2089,23 @@ int rapl_package_add_pmu(struct rapl_package *rp)
+ 
+ 	return rapl_pmu_update(rp);
+ }
++EXPORT_SYMBOL_GPL(rapl_package_add_pmu_locked);
++
++int rapl_package_add_pmu(struct rapl_package *rp)
++{
++	guard(cpus_read_lock)();
++
++	return rapl_package_add_pmu_locked(rp);
++}
+ EXPORT_SYMBOL_GPL(rapl_package_add_pmu);
+ 
+-void rapl_package_remove_pmu(struct rapl_package *rp)
++void rapl_package_remove_pmu_locked(struct rapl_package *rp)
+ {
+ 	struct rapl_package *pos;
+ 
+ 	if (!rp->has_pmu)
+ 		return;
+ 
+-	guard(cpus_read_lock)();
+-
+ 	list_for_each_entry(pos, &rapl_packages, plist) {
+ 		/* PMU is still needed */
+ 		if (pos->has_pmu && pos != rp)
+@@ -2111,6 +2115,14 @@ void rapl_package_remove_pmu(struct rapl_package *rp)
+ 	perf_pmu_unregister(&rapl_pmu.pmu);
+ 	memset(&rapl_pmu, 0, sizeof(struct rapl_pmu));
+ }
++EXPORT_SYMBOL_GPL(rapl_package_remove_pmu_locked);
++
++void rapl_package_remove_pmu(struct rapl_package *rp)
++{
++	guard(cpus_read_lock)();
++
++	rapl_package_remove_pmu_locked(rp);
++}
+ EXPORT_SYMBOL_GPL(rapl_package_remove_pmu);
+ #endif
+ 
+diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
+index 0ce1096b6314..9a7e150b3536 100644
+--- a/drivers/powercap/intel_rapl_msr.c
++++ b/drivers/powercap/intel_rapl_msr.c
+@@ -82,7 +82,7 @@ static int rapl_cpu_online(unsigned int cpu)
+ 		if (IS_ERR(rp))
+ 			return PTR_ERR(rp);
+ 		if (rapl_msr_pmu)
+-			rapl_package_add_pmu(rp);
++			rapl_package_add_pmu_locked(rp);
+ 	}
+ 	cpumask_set_cpu(cpu, &rp->cpumask);
+ 	return 0;
+@@ -101,7 +101,7 @@ static int rapl_cpu_down_prep(unsigned int cpu)
+ 	lead_cpu = cpumask_first(&rp->cpumask);
+ 	if (lead_cpu >= nr_cpu_ids) {
+ 		if (rapl_msr_pmu)
+-			rapl_package_remove_pmu(rp);
++			rapl_package_remove_pmu_locked(rp);
+ 		rapl_remove_package_cpuslocked(rp);
+ 	} else if (rp->lead_cpu == cpu) {
+ 		rp->lead_cpu = lead_cpu;
+diff --git a/include/linux/intel_rapl.h b/include/linux/intel_rapl.h
+index e9ade2ff4af6..f479ef5b3341 100644
+--- a/include/linux/intel_rapl.h
++++ b/include/linux/intel_rapl.h
+@@ -214,10 +214,14 @@ void rapl_remove_package(struct rapl_package *rp);
+ 
+ #ifdef CONFIG_PERF_EVENTS
+ int rapl_package_add_pmu(struct rapl_package *rp);
++int rapl_package_add_pmu_locked(struct rapl_package *rp);
+ void rapl_package_remove_pmu(struct rapl_package *rp);
++void rapl_package_remove_pmu_locked(struct rapl_package *rp);
+ #else
+ static inline int rapl_package_add_pmu(struct rapl_package *rp) { return 0; }
++static inline int rapl_package_add_pmu_locked(struct rapl_package *rp) { return 0; }
+ static inline void rapl_package_remove_pmu(struct rapl_package *rp) { }
++static inline void rapl_package_remove_pmu_locked(struct rapl_package *rp) { }
+ #endif
+ 
+ #endif /* __INTEL_RAPL_H__ */
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.48.1
+
 
