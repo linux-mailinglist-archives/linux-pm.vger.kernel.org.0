@@ -1,76 +1,47 @@
-Return-Path: <linux-pm+bounces-39644-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39645-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43980CC5979
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Dec 2025 01:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E21ACC6CD8
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Dec 2025 10:31:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0D829304BDA2
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Dec 2025 00:23:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AB988300E009
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Dec 2025 09:31:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD6A81E9919;
-	Wed, 17 Dec 2025 00:23:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N28Tdx+a"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29092337B8B;
+	Wed, 17 Dec 2025 09:31:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from silergymicro.com (unknown [218.94.11.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD99C1C84DC;
-	Wed, 17 Dec 2025 00:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36D12BEFFB;
+	Wed, 17 Dec 2025 09:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=218.94.11.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765931032; cv=none; b=qqu8S6W0XffKjRlqC/4d9tCJ13Shr0zkjxWSCe770cR1M59bFnTMtjEtLj1D1gKqywGHHkG3pdRKghVBJQkIRfe+ijSsuyzqm/9ZJb4S2R8onkeVxPGjxvWOrugUEe8h2mRzCEFjGBUHfzkTEfyhs1vmubdP4sl7Sgux/4f28jw=
+	t=1765963894; cv=none; b=Whq3ieLwbDcVwBdJsHzC2R5B47mlHE3GihAB0SU5pUCkZkwOI1csKAJ2/rJDn+BCJoYPtKlPoGAwXanOdNYfddQBxM/b5SIhnGPDSPr7pXSO6JoX5RvIdLocv9k1YCo28iU8h8Fdx20my6v3VMjsWsNLlSjgTghdqeIzHj0LWZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765931032; c=relaxed/simple;
-	bh=G0AeP2SFXAa2SNhN9cTIs+I4Bt40fCIyaD+Z0SVkcwI=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RNcQIuJd3a7z4ZEGTUF/XVWNVSeS+MDQ4Uz4bOOfn3259rR0w+g8YwIbWbviZQPfe/l/0EJKede2CsfrQteB/MnsW0xacOe81SxzeE0P/SbqcuXUqAUF2sXfpLHRZhs+qX02pQ8ZYJvbCoJthCCvFzDvtDoFJSpjediU+y6rFbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N28Tdx+a; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1765931031; x=1797467031;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=G0AeP2SFXAa2SNhN9cTIs+I4Bt40fCIyaD+Z0SVkcwI=;
-  b=N28Tdx+alW01L9WKB/Elq9gA0Wvwu+lOKpES0jegydnSyHO5xEyZdmqI
-   OjL808ca4Ak0oClqMS3FPZ48NZhF+Ux7+I17zEt9N8xPXwA0VYin4jjZI
-   wxpeRHMqk5ptW7Otj5S0C3JKquRtRRcaVat8fBmhdkpYFeI8b6OA8V3l+
-   zSQl5PDR5mrr28DtcRwJzs12syUjX29HS54AZlcZYjU1nlNylRVF0RoxA
-   /UdyDuHN0qbVZEGXnTz95u7039+OnB9KeSsbWcTns+C8RiIsuj+cfzIuX
-   BwaKQyGxGypfZbmDqtmot3o6vjk7IidCF7yZ9WG0XvGXzlstjLqGjYVeH
-   A==;
-X-CSE-ConnectionGUID: 5pTAtgq8QH209AxNkEaHSw==
-X-CSE-MsgGUID: /uLmijwcROahqo2PphSOqg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11644"; a="79228274"
-X-IronPort-AV: E=Sophos;i="6.21,154,1763452800"; 
-   d="scan'208";a="79228274"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2025 16:23:48 -0800
-X-CSE-ConnectionGUID: sOAJaPA3T3KK+tkO8tDtog==
-X-CSE-MsgGUID: x3MAgS5NTk+FvHkJokSWwg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,154,1763452800"; 
-   d="scan'208";a="228858110"
-Received: from sghuge-mobl2.amr.corp.intel.com (HELO xpardee-desk.lan) ([10.125.110.225])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2025 16:23:48 -0800
-From: Xi Pardee <xi.pardee@linux.intel.com>
-To: xi.pardee@linux.intel.com,
-	irenic.rajneesh@gmail.com,
-	david.e.box@linux.intel.com,
-	hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH 3/3] platform/x86/intel/pmc: Enable substate residencies for multiple PMCs
-Date: Tue, 16 Dec 2025 16:23:40 -0800
-Message-ID: <20251217002343.2289577-4-xi.pardee@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251217002343.2289577-1-xi.pardee@linux.intel.com>
-References: <20251217002343.2289577-1-xi.pardee@linux.intel.com>
+	s=arc-20240116; t=1765963894; c=relaxed/simple;
+	bh=CnlrdsMy+lcyn/m7HVPqbnmkIZ2+U9SUMA6k2VxpBpE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aBlbmLRykzWMremyz5SkBKJgBGFozs/EQOJi6eRLATdQht1Gtci8lBTxB8zAovU2ay8u6foKrHJRegA5zu7ucvlB6tHlOC9zDFGLcWHBluFpUhxKSQOf266XLG78BlclES5wpeXo7qzCF87EQAfQTZVOxbhk34b8vkNDYcEro64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=silergymicro.com; spf=none smtp.mailfrom=silergymicro.com; arc=none smtp.client-ip=218.94.11.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=silergymicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=silergymicro.com
+Received: from getian-VirtualBox.. (unknown [10.2.25.100])
+ by mail.silergymicro.com (Postfix) with ESMTPA id 80562182DA808;
+ Wed, 17 Dec 2025 17:31:21 +0800 (CST)
+From: "tian.ge" <tian.ge@silergymicro.com>
+To: krzk@kernel.org
+Cc: krzk+dt@kernel.org, robh@kernel.org, conor+dt@kernel.org, sre@kernel.org, 
+ devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, lei.zhang@silergycorp.com,
+ frank.fan@silergymicro.com
+Subject: Re: [PATCH] dt-bindings: power: supply: Add Silergy SY6974B charger
+Date: Wed, 17 Dec 2025 17:30:58 +0800
+Message-Id: <20251217093058.183290-1-tian.ge@silergymicro.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <43033462-bdea-48b2-9108-acc29b60e82e@kernel.org>
+References: <43033462-bdea-48b2-9108-acc29b60e82e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,56 +49,40 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TraceID: 17659638827mT5C
+Content-Type: text/plain; charset="utf-8"
 
-Enable substate residencies support for multiple PMCs. Previously
-substate residencies were shown only for the primary PMC. This
-change enables substate residencies for all available PMCs.
+On Tue, 16 Dec 2025 06:33:25 +0100, Krzysztof Kozlowski<krzk@kernel.org> wrote:
 
-Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
----
- drivers/platform/x86/intel/pmc/core.c | 26 ++++++++++++++++++--------
- 1 file changed, 18 insertions(+), 8 deletions(-)
+> On 16/12/2025 03:18, tian.ge wrote:
+> > Add bindings for the Silergy SY6974B I2C controlled charger.
+> 
+> Why? Where is any user of this?
+> 
+> Plus this was not tested, so I finish review here. You did not follow
+> basic DT binding rules, please read first writing-bindings doc or my
+> DTS101 talk.
+> 
+> Best regards,
+> Krzysztof
 
-diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
-index 25f77a9dc42c5..1f84d5ef47458 100644
---- a/drivers/platform/x86/intel/pmc/core.c
-+++ b/drivers/platform/x86/intel/pmc/core.c
-@@ -776,16 +776,26 @@ static inline u64 adjust_lpm_residency(struct pmc *pmc, u32 offset,
- static int pmc_core_substate_res_show(struct seq_file *s, void *unused)
- {
- 	struct pmc_dev *pmcdev = s->private;
--	struct pmc *pmc = pmcdev->pmcs[PMC_IDX_MAIN];
--	const int lpm_adj_x2 = pmc->map->lpm_res_counter_step_x2;
--	u32 offset = pmc->map->lpm_residency_offset;
--	u8 mode;
-+	unsigned int pmc_idx;
-+
-+	for (pmc_idx = 0; pmc_idx < ARRAY_SIZE(pmcdev->pmcs); ++pmc_idx) {
-+		int lpm_adj_x2;
-+		struct pmc *pmc;
-+		u32 offset;
-+		u8 mode;
- 
--	seq_printf(s, "%-10s %-15s\n", "Substate", "Residency");
-+		pmc = pmcdev->pmcs[pmc_idx];
-+		if (!pmc)
-+			continue;
- 
--	pmc_for_each_mode(mode, pmc) {
--		seq_printf(s, "%-10s %-15llu\n", pmc_lpm_modes[mode],
--			   adjust_lpm_residency(pmc, offset + (4 * mode), lpm_adj_x2));
-+		lpm_adj_x2 = pmc->map->lpm_res_counter_step_x2;
-+		offset = pmc->map->lpm_residency_offset;
-+
-+		seq_printf(s, "pmc%u %10s %15s\n", pmc_idx, "Substate", "Residency");
-+		pmc_for_each_mode(mode, pmc) {
-+			seq_printf(s, "%15s %15llu\n", pmc_lpm_modes[mode],
-+				   adjust_lpm_residency(pmc, offset + (4 * mode), lpm_adj_x2));
-+		}
- 	}
- 
- 	return 0;
--- 
-2.43.0
+Hi Krzysztof,
 
+Thanks for your feedback, and thanks to the bot for the dt-bindings-check report!
+
+Apologies for the issues in my initial submission:
+1. I didn't run `make dt_binding_check` for the DT binding (unaware of this mandatory step);
+2. The driver and DT binding were sent as separate patches with different recipients, making the driver invisible to DT maintainers.
+
+Clarification: The SY6974B driver patch is already submitted (Message-Id: 20251216021408.654926-1-tian.ge@silergymicro.com). It’s the direct user of this DT binding.
+
+I’ve now fixed all issues:
+1. Updated DT binding: Replaced all 'sy,' prefixes with 'silergy,' (passes `make dt_binding_check` and `yamllint`);
+2. Synced driver: Parses 'silergy,xxx' properties (consistent with binding, compiles cleanly).
+
+I’ll resubmit a unified v2 series (cover letter + DT binding + driver) to all relevant maintainers (DT + power supply) to resolve the association issue.
+
+Thanks,
+Tian
+ This email contains information from Silergy Corp. that may be confidential or privileged. Such information is solely for the intended recipient(s).Any review, retransmission, dissemination, disclosure or other use of this information by persons or entities other than intended recipient(s) is strictly prohibited. If you have received this email in error, please notify the sender immediately and delete this email together with any correspondences. 
 
