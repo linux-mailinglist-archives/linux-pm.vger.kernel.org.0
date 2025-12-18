@@ -1,139 +1,101 @@
-Return-Path: <linux-pm+bounces-39668-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39669-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A6F9CC9C95
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Dec 2025 00:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 33AD3CCA77F
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Dec 2025 07:30:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DF205303BE0A
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Dec 2025 23:18:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A014C305FA90
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Dec 2025 06:29:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80F55330640;
-	Wed, 17 Dec 2025 23:18:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDD0D320CCD;
+	Thu, 18 Dec 2025 06:28:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VBaT4sxa"
+	dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b="oj4V7Kti"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4184F32ED2F
-	for <linux-pm@vger.kernel.org>; Wed, 17 Dec 2025 23:18:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB072264AA;
+	Thu, 18 Dec 2025 06:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766013528; cv=none; b=MIoB7NNnAGkyVUMLySwI+qVgbA8r82Fm9McgRTb8WBjlulIm5uYH43rpSDjXrnqww+TldQI5Dhw97hEou+ZyHDBDKWpYz1ge9yagQDpBIoAN5Quqz769o5ULX1zCBOwrVoCwngLwkRJYCp1BCFz1PUgjKEjqesKOKHrQ3w0SRhQ=
+	t=1766039337; cv=none; b=SqSzWbhefOuLTdX8jjyP2/kVlZbE414JjR+x29a+cExNziE4PaHYrayq9+tfdH3UWs1ronQW7BOp2A/KRYFcWoifOeOLZDxx2yhTd/MO0K7YPJqHm7XxqmbC6h4w8yIr2UWFtig2QnMy0FOKcJsS091hIwkICXxcvVBal2AZrE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766013528; c=relaxed/simple;
-	bh=C1X5R0T9A6CrUnxpIm/QVXVuRULmzTp597QRk97zyjM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OX2bq2e0Cn+5T4JfYY83/QUXoQU0tS86k8eY7YP5kd93XhDiLcqmAzEEYvvkn/oi5VbD0o1WxEj4zgqW3zxCzaNvklOdgH8hdlqbPOUHLNiPgnPpJQDvt62Y+UzznHFEmEfREZVPMvKBBco6pFZQh9aUpJ3cFDJXBTtG2sURikA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VBaT4sxa; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-596ba05aaecso29364e87.0
-        for <linux-pm@vger.kernel.org>; Wed, 17 Dec 2025 15:18:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766013524; x=1766618324; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AZvc3rVI0di0d/Re6Le5Bvc+vMvJtdhpmIxMnxjb6tA=;
-        b=VBaT4sxaHFvfVHw/0PNR0mma9L9CQCE0t1LZsPF9klP2ecyZEgzKiX754iClqRnz0f
-         GmmYZH9YBVrmYyy8S74MtCYaKuLLOE2twPEfhgrGbfkH8UXctcxVy2vj9OV5ntO4+YDt
-         N24t/STd7wbl7G92s0Ny+GD1Htd8YjaiuuS7DGr+Iv8Q9IUwNUEXilozkJvTMnE86WQu
-         MnZ+OnIJvOTufXzIWehEwX5Rn+kCV2O/NoVJ2bWPv2EgbMUdijMRcUlXoqnDdN/RqdV2
-         qtSKWp2M81Sd6yvPFFJro9CHX/HMKbmz3BzLch4xdn6FHJrroyI4t4EVNBxfQxTI6t+V
-         6rDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766013524; x=1766618324;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=AZvc3rVI0di0d/Re6Le5Bvc+vMvJtdhpmIxMnxjb6tA=;
-        b=tI9Z3IjHJVUrZC20tAqtMoSoJKW986w2Nvv+6doFeRriuwEZJy3uonCFtwMFLD92tv
-         b0QsfULHjkepqcwfGSeqAj1d9qww1RRaVonz8sTx8XY0bYk0BtYBA+G5Pi+t5Tc9owPq
-         DVOWNcmKWM4kbtFBHXG5RnkSSHUoKpcvXEmV31dpi4mgokLGC4O7n9yXQEYuclBxEuxF
-         7F9Z4cZppTbEHLBXx9y7UxrA14LWdyFpES+jkN19PaMEW3sxkEFlNyj2nr4qaFjNT2B9
-         ywpwjVaWbFcWUYgqLz3lbN0ufC8DvSb+7yMj2tHByWz9ekJn+Q2FeH4moCVDXG+Av8OL
-         etmg==
-X-Forwarded-Encrypted: i=1; AJvYcCXCG9z6rK7e5iJF0Wgud4a1U7+zZv7yU0Lzzrv4nvdvuqNv7RhwMFKOLL99YY1jHp08UlZD0bmR+A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLTWInie9J8sM+lBPpCFrrQyTypncbqNxiqvXRRE0xnew5aiEX
-	l5PYYFdYSdyJ1mDU3/Xxgguy04p+6KSoLgMHa0pcNHnM30s5V70AFsFo28YXGg==
-X-Gm-Gg: AY/fxX44ODZERRUKjwTVAgPEWKGzTGTfeSB3ROKf+DT4Hp3Y8dh6Qw0LU5DpcPdH2wG
-	s/EXf7cQ1AHv7nWl+Ys4eu7I8lH62XObIhm3a6SzypLM9m8nsOUoqxYrfxq3JYOBY+w7M4BwW9r
-	OkhHDZR+QVQp+mieLj+wCBjjgCpHr3nMqBrYg+yOQ4lDuNKJGUd+KJE0XX5c5d5oWC+gqxr00ng
-	wc/2Cxpp2jljC5QzUiTTQOCFune8lWa6XJqZZuNTSt3sOfyKc1Zne+a9LQhDky5R/9MkqEomdfm
-	l2/lrVT7C75IlAn2XhYiePbq74oEc4QUfITMpN26AGkvBcIZ8jN4WFY2jYGJJt6DCpTUDP30wtK
-	wgeWyjboTXikLkDWeF9sNXGFYLrS9goK+5A0/HKqNgtl54iiV5M3/PML+IFPf2DxI4saEAjt7N2
-	3vGwNpv5aB
-X-Google-Smtp-Source: AGHT+IFoFgIAi9PMNEfIKCxeozWxswujwd1S6MJvMAmdk00BzJYAqN7Mqo6fE4Jz6OZ88KHyEwKy2w==
-X-Received: by 2002:a05:6512:3ba2:b0:598:edd4:d68 with SMTP id 2adb3069b0e04-598faa5a3bamr5789014e87.28.1766013524025;
-        Wed, 17 Dec 2025 15:18:44 -0800 (PST)
-Received: from localhost ([194.190.17.114])
-        by smtp.gmail.com with UTF8SMTPSA id 38308e7fff4ca-381134b5011sm2807821fa.3.2025.12.17.15.18.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Dec 2025 15:18:42 -0800 (PST)
-From: Askar Safin <safinaskar@gmail.com>
-To: mpatocka@redhat.com
-Cc: Dell.Client.Kernel@dell.com,
-	dm-devel@lists.linux.dev,
-	linux-block@vger.kernel.org,
-	linux-btrfs@vger.kernel.org,
-	linux-crypto@vger.kernel.org,
-	linux-lvm@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-pm@vger.kernel.org,
-	linux-raid@vger.kernel.org,
-	lvm-devel@lists.linux.dev,
-	pavel@ucw.cz,
-	rafael@kernel.org,
-	gmazyland@gmail.com
-Subject: Re: [RFC PATCH 2/2] swsusp: make it possible to hibernate to device mapper devices
-Date: Thu, 18 Dec 2025 02:18:37 +0300
-Message-ID: <20251217231837.157443-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <b32d0701-4399-9c5d-ecc8-071162df97a7@redhat.com>
-References: <b32d0701-4399-9c5d-ecc8-071162df97a7@redhat.com>
+	s=arc-20240116; t=1766039337; c=relaxed/simple;
+	bh=Y7BagkDVPUE7ngwlpWuPkyJIEsl6jUcK8Z6okUG1v64=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=DiOtl7UZxCXGs3agDJjqtMHVL/k7sqD9scjBUUYj3yr7qUn5+jseITFrZg7zWRUzKmhQjVpKz4rHsF3r9C0019QdO2GQpsUOI+WoHIq0dgr/kvhtctiApVvU2vYy+8sPEZhzK1mUrPeVGrA9FPRKC0eIvHzCMsJAEdNXd/qPEqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=h-partners.com; dkim=pass (1024-bit key) header.d=h-partners.com header.i=@h-partners.com header.b=oj4V7Kti; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
+dkim-signature: v=1; a=rsa-sha256; d=h-partners.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Y7BagkDVPUE7ngwlpWuPkyJIEsl6jUcK8Z6okUG1v64=;
+	b=oj4V7KtikxVzf+ADrttqJgV04/7/HWkFboZpsWBCiy7tHw1QqkselKjfzYhHP/tRyu8PJK4Tv
+	AlnxpwgqIn6cFfqiSDaTS/HGdw2XXMhcHHLE3rPohODPahGwD0F5w3C4/y+GCf3biJJkEBsRHGR
+	QJYfhYChWwgU1Qhw2lba6I0=
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4dX10G1bFMz12LDy;
+	Thu, 18 Dec 2025 14:26:38 +0800 (CST)
+Received: from dggemv705-chm.china.huawei.com (unknown [10.3.19.32])
+	by mail.maildlp.com (Postfix) with ESMTPS id 742811402C1;
+	Thu, 18 Dec 2025 14:28:51 +0800 (CST)
+Received: from kwepemn100009.china.huawei.com (7.202.194.112) by
+ dggemv705-chm.china.huawei.com (10.3.19.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 18 Dec 2025 14:28:44 +0800
+Received: from [10.67.121.59] (10.67.121.59) by kwepemn100009.china.huawei.com
+ (7.202.194.112) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Thu, 18 Dec
+ 2025 14:28:43 +0800
+Message-ID: <74dbd0d1-e888-4a1b-8f21-a44a015047e7@huawei.com>
+Date: Thu, 18 Dec 2025 14:28:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/4] ACPI: scan: Register platform devices for thermal
+ zones
+To: "Rafael J. Wysocki" <rafael@kernel.org>, Linux ACPI
+	<linux-acpi@vger.kernel.org>
+CC: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+	Armin Wolf <w_armin@gmx.de>, Hans de Goede <hansg@kernel.org>,
+	<lihuisong@huawei.com>
+References: <6222428.lOV4Wx5bFT@rafael.j.wysocki>
+ <4701463.LvFx2qVVIh@rafael.j.wysocki>
+From: "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <4701463.LvFx2qVVIh@rafael.j.wysocki>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemn100009.china.huawei.com (7.202.194.112)
 
-Mikulas Patocka <mpatocka@redhat.com>:
-> Askar Safin requires swap and hibernation on the dm-integrity device mapper
-> target because he needs to protect his data.
 
-Hi, Mikulas, Milan and others.
-
-I'm running swap on dm-integrity for 40 days.
-
-It runs mostly without problems.
-
-But yesterday my screen freezed for 4 minutes. And then continued to work
-normally.
-
-So, may I ask again a question: is swap on dm-integrity supposed to work
-at all? (I. e. swap partition on top of dm-integrity partition on top of
-actual disk partition.) (I'm talking about swap here, not about hibernation.)
-
-Mikulas Patocka said here https://lore.kernel.org/all/3f3d871a-6a86-354f-f83d-a871793a4a47@redhat.com/ :
-
-> Encrypted swap file is not supposed to work. It uses the loop device that 
-> routes the requests to a filesystem and the filesystem needs to allocate 
-> memory to process requests.
-
-> So, this is what happened to you - the machine runs out of memory, it 
-> needs to swap out some pages, dm-crypt encrypts the pages and generates 
-> write bios, the write bios are directed to the loop device, the loop 
-> device directs them to the filesystem, the filesystem attempts to allocate 
-> more memory => deadlock.
-
-Does the same apply to dm-integrity?
-
-I. e. is it possible that write to dm-integrity will lead to allocation?
-
--- 
-Askar Safin
+在 2025/12/10 22:42, Rafael J. Wysocki 写道:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Currently, platform devices are not registered for ACPI thermal zones
+> because they are not represented as device objects in the ACPI namespace.
+> Instead, they are represented as thermal zone objects, so in particular
+> the platform_id flag is not set for them during enumeration because it
+> is only set for objects of type ACPI_BUS_TYPE_DEVICE, but otherwise they
+> are handled similarly at the ACPI core level.
+>
+> To facilitate converting the ACPI thermal zone driver into a platform
+> one, modify acpi_set_pnp_ids() to set the platform_id flag for thermal
+> zones in analogy with device objects to cause platform devices to be
+> registered for them.
+>
+> No intentional functional impact.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: lihuisong@huawei.com
+>
+>
+>
 
