@@ -1,103 +1,110 @@
-Return-Path: <linux-pm+bounces-39676-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39677-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E888CCD719
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Dec 2025 20:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3415ECCD749
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Dec 2025 21:02:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 282EC303D33B
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Dec 2025 19:51:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 33E43302D2AF
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Dec 2025 20:02:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2754286897;
-	Thu, 18 Dec 2025 19:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B865284888;
+	Thu, 18 Dec 2025 20:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JnCVz1gZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PS+IZ7td"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5FB6246781;
-	Thu, 18 Dec 2025 19:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F2C2566E9
+	for <linux-pm@vger.kernel.org>; Thu, 18 Dec 2025 20:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766087514; cv=none; b=bS0eSOQuvjgOfX06CtdPuIi2VvFACD4pPR5n4x+ROE9RE3IW5w6Wx3qxdCxZkyvFBjUD6gyMVUMCwu/k38CFnoG1pbsy6r8c4pZ1FWTWGoKEQzwInaDXrQYG0YZRYhNx97OLZ7YEmtAwl+ZKOWs4ZuJ7u+xk2kZWqjGcgGbvO+0=
+	t=1766088142; cv=none; b=CQYjGHj3gtwqx6/1Rqf/D89pq704VDt+71Ag8vLW/01u+5z4eDYh3Se/3P68mqh4UbzIIk+pY9uxy+89I+uTQMtvS6Jtwf2x66xAPJi8GnFJbs6qnin1MucHukG9mXWAgMz8U1yh/t7GVCNqwIa3wWPhXhEPEywEF10j1oViHzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766087514; c=relaxed/simple;
-	bh=pvFe6vx//Wo4DSX9RXu/NixqTb4wBens/vBG15XPzpI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jLb0MiTql73+CWY4YtuTrTWN91/1uwcZvFK7zBd2pDQp33ULMvjx0DVC/GycwgzUYS1CnywET+1QRoyjH+kwdj0ybd5EWprFMoPXVkrOju8A7muhtER8B1oC0xSlH/dF8Btm+Pj6w6tf4M2KmibGOH7+lq2J1ZhChkIl409ij5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JnCVz1gZ; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766087513; x=1797623513;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=pvFe6vx//Wo4DSX9RXu/NixqTb4wBens/vBG15XPzpI=;
-  b=JnCVz1gZ6xcLfPfrlYoDxoNvkcVD4Jvuo+rRczROlDbiuhhZnI0XefLf
-   5n3gKFpHaZhlJtPfb0EUF43t4qtKQX2U3JZdkIB/LJvBDbXinIRsHc/T9
-   cSIJbWjP9ohWJ8XLMaFNuN+KBKSti3mLac85wByF83PG/R80fio2Et2Rz
-   m0HDMhs1i0/b4o1hHdAhvClRg6zEVq3QWPMY2ZIlZvYLIMmAJ5jc42SRT
-   jddsoG5kQo9ERl4dUZTwHckLtXNgVyqocFyOFuVAgCZkFjByYLgTMVakP
-   75Re90MjU7xO79sTzJFBo8VI73jzm0vF43mr3rBju1jKjynGeN/0Lrs0T
-   w==;
-X-CSE-ConnectionGUID: Qdu6V9pWSgqgtTGT1sOfSA==
-X-CSE-MsgGUID: 6dLbA03zSia2iZ/vNp7DWA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="67803073"
-X-IronPort-AV: E=Sophos;i="6.21,159,1763452800"; 
-   d="scan'208";a="67803073"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2025 11:51:53 -0800
-X-CSE-ConnectionGUID: TOyejrb7R8evnyK/WA541A==
-X-CSE-MsgGUID: G2X3d30yRduL/8sgjqt3Sg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,159,1763452800"; 
-   d="scan'208";a="199143510"
-Received: from spandruv-desk.jf.intel.com ([10.54.55.20])
-  by fmviesa009.fm.intel.com with ESMTP; 18 Dec 2025 11:51:52 -0800
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: rui.zhang@intel.com,
-	rafael@kernel.org,
-	daniel.lezcano@linaro.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] thermal: intel: intel_tcc_cooling: Add CPU models in the support list
-Date: Thu, 18 Dec 2025 11:51:50 -0800
-Message-ID: <20251218195150.3872795-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.51.0
+	s=arc-20240116; t=1766088142; c=relaxed/simple;
+	bh=LoV9n09547otchgzCjUNnOCwjdyV8TMJRDfIn3TWvX0=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=s7Jjs51AgQn8K4d2S2CxpAgMmNDTui2lq9IYrQsDsBWANWJHyLF1p4ZeYSsc+fq4Opbm27jgTdGZbN/nB7TzwSfNrprNV3WAQGu+I1h2weRl3kBz6SSOohBecY33GeR4HxwTxIkt9syA3daEbhqay7BpZVVn7rh8QR0kHoSG55Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PS+IZ7td; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE076C19421
+	for <linux-pm@vger.kernel.org>; Thu, 18 Dec 2025 20:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766088141;
+	bh=LoV9n09547otchgzCjUNnOCwjdyV8TMJRDfIn3TWvX0=;
+	h=From:Date:Subject:To:Cc:From;
+	b=PS+IZ7td0J9zUoog1v/on3un/N4kF+lEbIbNfYjMYRaRKQZUoRp07ImTTeYM7o0sW
+	 J1djby9KQBtWWyX04s8uSD9O5GrNNGWSZZhRLHvIAvxIBV9qhYXUa9gMK+wC/zKFlL
+	 A2aztBWHRMn7Dw8iGGUWr5nqJ2Cymnk3SvuETdz+scMxYwSjLthMaRtaVEoru+l2UP
+	 fi2S7yEKnX6gMxGSd01qVV1jhGYgyVKREax2HHiCrjSoiYQ9kY1FDGVCoLrjK/BeHR
+	 KWW7/wslRswhqrW+xlIW1DJ9iScgnn6vGH1m68k076xr3FzJapobYoxqdbTZsJNWjP
+	 rm8QaUjxSTrYg==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-3f5c9275b31so646453fac.0
+        for <linux-pm@vger.kernel.org>; Thu, 18 Dec 2025 12:02:21 -0800 (PST)
+X-Gm-Message-State: AOJu0YyP2zI04hLbYcF1otTfu//r8m+VaLyArPVkvFm3FmOmtTwQzaiB
+	P2VXHa/ScTLfi1GJSpDObmojoqNub8a+Gvd+cVs4R8WM3mOGHRWx2rBFiwgzF4x5iwfH6PloUlO
+	NkrzziUF6hSGrKsHkdIQPd5AILKEOrSE=
+X-Google-Smtp-Source: AGHT+IEpxp0y++VcKCeG/tqDuMqcMAGFNWXXNW6f9/825jGZWHLSA+knHe7V/WUngeFPYNNRfh/oXT0UiMzNhNR/hjo=
+X-Received: by 2002:a05:6820:162a:b0:65d:363:b874 with SMTP id
+ 006d021491bc7-65d0ea9708emr334338eaf.32.1766088140965; Thu, 18 Dec 2025
+ 12:02:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 18 Dec 2025 21:02:09 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0go6vKUdZmwAqafyr5LrSGhgGpvfq_whp=KEOvmEp9-HA@mail.gmail.com>
+X-Gm-Features: AQt7F2qWsdrq88lkrfp7q4Tls1p09bcXmMt_iV88ZHceKegoIvw72LBBrpkgrYE
+Message-ID: <CAJZ5v0go6vKUdZmwAqafyr5LrSGhgGpvfq_whp=KEOvmEp9-HA@mail.gmail.com>
+Subject: [GIT PULL] Thermal control updates for v6.19-rc2
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Add Panther Lake, Wildcat Lake and Nova Lake CPU models in the support
-list.
+Hi Linus,
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/thermal/intel/intel_tcc_cooling.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Please pull from the tag
 
-diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
-index f352ecafbedf..92de161e359a 100644
---- a/drivers/thermal/intel/intel_tcc_cooling.c
-+++ b/drivers/thermal/intel/intel_tcc_cooling.c
-@@ -65,6 +65,10 @@ static const struct x86_cpu_id tcc_ids[] __initconst = {
- 	X86_MATCH_VFM(INTEL_RAPTORLAKE, NULL),
- 	X86_MATCH_VFM(INTEL_RAPTORLAKE_P, NULL),
- 	X86_MATCH_VFM(INTEL_RAPTORLAKE_S, NULL),
-+	X86_MATCH_VFM(INTEL_PANTHERLAKE_L, NULL),
-+	X86_MATCH_VFM(INTEL_WILDCATLAKE_L, NULL),
-+	X86_MATCH_VFM(INTEL_NOVALAKE, NULL),
-+	X86_MATCH_VFM(INTEL_NOVALAKE_L, NULL),
- 	{}
- };
- 
--- 
-2.51.0
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ thermal-6.19-rc2
 
+with top-most commit d113735421da322ea144c9778c433de6ff6bc57b
+
+ thermal: core: Fix typo and indentation in comments
+
+on top of commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+
+ Linux 6.19-rc1
+
+to receive thermal control updates for 6.19-rc2.
+
+These enable a new hardware feature in the int340x thermal driver
+and fix up comments in the thermal core code:
+
+ - Set a feature flag in the int340x thermal driver to enable the
+   power slider interface for Wildcat Lake processors (Srinivas
+   Pandruvada)
+
+ - Fix typo and indentation in comments in the thermal core (Thorsten
+   Blum)
+
+Thanks!
+
+
+---------------
+
+Srinivas Pandruvada (1):
+      thermal: intel: int340x: Enable power slider interface for Wildcat Lake
+
+Thorsten Blum (1):
+      thermal: core: Fix typo and indentation in comments
+
+---------------
+
+ drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c | 3 ++-
+ drivers/thermal/thermal_core.c                                       | 4 ++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
