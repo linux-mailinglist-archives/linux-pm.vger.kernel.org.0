@@ -1,70 +1,70 @@
-Return-Path: <linux-pm+bounces-39686-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39687-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 555BFCCDD25
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Dec 2025 23:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC50CCCDD3E
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Dec 2025 23:35:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E49B3304F129
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Dec 2025 22:31:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A9ED03079AAD
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Dec 2025 22:32:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60308331A75;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E4833290F;
 	Thu, 18 Dec 2025 22:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MS5gvi9T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dSEzXV9O"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72695330B27;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0674331201;
 	Thu, 18 Dec 2025 22:26:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766096771; cv=none; b=a5W7RhUaSME/tG6ZxdhKXHMMGoJGgbakoFO4vs2nufk12VlJodCpyFgDw2iFsd3OyZ/Jl+21MjoxFd7dwbgJP02nPUHGqtxEAej5MmMHs6+bMYBy4+6tnzeMaSx5xdMj7PXgCS8m2vKLm/s0H+gYqGsFL9XX88iwq5Xc4BmNPPk=
+	t=1766096771; cv=none; b=LQA7enKU3GoFVJDSFXqg9gaYSDgjRmJMPzGLZ1v+91/eIOdllcf3cANsQ5zQ/1VNTuWbeKIYCYfIxaWFzgZpkJAZGSIay45JCep0zWzsDEXExQT7VUkcRmAP9qZfiLvtZd4Izi49tM1MFsnFIXKQ+ZmcSPZh4udoCKfUCfN6+ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1766096771; c=relaxed/simple;
-	bh=b5eBYNVbYP3v2tQ9LvDk90S1WPWl6xGg9yg3gB/kiQg=;
+	bh=8gapdIC1wUXz8+bbuwPpFHjchY0o4gI12RGOrPBSP6U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oL7K/cjg8zidCjLzUORnRE1PJIhh+6h3bwhGs4uiULYoMzEaVyWQeVOQk9cKNVpU/on3AM7AFCHcp+7FMmVX3MjrkxEXmNnDJp78krrOJE5LDLj0rtW42walGqyK00lvARUx08z6eNbnpTpvWy3rntwM634do8djjbJScjjwcZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MS5gvi9T; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=NgLX1vgxl1DZEZ1qViVUsHXPbhTbURbw0sC1qYgU764jayGbNc49nkFsuT1Tlzz3ThzC5qBwgilpHJ4YSQ7f2TNN5YxY9w3yqLW/AEgpkjcLlpHc/yV65pQFQvOrVq7cGqi3h+qYlgZbM3MkN7bVqqIJYrdoSummovz5FFKV6OQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dSEzXV9O; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766096769; x=1797632769;
+  t=1766096770; x=1797632770;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=b5eBYNVbYP3v2tQ9LvDk90S1WPWl6xGg9yg3gB/kiQg=;
-  b=MS5gvi9TeagyQimK2MkV28CGr7RvkYLYOzJLavkhXxo8jN+e3jR3nWVn
-   tUEu4oGyAGvxUvK73Owd5jYrtdXRIDyB1OaEWOEmQ6Evqj929Ug2bWvAU
-   Eb7zs/XtJWuDJJ+1gX9qC90fw6KMJyJe7NDNI1olTZOaRCNWGtxQtPY5k
-   bPnz3N3RIc2MXoEhKe8PHu+oBctw83t2r/95WPFjPa0HeiW16YN35dL6S
-   YEMAxATBEMwWiiEOUvP2vZRpLYtO83He9+a6bvL/rmlv0dNTdrjA7tQQv
-   Ztjh2WYDrxOO7b5YJPPcKoZKpPEdVEAg3ba+Eh6d1MbGiY+ySsHImHgLJ
-   A==;
-X-CSE-ConnectionGUID: 7IxkeTDtRM6rrF5pxP3u3Q==
-X-CSE-MsgGUID: QmRrpDkqShmAjRf2aUL8wQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="79519092"
+  bh=8gapdIC1wUXz8+bbuwPpFHjchY0o4gI12RGOrPBSP6U=;
+  b=dSEzXV9OeVbAK8ZyYhtlH9dtO5qnKKSqYYw67odDNMMETSEDVtmZOflR
+   brbYyGbedjK0e5YWTGADqkQjK9gDb7g7ng9EXXzmMOVOumREHc2GGH6Si
+   TfC0DNoCXfYJbmJKtWn32bsrD5EjKGgavWWGeQWo9NXkGNdIwPPkNGtji
+   b0JmOKn2c5wcbm5hPAhvkSZKnxspYJqxtdC0Ua+JoD9I7GBzdY579n1TU
+   sWIdDUUDU6Y+1A+NVV02r4O3xOP2jON1/FtrSS77DhZXLoQo10zKTeph0
+   XOZjt449tAHR6U7QtGXR6cccC/JM/EyBnNRojkX4ARJN1eXE5AUeeaZ3i
+   Q==;
+X-CSE-ConnectionGUID: /6mjRaFtSOqaO2yPsYWS7w==
+X-CSE-MsgGUID: fvv29PuZQDeFLrrp/a8uHw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11646"; a="79519096"
 X-IronPort-AV: E=Sophos;i="6.21,159,1763452800"; 
-   d="scan'208";a="79519092"
+   d="scan'208";a="79519096"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
   by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2025 14:26:06 -0800
-X-CSE-ConnectionGUID: FcDgeX3QRoCY/OxC1+9lGQ==
-X-CSE-MsgGUID: tG+OOcjKQVajdqbyJqiuzA==
+X-CSE-ConnectionGUID: vkkl7OAuRkKYjsjelFydUA==
+X-CSE-MsgGUID: 4o8Zhz7IQWqDoohKwpITaw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,159,1763452800"; 
-   d="scan'208";a="197851497"
+   d="scan'208";a="197851498"
 Received: from spandruv-desk.jf.intel.com ([10.54.55.20])
-  by orviesa006.jf.intel.com with ESMTP; 18 Dec 2025 14:26:06 -0800
+  by orviesa006.jf.intel.com with ESMTP; 18 Dec 2025 14:26:07 -0800
 From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 To: rafael@kernel.org,
 	daniel.lezcano@linaro.org
 Cc: linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH 1/2] thermal: int340x: processor_thermal: Enable slow workload type hints
-Date: Thu, 18 Dec 2025 14:25:58 -0800
-Message-ID: <20251218222559.4110027-2-srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH 2/2] thermal: intel: selftests: workload_hint: Support slow workload hints
+Date: Thu, 18 Dec 2025 14:25:59 -0800
+Message-ID: <20251218222559.4110027-3-srinivas.pandruvada@linux.intel.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251218222559.4110027-1-srinivas.pandruvada@linux.intel.com>
 References: <20251218222559.4110027-1-srinivas.pandruvada@linux.intel.com>
@@ -76,187 +76,149 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On processors starting from Panther Lake additional hints are provided.
-The hardware analyzes workload residencies over an extended period to
-determine whether the workload classification tends toward idle/battery
-life states or sustained/performance states. Based on this long-term
-analysis, it classifies:
-Power Classification: If the workload exhibits more idle or battery life
-residencies, it is classified as "power". This is indicated by
-setting the bit 4 of the current workload type.
-Performance Classification: If the workload exhibits more sustained or
-performance residencies, it is classified as "performance". This is
-indicated by resetting the bit 4 of the current workload type.
-
-This approach enables applications to ignore short-term workload
-fluctuations and instead respond to longer-term power vs. performance
-trends. This types of hints are called slow workload hints.
-
-To get notifications for slow workload hints, a new bit 22 is added
-to thermal mailbox to configure workload interrupts. This is possible
-to exclusively only enable slow workload hints or enable in addition to
-the current workload hints.
-
-To enable slow workload hint a new attribute is added to the existing
-workload hint attributes:
-workload_slow_hint_enable (RW): Write 1 to enable, 0 to disable.
-Reading this attribute shows the current state.
-
-This attribute is not present any previous generation of processors.
+Add option to enable slow workload type hints. User can specify
+"slow" as the command line argument to enable slow workload type hints.
+There are two slow workload type hints: "power" and "performance".
 
 Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- .../driver-api/thermal/intel_dptf.rst         |  3 +
- .../processor_thermal_wt_hint.c               | 61 ++++++++++++++++---
- 2 files changed, 56 insertions(+), 8 deletions(-)
+ .../intel/workload_hint/workload_hint_test.c  | 74 +++++++++++++------
+ 1 file changed, 52 insertions(+), 22 deletions(-)
 
-diff --git a/Documentation/driver-api/thermal/intel_dptf.rst b/Documentation/driver-api/thermal/intel_dptf.rst
-index 916bf0f36a03..4adfa1eb74db 100644
---- a/Documentation/driver-api/thermal/intel_dptf.rst
-+++ b/Documentation/driver-api/thermal/intel_dptf.rst
-@@ -375,6 +375,9 @@ based on the processor generation.
- ``workload_hint_enable`` (RW)
- 	Enable firmware to send workload type hints to user space.
+diff --git a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
+index ca2bd03154e4..569d44f22835 100644
+--- a/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
++++ b/tools/testing/selftests/thermal/intel/workload_hint/workload_hint_test.c
+@@ -12,6 +12,7 @@
  
-+``workload_slow_hint_enable`` (RW)
-+	Enable firmware to send slow workload type hints to user space.
-+
- ``notification_delay_ms`` (RW)
- 	Minimum delay in milliseconds before firmware will notify OS. This is
- 	for the rate control of notifications. This delay is between changing
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.c
-index 68e8391af8f4..826775ad8f6c 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.c
-@@ -34,6 +34,7 @@
+ #define WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE "/sys/bus/pci/devices/0000:00:04.0/workload_hint/notification_delay_ms"
+ #define WORKLOAD_ENABLE_ATTRIBUTE "/sys/bus/pci/devices/0000:00:04.0/workload_hint/workload_hint_enable"
++#define WORKLOAD_SLOW_ENABLE_ATTRIBUTE "/sys/bus/pci/devices/0000:00:04.0/workload_hint/workload_slow_hint_enable"
+ #define WORKLOAD_TYPE_INDEX_ATTRIBUTE  "/sys/bus/pci/devices/0000:00:04.0/workload_hint/workload_type_index"
  
- #define SOC_WT				GENMASK_ULL(47, 40)
- 
-+#define SOC_WT_SLOW_PREDICTION_INT_ENABLE_BIT	22
- #define SOC_WT_PREDICTION_INT_ENABLE_BIT	23
- 
- #define SOC_WT_PREDICTION_INT_ACTIVE	BIT(2)
-@@ -47,6 +48,7 @@ static u16 notify_delay_ms = 1024;
- 
- static DEFINE_MUTEX(wt_lock);
- static u8 wt_enable;
-+static u8 wt_slow_enable;
- 
- /* Show current predicted workload type index */
- static ssize_t workload_type_index_show(struct device *dev,
-@@ -59,7 +61,7 @@ static ssize_t workload_type_index_show(struct device *dev,
- 	int wt;
- 
- 	mutex_lock(&wt_lock);
--	if (!wt_enable) {
-+	if (!wt_enable && !wt_slow_enable) {
- 		mutex_unlock(&wt_lock);
- 		return -ENODATA;
- 	}
-@@ -84,9 +86,9 @@ static ssize_t workload_hint_enable_show(struct device *dev,
- 	return sysfs_emit(buf, "%d\n", wt_enable);
- }
- 
--static ssize_t workload_hint_enable_store(struct device *dev,
--					  struct device_attribute *attr,
--					  const char *buf, size_t size)
-+static ssize_t workload_hint_enable(struct device *dev, u8 enable_bit, u8 *status,
-+				    struct device_attribute *attr,
-+				    const char *buf, size_t size)
- {
- 	struct pci_dev *pdev = to_pci_dev(dev);
- 	u8 mode;
-@@ -99,17 +101,17 @@ static ssize_t workload_hint_enable_store(struct device *dev,
- 
- 	if (mode)
- 		ret = processor_thermal_mbox_interrupt_config(pdev, true,
--							      SOC_WT_PREDICTION_INT_ENABLE_BIT,
-+							      enable_bit,
- 							      notify_delay);
- 	else
- 		ret = processor_thermal_mbox_interrupt_config(pdev, false,
--							      SOC_WT_PREDICTION_INT_ENABLE_BIT, 0);
-+							      enable_bit, 0);
- 
- 	if (ret)
- 		goto ret_enable_store;
- 
- 	ret = size;
--	wt_enable = mode;
-+	*status = mode;
- 
- ret_enable_store:
- 	mutex_unlock(&wt_lock);
-@@ -117,8 +119,28 @@ static ssize_t workload_hint_enable_store(struct device *dev,
- 	return ret;
- }
- 
-+static ssize_t workload_hint_enable_store(struct device *dev, struct device_attribute *attr,
-+					  const char *buf, size_t size)
-+{
-+	return workload_hint_enable(dev, SOC_WT_PREDICTION_INT_ENABLE_BIT, &wt_enable,
-+				    attr, buf, size);
-+}
- static DEVICE_ATTR_RW(workload_hint_enable);
- 
-+static ssize_t workload_slow_hint_enable_show(struct device *dev, struct device_attribute *attr,
-+					       char *buf)
-+{
-+	return sysfs_emit(buf, "%d\n", wt_slow_enable);
-+}
-+
-+static ssize_t workload_slow_hint_enable_store(struct device *dev, struct device_attribute *attr,
-+					       const char *buf, size_t size)
-+{
-+	return workload_hint_enable(dev, SOC_WT_SLOW_PREDICTION_INT_ENABLE_BIT, &wt_slow_enable,
-+				    attr, buf, size);
-+}
-+static DEVICE_ATTR_RW(workload_slow_hint_enable);
-+
- static ssize_t notification_delay_ms_show(struct device *dev,
- 					  struct device_attribute *attr,
- 					  char *buf)
-@@ -178,16 +200,39 @@ static ssize_t notification_delay_ms_store(struct device *dev,
- 
- static DEVICE_ATTR_RW(notification_delay_ms);
- 
-+static umode_t workload_hint_attr_visible(struct kobject *kobj, struct attribute *attr, int unused)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct pci_dev *pdev;
-+
-+	if (attr != &dev_attr_workload_slow_hint_enable.attr)
-+		return attr->mode;
-+
-+	pdev = to_pci_dev(dev);
-+	switch (pdev->device) {
-+	case PCI_DEVICE_ID_INTEL_LNLM_THERMAL:
-+	case PCI_DEVICE_ID_INTEL_MTLP_THERMAL:
-+	case PCI_DEVICE_ID_INTEL_ARL_S_THERMAL:
-+		return 0;
-+	default:
-+		break;
-+	}
-+
-+	return attr->mode;
-+}
-+
- static struct attribute *workload_hint_attrs[] = {
- 	&dev_attr_workload_type_index.attr,
- 	&dev_attr_workload_hint_enable.attr,
-+	&dev_attr_workload_slow_hint_enable.attr,
- 	&dev_attr_notification_delay_ms.attr,
+ static const char * const workload_types[] = {
+@@ -22,6 +23,9 @@ static const char * const workload_types[] = {
  	NULL
  };
  
- static const struct attribute_group workload_hint_attribute_group = {
- 	.attrs = workload_hint_attrs,
--	.name = "workload_hint"
-+	.name = "workload_hint",
-+	.is_visible = workload_hint_attr_visible
- };
++static int wlt_slow;
++static char *wlt_enable_attr;
++
+ #define WORKLOAD_TYPE_MAX_INDEX	3
  
- /*
+ void workload_hint_exit(int signum)
+@@ -30,7 +34,7 @@ void workload_hint_exit(int signum)
+ 
+ 	/* Disable feature via sysfs knob */
+ 
+-	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
++	fd = open(wlt_enable_attr, O_RDWR);
+ 	if (fd < 0) {
+ 		perror("Unable to open workload type feature enable file");
+ 		exit(1);
+@@ -46,6 +50,26 @@ void workload_hint_exit(int signum)
+ 	close(fd);
+ }
+ 
++static void update_delay(char *delay_str)
++{
++	int fd;
++
++	printf("Setting notification delay in ms to %s\n", delay_str);
++
++	fd = open(WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE, O_RDWR);
++	if (fd < 0) {
++		perror("Unable to open workload notification delay");
++		exit(1);
++	}
++
++	if (write(fd, delay_str, strlen(delay_str)) < 0) {
++		perror("Can't set delay");
++		exit(1);
++	}
++
++	close(fd);
++}
++
+ int main(int argc, char **argv)
+ {
+ 	struct pollfd ufd;
+@@ -54,32 +78,26 @@ int main(int argc, char **argv)
+ 	char delay_str[64];
+ 	int delay = 0;
+ 
+-	printf("Usage: workload_hint_test [notification delay in milli seconds]\n");
++	printf("Usage: workload_hint_test [notification delay in milli seconds][slow]\n");
+ 
+ 	if (argc > 1) {
+-		ret = sscanf(argv[1], "%d", &delay);
+-		if (ret < 0) {
+-			printf("Invalid delay\n");
+-			exit(1);
+-		}
++		int i;
+ 
+-		printf("Setting notification delay to %d ms\n", delay);
+-		if (delay < 0)
+-			exit(1);
++		for (i = 1; i < argc; ++i) {
++			if (!strcmp(argv[i], "slow")) {
++				wlt_slow = 1;
++				continue;
++			}
+ 
+-		sprintf(delay_str, "%s\n", argv[1]);
+-		fd = open(WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE, O_RDWR);
+-		if (fd < 0) {
+-			perror("Unable to open workload notification delay");
+-			exit(1);
+-		}
++			ret = sscanf(argv[1], "%d", &delay);
++			if (ret < 0) {
++				printf("Invalid delay\n");
++				exit(1);
++			}
+ 
+-		if (write(fd, delay_str, strlen(delay_str)) < 0) {
+-			perror("Can't set delay");
+-			exit(1);
++			sprintf(delay_str, "%s\n", argv[1]);
++			update_delay(delay_str);
+ 		}
+-
+-		close(fd);
+ 	}
+ 
+ 	if (signal(SIGINT, workload_hint_exit) == SIG_IGN)
+@@ -89,8 +107,13 @@ int main(int argc, char **argv)
+ 	if (signal(SIGTERM, workload_hint_exit) == SIG_IGN)
+ 		signal(SIGTERM, SIG_IGN);
+ 
++	if (wlt_slow)
++		wlt_enable_attr = WORKLOAD_SLOW_ENABLE_ATTRIBUTE;
++	else
++		wlt_enable_attr = WORKLOAD_ENABLE_ATTRIBUTE;
++
+ 	/* Enable feature via sysfs knob */
+-	fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR);
++	fd = open(wlt_enable_attr, O_RDWR);
+ 	if (fd < 0) {
+ 		perror("Unable to open workload type feature enable file");
+ 		exit(1);
+@@ -145,6 +168,13 @@ int main(int argc, char **argv)
+ 			if (ret < 0)
+ 				break;
+ 
++			if (wlt_slow) {
++				if (index & 0x10)
++					printf("workload type slow:%s\n", "power");
++				else
++					printf("workload type slow:%s\n", "performance");
++			}
++
+ 			index &= 0x0f;
+ 			if (index > WORKLOAD_TYPE_MAX_INDEX)
+ 				printf("Invalid workload type index\n");
 -- 
 2.51.0
 
