@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-39700-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39701-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84989CCEF96
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 09:29:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20818CCEFA2
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 09:29:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 13B3F307DC4A
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 08:26:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1F2123089B85
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 08:26:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D040309F00;
-	Fri, 19 Dec 2025 08:17:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDEFF30C61A;
+	Fri, 19 Dec 2025 08:19:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aSYKo/wA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iisKiilH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA613093CE;
-	Fri, 19 Dec 2025 08:17:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B6D1F30A9;
+	Fri, 19 Dec 2025 08:19:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766132273; cv=none; b=p+II/GOmkWiByJbqLQs4Z5gJemZqeMBMAzt3WYkZIOQFUfNdo9PL3YoXQY6Q2o3UFAdboZyT+j81Yg+hnLmWv11Z/zPnAJ7m0LDpB13xL+CssCEqjPhPsxcQ88w13JguuqDisVeYbHMlsLMsG1H1DYRO5WVZYw4NKck5jMJFVlc=
+	t=1766132356; cv=none; b=PHl1mqZJYNnG67/NoS7Zg+PuOIvsfqiZjqz/c5A9AxqcUiVOFYO+azjITzk0dlBuON37k0MQvbgtIAyMddUt34scmjhNwmj+8GGitelJ2P8KZYeRQdmNEMpgahRJCVS896cgjUqkhxjfvlh37qU3noqgIlRn2B/yutn46G6KjCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766132273; c=relaxed/simple;
-	bh=Iqk/M9Co/YKAnwZryRQErxxsPqA/ewpz3JzOLw4fFqU=;
+	s=arc-20240116; t=1766132356; c=relaxed/simple;
+	bh=tm6PhD1Tgv4dvgUGUt7t+Wem6rV6UJT3zbZeA09Cmh0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TQtbezj0JIinvmND59R+Iu17Fb8OB0HaMBlInWa2KtSXdMrmmNrGTRiY9WbPo2OljHKUS3PZgmq7u8iemV/LPrjwYutfuwnkKsoKlcW6yXLLtf7wTdlW20GE+XZ5JfVZSDHRy3aECuNSNNVldaB8YnNwwsHaqJTV6UJy7wGolWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aSYKo/wA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C06FC4CEF1;
-	Fri, 19 Dec 2025 08:17:46 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=h/15nXShrLuKBafnDF5vNTcSSL7RPaGdMIHmrscfoFrjFcCOE3kkkIoz3UdvmZtGiS+ircNODECSCGr0XbQc9qkIo/n7i9ah9Gx7Qmune3Ic++H3xKO68DlR/9Siv/9hJjxAJPuDWFIi7hOjN3OlashLdU42oMqZwOiZTRHcgVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iisKiilH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C79C4CEF1;
+	Fri, 19 Dec 2025 08:19:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766132272;
-	bh=Iqk/M9Co/YKAnwZryRQErxxsPqA/ewpz3JzOLw4fFqU=;
+	s=k20201202; t=1766132356;
+	bh=tm6PhD1Tgv4dvgUGUt7t+Wem6rV6UJT3zbZeA09Cmh0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aSYKo/wAIEqbFmOcL46QP9MR0KNdwq4lYug5aMHF/R9os70B0asi1hpQdOmBYGBpz
-	 ooIK7TXlma0tqRrSs/ivjghMcXo6+LoMkDkALWk2bzqcdevKGxH6D0fwIQ/WG/pxQD
-	 G0CMpzKv9R9f6Pmdl2SA8RNumRwvOW+TmVMGW+P6InyIFll0QCiPiuxuea5yiF9jlN
-	 QKNknAt6hQxosC7XfFUrA6E+krT1Vqzt+Ge0zx1UXpKN7sCDu4mZtl3/asHMhd0ip0
-	 fPffRhPXnLAihctwLXznl+n82xjQp2gaKxdNviHSnLf2SZfTMaFLFpa6CrYaoBFhq0
-	 v69/df9fpJ46A==
-Message-ID: <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
-Date: Fri, 19 Dec 2025 09:17:44 +0100
+	b=iisKiilHuun461TBZX9FlSuK58CW8xbUm7pFDUCKV5EhK4WRFpAZAOkbSENnh494R
+	 StqfwmXQgS+OaCRFTCkEqHs/oOxxt65w4QSHZIMNGL613a9oo7CNa4QfmSo0Q8o/LU
+	 WwEm8nwG4vq1uiRDqwJa7zy4mCSDGELMilx4LNqbSZQQMEpGb25paSxCVWyJ3VQoKw
+	 kc/YeFOQcozwUJz4jm+gCKtbrcdZWcmymAqs+hn5y5d+Jkzc/5yW4ME+NNhrqp5ogZ
+	 sCxw7hRieDhlbbCihW7ox5Nyl4F9tuzTOp8hBgxDjZNYXq6Eq/4uqdeSxl/wUWeSIL
+	 vmPpnx10oRVSQ==
+Message-ID: <90c00d57-3737-4631-a2e9-8ff2e315db14@kernel.org>
+Date: Fri, 19 Dec 2025 09:19:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -48,8 +48,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] dt-bindings: mfd: maxim,max77759: add charger
- child node
+Subject: Re: [PATCH v2 2/5] dt-bindings: usb: maxim,max33359: Add supply
+ property for vbus
 To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
@@ -65,7 +65,7 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
  RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
 References: <20251218-max77759-charger-v2-0-2b259980a686@google.com>
- <20251218-max77759-charger-v2-1-2b259980a686@google.com>
+ <20251218-max77759-charger-v2-2-2b259980a686@google.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,42 +111,25 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251218-max77759-charger-v2-1-2b259980a686@google.com>
+In-Reply-To: <20251218-max77759-charger-v2-2-2b259980a686@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 18/12/2025 23:49, Amit Sunil Dhamne via B4 Relay wrote:
 > From: Amit Sunil Dhamne <amitsd@google.com>
 > 
-> The Maxim MAX77759 MFD includes a charger function. Extend the max77759
-> binding to include the charger. Also, update the example to include
-> charger.
+> Add a regulator supply property for vbus. This notifies the regulator
+> provider to source vbus when Type-C operates in Source power mode,
+> while turn off sourcing vbus when operating in Sink mode or
+> disconnected.
 > 
 > Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
 > ---
->  .../devicetree/bindings/mfd/maxim,max77759.yaml    | 33 ++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
-> index 525de9ab3c2b..1cffdf2e5776 100644
-> --- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
-> @@ -37,6 +37,30 @@ properties:
->    nvmem-0:
->      $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
->  
-> +  charger:
-> +    type: object
-> +    description: This is a dual input switch mode battery charger for portable
-> +      applications. It supports wired and wireless charging and can operate in
-> +      buck and boost mode.
-> +
+>  Documentation/devicetree/bindings/usb/maxim,max33359.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 
 
-I do not see any improvements, so same comment: this should be folded
-into the parent.
-
-Please read DTS 101 slides or writing bindings or any other talks...
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
 Best regards,
 Krzysztof
