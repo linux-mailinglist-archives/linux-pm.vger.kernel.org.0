@@ -1,107 +1,140 @@
-Return-Path: <linux-pm+bounces-39711-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39712-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5FEECD0B3E
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 17:03:37 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CD4ECD177C
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 19:53:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1D1CE3053F4B
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 16:01:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A1BFE307FC0D
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 18:51:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B766034FF79;
-	Fri, 19 Dec 2025 15:56:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36E2734B415;
+	Fri, 19 Dec 2025 18:45:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mv/YEEph"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BdTInSxN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B266D34F490
-	for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 15:56:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85B734B1B2
+	for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 18:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766159808; cv=none; b=ly0MxM1dcWIKw/bG5limV4vOFvaRjQGVbybQbtVAmlgx7jWa8/ZkXaHsePXnk61EKDcORBOcab2D19mTWzRZRg3Yla0NYuRC/DyxFAKGnUj/N0Rnrr4Pwo9TZZesV/+Bu5BcR+tgRqcUNCJqcvw5IhqNOjUwHTpEO/5oEuiiprk=
+	t=1766169935; cv=none; b=jeGupnQ0pOj0XX0qbEKhq+h8C4aUVuPkSn4BJJJfKGAi8ekGpaV457+wt5Z8OI2uPsxGEE8poNB9ksc9TjfBVotc8RPZY7EUfuPCCVdOhqFiiqZe/a6FE2BmLHWkNfmQ3gAjZxSy3QOw9CQO6Kr75CcMvuSh1xylb/xDl4CkqJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766159808; c=relaxed/simple;
-	bh=BCfq1sPC8zJlN38d7ugohDIyHGPm9Ul05BmqUVEKpMs=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=TGWHtspFl/7WAWeqByhvvbNTa/3x5Wpg8tD8o8dl8ZBrqCJhWRvSDQy4hE2+sStFbOWY8PMXns2nSgo3ffJakWCGXV0xDONIh43uQsBRLwtPtwhTpwtiBXjy6BxDxA4rOSt3FDWzBWED6BLBIWhpiPMTKI1giSuQg2Xpvvo/fSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mv/YEEph; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Content-Type: text/plain;
-	charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766159795;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Bc3v+gETzmXyCKJzI7in9efvxgfKV9X68r+h/s/HAHw=;
-	b=mv/YEEphH7naEiiPDOlXVnh6ERVsyUFgqJDIt6iMeq5brfSqGVWLIeDkryNRw3z23UZfva
-	z21HuWNWXw9ZeS8xiBenVJHfRLeiSmb73QbK8GiCc+R844uDnQ+P1OrC0medabcQCs18Kx
-	yuIpC1LMKjjadw4KSKsc2jYxPtGhOgM=
+	s=arc-20240116; t=1766169935; c=relaxed/simple;
+	bh=MTszl3Fxs1tXM+UBY05RwWvNC18neY6eriaRlQ/JnRo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WCdIniEgrv2upamFA0FZIeu0Qy7llIjFzLF7E3m5/HgqioapDjJvSI1hTIw2YrL5ipdQcdEkJtDTm2gN49YkpkDg2MOQSdAYHdkR4CX9KuxJ/oJ4pofmh30wRKXHykz1OnEHyZlcN2fLp4cygJjyPTMNK1hR541FJ9s2URgje7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BdTInSxN; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2a102494058so15788235ad.0
+        for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 10:45:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766169932; x=1766774732; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GYlvN5caouTLQVLlVh+1zVVRUvcLyQcfYMgpd8xCt2E=;
+        b=BdTInSxNRuFdXvEJMXbDz+3PzIZ98icI8Bs5t7fGY/D5rhOkwARa084YU8asVkNWlc
+         3dqWZiMUPM8iz4SnKhtZ6S2+apgtmZs3eBY+a5yxkitFc7MRzHkcoopgKDxlABeE456U
+         YJqnTEyictte350AmRsKPNpORjlpS8T4jahR/zZF2Y7PM9it+X3b4OST23edFRpUupyR
+         tDFbpQB+B0pIMBSV18JJ96+aDJadCFbm/8p0vZLxFZROiJfAbr0jYXcKWPUB80STC70/
+         XV+I0SIvrSKtVkWLSzwlL0HaSPJdsCx2FfLuvR1p8mJ6v5EPBmxy42vbB6t/RUgYbnxe
+         QJ/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766169932; x=1766774732;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GYlvN5caouTLQVLlVh+1zVVRUvcLyQcfYMgpd8xCt2E=;
+        b=Fc2q/LUYxkhbFfWVXlWSplg6nlZu8xY1RHgxXdi8Z7bEMkfuuDkXR9wroj4OMG2diz
+         6VBDJtK+AP5PZ87z6mbtTvt8ObIXes42pkZYWxj79cPPIsen4RxdSlT52QlI/GTLbgw1
+         rRXBKEOOUWhaoLnai+DE6sRryDR8PKWSBF8/uwvUaQfEF14x5naqJV7NsnC4eyu7lJEY
+         P9+ME0NKNjnv7HHs//Nuuh3zY7CvgA9NcwJydtK7bJclFA7Se0ZnVBaOZpCmOjpn1RrL
+         bkldlpDFpYGCnH9VS9CcnW/QfWwyR+r9AhNLNDsFPtLMSlhv8YbaCbLXXkzu6Pxqbh5G
+         MEaw==
+X-Forwarded-Encrypted: i=1; AJvYcCU4QEH91tyMhLvRG7nW76tRr5TjVxF3euSMdG8K/dvuVQ2s3wpFYfnT/WkRgy1P63RYUOqxZR0v8A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyoTl4us1BPjupFmEapC6Z4QAPprRMK8Ssct8fI66a72TfA0AFe
+	lewi1um1urv1oes+TlrXl+ybthghDxH3Q2YA+h4TNUL7Nc/qJxlcmkHn
+X-Gm-Gg: AY/fxX6Y/cLGKCOGSwjTs/WJVYfahT8fwSc28vHeo9KPGPmR/imSWsMV5UD+AvVv4n4
+	AJotvZXkupd3AqIacDjW9oIvmlXlPHTwDNLPstl6ABxArkGoghWbkO4HPwAXveS+ikc4bnI9lXR
+	NkRbl8iEH4jlee9zFxKntBZf2iToNouUd+6K+/y6rERFMvH2a4RBCJAL9lzU1WQTPdKYichXNqN
+	plGGMciMwt5tIrwGM9rcSKp1nAW84xaksgIGpJPQuJ7ZQraAYPWjEnwYbpiYOX6xld/PuZtv7og
+	scGyNqXpEYXenlN/veldT01BXiQ+peADjjvgYYSBIFa3tE9osYYK0SxWdZ9OY4kiy5+tGA6YDVT
+	9o/q5vyll9K5wrYlHa0T27OsB3F+eIWjmaLHgU8TsIHHXEOE4PK3S4G2WhOd1etl38yVQGold39
+	p/mrcbS5lu8W808xM=
+X-Google-Smtp-Source: AGHT+IHIvGucl5A+PQS92+Nx8WN9qI79yGewII6uMKzH9vwvTy9exW5L96rmrJaQeeLr6SbrD1ssgA==
+X-Received: by 2002:a17:902:ce91:b0:295:28a4:f0c6 with SMTP id d9443c01a7336-2a2f0bce9c1mr45379125ad.0.1766169931918;
+        Fri, 19 Dec 2025 10:45:31 -0800 (PST)
+Received: from gmail.com ([2402:e280:3e9b:22f:f73a:ec78:7a89:892b])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3c82858sm29019665ad.29.2025.12.19.10.45.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Dec 2025 10:45:31 -0800 (PST)
+From: Sumeet Pawnikar <sumeet4linux@gmail.com>
+To: daniel.lezcano@kernel.org,
+	rafael@kernel.org,
+	linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	sumeet4linux@gmail.com
+Subject: [PATCH] powercap: dtpm: Fix format string issues in log messages
+Date: Sat, 20 Dec 2025 00:15:20 +0530
+Message-ID: <20251219184521.379599-1-sumeet4linux@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81.1.4\))
-Subject: Re: [PATCH] cpufreq: amd_freq_sensitivity: Fix sensitivity clamping
- in amd_powersave_bias_target
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Thorsten Blum <thorsten.blum@linux.dev>
-In-Reply-To: <20251202190904.27c9bc06@pumpkin>
-Date: Fri, 19 Dec 2025 16:55:02 +0100
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Thomas Renninger <trenn@suse.de>,
- Borislav Petkov <bp@suse.de>,
- Jacob Shin <jacob.shin@amd.com>,
- stable@vger.kernel.org,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <3F396FA4-8DB6-451E-BF58-02646808FC3B@linux.dev>
-References: <20251202124427.418165-2-thorsten.blum@linux.dev>
- <20251202190904.27c9bc06@pumpkin>
-To: David Laight <david.laight.linux@gmail.com>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On 2. Dec 2025, at 20:09, David Laight wrote:
-> On Tue,  2 Dec 2025 13:44:28 +0100
-> Thorsten Blum <thorsten.blum@linux.dev> wrote:
-> 
->> The local variable 'sensitivity' was never clamped to 0 or
->> POWERSAVE_BIAS_MAX because the return value of clamp() was not used. Fix
->> this by assigning the clamped value back to 'sensitivity'.
-> 
-> This actually makes no difference
-> (assuming od_tuners->powersave_bias <= POWERSAVE_BIAS_MAX).
-> The only use of 'sensitivity' is the test at the end of the diff.
-> 
-> So I think you could just delete the line.
+Fix few format string issues in dtpm.c file,
+- Extra trailing comma and space in the debug message "Registered
+dtpm node '%s' / %llu-%llu uW, \n". This unnecessary trailing ", "
+before the newline character, resulting an illusion of some more
+message available for this under debug output.
 
-The local variable 'sensitivity' is an 'int', while '->powersave_bias'
-is an 'unsigned int'. If 'sensitivity' were ever negative, it would be
-converted to an 'unsigned int', producing an incorrect result. That's
-probably what the clamping was meant to prevent.
+- Incorrect log level for subsystem initialization failure message.
+There is an error condition, not informational, and should be logged
+at error level for consistency with other failure mssages. Changed
+pr_info() to pr_err() for this subsystem initialization failure
+message.
 
-However, calculating 'sensitivity' can be simplified from:
+- The same error message "Failed to initialize '%s': %d" has missing
+a trailing newline, which could cause log messages to be concatenated
+incorrectly, making the logs harder to read.
 
-	sensitivity = POWERSAVE_BIAS_MAX -
-		(POWERSAVE_BIAS_MAX * (d_reference - d_actual) / d_reference);
+These isseus affect log readability and consistency but do not impact
+any functionality.
 
-to:
+Signed-off-by: Sumeet Pawnikar <sumeet4linux@gmail.com>
+---
+ drivers/powercap/dtpm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-	sensitivity = POWERSAVE_BIAS_MAX * d_actual / d_reference;
-
-which makes it clearer that, in practice, 'sensitivity' is never
-negative. How about simplifying the formula as above, changing
-'sensitivity' to 'unsigned int', and removing the clamping?
-
-Thanks,
-Thorsten
+diff --git a/drivers/powercap/dtpm.c b/drivers/powercap/dtpm.c
+index 129d55bc705c..2179f5c0fbbe 100644
+--- a/drivers/powercap/dtpm.c
++++ b/drivers/powercap/dtpm.c
+@@ -406,7 +406,7 @@ int dtpm_register(const char *name, struct dtpm *dtpm, struct dtpm *parent)
+ 		dtpm->power_limit = dtpm->power_max;
+ 	}
+ 
+-	pr_debug("Registered dtpm node '%s' / %llu-%llu uW, \n",
++	pr_debug("Registered dtpm node '%s' / %llu-%llu uW\n",
+ 		 dtpm->zone.name, dtpm->power_min, dtpm->power_max);
+ 
+ 	return 0;
+@@ -582,7 +582,7 @@ int dtpm_create_hierarchy(struct of_device_id *dtpm_match_table)
+ 
+ 		ret = dtpm_subsys[i]->init();
+ 		if (ret)
+-			pr_info("Failed to initialize '%s': %d",
++			pr_err("Failed to initialize '%s': %d\n",
+ 				dtpm_subsys[i]->name, ret);
+ 	}
+ 
+-- 
+2.43.0
 
 
