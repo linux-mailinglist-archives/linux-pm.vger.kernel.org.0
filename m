@@ -1,100 +1,100 @@
-Return-Path: <linux-pm+bounces-39707-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39708-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 612A5CD0017
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 14:15:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC20ECD00A8
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 14:24:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4569E302E953
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 13:14:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0F4ED309B5D8
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 13:21:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C9329B224;
-	Fri, 19 Dec 2025 13:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B573271EB;
+	Fri, 19 Dec 2025 13:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KE7qwfSA";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="fPrEVRod"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VwPgOcAa";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="d6wbTPhx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C670430F7FA
-	for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 13:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00DC21D3CA
+	for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 13:15:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766150074; cv=none; b=BLiyd3xc4ZsQoXr87V1ktT9bpNr5dp2eUOrPYCLotibzDkykQg9fShIz3lgA5hfJILGYjN3ZlSV3CpeKjO3hVmW3BQ5GfPdTZyCSNCfklFOrzeUMavHpDva+FM3L9IiczKQK3ovVUCjlUEvveU1GeylEM3eandXFOyfhhmDiEeE=
+	t=1766150148; cv=none; b=KtlXsdW1lyyK5N6M+yCnsEPcYePQXdJLNovL5qEXqaTWQ2s/Ze/X+ziiMUbSdkLIkbL+KfV66CPgXJPdmvD8kZOmg9Zc6LTITXw3LLXMH3ZOyVJA9Wny7QbUjKYXLTWWYVXU/zWJ5UeAgu8U8Nn1ujYJylHHv2UygGPb157CpK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766150074; c=relaxed/simple;
-	bh=Qj7vGaEBpCtwKGYNjh0o6Zv0lf2d8jPNh0CwTd3emTs=;
+	s=arc-20240116; t=1766150148; c=relaxed/simple;
+	bh=mtVvIUS/JaJUCoLQVXSOzz/8MiesNRzguGmPjaF5OIg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wt6QGAoa7L1orOh4RLbTaqXGQ3Gxf7iXvaOtv/OuhOqyuE5ojkTxHhQQw816fZ0FRhaDyuJQXiGVNKJUuOraFWl+p9TAxxDuuHWELERTSKYfDxUNXpnacWghloxXVyzbsmm4FcEPRv9c+U+URPHrLxEH9jYWQXp23R7hyjYpTBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KE7qwfSA; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=fPrEVRod; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=jvB95tHIi0j/NPtxBMxcdbfXeW9Ns4n7hspvSkd0o6z+EiKbX2kVRHMBa+NubXUZPJ18hDqoo7bF8kpVRwiWfQIhmMGrQA8VtHvvUQtO9e1Emdt/kdqPpuox91cRXduXNf7DE4QE4gebjLs06ZLWctM2ZfeDi/Q3wk97IbfY6zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VwPgOcAa; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=d6wbTPhx; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BJC47L93319233
-	for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 13:14:32 GMT
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BJB41PM3939222
+	for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 13:15:44 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	fxIbdEjDeLf5+f+yETskdYR5vcJEABxLUEPWYYrSHhk=; b=KE7qwfSAShZWtwmd
-	4c7ZeKikM9x7ZAVy8KAUZY7OFirEhkey8LhJLwHUzxJbohCQgT9JE7IotHfRMrbn
-	xDl+Cp20Vc+YnfNGd8jTs2OU9jvG2zZiZfLhubtOpikBF3/K/On0Tw42780tKM2a
-	ldpgELmcVNTY4pOIDqf7uUvoMLUVSDw5uIilq1khXvcazdUvmDczhPRpbwsM5i/D
-	3dssEJOnB+VXJb57iSRaSsOYf/PP7a9Xv97OkRA+ssX+vQSAiVZ0n7A5zRkxlwBy
-	v/qP0eJMx/tYDabRLSHWbhME6X6dvUorgCbrTbDhpk5jnMBeq5yXGPs8RE+Djqsy
-	rp3GrA==
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b4r2etpkv-1
+	UpN1l31PtsvvDzVVzcUO81N4UuEt2F++NIEqhVqZxkU=; b=VwPgOcAaZFwHecay
+	WVwKGTlViyarYjlj0bZgxWoqkOsBLYJ6mdP17LrBMetlkdSGNhIfv+0x0E06zfMl
+	uHuePSmbky9nqHkcEGMBqV+SKZCtNluD/9bF43U3/sAX+44AKSO6drHhJuYNKxyL
+	ikkeJJU8Tt8/g4mR0hj7cjqgz8UTSN3sRa/c3uBkBwdlg27otK0TaaacJL4bZKsb
+	19UdktJ/BXsCsZt+mjN3HHoapKQgXEbPhKo1uT7undUZ01EYr5+yAt9ARXYHjET7
+	Wy40XlvPT4cCKXyFPL6VIXzPrvKFvCWXz3lphEzLjSvL/k8dvBPrDBJYrDr/7nLZ
+	sahnHQ==
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b4r2c2re3-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 13:14:31 +0000 (GMT)
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-7b9c91b814cso143548b3a.2
-        for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 05:14:31 -0800 (PST)
+	for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 13:15:43 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-7b9ef46df43so2200212b3a.1
+        for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 05:15:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766150071; x=1766754871; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1766150143; x=1766754943; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fxIbdEjDeLf5+f+yETskdYR5vcJEABxLUEPWYYrSHhk=;
-        b=fPrEVRodx+4VMCaO/S6cisu+wb8TpU5oD1uADOyTjRUiiW0m1KXZLoPMlwMcXzH0rL
-         94j540fFM11OYa3xT9qLdWqArxLp1rzZ7gzob+zMK7+O99//orxYDJxvAT4kFOu7/OxW
-         Yd9YiHXtyQZeJgAct5vWeIrRUU1L7SFFjVOir4/m3I/h7syfzshbCYmBc3N/XJbh8i1f
-         RvqoZBIuyTA4jJtZS3ibc1GqhD1BHUFPmb87oEOBYknilpxJFNcTfyWq8chD7fZHDyKK
-         7PpDwyl2MJkhLOB/LQmJhhHJd07ehHTL6vktrOVqV3ATo/1GuBb+3ljYchCEHSxIFARz
-         CulQ==
+        bh=UpN1l31PtsvvDzVVzcUO81N4UuEt2F++NIEqhVqZxkU=;
+        b=d6wbTPhxeimSNmfo/zqQTnpJtmnE6Qs0g1lydF2FRvD2eLzDoLPtt4MNOOt58ZRcL0
+         pKZGbQzuroVSk1AxLPefuGZHrrYJ8ZIAHlEChFhariRVpG4PRIifkJIS6TQuIviSyvHU
+         M1mpST/cPEDnP3Q3GDNEyp4WJ3pNTjLLdZOpf0spkYMWJzfKN8xcK47w+qIJeO58EMlS
+         MMRQawOi2N28UkCeosLqqPbmgbf3BWpFpTBSnaMqSoaHQAwzCENALnQo9V5FlXAGvGgh
+         XnBS+cmQQHQtSsdrdSvcgPJJMAh+DEyV/8E8caxee7Nq7GxKVw01SseZtF+fhNYuBScc
+         s2QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766150071; x=1766754871;
+        d=1e100.net; s=20230601; t=1766150143; x=1766754943;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fxIbdEjDeLf5+f+yETskdYR5vcJEABxLUEPWYYrSHhk=;
-        b=UWnSPJfJJ3mnmRIFXMwE1diruz0QfPRmvygZ5ezkG/swrEZx3UtE+YKNcItj+wnFnc
-         lPoRvN9u3e//v8lUkXivNsOKpBFax12eM3dheZucRY6PlhgOcFD+u7GHuU6K0s/nSLJP
-         lDu+OnL7S0kX/QWOmIT/oYHKzUG7xiQJUxLFTPxkakg0ye0eS90588+b+AFw8rRrbrCf
-         8YqbUHi3k8wz+Q03Q27FEA2gD6oaguKm4ZWraxZo//htl4s8gpObt8ove5nPHzVBYwGw
-         oZLBCvhClbMnswm4FpIk2KvLC0WeVNGYwsZtchZBXg1GGwAN7l5yPvXa1OOHzRlhSctJ
-         +7AA==
-X-Forwarded-Encrypted: i=1; AJvYcCV740WO4XZsN3XH0b72MGQqKudNmP/5jh37qhDHJyXCmj1/iZQWGrJbgI59Q+elrUyuX2gTgUGSfQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxh5ZlR1N4T8Uysf4RD/c9VyHjPy+rx4WHFEclLvMHuEVowgmWc
-	zsRYj1CpsWchYF5o85O/V6r9aQ7wlm2WAa7YZfTVn1aqiFBAaOsm3loRLy8maeuAF4hqvwhCNpD
-	i2k68uPZmeC2XhrqgQwv6csu1FCezkeGtRAgghNOKRu25xx1LBItKr+ndLBYewg==
-X-Gm-Gg: AY/fxX5NSQknii7mRvO4K8wchP2H/1QDe6uUP2ETrKAUL9uwuitRIaILN+TRXEyMlCz
-	lobTrpfXA0Eyr+xcpc9r4U+cYt7mu+e3U7kHN5ASKb0/axpVgiyusUjhE0KkFJncTyNJu7A4Am4
-	p9ZjgoQZ2QFvpA9zgMJU07bMAGr2FUO7DeDPygomWr/ATeLNpCJMFyHqGyhhsHGzrSRQZ4TK/h0
-	Fj80vz3ADdV36xzVVjlMRnTna67SyNEdWe1GV94WJ+3aOLMRo6V4ecUWFwu3c1U6j61dO0trvkp
-	Z5dns9Q4bjTyQLvnZnNmBY25YdDkqPx/TgDwEKAp/ZwG9DNDnWRL3JhazboqvQKVvdJZuftvMTk
-	E03rGO2aIUBORMj0BjQswGxRnDNnuiqtNkdvUGjqBpQ==
-X-Received: by 2002:a05:6a21:9986:b0:34d:d030:6739 with SMTP id adf61e73a8af0-376a8eb799bmr2910252637.31.1766150070770;
-        Fri, 19 Dec 2025 05:14:30 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEsWOkmXwOjw6AZq27WEyY1HsavsSllg42Xn3GJb/gy2x9AA77YdkUx/Dpt9IAMKuz5drJhZw==
-X-Received: by 2002:a05:6a21:9986:b0:34d:d030:6739 with SMTP id adf61e73a8af0-376a8eb799bmr2910218637.31.1766150070293;
-        Fri, 19 Dec 2025 05:14:30 -0800 (PST)
+        bh=UpN1l31PtsvvDzVVzcUO81N4UuEt2F++NIEqhVqZxkU=;
+        b=BKVeh/Imvawq8q0vlCXodhchwmBnDDNouast6YSCKOavWMi8sjqO2u+09tGZoxecFX
+         ywPG9qOK1yimRWCm5DJZoFhe4xC64Y3eIa/QCSayqHZjnOvPdSOkGf9CLnqA7wEk/y3c
+         xINABXSbdX3AtAhnpd8qw6pitEYmDuy2lKC72O0IjcHH76kXK3Yxnd6XlQb299CSUjBo
+         j/2nWeYc9eeDQDPPfQjicyhCnPzZayVI3AxnU0Ssr+UKhaRx1s9AXygoquxe5jDjT5gK
+         cU+iAdunflNelZsrDLowMqzUE0DYwpVs9Za0h5MdVTW97N/nC+4tBhzaxqxyJ4sBy/JT
+         kbbw==
+X-Forwarded-Encrypted: i=1; AJvYcCUR7nGNDAdob1dIDzhMIIKP8YPHffJ9nq4V7ebwr+us53Mt6hxPRELQQBZwuAeZvao5IK7Bu7qU5Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyS/G7Cya7qL1EF5Aj61n62j4pctQWP2TRmV3pFOQFV9G3FZMDz
+	Yxz4EWZLtC2rcZL56NH3+bFT9c+zGsgvWScjI/3C2gy7DxQESjaOb1fzU3Xo4fGefcr7JhkH3lj
+	oYk8ozY1lG5bFPq2I2PSYAclhey8L6OL5/29RMU0UCa/Ft9nOe3DVHZQSUougaA==
+X-Gm-Gg: AY/fxX78lhntKGxOMDzPxp157LcK8Mu6B1dBI057wrEThoX993ujVRlz7md+cPZKMCo
+	RgPlHHBFlJkhrViQRE5Ls1uIiWc97Hai5cio7gWZijm1n9mLDtDmSrWm49BLIgI5FDyNp6KNN4v
+	pnLsRczqqVpAVe94GdKnWtr+8LT1SZCKOnhjbpQ8au6B8DGnTspJgq2/TqznEnSVrSk8hYDO/d3
+	xoSe+nFfHvws64cfCLCBJ/5coUKUJyLw9B09JeYyG5PUa+6rc7NpqgfNJvQLbLZZFAq9FivgFvF
+	Iq3btnc8f8v9Oa43ku0E6fbBkt5gNdqHw3EbKnapIkBZE8R3nV/8pl5EZo49lUjm40dsNZHqFFz
+	0yz6v6us2IicN8BY9GBgnGt0CkoNaJ8TaSTrCrsHwKQ==
+X-Received: by 2002:a05:6a21:6d98:b0:364:86a:46b2 with SMTP id adf61e73a8af0-376a9ccbb0bmr3024501637.57.1766150142700;
+        Fri, 19 Dec 2025 05:15:42 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFsxyK5lHLg3u33gOcm5o66CK8suco88/56FRjoiS6lVtwAhOZVk1W29HbjNE5Gu3ZcAxPv+w==
+X-Received: by 2002:a05:6a21:6d98:b0:364:86a:46b2 with SMTP id adf61e73a8af0-376a9ccbb0bmr3024453637.57.1766150142120;
+        Fri, 19 Dec 2025 05:15:42 -0800 (PST)
 Received: from [10.217.217.28] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3d4cb25sm23305515ad.56.2025.12.19.05.14.22
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e772ac06fsm2002400a91.11.2025.12.19.05.15.34
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Dec 2025 05:14:29 -0800 (PST)
-Message-ID: <693d9370-ea2f-4eee-bd24-9803c2b15c39@oss.qualcomm.com>
-Date: Fri, 19 Dec 2025 18:44:21 +0530
+        Fri, 19 Dec 2025 05:15:41 -0800 (PST)
+Message-ID: <6afcb26f-6f6a-41ef-ac45-976e5e2f17ae@oss.qualcomm.com>
+Date: Fri, 19 Dec 2025 18:45:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -102,12 +102,11 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V8 4/4] thermal: qcom: add support for PMIC5 Gen3 ADC
- thermal monitoring
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: jic23@kernel.org, robh@kernel.org, krzysztof.kozlowski@linaro.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, agross@kernel.org,
-        andersson@kernel.org, lumag@kernel.org, konradybcio@kernel.org,
+Subject: Re: [PATCH V8 3/4] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+        agross@kernel.org, andersson@kernel.org, lumag@kernel.org,
+        dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
         daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
         thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
         subbaraman.narayanamurthy@oss.qualcomm.com,
@@ -119,219 +118,160 @@ Cc: jic23@kernel.org, robh@kernel.org, krzysztof.kozlowski@linaro.org,
         cros-qcom-dts-watchers@chromium.org, quic_kotarake@quicinc.com,
         neil.armstrong@linaro.org, stephan.gerhold@linaro.org
 References: <20251127134036.209905-1-jishnu.prakash@oss.qualcomm.com>
- <20251127134036.209905-5-jishnu.prakash@oss.qualcomm.com>
- <zzhzsc25f64tx6vrexshmm5uqi7saaff5teart6vvexlj4tcpo@czyhdfsk3khx>
+ <20251127134036.209905-4-jishnu.prakash@oss.qualcomm.com>
+ <20251207165349.72f80659@jic23-huawei>
 Content-Language: en-US
 From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-In-Reply-To: <zzhzsc25f64tx6vrexshmm5uqi7saaff5teart6vvexlj4tcpo@czyhdfsk3khx>
+In-Reply-To: <20251207165349.72f80659@jic23-huawei>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: L4O93Xx4KZndGslKkq8D3Lx-aPNgW8UM
-X-Proofpoint-ORIG-GUID: L4O93Xx4KZndGslKkq8D3Lx-aPNgW8UM
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE5MDExMCBTYWx0ZWRfX9BcZ6g1wGqv2
- 1QZPlQ/+xrwzkMjSENTu73UXV/SFsrFGK0PXLoQHwoOCmdbEQ9Uu1u/ijuoGSfPVgSGGSfJj2Cm
- 8Xa+9/YeyM9GSBVSxMyIWcHuAoQu0wmh5EuLwpt/zFY+TmYZl7YNsNo4VPecso6W9T/GMvQzEMd
- Wizt31tnEEwM8Nrc/1X2wKH/EvUT7VMZI8Rf7qR2LrABjJJ/ctLFlkSWkQWiYIbwvjCXO8uzqjF
- I/4UI1087LcqvPHILEDZWcphcsExtgPxmhfMxaoq+DGcw15KFIxzahLWcrb5AGMgQZvbh8L2HXH
- izNjznU4XcFYto8qj1fGZNkD9VQ+N8WoFBlucTyBAvSB7ulD2mJdwNWIPJZE+EloW3xAHN1frBq
- tSbW1edbBAarc5A88QFP2nd75Gf/HL/dQUa8xGJnAuTck/0R4IlWdDCrhS3DNcUbcj3Oh4/uDug
- eg1hlEE/fToifzVOmcw==
-X-Authority-Analysis: v=2.4 cv=Tp7rRTXh c=1 sm=1 tr=0 ts=69454fb7 cx=c_pps
- a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: k3sTLfy_hqS3Nmp7KwmOGr_Yn-tKq6UE
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjE5MDExMCBTYWx0ZWRfX5QhzdYAMO79Q
+ ds9igTjOLCplPsAAGCcvP9BTSGzVVQWlLD1tMRHV1dVOA3mdr+jyt0AgWjJCbdx5sknsAknitPf
+ 9g9DdDA5jcYT/qDYSmTzk5WL/g4nyiGAyqRaAlw2Jbhkr5mTsHZrJTGdos9/j14gMibhWQOgM+R
+ jxdlMWJE+yK6MOptsFzY59ELMXwxsswBLj+8sfcl7rtfCFPUFlhVP1zEP/zC4xz1f6VcST2wY7M
+ PxQ39qBoMk8fN2xfTkhj+sDBXg5Z/5/YOl38aj7ZiYJdrX4Rw7DbxwhiokRQEFFRZmp1pCQRTpf
+ JgFbkX8z8q/7FozJXoE1TRcBzoJTeNRvxzPPL6ra+cNIuA3GNmweSh1+hoRgm1dAJRdqR0WsFzH
+ NXWLTGlX7OCT9gFt7Go85OgPXD/byD/Z4jBjC0b9yoFHO2QbqKY+vMNnnn3n07X3G6IySrlYSH8
+ jyZm8qI66dKdoO19B/Q==
+X-Authority-Analysis: v=2.4 cv=feSgCkQF c=1 sm=1 tr=0 ts=69454fff cx=c_pps
+ a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
  a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=mR9g3s2PQlfax8CwdagA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=OpyuDcXvxspvyRM73sMx:22
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=fLtpXVqzqxV2lCxwsoQA:9
+ a=QEXdDO2ut3YA:10 a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-ORIG-GUID: k3sTLfy_hqS3Nmp7KwmOGr_Yn-tKq6UE
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-19_04,2025-12-17_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 clxscore=1015 impostorscore=0 malwarescore=0 spamscore=0
- phishscore=0 priorityscore=1501 lowpriorityscore=0 suspectscore=0
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2512190110
+ impostorscore=0 phishscore=0 priorityscore=1501 malwarescore=0 suspectscore=0
+ spamscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512190110
 
-Hi Dmitry,
+Hi Jonathan,
 
-On 12/6/2025 7:54 AM, Dmitry Baryshkov wrote:
-> On Thu, Nov 27, 2025 at 07:10:36PM +0530, Jishnu Prakash wrote:
->> Add support for ADC_TM part of PMIC5 Gen3.
+On 12/7/2025 10:23 PM, Jonathan Cameron wrote:
+> On Thu, 27 Nov 2025 19:10:35 +0530
+> Jishnu Prakash <jishnu.prakash@oss.qualcomm.com> wrote:
+> 
+>> The ADC architecture on PMIC5 Gen3 is similar to that on PMIC5 Gen2,
+>> with all SW communication to ADC going through PMK8550 which
+>> communicates with other PMICs through PBS.
 >>
->> This is an auxiliary driver under the Gen3 ADC driver, which implements the
->> threshold setting and interrupt generating functionalities of QCOM ADC_TM
->> drivers, used to support thermal trip points.
+>> One major difference is that the register interface used here is that
+>> of an SDAM (Shared Direct Access Memory) peripheral present on PMK8550.
+>> There may be more than one SDAM used for ADC5 Gen3 and each has eight
+>> channels, which may be used for either immediate reads (same functionality
+>> as previous PMIC5 and PMIC5 Gen2 ADC peripherals) or recurring measurements
+>> (same as ADC_TM functionality).
+>>
+>> By convention, we reserve the first channel of the first SDAM for all
+>> immediate reads and use the remaining channels across all SDAMs for
+>> ADC_TM monitoring functionality.
+>>
+>> Add support for PMIC5 Gen3 ADC driver for immediate read functionality.
+>> ADC_TM is implemented as an auxiliary thermal driver under this ADC
+>> driver.
 >>
 >> Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
->> ---
-
-...
-
->>
->>  drivers/thermal/qcom/Kconfig                  |   9 +
->>  drivers/thermal/qcom/Makefile                 |   1 +
->>  drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c | 530 ++++++++++++++++++
->>  3 files changed, 540 insertions(+)
->>  create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
->>
->> diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
->> index a6bb01082ec6..1acb11e4ac80 100644
->> --- a/drivers/thermal/qcom/Kconfig
->> +++ b/drivers/thermal/qcom/Kconfig
->> @@ -21,6 +21,15 @@ config QCOM_SPMI_ADC_TM5
->>  	  Thermal client sets threshold temperature for both warm and cool and
->>  	  gets updated when a threshold is reached.
->>  
->> +config QCOM_SPMI_ADC_TM5_GEN3
->> +	tristate "Qualcomm SPMI PMIC Thermal Monitor ADC5 Gen3"
->> +	depends on QCOM_SPMI_ADC5_GEN3
+> Hi Jishnu
 > 
-> This module depends directly on the Gen3 ADC driver. I think you can
-> drop a separate "common" submodule.
+> Biggest thing I noticed on a fresh review is that you include
+> very few headers.  This only compiles (I think) because of lots
+> of deeply nested includes.  General principle in kernel code is
+> to follow IWYU approach with a few exceptions.  That makes code
+> much less prone to changes deep in the header hierarchy.
 > 
-
-Yes, I can do this in the next patch series.
-
->> +	help
->> +	  This enables the auxiliary thermal driver for the ADC5 Gen3 thermal
->> +	  monitoring device. It shows up as a thermal zone with multiple trip points.
->> +	  Thermal client sets threshold temperature for both warm and cool and
->> +	  gets updated when a threshold is reached.
+> You can even use the tooling that exists for clang to give you suggestions
+> though search around for config files (I posted one a long time back)
+> that reduce the noise somewhat.
+> 
+> Jonathan
+> 
+> 
+>> diff --git a/drivers/iio/adc/qcom-adc5-gen3-common.c b/drivers/iio/adc/qcom-adc5-gen3-common.c
+>> new file mode 100644
+>> index 000000000000..46bb09424f22
+>> --- /dev/null
+>> +++ b/drivers/iio/adc/qcom-adc5-gen3-common.c
+>> @@ -0,0 +1,107 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+>> + *
+>> + * Code shared between the main and auxiliary Qualcomm PMIC voltage ADCs
+>> + * of type ADC5 Gen3.
+>> + */
 >> +
->>  config QCOM_SPMI_TEMP_ALARM
->>  	tristate "Qualcomm SPMI PMIC Temperature Alarm"
->>  	depends on OF && SPMI && IIO
+>> +#include <linux/bitfield.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/iio/adc/qcom-adc5-gen3-common.h>
+>> +#include <linux/regmap.h>
+> This seems like very light set of includes.
+> If nothing else should be seeing linux/types.h I think
 > 
-> 
->> +
->> +static struct adc_tm5_auxiliary_drv adctm5gen3_auxiliary_drv = {
->> +	.adrv = {
->> +		.id_table = adctm5_auxiliary_id_table,
->> +		.probe = adc_tm5_probe,
->> +	},
->> +	.tm_event_notify = adctm_event_handler,
->> +};
->> +
->> +static int __init adctm5_init_module(void)
->> +{
->> +	return auxiliary_driver_register(&adctm5gen3_auxiliary_drv.adrv);
->> +}
->> +
->> +static void __exit adctm5_exit_module(void)
->> +{
->> +	auxiliary_driver_unregister(&adctm5gen3_auxiliary_drv.adrv);
->> +}
->> +
->> +module_init(adctm5_init_module);
->> +module_exit(adctm5_exit_module);
-> 
-> We really need to make this work with module_auxiliary_driver-like
-> macro.
+> In general try to follow include what you use principles (loosely as some
+> conventions exit for not including particular headers). 
 > 
 
-I tried doing this again now, but I'm not sure if the way I found is fine.
+I have a question about this - I'm including some header files in my
+newly added common header file too (include/linux/iio/adc/qcom-adc5-gen3-common.h).
+Do I need to repeat those in the driver files where this header is already
+included?
 
+> Sorry I didn't notice this in earlier reviews!
+> 
+> 
+>> diff --git a/drivers/iio/adc/qcom-spmi-adc5-gen3.c b/drivers/iio/adc/qcom-spmi-adc5-gen3.c
+>> new file mode 100644
+>> index 000000000000..effd4bd49989
+>> --- /dev/null
+>> +++ b/drivers/iio/adc/qcom-spmi-adc5-gen3.c
+> 
+>> +/**
+>> + * struct adc5_chip - ADC private structure.
+>> + * @dev: SPMI ADC5 Gen3 device.
+>> + * @dev_data: Top-level ADC device data.
+>> + * @nchannels: number of ADC channels.
+>> + * @chan_props: array of ADC channel properties.
+>> + * @iio_chans: array of IIO channels specification.
+>> + * @complete: ADC result notification after interrupt is received.
+>> + * @lock: ADC lock for access to the peripheral, to prevent concurrent
+>> + * requests from multiple clients.
+>> + * @data: software configuration data.
+>> + * @n_tm_channels: number of ADC channels used for TM measurements.
+>> + * @tm_aux: pointer to auxiliary TM device.
+>> + */
+>> +struct adc5_chip {
+>> +	struct device *dev;
+>> +	struct adc5_device_data dev_data;
+>> +	unsigned int nchannels;
+>> +	struct adc5_channel_prop *chan_props;
+>> +	struct iio_chan_spec *iio_chans;
+>> +	struct completion complete;
+>> +	/*
+>> +	 * lock for access to the peripheral, to prevent concurrent requests
+>> +	 * from multiple clients.
+>> +	 */
+> 
+> Whilst checkpatch is dumb on this and complains if you don't have a comment
+> here feel free to drop it as the one in the kernel-doc is enough.
+> 
 
-Just to recap, the main issue with using module_auxiliary_driver() directly,
-which I discussed with Jonathan here earlier: (https://lore.kernel.org/all/20250301032901.7b38fed4@jic23-huawei/)
-was that it is a macro definition which uses its input argument to
-generate function names. So if I have a line like this:
-
-    module_auxiliary_driver(adctm5gen3_auxiliary_drv.adrv);
-
-it will generate function definitions like this, due to text substitutions:
-
-    static int __init adctm5gen3_auxiliary_drv.adrv_init(void)
-
-which will fail compilation.
-
-
-
-I see that in other drivers where module_auxiliary_driver() is used, there is a 
-"struct auxiliary_driver" initialization just before that initialized variable 
-is passed to module_auxiliary_driver(). I tried making a similar change here now:
-
-
-    -static struct adc_tm5_auxiliary_drv adctm5gen3_auxiliary_drv = {
-    -       .adrv = {
-    -               .id_table = adctm5_auxiliary_id_table,
-    -               .probe = adc_tm5_probe,
-    -       },
-    -       .tm_event_notify = adctm_event_handler,
-    +static struct auxiliary_driver adctm5gen3_auxiliary_driver = {
-    +    .id_table = adctm5_auxiliary_id_table,
-    +    .probe = adc_tm5_probe,
-     };
-    
-    -static int __init adctm5_init_module(void)
-    -{
-    -       return auxiliary_driver_register(&adctm5gen3_auxiliary_drv.adrv);
-    -}
-    -
-    -static void __exit adctm5_exit_module(void)
-    -{
-    -       auxiliary_driver_unregister(&adctm5gen3_auxiliary_drv.adrv);
-    -}
-    +struct adc_tm5_auxiliary_drv adctm5gen3_auxiliary_drv = {
-    +       .adrv = adctm5gen3_auxiliary_driver,
-    +       .tm_event_notify = adctm_event_handler,
-    +};
-    
-    -module_init(adctm5_init_module);
-    -module_exit(adctm5_exit_module);
-    +module_auxiliary_driver(adctm5gen3_auxiliary_driver);
-
-With this, I get the following error:
-
-    drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c:513:10: error: initializer element is not constant
-      513 |  .adrv = adctm5gen3_auxiliary_driver,
-          |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-It looks like the above definiton of adctm5gen3_auxiliary_driver is not considered
-a compile-time constant. I made the following modification to fix this:
-
-    -static struct auxiliary_driver adctm5gen3_auxiliary_driver = {
-    +static const struct auxiliary_driver adctm5gen3_auxiliary_driver = {
-
-
-And with this, the code does get built, but with warnings like this:
-
-
-    drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c: In function ‘adctm5gen3_auxiliary_driver_init’:
-    ./include/linux/device/driver.h:260:20: warning: passing argument 1 of ‘__auxiliary_driver_register’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
-      260 |  return __register(&(__driver) , ##__VA_ARGS__); \
-          |                    ^~~~~~~~~~~
-    ./include/linux/auxiliary_bus.h:253:30: note: in definition of macro ‘auxiliary_driver_register’
-      253 |  __auxiliary_driver_register(auxdrv, THIS_MODULE, KBUILD_MODNAME)
-          |                              ^~~~~~
-    ./include/linux/auxiliary_bus.h:287:2: note: in expansion of macro ‘module_driver’
-      287 |  module_driver(__auxiliary_driver, auxiliary_driver_register, auxiliary_driver_unregister)
-          |  ^~~~~~~~~~~~~
-    drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c:517:1: note: in expansion of macro ‘module_auxiliary_driver’
-      517 | module_auxiliary_driver(adctm5gen3_auxiliary_driver);
-          | ^~~~~~~~~~~~~~~~~~~~~~~
-    ./include/linux/auxiliary_bus.h:250:58: note: expected ‘struct auxiliary_driver *’ but argument is of type ‘const struct auxiliary_driver *’
-      250 | int __auxiliary_driver_register(struct auxiliary_driver *auxdrv, struct module *owner,
-          |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
-
-
-Is it acceptable to have the above code changes to use module_auxiliary_driver(),
-even with the warnings generated? 
-
-Or do you have any other suggestions?
+I'll make this change in the next patch series.
 
 Thanks,
 Jishnu
 
 
->> +
->> +MODULE_DESCRIPTION("SPMI PMIC Thermal Monitor ADC driver");
->> +MODULE_LICENSE("GPL");
->> +MODULE_IMPORT_NS("QCOM_SPMI_ADC5_GEN3");
->> -- 
->> 2.25.1
->>
+>> +	struct mutex lock;
+>> +	const struct adc5_data *data;
+>> +	unsigned int n_tm_channels;
+>> +	struct auxiliary_device *tm_aux;
+>> +};
 > 
+> 
+>>
 
 
