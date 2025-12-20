@@ -1,275 +1,309 @@
-Return-Path: <linux-pm+bounces-39722-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39723-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB188CD2D57
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 11:29:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D1F8CD2EBB
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 13:35:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 99455300A21A
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 10:29:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8CDA630181A0
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 12:35:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DFFD2DAFCA;
-	Sat, 20 Dec 2025 10:29:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2F4F273D66;
+	Sat, 20 Dec 2025 12:34:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="u5FSOmbt"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QWC/IeX8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D67273D84;
-	Sat, 20 Dec 2025 10:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D8917B50A
+	for <linux-pm@vger.kernel.org>; Sat, 20 Dec 2025 12:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766226557; cv=none; b=d6ml63dtQ2t56Z+V/wnUEhwa8aNNe0ZzTM9ENDkYxBVAKyUzk+hJx0ykHlDiE+xKli/byKUvCMJHMtttmWPo/e7T/Uc78xZ12vzI54PPZo3CH5aOyyPzHCheS2JWPVf1vbCJcPqdGzdHIt75ZzuWalCxaIRf/uZ3/G1ixaNSzg0=
+	t=1766234099; cv=none; b=V5qDGV6t8ypTeKrwc3NioSz9iasWl48Wew5+BJbu9nugnWtLUJXfEBrLN/O/+u9GZilIx8cFz0w5yN6pIxQ+gWAnH4ac7iFJRRTiO8QG881Y/g4GqtBG+pmcsfzzk1NB5ii/1jxMK7H8YOYv4wIl2ra/8SXr5DhMhlbPMIPrk90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766226557; c=relaxed/simple;
-	bh=tkASWnxDAnPkSgYklHe/Hs7vfqfR5l4Y2k3+inLhx5U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=R4dkrJX4S5Zo1gYjG89RAYlD1krwPwG6RM8aFpnls7XCIIwgUnzFAriIRGWtDy77qyD3eXN98SV9wOaI7aINa51fYfjzpOOj3dzOU0cgmWR10LMtRoJ2kFVPGyzB22JtBZuKuCWHQEv2s29BcpVQ+xp391vpXuqKW3+bsMqWx0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=u5FSOmbt; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=rQWfpVR0ETstCxv+UIVuxd4KCChPSiLYUvsCabSYxDc=;
-	b=u5FSOmbtABHD8Bjb22xd1V+0/78YUbbRd16O9Bi/kG+PNqrUEO6Aj/pmEsiFv6u1neCtJuYp0
-	ihS8mihEEpqC6WcsOqyQm0k3hknnRjarSq20tJGgvBFGCQ8nYYTQOR4JbwYHk8xxVPJA2pmSJrH
-	LL9KZ7+e/j/a4jZ7kfDP7/c=
-Received: from mail.maildlp.com (unknown [172.19.162.223])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4dYLDQ0jDKz1T4G3;
-	Sat, 20 Dec 2025 18:26:46 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8161640562;
-	Sat, 20 Dec 2025 18:29:02 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
- (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sat, 20 Dec
- 2025 18:29:01 +0800
-Message-ID: <1a2059cf-b12c-4e47-b52e-e5c797a0506c@huawei.com>
-Date: Sat, 20 Dec 2025 18:29:01 +0800
+	s=arc-20240116; t=1766234099; c=relaxed/simple;
+	bh=HxcbYaDU2NCzMhsYOgAY99lFkJhGLXoRGHYhBoNgDLY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XHF/Df7KIlOT9K8LY+b3VY7Sed82oI13aHsNIQePMXaxqWXE3vInSSe9HB7zEfpBmLIhDYmknmu7TQiyajH/6WlwqgCsS+7V0DDqb3AK3iKXCuqgwYlOEp46lVgieo3Somx8IXJSCoG+Xck7FCl0eclV3N8ODCLHIsBGLUQMDEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QWC/IeX8; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1766234096;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N1HzDltyBKjzeygGtrpa51qJUu6D5dQuY0xY8PUvjRA=;
+	b=QWC/IeX8LDnmkHebrH/SRxKr6x6GT3Y62IQ1o3CPRwakIUMYsn2zooEFUf2/n3BDMcR5mL
+	aJIdpzVJ/x2KQ4vHM4Huj6D5eAJGqb3e7EjT+WMkQIY4gv9C/T0HoVDBoqRps2FEvxQ9ID
+	LBpNfuD94OcrD+FMBtINnB3FRp9/6lE=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-619-Irr-uDjTPjeJRvhM-fb6dg-1; Sat,
+ 20 Dec 2025 07:34:51 -0500
+X-MC-Unique: Irr-uDjTPjeJRvhM-fb6dg-1
+X-Mimecast-MFC-AGG-ID: Irr-uDjTPjeJRvhM-fb6dg_1766234088
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 55583195DE48;
+	Sat, 20 Dec 2025 12:34:47 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.41])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 191D030001A2;
+	Sat, 20 Dec 2025 12:34:43 +0000 (UTC)
+Date: Sat, 20 Dec 2025 20:34:38 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Kairui Song <ryncsn@gmail.com>
+Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+	Barry Song <baohua@kernel.org>, Chris Li <chrisl@kernel.org>,
+	Nhat Pham <nphamcs@gmail.com>, Yosry Ahmed <yosry.ahmed@linux.dev>,
+	David Hildenbrand <david@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Youngjun Park <youngjun.park@lge.com>,
+	Hugh Dickins <hughd@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Ying Huang <ying.huang@linux.alibaba.com>,
+	Kemeng Shi <shikemeng@huaweicloud.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	linux-kernel@vger.kernel.org, Kairui Song <kasong@tencent.com>,
+	linux-pm@vger.kernel.org,
+	"Rafael J. Wysocki (Intel)" <rafael@kernel.org>
+Subject: Re: [PATCH v5 00/19] mm, swap: swap table phase II: unify swapin use
+ swap cache and cleanup flags
+Message-ID: <aUaX3mypyTXXM07x@MiWiFi-R3L-srv>
+References: <20251220-swap-table-p2-v5-0-8862a265a033@tencent.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] cpufreq: Update set_boost callbacks to rely on
- boost_freq_req
-To: Pierre Gondois <pierre.gondois@arm.com>
-CC: <linux-kernel@vger.kernel.org>, Christian Loehle
-	<christian.loehle@arm.com>, Ionela Voinescu <ionela.voinescu@arm.com>, Jie
- Zhan <zhanjie9@hisilicon.com>, Huang Rui <ray.huang@amd.com>, "Gautham R.
- Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello
-	<mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
-	<linux-pm@vger.kernel.org>
-References: <20251208105933.1369125-1-pierre.gondois@arm.com>
- <20251208105933.1369125-4-pierre.gondois@arm.com>
- <14ad55ce-413f-46e0-9ce0-f35fc421056c@huawei.com>
- <73da1186-5edd-4465-bd49-e18d9064a501@arm.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <73da1186-5edd-4465-bd49-e18d9064a501@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemf200001.china.huawei.com (7.202.181.227)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251220-swap-table-p2-v5-0-8862a265a033@tencent.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 2025/12/18 0:22, Pierre Gondois wrote:
-> Hello Lifeng,
-> 
-> Thanks for the review.
-> I wrote a bit of text, but IIUC you already agree with what I describe.
-> This might be more to be sure of what I want to do.
-> 
-> If you disagree with something, please let me know.
-> 
-> On 12/10/25 10:26, zhenglifeng (A) wrote:
->> On 2025/12/8 18:59, Pierre Gondois wrote:
->>> In the existing set_boost() callbacks:
->>> - Don't update policy->max as this is done through the qos notifier
->>>    cpufreq_notifier_max() which calls cpufreq_set_policy().
->>> - Remove freq_qos_update_request() calls as the qos request is now
->>>    done in policy_set_boost() and updates the new boost_freq_req
->>>
->>> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
->>> ---
->>>   drivers/cpufreq/amd-pstate.c   |  2 --
->>>   drivers/cpufreq/cppc_cpufreq.c | 21 ++++-----------------
->>>   drivers/cpufreq/cpufreq.c      | 14 ++------------
->>>   3 files changed, 6 insertions(+), 31 deletions(-)
->>>
->>> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
->>> index b44f0f7a5ba1c..50416358a96ac 100644
->>> --- a/drivers/cpufreq/amd-pstate.c
->>> +++ b/drivers/cpufreq/amd-pstate.c
->>> @@ -754,8 +754,6 @@ static int amd_pstate_cpu_boost_update(struct cpufreq_policy *policy, bool on)
->>>       else if (policy->cpuinfo.max_freq > nominal_freq)
->>>           policy->cpuinfo.max_freq = nominal_freq;
->>>   -    policy->max = policy->cpuinfo.max_freq;
->>> -
->>>       if (cppc_state == AMD_PSTATE_PASSIVE) {
->>>           ret = freq_qos_update_request(&cpudata->req[1], policy->cpuinfo.max_freq);
->>>           if (ret < 0)
->>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->>> index e23d9abea1359..3baf7baaec371 100644
->>> --- a/drivers/cpufreq/cppc_cpufreq.c
->>> +++ b/drivers/cpufreq/cppc_cpufreq.c
->>> @@ -597,21 +597,14 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
->>>       caps = &cpu_data->perf_caps;
->>>       policy->driver_data = cpu_data;
->>>   -    /*
->>> -     * Set min to lowest nonlinear perf to avoid any efficiency penalty (see
->>> -     * Section 8.4.7.1.1.5 of ACPI 6.1 spec)
->>> -     */
->>> -    policy->min = cppc_perf_to_khz(caps, caps->lowest_nonlinear_perf);
->>> -    policy->max = cppc_perf_to_khz(caps, policy->boost_enabled ?
->>> -                        caps->highest_perf : caps->nominal_perf);
->> Why remove this?
-> 
-> This is partly a mistake.
-> As you suggested below (I think), policy->max should not be set directly.
-> It might be better to set the boost_freq_req for all cpufreq drivers, which should
-> result in setting policy->max.
-> 
->>
->>> -
->>>       /*
->>>        * Set cpuinfo.min_freq to Lowest to make the full range of performance
->>>        * available if userspace wants to use any perf between lowest & lowest
->>>        * nonlinear perf
->>>        */
->>>       policy->cpuinfo.min_freq = cppc_perf_to_khz(caps, caps->lowest_perf);
->>> -    policy->cpuinfo.max_freq = policy->max;
->>> +    policy->cpuinfo.max_freq = cppc_perf_to_khz(caps, policy->boost_enabled ?
->>> +                        caps->highest_perf : caps->nominal_perf);
->>>         policy->transition_delay_us = cppc_cpufreq_get_transition_delay_us(cpu);
->>>       policy->shared_type = cpu_data->shared_type;
->>> @@ -776,17 +769,11 @@ static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
->>>   {
->>>       struct cppc_cpudata *cpu_data = policy->driver_data;
->>>       struct cppc_perf_caps *caps = &cpu_data->perf_caps;
->>> -    int ret;
->>>         if (state)
->>> -        policy->max = cppc_perf_to_khz(caps, caps->highest_perf);
->>> +        policy->cpuinfo.max_freq = cppc_perf_to_khz(caps, caps->highest_perf);
->>>       else
->>> -        policy->max = cppc_perf_to_khz(caps, caps->nominal_perf);
->>> -    policy->cpuinfo.max_freq = policy->max;
->>> -
->>> -    ret = freq_qos_update_request(policy->max_freq_req, policy->max);
->>> -    if (ret < 0)
->>> -        return ret;
->>> +        policy->cpuinfo.max_freq = cppc_perf_to_khz(caps, caps->nominal_perf);
->>>         return 0;
->>>   }
->>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->>> index 65ef0fa70c388..ab2def9e4d188 100644
->>> --- a/drivers/cpufreq/cpufreq.c
->>> +++ b/drivers/cpufreq/cpufreq.c
->>> @@ -1514,10 +1514,6 @@ static int cpufreq_policy_online(struct cpufreq_policy *policy,
->>>             blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
->>>                   CPUFREQ_CREATE_POLICY, policy);
->>> -    } else {
->>> -        ret = freq_qos_update_request(policy->max_freq_req, policy->max);
->>> -        if (ret < 0)
->>> -            goto out_destroy_policy;
->> I think boost_freq_req should be updated here, to solve the problem that
->> this code originally intended to solve.
-> 
-> Yes right indeed.
-> 
->>>       }
->>>         if (cpufreq_driver->get && has_target()) {
->>> @@ -2819,16 +2815,10 @@ int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state)
->>>           return -ENXIO;
->>>         ret = cpufreq_frequency_table_cpuinfo(policy);
->> cpufreq_frequency_table_cpuinfo() may change policy->max. I believe this
->> isn't what you want.
-> 
-> 
-> cpufreq_frequency_table_cpuinfo() can effectively update
-> policy->cpuinfo.max_freq, but directly setting policy->max should be wrong
-> as it bypasses the other QoS constraints on the maximal frequency.
-> 
-> Updates to policy->max should go through the following call chain
-> to be sure all constraints/notifiers are respected/called.
-> freq_qos_update_request()
-> \-freq_qos_apply()
->   \-pm_qos_update_target()
->     \-blocking_notifier_call_chain()
->       \-cpufreq_notifier_max()
->         \-handle_update()
->           \-refresh_frequency_limits()
->             \-cpufreq_set_policy()
-> 
-> FYIU, we should have:
-> - max_freq_req: the maximal frequency constraint as set by the user.
->   It is updated whenever the user write to scaling_max_freq.
-> - boost_freq_req: the maximal frequency constraint as set by the
->   driver. It is updated whenever boost is enabled/disabled.
-> - policy->cpuinfo.max_freq: the maximal frequency reachable by the driver.
->   This value is used in cpufreq at various places to check frequencies
->   are within valid boundaries.
-> - policy->max: the maximal frequency cpufreq can use. It is a resultant
->   of all the QoS constraints received (from the user, boost, thermal).
->   It should be updated whenever one of the QoS constraint is updated.
->   It should never be set directly to avoid bypassing the QoS constraints.
-> 
-> Whenever a cpufreq driver is initialized, policy->max is set, but the
-> value is overridden whenever the user writes to scaling_max_freq.
-> Thus we might think it should be replaced with a max_freq_req constraint.
-> 
-> However if boost is enabled, the maximal frequency will be limited by
-> max_freq_req. So at init, cpufreq drivers should set boost_freq_req
-> instead (to policy->cpuinfo.max_freql).
-> That way, if boost is enabled, the maximal frequency available is the
-> boost frequency.
-> 
-> ------
-> 
-> Summary:
-> -
-> policy->max should never be set directly. It should only be set through
-> cpufreq_set_policy(). cpufreq_set_policy() might be called indirectly
-> after updating a QoS constraint using freq_qos_update_request().
-> 
-> -
-> boost_freq_req should be set for all cpufreq drivers, with a default value
-> of policy->cpuinfo.max_freq. This represents the maximal frequency available
-> with/without boost.
-> Note: the name "boost_freq_req" might not be well chosen.
-> 
-> -
-> Any update to policy->cpuinfo.max_freq should be followed by a call to
-> freq_qos_update_request(policy->boost_freq_req).
-> This will allow to update "policy->max" with the new boost frequency.
+On 12/20/25 at 03:43am, Kairui Song wrote:
+> This series removes the SWP_SYNCHRONOUS_IO swap cache bypass swapin code and
+> special swap flag bits including SWAP_HAS_CACHE, along with many historical
+> issues. The performance is about ~20% better for some workloads, like
+> Redis with persistence. This also cleans up the code to prepare for
+> later phases, some patches are from a previously posted series.
 
-Yes. I agree. So the source of the problem is that max_freq_req includes
-both user-defined limits and driver-defined limits. And now you try to
-separate them. That's nice. Looking forward to the next version!
+Thanks for the great effort on the swap table phase II redesign, optimization
+and improvement. I am done with the whole patchset reviewing, with my
+limited knowledge, I didn't see some major issues, just rased several
+minor concerns. All in all, the whole patchset looks good to me.
 
-At the same time, I'm curious whether a similar problem would occur with
-min_freq_req if a driver existed that could change cpuinfo.min_freq in
-runtime (not quite certain whether such a driver exists).
+It's not easy to check patch by patch in this big patch series, especially
+some patches are involving a lot of changes, and some change could be related
+to later patch. I think it's worth being put in next or mergd for more testing.
+Looking forward to seeing the phase III patchset.
+
+FWIW, for the whole series,
+
+Reviewed-by: Baoquan He <bhe@redhat.com>
 
 > 
+> Swap cache bypassing and swap synchronization in general had many
+> issues. Some are solved as workarounds, and some are still there [1]. To
+> resolve them in a clean way, one good solution is to always use swap
+> cache as the synchronization layer [2]. So we have to remove the swap
+> cache bypass swap-in path first. It wasn't very doable due to
+> performance issues, but now combined with the swap table, removing
+> the swap cache bypass path will instead improve the performance,
+> there is no reason to keep it.
 > 
->>> -    if (ret) {
->>> +    if (ret)
->>>           pr_err("%s: Policy frequency update failed\n", __func__);
->>> -        return ret;
->>> -    }
->>>   -    ret = freq_qos_update_request(policy->max_freq_req, policy->max);
->>> -    if (ret < 0)
->>> -        return ret;
->>> -
->>> -    return 0;
->>> +    return ret;
->>>   }
->>>   EXPORT_SYMBOL_GPL(cpufreq_boost_set_sw);
->>>   
+> Now we can rework the swap entry and cache synchronization following
+> the new design. Swap cache synchronization was heavily relying on
+> SWAP_HAS_CACHE, which is the cause of many issues. By dropping the usage
+> of special swap map bits and related workarounds, we get a cleaner code
+> base and prepare for merging the swap count into the swap table in the
+> next step.
+> 
+> And swap_map is now only used for swap count, so in the next phase,
+> swap_map can be merged into the swap table, which will clean up more
+> things and start to reduce the static memory usage. Removal of
+> swap_cgroup_ctrl is also doable, but needs to be done after we also
+> simplify the allocation of swapin folios: always use the new
+> swap_cache_alloc_folio helper so the accounting will also be managed by
+> the swap layer by then.
+> 
+> Test results:
+> 
+> Redis / Valkey bench:
+> =====================
+> 
+> Testing on a ARM64 VM 1.5G memory:
+> Server: valkey-server --maxmemory 2560M
+> Client: redis-benchmark -r 3000000 -n 3000000 -d 1024 -c 12 -P 32 -t get
+> 
+>         no persistence              with BGSAVE
+> Before: 460475.84 RPS               311591.19 RPS
+> After:  451943.34 RPS (-1.9%)       371379.06 RPS (+19.2%)
+> 
+> Testing on a x86_64 VM with 4G memory (system components takes about 2G):
+> Server:
+> Client: redis-benchmark -r 3000000 -n 3000000 -d 1024 -c 12 -P 32 -t get
+> 
+>         no persistence              with BGSAVE
+> Before: 306044.38 RPS               102745.88 RPS
+> After:  309645.44 RPS (+1.2%)       125313.28 RPS (+22.0%)
+> 
+> The performance is a lot better when persistence is applied. This should
+> apply to many other workloads that involve sharing memory and COW. A
+> slight performance drop was observed for the ARM64 Redis test: We are
+> still using swap_map to track the swap count, which is causing redundant
+> cache and CPU overhead and is not very performance-friendly for some
+> arches. This will be improved once we merge the swap map into the swap
+> table (as already demonstrated previously [3]).
+> 
+> vm-scabiity
+> ===========
+> usemem --init-time -O -y -x -n 32 1536M (16G memory, global pressure,
+> simulated PMEM as swap), average result of 6 test run:
+> 
+>                            Before:         After:
+> System time:               282.22s         283.47s
+> Sum Throughput:            5677.35 MB/s    5688.78 MB/s
+> Single process Throughput: 176.41 MB/s     176.23 MB/s
+> Free latency:              518477.96 us    521488.06 us
+> 
+> Which is almost identical.
+> 
+> Build kernel test:
+> ==================
+> Test using ZRAM as SWAP, make -j48, defconfig, on a x86_64 VM
+> with 4G RAM, under global pressure, avg of 32 test run:
+> 
+>                 Before            After:
+> System time:    1379.91s          1364.22s (-0.11%)
+> 
+> Test using ZSWAP with NVME SWAP, make -j48, defconfig, on a x86_64 VM
+> with 4G RAM, under global pressure, avg of 32 test run:
+> 
+>                 Before            After:
+> System time:    1822.52s          1803.33s (-0.11%)
+> 
+> Which is almost identical.
+> 
+> MySQL:
+> ======
+> sysbench /usr/share/sysbench/oltp_read_only.lua --tables=16
+> --table-size=1000000 --threads=96 --time=600 (using ZRAM as SWAP, in a
+> 512M memory cgroup, buffer pool set to 3G, 3 test run and 180s warm up).
+> 
+> Before: 318162.18 qps
+> After:  318512.01 qps (+0.01%)
+> 
+> In conclusion, the result is looking better or identical for most cases,
+> and it's especially better for workloads with swap count > 1 on SYNC_IO
+> devices, about ~20% gain in above test. Next phases will start to merge
+> swap count into swap table and reduce memory usage.
+> 
+> One more gain here is that we now have better support for THP swapin.
+> Previously, the THP swapin was bound with swap cache bypassing, which
+> only works for single-mapped folios. Removing the bypassing path also
+> enabled THP swapin for all folios. The THP swapin is still limited to
+> SYNC_IO devices, the limitation can be removed later.
+> 
+> This may cause more serious THP thrashing for certain workloads, but that's
+> not an issue caused by this series, it's a common THP issue we should resolve
+> separately.
+> 
+> Link: https://lore.kernel.org/linux-mm/CAMgjq7D5qoFEK9Omvd5_Zqs6M+TEoG03+2i_mhuP5CQPSOPrmQ@mail.gmail.com/ [1]
+> Link: https://lore.kernel.org/linux-mm/20240326185032.72159-1-ryncsn@gmail.com/ [2]
+> Link: https://lore.kernel.org/linux-mm/20250514201729.48420-1-ryncsn@gmail.com/ [3]
+> 
+> Suggested-by: Chris Li <chrisl@kernel.org>
+> Signed-off-by: Kairui Song <kasong@tencent.com>
+> ---
+> Changes in v5:
+> Rebased on top of current mm-unstalbe, also appliable on mm-new.
+> - Solve trivial conlicts with 6.19 rc1 for easier reviewing.
+> - Don't change the argument for swap_entry_swapped [ Baoquan He ].
+> - Update commit message and comment [ Baoquan He ].
+> - Add a WARN in swap_dup_entries to catch potential swap count
+>   overflow. No error was ever observed for this but the check existed
+>   before, so just keep it to be very careful.
+> - Link to v4: https://lore.kernel.org/r/20251205-swap-table-p2-v4-0-cb7e28a26a40@tencent.com
+> 
+> Changes in v4:
+> - Rebase on latest mm-unstable, should be also mergeable with mm-new.
+> - Update the shmem update commit message as suggested by, and reviewed
+>   by [ Baolin Wang ].
+> - Add a WARN_ON to catch more potential issue and update a few comments.
+> - Link to v3: https://lore.kernel.org/r/20251125-swap-table-p2-v3-0-33f54f707a5c@tencent.com
+> 
+> Changes in v3:
+> - Imporve and update comments [ Barry Song, YoungJun Park, Chris Li ]
+> - Simplify the changes of cluster_reclaim_range a bit, as YoungJun points
+>   out the change looked confusing.
+> - Fix a few typos I found during self review.
+> - Fix a few build error and warns.
+> - Link to v2: https://lore.kernel.org/r/20251117-swap-table-p2-v2-0-37730e6ea6d5@tencent.com
+> 
+> Changes in v2:
+> - Rebased on latest mm-new to resolve conflicts, also appliable to
+>   mm-unstable.
+> - Imporve comment, and commit messages in multiple commits, many thanks to
+>   [Barry Song, YoungJun Park, Yosry Ahmed ]
+> - Fix cluster usable check in allocator [ YoungJun Park]
+> - Improve cover letter [ Chris Li ]
+> - Collect Reviewed-by [ Yosry Ahmed ]
+> - Fix a few build warning and issues from build bot.
+> - Link to v1: https://lore.kernel.org/r/20251029-swap-table-p2-v1-0-3d43f3b6ec32@tencent.com
+> 
+> ---
+> Kairui Song (18):
+>       mm, swap: rename __read_swap_cache_async to swap_cache_alloc_folio
+>       mm, swap: split swap cache preparation loop into a standalone helper
+>       mm, swap: never bypass the swap cache even for SWP_SYNCHRONOUS_IO
+>       mm, swap: always try to free swap cache for SWP_SYNCHRONOUS_IO devices
+>       mm, swap: simplify the code and reduce indention
+>       mm, swap: free the swap cache after folio is mapped
+>       mm/shmem: never bypass the swap cache for SWP_SYNCHRONOUS_IO
+>       mm, swap: swap entry of a bad slot should not be considered as swapped out
+>       mm, swap: consolidate cluster reclaim and usability check
+>       mm, swap: split locked entry duplicating into a standalone helper
+>       mm, swap: use swap cache as the swap in synchronize layer
+>       mm, swap: remove workaround for unsynchronized swap map cache state
+>       mm, swap: cleanup swap entry management workflow
+>       mm, swap: add folio to swap cache directly on allocation
+>       mm, swap: check swap table directly for checking cache
+>       mm, swap: clean up and improve swap entries freeing
+>       mm, swap: drop the SWAP_HAS_CACHE flag
+>       mm, swap: remove no longer needed _swap_info_get
+> 
+> Nhat Pham (1):
+>       mm/shmem, swap: remove SWAP_MAP_SHMEM
+> 
+>  arch/s390/mm/gmap_helpers.c |   2 +-
+>  arch/s390/mm/pgtable.c      |   2 +-
+>  include/linux/swap.h        |  71 ++--
+>  kernel/power/swap.c         |  10 +-
+>  mm/madvise.c                |   2 +-
+>  mm/memory.c                 | 276 +++++++-------
+>  mm/rmap.c                   |   7 +-
+>  mm/shmem.c                  |  75 ++--
+>  mm/swap.h                   |  70 +++-
+>  mm/swap_state.c             | 338 +++++++++++------
+>  mm/swapfile.c               | 861 ++++++++++++++++++++------------------------
+>  mm/userfaultfd.c            |  10 +-
+>  mm/vmscan.c                 |   1 -
+>  mm/zswap.c                  |   4 +-
+>  14 files changed, 858 insertions(+), 871 deletions(-)
+> ---
+> base-commit: dc9f44261a74a4db5fe8ed570fc8b3edc53a28a2
+> change-id: 20251007-swap-table-p2-7d3086e5c38a
+> 
+> Best regards,
+> -- 
+> Kairui Song <kasong@tencent.com>
 > 
 
 
