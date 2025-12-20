@@ -1,284 +1,294 @@
-Return-Path: <linux-pm+bounces-39715-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39716-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06897CD1B50
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 21:06:04 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAADBCD2473
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 01:45:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A02FB302FA2B
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Dec 2025 20:06:02 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 369B23001BFA
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 00:45:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A3BF2E8897;
-	Fri, 19 Dec 2025 20:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902B822B5A3;
+	Sat, 20 Dec 2025 00:45:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NWyI9gPE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C5EgBJmx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 983772D877E
-	for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 20:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C725F18A94C
+	for <linux-pm@vger.kernel.org>; Sat, 20 Dec 2025 00:45:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766174761; cv=none; b=WyxOYH2sE6nH6UkLbmRoFfV8kRjq++52J7m+RqC9KiDLGJaQ2/emEYQb3sIixugEJE+mWCHDBeMGT5ZwpQZrc0TOyjgEjexV0cZuPYqst6uJjmeUmz6/8hxpOgeaUn1Q46wBuKdMWk1xotMHRf0bykN7yjOUH6pKVKAyGNz3izQ=
+	t=1766191530; cv=none; b=O/OpnzGaXWsQRwqXx9i9819dcdBBM4UsAw3wv/0fdhG4wtqEoy/G75DixjhysbegttJ3PTKvQRX3muZyAzM7InTTCoNWKe6C6p4Axp2/m4bIDhW0KIg1lxCaPT5SGqWQbz1kQk1cjpTh1oQzcuLdAee0x7OPajBlgSWsdEVvwy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766174761; c=relaxed/simple;
-	bh=mGiXM7dkwALqgZTC8yWe6dcbyH6/nFmHVVsJpWBZxM4=;
+	s=arc-20240116; t=1766191530; c=relaxed/simple;
+	bh=2+jsEPyEAEVhUZ/L5Brcilwc6Iq77Bzzimns5lkwAlg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h+aJM7ftIcQZeGPpWH6yyGMR8t/L8V2T/d23qgLXiV+loE9ivKEc37Q8opJE4VYOkOo2w59ua6NEKQSOfUiwoMMZFs41pbV5+0M5M+hjq8f4xVVNpSYjQHAPEbuL0Anq1WTPFv7P/m+pRm0OFY9GgyWzvucW0p8MsbdBt4jjnNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NWyI9gPE; arc=none smtp.client-ip=209.85.208.43
+	 To:Cc:Content-Type; b=UGfVKjc7JuXUHy1Pk3OZ136faSuF3h9HF25UF+ZSOrSf+3yP7pGgkyX0rio6B+W9EZ/iJIg3bV5r8dskkUs7YVd9qvAAIuJf4mU3DvcDVABO493oTZJuWRDNIFeEzaDXFkCb4qhLV4rqkRNQY+bWy/AAKrsrjZ0q37UL1veJRs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C5EgBJmx; arc=none smtp.client-ip=209.85.128.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-64b7b737eddso2202824a12.1
-        for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 12:05:59 -0800 (PST)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-78c38149f9fso16333077b3.2
+        for <linux-pm@vger.kernel.org>; Fri, 19 Dec 2025 16:45:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766174758; x=1766779558; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1766191528; x=1766796328; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4w5CiTpqGrabbxUxAh6ePhewNTKmPofU9jkTiJ1MvgA=;
-        b=NWyI9gPE4flaE6Ql22A4aSKHKYhCzIdVm9veP+5yq7d8/u3xkBDRl9+MQ1lrpx8Mk3
-         6wcuVz5PKiw2ticz5u6Mbde9q+wGI5MejLm+G3IfGqH6Kv+vDsptJGiLBbNzmE7YEKgD
-         AhOSFvj1eW+FOeXdnvSgSefLbBgDpLdUhR1gzaAPUWimLDC5IsFYF+srDpVm/nd2T7/T
-         lsOgDf4hk8pGdfXvCPq+STYXG9/tGiuj9YXoAbdRD28ZJNlEKq3BtnpJruVHKYpYWP5X
-         CwHWEU0oztB4JOFk0jztIg94pKf+Y9pcE/V3jaHsTO3wjQivav0LX6wIEY5eWnNEdpzw
-         IbUg==
+        bh=DLPI+6y1Cd274pWyRLM4LL7VX9uNyq+alqBEtAEYrvI=;
+        b=C5EgBJmxuPpRx9IWXn1ISz5/gr+hkUobXADGH1jKXl5GNX19qHkc7fSAR9mNSkU64j
+         HXWaeNPYktQTFdupSnMpym/JYsSdeFtx8l+CPLBClkTgbD2wqrWeJgRxXCiNJvX6O+v0
+         D9JS2jkCkTe/P2MjeMRNKHo1H8Ki4EjlO4dpQW3P2sFp+mErSWlHttlnJmaKPR/Gibx0
+         fVlER++wBQX9RlKowNW5gJqCUP7+J+SQk6h52wcWWH5zhaEkWXag0oDAQk1+r1BUsASF
+         NFzU4inBDJIwoXSaH+b5CWO99iDv101aOdwxBQnr2MV+hRB0DeF5KhaxOYUp6+8aojj7
+         Jf5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766174758; x=1766779558;
+        d=1e100.net; s=20230601; t=1766191528; x=1766796328;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=4w5CiTpqGrabbxUxAh6ePhewNTKmPofU9jkTiJ1MvgA=;
-        b=TNMBvfYpi3G4M5MfynZhVXuyBT6785R88hzJ7Kc/fZjD2h8Nu1sW6lnhE/67fkt8Yz
-         iLHwXRuNbFwMwn4g+ThsboFcpHW9Je/dXxbb8oXWz9Iyamg43Q7lRUSPPUQJQZab+Txa
-         4J15rDjmhm6mO7wciBw+/GTJ6TpkC6B9QgMsBKJkGbYEyRjZ9A/ykSHTfPQqUYYxAOs6
-         77wVk7belfeATWQ6Qg1zupYnV5rtvcALjyoECUjUsyN1ZmYKXV4a7VpAGgupvnrrtb2p
-         E4PXH4oihYG1dW8Q4vuzZAcCv1y5wrz5I7Kf8eVrikkjDlkbz7jPKp/0OPSxtrML8ZCV
-         bLbw==
-X-Forwarded-Encrypted: i=1; AJvYcCUv1I1Hgj14OgBELxfVHRiVh2hQ3dii46YHSF2DPIeSanYeg2zh0gwLQBg/jI4RuT4c0zpD/YL8Yw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyJ4DTEnpX3Dq/az44IXD/18gDyklRcHVxRNab2rDzB8BAaoH+
-	l65HuFr7stBzAQZfMLraQ9ut7bKCaJYUJtyjMgxLlFTl6FC+Iw8pW1A6WAbIhCpaI4LC+PfFOIm
-	dGyMdIHg3KUYdYPFAXIahrgsUv7V3iP0=
-X-Gm-Gg: AY/fxX7Py56iV2RBCu2S8XyZxFfjEImAk9u9mA9TmGkoGTb//MRsYZYG41GGdnxNuUS
-	gFEUzNBKMm+dJ4zeXuRe3v6aa55oU+xyri7ga2PjRBrPJeyHiyrpcC/p8Y7x1SjaOKliMDVH8WV
-	pcNfVq9cvrdcOb+w6ztvls3QoxXHNNUx4yjN8BP9hxmJk6a6kvFt4Gb5PsksGSQyoAAPpcMkpS0
-	UNOddtpUOPt/wr0iXWLPoMHJWC3tLCZEhWxSUvi1gOAvK860HZqzgoU559YR427zNZ9rtkOOaxM
-	vShWtVd3r1X8daejV23Ful/yfkBovOLpUIWcQFeOqA==
-X-Google-Smtp-Source: AGHT+IF1POnLCa4AjD0T4HL68OsMv+4HDDO0cpabJm86414ifutbIdde1m67LWKd/ckIi8nE4Q7eS3r7NXO8ejqKkZs=
-X-Received: by 2002:aa7:c348:0:b0:64b:8f56:f804 with SMTP id
- 4fb4d7f45d1cf-64b8f56ff7fmr2613779a12.28.1766174757596; Fri, 19 Dec 2025
- 12:05:57 -0800 (PST)
+        bh=DLPI+6y1Cd274pWyRLM4LL7VX9uNyq+alqBEtAEYrvI=;
+        b=IGdHY/XOvCEy3VS2ZPu+reaZ53oX77FQJi7+S78en8vh8EI0eF16Hli03RcBjzLUm7
+         9sHyb90c89xmSiUBXbNdZsAySVCNq94GnNvgdh5b0ds54c9FY/MV8QAjtg3TKxtl1VF2
+         b6cHt0kGhK7vpaHN4Bm/DUIGlYv5RBy3FoGDzGCtFNUCbix5cHVl34sMhKSgG5k5Oy+N
+         ED49m5dd8NvSafgBp5rWTYL0jtWDmcaX4mf9NwHTqKUqpTmLHnahP+H9lo59ajgbkf6E
+         wiSoSRPgFcRfmoE+N8+sTJ+/gGbCwRyQCkLGN0QTmxsUET+HeJFSQ07MAsxWK8krW7wi
+         Sxlw==
+X-Forwarded-Encrypted: i=1; AJvYcCVY4D0KMGP5kIhWH5tV3+pbUOaNUwCKmh2/DHbE3xVuCmOFcTGD5iOAuQsuFXKgFSNwRmgKtnl0NA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmPxuLt6YwX6SyZaufFZlXqb36XCh1K2eECwzGWDbLOeead+1D
+	lOkIfZUUnrHEQ5NbCsJT+Lo7+2pjWDqB2HZv2akP6y9KQDg7q5hFoHY1Z/7buWkgRueZoeIEcjU
+	koZpaev6VPv2cq3dc0VWrHNaRmn5ZHcI=
+X-Gm-Gg: AY/fxX5KTsyf8qFNMDQf8clMC7CFT2Grh8uDfeLnpzTGH+kcu4i5GPYp+4Ce35D/imA
+	Wv7K6PznrRRvyP74jFfgepQMBYD7cVNYD7ftSkrk5/NqxUofWUXiZzgZk02JXwlQHIsp8GOT5TF
+	oERLEzafowiNCKmzAPL6+cnkGvVmh6/6FON8lieYHv6PI6vbgXWvy5ungKVXGjTZCdIpDKurxaD
+	EiRV3DjlQGiVIw8sxtmzTCigYSBldZ89WBXz75X/TLDHjTuSlluYBKNcAJ1PHVcPHUuZi0ujt88
+	d8wk8Z459yYycHJ2Rv9j9n7IxG45l+DMEmE675w=
+X-Google-Smtp-Source: AGHT+IGxV5Pk9FDKr/Lj9KKxcmNH7Vilqojhd5iNKpIgV73bbfC+PbBJ47gDiQQYvtv+vvVB4r13+qOWvY++J5PPenk=
+X-Received: by 2002:a53:6912:0:b0:645:5d62:dd8 with SMTP id
+ 956f58d0204a3-6466a8f31a3mr2853787d50.50.1766191527647; Fri, 19 Dec 2025
+ 16:45:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251220-swap-table-p2-v5-0-8862a265a033@tencent.com>
-In-Reply-To: <20251220-swap-table-p2-v5-0-8862a265a033@tencent.com>
-From: Kairui Song <ryncsn@gmail.com>
-Date: Sat, 20 Dec 2025 04:05:21 +0800
-X-Gm-Features: AQt7F2rEwxuypBr72KxPfJdvuV5mfvnYo1-1zcPWVt_eak3CiU3TT4aXkr2_eeI
-Message-ID: <CAMgjq7D5bmQvkR_Lw3Fjx+oSwonvT0AqJUM3_wYahpqzk5xHbg@mail.gmail.com>
-Subject: Re: [PATCH v5 00/19] mm, swap: swap table phase II: unify swapin use
- swap cache and cleanup flags
-To: linux-mm@kvack.org
-Cc: Andrew Morton <akpm@linux-foundation.org>, Baoquan He <bhe@redhat.com>, 
-	Barry Song <baohua@kernel.org>, Chris Li <chrisl@kernel.org>, Nhat Pham <nphamcs@gmail.com>, 
-	Yosry Ahmed <yosry.ahmed@linux.dev>, David Hildenbrand <david@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Youngjun Park <youngjun.park@lge.com>, 
-	Hugh Dickins <hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, "Rafael J. Wysocki (Intel)" <rafael@kernel.org>
+References: <20251217-mt8196-shader-present-v1-0-f6f8f3aa1e93@collabora.com>
+ <20251217-mt8196-shader-present-v1-3-f6f8f3aa1e93@collabora.com> <bdf5b4f9-d6f5-419d-9465-4f722bac06ef@arm.com>
+In-Reply-To: <bdf5b4f9-d6f5-419d-9465-4f722bac06ef@arm.com>
+From: Chia-I Wu <olvaffe@gmail.com>
+Date: Fri, 19 Dec 2025 16:45:16 -0800
+X-Gm-Features: AQt7F2qLOWDeNcNuYDcamhHFDHG6i6Fg_mD7kZv-_AbDieajS4u9bPacZVvQHto
+Message-ID: <CAPaKu7So4BeEyUGSS3ZAHi+Z=Sh6Kpy_W8eEtX4UQs=__MpPEA@mail.gmail.com>
+Subject: Re: [PATCH 3/4] drm/panthor: Implement reading shader_present from nvmem
+To: Steven Price <steven.price@arm.com>
+Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
+	Boris Brezillon <boris.brezillon@collabora.com>, Liviu Dudau <liviu.dudau@arm.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Chen-Yu Tsai <wenst@chromium.org>, kernel@collabora.com, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Dec 20, 2025 at 3:44=E2=80=AFAM Kairui Song <ryncsn@gmail.com> wrot=
-e:
+On Fri, Dec 19, 2025 at 7:31=E2=80=AFAM Steven Price <steven.price@arm.com>=
+ wrote:
 >
-> This series removes the SWP_SYNCHRONOUS_IO swap cache bypass swapin code =
-and
-> special swap flag bits including SWAP_HAS_CACHE, along with many historic=
-al
-> issues. The performance is about ~20% better for some workloads, like
-> Redis with persistence. This also cleans up the code to prepare for
-> later phases, some patches are from a previously posted series.
+> On 17/12/2025 17:03, Nicolas Frattaroli wrote:
+> > On some platforms, notably MediaTek MT8196, the shader_present bitmask
+> > in the Mali GPU register for it has cores enabled that may be faulty.
+> > The true shader_present bitmask is found in an efuse instead.
+> >
+> > Implement reading shader_present from an nvmem cell if one is present,
+> > falling back to the Mali register if it's absent. The error codes are
+> > trickled up through to the probe function so that probe deferral works.
+> >
+> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 >
-> Swap cache bypassing and swap synchronization in general had many
-> issues. Some are solved as workarounds, and some are still there [1]. To
-> resolve them in a clean way, one good solution is to always use swap
-> cache as the synchronization layer [2]. So we have to remove the swap
-> cache bypass swap-in path first. It wasn't very doable due to
-> performance issues, but now combined with the swap table, removing
-> the swap cache bypass path will instead improve the performance,
-> there is no reason to keep it.
+> Reviewed-by: Steven Price <steven.price@arm.com>
 >
-> Now we can rework the swap entry and cache synchronization following
-> the new design. Swap cache synchronization was heavily relying on
-> SWAP_HAS_CACHE, which is the cause of many issues. By dropping the usage
-> of special swap map bits and related workarounds, we get a cleaner code
-> base and prepare for merging the swap count into the swap table in the
-> next step.
+> [Although I really hope other vendors don't do this - the hardware is
+> broken!]
 >
-> And swap_map is now only used for swap count, so in the next phase,
-> swap_map can be merged into the swap table, which will clean up more
-> things and start to reduce the static memory usage. Removal of
-> swap_cgroup_ctrl is also doable, but needs to be done after we also
-> simplify the allocation of swapin folios: always use the new
-> swap_cache_alloc_folio helper so the accounting will also be managed by
-> the swap layer by then.
+> Although one NIT below if you respin for other reasons...
 >
-> Test results:
->
-> Redis / Valkey bench:
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> Testing on a ARM64 VM 1.5G memory:
-> Server: valkey-server --maxmemory 2560M
-> Client: redis-benchmark -r 3000000 -n 3000000 -d 1024 -c 12 -P 32 -t get
->
->         no persistence              with BGSAVE
-> Before: 460475.84 RPS               311591.19 RPS
-> After:  451943.34 RPS (-1.9%)       371379.06 RPS (+19.2%)
->
-> Testing on a x86_64 VM with 4G memory (system components takes about 2G):
-> Server:
-> Client: redis-benchmark -r 3000000 -n 3000000 -d 1024 -c 12 -P 32 -t get
->
->         no persistence              with BGSAVE
-> Before: 306044.38 RPS               102745.88 RPS
-> After:  309645.44 RPS (+1.2%)       125313.28 RPS (+22.0%)
->
-> The performance is a lot better when persistence is applied. This should
-> apply to many other workloads that involve sharing memory and COW. A
-> slight performance drop was observed for the ARM64 Redis test: We are
-> still using swap_map to track the swap count, which is causing redundant
-> cache and CPU overhead and is not very performance-friendly for some
-> arches. This will be improved once we merge the swap map into the swap
-> table (as already demonstrated previously [3]).
->
-> vm-scabiity
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> usemem --init-time -O -y -x -n 32 1536M (16G memory, global pressure,
-> simulated PMEM as swap), average result of 6 test run:
->
->                            Before:         After:
-> System time:               282.22s         283.47s
-> Sum Throughput:            5677.35 MB/s    5688.78 MB/s
-> Single process Throughput: 176.41 MB/s     176.23 MB/s
-> Free latency:              518477.96 us    521488.06 us
->
-> Which is almost identical.
->
-> Build kernel test:
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> Test using ZRAM as SWAP, make -j48, defconfig, on a x86_64 VM
-> with 4G RAM, under global pressure, avg of 32 test run:
->
->                 Before            After:
-> System time:    1379.91s          1364.22s (-0.11%)
->
-> Test using ZSWAP with NVME SWAP, make -j48, defconfig, on a x86_64 VM
-> with 4G RAM, under global pressure, avg of 32 test run:
->
->                 Before            After:
-> System time:    1822.52s          1803.33s (-0.11%)
->
-> Which is almost identical.
->
-> MySQL:
-> =3D=3D=3D=3D=3D=3D
-> sysbench /usr/share/sysbench/oltp_read_only.lua --tables=3D16
-> --table-size=3D1000000 --threads=3D96 --time=3D600 (using ZRAM as SWAP, i=
-n a
-> 512M memory cgroup, buffer pool set to 3G, 3 test run and 180s warm up).
->
-> Before: 318162.18 qps
-> After:  318512.01 qps (+0.01%)
->
-> In conclusion, the result is looking better or identical for most cases,
-> and it's especially better for workloads with swap count > 1 on SYNC_IO
-> devices, about ~20% gain in above test. Next phases will start to merge
-> swap count into swap table and reduce memory usage.
->
-> One more gain here is that we now have better support for THP swapin.
-> Previously, the THP swapin was bound with swap cache bypassing, which
-> only works for single-mapped folios. Removing the bypassing path also
-> enabled THP swapin for all folios. The THP swapin is still limited to
-> SYNC_IO devices, the limitation can be removed later.
->
-> This may cause more serious THP thrashing for certain workloads, but that=
-'s
-> not an issue caused by this series, it's a common THP issue we should res=
-olve
-> separately.
->
-> Link: https://lore.kernel.org/linux-mm/CAMgjq7D5qoFEK9Omvd5_Zqs6M+TEoG03+=
-2i_mhuP5CQPSOPrmQ@mail.gmail.com/ [1]
-> Link: https://lore.kernel.org/linux-mm/20240326185032.72159-1-ryncsn@gmai=
-l.com/ [2]
-> Link: https://lore.kernel.org/linux-mm/20250514201729.48420-1-ryncsn@gmai=
-l.com/ [3]
->
-> Suggested-by: Chris Li <chrisl@kernel.org>
-> Signed-off-by: Kairui Song <kasong@tencent.com>
-> ---
-> Changes in v5:
-> Rebased on top of current mm-unstalbe, also appliable on mm-new.
-> - Solve trivial conlicts with 6.19 rc1 for easier reviewing.
-> - Don't change the argument for swap_entry_swapped [ Baoquan He ].
-> - Update commit message and comment [ Baoquan He ].
-> - Add a WARN in swap_dup_entries to catch potential swap count
->   overflow. No error was ever observed for this but the check existed
->   before, so just keep it to be very careful.
-> - Link to v4: https://lore.kernel.org/r/20251205-swap-table-p2-v4-0-cb7e2=
-8a26a40@tencent.com
->
-> Changes in v4:
-> - Rebase on latest mm-unstable, should be also mergeable with mm-new.
-> - Update the shmem update commit message as suggested by, and reviewed
->   by [ Baolin Wang ].
-> - Add a WARN_ON to catch more potential issue and update a few comments.
-> - Link to v3: https://lore.kernel.org/r/20251125-swap-table-p2-v3-0-33f54=
-f707a5c@tencent.com
->
-> Changes in v3:
-> - Imporve and update comments [ Barry Song, YoungJun Park, Chris Li ]
-> - Simplify the changes of cluster_reclaim_range a bit, as YoungJun points
->   out the change looked confusing.
-> - Fix a few typos I found during self review.
-> - Fix a few build error and warns.
-> - Link to v2: https://lore.kernel.org/r/20251117-swap-table-p2-v2-0-37730=
-e6ea6d5@tencent.com
->
-> Changes in v2:
-> - Rebased on latest mm-new to resolve conflicts, also appliable to
->   mm-unstable.
-> - Imporve comment, and commit messages in multiple commits, many thanks t=
-o
->   [Barry Song, YoungJun Park, Yosry Ahmed ]
-> - Fix cluster usable check in allocator [ YoungJun Park]
-> - Improve cover letter [ Chris Li ]
-> - Collect Reviewed-by [ Yosry Ahmed ]
-> - Fix a few build warning and issues from build bot.
-> - Link to v1: https://lore.kernel.org/r/20251029-swap-table-p2-v1-0-3d43f=
-3b6ec32@tencent.com
->
-> ---
-> Kairui Song (18):
->       mm, swap: rename __read_swap_cache_async to swap_cache_alloc_folio
->       mm, swap: split swap cache preparation loop into a standalone helpe=
-r
->       mm, swap: never bypass the swap cache even for SWP_SYNCHRONOUS_IO
->       mm, swap: always try to free swap cache for SWP_SYNCHRONOUS_IO devi=
-ces
->       mm, swap: simplify the code and reduce indention
->       mm, swap: free the swap cache after folio is mapped
->       mm/shmem: never bypass the swap cache for SWP_SYNCHRONOUS_IO
+> > ---
+> >  drivers/gpu/drm/panthor/panthor_hw.c | 63 ++++++++++++++++++++++++++++=
+++++----
+> >  1 file changed, 57 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/panthor/panthor_hw.c b/drivers/gpu/drm/pan=
+thor/panthor_hw.c
+> > index 87ebb7ae42c4..eb44c8b108aa 100644
+> > --- a/drivers/gpu/drm/panthor/panthor_hw.c
+> > +++ b/drivers/gpu/drm/panthor/panthor_hw.c
+> > @@ -1,6 +1,7 @@
+> >  // SPDX-License-Identifier: GPL-2.0 or MIT
+> >  /* Copyright 2025 ARM Limited. All rights reserved. */
+> >
+> > +#include <linux/nvmem-consumer.h>
+> >  #include <drm/drm_print.h>
+> >
+> >  #include "panthor_device.h"
+> > @@ -109,7 +110,52 @@ static char *get_gpu_model_name(struct panthor_dev=
+ice *ptdev)
+> >       return "(Unknown Mali GPU)";
+> >  }
+> >
+> > -static void panthor_gpu_info_init(struct panthor_device *ptdev)
+> > +static int overload_shader_present(struct panthor_device *ptdev)
+> > +{
+> > +     struct device *dev =3D ptdev->base.dev;
+> > +     struct nvmem_cell *cell =3D nvmem_cell_get(dev, "shader-present")=
+;
+> > +     ssize_t len;
+> > +     void *buf;
+> > +     int ret;
+> > +
+> > +     if (IS_ERR(cell)) {
+> > +             /* On platforms without this cell, use the Mali register =
+*/
+> > +             if (PTR_ERR(cell) =3D=3D -ENOENT)
+> > +                     return 0;
+> > +
+> > +             return dev_err_probe(dev, PTR_ERR(cell),
+> > +                                  "Failed to get shader-present nvmem =
+cell\n");
+> > +     }
+> > +
+> > +     buf =3D nvmem_cell_read(cell, &len);
+> > +     if (IS_ERR(buf)) {
+> > +             ret =3D dev_err_probe(dev, PTR_ERR(buf),
+> > +                                 "Failed to read shader-present nvmem =
+cell\n");
+> > +             goto err_put_cell;
+> > +     }
+> > +
+> > +     if (!len || len > 8) {
+> > +             ret =3D dev_err_probe(dev, -EINVAL, "shader-present cell =
+can't be length %ld\n",
+> > +                                 len);
+> > +             goto err_free;
+> > +     }
+> > +
+> > +     memcpy(&ptdev->gpu_info.shader_present, buf, len);
+When len is 4, this is neither overriding nor masking. I might suggest
+switching to nvmem_cell_read_variable_le_u64 for simplicity.
 
-Gmail blocked my Patch 7 so I have to resend it manually, it still
-appears on lore thread just fine but the order seems a bit odd. Hope
-this won't cause trouble for everyone.
+Either way, Reviewed-by: Chia-I Wu <olvaffe@gmail.com>
+
+
+> > +
+> > +     kfree(buf);
+> > +     nvmem_cell_put(cell);
+> > +
+> > +     return 0;
+> > +
+> > +err_free:
+> > +     kfree(buf);
+> > +err_put_cell:
+> > +     nvmem_cell_put(cell);
+> > +
+> > +     return ret;
+> > +}
+>
+> Rather than repeating the clean up, you can do something like:
+>
+> {
+>         void *buf =3D NULL;
+>         int ret =3D 0
+>
+>         if (IS_ERR(cell)) {
+>                 ret =3D dev_err_probe(...);
+>                 goto out;
+>         }
+>
+>         buf =3D nvmem_cell_read();
+>         if (IS_ERR(buf)) {
+>                 ret =3D dev_err_probe(...);
+>                 goto out;
+>         }
+>
+>         if (!len || len > 8) {
+>                 ret =3D dev_err_probe(...);
+>                 goto out;
+>         }
+>
+>         memcpy();
+>
+> out:
+>         if (!IS_ERR(buf))
+>                 kfree(buf);
+>         if (!IS_ERR(cell))
+>                 nvmem_cell_put(cell);
+>
+>         return ret;
+> }
+>
+> That avoids mistakes when adding a new operation into the sequence. Or
+> you can use the fancy new cleanup helpers, but that feels overkill here.
+> But equally I'm ok if you leave the code as is - it's simple enough and
+> the conversation can be done later if we need it.
+>
+> Thanks,
+> Steve
+>
+> > +
+> > +static int panthor_gpu_info_init(struct panthor_device *ptdev)
+> >  {
+> >       unsigned int i;
+> >
+> > @@ -143,13 +189,18 @@ static void panthor_gpu_info_init(struct panthor_=
+device *ptdev)
+> >               ptdev->gpu_info.tiler_present =3D gpu_read64(ptdev, GPU_T=
+ILER_PRESENT);
+> >               ptdev->gpu_info.l2_present =3D gpu_read64(ptdev, GPU_L2_P=
+RESENT);
+> >       }
+> > +
+> > +     return overload_shader_present(ptdev);
+> >  }
+> >
+> > -static void panthor_hw_info_init(struct panthor_device *ptdev)
+> > +static int panthor_hw_info_init(struct panthor_device *ptdev)
+> >  {
+> >       u32 major, minor, status;
+> > +     int ret;
+> >
+> > -     panthor_gpu_info_init(ptdev);
+> > +     ret =3D panthor_gpu_info_init(ptdev);
+> > +     if (ret)
+> > +             return ret;
+> >
+> >       major =3D GPU_VER_MAJOR(ptdev->gpu_info.gpu_id);
+> >       minor =3D GPU_VER_MINOR(ptdev->gpu_info.gpu_id);
+> > @@ -172,6 +223,8 @@ static void panthor_hw_info_init(struct panthor_dev=
+ice *ptdev)
+> >                "shader_present=3D0x%0llx l2_present=3D0x%0llx tiler_pre=
+sent=3D0x%0llx",
+> >                ptdev->gpu_info.shader_present, ptdev->gpu_info.l2_prese=
+nt,
+> >                ptdev->gpu_info.tiler_present);
+> > +
+> > +     return 0;
+> >  }
+> >
+> >  static int panthor_hw_bind_device(struct panthor_device *ptdev)
+> > @@ -218,7 +271,5 @@ int panthor_hw_init(struct panthor_device *ptdev)
+> >       if (ret)
+> >               return ret;
+> >
+> > -     panthor_hw_info_init(ptdev);
+> > -
+> > -     return 0;
+> > +     return panthor_hw_info_init(ptdev);
+> >  }
+> >
+>
 
