@@ -1,173 +1,187 @@
-Return-Path: <linux-pm+bounces-39742-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39743-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12CB3CD37DB
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 22:56:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0C49CD382A
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 23:31:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A6CEE300F31E
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 21:56:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6D75D300FFA1
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 22:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31D802F691D;
-	Sat, 20 Dec 2025 21:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D44222DEA9B;
+	Sat, 20 Dec 2025 22:31:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="Ba/j1kdI"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eYuVl2YJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013064.outbound.protection.outlook.com [40.107.159.64])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA8022257E;
-	Sat, 20 Dec 2025 21:56:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.64
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766267771; cv=fail; b=Qn4cvd/PkqYLrNDbpEh0ehSwGuP1G07Sc788LeGM+6IC4Cg9DVvGap19R62GXzYYeu9wD0xLlyK/k6N8pHoZyzXYXhy9pxKYeHJZ6GIRBkVTXlp8Sy496N4cN+61sDJLdgpnDlYUnsoyvuVQp8Xnz/+29F24EbKzAPj5tP/FbGg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766267771; c=relaxed/simple;
-	bh=mS94G4gfqIGHyjoVkM1Y2NvP9gmqco73JK2/aLAIN4Y=;
-	h=From:To:CC:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=tqkoajqLtqu8ER5gpEDTW6tQLwFHmGsbAiarkXyFnLAmidlqDp0bIj1UgVWEEQRM1lf4HEi5TVWffhq9vVF2EDEkoxoKQM02bxEzIpsuhmjnZfhlqCnzo4th8IqLTAIRkCgkWweZBL0kPd5O7FKQSne5tR+nx+ePJkkXhcek1YE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=Ba/j1kdI; arc=fail smtp.client-ip=40.107.159.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gX/+pE1xfWciNK6lPjbCTHFTbHNtjmoqJpgFZLjnUVm6NBTs5c//FrIUaGw6uY9OGovacS3Hx/LR25K58VyKLxN5VEpL8Uq9S/YMc2g2v6G6e+EfyZHu48wO54oYSdVS3Riwcq75NJww/XU9+pIVadIUU7vv8u4shSm3Yb+cGG2I6bnz1u1GwuqU9JNXqEZhDXlJ4ZUXSYA7OAVy41bfgbPXP+x8Eo328L2v0MpCdGtRyYB98USWaIZ06RyIuKtqi0EeE8cbfgz0RHN8ePbAdAF2ZzWQQxbtt8ppnQ41PhwLWapgg5n0FM7GJZ8WjUYXl20d8Uhl2IAoiQBXCojtPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=I5qXyVp1pwk4vPb6nsvcD0qSHzgu2YPihwfagbquUro=;
- b=e2qWwAVb7YrsJeb9AG6/t3ask6yM/1nIji3ZtIfECbdddqiX6fUNgveN2+hKaMlwt4p5TPIkZHaKdcRAEtlaGMr/YOluLGLrF7iEICzvwBi87wEzSlaYVdE4TRzN27G0MVroCTt0ZIKomsdOGT/9rFTMDptWQ/flZd+g/2qRyc11+Fap3bvBlXtI6/Ou/2KgoY70him6ZgTWHQ+hqTrG04mekyP992MGwWB4Du40mjpC0FUtljsHQvePaLThl9t3goXb1XQ8Sq/CYNlmSMEh8JD/mwJy96av4Sl9SVahaxdUoAJsB78Q+vtjI3A2OHvdBYhkv9zntmFj9fKCjjrxMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=I5qXyVp1pwk4vPb6nsvcD0qSHzgu2YPihwfagbquUro=;
- b=Ba/j1kdIukt2VqSbaLIC0D+HRJFYQGnpQ7SV4N//QHNJyMaEbDC6w4Z/xUTuuKEYmzwgQM29yaVemTxxuG0BRLfixyykxck77Etf5EVCGeoZkrfq66kLEB/SOl/ZIQU9U/miUXAU/PlDbMskbc2wwiPVgMHcchWpXZYOcm+liQg=
-Received: from AS4P190CA0046.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:656::29)
- by DB9PR02MB8047.eurprd02.prod.outlook.com (2603:10a6:10:36f::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.10; Sat, 20 Dec
- 2025 21:56:04 +0000
-Received: from AMS0EPF0000019B.eurprd05.prod.outlook.com
- (2603:10a6:20b:656:cafe::40) by AS4P190CA0046.outlook.office365.com
- (2603:10a6:20b:656::29) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.10 via Frontend Transport; Sat,
- 20 Dec 2025 21:55:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
- smtp.mailfrom=axis.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=axis.com;
-Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
- 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
- client-ip=195.60.68.100; helo=mail.axis.com; pr=C
-Received: from mail.axis.com (195.60.68.100) by
- AMS0EPF0000019B.mail.protection.outlook.com (10.167.16.247) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9456.9 via Frontend Transport; Sat, 20 Dec 2025 21:56:04 +0000
-Received: from pc52311-2249 (10.4.0.13) by se-mail10w.axis.com (10.20.40.10)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.39; Sat, 20 Dec
- 2025 22:56:03 +0100
-From: Waqar Hameed <waqar.hameed@axis.com>
-To: Sebastian Reichel <sre@kernel.org>
-CC: Tobias Schrammm <t.schramm@manjaro.org>, Matti Vaittinen
-	<mazziesaccount@gmail.com>, <kernel@axis.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/5] power: supply: Remove unused gpio include header
-In-Reply-To: <pndh5tkzvbo.a.out@axis.com> (Waqar Hameed's message of "Sat, 20
-	Dec 2025 22:39:55 +0100")
-References: <pndh5tkzvbo.a.out@axis.com>
-User-Agent: a.out
-Date: Sat, 20 Dec 2025 22:56:03 +0100
-Message-ID: <pndfr94vmvg.a.out@axis.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535C9258CDF
+	for <linux-pm@vger.kernel.org>; Sat, 20 Dec 2025 22:31:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766269878; cv=none; b=ZUAO2oQHcoU/0QH5l2sJeefgC9RdA0r4W8hO+GMtd9jG3kUlkeHqucuqAaWmLbNZujG76RCSBS7XT8gxprcp0UXJPLtPOee6YTOqvYEDRZVzxxjEy/RPEotmOKHVpMDIYA7OuzNkpRDKeLqMZWJpMKEQ6T7w32aycsm7Zsqh3e4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766269878; c=relaxed/simple;
+	bh=kV63Zh38H+VacC8DXVV2Z2Ta6d9kCNbdvI6mFsSmHCc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y8eIq85JwdZ9Mg+NFYOZPIagNSvYeZg2Xj4yshBjh0vuVoYagkRCVcSrH36l9cnp7m68g5Nw+RNwrR3MRzHlstimVgWRgumCK5mc++0BoL0D26heBcrb16/UUocjzKyH7Kh6DafH9i1HmzVLgG6CEwtiHuGlnwozLB1c/G/tjIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eYuVl2YJ; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1766269864;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ATSohVrDsUPFERPnSjtnwMUfGmihgrPoXzJtDALVRVo=;
+	b=eYuVl2YJOWEt9T14aR0Rf4ggxeiqN6+YhJSqikZmgJaV+ArxXWxB+Y5YVwVkANx5njkdrk
+	N4t0FQ6aohZAQdlWVYInxiRWwifpGo9PYn+f+1eCJriWRfDCp5rXhSwISeCP6cQl80rRm9
+	yQLlEW+4IMwQ8priDYppR/VL/uCX2b8=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Ingo Molnar <mingo@kernel.org>,
+	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
+	"Xin Li (Intel)" <xin@zytor.com>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal: intel: int340x: Use sysfs_emit{_at} in sysfs show functions
+Date: Sat, 20 Dec 2025 23:30:11 +0100
+Message-ID: <20251220223026.125678-1-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: se-mail01w.axis.com (10.20.40.7) To se-mail10w.axis.com
- (10.20.40.10)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AMS0EPF0000019B:EE_|DB9PR02MB8047:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3aba2eae-2db4-4766-9899-08de401292ac
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|376014|13003099007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?iCtde7MtjbHod+05L7uTTgXRpIw4BD+KUnqOaLz5aFSH7+DSdX5S0jrasqyp?=
- =?us-ascii?Q?2z765CRAvNC49Dz5PnCDcI2PWBGowPKFEMq3fepXWa9h9Eu6Ihmx3HN48M0v?=
- =?us-ascii?Q?JLgkVmJdSaUR0OsgzXkbYYgPw63DM7uD1Z0YThLmEkn2WwoTmjeQOla6sZHo?=
- =?us-ascii?Q?Zt03Zn92Ftz+v4t1QuMgmDYABoTztJel0AJwHYHbsLc8v9iS4Uy6DpTwOZBy?=
- =?us-ascii?Q?iRzQdlWeGrPHgxqQ+qSv9TuTy7gzAjqRVt42v2BLgt2z8wiD3uKi/VX/bjhi?=
- =?us-ascii?Q?sAYmOOKxGU8en1n3Q6n1ZFnyYMaK/9Eua80Q0ANDZ6ZD0eF9mmY62SkvMBzb?=
- =?us-ascii?Q?oraKmlL6A/P5J7ju7AtiiOUGtTYX5e4O6hKHRG+j34yQv5p5WjPhBxnxG91f?=
- =?us-ascii?Q?eu1hBqd/eCNgjA3OznDux2R4X9Ypk76UO8skeiU/uH7n7floOkQzdpOMtoK8?=
- =?us-ascii?Q?KkVt8xttZFeHay0C45j5OzpVk40x+bQz9VdKf7K8/Rl0WLa4os2L9rm5Wvyp?=
- =?us-ascii?Q?L+vt7KPXwT53QxlqS22yyS2ANL5LifnulrRkgatIn6Q8x9+CGvJ0mjVpe+LU?=
- =?us-ascii?Q?Xb+cGd6z8m7fhmX+1H49kz/4DikLGIASs2LMS0k1tE+sSXfWBNv9XjJZftCg?=
- =?us-ascii?Q?cwc1Qul6aljQNPfEz+NpmVHo/k5aAjdgDDRG2GHNvbY7fgPUXv9+dUaE7iaV?=
- =?us-ascii?Q?1kOs9yySyBZveBmGsW4F2YjFMylmxTDYRk8uN5osOJ5wRVDtrPOBu0D1MpMA?=
- =?us-ascii?Q?5Ri3BCbk1CO70rZOTpTdmFAINwiiGRBdgqfkjQY9sABzJUyURCEvuiavWJOk?=
- =?us-ascii?Q?211yv6DOVTwcyBebxbpLw7w2YwWGBHtmRRrIAAXAE9ML9MKdX6muAEi5Yv5k?=
- =?us-ascii?Q?qeDvtpePZjjCPgh6/rchT2dBMYi85IGMsOB+KQkSGVFoW8F/ozVsrJXOtot0?=
- =?us-ascii?Q?3poRZywLFRrVst/ei+9+/X642Dsw/P8zK/09Tj5qR8z9BJ3L0zSVq1vAY5iB?=
- =?us-ascii?Q?nztKnrgmPmbNVghPNalaEUrwA/pgvz8b8+cMgrKmSHpsGIIanploeifqfacC?=
- =?us-ascii?Q?0DpS3m6O75UadPdqsAQ2hgC/7plaRP8NG50883kGWkuADGaLO0DErZ3ks8dz?=
- =?us-ascii?Q?K4S274gBFxgFTdlQK4mxeVFJsAsfRgPgx8pJ1B/8MUHWp7BoIm2VdSmT7ipJ?=
- =?us-ascii?Q?A49N21qQ0/lV5O1q5DbpmuSIrbzVi9COh9VNQSQb8DiAN3p59co3sH3I5dmF?=
- =?us-ascii?Q?Jntbtbzm6hbA0DQ/aE1VCGr4CV4ebh0orfY2qoqQsQCu3d1Ws/LNgcWD4pOd?=
- =?us-ascii?Q?34NEvSt7+i4jMYcY5LJqIZt3VGs59in1ntzQuOng5XZoftqHYDIfe0B1zJS1?=
- =?us-ascii?Q?Me/FZzH55AD1WrYlQ0IjGO2IMsBJCmKRI2sMu7ozAK0EA25MAYONw5BOAEul?=
- =?us-ascii?Q?JdRCMiUN2qFNaD8jIVIL4S3ky3/yMxkiFvwx78LXGyEaK3iBAMeE/V+zRoF3?=
- =?us-ascii?Q?iwQq0Ii3xCZeMtFrlk5y8H9yUOQQTZ+BTMb+OD36D1A8AcZ0GFVdioicV71n?=
- =?us-ascii?Q?Y1NEt/1DMP4h3R1PT1M=3D?=
-X-Forefront-Antispam-Report:
-	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014)(13003099007);DIR:OUT;SFP:1101;
-X-OriginatorOrg: axis.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2025 21:56:04.7123
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3aba2eae-2db4-4766-9899-08de401292ac
-X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AMS0EPF0000019B.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR02MB8047
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sat, Dec 20, 2025 at 22:39 +0100 Waqar Hameed <waqar.hameed@axis.com> wrote:
+Replace sprintf() with sysfs_emit() and sysfs_emit_at() in sysfs show
+functions. sysfs_emit() and sysfs_emit_at() are preferred to format
+sysfs output as it provides better bounds checking.
 
-> These drivers include the gpio header but never use it. This patch
-> series just removes this unnecessary header.
->
-> This issue was found when writing a new driver for the upcoming TI
-> BQ25630 [1]. Patch adding support for that one will be sent as soon as
-> TI releases the datasheet publicly, which should be anytime soon...
->
-> [1] https://www.ti.com/product/BQ25630
->
-> Waqar Hameed (5):
->   power: supply: bd99954: Remove unused gpio include header
->   power: supply: bq256xx: Remove unused gpio include header
->   power: supply: bq25980: Remove unused gpio include header
->   power: supply: cw2015: Remove unused gpio include header
->   power: supply: ucs1002: Remove unused gpio include header
->
->  drivers/power/supply/bd99954-charger.c | 1 -
->  drivers/power/supply/bq256xx_charger.c | 1 -
->  drivers/power/supply/bq25980_charger.c | 1 -
->  drivers/power/supply/cw2015_battery.c  | 1 -
->  drivers/power/supply/ucs1002_power.c   | 1 -
->  5 files changed, 5 deletions(-)
->
->
-> base-commit: fa084c35afa13ab07a860ef0936cd987f9aa0460
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ .../intel/int340x_thermal/processor_thermal_device.c     | 5 +++--
+ .../intel/int340x_thermal/processor_thermal_rfim.c       | 9 +++++----
+ .../intel/int340x_thermal/processor_thermal_wt_req.c     | 7 ++++---
+ 3 files changed, 12 insertions(+), 9 deletions(-)
 
-Sorry, somehow the "in-reply-header" got removed so the patches didn't
-group with the cover letter... I resent them again and hopefully it
-works now!
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+index 48e7849d4816..f80dbe2ca7e4 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+@@ -8,6 +8,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
++#include <linux/sysfs.h>
+ #include <linux/thermal.h>
+ #include <asm/msr.h>
+ #include "int340x_thermal_zone.h"
+@@ -23,7 +24,7 @@ static ssize_t power_limit_##index##_##suffix##_show(struct device *dev, \
+ { \
+ 	struct proc_thermal_device *proc_dev = dev_get_drvdata(dev); \
+ 	\
+-	return sprintf(buf, "%lu\n",\
++	return sysfs_emit(buf, "%lu\n",\
+ 	(unsigned long)proc_dev->power_limits[index].suffix * 1000); \
+ }
+ 
+@@ -143,7 +144,7 @@ static ssize_t tcc_offset_degree_celsius_show(struct device *dev,
+ 	if (offset < 0)
+ 		return offset;
+ 
+-	return sprintf(buf, "%d\n", offset);
++	return sysfs_emit(buf, "%d\n", offset);
+ }
+ 
+ static ssize_t tcc_offset_degree_celsius_store(struct device *dev,
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+index 589a3a71f0c4..bb9398dfa3c1 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+@@ -7,6 +7,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
++#include <linux/sysfs.h>
+ #include "processor_thermal_device.h"
+ 
+ MODULE_IMPORT_NS("INT340X_THERMAL");
+@@ -211,9 +212,9 @@ static ssize_t suffix##_show(struct device *dev,\
+ 	ret = (reg_val >> mmio_regs[ret].shift) & mmio_regs[ret].mask;\
+ 	err = get_mapped_string(mapping, attr->attr.name, ret, &str);\
+ 	if (!err)\
+-		return sprintf(buf, "%s\n", str);\
++		return sysfs_emit(buf, "%s\n", str);\
+ 	if (err == -EOPNOTSUPP)\
+-		return sprintf(buf, "%u\n", ret);\
++		return sysfs_emit(buf, "%u\n", ret);\
+ 	return err;\
+ }
+ 
+@@ -398,7 +399,7 @@ static ssize_t rfi_restriction_show(struct device *dev,
+ 	if (ret)
+ 		return ret;
+ 
+-	return sprintf(buf, "%llu\n", resp);
++	return sysfs_emit(buf, "%llu\n", resp);
+ }
+ 
+ static ssize_t ddr_data_rate_show(struct device *dev,
+@@ -413,7 +414,7 @@ static ssize_t ddr_data_rate_show(struct device *dev,
+ 	if (ret)
+ 		return ret;
+ 
+-	return sprintf(buf, "%llu\n", resp);
++	return sysfs_emit(buf, "%llu\n", resp);
+ }
+ 
+ static DEVICE_ATTR_RW(rfi_restriction);
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
+index b95810f4a011..2372f5202019 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
+@@ -7,6 +7,7 @@
+  */
+ 
+ #include <linux/pci.h>
++#include <linux/sysfs.h>
+ #include "processor_thermal_device.h"
+ 
+ /* List of workload types */
+@@ -28,9 +29,9 @@ static ssize_t workload_available_types_show(struct device *dev,
+ 	int ret = 0;
+ 
+ 	while (workload_types[i] != NULL)
+-		ret += sprintf(&buf[ret], "%s ", workload_types[i++]);
++		ret += sysfs_emit_at(buf, ret, "%s ", workload_types[i++]);
+ 
+-	ret += sprintf(&buf[ret], "\n");
++	ret += sysfs_emit_at(buf, ret, "\n");
+ 
+ 	return ret;
+ }
+@@ -85,7 +86,7 @@ static ssize_t workload_type_show(struct device *dev,
+ 	if (cmd_resp > ARRAY_SIZE(workload_types) - 1)
+ 		return -EINVAL;
+ 
+-	return sprintf(buf, "%s\n", workload_types[cmd_resp]);
++	return sysfs_emit(buf, "%s\n", workload_types[cmd_resp]);
+ }
+ 
+ static DEVICE_ATTR_RW(workload_type);
+-- 
+Thorsten Blum <thorsten.blum@linux.dev>
+GPG: 1D60 735E 8AEF 3BE4 73B6  9D84 7336 78FD 8DFE EAD4
+
 
