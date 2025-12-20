@@ -1,68 +1,81 @@
-Return-Path: <linux-pm+bounces-39719-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39720-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1750CD2557
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 02:59:54 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB1D4CD26A4
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 05:02:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 75C153020C73
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 01:59:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 873533017ED0
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 04:02:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA34F2DE70B;
-	Sat, 20 Dec 2025 01:59:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B211C19EED3;
+	Sat, 20 Dec 2025 04:02:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SHBcNsI+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HRzXcBno"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B24029B77E;
-	Sat, 20 Dec 2025 01:59:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1F6207DF7
+	for <linux-pm@vger.kernel.org>; Sat, 20 Dec 2025 04:02:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766195991; cv=none; b=NJ1XCtjTaESN8n4wLfq+0dbA7Ro9lkn3Vx4xaPfFJOtqxUBHZP/gEKLHPieFsozUpd7xI9lsgVDQMTKbBb0W7MVlwQS8H3MUTBpSl1h6GmMVqeE7V8OW3YuA/JAhD9wGLqK3VbQzN7xl23ef789ibJ6yVHrERpLWZCV9+6tRmqg=
+	t=1766203349; cv=none; b=A+wRTQj1hXyRMVeErIrTmN/ySpdntnxo0Y5/B0UFr7qB8fnxwQw3bSO0mB5fr0WFNBNXxik5SQjFhgCvJBP5HBp2w7Cfc5Oh4DAJZ0QZXr1ZoCoKAqZ3JT/4I6gUALF9uVRB9YoJ0i4BShUoKRs9k7JdsmblLYjUVbR8REK373E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766195991; c=relaxed/simple;
-	bh=os1jh+uZ9JsdSlnhfREmRKroQHOLlY2V9cVjgynwxB0=;
+	s=arc-20240116; t=1766203349; c=relaxed/simple;
+	bh=GJPbf42Yld+IknBiWEDwm8lq797Hg0zXAoyYXV32KqQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F3MQQ7m5f1UKl+fCrJwbyuNgrK9wMG0hm9+lxDmlkPEsXraw4r8eIYP8Her0xIyHaCC6h1TIH8YKqGg3fEaGqj501QEVykTUWCXGuQ/lXgMrEH3TSVppMhuaGtNAaiAKwnra9bZ3W9VeVKd2MV5k0DIDux1+PeDVpKqMQ9myyCs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SHBcNsI+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02FC7C4CEF1;
-	Sat, 20 Dec 2025 01:59:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766195991;
-	bh=os1jh+uZ9JsdSlnhfREmRKroQHOLlY2V9cVjgynwxB0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SHBcNsI+BT4SfEzjOuUyUlFgXxxsfU1cSymkC/KMEuxeQCV0RnQPMbWYWiWtARQ+S
-	 roy2dQvnmshflaSieqDX4PRCmO+Wf8YHIWNFqNI6MdGbZTL3YikWsRqVcmgHkf5Ymi
-	 fCIeh5cq3R11d4zZyWraYiJxA2UPdRR70H1AB7q2CNN4oeiRqBZcA1wwXelPUk7LwW
-	 RzXBx4vKfypoojYjBWtlD2zYR/3hCLvUohUnhAIpuOqklGbGMW8KQmitcH/a1GCAKa
-	 v6esnMcGmeiglkzGHLsdzq00xaB3nGrfUSEfAK0eRu4kMd8mId+B2Qrb5eR2IKcW76
-	 c3qCIn5Sqw/HQ==
-Date: Fri, 19 Dec 2025 19:59:48 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>, linux-kernel@vger.kernel.org,
-	Chia-I Wu <olvaffe@gmail.com>, David Airlie <airlied@gmail.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	Simona Vetter <simona@ffwll.ch>, Liviu Dudau <liviu.dudau@arm.com>,
-	Maxime Ripard <mripard@kernel.org>, kernel@collabora.com,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	dri-devel@lists.freedesktop.org,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Steven Price <steven.price@arm.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/4] dt-bindings: power: mt8196-gpufreq: Describe nvmem
- provider ability
-Message-ID: <176619598779.359396.11418181120053228697.robh@kernel.org>
-References: <20251217-mt8196-shader-present-v1-0-f6f8f3aa1e93@collabora.com>
- <20251217-mt8196-shader-present-v1-2-f6f8f3aa1e93@collabora.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q74ZEMPBOimtR5s34GsiVgmTa1znQrTv3IgEWXhYlgbykVIsyH/k94ToTiiGusJPq2OFdnTmRUTIHuy7ptfoUcI+PUY8v/Lykaf6b7NiaADULpa2TYnSsJKmK9Mxa5iLTipz7fskwaHhTIFw6hVGs0W1+2R1QdAqIVI3mMU8QH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HRzXcBno; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1766203347;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kvqmX5hgABRKtsoboa9njISBubOT841+nRpbPYRdnww=;
+	b=HRzXcBnoODZyuTRmFsotw+XuOg5D931pGd6nm9U8CUgcMAr0ND/hjRyGx7FbmSmv40FVXw
+	Q/CEqhDXeGA20sDregebe4pBpd9FLYmVWWCpfp9CdB2IjIDMGEo0bit8FOZv14mA9VlNYz
+	OwWBQoDXY7Ji5c5rWZHMPm8es5T8RWQ=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-177-NwGKxkwYPue8DRXokHcolQ-1; Fri,
+ 19 Dec 2025 23:02:23 -0500
+X-MC-Unique: NwGKxkwYPue8DRXokHcolQ-1
+X-Mimecast-MFC-AGG-ID: NwGKxkwYPue8DRXokHcolQ_1766203341
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7601E180060D;
+	Sat, 20 Dec 2025 04:02:19 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.41])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 90CF2180045B;
+	Sat, 20 Dec 2025 04:02:17 +0000 (UTC)
+Date: Sat, 20 Dec 2025 12:02:13 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Kairui Song <ryncsn@gmail.com>
+Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+	Barry Song <baohua@kernel.org>, Chris Li <chrisl@kernel.org>,
+	Nhat Pham <nphamcs@gmail.com>, Yosry Ahmed <yosry.ahmed@linux.dev>,
+	David Hildenbrand <david@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Youngjun Park <youngjun.park@lge.com>,
+	Hugh Dickins <hughd@google.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Ying Huang <ying.huang@linux.alibaba.com>,
+	Kemeng Shi <shikemeng@huaweicloud.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	linux-kernel@vger.kernel.org, Kairui Song <kasong@tencent.com>,
+	linux-pm@vger.kernel.org,
+	"Rafael J. Wysocki (Intel)" <rafael@kernel.org>
+Subject: Re: [PATCH v5 14/19] mm, swap: cleanup swap entry management workflow
+Message-ID: <aUYfxQtmWO3STLa8@MiWiFi-R3L-srv>
+References: <20251220-swap-table-p2-v5-0-8862a265a033@tencent.com>
+ <20251220-swap-table-p2-v5-14-8862a265a033@tencent.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -71,35 +84,61 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251217-mt8196-shader-present-v1-2-f6f8f3aa1e93@collabora.com>
+In-Reply-To: <20251220-swap-table-p2-v5-14-8862a265a033@tencent.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
+On 12/20/25 at 03:43am, Kairui Song wrote:
+> From: Kairui Song <kasong@tencent.com>
+> 
+> The current swap entry allocation/freeing workflow has never had a clear
+> definition. This makes it hard to debug or add new optimizations.
+> 
+> This commit introduces a proper definition of how swap entries would be
+> allocated and freed. Now, most operations are folio based, so they will
+> never exceed one swap cluster, and we now have a cleaner border between
+> swap and the rest of mm, making it much easier to follow and debug,
+> especially with new added sanity checks. Also making more optimization
+> possible.
+> 
+> Swap entry will be mostly allocated and free with a folio bound.
+                                          ~~~~
+                                          freed, typo
+> The folio lock will be useful for resolving many swap ralated races.
+> 
+> Now swap allocation (except hibernation) always starts with a folio in
+> the swap cache, and gets duped/freed protected by the folio lock:
+> 
+> - folio_alloc_swap() - The only allocation entry point now.
+>   Context: The folio must be locked.
+>   This allocates one or a set of continuous swap slots for a folio and
+>   binds them to the folio by adding the folio to the swap cache. The
+>   swap slots' swap count start with zero value.
+> 
+> - folio_dup_swap() - Increase the swap count of one or more entries.
+>   Context: The folio must be locked and in the swap cache. For now, the
+>   caller still has to lock the new swap entry owner (e.g., PTL).
+>   This increases the ref count of swap entries allocated to a folio.
+>   Newly allocated swap slots' count has to be increased by this helper
+>   as the folio got unmapped (and swap entries got installed).
+> 
+> - folio_put_swap() - Decrease the swap count of one or more entries.
+>   Context: The folio must be locked and in the swap cache. For now, the
+>   caller still has to lock the new swap entry owner (e.g., PTL).
+>   This decreases the ref count of swap entries allocated to a folio.
+>   Typically, swapin will decrease the swap count as the folio got
+>   installed back and the swap entry got uninstalled
+> 
+>   This won't remove the folio from the swap cache and free the
+>   slot. Lazy freeing of swap cache is helpful for reducing IO.
+>   There is already a folio_free_swap() for immediate cache reclaim.
+>   This part could be further optimized later.
+> 
+> The above locking constraints could be further relaxed when the swap
+> table if fully implemented. Currently dup still needs the caller
+        ~~ s/if/is/ typo
 
-On Wed, 17 Dec 2025 18:03:28 +0100, Nicolas Frattaroli wrote:
-> On the MediaTek MT8196 SoC, the Mali GPU's "shader_present" hardware
-> register may also include a non-functional shader core, along with the
-> present shader cores. An efuse elsewhere in the SoC provides the
-> shader_present mask with the fused off core omitted.
-> 
-> However, the efuse address is not publicly disclosed. What is known
-> though is that the GPUEB MCU reads this efuse, and exposes its contents
-> in the memory it shares with the application processor.
-> 
-> We can therefore describe the mediatek,mt8196-gpufreq device as being an
-> nvmem provider for this purpose, as it does provide nvmem access in an
-> indirect way.
-> 
-> The shader-present child node is left out of the list of required
-> properties as we may one day be able to describe the actual efuse region
-> this value comes from, so the gpufreq device isn't necessarily the only
-> device that can provide this cell, and implementations shouldn't need to
-> implement this functionality once this is the case.
-> 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
->  .../devicetree/bindings/power/mediatek,mt8196-gpufreq.yaml  | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> to lock the swap entry container (e.g. PTL), or a concurrent zap
+> may underflow the swap count.
+......
 
 
