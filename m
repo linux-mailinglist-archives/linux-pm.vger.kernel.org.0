@@ -1,58 +1,58 @@
-Return-Path: <linux-pm+bounces-39735-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39736-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 355E8CD37A0
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 22:41:46 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E797CD37B7
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 22:54:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 51B95303ADF0
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 21:40:16 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 61EED3002768
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 21:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39CC82E8B8F;
-	Sat, 20 Dec 2025 21:40:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 410452F3609;
+	Sat, 20 Dec 2025 21:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="bBWXOkQU"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="C+NWHscn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011059.outbound.protection.outlook.com [52.101.65.59])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012037.outbound.protection.outlook.com [52.101.66.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8B42D8DC2;
-	Sat, 20 Dec 2025 21:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8784E26ED5C;
+	Sat, 20 Dec 2025 21:54:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.37
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766266808; cv=fail; b=qModnvl2IDLsX84BWEwbd2W1FyTdqgRxaRRI3GgShkAzLT0eEJMeMk2x5P+t5lAyyD2EDa/IRLHQv6IWSUD4U8SKLqS2OMSBfqkeetjHHLhlwcvsEidiTm6u1Bu0uw6NvX6fkxyaLAw+FiwjF0JGR9kEYLDOA75kY74Vzgfvtrw=
+	t=1766267654; cv=fail; b=qkAUMPxdZvISAMVBfGZ/kKPwPXivwA7YM7je03T6og+uRj4W4MUy7l3s26rx0BtOQLCcufpPJhf+/S3VD2tsGvsaLzsraBENDphYD/rIofSOX22a4/dtAFdBLis+7Z4UKqx6fWoDFnNLkjVO/OJc1U7sr4kkgtMweL5mkZfnFgg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766266808; c=relaxed/simple;
-	bh=nV8upDMteWN35B5zSfUaghEx7pyKkoynn2ZRKCXXMEU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qjMib+8odxQJ3sdREyPunGy/qIrOOdNMTQSjsST/EnRTj03YAE9jaydju+9CWTecMm9vwlzTzcMUQv4dV1fP8gHgVRyMcR12lTvpvwZtT/mQVUs9wo7OH5JpGAbU85/c2O9+Xe8W+ZmsxCrzAVbAL1bUtDI1iorN138rTqhQ3I8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=bBWXOkQU; arc=fail smtp.client-ip=52.101.65.59
+	s=arc-20240116; t=1766267654; c=relaxed/simple;
+	bh=4pBQWAkw2H/hGdifI62OEp1LIlTMchaDlsToEhoiadQ=;
+	h=From:To:CC:Subject:Message-ID:Date:MIME-Version:Content-Type; b=SlNSsEzbCG/QvgavF6Ca2BGGFGVqO6r2UksgDPDivuGpZc1KDsJwyL2AX/LX+hYOSetsI0lTEsC+ToSpYpBPWjTiGfmnTmbFMamwpt0jhmNTXFIL6qVc+IseCr0RcW5CNY4bE4pI+ixqSJjzEpsXVxOAe+8lfkuwxBlshU+tR/M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=C+NWHscn; arc=fail smtp.client-ip=52.101.66.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IiE7LDZJU5FN8nMBtchXKTwZsrRkJEB6MvlWmnvXTxC+OOqNMnJInUxs9M5l4vuIjxqeax/M+cXoNwzAr/oows52EJsJWwft5B3DJFffonreRmCUogRwMSOa3fb+wsJqyb3eTasM+2zz4K/0tfEEk+n3JjGoZG08GsNiEAT9CNUuhOtccZBnvICI4ysTKlZ7Bvk+P+0QNxO2LxqtOKshoxSYxwFkNEJYCQ5wOPpFYGEp4eaRSk3DITGYEf6D30LuHFk5ftk8Qgs9ctrcX57VQz8I/LPeAmY54yzG78PEhX1J791/v3wGn8c66YMCsrOMpyQF+c6Kac8ElDlzbXxgHg==
+ b=l8IP064Rp6wP66s1pX8yYneTnQ78Qb7BEv02N61Goci3YncdnKnuMPnAsmDls89MtJmasNx8MguOBUdK37HDT5EXkRra0HQJYReplGzLtBStLDLWDb93fc+XpSCwYPhEmFI50Vx9jlVrtsnfCYhbka5Tdy9XseIjDrsmtsiMs0QqfcH2LOHIRDvHgc/+o1qek1/pB6P8WjCMW6mztbram5yduluEzwwGCeTlBQgUxmjt71OqtCSq6YAxcfsuzH0tBb8KG0TMwre8qe3Yj+s/dCC0n1ESPUbjiH4lb6FcGjk279ATeM1OCfw/E5HV2fSJWhZw+zs/rDuHhuFPp5IksA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VmPIxjR+nF83cy1XcmbA88yv1OkhwXorvPRcczYpDDY=;
- b=EhZ1HRKgUdMeSnEWr45KSxQOI3zSat+lbr7w1E+Ctm+lXnu1ZDSZhj3AYpcTcUbkyQXCzxKn8AMPP1+8hSkqyQavW8jr17spCwhdJwF/u+n9KJZAJ4UKwqtCw7UG19EJ2sk0DlKooYIHHZBPAmFEMgoeZ+w6Rg6c0phXqncd+CkwnmnKHeMc5Ux2rvk8gKgkf666ULu6R+b32/k1PCudCqkNXM06laGqq9FiejSjJS80EiezkKhuyMeUov0lTKQ6oHNnY6Lp6d89YDplGK4kIKIxIlDcKDpfFsS7ysZF/HphjxQSzoEZk4SeXgzsa8Zz4Q2uiTu/kTLWt6OmKWfaQw==
+ bh=Lx3xx1mw+CRvub5cerShgbfTe39FS0t33owP54eEWLs=;
+ b=C9RN3Yd+OdHnjcLQzGHBVk/lxr/3mjZm4zf1gTcgRYn3pmX2Gh8zmBu4B2ivEZFJg6a9ONlQl1KlGS0E2ZUte42DRgERHBhdwKzL7gjVNGBz+ZcMdY2rgX7LUzcOwMgiCE1ezusxIfxBNLURR+O4P0qf/fayleBfcOscK7f3Nosn1kbXNv/Hm83obP1vafBfjI7lkPco6Yn5vlVYhQDC09EbDk1NiaraEmwl8xA/DQBAw5l1BanLxr8sSFSd61RuKZo/Ysxb/rgqr1Cxi+GN5wcpEUNdW/ErBPtSaHE9lku15fSMjnZXToJ7BBGxg2yv4ePvDmTsBF+MXZnKHX045w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VmPIxjR+nF83cy1XcmbA88yv1OkhwXorvPRcczYpDDY=;
- b=bBWXOkQU0+BbAUcKb4aCh3wIiLIzwdMWkPmBfKFmMqUYiQfhSjcPgWGlLgvt99B5PVWTvo4ARJ0c739EHi3xZ1fbB2mrhA1y92ivIV+bleJOW1Y/n7qUDPrD+Nja+2xza8wPwjM5iYwXyk0HnEQuc68WnVO1qnQXlbCezIcpTHQ=
-Received: from AM8P191CA0009.EURP191.PROD.OUTLOOK.COM (2603:10a6:20b:21a::14)
- by PAWPR02MB9829.eurprd02.prod.outlook.com (2603:10a6:102:2e4::17) with
+ bh=Lx3xx1mw+CRvub5cerShgbfTe39FS0t33owP54eEWLs=;
+ b=C+NWHscnlTA6o505AfR7Jg/A2M8GyxuES+fDwIZUtWHDfi+ilca9SvxdZHWOEBXRvhs3jXfaBhs1d9UDoDr7lw3DFV60KSXsFwyDQ9nmSTwTL6F7SX21bCbbhK31nOsk61Dqm1GRV+weqCegrj4phKmwTCD8ayv90JRfS4B1OIg=
+Received: from AS4P189CA0004.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:5d7::7)
+ by DB5PR02MB10454.eurprd02.prod.outlook.com (2603:10a6:10:48a::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.10; Sat, 20 Dec
- 2025 21:40:00 +0000
-Received: from AM4PEPF00027A64.eurprd04.prod.outlook.com
- (2603:10a6:20b:21a:cafe::ff) by AM8P191CA0009.outlook.office365.com
- (2603:10a6:20b:21a::14) with Microsoft SMTP Server (version=TLS1_3,
+ 2025 21:54:08 +0000
+Received: from AMS0EPF00000198.eurprd05.prod.outlook.com
+ (2603:10a6:20b:5d7:cafe::c) by AS4P189CA0004.outlook.office365.com
+ (2603:10a6:20b:5d7::7) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.10 via Frontend Transport; Sat,
- 20 Dec 2025 21:39:49 +0000
+ 20 Dec 2025 21:54:04 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
  smtp.mailfrom=axis.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=axis.com;
@@ -60,21 +60,22 @@ Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
  195.60.68.100 as permitted sender) receiver=protection.outlook.com;
  client-ip=195.60.68.100; helo=mail.axis.com; pr=C
 Received: from mail.axis.com (195.60.68.100) by
- AM4PEPF00027A64.mail.protection.outlook.com (10.167.16.75) with Microsoft
+ AMS0EPF00000198.mail.protection.outlook.com (10.167.16.244) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9456.9 via Frontend Transport; Sat, 20 Dec 2025 21:39:59 +0000
+ 15.20.9456.9 via Frontend Transport; Sat, 20 Dec 2025 21:54:08 +0000
 Received: from pc52311-2249 (10.4.0.13) by se-mail10w.axis.com (10.20.40.10)
  with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.39; Sat, 20 Dec
- 2025 22:39:57 +0100
+ 2025 22:54:07 +0100
 From: Waqar Hameed <waqar.hameed@axis.com>
-To: Sebastian Reichel <sre@kernel.org>
+To: Sebastian Reichel <sre@kernel.org>, Tobias Schrammm
+	<t.schramm@manjaro.org>, Matti Vaittinen <mazziesaccount@gmail.com>
 CC: <kernel@axis.com>, <linux-pm@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>
-Subject: [PATCH 5/5] power: supply: ucs1002: Remove unused gpio include header
+Subject: [PATCH 0/5] power: supply: Remove unused gpio include header
 User-Agent: a.out
-Date: Sat, 20 Dec 2025 22:39:57 +0100
-Message-ID: <pnd3454zvbm.a.out@axis.com>
+Message-ID: <cover.1766266985.git.waqar.hameed@axis.com>
+Date: Sat, 20 Dec 2025 22:54:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,73 +87,79 @@ X-ClientProxiedBy: se-mail02w.axis.com (10.20.40.8) To se-mail10w.axis.com
  (10.20.40.10)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM4PEPF00027A64:EE_|PAWPR02MB9829:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2e684f65-f2e9-448a-974c-08de401053a6
+X-MS-TrafficTypeDiagnostic: AMS0EPF00000198:EE_|DB5PR02MB10454:EE_
+X-MS-Office365-Filtering-Correlation-Id: ef2308c3-5357-4fcd-e626-08de40124d8c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700013;
+	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024|13003099007;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?4dBbz5TgNKHRyeJt4huJBfM/px08wJlNn9KxWsT6Wc6CoyXJtp0dk/48zdSJ?=
- =?us-ascii?Q?IhJEbcXCbHIC9odWRi76Ta/XB6Y/zC9fHAFBfjrjyABwqTb8oBqW0mkduVK6?=
- =?us-ascii?Q?qT0OdUE34gXEeyp1GuKPH/tta8wCAJU/c/UMBKXBEhV1lF+aAwWjigubpRue?=
- =?us-ascii?Q?KK3TkFiL/7wHX65jfiiJYakV8BzDPT/DRl5xEEXCt//r8ESNaLWemZToJT1V?=
- =?us-ascii?Q?Wgsbcr6FKTdD5uu0mJFvz7nkr5auQQN+Dh8ZAHRF4CRDXTh5rWu07EKSo/JJ?=
- =?us-ascii?Q?IvwIXmlNbgkBSwdBPz2ThwKR1h5NUnJQmbyEF1UZLaATGf8OmYgL2u2y3fQr?=
- =?us-ascii?Q?z6UCeRFNSPj3w+lXmC8tOKOMV0nItu2WvDobMJMwxc3jxVFzIckThpAmWRM3?=
- =?us-ascii?Q?YJ7PdzTHRtvsi8fEIRzz7isCRr9AfCz5F30wV5REMdFRPFIrMC3zGQccjKRc?=
- =?us-ascii?Q?PTuRE6o9eXamxhk2pKCsc5o5Gjwvh4ccOwfK7J/4Dc7adrMrnvENmHPgM5HG?=
- =?us-ascii?Q?72GgEUSzLU4ETrcBXMxX9uO3XFhk4MpWf3NzkQSK0ErxLwQR9uGbPHomSnsE?=
- =?us-ascii?Q?/dmYkgtD6tnnjORT48eQPDAZR7dTykk5vBgiupFYEdZfRMfNjYmA6bbz0Dm6?=
- =?us-ascii?Q?u/XwqZwzBOvjzPjF/hlseWHZSszDTRA90tNfCMD8+hu3tFQ1NrM75iSlSNjN?=
- =?us-ascii?Q?p4SGIACP0i9njoJb7eGzjI4wW6Vx1TAqkID/k1lB5tKSp9WXD4QKgrOILqgA?=
- =?us-ascii?Q?6Stb4lWRef08teWnCKdmx9ikJPVBCI0gGKuyR70ob6KIaG2p852w3/U4/lJE?=
- =?us-ascii?Q?8ledP4YNIHaLfPdq1kUevCiNEDUiXYxaOJk2fcxTBU53lQ5pkL7KE8FOQIoE?=
- =?us-ascii?Q?x3BiuXoB0sac28sNaIL8wIwO45S3eKxgbMNktLDZFKrddkahOxnOK68Upm6e?=
- =?us-ascii?Q?k6QVUbRkJ9JMKu3Cfz3xRWW7vkqbrEm59T+H9HnOw6vXwotTULPsrl64YEsL?=
- =?us-ascii?Q?KMTq666fCx2iyKEw9i6OVH24So6eIsOVWTvg13MhwPaQGsMRtMWMXznHQvMh?=
- =?us-ascii?Q?a4LtDPC+6IG2XqlEGcyyjfNwgfSL7ICGcRjLlijoEO8JgR6JSQUobf1LwPu7?=
- =?us-ascii?Q?Yj7nZPr0yvk3GbfiVJ3neBlMKJMYHmgsGgzqr3n6e2XclVorwtNWVa0FqUtq?=
- =?us-ascii?Q?7XKllvk0mjWKFoxEWaXALiwwst065GFTZb1aGhNL90o2LvTSWu3/LvHQA1fi?=
- =?us-ascii?Q?kgsRebM2lzdPr1ndGMS0p11GAwvw934tgGTq7Ts8ncNtdjnv468bKUuVOD8V?=
- =?us-ascii?Q?6+ul4QWCWIVSGL3qUJww5G2zqV39EF//ReQvZfSTeAisWkkxxCOWSz5eTgz9?=
- =?us-ascii?Q?D9Xwj1jC3nIoRk0bVPhEh37l7nHoKsUmvd6WTccV8lsZzMwVr+SyvFyEn6ge?=
- =?us-ascii?Q?7lFBUV99Mb1LBdhvMcIyPkkTWN/ZS3TSTjsFfg7uX8U7NfraPFt4kHuEGlL4?=
- =?us-ascii?Q?2UHQrnA+KFm131sZLrhEsqep4M5TMKE8CF9wH6uO+WK6tNYfn3EcEA9PlrF5?=
- =?us-ascii?Q?HtNe0LwJA7RGZYHVCcw=3D?=
+	=?us-ascii?Q?0fmkC37SF/pvqrruLwMxRhf77UWt9JxyxWvziE7j9sr/PYy2WVVmOh0Up21K?=
+ =?us-ascii?Q?pZEmm5Se4uSnoz9yTk0Cn8blH5q1YlSyrzNb9BGgB/b9HgdLDoJnKWWR8T6z?=
+ =?us-ascii?Q?Aj0x9J/m6LdgsvJ6nibIevv+j3fxFEXt/0lGiU2VomVXPsEDszymgNzaAP0u?=
+ =?us-ascii?Q?BIYSpcHxsl+ObPE9ARXVmZbDLDDc4oidRYmGgZIdXYMrTPvAGFVTJ+mA+tqk?=
+ =?us-ascii?Q?Qk3i+ejFxXI82MqS3c/2AA1MHX7UDf1y//HULC0ixnwxdBmvyip30PU7yXR4?=
+ =?us-ascii?Q?t5E7hZlKr0YQW0X+17VtUnD1HfbiX9CeJ34UhjoprSgRZUdODmu2PqzzzBDy?=
+ =?us-ascii?Q?42SKJ8Ku9YMEmB5CHRx4yi3kqyRld/FrlAwoUoWl1HOoZFCWPLByA0RZlhzG?=
+ =?us-ascii?Q?sNjWbwMT52HnIVJExH24lh1bgh3Lq2InCeaS6ryDPMYVKaSSJwztYXEgBWsE?=
+ =?us-ascii?Q?phuCAoBYBZ0W3gNcCIQKZlUIzED6PvnEb2O0sosbfciQ7xuuARce0rni/uOy?=
+ =?us-ascii?Q?A8Tg/hh+wmB12Ab7Qf3gUW2qOeaPCtqTXjC2Q7M/GGv3XhN+vJRu1fOh22sT?=
+ =?us-ascii?Q?MTwdtSyuF2qZ3KAJGdZBnJM1/7QxZ0Ui0bu30cCRumVRcuswxaKqO0yCJayn?=
+ =?us-ascii?Q?wOXSyg0dgSQ4hRAMqrJWnHs6L/f+tMjlv20HWDgyLLeloNwC59qUhkrNxkba?=
+ =?us-ascii?Q?wQFXxPD8+jpgNI7U2cchkaLeHwv9rYQYNNkld8SC8dx9e8lz7Vffnce7iIKQ?=
+ =?us-ascii?Q?t5HTghBsMvZY5WK8Wb6joPLI6vygAxFn1YMeJ5KUy2yg8Wv6maVhIJXc5Skq?=
+ =?us-ascii?Q?hxn68YWj4davdxg8YkbXKPhKpnY5dKNDKtKqh1383xApv6FslPz2h67eIemy?=
+ =?us-ascii?Q?GHattZ/Oy/Z9POONHImaRrjM8d2DnnFS/Z7pOaBDvRzxuQR9c+pgjBUwGYuf?=
+ =?us-ascii?Q?cV87exlMEL8t7+eSIu5pasclyz/Q4YgbkPR/eq1lwliFy/gickTkCjKExmxn?=
+ =?us-ascii?Q?EBoZ0cPpMvlKO4PyFKoY3uQS6UsaHWwOEO0MNcu0fpqMv5cBuZfH2sG12Reh?=
+ =?us-ascii?Q?mLfiqm9F+Wc+i1EOb6UZ0Dc1Q72vPd0PLuA6duygnK4TPGpBnXeDod9RQMj1?=
+ =?us-ascii?Q?3qz9rsRhttNHXoSUC497q9aynLcQFQg/Mezzw2q0g2ZJhcqaCsRHK98S0XfV?=
+ =?us-ascii?Q?SoLaFgMbCvGJ/fkQOZ97Wuu2ZM0uSf3qGjXC6Ub2jxeLJQ29a/iJhOIGYrjC?=
+ =?us-ascii?Q?WsqNJi15qne0n0yoZ9mF4kkUgGPaopG1Ch/b5XTHpd28wrtOfW56QEdUWsnI?=
+ =?us-ascii?Q?nNOxH+ulQSAndBb7lfxaJGiWC+wK9UzYXCrY+dEtofp0LrgXbrAxMx2+iXTr?=
+ =?us-ascii?Q?AHJxlVqxq/AI/rMSyIw5Mo8Q0KkAXTycaBGRZ1ojZjZj46ZvoQj2t97aWJKv?=
+ =?us-ascii?Q?1RC7DmghNO755u85QG8ILawG8CtyP3VIhFLj2jmiv3EOrLCVHzCukgRyaZaJ?=
+ =?us-ascii?Q?ReSHSs7TVvbvUv9rimeOeZsrRTLt0satGF0/mPRFwVLCbBVkK0rDj/QpSK+Y?=
+ =?us-ascii?Q?VFU2DkxtDgpqww6qT9c=3D?=
 X-Forefront-Antispam-Report:
-	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024)(13003099007);DIR:OUT;SFP:1101;
 X-OriginatorOrg: axis.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2025 21:39:59.9861
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2025 21:54:08.7416
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2e684f65-f2e9-448a-974c-08de401053a6
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef2308c3-5357-4fcd-e626-08de40124d8c
 X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	AM4PEPF00027A64.eurprd04.prod.outlook.com
+	AMS0EPF00000198.eurprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR02MB9829
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB5PR02MB10454
 
-This header file is not used anywhere in the driver. Remove it.
+These drivers include the gpio header but never use it. This patch
+series just removes this unnecessary header.
 
-Signed-off-by: Waqar Hameed <waqar.hameed@axis.com>
----
- drivers/power/supply/ucs1002_power.c | 1 -
- 1 file changed, 1 deletion(-)
+This issue was found when writing a new driver for the upcoming TI
+BQ25630 [1]. Patch adding support for that one will be sent as soon as
+TI releases the datasheet publicly, which should be anytime soon...
 
-diff --git a/drivers/power/supply/ucs1002_power.c b/drivers/power/supply/ucs1002_power.c
-index fe94435340de6..3f44cc902f84d 100644
---- a/drivers/power/supply/ucs1002_power.c
-+++ b/drivers/power/supply/ucs1002_power.c
-@@ -6,7 +6,6 @@
-  */
- #include <linux/bits.h>
- #include <linux/freezer.h>
--#include <linux/gpio/consumer.h>
- #include <linux/i2c.h>
- #include <linux/interrupt.h>
- #include <linux/kernel.h>
+[1] https://www.ti.com/product/BQ25630
+
+Waqar Hameed (5):
+  power: supply: bd99954: Remove unused gpio include header
+  power: supply: bq256xx: Remove unused gpio include header
+  power: supply: bq25980: Remove unused gpio include header
+  power: supply: cw2015: Remove unused gpio include header
+  power: supply: ucs1002: Remove unused gpio include header
+
+ drivers/power/supply/bd99954-charger.c | 1 -
+ drivers/power/supply/bq256xx_charger.c | 1 -
+ drivers/power/supply/bq25980_charger.c | 1 -
+ drivers/power/supply/cw2015_battery.c  | 1 -
+ drivers/power/supply/ucs1002_power.c   | 1 -
+ 5 files changed, 5 deletions(-)
+
+
+base-commit: fa084c35afa13ab07a860ef0936cd987f9aa0460
 -- 
 2.39.5
 
