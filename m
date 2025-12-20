@@ -1,187 +1,198 @@
-Return-Path: <linux-pm+bounces-39743-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39744-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0C49CD382A
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 23:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48959CD3833
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 23:36:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6D75D300FFA1
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 22:31:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 61C72300EA08
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Dec 2025 22:36:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D44222DEA9B;
-	Sat, 20 Dec 2025 22:31:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F4102F3638;
+	Sat, 20 Dec 2025 22:36:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eYuVl2YJ"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="MuZYiLyZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010002.outbound.protection.outlook.com [52.101.84.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535C9258CDF
-	for <linux-pm@vger.kernel.org>; Sat, 20 Dec 2025 22:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766269878; cv=none; b=ZUAO2oQHcoU/0QH5l2sJeefgC9RdA0r4W8hO+GMtd9jG3kUlkeHqucuqAaWmLbNZujG76RCSBS7XT8gxprcp0UXJPLtPOee6YTOqvYEDRZVzxxjEy/RPEotmOKHVpMDIYA7OuzNkpRDKeLqMZWJpMKEQ6T7w32aycsm7Zsqh3e4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766269878; c=relaxed/simple;
-	bh=kV63Zh38H+VacC8DXVV2Z2Ta6d9kCNbdvI6mFsSmHCc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y8eIq85JwdZ9Mg+NFYOZPIagNSvYeZg2Xj4yshBjh0vuVoYagkRCVcSrH36l9cnp7m68g5Nw+RNwrR3MRzHlstimVgWRgumCK5mc++0BoL0D26heBcrb16/UUocjzKyH7Kh6DafH9i1HmzVLgG6CEwtiHuGlnwozLB1c/G/tjIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eYuVl2YJ; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766269864;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ATSohVrDsUPFERPnSjtnwMUfGmihgrPoXzJtDALVRVo=;
-	b=eYuVl2YJOWEt9T14aR0Rf4ggxeiqN6+YhJSqikZmgJaV+ArxXWxB+Y5YVwVkANx5njkdrk
-	N4t0FQ6aohZAQdlWVYInxiRWwifpGo9PYn+f+1eCJriWRfDCp5rXhSwISeCP6cQl80rRm9
-	yQLlEW+4IMwQ8priDYppR/VL/uCX2b8=
-From: Thorsten Blum <thorsten.blum@linux.dev>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Ingo Molnar <mingo@kernel.org>,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	"Xin Li (Intel)" <xin@zytor.com>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal: intel: int340x: Use sysfs_emit{_at} in sysfs show functions
-Date: Sat, 20 Dec 2025 23:30:11 +0100
-Message-ID: <20251220223026.125678-1-thorsten.blum@linux.dev>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A4C23A9AD;
+	Sat, 20 Dec 2025 22:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.2
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766270164; cv=fail; b=DKKLueBQnnf6A1sTmfUF1eZ8GHuzivtrAaL+Hmicg8FP4vOxDEK/dvf3XT+VoNTT7V+0DcWcXEz4AfbY4rYf3Tc9U7HEGBkmhRtWm6SyF7qQDDX2X9c2Rq/74G/pMuly7qf35pw23O3z2iDq3m8+1FnotUyb2AYkmkes9XNAQvE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766270164; c=relaxed/simple;
+	bh=Q9EfMRvuadjccWMXUtoumHe+igptqA+5ilPTxmj4Qkw=;
+	h=From:To:CC:Subject:Message-ID:Date:MIME-Version:Content-Type; b=R4SclGAgeTY5f1LS26Rc4y1S48YbIEeFVpF0vIUat9Q2fc0HqOC/KEL3//nlqzaGn+O88ia2yM02n/u1lbeXOsds7sNfR/yySTwfTEcyh/JzlnAURcaM8NuB9dZw/0l3v4DZYnxtKgXnJldwbXFMM5AQxw2vgtLwVxwmfx8A7Ts=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=MuZYiLyZ; arc=fail smtp.client-ip=52.101.84.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gqXUR1ExOjupTkyY7dOUQPsCWwV/KqGY23EHFKfZSAiKLHZQsmwEnPuu+UJFxkNe/tinMa1q3lIAExoYZupqlcUq6IwbLif8KnCa18X8zzB5tFiNiOsqks7a7W7lUX1PwkHVWidljaU7enfku91LU2HlbKpX8x4+EQSG+bTs8V7TuAyO/MtNqQv0/m588jHiZ55U0+K1N9qT7w59c8pjrrm4DduxzgX0wYCKpuDqisE1vNr3aG6+S3Iuwhf2DJsKtNs6VSzAGN/5nm+IeU9Hx8/JCSJgHUlPG40/7Oo/BetrV8GeqZ6PEk9gU14G+LGMnCkxn84wPyAGoNgZSIfjwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Y6SIBZimb+8gqWhQUFGRQBwSsp4EiUAbdvqcovGdedg=;
+ b=l0zkeY75slq5BQ+wr5BDtGtqf+Hn2PQxgZLBiXpZSXW3VTKI2iPzjc4jJLal3Bw5adrAwJ/oytESghA95XhaP2NM3gpU6vVVFr7mdINT8xpgdb5UlolKWiim7g4pQdJzA5tOnCvdRkFosAY5rzoAFsH9PRDlUdl8dlH/oKGXF7LQi2lOXe/4aIdUVlAsYjze3TEDn7XpQtT1YMpi91f6XOj+HWhVWg8pgy9l5A7A4s5Zg/nV06E4zxOTDsnJmsE/h/9dtCLbcCszNYZxWG4VVrWE4xV1rdD+2kKebaqMaIHkauHOnn0dhfE3SAVymlY6UoeRMvSwgyiQTQbQ9zvgBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=lists.linux.dev smtp.mailfrom=axis.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y6SIBZimb+8gqWhQUFGRQBwSsp4EiUAbdvqcovGdedg=;
+ b=MuZYiLyZyQ3eJrQTYU//e0VW0G9z0mq1plvQ8yNg7QA1Zg8Ccm16RxeO2qk5wc6oFLZ4mfEskxN6HOWfcX93km3n0E7gExh1iOI03Oj2W1GtldoaMMSGZ9wAFrGFFy6KJjiDh0HlhzqLWSkBLUBwHuyvKDNVMME2AiakzeIzZ8M=
+Received: from DU7P194CA0023.EURP194.PROD.OUTLOOK.COM (2603:10a6:10:553::14)
+ by DB4PR02MB8750.eurprd02.prod.outlook.com (2603:10a6:10:381::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.9; Sat, 20 Dec
+ 2025 22:35:59 +0000
+Received: from DB1PEPF000509FD.eurprd03.prod.outlook.com
+ (2603:10a6:10:553:cafe::42) by DU7P194CA0023.outlook.office365.com
+ (2603:10a6:10:553::14) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9434.10 via Frontend Transport; Sat,
+ 20 Dec 2025 22:35:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ DB1PEPF000509FD.mail.protection.outlook.com (10.167.242.39) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9434.6 via Frontend Transport; Sat, 20 Dec 2025 22:35:59 +0000
+Received: from pc52311-2249 (10.4.0.13) by se-mail10w.axis.com (10.20.40.10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.39; Sat, 20 Dec
+ 2025 23:35:58 +0100
+From: Waqar Hameed <waqar.hameed@axis.com>
+To: Linus Walleij <linusw@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Samuel Kayode <samkay014@gmail.com>, Wenyou Yang <wenyou.yang@atmel.com>,
+	Ricardo Rivera-Matos <r-rivera-matos@ti.com>, Dan Murphy <dmurphy@ti.com>,
+	Tony Lindgren <tony@atomide.com>, "Mike A. Chan" <mikechan@google.com>, Jun
+ Nakajima <jun.nakajima@intel.com>, Xiaohui Xin <xiaohui.xin@intel.com>,
+	Yunhong Jiang <yunhong.jiang@intel.com>, Tom Keel <thomas.keel@intel.com>,
+	Frank Li <Frank.Li@nxp.com>, Lee Jones <lee@kernel.org>, Nikita Travkin
+	<nikita@trvn.ru>, Anda-Maria Nicolae <anda-maria.nicolae@intel.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>, Phil Reid <preid@electromag.com.au>,
+	Alan Cox <alan@linux.intel.com>, Sheng Yang <sheng@linux.intel.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<imx@lists.linux.dev>
+Subject: [PATCH 00/11] power: supply: Fix use-after-free in
+ power_supply_changed()
+User-Agent: a.out
+Message-ID: <cover.1766268280.git.waqar.hameed@axis.com>
+Date: Sat, 20 Dec 2025 23:35:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain
+X-ClientProxiedBy: se-mail01w.axis.com (10.20.40.7) To se-mail10w.axis.com
+ (10.20.40.10)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB1PEPF000509FD:EE_|DB4PR02MB8750:EE_
+X-MS-Office365-Filtering-Correlation-Id: a9c17c9a-bb82-4bb5-dce8-08de401825cb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|7416014|376014|36860700013|1800799024|13003099007|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?n/Dexb0MWwOvmw/Msgy5qRgBOdSaS9sCa3sfGNR/ptS7V13QQYjlChG2+rpm?=
+ =?us-ascii?Q?TXBoOOKv+Dk4Itxinr0UoIS4ut/hehm2FDzv6YdJi2IHL9mmt6hRQckFTrKI?=
+ =?us-ascii?Q?+PqwqZEJJpMUCAcpTAeCJ17pwkPEaEu0xC3OAQd946kcA29pFfSXtoj517e9?=
+ =?us-ascii?Q?MfTEcojN+Bpb/j3P/dRwDzHzHMsocrsMXNT2x3RwcDo2jlUJ0Qpg/XAlVX2/?=
+ =?us-ascii?Q?mOkQEObDFolGt5UP9h/DUEE+QP2U2lvZoWXj1NKN9sDt2KCd5W8Oi6QUdYxt?=
+ =?us-ascii?Q?rQrQNDblS6fTNZzpT+k9Uxr2hJJzqSspIZMAcNATuzcadvVhqbVmWJVj3J3Y?=
+ =?us-ascii?Q?+cClcGhczVbCDuiSIbwQL7jvGc7JZJwS2471WjrblDlvFWVtWWqnn1K3GHhz?=
+ =?us-ascii?Q?7L5OT59lvtsEu8glp2b0hvW9tGuudYwzCZbkt/OKruK8fDu+82Qsh/YdoyPy?=
+ =?us-ascii?Q?VnIdWgir742na8Dx9ZfTbuv6f6Hj+wfuAZshP1hxUycwZb9N7gjk4wwFwvGz?=
+ =?us-ascii?Q?5xxejipkKnwtJz+nDq0j5kC1Frun12e+t69rZg8NUi0AQm3ecKyz71KRYcHb?=
+ =?us-ascii?Q?G3ClBXosxkr6aICHdmt1GhpdWAloPlEMMWZO7zNn6X6dWRs7kZXTksUHhj9O?=
+ =?us-ascii?Q?Y1RDP9p5DZRFgVWRHHQ//cS1LD40tpnpwYPUbJiWXEpxWNYAQMlc4xDDGP+v?=
+ =?us-ascii?Q?qbb6FZ42iJlh9ZmOLj/lQpHQM6gksvYhLTqXWeEwVfsQqAKtfophz7JbKMQQ?=
+ =?us-ascii?Q?Ucd1zs+w4cuYz+qnyejvitaojL2P9nVo6P9p0xcjYIMblQ5zPTUEnFRMFaOw?=
+ =?us-ascii?Q?9iYhLC/eSMjZxtl+zS1EjvROdYWPsFvAWQdQmn07sRv986hS7cjlkPReL8Oz?=
+ =?us-ascii?Q?5yWA5Pd0LiOkZaoIYBEteGm0nmLEyt4dPZ9tm0ExvUkgMyb1ck62ZhH7IJ92?=
+ =?us-ascii?Q?B5lnRmqgMsbxdtczx20Uo58IfaIay0zfLdyNGMdFyrhd5YIifmR7y8a4u+rr?=
+ =?us-ascii?Q?Z/etvJS9pF4hdnWFasBQKTiGIBpXOuqukq6kSzDxlTV0worJhjb5b+7qajif?=
+ =?us-ascii?Q?mOGJcfXRShacY0ahd55vGkhTgaY2CZ46sIuLcnDDYyV5Ev7jG4kswLpkmcc5?=
+ =?us-ascii?Q?FJ+RHLgNqflLFwSFXc5R/PHOJaXRaR8dZ9JLIU3e2MlKxNb9CoDGxwFR14AA?=
+ =?us-ascii?Q?KklLZpj2MUUoXpFz9neEG38onYrYmEV0zeLpZtyQXhHWtpeDcuSlmZ+Z3mJd?=
+ =?us-ascii?Q?lHV8jCQzKHnAoccnHBiyy/08kWZCBfEaENaqIPV1JB+DK5XarV3N2U38ixSx?=
+ =?us-ascii?Q?kR9cIbpEXBSitpYe518IuaHyuzFr2EDThRJfqLLj4hNz1dlUWESNiOjXSVs9?=
+ =?us-ascii?Q?243LkBmrUKwpeAzY+CZzCqm17KkMSZFSof8X7hyXW1alEv4XVjxaayM6lugW?=
+ =?us-ascii?Q?9C2LOn8USCzdvZPab/lQ1N7GY2UDfKGCIqVzkmOxsJ7LcRhuqrsuOMIGOZx+?=
+ =?us-ascii?Q?ihjhdS5xdiD7B4CiWKlbuc+XUhf6+vRr5koMQIkgDuvaHJy91Ap4XwqU1y9J?=
+ =?us-ascii?Q?sIyYKeCknEPfi0rDtZT7SgOoxs0/kxPZz5bcHdOE?=
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(376014)(36860700013)(1800799024)(13003099007)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2025 22:35:59.0157
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9c17c9a-bb82-4bb5-dce8-08de401825cb
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF000509FD.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR02MB8750
 
-Replace sprintf() with sysfs_emit() and sysfs_emit_at() in sysfs show
-functions. sysfs_emit() and sysfs_emit_at() are preferred to format
-sysfs output as it provides better bounds checking.
+The majority of the drivers in `drivers/power/supply/` do the right
+thing when registering an interrupt handler and the `power_supply`
+handle; namely making sure that the interrupt handler only runs while
+the `power_supply` handle is valid. The drivers in this patch series do
+not however. This can lead to a nasty use-after-free as thoroughly
+explained in the commit message.
 
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
----
- .../intel/int340x_thermal/processor_thermal_device.c     | 5 +++--
- .../intel/int340x_thermal/processor_thermal_rfim.c       | 9 +++++----
- .../intel/int340x_thermal/processor_thermal_wt_req.c     | 7 ++++---
- 3 files changed, 12 insertions(+), 9 deletions(-)
+These were identified by grepping for `request.+irq` and
+`power_supply_changed\(`, and then manually inspecting and fixing the
+affected ones. This issue was found when writing a new driver for the
+upcoming TI BQ25630 [1]. Patch adding support for that one will be sent
+as soon as TI releases the datasheet publicly, which should be anytime
+soon...
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-index 48e7849d4816..f80dbe2ca7e4 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-@@ -8,6 +8,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/sysfs.h>
- #include <linux/thermal.h>
- #include <asm/msr.h>
- #include "int340x_thermal_zone.h"
-@@ -23,7 +24,7 @@ static ssize_t power_limit_##index##_##suffix##_show(struct device *dev, \
- { \
- 	struct proc_thermal_device *proc_dev = dev_get_drvdata(dev); \
- 	\
--	return sprintf(buf, "%lu\n",\
-+	return sysfs_emit(buf, "%lu\n",\
- 	(unsigned long)proc_dev->power_limits[index].suffix * 1000); \
- }
- 
-@@ -143,7 +144,7 @@ static ssize_t tcc_offset_degree_celsius_show(struct device *dev,
- 	if (offset < 0)
- 		return offset;
- 
--	return sprintf(buf, "%d\n", offset);
-+	return sysfs_emit(buf, "%d\n", offset);
- }
- 
- static ssize_t tcc_offset_degree_celsius_store(struct device *dev,
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-index 589a3a71f0c4..bb9398dfa3c1 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-@@ -7,6 +7,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/sysfs.h>
- #include "processor_thermal_device.h"
- 
- MODULE_IMPORT_NS("INT340X_THERMAL");
-@@ -211,9 +212,9 @@ static ssize_t suffix##_show(struct device *dev,\
- 	ret = (reg_val >> mmio_regs[ret].shift) & mmio_regs[ret].mask;\
- 	err = get_mapped_string(mapping, attr->attr.name, ret, &str);\
- 	if (!err)\
--		return sprintf(buf, "%s\n", str);\
-+		return sysfs_emit(buf, "%s\n", str);\
- 	if (err == -EOPNOTSUPP)\
--		return sprintf(buf, "%u\n", ret);\
-+		return sysfs_emit(buf, "%u\n", ret);\
- 	return err;\
- }
- 
-@@ -398,7 +399,7 @@ static ssize_t rfi_restriction_show(struct device *dev,
- 	if (ret)
- 		return ret;
- 
--	return sprintf(buf, "%llu\n", resp);
-+	return sysfs_emit(buf, "%llu\n", resp);
- }
- 
- static ssize_t ddr_data_rate_show(struct device *dev,
-@@ -413,7 +414,7 @@ static ssize_t ddr_data_rate_show(struct device *dev,
- 	if (ret)
- 		return ret;
- 
--	return sprintf(buf, "%llu\n", resp);
-+	return sysfs_emit(buf, "%llu\n", resp);
- }
- 
- static DEVICE_ATTR_RW(rfi_restriction);
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
-index b95810f4a011..2372f5202019 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
-@@ -7,6 +7,7 @@
-  */
- 
- #include <linux/pci.h>
-+#include <linux/sysfs.h>
- #include "processor_thermal_device.h"
- 
- /* List of workload types */
-@@ -28,9 +29,9 @@ static ssize_t workload_available_types_show(struct device *dev,
- 	int ret = 0;
- 
- 	while (workload_types[i] != NULL)
--		ret += sprintf(&buf[ret], "%s ", workload_types[i++]);
-+		ret += sysfs_emit_at(buf, ret, "%s ", workload_types[i++]);
- 
--	ret += sprintf(&buf[ret], "\n");
-+	ret += sysfs_emit_at(buf, ret, "\n");
- 
- 	return ret;
- }
-@@ -85,7 +86,7 @@ static ssize_t workload_type_show(struct device *dev,
- 	if (cmd_resp > ARRAY_SIZE(workload_types) - 1)
- 		return -EINVAL;
- 
--	return sprintf(buf, "%s\n", workload_types[cmd_resp]);
-+	return sysfs_emit(buf, "%s\n", workload_types[cmd_resp]);
- }
- 
- static DEVICE_ATTR_RW(workload_type);
+[1] https://www.ti.com/product/BQ25630
+
+Waqar Hameed (11):
+  power: supply: ab8500: Fix use-after-free in power_supply_changed()
+  power: supply: act8945a: Fix use-after-free in power_supply_changed()
+  power: supply: bq256xx: Fix use-after-free in power_supply_changed()
+  power: supply: bq25980: Fix use-after-free in power_supply_changed()
+  power: supply: cpcap-battery: Fix use-after-free in
+    power_supply_changed()
+  power: supply: goldfish: Fix use-after-free in power_supply_changed()
+  power: supply: pf1550: Fix use-after-free in power_supply_changed()
+  power: supply: pm8916_bms_vm: Fix use-after-free in
+    power_supply_changed()
+  power: supply: pm8916_lbc: Fix use-after-free in
+    power_supply_changed()
+  power: supply: rt9455: Fix use-after-free in power_supply_changed()
+  power: supply: sbs-battery: Fix use-after-free in
+    power_supply_changed()
+
+ drivers/power/supply/ab8500_charger.c   | 40 ++++++++++++-------------
+ drivers/power/supply/act8945a_charger.c | 16 +++++-----
+ drivers/power/supply/bq256xx_charger.c  | 12 ++++----
+ drivers/power/supply/bq25980_charger.c  | 12 ++++----
+ drivers/power/supply/cpcap-battery.c    |  8 ++---
+ drivers/power/supply/goldfish_battery.c | 12 ++++----
+ drivers/power/supply/pf1550-charger.c   | 32 ++++++++++----------
+ drivers/power/supply/pm8916_bms_vm.c    | 18 +++++------
+ drivers/power/supply/pm8916_lbc.c       | 18 +++++------
+ drivers/power/supply/rt9455_charger.c   | 17 ++++++-----
+ drivers/power/supply/sbs-battery.c      | 36 +++++++++++-----------
+ 11 files changed, 111 insertions(+), 110 deletions(-)
+
+
+base-commit: fa084c35afa13ab07a860ef0936cd987f9aa0460
 -- 
-Thorsten Blum <thorsten.blum@linux.dev>
-GPG: 1D60 735E 8AEF 3BE4 73B6  9D84 7336 78FD 8DFE EAD4
+2.39.5
 
 
