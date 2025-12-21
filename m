@@ -1,238 +1,132 @@
-Return-Path: <linux-pm+bounces-39763-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39764-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E10C0CD3C44
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Dec 2025 07:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 02806CD3C79
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Dec 2025 08:33:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5662D3009421
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Dec 2025 06:33:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5FBEA300B839
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Dec 2025 07:33:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7103522126D;
-	Sun, 21 Dec 2025 06:33:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCDE2222B2;
+	Sun, 21 Dec 2025 07:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rz0OZIVR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RPk2S39r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F9D1A08DB
-	for <linux-pm@vger.kernel.org>; Sun, 21 Dec 2025 06:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7F4219FC;
+	Sun, 21 Dec 2025 07:33:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766298787; cv=none; b=NXObVdgEItxilQFKwOUcmBPVQgzp7bMAWJvrucaIZ/n4v+JNcmdRiG+TFUqk6sl+uXE/6dhBikO/V6SEti+uXPC2CS41/gZVRoMAasWkEfsaXvBLcJiYzzHn0ZFcitG244YKaxYiWDMonoybYz8bv4QsJMxL+Ok5xVdKYR/K4Q4=
+	t=1766302382; cv=none; b=X10QZipiG1roYsB9sXe98UlAG/NXIc+5Cu9I+HZ3mN2ek77k6m2WvMMDDwvM6WFtpm1OeCCtG0sr9RMSXBNMs4OKUYKcQ9a4Kv169tmlmGp7UP48vRZtoYaW0toJJ9G0NMH1VwVhtfLy0ohjSIfpTTedtmGKKxJfV9Vtf84yQUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766298787; c=relaxed/simple;
-	bh=t/SRnNrSaQoFeh37hW4yoybInZcjHy0NWwksWYocxp4=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=cvkA482Hu1LWOpmDQsNKyDNg1ukORTZVjgxlw3Ast0DBuaQYS7UX0QAujbSExJd2kHPY81+AJaEBhYiSYTQeNrxFgvoX9VSWKYkIGHLxt0eEdK3Y1nhbIMnOPuv863z4tul9hm5B+QK/+qqqGTKdfyoKSr3OQZvHEr6R8xDUO8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rz0OZIVR; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-598f59996aaso4023818e87.1
-        for <linux-pm@vger.kernel.org>; Sat, 20 Dec 2025 22:33:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766298783; x=1766903583; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1vvUOyQ20NZ3u320o4WJ7ZIkhH1hVl4Z31xAzi8r5Bo=;
-        b=Rz0OZIVRdAKsANUMFNYOiww3X19eVXrA0nIwM0BLbbRtPoeK4meQtUusNJ0v606H0g
-         uYWslmrDjFC3kxuj8uzjpr12C8SobxqSr1LMwqgWjJhn4WTrP3u7qr/3IOmBV95EPP48
-         PKC/ygtW+LymAGnmkAs2JiEZf/221k4gtM80zBjBkbMD1CQSWZIP2wrOPukl75njUNyA
-         VccOx4fCbwNqwDtRM/DBEkix/ud/g+y8+UC3/sNWQSpW009dw90Gbny6wDX5lxnGxlX9
-         ZzoUShp7RsojBg2ppkyQwbLtjkqEWJIMJpjdZSYEOBmJxYXu/04TOUSWHdOSXhWyZtBm
-         qmRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766298783; x=1766903583;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1vvUOyQ20NZ3u320o4WJ7ZIkhH1hVl4Z31xAzi8r5Bo=;
-        b=ZfKPWhX+P0o2QG9GghA/2tkxtSNzDbjJ9s3V1MBi7V+wkwx3cymylqvXEjmIFDHfHq
-         iy9oNXQR/CMlHM8GcqwwtLYzPVLnNR4CXJ+NgqqpFjhdP2FqYdbPRbAvKf/AOUMlK2Lb
-         Rc8NxJDVb0uzM9JsDMU+pWfr0pDJ9QfW/tTS48Tw9fg+DJzn98IVThwWD0YZtk79vnqS
-         0/2SOOKqSDVZsCL6hQf48q9A58lMRNJXJpuRFnbI1WP58LFw+jU4HMrTvi8TdIvD0PCG
-         Soz9vJeGcIlElPGJ9BqDHoNXozZH82dt76Fefipr18I95A4gCCLHHMnENTixA8E2SCC0
-         JylA==
-X-Gm-Message-State: AOJu0Yxte/XxDPiu3jGgdfnuddq/CvHvMfu01oxdy6OpuI9MgSi8laJL
-	ZpVX1U/6iEYoRtmgrM+q0E4v8DtNdxfslfE8OKf/+A5T5q/8/tGNVBG09dvGLg==
-X-Gm-Gg: AY/fxX6k1T+leV3z9QKHvbypPoFFlo3mM2ra7IFOjlWPzY7WkRkJMGDomolUOZmPXdS
-	SA88ptbef92mlxqWUSivlBcFrf4xci3Btvud8VT7cSC2g9UXUsO5RcFJByTOrJ+cWJqpywGILmZ
-	w//Ko5bePYgr4gjEvN0hcCA+ZBjwcTUu8sLUp1jkFBxB/A9Ef0fISP4WH/h9U0YMZq1xtDyeiwR
-	1tBYnWYeBz9Rj86TU/RS1op4B6RlGJte7UeejUy0UN4yfjgwbpMDrO1wJW+iGyDtXIFJ4NcrZqL
-	xj5ZxMIc68GOz3gYuX9/QOIWLNLTiB373YxnKcEgpiJkR70of9iBl+7SX25FtkdHvp9sWTX++IC
-	YtPaKwAiRiqmeaKQDrZIGsM2cQBPUrxvuXzgPXFqqwCFgfnHC2/FOUE+tq2joDvdFegGFWjIss7
-	BDt8JYqFk4
-X-Google-Smtp-Source: AGHT+IFH4sTCKSS1GMSuwc+OwiYqzPAVcYDM78ORrmlrP2GRDH82woFInG7r1oweWmtSgj0RnHhVgg==
-X-Received: by 2002:ac2:4e04:0:b0:599:1199:9df0 with SMTP id 2adb3069b0e04-59a17cbfe75mr2556883e87.0.1766298782833;
-        Sat, 20 Dec 2025 22:33:02 -0800 (PST)
-Received: from localhost ([194.190.17.114])
-        by smtp.gmail.com with UTF8SMTPSA id 38308e7fff4ca-3812262b360sm17479351fa.28.2025.12.20.22.33.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 20 Dec 2025 22:33:01 -0800 (PST)
-From: Askar Safin <safinaskar@gmail.com>
-To: linux-pm@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: pm: hibernation bug: wake up event during restore
-Date: Sun, 21 Dec 2025 09:32:14 +0300
-Message-ID: <20251221063214.3276685-1-safinaskar@gmail.com>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1766302382; c=relaxed/simple;
+	bh=acLNH9XZUwJ+/RUGFg15css9I9hbu1oRWu7mAn9c4XA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j/O1m9GZTOAgylmIYJYrNr0XcG+XmA1bwazlIj7TDQbXaoHpBsDGDLK9p6z+PWAJI6xQWfcIqblO7ULwT6jvnLbFS18k4ZfujWDZcitXdyV0Ca7gFO8p+/gWuuJBDXfk3+YYGvzdmawEdjk+f+LBzFWcOJc9PCAiPpyQQiYInsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RPk2S39r; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766302382; x=1797838382;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=acLNH9XZUwJ+/RUGFg15css9I9hbu1oRWu7mAn9c4XA=;
+  b=RPk2S39raFefSgmMNL0y5LirZF3+SeuONNQCzGK4byi/x1LEx9q474cj
+   iW56eXHfAY9AN2Bpk3B8Jw+dT2jY0FxpX9yRi8naVqlpP7FNberdU6jTi
+   FiThVkaBTMVrtAbVi7MuR/IVn4OStNVjPHUm4d6jmx/Yad0/9FFK4+ICE
+   BdaSrVKSy0OLdogdqjxiZMKjuddRQWt3d4L2zlvTSG0WZ+Yam4A2wOe+c
+   +Pmbsh/xUgYzfA3+lLMMmlUJ5OKj4XClExenhPxPyI9Fwl2a+GR61QBxk
+   UV78boy3OrzOrkyeVF0hYFeYz3YWumxzfxT1Y7h5KBN6WtyEmFuW87zpE
+   g==;
+X-CSE-ConnectionGUID: CX1f3As1SsaW36+vJQgT2g==
+X-CSE-MsgGUID: PDiZ2seDSSqobsyt3i42yg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11648"; a="72044553"
+X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
+   d="scan'208";a="72044553"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 23:33:01 -0800
+X-CSE-ConnectionGUID: WhT26M+xQ7i3MqpLrDYIvA==
+X-CSE-MsgGUID: /f0OMu86QL+ajuC4w0edDw==
+X-ExtLoop1: 1
+Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
+  by fmviesa003.fm.intel.com with ESMTP; 20 Dec 2025 23:32:56 -0800
+Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vXDvx-000000004y0-3IUv;
+	Sun, 21 Dec 2025 07:32:53 +0000
+Date: Sun, 21 Dec 2025 08:31:59 +0100
+From: kernel test robot <lkp@intel.com>
+To: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Lee Jones <lee@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>,
+	Amit Sunil Dhamne <amitsd@google.com>
+Subject: Re: [PATCH v2 4/5] power: supply: max77759: add charger driver
+Message-ID: <202512210844.O8gAG2p9-lkp@intel.com>
+References: <20251218-max77759-charger-v2-4-2b259980a686@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251218-max77759-charger-v2-4-2b259980a686@google.com>
 
-Hi, PM people! I found (yet another) hibernation bug on my laptop:
-sometimes wakeup events abort resuming from hibernation.
-I think I know how to fix this. And I already started to write patch.
-But I need your help to finish the patch.
+Hi Amit,
 
-The bug is already fixed by 2d967310c49e (i. e. by denylisting
-VEN_0488:00@355), but this fix is unsatisfactory for reasons described
-below.
+kernel test robot noticed the following build warnings:
 
-====
+[auto build test WARNING on lee-mfd/for-mfd-fixes]
+[also build test WARNING on sre-power-supply/for-next usb/usb-testing usb/usb-next usb/usb-linus v6.16-rc1 next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-So, I found a bug on my laptop. This is still the same laptop as with
-my previous bug reports: Dell Precision 7780.
+url:    https://github.com/intel-lab-lkp/linux/commits/Amit-Sunil-Dhamne-via-B4-Relay/dt-bindings-mfd-maxim-max77759-add-charger-child-node/20251219-065531
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git for-mfd-fixes
+patch link:    https://lore.kernel.org/r/20251218-max77759-charger-v2-4-2b259980a686%40google.com
+patch subject: [PATCH v2 4/5] power: supply: max77759: add charger driver
+reproduce: (https://download.01.org/0day-ci/archive/20251221/202512210844.O8gAG2p9-lkp@intel.com/reproduce)
 
-When I resume from hibernation, sometimes the resume doesn't work,
-and I see this in my logs:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512210844.O8gAG2p9-lkp@intel.com/
 
-Dec 20 02:04:55 comp kernel: PM: Loading and decompressing image data (811211 pages)...
-Dec 20 02:04:55 comp kernel: PM: Image loading progress:   0%
-Dec 20 02:04:55 comp kernel: PM: Image loading progress:  10%
-[...]
-Dec 20 02:04:55 comp kernel: PM: Image loading progress: 100%
-Dec 20 02:04:55 comp kernel: PM: Image loading done
-Dec 20 02:04:55 comp kernel: PM: hibernation: Read 3244844 kbytes in 1.62 seconds (2002.99 MB/s)
-Dec 20 02:04:55 comp kernel: PM: Image successfully loaded
-Dec 20 02:04:55 comp kernel: printk: Suspending console(s) (use no_console_suspend to debug)
-Dec 20 02:04:55 comp kernel: ACPI: EC: interrupt blocked
-Dec 20 02:04:55 comp kernel: ACPI: EC: event blocked
-Dec 20 02:04:55 comp kernel: ACPI: EC: EC stopped
-Dec 20 02:04:55 comp kernel: Disabling non-boot CPUs ...
-Dec 20 02:04:55 comp kernel: smpboot: CPU 31 is now offline
-Dec 20 02:04:55 comp kernel: smpboot: CPU 30 is now offline
-[...]
-Dec 20 02:04:55 comp kernel: smpboot: CPU 11 is now offline
-Dec 20 02:04:55 comp kernel: Wakeup pending. Abort CPU freeze
+All warnings (new ones prefixed by >>):
 
-Note that I don't touch anything during this. I don't touch mouse,
-keyboard, power button, etc.
-
-This is observed on Linux 6.18 from Debian.
-
-This bug is very bad. It cancels resume, and thus I lose my hibernation
-image with all unsaved data. I. e. the bug causes data loss.
-
-This bug has the same cause as another similar bug I discovered recently:
-i. e. wakeup event VEN_0488:00@355 , thus it is already fixed by mainline commit
-2d967310c49e (authored by me).
-
-But 2d967310c49e fixes this bug for my particular laptop only. But what if
-I buy some another laptop in the future? Wakeup events should be simply
-ignored completely during restore from hibernation. Because otherwise
-we lose hibernation image, i. e. we get data loss!
-
-Moreover, I want to be sure that resume is not cancelled even if I actually
-actively touch mouse, keyboard, etc. Touching mouse should not cause data
-loss!
-
-Looking at the logs, I see that the cause is call to pm_wakeup_pending in
-freeze_secondary_cpus . So, one option is simply to remove this call.
-I already checked: in all non-resume code paths call to freeze_secondary_cpus is
-always followed by call to syscore_suspend, which calls pm_wakeup_pending, too.
-
-Thus removing pm_wakeup_pending call from freeze_secondary_cpus will not
-break anything, i. e. responding to wakeup events in non-resume code
-paths will continue to work.
-
-The only problem is this: we will ignore wakeup events during freezing of
-CPUs (in non-resume) code paths, and check wakeup events later instead.
-But I think this is okay, because freezing of CPUs should not take lot of time.
-On my computer it takes less than millisecond.
-
-But, as I said above, I want to fix this problem not only on my laptop,
-but on all others, too. What if other calls to pm_wakeup_pending are
-problematic, too? So, we should make sure that either pm_wakeup_pending is
-not called during resume, either pm_wakeup_pending always returns false
-during resume.
-
-====
-
-I see 3 ways to achieve this.
-
-Way #1. Audit all calls to pm_wakeup_pending and make sure that it is
-never called during resume.
-
-For call in freeze_secondary_cpus we can simply remove it, as explained above:
-
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -1919,12 +1919,6 @@ int freeze_secondary_cpus(int primary)
-                if (!cpu_online(cpu) || cpu == primary)
-                        continue;
-
--               if (pm_wakeup_pending()) {
--                       pr_info("Wakeup pending. Abort CPU freeze\n");
--                       error = -EBUSY;
--                       break;
--               }
--
-                trace_suspend_resume(TPS("CPU_OFF"), cpu, true);
-                error = _cpu_down(cpu, 1, CPUHP_OFFLINE);
-                trace_suspend_resume(TPS("CPU_OFF"), cpu, false);
-
-Then we have call in device_suspend_late. device_suspend_late is called
-both in resume and non-resume code paths. So, we can do something like this:
-
---- i/drivers/base/power/main.c
-+++ w/drivers/base/power/main.c
-@@ -1638,7 +1638,7 @@ static void device_suspend_late(struct device *dev, pm_message_t state, bool asy
-        if (READ_ONCE(async_error))
-                goto Complete;
-
--       if (pm_wakeup_pending()) {
-+       if (!(state.event & PM_EVENT_QUIESCE) && pm_wakeup_pending()) {
-                WRITE_ONCE(async_error, -EBUSY);
-                goto Complete;
-        }
-
-There are other calls, all them should be dealt with, too.
-
-Way #2. Ensure that pm_transition is set correctly in resume code path and
-check it in pm_wakeup_pending. (Not good idea, because pm_transition is
-file-private, and pm_wakeup_pending is defined in other file.)
-
-Way #3. Ensure that events_check_enabled is false in resume code path and
-make sure that pm_wakeup_pending is always false if events_check_enabled is
-false:
-
---- i/drivers/base/power/wakeup.c
-+++ w/drivers/base/power/wakeup.c
-@@ -890,7 +890,10 @@ bool pm_wakeup_pending(void)
-                pm_print_active_wakeup_sources();
-        }
-
--       return ret || atomic_read(&pm_abort_suspend) > 0;
-+       if (events_check_enabled && atomic_read(&pm_abort_suspend) > 0)
-+               return true;
-+
-+       return ret;
- }
- EXPORT_SYMBOL_GPL(pm_wakeup_pending);
-
-====
-
-What should I choose?
-
-Please, fix the bug. Or help me to do this.
+   Warning: Documentation/translations/zh_CN/admin-guide/README.rst references a file that doesn't exist: Documentation/dev-tools/kgdb.rst
+   Warning: Documentation/translations/zh_CN/dev-tools/gdb-kernel-debugging.rst references a file that doesn't exist: Documentation/dev-tools/gdb-kernel-debugging.rst
+   Warning: Documentation/translations/zh_CN/how-to.rst references a file that doesn't exist: Documentation/xxx/xxx.rst
+   Warning: Documentation/translations/zh_TW/admin-guide/README.rst references a file that doesn't exist: Documentation/dev-tools/kgdb.rst
+   Warning: Documentation/translations/zh_TW/dev-tools/gdb-kernel-debugging.rst references a file that doesn't exist: Documentation/dev-tools/gdb-kernel-debugging.rst
+>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/devicetree/bindings/power/supply/maxim,max77759-charger.yaml
+   Warning: arch/riscv/kernel/kexec_image.c references a file that doesn't exist: Documentation/riscv/boot-image-header.rst
+   Warning: drivers/clocksource/timer-armada-370-xp.c references a file that doesn't exist: Documentation/devicetree/bindings/timer/marvell,armada-370-xp-timer.txt
+   Warning: include/rv/da_monitor.h references a file that doesn't exist: Documentation/trace/rv/da_monitor_synthesis.rst
+   Using alabaster theme
+   ERROR: Cannot find file ./include/linux/pci.h
 
 -- 
-Askar Safin
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
