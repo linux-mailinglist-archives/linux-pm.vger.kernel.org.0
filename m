@@ -1,133 +1,137 @@
-Return-Path: <linux-pm+bounces-39788-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39805-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 018D2CD7091
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 21:04:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9158ECD7210
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 21:47:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 348E7301989A
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 20:04:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 28FB3301AB3F
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 20:46:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDF0833BBD5;
-	Mon, 22 Dec 2025 20:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31E69343D6F;
+	Mon, 22 Dec 2025 20:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ks4sEbD4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X1diPkQW"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC941DEFF5;
-	Mon, 22 Dec 2025 20:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07CA430BF62;
+	Mon, 22 Dec 2025 20:37:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766433861; cv=none; b=VlBhSziaKRTLWj6xSAO8+kqiMSrpD8oS4cyrFOpuqserMwj6fgnyl+2L5e3KacdnSxacNV1hD3wXW6+z8NLoSUjylptAFHV/3SABiuRTTLpNqhL6Pnpw6vhENiv/PnoMUXstSCiD0cDK+zyBtVE9J+z+fqs6Zyk/IE6+OVi9jQc=
+	t=1766435878; cv=none; b=CTENrU0QoJSgil7qNz2zsyvFfJuxFgBW+FhMap9LFWYPFxEvhDRAAK7AISd7m4cy7P4I5DQA9v3az1Re5JDQ0TGWjlStk1nFUBbACrMkft7awjglM5Xi2T3XZEpRo0vwYToFYK1ZOEvTto2o3+rhCQ3w+Riocu5j5rzwS8tOZ7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766433861; c=relaxed/simple;
-	bh=zwpPZI3aCzU701r+bt49CUPkrH2uvexax+yCoGFo4dk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=a1SDRZJsVLetj3lRd+Z3FcidGLtkZh/rWrbU1Km3ExQX0ooL96QrIqksEkD2l1L4k3TP0bydRq7mk+gaUDILcd0i4LW73HRolFdS4foqhtvURH7GFoS6oLaZ3eCQzji7O3/xREPkIuu/XIcL6ZcTh/l0hFm6qyRrgvRPdAtVggE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ks4sEbD4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB36C4CEF1;
-	Mon, 22 Dec 2025 20:04:11 +0000 (UTC)
+	s=arc-20240116; t=1766435878; c=relaxed/simple;
+	bh=QvJ1CW2dTGSVQI9v1hkF14kO+wZVUTltwp45UZxtMDc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kFaY1NelKtK1gxdOSLYdCTg87lCkYlpFc1g/vJ6mUbRpmMckHfNPHUkoIbP04OtFgKa777BxiHNxHKKzMDV7W4OkHaBmFHftuDj6k4UwkQjIQAcce+vamWI9Y3erbva9F18aEwPCctprnkGLg9pa0TL+a3FONfUwAdzymCrI9Ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X1diPkQW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997FCC116D0;
+	Mon, 22 Dec 2025 20:37:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766433861;
-	bh=zwpPZI3aCzU701r+bt49CUPkrH2uvexax+yCoGFo4dk=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Ks4sEbD4BmEIL+iZbfylQlhQIi6pN3LrZ83VQb9hSJU3r7XUizrxcsW6e/FeWfUvd
-	 gUHvKlGB9e7kpSWLMwSsxLIajsEJesvz+egvwY9KfQKhXq5lWNSDo7ad5p76ERuwYn
-	 nx733ghtCo2Vv0USO877gmZtEIAvFFkMMf4O5yXdUVX8g1KzsKgmEYf13snZfFswn2
-	 UzB43OXM0N2SIksoQEeMUYVUD9pc+B9Qd24TzWGVxk7U11h1w87whOpqfCRkCfjgCG
-	 trJawH2puCyAErsYIAFuNf7WoKp1zQJIft2VjIy4xRgaq9BOtNkaBPi2FfphiVKZ71
-	 5RKGWht8ECTkQ==
-From: Mark Brown <broonie@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- FUJITA Tomonori <fujita.tomonori@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
- Heiner Kallweit <hkallweit1@gmail.com>, 
- Russell King <linux@armlinux.org.uk>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Breno Leitao <leitao@debian.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Luis Chamberlain <mcgrof@kernel.org>, Russ Weight <russ.weight@linux.dev>, 
- Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
- Leon Romanovsky <leon@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
- Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Jens Axboe <axboe@kernel.dk>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
- Liam Girdwood <lgirdwood@gmail.com>, Rae Moar <raemoar63@gmail.com>, 
- Tamir Duberstein <tamird@gmail.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- rust-for-linux@vger.kernel.org, nouveau@lists.freedesktop.org, 
- dri-devel@lists.freedesktop.org, netdev@vger.kernel.org, 
- linux-clk@vger.kernel.org, linux-pci@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org
-In-Reply-To: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com>
-References: <20250925-core-cstr-cstrings-v2-0-78e0aaace1cd@gmail.com>
-Subject: Re: (subset) [PATCH v2 00/19] rust: replace `kernel::c_str!` with
- C-Strings
-Message-Id: <176643385114.959021.16173066477128119135.b4-ty@kernel.org>
-Date: Mon, 22 Dec 2025 20:04:11 +0000
+	s=k20201202; t=1766435877;
+	bh=QvJ1CW2dTGSVQI9v1hkF14kO+wZVUTltwp45UZxtMDc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=X1diPkQWUD8viHi49Bj+t7AL3mo311LJJ0cqvIEZddRz7YYFXsFTenawWyC6fLyXW
+	 ViUwKvu2DMUbe+E6kt/2DYz2KZ12ieBkB8un3TqtyWegmi9ftTIvdlnvH4ixnprDKB
+	 BZK4h6lUKklET0HCNW93DYSyhN94AWwrgjDqY2AcLeDju/9kIa+BQNO8/hUMzOCrwB
+	 vo+keM3wp+mEioOmmQnsRANL66xi7zlvmh6BJ1H9kXmRbKaMuRgzLnEulsZCWQciZt
+	 j3euIabD1LY0/ylYkQHJ2Fh2QeAJR/ps2sTC7U4ouNRdqqZ6DeJJtya7BR7AWtZkNr
+	 PF/bouE5g9b8g==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Brian Norris <briannorris@chromium.org>,
+ Tiffany Lin <tiffany.lin@mediatek.com>,
+ Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+ Yunfei Dong <yunfei.dong@mediatek.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject:
+ [PATCH v1 07/23] media: mediatek: vcodec: Discard pm_runtime_put() return
+ value
+Date: Mon, 22 Dec 2025 21:06:16 +0100
+Message-ID: <3690736.iIbC2pHGDl@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
+References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-47773
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 25 Sep 2025 09:53:48 -0400, Tamir Duberstein wrote:
-> This series depends on step 3[0].
-> 
-> Subsystem maintainers: I would appreciate your `Acked-by`s so that this
-> can be taken through Miguel's tree (where the previous series must go).
-> 
-> Link: https://lore.kernel.org/all/20250925-cstr-core-v16-0-5cdcb3470ec2@gmail.com/ [0]
-> 
-> [...]
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Applied to
+Printing error messages on pm_runtime_put() returning negative values
+is not particularly useful.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+Returning an error code from pm_runtime_put() merely means that it has
+not queued up a work item to check whether or not the device can be
+suspended and there are many perfectly valid situations in which that
+can happen, like after writing "on" to the devices' runtime PM "control"
+attribute in sysfs for one example.
 
-Thanks!
+Accordingly, update mtk_vcodec_enc_pw_off() and mtk_vcodec_dec_pw_off()
+to simply discard the return value of pm_runtime_put().
 
-[19/19] rust: regulator: replace `kernel::c_str!` with C-Strings
-        commit: b0655377aa5a410df02d89170c20141a1a5bbc28
+This will facilitate a planned change of the pm_runtime_put() return
+type to void in the future.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+This patch is part of a series, but it doesn't depend on anything else
+in that series.  The last patch in the series depends on it.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+It can be applied by itself and if you decide to do so, please let me
+know.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+Otherwise, an ACK or equivalent will be appreciated, but also the lack
+of specific criticism will be eventually regarded as consent.
 
-Thanks,
-Mark
+---
+ drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_pm.c |    6 +-----
+ drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_pm.c |    6 +-----
+ 2 files changed, 2 insertions(+), 10 deletions(-)
+
+--- a/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_pm.c
++++ b/drivers/media/platform/mediatek/vcodec/decoder/mtk_vcodec_dec_pm.c
+@@ -67,11 +67,7 @@ static int mtk_vcodec_dec_pw_on(struct m
+ 
+ static void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
+ {
+-	int ret;
+-
+-	ret = pm_runtime_put(pm->dev);
+-	if (ret && ret != -EAGAIN)
+-		dev_err(pm->dev, "pm_runtime_put fail %d", ret);
++	pm_runtime_put(pm->dev);
+ }
+ 
+ static void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
+--- a/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_pm.c
++++ b/drivers/media/platform/mediatek/vcodec/encoder/mtk_vcodec_enc_pm.c
+@@ -71,11 +71,7 @@ int mtk_vcodec_enc_pw_on(struct mtk_vcod
+ 
+ void mtk_vcodec_enc_pw_off(struct mtk_vcodec_pm *pm)
+ {
+-	int ret;
+-
+-	ret = pm_runtime_put(pm->dev);
+-	if (ret && ret != -EAGAIN)
+-		dev_err(pm->dev, "pm_runtime_put fail %d", ret);
++	pm_runtime_put(pm->dev);
+ }
+ 
+ void mtk_vcodec_enc_clock_on(struct mtk_vcodec_pm *pm)
+
+
 
 
