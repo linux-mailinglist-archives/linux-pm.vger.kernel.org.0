@@ -1,213 +1,230 @@
-Return-Path: <linux-pm+bounces-39778-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39779-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CABF1CD652B
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 15:07:51 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2F22CD667C
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 15:43:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 47F0F3019740
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 14:07:51 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 36104301974A
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 14:43:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88FBF2D46C0;
-	Mon, 22 Dec 2025 14:07:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA9D2ECE97;
+	Mon, 22 Dec 2025 14:43:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NitRYNPv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OfyDVB8y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB88F283FDD;
-	Mon, 22 Dec 2025 14:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C4C17A30A;
+	Mon, 22 Dec 2025 14:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766412469; cv=none; b=UgWZy672jSJTf2+iF/ibEh/A1C54RUxOaSmwZ0cCuFlPYlZ6t552dY9MVFabfDnHa1kEa6r/fK8NGjZ2uibNJV7gWEbb1A09JB097H94uAP/xWPGftQCYMq6HNcO9/cFHYLgM4wbLXyVRGFUcBQDS/mgmxh9F/7JqTuu7XlLy0A=
+	t=1766414629; cv=none; b=glg+n6a4uCQIpmCv5nZGmn+aEOCLL0BsDYHrSM7TqWiLLqAlfr8wt29YemGme6oq3lZesZ5iZop4N5s7oTo8Ij3CN9Hw0X+NAPp34UqPHHQiXtUv9vYqv85aQUnw+XecQyy9qkAYe9bD0eSgt4sR18OFjbmbA+i7lDnw3wOc7zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766412469; c=relaxed/simple;
-	bh=UOGYbwV4khizIIRkAZEZ1DrHXk7kYjdhqrezBYqAA7o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pqWgM38/sZuTalGNcJF51FIHp5lVdBb4QFz0QYZg5jv3YC8KTCWOwb/LUQvL9QQT508oGOIg1itgh2xQG4wQf7eGtiWjXUvExO/W/gi+blT+zlrvMShmN0PYDsfLd7lOd6YXxvbRmV+o/MUonqcGBWlSrWmC1v53CaH2Qwg/mHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NitRYNPv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48CD4C4CEF1;
-	Mon, 22 Dec 2025 14:07:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766412468;
-	bh=UOGYbwV4khizIIRkAZEZ1DrHXk7kYjdhqrezBYqAA7o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NitRYNPvIDex3swqylD4WNfRjVbR/bL6FXStoDH7LCIy4B+888HSCmpnVuf2RASRR
-	 tKURip7NkNgixeDYA9a8FcqmQdidzevjjx0dxRhsqJDNW+pM2RJxH4h8tZVnS9C0Na
-	 oioopBrRVbIXKkkJtRjcl7s1PzFFtYcBmPF37C5mVqF9WaXRB1U6D0clzDghYveDWm
-	 Se4x2fakW8N7B4oJMLcVj0aI2MOSwDSVE8G32Vte+JbL/pkjGM5/0JhqEq/lsptzqx
-	 Z9yeM4/+Nhul31zfAvGm41yePHjelZ4DCHesVf4L6zJc71PrEW8/M2rH6uCPrHj/Bg
-	 R8OGyQTYCfRzg==
-Date: Mon, 22 Dec 2025 19:37:36 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: manivannan.sadhasivam@oss.qualcomm.com, Rob Herring <robh@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Hans de Goede <hansg@kernel.org>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: [PATCH v2 00/10] Add support for handling PCIe M.2 Key E
- connectors in devicetree
-Message-ID: <lrpxki6crdiezqam3nuw3pi45digirjpqxpvyjvwjugux6rjk5@3wpmtl77oj6f>
-References: <20251125-pci-m2-e-v2-0-32826de07cc5@oss.qualcomm.com>
- <aSYKHjpJkXWUVIyo@linaro.org>
+	s=arc-20240116; t=1766414629; c=relaxed/simple;
+	bh=w6xF0hMpR98bx2wAs/uVsbKsITXHoAWYUj597zVJW58=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Afk6X8l7zheu+Ise2BIRnl3JED4OVWUELgwFEdYBZTq7XkP1ctKxqHAMhC3OqH0dTCFBFcVoIgLPNhSpHDUacmYDzvuFJ0TA2iYFBuxN6KtqM2Ho7QeBus9wQAzHv5XAmujFQ6tAlifzGHjEn/HOJR46PKQLxi1bLG8w4cYM+SM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OfyDVB8y; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766414628; x=1797950628;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=w6xF0hMpR98bx2wAs/uVsbKsITXHoAWYUj597zVJW58=;
+  b=OfyDVB8yO8avgV4Cjd4BFcIWtIYjdF4z5SoCzotADNkamDctWOeBVlAb
+   jg6NtXp9Sf/9h8ZOtKKdpVY1L5u8RxdqJn/M/Ds3vj37oXhW4KgHGp7Zs
+   ENhaSEOJwQlyik7kfNJMG2YOxG7pqlkbAtk3C+lKY9kKE3BeePyCtdvHh
+   o5yOdiBPHKNSo0rOU2rxf/vBqhh+XWI/ufqC/QS6SM7PHvA9sS2tthW0S
+   Kl2s5EiSYQo1hvl0OOy9qubgFQixu3ltFs3NUDQnJ+OqhUmzGrmTu/wo9
+   GgbS32Ue9zqhMYks4xizKvqGTenzAKRJdcGCD+NFOLs1JBd4cZ2c32PzY
+   Q==;
+X-CSE-ConnectionGUID: sNYhH1E8RLSPqWGqM+ALxg==
+X-CSE-MsgGUID: XRZHO4Q1SHGXuD6TfxevdA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11650"; a="79722226"
+X-IronPort-AV: E=Sophos;i="6.21,168,1763452800"; 
+   d="scan'208";a="79722226"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 06:43:48 -0800
+X-CSE-ConnectionGUID: 8FgINj+WQnKUYp3YSKganQ==
+X-CSE-MsgGUID: 4FVxa3ViSWeCXBD3Nas8uw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,168,1763452800"; 
+   d="scan'208";a="204487799"
+Received: from spandruv-mobl5.amr.corp.intel.com (HELO [10.124.220.117]) ([10.124.220.117])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2025 06:43:46 -0800
+Message-ID: <1dd5045fbbb443fc12e602fc2803857401289294.camel@linux.intel.com>
+Subject: Re: [PATCH] thermal: intel: int340x: Use sysfs_emit{_at} in sysfs
+ show functions
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: Thorsten Blum <thorsten.blum@linux.dev>, "Rafael J. Wysocki"	
+ <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui	
+ <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Ingo Molnar	
+ <mingo@kernel.org>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, "Xin
+ Li (Intel)" <xin@zytor.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Dave Hansen
+	 <dave.hansen@linux.intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Mon, 22 Dec 2025 06:43:45 -0800
+In-Reply-To: <20251220223026.125678-1-thorsten.blum@linux.dev>
+References: <20251220223026.125678-1-thorsten.blum@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aSYKHjpJkXWUVIyo@linaro.org>
 
-On Tue, Nov 25, 2025 at 08:57:18PM +0100, Stephan Gerhold wrote:
-> On Tue, Nov 25, 2025 at 08:15:04PM +0530, Manivannan Sadhasivam via B4 Relay wrote:
-> > This series is the continuation of the series [1] that added the initial support
-> > for the PCIe M.2 connectors. This series extends it by adding support for Key E
-> > connectors. These connectors are used to connect the Wireless Connectivity
-> > devices such as WiFi, BT, NFC and GNSS devices to the host machine over
-> > interfaces such as PCIe/SDIO, USB/UART and NFC. This series adds support for
-> > connectors that expose PCIe interface for WiFi and UART interface for BT. Other
-> > interfaces are left for future improvements.
-> > 
-> > Serdev device support for BT
-> > ============================
-> > 
-> > Adding support for the PCIe interface was mostly straightforward and a lot
-> > similar to the previous Key M connector. But adding UART interface has proved to
-> > be tricky. This is mostly because of the fact UART is a non-discoverable bus,
-> > unlike PCIe which is discoverable. So this series relied on the PCI notifier to
-> > create the serdev device for UART/BT. This means the PCIe interface will be
-> > brought up first and after the PCIe device enumeration, the serdev device will
-> > be created by the pwrseq driver. This logic is necessary since the connector
-> > driver and DT node don't describe the device, but just the connector. So to make
-> > the connector interface Plug and Play, the connector driver uses the PCIe device
-> > ID to identify the card and creates the serdev device. This logic could be
-> > extended in the future to support more M.2 cards. Even if the M.2 card uses SDIO
-> > interface for connecting WLAN, a SDIO notifier could be added to create the
-> > serdev device.
-> > 
-> > Open questions
-> > ==============
-> > 
-> > Though this series adds the relevant functionality for handling the M.2 Key M
-> > connectors, there are still a few open questions exists on the design. 
-> > 
-> > 1. I've used the M.2 card model name as the serdev device name. This is found
-> > out by comparing the PCIe VID:PID in the notifier. Is this approach acceptable?
-> > I did not use the PID as the serdev name since it will vary if the SDIO
-> > interface is used in the future.
-> > 
-> > 2. PCIe client drivers of some M.2 WLAN cards like the Qcom QCA6390, rely on
-> > the PCIe device DT node to extract properties such as
-> > 'qcom,calibration-variant', 'firmware-name', etc... For those drivers, should we
-> > add the PCIe DT node in the Root Port in conjunction with the Port node as
-> > below?
-> > 
-> > pcie@0 {
-> > 	wifi@0 {
-> > 		compatible = "pci17cb,1103";
-> > 		...
-> > 		qcom,calibration-variant = "LE_X13S";
-> > 	};
-> > 
-> > 	port {
-> > 		pcie4_port0_ep: endpoint {
-> > 			remote-endpoint = <&m2_e_pcie_ep>;
-> > 		};
-> > 	};
-> > };
-> > 
-> > This will also require marking the PMU supplies optional in the relevant ath
-> > bindings for M.2 cards.
-> > 
-> > 3. Some M.2 cards require specific power up sequence like delays between
-> > regulator/GPIO and such. For instance, the WCN7850 card supported in this series
-> > requires 50ms delay between powering up an interface and driving it. I've just
-> > hardcoded the delay in the driver, but it is a pure hack. Since the pwrseq
-> > driver doesn't know anything about the device it is dealing with before powering
-> > it ON, how should it handle the device specific power requirements? Should we
-> > hardcode the device specific property in the connector node? But then, it will
-> > no longer become a generic M.2 connector and sort of defeats the purpose of the
-> > connector binding.
-> > 
-> > I hope to address these questions with the help of the relevant subsystem
-> > maintainers and the community. 
-> > 
-> > Testing
-> > =======
-> > 
-> > This series, together with the devicetree changes [2] was tested on the
-> > Qualcomm X1e based Lenovo Thinkpad T14s Laptop which has the WCN7850 WLAN/BT M.2
-> > card connected over PCIe and UART.
-> > 
-> > [2] https://github.com/Mani-Sadhasivam/linux/commit/acbee74a5c90fc8839bb7b6f326c677ee1c0d89c
-> 
+On Sat, 2025-12-20 at 23:30 +0100, Thorsten Blum wrote:
+> Replace sprintf() with sysfs_emit() and sysfs_emit_at() in sysfs show
+> functions. sysfs_emit() and sysfs_emit_at() are preferred to format
+> sysfs output as it provides better bounds checking.
+>=20
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
 
-Sorry for the delay!
+Reviewed-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-> Thanks for working on describing the M.2 connectors properly in the
-> device tree!
-> 
-> I haven't had time to look into this in detail yet, but a quick look at
-> the dt-bindings and examples looks good to me! Thanks for keeping the
-> bindings as generic as possible.
-> 
-
-Thanks for pushing me too ;)
-
-> I have a small nitpick for the specific example you have here: The
-> Lenovo ThinkPad T14s does not actually have a "M.2 Mechanical Key E
-> connector". If you look at a picture of the mainboard [1], the WLAN/BT
-> module is "soldered-down" (look on the right, on the right side next to
-> the large copper bracket). In the M.2 specification, "soldered-down"
-> modules do not have a "key", they have a specific pinout that is
-> followed (see section 5.4). The power sequencing etc and the set of pins
-> is quite similar/the same though.
-> 
-
-Oh, I was shared one schematics internally and told that it was the mirror of
-the T14s and it had the M.2 slot. So I just went with that. I didn't dare to
-open the cover of my corporate laptop ;)
-
-But this is a good info, thanks!
-
-> My notes (from a few months ago) suggest the T14s probably uses a
-> non-standard M.2 Type 1620 LGA pinout. I don't remember the exact chain
-> of thought behind that, but you can find similarly looking modules with
-> this type, e.g. https://www.sparklan.com/product/wnsq-290be/. There is a
-> 1620 *BGA* pinout in the M.2 specification, but a 1620 *LGA* pinout does
-> not exist there. Interestingly, in the block diagram of the module in
-> the link above this type is called *Q*M.2 1620 LGA 168 pin, as if this
-> is some Qualcomm-specific form factor.
-> 
-
-But the spec uses 1620 BGA for defining the SSD pinout. So 1620 LGA indeed looks
-like a custom one.
-
-> A real mechanical key E connector can be found e.g. in the X1E CRD, X1E
-> Devkit, or I think some of the X1E-based HP laptops (would need to check
-> which one exactly).
-> 
-> I'm not sure if it's really appropriate modeling the "soldered-down"
-> variant as "Mechanical Key E connector" in the DT. We might need
-> a separate compatible for this. Do you have any thoughts about that?
-> 
-
-I think having a separate compatible that uses the same binding should be
-sufficient since the interfaces are almost the same.
-
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
+> ---
+> =C2=A0.../intel/int340x_thermal/processor_thermal_device.c=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 5 +++--
+> =C2=A0.../intel/int340x_thermal/processor_thermal_rfim.c=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 | 9 +++++--
+> --
+> =C2=A0.../intel/int340x_thermal/processor_thermal_wt_req.c=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 7 ++++---
+> =C2=A03 files changed, 12 insertions(+), 9 deletions(-)
+>=20
+> diff --git
+> a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> index 48e7849d4816..f80dbe2ca7e4 100644
+> ---
+> a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> +++
+> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+> @@ -8,6 +8,7 @@
+> =C2=A0#include <linux/kernel.h>
+> =C2=A0#include <linux/module.h>
+> =C2=A0#include <linux/pci.h>
+> +#include <linux/sysfs.h>
+> =C2=A0#include <linux/thermal.h>
+> =C2=A0#include <asm/msr.h>
+> =C2=A0#include "int340x_thermal_zone.h"
+> @@ -23,7 +24,7 @@ static ssize_t
+> power_limit_##index##_##suffix##_show(struct device *dev, \
+> =C2=A0{ \
+> =C2=A0	struct proc_thermal_device *proc_dev =3D dev_get_drvdata(dev);
+> \
+> =C2=A0	\
+> -	return sprintf(buf, "%lu\n",\
+> +	return sysfs_emit(buf, "%lu\n",\
+> =C2=A0	(unsigned long)proc_dev->power_limits[index].suffix * 1000);
+> \
+> =C2=A0}
+> =C2=A0
+> @@ -143,7 +144,7 @@ static ssize_t
+> tcc_offset_degree_celsius_show(struct device *dev,
+> =C2=A0	if (offset < 0)
+> =C2=A0		return offset;
+> =C2=A0
+> -	return sprintf(buf, "%d\n", offset);
+> +	return sysfs_emit(buf, "%d\n", offset);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static ssize_t tcc_offset_degree_celsius_store(struct device *dev,
+> diff --git
+> a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> index 589a3a71f0c4..bb9398dfa3c1 100644
+> --- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> +++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
+> @@ -7,6 +7,7 @@
+> =C2=A0#include <linux/kernel.h>
+> =C2=A0#include <linux/module.h>
+> =C2=A0#include <linux/pci.h>
+> +#include <linux/sysfs.h>
+> =C2=A0#include "processor_thermal_device.h"
+> =C2=A0
+> =C2=A0MODULE_IMPORT_NS("INT340X_THERMAL");
+> @@ -211,9 +212,9 @@ static ssize_t suffix##_show(struct device *dev,\
+> =C2=A0	ret =3D (reg_val >> mmio_regs[ret].shift) &
+> mmio_regs[ret].mask;\
+> =C2=A0	err =3D get_mapped_string(mapping, attr->attr.name, ret,
+> &str);\
+> =C2=A0	if (!err)\
+> -		return sprintf(buf, "%s\n", str);\
+> +		return sysfs_emit(buf, "%s\n", str);\
+> =C2=A0	if (err =3D=3D -EOPNOTSUPP)\
+> -		return sprintf(buf, "%u\n", ret);\
+> +		return sysfs_emit(buf, "%u\n", ret);\
+> =C2=A0	return err;\
+> =C2=A0}
+> =C2=A0
+> @@ -398,7 +399,7 @@ static ssize_t rfi_restriction_show(struct device
+> *dev,
+> =C2=A0	if (ret)
+> =C2=A0		return ret;
+> =C2=A0
+> -	return sprintf(buf, "%llu\n", resp);
+> +	return sysfs_emit(buf, "%llu\n", resp);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static ssize_t ddr_data_rate_show(struct device *dev,
+> @@ -413,7 +414,7 @@ static ssize_t ddr_data_rate_show(struct device
+> *dev,
+> =C2=A0	if (ret)
+> =C2=A0		return ret;
+> =C2=A0
+> -	return sprintf(buf, "%llu\n", resp);
+> +	return sysfs_emit(buf, "%llu\n", resp);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static DEVICE_ATTR_RW(rfi_restriction);
+> diff --git
+> a/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
+> b/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
+> index b95810f4a011..2372f5202019 100644
+> ---
+> a/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
+> +++
+> b/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_req.c
+> @@ -7,6 +7,7 @@
+> =C2=A0 */
+> =C2=A0
+> =C2=A0#include <linux/pci.h>
+> +#include <linux/sysfs.h>
+> =C2=A0#include "processor_thermal_device.h"
+> =C2=A0
+> =C2=A0/* List of workload types */
+> @@ -28,9 +29,9 @@ static ssize_t workload_available_types_show(struct
+> device *dev,
+> =C2=A0	int ret =3D 0;
+> =C2=A0
+> =C2=A0	while (workload_types[i] !=3D NULL)
+> -		ret +=3D sprintf(&buf[ret], "%s ",
+> workload_types[i++]);
+> +		ret +=3D sysfs_emit_at(buf, ret, "%s ",
+> workload_types[i++]);
+> =C2=A0
+> -	ret +=3D sprintf(&buf[ret], "\n");
+> +	ret +=3D sysfs_emit_at(buf, ret, "\n");
+> =C2=A0
+> =C2=A0	return ret;
+> =C2=A0}
+> @@ -85,7 +86,7 @@ static ssize_t workload_type_show(struct device
+> *dev,
+> =C2=A0	if (cmd_resp > ARRAY_SIZE(workload_types) - 1)
+> =C2=A0		return -EINVAL;
+> =C2=A0
+> -	return sprintf(buf, "%s\n", workload_types[cmd_resp]);
+> +	return sysfs_emit(buf, "%s\n", workload_types[cmd_resp]);
+> =C2=A0}
+> =C2=A0
+> =C2=A0static DEVICE_ATTR_RW(workload_type);
 
