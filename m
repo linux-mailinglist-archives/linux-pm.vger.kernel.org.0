@@ -1,57 +1,52 @@
-Return-Path: <linux-pm+bounces-39790-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39789-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5197BCD7171
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 21:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C41ADCD7165
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 21:37:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9674130303BC
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 20:37:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A6B9F301275C
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 20:37:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43C0532827E;
-	Mon, 22 Dec 2025 20:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C6D30BF62;
+	Mon, 22 Dec 2025 20:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PKSzpzo7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nBJawlNz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E68230BBB6;
-	Mon, 22 Dec 2025 20:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F0230AD00;
+	Mon, 22 Dec 2025 20:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766435826; cv=none; b=if9/jfHmM/fHzx3+vvmdnREpeahMjvRuFs3IBb7WqzI+B23X5PB37542STO4Q1WSZGAgQm2zQrDP1iZtX540EmyjRvIpRLVq0+UhP5iNwdXC+IBRxbWgI03rcAH6vRdBllZh7rqhSAvfU2ePCCPGv14FB0lpDpVWywvA3W2cUuQ=
+	t=1766435822; cv=none; b=ZpOtFpnym3dL5aYfKQCABkWUNNgQPKf4GE3i4Y1Htd4LXhy7D2TuHcPZPzOATEIVjiZv/Rao5zecTId8ghOBqkHVKc5cjDIwb5Yz9cI0o7e0xWIbgcFIg8/y1SZ4LpHj+BZSypx8PztoSW/F0AW/ROGIlX6t2Alc/ws7fvX1a1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766435826; c=relaxed/simple;
-	bh=qU1xEqH8d5/3tAVNsT6IV9ERtj/PGsYjFsn2yDftN5Q=;
+	s=arc-20240116; t=1766435822; c=relaxed/simple;
+	bh=5lTSXfHCh0kt1mgn/MN7svtqP53TiA+t0/Nndt/lKy8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hsk7UMbHAJB4BJlNUcdvgxWSHwgK8/4FGSEQrDw/sk7Lcjb6H5mDk8LWdgFOWVtmKgyBVf3czKkFRhP3XPFqicayzUx2dF5IM7DUwOHRL0guAMdNZMUzTHFVcP17HVC+noKb/1HstjFsaO3VsObrkMmAplW2mbIAZEOR8BApGko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PKSzpzo7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAFDEC16AAE;
-	Mon, 22 Dec 2025 20:37:03 +0000 (UTC)
+	 MIME-Version:Content-Type; b=pnh9OK86gAo0r4yEizlFYHRPyA9obracXEy02NDxLo9eYN9X4F4J1AVMwhxS7xqBbxrHUGy32PiWMVgjirZq384LJQyClAXezWkycJlhfoFUvcXSOSifd1OzxA+uv/9a9pP9qQbu0fYB54T1VRj6bVNYAWOKtltTj4hFtqKc61U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nBJawlNz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ADD2C4CEF1;
+	Mon, 22 Dec 2025 20:37:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766435825;
-	bh=qU1xEqH8d5/3tAVNsT6IV9ERtj/PGsYjFsn2yDftN5Q=;
+	s=k20201202; t=1766435822;
+	bh=5lTSXfHCh0kt1mgn/MN7svtqP53TiA+t0/Nndt/lKy8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PKSzpzo7dZvCE4otps9jA7DCZ+mGvpTC/qTJK1+mCdPoaOo2UXkYVRtAVg6c97RTp
-	 uwjQTaFHqYu1SeoMeggsmQ9Ku0NRc4NhXYj6G7zxWcALjh2r1wMggGUuTKXeM1Cyw2
-	 R+/W0sK3Gwbg3oZlkrpHXCnkfYPMveJCeD94dBivJCn4IXRyuIQV+/RKSrlkb8l8Uf
-	 3H+CecKKAdH39vTExCZjz5qklsUAh0PD7jS/Eejus3xFsvP3rg1fSy86FYofbMnwUi
-	 n0dlARVZElTNtzk5TV2rCGmBp4d3TPbP+05PqLX2oSrgDqB0eXNp4XqHE0Q5nnyWLP
-	 JNTMq/KxbtHhA==
+	b=nBJawlNz7fMV/zbvpoYPVU9lgAjirjWl+4D29j/ucKxJcPkk28SmHCbHGUDOHJhO0
+	 dAXovi2sYZFwgA8oXbBk7TtHxX8v0yfTSRbCdCiAn78Id64reiRr8GaEYbtDZt+iix
+	 11n03SexnWuz4Bo8IFYyfD/A4v25q186abVzUUWg4EhAhxjeSfci4YOwLYq/gtiDdm
+	 ajPuXnRK0QKsPYqB2g+KCIF0axByJ5oIhqIFeAe4aanFKTdxNItfp/iMB4R2TqwDCx
+	 LEwqcDIFJnaZW2PovwyuvYBQG9KWOG9uh1TjPC3Gws/o2GQl5Dhxct/TgUrQjO9+jl
+	 xNQtJoY4SjacA==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Brian Norris <briannorris@chromium.org>,
- Nicolas Frattaroli <nicolas.frattaroli@collabora.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Heiko Stuebner <heiko@sntech.de>, linux-rockchip@lists.infradead.org,
- linux-sound@vger.kernel.org
+ Brian Norris <briannorris@chromium.org>
 Subject:
- [PATCH v1 22/23] ASoC: rockchip: Discard pm_runtime_put() return value
-Date: Mon, 22 Dec 2025 21:35:33 +0100
-Message-ID: <5160923.0VBMTVartN@rafael.j.wysocki>
+ [PATCH v1 23/23] PM: runtime: Change pm_runtime_put() return type to void
+Date: Mon, 22 Dec 2025 21:36:25 +0100
+Message-ID: <14387202.RDIVbhacDa@rafael.j.wysocki>
 Organization: Linux Kernel Development
 In-Reply-To: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
 References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
@@ -66,45 +61,60 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-It is better to check directly whether or not CONFIG_PM has
-been enabled instead of relying on an error value returned by
-pm_runtime_put() in that case because pm_runtime_put() may also return
-an error value in other cases, like after writing "on" to the devices'
-runtime PM "control" attribute in sysfs for one example.
+The primary role of pm_runtime_put() is to decrement the runtime PM
+usage counter of the given device.  It always does that regardless of
+the value returned by it later.
 
-This will facilitate a planned change of the pm_runtime_put() return
-type to void in the future.
+In addition, if the runtime PM usage counter after decrementation turns
+out to be zero, a work item is queued up to check whether or not the
+device can be suspended.  This is not guaranteed to succeed though and
+even if it is successful, the device may still not be suspended going
+forward.
+
+There are multiple valid reasons why pm_runtime_put() may not decide to
+queue up the work item mentioned above, including, but not limited to,
+the case when user space has written "on" to the device's runtime PM
+"control" file in sysfs.  In all of those cases, pm_runtime_put()
+returns a negative error code (even though the device's runtime PM
+usage counter has been successfully decremented by it) which is very
+confusing.  In fact, its return value should only be used for debug
+purposes and care should be taken when doing it even in that case.
+
+Accordingly, to avoid the confusion mentioned above, change the return
+type of pm_runtime_put() to void.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
+ include/linux/pm_runtime.h |   16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
 
-This patch is part of a series, but it doesn't depend on anything else
-in that series.  The last patch in the series depends on it.
-
-It can be applied by itself and if you decide to do so, please let me
-know.
-
-Otherwise, an ACK or equivalent will be appreciated, but also the lack
-of specific criticism will be eventually regarded as consent.
-
----
- sound/soc/rockchip/rockchip_sai.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
-
---- a/sound/soc/rockchip/rockchip_sai.c
-+++ b/sound/soc/rockchip/rockchip_sai.c
-@@ -1487,8 +1487,9 @@ static int rockchip_sai_probe(struct pla
- 	return 0;
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -545,22 +545,10 @@ static inline int pm_runtime_resume_and_
+  *
+  * Decrement the runtime PM usage counter of @dev and if it turns out to be
+  * equal to 0, queue up a work item for @dev like in pm_request_idle().
+- *
+- * Return:
+- * * 1: Success. Usage counter dropped to zero, but device was already suspended.
+- * * 0: Success.
+- * * -EINVAL: Runtime PM error.
+- * * -EACCES: Runtime PM disabled.
+- * * -EAGAIN: Runtime PM usage counter became non-zero or Runtime PM status
+- *            change ongoing.
+- * * -EBUSY: Runtime PM child_count non-zero.
+- * * -EPERM: Device PM QoS resume latency 0.
+- * * -EINPROGRESS: Suspend already in progress.
+- * * -ENOSYS: CONFIG_PM not enabled.
+  */
+-static inline int pm_runtime_put(struct device *dev)
++static inline void pm_runtime_put(struct device *dev)
+ {
+-	return __pm_runtime_idle(dev, RPM_GET_PUT | RPM_ASYNC);
++	__pm_runtime_idle(dev, RPM_GET_PUT | RPM_ASYNC);
+ }
  
- err_runtime_suspend:
--	/* If we're !CONFIG_PM, we get -ENOSYS and disable manually */
--	if (pm_runtime_put(&pdev->dev))
-+	if (IS_ENABLED(CONFIG_PM))
-+		pm_runtime_put(&pdev->dev);
-+	else
- 		rockchip_sai_runtime_suspend(&pdev->dev);
- 
- 	return ret;
+ /**
 
 
 
