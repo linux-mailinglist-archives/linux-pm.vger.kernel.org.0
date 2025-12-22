@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-39811-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39810-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B6CDCD71B6
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 21:40:06 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82B15CD71AA
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 21:39:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1AF3E3023A10
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 20:39:23 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B3AF7301E99C
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 20:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89084347BBB;
-	Mon, 22 Dec 2025 20:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1399346E42;
+	Mon, 22 Dec 2025 20:38:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KouQRqVa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NTwr/dB/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4FF347BA8;
-	Mon, 22 Dec 2025 20:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C6B346AE4;
+	Mon, 22 Dec 2025 20:38:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766435900; cv=none; b=EtNVTjQ56FqMn9dXNklZTIqbp9Zdoxx/a+rBGpe38tJttv0K3UY5judm8SmEqniWHlJnKWnyMjaP594SktxgnFYt+1t7MrdyKpuLi+K9OEGtQev7r4i/nRPfrPzubVrEHgz1X+J+mBXVVM2NfLeC5QRuwgNm+e3OblBUlg1HMY8=
+	t=1766435897; cv=none; b=pznJucdxdM8c7rW1ItD+WOdYGH1EzzsEweL9RVwV6TSmQUQsc7+2c+IBQRjcLBrkSaUqcuePrfniPiLxzMziuHxaNo6nOBCKO+xopRek3V5bJ93UmLoblDtnvq9xTnKqVFhsH4jGlzSh6Hgjz8ofS1H+kbpHQ6BlR0Xqlr86jc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766435900; c=relaxed/simple;
-	bh=bg6qNCsf46yjQR+W4i7aCIbrsapW96xa5ysgoxgK0r0=;
+	s=arc-20240116; t=1766435897; c=relaxed/simple;
+	bh=Gz8Io9XC6+UjwbiiJL2DyXYIAqa83xHO+FqGoRbQK8g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nIwU4d+5jB93+2XAEsVd/Mv7uI31EsnnSmz0471jwOis4ZxU9PZ/GvK9QNzyoDNgA1x0M1lPotN5ZMZoOxHCZjnFD9i4qG1UxD8/og1Z9hFY+HM3K2RKadlvCFw9A2BuFy8w6qspD3RSCJ1NXWr6x0ggapaIQp9KTSJHGVhbwOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KouQRqVa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0882AC4CEF1;
-	Mon, 22 Dec 2025 20:38:18 +0000 (UTC)
+	 MIME-Version:Content-Type; b=BtOE49UXNhYharuL6sf4qo/9TczFMT+bJ7sGF6+/EESmIEjfcv1IsOB/U21jWdhoAVinBBfVMXpdi4TWwEVR0OqRrhYGoRahE0fH3tG2NWJRod3VFMGO5oBOfiwCfh9sIF0x89OAxcrln0YI7zqre4ekXidDhUY7zV4zf9ry+t0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NTwr/dB/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9A35C116D0;
+	Mon, 22 Dec 2025 20:38:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766435899;
-	bh=bg6qNCsf46yjQR+W4i7aCIbrsapW96xa5ysgoxgK0r0=;
+	s=k20201202; t=1766435897;
+	bh=Gz8Io9XC6+UjwbiiJL2DyXYIAqa83xHO+FqGoRbQK8g=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=KouQRqVa9zOUD3opuetOYTu1y/SlRfOPCxYa8IJZCS4WPQ+XM5diQyt2cQp5j/uXQ
-	 0MQzos+mm5VhDrM7L8vQGsU4sOwhOFBVzw0vFyfVU/fYiBfBpI0nF82IM/N+KoiQ80
-	 z+KMyc4rEwP5YUtbRe8f8ifHsU56VgoXBckpI+cb5Qx9x8WebfkDbZCezoHCdE856r
-	 5ZaaO7aSsTbl3eG5Oe8IjUyx+zW6RZE5gCbUSMm486UKQVTLmaFyVAMfaNgiUDr1Ve
-	 xRhxi6jpBoVtQGkjeTVkvDhwpKPO1dMPHdyOwMzC3k8Cv8f0azRXAXicc07fS6v8+S
-	 Jk9hQVhE/f9Aw==
+	b=NTwr/dB/li3oA3kyNXRH3p+iMqOOhSPE+Vdg/h1yxc0CovR8dULsJKI7oquyaek5b
+	 N/Jb1qP5THwOHO+OwsR6SmMH5NVeH7MOnR+od/axg34u7WpSos7tbCqzLWxpLeJnvf
+	 B5b43bDi+eYuiXldgnzLnhqAU9klDCPh/xLb5GQsrBaEQZFqwoFnkCFF7PmSiYMHbA
+	 U5yXsfxx5c+aH3P5kXRIW7HQ5Fcd1rmavcs2uVt42HHV4uYARnZ2B0wWWQAHCGHzwK
+	 zsVE5Qu/LwHvccJ3Ar4tgT0wsnhwqFG5eKKq8GThX5f2M+Yem8ZpO0HqhiI5x8C0n8
+	 uTWY9mP0vUUug==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Brian Norris <briannorris@chromium.org>, Thomas Gleixner <tglx@linutronix.de>
-Subject:
- [PATCH v1 01/23] genirq/chip: Change irq_chip_pm_put() return type to void
-Date: Mon, 22 Dec 2025 20:50:10 +0100
-Message-ID: <4723896.LvFx2qVVIh@rafael.j.wysocki>
+ Brian Norris <briannorris@chromium.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ Alan Stern <stern@rowland.harvard.edu>
+Subject: [PATCH v1 02/23] USB: core: Discard pm_runtime_put() return value
+Date: Mon, 22 Dec 2025 20:52:33 +0100
+Message-ID: <5058509.GXAFRqVoOG@rafael.j.wysocki>
 Organization: Linux Kernel Development
 In-Reply-To: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
 References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
@@ -61,24 +62,15 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The irq_chip_pm_put() return value is only used in __irq_do_set_handler()
-to trigger a WARN_ON() if it is negative, but doing so is not useful
-because irq_chip_pm_put() simply passes the pm_runtime_put() return value
-to its callers.
+To allow the return type of pm_runtime_put() to be changed to void in the
+future, modify usb_autopm_put_interface_async() to discard the return
+value of pm_runtime_put().
 
-Returning an error code from pm_runtime_put() merely means that it has
-not queued up a work item to check whether or not the device can be
-suspended and there are many perfectly valid situations in which that
-can happen, like after writing "on" to the devices' runtime PM "control"
-attribute in sysfs for one example.
-
-For this reason, modify irq_chip_pm_put() to discard the pm_runtime_put()
-return value, change its return type to void, and drop the WARN_ON()
-around the irq_chip_pm_put() invocation from __irq_do_set_handler().
-Also update the irq_chip_pm_put() kerneldoc comment to be more accurate.
-
-This will facilitate a planned change of the pm_runtime_put() return
-type to void in the future.
+That value is merely used in a debug comment printed by the function in
+question and it is not a particularly useful piece of information
+because pm_runtime_put() does not guarantee that the device will be
+suspended even if it successfully queues up a work item to check
+whether or not the device can be suspended.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
@@ -93,63 +85,28 @@ Otherwise, an ACK or equivalent will be appreciated, but also the lack
 of specific criticism will be eventually regarded as consent.
 
 ---
- include/linux/irq.h |    2 +-
- kernel/irq/chip.c   |   22 +++++++++++-----------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ drivers/usb/core/driver.c |    8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
---- a/include/linux/irq.h
-+++ b/include/linux/irq.h
-@@ -659,7 +659,7 @@ extern void handle_percpu_devid_fasteoi_
- 
- extern int irq_chip_compose_msi_msg(struct irq_data *data, struct msi_msg *msg);
- extern int irq_chip_pm_get(struct irq_data *data);
--extern int irq_chip_pm_put(struct irq_data *data);
-+extern void irq_chip_pm_put(struct irq_data *data);
- #ifdef	CONFIG_IRQ_DOMAIN_HIERARCHY
- extern void handle_fasteoi_ack_irq(struct irq_desc *desc);
- extern void handle_fasteoi_mask_irq(struct irq_desc *desc);
---- a/kernel/irq/chip.c
-+++ b/kernel/irq/chip.c
-@@ -995,7 +995,7 @@ __irq_do_set_handler(struct irq_desc *de
- 		irq_state_set_disabled(desc);
- 		if (is_chained) {
- 			desc->action = NULL;
--			WARN_ON(irq_chip_pm_put(irq_desc_get_irq_data(desc)));
-+			irq_chip_pm_put(irq_desc_get_irq_data(desc));
- 		}
- 		desc->depth = 1;
- 	}
-@@ -1551,20 +1551,20 @@ int irq_chip_pm_get(struct irq_data *dat
- }
- 
- /**
-- * irq_chip_pm_put - Disable power for an IRQ chip
-+ * irq_chip_pm_put - Drop a PM reference on an IRQ chip
-  * @data:	Pointer to interrupt specific data
-  *
-- * Disable the power to the IRQ chip referenced by the interrupt data
-- * structure, belongs. Note that power will only be disabled, once this
-- * function has been called for all IRQs that have called irq_chip_pm_get().
-+ * Drop a power management reference, acquired via irq_chip_pm_get(), on the IRQ
-+ * chip represented by the interrupt data structure.
-+ *
-+ * Note that this will not disable power to the IRQ chip until this function
-+ * has been called for all IRQs that have called irq_chip_pm_get() and it may
-+ * not disable power at all (which may be prefented by user space, for example).
-  */
--int irq_chip_pm_put(struct irq_data *data)
-+void irq_chip_pm_put(struct irq_data *data)
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -1810,13 +1810,11 @@ EXPORT_SYMBOL_GPL(usb_autopm_put_interfa
+ void usb_autopm_put_interface_async(struct usb_interface *intf)
  {
- 	struct device *dev = irq_get_pm_device(data);
--	int retval = 0;
--
--	if (IS_ENABLED(CONFIG_PM) && dev)
--		retval = pm_runtime_put(dev);
+ 	struct usb_device	*udev = interface_to_usbdev(intf);
+-	int			status;
  
--	return (retval < 0) ? retval : 0;
-+	if (dev)
-+		pm_runtime_put(dev);
+ 	usb_mark_last_busy(udev);
+-	status = pm_runtime_put(&intf->dev);
+-	dev_vdbg(&intf->dev, "%s: cnt %d -> %d\n",
+-			__func__, atomic_read(&intf->dev.power.usage_count),
+-			status);
++	pm_runtime_put(&intf->dev);
++	dev_vdbg(&intf->dev, "%s: cnt %d\n",
++			__func__, atomic_read(&intf->dev.power.usage_count));
  }
+ EXPORT_SYMBOL_GPL(usb_autopm_put_interface_async);
+ 
 
 
 
