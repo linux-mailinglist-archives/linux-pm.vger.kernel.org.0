@@ -1,193 +1,195 @@
-Return-Path: <linux-pm+bounces-39783-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39784-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB43DCD6BA5
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 17:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1623BCD6D54
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 18:32:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CBAC6304B703
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 16:57:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 45A8D30365A6
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 17:31:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EBD9350298;
-	Mon, 22 Dec 2025 16:57:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD10233BBA8;
+	Mon, 22 Dec 2025 17:26:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lye7C4yi";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="BUvrZjuf"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="XNkYCQOz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FFCF34FF7E
-	for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 16:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8385333AD87
+	for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 17:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766422633; cv=none; b=nENnfGApPSV2XaL25nM69VFIkAEIUXLHtJkD0Hk9LIbvUwktcyfLwAOmHTdkbWeU40k85pH8cvh1w9oyBnKEmk2jEJv55r4kRksyh+jIiUW/Y/jyRBjH5Gt9eZ70YC2hwsCl1waspFoFxCM2JXZPWX4QRcdfWVFxMzH1X0woLRM=
+	t=1766424387; cv=none; b=P13iB8+vr0MMcc5SoTs7uif7pkjm8610q8FOj4hAWAjO6ynZqN54c6948I6OjTrdlg8pWXVC5Gqy+8JXZckHtyh67ZG9saXEh0EXjJKOCQNJk/Z2JMy2BXLDyH7YTmIWF7/6jPs9Pd7VpYgHYNqQHOcDTZ8pHTeZOE6cj2c3b0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766422633; c=relaxed/simple;
-	bh=xV6tWgjxZaXKfkrPw5l/uzOAaZsuSpJiThtogYYnDTU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=momKsHIy8kzNJN8FxRGdXptGuni7EWOIvXNJmEr+hEZI8JztgmuKUBdQYZ7U7c5iKmTxVWvt7kLvFr7aWUd49z9GMIgNfg/EN2+Sw8w1dKrHAnPVfmr8HTj9NNaroz8qHYpm89VxZ8MI1NDHcNmIqGjRJ1U1CaMWC3rCTSAi7kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lye7C4yi; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=BUvrZjuf; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BMEC3ul1889233
-	for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 16:57:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	4itgOftOBi39v3+Y6wa7zx7cM8P0meLsOdf8/g/via4=; b=lye7C4yiuqPLel88
-	HPjm+8uaBtuxa3yyOHwh+GY3XIatjzgnZCsGY2fsw1lPxqqMMamgVc0ktvkg/0nU
-	05DH+C2j7hcGr4pOk30N4qYefy/mBWQnnKLwTWqOBKGZ+imEAVCe1Ozjp6jeiqkn
-	i39hcH2pVNn0JxF+ITsmzv+FRazzD4vydZEfLWRzTdEgfTV+tSB9y8JPK8BdM1FE
-	d+yG5AVxDufijhKCnBvKHHt8jIkUcB+3ICYyGQtwc0khA3zHQvPZ5+6mjy/HsHi2
-	5+ZUuvM9Dxu0ys9sZ3OIOeAgngMdiEVYvcgiXLwOWSmBhMr1oi++5T5Vm/KyTQ1a
-	JwEnkA==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b770aghc4-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 16:57:09 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2a0bb1192cbso82601465ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 08:57:09 -0800 (PST)
+	s=arc-20240116; t=1766424387; c=relaxed/simple;
+	bh=OMHHcBrunLTAqrONlLcoGvei/dPQg1xIVNEoe6PRSCo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Red5by99Yk2kxy59+KLyZphot5Wk7RXhuvQTNTW/Biqg7uzYizKykKTPClogE0vS4EOqT3LPGUecW8bHzD1HyB2fK5hA1Ss+IgsXiGpwVJsh2tiigBwtDpZqwCOFHXFb76U9W0SlwwHmAJrFBIattqf8yRZV7npf+l52gVxwi50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=XNkYCQOz; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5957db5bdedso4824913e87.2
+        for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 09:26:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766422629; x=1767027429; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4itgOftOBi39v3+Y6wa7zx7cM8P0meLsOdf8/g/via4=;
-        b=BUvrZjufjNZiV46lq+7neHqdgxSSJiH7IMrC7M3zQGKRoT3/ZQBFuP6GAVG8RN/RDc
-         shgGHcNdcb/Jsmj0oPuoK84lja9v/vivhWzkcJDg/+d/WObcdOVncvj45aGuLyqEvRJQ
-         NH17xh0CsHFSrMZJpPKNqzFISLFRgHH8z17yljCsqs5kZ8Aj/v9RhMcGGkTetBj8J3Vy
-         KhMLX49tCHLFTbKBxg1YdL0oNma1m6wxoBrtQS7WrPhU7DM+fBIhWlB4rldVwkt067pb
-         ef98vDQb5yJuXdOe/gKYRFZSYn67aBvbzTIXYzEsxcsXTRu+Ko7NJxZcdlTyXkF3ucRc
-         merw==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1766424383; x=1767029183; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NaDcd5KsdnsvFsY11kNpZaauB3pAQDiUFi0UpOQzbhI=;
+        b=XNkYCQOzaAMjo7ceogJAePGsKHnQEHjhnhS4rdEcjV/TffyilFYToPzdhZMzUBtegz
+         UNGlXggLfNDnllynjCZ1sjMPm0jxBQ4foWuOULkPJ7sza8e+ricmgNnFipakpvOT+H7t
+         +xANBKzGwZHgsMGKmVpYfFjJEUAIZudpnrr9xISbMk8bBt45Tx67+dh39syr3KxBzz+y
+         MRedrovjvtYKfkLTi5GDgTMwAs9njBA2AvMBVYYnFVl/S+T2laIDiI0fewgxCtiAGx3c
+         SEhkF6yHumu212t1H2DiproatsWPGmPdOjCKPweFrx7ptKCdqfzzxs2awYr2DBC4Dh2U
+         xHNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766422629; x=1767027429;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4itgOftOBi39v3+Y6wa7zx7cM8P0meLsOdf8/g/via4=;
-        b=kqISh62j960zzvZHhky/lRCMi2iNWSE55y8PllOh9/fYScOBCZ/p6PGPmHpJHo+B6k
-         LRAVLxsoj45LM4Yu41c1jBDnzSUf+lVSNzdHUhHoK0UznR1qBbum90i/qaRykEW25Nyc
-         tSvQ0+fCVxgb6O4VN0cvTzO/MOROB9ByqVFgATlBsW5c2n52cUSlUDpcak6D4mQ5Kul0
-         hiunGg03C/FVj9gnM7tfkqePDpdZRYpbg+ghot6Mid26fHUnNdDwma6L2u4TjkQtj+Ji
-         fghKESn9YEv8rksDfZpvOEqjfiEcF2VNLDaJRg3HnqrEnK3mrQJRQTkbjPehZBd+UH/f
-         YOHA==
-X-Forwarded-Encrypted: i=1; AJvYcCUyGy03jc2bcZXGTnugaSvqATKJXcLsV/Jtuyv/EukNjdkFX0XH05uFMQQGMeSA918YHTp1RIkSvg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMA9pfpdrY3PHdD7noS/bKbIS9LcHWryLnMBO/xsin+0fh2tS3
-	i2zttUr1BCVnRAm1svfvqSYLpR5am1RxhnNe3kWrbLUUSqO7qRI8WxEXSAtGoJi0iCK8Xk9GhCp
-	U1TL89E26+VBiWMQgK5EjvTCshCMJqCr7zaSkGPbDNHUljCWQ0XXbLYPLHyfVMA==
-X-Gm-Gg: AY/fxX7uVmuMEqwEk15ltZrwvs5R1RDKgFE7vV+t8hs5Q/URz+rcXsKD9L71+ymxBU4
-	H2I11zbkgI/HEwET2dwpGCsaHCDqXwzjM+0KnfT1VVO8MzhRFCCYg0V5PLMEp9tN6PmmtJsJlP4
-	d+3F5m3SMjbgChVFp4/41TjkJQyIMYePbGw9AZFxQzHUepmPbGRuklqR3v+ltUfXcKZMKykyr6f
-	wTVqjlsw2928dRifw9GAEgQWr52K9RNDpUsUpI3sS8bBc5jC7SrAwlwFdSXY2aEmQnyrO7oLl3R
-	oIVkEi+Fr80/RKRDzpIs0tSqG1FOGnmroo6W5MczeTAnnQ7TcOUlxFvJB++AFWomNlaq8KXMDbq
-	VSAxhrQRJlXl550DWmAFAZpgSgCokgNzzXwbt
-X-Received: by 2002:a17:903:2448:b0:2a0:b7d3:1bf4 with SMTP id d9443c01a7336-2a2f2212833mr125103615ad.5.1766422628892;
-        Mon, 22 Dec 2025 08:57:08 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFDKazaiIoCtCLvy9WCpAv5NHiSa0bEoYQsJ/tn3nK095kVKTp+ibCk6SgPCiILA+nQ1SiDjw==
-X-Received: by 2002:a17:903:2448:b0:2a0:b7d3:1bf4 with SMTP id d9443c01a7336-2a2f2212833mr125103405ad.5.1766422628416;
-        Mon, 22 Dec 2025 08:57:08 -0800 (PST)
-Received: from [192.168.1.5] ([27.57.93.98])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3c9b51esm101496025ad.43.2025.12.22.08.57.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Dec 2025 08:57:08 -0800 (PST)
-Message-ID: <698bb8b4-d6ae-4a97-8cc3-9e48ea8afd2e@oss.qualcomm.com>
-Date: Mon, 22 Dec 2025 22:27:01 +0530
+        d=1e100.net; s=20230601; t=1766424383; x=1767029183;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NaDcd5KsdnsvFsY11kNpZaauB3pAQDiUFi0UpOQzbhI=;
+        b=oIVYD6OenLlMHDXC1n6DLz7Z9KJz2YD9mtO5IcnDLUupUOl5sIe6xAhjRPrNMWLYyx
+         kdlxAzC/QEVuqlPvtW7lsnmMk8WnAn8O9P4AqXRP7/xLO4KFc6TXIbi81QRVhGsuURbS
+         z/h9SGyPgdSX2R/ZolLGcCx3sxWexESd+bTfD+oD/bVQic5tvDcKUKmB9vmkWYu+gb+u
+         F3rypbIWqobCLFdDb/qXK3Q3eCu8HnYIa/MvnpOZWNwn1jVMpNb9oLJ3AgC2/183c486
+         zLj1rVSsvNyitB3yNH0qVDaObIvvRU7GURaalcNtjn420ukrOE2IFz5bEBYasCBT4PNd
+         srZg==
+X-Forwarded-Encrypted: i=1; AJvYcCXqmexB3X67MuQ6U78v/pKPZ5BxSEUBJfvwzT0P2/R1iXlAPRp97O/MGmKmZYqdv8ZLcHoSx+BVKA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4bOXOzh19n5AOKPDCQcLUkZwmMCRnc8gFOMaDBCHm1oILMBLD
+	9WdMcl7WH4sgkeA755o2TIA/AST6XDz4hgF7SaScxgHx29I2yqMHbGNyv6StxhQWY1qMmQ+ZfwP
+	WEZPmOxUkF5J7QiHviEm7WIXQ4GwHW2+Iljjb0+Y7PQ==
+X-Gm-Gg: AY/fxX7W5Un7D5szFESgqVSL+62KSJN/6oHjdZOTqASTagxsWI2S6RuOx6Qyxe2q0EP
+	6dFGjqEwFuNJqH0bUG0348vG4bIygJHzlqOWkcHmzQwMDdEPT1TIlaRp7kj5TYVB1iayhddGUst
+	G74N4gcvExOP+/CDyuq647NWjqGnFmsiFzChfrNbEVeWXZCL76uqqP7vbXrGru359riBjt3q0Qm
+	QVI80tcOxrYgFN4NrVQC2EJa6hvVql4yEbv/B+ebERn4+TJV9KJPv+AhS5MzTj5soj+1tQdw/xY
+	4KjCb+m2lanMNDilCDzosNV9eHfh4rJlJzqGFw==
+X-Google-Smtp-Source: AGHT+IHHrUjioE+4oGxrI2RZEOyG2V4gz0UD1pM+souTBtkWhlOrJEwpjpsg0kUgeSqCWXF/vwVFEgr3FOA2uN43Vw8=
+X-Received: by 2002:a05:6512:3e16:b0:598:eecb:c7ef with SMTP id
+ 2adb3069b0e04-59a17d5ddc0mr3918851e87.26.1766424382502; Mon, 22 Dec 2025
+ 09:26:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: qcs8300: Add clocks for QoS
- configuration
-To: Krzysztof Kozlowski <krzk@kernel.org>, Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Tipton <mike.tipton@oss.qualcomm.com>
-References: <20251128150106.13849-1-odelu.kukatla@oss.qualcomm.com>
- <20251128150106.13849-4-odelu.kukatla@oss.qualcomm.com>
- <8b8d35d4-ee88-4d91-aef5-0e77f03f59b0@kernel.org>
-Content-Language: en-US
-From: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-In-Reply-To: <8b8d35d4-ee88-4d91-aef5-0e77f03f59b0@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIyMDE1NSBTYWx0ZWRfXzcSDXI0maMBr
- ajlt1rmqkrytDH+JAFmh5dxxS2PfZPEq8qrBcnjcAXUrEPzXTrHIzAgtjPJN1CFHkX9VvBlSlPt
- n6Py9yTuZ94g6+fGQV+zbz87E6AK3xJ9ByfE2GywikNs70vh1eXNfgcOoGzcuLmXdqs/icOSYvR
- pmINnmuQ6FUrcG1+I4n03RN8Cr79rx6K105EHuULkGMbQ48YkVfyPvIMqYEunrpaa5gAkE8FoaH
- 5UNH5vsKC/UnlAfElj3d5Fgyic2L1oVdOm+Axg5b3/COLJcn+7A38sqFYRsYyY9DAd82zb1LTST
- 20sc4bDkmS3TXG8gA9Rxyc0SKIRQFdYJGVx9AlqScZoEg7SOS4VIWZN6HYdQhCwl7IwNByMH+YF
- WBXMlj+YxStzt1CnmloAPYXCDVa1GfLVfD+nUwRMbVbbqXbCpPZ89W8jndMNmM6+ASQhljJ6xCE
- RmyGJJLpLEyaaZ0l0aQ==
-X-Authority-Analysis: v=2.4 cv=VqAuwu2n c=1 sm=1 tr=0 ts=69497865 cx=c_pps
- a=JL+w9abYAAE89/QcEU+0QA==:117 a=luqpl2TCSyK2LuNNAmtdDg==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=P0VVE0QUFgw9kxqKfqoA:9 a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22
-X-Proofpoint-GUID: gg9XHGCYfIO1vLYLN201GPumQru0Ro37
-X-Proofpoint-ORIG-GUID: gg9XHGCYfIO1vLYLN201GPumQru0Ro37
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-22_02,2025-12-22_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 bulkscore=0 impostorscore=0 malwarescore=0 adultscore=0
- priorityscore=1501 phishscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512220155
+References: <20251222-next-15nov_expose_sysfs-v21-0-244614135fd8@oss.qualcomm.com>
+ <20251222-next-15nov_expose_sysfs-v21-2-244614135fd8@oss.qualcomm.com>
+In-Reply-To: <20251222-next-15nov_expose_sysfs-v21-2-244614135fd8@oss.qualcomm.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 22 Dec 2025 18:26:10 +0100
+X-Gm-Features: AQt7F2qw7k825VeBGH-gxAXeuuEKzY6BBYGjMxRWjHkHXafUFF3NWVKxl_TZNI0
+Message-ID: <CAMRc=MeBiHcYd_3p9k=QOc5zxC930W6=aaD4Jbh9zhMWjwZ=bA@mail.gmail.com>
+Subject: Re: [PATCH v21 2/2] power: reset: reboot-mode: Expose sysfs for
+ registered reboot_modes
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Bartosz Golaszewski <bgolasze@quicinc.com>, 
+	Bjorn Andersson <andersson@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Dec 22, 2025 at 4:33=E2=80=AFAM Shivendra Pratap
+<shivendra.pratap@oss.qualcomm.com> wrote:
+>
+> Currently, there is no standardized mechanism for userspace to discover
+> which reboot-modes are supported on a given platform. This limitation
+> forces tools and scripts to rely on hardcoded assumptions about the
+> supported reboot-modes.
+>
+> Create a class 'reboot-mode' and a device under it to expose a sysfs
+> interface to show the available reboot mode arguments to userspace. Use
+> the driver_name field of the struct reboot_mode_driver to create the
+> device.  For device-based drivers, configure the device driver name as
+> driver_name.
+>
+> This results in the creation of:
+>   /sys/class/reboot-mode/<driver>/reboot_modes
+>
+> This read-only sysfs file will exposes the list of supported reboot
+> modes arguments provided by the driver, enabling userspace to query the
+> list of arguments.
+>
+> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+> ---
 
+[snip]
 
-On 11/29/2025 3:04 PM, Krzysztof Kozlowski wrote:
-> On 28/11/2025 16:01, Odelu Kukatla wrote:
->> Add clocks which need to be enabled for configuring QoS on
->> qcs8300 SoC.
->>
->> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
->> ---
->>  arch/arm64/boot/dts/qcom/monaco.dtsi | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/monaco.dtsi b/arch/arm64/boot/dts/qcom/monaco.dtsi
->> index 816fa2af8a9a..6139511ea525 100644
->> --- a/arch/arm64/boot/dts/qcom/monaco.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/monaco.dtsi
->> @@ -2226,6 +2226,10 @@
->>  			reg = <0x0 0x016c0000 0x0 0x17080>;
->>  			#interconnect-cells = <2>;
->>  			qcom,bcm-voters = <&apps_bcm_voter>;
->> +			clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
->> +				 <&gcc GCC_AGGRE_NOC_QUPV3_AXI_CLK>,
->> +				 <&gcc GCC_AGGRE_USB2_PRIM_AXI_CLK>,
->> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
-> 
-> Your binding said all interconnects have clocks, so please update all of
-> them. Not only three out of 10-or-whatever-in-total-you-have.
-> 
+> +
+>  static unsigned int get_reboot_mode_magic(struct reboot_mode_driver *reb=
+oot,
+>                                           const char *cmd)
+>  {
+> @@ -76,6 +109,15 @@ int reboot_mode_register(struct reboot_mode_driver *r=
+eboot)
+>         size_t len =3D strlen(PREFIX);
+>         int ret;
+>
+> +       reboot->reboot_mode_device =3D device_create(&reboot_mode_class, =
+NULL, 0,
+> +                                                  (void *)reboot, reboot=
+->driver_name);
 
-Thanks Krzysztof!
-Not all interconnects have clocks/MMIO, I will update the bindings as
-you suggested in the fix:
-https://lore.kernel.org/all/20251129094612.16838-2-krzysztof.kozlowski@oss.qualcomm.com/
+You should define a separate struct in this file and pass it as
+drvdata as argument 4. The main reason for using device_create() was
+to not have to store any data associated with the sysfs ABI in a
+separate struct, not in the public one.
 
+> +       if (IS_ERR(reboot->reboot_mode_device)) {
+> +               ret =3D PTR_ERR(reboot->reboot_mode_device);
+> +               reboot->reboot_mode_device =3D NULL;
+> +               return ret;
+> +       }
+> +
+> +       mutex_init(&reboot->reboot_mode_mutex);
 
-Thanks,
-Odelu
+Add a corresponding mutex_destroy() please.
 
-> 
-> Best regards,
-> Krzysztof
+[snip]
 
+> +
+>  MODULE_AUTHOR("Andy Yan <andy.yan@rock-chips.com>");
+>  MODULE_DESCRIPTION("System reboot mode core library");
+>  MODULE_LICENSE("GPL v2");
+> diff --git a/include/linux/reboot-mode.h b/include/linux/reboot-mode.h
+> index 4a2abb38d1d612ec0fdf05eb18c98b210f631b7f..d7141a1a609b62bd3185642ec=
+c1478fdd3555037 100644
+> --- a/include/linux/reboot-mode.h
+> +++ b/include/linux/reboot-mode.h
+> @@ -2,9 +2,15 @@
+>  #ifndef __REBOOT_MODE_H__
+>  #define __REBOOT_MODE_H__
+>
+> +#include <linux/mutex.h>
+> +
+>  struct reboot_mode_driver {
+>         struct device *dev;
+>         struct list_head head;
+> +       const char *driver_name;
+
+I have no idea why you're storing the name here.
+
+As I said above: you should not need to modify this structure (if
+maybe for the mutex if modifications of this struct from existing code
+can race with the sysfs code). Use a separate one for sysfs data.
+
+> +       struct device *reboot_mode_device;
+
+I think you misunderstood my comment about the renaming: what I meant
+was: propose to rename the existing reboot_mode_driver structure to
+reboot_mode_device because this is what it is in reality.
+
+> +       /* protects reboot_mode list */
+> +       struct mutex reboot_mode_mutex;
+>         int (*write)(struct reboot_mode_driver *reboot, unsigned int magi=
+c);
+>         struct notifier_block reboot_notifier;
+>  };
+>
+> --
+> 2.34.1
+>
+
+Bart
 
