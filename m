@@ -1,56 +1,52 @@
-Return-Path: <linux-pm+bounces-39792-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39791-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39FD9CD7189
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 21:38:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC7EFCD717D
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 21:38:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5AFCA30443CD
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 20:37:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E3BCD303A192
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 20:37:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B29D3328E2;
-	Mon, 22 Dec 2025 20:37:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B603328E2;
+	Mon, 22 Dec 2025 20:37:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tQyJgYJZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fN8Q5sLt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8A931C567;
-	Mon, 22 Dec 2025 20:37:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584D631C567;
+	Mon, 22 Dec 2025 20:37:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766435832; cv=none; b=SQ6Ig9I49r4Md0G29FVN3nwRNM+KaZlqahxrMD3VVg4+xMC3NY/bwwq+sMye1WlXlSWFLjaLwtNRwxXt91W99YpeSvntxYwU6GkJ1YGY8D+fCGu2twAJcQy1SGTLOuEVpbaRvMxuIMHdylLKMRiwj5zKNCQQzIl/KuXRu/MsM4s=
+	t=1766435829; cv=none; b=Cy4wwKOkpYjPjYL1pKpycEY1vxxlbPpTuqrZBqgaW0+bn9LcUK5kEinvILJCbcI60aj8hIzf1JgHm+EFr+IAgQeSg+yhl0XDPQZDVHlSxsDPoXRDpvJUb8EWpidFnqF/0EZ1gMbliUZXcyZUjfWU1QCZYL8Gnzj59fhclP6n8uc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766435832; c=relaxed/simple;
-	bh=baWMgIZkHykOT1ScfB8/YYG3UmBK88tHYQ90EaBhlXY=;
+	s=arc-20240116; t=1766435829; c=relaxed/simple;
+	bh=T6XsZ646Iu0fYa3ICrNz3rpt/XYIvTnv5bAAxXrneio=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bMZ/C561NH5WELb8ZGUUCD/Xf7atKbJzrDk9F2bbUeLCUf1L64KnOa1pnO6XoByHTefXJ/6uHCEJqXYARXx5OTyek7RI3CoBdAdFyFLRU3wn3wzfh6mmott2fW+fFF8+QQhiS0cJp2jwIEbFBltBaJRa35orN1uL5eqHrgAmPZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tQyJgYJZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2805C116D0;
-	Mon, 22 Dec 2025 20:37:10 +0000 (UTC)
+	 MIME-Version:Content-Type; b=P0z+AVtHjMC/thwpqO65Gdg3ANBEevwDtkjLu6HENjNE6DdNRtBTZUx1kWGqGHO256sIg6QNzPTnPcnv1sSKHfL5RBkA3Ke5Rtyjm/xfHQF/F6W3Sbbm5odXm5rgrh/UMgMUNh7HKaY5r6t8IB8juJHFW6wfIRmvdG2XvfdFHm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fN8Q5sLt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C25F8C16AAE;
+	Mon, 22 Dec 2025 20:37:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766435832;
-	bh=baWMgIZkHykOT1ScfB8/YYG3UmBK88tHYQ90EaBhlXY=;
+	s=k20201202; t=1766435828;
+	bh=T6XsZ646Iu0fYa3ICrNz3rpt/XYIvTnv5bAAxXrneio=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tQyJgYJZ5iNhWWLNp2uUFisGdSW86mj5oSFYlovUZfWyaxHqAqJcF6IFZTW8M+IBk
-	 srLF7j8sshluG661lbGaqLZlWvbSUh79GP1U2Ow+vZWHG6sa1ZS6rnnWg5lXb1C91U
-	 omWOxo6d8v9MtTw5IuLZPB+WV3nwPccZ8KDTxLyj945Ucujsi5CuFlxB6iDugkLUMj
-	 AL1e+eNkeTHAmfIcrbNUuYRERfpeFXzL2YyhFJel5nsq7sbRgK+6mzjxg0ZL94eX7c
-	 9ySp2LZiC/U9egaNDr3SUF1UZcx5ao+cztEOACORijhaItiIDWWlxLZnBooCxYJhH3
-	 P6+Eqnttwljwg==
+	b=fN8Q5sLt+cJKvG+uO/CqALEKfTJeoPHhqIz6mul4QSklCogKZXaJlN6cUSkn5YLGO
+	 1nQ+t+rct86gXmKr3KcLySuEAwOllzbr0/7G4PKHAMAUAE6rjaGvrYzXDyD88qbfQh
+	 iz2wqY+edrIZmTw0o3B2Gqvr3kAbiCs36MQeYgB52aEIF5qMLiOlXpYpzbGRcY/YIq
+	 mQK+2HdhLDuFhQ5O5R6pw0lN6MrB2VMgxjvQnpamxRzTNequzGWMowRDu86XLtntUt
+	 /8JRO6DXKyvyTA56WbO0RXnvYudsoZs+3DSjbRxslvPywCgMvf+R/ozf9A1buiyP1X
+	 OOF1DOdZDOy0w==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Brian Norris <briannorris@chromium.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
- Bart Van Assche <bvanassche@acm.org>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org
-Subject:
- [PATCH v1 20/23] scsi: ufs: core: Discard pm_runtime_put() return values
-Date: Mon, 22 Dec 2025 21:31:45 +0100
-Message-ID: <2781685.BddDVKsqQX@rafael.j.wysocki>
+ Brian Norris <briannorris@chromium.org>, Vinod Koul <vkoul@kernel.org>,
+ dmaengine@vger.kernel.org
+Subject: [PATCH v1 21/23] dmaengine: sh: Discard pm_runtime_put() return value
+Date: Mon, 22 Dec 2025 21:33:25 +0100
+Message-ID: <9626129.rMLUfLXkoz@rafael.j.wysocki>
 Organization: Linux Kernel Development
 In-Reply-To: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
 References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
@@ -65,20 +61,9 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The ufshcd driver defines ufshcd_rpm_put() to return an int, but that
-return value is never used.  It also passes the return value of
-pm_runtime_put() to the caller which is not very useful.
-
-Returning an error code from pm_runtime_put() merely means that it has
-not queued up a work item to check whether or not the device can be
-suspended and there are many perfectly valid situations in which that
-can happen, like after writing "on" to the devices' runtime PM "control"
-attribute in sysfs for one example.
-
-Modify ufshcd_rpm_put() to discard the pm_runtime_put() return value
-and change its return type to void.
-
-No intentional functional impact.
+Clobbering an error value to be returned from shdma_tx_submit() with
+a pm_runtime_put() return value is not particularly useful, especially
+if the latter is 0, so stop doing that.
 
 This will facilitate a planned change of the pm_runtime_put() return
 type to void in the future.
@@ -96,23 +81,20 @@ Otherwise, an ACK or equivalent will be appreciated, but also the lack
 of specific criticism will be eventually regarded as consent.
 
 ---
- drivers/ufs/core/ufshcd-priv.h |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/dma/sh/shdma-base.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/ufs/core/ufshcd-priv.h
-+++ b/drivers/ufs/core/ufshcd-priv.h
-@@ -341,9 +341,9 @@ static inline int ufshcd_rpm_resume(stru
- 	return pm_runtime_resume(&hba->ufs_device_wlun->sdev_gendev);
- }
+--- a/drivers/dma/sh/shdma-base.c
++++ b/drivers/dma/sh/shdma-base.c
+@@ -143,7 +143,7 @@ static dma_cookie_t shdma_tx_submit(stru
+ 				}
  
--static inline int ufshcd_rpm_put(struct ufs_hba *hba)
-+static inline void ufshcd_rpm_put(struct ufs_hba *hba)
- {
--	return pm_runtime_put(&hba->ufs_device_wlun->sdev_gendev);
-+	pm_runtime_put(&hba->ufs_device_wlun->sdev_gendev);
- }
+ 				schan->pm_state = SHDMA_PM_ESTABLISHED;
+-				ret = pm_runtime_put(schan->dev);
++				pm_runtime_put(schan->dev);
  
- /**
+ 				spin_unlock_irq(&schan->chan_lock);
+ 				return ret;
 
 
 
