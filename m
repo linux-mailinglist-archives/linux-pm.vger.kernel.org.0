@@ -1,80 +1,100 @@
-Return-Path: <linux-pm+bounces-39781-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39782-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D4B9CD6791
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 16:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 23DD0CD6AC7
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 17:36:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D193F30567B1
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 15:03:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 56011302F82E
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Dec 2025 16:36:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F67731ED9F;
-	Mon, 22 Dec 2025 15:03:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E6A3314DB;
+	Mon, 22 Dec 2025 16:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WOoHCwzG"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="k6u4ZwTF";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="LWfUQewl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C353043BE
-	for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 15:03:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922E132E720
+	for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 16:36:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766415808; cv=none; b=Tlu5I4OhCNvkkE+WoJqTpY+NpequxHjUYnTod/+xRQo+Sdl+NEFPxpcBLNIa9+iUrrm2xYoXyLByn4GEUBS51/McfJo1OrMn+l5JjRmimWOnLSbsd3OVGfbsUie6oxW155V4cZTeCie/wuf0fpHePI+PZAkfmljE5igLJH0CKAQ=
+	t=1766421373; cv=none; b=WlEu98K+p3El52QMbTaqXvKBocf9kVBDx2yZch8RaLujTKRb7sUG1pNxRVCBk1yVYJ7Dra/k+9QX/LCVcWrmfFKnjc+CcJ08nEu5OxvYcZwTLWRGalluvx2tLMp9qQd8gDv05L2gWTJ/Z6MbRwCM3jSZAyrf39p5ie1OAodO0jM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766415808; c=relaxed/simple;
-	bh=t4rsFnGUzeD1KMwXT4iUUV1jriowknwgJrrHKVJFd1U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uf0Kf65PHVe6cv6Rz16igM0CM2Do0F14eSYfKyNN8OSR8IalK24zBJSbXcuo+RcNc6R7hHpG1HZFl+8SEnLiZ8p48fynAJ1Asu15zYc+ZToSTNG8dTHku0K3I1j0nQ6zgfuwyXEjYBpkBimdbE3oa3lNx5aHSCYNj6jHE7IhXFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WOoHCwzG; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-47755de027eso23677825e9.0
-        for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 07:03:26 -0800 (PST)
+	s=arc-20240116; t=1766421373; c=relaxed/simple;
+	bh=xsGdQ2XAEufFnmzMMLv3hLxABOefWcNCb772Vo6VRAc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=IprBGjkCcs+mxHhOD2EEmJpsSLFHU+oYrGm9rDkMQRVPay4z2sGM5tef2rfkC3xmPPYiVQbm+CdK1SRDXiilKQikbKxduXUBNX3+UmkDSIFMPH9o2IkF7ddiW2gHOGRDw8QF7ZdqevSVWHQpab+frvyvtA2FNRRucFzy/OT5JcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=k6u4ZwTF; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=LWfUQewl; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BMECVUs1530063
+	for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 16:36:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	wXvx82XWqFm6ITv1sw8wOZgISiDMz2WX+oxaxHkhTJg=; b=k6u4ZwTFheCvfG4L
+	eTXZtWDCPRdgf/LiHWR/fRzgmX45mMv6oX/1uuvg2n19D45eMkmntlt0BHj+IVmh
+	vccwe9DPdXJVBPefbxRod0bKaHnG2nXa1wp2qoJcySd4C5JX4UN+rG0F4xbhkt9/
+	gtmmeRD6v5BtKNyjp+eEdBwssisVkQLD9jP4fCYoNMBdu69Syrde4D/JSUmj7pG4
+	t1M/xtMgizzS06Earw41zHFb7i9yrOFJlLvgAYO9ai2GHfRVsop5sLTe7UsxuFPo
+	SbMljhmSOIEwPOc8QWJeE7J15DUjJx+VDHvz8iCzQdUZvM5QdI0k9xht3NZOawz9
+	6yOGBg==
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b758y0swq-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 16:36:10 +0000 (GMT)
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-34e5a9f0d6aso4070581a91.0
+        for <linux-pm@vger.kernel.org>; Mon, 22 Dec 2025 08:36:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766415805; x=1767020605; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/BovpYoyCqPQI6cHyERY9sM0XnG6cSj0PGe1+XI7CW4=;
-        b=WOoHCwzGZ6bdrRKq4+mJbZErvy050GBq3ODQnyT2b98CYCFzmxsGtrerYm83L3vQ1h
-         nb+ImkQODzhldr1p5CdHJYvqO8TzsbOHtQPfReqTsYSNqUmzO+jdBEt0f9ZURDM0Qe2S
-         EaXHqCyM/q9wI+4z6NKWAe/f+AZ4SdZUdaKf18HFxX0zwKB+mqc3E8tLp8kVML9LVgXH
-         qCX7wOop5DS+/BoiX3g4PtamFhrmHC3FYth8ncqjcq23baT9Qud42aZ0A251mbqBg4R6
-         RKVPLfWLqCJDsd6Tign3NwSWwLVRDtPZltGSK0kNR7pWa/aOHVAURoKyJhCa6f2A9qNX
-         fy5w==
+        d=oss.qualcomm.com; s=google; t=1766421370; x=1767026170; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=wXvx82XWqFm6ITv1sw8wOZgISiDMz2WX+oxaxHkhTJg=;
+        b=LWfUQewlVgXJJTrTi6/viLdjy7PtFNkEAMBfHCsGtbxBgFUbOaQ4ycZjQIxiRbtmKc
+         MAOMNKPrfpZHGPjJx7PwlwUuePV5r4nbk23j6nTh1G3vGTrBUar7ecexqJ0yvneUEfq0
+         +zwnq8GKxLcjP6X3UZOGm0ZSPazLsdlELn84nMRGhYpzY+htAGGDjFQe1RrQ8PVZj4dd
+         thcTpDuzOIOvhSwMizqa89EvEfZ64Ov/IRnSawMr5R6J78z2I3ybSTmb4fnbJIxt5y5A
+         CyeFCDanRedqiJKb9XDfVK2N8GIUtS6nDFE58rSbO334DZlFvD4Gtg+rwCbwkFpz+v8o
+         4IWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766415805; x=1767020605;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/BovpYoyCqPQI6cHyERY9sM0XnG6cSj0PGe1+XI7CW4=;
-        b=XGAzRhxQuNFl0pJRPj5dvCohM5NUDpt9JrEynuO7TL+LK1vFXs0+O3wN08aLUVsfc9
-         iHAV5r/wCgr/9W/ZCj9mSvoz4htahSRko6iYpD1Omg6A7N+4HQkgzLMhE02i3QLnl2eJ
-         t/OjEH0JdBD3T1WKNpVYTVxiFmHdNk+cwT9t9T9FgX6KdGRUtfcrJmlEhgn8ZivIDurh
-         uvNX4vljJbkKVsC1QmjYRYHijZT99z8gV0hUiENndLCVSyTqLCpGdptqo2kOyBbHHNMN
-         EYxycBCJW6Z713tL5m0jP4pvXDBlUf3bxILyLiL+437SfW3YS6ikh5i6mjbeIw+3Mtr/
-         33fQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX+fhT+eYj4/+7/pI+wTgsxBEn0dQwL/bwRKnFOOEtbdweOjLeIpvWDSQIIOS6YEI6SHdeZjXpRuQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZ5M5EQA2tpUmaAW1nuZLjcSeRACEDEuOkGWgdFiAUVBs9pKLe
-	OaqbaOJ+dRr9D4XJn5x+AxaYOyDwRyHucjzvaQTpVgUTkw0dRx4urdu2
-X-Gm-Gg: AY/fxX4/Kr/3rMHdLOr6yvuN+Z1FeaOVQ9SamWeXDu9+bUfO0iwl5Z6JTvBdqB8UT9g
-	Iv0bRVVi+/HLot7rpz9OSyEGeYMZtDLZjymkOg3kexTZF0vAI8q2Ju64cuVfRSPVwWV6yBI93We
-	f5cZCgO41lKTfDG5pe5kAFXECNcP5ZR0sRadEJpZSH/nyCaimdtlyGfqnZK2YtrHF/dYe8/dgrI
-	kgSDp9qKxKExYoiUagK/YotlIA0h8HyIqZLYn1FnSnEilMAYgRT3qjORO3txE7fjOZjTneLjH0r
-	Mk++oYOgQ3EbaP6dkqkTDfze0YYTspm0Af6ABNSd87fmhh7yKbU1HG7tuHhHcGoGDsDv8U6hY+D
-	gd3Yb2xyYeMTny6Gd3oZ0vXGpOhXtD/GW/1XVAN0tJgbRXVY7+gOvgwat055DkQSpz2ouAD+dRx
-	4SqtL74JXxsOR8EXA=
-X-Google-Smtp-Source: AGHT+IFJuusyQ+1Mz3/8tYi1eqLylmqECFtDDXhQgv1q9fY01NTCrKY3AspjaGJTpIOiZ62UGg1d9Q==
-X-Received: by 2002:a05:600c:4fce:b0:47a:935f:61a0 with SMTP id 5b1f17b1804b1-47d194c659emr102417425e9.0.1766415804486;
-        Mon, 22 Dec 2025 07:03:24 -0800 (PST)
-Received: from [192.168.1.27] ([176.74.141.242])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4325dbc522esm11740249f8f.11.2025.12.22.07.03.23
+        d=1e100.net; s=20230601; t=1766421370; x=1767026170;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wXvx82XWqFm6ITv1sw8wOZgISiDMz2WX+oxaxHkhTJg=;
+        b=JMv7GwjqBlnnyt7asGj+/ASFIXr6KgR6LJCdd7/UB+g954ez7v0LIbLDWR+0Rl8Na/
+         QPG4bZV+Ci/VOJoBXvucukUlefOI1qJ/QwpcCMBG7s0nLDJjcf+TDaRwtYshSSkx+kqv
+         rsdEUGE3rUOARBg1J/vDj5MiYdpxvWkxBLekbXE5nSFd4zQXTWYk8qayKfOoOhCM8KyH
+         4HDsrwrJvNFRWDrdUbGvSUSr/Ks0mn8w3oxZ4SXjuw94pN1LbAMIU3USDnUJxJ+Q1Imv
+         srP13Q/FjichEwH318AxdxE3NolLqUK4sgxXmdtCKrhg02qEXC/7X1Ewq34LyeCS0O8L
+         IOEg==
+X-Forwarded-Encrypted: i=1; AJvYcCXtkYyGp67oBEPxpzC3s1BeUxgtVYg5TZi4OvqOq/ea5ipXoD7IgxU0UC8otHAefMs55o1bVR9Bhg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtDhCW4ZVqQKDWwv3jdx+3i4Y7xzNBf8RixdGTPa8pGlsto71q
+	fNOXNR1U+Ck1c337eTwL9wCb/KgH0MVZNOOvhEdiR+gu0gZe3LzRhhL6hbW+dpudZqvNp/cXW4/
+	UwCylj1bsOH4Xh6b0iMVXIQ320QJfY0YljIh15mE9o9rsrWM+f5FxHoeomwUEiw==
+X-Gm-Gg: AY/fxX5eMYQX57or7YLmqcvsvyNPurP+KQWaE1GQnLkVFj3mQjhzYMXR0w7vaBosCGF
+	BF5U24z5c9ZtWsTaEvtrKtsjptWa+QAIXB8RRBNAq8w0YCnOG17Smwyobu8xapwxV8C9o7riHZT
+	3J7AuAAUamt6ZhlPrRRGO0jyTPaQ7mVkAFMNmKrK+yrykQCk7q3gd4jcSEkbA/pdlEoeT3miZAa
+	ONKnMLT+zNL2u0KeXdh2pii1dD555beJUHkOv9grpYXh75WZqt8BosdvisRjo/REXq4oae8y4gy
+	L5pB6sIRNXEwKSE5m8PaDl6UbEusJ9buzAbeZevOyRl+csJlwkC6xT81tx8HByePta9rPxi87CM
+	Z3+SB9z4naWGLV4PMm3lLjx1lHOMkox9rB+hD
+X-Received: by 2002:a17:90b:4c4a:b0:343:3898:e7c9 with SMTP id 98e67ed59e1d1-34e71d6901cmr13686846a91.2.1766421369908;
+        Mon, 22 Dec 2025 08:36:09 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHLpoCnuvbYB6BpdXP+5xmL2PI0Y+WCaNF/uzlKrlfel2GF8nuYzETmHXde3YZjosxkcvRINw==
+X-Received: by 2002:a17:90b:4c4a:b0:343:3898:e7c9 with SMTP id 98e67ed59e1d1-34e71d6901cmr13686820a91.2.1766421369341;
+        Mon, 22 Dec 2025 08:36:09 -0800 (PST)
+Received: from [192.168.1.5] ([27.57.93.98])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e9219f180sm10513551a91.2.2025.12.22.08.36.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Dec 2025 07:03:24 -0800 (PST)
-Message-ID: <86300955-72e4-42d5-892d-f49bdf14441e@gmail.com>
-Date: Mon, 22 Dec 2025 16:03:22 +0100
+        Mon, 22 Dec 2025 08:36:08 -0800 (PST)
+Message-ID: <2c864c13-9fdc-4925-84c4-7b80bec581fb@oss.qualcomm.com>
+Date: Mon, 22 Dec 2025 22:06:03 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,124 +102,117 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 2/2] swsusp: make it possible to hibernate to device
- mapper devices
-To: Askar Safin <safinaskar@gmail.com>, mpatocka@redhat.com
-Cc: Dell.Client.Kernel@dell.com, dm-devel@lists.linux.dev,
- linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org,
- linux-crypto@vger.kernel.org, linux-lvm@lists.linux.dev, linux-mm@kvack.org,
- linux-pm@vger.kernel.org, linux-raid@vger.kernel.org,
- lvm-devel@lists.linux.dev, pavel@ucw.cz, rafael@kernel.org
-References: <b32d0701-4399-9c5d-ecc8-071162df97a7@redhat.com>
- <20251217231837.157443-1-safinaskar@gmail.com>
+Subject: Re: [PATCH] dt-bindings: interconnect: qcom,sa8775p-rpmh: Fix
+ incorrectly added reg and clocks
+To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
+        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251129094612.16838-2-krzysztof.kozlowski@oss.qualcomm.com>
 Content-Language: en-US
-From: Milan Broz <gmazyland@gmail.com>
-Autocrypt: addr=gmazyland@gmail.com; keydata=
- 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
-In-Reply-To: <20251217231837.157443-1-safinaskar@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+In-Reply-To: <20251129094612.16838-2-krzysztof.kozlowski@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=TOdIilla c=1 sm=1 tr=0 ts=6949737a cx=c_pps
+ a=RP+M6JBNLl+fLTcSJhASfg==:117 a=luqpl2TCSyK2LuNNAmtdDg==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=IFhBrfRlIRHtlFGW3SwA:9
+ a=QEXdDO2ut3YA:10 a=iS9zxrgQBfv6-_F4QbHw:22
+X-Proofpoint-ORIG-GUID: FgYP2mTpZB5kdVHhAorXW8woKtTMRci-
+X-Proofpoint-GUID: FgYP2mTpZB5kdVHhAorXW8woKtTMRci-
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIyMDE1MiBTYWx0ZWRfX26qoqIcbOZlD
+ iPYPABVuype41ICmBK4LPDrsOF1ZnQIIdEPDG3Kj6faJs19ALc+WOFgQcHWmpYjerNjeVnfEJ4K
+ 82+G2sgpqETjGhw7i5u9btDe5LyZdcsMvF3p/aVWUbbvZYCMWOLPY6tiSTZlGYNEpD+Z3XGsN7d
+ 4KUEI3qiJqQ0+IFwFm5MEPZH17/C9jeSkUbdrOnML6OafkC2okuxQ4/zOA9xAdP1lmz5+dRKA73
+ /ic8vod3sof86z/9ISQlKeTzPx2agos4YTEfO1odHSknxTnFGxLgtj1fzOr9qlSJImVsCyhg8OQ
+ WtquYZGBp0pyBjdpbRMdlHGRDIqmtKtZwRLqKVM0fzRM7TRpr3FEdGvQivnEe9vrsavlhAu8LSq
+ 8zdeNy/P69CSGO/U86K+BhqlTZMhUy9GhhWewN1oY0i7DkOs3dX4o1vrO7py4HbsLz8jiq+1dqy
+ tVie/MLCNe5FGxQgXNg==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-22_02,2025-12-22_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0 priorityscore=1501
+ clxscore=1015 impostorscore=0 bulkscore=0 suspectscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512220152
 
-On 12/18/25 12:18 AM, Askar Safin wrote:
-> Mikulas Patocka <mpatocka@redhat.com>:
->> Askar Safin requires swap and hibernation on the dm-integrity device mapper
->> target because he needs to protect his data.
-> 
-> Hi, Mikulas, Milan and others.
-> 
-> I'm running swap on dm-integrity for 40 days.
-> 
-> It runs mostly without problems.
-> 
-> But yesterday my screen freezed for 4 minutes. And then continued to work
-> normally.
-> 
-> So, may I ask again a question: is swap on dm-integrity supposed to work
-> at all? (I. e. swap partition on top of dm-integrity partition on top of
-> actual disk partition.) (I'm talking about swap here, not about hibernation.)
 
-Hi,
 
-I am not sure if Mikulas is available; maybe it's better to try again
-in January...
-
-Anyway, my understanding is that all device-mapper targets use mempools,
-which should ensure that they can process even under memory pressure.
-
-AFAIK, swap over a device-mapper target (any target!) with a real block device
-should be ok. The problematic part is stacking over a filesystem (through a loop)
-as Mikulas mentioned.
-
-If I interpret Mikulas' answer correctly, it is the filesystem that could
-allocate memory here, and it deadlocks because of it (as it is swap itself).
-So I believe it can happen with other DM targets too.
-(If I am mistaken, please correct me.)
-
-I wish it could work, but I do not understand kernel details anymore here.
-It seems we are still in "a little walled gardens" communication issues
-among various kernel subsystems, as one of the former maintainers said :-)
-
-But you asked about a real block device, so it should work.
-I guess it is just another bug you see...
-
-Milan
+On 11/29/2025 3:16 PM, Krzysztof Kozlowski wrote:
+> Commit 8a55fbe4c94d ("dt-bindings: interconnect: add reg and clocks
+> properties to enable QoS on sa8775p") claims that all interconnects have
+> clocks and MMIO address space, but that is just not true.  Only few
+> have.  Bindings should restrict properties and should not allow
+> specifying non-existing hardware description, so fix missing constraints
+> for 'reg' and 'clocks'.
 > 
-> Mikulas Patocka said here https://lore.kernel.org/all/3f3d871a-6a86-354f-f83d-a871793a4a47@redhat.com/ :
+> Fixes: 8a55fbe4c94d ("dt-bindings: interconnect: add reg and clocks properties to enable QoS on sa8775p")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> ---
+>  .../interconnect/qcom,sa8775p-rpmh.yaml       | 31 +++++++++++++++++++
+>  1 file changed, 31 insertions(+)
 > 
->> Encrypted swap file is not supposed to work. It uses the loop device that
->> routes the requests to a filesystem and the filesystem needs to allocate
->> memory to process requests.
-> 
->> So, this is what happened to you - the machine runs out of memory, it
->> needs to swap out some pages, dm-crypt encrypts the pages and generates
->> write bios, the write bios are directed to the loop device, the loop
->> device directs them to the filesystem, the filesystem attempts to allocate
->> more memory => deadlock.
-> 
-> Does the same apply to dm-integrity?
-> 
-> I. e. is it possible that write to dm-integrity will lead to allocation?
-> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml
+> index 71428d2cce18..3dbe83e2de3d 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml
+> @@ -74,6 +74,37 @@ allOf:
+>              - description: aggre UFS CARD AXI clock
+>              - description: RPMH CC IPA clock
+>  
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sa8775p-config-noc
+> +              - qcom,sa8775p-dc-noc
+> +              - qcom,sa8775p-gem-noc
+> +              - qcom,sa8775p-gpdsp-anoc
+> +              - qcom,sa8775p-lpass-ag-noc
+> +              - qcom,sa8775p-mmss-noc
+> +              - qcom,sa8775p-nspa-noc
+> +              - qcom,sa8775p-nspb-noc
+> +              - qcom,sa8775p-pcie-anoc
+> +              - qcom,sa8775p-system-noc
+> +    then:
+> +      properties:
+> +        clocks: false
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sa8775p-clk-virt
+> +              - qcom,sa8775p-mc-virt
+> +    then:
+> +      properties:
+> +        reg: false
+> +        clocks: false
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+
+Hi Krzysztof,
+Thanks for fixing this, looks good to me.
+Though I did not face any issue with dt_binding_check, agreed, the
+earlier change was too permissive. Disallowing reg/clocks for the NOCs
+without MMIO/clocks and the virtual providers is the right approach.
+
+As you noted, the previous schema effectively allowed describing
+non-existent resources, and this change ensures such issues are caught
+early by dt_binding_check.
+
+Thanks,
+Odelu
+
 
 
