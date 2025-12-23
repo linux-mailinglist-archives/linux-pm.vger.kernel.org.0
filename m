@@ -1,74 +1,72 @@
-Return-Path: <linux-pm+bounces-39864-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39865-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id C64A8CD9615
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 13:58:03 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03BFECD9624
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 13:59:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 63FD7300905C
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 12:58:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C39923016999
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 12:59:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0D8432C331;
-	Tue, 23 Dec 2025 12:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1ED1330D5D;
+	Tue, 23 Dec 2025 12:59:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HCOptn23"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nsvvg4fI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52D8E328B79
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 12:57:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25D2331235;
+	Tue, 23 Dec 2025 12:59:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766494679; cv=none; b=ncQtONgTAbs1YMms0QOXUHFlijmdccdQooS5UgLqtj6n5RxKv6MLom6/bFhlK4DZmCTxiCtD8yT6nAliD9GrvpgOeYfZdDRjPFJpjlkiDYPFP0vH6ldjSmq5aGKaD+ivi8+W+eouCVGsjyOXqANlzKvRS1MAaT9VvLO2xJT9o8s=
+	t=1766494750; cv=none; b=rtTuZMXucEUM057MU+WwH1EsP2xuk5W51mP3RYg3p5YilfI2blNGFdu8PEtxQuVtPi8s7F45yebgGi6r1O12t0Ks8Tzpvg+9YdGoeTMv/fRy1rn9vCJLoK1LEq511oV2L+vs9titdF2NXgrO3JZM8KZ1KB+/6lBTFYR9DAmsxPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766494679; c=relaxed/simple;
-	bh=u9qpA+aPZVcwGHmGRxvEnqx5ap58NA4sS79B5Z84UgU=;
+	s=arc-20240116; t=1766494750; c=relaxed/simple;
+	bh=F0g3+2uTLV2NYZ/REdMbbdetXLTqblLF0qqtYqdEiCg=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CAjBbTzR8iRiMdhe09yusJdCXPfO6R1c6UzGw9ynyFVzuUmD+NJuObCcJepSSADAFCWzdb+P/rqikLBBRtzdqrLH66nvI+AmbIfFeKvqqYZibP8dXCsyVFmsLLp9M0jDn4pXQwUoxF7aTiRcUSkQhb80NR0WEwpW/TUq17pHxwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HCOptn23; arc=none smtp.client-ip=198.175.65.17
+	 Content-Type:MIME-Version; b=RRawg54Zu30JIMuX70hwsVPfpDOFlaS1vI4abL1h+pPUp7JuZ1kd/GjvCvbqy3D9dc6Ou6Tymx2OB7cePNDNPvtaSFPFyY4N7oK4Pyrd3W4ZFGx+T3H/M3aHvWOVkrmGE9ELyCetmL1l6D/JPsLDE1kYeMOpFcpY/E4PaJgHNqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nsvvg4fI; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766494678; x=1798030678;
+  t=1766494749; x=1798030749;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:content-transfer-encoding:mime-version;
-  bh=u9qpA+aPZVcwGHmGRxvEnqx5ap58NA4sS79B5Z84UgU=;
-  b=HCOptn23yUE4yRxVqvs0yRg7hRjig0B71Mx/EGsbSUTJT4Il7v0rYEBQ
-   F5gaIITflG1TJ/6cHsmMYcQ0YCeFqYIt/743FEzrQmm6c1MtetQg+6BEu
-   EYVcF5a+aorNKpv9dnf9dJ2m93M5SSJDMKHP3Rupbq5Xdj2jDfmepAoZe
-   5DpGzxUT+UVTdKE4/jtYIfTtV70hqxMbDOJyLS4P19vyrlQjl8O46Mk+O
-   HL7cFua3JFDeZp/sRT4lzlhuuc62643Kof5oOSZbrhJmyXefPp1DR3DBr
-   6rMbvv8TgQXSGUsRE5KtuVeOkdq5DrlqSQP4tMwOC/sONmkvIyhDpE0Y1
+  bh=F0g3+2uTLV2NYZ/REdMbbdetXLTqblLF0qqtYqdEiCg=;
+  b=nsvvg4fI+9TGlij7zU1ddcyyU7N7DeKhvU66Rc1cMWecF2TRuGGVfuer
+   MWeVvvyg8oEB9vctGkvWoqpO48Om7EaJWh8IdUnRXcSJTjZsNxkIArnlh
+   qKMCU+hVlGv60oSOZyOKcwwgCj4PSdkmg7WpLR9vhQF1m0gc4irPQwasy
+   KxcqBC3wwRiXEfeRYvq3YK/flGALcoadgQ4VcZjPT0RyoA8AhR/pJMu/g
+   cMCTKYhIaVeqyT84FTzY0Oijo5p5fFh8Mx3oA0OKL9DPIq3+fovaQrVSK
+   kIIXZDosyZtIakCdfiYSw5leLCfAY8gURshSVgswewf9m5X42hxqJA7zw
    Q==;
-X-CSE-ConnectionGUID: 8FGl3UZGTq2IvG4ek/pgWg==
-X-CSE-MsgGUID: 4w8IYu+YQAmyzT8yNpU9JQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="68325790"
-X-IronPort-AV: E=Sophos;i="6.21,170,1763452800"; 
-   d="scan'208";a="68325790"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 04:57:57 -0800
-X-CSE-ConnectionGUID: vlSOfEu5SP6w7K6xnZqY+Q==
-X-CSE-MsgGUID: xQcP33FOSLarT02Hk9ogcg==
+X-CSE-ConnectionGUID: h5pZ+ipOShitmhYoYLpy7A==
+X-CSE-MsgGUID: 2ZHftbnZQnqcZJN/bZbP9w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11635"; a="68280186"
+X-IronPort-AV: E=Sophos;i="6.20,256,1758610800"; 
+   d="scan'208";a="68280186"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 04:59:09 -0800
+X-CSE-ConnectionGUID: HALyF9cmSACtK+lKObQV5Q==
+X-CSE-MsgGUID: Q2j3N71HQ5ygLfzSlpwgKQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,170,1763452800"; 
-   d="scan'208";a="203911783"
-Received: from spandruv-mobl5.amr.corp.intel.com (HELO [10.124.220.160]) ([10.124.220.160])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 04:57:56 -0800
-Message-ID: <cd806f6a752d8138b51cb4aa1943176ac511d210.camel@linux.intel.com>
-Subject: Re: [RESEND, Cc only] RE: [PATCH] thermal: int340x: Fix
- slider_balance param get returning wrong value
+   d="scan'208";a="199443077"
+Received: from dnelso2-mobl.amr.corp.intel.com (HELO [10.124.220.160]) ([10.124.220.160])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 04:59:07 -0800
+Message-ID: <ae43d146993e63dc91a1d764baa099ba7021771a.camel@linux.intel.com>
+Subject: Re: [PATCH] thermal: intel: intel_tcc_cooling: Add CPU models in
+ the support list
 From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: "Kumar, Kaushlendra" <kaushlendra.kumar@intel.com>, "rafael@kernel.org"	
- <rafael@kernel.org>, "daniel.lezcano@linaro.org"
- <daniel.lezcano@linaro.org>,  "Zhang, Rui" <rui.zhang@intel.com>,
- "lukasz.luba@arm.com" <lukasz.luba@arm.com>
-Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Date: Tue, 23 Dec 2025 04:57:55 -0800
-In-Reply-To: <LV3PR11MB876863C45EF9B76B52E16369F5B5A@LV3PR11MB8768.namprd11.prod.outlook.com>
-References: <20251215063347.3521513-1-kaushlendra.kumar@intel.com>
-	 <LV3PR11MB876863C45EF9B76B52E16369F5B5A@LV3PR11MB8768.namprd11.prod.outlook.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: rui.zhang@intel.com, daniel.lezcano@linaro.org,
+ linux-pm@vger.kernel.org, 	linux-kernel@vger.kernel.org
+Date: Tue, 23 Dec 2025 04:59:06 -0800
+In-Reply-To: <CAJZ5v0gbZrbk5fWNF9iAvwfJo1aKBVF52++_s0HicRrKr4V2Zw@mail.gmail.com>
+References: <20251218195150.3872795-1-srinivas.pandruvada@linux.intel.com>
+	 <CAJZ5v0gbZrbk5fWNF9iAvwfJo1aKBVF52++_s0HicRrKr4V2Zw@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
@@ -79,82 +77,55 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, 2025-12-23 at 07:44 +0000, Kumar, Kaushlendra wrote:
-> Adding Cc: srinivas.pandruvada@linux.intel.com
+On Tue, 2025-12-23 at 12:08 +0100, Rafael J. Wysocki wrote:
+> On Thu, Dec 18, 2025 at 8:51=E2=80=AFPM Srinivas Pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> >=20
+> > Add Panther Lake, Wildcat Lake and Nova Lake CPU models in the
+> > support
+> > list.
+> >=20
+> > Signed-off-by: Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com>
+> > ---
+> > =C2=A0drivers/thermal/intel/intel_tcc_cooling.c | 4 ++++
+> > =C2=A01 file changed, 4 insertions(+)
+> >=20
+> > diff --git a/drivers/thermal/intel/intel_tcc_cooling.c
+> > b/drivers/thermal/intel/intel_tcc_cooling.c
+> > index f352ecafbedf..92de161e359a 100644
+> > --- a/drivers/thermal/intel/intel_tcc_cooling.c
+> > +++ b/drivers/thermal/intel/intel_tcc_cooling.c
+> > @@ -65,6 +65,10 @@ static const struct x86_cpu_id tcc_ids[]
+> > __initconst =3D {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 X86_MATCH_VFM(INTEL_RAPTORLA=
+KE, NULL),
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 X86_MATCH_VFM(INTEL_RAPTORLA=
+KE_P, NULL),
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 X86_MATCH_VFM(INTEL_RAPTORLA=
+KE_S, NULL),
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 X86_MATCH_VFM(INTEL_PANTHERLAKE_L=
+, NULL),
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 X86_MATCH_VFM(INTEL_WILDCATLAKE_L=
+, NULL),
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 X86_MATCH_VFM(INTEL_NOVALAKE, NUL=
+L),
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 X86_MATCH_VFM(INTEL_NOVALAKE_L, N=
+ULL),
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 {}
+> > =C2=A0};
+> >=20
+> > --
 >=20
-> No code changes.
+> Applied, but I'm not planning to send pull requests this week and
+> next
+> week, so it may become 6.20 material I'm afraid.
 
-> Original patch:
-> https://lore.kernel.org/all/20251215063347.3521513-1-kaushlendra.kumar@in=
-tel.com/
->=20
-> -----Original Message-----
-> From: Kumar, Kaushlendra <kaushlendra.kumar@intel.com>=20
-> Sent: Monday, December 15, 2025 12:04 PM
-> To: rafael@kernel.org; daniel.lezcano@linaro.org; Zhang, Rui
-> <rui.zhang@intel.com>; lukasz.luba@arm.com
-> Cc: linux-pm@vger.kernel.org; Kumar, Kaushlendra
-> <kaushlendra.kumar@intel.com>
-> Subject: [PATCH] thermal: int340x: Fix slider_balance param get
-> returning wrong value
->=20
-> The slider_def_balance_get() function returns the array value
-> slider_values[SOC_POWER_SLIDER_BALANCE] instead of the actual module
-> parameter slider_balanced_param. This means reading the
-> slider_balance sysfs attribute always shows the default value
-> (0x03) rather than the user-configured value set via module parameter
-> or sysfs write.
->=20
-> Return slider_balanced_param to correctly reflect the current module
-> parameter value.
-
-
-That is the intentional. This shows what is the current value used for
-balance slider.
-
-Setting module parameter is not enough. It needs to be applied by
-changing/updating profile, otherwise there is no way to know what value
-is getting used now.
-
-Once you touched profile you will see the value you set.
-
+Not urgent.
 
 Thanks,
 Srinivas
 
-
-
 >=20
-> Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
-> ---
-> =C2=A0.../intel/int340x_thermal/processor_thermal_soc_slider.c=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 2
-> +-
-> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git
-> a/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.
-> c
-> b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.
-> c
-> index 49ff3bae7271..96307dcb4812 100644
-> ---
-> a/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider.
-> c
-> +++
-> b/drivers/thermal/intel/int340x_thermal/processor_thermal_soc_slider
-> +++ .c
-> @@ -80,7 +80,7 @@ static int slider_def_balance_set(const char *arg,
-> const struct kernel_param *kp=C2=A0 static int slider_def_balance_get(cha=
-r
-> *buf, const struct kernel_param *kp)=C2=A0 {
-> =C2=A0	guard(mutex)(&slider_param_lock);
-> -	return sysfs_emit(buf, "%02x\n",
-> slider_values[SOC_POWER_SLIDER_BALANCE]);
-> +	return sysfs_emit(buf, "%02x\n", slider_balanced_param);
-> =C2=A0}
-> =C2=A0
-> =C2=A0static const struct kernel_param_ops slider_def_balance_ops =3D {
-> --
-> 2.34.1
+> Thanks!
 
