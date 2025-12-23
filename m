@@ -1,87 +1,321 @@
-Return-Path: <linux-pm+bounces-39838-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39839-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A369CD91BE
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 12:28:53 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69E04CD921B
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 12:34:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2D8EB3034A2D
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 11:28:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2881F30562F4
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 11:30:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB28330B29;
-	Tue, 23 Dec 2025 11:28:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E28325731;
+	Tue, 23 Dec 2025 11:30:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KfaVu8by"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="j8jq3KXV";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="D0twWEq8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D886B32ED50;
-	Tue, 23 Dec 2025 11:28:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B70328B79
+	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 11:30:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766489295; cv=none; b=TcW6js1Iw83Xd9c/yKK8Dv4uQBOsBSmM/yuvY3c15n6bDZVTL/LBaJO2PRqj3UWkjKG4zj+4zmmHrDL6PjsvKkMWtjDi/pGYAo9TDdSSAGZdsI4QAgguWAPVQHYnQKyho0Tt+hhJQvCGui80Wz677H6IiXNxL4S4FCpff0mExAU=
+	t=1766489416; cv=none; b=esLKxYJFmZouydME1P1LD0fmLxdnNSt0eh3bgjk9qZVTtMBjIvFJjqwcxEyolPPr+0qlV6/rpus5Bm67GFSKtwOKD5b+fhDlHDcG744dGJoCm4bgYIVM7KMlVjmXi4jCTp9bIuBDlKDJHZx+KsgRYs8wpNhG0eBkd2GYUZ3MXRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766489295; c=relaxed/simple;
-	bh=rdyBmgwaG/qEmPVoOSmwIO0N2ecEQV7lL40s7NnmKi8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=noKZoUoVDQuxdhCBGexjEvCMTGhzloS7VberYzw6tCbW0/dMav8KaKmA1Cy3sC698PBTKEU4kDESZvdBrqfXt7p81aO7WelqhLX/3sbcmvTT2qAGee5jpkqqMV01ooiIHC+MhiPeG/WO6L0vsWJ3FVdnyiiG4a+A5GfoxileOxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KfaVu8by; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41BC6C113D0;
-	Tue, 23 Dec 2025 11:28:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766489295;
-	bh=rdyBmgwaG/qEmPVoOSmwIO0N2ecEQV7lL40s7NnmKi8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=KfaVu8byt0YzmwiPotEf2wnkhAaM52jN3z9YEFRZ+QC2eczG0fH/RYCfQ3w/or04O
-	 WCrOLOhVnXK8TKtMej/aWV1EO1bsh5MoE0a6k+GNYkzVU4wCnF9l4FaD+mpdaUkYng
-	 DBslroDFPUYJiTIJimKyLg5KVUCTc+30wSbgmKp6oF5YeHyhj99bXri10gMiTh81CD
-	 XtRMV0yOwneWtrkznTOZg7a4qlKzQ3YAG00rfKg5Gj2vm4xKHXVYV7JHIMEyYHP8rK
-	 y7UeR6iF/HLG2uG9PINtnjlGymMDCx8ykvxV6qqZaYzx0ym60Z9s+2vckEctwzOhQe
-	 HHNjYDkltA5Dg==
-From: Vinod Koul <vkoul@kernel.org>
-To: Linux PM <linux-pm@vger.kernel.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, 
- Ulf Hansson <ulf.hansson@linaro.org>, 
- Brian Norris <briannorris@chromium.org>
-In-Reply-To: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
-References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
-Subject: Re: (subset) [PATCH v1 00/23] PM: runtime: Convert
- pm_runtime_put() to a void function
-Message-Id: <176648929390.697163.17518732693625217339.b4-ty@kernel.org>
-Date: Tue, 23 Dec 2025 16:58:13 +0530
+	s=arc-20240116; t=1766489416; c=relaxed/simple;
+	bh=6K3WH5J+PM9OjNszbLmNsAZFvGQoPys4pnlF5t7R1dM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ur4kLqbB1+kAZMh2v5ZUzUeIktSdNPbXPZyu5KmQZrvWvMrQRqHsFNtEfABuIuZqFwjhVZ9MvjjuTMJQbpt3PCvYvHn+PX50ZoVUhSkfyw6eMWVqkwcn8DNIN1chXX/mYP5EYVcggO6Jdi/t2WqCzktID+HH6WUPvqJKbVeEUKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=j8jq3KXV; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=D0twWEq8; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BNBRIaK700902
+	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 11:30:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	l0Lqetei9dr/hI31g6G5mWd+5bz73CklWhP+vHw/Ys0=; b=j8jq3KXVcNsbznoU
+	ApakwT3Q8I+7YYMxYjhB8u0gKX8Ue1zwjS9qmn4qy0mCOOUd3ClwxIoVOYvqDg2X
+	Ytfz13gGC7WoaPGJBmRNkIML4g15Pp/kyQt1DpA8aljDoSyX9rTAnEFZzkn0NKdr
+	aiuje8LStTPrW7dtUPIpfLC9Z2dmaBLk6vphugct+2iv/1+dMqizPUgflQ/oHvL1
+	0ilEwa2iokxlO2+JDP+gdub4VHrnnQBTO8x8OViwMQb1jnaBItlAE9bpMeGqMm+k
+	PHLVjjAPBS4WAwtnvkXHaRZEHKQUb2wRfcmblkXbmHsNao7yHt0riGPRczjLbEb4
+	+nRKSg==
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b7t7jr08h-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 11:30:12 +0000 (GMT)
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-7d481452732so9637095b3a.1
+        for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 03:30:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1766489412; x=1767094212; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=l0Lqetei9dr/hI31g6G5mWd+5bz73CklWhP+vHw/Ys0=;
+        b=D0twWEq82uBcSytx06IlG8+PCQCUY17Ug0xR3/j8WYu14N2n8rAMfRIv+aQpO82e73
+         +KzLqfev2DvtI2RhSr9of/rYWARAQaSrkfQ9zCPLOeAz8j5to6D1OJS+EPXq8+fd5TvY
+         LKDiMty7Juu6s5wDj02LJ2XUEH9YJp/HrYspFqH5fF7Eyks1oCrMIKUDrNQDOyNAD4Sn
+         ZkVSdAHWiF2TPOoxOJ3MgQVzluXUvOwmosIG8HqLq2sUAovsI1upscQ9aotYlul4WrQP
+         xTU14hu2B9AKR2d3/q3n/FWW0lE/g4l4lyS0zHroUoqXXUxb8W75262vUvW2OVMU5Ghn
+         LuPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766489412; x=1767094212;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l0Lqetei9dr/hI31g6G5mWd+5bz73CklWhP+vHw/Ys0=;
+        b=POEC1Xj/XM6DPuRwVfAFdgy5+Xj8PFZQTJt6fUNvefJnq+W6x9nAKVe0C+qGSOzDAj
+         M9yLMRPmEclriIrGsGHcLPvkyyRbR1JtjbIK/vldwShU/8r+Q7LtrFWURCJaOCyfIXsr
+         E312Oz4ggBxYD4tCHAGimcxqiDdJWJZMDTcrC5H7LncmX4msd/NjShL93BnmjwvwVUJ/
+         2RnpJNhH5we11/P7oDg+GXsSpSqQ7VQiMDQoIeNW7RU+BpoJ6GMs72KHknBUx4deKZSt
+         iDHcQGXRSy80TnSTT9fXvb5TFmyB+3jRmT0xBDdnw463abZ2zDOC60CV+fjz1X7ZOBzZ
+         m56Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVl4W8LXgQDGO1wrBbKgDLJLXbd/lQSJ76v3EWhUb/Y0ISDUe8cdZgfq4TDMzTkmdmP2f1ptv6qpQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGtGsk0GaE2GwPWS3MXZny01ILxlxc5+IL4ovh/rP6bUXXEf3m
+	Zmfw+TwQFfGka5/wsTh/P0lijLat0n+Sm+jHEKP1MaaexkqBavdlUTRsm+uawWtWcGbfmYvK+Tk
+	OAc0nr2gIjgnYKeog0AQG16p1ED521fihrbrx4mBlHyZUhss08qVJ3ikvpag31A==
+X-Gm-Gg: AY/fxX7sIgmwGebPuzWPQbP2cK9UiLw4/7/+SL1fKkFolQzZzTBCB7LdVqdO9deXUcz
+	x1zD8ImPlDvSZiGtK7sm/YQkX8nimuxKTN4JVEE0xnyvJe9D3MOMqUn/i4lkthqiHx01ewMEPr5
+	+G7wk7ROWMGx6tWa8dEkyTP6fr8IWdJwuUJX7pFufNq7B7PlW3s/KsAFV0Av9GnZKO4N8vuT6wk
+	QuKdQtZFecrdQN5uPC2OFLXUD/SgfgCt40igA5Tn2CmMoVaReuVtVaHOLyD2TuKSwrLCsQj/zqg
+	Go5ZxFIBpbtMleUCxms5K7HQ0Wj18/uDc8a6GW0+LUFeHlmLZ8a/bXxMuCOPBJkWlucU4Dg51HU
+	OGulWlHltGVmBXsSsedlyRlc2gZ7gfqgpnQvQ+JBg
+X-Received: by 2002:a05:6a00:600d:b0:776:1c49:82f8 with SMTP id d2e1a72fcca58-7ff6430cd27mr12237599b3a.8.1766489411548;
+        Tue, 23 Dec 2025 03:30:11 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFPgRFTScyrnuy1YMIv74Qcr9QGHQ+C83VKqALlenEg2gsLjshd5Q1jMu0PAvchpsESt0OLPg==
+X-Received: by 2002:a05:6a00:600d:b0:776:1c49:82f8 with SMTP id d2e1a72fcca58-7ff6430cd27mr12237547b3a.8.1766489410973;
+        Tue, 23 Dec 2025 03:30:10 -0800 (PST)
+Received: from [10.216.39.77] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e7c5307c7sm11847562a12.28.2025.12.23.03.30.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Dec 2025 03:30:10 -0800 (PST)
+Message-ID: <6aa04d1c-ef32-42c0-a2af-c632d69d638e@oss.qualcomm.com>
+Date: Tue, 23 Dec 2025 16:59:58 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V8] dt-bindings: iio/adc: Move QCOM ADC channel
+ definitions out of bindings folder
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: jic23@kernel.org, robh@kernel.org, krzysztof.kozlowski@linaro.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, agross@kernel.org,
+        andersson@kernel.org, lumag@kernel.org,
+        dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
+        daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
+        thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
+        subbaraman.narayanamurthy@oss.qualcomm.com,
+        david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
+        kamal.wadhwa@oss.qualcomm.com, rui.zhang@intel.com,
+        lukasz.luba@arm.com, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        cros-qcom-dts-watchers@chromium.org, quic_kotarake@quicinc.com,
+        neil.armstrong@linaro.org, stephan.gerhold@linaro.org
+References: <20251127133903.208760-1-jishnu.prakash@oss.qualcomm.com>
+ <20251204-calculating-sloth-of-valor-0e30ac@quoll>
+ <7c484433-bb0d-4628-a885-281b971eb0e8@kernel.org>
+Content-Language: en-US
+From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+In-Reply-To: <7c484433-bb0d-4628-a885-281b971eb0e8@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIzMDA5MiBTYWx0ZWRfX1oMsEui3Wyc8
+ ZDl4twMOd358PCMItr7DbukdVLFaedA+29gR8b1F5hpjAK4OXUANPuxYpf79y+Ecy3Yg5VSJ9Tm
+ INrA2rj3L7U6bkycxgzcUjtIuLxFJhTFma7ZXT0KMHvagkn++jde3awDG0OgKiYpTPtcnEaLDVa
+ 5f+yIjfESF+eMS8HnsgTlanrqZQpbmkcHGeGuDvhjtmV9/QXO0ydymDeHVlEdh/oNTimb9EtHvw
+ LzZksLCNYRxTMQ1ES3GtQbztcy2HEkRrAJDYolLzxtRoX6WiP9TW2ACHv3RZ9/uSf8ZF6vMfhQf
+ 6GPh7047JbOpHOELZIzv8LBRj39eOrsj4E4PkNRYNlpu9vjB0bcpaDqpBTv84JR4n8mPYM9IlxY
+ bNFPQh9yXbYEPGduH791Dw1yU3eILcaav62yBSDJlxUewW8cPJVGOUZnNUDZH1UveM0qvgnBNV3
+ po11vKwCyYdQtTGdQoQ==
+X-Authority-Analysis: v=2.4 cv=IvATsb/g c=1 sm=1 tr=0 ts=694a7d44 cx=c_pps
+ a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
+ a=KKAkSRfTAAAA:8 a=4YxtWCXCpLJr31cFxN0A:9 a=QEXdDO2ut3YA:10
+ a=OpyuDcXvxspvyRM73sMx:22 a=TjNXssC_j7lpFel5tvFf:22 a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-GUID: MvHhTBaC7d41ZTMUGD-KPwn2kfsaW_NF
+X-Proofpoint-ORIG-GUID: MvHhTBaC7d41ZTMUGD-KPwn2kfsaW_NF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-23_03,2025-12-22_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 clxscore=1015 bulkscore=0 malwarescore=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512230092
 
+Hi Krzysztof,
 
-On Mon, 22 Dec 2025 20:48:11 +0100, Rafael J. Wysocki wrote:
-> This is something I have had on my todo list for some time, but it is
-> kind of tricky because the return value of pm_runtime_put() is used in
-> some places all over the tree.
+On 12/4/2025 1:25 PM, Krzysztof Kozlowski wrote:
+> On 04/12/2025 08:54, Krzysztof Kozlowski wrote:
+>> On Thu, Nov 27, 2025 at 07:09:03PM +0530, Jishnu Prakash wrote:
+>>> There are several header files containing QCOM ADC macros for channel names
+>>> right now in the include/dt-bindings/iio folder. Since these are hardware
+>>> constants mostly used in devicetree and not exactly bindings, move the
+>>> files to the arch/arm(64)/boot/dts/qcom folders.
+>>>
+>>> Correct the header file paths in all affected devicetree files to fix
+>>> compilation errors seen with this move. Update documentation files
+>>> similarly to fix dtbinding check errors for the same. Make a copy
+>>> of the header file with constants used in ADC driver files in the
+>>> /include/linux/iio/adc folder and update driver files to use this
+>>> path to include it.
+>>>
+>>> Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+>>> ---
+>>> Changes since v7:
+>>> - Based on a discussion with Krzysztof concluded here: 
+>>>   https://lore.kernel.org/all/d10e2eea-4b86-4e1a-b7a0-54c55907a605@oss.qualcomm.com/,
+>>>   moved ADC macro header files to arch/arm(64)/boot/dts/qcom folders. The file
+>>>   include/dt-bindings/iio/qcom,spmi-vadc.h is moved to arch/arm/boot/dts/qcom/
+>>>   as it is used in both arm and arm64 SoCs and other per-PMIC adc7 header files
+>>>   are moved to arch/arm64/boot/dts/qcom.
+>>> - Updated affected devicetree and documentation files based on path changes above.
+>>> - Made a copy of qcom,spmi-vadc.h in /include/linux/iio/adc folder
+>>>   for inclusion in ADC driver files and updated affected driver files to use it.
+>>> - Dropped Acked-by tags from Lee, Rob and Jonathan due to these significant changes
+>>>   made in latest patch version.
+>>> - Updated some more devicetree files affected by this change.
+>>> - Pushing this as a standalone change separate from ADC5 Gen3 series, as that
+>>>   series will no longer depend upon this patch for the location of
+>>>   qcom,spmi-vadc.h, as ADC5 Gen3 macros will be added in separate new files.
+>>> - Link to v7: https://lore.kernel.org/all/20250826083657.4005727-2-jishnu.prakash@oss.qualcomm.com/
+>>>
+>>> Changes since v6:
+>>> - Collected Acked-by tag from Jonathan.
+>>>
+>>> Changes since v5:
+>>> - Updated one more devicetree file requiring this change.
+>>>   Ran full dt_binding_check and dtbs_check and verified that no
+>>>   errors were reported related to this patch.
+>>>
+>>>   Mentioning this explicitly as there was an invalid error reported on
+>>>   this patch in the last two patch series, from upstream kernel
+>>>   automation:
+>>>
+>>>   fatal error: dt-bindings/iio/adc/qcom,spmi-vadc.h: No such file or directory
+>>>
+>>>   The error is invalid as this file does get added in this patch, in
+>>>   previous patch series too.
+>>>
+>>>   Links to discussion for same in v5:
+>>>   https://lore.kernel.org/all/cc328ade-a05e-4b1d-a8f0-55b18b4a0873@oss.qualcomm.com/
+>>>   https://lore.kernel.org/all/9f24e85d-f762-4c29-a58f-ed7652f50919@oss.qualcomm.com/
+>>>
+>>>   Links to discussion for same in v4:
+>>>   https://lore.kernel.org/all/16aaae04-4fe8-4227-9374-0919960a4ca2@quicinc.com/
+>>>
+>>> Changes since v4:
+>>> - Updated some more devicetree files requiring this change.
+>>>
+>>> Changes since v3:
+>>> - Updated files affected by adc file path change in /arch/arm, which
+>>>   were missed earlier. Updated some more new devicetree files requiring
+>>>   this change in /arch/arm64.
+>>>
+>>> Changes since v2:
+>>> - Updated some more new devicetree files requiring this change.
+>>> - Collected Acked-by tags from Rob and Lee.
+>>>
+>>>  .../bindings/iio/adc/qcom,spmi-vadc.yaml      |   4 +-
+>>>  .../bindings/mfd/qcom,spmi-pmic.yaml          |   2 +-
+>>>  .../bindings/thermal/qcom-spmi-adc-tm-hc.yaml |   2 +-
+>>>  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |   6 +-
+>>
+>> You have a checkpatch warning for a reason. You should not make these
+>> combined into one change.
+>>
+>>>  arch/arm/boot/dts/qcom/pm8226.dtsi            |   2 +-
+>>>  arch/arm/boot/dts/qcom/pm8941.dtsi            |   3 +-
+>>>  arch/arm/boot/dts/qcom/pma8084.dtsi           |   2 +-
+>>>  arch/arm/boot/dts/qcom/pmx55.dtsi             |   2 +-
+>>>  .../arm/boot/dts/qcom}/qcom,spmi-vadc.h       |   0
+>>>  arch/arm64/boot/dts/qcom/pm4125.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm6125.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm6150.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm6150l.dtsi         |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm660.dtsi           |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm660l.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm7250b.dtsi         |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm8150.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm8150b.dtsi         |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm8150l.dtsi         |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm8916.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm8937.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm8950.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm8953.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm8994.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pm8998.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pmi632.dtsi          |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pmi8950.dtsi         |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi     |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pmp8074.dtsi         |   2 +-
+>>>  arch/arm64/boot/dts/qcom/pms405.dtsi          |   2 +-
+>>>  .../boot/dts/qcom/qcm6490-fairphone-fp5.dts   |   4 +-
+>>>  .../dts/qcom/qcm6490-particle-tachyon.dts     |   4 +-
+>>>  .../boot/dts/qcom/qcm6490-shift-otter.dts     |   4 +-
+>>>  .../boot/dts/qcom}/qcom,spmi-adc7-pm7325.h    |   2 +-
+>>>  .../boot/dts/qcom}/qcom,spmi-adc7-pm8350.h    |   2 +-
+>>>  .../boot/dts/qcom}/qcom,spmi-adc7-pm8350b.h   |   2 +-
+>>>  .../boot/dts/qcom}/qcom,spmi-adc7-pmk8350.h   |   2 +-
+>>>  .../boot/dts/qcom}/qcom,spmi-adc7-pmr735a.h   |   2 +-
+>>>  .../boot/dts/qcom}/qcom,spmi-adc7-pmr735b.h   |   2 +-
+>>>  .../boot/dts/qcom}/qcom,spmi-adc7-smb139x.h   |   2 +-
+>>>  .../dts/qcom/qcs6490-radxa-dragon-q6a.dts     |   4 +-
+>>>  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts  |   4 +-
+>>>  arch/arm64/boot/dts/qcom/sc7280-idp.dts       |   2 +-
+>>>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |   2 +-
+>>>  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |   4 +-
+>>>  arch/arm64/boot/dts/qcom/sc8180x-pmics.dtsi   |   2 +-
+>>>  .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts |   2 +-
+>>>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |   2 +-
+>>>  .../dts/qcom/sc8280xp-microsoft-blackrock.dts |   2 +-
+>>>  arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi  |   6 +-
+>>>  .../boot/dts/qcom/sm7225-fairphone-fp4.dts    |   2 +-
+>>>  .../boot/dts/qcom/sm7325-nothing-spacewar.dts |   6 +-
+>>>  arch/arm64/boot/dts/qcom/sm8450-hdk.dts       |   9 +-
+>>>  drivers/iio/adc/qcom-spmi-adc5.c              |   3 +-
+>>>  drivers/iio/adc/qcom-spmi-vadc.c              |   3 +-
+>>>  include/linux/iio/adc/qcom,spmi-vadc.h        | 303 ++++++++++++++++++
+>>>  56 files changed, 374 insertions(+), 73 deletions(-)
+>>>  rename {include/dt-bindings/iio => arch/arm/boot/dts/qcom}/qcom,spmi-vadc.h (100%)
+>>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pm7325.h (98%)
+>>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pm8350.h (98%)
+>>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pm8350b.h (99%)
+>>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pmk8350.h (98%)
+>>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pmr735a.h (96%)
+>>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pmr735b.h (96%)
+>>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-smb139x.h (93%)
+>>
+>> Huh, what? How can you drop the header? Are you sure you checked
+>> previous commits, e.g. pinctrl headers, how this should be done? Where
+>> did you see such commit dropping the ABI?
+>>
 > 
-> Nevertheless, I think that it is worth doing because the majority of
-> users of the pm_runtime_put() return value are at least somewhat
-> questionable (in fact, IMV the only legitimate use of it is in the
-> USB core where it is included in a debug message).
+> You too can use search to see how this was done...
 > 
-> [...]
+> https://lore.kernel.org/all/20220605160508.134075-1-krzysztof.kozlowski@linaro.org/
 
-Applied, thanks!
+Thanks for sharing the example. I went through the series fully and
+understand the issue now - to avoid modifying ABI, the preference
+is to copy the header files to required locations, update any
+references to them and mark the older header files as deprecated.
+I'll make and push a similar series for this change.
 
-[21/23] dmaengine: sh: Discard pm_runtime_put() return value
-        commit: b442377c0ea2044a8f50ffa3fe59448f9ed922c9
+Thanks,
+Jishnu
 
-Best regards,
--- 
-~Vinod
-
+> 
+> 
+> Best regards,
+> Krzysztof
 
 
