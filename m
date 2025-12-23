@@ -1,321 +1,236 @@
-Return-Path: <linux-pm+bounces-39839-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39840-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69E04CD921B
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 12:34:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D7F3CD92EA
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 13:13:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2881F30562F4
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 11:30:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 924F83019B6C
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 12:13:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E28325731;
-	Tue, 23 Dec 2025 11:30:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A46543314B7;
+	Tue, 23 Dec 2025 12:13:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="j8jq3KXV";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="D0twWEq8"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="LJ5UtcLZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from CO1PR03CU002.outbound.protection.outlook.com (mail-westus2azon11010035.outbound.protection.outlook.com [52.101.46.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B70328B79
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 11:30:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766489416; cv=none; b=esLKxYJFmZouydME1P1LD0fmLxdnNSt0eh3bgjk9qZVTtMBjIvFJjqwcxEyolPPr+0qlV6/rpus5Bm67GFSKtwOKD5b+fhDlHDcG744dGJoCm4bgYIVM7KMlVjmXi4jCTp9bIuBDlKDJHZx+KsgRYs8wpNhG0eBkd2GYUZ3MXRs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766489416; c=relaxed/simple;
-	bh=6K3WH5J+PM9OjNszbLmNsAZFvGQoPys4pnlF5t7R1dM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ur4kLqbB1+kAZMh2v5ZUzUeIktSdNPbXPZyu5KmQZrvWvMrQRqHsFNtEfABuIuZqFwjhVZ9MvjjuTMJQbpt3PCvYvHn+PX50ZoVUhSkfyw6eMWVqkwcn8DNIN1chXX/mYP5EYVcggO6Jdi/t2WqCzktID+HH6WUPvqJKbVeEUKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=j8jq3KXV; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=D0twWEq8; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BNBRIaK700902
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 11:30:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	l0Lqetei9dr/hI31g6G5mWd+5bz73CklWhP+vHw/Ys0=; b=j8jq3KXVcNsbznoU
-	ApakwT3Q8I+7YYMxYjhB8u0gKX8Ue1zwjS9qmn4qy0mCOOUd3ClwxIoVOYvqDg2X
-	Ytfz13gGC7WoaPGJBmRNkIML4g15Pp/kyQt1DpA8aljDoSyX9rTAnEFZzkn0NKdr
-	aiuje8LStTPrW7dtUPIpfLC9Z2dmaBLk6vphugct+2iv/1+dMqizPUgflQ/oHvL1
-	0ilEwa2iokxlO2+JDP+gdub4VHrnnQBTO8x8OViwMQb1jnaBItlAE9bpMeGqMm+k
-	PHLVjjAPBS4WAwtnvkXHaRZEHKQUb2wRfcmblkXbmHsNao7yHt0riGPRczjLbEb4
-	+nRKSg==
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b7t7jr08h-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 11:30:12 +0000 (GMT)
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-7d481452732so9637095b3a.1
-        for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 03:30:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766489412; x=1767094212; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l0Lqetei9dr/hI31g6G5mWd+5bz73CklWhP+vHw/Ys0=;
-        b=D0twWEq82uBcSytx06IlG8+PCQCUY17Ug0xR3/j8WYu14N2n8rAMfRIv+aQpO82e73
-         +KzLqfev2DvtI2RhSr9of/rYWARAQaSrkfQ9zCPLOeAz8j5to6D1OJS+EPXq8+fd5TvY
-         LKDiMty7Juu6s5wDj02LJ2XUEH9YJp/HrYspFqH5fF7Eyks1oCrMIKUDrNQDOyNAD4Sn
-         ZkVSdAHWiF2TPOoxOJ3MgQVzluXUvOwmosIG8HqLq2sUAovsI1upscQ9aotYlul4WrQP
-         xTU14hu2B9AKR2d3/q3n/FWW0lE/g4l4lyS0zHroUoqXXUxb8W75262vUvW2OVMU5Ghn
-         LuPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766489412; x=1767094212;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l0Lqetei9dr/hI31g6G5mWd+5bz73CklWhP+vHw/Ys0=;
-        b=POEC1Xj/XM6DPuRwVfAFdgy5+Xj8PFZQTJt6fUNvefJnq+W6x9nAKVe0C+qGSOzDAj
-         M9yLMRPmEclriIrGsGHcLPvkyyRbR1JtjbIK/vldwShU/8r+Q7LtrFWURCJaOCyfIXsr
-         E312Oz4ggBxYD4tCHAGimcxqiDdJWJZMDTcrC5H7LncmX4msd/NjShL93BnmjwvwVUJ/
-         2RnpJNhH5we11/P7oDg+GXsSpSqQ7VQiMDQoIeNW7RU+BpoJ6GMs72KHknBUx4deKZSt
-         iDHcQGXRSy80TnSTT9fXvb5TFmyB+3jRmT0xBDdnw463abZ2zDOC60CV+fjz1X7ZOBzZ
-         m56Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVl4W8LXgQDGO1wrBbKgDLJLXbd/lQSJ76v3EWhUb/Y0ISDUe8cdZgfq4TDMzTkmdmP2f1ptv6qpQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGtGsk0GaE2GwPWS3MXZny01ILxlxc5+IL4ovh/rP6bUXXEf3m
-	Zmfw+TwQFfGka5/wsTh/P0lijLat0n+Sm+jHEKP1MaaexkqBavdlUTRsm+uawWtWcGbfmYvK+Tk
-	OAc0nr2gIjgnYKeog0AQG16p1ED521fihrbrx4mBlHyZUhss08qVJ3ikvpag31A==
-X-Gm-Gg: AY/fxX7sIgmwGebPuzWPQbP2cK9UiLw4/7/+SL1fKkFolQzZzTBCB7LdVqdO9deXUcz
-	x1zD8ImPlDvSZiGtK7sm/YQkX8nimuxKTN4JVEE0xnyvJe9D3MOMqUn/i4lkthqiHx01ewMEPr5
-	+G7wk7ROWMGx6tWa8dEkyTP6fr8IWdJwuUJX7pFufNq7B7PlW3s/KsAFV0Av9GnZKO4N8vuT6wk
-	QuKdQtZFecrdQN5uPC2OFLXUD/SgfgCt40igA5Tn2CmMoVaReuVtVaHOLyD2TuKSwrLCsQj/zqg
-	Go5ZxFIBpbtMleUCxms5K7HQ0Wj18/uDc8a6GW0+LUFeHlmLZ8a/bXxMuCOPBJkWlucU4Dg51HU
-	OGulWlHltGVmBXsSsedlyRlc2gZ7gfqgpnQvQ+JBg
-X-Received: by 2002:a05:6a00:600d:b0:776:1c49:82f8 with SMTP id d2e1a72fcca58-7ff6430cd27mr12237599b3a.8.1766489411548;
-        Tue, 23 Dec 2025 03:30:11 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFPgRFTScyrnuy1YMIv74Qcr9QGHQ+C83VKqALlenEg2gsLjshd5Q1jMu0PAvchpsESt0OLPg==
-X-Received: by 2002:a05:6a00:600d:b0:776:1c49:82f8 with SMTP id d2e1a72fcca58-7ff6430cd27mr12237547b3a.8.1766489410973;
-        Tue, 23 Dec 2025 03:30:10 -0800 (PST)
-Received: from [10.216.39.77] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e7c5307c7sm11847562a12.28.2025.12.23.03.30.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Dec 2025 03:30:10 -0800 (PST)
-Message-ID: <6aa04d1c-ef32-42c0-a2af-c632d69d638e@oss.qualcomm.com>
-Date: Tue, 23 Dec 2025 16:59:58 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77CB1F75A6;
+	Tue, 23 Dec 2025 12:13:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.46.35
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766492017; cv=fail; b=vAo6BXtVU/BK5+F68ZGIwBqq7SccMCQwx4YKIGreoe0t/BHaeR8WekxUnPlZdGJYnjuLtQA2YR+a5XPCKf0xK+LPp3PiFgLUR2iNoBK7zbE7TyF8tqEz/Uiy+ziyi1IEHqdOvDTox6eHghYdgH4GQOguv0t54xsFeJ1t1iTXBMs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766492017; c=relaxed/simple;
+	bh=JtTq2VuEX9Q6G3HfDXs22eUUJ6bCi+13EzKNirM8JDE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=P9LlP3Wbj9HnKYksmzgKgGEUCE6EPLyqhWa3sFTFP9WygUiBp9dKKL5DC0eCTsydXTlwOoyRriYUmmmOGDzWl6P7DMyt6q82E0XxMGVrgLKio4mHXDTbAOzEgBHPmh27E2LxnLeJFLtQmMGawhahHD4LS5byaSSXdXIZ6FzrgOU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=LJ5UtcLZ; arc=fail smtp.client-ip=52.101.46.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pqFT6gv7jhR1kaMmNJ48xiJYX46qI08Y9UO1iqSVIDLfzIYmaDyN+CNmMOUcAQ2wsHq6+rkplWI/PBELWN+e5vtmWfR1/4IQ7Au6DMtuDz8cK+D9PksuP2tGhB2Cqwt4JmbnTSKKdcFNxDAzla8RMK9vMs6bf6TFmaph1zFkt28ifFKS/XsXibPlHqrM9O/aFUxQ7J1pFcIXMHATqlwUGVA52kHAdgMmhBuIclsvTGrvU0m0ZCuPs6fla2opuDS0Mi/+wus6s9xITJ2+t8Wz8d3TKaj1U3cYknyisR5cURg2aangTitCv5peF1IhgBuDs9qC1yGwbcbxpKmchuDxnw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PVs1UoDV32Y15tMsSgMRxjeSXPMlY9VSKkuOsdJpc5c=;
+ b=ee5DJDzEhZoFlfNXYPTmMe1wWIEonyZuFM0Co00usOzKVQOmCbrC37vZoLKJvWg4E3ifOZPVYt1zfClhIu0UyiWMhL+0X0Rt/aSR35FKwJzIdsqi1GUBkk5hj1pMvrtmYiVNY990rSV65bvD70IYXkmEA11pQIvi4JMRF7znoOSM8wBEihKnRasa0qGDQOg/tkC5XO4OWtHNvxSPZPfo/GQTg6QWMDhtLdUncwpq2/sq2jnlNwP/9uyHdr80xwpFAY/FJ+wn8L8KhQmEyWHxSnP2ThA+gRYZ5tpLG/INi2I8eQmsQXWlfcmlTbsNG0Ne+7PCkvFpYLitd6/xgC78wA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PVs1UoDV32Y15tMsSgMRxjeSXPMlY9VSKkuOsdJpc5c=;
+ b=LJ5UtcLZkP6Gup9LeFzXjaU2TeaZjGg3zfvoX6YCwzFOv5AmhehBxZo9RR/mzDlmjrIDqXsu4Rpb/hqzZk2bYrRpFgNY2NrmiEQsvR8UAowzsZF6mqiEUvyfC0sgAVAbFlD20tU0ZE6BDzEseYmHdiGry3AmtfEtabTleEL2N5GjKzzo2p98b0OcMcz99fSLR/ABefzw8Rs1oHfNLjni6pcAWFLxBMSYJngTY/AHde3comuViRYRYOpc497MGGpQcP3WHirsHs28vSbZmHJnAOzcYWkZJR3BozZ0/q+sN8ttsb1sQ4xZahJ8LERNCW9p3jJ5KYIrNYOXwTukmM83lA==
+Received: from CY5PR15CA0071.namprd15.prod.outlook.com (2603:10b6:930:18::16)
+ by SN7PR12MB8103.namprd12.prod.outlook.com (2603:10b6:806:355::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.9; Tue, 23 Dec
+ 2025 12:13:31 +0000
+Received: from CY4PEPF0000EE32.namprd05.prod.outlook.com
+ (2603:10b6:930:18:cafe::2e) by CY5PR15CA0071.outlook.office365.com
+ (2603:10b6:930:18::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9456.11 via Frontend Transport; Tue,
+ 23 Dec 2025 12:13:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CY4PEPF0000EE32.mail.protection.outlook.com (10.167.242.38) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9456.9 via Frontend Transport; Tue, 23 Dec 2025 12:13:31 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 23 Dec
+ 2025 04:13:19 -0800
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 23 Dec
+ 2025 04:13:18 -0800
+Received: from sumitg-l4t.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
+ Transport; Tue, 23 Dec 2025 04:13:11 -0800
+From: Sumit Gupta <sumitg@nvidia.com>
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <lenb@kernel.org>,
+	<robert.moore@intel.com>, <corbet@lwn.net>, <pierre.gondois@arm.com>,
+	<zhenglifeng1@huawei.com>, <rdunlap@infradead.org>, <ray.huang@amd.com>,
+	<gautham.shenoy@amd.com>, <mario.limonciello@amd.com>, <perry.yuan@amd.com>,
+	<ionela.voinescu@arm.com>, <zhanjie9@hisilicon.com>,
+	<linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>
+CC: <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
+	<jonathanh@nvidia.com>, <vsethi@nvidia.com>, <ksitaraman@nvidia.com>,
+	<sanjayc@nvidia.com>, <nhartman@nvidia.com>, <bbasu@nvidia.com>,
+	<sumitg@nvidia.com>
+Subject: [PATCH v5 00/11] Enhanced autonomous selection and improvements
+Date: Tue, 23 Dec 2025 17:42:56 +0530
+Message-ID: <20251223121307.711773-1-sumitg@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V8] dt-bindings: iio/adc: Move QCOM ADC channel
- definitions out of bindings folder
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: jic23@kernel.org, robh@kernel.org, krzysztof.kozlowski@linaro.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, agross@kernel.org,
-        andersson@kernel.org, lumag@kernel.org,
-        dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
-        daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
-        thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
-        subbaraman.narayanamurthy@oss.qualcomm.com,
-        david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
-        kamal.wadhwa@oss.qualcomm.com, rui.zhang@intel.com,
-        lukasz.luba@arm.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        cros-qcom-dts-watchers@chromium.org, quic_kotarake@quicinc.com,
-        neil.armstrong@linaro.org, stephan.gerhold@linaro.org
-References: <20251127133903.208760-1-jishnu.prakash@oss.qualcomm.com>
- <20251204-calculating-sloth-of-valor-0e30ac@quoll>
- <7c484433-bb0d-4628-a885-281b971eb0e8@kernel.org>
-Content-Language: en-US
-From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-In-Reply-To: <7c484433-bb0d-4628-a885-281b971eb0e8@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIzMDA5MiBTYWx0ZWRfX1oMsEui3Wyc8
- ZDl4twMOd358PCMItr7DbukdVLFaedA+29gR8b1F5hpjAK4OXUANPuxYpf79y+Ecy3Yg5VSJ9Tm
- INrA2rj3L7U6bkycxgzcUjtIuLxFJhTFma7ZXT0KMHvagkn++jde3awDG0OgKiYpTPtcnEaLDVa
- 5f+yIjfESF+eMS8HnsgTlanrqZQpbmkcHGeGuDvhjtmV9/QXO0ydymDeHVlEdh/oNTimb9EtHvw
- LzZksLCNYRxTMQ1ES3GtQbztcy2HEkRrAJDYolLzxtRoX6WiP9TW2ACHv3RZ9/uSf8ZF6vMfhQf
- 6GPh7047JbOpHOELZIzv8LBRj39eOrsj4E4PkNRYNlpu9vjB0bcpaDqpBTv84JR4n8mPYM9IlxY
- bNFPQh9yXbYEPGduH791Dw1yU3eILcaav62yBSDJlxUewW8cPJVGOUZnNUDZH1UveM0qvgnBNV3
- po11vKwCyYdQtTGdQoQ==
-X-Authority-Analysis: v=2.4 cv=IvATsb/g c=1 sm=1 tr=0 ts=694a7d44 cx=c_pps
- a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=COk6AnOGAAAA:8
- a=KKAkSRfTAAAA:8 a=4YxtWCXCpLJr31cFxN0A:9 a=QEXdDO2ut3YA:10
- a=OpyuDcXvxspvyRM73sMx:22 a=TjNXssC_j7lpFel5tvFf:22 a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-GUID: MvHhTBaC7d41ZTMUGD-KPwn2kfsaW_NF
-X-Proofpoint-ORIG-GUID: MvHhTBaC7d41ZTMUGD-KPwn2kfsaW_NF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-23_03,2025-12-22_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 clxscore=1015 bulkscore=0 malwarescore=0 impostorscore=0
- suspectscore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512230092
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE32:EE_|SN7PR12MB8103:EE_
+X-MS-Office365-Filtering-Correlation-Id: de40b0c9-e1c3-45d3-df21-08de421cb034
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|82310400026|7416014|1800799024|36860700013|13003099007|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?d8GJB2f/eTn3SxEd/Qtdltt9u/321xuxvvrl7QF/oO9cRY0+O4eTAR38X4Ia?=
+ =?us-ascii?Q?R057aSP8uP9AS314CnOsxU8ieTTxzIv/AqO3nyxvzI9AKHdwKzVcfPxwsw0s?=
+ =?us-ascii?Q?9OqyIGU5ZtP0nxRs51/5lAkY0nesnD3KhlZn2aCaWulLb9C4fK+g5ShB8JCo?=
+ =?us-ascii?Q?vJjnacM9GO4FTEA8296CopsI/QykUg/hzVA9Gx094ZlD/LNai+1WpLg2C7Ee?=
+ =?us-ascii?Q?ADz+cWD3BSOFdlIXUmICyruDVtsyByz/xGE9+w1GseHeMiuUEt8PR/Q7ZAeH?=
+ =?us-ascii?Q?sbO6IEXNFlXNk7IFchm21P/1A3w7iC7IRl0IFd8cPdwCy8pDZ/w4/+yLr53s?=
+ =?us-ascii?Q?7zlpMzAnmo10lCCb+L9IjFJeCVmGYR2AivXHvwjm7RJD9P50MN1Z7vNYmXf9?=
+ =?us-ascii?Q?HzlFnTBOPtZeOMWcbjs6DVIeGjzicfEgbSrDs5GSPoA/wWWV79wJ49liz/eQ?=
+ =?us-ascii?Q?wCvDTsyc6mOD+8BKGHcdBlqdWUUNtTh+eeF+Z7qLYsIqwkY1jF7tV6Ah2cbs?=
+ =?us-ascii?Q?u7zxS8wjliXQQJeDx66ISfT6QNasL+jBz/IWGSZMOk5NoGm9LV3TqtD+Hvwx?=
+ =?us-ascii?Q?Sj+SqNnul+9qvqUyQboodu9QWH2skvCQzMhpJFVyKsMGfEpnO2b1FZhBZPEu?=
+ =?us-ascii?Q?q0YlP/O1BlDOfcJXwYMM2iYE9y85yFXeiy/Ziqv9+QgHtvulYadrIsdUnptG?=
+ =?us-ascii?Q?MtAUerq493pvH0t+7EQuLXaXDZtjaDflEYf9mX+pKenOkZwShGFBg5nOtfI0?=
+ =?us-ascii?Q?xfr60NftDg2PZV8UjIth9cdb+2Ipi4uAxICIWGURdPuPD7Ui+27/qFtp6/WU?=
+ =?us-ascii?Q?G9ck8NrotkgayZC9wDuc6c8f3jFHFkULgjEX7w72cuEW+C2B4kR7oinj3/tu?=
+ =?us-ascii?Q?9RhqPokh+F6Q9G4uwWffirtJc/LRxKQGJ/H0FQCqXjy2mggdWBxRZaNDXmit?=
+ =?us-ascii?Q?Sls75ULqqnxJaVpLtLlG5T23w407W3eimGd8q1TW18hLGiKereOkiq9UwntF?=
+ =?us-ascii?Q?rR1lSsANeTVM7+UkVupLdBA3h0DvsfaRSNdX0smf6bBKT1L89ROv7wrkomZb?=
+ =?us-ascii?Q?qe/66PMVz3Jph72PwhqUhQvhJtpEGBwgMkH6lixd4WteBUmKf5i1LRw7MWy0?=
+ =?us-ascii?Q?FTkmr4OhJhkBoOhQx6cXZJVCQCC4I+bGBvYxKlRJNJNMbInkgmiGItS2Y2Ou?=
+ =?us-ascii?Q?aiAM5Vlop3U54LGpnyQglTHf27P5pkiX9dzsoPS+9+p/pW6fDpirgutCXx/F?=
+ =?us-ascii?Q?lmcdPA6nj47IirKB9xGaULtGQz89MUGle4Wu4jfmwpXOfjZ70iaXl6eFTQES?=
+ =?us-ascii?Q?+Ta1eBO5wS0uJheltArkHOEtDIIafbiRzsSk9jM6QCLg16NTiR3YBtpomJu8?=
+ =?us-ascii?Q?WrmMqh6zbOCK32I0pbMkMoRG/0ngUpEoP8uC7fUjht9E+oycN+x8C7LQNnIh?=
+ =?us-ascii?Q?yQKXT6xq0Di1yQ9CdsDoRzIq5j4uokrcKHrpoZl9CWmfArzCu45cLICAUWOz?=
+ =?us-ascii?Q?8yG+2lInyqV10gvL2lndCRzuCR0AGZjw+thOsu2KTHLtXlMy/Qtjwwkw4d/N?=
+ =?us-ascii?Q?8ZJ8wDoQNcrf42cC512dUgevvkRrQ+P0owlC2vqsWun4HSVcbQhSPzQw6KcO?=
+ =?us-ascii?Q?BQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(7416014)(1800799024)(36860700013)(13003099007)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Dec 2025 12:13:31.4860
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: de40b0c9-e1c3-45d3-df21-08de421cb034
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EE32.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8103
 
-Hi Krzysztof,
+This patch series enhances the ACPI CPPC CPUFREQ driver with
+comprehensive support for autonomous performance selection, expanded
+runtime control interfaces and improvements.
 
-On 12/4/2025 1:25 PM, Krzysztof Kozlowski wrote:
-> On 04/12/2025 08:54, Krzysztof Kozlowski wrote:
->> On Thu, Nov 27, 2025 at 07:09:03PM +0530, Jishnu Prakash wrote:
->>> There are several header files containing QCOM ADC macros for channel names
->>> right now in the include/dt-bindings/iio folder. Since these are hardware
->>> constants mostly used in devicetree and not exactly bindings, move the
->>> files to the arch/arm(64)/boot/dts/qcom folders.
->>>
->>> Correct the header file paths in all affected devicetree files to fix
->>> compilation errors seen with this move. Update documentation files
->>> similarly to fix dtbinding check errors for the same. Make a copy
->>> of the header file with constants used in ADC driver files in the
->>> /include/linux/iio/adc folder and update driver files to use this
->>> path to include it.
->>>
->>> Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
->>> ---
->>> Changes since v7:
->>> - Based on a discussion with Krzysztof concluded here: 
->>>   https://lore.kernel.org/all/d10e2eea-4b86-4e1a-b7a0-54c55907a605@oss.qualcomm.com/,
->>>   moved ADC macro header files to arch/arm(64)/boot/dts/qcom folders. The file
->>>   include/dt-bindings/iio/qcom,spmi-vadc.h is moved to arch/arm/boot/dts/qcom/
->>>   as it is used in both arm and arm64 SoCs and other per-PMIC adc7 header files
->>>   are moved to arch/arm64/boot/dts/qcom.
->>> - Updated affected devicetree and documentation files based on path changes above.
->>> - Made a copy of qcom,spmi-vadc.h in /include/linux/iio/adc folder
->>>   for inclusion in ADC driver files and updated affected driver files to use it.
->>> - Dropped Acked-by tags from Lee, Rob and Jonathan due to these significant changes
->>>   made in latest patch version.
->>> - Updated some more devicetree files affected by this change.
->>> - Pushing this as a standalone change separate from ADC5 Gen3 series, as that
->>>   series will no longer depend upon this patch for the location of
->>>   qcom,spmi-vadc.h, as ADC5 Gen3 macros will be added in separate new files.
->>> - Link to v7: https://lore.kernel.org/all/20250826083657.4005727-2-jishnu.prakash@oss.qualcomm.com/
->>>
->>> Changes since v6:
->>> - Collected Acked-by tag from Jonathan.
->>>
->>> Changes since v5:
->>> - Updated one more devicetree file requiring this change.
->>>   Ran full dt_binding_check and dtbs_check and verified that no
->>>   errors were reported related to this patch.
->>>
->>>   Mentioning this explicitly as there was an invalid error reported on
->>>   this patch in the last two patch series, from upstream kernel
->>>   automation:
->>>
->>>   fatal error: dt-bindings/iio/adc/qcom,spmi-vadc.h: No such file or directory
->>>
->>>   The error is invalid as this file does get added in this patch, in
->>>   previous patch series too.
->>>
->>>   Links to discussion for same in v5:
->>>   https://lore.kernel.org/all/cc328ade-a05e-4b1d-a8f0-55b18b4a0873@oss.qualcomm.com/
->>>   https://lore.kernel.org/all/9f24e85d-f762-4c29-a58f-ed7652f50919@oss.qualcomm.com/
->>>
->>>   Links to discussion for same in v4:
->>>   https://lore.kernel.org/all/16aaae04-4fe8-4227-9374-0919960a4ca2@quicinc.com/
->>>
->>> Changes since v4:
->>> - Updated some more devicetree files requiring this change.
->>>
->>> Changes since v3:
->>> - Updated files affected by adc file path change in /arch/arm, which
->>>   were missed earlier. Updated some more new devicetree files requiring
->>>   this change in /arch/arm64.
->>>
->>> Changes since v2:
->>> - Updated some more new devicetree files requiring this change.
->>> - Collected Acked-by tags from Rob and Lee.
->>>
->>>  .../bindings/iio/adc/qcom,spmi-vadc.yaml      |   4 +-
->>>  .../bindings/mfd/qcom,spmi-pmic.yaml          |   2 +-
->>>  .../bindings/thermal/qcom-spmi-adc-tm-hc.yaml |   2 +-
->>>  .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |   6 +-
->>
->> You have a checkpatch warning for a reason. You should not make these
->> combined into one change.
->>
->>>  arch/arm/boot/dts/qcom/pm8226.dtsi            |   2 +-
->>>  arch/arm/boot/dts/qcom/pm8941.dtsi            |   3 +-
->>>  arch/arm/boot/dts/qcom/pma8084.dtsi           |   2 +-
->>>  arch/arm/boot/dts/qcom/pmx55.dtsi             |   2 +-
->>>  .../arm/boot/dts/qcom}/qcom,spmi-vadc.h       |   0
->>>  arch/arm64/boot/dts/qcom/pm4125.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm6125.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm6150.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm6150l.dtsi         |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm660.dtsi           |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm660l.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm7250b.dtsi         |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm8150.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm8150b.dtsi         |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm8150l.dtsi         |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm8916.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm8937.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm8950.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm8953.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm8994.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pm8998.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pmi632.dtsi          |   2 +-
->>>  arch/arm64/boot/dts/qcom/pmi8950.dtsi         |   2 +-
->>>  arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi     |   2 +-
->>>  arch/arm64/boot/dts/qcom/pmp8074.dtsi         |   2 +-
->>>  arch/arm64/boot/dts/qcom/pms405.dtsi          |   2 +-
->>>  .../boot/dts/qcom/qcm6490-fairphone-fp5.dts   |   4 +-
->>>  .../dts/qcom/qcm6490-particle-tachyon.dts     |   4 +-
->>>  .../boot/dts/qcom/qcm6490-shift-otter.dts     |   4 +-
->>>  .../boot/dts/qcom}/qcom,spmi-adc7-pm7325.h    |   2 +-
->>>  .../boot/dts/qcom}/qcom,spmi-adc7-pm8350.h    |   2 +-
->>>  .../boot/dts/qcom}/qcom,spmi-adc7-pm8350b.h   |   2 +-
->>>  .../boot/dts/qcom}/qcom,spmi-adc7-pmk8350.h   |   2 +-
->>>  .../boot/dts/qcom}/qcom,spmi-adc7-pmr735a.h   |   2 +-
->>>  .../boot/dts/qcom}/qcom,spmi-adc7-pmr735b.h   |   2 +-
->>>  .../boot/dts/qcom}/qcom,spmi-adc7-smb139x.h   |   2 +-
->>>  .../dts/qcom/qcs6490-radxa-dragon-q6a.dts     |   4 +-
->>>  arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts  |   4 +-
->>>  arch/arm64/boot/dts/qcom/sc7280-idp.dts       |   2 +-
->>>  arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |   2 +-
->>>  arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |   4 +-
->>>  arch/arm64/boot/dts/qcom/sc8180x-pmics.dtsi   |   2 +-
->>>  .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts |   2 +-
->>>  .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |   2 +-
->>>  .../dts/qcom/sc8280xp-microsoft-blackrock.dts |   2 +-
->>>  arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi  |   6 +-
->>>  .../boot/dts/qcom/sm7225-fairphone-fp4.dts    |   2 +-
->>>  .../boot/dts/qcom/sm7325-nothing-spacewar.dts |   6 +-
->>>  arch/arm64/boot/dts/qcom/sm8450-hdk.dts       |   9 +-
->>>  drivers/iio/adc/qcom-spmi-adc5.c              |   3 +-
->>>  drivers/iio/adc/qcom-spmi-vadc.c              |   3 +-
->>>  include/linux/iio/adc/qcom,spmi-vadc.h        | 303 ++++++++++++++++++
->>>  56 files changed, 374 insertions(+), 73 deletions(-)
->>>  rename {include/dt-bindings/iio => arch/arm/boot/dts/qcom}/qcom,spmi-vadc.h (100%)
->>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pm7325.h (98%)
->>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pm8350.h (98%)
->>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pm8350b.h (99%)
->>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pmk8350.h (98%)
->>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pmr735a.h (96%)
->>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-pmr735b.h (96%)
->>>  rename {include/dt-bindings/iio => arch/arm64/boot/dts/qcom}/qcom,spmi-adc7-smb139x.h (93%)
->>
->> Huh, what? How can you drop the header? Are you sure you checked
->> previous commits, e.g. pinctrl headers, how this should be done? Where
->> did you see such commit dropping the ABI?
->>
-> 
-> You too can use search to see how this was done...
-> 
-> https://lore.kernel.org/all/20220605160508.134075-1-krzysztof.kozlowski@linaro.org/
+CPPC autonomous mode (auto_sel) enables hardware-driven CPU performance
+scaling using Energy Performance Preference (EPP) hints, without OS
+governor intervention. Currently, there's limited runtime control and
+visibility into CPPC performance registers when using autonomous mode.
 
-Thanks for sharing the example. I went through the series fully and
-understand the issue now - to avoid modifying ABI, the preference
-is to copy the header files to required locations, update any
-references to them and mark the older header files as deprecated.
-I'll make and push a similar series for this change.
+This series addresses these gaps by:
+1. Exposing min_perf/max_perf registers via sysfs (as frequency in kHz)
+   to allow fine-grained performance bounds control in autonomous mode.
+2. Exposing perf_limited register to detect and clear throttling events.
+3. Keeping policy limits synchronized with hardware registers to ensure
+   consistent behavior between HW state and userspace view.
+4. Providing boot parameter for system-wide autonomous mode enablement.
 
-Thanks,
-Jishnu
+It also includes code improvements: generic sysfs helpers, struct
+cleanup, new APIs for reading performance controls, and extended
+epp_perf support.
 
-> 
-> 
-> Best regards,
-> Krzysztof
+The patches are grouped as below:
+- Patch 1: Generic sysfs helpers. Refactoring, independent.
+- Patch 2, 3 & 4: Improvements. Can be applied independently.
+- Patch 5: ACPI APIs and sysfs for min/max_perf. Independent.
+- Patch 6: ACPI APIs and sysfs for perf_limited. Independent.
+- Patch 7: Add ABI documentation. Depends on Patch 5 and 6.
+- Patch 8: Sync policy when min/max_perf updated. Depends on Patch 5.
+- Patch 9: Sync policy when toggling auto_select. Depends on Patch 8.
+- Patch 10: Make scaling_min/max_freq read-only. Depends on Patch 9.
+- Patch 11: Boot parameter support. Depends on Patch 9.
+
+Patches 1-7 can be applied first if they are Ok.
+
+---
+v4[4] -> v5:
+- patch2: new patch to clean up cppc_perf_caps and cppc_perf_ctrls.
+- patch3: moved cppc_get_perf() call from v4's patch8 to here.
+- patch5: fix ABI documentation format (kernel test robot report).
+- patch6: update perf_limited logic to only allow clearing set bits.
+- patch8: new patch to sync policy limits when updating min/max_perf,
+  update_policy parameter moved from v4's patch5.
+- patch9: refactored from v4's patch7, added update_reg parameter,
+  handle -EOPNOTSUPP for auto_sel (platforms with fixed auto_sel).
+- patch10: new to make scaling_min/max_freq read-only in auto_sel mode.
+- patch11 (v4's patch8): moved boot param handling to cpu_init,
+  handle -EOPNOTSUPP for EPP (platforms without EPP support).
+- general code improvements, kernel-doc updates, reduced redundancies.
+
+[4] has detailed changelog of previous versions.
+
+Sumit Gupta (11):
+  cpufreq: CPPC: Add generic helpers for sysfs show/store
+  ACPI: CPPC: Clean up cppc_perf_caps and cppc_perf_ctrls structs
+  ACPI: CPPC: Add cppc_get_perf() API to read performance controls
+  ACPI: CPPC: Extend cppc_set_epp_perf() to support auto_sel and epp
+  ACPI: CPPC: add APIs and sysfs interface for min/max_perf
+  ACPI: CPPC: add APIs and sysfs interface for perf_limited
+  cpufreq: CPPC: Add sysfs for min/max_perf and perf_limited
+  cpufreq: CPPC: sync policy limits when updating min/max_perf
+  cpufreq: CPPC: sync policy limits when toggling auto_select
+  cpufreq: CPPC: make scaling_min/max_freq read-only when auto_sel
+    enabled
+  cpufreq: CPPC: add autonomous mode boot parameter support
+
+ .../ABI/testing/sysfs-devices-system-cpu      |  42 ++
+ .../admin-guide/kernel-parameters.txt         |  13 +
+ drivers/acpi/cppc_acpi.c                      | 214 ++++++++-
+ drivers/cpufreq/cppc_cpufreq.c                | 434 ++++++++++++++++--
+ include/acpi/cppc_acpi.h                      |  46 +-
+ 5 files changed, 712 insertions(+), 37 deletions(-)
+
+[1] https://lore.kernel.org/lkml/20250211103737.447704-1-sumitg@nvidia.com/
+[2] https://lore.kernel.org/lkml/20250823200121.1320197-1-sumitg@nvidia.com/
+[3] https://lore.kernel.org/lkml/20251001150104.1275188-1-sumitg@nvidia.com/
+[4] https://lore.kernel.org/lkml/20251105113844.4086250-1-sumitg@nvidia.com/
+
+-- 
+2.34.1
 
 
