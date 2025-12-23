@@ -1,121 +1,159 @@
-Return-Path: <linux-pm+bounces-39867-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39868-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F11DECD96E6
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 14:24:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C77EECD970A
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 14:32:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B31CF3012BF0
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 13:24:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8D1B63012763
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 13:32:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB78832C958;
-	Tue, 23 Dec 2025 13:24:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E60E33F36D;
+	Tue, 23 Dec 2025 13:32:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WR4c+2lF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tsX+elyp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC09018FC80
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 13:24:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 694B01A9F85;
+	Tue, 23 Dec 2025 13:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766496282; cv=none; b=dtSvLFLPu6ZvluktH5+8txXG3VdisuclUkEESeicjaqtvh9xkooS8KsE+/UaGFIEJmlweyIS06rE+PAn2WiVXrTqF5xJxZENNCBDRXzd+abYIYkfbYM+Ncb/+M48Vzo4LvrkO3KbxYiB3Ap9VwyUFKQnpHhQJMqx2zwaowIv/6I=
+	t=1766496755; cv=none; b=O9DZD4cOxuBG2+5mNUsc0UuP60C4u8t7z/pLwA103npfWEOuQ0o6qx7CoY3lFfMISCzSqQpZUXcAYkexIK8NwyPmqAgZTeABK/obMUpHDDiKi3+/p5pBOabtQyL6P6JpYMqdkDQhH7TPJh8Kvi+otiC1ylxK+AQjUpO5xFbyEw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766496282; c=relaxed/simple;
-	bh=gK9OawX9wp4zO4hKWlRpOJAObUdBEBomXpLLHsqO6C0=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=W0Ps7qxC4hNLQXTjxuXdRKcbXVBTuzId6CNVy8R1lWtk7KEE0BxfeLnIqZsJKgGn+EvL3noj/MMd+yfDKAceVFZsJqHLXtVvn2d/bsjo5LhJZ1pL0iqD3+kPcz0mpvbDsMEjKO+FbNn4lzipFa8nZWkTnWclxFiDx1OWFVWzuZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WR4c+2lF; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Content-Type: text/plain;
-	charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1766496279;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3r1HPM/unsvbZO56nnrxtWQoJMqJCpBYI94PYL6ZtxE=;
-	b=WR4c+2lFfIvdQb40t3rqkRZbRVQGzmv2O/DGz42S+WeOy/C7BMPSRD8LGd4OUpLlXkHQOG
-	RmRIyXrgaVby+zIWi4R8quuKfGmdZEWCkgjpIVuWGrmxxqHm+umC7ihTW/b1/9l5Eu4i0j
-	U/+kK+MaHGfqQWIJkCNZmgYjkW7xCMM=
+	s=arc-20240116; t=1766496755; c=relaxed/simple;
+	bh=xbt9uegKH0QnNNxNVuyDChxCTc/MnbUT0LpZPpYj1po=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=emmfS7CxAm6FjEw1IZZfXb3MgcLDfYH1zmF/gcUV2DzMO50oKpHTOxlKRu/tnPvcyQP35MN92xMWCFu9awcu8nq70E3vO6knAbdgJozbUYpmuH3NwQdGRqbzbXBrC2pbQo1u6zrGKXE71WZqtM5M+/fB+3hq4Y5v15SRZzPXSiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tsX+elyp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE05C113D0;
+	Tue, 23 Dec 2025 13:32:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766496754;
+	bh=xbt9uegKH0QnNNxNVuyDChxCTc/MnbUT0LpZPpYj1po=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=tsX+elypj/hcJ7YpsHnJrxshuDSNi4bG3RAvK5wBIPQZJH1tak151baA3vKZDut+u
+	 kDvLkeeFUrrOC0PJuLX6jVkoSF6oPV9NgjRyFcksn2rzKVuFTT5ctSPJYRTQQJxKX9
+	 Zw60jNdVb7HLc7Y9y4Jb3lILntG5slQJA8Gxsg5RExuspURxBk919xqBcQXRIOxvPV
+	 4C39mqSw4bXe9ZmcsqXXf1n+u2DBjn7M9S2KolaN1wqhHDsVT3oSCrQCCf4fyrtj1L
+	 Zybb6+FaAjlgJe/emkTEw9VwixbGjISutLKqKXpawszu0a9yeHhTuo6fvOSaGx8Zg5
+	 1NYO9ar5YMZmw==
+Message-ID: <3d156c45-b55d-4ca4-95d6-0d06e067bbdb@kernel.org>
+Date: Tue, 23 Dec 2025 14:32:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81.1.4\))
-Subject: Re: [PATCH] cpufreq: amd_freq_sensitivity: Fix sensitivity clamping
- in amd_powersave_bias_target
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Thorsten Blum <thorsten.blum@linux.dev>
-In-Reply-To: <3F396FA4-8DB6-451E-BF58-02646808FC3B@linux.dev>
-Date: Tue, 23 Dec 2025 14:23:01 +0100
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Thomas Renninger <trenn@suse.de>,
- Borislav Petkov <bp@suse.de>,
- Jacob Shin <jacob.shin@amd.com>,
- stable@vger.kernel.org,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/5] dt-bindings: mfd: maxim,max77759: add charger
+ child node
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+References: <20251218-max77759-charger-v2-0-2b259980a686@google.com>
+ <20251218-max77759-charger-v2-1-2b259980a686@google.com>
+ <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <D681EEAF-A449-4464-80B1-D5B73E53B042@linux.dev>
-References: <20251202124427.418165-2-thorsten.blum@linux.dev>
- <20251202190904.27c9bc06@pumpkin>
- <3F396FA4-8DB6-451E-BF58-02646808FC3B@linux.dev>
-To: David Laight <david.laight.linux@gmail.com>
-X-Migadu-Flow: FLOW_OUT
 
-On 19. Dec 2025, at 16:55, Thorsten Blum wrote:
-> On 2. Dec 2025, at 20:09, David Laight wrote:
->> On Tue,  2 Dec 2025 13:44:28 +0100
->> Thorsten Blum <thorsten.blum@linux.dev> wrote:
->> 
->>> The local variable 'sensitivity' was never clamped to 0 or
->>> POWERSAVE_BIAS_MAX because the return value of clamp() was not used. Fix
->>> this by assigning the clamped value back to 'sensitivity'.
->> 
->> This actually makes no difference
->> (assuming od_tuners->powersave_bias <= POWERSAVE_BIAS_MAX).
->> The only use of 'sensitivity' is the test at the end of the diff.
->> 
->> So I think you could just delete the line.
+On 19/12/2025 09:17, Krzysztof Kozlowski wrote:
+> On 18/12/2025 23:49, Amit Sunil Dhamne via B4 Relay wrote:
+>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>
+>> The Maxim MAX77759 MFD includes a charger function. Extend the max77759
+>> binding to include the charger. Also, update the example to include
+>> charger.
+>>
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> ---
+>>  .../devicetree/bindings/mfd/maxim,max77759.yaml    | 33 ++++++++++++++++++++++
+>>  1 file changed, 33 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>> index 525de9ab3c2b..1cffdf2e5776 100644
+>> --- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>> @@ -37,6 +37,30 @@ properties:
+>>    nvmem-0:
+>>      $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
+>>  
+>> +  charger:
+>> +    type: object
+>> +    description: This is a dual input switch mode battery charger for portable
+>> +      applications. It supports wired and wireless charging and can operate in
+>> +      buck and boost mode.
+>> +
 > 
-> The local variable 'sensitivity' is an 'int', while '->powersave_bias'
-> is an 'unsigned int'. If 'sensitivity' were ever negative, it would be
-> converted to an 'unsigned int', producing an incorrect result. That's
-> probably what the clamping was meant to prevent.
 > 
-> However, calculating 'sensitivity' can be simplified from:
+> I do not see any improvements, so same comment: this should be folded
+> into the parent.
 > 
-> 	sensitivity = POWERSAVE_BIAS_MAX -
-> 		(POWERSAVE_BIAS_MAX * (d_reference - d_actual) / d_reference);
+> Please read DTS 101 slides or writing bindings or any other talks...
 > 
-> to:
-> 
-> 	sensitivity = POWERSAVE_BIAS_MAX * d_actual / d_reference;
-> 
-> which makes it clearer that, in practice, 'sensitivity' is never
-> negative. How about simplifying the formula as above, changing
-> 'sensitivity' to 'unsigned int', and removing the clamping?
 
-Hm, changing the formula could alter the integer arithmetic, potentially
-producing slightly different results, and might even overflow.
+No responses to my emails for a few days, so I assume discussion is done
+and I mark it as changes requested in patchwork.
 
-I guess we should keep the formula as is and either defensively clamp
-'sensitivity', as originally intended, or just remove the line (since
-this seems to have been working since 2013 and as suggested by David).
-
-I'm slightly in favor of clamping the value because the assumptions
-aren't obvious to me.
-
-Any preferences or other suggestions?
-
-Thanks,
-Thorsten
-
+Best regards,
+Krzysztof
 
