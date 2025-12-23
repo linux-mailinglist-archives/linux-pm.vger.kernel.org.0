@@ -1,90 +1,286 @@
-Return-Path: <linux-pm+bounces-39871-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39872-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F01CD9CAC
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 16:37:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E76D4CD9E06
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 16:58:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 65B5E3008057
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 15:36:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BB2D53014ACD
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 15:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3DF73502B8;
-	Tue, 23 Dec 2025 15:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="4BObmR1z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50BD926158B;
+	Tue, 23 Dec 2025 15:58:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D2373502B4;
-	Tue, 23 Dec 2025 15:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33D5C1DA62E
+	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 15:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766503797; cv=none; b=K4/keehlhtKqkNlmuNVGqCxx7VyNjVerzTDJ7ikLfd7VPNjgstfUDhOPppCKY20Mbp93RDf+0Qzig479aM/lCZKmAmyIa1qDlpm7tNxtZPd/45Z8uJ7iWV0GTudkW0yqVixRm/Z1f8OD0DlRrMfAC0+2V2Yxztn9JSpT+/rJblc=
+	t=1766505494; cv=none; b=H45qqpQl4j8aEmXwHb5UZGp1jIPw4ekjaJYK4fuxlnLq9rwZXm3Zqi2bPfNlZvFDc+oHvybJFOInR+NWaa3QLFTjyR4Ikw6v3SH/T+bYCJCSBarbIX8drUO/8hnPb3g03qbckCel/emOEdpYtLHJt/B9V/l+6PXBMH78SohVGfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766503797; c=relaxed/simple;
-	bh=+glxbiWBpZRqAPrD3N7LiX7llCM/ySgT5zAKvFSZoi4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Hh9IIawnAic8B0QdqDYeZdDSt8eWMpxll2VrnwG3cPQsfhYuTwGhW8qrVmWusrvfqjkzFQbyYJ6QNueSeJFSEnMtbVFC636GhasNCzYFdcV2DRxEsSviokqALbJr75cGOV5iRMySn1g5oODMbqHvyrOXm8GyPJKFQB2M7byFKQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=4BObmR1z; arc=none smtp.client-ip=199.89.1.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4dbJpj2DpBzlskkV;
-	Tue, 23 Dec 2025 15:29:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1766503787; x=1769095788; bh=eyHzFGrQcYn1KFN3S/LI+LqU
-	UXYAcKhjjmnMGus/zfI=; b=4BObmR1zt9sVHnVIFuQvoV17ZdcGC1TCxUxH2trG
-	3416ZKIfht7Da4t4D3+s2rEZKOk/hLPskQMHsWYZI98Dx9OsqSHeBu2ty656U+wV
-	EGg0/jdv1/8pcS7zH2pozrv3e/jZppGjDBm6d45jydRTVZPc/qGAxqm0ePHAkJUl
-	ST4hFm14VTduWqr65X09tjt1QR8E7WZ0FYnRv5p+JTVG9DtP8+m4TFTsaE9y2B9Y
-	WlS+Z7+9Z45c6RPsxwLc1cb+F8LXQ//1D4HqJR33J/JiL7q/w9rpGg/VZtv8Ha+/
-	CfTztcOzOvn1B8zveHRanbm6ds2XJ2afxoCZ59Yp3t8lWw==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id tyWs604suY3A; Tue, 23 Dec 2025 15:29:47 +0000 (UTC)
-Received: from [172.16.2.244] (92-71-251-62.biz.kpn.net [92.71.251.62])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4dbJpZ6J4Kzlsb49;
-	Tue, 23 Dec 2025 15:29:42 +0000 (UTC)
-Message-ID: <bade326b-f32b-4e90-aa2f-af7db26c4461@acm.org>
-Date: Tue, 23 Dec 2025 16:29:39 +0100
+	s=arc-20240116; t=1766505494; c=relaxed/simple;
+	bh=vKrMLCPSbh8gD+JQJgLtluOE/5j4TJNl/B3XS7owfW4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OeMkfumivTIplMolFyDDBCzjmqIZZpthpZTPchKGGbqWlSPSM22vHtmIejYcuMMQG0nE8cK/Yfqyh7A3euEIvP8VXXOdut5i14gZ7Zfa6Legz6MlLudRhHpNRCuNcp78Pv0xeWJLHvCrqSjXIfKf0rrSPaKU+uiWKXR9kb/YVl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80E0A497
+	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 07:58:03 -0800 (PST)
+Received: from e142607.local (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 495233F73F
+	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 07:58:10 -0800 (PST)
+Date: Tue, 23 Dec 2025 15:57:20 +0000
+From: Liviu Dudau <liviu.dudau@arm.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Brian Norris <briannorris@chromium.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Liu Ying <victor.liu@nxp.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>,
+	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v1 03/23] drm: Discard pm_runtime_put() return value
+Message-ID: <aUq74DUXcoh-AzZe@e142607>
+References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
+ <3045480.e9J7NaK4W3@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 20/23] scsi: ufs: core: Discard pm_runtime_put() return
- values
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson
- <ulf.hansson@linaro.org>, Brian Norris <briannorris@chromium.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>, linux-scsi@vger.kernel.org
-References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
- <2781685.BddDVKsqQX@rafael.j.wysocki>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <2781685.BddDVKsqQX@rafael.j.wysocki>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <3045480.e9J7NaK4W3@rafael.j.wysocki>
 
-On 12/22/25 9:31 PM, Rafael J. Wysocki wrote:>
-> The ufshcd driver defines ufshcd_rpm_put() to return an int, but that
-> return value is never used.  It also passes the return value of
-> pm_runtime_put() to the caller which is not very useful.
+On Mon, Dec 22, 2025 at 08:57:35PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Multiple DRM drivers use the pm_runtime_put() return value for printing
+> debug or even error messages and all of those messages are at least
+> somewhat misleading.
+> 
+> Returning an error code from pm_runtime_put() merely means that it has
+> not queued up a work item to check whether or not the device can be
+> suspended and there are many perfectly valid situations in which that
+> can happen, like after writing "on" to the devices' runtime PM "control"
+> attribute in sysfs for one example.  It also happens when the kernel
+> has been configured with CONFIG_PM unset.
+> 
+> For this reason, modify all of those drivers to simply discard the
+> pm_runtime_put() return value which is what they should be doing.
+> 
+> This will facilitate a planned change of the pm_runtime_put() return
+> type to void in the future.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> This patch is part of a series, but it doesn't depend on anything else
+> in that series.  The last patch in the series depends on it.
+> 
+> It can be applied by itself and if you decide to do so, please let me
+> know.
+> 
+> Otherwise, an ACK or equivalent will be appreciated, but also the lack
+> of specific criticism will be eventually regarded as consent.
+> 
+> ---
+>  drivers/gpu/drm/arm/malidp_crtc.c                   |    6 +-----
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+For the malidp_crtc.c:
 
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+
+Best regards,
+Liviu
+
+>  drivers/gpu/drm/bridge/imx/imx8qm-ldb.c             |    4 +---
+>  drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c            |    4 +---
+>  drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c |    5 +----
+>  drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c        |    5 +----
+>  drivers/gpu/drm/imx/dc/dc-crtc.c                    |   12 +++---------
+>  drivers/gpu/drm/vc4/vc4_hdmi.c                      |    5 +----
+>  drivers/gpu/drm/vc4/vc4_vec.c                       |   12 ++----------
+>  8 files changed, 11 insertions(+), 42 deletions(-)
+> 
+> --- a/drivers/gpu/drm/arm/malidp_crtc.c
+> +++ b/drivers/gpu/drm/arm/malidp_crtc.c
+> @@ -77,7 +77,6 @@ static void malidp_crtc_atomic_disable(s
+>  									 crtc);
+>  	struct malidp_drm *malidp = crtc_to_malidp_device(crtc);
+>  	struct malidp_hw_device *hwdev = malidp->dev;
+> -	int err;
+>  
+>  	/* always disable planes on the CRTC that is being turned off */
+>  	drm_atomic_helper_disable_planes_on_crtc(old_state, false);
+> @@ -87,10 +86,7 @@ static void malidp_crtc_atomic_disable(s
+>  
+>  	clk_disable_unprepare(hwdev->pxlclk);
+>  
+> -	err = pm_runtime_put(crtc->dev->dev);
+> -	if (err < 0) {
+> -		DRM_DEBUG_DRIVER("Failed to disable runtime power management: %d\n", err);
+> -	}
+> +	pm_runtime_put(crtc->dev->dev);
+>  }
+>  
+>  static const struct gamma_curve_segment {
+> --- a/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
+> +++ b/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
+> @@ -280,9 +280,7 @@ static void imx8qm_ldb_bridge_atomic_dis
+>  	clk_disable_unprepare(imx8qm_ldb->clk_bypass);
+>  	clk_disable_unprepare(imx8qm_ldb->clk_pixel);
+>  
+> -	ret = pm_runtime_put(dev);
+> -	if (ret < 0)
+> -		DRM_DEV_ERROR(dev, "failed to put runtime PM: %d\n", ret);
+> +	pm_runtime_put(dev);
+>  }
+>  
+>  static const u32 imx8qm_ldb_bus_output_fmts[] = {
+> --- a/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
+> +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
+> @@ -282,9 +282,7 @@ static void imx8qxp_ldb_bridge_atomic_di
+>  	if (is_split && companion)
+>  		companion->funcs->atomic_disable(companion, state);
+>  
+> -	ret = pm_runtime_put(dev);
+> -	if (ret < 0)
+> -		DRM_DEV_ERROR(dev, "failed to put runtime PM: %d\n", ret);
+> +	pm_runtime_put(dev);
+>  }
+>  
+>  static const u32 imx8qxp_ldb_bus_output_fmts[] = {
+> --- a/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c
+> +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c
+> @@ -181,11 +181,8 @@ static void imx8qxp_pc_bridge_atomic_dis
+>  {
+>  	struct imx8qxp_pc_channel *ch = bridge->driver_private;
+>  	struct imx8qxp_pc *pc = ch->pc;
+> -	int ret;
+>  
+> -	ret = pm_runtime_put(pc->dev);
+> -	if (ret < 0)
+> -		DRM_DEV_ERROR(pc->dev, "failed to put runtime PM: %d\n", ret);
+> +	pm_runtime_put(pc->dev);
+>  }
+>  
+>  static const u32 imx8qxp_pc_bus_output_fmts[] = {
+> --- a/drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c
+> +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c
+> @@ -127,11 +127,8 @@ static void imx8qxp_pxl2dpi_bridge_atomi
+>  						  struct drm_atomic_state *state)
+>  {
+>  	struct imx8qxp_pxl2dpi *p2d = bridge->driver_private;
+> -	int ret;
+>  
+> -	ret = pm_runtime_put(p2d->dev);
+> -	if (ret < 0)
+> -		DRM_DEV_ERROR(p2d->dev, "failed to put runtime PM: %d\n", ret);
+> +	pm_runtime_put(p2d->dev);
+>  
+>  	if (p2d->companion)
+>  		p2d->companion->funcs->atomic_disable(p2d->companion, state);
+> --- a/drivers/gpu/drm/imx/dc/dc-crtc.c
+> +++ b/drivers/gpu/drm/imx/dc/dc-crtc.c
+> @@ -300,7 +300,7 @@ dc_crtc_atomic_disable(struct drm_crtc *
+>  				drm_atomic_get_new_crtc_state(state, crtc);
+>  	struct dc_drm_device *dc_drm = to_dc_drm_device(crtc->dev);
+>  	struct dc_crtc *dc_crtc = to_dc_crtc(crtc);
+> -	int idx, ret;
+> +	int idx;
+>  
+>  	if (!drm_dev_enter(crtc->dev, &idx))
+>  		goto out;
+> @@ -313,16 +313,10 @@ dc_crtc_atomic_disable(struct drm_crtc *
+>  	dc_fg_disable_clock(dc_crtc->fg);
+>  
+>  	/* request pixel engine power-off as plane is off too */
+> -	ret = pm_runtime_put(dc_drm->pe->dev);
+> -	if (ret)
+> -		dc_crtc_err(crtc, "failed to put DC pixel engine RPM: %d\n",
+> -			    ret);
+> +	pm_runtime_put(dc_drm->pe->dev);
+>  
+>  	/* request display engine power-off when CRTC is disabled */
+> -	ret = pm_runtime_put(dc_crtc->de->dev);
+> -	if (ret < 0)
+> -		dc_crtc_err(crtc, "failed to put DC display engine RPM: %d\n",
+> -			    ret);
+> +	pm_runtime_put(dc_crtc->de->dev);
+>  
+>  	drm_dev_exit(idx);
+>  
+> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> @@ -848,7 +848,6 @@ static void vc4_hdmi_encoder_post_crtc_p
+>  	struct vc4_hdmi *vc4_hdmi = encoder_to_vc4_hdmi(encoder);
+>  	struct drm_device *drm = vc4_hdmi->connector.dev;
+>  	unsigned long flags;
+> -	int ret;
+>  	int idx;
+>  
+>  	mutex_lock(&vc4_hdmi->mutex);
+> @@ -867,9 +866,7 @@ static void vc4_hdmi_encoder_post_crtc_p
+>  	clk_disable_unprepare(vc4_hdmi->pixel_bvb_clock);
+>  	clk_disable_unprepare(vc4_hdmi->pixel_clock);
+>  
+> -	ret = pm_runtime_put(&vc4_hdmi->pdev->dev);
+> -	if (ret < 0)
+> -		drm_err(drm, "Failed to release power domain: %d\n", ret);
+> +	pm_runtime_put(&vc4_hdmi->pdev->dev);
+>  
+>  	drm_dev_exit(idx);
+>  
+> --- a/drivers/gpu/drm/vc4/vc4_vec.c
+> +++ b/drivers/gpu/drm/vc4/vc4_vec.c
+> @@ -542,7 +542,7 @@ static void vc4_vec_encoder_disable(stru
+>  {
+>  	struct drm_device *drm = encoder->dev;
+>  	struct vc4_vec *vec = encoder_to_vc4_vec(encoder);
+> -	int idx, ret;
+> +	int idx;
+>  
+>  	if (!drm_dev_enter(drm, &idx))
+>  		return;
+> @@ -556,17 +556,9 @@ static void vc4_vec_encoder_disable(stru
+>  
+>  	clk_disable_unprepare(vec->clock);
+>  
+> -	ret = pm_runtime_put(&vec->pdev->dev);
+> -	if (ret < 0) {
+> -		drm_err(drm, "Failed to release power domain: %d\n", ret);
+> -		goto err_dev_exit;
+> -	}
+> +	pm_runtime_put(&vec->pdev->dev);
+>  
+>  	drm_dev_exit(idx);
+> -	return;
+> -
+> -err_dev_exit:
+> -	drm_dev_exit(idx);
+>  }
+>  
+>  static void vc4_vec_encoder_enable(struct drm_encoder *encoder,
+> 
+> 
+> 
 
