@@ -1,126 +1,91 @@
-Return-Path: <linux-pm+bounces-39887-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39888-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 167EDCDA243
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 18:41:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81265CDA270
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 18:45:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 63AF13002B8C
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 17:41:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 41A26303DD37
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 17:44:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03A4D338595;
-	Tue, 23 Dec 2025 17:41:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42A43347FD2;
+	Tue, 23 Dec 2025 17:44:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="ruYLz2ZI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hp8Lc53E"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5077E29CB4D
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 17:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ACDB338927;
+	Tue, 23 Dec 2025 17:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766511688; cv=none; b=gH0wCTIvZUx2ssdcIo7/N0V53MKP8MbRJ7IrmYNPifjG9bp9cYwicfEiWhTtfrVb+DtG730HhBmnqHK0JmpQ66w2e68aFsf+XRTIvhTNEo+A03YiSMXuC67C9UkxgLcAuidTqqDwWvArS34L6AHuDvx4nkjfSrYGp01hKPzO1aY=
+	t=1766511870; cv=none; b=kne7hnH/oi7fD6caU9PuEcGID3SlFZR/eKJnKyl2yOuNjodo9wCJohHU6YeHpsr4Hn17WUsv0oph3Osm2rn8iJLjjYTC4gz7R0D9xbauh3f3vN5x1qH6rhXGV+sNIARDlKeGgScPVRrIe7nsjmf8fzzFVXdNbx2Z1Bu/EIly3fY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766511688; c=relaxed/simple;
-	bh=4g6cRpSF90Sm8HT2nVak24i/3RDc2QDXNk1+OmWVOyU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iSHUiBFRbJKDUFsFmARKiPiV170FtRUPOqNMMNLkn0vGaezPuhZ78IG5LEW6iHnxFlb8fw3mg8RwcKB8SHAWqI0QvW23vlt8k0eVdjqTfpp+sYt+IHGQo44JlqZGGPYNzRpxa/H7Cgr8AgxgZgNQBB0CA07khs2In6sEXfHfMAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=ruYLz2ZI; arc=none smtp.client-ip=209.85.160.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-3e0f19a38d0so3776258fac.0
-        for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 09:41:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1766511686; x=1767116486; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4g6cRpSF90Sm8HT2nVak24i/3RDc2QDXNk1+OmWVOyU=;
-        b=ruYLz2ZIevlheBvfv+g18A5vh8St/IDIDegOlLZrlR0TfsogTJrFZLVkZxXqRR66pr
-         bet2B4WYJbZhoINe8ooHjb1N0IASQH6rlREr38ueC/wtgh/sFpmAIJqwIS5suF2kmhgr
-         cJB1ejrjxImbn0v35qdyQ9s59tAnZff3d4WAMmNbuIwtGwj6dNKF7O9aTqq8HaFKa9J0
-         C3easPuoFM1VS/7hXLBkcQXR+rikl4Cf1ra6shTQam6yxS3sSrXcsPXp42Nn8ZUxcEFZ
-         redYlUY+3hKlAzF8gMoMVGBeAsO1g5BHhJctkzPpTEpudI3XMWGfdOcs+6cVvUxLj8vU
-         4tGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766511686; x=1767116486;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4g6cRpSF90Sm8HT2nVak24i/3RDc2QDXNk1+OmWVOyU=;
-        b=YuWrTAGA1RB+L7hoB9PAlAlWvYGYm0Jr1UnqLkqnV9aoyPGaqV2moCo8yM2HEAS+Kf
-         CsXjakaFycMlX7IOsvhFYAnFPcMOu7PhrCp0/WFe+c0YSSGmBcM3cl0Tg1oSM3YlkFLd
-         TuBwCxkLEuySxfNRMdjjo6iAhiRJhpefZ87On/yYc1JceC7JmL8VTXpWJDb5ru0HEwxx
-         feTATUBX+x7C7wvUEJ7RTlXTTSv2EZ/I+VD0OnEgQKn/ntk8eZTncEPqeLDr0RJ8PGuh
-         WpKPY1uE122o8FaE1ZI3nd7rMQmQgCInirR4WRnOboYhyNsYmz3aVFywv0BrJ8oBaueF
-         tS+g==
-X-Forwarded-Encrypted: i=1; AJvYcCVqTM/sEXXweiLyQlDFlKLorR/WiZDJghLcXv34NMyUJSBe8zZiV47IhoqKQlZBFsfothjjxe9GrA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz15EeCbWRibzba6uDfWf3KOtKzL86J54n0Xgpfs3WwTSa6rQoM
-	m/hwstwKB5TYD3DnrvLby1H5SwYIL2i5H5f98WIRhV9GJQlhnltDyYjkdtrlskuf1dD+c0umXMr
-	c0ih9
-X-Gm-Gg: AY/fxX7WLj9UkPNCZlNxiFQoXLyMAhYzvSkjZM0hrIvf407C/3K3vcqN9PX25PYyIS8
-	2gV+mUKNnXKSpsuhkocCFRcV0qRmuC07BFTNZEZi7Gau38OHXGK5zLzjkkvuW+0KlGLcRO1OJig
-	ar5qdaEGlQh4j304ApAMGjMEP2XaD8k6S1BHcJyMsyeyerjyxks/s6LSl724Uf3mbCKtMLUvbH1
-	wOj+JRY5yDB46OxRujkeB0tm3gdIFAON2P4pADH+litofrhSuCr095TeFmJKtbbDs3Iy55ly9w3
-	ucJCUJFkqeBmCdhFz8/fARMdZUAQ8LC4sW5PXfLO2t/QvffSHWWEeYKqOJgjeXXMPYe2zZLdcaz
-	4Q/YIGYvh4KaayhXVEcJ/vVaX251dmewwReGyAVj+Z4f3OZxpUkzJb/mSt2nreFSjL/gt/mBo/d
-	wQbYqz5K8=
-X-Google-Smtp-Source: AGHT+IHvO/iSXTzXMcLwk1UZ6R+sF3sMQvret+M/zf3RXcZhjvO++LdF1822NYem8TQNIc1FlzGzmw==
-X-Received: by 2002:a05:6871:2b1e:b0:3e8:8b6f:9d85 with SMTP id 586e51a60fabf-3fda585f9bbmr6902517fac.29.1766511686089;
-        Tue, 23 Dec 2025 09:41:26 -0800 (PST)
-Received: from kf-m2g5 ([2607:fb90:bf8f:aac:a6ef:c339:5c5a:a921])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-3fdaab65749sm8780158fac.11.2025.12.23.09.41.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Dec 2025 09:41:25 -0800 (PST)
-Date: Tue, 23 Dec 2025 11:41:22 -0600
-From: Aaron Rainbolt <arainbolt@kfocus.org>
-To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: kernel-team@lists.ubuntu.com, lenb@kernel.org,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, mmikowski@kfocus.org,
- rjw@rjwysocki.net
-Subject: Re: [BUG] intel_pstate: CPU frequencies miscalculated/incorrectly
- detected on Arrow Lake hardware
-Message-ID: <20251223114122.0227dab8@kf-m2g5>
-In-Reply-To: <250bec4336d5e7adbc841e4945e50e589b10c375.camel@linux.intel.com>
-References: <20251214184507.21f95134@kf-m2g5>
-	<33fc5ba96b80f1eeb69777822cfddefe64100540.camel@linux.intel.com>
-	<20251215092525.6ea95739@kf-m2g5>
-	<250bec4336d5e7adbc841e4945e50e589b10c375.camel@linux.intel.com>
-Organization: Kubuntu Focus
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1766511870; c=relaxed/simple;
+	bh=QfnwP6g3xZyc9qS0ZVe4lcUJD+FmaQPSpWmATsSwLwg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=UdGYUDueWYfiW5mpU9Vb3xrXoEUxYWn69QMNflhfFwPsrsK52dGktVPdBE/j0GJAHcXZFalpYnaqHy5UTvWEPS5LgeX5orGCdjgFDzlByBYeD2YI3emRMyFcz9L9J38hC0OKVss7svkAvcmBQv9x90ma09B/6z9CrKMIB7Q5xUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hp8Lc53E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D944C113D0;
+	Tue, 23 Dec 2025 17:44:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766511869;
+	bh=QfnwP6g3xZyc9qS0ZVe4lcUJD+FmaQPSpWmATsSwLwg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=hp8Lc53E+roULdJGi8nNVCdOFZOj4ej522R5s0vXLxIhbW3PkknOgMvnyu4Y1akKE
+	 ROr8nmuY3C35WGHDYTvja18GMifaHlMl1N9reCfXDBmdY1gLYl+rZ/G91eOc3un3xM
+	 2HuwekgGq20MVunBhsVIX/siQi5MK1Ty42v4ZsLc/iq5NZ1Li+pCwYWjyfOAGjHAnt
+	 IBW3l2p9z04VqgMKlsuwGUhwU1IZBm060VDw6VhWYp5q9Rt2aK60k67LrgmKIUBRm9
+	 t8YCosA6KTxPW/x569a7f+KVh0CRQTZ3FZ0uLHWmebvYBon8ZnjNlc1elx8SfItm8H
+	 04RwnURXY4vpQ==
+From: Vinod Koul <vkoul@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, 
+ Brian Norris <briannorris@chromium.org>
+In-Reply-To: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
+References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
+Subject: Re: (subset) [PATCH v1 00/23] PM: runtime: Convert
+ pm_runtime_put() to a void function
+Message-Id: <176651186788.759340.13138612907596077683.b4-ty@kernel.org>
+Date: Tue, 23 Dec 2025 23:14:27 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13.0
 
-On Wed, 17 Dec 2025 05:33:08 -0800
-srinivas pandruvada <srinivas.pandruvada@linux.intel.com> wrote:
 
-> Hi Aaron,
->=20
-> Tested on a platform with the similar CPU (100 MHz more max). There is
-> no issue in max frequency or base frequency display.
+On Mon, 22 Dec 2025 20:48:11 +0100, Rafael J. Wysocki wrote:
+> This is something I have had on my todo list for some time, but it is
+> kind of tricky because the return value of pm_runtime_put() is used in
+> some places all over the tree.
+> 
+> Nevertheless, I think that it is worth doing because the majority of
+> users of the pm_runtime_put() return value are at least somewhat
+> questionable (in fact, IMV the only legitimate use of it is in the
+> USB core where it is included in a debug message).
+> 
+> [...]
 
-Hi Srinivas,
+Applied, thanks!
 
-Thanks for taking the time to look into this. For reference, the
-X560WNR-G that we last reported has the INSYDE BIOS version
-1.07.07S3min29. That might be useful when reaching out to Clevo.
+[13/23] phy: freescale: Discard pm_runtime_put() return value
+        commit: 8bb108e4f6747dcea590710c4b6f95eebf4a04d6
+[14/23] phy: rockchip-samsung-dcphy: Discard pm_runtime_put() return value
+        commit: 455bf7d9256495e09fd3fd4a4e8a41e727f1043b
+[15/23] phy: core: Discard pm_runtime_put() return values
+        commit: caad07ae07e3fb173e804abdd53fb96aa7186830
 
-Since we=E2=80=99ve seen this on hardware from Clevo, TongFang, and ASUS, w=
-e=E2=80=99ll
-want to report to all of them. Can you tell us what tool you are using
-to measure the max and base frequency displays? Are both P and E cores
-displaying the proper frequencies on your end? We can then share that
-with the ODMs.
+Best regards,
+-- 
+~Vinod
 
-Thanks again,
 
---
-Aaron
 
