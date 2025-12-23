@@ -1,354 +1,358 @@
-Return-Path: <linux-pm+bounces-39851-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39852-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 613BFCD9396
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 13:19:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA756CD93FC
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 13:29:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 16E443022B66
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 12:16:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5266B30198D6
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 12:28:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C113326D74;
-	Tue, 23 Dec 2025 12:16:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ej/++Vha"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9966932AABE;
+	Tue, 23 Dec 2025 12:28:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012014.outbound.protection.outlook.com [52.101.53.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f77.google.com (mail-oo1-f77.google.com [209.85.161.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5045302773;
-	Tue, 23 Dec 2025 12:16:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766492215; cv=fail; b=rFe/Vmz2inO1MCfVQ20INcaGDzNrcv+JHpVWcybfs//rjykiqBR5/NNPpl54kTQ4farEY/YmBwq0rBD1vOEEWvkv1LTE91g+2TrVrzVFbhhaMpLNNo/s34a2Tc1Vm3+KlPXS0tdt/Ht8ax36psMCdTust8Xt5bWMz5YrfwKQ8Qc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766492215; c=relaxed/simple;
-	bh=Lg/QBkJm1scDfbw3S/fN2MPWMfybznUBGCviT6jddFw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ijDzaMTiEYv9cGTz2nUA1gNp/pu3cq/mHExzEVPEJN/Gi8XKXQm/JJTUpwuYVOdDiRPm6pKa6gFvd5tG3h0fbltVPWXF8D3yaJP/3eVai6Z5nFY40EGtuyS5FhCoh1soJvXVJpw4fjSd1Sbg9POQ5y+Fq+jqIIuaqJ9ok3QucEo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ej/++Vha; arc=fail smtp.client-ip=52.101.53.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IC1DZM68lSVnoWkClFYjUgdttfQHw5XyIbCILalkUELiihX2XOuoKTGotjGWsdAAw8QjWewzntU5a9crOyZOaUd3EsdIf6J5HsPQBlT02DEnse1f5ZEC7ipLSxlepJHJy+bWyvgLbSVNcct+kSQGdF9885GMdw7PtsHA6b9ZR5zWD/smhh3SXeHX/3uczrjtgn+9i5XqY+8+dX5iJwhi2VGYOYSKqJGThSWXdWcUuesp8GJoxP9LfYwu7q1LTZeg4XZDnRPxXCcHbZO3QKFGu32s5gD9tkuF9mc82zWcVjM3yxcDSAYegOnlj/NFt5Lg5FnegPoNpfeFOxm92KZskw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=h/nMe4z0VlqCnjLYQsMkKM+KdQn7+ClDI32HmHVvV4k=;
- b=AhoA7UfEq+cHaRTrVorxKKICQ8mA2FyViUpmmNF/8caCX+MPKHZBO+IDcVZZ/Ol0Qb9BPEG0+UgXqBcK0nXcCpyzlSOt64eaZAsnGzNCyBYE9uCxXwonG+mI8ME75ONXBHCqiVzRwaUKkfGPFFVwE5pAat1b8AniQU0+VBju1c9Nukn7Q958u8MZx4AymPyUb9zI/FjYDX8QJ1/0UK2XNbdlpBlWrE4cpyyZem8Zsb2Zulof2zf4oaNE2SnsE0abk6F3tg61BuvVdIhoZlsuy2G66l3jdncRfFTIN/XB/x62PxLv3tfHE1NDZXyixAT8l40lm1ktzCmn80BfrDpKEw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=h/nMe4z0VlqCnjLYQsMkKM+KdQn7+ClDI32HmHVvV4k=;
- b=Ej/++VhaAzz/rnbYsY5D+qkoxyiTUcqjtPE0an5nn/8r2XA5YBHNFiGZ1wbshzzv4qR+/JqszWxUj3i/XkCBIb8RdZxvhMHn5nfQyRpDYuBVg16LHa1ccDBtg7u0uXjAI6vWfrY2rGabVVvd7OYWfgcML5ztiJX7TDpxwEI7FkQl2Q8cOt2KuC9iV3DOez/RqMxSVicbszOXcA9soheYijfg6XQGO0McxaXeR1Nz5ZE7JnlM8YZz075XbOajFG8jVDcmeqO8fUI9lRe9MX0AQvSrpeXDocOB0sQStQWyzpa3ql3pn9gpkLhI7g30si5fG2F7unlEmOx+aYotECb94w==
-Received: from MN0PR05CA0011.namprd05.prod.outlook.com (2603:10b6:208:52c::17)
- by DS5PPFA3734E4BA.namprd12.prod.outlook.com (2603:10b6:f:fc00::65c) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9434.11; Tue, 23 Dec
- 2025 12:15:34 +0000
-Received: from BL6PEPF0001AB73.namprd02.prod.outlook.com
- (2603:10b6:208:52c:cafe::e8) by MN0PR05CA0011.outlook.office365.com
- (2603:10b6:208:52c::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9456.11 via Frontend Transport; Tue,
- 23 Dec 2025 12:15:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL6PEPF0001AB73.mail.protection.outlook.com (10.167.242.166) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9456.9 via Frontend Transport; Tue, 23 Dec 2025 12:15:33 +0000
-Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 23 Dec
- 2025 04:15:16 -0800
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail205.nvidia.com
- (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 23 Dec
- 2025 04:15:15 -0800
-Received: from sumitg-l4t.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Tue, 23 Dec 2025 04:15:08 -0800
-From: Sumit Gupta <sumitg@nvidia.com>
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <lenb@kernel.org>,
-	<robert.moore@intel.com>, <corbet@lwn.net>, <pierre.gondois@arm.com>,
-	<zhenglifeng1@huawei.com>, <rdunlap@infradead.org>, <ray.huang@amd.com>,
-	<gautham.shenoy@amd.com>, <mario.limonciello@amd.com>, <perry.yuan@amd.com>,
-	<ionela.voinescu@arm.com>, <zhanjie9@hisilicon.com>,
-	<linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>
-CC: <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
-	<jonathanh@nvidia.com>, <vsethi@nvidia.com>, <ksitaraman@nvidia.com>,
-	<sanjayc@nvidia.com>, <nhartman@nvidia.com>, <bbasu@nvidia.com>,
-	<sumitg@nvidia.com>
-Subject: [PATCH v5 11/11] cpufreq: CPPC: add autonomous mode boot parameter support
-Date: Tue, 23 Dec 2025 17:43:07 +0530
-Message-ID: <20251223121307.711773-12-sumitg@nvidia.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251223121307.711773-1-sumitg@nvidia.com>
-References: <20251223121307.711773-1-sumitg@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A432D3A69
+	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 12:28:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.77
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766492905; cv=none; b=BdaQR42sVlxuNSkPgC3ZddmwwbcQ1dD5EVPZ0NVqoc39KWpRTDW9JwuC+7uaDuAVquTLGemy5GV6wCjBPD8lw08/L+l/JaAvJ1lXGc9GzVrDErHF96MqxlqxMxC/2ya8RzCzfQYBGH4X6mDtJx4aNOP8dEyhAxOkDX/ZXJ7RTow=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766492905; c=relaxed/simple;
+	bh=gD0SEXL2+DXzNth1fr0SiKv1es1wIqr9oKrfas9t8jA=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=DIb36wfYY4UaPhUc8XbTqB09zD8jHR2YQzL8IjDRZDYOMjc3Phs4Oxk3QVQYB+VrgSn45eE2Im4uKOUzIeJ/wSZVoHXMXU2vkGAVF3IHPh4jQ6CmuzMGVcD43eZzOvDHGlkqW4l2U2cyZeyU0lWvPBdffeF2HzfJ/2n0YSne4vQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f77.google.com with SMTP id 006d021491bc7-6574d3d44f9so7990379eaf.3
+        for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 04:28:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766492902; x=1767097702;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MJVW7jt0QGN4IyXhFjx6JZEDzM1Hdk7Z4ctneZxH1M0=;
+        b=vrwQgG0ar9L0wiuY/Ub2+fKnBzqvoo26PsId9jG5YT6VjedWivloiR0yUiiM3CgM+1
+         XWucBM4W7gZi2zw44iHu6fRnMF7dNy9Efd5Ia5UTUJdGeSrY00GcH2LTCn3zEhDoD7Yl
+         dzCPi4FKa20UrBpQ3AYRFL4hZVpQQpp8cWRff5PyWbAbG9jMtkLvQueDV7vdDspVEAZz
+         YIMBtOcBk7HqFcu7Djmi4LhfPwbiaq5CWz4PBXrQDTKwVmRx8+JLNOkXVrsG1MuC4mK9
+         5JbQbU0LzEr4fB5BsFxLmO4u/XXwd8zUh+E1o4izyacDlB2zzKXoaY7O0EAu5Maxwx4T
+         veTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX5zIoYrzHU31L6X9nT21kojviJg1eoqwQXWHD6qVx46pphx0Rxsb+dxXILQjRorfczzQguWrrYKw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiybaSx7ND3Bp7BUencuF4Nkp4LcGJO27y/yjxvZSg0h3gWKPP
+	tmQ5g0linJGP6BQVn+thkE6hd1iho3X6UP0xuMzX4UzKQoNlSAWrEdnh6PYDP2jD1FivEehSvy+
+	zE1SLhdd3+T1BPwTOfOEJwogprg5UzbKg259OSjrMLT9zJu16VW8lqz0TmOo=
+X-Google-Smtp-Source: AGHT+IG78JSMVF7rpwwoKalNUcpb2BjuqZTxAC3l2K642yQGwNkp0iUgJh1Tmr8rAWFtc+hDL2Hrfl2J9+y682Aql/wu/SkNmC95
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB73:EE_|DS5PPFA3734E4BA:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd0263d8-089a-444d-656a-08de421cf8d3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|36860700013|1800799024|82310400026|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?IONdS240Wyf9hAqQ8+g/04EZ+98edV9OPeY/aCoMOd7rHv1WaIv+uRjyplN9?=
- =?us-ascii?Q?o0K+SUvzcUBkFM1ga/9FuJoZkLyvDxRvq0cNnWquCN7Yjr1UVHVbyr9RPBeH?=
- =?us-ascii?Q?o1JcZbTo9kBSB2Wucswae9K8Nh9bfp0SEi9VbTNrW9dEv7GOGtOJX7gOaMA+?=
- =?us-ascii?Q?Tu1abeRSTnr85x5tPg4xRJplEacpB48j+Ib7Q/5h9AQa6lptIP08qLV4L8gK?=
- =?us-ascii?Q?oBWIWHsaYGgYPe1R7xJE4npQ54Mftc2JSwwOy03+Th4P+4meZS+4RZdkvROS?=
- =?us-ascii?Q?jjiPoGFZnSsH9EOd83t43GYXy8D3ZGpTE14qRjTLuO8ewfCsq+GUalZDQoeu?=
- =?us-ascii?Q?Y/kg69l6o7w6dKFuIE5T0/2XZDBkzynFhWlM1lGt8jq7jL6zSYt2/s2RVUU5?=
- =?us-ascii?Q?KBpNWcM3HNczbIfZaj9p1nwOzBZcQLwikGiIHKETZlB1deD1cOcc8CN9SD+X?=
- =?us-ascii?Q?WxE8H7vQezuplTHYtiLSzDB6T5uP9oSSWXeAJ5CUAWE9B9Nc72WuK6Leq4qT?=
- =?us-ascii?Q?UXdmfCxwa0m3oO98XI9MEeYV+hzHcujZpTKJKMrGYzI9bGIvljnXOyypxUDB?=
- =?us-ascii?Q?Ext5dNmn/2cXDZ4AhKUlKFKTxlOpdSi+SPs6ydauymsLF3TLXsq8cEI1xqEd?=
- =?us-ascii?Q?5ULVaOgVFrSRNNhPD30RXKwkITXUQ5PDRmGq0imnWDKXfxXw2BjTZEdMiD+3?=
- =?us-ascii?Q?8sLKCRUGNCtHyTUDyqW32fPJjuS186TWgFXQPy0OIKPU4tintUafBV/YWDze?=
- =?us-ascii?Q?0a4xkfXHFj/oD6CPWm6fb0/seF2l7N0Rwx/5VjjUUEjX5zQ8cox+G1QR4+z3?=
- =?us-ascii?Q?JPXhkw9fRePez9vjY9lvKag9+xyHdQfwQWo6d5pI6M8AUXrZjS6NLcZhmVqI?=
- =?us-ascii?Q?leDahEgl3mWpbi62/tbbCkqQ8JSkbjlw5mdi8mDJYfT+E0AdKkvEyS7CqvLe?=
- =?us-ascii?Q?cuZR959R053YgSzBsMPhctOQVrGS5sufoqxRpVJh6sR8Y/cgvSFAucgFS/bV?=
- =?us-ascii?Q?vXR//9XtzkBCAPl/9s0DhfmIusk42FopiBCCrsJemiz2LtNa3B25jmVB41B/?=
- =?us-ascii?Q?X2sL8DkUxLxDjp8OPboMLpZ8cnmYSqxRZSEuj5wvWGIvQ/C3cXs1bc8ooJSq?=
- =?us-ascii?Q?mKdPET3LtzP1/qYSk3NFGfq3uyhJ8da04485D4mTRSz8PHTadfF8Fz8PvMpW?=
- =?us-ascii?Q?lX5FL2tZXQUB9G7lQJ5GqWZNgs+myYqHqjSxVGGzc5QYHBN5pOrFv1NCc2Gw?=
- =?us-ascii?Q?jKSQjztY5oTJrB/itAtCcYVVs2hecrEFfwq8PahmMhP+gWmlMU2EXNgOZ4oc?=
- =?us-ascii?Q?hhAWGkA21/04KyTg8KPy8qczy8At1nqC908lWD4SLmwyglJRrICYsFjAcsyf?=
- =?us-ascii?Q?fF/iXmHGn/EwBjLHefd8g/DkziwGkVGiqvc3VmcLVxcqAhOZSZx7FGJ02++F?=
- =?us-ascii?Q?RKSzaFAB2UfejxfC5DfGVgtpO/FeDi7+Qr8nJEYPMjHQMqOLl71z9Mlt3Xo+?=
- =?us-ascii?Q?fSRbm6HbDqT02iJkR33ldqIkL1QUhHYey++7YMdDKBsKfZbFNy92S9KRWA3v?=
- =?us-ascii?Q?ZF+uTqNLxZaeesKY6hF1jXKF33+Bur2y3syR76HP?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(1800799024)(82310400026)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Dec 2025 12:15:33.2402
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd0263d8-089a-444d-656a-08de421cf8d3
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB73.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS5PPFA3734E4BA
+X-Received: by 2002:a05:6820:22a6:b0:659:9a49:9009 with SMTP id
+ 006d021491bc7-65d0ea7234dmr5942525eaf.54.1766492902352; Tue, 23 Dec 2025
+ 04:28:22 -0800 (PST)
+Date: Tue, 23 Dec 2025 04:28:22 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <694a8ae6.050a0220.19928e.0025.GAE@google.com>
+Subject: [syzbot] [pm?] KASAN: slab-use-after-free Read in thermal_zone_device_check
+From: syzbot <syzbot+3b3852c6031d0f30dfaf@syzkaller.appspotmail.com>
+To: daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, lukasz.luba@arm.com, rafael@kernel.org, 
+	rui.zhang@intel.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Add kernel boot parameter 'cppc_cpufreq.auto_sel_mode' to enable CPPC
-autonomous performance selection on all CPUs at system startup without
-requiring runtime sysfs manipulation. When autonomous mode is enabled,
-the hardware automatically adjusts CPU performance based on workload
-demands using Energy Performance Preference (EPP) hints.
+Hello,
 
-When auto_sel_mode=1:
-- All CPUs are configured for autonomous operation during init
-- EPP is set to performance preference (0x0) by default
-- Min/max performance bounds use defaults or already set values
-- CPU frequency scaling is handled by hardware instead of OS governor
+syzbot found the following issue on:
 
-The boot parameter is applied only during first policy initialization.
-User's runtime sysfs configuration is preserved across hotplug.
+HEAD commit:    dd9b004b7ff3 Merge tag 'trace-v6.19-rc1' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=150d131a580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a94030c847137a18
+dashboard link: https://syzkaller.appspot.com/bug?extid=3b3852c6031d0f30dfaf
+compiler:       Debian clang version 20.1.8 (++20250708063551+0c9f909b7976-1~exp1~20250708183702.136), Debian LLD 20.1.8
 
-For Documentation/:
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ea0a8b24838c/disk-dd9b004b.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/67ac69e3e131/vmlinux-dd9b004b.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/570521afa03d/bzImage-dd9b004b.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3b3852c6031d0f30dfaf@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: slab-use-after-free in __mutex_lock_common kernel/locking/mutex.c:593 [inline]
+BUG: KASAN: slab-use-after-free in __mutex_lock+0x147/0x1350 kernel/locking/mutex.c:776
+Read of size 8 at addr ffff888065d7f6f8 by task kworker/0:3/22405
+
+CPU: 0 UID: 0 PID: 22405 Comm: kworker/0:3 Tainted: G             L      syzkaller #0 PREEMPT(full) 
+Tainted: [L]=SOFTLOCKUP
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
+Workqueue: events_freezable_pwr_efficient thermal_zone_device_check
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x189/0x250 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:378 [inline]
+ print_report+0xca/0x240 mm/kasan/report.c:482
+ kasan_report+0x118/0x150 mm/kasan/report.c:595
+ __mutex_lock_common kernel/locking/mutex.c:593 [inline]
+ __mutex_lock+0x147/0x1350 kernel/locking/mutex.c:776
+ class_thermal_zone_constructor drivers/thermal/thermal_core.h:155 [inline]
+ thermal_zone_device_update drivers/thermal/thermal_core.c:704 [inline]
+ thermal_zone_device_check+0x22/0xb0 drivers/thermal/thermal_core.c:1396
+ process_one_work kernel/workqueue.c:3257 [inline]
+ process_scheduled_works+0xad1/0x1770 kernel/workqueue.c:3340
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3421
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+ </TASK>
+
+Allocated by task 22405:
+ kasan_save_stack mm/kasan/common.c:56 [inline]
+ kasan_save_track+0x3e/0x80 mm/kasan/common.c:77
+ poison_kmalloc_redzone mm/kasan/common.c:397 [inline]
+ __kasan_kmalloc+0x93/0xb0 mm/kasan/common.c:414
+ kasan_kmalloc include/linux/kasan.h:262 [inline]
+ __do_kmalloc_node mm/slub.c:5657 [inline]
+ __kmalloc_noprof+0x41d/0x800 mm/slub.c:5669
+ kmalloc_noprof include/linux/slab.h:961 [inline]
+ kzalloc_noprof include/linux/slab.h:1094 [inline]
+ thermal_zone_device_register_with_trips+0x178/0xd70 drivers/thermal/thermal_core.c:1541
+ thermal_tripless_zone_device_register+0x35/0x50 drivers/thermal/thermal_core.c:1655
+ psy_register_thermal+0x1fe/0x310 drivers/power/supply/power_supply_core.c:1534
+ __power_supply_register+0xc37/0xf90 drivers/power/supply/power_supply_core.c:1640
+ thunderstrike_psy_create+0x1f3/0x3c0 drivers/hid/hid-nvidia-shield.c:841
+ thunderstrike_create drivers/hid/hid-nvidia-shield.c:897 [inline]
+ shield_probe+0x7ee/0xb00 drivers/hid/hid-nvidia-shield.c:1058
+ __hid_device_probe drivers/hid/hid-core.c:2775 [inline]
+ hid_device_probe+0x416/0x7a0 drivers/hid/hid-core.c:2812
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26d/0xad0 drivers/base/dd.c:659
+ __driver_probe_device+0x18c/0x320 drivers/base/dd.c:801
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:831
+ __device_attach_driver+0x279/0x430 drivers/base/dd.c:959
+ bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:500
+ __device_attach+0x2b8/0x430 drivers/base/dd.c:1031
+ device_initial_probe+0xa1/0xd0 drivers/base/dd.c:1086
+ bus_probe_device+0x12a/0x220 drivers/base/bus.c:574
+ device_add+0x7b6/0xb80 drivers/base/core.c:3689
+ hid_add_device+0x272/0x3e0 drivers/hid/hid-core.c:2951
+ usbhid_probe+0xe13/0x12c0 drivers/hid/usbhid/hid-core.c:1435
+ usb_probe_interface+0x668/0xc90 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26d/0xad0 drivers/base/dd.c:659
+ __driver_probe_device+0x18c/0x320 drivers/base/dd.c:801
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:831
+ __device_attach_driver+0x279/0x430 drivers/base/dd.c:959
+ bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:500
+ __device_attach+0x2b8/0x430 drivers/base/dd.c:1031
+ device_initial_probe+0xa1/0xd0 drivers/base/dd.c:1086
+ bus_probe_device+0x12a/0x220 drivers/base/bus.c:574
+ device_add+0x7b6/0xb80 drivers/base/core.c:3689
+ usb_set_configuration+0x1a87/0x2110 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0x8d/0x150 drivers/usb/core/generic.c:250
+ usb_probe_device+0x1c4/0x3c0 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:-1 [inline]
+ really_probe+0x26d/0xad0 drivers/base/dd.c:659
+ __driver_probe_device+0x18c/0x320 drivers/base/dd.c:801
+ driver_probe_device+0x4f/0x240 drivers/base/dd.c:831
+ __device_attach_driver+0x279/0x430 drivers/base/dd.c:959
+ bus_for_each_drv+0x251/0x2e0 drivers/base/bus.c:500
+ __device_attach+0x2b8/0x430 drivers/base/dd.c:1031
+ device_initial_probe+0xa1/0xd0 drivers/base/dd.c:1086
+ bus_probe_device+0x12a/0x220 drivers/base/bus.c:574
+ device_add+0x7b6/0xb80 drivers/base/core.c:3689
+ usb_new_device+0xa39/0x1720 drivers/usb/core/hub.c:2695
+ hub_port_connect drivers/usb/core/hub.c:5567 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x29b1/0x4ef0 drivers/usb/core/hub.c:5953
+ process_one_work kernel/workqueue.c:3257 [inline]
+ process_scheduled_works+0xad1/0x1770 kernel/workqueue.c:3340
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3421
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+
+Freed by task 1790:
+ kasan_save_stack mm/kasan/common.c:56 [inline]
+ kasan_save_track+0x3e/0x80 mm/kasan/common.c:77
+ kasan_save_free_info+0x46/0x50 mm/kasan/generic.c:584
+ poison_slab_object mm/kasan/common.c:252 [inline]
+ __kasan_slab_free+0x5c/0x80 mm/kasan/common.c:284
+ kasan_slab_free include/linux/kasan.h:234 [inline]
+ slab_free_hook mm/slub.c:2540 [inline]
+ slab_free mm/slub.c:6668 [inline]
+ kfree+0x1c0/0x660 mm/slub.c:6876
+ psy_unregister_thermal drivers/power/supply/power_supply_core.c:1551 [inline]
+ power_supply_unregister+0xf9/0x140 drivers/power/supply/power_supply_core.c:1767
+ thunderstrike_destroy drivers/hid/hid-nvidia-shield.c:927 [inline]
+ shield_remove+0x72/0x120 drivers/hid/hid-nvidia-shield.c:1104
+ hid_device_remove+0x228/0x370 drivers/hid/hid-core.c:-1
+ device_remove drivers/base/dd.c:569 [inline]
+ __device_release_driver drivers/base/dd.c:1282 [inline]
+ device_release_driver_internal+0x46f/0x800 drivers/base/dd.c:1305
+ bus_remove_device+0x34d/0x440 drivers/base/bus.c:616
+ device_del+0x511/0x8e0 drivers/base/core.c:3878
+ hid_remove_device drivers/hid/hid-core.c:3008 [inline]
+ hid_destroy_device+0x6b/0x1b0 drivers/hid/hid-core.c:3030
+ usbhid_disconnect+0x9f/0xc0 drivers/hid/usbhid/hid-core.c:1462
+ usb_unbind_interface+0x26e/0x910 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:571 [inline]
+ __device_release_driver drivers/base/dd.c:1282 [inline]
+ device_release_driver_internal+0x4d9/0x800 drivers/base/dd.c:1305
+ bus_remove_device+0x34d/0x440 drivers/base/bus.c:616
+ device_del+0x511/0x8e0 drivers/base/core.c:3878
+ usb_disable_device+0x3d4/0x8e0 drivers/usb/core/message.c:1418
+ usb_disconnect+0x32f/0x990 drivers/usb/core/hub.c:2345
+ hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5707 [inline]
+ port_event drivers/usb/core/hub.c:5871 [inline]
+ hub_event+0x1ca9/0x4ef0 drivers/usb/core/hub.c:5953
+ process_one_work kernel/workqueue.c:3257 [inline]
+ process_scheduled_works+0xad1/0x1770 kernel/workqueue.c:3340
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3421
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+
+Last potentially related work creation:
+ kasan_save_stack+0x3e/0x60 mm/kasan/common.c:56
+ kasan_record_aux_stack+0xbd/0xd0 mm/kasan/generic.c:556
+ insert_work+0x3d/0x330 kernel/workqueue.c:2180
+ __queue_work+0xcd0/0xf90 kernel/workqueue.c:2335
+ mod_delayed_work_on+0xf8/0x200 kernel/workqueue.c:2591
+ mod_delayed_work include/linux/workqueue.h:699 [inline]
+ thermal_zone_pm_complete drivers/thermal/thermal_core.c:1839 [inline]
+ thermal_pm_notify_complete drivers/thermal/thermal_core.c:1851 [inline]
+ thermal_pm_notify+0x223/0x560 drivers/thermal/thermal_core.c:1866
+ notifier_call_chain+0x19d/0x3a0 kernel/notifier.c:85
+ blocking_notifier_call_chain+0x6a/0x90 kernel/notifier.c:380
+ snapshot_release+0x123/0x1d0 kernel/power/user.c:125
+ __fput+0x44c/0xa70 fs/file_table.c:468
+ task_work_run+0x1d4/0x260 kernel/task_work.c:233
+ resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
+ __exit_to_user_mode_loop kernel/entry/common.c:44 [inline]
+ exit_to_user_mode_loop+0xff/0x4f0 kernel/entry/common.c:75
+ __exit_to_user_mode_prepare include/linux/irq-entry-common.h:226 [inline]
+ syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:256 [inline]
+ syscall_exit_to_user_mode_work include/linux/entry-common.h:159 [inline]
+ syscall_exit_to_user_mode include/linux/entry-common.h:194 [inline]
+ do_syscall_64+0x2d0/0xf80 arch/x86/entry/syscall_64.c:100
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Second to last potentially related work creation:
+ kasan_save_stack+0x3e/0x60 mm/kasan/common.c:56
+ kasan_record_aux_stack+0xbd/0xd0 mm/kasan/generic.c:556
+ insert_work+0x3d/0x330 kernel/workqueue.c:2180
+ __queue_work+0xcd0/0xf90 kernel/workqueue.c:2335
+ call_timer_fn+0x16e/0x590 kernel/time/timer.c:1748
+ expire_timers kernel/time/timer.c:1794 [inline]
+ __run_timers kernel/time/timer.c:2373 [inline]
+ __run_timer_base+0x646/0x860 kernel/time/timer.c:2385
+ run_timer_base kernel/time/timer.c:2394 [inline]
+ run_timer_softirq+0xb7/0x180 kernel/time/timer.c:2404
+ handle_softirqs+0x27d/0x850 kernel/softirq.c:622
+ __do_softirq kernel/softirq.c:656 [inline]
+ invoke_softirq kernel/softirq.c:496 [inline]
+ __irq_exit_rcu+0xca/0x1f0 kernel/softirq.c:723
+ irq_exit_rcu+0x9/0x30 kernel/softirq.c:739
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1056 [inline]
+ sysvec_apic_timer_interrupt+0xa6/0xc0 arch/x86/kernel/apic/apic.c:1056
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
+
+The buggy address belongs to the object at ffff888065d7f000
+ which belongs to the cache kmalloc-2k of size 2048
+The buggy address is located 1784 bytes inside of
+ freed 2048-byte region [ffff888065d7f000, ffff888065d7f800)
+
+The buggy address belongs to the physical page:
+page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x65d78
+head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0xfff00000000040(head|node=0|zone=1|lastcpupid=0x7ff)
+page_type: f5(slab)
+raw: 00fff00000000040 ffff88813ffa7000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000080008 00000000f5000000 0000000000000000
+head: 00fff00000000040 ffff88813ffa7000 dead000000000122 0000000000000000
+head: 0000000000000000 0000000000080008 00000000f5000000 0000000000000000
+head: 00fff00000000003 ffffea0001975e01 00000000ffffffff 00000000ffffffff
+head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000008
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 1790, tgid 1790 (kworker/0:5), ts 1662150126386, free_ts 1662115181412
+ set_page_owner include/linux/page_owner.h:32 [inline]
+ post_alloc_hook+0x234/0x290 mm/page_alloc.c:1846
+ prep_new_page mm/page_alloc.c:1854 [inline]
+ get_page_from_freelist+0x2365/0x2440 mm/page_alloc.c:3915
+ __alloc_frozen_pages_noprof+0x181/0x370 mm/page_alloc.c:5210
+ alloc_pages_mpol+0x232/0x4a0 mm/mempolicy.c:2486
+ alloc_slab_page mm/slub.c:3075 [inline]
+ allocate_slab+0x86/0x3b0 mm/slub.c:3248
+ new_slab mm/slub.c:3302 [inline]
+ ___slab_alloc+0xf2b/0x1960 mm/slub.c:4656
+ __slab_alloc+0x65/0x100 mm/slub.c:4779
+ __slab_alloc_node mm/slub.c:4855 [inline]
+ slab_alloc_node mm/slub.c:5251 [inline]
+ __do_kmalloc_node mm/slub.c:5656 [inline]
+ __kmalloc_node_track_caller_noprof+0x5d4/0x820 mm/slub.c:5764
+ kmalloc_reserve+0x136/0x290 net/core/skbuff.c:608
+ __alloc_skb+0x27e/0x430 net/core/skbuff.c:690
+ alloc_skb include/linux/skbuff.h:1383 [inline]
+ mld_newpack+0x13c/0xc40 net/ipv6/mcast.c:1775
+ add_grhead+0x5a/0x2a0 net/ipv6/mcast.c:1886
+ add_grec+0x1452/0x1740 net/ipv6/mcast.c:2025
+ mld_send_cr net/ipv6/mcast.c:2148 [inline]
+ mld_ifc_work+0x6ed/0xd60 net/ipv6/mcast.c:2693
+ process_one_work kernel/workqueue.c:3257 [inline]
+ process_scheduled_works+0xad1/0x1770 kernel/workqueue.c:3340
+ worker_thread+0x8a0/0xda0 kernel/workqueue.c:3421
+page last free pid 15 tgid 15 stack trace:
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ free_pages_prepare mm/page_alloc.c:1395 [inline]
+ __free_frozen_pages+0xbc8/0xd30 mm/page_alloc.c:2943
+ rcu_do_batch kernel/rcu/tree.c:2605 [inline]
+ rcu_core+0xd70/0x1870 kernel/rcu/tree.c:2857
+ handle_softirqs+0x27d/0x850 kernel/softirq.c:622
+ run_ksoftirqd+0x9b/0x100 kernel/softirq.c:1063
+ smpboot_thread_fn+0x542/0xa60 kernel/smpboot.c:160
+ kthread+0x711/0x8a0 kernel/kthread.c:463
+ ret_from_fork+0x599/0xb30 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+
+Memory state around the buggy address:
+ ffff888065d7f580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888065d7f600: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888065d7f680: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                                ^
+ ffff888065d7f700: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888065d7f780: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
 ---
- .../admin-guide/kernel-parameters.txt         | 13 +++
- drivers/cpufreq/cppc_cpufreq.c                | 85 +++++++++++++++++--
- 2 files changed, 90 insertions(+), 8 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index aab72efa1acd..450f0b0225dc 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1035,6 +1035,19 @@ Kernel parameters
- 			Format:
- 			<first_slot>,<last_slot>,<port>,<enum_bit>[,<debug>]
- 
-+	cppc_cpufreq.auto_sel_mode=
-+			[CPU_FREQ] Enable ACPI CPPC autonomous performance
-+			selection. When enabled, hardware automatically adjusts
-+			CPU frequency on all CPUs based on workload demands.
-+			In Autonomous mode, Energy Performance Preference (EPP)
-+			hints guide hardware toward performance (0x0) or energy
-+			efficiency (0xff).
-+			Requires ACPI CPPC autonomous selection register support.
-+			Format: <bool>
-+			Default: 0 (disabled)
-+			0: use cpufreq governors
-+			1: enable if supported by hardware
-+
- 	cpuidle.off=1	[CPU_IDLE]
- 			disable the cpuidle sub-system
- 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index b3da263c18b0..8c6869e68504 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -30,6 +30,9 @@ static struct cpufreq_driver cppc_cpufreq_driver;
- 
- static DEFINE_MUTEX(cppc_cpufreq_update_autosel_config_lock);
- 
-+/* Autonomous Selection boot parameter */
-+static bool auto_sel_mode;
-+
- #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
- static enum {
- 	FIE_UNSET = -1,
-@@ -643,11 +646,16 @@ static int cppc_cpufreq_set_mperf_limit(struct cpufreq_policy *policy, u64 val,
-  * cppc_cpufreq_update_autosel_config - Update autonomous selection config
-  * @policy: cpufreq policy
-  * @is_auto_sel: enable/disable autonomous selection
-+ * @epp_val: EPP value (used only if update_epp true)
-+ * @update_epp: whether to update EPP register
-+ * @update_policy: whether to update policy constraints
-  *
-  * Return: 0 on success, negative error code on failure
-  */
- static int cppc_cpufreq_update_autosel_config(struct cpufreq_policy *policy,
--					      bool is_auto_sel)
-+					      bool is_auto_sel, u32 epp_val,
-+					      bool update_epp,
-+					      bool update_policy)
- {
- 	struct cppc_cpudata *cpu_data = policy->driver_data;
- 	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
-@@ -655,7 +663,6 @@ static int cppc_cpufreq_update_autosel_config(struct cpufreq_policy *policy,
- 	u64 max_perf = caps->nominal_perf;
- 	unsigned int cpu = policy->cpu;
- 	bool update_reg = is_auto_sel;
--	bool update_policy = true;
- 	int ret;
- 
- 	guard(mutex)(&cppc_cpufreq_update_autosel_config_lock);
-@@ -685,6 +692,17 @@ static int cppc_cpufreq_update_autosel_config(struct cpufreq_policy *policy,
- 	if (ret && ret != -EOPNOTSUPP)
- 		return ret;
- 
-+	/* Update EPP register */
-+	if (update_epp) {
-+		ret = cppc_set_epp(cpu, epp_val);
-+		if (ret && ret != -EOPNOTSUPP) {
-+			pr_warn("Failed to set EPP for CPU%d (%d)\n", cpu, ret);
-+			return ret;
-+		}
-+		if (!ret)
-+			cpu_data->perf_ctrls.energy_perf = epp_val;
-+	}
-+
- 	/* Update auto_sel register */
- 	ret = cppc_set_auto_sel(cpu, is_auto_sel);
- 	if (ret && ret != -EOPNOTSUPP) {
-@@ -816,11 +834,54 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	policy->cur = cppc_perf_to_khz(caps, caps->highest_perf);
- 	cpu_data->perf_ctrls.desired_perf =  caps->highest_perf;
- 
--	ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
--	if (ret) {
--		pr_debug("Err setting perf value:%d on CPU:%d. ret:%d\n",
--			 caps->highest_perf, cpu, ret);
--		goto out;
-+	/*
-+	 * Enable autonomous mode on first init if boot param is set.
-+	 * Check last_governor to detect first init and skip if auto_sel
-+	 * is already enabled.
-+	 */
-+	if (auto_sel_mode && policy->last_governor[0] == '\0' &&
-+	    !cpu_data->perf_ctrls.auto_sel) {
-+		/* Enable CPPC - optional register, some platforms need it */
-+		ret = cppc_set_enable(cpu, true);
-+		if (ret) {
-+			if (ret == -EOPNOTSUPP)
-+				pr_debug("CPPC enable not supported CPU%d\n",
-+					 cpu);
-+			else
-+				pr_warn("Failed enable CPPC CPU%d (%d)\n",
-+					cpu, ret);
-+		}
-+
-+		/*
-+		 * Enable autonomous mode; Pass false for update_policy to avoid
-+		 * updating policy limits prematurely as they are not yet fully setup.
-+		 */
-+		ret = cppc_cpufreq_update_autosel_config(policy,
-+							 true,  /* is_auto_sel */
-+							 CPPC_EPP_PERFORMANCE_PREF,
-+							 true,  /* update_epp */
-+							 false); /* update_policy */
-+		if (ret)
-+			pr_warn("Failed autonomous config CPU%d (%d)\n",
-+				cpu, ret);
-+	}
-+
-+	/* If auto mode is enabled, sync policy limits with HW registers */
-+	if (cpu_data->perf_ctrls.auto_sel) {
-+		policy->min = cppc_perf_to_khz(caps,
-+					       cpu_data->perf_ctrls.min_perf ?:
-+					       caps->lowest_nonlinear_perf);
-+		policy->max = cppc_perf_to_khz(caps,
-+					       cpu_data->perf_ctrls.max_perf ?:
-+					       caps->nominal_perf);
-+	} else {
-+		/* Standard mode: governors control frequency */
-+		ret = cppc_set_perf(cpu, &cpu_data->perf_ctrls);
-+		if (ret) {
-+			pr_debug("Err setting perf value:%d CPU:%d ret:%d\n",
-+				 caps->highest_perf, cpu, ret);
-+			goto out;
-+		}
- 	}
- 
- 	cppc_cpufreq_cpu_fie_init(policy);
-@@ -991,7 +1052,7 @@ static ssize_t store_auto_select(struct cpufreq_policy *policy,
- 	if (ret)
- 		return ret;
- 
--	ret = cppc_cpufreq_update_autosel_config(policy, val);
-+	ret = cppc_cpufreq_update_autosel_config(policy, val, 0, false, true);
- 	if (ret)
- 		return ret;
- 
-@@ -1253,10 +1314,18 @@ static int __init cppc_cpufreq_init(void)
- 
- static void __exit cppc_cpufreq_exit(void)
- {
-+	unsigned int cpu;
-+
-+	for_each_present_cpu(cpu)
-+		cppc_set_auto_sel(cpu, false);
-+
- 	cpufreq_unregister_driver(&cppc_cpufreq_driver);
- 	cppc_freq_invariance_exit();
- }
- 
-+module_param(auto_sel_mode, bool, 0000);
-+MODULE_PARM_DESC(auto_sel_mode, "Enable Autonomous Performance Level Selection");
-+
- module_exit(cppc_cpufreq_exit);
- MODULE_AUTHOR("Ashwin Chaugule");
- MODULE_DESCRIPTION("CPUFreq driver based on the ACPI CPPC v5.0+ spec");
--- 
-2.34.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
