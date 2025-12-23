@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-39868-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39869-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C77EECD970A
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 14:32:37 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98F4ECD97A2
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 14:45:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8D1B63012763
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 13:32:36 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C18353016DC7
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 13:45:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E60E33F36D;
-	Tue, 23 Dec 2025 13:32:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 692B722E3E9;
+	Tue, 23 Dec 2025 13:45:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tsX+elyp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NngkHg1O"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 694B01A9F85;
-	Tue, 23 Dec 2025 13:32:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357AB1E7C08;
+	Tue, 23 Dec 2025 13:45:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766496755; cv=none; b=O9DZD4cOxuBG2+5mNUsc0UuP60C4u8t7z/pLwA103npfWEOuQ0o6qx7CoY3lFfMISCzSqQpZUXcAYkexIK8NwyPmqAgZTeABK/obMUpHDDiKi3+/p5pBOabtQyL6P6JpYMqdkDQhH7TPJh8Kvi+otiC1ylxK+AQjUpO5xFbyEw4=
+	t=1766497545; cv=none; b=WQh3DOVsfF4hUUSVUNAj6kMNBeqafApZ/DZNj41IJoNeBznXVg1WyiSIuMxNiVovNeqQ/43bKrjGq/nKA68Inj7IHbERwYQ0tXJQXAYbzMjsbWcYYeDjvXoBJ2WZ6k/bhsPAi4UXhl0ivfgpwSl9CCuvNsA+dFMh/R58+0NJAxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766496755; c=relaxed/simple;
-	bh=xbt9uegKH0QnNNxNVuyDChxCTc/MnbUT0LpZPpYj1po=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=emmfS7CxAm6FjEw1IZZfXb3MgcLDfYH1zmF/gcUV2DzMO50oKpHTOxlKRu/tnPvcyQP35MN92xMWCFu9awcu8nq70E3vO6knAbdgJozbUYpmuH3NwQdGRqbzbXBrC2pbQo1u6zrGKXE71WZqtM5M+/fB+3hq4Y5v15SRZzPXSiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tsX+elyp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE05C113D0;
-	Tue, 23 Dec 2025 13:32:27 +0000 (UTC)
+	s=arc-20240116; t=1766497545; c=relaxed/simple;
+	bh=l0X9Q8nszgJQm1PR4mCOzAEmpSBNmN4/Bn0nalIHUbk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UQIQZ2jRQG9tiqLeeIqBh6uAekq9a/5O0yikvq4rsrGmuJqDhX/JQy8BXlyRHAojUd7LRMUeY6xCrcCXlX69M53hS0g6B3ZwRJuUC6vhqpz4cj46KTVePpycYHj+xgJQxefy8IrIY6QSEofTn06aPSgfYyHbU8B0itirjAwkdLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NngkHg1O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829FFC113D0;
+	Tue, 23 Dec 2025 13:45:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766496754;
-	bh=xbt9uegKH0QnNNxNVuyDChxCTc/MnbUT0LpZPpYj1po=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=tsX+elypj/hcJ7YpsHnJrxshuDSNi4bG3RAvK5wBIPQZJH1tak151baA3vKZDut+u
-	 kDvLkeeFUrrOC0PJuLX6jVkoSF6oPV9NgjRyFcksn2rzKVuFTT5ctSPJYRTQQJxKX9
-	 Zw60jNdVb7HLc7Y9y4Jb3lILntG5slQJA8Gxsg5RExuspURxBk919xqBcQXRIOxvPV
-	 4C39mqSw4bXe9ZmcsqXXf1n+u2DBjn7M9S2KolaN1wqhHDsVT3oSCrQCCf4fyrtj1L
-	 Zybb6+FaAjlgJe/emkTEw9VwixbGjISutLKqKXpawszu0a9yeHhTuo6fvOSaGx8Zg5
-	 1NYO9ar5YMZmw==
-Message-ID: <3d156c45-b55d-4ca4-95d6-0d06e067bbdb@kernel.org>
-Date: Tue, 23 Dec 2025 14:32:24 +0100
+	s=k20201202; t=1766497544;
+	bh=l0X9Q8nszgJQm1PR4mCOzAEmpSBNmN4/Bn0nalIHUbk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NngkHg1OKKOC/CbJRPoj87pJkXrkpxPNf6z/lJdH8FdaYFTpBIvYdGYi8hdh+Tn7I
+	 I5fB/iKgFtbtqej2P94CesnMs6B0TRicRsx/7kSYSQ1bhidy3QH+X0zYwjpxFTahCy
+	 /++Dnypda8DzoL/+ZdpvJhgWsc39SDr4fgf1CuL+0x5ee+SKDJcu3YIwK+O1nMb4Os
+	 FDhfoPY7K1ad52Sgp4y0HiQ7hOFIAXaO4Z9GxFvxTRE7CsWKrWozHrRn9Lp8COIoOS
+	 41Vi1x/76RLh+oHLeomnTug5CQbGYMS459y1pSlBwwtgYjDABNBxV5J1o1qNUPfKzk
+	 z4mFM+d2UXmlQ==
+Message-ID: <54ee48cf-9a00-4132-9ca6-bad65e08990a@kernel.org>
+Date: Tue, 23 Dec 2025 14:45:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -48,26 +48,24 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] dt-bindings: mfd: maxim,max77759: add charger
- child node
+Subject: Re: [PATCH 1/3] dt-bindings: interconnect: add clocks property to
+ enable QoS on qcs8300
+To: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
+ Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Mike Tipton <mike.tipton@oss.qualcomm.com>
+References: <20251128150106.13849-1-odelu.kukatla@oss.qualcomm.com>
+ <20251128150106.13849-2-odelu.kukatla@oss.qualcomm.com>
+ <bf8fbe4b-d89e-424f-8445-0da2f80422c1@kernel.org>
+ <ef51aa03-4478-42f4-88a3-510457c4b917@oss.qualcomm.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
- <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20251218-max77759-charger-v2-0-2b259980a686@google.com>
- <20251218-max77759-charger-v2-1-2b259980a686@google.com>
- <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -112,47 +110,54 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
+In-Reply-To: <ef51aa03-4478-42f4-88a3-510457c4b917@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 19/12/2025 09:17, Krzysztof Kozlowski wrote:
-> On 18/12/2025 23:49, Amit Sunil Dhamne via B4 Relay wrote:
->> From: Amit Sunil Dhamne <amitsd@google.com>
+On 22/12/2025 18:38, Odelu Kukatla wrote:
+> 
+> 
+> On 11/29/2025 3:03 PM, Krzysztof Kozlowski wrote:
+>> On 28/11/2025 16:01, Odelu Kukatla wrote:
+>>> Add 'clocks' property to enable QoS configuration. This property
+>>> enables the necessary clocks for QoS configuration.
+>>>
+>>> QoS configuration is essential for ensuring that latency sensitive
+>>> components such as CPUs and multimedia engines receive prioritized
+>>> access to memory and interconnect resources. This helps to manage
+>>> bandwidth and latency across subsystems, improving system responsiveness
+>>> and performance in concurrent workloads.
 >>
->> The Maxim MAX77759 MFD includes a charger function. Extend the max77759
->> binding to include the charger. Also, update the example to include
->> charger.
+>> I don't see how clocks property help here at all. Are you getting clock
+>> rates in the driver of some other clocks to make QoS decisions?
 >>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> ---
->>  .../devicetree/bindings/mfd/maxim,max77759.yaml    | 33 ++++++++++++++++++++++
->>  1 file changed, 33 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->> index 525de9ab3c2b..1cffdf2e5776 100644
->> --- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
->> @@ -37,6 +37,30 @@ properties:
->>    nvmem-0:
->>      $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
->>  
->> +  charger:
->> +    type: object
->> +    description: This is a dual input switch mode battery charger for portable
->> +      applications. It supports wired and wireless charging and can operate in
->> +      buck and boost mode.
->> +
 > 
-> 
-> I do not see any improvements, so same comment: this should be folded
-> into the parent.
-> 
-> Please read DTS 101 slides or writing bindings or any other talks...
-> 
+> We don't need to get clock rate/frequency, just need to enable the
+> clock(s) for QoS register access for which we need to get the clock
+> handle in driver.
 
-No responses to my emails for a few days, so I assume discussion is done
-and I mark it as changes requested in patchwork.
+Not relevant what your driver does. Still getting clock does not improve
+system responsiveness. If you claim otherwise give me an argument or any
+sort of proof that providing clock has impact on system responsiveness.
+
+IOW, don't feed us marketing. It's waste of our time.
+
+
+
+> 
+>>>
+>>> Both 'reg' and 'clocks' properties are optional. If either is missing,
+>>
+>> No! They are not. How they can be optional in the hardware? How SoC can
+>> have for ONE GIVEN device optional reg, meaning one board with the same
+>> Soc has the IO address space but other board with the same SoC does not
+>> have it.
+>>
+> 
+> I agree, I will drop the “optional” wording and rework the schema so
+
+So why were they optional in the first place? What is this patch describing?
+
 
 Best regards,
 Krzysztof
