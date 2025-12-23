@@ -1,327 +1,293 @@
-Return-Path: <linux-pm+bounces-39862-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39863-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7638ACD94B9
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 13:37:29 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18738CD9471
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 13:35:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6EEE73082ACF
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 12:34:19 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id DC7513004623
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 12:35:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC15C332914;
-	Tue, 23 Dec 2025 12:34:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CBB133291B;
+	Tue, 23 Dec 2025 12:35:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="jRYJy6Qp";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="XOmGe4DO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LG9brHhw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA0822DFA5
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 12:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318FA30DD07;
+	Tue, 23 Dec 2025 12:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766493253; cv=none; b=iWPQ4qnOvf6rSM2jFg4Tr1agFNt4p9iIy0LOwBr1WabmNfAujYlEhKPUJUnZ07UFcCrIwB5TPZobIOuLb1kptwvdKitq8hR8rsye19xwcBnRXBbrminB9Kus0iZ6bZhAHMLNIky2o4QXziPBcj19DItRIoD/tRaVWVylmwKHaBY=
+	t=1766493300; cv=none; b=c5vUydb9y4PggYEJKoAAXaIoqagGAR6twQ2g8M2VWXsbCSHkab6JxhGmUucWbgKhw+C0ikqILzyNgwcJRLAf59LzXA9sHMWN/DHsAtmIqXUz/xCR85JGKE9CTaS5oAP8aFTgoqaybGrZeZAE+is+hBiVQXwsKBCNxgkwHPUhAF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766493253; c=relaxed/simple;
-	bh=VJnabV5NE9B8s8GjpntpzXqF/MDpr7dnVToPXUTxIm0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=U9ThFAzEQ8VUO56XRD0duw2Dq65aotRe6J9df4cIWQnw8iT0gJBhO4SwB/sBdgpsHwgVMkFeWH9QjHKpavPVP6WxDBEk4m917HHaUi9Oag8rUYeQEmVtoAHaNr+CnftfA/X5HFF3QyPvrQ2+yCys1VljlUpv9dUVP6rTAuZkgPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=jRYJy6Qp; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=XOmGe4DO; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BN9kDeR1889180
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 12:34:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=6gWjZeGNdHf
-	8e38PN2KZAbnK77L2YjO8Vi7vnEfr27Y=; b=jRYJy6QpeVZPYde54jClHSIQ3HP
-	JKik7S/A+pnwqUqocGFAb9Pt7B2ETdbZrcXsW26s2B3Ixio/LFZMJy0aS8cjhYiW
-	kfeeDfWJaf1mGSb3OE1S2IO23I5IdmW5LD+ceLCqLuSoc5QnPXu3ekBtO8tR5/Cr
-	bCH75c1G+IDdrGPtxlEq8x3VWnlVb6GKktsBK+g2fSwumE4oWbEBsLfuvfpCgmKf
-	xiskNq1QsFJb+mShtQv4akknxp1r31qjrLk1kRHeOnETMrjRsHyKqAmvZSeqJOEX
-	xNdr4qJ4x09bsOH3/4zd1ysStuMva8bgeRD+fsnD6pShhihOBV+A9435PZw==
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b770akjnj-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 12:34:11 +0000 (GMT)
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-34c387d3eb6so4735188a91.2
-        for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 04:34:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766493250; x=1767098050; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6gWjZeGNdHf8e38PN2KZAbnK77L2YjO8Vi7vnEfr27Y=;
-        b=XOmGe4DOe0KXot8eNRaQstGFrfOV+9FfRN6uZe/Lq2Bsa1hz1bNwPQ1Pzk0zjtR6yu
-         VyjnoaRftCg28be3RPBEIdSN7X+a+AOB7iDqXfd4+XFebcSOKf+BEqm1wxsVHsA44PZt
-         JrE/VnO2iTWK09rh/5qZmXpPndyNftrZtzP4LgNx6Fv6iOJhhO8J3Di4BE9sgHQwLDnw
-         uzKBXzejfqpvL8jdRT6j21zzZN9ppsERJUQ1IAIO0kwIPkxRaJDebBRE94clJf/rkRyN
-         HEVgVj7UVmqQqTsmsOrUwiFPQa68LHQCeb2SM6c2ZIgxwGUD6VW+nYmsA7FKSRMEm0bz
-         VN4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766493250; x=1767098050;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6gWjZeGNdHf8e38PN2KZAbnK77L2YjO8Vi7vnEfr27Y=;
-        b=dnu0BTPe140/Y/SO/OBa21GZ0Ph2KxNipareKfQZbvshO+21I1vSK49tE3X1YWZZLS
-         hb/t/afMAXF49CjSWeq9e+zVUI9nueRuF7e/GfY8QmZSy6x8ryvK8q4jCU/tgxqbICMe
-         KYOjMgoYybrORGY2BlqIFjkrUDMmDIGgOVAKi3CU8r/oQogN2xypakcCVRkYAwLQAaAT
-         HEZmNc26W1wR554zeLnI1m77CG2d4sZTt64khG96EV9rc3yujODu54nfHV6SZJ+4ZGnm
-         ibigSXvkps2uu0FATvYnezLnGQgqT4MjC5W2u+eaSdbmAmEwVoHfevItuJIYrZGg9YNf
-         Zrsg==
-X-Forwarded-Encrypted: i=1; AJvYcCWtNgCKknvzlFNHY+uWx9Pl/MG9tuCjWWt/GgffRDrfgfv63pMKcAizC+FRjq72wbi/x0k4nHAwTw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzI4J/e7I2g4wB7tyLml+zyXjDx/mnWVuSg1nH21ptj8xIAtnaB
-	8nudELSMamBBPdRSrUd6X5RY4yo17JUgr/4w/haZaqO8WL/t8gJl9+ZsFUyBoUgnjF0oT15vQag
-	YqGZFYx01NxEC+OOz+oMeD17QmW6nL1mMtUvnfHmX7LuOAbsXe4nphvTLzFJXpQ==
-X-Gm-Gg: AY/fxX4uXQ3Ysvs8/8UEcF4HCEmilPf19czPEBNpVHAJB2KnWxT7Paj18ed2JP6Szdt
-	3mqMG+QrJILZaUO9kthbOVfUcCclZiV7N97OodGb1bpaP08AgrnY8CHLSQJ2WZqFtFyazIVVrHN
-	ELXU0OgKac6J3+WtT9/I7jy8OOcvPq/4RHUuDpE3kX09hhhG2fdCXLja03f4jiFW7USjOTOwN2Z
-	yUFw+7ZFrT3WUh+X9a5mEN4y0P5r85vtt747Q4WpCF/cFPSFnjA16+J+4Ph/U+AqSb9zGKBDIBw
-	Ef0hvAkbzxawGIcUxhDCe2qo4hIJJRADIbcR+3WBkokUGvaU5I4tyMR5CwXz6iLfmLwF+HEL9ZQ
-	A9EtNcg9YijButWPLwERsGabDEFkHRb2xrQ5o3/Q=
-X-Received: by 2002:a17:90b:548c:b0:34c:37b8:db34 with SMTP id 98e67ed59e1d1-34e921e959dmr10243463a91.32.1766493250273;
-        Tue, 23 Dec 2025 04:34:10 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG/eEWLBnl2k0jZewfmrXJkfFQsP7K04TJpar3r+2nE2qnKZXVlmbrv8wh0IR6tnAgjj5rSxA==
-X-Received: by 2002:a17:90b:548c:b0:34c:37b8:db34 with SMTP id 98e67ed59e1d1-34e921e959dmr10243443a91.32.1766493249767;
-        Tue, 23 Dec 2025 04:34:09 -0800 (PST)
-Received: from hu-gkohli-hyd.qualcomm.com ([202.46.23.25])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e921b39dfsm12936044a91.8.2025.12.23.04.34.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Dec 2025 04:34:09 -0800 (PST)
-From: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-To: andersson@kernel.org, mathieu.poirier@linaro.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com,
-        konradybcio@kernel.org, amitk@kernel.org, mani@kernel.org,
-        casey.connolly@linaro.org
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-Subject: [PATCH v1 8/8] arm64: dts: qcom: Enable cdsp qmi tmd devices for monaco
-Date: Tue, 23 Dec 2025 18:02:27 +0530
-Message-Id: <20251223123227.1317244-9-gaurav.kohli@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251223123227.1317244-1-gaurav.kohli@oss.qualcomm.com>
-References: <20251223123227.1317244-1-gaurav.kohli@oss.qualcomm.com>
+	s=arc-20240116; t=1766493300; c=relaxed/simple;
+	bh=0MjY6kPtdss+jmkMt3dBTemiyz/CWO0603d8+DT8BZs=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=DUPpU34MRi814awXQrLLD6TQ2GCskFKINM6YrA4UNoX1REnhBfz8AWpaVgAyLovAZEPvj8n+VOD/FAT7h8/t20/hrtrPrkCJvoT+Ao/UTNYQytDiAwFIbdMSX2Osx0z5emJNWa+Blxs/0VCA5dmvTlJgYmC6SrkdcRZTM5gJAn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LG9brHhw; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766493298; x=1798029298;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=0MjY6kPtdss+jmkMt3dBTemiyz/CWO0603d8+DT8BZs=;
+  b=LG9brHhwpnnlw8mqMUljr7582sm21A62rEdZqYLyve7YjfeH2JtiDA9b
+   pduL70b2zR5IENT09h2AtpbbZoTNliZ8weST3nMkA1D0P+Dps3AOFVke8
+   G9yyuLozAomIKjaMZLwBPaCdHnOgNXZ8i+A4LMKcRLrYobqAhmK8u/7mq
+   IOhjCIRdsh2z8elFY61Lp8ePrqynRQEeygZCdTONAPYsGA8cYYNGdyl/G
+   7oADzjm35hGsG9i3bywZbui9S96dEcrVHrWpYOpZ4XJ9/yC/i1zpGITJe
+   UI2a9U6UgxMDYOlIQZzAxMvGxWmIwqaQ/k6FbirPH+MPqDMaTmxE6dBv+
+   g==;
+X-CSE-ConnectionGUID: Cb/GODjzTU+cL3qSvn4TRA==
+X-CSE-MsgGUID: f8KbiHBVTgqmJskQAGXiTA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11651"; a="85929702"
+X-IronPort-AV: E=Sophos;i="6.21,170,1763452800"; 
+   d="scan'208";a="85929702"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 04:34:57 -0800
+X-CSE-ConnectionGUID: svF0pR+yT5iHlm1O3cFAaw==
+X-CSE-MsgGUID: 7IXozvm8TAeDqanrJT/4Qw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,170,1763452800"; 
+   d="scan'208";a="199010823"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.48])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2025 04:34:54 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Tue, 23 Dec 2025 14:34:51 +0200 (EET)
+To: Xi Pardee <xi.pardee@linux.intel.com>
+cc: irenic.rajneesh@gmail.com, david.e.box@linux.intel.com, 
+    hdegoede@redhat.com, platform-driver-x86@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/3] platform/x86/intel/pmc: Move LPM mode attributes to
+ PMC
+In-Reply-To: <20251217002343.2289577-3-xi.pardee@linux.intel.com>
+Message-ID: <d9439785-e9d8-ec6b-740a-382efe2eaf22@linux.intel.com>
+References: <20251217002343.2289577-1-xi.pardee@linux.intel.com> <20251217002343.2289577-3-xi.pardee@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIzMDEwMiBTYWx0ZWRfX4kUffmylRKhH
- 8XK/faPOC1rPWFGuUgAi4SG1nfqpcHO38i2clSOjbU8rfz4uTRyEp4VEc6BZthTwOEad0OqkcD0
- iHLOGyPa/LB0YAMTtqGyYT3V/cwtu2SQpKfB6xD0mRQsZXSORAezQ/fn2IcLwpZULCWx5sRlyvO
- aCZCc/wKdrlmZcb9fdBguBETR/FJGqS2UikOSdO4wxyI0XGXkUHGWbRW7SAHE0zFyIGI8fx4FhL
- yEd1tPnT3uj5Ksak2uDvck3hxo7ZJi6HYKNER77Iv2uqW7cxECwTlPzpJCOFvyS2JeFdkztfY4t
- bM7N4HsWKnA6MW7juzbNEy4j6h7qQTr+i9VMs/9UTWVlO+nMJsRACgMoCzc6D58fso07KSz81oG
- VKwzbqGI/3DlPBNcjf0qUA5M6oPBHnu8UFZLDtzsnfwEW0gikAWeKhLHXnkfGTTsEZNw3Yqih/a
- lTsC4ptpcpVIs4MdEtQ==
-X-Authority-Analysis: v=2.4 cv=VqAuwu2n c=1 sm=1 tr=0 ts=694a8c43 cx=c_pps
- a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=ZePRamnt/+rB5gQjfz0u9A==:17
- a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=IQafhW1YQlm6yhshX2cA:9 a=uKXjsCUrEbL0IQVhDsJ9:22
-X-Proofpoint-GUID: T6t3ADqOxQvs3moWRXHQMFpHurbWBUnB
-X-Proofpoint-ORIG-GUID: T6t3ADqOxQvs3moWRXHQMFpHurbWBUnB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-23_03,2025-12-22_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 bulkscore=0 impostorscore=0 malwarescore=0 adultscore=0
- priorityscore=1501 phishscore=0 clxscore=1011 lowpriorityscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512230102
+Content-Type: text/plain; charset=US-ASCII
 
-Enable cdsp cooling devices and thermal zone cooling map bindings
-for cdsp.
+On Tue, 16 Dec 2025, Xi Pardee wrote:
 
-Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
----
- arch/arm64/boot/dts/qcom/monaco.dtsi | 92 ++++++++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
+> Move LPM modes attributes from the pmc_dev to the pmc
+> structure. LPM modes are PMC-specific and should be
+> stored within the pmc structure.
 
-diff --git a/arch/arm64/boot/dts/qcom/monaco.dtsi b/arch/arm64/boot/dts/qcom/monaco.dtsi
-index 985e37bf4876..1fe148ec5cf7 100644
---- a/arch/arm64/boot/dts/qcom/monaco.dtsi
-+++ b/arch/arm64/boot/dts/qcom/monaco.dtsi
-@@ -6217,6 +6217,14 @@ compute-cb@4 {
- 					};
- 				};
- 			};
-+
-+			cooling {
-+				compatible = "qcom,qmi-cooling-cdsp";
-+					cdsp_sw: cdsp_sw {
-+						label = "cdsp_sw";
-+						#cooling-cells = <2>;
-+					};
-+			};
- 		};
- 
- 		tsens2: thermal-sensor@c251000 {
-@@ -6569,36 +6577,78 @@ nsp-0-0-0-thermal {
- 			thermal-sensors = <&tsens2 5>;
- 
- 			trips {
-+				nsp_0_0_0_alert0: trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
- 				nsp-critical {
- 					temperature = <125000>;
- 					hysteresis = <1000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&nsp_0_0_0_alert0>;
-+					cooling-device = <&cdsp_sw
-+							THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		nsp-0-1-0-thermal {
- 			thermal-sensors = <&tsens2 6>;
- 
- 			trips {
-+				nsp_0_1_0_alert0: trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
- 				nsp-critical {
- 					temperature = <125000>;
- 					hysteresis = <1000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&nsp_0_1_0_alert0>;
-+					cooling-device = <&cdsp_sw
-+							THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		nsp-0-2-0-thermal {
- 			thermal-sensors = <&tsens2 7>;
- 
- 			trips {
-+				nsp_0_2_0_alert0: trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
- 				nsp-critical {
- 					temperature = <125000>;
- 					hysteresis = <1000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&nsp_0_2_0_alert0>;
-+					cooling-device = <&cdsp_sw
-+							THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		ddrss-0-thermal {
-@@ -6689,36 +6739,78 @@ nsp-0-0-1-thermal {
- 			thermal-sensors = <&tsens3 5>;
- 
- 			trips {
-+				nsp_0_0_1_alert0: trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
- 				nsp-critical {
- 					temperature = <125000>;
- 					hysteresis = <1000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&nsp_0_0_1_alert0>;
-+					cooling-device = <&cdsp_sw
-+							THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		nsp-0-1-1-thermal {
- 			thermal-sensors = <&tsens3 6>;
- 
- 			trips {
-+				nsp_0_1_1_alert0: trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
- 				nsp-critical {
- 					temperature = <125000>;
- 					hysteresis = <1000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&nsp_0_1_1_alert0>;
-+					cooling-device = <&cdsp_sw
-+							THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		nsp-0-2-1-thermal {
- 			thermal-sensors = <&tsens3 7>;
- 
- 			trips {
-+				nsp_0_2_1_alert0: trip-point0 {
-+					temperature = <115000>;
-+					hysteresis = <5000>;
-+					type = "passive";
-+				};
-+
- 				nsp-critical {
- 					temperature = <125000>;
- 					hysteresis = <1000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&nsp_0_2_1_alert0>;
-+					cooling-device = <&cdsp_sw
-+							THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		ddrss-1-thermal {
+This looks very short. Please reflow your commit message paragraphs to 72 
+chars.
+
+> After the change, LPM mode information will be retrieved
+> and stored per PMC. The substate_requirements attribute
+> in debugfs will display the requirements for each enabled
+> LPM substate.
+> 
+> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
+> ---
+>  drivers/platform/x86/intel/pmc/core.c | 39 ++++++++++++++++++---------
+>  drivers/platform/x86/intel/pmc/core.h | 15 +++++------
+>  2 files changed, 34 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+> index 3e916228e7ed2..25f77a9dc42c5 100644
+> --- a/drivers/platform/x86/intel/pmc/core.c
+> +++ b/drivers/platform/x86/intel/pmc/core.c
+> @@ -783,7 +783,7 @@ static int pmc_core_substate_res_show(struct seq_file *s, void *unused)
+>  
+>  	seq_printf(s, "%-10s %-15s\n", "Substate", "Residency");
+>  
+> -	pmc_for_each_mode(mode, pmcdev) {
+> +	pmc_for_each_mode(mode, pmc) {
+>  		seq_printf(s, "%-10s %-15llu\n", pmc_lpm_modes[mode],
+>  			   adjust_lpm_residency(pmc, offset + (4 * mode), lpm_adj_x2));
+>  	}
+> @@ -838,10 +838,11 @@ static void pmc_core_substate_req_header_show(struct seq_file *s, int pmc_index,
+>  					      enum header_type type)
+>  {
+>  	struct pmc_dev *pmcdev = s->private;
+> +	struct pmc *pmc = pmcdev->pmcs[pmc_index];
+>  	u8 mode;
+>  
+>  	seq_printf(s, "%40s |", "Element");
+> -	pmc_for_each_mode(mode, pmcdev)
+> +	pmc_for_each_mode(mode, pmc)
+>  		seq_printf(s, " %9s |", pmc_lpm_modes[mode]);
+>  
+>  	if (type == HEADER_STATUS) {
+> @@ -887,7 +888,7 @@ static int pmc_core_substate_blk_req_show(struct seq_file *s, void *unused)
+>  
+>  				counter = pmc_core_reg_read(pmc, offset);
+>  				seq_printf(s, "pmc%u: %34s |", pmc_idx, map->name);
+> -				pmc_for_each_mode(mode, pmcdev) {
+> +				pmc_for_each_mode(mode, pmc) {
+>  					bool required = *lpm_req_regs & BIT(mode);
+>  
+>  					seq_printf(s, " %9s |", required ? "Required" : " ");
+> @@ -961,7 +962,7 @@ static int pmc_core_substate_req_regs_show(struct seq_file *s, void *unused)
+>  			 * show an element if it's required for at least one of the
+>  			 * enabled low power modes
+>  			 */
+> -			pmc_for_each_mode(mode, pmcdev)
+> +			pmc_for_each_mode(mode, pmc)
+>  				req_mask |= lpm_req_regs[mp + (mode * num_maps)];
+>  
+>  			/* Get the last latched status for this map */
+> @@ -987,7 +988,7 @@ static int pmc_core_substate_req_regs_show(struct seq_file *s, void *unused)
+>  				seq_printf(s, "pmc%d: %34s |", pmc_idx, map[i].name);
+>  
+>  				/* Loop over the enabled states and display if required */
+> -				pmc_for_each_mode(mode, pmcdev) {
+> +				pmc_for_each_mode(mode, pmc) {
+>  					bool required = lpm_req_regs[mp + (mode * num_maps)] &
+>  							bit_mask;
+>  					seq_printf(s, " %9s |", required ? "Required" : " ");
+> @@ -1077,7 +1078,7 @@ static int pmc_core_lpm_latch_mode_show(struct seq_file *s, void *unused)
+>  		c10 = true;
+>  	}
+>  
+> -	pmc_for_each_mode(mode, pmcdev) {
+> +	pmc_for_each_mode(mode, pmc) {
+>  		if ((BIT(mode) & reg) && !c10)
+>  			seq_printf(s, " [%s]", pmc_lpm_modes[mode]);
+>  		else
+> @@ -1117,7 +1118,7 @@ static ssize_t pmc_core_lpm_latch_mode_write(struct file *file,
+>  	mode = sysfs_match_string(pmc_lpm_modes, buf);
+>  
+>  	/* Check string matches enabled mode */
+> -	pmc_for_each_mode(m, pmcdev)
+> +	pmc_for_each_mode(m, pmc)
+>  		if (mode == m)
+>  			break;
+>  
+> @@ -1213,9 +1214,8 @@ static bool pmc_core_pri_verify(u32 lpm_pri, u8 *mode_order)
+>  	return true;
+>  }
+>  
+> -void pmc_core_get_low_power_modes(struct pmc_dev *pmcdev)
+> +static void pmc_core_pmc_get_low_power_modes(struct pmc_dev *pmcdev, struct pmc *pmc)
+>  {
+> -	struct pmc *pmc = pmcdev->pmcs[PMC_IDX_MAIN];
+>  	u8 pri_order[LPM_MAX_NUM_MODES] = LPM_DEFAULT_PRI;
+>  	u8 mode_order[LPM_MAX_NUM_MODES];
+>  	u32 lpm_pri;
+> @@ -1232,7 +1232,7 @@ void pmc_core_get_low_power_modes(struct pmc_dev *pmcdev)
+>  	 * Lower byte is enough to cover the number of lpm modes for all
+>  	 * platforms and hence mask the upper 3 bytes.
+>  	 */
+> -	pmcdev->num_lpm_modes = hweight32(lpm_en & 0xFF);
+> +	pmc->num_lpm_modes = hweight32(lpm_en & 0xFF);
+>  
+>  	/* Read 32 bit LPM_PRI register */
+>  	lpm_pri = pmc_core_reg_read(pmc, pmc->map->lpm_priority_offset);
+> @@ -1261,7 +1261,22 @@ void pmc_core_get_low_power_modes(struct pmc_dev *pmcdev)
+>  		if (!(BIT(mode) & lpm_en))
+>  			continue;
+>  
+> -		pmcdev->lpm_en_modes[i++] = mode;
+> +		pmc->lpm_en_modes[i++] = mode;
+> +	}
+> +}
+> +
+> +static void pmc_core_get_low_power_modes(struct pmc_dev *pmcdev)
+> +{
+> +	unsigned int pmc_idx;
+> +
+> +	for (pmc_idx = 0; pmc_idx < ARRAY_SIZE(pmcdev->pmcs); ++pmc_idx) {
+
+Please always use post-increment when you are free to choose which one to 
+use.
+
+> +		struct pmc *pmc;
+> +
+> +		pmc = pmcdev->pmcs[pmc_idx];
+> +		if (!pmc)
+> +			continue;
+> +
+> +		pmc_core_pmc_get_low_power_modes(pmcdev, pmc);
+>  	}
+>  }
+>  
+> @@ -1506,7 +1521,7 @@ int pmc_core_pmt_get_lpm_req(struct pmc_dev *pmcdev, struct pmc *pmc, struct tel
+>  		return -ENOMEM;
+>  
+>  	mode_offset = LPM_HEADER_OFFSET + LPM_MODE_OFFSET;
+> -	pmc_for_each_mode(mode, pmcdev) {
+> +	pmc_for_each_mode(mode, pmc) {
+>  		u32 *req_offset = pmc->lpm_req_regs + (mode * num_maps);
+>  		int m;
+>  
+> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
+> index ead2f33ed3ed5..118c8740ad3aa 100644
+> --- a/drivers/platform/x86/intel/pmc/core.h
+> +++ b/drivers/platform/x86/intel/pmc/core.h
+> @@ -423,6 +423,8 @@ struct pmc_info {
+>   *			specific attributes
+>   * @lpm_req_regs:	List of substate requirements
+>   * @ltr_ign:		Holds LTR ignore data while suspended
+> + * @num_lpm_modes:	Count of enabled modes
+> + * @lpm_en_modes:	Array of enabled modes from lowest to highest priority
+>   *
+>   * pmc contains info about one power management controller device.
+>   */
+> @@ -432,6 +434,8 @@ struct pmc {
+>  	const struct pmc_reg_map *map;
+>  	u32 *lpm_req_regs;
+>  	u32 ltr_ign;
+> +	u8 num_lpm_modes;
+> +	u8 lpm_en_modes[LPM_MAX_NUM_MODES];
+>  };
+>  
+>  /**
+> @@ -446,8 +450,6 @@ struct pmc {
+>   * @pkgc_res_cnt:	Array of PKGC residency counters
+>   * @num_of_pkgc:	Number of PKGC
+>   * @s0ix_counter:	S0ix residency (step adjusted)
+> - * @num_lpm_modes:	Count of enabled modes
+> - * @lpm_en_modes:	Array of enabled modes from lowest to highest priority
+>   * @suspend:		Function to perform platform specific suspend
+>   * @resume:		Function to perform platform specific resume
+>   *
+> @@ -462,8 +464,6 @@ struct pmc_dev {
+>  	struct mutex lock; /* generic mutex lock for PMC Core */
+>  
+>  	u64 s0ix_counter;
+> -	u8 num_lpm_modes;
+> -	u8 lpm_en_modes[LPM_MAX_NUM_MODES];
+>  	void (*suspend)(struct pmc_dev *pmcdev);
+>  	int (*resume)(struct pmc_dev *pmcdev);
+>  
+> @@ -535,7 +535,6 @@ int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value, int ignore);
+>  
+>  int pmc_core_resume_common(struct pmc_dev *pmcdev);
+>  int get_primary_reg_base(struct pmc *pmc);
+> -void pmc_core_get_low_power_modes(struct pmc_dev *pmcdev);
+>  void pmc_core_punit_pmt_init(struct pmc_dev *pmcdev, u32 *guids);
+>  void pmc_core_set_device_d3(unsigned int device);
+>  
+> @@ -563,10 +562,10 @@ int pmc_core_pmt_get_blk_sub_req(struct pmc_dev *pmcdev, struct pmc *pmc,
+>  extern const struct file_operations pmc_core_substate_req_regs_fops;
+>  extern const struct file_operations pmc_core_substate_blk_req_fops;
+>  
+> -#define pmc_for_each_mode(mode, pmcdev)						\
+> +#define pmc_for_each_mode(mode, pmc)						\
+>  	for (unsigned int __i = 0, __cond;					\
+> -	     __cond = __i < (pmcdev)->num_lpm_modes,				\
+> -	     __cond && ((mode) = (pmcdev)->lpm_en_modes[__i]),			\
+> +	     __cond = __i < (pmc)->num_lpm_modes,				\
+> +	     __cond && ((mode) = (pmc)->lpm_en_modes[__i]),			\
+>  	     __cond;								\
+>  	     __i++)
+>  
+> 
+
 -- 
-2.34.1
+ i.
 
 
