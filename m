@@ -1,181 +1,227 @@
-Return-Path: <linux-pm+bounces-39900-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39901-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2121ACDA6E5
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 20:56:06 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B935ECDAAAA
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 22:09:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D4CF0300E031
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 19:55:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 3A9BD302083B
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Dec 2025 21:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1FE334C137;
-	Tue, 23 Dec 2025 19:55:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A79730DED8;
+	Tue, 23 Dec 2025 21:09:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="XvQqS6Dc";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="LzbqHjvF"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="iwtqE6lq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6E0346AD5
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 19:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766519720; cv=none; b=lHo0wmVxAdJLimPDMGT8+uyYUdf0UnQPAPDocF1qawdGzocfsa2vMdqZ6OWY4It0HUiXI0EqqqQl7nTEX87Pyiiombhf8vuWFgBaiu5cOGp8bBKHageSsjVtE3btriGYgmHxpsccIm5iemW+BjK/obxEWyWdp7Afk39FKVyQrxY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766519720; c=relaxed/simple;
-	bh=JeHtUOzF6q/IAIMn52nRpNimmQWWVnXvup3DxfBJg60=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FF42FABE1;
+	Tue, 23 Dec 2025 21:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766524157; cv=pass; b=LFwKAkSkggHz8EgCcf0DXRkE+0JPOmFBrmLzlNAvTBG04KBLUmUoPQWppz2bc9GJwhfk3IsDp8iw53+W/VgfKPp1vzphn1xQ27OmmdqHFTJA2bskYv/iA1DOR4f4k8l8g8H0fHKGHUkmOxEGtG1pD6/XPP7vpAGX0Lpbv0cGZvU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766524157; c=relaxed/simple;
+	bh=VXWNJbjeW+XfWfdP+JpgsxNRHGEP7GNhC0twpJ1rQp8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HtzPewHskWRwSiZtbsnRMryxAhgC8OTLoK3+CLEpV5jO/z3DNlQavYiJMcQ5dN6tjjmfMb816427hByqsunv2blzl6JzpnrN+YCwTNl9RI9DTbUdFQeC8a3JL3/esj8s0Ir/aPLkFU6tpmS/iorQIxVNmdhCrUU5qVdyIPZ5Tfw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=XvQqS6Dc; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=LzbqHjvF; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BNHwUXD1245478
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 19:55:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=+5BStTVKjVSt3rj+EAQ8x7sv
-	1areOLZbU4gP/y3s9RY=; b=XvQqS6DcJadicDp6PjCqvfHdxaGbi/zdbR/XLKdV
-	g9DwJpw07Mh56S2rqPpKQm3tCFn9ZaEO5m8N/lZ0unpNo0OGWtII7B4kLgPfo1JI
-	FkEBH/sTqSj2q3B0w3biADdYKnqt/FGHwHUtXI+q7/B50m1vun9Mv/Iu75bWoarW
-	BQp7IIIrUgnlS+FYFZoGfVFJ1VAe5GMJ/9IpdqQKOsYQanJmUa0mTiFBnipGkh+K
-	F2/0KiNX36cDAVMkmnHYqsFj05IREPUu+4/c8vxxQ7EjMZYob5cyUK3+x4S2O48+
-	aQnRwyl4I338dSgi0lHPH06B1qS27XwCT/ys5aZoAIXTew==
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b7u9cs94r-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 19:55:18 +0000 (GMT)
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4ed7591799eso128454351cf.0
-        for <linux-pm@vger.kernel.org>; Tue, 23 Dec 2025 11:55:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766519718; x=1767124518; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+5BStTVKjVSt3rj+EAQ8x7sv1areOLZbU4gP/y3s9RY=;
-        b=LzbqHjvFzMZc7b85ToZg5DDj/m9URRMcEKv+z21vr5RXFgzXYoKcs9NNFFJajvzRLl
-         8LjHyVNVmNN2oEeoZeZw8tEUcNMTlRAWIJ4qQVm8p1muLwuJwqCKM1CBDujGZYbotcBl
-         uvszhUg5hgWL0MYxx8yuDFVqM44qeGGtBH2naskoclS0xVqHh30t8NOATAI1zicdH4oN
-         ogpyN0dndRZpl8WLiuleyA2qe81+jhncc93LMmKR5Fw7I1EKSDrZFXU6MoSnEhBRplyE
-         x5+FWS/VXUw6ads0Pd9tQCxzX0d8XHAH6uO10xyyQetB1UZfSXhW4l+vtQDFzjFSisWQ
-         UfKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766519718; x=1767124518;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+5BStTVKjVSt3rj+EAQ8x7sv1areOLZbU4gP/y3s9RY=;
-        b=h+6Q4fdMwx9YN6COSRnYaTzPi4hWbiwR5GNlrwBCA3+uvVW19ygdQLe3EP4Hez4qy+
-         tbza4VYdK5/iaualFCuJcbvLLj02T123camkFgeOcWXTNPfDwJlVjBTG/cNDL7sp3CeG
-         LRaTEbsMJsiAfZ0jvAIXKDIdAac1TUI0VrLjy5d/i2ouQ3p4IjD93tCn3y5aYoGqv+bd
-         MTkdzKjNMcrbo0FhOL6flyXwoWGlRa4CvFXbhJIrC8grf02G+Mow9WAsNmuSnhTy5i6o
-         kX7cygDwWv03rBrFkEZL431vTQiWhQKOKsIhCaa83AfIL3Wta5rlHdIY8BgDVmCkjBSU
-         3o8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVSSwDcuMo/+bDiivXEu0ndEQamM3z4Ngt140wnA1dGMQM1H4ErwAsAetaKdbNH1QGAjMbAaMie0Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkKUcJ84sjQeqykXqcoqkD2KudVkh2DdYvfRpqEngxgloHEJUH
-	ZiSpL4gpEmLBfoAQkZ3McSIQ6h9Nz77IsY2eo1vAfAn0qoNHQ9CeppaZZnWOyfEH/ITAev4TROT
-	gdEewCeUg0C0JaRF56Qh47pINApqcJU861dhRlV4eazlgJCRlJ9yelmbDK9x+Tw==
-X-Gm-Gg: AY/fxX5iREWWXIbthccsZ1VUqih20sq6H35KIXkW4nttdKMdLYhUxxNPhR5vAXLS4vn
-	BUIy7bVsSGvjJAkXIKRJIRc7r6a+VVtdXoKrzhUL9k6eusHPq/z94l/jA1EOjEBul7wrAKQgZGF
-	AwiStbvq43QJGfhC95RHe8k1suA2o1vPWIXg9edwGmbF0PzAYfUGSdZB11mVF2rxIXsTj+l2bnW
-	xZ6zWA22kjLswTb+1d9dbp55zEQ1yiXZiBnNTHdmaXe8us4u6h5Vk/3YYu6Di8zMIHfI87zsSec
-	Hdhud9FhrBpTcoZR4IMODFVmjakxShbVyHgb7jIkh5cYJCOqyuGeojBepb4yHx6oosS/yzPRoah
-	kLwHvj+LXMR99VnpFHCXznk4cyDJgHp5lWhJ12Az4OdtZ5q90Wu8d3hyHKrbcGgHa4cMhDghjPs
-	zYdu6xiFhLOkBQ6ZHIC6P4vII=
-X-Received: by 2002:a05:622a:4243:b0:4ef:bed6:5358 with SMTP id d75a77b69052e-4f4abd1c647mr227535291cf.21.1766519717615;
-        Tue, 23 Dec 2025 11:55:17 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGyl53CTvCy3DtDwqsEpaclioPGQPPivQcHmL7nD6zQOqdsOLZVeuyyrrHY4JSSia3f121UAA==
-X-Received: by 2002:a05:622a:4243:b0:4ef:bed6:5358 with SMTP id d75a77b69052e-4f4abd1c647mr227535001cf.21.1766519717172;
-        Tue, 23 Dec 2025 11:55:17 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3812262b2cdsm38445331fa.25.2025.12.23.11.55.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Dec 2025 11:55:16 -0800 (PST)
-Date: Tue, 23 Dec 2025 21:55:13 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Tipton <mike.tipton@oss.qualcomm.com>
-Subject: Re: [PATCH 1/3] dt-bindings: interconnect: add clocks property to
- enable QoS on qcs8300
-Message-ID: <n7ucdvjlvst23zbbcwenp7umhn4wgsznqp23scpknwqnd6tcep@i6lhp7va325w>
-References: <20251128150106.13849-1-odelu.kukatla@oss.qualcomm.com>
- <20251128150106.13849-2-odelu.kukatla@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NjhCrwU5NoTiiilmnnv96PfmKB0GNOlTSOD0GM4ZDOeuMys0sXo9ltnmNTRNkrCK+bwruVpbsRtQN6oUeRP/K3B//Hgg6E917FvPFJlr5JhqXOy9iY/5+QgkeBiBIsyKaE5IgrIynIkzpxom38NZkPVvuX8DQWVtNRq5atggMhM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=iwtqE6lq; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1766524141; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=ep2yqpwPQgA6IwrCtoFQ2hC0GxvjsB9L5JOziCiJYLxsnrkiVWOtUoeni1Wn2uvDlIjasrq+7PIUM1k8UF903fzcyWgwnrUXgcMQZIswAItAvdfC9wkKw1zc+0iLU+dCAe+boGIM878J8Bf8H+BSd5ALool6tIIxrku9SkEA8Mk=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1766524141; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=s8NAUT9bQs7qbFSasLydr/oelzy5DvyIfqkHKjJGVGI=; 
+	b=Ne3L1koMO7S1Hp8R07idwRkW03ZzUxDyMnSb5k0RvqIJei4NiREZmWNZPGvTXdr7JVz0JdNlCWK3yKEAInP0351bnBaU2y+MDXhkVjccaYLB4C/HiagOMWP2IAWp1nKCRtstBmMSpkd8WsvFt1VueoEk5uqprrATNjft3rXhZqM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1766524141;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=s8NAUT9bQs7qbFSasLydr/oelzy5DvyIfqkHKjJGVGI=;
+	b=iwtqE6lq4CdFM+EPyvIlThYfrkEAr+jJapENLUeODZR+czZs6+rlcD6tyya2Rh8n
+	qrNSgLhPcmk02RWyF+WLrJY5FcQ2GxYuaItEwWJGfAMVMDI18mQeGWth3iwFeLvLsvI
+	SZV6obOXl/vp1HmofsZqqmdiHOhCEsTLiFKH8xFc=
+Received: by mx.zohomail.com with SMTPS id 1766524138042730.0153141909041;
+	Tue, 23 Dec 2025 13:08:58 -0800 (PST)
+Received: by venus (Postfix, from userid 1000)
+	id E3BEE18197C; Tue, 23 Dec 2025 22:08:54 +0100 (CET)
+Date: Tue, 23 Dec 2025 22:08:54 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Riwen Lu <luriwen@kylinos.cn>, pavel@kernel.org, lenb@kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, xiongxin <xiongxin@kylinos.cn>, 
+	regressions@lists.linux.dev
+Subject: [REGRESSION] Re: [PATCH v3] PM: suspend: Make pm_test delay
+ interruptible by wakeup events
+Message-ID: <aUsAk0k1N9hw8IkY@venus>
+References: <20251113012638.1362013-1-luriwen@kylinos.cn>
+ <CAJZ5v0hwhVO6J2nS2-byU0+Lm8QbzdBzv4-X4eLNNUpTg+41Kg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6lymdjenuo2frg5f"
 Content-Disposition: inline
-In-Reply-To: <20251128150106.13849-2-odelu.kukatla@oss.qualcomm.com>
-X-Proofpoint-GUID: uhUzl93hXNpbuR3kozoIHlMSKkXKczVE
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjIzMDE2NiBTYWx0ZWRfX1vKvb+d5sQ5M
- pRhy6pmx5k9g1dW6dog52JLnEdU0jCY0js5Cn+Mtxjev+ghN5EOpAKN9544q+nwPT7fB58mU4wt
- lKLfOUaFTN8DGnJi34K2lKgTYeTuzHOAdxnaOdRxoaNulV28H/WcyhEfGny/HVV6Lq5pL5ybHby
- aIO6M6TbbhMhfg6YN3ZrelnPf3Owfs83mm3Fa4kjZxa/biOMjHGKu9rkix0xmHX37cz8rnG6lSU
- ZARoq+GiUK2q3zNyPZBMS1JdVnoCxWn0Co6CtUVZzGJ6bHkefLvW3kt5oT75DCDI8scdQr5Chhz
- tqfFXPbuKFc9uXTsnd1wjlGJXiWhBtverD9xGlPWp3+Miz5xGv2sk0HKLb7/ae2TjtKsuQ7O2ja
- VrM5Mqk3KpPlZ+keaYv+91IuQSV7/5lAtXw6Cw5Bs2+O2A097IJWHXwNh4pUlUKjFb23n8eQExv
- 39NyERqe2kzoePW1LrQ==
-X-Authority-Analysis: v=2.4 cv=HsN72kTS c=1 sm=1 tr=0 ts=694af3a6 cx=c_pps
- a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=dhCFs6qcdUbYmOXzIwcA:9 a=CjuIK1q_8ugA:10
- a=dawVfQjAaf238kedN5IG:22
-X-Proofpoint-ORIG-GUID: uhUzl93hXNpbuR3kozoIHlMSKkXKczVE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-23_04,2025-12-22_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 suspectscore=0
- malwarescore=0 clxscore=1015 adultscore=0 bulkscore=0 phishscore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2512230166
+In-Reply-To: <CAJZ5v0hwhVO6J2nS2-byU0+Lm8QbzdBzv4-X4eLNNUpTg+41Kg@mail.gmail.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.5.1/266.517.63
+X-ZohoMailClient: External
 
-On Fri, Nov 28, 2025 at 08:31:04PM +0530, Odelu Kukatla wrote:
-> Add 'clocks' property to enable QoS configuration. This property
-> enables the necessary clocks for QoS configuration.
-> 
-> QoS configuration is essential for ensuring that latency sensitive
-> components such as CPUs and multimedia engines receive prioritized
-> access to memory and interconnect resources. This helps to manage
-> bandwidth and latency across subsystems, improving system responsiveness
-> and performance in concurrent workloads.
-> 
-> Both 'reg' and 'clocks' properties are optional. If either is missing,
-> QoS configuration will be skipped. This behavior is controlled by the
-> 'qos_requires_clocks' flag in the driver, which ensures that QoS
-> configuration is bypassed when required clocks are not defined.
-> 
-> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-> ---
->  .../interconnect/qcom,qcs8300-rpmh.yaml       | 53 ++++++++++++++++---
->  1 file changed, 47 insertions(+), 6 deletions(-)
 
-As a generic feedback for Qualcomm interconnect drivers (please pass it
-through the team):
+--6lymdjenuo2frg5f
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: [REGRESSION] Re: [PATCH v3] PM: suspend: Make pm_test delay
+ interruptible by wakeup events
+MIME-Version: 1.0
 
-Please ensure that QoS-related clocks are defined in the first driver
-submission. DT bindings should describe the hardware and it's not that
-the hardware has changed between the time the first patches were
-submitted and this patchset.
+Hi,
 
-I see a typical pattern that QoS support is being submitted several
-months later. Why is it so? Why can't QoS be a part of the _same_
-patchset?
+On Fri, Nov 14, 2025 at 05:11:16PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Nov 13, 2025 at 2:26=E2=80=AFAM Riwen Lu <luriwen@kylinos.cn> wro=
+te:
+> >
+> > Modify the suspend_test() function to make the test delay can be
+> > interrupted by wakeup events.
+> >
+> > This improves the responsiveness of the system during suspend testing
+> > when wakeup events occur, allowing the suspend process to proceed
+> > without waiting for the full test delay to complete when wakeup events
+> > are detected.
+> >
+> > Additionally, using msleep() instead of mdelay() avoids potential soft
+> > lockup "CPU stuck" issues when long test delays are configured.
+> >
+> > Co-developed-by: xiongxin <xiongxin@kylinos.cn>
+> > Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+> > Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
+> > ---
+> >  kernel/power/suspend.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> > index b4ca17c2fecf..1c2f777da367 100644
+> > --- a/kernel/power/suspend.c
+> > +++ b/kernel/power/suspend.c
+> > @@ -344,10 +344,14 @@ MODULE_PARM_DESC(pm_test_delay,
+> >  static int suspend_test(int level)
+> >  {
+> >  #ifdef CONFIG_PM_DEBUG
+> > +       int i;
+> > +
+> >         if (pm_test_level =3D=3D level) {
+> >                 pr_info("suspend debug: Waiting for %d second(s).\n",
+> >                                 pm_test_delay);
+> > -               mdelay(pm_test_delay * 1000);
+> > +               for (i =3D 0; i < pm_test_delay && !pm_wakeup_pending()=
+; i++)
+> > +                       msleep(1000);
+> > +
+> >                 return 1;
+> >         }
+> >  #endif /* !CONFIG_PM_DEBUG */
+> > --
+>=20
+> Applied as 6.19 material, thanks!
 
--- 
-With best wishes
-Dmitry
+This is now upstream as a10ad1b10402 ("PM: suspend: Make pm_test delay inte=
+rruptible by wakeup events").
+When doing the following PM debugging test on ROCK 4D on v6.19-rc2
+
+echo N > /sys/module/printk/parameters/console_suspend
+echo 1 > /sys/power/pm_print_times
+echo 1 > /sys/power/pm_debug_messages
+echo core > /sys/power/pm_test
+echo mem > /sys/power/state
+
+I see the following error triggered reliably, which did not happen on 6.18
+and no longer appears after reverting this patch:
+
+[   49.647656] ------------[ cut here ]------------
+[   49.647656] WARNING: kernel/time/timekeeping.c:821 at ktime_get+0xb8/0xd=
+8, CPU#0: swapper/0/0
+[   49.647656] Modules linked in: sha256 cfg80211 binfmt_misc fuse ipv6 snd=
+_soc_hdmi_codec rk805_pwrkey rockchip_saradc dwmac_rk stmmac_platform rtc_h=
+ym8563 snd_soc_es8328_i2c phy_rockchip_usbdp rockchipdrm stmmac snd_soc_es8=
+328 dw_hdmi_qp industrialio_triggered_buffer analogix_dp typec phy_rockchip=
+_samsung_hdptx kfifo_buf dw_dp rockchip_thermal dw_mipi_dsi spi_rockchip_sf=
+c phy_rockchip_naneng_combphy pcs_xpcs panfrost drm_shmem_helper gpu_sched =
+snd_soc_rockchip_sai snd_soc_simple_card drm_dp_aux_bus dw_hdmi snd_soc_sim=
+ple_card_utils rfkill_gpio rfkill snd_soc_core drm_display_helper snd_compr=
+ess cec drm_client_lib drm_dma_helper display_connector snd_pcm_dmaengine d=
+rm_kms_helper snd_pcm drm snd_timer snd backlight soundcore adc_keys
+[   49.647656] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.19.0-rc2-=
+g7211b2cf9c08 #1 PREEMPT
+[   49.647656] Hardware name: Radxa ROCK 4D (DT)
+[   49.647656] pstate: 800000c5 (Nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=
+=3D--)
+[   49.647656] pc : ktime_get+0xb8/0xd8
+[   49.647656] lr : tick_nohz_idle_enter+0x50/0x90
+[   49.647656] sp : ffffc1a17b573d50
+[   49.647656] x29: ffffc1a17b573d50 x28: 00000000fdf57ec0 x27: ffffc1a17b5=
+7b260
+[   49.647656] x26: ffffc1a17b57e000 x25: 0000000000000000 x24: 00000000000=
+000ea
+[   49.647656] x23: ffffc1a17a470000 x22: ffffc1a17b57ad00 x21: ffff3e6282a=
+25000
+[   49.647656] x20: ffff0003fdead5d8 x19: ffffc1a17b4885d8 x18: 00000000000=
+0000a
+[   49.647656] x17: ffff3e6282a25000 x16: ffff800080000000 x15: 00700ea231d=
+1d404
+[   49.647656] x14: 0000000000000396 x13: 0000000000000001 x12: 00000000000=
+00001
+[   49.647656] x11: 00000000000000c0 x10: 0000000000000aa0 x9 : ffffc1a17b5=
+73d00
+[   49.647656] x8 : ffffc1a17b586680 x7 : 0000000000000000 x6 : 00000000000=
+00000
+[   49.647656] x5 : 0000000000000004 x4 : ffffc1a17b57eb68 x3 : 00000000000=
+00000
+[   49.647656] x2 : ffffc1a17b48ec40 x1 : 0000000000000000 x0 : 00000000000=
+00001
+[   49.647656] Call trace:
+[   49.647656]  ktime_get+0xb8/0xd8 (P)
+[   49.647656]  tick_nohz_idle_enter+0x50/0x90
+[   49.647656]  do_idle+0x38/0x260
+[   49.647656]  cpu_startup_entry+0x38/0x40
+[   49.647656]  rest_init+0xd8/0xe0
+[   49.647656]  console_on_rootfs+0x0/0x6c
+[   49.647656]  __primary_switched+0x88/0x90
+[   49.647656] ---[ end trace 0000000000000000 ]---
+
+Greetings,
+
+-- Sebastian
+
+--6lymdjenuo2frg5f
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmlLBOIACgkQ2O7X88g7
++pozrhAApMMmy8xT4ahq3B0jtFJzrxLWqU867KlUv7R/8cLH6sl1Fota9BneSLun
+twK+/tqSQAdYZWw9eCKzfUNqkDcpQC7Uv2zST01Ee2WJ9iHqWza/ggvCU5kB1iuR
+UqmTwwXix3DgrgMjWwRN3HdcsUyelPBDESOZe6kJ2qOLLJspit/bcriVSTtKl0Mp
+X9RhreEDSBBJ0zuFyaA0Uli7vII9MIs5pK5ymR4Wy9rIYCWEcqPZezgpRcT7XZma
+3Vz4VMI+W6QwBCH2mpR7Gzz3yjgLmL1DIZg+GUWAYzqyoDeafPCN6Oj5++UkT4M6
+dGdnapJwA21jgbjNd3UOEi0kZpRAr53M4hGZ4uiofXTXm6iGgSk1d0+v4J8GVMrD
+SAP8DdR4e8brVx5Koc5Fyq/+XAiR0/ZBLRSHdnvWP3xh5e7Um5Gt74Hx82mKhXZz
+g6ml6bdM/5BXQ79Ywh4ASqgDJ4Hypq+QMvIbJ2FZLfYy0Vva50HLoQI1pBRmaD08
+l+TRAu4dPbQlSeAl4QZR4vcg/m3Q3216rwRR067hGp0rbCvFf0wXQ9Fq63pFZr+X
+bbC18uim5R04oUmkco0+5mB3OkCZ1K1Ug/H6SCfMq7grLqyu/nQwJISJgekFxlsU
+Ec4lPFWFTuUTkOXoe4tacLLAIzKO973eMUeEGHLHnH7ZgkcyRyM=
+=u5y6
+-----END PGP SIGNATURE-----
+
+--6lymdjenuo2frg5f--
 
