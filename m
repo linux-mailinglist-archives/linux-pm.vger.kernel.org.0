@@ -1,160 +1,165 @@
-Return-Path: <linux-pm+bounces-39918-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39919-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6758CCDD018
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 19:33:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0496BCDD04C
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 20:07:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2A1AE301FF4C
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 18:33:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9F1803011EC2
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 19:07:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90FA03019BE;
-	Wed, 24 Dec 2025 18:33:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E05A33A031;
+	Wed, 24 Dec 2025 19:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lLhNK3j9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jt48wwVz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f54.google.com (mail-yx1-f54.google.com [74.125.224.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B664B86337;
-	Wed, 24 Dec 2025 18:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931CE30BBBB
+	for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 19:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766601185; cv=none; b=CrnsTiviYqw8zywdeHWe4kY4WTr3RIbe28v61517x1AnD9VmsRe9WB4Pz4kNF8Yg8qFv8rcVUdy2pSPXCvnZFDRwUzgZCIXGVtfWbu9ndLuyDJ5QJM7sZSZ9btg0nL8BLr9oxwDi1FHQd0P8sG26JSIuAUKAF076LnzieISw2qc=
+	t=1766603264; cv=none; b=QMoB3WcVoCXGVstIq6fj/h8fXiUeFLaSeEfGEd6AZGLJYK1+VCsmJWtA4lKRfl32D5+fl3PZfGpA/QkpJBXmDo380nvsLD9IgB3hVrF26iKDx35yPADbf39DeGEqvwd/yFz9leR5PWs7VWvSU+3zrhOlqTyT1GqODB0gz7Fi2kI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766601185; c=relaxed/simple;
-	bh=RsG87ueyldnZZZk3PsZzqf+vvdsWkt7pyksxnFNVWBU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GvzmGRkHbFr3+VrtjwFMK42icV6Y61vm00BLYucURO/DzOGmVhz+SfpnJl7znLi1JxOw3K3JTu9nPLe0rCe9z4xGv2ThTSlkQPsuwQGhGdGrJOpJsxmx4b/CKtQ/tBIgpbVy8ynlWShnzdl48wA+6bU6DmXuUZ4UX0jS0Z4QjQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lLhNK3j9; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766601184; x=1798137184;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RsG87ueyldnZZZk3PsZzqf+vvdsWkt7pyksxnFNVWBU=;
-  b=lLhNK3j9PL8oSkCwOP6K6ocZt3F/EHta8480nugK2fduJlcSUX2OrqVx
-   hus4yqmbCQZi5nAcIgnTQQDiTRzGWXNMqbD0wOrLgtgBIPzrai9d3rWuZ
-   bUTepfby9ZjapsZGLPqaZBFLVwcDT60pslyx+aZC7Y2kANxZXXDVnpdHj
-   74SImfAi+fym2xlaiE45F5ISQy32JmzGLgoQqqVbOOBK1ON+/cbqH3qnS
-   nX45ZgTm+2B643amdt/eAmCgbuhl6El9Xb4P9Ipdi/V204N9B5IJNFGLw
-   vw85d+THswzJQZ9vln+/gxD5gR4mFQd78r3aTXMnROnYFNLN410eab5ND
-   g==;
-X-CSE-ConnectionGUID: WwCPfXMxQwS0Q4MXl3/5CA==
-X-CSE-MsgGUID: MiSvo8EXQAe/wGo9KpaBCw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="72061774"
-X-IronPort-AV: E=Sophos;i="6.21,174,1763452800"; 
-   d="scan'208";a="72061774"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 10:33:03 -0800
-X-CSE-ConnectionGUID: hIIlLaeHRTO+FMsExmvWDw==
-X-CSE-MsgGUID: FV+miLuFT0ee+nKrm1TQZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,174,1763452800"; 
-   d="scan'208";a="231124025"
-Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
-  by fmviesa001.fm.intel.com with ESMTP; 24 Dec 2025 10:32:57 -0800
-Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vYTfL-000000006Ia-0DOx;
-	Wed, 24 Dec 2025 18:32:55 +0000
-Date: Wed, 24 Dec 2025 19:32:53 +0100
-From: kernel test robot <lkp@intel.com>
-To: Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
-	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
-	corbet@lwn.net, pierre.gondois@arm.com, zhenglifeng1@huawei.com,
-	rdunlap@infradead.org, ray.huang@amd.com, gautham.shenoy@amd.com,
-	mario.limonciello@amd.com, perry.yuan@amd.com,
-	ionela.voinescu@arm.com, zhanjie9@hisilicon.com,
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, linux-tegra@vger.kernel.org,
-	treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
-	ksitaraman@nvidia.com, sanjayc@nvidia.com, nhartman@nvidia.com,
-	bbasu@nvidia.com, sumitg@nvidia.com
-Subject: Re: [PATCH v5 07/11] cpufreq: CPPC: Add sysfs for min/max_perf and
- perf_limited
-Message-ID: <202512241930.heuhsbt9-lkp@intel.com>
-References: <20251223121307.711773-8-sumitg@nvidia.com>
+	s=arc-20240116; t=1766603264; c=relaxed/simple;
+	bh=xGMey4A7iFVHAmrVZuSavckmgLulJhGs63Zh3metjjY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sAAGnT2VHMypMYEmw/AiL8B2QvNiQZpbuCfvwlVYG5Nk8wDQAFHQIoiKJzVhRSbXGvA9tOEtopx4BshjsBbHBAtq2AO5GMb0twcAkNacpjU63gAwA9qJXkZ2qIeWPziT3jbe66G485Qxy0fsvyr1abd4Lv3TOol20yUb8O5kHsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jt48wwVz; arc=none smtp.client-ip=74.125.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yx1-f54.google.com with SMTP id 956f58d0204a3-642fcb38f35so4994022d50.1
+        for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 11:07:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1766603261; x=1767208061; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NzIVnDZpOLjchy2wgbEcpJaoavN6zFZmqhSGhoRwcq0=;
+        b=jt48wwVzAY30EJsCgsBi7TrUZHYIH4B7dENfIKwBOgf+orFGCMZ9TbGni6VSrbHmdI
+         LPK3rS9lwcDDXS6PnM9tsNqrFgZ7p2KuWtrjQMcqMm//eCk9BKnUomcvLXovIP2xunU2
+         B6SbxvRopOesHK+AkV3hoIJG//jR3l+5+m301qKjGd44VvSJfsthjTX2uhcGj/bSFdIv
+         /RNSYyo8UUlEjlTDCeM13EDgRLXa1Am1Xyvy1AR6PHvQqG9BJn9aCjzvQPJrv6iWzFDk
+         EGY1aznIp1KannV8iZph+snCe15e2bn28pj/gkm5t81hhSPQDlAsc8A5HMnv1mP/5xq9
+         uSfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766603261; x=1767208061;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NzIVnDZpOLjchy2wgbEcpJaoavN6zFZmqhSGhoRwcq0=;
+        b=S/gbl6/1030w1byPY6mXUUfRJ2/CSA2vZyCkErkxkU3pGeT4axCKg/8eQMCV204A3d
+         GWK/Y7e5LRbhWldxMlzzktoLgqKdAmBF4g3a2IblLkfavK0vHJPJGDiGSf5ABub4BnxE
+         taiqxe9FcGv7kToAjVgLEp6pRBUXVT6KOumOkcxpHVUnjXBePDgLNNSl9b1B2gUZHs6L
+         9xaLJsd1qaifxfapqEIXkufI+EEcBG2YBBDJKZ7bHVjW0qEamMH2PyQbAA4GslKBXTB0
+         46QX1ZbV0biXMvSc60wSDc8xEmBzHf60FwQnFaOIK8bUBEvHjNipukwH6Br+RTY8zD4F
+         o0nw==
+X-Forwarded-Encrypted: i=1; AJvYcCXEfFZPyXnG/fy5aGJJTlWOpoBTC6MhVETbiZcZXRo+dV0DxmacN5aidpfyqN3TM7qgFqwuGB4RiA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzsy5KVFIKVTvXr5OVJlNFx7dpOhndLTjKBilfzLee+fqEN6G9u
+	bVcnSaFxh43oOzj529HkxxFz1NyrxMCXh89USzOpQ+XixLKJtLFVZNqUkcldi8M6pw==
+X-Gm-Gg: AY/fxX4nwvub/YaY1WxZittep58taHYN1cL/VW9ucugvf2oh21RyZvRHmALdMAcLQFE
+	WSh3jeEI8oo9+bjQBlmQ4/MVVPPPLVaFqI9HhUxaMZqFKARS7X+10VSKVUorJ/B8l/OWtnaSa/H
+	yaaQBn+NPX0ejI8wA1PCRZ6WObKcECQqyn1WaR5IllWpdqY2TD5fVCEkLYQuO7EW3+oP6lum4HE
+	2HLkYZ5gibPqCa7j2NL4XNqVwbW2FrOuDQE2WcCZHL+9QayeFv2CAKY1EtgAbqXJbYrOwtQX/bM
+	XD3H21VuSQwvuprNgLUQ5soRmEUB7dPkTUHlvnU8tqR0DgmTCVUUNDgqVHhSUIoxgr5WGQB1UxB
+	yXy7qiyjEZezwoEYGr4G7fsWScdYptwO1JB7zDqANfpG3sw1H46cgxQuYuwktTd6jSEH66sLE4x
+	yseuRr5BnnkriFA7zhhEzifzIeYuVPWvH7vLzZ0gFHyaFgjhACuu5bzlNSoeE=
+X-Google-Smtp-Source: AGHT+IEY4Bkjt/yYbrhofiHe25t6FYtL51Cgg0/pcmheFBExP5e5Z7qmADlL5vL1uqS/fVBKeLgjpg==
+X-Received: by 2002:a53:bdc5:0:b0:63f:2bc7:7074 with SMTP id 956f58d0204a3-6466a8aba62mr11525267d50.60.1766603261316;
+        Wed, 24 Dec 2025 11:07:41 -0800 (PST)
+Received: from ?IPV6:2600:1700:4570:89a0:6872:f79a:c2ff:4f4f? ([2600:1700:4570:89a0:6872:f79a:c2ff:4f4f])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6466a8b16e2sm8621687d50.2.2025.12.24.11.07.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Dec 2025 11:07:40 -0800 (PST)
+Message-ID: <c3599851-6e19-4ed9-9ce7-703746b978e7@google.com>
+Date: Wed, 24 Dec 2025 11:07:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251223121307.711773-8-sumitg@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/5] dt-bindings: mfd: maxim,max77759: add charger
+ child node
+To: Krzysztof Kozlowski <krzk@kernel.org>, Sebastian Reichel
+ <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+References: <20251218-max77759-charger-v2-0-2b259980a686@google.com>
+ <20251218-max77759-charger-v2-1-2b259980a686@google.com>
+ <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
+From: Amit Sunil Dhamne <amitsd@google.com>
+Content-Language: en-US
+In-Reply-To: <411802b6-517d-497e-bf7b-183e6e6d7a64@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Sumit,
+Hi Krzysztof,
 
-kernel test robot noticed the following build warnings:
+On 12/19/25 12:17 AM, Krzysztof Kozlowski wrote:
+> On 18/12/2025 23:49, Amit Sunil Dhamne via B4 Relay wrote:
+>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>
+>> The Maxim MAX77759 MFD includes a charger function. Extend the max77759
+>> binding to include the charger. Also, update the example to include
+>> charger.
+>>
+>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>> ---
+>>  .../devicetree/bindings/mfd/maxim,max77759.yaml    | 33 ++++++++++++++++++++++
+>>  1 file changed, 33 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>> index 525de9ab3c2b..1cffdf2e5776 100644
+>> --- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>> +++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+>> @@ -37,6 +37,30 @@ properties:
+>>    nvmem-0:
+>>      $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
+>>  
+>> +  charger:
+>> +    type: object
+>> +    description: This is a dual input switch mode battery charger for portable
+>> +      applications. It supports wired and wireless charging and can operate in
+>> +      buck and boost mode.
+>> +
+>
+> I do not see any improvements, so same comment: this should be folded
+> into the parent.
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.19-rc2 next-20251219]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/cpufreq-CPPC-Add-generic-helpers-for-sysfs-show-store/20251224-001833
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20251223121307.711773-8-sumitg%40nvidia.com
-patch subject: [PATCH v5 07/11] cpufreq: CPPC: Add sysfs for min/max_perf and perf_limited
-reproduce: (https://download.01.org/0day-ci/archive/20251224/202512241930.heuhsbt9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512241930.heuhsbt9-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   Using alabaster theme
-   ERROR: Cannot find file ./include/linux/pci.h
-   WARNING: No kernel-doc for file ./include/linux/pci.h
-   ERROR: Cannot find file ./include/linux/mod_devicetable.h
-   WARNING: No kernel-doc for file ./include/linux/mod_devicetable.h
->> Documentation/ABI/testing/sysfs-devices-system-cpu:356: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
-   ERROR: Cannot find file ./include/linux/bootconfig.h
-   WARNING: No kernel-doc for file ./include/linux/bootconfig.h
-   ERROR: Cannot find file ./include/linux/pstore_zone.h
-   ERROR: Cannot find file ./include/linux/pstore_zone.h
-   WARNING: No kernel-doc for file ./include/linux/pstore_zone.h
+I misunderstood the folding comment for merging the charger binding into
+mfd.
 
 
-vim +356 Documentation/ABI/testing/sysfs-devices-system-cpu
+> Please read DTS 101 slides or writing bindings or any other talks...
 
-   347	
-   348			Read/write a frequency value in kHz from/to this file. This
-   349			file sets the maximum performance level (as frequency) at
-   350			which the platform may run. The frequency value is internally
-   351			converted to a performance value and must be in the range
-   352			[cpuinfo_min_freq, cpuinfo_max_freq], inclusive.
-   353	
-   354			This file is only present if the cppc-cpufreq driver is in use.
-   355	
- > 356	What:		/sys/devices/system/cpu/cpuX/cpufreq/perf_limited
-   357	Date:		February 2026
-   358	Contact:	linux-pm@vger.kernel.org
-   359	Description:	Performance Limited
-   360	
-   361			Read to check if platform throttling (thermal/power/current
-   362			limits) caused delivered performance to fall below the
-   363			requested level. A non-zero value indicates throttling occurred.
-   364	
-   365			Write the bitmask of bits to clear:
-   366			  1 = clear bit 0 (desired performance excursion)
-   367			  2 = clear bit 1 (minimum performance excursion)
-   368			  3 = clear both bits
-   369			The platform sets these bits; OSPM can only clear them.
-   370	
-   371			This file is only present if the cppc-cpufreq driver is in use.
-   372	
+This gives a lot more context. Thanks for the pointer. I also reviewed a
+few recently merged mfd (with charger being a cell) patches as well.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I realize that you're asking me to remove the charger node and re-anchor
+its properties to the pmic mfd device. I will update it in the next
+revision.
+
+
+BR,
+
+Amit
+
+>
+> Best regards,
+> Krzysztof
 
