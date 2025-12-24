@@ -1,126 +1,160 @@
-Return-Path: <linux-pm+bounces-39917-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39918-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BBADCDCFEA
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 19:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6758CCDD018
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 19:33:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D8FCA30141EB
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 18:21:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2A1AE301FF4C
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 18:33:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4C46329C4F;
-	Wed, 24 Dec 2025 18:21:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90FA03019BE;
+	Wed, 24 Dec 2025 18:33:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WcKH+yzV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lLhNK3j9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2728145A1F
-	for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 18:21:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B664B86337;
+	Wed, 24 Dec 2025 18:33:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766600470; cv=none; b=VQI5otKsimJMXfsuSUYJRDtoHC0qsQSX11EGkZmwEWapTe0IwS1Jpn5RxR968ZGMULpJR76rHt6Oj3BEH46oDdO62YJNEjQts5R1FEUd4sL4w7tKgvZ6mZgqeuigSeKuRjyu76YZc8ieTlzWpwm6BYdgfcS8xj+m8LU7QjviLns=
+	t=1766601185; cv=none; b=CrnsTiviYqw8zywdeHWe4kY4WTr3RIbe28v61517x1AnD9VmsRe9WB4Pz4kNF8Yg8qFv8rcVUdy2pSPXCvnZFDRwUzgZCIXGVtfWbu9ndLuyDJ5QJM7sZSZ9btg0nL8BLr9oxwDi1FHQd0P8sG26JSIuAUKAF076LnzieISw2qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766600470; c=relaxed/simple;
-	bh=kUEtGZexwuxWvBBaH3Bt8qhV0BzOV87ZgQoNucqqOoo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jgXrFzmWzaxbsZ4yscNwwRreZLIo5Q1StPryy5MD5+WysncepvgYI6UdM8/CQlHkZvq34lhBhZeW9GCpnWVO5OmpHzxotX3EYMpJJavTbMPmvii/W7I8MuxAmcSEVZ9dkvh8bsFWOVj/4Zx8LM041S9ehdnRqJ+RaV+j7mnGLrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WcKH+yzV; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1766600467;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FMDaQlrjaLe9XjxVldJhVnRL6bKjLFnfMBk3tnqVZUo=;
-	b=WcKH+yzVec6Ul9MIAi+Q2Zg9he4s1w8R06NyafTGj5X7EcjLdGu+JdOPdRpazQ7jtYsCui
-	qGylf0L4mNtu+GxSFZqcAeK2NKViFHNfVRv7LKct6FVPdS4BmWqsIX9JDRycXkDzJvIJ/P
-	KzZuoY/wHoD/MJFBeh0acKZYfi1r0pU=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-655-iF84iMlRNH6skcQMwTbYoQ-1; Wed,
- 24 Dec 2025 13:21:04 -0500
-X-MC-Unique: iF84iMlRNH6skcQMwTbYoQ-1
-X-Mimecast-MFC-AGG-ID: iF84iMlRNH6skcQMwTbYoQ_1766600463
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 345ED1955F3F;
-	Wed, 24 Dec 2025 18:21:03 +0000 (UTC)
-Received: from mrout-thinkpadp16vgen1.punetw6.csb (unknown [10.74.64.11])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B78A519560A7;
-	Wed, 24 Dec 2025 18:20:59 +0000 (UTC)
-From: Malaya Kumar Rout <mrout@redhat.com>
-To: linux-kernel@vger.kernel.org
-Cc: mrout@redhat.com,
-	malayarout91@gmail.com,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	linux-pm@vger.kernel.org
-Subject: [PATCH] PM: hibernate: Fix crash when freeing invalid crypto compressor
-Date: Wed, 24 Dec 2025 23:50:54 +0530
-Message-ID: <20251224182055.124020-1-mrout@redhat.com>
+	s=arc-20240116; t=1766601185; c=relaxed/simple;
+	bh=RsG87ueyldnZZZk3PsZzqf+vvdsWkt7pyksxnFNVWBU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GvzmGRkHbFr3+VrtjwFMK42icV6Y61vm00BLYucURO/DzOGmVhz+SfpnJl7znLi1JxOw3K3JTu9nPLe0rCe9z4xGv2ThTSlkQPsuwQGhGdGrJOpJsxmx4b/CKtQ/tBIgpbVy8ynlWShnzdl48wA+6bU6DmXuUZ4UX0jS0Z4QjQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lLhNK3j9; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766601184; x=1798137184;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RsG87ueyldnZZZk3PsZzqf+vvdsWkt7pyksxnFNVWBU=;
+  b=lLhNK3j9PL8oSkCwOP6K6ocZt3F/EHta8480nugK2fduJlcSUX2OrqVx
+   hus4yqmbCQZi5nAcIgnTQQDiTRzGWXNMqbD0wOrLgtgBIPzrai9d3rWuZ
+   bUTepfby9ZjapsZGLPqaZBFLVwcDT60pslyx+aZC7Y2kANxZXXDVnpdHj
+   74SImfAi+fym2xlaiE45F5ISQy32JmzGLgoQqqVbOOBK1ON+/cbqH3qnS
+   nX45ZgTm+2B643amdt/eAmCgbuhl6El9Xb4P9Ipdi/V204N9B5IJNFGLw
+   vw85d+THswzJQZ9vln+/gxD5gR4mFQd78r3aTXMnROnYFNLN410eab5ND
+   g==;
+X-CSE-ConnectionGUID: WwCPfXMxQwS0Q4MXl3/5CA==
+X-CSE-MsgGUID: MiSvo8EXQAe/wGo9KpaBCw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="72061774"
+X-IronPort-AV: E=Sophos;i="6.21,174,1763452800"; 
+   d="scan'208";a="72061774"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2025 10:33:03 -0800
+X-CSE-ConnectionGUID: hIIlLaeHRTO+FMsExmvWDw==
+X-CSE-MsgGUID: FV+miLuFT0ee+nKrm1TQZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,174,1763452800"; 
+   d="scan'208";a="231124025"
+Received: from igk-lkp-server01.igk.intel.com (HELO 8a0c053bdd2a) ([10.211.93.152])
+  by fmviesa001.fm.intel.com with ESMTP; 24 Dec 2025 10:32:57 -0800
+Received: from kbuild by 8a0c053bdd2a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vYTfL-000000006Ia-0DOx;
+	Wed, 24 Dec 2025 18:32:55 +0000
+Date: Wed, 24 Dec 2025 19:32:53 +0100
+From: kernel test robot <lkp@intel.com>
+To: Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
+	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+	corbet@lwn.net, pierre.gondois@arm.com, zhenglifeng1@huawei.com,
+	rdunlap@infradead.org, ray.huang@amd.com, gautham.shenoy@amd.com,
+	mario.limonciello@amd.com, perry.yuan@amd.com,
+	ionela.voinescu@arm.com, zhanjie9@hisilicon.com,
+	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-tegra@vger.kernel.org,
+	treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
+	ksitaraman@nvidia.com, sanjayc@nvidia.com, nhartman@nvidia.com,
+	bbasu@nvidia.com, sumitg@nvidia.com
+Subject: Re: [PATCH v5 07/11] cpufreq: CPPC: Add sysfs for min/max_perf and
+ perf_limited
+Message-ID: <202512241930.heuhsbt9-lkp@intel.com>
+References: <20251223121307.711773-8-sumitg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251223121307.711773-8-sumitg@nvidia.com>
 
-When crypto_alloc_acomp() fails, it returns an ERR_PTR value, not NULL.
-The cleanup code in save_compressed_image() and load_compressed_image()
-unconditionally calls crypto_free_acomp() without checking for ERR_PTR,
-which causes crypto_acomp_tfm() to dereference an invalid pointer and
-crash the kernel.
+Hi Sumit,
 
-This can be triggered when the compression algorithm is unavailable
-(e.g., CONFIG_CRYPTO_LZO not enabled).
+kernel test robot noticed the following build warnings:
 
-Fix by adding IS_ERR_OR_NULL() checks before calling crypto_free_acomp()
-and acomp_request_free(), similar to the existing kthread_stop() check.
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.19-rc2 next-20251219]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Malaya Kumar Rout <mrout@redhat.com>
----
- kernel/power/swap.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/cpufreq-CPPC-Add-generic-helpers-for-sysfs-show-store/20251224-001833
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20251223121307.711773-8-sumitg%40nvidia.com
+patch subject: [PATCH v5 07/11] cpufreq: CPPC: Add sysfs for min/max_perf and perf_limited
+reproduce: (https://download.01.org/0day-ci/archive/20251224/202512241930.heuhsbt9-lkp@intel.com/reproduce)
 
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 33a186373bef..8ee2fa995580 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -902,8 +902,10 @@ static int save_compressed_image(struct swap_map_handle *handle,
- 		for (thr = 0; thr < nr_threads; thr++) {
- 			if (data[thr].thr)
- 				kthread_stop(data[thr].thr);
--			acomp_request_free(data[thr].cr);
--			crypto_free_acomp(data[thr].cc);
-+			if (data[thr].cr)
-+				acomp_request_free(data[thr].cr);
-+			if (!IS_ERR_OR_NULL(data[thr].cc))
-+				crypto_free_acomp(data[thr].cc);
- 		}
- 		vfree(data);
- 	}
-@@ -1499,8 +1501,10 @@ static int load_compressed_image(struct swap_map_handle *handle,
- 		for (thr = 0; thr < nr_threads; thr++) {
- 			if (data[thr].thr)
- 				kthread_stop(data[thr].thr);
--			acomp_request_free(data[thr].cr);
--			crypto_free_acomp(data[thr].cc);
-+			if (data[thr].cr)
-+				acomp_request_free(data[thr].cr);
-+			if (!IS_ERR_OR_NULL(data[thr].cc))
-+				crypto_free_acomp(data[thr].cc);
- 		}
- 		vfree(data);
- 	}
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512241930.heuhsbt9-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   Using alabaster theme
+   ERROR: Cannot find file ./include/linux/pci.h
+   WARNING: No kernel-doc for file ./include/linux/pci.h
+   ERROR: Cannot find file ./include/linux/mod_devicetable.h
+   WARNING: No kernel-doc for file ./include/linux/mod_devicetable.h
+>> Documentation/ABI/testing/sysfs-devices-system-cpu:356: WARNING: Definition list ends without a blank line; unexpected unindent. [docutils]
+   ERROR: Cannot find file ./include/linux/bootconfig.h
+   WARNING: No kernel-doc for file ./include/linux/bootconfig.h
+   ERROR: Cannot find file ./include/linux/pstore_zone.h
+   ERROR: Cannot find file ./include/linux/pstore_zone.h
+   WARNING: No kernel-doc for file ./include/linux/pstore_zone.h
+
+
+vim +356 Documentation/ABI/testing/sysfs-devices-system-cpu
+
+   347	
+   348			Read/write a frequency value in kHz from/to this file. This
+   349			file sets the maximum performance level (as frequency) at
+   350			which the platform may run. The frequency value is internally
+   351			converted to a performance value and must be in the range
+   352			[cpuinfo_min_freq, cpuinfo_max_freq], inclusive.
+   353	
+   354			This file is only present if the cppc-cpufreq driver is in use.
+   355	
+ > 356	What:		/sys/devices/system/cpu/cpuX/cpufreq/perf_limited
+   357	Date:		February 2026
+   358	Contact:	linux-pm@vger.kernel.org
+   359	Description:	Performance Limited
+   360	
+   361			Read to check if platform throttling (thermal/power/current
+   362			limits) caused delivered performance to fall below the
+   363			requested level. A non-zero value indicates throttling occurred.
+   364	
+   365			Write the bitmask of bits to clear:
+   366			  1 = clear bit 0 (desired performance excursion)
+   367			  2 = clear bit 1 (minimum performance excursion)
+   368			  3 = clear both bits
+   369			The platform sets these bits; OSPM can only clear them.
+   370	
+   371			This file is only present if the cppc-cpufreq driver is in use.
+   372	
+
 -- 
-2.51.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
