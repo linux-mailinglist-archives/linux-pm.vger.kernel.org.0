@@ -1,100 +1,100 @@
-Return-Path: <linux-pm+bounces-39902-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39903-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4E6ACDBA84
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 09:20:25 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06E74CDBA8C
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 09:21:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 685A6301A706
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 08:20:15 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 07147300C16A
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 08:21:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 356C430E84E;
-	Wed, 24 Dec 2025 08:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E72A32A3C9;
+	Wed, 24 Dec 2025 08:20:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MKRqgpye";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="eL1U4Xb+"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KEIHoxST";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="aziGHPHK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38979269CE7
-	for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 08:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA2B2DF128
+	for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 08:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766564413; cv=none; b=pKMUsrfumCxJyRElkwHdvODEczxMfbR4BDeCZWuCU0/0qUYqMFId1zIQSchU5wJ+BaWUrTfa6eEGMR3oAtVz/yAzHXsJvjb0atTUzHJd5OPhYoNdmLudl8Dwv6NqMqEdSdzg6HFqABWQp21QUOyY1U9MextFxvk6TSbFsUagGqU=
+	t=1766564458; cv=none; b=m0RY6ttqVRDu0XCd0LKe7hN6ieAu7gXy82qawIOdEFterlE6JuO5vGV7xA8u7jnb/xacfI1kGPmARrCyaUwrMh1DLjSziDjKRYhJqE9MfS1BsaztTj/B6is+c7xGaO5JqCu1jRD13Kd0yvY0vMLjKRTB9rQcGUOAXCWzw76fy/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766564413; c=relaxed/simple;
-	bh=4tiG7mYYhrJHtMUu2zLkSlC44E+ts0dw44yrBndIklY=;
+	s=arc-20240116; t=1766564458; c=relaxed/simple;
+	bh=GSU5yGNtEOFMKebMqYnsrC3weQDSAQFw3sFP+vYsDkw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OtFXbcZ6jSgHvnGYim9I/b5ERKwBO+XvAfly+LvzHf2cUPq+PBJCfHO04VoF4yDmiP8OmB3yt8LgcnApqzMYtjNEWU4Yiqgst5kmPjxgaodBRlum8aBjpf0GbFkitY9iumigU4NVrTUQwqaGabWlLVIBPGVu+AcCyzTVJDzF4DM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MKRqgpye; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=eL1U4Xb+; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=LVAgupD6aKq9xyM656A3UU6W5y2yG0PFkG5c0jJm03hcmyMir0RqJSvpEA4kPMZ1u57TVfYRMK1jWPdu+c4dcpvFrvIfRHCpiN2aJwtqHuQ6scdfiKXkF6IjvxLy4f1orLB7KxOfcm2Nkt3CGn/H6tGoK3QxMvnSKZyn0SejXM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KEIHoxST; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=aziGHPHK; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BO5gHrc1018224
-	for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 08:20:10 GMT
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BO6iGJX678327
+	for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 08:20:56 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	v1aTFRmwjiHABmaYA3Tkt3n6HdoFNrXtqlDsLqKqL88=; b=MKRqgpye7LYOlypK
-	/VD7Uv7lG0ZQ1Hq5I24L50SOiPZgUlUyOyyUGkFtM2Ru8eew8OpNcvP3udCUZ3YT
-	Eham8SaB6tz0U+n83a+1p7eQcPprLnMCW3DxoKdIDp4GkdvNbUcZFvoaSZNXuIXQ
-	MfMbhp51khNDukff921A5W9fYBg9R4ou3nVZK291dPaNg60cO/qMTy5T+4fL2jM3
-	mPwBIYTWsTRwyJWpkzQzUKkERVlbC/vuxM9+J4acFGHJYD2+AOm/R94puUjAke8O
-	RMTSYj+nztSXOeTtuRYXOZiN+H6bt7iXdmmabiF0FQeeIWwZBwgaIF58bvpzIpPw
-	d/heQg==
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b7xjsa98c-1
+	EbcdHEnt0rdVycBwlDK178QvcbxGSwRY7tSrUvZuOok=; b=KEIHoxSTIwsf88V7
+	5kyvHNIPj4V9AWAb38nnRpF/jFdgsQthz7d4qSaV3+59OQVOZiEAkyqggJsMwzE0
+	ZIy9Al4vOCeBFuzfhGEestBZqVQPPee19eri3h8cdptrkzUXFiezhAUYESlBvyQu
+	UVwFeuP6mZSOPAGyO7+heu3BVVFLnWmSxKEsE3tCv440nMtYYd02T+l2tMOFPJzF
+	NJ7JqoEpxoUdjZC/oCM0cuUJtrSQANjDdRn/SbfR4xjVj6aBwKbyiqCi3yNJ1wby
+	UtfzMBqqlu4Ewhmmq30hJXD2ikH3L3d1fPCmQUs+/2dM95U+q8k7bhBGSAtZDark
+	6A0dDQ==
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b7yvq210p-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 08:20:09 +0000 (GMT)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-34c93f0849dso5716908a91.1
-        for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 00:20:09 -0800 (PST)
+	for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 08:20:56 +0000 (GMT)
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-34c904a1168so12311490a91.1
+        for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 00:20:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766564409; x=1767169209; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1766564456; x=1767169256; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=v1aTFRmwjiHABmaYA3Tkt3n6HdoFNrXtqlDsLqKqL88=;
-        b=eL1U4Xb+hnF2up/MOEGgIx3VDvPFOXyHF+aS+RL2J4kmEDTuLTuIhA9dCeY30ahWO8
-         IDjD4iZSNENYV0OJwh1yeOIwVJXl/hDXbnpf/v4FAKYJy00mR+S4X9i9+vXJ1gLy2k65
-         srfIMnR2DHujDUXeqPgfWHqCgv+12M6LQWpKXGU+P3dRiMYLNjoQJfubNzBVW2OXoP4G
-         JOX8jHIIGxmd55vWMfqBIEznfb/3nwtnq6lbCXRSdTSxeeyPA17wqOSJSzL8haxo1NUt
-         h+b7Z1WC5dPZBzgp0Ql9oo3kx/+isSGj4WW7CkHsQNuSulVtRf96hTBqSHcJ97xXrkyb
-         6wmA==
+        bh=EbcdHEnt0rdVycBwlDK178QvcbxGSwRY7tSrUvZuOok=;
+        b=aziGHPHKTc52YSmcJXmaM2J/mMdMW9iVirt3SW556HHvvSoQF+Xfv8CCYbIMiKxl+I
+         05fS7CnU1d9RbJEXYywyr7gv1aeGVSd+v63qsn5uMcE3xI+0WUxSDIJjx8poKTTV9aRK
+         7TUj5n02qhqD3pTht986Pl5gVrRA5Mosc17bsOBX7hjgMHh7389Sm3G3J3ZQ5ttTmWHL
+         9bab5gFUASSYQfhqve4PKS0y/iteAnbwdfOfb18XHA0XXjKQBLJyD7m7aZzQwbltQlDi
+         jZJCczlg+DtgwLF/48UIh7CwLYluLwHwQwKFJtOsFsWhpaM4d6npxjVV3TvUYe0Tva8i
+         rbqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766564409; x=1767169209;
+        d=1e100.net; s=20230601; t=1766564456; x=1767169256;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=v1aTFRmwjiHABmaYA3Tkt3n6HdoFNrXtqlDsLqKqL88=;
-        b=DOlP4e1vNMmD5HiddQj3ZFqTxtiDs2FSN/4DQYtNuawzYnRaBVNsbQDGobK+y9FrTl
-         lGUb6h/WCw4xDs8Lv41Ws9KxYlQOAzHN6i6dfWr6YJGMD1xHiN8XnqF+3H79d/7nXLO9
-         SXIE2LzEl8RRUwIDST72JqjXTfEtM0Tp1krIIeWnDbQzv0rxkM8J//2Xyz2/MhJ3BYng
-         BrsYB6bdeG9GXdIqNAgTEI35m7RZvhrw3sX/7VUfqHj2fF/1TN6eIq3HARjPr2wws+x7
-         S5iYqP23vHSBM2Id6cswBQHS1ph/CXlHbvteo8c4etYpg+uIxB+e4JuwLE8kWGz0x45I
-         D09A==
-X-Forwarded-Encrypted: i=1; AJvYcCXjofMztOAd0Lxgronrt2RsBs0YkyLiDx2DmN8Lp5HIzlpZkSU+IENVLdocTHlKneTktTK4Ttn7wg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQM8uU/F5XQxWwDb/gW5sWGknKpfzd7hPrnHlgYKnu3Z0l9VPc
-	76TfY5E0fgiz/udDHIN0+e3byXq6wCcrRYwY3IGTrbVVK+bMgSrs3Iu/ePsfyvzFBshHW8+lNTI
-	GvPWBcPSkxdTCEq+srgczVYf2LIOZK5zHbkMxURkc2zjbqzTiWUvVd9FZXm+WYg==
-X-Gm-Gg: AY/fxX647v9lIMyCW67MVfsxmTi/xKsH83gGHJM+HnrMGnguSRhd7Mdfr811ErYDV29
-	K5yfbSn3L3KWgMBANmnsUlHoTlA4nwqasafUiRv1xz4j/AAFKO66ZqGdh1uBWaEMnqjpcqMDhHW
-	MMIQL/4vQ22mtMHyBSylJMZVwDTwKumUH42CWPfipr8m8dRdWPk7AsL4GhsgxTnjNee0QQUHF5i
-	XVrxPSfAP4B+KeHi6ars5+/QKJMj9n+NPFyiAOG9BpHb8APw1077uAUoHkJgx70hfl5quk2Kx8O
-	42PxU0AHJIQLf/IZ8eLWu9O1hfiF+8KOZQuxmAu9iPfQFto2pPfNdc9Z0bCrZab7nuNjldNAz1V
-	xSZUYXaA/eoIWvVK7pri/tKXxQ9S3HbcNA6naPdbF0Q==
-X-Received: by 2002:a17:90b:4b0b:b0:340:c094:fbff with SMTP id 98e67ed59e1d1-34e71e09fecmr17011434a91.10.1766564408665;
-        Wed, 24 Dec 2025 00:20:08 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGivsG+N5RJkX5fsHsrnoYYjv8t3uRuyakLXbUPqE1tarR4/F9wX1tOx5Dxy7dfZiDukn6lng==
-X-Received: by 2002:a17:90b:4b0b:b0:340:c094:fbff with SMTP id 98e67ed59e1d1-34e71e09fecmr17011402a91.10.1766564408100;
-        Wed, 24 Dec 2025 00:20:08 -0800 (PST)
+        bh=EbcdHEnt0rdVycBwlDK178QvcbxGSwRY7tSrUvZuOok=;
+        b=AKbJG92WsPc7VKu/eeGIuFHeYJ7PFyx5FmCbmc2B8yu0MBUO7UIqh7RflPw8npaa1r
+         6QmG8Sca9bBn5bqu/NYv5HC2iNnwJEVgWBwhmWPiRF2jZanU9st23TbdXjSZ+Qd1ERl4
+         s+l4dyTTg1zH8Dlvo5dPiNoY310J13SQYy0k6Z/NimwcbFadIifbYxxjJigOrRsY1SFf
+         Xj/5p8xRvuGJLZwz3HHl4S9IbW5pJGv0Wpa2GzMa2tOKgkqNcHxpJL5jfsgi7IEyJ48Z
+         ZvDjd+PB5O7mubB50bhYEJZ/vD4gcV1/0DZaff50loxxgP5iVC1qZoTkqdTaqonv23q8
+         Q/Ag==
+X-Forwarded-Encrypted: i=1; AJvYcCXvMbw60xqiw1l/F55PR/ehyM+pwPoWJcA5de+6vjoeRVLM0PCUdw1KXzr5yJiGvrzkTc8WGqyfDg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yza5i69VoKymN4Zd2T6vIkkZQsvL01AQx4Hr389w+fmBoFSfEw3
+	fduzm6bREH2M11YewyUhzxbNzw/mVlR7Unv82Vc5YaTTLBS87u29n6ix7O+75gVJQgfblY4bJzZ
+	AQPFtIB/Y+0icwdJmAaXn1ZoOPlq2aMo0y9jo3DLvyeBhJxsttm6GWY2IBBFmHg==
+X-Gm-Gg: AY/fxX4jDnpZceMYqJh5uQDT5rDknHTw/Ny2YKoI9tUQOPUjxy86sWUNdS9WdG2BveI
+	k2qQLnzhocNtrEcXkNCOToi8/Oo2egdirpqUdr72ok7Tbkd3uNAYMD3NmWHJVXycU67LENFA5qU
+	yZNEiEtZ8XOMcCzCsqKCalp37slczIdjmEyk1BuIdWP5+IabI78WDMwUFyPmcnooVtt36Swqos5
+	cOjghUkiW5uqt6F4eilWELEpWVktRlhgkQy2RHlqy4WTkg7u9/PDOa+nCu/tUpiRunTGg16VRRx
+	PUQ6Bb7BKVlEsVxbNN9Y6nfSqIfSyHszSkN8CshUG0TjW5G9lZA/pje7WtgCJl+ZOfVfTHcC43T
+	Xe5gNS3L++VWLDntam7qzQD2LfZqmVbeBFHGolK3QgQ==
+X-Received: by 2002:a17:90b:2749:b0:349:2154:eede with SMTP id 98e67ed59e1d1-34e9214e677mr14067922a91.14.1766564455524;
+        Wed, 24 Dec 2025 00:20:55 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFpNJi8TUG80yxK6/I8Wztg6e2acb+GkGygU+f56Eoxmw1V3ergpeX3o4nU5Gn7hQVrf5V46A==
+X-Received: by 2002:a17:90b:2749:b0:349:2154:eede with SMTP id 98e67ed59e1d1-34e9214e677mr14067900a91.14.1766564455027;
+        Wed, 24 Dec 2025 00:20:55 -0800 (PST)
 Received: from [192.168.1.11] ([106.222.232.236])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e77285111sm9006585a91.5.2025.12.24.00.20.02
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34e70dcc7bcsm17906048a91.13.2025.12.24.00.20.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Dec 2025 00:20:07 -0800 (PST)
-Message-ID: <611b87db-9226-4c99-a07d-03351dd10546@oss.qualcomm.com>
-Date: Wed, 24 Dec 2025 13:50:00 +0530
+        Wed, 24 Dec 2025 00:20:54 -0800 (PST)
+Message-ID: <c46a42ff-36df-43ed-b9c6-a6778ac7a791@oss.qualcomm.com>
+Date: Wed, 24 Dec 2025 13:50:48 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -102,363 +102,93 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/8] thermal: Add Remote Proc cooling driver
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: andersson@kernel.org, mathieu.poirier@linaro.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com,
-        konradybcio@kernel.org, amitk@kernel.org, mani@kernel.org,
-        casey.connolly@linaro.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Amit Kucheria <amit.kucheria@oss.qualcomm.com>
+Subject: Re: [PATCH v1 3/8] dt-bindings: thermal: Add qcom,qmi-cooling yaml
+ bindings
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: rui.zhang@intel.com, linux-pm@vger.kernel.org, amitk@kernel.org,
+        conor+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mathieu.poirier@linaro.org,
+        daniel.lezcano@linaro.org, mani@kernel.org, casey.connolly@linaro.org,
+        rafael@kernel.org, konradybcio@kernel.org, andersson@kernel.org,
+        lukasz.luba@arm.com, krzk+dt@kernel.org, linux-arm-msm@vger.kernel.org
 References: <20251223123227.1317244-1-gaurav.kohli@oss.qualcomm.com>
- <20251223123227.1317244-2-gaurav.kohli@oss.qualcomm.com>
- <iz3e2ojepgjo4c36ibl5sfpw2oidkj7sao6o2jint4midgsynm@adhsfkukk2ba>
+ <20251223123227.1317244-4-gaurav.kohli@oss.qualcomm.com>
+ <176649836333.2975956.6455328748183813008.robh@kernel.org>
 Content-Language: en-US
 From: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-In-Reply-To: <iz3e2ojepgjo4c36ibl5sfpw2oidkj7sao6o2jint4midgsynm@adhsfkukk2ba>
+In-Reply-To: <176649836333.2975956.6455328748183813008.robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjI0MDA3MSBTYWx0ZWRfX97u0IcXKbKz7
- CSHT6iRrar3NTBK0ItG2UNoBSSv13LCKPMWHC6E/XFzBT0Xz667UzytQNeN+9jIr8p+uDLq70kV
- ogGeoMJzGegBGEr5IvG/Db5KjRWW0KwinvsOV/K3G3/8FyP4+jmNcXopp9WJvK9p0wZs2gYQkil
- R6f/MFEx4UhZiSBUqLjQnAzFbzsim+HVUp/BjvVsGIIEAT8ZZ1tuY84I3Vg8o7l0G8ZDh3FmmDm
- SctOZeUcV44kNHTzgoPDEhmj3O4kkw8fQ9cSv7lxRirJsXopiqTfI/NLEaAEiifuq7fR2ORK2P+
- /h26OrJNBlpcEFKUXhah3LLxMgYa5IrCV0xJuG/eJcZNr7lZEzgUU3MxlKCw+z6TNQZFxcYHjWC
- LNOZhG3GIMHltJQjPtux4FHXYaXNoZJYOsdRpGQkugocmk+ur0v4ZwWi2oB1W1zlSOItHzTrOlB
- LyIvKq+rS+XlgP8ybSQ==
-X-Proofpoint-ORIG-GUID: klARbs2dPZiyM3D5-aOKaLTqgUCA5k7U
-X-Authority-Analysis: v=2.4 cv=YcqwJgRf c=1 sm=1 tr=0 ts=694ba239 cx=c_pps
- a=0uOsjrqzRL749jD1oC5vDA==:117 a=pk+8NuH2X28N4C0eta/h1Q==:17
+X-Proofpoint-ORIG-GUID: tl3RFrMQsv1lSThsy59_UiaClA4s89d_
+X-Authority-Analysis: v=2.4 cv=abZsXBot c=1 sm=1 tr=0 ts=694ba268 cx=c_pps
+ a=vVfyC5vLCtgYJKYeQD43oA==:117 a=pk+8NuH2X28N4C0eta/h1Q==:17
  a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8 a=7CQSdrXTAAAA:8
- a=a4_5xkhM6FseDPdgHKsA:9 a=QEXdDO2ut3YA:10 a=mQ_c8vxmzFEMiUWkPHU9:22
- a=a-qgeE7W1pNrGK8U0ZQC:22
-X-Proofpoint-GUID: klARbs2dPZiyM3D5-aOKaLTqgUCA5k7U
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=KKAkSRfTAAAA:8
+ a=QcnDgq45NsFIHwn4wVcA:9 a=QEXdDO2ut3YA:10 a=rl5im9kqc5Lf4LNbBjHf:22
+ a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-GUID: tl3RFrMQsv1lSThsy59_UiaClA4s89d_
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjI0MDA3MSBTYWx0ZWRfX/xRNAShbLXSS
+ 4tplr6P55VKwDpZNrS1+K/BQYG4/uyIm/CrLl3m13OnuD+h6Pmp5c/YgKXOkEBbB8Cz1VwpHwSm
+ NbcHOHchxYPb9S+79KrslKEoVKXX4cumavOErIPhwk+wKerovpxX9J17MW8mZb8r2GeOnDr5imy
+ PtU2p+3rXmtLEkfPnoffZVio56lvl19e+tp3WHwXsEUcW6CTF1MazpkXbUXWw7ECXwjglbmyW6j
+ htr2+rX3zDCL8khwfA3A+qKmt+YcHIAZ8JjP4EVUIsrh3I3XR8o8OMAgUXZjMHQbtFDr//hFHZ5
+ cEjqTLmyehSvpi1sDEbEk0iPeAsSsgC/CttH3kEtz/uZnN/ST/SHOeEtFWjw/fSidn8CWzwNB+5
+ +qYfgiIX1D2lfTG8GpreXKG1rfha9DR65Pw3P8/VfkAwdnrIcD5B17XzAxYBM8pSNJuwzkV2ZHN
+ 3+UBnpS7WmA1ysxCHVA==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2025-12-24_02,2025-12-22_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 adultscore=0 phishscore=0 clxscore=1015 bulkscore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2512240071
+ adultscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 malwarescore=0 phishscore=0 suspectscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512240071
 
 
-On 12/24/2025 12:53 AM, Dmitry Baryshkov wrote:
-> On Tue, Dec 23, 2025 at 06:02:20PM +0530, Gaurav Kohli wrote:
->> Add a new generic driver for thermal cooling devices that control
->> remote processors (modem, DSP, etc.) through various communication
->> channels.
+On 12/23/2025 7:29 PM, Rob Herring (Arm) wrote:
+> On Tue, 23 Dec 2025 18:02:22 +0530, Gaurav Kohli wrote:
+>> The cooling subnode of a remoteproc represents a client of the Thermal
+>> Mitigation Device QMI service running on it. Each subnode of the cooling
+>> node represents a single control exposed by the service.
 >>
->> This driver provides an abstraction layer between the thermal
->> subsystem and vendor-specific remote processor communication
->> mechanisms.
-> This driver simply wraps 3 callbacks. Please explain in the commit
-> message, why do we need it? Why can't the consumer of this API simply
-> provide those callbacks directly?
-
-
-thanks for review, sure i will update in next post.
-
-
->> Suggested-by: Amit Kucheria <amit.kucheria@oss.qualcomm.com>
+>> Add maintainer name also and update this binding for cdsp substem.
+>>
+>> Co-developed-by: Casey Connolly <casey.connolly@linaro.org>
 >> Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+>> Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
 >> ---
->>   MAINTAINERS                          |   8 ++
->>   drivers/thermal/Kconfig              |  11 ++
->>   drivers/thermal/Makefile             |   2 +
->>   drivers/thermal/remoteproc_cooling.c | 154 +++++++++++++++++++++++++++
->>   include/linux/remoteproc_cooling.h   |  52 +++++++++
->>   5 files changed, 227 insertions(+)
->>   create mode 100644 drivers/thermal/remoteproc_cooling.c
->>   create mode 100644 include/linux/remoteproc_cooling.h
+>>   .../bindings/remoteproc/qcom,pas-common.yaml  |  6 ++
+>>   .../bindings/thermal/qcom,qmi-cooling.yaml    | 99 +++++++++++++++++++
+>>   2 files changed, 105 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
 >>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 679e5f11e672..c1ba87315cdf 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -25935,6 +25935,14 @@ F:	drivers/thermal/cpufreq_cooling.c
->>   F:	drivers/thermal/cpuidle_cooling.c
->>   F:	include/linux/cpu_cooling.h
->>   
->> +THERMAL/REMOTEPROC_COOLING
->> +M:	Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
->> +L:	linux-pm@vger.kernel.org
->> +S:	Supported
->> +F:	drivers/thermal/remoteproc_cooling.c
->> +F:	include/linux/remoteproc_cooling.h
->> +
->> +
->>   THERMAL/POWER_ALLOCATOR
->>   M:	Lukasz Luba <lukasz.luba@arm.com>
->>   L:	linux-pm@vger.kernel.org
->> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
->> index b10080d61860..31e92be34387 100644
->> --- a/drivers/thermal/Kconfig
->> +++ b/drivers/thermal/Kconfig
->> @@ -229,6 +229,17 @@ config PCIE_THERMAL
->>   
->>   	  If you want this support, you should say Y here.
->>   
->> +
->> +config REMOTEPROC_THERMAL
->> +	bool "Remote processor cooling support"
-> Why this is 'bool' rather than 'tristate'?
-
-
-tristate will be fine, will update this.
-
-
+> My bot found errors running 'make dt_binding_check' on your patch:
 >
->> +	help
->> +	  This implements a generic cooling mechanism for remote processors
->> +	  (modem, DSP, etc.) that allows vendor-specific implementations to
->> +	  register thermal cooling devices and provide callbacks for thermal
->> +	  mitigation.
->> +
->> +	  If you want this support, you should say Y here.
->> +
->>   config THERMAL_EMULATION
->>   	bool "Thermal emulation mode support"
->>   	help
->> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
->> index bb21e7ea7fc6..ae747dde54fe 100644
->> --- a/drivers/thermal/Makefile
->> +++ b/drivers/thermal/Makefile
->> @@ -34,6 +34,8 @@ thermal_sys-$(CONFIG_DEVFREQ_THERMAL) += devfreq_cooling.o
->>   
->>   thermal_sys-$(CONFIG_PCIE_THERMAL) += pcie_cooling.o
->>   
->> +thermal_sys-$(CONFIG_REMOTEPROC_THERMAL) += remoteproc_cooling.o
->> +
->>   obj-$(CONFIG_K3_THERMAL)	+= k3_bandgap.o k3_j72xx_bandgap.o
->>   # platform thermal drivers
->>   obj-y				+= broadcom/
->> diff --git a/drivers/thermal/remoteproc_cooling.c b/drivers/thermal/remoteproc_cooling.c
->> new file mode 100644
->> index 000000000000..a1f948cbde0f
->> --- /dev/null
->> +++ b/drivers/thermal/remoteproc_cooling.c
->> @@ -0,0 +1,154 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Remote Processor Cooling Device
->> + *
->> + * Copyright (c) 2025, Qualcomm Innovation Center, Inc. All rights reserved.
->> + */
->> +
->> +#include <linux/err.h>
->> +#include <linux/export.h>
->> +#include <linux/module.h>
->> +#include <linux/mutex.h>
->> +#include <linux/of.h>
->> +#include <linux/slab.h>
->> +#include <linux/thermal.h>
->> +
->> +#define REMOTEPROC_PREFIX		"rproc_"
->> +
->> +struct remoteproc_cooling_ops {
->> +	int (*get_max_level)(void *devdata, unsigned long *level);
->> +	int (*get_cur_level)(void *devdata, unsigned long *level);
->> +	int (*set_cur_level)(void *devdata, unsigned long level);
->> +};
->> +
->> +/**
->> + * struct remoteproc_cdev - Remote processor cooling device
->> + * @cdev: Thermal cooling device handle
->> + * @ops: Vendor-specific operation callbacks
->> + * @devdata: Private data for vendor implementation
->> + * @np: Device tree node associated with this cooling device
->> + * @lock: Mutex to protect cooling device operations
->> + */
->> +struct remoteproc_cdev {
->> +	struct thermal_cooling_device *cdev;
->> +	const struct remoteproc_cooling_ops *ops;
->> +	void *devdata;
->> +	struct device_node *np;
->> +	struct mutex lock;
->> +};
->> +
->> +
->> +/* Thermal cooling device callbacks */
->> +
->> +static int remoteproc_get_max_state(struct thermal_cooling_device *cdev,
->> +				    unsigned long *state)
->> +{
->> +	struct remoteproc_cdev *rproc_cdev = cdev->devdata;
->> +	int ret;
->> +
->> +	if (!rproc_cdev || !rproc_cdev->ops)
->> +		return -EINVAL;
->> +
->> +	mutex_lock(&rproc_cdev->lock);
->> +	ret = rproc_cdev->ops->get_max_level(rproc_cdev->devdata, state);
->> +	mutex_unlock(&rproc_cdev->lock);
->> +
->> +	return ret;
->> +}
->> +
->> +static int remoteproc_get_cur_state(struct thermal_cooling_device *cdev,
->> +				    unsigned long *state)
->> +{
->> +	struct remoteproc_cdev *rproc_cdev = cdev->devdata;
->> +	int ret;
->> +
->> +	if (!rproc_cdev || !rproc_cdev->ops)
->> +		return -EINVAL;
->> +
->> +	mutex_lock(&rproc_cdev->lock);
->> +	ret = rproc_cdev->ops->get_cur_level(rproc_cdev->devdata, state);
->> +	mutex_unlock(&rproc_cdev->lock);
->> +
->> +	return ret;
->> +}
->> +
->> +static int remoteproc_set_cur_state(struct thermal_cooling_device *cdev,
->> +				    unsigned long state)
->> +{
->> +	struct remoteproc_cdev *rproc_cdev = cdev->devdata;
->> +	int ret;
->> +
->> +	if (!rproc_cdev || !rproc_cdev->ops)
->> +		return -EINVAL;
->> +
->> +	mutex_lock(&rproc_cdev->lock);
->> +	ret = rproc_cdev->ops->set_cur_level(rproc_cdev->devdata, state);
->> +	mutex_unlock(&rproc_cdev->lock);
->> +
->> +	return ret;
->> +}
->> +
->> +static const struct thermal_cooling_device_ops remoteproc_cooling_ops = {
->> +	.get_max_state = remoteproc_get_max_state,
->> +	.get_cur_state = remoteproc_get_cur_state,
->> +	.set_cur_state = remoteproc_set_cur_state,
->> +};
->> +
->> +struct remoteproc_cdev *
->> +remoteproc_cooling_register(struct device_node *np,
->> +			     const char *name, const struct remoteproc_cooling_ops *ops,
->> +			     void *devdata)
->> +{
->> +	struct remoteproc_cdev *rproc_cdev;
->> +	struct thermal_cooling_device *cdev;
->> +	int ret;
->> +
->> +	if (!name || !ops) {
->> +		return ERR_PTR(-EINVAL);
->> +	}
->> +
->> +	rproc_cdev = kzalloc(sizeof(*rproc_cdev), GFP_KERNEL);
->> +	if (!rproc_cdev)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	rproc_cdev->ops = ops;
->> +	rproc_cdev->devdata = devdata;
->> +	rproc_cdev->np = np;
->> +	mutex_init(&rproc_cdev->lock);
->> +
->> +	char *rproc_name __free(kfree) =
->> +		kasprintf(GFP_KERNEL, REMOTEPROC_PREFIX "%s", name);
->> +	/* Register with thermal framework */
->> +	if (np) {
->> +		cdev = thermal_of_cooling_device_register(np, rproc_name, rproc_cdev,
->> +							  &remoteproc_cooling_ops);
->> +	}
->> +
->> +	if (IS_ERR(cdev)) {
->> +		ret = PTR_ERR(cdev);
->> +		goto free_rproc_cdev;
->> +	}
-> So, if np == NULL, we register nothing, but still return 0 (aka no
-> error). Why?
+> yamllint warnings/errors:
 >
->> +
->> +	rproc_cdev->cdev = cdev;
->> +
->> +	return rproc_cdev;
->> +
->> +free_rproc_cdev:
->> +	kfree(rproc_cdev);
->> +	return ERR_PTR(ret);
->> +}
->> +EXPORT_SYMBOL_GPL(remoteproc_cooling_register);
->> +
->> +void remoteproc_cooling_unregister(struct remoteproc_cdev *rproc_cdev)
->> +{
->> +	if (!rproc_cdev)
->> +		return;
->> +
->> +	thermal_cooling_device_unregister(rproc_cdev->cdev);
->> +	mutex_destroy(&rproc_cdev->lock);
->> +	kfree(rproc_cdev);
->> +}
->> +EXPORT_SYMBOL_GPL(remoteproc_cooling_unregister);
->> +
->> +MODULE_LICENSE("GPL");
->> +MODULE_DESCRIPTION("Remote Processor Cooling Device");
->> diff --git a/include/linux/remoteproc_cooling.h b/include/linux/remoteproc_cooling.h
->> new file mode 100644
->> index 000000000000..ef94019d220d
->> --- /dev/null
->> +++ b/include/linux/remoteproc_cooling.h
->> @@ -0,0 +1,52 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Remote Processor Cooling Device
->> + *
->> + * Copyright (c) 2025, Qualcomm Innovation Center
->> + */
->> +
->> +#ifndef __REMOTEPROC_COOLING_H__
->> +#define __REMOTEPROC_COOLING_H__
->> +
->> +#include <linux/thermal.h>
->> +
->> +struct device;
->> +struct device_node;
->> +
->> +struct remoteproc_cooling_ops {
->> +	int (*get_max_level)(void *devdata, unsigned long *level);
->> +	int (*get_cur_level)(void *devdata, unsigned long *level);
->> +	int (*set_cur_level)(void *devdata, unsigned long level);
->> +};
->> +
->> +struct remoteproc_cdev;
->> +
->> +#ifdef CONFIG_REMOTEPROC_THERMAL
->> +
->> +struct remoteproc_cdev *
->> +remoteproc_cooling_register(struct device_node *np,
->> +			     const char *name,
->> +			     const struct remoteproc_cooling_ops *ops,
->> +			     void *devdata);
->> +
->> +void remoteproc_cooling_unregister(struct remoteproc_cdev *rproc_cdev);
->> +
->> +#else /* !CONFIG_REMOTEPROC_THERMAL */
->> +
->> +static inline struct remoteproc_cdev *
->> +remoteproc_cooling_register(struct device_node *np,
->> +			     const char *name,
->> +			     const struct remoteproc_cooling_ops *ops,
->> +			     void *devdata)
->> +{
->> +	return ERR_PTR(-EINVAL);
->> +}
->> +
->> +static inline void
->> +remoteproc_cooling_unregister(struct remoteproc_cdev *rproc_cdev)
->> +{
->> +}
->> +
->> +#endif /* CONFIG_REMOTEPROC_THERMAL */
->> +
->> +#endif /* __REMOTEPROC_COOLING_H__ */
->> -- 
->> 2.34.1
->>
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.example.dtb: /example-0/remoteproc-cdsp1/cooling: failed to match any schema with compatible: ['qcom,qmi-cooling-cdsp1']
+>
+> doc reference errors (make refcheckdocs):
+>
+> See https://patchwork.kernel.org/project/devicetree/patch/20251223123227.1317244-4-gaurav.kohli@oss.qualcomm.com
+>
+> The base for the series is generally the latest rc1. A different dependency
+> should be noted in *this* patch.
+>
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your schema.
+
+
+thanks for review, missed to add one cdsp1 patch in this series, will 
+update in next post.
+
+
 
