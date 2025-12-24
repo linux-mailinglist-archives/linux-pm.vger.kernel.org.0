@@ -1,100 +1,46 @@
-Return-Path: <linux-pm+bounces-39911-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39912-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57177CDBF1B
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 11:15:21 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4565CCDBFB2
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 11:24:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D60E03007C78
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 10:11:48 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 608E83007B67
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Dec 2025 10:24:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD53D33372D;
-	Wed, 24 Dec 2025 10:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E081E3164B7;
+	Wed, 24 Dec 2025 10:24:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="SjZSYxdt";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="O3vcEA2v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ErW66G8T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FBDD301037
-	for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 10:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B278B23D7CA;
+	Wed, 24 Dec 2025 10:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766571107; cv=none; b=Usbzyf0mzk8oxdufqGdkryZ+mCpVKCdN6LYIuKK99eGz7j29SfBVw/H2w/0g96zjdOR5nRaLXEcIhn5xQsyM85d3i5lyKlVH725IRcSwVQhug53MM++16hVqqc8Jw6T2jyFefQEePHn27qRPW5Pr0gPI40O+NmlbwTjRsGTvGo4=
+	t=1766571849; cv=none; b=Y2CV9Z6IQle7elSOWx83t3jeul+yDlE1wdWpqfOjbBwvy+K4p27O11WOjfYFq1lcrW2QSznie7IZFHlxoJuIynewf3+VECR2U97HVritxg2kaeFZ3AxJgMGzgc4mc985KBZaIF60WS/lNpjC/TzeSVRzJ9ce17fv1C3H904F8y0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766571107; c=relaxed/simple;
-	bh=0+LzigftUlRjypYE7eKHbXMl8C6YbFGHAlET3r9jYMQ=;
+	s=arc-20240116; t=1766571849; c=relaxed/simple;
+	bh=CQlmXK9mJLUJy6COy6T68DSOiFtyzoKtKbRE3psb534=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uMzrka9gatFZoWXZT4MCfcyeewOQuI4Kw9VFH8is60SQHST64+kDTlJVRI0CPsgW/91+Lpp9pPn+Ioh7/0jcV3tRuizNm9PwZGickfsNmitkzmfhaAsb8F3uSV5hZLB0d3coc2KFf9KwgRZoh2DBWiwehyzFTseVUdJWvbvUrug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=SjZSYxdt; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=O3vcEA2v; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BO43QEm4134150
-	for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 10:11:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Svub1lU8ZSgyZ0FEnwysVHAmS9UtLZzdyHUW+Tohk6E=; b=SjZSYxdt2qoOIAnh
-	sPT/EtoFzR/AwExHlaMqaGu92FAjXvr4mI/r4uIFkGszTaRob3AZ65FxNpZmSx+B
-	3zraQBeYRFFTb5xW2K4U8xyfKGiAp6NxTxyKmBv0jmmQJ09FEVR64SJxBdhhy9sl
-	WCiJ5FiweTQixePBqHVC+J1POROYTAWLRCTUa6/99utOu7pdlfCOThZzLn3BdLn6
-	6BQK18B6FA7PT/LjV6H7Ch5smKCsJk9D3N5z/hYMHLNaLOizMdS7n5HFn9+1x6q8
-	xMu0W+z/wm3q+vhcUwb8SDsC1H06QMqda5bEkzaPeHGZ0jClBtj0LNMvJZ7QbLc3
-	GljtdQ==
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4b7x46tqxr-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 10:11:45 +0000 (GMT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-29f8e6a5de4so80321975ad.2
-        for <linux-pm@vger.kernel.org>; Wed, 24 Dec 2025 02:11:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1766571105; x=1767175905; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Svub1lU8ZSgyZ0FEnwysVHAmS9UtLZzdyHUW+Tohk6E=;
-        b=O3vcEA2viZ3YgUK9+c0aWZ/HMJMkoqpIY97uhD0jaFrbC1AX7AEFlrgJYdsNDBAJ3x
-         iJHyK4Hw/CTSwucY6NX9pgen0TtpkyKUwSLKs/4vDaCcEf/Uu4Odb3aYQy84G0OoG5fc
-         yxAp3cU35xViShPa6QP8nWTOOBsMWRw/pFPwJjVwHhBKNCESdBO6xbUslzXzsUKYYxUg
-         vvEO3I5LLNPnzNaAWuP6E/neyqRSQlE+D73kZ5mAcjE0bTSE4BWbWEBwUR/lZhwJA8hD
-         nUP85/DCThNJlxJJcYFQum1KvY5ZvazX657dRqdRkuph7ATOonMmEH0aPEHQAtNOa8Hr
-         7e5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766571105; x=1767175905;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Svub1lU8ZSgyZ0FEnwysVHAmS9UtLZzdyHUW+Tohk6E=;
-        b=ni2E9oRCWf/Fl6al2trvh8KshwcDJ0yk1xj6PWc6v1JT6U232LtsvVR9XWHgj90csL
-         A04/N52Z0xhYW1lyQrVgedzV9qMRvMXxq3RstdsoQXQXB/yp/T5YcCN+/dV3X2f0Bv/f
-         SebtfDiKEcMzNF01K6hS/Gg3gyYFmARedAgTZz/qTRNdNEb5qfxGiYbAIOm17A0ueDl6
-         KPD88cuNsEinFspC4lkxspBfoJTiirCdXqCok7R0TvSZ55fUeHr3s0vLdeOBwVOXWP2I
-         Efs+q4PSuCrx+u9LFdcsc73zsBTPUi009jp0CahNqMOccBSCXUIuFawvdOIqPXdIEjoK
-         WKvA==
-X-Forwarded-Encrypted: i=1; AJvYcCXtRH0ucNpTWFpOfbzIfWroYM6UqQrS+AL5UFfozv1mZclDqMdnjIvCea3+8VgK99x14R5A0Nx4jQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBZ0cuQ+c5SfsbJvzNkuU/ihjkBWButcMqDAiaICVwzJEcLovG
-	AUPuzf8txHUbIvtlQWqavV4x9yISaqD30GGRjYS3/hPJKvhp3em/nFdbvHBvBeNSEwYz9lvLERQ
-	eAKCApfXF3+U9zWKiJThg6R2kMTFlmximNPv/QHqoebTshdq+Rw+ZpBwzewU1QQ==
-X-Gm-Gg: AY/fxX6hYX4w2AHDNii07D1cf2L0m+6dgCEHJuYTNgCFqAVoY/uWJ9JX6Wo1Hf7KJwD
-	0d++NRcYZGEubupRBIkQVMN+GocqsFTfQqYZ0kt6LNScpoJ2yfmbtWdFD2VulujjlZd+eknN0Cw
-	Cc/kd3ZPPvYAMrfyD1eb4PQzJDOW8IMS/WDU5zuYgQrxsVyAVBXy0Fq8MeeBjTWMwiCjW3VEH8I
-	/97qu440abvhS0oz3Jkeg3Xb49ym3cBtRzJd+3jIGfqsootOh8EEuw3m+mBePfqGXWUTCNoe8YL
-	funKl9Zi+FirDi48zgMuC0L2yg535eM9uP8dSuVqrsuMZWOC1iIo04IwHkhaVqsSAcEOK56LaYI
-	XMqUSooIJaw4lo1obZ1sE1ZMEeFCUC3rTaPpymFidzw==
-X-Received: by 2002:a17:903:2cd:b0:2a0:e532:242e with SMTP id d9443c01a7336-2a2f220dd7bmr160503125ad.11.1766571104923;
-        Wed, 24 Dec 2025 02:11:44 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEPP9Ip+0lDlRJOgiICxJKR2lJuGko3g+A/N9Bn0a9iSgphrPC7hgQ2nkVu84feaV3gcN9RWg==
-X-Received: by 2002:a17:903:2cd:b0:2a0:e532:242e with SMTP id d9443c01a7336-2a2f220dd7bmr160502985ad.11.1766571104446;
-        Wed, 24 Dec 2025 02:11:44 -0800 (PST)
-Received: from [192.168.1.11] ([106.222.232.236])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3c66bd3sm151171405ad.1.2025.12.24.02.11.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Dec 2025 02:11:44 -0800 (PST)
-Message-ID: <a0df9078-f05e-40bc-a708-cd03eb86839f@oss.qualcomm.com>
-Date: Wed, 24 Dec 2025 15:41:37 +0530
+	 In-Reply-To:Content-Type; b=tcopv+alf3TXqks66JEjwS5gnd9t06bsjqjymMnG0z0mn/qJYV4xh5bOKQxOAgEaYsMZtUaepaxZEmh2t56DwbuZy92Dhc5RVcmurOAqdLqKdZtjQR8rPFZu47vtdeooUWhZEPlrZjesWmXkXDs5xEZKhhADDfXSFaQEjIhqkc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ErW66G8T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 379D6C4CEFB;
+	Wed, 24 Dec 2025 10:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766571849;
+	bh=CQlmXK9mJLUJy6COy6T68DSOiFtyzoKtKbRE3psb534=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ErW66G8TPnaugnyphnjePd5mszJMhQOHyF53vfegQj8DvP6dKdrDfjX3XEIsAQ56n
+	 CieZl6sXkYLHUxXK8E5drgHOqUiyUE7xZERg+MZIkL4xs98Dc3W8CgMta1ZhwGH/Ko
+	 kPXKEtwk/9BjcUyTai3pEmdQNEdLuPA7Us8eM/FY0l7cjTuwnVKIFHtt9OQOmyvRi/
+	 RQT2GPw6rClvzQoxYIs0y94KY5LAxWl82kZEae/Egz6LoCqr46F33vZ0q4LKPDW9wV
+	 l4KdUdRqKirpyPOuLtyS06aY6Vc0tHj08iG0tb6Q/3IORBjHe+XgNuRk5klcOV74hm
+	 PXd9WBpWQTX3g==
+Message-ID: <60653b06-38c4-4276-a6e5-4a5900ba19d4@kernel.org>
+Date: Wed, 24 Dec 2025 11:24:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -102,78 +48,163 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 8/8] arm64: dts: qcom: Enable cdsp qmi tmd devices for
- monaco
-To: Krzysztof Kozlowski <krzk@kernel.org>, andersson@kernel.org,
-        mathieu.poirier@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
-        conor+dt@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, lukasz.luba@arm.com, konradybcio@kernel.org,
-        amitk@kernel.org, mani@kernel.org, casey.connolly@linaro.org
+Subject: Re: [PATCH v1 3/8] dt-bindings: thermal: Add qcom,qmi-cooling yaml
+ bindings
+To: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, andersson@kernel.org,
+ mathieu.poirier@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+ rui.zhang@intel.com, lukasz.luba@arm.com, konradybcio@kernel.org,
+ amitk@kernel.org, mani@kernel.org, casey.connolly@linaro.org
 Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20251223123227.1317244-1-gaurav.kohli@oss.qualcomm.com>
- <20251223123227.1317244-9-gaurav.kohli@oss.qualcomm.com>
- <2ce05668-e4b1-4943-aebd-9ba57f4c8363@kernel.org>
+ <20251223123227.1317244-4-gaurav.kohli@oss.qualcomm.com>
+ <f6bd1bda-6aab-4d4e-9981-f55cce03f70d@kernel.org>
+ <3fc177ca-0260-471d-b7a4-bd479f5e5855@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-In-Reply-To: <2ce05668-e4b1-4943-aebd-9ba57f4c8363@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <3fc177ca-0260-471d-b7a4-bd479f5e5855@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: ttNMGIZ-NKV1MugKOieRhRz8h5I_Ndea
-X-Proofpoint-GUID: ttNMGIZ-NKV1MugKOieRhRz8h5I_Ndea
-X-Authority-Analysis: v=2.4 cv=aOf9aL9m c=1 sm=1 tr=0 ts=694bbc61 cx=c_pps
- a=IZJwPbhc+fLeJZngyXXI0A==:117 a=pk+8NuH2X28N4C0eta/h1Q==:17
- a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=JG_C0qjW1QYSyXvylJMA:9
- a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjI0MDA4NyBTYWx0ZWRfX8dfQOjOOyPuQ
- f2H+BtG/PfSfac5iqVxpApe/413R5jzFJiX5vJRqMJvRLhrMvGQGdciCj+shzwFIi/c8k+wIYz+
- /dJRYDy2S4hrjmmiFaNRnHns2m3mltcZCyq2HpvPPqa0T7UgSeBH4aTQxKJjLnkuTywmbcEgUFT
- BFoqVVR6OiJkb0V0Mc4SzgfXGRnO2YJeFnmQnUOuRY5fKZnIYSRAWDxXkeGkhQQ216VVbMBjVUi
- L7Dd1YXbPOFPJ8KYa9FdRx8a7W3tPrpgNdmwO9UXOgo3a8PXjKucPXPLVNjOaikVr+iI1eyT8/C
- dOUbCGn3ieb6qAAig21SQz/buPqjbY72vWZOkJbx2F7fuFT27fm2JCEzu65Q99fHvnFSzoW7nO7
- l+d74Tz95Al6D+w1AqoHVNH3v4Ltr09k+EZSDGHULipWaPXsNXC63gfXpGnmXfToJsWxKC2Oolx
- pPp2TzfJJb/UpMfrG5g==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-24_03,2025-12-22_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 phishscore=0 suspectscore=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2512240087
 
-
-On 12/24/2025 2:28 PM, Krzysztof Kozlowski wrote:
-> On 23/12/2025 13:32, Gaurav Kohli wrote:
->> Enable cdsp cooling devices and thermal zone cooling map bindings
->> for cdsp.
+On 24/12/2025 11:08, Gaurav Kohli wrote:
+> 
+> On 12/24/2025 2:27 PM, Krzysztof Kozlowski wrote:
+>> On 23/12/2025 13:32, Gaurav Kohli wrote:
+>>> The cooling subnode of a remoteproc represents a client of the Thermal
+>>> Mitigation Device QMI service running on it. Each subnode of the cooling
+>>> node represents a single control exposed by the service.
+>>>
+>>> Add maintainer name also and update this binding for cdsp substem.
+>>>
+>>> Co-developed-by: Casey Connolly <casey.connolly@linaro.org>
+>>> Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+>>> Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
+>>> ---
+>>>   .../bindings/remoteproc/qcom,pas-common.yaml  |  6 ++
+>>>   .../bindings/thermal/qcom,qmi-cooling.yaml    | 99 +++++++++++++++++++
+>>>   2 files changed, 105 insertions(+)
+>>>   create mode 100644 Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
+>>> index 63a82e7a8bf8..bbc82253f76b 100644
+>>> --- a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
+>>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
+>>> @@ -77,6 +77,12 @@ properties:
+>>>         and devices related to the ADSP.
+>>>       unevaluatedProperties: false
+>>>   
+>>> +  cooling:
+>>> +    $ref: /schemas/thermal/qcom,qmi-cooling.yaml#
+>>> +    description:
+>>> +      Cooling subnode which represents the cooling devices exposed by the Modem.
+>>> +    unevaluatedProperties: false
+>>> +
+>>>   required:
+>>>     - clocks
+>>>     - clock-names
+>>> diff --git a/Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml b/Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
+>>> new file mode 100644
+>>> index 000000000000..90b46712d241
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
+>>> @@ -0,0 +1,99 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>> +# Copyright 2023 (c), Linaro Limited
+>>> +
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/thermal/qcom,qmi-cooling.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Qualcomm QMI based thermal mitigation (TMD) cooling devices.
+>>> +
+>>> +maintainers:
+>>> +  - Caleb Connolly <caleb.connolly@linaro.org>
+>>> +  - Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+>>> +
+>>> +description:
+>>> +  Qualcomm QMI-based TMD cooling devices are used to mitigate thermal conditions
+>>> +  across multiple remote subsystems. These devices operate based on junction temperature
+>>> +  sensors (TSENS) associated with thermal zones for each subsystem.
+>>> +
+>>> +  Each subnode corresponds to a control interface for a single instance of the TMD
+>>> +  service running on a remote subsystem.
+>>> +
+>>> +definitions:
+>> defs, look at other code
 >>
->> Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
->> ---
->>   arch/arm64/boot/dts/qcom/monaco.dtsi | 92 ++++++++++++++++++++++++++++
->>   1 file changed, 92 insertions(+)
 >>
->> diff --git a/arch/arm64/boot/dts/qcom/monaco.dtsi b/arch/arm64/boot/dts/qcom/monaco.dtsi
->> index 985e37bf4876..1fe148ec5cf7 100644
->> --- a/arch/arm64/boot/dts/qcom/monaco.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/monaco.dtsi
->> @@ -6217,6 +6217,14 @@ compute-cb@4 {
->>   					};
->>   				};
->>   			};
->> +
->> +			cooling {
->> +				compatible = "qcom,qmi-cooling-cdsp";
->> +					cdsp_sw: cdsp_sw {
-> Another LLM generated snippet or just mistake?
+>>> +  tmd:
+>>> +    type: object
+>>> +    description: |
+>>> +      A single Thermal Mitigation Device exposed by a remote subsystem.
+>> Missing proper formatting. Please do not send us code written by LLM.
+> 
+> 
+> This patch is based on older series
+> 
+> https://lore.kernel.org/linux-devicetree/20230905-caleb-qmi_cooling-v1-0-5aa39d4164a7@linaro.org/, did some manual changes to remove unusable code.
+
+How? This is v1, not v2. How did you address other comments? Where did
+you provide proper changelog? Why this is not correctly versioned/
+
+> let me fix the formatting. This is not generated code.
+
+I do not believe, because this:
 
 
-All this is manual code, will fix this.
+>>> +      phandle: true
 
+Does not exist. You cannot come with something like that, there is no
+such code.
 
->
-> Best regards,
-> Krzysztof
+Only LLM when parsing DTB could invent something like this. Otherwise
+explain me please the process leading to coming to such change.
+
+Best regards,
+Krzysztof
 
