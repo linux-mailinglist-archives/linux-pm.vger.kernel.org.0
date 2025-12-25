@@ -1,183 +1,118 @@
-Return-Path: <linux-pm+bounces-39935-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39936-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40D8ACDDD6D
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 14:57:08 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19D5CCDE259
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 00:02:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 89DC630115F2
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 13:57:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A9E50300A346
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 23:01:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268D22F25EB;
-	Thu, 25 Dec 2025 13:57:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3247C2BEC20;
+	Thu, 25 Dec 2025 23:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="nQWN4l1e"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sx3GCPFJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9311D1E5B94;
-	Thu, 25 Dec 2025 13:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71F18238176
+	for <linux-pm@vger.kernel.org>; Thu, 25 Dec 2025 23:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766671023; cv=none; b=kpvUIQ1OdgtgWlOkJy18etL4p50c4qIEmWJrlUszn7quVYX8PI7r2/7YG0w/7VJDzLY0Ke6a3zxHOT9NS2rwTcO0H+Nyr8CDzwO6gq5SxTS+WLfCO16bobyXZ+xrfLPkRKLy1SXr92IKJOY3QJq9euo51Yb/sKEAd2N/GlU/qMk=
+	t=1766703712; cv=none; b=uR2vJmpHOMIGcBDcaLH0KCPvqb8nfhCZKTKiYEz8Ui7q8cUrJpMTw/TYwtypZQtELTOUKoLkAJixhStIq5kpiRDstKxbM0zAtVXWtbvk3dVuJU5xlpi/WeRQAlWt1CjoRTrRm1J8bcDIdiQF/iGXY/b1aI4CuUkR9x2LkGVD/9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766671023; c=relaxed/simple;
-	bh=gjPy0+yDnkEXIB8ggarAwk+MlKdkx/zGb2/HIwySSCE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=GYRdSvtyKiyf6T7afEqnJj0EweLyEKRTWJTv5D8G/hK5j2lKmlOVZ87EPCS76q5Ewu1sDIDlXRfBGhyftjT7MKKnivMLTGhdG6R8Ol3wI/JoMcUEspiBZTEnVe32Jry6EQ3tocWDG32HmV9BeldMlLmDwxjdm80X0tYBlJT94ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=nQWN4l1e; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=yZRXKTBvTJnA1kBQ+hVGPiGikKPmA7mMfIkfGuLZJXI=;
-	b=nQWN4l1eteRfbAnFOMsv4DMzcAUnLk3bIMQP41mlSAQQl2Qb7CkoVZ5XLHND5xOdSS6UY1FTK
-	ajdv5d4MHnqeV0RaayoQ8664tpEmXDbjB0PWy3splBE6iMgQBHgVxvI1QcLmC3pLdW1541RFLnY
-	jB6+BAhDX1FeaKb3rOM8qFY=
-Received: from mail.maildlp.com (unknown [172.19.162.92])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4dcVZs1n15zLlTC;
-	Thu, 25 Dec 2025 21:53:41 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3B27B40565;
-	Thu, 25 Dec 2025 21:56:48 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
- (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 25 Dec
- 2025 21:56:47 +0800
-Message-ID: <9ea62a14-46a1-4238-97ed-aeabf9f3ab77@huawei.com>
-Date: Thu, 25 Dec 2025 21:56:46 +0800
+	s=arc-20240116; t=1766703712; c=relaxed/simple;
+	bh=1nXVJoQSdXGgbMKh9pApq6y10cVhUvD4OxYtOcA9q/M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=faFUjcvpXLcKNE+bNB7eZRNp4c+90SpXvxIlGXI9C/B01xq+XhjeEV6u35iP8dhOYBi47Bu94ZKp4s7nQqLD5Rq1GHyU1wFEkE4b4/oijQd4KQsFzB3/T0h4PqZ8R6DVtSG3MHIIqdpjI8C/1tdHVGIGPv1DsFVhKFtZggFUDwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sx3GCPFJ; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-596ba05aaecso7300933e87.0
+        for <linux-pm@vger.kernel.org>; Thu, 25 Dec 2025 15:01:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766703707; x=1767308507; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ncHdqjENSZCuc/WVDnKcW2WQO5yfWiwK76OS/LmTBGY=;
+        b=Sx3GCPFJDHNY/A7WjwxwL9YpPDZiWCj+fkIUE37svktNgtHvqynBLiI55JmRpM6jjW
+         ykhjqI7RXVpj9/jZAwL+wClIHdL9z9gp4ETS+Oz23I2Bf11dHMMyrCUR2uRZGUSeiBnr
+         sBDjdIczIzVhbZeE4Ij79io51IqpqfCox0qk4cAqoFXKKGhlBYMdPLXVthsM2zhGkoSG
+         F2NNOAf1+OZaHW0QEFgQGw+6XwUN2Nf2up/QAN3/qrrsnACekHewIpXGSYOuUirCZZRv
+         +HPEixa+WUhe7IAa/KmuYibxTyL5rcvnPWD8xziEu2k+9qKiP7Xx6cj3wFnq3BkWK8Du
+         x/hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766703707; x=1767308507;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ncHdqjENSZCuc/WVDnKcW2WQO5yfWiwK76OS/LmTBGY=;
+        b=ro0MQwlCZ73+bccyViLlDh8cUN7XXUMQPzihZxj1Fr9LJkUmnItTqNzlOKMn70xwvu
+         7jsUkV2Y/6gFPfe97bnfsfbeZKzNKL7h5nxYRBAXRKoBUq905N+bUi/LT34ftRI+v6AF
+         kZ+ma7WHeOylqzpNVgFkZ42mCRRF9j8QV/oZDrYKjDlBV0Zl5pMmS8a8vspAZrySo6QL
+         RDL6QdRNKSAyG9rZ1WgJyp2BUnbGWuN67eGOlsa1cSMbhQTlLmVofNxeVtPgYDdC/cpc
+         EuxZyXGzoL4KzZi3J5H193gMFvW2hPcvv/n9f0774qU2g9mlB6I9gWTpLksR9PW4yiai
+         4aNA==
+X-Forwarded-Encrypted: i=1; AJvYcCX++D59wb1o4NaFm0ZbKTZICyJlRNHBt21SVwRoyv5zxmIn8CMMZAI0zahkywKVPj+SaSOX3gURpA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4KIA0euMcoROH1lVHjlXa+vGubEMR0pGBE8yQnqS1oooQSYar
+	J77zBgOF3zXUAGNAjGVE7TYI+mmIcT+8Ou7pySFXItthYEwOtNbblOgn
+X-Gm-Gg: AY/fxX4iPCcZPIV2qLgMVb8YO+fcvfSMmfLS3HZR5cP1yVI1Si5oWbyQhv+728JOpzx
+	g4SOfoNpWA6gcW4D1RbUxMVbLs0Wnoq/CudRZK2+E+oIZS8mhsI1IhbNd3Ro0sjcihHN3xB+/Tc
+	PQnv6m4+pTY+AaUouYUNFBgFnF9Bd8kAZWvFyRQVC6vt/GKSRjRqUulxuUUwVJ+HpjEef7NYNNB
+	KR1CkK+XNG54TxADEP4y/XLOU8HGMkkXmYoQu3RcsuOTKo/nOy8RSvDu4nsLggpLhG56GfTprOi
+	XhecXHFIodL9Rcfz+P/2tfj8XIECEmb1nRrP3Lcir6NIfisRu3XHGMmuVmGirV5+u+cniAvYEvp
+	74t/rp48hOJwxKQ5u+aY2ojiQk9R5guNy5VhfxnDw8ZaRpU2wttTPGKM7j5an7j45wMU74w9oCu
+	RTUGB7rd6f
+X-Google-Smtp-Source: AGHT+IFNGb1M3X9NAk8pG0TWDgEZk3PtPJ6uu+jwzwArZcBrnR9KLLHpjsWJe6q+HecZnTMtk8Thqw==
+X-Received: by 2002:a05:6512:4017:b0:595:7b90:4098 with SMTP id 2adb3069b0e04-59a17d1e552mr8076867e87.19.1766703707267;
+        Thu, 25 Dec 2025 15:01:47 -0800 (PST)
+Received: from localhost ([194.190.17.114])
+        by smtp.gmail.com with UTF8SMTPSA id 2adb3069b0e04-59a1862836esm6223067e87.98.2025.12.25.15.01.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 25 Dec 2025 15:01:45 -0800 (PST)
+From: Askar Safin <safinaskar@gmail.com>
+To: mario.limonciello@amd.com
+Cc: Dell.Client.Kernel@dell.com,
+	andriy.shevchenko@linux.intel.com,
+	chetan.kumar@mediatek.com,
+	chris.feng@mediatek.com,
+	hua.yang@mediatek.com,
+	len.brown@intel.com,
+	liang.lu@mediatek.com,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	pavel@ucw.cz,
+	rafael@kernel.org,
+	regressions@lists.linux.dev,
+	stable@kernel.org,
+	ting.wang@mediatek.com
+Subject: Re: [REGRESSION][BISECTED] "Wakeup event detected during hibernation" on Dell Precision 7780 (was "[PATCH v4] PM: hibernate: Avoid missing wakeup events during hibernation")
+Date: Fri, 26 Dec 2025 02:01:42 +0300
+Message-ID: <20251225230142.2403756-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <d06be6c6-f5b7-4259-b76a-20dc52a5ffd3@amd.com>
+References: <d06be6c6-f5b7-4259-b76a-20dc52a5ffd3@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 08/11] cpufreq: CPPC: sync policy limits when updating
- min/max_perf
-To: Sumit Gupta <sumitg@nvidia.com>, <rafael@kernel.org>,
-	<viresh.kumar@linaro.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
-	<corbet@lwn.net>, <pierre.gondois@arm.com>, <rdunlap@infradead.org>,
-	<ray.huang@amd.com>, <gautham.shenoy@amd.com>, <mario.limonciello@amd.com>,
-	<perry.yuan@amd.com>, <ionela.voinescu@arm.com>, <zhanjie9@hisilicon.com>,
-	<linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>
-CC: <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
-	<jonathanh@nvidia.com>, <vsethi@nvidia.com>, <ksitaraman@nvidia.com>,
-	<sanjayc@nvidia.com>, <nhartman@nvidia.com>, <bbasu@nvidia.com>
-References: <20251223121307.711773-1-sumitg@nvidia.com>
- <20251223121307.711773-9-sumitg@nvidia.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <20251223121307.711773-9-sumitg@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemf200001.china.huawei.com (7.202.181.227)
+Content-Transfer-Encoding: 8bit
 
-On 2025/12/23 20:13, Sumit Gupta wrote:
-> When min_perf or max_perf is updated via sysfs in autonomous mode, the
-> policy frequency limits should also be updated to reflect the new
-> performance bounds.
-> 
-> Add @update_policy parameter to cppc_cpufreq_set_mperf_limit() to
-> control whether policy constraints are synced with HW registers.
-> The policy is updated only when autonomous selection is enabled to
-> keep SW limits in sync with HW.
-> 
-> This ensures that scaling_min_freq and scaling_max_freq values remain
-> consistent with the actual min/max_perf register values when operating
-> in autonomous mode.
-> 
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  drivers/cpufreq/cppc_cpufreq.c | 35 ++++++++++++++++++++++++++--------
->  1 file changed, 27 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 1f8825006940..0202c7b823e6 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -544,14 +544,20 @@ static void populate_efficiency_class(void)
->   * cppc_cpufreq_set_mperf_limit - Set min/max performance limit
->   * @policy: cpufreq policy
->   * @val: performance value to set
-> + * @update_policy: whether to update policy constraints
->   * @is_min: true for min_perf, false for max_perf
-> + *
-> + * When @update_policy is true, updates cpufreq policy frequency limits.
-> + * @update_policy is false during cpu_init when policy isn't fully set up.
->   */
->  static int cppc_cpufreq_set_mperf_limit(struct cpufreq_policy *policy, u64 val,
-> -					bool is_min)
-> +					bool update_policy, bool is_min)
->  {
->  	struct cppc_cpudata *cpu_data = policy->driver_data;
->  	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
->  	unsigned int cpu = policy->cpu;
-> +	struct freq_qos_request *req;
-> +	unsigned int freq;
->  	u32 perf;
->  	int ret;
->  
-> @@ -571,15 +577,26 @@ static int cppc_cpufreq_set_mperf_limit(struct cpufreq_policy *policy, u64 val,
->  	else
->  		cpu_data->perf_ctrls.max_perf = perf;
->  
-> +	if (update_policy) {
-> +		freq = cppc_perf_to_khz(caps, perf);
-> +		req = is_min ? policy->min_freq_req : policy->max_freq_req;
-> +
-> +		ret = freq_qos_update_request(req, freq);
-> +		if (ret < 0) {
-> +			pr_warn("Failed to update %s_freq constraint for CPU%d: %d\n",
-> +				is_min ? "min" : "max", cpu, ret);
-> +			return ret;
-> +		}
-> +	}
-> +
+Mario Limonciello <mario.limonciello@amd.com>:
+> Can you try using command line instead in case it's actually the 
+> touchpad click still being registered?
 
-OK. Now I see the necessity of extracting this function. But why not use
-freq_khz as a input parameter and convert it to perf in this funciton,
-since you need the freq here?
+Hi. I found another hibernation bug and I want to fix it first,
+because I know how to fix it:
 
->  	return 0;
->  }
->  
-> -#define cppc_cpufreq_set_min_perf(policy, val) \
-> -	cppc_cpufreq_set_mperf_limit(policy, val, true)
-> -
-> -#define cppc_cpufreq_set_max_perf(policy, val) \
-> -	cppc_cpufreq_set_mperf_limit(policy, val, false)
-> +#define cppc_cpufreq_set_min_perf(policy, val, update_policy) \
-> +	cppc_cpufreq_set_mperf_limit(policy, val, update_policy, true)
->  
-> +#define cppc_cpufreq_set_max_perf(policy, val, update_policy) \
-> +	cppc_cpufreq_set_mperf_limit(policy, val, update_policy, false)
->  static struct cppc_cpudata *cppc_cpufreq_get_cpu_data(unsigned int cpu)
->  {
->  	struct cppc_cpudata *cpu_data;
-> @@ -988,7 +1005,8 @@ static ssize_t store_min_perf(struct cpufreq_policy *policy, const char *buf,
->  	perf = cppc_khz_to_perf(&cpu_data->perf_caps, freq_khz);
->  
->  	guard(mutex)(&cppc_cpufreq_update_autosel_config_lock);
-> -	ret = cppc_cpufreq_set_min_perf(policy, perf);
-> +	ret = cppc_cpufreq_set_min_perf(policy, perf,
-> +					cpu_data->perf_ctrls.auto_sel);
->  	if (ret)
->  		return ret;
->  
-> @@ -1045,7 +1063,8 @@ static ssize_t store_max_perf(struct cpufreq_policy *policy, const char *buf,
->  	perf = cppc_khz_to_perf(&cpu_data->perf_caps, freq_khz);
->  
->  	guard(mutex)(&cppc_cpufreq_update_autosel_config_lock);
-> -	ret = cppc_cpufreq_set_max_perf(policy, perf);
-> +	ret = cppc_cpufreq_set_max_perf(policy, perf,
-> +					cpu_data->perf_ctrls.auto_sel);
->  	if (ret)
->  		return ret;
->  
+https://lore.kernel.org/all/20251221063214.3276685-1-safinaskar@gmail.com/
 
+But I need help to proceed writing patch.
+
+-- 
+Askar Safin
 
