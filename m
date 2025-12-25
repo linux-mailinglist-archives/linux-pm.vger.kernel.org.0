@@ -1,292 +1,240 @@
-Return-Path: <linux-pm+bounces-39928-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39929-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AC0DCDD474
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 05:05:02 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59745CDD7DF
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 09:22:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C3DDB306D6E0
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 04:01:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D15BA302E077
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 08:22:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C991723D7C5;
-	Thu, 25 Dec 2025 04:01:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F069130AAC2;
+	Thu, 25 Dec 2025 08:22:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="bOd3Boiv"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="E/xVngxb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC531A3179;
-	Thu, 25 Dec 2025 04:01:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB503093C0;
+	Thu, 25 Dec 2025 08:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766635312; cv=none; b=i7/oo5iWZF16ofK4uYbKy7tfvoN1IFRxVgcBn8nkRprJabbgIVC9/ik6VY1JCKmaCzVGwvdUHpDtlLrivQu4pHgfz46OYgp1DIRW02cTU0KrwQSqd73YbslNQPSbQL2q6XAseAm8ZaBgKwyHdY9pnjXGg23xxc4MekNGuvL9RKo=
+	t=1766650930; cv=none; b=lLjgPrDvlLbDGVRFCJLG+NFqS3oGocJZ6KTv/anvRNdSPUEnd9xkEAmbZwQSekstPVn6akGIr4yMMxezxtSkQqRS8AOe4RsvQAKaPFKAi/+JlJKr8ojBT0Pek7d5EqWkf05TArzZT9XbV8Glb734GWWBNLQplJnWu8sIKV1RkIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766635312; c=relaxed/simple;
-	bh=a0iq1sd1jBM9Q1ibIFRv0NxghMqTfNf4aPuL2PGlptU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k6vMNCW8AU5Hg0+L0RVM1Atx6eMWzd+G1hUHaceUn3OUYtQhvNt1GDqkaSPD/3DzdNGrY84wkhYn+lujKPiDyXxLEJLOy5TJDXY82YZOegtAApppJjxDbuaRAyeTch4fZrMSBgzBUb8HDeBc6FZM58I2ri3ARKM+X2tMXOyxp94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=bOd3Boiv; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=lwltwGqxiKq/BS1zwHOtRLooQae3Ubuni+ZvF375urk=; b=bOd3BoivYefmQg185t+3yXn/tN
-	KUk4ZkQer5Ngpw36nT7mKkD2t+Wi8ZD1KJJwE6RruOnhpaak65VEO5f+wwld9uu1F/vzI70BxcwUR
-	bR4BkB4AYtVkJr/mfw+LJR49JoI4NFiQ8ROcYqfES8aupTychHZ6DXHGEIkMCHlJyBA0mIsZOG9uK
-	913nxQ9+px99h/gbH3G6Qi0pQictX7fhrTQM7HGe8qjJvP5Btu5IgmUKOEaMCHVjF4RdfqMjV+mMO
-	MyMO3DmD03lypMU9Gu40kOKw+uLXc0MG4evVpfqzFlc6yKww6TSXUewxp5cggfxMf3PBsFFvkm81M
-	Y0XtYhXg==;
-Received: from [58.29.143.236] (helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1vYcXj-00GLlf-1l; Thu, 25 Dec 2025 05:01:40 +0100
-From: Changwoo Min <changwoo@igalia.com>
-To: lukasz.luba@arm.com,
-	rafael@kernel.org,
-	donald.hunter@gmail.com,
-	kuba@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	lenb@kernel.org,
-	pavel@kernel.org,
-	changwoo@igalia.com
-Cc: kernel-dev@igalia.com,
-	linux-pm@vger.kernel.org,
-	netdev@vger.kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH for 6.19 4/4] PM: EM: Add dump to get-perf-domains in the EM YNL spec
-Date: Thu, 25 Dec 2025 13:01:04 +0900
-Message-ID: <20251225040104.982704-5-changwoo@igalia.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20251225040104.982704-1-changwoo@igalia.com>
-References: <20251225040104.982704-1-changwoo@igalia.com>
+	s=arc-20240116; t=1766650930; c=relaxed/simple;
+	bh=X2l5lOuNHuPWUfjU6YQXnnSXDCwcmxn6xUyYrfTh9+0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=eyzFQRlLeEFkLDyTqplcbv+pzi+65cBi4/89w8e9CbllQf6EvcrkPCwFqc0vGb/VIivx9b80k71ENLtg/k8jHtfeOJIecunVjZL2J4z1St92Stpp+wcVATgv8SMxGqMWnIxxNMuXoSby/XGzEwqJxt5T7HbyTeiCl1B6f2BXKUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=E/xVngxb; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=qV9c0cAuQBFG5vHxyodBDru6tAcw75rGhJjJFCuTdLg=;
+	b=E/xVngxbpq+/240pqexo6OzMXmiriq+qx/kVoVgF+DFLT5AoOdPr1148j/tgZploHfqaRprSx
+	ZWW8DtiBq9nHpt0LUifGwiaDHJf8MG8asx7hyzVlCxPYDXX5Ko97Ev3E7TjiERPzJsL5C2iPCwW
+	/Pi6UoBcc6xUjxJbx+KL3II=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4dcM8R25spz12LJG;
+	Thu, 25 Dec 2025 16:18:47 +0800 (CST)
+Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id 1FC534056C;
+	Thu, 25 Dec 2025 16:21:59 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
+ (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 25 Dec
+ 2025 16:21:58 +0800
+Message-ID: <e484ce68-1fb1-4732-8577-19a2b7141c40@huawei.com>
+Date: Thu, 25 Dec 2025 16:21:57 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 03/11] ACPI: CPPC: Add cppc_get_perf() API to read
+ performance controls
+To: Sumit Gupta <sumitg@nvidia.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<corbet@lwn.net>, <pierre.gondois@arm.com>, <rdunlap@infradead.org>,
+	<ray.huang@amd.com>, <gautham.shenoy@amd.com>, <mario.limonciello@amd.com>,
+	<perry.yuan@amd.com>, <ionela.voinescu@arm.com>, <zhanjie9@hisilicon.com>,
+	<linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>
+CC: <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
+	<jonathanh@nvidia.com>, <vsethi@nvidia.com>, <ksitaraman@nvidia.com>,
+	<sanjayc@nvidia.com>, <nhartman@nvidia.com>, <bbasu@nvidia.com>
+References: <20251223121307.711773-1-sumitg@nvidia.com>
+ <20251223121307.711773-4-sumitg@nvidia.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <20251223121307.711773-4-sumitg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemf200001.china.huawei.com (7.202.181.227)
 
-Add dump to get-perf-domains, so that a user can fetch either information
-about a specific performance domain with do or information about all
-performance domains with dump. The YNL spec, autogenerated files, and
-the do implementation are updated, and the dump implementation is added.
+On 2025/12/23 20:12, Sumit Gupta wrote:
+> Add cppc_get_perf() function to read values of performance control
+> registers including desired_perf, min_perf, max_perf, energy_perf,
+> and auto_sel.
+> 
+> This provides a read interface to complement the existing
+> cppc_set_perf() write interface for performance control registers.
+> 
+> Note that auto_sel is read by cppc_get_perf() but not written by
+> cppc_set_perf() to avoid unintended mode changes during performance
+> updates. It can be updated with existing dedicated cppc_set_auto_sel()
+> API.
+> 
+> Also call cppc_get_perf() in cppc_cpufreq_get_cpu_data() to initialize
+> perf_ctrls with current hardware register values during cpufreq
+> initialization for each CPU policy.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/acpi/cppc_acpi.c       | 79 ++++++++++++++++++++++++++++++++++
+>  drivers/cpufreq/cppc_cpufreq.c |  6 +++
+>  include/acpi/cppc_acpi.h       |  5 +++
+>  3 files changed, 90 insertions(+)
+> 
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index e66e20d1f31b..a4e89fe6aab5 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -1732,6 +1732,85 @@ int cppc_set_enable(int cpu, bool enable)
+>  	return cppc_set_reg_val(cpu, ENABLE, enable);
+>  }
+>  EXPORT_SYMBOL_GPL(cppc_set_enable);
+> +/**
+> + * cppc_get_perf - Get a CPU's performance controls.
+> + * @cpu: CPU for which to get performance controls.
+> + * @perf_ctrls: ptr to cppc_perf_ctrls. See cppc_acpi.h
+> + *
+> + * Return: 0 for success with perf_ctrls, -ERRNO otherwise.
+> + */
+> +int cppc_get_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
+> +{
+> +	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> +	struct cpc_register_resource *desired_perf_reg,
+> +				     *min_perf_reg, *max_perf_reg,
+> +				     *energy_perf_reg, *auto_sel_reg;
+> +	u64 desired_perf = 0, min = 0, max = 0, energy_perf = 0, auto_sel = 0;
+> +	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+> +	struct cppc_pcc_data *pcc_ss_data = NULL;
+> +	int ret = 0, regs_in_pcc = 0;
+> +
+> +	if (!cpc_desc) {
+> +		pr_debug("No CPC descriptor for CPU:%d\n", cpu);
+> +		return -ENODEV;
+> +	}
+> +
+> +	if (!perf_ctrls) {
+> +		pr_debug("Invalid perf_ctrls pointer\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	desired_perf_reg = &cpc_desc->cpc_regs[DESIRED_PERF];
+> +	min_perf_reg = &cpc_desc->cpc_regs[MIN_PERF];
+> +	max_perf_reg = &cpc_desc->cpc_regs[MAX_PERF];
+> +	energy_perf_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
+> +	auto_sel_reg = &cpc_desc->cpc_regs[AUTO_SEL_ENABLE];
+> +
+> +	/* Are any of the regs PCC ?*/
+> +	if (CPC_IN_PCC(desired_perf_reg) || CPC_IN_PCC(min_perf_reg) ||
+> +	    CPC_IN_PCC(max_perf_reg) || CPC_IN_PCC(energy_perf_reg) ||
+> +	    CPC_IN_PCC(auto_sel_reg)) {
+> +		if (pcc_ss_id < 0) {
+> +			pr_debug("Invalid pcc_ss_id for CPU:%d\n", cpu);
+> +			return -ENODEV;
+> +		}
+> +		pcc_ss_data = pcc_data[pcc_ss_id];
+> +		regs_in_pcc = 1;
+> +		down_write(&pcc_ss_data->pcc_lock);
+> +		/* Ring doorbell once to update PCC subspace */
+> +		if (send_pcc_cmd(pcc_ss_id, CMD_READ) < 0) {
+> +			ret = -EIO;
+> +			goto out_err;
+> +		}
+> +	}
+> +
+> +	/* Read optional elements if present */
+> +	if (CPC_SUPPORTED(max_perf_reg))
+> +		cpc_read(cpu, max_perf_reg, &max);
+> +	perf_ctrls->max_perf = max;
+> +
+> +	if (CPC_SUPPORTED(min_perf_reg))
+> +		cpc_read(cpu, min_perf_reg, &min);
+> +	perf_ctrls->min_perf = min;
+> +
+> +	if (CPC_SUPPORTED(desired_perf_reg))
+> +		cpc_read(cpu, desired_perf_reg, &desired_perf);
+> +	perf_ctrls->desired_perf = desired_perf;
+> +
+> +	if (CPC_SUPPORTED(energy_perf_reg))
+> +		cpc_read(cpu, energy_perf_reg, &energy_perf);
+> +	perf_ctrls->energy_perf = energy_perf;
+> +
+> +	if (CPC_SUPPORTED(auto_sel_reg))
+> +		cpc_read(cpu, auto_sel_reg, &auto_sel);
+> +	perf_ctrls->auto_sel = (bool)auto_sel;
+> +
+> +out_err:
+> +	if (regs_in_pcc)
+> +		up_write(&pcc_ss_data->pcc_lock);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(cppc_get_perf);
+>  
+>  /**
+>   * cppc_set_perf - Set a CPU's performance controls.
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 7c26ce554e29..a87e7bb2e2f1 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -562,6 +562,12 @@ static struct cppc_cpudata *cppc_cpufreq_get_cpu_data(unsigned int cpu)
+>  		goto free_mask;
+>  	}
+>  
+> +	ret = cppc_get_perf(cpu, &cpu_data->perf_ctrls);
+> +	if (ret) {
+> +		pr_debug("Err reading CPU%d perf ctrls: ret:%d\n", cpu, ret);
+> +		goto free_mask;
+> +	}
+> +
 
-Suggested-by: Donald Hunter <donald.hunter@gmail.com>
-Signed-off-by: Changwoo Min <changwoo@igalia.com>
----
- .../netlink/specs/dev-energymodel.yaml        | 12 ++++
- include/uapi/linux/dev_energymodel.h          |  3 +-
- kernel/power/em_netlink.c                     | 58 +++++++++++++++++--
- kernel/power/em_netlink_autogen.c             | 16 ++++-
- kernel/power/em_netlink_autogen.h             |  2 +
- 5 files changed, 82 insertions(+), 9 deletions(-)
+If you really need energy_perf and auto_sel in cpu_data->perf_ctrls, they
+should be updated whenever they are set, i.e., in store_auto_select() and
+store_energy_performance_preference_val().
 
-diff --git a/Documentation/netlink/specs/dev-energymodel.yaml b/Documentation/netlink/specs/dev-energymodel.yaml
-index af8b8f72f722..1843e68faacf 100644
---- a/Documentation/netlink/specs/dev-energymodel.yaml
-+++ b/Documentation/netlink/specs/dev-energymodel.yaml
-@@ -47,6 +47,11 @@ attribute-sets:
-     doc: >-
-       Information on all the performance domains.
-     attributes:
-+      -
-+        name: perf-domain-id
-+        type: u32
-+        doc: >-
-+          A unique ID number for each performance domain.
-       -
-         name: perf-domain
-         type: nest
-@@ -136,6 +141,13 @@ operations:
-       attribute-set: perf-domains
-       doc: Get the list of information for all performance domains.
-       do:
-+        request:
-+          attributes:
-+            - perf-domain-id
-+        reply:
-+          attributes:
-+            - perf-domain
-+      dump:
-         reply:
-           attributes:
-             - perf-domain
-diff --git a/include/uapi/linux/dev_energymodel.h b/include/uapi/linux/dev_energymodel.h
-index 3399967e1f93..e8e133b5a797 100644
---- a/include/uapi/linux/dev_energymodel.h
-+++ b/include/uapi/linux/dev_energymodel.h
-@@ -37,7 +37,8 @@ enum dev_energymodel_perf_domain_flags {
- };
- 
- enum {
--	DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN = 1,
-+	DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN_ID = 1,
-+	DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN,
- 
- 	__DEV_ENERGYMODEL_A_PERF_DOMAINS_MAX,
- 	DEV_ENERGYMODEL_A_PERF_DOMAINS_MAX = (__DEV_ENERGYMODEL_A_PERF_DOMAINS_MAX - 1)
-diff --git a/kernel/power/em_netlink.c b/kernel/power/em_netlink.c
-index b6edb018c65a..9412f1666007 100644
---- a/kernel/power/em_netlink.c
-+++ b/kernel/power/em_netlink.c
-@@ -18,6 +18,13 @@
- #include "em_netlink_autogen.h"
- 
- /*************************** Command encoding ********************************/
-+struct dump_ctx {
-+	int idx;
-+	int start;
-+	struct sk_buff *skb;
-+	struct netlink_callback *cb;
-+};
-+
- static int __em_nl_get_pd_size(struct em_perf_domain *pd, void *data)
- {
- 	int nr_cpus, msg_sz, cpus_sz;
-@@ -76,16 +83,44 @@ static int __em_nl_get_pd(struct em_perf_domain *pd, void *data)
- 	return -EMSGSIZE;
- }
- 
-+static int __em_nl_get_pd_for_dump(struct em_perf_domain *pd, void *data)
-+{
-+	const struct genl_info *info;
-+	struct dump_ctx *ctx = data;
-+	void *hdr;
-+	int ret;
-+
-+	if (ctx->idx++ < ctx->start)
-+		return 0;
-+
-+	info = genl_info_dump(ctx->cb);
-+	hdr = genlmsg_iput(ctx->skb, info);
-+	if (!hdr) {
-+		genlmsg_cancel(ctx->skb, hdr);
-+		return -EMSGSIZE;
-+	}
-+
-+	ret = __em_nl_get_pd(pd, ctx->skb);
-+	genlmsg_end(ctx->skb, hdr);
-+	return ret;
-+}
-+
- int dev_energymodel_nl_get_perf_domains_doit(struct sk_buff *skb,
- 					      struct genl_info *info)
- {
-+	int id, ret = -EMSGSIZE, msg_sz = 0;
-+	int cmd = info->genlhdr->cmd;
-+	struct em_perf_domain *pd;
- 	struct sk_buff *msg;
- 	void *hdr;
--	int cmd = info->genlhdr->cmd;
--	int ret = -EMSGSIZE, msg_sz = 0;
- 
--	for_each_em_perf_domain(__em_nl_get_pd_size, &msg_sz);
-+	if (!info->attrs[DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN_ID])
-+		return -EINVAL;
-+
-+	id = nla_get_u32(info->attrs[DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN_ID]);
-+	pd = em_perf_domain_get_by_id(id);
- 
-+	__em_nl_get_pd_size(pd, &msg_sz);
- 	msg = genlmsg_new(msg_sz, GFP_KERNEL);
- 	if (!msg)
- 		return -ENOMEM;
-@@ -94,10 +129,9 @@ int dev_energymodel_nl_get_perf_domains_doit(struct sk_buff *skb,
- 	if (!hdr)
- 		goto out_free_msg;
- 
--	ret = for_each_em_perf_domain(__em_nl_get_pd, msg);
-+	ret = __em_nl_get_pd(pd, msg);
- 	if (ret)
- 		goto out_cancel_msg;
--
- 	genlmsg_end(msg, hdr);
- 
- 	return genlmsg_reply(msg, info);
-@@ -106,10 +140,22 @@ int dev_energymodel_nl_get_perf_domains_doit(struct sk_buff *skb,
- 	genlmsg_cancel(msg, hdr);
- out_free_msg:
- 	nlmsg_free(msg);
--
- 	return ret;
- }
- 
-+int dev_energymodel_nl_get_perf_domains_dumpit(struct sk_buff *skb,
-+						struct netlink_callback *cb)
-+{
-+	struct dump_ctx ctx = {
-+		.idx = 0,
-+		.start = cb->args[0],
-+		.skb = skb,
-+		.cb = cb,
-+	};
-+
-+	return for_each_em_perf_domain(__em_nl_get_pd_for_dump, &ctx);
-+}
-+
- static struct em_perf_domain *__em_nl_get_pd_table_id(struct nlattr **attrs)
- {
- 	struct em_perf_domain *pd;
-diff --git a/kernel/power/em_netlink_autogen.c b/kernel/power/em_netlink_autogen.c
-index 44acef0e7df2..16a59200c6a4 100644
---- a/kernel/power/em_netlink_autogen.c
-+++ b/kernel/power/em_netlink_autogen.c
-@@ -11,6 +11,11 @@
- 
- #include <uapi/linux/dev_energymodel.h>
- 
-+/* DEV_ENERGYMODEL_CMD_GET_PERF_DOMAINS - do */
-+static const struct nla_policy dev_energymodel_get_perf_domains_nl_policy[DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN_ID + 1] = {
-+	[DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN_ID] = { .type = NLA_U32, },
-+};
-+
- /* DEV_ENERGYMODEL_CMD_GET_PERF_TABLE - do */
- static const struct nla_policy dev_energymodel_get_perf_table_nl_policy[DEV_ENERGYMODEL_A_PERF_TABLE_PERF_DOMAIN_ID + 1] = {
- 	[DEV_ENERGYMODEL_A_PERF_TABLE_PERF_DOMAIN_ID] = { .type = NLA_U32, },
-@@ -18,10 +23,17 @@ static const struct nla_policy dev_energymodel_get_perf_table_nl_policy[DEV_ENER
- 
- /* Ops table for dev_energymodel */
- static const struct genl_split_ops dev_energymodel_nl_ops[] = {
-+	{
-+		.cmd		= DEV_ENERGYMODEL_CMD_GET_PERF_DOMAINS,
-+		.doit		= dev_energymodel_nl_get_perf_domains_doit,
-+		.policy		= dev_energymodel_get_perf_domains_nl_policy,
-+		.maxattr	= DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN_ID,
-+		.flags		= GENL_CMD_CAP_DO,
-+	},
- 	{
- 		.cmd	= DEV_ENERGYMODEL_CMD_GET_PERF_DOMAINS,
--		.doit	= dev_energymodel_nl_get_perf_domains_doit,
--		.flags	= GENL_CMD_CAP_DO,
-+		.dumpit	= dev_energymodel_nl_get_perf_domains_dumpit,
-+		.flags	= GENL_CMD_CAP_DUMP,
- 	},
- 	{
- 		.cmd		= DEV_ENERGYMODEL_CMD_GET_PERF_TABLE,
-diff --git a/kernel/power/em_netlink_autogen.h b/kernel/power/em_netlink_autogen.h
-index f7e4bddcbd53..5caf2f7e18a5 100644
---- a/kernel/power/em_netlink_autogen.h
-+++ b/kernel/power/em_netlink_autogen.h
-@@ -14,6 +14,8 @@
- 
- int dev_energymodel_nl_get_perf_domains_doit(struct sk_buff *skb,
- 					     struct genl_info *info);
-+int dev_energymodel_nl_get_perf_domains_dumpit(struct sk_buff *skb,
-+					       struct netlink_callback *cb);
- int dev_energymodel_nl_get_perf_table_doit(struct sk_buff *skb,
- 					   struct genl_info *info);
- 
--- 
-2.52.0
+>  	return cpu_data;
+>  
+>  free_mask:
+> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+> index a090b010f5f1..12a1dc31bf2a 100644
+> --- a/include/acpi/cppc_acpi.h
+> +++ b/include/acpi/cppc_acpi.h
+> @@ -150,6 +150,7 @@ extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
+>  extern int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf);
+>  extern int cppc_get_highest_perf(int cpunum, u64 *highest_perf);
+>  extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_ctrs);
+> +extern int cppc_get_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+>  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+>  extern int cppc_set_enable(int cpu, bool enable);
+>  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
+> @@ -191,6 +192,10 @@ static inline int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb_
+>  {
+>  	return -EOPNOTSUPP;
+>  }
+> +static inline int cppc_get_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+>  static inline int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
+>  {
+>  	return -EOPNOTSUPP;
 
 
