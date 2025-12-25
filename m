@@ -1,172 +1,253 @@
-Return-Path: <linux-pm+bounces-39931-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39932-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1712CDD970
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 10:33:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCDE4CDDA00
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 10:54:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 65F4B3015177
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 09:33:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8D0F93011A48
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 09:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A89C279DC3;
-	Thu, 25 Dec 2025 09:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E58230BF7D;
+	Thu, 25 Dec 2025 09:54:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N/OegG7M"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BFE923EAB6;
-	Thu, 25 Dec 2025 09:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF07919C54E;
+	Thu, 25 Dec 2025 09:54:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766655227; cv=none; b=b4EFt+dVpy2NDt3L2SNaYxOTAQaaI1EtSXGz4slRspIoDt0CJTxDhKakRP3zlGT29t4p1SDgMpzn8WtnRy1c/us5gXllb/giBFd8IKIaidru1PHC3g958Y7mzHMNe/m970ucqJkjb4i+05HoSP2qdFwXQnmwNNaltHwrg3aGxRI=
+	t=1766656489; cv=none; b=NrpOpL9aQRGiB6G9U2OGJo+mMjrAnUgvlP3rmnZYlXVcYjYyUua7cdg2QZSwQoxnJqveQNguYGbk2T09CjJWAWtSGvtd2ZIu2ezxNEYIAvaNRhLNPMvm2CpJMQMfSbOpDOCMg0m+bGMPkZzbVrA/YaxkgoW6iJRc+P7yXFIBFaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766655227; c=relaxed/simple;
-	bh=w1xapEhESvrRXoIIo2QFizy4DiFHNCF+imb/w+yvE0I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g/e6M7dyldwDd/RSMbFdmCVP9ODIwNyyjBTGIt2v23cOf1W0qFOq2URW4vNKyI0gnae18jfPMptyhy+mr7JyoL4qwBV+ZWJoOOjfki65/lkAJr2uimO6aBUMWT3Z6Rqw0cEUlEkGjZJMl4NAFAWO1bVWiMifVfJXOQvXXT/59mg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: c8f91a62e17411f0a38c85956e01ac42-20251225
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:61cee32f-9124-4909-8761-4e06d1000f00,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:19a89b60e5c5e2880c988ccd0e7200f1,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|898,TC:nil,Content:0|15|
-	52,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
-	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: c8f91a62e17411f0a38c85956e01ac42-20251225
-X-User: luriwen@kylinos.cn
-Received: from [10.42.13.61] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <luriwen@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 562864616; Thu, 25 Dec 2025 17:33:35 +0800
-Message-ID: <227b6cdc-2abb-47d4-8a92-ff4fad2f2d9e@kylinos.cn>
-Date: Thu, 25 Dec 2025 17:33:32 +0800
+	s=arc-20240116; t=1766656489; c=relaxed/simple;
+	bh=g1z6AkV4utITKL0DzG0l6IfyyZbDqdSGOQTWHHEmxlg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=AdRbcR+B0Y73T22wnF9X4D2bOXUMGQY1RyNr2X9go/OMWlEeZ37aQc2apdLFlUdj9QGKAJqTv3rLWWFqLSJ0vMzgZu3aBk7K/5fvT+IEUmstPjZxD8XCGApr+4E3Bi7Z1ajiLKKcrCvhw9I0YMtZfzcCxFEXiT9WmCSez2DcyCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N/OegG7M; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766656487; x=1798192487;
+  h=date:from:to:cc:subject:message-id;
+  bh=g1z6AkV4utITKL0DzG0l6IfyyZbDqdSGOQTWHHEmxlg=;
+  b=N/OegG7M8lg01vEb3HWQ5DWqSkS7RbCicQIFPH5ILZyw+pl6FkU/aKM2
+   ZdC5qAgoy7t8azyzkYiFVsiYc92jjXN3UF69PQ71ru805UxEdWliT3ao2
+   Udh3lth1hzLneAEqYxqK/rMLfALeAEQKI9Wiy4jXs3yXjFAspCYimciU0
+   7l+ZQKW2cpBwjITRVj4PfjnDiZ7l/sA8GIE1zTR3zkkISQn32MukSEW9C
+   vQW2BzDEJRckhMZjn1I4V601M2JXygqDj3MdQgY47qPy3D5ElmbQorzcC
+   XlerCD5Jv/YXsTS0xYvthxG9jjmv3W2la4AC1a5eWbZ3RquULCJf8XM4h
+   A==;
+X-CSE-ConnectionGUID: +uq9knvcT1+NlQAZBGwksA==
+X-CSE-MsgGUID: N7QYorEfRA6Ls4roiwHkew==
+X-IronPort-AV: E=McAfee;i="6800,10657,11652"; a="72317769"
+X-IronPort-AV: E=Sophos;i="6.21,176,1763452800"; 
+   d="scan'208";a="72317769"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Dec 2025 01:54:46 -0800
+X-CSE-ConnectionGUID: 3J9YFNseSA6NUAxcD3sfMQ==
+X-CSE-MsgGUID: EXUt1gX7ScepFK2gWdEdvw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,176,1763452800"; 
+   d="scan'208";a="231253063"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 25 Dec 2025 01:54:45 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vYi3K-000000003xn-1duT;
+	Thu, 25 Dec 2025 09:54:39 +0000
+Date: Thu, 25 Dec 2025 17:53:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 92c49233f514db11ba0abefc7beb5be412ae7e4b
+Message-ID: <202512251736.N4KgnVNs-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [REGRESSION] Re: [PATCH v3] PM: suspend: Make pm_test delay
- interruptible by wakeup events
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: pavel@kernel.org, lenb@kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, xiongxin <xiongxin@kylinos.cn>,
- regressions@lists.linux.dev
-References: <20251113012638.1362013-1-luriwen@kylinos.cn>
- <CAJZ5v0hwhVO6J2nS2-byU0+Lm8QbzdBzv4-X4eLNNUpTg+41Kg@mail.gmail.com>
- <aUsAk0k1N9hw8IkY@venus>
- <CAJZ5v0jha1VEHGfqYfu1G9WCwPEM=kDa-_c1LqchnkxAWbCBiw@mail.gmail.com>
-Content-Language: en-US
-From: luriwen <luriwen@kylinos.cn>
-In-Reply-To: <CAJZ5v0jha1VEHGfqYfu1G9WCwPEM=kDa-_c1LqchnkxAWbCBiw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
-在 2025/12/24 19:44, Rafael J. Wysocki 写道:
-> On Tue, Dec 23, 2025 at 10:09 PM Sebastian Reichel
-> <sebastian.reichel@collabora.com> wrote:
->> Hi,
->>
->> On Fri, Nov 14, 2025 at 05:11:16PM +0100, Rafael J. Wysocki wrote:
->>> On Thu, Nov 13, 2025 at 2:26 AM Riwen Lu <luriwen@kylinos.cn> wrote:
->>>> Modify the suspend_test() function to make the test delay can be
->>>> interrupted by wakeup events.
->>>>
->>>> This improves the responsiveness of the system during suspend testing
->>>> when wakeup events occur, allowing the suspend process to proceed
->>>> without waiting for the full test delay to complete when wakeup events
->>>> are detected.
->>>>
->>>> Additionally, using msleep() instead of mdelay() avoids potential soft
->>>> lockup "CPU stuck" issues when long test delays are configured.
->>>>
->>>> Co-developed-by: xiongxin <xiongxin@kylinos.cn>
->>>> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
->>>> Signed-off-by: Riwen Lu <luriwen@kylinos.cn>
->>>> ---
->>>>   kernel/power/suspend.c | 6 +++++-
->>>>   1 file changed, 5 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
->>>> index b4ca17c2fecf..1c2f777da367 100644
->>>> --- a/kernel/power/suspend.c
->>>> +++ b/kernel/power/suspend.c
->>>> @@ -344,10 +344,14 @@ MODULE_PARM_DESC(pm_test_delay,
->>>>   static int suspend_test(int level)
->>>>   {
->>>>   #ifdef CONFIG_PM_DEBUG
->>>> +       int i;
->>>> +
->>>>          if (pm_test_level == level) {
->>>>                  pr_info("suspend debug: Waiting for %d second(s).\n",
->>>>                                  pm_test_delay);
->>>> -               mdelay(pm_test_delay * 1000);
->>>> +               for (i = 0; i < pm_test_delay && !pm_wakeup_pending(); i++)
->>>> +                       msleep(1000);
->>>> +
->>>>                  return 1;
->>>>          }
->>>>   #endif /* !CONFIG_PM_DEBUG */
->>>> --
->>> Applied as 6.19 material, thanks!
->> This is now upstream as a10ad1b10402 ("PM: suspend: Make pm_test delay interruptible by wakeup events").
->> When doing the following PM debugging test on ROCK 4D on v6.19-rc2
->>
->> echo N > /sys/module/printk/parameters/console_suspend
->> echo 1 > /sys/power/pm_print_times
->> echo 1 > /sys/power/pm_debug_messages
->> echo core > /sys/power/pm_test
->> echo mem > /sys/power/state
->>
->> I see the following error triggered reliably, which did not happen on 6.18
->> and no longer appears after reverting this patch:
->>
->> [   49.647656] ------------[ cut here ]------------
->> [   49.647656] WARNING: kernel/time/timekeeping.c:821 at ktime_get+0xb8/0xd8, CPU#0: swapper/0/0
->> [   49.647656] Modules linked in: sha256 cfg80211 binfmt_misc fuse ipv6 snd_soc_hdmi_codec rk805_pwrkey rockchip_saradc dwmac_rk stmmac_platform rtc_hym8563 snd_soc_es8328_i2c phy_rockchip_usbdp rockchipdrm stmmac snd_soc_es8328 dw_hdmi_qp industrialio_triggered_buffer analogix_dp typec phy_rockchip_samsung_hdptx kfifo_buf dw_dp rockchip_thermal dw_mipi_dsi spi_rockchip_sfc phy_rockchip_naneng_combphy pcs_xpcs panfrost drm_shmem_helper gpu_sched snd_soc_rockchip_sai snd_soc_simple_card drm_dp_aux_bus dw_hdmi snd_soc_simple_card_utils rfkill_gpio rfkill snd_soc_core drm_display_helper snd_compress cec drm_client_lib drm_dma_helper display_connector snd_pcm_dmaengine drm_kms_helper snd_pcm drm snd_timer snd backlight soundcore adc_keys
->> [   49.647656] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.19.0-rc2-g7211b2cf9c08 #1 PREEMPT
->> [   49.647656] Hardware name: Radxa ROCK 4D (DT)
->> [   49.647656] pstate: 800000c5 (Nzcv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->> [   49.647656] pc : ktime_get+0xb8/0xd8
->> [   49.647656] lr : tick_nohz_idle_enter+0x50/0x90
->> [   49.647656] sp : ffffc1a17b573d50
->> [   49.647656] x29: ffffc1a17b573d50 x28: 00000000fdf57ec0 x27: ffffc1a17b57b260
->> [   49.647656] x26: ffffc1a17b57e000 x25: 0000000000000000 x24: 00000000000000ea
->> [   49.647656] x23: ffffc1a17a470000 x22: ffffc1a17b57ad00 x21: ffff3e6282a25000
->> [   49.647656] x20: ffff0003fdead5d8 x19: ffffc1a17b4885d8 x18: 000000000000000a
->> [   49.647656] x17: ffff3e6282a25000 x16: ffff800080000000 x15: 00700ea231d1d404
->> [   49.647656] x14: 0000000000000396 x13: 0000000000000001 x12: 0000000000000001
->> [   49.647656] x11: 00000000000000c0 x10: 0000000000000aa0 x9 : ffffc1a17b573d00
->> [   49.647656] x8 : ffffc1a17b586680 x7 : 0000000000000000 x6 : 0000000000000000
->> [   49.647656] x5 : 0000000000000004 x4 : ffffc1a17b57eb68 x3 : 0000000000000000
->> [   49.647656] x2 : ffffc1a17b48ec40 x1 : 0000000000000000 x0 : 0000000000000001
->> [   49.647656] Call trace:
->> [   49.647656]  ktime_get+0xb8/0xd8 (P)
->> [   49.647656]  tick_nohz_idle_enter+0x50/0x90
->> [   49.647656]  do_idle+0x38/0x260
->> [   49.647656]  cpu_startup_entry+0x38/0x40
->> [   49.647656]  rest_init+0xd8/0xe0
->> [   49.647656]  console_on_rootfs+0x0/0x6c
->> [   49.647656]  __primary_switched+0x88/0x90
->> [   49.647656] ---[ end trace 0000000000000000 ]---
-> msleep() is not suitable for the "core" level testing.
->
-> Change msleep() in suspend_test() back to mdelay() and the backtrace
-> should go away.
->
-> I'll send a patch for that later this week unless someone beats me to it.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 92c49233f514db11ba0abefc7beb5be412ae7e4b  Merge branch 'acpi-queue' into bleeding-edge
 
-Maybe usingmdelay() only forTEST_CORE while keepingmsleep() for other 
-test levels ?
+elapsed time: 1304m
 
+configs tested: 162
+configs skipped: 5
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+alpha                               defconfig    gcc-15.1.0
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    gcc-15.1.0
+arc                                 defconfig    gcc-15.1.0
+arc                   randconfig-001-20251225    gcc-11.5.0
+arc                   randconfig-002-20251225    gcc-11.5.0
+arm                               allnoconfig    clang-22
+arm                              allyesconfig    gcc-15.1.0
+arm                                 defconfig    clang-22
+arm                   randconfig-001-20251225    clang-22
+arm                   randconfig-002-20251225    gcc-12.5.0
+arm                   randconfig-003-20251225    clang-22
+arm                   randconfig-004-20251225    clang-22
+arm64                            allmodconfig    clang-19
+arm64                             allnoconfig    gcc-15.1.0
+arm64                               defconfig    gcc-15.1.0
+arm64                 randconfig-001-20251225    clang-18
+arm64                 randconfig-002-20251225    gcc-12.5.0
+arm64                 randconfig-003-20251225    clang-22
+arm64                 randconfig-004-20251225    clang-22
+csky                             allmodconfig    gcc-15.1.0
+csky                              allnoconfig    gcc-15.1.0
+csky                                defconfig    gcc-15.1.0
+csky                  randconfig-001-20251225    gcc-15.1.0
+csky                  randconfig-002-20251225    gcc-11.5.0
+hexagon                          allmodconfig    clang-17
+hexagon                           allnoconfig    clang-22
+hexagon                             defconfig    clang-22
+hexagon               randconfig-001-20251225    clang-22
+hexagon               randconfig-002-20251225    clang-22
+i386                             allmodconfig    gcc-14
+i386                              allnoconfig    gcc-14
+i386                             allyesconfig    gcc-14
+i386        buildonly-randconfig-001-20251225    clang-20
+i386        buildonly-randconfig-002-20251225    clang-20
+i386        buildonly-randconfig-003-20251225    gcc-14
+i386        buildonly-randconfig-004-20251225    clang-20
+i386        buildonly-randconfig-005-20251225    clang-20
+i386        buildonly-randconfig-006-20251225    gcc-14
+i386                                defconfig    clang-20
+i386                  randconfig-001-20251225    gcc-14
+i386                  randconfig-002-20251225    clang-20
+i386                  randconfig-003-20251225    clang-20
+i386                  randconfig-004-20251225    clang-20
+i386                  randconfig-005-20251225    clang-20
+i386                  randconfig-006-20251225    clang-20
+i386                  randconfig-007-20251225    clang-20
+i386                  randconfig-011-20251225    clang-20
+i386                  randconfig-012-20251225    gcc-14
+i386                  randconfig-013-20251225    gcc-14
+i386                  randconfig-014-20251225    clang-20
+i386                  randconfig-015-20251225    gcc-14
+i386                  randconfig-016-20251225    clang-20
+i386                  randconfig-017-20251225    clang-20
+loongarch                         allnoconfig    clang-22
+loongarch             randconfig-001-20251225    clang-22
+loongarch             randconfig-002-20251225    gcc-15.1.0
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+m68k                                defconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                             allmodconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                             allyesconfig    gcc-15.1.0
+mips                   sb1250_swarm_defconfig    gcc-15.1.0
+nios2                            allmodconfig    gcc-11.5.0
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    gcc-11.5.0
+nios2                 randconfig-001-20251225    gcc-9.5.0
+nios2                 randconfig-002-20251225    gcc-11.5.0
+openrisc                         allmodconfig    gcc-15.1.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+openrisc                  or1klitex_defconfig    gcc-15.1.0
+parisc                           alldefconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                randconfig-001-20251225    gcc-12.5.0
+parisc                randconfig-002-20251225    gcc-14.3.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                  iss476-smp_defconfig    gcc-15.1.0
+powerpc               randconfig-001-20251225    clang-22
+powerpc               randconfig-002-20251225    clang-22
+powerpc                      tqm8xx_defconfig    clang-19
+powerpc64             randconfig-001-20251225    gcc-8.5.0
+powerpc64             randconfig-002-20251225    gcc-13.4.0
+riscv                            allmodconfig    clang-22
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    clang-22
+riscv                 randconfig-001-20251225    clang-22
+riscv                 randconfig-002-20251225    gcc-11.5.0
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    clang-22
+s390                  randconfig-001-20251225    gcc-14.3.0
+s390                  randconfig-002-20251225    clang-19
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-15.1.0
+sh                    randconfig-001-20251225    gcc-15.1.0
+sh                    randconfig-002-20251225    gcc-9.5.0
+sh                           se7206_defconfig    gcc-15.1.0
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20251225    gcc-8.5.0
+sparc                 randconfig-002-20251225    gcc-8.5.0
+sparc64                          allmodconfig    clang-22
+sparc64                             defconfig    clang-20
+sparc64               randconfig-001-20251225    gcc-9.5.0
+sparc64               randconfig-002-20251225    clang-20
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    gcc-14
+um                                  defconfig    clang-22
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20251225    gcc-13
+um                    randconfig-002-20251225    gcc-14
+um                           x86_64_defconfig    clang-22
+x86_64                           allmodconfig    clang-20
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20251225    clang-20
+x86_64      buildonly-randconfig-002-20251225    clang-20
+x86_64      buildonly-randconfig-003-20251225    gcc-14
+x86_64      buildonly-randconfig-004-20251225    clang-20
+x86_64      buildonly-randconfig-005-20251225    gcc-14
+x86_64      buildonly-randconfig-006-20251225    clang-20
+x86_64                              defconfig    gcc-14
+x86_64                randconfig-001-20251225    gcc-12
+x86_64                randconfig-002-20251225    clang-20
+x86_64                randconfig-003-20251225    gcc-12
+x86_64                randconfig-004-20251225    clang-20
+x86_64                randconfig-005-20251225    gcc-14
+x86_64                randconfig-006-20251225    gcc-14
+x86_64                randconfig-011-20251225    gcc-13
+x86_64                randconfig-012-20251225    gcc-14
+x86_64                randconfig-013-20251225    clang-20
+x86_64                randconfig-014-20251225    clang-20
+x86_64                randconfig-015-20251225    gcc-14
+x86_64                randconfig-016-20251225    clang-20
+x86_64                randconfig-071-20251225    clang-20
+x86_64                randconfig-072-20251225    clang-20
+x86_64                randconfig-073-20251225    gcc-14
+x86_64                randconfig-074-20251225    clang-20
+x86_64                randconfig-075-20251225    gcc-14
+x86_64                randconfig-076-20251225    gcc-14
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                randconfig-001-20251225    gcc-8.5.0
+xtensa                randconfig-002-20251225    gcc-10.5.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
