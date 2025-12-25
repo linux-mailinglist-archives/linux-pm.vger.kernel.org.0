@@ -1,49 +1,50 @@
-Return-Path: <linux-pm+bounces-39924-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39926-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AD29CDD44A
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 05:01:48 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33869CDD453
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 05:01:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9C75F3010FDF
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 04:01:42 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EC1863014DE8
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Dec 2025 04:01:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D0F1A3179;
-	Thu, 25 Dec 2025 04:01:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACF5B22425B;
+	Thu, 25 Dec 2025 04:01:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="hG1dlgS6"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="TWwztiAT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6F1137932;
-	Thu, 25 Dec 2025 04:01:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF9118A6CF;
+	Thu, 25 Dec 2025 04:01:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766635301; cv=none; b=aLEf6WAmmncPTGwSndH9fl+vzIo8sP+XjDPDda/4+JE75ILZ+VRprSSyV5Nvxu4xqPKufECtVVra62yneerHJiNKiK3pfUCZaIGRZXVhjDJ0GHftyJ1vBgAhkJLAaYODbbCF4caAYVSxQLP4rgxy8X17D0YEAtIROLHoWqbB3TY=
+	t=1766635303; cv=none; b=foctiHDu7+c1QYpG9baWKpc8ze8Tv7/VBzpOUBfivJcSYybiWaiGU5FAV1ft7kMsb/LZhSYL95YkE/i3JpzvQtzSyh7D6A5dAO3Gl8QV3ZZDctjSyksnw7fc8CqInZrvhJ1fFy/NWftyOCttEpjNiuvVYvz2aHTuEMHYKqJAYlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766635301; c=relaxed/simple;
-	bh=sskXjqalJpXJeJYI3H3wRotpMuS3CPVcUt6AgPaOJxs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kqiLw5s+m3jqvNsg/WJ56bTQIg7/sDYUIgOSf+tYo7hbCoXvFZkqvUglJtRUidg5ROAqTqvEtA6MNWAu04i5N/4nF+HZkDBui5j2L1h+qrUP/j5honDlDtuVYon6mjohvzfjiMc+5MXbvIVhKxUsSVvgMpZFJymFvgDduTybkoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=hG1dlgS6; arc=none smtp.client-ip=213.97.179.56
+	s=arc-20240116; t=1766635303; c=relaxed/simple;
+	bh=hJysfRjJTushzuu59PdwNmXhK03fRR3ksyu3RLmpdxQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=R+CazO3UGSUInxh+e43HCGIxvvdb6I1mrGbXBJVUk2THRVYZXd2tZhvY7bEA/19g9io8beSWsL+5CF+irTDhagySV4gfcIZ8R8X84hTKZIiA0lImrjcwX2Pn8mY1htyZ3oTenDr4Bs2rwXzGJcnS9qoB+tS2fNu/wE4Jmjik7+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=TWwztiAT; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
-	Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
+	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=1ltEyGKlKJr9s0HLrCnwNtlQKqlrQbmPClgKAVREPzQ=; b=hG1dlgS6mx4DLZ4vDtwtBEkc81
-	6aZdlMbRIV3fWEoB8njwdWDrMD/gcfenGrTftXnvUbNZYql0iy8EOhZdAQQUCrW4agW/k/vxPEB8/
-	XDAe+ChZTAf7f0YNLjVNrpmKBxGiwPUEzN9PRQHVktlu/2S01rs01EDCABHrgb20CJu6kYKbAvrdW
-	CKDWcrH6/ihzLykNzo+x6z/6qWQckTtcokNw5Pb7/K2xZ79eFDt3bQJCStId08Y4xTZs7E9xtZxow
-	oKcR8s4/JdOc5Y/m+0WOW+6lsIoHjlrL0yKA14NfYKRcSYl+0wY1gxgBo9+EUacFFeyVGwgsXWdxb
-	KLFklNvw==;
+	bh=UhWTOkAZA+dz1Nq7KQoFDikneq1yPjcN1s7NbbqCjLE=; b=TWwztiATrz8Gd7l5XTQS/8RaRT
+	XoXNANof8Wb2SScTkVZUMkWo0qb8ocnLLuC9M90fSI+jQ+MwrBMREFOpjZESk2chpbzrqb0c9rBNk
+	N3inC2SqgboE2QSkVl4GXNE/0VxzVx6KVnIDxiBVhvmVyAhQ1aq0divlpiQIf3VZRP39XpK5JaEGZ
+	AIa4jWjvvk299mGtrq6TeyBEw+ebJ2YkX0Ldy3pb4SxamtO3nW5o9G7BX0R9LK7U4lRVPTQUDCJBJ
+	d2/S682xS34kQVy7xhShvUailKl43GC9HsfsQl7dJqWzWrWl7GYmD/g4l2MlnRrH+iL6isFfFdc0d
+	xXwh1yJA==;
 Received: from [58.29.143.236] (helo=localhost)
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1vYcXI-00GLkw-3d; Thu, 25 Dec 2025 05:01:13 +0100
+	id 1vYcXO-00GLl3-S7; Thu, 25 Dec 2025 05:01:19 +0100
 From: Changwoo Min <changwoo@igalia.com>
 To: lukasz.luba@arm.com,
 	rafael@kernel.org,
@@ -61,10 +62,12 @@ Cc: kernel-dev@igalia.com,
 	netdev@vger.kernel.org,
 	sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH for 6.19 0/4] Revise the EM YNL spec to be clearer
-Date: Thu, 25 Dec 2025 13:01:00 +0900
-Message-ID: <20251225040104.982704-1-changwoo@igalia.com>
+Subject: [PATCH for 6.19 1/4] PM: EM: Fix yamllint warnings in the EM YNL spec
+Date: Thu, 25 Dec 2025 13:01:01 +0900
+Message-ID: <20251225040104.982704-2-changwoo@igalia.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20251225040104.982704-1-changwoo@igalia.com>
+References: <20251225040104.982704-1-changwoo@igalia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,58 +77,44 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-This patch set addresses all the concerns raised at [1] to make the EM YNL spec
-clearer. It includes the following changes:
+The energy model YNL spec has the following two warnings
+when checking with yamlint:
 
-- Fix the lint errors (1/4). 
-- Rename em.yaml to dev-energymodel.yaml (2/4).  “dev-energymodel” was used
-  instead of “device-energy-model”, which was originally proposed [2], because
-  the netlink protocol name cannot exceed GENL_NAMSIZ(16). In addition, docs
-  strings and flags attributes were added.
-- Change cpus' type from string to u64 array of CPU ids (3/4).
-- Add dump to get-perf-domains in the EM YNL spec (4/4). A user can fetch
-  either information about a specific performance domain with do or information
-  about all performance domains with dump. 
+ 3:1    warning missing document start "---"  (document-start)
+ 107:13 error   wrong indentation: expected 10 but found 12  (indentation)
 
-This can be tested using the tool, tools/net/ynl/pyynl/cli.py, for example,
-with the following commands:
+So let’s fix whose lint warnings.
 
-  $> tools/net/ynl/pyynl/cli.py \
-     --spec Documentation/netlink/specs/dev-energymodel.yaml \
-     --dump get-perf-domains
-  $> tools/net/ynl/pyynl/cli.py \
-     --spec Documentation/netlink/specs/dev-energymodel.yaml \
-     --do get-perf-domains --json '{"perf-domain-id": 0}'
-  $> tools/net/ynl/pyynl/cli.py \
-     --spec Documentation/netlink/specs/dev-energymodel.yaml \
-     --do get-perf-table --json '{"perf-domain-id": 0}'
-  $> tools/net/ynl/pyynl/cli.py \
-     --spec Documentation/netlink/specs/dev-energymodel.yaml \
-     --subscribe event  --sleep 10
+Fixes: bd26631ccdfd ("PM: EM: Add em.yaml and autogen files")
+Suggested-by: Donald Hunter <donald.hunter@gmail.com>
+Signed-off-by: Changwoo Min <changwoo@igalia.com>
+---
+ Documentation/netlink/specs/em.yaml | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-[1] https://lore.kernel.org/lkml/CAD4GDZy-aeWsiY=-ATr+Y4PzhMX71DFd_mmdMk4rxn3YG8U5GA@mail.gmail.com/
-[2] https://lore.kernel.org/lkml/CAJZ5v0gpYQwC=1piaX-PNoyeoYJ7uw=DtAGdTVEXAsi4bnSdbA@mail.gmail.com/
-
-Changwoo Min (4):
-  PM: EM: Fix yamllint warnings in the EM YNL spec
-  PM: EM: Rename em.yaml to dev-energymodel.yaml
-  PM: EM: Change cpus' type from string to u64 array in the EM YNL spec
-  PM: EM: Add dump to get-perf-domains in the EM YNL spec
-
- .../netlink/specs/dev-energymodel.yaml        | 188 ++++++++++++++++
- Documentation/netlink/specs/em.yaml           | 113 ----------
- MAINTAINERS                                   |   8 +-
- include/uapi/linux/dev_energymodel.h          |  90 ++++++++
- include/uapi/linux/energy_model.h             |  63 ------
- kernel/power/em_netlink.c                     | 207 ++++++++++++------
- kernel/power/em_netlink_autogen.c             |  58 +++--
- kernel/power/em_netlink_autogen.h             |  22 +-
- 8 files changed, 472 insertions(+), 277 deletions(-)
- create mode 100644 Documentation/netlink/specs/dev-energymodel.yaml
- delete mode 100644 Documentation/netlink/specs/em.yaml
- create mode 100644 include/uapi/linux/dev_energymodel.h
- delete mode 100644 include/uapi/linux/energy_model.h
-
+diff --git a/Documentation/netlink/specs/em.yaml b/Documentation/netlink/specs/em.yaml
+index 9905ca482325..0c595a874f08 100644
+--- a/Documentation/netlink/specs/em.yaml
++++ b/Documentation/netlink/specs/em.yaml
+@@ -1,5 +1,8 @@
+ # SPDX-License-Identifier: ((GPL-2.0 WITH Linux-syscall-note) OR BSD-3-Clause)
+-
++#
++# Copyright (c) 2025 Valve Corporation.
++#
++---
+ name: em
+ 
+ doc: |
+@@ -104,7 +107,7 @@ operations:
+       attribute-set: pd-table
+       event:
+         attributes:
+-            - pd-id
++          - pd-id
+       mcgrp: event
+ 
+ mcast-groups:
 -- 
 2.52.0
 
