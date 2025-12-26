@@ -1,129 +1,152 @@
-Return-Path: <linux-pm+bounces-39942-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39943-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E22F0CDE856
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 10:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F81ACDE9E3
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 12:07:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ACA3C300A34C
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 09:09:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 03BE2300451A
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 11:07:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00FDB1D619F;
-	Fri, 26 Dec 2025 09:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44362319600;
+	Fri, 26 Dec 2025 11:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oqA+woMd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kSuPTZIY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3621DA23;
-	Fri, 26 Dec 2025 09:09:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14968289824;
+	Fri, 26 Dec 2025 11:07:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766740194; cv=none; b=MnMEBEbdbXDj5BD/ILnVUQXoEgWFOYX6e8Oe2ej03ZuFbAqAdJi1v0JtOI+5zPx7KCI7SwvRr0YHh4Dp1/OdEUbKLKqOkYftX16SGSZaymsozX4QXI6pfUoWB/dYLoEC/zga09pCjuXgoIsGMnOD0ao7mOOBNPrz7U/Xc7Gevng=
+	t=1766747252; cv=none; b=ohZxfpdHaaxy8R8tUvbnoQ2lwVdkm8HZ/ihVEWobsHZ1H606wO4Yg3/oDgxmk/y41K431vAoFz1NVH6f9aKYyuOkrOrdm/2VSgg11j1yzMI/SWgXO8br4D6iDMMuiXkfg/78g5IPv1+14zDZ9a1s1Q5+IO49lzGBOOxrwynSTS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766740194; c=relaxed/simple;
-	bh=NDc9Td1nIi1SPp0y679l4SNFtqpbhHKfC+A7ZuRR6Dw=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iWMeKNPVQ8uzLiFXZbmic1NmjIVdGvSJ1LRRL9jBoIu6J3mZxP24bwZgxdQM26XfyfF/H6Ym4FfkjGRjVpBo9dxQApn8k2ZwCEcr9Whov8iXQm+Oacup/OLDPPikApJ1sCWXlVMNkRsXCd5oRTQ1IHHv/UUPSB5lE3mzePZcl+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oqA+woMd; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 6332F1A2441;
-	Fri, 26 Dec 2025 09:09:50 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 26EEF606E4;
-	Fri, 26 Dec 2025 09:09:50 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 65601103C8C77;
-	Fri, 26 Dec 2025 10:09:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1766740189; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=5gLacqsJOxfGdZGsocf6XrtXneY4RT9chgPcLr5hdSw=;
-	b=oqA+woMdRGfOGBL0KWvBoZPQ6OJ0gUI1QKcKXRmO6aNQI8fuCX8uiVJDQ4EFarhIiMjjhl
-	ZHdjJkw21yBxWiw7hTqYvZpnYg+m0nJ3Kwh//gkJO8ahUFf6ASeHc6S3YlRZwzT3LA0GsC
-	TZ19L/R2tTwn022oLUc6wpABL64LYWlXMB84VPBRCamQ/CXtVPQca3vAmlXpcLdb/8XC+k
-	/bi4HheSvC9roeqSwoqLfedCy+c53vOx9C7B/hrL3+ixMypC/aMOImpUjDDVLT/cwZyh27
-	r6I5t89z1JiEV/lE0eA1DuHC1lD8idSEnDTTBHk+26C8eDcAhdqzMh5PJU/PxA==
-Date: Fri, 26 Dec 2025 10:09:46 +0100
-From: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-To: Romain Gantois <romain.gantois@bootlin.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
- <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
- <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools: lib: thermal: Correct CFLAGS and LDFLAGS in
- pkg-config template
-Message-ID: <20251226100946.14ad75d1@windsurf>
-In-Reply-To: <20251226-libthermal-pkgconfig-v1-1-3406de5ca8ea@bootlin.com>
-References: <20251226-libthermal-pkgconfig-v1-1-3406de5ca8ea@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1766747252; c=relaxed/simple;
+	bh=uz0S3GHajVhQ7hfq/SwP9yGLsixL/C2ycMZjmELkzAI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kdgC4edyGqvJ53eqRRpeMYNv13HkIBon0Lzd86k+lqDwvPENva2B7/SbYhT3e8OdEWq3op1gqhMvoa136v6JydbREqyrbVhyOa6Ih+rTsV63LnsGSetXxKRAEYc7I6m92cbMflHXOPaQsHJn2qelXiUydnquV+TWm/2bBJfJpOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kSuPTZIY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25922C4CEF7;
+	Fri, 26 Dec 2025 11:07:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766747251;
+	bh=uz0S3GHajVhQ7hfq/SwP9yGLsixL/C2ycMZjmELkzAI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=kSuPTZIYxGKyLlN9gpKgIBZy0/JbgRXlsb1It3PKrltCTKrQlqQB7a/BgUDKznBO+
+	 J7hwgXyWroIBggnrSe8pXGoZZca/vr1kd9j6ZTCBL60ZxzsSvA6mhE7WVlQnjYj8KX
+	 P0feSSgyDu6fZQMRjcENEhG7NgO2FsrowRY5ANuClOEgDTtx565Vpvndr+aJIU466K
+	 JZMTKRCHm+Et9I68K63TDtaCnrjMgbqzS7gezZ/KOa+xVNnevhlPJLc4domBiUIqXU
+	 rVWHalwKQDoFlrOG5suTPrUWkbsPhX+ngcPiO86AoooIu7KIKXAdJY1J0exmcN8Bk/
+	 HrFJYYuyW6nXw==
+Message-ID: <9483a6f6-9834-4ea6-8f94-e7e158bf68cc@kernel.org>
+Date: Fri, 26 Dec 2025 12:07:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v18 05/10] dt-bindings: arm: Document reboot mode magic
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>,
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
+ Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Andy Yan
+ <andy.yan@rock-chips.com>, Bartosz Golaszewski <brgl@kernel.org>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+ Andre Draszik <andre.draszik@linaro.org>,
+ Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ Srinivas Kandagatla <srini@kernel.org>
+References: <20251223-arm-psci-system_reset2-vendor-reboots-v18-0-32fa9e76efc3@oss.qualcomm.com>
+ <20251223-arm-psci-system_reset2-vendor-reboots-v18-5-32fa9e76efc3@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251223-arm-psci-system_reset2-vendor-reboots-v18-5-32fa9e76efc3@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello Romain,
+On 23/12/2025 18:07, Shivendra Pratap wrote:
+> Add bindings to describe vendor-specific reboot modes. Values here
+> correspond to valid parameters to vendor-specific reset types in PSCI
+> SYSTEM_RESET2 call.
+> 
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+> ---
+>  Documentation/devicetree/bindings/arm/psci.yaml | 42 +++++++++++++++++++++++++
+>  1 file changed, 42 insertions(+)
+> 
 
-On Fri, 26 Dec 2025 08:54:32 +0100
-Romain Gantois <romain.gantois@bootlin.com> wrote:
 
-> diff --git a/tools/lib/thermal/libthermal.pc.template b/tools/lib/thermal=
-/libthermal.pc.template
-> index ac24d0ab17f5..3b8a24d0a8b8 100644
-> --- a/tools/lib/thermal/libthermal.pc.template
-> +++ b/tools/lib/thermal/libthermal.pc.template
-> @@ -8,5 +8,5 @@ Name: libthermal
->  Description: thermal library
->  Requires: libnl-3.0 libnl-genl-3.0
->  Version: @VERSION@
-> -Libs: -L${libdir} -lnl-genl-3 -lnl-3
-> -Cflags: -I${includedir} -I${include}/libnl3
-> +Libs: -L${libdir} -lnl-genl-3 -lnl-3 -lthermal
-> +Cflags: -I${includedir} -I${includedir}/libnl3
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC. It might happen, that command when run on an older
+kernel, gives you outdated entries. Therefore please be sure you base
+your patches on recent Linux kernel.
 
-Actually -lnl-genl-3 -lnl-3 in Libs and -I${includedir}/libnl3 in
-Cflags can be removed as well, because the Requires: field contains
-libnl-3.0 and libnl-genl-3.0, which will cause pkg-config to
-recursively query the libs/cflags for libnl-3.0 and libnl-genl-3.0.
+Tools like b4 or scripts/get_maintainer.pl provide you proper list of
+people, so fix your workflow. Tools might also fail if you work on some
+ancient tree (don't, instead use mainline) or work on fork of kernel
+(don't, instead use mainline). Just use b4 and everything should be
+fine, although remember about `b4 prep --auto-to-cc` if you added new
+patches to the patchset.
 
-=46rom https://people.freedesktop.org/~dbn/pkg-config-guide.html:
+You missed at least devicetree list (maybe more), so this won't be
+tested by automated tooling. Performing review on untested code might be
+a waste of time.
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+Please kindly resend and include all necessary To/Cc entries.
 
-Cflags: The compiler flags specific to this package and any required
-libraries that don't support pkg-config. If the required libraries
-support pkg-config, they should be added to Requires or
-Requires.private.
-
-Libs: The link flags specific to this package and any required
-libraries that don't support pkg-config. The same rule as Cflags
-applies here.
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-Since libnl-3.0 and libnl-genl-3.0 support pkg-config (otherwise they
-wouldn't be listed in Requires:), then those flags should be dropped
-from Libs: and Cflags:.
-
-Also, since this is a fix, probably this commit requires a Fixes: tag.
 
 Best regards,
-
-Thomas
---=20
-Thomas Petazzoni, co-owner and CEO, Bootlin
-Embedded Linux and Kernel engineering and training
-https://bootlin.com
+Krzysztof
 
