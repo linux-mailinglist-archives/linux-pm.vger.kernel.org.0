@@ -1,152 +1,243 @@
-Return-Path: <linux-pm+bounces-39943-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39945-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F81ACDE9E3
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 12:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D0EBCDE9FC
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 12:10:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 03BE2300451A
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 11:07:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E400F3012BD9
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 11:10:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44362319600;
-	Fri, 26 Dec 2025 11:07:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D4F31A801;
+	Fri, 26 Dec 2025 11:10:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kSuPTZIY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BZ8LwPuP";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="V+oYWbRs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14968289824;
-	Fri, 26 Dec 2025 11:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CFF31960F
+	for <linux-pm@vger.kernel.org>; Fri, 26 Dec 2025 11:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766747252; cv=none; b=ohZxfpdHaaxy8R8tUvbnoQ2lwVdkm8HZ/ihVEWobsHZ1H606wO4Yg3/oDgxmk/y41K431vAoFz1NVH6f9aKYyuOkrOrdm/2VSgg11j1yzMI/SWgXO8br4D6iDMMuiXkfg/78g5IPv1+14zDZ9a1s1Q5+IO49lzGBOOxrwynSTS0=
+	t=1766747432; cv=none; b=b5nk6MQjQjwtIqeaDxa5ODsrxYQfwdLJl+wOFazfD2Uu9JwiknJUmMdRP0JCIA6KRrwJ5lbsNd+/0QerHgm/h6ZZ1OPSjyYmGDTLT9NSl+fxcYhHGNjlmVLLXD7V0bP5chflHfvb3HmWC+khM0jTgUPj0Rw/eD4W+FjjdkN3Fzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766747252; c=relaxed/simple;
-	bh=uz0S3GHajVhQ7hfq/SwP9yGLsixL/C2ycMZjmELkzAI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kdgC4edyGqvJ53eqRRpeMYNv13HkIBon0Lzd86k+lqDwvPENva2B7/SbYhT3e8OdEWq3op1gqhMvoa136v6JydbREqyrbVhyOa6Ih+rTsV63LnsGSetXxKRAEYc7I6m92cbMflHXOPaQsHJn2qelXiUydnquV+TWm/2bBJfJpOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kSuPTZIY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25922C4CEF7;
-	Fri, 26 Dec 2025 11:07:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766747251;
-	bh=uz0S3GHajVhQ7hfq/SwP9yGLsixL/C2ycMZjmELkzAI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kSuPTZIYxGKyLlN9gpKgIBZy0/JbgRXlsb1It3PKrltCTKrQlqQB7a/BgUDKznBO+
-	 J7hwgXyWroIBggnrSe8pXGoZZca/vr1kd9j6ZTCBL60ZxzsSvA6mhE7WVlQnjYj8KX
-	 P0feSSgyDu6fZQMRjcENEhG7NgO2FsrowRY5ANuClOEgDTtx565Vpvndr+aJIU466K
-	 JZMTKRCHm+Et9I68K63TDtaCnrjMgbqzS7gezZ/KOa+xVNnevhlPJLc4domBiUIqXU
-	 rVWHalwKQDoFlrOG5suTPrUWkbsPhX+ngcPiO86AoooIu7KIKXAdJY1J0exmcN8Bk/
-	 HrFJYYuyW6nXw==
-Message-ID: <9483a6f6-9834-4ea6-8f94-e7e158bf68cc@kernel.org>
-Date: Fri, 26 Dec 2025 12:07:22 +0100
+	s=arc-20240116; t=1766747432; c=relaxed/simple;
+	bh=6XVhJABznxJQSZ7CcQDSziZAdWLkzwy2q7pCqs6tCDs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i1LGwRzpjfzzap2eICOl7mNsg7BD+dMElLGQCLS4Cy3OytJeaodzLmKDgO17fqY3uAYQ0usZ7kvffNbuOAkUTsUGJ4sK46pS6jOCZ4i5yWTAKpvq8kE95hcvQFO2xeiNbJRvUqNfTZs3N/Fc2AS75AMnJJjB4G+RiwQyccPgOxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BZ8LwPuP; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=V+oYWbRs; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1766747429;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=X6RnF9oXZ3RxKDu+LPwnnX4t+k9ddbAsuLiaDjD4wUs=;
+	b=BZ8LwPuPt8rKWXcp56CNnD9TOda43j80rMv6KMaCfQVgAAaxjtuarB3h+aUXn/Qrby3jar
+	kfyASUlIScn3nsbIH6lHLBMtwR3FBJ8eqUW1Gx9fgZiR2EtyS15Rr7zZZj0xBV2oOdeaFa
+	0eZlUEKK3odS7itW3iW732pnOB+bn60=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-461-If08Oj8fOrCXy90-qVX_KQ-1; Fri, 26 Dec 2025 06:10:26 -0500
+X-MC-Unique: If08Oj8fOrCXy90-qVX_KQ-1
+X-Mimecast-MFC-AGG-ID: If08Oj8fOrCXy90-qVX_KQ_1766747426
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-47d17fff653so24774805e9.0
+        for <linux-pm@vger.kernel.org>; Fri, 26 Dec 2025 03:10:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1766747426; x=1767352226; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=X6RnF9oXZ3RxKDu+LPwnnX4t+k9ddbAsuLiaDjD4wUs=;
+        b=V+oYWbRsVYlpE2w3A4eGVhcWeq6gxPT8KVIGinFIOWkMnq6BJ5fy0UT9nNU52NbaiM
+         grlVsbiRaa4QSw2yJUZM3CaFVO/YGyJBFGXwR2hdRxK5G10feQjRUZjJ+JsAzkDeL2X+
+         MH5Q5YX6xQ4XLHTGOYl+wru8156ITP4YsGlyVanPtXqYNbiHUv8+UIwjqdv8ahk5NIyt
+         26ShW1Bmwxa422vHWeZdEwQ2e6ZIcP5pnIriPutsOK9TQGgtCpAjW5BFRKlXry1/Vqfv
+         8/rlnfkGIeqR52FPn3o1W5yok4o5eleZ+KPcurzsRi9XiayJTJStOcTqpuhMTI9Xqt8i
+         SeDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766747426; x=1767352226;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X6RnF9oXZ3RxKDu+LPwnnX4t+k9ddbAsuLiaDjD4wUs=;
+        b=ctPutzCtWGT5Y7SLXo0EhroN7SLsvnBCJtr2/HSY42T8q+5yKLt06U5Q+rQDU5mWNi
+         Esp7oAsLLxRqWNuhG66qp0cBt7BvhgUki8LyBwVhzONyBcg0E2qX3yRSZgMs8+RBFquC
+         KsgSzaRaGv9I1TSmcygFpcGP18iDhPqFkSlosyxVq+r/3o0XNfDAl+lu3nDFdd9PpkJ7
+         xvGeySxROOqEdRlu4IeafQpw3/Ql83cytRTY40EVjIokGo+z4uR8EDpz5ylOeHUzYUM0
+         KgmOyxPO+Gb0RgU21n3XKQryRDi1cJ8L7FshEI3KwlA2H4zOjVQYjyx6gDIoGiexE3Ba
+         FJ5w==
+X-Forwarded-Encrypted: i=1; AJvYcCUFQtRkjAaX+RuhU08haZxObWvoWux0jzqliy0eDvqV9Iq/TiaX+jdJ1ioJuGcYqqF41POiXuRoSA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yydz9RPDtZnkZpunGQNpnypvg29AiuIW8BzT2tW/j8oMFP6wTbp
+	ec2P9MFKwUNcSwqg7lD1Ezdm1tmrVcYxBFJaBUd3rtcOPbSClvq47zIrfmCxs1bM9CG9+6DRlo8
+	ldA1kiPnILndLr7D73aIQAxLV1sU6PEH0NiXFCFk1n4P7uKDmHsH00XgHuJEW
+X-Gm-Gg: AY/fxX6hPKMapYl7pjgZb14pbIoMA/2AlzF4ElXOOibvhiMn+WUy0vs4cKntf9X0ia/
+	UedppXALUesDmNc8ZCjA/sJnw0vl0WPYKWIv+Ai7JEPDAeGwUy3p17NyVzd4zaTkz4xHdKv/2LT
+	cQzZSEKbWHJjQDeGsVgG3o0ovWEaRoOgRnI5y1ArefWteQ/KUKqam3gb2P7aIluwT9azB5bFdDL
+	jzCqewNKvqYohV5kaaGClEy/V1Kr/6T4iYdgPDe6gjWOlTFPy05/bUHQTsmHu2oNzRjqy24tGQ0
+	2cdDCyjJhCgJhJjIsJZmtXejbzNOMgUjHSreA0EUOt8TftRfpEMD/pZPAgSr3iDS+pUmTzw2UY6
+	aYTpAowb1AJfGuxZ85f9SvR0P2wZUlIDk/FxhBO5ResQg6toWeNugpQkRQubDk9kzcDS2lcR/8q
+	juOUU1y+pNSA==
+X-Received: by 2002:a05:600c:6096:b0:479:3a88:de5f with SMTP id 5b1f17b1804b1-47d1959d6eemr243492355e9.36.1766747425545;
+        Fri, 26 Dec 2025 03:10:25 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHw/Viw1qNAAohz+Q4lRt/1eKBqqQr8oiemTzb1GECKUUagT6XSHCs8mpLNjRt0HcsLSTZh1g==
+X-Received: by 2002:a05:600c:6096:b0:479:3a88:de5f with SMTP id 5b1f17b1804b1-47d1959d6eemr243491995e9.36.1766747425070;
+        Fri, 26 Dec 2025 03:10:25 -0800 (PST)
+Received: from sissix.lzampier.com ([2a06:5900:814a:ab00:3725:2991:6cf3:b3aa])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d193d4e91sm375653855e9.13.2025.12.26.03.10.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Dec 2025 03:10:24 -0800 (PST)
+From: Lucas Zampieri <lzampier@redhat.com>
+To: linux-input@vger.kernel.org
+Cc: Lucas Zampieri <lzampier@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Bastien Nocera <hadess@hadess.net>,
+	linux-pm@vger.kernel.org,
+	lcasmz54@gmail.com
+Subject: [PATCH v6 0/3] HID: Add support for multiple batteries per device
+Date: Fri, 26 Dec 2025 11:10:13 +0000
+Message-ID: <20251226111019.31243-1-lzampier@redhat.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v18 05/10] dt-bindings: arm: Document reboot mode magic
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
- Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Andy Yan
- <andy.yan@rock-chips.com>, Bartosz Golaszewski <brgl@kernel.org>
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
- Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
- Andre Draszik <andre.draszik@linaro.org>,
- Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- Srinivas Kandagatla <srini@kernel.org>
-References: <20251223-arm-psci-system_reset2-vendor-reboots-v18-0-32fa9e76efc3@oss.qualcomm.com>
- <20251223-arm-psci-system_reset2-vendor-reboots-v18-5-32fa9e76efc3@oss.qualcomm.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20251223-arm-psci-system_reset2-vendor-reboots-v18-5-32fa9e76efc3@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 23/12/2025 18:07, Shivendra Pratap wrote:
-> Add bindings to describe vendor-specific reboot modes. Values here
-> correspond to valid parameters to vendor-specific reset types in PSCI
-> SYSTEM_RESET2 call.
-> 
-> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> Signed-off-by: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-> ---
->  Documentation/devicetree/bindings/arm/psci.yaml | 42 +++++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
-> 
+This series adds support for HID devices with multiple batteries.
+
+Currently, the HID battery reporting subsystem only supports one battery per
+device. There are several devices with multiple batteries that would benefit
+from this support:
+- Gaming headsets with batteries in both the headset and charging dock
+- Wireless earbuds with per-earbud batteries plus charging case
+- Split keyboards with per-side batteries
+
+## Proposed Solution
+
+This series introduces struct hid_battery to encapsulate individual battery
+state, replaces the old battery fields with a list-based approach, and adds
+support for multiple batteries tracked within struct hid_device. Batteries
+are identified by report ID and named as hid-{uniq}-battery-{id}. The
+implementation is fully backwards compatible with single-battery devices
+through a helper function. The series first converts the battery code to
+devm_* as preparatory cleanup, which simplifies the subsequent refactoring
+and reduces risk of memory management bugs.
+
+## Testing
+
+Tested with split keyboard hardware (Dactyl 5x6) using custom ZMK firmware
+that implements per-side HID battery reporting. Each battery (left and right
+keyboard halves) reports independently through the power supply interface with
+distinct report IDs (0x05 and 0x06).
+
+Test firmware available on my personal fork at:
+https://github.com/zampierilucas/zmk/tree/feat/individual-hid-battery-reporting
+If this series gets merged, these changes will be proposed to upstream ZMK.
+
+HID descriptor and recording captured with hid-recorder:
+
+D: 0
+R: 162 05 01 09 06 a1 01 85 01 05 07 19 e0 29 e7 15 00 25 01 75 01 95 08 81 02 05 07 75 08 95 01 81 03 05 07 15 00 25 01 19 00 29 67 75 01 95 68 81 02 c0 05 0c 09 01 a1 01 85 02 05 0c 15 00 26 ff 0f 19 00 2a ff 0f 75 10 95 06 81 00 c0 05 84 09 05 a1 01 05 85 85 05 09 44 15 00 25 01 35 00 45 01 75 08 95 01 81 02 09 65 15 00 25 64 35 00 45 64 75 08 95 01 81 02 c0 05 84 09 05 a1 01 05 85 85 06 09 44 15 00 25 01 35 00 45 01 75 08 95 01 81 02 09 65 15 00 25 64 35 00 45 64 75 08 95 01 81 02 c0
+N: ZMK Project Dactyl 5x6
+P: usb-0000:2d:00.3-4.2/input2
+I: 3 1d50 615e
+D: 0
+E: 0.000000 3 05 00 56
+E: 0.000977 3 05 00 56
+E: 1.490974 3 06 00 52
+E: 1.491958 3 06 00 52
+E: 6.492979 3 06 00 53
+E: 6.493962 3 06 00 53
+
+The recording shows both batteries reporting with different charge levels
+(Report ID 05: 86%, Report ID 06: 82%-83%), demonstrating the multi-battery
+functionality. This can be used to verify UPower compatibility.
+
+## Future Work: Userspace Integration
+
+As suggested by Bastien, semantic battery differentiation (e.g., "left
+earbud" vs "right earbud") requires userspace coordination, as HID
+reports typically lack role metadata.
+
+This will require:
+1. systemd/hwdb entries for device-specific battery role mappings
+2. UPower updates to enumerate and group multi-battery devices
+3. Desktop environment changes to display batteries with meaningful labels
+
+This kernel infrastructure is a prerequisite for that userspace work.
+
+Lucas Zampieri (3):
+  HID: input: Convert battery code to devm_*
+  HID: input: Introduce struct hid_battery and refactor battery code
+  HID: input: Add support for multiple batteries per device
+
+Signed-off-by: Lucas Zampieri <lzampier@redhat.com>
+
+Changes in v6:
+- Split v5 patch 2/2 into two separate patches as suggested by Benjamin:
+  - Patch 2/3: Introduce struct hid_battery and convert existing code
+    (no functional change for single-battery devices)
+  - Patch 3/3: Add multi-battery list support
+- Renamed hid_get_first_battery() to hid_get_battery() as suggested by
+  Benjamin
+- Added devm_kfree() calls in error path of hidinput_setup_battery() for
+  proper cleanup if devm_power_supply_register() fails
+
+Changes in v5:
+- Split the monolithic v4 patch into two logical patches as suggested by
+  Benjamin, devm_* conversion, then struct refactor and multi-battery support
+  combined
+
+Changes in v4:
+- Added missing hidinput_update_battery() stub in #else block for
+  CONFIG_HID_BATTERY_STRENGTH=n builds
+- Reported-by: kernel test robot <lkp@intel.com>
+- Closes: https://lore.kernel.org/oe-kbuild-all/202511201624.yUv4VtBv-lkp@intel.com/
+
+Changes in v3:
+- Squashed the three v2 patches into a single patch as suggested by
+  Benjamin
+- Removed all legacy dev->battery_* fields, using list-based storage only
+- Changed battery naming to include report ID: hid-{uniq}-battery-{report_id}
+- Converted battery memory management to devm_* for automatic cleanup
+- Updated hidinput_update_battery() to take struct hid_battery directly
+- Added hid_get_first_battery() helper for external driver compatibility
+- Updated hid-apple.c and hid-magicmouse.c to use new battery API
+- Simplified cover letter based on feedback
+
+Changes in v2:
+- Split the monolithic v1 patch into three logical patches for easier review:
+  1. Introduce struct hid_battery (pure structure addition)
+  2. Refactor existing code to use the new structure (internal changes)
+  3. Add multi-battery support (new functionality)
+- Added detailed testing section with hardware specifics
+- Added hid-recorder output (dactyl-hid-recording.txt) demonstrating two-battery
+  HID descriptor for UPower validation
+- Added "Future Work: Userspace Integration" section addressing Bastien's feedback
+  about semantic battery differentiation
+- Added hardware examples with product links to commit messages (per Bastien's
+  suggestion)
+- No functional changes from v1, only improved patch organization and documentation
+
+ drivers/hid/hid-apple.c      |  10 +-
+ drivers/hid/hid-core.c       |   4 +
+ drivers/hid/hid-input-test.c |  39 ++++----
+ drivers/hid/hid-input.c      | 189 ++++++++++++++++++-----------------
+ drivers/hid/hid-magicmouse.c |  10 +-
+ include/linux/hid.h          |  54 +++++++---
+ 6 files changed, 180 insertions(+), 126 deletions(-)
 
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC. It might happen, that command when run on an older
-kernel, gives you outdated entries. Therefore please be sure you base
-your patches on recent Linux kernel.
+base-commit: 8b690556d8fe0ee15151cc37ec49c5bbfe41d5b1
+--
+2.52.0
 
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-
-You missed at least devicetree list (maybe more), so this won't be
-tested by automated tooling. Performing review on untested code might be
-a waste of time.
-
-Please kindly resend and include all necessary To/Cc entries.
-
-
-Best regards,
-Krzysztof
 
