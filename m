@@ -1,165 +1,284 @@
-Return-Path: <linux-pm+bounces-39937-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39938-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7DADCDE2D4
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 01:20:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A02C1CDE413
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 03:56:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AC89E3004CCF
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 00:20:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 442BA3008EB3
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Dec 2025 02:56:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2AF02AE84;
-	Fri, 26 Dec 2025 00:20:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F14A62E8B8A;
+	Fri, 26 Dec 2025 02:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OP10CBCd"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="BaCFn/mu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E4B3A1E8C
-	for <linux-pm@vger.kernel.org>; Fri, 26 Dec 2025 00:20:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97C61A7264;
+	Fri, 26 Dec 2025 02:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766708410; cv=none; b=CJzwyKosM1FkGUri0waPFiAgLG0svHXXif5TWHp2X7rUrgdBT856S1rOXGXKkgcdDTutDYCBWi9uBlxAKZ0yY/djfGbaYbZAxn+QErhrOOyrpNE9SRcWZUBTlZtelaMkWA3TPH4BZjX5r32iXpsEcO5Q7oEjk5izeXapmKUq0VY=
+	t=1766717759; cv=none; b=iMuGcWSNIUYWPIXNAfz2gGTwhvgCU7li0XCNcdc9lx1IcDjbBXTPH5TTzCDHq0tSbRENMYPQWrF9I/K0/ZTyjZNfIc0wLaK9z3ZDBZeqfaM5EKKoAKGxRpoa4gQt0kGNEp+rP8/gZLg5ys1hS0roAF0uu8BsCcBaRr7oFa1rXg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766708410; c=relaxed/simple;
-	bh=nGwM+PQuL1rzxPZ5jagDG0kFkA7NFWyXrk61vQ0HbjA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qtAJywgOc9qGimR3Abm/soInWDYqNFS7+UC4+bri+UbeOP2rU9wEIj/Ewo/1Uply3UB60NzgkznkESCSVJkouUt0MqkAGSDWRBsKvps9gb2V8sg8eowjtYKg8REkh91LpRZ0hGtdjk6Yc44IEwebdREJc85q7lhfVl0WXTYQcL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OP10CBCd; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-29f1bc40b35so115211815ad.2
-        for <linux-pm@vger.kernel.org>; Thu, 25 Dec 2025 16:20:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766708408; x=1767313208; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+DhWhE7XYlLnVX4zCn90QgLygN3HeTxBI4v2gs7tTiQ=;
-        b=OP10CBCdAUEacACKVvMPn6XHxS9EbUitLw4z1g+kARcZywxhn2wVI1mo1gRBilHtj5
-         KyC3El1KDYxst7dTnafKE2sxfO2E8CVRZx9TXJVQwcQPe+2IAoCrWRFF/UnvnYT99Pl0
-         CfujeCadZV4ip/wJw0LkKVp7Z0DfOfy9Mo2yHdKghpkVs/wKD5aMeSJyQktGp6IrUBq3
-         yerN7Xm6lv+PZE9LcI+97ltp/2PphRKf+hxzc3eyV3YipGj2hAZfDpCGc/2d+2z92sTa
-         hz6TfvIbyIXE9JPZrBAcMuTze73FJyNsgT3Jl42uh5VKr5xke6uf9+KdKG9i2dRun5Gt
-         W7Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766708408; x=1767313208;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+DhWhE7XYlLnVX4zCn90QgLygN3HeTxBI4v2gs7tTiQ=;
-        b=DVGGg64CH3rnKoGx4bw7VBYXBCCcemfpJ91pg+j98TOhO6dowhzwiS7hOMON3G8+HB
-         dR4QztbuZRatSHupAKLLWOPAAzE0XxDsLPem5gD/uwc1T2eYFnAwKZ7pH0sCrS+y+/3h
-         F462kxfsqkVELHD5UqR7TLrt48clhK10j4+r4JROqtuRQ1OfaobkcSIjI4ikF8i3yvoY
-         Kig/e+CLmXotLU1hPUZl4iHUFOCb2wwWS1hNQ96IIRkDIeeIU4cxHP+yfJVckUUaAB9L
-         v4XUiJC7ZeKhC7TAKauFLhHv861htzasPdWg4zoSZMEWM8PkIdd+Oq2aFec0ZTuOvX7e
-         Dw1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVX4WcZ1jNVPPIicvp1gH2sfEoowUx2YlLMBARnLcWxI6cN1JaF+nPQ+K6oAtljtJBxEJefPuFeww==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwI3AtNdwjenDNjVD98UCVFG8PfD6RINboNoINjj2DtFH1cWb4z
-	xrK9Z2C7yp/Mq9eisBIJ2ubkBH8aq68YZP1l1d9pItmmphzYcS+SzyXlvQEqhP6k
-X-Gm-Gg: AY/fxX7DqUlF1QdylNTj4LA3kXfOXg1KnD5GYfwhHeqy83qWYEcCL+1WFYpMRyawd5o
-	V4Tav2PkVlUtMrLNxB6g2SPz/4N29iql5F7KjgN3QuMDzhD+vsz6SKJr4AVczh4VrpdxiGqGG/Z
-	yYOUX3wKyYm1iju4kULC7ZtDGQr2WXd2UNU5lpq7EwJjKbeWjW3bHALJohlEF4LeNhcnO2XPFIi
-	5NFB6NZZNKMjWurHBEhKN2NL3oml9t3z8e1MXuExWjbz8RkJStCt5usnjhrSd4KDzuzT97zQOBx
-	Q9Yrqx1vx7hYPypFSpC7moZsE8Obfex/nESAOjrphwPslSUd7HnvQO44Lms3+5inTr3YWhO6Etc
-	Rk9Y4yGN/ozA/cFWXetOY1TFgPLbd3TfjgAq6Zh1ygIEdLEn/Y7LXtXt1CYOQkoI8QMIGE7vrFb
-	eJMw674ar30js=
-X-Google-Smtp-Source: AGHT+IGLMBqAzBAWo4yb7tpIYsnetp2fYl5pljocfiHOuE5aX2wPJYCLp8EgyaUT6wEF75bnJiiidQ==
-X-Received: by 2002:a17:903:ac4:b0:298:2afa:796d with SMTP id d9443c01a7336-2a2f2a56707mr203430055ad.61.1766708408379;
-        Thu, 25 Dec 2025 16:20:08 -0800 (PST)
-Received: from archie.me ([210.87.74.117])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a2f3d5d1b8sm191462195ad.68.2025.12.25.16.20.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Dec 2025 16:20:07 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id 1E93540A3327; Fri, 26 Dec 2025 07:20:03 +0700 (WIB)
-Date: Fri, 26 Dec 2025 07:20:03 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
-	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
-	corbet@lwn.net, pierre.gondois@arm.com, zhenglifeng1@huawei.com,
-	rdunlap@infradead.org, ray.huang@amd.com, gautham.shenoy@amd.com,
-	mario.limonciello@amd.com, perry.yuan@amd.com,
-	ionela.voinescu@arm.com, zhanjie9@hisilicon.com,
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Cc: linux-tegra@vger.kernel.org, treding@nvidia.com, jonathanh@nvidia.com,
-	vsethi@nvidia.com, ksitaraman@nvidia.com, sanjayc@nvidia.com,
-	nhartman@nvidia.com, bbasu@nvidia.com
-Subject: Re: [PATCH v5 07/11] cpufreq: CPPC: Add sysfs for min/max_perf and
- perf_limited
-Message-ID: <aU3Us1NzlpVQcyii@archie.me>
-References: <20251223121307.711773-1-sumitg@nvidia.com>
- <20251223121307.711773-8-sumitg@nvidia.com>
+	s=arc-20240116; t=1766717759; c=relaxed/simple;
+	bh=NDVC20or6vbM5v7zfCOELIkvuAf/hPZSNFlMyHD9xSw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=q1Qdu0ZZjDP70dl4P8Igq33El5sKaZ6hbWlHJe4+hUtsASFNzGNxQDhFQYNEsDVnDqeDf9f/9Wq5gXZ7P7oZ2iHemuidmQv4iHCeTFnYABZRs1TInzxz2MrJS9MMq0yQfafDpjwVETSaopISwyfFJDvLcUIMuAhZrRCo3+arjVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=BaCFn/mu; arc=none smtp.client-ip=113.46.200.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Cmh4XqQkEkjzKjqus+Vwf6F7A0kN8cGTEmwXX0cJbS0=;
+	b=BaCFn/muyiypuU6FUvWU6ynBF6seDr9F7uVDeYcZ4N5rYKedBtzr+wK7RNeXLBetpKrmZnOaH
+	nXwIlQR+qyWqTVtSyMlXoYrLbvgGxYnt4viRaxT5xjGYxK7G7MYPX8vo0ZHIhBON8SCzIPUGsxE
+	PEFf28cMlsPCdqn88P8Bmq4=
+Received: from mail.maildlp.com (unknown [172.19.162.223])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4dcqsp0Y4rzRhQm;
+	Fri, 26 Dec 2025 10:52:46 +0800 (CST)
+Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id 62D1740562;
+	Fri, 26 Dec 2025 10:55:54 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
+ (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 26 Dec
+ 2025 10:55:53 +0800
+Message-ID: <ae4ff90a-d2c4-4c13-9d65-a0f266bb4b4b@huawei.com>
+Date: Fri, 26 Dec 2025 10:55:53 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="t+JMDWcZpMsJclIY"
-Content-Disposition: inline
-In-Reply-To: <20251223121307.711773-8-sumitg@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 09/11] cpufreq: CPPC: sync policy limits when toggling
+ auto_select
+To: Sumit Gupta <sumitg@nvidia.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<corbet@lwn.net>, <pierre.gondois@arm.com>, <rdunlap@infradead.org>,
+	<ray.huang@amd.com>, <gautham.shenoy@amd.com>, <mario.limonciello@amd.com>,
+	<perry.yuan@amd.com>, <ionela.voinescu@arm.com>, <zhanjie9@hisilicon.com>,
+	<linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>
+CC: <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
+	<jonathanh@nvidia.com>, <vsethi@nvidia.com>, <ksitaraman@nvidia.com>,
+	<sanjayc@nvidia.com>, <nhartman@nvidia.com>, <bbasu@nvidia.com>
+References: <20251223121307.711773-1-sumitg@nvidia.com>
+ <20251223121307.711773-10-sumitg@nvidia.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <20251223121307.711773-10-sumitg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemf200001.china.huawei.com (7.202.181.227)
 
+On 2025/12/23 20:13, Sumit Gupta wrote:
+> When CPPC autonomous selection (auto_select) is enabled or disabled,
+> the policy min/max frequency limits should be updated appropriately to
+> reflect the new operating mode.
+> 
+> Currently, toggling auto_select only changes the hardware register but
+> doesn't update the cpufreq policy constraints, which can lead to
+> inconsistent behavior between the hardware state and the policy limits
+> visible to userspace.
+> 
+> Add cppc_cpufreq_update_autosel_config() function to handle the
+> auto_select toggle by syncing min/max_perf values with policy
+> constraints. When enabling auto_sel, restore preserved min/max_perf
+> values to policy limits. When disabling, reset policy to defaults
+> while preserving hardware register values for later use.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/cpufreq/cppc_cpufreq.c | 112 +++++++++++++++++++++++++++------
+>  1 file changed, 92 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+> index 0202c7b823e6..b1f570d6de34 100644
+> --- a/drivers/cpufreq/cppc_cpufreq.c
+> +++ b/drivers/cpufreq/cppc_cpufreq.c
+> @@ -544,14 +544,20 @@ static void populate_efficiency_class(void)
+>   * cppc_cpufreq_set_mperf_limit - Set min/max performance limit
+>   * @policy: cpufreq policy
+>   * @val: performance value to set
+> + * @update_reg: whether to update hardware register
+>   * @update_policy: whether to update policy constraints
+>   * @is_min: true for min_perf, false for max_perf
+>   *
+> + * When @update_reg is true, writes to HW registers and preserves values.
+>   * When @update_policy is true, updates cpufreq policy frequency limits.
+> + *
+> + * @update_reg is false when disabling auto_sel to preserve HW values.
+> + * The preserved value is used on next enabling of the autonomous mode.
+>   * @update_policy is false during cpu_init when policy isn't fully set up.
+>   */
+>  static int cppc_cpufreq_set_mperf_limit(struct cpufreq_policy *policy, u64 val,
+> -					bool update_policy, bool is_min)
+> +					bool update_reg, bool update_policy,
+> +					bool is_min)
+>  {
+>  	struct cppc_cpudata *cpu_data = policy->driver_data;
+>  	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
+> @@ -563,19 +569,22 @@ static int cppc_cpufreq_set_mperf_limit(struct cpufreq_policy *policy, u64 val,
+>  
+>  	perf = clamp(val, caps->lowest_perf, caps->highest_perf);
+>  
+> -	ret = is_min ? cppc_set_min_perf(cpu, perf) :
+> -		       cppc_set_max_perf(cpu, perf);
+> -	if (ret) {
+> -		if (ret != -EOPNOTSUPP)
+> -			pr_warn("Failed to set %s_perf (%llu) on CPU%d (%d)\n",
+> -				is_min ? "min" : "max", (u64)perf, cpu, ret);
+> -		return ret;
+> -	}
+> +	if (update_reg) {
+> +		ret = is_min ? cppc_set_min_perf(cpu, perf) :
+> +			       cppc_set_max_perf(cpu, perf);
+> +		if (ret) {
+> +			if (ret != -EOPNOTSUPP)
+> +				pr_warn("CPU%d: set %s_perf=%llu failed (%d)\n",
+> +					cpu, is_min ? "min" : "max",
+> +					(u64)perf, ret);
+> +			return ret;
+> +		}
+>  
+> -	if (is_min)
+> -		cpu_data->perf_ctrls.min_perf = perf;
+> -	else
+> -		cpu_data->perf_ctrls.max_perf = perf;
+> +		if (is_min)
+> +			cpu_data->perf_ctrls.min_perf = perf;
+> +		else
+> +			cpu_data->perf_ctrls.max_perf = perf;
+> +	}
+>  
+>  	if (update_policy) {
+>  		freq = cppc_perf_to_khz(caps, perf);
+> @@ -592,11 +601,74 @@ static int cppc_cpufreq_set_mperf_limit(struct cpufreq_policy *policy, u64 val,
+>  	return 0;
+>  }
+>  
+> -#define cppc_cpufreq_set_min_perf(policy, val, update_policy) \
+> -	cppc_cpufreq_set_mperf_limit(policy, val, update_policy, true)
+> +#define cppc_cpufreq_set_min_perf(policy, val, update_reg, update_policy)     \
+> +	cppc_cpufreq_set_mperf_limit(policy, val, update_reg, update_policy,  \
+> +				     true)
+> +
+> +#define cppc_cpufreq_set_max_perf(policy, val, update_reg, update_policy)     \
+> +	cppc_cpufreq_set_mperf_limit(policy, val, update_reg, update_policy,  \
+> +				     false)
+> +
+> +/**
+> + * cppc_cpufreq_update_autosel_config - Update autonomous selection config
+> + * @policy: cpufreq policy
+> + * @is_auto_sel: enable/disable autonomous selection
+> + *
+> + * Return: 0 on success, negative error code on failure
+> + */
+> +static int cppc_cpufreq_update_autosel_config(struct cpufreq_policy *policy,
+> +					      bool is_auto_sel)
+> +{
+> +	struct cppc_cpudata *cpu_data = policy->driver_data;
+> +	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
+> +	u64 min_perf = caps->lowest_nonlinear_perf;
+> +	u64 max_perf = caps->nominal_perf;
+> +	unsigned int cpu = policy->cpu;
+> +	bool update_reg = is_auto_sel;
+> +	bool update_policy = true;
+> +	int ret;
+> +
+> +	guard(mutex)(&cppc_cpufreq_update_autosel_config_lock);
+> +
+> +	if (is_auto_sel) {
+> +		/* Use preserved values if available, else use defaults */
+> +		if (cpu_data->perf_ctrls.min_perf)
+> +			min_perf = cpu_data->perf_ctrls.min_perf;
+> +		if (cpu_data->perf_ctrls.max_perf)
+> +			max_perf = cpu_data->perf_ctrls.max_perf;
+> +	}
 
---t+JMDWcZpMsJclIY
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+So if !is_auto_sel, min_perf and max_perf reg will be set to
+lowest_nonlinear_perf and nominal_perf, but perf_ctrls.min_perf and
+perf_ctrls.max_perf remain the old value. A little bit strange I think. And
+when this happen, min_freq_req and max_freq_req will retain the value last
+set by the users through min_perf and max_perf. It's that alright?
 
-On Tue, Dec 23, 2025 at 05:43:03PM +0530, Sumit Gupta wrote:
-> +		Write the bitmask of bits to clear:
-> +		  1 =3D clear bit 0 (desired performance excursion)
-> +		  2 =3D clear bit 1 (minimum performance excursion)
-> +		  3 =3D clear both bits
-> +		The platform sets these bits; OSPM can only clear them.
+> +
+> +	/*
+> +	 * Set min/max performance and update policy constraints.
+> +	 *   When enabling: update both HW registers and policy.
+> +	 *   When disabling: update policy only, preserve HW registers.
+> +	 * Continue even if min/max are not supported, as EPP and autosel
+> +	 * might still be supported.
+> +	 */
+> +	ret = cppc_cpufreq_set_min_perf(policy, min_perf, update_reg,
+> +					update_policy);
+> +	if (ret && ret != -EOPNOTSUPP)
+> +		return ret;
+> +
+> +	ret = cppc_cpufreq_set_max_perf(policy, max_perf, update_reg,
+> +					update_policy);
+> +	if (ret && ret != -EOPNOTSUPP)
+> +		return ret;
+> +
+> +	/* Update auto_sel register */
+> +	ret = cppc_set_auto_sel(cpu, is_auto_sel);
+> +	if (ret && ret != -EOPNOTSUPP) {
+> +		pr_warn("Failed to set auto_sel=%d for CPU%d (%d)\n",
+> +			is_auto_sel, cpu, ret);
+> +		return ret;
+> +	}
+> +	if (!ret)
+> +		cpu_data->perf_ctrls.auto_sel = is_auto_sel;
+> +
+> +	return 0;
 
-Sphinx reports htmldocs warning:
+Better to return ret.
 
-Documentation/ABI/testing/sysfs-devices-system-cpu:356: WARNING: Definition=
- list ends without a blank line; unexpected unindent. [docutils]
+> +}
+> +
+>  
+> -#define cppc_cpufreq_set_max_perf(policy, val, update_policy) \
+> -	cppc_cpufreq_set_mperf_limit(policy, val, update_policy, false)
+>  static struct cppc_cpudata *cppc_cpufreq_get_cpu_data(unsigned int cpu)
+>  {
+>  	struct cppc_cpudata *cpu_data;
+> @@ -889,7 +961,7 @@ static ssize_t store_auto_select(struct cpufreq_policy *policy,
+>  	if (ret)
+>  		return ret;
 
-I have to fix up the bitmask list:
+Since you already store auto_sel value in perf_ctrls, We can compare the
+new value with perf_ctrls.auto_sel here, and just return if they are the
+same.
 
----- >8 ----
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documenta=
-tion/ABI/testing/sysfs-devices-system-cpu
-index b022cbf46adcfe..8cda698019922b 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -363,9 +363,11 @@ Description:	Performance Limited
- 		requested level. A non-zero value indicates throttling occurred.
-=20
- 		Write the bitmask of bits to clear:
--		  1 =3D clear bit 0 (desired performance excursion)
--		  2 =3D clear bit 1 (minimum performance excursion)
--		  3 =3D clear both bits
-+
-+		- 1 =3D clear bit 0 (desired performance excursion)
-+		- 2 =3D clear bit 1 (minimum performance excursion)
-+		- 3 =3D clear both bits
-+
- 		The platform sets these bits; OSPM can only clear them.
-=20
- 		This file is only present if the cppc-cpufreq driver is in use.
+>  
+> -	ret = cppc_set_auto_sel(policy->cpu, val);
+> +	ret = cppc_cpufreq_update_autosel_config(policy, val);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -1005,7 +1077,7 @@ static ssize_t store_min_perf(struct cpufreq_policy *policy, const char *buf,
+>  	perf = cppc_khz_to_perf(&cpu_data->perf_caps, freq_khz);
+>  
+>  	guard(mutex)(&cppc_cpufreq_update_autosel_config_lock);
+> -	ret = cppc_cpufreq_set_min_perf(policy, perf,
+> +	ret = cppc_cpufreq_set_min_perf(policy, perf, true,
+>  					cpu_data->perf_ctrls.auto_sel);
+>  	if (ret)
+>  		return ret;
+> @@ -1063,7 +1135,7 @@ static ssize_t store_max_perf(struct cpufreq_policy *policy, const char *buf,
+>  	perf = cppc_khz_to_perf(&cpu_data->perf_caps, freq_khz);
+>  
+>  	guard(mutex)(&cppc_cpufreq_update_autosel_config_lock);
+> -	ret = cppc_cpufreq_set_max_perf(policy, perf,
+> +	ret = cppc_cpufreq_set_max_perf(policy, perf, true,
+>  					cpu_data->perf_ctrls.auto_sel);
+>  	if (ret)
+>  		return ret;
 
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---t+JMDWcZpMsJclIY
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCaU3UrwAKCRD2uYlJVVFO
-o4kvAQDTEVNeFeX7ckTchAsnDcqX6/lgn/RtWuqlH3bGU25fFwD/ZEKQGJS37yff
-aP5cML3xRpih8KZ3CuP+1ul/2sh1TAI=
-=OMhn
------END PGP SIGNATURE-----
-
---t+JMDWcZpMsJclIY--
 
