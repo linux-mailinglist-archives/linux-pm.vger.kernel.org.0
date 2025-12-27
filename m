@@ -1,152 +1,96 @@
-Return-Path: <linux-pm+bounces-39965-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39968-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E12D6CDFF33
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 17:31:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F95DCDFFB1
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 17:55:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4C0C53009F45
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 16:31:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 73AAE301C3E2
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 16:53:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1842459C6;
-	Sat, 27 Dec 2025 16:31:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D002A324B0C;
+	Sat, 27 Dec 2025 16:53:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="FDbCjAvm";
-	dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="bLz5xEqO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QDhJKqxm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.82])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF1E32470E;
-	Sat, 27 Dec 2025 16:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.82
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766853093; cv=pass; b=u70cwLp63UUTMkImx1xsE4mbLqcSxF8xKuaRsBYkxHm7Gh32H2s+xH+WUcOn4Gj1L7xMq+nPWw7qMMLDASmPb6HGxl73lpYTJ42v23xOJAl2gaqw9+uKzolfXjAuE3OuyC7DQLt5T3OY1Jm1u8fiN6qMxQD9OiyghKPw+hkZFxo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766853093; c=relaxed/simple;
-	bh=VN/x373hy69itGeNHk2nWJqOctFWWyrBo9tktBSIn0U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kqUxS2MOQsUK9XJCdmHq4pkRrZnMMVwvgwVwbIu0FFbWGyKR2AgBFAQXHPH8TT2Jv0zEq8Ej7bExrUOD//iici7oD1yBhBrwk5Ws7VxSqeBcChsK8EW/liKhJaZm9Akw9GshXcCUOg/vZvaovKCv1ZqgbDvdY+GPQbDKqu+GTPE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jm0.eu; spf=none smtp.mailfrom=jm0.eu; dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=FDbCjAvm; dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=bLz5xEqO; arc=pass smtp.client-ip=85.215.255.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jm0.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jm0.eu
-ARC-Seal: i=1; a=rsa-sha256; t=1766852905; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=iaa71vAjezJNy/1pjiRbSfjHyn3IdNOUUdn/4cXs5aVq/hHhWR3ladntH/CTGO/3h6
-    aiSqhfMhvAF5yFWqLzQaIo3DrFfivD5VBu46PQSazWKgPQxpGS6C1hmZxhQgA2st5kq9
-    IIjHzBq71Ui61IiVdOyCLqiDFZ5w3PRy5xX5panKiIZ9WkvStYuzwstHJIQMiqRTG8RX
-    5UObJ1+wWQvn7QYIYueRi2UY/Xvv5+jdULrfL8sOgJfRDgpPDpBmhsHpiz/0FnYUGD9c
-    RTxXAvx7tp93RDlWasZBnoR35rtc1X7+Bd+Zg1c/MqRCFltA15OXrw5HFsPC64HRVbD4
-    b+oQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1766852905;
-    s=strato-dkim-0002; d=strato.com;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=BuD5YZ4N03UhpFzeELt8Wte/+AalKTr8rt0ghSZkn0s=;
-    b=jASsQmOGTK07y99JraOF0l9hgphZXm9vb8J4Yq4xkOD1Rl3OWTBv23ai3/gyZE8zko
-    G0BlRj21ylJw58k70sacQLoqqVf1GmDoht8mVXX3M50awaOIkVQLry4nlrMMj5Zd0to5
-    HqyUp9how0o6l3j/QOt1/Ig8HrKc3umY7BW/cfz5RclqmqYDRIQUx+TEBpibuvxklNbP
-    v47wtMbhHPQCoLQUDACrJ0VbBj6BAarlZ3pt+d2TDedc4QgHhqsIj7EjodtVBr28S/Xi
-    QoA5XbMOZzWh+0EqTSaNxKy/1eXUMVHmwBTOxQtnkC2DmA+DzJ3vXNAdPmtwIhqssmfX
-    1fAA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1766852905;
-    s=strato-dkim-0002; d=jm0.eu;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=BuD5YZ4N03UhpFzeELt8Wte/+AalKTr8rt0ghSZkn0s=;
-    b=FDbCjAvmvqCbwcOhWfjRcxcHxzdtFVBV/b2uhyVRdM58xsCYNXs+tEV6ySWZ7q/Qr7
-    frHXHnre7El7un9+ytVEPGo58XSefaJmU/PSwj+mMKkt+eRksXTFDL5/yjNFgeW6b1ZB
-    iqMAohVtYDa2dqJOm+tvkUB+Bggi/VcEA/BO83UPVEILcoyOS4q4mWf8SePK9Br65LS7
-    MwQSJGfHyIX7FFAslh27csONq8kei/tr89AxLlESCBTnLVVUpNcWUOJeoLpfLxAuWatN
-    W8IJP0fxeJQkxj1KlSkGNGbe6f5XBArjhRYeu1YRXvd9rl0SudqZ9aoRotNQz9C3M3RT
-    iGAg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1766852905;
-    s=strato-dkim-0003; d=jm0.eu;
-    h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
-    From:Subject:Sender;
-    bh=BuD5YZ4N03UhpFzeELt8Wte/+AalKTr8rt0ghSZkn0s=;
-    b=bLz5xEqOh+2dF9YJyWADchR8kRgH+MArwclgvjgGugEEr9R6IXs67Onj3lPpxRNCWs
-    TpsBCFXPixcbxJIqlqCQ==
-X-RZG-AUTH: ":JmMXYEHmdv4HaV2cbPh7iS0wbr/uKIfGM0EPTeoCaRth8YQvpoIkZXd2bnfIrOV7Mbk="
-Received: from localhost.localdomain
-    by smtp.strato.de (RZmta 54.1.0 DYNA|AUTH)
-    with ESMTPSA id z0d4ec1BRGSPtuK
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sat, 27 Dec 2025 17:28:25 +0100 (CET)
-From: Josua Mayer <josua.mayer@jm0.eu>
-Date: Sat, 27 Dec 2025 17:28:15 +0100
-Subject: [PATCH 3/3] ARM: dts: imx: imx50-kobo-aura: add description for
- battery
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F9431A7E2
+	for <linux-pm@vger.kernel.org>; Sat, 27 Dec 2025 16:53:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1766854411; cv=none; b=Y/ExO0YqafYfqV4zYRMx2s5gi5LuCjl9fNXFLYLo7mQYjRD8SBaJjVCS8Z56GgMVkjC4kZZOVvOhpkWBcV+PuxFw7vJBxbfBsB552BMvjbCRbYP+PYUrkkpGv6w13scfiTikZbQpsU86vCV7G5adXouc8au/BJJv/U5gD3LYo4Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1766854411; c=relaxed/simple;
+	bh=gu4P8yCtGv38ojTrodppXUMSDmAq3ug24zzKR6LldJ4=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=Y3ryQumhuqjxTJ5s8MwssrXejOj6i1JveMoKp2d4PTsxfPR7bnD5WnMhqj8XF3K6VZ/uAaVoSVj5DtSOsLNSl6rSqlhyXVa2bkOvICPzHUC0Lf5hAKfhGUj5tCyTQACDeYZmkiI9TBUQDxL5zvcR2tWC44A8NE+6dPgGwU9+wmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QDhJKqxm; arc=none smtp.client-ip=74.125.224.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-640d4f2f13dso6915780d50.1
+        for <linux-pm@vger.kernel.org>; Sat, 27 Dec 2025 08:53:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766854409; x=1767459209; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=gu4P8yCtGv38ojTrodppXUMSDmAq3ug24zzKR6LldJ4=;
+        b=QDhJKqxm7FEZ4RFnti2R6tTqK7hH71vHV/VblwD6XBiZr35ArhxkMjygs3OtTmFvtm
+         GQ1AmgwfSWQWL+gElq7vwkuZxf7q15KuUdqRblWZHBa5u5182q8C7A4C2XA4t6uzpKVX
+         +pNd4dtyEqS+H4yN0jP/nFje92W/Rymy9ExrCqlaR3XpzR80zooQy6x8VpCA23ZD4qYf
+         s31Z59m4lqS140QE9rpScOvahBnTZ1C/ToyacjYxwYseGZDw31pF6UDbPh3V7QuYIDxN
+         Qujj3bknKQuzHI2l7qf60TMVrYFbmcw4wq7t6uSL0Ohv3827R1oksyZgH0fG/ILY6khr
+         UNNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766854409; x=1767459209;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gu4P8yCtGv38ojTrodppXUMSDmAq3ug24zzKR6LldJ4=;
+        b=IhIeGbrkh84MCQL9nU11uwYlRONOHE0n7w0IZHVQNTGMmdYe9GCJ1g540PNFBCieVY
+         XrKK/xBW+WqAGdPnx7d+RxBSCiBbI5yqrEo9LXorqOeUrizNXHPPSHqe5/Hez8jCeqo8
+         tQFn+CxIqlcAyeP9VnyFjP8Jit1MPuXoVjHs72j//3hTV5Mt2HNHDMPdk0zUiudx/818
+         ahBRqhSbdgSZzLr0IAFvefvgLDKbrxRnm/2scpKlxTGaoFhz2kXQhDigDwnPnD9zq902
+         2FwYz9mS+wjcwDkU+RCUglamoL4em4l+SvL8Q8HAkfAzz8+066NTkIDjDsPmGQ1jhk+F
+         V+gw==
+X-Forwarded-Encrypted: i=1; AJvYcCXRTRBlAXQO5Uyodll7UWHwG6YyYTof4cJwzIOwedSCLJ1cJKMvIB1/C2PHtGbuiuWnEGdCXZye0w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7y4IQKBpf6rL/ejCyo1D7TwqvbXnEfgTO6vtyE5z9gYr20VjO
+	D/Fz8Xfo6gc8d/WjWlOGUVBBjX5wr4CfguXhmQpNO0OJ4toLSO+dRR1n+YETFWtR4foZ112IVG+
+	bZsHwURZ8IntJgooTZN0XGPnRADnYSfc=
+X-Gm-Gg: AY/fxX7ABmaiY7l5iGNJ8UI9OOqz7RNMNsgnJlIipVYrUfp16I/9s2mWO+pV6EujzRb
+	K4ASLUB5CPoRtBWNb/Ju01O//8pV5W0d1lR2/ckJ/uG1tvKcD1ttfNjWMwZbC/P82DFEh3ppndm
+	eza7UhXxGzb9r2A4l+IZHsplla1f1KvpB2Y25WYrm60jlPyK3S95yVcbNeWr3jwkGswDOb6itz5
+	mPvB3gOte6ZmtGeLIsfGPsxBuO8nTNUidspzjJTKfWOHTOZA/79sYMHjzQq+1qpuzM2
+X-Google-Smtp-Source: AGHT+IF3Ar92THam/YBoDFLspVYsbTbaPEn4UDgIjGwlo+OzDwvfQfbc5kNYDFIO2HEklpYYD2voIBzsATqCIeii49c=
+X-Received: by 2002:a05:690e:ec3:b0:644:5d3f:844b with SMTP id
+ 956f58d0204a3-6466a8a89d6mr15524495d50.54.1766854408938; Sat, 27 Dec 2025
+ 08:53:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251227-kobo-aura-battery-v1-3-328a90ef5122@jm0.eu>
-References: <20251227-kobo-aura-battery-v1-0-328a90ef5122@jm0.eu>
-In-Reply-To: <20251227-kobo-aura-battery-v1-0-328a90ef5122@jm0.eu>
-To: =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>
-Cc: Andreas Kemnade <andreas@kemnade.info>, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, Josua Mayer <josua.mayer@jm0.eu>
-X-Mailer: b4 0.14.3
+From: =?UTF-8?B?QmFybmFiw6FzIEN6w6ltw6Fu?= <trabarni@gmail.com>
+Date: Sat, 27 Dec 2025 17:53:18 +0100
+X-Gm-Features: AQt7F2qYKWCD4_nduV_EbKeCZVZL2BRsDeJglVK1M4bYvsM7D9xgKCVpKAP_4SI
+Message-ID: <CAGsSOWWMO8+8vB2EM8s1=hyN1raO6TDpqGBTdrmNrZpfDfn5wQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] arm64: dts: qcom: dts: switch to RPMPD_* indices
+To: dmitry.baryshkov@oss.qualcomm.com
+Cc: Bjorn Andersson <andersson@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	devicetree@vger.kernel.org, konradybcio@kernel.org, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Rob Herring <robh@kernel.org>, ulf.hansson@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 
-Kobo Aura has a rechargable battery that is monitored by the embedded
-controller.
+Hi,
 
-Battery markings: PR-285083 3.7V Typ. 1500mAh; 575327416288 5.55Wh.
+MSM8937 and MSM8917 MSS would need more power domains like MSM8939 and MSM8953.
+I am planning to send modem related changes soon what are interfering
+with this change.
 
-Add description for this battery and link it for monitoring by the
-embedded controller.
+https://github.com/barni2000/linux/commit/21151cb3d07124897e4d3dad51c833c4af27f6e0
 
-Signed-off-by: Josua Mayer <josua.mayer@jm0.eu>
----
- arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts b/arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts
-index b1a6a9c58ac33..dc8d9fd45cd23 100644
---- a/arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts
-+++ b/arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts
-@@ -16,6 +16,14 @@ chosen {
- 		stdout-path = "serial1:115200n8";
- 	};
- 
-+	battery: battery {
-+		compatible = "simple-battery";
-+		voltage-min-design-microvolt = <3400000>;
-+		voltage-max-design-microvolt = <4100000>;
-+		energy-full-design-microwatt-hours = <5550000>;
-+		charge-full-design-microamp-hours = <1500000>;
-+	};
-+
- 	memory@70000000 {
- 		device_type = "memory";
- 		reg = <0x70000000 0x10000000>;
-@@ -151,6 +159,7 @@ embedded-controller@43 {
- 		system-power-controller;
- 		interrupts-extended = <&gpio4 11 IRQ_TYPE_EDGE_FALLING>;
- 		#pwm-cells = <2>;
-+		monitored-battery = <&battery>;
- 	};
- };
- 
-
--- 
-2.51.0
-
+Br,
+Barnabas
 
