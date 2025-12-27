@@ -1,159 +1,128 @@
-Return-Path: <linux-pm+bounces-39963-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39966-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81224CDFD30
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 15:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C413CDFF42
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 17:34:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 505603010AB9
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 14:18:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3E1A33016CCD
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 16:34:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F80719AD8B;
-	Sat, 27 Dec 2025 14:18:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D128A32470E;
+	Sat, 27 Dec 2025 16:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="T/uH8xCw"
+	dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="T+o7cNI3";
+	dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="rUHiDWwh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9371829408;
-	Sat, 27 Dec 2025 14:18:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDA93242C2;
+	Sat, 27 Dec 2025 16:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.51
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766845131; cv=pass; b=FEAjMon3j9XajQK8u/fZQE7yIAc9AJtc16yf7bNk6rR85XM+PIL+tvXHzTw9kMgXee+uQ2XEZmBcj1ooi/bvwD+pw5cmP+y4qF0q6NL9nUA1BYp/h8dvNceo5brgUHPq/ii3iSdVUefneTX1GS1/6MHIIq0rFsoyX/wg/zXssGc=
+	t=1766853280; cv=pass; b=M8fi0rrTMHyLGS0TQbIcOJjh5Vlm+EiJ9Tsh7jj062S1HZRDpRvz6ROCCDk6/6gbHBzGGlrklXqNy2NzGm1TdZcm2FXUhGuydOkuK2/MkTY1B5/u3JhDGu4AIESFATvaTPaIuiTbVPc34r3E51fJgX5b8yeNUtnli6t8ia8EtZM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766845131; c=relaxed/simple;
-	bh=0jbs1OT1KC+lQ0+DdOw/DBioVGjV567f3u4FKySc7jg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dcquqJppgYXm8vGcIfYWEkxuOGI+WPcVYN0mHA8qU7YypkeKKVRiqKOefYCVsY4vaxGor2+d4xqwu25rp2MAd7nXyNDVE8EzcDXuDO6K7sAB/862cQb71g/uKCVVPavsGf+4Lly5sG7Q807sAnEeKzQbpg6OIAp5XFiRNT3H4n0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=T/uH8xCw; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1766845103; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=eDg/NV5QmLF6drR5YDRbHhvQ9FDyRHpz4d5c6HlLfgYikZA+HZFPlSlBdG5XQHQ7X01SSe1TG+wNtRrs9NSXT7xDhqhHnPlJu94kMZcMcLqgL2GEIU9+gdUycskBjaC3elRUnzsa3zDqxsUVJ1Tg/BUH8L7iNq76W8XIrkZGyLA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1766845103; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=jzRjZmKvJw7I6a7ENB3s/cl9OVpEExAn8hbMD8cMxPw=; 
-	b=HJC6DGMO2cMLbEc0o3fitCP7hrJrlkXCdJE9/d7NhOEodY6qTiuiCGSeXliNl+Px2WLKQFFPequLUsLttqQpRAbwQ/oYxaTCaEersqsda5CkyAUnJNj+6CyYq5fjDSV9uN3Gf44elgwNhF3Y4hraGcY0QQ+XuZel8mND2SZiCmo=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1766845103;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=jzRjZmKvJw7I6a7ENB3s/cl9OVpEExAn8hbMD8cMxPw=;
-	b=T/uH8xCw2RLYlj3KxDCLxdKw2jdwYAZcK5WXp1DaILV+E0cW9TGV0XS1P9FPll2T
-	5ElwNN6noixwH4Pq8CbPeb5GSTzmYid+ce0u8++f1GyzlpZ/Xb7qi/yuMC+8bfflx8c
-	rX8LLwMT1ePljlzIVLJn0khDFuRKzx2UVTXGsshY=
-Received: by mx.zohomail.com with SMTPS id 1766845100660199.61711369774093;
-	Sat, 27 Dec 2025 06:18:20 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id 814AE1803AB; Sat, 27 Dec 2025 15:18:16 +0100 (CET)
-Date: Sat, 27 Dec 2025 15:18:16 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Riwen Lu <luriwen@kylinos.cn>
-Subject: Re: [PATCH v1] PM: sleep: Fix suspend_test() at the TEST_CORE level
-Message-ID: <aU_p-0fVKR7z-vtH@venus>
-References: <6251576.lOV4Wx5bFT@rafael.j.wysocki>
+	s=arc-20240116; t=1766853280; c=relaxed/simple;
+	bh=QAuf+cMdNxs5eGncOwpfPVnx7bwtpA/mXbQcHusVmDo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EQ69+Mm1sMxCSkZ92bBPeyyH0HwRNDMXykB1ceAV8vFUwM+GVZZyU9+2FH2YZtXPsaqYKXoVI4baHiD1zrBzgALBex3ZlEOORjkPw4M1DbaH2cNoqrB2dFokdfC6jXmTuN4jnAVAVD9H9DxYFka32hjpnSHNJcS15Nu5mqu8a+I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jm0.eu; spf=none smtp.mailfrom=jm0.eu; dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=T+o7cNI3; dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=rUHiDWwh; arc=pass smtp.client-ip=85.215.255.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jm0.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jm0.eu
+ARC-Seal: i=1; a=rsa-sha256; t=1766852904; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=XvdxblLCrdDbLt1mtdBZhtZlmTuE5nTxppeNyM/oq/GQW0k44V9zEHrARUKYZtyY3H
+    wPJ4MLES+X24+Rq67HcWL0ty/mJ5j1oODzVFoGCez2r+LcYvRzE8auhVQLnLjFNBp0rL
+    JBnEhnSRavaFagTjG/QCKo9p1Nm/mv4hOabG3gSCnyZh8KwDfoIoUlaH1znx1odngGg8
+    jMJYJXf19Etq1qcYEYXe1Q09oouoTdusUvtQ0ebwBRNfPhvv9uDXQ0JOK38rkoQj15Au
+    tIgP6LjWySySXRcPrMKWQAWyRcg3/HqAGsbPvYOnVRb+F083f49eO4wDMthEp+zdvy28
+    LYQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1766852904;
+    s=strato-dkim-0002; d=strato.com;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=VyBAzRalal+p5EliBFxBewJN0DK+Unjwn6xANRTpk6A=;
+    b=QXPDqgmxv5Thquo5mJi0Zns3kIPz9/t7T5DN2kyyfQxW2X/weWWEo8BS2FXLgiuP5Y
+    quVPyqnGma2EA15NWS/Bx4ol7UEi9l7ffOhVLCcm6cirG1y8SXD6SuzfDKqVvUbH1FGF
+    A2oywo0Yi0wVOY6j/1Wi1FhM8wta79swyfX6Q/IIvdBIevNiVJ4tPT59shfdq2qZsZ4w
+    aYMH3fVKtDSWuvt70E0Ux+cwvBb3YqBTNJ7t3mZn7LLr/PHmuD7WDAQXUQT5l2uFhWfr
+    e1swh5bjPUTJXhU1EYLlE8HXMA1fZ3xfDzOm2wSrtoMbXf1DkxPguRTNvPUioBQvTym0
+    wbzA==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1766852904;
+    s=strato-dkim-0002; d=jm0.eu;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=VyBAzRalal+p5EliBFxBewJN0DK+Unjwn6xANRTpk6A=;
+    b=T+o7cNI3rAMorQJSGUOR/vT+3hzCGh+tO+7Y+gvAY6iHbtrK3+8IutkH9ip7d1nyxQ
+    AgxjzEYsfXlbgW5TIcC7vVRn896qto+Sf0+rCpUmDz7RU8jSMHTuYoads1skFCNZo5LQ
+    U9ioAttHgmYdg/5bOkac3rFL62v4x92omCOr5CqkqYMNBlRrIoKT0RL/p3fqXGW3VKBu
+    gCb0KcP2N9qXT/9wSWEVvbixwvXUBKERhttB2FUVeo5AdjZbdDDMLDOE8URc6tL3dFOT
+    6AdOtmY6nEEqMCvwUxfX7FO2DfJ9YRUOyZ6SPn7C/xDOf2m/C181gnDmnfEywdtXQU+y
+    PttA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1766852904;
+    s=strato-dkim-0003; d=jm0.eu;
+    h=Cc:To:Message-Id:Date:Subject:From:Cc:Date:From:Subject:Sender;
+    bh=VyBAzRalal+p5EliBFxBewJN0DK+Unjwn6xANRTpk6A=;
+    b=rUHiDWwh+kTD3oR4xdGnTAjOPZ5cDrwBm0tTpCVaOy8xmHy5ZEilzTlUfu4k2gsHpT
+    PQGIAvY/kAPFz4xr8ADA==
+X-RZG-AUTH: ":JmMXYEHmdv4HaV2cbPh7iS0wbr/uKIfGM0EPTeoCaRth8YQvpoIkZXd2bnfIrOV7Mbk="
+Received: from localhost.localdomain
+    by smtp.strato.de (RZmta 54.1.0 DYNA|AUTH)
+    with ESMTPSA id z0d4ec1BRGSNtuH
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sat, 27 Dec 2025 17:28:23 +0100 (CET)
+From: Josua Mayer <josua.mayer@jm0.eu>
+Subject: [PATCH 0/3] power: supply: add battery driver for netronix ec
+Date: Sat, 27 Dec 2025 17:28:12 +0100
+Message-Id: <20251227-kobo-aura-battery-v1-0-328a90ef5122@jm0.eu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dvxkgxpxo3vjgzfp"
-Content-Disposition: inline
-In-Reply-To: <6251576.lOV4Wx5bFT@rafael.j.wysocki>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.5.1/266.841.63
-X-ZohoMailClient: External
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABwJUGkC/x3MQQ5AMBBA0avIrE3SVhCuIhYtg4lEZYqQxt01l
+ m/xf4RAwhSgzSIIXRzYbwk6z2BY7DYT8pgMRplSG1Pj6p1He4pFZ4+D5MGCKuUGXTajriB1u9D
+ E9//s+vf9AFGv+c1jAAAA
+X-Change-ID: 20251227-kobo-aura-battery-3e60bc159d16
+To: =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>
+Cc: Andreas Kemnade <andreas@kemnade.info>, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, Josua Mayer <josua.mayer@jm0.eu>, 
+ Josua Mayer <josua@solid-run.com>
+X-Mailer: b4 0.14.3
 
+Signed-off-by: Josua Mayer <josua.mayer@jm0.eu>
+---
+Josua Mayer (3):
+      power: supply: add battery driver for netronix ec
+      dt-bindings: mfd: netronix,ntxec: add reference to power-supply
+      ARM: dts: imx: imx50-kobo-aura: add description for battery
 
---dvxkgxpxo3vjgzfp
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1] PM: sleep: Fix suspend_test() at the TEST_CORE level
-MIME-Version: 1.0
+ .../devicetree/bindings/mfd/netronix,ntxec.yaml    |   9 +-
+ arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts      |   9 ++
+ drivers/mfd/ntxec.c                                |   1 +
+ drivers/power/supply/Kconfig                       |   9 ++
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/ntxec-battery.c               | 101 +++++++++++++++++++++
+ 6 files changed, 127 insertions(+), 3 deletions(-)
+---
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20251227-kobo-aura-battery-3e60bc159d16
 
-Hi,
+Best regards,
+-- 
+Josua Mayer <josua.mayer@jm0.eu>
 
-On Fri, Dec 26, 2025 at 02:50:57PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->=20
-> Commit a10ad1b10402 ("PM: suspend: Make pm_test delay interruptible by
-> wakeup events") replaced mdelay() in suspend_test() with msleep() which
-> does not work at the TEST_CORE test level that calls suspend_test()
-> while running on one CPU with interrupts off.
->=20
-> Address this by making suspend_test() check if the test level is
-> suitable for using msleep() and use mdelay() otherwise.
->=20
-> Fixes: a10ad1b10402 ("PM: suspend: Make pm_test delay interruptible by wa=
-keup events")
-> Reported-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Closes: https://lore.kernel.org/linux-pm/aUsAk0k1N9hw8IkY@venus/
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-
-I can confirm it fixes the issue I reported, so:
-
-Tested-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
-Greetings,
-
--- Sebastian
-
->  kernel/power/suspend.c |    9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
->=20
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -349,9 +349,12 @@ static int suspend_test(int level)
->  	if (pm_test_level =3D=3D level) {
->  		pr_info("suspend debug: Waiting for %d second(s).\n",
->  				pm_test_delay);
-> -		for (i =3D 0; i < pm_test_delay && !pm_wakeup_pending(); i++)
-> -			msleep(1000);
-> -
-> +		for (i =3D 0; i < pm_test_delay && !pm_wakeup_pending(); i++) {
-> +			if (level > TEST_CORE)
-> +				msleep(1000);
-> +			else
-> +				mdelay(1000);
-> +		}
->  		return 1;
->  	}
->  #endif /* !CONFIG_PM_DEBUG */
->=20
->=20
->=20
-
---dvxkgxpxo3vjgzfp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmlP6qQACgkQ2O7X88g7
-+ponhg/8DFhgtSQ9njudkn1alyQjlWQqEOFYqevvSV3QmMHRfP3el+TfwteArYOE
-SFkG3q9W2nqkP2yOQ6Zk6e7FXHZwVTZD738DY+aUPIMrnw/sx8cGol4iEInGdLRR
-XJLVk0d8sIn5D3ZlMkvw+Q1Em6XBb4jkXQJMD0MHuowrUCFB18WFNilviI/EgPWJ
-q/2XLfhLcc3lQdTEHIAEcimZjfWKEoSZ/jHEDHtuSoNn29rSBmcrecdmYI2kOklI
-Dsg/Ib4vjms7l0X+DbLHNu9BkFCoVtVLadOXPePZL9tEp+nljzuhBVEvVYW05ov7
-vtBIY27HdmxiWSXaVQfjGovRbnoXghJZmtQFRhFQO4pgUXIHdA01A2auynaGsimp
-E6I5ar35GZnOIQ8D/biMZE0eXNWZaP+7ZmFNvWTO6OoylK6UhMHZOeFV7rvF5tVB
-MoIeL/gx8XQy5jmB3BPiHxhGr0G3r1EBajWreYzTNnlgrDTAXeFY7GxPtdU9zwNS
-iod+3bPI0qVWe26EFM/uY6X8Jdb4tKosxDyY3RkYzuwpynrRHxmvZW16/OqTdEXY
-4SmFYssYmHhTXnt2se8qwO4LTIBdmBzBQb1d+iOpaRSx1QELpvPSVIvNcHlGjd2Q
-7TKVHTXk0im4i8Rd7I+actOVkOU8K7l6m/+LNLJhJatMpEFgCtI=
-=7Rj5
------END PGP SIGNATURE-----
-
---dvxkgxpxo3vjgzfp--
 
