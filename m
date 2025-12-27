@@ -1,86 +1,87 @@
-Return-Path: <linux-pm+bounces-39964-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39967-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 937DBCDFF2A
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 17:31:32 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD4C7CDFF96
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 17:52:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9F4D3300D482
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 16:31:30 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A0A07300BED9
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Dec 2025 16:52:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4CF323ABB0;
-	Sat, 27 Dec 2025 16:31:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51F42314B73;
+	Sat, 27 Dec 2025 16:52:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="CYk4T6ac";
-	dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="H9o1l0TG"
+	dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="RxzYg0RY";
+	dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="PsvsXm9u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.82])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A45617B425;
-	Sat, 27 Dec 2025 16:31:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.82
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2308D1DA55;
+	Sat, 27 Dec 2025 16:52:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766853089; cv=pass; b=V1MIOaHJyjX6qwCiWmQ7cCoeMKEW7N0bnJDJMKS+5yQB+J9uEneBhjrtk57sz9juKtGlfx58bPc8JwL7s3T9yABNAG+eDFYSTlHGDw8b3SSPg5UKDewLa+DdqzvTAjKxrWSJfyb6zlq+ylt8vBZnM9iU8UD6AsFfOFPe0ZrytS4=
+	t=1766854355; cv=pass; b=R5tvHPuMoo6QFRCrnsX4BplkY6NJPNqcmdZ0pAKlj7qXsMvps3ScXsWzg4MUb+FUiDdLQcXKKCRB//E3ejsfox43rtCbDlia+HNDwU6RhDl2unPfh3NQM0pCr6Wvg3RdWw4kcDN0WOEzffpW313+AOysPDGNDoXKqkef8OovX4o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766853089; c=relaxed/simple;
-	bh=EYTouuIKOAbasllfMMkwGify64wGdcuvMBTq9IQ0nag=;
+	s=arc-20240116; t=1766854355; c=relaxed/simple;
+	bh=l4f+b8rxW1OoheD1H4u/RGOHJuhhcel4qeyOFe/gIOQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RMkNZmkBOwMvi4V+wardOOZMDMEUIsJGrkJDioVSh+CIxQurf/QJ4dz7JtAjRb+9HIi0wceBro7cPmMnFRk7GN9S7S7Tn8LBCHzeIo4iIhp3UEp/Vh1tqJ5sgTJ+2Bt7jKtTgewrBlfaUttTd2v8RSdBP56vkfnBTp99TZknvOQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jm0.eu; spf=none smtp.mailfrom=jm0.eu; dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=CYk4T6ac; dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=H9o1l0TG; arc=pass smtp.client-ip=85.215.255.82
+	 In-Reply-To:To:Cc; b=io3kc+sScr/AFEUWmlv61/WCQ8+VMNcCG0hPATdPIJKDQyI5I/KuimNUNlJjIsl7wd4L4CbBXzwTqiQIf6WIvmQFkjwPqoTUw8IKkS4SHf1X3cjh+j4u5WvRK1524c06t4Dx7AavtQRFgL2i2FCAZMPeQDpboQDIa9xgh8hCPoI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jm0.eu; spf=none smtp.mailfrom=jm0.eu; dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=RxzYg0RY; dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=PsvsXm9u; arc=pass smtp.client-ip=81.169.146.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jm0.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jm0.eu
-ARC-Seal: i=1; a=rsa-sha256; t=1766852904; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1766852905; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=pqy6mqROcxf1G/JG9se5DF+UkWnYtkSm+EqkpsxBPWFuiXVg+rVykipdg+itBR310h
-    LXsNRF9Be3yDCaO1bcjawQwn3ZjhxfKTu2S5cOSEFeOziKUISaofNJ7gBIMwPXxvtlgO
-    dpLOE4R1bSXDkYNLu5UZjHW86NntKEm1rj+MSXTSttmRKZfIor/H6LMmFLBmhXtXoOwF
-    WfHK/TODMFNDtHuVqUJoZEiCj3SdNIm9tDjNsqBfaAd8pG3/GjmWF6Bph72Qzqa3Uf9O
-    5f4dpoQRRQH94JzlN7Stb37NxyD5REjqq3Oni31UdeVR+DywzFUhuVG22k8tV+aPdGN4
-    +xHQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1766852904;
+    b=AmaG8lufEcHfcRdXndOvpSwo7MhKysgjdAStJveVoxKeZHG0W7HwuHvf8KgmiFyILs
+    f4MFOOWItUTF1aBg3v8hAkOZ7W7viPEySAM9FzR5vU3PBWs+UWc38HcwQi6Jn+EjT1dK
+    dssFYXPDGPEkSulcfMbOziQ/VqKr0c2rU/XIUeFrqGTAskDVeuN0YNx1xnfsmrpsX7Yg
+    2//xicsmjjSC5bELzMvvvhZE4TvpKwDEckjpVWDhGXtbG3dxCrYYXm+B5JGNGF7J2LRV
+    b5bJcBB45Rqn2jc4n+u36tXTm/rFihGHoG42GYMvKCMkkqsbA2sotSAdMKdirmLjEhG1
+    g9lg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1766852905;
     s=strato-dkim-0002; d=strato.com;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=oBoh6hY3yJ4owxWQx6sgt/gcf5XerqfPpIM1LTdUQis=;
-    b=o/hSiqjmceS4YHXvms+r++w0H1UnlaUo10zdxkSrIMRiniOvgYj0ePrbj64GiWAXIm
-    yFqUuquM8XYuX5fs0qIpSkd7B9SfZq9SC5c8YBKhZ6felz4PCUYQJcqbB2EXfxPoZE+w
-    Na54AOd3mhIofaFeLERn6xvtq10DpOF0+ly3eCrBZkrCeNniE2F+y2gdBsMaMm+GQVJ2
-    K7injbmOm0IaFY1MUHUMVtqMIj9oWYcthd1DzqaQwLueDXYpCYKLOrt4OpthkkdxQCDF
-    W3LEYscGslh0uAgXPxTQ+eFWmERnpeD5hBelPBVTJez3OIVcUsukJMXRBeH2pHM3hN/S
-    4lxA==
+    bh=8LxlG+pLsH21v5FwAitBDXQijxuqWknyeGn1K+XbPv0=;
+    b=hHrDyJ5nsX9sSX+EtcxgRUSOvBhe91RTHOiJ5fXNnG32Nnv6DGAyiuw8LYMPpsq9qH
+    M3g98vTojfNlZ/s8pRItFXk3Tj69ErX07XmyVgx3TZCqS8bqGBx7OpjfB8kkQ/wPwpfl
+    KRs/PM/TWFHtAEJqIh5I57NEDx4ywI1lcDrrOWNwYQeclZfhwylxBVtoqvMviBS47CDR
+    3uNhokTSddYMDnVWz3wbif94yD2G9AZ64NDUy9ZqWBjeWUNZhrj3bxUS+iouZZJdB4zk
+    JYOns2yOJHIRGaECtStz+SO3DR54l//jTnqJmEQHZl1OXBBo483K24HM5ISkXdafnQku
+    yFnQ==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1766852904;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1766852905;
     s=strato-dkim-0002; d=jm0.eu;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=oBoh6hY3yJ4owxWQx6sgt/gcf5XerqfPpIM1LTdUQis=;
-    b=CYk4T6acNEEB6i53/NeTkcrkzFlKUgiCUkTso4ASy49j1yRpP40RrtC6O7sJWLAnlp
-    pUpxuCAHROZXRKaGLWrKZ7Kp3MLGNHqYmTEcCuZSQomz66+BV3GAi4H4cZOaajdqWTIw
-    UxAFKB+NsJ/aIxj/VF5jJhBJB8mcdLAgVsjS/Avpi+6Vi149p3fmIKobbnTNzlZ9eI3g
-    Pb9fUEZpMrRUl8I7Xp/OAF7UTVLw/dBC2TC8KwvDhAcXrFBYVCR1ONx+laOED2dau2SS
-    /TpAtDXay5UETEiKgU/lWaA00EGQNNP59ayKNAcw5FPVRvHGY3pPGW7+dR/JUFW1rjBn
-    0VgQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1766852904;
+    bh=8LxlG+pLsH21v5FwAitBDXQijxuqWknyeGn1K+XbPv0=;
+    b=RxzYg0RYJmuu63TovFOOieC4G1i5NRskuUlFyiDzy6mZ3QDhyAj07MTtOQEWYRc2JY
+    vPygyJeYuHeRSpdq8tOzHuX0eZH+zmA33V8ABFljYVrrUUE6uau1qf6Z0wcXUtKXyBQt
+    4qkKHZ1YiatCnuQ1LpYX5btPgKWGa5ZdMcMFp680xm1PC87vAPN8nH9cCedZoCWDMIH7
+    j67f4zIBQwOopwLTtMczaaDfvsUhYwDPDJyoWe8VbCvNvM7MEN4A+2Rp213qLFsWmYjH
+    2r2hqLvp1mkuMdzW/se+RrhmtyO/1YjFc3hGG5uVSYCLVWisR8gzOWwQLQmC3NnOT25B
+    xu6g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1766852905;
     s=strato-dkim-0003; d=jm0.eu;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=oBoh6hY3yJ4owxWQx6sgt/gcf5XerqfPpIM1LTdUQis=;
-    b=H9o1l0TGDq7W0PnemiPm+6e5jWMG32qaTil1P94FhVUlOfbyIJuBCR/BY020epbW+2
-    D6Y4qI8JM70bNl3YxBAg==
+    bh=8LxlG+pLsH21v5FwAitBDXQijxuqWknyeGn1K+XbPv0=;
+    b=PsvsXm9uKtmHbLziW9jJfgJDDricGlFLTO6P40ztCnPQLZzIRH0Hmtpm0TOdKm0+av
+    KUBMUq+R2GoEfwRGcWCA==
 X-RZG-AUTH: ":JmMXYEHmdv4HaV2cbPh7iS0wbr/uKIfGM0EPTeoCaRth8YQvpoIkZXd2bnfIrOV7Mbk="
 Received: from localhost.localdomain
     by smtp.strato.de (RZmta 54.1.0 DYNA|AUTH)
-    with ESMTPSA id z0d4ec1BRGSOtuI
+    with ESMTPSA id z0d4ec1BRGSOtuJ
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
     Sat, 27 Dec 2025 17:28:24 +0100 (CET)
 From: Josua Mayer <josua.mayer@jm0.eu>
-Date: Sat, 27 Dec 2025 17:28:13 +0100
-Subject: [PATCH 1/3] power: supply: add battery driver for netronix ec
+Date: Sat, 27 Dec 2025 17:28:14 +0100
+Subject: [PATCH 2/3] dt-bindings: mfd: netronix,ntxec: add reference to
+ power-supply
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,7 +90,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251227-kobo-aura-battery-v1-1-328a90ef5122@jm0.eu>
+Message-Id: <20251227-kobo-aura-battery-v1-2-328a90ef5122@jm0.eu>
 References: <20251227-kobo-aura-battery-v1-0-328a90ef5122@jm0.eu>
 In-Reply-To: <20251227-kobo-aura-battery-v1-0-328a90ef5122@jm0.eu>
 To: =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
@@ -101,166 +102,72 @@ To: =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
  Fabio Estevam <festevam@gmail.com>
 Cc: Andreas Kemnade <andreas@kemnade.info>, devicetree@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, Josua Mayer <josua.mayer@jm0.eu>
+ linux-arm-kernel@lists.infradead.org, Josua Mayer <josua.mayer@jm0.eu>, 
+ Josua Mayer <josua@solid-run.com>
 X-Mailer: b4 0.14.3
 
-Implement a simple battery driver for monitoring voltage with the
-netronix embedded controller found in certain ebook readers.
+The Netronix Embedded Controller supports monitoring of battery voltage.
 
-Signed-off-by: Josua Mayer <josua.mayer@jm0.eu>
+Voltage monitoring functionality is self-contained and requires no
+supply- or battery-specific runtime configuration.
+
+Battery design characteristics (e.g. voltage-min-design-microvolt) are
+useful for users to understand the charge level and are commonly
+provided by a separate battery node linked with monitored-battery
+property.
+
+Add reference to power-supply.yaml so that power-supplies and
+monitored-battery properties become available.
+
+Further drop reg property description and replace it with maxItems 1 as
+is common for i2c devices with single bus address.
+
+Finally replace additionalProperties with unevaluatedProperties to
+allow properties from referenced schemas.
+
+Signed-off-by: Josua Mayer <josua@solid-run.com>
 ---
- drivers/mfd/ntxec.c                  |   1 +
- drivers/power/supply/Kconfig         |   9 ++++
- drivers/power/supply/Makefile        |   1 +
- drivers/power/supply/ntxec-battery.c | 101 +++++++++++++++++++++++++++++++++++
- 4 files changed, 112 insertions(+)
+ Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/mfd/ntxec.c b/drivers/mfd/ntxec.c
-index 08c68de0f01bc..d5059b8862aa8 100644
---- a/drivers/mfd/ntxec.c
-+++ b/drivers/mfd/ntxec.c
-@@ -139,6 +139,7 @@ static const struct regmap_config regmap_config = {
- static const struct mfd_cell ntxec_subdev[] = {
- 	{ .name = "ntxec-rtc" },
- 	{ .name = "ntxec-pwm" },
-+	{ .name = "ntxec-battery" },
- };
+diff --git a/Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml b/Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml
+index 37fbb953ea12e..6599dcf0eceb0 100644
+--- a/Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml
++++ b/Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml
+@@ -13,13 +13,15 @@ description: |
+   This EC is found in e-book readers of multiple brands (e.g. Kobo, Tolino), and
+   is typically implemented as a TI MSP430 microcontroller.
  
- static const struct mfd_cell ntxec_subdev_pwm[] = {
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 92f9f7aae92f2..5674a23ba7bd6 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -1132,4 +1132,13 @@ config FUEL_GAUGE_MM8013
- 	  the state of charge, temperature, cycle count, actual and design
- 	  capacity, etc.
++allOf:
++  - $ref: /schemas/power/supply/power-supply.yaml
++
+ properties:
+   compatible:
+     const: netronix,ntxec
  
-+config BATTERY_NTXEC
-+	tristate "Battery driver for Netronix embedded controller"
-+	depends on MFD_NTXEC
-+	help
-+	  Say yes here to enable netronix ec battery monitoring driver.
-+	  It enables the monitoring battery voltage on certain e-book readers
-+	  using an embedded controller by ODM Netronix. Battery design
-+	  characteristics are read from Firmware Tables if available.
-+
- endif # POWER_SUPPLY
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 4b79d5abc49a7..db6fc815f9da2 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -128,3 +128,4 @@ obj-$(CONFIG_CHARGER_SURFACE)	+= surface_charger.o
- obj-$(CONFIG_BATTERY_UG3105)	+= ug3105_battery.o
- obj-$(CONFIG_CHARGER_QCOM_SMB2)	+= qcom_smbx.o
- obj-$(CONFIG_FUEL_GAUGE_MM8013)	+= mm8013.o
-+obj-$(CONFIG_BATTERY_NTXEC)	+= ntxec-battery.o
-diff --git a/drivers/power/supply/ntxec-battery.c b/drivers/power/supply/ntxec-battery.c
-new file mode 100644
-index 0000000000000..f49f0966d18dd
---- /dev/null
-+++ b/drivers/power/supply/ntxec-battery.c
-@@ -0,0 +1,101 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * The Netronix embedded controller is a microcontroller found in some
-+ * e-book readers designed by the original design manufacturer Netronix, Inc.
-+ * It contains RTC, battery monitoring, system power management, and PWM
-+ * functionality.
-+ *
-+ * This driver implements battery monitoring.
-+ *
-+ * Copyright 2021 Josua Mayer <josua.mayer@jm0.eu>
-+ */
-+
-+#include <linux/mfd/ntxec.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/power_supply.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+
-+static const enum power_supply_property ntxec_battery_properties[] = {
-+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-+};
-+
-+struct ntxec_battery {
-+	struct ntxec *ec;
-+};
-+
-+#define NTXEC_REG_READ_BATTERY	0x41
-+
-+static int ntxec_battery_get_property(struct power_supply *psy,
-+				     enum power_supply_property psp,
-+				     union power_supply_propval *val)
-+{
-+	struct ntxec_battery *priv = power_supply_get_drvdata(psy);
-+	int ret;
-+	unsigned int value;
-+
-+	switch (psp) {
-+		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-+			ret = regmap_read(priv->ec->regmap, NTXEC_REG_READ_BATTERY, &value);
-+			if (ret < 0)
-+				return ret;
-+
-+			/* ec value to microvolt conversion:
-+			 * vendor kernel source suggests linear behaviour from 3V to 4.2V
-+			 * with readings 767 to 1023; each increment represents 4687,5uV.
-+			 * adjust 3V boundary slightly to report exactly 4.2V when full.
-+			 */
-+			val->intval = 2999872 + (value - 767) * 4688;
-+			break;
-+		default:
-+			dev_err(&psy->dev, "%s: invalid property %u\n", __func__, psp);
-+			return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct power_supply_desc ntxec_battery_desc = {
-+	.name = "ec-battery",
-+	.type = POWER_SUPPLY_TYPE_BATTERY,
-+	.properties = ntxec_battery_properties,
-+	.get_property = ntxec_battery_get_property,
-+	.num_properties = ARRAY_SIZE(ntxec_battery_properties),
-+};
-+
-+static int ntxec_battery_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct ntxec *ec = dev_get_drvdata(dev->parent);
-+	struct power_supply_config psy_cfg = {};
-+	struct ntxec_battery *priv;
-+	struct power_supply *psy;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->ec = ec;
-+	psy_cfg.drv_data = priv;
-+	psy_cfg.fwnode = dev_fwnode(dev->parent);
-+	psy_cfg.no_wakeup_source = true;
-+	psy = devm_power_supply_register(dev, &ntxec_battery_desc, &psy_cfg);
-+	if (IS_ERR(psy))
-+		return PTR_ERR(psy);
-+
-+	return 0;
-+}
-+
-+static struct platform_driver ntxec_battery_driver = {
-+	.driver = {
-+		.name = "ntxec-battery",
-+	},
-+	.probe = ntxec_battery_probe,
-+};
-+module_platform_driver(ntxec_battery_driver);
-+
-+MODULE_AUTHOR("Josua Mayer <josua.mayer@jm0.eu>");
-+MODULE_DESCRIPTION("Battery driver for Netronix EC");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:ntxec-battery");
+   reg:
+-    items:
+-      - description: The I2C address of the EC
++    maxItems: 1
+ 
+   system-power-controller:
+     type: boolean
+@@ -42,7 +44,7 @@ required:
+   - compatible
+   - reg
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+@@ -61,5 +63,6 @@ examples:
+                 interrupt-parent = <&gpio4>;
+                 interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
+                 #pwm-cells = <2>;
++                monitored-battery = <&battery>;
+         };
+     };
 
 -- 
 2.51.0
