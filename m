@@ -1,103 +1,119 @@
-Return-Path: <linux-pm+bounces-39974-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39975-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF9ACCE5228
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Dec 2025 16:51:47 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD074CE522D
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Dec 2025 16:51:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4127030052E3
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Dec 2025 15:51:46 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7D145300286B
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Dec 2025 15:51:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1BDF2C0F97;
-	Sun, 28 Dec 2025 15:51:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 961C22D130C;
+	Sun, 28 Dec 2025 15:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PcvCiOS7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jRB8Vix5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9BD28D8E8
-	for <linux-pm@vger.kernel.org>; Sun, 28 Dec 2025 15:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3F6238C0A
+	for <linux-pm@vger.kernel.org>; Sun, 28 Dec 2025 15:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766937104; cv=none; b=cPhIr74rXYBpcJn7qU+59kGhLZbF8tuXeEB8wh8OCu6Rk+UNQbxtg6OmBJfPK0FsisHi4JTI4MHgot4QOj4nN6fohkREAsDt7vUNAlfInZsAgsjhG3cBWllJ/JLgRpLpd7hYfKyYFDyBpHPgLFtdqsla0Z7tK6Z83JjB/18TEQk=
+	t=1766937111; cv=none; b=ZxdIp5o3NotScVTUboZpAR0FS4RGR2iueEuRRE90FiEe+sGjQUOkZ4g2G73FFeXpkPje7U8FJTk+tCwBzRw/dhW7Ag2sI3rPzUcEPOyulPAx4HwMr0WQltqmbORaBioGUgGshPKLLRLoWP6lsWBRYQIiMV722b+lOPSKvoctXy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766937104; c=relaxed/simple;
-	bh=UPBdwscMbeewUmZS1YlHhhaecNMpTlEwPf4hXKqUXHI=;
+	s=arc-20240116; t=1766937111; c=relaxed/simple;
+	bh=Bkavqw10CnB9Sonw91bjgCl8Du/CzS1634r7L7bue2A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BsxgZu8W7VuiZI2wyE+7XPqPJ/uYGaDM7bBZf4fZbW2Y1qxp0WPe+czsSiAALMk/JQvs0bJd/DQ+lCUmLw+h9DxbO/84BL/4PUTQL2lSTU4bHFhP4aUE7f0jTB5Hz/2uFcLfyJiY+uq1/Ps87xPG4XOY4hNr3hGnANIjJnA23n8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PcvCiOS7; arc=none smtp.client-ip=209.85.167.50
+	 To:Cc:Content-Type; b=FQj8MRQ2G9yxdWRit7+cNBUv3EZatZ+ljyazjzd+aFOEsTAxKTWaq3idAP7NYQwSGg01gU+WstWIq3Oe4rwwyhTbkxOwCzXHqVnGhII+wjqr2tyEY7o/siEUFb66Z4+xYZkfEJWV7vI+GiZaPQ8GhatWlJF2JqjE7UIR0keCZGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jRB8Vix5; arc=none smtp.client-ip=209.85.167.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-59a10df8027so10919260e87.0
-        for <linux-pm@vger.kernel.org>; Sun, 28 Dec 2025 07:51:42 -0800 (PST)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5942b58ac81so7018494e87.2
+        for <linux-pm@vger.kernel.org>; Sun, 28 Dec 2025 07:51:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1766937101; x=1767541901; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1766937108; x=1767541908; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vMOElam5lFCQ00bwoN+FTpOkP8287mrJpVz34H2qYuM=;
-        b=PcvCiOS73VXBn6sRUI444KBAO4fdbHDHkyCBrg6DWDD4JyRDbwpFpQ4LCC1bvghGNa
-         10GsuO/8Ywny8uh+D7+bYNA/q0b08kjJv4/NGj69EfW+Xv8tJLLSsVBKCvkMAoG8W2wK
-         mWrGHVM7IPqgC3RdQjihLokW8i4tHquXiUB0pojSmZCv/iqCRP6HrzW09AM4X2S8HWZs
-         m6YsnsvBglvQe9i6j0ogBfmFwb/9tPKKmOJMgBvFO6VsgP0IDUz+rWIQAyGNijafHnaE
-         JymhUEpJ91CIrQjUrmTI6tnmOXh3cJ3XAuffGXnJ4W1CEvstW836H+++YFP1tjlYOZ45
-         zkkA==
+        bh=xDt2nU/HCGuLKi4YQDj2IaYM1PBWLEa/ggxeMOrlmyU=;
+        b=jRB8Vix5SUdD0H2nrMady1nzSBAF4AOYCsr40neia5s51XYopy5Sdw3kaaReLa/vwG
+         1duHP4sth6/GD4k0eQC+c7x470sc4UnlEIFI9HOikDzggckyOgCORVeIn1DZvSzEaVTx
+         78s6wiJS26u6Br3vqwuH7eb4zzYryntdZgmx09Kl6o4hZduhGNY3VcCzmN2B1+qzgUqP
+         6eKcZOYAVkrnKFJqJi36Jh7ys/KSLhfXgAuDsqpkDwYjsgKDq8RVIzgTH0FaQ6x4zamt
+         oWSZK4e0l8MVRENU4KJ0nVu9OAbDKm8Zb00qfzN+W3aYX2qABktIT3Nq48F4hZdiR3u6
+         KZ9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766937101; x=1767541901;
+        d=1e100.net; s=20230601; t=1766937108; x=1767541908;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vMOElam5lFCQ00bwoN+FTpOkP8287mrJpVz34H2qYuM=;
-        b=PsIxOjdr38LejUMQ3UqSJp1TaigoWhQxPbXgRwFuoD1AFQl8yYmwWZolXG+31F12Sc
-         /62I+47PfNWAs4SACjAIvW/oncOVkmXXo03FVRRqPZFsXmHYxmYxgp5Czyzy4DvO8Rov
-         0T3OjWQ9fmLVRj4WIEucgjq2j0QQPVNQV9TYjcWYYtexPB2XsxE7n+xwB5xUgZBvGKx5
-         lZzAgQkXMuNccM9ykaySd/FPQW5DMU3W19cZDfEe/UmuoYnZvyaOn5NVN0I3cZ/LJYrR
-         dlGauJusyQIesF+oMQirOioLSm8I59gT2jFncEhxI7Ngr8I9y6c2n4jWqd/zfgchOXx0
-         hUtg==
-X-Forwarded-Encrypted: i=1; AJvYcCUAbuIKKHVVMdGCoJ8OxKNF/CBEmlEyDkWR4dAJcZUxi+abHRkX7Ab1yIr4KmAv2vcyAiYot+HfTw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEnrBEk98nwP+ipt9pTdRWeDoEkBduX7JZPpAWnM+hNq/BzoFJ
-	mCjXVq+QqzIVjaeZfEVqjdChVqQ6fHaUbKv5QJboep8+CpDVoILwtoCIdsHPONQzXfJEm92uZr1
-	ZVrxcCPCOCaHAk2EMpeGVqrgLBuFKX+CUUxjz21vwsQPS3fQUVfV4
-X-Gm-Gg: AY/fxX6GbJBSiRdZAhlF07qVV3tlEqyES7DWFnkyYXsnVxjOVZIXIC83/k95OfB+074
-	yRfPOO+W7ZlRKaLYdPaf+tolXtqihqIVO3W4upsz3GUzhKZaH1fgnLR3EZWL9QjtJs9VTPmYpHP
-	iq/YfDKVBQ/sTtOJ67HK8MLvk+EiVEGSjmt+4CngJVZH4rRieOGQ00xpLXx7DaJmGhZMnGZTxE9
-	jhMFGjFw7RHFgGZYDRXwEgtAT+F/XG3pSKjEpuvCg+ZulagKVN3IVl2/Kvu9Uc2PCq042/k
-X-Google-Smtp-Source: AGHT+IHLUFVsnwRwkLFb3Tq4L6Zc3f/V8NutlxDmQ4VBL3ts9a5/EsxCVdAPRyCi+loA38VXEQC6iUojrpiM88ffZ7E=
-X-Received: by 2002:a2e:a913:0:b0:37b:ba96:ce07 with SMTP id
- 38308e7fff4ca-38121596892mr81755101fa.15.1766937100554; Sun, 28 Dec 2025
- 07:51:40 -0800 (PST)
+        bh=xDt2nU/HCGuLKi4YQDj2IaYM1PBWLEa/ggxeMOrlmyU=;
+        b=c+qkFAmU2A8a7uoRJUKZKyRpcIHtnpPl5mNiovR1zy06vr5SydyxcvY7Q6ZzKzP0ZN
+         sDdX9YfjidwNDMCnUn5kKXTs3YY0PPfQTOyd4ohlpegVtWjzyI1UGrluTGYS7DBxwaLe
+         d+QegrO+PXzqlNoZMm95HsmOD4lIe3wtDG0OFJBEZ+HAydzp+Usffl71dlWqCNXZNu5m
+         Y0sWkSFykrTPjFlu9V7e8AOE+Nxwv7xNYA8ZIZRRCmT2NsFLgE1MGU8u0tAhut07qPWV
+         G0bAmkoEDDxnErTpLRY55t8B6mFtWxDbF+L30klekT0uc4JX7Rduc3ZdC0n9TyMzuwhC
+         xzkw==
+X-Forwarded-Encrypted: i=1; AJvYcCUx62Uu2Z7NGFmhdtQ2IqXGLr5Kl0MgvRGae/V3BK1ETr+iBF6akQby6jsR32ihrlY+5zFAXutiXA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyV7jDN5ejabd6DguAFR909pKNmZKt/q94xfujHR42fGV2IxbIU
+	ZEcRRArFG+2wvt136JOHLMXAV5fG/cUCnKWbts6uR0lmOXYyuZSB1jXkWBDKyo4PA8tShmu11UA
+	dtaciulBt0JWxmE0ZVeKIaArzV3P7CB08Nv+w/SaOKQ==
+X-Gm-Gg: AY/fxX5CT85Jjy0e9K3WkI+1KJHOSpPfNPvH4nnNhFGrdMq63CbapYkLAaBjapDKmKz
+	08ujYwpIfhck7+ehVpM53uT+ci9tpT3epVzKumc3WtEgJAOc6gAAAODSPMXAMpqmvaU2LmwCTHQ
+	xODucf0NiCMaWu71jNG4d08kgb25N9YIsgdCgkGNhskqU+JiC7AqL/xiNb+Xc5GllBjf56QGb78
+	CmOKPyxVUuXDSJlE8xQ8AX6FRK7ICysf2n3SvTllNPTEtwjLrAK/xoqsLt+PC01UeCtEIra3eec
+	g7lMOl8=
+X-Google-Smtp-Source: AGHT+IGU1N8QBbdq+8B2sBGxa7sL3yjutJLHsa+eD4d/4O/IOXbvlkTxqF+kvhbF6vdkbcVRxjuHnPzltz+HFIkKUD8=
+X-Received: by 2002:a05:6512:124f:b0:599:105a:67ce with SMTP id
+ 2adb3069b0e04-59a17d727c3mr8952951e87.9.1766937107517; Sun, 28 Dec 2025
+ 07:51:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251211040252.497759-1-vulab@iscas.ac.cn>
-In-Reply-To: <20251211040252.497759-1-vulab@iscas.ac.cn>
+References: <20251128041722.3540037-1-macpaul.lin@mediatek.com>
+In-Reply-To: <20251128041722.3540037-1-macpaul.lin@mediatek.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Sun, 28 Dec 2025 16:51:04 +0100
-X-Gm-Features: AQt7F2q4HOmCP3AtHKfQGHLB3c99yZpMtVEIsP3Gmo2gfisxBcr_gBvsZWBQEl4
-Message-ID: <CAPDyKFrPZqwDmgFuPfbpX+FF3-r9F-r+9+Mm5v8z5Wb7TQJvmg@mail.gmail.com>
-Subject: Re: [PATCH v4] pmdomain: imx: Fix reference count leak in imx_gpc_probe()
-To: Wentao Liang <vulab@iscas.ac.cn>
-Cc: shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
-	festevam@gmail.com, linux-pm@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
+Date: Sun, 28 Dec 2025 16:51:11 +0100
+X-Gm-Features: AQt7F2rKehWvSimlxiGz9Dfw_4j8BvE8_7xLSPYZyFy88f7zjPyzLM7SIUxe60A
+Message-ID: <CAPDyKFranQ=UU5waLcw27E4SG30bps80DmGs+zZs6N9=iZa_zg@mail.gmail.com>
+Subject: Re: [PATCH v2] pmdomain: mtk-pm-domains: improve spinlock recursion
+ fix in probe with correcting reference count
+To: Macpaul Lin <macpaul.lin@mediatek.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	=?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= <nfraprado@collabora.com>, 
+	Chen-Yu Tsai <wenst@chromium.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	Weiyi Lu <Weiyi.Lu@mediatek.com>, Jian Hui Lee <jianhui.lee@canonical.com>, 
+	Irving-CH Lin <Irving-CH.Lin@mediatek.com>, conor@kernel.org, krzk@kernel.org, 
+	Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>, Bear Wang <bear.wang@mediatek.com>, 
+	Pablo Sun <pablo.sun@mediatek.com>, Ramax Lo <ramax.lo@mediatek.com>, 
+	Macpaul Lin <macpaul@gmail.com>, 
+	MediaTek Chromebook Upstream <Project_Global_Chrome_Upstream_Group@mediatek.com>, Stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 11 Dec 2025 at 05:03, Wentao Liang <vulab@iscas.ac.cn> wrote:
+On Fri, 28 Nov 2025 at 05:17, Macpaul Lin <macpaul.lin@mediatek.com> wrote:
 >
-> of_get_child_by_name() returns a node pointer with refcount incremented.
-> Use the __free() attribute to manage the pgc_node reference, ensuring
-> automatic of_node_put() cleanup when pgc_node goes out of scope.
+> Remove scpsys_get_legacy_regmap(), replacing its usage with
+> of_find_node_with_property().  Explicitly call of_node_get(np) before each
+> of_find_node_with_property() to maintain correct node reference counting.
 >
-> This eliminates the need for explicit error handling paths and avoids
-> reference count leaks.
+> The of_find_node_with_property() function "consumes" its input by calling
+> of_node_put() internally, whether or not it finds a match.
+> Currently, dev->of_node (np) is passed multiple times in sequence without
+> incrementing its reference count, causing it to be decremented multiple times
+> and risking early memory release.
 >
-> Fixes: 721cabf6c660 ("soc: imx: move PGC handling to a new GPC driver")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
+> Adding of_node_get(np) before each call balances the reference count,
+> preventing premature node release.
+>
+> Fixes: c1bac49fe91f ("pmdomains: mtk-pm-domains: Fix spinlock recursion in probe")
+> Cc: Stable@vger.kernel.org
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> Tested-by: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
 
 Applied for fixes, thanks!
 
@@ -105,42 +121,69 @@ Kind regards
 Uffe
 
 
->
+
 > ---
-> Change in V4:
-> - Fix typo error in code
+>  drivers/pmdomain/mediatek/mtk-pm-domains.c | 21 ++++++---------------
+>  1 file changed, 6 insertions(+), 15 deletions(-)
 >
-> Change in V3:
-> - Ensure variable is assigned when using cleanup attribute
+> Changes for v2:
+>  - Rewording commit message.
+>  - Add Fixes: and Tested-by: tag, thanks.
 >
-> Change in V2:
-> - Use __free() attribute instead of explicit of_node_put() calls
-> ---
->  drivers/pmdomain/imx/gpc.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> index 80561d27f2b2..f64f24d520dd 100644
+> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> @@ -984,18 +984,6 @@ static void scpsys_domain_cleanup(struct scpsys *scpsys)
+>         }
+>  }
 >
-> diff --git a/drivers/pmdomain/imx/gpc.c b/drivers/pmdomain/imx/gpc.c
-> index f18c7e6e75dd..56a78cc86584 100644
-> --- a/drivers/pmdomain/imx/gpc.c
-> +++ b/drivers/pmdomain/imx/gpc.c
-> @@ -403,13 +403,12 @@ static int imx_gpc_old_dt_init(struct device *dev, struct regmap *regmap,
->  static int imx_gpc_probe(struct platform_device *pdev)
->  {
->         const struct imx_gpc_dt_data *of_id_data = device_get_match_data(&pdev->dev);
-> -       struct device_node *pgc_node;
-> +       struct device_node *pgc_node __free(device_node)
-> +               = of_get_child_by_name(pdev->dev.of_node, "pgc");
->         struct regmap *regmap;
->         void __iomem *base;
->         int ret;
->
-> -       pgc_node = of_get_child_by_name(pdev->dev.of_node, "pgc");
+> -static struct device_node *scpsys_get_legacy_regmap(struct device_node *np, const char *pn)
+> -{
+> -       struct device_node *local_node;
 > -
->         /* bail out if DT too old and doesn't provide the necessary info */
->         if (!of_property_present(pdev->dev.of_node, "#power-domain-cells") &&
->             !pgc_node)
-> --
-> 2.34.1
+> -       for_each_child_of_node(np, local_node) {
+> -               if (of_property_present(local_node, pn))
+> -                       return local_node;
+> -       }
+> -
+> -       return NULL;
+> -}
+> -
+>  static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *scpsys)
+>  {
+>         const u8 bp_blocks[3] = {
+> @@ -1017,7 +1005,8 @@ static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
+>          * this makes it then possible to allocate the array of bus_prot
+>          * regmaps and convert all to the new style handling.
+>          */
+> -       node = scpsys_get_legacy_regmap(np, "mediatek,infracfg");
+> +       of_node_get(np);
+> +       node = of_find_node_with_property(np, "mediatek,infracfg");
+>         if (node) {
+>                 regmap[0] = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg");
+>                 of_node_put(node);
+> @@ -1030,7 +1019,8 @@ static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
+>                 regmap[0] = NULL;
+>         }
 >
+> -       node = scpsys_get_legacy_regmap(np, "mediatek,smi");
+> +       of_node_get(np);
+> +       node = of_find_node_with_property(np, "mediatek,smi");
+>         if (node) {
+>                 smi_np = of_parse_phandle(node, "mediatek,smi", 0);
+>                 of_node_put(node);
+> @@ -1048,7 +1038,8 @@ static int scpsys_get_bus_protection_legacy(struct device *dev, struct scpsys *s
+>                 regmap[1] = NULL;
+>         }
+>
+> -       node = scpsys_get_legacy_regmap(np, "mediatek,infracfg-nao");
+> +       of_node_get(np);
+> +       node = of_find_node_with_property(np, "mediatek,infracfg-nao");
+>         if (node) {
+>                 regmap[2] = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg-nao");
+>                 num_regmaps++;
+> --
+> 2.45.2
 >
 
