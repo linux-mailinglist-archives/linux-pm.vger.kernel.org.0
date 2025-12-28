@@ -1,200 +1,146 @@
-Return-Path: <linux-pm+bounces-39973-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-39974-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98641CE51C3
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Dec 2025 16:12:59 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF9ACCE5228
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Dec 2025 16:51:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0012F300BB98
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Dec 2025 15:12:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4127030052E3
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Dec 2025 15:51:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CBA62D0601;
-	Sun, 28 Dec 2025 15:12:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1BDF2C0F97;
+	Sun, 28 Dec 2025 15:51:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pQZooQVx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PcvCiOS7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A771D9346;
-	Sun, 28 Dec 2025 15:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA9BD28D8E8
+	for <linux-pm@vger.kernel.org>; Sun, 28 Dec 2025 15:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766934773; cv=none; b=fXUc4lIi8LJ/TuTMS6ZgYUW724q5QeZHeFk9gMfqyaNAdu9KjZFwF8bOO/dsEw9H9xiPnTFNUEe+veiMDWrRlkcW70soHx5rmQGbnOoC75WUuIFxaEPQrZeJJNY0tPLEO4n+dF2tdMc0nGMaAD6Z882sWQBf577oaPpKR8HdTqU=
+	t=1766937104; cv=none; b=cPhIr74rXYBpcJn7qU+59kGhLZbF8tuXeEB8wh8OCu6Rk+UNQbxtg6OmBJfPK0FsisHi4JTI4MHgot4QOj4nN6fohkREAsDt7vUNAlfInZsAgsjhG3cBWllJ/JLgRpLpd7hYfKyYFDyBpHPgLFtdqsla0Z7tK6Z83JjB/18TEQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766934773; c=relaxed/simple;
-	bh=EDu/GDrPT0wUm4p/vTK1dNE20NpwGpBmbNK9l0wcXMw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cUTwKDmyQfBTYiY00QlXzao+VncqOdf6/yvivYeZo/MR5eO8nMuMD+8xkQMO3d34iXbjDT4NTsZ46rnszmqvTEI9ui+VJ7X3xDtbowTxaV8u/AkTMve0hd4dz9prCkzYkTfw0xzXuCs1L55jXezDTzeh/o4JulajZkyKdyffrEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pQZooQVx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D612C4CEFB;
-	Sun, 28 Dec 2025 15:12:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766934773;
-	bh=EDu/GDrPT0wUm4p/vTK1dNE20NpwGpBmbNK9l0wcXMw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pQZooQVx2hYhrsl11ZcpKJn7DTOSn6S330pTqIASskge1EAaB9lXt/CV9+GXRur1t
-	 0R6ouhU30pyKoUpIikUNE4MF+MlwNU/JqmWKdZY785lciUUrefsmFsmdgFuxqW4RyR
-	 twdZ2RneWhNgz5HRKIwRV4VtM7zfIh9Tg1oXjP7DiyjhRUByhqr3boxoueK9tmQLj6
-	 JX27OEwt8ae8Swksf+pTW+ABx8U1DPpGXMVwMxeZfKfi/8/4Us8mhnREYl5YkCBtmL
-	 8zWLaq2H/j9xd6uQf6kFIuxycHt7GLz6CDJCEnYpwefB4z/uc6WCNE8s7xynChZkMH
-	 7TdxBUKaGl0rw==
-Date: Sun, 28 Dec 2025 20:42:40 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-pm@vger.kernel.org, Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH v3 1/4] dt-bindings: connector: Add PCIe M.2 Mechanical
- Key M connector
-Message-ID: <w773lfwggdemfitkwc2goh3odyzqo3vxbajzjlulum7i6trdsh@6izf6ajlr2ss>
-References: <20251125-pci-m2-v3-0-c528042aea47@oss.qualcomm.com>
- <20251125-pci-m2-v3-1-c528042aea47@oss.qualcomm.com>
- <20251208191110.GA2473021-robh@kernel.org>
+	s=arc-20240116; t=1766937104; c=relaxed/simple;
+	bh=UPBdwscMbeewUmZS1YlHhhaecNMpTlEwPf4hXKqUXHI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BsxgZu8W7VuiZI2wyE+7XPqPJ/uYGaDM7bBZf4fZbW2Y1qxp0WPe+czsSiAALMk/JQvs0bJd/DQ+lCUmLw+h9DxbO/84BL/4PUTQL2lSTU4bHFhP4aUE7f0jTB5Hz/2uFcLfyJiY+uq1/Ps87xPG4XOY4hNr3hGnANIjJnA23n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PcvCiOS7; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-59a10df8027so10919260e87.0
+        for <linux-pm@vger.kernel.org>; Sun, 28 Dec 2025 07:51:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1766937101; x=1767541901; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vMOElam5lFCQ00bwoN+FTpOkP8287mrJpVz34H2qYuM=;
+        b=PcvCiOS73VXBn6sRUI444KBAO4fdbHDHkyCBrg6DWDD4JyRDbwpFpQ4LCC1bvghGNa
+         10GsuO/8Ywny8uh+D7+bYNA/q0b08kjJv4/NGj69EfW+Xv8tJLLSsVBKCvkMAoG8W2wK
+         mWrGHVM7IPqgC3RdQjihLokW8i4tHquXiUB0pojSmZCv/iqCRP6HrzW09AM4X2S8HWZs
+         m6YsnsvBglvQe9i6j0ogBfmFwb/9tPKKmOJMgBvFO6VsgP0IDUz+rWIQAyGNijafHnaE
+         JymhUEpJ91CIrQjUrmTI6tnmOXh3cJ3XAuffGXnJ4W1CEvstW836H+++YFP1tjlYOZ45
+         zkkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766937101; x=1767541901;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vMOElam5lFCQ00bwoN+FTpOkP8287mrJpVz34H2qYuM=;
+        b=PsIxOjdr38LejUMQ3UqSJp1TaigoWhQxPbXgRwFuoD1AFQl8yYmwWZolXG+31F12Sc
+         /62I+47PfNWAs4SACjAIvW/oncOVkmXXo03FVRRqPZFsXmHYxmYxgp5Czyzy4DvO8Rov
+         0T3OjWQ9fmLVRj4WIEucgjq2j0QQPVNQV9TYjcWYYtexPB2XsxE7n+xwB5xUgZBvGKx5
+         lZzAgQkXMuNccM9ykaySd/FPQW5DMU3W19cZDfEe/UmuoYnZvyaOn5NVN0I3cZ/LJYrR
+         dlGauJusyQIesF+oMQirOioLSm8I59gT2jFncEhxI7Ngr8I9y6c2n4jWqd/zfgchOXx0
+         hUtg==
+X-Forwarded-Encrypted: i=1; AJvYcCUAbuIKKHVVMdGCoJ8OxKNF/CBEmlEyDkWR4dAJcZUxi+abHRkX7Ab1yIr4KmAv2vcyAiYot+HfTw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEnrBEk98nwP+ipt9pTdRWeDoEkBduX7JZPpAWnM+hNq/BzoFJ
+	mCjXVq+QqzIVjaeZfEVqjdChVqQ6fHaUbKv5QJboep8+CpDVoILwtoCIdsHPONQzXfJEm92uZr1
+	ZVrxcCPCOCaHAk2EMpeGVqrgLBuFKX+CUUxjz21vwsQPS3fQUVfV4
+X-Gm-Gg: AY/fxX6GbJBSiRdZAhlF07qVV3tlEqyES7DWFnkyYXsnVxjOVZIXIC83/k95OfB+074
+	yRfPOO+W7ZlRKaLYdPaf+tolXtqihqIVO3W4upsz3GUzhKZaH1fgnLR3EZWL9QjtJs9VTPmYpHP
+	iq/YfDKVBQ/sTtOJ67HK8MLvk+EiVEGSjmt+4CngJVZH4rRieOGQ00xpLXx7DaJmGhZMnGZTxE9
+	jhMFGjFw7RHFgGZYDRXwEgtAT+F/XG3pSKjEpuvCg+ZulagKVN3IVl2/Kvu9Uc2PCq042/k
+X-Google-Smtp-Source: AGHT+IHLUFVsnwRwkLFb3Tq4L6Zc3f/V8NutlxDmQ4VBL3ts9a5/EsxCVdAPRyCi+loA38VXEQC6iUojrpiM88ffZ7E=
+X-Received: by 2002:a2e:a913:0:b0:37b:ba96:ce07 with SMTP id
+ 38308e7fff4ca-38121596892mr81755101fa.15.1766937100554; Sun, 28 Dec 2025
+ 07:51:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251208191110.GA2473021-robh@kernel.org>
+References: <20251211040252.497759-1-vulab@iscas.ac.cn>
+In-Reply-To: <20251211040252.497759-1-vulab@iscas.ac.cn>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Sun, 28 Dec 2025 16:51:04 +0100
+X-Gm-Features: AQt7F2q4HOmCP3AtHKfQGHLB3c99yZpMtVEIsP3Gmo2gfisxBcr_gBvsZWBQEl4
+Message-ID: <CAPDyKFrPZqwDmgFuPfbpX+FF3-r9F-r+9+Mm5v8z5Wb7TQJvmg@mail.gmail.com>
+Subject: Re: [PATCH v4] pmdomain: imx: Fix reference count leak in imx_gpc_probe()
+To: Wentao Liang <vulab@iscas.ac.cn>
+Cc: shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+	festevam@gmail.com, linux-pm@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Dec 08, 2025 at 01:11:10PM -0600, Rob Herring wrote:
-> On Tue, Nov 25, 2025 at 04:42:26PM +0530, Manivannan Sadhasivam wrote:
-> > Add the devicetree binding for PCIe M.2 Mechanical Key M connector defined
-> > in the PCI Express M.2 Specification, r4.0, sec 5.3. This connector
-> > provides interfaces like PCIe and SATA to attach the Solid State Drives
-> > (SSDs) to the host machine along with additional interfaces like USB, and
-> > SMB for debugging and supplementary features. At any point of time, the
-> > connector can only support either PCIe or SATA as the primary host
-> > interface.
-> > 
-> > The connector provides a primary power supply of 3.3v, along with an
-> > optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
-> > 1.8v sideband signaling.
-> > 
-> > The connector also supplies optional signals in the form of GPIOs for fine
-> > grained power management.
-> > 
-> > Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > ---
-> >  .../bindings/connector/pcie-m2-m-connector.yaml    | 141 +++++++++++++++++++++
-> >  1 file changed, 141 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
-> > new file mode 100644
-> > index 000000000000..f65a05d93735
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
-> > @@ -0,0 +1,141 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/connector/pcie-m2-m-connector.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: PCIe M.2 Mechanical Key M Connector
-> > +
-> > +maintainers:
-> > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > +
-> > +description:
-> > +  A PCIe M.2 M connector node represents a physical PCIe M.2 Mechanical Key M
-> > +  connector. The Mechanical Key M connectors are used to connect SSDs to the
-> > +  host system over PCIe/SATA interfaces. These connectors also offer optional
-> > +  interfaces like USB, SMB.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: pcie-m2-m-connector
-> > +
-> > +  vpcie3v3-supply:
-> > +    description: A phandle to the regulator for 3.3v supply.
-> > +
-> > +  vpcie1v8-supply:
-> > +    description: A phandle to the regulator for VIO 1.8v supply.
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +    description: OF graph bindings modeling the interfaces exposed on the
-> > +      connector. Since a single connector can have multiple interfaces, every
-> > +      interface has an assigned OF graph port number as described below.
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: Host interfaces of the connector
-> > +
-> > +        properties:
-> > +          endpoint@0:
-> > +            $ref: /schemas/graph.yaml#/properties/endpoint
-> > +            description: PCIe interface
-> > +
-> > +          endpoint@1:
-> > +            $ref: /schemas/graph.yaml#/properties/endpoint
-> > +            description: SATA interface
-> 
-> 
-> Where's the binding changes to allow graph nodes on SATA and PCIe 
-> bindings? I suppose Thunderbolt/USB4 on USB-C connectors will need that 
-> too.
-> 
+On Thu, 11 Dec 2025 at 05:03, Wentao Liang <vulab@iscas.ac.cn> wrote:
+>
+> of_get_child_by_name() returns a node pointer with refcount incremented.
+> Use the __free() attribute to manage the pgc_node reference, ensuring
+> automatic of_node_put() cleanup when pgc_node goes out of scope.
+>
+> This eliminates the need for explicit error handling paths and avoids
+> reference count leaks.
+>
+> Fixes: 721cabf6c660 ("soc: imx: move PGC handling to a new GPC driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
 
-Raised dtschema PR for PCI [1] and added SATA binding change in v4. For
-Thunderbolt/USB4, there is no schema as of now. So skipping it until one gets
-added.
+Applied for fixes, thanks!
 
-[1] https://github.com/devicetree-org/dt-schema/pull/180
+Kind regards
+Uffe
 
-> > +
-> > +        anyOf:
-> > +          - required:
-> > +              - endpoint@0
-> > +          - required:
-> > +              - endpoint@1
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: USB 2.0 interface
-> > +
-> > +      port@2:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: SMB interface
-> 
-> SMB is SMBus? There's no graph support for I2C either. For that, we use 
-> 'i2c-parent'.
-> 
 
-Ack.
-
-> > +
-> > +    required:
-> > +      - port@0
-> > +
-> > +  clocks:
-> > +    description: 32.768 KHz Suspend Clock (SUSCLK) input from the host system to
-> > +      the M.2 card. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.1 for
-> > +      more details.
-> > +    maxItems: 1
-> > +
-> > +  pedet-gpios:
-> > +    description: GPIO controlled connection to PEDET signal. This signal is used
-> 
-> Instead of 'controlled connection' use just input or output. Arguably an 
-> input isn't GPIO controlled.
-> 
-
-Ack.
-
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
+>
+> ---
+> Change in V4:
+> - Fix typo error in code
+>
+> Change in V3:
+> - Ensure variable is assigned when using cleanup attribute
+>
+> Change in V2:
+> - Use __free() attribute instead of explicit of_node_put() calls
+> ---
+>  drivers/pmdomain/imx/gpc.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/pmdomain/imx/gpc.c b/drivers/pmdomain/imx/gpc.c
+> index f18c7e6e75dd..56a78cc86584 100644
+> --- a/drivers/pmdomain/imx/gpc.c
+> +++ b/drivers/pmdomain/imx/gpc.c
+> @@ -403,13 +403,12 @@ static int imx_gpc_old_dt_init(struct device *dev, struct regmap *regmap,
+>  static int imx_gpc_probe(struct platform_device *pdev)
+>  {
+>         const struct imx_gpc_dt_data *of_id_data = device_get_match_data(&pdev->dev);
+> -       struct device_node *pgc_node;
+> +       struct device_node *pgc_node __free(device_node)
+> +               = of_get_child_by_name(pdev->dev.of_node, "pgc");
+>         struct regmap *regmap;
+>         void __iomem *base;
+>         int ret;
+>
+> -       pgc_node = of_get_child_by_name(pdev->dev.of_node, "pgc");
+> -
+>         /* bail out if DT too old and doesn't provide the necessary info */
+>         if (!of_property_present(pdev->dev.of_node, "#power-domain-cells") &&
+>             !pgc_node)
+> --
+> 2.34.1
+>
+>
 
