@@ -1,328 +1,265 @@
-Return-Path: <linux-pm+bounces-40002-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40003-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42F01CE5F7C
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 06:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DB87CE60CD
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 07:53:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F396E3002D34
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 05:11:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 90AD03004187
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 06:53:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59D7204C36;
-	Mon, 29 Dec 2025 05:11:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 829CD238C29;
+	Mon, 29 Dec 2025 06:53:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eqjJaqn/"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="gSNOBtKK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBCC19E97F;
-	Mon, 29 Dec 2025 05:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF1D02253B0;
+	Mon, 29 Dec 2025 06:53:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766985111; cv=none; b=qjSqaAfHpLHrTk2AmWPio5CAGz+oyJJdKkExgJhhL/cuDnK8wHqXlfIfsX7KG9P2ROkgtj8GBUyrHcdUMDrSnyr293HxpG6tIFJlLUlGRG1QRcJfFJcG6y7iLJJCTCEftRh7dh14yPZUIJijaKpuHXQfic0fPNIVxnM/OQGEyU0=
+	t=1766991230; cv=none; b=hxWIEPJbf9HHwx2f2yEue5m3fx05u+2grQnuhn34k3JP4WIeovC2h3IiqCAOE/55L1ZoE7vAyYCP6vlKiON3/SYqmfSXPMFHqkby0kdQQmWo+IotM3GGwb/jGIYv8Pmlxdfd7cFwT9TUMLAGT8OIGthLQbv3YvpViFIz9NoGVNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766985111; c=relaxed/simple;
-	bh=cyDazONphFeU6MzdOTgshzyyI13WywObZm7Omu3DoCI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Ix+xmGzpVGlGw0nwzZL0xNibU4af8f6YGA3uZB7e1abt1Rf4FG3xeiXYjA9s5aYftRMWvVeuZp2YhkGRyID1cXT0KjtW0jADPTcffxyjREz9qy0LAqS+tdVMu83+QL8ajwdS7V0RiWwZikE+AoJGIPfBrFSehvtHv1g/Jk70Cz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eqjJaqn/; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1766985109; x=1798521109;
-  h=date:from:to:cc:subject:message-id;
-  bh=cyDazONphFeU6MzdOTgshzyyI13WywObZm7Omu3DoCI=;
-  b=eqjJaqn/iei2WgLtqMHuOGHIiGVEznMHMD6heB/O3DtwcQcjAaWX9w/2
-   bok7ew6UDd6iwcImrKsMDqHvEm3m0e/wsLL2Bv1YEJuZjJLs5OPkkwFc8
-   tFDJIL0BLqVUcNeyIhyYExoHLIWJMJv9jvQ542vXzPNWpqkjrvQr9tuII
-   u0624Z4ExgbAB2T0HkO74M6bVB80LpDaqZuceyGq7bEfZU7GYWpDd4dGK
-   2qllbun7CnhVwOvuTIIExuoMpafu2tKauyKrJ6WjtZ05Xte4Lt+yMOVV/
-   GZyPtzDqzfZ2ly8GhSFF3AzgkGRTqce0pz6Lm86sSl4M6CXrld4I2IU1Z
-   g==;
-X-CSE-ConnectionGUID: gI/OTsscSuubh4dN4tlk7w==
-X-CSE-MsgGUID: DZ1ZipNOQv6i/Bk8ieASyQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11655"; a="80049851"
-X-IronPort-AV: E=Sophos;i="6.21,185,1763452800"; 
-   d="scan'208";a="80049851"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2025 21:11:49 -0800
-X-CSE-ConnectionGUID: ypwQwb+aTrKo+V16eRPmww==
-X-CSE-MsgGUID: PmORmrT2Qym+ZUQ3Y98gqw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,185,1763452800"; 
-   d="scan'208";a="238250501"
-Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 28 Dec 2025 21:11:48 -0800
-Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1va5Xl-000000006xN-1OFt;
-	Mon, 29 Dec 2025 05:11:45 +0000
-Date: Mon, 29 Dec 2025 13:11:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH UNVERIFIED
- WARNING 0128b2cfd36c3ed57a57dc79f050aec14da61e5f
-Message-ID: <202512291329.x82hO2Pq-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1766991230; c=relaxed/simple;
+	bh=cl9G9gUCCefSwZQztfZ/hIVtxBY3FjWjwztkJQsRzbo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hY7FoA4WHNwJPJBGXrupFJMQddaRYqwEJFHRJWl4GBX1AfzjBJSxeu6qTCNtwVpfSd5UrUD5zzJmSlJsg/tq4uhrk4K4R1zNbhVKm2244DSm4kvqs99PzMPAhVfrUeHJ1f12cso8IXjrM4jW2AXGDq3gKEviejTYQvrDQ5LYLyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=gSNOBtKK; arc=none smtp.client-ip=54.254.200.128
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1766991205;
+	bh=i8sax+Q6GvwgMz1ddDPfZuAAjgqNWAWZQw9z3RdR4M8=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=gSNOBtKKjSWqQjlwHwK0be/jZdsd5ZLJQMDbL11IaYc6N67OpUQK8mGECbxkKwwyT
+	 g2Ou3h/pOaTbtl4BTRQBzbFytXipSvibY4q+7QNnS7Fl42XwGIKox9JfA0tnIh1t3R
+	 ytlyYuTV/IEj2tquu7AYwpAQh1eDHTES8nVUUHQA=
+X-QQ-mid: zesmtpip2t1766991200tff807f1a
+X-QQ-Originating-IP: 1tqCCaoGDM+BgSTgaxbKAyY0FdW+6zZmy2kGzi/eiwU=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 29 Dec 2025 14:53:18 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 13051461574331737292
+EX-QQ-RecipientCnt: 6
+From: tuhaowen <tuhaowen@uniontech.com>
+To: rafael@kernel.org
+Cc: pavel@kernel.org,
+	lenb@kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	tuhaowen@uniontech.com
+Subject: [PATCH v1] PM: sleep: Add configurable timeout and mode control for filesystem sync
+Date: Mon, 29 Dec 2025 14:52:51 +0800
+Message-Id: <20251229065251.3315787-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: OTUHZG7Ulf3mRVs5EzSz1vMVPSDFN1UjsWDd9Z+l/TPY5RfUAA26Ejw2
+	AZX54c2Q4KokRLO0xywpklkZFCXNrpEkSaJl6c3SXTTcUzfy7/koXwzWSybCw0onXQ/uKQk
+	ppHDLVy+IvXwr3TVi8V8xsHmrLN3+npk2EucjIb8+Bc/4HVZDTDnia4kNa5gS49Z0Eas8fZ
+	B1k3YmjfKLeAhRlUWE2U1KHJah+vP0RjLR/ndPb6JUu3tDH4YDIACO7MwUVBt9OHeEqdgIm
+	0j4eN7XV+3yiIchyMfeohbQye+mDgwj0lKOtqBNIdiJfGpu8W2q+3e7byDBOyJGl8Sv8vEv
+	JHqyKG+ho9D9WljTsvfWJN2FHhbX90PYyCyHDTLdd9uYGRHSx+Je67rHez97gXtqW/vJRQg
+	pNEelOSv+4TLg1070LhPuS0gcQ/aCg/tu9KA4J9uMrUkoRbXmCrnseTW38M9e6IrFuwvAes
+	9WbM1xAM8ArZcj17danemU6zoFAyPO/gPqDwsT/FDehmNC7HKXL2hEVHnvMMxdX8BqNgvhL
+	PmCToqyaAX3jB4bWrcCTzUYfLsUDXE/IkXZradX8IooeqdwpNYYmO4MxylpH2O6xTODI+0A
+	/fVMS8dXTrfbz7elk9wOfnGr8NYeLGbxZZjsCJHNfm8nUHV7qJItGV06nFBa7cibDl3Ho3o
+	OrrpJ2sv+BNOGZk6UUGGfg0tRNB0yoxu9n6bT/auLVWsD7qPck7WVMVdzX8FU0Z49QsfT9l
+	Wg4HKMAsQvcTxqWOh/V5GHiLZ/MoornxZwPNQQyKy3g/XlYvWlcZE6XWzqbPTBvsHZBIqrv
+	B3b/XPK873e7JZnXKyPNCbowJ9x/bZO16bNDs+HRgF6d4KRkst4czy90WFr7G5k6lvJrGP8
+	SEI2qAb904udNlUonQWOWSat7WCTRPNpU3aVa+Qn26gMkp20M0PgONAXrtT1aeJYelpu21t
+	OT85Zb8ivEaqAhamtgIjVhjP99YDkU9RGwPdzFnKkHSlm1GuQsYSfSotLFy+f4tfjRGFFrZ
+	+ohH1XmZjBGPbnrnRJcJMEbl26ULc=
+X-QQ-XMRINFO: MSVp+SPm3vtSI1QTLgDHQqIV1w2oNKDqfg==
+X-QQ-RECHKSPAM: 0
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 0128b2cfd36c3ed57a57dc79f050aec14da61e5f  Merge branch 'acpi-queue' into bleeding-edge
+When users trigger system suspend on desktop systems, filesystem sync
+can take 10-25 seconds or even longer if there are slow/faulty storage
+devices (e.g., a failing hard drive or disconnected USB drive). During
+this time, the screen goes black and the system appears completely
+frozen with no visual feedback. Users cannot distinguish whether the
+system is "syncing filesystems" or has "crashed/hung", leading them
+to perform a hard reset, potentially causing data loss.
 
-Unverified Warning (likely false positive, kindly check if interested):
+While the existing wakeup event mechanism allows aborting sync via key
+presses (designed for mobile devices), desktop/laptop users often don't
+realize they can press keys during the black screen. Instead, they tend
+to force power off by holding the power button, assuming the system has
+hung. This is especially problematic with faulty storage devices that
+cause indefinite sync hangs.
 
-    drivers/acpi/bus.c:297 acpi_run_osc() warn: sizeof(NUMBER)?
-    drivers/acpi/bus.c:335 acpi_osc_handshake() warn: sizeof(NUMBER)?
+This patch adds a timeout mechanism to automatically abort filesystem
+sync after a configurable duration, preventing indefinite hangs without
+requiring user intervention:
 
-Warning ids grouped by kconfigs:
+1. /sys/power/fs_sync_mode (0 or 1, default: 0)
+   - Mode 0: Check wakeup events, allow user to abort sync
+   - Mode 1: Only use timeout, ignore wakeup events
 
-recent_errors
-|-- i386-randconfig-141-20251228
-|   |-- drivers-acpi-bus.c-acpi_osc_handshake()-warn:sizeof(NUMBER)
-|   `-- drivers-acpi-bus.c-acpi_run_osc()-warn:sizeof(NUMBER)
-`-- x86_64-randconfig-161-20251228
-    |-- drivers-acpi-bus.c-acpi_osc_handshake()-warn:sizeof(NUMBER)
-    `-- drivers-acpi-bus.c-acpi_run_osc()-warn:sizeof(NUMBER)
+2. /sys/power/fs_sync_timeout (0-300 seconds, default: 0)
+   - Set maximum wait time for filesystem sync
 
-elapsed time: 1016m
+The fix adds timeout mechanism to pm_sleep_fs_sync(). When timeout
+expires or user presses a key (mode 0), the sync is aborted and
+suspend proceeds, preventing indefinite hangs. The default behavior
+(mode 0, timeout 0) maintains backward compatibility.
 
-configs tested: 225
-configs skipped: 4
+Link: https://lore.kernel.org/all/CAJZ5v0g_HXQjWfp=L0KetRCHMTD=QsP3wJKNZnadJic2yccCUQ@mail.gmail.com/
 
-tested configs:
-alpha                             allnoconfig    gcc-15.1.0
-alpha                            allyesconfig    gcc-15.1.0
-alpha                               defconfig    gcc-15.1.0
-arc                              allmodconfig    gcc-15.1.0
-arc                               allnoconfig    gcc-15.1.0
-arc                              allyesconfig    clang-22
-arc                              allyesconfig    gcc-15.1.0
-arc                                 defconfig    gcc-15.1.0
-arc                   randconfig-001-20251228    gcc-10.5.0
-arc                   randconfig-001-20251229    gcc-8.5.0
-arc                   randconfig-002-20251228    gcc-8.5.0
-arc                   randconfig-002-20251229    gcc-8.5.0
-arm                               allnoconfig    clang-22
-arm                              allyesconfig    gcc-15.1.0
-arm                        clps711x_defconfig    clang-22
-arm                          collie_defconfig    gcc-15.1.0
-arm                                 defconfig    clang-22
-arm                                 defconfig    gcc-15.1.0
-arm                      jornada720_defconfig    clang-22
-arm                   milbeaut_m10v_defconfig    gcc-14
-arm                        mvebu_v7_defconfig    gcc-14
-arm                   randconfig-001-20251228    gcc-8.5.0
-arm                   randconfig-001-20251229    gcc-8.5.0
-arm                   randconfig-002-20251228    gcc-15.1.0
-arm                   randconfig-002-20251229    gcc-8.5.0
-arm                   randconfig-003-20251228    clang-22
-arm                   randconfig-003-20251229    gcc-8.5.0
-arm                   randconfig-004-20251228    gcc-13.4.0
-arm                   randconfig-004-20251229    gcc-8.5.0
-arm                        realview_defconfig    clang-16
-arm                        spear6xx_defconfig    clang-22
-arm64                            alldefconfig    gcc-14
-arm64                            allmodconfig    clang-19
-arm64                            allmodconfig    clang-22
-arm64                             allnoconfig    gcc-15.1.0
-arm64                               defconfig    gcc-15.1.0
-arm64                 randconfig-001-20251228    gcc-8.5.0
-arm64                 randconfig-002-20251228    clang-22
-arm64                 randconfig-003-20251228    clang-22
-arm64                 randconfig-004-20251228    clang-22
-csky                             allmodconfig    gcc-15.1.0
-csky                              allnoconfig    gcc-15.1.0
-csky                                defconfig    gcc-15.1.0
-csky                  randconfig-001-20251228    gcc-11.5.0
-csky                  randconfig-002-20251228    gcc-14.3.0
-hexagon                          allmodconfig    clang-17
-hexagon                          allmodconfig    gcc-15.1.0
-hexagon                           allnoconfig    clang-22
-hexagon                             defconfig    clang-22
-hexagon                             defconfig    gcc-15.1.0
-hexagon               randconfig-001-20251228    clang-22
-hexagon               randconfig-002-20251228    clang-22
-i386                             allmodconfig    gcc-14
-i386                              allnoconfig    gcc-14
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20251228    gcc-14
-i386        buildonly-randconfig-001-20251229    gcc-14
-i386        buildonly-randconfig-002-20251228    clang-20
-i386        buildonly-randconfig-002-20251229    gcc-14
-i386        buildonly-randconfig-003-20251228    gcc-12
-i386        buildonly-randconfig-003-20251229    gcc-14
-i386        buildonly-randconfig-004-20251228    clang-20
-i386        buildonly-randconfig-004-20251229    gcc-14
-i386        buildonly-randconfig-005-20251228    clang-20
-i386        buildonly-randconfig-005-20251229    gcc-14
-i386        buildonly-randconfig-006-20251228    clang-20
-i386        buildonly-randconfig-006-20251229    gcc-14
-i386                                defconfig    clang-20
-i386                                defconfig    gcc-15.1.0
-i386                  randconfig-001-20251228    gcc-12
-i386                  randconfig-002-20251228    clang-20
-i386                  randconfig-003-20251228    gcc-14
-i386                  randconfig-004-20251228    gcc-14
-i386                  randconfig-005-20251228    gcc-14
-i386                  randconfig-006-20251228    gcc-14
-i386                  randconfig-007-20251228    gcc-14
-i386                  randconfig-011-20251229    gcc-14
-i386                  randconfig-012-20251229    gcc-14
-i386                  randconfig-013-20251229    gcc-14
-i386                  randconfig-014-20251229    gcc-14
-i386                  randconfig-015-20251229    gcc-14
-i386                  randconfig-016-20251229    gcc-14
-i386                  randconfig-017-20251229    gcc-14
-loongarch                        allmodconfig    clang-19
-loongarch                        allmodconfig    clang-22
-loongarch                         allnoconfig    clang-22
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20251228    clang-22
-loongarch             randconfig-002-20251228    gcc-15.1.0
-m68k                             allmodconfig    gcc-15.1.0
-m68k                              allnoconfig    gcc-15.1.0
-m68k                             allyesconfig    gcc-15.1.0
-m68k                                defconfig    gcc-15.1.0
-microblaze                        allnoconfig    gcc-15.1.0
-microblaze                       allyesconfig    gcc-15.1.0
-microblaze                          defconfig    gcc-15.1.0
-mips                             allmodconfig    gcc-15.1.0
-mips                              allnoconfig    gcc-15.1.0
-mips                             allyesconfig    gcc-15.1.0
-mips                          ath25_defconfig    gcc-14
-mips                     decstation_defconfig    gcc-15.1.0
-nios2                            allmodconfig    clang-22
-nios2                            allmodconfig    gcc-11.5.0
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    gcc-11.5.0
-nios2                 randconfig-001-20251228    gcc-11.5.0
-nios2                 randconfig-002-20251228    gcc-8.5.0
-openrisc                         allmodconfig    clang-22
-openrisc                         allmodconfig    gcc-15.1.0
-openrisc                          allnoconfig    gcc-15.1.0
-openrisc                            defconfig    gcc-15.1.0
-parisc                           allmodconfig    gcc-15.1.0
-parisc                            allnoconfig    gcc-15.1.0
-parisc                           allyesconfig    gcc-15.1.0
-parisc                              defconfig    gcc-15.1.0
-parisc                generic-64bit_defconfig    gcc-14
-parisc                randconfig-001-20251228    gcc-10.5.0
-parisc                randconfig-001-20251229    gcc-12.5.0
-parisc                randconfig-002-20251228    gcc-8.5.0
-parisc                randconfig-002-20251229    gcc-12.5.0
-parisc64                            defconfig    gcc-15.1.0
-powerpc                          allmodconfig    gcc-15.1.0
-powerpc                           allnoconfig    gcc-15.1.0
-powerpc                    mvme5100_defconfig    gcc-15.1.0
-powerpc               randconfig-001-20251228    clang-22
-powerpc               randconfig-001-20251229    gcc-12.5.0
-powerpc               randconfig-002-20251228    clang-22
-powerpc64             randconfig-001-20251228    gcc-15.1.0
-powerpc64             randconfig-001-20251229    gcc-12.5.0
-powerpc64             randconfig-002-20251228    gcc-8.5.0
-powerpc64             randconfig-002-20251229    gcc-12.5.0
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    gcc-15.1.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    clang-22
-riscv                 randconfig-001-20251228    clang-22
-riscv                 randconfig-002-20251228    clang-22
-s390                             allmodconfig    clang-18
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.1.0
-s390                                defconfig    clang-22
-s390                  randconfig-001-20251228    gcc-15.1.0
-s390                  randconfig-002-20251228    clang-22
-sh                               allmodconfig    gcc-15.1.0
-sh                                allnoconfig    gcc-15.1.0
-sh                               allyesconfig    gcc-15.1.0
-sh                                  defconfig    gcc-14
-sh                                  defconfig    gcc-15.1.0
-sh                    randconfig-001-20251228    gcc-13.4.0
-sh                    randconfig-002-20251228    gcc-15.1.0
-sh                             shx3_defconfig    gcc-14
-sparc                             allnoconfig    gcc-15.1.0
-sparc                               defconfig    gcc-15.1.0
-sparc                 randconfig-001-20251228    gcc-14.3.0
-sparc                 randconfig-001-20251229    gcc-14
-sparc                 randconfig-002-20251228    gcc-12.5.0
-sparc                 randconfig-002-20251229    gcc-14
-sparc64                          allmodconfig    clang-22
-sparc64                             defconfig    clang-20
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20251228    clang-22
-sparc64               randconfig-001-20251229    gcc-14
-sparc64               randconfig-002-20251228    clang-20
-sparc64               randconfig-002-20251229    gcc-14
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-14
-um                               allyesconfig    gcc-15.1.0
-um                                  defconfig    clang-22
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20251228    clang-22
-um                    randconfig-001-20251229    gcc-14
-um                    randconfig-002-20251228    clang-22
-um                    randconfig-002-20251229    gcc-14
-um                           x86_64_defconfig    clang-22
-um                           x86_64_defconfig    gcc-14
-x86_64                           allmodconfig    clang-20
-x86_64                            allnoconfig    clang-20
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20251228    gcc-14
-x86_64      buildonly-randconfig-001-20251229    gcc-14
-x86_64      buildonly-randconfig-002-20251228    gcc-14
-x86_64      buildonly-randconfig-002-20251229    gcc-14
-x86_64      buildonly-randconfig-003-20251228    gcc-14
-x86_64      buildonly-randconfig-003-20251229    gcc-14
-x86_64      buildonly-randconfig-004-20251228    gcc-14
-x86_64      buildonly-randconfig-004-20251229    gcc-14
-x86_64      buildonly-randconfig-005-20251228    gcc-14
-x86_64      buildonly-randconfig-005-20251229    gcc-14
-x86_64      buildonly-randconfig-006-20251228    clang-20
-x86_64      buildonly-randconfig-006-20251229    gcc-14
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20251228    clang-20
-x86_64                randconfig-002-20251228    clang-20
-x86_64                randconfig-003-20251228    clang-20
-x86_64                randconfig-004-20251228    gcc-14
-x86_64                randconfig-005-20251228    clang-20
-x86_64                randconfig-006-20251228    gcc-14
-x86_64                randconfig-011-20251228    gcc-14
-x86_64                randconfig-012-20251228    gcc-14
-x86_64                randconfig-013-20251228    clang-20
-x86_64                randconfig-014-20251228    clang-20
-x86_64                randconfig-015-20251228    clang-20
-x86_64                randconfig-016-20251228    gcc-12
-x86_64                randconfig-071-20251228    gcc-14
-x86_64                randconfig-071-20251229    clang-20
-x86_64                randconfig-072-20251229    clang-20
-x86_64                randconfig-072-20251229    gcc-14
-x86_64                randconfig-073-20251229    clang-20
-x86_64                randconfig-073-20251229    gcc-13
-x86_64                randconfig-074-20251229    clang-20
-x86_64                randconfig-075-20251229    clang-20
-x86_64                randconfig-076-20251229    clang-20
-x86_64                               rhel-9.4    clang-20
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    gcc-15.1.0
-xtensa                           allyesconfig    clang-22
-xtensa                randconfig-001-20251228    gcc-10.5.0
-xtensa                randconfig-001-20251229    gcc-14
-xtensa                randconfig-002-20251228    gcc-8.5.0
-xtensa                randconfig-002-20251229    gcc-14
+Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
+---
+ kernel/power/main.c | 94 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 91 insertions(+), 3 deletions(-)
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 03b2c5495c77..bb7dd73e18fc 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -102,6 +102,12 @@ static atomic_t pm_fs_sync_count = ATOMIC_INIT(0);
+ static struct workqueue_struct *pm_fs_sync_wq;
+ static DECLARE_WAIT_QUEUE_HEAD(pm_fs_sync_wait);
+ 
++/* Timeout for file system sync during suspend/hibernate (in seconds) */
++static unsigned int fs_sync_timeout_secs;
++
++/* File system sync mode: 0 = interrupt mode, 1 = timeout mode */
++static unsigned int fs_sync_mode;
++
+ static bool pm_fs_sync_completed(void)
+ {
+ 	return atomic_read(&pm_fs_sync_count) == 0;
+@@ -119,11 +125,15 @@ static DECLARE_WORK(pm_fs_sync_work, pm_fs_sync_work_fn);
+ /**
+  * pm_sleep_fs_sync() - Sync file systems in an interruptible way
+  *
+- * Return: 0 on successful file system sync, or -EBUSY if the file system sync
+- * was aborted.
++ * Return: 0 on successful file system sync,
++ *         -EBUSY if the file system sync was aborted by wakeup event,
++ *         -ETIME if the file system sync timed out.
+  */
+ int pm_sleep_fs_sync(void)
+ {
++	unsigned long timeout_jiffies = 0;
++	unsigned long start_time;
++
+ 	pm_wakeup_clear(0);
+ 
+ 	/*
+@@ -137,16 +147,90 @@ int pm_sleep_fs_sync(void)
+ 		queue_work(pm_fs_sync_wq, &pm_fs_sync_work);
+ 	}
+ 
++	/* Setup timeout only in timeout mode (mode 1) */
++	if (fs_sync_mode && fs_sync_timeout_secs > 0) {
++		timeout_jiffies = msecs_to_jiffies(fs_sync_timeout_secs * 1000);
++		start_time = jiffies;
++	}
++
+ 	while (!pm_fs_sync_completed()) {
+-		if (pm_wakeup_pending())
++		if (!fs_sync_mode && pm_wakeup_pending())
+ 			return -EBUSY;
+ 
++		if (fs_sync_mode && timeout_jiffies > 0 &&
++		    time_after(jiffies, start_time + timeout_jiffies)) {
++			pr_warn("PM: File system sync timed out after %u seconds, proceeding with suspend\n",
++				fs_sync_timeout_secs);
++			return -ETIME;
++		}
++
+ 		wait_event_timeout(pm_fs_sync_wait, pm_fs_sync_completed(),
+ 				   PM_FS_SYNC_WAKEUP_RESOLUTION);
+ 	}
+ 
+ 	return 0;
+ }
++
++/*
++ * fs_sync_timeout: Control file system sync timeout during suspend/hibernate.
++ *
++ * show() returns the timeout value in seconds.
++ * store() accepts a value in seconds. 0 means no timeout (only interrupted by wakeup events).
++ * Non-zero values will cause the sync to be interrupted after the specified time.
++ */
++static ssize_t fs_sync_timeout_show(struct kobject *kobj,
++				    struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%u\n", fs_sync_timeout_secs);
++}
++
++static ssize_t fs_sync_timeout_store(struct kobject *kobj,
++				     struct kobj_attribute *attr,
++				     const char *buf, size_t n)
++{
++	unsigned long val;
++
++	if (kstrtoul(buf, 10, &val))
++		return -EINVAL;
++
++	/* Allow values from 0 to 300 seconds (5 minutes) */
++	if (val > 300)
++		return -EINVAL;
++
++	fs_sync_timeout_secs = val;
++	return n;
++}
++
++power_attr(fs_sync_timeout);
++
++/*
++ * fs_sync_mode: Control file system sync behavior mode
++ *
++ * 0 = interrupt mode (default): check wakeup events during sync, can abort suspend/hibernate
++ * 1 = timeout mode: ignore wakeup events during sync, only use timeout
++ */
++static ssize_t fs_sync_mode_show(struct kobject *kobj,
++				  struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%u\n", fs_sync_mode);
++}
++
++static ssize_t fs_sync_mode_store(struct kobject *kobj,
++				   struct kobj_attribute *attr,
++				   const char *buf, size_t n)
++{
++	unsigned long val;
++
++	if (kstrtoul(buf, 10, &val))
++		return -EINVAL;
++
++	if (val > 1)
++		return -EINVAL;
++
++	fs_sync_mode = val;
++	return n;
++}
++power_attr(fs_sync_mode);
+ #endif /* CONFIG_SUSPEND || CONFIG_HIBERNATION */
+ 
+ /* Routines for PM-transition notifications */
+@@ -1085,6 +1169,10 @@ static struct attribute * g[] = {
+ 	&mem_sleep_attr.attr,
+ 	&sync_on_suspend_attr.attr,
+ #endif
++#if defined(CONFIG_SUSPEND) || defined(CONFIG_HIBERNATION)
++	&fs_sync_timeout_attr.attr,
++	&fs_sync_mode_attr.attr,
++#endif
+ #ifdef CONFIG_PM_AUTOSLEEP
+ 	&autosleep_attr.attr,
+ #endif
+-- 
+2.20.1
+
 
