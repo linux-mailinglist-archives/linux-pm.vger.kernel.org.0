@@ -1,364 +1,328 @@
-Return-Path: <linux-pm+bounces-40001-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40002-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51F7BCE5E91
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 05:33:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42F01CE5F7C
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 06:11:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 243C03004B99
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 04:33:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F396E3002D34
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 05:11:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E7181E49F;
-	Mon, 29 Dec 2025 04:33:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59D7204C36;
+	Mon, 29 Dec 2025 05:11:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eCW0ySH+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eqjJaqn/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48AEF3A1E6B
-	for <linux-pm@vger.kernel.org>; Mon, 29 Dec 2025 04:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BBCC19E97F;
+	Mon, 29 Dec 2025 05:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766982783; cv=none; b=CstVngxfosrxO7TvRMvxmsz2JzpVMj/E/aIco0zlovz1D/rnonpbvpGOI1fCsLIgvQTUPkNK+3DattZ5xczvrIHch3whEt8MZgAQOE7lEEgwANDfFy50Xu0ucbXaT4QHIPcC1Eg8Iyb67YniNL0NokjmUgg6thhomM0lNeLPVZY=
+	t=1766985111; cv=none; b=qjSqaAfHpLHrTk2AmWPio5CAGz+oyJJdKkExgJhhL/cuDnK8wHqXlfIfsX7KG9P2ROkgtj8GBUyrHcdUMDrSnyr293HxpG6tIFJlLUlGRG1QRcJfFJcG6y7iLJJCTCEftRh7dh14yPZUIJijaKpuHXQfic0fPNIVxnM/OQGEyU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766982783; c=relaxed/simple;
-	bh=ErKI2Z2/Kk3WiDTOjfPDUCn4imOWSzq/e3xSTJnl980=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qZnE8DkRXapSX7jD3pP4qu9OcysNMfx6iJxDTnYoY2XHd4orpYIPRLeXVHicemNbLD5yFjnOc8ZOlStXdJHhcjGs7Ba4q6b/VQHfm+rodT8BvnpBiLurTHtNc+JvlK8fHrp+H4KDW/cHX6yVWikGDOIgwxaA9GRWjvymVIIRI+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eCW0ySH+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD8DCC116C6;
-	Mon, 29 Dec 2025 04:33:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766982781;
-	bh=ErKI2Z2/Kk3WiDTOjfPDUCn4imOWSzq/e3xSTJnl980=;
-	h=From:To:Cc:Subject:Date:From;
-	b=eCW0ySH+cLwedhCmTz02YCl3TIiQQzZJK5hCXDgc7jzB8gz41BP8DSM/lIa1mWvyO
-	 vDpvu0HeifngCrai+U2X1K3X2du3HXsSn/EDHUeKHVTd1pGAa6KFVe9sPlbsHNueNO
-	 5DW0WrwJKBw3nJx9l22Cwq8RWHkk/X30zw3s5DCS4S00TWUaHc2ZDgJfo5FmNSeKzZ
-	 e8nqYN7CaafOiMuOBcvWAtddxdA1iA8GYowE6lIu6KkCi+LAlQA6ow5FgxLJ5sGEb4
-	 AnHU8Ord7G+1mMyIKKKaw9u2DF7CWnYLCmthestb6JwNAkTL4J9OuXVOeDIzc9Nkej
-	 wfq4EygUlMSRA==
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-pm@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	tzungbi@kernel.org
-Subject: [PATCH] pmdomain: mediatek: Break lock dependency to `prepare_lock`
-Date: Mon, 29 Dec 2025 04:32:44 +0000
-Message-ID: <20251229043244.4103262-1-tzungbi@kernel.org>
-X-Mailer: git-send-email 2.52.0.351.gbe84eed79e-goog
+	s=arc-20240116; t=1766985111; c=relaxed/simple;
+	bh=cyDazONphFeU6MzdOTgshzyyI13WywObZm7Omu3DoCI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Ix+xmGzpVGlGw0nwzZL0xNibU4af8f6YGA3uZB7e1abt1Rf4FG3xeiXYjA9s5aYftRMWvVeuZp2YhkGRyID1cXT0KjtW0jADPTcffxyjREz9qy0LAqS+tdVMu83+QL8ajwdS7V0RiWwZikE+AoJGIPfBrFSehvtHv1g/Jk70Cz0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eqjJaqn/; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766985109; x=1798521109;
+  h=date:from:to:cc:subject:message-id;
+  bh=cyDazONphFeU6MzdOTgshzyyI13WywObZm7Omu3DoCI=;
+  b=eqjJaqn/iei2WgLtqMHuOGHIiGVEznMHMD6heB/O3DtwcQcjAaWX9w/2
+   bok7ew6UDd6iwcImrKsMDqHvEm3m0e/wsLL2Bv1YEJuZjJLs5OPkkwFc8
+   tFDJIL0BLqVUcNeyIhyYExoHLIWJMJv9jvQ542vXzPNWpqkjrvQr9tuII
+   u0624Z4ExgbAB2T0HkO74M6bVB80LpDaqZuceyGq7bEfZU7GYWpDd4dGK
+   2qllbun7CnhVwOvuTIIExuoMpafu2tKauyKrJ6WjtZ05Xte4Lt+yMOVV/
+   GZyPtzDqzfZ2ly8GhSFF3AzgkGRTqce0pz6Lm86sSl4M6CXrld4I2IU1Z
+   g==;
+X-CSE-ConnectionGUID: gI/OTsscSuubh4dN4tlk7w==
+X-CSE-MsgGUID: DZ1ZipNOQv6i/Bk8ieASyQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11655"; a="80049851"
+X-IronPort-AV: E=Sophos;i="6.21,185,1763452800"; 
+   d="scan'208";a="80049851"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2025 21:11:49 -0800
+X-CSE-ConnectionGUID: ypwQwb+aTrKo+V16eRPmww==
+X-CSE-MsgGUID: PmORmrT2Qym+ZUQ3Y98gqw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,185,1763452800"; 
+   d="scan'208";a="238250501"
+Received: from lkp-server02.sh.intel.com (HELO dd3453e2b682) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 28 Dec 2025 21:11:48 -0800
+Received: from kbuild by dd3453e2b682 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1va5Xl-000000006xN-1OFt;
+	Mon, 29 Dec 2025 05:11:45 +0000
+Date: Mon, 29 Dec 2025 13:11:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH UNVERIFIED
+ WARNING 0128b2cfd36c3ed57a57dc79f050aec14da61e5f
+Message-ID: <202512291329.x82hO2Pq-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Break a circular locking dependency between the Generic Power Domain
-lock (`genpd->mlock`) and the clock framework's `prepare_lock`.  Move
-the prepare() to the domain initialization phase and the unprepare()
-to the cleanup phase.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 0128b2cfd36c3ed57a57dc79f050aec14da61e5f  Merge branch 'acpi-queue' into bleeding-edge
 
-The possible deadlock occurs in the following scenario:
+Unverified Warning (likely false positive, kindly check if interested):
 
-1. `genpd_power_on` acquires `genpd->mlock` and then calls the driver's
-   `scpsys_power_on`.  The driver calls `clk_bulk_prepare_enable`,
-   which attempts to acquire `prepare_lock`.
+    drivers/acpi/bus.c:297 acpi_run_osc() warn: sizeof(NUMBER)?
+    drivers/acpi/bus.c:335 acpi_osc_handshake() warn: sizeof(NUMBER)?
 
-> -> #0 (prepare_lock){+.+.}-{3:3}:
->        __lock_acquire
->        lock_acquire
->        __mutex_lock_common
->        mutex_lock_nested
->        clk_prepare
->        clk_bulk_prepare
->        scpsys_power_on
->        genpd_power_on
+Warning ids grouped by kconfigs:
 
-2. A clock provider (managed by a power domain) is resumed.
-   `clk_prepare` acquires `prepare_lock` and triggers a runtime resume of
-   its power domain, which attempts to acquire `genpd->mlock`.
+recent_errors
+|-- i386-randconfig-141-20251228
+|   |-- drivers-acpi-bus.c-acpi_osc_handshake()-warn:sizeof(NUMBER)
+|   `-- drivers-acpi-bus.c-acpi_run_osc()-warn:sizeof(NUMBER)
+`-- x86_64-randconfig-161-20251228
+    |-- drivers-acpi-bus.c-acpi_osc_handshake()-warn:sizeof(NUMBER)
+    `-- drivers-acpi-bus.c-acpi_run_osc()-warn:sizeof(NUMBER)
 
-> -> #1 (&genpd->mlock){+.+.}-{3:3}:
->        __mutex_lock_common
->        mutex_lock_nested
->        genpd_lock_mtx
->        genpd_runtime_resume
->        __rpm_callback
->        rpm_callback
->        rpm_resume
->        __pm_runtime_resume
->        clk_core_prepare
->        clk_prepare
->        clk_bulk_prepare
+elapsed time: 1016m
 
-This creates a cycle: `mlock` -> `prepare_lock` -> `mlock`.
+configs tested: 225
+configs skipped: 4
 
-> Possible unsafe locking scenario:
->
->       CPU0                    CPU1
->       ----                    ----
->  lock(&genpd->mlock);
->                               lock(prepare_lock);
->                               lock(&genpd->mlock);
->  lock(prepare_lock);
+tested configs:
+alpha                             allnoconfig    gcc-15.1.0
+alpha                            allyesconfig    gcc-15.1.0
+alpha                               defconfig    gcc-15.1.0
+arc                              allmodconfig    gcc-15.1.0
+arc                               allnoconfig    gcc-15.1.0
+arc                              allyesconfig    clang-22
+arc                              allyesconfig    gcc-15.1.0
+arc                                 defconfig    gcc-15.1.0
+arc                   randconfig-001-20251228    gcc-10.5.0
+arc                   randconfig-001-20251229    gcc-8.5.0
+arc                   randconfig-002-20251228    gcc-8.5.0
+arc                   randconfig-002-20251229    gcc-8.5.0
+arm                               allnoconfig    clang-22
+arm                              allyesconfig    gcc-15.1.0
+arm                        clps711x_defconfig    clang-22
+arm                          collie_defconfig    gcc-15.1.0
+arm                                 defconfig    clang-22
+arm                                 defconfig    gcc-15.1.0
+arm                      jornada720_defconfig    clang-22
+arm                   milbeaut_m10v_defconfig    gcc-14
+arm                        mvebu_v7_defconfig    gcc-14
+arm                   randconfig-001-20251228    gcc-8.5.0
+arm                   randconfig-001-20251229    gcc-8.5.0
+arm                   randconfig-002-20251228    gcc-15.1.0
+arm                   randconfig-002-20251229    gcc-8.5.0
+arm                   randconfig-003-20251228    clang-22
+arm                   randconfig-003-20251229    gcc-8.5.0
+arm                   randconfig-004-20251228    gcc-13.4.0
+arm                   randconfig-004-20251229    gcc-8.5.0
+arm                        realview_defconfig    clang-16
+arm                        spear6xx_defconfig    clang-22
+arm64                            alldefconfig    gcc-14
+arm64                            allmodconfig    clang-19
+arm64                            allmodconfig    clang-22
+arm64                             allnoconfig    gcc-15.1.0
+arm64                               defconfig    gcc-15.1.0
+arm64                 randconfig-001-20251228    gcc-8.5.0
+arm64                 randconfig-002-20251228    clang-22
+arm64                 randconfig-003-20251228    clang-22
+arm64                 randconfig-004-20251228    clang-22
+csky                             allmodconfig    gcc-15.1.0
+csky                              allnoconfig    gcc-15.1.0
+csky                                defconfig    gcc-15.1.0
+csky                  randconfig-001-20251228    gcc-11.5.0
+csky                  randconfig-002-20251228    gcc-14.3.0
+hexagon                          allmodconfig    clang-17
+hexagon                          allmodconfig    gcc-15.1.0
+hexagon                           allnoconfig    clang-22
+hexagon                             defconfig    clang-22
+hexagon                             defconfig    gcc-15.1.0
+hexagon               randconfig-001-20251228    clang-22
+hexagon               randconfig-002-20251228    clang-22
+i386                             allmodconfig    gcc-14
+i386                              allnoconfig    gcc-14
+i386                             allyesconfig    gcc-14
+i386        buildonly-randconfig-001-20251228    gcc-14
+i386        buildonly-randconfig-001-20251229    gcc-14
+i386        buildonly-randconfig-002-20251228    clang-20
+i386        buildonly-randconfig-002-20251229    gcc-14
+i386        buildonly-randconfig-003-20251228    gcc-12
+i386        buildonly-randconfig-003-20251229    gcc-14
+i386        buildonly-randconfig-004-20251228    clang-20
+i386        buildonly-randconfig-004-20251229    gcc-14
+i386        buildonly-randconfig-005-20251228    clang-20
+i386        buildonly-randconfig-005-20251229    gcc-14
+i386        buildonly-randconfig-006-20251228    clang-20
+i386        buildonly-randconfig-006-20251229    gcc-14
+i386                                defconfig    clang-20
+i386                                defconfig    gcc-15.1.0
+i386                  randconfig-001-20251228    gcc-12
+i386                  randconfig-002-20251228    clang-20
+i386                  randconfig-003-20251228    gcc-14
+i386                  randconfig-004-20251228    gcc-14
+i386                  randconfig-005-20251228    gcc-14
+i386                  randconfig-006-20251228    gcc-14
+i386                  randconfig-007-20251228    gcc-14
+i386                  randconfig-011-20251229    gcc-14
+i386                  randconfig-012-20251229    gcc-14
+i386                  randconfig-013-20251229    gcc-14
+i386                  randconfig-014-20251229    gcc-14
+i386                  randconfig-015-20251229    gcc-14
+i386                  randconfig-016-20251229    gcc-14
+i386                  randconfig-017-20251229    gcc-14
+loongarch                        allmodconfig    clang-19
+loongarch                        allmodconfig    clang-22
+loongarch                         allnoconfig    clang-22
+loongarch                           defconfig    clang-19
+loongarch             randconfig-001-20251228    clang-22
+loongarch             randconfig-002-20251228    gcc-15.1.0
+m68k                             allmodconfig    gcc-15.1.0
+m68k                              allnoconfig    gcc-15.1.0
+m68k                             allyesconfig    gcc-15.1.0
+m68k                                defconfig    gcc-15.1.0
+microblaze                        allnoconfig    gcc-15.1.0
+microblaze                       allyesconfig    gcc-15.1.0
+microblaze                          defconfig    gcc-15.1.0
+mips                             allmodconfig    gcc-15.1.0
+mips                              allnoconfig    gcc-15.1.0
+mips                             allyesconfig    gcc-15.1.0
+mips                          ath25_defconfig    gcc-14
+mips                     decstation_defconfig    gcc-15.1.0
+nios2                            allmodconfig    clang-22
+nios2                            allmodconfig    gcc-11.5.0
+nios2                             allnoconfig    gcc-11.5.0
+nios2                               defconfig    gcc-11.5.0
+nios2                 randconfig-001-20251228    gcc-11.5.0
+nios2                 randconfig-002-20251228    gcc-8.5.0
+openrisc                         allmodconfig    clang-22
+openrisc                         allmodconfig    gcc-15.1.0
+openrisc                          allnoconfig    gcc-15.1.0
+openrisc                            defconfig    gcc-15.1.0
+parisc                           allmodconfig    gcc-15.1.0
+parisc                            allnoconfig    gcc-15.1.0
+parisc                           allyesconfig    gcc-15.1.0
+parisc                              defconfig    gcc-15.1.0
+parisc                generic-64bit_defconfig    gcc-14
+parisc                randconfig-001-20251228    gcc-10.5.0
+parisc                randconfig-001-20251229    gcc-12.5.0
+parisc                randconfig-002-20251228    gcc-8.5.0
+parisc                randconfig-002-20251229    gcc-12.5.0
+parisc64                            defconfig    gcc-15.1.0
+powerpc                          allmodconfig    gcc-15.1.0
+powerpc                           allnoconfig    gcc-15.1.0
+powerpc                    mvme5100_defconfig    gcc-15.1.0
+powerpc               randconfig-001-20251228    clang-22
+powerpc               randconfig-001-20251229    gcc-12.5.0
+powerpc               randconfig-002-20251228    clang-22
+powerpc64             randconfig-001-20251228    gcc-15.1.0
+powerpc64             randconfig-001-20251229    gcc-12.5.0
+powerpc64             randconfig-002-20251228    gcc-8.5.0
+powerpc64             randconfig-002-20251229    gcc-12.5.0
+riscv                            allmodconfig    clang-22
+riscv                             allnoconfig    gcc-15.1.0
+riscv                            allyesconfig    clang-16
+riscv                               defconfig    clang-22
+riscv                 randconfig-001-20251228    clang-22
+riscv                 randconfig-002-20251228    clang-22
+s390                             allmodconfig    clang-18
+s390                              allnoconfig    clang-22
+s390                             allyesconfig    gcc-15.1.0
+s390                                defconfig    clang-22
+s390                  randconfig-001-20251228    gcc-15.1.0
+s390                  randconfig-002-20251228    clang-22
+sh                               allmodconfig    gcc-15.1.0
+sh                                allnoconfig    gcc-15.1.0
+sh                               allyesconfig    gcc-15.1.0
+sh                                  defconfig    gcc-14
+sh                                  defconfig    gcc-15.1.0
+sh                    randconfig-001-20251228    gcc-13.4.0
+sh                    randconfig-002-20251228    gcc-15.1.0
+sh                             shx3_defconfig    gcc-14
+sparc                             allnoconfig    gcc-15.1.0
+sparc                               defconfig    gcc-15.1.0
+sparc                 randconfig-001-20251228    gcc-14.3.0
+sparc                 randconfig-001-20251229    gcc-14
+sparc                 randconfig-002-20251228    gcc-12.5.0
+sparc                 randconfig-002-20251229    gcc-14
+sparc64                          allmodconfig    clang-22
+sparc64                             defconfig    clang-20
+sparc64                             defconfig    gcc-14
+sparc64               randconfig-001-20251228    clang-22
+sparc64               randconfig-001-20251229    gcc-14
+sparc64               randconfig-002-20251228    clang-20
+sparc64               randconfig-002-20251229    gcc-14
+um                               allmodconfig    clang-19
+um                                allnoconfig    clang-22
+um                               allyesconfig    gcc-14
+um                               allyesconfig    gcc-15.1.0
+um                                  defconfig    clang-22
+um                                  defconfig    gcc-14
+um                             i386_defconfig    gcc-14
+um                    randconfig-001-20251228    clang-22
+um                    randconfig-001-20251229    gcc-14
+um                    randconfig-002-20251228    clang-22
+um                    randconfig-002-20251229    gcc-14
+um                           x86_64_defconfig    clang-22
+um                           x86_64_defconfig    gcc-14
+x86_64                           allmodconfig    clang-20
+x86_64                            allnoconfig    clang-20
+x86_64                           allyesconfig    clang-20
+x86_64      buildonly-randconfig-001-20251228    gcc-14
+x86_64      buildonly-randconfig-001-20251229    gcc-14
+x86_64      buildonly-randconfig-002-20251228    gcc-14
+x86_64      buildonly-randconfig-002-20251229    gcc-14
+x86_64      buildonly-randconfig-003-20251228    gcc-14
+x86_64      buildonly-randconfig-003-20251229    gcc-14
+x86_64      buildonly-randconfig-004-20251228    gcc-14
+x86_64      buildonly-randconfig-004-20251229    gcc-14
+x86_64      buildonly-randconfig-005-20251228    gcc-14
+x86_64      buildonly-randconfig-005-20251229    gcc-14
+x86_64      buildonly-randconfig-006-20251228    clang-20
+x86_64      buildonly-randconfig-006-20251229    gcc-14
+x86_64                              defconfig    gcc-14
+x86_64                                  kexec    clang-20
+x86_64                randconfig-001-20251228    clang-20
+x86_64                randconfig-002-20251228    clang-20
+x86_64                randconfig-003-20251228    clang-20
+x86_64                randconfig-004-20251228    gcc-14
+x86_64                randconfig-005-20251228    clang-20
+x86_64                randconfig-006-20251228    gcc-14
+x86_64                randconfig-011-20251228    gcc-14
+x86_64                randconfig-012-20251228    gcc-14
+x86_64                randconfig-013-20251228    clang-20
+x86_64                randconfig-014-20251228    clang-20
+x86_64                randconfig-015-20251228    clang-20
+x86_64                randconfig-016-20251228    gcc-12
+x86_64                randconfig-071-20251228    gcc-14
+x86_64                randconfig-071-20251229    clang-20
+x86_64                randconfig-072-20251229    clang-20
+x86_64                randconfig-072-20251229    gcc-14
+x86_64                randconfig-073-20251229    clang-20
+x86_64                randconfig-073-20251229    gcc-13
+x86_64                randconfig-074-20251229    clang-20
+x86_64                randconfig-075-20251229    clang-20
+x86_64                randconfig-076-20251229    clang-20
+x86_64                               rhel-9.4    clang-20
+x86_64                          rhel-9.4-func    clang-20
+x86_64                    rhel-9.4-kselftests    clang-20
+x86_64                          rhel-9.4-rust    clang-20
+xtensa                            allnoconfig    gcc-15.1.0
+xtensa                           allyesconfig    clang-22
+xtensa                randconfig-001-20251228    gcc-10.5.0
+xtensa                randconfig-001-20251229    gcc-14
+xtensa                randconfig-002-20251228    gcc-8.5.0
+xtensa                randconfig-002-20251229    gcc-14
 
-This breaks the dependency chain in #0.
-
-This is a revert of f0fce06e345d ("soc: mtk-pm-domains: Fix the clock
-prepared issue").  However, addressing the issue by moving the
-unprepare()/prepare() to PM suspend()/resume() callbacks.
-
-Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
----
- drivers/pmdomain/mediatek/mtk-pm-domains.c | 99 +++++++++++++++++-----
- 1 file changed, 79 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-index 80561d27f2b2..2da0f62988c0 100644
---- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-+++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-@@ -318,12 +318,12 @@ static int scpsys_hwv_power_on(struct generic_pm_domain *genpd)
- 	if (ret)
- 		goto err_infra;
- 
--	ret = clk_bulk_prepare_enable(pd->num_clks, pd->clks);
-+	ret = clk_bulk_enable(pd->num_clks, pd->clks);
- 	if (ret)
- 		goto err_reg;
- 
- 	/* For HWV the subsys clocks refer to the HWV low power subsystem */
--	ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
-+	ret = clk_bulk_enable(pd->num_subsys_clks, pd->subsys_clks);
- 	if (ret)
- 		goto err_disable_clks;
- 
-@@ -365,7 +365,7 @@ static int scpsys_hwv_power_on(struct generic_pm_domain *genpd)
- 	}
- 
- 	/* It's done! Disable the HWV low power subsystem clocks */
--	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
-+	clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
- 
- 	if (MTK_SCPD_CAPS(pd, MTK_SCPD_INFRA_PWR_CTL))
- 		scpsys_sec_infra_power_on(false);
-@@ -373,9 +373,9 @@ static int scpsys_hwv_power_on(struct generic_pm_domain *genpd)
- 	return 0;
- 
- err_disable_subsys_clks:
--	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
-+	clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
- err_disable_clks:
--	clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
-+	clk_bulk_disable(pd->num_clks, pd->clks);
- err_reg:
- 	scpsys_regulator_disable(pd->supply);
- err_infra:
-@@ -398,7 +398,7 @@ static int scpsys_hwv_power_off(struct generic_pm_domain *genpd)
- 			return ret;
- 	}
- 
--	ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
-+	ret = clk_bulk_enable(pd->num_subsys_clks, pd->subsys_clks);
- 	if (ret)
- 		goto err_infra;
- 
-@@ -437,8 +437,8 @@ static int scpsys_hwv_power_off(struct generic_pm_domain *genpd)
- 	if (ret)
- 		goto err_disable_subsys_clks;
- 
--	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
--	clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
-+	clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
-+	clk_bulk_disable(pd->num_clks, pd->clks);
- 
- 	scpsys_regulator_disable(pd->supply);
- 
-@@ -448,7 +448,7 @@ static int scpsys_hwv_power_off(struct generic_pm_domain *genpd)
- 	return 0;
- 
- err_disable_subsys_clks:
--	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
-+	clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
- err_infra:
- 	if (MTK_SCPD_CAPS(pd, MTK_SCPD_INFRA_PWR_CTL))
- 		scpsys_sec_infra_power_on(false);
-@@ -616,7 +616,7 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
- 	if (ret)
- 		return ret;
- 
--	ret = clk_bulk_prepare_enable(pd->num_clks, pd->clks);
-+	ret = clk_bulk_enable(pd->num_clks, pd->clks);
- 	if (ret)
- 		goto err_reg;
- 
-@@ -638,8 +638,7 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
- 	 * access.
- 	 */
- 	if (!MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
--		ret = clk_bulk_prepare_enable(pd->num_subsys_clks,
--					      pd->subsys_clks);
-+		ret = clk_bulk_enable(pd->num_subsys_clks, pd->subsys_clks);
- 		if (ret)
- 			goto err_pwr_ack;
- 	}
-@@ -653,8 +652,7 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
- 		goto err_disable_sram;
- 
- 	if (MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
--		ret = clk_bulk_prepare_enable(pd->num_subsys_clks,
--					      pd->subsys_clks);
-+		ret = clk_bulk_enable(pd->num_subsys_clks, pd->subsys_clks);
- 		if (ret)
- 			goto err_enable_bus_protect;
- 	}
-@@ -667,10 +665,9 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
- 	scpsys_sram_disable(pd);
- err_disable_subsys_clks:
- 	if (!MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION))
--		clk_bulk_disable_unprepare(pd->num_subsys_clks,
--					   pd->subsys_clks);
-+		clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
- err_pwr_ack:
--	clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
-+	clk_bulk_disable(pd->num_clks, pd->clks);
- err_reg:
- 	scpsys_regulator_disable(pd->supply);
- 	return ret;
-@@ -695,7 +692,7 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
- 		regmap_set_bits(scpsys->base, pd->data->ext_buck_iso_offs,
- 				pd->data->ext_buck_iso_mask);
- 
--	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
-+	clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
- 
- 	if (MTK_SCPD_CAPS(pd, MTK_SCPD_MODEM_PWRSEQ))
- 		scpsys_modem_pwrseq_off(pd);
-@@ -708,7 +705,7 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
- 	if (ret < 0)
- 		return ret;
- 
--	clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
-+	clk_bulk_disable(pd->num_clks, pd->clks);
- 
- 	scpsys_regulator_disable(pd->supply);
- 
-@@ -855,6 +852,14 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
- 		pd->genpd.flags |= GENPD_FLAG_IRQ_SAFE;
- 	}
- 
-+	ret = clk_bulk_prepare(pd->num_clks, pd->clks);
-+	if (ret)
-+		goto err_put_subsys_clocks;
-+
-+	ret = clk_bulk_prepare(pd->num_subsys_clks, pd->subsys_clks);
-+	if (ret)
-+		goto err_unprepare_clocks;
-+
- 	/*
- 	 * Initially turn on all domains to make the domains usable
- 	 * with !CONFIG_PM and to get the hardware in sync with the
-@@ -869,7 +874,7 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
- 		ret = pd->genpd.power_on(&pd->genpd);
- 		if (ret < 0) {
- 			dev_err(scpsys->dev, "%pOF: failed to power on domain: %d\n", node, ret);
--			goto err_put_subsys_clocks;
-+			goto err_unprepare_subsys_clocks;
- 		}
- 
- 		if (MTK_SCPD_CAPS(pd, MTK_SCPD_ALWAYS_ON))
-@@ -888,6 +893,10 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
- 
- 	return scpsys->pd_data.domains[id];
- 
-+err_unprepare_subsys_clocks:
-+	clk_bulk_unprepare(pd->num_subsys_clks, pd->subsys_clks);
-+err_unprepare_clocks:
-+	clk_bulk_unprepare(pd->num_clks, pd->clks);
- err_put_subsys_clocks:
- 	clk_bulk_put(pd->num_subsys_clks, pd->subsys_clks);
- err_put_clocks:
-@@ -965,6 +974,8 @@ static void scpsys_remove_one_domain(struct scpsys_domain *pd)
- 	if (scpsys_domain_is_on(pd))
- 		scpsys_power_off(&pd->genpd);
- 
-+	clk_bulk_unprepare(pd->num_clks, pd->clks);
-+	clk_bulk_unprepare(pd->num_subsys_clks, pd->subsys_clks);
- 	clk_bulk_put(pd->num_clks, pd->clks);
- 	clk_bulk_put(pd->num_subsys_clks, pd->subsys_clks);
- }
-@@ -1208,6 +1219,7 @@ static int scpsys_probe(struct platform_device *pdev)
- 	if (!scpsys)
- 		return -ENOMEM;
- 
-+	platform_set_drvdata(pdev, scpsys);
- 	scpsys->dev = dev;
- 	scpsys->soc_data = soc;
- 
-@@ -1270,12 +1282,59 @@ static int scpsys_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static int scpsys_suspend(struct device *dev)
-+{
-+	struct scpsys *scpsys = dev_get_drvdata(dev);
-+	struct generic_pm_domain *genpd;
-+	struct scpsys_domain *pd;
-+	int i;
-+
-+	for (i = 0; i < scpsys->pd_data.num_domains; i++) {
-+		genpd = scpsys->pd_data.domains[i];
-+		if (!genpd)
-+			continue;
-+
-+		pd = to_scpsys_domain(genpd);
-+		clk_bulk_unprepare(pd->num_clks, pd->clks);
-+		clk_bulk_unprepare(pd->num_subsys_clks, pd->subsys_clks);
-+	}
-+	return 0;
-+}
-+
-+static int scpsys_resume(struct device *dev)
-+{
-+	struct scpsys *scpsys = dev_get_drvdata(dev);
-+	struct generic_pm_domain *genpd;
-+	struct scpsys_domain *pd;
-+	int i, ret;
-+
-+	for (i = 0; i < scpsys->pd_data.num_domains; i++) {
-+		genpd = scpsys->pd_data.domains[i];
-+		if (!genpd)
-+			continue;
-+
-+		pd = to_scpsys_domain(genpd);
-+		ret = clk_bulk_prepare(pd->num_clks, pd->clks);
-+		if (ret)
-+			return ret;
-+		ret = clk_bulk_prepare(pd->num_subsys_clks, pd->subsys_clks);
-+		if (ret)
-+			return ret;
-+	}
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops scpsys_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(scpsys_suspend, scpsys_resume)
-+};
-+
- static struct platform_driver scpsys_pm_domain_driver = {
- 	.probe = scpsys_probe,
- 	.driver = {
- 		.name = "mtk-power-controller",
- 		.suppress_bind_attrs = true,
- 		.of_match_table = scpsys_of_match,
-+		.pm = &scpsys_pm_ops,
- 	},
- };
- builtin_platform_driver(scpsys_pm_domain_driver);
--- 
-2.52.0.351.gbe84eed79e-goog
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
