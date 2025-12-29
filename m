@@ -1,191 +1,121 @@
-Return-Path: <linux-pm+bounces-40015-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40016-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00EA8CE6C2C
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 13:47:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1E90CE6E38
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 14:32:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id ABEC33008D54
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 12:47:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7FD1030041A4
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 13:32:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA7DD312813;
-	Mon, 29 Dec 2025 12:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3323C1F30C3;
+	Mon, 29 Dec 2025 13:32:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OdrQVnUy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gGOmdrYd"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE22223D288;
-	Mon, 29 Dec 2025 12:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E5A5632
+	for <linux-pm@vger.kernel.org>; Mon, 29 Dec 2025 13:32:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767012428; cv=none; b=BxmXZSf+qr4aXMH4aOiaeuKySfBhWlP2wOQAjmlDqvdcI+JCoehntx7Gvgo0iqf3MkjtqeSR4LWz7hCLzJpSe9ge9L5PwisEfzHYctAvukamV3I/b05JWl4rDOvYtvtpts0Sg0W/26vIzj/HQ5fdtnu0kIMJiW8QSUeqbHv2oL0=
+	t=1767015143; cv=none; b=ZTmaG9K+VpnPzmaNw8twQwLfC3yvhm9a5KuxmjwmQlReHdNIEtu92SQyC8p31le5c7b/lbps0J+FtSaDOXb+lCPGCYwj0mW+sXlqXNUY2dW2Q2eOFRyXYSzd5pE8Abe9BY2cjFtM4owMPbK970n1aXYcBT/UFDdFfh6wVMxeS0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767012428; c=relaxed/simple;
-	bh=AWyCsD5z8XTiBaogb1lYO1zNJ3O45jf71lJcJFSyGSs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZY7iLh9Yoi2sei/pkfo3WuAXtQGWtRPGilUDpxoeI4BXvAOfXtBiTwXH0ekEW2ePzd73yyrogDczEPLQe9dBhogckJgmPTCgJ3D+0vyZiIS3CUz1BJxn3D3J+uZOL1EopRk8IQ+/iz80xOKlGVrPSMYBDkGKedooOTPguDk0x7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OdrQVnUy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F05C4CEF7;
-	Mon, 29 Dec 2025 12:47:04 +0000 (UTC)
+	s=arc-20240116; t=1767015143; c=relaxed/simple;
+	bh=nfLEknyMby51WHoQKrvojs6QQ1y0Bf2YJAgFmRSFOxY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=foImwjygUWOaRi2nYcaBn4TamTgxN66Gv7y3WgQUWtWBonEP+MBJxVV1qfYCW3LSWTzweu+pXclILxPruTiWrDjt/zyjZABfAM+mMvdmIiZMygIFD5JaWQaE9KTpLjlPVARmeqpV3nhZuGzpCnkEjx1PRbriuIcfyMhCWPu/g9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gGOmdrYd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D700EC4CEF7
+	for <linux-pm@vger.kernel.org>; Mon, 29 Dec 2025 13:32:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767012428;
-	bh=AWyCsD5z8XTiBaogb1lYO1zNJ3O45jf71lJcJFSyGSs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OdrQVnUyeo3oDm+8aiStBPpYW+5rFs1jV0FPhSkEb5m2H/GBaA8g+PdruziFH8g3d
-	 sDBzXomBPgRBfCnT2DHN8FimB+lSektt2+saNIPJNWpRdXm9W90WHk2Rq65SRdWzHu
-	 YlJs169f44QPKgh1GgQ6ywnO/aZLXKXtVBOYU+VpvsanOKntKtpj2CU5BIErXub+AT
-	 0gxXn3O+U1Udh1dxg59t6CHaWHrKIey1HQmC2CoSd6Af8hhuJ6s9Ml7knYJy65/VOL
-	 arhLhAt8RMIW5q9OiHIVQMpclU4GR/SnD5p+aIkckg/8sXkLhj96MqQAHrqvMRuS4R
-	 Jv4r5UGMSEY6g==
-Message-ID: <4daabe4d-bebc-4072-b7c6-0c46ee087040@kernel.org>
-Date: Mon, 29 Dec 2025 13:47:02 +0100
+	s=k20201202; t=1767015142;
+	bh=nfLEknyMby51WHoQKrvojs6QQ1y0Bf2YJAgFmRSFOxY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gGOmdrYd9MvFLpB5zO8m1JQTl4BELrqVbHkPgWjKfuVu+ZXztZqsBgZC9WtIFpWNY
+	 lyy+DF9az2AKonzB8pqZWAeTP97Coj9Z48UjuCq6AelxdVBLKhLpg62qBvcFFSaxEc
+	 fF3zdh0rQQ+PoZUvO+RayYRPrOfJ7MX60KTGU9rZtwmqEji5n3ymIO4xQQbZWPWwLL
+	 ks5i6b7t44/baWELnrA/OB47WdA600kczFheDgMMz8ItB3nZRskWwC3tKIQk8J9nen
+	 tPxUbxTvPzERiPGFYKed/nt6ihwrJ6dqbImRYKPfLVeir0ITZ1Y3WaHg112dqNvipP
+	 /4ye22Y6dTN1A==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-65d0953cd49so5908902eaf.0
+        for <linux-pm@vger.kernel.org>; Mon, 29 Dec 2025 05:32:22 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUdrl8FchSV1RUo8MYSpios04Yqw3d51kt0iecuJBTCGIsYEfEE3qzbpcdImUO8RKfWTfMGZVrRlg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEfFmdQ+R7QURrqQK1emAE18QhOl5yoBUNTVOmc3lc+qt0jV3N
+	d3Gia4o3hc/vdJk6FlvA0F9oeHy91JtJRfH+z5g16wlcGPFblGQYZTm5RSs9ylOJslm4koAoONr
+	/OYjlBQkBDyTsejTQ/ZfnMtwAe1Yg8AE=
+X-Google-Smtp-Source: AGHT+IGHmF/UeipIR0M7ntD24u3HCLarZY8hIdMfE2PZSXhQV8l8tZQwln/n+/TOpC3AObg5tYaqUCM0chgWqYUGXVM=
+X-Received: by 2002:a05:6820:4814:b0:65d:697:2d52 with SMTP id
+ 006d021491bc7-65d0e9f049fmr8750934eaf.37.1767015141978; Mon, 29 Dec 2025
+ 05:32:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V1 2/3] dt-bindings: power: sbs-battery: add polling
- interval property
-To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>,
- "sre@kernel.org" <sre@kernel.org>, "robh@kernel.org" <robh@kernel.org>,
- "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc: GEO-CHHER-bsp-development <bsp-development.geo@leica-geosystems.com>
-References: <20251229085636.4082852-1-Qing-wu.Li@leica-geosystems.com.cn>
- <20251229085636.4082852-2-Qing-wu.Li@leica-geosystems.com.cn>
- <63f1fd11-6628-4a83-b376-1e4efad6fd63@kernel.org>
- <GV2PR06MB108094811EF351CEA446A1ACBD7BFA@GV2PR06MB10809.eurprd06.prod.outlook.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <GV2PR06MB108094811EF351CEA446A1ACBD7BFA@GV2PR06MB10809.eurprd06.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <6251576.lOV4Wx5bFT@rafael.j.wysocki> <ead94047-f1de-4349-99f4-f836382b91d9@kylinos.cn>
+In-Reply-To: <ead94047-f1de-4349-99f4-f836382b91d9@kylinos.cn>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 29 Dec 2025 14:32:09 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0j257Pomf0_gPdUfdgmxo6H9oV+jrp+_y_UC4G9kf1cNg@mail.gmail.com>
+X-Gm-Features: AQt7F2p6TLY0KHpywLrxv83DqOZDhlCSfHXRNrrEh8yQtoTEtOt4Y14iz-klyWE
+Message-ID: <CAJZ5v0j257Pomf0_gPdUfdgmxo6H9oV+jrp+_y_UC4G9kf1cNg@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: sleep: Fix suspend_test() at the TEST_CORE level
+To: luriwen <luriwen@kylinos.cn>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 29/12/2025 10:50, LI Qingwu wrote:
-> 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzk@kernel.org>
->> Sent: Monday, December 29, 2025 5:16 PM
->> To: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>; sre@kernel.org;
->> robh@kernel.org; krzk+dt@kernel.org; conor+dt@kernel.org;
->> linux-pm@vger.kernel.org; devicetree@vger.kernel.org;
->> linux-kernel@vger.kernel.org
->> Cc: GEO-CHHER-bsp-development
->> <bsp-development.geo@leica-geosystems.com>
->> Subject: Re: [PATCH V1 2/3] dt-bindings: power: sbs-battery: add polling interval
->> property
->>
->> This email is not from Hexagon’s Office 365 instance. Please be careful while
->> clicking links, opening attachments, or replying to this email.
->>
->>
->> On 29/12/2025 09:56, LI Qingwu wrote:
->>> Add the optional sbs,monitoring-interval-ms property for SBS-compliant
->>> batteries to configure a periodic polling interval on systems without
->>> interrupt support. The driver periodically checks the battery status
->>> and notifies userspace of changes when this property is set, and
->>> ignores it when a GPIO interrupt is available.
->>>
->>> The property defaults to 0 to preserve existing behaviour.
->>>
->>> Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
->>> ---
->>>  .../bindings/power/supply/sbs,sbs-battery.yaml           | 9 +++++++++
->>>  1 file changed, 9 insertions(+)
->>>
->>> diff --git
->>> a/Documentation/devicetree/bindings/power/supply/sbs,sbs-battery.yaml
->>> b/Documentation/devicetree/bindings/power/supply/sbs,sbs-battery.yaml
->>> index 90b9d3d882a4..fbdd5dd5dda8 100644
->>> ---
->>> a/Documentation/devicetree/bindings/power/supply/sbs,sbs-battery.yaml
->>> +++ b/Documentation/devicetree/bindings/power/supply/sbs,sbs-battery.y
->>> +++ aml
->>> @@ -59,6 +59,15 @@ properties:
->>>        master implementation.
->>>      type: boolean
->>>
->>> +  sbs,monitoring-interval-ms:
->>> +    description:
->>> +      Polling interval in milliseconds for battery status monitoring on
->>> +      systems without interrupt support. The driver periodically checks
->>> +      the battery status and notifies userspace of changes. Ignored when
->>> +      GPIO interrupt is available.
->>
->>
->> You described the desired Linux feature or behavior, not the actual hardware.
->> The bindings are about the latter, so instead you need to rephrase the property
->> and its description to match actual hardware
->> capabilities/features/configuration etc.
->>
-> 
-> Thanks for the quick feedback!
-> How about this?
-> 
->   sbs,monitoring-interval-ms:
->     description:
->       Polling interval in milliseconds for battery status monitoring.
->       Intended for hardware designs where the battery's interrupt signal
->       is not connected, necessitating periodic status checks to detect
->       changes.
+On Mon, Dec 29, 2025 at 3:31=E2=80=AFAM luriwen <luriwen@kylinos.cn> wrote:
+>
+> =E5=9C=A8 2025/12/26 21:50, Rafael J. Wysocki =E5=86=99=E9=81=93:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Commit a10ad1b10402 ("PM: suspend: Make pm_test delay interruptible by
+> > wakeup events") replaced mdelay() in suspend_test() with msleep() which
+> > does not work at the TEST_CORE test level that calls suspend_test()
+> > while running on one CPU with interrupts off.
+> >
+> > Address this by making suspend_test() check if the test level is
+> > suitable for using msleep() and use mdelay() otherwise.
+> >
+> > Fixes: a10ad1b10402 ("PM: suspend: Make pm_test delay interruptible by =
+wakeup events")
+> > Reported-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > Closes: https://lore.kernel.org/linux-pm/aUsAk0k1N9hw8IkY@venus/
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >   kernel/power/suspend.c |    9 ++++++---
+> >   1 file changed, 6 insertions(+), 3 deletions(-)
+> >
+> > --- a/kernel/power/suspend.c
+> > +++ b/kernel/power/suspend.c
+> > @@ -349,9 +349,12 @@ static int suspend_test(int level)
+> >       if (pm_test_level =3D=3D level) {
+> >               pr_info("suspend debug: Waiting for %d second(s).\n",
+> >                               pm_test_delay);
+> > -             for (i =3D 0; i < pm_test_delay && !pm_wakeup_pending(); =
+i++)
+> > -                     msleep(1000);
+> > -
+> > +             for (i =3D 0; i < pm_test_delay && !pm_wakeup_pending(); =
+i++) {
+> > +                     if (level > TEST_CORE)
+> > +                             msleep(1000);
+> > +                     else
+> > +                             mdelay(1000);
+> > +             }
+>
+> Maybe this can be rewritten as follows
+>
+>                 for (i =3D 0; i < pm_test_delay && !pm_wakeup_pending(); =
+i++)
+>                         level =3D=3D TEST_CORE ? mdelay(1000) : msleep(10=
+00);
 
-
-Nothing changed. It's exactly the same.
-
-Explain me how "polling interval" by Linux driver is a hardware value?
-What was not clear in my feedback?
-
-Best regards,
-Krzysztof
+Not really, the current trend is to avoid the ternary operator.
 
