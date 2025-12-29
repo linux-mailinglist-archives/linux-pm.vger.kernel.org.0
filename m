@@ -1,167 +1,124 @@
-Return-Path: <linux-pm+bounces-40020-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40021-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51B69CE842B
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 23:03:35 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6059CE8470
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 23:12:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B2C463025A7B
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 22:00:27 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 9015030021DD
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Dec 2025 22:12:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17F7F3115BD;
-	Mon, 29 Dec 2025 22:00:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rostedt.org header.i=@rostedt.org header.b="pgydrzZb";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hUL/be+n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F652274FF5;
+	Mon, 29 Dec 2025 22:12:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92EF7261B9B;
-	Mon, 29 Dec 2025 22:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA9E82C2372
+	for <linux-pm@vger.kernel.org>; Mon, 29 Dec 2025 22:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767045623; cv=none; b=I8PkFDQCuhJYvr9fu5ZSHyU8JS6HLoqDNn2Wh2UWc6bmt+k+UfYyyKbrPEHskMg+OhLigxNA6na8WSBlmxBtHm6UROb5PZIoDaxNPCgvROduUTNQMZzr7yPNSPzng7Lii/zIuw/3IwtnuWKZg5UW38NIQfXjUhq1kqUXMmA8/uE=
+	t=1767046334; cv=none; b=rXC3MReVRIA+tbpmEHD2oCrUGVYZ3IY5CNNU0LXry3F2JWMU4jKrtZuX9f/2uruazvqI/Qd2uNQsD6RCRCeHMvGKk2kTL37C8XWpHQx5eX0dlsRlwZtg3d3c6bkgXKRQql6PSdwmG+DQTlI7iTPIsdNh95wpIrHSbnALxmgHeT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767045623; c=relaxed/simple;
-	bh=e1ZpqeYV96WGhzswy3N9lCtRQ0ojGzRE3LStGOklIn8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XEXBpcf6k4CX2xUxE4/iyiRSiWwXsIwwqCqQV6xxLCIZMk+g/mb7FmQfjJoyjOQGOUF49bP7ceQbP2NXAYuAnknKJiNekH77f/ozI5kRQn/5eA4MVR97NQqyML5FadRu7gL7nAdIXiPk1a4ysZIexj3C7AqYHf820c5EL2n6xDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rostedt.org; spf=pass smtp.mailfrom=rostedt.org; dkim=pass (2048-bit key) header.d=rostedt.org header.i=@rostedt.org header.b=pgydrzZb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hUL/be+n; arc=none smtp.client-ip=103.168.172.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rostedt.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rostedt.org
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.phl.internal (Postfix) with ESMTP id 08D781380260;
-	Mon, 29 Dec 2025 17:00:18 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Mon, 29 Dec 2025 17:00:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rostedt.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1767045618;
-	 x=1767052818; bh=O0ZJU8DaqzJoW8dJ+OnRjJXbin20aHsOsnu3lVtVS/E=; b=
-	pgydrzZbhfxZrfTds1ZaT3udPpLePseKQ0ti+HbUrz1daDYZX/FA+JWmVvDHi5Uy
-	KQuDmc982scU8ueDuzTaD4lT2FPTnUQJ4rYfCzWzziaGCj1rbVpZdEV48d7nlBUJ
-	INJBpxL3sdWCu2cfhnbMl/j7cxA/t2fZnzX7clVxprGJNymOcBrIQNfqgOe2qQkl
-	OuL5kEsHoL0D+xzuQeZZkAldMUg9Y596x3jNwgeHHS2Mzx/buqg2Ie+DqHRkeLK7
-	lAbbszayWaunTxWlDrX2RbnInUBS7FKDxq7DoukY4oik+nxWevSwvDzgvvnmsM4L
-	8QnJX2RwNzTbQ2IOJEFL7g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1767045618; x=
-	1767052818; bh=O0ZJU8DaqzJoW8dJ+OnRjJXbin20aHsOsnu3lVtVS/E=; b=h
-	UL/be+nAK20snGbOKBc/uFgayhhPWAz60SZWy+BJcWMQBesMo/SNWb7uygeFVwD/
-	crOskNtHD4J7ukB4qmoHqbCnHEfrx5b3xgnAZqCGVY9A2WswBRnyPFowKeRKxANa
-	dk1iubDd2IDR+aokGCV5/w6BQ60kTCXdLF7p074zao1mdlP0Vv+6wHLp0A04GU1s
-	lCZkFY1Xek4stfCLrFJ3eVt7qXFo/iRaxNmAyDMkzizJk0DX3cE8kVTPrc8fWaCS
-	MkR56B5EYXwI/lfJ70yXatH+t+ngyWr9vRwbX9W8Deu5guACsdd4pOhyYUyxCiDw
-	sYMJuozqeC3WRRMNIDfYA==
-X-ME-Sender: <xms:8PlSaf40ZhDJ0bnKyPIf2R69fIwqDPctibIRrkrj7Z7pda6HKBLNYQ>
-    <xme:8PlSaQkSTIKEvLNCKfg7-iL09V52gch3CtS7XTc73nGeCYRsgC-9dI_Y7FrTvf-qm
-    enyLRBwG-7CVYJhb7i-xQ8gx3ltUyN1yIThzw3xKewuUyCHDMsb>
-X-ME-Received: <xmr:8PlSaaFhH_upQzRWw86M2C-liXartwbQ4RX18Z-jR6iYVRZG8V6uH-KD6CdBtaQVp0ZbLdHP>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdejkedvkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfgjfhfogggtgfesthejredtredtvdenucfhrhhomhepufhtvghvvghn
-    ucftohhsthgvughtuceoshhtvghvvghnsehrohhsthgvughtrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeelteehvdekvdfgfffgvefhgfdutdfgueeuvedujeelvdeluddugefhteeg
-    tdetgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hsthgvvhgvnhesrhhoshhtvgguthdrohhrghdpnhgspghrtghpthhtohepgedupdhmohgu
-    vgepshhmthhpohhuthdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpd
-    hrtghpthhtoheptghhrhhishhtihgrnhdrlhhovghhlhgvsegrrhhmrdgtohhmpdhrtghp
-    thhtohepfihushgrmhhuvghlsehgohhoghhlvgdrtghomhdprhgtphhtthhopehrrgihrd
-    hhuhgrnhhgsegrmhgurdgtohhmpdhrtghpthhtohepghgruhhthhgrmhdrshhhvghnohih
-    segrmhgurdgtohhmpdhrtghpthhtohepmhgrrhhiohdrlhhimhhonhgtihgvlhhlohesrg
-    hmugdrtghomhdprhgtphhtthhopehpvghrrhihrdihuhgrnhesrghmugdrtghomhdprhgt
-    phhtthhopegtohhrsggvtheslhifnhdrnhgvthdprhgtphhtthhopehvihhrvghshhdrkh
-    humhgrrheslhhinhgrrhhordhorhhg
-X-ME-Proxy: <xmx:8PlSaQYGgalNw5SjPdhrKAnCLLFUEoQGrOSVs3tkY2TExqc8clVHjA>
-    <xmx:8PlSaRI6B8RsVmiJPWVAQ_ziecOBFE6_QF8KSusnBWzUjhmyYLHHNw>
-    <xmx:8PlSaRyHBo-bvTd8HYnRPio7ljvW4x2WArRI8dzfGkLYWwNzAb4mjg>
-    <xmx:8PlSaR1Gi1SOcnlTZoZbSP9EfKmkyIm-eBsBp0j0sRwJPqg5aUIV2g>
-    <xmx:8vlSaSZc8DEhckn2AumEN10TY2bNWg389EoEctNBAVXwOp63LLBOD0Dk>
-Feedback-ID: id06e481b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 29 Dec 2025 17:00:14 -0500 (EST)
-Date: Mon, 29 Dec 2025 17:00:21 -0500
-From: Steven Rostedt <steven@rostedt.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Christian Loehle <christian.loehle@arm.com>,
- Samuel Wu <wusamuel@google.com>, Huang Rui <ray.huang@amd.com>,
- "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Perry Yuan <perry.yuan@amd.com>, Jonathan Corbet <corbet@lwn.net>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Len Brown <lenb@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
- James Clark <james.clark@linaro.org>, kernel-team@android.com,
- linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] cpufreq: Replace trace_cpu_frequency with
- trace_policy_frequency
-Message-ID: <20251229170021.71cc5425@gandalf.local.home>
-In-Reply-To: <20251229165212.5bd8508d@gandalf.local.home>
-References: <20251201202437.3750901-1-wusamuel@google.com>
-	<20251201202437.3750901-2-wusamuel@google.com>
-	<f28577c1-ca95-43ca-b179-32e2cd46d054@arm.com>
-	<CAJZ5v0hAmgjozeX0egBs_ii_zzKXGPsPBUWwmGD+23KD++Rzqw@mail.gmail.com>
-	<20251204114844.54953b01@gandalf.local.home>
-	<CAJZ5v0irO1zmh=un+8vDQ8h2k-sHFTpCPCwr=iVRPcozHMRKHA@mail.gmail.com>
-	<20251229165212.5bd8508d@gandalf.local.home>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1767046334; c=relaxed/simple;
+	bh=Q97l49UMcLW/9HbN7nVb7C9OE3vu87fPNbVab3j4xoU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eseeDKXebdPmsqWhcQ6cvquoQHh/vq/QKKov84heOx2+SkjoozzKuv4CQISHHjX2YwvA18loOXCdR5/+ir2OqqSoXQm4U8ObJdA2y66F8JoVaae77DamTXrvk08n33CPbqw6nUMu0o05GdBGI2M1XEox302Zri0tDHs3xBrJ3hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AFEB4497;
+	Mon, 29 Dec 2025 14:12:02 -0800 (PST)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EBCC23F694;
+	Mon, 29 Dec 2025 14:12:04 -0800 (PST)
+Date: Mon, 29 Dec 2025 23:12:06 +0100
+From: Beata Michalska <beata.michalska@arm.com>
+To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+Cc: Will Deacon <will@kernel.org>, catalin.marinas@arm.com,
+	rafael@kernel.org, viresh.kumar@linaro.org, sudeep.holla@arm.com,
+	gregkh@linuxfoundation.org, dakr@kernel.org,
+	ionela.voinescu@arm.com, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, linuxarm@huawei.com,
+	jonathan.cameron@huawei.com, vincent.guittot@linaro.org,
+	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com,
+	zhangpengjie2@huawei.com, wangzhi12@huawei.com,
+	linhongye@h-partners.com
+Subject: Re: [PATCH v6 0/3] arm64: topology: Handle AMU FIE setup on CPU
+ hotplug
+Message-ID: <aVL8tp7k1ne9DWSX@arm.com>
+References: <20251119081356.2495290-1-zhenglifeng1@huawei.com>
+ <aS2z0EURwHbbGZab@arm.com>
+ <9b6882dc-a91a-42d6-bf76-347338930d71@huawei.com>
+ <aS8GZOuaS1-j14MD@arm.com>
+ <29253319-ced9-4ab6-a58e-28afdf235cde@huawei.com>
+ <aTx2V4am0FNHm03R@google.com>
+ <62ad0257-aa50-4ab6-bd46-64c3963e4b94@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62ad0257-aa50-4ab6-bd46-64c3963e4b94@huawei.com>
 
-On Mon, 29 Dec 2025 16:52:12 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> On Thu, 4 Dec 2025 18:24:57 +0100
-> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> 
-> > My concern is that the patch effectively removes one trace point
-> > (cpu_frequency) and adds another one with a different format
-> > (policy_frequency), updates one utility in the kernel tree and expects
-> > everyone else to somehow know that they should switch over.
+On Sat, Dec 20, 2025 at 05:09:52PM +0800, zhenglifeng (A) wrote:
+> On 2025/12/13 4:08, Will Deacon wrote:
+> > On Fri, Dec 12, 2025 at 05:27:09PM +0800, zhenglifeng (A) wrote:
+> >> On 2025/12/2 23:31, Beata Michalska wrote:
+> >>> On Tue, Dec 02, 2025 at 11:05:25AM +0800, zhenglifeng (A) wrote:
+> >>>> On 2025/12/1 23:27, Beata Michalska wrote:
+> >>>>> Hi,
+> >>>>>
+> >>>>> Apologies for the delay in reviewing this - currently in progress....
+> >>>>> Out of curiosity: what's the cpufreq driver used for testing this series ?
+> >>>>
+> >>>> I used cppc_cpufreq for testing this. But with some modifications in
+> >>>> processor_driver.c, or you'll find that the driver will fail to load with
+> >>>> maxcpus set. The modification below is only a temporary solution. I'm still
+> >>>> working on that.
+> >>>>
+> >>> Right, so overall the implementation looks good - thanks for that.
+> >>> There are two issues though with the cppc cpufreq driver.
+> >>>
+> >>> One: as you have already noticed - it fails to register when
+> >>> cpumask_present != cpumask_online.
+> >>>
+> >>> Second: it will mix the sources of the freq scale if not all CPUs within the
+> >>> policy have AMUs enabled/valid. This is due to the fact that at the time of
+> >>> registering the driver and initializing the FIE support policy->cpus ==
+> >>> policy->related_cpus. Assuming scenario when there are two CPUs within the
+> >>> policy, one being offline and missing valid AMU counters,
+> >>> the topology_set_scale_freq_source from cppc cpufreq driver will register
+> >>> the tick handler for both CPUs, whereas AMU support will (rightly so) register
+> >>> only for the firs one. When the second CPU comes online, the mismatch will be
+> >>> detected and the arch callback will get cleared for the first CPU, but the
+> >>> second one will remain unchanged.
+> >>>
+> >>> That said, I do not think any of those issues is a blocker for this series.
+> >>> But both would need fixing.
+> >>
+> >> I believe Beata is OK with this series. So I think we can move ahead with it
+> >> now.
 > > 
-> > I know about at least several people who have their own scripts using
-> > this tracepoint though.  
+> > Please repost at -rc1. It would be nice to have an Ack from Beata...
 > 
-> Hi Rafael,
+> Hi Beata,
 > 
-> Can you reach out to those that have scripts that use this trace event to
-> see if it can be changed?
+> It would be nice if you could give this patch an Ack.
 > 
-> Thanks,
+> Thanks.
+> 
+Apologies, 've been away.
 
-I got a bunch of "Undelivered Mail Returned to Sender". It seems that gmail
-thinks my goodmis.org account is now spam :-p
+Acked-by: Beata Michalska <beata.michalska@arm.com>
 
--- Steve
-
+---
+BR
+Beata
+> > 
+> > Will
+> > 
+> 
 
