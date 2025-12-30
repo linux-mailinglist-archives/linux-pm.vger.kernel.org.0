@@ -1,154 +1,169 @@
-Return-Path: <linux-pm+bounces-40044-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40045-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4B33CE9B5D
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 13:56:44 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2DBACE9CC1
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 14:36:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 22FDA301BE84
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 12:56:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D1BC03011B10
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 13:36:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1475A1A0BF1;
-	Tue, 30 Dec 2025 12:56:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC797236454;
+	Tue, 30 Dec 2025 13:36:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M0eVuIVQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cKOqd7B4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3514818FDBE
-	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 12:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A53A22B8C5
+	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 13:36:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767099400; cv=none; b=J6QnfNWb121zak8qJtXAeheZWsHMzd0ImkIJEsBrYKQFFLFX2cLw37ewxttOmxQF5LsfOJdz9rzDaZq4KiqVx/LeLO6hukpJKcCFqn1+E99YSVdqjSf5V881qvP5UBEGl+q5/gCJn1e34D/4qJ1NowYTUni5HKzDqDHHM/fKWlM=
+	t=1767101764; cv=none; b=a+tVVNw7xLDsTmt7V4mUCOxdJgvOuibIGKVsBqD3WZ+6USUVmzaMnNRAYplVxx0cOf/1OpyFJKMVGEgd4opVCKcbW0wjLz5n0/3inTreD4Z/TijhDKxPCCgopulpGN2xFRNdii5nxICOGf8CoGaZaz+eT4Cz9j55bvoioa+wdM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767099400; c=relaxed/simple;
-	bh=qA+Llm8/LCWJPs0YBfi84Z6KAfPrxe6ryFR18gOX7Lo=;
-	h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:References:
-	 Cc:In-Reply-To:To; b=IqtO/5tDu5220is5TCu6RfBJe2I1fTJcKmJsPygr1HYrduCkOQPlRru022urNvwkBNFD10yfGjMeWv9zLaQoFAC1N1MH3pGNoOZT9+/6Hqp4KmZiCaZWUizvOJMipaDLp3A3T25EwaYLH/mGM5KhSr09gi5yjS739zlhl+UXX8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M0eVuIVQ; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4779adb38d3so65180125e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 04:56:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767099396; x=1767704196; darn=vger.kernel.org;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1g1kb/JOi9XsJPGmGm57a9CaF95ijegnXyJMo6Mx7xQ=;
-        b=M0eVuIVQDXLgtFb0RSfTRIefHUd2B3yf2xVI9XuDNUQtg9i2Jjr/BAfv62IIiHoXlE
-         3ybRYxDwOh5SmfLM7sbo0Gvc2AB8tdJiXgo/8exI9biloB6h1O8LvG7laS+khJXumr/w
-         MTeNGywJnzUb/qmnog9KgaO5MV1Bf4F55si7DQ5ZnGwMLd4MoqwjJ3X562XV0fTyDsHL
-         Sltyr+xx9O+BB8QmY+C5ARMi3JRjuPc8QjzTVPYR/guhFpdCNswTpGw7p3KgkgiHCfal
-         sVlkEcB0lfnI8hlh23vF1RPKuL6Yq7T8T2X2NNyWIYV5VeFYPVUIj9f7W94EZINe+3Kg
-         hGMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767099396; x=1767704196;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1g1kb/JOi9XsJPGmGm57a9CaF95ijegnXyJMo6Mx7xQ=;
-        b=meS9LecW6XjuM1CWRtzxzlh4CFraLdQT27Tmd0zWytBx0Rd/8lak8ORsZnGUUDTmwU
-         VqKteDUotDNZfy8niNCL7mQuYKlhI5kUo0tyJdUUOXhBbVDFfqsBqRnmSqSTH1F2Ctkn
-         WuAoLrq87/+Ln8xxae8iMyRLud6VnqSNU2CH9OgK6mSdH0/Qj2GoBsD9XDP55GsGIudp
-         VXGa60M0x4ZHek4eIk+4fJt76NpxUPZS4i4Y3ia+NXwjEVdZxIuK0bFvn50gsuEjvyV8
-         x3HORAoVIP76nVbP4XV6Sk7PjYWgzszsWOPKFdKDy9evxjYIJ/lxLMuNFa5MG53mfSjJ
-         6QZg==
-X-Forwarded-Encrypted: i=1; AJvYcCXgrtgnDJe/jUBA6nqNGaZZWz6gtKYEYzEwIn8qzjyjNOPppYrTkNoIsIFfmdDTR7AhL5zO3s2wFg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzxd8xa03KnO2sXsQF/JbUnIb92NW/JV8mQxw4Y8jOzCKLNMumt
-	rs6SBmC9zmdN7iaUF8vDCGYdjQ/Fj19SZo1pp9DpVdeaxqOMmcsS3yjq0uPMjg==
-X-Gm-Gg: AY/fxX4H75AWDs2jqGWjZpXdsO9ZGpBTwWPGoF0sx+gz036ZZON09OllqLQhxR+WBH7
-	QTreIaiUwaj04FrGSayFmesbudcWh4aw0df4+jgvuKY+LgC87GiP6WRjDS2RSOACM5WU8C5G99v
-	TdNldDcvnM4SbKAMiN13L37yb/In3C4S2rjJ/5vIX1McEUCaij/szrzgP/Z4A+mPizSwJJnR/sf
-	jZb+Rz9u7fY7/Mgn9F5RJ3l7W/3qsuHMd8sudiQuaJLvUdQWMSdwh5I+yymKiILPqYGqiOuwU5y
-	/JJH19XzU/6WrkMYLKMJeKiatZ9GC1Lll8TNmT3KGfr9eYzsPBnNy94dAz0Ewq/rQP5Hbai+zI5
-	cqbcUADq2+L0XjouMihwFqlkHScNOGKlqVwhpd7SpFWuM5Sjk5tLgMAp6X4pap6MQKf2Db7zeKR
-	/HaEIT97uQZNU+QuVWCm7V2v6uwPq7NxwEbRKZSdGhacMe
-X-Google-Smtp-Source: AGHT+IGXIOQiYhgHUXu3tLRwuadO2gEnm0hRaSS+QlqjvGD/CbRO6q8KjLwpAqdJ7Xfc/tDhstFhvg==
-X-Received: by 2002:a05:600c:8b06:b0:47b:e2a9:2bd7 with SMTP id 5b1f17b1804b1-47d3b011b03mr234735265e9.19.1767099396343;
-        Tue, 30 Dec 2025 04:56:36 -0800 (PST)
-Received: from smtpclient.apple ([2a02:8010:60a0:0:7880:449e:4715:b158])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d19346e48sm578531675e9.2.2025.12.30.04.56.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Dec 2025 04:56:35 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From: Donald Hunter <donald.hunter@gmail.com>
+	s=arc-20240116; t=1767101764; c=relaxed/simple;
+	bh=whRaztirvx5Wyh80MSX+DutYWxXqcp9XldzpUIBN9zk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RL9ocQPV6eWApZVTJAXkogZ89G/ixCOj9PmxmfLXvQizftCGVnbVFznNOS/IEeeb8TFpk3KZs6dNvG9qIKQ7GfpUbtJymIVFx864/uv5AFXSfPV0l7SpEaCdcjU0CZAsuJ7uBdbAjgZd5P8PdxPisurN7fOF8EVD+nddGVZ5cYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cKOqd7B4; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767101763; x=1798637763;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=whRaztirvx5Wyh80MSX+DutYWxXqcp9XldzpUIBN9zk=;
+  b=cKOqd7B4ify/4oy22atg9aYnDU2tzUTmScn6TVCs4e5aKJRhttkUU7Fi
+   UdXIP6j1Zk05cAzoeao8hkPhg0bSlaOweLaOH3JrRKOf4mn00ge03FRYP
+   0urVqrm0t+eSS/PJr1FDSvF+x4ZEEpCbjgswZ02aXPNVviKEawn65Fgy3
+   kwdUUaoVojf6xFI2Vo9F9BvOAU15X7P/HoxxzlBnX15ByaTHShv+fuWiZ
+   gv8IdQaqem+5/tSqEI4POxMiTHRKiJ2ci11KUj7LtQn3R2WIVv3ItMQND
+   w/GOAE3Kgjlrwhy7izeJ+QRsow2SK5fkSB0IfR4nfVc997lBWocHnz2dp
+   g==;
+X-CSE-ConnectionGUID: jv3TeRHVSbS1HwjnF5AUbg==
+X-CSE-MsgGUID: 80MZblQzTcmmDakg/KtDFQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11656"; a="79809530"
+X-IronPort-AV: E=Sophos;i="6.21,189,1763452800"; 
+   d="scan'208";a="79809530"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2025 05:36:01 -0800
+X-CSE-ConnectionGUID: ada3EXIlSHOIL18jvWVdKA==
+X-CSE-MsgGUID: E5snTTCFSEymNkXU32GLZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,189,1763452800"; 
+   d="scan'208";a="205734082"
+Received: from lkp-server01.sh.intel.com (HELO c9aa31daaa89) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 30 Dec 2025 05:35:59 -0800
+Received: from kbuild by c9aa31daaa89 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vaZtE-000000000P3-2Vow;
+	Tue, 30 Dec 2025 13:35:56 +0000
+Date: Tue, 30 Dec 2025 21:35:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tzung-Bi Shih <tzungbi@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
+	tzungbi@kernel.org
+Subject: Re: [PATCH] pmdomain: mediatek: Break lock dependency to
+ `prepare_lock`
+Message-ID: <202512302129.BjTBw9E6-lkp@intel.com>
+References: <20251229043244.4103262-1-tzungbi@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH for 6.19 0/4] Revise the EM YNL spec to be clearer
-Date: Tue, 30 Dec 2025 12:56:25 +0000
-Message-Id: <BA1D25E0-F4D8-4FFA-92AA-FE58FB3622C1@gmail.com>
-References: <849b576e-9563-42ae-bd5c-756fb6dfd8de@arm.com>
-Cc: Changwoo Min <changwoo@igalia.com>, kernel-dev@igalia.com,
- linux-pm@vger.kernel.org, horms@kernel.org, pabeni@redhat.com,
- rafael@kernel.org, netdev@vger.kernel.org, edumazet@google.com,
- davem@davemloft.net, sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
- lenb@kernel.org, pavel@kernel.org, kuba@kernel.org
-In-Reply-To: <849b576e-9563-42ae-bd5c-756fb6dfd8de@arm.com>
-To: Lukasz Luba <lukasz.luba@arm.com>
-X-Mailer: iPhone Mail (23D5089e)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251229043244.4103262-1-tzungbi@kernel.org>
+
+Hi Tzung-Bi,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.19-rc3 next-20251219]
+[cannot apply to amd-pstate/linux-next amd-pstate/bleeding-edge]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Tzung-Bi-Shih/pmdomain-mediatek-Break-lock-dependency-to-prepare_lock/20251229-123525
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20251229043244.4103262-1-tzungbi%40kernel.org
+patch subject: [PATCH] pmdomain: mediatek: Break lock dependency to `prepare_lock`
+config: arm-randconfig-003-20251230 (https://download.01.org/0day-ci/archive/20251230/202512302129.BjTBw9E6-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 10.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251230/202512302129.BjTBw9E6-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512302129.BjTBw9E6-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/pmdomain/mediatek/mtk-pm-domains.c:1304:12: warning: 'scpsys_resume' defined but not used [-Wunused-function]
+    1304 | static int scpsys_resume(struct device *dev)
+         |            ^~~~~~~~~~~~~
+>> drivers/pmdomain/mediatek/mtk-pm-domains.c:1285:12: warning: 'scpsys_suspend' defined but not used [-Wunused-function]
+    1285 | static int scpsys_suspend(struct device *dev)
+         |            ^~~~~~~~~~~~~~
 
 
+vim +/scpsys_resume +1304 drivers/pmdomain/mediatek/mtk-pm-domains.c
 
-> On 30 Dec 2025, at 09:44, Lukasz Luba <lukasz.luba@arm.com> wrote:
->=20
-> =EF=BB=BFHi Changwoo,
->=20
->> On 12/25/25 04:01, Changwoo Min wrote:
->> This patch set addresses all the concerns raised at [1] to make the EM YN=
-L spec
->> clearer. It includes the following changes:
->> - Fix the lint errors (1/4).
->> - Rename em.yaml to dev-energymodel.yaml (2/4).  =E2=80=9Cdev-energymodel=
-=E2=80=9D was used
->>   instead of =E2=80=9Cdevice-energy-model=E2=80=9D, which was originally p=
-roposed [2], because
->>   the netlink protocol name cannot exceed GENL_NAMSIZ(16). In addition, d=
-ocs
->>   strings and flags attributes were added.
->> - Change cpus' type from string to u64 array of CPU ids (3/4).
->> - Add dump to get-perf-domains in the EM YNL spec (4/4). A user can fetch=
+  1284	
+> 1285	static int scpsys_suspend(struct device *dev)
+  1286	{
+  1287		struct scpsys *scpsys = dev_get_drvdata(dev);
+  1288		struct generic_pm_domain *genpd;
+  1289		struct scpsys_domain *pd;
+  1290		int i;
+  1291	
+  1292		for (i = 0; i < scpsys->pd_data.num_domains; i++) {
+  1293			genpd = scpsys->pd_data.domains[i];
+  1294			if (!genpd)
+  1295				continue;
+  1296	
+  1297			pd = to_scpsys_domain(genpd);
+  1298			clk_bulk_unprepare(pd->num_clks, pd->clks);
+  1299			clk_bulk_unprepare(pd->num_subsys_clks, pd->subsys_clks);
+  1300		}
+  1301		return 0;
+  1302	}
+  1303	
+> 1304	static int scpsys_resume(struct device *dev)
+  1305	{
+  1306		struct scpsys *scpsys = dev_get_drvdata(dev);
+  1307		struct generic_pm_domain *genpd;
+  1308		struct scpsys_domain *pd;
+  1309		int i, ret;
+  1310	
+  1311		for (i = 0; i < scpsys->pd_data.num_domains; i++) {
+  1312			genpd = scpsys->pd_data.domains[i];
+  1313			if (!genpd)
+  1314				continue;
+  1315	
+  1316			pd = to_scpsys_domain(genpd);
+  1317			ret = clk_bulk_prepare(pd->num_clks, pd->clks);
+  1318			if (ret)
+  1319				return ret;
+  1320			ret = clk_bulk_prepare(pd->num_subsys_clks, pd->subsys_clks);
+  1321			if (ret)
+  1322				return ret;
+  1323		}
+  1324		return 0;
+  1325	}
+  1326	
 
->>   either information about a specific performance domain with do or infor=
-mation
->>   about all performance domains with dump.
->> This can be tested using the tool, tools/net/ynl/pyynl/cli.py, for exampl=
-e,
->> with the following commands:
->>   $> tools/net/ynl/pyynl/cli.py \
->>      --spec Documentation/netlink/specs/dev-energymodel.yaml \
->>      --dump get-perf-domains
->>   $> tools/net/ynl/pyynl/cli.py \
->>      --spec Documentation/netlink/specs/dev-energymodel.yaml \
->>      --do get-perf-domains --json '{"perf-domain-id": 0}'
->>   $> tools/net/ynl/pyynl/cli.py \
->>      --spec Documentation/netlink/specs/dev-energymodel.yaml \
->>      --do get-perf-table --json '{"perf-domain-id": 0}'
->>   $> tools/net/ynl/pyynl/cli.py \
->>      --spec Documentation/netlink/specs/dev-energymodel.yaml \
->>      --subscribe event  --sleep 10
->> [1] https://lore.kernel.org/lkml/CAD4GDZy-aeWsiY=3D-ATr+Y4PzhMX71DFd_mmdM=
-k4rxn3YG8U5GA@mail.gmail.com/
->> [2] https://lore.kernel.org/lkml/CAJZ5v0gpYQwC=3D1piaX-PNoyeoYJ7uw=3DDtAG=
-dTVEXAsi4bnSdbA@mail.gmail.com/
->=20
-> My apologies, I've missed those conversations (not the best season).
->=20
-> So what would be the procedure here for the review?
-> Could Folks from netlink help here?
-
-I will review, hopefully later today.=20
-
-What hardware can it be tested on?
-
-> I will do my bit for the EM related stuff (to double-check them).
->=20
-> Regards,
-> Lukasz
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
