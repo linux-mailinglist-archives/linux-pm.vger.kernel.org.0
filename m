@@ -1,154 +1,167 @@
-Return-Path: <linux-pm+bounces-40048-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40049-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4858CE9E05
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 15:08:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FB67CEA06A
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 16:10:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 6F0463001C11
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 14:08:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 11DCF3065796
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 15:05:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5492E1F9ECB;
-	Tue, 30 Dec 2025 14:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EcnZ9vv/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DE6231A556;
+	Tue, 30 Dec 2025 15:05:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A351EE7C6
-	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 14:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2402631A05E
+	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 15:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767103698; cv=none; b=bHwT00tbm2CAN5J1NTcWOoNyhDWw5hX/mkDMhbzl2/zWmfYVt/TCWvEp2Ba1Gs+vagcFAT4e8iy1R7Vy8xijjoyKfGSxpBuE2Xkte3MhqXyREIx2VJzEfTA7k/ashq+EcZ70FyA+QOkxp3xz7jcZqEqGG5jsNb+9m1OCA9x9uR8=
+	t=1767107126; cv=none; b=Ul3aQm2WFmWsBxit66zyDt6En5xWMP6xgFbYdULiDeVTYg76ooENy7dSV/UAz7UnEkpe/9VXKmt5qz+MC/ulW24sWaJse37VkLZoTMrQ9Cr7SOyTnaurZRHH1TXNwynYcATZZxX/3KpcD0Nu9sghNQwJoPQtJWJfVXa1qwQ1B/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767103698; c=relaxed/simple;
-	bh=d5b20GjOZmEe7MLdyY8hDIhd+/ediIvuv0ZzoeBumSM=;
+	s=arc-20240116; t=1767107126; c=relaxed/simple;
+	bh=dkjLK7cj8/C4JRusSr9IXX3Q+juZmbMwsVO/nZqCEKQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HrDWib4cg5ui0JsFI48Nge68JHj3OMsyGoQqTrUmnnL5v2q+xB0Sm7sGxrxkEQKDScsG2Hrdjk/5Wy4e7N98SpjuFuZBBN0JyACFEuo6MirjS7q20caiq78fz7+e12O5i3Dxm7ZN2ZK2K1iGOQz9r0qs78v7u9k4S+9/Z5uL7iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EcnZ9vv/; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-59583505988so15474533e87.1
-        for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 06:08:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1767103694; x=1767708494; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VyJApu1LEoZShSyHFwCDEnHWsxopeMuohegEMjDmgz8=;
-        b=EcnZ9vv/3har4lcrpUgmRbnPtEwziVmLBHWbDqT72aJXxx2VmPzz56kMk/nWJQEnMy
-         s0lO7dRT2im+JF6anTFP5FCFwuHUUrm54Q6DJ7jOtzgwShoEumwbCCbjDl0Litbf5KrK
-         rDAZb3/dFEDU1Qb6gqUfyVV9+hZ6BHgKoH+Y0Db1nVIh7giz0YPAO2Ypc/1hmLGKHnrY
-         xr/tH7JAGHAmJ+FSbyBXeyalSIilCKL2B9i8vnSnX0J4fxX6ioMTjC0eSggscyOngKvU
-         AVw9G7HMHF+RC3C2T6AQU7cw90JaBZb6FDmyCE/3md8lH9RhaWiXLpFPtpDhsuDN89lW
-         bWTg==
+	 To:Cc:Content-Type; b=pOPjcDPAW50yaSbfe2+Z/jr6zGcEjAK9hmJnu2BgIWf85/GSFlHbHGp5MveJ8INNNMActk9bzngs9WhBMXtzWhWA2hXtqE37EgufNJdVx29h+HzRTaTgHK96/xXmyZoUhhxNSrgkSB87hM60nPwmVFUZkLb/z4XEBoD4YtWJ9jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-55b26461e78so2609982e0c.3
+        for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 07:05:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767103694; x=1767708494;
+        d=1e100.net; s=20230601; t=1767107123; x=1767711923;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VyJApu1LEoZShSyHFwCDEnHWsxopeMuohegEMjDmgz8=;
-        b=WIn1Ya7rbCW/R+2d+eTmPhavrn5LYlVEpa1WLg6OGMa16Qh/OhLXhyJD4p3KbEpJJP
-         PRJRFgG5H9RmdIZu7bViZzzdetylcJWXJVGuck1XkZkJGJ4H/s7jj9hCGdjBgt1twgly
-         4TXs64SimpSUWZiq0AKRMB3XvWALOO+BUN6hOlW0GX5//Lbx8WP46pyC1JWYqB84SWZH
-         O0ruOhX4YgSiG0/V2x47qeESghsELvbaQ6NTQSHDEhI3U5qpbd7GR4aZCnqEQhHJYoo+
-         U8iaFJZ5I3CeifbQHyY8OHRxZJafKajJl1emzuz7iFIERH34ML5LLoonZU8oLGPq6WuT
-         n4qg==
-X-Forwarded-Encrypted: i=1; AJvYcCWpBSsvsM4+KedmuXmPDs0Dmo28sjq6yRHmOgqqPmTkauPVrlSN8V92pKFs0/J0d258BPUNWUfeCg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMc6gxovQ68si4vrFlyJV4G5W1AssA+xU+6W9u6U07Jsb0536g
-	78Dg/JWbluatPxSEEMI1oi8/q4WNqtn8dIGiDG+RZZK3b20ppICyPPiFx20LQDc346cGJelXNIp
-	DlCYwJDgJhcC2uPgGrnf8Dyw6lVG2qdnvUV6SADBFJQ==
-X-Gm-Gg: AY/fxX7cOjPKgtcW5aPJBEC/jgFSXPCZ+B0XdJrME3yFKFm0w5H3bD6yustX/KzVzf3
-	DZpUKnMSQMtTjiB9q3j/3FT0DV1hgcGuEpPdCxlOJcz8wE2Z/Lkprqu19CMMsKOABX9OeJrxvB0
-	jLpc/5V4Mo1LbmJMoY9z1PkZ6JzfTfBIdg02QUQlJMrr0oUpnoRHTcgBl29ccZr6h/mQRZ6lg9u
-	ei02nB5ZAz4QKrGYnPr6acDi74fqxeXXO5dVKc7YvtZd/2l/5mpf5Z5HTyVxLHlyJ6Aw6MfkaKd
-	p9hUeRM=
-X-Google-Smtp-Source: AGHT+IE5fYKXYm6s7wg7VCYj3x3U8vGECYHQuPDTbdIUhcnUk9fct3+MvwocLHBZETGEXghR/RioxsyFpqqrT1jVOi8=
-X-Received: by 2002:a05:6512:3d9e:b0:595:7d7c:59a9 with SMTP id
- 2adb3069b0e04-59a17d6bb20mr12422984e87.22.1767103693612; Tue, 30 Dec 2025
- 06:08:13 -0800 (PST)
+        bh=n3bghUu0vru4RrxnbMTcftVq/cqOVIrTFnZfWBS4mDw=;
+        b=tf39sW7puEb3e4R95Acc99T3g3cJ6gZQorN2XgwylRr8mRuQfHHIy7vuMKSyU5U9fg
+         lZSB15P4/KwPD4azb7xDI++ALtaZaV4QF6AQGH8wUQkniAk6N3jMPPvsHtdralXj08sc
+         gcCCznJ6gqc7m0C+m3xTBOu/tQ6hrijqwPIINsrNaCNsWxygfR74mbXKuXqjHWFGf20M
+         sMz1fIiabM87lMSzEkqcc62shKRu3qkuRhhepv/jmEdFdXvuA0UQ9hx5dU/j3zLzHko+
+         tL2hPN+gm+BvBm4mKg39eoGf8STf3z6s3vQxOdvxVnHVGViKnEzNKOdjGPIAn01TdS8d
+         oXAQ==
+X-Gm-Message-State: AOJu0Yyp7Onk8FFBWxmLgBvAvF/w/pZJlOEv6bYWJFJvjXzbbTThtzPG
+	11ifT9dMThS0HukxCpce6F0pKZVnPkhXbd84yq3jwWAp8ROjbEybfVIulwwxNBxg
+X-Gm-Gg: AY/fxX7RbZ3Rc9esSQkxZ/GH6yZ3yAq1nd2W26TmIXAfaNCev1ThXnBqEB+HP6PLQA+
+	V7ljIcMPOR1NyO9cEpV4teEjrBAGyus3VRSfQXzb3LA8e52TeQB0BftXmbwRnUvNspx9AJdVxc3
+	h00YMpCPK+O8KmNIk7RAthQw4TqMYybRPOHb6+OqSxU+ucTF9a2yTgSw4ksNJjKySSe+49cIY1b
+	4ZIsD/PKFdHZKEXxdThqKfPIOniMBSiynCH0U/fJDv0suJErvYWwo7B4CUWTXJovFmtk2cLC+Be
+	KcAnk5Btv33fvt4B0TqClkqZj31aEhw+an0l8Xk4qJMFmRfpfocZWDNekBS4wiXWEJTG89NwrCc
+	onZTqKvn9jEPLMm8KCL0aHjcj4D800kHlBHbvJSbJlhDbjWl/4SRmA+v0at7/FUDuQC8Ui5fMZ3
+	YmxijktpZqL+7DNG2EkiamxtLjwXgn5mhogNwJQv+4eJ//vHalDy8W
+X-Google-Smtp-Source: AGHT+IGzMZ7aM/NPXyHcPHX1jLwIN6hB+Kv8PYzJnCT8l+4FK4SLegSzftzKEZdhb1VfSbvpQ6X0nA==
+X-Received: by 2002:a05:6122:32d5:b0:54a:a5ac:5107 with SMTP id 71dfb90a1353d-5615be84512mr8626402e0c.15.1767107123083;
+        Tue, 30 Dec 2025 07:05:23 -0800 (PST)
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com. [209.85.221.174])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-943417b7ba7sm9263436241.15.2025.12.30.07.05.22
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Dec 2025 07:05:22 -0800 (PST)
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-55b26461e78so2609944e0c.3
+        for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 07:05:22 -0800 (PST)
+X-Received: by 2002:a05:6122:1354:b0:55b:305b:4e3b with SMTP id
+ 71dfb90a1353d-5615beb8214mr9695143e0c.17.1767107122056; Tue, 30 Dec 2025
+ 07:05:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251216055247.13150-1-rmxpzlb@gmail.com>
-In-Reply-To: <20251216055247.13150-1-rmxpzlb@gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 30 Dec 2025 15:07:37 +0100
-X-Gm-Features: AQt7F2pCXsP1gwfFRKDfAs1-CtV1ujaercDhCS5Kpm883EIuOK5DFfbTj1RsrhE
-Message-ID: <CAPDyKFpx-hxv4QVW+zp8Zbd=-9vvmwsVJ2adem6V1gWLQteYsQ@mail.gmail.com>
-Subject: Re: [PATCH v2] pmdomain:rockchip: Fix init genpd as GENPD_STATE_ON
- before regulator ready
-To: Frank Zhang <rmxpzlb@gmail.com>
-Cc: heiko@sntech.de, linux-rockchip@lists.infradead.org, 
-	linux-pm@vger.kernel.org, chaoyi.chen@rock-chips.com, 
-	sebastian.reichel@collabora.com, quentin.schulz@cherry.de, 
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+References: <6245770.lOV4Wx5bFT@rafael.j.wysocki> <2556645.jE0xQCEvom@rafael.j.wysocki>
+ <CAMuHMdVMFQebA43FJ53PBnd67C8fxWAC21cr4jWTGDwg-HV53w@mail.gmail.com> <CAMuHMdWshJOjzD5DGzyRUG66jvPC6PPVBgaT=UdWy+XOk_T5Pw@mail.gmail.com>
+In-Reply-To: <CAMuHMdWshJOjzD5DGzyRUG66jvPC6PPVBgaT=UdWy+XOk_T5Pw@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 30 Dec 2025 16:05:11 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVeHY7+9Jz60OX521iaEorGOcrxuGC8iuzDRUA-tkEvLQ@mail.gmail.com>
+X-Gm-Features: AQt7F2rwnAcC5lQxf8KDSlHqxdZgmhT_kPKehxVIuLLpkwUasjT0-vp_jZiOQQo
+Message-ID: <CAMuHMdVeHY7+9Jz60OX521iaEorGOcrxuGC8iuzDRUA-tkEvLQ@mail.gmail.com>
+Subject: Re: [PATCH v1 15/23] phy: core: Discard pm_runtime_put() return values
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Brian Norris <briannorris@chromium.org>, 
+	Vinod Koul <vkoul@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	linux-phy@lists.infradead.org, 
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 
-+ Nicolas
-
-On Tue, 16 Dec 2025 at 06:53, Frank Zhang <rmxpzlb@gmail.com> wrote:
+On Tue, 30 Dec 2025 at 11:54, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Tue, 30 Dec 2025 at 11:34, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Mon, 22 Dec 2025 at 21:40, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > The PHY core defines phy_pm_runtime_put() to return an int, but that
+> > > return value is never used.  It also passes the return value of
+> > > pm_runtime_put() to the caller which is not very useful.
+> > >
+> > > Returning an error code from pm_runtime_put() merely means that it has
+> > > not queued up a work item to check whether or not the device can be
+> > > suspended and there are many perfectly valid situations in which that
+> > > can happen, like after writing "on" to the devices' runtime PM "control"
+> > > attribute in sysfs for one example.
+> > >
+> > > Modify phy_pm_runtime_put() to discard the pm_runtime_put() return
+> > > value and change its return type to void.  Also drop the redundant
+> > > pm_runtime_enabled() call from there.
+> > >
+> > > No intentional functional impact.
+> > >
+> > > This will facilitate a planned change of the pm_runtime_put() return
+> > > type to void in the future.
+> > >
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Thanks for your patch, which is now commit caad07ae07e3fb17 ("phy:
+> > core: Discard pm_runtime_put() return values") in phy/next.
+> >
+> > This is causing several messages like
+> >
+> >     phy phy-e6590100.usb-phy-controller.2: Runtime PM usage count underflow!
+> >
+> > during boot, and s2ram on Koelsch (R-Car M2-W).
 >
-> RK3588_PD_NPU initialize as GENPD_STATE_ON before regulator ready.
-> rknn_iommu initlized success and suspend RK3588_PD_NPU. When rocket
-> driver register, it will resume rknn_iommu.
+> On R-Car Gen3, there are no such messages, as e.g.
+> drivers/phy/renesas/phy-rcar-gen3-usb2.c does support Runtime PM.
+> R-Car Gen2 uses drivers/phy/renesas/phy-rcar-gen2.c, which does not
+> use Runtime PM yet, but still relies on explicit clock management.
 >
-> If regulator is still not ready at this point, rknn_iommu resume fail,
-> pm runtime status will be error: -EPROBE_DEFER.
+> > > --- a/drivers/phy/phy-core.c
+> > > +++ b/drivers/phy/phy-core.c
+> > > @@ -190,15 +190,12 @@ int phy_pm_runtime_get_sync(struct phy *
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(phy_pm_runtime_get_sync);
+> > >
+> > > -int phy_pm_runtime_put(struct phy *phy)
+> > > +void phy_pm_runtime_put(struct phy *phy)
+> > >  {
+> > >         if (!phy)
+> > > -               return 0;
+> > > +               return;
+> > >
+> > > -       if (!pm_runtime_enabled(&phy->dev))
+> > > -               return -ENOTSUPP;
+> >
+> > Adding some instrumentation shows that this branch was taken before,
+> > thus skipping the call to pm_runtime_put().
+> >
+> > Can I just put the check back, or is there an underlying problem that
+> > should be fixed instead?
 >
-> This patch set pmdomain to off if it need regulator during probe,
-> consumer device can power on pmdomain after regulator ready.
->
-> Signed-off-by: Frank Zhang <rmxpzlb@gmail.com>
-> Tested-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-> Tested-by: Quentin Schulz <quentin.schulz@cherry.de>
+> I assume the PHY core should support both drivers that do and do not
+> support Runtime PM.
 
-The problem with the child-domain using a regulator has been discussed
-before [1] between Nicolas, Heiko and me. That said, I have looped in
-Nicolas to allow him to share his opinion about this too.
+I have sent a patch:
+https://lore.kernel.org/3ca9f8166d21685bfbf97535da30172f74822130.1767107014.git.geert+renesas@glider.be
 
-My view on is that I would prefer that we try to address/fix the root
-cause, rather than trying to paper over the problem as what seems to
-be suggested in the $subject patch. Or at least I need Nicolas/Heiko
-to confirm that they are fine with the $subject patch, before I pick
-it up.
+Gr{oetje,eeting}s,
 
-Kind regards
-Uffe
+                        Geert
 
-> ---
-> Changes in v2:
-> - Simplified the regulator check logic, trun off pmdomain if need
->   regulator.
-> ---
->  drivers/pmdomain/rockchip/pm-domains.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-> index 4f1336a0f49a..997e93c12951 100644
-> --- a/drivers/pmdomain/rockchip/pm-domains.c
-> +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> @@ -879,6 +879,16 @@ static int rockchip_pm_add_one_domain(struct rockchip_pmu *pmu,
->                 pd->genpd.name = pd->info->name;
->         else
->                 pd->genpd.name = kbasename(node->full_name);
-> +
-> +       /*
-> +        * power domain's needing a regulator should default to off, since
-> +        * the regulator state is unknown at probe time. Also the regulator
-> +        * state cannot be checked, since that usually requires IP needing
-> +        * (a different) power domain.
-> +        */
-> +       if (pd->info->need_regulator)
-> +               rockchip_pd_power(pd, false);
-> +
->         pd->genpd.power_off = rockchip_pd_power_off;
->         pd->genpd.power_on = rockchip_pd_power_on;
->         pd->genpd.attach_dev = rockchip_pd_attach_dev;
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-[1]
-https://lore.kernel.org/all/CAPDyKFr=GwJ+cO3cW4Ed_LsS=q_JtuuQPDweDpLgDO4hBLFXUA@mail.gmail.com/
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
