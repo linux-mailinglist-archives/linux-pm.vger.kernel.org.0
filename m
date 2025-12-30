@@ -1,94 +1,88 @@
-Return-Path: <linux-pm+bounces-40034-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40035-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5E66CE9395
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 10:34:07 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26F53CE93A1
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 10:36:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 822A63011A4D
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 09:34:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A67C93012CF2
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 09:36:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A86B2C08B1;
-	Tue, 30 Dec 2025 09:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mtKEPZ73"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E90288517;
+	Tue, 30 Dec 2025 09:36:06 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA6B242D97;
-	Tue, 30 Dec 2025 09:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0783224B1B;
+	Tue, 30 Dec 2025 09:36:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767087241; cv=none; b=LTQTOdHvXSynSWZ9Ix13fla1TxB2I9juodHXQVn033zwgghP/xFrHjwZL+kuY2Wr0Co/Uk9sMNd5r7pcXeYbFaSt5QSjKX9ICMvtpij2gyzYmFczgupEI15Tk+phhotYpNaqOTMIEiOU37sIxBIy/r37Tx0SIJd9lmLhGC3D1z8=
+	t=1767087366; cv=none; b=LP1KnUlV5Pd3I1cFGdZLdhN9KG6idERuJUgtJj3EW7s3180GwySgcSB4uQTmmA+2Z0DjUDC6Juzi4jCZleRc7ixoXCJImCoiJIJebIO1quefKFUkmJDYYOiy7fWbGtASf9Fi1EoMTk1zYDCub2G7GDi77ifC6GR2X+SUglHyu5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767087241; c=relaxed/simple;
-	bh=8IiH8oqG55XbOIGLcLkri2CLbZPYlF6u5isFFigIskk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bCk1ZS88eGyesyna7a1zbToaJ7bFds56AZNlhEmU077Y1MiqQn2oAmW0DX0u6tOQiy8l56O2KHFs4oeXev4hCPN4bV8TBU+O2dB4HSOXn+KmEVZ2tTd6ZnSmyMMYd1flefS+6dexT4ibPKah3GCRhVJi423PMvFLpoIy+LnTz6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mtKEPZ73; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 981FFC4CEFB;
-	Tue, 30 Dec 2025 09:33:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767087239;
-	bh=8IiH8oqG55XbOIGLcLkri2CLbZPYlF6u5isFFigIskk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mtKEPZ732UXITcojH8GEX1UCTVlYpDK95+M1pKrs+HZboz3eh9lVdc4tMszCLZFRg
-	 1ViWWvM8CbMwiSXY6YpKHhphWCPGctiuu98W77K2zZrF3RxDvFXL0UCAHu8gqpNZeM
-	 Xj/cgcuvEn1kuwcBTsC8GGFXKWfpBsXEYDbHMrly0fOYr3x4Fb7/lad8xNB1PLOaJv
-	 TiHXznekgkpLdN0JCQbS6IKIGyp4WrX2EzerbxrvjfySYCqdsWiy0QpVwE/es3LP29
-	 IuYYDZd8vwHfblnSmjZD19hTw2SeXNS7Q1nyJQuBObyMDpxMc413fibBk2WZBJ5aGx
-	 PxeqUC1UeVSKg==
-Date: Tue, 30 Dec 2025 10:33:52 +0100
-From: Niklas Cassel <cassel@kernel.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-Cc: Bjorn Helgaas <bhelgaas@google.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	Stephan Gerhold <stephan.gerhold@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	linux-pm@vger.kernel.org, linux-ide@vger.kernel.org,
-	Frank Li <Frank.Li@nxp.com>,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v4 0/5] PCI: Add initial support for handling PCIe M.2
- connectors in devicetree
-Message-ID: <aVOcgDeOejO9m1zE@ryzen>
-References: <20251228-pci-m2-v4-0-5684868b0d5f@oss.qualcomm.com>
+	s=arc-20240116; t=1767087366; c=relaxed/simple;
+	bh=PuQuJLAZxuEqtB+iiLnCbmFsuA1FAB3fWJEpP3b7AMQ=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=lXu/bCEhhtyEQlBkumGWuWvHbBDj/EdvLBlHQaHZt7Z7lEnQ3WB6bW2v10l9p8LWQGyGv4hnF20zJDrZ98uTL00eZDk06ac+rlXuiHb62acSW6R+oYACiIJuH/pUVrhEEMbcW0agD5ygzCu/2o+eH98aimS3CPQ1F/Wp8BGqEas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0CF7497;
+	Tue, 30 Dec 2025 01:35:54 -0800 (PST)
+Received: from [10.57.10.231] (unknown [10.57.10.231])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9846C3F63F;
+	Tue, 30 Dec 2025 01:36:00 -0800 (PST)
+Message-ID: <d5ee5e5b-d636-47c7-83e6-b58cab9f4d6e@arm.com>
+Date: Tue, 30 Dec 2025 09:35:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251228-pci-m2-v4-0-5684868b0d5f@oss.qualcomm.com>
-
-Hello Mani,
-
-On Sun, Dec 28, 2025 at 10:31:00PM +0530, Manivannan Sadhasivam wrote:
-> The Mechanical Key M connector is used to connect SSDs to the host machine over
-> PCIe/SATA interfaces. Due to the hardware constraints, this series only adds
-> support for driving the PCIe interface of the connector in the kernel.
-
-Since this series does not add any support for SATA, do we really want to
-modify the SATA device tree binding?
-
-I know that device tree describes the hardware, but if there is no software
-that makes use of this, the SATA DT binding change feels a bit unnecessary.
-
-Do we perhaps want to defer modifying the SATA DT binding change until the
-corresponding change in software is added?
+User-Agent: Mozilla Thunderbird
+From: Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH 1/2] PM: EM: Fix incorrect description of the cost field
+ in struct em_perf_state
+To: Yaxiong Tian <tianyaxiong@kylinos.cn>
+Cc: linux-pm@vger.kernel.org, lenb@kernel.org, linux-kernel@vger.kernel.org,
+ pavel@kernel.org, rafael@kernel.org
+References: <20251230061534.816894-1-tianyaxiong@kylinos.cn>
+Content-Language: en-US
+In-Reply-To: <20251230061534.816894-1-tianyaxiong@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
-Kind regards,
-Niklas
+
+On 12/30/25 06:15, Yaxiong Tian wrote:
+> Due to commit 1b600da51073 ("PM: EM: Optimize em_cpu_energy() and remove
+> division"), the logic for energy consumption calculation has been modified.
+> The actual calculation of cost is 10 * power * max_frequency / frequency
+> instead of power * max_frequency / frequency.
+> 
+> Therefore, the comment for cost has been updated to reflect the correct
+> content.
+> 
+> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
+> ---
+>   include/linux/energy_model.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index 43aa6153dc57..e7497f804644 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -18,7 +18,7 @@
+>    * @power:	The power consumed at this level (by 1 CPU or by a registered
+>    *		device). It can be a total power: static and dynamic.
+>    * @cost:	The cost coefficient associated with this level, used during
+> - *		energy calculation. Equal to: power * max_frequency / frequency
+> + *		energy calculation. Equal to: 10 * power * max_frequency / frequency
+>    * @flags:	see "em_perf_state flags" description below.
+>    */
+>   struct em_perf_state {
+
+Good catch, thank you!
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
