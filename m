@@ -1,108 +1,94 @@
-Return-Path: <linux-pm+bounces-40033-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40034-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F42DCE9383
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 10:31:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5E66CE9395
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 10:34:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 027CA3011424
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 09:31:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 822A63011A4D
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 09:34:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977B32264C0;
-	Tue, 30 Dec 2025 09:31:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A86B2C08B1;
+	Tue, 30 Dec 2025 09:34:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mtKEPZ73"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDC8C2BE7D1;
-	Tue, 30 Dec 2025 09:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA6B242D97;
+	Tue, 30 Dec 2025 09:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767087067; cv=none; b=bFit2oayjXBQZ1gcmluW9PZbwfq/8DRq3jYuNO4UzQqw9RTnK4w9Tpc5uW3m+W7ueFKq1jSHv5uuLE0yaBve+YJyil3eQFn/HI6192QF0pUni9ZEv0miw/AjlmDxaagxexoDu2hbvUhGEN1PR1T6MAuFy1R0gJsl97SgaUA+EE4=
+	t=1767087241; cv=none; b=LTQTOdHvXSynSWZ9Ix13fla1TxB2I9juodHXQVn033zwgghP/xFrHjwZL+kuY2Wr0Co/Uk9sMNd5r7pcXeYbFaSt5QSjKX9ICMvtpij2gyzYmFczgupEI15Tk+phhotYpNaqOTMIEiOU37sIxBIy/r37Tx0SIJd9lmLhGC3D1z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767087067; c=relaxed/simple;
-	bh=C/ELA4IIhciFbPXCMLd1GHQYpHfIvH2iwglrRgkcH1Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ux/yIeFfB3L5g4TFGRRoQqEiIjTsBvBorNiO2XLQADUm1xRAWx5S5ZUF92Oy0OHRydwbkVURnWOF1aypoxKmSAL45w1C9aysK7wvDKy10Xs7AF7TR/yf5HX3IUm9czVv0JvGd2dMJsXPnsW6aqkcVd8zo5L7N/yPUMDnhoYurfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 302C21424;
-	Tue, 30 Dec 2025 01:30:51 -0800 (PST)
-Received: from e127648.arm.com (unknown [10.57.11.17])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6C2DF3F63F;
-	Tue, 30 Dec 2025 01:30:56 -0800 (PST)
-From: Christian Loehle <christian.loehle@arm.com>
-To: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	vincent.guittot@linaro.org,
-	dietmar.eggemann@arm.com
-Cc: rafael@kernel.org,
-	qyousef@layalina.io,
-	peterz@infradead.org,
-	pierre.gondois@arm.com,
-	qperret@google.com,
-	sven@svenpeter.dev,
-	Christian Loehle <christian.loehle@arm.com>
-Subject: [PATCH 1/1] sched/fair: Ignore OU for lone task on max-cap CPU
-Date: Tue, 30 Dec 2025 09:30:37 +0000
-Message-Id: <20251230093037.427141-2-christian.loehle@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20251230093037.427141-1-christian.loehle@arm.com>
-References: <20251230093037.427141-1-christian.loehle@arm.com>
+	s=arc-20240116; t=1767087241; c=relaxed/simple;
+	bh=8IiH8oqG55XbOIGLcLkri2CLbZPYlF6u5isFFigIskk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bCk1ZS88eGyesyna7a1zbToaJ7bFds56AZNlhEmU077Y1MiqQn2oAmW0DX0u6tOQiy8l56O2KHFs4oeXev4hCPN4bV8TBU+O2dB4HSOXn+KmEVZ2tTd6ZnSmyMMYd1flefS+6dexT4ibPKah3GCRhVJi423PMvFLpoIy+LnTz6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mtKEPZ73; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 981FFC4CEFB;
+	Tue, 30 Dec 2025 09:33:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767087239;
+	bh=8IiH8oqG55XbOIGLcLkri2CLbZPYlF6u5isFFigIskk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mtKEPZ732UXITcojH8GEX1UCTVlYpDK95+M1pKrs+HZboz3eh9lVdc4tMszCLZFRg
+	 1ViWWvM8CbMwiSXY6YpKHhphWCPGctiuu98W77K2zZrF3RxDvFXL0UCAHu8gqpNZeM
+	 Xj/cgcuvEn1kuwcBTsC8GGFXKWfpBsXEYDbHMrly0fOYr3x4Fb7/lad8xNB1PLOaJv
+	 TiHXznekgkpLdN0JCQbS6IKIGyp4WrX2EzerbxrvjfySYCqdsWiy0QpVwE/es3LP29
+	 IuYYDZd8vwHfblnSmjZD19hTw2SeXNS7Q1nyJQuBObyMDpxMc413fibBk2WZBJ5aGx
+	 PxeqUC1UeVSKg==
+Date: Tue, 30 Dec 2025 10:33:52 +0100
+From: Niklas Cassel <cassel@kernel.org>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+Cc: Bjorn Helgaas <bhelgaas@google.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	Stephan Gerhold <stephan.gerhold@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	linux-pm@vger.kernel.org, linux-ide@vger.kernel.org,
+	Frank Li <Frank.Li@nxp.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v4 0/5] PCI: Add initial support for handling PCIe M.2
+ connectors in devicetree
+Message-ID: <aVOcgDeOejO9m1zE@ryzen>
+References: <20251228-pci-m2-v4-0-5684868b0d5f@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251228-pci-m2-v4-0-5684868b0d5f@oss.qualcomm.com>
 
-Tasks that have an utilization high enough to trigger misfit or
-overutilized on a max-cap CPU don't have any better CPU to be placed
-on, as long as this CPU isn't under significant thermal or system
-pressure. There's no reason to let it trigger the global
-overutilized state then.
-Treat maximum capacity CPUs with just a single task as !overutilized
-to let EAS decide placements on the remaining tasks and CPUs, it will
-already avoid placing additional tasks on these CPUs as they don't have
-any spare capacity.
+Hello Mani,
 
-Overutilized state is global to 1) ensure maximum throughput and 2)
-prevent running find_energy_efficient_cpu() with unreliable PELT values
-when compute capacity isn't provided to tasks.
-1) remains trivially true as for CAS the same 1024-capacity CPU would
-have been a correct choice for a lone task, too.
-2) is guaranteed by limiting it to nr_running <= 1, the task itself
-then has accurate PELT values as maximum compute capacity can be provided
-(also ensured by subtracting system and thermal pressure from the CPU).
-EAS will naturally not place additional tasks on the CPU as
-find_energy_efficient_cpu() requires the task's utilization to fit onto
-the spare-cap (util_fits_cpu()), of which there is none in the scenario
-we are concerned with.
+On Sun, Dec 28, 2025 at 10:31:00PM +0530, Manivannan Sadhasivam wrote:
+> The Mechanical Key M connector is used to connect SSDs to the host machine over
+> PCIe/SATA interfaces. Due to the hardware constraints, this series only adds
+> support for driving the PCIe interface of the connector in the kernel.
 
-Signed-off-by: Christian Loehle <christian.loehle@arm.com>
----
- kernel/sched/fair.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Since this series does not add any support for SATA, do we really want to
+modify the SATA device tree binding?
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index da46c3164537..d885b2a0fcd3 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6790,6 +6790,12 @@ static inline bool cpu_overutilized(int cpu)
- 	if (!sched_energy_enabled())
- 		return false;
- 
-+	/* Single task on max-cap CPU isn't misfit so no reason to trigger OU */
-+	if (arch_scale_cpu_capacity(cpu) == SCHED_CAPACITY_SCALE &&
-+	    cpu_rq(cpu)->nr_running <= 1 &&
-+	    !capacity_greater(SCHED_CAPACITY_SCALE, capacity_of(cpu)))
-+		return false;
-+
- 	rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
- 	rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
- 
--- 
-2.34.1
+I know that device tree describes the hardware, but if there is no software
+that makes use of this, the SATA DT binding change feels a bit unnecessary.
 
+Do we perhaps want to defer modifying the SATA DT binding change until the
+corresponding change in software is added?
+
+
+Kind regards,
+Niklas
 
