@@ -1,212 +1,112 @@
-Return-Path: <linux-pm+bounces-40030-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40031-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EC94CE8F9F
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 09:08:14 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EBE2CE915F
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 09:52:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 53AFB3002840
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 08:08:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C5B4A3025157
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 08:51:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AA9F2FE575;
-	Tue, 30 Dec 2025 08:08:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8338C324B19;
+	Tue, 30 Dec 2025 08:35:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOHCLkeX"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="UOJKUXP1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out162-62-58-216.mail.qq.com (out162-62-58-216.mail.qq.com [162.62.58.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D302F7AD0;
-	Tue, 30 Dec 2025 08:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EE43246EC;
+	Tue, 30 Dec 2025 08:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767082089; cv=none; b=h52I++pA0so+1Ke63M5mUlWzjvz3IHEiPJHzpiX20rUiIKHHd4IOITWxN2ilQ/N1n8zxYvUbNDsQkD33eHMbiBxbSSuLPEFoSCqflD1VGVQVWqbJpdf2yBLNrUtN/T836gZWpFPKpmZPCKt8UTVIcIaYDIV1MluLVDzICTXxvZQ=
+	t=1767083755; cv=none; b=ke5s9IiV3liSXDzJeR2YxomrzqfhbVIDiJ7RRfihfyTKAGIe6iQGUsaedxIzjqiy5Y/Hcs3iFjAyNdAfEM9zMknCnj2OX8GtozgkjNlqI2wkgPkOGZF/ju4XiQhRKCdafvf2mo/KummcOwWh54EAIJjs+u2Jxu8WwDFrVEpbd5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767082089; c=relaxed/simple;
-	bh=MAuT6kX2skfD9THyyWJ8LQ+yulvGn9NW41sVqxts1yU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S8XMcJmtcYKmHuZnSsFciQgXE1C/tzoNPdsbyQ7dPQx83iDUFDUbQoa7uv5z0cpA8G5pcaYUHdZjl1F0e7YxiVoarc+n7MVo4yIo0MTCezcnu/4F+5exd9Ykk4QACmIKmNKu9Pvfgu3j7Q5LnoRfBaVdy8dxmUEb/k7sQZCUFWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOHCLkeX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B8A6C4CEFB;
-	Tue, 30 Dec 2025 08:07:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767082087;
-	bh=MAuT6kX2skfD9THyyWJ8LQ+yulvGn9NW41sVqxts1yU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kOHCLkeXIr4bMGx1yxcUVL5o1PBdStGGwyn2LajtcvnSSeXgcRcHOR7Zdava2vEtv
-	 J25tvmXiD8azlKs/HBLeJVvEyUmOSYVejGKK/RxBCmiR87kHQ9rHo4xFVjsBjvakHY
-	 j5gFGpc+bQnN3A9ZlyfVH38tejNsIYtM4kpKTX/ccoZK0fgfpltEJPzsWxVKBRkJZh
-	 YDT6LUGXTzRQ1Vj1lJtcvoBgY/NpxwfkaUHXvqabhW7o/S4/S3WHFz97ex/XlhTCMB
-	 gR2a+BkIDRFsx213PKYRZ43IZyM1MVx8TgDyEBqCqBljxDTlj74sfHE8SzgBMxJHM4
-	 uxsPVfOvCxfUg==
-Date: Tue, 30 Dec 2025 13:37:56 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Hans de Goede <hansg@kernel.org>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Subject: Re: [PATCH v2 08/10] dt-bindings: connector: Add PCIe M.2 Mechanical
- Key E connector
-Message-ID: <2fyzwqr5cvkzkkgu5dk6qbc6o2dhnrtt22lf37rv6jzwtmbrek@yhedhlvzpzw7>
-References: <20251125-pci-m2-e-v2-0-32826de07cc5@oss.qualcomm.com>
- <20251125-pci-m2-e-v2-8-32826de07cc5@oss.qualcomm.com>
- <20251208202803.GA2541017-robh@kernel.org>
+	s=arc-20240116; t=1767083755; c=relaxed/simple;
+	bh=pgYQTbbzTQHceI2w6PURtP4b9zBJAxRmuPk6bhXSV3A=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=R8XyUzh7SBl+4/EupenMFpSXo9z9dWtl0/X80KN3txET85tRM48ssjQNYRlsU4zhOJSAT3v7VmTpZvgP3YyXFy/v17KwJJzRPaGfVVfvr3K2OvujqpakwQ7piyCY/P6js1iUFYa/QDPGpPvUMwcoNIe8ZkakLKWc9PoDX5peEaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=UOJKUXP1; arc=none smtp.client-ip=162.62.58.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1767083741; bh=4t9UiJ/TAyEd2QPMPRzUsrDKNkvd6izh2offNQBvV2s=;
+	h=From:To:Cc:Subject:Date;
+	b=UOJKUXP136qzB/DHbbh2YZy9fAww1Ss+nVzhwqFedqKcTFvAe8/mAYIyNnd7rwrpZ
+	 QUIJtqNs0wTSKuGG9mrOPRLm4hLaTxh5ZDkrUJLPwnFk9nLZE33+sxCUqjR/UxnGou
+	 3O7nuqJrQCMEMNF1Z1C4qPebAqM0X260eATK8dOk=
+Received: from huangjiping-System-Product-Name.msnode ([116.237.165.226])
+	by newxmesmtplogicsvrszb51-0.qq.com (NewEsmtp) with SMTP
+	id 4F99E8F8; Tue, 30 Dec 2025 16:19:57 +0800
+X-QQ-mid: xmsmtpt1767082797tpn4x8vc8
+Message-ID: <tencent_FFD1C08721AB1823AB10E04FFFD29F357C06@qq.com>
+X-QQ-XMAILINFO: MIbv1O9N9h62AuYXbW593opYEG6Kk7Ygg3s51J1czdYK8oEorm7Y0CWlCqC9+Y
+	 I4ckB/lApTbE8EAEezhQo6d4z1J3T7NQ9ZeSsAoTsb8B4gQkgdNO/Ex90FwfPVIRCnELwpxr+4T3
+	 xe6pSKd8eBgp/rMiyncatPh2/C+r7tb23CVP7/3La25gzRABflYyPVZD9VtS27L4UriYwjnpJBYS
+	 Wd9NUOrkjqpkuUMbdZRReY91FcReXS2l5UWxOiis5Y507LvSgsuLvQrYUvfe7Uaw7J4xysXKO3ra
+	 8JFr7wKBznkc3QK6ktN6wurJ2muoYPvFyMFyh/OyjkmKZAOiaZc6tnHuPSJpcNIZdzBBxNqga3VG
+	 0jGnsvwrRUNp4WdDbu1/vxz03WwZLwQWjPaB7IFTkJTEKXChJkiljZRKFKnAvlfAxrBoP6zc53v5
+	 LYDmswfaNrpZRZr9ESG7z3g4sRQMysJEcHmz5nEof5G/99Px0no7Avf4zDoJ8upRb/+Nw1FqMXO/
+	 R4UeKIn5+vmgpJiLDrzlBvH25qXFKet2QBSJAJxT/hez4g/Te2du3FYnUAj3c4PeJppRz9LpTpq/
+	 3irGEzqVsh6p6ijgkaXnorMq7JXueI+fgzwaSQn/yCaIUeF+qqhjYbRzD2W9XC9WOHwy5hr5wjDv
+	 Rn27IgMSkhSKFVRIw/4AY2RTs+yCy+GgsfctdbaZqlC2prVYJkd6coxPu0tpPJJZ+8vzlVxqU2LZ
+	 CokngX1LgjW52Bx1dFzaVqG2+fY4HlagVtsbFAiYGAm/TKa+yF6C+gV95aOJE109bKuvhXf5S7/i
+	 woy2iWHbDy9TIr0k1l+gN0lugGOi+bKdw8pkZxumNZF1e9NE+iSLTkZnGO8DE+gkDYxHQELvrN1A
+	 Wk3uWYxE8FarovxJnV6g/+2vxeEvlidEEeQ7Gb1Feh4jyA5PNTgB9fcbY+RRWdSRhLTc3PZQPd00
+	 JjODrjjxWqT0aT0cIwCuT0z5X3hw6DJLV40BdGA1haTDUtdH71imuHTU8Ok3DL4KkP0xIPqW990z
+	 Vh04GOaVa+Mswq8aBiVRSKXg31rfk=
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
+From: jiping huang <huangjiping95@qq.com>
+To: rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	rui.zhang@intel.com,
+	lukasz.luba@arm.com
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jiping huang <huangjiping95@qq.com>,
+	jiping huang <jipinghuang686@gmail.com>
+Subject: [PATCH] thermal: add the setting logic for cdev state while trip->threshold modified dynamically.
+Date: Tue, 30 Dec 2025 03:19:43 -0500
+X-OQ-MSGID: <20251230081943.3077264-1-huangjiping95@qq.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251208202803.GA2541017-robh@kernel.org>
 
-On Mon, Dec 08, 2025 at 02:28:03PM -0600, Rob Herring wrote:
-> On Tue, Nov 25, 2025 at 08:15:12PM +0530, Manivannan Sadhasivam wrote:
-> > Add the devicetree binding for PCIe M.2 Mechanical Key E connector defined
-> > in the PCI Express M.2 Specification, r4.0, sec 5.1.2. This connector
-> > provides interfaces like PCIe or SDIO to attach the WiFi devices to the
-> > host machine, USB or UART+PCM interfaces to attach the Bluetooth (BT)
-> > devices along with additional interfaces like I2C for NFC solution. At any
-> > point of time, the connector can only support either PCIe or SDIO as the
-> > WiFi interface and USB or UART as the BT interface.
-> 
-> AFAICT, there's no muxing of interfaces. Maybe that's a defacto 
-> limitation on x86 systems? There's no reason to encode that into the 
-> binding if the pins aren't mux'ed on the connector.
-> 
+  In the current gov algorithm, only when temperature > trip_threshold
+and the temperature rising, in both cases where temperature <
+trip_threshold and temperature dropping, cdev ->states will be updated.
+  In theory, if the trip_threshold is modified runtime and there are
+still situations where the temperature remains unchanged or decreases
+when the throttle is true, and where the temperature rises or remains
+unchanged when the throttle is false, then the cdev ->state should be
+updated by comparing temperature with the trip threshold again.
 
-Ok. If you prefer not to describe the MUX (if one exists outside of the
-connector) in the binding, then having one endpoint sounds reasonable.
+Signed-off-by: jiping huang <jipinghuang686@gmail.com>
+---
+ drivers/thermal/gov_step_wise.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-You did raise this point in the other series, but the conversation was not
-concluded: https://lore.kernel.org/linux-pci/20251119235614.GA3566558-robh@kernel.org/
-
-> > 
-> > The connector provides a primary power supply of 3.3v, along with an
-> > optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
-> > 1.8v sideband signaling.
-> > 
-> > The connector also supplies optional signals in the form of GPIOs for fine
-> > grained power management.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > ---
-> >  .../bindings/connector/pcie-m2-e-connector.yaml    | 178 +++++++++++++++++++++
-> >  MAINTAINERS                                        |   1 +
-> >  2 files changed, 179 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
-> > new file mode 100644
-> > index 000000000000..fe2c9a943a21
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
-> > @@ -0,0 +1,178 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/connector/pcie-m2-e-connector.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: PCIe M.2 Mechanical Key E Connector
-> > +
-> > +maintainers:
-> > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > +
-> > +description:
-> > +  A PCIe M.2 E connector node represents a physical PCIe M.2 Mechanical Key E
-> > +  connector. Mechanical Key E connectors are used to connect Wireless
-> > +  Connectivity devices including combinations of Wi-Fi, BT, NFC to the host
-> > +  machine over interfaces like PCIe/SDIO, USB/UART+PCM, and I2C.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: pcie-m2-e-connector
-> > +
-> > +  vpcie3v3-supply:
-> > +    description: A phandle to the regulator for 3.3v supply.
-> > +
-> > +  vpcie1v8-supply:
-> > +    description: A phandle to the regulator for VIO 1.8v supply.
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +    description: OF graph bindings modeling the interfaces exposed on the
-> > +      connector. Since a single connector can have multiple interfaces, every
-> > +      interface has an assigned OF graph port number as described below.
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: Connector interfaces for Wi-Fi
-> > +
-> > +        properties:
-> > +          endpoint@0:
-> > +            $ref: /schemas/graph.yaml#/properties/endpoint
-> > +            description: PCIe interface
-> > +
-> > +          endpoint@1:
-> > +            $ref: /schemas/graph.yaml#/properties/endpoint
-> > +            description: SDIO interface
-> > +
-> > +        anyOf:
-> > +          - required:
-> > +              - endpoint@0
-> > +          - required:
-> > +              - endpoint@1
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: Connector interfaces for BT
-> > +
-> > +        properties:
-> > +          endpoint@0:
-> > +            $ref: /schemas/graph.yaml#/properties/endpoint
-> > +            description: USB 2.0 interface
-> > +
-> > +          endpoint@1:
-> > +            $ref: /schemas/graph.yaml#/properties/endpoint
-> > +            description: UART interface
-> > +
-> > +        anyOf:
-> > +          - required:
-> > +              - endpoint@0
-> > +          - required:
-> > +              - endpoint@1
-> > +
-> > +      port@2:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: PCM/I2S interface
-> 
-> Does this work with any existing DAI bindings? Or conflict with the 
-> audio graph card binding?
-> 
-
-I haven't verified with any sound card, but it looks to be compatible with the
-existing audio graph card binding.
-
-> > +
-> > +      port@3:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: I2C interface
-> 
-> Like the other one, use i2c-parent.
-> 
-
-Ack.
-
-- Mani
-
+diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+index 65974fe8be0d..d1fe7e28297f 100644
+--- a/drivers/thermal/gov_step_wise.c
++++ b/drivers/thermal/gov_step_wise.c
+@@ -49,9 +49,9 @@ static unsigned long get_target_state(struct thermal_instance *instance,
+ 	}
+ 
+ 	if (throttle) {
+-		if (trend == THERMAL_TREND_RAISING)
++		if (trend == THERMAL_TREND_RAISING || cur_state <= instance->lower)
+ 			return clamp(cur_state + 1, instance->lower, instance->upper);
+-	} else if (trend == THERMAL_TREND_DROPPING) {
++	} else {
+ 		if (cur_state <= instance->lower)
+ 			return THERMAL_NO_TARGET;
+ 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.34.1
+
 
