@@ -1,206 +1,212 @@
-Return-Path: <linux-pm+bounces-40028-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40030-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65C8ECE8F5D
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 09:02:21 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EC94CE8F9F
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 09:08:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4BBB1301AD03
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 08:01:54 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 53AFB3002840
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 08:08:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2F122DCF45;
-	Tue, 30 Dec 2025 08:01:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AA9F2FE575;
+	Tue, 30 Dec 2025 08:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="n8SuKZUh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOHCLkeX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7F11AA1F4
-	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 08:01:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D302F7AD0;
+	Tue, 30 Dec 2025 08:08:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767081713; cv=none; b=NrCFHobWfWWJNTdKPfHCFyKNKWuqg8S/veNPaB/Qe8ySKl1vFtAUDeMWnQaqQd/ZrVodj0+sXZrP0EmtzXuPRZiD+7LNQsJUGoQmG2AuZxs+v5NNZRZb/rSbPMPxfQGVmqkxTx5p5h0y+GI6JJyXDzHj2WTTEV0IacTU5g1LDvA=
+	t=1767082089; cv=none; b=h52I++pA0so+1Ke63M5mUlWzjvz3IHEiPJHzpiX20rUiIKHHd4IOITWxN2ilQ/N1n8zxYvUbNDsQkD33eHMbiBxbSSuLPEFoSCqflD1VGVQVWqbJpdf2yBLNrUtN/T836gZWpFPKpmZPCKt8UTVIcIaYDIV1MluLVDzICTXxvZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767081713; c=relaxed/simple;
-	bh=NVxw9tzSbqx7Fnx+fwrVsx/w+Vvhvte292GqHHgXpsI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=agqXwEU4Z7YiVZFJ+k1uGKWzRkvWWYfipu7y55C/N0Oz4SqIiCt67+3pthZAej4ef83HVMx+ME5BqwhVXUK4gZPU0l6CH3xyaSEJ467/u6eSl2Bkz2b6rLTMH/RjrO7HsmpzElzYf6nzuPmIjD5ou3rTpq2Yrt8TR7yWN7FcvpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=n8SuKZUh; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=rSSgS4Owu7apQQ6F3BIp5jGRa84w3hOg76VfO/jrTmw=;
-	b=n8SuKZUhk8irlpoy7u+eoWhElMiDgO6/PbR0Z22LKXRi/+4eI/vglekMkORpqxAndxcX6Asv4
-	kcquYVAypwDR5xu5iTJ932y8InLeW7jfAcsE/+mDyZZ9Dn5r0///7zkcKj0kKazy89cGqBFLgyq
-	rj8UkrN2JqvmpzEVV+T4ryM=
-Received: from mail.maildlp.com (unknown [172.19.162.140])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4dgQTW653bz1T4H8;
-	Tue, 30 Dec 2025 15:59:11 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id 30EE52016A;
-	Tue, 30 Dec 2025 16:01:42 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- kwepemf200001.china.huawei.com (7.202.181.227) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 30 Dec 2025 16:01:41 +0800
-From: Lifeng Zheng <zhenglifeng1@huawei.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <rafael@kernel.org>,
-	<viresh.kumar@linaro.org>, <sudeep.holla@arm.com>,
-	<gregkh@linuxfoundation.org>, <dakr@kernel.org>, <beata.michalska@arm.com>,
-	<ionela.voinescu@arm.com>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<vincent.guittot@linaro.org>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>, <yubowen8@huawei.com>, <zhangpengjie2@huawei.com>,
-	<wangzhi12@huawei.com>, <linhongye@h-partners.com>, <zhenglifeng1@huawei.com>
-Subject: [REPOST PATCH v6 3/3] arm64: topology: Handle AMU FIE setup on CPU hotplug
-Date: Tue, 30 Dec 2025 16:01:15 +0800
-Message-ID: <20251230080115.2120612-4-zhenglifeng1@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20251230080115.2120612-1-zhenglifeng1@huawei.com>
-References: <20251230080115.2120612-1-zhenglifeng1@huawei.com>
+	s=arc-20240116; t=1767082089; c=relaxed/simple;
+	bh=MAuT6kX2skfD9THyyWJ8LQ+yulvGn9NW41sVqxts1yU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S8XMcJmtcYKmHuZnSsFciQgXE1C/tzoNPdsbyQ7dPQx83iDUFDUbQoa7uv5z0cpA8G5pcaYUHdZjl1F0e7YxiVoarc+n7MVo4yIo0MTCezcnu/4F+5exd9Ykk4QACmIKmNKu9Pvfgu3j7Q5LnoRfBaVdy8dxmUEb/k7sQZCUFWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOHCLkeX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B8A6C4CEFB;
+	Tue, 30 Dec 2025 08:07:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767082087;
+	bh=MAuT6kX2skfD9THyyWJ8LQ+yulvGn9NW41sVqxts1yU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kOHCLkeXIr4bMGx1yxcUVL5o1PBdStGGwyn2LajtcvnSSeXgcRcHOR7Zdava2vEtv
+	 J25tvmXiD8azlKs/HBLeJVvEyUmOSYVejGKK/RxBCmiR87kHQ9rHo4xFVjsBjvakHY
+	 j5gFGpc+bQnN3A9ZlyfVH38tejNsIYtM4kpKTX/ccoZK0fgfpltEJPzsWxVKBRkJZh
+	 YDT6LUGXTzRQ1Vj1lJtcvoBgY/NpxwfkaUHXvqabhW7o/S4/S3WHFz97ex/XlhTCMB
+	 gR2a+BkIDRFsx213PKYRZ43IZyM1MVx8TgDyEBqCqBljxDTlj74sfHE8SzgBMxJHM4
+	 uxsPVfOvCxfUg==
+Date: Tue, 30 Dec 2025 13:37:56 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Hans de Goede <hansg@kernel.org>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Subject: Re: [PATCH v2 08/10] dt-bindings: connector: Add PCIe M.2 Mechanical
+ Key E connector
+Message-ID: <2fyzwqr5cvkzkkgu5dk6qbc6o2dhnrtt22lf37rv6jzwtmbrek@yhedhlvzpzw7>
+References: <20251125-pci-m2-e-v2-0-32826de07cc5@oss.qualcomm.com>
+ <20251125-pci-m2-e-v2-8-32826de07cc5@oss.qualcomm.com>
+ <20251208202803.GA2541017-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemf200001.china.huawei.com (7.202.181.227)
+In-Reply-To: <20251208202803.GA2541017-robh@kernel.org>
 
-Currently, when a cpufreq policy is created, the AMU FIE setup process
-checks all CPUs in the policy -- including those that are offline. If any
-of these CPUs are offline at that time, their AMU capability flag hasn't
-been verified yet, leading the check fail. As a result, AMU FIE is not
-enabled, even if the CPUs that are online do support it.
+On Mon, Dec 08, 2025 at 02:28:03PM -0600, Rob Herring wrote:
+> On Tue, Nov 25, 2025 at 08:15:12PM +0530, Manivannan Sadhasivam wrote:
+> > Add the devicetree binding for PCIe M.2 Mechanical Key E connector defined
+> > in the PCI Express M.2 Specification, r4.0, sec 5.1.2. This connector
+> > provides interfaces like PCIe or SDIO to attach the WiFi devices to the
+> > host machine, USB or UART+PCM interfaces to attach the Bluetooth (BT)
+> > devices along with additional interfaces like I2C for NFC solution. At any
+> > point of time, the connector can only support either PCIe or SDIO as the
+> > WiFi interface and USB or UART as the BT interface.
+> 
+> AFAICT, there's no muxing of interfaces. Maybe that's a defacto 
+> limitation on x86 systems? There's no reason to encode that into the 
+> binding if the pins aren't mux'ed on the connector.
+> 
 
-Later, when the previously offline CPUs come online and report AMU support,
-there's no mechanism in place to re-enable AMU FIE for the policy. This
-leaves the entire frequency domain without AMU FIE, despite being eligible.
+Ok. If you prefer not to describe the MUX (if one exists outside of the
+connector) in the binding, then having one endpoint sounds reasonable.
 
-Restrict the initial AMU FIE check to only those CPUs that are online at
-the time the policy is created, and allow CPUs that come online later to
-join the policy with AMU FIE enabled.
+You did raise this point in the other series, but the conversation was not
+concluded: https://lore.kernel.org/linux-pci/20251119235614.GA3566558-robh@kernel.org/
 
-Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-Acked-by: Beata Michalska <beata.michalska@arm.com>
----
- arch/arm64/kernel/topology.c | 65 ++++++++++++++++++++++++++++++++++--
- drivers/base/arch_topology.c |  9 ++++-
- 2 files changed, 71 insertions(+), 3 deletions(-)
+> > 
+> > The connector provides a primary power supply of 3.3v, along with an
+> > optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
+> > 1.8v sideband signaling.
+> > 
+> > The connector also supplies optional signals in the form of GPIOs for fine
+> > grained power management.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > ---
+> >  .../bindings/connector/pcie-m2-e-connector.yaml    | 178 +++++++++++++++++++++
+> >  MAINTAINERS                                        |   1 +
+> >  2 files changed, 179 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
+> > new file mode 100644
+> > index 000000000000..fe2c9a943a21
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
+> > @@ -0,0 +1,178 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/connector/pcie-m2-e-connector.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: PCIe M.2 Mechanical Key E Connector
+> > +
+> > +maintainers:
+> > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > +
+> > +description:
+> > +  A PCIe M.2 E connector node represents a physical PCIe M.2 Mechanical Key E
+> > +  connector. Mechanical Key E connectors are used to connect Wireless
+> > +  Connectivity devices including combinations of Wi-Fi, BT, NFC to the host
+> > +  machine over interfaces like PCIe/SDIO, USB/UART+PCM, and I2C.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: pcie-m2-e-connector
+> > +
+> > +  vpcie3v3-supply:
+> > +    description: A phandle to the regulator for 3.3v supply.
+> > +
+> > +  vpcie1v8-supply:
+> > +    description: A phandle to the regulator for VIO 1.8v supply.
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +    description: OF graph bindings modeling the interfaces exposed on the
+> > +      connector. Since a single connector can have multiple interfaces, every
+> > +      interface has an assigned OF graph port number as described below.
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description: Connector interfaces for Wi-Fi
+> > +
+> > +        properties:
+> > +          endpoint@0:
+> > +            $ref: /schemas/graph.yaml#/properties/endpoint
+> > +            description: PCIe interface
+> > +
+> > +          endpoint@1:
+> > +            $ref: /schemas/graph.yaml#/properties/endpoint
+> > +            description: SDIO interface
+> > +
+> > +        anyOf:
+> > +          - required:
+> > +              - endpoint@0
+> > +          - required:
+> > +              - endpoint@1
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description: Connector interfaces for BT
+> > +
+> > +        properties:
+> > +          endpoint@0:
+> > +            $ref: /schemas/graph.yaml#/properties/endpoint
+> > +            description: USB 2.0 interface
+> > +
+> > +          endpoint@1:
+> > +            $ref: /schemas/graph.yaml#/properties/endpoint
+> > +            description: UART interface
+> > +
+> > +        anyOf:
+> > +          - required:
+> > +              - endpoint@0
+> > +          - required:
+> > +              - endpoint@1
+> > +
+> > +      port@2:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description: PCM/I2S interface
+> 
+> Does this work with any existing DAI bindings? Or conflict with the 
+> audio graph card binding?
+> 
 
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index cf9bb761af3a..539b38935182 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -284,7 +284,7 @@ static int init_amu_fie_callback(struct notifier_block *nb, unsigned long val,
- 	struct cpufreq_policy *policy = data;
- 
- 	if (val == CPUFREQ_CREATE_POLICY)
--		amu_fie_setup(policy->related_cpus);
-+		amu_fie_setup(policy->cpus);
- 
- 	/*
- 	 * We don't need to handle CPUFREQ_REMOVE_POLICY event as the AMU
-@@ -303,10 +303,71 @@ static struct notifier_block init_amu_fie_notifier = {
- 	.notifier_call = init_amu_fie_callback,
- };
- 
-+static int cpuhp_topology_online(unsigned int cpu)
-+{
-+	struct cpufreq_policy *policy = cpufreq_cpu_policy(cpu);
-+
-+	/* Those are cheap checks */
-+
-+	/*
-+	 * Skip this CPU if:
-+	 *  - it has no cpufreq policy assigned yet,
-+	 *  - no policy exists that spans CPUs with AMU counters, or
-+	 *  - it was already handled.
-+	 */
-+	if (unlikely(!policy) || !cpumask_available(amu_fie_cpus) ||
-+	    cpumask_test_cpu(cpu, amu_fie_cpus))
-+		return 0;
-+
-+	/*
-+	 * Only proceed if all already-online CPUs in this policy
-+	 * support AMU counters.
-+	 */
-+	if (unlikely(!cpumask_subset(policy->cpus, amu_fie_cpus)))
-+		return 0;
-+
-+	/*
-+	 * If the new online CPU cannot pass this check, all the CPUs related to
-+	 * the same policy should be clear from amu_fie_cpus mask, otherwise they
-+	 * may use different source of the freq scale.
-+	 */
-+	if (!freq_counters_valid(cpu)) {
-+		pr_warn("CPU[%u] doesn't support AMU counters\n", cpu);
-+		topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH,
-+						 policy->related_cpus);
-+		cpumask_andnot(amu_fie_cpus, amu_fie_cpus, policy->related_cpus);
-+		return 0;
-+	}
-+
-+	cpumask_set_cpu(cpu, amu_fie_cpus);
-+
-+	topology_set_scale_freq_source(&amu_sfd, cpumask_of(cpu));
-+
-+	pr_debug("CPU[%u]: counter will be used for FIE.", cpu);
-+
-+	return 0;
-+}
-+
- static int __init init_amu_fie(void)
- {
--	return cpufreq_register_notifier(&init_amu_fie_notifier,
-+	int ret;
-+
-+	ret = cpufreq_register_notifier(&init_amu_fie_notifier,
- 					CPUFREQ_POLICY_NOTIFIER);
-+	if (ret)
-+		return ret;
-+
-+	ret = cpuhp_setup_state_nocalls(CPUHP_AP_ONLINE_DYN,
-+					"arm64/topology:online",
-+					cpuhp_topology_online,
-+					NULL);
-+	if (ret < 0) {
-+		cpufreq_unregister_notifier(&init_amu_fie_notifier,
-+					    CPUFREQ_POLICY_NOTIFIER);
-+		return ret;
-+	}
-+
-+	return 0;
- }
- core_initcall(init_amu_fie);
- 
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 84ec92bff642..c0ef6ea9c111 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -34,7 +34,14 @@ EXPORT_PER_CPU_SYMBOL_GPL(capacity_freq_ref);
- 
- static bool supports_scale_freq_counters(const struct cpumask *cpus)
- {
--	return cpumask_subset(cpus, &scale_freq_counters_mask);
-+	int i;
-+
-+	for_each_cpu(i, cpus) {
-+		if (cpumask_test_cpu(i, &scale_freq_counters_mask))
-+			return true;
-+	}
-+
-+	return false;
- }
- 
- bool topology_scale_freq_invariant(void)
+I haven't verified with any sound card, but it looks to be compatible with the
+existing audio graph card binding.
+
+> > +
+> > +      port@3:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description: I2C interface
+> 
+> Like the other one, use i2c-parent.
+> 
+
+Ack.
+
+- Mani
+
 -- 
-2.33.0
-
+மணிவண்ணன் சதாசிவம்
 
