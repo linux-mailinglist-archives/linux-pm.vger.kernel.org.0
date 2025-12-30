@@ -1,169 +1,212 @@
-Return-Path: <linux-pm+bounces-40045-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40046-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2DBACE9CC1
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 14:36:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEC72CE9CCA
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 14:39:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D1BC03011B10
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 13:36:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E6C9830198E2
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 13:39:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC797236454;
-	Tue, 30 Dec 2025 13:36:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE9B423C4F4;
+	Tue, 30 Dec 2025 13:39:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cKOqd7B4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s+UzDTHu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A53A22B8C5
-	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 13:36:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2C8239099
+	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 13:39:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767101764; cv=none; b=a+tVVNw7xLDsTmt7V4mUCOxdJgvOuibIGKVsBqD3WZ+6USUVmzaMnNRAYplVxx0cOf/1OpyFJKMVGEgd4opVCKcbW0wjLz5n0/3inTreD4Z/TijhDKxPCCgopulpGN2xFRNdii5nxICOGf8CoGaZaz+eT4Cz9j55bvoioa+wdM4=
+	t=1767101992; cv=none; b=eTfXjNG08Rd0s1WN5ocsFDFjRWTH+RS/2BZnXPaf9/1WHHV0hesXvDLQL8EF9B1sz7e46lin0n0xLJf1JjzRyd48TURFsM4ZNIsbIzi9Dv8kmBUZ8riVHr0mNbIwNz46aEDJP+GhgJDtU8vvQApZDZ4TfrrPqzjO0crDJaXYit4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767101764; c=relaxed/simple;
-	bh=whRaztirvx5Wyh80MSX+DutYWxXqcp9XldzpUIBN9zk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RL9ocQPV6eWApZVTJAXkogZ89G/ixCOj9PmxmfLXvQizftCGVnbVFznNOS/IEeeb8TFpk3KZs6dNvG9qIKQ7GfpUbtJymIVFx864/uv5AFXSfPV0l7SpEaCdcjU0CZAsuJ7uBdbAjgZd5P8PdxPisurN7fOF8EVD+nddGVZ5cYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cKOqd7B4; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767101763; x=1798637763;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=whRaztirvx5Wyh80MSX+DutYWxXqcp9XldzpUIBN9zk=;
-  b=cKOqd7B4ify/4oy22atg9aYnDU2tzUTmScn6TVCs4e5aKJRhttkUU7Fi
-   UdXIP6j1Zk05cAzoeao8hkPhg0bSlaOweLaOH3JrRKOf4mn00ge03FRYP
-   0urVqrm0t+eSS/PJr1FDSvF+x4ZEEpCbjgswZ02aXPNVviKEawn65Fgy3
-   kwdUUaoVojf6xFI2Vo9F9BvOAU15X7P/HoxxzlBnX15ByaTHShv+fuWiZ
-   gv8IdQaqem+5/tSqEI4POxMiTHRKiJ2ci11KUj7LtQn3R2WIVv3ItMQND
-   w/GOAE3Kgjlrwhy7izeJ+QRsow2SK5fkSB0IfR4nfVc997lBWocHnz2dp
-   g==;
-X-CSE-ConnectionGUID: jv3TeRHVSbS1HwjnF5AUbg==
-X-CSE-MsgGUID: 80MZblQzTcmmDakg/KtDFQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11656"; a="79809530"
-X-IronPort-AV: E=Sophos;i="6.21,189,1763452800"; 
-   d="scan'208";a="79809530"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2025 05:36:01 -0800
-X-CSE-ConnectionGUID: ada3EXIlSHOIL18jvWVdKA==
-X-CSE-MsgGUID: E5snTTCFSEymNkXU32GLZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,189,1763452800"; 
-   d="scan'208";a="205734082"
-Received: from lkp-server01.sh.intel.com (HELO c9aa31daaa89) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 30 Dec 2025 05:35:59 -0800
-Received: from kbuild by c9aa31daaa89 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vaZtE-000000000P3-2Vow;
-	Tue, 30 Dec 2025 13:35:56 +0000
-Date: Tue, 30 Dec 2025 21:35:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tzung-Bi Shih <tzungbi@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Cc: oe-kbuild-all@lists.linux.dev,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-	tzungbi@kernel.org
-Subject: Re: [PATCH] pmdomain: mediatek: Break lock dependency to
- `prepare_lock`
-Message-ID: <202512302129.BjTBw9E6-lkp@intel.com>
-References: <20251229043244.4103262-1-tzungbi@kernel.org>
+	s=arc-20240116; t=1767101992; c=relaxed/simple;
+	bh=OlkCqn8fXbP0BKS1z87/ZV5T/EiSvUw1/xi0wc+ejKM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HsySbXdXD4k5hIq4YWKa07GvOsBhSOGLcjHo3yFUiwWgvPI5SVI7e3h+J6MbvK5lNwXyG/PbbfjBHNO6DPhoVmCS8TiLibImsyOc/jYmLgF800kU27lokw2B2PzLQlEBSnW6+tbmjTVlItg24mBjQShWnvZwITFq0sYWbaQqSHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s+UzDTHu; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-59445ee9738so7891494e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 05:39:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1767101989; x=1767706789; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bg1+ls4Dm0mVYOjkWjZgFsYapx+e4w8tJTjnMs5lrKs=;
+        b=s+UzDTHuiGeSzvMLtmoAi5M5IJShFvnkkIDQ0GL1WL3pJ19ovhKE4nXHDxiOoUzcFg
+         nIuardYjfu/ByuSCB+1kAxw1+mdBPUiadyZaoe3ucTO3cw5rBdm0gvFcL+5VB+pfioAY
+         9CVatTIDXR+8ap1X+u8RPguYMepfTX6gZk6CTeinZAyy0VDrLULXfHP4npHYyikTGHV5
+         In1U+MeUdq1nQHxhCfiaww3IFqmw4EwIK7WCM8RVxJNkNf1zosp+3Ko/F3bxID5b5ztQ
+         gcCUFq2/u2hrs5BjJfge12+7oAbMb6Lybf0zkB1WLvobtm7lXrWjkrvlsOOrwlcXqCwz
+         73kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767101989; x=1767706789;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Bg1+ls4Dm0mVYOjkWjZgFsYapx+e4w8tJTjnMs5lrKs=;
+        b=I3oc6RM44BUmCOgseutpYh+UAaV0vBnLkjIBntxe70baXqipMBJqc7ui8mbS9vJ0jk
+         MJgef5z/bRQuNTV8kb4QFoNiNoyiEF4UP96LdAqinWEnvG2e8OtB01vn/a6QO8javupg
+         v8AEMdR+etjqYIuBfnjgiUjJc01+9kG6jEo/akerC0CI5cUz8Br68jGd/y24F4+ycFwc
+         7cXfUCwgPjQJDTgbkuZodppdZKZqnj05zS8f+0cEzMweWwI0P2AvW43QTw1t0N0cV2s1
+         KxbHLEO90I1jfi7HU4QML9C/Gm46PZqgPe9/YbuPeCqEEyG7tus5MTTTnNDmckOm+1Gm
+         GFdA==
+X-Forwarded-Encrypted: i=1; AJvYcCV/GQ+q8XOUCeRTSLiG37GhYbt4s9XGzVwyN8c+j8sU7ewp5d2HKQnpX+1i+UBc3zezl2C5DszkvA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0CXhqThL3HR0+5HYFWzCTLoce66w4xE1Si2stip/s6f3KQsj1
+	8vdo1BLKP3TSiwLfDmuIKBkC58yEDzXx961rWppU3/MFedcpd0z5mmN8m9jegyb6h4rgQyuK3Kj
+	NzoR7Mwvpgw8ACfMnHNVN5ga5kZej6n9zo85xje7H+Q==
+X-Gm-Gg: AY/fxX6Xi2C5zHQi39wurC6kOcnGDQlSUPDvE7sGvJO+t4l0XOgKXo8fO3sQSf/+pXs
+	FRXPRYONfatVRQSpCQmVBwip/e+6rv3WS7AkSDzvds+1lvQGoMIi3iOkdFDUTCoZ8ciSeiYEvJI
+	2Tykb+7FOq6g+uJTf5XBl/H2bZCUJQBSHL3Y2FCb7012zmwoJso/aPe9GL8Y41K5P+9jAWzyYAN
+	JojddZr5j3gicaEkPFEICEOXLWxcn71XGmKUMAB5d626HwSl1VGHVCL4ST3+otFk8fRTVG3
+X-Google-Smtp-Source: AGHT+IFc2q13TthZOLNMt7KlXgzpHYzWQ4Oc1qku0cPr+yLi0Y1e7lT6nY190irxS/Myr4DyEyhRfiOI15TA9SqTEa4=
+X-Received: by 2002:a05:6512:b20:b0:594:2870:9774 with SMTP id
+ 2adb3069b0e04-59a17d670f6mr11077610e87.38.1767101988845; Tue, 30 Dec 2025
+ 05:39:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251229043244.4103262-1-tzungbi@kernel.org>
+References: <20251205015428.643-1-ming.qian@oss.nxp.com> <20251205015428.643-2-ming.qian@oss.nxp.com>
+In-Reply-To: <20251205015428.643-2-ming.qian@oss.nxp.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 30 Dec 2025 14:39:12 +0100
+X-Gm-Features: AQt7F2p9Tp60FXm9JL954U-IrjyLLANKEoHVrFFumJZKPA0geVKKGoJbY19yu5A
+Message-ID: <CAPDyKFpt-GL-RFcJ5mTWFqaRfy1dQJ7LL8OBCoQK0+zPDFEzsg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] media: v4l2-mem2mem: Add a kref to the
+ v4l2_m2m_dev structure
+To: ming.qian@oss.nxp.com
+Cc: linux-media@vger.kernel.org, mchehab@kernel.org, hverkuil-cisco@xs4all.nl, 
+	nicolas@ndufresne.ca, benjamin.gaignard@collabora.com, p.zabel@pengutronix.de, 
+	sebastian.fricke@collabora.com, shawnguo@kernel.org, s.hauer@pengutronix.de, 
+	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com, 
+	l.stach@pengutronix.de, Frank.li@nxp.com, peng.fan@nxp.com, 
+	eagle.zhou@nxp.com, imx@lists.linux.dev, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Tzung-Bi,
+On Fri, 5 Dec 2025 at 02:55, <ming.qian@oss.nxp.com> wrote:
+>
+> From: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+>
+> Adding a reference count to the v4l2_m2m_dev structure allow safely
+> sharing it across multiple hardware nodes. This can be used to prevent
+> running jobs concurrently on m2m cores that have some internal resource
+> sharing.
+>
+> Signed-off-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+> Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
 
-kernel test robot noticed the following build warnings:
+I certainly don't have the complete picture for how this needs to work.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.19-rc3 next-20251219]
-[cannot apply to amd-pstate/linux-next amd-pstate/bleeding-edge]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+However, I was thinking that rather than using a kref and having to
+share two specific functions to update it (v4l2_m2m_get|put), couldn't
+we just use a device-link instead?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Tzung-Bi-Shih/pmdomain-mediatek-Break-lock-dependency-to-prepare_lock/20251229-123525
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20251229043244.4103262-1-tzungbi%40kernel.org
-patch subject: [PATCH] pmdomain: mediatek: Break lock dependency to `prepare_lock`
-config: arm-randconfig-003-20251230 (https://download.01.org/0day-ci/archive/20251230/202512302129.BjTBw9E6-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 10.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251230/202512302129.BjTBw9E6-lkp@intel.com/reproduce)
+Kind regards
+Uffe
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202512302129.BjTBw9E6-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/pmdomain/mediatek/mtk-pm-domains.c:1304:12: warning: 'scpsys_resume' defined but not used [-Wunused-function]
-    1304 | static int scpsys_resume(struct device *dev)
-         |            ^~~~~~~~~~~~~
->> drivers/pmdomain/mediatek/mtk-pm-domains.c:1285:12: warning: 'scpsys_suspend' defined but not used [-Wunused-function]
-    1285 | static int scpsys_suspend(struct device *dev)
-         |            ^~~~~~~~~~~~~~
-
-
-vim +/scpsys_resume +1304 drivers/pmdomain/mediatek/mtk-pm-domains.c
-
-  1284	
-> 1285	static int scpsys_suspend(struct device *dev)
-  1286	{
-  1287		struct scpsys *scpsys = dev_get_drvdata(dev);
-  1288		struct generic_pm_domain *genpd;
-  1289		struct scpsys_domain *pd;
-  1290		int i;
-  1291	
-  1292		for (i = 0; i < scpsys->pd_data.num_domains; i++) {
-  1293			genpd = scpsys->pd_data.domains[i];
-  1294			if (!genpd)
-  1295				continue;
-  1296	
-  1297			pd = to_scpsys_domain(genpd);
-  1298			clk_bulk_unprepare(pd->num_clks, pd->clks);
-  1299			clk_bulk_unprepare(pd->num_subsys_clks, pd->subsys_clks);
-  1300		}
-  1301		return 0;
-  1302	}
-  1303	
-> 1304	static int scpsys_resume(struct device *dev)
-  1305	{
-  1306		struct scpsys *scpsys = dev_get_drvdata(dev);
-  1307		struct generic_pm_domain *genpd;
-  1308		struct scpsys_domain *pd;
-  1309		int i, ret;
-  1310	
-  1311		for (i = 0; i < scpsys->pd_data.num_domains; i++) {
-  1312			genpd = scpsys->pd_data.domains[i];
-  1313			if (!genpd)
-  1314				continue;
-  1315	
-  1316			pd = to_scpsys_domain(genpd);
-  1317			ret = clk_bulk_prepare(pd->num_clks, pd->clks);
-  1318			if (ret)
-  1319				return ret;
-  1320			ret = clk_bulk_prepare(pd->num_subsys_clks, pd->subsys_clks);
-  1321			if (ret)
-  1322				return ret;
-  1323		}
-  1324		return 0;
-  1325	}
-  1326	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+> v4
+> - Add my Signed-off-by
+>
+>  drivers/media/v4l2-core/v4l2-mem2mem.c | 23 +++++++++++++++++++++++
+>  include/media/v4l2-mem2mem.h           | 21 +++++++++++++++++++++
+>  2 files changed, 44 insertions(+)
+>
+> diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> index fec93c1a9231..ae0de54d4c3e 100644
+> --- a/drivers/media/v4l2-core/v4l2-mem2mem.c
+> +++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
+> @@ -90,6 +90,7 @@ static const char * const m2m_entity_name[] = {
+>   * @job_work:          worker to run queued jobs.
+>   * @job_queue_flags:   flags of the queue status, %QUEUE_PAUSED.
+>   * @m2m_ops:           driver callbacks
+> + * @kref:              device reference count
+>   */
+>  struct v4l2_m2m_dev {
+>         struct v4l2_m2m_ctx     *curr_ctx;
+> @@ -109,6 +110,8 @@ struct v4l2_m2m_dev {
+>         unsigned long           job_queue_flags;
+>
+>         const struct v4l2_m2m_ops *m2m_ops;
+> +
+> +       struct kref kref;
+>  };
+>
+>  static struct v4l2_m2m_queue_ctx *get_queue_ctx(struct v4l2_m2m_ctx *m2m_ctx,
+> @@ -1200,6 +1203,7 @@ struct v4l2_m2m_dev *v4l2_m2m_init(const struct v4l2_m2m_ops *m2m_ops)
+>         INIT_LIST_HEAD(&m2m_dev->job_queue);
+>         spin_lock_init(&m2m_dev->job_spinlock);
+>         INIT_WORK(&m2m_dev->job_work, v4l2_m2m_device_run_work);
+> +       kref_init(&m2m_dev->kref);
+>
+>         return m2m_dev;
+>  }
+> @@ -1211,6 +1215,25 @@ void v4l2_m2m_release(struct v4l2_m2m_dev *m2m_dev)
+>  }
+>  EXPORT_SYMBOL_GPL(v4l2_m2m_release);
+>
+> +void v4l2_m2m_get(struct v4l2_m2m_dev *m2m_dev)
+> +{
+> +       kref_get(&m2m_dev->kref);
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_m2m_get);
+> +
+> +static void v4l2_m2m_release_from_kref(struct kref *kref)
+> +{
+> +       struct v4l2_m2m_dev *m2m_dev = container_of(kref, struct v4l2_m2m_dev, kref);
+> +
+> +       v4l2_m2m_release(m2m_dev);
+> +}
+> +
+> +void v4l2_m2m_put(struct v4l2_m2m_dev *m2m_dev)
+> +{
+> +       kref_put(&m2m_dev->kref, v4l2_m2m_release_from_kref);
+> +}
+> +EXPORT_SYMBOL_GPL(v4l2_m2m_put);
+> +
+>  struct v4l2_m2m_ctx *v4l2_m2m_ctx_init(struct v4l2_m2m_dev *m2m_dev,
+>                 void *drv_priv,
+>                 int (*queue_init)(void *priv, struct vb2_queue *src_vq, struct vb2_queue *dst_vq))
+> diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
+> index bf6a09a04dcf..ca295c660c7f 100644
+> --- a/include/media/v4l2-mem2mem.h
+> +++ b/include/media/v4l2-mem2mem.h
+> @@ -547,6 +547,27 @@ v4l2_m2m_register_media_controller(struct v4l2_m2m_dev *m2m_dev,
+>   */
+>  void v4l2_m2m_release(struct v4l2_m2m_dev *m2m_dev);
+>
+> +/**
+> + * v4l2_m2m_get() - take a reference to the m2m_dev structure
+> + *
+> + * @m2m_dev: opaque pointer to the internal data to handle M2M context
+> + *
+> + * This is used to share the M2M device across multiple devices. This
+> + * can be used to avoid scheduling two hardware nodes concurrently.
+> + */
+> +void v4l2_m2m_get(struct v4l2_m2m_dev *m2m_dev);
+> +
+> +/**
+> + * v4l2_m2m_put() - remove a reference to the m2m_dev structure
+> + *
+> + * @m2m_dev: opaque pointer to the internal data to handle M2M context
+> + *
+> + * Once the M2M device have no more references, v4l2_m2m_realse() will be
+> + * called automatically. Users of this method should never call
+> + * v4l2_m2m_release() directly. See v4l2_m2m_get() for more details.
+> + */
+> +void v4l2_m2m_put(struct v4l2_m2m_dev *m2m_dev);
+> +
+>  /**
+>   * v4l2_m2m_ctx_init() - allocate and initialize a m2m context
+>   *
+> --
+> 2.52.0
+>
 
