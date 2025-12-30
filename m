@@ -1,131 +1,154 @@
-Return-Path: <linux-pm+bounces-40043-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40044-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E489FCE996A
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 12:56:33 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4B33CE9B5D
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 13:56:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 11EDC30185C4
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 11:56:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 22FDA301BE84
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 12:56:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B77C72EAB72;
-	Tue, 30 Dec 2025 11:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1475A1A0BF1;
+	Tue, 30 Dec 2025 12:56:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LeOYrXX1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M0eVuIVQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DBE2E9EDA
-	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 11:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3514818FDBE
+	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 12:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767095789; cv=none; b=ifm4qCE/33btsdc15CdSo4gtYviPTiEOmBd/0Sr6I5LEOX6vv5VwOjRmGkkUFK/6fCMcnY8hnB5ZHNioXLWa9B/K6ffp0pGflUWFZefb5gHK3j9C2CFWiTJ8Chv42YlL2oz20acMBKaz6lDhTWSut/kJDsxQqZ5qVORkmYz2e/0=
+	t=1767099400; cv=none; b=J6QnfNWb121zak8qJtXAeheZWsHMzd0ImkIJEsBrYKQFFLFX2cLw37ewxttOmxQF5LsfOJdz9rzDaZq4KiqVx/LeLO6hukpJKcCFqn1+E99YSVdqjSf5V881qvP5UBEGl+q5/gCJn1e34D/4qJ1NowYTUni5HKzDqDHHM/fKWlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767095789; c=relaxed/simple;
-	bh=SiCEdssybs+3Z6oDb/8jDCJ/o7xt3WYbcfK5j1kYg1k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W1CbxtywgatnSKXT1iSm9z1ANDFYUzAg5tbq4PoDNtsdJ5dRTmCG70QUR9daWrZ6VEeq+A8jClr0fCjU7bnnzajNGra0H4aAX5TvP2J2L+aMJYVh3MQzaQd8Le15xy/1kupPuGO9spWHeaxmU6CeEYmHjg1BqKAhD5iHnxKJAcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LeOYrXX1; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767095787;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=egm9ec/npY1danG7l7/ibhgiZQkW9icZioSmLCCrJ9A=;
-	b=LeOYrXX158p+t2PCfZnJJnSOfR0y/ZvdKbZf+SY9zaNk1iKI8cNksgeruhuHrBenwZMekp
-	Cm97qzv23SWnxHFOFVGNnyEq11nyw0m2gukm7xH9KhE5ebs5J3EeyUhYCXLKyeDKt1q235
-	RYpDwFlDkvrqAkMM9w8l/94lmkWbtYE=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-284-uao5-NfpOuK8K95BKkzANg-1; Tue,
- 30 Dec 2025 06:56:23 -0500
-X-MC-Unique: uao5-NfpOuK8K95BKkzANg-1
-X-Mimecast-MFC-AGG-ID: uao5-NfpOuK8K95BKkzANg_1767095782
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 36AB51956080;
-	Tue, 30 Dec 2025 11:56:22 +0000 (UTC)
-Received: from mrout-thinkpadp16vgen1.punetw6.csb (unknown [10.74.64.151])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B530B180045B;
-	Tue, 30 Dec 2025 11:56:18 +0000 (UTC)
-From: Malaya Kumar Rout <mrout@redhat.com>
-To: rafael@kernel.org
-Cc: Malaya Kumar Rout <mrout@redhat.com>,
-	Len Brown <lenb@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] PM: hibernate: Fix crash when freeing invalid crypto compressor
-Date: Tue, 30 Dec 2025 17:26:13 +0530
-Message-ID: <20251230115613.64080-1-mrout@redhat.com>
-In-Reply-To: <CAJZ5v0hn1E=tWVoG7nKsD3_KGygkaGpeSoQ4JsMaJNgugT_Tnw@mail.gmail.com>
-References: <CAJZ5v0hn1E=tWVoG7nKsD3_KGygkaGpeSoQ4JsMaJNgugT_Tnw@mail.gmail.com>
+	s=arc-20240116; t=1767099400; c=relaxed/simple;
+	bh=qA+Llm8/LCWJPs0YBfi84Z6KAfPrxe6ryFR18gOX7Lo=;
+	h=Content-Type:From:Mime-Version:Subject:Date:Message-Id:References:
+	 Cc:In-Reply-To:To; b=IqtO/5tDu5220is5TCu6RfBJe2I1fTJcKmJsPygr1HYrduCkOQPlRru022urNvwkBNFD10yfGjMeWv9zLaQoFAC1N1MH3pGNoOZT9+/6Hqp4KmZiCaZWUizvOJMipaDLp3A3T25EwaYLH/mGM5KhSr09gi5yjS739zlhl+UXX8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M0eVuIVQ; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4779adb38d3so65180125e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 04:56:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767099396; x=1767704196; darn=vger.kernel.org;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1g1kb/JOi9XsJPGmGm57a9CaF95ijegnXyJMo6Mx7xQ=;
+        b=M0eVuIVQDXLgtFb0RSfTRIefHUd2B3yf2xVI9XuDNUQtg9i2Jjr/BAfv62IIiHoXlE
+         3ybRYxDwOh5SmfLM7sbo0Gvc2AB8tdJiXgo/8exI9biloB6h1O8LvG7laS+khJXumr/w
+         MTeNGywJnzUb/qmnog9KgaO5MV1Bf4F55si7DQ5ZnGwMLd4MoqwjJ3X562XV0fTyDsHL
+         Sltyr+xx9O+BB8QmY+C5ARMi3JRjuPc8QjzTVPYR/guhFpdCNswTpGw7p3KgkgiHCfal
+         sVlkEcB0lfnI8hlh23vF1RPKuL6Yq7T8T2X2NNyWIYV5VeFYPVUIj9f7W94EZINe+3Kg
+         hGMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767099396; x=1767704196;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=1g1kb/JOi9XsJPGmGm57a9CaF95ijegnXyJMo6Mx7xQ=;
+        b=meS9LecW6XjuM1CWRtzxzlh4CFraLdQT27Tmd0zWytBx0Rd/8lak8ORsZnGUUDTmwU
+         VqKteDUotDNZfy8niNCL7mQuYKlhI5kUo0tyJdUUOXhBbVDFfqsBqRnmSqSTH1F2Ctkn
+         WuAoLrq87/+Ln8xxae8iMyRLud6VnqSNU2CH9OgK6mSdH0/Qj2GoBsD9XDP55GsGIudp
+         VXGa60M0x4ZHek4eIk+4fJt76NpxUPZS4i4Y3ia+NXwjEVdZxIuK0bFvn50gsuEjvyV8
+         x3HORAoVIP76nVbP4XV6Sk7PjYWgzszsWOPKFdKDy9evxjYIJ/lxLMuNFa5MG53mfSjJ
+         6QZg==
+X-Forwarded-Encrypted: i=1; AJvYcCXgrtgnDJe/jUBA6nqNGaZZWz6gtKYEYzEwIn8qzjyjNOPppYrTkNoIsIFfmdDTR7AhL5zO3s2wFg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzxd8xa03KnO2sXsQF/JbUnIb92NW/JV8mQxw4Y8jOzCKLNMumt
+	rs6SBmC9zmdN7iaUF8vDCGYdjQ/Fj19SZo1pp9DpVdeaxqOMmcsS3yjq0uPMjg==
+X-Gm-Gg: AY/fxX4H75AWDs2jqGWjZpXdsO9ZGpBTwWPGoF0sx+gz036ZZON09OllqLQhxR+WBH7
+	QTreIaiUwaj04FrGSayFmesbudcWh4aw0df4+jgvuKY+LgC87GiP6WRjDS2RSOACM5WU8C5G99v
+	TdNldDcvnM4SbKAMiN13L37yb/In3C4S2rjJ/5vIX1McEUCaij/szrzgP/Z4A+mPizSwJJnR/sf
+	jZb+Rz9u7fY7/Mgn9F5RJ3l7W/3qsuHMd8sudiQuaJLvUdQWMSdwh5I+yymKiILPqYGqiOuwU5y
+	/JJH19XzU/6WrkMYLKMJeKiatZ9GC1Lll8TNmT3KGfr9eYzsPBnNy94dAz0Ewq/rQP5Hbai+zI5
+	cqbcUADq2+L0XjouMihwFqlkHScNOGKlqVwhpd7SpFWuM5Sjk5tLgMAp6X4pap6MQKf2Db7zeKR
+	/HaEIT97uQZNU+QuVWCm7V2v6uwPq7NxwEbRKZSdGhacMe
+X-Google-Smtp-Source: AGHT+IGXIOQiYhgHUXu3tLRwuadO2gEnm0hRaSS+QlqjvGD/CbRO6q8KjLwpAqdJ7Xfc/tDhstFhvg==
+X-Received: by 2002:a05:600c:8b06:b0:47b:e2a9:2bd7 with SMTP id 5b1f17b1804b1-47d3b011b03mr234735265e9.19.1767099396343;
+        Tue, 30 Dec 2025 04:56:36 -0800 (PST)
+Received: from smtpclient.apple ([2a02:8010:60a0:0:7880:449e:4715:b158])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47d19346e48sm578531675e9.2.2025.12.30.04.56.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Dec 2025 04:56:35 -0800 (PST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From: Donald Hunter <donald.hunter@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH for 6.19 0/4] Revise the EM YNL spec to be clearer
+Date: Tue, 30 Dec 2025 12:56:25 +0000
+Message-Id: <BA1D25E0-F4D8-4FFA-92AA-FE58FB3622C1@gmail.com>
+References: <849b576e-9563-42ae-bd5c-756fb6dfd8de@arm.com>
+Cc: Changwoo Min <changwoo@igalia.com>, kernel-dev@igalia.com,
+ linux-pm@vger.kernel.org, horms@kernel.org, pabeni@redhat.com,
+ rafael@kernel.org, netdev@vger.kernel.org, edumazet@google.com,
+ davem@davemloft.net, sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org,
+ lenb@kernel.org, pavel@kernel.org, kuba@kernel.org
+In-Reply-To: <849b576e-9563-42ae-bd5c-756fb6dfd8de@arm.com>
+To: Lukasz Luba <lukasz.luba@arm.com>
+X-Mailer: iPhone Mail (23D5089e)
 
-When crypto_alloc_acomp() fails, it returns an ERR_PTR value, not NULL.
-The cleanup code in save_compressed_image() and load_compressed_image()
-unconditionally calls crypto_free_acomp() without checking for ERR_PTR,
-which causes crypto_acomp_tfm() to dereference an invalid pointer and
-crash the kernel.
 
-This can be triggered when the compression algorithm is unavailable
-(e.g., CONFIG_CRYPTO_LZO not enabled).
 
-Fix by adding IS_ERR_OR_NULL() checks before calling crypto_free_acomp()
-and acomp_request_free(), similar to the existing kthread_stop() check.
+> On 30 Dec 2025, at 09:44, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>=20
+> =EF=BB=BFHi Changwoo,
+>=20
+>> On 12/25/25 04:01, Changwoo Min wrote:
+>> This patch set addresses all the concerns raised at [1] to make the EM YN=
+L spec
+>> clearer. It includes the following changes:
+>> - Fix the lint errors (1/4).
+>> - Rename em.yaml to dev-energymodel.yaml (2/4).  =E2=80=9Cdev-energymodel=
+=E2=80=9D was used
+>>   instead of =E2=80=9Cdevice-energy-model=E2=80=9D, which was originally p=
+roposed [2], because
+>>   the netlink protocol name cannot exceed GENL_NAMSIZ(16). In addition, d=
+ocs
+>>   strings and flags attributes were added.
+>> - Change cpus' type from string to u64 array of CPU ids (3/4).
+>> - Add dump to get-perf-domains in the EM YNL spec (4/4). A user can fetch=
 
-Fixes: b03d542c3c95 ("PM: hibernate: Use crypto_acomp interface")
-Signed-off-by: Malaya Kumar Rout <mrout@redhat.com>
----
- kernel/power/swap.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+>>   either information about a specific performance domain with do or infor=
+mation
+>>   about all performance domains with dump.
+>> This can be tested using the tool, tools/net/ynl/pyynl/cli.py, for exampl=
+e,
+>> with the following commands:
+>>   $> tools/net/ynl/pyynl/cli.py \
+>>      --spec Documentation/netlink/specs/dev-energymodel.yaml \
+>>      --dump get-perf-domains
+>>   $> tools/net/ynl/pyynl/cli.py \
+>>      --spec Documentation/netlink/specs/dev-energymodel.yaml \
+>>      --do get-perf-domains --json '{"perf-domain-id": 0}'
+>>   $> tools/net/ynl/pyynl/cli.py \
+>>      --spec Documentation/netlink/specs/dev-energymodel.yaml \
+>>      --do get-perf-table --json '{"perf-domain-id": 0}'
+>>   $> tools/net/ynl/pyynl/cli.py \
+>>      --spec Documentation/netlink/specs/dev-energymodel.yaml \
+>>      --subscribe event  --sleep 10
+>> [1] https://lore.kernel.org/lkml/CAD4GDZy-aeWsiY=3D-ATr+Y4PzhMX71DFd_mmdM=
+k4rxn3YG8U5GA@mail.gmail.com/
+>> [2] https://lore.kernel.org/lkml/CAJZ5v0gpYQwC=3D1piaX-PNoyeoYJ7uw=3DDtAG=
+dTVEXAsi4bnSdbA@mail.gmail.com/
+>=20
+> My apologies, I've missed those conversations (not the best season).
+>=20
+> So what would be the procedure here for the review?
+> Could Folks from netlink help here?
 
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 33a186373bef..8ee2fa995580 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -902,8 +902,10 @@ static int save_compressed_image(struct swap_map_handle *handle,
- 		for (thr = 0; thr < nr_threads; thr++) {
- 			if (data[thr].thr)
- 				kthread_stop(data[thr].thr);
--			acomp_request_free(data[thr].cr);
--			crypto_free_acomp(data[thr].cc);
-+			if (data[thr].cr)
-+				acomp_request_free(data[thr].cr);
-+			if (!IS_ERR_OR_NULL(data[thr].cc))
-+				crypto_free_acomp(data[thr].cc);
- 		}
- 		vfree(data);
- 	}
-@@ -1499,8 +1501,10 @@ static int load_compressed_image(struct swap_map_handle *handle,
- 		for (thr = 0; thr < nr_threads; thr++) {
- 			if (data[thr].thr)
- 				kthread_stop(data[thr].thr);
--			acomp_request_free(data[thr].cr);
--			crypto_free_acomp(data[thr].cc);
-+			if (data[thr].cr)
-+				acomp_request_free(data[thr].cr);
-+			if (!IS_ERR_OR_NULL(data[thr].cc))
-+				crypto_free_acomp(data[thr].cc);
- 		}
- 		vfree(data);
- 	}
--- 
-2.52.0
+I will review, hopefully later today.=20
 
+What hardware can it be tested on?
+
+> I will do my bit for the EM related stuff (to double-check them).
+>=20
+> Regards,
+> Lukasz
 
