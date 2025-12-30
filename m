@@ -1,186 +1,162 @@
-Return-Path: <linux-pm+bounces-40052-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40053-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9157CCEA375
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 17:47:15 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC89CEA6E3
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 19:10:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5F964300C289
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 16:47:14 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 440203005038
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 18:10:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0339F259C84;
-	Tue, 30 Dec 2025 16:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A4CB320A0A;
+	Tue, 30 Dec 2025 18:10:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J258kGX7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jRzCiLdG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE487B640
-	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 16:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0BE2580DE
+	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 18:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767113232; cv=none; b=LOu2wutveQs06x6BAYVKHli+albnAaY5iRKZnv5hk0Tr5/5sl+kbkWh/AaDtaF3D0AChQXWLoPF6JQ0+hvO0sP1/nuHIQNOSyuYsvlaq6weiEZLyxJZILhqgSUlznQ6XYDU3aUahEd37GGxyG8+6HA9c/LIe6YYsD7b9tpS/aMQ=
+	t=1767118252; cv=none; b=D6w/d2rA95ZTuaRm+aW8/wZEa+UHJZAjbim7WAPHunblsFv7TXcBiJdMZeDrzdZ5xELzcuIgDTcVBMgJatgZ7aPHQRBbudsM6VoFAWNxJl9Cjo5PX5uO5YMbmrrVpyhjbll4Z6Rjbcd2Xp9VQJiWNBAyEqiwYwHVLPqhL96rM98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767113232; c=relaxed/simple;
-	bh=azMGZ+Y/w738X1gTmr+Ft9ox9muQzUuW+4LiLYeeONg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=eyEQAWbPFIbY4KJ5fqcCj97HdPYO6oeIdUj3Qum/meipByViJ0LenhwvxoBfia6cQXLR8n1buuq5DP/zWOhxr/5jh6+bitgXCx3KykkWGSgyRpbhV3jboeORAaBTrXPqPr7Jq+5W37JfL1TqvVfoi5iE9fyh5UmwY8H4YzD4Www=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=J258kGX7; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-42fb4eeb482so5066015f8f.0
-        for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 08:47:10 -0800 (PST)
+	s=arc-20240116; t=1767118252; c=relaxed/simple;
+	bh=FgJuNpgaVD0m6yaXMmc2AfRGD+fA194iC5P4RORcRWk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i77JpSCoCC7jHbLcGUnf0hAYfja4tF0xFuBvLreLYZ1zIMN/V8Zt8Komf30WnMQ+WVWP0fMagulFERbsWoRwgib9+Yn63BAKYy4m3X7m5zLdmAdMayXZtdWUUWGJCi5ZH24g8FtBXGJy7eKEjJDpY+vSMXjn04JPAdkuKjfIpms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jRzCiLdG; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7f121c00dedso13642253b3a.0
+        for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 10:10:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1767113229; x=1767718029; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3pfquFHr2E1uP9KAC57iEkcByjX7EFnU9BkMGY8sqcI=;
-        b=J258kGX7uHWdgvpGqbYW7ud/5IBSNeAZqxwB9k1PdRmHQZsOUW3VoAYAh0cVZn95Nn
-         aYXQQNmZ1XiAikkM9a1YLUFcFIgO11QmHqRmTMScDOdGMh51pgiBi/5PEbWLa6RY7B92
-         DxUf/6/D3TDqo8h43HP0Rf7KXVn7hOJMsh/oDDWc2/MbobvJJXS36MEHcoS1/Erow739
-         DOiOHE7aC+Gi+c9yTOnT1puB/DL1DHO2727C5ok0CwmlvI8nasDQn1ZKd4FUZRiJOPUW
-         oBP59Hz2525bGQBWgw9TeDoxU0g9yk6333TA/eFlMllKxUu21T6y0IzBB4AODh9+1pDM
-         JjDA==
+        d=gmail.com; s=20230601; t=1767118248; x=1767723048; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U4o2F4BeHSek0PRiyhvtGksMp+wv7OaL4BHi8U8EOKo=;
+        b=jRzCiLdGMBSfGpEhCtHyr/JU/LptiDCZJEfmCo3lyH4ZesMzZhDixX+HxuZEFyPObA
+         ZDvpl/Gxs1yfacsLRce18+COii2z9dVuDBajN4FRNV78pFxUkv235fbCPaJq4XQg9O6n
+         j1CPpchgDgEKuoLO6HeY1VlDvlyTMlGtBrkuuMf02sobB+f7Fex4MrA/cgfJxIAvRD0Q
+         cPlPgIPQviFjZavRoU2bCBZ8o6bk67sLSC4lDj2emB4fzAV4YxoZQj8R3buNGfYso0s7
+         8OYHmLp5igt5IcVWyeK1rJLulTvO9gGkS60xrtl5lNH0d556kwNYk4hz0L93gmf+YsQe
+         R9xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767113229; x=1767718029;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1767118248; x=1767723048;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3pfquFHr2E1uP9KAC57iEkcByjX7EFnU9BkMGY8sqcI=;
-        b=pbNkdE3jT5i5XH4hmtlhZSsLkqfEe6njhMBA28B/N8/weYKx+cBFQP/9nt98a1Qvsy
-         nyzM+Ho293y1cBKb2g6jl1RRw9haFWV2HrQR0fOUt7VroRoiGbNPJGBg7WB8Cy68oMnl
-         Wq+HgzHBti917MEhFZnjhtfYa622Q1Dr7eQg7HrlN8feL+pZuGzz6QFJYLS5+6ZRyaCn
-         GTlkX1QKT27myDm+lxDc7SjM2V8u2SgC2/iyYrxqYhECeJ8OuuG1wUduCTAPc0OB6lzL
-         1oyFgvz/PJIJoKoe1E+f26gqwu09iS9CxXmzJ7eZLsD7S0d0aQb7m+p5glj88t4wEDMq
-         oX3A==
-X-Forwarded-Encrypted: i=1; AJvYcCVDu7JNGtfOuNjYFK2Ji0UkK+XxMyw7wbt0CBTXKKAfyibrcVZTTNMf9nslSQFW5Irs+nWmqVpjgg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMWI6lOhMqhlEQQjPoFqjY+Rmjhk4tOH1MhuwEQoQcU4EZH1g3
-	UBT1yiYr22UpAKvAR0ls2DWJo5/SFsT4XYVHMFDUmt73fRwUG5kMzusr7kXk6UCi5Gk=
-X-Gm-Gg: AY/fxX5sM0CKNqOcD33rUEIR23FIaeaHfMqFPIj4YfcF4q8+XzefuKvIyBG6owxmf+d
-	AeIwTTjn/01CBvDOFJY4i2EcD+yHabVDnSSsKIw/+VLmNl21uf0j7gGDk+B1FfizedRNb33mtc2
-	6ifJIwBroyl26ZyGsebKqC1OyOYkZ4x4Xb+dEYg42SMGAggyrCgFO35uO4biFacW5wCNXDe/Ym+
-	KWVMXHB1Nyjw/LTE79NpYCEmQp1XSjswg5CrQiEW+k8XabKmxuqWx1djgPzb2YiPiAInN0ErqCJ
-	bVbaPjZO/RE8FB0o9bN1OldKNj+EfGO2JcmipnMcf1LVhkLXQlubyxA5kXG2G569DBV2fdAnhbe
-	rxoN5ZPqBidnBLC5aKzww2iRFIDGGEMehr7RrTRq4lelNZZmKkdSYAEdqU3R6n5W5tpo8eOIoU8
-	7L3kByi5aSdgi8Vwh7
-X-Google-Smtp-Source: AGHT+IHMq3rkyfVIFLOAgqrtI8Kd81444k2H0h1pzFPyc4MxuoT1oRDzP4THcxMscABTwCEuwuAx4Q==
-X-Received: by 2002:a05:6000:144c:b0:430:ff81:2965 with SMTP id ffacd0b85a97d-4324e50bb11mr43495198f8f.49.1767113228812;
-        Tue, 30 Dec 2025 08:47:08 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43277b82a58sm35493375f8f.6.2025.12.30.08.47.07
+        bh=U4o2F4BeHSek0PRiyhvtGksMp+wv7OaL4BHi8U8EOKo=;
+        b=SIVNTcogrHqBKj6cY8w6EBVnMszH0PeRNJwVI+uPBGWoedrTZYbzOOo+F78UHfQ0Jm
+         UQXOdFIZnCChTGMil7Y5YlhDLfuCLLIFdkztfKHt747DYXSCDKqVzG4CvWF5ixVhT5cH
+         ACgKpqU1epag/z/OCIG7TgcCiDxTm+posr4R2j4mbe+ftGSuaYSANbCjO7NCTqzPLyVC
+         ang+vedZjARW7KoXPVZS74Ubdx0slXGvj8Z3FBLOxQksiPX8X3BE2fKzgp++M1qnYGJu
+         g26+Urn6HfUivT5chNYztt5urP9Z7PBMC7wXILLmDC/rM+ve9P9zq3diWftwmHmgO5rH
+         tIXg==
+X-Forwarded-Encrypted: i=1; AJvYcCWkSamYL26B7/z+7eSVmZEre61X0s5Cntx1biHmVrjvG5thJD6QwFNRaVGsz74Xzb7M7Y1oBPjCog==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVcvu4+AyUGdVEVioutzcTcZbX55w6c/PdQdVs3zO2LpL/x54/
+	WTnDeUzs9kc1Wi0sLPLxHX72cw5UvEVa5B2bMDcVQvacqOxWiYnyIjZp
+X-Gm-Gg: AY/fxX7BM6uA7c+Q5GmL+tBEAWuoA/86930xel8ruHiiFnt5aMDOoJ1NKZvuYUYfnuM
+	L1l9Rdpvb5B6mEqHHo905PBsCUtoSrCdTt9SdFLhD0wXbxBLvMjWsgLY8UZ9S5E7l+Lb01LYDjR
+	inWkNL82uA2D7R+xuL2Gz0mzqWLLsslTuokJXfbJKsJZTL+9BFtdnRgzyWx0VL7Nd+Yg8K5dKBF
+	LCFAZRpI4qllnvfIIIG2xsuCr8x3cmhG/m6C1pSF0kRSCP+LKl5SEu3PrMAc9k0ZN0jiB+JX2J0
+	Slq5zt4+GemDUj5w97OH6ZW/S6yXnlKzhL63mXfYLG0yYzcE8R2EWnkmXRpxi3fiN0DJz+RVoxs
+	jl8JyTOLSjDZOvNx4vgQ7jelvIUcQZtQ4xxhWyoSolAekSDAUKRIlTCWDXDpOdrjUaS2xUbKvqG
+	DtZgSaaq5zOig7xXNoV/UtXHd9Rb6XNMVizMK6BfP+8NY5Hv7Uq3bNay00bUE92arWC4r+21kle
+	CzXZh5UkroJMmn9O6uRud3eAymZOx76
+X-Google-Smtp-Source: AGHT+IF7WV9lO2SRprnaSS6rXcXG+rahUOdxgA9XI3QZjssiw/UqNuh+1y3CwU7o6es14BggMVW//A==
+X-Received: by 2002:a05:6a00:420e:b0:7e8:450c:61ae with SMTP id d2e1a72fcca58-7ff67063910mr30261999b3a.69.1767118248003;
+        Tue, 30 Dec 2025 10:10:48 -0800 (PST)
+Received: from visitorckw-work01.c.googlers.com.com (25.118.81.34.bc.googleusercontent.com. [34.81.118.25])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e7bc69728sm29598278a12.19.2025.12.30.10.10.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Dec 2025 08:47:08 -0800 (PST)
-Date: Tue, 30 Dec 2025 19:47:05 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: oe-kbuild@lists.linux.dev,
-	Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	Bartosz Golaszewski <bgolasze@quicinc.com>,
-	Bjorn Andersson <andersson@kernel.org>
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Tue, 30 Dec 2025 10:10:47 -0800 (PST)
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: airlied@gmail.com,
+	simona@ffwll.ch,
+	maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org,
+	tzimmermann@suse.de,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	dmitry.torokhov@gmail.com,
+	sre@kernel.org,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	lgirdwood@gmail.com,
+	broonie@kernel.org
+Cc: jserv@ccns.ncku.edu.tw,
+	eleanor15x@gmail.com,
+	dri-devel@lists.freedesktop.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-input@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Subject: Re: [PATCH v22 2/2] power: reset: reboot-mode: Expose sysfs for
- registered reboot_modes
-Message-ID: <202512271806.n2lycyZw-lkp@intel.com>
+	linux-serial@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	Kuan-Wei Chiu <visitorckw@gmail.com>
+Subject: [PATCH 0/6] dt-bindings: goldfish: Convert to DT schema
+Date: Tue, 30 Dec 2025 18:10:25 +0000
+Message-ID: <20251230181031.3191565-1-visitorckw@gmail.com>
+X-Mailer: git-send-email 2.52.0.358.g0dd7633a29-goog
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251227-next-15nov_expose_sysfs-v22-2-2d153438ba19@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Shivendra,
+Convert the Android Goldfish emulator platform bindings from text
+format to DT schema.
 
-kernel test robot noticed the following build warnings:
+Most of these bindings are currently located in
+Documentation/devicetree/bindings/goldfish/. Move them to the
+appropriate subsystem directories (serial, input, power, sound, misc)
+to align with the kernel directory structure.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shivendra-Pratap/Documentation-ABI-Add-sysfs-class-reboot-mode-reboot_modes/20251227-025914
-base:   cc3aa43b44bdb43dfbac0fcb51c56594a11338a8
-patch link:    https://lore.kernel.org/r/20251227-next-15nov_expose_sysfs-v22-2-2d153438ba19%40oss.qualcomm.com
-patch subject: [PATCH v22 2/2] power: reset: reboot-mode: Expose sysfs for registered reboot_modes
-config: x86_64-randconfig-161-20251227 (https://download.01.org/0day-ci/archive/20251227/202512271806.n2lycyZw-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-rustc: rustc 1.88.0 (6b00bc388 2025-06-23)
+Update the examples to use generic node names (e.g., 'serial' instead
+of 'goldfish_tty') and fix minor inconsistencies in the original
+documentation to comply with current DT specifications.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-| Closes: https://lore.kernel.org/r/202512271806.n2lycyZw-lkp@intel.com/
+Kuan-Wei Chiu (6):
+  dt-bindings: serial: google,goldfish-tty: Convert to DT schema
+  dt-bindings: misc: google,android-pipe: Convert to DT schema
+  dt-bindings: input: google,goldfish-events-keypad: Convert to DT
+    schema
+  dt-bindings: power: supply: google,goldfish-battery: Convert to DT
+    schema
+  dt-bindings: sound: google,goldfish-audio: Convert to DT schema
+  dt-bindings: display: google,goldfish-fb: Convert to DT schema
 
-smatch warnings:
-drivers/power/reset/reboot-mode.c:147 reboot_mode_create_device() error: we previously assumed 'head' could be null (see line 112)
-
-vim +/head +147 drivers/power/reset/reboot-mode.c
-
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  103  static int reboot_mode_create_device(struct reboot_mode_driver *reboot)
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  104  {
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  105  	struct sysfs_data *sysfs_info;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  106  	struct sysfs_data *next;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  107  	struct list_head *head;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  108  	struct mode_info *info;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  109  	int ret;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  110  
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  111  	head = kzalloc(sizeof(*head), GFP_KERNEL);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27 @112  	if (!head) {
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  113  		ret = -ENOMEM;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  114  		goto error;
-
-This should just be return -ENOMEM;
-
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  115  	}
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  116  
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  117  	INIT_LIST_HEAD(head);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  118  
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  119  	list_for_each_entry(info, &reboot->head, list) {
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  120  		sysfs_info = kzalloc(sizeof(*sysfs_info), GFP_KERNEL);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  121  		if (!sysfs_info) {
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  122  			ret = -ENOMEM;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  123  			goto error;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  124  		}
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  125  
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  126  		sysfs_info->mode = kstrdup_const(info->mode, GFP_KERNEL);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  127  		if (!sysfs_info->mode) {
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  128  			kfree(sysfs_info);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  129  			ret = -ENOMEM;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  130  			goto error;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  131  		}
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  132  
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  133  		list_add_tail(&sysfs_info->list, head);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  134  	}
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  135  
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  136  	reboot->reboot_mode_device = device_create(&reboot_mode_class, NULL, 0,
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  137  						   (void *)head, reboot->dev->driver->name);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  138  
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  139  	if (IS_ERR(reboot->reboot_mode_device)) {
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  140  		ret = PTR_ERR(reboot->reboot_mode_device);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  141  		goto error;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  142  	}
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  143  
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  144  	return 0;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  145  
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  146  error:
-e5f49083a20ae0 Shivendra Pratap 2025-12-27 @147  	list_for_each_entry_safe(sysfs_info, next, head, list) {
-                                                                                                   ^^^^
-But it is a crash instead.
-
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  148  		list_del(&sysfs_info->list);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  149  		kfree_const(sysfs_info->mode);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  150  		kfree(sysfs_info);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  151  	}
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  152  
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  153  	kfree(head);
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  154  	reboot->reboot_mode_device = NULL;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  155  	return ret;
-e5f49083a20ae0 Shivendra Pratap 2025-12-27  156  }
+ .../bindings/display/google,goldfish-fb.txt   | 17 ---------
+ .../bindings/display/google,goldfish-fb.yaml  | 38 +++++++++++++++++++
+ .../devicetree/bindings/goldfish/audio.txt    | 17 ---------
+ .../devicetree/bindings/goldfish/battery.txt  | 17 ---------
+ .../devicetree/bindings/goldfish/events.txt   | 17 ---------
+ .../devicetree/bindings/goldfish/pipe.txt     | 17 ---------
+ .../devicetree/bindings/goldfish/tty.txt      | 17 ---------
+ .../input/google,goldfish-events-keypad.yaml  | 38 +++++++++++++++++++
+ .../bindings/misc/google,android-pipe.yaml    | 38 +++++++++++++++++++
+ .../power/supply/google,goldfish-battery.yaml | 38 +++++++++++++++++++
+ .../bindings/serial/google,goldfish-tty.yaml  | 38 +++++++++++++++++++
+ .../bindings/sound/google,goldfish-audio.yaml | 38 +++++++++++++++++++
+ 12 files changed, 228 insertions(+), 102 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/google,goldfish-fb.txt
+ create mode 100644 Documentation/devicetree/bindings/display/google,goldfish-fb.yaml
+ delete mode 100644 Documentation/devicetree/bindings/goldfish/audio.txt
+ delete mode 100644 Documentation/devicetree/bindings/goldfish/battery.txt
+ delete mode 100644 Documentation/devicetree/bindings/goldfish/events.txt
+ delete mode 100644 Documentation/devicetree/bindings/goldfish/pipe.txt
+ delete mode 100644 Documentation/devicetree/bindings/goldfish/tty.txt
+ create mode 100644 Documentation/devicetree/bindings/input/google,goldfish-events-keypad.yaml
+ create mode 100644 Documentation/devicetree/bindings/misc/google,android-pipe.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/supply/google,goldfish-battery.yaml
+ create mode 100644 Documentation/devicetree/bindings/serial/google,goldfish-tty.yaml
+ create mode 100644 Documentation/devicetree/bindings/sound/google,goldfish-audio.yaml
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.52.0.358.g0dd7633a29-goog
 
 
