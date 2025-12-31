@@ -1,316 +1,183 @@
-Return-Path: <linux-pm+bounces-40085-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40086-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4E5CCEB7C7
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 08:55:37 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A3D3CEBB1C
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 10:32:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 94FA33004F55
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 07:55:36 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 59664300B884
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 09:32:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A729330F925;
-	Wed, 31 Dec 2025 07:55:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDC5B2046BA;
+	Wed, 31 Dec 2025 09:32:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="SBvZ1JYQ";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="FIeGZ7Tp"
+	dkim=pass (1024-bit key) header.d=leica-geosystems.com.cn header.i=@leica-geosystems.com.cn header.b="Rw216ry3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011011.outbound.protection.outlook.com [40.107.130.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB88B280331
-	for <linux-pm@vger.kernel.org>; Wed, 31 Dec 2025 07:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767167735; cv=none; b=R6FbualzBSPXHE8nveI1Nms59ajrZESxFeYFx1fzuquzqN8o8bO+gg9SKiR303x4PA3+Gaf5o0JrKbA5Ylim5r2M04xcv1/OB7jO5LZgQP2GdtJTJM1M/tQj4DTRS7yzwrj/dm+JWalNnVrjrq2B4sE0WM3d9o37chH7Yfqei+o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767167735; c=relaxed/simple;
-	bh=Ci2lgViwE6iaeo2XUl4/asrVQ2GlNtpDKDBflxf9Y50=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jAlHaV40cDT/Ilchi5CV4PGyKptANJU5xyHsGCuWVsrMsUYSdOqWCsZdKjh/XOeDsPTk00kgmVghvWZi6lZlbMHpfFk6JtKM5bY0fatu58yEysw4dMeLwBD0gP2A9bEtURjqVcyR6ziFKBn/NOD4cFS5Nf0bG6GUtqQqI9lKYr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=SBvZ1JYQ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=FIeGZ7Tp; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BV78RH62733191
-	for <linux-pm@vger.kernel.org>; Wed, 31 Dec 2025 07:55:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	AYhrJHAScIxSw7RMMat/8wMUY18Hw+IB5SuvLlAJjFc=; b=SBvZ1JYQ/+TJ/gd1
-	dNb7pfJkznVcJwfLnfnk2EwkFMKoZk9zzJxbfxtVoTSob2OVhB8wFtt6Xs0izghT
-	0M29wSViqPKGYdQ59RiUyiVQo+laxD7ouxcjaIypc58R1vtdIFnXPEkHO0P6tY8r
-	/VO3oCax0XjgUFSsdCmVPLtISDF98bj3ffFVRk7BYxy/4DOjGJj+N8tfsFdpY2dX
-	pbs9xR4GLugKiPG24yIxI9vk2fA1XUc4VSpYDC4kH36f9FKrU+nX6zT97FYzKh8Z
-	QlD4BlsFxK9z2Z+47PyWYkHZWHrdsjAS6k1je4CYO5XA9IIgNMdqeN89uAceauEO
-	I1Gu0Q==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bcy6ag2tn-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 31 Dec 2025 07:55:32 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4ee0995fa85so315696761cf.1
-        for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 23:55:32 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F864274643;
+	Wed, 31 Dec 2025 09:32:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767173524; cv=fail; b=bFn5DL8GE95fG7NYLFUL9/WX5JiQ3FG2uxDhHT+yzsUGRb5Vo4o1gJJP+wa5jhcJD5HdXeoZd9NEVX8h099NHCG2yURUGU2iCZEWuGTyASSt9AtG91kNdUSpV0RB060ffXmWf6Zdo6Cy66X5ocHPn1jD6Zi1K+ZEpbvrwaRBYSc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767173524; c=relaxed/simple;
+	bh=HLfrIqNoj4CvZzGFbOgkBmpFN1siLzizJkjOUTD5g7Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KB6W4wf85PawIuagTh4ejwAg16nX2CZxWsI0rAbpjin5+HsOjC+X8QygZKmojgTAp9bI8wtoTk1X3sZ61ZFmI2ek6x5qwJphNdVc7jDfGSlTytuI68lLAp94x80dBwDpd8lpGSN8LsBYDAV5p5Jr3pHS02IJ9xP15vWIBHe4m04=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com.cn; spf=fail smtp.mailfrom=leica-geosystems.com.cn; dkim=pass (1024-bit key) header.d=leica-geosystems.com.cn header.i=@leica-geosystems.com.cn header.b=Rw216ry3; arc=fail smtp.client-ip=40.107.130.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=leica-geosystems.com.cn
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YekfCCWtv+TtF6+gkuCtrOnbGHz+fhT2Td/r3zDOikSGvBvI6m3PGCzcLrEJysIHDTdV0lX93X7TPjChH4qSs0c79VhLKTS/0Z15zH+cpbVIVdS/f9aG8lwbjcbBUZdnIL62tyekYhVclspuJIC4HR8a/T6LYtsL6+OXAimoYRlc8HHjzvy0M9VVI2MLG9EIN4pjaQl60N8ZXVy23NNw0GaAj+5Su46rusJcEDmMIwCQINFcaHgDaId6aTz9CXS3ORt51zQQJW/raRzUabMA2Be1kfBhqjl9cJCJKVfrj8Q1R9vUT6Nm5EHOQ1j7KQnCsgrrKOxr51+DBXSzzolJ4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DWaQYwd76yKAqmkWKwupY2yiCITM1qYtM1IDZ8hxBaA=;
+ b=fO1Nh4G1yAGgaq0UJANXCzy2wpzHf/KU/alAY6M2NBxvBRsSEV25syQ1LN/QCLQpUprsYRxi1IXjy8FknJB7Cii2+pjrk0F3d8oz+xkX4ykTsAWDRN3xlhzUL+XAUUBfOFHLo7Egd20YfbfMK3uoo75VywcJPwhi6J3sY6wV5IK6fnGS18xoTnw4MhtxgdEatlpuRPy4eMJl0d0tTUj1HmmQKdJEbQGM+5czby/5xjgbc7UjMWAuP3MQdPnj1hPYnDxnSbwz1BcXl/L79BYdP6qQla1tRPvkj68nxNCaZa8k7VqRaAvcREXX3qcltwYb3spjsG4BQjNZ7dmkD0gdAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 193.8.40.99) smtp.rcpttodomain=vger.kernel.org
+ smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass (p=reject sp=reject
+ pct=100) action=none header.from=leica-geosystems.com.cn; dkim=none (message
+ not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767167732; x=1767772532; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AYhrJHAScIxSw7RMMat/8wMUY18Hw+IB5SuvLlAJjFc=;
-        b=FIeGZ7TpKtrVOI5Np7b8hx0RKM4clopkv5olhlSw3ikID/SswGP88AAF8kImHpKamb
-         vqjPOJzg5HO4XRSR/e4nbca8qSX5cHOWQFUgtBFY1l6h+bmLFQBkoh42EhjZBZhKS2c3
-         7u5GJQPBaoQwPEZIdJBKkMp2KkQBnlMEZjJ1/8JlSNEJYgMJ0LDZz6vIPgQexsPjO5hy
-         TTdDt3Pvyye7agYQV5uyu7BfbGJErlkDwk/RAPPWmm3q7QCS4SfWrOoBPvfD8fwXb0Ey
-         Z7+QP0NwGxXXimBn13mb8MYhSl2etTtWcrZGbLGYxQUKxmo5zxtHI3eY4d8kYjtl2pKF
-         EAsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767167732; x=1767772532;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AYhrJHAScIxSw7RMMat/8wMUY18Hw+IB5SuvLlAJjFc=;
-        b=YUPOvhZo4SthKI3ETTYBBj1Jrk5E7+wQCsgrE5RcPDG8RPTZBLTSJhrBYvo9ZERcsh
-         QX2CrT8Erepqw09+5OODIml2yLWA6AkxoZZPiFLRYYW1MSpktYPc2ba82vXb/iLRXMkg
-         1JFVcCQvYUjxNdFnLsXomC8hdSQkI7vOxZEXVoTatViaKC/YRNv7l4vNooVtXX3D3/i4
-         vKy43ZZ+YtUR3fRINUIQ9L5SyWFu0/YzGTz+9S+Au/XkwxoP/WFF6UJmACcWn0ax9PmR
-         lXT8zzQqlpSXKa+ejLtc8q5e+arMf8ON0B+FqsboGmfGZRWIabOz4T/Z8i4fIh2yA2SZ
-         CZOA==
-X-Forwarded-Encrypted: i=1; AJvYcCWpkMiiXAKVbBuiEAaDxiWWnnb0rPXZv17yo8a7xuVLmcz61y37FiEBFKHXpo4K7WO5lIz+4jFedQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw69cLqxksQ/ppAzl8Mira/FCqZcEdtUbPEeq5iC1W5Ig7D4rMe
-	q0rx2dw55KCUe00Kc5/tf2YBsz5RyFRkihfhP3OF2wuiSF4UYzceSnny83UgJUufZ+tQPi3501G
-	2nLsDgCRVe3aeqgJXSJCoBTD0p/dVTE+etY7cSOFL8HiV66JIwCjQYKwv04QT2w==
-X-Gm-Gg: AY/fxX4Io0Zc+YC3caugSi3RsA0pI/eMWhqvL4gvsHvye2i81zby9mRf6Xj0F639dxM
-	wlLUJxvQ9FHtKp8sgxGwMhCX8JRGroPr/bBnQNelRh4aISz/lWWehf6PCl9hCyervXjf2O+L/JI
-	cKWRw3ksSKQKKwh7K++fPanPvxQ640tHiAShO07Zu7wteGhMjjEnkldSoFGaIgEk/b7eMZkcOjP
-	p/i2BjGhupUBCoaW0KOvDrCNG6cbLxWhzCDSVMEaRDItkwlgUGreFkiDj1xzVl/emljuI2akoN7
-	ufIXBfbpQ783xoZGei49lyHqcPbhOnSdCfevJwGtlbccTOBe1I8OsLuiGi9o3FU6TynoIFwd1CD
-	6+KpVvZkRa1WWSEwMAbb0Iu7b8hrOWRL1zDkuF6ZyYaV3sLzf/PJklKces9jA6YYV7eRS17kHWc
-	6U6b3CK3GLuRLs
-X-Received: by 2002:a05:622a:5792:b0:4f1:e9da:e876 with SMTP id d75a77b69052e-4f4abda20cdmr546160491cf.62.1767167732206;
-        Tue, 30 Dec 2025 23:55:32 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG0z6bL/Y1Q3cI0/9z8D+o6JuInTfb+26sqDPP2cu22WLKInz2eDNWMCCud7yvrAQyf1G40og==
-X-Received: by 2002:a05:622a:5792:b0:4f1:e9da:e876 with SMTP id d75a77b69052e-4f4abda20cdmr546160291cf.62.1767167731661;
-        Tue, 30 Dec 2025 23:55:31 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a073:af00::4c9? (2001-14ba-a073-af00--4c9.rev.dnainternet.fi. [2001:14ba:a073:af00::4c9])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3812267a438sm100328661fa.41.2025.12.30.23.55.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Dec 2025 23:55:30 -0800 (PST)
-Message-ID: <4999105f-e105-4412-b6f8-bb1e2990eab7@oss.qualcomm.com>
-Date: Wed, 31 Dec 2025 09:55:29 +0200
+ d=leica-geosystems.com.cn; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DWaQYwd76yKAqmkWKwupY2yiCITM1qYtM1IDZ8hxBaA=;
+ b=Rw216ry37SsXUcAPUJ9W5VMhZs5oz+33haLDxIiF6QI2ESMyuhpvneoniRAmnDl/p6P/ZsUW2nQZWFIqFZfnSBPzoou53qjcD8++nYmSbGQbFa7wNInBjXe0I9D4bKoFrGZjwdBXIA1+Me/YmqkEClyJYnBE4veww3IgMQbci0g=
+Received: from DU2PR04CA0258.eurprd04.prod.outlook.com (2603:10a6:10:28e::23)
+ by DB8PR06MB6554.eurprd06.prod.outlook.com (2603:10a6:10:129::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Wed, 31 Dec
+ 2025 09:31:58 +0000
+Received: from DU2PEPF00028D0D.eurprd03.prod.outlook.com
+ (2603:10a6:10:28e:cafe::1f) by DU2PR04CA0258.outlook.office365.com
+ (2603:10a6:10:28e::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9478.4 via Frontend Transport; Wed,
+ 31 Dec 2025 09:31:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.99)
+ smtp.mailfrom=leica-geosystems.com.cn; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=leica-geosystems.com.cn;
+Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com.cn
+ designates 193.8.40.99 as permitted sender) receiver=protection.outlook.com;
+ client-ip=193.8.40.99; helo=hexagon.com; pr=C
+Received: from hexagon.com (193.8.40.99) by
+ DU2PEPF00028D0D.mail.protection.outlook.com (10.167.242.21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9478.4 via Frontend Transport; Wed, 31 Dec 2025 09:31:57 +0000
+Received: from aherlnxbspsrv01.lgs-net.com ([10.61.228.61]) by hexagon.com with Microsoft SMTPSVC(10.0.17763.1697);
+	 Wed, 31 Dec 2025 10:31:57 +0100
+From: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+To: sre@kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: bsp-development.geo@leica-geosystems.com,
+	LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+Subject: [PATCH 1/2] power: supply: sbs-battery: Reject all-zero readings as battery absent
+Date: Wed, 31 Dec 2025 09:31:51 +0000
+Message-ID: <20251231093152.2817579-1-Qing-wu.Li@leica-geosystems.com.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/8] dt-bindings: thermal: Add qcom,qmi-cooling yaml
- bindings
-To: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, andersson@kernel.org,
-        mathieu.poirier@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
-        conor+dt@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, lukasz.luba@arm.com, konradybcio@kernel.org,
-        amitk@kernel.org, mani@kernel.org, casey.connolly@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20251223123227.1317244-1-gaurav.kohli@oss.qualcomm.com>
- <20251223123227.1317244-4-gaurav.kohli@oss.qualcomm.com>
- <f6bd1bda-6aab-4d4e-9981-f55cce03f70d@kernel.org>
- <3fc177ca-0260-471d-b7a4-bd479f5e5855@oss.qualcomm.com>
- <60653b06-38c4-4276-a6e5-4a5900ba19d4@kernel.org>
- <74b33eb5-a75b-479e-92b3-cb6e094e5610@oss.qualcomm.com>
- <qbbn4dpp52nojvi3fge5kotnxcetuhsqhtvm6rl7rjbo46e2ly@cp24xlhdk54h>
- <9ab77a8e-a5e6-45bc-bc73-12c0d0700fc0@oss.qualcomm.com>
-Content-Language: en-US
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-In-Reply-To: <9ab77a8e-a5e6-45bc-bc73-12c0d0700fc0@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: bYnIdHXxQU81usDe27-CjbAKq3kpS9qe
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjMxMDA2NyBTYWx0ZWRfXzYwEFEa+XWLB
- vQRCYUvsKbJ3ZQ3AP/Pq51zqbsIss89ofZuZI89Q7qWVZR7C9AxW4u6FJCIoh1ctyYNd1k2aG8V
- 3vNKMP9IJ4plxjD3lVbI1F+kZvX7jAFiQSt3Cfydum+Lq7VoZKr8BxnJm5b984PjY20EiCRQunQ
- ACGYVJyk0pAclMeL/sv1V/FAugATDI+ZDXxvrs8Wx2/OietkhalPD/wKpS3mdFrvceYDMNrFv7S
- oYtw+CiC/Zw4Qrd7kqk8uGoXYkXwbjk8RS0Oe0xewa+EihD2SY/PR5wRMXAIC+xbPcTWbkqt6uY
- fFXhekKa1Q7ztak+xbx5QpbCT4pouEj/aGhzNz07aLvFgkpQtLWKPM4mLfQNDdinEiVxE0929++
- kJGBHUm7nSH8j50i2VL8Fo46PRhc1lUMu9IwnhhzBp8wxOuUro9NNOueYPH2J85VSBerxI6V6fx
- 2hyleDRMAsVoicIPCeA==
-X-Proofpoint-GUID: bYnIdHXxQU81usDe27-CjbAKq3kpS9qe
-X-Authority-Analysis: v=2.4 cv=J9GnLQnS c=1 sm=1 tr=0 ts=6954d6f4 cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=gEfo2CItAAAA:8 a=VwQbUJbxAAAA:8 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
- a=9DOCaZkiX73qrqxUqwoA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=a_PwQJl-kcHnX1M80qC6:22 a=sptkURWiP4Gy88Gu7hUp:22 a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-31_02,2025-12-31_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 phishscore=0 adultscore=0 impostorscore=0 spamscore=0
- suspectscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512310067
+X-OriginalArrivalTime: 31 Dec 2025 09:31:57.0634 (UTC) FILETIME=[4EFEA220:01DC7A38]
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PEPF00028D0D:EE_|DB8PR06MB6554:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: b76a5da9-cf02-4d3d-ce9b-08de484f71b5
+X-SET-LOWER-SCL-SCANNER: YES
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?MTKsZkgsG2jZGh3OHGYEmKvoeAJdX2CzjalNdfdLUg+Mie9K5gl6ByOjHbny?=
+ =?us-ascii?Q?SqBmzEkIH87Wd+F3CNSMOzbopJArEaZHHGI+4iRwPv4k7yVNAssDsJhVmv5X?=
+ =?us-ascii?Q?9dTQU4gyKU9q2yEPuSsefjPLnrcvmGEUKVG8vLnLSj2yo9CUUi3G4o1YsgGF?=
+ =?us-ascii?Q?BUiGxP/bY89N++cAhIH7ral6vB6gi/KMHDIwBTT3EjP7eYVddHbyncG6KVG9?=
+ =?us-ascii?Q?q/DfvBbU5wQQZc6fP87o05pmYfSi7i+PkedGmzQY5qKQErfc6DGk8KaNmOyj?=
+ =?us-ascii?Q?9Y7j3SB/AMKULg20UZ/MddLM9kHDIbr6hv/ZT3C5yP+gLUfR33IclIobw9QO?=
+ =?us-ascii?Q?rfB/JWC6gwbnsHIXopScyrs9NmDy+sdIeZ/2zKOZ6iTtDnf8BmNnzTsxeeO1?=
+ =?us-ascii?Q?kf/bFh86Q0c70rxgDn9WHTsD+jA9wQhpTbP8tJOYLrJh8kCj3xR13mCbW4L2?=
+ =?us-ascii?Q?0Ex5CoBEI+1PDfmbQ7I8t9S3t9MN5nV697iJHPNxvQCMa8WsnntTUVRyD525?=
+ =?us-ascii?Q?CRSBy9sJCopSxHulAoB0xBsnSTlyQjeEZWX9Up/qQ3tOx0/5hSR1lUmGFgYN?=
+ =?us-ascii?Q?A7ic7P7CLdRXC8DRO7SzHwoywrdgrDB9rV97keRfchXKB5x8ZN917Mln7/Cv?=
+ =?us-ascii?Q?sLG3L+sHMEfVWXWEx7si5jM05DBsBzfeQ0ihrjiwOkhHEvK/hUx1AP8YDrDO?=
+ =?us-ascii?Q?P6M31IolzDjBmDskLph3+8x+WUFONFV+0OEG5COIjhrKXF81vOU/tmHK/9bk?=
+ =?us-ascii?Q?SegDaxGsR4U7dhoqHjW6IK86HC0nmT8c4MHkQxg8st9cBBqJpchxmH4dObko?=
+ =?us-ascii?Q?iTaPVYrIRly2plp1prNBnlIbGPWTs7LVm7Nk/1wbhwcn5OuYJxtEkIM6P/sC?=
+ =?us-ascii?Q?uUxbV/oVaT/bmV7yH9Y34jwHdzgYQaw2NMRDq6f+WLdxNIZSXYz5G+UyOLzJ?=
+ =?us-ascii?Q?nNEsocW7ecNIYLlAU4ouUnIZTJJLjNhr2VdS6PV4bbzV3XBe1/mT6TgQcLD0?=
+ =?us-ascii?Q?wQAS7jkIiKNa0h9mWhLmRuKPjBXq9NzJ3kjUVNABYLOFM0Hqg/CrZWxMpF+B?=
+ =?us-ascii?Q?vpLNcak3pR0o/qtiU4TBoIp1WIF9kYxYlMh8DbXkMnqYRrYjwj1LIzZemNA3?=
+ =?us-ascii?Q?V59Xp1S7WuT24wY79YlL1kFUEq9s+qR3f+5XHARS86Th+KYzSmrZNEUTGtje?=
+ =?us-ascii?Q?9/LIKio0ezVP/sAYIr0BMluqKkdV8Rvn6iUa9nXZ+FVI0Am/OzyesZk3G5ba?=
+ =?us-ascii?Q?NMNT9vsNBdm46bQv7OGH5eUa9t3/ekmI/BDSZLR9/5LI3yVf2wJseGr9hVug?=
+ =?us-ascii?Q?ylQSWajd9/gU49WIYvPJomL3S3TOdtb0vMq4ryptFESC/5VpC9Pfi18TxycF?=
+ =?us-ascii?Q?VD8HMMIntcccy2vWQpPleL17az8VTxQE9Q+eIDNx+vjzRrS7T1tWvxvRb66R?=
+ =?us-ascii?Q?Hr/TtWyLuTgA620B+2S5RSemxfY6Hanq3lcvntMsvNHQuAw2j4VUtAQ1A6YP?=
+ =?us-ascii?Q?P3/lepnxNdBnHpHmWZgbtyIX3fe//nQ9Eof5UNsDHy78BBYc0pV2Q8/ntCcj?=
+ =?us-ascii?Q?wVrh2EOsZbL+0rs3epE=3D?=
+X-Forefront-Antispam-Report:
+	CIP:193.8.40.99;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:hexagon.com;PTR:ahersrvdom51.leica-geosystems.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: leica-geosystems.com.cn
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Dec 2025 09:31:57.8977
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b76a5da9-cf02-4d3d-ce9b-08de484f71b5
+X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.99];Helo=[hexagon.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DU2PEPF00028D0D.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR06MB6554
 
-On 31/12/2025 09:52, Gaurav Kohli wrote:
-> 
-> On 12/31/2025 1:17 PM, Dmitry Baryshkov wrote:
->> On Wed, Dec 31, 2025 at 12:12:04PM +0530, Gaurav Kohli wrote:
->>> On 12/24/2025 3:54 PM, Krzysztof Kozlowski wrote:
->>>> On 24/12/2025 11:08, Gaurav Kohli wrote:
->>>>> On 12/24/2025 2:27 PM, Krzysztof Kozlowski wrote:
->>>>>> On 23/12/2025 13:32, Gaurav Kohli wrote:
->>>>>>> The cooling subnode of a remoteproc represents a client of the 
->>>>>>> Thermal
->>>>>>> Mitigation Device QMI service running on it. Each subnode of the 
->>>>>>> cooling
->>>>>>> node represents a single control exposed by the service.
->>>>>>>
->>>>>>> Add maintainer name also and update this binding for cdsp substem.
->>>>>>>
->>>>>>> Co-developed-by: Casey Connolly <casey.connolly@linaro.org>
->>>>>>> Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
->>>>>>> Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
->>>>>>> ---
->>>>>>>     .../bindings/remoteproc/qcom,pas-common.yaml  |  6 ++
->>>>>>>     .../bindings/thermal/qcom,qmi-cooling.yaml    | 99 ++++++++++ 
->>>>>>> +++++++++
->>>>>>>     2 files changed, 105 insertions(+)
->>>>>>>     create mode 100644 Documentation/devicetree/bindings/thermal/ 
->>>>>>> qcom,qmi-cooling.yaml
->>>>>>>
->>>>>>> diff --git a/Documentation/devicetree/bindings/remoteproc/ 
->>>>>>> qcom,pas-common.yaml b/Documentation/devicetree/bindings/ 
->>>>>>> remoteproc/qcom,pas-common.yaml
->>>>>>> index 63a82e7a8bf8..bbc82253f76b 100644
->>>>>>> --- a/Documentation/devicetree/bindings/remoteproc/qcom,pas- 
->>>>>>> common.yaml
->>>>>>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,pas- 
->>>>>>> common.yaml
->>>>>>> @@ -77,6 +77,12 @@ properties:
->>>>>>>           and devices related to the ADSP.
->>>>>>>         unevaluatedProperties: false
->>>>>>> +  cooling:
->>>>>>> +    $ref: /schemas/thermal/qcom,qmi-cooling.yaml#
->>>>>>> +    description:
->>>>>>> +      Cooling subnode which represents the cooling devices 
->>>>>>> exposed by the Modem.
->>>>>>> +    unevaluatedProperties: false
->>>>>>> +
->>>>>>>     required:
->>>>>>>       - clocks
->>>>>>>       - clock-names
->>>>>>> diff --git a/Documentation/devicetree/bindings/thermal/qcom,qmi- 
->>>>>>> cooling.yaml b/Documentation/devicetree/bindings/thermal/ 
->>>>>>> qcom,qmi-cooling.yaml
->>>>>>> new file mode 100644
->>>>>>> index 000000000000..90b46712d241
->>>>>>> --- /dev/null
->>>>>>> +++ b/Documentation/devicetree/bindings/thermal/qcom,qmi- 
->>>>>>> cooling.yaml
->>>>>>> @@ -0,0 +1,99 @@
->>>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>>>>> +# Copyright 2023 (c), Linaro Limited
->>>>>>> +
->>>>>>> +%YAML 1.2
->>>>>>> +---
->>>>>>> +$id: http://devicetree.org/schemas/thermal/qcom,qmi-cooling.yaml#
->>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>>> +
->>>>>>> +title: Qualcomm QMI based thermal mitigation (TMD) cooling devices.
->>>>>>> +
->>>>>>> +maintainers:
->>>>>>> +  - Caleb Connolly <caleb.connolly@linaro.org>
->>>>>>> +  - Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
->>>>>>> +
->>>>>>> +description:
->>>>>>> +  Qualcomm QMI-based TMD cooling devices are used to mitigate 
->>>>>>> thermal conditions
->>>>>>> +  across multiple remote subsystems. These devices operate based 
->>>>>>> on junction temperature
->>>>>>> +  sensors (TSENS) associated with thermal zones for each subsystem.
->>>>>>> +
->>>>>>> +  Each subnode corresponds to a control interface for a single 
->>>>>>> instance of the TMD
->>>>>>> +  service running on a remote subsystem.
->>>>>>> +
->>>>>>> +definitions:
->>>>>> defs, look at other code
->>>>>>
->>>>>>
->>>>>>> +  tmd:
->>>>>>> +    type: object
->>>>>>> +    description: |
->>>>>>> +      A single Thermal Mitigation Device exposed by a remote 
->>>>>>> subsystem.
->>>>>> Missing proper formatting. Please do not send us code written by LLM.
->>>>> This patch is based on older series
->>>>>
->>>>> https://lore.kernel.org/linux-devicetree/20230905-caleb- 
->>>>> qmi_cooling-v1-0-5aa39d4164a7@linaro.org/, did some manual changes 
->>>>> to remove unusable code.
->>>> How? This is v1, not v2. How did you address other comments? Where did
->>>> you provide proper changelog? Why this is not correctly versioned/
->>>>
->>>>> let me fix the formatting. This is not generated code.
->>>> I do not believe, because this:
->>>>
->>>>
->>>>>>> +      phandle: true
->>>
->>> As i have mentioned in earlier reply, we are including below series:
->>>
->>> https://lore.kernel.org/linux-devicetree/20230905-caleb-qmi_cooling- 
->>> v1-0-5aa39d4164a7@linaro.org/,)
->>> as this is client for remote proc cooling.
->>> I was seeing this error while using older yam files.
->>>
->>> ('cdsp_sw' was unexpected)
->>>
->>> from schema qcom,qmi-cooling.yaml
->>>
->>> So to avoid that, i have added phandle to avoid this error. will fix 
->>> this in
->>> proper way
->>> by including another yaml file which will define the cdsp_sw,
->>>
->>> Below is the dt node:
->>> cooling {
->>> +                compatible = "qcom,qmi-cooling-cdsp";
->>> +                    cdsp_sw: cdsp_sw {
->> You can't have a node called cdsp_sw. Underscores are not allowed in
->> node names.
-> 
-> 
-> Will change to cdsp-sw.
+The driver reports battery present when status register read succeeds,
+without checking the actual register values. Some systems return all
+zeros when no battery is connected, causing false presence detection.
 
-Why do you need a subnode at all? Can there be multiple cooling 
-"devices" for a DSP? Also, if you insist on having a subnode, could you 
-please come up with a _generic_ enough name that would describe the 
-node? cdsp-sw definitely isn't generic.
+Add validation: when status reads zero, cross-check voltage and capacity.
+Report battery absent only if all three registers return zero.
 
-> 
-> thanks
-> 
-> Gaurav
-> 
-> 
->>> +                        label = "cdsp_sw";
->>> +                        #cooling-cells = <2>;
->>> +                    };
->>> +            };
->>>
->>>
->>>> Does not exist. You cannot come with something like that, there is no
->>>> such code.
->>>>
->>>> Only LLM when parsing DTB could invent something like this. Otherwise
->>>> explain me please the process leading to coming to such change.
->>>>
->>>> Best regards,
->>>> Krzysztof
+Tested on i.MX 8M Plus platform with SBS-compliant battery.
 
+Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
+---
+ drivers/power/supply/sbs-battery.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
+index 943c82ee978f..0b9ecfc1f3f7 100644
+--- a/drivers/power/supply/sbs-battery.c
++++ b/drivers/power/supply/sbs-battery.c
+@@ -594,9 +594,19 @@ static int sbs_get_battery_presence_and_health(
+ 		return ret;
+ 	}
+ 
+-	if (psp == POWER_SUPPLY_PROP_PRESENT)
++	if (psp == POWER_SUPPLY_PROP_PRESENT) {
+ 		val->intval = 1; /* battery present */
+-	else { /* POWER_SUPPLY_PROP_HEALTH */
++		if (ret == 0) {
++			int voltage, capacity;
++
++			voltage = sbs_read_word_data(
++				client, sbs_data[REG_VOLTAGE].addr);
++			capacity = sbs_read_word_data(
++				client, sbs_data[REG_CAPACITY].addr);
++			if (voltage == 0 && capacity == 0)
++				val->intval = 0;
++		}
++	} else { /* POWER_SUPPLY_PROP_HEALTH */
+ 		if (sbs_bat_needs_calibration(client)) {
+ 			val->intval = POWER_SUPPLY_HEALTH_CALIBRATION_REQUIRED;
+ 		} else {
 -- 
-With best wishes
-Dmitry
+2.43.0
+
 
