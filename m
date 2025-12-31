@@ -1,312 +1,176 @@
-Return-Path: <linux-pm+bounces-40087-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40088-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C869CEBB19
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 10:32:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id B994CCEBE37
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 12:59:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 66E46300E785
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 09:32:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 83E7F301C966
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 11:59:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DF22DAFB9;
-	Wed, 31 Dec 2025 09:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0231320A04;
+	Wed, 31 Dec 2025 11:59:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=leica-geosystems.com.cn header.i=@leica-geosystems.com.cn header.b="Oy/JxCuU"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Fn6OLCFo";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="AikWFsOY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013035.outbound.protection.outlook.com [52.101.72.35])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533631A9F84;
-	Wed, 31 Dec 2025 09:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.35
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767173525; cv=fail; b=jZN5h64y4fAJFfljZfSg1gz3dbuUt47tQV/dVviTNYAv/dRGnMa8Duw4YX7JQ5ZnjAp7d+3A3/SHOf24L9vI80sxkgwTwWjlsm2kodMFwN2MBlOuAqwhWir67evPHTebxhuW6FW+Leh43yQFq1Hn+Lch8wWCgzhpHnBcT0UiSEQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767173525; c=relaxed/simple;
-	bh=YwtTs7TNBIA8N4GBDJDvRKi/xbARZQUyx/RqwowniE0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iPPQ2LJZTjpSQ1lCC/CJjPVgI1NBwxQ1wx6jIxH92IwRPIBJJIdKFcw7kiEXhjZ2Re1jTrJI5wXkhx4RqcDyyMVnG/XCVm7Sr0C1QtVN0cpPv6pGkTe6z0TeHenhP1kctXsuJwnSZJ1JzpfKvGmup120zRbEfX/htVYge1mr4Lk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com.cn; spf=fail smtp.mailfrom=leica-geosystems.com.cn; dkim=pass (1024-bit key) header.d=leica-geosystems.com.cn header.i=@leica-geosystems.com.cn header.b=Oy/JxCuU; arc=fail smtp.client-ip=52.101.72.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=leica-geosystems.com.cn
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EG4hCMtzyQXrYGcKmySIef2FNBMwjKISwdDBemHUBVUbh8Na69JTknJ6e0lvUsODOHQUO00ACfsXt0eNo1OHQTzu+mS0aVUJCI7IUfo0n/wPdXo8vau9Dvipe4Kn69SnNWjw5Jq1Lm5zuGVC8sr6j2cCk+vTgufJgh1Jam0HeAP5V5FF5A1YUEzecXo8xBib4qXdf0bUO30aNstV+ytKPbEYJ39xHNVvoSwnRx/pzRwPtQtANF2LN4PaVOPzxvzAWoNJzsS/GIIsPVPw7m83WvNanndeIsnDB8XOGQBHTVGhhEXuo4XDJKzpKmgdm27UvOnB16rJY8VN250N2tNX3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4MAJoL4pWgX2HvHJ58UNxrzwPb9VptLkBpEd2/Zy73o=;
- b=oOlmZ29xxkbFrFIRgtWZEdGZ01HL+sGsrCXn72xhiNBxeiJVxmd4Y4eA3aqzVriCeKi9XBKI1VlEHYF+XnA09XPetZiKfcEDXHwXUOc3BuQghCUwoVBPFYQCATQXNr8Dti+aJVL2POzxI6BpXh6K188JuQ3MKWv8cu378Z57TJXt6ku5zjldrxyqW9dvHi80nO4yv+rnnC+AQgL4QEzQmfXaL304Fl6R2+cvshJPifIVqaR7R/xsqeOgzTiqiHgo7/j1DxNBFIn4KpdW55y+sUC1m+/YFgNPdQGoAv6/veU3R0PWpdynoaHEPFI50Ada2oDdX5fpNTgRUwPDybk1zw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 193.8.40.99) smtp.rcpttodomain=vger.kernel.org
- smtp.mailfrom=leica-geosystems.com.cn; dmarc=pass (p=reject sp=reject
- pct=100) action=none header.from=leica-geosystems.com.cn; dkim=none (message
- not signed); arc=none (0)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7DF31960B
+	for <linux-pm@vger.kernel.org>; Wed, 31 Dec 2025 11:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767182375; cv=none; b=BZwzBVvvD7gwPjOwqaujabOHevYGHaXj+5+S4i3kw7rv2hzyRTPyNNiV1n62zX9MU94t6Pp6vHc5bmwBeVJa+UkBG5Qe5+ditlzogdjmbk17xDPw5aMOyedh6EdqoXiCiVRZMD7CD9M78i6zHL98VJWY5iHgJQ0NVnsVWYWZNag=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767182375; c=relaxed/simple;
+	bh=uyffDGfn05peAWo3sgXumgnt3wMR4eHeF4ZsEVRMf14=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VWDfrDuk0CdbhjAiUJ4wLVTKLOBvtLaw48vaz1+qCyk03GwUIZ+9CsdhudQcoZOnLixYm6vmN1Tqznzx+e/vCQF5GInchPeqex7Ir3SSlA1k5pwQeBouLEYw+K6er6bL3uy0DBqWeCVdOX2u7B8mydBDNP/eLRy98aNcxWsFh8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Fn6OLCFo; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=AikWFsOY; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BUNO9jP2618396
+	for <linux-pm@vger.kernel.org>; Wed, 31 Dec 2025 11:59:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	TNjhPMri5egMZGfHF7ADhCRlV/hFxO0EU6L/JwwocvM=; b=Fn6OLCFoIX1LUTLM
+	rbZDaBB9VeH4f2s0MIkvO2AaLbov8KhpkFInAn9K0FPyEfXY1Lsyx9kMxM7ct88F
+	KLP4llSpe+85LH16mYf3UhsIWI0MSsQebIrdjV8TokJkAXc5Q/dNkyNkVYpt824O
+	T+CRFPHT6MUm1u1SSE2rRuAOgHY8OY/EJXc1D8UIsWOgOCRpvrUW6LY31knwHIDp
+	jbkDzNa4Ruw+9/XejK49O9rqvqViROG6EDU+ZmlCrr77O4ZwIZbWUGHFFQYjQLnP
+	f3QAsPYK90G5mwod/00+OtCGRkIKTWWMLxaTXDaS0AwmdOJ+ZMDE+6NVURIsZ8KM
+	OKwCZw==
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bc06gvc1g-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Wed, 31 Dec 2025 11:59:33 +0000 (GMT)
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4ee23b6b6fdso27718591cf.0
+        for <linux-pm@vger.kernel.org>; Wed, 31 Dec 2025 03:59:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=leica-geosystems.com.cn; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4MAJoL4pWgX2HvHJ58UNxrzwPb9VptLkBpEd2/Zy73o=;
- b=Oy/JxCuUUO/Ic0hcnG2/ApU+eJ8LpvjhosYGWLhUxA3YGM+wbI9jagjpMTWdCNIO9IIxJRq05pNCo9s7NIc0c5HPTY9xkYXA90Lcyo/h2QwIK8j2jUiBmEbJ4d/O6rzweFYV801XYn+L8i47ntPkosRFWDWCMVlbyxLWY1xEuzc=
-Received: from DU2PR04CA0268.eurprd04.prod.outlook.com (2603:10a6:10:28e::33)
- by PA6PR06MB10227.eurprd06.prod.outlook.com (2603:10a6:102:522::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9456.14; Wed, 31 Dec
- 2025 09:31:58 +0000
-Received: from DU2PEPF00028D0D.eurprd03.prod.outlook.com
- (2603:10a6:10:28e:cafe::c5) by DU2PR04CA0268.outlook.office365.com
- (2603:10a6:10:28e::33) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9478.4 via Frontend Transport; Wed,
- 31 Dec 2025 09:31:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 193.8.40.99)
- smtp.mailfrom=leica-geosystems.com.cn; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=leica-geosystems.com.cn;
-Received-SPF: Pass (protection.outlook.com: domain of leica-geosystems.com.cn
- designates 193.8.40.99 as permitted sender) receiver=protection.outlook.com;
- client-ip=193.8.40.99; helo=hexagon.com; pr=C
-Received: from hexagon.com (193.8.40.99) by
- DU2PEPF00028D0D.mail.protection.outlook.com (10.167.242.21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9478.4 via Frontend Transport; Wed, 31 Dec 2025 09:31:58 +0000
-Received: from aherlnxbspsrv01.lgs-net.com ([10.61.228.61]) by hexagon.com with Microsoft SMTPSVC(10.0.17763.1697);
-	 Wed, 31 Dec 2025 10:31:57 +0100
-From: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-To: sre@kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: bsp-development.geo@leica-geosystems.com,
-	LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
-Subject: [PATCH 2/2] power: supply: sbs-battery: Add support for polling battery status
-Date: Wed, 31 Dec 2025 09:31:52 +0000
-Message-ID: <20251231093152.2817579-2-Qing-wu.Li@leica-geosystems.com.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251231093152.2817579-1-Qing-wu.Li@leica-geosystems.com.cn>
-References: <20251231093152.2817579-1-Qing-wu.Li@leica-geosystems.com.cn>
+        d=oss.qualcomm.com; s=google; t=1767182373; x=1767787173; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TNjhPMri5egMZGfHF7ADhCRlV/hFxO0EU6L/JwwocvM=;
+        b=AikWFsOYkXug3paQ5kSHuy5cZl4UcfqmDrc9UipuIPwYpj2Vun/BtuEjOReCFYAS/z
+         jhYyP/Jt72lXihigh3xJ05SvblWbRsZHhRUO85/J+H4JHhtvnzC36vKzWx9dx/rLMony
+         4wzbjw9dAr+6DZlSkm+p4CE58/l608jrmu9/g4Ypg2jRh+IjlW0Fl8K6XDjsqRgJWPTe
+         DtYuRtTb8ScdIrtzjORKm6m2W1nLOCEhhF3ZgnQMqsH+ZEU2HRMPykrgpWVZuMBpzrD2
+         yj5uUv29nEbEbpP5BkqKb231D4nCutJzUERg5rbZ3zRqX1ylsMmg0oncAzSbxEX6Tfl1
+         XzdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767182373; x=1767787173;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TNjhPMri5egMZGfHF7ADhCRlV/hFxO0EU6L/JwwocvM=;
+        b=kwqHmPbmJsYpOD3VpkcvIOOB0QyohsZ7tXi/jlPmNK/dVdlyvKK/sFLyFBtWKwKXMi
+         N9dbXGIt0gcljELdvf9nw6HoN/RWgg2hYKO3cdaMt1ZUE/bAhO4s2lAqOnWoR+0Bfw3U
+         wXHGFCeWSQnH4V2GkZTc0OtlIY8VTmQpJYap+TULdC/dkOnF4Tj1A//0mm0LBtBEKhGO
+         JNhmQ2fS7rCPQGCpNX6n54FmP1lAsbwkR/NhlfUZk08gwdxJF/WTCTFt+S8/g5SXM2Cv
+         1EkaIajHrq061S8SAyINzbx03jKjWVIhPMTmyRfVSYiJjJJPaRJeAgrLUTWKu5SsOmpm
+         eA+A==
+X-Forwarded-Encrypted: i=1; AJvYcCUjrGQpbcVfnSUY+k5wK2MxW9Xi2yfBTOYmAd7G/GhFTx6rZaTUnbGIEHbLlvdAQO3eHX9AlJp6Qg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEKE68D+GcF4rtxaLHtlzP9v13Dfyt/ZBmBoEuloPmkbRQ0YBN
+	sXvbKE1c3WRgI0Jk6aL3ICbNu6ylJC8s5x07dhGM1AmbqVBqQWMOOuLrOXofXnCi4HNXPmH4f0f
+	ugupeoC5WoU1U6pSqNsx470vBPYhXP5j7Kd0cfhN1PM+HenDxdVNsthFEBKH36Q==
+X-Gm-Gg: AY/fxX6TAONZ9+9lGH1oM7MMNCahSrqZyUfokgPAGav5O+7kjuL3flkQ58Mwen1Ropn
+	EJ0LBRw+PLhyYWsSijpTlhicmLSDAQjM7w3MmdTdcvUcfu4x6IBGfQdAHZM9oTZYEnIFzJAjf51
+	QIgyxRQozKYtumGm9zCBTptSoQCL4KpWuwFg1eir9H/qQYLa+6cB4MB/Iue75Oiebowi6x17hdE
+	b9KuBHorBtIKMUwBXSdOup+6+bPdzZUwAmZr915qoFsf0q690F8voa3qwI88XvhAFUvD2oyQweh
+	M02TN6pNd/cLNKoE5fihv9kaia3PoGXeaNeG2A2pnAuUy+UoCN1wd2IN+8wHpJ8X9pWNkAtFUWG
+	mm1oC83YXWP3FVXudnuv0RPzjv5BuIfBEOKhqx4YKw4YHZ9eWslAP7Q73fpf5SNUF0A==
+X-Received: by 2002:ac8:5a46:0:b0:4f1:b580:fba8 with SMTP id d75a77b69052e-4f4abcd86f6mr410376961cf.3.1767182372588;
+        Wed, 31 Dec 2025 03:59:32 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFn/5ejBuCR7T6usDlrDmTh8+/iYla+IL6/jHjwTNavUKl5hdjO3p1G8/XEudpBh9M+sUWJuA==
+X-Received: by 2002:ac8:5a46:0:b0:4f1:b580:fba8 with SMTP id d75a77b69052e-4f4abcd86f6mr410376771cf.3.1767182372182;
+        Wed, 31 Dec 2025 03:59:32 -0800 (PST)
+Received: from [192.168.119.72] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037de10dfsm3835467966b.36.2025.12.31.03.59.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Dec 2025 03:59:31 -0800 (PST)
+Message-ID: <d6396ed0-8529-44af-9d2b-cf0bf03f17f6@oss.qualcomm.com>
+Date: Wed, 31 Dec 2025 12:59:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-OriginalArrivalTime: 31 Dec 2025 09:31:57.0650 (UTC) FILETIME=[4F011320:01DC7A38]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PEPF00028D0D:EE_|PA6PR06MB10227:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 23f3282a-0242-44d7-7bfa-08de484f7204
-X-SET-LOWER-SCL-SCANNER: YES
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|36860700013|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?0VPnG3wqGgnHqty4YcWAUJtWFZ/09DyZbTig7XjD+6yNeXySPRVE/hHEHbh0?=
- =?us-ascii?Q?tyeBzA8z9SNDJT5x7+ficyL4rQ+gUmqEZG3SJFSb9daCi883cRLBbHKDrsZ9?=
- =?us-ascii?Q?tDciMzWjNl2mfF1M1AY2nz3z+xk0auK8/6Pm6n0M7uO5jkJ5nSOhGXxqsYlG?=
- =?us-ascii?Q?p5JUdgnEOtUUvXV5gxMq+XjTRNAt/rv3wDPBHL3l77S7QYQ2TcXdrwfdskKn?=
- =?us-ascii?Q?WcgdzS1Rxi9FP67vt+dS2xEwHX6uAkggm5TYrzhoCnZZVObRYLSTI1T9Z8im?=
- =?us-ascii?Q?gVoAeu25XbxIpujR0Z/yd2UJMiLbt9ya6NjL4ILA/7QSo0Rv86rVLZ951MJM?=
- =?us-ascii?Q?6oyxeFqWfXOEDMKkQw0GIpBAUuA7vxop2d67SX9UxFGFYp/hRUH/kVw6lAYA?=
- =?us-ascii?Q?4tIxmaf+U3g2/fuDig5XOvWlaqEm7oQPaEEjkfyfyLO7MpCehTjVTty7qSXK?=
- =?us-ascii?Q?C6TROrdD1kUSBgsdfkqcaAa0IyGqSWSPsQLT7CXYILGjdLEnJoi3rzj8+Vll?=
- =?us-ascii?Q?FQ45uhqMw+qoKrRC7o/mukPJfU2ArMRo+me4HO/kyX1BgeKwwSE/fH0dkLd2?=
- =?us-ascii?Q?kTiXXiwEncpymyuuIRGQmmrrisWiCcpfs0/JdPukSFzUC9hAI9b0fHT37Ppv?=
- =?us-ascii?Q?tUPqYxMK85Jy/4FsvbOqfqfnfTh5y7HfHlSHaPwApJsan8ua380P6CIAAjcR?=
- =?us-ascii?Q?3sCCRAaKwDyzmFgdENZWVVrqkBPM/cIfly8W80waH1S54YFSbqXdYFZc+pXv?=
- =?us-ascii?Q?1RbDdB3olQMW9O3GTD1MgyJrdG/JhpaXFXpTuTO25Vnezwl3UcLHa+4LGXYg?=
- =?us-ascii?Q?GQtniZRH5Am5qW6S+z+b3Zs3rZz3RcxmnW6zN4adzKXfle6JOonvEKGxmAfe?=
- =?us-ascii?Q?C9ropadZvIzmCOV3nY/V+fne+bRg8YkYbA1xt1PjIJ3qVjKIP/rhspdg5iuO?=
- =?us-ascii?Q?6gHugZEwtgnd3rMmUNZnMKGfpOve4nFKO3l5r+1uP0JIQ8bx7DX+9k6L5NYB?=
- =?us-ascii?Q?eu8itF2y9WYM4Tw0t/a8/fgCmDIIouzvYRsh9tENTAFrIkbv2yaTndKMnYma?=
- =?us-ascii?Q?MQ/mQCe432owtr5PYmyUyx4VLhhw1JjVUzxS43111a6fLOmz2EuMslurdsOT?=
- =?us-ascii?Q?K3ymUtAn1oPYtgYESPOyhG7AtB2xqxTNXnv7bKBW5S2H4kTWC+rpV3MAqQet?=
- =?us-ascii?Q?9ISGWQe7RY0U4nqYlcN9PWV1GuPbpKciS/Nv+ncGPW11P5O/ZM3YSQzd8w9l?=
- =?us-ascii?Q?IX6aliVVxB851sYXHzpmBj8Fr/YfV+rNfyMkEPGmyzBS4WMq6COkpcT/kvq7?=
- =?us-ascii?Q?nBzJdUguTgALhRXLbr/If4pJfVSkh8hJUt4fc5Cja+YdNi03hBk1DR+ilgRV?=
- =?us-ascii?Q?/goUv5n6BweN8+fUOO7NBZzMqFDCMu5/18M2YkBHodJaJjuThQv1k+Va1I45?=
- =?us-ascii?Q?2Q2cLuXLIv20r8ZmU5QoQzpYZ1d+ROUO+gdZtNzWJwpjL79ePhUNR/yiMYXR?=
- =?us-ascii?Q?ziByKM26LlvfK/oxyYVe/GOoV8C0tbiN/uDYEkZY/Nk6RiyfIziPyluZYvP3?=
- =?us-ascii?Q?33M4LXA/jmlU9Xh5Ae4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:193.8.40.99;CTRY:CH;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:hexagon.com;PTR:ahersrvdom51.leica-geosystems.com;CAT:NONE;SFS:(13230040)(82310400026)(376014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: leica-geosystems.com.cn
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Dec 2025 09:31:58.4321
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23f3282a-0242-44d7-7bfa-08de484f7204
-X-MS-Exchange-CrossTenant-Id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a;Ip=[193.8.40.99];Helo=[hexagon.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DU2PEPF00028D0D.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA6PR06MB10227
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 3/8] dt-bindings: thermal: Add qcom,qmi-cooling yaml
+ bindings
+To: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, andersson@kernel.org,
+        mathieu.poirier@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com, lukasz.luba@arm.com, konradybcio@kernel.org,
+        amitk@kernel.org, mani@kernel.org, casey.connolly@linaro.org
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20251223123227.1317244-1-gaurav.kohli@oss.qualcomm.com>
+ <20251223123227.1317244-4-gaurav.kohli@oss.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20251223123227.1317244-4-gaurav.kohli@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: o9TGfPdHc4e0iPKJOsRaveto6AC-4-uS
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjMxMDEwNSBTYWx0ZWRfX1quLA5RNCkEG
+ fyIbDUGrJvIg+hsRmZcz1FJczmlCeiGRWAs745X2cQV1YG+4sroukbJsMcuKp8cpKCd+vdjk7V5
+ 26JnIRqhoLIARmdAWqtSBWENnVQc1Cv3b6zFCoD0pPr5bkmJ0GqAv1E6+M4DZWBUVtylwXECrOZ
+ 9aeO5jBYtiTw83bYDte6dNGnTXyysRxALPjqSSqydvkKohtRxhl1BcFk4E+VT/y+WzxknH6ny9D
+ QQBlR+SXu4291ToNLVTcRa98j5Wn/3seG0RmThAyg6W5in3YiBFDTSP6Lr3clTSfkNk3it6VldY
+ QfUCwz7pcAfecwR1hNjodp/Gj508SNnFNzF3xzs8z3AbSRZot5T1OyP4kqYRowgoB8PJIqfXXFF
+ 7bj3NnKzH1C+4e9L2g3OaRCs+kIExXyt1qgmEW1YNmgd+DPtosUzkxj2eKYnMry+iud7TekTKd9
+ 6qR1soTuajbF2PrxJ7g==
+X-Authority-Analysis: v=2.4 cv=A45h/qWG c=1 sm=1 tr=0 ts=69551025 cx=c_pps
+ a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
+ a=82mGn9uJx0ILj01WsxUA:9 a=QEXdDO2ut3YA:10 a=a_PwQJl-kcHnX1M80qC6:22
+ a=cvBusfyB2V15izCimMoJ:22
+X-Proofpoint-GUID: o9TGfPdHc4e0iPKJOsRaveto6AC-4-uS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2025-12-31_03,2025-12-31_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 priorityscore=1501 clxscore=1015 suspectscore=0
+ bulkscore=0 phishscore=0 impostorscore=0 spamscore=0 malwarescore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
+ definitions=main-2512310105
 
-Enable periodic polling of SBS battery status on systems where the
-battery interrupt line is not connected. Polling is configured via
-the poll_interval parameter (ms, default 0/disabled) and automatically
-disabled when a working GPIO interrupt is available.
+On 12/23/25 1:32 PM, Gaurav Kohli wrote:
+> The cooling subnode of a remoteproc represents a client of the Thermal
+> Mitigation Device QMI service running on it. Each subnode of the cooling
+> node represents a single control exposed by the service.
+> 
+> Add maintainer name also and update this binding for cdsp substem.
+> 
+> Co-developed-by: Casey Connolly <casey.connolly@linaro.org>
+> Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+> Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
+> ---
 
-Example usage:
-  echo 5000 > /sys/module/sbs_battery/parameters/poll_interval
+[...]
 
-Tested on i.MX 8M Plus platform with SBS-compliant battery.
+> +    remoteproc-cdsp {
+> +        cooling {
+> +            compatible = "qcom,qmi-cooling-cdsp";
+> +
+> +            cdsp_sw0: cdsp_sw {
 
-Signed-off-by: LI Qingwu <Qing-wu.Li@leica-geosystems.com.cn>
----
- drivers/power/supply/sbs-battery.c | 84 +++++++++++++++++++++++++++++-
- 1 file changed, 83 insertions(+), 1 deletion(-)
+I'm curious about the meaning of the name - does "sw" here stand
+for "software"?
 
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index 0b9ecfc1f3f7..f4f1189fec3c 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -14,6 +14,7 @@
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/kernel.h>
-+#include <linux/list.h>
- #include <linux/module.h>
- #include <linux/property.h>
- #include <linux/of.h>
-@@ -214,8 +215,10 @@ struct sbs_info {
- 	u32				poll_retry_count;
- 	struct delayed_work		work;
- 	struct mutex			mode_lock;
-+	u32				poll_interval;
- 	u32				flags;
- 	int				technology;
-+	struct list_head		list;
- 	char				strings[NR_STRING_BUFFERS][I2C_SMBUS_BLOCK_MAX + 1];
- };
- 
-@@ -242,6 +245,52 @@ static void sbs_invalidate_cached_props(struct sbs_info *chip)
- }
- 
- static bool force_load;
-+static DEFINE_MUTEX(sbs_list_lock);
-+static LIST_HEAD(sbs_battery_devices);
-+static unsigned int poll_interval;
-+
-+static int poll_interval_param_set(const char *val,
-+				   const struct kernel_param *kp)
-+{
-+	struct sbs_info *chip;
-+	unsigned int prev_val = *(unsigned int *)kp->arg;
-+	int ret;
-+
-+	ret = param_set_uint(val, kp);
-+	if (ret < 0 || prev_val == *(unsigned int *)kp->arg)
-+		return ret;
-+
-+	mutex_lock(&sbs_list_lock);
-+	list_for_each_entry(chip, &sbs_battery_devices, list) {
-+		if (!chip->gpio_detect) {
-+			chip->poll_interval = poll_interval;
-+			if (chip->poll_interval)
-+				mod_delayed_work(system_wq, &chip->work, 0);
-+		}
-+	}
-+	mutex_unlock(&sbs_list_lock);
-+
-+	return 0;
-+}
-+
-+static const struct kernel_param_ops param_ops_poll_interval = {
-+	.set = poll_interval_param_set,
-+	.get = param_get_uint,
-+};
-+
-+static void sbs_list_remove(void *data)
-+{
-+	struct sbs_info *chip = data;
-+
-+	mutex_lock(&sbs_list_lock);
-+	list_del(&chip->list);
-+	mutex_unlock(&sbs_list_lock);
-+}
-+
-+module_param_cb(poll_interval, &param_ops_poll_interval, &poll_interval, 0644);
-+MODULE_PARM_DESC(
-+	poll_interval,
-+	"Polling interval in milliseconds for devices without GPIO interrupt (0=disabled)");
- 
- static int sbs_read_word_data(struct i2c_client *client, u8 address);
- static int sbs_write_word_data(struct i2c_client *client, u8 address, u16 value);
-@@ -1091,6 +1140,10 @@ static void sbs_delayed_work(struct work_struct *work)
- 	/* if the read failed, give up on this work */
- 	if (ret < 0) {
- 		chip->poll_time = 0;
-+		if (chip->poll_interval)
-+			schedule_delayed_work(
-+				&chip->work,
-+				msecs_to_jiffies(chip->poll_interval));
- 		return;
- 	}
- 
-@@ -1106,6 +1159,11 @@ static void sbs_delayed_work(struct work_struct *work)
- 	if (chip->last_state != ret) {
- 		chip->poll_time = 0;
- 		power_supply_changed(chip->power_supply);
-+	}
-+
-+	if (chip->poll_interval) {
-+		schedule_delayed_work(&chip->work,
-+				      msecs_to_jiffies(chip->poll_interval));
- 		return;
- 	}
- 	if (chip->poll_time > 0) {
-@@ -1173,6 +1231,8 @@ static int sbs_probe(struct i2c_client *client)
- 	}
- 	chip->i2c_retry_count = chip->i2c_retry_count + 1;
- 
-+	chip->poll_interval = poll_interval;
-+
- 	chip->charger_broadcasts = !device_property_read_bool(&client->dev,
- 					"sbs,disable-charger-broadcasts");
- 
-@@ -1201,12 +1261,18 @@ static int sbs_probe(struct i2c_client *client)
- 		goto skip_gpio;
- 	}
- 
-+	if (chip->poll_interval) {
-+		dev_dbg(&client->dev,
-+			"GPIO-based IRQ configured, polling disabled\n");
-+		chip->poll_interval = 0;
-+	}
-+
- skip_gpio:
- 	/*
- 	 * Before we register, we might need to make sure we can actually talk
- 	 * to the battery.
- 	 */
--	if (!(force_load || chip->gpio_detect)) {
-+	if (!(force_load || chip->gpio_detect || chip->poll_interval)) {
- 		union power_supply_propval val;
- 
- 		rc = sbs_get_battery_presence_and_health(
-@@ -1230,6 +1296,22 @@ static int sbs_probe(struct i2c_client *client)
- 	dev_info(&client->dev,
- 		"%s: battery gas gauge device registered\n", client->name);
- 
-+	mutex_lock(&sbs_list_lock);
-+	list_add(&chip->list, &sbs_battery_devices);
-+	mutex_unlock(&sbs_list_lock);
-+
-+	rc = devm_add_action(&client->dev, sbs_list_remove, chip);
-+	if (rc) {
-+		mutex_lock(&sbs_list_lock);
-+		list_del(&chip->list);
-+		mutex_unlock(&sbs_list_lock);
-+		return rc;
-+	}
-+
-+	if (chip->poll_interval > 0)
-+		schedule_delayed_work(&chip->work,
-+				      msecs_to_jiffies(chip->poll_interval));
-+
- 	return 0;
- }
- 
--- 
-2.43.0
+If so, does this essentially mean "a software toggle for throttling the
+CDSP"?
 
+Would all such occurrences essentially always have a "sw" suffix?
+
+Konrad
 
