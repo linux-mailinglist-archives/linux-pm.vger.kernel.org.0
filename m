@@ -1,383 +1,371 @@
-Return-Path: <linux-pm+bounces-40075-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40076-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3F51CEAEE5
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 00:46:58 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB15DCEB359
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 04:54:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C5898301C3D8
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Dec 2025 23:46:43 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 2E94D3009F60
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 03:54:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F74932FA12;
-	Tue, 30 Dec 2025 23:36:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 072B230BBB8;
+	Wed, 31 Dec 2025 03:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZyHOKL3h";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="h/1+Ffeb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AK09EsNB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9262D32B9A8
-	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 23:36:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E2C2D3737
+	for <linux-pm@vger.kernel.org>; Wed, 31 Dec 2025 03:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767137794; cv=none; b=Z8/B7pPlOf0I26pwtFogtMMVZZGEBqxytrYSyF2xYodgnjwV6Bt4pEUvw8lBWo3wY503/9ij9G1lEgzY+qqC43fQNZXjg8XnW9J4kfeGQWY62bZD2aS7W4Qe4PZnCXsi3XKfYRQCEQMN7saO4eJSZCH+U++i/WI9Fo5BOgPR8ZY=
+	t=1767153253; cv=none; b=Chi39UNJ8jvRvRGOHKajoauY7cy7qhet5UVmjJkwi0sD1a4qNxXUVDPcr1LsOedJ9hXdZBjIPJ426cLH3Z2HGwWdMWZbcHWNroEYydYBxhOmEPKhpkAtg/OsdOXrq9kx+roXamY8diZoZ0uRaXdvt62psEs2SH8DgTsXN2FG+Qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767137794; c=relaxed/simple;
-	bh=8vfZDA0+eLe1oxx8QbS4fcx/NwTCXaa5C6ek/BD4aCo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Uq0Gf0xQGRdgI8HXY9NeQONTBVGX1PmeLnlktqkUT71JVdUW/f1wP7F1pb3TJrJzlX+tb6Cj95XefhqAUXyPGZVpvvP5if/NgNqAcUPIgcUaBt2k8jFjGOQM1iNDYNWfD3qQkhpNvSUeIRtzzCtjzkAntDEmYzjTh9OcF9IToLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZyHOKL3h; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=h/1+Ffeb; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 5BUKjtCG509400
-	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 23:36:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ux95GdgAy7hFfesGPlF9hWlnbmmD5+m3uisShSQL5Is=; b=ZyHOKL3hcpp7i4qp
-	0GIrq1tf5hu5F/14rTt4lUV1lZd0g/8nefz26aBytS+Bm3VE12Jtjnh6syzFyadx
-	Bco4rsrmgTZHVZGfIYpYM+HNFdznF6j8Xs0eMNQXsoq154cdqvALhkqxo+FV9+8Z
-	M65IziGfNfQlMzR6MldybzIwCh5CzeSPSMAg/hMVIBmhWbVzMoUEHC5DThIVpadC
-	fPoYi9HvvEkzFZsHuktLdol239sG5SmoBuygBI439pVIpIdpcKMLK/ZD8Y9UXmDg
-	LS8zEID76r4fhShzaibzWnFPVW8LYRx+YpyEVWtFDVCp8Z5LuGoxwnA3+w908wRu
-	4q/76w==
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bc0sgu2dy-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 23:36:27 +0000 (GMT)
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-4f1f42515ffso262566701cf.0
-        for <linux-pm@vger.kernel.org>; Tue, 30 Dec 2025 15:36:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767137786; x=1767742586; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ux95GdgAy7hFfesGPlF9hWlnbmmD5+m3uisShSQL5Is=;
-        b=h/1+Ffebn7U+rQdDkr9+WvWqRukMD1vAlmjk5bS3GY8OHCpfhd3gU4J2FDIwt75eU4
-         JzLYY0VMmLP5MMAgnJ3Q/LGjai108H2PZe4+BHbWyuqsssmVfxUoRdA7HYV0mCOZoFvQ
-         ziWb0Ye8MpTZviLog6vUSzDsu7uMV7VG4sEIXQjqWbGrKpAP2MeBy6yAeUC3f4V8yyS2
-         6Muio6210FBG8j8SJ9wjDCQ8qX9qqWNcDHA+M55g2jC78pM+lwhDArf96QBTRnLLDn0R
-         fRc3d/HYURKTwzPtQ33pFH1HOPiCg1Gz2d236OzvwC6LzSkExxcJ9Zpmju86rAzxF+gB
-         zC8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767137786; x=1767742586;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ux95GdgAy7hFfesGPlF9hWlnbmmD5+m3uisShSQL5Is=;
-        b=YRUIHXo7y+4dY5ugUKxMAbk/8OFgcZ5VTS6HLg8k03+dB6368WU5HTRODx30TOfEam
-         XGufx2uDQ+wrimaSQLpjiPsnb5aseuMkxKRsp+CplhDnbSfT+IGgmS+8U0CPo7B25Mo1
-         7raGOAnyAHi+FuccXAVQAVYKU66x5ADR6LyYgC6CAK1q0S3yxslx8E/EmPoThrUDANU8
-         ERb5fiB9jD0hJ+svF6bEWi9FfyPb97bZiwwUmk+ts+tIvzvr7JD2nMYqw58ivNodM8fZ
-         ueo142mRjuVfqN8McWpF/BAFHjpgmbh5iXByyGy+WMUN4+lwXE8Gs3mrl6UqayHx0MbD
-         QBCg==
-X-Forwarded-Encrypted: i=1; AJvYcCVzWE71AX1oAx/wxjDp5wFmQ9oG3dsHdy4ogFjwaM6QJRWVMBtPge6oXj2UhSxMQ0OMKxORzk4QNw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2S4KbgMfnGl6T2+1BmTwsK5aSbnQDTiKS2t6VupMV9VvZuzMd
-	rVd++ooepcuBL7xZQEDuiqJ1he9hken9iFs38HMAV0LrYcDG/yrSlDC6uyh3fXGsjr3NasMrm9y
-	+LFHRvjttNiNnzbEjT59j0bjVfLqII+cVlqU0vUiZxlsCAZ5TdpecHzlNnoYqow==
-X-Gm-Gg: AY/fxX5ICqNzVf6+SACN/qop90Hew9Q+k9N5+rCiNiLUhpcvsoclsD9R//dOzOvLU/X
-	PQ7vITcPvED3i2PzeJiuCwufLMGYLtvIAVx6AXMgkGvuaf95mPq/kOMTAMfkTRn2RacKFqLMHX8
-	LUwTWLrnPo9WKdNvgLXo8u+cxa79AiHpJydcpwqpskikareMLK6Q8ivWpw9cgZ9ZHDHFCiz2dm+
-	qeFDhyelfJYnvcUAH1+82jIUtzXnuBXnP8oAowLuOMxw3sz4paBYqfcLYNrtz2/ExbiEGlHOWZ8
-	JkwA7y5enmWhVoAQ2nbBrx9/z8BsbIprDo9RfbBozMDLDzNfEt6BjXGmFhnTbGNJLmCkUxm5ILq
-	ga46c5dK4EVbXGkv5wpPyAXXMIi4OyrcBuPGq53an02cIs8baxaHTPWXrpQw4+HlA7LmFxpKviV
-	Kp7PLwWtcXdQ1oyVrP4ReKh00=
-X-Received: by 2002:a05:622a:cf:b0:4ee:1e95:af68 with SMTP id d75a77b69052e-4f4abd1da6cmr579227961cf.36.1767137784778;
-        Tue, 30 Dec 2025 15:36:24 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHgR39HskKDK0VPENv4JCEhQfvh2ZibF0b4cYURAUkvz8grVJGOP6SkuWxVIrZPWDN84BJ6pw==
-X-Received: by 2002:a05:622a:cf:b0:4ee:1e95:af68 with SMTP id d75a77b69052e-4f4abd1da6cmr579227521cf.36.1767137784225;
-        Tue, 30 Dec 2025 15:36:24 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59a18620337sm10349574e87.86.2025.12.30.15.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Dec 2025 15:36:23 -0800 (PST)
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Date: Wed, 31 Dec 2025 01:36:04 +0200
-Subject: [PATCH 14/14] arm64: dts: qcom: sm8150-hdk: describe WiFi/BT
- properly
+	s=arc-20240116; t=1767153253; c=relaxed/simple;
+	bh=vv5TvpKljz67G4j1CDBjncg42B3hKIrjZiA2MqUfKQM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U2cfmy0x1MGHcHiT+nVksm3X50LgNSTTTEgCPY4ELL8Py4iiaZ+Z9wbIZVV7vvscEDi8IWDrQzNZfQsvjgUpl1A6AX+uatY4Ez6LtIZgTiHdE3Hdge14Rw6FfiGA4HbOiKU++CTeM1L6Kdu/Awy9w5ZUWlr0fZlSMSilaOWewnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AK09EsNB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FBE4C116B1;
+	Wed, 31 Dec 2025 03:54:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767153253;
+	bh=vv5TvpKljz67G4j1CDBjncg42B3hKIrjZiA2MqUfKQM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=AK09EsNBLL6jpKUoF2W5bmUlTOL2bwsJb6JGm9RlwHldcEIGApe8VqcPvBIciahwn
+	 Xyll+XGUfi9TAWHiqTz1didvdskF0WLdXgP1oFkKvy018q6KAw+l0z8huvTbF9VXdW
+	 QbT1sWlRPiXG9NYcltfLIf5ZczINvWFXVvkMgILIdX+ppqpyNGl/Z4DU3NxM2HkOO2
+	 LWxSjn8OQ6O/lT+DQyDzi1r3ZBP7ojwcBQLQpZ2+dbbWmfzKzNOrrR+94ksiEk8u3Z
+	 Y0aRq4SvEhJnoUCFt72rakZjzoGCc3t5sw1Jpwu/hv1I69jY/bsiE5FHQrOb7i9VB9
+	 EPcT0KsYbp8eQ==
+From: Tzung-Bi Shih <tzungbi@kernel.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-pm@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	tzungbi@kernel.org
+Subject: [PATCH v2] pmdomain: mediatek: Break lock dependency to `prepare_lock`
+Date: Wed, 31 Dec 2025 03:53:57 +0000
+Message-ID: <20251231035357.1147578-1-tzungbi@kernel.org>
+X-Mailer: git-send-email 2.52.0.351.gbe84eed79e-goog
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251231-wcn3990-pwrctl-v1-14-1ff4d6028ad5@oss.qualcomm.com>
-References: <20251231-wcn3990-pwrctl-v1-0-1ff4d6028ad5@oss.qualcomm.com>
-In-Reply-To: <20251231-wcn3990-pwrctl-v1-0-1ff4d6028ad5@oss.qualcomm.com>
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Jeff Johnson <jjohnson@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Balakrishna Godavarthi <quic_bgodavar@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-wireless@vger.kernel.org, ath10k@lists.infradead.org,
-        linux-pm@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5614;
- i=dmitry.baryshkov@oss.qualcomm.com; h=from:subject:message-id;
- bh=8vfZDA0+eLe1oxx8QbS4fcx/NwTCXaa5C6ek/BD4aCo=;
- b=owGbwMvMwMXYbdNlx6SpcZXxtFoSQ2ZI4lN9j3hTM6s03asXMy9bNyhf/3Jm0nFG5vitli6Sa
- uVTpuh1MhqzMDByMciKKbL4FLRMjdmUHPZhx9R6mEGsTCBTGLg4BWAi7j/Y/9nxJ+x5+6+5R6ff
- MV49rT0kL2PdIhaH2VZlUUnLHK69OHCxX9Yy84FzdMWOxBeZF5iPByeJHfEVNX883/XVzW7m3pz
- D4lmdy0vjpi9N2xrGObuh3qfDMVnv41qJ/LfRt1UjpQ88DTQS4uuatfr+3SM7H6/dEyhWyfHQmz
- fU2bR5+STlbaUGN+24P3D7Pe0svnVeVFQ75mx2Ss/WdY6H/i0I0Q5uObJ0xrLFrrsaparUtOYxR
- r1l97zlEVC3ILCVtZtLIY7hom720pM2a0y8Hp5bbXa+Y4Ze5tz9ReuFLNfWORx2zJl1sHzZXNbw
- Lmv+mTbeH1g/3TzCkBna0x3w3Jn5XsHuIpOW+G2l+hkA
-X-Developer-Key: i=dmitry.baryshkov@oss.qualcomm.com; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMjMwMDIxMSBTYWx0ZWRfX47mn/qExRSFe
- jeOW4IGP9cmYS0Oc/R94jrTKVLC3jN5wmveQEPLGczUnKs3FMpo2gRyKDgONqEP18ZD2j+F7DIB
- H5xwBNB3z5mIRJetaj+ve8mwlFuBYQ+iyzXrhiDL22ZTpUHzEBKHZxDBClImTuYAezNDNVkviyv
- pUa9WOV1Huy22hIMPvYm/tYXTLLIc3rJFT8Tdrb3jC6UEGLQIihtRsj0OI6Kr7R+bcYt3zw4Vz5
- waoJUHjWSFOZd7z24lH8qMfLwxVVcclltQon3OuXbSTWpT3EUp5mm5amk8vEDJJ+sN89Q5z3p3F
- wJUcEG1XwGejijPyt16cHOwAQ/+lQQmNXwiF5dIedbcyiUDsVCpX9Xymi3Ta/sde0Vpz59LmT+r
- WJ2Pr7Ad1CFYxp9D83t/NanMMb0HIK63a7/Uh0WAxN+WrnEDMBg0fUYjaPBYNFiZnRoevnbzpg2
- 6IlUdr2ssNP2ONjOYkw==
-X-Proofpoint-GUID: McUeKFczhhtAqpVLnDH87wNqWrPulY0T
-X-Proofpoint-ORIG-GUID: McUeKFczhhtAqpVLnDH87wNqWrPulY0T
-X-Authority-Analysis: v=2.4 cv=foHRpV4f c=1 sm=1 tr=0 ts=695461fb cx=c_pps
- a=JbAStetqSzwMeJznSMzCyw==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=wP3pNCr1ah4A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=daeKR1c1ZtUuBhPExssA:9 a=QEXdDO2ut3YA:10
- a=uxP6HrT_eTzRwkO_Te1X:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2025-12-30_04,2025-12-30_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 clxscore=1015 malwarescore=0 suspectscore=0 phishscore=0
- impostorscore=0 bulkscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2512300211
+Content-Transfer-Encoding: 8bit
 
-Properly describe the PMU present as a part of the onboard WCN3998
-WiFi/BT chip. Enable Bluetooth part of the chip too.
+Break a circular locking dependency between the Generic Power Domain
+lock (`genpd->mlock`) and the clock framework's `prepare_lock`.  Move
+the prepare() to the domain initialization phase and the unprepare()
+to the cleanup phase.
 
-[    5.479978] Bluetooth: hci0: setting up wcn399x
-[    5.633763] Bluetooth: hci0: QCA Product ID   :0x0000000a
-[    5.645350] Bluetooth: hci0: QCA SOC Version  :0x40010224
-[    5.650906] Bluetooth: hci0: QCA ROM Version  :0x00001001
-[    5.665173] Bluetooth: hci0: QCA Patch Version:0x00006699
-[    5.679356] Bluetooth: hci0: QCA controller version 0x02241001
-[    5.691109] Bluetooth: hci0: QCA Downloading qca/crbtfw21.tlv
-[    6.680102] Bluetooth: hci0: QCA Downloading qca/crnv21.bin
-[    6.842948] Bluetooth: hci0: QCA setup on UART is completed
+The possible deadlock occurs in the following scenario:
 
-[   81.510709] ath10k_snoc 18800000.wifi: qmi chip_id 0x30224 chip_family 0x4001 board_id 0x55 soc_id 0x40060000
-[   81.521713] ath10k_snoc 18800000.wifi: qmi fw_version 0x32040163 fw_build_timestamp 2019-10-08 05:42 fw_build_id QC_IMAGE_VERSION_STRING=WLAN.HL.3.2.0-00355-QCAHLSWMTPLZ-1
-[   81.554143] ath10k_snoc 18800000.wifi: failed to fetch board data for bus=snoc,qmi-board-id=55,qmi-chip-id=30224,variant=Qualcomm_sm8150hdk from ath10k/WCN3990/hw1.0/board-2.bin
-[   85.467464] ath10k_snoc 18800000.wifi: wcn3990 hw1.0 target 0x00000008 chip_id 0x00000000 sub 0000:0000
-[   85.478132] ath10k_snoc 18800000.wifi: kconfig debug 0 debugfs 0 tracing 0 dfs 0 testmode 0
-[   85.487223] ath10k_snoc 18800000.wifi: firmware ver  api 5 features wowlan,mgmt-tx-by-reference,non-bmi crc32 b3d4b790
-[   85.758168] ath10k_snoc 18800000.wifi: htt-ver 3.73 wmi-op 4 htt-op 3 cal file max-sta 32 raw 0 hwcrypto 1
-[   85.901630] ath10k_snoc 18800000.wifi: invalid MAC address; choosing random
+1. `genpd_power_on` acquires `genpd->mlock` and then calls the driver's
+   `scpsys_power_on`.  The driver calls `clk_bulk_prepare_enable`,
+   which attempts to acquire `prepare_lock`.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> -> #0 (prepare_lock){+.+.}-{3:3}:
+>        __lock_acquire
+>        lock_acquire
+>        __mutex_lock_common
+>        mutex_lock_nested
+>        clk_prepare
+>        clk_bulk_prepare
+>        scpsys_power_on
+>        genpd_power_on
+
+2. A clock provider (managed by a power domain) is resumed.
+   `clk_prepare` acquires `prepare_lock` and triggers a runtime resume of
+   its power domain, which attempts to acquire `genpd->mlock`.
+
+> -> #1 (&genpd->mlock){+.+.}-{3:3}:
+>        __mutex_lock_common
+>        mutex_lock_nested
+>        genpd_lock_mtx
+>        genpd_runtime_resume
+>        __rpm_callback
+>        rpm_callback
+>        rpm_resume
+>        __pm_runtime_resume
+>        clk_core_prepare
+>        clk_prepare
+>        clk_bulk_prepare
+
+This creates a cycle: `mlock` -> `prepare_lock` -> `mlock`.
+
+> Possible unsafe locking scenario:
+>
+>       CPU0                    CPU1
+>       ----                    ----
+>  lock(&genpd->mlock);
+>                               lock(prepare_lock);
+>                               lock(&genpd->mlock);
+>  lock(prepare_lock);
+
+This breaks the dependency chain in #0.
+
+This is a revert of f0fce06e345d ("soc: mtk-pm-domains: Fix the clock
+prepared issue").  However, addressing the issue by moving the
+unprepare()/prepare() to PM suspend()/resume() callbacks.
+
+Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sm8150-hdk.dts | 141 ++++++++++++++++++++++++++++++--
- 1 file changed, 136 insertions(+), 5 deletions(-)
+v2:
+- Fix build error reported by "kernel test robot <lkp@intel.com>".
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8150-hdk.dts b/arch/arm64/boot/dts/qcom/sm8150-hdk.dts
-index 0339a572f34d..18b51a1236de 100644
---- a/arch/arm64/boot/dts/qcom/sm8150-hdk.dts
-+++ b/arch/arm64/boot/dts/qcom/sm8150-hdk.dts
-@@ -20,6 +20,7 @@ / {
+v1: https://lore.kernel.org/all/20251229043244.4103262-1-tzungbi@kernel.org/
+
+ drivers/pmdomain/mediatek/mtk-pm-domains.c | 101 +++++++++++++++++----
+ 1 file changed, 81 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+index 80561d27f2b2..c371b08c9170 100644
+--- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
++++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+@@ -318,12 +318,12 @@ static int scpsys_hwv_power_on(struct generic_pm_domain *genpd)
+ 	if (ret)
+ 		goto err_infra;
  
- 	aliases {
- 		serial0 = &uart2;
-+		serial1 = &uart13;
- 	};
+-	ret = clk_bulk_prepare_enable(pd->num_clks, pd->clks);
++	ret = clk_bulk_enable(pd->num_clks, pd->clks);
+ 	if (ret)
+ 		goto err_reg;
  
- 	chosen {
-@@ -66,6 +67,43 @@ hdmi_con: endpoint {
- 			};
- 		};
- 	};
-+
-+	wcn3998-pmu {
-+		compatible = "qcom,wcn3998-pmu";
-+
-+		pinctrl-0 = <&sw_ctrl_default>;
-+		pinctrl-names = "default";
-+
-+		vddio-supply = <&vreg_s4a_1p8>;
-+		vddxo-supply = <&vreg_l7a_1p8>;
-+		vddrfa1p3-supply = <&vreg_l2c_1p3>;
-+		vddch0-supply = <&vreg_l11c_3p3>;
-+		vddch1-supply = <&vreg_l10c_3p3>;
-+
-+		swctrl-gpios = <&tlmm 50 GPIO_ACTIVE_HIGH>;
-+
-+		regulators {
-+			vreg_pmu_io: ldo0 {
-+				regulator-name = "vreg_pmu_io";
-+			};
-+
-+			vreg_pmu_xo: ldo1 {
-+				regulator-name = "vreg_pmu_xo";
-+			};
-+
-+			vreg_pmu_rf: ldo2 {
-+				regulator-name = "vreg_pmu_rf";
-+			};
-+
-+			vreg_pmu_ch0: ldo3 {
-+				regulator-name = "vreg_pmu_ch0";
-+			};
-+
-+			vreg_pmu_ch1: ldo4 {
-+				regulator-name = "vreg_pmu_ch1";
-+			};
-+		};
-+	};
- };
+ 	/* For HWV the subsys clocks refer to the HWV low power subsystem */
+-	ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
++	ret = clk_bulk_enable(pd->num_subsys_clks, pd->subsys_clks);
+ 	if (ret)
+ 		goto err_disable_clks;
  
- &apps_rsc {
-@@ -594,6 +632,10 @@ &qupv3_id_1 {
- 	status = "okay";
- };
+@@ -365,7 +365,7 @@ static int scpsys_hwv_power_on(struct generic_pm_domain *genpd)
+ 	}
  
-+&qupv3_id_2 {
-+	status = "okay";
+ 	/* It's done! Disable the HWV low power subsystem clocks */
+-	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
++	clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
+ 
+ 	if (MTK_SCPD_CAPS(pd, MTK_SCPD_INFRA_PWR_CTL))
+ 		scpsys_sec_infra_power_on(false);
+@@ -373,9 +373,9 @@ static int scpsys_hwv_power_on(struct generic_pm_domain *genpd)
+ 	return 0;
+ 
+ err_disable_subsys_clks:
+-	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
++	clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
+ err_disable_clks:
+-	clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
++	clk_bulk_disable(pd->num_clks, pd->clks);
+ err_reg:
+ 	scpsys_regulator_disable(pd->supply);
+ err_infra:
+@@ -398,7 +398,7 @@ static int scpsys_hwv_power_off(struct generic_pm_domain *genpd)
+ 			return ret;
+ 	}
+ 
+-	ret = clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys_clks);
++	ret = clk_bulk_enable(pd->num_subsys_clks, pd->subsys_clks);
+ 	if (ret)
+ 		goto err_infra;
+ 
+@@ -437,8 +437,8 @@ static int scpsys_hwv_power_off(struct generic_pm_domain *genpd)
+ 	if (ret)
+ 		goto err_disable_subsys_clks;
+ 
+-	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
+-	clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
++	clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
++	clk_bulk_disable(pd->num_clks, pd->clks);
+ 
+ 	scpsys_regulator_disable(pd->supply);
+ 
+@@ -448,7 +448,7 @@ static int scpsys_hwv_power_off(struct generic_pm_domain *genpd)
+ 	return 0;
+ 
+ err_disable_subsys_clks:
+-	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
++	clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
+ err_infra:
+ 	if (MTK_SCPD_CAPS(pd, MTK_SCPD_INFRA_PWR_CTL))
+ 		scpsys_sec_infra_power_on(false);
+@@ -616,7 +616,7 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = clk_bulk_prepare_enable(pd->num_clks, pd->clks);
++	ret = clk_bulk_enable(pd->num_clks, pd->clks);
+ 	if (ret)
+ 		goto err_reg;
+ 
+@@ -638,8 +638,7 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
+ 	 * access.
+ 	 */
+ 	if (!MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
+-		ret = clk_bulk_prepare_enable(pd->num_subsys_clks,
+-					      pd->subsys_clks);
++		ret = clk_bulk_enable(pd->num_subsys_clks, pd->subsys_clks);
+ 		if (ret)
+ 			goto err_pwr_ack;
+ 	}
+@@ -653,8 +652,7 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
+ 		goto err_disable_sram;
+ 
+ 	if (MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
+-		ret = clk_bulk_prepare_enable(pd->num_subsys_clks,
+-					      pd->subsys_clks);
++		ret = clk_bulk_enable(pd->num_subsys_clks, pd->subsys_clks);
+ 		if (ret)
+ 			goto err_enable_bus_protect;
+ 	}
+@@ -667,10 +665,9 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
+ 	scpsys_sram_disable(pd);
+ err_disable_subsys_clks:
+ 	if (!MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION))
+-		clk_bulk_disable_unprepare(pd->num_subsys_clks,
+-					   pd->subsys_clks);
++		clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
+ err_pwr_ack:
+-	clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
++	clk_bulk_disable(pd->num_clks, pd->clks);
+ err_reg:
+ 	scpsys_regulator_disable(pd->supply);
+ 	return ret;
+@@ -695,7 +692,7 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
+ 		regmap_set_bits(scpsys->base, pd->data->ext_buck_iso_offs,
+ 				pd->data->ext_buck_iso_mask);
+ 
+-	clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks);
++	clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
+ 
+ 	if (MTK_SCPD_CAPS(pd, MTK_SCPD_MODEM_PWRSEQ))
+ 		scpsys_modem_pwrseq_off(pd);
+@@ -708,7 +705,7 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
++	clk_bulk_disable(pd->num_clks, pd->clks);
+ 
+ 	scpsys_regulator_disable(pd->supply);
+ 
+@@ -855,6 +852,14 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
+ 		pd->genpd.flags |= GENPD_FLAG_IRQ_SAFE;
+ 	}
+ 
++	ret = clk_bulk_prepare(pd->num_clks, pd->clks);
++	if (ret)
++		goto err_put_subsys_clocks;
++
++	ret = clk_bulk_prepare(pd->num_subsys_clks, pd->subsys_clks);
++	if (ret)
++		goto err_unprepare_clocks;
++
+ 	/*
+ 	 * Initially turn on all domains to make the domains usable
+ 	 * with !CONFIG_PM and to get the hardware in sync with the
+@@ -869,7 +874,7 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
+ 		ret = pd->genpd.power_on(&pd->genpd);
+ 		if (ret < 0) {
+ 			dev_err(scpsys->dev, "%pOF: failed to power on domain: %d\n", node, ret);
+-			goto err_put_subsys_clocks;
++			goto err_unprepare_subsys_clocks;
+ 		}
+ 
+ 		if (MTK_SCPD_CAPS(pd, MTK_SCPD_ALWAYS_ON))
+@@ -888,6 +893,10 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
+ 
+ 	return scpsys->pd_data.domains[id];
+ 
++err_unprepare_subsys_clocks:
++	clk_bulk_unprepare(pd->num_subsys_clks, pd->subsys_clks);
++err_unprepare_clocks:
++	clk_bulk_unprepare(pd->num_clks, pd->clks);
+ err_put_subsys_clocks:
+ 	clk_bulk_put(pd->num_subsys_clks, pd->subsys_clks);
+ err_put_clocks:
+@@ -965,6 +974,8 @@ static void scpsys_remove_one_domain(struct scpsys_domain *pd)
+ 	if (scpsys_domain_is_on(pd))
+ 		scpsys_power_off(&pd->genpd);
+ 
++	clk_bulk_unprepare(pd->num_clks, pd->clks);
++	clk_bulk_unprepare(pd->num_subsys_clks, pd->subsys_clks);
+ 	clk_bulk_put(pd->num_clks, pd->clks);
+ 	clk_bulk_put(pd->num_subsys_clks, pd->subsys_clks);
+ }
+@@ -1208,6 +1219,7 @@ static int scpsys_probe(struct platform_device *pdev)
+ 	if (!scpsys)
+ 		return -ENOMEM;
+ 
++	platform_set_drvdata(pdev, scpsys);
+ 	scpsys->dev = dev;
+ 	scpsys->soc_data = soc;
+ 
+@@ -1270,12 +1282,61 @@ static int scpsys_probe(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_PM_SLEEP
++static int scpsys_suspend(struct device *dev)
++{
++	struct scpsys *scpsys = dev_get_drvdata(dev);
++	struct generic_pm_domain *genpd;
++	struct scpsys_domain *pd;
++	int i;
++
++	for (i = 0; i < scpsys->pd_data.num_domains; i++) {
++		genpd = scpsys->pd_data.domains[i];
++		if (!genpd)
++			continue;
++
++		pd = to_scpsys_domain(genpd);
++		clk_bulk_unprepare(pd->num_clks, pd->clks);
++		clk_bulk_unprepare(pd->num_subsys_clks, pd->subsys_clks);
++	}
++	return 0;
++}
++
++static int scpsys_resume(struct device *dev)
++{
++	struct scpsys *scpsys = dev_get_drvdata(dev);
++	struct generic_pm_domain *genpd;
++	struct scpsys_domain *pd;
++	int i, ret;
++
++	for (i = 0; i < scpsys->pd_data.num_domains; i++) {
++		genpd = scpsys->pd_data.domains[i];
++		if (!genpd)
++			continue;
++
++		pd = to_scpsys_domain(genpd);
++		ret = clk_bulk_prepare(pd->num_clks, pd->clks);
++		if (ret)
++			return ret;
++		ret = clk_bulk_prepare(pd->num_subsys_clks, pd->subsys_clks);
++		if (ret)
++			return ret;
++	}
++	return 0;
++}
++#endif
++
++static const struct dev_pm_ops scpsys_pm_ops = {
++	SET_SYSTEM_SLEEP_PM_OPS(scpsys_suspend, scpsys_resume)
 +};
 +
- &remoteproc_adsp {
- 	status = "okay";
- 
-@@ -626,12 +668,97 @@ lt9611_irq_pin: lt9611-irq-state {
- 		bias-disable;
- 	};
- 
-+	qup_uart13_default: qup-uart13-default-state {
-+		cts-pins {
-+			pins = "gpio43";
-+			function = "qup13";
-+			drive-strength = <2>;
-+			bias-bus-hold;
-+		};
-+
-+		rts-pins {
-+			pins = "gpio44";
-+			function = "qup13";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+
-+		tx-pins {
-+			pins = "gpio45";
-+			function = "qup13";
-+			drive-strength = <2>;
-+			bias-disable;
-+		};
-+
-+		rx-pins {
-+			pins = "gpio46";
-+			function = "qup13";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	qup_uart13_sleep: qup-uart13-sleep-state {
-+		cts-pins {
-+			pins = "gpio43";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-bus-hold;
-+		};
-+
-+		rts-pins {
-+			pins = "gpio44";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-pull-down;
-+		};
-+
-+		tx-pins {
-+			pins = "gpio45";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+
-+		rx-pins {
-+			pins = "gpio46";
-+			function = "gpio";
-+			drive-strength = <2>;
-+			bias-pull-up;
-+		};
-+	};
-+
-+	sw_ctrl_default: sw-ctrl-default-state {
-+		pins = "gpio50";
-+		function = "gpio";
-+		bias-pull-down;
-+	};
+ static struct platform_driver scpsys_pm_domain_driver = {
+ 	.probe = scpsys_probe,
+ 	.driver = {
+ 		.name = "mtk-power-controller",
+ 		.suppress_bind_attrs = true,
+ 		.of_match_table = scpsys_of_match,
++		.pm = &scpsys_pm_ops,
+ 	},
  };
- 
- &uart2 {
- 	status = "okay";
- };
- 
-+&uart13 {
-+	/delete-property/ interrupts;
-+	interrupts-extended = <&intc GIC_SPI 585 IRQ_TYPE_LEVEL_HIGH>,
-+			      <&tlmm 46 IRQ_TYPE_EDGE_FALLING>;
-+	pinctrl-0 = <&qup_uart13_default>;
-+	pinctrl-1 = <&qup_uart13_sleep>;
-+	pinctrl-names = "default", "sleep";
-+
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "qcom,wcn3998-bt";
-+
-+		vddio-supply = <&vreg_pmu_io>;
-+		vddxo-supply = <&vreg_pmu_xo>;
-+		vddrf-supply = <&vreg_pmu_rf>;
-+		vddch0-supply = <&vreg_pmu_ch0>;
-+	};
-+};
-+
- &ufs_mem_hc {
- 	status = "okay";
- 
-@@ -705,12 +832,16 @@ &usb_2_dwc3 {
- };
- 
- &wifi {
--	status = "okay";
--
-+	/* SoC */
- 	vdd-0.8-cx-mx-supply = <&vreg_l1a_0p75>;
--	vdd-1.8-xo-supply = <&vreg_l7a_1p8>;
--	vdd-1.3-rfa-supply = <&vreg_l2c_1p3>;
--	vdd-3.3-ch0-supply = <&vreg_l11c_3p3>;
-+
-+	/* WiFi / BT PMU */
-+	vdd-1.8-xo-supply = <&vreg_pmu_xo>;
-+	vdd-1.3-rfa-supply = <&vreg_pmu_rf>;
-+	vdd-3.3-ch0-supply = <&vreg_pmu_ch0>;
-+	vdd-3.3-ch1-supply = <&vreg_pmu_ch1>;
- 
- 	qcom,calibration-variant = "Qualcomm_sm8150hdk";
-+
-+	status = "okay";
- };
-
+ builtin_platform_driver(scpsys_pm_domain_driver);
 -- 
-2.47.3
+2.52.0.351.gbe84eed79e-goog
 
 
