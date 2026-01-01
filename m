@@ -1,115 +1,164 @@
-Return-Path: <linux-pm+bounces-40105-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40106-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F07BCEC5F4
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 18:24:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42351CECCB0
+	for <lists+linux-pm@lfdr.de>; Thu, 01 Jan 2026 04:49:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 62BDE3009814
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Dec 2025 17:24:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9B5D83009426
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Jan 2026 03:49:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03B712BD015;
-	Wed, 31 Dec 2025 17:24:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB65F1E32D6;
+	Thu,  1 Jan 2026 03:49:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fvHMbRdn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dTFTw3bj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303F62BCF4C
-	for <linux-pm@vger.kernel.org>; Wed, 31 Dec 2025 17:24:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE4DB2C181;
+	Thu,  1 Jan 2026 03:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767201848; cv=none; b=FlWFQ83CDfAaVo/60mm5ZN99uQHOdhtKxfds+JKPD+pgP61UicfeRy0i05jH6HlAD+k9G0jJ05p9CurnXSqPsD+K9PjhAFVu0vLSjlhooUbMVXul7JT7k/8ev82mHRZabTKAny95+vyHOW6ugHpZ54I5kpBkQlAnqkwOo1+Mw8A=
+	t=1767239369; cv=none; b=Aax5t2fxpqOUv6ulfZ5uu/XeReP3NwXDYZ8pBjTIk6ZckIsRoknIiTITmhBPZGmW7uFKHfTNAFkRhdghwbiwdVb70Zj6MqgLs/Wb7FbR8Xy9MpIlOAFPBJRRMqvYr/484lp2enibqsRunj9LnZSu3j9EJcHpS6QtheXDZtHJnUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767201848; c=relaxed/simple;
-	bh=T8Y8ubirw01g5zFTgijalKE+TvYZvn9mJqyF6t4G8Q0=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
-	 MIME-Version:Content-Type; b=pR7BlTeD+3PkwHQ12SpVy/DizTNRVgTK95dhtlGVZenG5Fu0KH/JewWKkbsxFBfmrXoIm9urUffys0ue2UhieHzkrcWj0Ol5ytkC6FjIYUMu7Kuwxoy25EaocUVtGMagIFhlSjrRRTo0EKY1kuOYSFl+xRbFyI3aRUNoEWrDmKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fvHMbRdn; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4779ce2a624so84324585e9.2
-        for <linux-pm@vger.kernel.org>; Wed, 31 Dec 2025 09:24:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767201845; x=1767806645; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :message-id:date:in-reply-to:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=R87JjGL/7Tv48x8Fv9GR/wm2jySKUeW5S5Ujq2orAxo=;
-        b=fvHMbRdncJb0qt1wtIkCCaL+CH9x42WKRTOucUJAwnS+tQFZudByY1Fgo5lOIojsVA
-         EO0V7FObw7hu53c7jU53AwBy9+6ohb7jNAz7Ggr5UyKA3LDk8iqqdl1PWvllC45hTVe/
-         YszwcomHqDZemUv7dXOLhC9ZUHycUch4VITv9I8G7SOybhyrPZ8XJy6Dh68X/yZNgXZo
-         VJY5qEoxoTfmTN17l199TxDeLRYSU11tihQtJueQYLvw4QYK/B18vVUeAPpJx4vAFf0o
-         UzYqymKgJwTCkI2e1a1N2j7N7SzwlkdswliGkz8TZniaBD7bDkF0130BjkTSA4KXsERL
-         ELWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767201845; x=1767806645;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :message-id:date:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R87JjGL/7Tv48x8Fv9GR/wm2jySKUeW5S5Ujq2orAxo=;
-        b=gVbpju8W3/hu3Xn7R1q5l6jbZViwOJibFM+tr7LekXimmScThtGsNPdCCO7NlGMKA/
-         WTIAraTgjkJ7rUB+i9z2K935EwzaMN0uEYn54gzcv0gp6uNzYtyNF4M0XQluiXVjWfjq
-         0cxJjzAkheTQdlP4MNmL8x26P4em56eJIUG2xWqbjamuvrESg0poQjzhVJI9TWMrV4w4
-         TuKO38mqAXvaHYfe/XH4dsSWv+7t5kw0eN8blYVsk/ziAwS3uQMYa/iKuWJ94zHLeuSx
-         VyoOraY0k7BUefpzBeiQm35094pwxDLYl1mkERpp3oTsitYpE6fQvQPDRJQNpDAFDjrX
-         U/Ww==
-X-Forwarded-Encrypted: i=1; AJvYcCWKa0T96zCWiATUmloZV9gCLEVp6KmkSXkOSeH2ucg4T3yhlS1+1I2QXQwARTs/owKQE1tOyCHzRg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAZ3/OXnvuXIfliHN9M9lSQcPl6BwnOUhTz8Ox/BNQP2rFV6oX
-	vlulgA8ULDm/7IcSkPFbGl5BQyjluqYVP1hkDAtmkxqwkv5L4T6oaLBW
-X-Gm-Gg: AY/fxX6Jyi1ZfyEDso6n20ToKmwy0xdSU1/W9wDCDb7W+MYSyJrvQN+jAGrdkw7LMeM
-	zvAg0sIdfO75lqnGbcCpCtBT0q9Zc2lCSIT7EoADlLe4RhuoEH+zhVtOFSnrwcqmjNR5DvCckCy
-	s/zlgIPBTQ4BFXxrUIjHlU0HRIp9ISCdrwYYRsEMDp0lPbAr2I40UBcqNzUHQCVWZbfQLr4ka/x
-	oWQEvdtXOiP/6do0lHiLPz92YwoNfK++GYaXWT2BPgpCbjBzfppTzbmZNf74CaifVAyaaVpqoQh
-	6+/80C5Bvr4Gw78efRWH8jI4o4zKA6rSJ7we2coL+EWFJTPhOKfZ+NrEUmALwvlzX7LbaMFm9ye
-	j/dvV6kTyxhq303ZGGmK8uuFpCqVxB5KkaBnHPrkDgIW4dbbnzEf0iaWDmu8qSXjDhhWZ2N7RDq
-	TXm199f6pHGnnmzpzzcpSNC/23eTsPPIS/
-X-Google-Smtp-Source: AGHT+IFdVUAusCYbhXtGHx5jk/mS7YxbHvH2ZdgmHlBVw+Es8g6zXJWrYIKrmmgwqUnSvZCNAmfSKA==
-X-Received: by 2002:a05:600c:1912:b0:477:89d5:fdac with SMTP id 5b1f17b1804b1-47d1959f714mr510979675e9.31.1767201845337;
-        Wed, 31 Dec 2025 09:24:05 -0800 (PST)
-Received: from imac ([2a02:8010:60a0:0:2944:18df:f54a:f00])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324ea1af2bsm75005716f8f.1.2025.12.31.09.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Dec 2025 09:24:04 -0800 (PST)
-From: Donald Hunter <donald.hunter@gmail.com>
-To: Changwoo Min <changwoo@igalia.com>
-Cc: lukasz.luba@arm.com,  rafael@kernel.org,  kuba@kernel.org,
-  davem@davemloft.net,  edumazet@google.com,  pabeni@redhat.com,
-  horms@kernel.org,  lenb@kernel.org,  pavel@kernel.org,
-  kernel-dev@igalia.com,  linux-pm@vger.kernel.org,
-  netdev@vger.kernel.org,  sched-ext@lists.linux.dev,
-  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH for 6.19 1/4] PM: EM: Fix yamllint warnings in the EM
- YNL spec
-In-Reply-To: <20251225040104.982704-2-changwoo@igalia.com>
-Date: Wed, 31 Dec 2025 17:20:21 +0000
-Message-ID: <m2v7hmk1pm.fsf@gmail.com>
-References: <20251225040104.982704-1-changwoo@igalia.com>
-	<20251225040104.982704-2-changwoo@igalia.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1767239369; c=relaxed/simple;
+	bh=1sTaYu5maZYYp5Tn4/bX5HWP/0gbz500XijtDaG9+bk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=rMtMWg9yoX3PDblq1nEXuTZhuYDFdztxZgd+UqSvCg4Z12S/SPxhRhcNsKiTmijZlVEASIrmK+R4+4HNmhg3nDSaFi9B7t0DL4eRMby43LyQky57xBK6FWgo3XW1NKVdCX8M3On5PwmHdr5jJOm4OBkmkS3T7S0UKR6ZtJ+BIcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dTFTw3bj; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767239368; x=1798775368;
+  h=date:from:to:cc:subject:message-id;
+  bh=1sTaYu5maZYYp5Tn4/bX5HWP/0gbz500XijtDaG9+bk=;
+  b=dTFTw3bjrr+u5uqPm4DOJPZOPfQQWjYHja3VegMIiCzRMsBTu59+fBxA
+   RsciOjnHs/2zcDduDcqTBUp4qTVAih9Wshr7Y+bzC3B0WcQC0bCso1Fj/
+   tgc58Zbh7UarLtCCw5KyYR6/Fu+9bWcUOUxQ+a66Tn+ScK67b+gS3x4md
+   Dii78+I86nZJ6Qlfb+altxQp5wo3snO6Dj+4ByLtwlaMM2rWbqLJjqPo8
+   peo13/QzxZyVVYDoNFDnzq3+3w0mW0bgwVLHg6aVxgDNeWJZleH2pEwwj
+   tFipVkLDhMtRnClXZU3Ut0FybKBaBAR5wDkElIDgtrb63wgbWZCjL+Mj2
+   Q==;
+X-CSE-ConnectionGUID: sW4BXSkyQlKI8eRi5VAK+w==
+X-CSE-MsgGUID: ht6k8RQwTQmPzWWraWxonQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11658"; a="68831903"
+X-IronPort-AV: E=Sophos;i="6.21,193,1763452800"; 
+   d="scan'208";a="68831903"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Dec 2025 19:49:27 -0800
+X-CSE-ConnectionGUID: cWBFAkmfS4CxBznvKfVE0g==
+X-CSE-MsgGUID: +dZi8eIvSeuOqYddKxAnbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,193,1763452800"; 
+   d="scan'208";a="206605297"
+Received: from lkp-server01.sh.intel.com (HELO c9aa31daaa89) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 31 Dec 2025 19:49:25 -0800
+Received: from kbuild by c9aa31daaa89 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vb9gg-000000001eN-3dgM;
+	Thu, 01 Jan 2026 03:49:22 +0000
+Date: Thu, 01 Jan 2026 11:48:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [rafael-pm:pm-runtime-cleanup 23/23]
+ drivers/clk/tegra/clk-device.c:178:2: error: incompatible function pointer
+ types initializing 'int (*)(struct device *)' with an expression of type
+ 'void (*)(struct device *)'
+Message-ID: <202601011126.sozHuNJ1-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-Changwoo Min <changwoo@igalia.com> writes:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-runtime-cleanup
+head:   93098b331b83758601e6a4c26bbc773de1bd21cd
+commit: 93098b331b83758601e6a4c26bbc773de1bd21cd [23/23] PM: runtime: Change pm_runtime_put() return type to void
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260101/202601011126.sozHuNJ1-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260101/202601011126.sozHuNJ1-lkp@intel.com/reproduce)
 
-> The energy model YNL spec has the following two warnings
-> when checking with yamlint:
->
->  3:1    warning missing document start "---"  (document-start)
->  107:13 error   wrong indentation: expected 10 but found 12  (indentation)
->
-> So let=E2=80=99s fix whose lint warnings.
->
-> Fixes: bd26631ccdfd ("PM: EM: Add em.yaml and autogen files")
-> Suggested-by: Donald Hunter <donald.hunter@gmail.com>
-> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601011126.sozHuNJ1-lkp@intel.com/
 
-Reviewed-by: Donald Hunter <donald.hunter@gmail.com>
+All errors (new ones prefixed by >>):
+
+>> drivers/clk/tegra/clk-device.c:178:2: error: incompatible function pointer types initializing 'int (*)(struct device *)' with an expression of type 'void (*)(struct device *)' [-Wincompatible-function-pointer-types]
+     178 |         SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:345:2: note: expanded from macro 'SET_SYSTEM_SLEEP_PM_OPS'
+     345 |         SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:316:12: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+     316 |         .resume = pm_sleep_ptr(resume_fn), \
+         |                   ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:474:28: note: expanded from macro 'pm_sleep_ptr'
+     474 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/util_macros.h:136:27: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/clk/tegra/clk-device.c:178:2: error: incompatible function pointer types initializing 'int (*)(struct device *)' with an expression of type 'void (*)(struct device *)' [-Wincompatible-function-pointer-types]
+     178 |         SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:345:2: note: expanded from macro 'SET_SYSTEM_SLEEP_PM_OPS'
+     345 |         SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:318:10: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+     318 |         .thaw = pm_sleep_ptr(resume_fn), \
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:474:28: note: expanded from macro 'pm_sleep_ptr'
+     474 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/util_macros.h:136:27: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/clk/tegra/clk-device.c:178:2: error: incompatible function pointer types initializing 'int (*)(struct device *)' with an expression of type 'void (*)(struct device *)' [-Wincompatible-function-pointer-types]
+     178 |         SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:345:2: note: expanded from macro 'SET_SYSTEM_SLEEP_PM_OPS'
+     345 |         SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:320:13: note: expanded from macro 'SYSTEM_SLEEP_PM_OPS'
+     320 |         .restore = pm_sleep_ptr(resume_fn),
+         |                    ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:474:28: note: expanded from macro 'pm_sleep_ptr'
+     474 | #define pm_sleep_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM_SLEEP), (_ptr))
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/util_macros.h:136:27: note: expanded from macro 'PTR_IF'
+     136 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
+
+
+vim +178 drivers/clk/tegra/clk-device.c
+
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  169  
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  170  /*
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  171   * Tegra GENPD driver enables clocks during NOIRQ phase. It can't be done
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  172   * for clocks served by this driver because runtime PM is unavailable in
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  173   * NOIRQ phase. We will keep clocks resumed during suspend to mitigate this
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  174   * problem. In practice this makes no difference from a power management
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  175   * perspective since voltage is kept at a nominal level during suspend anyways.
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  176   */
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  177  static const struct dev_pm_ops tegra_clock_pm = {
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01 @178  	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  179  };
+b1bc04a2ac5b15 Dmitry Osipenko 2021-12-01  180  
+
+:::::: The code at line 178 was first introduced by commit
+:::::: b1bc04a2ac5b15e0b681228376664671fc2f2017 clk: tegra: Support runtime PM and power domain
+
+:::::: TO: Dmitry Osipenko <digetx@gmail.com>
+:::::: CC: Thierry Reding <treding@nvidia.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
