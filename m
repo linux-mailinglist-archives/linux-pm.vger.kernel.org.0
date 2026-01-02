@@ -1,87 +1,87 @@
-Return-Path: <linux-pm+bounces-40136-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40137-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE784CEF20B
-	for <lists+linux-pm@lfdr.de>; Fri, 02 Jan 2026 19:02:52 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3351CEF1E1
+	for <lists+linux-pm@lfdr.de>; Fri, 02 Jan 2026 19:01:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BD4D93024E4B
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jan 2026 18:01:05 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 56F9530069A0
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jan 2026 18:01:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 089F72FF16F;
-	Fri,  2 Jan 2026 18:01:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EC242FF16C;
+	Fri,  2 Jan 2026 18:01:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="LsuKRvRS";
-	dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="psG28K4t"
+	dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="hBWflBbP";
+	dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b="fmb8knCD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.83])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC70227F015;
-	Fri,  2 Jan 2026 18:00:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2B7F2FD69A;
+	Fri,  2 Jan 2026 18:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.84
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767376859; cv=pass; b=FrvQAYLWOcwE8HGlh7sjPNwIWqxRmKE7VtDdCvsjrFqupV+zDgC71orWRkLpp4+8a5vqGtq/fsXaojejYWJuj1Y/wnuI8C9lORvO2CTEwOhuMWnJGhg/YAIeol1OG5CltFXk9BxXJn5/22rZLzOSquNCSZveW0W0PUh+3H1r0tA=
+	t=1767376866; cv=pass; b=I86Hzd3wKevTjOMVKDf9lIdN3xLt15dT4+NbdR1g7XDlTZsA/8hXftmGhFB2znAR2QjCaAzZDO56QTRNm8GDe7PdObMfG2qtqZdkEYovD6h4/PvFqQ2hHYRxJFktFSVTcfyFWS2NYksJxmP+JgXiG2IpLryzVGPrkZO9ZuOOdCg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767376859; c=relaxed/simple;
-	bh=szy0BQhDjcywmXfulHjMRZvP35HfFdHm9ZR3Giy5mxU=;
+	s=arc-20240116; t=1767376866; c=relaxed/simple;
+	bh=UmB/Zvj2CEeBiKzr+kPyp+yV+9d3byoCdoSJYcTCbbU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jI/XY1y8aZL1++HB0Otj8L3EQ/doyG0N5HdSSOiwrjvJ/+w0ajThg1hMIAaCg+kgL+99L82aSkt/TzYkUxv1qxxx3EqGRxitfhZqTidKpisvMSNM450PknD56TadaAqW/z3+gwpaiNA/AI7aHfZcvFXFtHwBZRHHvyTYMNrsfps=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jm0.eu; spf=none smtp.mailfrom=jm0.eu; dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=LsuKRvRS; dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=psG28K4t; arc=pass smtp.client-ip=85.215.255.83
+	 In-Reply-To:To:Cc; b=WbIpi0e+AUbhIG4CMYYP/gt8sCdG3ol3HeY/ovKllEO7TarSNFOA+vv7xB9V9+0KHb4LoZaZIPmAbpGzmcK+W8R8vqG6v1ahu+9+LsoirwV/YDfzS4bJn+wEHAywisEQvB7so7EdQE6i8R1uHeqhcHEQZ+xUp/gYbA4ij2Ue2qI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jm0.eu; spf=none smtp.mailfrom=jm0.eu; dkim=pass (2048-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=hBWflBbP; dkim=permerror (0-bit key) header.d=jm0.eu header.i=@jm0.eu header.b=fmb8knCD; arc=pass smtp.client-ip=85.215.255.84
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=jm0.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=jm0.eu
-ARC-Seal: i=1; a=rsa-sha256; t=1767376837; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1767376838; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=fjuv9XzpkJV0m+YIpx2Od1BAjRZ1jGGTgER3a6WHcVd3FcoBn1KGCeiOiBgwnQ7frs
-    7sH0JvM57xVJXgwp+h1ShpdZBmhvzg+kckSwlfufuVk+cclsItIZ1zEjsU9ZhEh3/Imz
-    dbqb3z3Ju6XDs8WnlxHxqj1RjypBq9qu88uD0HL7YpJONChiVWqO52UICYYthBgWlB97
-    LsjKdupRoj6Hk8HZY5xTxIARqspM9ZFzESh+TN5PXZEw7Zvh9l3SQYU94a7Z7CYWkDDJ
-    P1SqKWDj8aHF3xeiiNrzL/QMGzgTnnbd3WOo4hUWiKgNFBflm9LAVerXIolid0CUHa+w
-    TsSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1767376837;
+    b=IU13SRqmCuFz9WibsWO/8sQOEN80qhuPtyZRd8wKJQKek8tiyRMTB7FZ0B7rptqeGs
+    Box2RXeI9zKHlQXTuuuH6B1O+mOdCFNWmyYux1BPlFM7MKbUA1Xdc3lvaadcrbBKzspb
+    S6wGIGOJ2F2jGm//mW1SzeN1ZoNQcYM+gcnSche4ZKid8ptY0NFty3SRU76CDVgW3xs9
+    /aJibXQsBNDvy39LEOPVLzBhoFQeecWPK9pGhjpP95/v67FXJ1w2gz3Eww+A5xEta6nW
+    M35qM+yhhWRwEnqLNPwB9tHwZzEqtgUbRL2FbCQ4cNMBqX3eRe63WYN/X8VKIUxYVr8h
+    AGRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1767376838;
     s=strato-dkim-0002; d=strato.com;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=IMRntDBW+5EWU7Eup6lBpFcTSPp+X8qdra3fy4r81Tc=;
-    b=tQ7FIJa99YLaLjlHScq8399HxmmQGVX6ZZ6V5bK9lkmxfTb8VIbxpc2+lSisrFE/aG
-    j2vIHdaP10ZkfcIF19vQNluTMGbyp6QpUH2mbtgCpPD185XMCC3cG9USQ60kP2f6R9YA
-    1TH1wx7qORiaXeJKOLpeWHaSyITnWmFXCkloou0oKNIYvxWMvThmsyAA+J5bE2a0eVNR
-    MG/HakzLNwNFbxeMaBy/yHtPKkSIsLAiqhSiCyfR8WVao6A/jhvsk5B1Ce6mAmi7o422
-    wFQ/YSDKYEBD836Lb7kQBDikMF/MIO/nyje2wvnCSXtrDbKRo5cRWyMUgGSOKxmfX7An
-    APjA==
+    bh=0Asg95GJHRYYRrgfRPhQS05Ear6e3z4tU5KMDrFBRZM=;
+    b=WxV3tD9apIoYO05ioQL48rEXrwFHBm6zsbwIvtI5AL6MBS7VB+WvXBam22gA1HzC3R
+    n3h8S2nHEJa6u7k5bVAJbf/GgCjcuk/juGpvg8geLN+zqK4UCERvB7YEFQtJ1M5Ge6dV
+    +485P1WUOECAHTTnEWdWTwg5ljXenHWd6sbaABBXi+kux3jVRcnWSxrfWmzQ79DA31SR
+    2p8QTMXwF3QmIZZT7MCAuw024twWXgxi859VkXkOW07A4ymS7fXoXrG+6THMzziYOn2r
+    mZoxjZlr/DApL8jYooSUcICEhgC1vuJd+GDq/HR8JKnqBWielTKH74ZtyhAzKnww2r4y
+    +z1A==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
 X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1767376837;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1767376838;
     s=strato-dkim-0002; d=jm0.eu;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=IMRntDBW+5EWU7Eup6lBpFcTSPp+X8qdra3fy4r81Tc=;
-    b=LsuKRvRSLn82MwSl0jhEcMvPIK/VhOtVm6VKB1snaepBDnGSdm3GgoCfvhxJ7wx1sl
-    l6gSq5EN4lfDpxguuxKGw8RsRabZBwr/Lmgmnh1MqfZhiodLYfbys7Ojg5FSgcEE2D/I
-    FruktwcmVyZZOWDZVa7pAnLp5S/lOS6UhKQay6NGrsL7KfnSlFhryJKmuCzoOq19qF4+
-    HA1olmwxv6W8BbUEIvo2gXqnR4kV+8e0r4SOStuIhlpOBEMEdClj28q0VEglZCmCMDS9
-    WRNJsmi/nSMbMJFqgOL+lu3wUIUcVui4YB1VKyeSvRE4Z57TRCZkfM3Pg9ojq/Ke0J22
-    PhJQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1767376837;
+    bh=0Asg95GJHRYYRrgfRPhQS05Ear6e3z4tU5KMDrFBRZM=;
+    b=hBWflBbPWgIWIkwGBCSYV7bMa16sPrtjxIIHg9nIae7WEn/Gmf2nmBhaxG3imBXf06
+    F6kFW2WXTYh1ba7E/Mc4Y/qLCwHWY6Kvm1pDJHJHxYzscUlHDSowC0+gaI0V+RTe1iU5
+    eGX/Jphx+VGvlyKM4akWZvbKXawRIFPV9jDKCNRwcpDinrYvyNYWnLcCJcghm0nlYLa6
+    aL0GXfyKuBSCb/jZKXO2UpwvOKWxmALP6R8RsnI9KVktI1K8Z2BvJzAO+yjWJtAcmJal
+    LzoZIiLMoPZczOYFsW6atYqVde3U5PnScQcXUyB6m9cTLrY9WyFRSPNGYnkOJTh4nFdR
+    12FA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1767376838;
     s=strato-dkim-0003; d=jm0.eu;
     h=Cc:To:In-Reply-To:References:Message-Id:Subject:Date:From:Cc:Date:
     From:Subject:Sender;
-    bh=IMRntDBW+5EWU7Eup6lBpFcTSPp+X8qdra3fy4r81Tc=;
-    b=psG28K4t1TAuJEvmoOZ/tJkkjEgh/sj0GKZrC1EXdhgIKoAeR8jYEZdBxrwnLWZmDV
-    T7Phw/ZtKVJO8ACS+4CQ==
+    bh=0Asg95GJHRYYRrgfRPhQS05Ear6e3z4tU5KMDrFBRZM=;
+    b=fmb8knCDGGGisSp3Kuir/I1mSfTxi5qH2pieptBtj5sTYFEhIUcwRvDFaMYsFElXSO
+    5uynNR/unyG+dScGicCQ==
 X-RZG-AUTH: ":JmMXYEHmdv4HaV2cbPh7iS0wbr/uKIfGM0EPTeoCaRth8YQivJ4sfKeu9QyRDNI="
 Received: from Wablet.localdomain
     by smtp.strato.de (RZmta 54.1.0 DYNA|AUTH)
-    with ESMTPSA id z0d4ec202I0aEU9
+    with ESMTPSA id z0d4ec202I0bEUA
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
-    Fri, 2 Jan 2026 19:00:36 +0100 (CET)
+    Fri, 2 Jan 2026 19:00:37 +0100 (CET)
 From: Josua Mayer <josua.mayer@jm0.eu>
-Date: Fri, 02 Jan 2026 19:00:30 +0100
-Subject: [PATCH 1/4] dt-bindings: mfd: netronix,ntxec: add reference to
- power-supply
+Date: Fri, 02 Jan 2026 19:00:31 +0100
+Subject: [PATCH 2/4] ARM: dts: imx: imx50-kobo-aura: add description for
+ battery
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,8 +89,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260102-kobo-aura-battery-v1-1-501f2a8fa575@jm0.eu>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260102-kobo-aura-battery-v1-2-501f2a8fa575@jm0.eu>
 References: <20260102-kobo-aura-battery-v1-0-501f2a8fa575@jm0.eu>
 In-Reply-To: <20260102-kobo-aura-battery-v1-0-501f2a8fa575@jm0.eu>
 To: =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
@@ -105,68 +105,47 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, Josua Mayer <josua.mayer@jm0.eu>
 X-Mailer: b4 0.13.0
 
-The Netronix Embedded Controller supports monitoring of battery voltage.
+Kobo Aura has a rechargable battery that is monitored by the embedded
+controller.
 
-Voltage monitoring functionality is self-contained and requires no
-supply- or battery-specific runtime configuration.
+Battery markings: PR-285083 3.7V Typ. 1500mAh; 575327416288 5.55Wh.
 
-Battery design characteristics (e.g. voltage-min-design-microvolt) are
-useful for users to understand the charge level and are commonly
-provided by a separate battery node linked with monitored-battery
-property.
+Add description for this battery and link it for monitoring by the
+embedded controller.
 
-Add reference to power-supply.yaml so that power-supplies and
-monitored-battery properties become available.
-
-Further drop reg property description and replace it with maxItems 1 as
-is common for i2c devices with single bus address.
-
-Finally replace additionalProperties with unevaluatedProperties to
-allow properties from referenced schemas.
-
+Reviewed-by: J. Neuschäfer <j.neuschaefer@gmx.net>
 Signed-off-by: Josua Mayer <josua.mayer@jm0.eu>
 ---
- Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml b/Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml
-index 37fbb953ea12..6599dcf0eceb 100644
---- a/Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml
-+++ b/Documentation/devicetree/bindings/mfd/netronix,ntxec.yaml
-@@ -13,13 +13,15 @@ description: |
-   This EC is found in e-book readers of multiple brands (e.g. Kobo, Tolino), and
-   is typically implemented as a TI MSP430 microcontroller.
+diff --git a/arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts b/arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts
+index b1a6a9c58ac3..dc8d9fd45cd2 100644
+--- a/arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts
++++ b/arch/arm/boot/dts/nxp/imx/imx50-kobo-aura.dts
+@@ -16,6 +16,14 @@ chosen {
+ 		stdout-path = "serial1:115200n8";
+ 	};
  
-+allOf:
-+  - $ref: /schemas/power/supply/power-supply.yaml
++	battery: battery {
++		compatible = "simple-battery";
++		voltage-min-design-microvolt = <3400000>;
++		voltage-max-design-microvolt = <4100000>;
++		energy-full-design-microwatt-hours = <5550000>;
++		charge-full-design-microamp-hours = <1500000>;
++	};
 +
- properties:
-   compatible:
-     const: netronix,ntxec
+ 	memory@70000000 {
+ 		device_type = "memory";
+ 		reg = <0x70000000 0x10000000>;
+@@ -151,6 +159,7 @@ embedded-controller@43 {
+ 		system-power-controller;
+ 		interrupts-extended = <&gpio4 11 IRQ_TYPE_EDGE_FALLING>;
+ 		#pwm-cells = <2>;
++		monitored-battery = <&battery>;
+ 	};
+ };
  
-   reg:
--    items:
--      - description: The I2C address of the EC
-+    maxItems: 1
- 
-   system-power-controller:
-     type: boolean
-@@ -42,7 +44,7 @@ required:
-   - compatible
-   - reg
- 
--additionalProperties: false
-+unevaluatedProperties: false
- 
- examples:
-   - |
-@@ -61,5 +63,6 @@ examples:
-                 interrupt-parent = <&gpio4>;
-                 interrupts = <11 IRQ_TYPE_EDGE_FALLING>;
-                 #pwm-cells = <2>;
-+                monitored-battery = <&battery>;
-         };
-     };
 
 -- 
 2.43.0
