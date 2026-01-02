@@ -1,68 +1,69 @@
-Return-Path: <linux-pm+bounces-40116-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40117-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB408CEE36B
-	for <lists+linux-pm@lfdr.de>; Fri, 02 Jan 2026 11:54:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7241CCEE378
+	for <lists+linux-pm@lfdr.de>; Fri, 02 Jan 2026 11:55:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BB5D230006C7
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jan 2026 10:54:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 16BD3300BBB3
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jan 2026 10:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CADA2DEA77;
-	Fri,  2 Jan 2026 10:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E16242DECB2;
+	Fri,  2 Jan 2026 10:54:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g0zs/yNT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J7nEObdI"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57EBB2D7D2A
-	for <linux-pm@vger.kernel.org>; Fri,  2 Jan 2026 10:54:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD392DEA77
+	for <linux-pm@vger.kernel.org>; Fri,  2 Jan 2026 10:54:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767351252; cv=none; b=sIqpdy8eU9bhjkm+d/a5A6Aq7OToyPGgsfZkJTPOh1JPXk2+09K/dh3a74rIi3JRLTNLd2Q2VJlkob9154tVkjvQVPfKQKAx1QO3qPiZOzoYajGX9sUbbGbkixYoPpoK0UVixR/hekOu4mqPrihdzKY4LzMWltl5ASUO0IW/QLY=
+	t=1767351297; cv=none; b=XVDUoPE5luuoG3l9RN1X7JUOgUvqdUAiyl03n7RaGXqkvUNsoeU1cz+0f/96GbOMNT/G2WFV4QUNOc2AxrdImAw/hSUG5mLT0siUuR5Hmqi0P5c4+bA1wEHwoRPT2d01zMbc12b6Y97KCS27A+9ZL2gC4W5iwHzB4Vdw0OXVTJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767351252; c=relaxed/simple;
-	bh=mhZD+26yEtIqCTAfVl9iT6ZYu15zs4sSgg8F7ighC/4=;
+	s=arc-20240116; t=1767351297; c=relaxed/simple;
+	bh=2MSWLmERer6P1TQXzvhyk6/QJFLaS0pEuKvejes0xqk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MmauAdlgj/sZVcKkZDZm+c1ESKa0ks2E7uheUzvFKRFTMV7a+4FAnX/nmGCc4xakccRp5vnnaUanTGjKd61F5NmMh13WYqlPhYM/lb5O442z/QipKGVFuRAz7Ovn4dZtGayJ79kRdD0yrxE11GCQkr/4ZVtvtuEwHA9G0WZgWt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g0zs/yNT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B051C19424
-	for <linux-pm@vger.kernel.org>; Fri,  2 Jan 2026 10:54:12 +0000 (UTC)
+	 To:Cc:Content-Type; b=g+FUy+KTDpajciuunx6UZ23eu0szuSj9eHKXThp+8B5fqmEbpjMAR+LLSSybNcWkuGMjacV3C9Zob3A2VzmCD4vFezprQJVSrkdsTXih/rj0xQqYerQAdB35WntCBITTzsO8RrklYw8LG9OAy1yBkqEh+T1zqomCSxpeoLXM3WA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J7nEObdI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72F55C19423
+	for <linux-pm@vger.kernel.org>; Fri,  2 Jan 2026 10:54:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767351252;
-	bh=mhZD+26yEtIqCTAfVl9iT6ZYu15zs4sSgg8F7ighC/4=;
+	s=k20201202; t=1767351297;
+	bh=2MSWLmERer6P1TQXzvhyk6/QJFLaS0pEuKvejes0xqk=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=g0zs/yNTkJOTHppfnCWmNvC+9oYLEz1NkUoEzyweEETzScTG+qABaLmAGD3LujFRI
-	 FbrNgAMngh0lQAHpVA7/advd4197jrvMhfmu2mtYfOC/+D7rYHNdo4d4lpm5LFEFFF
-	 BRK0ao0800BY41AIpfUE29vPVW/ZWeJy1zh3KklfGOXfCuwPsNEtGODcLsh07EIezo
-	 P6D19sO6dTTKLdXL6LcxwjUVVTlm1W7f7mqNtAvigC5/yEhvprMlQUx3E8jRdZllF5
-	 MiSkRWQl0PU5Nc8U5dXd+SWPbDP64Fgddl6X/YN3VwMbIVhOIFTcVN4CRHdyinzjsz
-	 59al3gVGGPU0w==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5957d7e0bf3so11497754e87.0
-        for <linux-pm@vger.kernel.org>; Fri, 02 Jan 2026 02:54:12 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVEel0AkfqFhGjT9vlY/hbFjpIs1FeTN8wnoioeqAJ8oDznIiuxmsAj1fKgLcQ2DXAO0VNSXe+sZg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwV5bhxQ1SLVhX430ahafKCkyRneOYkID4h2bq8QCrtGE8yd7oS
-	tnKHGRAEvm5BrhiVtXI1nMRyDEe6rBNomKM6bZtZfsoSPacDQtqkDmrUtUooeCsO25BCbzzsJfW
-	ZB4kt1Rn3gT5puLq8BXXwl602h6lTsdLFBp3Jkg6E6w==
-X-Google-Smtp-Source: AGHT+IExnKYlDStG06tTP1RibOKTGQuC8yDyUL3e1vDeFIS1fn58mDudw2E+LdXxU8NjOyVmgo6RUbBW+jM7qYg69kE=
-X-Received: by 2002:a05:6512:1581:b0:598:e9f9:c03 with SMTP id
- 2adb3069b0e04-59a124dcd09mr14271730e87.3.1767351250861; Fri, 02 Jan 2026
- 02:54:10 -0800 (PST)
+	b=J7nEObdIKvT76wNd4LVyS/5yE315iSpvpQax38KXDtMgpEk69W79APryrs/0M5taK
+	 U0rfU2I/uLbQfiws6180HnOaL/MCC4uIURj141Tzibsu7W3GTKOvejr7TonqbIrE+f
+	 mLgNOHIisIYraHcjgUvdXSeN3cBqs7+jk12BSB0B/k0ZIdDKtPBYOGH4OnKbRaYM3o
+	 bO4womAsnx3B5M8r0AoHn7VuXIrFhMtY2xhrW2hMSm20jf+Yqc/y5aHE0agNhxRe1s
+	 rJ1dn2mmzWGqd73u2GeWCQ1RbufIrw2bYS55695GkqyZ7SA4vBAI4QvokxjFVU6TTA
+	 rTYsYJ9FtCt4A==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5943d20f352so12753901e87.0
+        for <linux-pm@vger.kernel.org>; Fri, 02 Jan 2026 02:54:57 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWiVsyzMHsXSXlZSiYUAXSFfssmFmXNdkYLT9d7Hm4eHV868aNLzhhnTq7A07DOunHdtUIMi8YCfg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaNQVx7fn9LBSJd+mZwKQ/E16+T01kiRiNhZ5zPr7Nt1EsPig6
+	TrlVXKqDVWq4j/7Wf1wrWXpzoKZMA+YJSUkIEBWjBK5P+IU3ecJejErXUMBH27rKQacVJUkMHYM
+	65yAsUFWgqcChJ4+ULaamzhEeuJ4kTcxL5kQxs2zXQA==
+X-Google-Smtp-Source: AGHT+IE3wuqwhhZBoW5XeciJahkVWmtDvaII43AmrTFI+5uo0TaQV8ir4NrgZCEOO0OAdXxh6N3P1CB6vFYdTkYD2Ug=
+X-Received: by 2002:a05:6512:ba3:b0:594:55ab:57ff with SMTP id
+ 2adb3069b0e04-59a17ddb48amr12071035e87.33.1767351296119; Fri, 02 Jan 2026
+ 02:54:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251231-wcn3990-pwrctl-v1-0-1ff4d6028ad5@oss.qualcomm.com> <20251231-wcn3990-pwrctl-v1-13-1ff4d6028ad5@oss.qualcomm.com>
-In-Reply-To: <20251231-wcn3990-pwrctl-v1-13-1ff4d6028ad5@oss.qualcomm.com>
+References: <20251231-wcn3990-pwrctl-v1-0-1ff4d6028ad5@oss.qualcomm.com> <20251231-wcn3990-pwrctl-v1-1-1ff4d6028ad5@oss.qualcomm.com>
+In-Reply-To: <20251231-wcn3990-pwrctl-v1-1-1ff4d6028ad5@oss.qualcomm.com>
 From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Fri, 2 Jan 2026 11:53:58 +0100
-X-Gmail-Original-Message-ID: <CAMRc=Mf5fC===xFnO6P_Nuf1YnbgHK2DXvDLDand1StyUTKcYQ@mail.gmail.com>
-X-Gm-Features: AQt7F2rX1OA_FQ6BWF4RsUO2xhslUW0cJ4Gi7nKzsu0XwbfiBxB-ZebBY9NVVE8
-Message-ID: <CAMRc=Mf5fC===xFnO6P_Nuf1YnbgHK2DXvDLDand1StyUTKcYQ@mail.gmail.com>
-Subject: Re: [PATCH 13/14] arm64: dts: qcom: sdm845-db845c: describe WiFi/BT properly
+Date: Fri, 2 Jan 2026 11:54:43 +0100
+X-Gmail-Original-Message-ID: <CAMRc=Md4pqhouCc0--Ew-cPDYp3wOj97=vfCPqELJjbqZCd5Ag@mail.gmail.com>
+X-Gm-Features: AQt7F2qltvB2UU7GWk8z6M_fSp-9tAVaUHvoANn-Hv2ylsV5N-rqoTXZjvTtmcw
+Message-ID: <CAMRc=Md4pqhouCc0--Ew-cPDYp3wOj97=vfCPqELJjbqZCd5Ag@mail.gmail.com>
+Subject: Re: [PATCH 01/14] regulator: dt-bindings: qcom,qca6390-pmu: describe
+ PMUs on WCN39xx
 To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
 	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
@@ -80,8 +81,9 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Dec 31, 2025 at 12:36=E2=80=AFAM Dmitry Baryshkov
 <dmitry.baryshkov@oss.qualcomm.com> wrote:
 >
-> The onboard WiFi / BT device, WCN3990, has a simple on-chip PMU, which
-> further spreads generated voltage. Describe the PMU in the device tree.
+> WCN3990 and other similar WiFi/BT chips incorporate a simple on-chip PMU
+> (clearly described as such in the documentation). Extend DT schema
+> covering other Qualcomm WiFi/BT chips to cover these devices too.
 >
 > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 > ---
