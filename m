@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-40126-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40127-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C9F5CEE810
-	for <lists+linux-pm@lfdr.de>; Fri, 02 Jan 2026 13:22:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 807F8CEE849
+	for <lists+linux-pm@lfdr.de>; Fri, 02 Jan 2026 13:24:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 025C13032AB2
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Jan 2026 12:20:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D1B22305B59F
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Jan 2026 12:21:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A8630F80B;
-	Fri,  2 Jan 2026 12:20:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4238030F814;
+	Fri,  2 Jan 2026 12:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZrgGLczZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ajr0/a2S"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D30E30F7E0;
-	Fri,  2 Jan 2026 12:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBC330F7FE;
+	Fri,  2 Jan 2026 12:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767356450; cv=none; b=ngBFxOT3jA6dqxxzDvcxm2NluOnoTNrQQS8n+shxyblSyWCAkrF3RJJR+PvEPrt7rdAcLSIxZHV7SVqiNwLidOWaJ/tDMouvwhJH/XopK5f5wQ1CPHyjZnuvLp+FXVNbfXJbH/eMXfAo1HQ2bwHhWxSQp825LKm/wHBbySiVKaM=
+	t=1767356479; cv=none; b=r4QqV1Kcx3vOPY1+eREeMkuZQk480FyegtX7vVGb7hPO7khJK9tO8OsXnZRr8Z0tDSd5hFwPTHAUefa4aQcR7ehwYjwa6WkEsDHU9bKwhG2Wjj8OjJZZW+f4x/WDr6Im0M5ouE2ebyL8ahhOAOm5sgm+5mXJZ/o1mqZT00Lsjho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767356450; c=relaxed/simple;
-	bh=HQWXtB+03VQk2ywudJcwjwSzTG7z0J6J3J4QyYk9IY8=;
+	s=arc-20240116; t=1767356479; c=relaxed/simple;
+	bh=UHlQsLcaXWnyACvrjhEb45lh4+oW0nhffnIhnMdC96I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YAx1hvh3GI7K6UdvdJcGPea5whu7Xm1m1zi1RGm+b2w5Ned231J/JY/oRT3g7TNejZCZRLW5XiD0mN23/NFhR07nMhOxEudu7vjUHWqK/gxjCf/GS/upf4nSb1/L4oFy8tuPachXZSutBAT8itp4tVGz28wSAPLynaYkUpp17pM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZrgGLczZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F7E2C116C6;
-	Fri,  2 Jan 2026 12:20:48 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Iu7i2Ulp5XErDUVb75fm/txWL9qOtpsCU51QuEDr84qhQUe+2lciXNRhIWSxgKLIhBnld8j9Io+I+7l0y8IUz/2VWzGgENf4vs1CS07Lc5qLkn+pn7BkzpcjAR+19qkyMorpaiwTU3qJ9oSwNknraceCQEDAwhfEPl9hf4kC4ZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ajr0/a2S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56020C19421;
+	Fri,  2 Jan 2026 12:21:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767356449;
-	bh=HQWXtB+03VQk2ywudJcwjwSzTG7z0J6J3J4QyYk9IY8=;
+	s=k20201202; t=1767356478;
+	bh=UHlQsLcaXWnyACvrjhEb45lh4+oW0nhffnIhnMdC96I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZrgGLczZ6e2KrfwXk4SINkzjLifPJwuOx2JjRbpqn3CdJhkTjAK2mlCY/uPFObKRE
-	 tc3vhNlKO8tC4sKuxYyrvgKc54xIWfyZBcTdOvHEcBhJjqqC/qSbsiwhRIdkDZCey2
-	 dBum15VQJCRkVks5qVtUsrLyb15iSlA2xD4mHTmWU/VoqH22vmwxmOxli0oW73YGe3
-	 UqsgmzMBBH6HhIhthDSA5uEo2R50OyCnIe3z/TFS+ZaORL8ziBE4FplqWy62S7s3G/
-	 F4QRLle/mefuHRQywUVnp7aR2IVsQ1Hev4lSgjEAOT5JaY13JAo916KG3gHHv7+uw7
-	 DKInHBRSZGQlg==
-Date: Fri, 2 Jan 2026 13:20:46 +0100
+	b=ajr0/a2SRrlWfK1kVMdMkEN8q1r5oNniCbx5pFlwKj9+xd/p537VjL40rqq7rbNdF
+	 r4MmIrJVn+yZdrsWB/XqfSEXbOl2N2Lj8WcHt2Z+iMXq/AX3kDH3NKUPaPhgk61763
+	 8u+fOEPthswj5vlgEmD8b2YAH28tRxXZ8Kikotjut/qCcZcEvu5DVDrLEuvzHk+V1J
+	 obBuYzjMheibb3sqYjZ4d3zVUuKGKDGOPBmuUIKOg3To7zDOVFgUYEVh3yGvP4Ml7N
+	 PiOWa/7I4Q4tUOx0Fwo1tOEDxrYl3xMYVhpxq1h5MuP32XKogITy64BEozw0u1a0UU
+	 Sip0KeoTBqZ8g==
+Date: Fri, 2 Jan 2026 13:21:16 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Kuan-Wei Chiu <visitorckw@gmail.com>
 Cc: airlied@gmail.com, simona@ffwll.ch, maarten.lankhorst@linux.intel.com, 
@@ -49,11 +49,11 @@ Cc: airlied@gmail.com, simona@ffwll.ch, maarten.lankhorst@linux.intel.com,
 	jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com, dri-devel@lists.freedesktop.org, 
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, 
 	linux-pm@vger.kernel.org, linux-serial@vger.kernel.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH 3/6] dt-bindings: input: google,goldfish-events-keypad:
+Subject: Re: [PATCH 4/6] dt-bindings: power: supply: google,goldfish-battery:
  Convert to DT schema
-Message-ID: <20260102-sociable-happy-echidna-ca01ec@quoll>
+Message-ID: <20260102-stereotyped-cunning-booby-a680c8@quoll>
 References: <20251230181031.3191565-1-visitorckw@gmail.com>
- <20251230181031.3191565-4-visitorckw@gmail.com>
+ <20251230181031.3191565-5-visitorckw@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,46 +62,20 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20251230181031.3191565-4-visitorckw@gmail.com>
+In-Reply-To: <20251230181031.3191565-5-visitorckw@gmail.com>
 
-On Tue, Dec 30, 2025 at 06:10:28PM +0000, Kuan-Wei Chiu wrote:
-> +title: Android Goldfish Events Keypad
+On Tue, Dec 30, 2025 at 06:10:29PM +0000, Kuan-Wei Chiu wrote:
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/google,goldfish-battery.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Android Goldfish Battery
 > +
 > +maintainers:
 > +  - Kuan-Wei Chiu <visitorckw@gmail.com>
 > +
-> +description:
-> +  Android goldfish events keypad device generated by android emulator.
-> +
 
-Not an input device? No input.yaml reference?
-
-> +properties:
-> +  compatible:
-> +    const: google,goldfish-events-keypad
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    keypad@9040000 {
-> +        compatible = "google,goldfish-events-keypad";
-> +        reg = <0x9040000 0x1000>;
-> +        interrupts = <0x5>;
-
-This should be decimal, not hex.
-
+Same comments.
 
 Best regards,
 Krzysztof
