@@ -1,132 +1,145 @@
-Return-Path: <linux-pm+bounces-40153-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40154-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B34ECF0172
-	for <lists+linux-pm@lfdr.de>; Sat, 03 Jan 2026 16:09:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3159CF0182
+	for <lists+linux-pm@lfdr.de>; Sat, 03 Jan 2026 16:14:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8FA423006992
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Jan 2026 15:09:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0C8B63015846
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Jan 2026 15:14:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38CFF30DEBD;
-	Sat,  3 Jan 2026 15:09:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6889730DEC6;
+	Sat,  3 Jan 2026 15:14:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KEV2vZvh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hQ2o1Y60"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0237819B5A7;
-	Sat,  3 Jan 2026 15:09:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321AB1C3BF7;
+	Sat,  3 Jan 2026 15:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767452943; cv=none; b=UVWQSueCgujslpF98JnM2JwGqFRxwliYKnHNhxIISMXd4D54Xn+moWweg4jr5YsAt3YCf4ktTQdbdLTbtfhQF/dB0/63Y4tp0JnTABBi3xgp4j21xN7UG8bRxKDiMvvhe2Kf5EJN3KR2UUptBk9tokFGuUWxocophrwyv6X17do=
+	t=1767453242; cv=none; b=U10Xq4szjqw9/aoYDmDh3+qJRTNCcCLC8Fyow+ob4cH8e21ijaMtCDnwY+Z6os+BypawzaFT7Alg9UM+GU/L0pYHwQ2W/6YsPncxS+DdAVdKwIjm28M2VnuNxL9I8fcbDsxBJXiTmOl/3TyfrdI+j1rgli5CswSwNU5TGjJs7cQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767452943; c=relaxed/simple;
-	bh=qf9s2CWSLPPGzJ0/0o/pgRvVIG8OsurR4bC3Cxi2ecI=;
+	s=arc-20240116; t=1767453242; c=relaxed/simple;
+	bh=Yd4tC3CJrz0W4J4gNCgOxcW+/mpQJ6pNSU0StbZEnX0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MoRm9EtvfFdcFE5w4MnKxF1opVaF0wci9ipbWocbe8gWWJBu6ZCnSoxO8BPVoNlypD8Yk0krcmrWGU7hQQUqdcUETF4N/89XgF8+aDh/+ltaB+w6FxZv579nVjxU8mCMhEXZ0eAwDTFp9QY2Z3yEj2Oy9kNB3aeWtvR+MCHX5FA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KEV2vZvh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC0BC113D0;
-	Sat,  3 Jan 2026 15:09:00 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=k1xjxx5k3s0ENUlXLZ5x2659XCypeyGIOCEs+JzNnRabhmEXmJvmhaavbL95aP7XKkRQIe+ECMqDT6xt63s8k453DiBgKmwjQXshcFmAf+kIMtNkLHtSLwH9Z9aQQoT99W+IZdQuWnyj4to2TpiRo/EikkpqXORVesEGvBD4rnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hQ2o1Y60; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9897AC113D0;
+	Sat,  3 Jan 2026 15:13:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767452942;
-	bh=qf9s2CWSLPPGzJ0/0o/pgRvVIG8OsurR4bC3Cxi2ecI=;
+	s=k20201202; t=1767453241;
+	bh=Yd4tC3CJrz0W4J4gNCgOxcW+/mpQJ6pNSU0StbZEnX0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KEV2vZvh4QWjHb9lssW/XfRHdwLJxDPWINU4otZelCN3zleAfQhNUavQGHcvhq4bm
-	 LDjsSvA7sdAoTS5F4iTO+AHHAW2YGIliD2JcGc/Jpg6XMFQBJpLFjhcfoZdCf/TEpV
-	 nSxxD9eOeQEtDfw4GLjr/8kLSWz19q1wNT2+rXBn8NQqbRwv/DBY4GSEvQ6g06knCh
-	 XSZeikpJkVPJNXj2btrYeHRYSrmucq9CexpJvVUkL7inoZnDtpV82jrUOn1T8cbykC
-	 MYol3h5NGFxZp0pm+lNiIicvmalbJHwazV7UJ9OuB6CiRzPf/CMBLAuA8Je4MwCdvn
-	 KiKs5ToB97pMg==
-Date: Sat, 3 Jan 2026 09:08:58 -0600
+	b=hQ2o1Y60+ULmtW3dt1NpLanU5Ax5wz0P0AZ6CLBOaBXasBOCrxTVHOWCCmBUg+o7t
+	 lmktL+sgpWlBbNX8AHJlate8hoJJZ2KmHKMNDEai6S3i7V2o7DlrHOVvnji/IpZOme
+	 aHk814YrC+h98E3QUp0knKn3gEB36mSJOUvJnIcwcdAhThSaHin50VRakxaOlFkDsS
+	 9Xt/2dSo411kFXb8v6rsJE5NLCqTCWo4sIcQhVWv8ILh7K++0Y3trp6W3wQJqFL86+
+	 JVrosmh6QQ2XDk72AoHG1uGi8sZQqhj0+47szob0KC0kCTHZ1GRYeq5vM004uEmvTl
+	 +bZ2xeA5PDXEg==
+Date: Sat, 3 Jan 2026 09:13:57 -0600
 From: Bjorn Andersson <andersson@kernel.org>
 To: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	mathieu.poirier@linaro.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
-	lukasz.luba@arm.com, konradybcio@kernel.org, amitk@kernel.org, mani@kernel.org, 
-	casey.connolly@linaro.org, linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 3/8] dt-bindings: thermal: Add qcom,qmi-cooling yaml
- bindings
-Message-ID: <spnzzacpelmkzccithxwnhr2e6fncuqrd46ybhplnryl2fnswy@pblwhdupnxws>
+Cc: mathieu.poirier@linaro.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org, 
+	rui.zhang@intel.com, lukasz.luba@arm.com, konradybcio@kernel.org, amitk@kernel.org, 
+	mani@kernel.org, casey.connolly@linaro.org, linux-arm-msm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1 6/8] arm64: dts: qcom: Enable cdsp qmi tmd devices for
+ talos
+Message-ID: <cnihk2656pi2qpag3gchf7csfkcj6otkwemcnb5cqo62cymtzx@23hjt6pjjhpx>
 References: <20251223123227.1317244-1-gaurav.kohli@oss.qualcomm.com>
- <20251223123227.1317244-4-gaurav.kohli@oss.qualcomm.com>
- <fu7rhvpo7t2fjx4l7nvzd2cec7loyjeqyvwgochghyyax4nqof@6bat54r3qgov>
- <7e946103-06cc-4e44-be00-fd0ab9a8f55c@oss.qualcomm.com>
+ <20251223123227.1317244-7-gaurav.kohli@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7e946103-06cc-4e44-be00-fd0ab9a8f55c@oss.qualcomm.com>
+In-Reply-To: <20251223123227.1317244-7-gaurav.kohli@oss.qualcomm.com>
 
-On Wed, Dec 24, 2025 at 01:54:04PM +0530, Gaurav Kohli wrote:
-> On 12/24/2025 1:00 AM, Dmitry Baryshkov wrote:
-> > On Tue, Dec 23, 2025 at 06:02:22PM +0530, Gaurav Kohli wrote:
-> > > diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
-[..]
-> > > +  vdd:
-> > > +    $ref: "#/definitions/tmd"
-> > > +    description:
-> > > +      Modem processor temperature TMD
-> > > +    properties:
-> > > +      label:
-> > > +        const: modem
-> > Why it being called vdd?
-> > 
-> > Why do you define modem-specific node here, while the CDSP-specific is
-> > defined under the if block?
-> 
-> 
-> will remove modem in next post,  earlier we were developing for all
-> subsystem.
-> right now wanted to post for cdsp subsystem first, will fix in next post.
-> 
+On Tue, Dec 23, 2025 at 06:02:25PM +0530, Gaurav Kohli wrote:
+> Enable cdsp cooling devices and thermal zone cooling map bindings
+> for cdsp.
 
-No, upstream the binding and driver for all known endpoints (and test to
-the best of your ability), then enable the ones you have on your
-platform.
+This is the first time we're seeing this in a DeviceTree file, so I want
+a proper problem description of what it is, why it is. As described in:
+https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
 
-[..]
-> > 
-> > > +              label = "cdsp_sw";
-> > > +              #cooling-cells = <2>;
-> > > +            };
-> > > +        };
-> > > +    };
-> > > +
-> > > +    remoteproc-cdsp1 {
-> > > +        cooling {
-> > > +            compatible = "qcom,qmi-cooling-cdsp1";
-> > > +
-> > > +            cdsp_sw1: cdsp_sw {
-> > > +              label = "cdsp_sw";
-> > > +              #cooling-cells = <2>;
-> > > +            };
-> > > +        };
-> > > +    };
-> > What's the point of having the second CDSP block? Could you demonstrate
-> > modem instead?
 > 
+> Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+> ---
+>  arch/arm64/boot/dts/qcom/talos.dtsi | 23 +++++++++++++++++++++++
+>  1 file changed, 23 insertions(+)
 > 
-> Missed one cdsp1 block in this series, will add in next post. Leman's is
-> using two cdsp subsystem for that we need cdsp1.
-> 
+> diff --git a/arch/arm64/boot/dts/qcom/talos.dtsi b/arch/arm64/boot/dts/qcom/talos.dtsi
+> index 95d26e313622..61faea81c263 100644
+> --- a/arch/arm64/boot/dts/qcom/talos.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/talos.dtsi
+> @@ -18,6 +18,7 @@
+>  #include <dt-bindings/power/qcom-rpmpd.h>
+>  #include <dt-bindings/power/qcom,rpmhpd.h>
+>  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> +#include <dt-bindings/thermal/thermal.h>
+>  
+>  / {
+>  	interrupt-parent = <&intc>;
+> @@ -3550,6 +3551,14 @@ compute-cb@6 {
+>  					};
+>  				};
+>  			};
+> +
+> +			cooling {
+> +				compatible = "qcom,qmi-cooling-cdsp";
+> +					cdsp_sw: cdsp_sw {
+> +						label = "cdsp_sw";
+> +						#cooling-cells = <2>;
+> +					};
+> +			};
+>  		};
+>  
+>  		pmu@90b6300 {
+> @@ -4721,12 +4730,26 @@ q6-hvx-thermal {
+>  			thermal-sensors = <&tsens0 10>;
+>  
+>  			trips {
+> +				q6_hvx_alert0: trip-point0 {
+> +					temperature = <105000>;
 
-It's just an example, make it as informative as possible.
+Perhaps my coffee hasn't kicked in this morning, but doesn't this say
+that we should start throttle at 105C? Isn't that quite a bit above the
+point where the OSM/EPSS is starving the apps CPUs? Shouldn't it be the
+other way around? What does this cooling device actually do?
 
 Regards,
 Bjorn
 
+> +					hysteresis = <5000>;
+> +					type = "passive";
+> +				};
+> +
+>  				q6-hvx-critical {
+>  					temperature = <115000>;
+>  					hysteresis = <1000>;
+>  					type = "critical";
+>  				};
+>  			};
+> +
+> +			cooling-maps {
+> +				map0 {
+> +					trip = <&q6_hvx_alert0>;
+> +					cooling-device = <&cdsp_sw
+> +							THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+> +			};
+>  		};
+>  
+>  		mdm-core-thermal {
+> -- 
+> 2.34.1
 > 
-> > > +...
-> > > -- 
-> > > 2.34.1
-> > > 
 
