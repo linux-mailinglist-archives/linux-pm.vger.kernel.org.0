@@ -1,129 +1,161 @@
-Return-Path: <linux-pm+bounces-40146-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40147-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD9B3CEFD80
-	for <lists+linux-pm@lfdr.de>; Sat, 03 Jan 2026 10:37:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4039CEFDDD
+	for <lists+linux-pm@lfdr.de>; Sat, 03 Jan 2026 11:03:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A5F143017872
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Jan 2026 09:37:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 16168301F8E5
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Jan 2026 10:03:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4944299AAA;
-	Sat,  3 Jan 2026 09:37:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69E842D0C8C;
+	Sat,  3 Jan 2026 10:03:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VWSRtXNC"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wm75/+kc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D673C465
-	for <linux-pm@vger.kernel.org>; Sat,  3 Jan 2026 09:37:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C0B239085
+	for <linux-pm@vger.kernel.org>; Sat,  3 Jan 2026 10:03:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767433076; cv=none; b=SeMRREucmXqRQdH9wqRcMWsGps1tpXccnNWzl9963qbkZhkqUKlu0NoYQffoqMiC6+D1IP2R4nR40fseraldmAUX79qvs/f7yJAZo8JLbeb+8LjIqk07+VDBy4MUMuzkUtFMw71bytfP5TXMQF8jAAYKj6BOYFAK0Ml5LGSU5u8=
+	t=1767434608; cv=none; b=QyHfngAw6BPPqSxUwbRKweyBggvURTcMxWkkr+Y67pZ5+XXmvz89JPTsxGccnEnNb05/VLi6Qn9jHsgWZAHmpTj/hCUvv1NO2Td3xN6Tu7g5XYrnJiWcA+OJDp7eDkRaZmXORnmlnxWhyNm2f1V7xs7yTDfZdPHL44OnOR61uGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767433076; c=relaxed/simple;
-	bh=TpVi9D0jzpT3ukHrer/AKAT/FwYh0F6irW4JiL0SZi8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jaXtkqpiljMceHmvK8JuZbdFql5qgNIHM0fzQBQHoNEt2fjEVSFPbuB/7gT8sohjUFeJwsifTGM7pRu4D2Fw43pmSrkbCax+EUF13GhvNyVfuWImdGhjJwa/z1z2naJ9aTIuKzfqLPyrwVLi/XNlYm6ccok4npZYihuHDqDJIrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VWSRtXNC; arc=none smtp.client-ip=209.85.167.54
+	s=arc-20240116; t=1767434608; c=relaxed/simple;
+	bh=A94DAyTO7kYqQUnINuHd8gangTUwz1WgeTPn3k7pJEI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X+DhpdEkDHEksX+kqRFLxheQFT7gD63A39BFmkP+3uJx1nimpmYawedubs7vyvDAEZ0MFJlkRhYfGxXZVAAjmUjwID2HMvtM7z7SDQd+h5tgd0aJR9UJ4puium5d0YcgDA8izuXLYUkdHruxEWBgcSfaMcBTqXciMl1f4g77fjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wm75/+kc; arc=none smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5959187c5a9so10922730e87.1
-        for <linux-pm@vger.kernel.org>; Sat, 03 Jan 2026 01:37:54 -0800 (PST)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5957db5bdedso14571198e87.2
+        for <linux-pm@vger.kernel.org>; Sat, 03 Jan 2026 02:03:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1767433073; x=1768037873; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pWZkKPiFtnR/rs3kiMr68GAakSXnMiP1ZnZ9OMgWTpU=;
-        b=VWSRtXNC0s7VVe4SwMdAebtZn8kv3P1JHRLQdk3WhQJyjAwt67ar8INucGBgOc8dNT
-         1DxECcUhlcuIuIp3ik471/ZCp2RXkg1lVghtyj5BJ/yndorM7/XLDsNALtRZ3tPauI4W
-         bgpJHnaceL9DFLXmAlkedWcOAE8Y1x3w5hjEMuJ1nxcHwngPqL3WQydHDEXMkL7YsP/h
-         LZlA+xBiiYbPGkw/fTgHh6BvFyhGyUYHOwwqUJpyz9DZrXQFECf1pwvEf5+IFuOPi8+A
-         cEXArkmbHS+Zm6jNVScHVL0EFW/Qiwyae4Wbx3okuWyidrtI/XiTE792WVfbCDCUwIT+
-         CtHg==
+        d=linaro.org; s=google; t=1767434604; x=1768039404; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bDXSZppGA43wphmZJyL9aJJ8iAZCIXmj8aHnH0wAQ/k=;
+        b=wm75/+kcB+W3uqP2lD/akxsDeuxWdoSwUB+er0lLY+X1fWXkYryzoK6CpfzillxUDh
+         FJaexOoiniW1cGRUimOpPfXJqFTVTcgyAy2d2vUakbck7VZh/E/wKPbz5kbs3uApWL3B
+         prvNqe4pCP36DqL6vL7HQYXpLiu5qwm1NQP1JKybPmDzQBnL5tUUQlIhsOayzzd7Adeh
+         OXpB5YjiFv2TLsfJN5xn9ja8OlszLiymD0DdqkamOaI7xQLiptGjmCReUcKmxNvJSbGu
+         qt7Cl9Syrq807FFZQQWbLwW4c7/+XmkPfE9ikNr2WmbF7lMXvfiwzs/kf6mbPbC5ivix
+         DpQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767433073; x=1768037873;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1767434604; x=1768039404;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pWZkKPiFtnR/rs3kiMr68GAakSXnMiP1ZnZ9OMgWTpU=;
-        b=SY2MSh1zBLCFzCMHgpge5XolrOMPkKJt1xQ8NYWrXrBoPpAR60gnjFdAuOkTWuwx94
-         KWJzZ4fEKVBVwnu5cbpapoRkb2xITp4F5u+GE8AnucteqGilWwTIh47/5DPCwUyEUHb3
-         Jwj5dqz+LaF3oIBd/OhP6MZlf49qu9stAgpK5reXytpP7uOUseZvJJCbGRqe6QNpLMAV
-         N3qDCeDspB3F/u2rIPH32cOd5/NzJdOfUL1eLv3rl81G5LmtIv+Rk131gxO/w/FiXfYk
-         /eCI/mt5yTwu+SgiRL6yAjouH1xf/v5vEA/SAeDTUBWZRfMZDcOZuGnDF+pBmkIwSP2h
-         7Vgw==
-X-Forwarded-Encrypted: i=1; AJvYcCUfwHb8GsNNuSpEraQUc/xrBT0lAx/2Ty7oiIM9DGR5fZU4FJ0ZLmoLQy12+T/Kwu2eV/pnGcOofQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxe5OcZJW/AvCF4soLo3ZA8kXrzKyKwXLgPx/eDeQiw3EX58Yzc
-	pOf1g0r81s1q/RsVFaY4aqj6HReW73MCDqQvIxF/WoogZIAbmE/gXC0ilWyZ45I+6xk=
-X-Gm-Gg: AY/fxX7uORsXmz7LdxmcztXMcZ36QFjClsd0dcJKsqA5tFrfy92sLwkEGyHrkHq6NKl
-	gVMoOypMyBIFl8CfBR2dVCE0eDUmnDwr6u/JC4rQ8+1v0BKJmD0+00lpfR/RhH+Kf0uqWA8kMik
-	31Qap1nBTQpXQ6v/JE8TReH3J5VbC73g2iVNX7DIxLQBs81wMwgw47i5CGdyLW5RjOnU1Hx/wSZ
-	tx9Wwn58CCujHb7I7AneQX9/eoSj1b4UbvYgjuqz2J1JMYqBdJw39vinh55ohKHhyyP7neuKvgQ
-	KFtq5ilKhDuV1Etj4JjPCFffdLBk/LtdVLHkwQ34ZRymqMn1+B8m9u3Z25uEo77/6+TXu1e3+rg
-	Wl1Bl61crvOJOL4QKYcFkfcgvs7HiANgStFDl/tZsmbNMPfIMGZME1oY+sfQGuVLryarn6vpP1F
-	euz58416RRt9Hc1Ai6MLvLNvQ2C4A7NJYszr2Xkp2Pu+Ghtj38W60PS2mmtNmQ
-X-Google-Smtp-Source: AGHT+IE+2jMoWfH0mG2kim3lvOWpG5hQP8AXw3e+htxPH4TjM8NTe2jcV7wlyub4Ua3gnsY82BxoQQ==
-X-Received: by 2002:a05:6512:747:b0:59b:29b0:11e9 with SMTP id 2adb3069b0e04-59b29b01201mr7236169e87.53.1767433072874;
-        Sat, 03 Jan 2026 01:37:52 -0800 (PST)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59a185ddc12sm12970431e87.37.2026.01.03.01.37.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Jan 2026 01:37:52 -0800 (PST)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Linus <torvalds@linux-foundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain fixes for v6.19-rc4
-Date: Sat,  3 Jan 2026 10:37:51 +0100
-Message-ID: <20260103093751.58526-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
+        bh=bDXSZppGA43wphmZJyL9aJJ8iAZCIXmj8aHnH0wAQ/k=;
+        b=xJ3iaXiZMjyclg6kGrz5fvB1nY8wnG0ReekXx83TvgzrNwQxY1zDVHWOuW+uLbIZGk
+         s0vJwd9u79pLXpwWMKGr3unywrMh/s0ZZSuefmy5hImv/3cMSqCoqvFnuMIB7dkbtxGe
+         UeG+1Ec3APRYzRoBee6+FJmeK9qykyfaZCA+LU3g6BtCufNRbEsFfR2PysCRHG8rJo76
+         vxOlqqPtsuQlyLfFEO9AnVSyRQMcbP6AIfY+0RHp/G0kImqgifaC44m5+ZPvhxWefy99
+         5ZxPdYA1Bvbqd5tfsjvTm7YryBwP+7KHUHcFtYc2dUvniE2MAYj218j9GXlOPoiifGeu
+         JwIw==
+X-Forwarded-Encrypted: i=1; AJvYcCXHEx6YMzKMrhvVXZqXV9katJYTqmuecKagMJQpUf0tbzV3GX6tFLyzbm8p+FO4bF8CrkeOfL20Aw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8QFDWIvj9gMBFJkh23v3HRbVUHEj26DYJbGVRxYWiVLe3nMX6
+	DWswaWE1O6pRnYuCAYL/J2oKEK0muo6jGjEZ50lBq4b+e/xEPV0k/kZQD2jUuIu+CzG5ab0MHxu
+	F1AiH3j8WqxDeEIDcfZTrOVOEo8GxrvE1jkmgavhdGw==
+X-Gm-Gg: AY/fxX7RkM9d3Y2lnK38oESOtER+WwEIs/ZlJJrcHv390YfW3iOCTwW8ozYOxnYN3ra
+	a1K+LLNnig4Iz8y14cCbOgeHwxQP8fg4ZjaEU7Ao707+eqpWhGGdINa9mV2DhHUeXGFIQ/yhXGa
+	2cMSObXUbiSWZuBKw/CZyFUSlucWOT+cLTPEijMk1raPtBNTUR4Dng3wiUn2oe0hZtlSlFh5xdu
+	2ZBqHLCGkC7aM2VKvPQ1P1s0ikK9r88ZNn1+mki8K1A6S/C9dhR/ZAAXJEd5Yfjlq3EcipH
+X-Google-Smtp-Source: AGHT+IFKB5FPDCXC2bA+k7uKQBiw0br0n5E1yiLNSCnfVzhkAKxTdSHEp5ZWB2TbHk2W/He8NymlZBgfriNTTFeJlI0=
+X-Received: by 2002:a05:6512:10cf:b0:59a:108a:31fa with SMTP id
+ 2adb3069b0e04-59a17d18076mr14943741e87.10.1767434604071; Sat, 03 Jan 2026
+ 02:03:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251205015428.643-1-ming.qian@oss.nxp.com> <20251205015428.643-3-ming.qian@oss.nxp.com>
+In-Reply-To: <20251205015428.643-3-ming.qian@oss.nxp.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Sat, 3 Jan 2026 11:02:48 +0100
+X-Gm-Features: AQt7F2oMTRKk7t89Y9gE75MVMNztzWV9UDfi1TNNrPc77CmFOSHTt5sl2zwMryU
+Message-ID: <CAPDyKFq2iWX-axxnKHisRHwKJqnyHYm5oM2_UKZaeQduKdYkFw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] pmdomain: imx8m-blk-ctrl: Remove separate rst and
+ clk mask for 8mq vpu
+To: ming.qian@oss.nxp.com
+Cc: linux-media@vger.kernel.org, mchehab@kernel.org, hverkuil-cisco@xs4all.nl, 
+	nicolas@ndufresne.ca, benjamin.gaignard@collabora.com, p.zabel@pengutronix.de, 
+	sebastian.fricke@collabora.com, shawnguo@kernel.org, s.hauer@pengutronix.de, 
+	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com, 
+	l.stach@pengutronix.de, Frank.li@nxp.com, peng.fan@nxp.com, 
+	eagle.zhou@nxp.com, imx@lists.linux.dev, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Linus,
+On Fri, 5 Dec 2025 at 02:55, <ming.qian@oss.nxp.com> wrote:
+>
+> From: Ming Qian <ming.qian@oss.nxp.com>
+>
+> For i.MX8MQ platform, the ADB in the VPUMIX domain has no separate reset
+> and clock enable bits, but is ungated and reset together with the VPUs.
+> So we can't reset G1 or G2 separately, it may led to the system hang.
+> Remove rst_mask and clk_mask of imx8mq_vpu_blk_ctl_domain_data.
+> Let imx8mq_vpu_power_notifier() do really vpu reset.
+>
+> Fixes: 608d7c325e85 ("soc: imx: imx8m-blk-ctrl: add i.MX8MQ VPU blk-ctrl")
+> Signed-off-by: Ming Qian <ming.qian@oss.nxp.com>
+> Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Reviewed-by: Peng Fan <peng.fan@nxp.com>
+> Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
-Here's a pull-request with a couple of pmdomain fixes intended for v6.19-rc4.
-Details about the highlights are as usual found in the signed tag.
-
-Please pull this in!
+Applied for fixes and by adding a stable tag, thanks!
 
 Kind regards
-Ulf Hansson
+Uffe
 
 
-The following changes since commit f8f9c1f4d0c7a64600e2ca312dec824a0bc2f1da:
-
-  Linux 6.19-rc3 (2025-12-28 13:24:26 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.19-rc3
-
-for you to fetch changes up to 73cb5f6eafb0ac7aea8cdeb8ff12981aa741d8fb:
-
-  pmdomain: imx: Fix reference count leak in imx_gpc_probe() (2025-12-29 11:41:09 +0100)
-
-----------------------------------------------------------------
-pmdomain providers:
- - mediatek: Fix spinlock recursion fix during probe
- - imx: Fix reference count leak during probe
-
-----------------------------------------------------------------
-Macpaul Lin (1):
-      pmdomain: mtk-pm-domains: Fix spinlock recursion fix in probe
-
-Wentao Liang (1):
-      pmdomain: imx: Fix reference count leak in imx_gpc_probe()
-
- drivers/pmdomain/imx/gpc.c                 |  5 ++---
- drivers/pmdomain/mediatek/mtk-pm-domains.c | 21 ++++++---------------
- 2 files changed, 8 insertions(+), 18 deletions(-)
+> ---
+> v3
+> - Add some comments
+> v2
+> - Update commit message
+>
+>  drivers/pmdomain/imx/imx8m-blk-ctrl.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/pmdomain/imx/imx8m-blk-ctrl.c b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
+> index 5c83e5599f1e..74bf4936991d 100644
+> --- a/drivers/pmdomain/imx/imx8m-blk-ctrl.c
+> +++ b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
+> @@ -846,22 +846,25 @@ static int imx8mq_vpu_power_notifier(struct notifier_block *nb,
+>         return NOTIFY_OK;
+>  }
+>
+> +/*
+> + * For i.MX8MQ, the ADB in the VPUMIX domain has no separate reset and clock
+> + * enable bits, but is ungated and reset together with the VPUs.
+> + * Resetting G1 or G2 separately may led to system hang.
+> + * Remove the rst_mask and clk_mask from the domain data of G1 and G2,
+> + * Let imx8mq_vpu_power_notifier() do really vpu reset.
+> + */
+>  static const struct imx8m_blk_ctrl_domain_data imx8mq_vpu_blk_ctl_domain_data[] = {
+>         [IMX8MQ_VPUBLK_PD_G1] = {
+>                 .name = "vpublk-g1",
+>                 .clk_names = (const char *[]){ "g1", },
+>                 .num_clks = 1,
+>                 .gpc_name = "g1",
+> -               .rst_mask = BIT(1),
+> -               .clk_mask = BIT(1),
+>         },
+>         [IMX8MQ_VPUBLK_PD_G2] = {
+>                 .name = "vpublk-g2",
+>                 .clk_names = (const char *[]){ "g2", },
+>                 .num_clks = 1,
+>                 .gpc_name = "g2",
+> -               .rst_mask = BIT(0),
+> -               .clk_mask = BIT(0),
+>         },
+>  };
+>
+> --
+> 2.52.0
+>
 
