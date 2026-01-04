@@ -1,317 +1,106 @@
-Return-Path: <linux-pm+bounces-40166-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40167-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CC90CF08E5
-	for <lists+linux-pm@lfdr.de>; Sun, 04 Jan 2026 03:41:26 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B53E3CF0DA7
+	for <lists+linux-pm@lfdr.de>; Sun, 04 Jan 2026 12:53:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F156D3007276
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Jan 2026 02:41:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B636C30056C6
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Jan 2026 11:53:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E28A82BD590;
-	Sun,  4 Jan 2026 02:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C303A2877E8;
+	Sun,  4 Jan 2026 11:53:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="OtaWa7wd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JCr1Msa1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B3B24677A;
-	Sun,  4 Jan 2026 02:41:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA304A3E;
+	Sun,  4 Jan 2026 11:53:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767494469; cv=none; b=b35AN0OzzRBpMEtusJ1eDeBE1T9hFT/NJheJnLda81W2pQvPjF3hXrBpq0qysMt0LrIlL65B9dp7quks7vLv/K2p6+aCDj7C1q1sARLiKOu4gMDJeMRKryYxzhOGY5+cJxTncrNxV2DUTx3GTaHF92XeqizCKwJgCXrv8osJJCM=
+	t=1767527623; cv=none; b=P74ku0zIbwA8DxDsWnu5uKJzx8yDtDiOYubEd60tTpTiQWcZVer4RfidDR6gwVSVN24TI+6ZxCiyT6+KHqJyFpPapvhpSeyxHUBrJMoJ3aXO3W4mb76gFVxISpE5xmEzdfPh+lz1f21UIQiU2vSWF8KvBm1iAjr1kPtRVYzYkAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767494469; c=relaxed/simple;
-	bh=TQHpzrwoQ28NDVKC+pDXMsp73dIDCLWwSbsV+GFBH58=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Ac3wYoLtsRHz6wuXRb8YePpDDx++fAz5GMxLrvtQvg55axMXFAoQEBhVTjsNodyUzEloqtjqlgZhAagxiJDF4ktgCIO37IdIHb/yFABTK2qZtM0O8tSszj94pBgsLUQAFpXeKa8VoVWh78e2HpAtTSHSlUpKaI5gkh6CobP4NHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=OtaWa7wd; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=Eshj1pMdOkNSTmIqxXIMTa4E03hzJgGq2pDyzNFRaTs=;
-	b=OtaWa7wdLA13kJlNO/94WQ2Jj8drLXq0BcBoLS7UnF3ihl5I090G6sqljOrImec8SuwnLNCqF
-	1mlOG/ewO90mRFBga60bkauEDo2ZCzAuIJ8wnDa1/lfY3NJEPeCoe2rJzfyHZ/5zr6fYCQ/0HSp
-	ayOIiT9btBJf4BzZkTbmxwM=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4dkM752Nwvz1T4FZ;
-	Sun,  4 Jan 2026 10:38:25 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id 5D5004056B;
-	Sun,  4 Jan 2026 10:41:02 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
- (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sun, 4 Jan
- 2026 10:41:01 +0800
-Message-ID: <1a50df36-4f56-4ea3-a049-07b909deb3ed@huawei.com>
-Date: Sun, 4 Jan 2026 10:41:01 +0800
+	s=arc-20240116; t=1767527623; c=relaxed/simple;
+	bh=AIprCMecqfWvn68c5BFxnum4U31MRe9S40v01yZYSHA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gJ8xBzN2FnmRHRBgKmZxJFsNTCxWN1v8895RAqK+e206bxPUW1/4sauFpPEO4S/m1c0rhSO5oO/ziRmFjoc+TqSjM4HHek2WG5h5n8cryBQ9uFkkvKmHXk79PdsxIgxJhwAfsiun+ajyL+AxY2oU3W66ApQKKYV7KdpBsI+jy+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JCr1Msa1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC281C4CEF7;
+	Sun,  4 Jan 2026 11:53:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767527623;
+	bh=AIprCMecqfWvn68c5BFxnum4U31MRe9S40v01yZYSHA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=JCr1Msa18TAtDoNH856kGTE3S0BaMMbRGJaiFeOIvSrDvHB78FOIy4354A7DwkG0H
+	 y4WZfdUdWqHW5uXCmWdW/Z31i57wRagcwMh9YEZaQtpBJbi0RueNn8yISX03VUq6I0
+	 uB8cQ/vmNeVtZfK94UTOD16RU7C3ahVliokQoPwidLmVoZRZoQMfnPNe3G6KEAbkfY
+	 xQpMsgodFfhH77DhRoPgOOnzdsECFg179R2+Ov4GKGHEFbsyu+DsqVL28TbCBh1zXg
+	 YNuUeywEsLZWYj82UYonlCVjlXeknHbmgVvYjUFwzaeDJ32HWugmti1LNc9WUlVVlr
+	 /ryxdv7c7ML8w==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: linux-tegra@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
+Cc: Peter De Schrijver <pdeschrijver@nvidia.com>,
+ Prashant Gaikwad <pgaikwad@nvidia.com>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>, linux-clk@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, Dmitry Osipenko <digetx@gmail.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH v1] clk: tegra: Adjust callbacks in tegra_clock_pm
+Date: Sun, 04 Jan 2026 12:53:36 +0100
+Message-ID: <5088794.31r3eYUQgx@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] PM / devfreq: use _visible attribute to replace
- create/remove_sysfs_files()
-To: Pengjie Zhang <zhangpengjie2@huawei.com>, <myungjoo.ham@samsung.com>,
-	<kyungmin.park@samsung.com>, <cw00.choi@samsung.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <yubowen8@huawei.com>,
-	<linhongye@h-partners.com>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <wangzhi12@huawei.com>
-References: <20251216031153.2242306-1-zhangpengjie2@huawei.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <20251216031153.2242306-1-zhangpengjie2@huawei.com>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
- kwepemf200001.china.huawei.com (7.202.181.227)
 
-On 2025/12/16 11:11, Pengjie Zhang wrote:
-> Previously, non-generic attributes (polling_interval, timer) used separate
-> create/delete logic, leading to race conditions during concurrent access in
-> creation/deletion. Multi-threaded operations also caused inconsistencies
-> between governor capabilities and attribute states.
-> 
-> 1.Use is_visible + sysfs_update_group() to unify management of these
-> attributes, eliminating creation/deletion races.
-> 2.Add locks and validation to these attributes, ensuring consistency
-> between current governor capabilities and attribute operations in
-> multi-threaded environments.
-> 
-> Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-> Reviewed-by: Jie Zhan <zhanjie9@hisilicon.com>
-> Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
-> ---
-> changes in v5:
-> -Remove the curly braces of an if statement
-> -Added a note explaining why locking is necessary.
-> Link to v4:https://lore.kernel.org/all/20251205083724.4068896-1-zhangpengjie2@huawei.com/
-> 
-> changes in v4:
-> -Remove the DEFINE_SYSFS_GROUP_VISIBLE macro and directly set the is_visible function.
-> -Remove unnecessary ret variables
-> Link to v3:https://lore.kernel.org/lkml/20251107031706.1698396-1-zhangpengjie2@huawei.com/
-> 
-> changes in v3:
-> - Use guard() to simplify lock acquisition and destruction.
-> - Eliminate redundant checks for df.
-> Link to v2:https://lore.kernel.org/lkml/20251028022458.2824872-1-zhangpengjie2@huawei.com/
-> 
-> Changes in v2: 
-> - Fix one problem reported by the kernel test robot.
-> - Redirect all error paths in timer_store() to out to ensure locks are not 
->  left unReleased.
-> Link to v1:https://lore.kernel.org/lkml/20251025135238.3576861-1-zhangpengjie2@huawei.com/
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-LGTM.
+System suspend and resume callbacks run after the core has bumped
+up the runtime PM usage counters of all devices, so these callbacks
+need not worry about runtime PM reference counting.
 
-Reviewed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+Accordingly, to eliminate useless overhead related to runtime PM
+usage counter manipulation, set the suspend callback pointer in
+tegra_clock_pm to pm_runtime_resume() and do not set the resume
+callback in it at all.
 
-> 
->  drivers/devfreq/devfreq.c | 103 ++++++++++++++++++++++----------------
->  1 file changed, 60 insertions(+), 43 deletions(-)
-> 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 2e8d01d47f69..7673a39baaa6 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -38,6 +38,7 @@
->  
->  static struct class *devfreq_class;
->  static struct dentry *devfreq_debugfs;
-> +static const struct attribute_group gov_attr_group;
->  
->  /*
->   * devfreq core provides delayed work based load monitoring helper
-> @@ -785,11 +786,6 @@ static void devfreq_dev_release(struct device *dev)
->  	kfree(devfreq);
->  }
->  
-> -static void create_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov);
-> -static void remove_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov);
-> -
->  /**
->   * devfreq_add_device() - Add devfreq feature to the device
->   * @dev:	the device to add devfreq feature.
-> @@ -956,7 +952,10 @@ struct devfreq *devfreq_add_device(struct device *dev,
->  			 __func__);
->  		goto err_init;
->  	}
-> -	create_sysfs_files(devfreq, devfreq->governor);
-> +
-> +	err = sysfs_update_group(&devfreq->dev.kobj, &gov_attr_group);
-> +	if (err)
-> +		goto err_init;
->  
->  	list_add(&devfreq->node, &devfreq_list);
->  
-> @@ -995,12 +994,9 @@ int devfreq_remove_device(struct devfreq *devfreq)
->  
->  	devfreq_cooling_unregister(devfreq->cdev);
->  
-> -	if (devfreq->governor) {
-> +	if (devfreq->governor)
->  		devfreq->governor->event_handler(devfreq,
->  						 DEVFREQ_GOV_STOP, NULL);
-> -		remove_sysfs_files(devfreq, devfreq->governor);
-> -	}
-> -
->  	device_unregister(&devfreq->dev);
->  
->  	return 0;
-> @@ -1460,7 +1456,6 @@ static ssize_t governor_store(struct device *dev, struct device_attribute *attr,
->  			 __func__, df->governor->name, ret);
->  		goto out;
->  	}
-> -	remove_sysfs_files(df, df->governor);
->  
->  	/*
->  	 * Start the new governor and create the specific sysfs files
-> @@ -1489,7 +1484,7 @@ static ssize_t governor_store(struct device *dev, struct device_attribute *attr,
->  	 * Create the sysfs files for the new governor. But if failed to start
->  	 * the new governor, restore the sysfs files of previous governor.
->  	 */
-> -	create_sysfs_files(df, df->governor);
-> +	ret = sysfs_update_group(&df->dev.kobj, &gov_attr_group);
->  
->  out:
->  	mutex_unlock(&devfreq_list_lock);
-> @@ -1807,14 +1802,17 @@ static struct attribute *devfreq_attrs[] = {
->  	&dev_attr_trans_stat.attr,
->  	NULL,
->  };
-> -ATTRIBUTE_GROUPS(devfreq);
->  
->  static ssize_t polling_interval_show(struct device *dev,
->  				     struct device_attribute *attr, char *buf)
->  {
->  	struct devfreq *df = to_devfreq(dev);
->  
-> -	if (!df->profile)
-> +	/* Protect against race between sysfs attrs update and read/write */
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->profile || !df->governor ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, POLLING_INTERVAL))
->  		return -EINVAL;
->  
->  	return sprintf(buf, "%d\n", df->profile->polling_ms);
-> @@ -1828,7 +1826,10 @@ static ssize_t polling_interval_store(struct device *dev,
->  	unsigned int value;
->  	int ret;
->  
-> -	if (!df->governor)
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->governor ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, POLLING_INTERVAL))
->  		return -EINVAL;
->  
->  	ret = sscanf(buf, "%u", &value);
-> @@ -1847,7 +1848,10 @@ static ssize_t timer_show(struct device *dev,
->  {
->  	struct devfreq *df = to_devfreq(dev);
->  
-> -	if (!df->profile)
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->profile || !df->governor ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, TIMER))
->  		return -EINVAL;
->  
->  	return sprintf(buf, "%s\n", timer_name[df->profile->timer]);
-> @@ -1861,7 +1865,10 @@ static ssize_t timer_store(struct device *dev, struct device_attribute *attr,
->  	int timer = -1;
->  	int ret = 0, i;
->  
-> -	if (!df->governor || !df->profile)
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->governor || !df->profile ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, TIMER))
->  		return -EINVAL;
->  
->  	ret = sscanf(buf, "%16s", str_timer);
-> @@ -1905,37 +1912,47 @@ static ssize_t timer_store(struct device *dev, struct device_attribute *attr,
->  }
->  static DEVICE_ATTR_RW(timer);
->  
-> -#define CREATE_SYSFS_FILE(df, name)					\
-> -{									\
-> -	int ret;							\
-> -	ret = sysfs_create_file(&df->dev.kobj, &dev_attr_##name.attr);	\
-> -	if (ret < 0) {							\
-> -		dev_warn(&df->dev,					\
-> -			"Unable to create attr(%s)\n", "##name");	\
-> -	}								\
-> -}									\
-> +static struct attribute *governor_attrs[] = {
-> +	&dev_attr_polling_interval.attr,
-> +	&dev_attr_timer.attr,
-> +	NULL
-> +};
->  
-> -/* Create the specific sysfs files which depend on each governor. */
-> -static void create_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov)
-> +static umode_t gov_attr_visible(struct kobject *kobj,
-> +				struct attribute *attr, int n)
->  {
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, POLLING_INTERVAL))
-> -		CREATE_SYSFS_FILE(devfreq, polling_interval);
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, TIMER))
-> -		CREATE_SYSFS_FILE(devfreq, timer);
-> -}
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct devfreq *df = to_devfreq(dev);
->  
-> -/* Remove the specific sysfs files which depend on each governor. */
-> -static void remove_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov)
-> -{
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, POLLING_INTERVAL))
-> -		sysfs_remove_file(&devfreq->dev.kobj,
-> -				&dev_attr_polling_interval.attr);
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, TIMER))
-> -		sysfs_remove_file(&devfreq->dev.kobj, &dev_attr_timer.attr);
-> +	if (!df->governor || !df->governor->attrs)
-> +		return 0;
-> +
-> +	if (attr == &dev_attr_polling_interval.attr &&
-> +	    IS_SUPPORTED_ATTR(df->governor->attrs, POLLING_INTERVAL))
-> +		return attr->mode;
-> +
-> +	if (attr == &dev_attr_timer.attr &&
-> +	    IS_SUPPORTED_ATTR(df->governor->attrs, TIMER))
-> +		return attr->mode;
-> +
-> +	return 0;
->  }
->  
-> +static const struct attribute_group devfreq_group = {
-> +	.attrs = devfreq_attrs,
-> +};
-> +
-> +static const struct attribute_group gov_attr_group = {
-> +	.attrs = governor_attrs,
-> +	.is_visible = gov_attr_visible,
-> +};
-> +
-> +static const struct attribute_group *devfreq_groups[] = {
-> +	&devfreq_group,
-> +	&gov_attr_group,
-> +	NULL
-> +};
-> +
->  /**
->   * devfreq_summary_show() - Show the summary of the devfreq devices
->   * @s:		seq_file instance to show the summary of devfreq devices
+This will also facilitate a planned change of the pm_runtime_put()
+return type to void in the future.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+This patch is requisite for converting pm_runtime_put() into a void
+function.
+
+If you decide to pick it up, please let me know.
+
+Otherwise, an ACK or equivalent will be appreciated, but also the lack
+of specific criticism will be eventually regarded as consent.
+
+---
+ drivers/clk/tegra/clk-device.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/clk/tegra/clk-device.c
++++ b/drivers/clk/tegra/clk-device.c
+@@ -175,7 +175,7 @@ unreg_clk:
+  * perspective since voltage is kept at a nominal level during suspend anyways.
+  */
+ static const struct dev_pm_ops tegra_clock_pm = {
+-	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
++	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume, NULL)
+ };
+ 
+ static const struct of_device_id tegra_clock_match[] = {
+
+
 
 
