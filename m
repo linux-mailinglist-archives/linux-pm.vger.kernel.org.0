@@ -1,106 +1,116 @@
-Return-Path: <linux-pm+bounces-40167-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40168-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B53E3CF0DA7
-	for <lists+linux-pm@lfdr.de>; Sun, 04 Jan 2026 12:53:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC967CF1292
+	for <lists+linux-pm@lfdr.de>; Sun, 04 Jan 2026 18:16:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B636C30056C6
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Jan 2026 11:53:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AD14A300819A
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Jan 2026 17:16:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C303A2877E8;
-	Sun,  4 Jan 2026 11:53:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B56A620B7E1;
+	Sun,  4 Jan 2026 17:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JCr1Msa1"
+	dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b="ohhItlKZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA304A3E;
-	Sun,  4 Jan 2026 11:53:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03BCF1E520C;
+	Sun,  4 Jan 2026 17:16:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.134.164.104
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767527623; cv=none; b=P74ku0zIbwA8DxDsWnu5uKJzx8yDtDiOYubEd60tTpTiQWcZVer4RfidDR6gwVSVN24TI+6ZxCiyT6+KHqJyFpPapvhpSeyxHUBrJMoJ3aXO3W4mb76gFVxISpE5xmEzdfPh+lz1f21UIQiU2vSWF8KvBm1iAjr1kPtRVYzYkAI=
+	t=1767547015; cv=none; b=vBupAMa8CnvKTCLXWU9wtgj8NYchHbnCgqB7NSXZJupUBcgqxwkVMi9n2cEmf49VEzgccfYkjbARBNh39RRD06Kob2sRw/0koJNpoiC6Neir2E/W/Tkh+TmQdSDDjvcJKu6I2Bz/XSHvVUQBqDAdOoT1HmxebWJCBrl4WC6q7Wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767527623; c=relaxed/simple;
-	bh=AIprCMecqfWvn68c5BFxnum4U31MRe9S40v01yZYSHA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gJ8xBzN2FnmRHRBgKmZxJFsNTCxWN1v8895RAqK+e206bxPUW1/4sauFpPEO4S/m1c0rhSO5oO/ziRmFjoc+TqSjM4HHek2WG5h5n8cryBQ9uFkkvKmHXk79PdsxIgxJhwAfsiun+ajyL+AxY2oU3W66ApQKKYV7KdpBsI+jy+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JCr1Msa1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC281C4CEF7;
-	Sun,  4 Jan 2026 11:53:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767527623;
-	bh=AIprCMecqfWvn68c5BFxnum4U31MRe9S40v01yZYSHA=;
-	h=From:To:Cc:Subject:Date:From;
-	b=JCr1Msa18TAtDoNH856kGTE3S0BaMMbRGJaiFeOIvSrDvHB78FOIy4354A7DwkG0H
-	 y4WZfdUdWqHW5uXCmWdW/Z31i57wRagcwMh9YEZaQtpBJbi0RueNn8yISX03VUq6I0
-	 uB8cQ/vmNeVtZfK94UTOD16RU7C3ahVliokQoPwidLmVoZRZoQMfnPNe3G6KEAbkfY
-	 xQpMsgodFfhH77DhRoPgOOnzdsECFg179R2+Ov4GKGHEFbsyu+DsqVL28TbCBh1zXg
-	 YNuUeywEsLZWYj82UYonlCVjlXeknHbmgVvYjUFwzaeDJ32HWugmti1LNc9WUlVVlr
-	 /ryxdv7c7ML8w==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: linux-tegra@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
-Cc: Peter De Schrijver <pdeschrijver@nvidia.com>,
- Prashant Gaikwad <pgaikwad@nvidia.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, linux-clk@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>, Dmitry Osipenko <digetx@gmail.com>,
- Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH v1] clk: tegra: Adjust callbacks in tegra_clock_pm
-Date: Sun, 04 Jan 2026 12:53:36 +0100
-Message-ID: <5088794.31r3eYUQgx@rafael.j.wysocki>
-Organization: Linux Kernel Development
+	s=arc-20240116; t=1767547015; c=relaxed/simple;
+	bh=do7PrGXGKBqJG/GVaoNNmxrkL5sFHtFTmOCIpmcA7MA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JB3ynn3K6H5INaHCFeU02tXFX7OlU0EoyaAwct6H+OszhzDvir2dWFyI/N3KnjsxCKWLWgMQyVN6eakEh1ncbVrCTg1uPBs3Q4ALv5sB3bTSJ1mN8fIWnmg0NPNNs8MIzMjrOLLPFD/aQQL6rRcWtt7X0SMu/nEUKqdOlvAXLKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr; spf=pass smtp.mailfrom=inria.fr; dkim=pass (1024-bit key) header.d=inria.fr header.i=@inria.fr header.b=ohhItlKZ; arc=none smtp.client-ip=192.134.164.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inria.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inria.fr
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=B+VIMQCaJeUOuYcR/SekdE5pwgQ/eHItITPjSlLrErw=;
+  b=ohhItlKZskJQkMMhG9YowNpa+z5RmGJv9yU62AA/k7L/dSSM1I6f5a45
+   kymMMdRtr4RsK8r6vyfEyvM6ggutcQ36f4XZ1xX6f9CqliEPAkKCpPNnS
+   A0CaHPhfj98j5XusUAB99QQqieod2nwaeheCeElV/j8H2jMm6TD66XrLf
+   Y=;
+X-CSE-ConnectionGUID: P+TRORtOS+yKlTWomMt+RQ==
+X-CSE-MsgGUID: +FoUaWWfQBqboIdDiR6EOQ==
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=Julia.Lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="6.21,201,1763420400"; 
+   d="scan'208";a="135016037"
+Received: from i80.paris.inria.fr (HELO i80.paris.inria.fr.) ([128.93.102.196])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2026 18:16:50 +0100
+From: Julia Lawall <Julia.Lawall@inria.fr>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	jonghwa3.lee@samsung.com
+Cc: yunbolyu@smu.edu.sg,
+	kexinsun@smail.nju.edu.cn,
+	ratnadiraw@smu.edu.sg,
+	xutong.ma@inria.fr,
+	Len Brown <lenb@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] docs: power: update documentation about removed function
+Date: Sun,  4 Jan 2026 18:16:44 +0100
+Message-Id: <20260104171644.292437-1-Julia.Lawall@inria.fr>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The function cm_notify_event() was removed in commit 9584051f3cf3
+("power: supply: charger-manager: Remove cm_notify_event function").
+Remove the documentation that suggests how it can be used.
 
-System suspend and resume callbacks run after the core has bumped
-up the runtime PM usage counters of all devices, so these callbacks
-need not worry about runtime PM reference counting.
-
-Accordingly, to eliminate useless overhead related to runtime PM
-usage counter manipulation, set the suspend callback pointer in
-tegra_clock_pm to pm_runtime_resume() and do not set the resume
-callback in it at all.
-
-This will also facilitate a planned change of the pm_runtime_put()
-return type to void in the future.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-This patch is requisite for converting pm_runtime_put() into a void
-function.
-
-If you decide to pick it up, please let me know.
-
-Otherwise, an ACK or equivalent will be appreciated, but also the lack
-of specific criticism will be eventually regarded as consent.
+Signed-off-by: Julia Lawall <Julia.Lawall@inria.fr>
 
 ---
- drivers/clk/tegra/clk-device.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/clk/tegra/clk-device.c
-+++ b/drivers/clk/tegra/clk-device.c
-@@ -175,7 +175,7 @@ unreg_clk:
-  * perspective since voltage is kept at a nominal level during suspend anyways.
-  */
- static const struct dev_pm_ops tegra_clock_pm = {
--	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume_and_get, pm_runtime_put)
-+	SET_SYSTEM_SLEEP_PM_OPS(pm_runtime_resume, NULL)
- };
+There is also a reference to cm_notify_event in
+drivers/power/supply/charger-manager.c that is less clear what to do
+with:
+
+        /*
+         * Charger-manager is capable of waking up the system from sleep
+         * when event is happened through cm_notify_event()
+         */
+	device_init_wakeup(&pdev->dev, true);
+        device_set_wakeup_capable(&pdev->dev, false);
+
+ Documentation/power/charger-manager.rst |   12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
+
+diff --git a/Documentation/power/charger-manager.rst b/Documentation/power/charger-manager.rst
+index 84fab9376792..b29c962cacdc 100644
+--- a/Documentation/power/charger-manager.rst
++++ b/Documentation/power/charger-manager.rst
+@@ -183,17 +183,7 @@ struct charger_desc elements:
+ 	the value of measure_battery_temp.
  
- static const struct of_device_id tegra_clock_match[] = {
-
-
+ 
+-5. Notify Charger-Manager of charger events: cm_notify_event()
+-==============================================================
+-If there is an charger event is required to notify
+-Charger Manager, a charger device driver that triggers the event can call
+-cm_notify_event(psy, type, msg) to notify the corresponding Charger Manager.
+-In the function, psy is the charger driver's power_supply pointer, which is
+-associated with Charger-Manager. The parameter "type"
+-is the same as irq's type (enum cm_event_types). The event message "msg" is
+-optional and is effective only if the event type is "UNDESCRIBED" or "OTHERS".
+-
+-6. Other Considerations
++5. Other Considerations
+ =======================
+ 
+ At the charger/battery-related events such as battery-pulled-out,
 
 
