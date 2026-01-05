@@ -1,53 +1,50 @@
-Return-Path: <linux-pm+bounces-40186-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40189-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B05DCCF388B
-	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 13:31:25 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id A717CCF3A99
+	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 14:00:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E1343300AFE7
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 12:31:23 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 96B96300644E
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 12:58:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 323D333893A;
-	Mon,  5 Jan 2026 12:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9326343D6F;
+	Mon,  5 Jan 2026 12:56:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hqgf9yS+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eloDyBS1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B49113B293;
-	Mon,  5 Jan 2026 12:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8DA3431FD;
+	Mon,  5 Jan 2026 12:56:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767616282; cv=none; b=qiKM8Ske+eDMaySyoJJrOEeHhIyBDO65a6muupwFcYObtEu0X9p9mkOlcuJu0JyIIwr6mlJih4sdrGfaKHnzfhYWzxi69+dy8qzOtSydcrdEUBOT+BbwmM0NoaS5Dja+/qjYofc7StrjvzRffmF3KkWZTjOogXRmR+u0czZgDkI=
+	t=1767617807; cv=none; b=T9FVS7FG62CvvJpJlnqtnOTa6WpTSOZqwt3A+Okx/OY2MiBttvtDhJGNJDzywNmr/WnbANHDTZ/m98JnFMFXsQJPkjxPxQuPm5FC2A7vJMa+8eOlYiOl8e7WPILqYVmjLfM82sX6z0BcDCWsV09tiUmUAc+s9jkeCplf+Keqi3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767616282; c=relaxed/simple;
-	bh=gyBvfMwzBQ/Y7h4l4Q2rKCWMHW/GDa93wcjZtUxyIXg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=bdhNggFlYKrDHs+Dac9dWsneFo5rTR8lfl3D86MNlHjymOAESn2Q8HfyRkw4FKcxpE0qmyVzcIm3IrE1JYdgFNoPy3pZkyeE+g6py185QmuqrRPDDuB3Xc12VUvlPfjj3bbo5NZh4OrPiENxnlw3+edKzIg+kI2JROaazoayXh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hqgf9yS+; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id B74874E41F7D;
-	Mon,  5 Jan 2026 12:31:17 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 8E1D360726;
-	Mon,  5 Jan 2026 12:31:17 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 44718103C847E;
-	Mon,  5 Jan 2026 13:31:15 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1767616277; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=ncRRgZMgnnJ2pFO93YhC4rnge0LWXz/c/w5kVZDP8qI=;
-	b=hqgf9yS+0QKlTcin0Tx3N/Uat2wrsXj5H1ZTg8TcSMn7VOIeYFuMIzW8aTXzf0Tg+IMqBK
-	cTEg5c8Pj39zambbbjhDY9Wj5Uwjf2bphRwFK1Gtp+tNWKzpGyQ4hSABsBHEfmRWVio9RH
-	fPcSiRWQ0Q8eAUhmLWwQxqaUZF7weasytlmjAd0FIbLURbOSybqf9HMj3/fUJw8fQXjIcO
-	AfiwZhZE06zzAPNmE7NrWv0MG3e57Nv6zl60jRnvJ6Y9D/AvU1rbf6W+9zYrLsT0SfcQgl
-	qagRpVeMdHC74rlm0SJpL8MB43uGCjLKAnESVkbuBOnqmcEORt3g9DsHn15c+A==
-From: Romain Gantois <romain.gantois@bootlin.com>
-Date: Mon, 05 Jan 2026 13:31:12 +0100
-Subject: [PATCH v2] tools: lib: thermal: Correct CFLAGS and LDFLAGS in
- pkg-config template
+	s=arc-20240116; t=1767617807; c=relaxed/simple;
+	bh=0/FNTDcgirnA9vyGn4Nykw0//mGf5LocBXFpq2GMF5Q=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GIiEFt3vFWdvIlxqFy+yUPyfwcmORK2VPcXKHYNlC/n0JlU8FtM0DtXt/MHKBtsrZipCrZKcw2p7cKfO3yT3lgsAiRR6U4lT43J6IiR8xgY3tR88L6pR5UTu3/usulNbP5SzY/PQiXzjCC1FzBXflpoCrni+HdpoFNMr8ynnpYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eloDyBS1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4A0C1C19424;
+	Mon,  5 Jan 2026 12:56:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767617807;
+	bh=0/FNTDcgirnA9vyGn4Nykw0//mGf5LocBXFpq2GMF5Q=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=eloDyBS1gwcGjMZvlCWgZ546QCJR1rcU1ZQ3lMUxIqmYlpITBNncl9n7nKv7jMTaV
+	 ntWJStZ7ttNrc6x9XKpC/0vWXWN75sA/mRt8cS1deBUt+oy1E48gbieiS2LTS1Pvam
+	 /CUiJ3b+DeB76/P/7xs0f+OfunCfp95n1iRd9sKNasaHWiWzJTJkvn9ec+VeQBC2dm
+	 Z0nnfmOTNNnk+3FRZKskGmd+4bDRraOvLb5t3NIv0qGC1uC6J1Lj+9iL4XxBCl4BHb
+	 QgRwYWtuGBYqIrNTox+uIXwXWBZmBZuPD72xgh08qF6IrS+169tUDQDXpBbQzPM8b7
+	 yAXvjBsJbk/cA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 397C2C79F8C;
+	Mon,  5 Jan 2026 12:56:47 +0000 (UTC)
+From: Michael Reeves via B4 Relay <devnull+michael.reeves077.gmail.com@kernel.org>
+Subject: [PATCH 0/2] Add Apple Silicon SMC power driver
+Date: Mon, 05 Jan 2026 23:56:35 +1100
+Message-Id: <20260105-b4-macsmc-power-v1-0-62954c42a555@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,64 +53,64 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260105-libthermal-pkgconfig-v2-1-e086bdeddb41@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAA+vW2kC/4WNTQ6CMBBGr0JmbQ0dfkRW3sOwKGWAidCSljQa0
- rtbuYDL95LvfQd4ckwe2uwAR4E9W5MALxnoWZmJBA+JAXOsJGItFu73mdyqFrG9Jm3NyJPAAqt
- 7L/Py1ihI083RyO8z++wSz+x36z7nS5A/+ycYpJCiKPN6oEqrhtSjt3Zf2Fy1XaGLMX4B1i+kg
- roAAAA=
-X-Change-ID: 20251226-libthermal-pkgconfig-23259b10478a
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Romain Gantois <romain.gantois@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAO1W2kC/x3MTQqAIBBA4avErBtQ+4OuEi1snGoWlShUIN49a
+ fkt3ksQOQhHGKsEgW+Jcp0Fuq6AdntujOKKwSjTK606XFo8LMWD0F8PB3RKD0TD2jWWoFQ+8Cr
+ vf5zmnD+qQi/uYQAAAA==
+X-Change-ID: 20260105-b4-macsmc-power-d017cc7f53ac
+To: Sebastian Reichel <sre@kernel.org>, Sven Peter <sven@kernel.org>, 
+ Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>, 
+ Lee Jones <lee@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ Michael Reeves <michael.reeves077@gmail.com>, 
+ Hector Martin <marcan@marcan.st>
 X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767617806; l=1301;
+ i=michael.reeves077@gmail.com; s=20260105; h=from:subject:message-id;
+ bh=0/FNTDcgirnA9vyGn4Nykw0//mGf5LocBXFpq2GMF5Q=;
+ b=pXgNPMu6iKqaJdxxdZ+XZiUEBGctL1+0EGQ1Mf6C7pdzK0+VGMoho8NKfA9cbjoe6FHCZEAZp
+ 0HXLd6hn9DQAC/1GvyrUcNGyoHIxOwWglVsTCos2RKyS34VGyIPRBWm
+X-Developer-Key: i=michael.reeves077@gmail.com; a=ed25519;
+ pk=QIrgWBGCm3LG0YYc6MLCDkwuVXLTGGooVBdWX/KhSiU=
+X-Endpoint-Received: by B4 Relay for michael.reeves077@gmail.com/20260105
+ with auth_id=591
+X-Original-From: Michael Reeves <michael.reeves077@gmail.com>
+Reply-To: michael.reeves077@gmail.com
 
-There are two issues with the current pkg-config template.
+This series adds a power supply driver for the Apple SMC found on
+Apple Silicon devices. This allows the kernel to report AC status,
+battery charging status, and power metrics, and modify the charging
+behaviour.
 
-Firstly, the -lthermal linker flag is missing.
+The first patch adds the driver itself, and the second patch wires it
+up to the MFD core.
 
-Secondly, the libnl3 include directory compiler flag references "include"
-instead of "includedir", which leads to an unexpanded variable when
-pkg-config is called. Moreover, it isn't necessary to add this flag here,
-since the "Requires" field will cause pkg-config do add it automatically.
-The same logic applies to the LDFLAGS for libnl3.
+The driver is based on an original out-of-tree implementation by
+Hector Martin. It has been refactored for upstream inclusion, 
+including support for newer SMC firmwares, devices without batteries,
+dynamic property detection and improved state management.
 
-Add the missing -lthermal flag and remove unnecessary and incorrect libnl3
-flags.
+Tested on: Apple M3 (MacBook Air, J613)
 
-Fixes: 47c4b0de080a ("tools/lib/thermal: Add a thermal library")
-Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+Signed-off-by: Michael Reeves <michael.reeves077@gmail.com>
 ---
-Changes in v2:
-- Removed unnecessary libnl3 flags.
-- Added "Fixes" tag.
-- Link to v1: https://lore.kernel.org/r/20251226-libthermal-pkgconfig-v1-1-3406de5ca8ea@bootlin.com
----
- tools/lib/thermal/libthermal.pc.template | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Michael Reeves (2):
+      power: supply: Add macsmc-power driver for Apple Silicon
+      mfd: macsmc: Wire up Apple SMC power driver
 
-diff --git a/tools/lib/thermal/libthermal.pc.template b/tools/lib/thermal/libthermal.pc.template
-index ac24d0ab17f5..b984c5ecd20a 100644
---- a/tools/lib/thermal/libthermal.pc.template
-+++ b/tools/lib/thermal/libthermal.pc.template
-@@ -8,5 +8,5 @@ Name: libthermal
- Description: thermal library
- Requires: libnl-3.0 libnl-genl-3.0
- Version: @VERSION@
--Libs: -L${libdir} -lnl-genl-3 -lnl-3
--Cflags: -I${includedir} -I${include}/libnl3
-+Libs: -L${libdir} -lthermal
-+Cflags: -I${includedir}
-
+ MAINTAINERS                         |   1 +
+ drivers/mfd/macsmc.c                |   1 +
+ drivers/power/supply/Kconfig        |  11 +
+ drivers/power/supply/Makefile       |   1 +
+ drivers/power/supply/macsmc-power.c | 872 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 886 insertions(+)
 ---
-base-commit: d113735421da322ea144c9778c433de6ff6bc57b
-change-id: 20251226-libthermal-pkgconfig-23259b10478a
+base-commit: cc3aa43b44bdb43dfbac0fcb51c56594a11338a8
+change-id: 20260105-b4-macsmc-power-d017cc7f53ac
 
 Best regards,
 -- 
-Romain Gantois <romain.gantois@bootlin.com>
+Michael Reeves <michael.reeves077@gmail.com>
+
 
 
