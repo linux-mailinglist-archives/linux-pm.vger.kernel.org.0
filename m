@@ -1,142 +1,221 @@
-Return-Path: <linux-pm+bounces-40209-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40210-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B41ACF492C
-	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 17:05:02 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B552CF49CB
+	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 17:16:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1F128302FA01
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 16:00:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 67040302CDCD
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 16:15:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2175622E406;
-	Mon,  5 Jan 2026 16:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EF9631AA8F;
+	Mon,  5 Jan 2026 16:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="K/PiSX82"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dgQc0b4b"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out203-205-221-164.mail.qq.com (out203-205-221-164.mail.qq.com [203.205.221.164])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C086D33AD8D;
-	Mon,  5 Jan 2026 16:00:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417882F25E4;
+	Mon,  5 Jan 2026 16:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767628809; cv=none; b=Erf95sdx2y/lYKWaOL0i2xqUhNvJBep6HL3NW+5HzkFWP9RlY7AecHJdReXatIElX+L3hdl7Ic4t5lRl+D/jOH8N20B/BEar3bdmvhcZ5betbuGH1IOA3yMiu257YCwOAlKIsYh36/fJtFEAuaCAbG9/AMsa+Zi22J/PdGBmeyI=
+	t=1767629429; cv=none; b=uUTGfjnVMSg09h/Itz5egqgdu+enqI1fRI1zqIncxvaOLmHTKghn5Lp0kfYRlqguiIO18L/uR4NGW18eVdM/UuP0VrbMkHtdqet1C/R50sMSBSh6hY/XZrjOrIWbncLtNSPWvRtzZB/zQOKSAbed/ixX1p15z9Hsi9F4LwCInJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767628809; c=relaxed/simple;
-	bh=N1hoyS8vAEYeNcKmQMNtf0b1xMeM++/15iIyYizaztg=;
-	h=Message-ID:From:Date:Subject:MIME-Version:Content-Type:To:Cc; b=mGOLmoJnBCtT5f7NvlucM+vkrJWjCillAuaTkdKNCaZeoHoBoyjO0PwE0uV2oa6ObJ1muIHvXqFiFIZF+E4nBOfmQk2lAzGadgFXj5ldzTTgmopkQhMTAtILv0VPd90Z43G0/0EPEajQ2QwXvV8aomQP9jLV2MxF8xSmOEHM6Ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=K/PiSX82; arc=none smtp.client-ip=203.205.221.164
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1767628796; bh=3WeX3bT5s+OT8VIdljNj7+krconZGdqv+VIUg1emz0E=;
-	h=From:Date:Subject:To:Cc;
-	b=K/PiSX82MSFDXGbCLbe3GViDBf/6RDUpAaU4UFMdiwdA5eyUMOYK40AATjlVwCK3S
-	 30F7nv0KBMnPE81ZCw+i92mCTRjG0JWOkT/PVoHJRR4di0LwSdXsZOKScCZ0Xl+6hr
-	 TTfBGh4gu3G6Zq7rckdmDIeCef6g69n0IxX+HXBE=
-Received: from junjungu-PC.localdomain ([223.167.147.103])
-	by newxmesmtplogicsvrsza53-0.qq.com (NewEsmtp) with SMTP
-	id EF627A59; Mon, 05 Jan 2026 23:59:54 +0800
-X-QQ-mid: xmsmtpt1767628794tr0jci5fx
-Message-ID: <tencent_0B346CE1589FE10E0110418896F129323709@qq.com>
-X-QQ-XMAILINFO: NFIgmBUYVYTpNalnUa9mLZPXg2XFb1ZTzEyZxEoFXqyT0NrWEKUy48GSJLDgYQ
-	 UYmFa1M0a7TTTuoWqNfIkyqlSSt6VUpBxPDRP6f9cHsHxLHveFwa6Oi2yCUCSPfB4HiIrQbnuS/+
-	 6elU3TBe+GDUvZVJRidGsIZU0jiZZ4m5faZXytDiZF2TZCVnPm02bpM3vqmoDoKfC4AQHnMzrQAg
-	 HJ0a1JlaDqsqSuAWXwiF4Vr3LMgbQvINVpZJCdE5RaxQaL0TzMYYqRMj4sIDq5UJYP1VBKLBnIV5
-	 6PheMEs8pYirzDdOXFO2kLqTMkgdc/v7FXfij5Iz0RYHciKLYDXEnSARr2Hyh6LJf0I3CYii+Qjb
-	 ppsV0nKWWW/3O+VLWtJh2/sdI8WU4sm1rtErEpXi/9bNQQuZm2dXXG98xFZHbUmkT9Ymai7dKb5p
-	 QZISQMEH9aZIIkAa41+TeTiwRIlLVsR4fvc0MnXTI/Su67f3U1d8go1NCYJ1iZ3Ldv0qH3i3fK3s
-	 I9VLBIF1FHaS4dahKHivYQmf7nUnn+z3yGg6NwA2WPTTMt5HmcN9y5/Mpc6HrT6cwM2NOuDMY0p9
-	 Wg+ih54a8z0fykRDvpA7BeG5aUuutbBgqpISJTnPP83eeJvYOq0qeQANLtb/9bK5GqMSWL0WmIMk
-	 ttp2qP4ZIKwYfZRbuwhpm7qlukykW6H4fmNrHGcjVYDxfmiVsPFPvzN/RQ50arMaTRWqv4J2qiDK
-	 tP2ziFYvKi0ScbA92waeqRcgMj1puQOZHqOZ+MWRBzzJNEvYksR+g2IRYr/3ZsEgax892UkftgJP
-	 8AVcJMRPgErMEHs9xa81WvgR5VBzQGh0+v0F9eR67rcX15/hZxr+Z7SGaWXP8BMncTEcFRz5A6pK
-	 m4/Ge4AOrVielNgCnG+I3EtbRsOeG2qCYyreZKab69jBGCraEG0LKFqPMDiAzqZgWnz+TAbJlH4i
-	 QB7wEe0BwYMR7K4iLBd1CoiqMEAT5DoOUlKUsFBV0JDgR8180FPEOCGh+87qCBp4Uwe0sSaih6yz
-	 gbSSBzp9LmtJl0Tt5V+u8/WiQF+fYUUOTy7LiX0Uo881utbOtKxi7z6laKnki64cdw+dnR5iUuIR
-	 WLSG1wAC5G+PwocXOOtsrv7jxDxGffO2n/HfIOI47G0ZtuTB/NB7QxtOP9TBEofV9uiXt4asC82T
-	 eqYFI=
-X-QQ-XMRINFO: Mp0Kj//9VHAxzExpfF+O8yhSrljjwrznVg==
-From: Felix Gu <gu_0233@qq.com>
-Date: Mon, 05 Jan 2026 23:59:40 +0800
-Subject: [PATCH] cpufreq: mediatek-hw: Fix resource leaks in init function
+	s=arc-20240116; t=1767629429; c=relaxed/simple;
+	bh=kzCRFUztXQTIWieGzaPRB5F9NacR2ZhvKHo9n5T7lCs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZXZ/tSdSRvCf7vP27mCSoNjpiKKBy7FB2Mh2Im6fAaXgLI95bLJU/Aw8kyncSAsA27czDyjBUAVckAu+LRAjc2D0SY9semw9SIrF7z/wnvbinMzK8q6FwbDmi7tTPuVByNOlLjx4NClWt1iyHvAx1haJE8hJILpQjVt9Hl4dg10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dgQc0b4b; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1767629427; x=1799165427;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kzCRFUztXQTIWieGzaPRB5F9NacR2ZhvKHo9n5T7lCs=;
+  b=dgQc0b4bkVdYXVUk7Sfz79trgYSNc4RnsHIBQuSZyhsnxODh+tDI0pbL
+   Pm6Qqc+F84QfruQ4xUz8iS3xKAk4HWWDV1nL/Tj3kFbvLAV65HYE56cJL
+   TCq6RyalR9CyZTkKfDPlCvdsqagGIptLdukZbnzGifjHaMJhP3F7Xi5l5
+   IaPSoMURAQ7gLqR8nhsq4Q3kW+9O/YRSJaNAr3orkgZC4uMCCgbqYjaR5
+   slCNaSMMM9YHhRsrt+QnyCC3hFPRoeduJIcGDAZjbSjnlEFqK+30V+JKc
+   iLAt575Hj/0/ffEEG5vJfmUcngKZn+L/KN9XyibD5VQgFko6ZuKB8Yf5t
+   Q==;
+X-CSE-ConnectionGUID: WltLiaPeTc+VR7OvQGbH2A==
+X-CSE-MsgGUID: ZnO4oCPJRd6JAVOFyN8jLA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11662"; a="79300044"
+X-IronPort-AV: E=Sophos;i="6.21,203,1763452800"; 
+   d="scan'208";a="79300044"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2026 08:10:26 -0800
+X-CSE-ConnectionGUID: zs90m1P/T/6PV/+GxPKxMQ==
+X-CSE-MsgGUID: 6BWfqYvcS/SbRp4lnJP65w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,203,1763452800"; 
+   d="scan'208";a="202469155"
+Received: from rfrazer-mobl3.amr.corp.intel.com (HELO kuha) ([10.124.222.12])
+  by orviesa008.jf.intel.com with SMTP; 05 Jan 2026 08:10:20 -0800
+Received: by kuha (sSMTP sendmail emulation); Mon, 05 Jan 2026 18:10:01 +0200
+Date: Mon, 5 Jan 2026 18:10:01 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: amitsd@google.com
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Lee Jones <lee@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Subject: Re: [PATCH v3 5/5] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
+ setting charger mode
+Message-ID: <aVvhvuq6Ls1v3B_E@kuha>
+References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
+ <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-OQ-MSGID: <20260105-mediatek-cpufreq-hw-v1-1-69ad43d6ab1f@qq.com>
-X-B4-Tracking: v=1; b=H4sIAOvfW2kC/x3MSQqAMAxA0atI1gZqoSpeRVyEmmoQp9YJpHe3u
- HyL/18I7IUDNNkLni8Jsi4JRZ6BHWkZGKVPBq10qQplcOZe6OAJ7XY6zzuON5ImR8bWujIEqdw
- 8O3n+a9vF+AGvz+eCZQAAAA==
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- Felix Gu <gu_0233@qq.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1767628794; l=1651;
- i=gu_0233@qq.com; h=from:subject:message-id;
- bh=N1hoyS8vAEYeNcKmQMNtf0b1xMeM++/15iIyYizaztg=;
- b=m3kmr/y/heV8l/1/sXa7s6mw6GRn0lgdc5gisKmjjSANU0xwK678ZTBHg/ZwxEQTwReOy0RGB
- ptIja3YhbHGCvBVucI4f7DEqg5Vl8gUPIXlq5ditsq+bcgz3fK3aq8a
-X-Developer-Key: i=gu_0233@qq.com; a=ed25519;
- pk=fjUXwmjchVN7Ja6KGP55IXOzFeCl9edaHoQIEUA+/hw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
 
-In mtk_cpu_resources_init(), if mtk_cpu_create_freq_table() fails, the
-function returns directly without releasing the resources.
+Sat, Dec 27, 2025 at 12:04:25AM +0000, Amit Sunil Dhamne via B4 Relay kirjoitti:
+> From: Amit Sunil Dhamne <amitsd@google.com>
+> 
+> TCPCI maxim driver directly writes to the charger's register space to
+> set charger mode depending on the power role. As MAX77759 chg driver
+> exists, this WAR is not required.
+> 
+> Instead, use a regulator interface to source vbus when typec is in
+> source power mode. In other power modes, this regulator will be turned
+> off if active.
+> 
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
 
-Similarly, in mtk_cpufreq_hw_cpu_init(), if the driver returns -ENODEV,
- it fails to clean up. Fix this by calling mtk_cpufreq_hw_cpu_exit()
-to properly release resources.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Signed-off-by: Felix Gu <gu_0233@qq.com>
----
- drivers/cpufreq/mediatek-cpufreq-hw.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+> ---
+>  drivers/usb/typec/tcpm/tcpci_maxim.h      |  1 +
+>  drivers/usb/typec/tcpm/tcpci_maxim_core.c | 54 +++++++++++++++++++------------
+>  2 files changed, 34 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
+> index b33540a42a95..b314606eb0f6 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim.h
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
+> @@ -60,6 +60,7 @@ struct max_tcpci_chip {
+>  	struct tcpm_port *port;
+>  	enum contamiant_state contaminant_state;
+>  	bool veto_vconn_swap;
+> +	struct regulator *vbus_reg;
+>  };
+>  
+>  static inline int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
+> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> index 19f638650796..e9e2405c5ca0 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/usb/pd.h>
+>  #include <linux/usb/tcpci.h>
+>  #include <linux/usb/tcpm.h>
+> @@ -35,12 +36,6 @@
+>   */
+>  #define TCPC_RECEIVE_BUFFER_LEN				32
+>  
+> -#define MAX_BUCK_BOOST_SID				0x69
+> -#define MAX_BUCK_BOOST_OP				0xb9
+> -#define MAX_BUCK_BOOST_OFF				0
+> -#define MAX_BUCK_BOOST_SOURCE				0xa
+> -#define MAX_BUCK_BOOST_SINK				0x5
+> -
+>  static const struct regmap_range max_tcpci_tcpci_range[] = {
+>  	regmap_reg_range(0x00, 0x95)
+>  };
+> @@ -202,32 +197,49 @@ static void process_rx(struct max_tcpci_chip *chip, u16 status)
+>  	tcpm_pd_receive(chip->port, &msg, rx_type);
+>  }
+>  
+> +static int get_vbus_regulator_handle(struct max_tcpci_chip *chip)
+> +{
+> +	if (IS_ERR_OR_NULL(chip->vbus_reg)) {
+> +		chip->vbus_reg = devm_regulator_get_exclusive(chip->dev,
+> +							      "vbus");
+> +		if (IS_ERR_OR_NULL(chip->vbus_reg)) {
+> +			dev_err(chip->dev,
+> +				"Failed to get vbus regulator handle");
+> +			return -ENODEV;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static int max_tcpci_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata, bool source, bool sink)
+>  {
+>  	struct max_tcpci_chip *chip = tdata_to_max_tcpci(tdata);
+> -	u8 buffer_source[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SOURCE};
+> -	u8 buffer_sink[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SINK};
+> -	u8 buffer_none[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_OFF};
+> -	struct i2c_client *i2c = chip->client;
+>  	int ret;
+>  
+> -	struct i2c_msg msgs[] = {
+> -		{
+> -			.addr = MAX_BUCK_BOOST_SID,
+> -			.flags = i2c->flags & I2C_M_TEN,
+> -			.len = 2,
+> -			.buf = source ? buffer_source : sink ? buffer_sink : buffer_none,
+> -		},
+> -	};
+> -
+>  	if (source && sink) {
+>  		dev_err(chip->dev, "Both source and sink set\n");
+>  		return -EINVAL;
+>  	}
+>  
+> -	ret = i2c_transfer(i2c->adapter, msgs, 1);
+> +	ret = get_vbus_regulator_handle(chip);
+> +	if (ret) {
+> +		/*
+> +		 * Regulator is not necessary for sink only applications. Return
+> +		 * success in cases where sink mode is being modified.
+> +		 */
+> +		return source ? ret : 1;
+> +	}
+> +
+> +	if (source) {
+> +		if (!regulator_is_enabled(chip->vbus_reg))
+> +			ret = regulator_enable(chip->vbus_reg);
+> +	} else {
+> +		if (regulator_is_enabled(chip->vbus_reg))
+> +			ret = regulator_disable(chip->vbus_reg);
+> +	}
+>  
+> -	return  ret < 0 ? ret : 1;
+> +	return ret < 0 ? ret : 1;
+>  }
+>  
+>  static void process_power_status(struct max_tcpci_chip *chip)
+> 
+> -- 
+> 2.52.0.351.gbe84eed79e-goog
+> 
 
-diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
-index ae4500ab4891..f28a3de1604f 100644
---- a/drivers/cpufreq/mediatek-cpufreq-hw.c
-+++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
-@@ -278,13 +278,15 @@ static int mtk_cpu_resources_init(struct platform_device *pdev,
- 	ret = mtk_cpu_create_freq_table(pdev, data);
- 	if (ret) {
- 		dev_info(dev, "Domain-%d failed to create freq table\n", index);
--		return ret;
-+		goto unmap_base;
- 	}
- 
- 	policy->freq_table = data->table;
- 	policy->driver_data = data;
- 
- 	return 0;
-+unmap_base:
-+	iounmap(base);
- release_region:
- 	release_mem_region(res->start, resource_size(res));
- 	return ret;
-@@ -322,6 +324,8 @@ static int mtk_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 		if (!(sig & CPUFREQ_HW_STATUS)) {
- 			pr_info("cpufreq hardware of CPU%d is not enabled\n",
- 				policy->cpu);
-+			/* call mtk_cpufreq_hw_cpu_exit to cleanup the resource */
-+			mtk_cpufreq_hw_cpu_exit(policy);
- 			return -ENODEV;
- 		}
- 
-
----
-base-commit: 52ae6ea5bd7c7286dcba463b6323b640b22af833
-change-id: 20260105-mediatek-cpufreq-hw-a2afa5c8275a
-
-Best regards,
 -- 
-Felix Gu <gu_0233@qq.com>
-
+heikki
 
