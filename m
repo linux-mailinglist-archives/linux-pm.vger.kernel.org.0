@@ -1,112 +1,71 @@
-Return-Path: <linux-pm+bounces-40180-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40181-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73414CF2F3E
-	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 11:19:15 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E702CF303E
+	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 11:37:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5E540302412E
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 10:17:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 705AC30039D9
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 10:37:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF4B6313263;
-	Mon,  5 Jan 2026 10:17:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 820C3316185;
+	Mon,  5 Jan 2026 10:37:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="XVT72kka"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WcSa4BcZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f228.google.com (mail-oi1-f228.google.com [209.85.167.228])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B532F4A1E
-	for <linux-pm@vger.kernel.org>; Mon,  5 Jan 2026 10:17:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E386313E00
+	for <linux-pm@vger.kernel.org>; Mon,  5 Jan 2026 10:37:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767608274; cv=none; b=FSdqdlK/jvbaRb+3xcDHSUE0AEI4lpSNc++YMqCVuvYOQL/hhjkr9ZxW2qBvTYWEmrK9MHLhOYykICrAef3x9xLHT1aieNuc4tbkYWFij3Sn4IK5vvWuFiZKxipXhTYk/GEoHFleKU6HkXGnTO45ckWAAdosBL79YyOnvBdk/NY=
+	t=1767609471; cv=none; b=Cc5AtfRFFu42xEnpkjOBK+ocdtWQ93EgbZfRON0BILWZ3Xcn8zb4IHsgaPHia1jzV2A9Brgl6Z+PgYNfX9gYMFmGufoUWSMNmxUyrec982bOgzVFCuTijFO78MGyR8x5ZEyUlnfbjR6frEkaG2UFBdWyZtYmad0/YJs4/ZOdmGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767608274; c=relaxed/simple;
-	bh=QY3HTEVaHPlfhfn0LQXxca+zyPZhcAwhzUarq0fwl9Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=I+6zxD1arlQODn4ptzQ4bn0ORigdGN2JzXLM+oTN5GgtaNZvURdauVHr96mTA2TvH8m0zpKzE42F+OB+Qh5XvmDOa3uZbAs5q7IbhU+mY+plDwAUzJzbtFBIuZwK6iNZFBm8xynvaSHPHpoGWgcwcV08n0bERK66h3Brx4HI0u0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=XVT72kka; arc=none smtp.client-ip=209.85.167.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-oi1-f228.google.com with SMTP id 5614622812f47-455bef556a8so9428158b6e.1
-        for <linux-pm@vger.kernel.org>; Mon, 05 Jan 2026 02:17:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767608272; x=1768213072;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZDEZfxXGKUHqnD6uzu3JESKT0vdq+bi9ssWL2yPlp2w=;
-        b=kIU5qSSfKlA4W4U5OKgdVnD7t0zAJjpvYuJsAboCSYK6YYzsGV2UIs6YOURcOGtJR0
-         HaO5FmsaCkmmHxATMpK8LtmDhJDk6qDO0oSqVTxrD560HFp6uDZlLNhss+AihbNnXyvv
-         JoPGoEM1TpiMYqVZF9igSMaqCTGO4c3P0C97dKmF9Pot3fsvkK9Pa6QALt1jugzPsKqj
-         oIa5Z774idQmmmwQoHnzGTEnAPdYbSARGbSFobO5k03kp9gQRLFP4sRgW6IgY6vUMRcN
-         Mcj1xouiEyeUprZIH9IJGylce18jBUXpzXOEYgzdZ6xxRD+PNRrnbIs6njRQtRmWzEQv
-         aYZA==
-X-Forwarded-Encrypted: i=1; AJvYcCWqgvh9tOAL0ajHXeHTfNKYMBuaS3qPANbs6AmJjsU/8Aghv7fyFsfHatDy+DhwtXrOiYG4jv1qIg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlKt8Vceg6LFVoJuMEOi5bDxmDg0zdT10X9Pzr1epLhHNbmdjZ
-	PEKyxi8MTakUI2hCSc8gXXj6At+Y0vALel+W2daGWaC5h9uWAonuJKo/GYlc5qSlrj6jjIs12O9
-	IWHKMd06tzoZTbwO9Tq6tVQjNEGChch4+ki+9GH/7DUQz+h3+mm1xiGScLbNyMld++LqRob/7v6
-	3B//jaC0+Lc35mmHeEKbXhhrXi7YBdpwJhlO70XjnHE185gzhvcp1Do02IdDqrZOFZFcDpQUAOi
-	wwFMYEKXXvetRU6WGFr
-X-Gm-Gg: AY/fxX4Waolj812JIDOlfdaPJp6gy4ZhoRO8EH5m0WWQIfMndIAuMCljpRoOq0R9UnI
-	ZoGzn4sMD5IlSW2jI+SOdEXZBAvEKZiTHxUTe7t5fo9bL2fa7yYAY9Zo9PWjziaVRADRLZ/5xrN
-	l9I9qSrJskfcXpRt34aOn4cMhjQqLYg/eCF/yCJE4+xquWD/Toa1zPYVhAAw9+SBuBwf/9hxJrI
-	KduzQDCu6F3dLOG8Pb3Pgsjw5I0tIG3wJs4IS6pEVp6Etp+ppJhOboYS2Hp6l0DakyXcOyiFYQ+
-	MCgs1j/UqA1/NvA0SCektH/nisbk3GQsfER1SZWRzwEEuGc7gbDA2xyxVbfuIykyvQoIMXr2kV3
-	HvbFph2LnzLSocX6yyHr8nkhpDmAOE+fpv5rQ19Cj/a/FmvD4ZVsDseNsnG7vaUUqB6JwdwGyUe
-	bxxXZKibLwWSqdP7YewKD3EgGKefwpRPar+HGPfBCbIyMDgw==
-X-Google-Smtp-Source: AGHT+IGVq2gR61Fw3ME4VV7+Fo6NYVZX2GaO5jX/GsAalW8CGlSWafbQNl2H+73BFr/Z5OIkz5aZ+7RdnlwP
-X-Received: by 2002:a05:6808:67c3:b0:44f:e4a7:74b1 with SMTP id 5614622812f47-457b1fc27famr17493177b6e.3.1767608271795;
-        Mon, 05 Jan 2026 02:17:51 -0800 (PST)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-2.dlp.protect.broadcom.com. [144.49.247.2])
-        by smtp-relay.gmail.com with ESMTPS id 46e09a7af769-7cc667d771esm6400354a34.6.2026.01.05.02.17.51
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Jan 2026 02:17:51 -0800 (PST)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-34e70e2e363so31362705a91.1
-        for <linux-pm@vger.kernel.org>; Mon, 05 Jan 2026 02:17:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1767608270; x=1768213070; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZDEZfxXGKUHqnD6uzu3JESKT0vdq+bi9ssWL2yPlp2w=;
-        b=XVT72kkahmHtaf719+HMdZO37C3gfnmLQw4FyrAMadM2CYk3a4lhAJOeKTrdwNfv5W
-         gzNHLCfteYMe/qZhuUZ/gG7ZnauTI9+wYtcgITdjvpX1JtUGeTwoxK7sfJZlfrrbTj5Q
-         5s5EbShd9BYjVHhQvn7CNcjg4S6XdoIvJ11cY=
-X-Forwarded-Encrypted: i=1; AJvYcCVotztYMKop538+HOXU9G1pMNa2SCaKaMwQXYhZmm7zGLFloVpnkIYqRZEC8+yugIA3IHl2uQoYWg==@vger.kernel.org
-X-Received: by 2002:a05:7023:905:b0:11d:fd26:234e with SMTP id a92af1059eb24-121722b821amr43934364c88.16.1767608269932;
-        Mon, 05 Jan 2026 02:17:49 -0800 (PST)
-X-Received: by 2002:a05:7023:905:b0:11d:fd26:234e with SMTP id a92af1059eb24-121722b821amr43934337c88.16.1767608269346;
-        Mon, 05 Jan 2026 02:17:49 -0800 (PST)
-Received: from shivania.lvn.broadcom.net ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1217254d369sm170077924c88.16.2026.01.05.02.17.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jan 2026 02:17:49 -0800 (PST)
-From: Shivani Agarwal <shivani.agarwal@broadcom.com>
-To: stable@vger.kernel.org,
-	gregkh@linuxfoundation.org
-Cc: sudeep.holla@arm.com,
-	cristian.marussi@arm.com,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ajay.kaher@broadcom.com,
-	alexey.makhalov@broadcom.com,
-	vamsi-krishna.brahmajosyula@broadcom.com,
-	yin.ding@broadcom.com,
-	tapas.kundu@broadcom.com,
-	Henry Martin <bsdhenrymartin@gmail.com>,
-	Sasha Levin <sashal@kernel.org>,
-	Shivani Agarwal <shivani.agarwal@broadcom.com>
-Subject: [PATCH v5.10] cpufreq: scmi: Fix null-ptr-deref in scmi_cpufreq_get_rate()
-Date: Mon,  5 Jan 2026 01:57:01 -0800
-Message-Id: <20260105095701.659420-1-shivani.agarwal@broadcom.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1767609471; c=relaxed/simple;
+	bh=wXjYCJBvOZhStUq5+4QiketDUitlpvp5MjWaZtBKM+Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k7K3Cz1ETxVhl0LGxbBnJVjEuet3tQIgGmglJeUItydFeI2LqWs+QoMcOIrwGJD5iShGaKvqp5DmWE2VvNW74CKrAc4D45IRbc3DCVLzKoHQBQ+BXi0Ts25RTj5AsETDcTPEAwDoNe5530F1FOGOyyl+hjsBzPDys7MuVtRL12w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WcSa4BcZ; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1767609467;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=9nHpy5jbivDnbEg5odYYdL9Pd8vhtyOjv88OCtDGS5U=;
+	b=WcSa4BcZAob9IbnstlTVQqK+Bzo+/Qq1CvQjfepKRL5BohuIZZYomoucxRVzO4W14KPyI9
+	9s+PnS+i0mMOusDaMP8WrT6B6oGyAqr/8vjkKb0PPJ+U2j3PAYIAA0fhMP5kc47l67MWKv
+	ynjqGcEAsGtn3C17ubhWWVdUr7FAuy8=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-401-TJ2SErVWM7ed5WJXw1W73A-1; Mon,
+ 05 Jan 2026 05:37:42 -0500
+X-MC-Unique: TJ2SErVWM7ed5WJXw1W73A-1
+X-Mimecast-MFC-AGG-ID: TJ2SErVWM7ed5WJXw1W73A_1767609461
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BDE671956089;
+	Mon,  5 Jan 2026 10:37:39 +0000 (UTC)
+Received: from mrout-thinkpadp16vgen1.punetw6.csb (unknown [10.74.64.191])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6E2FC180045B;
+	Mon,  5 Jan 2026 10:37:35 +0000 (UTC)
+From: Malaya Kumar Rout <mrout@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: mrout@redhat.com,
+	malayarout91@gmail.com,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Changwoo Min <changwoo@igalia.com>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH] PM: EM: Fix memory leak in em_create_pd() error path
+Date: Mon,  5 Jan 2026 16:07:29 +0530
+Message-ID: <20260105103730.65626-1-mrout@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -114,55 +73,47 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-From: Henry Martin <bsdhenrymartin@gmail.com>
+When ida_alloc() fails in em_create_pd(), the function returns without
+freeing the previously allocated 'pd' structure, leading to a memory leak.
+The 'pd' pointer is allocated either at line 436 (for CPU devices with
+cpumask) or line 442 (for other devices) using kzalloc().
 
-[ Upstream commit 484d3f15cc6cbaa52541d6259778e715b2c83c54 ]
+Additionally, the function incorrectly returns -ENOMEM when ida_alloc()
+fails, ignoring the actual error code returned by ida_alloc(), which can
+fail for reasons other than memory exhaustion.
 
-cpufreq_cpu_get_raw() can return NULL when the target CPU is not present
-in the policy->cpus mask. scmi_cpufreq_get_rate() does not check for
-this case, which results in a NULL pointer dereference.
+Fix both issues by:
+1. Freeing the 'pd' structure with kfree() when ida_alloc() fails
+2. Returning the actual error code from ida_alloc() instead of -ENOMEM
 
-Add NULL check after cpufreq_cpu_get_raw() to prevent this issue.
+This ensures proper cleanup on the error path and accurate error reporting.
 
-Fixes: 99d6bdf33877 ("cpufreq: add support for CPU DVFS based on SCMI message protocol")
-Signed-off-by: Henry Martin <bsdhenrymartin@gmail.com>
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
-[Shivani: Modified to apply on 5.10.y]
-Signed-off-by: Shivani Agarwal <shivani.agarwal@broadcom.com>
+Fixes: cbe5aeedecc7 ("PM: EM: Assign a unique ID when creating a performance domain")
+Signed-off-by: Malaya Kumar Rout <mrout@redhat.com>
 ---
- drivers/cpufreq/scmi-cpufreq.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ kernel/power/energy_model.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index bb1389f27..6b65d537c 100644
---- a/drivers/cpufreq/scmi-cpufreq.c
-+++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -29,12 +29,18 @@ static const struct scmi_handle *handle;
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index 11af9f64aa82..5b055cbe5341 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -449,8 +449,10 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 	INIT_LIST_HEAD(&pd->node);
  
- static unsigned int scmi_cpufreq_get_rate(unsigned int cpu)
- {
--	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
-+	struct cpufreq_policy *policy;
-+	struct scmi_data *priv;
- 	const struct scmi_perf_ops *perf_ops = handle->perf_ops;
--	struct scmi_data *priv = policy->driver_data;
- 	unsigned long rate;
- 	int ret;
+ 	id = ida_alloc(&em_pd_ida, GFP_KERNEL);
+-	if (id < 0)
+-		return -ENOMEM;
++	if (id < 0) {
++		kfree(pd);
++		return id;
++	}
+ 	pd->id = id;
  
-+	policy = cpufreq_cpu_get_raw(cpu);
-+	if (unlikely(!policy))
-+		return 0;
-+
-+	priv = policy->driver_data;
-+
- 	ret = perf_ops->freq_get(handle, priv->domain_id, &rate, false);
- 	if (ret)
- 		return 0;
+ 	em_table = em_table_alloc(pd);
 -- 
-2.40.4
+2.52.0
 
 
