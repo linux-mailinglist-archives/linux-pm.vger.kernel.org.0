@@ -1,101 +1,100 @@
-Return-Path: <linux-pm+bounces-40219-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40220-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B017CF520B
-	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 18:59:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EFBBFCF52DD
+	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 19:11:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 65CFC30D976F
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 17:54:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 794A730CF5B9
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 18:06:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A0D31ED65;
-	Mon,  5 Jan 2026 17:54:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63CED32D42A;
+	Mon,  5 Jan 2026 18:06:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="NqCFXncl";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="d7xIdfqy"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lHzxZzQ0";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="QrvHvDRc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FDE630BB86
-	for <linux-pm@vger.kernel.org>; Mon,  5 Jan 2026 17:54:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA205322DC1
+	for <linux-pm@vger.kernel.org>; Mon,  5 Jan 2026 18:06:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767635649; cv=none; b=KEUljfI2ltygU++KuOtNtPozQQtPubvc1OdxkM4OMSyvAT52UJEC2Eb240NLXwHoyYJfJynYnAezMOHHuLjr3u2/YskRU+6AIV+IrJb7CbB4rv3dWcLJ1+De5h6iopa315GCcJVwVkzUdNfm2F0vXlWW+uF8GgAbHMJs7jwP9F4=
+	t=1767636365; cv=none; b=bS9Uhf1rECiwx8Y0dhytG81fUoDIhgiXftD6MoDPTOpyCLzywUn82ADywX553VgVRy3/pxq9SfcogGxjgQOhIoBzAJVtAxCbKq4lg7S0jMHqTcVyfuiVvOdLwH1fIuX2Z5Mug/A5psO372WCE4eRJpTYAKqql3JPDPx+RGJj6pE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767635649; c=relaxed/simple;
-	bh=udwWkdhpTzT2eQUkwfGyGq8r6Ut5AbsbTRHIFrQ1B/0=;
+	s=arc-20240116; t=1767636365; c=relaxed/simple;
+	bh=MviTLb+i+73XFtiB8m2lJ/JWKXjGQk81bE6taCgf6OM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Sew8lC/WpGhSvVwlemYAfhAxBhLODm6+0pcKfZtWxrOmraqoXK+pajZtghl7r+Z0ZqilaxvQMSgz+/SZbQ/DXJTOvEOyHhFSm9NH4sNcL636FEuASq4f4Rx4q8q26cW12ZDo/GngjtfeRTv/QSrzk+VWYF/NjfItgtN7yFeW7CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=NqCFXncl; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=d7xIdfqy; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=IPnVEGHHEZqD1WrKDqGel99El8Oxm0Kd6AcWf89mqQ3XtphWaZ1dHHgGqIQzxhpC+AJeLOzFYAA5U3vT5NSsOL41BsQ5wnKGwu6iehYatUaDa3fkYm8xu6I9/LyaxKt7VqQSUEiaVfAsxein08qur4lyB2yDX9KyrnqEGTk61bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lHzxZzQ0; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=QrvHvDRc; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 605Bm1Ji4032703
-	for <linux-pm@vger.kernel.org>; Mon, 5 Jan 2026 17:54:06 GMT
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 605FKeMn1751794
+	for <linux-pm@vger.kernel.org>; Mon, 5 Jan 2026 18:05:57 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	up2RJ7mBO3QRQNqNSX63k2cfkFf65kx0CXGDWq797Cw=; b=NqCFXncl0eE41y7F
-	1cjWzK7v1HtXjtW0mU7ToSsxoWtRLv7c7lswLOrH4GN//cBpvicmRjLDoMWRV9SZ
-	oJ7HiiI9szam6Biqz/qlgvPCvu+FNz56ehYrUtMn2stq4V4ME496IQqEmbSCON5l
-	02S2WYsLDMqnv7VnK7IQW+BwGzG+ubNQYTRKCUpiUjIroRnDLeP0ysbL0SQ6xNGW
-	jpNpXpjDUXUjSL68EzqN6d3mKrEJvEsMpGTU6v1dXQ6Dql5Rfz71JbrsxuXo56ut
-	iwF9wHgJiZhZS4aNKntm2AKN64SUTrVRnX0stKs6bXYKgu1p2ljx5Gh3YaocQGyt
-	bx/xKA==
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bg79nj2sh-1
+	gasKLYXS3OeS8VFFBD54LZHts/X5wHza0ieO8b1vB6M=; b=lHzxZzQ0vAU9E8wS
+	wowmKycVWNYP7vj8WDtDjRXfyAZx1OaXWC0eRMqrVSFyPMG46ByiwavisOdSNBAw
+	wC/PRWhiT7CBtsqyMBW9Cb0KpSvsRQLBFG2ONRjC5dXYrOGKwkh/OwluYd36cDzd
+	aHxLVcoCsNQEjPvggEBnV6wtXLHNeyChn9zTwvugPrEEJocdD7tUbEO5Pu69FjZo
+	Nz5O7VOGBkI+boBYPMRiCE+hWCxFHqpY+Q2EQQUuNyjgYRHmMWjjn8QajuI1+PbW
+	1OdOCFKiEtY0gzQJ6xJrG/DGu5yfRxC6Z9oZEiLly6WvT3Qqh8+8GTbbRaTiJkBd
+	wbj7ag==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bgfv00g31-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 05 Jan 2026 17:54:06 +0000 (GMT)
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-34c48a76e75so679055a91.1
-        for <linux-pm@vger.kernel.org>; Mon, 05 Jan 2026 09:54:06 -0800 (PST)
+	for <linux-pm@vger.kernel.org>; Mon, 05 Jan 2026 18:05:56 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2a07fa318fdso2570665ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 05 Jan 2026 10:05:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767635645; x=1768240445; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1767636356; x=1768241156; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=up2RJ7mBO3QRQNqNSX63k2cfkFf65kx0CXGDWq797Cw=;
-        b=d7xIdfqy+Wgt0ltzP0mFBL2TKXaT5RBxqRfSmreAk937tYHkRgfSdUaC7uPbZy21qO
-         QO584bKN+k2ERhLvRsJS+x68gIH2HBRVJMaJvmFHQKz/74jOgkQJpNsLxhQj1zkEOYbk
-         Xusqi+NrW0JZ6x3q8fnMyjvzGWtMrVIZnT23d2WNz+ARZW/swP1cpImY5mZZ9VbuH5KK
-         JEJoXeskeca5UaDa07swuBSODM//s04gzNfEouMFKGDYIf6wtR/u98h6tEpaWpHt1EkL
-         4ulM3fn9nghdCR51zBWQLlHEDlJSTLQPoSPQpxDiVN0U/ccggv7SCTVRJemhjJbvGkbS
-         /Ykg==
+        bh=gasKLYXS3OeS8VFFBD54LZHts/X5wHza0ieO8b1vB6M=;
+        b=QrvHvDRcRiafRhF/bEowkCeKQ163RCOm23mABXrP+DubJRDjbuTbBnNIivmyXw2+Ix
+         pOhftWSg7vKdJeC7y5akcuolvZeaMx25uoZc37vcsptjHFCTBbJaei+111TB8BMjPCDD
+         1kJloEtOuZW+WfXE8WsOZlj/caeXrFe59XKptUAlniF5yXk6AwIiMcXLmPODZ6xQ3W0J
+         QNEbR+yOPJxn65UjqFi+3E0P8ySLczyxOaG0ewwe/OEvXIhyZYZMLUpY+Sjj3bVxbtFQ
+         pXOyJPvhG9hD2oviVlVZ6H08mg+GTF4BdadSrN4QmOAHPMmRIqlOHFjjsUlbHvnDlUiv
+         XnDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767635645; x=1768240445;
+        d=1e100.net; s=20230601; t=1767636356; x=1768241156;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=up2RJ7mBO3QRQNqNSX63k2cfkFf65kx0CXGDWq797Cw=;
-        b=D7HPh+GilUpnuvXlEyoQayj+6nLhoLvJ3Pl4G40HvJKOeKQz9OOv6TZjK+GE1luhlD
-         z7XZ0eUouDrIB4hZQwxghnUCZpDw1h4fi8snZkdUj7qsCdfF6/dRv1MUxfWYxdUAkKnj
-         ngj080ID6XjdC74o7cKEhUTTTYt6gu9QOC6SLUIcVo3Hn5RW9vX8LAVSgsfloPYrIvHR
-         wZTfLjxQuHD/f3mFKMYQMnhw4vFB2RkJ2xIN6FFc03aP3ta2T/lGW4I0rUTNArmOW2nE
-         AYCf2o1t+pIkcZ2LyFuVPS9YDyRPAQfeYmDu2MRCXoUIWRjS2gHQHopZU0R05sJgxjWo
-         Zwpw==
-X-Forwarded-Encrypted: i=1; AJvYcCUWF3nMIr43rRuCu7vxsMZPL2zqen78ZTHPTcjiRFRf+tePrmvQnE/X9IyJJSRmbwXrU47C2W/fyw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgAizjdOYO8kdjMhtrpnAKEaZRhIfnaZAdzdsVCA3vEia3jV4B
-	LaslWHaCeiaPUgcll0GXlxxnXSBRUEhr49L1MvoulrxQ8bwWmBVtLtUfMZGqnxH8QO/r1KyEerY
-	lWWDINYZd+/QheHS0jj7jOgAr1c/b9JBmcKwIrrTn2BMR7Rz4QAqtfnGvBq+bKQ==
-X-Gm-Gg: AY/fxX6jdzJkvTYc3jjCxDAoY0o+B0dZra01o8/s2FI/qqMPiwModNB+4o+CSZdISSH
-	smwl9vW68mh9UCsabkWnyQWxY3DUrXFIkjNpxRaiBOXOFv1nEWcKV5TvnzksL9W1tCGKloZVsjb
-	A2TZMUCldWssKiy5dmHBM98KNgLHhZou1FamP6RhSfGlJIiti3udI/IPGQJI6wv2w8yB8PpIEqM
-	HXI/chYCJga2xZ6gkZNwj5/78tlMl4Fhk6ymx/i0fHreVnybHnwGVVBOjOb+x6iJzSnnPz8DxtX
-	IY5ZJXjDbqVa+eXa+ZbGbfPqB3FcSJN1abfMwQ8cnZfRxYk6KLIq6fgg700Fsx5gX47HatW5ja0
-	F88qXvFrbYR5OkazLtO7Fyq6bV0AtAfUbgr8nBzRkRAUordQYzvHBx1MXqYQDFRiczI3LS9hi8U
-	pFZYrN
-X-Received: by 2002:a17:90b:2684:b0:34a:b8e0:dd64 with SMTP id 98e67ed59e1d1-34f5f273b91mr120676a91.1.1767635645300;
-        Mon, 05 Jan 2026 09:54:05 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFEAjGO3oXRkqFt+Dr912mQRBhrraJgw+/RX85ptzw8Hrud60zSlNKtqDujFJK5kumkbSyRog==
-X-Received: by 2002:a17:90b:2684:b0:34a:b8e0:dd64 with SMTP id 98e67ed59e1d1-34f5f273b91mr120641a91.1.1767635644778;
-        Mon, 05 Jan 2026 09:54:04 -0800 (PST)
-Received: from ?IPV6:2405:201:c408:b07b:6589:c739:d9cc:4910? ([2405:201:c408:b07b:6589:c739:d9cc:4910])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f5f7a557asm11725a91.3.2026.01.05.09.53.57
+        bh=gasKLYXS3OeS8VFFBD54LZHts/X5wHza0ieO8b1vB6M=;
+        b=XEkdSemym4vwXSZ0n3hU+Vt9Rfdk2W8PRRknjy94hqFl0EeJ+4IAPsGXRsBeoVzrdz
+         nvTESPpNDjffVgzzf3RMqpCLDdk8zYxoOWdstamC3Hwx3UvTYW9U7HufXEG8GRW6hza2
+         Mejwp5hi0gaNW+EwL/py0YuTCeyFxVTqT2WM1teruKqoujRQTEpGIAfQJT8hPqLFioO3
+         uSlEfl2EeVG9P9xBLqN+awSqE5/mELdcRilg0PF67ZPIcItHNKTqlpdrnLRKThBV2c4z
+         mj91qvp8hVpfJqyUZRTZQfCDriL+GEsIuTCjeWZ2fjVrv6mdUtMPqy/m1sN+6EymDkRt
+         DDAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqQGYBnpiIH/ClDpcZQktsMXZrNUHni2Lo9hxx5mnUK6nSc79q5n+WCZrxdlSDw3o8mlsWImMHQQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuyD9n0voPej9wiYZxMKlYh1xTLwAJoXCQoBuvzcRDOjISRrxR
+	PzXjms92b9IcBX3iw72BcVwPrrt7QuuTD0pjzzVrBKe/vNca++IHxeOlTLgywXgRYUUXasc9cLU
+	nCxOgY2tgjgZOg+NBqVUkyfxn7eu0VGwNNE7ZA4CbUGtWLLA1UnU9dbC9YxQN0w==
+X-Gm-Gg: AY/fxX6+AuOpfhA7dK8+4FfN6PoEq1G4gAI3OJ0Th6d9DnvqUcFQ1NanocKNdqmtjlC
+	8zT+eVP2RJ0cSJL9krFHEUkQvqQzR/lURAgaBQK8c+Ntg9OamItSfNnwTIyGrK5YYWQoA91VOSi
+	Fj65gVFpMhKHtZslJfdtmajbaQf8pIi2evQqjMc4zy0KNMkKluSsm7DUZkAdCFlcFF4fJlT21n/
+	QUcEUQDujeMIjrNBBIgPw2VwtWlA1ccEtyMBfh3Wd9Nbm1dUAAc/o5igxZWOpXxENe/UITdgK5z
+	4o2JKzjonO2RcwubtxNkNi8ZnXc+teH2313EEC5KWDRUmsRkt7PO0llvIKxMX9BoXXK40JcrD7L
+	bOljJmTT5NG1/CYx+4eGUBdEhJE1Px0m/yRYUDlD2DXg=
+X-Received: by 2002:a17:903:3bad:b0:2a0:9084:3aff with SMTP id d9443c01a7336-2a3e2d52ac5mr3899695ad.61.1767636356115;
+        Mon, 05 Jan 2026 10:05:56 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHpQZwihDfp6inPGKAPgkcClDWOhLlQc6x8Cm9jLA9KjnRbNR5X66E87i7aMn7CjRQ48I+axw==
+X-Received: by 2002:a17:903:3bad:b0:2a0:9084:3aff with SMTP id d9443c01a7336-2a3e2d52ac5mr3899525ad.61.1767636355569;
+        Mon, 05 Jan 2026 10:05:55 -0800 (PST)
+Received: from [10.216.40.68] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e2b809c3sm3905895ad.81.2026.01.05.10.05.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Jan 2026 09:54:04 -0800 (PST)
-Message-ID: <06619e53-7260-7bd2-1954-dd10b92dc354@oss.qualcomm.com>
-Date: Mon, 5 Jan 2026 23:23:56 +0530
+        Mon, 05 Jan 2026 10:05:55 -0800 (PST)
+Message-ID: <87f25d02-2805-9da7-0d7f-05ce8a022d25@oss.qualcomm.com>
+Date: Mon, 5 Jan 2026 23:35:24 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -104,8 +103,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH v19 01/10] power: reset: reboot-mode: Remove devres based
- allocations
+Subject: Re: [PATCH v19 06/10] power: reset: Add psci-reboot-mode driver
 Content-Language: en-US
 To: Bartosz Golaszewski <brgl@kernel.org>
 Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
@@ -132,142 +130,127 @@ Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
         linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, Srinivas Kandagatla <srini@kernel.org>
 References: <20251228-arm-psci-system_reset2-vendor-reboots-v19-0-ebb956053098@oss.qualcomm.com>
- <20251228-arm-psci-system_reset2-vendor-reboots-v19-1-ebb956053098@oss.qualcomm.com>
- <CAMRc=McEB+yVYxropzsqLExZCU5Pd_iy_=5N3pTxu28-ZX=7_w@mail.gmail.com>
+ <20251228-arm-psci-system_reset2-vendor-reboots-v19-6-ebb956053098@oss.qualcomm.com>
+ <CAMRc=Me8WQ=aMd-NJ1yzzHzqU8fT1u4eb7as=EjSpZ+Rpv9+rg@mail.gmail.com>
 From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-In-Reply-To: <CAMRc=McEB+yVYxropzsqLExZCU5Pd_iy_=5N3pTxu28-ZX=7_w@mail.gmail.com>
+In-Reply-To: <CAMRc=Me8WQ=aMd-NJ1yzzHzqU8fT1u4eb7as=EjSpZ+Rpv9+rg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: vgEjsQkgQGeyhteSh0wJeTYJr3BCTdvm
-X-Proofpoint-ORIG-GUID: vgEjsQkgQGeyhteSh0wJeTYJr3BCTdvm
-X-Authority-Analysis: v=2.4 cv=Y8P1cxeN c=1 sm=1 tr=0 ts=695bfabe cx=c_pps
- a=vVfyC5vLCtgYJKYeQD43oA==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=LC1Hwnd0PhZBVGXlRGcA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=rl5im9kqc5Lf4LNbBjHf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA1MDE1NCBTYWx0ZWRfXwd9aByB/Es7u
- oKYxoNfA+R29ED/Hv4H9fQ7aVSHCQb6sgR5ffusG3NBCQf6Kks3x5bqOZ2fAEe7QmNj0bPoXkCL
- SDhabyFpa4fIlCYtXxOYoyHHbqcF3YENimi+0WyLpGF4NoL5bcBWKJfZEevY2jeCvsPIjoeobYt
- gPAmqCGWiO8sBUx/V3y/qUPJCxIuyGEN9ndv5IXhbjAL9egLMtTzK8/qn/LaBwm9VVSYOlGZDtE
- RoEUm8dTFMayh1B3tpATqpK53ImpBczBgmkSsQZbZ+jcW2hBbQNmDlBHwEUVlqBlsc7FEYNNPkM
- O3ZQWLNqmiu3dNiCCHuU2fg4NB8olZykk66v5831P4Xcd1gnTrUsene02neTB9gGkogfBYtQmvF
- 6DUL59f2gXMuauHRcsVAYBEXtVW0eZFiOTXtFi0w4NY8+Hu9Lvf9QKdKDyEOV9r9vOTJLt5nVcN
- X5We21zYUCCLMsMbtvA==
+X-Authority-Analysis: v=2.4 cv=e9YLiKp/ c=1 sm=1 tr=0 ts=695bfd84 cx=c_pps
+ a=cmESyDAEBpBGqyK7t0alAg==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=XO6BmJ_ieOJQNt0V76AA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=1OuFwYUASf3TG4hYMiVC:22
+X-Proofpoint-GUID: viMqidpUJY2hU_E8zdOaMBziN9aXr5Gc
+X-Proofpoint-ORIG-GUID: viMqidpUJY2hU_E8zdOaMBziN9aXr5Gc
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA1MDE1NyBTYWx0ZWRfXzhbAxgv0/LTD
+ ReahNI2C/417i/EXDuLgaMIIqz84W+80CPqTFX7w4JzQr6/FNYkLeqZNGMlBYFomxspyDg9pPcK
+ z8dMwfj2h1DFQwgk8UXBzj9qaA/+SDRnFqjve0yCYe8dcCXhNMNPp99AsdMullI3/+Qkm63RiLF
+ Z7ZjZYreyU2+6lUyOXJFdv5Aq1MjiUaysOyaUv30HSoWc9Y8qh5rPHqgFcr1Y/zd3Rvi1607H2w
+ nQEEb2c6aFkdLDCeI+JkantHTZKb2tm4UceEHoRk1518zA28ffbrVB1RK0zk9Y2MgUV2h8Ijgyy
+ LzpHXXADv1jutEgWv18w5rwctsADScJ/ld9ALGuYzVv2ubN+YDIRq7wlEM+5+f86UdKrjNFbsCq
+ vO6rJJkv6KiADDH3OrUmKZ2pm6BikykGlRo4Qa/j5QliCUaqgLkQoLhNLcuiVN8KlPPTJSSIVa+
+ gSL6AQ+wavEfj/OKbPg==
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
  definitions=2026-01-05_01,2026-01-05_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 phishscore=0
- impostorscore=0 suspectscore=0 clxscore=1015 bulkscore=0 adultscore=0
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2601050154
+ clxscore=1015 impostorscore=0 priorityscore=1501 phishscore=0 malwarescore=0
+ suspectscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601050157
 
 
 
-On 1/2/2026 3:35 PM, Bartosz Golaszewski wrote:
-> On Sun, Dec 28, 2025 at 6:20 PM Shivendra Pratap
+On 1/2/2026 5:27 PM, Bartosz Golaszewski wrote:
+> On Sun, Dec 28, 2025 at 6:21 PM Shivendra Pratap
 > <shivendra.pratap@oss.qualcomm.com> wrote:
 >>
->> Devres APIs are intended for use in drivers, where the managed lifetime
->> of resources is tied directly to the driver attach/detach cycle. In
->> shared subsystem code, there is no guarantee that the subsystem
->> functions will only be called after a driver has been attached, nor that
->> they will not be referenced after the managed resources have been
->> released during driver detach.
-
-[SNIP..]
-
->>
->> @@ -71,9 +74,11 @@ static int reboot_mode_notify(struct notifier_block *this,
->>  int reboot_mode_register(struct reboot_mode_driver *reboot)
->>  {
->>         struct mode_info *info;
->> +       struct mode_info *next;
->>         struct property *prop;
->>         struct device_node *np = reboot->dev->of_node;
->>         size_t len = strlen(PREFIX);
->> +       u32 magic;
->>         int ret;
->>
->>         INIT_LIST_HEAD(&reboot->head);
->> @@ -82,19 +87,17 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
->>                 if (strncmp(prop->name, PREFIX, len))
->>                         continue;
->>
->> -               info = devm_kzalloc(reboot->dev, sizeof(*info), GFP_KERNEL);
->> +               if (of_property_read_u32(np, prop->name, &magic)) {
 > 
-> Please use device_property_read_u32() if you have access to a device struct.
-
-Ack. Can it go in same patch with the fixes tag?
-
+> [snip]
 > 
->> +                       pr_err("reboot mode %s without magic number\n", prop->name);
-> 
-> If this is an error, shouldn't we bail out?
-> 
->> +                       continue;
->> +               }
 >> +
->> +               info = kzalloc(sizeof(*info), GFP_KERNEL);
->>                 if (!info) {
->>                         ret = -ENOMEM;
->>                         goto error;
->>                 }
->>
->> -               if (of_property_read_u32(np, prop->name, &info->magic)) {
->> -                       dev_err(reboot->dev, "reboot mode %s without magic number\n",
->> -                               info->mode);
->> -                       devm_kfree(reboot->dev, info);
->> -                       continue;
->> -               }
->> -
->>                 info->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
->>                 if (!info->mode) {
->>                         ret =  -ENOMEM;
->> @@ -102,8 +105,7 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
->>                 } else if (info->mode[0] == '\0') {
->>                         kfree_const(info->mode);
->>                         ret = -EINVAL;
->> -                       dev_err(reboot->dev, "invalid mode name(%s): too short!\n",
->> -                               prop->name);
->> +                       pr_err("invalid mode name(%s): too short!\n", prop->name);
->>                         goto error;
->>                 }
->>
->> @@ -116,8 +118,12 @@ int reboot_mode_register(struct reboot_mode_driver *reboot)
->>         return 0;
->>
->>  error:
->> -       list_for_each_entry(info, &reboot->head, list)
->> +       kfree(info);
->> +       list_for_each_entry_safe(info, next, &reboot->head, list) {
->> +               list_del(&info->list);
->>                 kfree_const(info->mode);
->> +               kfree(info);
->> +       }
->>
->>         return ret;
->>  }
->> @@ -130,11 +136,15 @@ EXPORT_SYMBOL_GPL(reboot_mode_register);
->>  int reboot_mode_unregister(struct reboot_mode_driver *reboot)
->>  {
->>         struct mode_info *info;
->> +       struct mode_info *next;
->>
->>         unregister_reboot_notifier(&reboot->reboot_notifier);
->>
->> -       list_for_each_entry(info, &reboot->head, list)
->> +       list_for_each_entry_safe(info, next, &reboot->head, list) {
->> +               list_del(&info->list);
->>                 kfree_const(info->mode);
->> +               kfree(info);
->> +       }
+>> +static int psci_reboot_mode_probe(struct faux_device *fdev)
+>> +{
+>> +       struct reboot_mode_driver *reboot;
+>> +       struct device_node *psci_np;
+>> +       struct device_node *np;
+>> +       int ret;
+>> +
+>> +       psci_np = of_find_compatible_node(NULL, NULL, "arm,psci-1.0");
+>> +       if (!psci_np)
+>> +               return -ENODEV;
+>> +
+>> +       /*
+>> +        * Find the psci:reboot-mode node.
+>> +        * If NULL, continue to register predefined modes.
+>> +        * np refcount to be handled by dev;
+>> +        * psci_np refcount is decremented by of_find_node_by_name;
+>> +        */
 > 
-> The code is repeated here, maybe factor it out into a separate function?
+> Can you make this comment into full sentences, I had trouble parsing
+> the meaning for a minute.
 
-Ack. let me try that.
+Ack.
+
+> 
+>> +       np = of_find_node_by_name(psci_np, "reboot-mode");
+>> +       fdev->dev.of_node = np;
+> 
+> The logic of the device assigning its own node is a bit sketchy,
+> ideally this should be done before the device probes.
+
+Will move it to init. thanks.
+
+> 
+>> +
+>> +       reboot = devm_kzalloc(&fdev->dev, sizeof(*reboot), GFP_KERNEL);
+>> +       if (!reboot)
+>> +               return -ENOMEM;
+>> +
+>> +       psci_reboot_mode_set_predefined_modes(reboot);
+>> +       reboot->write = psci_reboot_mode_write;
+>> +       reboot->dev = &fdev->dev;
+>> +
+>> +       ret = devm_reboot_mode_register(&fdev->dev, reboot);
+>> +       if (ret) {
+>> +               dev_err(&fdev->dev, "devm_reboot_mode_register failed %d\n", ret);
+>> +               return ret;
+> 
+> Use dev_err_probe().
+
+Ack.
+
+> 
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static struct faux_device_ops psci_reboot_mode_ops = {
+>> +       .probe = psci_reboot_mode_probe,
+>> +};
+>> +
+>> +static int __init psci_reboot_mode_init(void)
+>> +{
+>> +       struct faux_device *fdev;
+>> +
+>> +       fdev = faux_device_create("psci-reboot-mode", NULL, &psci_reboot_mode_ops);
+>> +       if (!fdev)
+>> +               return -ENODEV;
+> 
+> This will always create this device for everyone who includes this
+> module. Move the of_find_compatible_node(NULL, NULL, "arm,psci-1.0")
+> call from probe() here instead and don't create the device if it
+> fails.
+
+Ack. 
+Will move both calls to init before creating the faux device. 
+
+psci_np = of_find_compatible_node(NULL, NULL, "arm,psci-1.0");
+and 
+np = of_find_node_by_name(psci_np, "reboot-mode");
+--
 
 thanks,
 Shivendra
