@@ -1,138 +1,183 @@
-Return-Path: <linux-pm+bounces-40192-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40215-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 762F3CF4F26
-	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 18:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98FECCF5026
+	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 18:31:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AC6BD30FA227
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 17:06:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 93DF130422AA
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 17:26:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0033339856;
-	Mon,  5 Jan 2026 13:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8178B31064A;
+	Mon,  5 Jan 2026 17:26:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="FvfsHsgj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from out203-205-221-164.mail.qq.com (out203-205-221-164.mail.qq.com [203.205.221.164])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009D533984D;
-	Mon,  5 Jan 2026 13:13:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE0E32D0610;
+	Mon,  5 Jan 2026 17:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.164
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767618817; cv=none; b=nVqbc3bOD0IYaATv2Ta6McwzI5Vr1G+kGBsm+Wbbbvf6ZW+EQEFJHF0VkO1N9IKFD60evodG4g7LPHMJEEvj9TkyarBzd/a7I18cw+NIuQ4vUblt1nLH1IQ6mLKdg3nADpX9MaIyJsym/zz2G5HnOftfuUiEyivAHbAWf7L0WYE=
+	t=1767634009; cv=none; b=ucuPQkmMWvmqWY0F0RuP0PLlEz7pbyLHHp2U9KQFzX8YVp38CpRz5caRUxuqb80F+7T6C7nQuGk3uo2e6SuZnWMZjLhfEwowgUEodMcOeL6//0Q+mBuWvnNUQKoD9iQcFmPmUCsRlSY8c6uN9NusPtNp1ANgt1vujvNAKSj8u1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767618817; c=relaxed/simple;
-	bh=Vy6RaF7s9rFJKANr5LYAB2S+8LdhlBMuOdgH4W3YKtM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UJjH/kBI51yKOkpCT7P/M7HHos3nqitwKcvz1EFVRrMwNXEeVWjJr5tgSfBKXlmnAwaGnOAEtqnc2ZCdY+TRapB2B7bUy7zaFbHeqKIIYd5/L3Kktt7VMUuxZIZoRXdisQ31ixgESh+cGgKm0+CW854zym2PhEQEDvfYxDwugPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from DESKTOP-L0HPE2S.localdomain (unknown [124.16.141.245])
-	by APP-05 (Coremail) with SMTP id zQCowADneAzsuFtpFst0Aw--.17822S2;
-	Mon, 05 Jan 2026 21:13:18 +0800 (CST)
-From: Haotian Zhang <vulab@iscas.ac.cn>
-To: andreas@kemnade.info,
-	khilman@kernel.org,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: linux-omap@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Haotian Zhang <vulab@iscas.ac.cn>
-Subject: [PATCH v2] cpufreq: OMAP: Fix resource leak in probe error path and remove
-Date: Mon,  5 Jan 2026 21:12:53 +0800
-Message-ID: <20260105131253.2692-1-vulab@iscas.ac.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20251215030327.1771-1-vulab@iscas.ac.cn>
-References: <20251215030327.1771-1-vulab@iscas.ac.cn>
+	s=arc-20240116; t=1767634009; c=relaxed/simple;
+	bh=nr1nUJZ861Pt93C2gXY/TX35ljdTJDdRAv39IBJWbTk=;
+	h=Message-ID:From:Date:Subject:MIME-Version:Content-Type:To:Cc; b=soboU/SHec1Y+LLemy5g1hlggfZlATDbIKLf5yCZUTMbr0o7JTwN53jkgSOQQ+B/7o72z8K8CcW1pLybt3d8rD5x46ug55FxDVLAwrVwVT/TYK408G9uC7ta9takjNxhaGFykk2YNU9S1HuTXUyQ9nyhcIF/54AMRCkDsIbz2Uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=FvfsHsgj; arc=none smtp.client-ip=203.205.221.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1767634000; bh=nU4oGOpJwp3Q/MANXI0zxfwIDFbVnVE/U6jKEshkPTQ=;
+	h=From:Date:Subject:To:Cc;
+	b=FvfsHsgjjMok7g0wdaxJ9e26TZWMkZWWImjdEuONf8pMaFX2e84HddLDK7BnoV3N+
+	 oWwngTh4FHeYd3m5iHY2HCulqARfeWaTKqFlj7JM4b9kH2mL78VMIkgErVA9fXv6TC
+	 rAG4OnbrouOnQkOmkr1vCvUoaccyCO14O82C1S9s=
+Received: from junjungu-PC.localdomain ([223.167.147.103])
+	by newxmesmtplogicsvrszc43-0.qq.com (NewEsmtp) with SMTP
+	id 6A5AA8BC; Tue, 06 Jan 2026 01:26:37 +0800
+X-QQ-mid: xmsmtpt1767633997t6s5n9yjy
+Message-ID: <tencent_68F699431A877005CF0887CF888B440BF808@qq.com>
+X-QQ-XMAILINFO: MILSKRzDrLPbipQjZXgCF41Di+higtsdGDhYaZyj9r6A76I/R9AdyJqn7gHMCN
+	 8ekuy+uDxBxCse10UPI9nekJ2iVcFfN4/h4jGxzHmo6C5QJV7xJWOzesYbC87jcQqlP4gEjxihGg
+	 A4L84Chzt+EkyrayrLmL65ELRhhZeDjM84xictkcpM7l3i7PemebMiWwf8m3JFcEVn7ZS2nS0h4p
+	 GsKxyH13tZo7N9ahN1D6B3wpnvQKfPgp+1QGfay4M0pzs/CrbpuOC0z4bqAmScw44SRj0HxWYmp0
+	 DQpkruEZY3eEq3Bb43yqbTwe3MNMhyOUbSJtoWmJyg3Mi2deB7wIDGDcNq6bYfAo+fRxrsRCQasv
+	 TnqvuPYJ+yZoTvozzQ9IqyvpvPzf6rT5ANzjdvW3O5aCSsdBKuL/PtordknM0PDKs4booaq7JUex
+	 ixNeG7B4ZP/fyNPjz3WV2o3L7TZw94SWmkZmEdn8b6+N+fEcSs3t4Wn6lf3h/0B/lahJdgLeHLYy
+	 XH8U364f9lk8Cl+S+EcftGeNx/gF3X2Rjqa8L6n+7zP5XSP2q864DaSYfIc5dLzmPucgpCeocF4a
+	 9gHtsd/plPH0zQhg1PGel6bzvMkrgg9ZChh6zFCj10CDt5k9Of1EkTtDrGJ2qic69LL2NBOCqCki
+	 Z7O1w4XzN1Aoi2Ar2IRccug/Vu8TVt1kJWn8L7rQQWhGF+mR+eaOMPzur4NgP6oMp3bv7/QX57nK
+	 2RwCm6fPbKqb583F5ZGuZynBexz8SvNe4FqjKYpufs10ib9pyRD17DDRK/RCDbw9pIQwxPF8/dHW
+	 9YBi2gmIRx5DTPgVEhGKV5le+ZJ96XwH15NyViiSAZryDLLViVIGByyvvYfX5Y2OasHdY0VvhgJK
+	 +2sEP0GDHNdoQPZw8lYteuopXHqQTIC0frXW8Jk3/ELcaLZADAz/kzGh4Fooxw/FxZ94NBVI2uhJ
+	 0DuawoCJiyp91C+cbeBVDLwkITDyALJgdWF2xVRWRjXK0hH+OglDuFUAVtM5BssKQAESpBrWoZkw
+	 vwMHRDgzKYj9IQvSXS8NdzA6e81nbwOuyLA9TMqdzzTWkmp7WXyVoOLhNQ873TR1jquXyufwgHi/
+	 OiZ1Ayb6gqZ7u7fuLyvQXr4+CLqZtT1bOdK1h8dDWRkjfFbF3a1Dgo19mVF13mOtlyzUMqF4PUYs
+	 OWlewVVOeN+9T5KQ==
+X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
+From: Felix Gu <gu_0233@qq.com>
+Date: Tue, 06 Jan 2026 01:26:29 +0800
+Subject: [PATCH v2] cpufreq: mediatek-hw: Fix resource leaks in init
+ function
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowADneAzsuFtpFst0Aw--.17822S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw1fAFyrGr4kJry5JF18Zrb_yoW8Zw1kpF
-	Z8WrWakr48JF97C39rAF4xCa4ru3WSyw409w1xGwsav3WDAF15Wa4DGa4UAF45K3ykJr4I
-	vryUZa1xCF4DZFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-	0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-	jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
-	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkF7I0En4kS14v26r12
-	6r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-	0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-	0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-	WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-	IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUejjgDUUUU
-X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiCQ8SA2lbeC64dQAAs+
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-OQ-MSGID: <20260106-mediatek-cpufreq-hw-v2-1-6d46b87ae1df@qq.com>
+X-B4-Tracking: v=1; b=H4sIAET0W2kC/32NSw7CMAwFr1J5jVESSPmsuAfqwiQOtVB/SSmgq
+ ncn9AAsZ6Q3b4bEUTjBuZgh8iRJujaD2RTgamrvjOIzg1GmVFpZbNgLjfxA1z9D5AHrF5KhQNY
+ dzcES5GUfOch7rV6rzLWksYuf9WTSP/u/N2nUWJ7I73e+pJsOl2HYuq6BalmWL0QWYFGzAAAA
+X-Change-ID: 20260105-mediatek-cpufreq-hw-a2afa5c8275a
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ Felix Gu <gu_0233@qq.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767633997; l=2978;
+ i=gu_0233@qq.com; h=from:subject:message-id;
+ bh=nr1nUJZ861Pt93C2gXY/TX35ljdTJDdRAv39IBJWbTk=;
+ b=O48yMN5V+xG5FJIt6McPAIfjKwFDTCpBUZbwwXXVQijE2CcE5TBwYWlxzaS6mAav1oxBCIZJx
+ Dgo5By3I4yaBeIlz4ydYQe7CivtssBFIKElkqjreHYAW9420Vh6VRf0
+X-Developer-Key: i=gu_0233@qq.com; a=ed25519;
+ pk=fjUXwmjchVN7Ja6KGP55IXOzFeCl9edaHoQIEUA+/hw=
 
-The current omap_cpufreq_probe() uses regulator_get() to obtain the MPU
-regulator but does not release it in omap_cpufreq_remove() or when
-cpufreq_register_driver() fails.
+In mtk_cpu_resources_init(), if mtk_cpu_create_freq_table() fails, the
+function returns directly without releasing the resources.
 
-Add the missing regulator_put() in the remove function and in the
-error handling path of the probe function to prevent resource leaks.
-Also ensure the mpu_reg pointer is set to NULL after release to avoid
-dangling pointers.
+Similarly, in mtk_cpufreq_hw_cpu_init(), if the driver returns -ENODEV,
+ it fails to clean up. Fix this by calling mtk_cpufreq_hw_cpu_exit()
+to properly release resources.
 
-Fixes: 53dfe8a884e6 ("cpufreq: OMAP: scale voltage along with frequency")
-Suggested-by: Andreas Kemnade <andreas@kemnade.info>
-Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
-
+Signed-off-by: Felix Gu <gu_0233@qq.com>
 ---
 Changes in v2:
- - Revert to using regulator_get() instead of devm_regulator_get()
-   to ensure immediate release of unusable regulators and
-   safer handling of the global mpu_reg variable.
- - Add explicit regulator_put() in omap_cpufreq_remove().
- - Add error handling for cpufreq_register_driver() in probe.
+- Move mtk_cpufreq_hw_cpu_exit() before mtk_cpufreq_hw_cpu_init() to fix compilation.
+- Link to v1: https://lore.kernel.org/lkml/tencent_0B346CE1589FE10E0110418896F129323709@qq.com/
 ---
- drivers/cpufreq/omap-cpufreq.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+ drivers/cpufreq/mediatek-cpufreq-hw.c | 29 +++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/cpufreq/omap-cpufreq.c b/drivers/cpufreq/omap-cpufreq.c
-index bbb01d93b54b..b3d58090d202 100644
---- a/drivers/cpufreq/omap-cpufreq.c
-+++ b/drivers/cpufreq/omap-cpufreq.c
-@@ -151,6 +151,8 @@ static struct cpufreq_driver omap_driver = {
- 
- static int omap_cpufreq_probe(struct platform_device *pdev)
- {
-+	int ret;
-+
- 	mpu_dev = get_cpu_device(0);
- 	if (!mpu_dev) {
- 		pr_warn("%s: unable to get the MPU device\n", __func__);
-@@ -174,12 +176,23 @@ static int omap_cpufreq_probe(struct platform_device *pdev)
- 		}
+diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
+index ae4500ab4891..3e74c32bb273 100644
+--- a/drivers/cpufreq/mediatek-cpufreq-hw.c
++++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
+@@ -278,18 +278,32 @@ static int mtk_cpu_resources_init(struct platform_device *pdev,
+ 	ret = mtk_cpu_create_freq_table(pdev, data);
+ 	if (ret) {
+ 		dev_info(dev, "Domain-%d failed to create freq table\n", index);
+-		return ret;
++		goto unmap_base;
  	}
  
--	return cpufreq_register_driver(&omap_driver);
-+	ret = cpufreq_register_driver(&omap_driver);
-+	if (ret) {
-+		if (mpu_reg) {
-+			regulator_put(mpu_reg);
-+			mpu_reg = NULL;
-+		}
-+	}
-+	return ret;
+ 	policy->freq_table = data->table;
+ 	policy->driver_data = data;
+ 
+ 	return 0;
++unmap_base:
++	iounmap(base);
+ release_region:
+ 	release_mem_region(res->start, resource_size(res));
+ 	return ret;
  }
  
- static void omap_cpufreq_remove(struct platform_device *pdev)
++static void mtk_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
++{
++	struct mtk_cpufreq_domain *data = policy->driver_data;
++	struct resource *res = data->res;
++	void __iomem *base = data->base;
++
++	/* HW should be in paused state now */
++	writel_relaxed(0x0, data->reg_bases[REG_FREQ_ENABLE]);
++	iounmap(base);
++	release_mem_region(res->start, resource_size(res));
++}
++
+ static int mtk_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
  {
- 	cpufreq_unregister_driver(&omap_driver);
-+	if (mpu_reg) {
-+		regulator_put(mpu_reg);
-+		mpu_reg = NULL;
-+	}
+ 	struct platform_device *pdev = cpufreq_get_driver_data();
+@@ -322,6 +336,8 @@ static int mtk_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+ 		if (!(sig & CPUFREQ_HW_STATUS)) {
+ 			pr_info("cpufreq hardware of CPU%d is not enabled\n",
+ 				policy->cpu);
++			/* call mtk_cpufreq_hw_cpu_exit to cleanup the resource */
++			mtk_cpufreq_hw_cpu_exit(policy);
+ 			return -ENODEV;
+ 		}
+ 
+@@ -331,17 +347,6 @@ static int mtk_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+ 	return 0;
  }
  
- static struct platform_driver omap_cpufreq_platdrv = {
+-static void mtk_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
+-{
+-	struct mtk_cpufreq_domain *data = policy->driver_data;
+-	struct resource *res = data->res;
+-	void __iomem *base = data->base;
+-
+-	/* HW should be in paused state now */
+-	writel_relaxed(0x0, data->reg_bases[REG_FREQ_ENABLE]);
+-	iounmap(base);
+-	release_mem_region(res->start, resource_size(res));
+-}
+ 
+ static void mtk_cpufreq_register_em(struct cpufreq_policy *policy)
+ {
+
+---
+base-commit: 52ae6ea5bd7c7286dcba463b6323b640b22af833
+change-id: 20260105-mediatek-cpufreq-hw-a2afa5c8275a
+
+Best regards,
 -- 
-2.43.0
+Felix Gu <gu_0233@qq.com>
 
 
