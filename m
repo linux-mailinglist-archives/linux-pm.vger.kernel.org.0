@@ -1,221 +1,119 @@
-Return-Path: <linux-pm+bounces-40210-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40211-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B552CF49CB
-	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 17:16:16 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1202CF4B68
+	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 17:34:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 67040302CDCD
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 16:15:57 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 1DFB7300A9A8
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 16:34:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EF9631AA8F;
-	Mon,  5 Jan 2026 16:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287D933D6C7;
+	Mon,  5 Jan 2026 16:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dgQc0b4b"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Kzkj8ilV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417882F25E4;
-	Mon,  5 Jan 2026 16:10:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C2BE33D6E6
+	for <linux-pm@vger.kernel.org>; Mon,  5 Jan 2026 16:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767629429; cv=none; b=uUTGfjnVMSg09h/Itz5egqgdu+enqI1fRI1zqIncxvaOLmHTKghn5Lp0kfYRlqguiIO18L/uR4NGW18eVdM/UuP0VrbMkHtdqet1C/R50sMSBSh6hY/XZrjOrIWbncLtNSPWvRtzZB/zQOKSAbed/ixX1p15z9Hsi9F4LwCInJg=
+	t=1767630880; cv=none; b=DqY+akyWBX7qfFy491kFTNieMi9CcAsIUSyjxje4sV8IxVOCk8tY+OOs8SMUQVIyj/7yHdyRuSSHc5ipUhbb2vqsSOhepYbmTwbsIqt5OBNT2eVf3AEKM9W/SGZUe9Yj3RHgux3OcdcvfVnCr2/vrsGNeaMe5AeaNRduN+h595E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767629429; c=relaxed/simple;
-	bh=kzCRFUztXQTIWieGzaPRB5F9NacR2ZhvKHo9n5T7lCs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZXZ/tSdSRvCf7vP27mCSoNjpiKKBy7FB2Mh2Im6fAaXgLI95bLJU/Aw8kyncSAsA27czDyjBUAVckAu+LRAjc2D0SY9semw9SIrF7z/wnvbinMzK8q6FwbDmi7tTPuVByNOlLjx4NClWt1iyHvAx1haJE8hJILpQjVt9Hl4dg10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dgQc0b4b; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767629427; x=1799165427;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kzCRFUztXQTIWieGzaPRB5F9NacR2ZhvKHo9n5T7lCs=;
-  b=dgQc0b4bkVdYXVUk7Sfz79trgYSNc4RnsHIBQuSZyhsnxODh+tDI0pbL
-   Pm6Qqc+F84QfruQ4xUz8iS3xKAk4HWWDV1nL/Tj3kFbvLAV65HYE56cJL
-   TCq6RyalR9CyZTkKfDPlCvdsqagGIptLdukZbnzGifjHaMJhP3F7Xi5l5
-   IaPSoMURAQ7gLqR8nhsq4Q3kW+9O/YRSJaNAr3orkgZC4uMCCgbqYjaR5
-   slCNaSMMM9YHhRsrt+QnyCC3hFPRoeduJIcGDAZjbSjnlEFqK+30V+JKc
-   iLAt575Hj/0/ffEEG5vJfmUcngKZn+L/KN9XyibD5VQgFko6ZuKB8Yf5t
-   Q==;
-X-CSE-ConnectionGUID: WltLiaPeTc+VR7OvQGbH2A==
-X-CSE-MsgGUID: ZnO4oCPJRd6JAVOFyN8jLA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11662"; a="79300044"
-X-IronPort-AV: E=Sophos;i="6.21,203,1763452800"; 
-   d="scan'208";a="79300044"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2026 08:10:26 -0800
-X-CSE-ConnectionGUID: zs90m1P/T/6PV/+GxPKxMQ==
-X-CSE-MsgGUID: 6BWfqYvcS/SbRp4lnJP65w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,203,1763452800"; 
-   d="scan'208";a="202469155"
-Received: from rfrazer-mobl3.amr.corp.intel.com (HELO kuha) ([10.124.222.12])
-  by orviesa008.jf.intel.com with SMTP; 05 Jan 2026 08:10:20 -0800
-Received: by kuha (sSMTP sendmail emulation); Mon, 05 Jan 2026 18:10:01 +0200
-Date: Mon, 5 Jan 2026 18:10:01 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: amitsd@google.com
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Lee Jones <lee@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH v3 5/5] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
- setting charger mode
-Message-ID: <aVvhvuq6Ls1v3B_E@kuha>
+	s=arc-20240116; t=1767630880; c=relaxed/simple;
+	bh=fonikX7z7K1ohHQZl6vZ41UkDK6dK2RBIq07hZiimXM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Jufqm8QI6B+uK0i+B6pqwB0E3E4bUl4wRtSPyqQFMliLPqliBR7Gdr5h3sqLQBKdn3appqFrHAsADgzgcXWJwgmbuA5EOFgL6Jumv0CFAMoqretYJrwiPc4AjpDqSv29jbH9VZlKRIqC5U8JVtkAh/RMKVRPzVILfnOFOP5TAXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Kzkj8ilV; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-64ba74e6892so109561a12.2
+        for <linux-pm@vger.kernel.org>; Mon, 05 Jan 2026 08:34:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1767630876; x=1768235676; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fonikX7z7K1ohHQZl6vZ41UkDK6dK2RBIq07hZiimXM=;
+        b=Kzkj8ilVNzMJFRW1nbm2QkX1jFeSKl5WkENFpQPkTe6EfrRyB4/2A5M3hGGHB8uyNm
+         RVnxTbxgCEXDZthOXFVd/ohUQ8eH/gvIbNkjERHjJgVCBoEoLZrfj8SH4U9/2OuUBiHG
+         lycvPdYAIjkB4nBjVEUMDHuD/wQMijclKtxYmSHkIbWPYRKGichS5cMGSmeCGMiHA4jS
+         GyDuZXVdd6ZzjRVHA4VqYbib0xmmABB3FDdbgKEG24kM3ewUXFg+Ui+LC3XhztVQsjOy
+         fY5YNig0nJEtLyuFN24S0aFYzIM2sCIccS1E1qxCtCL4iy+OYMI53Y9nB6h3K83FLqUM
+         t6wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767630876; x=1768235676;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fonikX7z7K1ohHQZl6vZ41UkDK6dK2RBIq07hZiimXM=;
+        b=giEIgex6yuX4xgJeE1MyR2Ma5A6ukdFq0ozTrv3E6VQmhtEh56Uqu/rY31iAnB+sTT
+         YqteU7ucp4tT5KRVeVDkLbUMtfGmAeyTadWwxFmyvY+EXcxWTdjOgq59p8Y8b0jZdHKi
+         M3ifTT8SnLHOlaWEnWbHHLrAGwEfM+iZ03BVl6JS6HiZwIFnlBuJzk2CuEHQGvjJK3Pc
+         1YhHy1h13oPsFo+xgHzSbVC97787dXGSA0Kq0zXxXxmisF9ZapV1dTXhN7bt/aw+y7e+
+         wqbcFi9nwPczXyuq9sHzk9aVmMyaM3gjaAJLM5yd+Fc25myzDdmp/menprBEcWRtfVh2
+         IZ4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVx5VHFgs6iEAOho+5v6s/V7X6f+QNVMgp3eGx0vbACcMxRL1vlD/s4Xi5hUH3ZDRF9mXZ5baVrnw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyMbJFy4jGzG6/E1PnmEbwJw5lbVoGVDSkS3/PEK6QJCZ61pIju
+	SbgFAVeP1oPBlp+A4stlci7swuo0DpfyBMKjwWfcNhvg+tOMX7yCnodPsUYMQRvnS8vzEeOVxC7
+	Ze2dohYPvUw==
+X-Gm-Gg: AY/fxX7YvditlpXhv57FI8gWKN8fyU5ZMMvoY/N2oJFePAKS+C4KV8fg5Rqhk75jJa6
+	oWGYyFtr9jVo/Dj1hhxrSHijaN1eGUl8ZwLOoK/cR8x7Q3x2N4UQuZKE1J9hgoa4UY6OeeYAY7U
+	cAeGv3GD4WUvzhOZdbCv8oLsnpQUgoGogbCWPT4jywSLqG60x8xJhBILNDRmf1QoRJK9rTNW1Fm
+	nY4TT7wsPq9XC47d5AbQDRmcw+boAH4nmVItyBSgglFCa+OzY7KPGWrw+M07fAvPGd/u/z3ZDZb
+	3obYR35VKwtldBBZV+VdsULcOG+M0zHqHeKXzskkXh2EEIFCRbV1sODkDzJGFyluw2Ksk0eTmbx
+	4EWmENo6h091FX3jySkzeOZhODpVvMPOBISrBvUkQ1SFzH3hsjCH/wWidbdxTDIr22CO0ISMl1u
+	jDZ10p/glVKAsh1fOBOQ==
+X-Google-Smtp-Source: AGHT+IHIyW6EL5Qeds3ppqsne/ep5l8vVI6WL/+6EbkwC3Ri0haHzlrCKUwNVD3J8FuYeN4YtG8RdA==
+X-Received: by 2002:a17:907:a43:b0:b76:74b6:dbf8 with SMTP id a640c23a62f3a-b8426a67855mr36978666b.14.1767630875838;
+        Mon, 05 Jan 2026 08:34:35 -0800 (PST)
+Received: from draszik.lan ([212.129.74.225])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b84265ac3ecsm40253166b.11.2026.01.05.08.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jan 2026 08:34:35 -0800 (PST)
+Message-ID: <6eb57ad14908ae894f090ce83c756e4cbc834aba.camel@linaro.org>
+Subject: Re: [PATCH v3 1/5] dt-bindings: mfd: maxim,max77759: reference
+ power-supply schema and add regulator property
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>, Rob Herring	
+ <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley	
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, Greg Kroah-Hartman	
+ <gregkh@linuxfoundation.org>, Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, Peter Griffin
+ <peter.griffin@linaro.org>, Tudor Ambarus	 <tudor.ambarus@linaro.org>, Alim
+ Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, RD
+ Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+Date: Mon, 05 Jan 2026 16:35:09 +0000
+In-Reply-To: <20251227-max77759-charger-v3-1-54e664f5ca92@google.com>
 References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
- <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
+	 <20251227-max77759-charger-v3-1-54e664f5ca92@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-2+build3 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
 
-Sat, Dec 27, 2025 at 12:04:25AM +0000, Amit Sunil Dhamne via B4 Relay kirjoitti:
+On Sat, 2025-12-27 at 00:04 +0000, Amit Sunil Dhamne via B4 Relay wrote:
 > From: Amit Sunil Dhamne <amitsd@google.com>
-> 
-> TCPCI maxim driver directly writes to the charger's register space to
-> set charger mode depending on the power role. As MAX77759 chg driver
-> exists, this WAR is not required.
-> 
-> Instead, use a regulator interface to source vbus when typec is in
-> source power mode. In other power modes, this regulator will be turned
-> off if active.
-> 
+>=20
+> Extend the max77759 binding to reference power-supply schema, so that
+> PMIC node can reference its supplier. Also, add regulator property to
+> control CHGIN (OTG) voltage.
+>=20
 > Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
 > ---
->  drivers/usb/typec/tcpm/tcpci_maxim.h      |  1 +
->  drivers/usb/typec/tcpm/tcpci_maxim_core.c | 54 +++++++++++++++++++------------
->  2 files changed, 34 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
-> index b33540a42a95..b314606eb0f6 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim.h
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
-> @@ -60,6 +60,7 @@ struct max_tcpci_chip {
->  	struct tcpm_port *port;
->  	enum contamiant_state contaminant_state;
->  	bool veto_vconn_swap;
-> +	struct regulator *vbus_reg;
->  };
->  
->  static inline int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
-> diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> index 19f638650796..e9e2405c5ca0 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-> @@ -10,6 +10,7 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/regmap.h>
-> +#include <linux/regulator/consumer.h>
->  #include <linux/usb/pd.h>
->  #include <linux/usb/tcpci.h>
->  #include <linux/usb/tcpm.h>
-> @@ -35,12 +36,6 @@
->   */
->  #define TCPC_RECEIVE_BUFFER_LEN				32
->  
-> -#define MAX_BUCK_BOOST_SID				0x69
-> -#define MAX_BUCK_BOOST_OP				0xb9
-> -#define MAX_BUCK_BOOST_OFF				0
-> -#define MAX_BUCK_BOOST_SOURCE				0xa
-> -#define MAX_BUCK_BOOST_SINK				0x5
-> -
->  static const struct regmap_range max_tcpci_tcpci_range[] = {
->  	regmap_reg_range(0x00, 0x95)
->  };
-> @@ -202,32 +197,49 @@ static void process_rx(struct max_tcpci_chip *chip, u16 status)
->  	tcpm_pd_receive(chip->port, &msg, rx_type);
->  }
->  
-> +static int get_vbus_regulator_handle(struct max_tcpci_chip *chip)
-> +{
-> +	if (IS_ERR_OR_NULL(chip->vbus_reg)) {
-> +		chip->vbus_reg = devm_regulator_get_exclusive(chip->dev,
-> +							      "vbus");
-> +		if (IS_ERR_OR_NULL(chip->vbus_reg)) {
-> +			dev_err(chip->dev,
-> +				"Failed to get vbus regulator handle");
-> +			return -ENODEV;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int max_tcpci_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata, bool source, bool sink)
->  {
->  	struct max_tcpci_chip *chip = tdata_to_max_tcpci(tdata);
-> -	u8 buffer_source[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SOURCE};
-> -	u8 buffer_sink[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SINK};
-> -	u8 buffer_none[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_OFF};
-> -	struct i2c_client *i2c = chip->client;
->  	int ret;
->  
-> -	struct i2c_msg msgs[] = {
-> -		{
-> -			.addr = MAX_BUCK_BOOST_SID,
-> -			.flags = i2c->flags & I2C_M_TEN,
-> -			.len = 2,
-> -			.buf = source ? buffer_source : sink ? buffer_sink : buffer_none,
-> -		},
-> -	};
-> -
->  	if (source && sink) {
->  		dev_err(chip->dev, "Both source and sink set\n");
->  		return -EINVAL;
->  	}
->  
-> -	ret = i2c_transfer(i2c->adapter, msgs, 1);
-> +	ret = get_vbus_regulator_handle(chip);
-> +	if (ret) {
-> +		/*
-> +		 * Regulator is not necessary for sink only applications. Return
-> +		 * success in cases where sink mode is being modified.
-> +		 */
-> +		return source ? ret : 1;
-> +	}
-> +
-> +	if (source) {
-> +		if (!regulator_is_enabled(chip->vbus_reg))
-> +			ret = regulator_enable(chip->vbus_reg);
-> +	} else {
-> +		if (regulator_is_enabled(chip->vbus_reg))
-> +			ret = regulator_disable(chip->vbus_reg);
-> +	}
->  
-> -	return  ret < 0 ? ret : 1;
-> +	return ret < 0 ? ret : 1;
->  }
->  
->  static void process_power_status(struct max_tcpci_chip *chip)
-> 
-> -- 
-> 2.52.0.351.gbe84eed79e-goog
-> 
+> =C2=A0.../devicetree/bindings/mfd/maxim,max77759.yaml=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 16 +++++++++++++++-
+> =C2=A01 file changed, 15 insertions(+), 1 deletion(-)
 
--- 
-heikki
+Reviewed-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
 
