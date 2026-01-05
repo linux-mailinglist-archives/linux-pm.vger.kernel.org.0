@@ -1,187 +1,126 @@
-Return-Path: <linux-pm+bounces-40229-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40230-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65727CF5AC9
-	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 22:31:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4324CF5AE4
+	for <lists+linux-pm@lfdr.de>; Mon, 05 Jan 2026 22:33:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 642253025720
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 21:31:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9AF3D3109EB1
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Jan 2026 21:31:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEAF12BEFF6;
-	Mon,  5 Jan 2026 21:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E4B92F5A36;
+	Mon,  5 Jan 2026 21:31:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="lFUJ1iqt";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Gm2eIds6"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="SxOMrIet"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280842737E3
-	for <linux-pm@vger.kernel.org>; Mon,  5 Jan 2026 21:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88973279DA6
+	for <linux-pm@vger.kernel.org>; Mon,  5 Jan 2026 21:31:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767648691; cv=none; b=F+wMQAj//FsewJ18RkEyDNX+MZqKLh6SzYtM7wcjSQMnan/0rd71uhOYXq2XWk6LzSuKY1nE3Jk21SLwFXwFbH4XXtm1fgop1STpXSPmheFf7TEqzhWFqDNtkVUCL7ma+DLUV5lrfECc8Rwvnl4zlE9G1AsgGdJGmY/sQmH9WGk=
+	t=1767648702; cv=none; b=XfPf3MRoLaoFlSDRkjr/sykIUi6BdyeXnhY3use6qfUA6ozIQv4lXzusBPlt3W0fqdHNK+7oHnWDgddkB6zE/6SESdlr8rtCL5kY9bVCbBHAa/WoXeUVnGy3zvyudnEMi6GbVHVKgg+o8HqgUynp81mCQieAI7WfGgzNTsa5zng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767648691; c=relaxed/simple;
-	bh=utkjV6+Kk2zjUaBHcQnXOzor5MiIt6uMzcWnSOF2MDI=;
+	s=arc-20240116; t=1767648702; c=relaxed/simple;
+	bh=vPp3AvTGPchLW2c+AGwJirbOQoWxFBkOxQEfOGFlo5U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aEZ1WLSTSMjZMdCW/ERCkFkNZJ86ciHATAXaMo59TUFWXgVyNN5cXxUUkh8WeJl0xfrQIpTlRAHm1JKeOxzmugxjpPSbIf7F7a48Ql0gi8EERORsFbtWajEic7skmc+Tiit4sz6mrVce+4cEdlMpKJv0G1vJ/bEtsPSm0Erw+zM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=lFUJ1iqt; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Gm2eIds6; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 605GK23w3337608
-	for <linux-pm@vger.kernel.org>; Mon, 5 Jan 2026 21:31:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	4zu5KsSSAYr8IXy49RPMoofLX2Z45PWdd94vhBIDqqE=; b=lFUJ1iqt2RX7MJd9
-	d/lofAm3V64RkHAtaYCanL5/o5QFTL5LQfLkcDzgDFaIQ+VS1q1PeQ9eoxYwV9/i
-	dt926QH7MxKqiz6IQL2yDVa5OqvgaSHhN8HpiJQNw2OEAxMX4jXBOeYXvqKENBSj
-	RfbrJW8bZPNGVrUzpaxFKZ5XSGxykDtw5tQBbeOq/jCxwZqRJ96MZwJsqguHw6Er
-	Y6nR6nEThARXFInszk08xj2RsXAY1B+TtzxoGeXdJZUAe2ggBq13paSpVQOSFbql
-	ET1gnVfGF/nY8cXCxUWdgfRdTKD8ZbN5NN5PuxJpSIyjD4U8c2nhU0ovkHRxLQbZ
-	pXmM8A==
-Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com [209.85.222.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bggqu0v1x-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 05 Jan 2026 21:31:29 +0000 (GMT)
-Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-9413e6717f0so571043241.1
-        for <linux-pm@vger.kernel.org>; Mon, 05 Jan 2026 13:31:29 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=jqm2Y7iYlod7OVqtgXNkOH3eigccSqz4I6E0KTizH+Nh0YHF3mTg1nnCLLSYNPqn/dTrjKcaQuxzUKYrq/cph3ZprDtk8gcZJvS5nluDc1AHr4lRtr7YIjoRY8VTIvJSr6ebYnO6K4dWfDSeFtE1430k6j4SA7ay2U4OBbuek+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=SxOMrIet; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c0224fd2a92so259712a12.2
+        for <linux-pm@vger.kernel.org>; Mon, 05 Jan 2026 13:31:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767648688; x=1768253488; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4zu5KsSSAYr8IXy49RPMoofLX2Z45PWdd94vhBIDqqE=;
-        b=Gm2eIds6ldMZ7YTUQmX1/536yRRLw3vD6QnPC0+hDv1JwngNZDjtkJ2vc04lIit2CM
-         ZlOWgtrOGmPGEHDIMrs4DT4IGwhAwc76o1yW5l4Cz35V62hEbM9dpyu/d8EZHRo5jPjk
-         T0vm9ZbZsCq3GPbvNKPOOqR6XbUsDkH9vISQwlFX1wGg5o0YMoZX6Ue+DKyA/eGHPNE7
-         hyKT7pyjhazBc8jRSo8NOEo5koknZScw/7AVd3tcmhiDNy9MJYF61lA1wXz8mN3ZAMgS
-         YO4bR2S0L5vF0gC6Uhsa0Swtz/S2MZGNZ/iU8gDzbM39L8ZMFyqmReS6rGc/QPlZgurs
-         DfYQ==
+        d=chromium.org; s=google; t=1767648700; x=1768253500; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SLE/vO3ZvnLaOBduDAh1SAq6McjdOl4HC6YjHnCaxmk=;
+        b=SxOMrIet7JfKlkTB+MNkBl05ryUqtI6mSdQdkby4YxvwiNVLQwaV+4/knhONuWuXBR
+         4JbXmUWqWccayE4HTctV0vnvBhW0XYh2xYQHxCOpzLaCHthiiAz/QHwzeC4VrVnechvz
+         bwIwWyd59EzOIQLAWT8wwscaePjMnO2EGlyzI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767648688; x=1768253488;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4zu5KsSSAYr8IXy49RPMoofLX2Z45PWdd94vhBIDqqE=;
-        b=q0ml0q0oPXa5mOP3FLdVse/npFKK00+yq+XDRcK51+DmKntqpr/IVVap+QLoOEc3F2
-         fgFnvIwXKP7ky0uZfkWZaHOe3Ji8AvJCUDpyYVdc8b3gtZifkmcmyjOIASCkgxirGdHE
-         06ln5vrYzHKxEvBRFoImzkbu3XxPvzPiBWEXMRLCJPZISNvZ+wiAZLcCzvpzNSdrwe/2
-         YvsZ9Syry5A18KNZYMU+yOuxgWwSiu3wl/66H6t23b5ebJil6IDQGTMC9yIW8/h0Tnrh
-         qnZNb7Qw1lZyRZ7imXSuNOAx3yjbe3/p9p3M1UbbazupVoHuZtzqxVfJyFzzHmnMrtUa
-         3Y/g==
-X-Forwarded-Encrypted: i=1; AJvYcCXYsOVNkbSJ3Wf1GblBG3JpWQOjuVb+yR9P9K88z3QElC83mHkRTzkQLcVYxcCe9lWGh6Z3+d+93Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv9N1CrSbzMVpIH//HOHimEvRRMddd3lzM7RBR4JHgGz4pq/Fr
-	kQ4orux1baXZCdcfKqkNUUJF7lRws2GO+VqBg+UWaHNiMJKy5lLAeGiextgaGshH0GBuW5lXKUa
-	X38tcl1okXjp0bG8epzkqRcWrf03XMhqKkMo5kHEa1wIfm6lr1Vh7ohN1HIjOEg==
-X-Gm-Gg: AY/fxX4tTSmcU6gLuYglfNqc+f5F6pWk1OM+SDNOcMpSqZBlCeFKNN1Ls2gdujXtgPd
-	2kuBNuUPB9b8d+FdbaYGrPxPg1uaSFDY3rxL1QhxRWH03Rwvw7l49kbsycwiT+jLX7nPdXg/9fA
-	ltKmbB95ihGbVj5CZXK2QhUqxgVVlorASYOz6otkT1Q7x85Q8P0zsgXz78DuDw7g08OLpR1iWsU
-	XHSF+xZ5EA4ndqzft8TgP1ofUSXOodNOqE0YxEYW+yWRApXQTbu6NKAPpyF+4c50rlRwMWzg5kV
-	r/8kjapL2cwVJSiTUJS7tvT/3Mjy4Yo5fK1+/t+O1XBm839xYrOpNW7ns2IkPXWLLT3HlPwwdS7
-	q5aj2fvqKDbYT9YD4qSRNrwYQwu5oAHRdI2luAXZdjJlTnbkrqGnvK95dZzJNdGYl8ne6YyN0rH
-	6kGP5f1b2ZxaFrF475Sji8r/U=
-X-Received: by 2002:a05:6102:2912:b0:5db:e851:938e with SMTP id ada2fe7eead31-5ec74318ab0mr280761137.10.1767648688150;
-        Mon, 05 Jan 2026 13:31:28 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHN6D3L01UfV6GWimrbBRPwGxz03pI11NWXb7fzsx236R9fU8MdRrZ4c01w5FGgeM95dAMb7w==
-X-Received: by 2002:a05:6102:2912:b0:5db:e851:938e with SMTP id ada2fe7eead31-5ec74318ab0mr280739137.10.1767648687644;
-        Mon, 05 Jan 2026 13:31:27 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-382eb8ad6besm652641fa.27.2026.01.05.13.31.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Jan 2026 13:31:26 -0800 (PST)
-Date: Mon, 5 Jan 2026 23:31:25 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
-Cc: Bartosz Golaszewski <brgl@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Bjorn Andersson <andersson@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Moritz Fischer <moritz.fischer@ettus.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
-        Andre Draszik <andre.draszik@linaro.org>,
-        Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, Srinivas Kandagatla <srini@kernel.org>
-Subject: Re: [PATCH v19 01/10] power: reset: reboot-mode: Remove devres based
- allocations
-Message-ID: <cvmtn335gwnl6rvmlm4vgyablsj735rknga4ffv53gpk4k7d6g@tt7ebuyusocu>
-References: <20251228-arm-psci-system_reset2-vendor-reboots-v19-0-ebb956053098@oss.qualcomm.com>
- <20251228-arm-psci-system_reset2-vendor-reboots-v19-1-ebb956053098@oss.qualcomm.com>
- <CAMRc=McEB+yVYxropzsqLExZCU5Pd_iy_=5N3pTxu28-ZX=7_w@mail.gmail.com>
- <acbb37a1-3189-4d4e-5c05-55b13cd40a7f@oss.qualcomm.com>
+        d=1e100.net; s=20230601; t=1767648700; x=1768253500;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SLE/vO3ZvnLaOBduDAh1SAq6McjdOl4HC6YjHnCaxmk=;
+        b=Kb2FYZEq+rZA/A4GaDPb2c1wSsMaRaxuuYyuAw0ERhJrvKBPbqg9i2MO4OBEUmgeva
+         /LHjglqKU5CSZKZA4df77HELZmXQlHPUQY7DnOPzfGEAe2yOc38Z7mKfo2pUsMQY1K0q
+         RyIrcovV+Dynry1k/dhkLB06vXc+BeuMIgj2/s1KIKiNqPzDL5TBiNSmegAq5TUSFKh5
+         4VWIBxVqm6rmJEjk4doQr4OWTDU+QOobclJmiQ/8ZzhtNa/87f3j78fNy/MboVJyBVT4
+         Mrx9BSPMSDiBeaBElxLITWcqZNRrFtHPetu4EU5Ru1ZQUh+/RdZCmoGXxX4Oyj0VYAox
+         +kDw==
+X-Gm-Message-State: AOJu0YzOI8gU8y+IoKmRxJqOpfHEs2EU0rVYzvwi2PUG8es68yCiF6zt
+	fAtg+YUfA2ZZpcQdtCsy5F84bREcEj0d8Klfu35pft3MC5bCmH1XSyJoMVgfRMJdHocTRMdKQO9
+	nS5o=
+X-Gm-Gg: AY/fxX4xt2sliynndnbbRI3UUD1xjaVNBlpK2qppy1m1m7KwlZh9zBw7fN8cktcUqZo
+	Xuwv8uoUp1QS+7dVbcxOlrjv9/MdnWikTnT9ZrYXBGWpiOqMzZyFw3UI+raZQy3f3vgk2YulAIU
+	92v5N3Vne/2dYvABYk51AOQXMFTFtV174ykAFc+5ER19Qs3hdhbm7Nlp+fmjdDhs0fgxSTwFn2B
+	SgDybRy94CbG+LLsuzZsA0FKuFeIIkwpM5CYYpTwE3K9BBWFta+FxgcjFDS7vyli0+1moMfOfjw
+	dsMAi2YA1bGfhBX3/Z2otohW/iRz1OFJH8qBG/g6PqtHxpXRF9Q2Bo5JftgCgPxNKZfn5oyYAcI
+	5RX1LYPunrlCzPRGwmR8x4XYbCUYn1DxrIpRWrIpdP51WHEXQRKjwbL7P7XG7eASEOxc9Vc3Wo2
+	jf6EXrCXNminFYWOr1PSv0OZMnOrz2gS0s+GZ+I3e7+XM5J3+ipw==
+X-Google-Smtp-Source: AGHT+IFJ9JDeRFynFjJTq4iT72J0gsfQX5pc9IxuV9lkM7nLv2iM1FuklTdwLW++i3XlTEDta9dRgA==
+X-Received: by 2002:a05:7300:b295:b0:2a4:3593:6474 with SMTP id 5a478bee46e88-2b16f92f172mr559835eec.36.1767648699808;
+        Mon, 05 Jan 2026 13:31:39 -0800 (PST)
+Received: from localhost ([2a00:79e0:2e7c:8:526d:9db9:4a72:4149])
+        by smtp.gmail.com with UTF8SMTPSA id 5a478bee46e88-2b1706a53f0sm498920eec.10.2026.01.05.13.31.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Jan 2026 13:31:39 -0800 (PST)
+Date: Mon, 5 Jan 2026 13:31:36 -0800
+From: Brian Norris <briannorris@chromium.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v1 23/23] PM: runtime: Change pm_runtime_put() return
+ type to void
+Message-ID: <aVwtuIfYH6CgQDP_@google.com>
+References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
+ <14387202.RDIVbhacDa@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <acbb37a1-3189-4d4e-5c05-55b13cd40a7f@oss.qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA1MDE4NyBTYWx0ZWRfX0cjqu2OYoEI2
- AykjeqozVmQf27jxf+M2ug+lOBTT6mh+LwUE/Po8oGqjf/GGWqn1tbKAvYXxUAOg1ZQxKl0WMr4
- Cf+4p/zBm8OL5qIOO3+g8djl6dBCD3ZDUpi59p+WrLbJW5T1NxHZZXACfWelCZ3TzAWYdyoLx94
- Gw0vAhW69F0+cXe78DsIWLsLWasWDGAUVR7TvvT1pEjOME4IJk8K/JR/8j+lelrIIgDJeqTFPWO
- y2Qop9rkiUUVbaWMqiGYeK85VApji1bFRBZ4TBQWhED1VZkj+SG42fhEt6cggO28wdTyo2HRVCe
- 5LhuXLG2GW6Pfo5G4wA8GpjuN8Fa81IsFDqyxc+gD4L8/6DCx4ynkDIMUdGyFGkqB1dZfHFYDGk
- Ocgzj+8lMa1EXLORaUJOeMzUL/3WEa/pphgeosH3dCvu4PDM/bH+dh6MoqVL3rQxUBbRtAKwATi
- XVQpheiPyAe2gX4YzBw==
-X-Proofpoint-ORIG-GUID: hh6tThsSK_riktiY5xLKrtSuHBiDLLgp
-X-Authority-Analysis: v=2.4 cv=fr/RpV4f c=1 sm=1 tr=0 ts=695c2db1 cx=c_pps
- a=UbhLPJ621ZpgOD2l3yZY1w==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=EUspDBNiAAAA:8 a=gjb6EQGLQTTv68HWFF4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=TOPH6uDL9cOC6tEoww4z:22
-X-Proofpoint-GUID: hh6tThsSK_riktiY5xLKrtSuHBiDLLgp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-05_02,2026-01-05_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 suspectscore=0 adultscore=0 spamscore=0 priorityscore=1501
- impostorscore=0 bulkscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601050187
+In-Reply-To: <14387202.RDIVbhacDa@rafael.j.wysocki>
 
-On Mon, Jan 05, 2026 at 11:46:40PM +0530, Shivendra Pratap wrote:
+On Mon, Dec 22, 2025 at 09:36:25PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
+> The primary role of pm_runtime_put() is to decrement the runtime PM
+> usage counter of the given device.  It always does that regardless of
+> the value returned by it later.
 > 
-> On 1/2/2026 3:35 PM, Bartosz Golaszewski wrote:
-> > On Sun, Dec 28, 2025 at 6:20 PM Shivendra Pratap
-> > <shivendra.pratap@oss.qualcomm.com> wrote:
+> In addition, if the runtime PM usage counter after decrementation turns
+> out to be zero, a work item is queued up to check whether or not the
+> device can be suspended.  This is not guaranteed to succeed though and
+> even if it is successful, the device may still not be suspended going
+> forward.
 > 
-> [snip]
+> There are multiple valid reasons why pm_runtime_put() may not decide to
+> queue up the work item mentioned above, including, but not limited to,
+> the case when user space has written "on" to the device's runtime PM
+> "control" file in sysfs.  In all of those cases, pm_runtime_put()
+> returns a negative error code (even though the device's runtime PM
+> usage counter has been successfully decremented by it) which is very
+> confusing.  In fact, its return value should only be used for debug
+> purposes and care should be taken when doing it even in that case.
 > 
-> > 
-> >> +                       pr_err("reboot mode %s without magic number\n", prop->name);
-> > 
-> > If this is an error, shouldn't we bail out?
-> > 
-> >> +                       continue;
+> Accordingly, to avoid the confusion mentioned above, change the return
+> type of pm_runtime_put() to void.
 > 
-> This is not an error as per original design of reboot-mode framework.
-> The code as of now says, if the reboot-mode node has an entry without
-> proper magic value, ignore it, and, process the next.
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  include/linux/pm_runtime.h |   16 ++--------------
+>  1 file changed, 2 insertions(+), 14 deletions(-)
 
-Then why are you using error level for the message printout?
+I'm always happy to see rough edges of the runtime PM API sanded off.
+Thanks for doing this!
 
--- 
-With best wishes
-Dmitry
+Reviewed-by: Brian Norris <briannorris@chromium.org>
 
