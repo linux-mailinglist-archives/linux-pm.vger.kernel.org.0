@@ -1,125 +1,180 @@
-Return-Path: <linux-pm+bounces-40314-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40324-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28A3CCF860E
-	for <lists+linux-pm@lfdr.de>; Tue, 06 Jan 2026 13:47:51 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70E5DCF8E8F
+	for <lists+linux-pm@lfdr.de>; Tue, 06 Jan 2026 15:55:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DA34A301F26C
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jan 2026 12:38:40 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B9DE1300C353
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jan 2026 14:55:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DF24326D79;
-	Tue,  6 Jan 2026 12:38:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eBijw961"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FA1C334C04;
+	Tue,  6 Jan 2026 14:55:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from CHN02-BJS-obe.outbound.protection.partner.outlook.cn (mail-bjschn02on2110.outbound.protection.partner.outlook.cn [139.219.17.110])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F981A2C04
-	for <linux-pm@vger.kernel.org>; Tue,  6 Jan 2026 12:38:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767703119; cv=none; b=j7GnYReGA7zS3yTtKFrWs1UKsw5KiQAqx5mIJ+eaQ2+2kqAh0aIptkOBl5BrwlFw+zoSQXBw6616+HTEgYATHJ6693vrmdemJa3q0rxImDTQVyv72tcWyrTPRzauHf3eJflIJp7GKgetP9MgJxn2sr+BIqK+Ftw3BIqUFEsBSSg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767703119; c=relaxed/simple;
-	bh=/WJ3FXylxb75JjfkAYrSDskdl0Pr5JcXSOfrWa9vX2M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=spvmHpEGqtjUTvf3jB0YLURKw3qQopJRNqODVDYhFySfjnCW8ZBU1ddihuF7cuk9lSYguqrYZbye0Ow9zIbyiahFTCBp2/ZYW4gP0qA65SRMZpb7WoUJIK/31GkEoTs1WJqYgzmggBlNbGk1Cpojw7eGkIc4IgJo3JFa1PPkdN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eBijw961; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1032C4AF0D
-	for <linux-pm@vger.kernel.org>; Tue,  6 Jan 2026 12:38:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767703118;
-	bh=/WJ3FXylxb75JjfkAYrSDskdl0Pr5JcXSOfrWa9vX2M=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=eBijw961FdVqdQ5lzqU/ESM00AOiadOqx+ua0ZRGi8NdxZOi0LmsS4uMs8po6Cb0O
-	 5TMhTC1pqRmu5yMhNHRR+d9WYEpa5PYeh2yArJhCA70XzCJpBcWfx41mNkMu0g87H7
-	 xo89EoRPkf34wKF1WWhYht/GJw/1OcOhYW0wZp+ouQonriPSRbIJVqOczclQENQpIe
-	 N8Gjs/7c0iTXE66WYqZPBMwfi2/XNAtnLCMO3RPd6DP97ZzSdEoYSqQ4ZTSfsUnQ12
-	 xGnHMMTQLsb/EQJU/s/eAr+K2BKAJOufY6CAyLHUMxqYPkOXol0F+D/fjg/dimDcik
-	 qXCIufIZGv6/A==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5945510fd7aso739307e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 06 Jan 2026 04:38:38 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVCxseKwhoRB1nCAy3O7fh2gQVf6E7bljLkg/8V1IPGFH63x9UpxG/3Tz1NiirS7X08dOtdsbowhg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YymwtdzZ7cs+y5g5E0hpovCEqgjKtiX88l/TIQDa4TwstP43PYA
-	XP84rCPzyKEG7efAiTwCXiZPSk8E9nCuupxSf2XjxJHXJwdRx6s/8BvxnUdvZgy0O2VioM52dwq
-	B/RuHCanKVPTB3XQo2eXOsGv2SWZyd+4K6SF/jDWb9w==
-X-Google-Smtp-Source: AGHT+IH/5oi/Mm4ylt/aH4A15j/ljVlSgxeG2MAOav7Sf6QITgCC+i0rM7ktFn11IEgwttpux/NAggqCjE5gcEsv344=
-X-Received: by 2002:a05:6512:4010:b0:598:f2e1:f616 with SMTP id
- 2adb3069b0e04-59b652b8202mr751335e87.29.1767703117392; Tue, 06 Jan 2026
- 04:38:37 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74FE335555;
+	Tue,  6 Jan 2026 14:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.17.110
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767711350; cv=fail; b=Q2OJzwenJvY6e+Y9WxOHsuyrDioKDKGECodMU7bUckB7eDS8S/knSWUj5cXHIsBN0cXUhZpiWfgFFc0bu4ABaoLT2stgtH4iAysh1datwRINLkl5hTUGpVcVJQDSjAI2BJtZcCYsd4SORxzMNpQn1HfY9RiWQfsoTbjHu8On7xM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767711350; c=relaxed/simple;
+	bh=SkkR+r7LIQY55TuDN6eNAAhPAgUWgoDL5SvY24aww+s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=gbbgRLot78P3vZjOMrT2SHMpLTlkELrSpEPrV7P1mH3xAzva2D7HWFhXSK0s+RlZ6VncU2k6iiM46/JIiA17ub4Ni1JK12uVGqYScnRa5zFL76uBi7hCDPKqOC8j7gHPUj1XX+aWDbqWmMkGdHrt2CibqhfCU6tvNPfuLpIWZ7s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.17.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D8bYIrqGe/9tj+I/02JeFwgbIht/VTONxgveTrUDPF2HjEtM+9TuVvGn5NyDmsb62bZxRbyzegdFIfC6tHQ/23UNlV6kSvRu8B1TiPgl2WYgmnIf8YjID+fCeRB1d+aQK/Z/I7apR5lES8s2KvL06IjZBcw9EgGhM86XENiW2qgQNCbAtniu1FpuHXp8j3ghmakcDz3Wxhy3bNdek0vCzjkqTRYMDCTWF0F1BH+tSRMOONykY1+W5pZCsP6ApqCvcVuXSuHihkow22WAt9aDivWMG0RaMIZfdgJTxdqljuVET/BwSmo5K9PbN404Y7tRm9AKg4vYk6Jr/Zh3D3IMZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1ur0Zu1ZfgULTGPHXoJkZKxzKzahgPq68u4jKhcp7Jk=;
+ b=ZCYLa8FZHF6HV7a3dc/jc9NYAFF/Y2VvFD0VKA8MV6RQL4o1cf03aE4Wh1AfXbF9LAvTzAm9ShhQ5dgPVHjkSvVZg6OAQFrXxARld+NxJzq/LmxqIUCvGlqhx6TLzoQw6a6bgRg48Mx4jqrH1FK2VnkBQGFwzWvXDVe9/X41JWOdHJoMGHHTSidV9KDFq1fEw47jdfRrigpquLAmTfJNFmpmWhz5bpqdUsLCglO9j8jcXYw09tajpq65JLeC45ZaA8i9A33zi6ycEFTmml6VPS0ebDZllv8/sTNUz4Dco0mdIKtCwue7Shl9D/g6cFUMN6UqAVFZa2kM0thRJS5lLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+Received: from SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:20::14) by SH0PR01MB0730.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:22::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9412.13; Tue, 6 Jan
+ 2026 09:22:36 +0000
+Received: from SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn
+ ([fe80::81c4:2724:6a48:a18]) by SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn
+ ([fe80::81c4:2724:6a48:a18%4]) with mapi id 15.20.9388.011; Tue, 6 Jan 2026
+ 09:22:35 +0000
+From: Joshua Yeong <joshua.yeong@starfivetech.com>
+To: rahul@summations.net,
+	anup@brainfault.org,
+	joshua.yeong@starfivetech.com,
+	leyfoon.tan@starfivetech.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	sboyd@kernel.org,
+	jms@oss.tenstorrent.com,
+	darshan.prajapati@einfochips.com,
+	charlie@rivosinc.com,
+	dfustini@oss.tenstorrent.com,
+	michal.simek@amd.com,
+	cyy@cyyself.name,
+	jassisinghbrar@gmail.com,
+	andriy.shevchenko@linux.intel.com
+Cc: linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH 5/5] MAINTAINERS: Add RISC-V RPMI performance service group
+Date: Tue,  6 Jan 2026 17:21:16 +0800
+Message-ID: <20260106092117.3727152-6-joshua.yeong@starfivetech.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260106092117.3727152-1-joshua.yeong@starfivetech.com>
+References: <20260106092117.3727152-1-joshua.yeong@starfivetech.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: ZQ0PR01CA0035.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:2::21) To SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:20::14)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260106-wcn3990-pwrctl-v2-0-0386204328be@oss.qualcomm.com> <20260106-wcn3990-pwrctl-v2-3-0386204328be@oss.qualcomm.com>
-In-Reply-To: <20260106-wcn3990-pwrctl-v2-3-0386204328be@oss.qualcomm.com>
-From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Tue, 6 Jan 2026 13:38:25 +0100
-X-Gmail-Original-Message-ID: <CAMRc=McxGOejmegC9KaNLpCbxSL_CWmPC2PwfQGxQ+vaHg+rOw@mail.gmail.com>
-X-Gm-Features: AQt7F2rrsJVu7GLT96AFg8gb0rDx8lEL223Ap08R9PVwfe0DiaVCdXK84QTL9yQ
-Message-ID: <CAMRc=McxGOejmegC9KaNLpCbxSL_CWmPC2PwfQGxQ+vaHg+rOw@mail.gmail.com>
-Subject: Re: [PATCH v2 03/14] Bluetooth: qca: fix ROM version reading on
- WCN3998 chips
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-	Jeff Johnson <jjohnson@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Balakrishna Godavarthi <quic_bgodavar@quicinc.com>, Matthias Kaehlcke <mka@chromium.org>, 
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
-	linux-wireless@vger.kernel.org, ath10k@lists.infradead.org, 
-	linux-pm@vger.kernel.org, Krzysztof Kozlowski <krzk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SH0PR01MB0841:EE_|SH0PR01MB0730:EE_
+X-MS-Office365-Filtering-Correlation-Id: 130d56d1-3fff-48f8-9faa-08de4d0520bc
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam:
+ BCL:0;ARA:13230040|7416014|1800799024|366016|52116014|41320700013|38350700014|7053199007|921020;
+X-Microsoft-Antispam-Message-Info:
+ kbrSbf8ooNIykpWGeNs+rku2zPZQ1ha1c+yRHZ2/h3y5iEdAMz2ZOlEPDbuaNKtNyOuqgnZUWq6dvefOdRKJPpqz0+NJT699j43ag5vp4eFoFc3Kr20cAOTNwRu8aCZbSTdWuZn+9snddUhXLRvf1EHTE8z6ofsAQpCyU5b4VChGXT9zzrDbTQJ4nP/v6A5U0er6h93FdwJQnIMEjygBvoNGh+7viSlGZBZOgTtSftnPLOnRcZpOnt2R5SmIGe220mFHesla5vlfdPnRBIXC+vaXLpP1pOq+nXM/maeY4OUhmyoHxPuyf7ClMiMC8TyBL7SK4VQCtW9Mv3ue0thahO5G2kgCYmenNZraHQsgu0mTJzpglMgJvxwcLdvHAC5LWz0k+MoEzkLoRGZMRkervj74iaCI7/rCF9El/X4kqvG8FidVPM6axR9nTYjYDQTgNWyKy72SCMi9H98SMhvOfwn45JyUq/e+OaL16SaMZWlTkiGORGxEK5y0FuJdCAm4LGqKjxWzBCavi2VzFAb0yKAPbYY/M4Fm2hDeu95z8gKkbcXhmwLUgrgj7eRkx81+peylhg47p+y4Qv1if1ZOBThZ+KyQ6mkFOZx4fMG4gVM=
+X-Forefront-Antispam-Report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(366016)(52116014)(41320700013)(38350700014)(7053199007)(921020);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+ =?us-ascii?Q?ogz8QKKL7Rl5XP1dfaoFpYlk0nsCdIer+YNGT5jtZ4G0nzJfg93I/7H47snt?=
+ =?us-ascii?Q?VhAkQmT73006F8tbgUoC9FUqaeFRjE3Y/wt/pwnQXn+YcGEvqLH20Nv7ajci?=
+ =?us-ascii?Q?0Gl+1M47h9yZ8/cmMnd6Jo+2SGDrhRWhN7TMjnFhwy9sOHRw9fG7heUjjOzc?=
+ =?us-ascii?Q?rQqiROMCCKiosEI4zM6WerROfw7zv9Pg1X4mmL98af5AbzpK3UEpdhKLiyDX?=
+ =?us-ascii?Q?F71AhmZbEkUKCKjLGJojadI9ZQ4RZLiWXm/0c5fZbZix6327O+6Xnjyk/w3W?=
+ =?us-ascii?Q?xTxjJ/GJUF0+OjUmybFw/FUpUIvD8uYEwo4nLG6HZ1U5AgHau3it1PeXKU5d?=
+ =?us-ascii?Q?cOPKcUoCmND0zhzYY4U+KQZCExErPUoG8jodvgUWGpUK26gmko/eXZX2dEj7?=
+ =?us-ascii?Q?MUXWR+rs+9iBwbLB9ePslQ+F1+KPEYA/fTb0wG3onNXggZKi/ewbBZIG9yfF?=
+ =?us-ascii?Q?BZM0B+UmiMlUR+qYjpMOCJDjZkHNLIWM/jhuCv2wiqdhUuiGUmuq9sJF3BoG?=
+ =?us-ascii?Q?bb5kTNtiKk0RQ3L480nkU5daCi8h31obGMghytZfJci1zw+TQYYZuPeRkI/F?=
+ =?us-ascii?Q?d5bo/cXAcSNBxfGaxOuK9OkBGjraDdvmHrmLCyObxCKK8zTRcr+emtRqN0Gr?=
+ =?us-ascii?Q?XHANfzPwWKy/DpC3U9+2Zwt9NQRtcnSrZ5OiE9ynx9zSdYI8h+Z02/nVE9JT?=
+ =?us-ascii?Q?4h6Ndvykp3QK5qUL9NpTfbjim1erkNvagkZn+P+cIZt40+CPddROUuPSABD9?=
+ =?us-ascii?Q?GtBTkElsgDG4p6hjPmdRPK+Ym7Ps/ncgxq+BC7lKS139S6411IFdw6WMB+RS?=
+ =?us-ascii?Q?/nHXdbLTg+7v6OjaFh2K/glqOmmtXTnkrFtDddiFMNf4EqlclLQFb227kLsX?=
+ =?us-ascii?Q?yDGaXF6PHKNju7AONdlec0s4obqIghRnfL24Zg2pbeiPc56ZP/1JB/xowr4g?=
+ =?us-ascii?Q?/KtqY8E40A3Dsg1vVT1O1gO3zcJE30CMlAlROcEb83+Dkc24dPfytyNkWZen?=
+ =?us-ascii?Q?kd6csIBEToUg29WdryL66hdvODIULheOun0MoYd75D7UAngZeswUoExXEruT?=
+ =?us-ascii?Q?rWlRlb51tJdVb+o4BHevACTSzfoUtWpCJFQAEvvMriYF7Dm+cFLIqVOGKXlH?=
+ =?us-ascii?Q?7KT3fhzqrigmM7yy/9CRacJkJ2Wiu07gejvUYfMnk7Sw9dvYZhsX1TqIUuWs?=
+ =?us-ascii?Q?6tcHm2pr+J9Qjrgsl6TA1gJiYxAyrAjmNb/yL9YRDxyL4L/TNdNmIx9U15np?=
+ =?us-ascii?Q?RPlVfXhe8A6LBrETl8l/cw8GcTcwq+sK32XquemaQn9QW7bypICEFUJ8yeYv?=
+ =?us-ascii?Q?DD0CYsOl6Z6vpWtPz5U21/VtkWg+KNFl/u2jO3NdF2RZWATHUddj7S44Rajk?=
+ =?us-ascii?Q?DM+7Ibs84AOCZL2ZfwnS0BwtOasyb3LZx/ucA8awE75HI5ppavCdJxhIEAZJ?=
+ =?us-ascii?Q?yiY8zF+ZWx07Vim6JQMRXEmVp3+nu76UZpKez0+60o/qFP5Q1Ks52eJvCx+0?=
+ =?us-ascii?Q?05xWYhgGQS3c+hLUfCasvj4jDAOlZxq082NdsUC0Trx9VocJVOZYe8j51ZW3?=
+ =?us-ascii?Q?zBLY155yPS4kNH0zclA9FsCBYGC5GizBNWqdBc6RIwXP7WLN26qsbKv88deY?=
+ =?us-ascii?Q?IlM/toiQ1XXL0I93yyt+jpQ=3D?=
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 130d56d1-3fff-48f8-9faa-08de4d0520bc
+X-MS-Exchange-CrossTenant-AuthSource: SH0PR01MB0841.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2026 09:22:35.8492
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f5OtLeW+gXqIZyt2s6RAzl5c7/6Yhf222wQq/b/gOwwv8Z8FEsZ7dFoW8DjlW/Fqkv/16YKnE5wQ87HFF9ueNCOz4tA765AuUqzjnil76+M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SH0PR01MB0730
 
-On Tue, Jan 6, 2026 at 2:01=E2=80=AFAM Dmitry Baryshkov
-<dmitry.baryshkov@oss.qualcomm.com> wrote:
->
-> WCN3998 uses a bit different format for rom version:
->
-> [    5.479978] Bluetooth: hci0: setting up wcn399x
-> [    5.633763] Bluetooth: hci0: QCA Product ID   :0x0000000a
-> [    5.645350] Bluetooth: hci0: QCA SOC Version  :0x40010224
-> [    5.650906] Bluetooth: hci0: QCA ROM Version  :0x00001001
-> [    5.665173] Bluetooth: hci0: QCA Patch Version:0x00006699
-> [    5.679356] Bluetooth: hci0: QCA controller version 0x02241001
-> [    5.691109] Bluetooth: hci0: QCA Downloading qca/crbtfw21.tlv
-> [    6.680102] Bluetooth: hci0: QCA Downloading qca/crnv21.bin
-> [    6.842948] Bluetooth: hci0: QCA setup on UART is completed
->
-> Fixes: 523760b7ff88 ("Bluetooth: hci_qca: Added support for WCN3998")
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> ---
->  drivers/bluetooth/btqca.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-> index 7c958d6065be..86a48d009d1b 100644
-> --- a/drivers/bluetooth/btqca.c
-> +++ b/drivers/bluetooth/btqca.c
-> @@ -804,6 +804,8 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baud=
-rate,
->          */
->         if (soc_type =3D=3D QCA_WCN3988)
->                 rom_ver =3D ((soc_ver & 0x00000f00) >> 0x05) | (soc_ver &=
- 0x0000000f);
-> +       else if (soc_type =3D=3D QCA_WCN3998)
-> +               rom_ver =3D ((soc_ver & 0x0000f000) >> 0x07) | (soc_ver &=
- 0x0000000f);
->         else
->                 rom_ver =3D ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver &=
- 0x0000000f);
->
->
-> --
-> 2.47.3
->
+Add myself into mail to list for RISC-V RPMI.
 
-Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Signed-off-by: Joshua Yeong <joshua.yeong@starfivetech.com>
+---
+ MAINTAINERS | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 765ad2daa218..fa47e94446cb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22508,14 +22508,18 @@ F:	drivers/perf/riscv_pmu_sbi.c
+ RISC-V RPMI AND MPXY DRIVERS
+ M:	Rahul Pathak <rahul@summations.net>
+ M:	Anup Patel <anup@brainfault.org>
++M:	Joshua Yeong <joshua.yeong@starfivetech.com>
+ L:	linux-riscv@lists.infradead.org
+ F:	Documentation/devicetree/bindings/clock/riscv,rpmi-clock.yaml
+ F:	Documentation/devicetree/bindings/clock/riscv,rpmi-mpxy-clock.yaml
++F:	Documentation/devicetree/bindings/firmware/riscv,rpmi-performance.yaml
++F:	Documentation/devicetree/bindings/firmware/riscv,rpmi-mpxy-performance.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/riscv,rpmi-mpxy-system-msi.yaml
+ F:	Documentation/devicetree/bindings/interrupt-controller/riscv,rpmi-system-msi.yaml
+ F:	Documentation/devicetree/bindings/mailbox/riscv,rpmi-shmem-mbox.yaml
+ F:	Documentation/devicetree/bindings/mailbox/riscv,sbi-mpxy-mbox.yaml
+ F:	drivers/clk/clk-rpmi.c
++F:	drivers/cpufreq/riscv-rpmi-cpufreq.c
+ F:	drivers/irqchip/irq-riscv-rpmi-sysmsi.c
+ F:	drivers/mailbox/riscv-sbi-mpxy-mbox.c
+ F:	include/linux/mailbox/riscv-rpmi-message.h
+-- 
+2.43.0
+
 
