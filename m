@@ -1,137 +1,149 @@
-Return-Path: <linux-pm+bounces-40328-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40329-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91BFECF9934
-	for <lists+linux-pm@lfdr.de>; Tue, 06 Jan 2026 18:14:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B9850CFA11C
+	for <lists+linux-pm@lfdr.de>; Tue, 06 Jan 2026 19:19:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 635C03043A7E
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jan 2026 17:08:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1F71E3037CDD
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jan 2026 17:30:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 346673431F5;
-	Tue,  6 Jan 2026 17:08:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69FF23563C6;
+	Tue,  6 Jan 2026 17:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JYvtqPyv"
+	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="Rk0jrZL2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98407342CA9
-	for <linux-pm@vger.kernel.org>; Tue,  6 Jan 2026 17:08:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BCA3563DC;
+	Tue,  6 Jan 2026 17:29:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767719286; cv=none; b=H6EPchb8FJcAFWviia32zUvoUblqG85YWa8hoTq4UIMY8OyQYgwol7NAHJk2SdLu4vqy3P4H0KYKpUAPKKjJMfXOPd3RO9yR3ctW9kgjcM65ZzNedkML7aVzMEgsImrqFT+VvxRW9I61xXaetr9jFKqVKfb13DZHYRw03vpzMAQ=
+	t=1767720601; cv=none; b=MX/5zX6Eaq/PHx1GuaQ9Kf/xgcVnRMX/6dde9F4HG+KJ+lZV4fQoHZHWyP255ZpCJ1aVFvnd8RsUq+8EXpJaqfljEs4qKV/H4JqaABi/thPNXG1p+prVq/4MFMf2y2FMefzsMaCfj8cl00b1vjJ+Nb96Nd6jJX8QvF8fgKjiOqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767719286; c=relaxed/simple;
-	bh=Da1+z6b8uGHwUBBD5JI63a5JdnmV5MD64hW+WWvh91Q=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LdDfsGEsdB70v4RKGoyaZsF8WkB8JX2xcLc7IE3Kk+cRW1wfg0wsFrtztGFRXPRizCV9Qkbjtn1yLF0prrkYcX1KvnyZ01Q54keuQ4etZ+jd34POr8oYTFFKssTQ8a5LqMO2jrrDQGSO6Z3fANb3XCkjZu69xNW/O0s3v+MGr1g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JYvtqPyv; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-34c30f0f12eso975540a91.1
-        for <linux-pm@vger.kernel.org>; Tue, 06 Jan 2026 09:08:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1767719284; x=1768324084; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Da1+z6b8uGHwUBBD5JI63a5JdnmV5MD64hW+WWvh91Q=;
-        b=JYvtqPyvSAFsBI+eLNYw67akcbkLUgTHpKj5D0BZ8GJIf+UEkAALvEhWUgP2EtiBmH
-         Jkp6+b7koZYOXhURIx436inPpylOR9cdzl/05F3yx/rxch4QWmpP4/4ets/0su2EDv4u
-         BiW3i633+GeFJEyzCvgl/PQxBS5tQqRZyQoYzcAWHabDQs+oYu6qBywWZkrJQnqTKZ2j
-         2E+Y5llzojFAcRTsfCGoPqJg7QXDTG+nfTG2qqdN8T1gnPRK2L6VMZyO+CiJtjUuxtWq
-         X6Fss19hoh6V7QcX+WzQfFGZpqnyqlxKk5PTq2v4fq++KnHAa4dquF3vwzhBm936tOwq
-         JnNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767719284; x=1768324084;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Da1+z6b8uGHwUBBD5JI63a5JdnmV5MD64hW+WWvh91Q=;
-        b=LSuD9GdGYDTMptsHsqbUXjH2wLeg/4Ngtlep6ILrvWasqY7FM0p6JKJRKgtIqFzgbC
-         2pZ3JZAtxU4WDQq6wziKR8j7D7DQlwiyZfQejc8OUbKw/9AxWudZXzOi7dal3wSgsuCC
-         Bjc5Rd0TT61OI68/p0xC4oYrbxeqmjLk4ku+QexspZaEHMqaYkgN72IvLkUXy/+B8Te/
-         BMidbDIV6Lf/U5B9Rv4hTT1g0E5xVsmto7R7rO/K3+1ORGbIuO4XLGyHzfEV9tsWCE16
-         xLhRo+0EJTr2HihBnisKwE/hdWKi++WicbAir/dbUJ4bwPQxe8bSLj/RGAsDwIR1MkT0
-         en7w==
-X-Forwarded-Encrypted: i=1; AJvYcCXxLzgNCIzKfi3TaFUl+15T/AiBlA4pqQO0oWQIzaJfSxqyXt/Yj/OqWKOrjO4UHvD0NK4V2FQz9A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhnwCGHNKTrtHdChQJWo2wopGXb7ToFuq4EVlzTsgzTF7Y0M4G
-	ZuUtksyuOrjAhYdlpdTVftF+GTGcuQprK2RNnakg73oDeLXrh12Tg4bJoq/BP2mRVoA=
-X-Gm-Gg: AY/fxX4JE5plmVdJOuGWXLq4qdsSmyeGHe6HPPpRvEeII0hXEiJQugCmwJQEFCvf8Pi
-	iP/Ubr4VJLCte8DoDyIEbFnrVR2qcyzV1yMLPUDF3wu0hHvV/y2oqKN9vOvNphWdWDr8OPJGvfI
-	F5w/TFqBTb+ZVh3tLEguMDC6TTvvJD5Q2uwNCZvO46CWLd7ECHIbT14RsvJnBZUSTsI67LXwmYl
-	MEBYCsP3CSiuLHlmB1spAg1r3Rs7jRolznfvo211HEKU+W1wlsBbK7+VyYaapxp/ZZmyJQod3ze
-	gChO9aCNOhZXQW1ZOy8ApcEfCIpbMbyXQtVFLwkRIgooyvgrvZfTJKwgIfprE1oo5pVLwZIdIU0
-	k9yl/yMvmbSKf/HMSqMpi4w5sO/DVPVJuAZGLGnQIyrlYvWQ15c2Gz06a5Cq4EVhcvooXA2bwQ9
-	4qib7KenWn2o2uRV2u
-X-Google-Smtp-Source: AGHT+IF/YyPky1JmsX8trR5QA82S375cVcq4PGyCdARaly/JqyN2JQRlvVwmKUH1OrX5HSLct3ppWg==
-X-Received: by 2002:a17:90b:1646:b0:343:7714:4cab with SMTP id 98e67ed59e1d1-34f5f2f8b2cmr2485923a91.22.1767719283665;
-        Tue, 06 Jan 2026 09:08:03 -0800 (PST)
-Received: from draszik.lan ([212.129.74.10])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f5fb7442asm2746281a91.15.2026.01.06.09.07.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jan 2026 09:08:03 -0800 (PST)
-Message-ID: <cd07660f196ce5686b32a67fa5a4edf5dd70dbc2.camel@linaro.org>
-Subject: Re: [PATCH v6 0/2] MAX77759 Fuel Gauge driver support
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Thomas Antoine <t.antoine@uclouvain.be>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-  Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Peter Griffin	 <peter.griffin@linaro.org>, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Date: Tue, 06 Jan 2026 17:08:32 +0000
-In-Reply-To: <a6f5c448-d0ab-4119-94ee-201bc3027e84@uclouvain.be>
-References: <20250915-b4-gs101_max77759_fg-v6-0-31d08581500f@uclouvain.be>
-	 <8385a4fbb6c10cfe643c2f310f6a67150e260cf4.camel@linaro.org>
-	 <a6f5c448-d0ab-4119-94ee-201bc3027e84@uclouvain.be>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-2+build3 
+	s=arc-20240116; t=1767720601; c=relaxed/simple;
+	bh=u4uuqTQUdVSQFR40CmbeuCd7YWPpLNXfQChgviT0EYY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IkHibpavluvs3R4vE1/yfNjsS+/L2YpngdCzMzV3sSVxOzYQhSrDzJDuZi8UgFel8CJMriPlpzmtIWDvXl1Su5SS3rz0+v/LTfOR2VyARVWk+TYHNfNq3ma7UmWF+yDuFw1fWnh8q3NEMzdAkzZDP137nK6IVrxicI1RPFTFNMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=Rk0jrZL2; arc=none smtp.client-ip=178.238.236.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=kemnade.info; s=20220719; h=References:In-Reply-To:Cc:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=c3xQQo7dlQe+3ToJZk0WtJfo6q7i6BfPDImOGw/1mAY=; b=Rk0jrZL2JDiHAt8AM6gbN5vLDJ
+	Q4407EBHUY56ExWkUEpmOVlHodGmpbUzQXxFu7XbiA0Kc7l6RDi9erVOuvSJTMkh1sZ+oaHlEqJJC
+	q1ExTI3DGyPI9X1o5xF1Fy3jdD+wCSbR3hMLVWYxDMsJixdVx7y2R7xqeGzOYAM6s+1lb5lSfPKgQ
+	Y7J1Tz+V4vXgzLH+IcPohDNqL2IPxrypuPQN3Fx4rSwz64KpQkckHNz3+u9FReveAwILFDfwvWWBt
+	ZjZBmHubVtk0AhJgSrLLk4gL0mafptijqfN4P0iXEU6lOVCBOzD73clayjDcTUZHQ1BFjs7YehWFs
+	yMchuuwg==;
+Date: Tue, 6 Jan 2026 18:29:46 +0100
+From: Andreas Kemnade <andreas@kemnade.info>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Haotian Zhang <vulab@iscas.ac.cn>, Kevin Hilman <khilman@kernel.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, linux-omap@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] omap-cpufreq: Fix regulator resource leak in probe()
+Message-ID: <20260106182946.1c54d769@kemnade.info>
+In-Reply-To: <pjmwnxp6wae3bbmzmzys4r5szw6ywxphi4qtmpmg7jsqadc5fm@fvozoujr4mi5>
+References: <20251215030327.1771-1-vulab@iscas.ac.cn>
+	<20260105101412.0ac7baa7@kemnade.info>
+	<pjmwnxp6wae3bbmzmzys4r5szw6ywxphi4qtmpmg7jsqadc5fm@fvozoujr4mi5>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Thomas,
+On Tue, 6 Jan 2026 10:20:55 +0530
+Viresh Kumar <viresh.kumar@linaro.org> wrote:
 
-On Tue, 2026-01-06 at 17:54 +0100, Thomas Antoine wrote:
-> Hi,
->=20
-> > [...]=20
-> > Are you still working on this? Are you planning to send out a new versi=
-on?
->=20
-> Really sorry for the long time since I sent anything. I had some personal
-> issues and had to focus on work so I could not work on this.
->=20
-> Moreover, after rechecking the files, I noticed that the support for the
-> MAX77759 should most likely go in the max17042_battery.c file. There is
-> already support for multiple chips (e.g. max77705, max7779849) and when
-> I looked into it a while ago, most of the support of my last patch was
-> present with some things more.
-> I don't know how I did not notice this when I first started working on th=
-is.
->=20
-> I can rework this patch and send it by the end of the week as the change
-> requests were pretty light.
-> However, I think the cleaner course of action is for me to attempt to
-> integrate changes into the max17042 file and see if anything causes
-> problems which would warrant a new driver. I think I can take the free
-> time to do this by the end of the month.
->=20
-> What do you think?
+> On 05-01-26, 10:14, Andreas Kemnade wrote:
+> > On Mon, 15 Dec 2025 11:03:27 +0800
+> > Haotian Zhang <vulab@iscas.ac.cn> wrote:
+> >   
+> > > The current omap_cpufreq_probe() uses regulator_get() to obtain the MPU
+> > > regulator but does not release it in omap_cpufreq_remove() or when
+> > > cpufreq_register_driver() fails, leading to a potential resource leak.
+> > > 
+> > > Use devm_regulator_get() instead of regulator_get() so that the regulator
+> > > resource is automatically released.
+> > > 
+> > > Fixes: 53dfe8a884e6 ("cpufreq: OMAP: scale voltage along with frequency")
+> > > Signed-off-by: Haotian Zhang <vulab@iscas.ac.cn>
+> > > ---
+> > >  drivers/cpufreq/omap-cpufreq.c | 3 +--
+> > >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/cpufreq/omap-cpufreq.c b/drivers/cpufreq/omap-cpufreq.c
+> > > index bbb01d93b54b..f83f85996b36 100644
+> > > --- a/drivers/cpufreq/omap-cpufreq.c
+> > > +++ b/drivers/cpufreq/omap-cpufreq.c
+> > > @@ -157,7 +157,7 @@ static int omap_cpufreq_probe(struct platform_device *pdev)
+> > >  		return -EINVAL;
+> > >  	}
+> > >  
+> > > -	mpu_reg = regulator_get(mpu_dev, "vcc");
+> > > +	mpu_reg = devm_regulator_get(mpu_dev, "vcc");
+> > >  	if (IS_ERR(mpu_reg)) {
+> > >  		pr_warn("%s: unable to get MPU regulator\n", __func__);
+> > >  		mpu_reg = NULL;
+> > > @@ -169,7 +169,6 @@ static int omap_cpufreq_probe(struct platform_device *pdev)
+> > >  		if (regulator_get_voltage(mpu_reg) < 0) {
+> > >  			pr_warn("%s: physical regulator not present for MPU\n",
+> > >  				__func__);
+> > > -			regulator_put(mpu_reg);  
+> > 
+> > so it it not useable and could be released which is not done anymare 
+> > with your patch. It is not an error path here.  
+> 
+> Right. Perhaps devm_regulator_put() here would be good enough.
+> 
+ok, didn't expect such a function, so that should be the cleanest approach.
 
-Thanks for the detailed answer, much appreciated!
+> > >  			mpu_reg = NULL;  
+> > 
+> > And this should happen after removal, too. I feel some discomfort with
+> > variables pointing to freed ressources. So I think rather add
+> > the regulator_put and the = NULL to the remove function.  
+> 
+> I don't see a reason why this extra step should be performed after the driver is
+> removed. `mpu_reg` can't be used after that.
+> 
+hmm, it is performed when the device is removed/unbound, which does not necessarily
+mean the driver is removed. But that does not prevent trouble if something
+is still trying to access stuff here after driver removal. So it is not really
+helpful.
 
-I'm always up for cleaner solutions, and unless somebody else has a
-compelling reason to not follow your new outlined approach, I'd
-say go for it :-)
+Hmm, how does a device gets bound to this driver?
 
-Happy new year to you too!
+Lets gets back to this very basic question. I am usually using CPUFREQ_DT.
+Are there any signs of usage of this driver?
 
-Cheers,
-Andre'
+omap2plus_defconfig creates in .config
+#
+# CPU frequency scaling drivers
+#
+CONFIG_CPUFREQ_DT=m
+# CONFIG_CPUFREQ_VIRT is not set
+CONFIG_CPUFREQ_DT_PLATDEV=y
+# CONFIG_ARM_OMAP2PLUS_CPUFREQ is not set
+CONFIG_ARM_TI_CPUFREQ=y
+# end of CPU Frequency scaling
+
+So this thing is not used. Everything with omap2plus uses devicetree,
+so probably no user at all for it. So I think we can deorbit the whole
+thing.
+
+But the fix is good for stable. So I would propose to add this
+fix (to let it propagate to stable) and deorbit this driver.
+
+Regards,
+Andreas
 
