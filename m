@@ -1,235 +1,135 @@
-Return-Path: <linux-pm+bounces-40323-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40325-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5237FCF8E96
-	for <lists+linux-pm@lfdr.de>; Tue, 06 Jan 2026 15:56:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37A59CF9017
+	for <lists+linux-pm@lfdr.de>; Tue, 06 Jan 2026 16:15:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7E364301CD01
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jan 2026 14:55:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8A9B430BF306
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jan 2026 15:08:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D313335559;
-	Tue,  6 Jan 2026 14:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B853433E34C;
+	Tue,  6 Jan 2026 15:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="HJfK3w7a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LwpLZ4Gv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010021.outbound.protection.outlook.com [52.101.69.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D91334C20;
-	Tue,  6 Jan 2026 14:55:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767711336; cv=fail; b=lyeFCqtPIi/5guT1X8RhU2i/heFgl8TjGXAmv/oQEvZEpHXKsaqtiHI6hMOHMjv0Xd9/+aygxR34FxvFD+HGbkS7KYInK+sgrJzPF430FjBrZ0bFwRz2oouPJOcOycJUrDLURfU8hU/Luq8VgATpjYUleBMaInUnAMgnoq8n6IA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767711336; c=relaxed/simple;
-	bh=ncho4es0EzLi87g0REVaeejy4gJIZTZnXL99XUd/CfI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=rMOxZBmnpKGqqzD6qGYVLX8uFMn154GnWVyY0WVkYmvlZTGhcB4W4wRffOZtN7PKqj/C6N5yZ5BceZTSSKt7MoVHzsmR0/MVCagcL8sEtBC0vcQaXjTw8jlx6YxbRTDfBUqp5jKh+709irdKPCbqLLRgNLFiWR8FCTj81epTPK0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=HJfK3w7a; arc=fail smtp.client-ip=52.101.69.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=g3qnMHMkwHbLX5kzJ9uVDW+Bqfw4S1MB/9xrnonBsDxrg0AjSoYbmqSR4gwFeTafNUHRwqtLZF5mJb0iGChKDKbkz5WmyZKfuex90Y4jGTG0IoUMoY5JyeAjUiVLiKSUCR8yI1M6a1Avq0eRQeaB8MaJwYPCT7rkjPleicR2WfTqyVp4JMKaU/0mmlwoQt3615NbadJ23Z74i88ugVtpXLDhZMwaYRKYQjyLp9Wxx0jLCjR/+l5XwyjC44DHdcyq84eNVpTjjK40JfHIlXfl2tu3XQAoCc5IXv4/wsX4a/NuCCrdEqgBsFmJyrioWMxWnet7s7rK7eLPPKuM2EFKvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=i5ZqWswtW6iqsdeNPzX7hUI8uvm/O8ALl+ZnG/DAlxo=;
- b=zAJKjoJR8MH5fTfHOJn7/FM0eFHyqRHTg3Kxqk+AqScD9ZvdPbKPTwgBca8+gESuO7FiroPhKSY124ovq+CkQagtoizg3A3d4ewS/RhglkU1Zj43bkOXutATe7LNJIyfxLV6fymrKnohxFta0IZ0MOTZApKZuJ3Vtc1Zm7pP+kxBqd1wcKrX74T/BxDTSIUwxPIruuY2hZD0t5qCwQ8BJiCUhChTUMGyPsYaS72lEJbP7IrDGZGQOXOiE1Ll5dvU8fvLMPLyJRt5D2Emji/t+WyEctnD0jpvYmPWcmqKh2+qyn7e6eyv32kQszBuin3pEXNTDrouYxLdqXVfUdmFig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=i5ZqWswtW6iqsdeNPzX7hUI8uvm/O8ALl+ZnG/DAlxo=;
- b=HJfK3w7aYhYH4085B9Lzm/e2PqMI766XjeYKJD1ADxQpj8fJXZGK+/h76f4CvEzXllp/EmvMlsVYX8Xgpx5Cg5En2e1J6rwLQvdqbwKTv0yWkdE7EBW7c95MM4YzFAItbwOok42fPdT6ckSmGs5XSDY7F7ytKof0gax0+g5A8Q8aWXSwh+UxAdTHMcXFqWtXuV6YY9e09XmeQp7JHCdqYhVkz0rHtmCJsmXKetkj02ybRjf6A/lgZjzEWODwqtAbmWzwHvaTzWBneqf5uYYfyLlbFds3oc2vLl3UybqzoOLQJ9Y4waUxDQKcIcceTaYDpI+/lh/ySpV8Qn0rG2rnJQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8951.eurprd04.prod.outlook.com (2603:10a6:10:2e2::22)
- by PAWPR04MB9912.eurprd04.prod.outlook.com (2603:10a6:102:387::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.5; Tue, 6 Jan
- 2026 14:55:30 +0000
-Received: from DU2PR04MB8951.eurprd04.prod.outlook.com
- ([fe80::753c:468d:266:196]) by DU2PR04MB8951.eurprd04.prod.outlook.com
- ([fe80::753c:468d:266:196%4]) with mapi id 15.20.9478.004; Tue, 6 Jan 2026
- 14:55:30 +0000
-Date: Tue, 6 Jan 2026 09:55:16 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nipun Gupta <nipun.gupta@amd.com>,
-	Nikhil Agarwal <nikhil.agarwal@amd.com>,
-	Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Vinod Koul <vkoul@kernel.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-clk@vger.kernel.org, imx@lists.linux.dev,
-	dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 09/11] dmaengine: fsl_raid: Simplify with scoped for
- each OF child loop
-Message-ID: <aV0iVJgmqevN5UPV@lizhi-Precision-Tower-5810>
-References: <20260106-of-for-each-compatible-scoped-v2-0-05eb948d91f2@oss.qualcomm.com>
- <20260106-of-for-each-compatible-scoped-v2-9-05eb948d91f2@oss.qualcomm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260106-of-for-each-compatible-scoped-v2-9-05eb948d91f2@oss.qualcomm.com>
-X-ClientProxiedBy: SJ0PR13CA0084.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::29) To DU2PR04MB8951.eurprd04.prod.outlook.com
- (2603:10a6:10:2e2::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398A633DEF7
+	for <linux-pm@vger.kernel.org>; Tue,  6 Jan 2026 15:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767712033; cv=none; b=l07HDpkWmN+AzAKaemV5zliN2lehbjIm7mYwGNP/uUiutF4rfBO9cF8ZjZT29am7Po57+0ZOThtsOy5wFtQQorWUsj7rluzCJJL5UB2dYoU4zpmzuOMYiEg78xp/lmmlFs0Bauwu3ljWjr4IMjL1yB9chMpPw27wrEXfVQQllsQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767712033; c=relaxed/simple;
+	bh=IQu1Edy/HWKz08uAYzo3PsbrFyGQXi8NI559zIHsYyQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Uyz66vPb+nTCOj/9PMDEgaS0roU35Id9HANShPIQOwQ048ztMbqWBDYV55zbUcnPsgFPmP4TXPh0JtVE5rUBSpICdrdcmVOzfHIGcg7aSVT1XPUG+Bot6yuVtDDerp6oShPkj9Y3SSK6fmOeCp4x2conbgP+RudspPkF4pGfGGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LwpLZ4Gv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DBD5C2BCB1
+	for <linux-pm@vger.kernel.org>; Tue,  6 Jan 2026 15:07:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767712032;
+	bh=IQu1Edy/HWKz08uAYzo3PsbrFyGQXi8NI559zIHsYyQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=LwpLZ4Gv/rLh9TOdLjDFrTwucroei2WbfyfQ748EF/Mixcf1SBZ7zGqZnvN3Cl67f
+	 G3QK9601kjEphYjnk4vmdZbVf3k/2hTZdTTy+LNeVt5x3G++qme34VifB+NJICW3vJ
+	 09c9JKB3N8bg1N+oyoE39OERHvzumzFiSIObvrQx+DaaND/DEPHGRZvAnPS/seHHSo
+	 1+Pxa3g00WVBkt02qKeOUAugvQXcehMej7dfbRiaqJbD+thxrzi1yFRdv5sPnQpBjO
+	 oI0Uiz8GA0cZx2M4JzwK1SkdfPms+hGSpML/mW9cUOjE9JxmPv5KeuXRQN9dP7cxp/
+	 8acHsRKVIWusg==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-594270ec7f9so1246348e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 06 Jan 2026 07:07:12 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXwgXYPBXuGGScrJjjPF35pPAYzt4O5n462Aez+PSClnS/fsjbnW0fBvWUv5UvE+YU/xnOVZ7zllg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpwLZxoQl4khLsDFPzpkn9k0XKEf6PygrvrMfRrZLv4AQ+iQB1
+	WUL9IrEglwNa5EGMjz8ev2sU31gQgz7/O1v/OCiO5EEir7AcBexjbrpVEb9WgZxx6PO9cHJooWG
+	9nN6RW9atvl+YHXvnzRWXETyCORC57i44X6cPmIFgVA==
+X-Google-Smtp-Source: AGHT+IHAOfkiONe5tfkuIatWxpK+1+BQ2Mtd3EKyiolyupo7EAbMOL0eppnic2LZGQzoSV374+2boUr3vUjOlxckYmM=
+X-Received: by 2002:a05:6512:3f0b:b0:598:eb13:c14e with SMTP id
+ 2adb3069b0e04-59b652cb22fmr1135214e87.35.1767712031036; Tue, 06 Jan 2026
+ 07:07:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8951:EE_|PAWPR04MB9912:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0105b925-eb16-4304-335c-08de4d33a2bd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|19092799006|7416014|376014|52116014|366016|7053199007|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?mMHeYiHpw93GMKacRRHZjmkV7EO/ZTeufxvw6e24u1rnupnbRAel1G3bSUnq?=
- =?us-ascii?Q?UXf67YjKzx1TebtpyDOBlotb/gVA44UxojFTE51ZnLTdafbUf6S3+5yfGlWk?=
- =?us-ascii?Q?cCvaHhU9co9AxDwsTrQDWwkmlAXB3FGUR3qov5BQNEt25Yds9psvVuJwUqWV?=
- =?us-ascii?Q?N1uSwj/J8LS2E9sRaWyUCjSS65gLhh4GGqcyzLvYs1o6Wxh0uKaxFVKN+4WW?=
- =?us-ascii?Q?KTFkTzzBhHd4Fxpc4dMNk4Yw/WQDwOPxNxOh7fHs6+QjZXXgU7G+87r4k6q9?=
- =?us-ascii?Q?L3c/uFX71nvdDHHTvVKGQri9pkVW7FgQrvSS3eemTXUxei4uUi/yXO6wd1IX?=
- =?us-ascii?Q?Pu3A/yAv6W72NfpaYQVMneNfwVyZSLhPiFxtoZowdXhp36rMoNo8QNhQ0dw8?=
- =?us-ascii?Q?MZ9yocPW0DrZcdgFwhMxkElldyYtgOcx/qaU8P7H/ynDffkL2j/99iMODENv?=
- =?us-ascii?Q?pfgMtHVxkZTMYWegAe5+CfffImbiAuE/QEWq0W9fcY/vdMTANcHD6GDSO4Ow?=
- =?us-ascii?Q?4M6cLYqQq5wHLJCY1UmIzH00e6M4KIljXK6tL2gga5lYJgQHe23mjobPk540?=
- =?us-ascii?Q?ExeW5CSI+bCIJrPjVq7UwVvAycpdxav64NjISn43om+x7AfcKrNAz5vQ/52E?=
- =?us-ascii?Q?YW+z21KRABgXXOuXoCC93ZLtjBstNObJ64tE58Y8lN5W8lXX+AGbKvJbv/Av?=
- =?us-ascii?Q?GIwnTJuepKfRFKxCUKh+YtA00U/b8h3Nj6rN/r7V18nS24sLB+UQSi1MOK7H?=
- =?us-ascii?Q?W7JPrb7ldIJQuBm1dfZWsMGvoOB3HPpKt1qgJgbIA475Zbgz9QYlpeP5AmWY?=
- =?us-ascii?Q?J/1ftWG+JrjrWPeUugxwRBgCU2bG3cNoHwKhcNfD+H7N/NtzEMCQ2H7wgPjJ?=
- =?us-ascii?Q?+3x6h+3Y5delpqt3c4f2K07Qn+jhfQk3HoCeD/1VJdwSsahU2MNu20FUCVtw?=
- =?us-ascii?Q?9OTsjkUYow4Ja6Lt4NKaDphmQDIgfJ91ljgLTNslsfB9wRz4ishh7NAKkcK5?=
- =?us-ascii?Q?br9dAGM7lZqL7/mMpnZN34PJKR/YeVGo15rS4hfvx4iazpExFCyHVoxwF3Rj?=
- =?us-ascii?Q?wEpnSV4sfdZ21VgVJGiA1dYnmE5MA6dKZZeEWBPurL3Bvm72NK+TfV6rS5fz?=
- =?us-ascii?Q?mjCxrCOzOoaXvV4Bpl9qtfOn5Xk+PW0oLJm2WOtLUg4BRzmbG94xtAM39J9K?=
- =?us-ascii?Q?Nrtv3nmQ5DiBc7esUqAnIIl3W7826VVZGKdpctImxs1+ch0nrPKrsYQKdI41?=
- =?us-ascii?Q?r3KYiANMVtFd3xD1hjPnEOxfmqU+IzEmG2WeuisGIqPvGlllMSQoJAYweU98?=
- =?us-ascii?Q?hHmNe4RrskUwwf1Iu9ODZjq8M05GYdBlgsLXi9lbh2wo4TzUIcmxL4Q3g5+k?=
- =?us-ascii?Q?x+xRQfSdgiWm1DOS3JPXBoeXz8p6MdQc61YEeJnxWoeWZTkDwxXxyx1/iIzm?=
- =?us-ascii?Q?pacAojhzS8xsCM7e//r+9zgFo0xIn9PCNs5DZFh6m6pZH1PYfksD/sflUBOI?=
- =?us-ascii?Q?dAENnicX4JswbxlzAWK+WVe6kRXjQ6hpteLt?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8951.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(19092799006)(7416014)(376014)(52116014)(366016)(7053199007)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?tLSsCQRBAFL3PEzxRzXBJuMYo79msNOtlyNcen7JFncTSOXnrX6QCSzDRk1B?=
- =?us-ascii?Q?sqQCet9ba3/x2pxPIw4r2/65e1KD3k53Zj2GIhUBg5dmevEZa5SGVoiDZaTk?=
- =?us-ascii?Q?4VAHlXQ5oHA5d8giA+xzuirYSJ5IQ1iH5AcwJWhRScFHcfamEki5XWK8se9Z?=
- =?us-ascii?Q?yLlFo3FVAD8As5tN76lAOG2manHZ6ELSi6OHwGEDbMrbIkbEQ8WoKWFnrKUe?=
- =?us-ascii?Q?qxiBEBwbhIiP/qq9cjC4wFbbTKc3fbNvMi8niOTYRoCqWPJd2Wqdzp2kvNJ2?=
- =?us-ascii?Q?QdzkAHJLJZ4LxAl1bdhYe0eGEo6QTf3MdyOIJ+2bt1a7nqbURAGeZ1iTQz3a?=
- =?us-ascii?Q?eWRAgBlLdZHQOby95jdyu0FAoXPkypMr372f2RFQ09pXoCDU4429uiD8zq/s?=
- =?us-ascii?Q?bspmb32YmyBvzHhIY3EKMBMKhBpIPjk/eOkRp5kuQ+kh5Cl2bCh+UgtZyEvc?=
- =?us-ascii?Q?Os5Ywu9zxXiwUmB6jouSB8YWbK1mNUavQUHfnweMUZldVQsI+/zU+UbZa2+s?=
- =?us-ascii?Q?pbsyO/NPbTOJ1X/wHAYMi/D5XO83xklIyz7g5aXPfyr+cEvzFYqNSDuYMyEl?=
- =?us-ascii?Q?Zcywkrf2Jjwm3gnmaIN8qBCSUDM66V1dNPKQ898HFZV9BUEbO+Giu5X38n40?=
- =?us-ascii?Q?OCuUa1Zh5J/gTsD69XAIpik2zqmwjuLzf8oPwiPPmaKwq5wZWY1EpRSjR2yN?=
- =?us-ascii?Q?jzRhcWS9uab/z2cs+Az/I9k+4t5n21y019r0oMUl5HEkfVaiX4jLq7RV4Ekc?=
- =?us-ascii?Q?fJQBOKztEYVLhtdNS9nRyhV4A18VBHd8IcxjTmMopDOerU/lG5j3TDnuXI/e?=
- =?us-ascii?Q?JAofO0sSiwczMX+buKuPfxfOyEx58qhFD+DLpi/Udkd1y3tktDIAZikjvq9d?=
- =?us-ascii?Q?Cvmdy5OqgeLtMbZ2NmZ2P77oMKRGEEJreg43PGeriS2fFH+10R6P8Ve43QgZ?=
- =?us-ascii?Q?QntqDq7roel7SoXqBRwR97s1+eQTawj0fMv27PI1U/Hf1aYq8mAtmVzwrQ3+?=
- =?us-ascii?Q?4JjesTBX48TrUmJ5ohNLhICSgeHzp6LmZKPJSZUHW7DXBcxXbKpE1Hc37Ld4?=
- =?us-ascii?Q?0qms0WB+ukeHAGlDbrIKt8THGu+XMFNTP7aZWwTuwcbyh+eVPwe07ni3N/Sy?=
- =?us-ascii?Q?ygOVIyTyBs4HGkrk4fnDSx+JoeyA9pIaRtqqThpF+wscExLQALmgJi3G/O5b?=
- =?us-ascii?Q?B5OLvjdedCgU2AFjJUCgixvi4/P47534yqeXdd7mmyxiK2Kv+TQRjHzF3K/J?=
- =?us-ascii?Q?1SiRb6zLQzRE71VKFE2h0MJnVt8hBbX1rYdKM0vKpnVhvemdDeNDj92Eojvo?=
- =?us-ascii?Q?sOW7g9rQKCdpFIPFjzQWPHW7ytFtzdx0NiGNq2RNDtcrwX2+DCXws66cPXIa?=
- =?us-ascii?Q?BYiAHW2ik99lVXO16llpx2lmM4EBTyFOHJ3tAvVsM9dbW3hhwE5vKIRBaJ2a?=
- =?us-ascii?Q?ZZ9ioGFaDpITw+9o889grlIg+KzPhdkibltQNaNQQk2gEXpUFckEwPV6WhNd?=
- =?us-ascii?Q?XEvQ7lu9/798fJO3XU4wIv/61GF85kp5I8bUv2AlBk2NxbVSENbEJAttkeIv?=
- =?us-ascii?Q?9OM4j0ui74poYO7z3a57U/NS2KYXRpzLCoire9TiM4t+wC37EGvbhi4ru721?=
- =?us-ascii?Q?f39/hEb1uLfuu4BrvmoaK30HSggHk2NKYNWnZLJlA8jzixPLz2w9b4DRhYAP?=
- =?us-ascii?Q?XQH0KY/pr0NTjScfr7qSf57ZkDKC/2OlSQGxZjIwB4Tnylq8?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0105b925-eb16-4304-335c-08de4d33a2bd
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8951.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2026 14:55:30.3581
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rEtPzRynVQYz9WRrx2THejGeL4sNBSpM+Io+24ISyy4yaHolnQzxiFH2IYuaro3Id+kEfpUULhsw4sF4MYRCVQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR04MB9912
+References: <20251228-arm-psci-system_reset2-vendor-reboots-v19-0-ebb956053098@oss.qualcomm.com>
+ <20251228-arm-psci-system_reset2-vendor-reboots-v19-6-ebb956053098@oss.qualcomm.com>
+ <CAMRc=Me8WQ=aMd-NJ1yzzHzqU8fT1u4eb7as=EjSpZ+Rpv9+rg@mail.gmail.com>
+ <87f25d02-2805-9da7-0d7f-05ce8a022d25@oss.qualcomm.com> <CAMRc=McH6jsaKROyMGAhH_gGSiQtqvuVmrUODgtSp0hX8g06=A@mail.gmail.com>
+ <466fac7a-e16d-9c49-80bc-c07ba5a5f334@oss.qualcomm.com>
+In-Reply-To: <466fac7a-e16d-9c49-80bc-c07ba5a5f334@oss.qualcomm.com>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Tue, 6 Jan 2026 16:06:58 +0100
+X-Gmail-Original-Message-ID: <CAMRc=MdNfW9pafvWy8L5iv5StR1b4_jghL7j-08cyPZVeO1Mag@mail.gmail.com>
+X-Gm-Features: AQt7F2phEQiXdqhKlEbA_1Ii19T6QcgYifTgwXE_RDm9f9TtDMKssHYYLEX6HPY
+Message-ID: <CAMRc=MdNfW9pafvWy8L5iv5StR1b4_jghL7j-08cyPZVeO1Mag@mail.gmail.com>
+Subject: Re: [PATCH v19 06/10] power: reset: Add psci-reboot-mode driver
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Souvik Chakravarty <Souvik.Chakravarty@arm.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Andy Yan <andy.yan@rock-chips.com>, 
+	John Stultz <john.stultz@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	Moritz Fischer <moritz.fischer@ettus.com>, Mark Rutland <mark.rutland@arm.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>, Andre Draszik <andre.draszik@linaro.org>, 
+	Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	Srinivas Kandagatla <srini@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 06, 2026 at 10:15:19AM +0100, Krzysztof Kozlowski wrote:
-> Use scoped for-each loop when iterating over device nodes to make code a
-> bit simpler.
+On Tue, Jan 6, 2026 at 3:45=E2=80=AFPM Shivendra Pratap
+<shivendra.pratap@oss.qualcomm.com> wrote:
 >
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> On 1/6/2026 6:04 PM, Bartosz Golaszewski wrote:
+> > On Mon, Jan 5, 2026 at 7:06=E2=80=AFPM Shivendra Pratap
+> > <shivendra.pratap@oss.qualcomm.com> wrote:
+> >>
+> >>>> +static int __init psci_reboot_mode_init(void)
+> >>>> +{
+> >>>> +       struct faux_device *fdev;
+> >>>> +
+> >>>> +       fdev =3D faux_device_create("psci-reboot-mode", NULL, &psci_=
+reboot_mode_ops);
+> >>>> +       if (!fdev)
+> >>>> +               return -ENODEV;
+> >>>
+> >>> This will always create this device for everyone who includes this
+> >>> module. Move the of_find_compatible_node(NULL, NULL, "arm,psci-1.0")
+> >>> call from probe() here instead and don't create the device if it
+> >>> fails.
+> >>
+> >> Ack.
+> >> Will move both calls to init before creating the faux device.
+> >>
+> >> psci_np =3D of_find_compatible_node(NULL, NULL, "arm,psci-1.0");
+> >> and
+> >> np =3D of_find_node_by_name(psci_np, "reboot-mode");
+> >> --
+> >>
+> >
+> > On a second glance - and I may be totally wrong - would it be possible
+> > to switch to using the auxiliary bus and create this device from
+> > drivers/firmware/psci/psci.c? That would be even cleaner.
+>
+> Till v17, device was being created in psci.c. Lorenzo wanted to move it
+> outside psci similar to design of cpuidle-psci.
+>
+> https://lore.kernel.org/all/aRIfc9iuC2b9DqI+@lpieralisi/
+>
 
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
+Thanks for the link. Right, there's no actual psci driver binding to a
+struct device, rather we only have a set of functions called very
+early into the boot process.
 
->
-> ---
->
-> Depends on the first patch.
-> ---
->  drivers/dma/fsl_raid.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/drivers/dma/fsl_raid.c b/drivers/dma/fsl_raid.c
-> index 6aa97e258a55..6e6d7e0e475e 100644
-> --- a/drivers/dma/fsl_raid.c
-> +++ b/drivers/dma/fsl_raid.c
-> @@ -746,7 +746,6 @@ static int fsl_re_chan_probe(struct platform_device *ofdev,
->  static int fsl_re_probe(struct platform_device *ofdev)
->  {
->  	struct fsl_re_drv_private *re_priv;
-> -	struct device_node *np;
->  	struct device_node *child;
->  	u32 off;
->  	u8 ridx = 0;
-> @@ -823,11 +822,10 @@ static int fsl_re_probe(struct platform_device *ofdev)
->  	dev_set_drvdata(dev, re_priv);
->
->  	/* Parse Device tree to find out the total number of JQs present */
-> -	for_each_compatible_node(np, NULL, "fsl,raideng-v1.0-job-queue") {
-> +	for_each_compatible_node_scoped(np, NULL, "fsl,raideng-v1.0-job-queue") {
->  		rc = of_property_read_u32(np, "reg", &off);
->  		if (rc) {
->  			dev_err(dev, "Reg property not found in JQ node\n");
-> -			of_node_put(np);
->  			return -ENODEV;
->  		}
->  		/* Find out the Job Rings present under each JQ */
->
-> --
-> 2.51.0
->
+Nevermind this comment
+
+Bart
 
