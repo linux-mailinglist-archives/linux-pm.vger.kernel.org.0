@@ -1,178 +1,132 @@
-Return-Path: <linux-pm+bounces-40331-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40332-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06A81CF9DE2
-	for <lists+linux-pm@lfdr.de>; Tue, 06 Jan 2026 18:53:17 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F3F2CFACC5
+	for <lists+linux-pm@lfdr.de>; Tue, 06 Jan 2026 20:53:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4B2CC3157151
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Jan 2026 17:40:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 801BF3158159
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Jan 2026 19:30:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C002EC558;
-	Tue,  6 Jan 2026 17:34:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC39034D385;
+	Tue,  6 Jan 2026 19:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="jh0WVdvT";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Nz4sZcfa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c02Ax4OS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 864262EA16A
-	for <linux-pm@vger.kernel.org>; Tue,  6 Jan 2026 17:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D763090CC;
+	Tue,  6 Jan 2026 19:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767720875; cv=none; b=msQ7bb2drPPU4zQDTGEAA/dtymBQTGiDNX95gAMwSJwxWV5UCGFyjvGPsbFYrpr+V56OVqifwd1d01xm9JL6shy6/w4Pw7GxTmO1BoDAaPJu4hTalLOyJhhjJyYiY8/e8cU+OX59ApWHhyvzszgXsfT3/ISo9XbfV7/cTJuf53k=
+	t=1767727808; cv=none; b=jkOeXuwi10Yq7or1PF5nVD3Mwe+3M6Ls5IQ9crmU8Nea+UTD0J0AV8MNfA5Ak3+ripBhoDQWh4EtpypTy7HNxyRptqcMPTeIDTFNU5J671+micfQn7gBnesvTQWoPGyMt6g/+4Ws2mb7U1ey4jatsTcPVIHOlrGTaRJ7q3vlu6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767720875; c=relaxed/simple;
-	bh=4uAAVaBUqR7XbgPYM+b3TErNU92wyGwrj6qD+m/4Eys=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OtawLGHSi4BHxuGcM25MUuQYQ0xZ2smQ/fcRyqlmIm6xupqacaNu+K6Q2j0FGI404Sug1Yy6L5cLiWoD4NcYikYFKA02HXN7/gSArr0FG3ag23c+2L2e21xRjb1YeTjanJs6dfQyYdEFjzoj92PcFJDOKz7YVATDj65TqFrNi4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=jh0WVdvT; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Nz4sZcfa; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 606GqKB33888893
-	for <linux-pm@vger.kernel.org>; Tue, 6 Jan 2026 17:34:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=jzSTS8fbRs1wSAGF7WUmIraz
-	4oEVJgEJtLyxFPfHdeY=; b=jh0WVdvT/iHJCW9ccrMMRQSXa8S7RznjJF2rwsEN
-	YKwyXrzMt1PfUGji8KYBTIfsqkOYc3GpQakVO9XP2+xjmyL6iXyXAFfb71sInSdv
-	kWR7WbHq4o4RAv6mIDMxZHsbokci3U62YI6Paaf3X2NngzaBz4EKYYB4U667tyq7
-	fn1r6oK0Nid52Eg2ESQNbj+OEW++qF/UfR9bcvHyZIrWkZcaUrFsLyPAiE/LR2Pd
-	sydRPjtTZOWB7NNLg+Yzs9VHBMmrEhJ8R9K14MnudQhdrTihKF8rlaiHEKxKmnro
-	t1+GLHOBC15gk5klSTnDod8Ij2r5Jn4z9szjZqTb4BWpoQ==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bh6a0g4b3-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 06 Jan 2026 17:34:32 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4f1d7ac8339so49681881cf.2
-        for <linux-pm@vger.kernel.org>; Tue, 06 Jan 2026 09:34:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767720872; x=1768325672; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jzSTS8fbRs1wSAGF7WUmIraz4oEVJgEJtLyxFPfHdeY=;
-        b=Nz4sZcfadxHAci8TJaPY7PKYE2OPXJu9G0hJXPaa4bTg6uE4Ezd9zERwAKNQa4lBTR
-         6LATPjCSwvJYDdd7GHGAh5ZbuyUeZDYQzcCe0tKaVSWjDAZaTKZYjwg7IbaY0C59JJg4
-         60jtQqTPYnQVgzR8cRk5eJHh9M/bCuT7k+WeN9YNwFTtMBY1jZtlgaybbBcXzmWOS3k3
-         84sB1Cw1OmKumjscHgQPSzZ4jhMosQJn6YLafe8GqAoufxLhp0lZcvj6lrp4+5XsgKIt
-         GK4fctpw3GyoiZ/jR3PEmwsBEY39Jd0ZyzOAGJBALWIS04MF/7JiotqCHd0hUPfLJ/Dv
-         ZxqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767720872; x=1768325672;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jzSTS8fbRs1wSAGF7WUmIraz4oEVJgEJtLyxFPfHdeY=;
-        b=bIdLNWSTzkZonvBs7eyx38lUmVWOy1GBKZk2dthRPwAnDpuILDWnLwcU+5PfeFZL/e
-         v2lFv6+Z9jILimETVBBhmhNqaAzdQl1YLgBUL+HcAvlaZKEEaPhVdGvDoxOdJ1u++VDF
-         9pj2tOs33poeHmEoMwxjasXoKTvUhgNI5lysOY5Epaypy7a/PxiG/Zi1P+rlpqHUSdjV
-         tk1RGPmag6ni29ZChrvWKhloxnT75NqfHRY4OyvU8lLbwAMfks5TlIf9uMkAK4mKr3db
-         aHwN7k5tgOyRUQIPzc8UMeLegT84Mir8zifyohVFOQVq3XCatVSG3BnVOhanyj2CF+gf
-         1Rzw==
-X-Forwarded-Encrypted: i=1; AJvYcCU5n/LDp9my8lcKU0sM2tqEEqESigc1TtmfHXmG2lnOBIO+//w/O3icH3NgDgioV0kpm/W46i2QJQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvW27PGfMXPTFXLycdlLQmnJDExDrSgCqa27qeOWFt0lnTVWSC
-	TskFCmvuLlJcaGMkkaaCCcKaXs6dOzxVTQ/tuoeTR3ePriyp9SNcCyaX/m1yCJf78rtc7FTNGkd
-	X+U2fvJ78eq0sLBGKfJYXMWhksIJl7xhWl5UaKJ0K1GHYWyWila+othUYWN6i2Q==
-X-Gm-Gg: AY/fxX6wrsjlndhpMyU9xDREgliFh2bCeUqteUJTEJjhvWJC65xqLF8xPoFhp0ronsb
-	4h1NtsNCGI/Kfuj+pCGSBTCtk/9x3jd/JHhot6l8fFWGFS8a3795jZHnsak7DuJ1xoH6GVL0qbb
-	tzHabY+Nyf+bObA0bkendtEIaXdBnRmHI8Ef9l/3Jm1lhFh++az1nlQfMMpjix3vAPJQB/1LYSu
-	1/UGFoBHE/ifofHEDr4875vfOI9yd1UThRjw40er1TyfZ7P3Lsb2aIJLi3A3833mxUT9hZw+iGD
-	1aBPafZeR66ARZCOvh/qRYn27NclioZareFuKJA3NkMXJIfCdFkVBHC7l+o1dYFOkCo4nyS5WRI
-	7otM9IOLRV1vXlEu1wy8r
-X-Received: by 2002:ac8:57cb:0:b0:4f1:b9fc:eeda with SMTP id d75a77b69052e-4ffa77597abmr57402841cf.37.1767720871921;
-        Tue, 06 Jan 2026 09:34:31 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFsS5Q8M4Ax4uLqCekfjuM/TS7dC5bAY2/2l4KJvBIfjf+72ZUp+kPt+lte2C5fe//DuAlvyA==
-X-Received: by 2002:ac8:57cb:0:b0:4f1:b9fc:eeda with SMTP id d75a77b69052e-4ffa77597abmr57402111cf.37.1767720871283;
-        Tue, 06 Jan 2026 09:34:31 -0800 (PST)
-Received: from oss.qualcomm.com ([86.121.7.10])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507bf6d5absm2551707a12.33.2026.01.06.09.34.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jan 2026 09:34:30 -0800 (PST)
-Date: Tue, 6 Jan 2026 19:34:28 +0200
-From: Abel Vesa <abel.vesa@oss.qualcomm.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        Nipun Gupta <nipun.gupta@amd.com>,
-        Nikhil Agarwal <nikhil.agarwal@amd.com>,
-        Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>, Vinod Koul <vkoul@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, llvm@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-clk@vger.kernel.org, imx@lists.linux.dev,
-        dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 07/11] clk: imx: imx27: Simplify with scoped for each
- OF child loop
-Message-ID: <pbmxwpyohpq3pi552pjwwgfe5wcj7qq7fx6lofpod5mq4bvmwj@sn4yfn74sgiz>
-References: <20260106-of-for-each-compatible-scoped-v2-0-05eb948d91f2@oss.qualcomm.com>
- <20260106-of-for-each-compatible-scoped-v2-7-05eb948d91f2@oss.qualcomm.com>
+	s=arc-20240116; t=1767727808; c=relaxed/simple;
+	bh=65FHEdsl3qmcecvbhDm3fIBYqduzHPc/HW3W3tCWGy0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uXT88+PahT1rtkgmz8tz11l+V2f/duLMfhOKZkJqaBuIrlscYeR3R+hfGxKb2yoKCmsDKooFJToMD/dnTJYTIJgYlsUc9DAaY98aR7l9/FV+ol7rjEuGBajV5VNmavpXWTJ/8qe2Vjzux7cY98Lx8DEp6SGy7lvWn5MktMeI01A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c02Ax4OS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48B3BC116C6;
+	Tue,  6 Jan 2026 19:30:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767727808;
+	bh=65FHEdsl3qmcecvbhDm3fIBYqduzHPc/HW3W3tCWGy0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=c02Ax4OSO7PWuHseTtEYhimqqy4A2Uy/5B9Hj46+HbUDjcsL0oaKYzq6HGDj+csby
+	 dDkopt5hVgF8hQd2zLS12o6hHi4YlzQYgmU8ONm9YJrgi+LJ+NBoTOHgmuY1ykk07W
+	 e2MaKRWcGDEckzc+hPZfknezOw4dw8iaMjhmExxscYme1QjalFS9hXTid9wvWrmkjG
+	 LDRtfZSTBzOkjKNBABrvhiLZW4CfTTkqUdEksBcuChsavuR/GJ8/UOoxUjAM1qTvJh
+	 kLEcNxQQb75YIyogHge3yt8yoNEpEmjTSjvRdjElRG+6f8iTAnFeM5SqK8TDJr7KMw
+	 b055YYTBDeOMQ==
+Message-ID: <8fb99491-093e-44e6-9227-8254ac8b51a6@kernel.org>
+Date: Tue, 6 Jan 2026 13:30:04 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260106-of-for-each-compatible-scoped-v2-7-05eb948d91f2@oss.qualcomm.com>
-X-Proofpoint-ORIG-GUID: w9w2OvJWLVs_1cRqhojvcIEjjEN2FbH0
-X-Proofpoint-GUID: w9w2OvJWLVs_1cRqhojvcIEjjEN2FbH0
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA2MDE1MiBTYWx0ZWRfX6Ftz99CXU6sb
- itc8gPl/WdPq8Loj9ILbYS+FcfwURVujEx1JRKheO6lCW70mXMts9ncHOJkpAL3NeAvINzWc058
- UN0iQJj7/DWsj8PVklZcRKn6LZFCTQYO2qJiMELlm+YX9YJh+LTlgAbDxYoiVqE498idjWL/6cg
- S1y1IE6/4z085FbiPbSc3ip9LsiE/hJicDiHhNdlC3YR+A/4HT0HrR20ye1RePvmA91HVbaQPRx
- QGgCuR294D1QDdFHXXFkI+48om7RoXbvJH5a3zLMyn/d8y9jVBgnrvvZaoEB9zOGKzegsW99S+a
- DHfWgf/OFwVzNjbbTvBQ7Kz7I9K59wQIRrDIMWFgKhqe3XrrtXktJ9sgU5Tv6CzytPOqbB+MJbP
- yPGQj/2Sq5Y6TuB92yH/uOoOoPFT4YuCunCcstwvLCTqXbnBt81iKJYjBht7S/nzqeLeuWBjib3
- yR3TL6lE00NbwZm6+QA==
-X-Authority-Analysis: v=2.4 cv=MtdfKmae c=1 sm=1 tr=0 ts=695d47a8 cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=hZ5Vz02otkLiOpJ15TJmsQ==:17
- a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=8AirrxEcAAAA:8 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8
- a=_Ixbbux_C5oTi3JCwyIA:9 a=CjuIK1q_8ugA:10 a=a_PwQJl-kcHnX1M80qC6:22
- a=ST-jHhOKWsTCqRlWije3:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-06_01,2026-01-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 suspectscore=0 phishscore=0 adultscore=0 bulkscore=0
- priorityscore=1501 clxscore=1011 impostorscore=0 spamscore=0
- lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2601060152
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 1/2] cpufreq/amd-pstate: Pass the policy to
+ amd_pstate_update()
+To: K Prateek Nayak <kprateek.nayak@amd.com>, Huang Rui <ray.huang@amd.com>,
+ "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Len Brown <lenb@kernel.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Clark Williams <clrkwllms@kernel.org>, Bert Karwatzki <spasswolf@web.de>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev
+Cc: Perry Yuan <perry.yuan@amd.com>
+References: <20260106073608.278644-1-kprateek.nayak@amd.com>
+ <20260106073608.278644-2-kprateek.nayak@amd.com>
+Content-Language: en-US
+From: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>
+In-Reply-To: <20260106073608.278644-2-kprateek.nayak@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 26-01-06 10:15:17, Krzysztof Kozlowski wrote:
-> Use scoped for-each loop when iterating over device nodes to make code a
-> bit simpler.
+
+
+On 1/6/2026 1:36 AM, K Prateek Nayak wrote:
+> All callers of amd_pstate_update() already have a reference to the
+> cpufreq_policy object.
 > 
-> Reviewed-by: Peng Fan <peng.fan@nxp.com>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+> Pass the entire policy object and grab the cpudata using
+> "policy->driver_data" instead of passing the cpudata and unnecessarily
+> grabbing another read-side reference to the cpufreq policy object when
+> it is already available in the caller.
+> 
+> No functional changes intended.
+> 
+> Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
+Reviewed-by: Mario Limonciello (AMD) <superm1@kernel.org>
+> ---
+>   drivers/cpufreq/amd-pstate.c | 11 ++++-------
+>   1 file changed, 4 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index c45bc98721d2..5818a92d96b9 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -565,15 +565,12 @@ static inline bool amd_pstate_sample(struct amd_cpudata *cpudata)
+>   	return true;
+>   }
+>   
+> -static void amd_pstate_update(struct amd_cpudata *cpudata, u8 min_perf,
+> +static void amd_pstate_update(struct cpufreq_policy *policy, u8 min_perf,
+>   			      u8 des_perf, u8 max_perf, bool fast_switch, int gov_flags)
+>   {
+> -	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpudata->cpu);
+> +	struct amd_cpudata *cpudata = policy->driver_data;
+>   	union perf_cached perf = READ_ONCE(cpudata->perf);
+>   
+> -	if (!policy)
+> -		return;
+> -
+>   	/* limit the max perf when core performance boost feature is disabled */
+>   	if (!cpudata->boost_supported)
+>   		max_perf = min_t(u8, perf.nominal_perf, max_perf);
+> @@ -675,7 +672,7 @@ static int amd_pstate_update_freq(struct cpufreq_policy *policy,
+>   	if (!fast_switch)
+>   		cpufreq_freq_transition_begin(policy, &freqs);
+>   
+> -	amd_pstate_update(cpudata, perf.min_limit_perf, des_perf,
+> +	amd_pstate_update(policy, perf.min_limit_perf, des_perf,
+>   			  perf.max_limit_perf, fast_switch,
+>   			  policy->governor->flags);
+>   
+> @@ -737,7 +734,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+>   	if (max_perf < min_perf)
+>   		max_perf = min_perf;
+>   
+> -	amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true,
+> +	amd_pstate_update(policy, min_perf, des_perf, max_perf, true,
+>   			policy->governor->flags);
+>   }
+>   
 
-Acked-by: Abel Vesa <abelvesa@kernel.org>
 
