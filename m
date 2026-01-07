@@ -1,112 +1,136 @@
-Return-Path: <linux-pm+bounces-40386-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40387-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E3BDCFF67C
-	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 19:21:36 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5979CFF4F2
+	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 19:10:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6AB74304E5CB
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 18:20:51 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B5679300FA11
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 18:10:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD97F34A775;
-	Wed,  7 Jan 2026 16:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YkCXjGpd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B68D33612EA;
+	Wed,  7 Jan 2026 16:54:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20908345CC6;
-	Wed,  7 Jan 2026 16:48:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD5FB359718;
+	Wed,  7 Jan 2026 16:54:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767804521; cv=none; b=eXyJxTq7S5wXSIiUuuJwIPvPONcUJX/R+k+f4auiMIPlv7Y5uJOZ4rk6Ep97I1oeXV5XHrUcKRvze9zxWvkixV8BdKR64AzYlMU8QIpzybj45Bz1wf+d0P0T4+QYm4nFfWni0StEU4dbEOBJ9SE6N35Gtor9heYiOx0U9fup1I4=
+	t=1767804869; cv=none; b=Jefjha1NjnsT6JVOfDoLiBvWqXN0jsUmQ+LGNruN9gNpiUH2YYdLx6zW10eMhHGvGg2232xc/CdfgcYa4KyqpQ2brFxBpIztML5PISLs17X3FXRIR6ZBTyyBYq0bsgHsGdwLcChvZfpxB7x0dDw2uOmisLYvrTHkVmyZ+b9PlTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767804521; c=relaxed/simple;
-	bh=YlIeTCM10zf09MC9CyZkYv+Kn5yyXyFaG8Q3R0EOyrE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rIt2JV1/ldYbD8D9qZjcTCPPi4x0TYvPYibZLemwNWUTOUfFIYzPi0eTclv94e14bz2FWZyXa7pra639w7D5b21eQo08krtt8rvhUegHTXdvIs33Z1t7LgH8FVPrizAHMJNNasJddMIuChOL3nWizUrm+meQSYxpQv2R+JE9uHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YkCXjGpd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C678FC4CEF1;
-	Wed,  7 Jan 2026 16:48:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767804520;
-	bh=YlIeTCM10zf09MC9CyZkYv+Kn5yyXyFaG8Q3R0EOyrE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YkCXjGpdmaVvCdlXKlt1x5wAhSc63hUWo+x4Ex3TYEh2dB+ZMmdk5nm7o5G+BO/Ig
-	 0mlgkEV5z4chNbADVglVF4ChIBltwuEgqOvZ3JLfunPAthyFjdYfuA0l90z3UdIopQ
-	 hIiECu9bx4wH66PhzJ1HFT4RLVU8dd9ZxpwA3GXb3loqZRo7KUiB3E88wO8/ERm5wV
-	 yK13JQJX7C/662kUtLXhlUlceCVBda++u5jrfgo78rz8sb/iULabBS56d21dHdEqfx
-	 jmo2pWbLpmMVClcy+ti2vay36O1SZyDxqNriRNg97HdHNOgL2xYr+mr3y9vZkF+GF6
-	 D59Rq0OT+MotQ==
-Date: Wed, 7 Jan 2026 22:18:29 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Niklas Cassel <cassel@kernel.org>
-Cc: manivannan.sadhasivam@oss.qualcomm.com, 
-	Bjorn Helgaas <bhelgaas@google.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Damien Le Moal <dlemoal@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-pm@vger.kernel.org, linux-ide@vger.kernel.org, 
-	Frank Li <Frank.Li@nxp.com>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v5 0/5] PCI: Add initial support for handling PCIe M.2
- connectors in devicetree
-Message-ID: <3jzmxpjz46rx6yfem6govgvahwpxwsqtzxfj5cmkcfmgeubdcb@6oudcjxqsw4h>
-References: <20260107-pci-m2-v5-0-8173d8a72641@oss.qualcomm.com>
- <aV5vb1VlQYeWNcv1@ryzen>
+	s=arc-20240116; t=1767804869; c=relaxed/simple;
+	bh=ytOH4rPaPYZtl6XKeTgWh8ZjUPJ51XZhSmtYTjSD9e4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SAi5QXWHk+UYtjqnfnzKBOiormYOoGvtX6qRaQhmAgKhqPK4VJNsl9Puav8ToUqo6dgOK/xtSPvLtUjk5DTakB4wmK1ZhqVPL0QFFomc6S/uv0CpaNJ68X7kYSM17VZBKJURKgi3TzWDRJu1LerFYR/qmLdhq2sZgtpwEAX077I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 45325497;
+	Wed,  7 Jan 2026 08:54:08 -0800 (PST)
+Received: from [10.57.46.202] (unknown [10.57.46.202])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B76E33F6A8;
+	Wed,  7 Jan 2026 08:54:11 -0800 (PST)
+Message-ID: <846e1998-b508-4433-9db6-3a52ff23552f@arm.com>
+Date: Wed, 7 Jan 2026 17:54:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aV5vb1VlQYeWNcv1@ryzen>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] arm64: fix cleared E0POE bit after
+ cpu_suspend()/resume()
+To: Yeoreum Yun <yeoreum.yun@arm.com>, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: rafael@kernel.org, pavel@kernel.org, catalin.marinas@arm.com,
+ will@kernel.org, anshuman.khandual@arm.com, ryan.roberts@arm.com,
+ yang@os.amperecomputing.com, joey.gouly@arm.com, stable@vger.kernel.org
+References: <20260107162115.3292205-1-yeoreum.yun@arm.com>
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+Content-Language: en-GB
+In-Reply-To: <20260107162115.3292205-1-yeoreum.yun@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jan 07, 2026 at 03:36:31PM +0100, Niklas Cassel wrote:
-> On Wed, Jan 07, 2026 at 07:41:22PM +0530, Manivannan Sadhasivam via B4 Relay wrote:
-> > Hi,
-> > 
-> > This series is an initial attempt to support the PCIe M.2 connectors in the
-> > kernel and devicetree binding. The PCIe M.2 connectors as defined in the PCI
-> > Express M.2 Specification are widely used in Notebooks/Tablet form factors (even
-> > in PCs). On the ACPI platforms, power to these connectors are mostly handled by
-> > the firmware/BIOS and the kernel never bothered to directly power manage them as
-> > like other PCIe connectors. But on the devicetree platforms, the kernel needs to
-> > power manage these connectors with the help of the devicetree description. But
-> > so far, there is no proper representation of the M.2 connectors in devicetree
-> > binding. This forced the developers to fake the M.2 connectors as PMU nodes [1]
-> > and fixed regulators in devicetree.
-> > 
-> > So to properly support the M.2 connectors in devicetree platforms, this series
-> > introduces the devicetree binding for Mechanical Key M connector as an example
-> > and also the corresponding pwrseq driver and PCI changes in kernel to driver the
-> > connector.
-> > 
-> > The Mechanical Key M connector is used to connect SSDs to the host machine over
-> > PCIe/SATA interfaces. Due to the hardware constraints, this series only adds
-> > support for driving the PCIe interface of the connector in the kernel.
-> > 
-> > Also, the optional interfaces supported by the Key M connectors are not
-> > supported in the driver and left for the future enhancements.
-> 
-> For me, it is not clear if there is a dependency or conflict with your
-> "major pwrctrl rework series":
-> [PATCH v4 0/8] PCI/pwrctrl: Major rework to integrate pwrctrl devices with controller drivers
-> 
-> Does one need to go before the other, or are they completely unrelated
-> and can be merged in any order without conflicts?
-> 
+On 07/01/2026 17:21, Yeoreum Yun wrote:
+> TCR2_ELx.E0POE is set during smp_init().
+> However, this bit is not reprogrammed when the CPU enters suspension and
+> later resumes via cpu_resume(), as __cpu_setup() does not re-enable E0POE
+> and there is no save/restore logic for the TCR2_ELx system register.
+>
+> As a result, the E0POE feature no longer works after cpu_resume().
+>
+> To address this, save and restore TCR2_EL1 in the cpu_suspend()/cpu_resume()
+> path, rather than adding related logic to __cpu_setup(), taking into account
+> possible future extensions of the TCR2_ELx feature.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: bf83dae90fbc ("arm64: enable the Permission Overlay Extension for EL0")
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
+>
+> Patch History
+> ==============
+> from v1 to v2:
+>   - following @Kevin Brodsky suggestion.
+>   - https://lore.kernel.org/all/20260105200707.2071169-1-yeoreum.yun@arm.com/
+>
+> NOTE:
+>   This patch based on v6.19-rc4
+> ---
+>  arch/arm64/include/asm/suspend.h | 2 +-
+>  arch/arm64/mm/proc.S             | 8 ++++++++
+>  2 files changed, 9 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/include/asm/suspend.h b/arch/arm64/include/asm/suspend.h
+> index e65f33edf9d6..e9ce68d50ba4 100644
+> --- a/arch/arm64/include/asm/suspend.h
+> +++ b/arch/arm64/include/asm/suspend.h
+> @@ -2,7 +2,7 @@
+>  #ifndef __ASM_SUSPEND_H
+>  #define __ASM_SUSPEND_H
+>
+> -#define NR_CTX_REGS 13
+> +#define NR_CTX_REGS 14
+>  #define NR_CALLEE_SAVED_REGS 12
+>
+>  /*
+> diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
+> index 01e868116448..5d907ce3b6d3 100644
+> --- a/arch/arm64/mm/proc.S
+> +++ b/arch/arm64/mm/proc.S
+> @@ -110,6 +110,10 @@ SYM_FUNC_START(cpu_do_suspend)
+>  	 * call stack.
+>  	 */
+>  	str	x18, [x0, #96]
+> +alternative_if ARM64_HAS_TCR2
+> +	mrs	x2, REG_TCR2_EL1
+> +	str	x2, [x0, #104]
+> +alternative_else_nop_endif
+>  	ret
+>  SYM_FUNC_END(cpu_do_suspend)
+>
+> @@ -144,6 +148,10 @@ SYM_FUNC_START(cpu_do_resume)
+>  	msr	tcr_el1, x8
+>  	msr	vbar_el1, x9
+>  	msr	mdscr_el1, x10
+> +alternative_if ARM64_HAS_TCR2
+> +	ldr	x2, [x0, #104]
+> +	msr	REG_TCR2_EL1, x2
+> +alternative_else_nop_endif
 
-Only patch 2 has the conflict with pwrctrl rework series, but that is trivial to
-fix. Otherwise, both are mostly independent.
+Maybe this could be pushed further down cpu_do_resume, next to DISR_EL1
+maybe (since it's also conditional)? Otherwise the diff LGTM:
 
-- Mani
+Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
 
--- 
-மணிவண்ணன் சதாசிவம்
+- Kevin
+
+>  	msr	sctlr_el1, x12
+>  	set_this_cpu_offset x13
+> --
+> LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
+>
 
