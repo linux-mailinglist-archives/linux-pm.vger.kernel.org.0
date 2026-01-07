@@ -1,80 +1,78 @@
-Return-Path: <linux-pm+bounces-40345-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40346-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FE3BCFB914
-	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 02:17:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F329CFC038
+	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 05:50:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C1F33308363C
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 01:14:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2708030245F7
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 04:50:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 619DB27FD6D;
-	Wed,  7 Jan 2026 01:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7AFD1E0B9C;
+	Wed,  7 Jan 2026 04:50:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VkCZX0ap"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ia2gC+FF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011046.outbound.protection.outlook.com [40.107.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE70D27FD4B
-	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 01:14:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767748458; cv=none; b=uG+aMQ+CJKOSS/J5NqO81WJQVbb0GuyDkLlq3hTcP1l3VfP0dPJFmYRzVq9N1zljE+Ty1dB1HJtTbTnbrCEDmdC8flF+76VcN9ZtQuAzgK0OUTJgCyhiECYhMSKOoym/ozHMqfgGJjXezxHrY6sB8ZFlwKHPrmqquBVZxFV5o/U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767748458; c=relaxed/simple;
-	bh=T1Pvna6OIspUfMSSXx8AsLmFU2mLpsfalDrp3l2ezqY=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=OCLcqwh2E6zQiII0JopcPzuAosF54g0fWJFeOAP2byPqhW6v5hjTIuWMN76NRG8YhQdKPpF3dGCDY2uy+H3nsdzwicR/CM/FRqY+UCKk84VsS3INRUJItVJ034cjhkOj6C3O59ETb7+xTgaomIWMdKJSjo1zkzjdj31LLeyRYAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VkCZX0ap; arc=none smtp.client-ip=74.125.82.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-121b251438eso217575c88.0
-        for <linux-pm@vger.kernel.org>; Tue, 06 Jan 2026 17:14:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1767748454; x=1768353254; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=i/q7eG5TC0f+rG1FDYhd25WOPPiwZKL6HM4TaHopyfM=;
-        b=VkCZX0apFy97rkVG4PxqZjs22Bdbh0/XCi2Fjy7MlIK/1m+XpMAKy/T6ULdK4bahqD
-         z0+i3DYhE2ZOZBJN2CYLle5fGj9OdHDg1LiUev8fs9LeQbqd15D4o1ZrLkoqkzrOPmEa
-         DHdcwWi/QnJ4SIPMut+Pes2k7TrODa8tJTu+lKbN4LneVaGJvjFxRQNTFaghLVmcHyfv
-         rU7Jk9TUk31u0nRouq2E9vGKd+TP87Xe5YP6zMxIqxuUETDEY+5jeNUN/r70mWEwgN13
-         zWFT6c9l02oZeem9Ob9V6ldWsyQSYk1BDwTEIoix1w38IvbwCh0J2rIk+YH3YnJmeYzE
-         rYXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767748454; x=1768353254;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=i/q7eG5TC0f+rG1FDYhd25WOPPiwZKL6HM4TaHopyfM=;
-        b=AjjjhgYaf5PnAXEAPCbYhzgkFkXil6VqeomQAc3aLnMUnyAd5nmNvoqGdKtqxWCGUg
-         fvdgIxCfa0Bpc0JzJJCdexKU4e7cYhQUzgZKjYp38wrDX7l14xQjXqBATKqeogwSTWDk
-         BS1zLDbfYtWIPZzGiFi197OmQPQRntqbRoSdtjrlUoxeUb94Y7P/+B8HwklSsRx4sNzQ
-         nYBkWxx7idZQSw4rJLyIYxtUK9CQkRq/8IcU6PjqRTPCLDqYLtcMYExX1w+OdVPPJcqg
-         s3/n7cyEhU5RRbGMuCHQdgvQrgsvGc1kNF27Wi9lseD1p8hVYGYEwV89OdHGw2JvpNUk
-         2TPA==
-X-Forwarded-Encrypted: i=1; AJvYcCUuW+Ua6NsNtGMkwMszgxRh+RWAli2wf2o/aibHfUwJu6bWaYJ/v+NGuzeEYxrlstZmBCQtUJNeiw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVxaF6eHk7NPjsOF56xBKoMeOkDGemyp+JFDJxSK1jRIMZ5TEp
-	yRLzdLnruJcnGIsLq9Q2B0f8QSmxLeV5jhpM/ec4DQ3bNnQky2CxBPz0yQGTLWyKGg==
-X-Gm-Gg: AY/fxX77sMote5PgLLfvMlcgV1MQIhkDv3POh3VBPGVjeXpUM+FoBBfaHN4l8uLnlkn
-	OUcFVdHSRJuiYqMK96MsgUr9/I76sxNCCKjWLbUG+4EF3BzwNM3dOOF7yL1mLRa8Wb+munOyCOa
-	nz9Xp62MzXJqPwX7BYlXakwIVEdyeq0/dWfuP1hH+GRYkWpQDvXYiJGyWnOlJHjyWSrOFRu5I86
-	RMqXI8/ENhJGPKOHPFDSBOYbLjc3QIeAWKHbd+VCGpQ1pwsKjhnUM6+LdP7zqzm7oc6QKFoFAu7
-	+wBIyEMvx5vczwiUHRnbgvjwDWydxni7IcgpehNRFOahCczSj2IfEai+atTKL1nNsU1HsR4mx8S
-	5JkCHKHAzMGKQ75GkN2iw3L0fW53NQUnsyry3hz5yxw7+rxJHjynH1ZZexjQMlT7LIkYNgXnvOu
-	+2qXZeROzUmhQwBXPDqzCs2kS4j4L+RpHZl+Z3PJo3EEkSgjYlPpBJRZrCSnsiSC079p9+swCFt
-	FWTAzYxQQqpPg==
-X-Google-Smtp-Source: AGHT+IGiFbZx6mWvwCRRQRLymGnvXpJnliDPNOXhWVRQ/mpXLIyqm+r3YTgSf5lxr40eS+MG1pQgCQ==
-X-Received: by 2002:a05:7300:a191:b0:2a4:3593:ccbb with SMTP id 5a478bee46e88-2b17c74cd89mr994550eec.2.1767748453514;
-        Tue, 06 Jan 2026 17:14:13 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e7c:8:b5c0:c506:467d:ed5e? ([2a00:79e0:2e7c:8:b5c0:c506:467d:ed5e])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1707b2256sm5159343eec.25.2026.01.06.17.14.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Jan 2026 17:14:12 -0800 (PST)
-Message-ID: <255d7726-6758-43ed-b35f-db14726bcc9b@google.com>
-Date: Tue, 6 Jan 2026 17:14:11 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48CFE35959;
+	Wed,  7 Jan 2026 04:50:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767761402; cv=fail; b=SN3/MrkBOnUzdBbsgpp6frA3M6xsDt1r/lsGeimq6HMjepS2NxIWRgEF3fGxg7uM/v49nqsxSzv5ilaWavD7S9qs7OQ4/lE8jS6ZNS27+S16ALhQ//RkRsaMeI9UL72Zus7/IuIQKoKEG49cBqCCgfxkWiMXaJdwHXYphNCNDxk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767761402; c=relaxed/simple;
+	bh=86GoidyRphMvMHa0O7J2LWiaehFVu+ZyC7seA3J9qI4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=DTo6UlUeL0PFgHlLsXoOexQKIR+itE3g5JSBuGPenjXCEjlgmis/LXAwI49yxjGvVevpZw99Dc8/0DXkT55Sf4u6KbxenLcXiU/FzXLgBT7ahwqaorXDVlN9zjBCgG3hih0htXoQwR+8+g24jtM75XD2XibowCV1U424G5irkEM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ia2gC+FF; arc=fail smtp.client-ip=40.107.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=wWEbu9u4JkPsCfvfHJMsWv8mcoQSJvhzQKqOoXln4toL35PKGBo2Uf1R2bmnqx84fGbij1j0hDN5EguAX8lVTQGtr7xdKEddJgSyCPRu5EAAhIe98Gb31wpndwTn6abk5WcTJ/e+YHzjaiow9m5VuYCv+U6XaAxM94QHSdR6VQkFemBSx3mzAWkhZrJRkxOK8UcvmH3yAo4KLWPxsONwnkkWJdIeyX4AXnh/ayTXPjTxVD5EuMsj+7DxAqqvyBwfCXD3mluqu3blWB7GszU8GoMYIs4FDwVta+uUgAnog6sZUzb0DpNn77JCtu19VOfnY8Qt4vDR4eRr21F1ilMf0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Gq09EMj1mLc2gaeXQ30D9i8Ed3Tpkr9ifBblmLPs+J0=;
+ b=mYCmO8nhKJ8UJJc5uC60qF2YIBfPMzYXmuhSI3rHwzrSQYzLRoOAyeMlBWY5kqs4UpT1vkBMZqO0hRhEtzP7cIoisQ2Xd+jh6rTAlhAUwmB6LE6irFcDRcjqGo6qbX5yxvNn/Spl0gDTMoBPhm7AIX6R01K+xl/JShs5iE70owPi0/rOZZKq0fZI4XVMpIDhbDGYq0dE41TNfNONZzt8hMvKzvg+zMnlNeovY9f8MlF05ueLB6PCxxol6BTrkoezhho/wp1W6iqn3QfltFSMSfWH5kzK6tVeKy87Rryt3ufdsKoTfXlJXTWqX6a9afXtQPgmvCLDLRUamgjHSMMVXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Gq09EMj1mLc2gaeXQ30D9i8Ed3Tpkr9ifBblmLPs+J0=;
+ b=ia2gC+FFdM1TRV6dNif/J3FfaOte8ArFCNAnFdha4BaFBU4CMwaP1ZleMNhxiZYRLa84SlDx29Sq/l9bdXiTAUFoDLnq6LXC9mo/1+igOeySlI2YrrOOQOUjBaMDS4pWvxykARWYbwHIYggt/z6zby1gC+VEG99Cd84ST0n+izI=
+Received: from SA1P222CA0079.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:35e::16)
+ by LV3PR12MB9093.namprd12.prod.outlook.com (2603:10b6:408:19d::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.5; Wed, 7 Jan
+ 2026 04:49:54 +0000
+Received: from SA2PEPF00003F66.namprd04.prod.outlook.com
+ (2603:10b6:806:35e:cafe::20) by SA1P222CA0079.outlook.office365.com
+ (2603:10b6:806:35e::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9499.2 via Frontend Transport; Wed, 7
+ Jan 2026 04:49:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb08.amd.com; pr=C
+Received: from satlexmb08.amd.com (165.204.84.17) by
+ SA2PEPF00003F66.mail.protection.outlook.com (10.167.248.41) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9499.1 via Frontend Transport; Wed, 7 Jan 2026 04:49:54 +0000
+Received: from satlexmb08.amd.com (10.181.42.217) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Tue, 6 Jan
+ 2026 22:49:53 -0600
+Received: from [172.31.184.125] (10.180.168.240) by satlexmb08.amd.com
+ (10.181.42.217) with Microsoft SMTP Server id 15.2.2562.17 via Frontend
+ Transport; Tue, 6 Jan 2026 22:49:49 -0600
+Message-ID: <a29f0be2-5d8f-4585-8cf0-baabfd316e12@amd.com>
+Date: Wed, 7 Jan 2026 10:19:48 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,622 +80,118 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/5] power: supply: max77759: add charger driver
-From: Amit Sunil Dhamne <amitsd@google.com>
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
- <20251227-max77759-charger-v3-4-54e664f5ca92@google.com>
- <298ca35590d2180fdcf334f94964b6110e17c606.camel@linaro.org>
- <50c29a62-1fdb-4de2-8887-0d551eee5ec0@google.com>
+Subject: Re: [RFC PATCH 2/2] cpufreq: Pass the policy to
+ cpufreq_driver->adjust_perf()
+To: "Mario Limonciello (AMD) (kernel.org)" <superm1@kernel.org>, Huang Rui
+	<ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown
+	<lenb@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, "Clark
+ Williams" <clrkwllms@kernel.org>, Bert Karwatzki <spasswolf@web.de>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-rt-devel@lists.linux.dev>
+CC: Perry Yuan <perry.yuan@amd.com>
+References: <20260106073608.278644-1-kprateek.nayak@amd.com>
+ <20260106073608.278644-3-kprateek.nayak@amd.com>
+ <1e51babe-d112-44fb-96e6-8ee7c8050302@kernel.org>
 Content-Language: en-US
-In-Reply-To: <50c29a62-1fdb-4de2-8887-0d551eee5ec0@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: K Prateek Nayak <kprateek.nayak@amd.com>
+In-Reply-To: <1e51babe-d112-44fb-96e6-8ee7c8050302@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF00003F66:EE_|LV3PR12MB9093:EE_
+X-MS-Office365-Filtering-Correlation-Id: 290a974d-2823-42cf-87fe-08de4da83328
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|82310400026|1800799024|36860700013|13003099007|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dmRsWnZoVTVuYlYySGYvdnR6V2NLcUpzUTdvMjJOYkVrSnFVMTFiME1BU25M?=
+ =?utf-8?B?bGhZeWZOWlFrRk9qaCsvS084NHUwSklBSGpMbDhsV3NPMSt6cDErOEVXald1?=
+ =?utf-8?B?c1liZ2lpaW5pc25GL1huWGdxOVhEdERtYlkzVC80dEt6NFozcEVhdnZXcWVE?=
+ =?utf-8?B?V29MTmt1Vm4rYmI3YTlsaUdGdnh1cEZ3dDlNR09uSXcwbTZ1U3hNNXV1aHN0?=
+ =?utf-8?B?QUtteHhsYTdTUTl1VVI3c2p3NzdPQi96aDRvTUxSQkRVaXMyM3pIbCtYSnZ1?=
+ =?utf-8?B?Z09NZWs1amVmb0lFQWVia3kxQXE2aXFNV1J5TWlnVTFwUTNuUTlGZ1M5TnlO?=
+ =?utf-8?B?ZVNRU2FaY1UvRjQrWm0xenI0ZHpaVWNXN0ZhRXZJck83YWdHQ3g0S2ZBUmx5?=
+ =?utf-8?B?NE52WFJrMVVtdHI4dFViTTl3TW5LUjR1RmpBdElsazFPK240Y1c4eHBjMjRl?=
+ =?utf-8?B?bXJhdm9EZFdBbXhuY2FWcTZianJTTngzNFNTT1BpZDFTdW5uSWhLQUpkNHYv?=
+ =?utf-8?B?WlNWbUNQWmVlQlBGYXF6VmU1U0FGL1hqUm5KWm1oMW8rUGRZaE5BSGhrL3RF?=
+ =?utf-8?B?UHdqZ3huT1dqT3ovMXFzaitZS3ZiMkgrby9Cd0dPUVY0UmcxQ05TM0tMd0oy?=
+ =?utf-8?B?bUZUVHpLZkQzdnRQQ1NZN0ZZek5jU0JiRlJvRWlvS3hGTWQxK3Q5RFEwUXZi?=
+ =?utf-8?B?R0p0N3pIKzNDTG02Y3JMc1hJQlpqSllkOHRmRU43Q05YSi9ZZUJCNlJENVZu?=
+ =?utf-8?B?ZE00QmVwekRacldzc2liWllXYTFaNDFpaWdEbk9zbGpLNXh0a2hTK3FtbXda?=
+ =?utf-8?B?aFVmQUNYQTBHN1VIMlVqakJuMndycitNVUxERnlscnkzQ203ODdIQ3RRYTdR?=
+ =?utf-8?B?cVRnK1lFTnRieUUvVHlGSzVHSjJ5V0RnOEhDeXMrZ2VrTFR0UnJhT2twdm16?=
+ =?utf-8?B?YWpCYTBlZGoyK2tPSnNPcWRpZUloU014WkFpZFlvaHFUZWhrd2dJT3hZVkEw?=
+ =?utf-8?B?bGxpNUlUaG5iSWxVdzlWS2tBb2JuS0xMZTVOTEg1OVJaSUJmSzlnNkFMOWhL?=
+ =?utf-8?B?K0pmY3psQ044N1FmQThoY00zWmlYV0RnSW1NLyt4dlpMT01HTGRRR2NvZnA1?=
+ =?utf-8?B?ODlXNk14eDlsYlU3ZjJHUC8zNllUYjZzRkxxaGxpYjdwM2ZCQisrdVdCRjU2?=
+ =?utf-8?B?eFo3SkFyek1ubm5hQmFpMUxpRXMvb1NWaWlYRTFwdTdWUTZOdkZJbENFZHNs?=
+ =?utf-8?B?MjNUOG1mNGkzQTB3ZU1WUmRGKzN4NndGbXJ1R0FEV2t3UEJubGZlREZSeEcw?=
+ =?utf-8?B?VFBXVk15bDdEbmk5MEEyQ1UvOWdJa1RxOXlxSHBEQVZzTTFEMVVYbDB2QUpw?=
+ =?utf-8?B?ZTBzZ3g1d0hhOUlHaEhzK2dFbmtKeks1aVRwZU1UdkhZUHZQd2ZONThQNFBT?=
+ =?utf-8?B?Rm1vMG9yanMrajdFbU44SGx1R3NyWlB2cjQxSTYvNzIzMkIzQWdhWHNRdVM2?=
+ =?utf-8?B?U050NHhILy8yMjZwMHBaYVRjdDZxUXZOWlBIRkYweWdFUWU0ck52dDVJUmNT?=
+ =?utf-8?B?aVJhU0JTTWtESDJuRWNhaFNVczY5ZXduZVBwOUtDVDRwL0JsTzIyUk9yYVRP?=
+ =?utf-8?B?UnpDczlSWWFwbnlocnNBZkpaY3lzellDWDZPclNvbUozUVk2aXBERUd1QTJi?=
+ =?utf-8?B?V2hNWkNDM0xVWVFoUDlSd0NPVHdtNld0bHNBNTA0Y1N5STd6ak1zcnNlQTBX?=
+ =?utf-8?B?QmJsQlVmWExBNVROMG5UVi80WVh5Rm13S2NUOEQydEdaMkw4WE5iY1BsL01u?=
+ =?utf-8?B?QXpuWlVXNTArWFpUY0VyUUtEMWVscFhscy9ibEk3K1BFbEJ4YVdoZlhWSDNS?=
+ =?utf-8?B?eDlUVy9rUXlqMmdxOWl6Z1dLOTh6N1o5dURVQmVXOGNES1FCSmFjL0c2MVlo?=
+ =?utf-8?B?d2RIYUtTWVNqWUg3QXlaemJ2VzVCQnNEdFFEb1pma1h3aTZ4V05zZkthVk1s?=
+ =?utf-8?B?SFpod1dqRGdBRFhEcFdZaUY0dmhDOTFxd3RZa0xIQ1VIK2ZmYTJhODg3cTBa?=
+ =?utf-8?B?VDlXNkhiOGtKQUJ4K1RsTU9rZzFtdTI2Z2VsMjRGRlJncXBvU1BYeFh1aXpL?=
+ =?utf-8?Q?YWKzM87x+r3r4vlXtnKwSuOKL?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb08.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(82310400026)(1800799024)(36860700013)(13003099007)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2026 04:49:54.0714
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 290a974d-2823-42cf-87fe-08de4da83328
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb08.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF00003F66.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9093
 
+Hello Mario,
 
-On 1/6/26 3:41 PM, Amit Sunil Dhamne wrote:
-> Hi Andre',
->
-> On 1/5/26 9:32 AM, André Draszik wrote:
->> Hi Amit,
+On 1/7/2026 1:01 AM, Mario Limonciello (AMD) (kernel.org) wrote:
+> 
+> 
+> On 1/6/2026 1:36 AM, K Prateek Nayak wrote:
+>> cpufreq_cpu_get() can sleep on PREEMPT_RT in presence of concurrent
+>> writer(s), however amd-pstate depends on fetching the cpudata via the
+>> policy's driver data which necessitates grabbing the reference.
 >>
->> I haven't done a full review, but a few things caught my eye.
+>> Since schedutil governor can call "cpufreq_driver->update_perf()"
+>> during sched_tick/enqueue/dequeue with rq_lock held and IRQs disabled,
+>> fetching the policy object using the cpufreq_cpu_get() helper in the
+>> scheduler fast-path leads to "BUG: scheduling while atomic" on
+>> PREEMPT_RT [1].
 >>
->> On Sat, 2025-12-27 at 00:04 +0000, Amit Sunil Dhamne via B4 Relay wrote:
->>> From: Amit Sunil Dhamne <amitsd@google.com>
->>>
->>> Add support for MAX77759 battery charger driver. This is a 4A 1-Cell
->>> Li+/LiPoly dual input switch mode charger. While the device can support
->>> USB & wireless charger inputs, this implementation only supports USB
->>> input. This implementation supports both buck and boost modes.
->>>
->>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->>> ---
->>>   MAINTAINERS                             |   6 +
->>>   drivers/power/supply/Kconfig            |  11 +
->>>   drivers/power/supply/Makefile           |   1 +
->>>   drivers/power/supply/max77759_charger.c | 764 
->>> ++++++++++++++++++++++++++++++++
->>>   4 files changed, 782 insertions(+)
->>>
->>> diff --git a/MAINTAINERS b/MAINTAINERS
->>> index dc731d37c8fe..26a9654ab75e 100644
->>> --- a/MAINTAINERS
->>> +++ b/MAINTAINERS
->>> @@ -15539,6 +15539,12 @@ F:    drivers/mfd/max77759.c
->>>   F:    drivers/nvmem/max77759-nvmem.c
->>>   F:    include/linux/mfd/max77759.h
->>>   +MAXIM MAX77759 BATTERY CHARGER DRIVER
->>> +M:    Amit Sunil Dhamne <amitsd@google.com>
->>> +L:    linux-kernel@vger.kernel.org
->>> +S:    Maintained
->>> +F:    drivers/power/supply/max77759_charger.c
->>> +
->>>   MAXIM MAX77802 PMIC REGULATOR DEVICE DRIVER
->>>   M:    Javier Martinez Canillas <javier@dowhile0.org>
->>>   L:    linux-kernel@vger.kernel.org
->>> diff --git a/drivers/power/supply/Kconfig 
->>> b/drivers/power/supply/Kconfig
->>> index 92f9f7aae92f..e172fd980fde 100644
->>> --- a/drivers/power/supply/Kconfig
->>> +++ b/drivers/power/supply/Kconfig
->>> @@ -1132,4 +1132,15 @@ config FUEL_GAUGE_MM8013
->>>         the state of charge, temperature, cycle count, actual and 
->>> design
->>>         capacity, etc.
->>>   +config CHARGER_MAX77759
->>> +    tristate "MAX77759 Charger Driver"
->>> +    depends on MFD_MAX77759 && REGULATOR
->>> +    default MFD_MAX77759
->>> +    help
->>> +      Say M or Y here to enable the MAX77759 Charger Driver. MAX77759
->>> +      charger is a function of the MAX77759 PMIC. This is a dual input
->>> +      switch-mode charger. This driver supports buck and OTG boost 
->>> modes.
->>> +
->>> +      If built as a module, it will be called max77759_charger.
->>> +
->> It might make sense to add this block near the existing MAX77... 
->> charger drivers,
->> while updating the tristate string and keeping alphabetical order of 
->> entries.
+>> Pass the cached cpufreq policy object in sg_policy to the update_perf()
+>> instead of just the CPU. The CPU can be inferred using "policy->cpu".
 >>
->>>   endif # POWER_SUPPLY
->>> diff --git a/drivers/power/supply/Makefile 
->>> b/drivers/power/supply/Makefile
->>> index 4b79d5abc49a..6af905875ad5 100644
->>> --- a/drivers/power/supply/Makefile
->>> +++ b/drivers/power/supply/Makefile
->>> @@ -128,3 +128,4 @@ obj-$(CONFIG_CHARGER_SURFACE)    += 
->>> surface_charger.o
->>>   obj-$(CONFIG_BATTERY_UG3105)    += ug3105_battery.o
->>>   obj-$(CONFIG_CHARGER_QCOM_SMB2)    += qcom_smbx.o
->>>   obj-$(CONFIG_FUEL_GAUGE_MM8013)    += mm8013.o
->>> +obj-$(CONFIG_CHARGER_MAX77759)    += max77759_charger.o
->>> diff --git a/drivers/power/supply/max77759_charger.c 
->>> b/drivers/power/supply/max77759_charger.c
->>> new file mode 100644
->>> index 000000000000..3d255b069fb9
->>> --- /dev/null
->>> +++ b/drivers/power/supply/max77759_charger.c
->>> @@ -0,0 +1,764 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/*
->>> + * max77759_charger.c - Battery charger driver for MAX77759 charger 
->>> device.
->>> + *
->>> + * Copyright 2025 Google LLC.
->>> + */
->>> +
->>> +#include <linux/bitfield.h>
->>> +#include <linux/cleanup.h>
->>> +#include <linux/device.h>
->>> +#include <linux/devm-helpers.h>
->>> +#include <linux/interrupt.h>
->>> +#include <linux/irq.h>
->>> +#include <linux/math64.h>
->>> +#include <linux/mfd/max77759.h>
->>> +#include <linux/module.h>
->>> +#include <linux/mod_devicetable.h>
->>> +#include <linux/mutex.h>
->>> +#include <linux/of.h>
->>> +#include <linux/platform_device.h>
->>> +#include <linux/power_supply.h>
->>> +#include <linux/regmap.h>
->>> +#include <linux/regulator/driver.h>
->>> +#include <linux/string_choices.h>
->>> +
->>> +/* Default values for Fast Charge Current & Float Voltage */
->>> +#define CHG_CC_DEFAULT_UA            2266770
->>> +#define CHG_FV_DEFAULT_MV            4300
->>> +
->>> +#define FOREACH_IRQ(S)            \
->>> +    S(AICL),            \
->>> +    S(CHGIN),            \
->>> +    S(CHG),                \
->>> +    S(INLIM),            \
->>> +    S(BAT_OILO),            \
->>> +    S(CHG_STA_CC),            \
->>> +    S(CHG_STA_CV),            \
->>> +    S(CHG_STA_TO),            \
->>> +    S(CHG_STA_DONE)
->>> +
->>> +#define GENERATE_ENUM(e)        e
->>> +#define GENERATE_STRING(s)        #s
->>> +
->>> +enum {
->>> +    FOREACH_IRQ(GENERATE_ENUM)
->>> +};
->>> +
->>> +static const char *const chgr_irqs_str[] = {
->>> +    FOREACH_IRQ(GENERATE_STRING)
->>> +};
->>> +
->>> +static int irqs[ARRAY_SIZE(chgr_irqs_str)];
->> No global variables please, this is not a singleton.
+>> The lifetime of cpufreq_policy object outlasts that of the governor and
+>> the cpufreq driver (allocated when the CPU is onlined and only reclaimed
+>> when the CPU is offlined / the CPU device is removed) which makes it
+>> safe to be referenced throughout the governor's lifetime.
 >>
->>> [...]
->>>
->>> +static int set_input_current_limit(struct max77759_charger *chg, 
->>> int ilim_ua)
->>> +{
->>> +    u32 regval;
->>> +
->>> +    if (ilim_ua < 0)
->>> +        return -EINVAL;
->>> +
->>> +    if (ilim_ua == 0)
->>> +        ilim_ua = MAX77759_CHGR_CHGIN_ILIM_MIN_UA;
->>> +    else if (ilim_ua > MAX77759_CHGR_CHGIN_ILIM_MAX_UA)
->>> +        ilim_ua = MAX77759_CHGR_CHGIN_ILIM_MAX_UA;
->> What if ilim_ua == 1 (or any other value < min_uA)? You could use 
->> clamp()
->> instead of open-coding.
->>
->>> +
->>> +    regval = val_to_regval(ilim_ua, MAX77759_CHGR_CHGIN_ILIM_MIN_UA,
->>> +                   MAX77759_CHGR_CHGIN_ILIM_STEP_UA,
->>> +                   MAX77759_CHGR_CHGIN_ILIM_REG_OFFSET);
->>> +    return regmap_update_bits(chg->regmap, 
->>> MAX77759_CHGR_REG_CHG_CNFG_09,
->>> +                  MAX77759_CHGR_REG_CHG_CNFG_09_CHGIN_ILIM,
->>> +                  regval);
->>> +}
->>> +
->>> +static const enum power_supply_property max77759_charger_props[] = {
->>> +    POWER_SUPPLY_PROP_ONLINE,
->>> +    POWER_SUPPLY_PROP_PRESENT,
->>> +    POWER_SUPPLY_PROP_STATUS,
->>> +    POWER_SUPPLY_PROP_CHARGE_TYPE,
->>> +    POWER_SUPPLY_PROP_HEALTH,
->>> +    POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX,
->>> +    POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX,
->>> +    POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
->>> +};
->>> +
->>> +static int max77759_charger_get_property(struct power_supply *psy,
->>> +                     enum power_supply_property psp,
->>> +                     union power_supply_propval *pval)
->>> +{
->>> +    struct max77759_charger *chg = power_supply_get_drvdata(psy);
->>> +    int ret;
->>> +
->>> +    switch (psp) {
->>> +    case POWER_SUPPLY_PROP_ONLINE:
->>> +        ret = get_online(chg);
->>> +        break;
->>> +    case POWER_SUPPLY_PROP_PRESENT:
->>> +        ret = charger_input_valid(chg);
->>> +        break;
->>> +    case POWER_SUPPLY_PROP_STATUS:
->>> +        ret = get_status(chg);
->>> +        break;
->>> +    case POWER_SUPPLY_PROP_CHARGE_TYPE:
->>> +        ret = get_charge_type(chg);
->>> +        break;
->>> +    case POWER_SUPPLY_PROP_HEALTH:
->>> +        ret = get_health(chg);
->>> +        break;
->>> +    case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
->>> +        ret = get_fast_charge_current(chg);
->>> +        break;
->>> +    case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
->>> +        ret = get_float_voltage(chg);
->>> +        break;
->>> +    case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
->>> +        ret = get_input_current_limit(chg);
->>> +        break;
->>> +    default:
->>> +        ret = -EINVAL;
->>> +    }
->>> +
->>> +    pval->intval = ret;
->>> +    return ret < 0 ? ret : 0;
->>> +}
->>> +
->>> +static const struct power_supply_desc max77759_charger_desc = {
->>> +    .name = "max77759-charger",
->>> +    .type = POWER_SUPPLY_TYPE_USB,
->>> +    .properties = max77759_charger_props,
->>> +    .num_properties = ARRAY_SIZE(max77759_charger_props),
->>> +    .get_property = max77759_charger_get_property,
->>> +};
->>> +
->>> +static int charger_set_mode(struct max77759_charger *chg,
->>> +                enum max77759_chgr_mode mode)
->>> +{
->>> +    int ret;
->>> +
->>> +    guard(mutex)(&chg->lock);
->>> +
->>> +    if (chg->mode == mode)
->>> +        return 0;
->>> +
->>> +    if ((mode == MAX77759_CHGR_MODE_CHG_BUCK_ON ||
->>> +         mode == MAX77759_CHGR_MODE_OTG_BOOST_ON) &&
->>> +        chg->mode != MAX77759_CHGR_MODE_OFF) {
->>> +        dev_err(chg->dev, "Invalid mode transition from %d to %d",
->>> +            chg->mode, mode);
->>> +        return -EINVAL;
->>> +    }
->>> +
->>> +    ret = regmap_update_bits(chg->regmap, 
->>> MAX77759_CHGR_REG_CHG_CNFG_00,
->>> +                 MAX77759_CHGR_REG_CHG_CNFG_00_MODE, mode);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    chg->mode = mode;
->>> +    return 0;
->>> +}
->>> +
->>> +static int enable_chgin_otg(struct regulator_dev *rdev)
->>> +{
->>> +    struct max77759_charger *chg = rdev_get_drvdata(rdev);
->>> +
->>> +    return charger_set_mode(chg, MAX77759_CHGR_MODE_OTG_BOOST_ON);
->>> +}
->>> +
->>> +static int disable_chgin_otg(struct regulator_dev *rdev)
->>> +{
->>> +    struct max77759_charger *chg = rdev_get_drvdata(rdev);
->>> +
->>> +    return charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
->>> +}
->>> +
->>> +static int chgin_otg_status(struct regulator_dev *rdev)
->>> +{
->>> +    struct max77759_charger *chg = rdev_get_drvdata(rdev);
->>> +
->>> +    guard(mutex)(&chg->lock);
->>> +    return chg->mode == MAX77759_CHGR_MODE_OTG_BOOST_ON;
->>> +}
->>> +
->>> +static const struct regulator_ops chgin_otg_reg_ops = {
->>> +    .enable = enable_chgin_otg,
->>> +    .disable = disable_chgin_otg,
->>> +    .is_enabled = chgin_otg_status,
->>> +};
->>> +
->>> +static const struct regulator_desc chgin_otg_reg_desc = {
->>> +    .name = "chgin-otg",
->>> +    .of_match = of_match_ptr("chgin-otg-regulator"),
->>> +    .owner = THIS_MODULE,
->>> +    .ops = &chgin_otg_reg_ops,
->>> +    .fixed_uV = 5000000,
->>> +    .n_voltages = 1,
->>> +};
->>> +
->>> +static irqreturn_t irq_handler(int irq, void *data)
->>> +{
->>> +    struct max77759_charger *chg = data;
->>> +    struct device *dev = chg->dev;
->>> +    u32 chgint_ok;
->>> +    int i;
->>> +
->>> +    regmap_read(chg->regmap, MAX77759_CHGR_REG_CHG_INT_OK, 
->>> &chgint_ok);
->> You might want to check the return value and return IRQ_NONE if it 
->> didn't
->> work?
->>
->>> +
->>> +    for (i = 0; i < ARRAY_SIZE(irqs); i++) {
->>> +        if (irqs[i] == irq)
->>> +            break;
->>> +    }
->>> +
->>> +    switch (i) {
->>> +    case AICL:
->>> +        dev_dbg(dev, "AICL mode: %s",
->>> +            str_no_yes(chgint_ok & MAX77759_CHGR_REG_CHG_INT_AICL));
->>> +        break;
->>> +    case CHGIN:
->>> +        dev_dbg(dev, "CHGIN input valid: %s",
->>> +            str_yes_no(chgint_ok & MAX77759_CHGR_REG_CHG_INT_CHGIN));
->>> +        break;
->>> +    case CHG:
->>> +        dev_dbg(dev, "CHG status okay/off: %s",
->>> +            str_yes_no(chgint_ok & MAX77759_CHGR_REG_CHG_INT_CHG));
->>> +        break;
->>> +    case INLIM:
->>> +        dev_dbg(dev, "Current Limit reached: %s",
->>> +            str_no_yes(chgint_ok & MAX77759_CHGR_REG_CHG_INT_INLIM));
->>> +        break;
->>> +    case BAT_OILO:
->>> +        dev_dbg(dev, "Battery over-current threshold crossed");
->>> +        break;
->>> +    case CHG_STA_CC:
->>> +        dev_dbg(dev, "Charger reached CC stage");
->>> +        break;
->>> +    case CHG_STA_CV:
->>> +        dev_dbg(dev, "Charger reached CV stage");
->>> +        break;
->>> +    case CHG_STA_TO:
->>> +        dev_dbg(dev, "Charger reached TO stage");
->>> +        break;
->>> +    case CHG_STA_DONE:
->>> +        dev_dbg(dev, "Charger reached TO stage");
->>> +        break;
->> Are the above debug messages really all needed?
+>> Link: https://lore.kernel.org/all/20250731092316.3191-1-spasswolf@web.de/ [1]
+> 
+> I think you should have these tags instead:
+> Reported-by: Bert Karwatzki <spasswolf@web.de>
+> Closes:https://lore.kernel.org/all/20250731092316.3191-1-spasswolf@web.de/ [1]
 
-I forgot to respond to this comment in my previous email.
+Ack! I'll update it in the next version. Thank you for the review.
 
-I think we can keep AICL, BAT_OILO, INLIM. They're either special 
-conditions (AICL) or faulty conditions (like BAT_OILO) and we can in 
-fact keep them at dev_info level. Rest can be removed and a 
-power_supply_changed() is sufficient.
+-- 
+Thanks and Regards,
+Prateek
 
-Let me know what you think?
-
-BR,
-
-Amit
-
->>
->>> +    default:
->>> +        dev_err(dev, "Unrecognized irq: %d", i);
->>> +        return IRQ_HANDLED;
->> I'm not sure it should return IRQ_HANDLED in this case.
->>
->>> +    }
->>> +
->>> +    power_supply_changed(chg->psy);
->>> +    return IRQ_HANDLED;
->>> +}
->>> +
->>> +static int max77759_init_irqhandler(struct max77759_charger *chg)
->>> +{
->>> +    struct device *dev = chg->dev;
->>> +    unsigned long irq_flags;
->>> +    struct irq_data *irqd;
->>> +    int i, ret;
->>> +
->>> +    for (i = 0; i < ARRAY_SIZE(chgr_irqs_str); i++) {
->>> +        ret = platform_get_irq_byname(to_platform_device(dev),
->>> +                          chgr_irqs_str[i]);
->>> +        if (ret < 0) {
->>> +            dev_err(dev,
->>> +                "Failed to get irq resource for %s, ret=%d",
->>> +                chgr_irqs_str[i], ret);
->>> +            return ret;
->>> +        }
->> You should use return dev_err_probe() here, and drop the additional 
->> dev_err_probe()
->> in max77759_charger_probe().
->>
->>> +
->>> +        irqs[i] = ret;
->>> +        irq_flags = IRQF_ONESHOT;
->>> +        irqd = irq_get_irq_data(irqs[i]);
->>> +        if (irqd)
->>> +            irq_flags |= irqd_get_trigger_type(irqd);
->> The above three lines are not needed, and then you can also drop 
->> irq_flags and
->> use its value in the below call directly.
->>
->>> +
->>> +        ret = devm_request_threaded_irq(dev, irqs[i], NULL, 
->>> irq_handler,
->>> +                        irq_flags, dev_name(dev), chg);
->>> +        if (ret) {
->>> +            dev_err(dev,
->>> +                "Unable to register irq handler for %s, ret=%d",
->>> +                chgr_irqs_str[i], ret);
->>> +            return ret;
->> dev_err_probe() please.
->>
->>> +        }
->>> +    }
->>> +
->>> +    return 0;
->>> +}
->>> +
->>> +static int max77759_charger_init(struct max77759_charger *chg)
->>> +{
->>> +    struct power_supply_battery_info *info;
->>> +    u32 regval, fast_chg_curr, fv;
->>> +    int ret;
->>> +
->>> +    regmap_read(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_00, &regval);
->>> +    chg->mode = FIELD_GET(MAX77759_CHGR_REG_CHG_CNFG_00_MODE, regval);
->>> +    ret = charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    if (power_supply_get_battery_info(chg->psy, &info)) {
->>> +        fv = CHG_FV_DEFAULT_MV;
->>> +        fast_chg_curr = CHG_CC_DEFAULT_UA;
->>> +    } else {
->>> +        fv = info->constant_charge_voltage_max_uv / 1000;
->>> +        fast_chg_curr = info->constant_charge_current_max_ua;
->>> +    }
->>> +
->>> +    ret = set_fast_charge_current_limit(chg, fast_chg_curr);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    ret = set_float_voltage_limit(chg, fv);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    ret = unlock_prot_regs(chg, true);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    /* Disable wireless charging input */
->>> +    regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_12,
->>> +               MAX77759_CHGR_REG_CHG_CNFG_12_WCINSEL, 0);
->>> +
->>> +    regmap_update_bits(chg->regmap, MAX77759_CHGR_REG_CHG_CNFG_18,
->>> +               MAX77759_CHGR_REG_CHG_CNFG_18_WDTEN, 0);
->> I think it's good practice to check return values.
->>
->>> +
->>> +    return unlock_prot_regs(chg, false);
->>> +}
->>> +
->>> +static void psy_work_item(struct work_struct *work)
->>> +{
->>> +    struct max77759_charger *chg =
->>> +        container_of(work, struct max77759_charger, psy_work);
->>> +    union power_supply_propval current_limit = { 0 }, online = { 0 };
->>> +    int ret;
->>> +
->>> +    power_supply_get_property(chg->tcpm_psy, 
->>> POWER_SUPPLY_PROP_CURRENT_MAX,
->>> +                  &current_limit);
->>> +    power_supply_get_property(chg->tcpm_psy, POWER_SUPPLY_PROP_ONLINE,
->>> +                  &online);
->> Would it make sense to rework this and check the return values? Then 
->> you can also
->> drop the greedy init at function entry.
->>
->>> +
->>> +    if (online.intval && current_limit.intval) {
->>> +        ret = set_input_current_limit(chg, current_limit.intval);
->>> +        if (ret)
->>> +            dev_err(chg->dev,
->>> +                "Unable to set current limit, ret=%d", ret);
->>> +
->>> +        charger_set_mode(chg, MAX77759_CHGR_MODE_CHG_BUCK_ON);
->>> +    } else {
->>> +        charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
->>> +    }
->>> +}
->>> +
->>> +static int psy_changed(struct notifier_block *nb, unsigned long 
->>> evt, void *data)
->>> +{
->>> +    struct max77759_charger *chg = container_of(nb, struct 
->>> max77759_charger,
->>> +                            nb);
->>> +    const char *psy_name = "tcpm-source";
->>> +    struct power_supply *psy = data;
->>> +
->>> +    if (!strnstr(psy->desc->name, psy_name, strlen(psy_name)) ||
->>> +        evt != PSY_EVENT_PROP_CHANGED)
->>> +        return NOTIFY_OK;
->>> +
->>> +    chg->tcpm_psy = psy;
->>> +    schedule_work(&chg->psy_work);
->> Maybe add a newline here.
->>
->>> +    return NOTIFY_OK;
->>> +}
->>> +
->>> +static void max_tcpci_unregister_psy_notifier(void *nb)
->>> +{
->>> +    power_supply_unreg_notifier(nb);
->>> +}
->>> +
->>> +static int max77759_charger_probe(struct platform_device *pdev)
->>> +{
->>> +    struct regulator_config chgin_otg_reg_cfg;
->>> +    struct power_supply_config psy_cfg;
->>> +    struct device *dev = &pdev->dev;
->>> +    struct max77759_charger *chg;
->>> +    int ret;
->>> +
->>> +    device_set_of_node_from_dev(dev, dev->parent);
->>> +    chg = devm_kzalloc(dev, sizeof(*chg), GFP_KERNEL);
->>> +    if (!chg)
->>> +        return -ENOMEM;
->>> +
->>> +    platform_set_drvdata(pdev, chg);
->>> +    chg->dev = dev;
->>> +    chg->regmap = dev_get_regmap(dev->parent, "charger");
->>> +    if (!chg->regmap)
->>> +        return dev_err_probe(dev, -ENODEV, "Missing regmap");
->>> +
->>> +    ret = devm_mutex_init(dev, &chg->lock);
->>> +    if (ret)
->>> +        return dev_err_probe(dev, ret, "Failed to initialize lock");
->>> +
->>> +    psy_cfg.fwnode = dev_fwnode(dev);
->>> +    psy_cfg.drv_data = chg;
->>> +    chg->psy = devm_power_supply_register(dev, &max77759_charger_desc,
->>> +                          &psy_cfg);
->>> +    if (IS_ERR(chg->psy))
->>> +        return dev_err_probe(dev, -EPROBE_DEFER,
->>> +                     "Failed to register psy, ret=%ld",
->>> +                     PTR_ERR(chg->psy));
->>> +
->>> +    ret = max77759_charger_init(chg);
->>> +    if (ret)
->>> +        return dev_err_probe(dev, ret,
->>> +                     "Failed to initialize max77759 charger");
->>> +
->>> +    chgin_otg_reg_cfg.dev = dev;
->>> +    chgin_otg_reg_cfg.driver_data = chg;
->>> +    chgin_otg_reg_cfg.of_node = dev_of_node(dev);
->>> +    chg->chgin_otg_rdev = devm_regulator_register(dev, 
->>> &chgin_otg_reg_desc,
->>> +                              &chgin_otg_reg_cfg);
->>> +    if (IS_ERR(chg->chgin_otg_rdev))
->>> +        return dev_err_probe(dev, PTR_ERR(chg->chgin_otg_rdev),
->>> +                     "Failed to register chgin otg regulator");
->>> +
->>> +    ret = devm_work_autocancel(dev, &chg->psy_work, psy_work_item);
->>> +    if (ret)
->>> +        return dev_err_probe(dev, ret, "Failed to initialize psy 
->>> work");
->>> +
->>> +    chg->nb.notifier_call = psy_changed;
->>> +    ret = power_supply_reg_notifier(&chg->nb);
->>> +    if (ret)
->>> +        return dev_err_probe(dev, ret,
->>> +                     "Unable to register psy notifier");
->>> +
->>> +    ret = devm_add_action_or_reset(dev, 
->>> max_tcpci_unregister_psy_notifier,
->>> +                       &chg->nb);
->>> +    if (ret)
->>> +        return ret;
->> You could print a message here as well.
->
-> Thanks for the detailed review! I will fix all the flagged issues in 
-> the next rev.
->
->
-> BR,
->
-> Amit
->
->>
->> Cheers,
->> Andre'
 
