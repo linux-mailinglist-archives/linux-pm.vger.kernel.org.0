@@ -1,120 +1,136 @@
-Return-Path: <linux-pm+bounces-40361-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40364-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 636FFCFDB45
-	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 13:38:32 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 654C3CFDBA2
+	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 13:45:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 31208311C015
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 12:32:21 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 5DCC030021D9
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 12:45:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFABB3148DD;
-	Wed,  7 Jan 2026 12:32:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B3C32939F;
+	Wed,  7 Jan 2026 12:37:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GkGk6XqK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hlNR8W/3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41058F49;
-	Wed,  7 Jan 2026 12:32:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19373329395;
+	Wed,  7 Jan 2026 12:37:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767789125; cv=none; b=J0b2PjCfjJopP9osph3ACd89XGjhmB+DWvaUCbS3UcEg1QVuYek8gvuhcwhwXzY46d9z5mBgM1fxMT588FGB5E+rifXwRm5pm4AwCqwdb+/iBgUhVYP+uyCAz2pPSdr48STISOerGpCrvaDqoqMdRBlj3u3Rot+qDuSvHtzBC08=
+	t=1767789467; cv=none; b=Vb6MXsHRbA9YGXQBRYrZX0RONznh8upf+d2HGGKk/DSqFzVRiitt6CvBSRwddMJdz9uPTNKUCCXRBhRSICpE0Pao8n//Impvcyqlm9nCJ9TuLCfohi5J5hxniGCixfjiYk+8jdhuFUn67B5iN7yTObp1Fy71pMfXm0/K/Y1Gdxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767789125; c=relaxed/simple;
-	bh=sfYlyiZoeUZcVn7NwfS5gMgyWT0pMwsrWiexLPWG+Lo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uG7zBLOL8Sa38Kd9Lw5AXBHKt8+6deQ8Gh9OAyDuagPMdPV4bjGCW9u/qtV0XDtXI/Qg6yJkbtcVZsCqnU74BqxPAvtq8V2d7OJ9jollj3jiNltsMcERz29Ki72gEtkcrnNLCtzZgWR3Jyg7Y5cue+pW/6BJH/7hn0q2hiJBuEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GkGk6XqK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A34EC4CEF7;
-	Wed,  7 Jan 2026 12:31:59 +0000 (UTC)
+	s=arc-20240116; t=1767789467; c=relaxed/simple;
+	bh=3rZ3aSqDtIQegdbz0UiHC1dGQWKjQrUwSTJAJTSwECw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kIa/NI7XWopupXxye9ONlvve/idJ3Vld4yIFlnkNREsM07PzYw614A1+E85oZSjUF9QNYmutwD5fu1Vpa99hUprSXf7Y0cUePe5wRlKzdmShGxk6Jvb5Yl5VQn67RNFL5NcWh+Qz7bu39eJ7dFAQWrynKGpMvExAz/UD1OZC09U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hlNR8W/3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DCEEC4CEF7;
+	Wed,  7 Jan 2026 12:37:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767789125;
-	bh=sfYlyiZoeUZcVn7NwfS5gMgyWT0pMwsrWiexLPWG+Lo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GkGk6XqKLaGl/8j/tUCkvHRUPu5FGXepJy0ojmFTNwzNgDtZLbY42vyoyRm8ZEM4B
-	 91dywEkuqYf+i7YOFLywI8jwoJeO0ARjqIOZQ/R8OcBK1EY0JcXRGUMp7KelNJQTdx
-	 BepyMOchxH7/DqNmQGJiphOUtpskRIjSh7wjC/YphZ11lVghKdhVVdrFPPq5npC2qP
-	 bTXpfYMTuEcWvSW409C5JF1kRiFXeNuCFp+GMefGV8i2fkI6GtxbgKruLxJ/1NOtGJ
-	 cHOqiYvJa26ydKn34QsC8rh0WpC0Y+cg+fwTROdmKdLrNCjuLKa8FvuhD9d4hBr7gw
-	 7Wsqff3rWNJCQ==
-Date: Wed, 7 Jan 2026 18:01:56 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Bartosz Golaszewski <brgl@kernel.org>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	Stephan Gerhold <stephan.gerhold@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	linux-pm@vger.kernel.org, linux-ide@vger.kernel.org
-Subject: Re: [PATCH v4 5/5] power: sequencing: Add the Power Sequencing
- driver for the PCIe M.2 connectors
-Message-ID: <pqix44ld4icxhmvaranezas7j77wcrmkfpj4xyxgxir3tmfwx7@fswnr25k2f43>
-References: <20251228-pci-m2-v4-0-5684868b0d5f@oss.qualcomm.com>
- <20251228-pci-m2-v4-5-5684868b0d5f@oss.qualcomm.com>
- <CAMRc=MfPq7+ZbWTp7+H388hqHoX27qbbHsLHO+xeLaceTwZLVA@mail.gmail.com>
- <z33axfsiox73f2lklhiaulekjnqxnqtkycfylybwqnqxtx2fck@3qtas4u6mfnz>
- <CAMRc=McS8a-1cH_y+kpze=zj2-PksHDO3SE=p3XnbEueUQt9xA@mail.gmail.com>
+	s=k20201202; t=1767789466;
+	bh=3rZ3aSqDtIQegdbz0UiHC1dGQWKjQrUwSTJAJTSwECw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=hlNR8W/3AVrpb8ASe87LFsEhWBoubhWmsxr04CZtHK2Vg/IJeTgzKtZ9um+fFfeOw
+	 bC+4X8FByJwNz2HWfmM8ZWqG51v0/GFeJvs5wFGx/28O7ph2qKD2qDeFb2hPWOH2r2
+	 sdaOmpJ7fmn+FlBYWkRJIMbaCtYB2R/wVSUTCqMF4CBdAS6260wEmyEmf4hkB/Tni4
+	 nAlqEMERywSjxxDxJV24W7fgUuxfIfCH7Mm4+52hFsL5qpdCfQXcgS0xw2QixEU9uQ
+	 s5vNMkcwVI4Ap9y+U/U8eZd1EuQypeASpJ1zO25uJoLNmFH9v8S/KU+p8d2T2ohxye
+	 GDKdLbUAkRb2Q==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Brian Norris <briannorris@chromium.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Siddharth Vadapalli <s-vadapalli@ti.com>,
+ Roger Quadros <rogerq@kernel.org>, netdev@vger.kernel.org,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, Simon Horman <horms@kernel.org>
+Subject:
+ [RESEND][PATCH v2 1/3] net: ethernet: ti: am65-cpsw: Discard pm_runtime_put()
+ return value
+Date: Wed, 07 Jan 2026 13:34:02 +0100
+Message-ID: <5042490.GXAFRqVoOG@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <2816529.mvXUDI8C0e@rafael.j.wysocki>
+References:
+ <6245770.lOV4Wx5bFT@rafael.j.wysocki> <2816529.mvXUDI8C0e@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=McS8a-1cH_y+kpze=zj2-PksHDO3SE=p3XnbEueUQt9xA@mail.gmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jan 07, 2026 at 10:51:11AM +0100, Bartosz Golaszewski wrote:
-> On Wed, Jan 7, 2026 at 10:39 AM Manivannan Sadhasivam <mani@kernel.org> wrote:
-> >
-> > > > +
-> > > > +static int pwrseq_pcie_m2_probe(struct platform_device *pdev)
-> > > > +{
-> > > > +       struct device *dev = &pdev->dev;
-> > > > +       struct pwrseq_pcie_m2_ctx *ctx;
-> > > > +       struct pwrseq_config config = {};
-> > > > +       int ret;
-> > > > +
-> > > > +       ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-> > > > +       if (!ctx)
-> > > > +               return -ENOMEM;
-> > > > +
-> > > > +       ctx->of_node = dev_of_node(dev);
-> > >
-> > > Since you're storing the node address for later, I'd suggest using
-> > > of_node_get() to get a real reference.
-> > >
-> >
-> > If CONFIG_OF_DYNAMIC is not enabled, then of_node_get() will just return the
-> > passed pointer. I always prefer using dev_of_node() since it has the CONFIG_OF
-> > and NULL check. Though, the checks won't apply here, I used it for consistency.
-> >
-> 
-> I think it's just more of a good practice to take a reference to any
-> resource whenever you store keep it for longer than the duration of
-> the function even if the actual reference counting is disabled in some
-> instances.
+From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-Good practice you inherited from writing Rust code :)
+Printing error messages on pm_runtime_put() returning negative values
+is not particularly useful.
 
-> If ever we switch to fwnodes, the circumstances may be
-> different than static devicetree.
-> 
-> You can also do "ctx->of_node = of_node_get(dev_of_node(dev));", all
-> the NULL-checks are there.
-> 
+Returning an error code from pm_runtime_put() merely means that it has
+not queued up a work item to check whether or not the device can be
+suspended and there are many perfectly valid situations in which that
+can happen, like after writing "on" to the devices' runtime PM "control"
+attribute in sysfs for one example.
 
-This may not be needed. I can use of_node_get() here, but the APIs are just
-fragile such that neither dev_of_node() nor of_node_get() increments the
-refcount always.
+Accordingly, update am65_cpsw_ethtool_op_begin() and cpsw_ethtool_op_begin()
+to simply discard the return value of pm_runtime_put().
 
-- Mani
+This will facilitate a planned change of the pm_runtime_put() return
+type to void in the future.
 
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1 -> v2: No changes
+
+---
+ drivers/net/ethernet/ti/am65-cpsw-ethtool.c | 5 +----
+ drivers/net/ethernet/ti/cpsw_ethtool.c      | 5 +----
+ 2 files changed, 2 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
+index c57497074ae6..98d60da7cc3b 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
+@@ -391,11 +391,8 @@ static int am65_cpsw_ethtool_op_begin(struct net_device *ndev)
+ static void am65_cpsw_ethtool_op_complete(struct net_device *ndev)
+ {
+ 	struct am65_cpsw_common *common = am65_ndev_to_common(ndev);
+-	int ret;
+ 
+-	ret = pm_runtime_put(common->dev);
+-	if (ret < 0 && ret != -EBUSY)
+-		dev_err(common->dev, "ethtool complete failed %d\n", ret);
++	pm_runtime_put(common->dev);
+ }
+ 
+ static void am65_cpsw_get_drvinfo(struct net_device *ndev,
+diff --git a/drivers/net/ethernet/ti/cpsw_ethtool.c b/drivers/net/ethernet/ti/cpsw_ethtool.c
+index bdc4db0d169c..a43f75ee269e 100644
+--- a/drivers/net/ethernet/ti/cpsw_ethtool.c
++++ b/drivers/net/ethernet/ti/cpsw_ethtool.c
+@@ -374,11 +374,8 @@ int cpsw_ethtool_op_begin(struct net_device *ndev)
+ void cpsw_ethtool_op_complete(struct net_device *ndev)
+ {
+ 	struct cpsw_priv *priv = netdev_priv(ndev);
+-	int ret;
+ 
+-	ret = pm_runtime_put(priv->cpsw->dev);
+-	if (ret < 0)
+-		cpsw_err(priv, drv, "ethtool complete failed %d\n", ret);
++	pm_runtime_put(priv->cpsw->dev);
+ }
+ 
+ void cpsw_get_channels(struct net_device *ndev, struct ethtool_channels *ch)
 -- 
-மணிவண்ணன் சதாசிவம்
+2.51.0
+
+
+
+
 
