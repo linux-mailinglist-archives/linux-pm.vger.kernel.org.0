@@ -1,117 +1,86 @@
-Return-Path: <linux-pm+bounces-40360-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40365-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F23B4CFD7DD
-	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 12:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ED3A2CFDBAE
+	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 13:46:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7A603301722B
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 11:52:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F2B11303164C
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 12:45:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4521F3128B0;
-	Wed,  7 Jan 2026 11:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ED9E329E7B;
+	Wed,  7 Jan 2026 12:37:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oXqYrhcc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 211052F7444;
-	Wed,  7 Jan 2026 11:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D78E9329E6F;
+	Wed,  7 Jan 2026 12:37:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767786732; cv=none; b=dwds5F2aAYdHFuPXSIDmB0whQfoR2RGTJM1OEQxxmc4lupsSmgSkTwmpe4iI/fSQHAMRzmW2aKFuLvH4gYog6sZ5cikI5S08RvIpKgkuEKmrUjxne8sZaEQOOW0UG3HODWacFwwpxp2ICWCRzohsfl+iq9Fq0M22R5dHtRY/tSc=
+	t=1767789474; cv=none; b=MQR5ATq+5HtthK5tkb/t0VUvtlJl6Bi28GAj1GuOlO7W3rIfsTSGz0xAO4mb8Dy+B4q1Wzg6ZTZq8Ilcagk1IxD00RbV/VPhEC3v2b++xOsMo6ij4vZ+tny7XSVZCrML82uHnXK8xw9qZcXultYRnRjltJThTv3lDKS+3ZSRWf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767786732; c=relaxed/simple;
-	bh=1Fchlxf4hNZLgwVE8WYe2dz3lUN9r/xoRIw5B7bqDRE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dO/2Tqu5GdcpqAsnjaEUXC2/YaIQwmYfqJSI9bAcw/dtLRNLXnGZgs+DlqV75oPaXMENhIfj4XOwOh1YKL4v2nrEd9WDZMQYswoUcV2fIQ/oAwzCL89OgI5usLkb6SkfJf9xpe08mb6xZUNW6dfm6niaXIITbDGDfk7FIlA3icE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1DF6497;
-	Wed,  7 Jan 2026 03:52:02 -0800 (PST)
-Received: from [10.57.12.220] (unknown [10.57.12.220])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FDD63F6A8;
-	Wed,  7 Jan 2026 03:52:07 -0800 (PST)
-Message-ID: <08b09d21-0c59-4c0d-8b21-3883e76964d2@arm.com>
-Date: Wed, 7 Jan 2026 11:52:06 +0000
+	s=arc-20240116; t=1767789474; c=relaxed/simple;
+	bh=SSxdlXBDbRphoLQNWCYCgGFLbgHh+3HKYPtQc2L4wmg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gq7idJdzcZSVmChrr0BGIrtnUNfoR5sRyFeifcbKLXkk9rUG2S2T2NsS/IYthDMaEh41mByQYNkYIKdu3owpv/jMK3ytpPZLTSNmxJ1G2jeGt2KCf2aXSxHRI5TQOkNv69HxecGimjfXIAKVN1eDAd1qtlTv01u+59rt6SAKkzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oXqYrhcc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E39C16AAE;
+	Wed,  7 Jan 2026 12:37:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767789473;
+	bh=SSxdlXBDbRphoLQNWCYCgGFLbgHh+3HKYPtQc2L4wmg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=oXqYrhccgF/RvvTd9//5eSL5owPyT+ORoVztYCdhV4ICR9XzbGZ+ar0eGI55nkg9y
+	 tzD7P5f+s0Yw4hgGXjSbYukDtuhwk3Jl4Td+MkJxV78W5VA3tkQ9Yeswmz05C4lmi7
+	 1nHztxmamSWjJm8WI9W3oBxbV3G0QfChF9cEJVf5pVpKWnJzRrAubPJL8ctea7Iljh
+	 sZ9Xw89BRIgD4/boMr7dOFu0CkZxm0g1QrAUvKW02TuPKzD4nfjXEdy7emdxxwpwoD
+	 hJILI6ejjw8j74aqg2Dm+w544YYPl6Yqg+IR6IUQBdEvlb1mlAsvYAWcAy3ko9Iiwe
+	 +2VyWDJmz1R1A==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Brian Norris <briannorris@chromium.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Siddharth Vadapalli <s-vadapalli@ti.com>,
+ Roger Quadros <rogerq@kernel.org>, netdev@vger.kernel.org,
+ Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, Simon Horman <horms@kernel.org>
+Subject: [RESEND][PATCH v2 0/3] net: Discard pm_runtime_put() return value
+Date: Wed, 07 Jan 2026 13:31:03 +0100
+Message-ID: <2816529.mvXUDI8C0e@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
+References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH for 6.19 0/4] Revise the EM YNL spec to be clearer
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Changwoo Min <changwoo@igalia.com>, kernel-dev@igalia.com,
- linux-pm@vger.kernel.org, horms@kernel.org, pabeni@redhat.com,
- netdev@vger.kernel.org, edumazet@google.com, davem@davemloft.net,
- sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org, lenb@kernel.org,
- pavel@kernel.org, donald.hunter@gmail.com, kuba@kernel.org
-References: <20251225040104.982704-1-changwoo@igalia.com>
- <849b576e-9563-42ae-bd5c-756fb6dfd8de@arm.com>
- <CAJZ5v0imU_DkW5-Pip3ze-MaHj+CAvc0LNkaLsTZuFbj33R0aA@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0imU_DkW5-Pip3ze-MaHj+CAvc0LNkaLsTZuFbj33R0aA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Rafael,
+Hi All,
 
-On 1/5/26 18:22, Rafael J. Wysocki wrote:
-> On Tue, Dec 30, 2025 at 10:44 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Changwoo,
->>
->> On 12/25/25 04:01, Changwoo Min wrote:
->>> This patch set addresses all the concerns raised at [1] to make the EM YNL spec
->>> clearer. It includes the following changes:
->>>
->>> - Fix the lint errors (1/4).
->>> - Rename em.yaml to dev-energymodel.yaml (2/4).  “dev-energymodel” was used
->>>     instead of “device-energy-model”, which was originally proposed [2], because
->>>     the netlink protocol name cannot exceed GENL_NAMSIZ(16). In addition, docs
->>>     strings and flags attributes were added.
->>> - Change cpus' type from string to u64 array of CPU ids (3/4).
->>> - Add dump to get-perf-domains in the EM YNL spec (4/4). A user can fetch
->>>     either information about a specific performance domain with do or information
->>>     about all performance domains with dump.
->>>
->>> This can be tested using the tool, tools/net/ynl/pyynl/cli.py, for example,
->>> with the following commands:
->>>
->>>     $> tools/net/ynl/pyynl/cli.py \
->>>        --spec Documentation/netlink/specs/dev-energymodel.yaml \
->>>        --dump get-perf-domains
->>>     $> tools/net/ynl/pyynl/cli.py \
->>>        --spec Documentation/netlink/specs/dev-energymodel.yaml \
->>>        --do get-perf-domains --json '{"perf-domain-id": 0}'
->>>     $> tools/net/ynl/pyynl/cli.py \
->>>        --spec Documentation/netlink/specs/dev-energymodel.yaml \
->>>        --do get-perf-table --json '{"perf-domain-id": 0}'
->>>     $> tools/net/ynl/pyynl/cli.py \
->>>        --spec Documentation/netlink/specs/dev-energymodel.yaml \
->>>        --subscribe event  --sleep 10
->>>
->>> [1] https://lore.kernel.org/lkml/CAD4GDZy-aeWsiY=-ATr+Y4PzhMX71DFd_mmdMk4rxn3YG8U5GA@mail.gmail.com/
->>> [2] https://lore.kernel.org/lkml/CAJZ5v0gpYQwC=1piaX-PNoyeoYJ7uw=DtAGdTVEXAsi4bnSdbA@mail.gmail.com/
->>
->> My apologies, I've missed those conversations (not the best season).
->>
->> So what would be the procedure here for the review?
->> Could Folks from netlink help here?
->>
->> I will do my bit for the EM related stuff (to double-check them).
-> 
-> I think that it'll be good to have this in 6.19 to avoid making a
-> major release with an outdated EM YNL spec and I see that the review
-> on the net side is complete, so are there any concerns about this?
+This is a resend of
 
-I'm sorry for delay.
-I don't see concerns. It LGTM so far, I can see that there will be v2
-with minor change.
+https://lore.kernel.org/linux-pm/5973090.DvuYhMxLoT@rafael.j.wysocki/
 
-Regards,
-Lukasz
+which mostly was a resend of patches [10-12/23] from:
+
+https://lore.kernel.org/linux-pm/6245770.lOV4Wx5bFT@rafael.j.wysocki/
+
+as requested by Jakub, except for the last patch that has been fixed
+while at it and so the version has been bumped up.
+
+The patches are independent of each other and they are all requisite
+for converting pm_runtime_put() into a void function.
+
+Thanks!
+
+
 
 
