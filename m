@@ -1,136 +1,135 @@
-Return-Path: <linux-pm+bounces-40348-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40349-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 533EBCFC21B
-	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 06:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BB33CFC5A3
+	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 08:31:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 918F830141E5
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 05:57:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BEA293086242
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 07:28:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED8D62641E3;
-	Wed,  7 Jan 2026 05:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sWywaJas"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7ED27991E;
+	Wed,  7 Jan 2026 07:28:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E96235358
-	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 05:57:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A92A927A461
+	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 07:28:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767765467; cv=none; b=Y8CDIyiUPpwJjbF+Tii+NC8mjKZJzgpDZjSPjsaBd9Q4N/P5XjxVgUNhVs8hnfj2QKMGhL3pFRnoozhPlbuzFBRvPfCrGTG2x/YWFfYxp5TsYPjhbmPP/HP5Qai8jnQRFRa9QBxnswsubLVrWtJxUzOuHO6SbZPHxlh0+StNiP8=
+	t=1767770895; cv=none; b=gydOJ9y+E0wWes2nIF13avMUa9FPbLSdeUGWCSONXdpc9Xwt4rhVvL6v79iSEaZedSibCU52g6Hn9E9zDUCnq0d7iDBP2RunksnjSwWNSE7Ii89GZQ6D8HpGtgSaRO3C+pUvQAIXqjhIaRQK8GeZQ43I8Q4CuNkQnoeTuCjSuhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767765467; c=relaxed/simple;
-	bh=iOvdWPELyx+skLN7UXWLkA+/bXZVeSPWgX2ioqSAssc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CCzbHyThmhX0LXuTpBE3f7DcZpMaMQ0GyL5RP8AzyfUgp49Olv8ZB+JoBPzY6jfczbWfRof4cjN4B+8eDZmyWFRxGlS57zMn65inq5y4VUYZXdTHj/FkB6M6gEyUKatI7t1spM/cgNQQaFWOQ9y9o9qegQ7YBmDXNtwalDh5Zx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sWywaJas; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c1e7cdf0905so941300a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 06 Jan 2026 21:57:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1767765466; x=1768370266; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LC0H7XXkEOYKc23QOgFpX3RRHegQ2qJKsip88CL9K2Q=;
-        b=sWywaJasLS0e25dnLyTHRyLKKNw/GbbpcHZjHXsQtmWlL2D2mPJscklhT8TNgv4x70
-         NW4dtQd/N5uGbgm2WpXWmmvQPIgKz6cRelmm2hLfKT6EX+CgfJwkEL3kHwSRcHLywlSi
-         YvLmZe9RUIeNu6je3R/VhYp4WsJS54xWq4Qjj6jLUSf5om57IP3CJWOdxbFX8KkX3L41
-         aWk8ss69lN/kM/m0lk8g7MzMhwCm932F4UmZvck6j6jV28np3LxfUUkovqSQhge6J9m5
-         jgd5o2RXUSs2Svf/JSrKTna7tmXscpCj4SWiIEqjsJ9QPRrd6YfD5FEkwPagzL3aa8yq
-         gZMQ==
+	s=arc-20240116; t=1767770895; c=relaxed/simple;
+	bh=RfgEuMNL4TUo/qvInpOgHkNAN7w3Ng98TrXjKaBgOIU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fA2SFM7+I/bj0J6dmNapwHXajYmQH2e9jsRBEN92VQnAwN5VgVNDbKhUz//l8/c09d1KQWXaDniKEPVGzYbbmZBxu5oKBxTL+yrsVtMjxEhnmJtO0VGMjCJRg4SAmCnjwmOh7a5WCPdfivleGqfX2PZ3wf1+T3SwzM7cP5xQH9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gompa.dev; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gompa.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7c6d1ebb0c4so1270873a34.1
+        for <linux-pm@vger.kernel.org>; Tue, 06 Jan 2026 23:28:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767765466; x=1768370266;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LC0H7XXkEOYKc23QOgFpX3RRHegQ2qJKsip88CL9K2Q=;
-        b=AzaoFSCCJ2luBLDrczBr8P9ZAIdYGidAN/Y4pAOuFrQBVhLOdOjGhiR1/iJE2OTzUX
-         9b0qx0wDkEpLoyDJljNtVab/jTDFTNeojKvORW1i3H6SLGlh6PCEm0OY8CfXcRcL5w06
-         omkzf1/ygH8JHgmBHC1JUoTqWvAN8Lr1obfYU2iHs3/4qn4khlVavv/i2JeQ3DGM48rd
-         bqOiXvsZ+b6zTR7iuNQs2oQ8PbIbhaJexvgFdUPa6j/6tIfi6wHtGUAreIEclKAhozWL
-         49Ii4dpv0s5EBwz+74wi/2OLcj77wFSsroMuoPPcY3ixD5AxhDINxQDRamPJPQ8Vqm9D
-         HgAA==
-X-Forwarded-Encrypted: i=1; AJvYcCXIJe60mbi0+w/7lm9aPtBNlbN9HQhwS8B1OBRQx+iKtDjXkFD+ae6XeYsN7jihsq60Q9XJeZYJMg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwupSNhMUzA47F45otBzvL27fAbR7HFjXmGtCT4kPn4u7q5Zo4D
-	AuEjzurG3RGwGWzsXTv8Id8Koo3DWn9ynMLmiRJPColNHj/Usxeeloen9GlZCV9m0DI=
-X-Gm-Gg: AY/fxX5rSuL/qYh6L8bXJX7yTAQ4ihwBSVmGzxE3P4DEyOoIXM400R9qS/D7JpsYIqB
-	RnV2U8NTQocynpMG8ZengbNMyI7aomUuN7VWaZVFeb117kUccp0bdbphn4WeIsU2UeEMf+7r7ar
-	pryiDpeMWLYJqs+7MbxG1i8mZPS1Ht72AremlrmLipAc/QlYCWhef4Pl6WF8Hja8qa1VI2ArFCR
-	eFrKNCwEafBwiUOmY5rjDroLv4CCu57X9tXz5jgVy7lKFkDdZcAkBIDO6pT3fGOLokUXVXGRIZ5
-	NTfpCc79kQ0bJFR79b/c363JX3FQYjwbU9lkhy4cEdyk6t3cQtzcXFHDHdtJtIXMtO1g7l8lARw
-	lMVkcsfY2KD1pqDdpIEu3LEovKM7HYHVVfpRj8DJ0I2Ffeln8RCjEgxSf7slyBa5seTuZeMqTun
-	qAonfBs226iTkMnanJPXeYGQ==
-X-Google-Smtp-Source: AGHT+IHbKbuUiaGFKdL4diTpNeLR/j5eosCfbHWdAQ8rrrg+/KnQsIV8kE3nI8jz4VVgZv3B/kEBbQ==
-X-Received: by 2002:a05:6a20:7355:b0:361:4f82:e545 with SMTP id adf61e73a8af0-3898fa1f824mr1336775637.53.1767765465528;
-        Tue, 06 Jan 2026 21:57:45 -0800 (PST)
-Received: from localhost ([122.172.80.63])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cc8d76sm38106705ad.84.2026.01.06.21.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jan 2026 21:57:44 -0800 (PST)
-Date: Wed, 7 Jan 2026 11:27:42 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Andreas Kemnade <andreas@kemnade.info>, Nishanth Menon <nm@ti.com>, 
-	Kevin Hilman <khilman@kernel.org>
-Cc: Haotian Zhang <vulab@iscas.ac.cn>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-omap@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] omap-cpufreq: Fix regulator resource leak in probe()
-Message-ID: <y2xyyyyhdoxflj4doa4y3a7prjqulcw63bdkor3fo3qsbmxvzy@dvhmfxkkzdqs>
-References: <20251215030327.1771-1-vulab@iscas.ac.cn>
- <20260105101412.0ac7baa7@kemnade.info>
- <pjmwnxp6wae3bbmzmzys4r5szw6ywxphi4qtmpmg7jsqadc5fm@fvozoujr4mi5>
- <20260106182946.1c54d769@kemnade.info>
+        d=1e100.net; s=20230601; t=1767770892; x=1768375692;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Eu/A0GfTdEUi+4McTsexKabuBI9bVphLbWuOqGe7DD0=;
+        b=Ne0Rlza5AoKo7uiZRSmpauLSEZ92tgZws8L4MaapiO54SqTorkvN1iT+gaYiUsJW0E
+         4y/RhFRlT8PUmFDtr4sP1FFMEEgFSAkMGp9SAtv3o7/SUDP6H0Rt3gsmP4PZk/AiBPQW
+         bLb5gzpaV8omBHMkdBx9SssxiAHnAsy74L0+dfcFzXGQM/trjUB1MPqHpMefa+oA/Tz/
+         P/yQRI9Wv15ZxsEoe7paAhDDasF8SrMkoITA0Of3/VJJsyiH1FXMbEhdkGiIY+rUAxz1
+         gYvr/g8TVyOcyANMK2oTO1pnIhqGRrfgdo7n4N+VnmbMvd+E0YxI59YzvhR52nbg+3QJ
+         NunQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW2R2+38rX483FaFbvJHRRe2jRXN+0BXbU99uzUKUiSNr7N7OVG6v76FGp11vmIpc8TkbcHT9ohhg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzS2PWk9zk9W17N7zmWRn6zA1tQOatZKxf9gXK52AcPItfLByDH
+	WmbiDXE7/Q5Dbo6FY7OmUd6iaDLya4utGvkbbpQG1y85j3WRdOqAyidt8QKCog==
+X-Gm-Gg: AY/fxX4mwgsqNTNE0dk+/CSUyFgf7aBhILX5Eo2ZM/Tyq78pGOsKZjeEt8gULEFHiqR
+	egMFT7ztjCK2Xbk3LU/OX9oVo1sAd0MmGw/Aoy+lgF6Qn8GX2DWdVcUKBLNzGD9iqQAAyvaJlo4
+	8QQ/iTbueMxQplf17vtjIA6IRmZxbwLqnXas1zHLybjcvLNxiHIz7AmaRNJg2WPT3hPoGZVCYgF
+	Y8kt0K8M92sxGr0ToNsy/smIDxv/oYfmX+XJd0d39CZ3Enszx+PRRClno5tm2lXdhez040NKuWi
+	q/DKVKE+2Y5jBdrj4i+rxzzKq652AgCy0qVE8Stdx2GhX7L/MQ/bfpSsPWAe4Ub3+yNcoLJic5P
+	mCxOqjDUOKC0J2o1FccLy7UyeEZ8urgOCDBrmUAIo1+PrCkX7mEOfgZsvdxdyvcdQ6fAosEfCWc
+	ug655e68uXqsycmU299eFZycS4joeV2Qvt4hLqkGylOtVpANZtJ0KhaLYoR0w33zvxzFZssQIhL
+	upfvQpbWfc=
+X-Google-Smtp-Source: AGHT+IGZIE5sCd+KsANJAIb+DkQhMIXyzirOZsDAk/0CZu79L+mBgT2JcVLikolQ05h9VLxpbOZcVg==
+X-Received: by 2002:a05:6830:2696:b0:748:8b42:77ab with SMTP id 46e09a7af769-7ce506a4c2amr871479a34.0.1767770892155;
+        Tue, 06 Jan 2026 23:28:12 -0800 (PST)
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com. [209.85.210.47])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7ce478ede38sm2866205a34.26.2026.01.06.23.28.11
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Jan 2026 23:28:11 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7c701097a75so946562a34.3
+        for <linux-pm@vger.kernel.org>; Tue, 06 Jan 2026 23:28:11 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVQ7cJbbZSmWz8qalEoSZyGcM96YXewAoVKND2TygNwLwQT9kdalHOgnyrddAQ6LGoXGsHR8PKcZg==@vger.kernel.org
+X-Received: by 2002:a05:6830:2b07:b0:7c7:59a1:48d5 with SMTP id
+ 46e09a7af769-7ce5089afafmr879312a34.1.1767770891508; Tue, 06 Jan 2026
+ 23:28:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260106182946.1c54d769@kemnade.info>
+References: <20260105-b4-macsmc-power-v1-0-62954c42a555@gmail.com>
+In-Reply-To: <20260105-b4-macsmc-power-v1-0-62954c42a555@gmail.com>
+From: Neal Gompa <neal@gompa.dev>
+Date: Wed, 7 Jan 2026 02:27:35 -0500
+X-Gmail-Original-Message-ID: <CAEg-Je--qfftNtPgOOU5hsG=6roPeycgSWC+cZkW8EHmLwRx8Q@mail.gmail.com>
+X-Gm-Features: AQt7F2qGyZ3wQ07Wyu2P5kUdwfWzPrrW5nKTTTElBM9nakAD7-jOVKbhW0CdPTQ
+Message-ID: <CAEg-Je--qfftNtPgOOU5hsG=6roPeycgSWC+cZkW8EHmLwRx8Q@mail.gmail.com>
+Subject: Re: [PATCH 0/2] Add Apple Silicon SMC power driver
+To: michael.reeves077@gmail.com
+Cc: Sebastian Reichel <sre@kernel.org>, Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
+	Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	Hector Martin <marcan@marcan.st>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 06-01-26, 18:29, Andreas Kemnade wrote:
-> hmm, it is performed when the device is removed/unbound, which does not necessarily
-> mean the driver is removed.
+On Mon, Jan 5, 2026 at 7:56=E2=80=AFAM Michael Reeves via B4 Relay
+<devnull+michael.reeves077.gmail.com@kernel.org> wrote:
+>
+> This series adds a power supply driver for the Apple SMC found on
+> Apple Silicon devices. This allows the kernel to report AC status,
+> battery charging status, and power metrics, and modify the charging
+> behaviour.
+>
+> The first patch adds the driver itself, and the second patch wires it
+> up to the MFD core.
+>
+> The driver is based on an original out-of-tree implementation by
+> Hector Martin. It has been refactored for upstream inclusion,
+> including support for newer SMC firmwares, devices without batteries,
+> dynamic property detection and improved state management.
+>
+> Tested on: Apple M3 (MacBook Air, J613)
+>
+> Signed-off-by: Michael Reeves <michael.reeves077@gmail.com>
+> ---
+> Michael Reeves (2):
+>       power: supply: Add macsmc-power driver for Apple Silicon
+>       mfd: macsmc: Wire up Apple SMC power driver
+>
+>  MAINTAINERS                         |   1 +
+>  drivers/mfd/macsmc.c                |   1 +
+>  drivers/power/supply/Kconfig        |  11 +
+>  drivers/power/supply/Makefile       |   1 +
+>  drivers/power/supply/macsmc-power.c | 872 ++++++++++++++++++++++++++++++=
+++++++
+>  5 files changed, 886 insertions(+)
+> ---
+> base-commit: cc3aa43b44bdb43dfbac0fcb51c56594a11338a8
+> change-id: 20260105-b4-macsmc-power-d017cc7f53ac
+>
 
-For the cpufreq drivers, the device is normally never removed. It either gets
-created from DT or some platform specific code creates the device for ever. But
-anyway, we were both talking about unbound being called, doesn't matter if it is
-the device or driver which is removed.
+LGTM, thanks for this work!
 
-> But that does not prevent trouble if something
-> is still trying to access stuff here after driver removal. So it is not really
-> helpful.
+Reviewed-by: Neal Gompa <neal@gompa.dev>
 
-It is not possible for something to still be using the resources from this
-driver (like the global variables) after remove() is called. If there is a bug
-in there, then that needs to be fixed instead.
 
-> Hmm, how does a device gets bound to this driver?
-
-Nice catch.
-
-Tried to look at history.
-
-commit cb6675d6a868 ("ARM: OMAP2+: Remove legacy PM init")
-
-This commit removed the platform device being created and mentions that stuff
-happens via DT, which AFAIU, creates the cpufreq-dt device instead.
-
-So no one should be using this driver since year 2016.
-
-Kevin, Nishanth, can you please confirm ? We should remove this driver.
-
-> But the fix is good for stable. So I would propose to add this
-> fix (to let it propagate to stable) and deorbit this driver.
-
-I don't think it is worth adding to stable when there are no users.
-
--- 
-viresh
+--=20
+=E7=9C=9F=E5=AE=9F=E3=81=AF=E3=81=84=E3=81=A4=E3=82=82=E4=B8=80=E3=81=A4=EF=
+=BC=81/ Always, there's only one truth!
 
