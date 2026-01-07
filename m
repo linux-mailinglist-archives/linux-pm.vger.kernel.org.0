@@ -1,58 +1,58 @@
-Return-Path: <linux-pm+bounces-40389-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40390-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D5D4CFF831
-	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 19:41:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B03ECFF129
+	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 18:22:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 55AC3300EF56
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 18:41:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 04AEC3045762
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 17:21:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B28C434FF4A;
-	Wed,  7 Jan 2026 17:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2986634A3D0;
+	Wed,  7 Jan 2026 17:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="q3hl883L"
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="Xsn3PzMM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011021.outbound.protection.outlook.com [40.107.74.21])
+Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011063.outbound.protection.outlook.com [52.101.125.63])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5578834D919;
-	Wed,  7 Jan 2026 17:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760ED3A0B02;
+	Wed,  7 Jan 2026 17:10:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.63
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767805589; cv=fail; b=O9UZXXNqPZJ5zbz2lZL0XBx4WuUibVLyHgGO789xfM/opXfP9Se8YRfCuI6GiE6tz0h6joQPwRSXl3UEFRn6hHG1+LKGjBw9UbzcLdCE4/NBWjBiwVP0KVRgKkexkeBR+lc44ITuN9L3h1zg8M3wl1PK/bBkRzpB1ApWK8BEcPE=
+	t=1767805833; cv=fail; b=aSS6pceN3f+jVMA0I5IcvDOY69vEVrXMEtqvHVCq2bEqy1Lx8PyVR8G861yAHY9MEp4cKtj5zebf3xJdxgQQlLYnEykjTFeqCelSrju1ySF6x7+DbdgS6DLeoRA9xrf1PnqJICulpuzwDK2AfICAZcoixYsSgEPWCBuHBnFPLUE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767805589; c=relaxed/simple;
-	bh=rWaCi/N+gee6GGfwvIFJVTWaCnPtwKJHd6ohz+Z/V8Y=;
+	s=arc-20240116; t=1767805833; c=relaxed/simple;
+	bh=GIONI3v79GZ1q4WTMHVeu0EsQC22TnKbgqQIoovYt1Q=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Ju6vrf9oxA+ZoBifsokBmmCTqYA1ih61TaJLW8GB4/GmD+Q8KRsAaA1bWiYPbdlAwHx8r8Gl/BnPlY4Rj5Yn2PT7k5xet8ELA5YwW9P2ihckGeGX19f5mK/G6hCeZTh0+EX8ow4hheQDx4qQoJCZ6IquunmU0j03iFFGRmK4t6E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=q3hl883L; arc=fail smtp.client-ip=40.107.74.21
+	 Content-Type:MIME-Version; b=Tm58ckNau/uScUwJJnqYXVFfzp+tlyI3nT5iLxT+2DzRju/y3TPJY6hsNavDCyYcdFmANTnI8AWBg8BEbZ0zjqGBVxSsPjcyXTp27gOUqtfb+8kjVqVEv5nzM6yd3J9WRo+tQ+yEhI2vzuI6M7pfezvpFxIqTexHfzPyX7mhLMY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=Xsn3PzMM; arc=fail smtp.client-ip=52.101.125.63
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Z2xyJbFGsZSLqxrhm9iZYSxdc1pAN23i+trcB48MVkZBKWv6BKs5pgB5z1wrzd2ILoMH/sQSG4hJrN1q5d7rESD6eBvZAPEjZ5tU+h4tnmGoQyEcT/hwpk6K2q607Dnbti/iy00kbhtnFDdV3ifmBrRFegvaXMiV9P0+vZlRZeOP+jXrtnHoPxZVBL1lqRVNlOsa9HUqAmMlf9r8x3CBBmBRsqNeCPQdyCSM9mhcizIxnTjPr58MEcYyPFrTZmYYgdLoXT8KQaN9zRijwMOSDWRk7gY03Z4A3I6cuvtFQ3hEDHtNo7lXogc4cn3g7XmNylzhnHxeOxmGgqWyit6K/w==
+ b=Yf/3JvPdHNCVVvXKTaSwAIxlaRILGkwyh2W5aJjMlbG5W181LXX6PzKtytHzgqEQIFM1PPVLdmvFAHfBCt/ecBGNerNiFVtysnHRbPpjKUoTCwAgc6V/Z8lNWeXGRHqM74l1dHVQZfoYsgozY1zO2Lpp2b7xIPd5d98sWDGkjIx+h/vKKrggAuGTxvUYlfIXPOfYlrhjzEgAAXj3dAVCufYFQRVQPiMdOl2Afn2R2IHJ52qp2cCAPzYdh+1Bovp3mzOFs1t6lcV+xKXlu8snmaPN2GanLcoUDTytbhwyglyfVJ6lRbby7/jl/LFKevJP9BMql+VYbMnDOm6Fn1IGaQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ZjPOu2okXug+NMCC8CGvIUj6PSSrVyIIQnXcA/eDBDU=;
- b=bEJt7Z3rs0W3kKwcdskhfoY218oycRQkYHSPkfskLT0nXlg0ybLS8Am47lE4RvG5IZonO9botAC9XLrL1usAWAh56hcSh58l2jupVUbUJwdKeP/bJbEfSL69SawEWsxBiA7xVOUXvj2hjeq099iK/bxu1diK4RT91zU74bl7P4cv1ID4R4zvH4/1hI+Y1U12JGauVkd/2jbAf++JeRsGBxIcTp9d+JKHmFx9oETEIHuV5C3y2GLWGuJqDAPLQuRZ/gR+n4CoFJuOl0/LfCM3h4QFze1SnnzTSeWy9czxvzmMuuCOENiMscTkpTer6KJL7oSG3KVrXZpvkfobLmFXlQ==
+ bh=MY4eOz2/G+G9VTWR2cu/w3tz1TFDYKK1j2FbSMksr4A=;
+ b=oZA9flVcZdf7CkwIH1m5n1glgpu/2hLZEq8EiPHvDwgP3P8bGKUFdM+BOilTaoG8IKVIs0pSnSKFVvCHtf2ldmnwN9rImryNxovkwye/g/SLuXdKgJ6rGZwnEqYiDhrxWs/pZsl4O5cgJsBv8wU/7yqvfxd1rpSiDaddWW8K4W2n86HhPJ26CCNLyrOSRqh82Ab05yrhTE83L1A3TbZ4AOL0sL0iydIbGFz55Hx948hD7/QgCpM9EXDlzOKESwUtjmkFbCVaGZ4XKuO2xkaIwzBOYVGwz6liRXHEo+eRjOZGtTw3vt9yYBEqlcxS4sgk3KwojLO3F+1yHdt3L9hryA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
  header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ZjPOu2okXug+NMCC8CGvIUj6PSSrVyIIQnXcA/eDBDU=;
- b=q3hl883LcZQ+qLAq3tA1FiRkH2vntE2Qb0UDUdKYUtnng6e/l5VJ21oXK8XlWUWG/9g8rvioWHD9kmbfm91/aZqLp+c0kNlDgtXeACCBHvQotos4Ktbpnv6KXryc12rXV2V1PZtqe48cr4FBfPNKF4k8RgJmdDKopHcyrxV4HII=
+ bh=MY4eOz2/G+G9VTWR2cu/w3tz1TFDYKK1j2FbSMksr4A=;
+ b=Xsn3PzMMvkoMN+p+qgIHvmKno3X/O6Pr75lL7ekO1Lj+hfz7TcrfcuHUjcEXt3GG205g4huML8f7L3aa3HLy1p4SEVua92+in4vb7JO4aiuiW1kBE9E2jRebjCWA7hkaTAIw2idAdFxBhywKWJFWRIq86G7dzRzROyIIYSFql1o=
 Received: from TY6PR01MB17377.jpnprd01.prod.outlook.com (2603:1096:405:35b::6)
- by TY3PR01MB11074.jpnprd01.prod.outlook.com (2603:1096:400:3ae::7) with
+ by TYCPR01MB7386.jpnprd01.prod.outlook.com (2603:1096:400:f0::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.0; Wed, 7 Jan
- 2026 17:06:20 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.2; Wed, 7 Jan
+ 2026 17:10:15 +0000
 Received: from TY6PR01MB17377.jpnprd01.prod.outlook.com
  ([fe80::aa7e:1460:f303:3fd8]) by TY6PR01MB17377.jpnprd01.prod.outlook.com
  ([fe80::aa7e:1460:f303:3fd8%6]) with mapi id 15.20.9499.002; Wed, 7 Jan 2026
- 17:06:20 +0000
+ 17:10:15 +0000
 From: John Madieu <john.madieu.xa@bp.renesas.com>
 To: Cosmin-Gabriel Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>, "Rafael
  J . Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -65,17 +65,17 @@ CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
 	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
 	Cosmin-Gabriel Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: RE: [PATCH v3 2/9] thermal: renesas: rzg3e: make min and max
- temperature per-chip
-Thread-Topic: [PATCH v3 2/9] thermal: renesas: rzg3e: make min and max
- temperature per-chip
-Thread-Index: AQHcXtVEW9h8VbAEjkSytnrj11sqErVHMejQ
-Date: Wed, 7 Jan 2026 17:06:20 +0000
+Subject: RE: [PATCH v3 3/9] thermal: renesas: rzg3e: make calibration value
+ retrieval per-chip
+Thread-Topic: [PATCH v3 3/9] thermal: renesas: rzg3e: make calibration value
+ retrieval per-chip
+Thread-Index: AQHcXtVHJDhk+RkGjEiFOXoXdGiG/bVHMttw
+Date: Wed, 7 Jan 2026 17:10:15 +0000
 Message-ID:
- <TY6PR01MB17377CE455D4E2142554EA134FF84A@TY6PR01MB17377.jpnprd01.prod.outlook.com>
+ <TY6PR01MB1737741ED188F41A980330789FF84A@TY6PR01MB17377.jpnprd01.prod.outlook.com>
 References: <20251126130356.2768625-1-cosmin-gabriel.tanislav.xa@renesas.com>
- <20251126130356.2768625-3-cosmin-gabriel.tanislav.xa@renesas.com>
-In-Reply-To: <20251126130356.2768625-3-cosmin-gabriel.tanislav.xa@renesas.com>
+ <20251126130356.2768625-4-cosmin-gabriel.tanislav.xa@renesas.com>
+In-Reply-To: <20251126130356.2768625-4-cosmin-gabriel.tanislav.xa@renesas.com>
 Accept-Language: en-US, en-GB
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -83,75 +83,75 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=bp.renesas.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY6PR01MB17377:EE_|TY3PR01MB11074:EE_
-x-ms-office365-filtering-correlation-id: bdb5e320-5073-4fa0-39d7-08de4e0f143f
+x-ms-traffictypediagnostic: TY6PR01MB17377:EE_|TYCPR01MB7386:EE_
+x-ms-office365-filtering-correlation-id: e94f4079-2c13-4c1f-2615-08de4e0fa034
 x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|1800799024|7416014|376014|38070700021|921020;
+ BCL:0;ARA:13230040|366016|7416014|376014|1800799024|921020|38070700021;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?jdvU6p6HFvKs9VBCo+nBpye9S/9qOWDusiDuM4ippTi85q8+UyiQtwr8RRUp?=
- =?us-ascii?Q?Q1n6BKTFLT2d8RFo43OogQE/oPzh4G/Peoicz0vE+uHmoKiQ4SN2QrQKMoSg?=
- =?us-ascii?Q?I2mbNVT1z65k7+AbNPhLnsjZWJ4q2hxVN407bTG6z48DDzWA+QEGTJxBYJgX?=
- =?us-ascii?Q?uBo9muRuiYtDczRHX3xZqKhvWK7HkRN1yGvW38i1AimMwl2TGLM1RqfBuTFm?=
- =?us-ascii?Q?1zcgnDh2rg11tM+9DBl8TGBJRYtAN3bt/WVh0i5slHk6dDumL8y/g1/kbjAD?=
- =?us-ascii?Q?vFhRdigjaWvswAwLHXqn/8q6gbnkeynmYRzQQF650lZaaaU4M1L3F3MSRYaK?=
- =?us-ascii?Q?b7OrJv6D5Vw5iX5FRlCdZA2WxW0kb0ZUD8JLmSqFk9YGKSbsQKyipgvnjJV6?=
- =?us-ascii?Q?PA9Qg3hF4MXw83CwpQADWNgoavcw8gksaC5bYdPBe8izqJkJudGFm5nvhQ4h?=
- =?us-ascii?Q?fVlCZgjuAQyuSU410CpdcET4FcA/iuHvdsvXiBQwyP/Qg8YDb7DQXcLCRqIx?=
- =?us-ascii?Q?7kJOCLhEtaKRCAEpwUmS2LDal01JuAw1cPVap0XSgqz6gyXuJdxo+lLfTVCi?=
- =?us-ascii?Q?pkP4zr2Keo/1yobHqGz6HHfvHO6ETm7Nbx5sNeyfW+4cuheWH3Hwr2Xm8i10?=
- =?us-ascii?Q?YtcBAjJiP4rPXWbp44ud0tqhkMPhD42N0o/WRbAYgL/+4UVdi0DYsRbxXYEl?=
- =?us-ascii?Q?i4Ad/wVetzilHBYlfnfDkujy1jv1cyT3hEFYB8/0WtWs947ZLTqnt8hquPKH?=
- =?us-ascii?Q?1894oY4tET2l/ud9rJXwc0qQANYMhIyQNpAdVSKpuf57tqbfl4pG/YIYn9Mc?=
- =?us-ascii?Q?45KN4V2Yhw5t325YAQi/ysQP46r8x2u3aPP7Xsuvis0mwJC6LWpOufN+yErS?=
- =?us-ascii?Q?GIVrVn8Qp+LUwNHvFGLYnj3I6z+6LZxuQHEIiiH+Bfl4K/lCD8zh9bvfW9Ra?=
- =?us-ascii?Q?mTfv4Lpti3RGLMwecuBJYUMNPz0mEfoPqLNCUHsT3uyFxxgnDHZEDMbc2hVt?=
- =?us-ascii?Q?C2BbrUJhCNvb3KFm1HL86QPIRn5sAKuB5Ei2IvmabySOqMRD1iOszHPt7l1Z?=
- =?us-ascii?Q?xy1y94qxGhMV/M1s3Tc1NdOytT3x/z+EuTkubgf4mTdIePyhZh3cy40sEyMu?=
- =?us-ascii?Q?BNwKHfBptqGELLXADWwrOjX6EMpUMTHURAbhMJDUrIUYzw4Gji9LahvqDOmK?=
- =?us-ascii?Q?2vFmiyUgwcw58czu3bIuEgOfSkYX+rQ/hrstPfhSXAmQUZkQ7lwTgog6qcAv?=
- =?us-ascii?Q?WfkdJPkDhBbe4/jYENN06CQcI4bcSm/SVQJA0IhHlVbNw8hkKCycvBsHVAGi?=
- =?us-ascii?Q?ZIx2Lfapog6lDyfv5pKp5vwXgTA1FJ7P9dtba3Ttd3oRF9Wa5XQOlTHg3Nzd?=
- =?us-ascii?Q?YsQ8t1OCcw6qZS6CEk2v3LLELLtbkPBhgxe3wPRbHlAPKdPGlmFoIzsAV6ve?=
- =?us-ascii?Q?7JEAsi3lS6L6o6/ZLafRRDBf8/lVpoW2mTG1iFWwlbZZ7FI5mHJMMXbBBUyo?=
- =?us-ascii?Q?CQ1DiH5n2uk0ZsKA13WpIIXaENteYReVAZgxD8WDRDgP/vF+IAduTYeTqA?=
+ =?us-ascii?Q?KZ4pGKgb9XF3vHJMi4uZ8jwgjSrqgLH6TIjWf6qdiZStfrXl4l6v0VnT4eC6?=
+ =?us-ascii?Q?hID1caVoXTos6k4j3x/fnlD1vbv3HTe6ONQNoYbVgcO8x8JkoD6fNHgusDFY?=
+ =?us-ascii?Q?Nkb0/5aVewDJCmmRNcUguDhj2QJcdNcV1FXz7ntm/Ks0LhfcV0CcLPYbDZvD?=
+ =?us-ascii?Q?zFoWN2xNlHLIjBBcCgmRBbqTx9PYsidFw4cExIUu2SGCWPZ2bqIR7siV79Bm?=
+ =?us-ascii?Q?JMBz0Y1W9zJFcYaScd2VxPTPguTAJypJfZzDpHZblMi/Qn/DTnsd/48gfZFR?=
+ =?us-ascii?Q?mBtdjczqXQqZYkpx4VU3rFkbS9KbuhMAOJjB6GMpPkIOPqu+yG36EdMfjjeU?=
+ =?us-ascii?Q?DbHuC1zPVXPycxKp4NS80sAxOBQkWJlNOY3NTzty4xfhypXI6NexMpJSci+K?=
+ =?us-ascii?Q?jPtW2o/nXc8sl8FsKG8KLgYBATz6fZ8zF6AeMpB6CVXUu91GW2aW8q+eRCpI?=
+ =?us-ascii?Q?3ijTo9EM8meSMoNxvycwBwKdq2loGQ4R91VSarOQhpxX6AiidV8jovZXf7aA?=
+ =?us-ascii?Q?lL5AOX7KqnpCacxtt/EBsHxRiaahbSG6Uum/VMHUVeirDArVKHdoC/7s1u3x?=
+ =?us-ascii?Q?1zzYA0kCC+CaBep/Z34uF+wYlhulyD6sq20ZjLch/LukcjYEMxodcY8LjLb0?=
+ =?us-ascii?Q?25jAhnv5m1luws96dqnd0W/FgNw/YIQ25hoZnKtZe0Jp3YEkhiDHFqXYlzNH?=
+ =?us-ascii?Q?3pmYfx/bDnetm3qbwbCGYRlYOQ0tmtNHC/Aw/OG11t58aNGvjIaK6fibb8VT?=
+ =?us-ascii?Q?gtXABToc9/aX28/n23jcd3k4Xd1DvjcQ/MvbBkP+JAqHdH4h32oiiExdLGou?=
+ =?us-ascii?Q?ZWGeEYVsD4lycH2mZns9ayy5n8nO9PliWY64HdmgKavvDBbXZhnPQgNxHkTF?=
+ =?us-ascii?Q?oVYrZsSuOFIfT7KNRGScVRLj2NZrip33aeuN905MJPBhJM8SIEKpQkXteSoh?=
+ =?us-ascii?Q?TfC8gJP2+RKxEIShMDyhzdq72SQhTzzsZ6ttmXLtoL1Cmtt0a6Br39yK6w59?=
+ =?us-ascii?Q?qO5uH5bzri+1J1VA3JjamxyKo4gsqm2s4NwhGWgsfTuOvp54OnLXoXglje0F?=
+ =?us-ascii?Q?a+2t1IQUOsKjW2bOBYmtJtTpSE9Pj6+EuzEc9AVKezAaoRbx1urF/w7MHU9I?=
+ =?us-ascii?Q?Tf/mRBpvV6gKwcZXby71uGh2Y8a9LHNgWgWXFjgSFFCk13wPfH9iCUT3sSSv?=
+ =?us-ascii?Q?K5lR7sgglB4wVR6RCULWYW10SJTsLohH0Aehe+xxDWAYWDF5o00roFwCRfbL?=
+ =?us-ascii?Q?yXotN1sNoZLHyDzYwtbAYftbvnKmwg9iMk6gzCBzzVIZ89W/1VYENr+9o6Sx?=
+ =?us-ascii?Q?FogMqW54u7YPO7AorGdR1pkxDK/jPRhcDyi6a44KXUTrrRNcdkK/GeD4Z9UZ?=
+ =?us-ascii?Q?yQermQv6Xo7Ln9Hm5LiQQX53xBXby4mpEwh+Oci7nDBedzNy5Xyxsy5cq3+v?=
+ =?us-ascii?Q?Tye1tYMgLEVI0ZJpfLU7/FiXlUUg9JKnFZOf3FVwypnZZC/MGFFR1dOYrKaP?=
+ =?us-ascii?Q?7r6OuranVvfngXjotZxk6wIL2mUTCnlO2pA6TxXhULDPl6wnGTE4B5Paaw?=
  =?us-ascii?Q?=3D=3D?=
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY6PR01MB17377.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(38070700021)(921020);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY6PR01MB17377.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(921020)(38070700021);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?Y0xDy/SBQyiXn1dCCZ5Fid4eLj/fBU2T5lxRA4whC8bmL45iCu8HS23D/HEs?=
- =?us-ascii?Q?hAp5s/kZ+U/roxhRxrdofukMSPa/wPAoDSv3hQB7bqHLIgKnfC//bJ8jzBEi?=
- =?us-ascii?Q?GplRlTB4n/QqQTG4HYyckJOd2ByKpESCPravHLnSn0zwyy+zqFeRhyRc86ly?=
- =?us-ascii?Q?fp7puzy1K2jNFk4033lzQ03dG/xmj6zPtb9abiAeJxGCbQrIa/t8LZgYbphg?=
- =?us-ascii?Q?YsTxQOnIQUffYfIhRaNA4UPQMHFkxJp99LpomfuxIdddqzVhoDLft11/tqWA?=
- =?us-ascii?Q?uPBzfuS1U4Z+A61CPqBCCDSrJYDvu8WLT/W9Ym+dwL1kNCOsoxDrcNObwAN7?=
- =?us-ascii?Q?BTi9pkHeOBrRoIluUlanoCAOGA0t5112dZwIZyToQ3JVKJZuea5sI3c4pTNN?=
- =?us-ascii?Q?aTaW4TTu1Q6MYZCeu4JNq6ly3jzW2Me0qc1fZrUTJjddngjtvh1RZ+GpcZfL?=
- =?us-ascii?Q?sDmqa54H0OFvCXtmgLcZ6cU8pdvr0CmlSHYahWl5j4OED37nKx/I5qK5k9PD?=
- =?us-ascii?Q?VJ1n0J+LjcToP3YaG22ZRSoxn/vyo8SB0MAB5arwyfklkhNGffSbq0g31MB1?=
- =?us-ascii?Q?0Cy+VnJNVMPI8itH/qz5BnTGBkFBtOJiwAVvOxySKR5wOX552CEyl+OAJTtJ?=
- =?us-ascii?Q?I+AxbIIjYM38Qu+MPH0cyQ/ID4bX+sJ8etq5EdLzVse0S8XlJ4gIuhPBGjPf?=
- =?us-ascii?Q?v5NF5fKce0iXCOHa793n+y170jnApZ8tab2CkT2JmXCXYnZiFd3q6E1/0Na+?=
- =?us-ascii?Q?KMgpfROZV30jKkSTt5HFABvgcJAdI98EKjkER8xwVF7N7waVh0h02S0JDHso?=
- =?us-ascii?Q?rQrKUKIxQcQQaAO/a4t5znEaAZl1CqmXTTKWUNQ+c62zXLIkXf8eSTarY/w7?=
- =?us-ascii?Q?55gUPCmUzaK7la3F0TxocPZEfAHANvfJ/FtK7U2AsPjDEzahCCr16SWgEJat?=
- =?us-ascii?Q?OyrMsoBg3ivRbUM79Y5aDKW4UBLTZbNCiHNHLreI0KQzcjAglSleoZp9cjQk?=
- =?us-ascii?Q?tOkUrhBSTN5zZRwB4yicBasl57MD891h5D9eHM/rpsXE3pyujohUZvRW0rXm?=
- =?us-ascii?Q?5dfR1k4DT9pjAqSbR1xqCvRpEAx04WVN5kjIScvyDBJ068tJjwi5SQzckj1r?=
- =?us-ascii?Q?2girQK8jVX6Ob6xpoho6Sc4L1D8btD8OBkRT402i9fxULjXLI28r+7EwFxHx?=
- =?us-ascii?Q?wR8uFwWMcQOCLEyZEwL6ImErfPms7PRVRyj4Y5UxEJQVHENzuXXexbf0UBgd?=
- =?us-ascii?Q?NeSJXso6gbb6AtGznZFB/hjwac1DTgo3gJ3fE3BXihN8f3QA2DG5Iz22JwfG?=
- =?us-ascii?Q?lMTbgyPGvi6T3khqnRI09E4AiF7YKajwG6IFD/4kLdTGXx4rBoRcVVuyPr2l?=
- =?us-ascii?Q?OPG5jx33yfsgiM8ZnJUGa9KYq9l4z7U6thErSadYz8J2047lYpLgoBMNbv1T?=
- =?us-ascii?Q?LO4YwadMgUNlwVP4EvaTKPPbSDSR7j3JD+1UcugbHTT9AdxQk1xEognXide/?=
- =?us-ascii?Q?vPNER9vzMM/E4vii5UFQoLxWcG5jjxnDZWqU85i4zWCVZQHkJPb5LiLGTZ7u?=
- =?us-ascii?Q?NPmOsCUdnXMre6ndpPbid8vzFaqHPjGcnUQpIiwkZ4FUq259aD/DIKBihxam?=
- =?us-ascii?Q?e0JG4jw5ZuoMdh7adQIcjJRluTUwONArBuf4QgBJFsysCo5A+fcezdRICcui?=
- =?us-ascii?Q?YaJw0R3JGb/vERbBFVLtdT+syYs63JAHeIdBgwJJ988ZKJfCGGGEavK9ibgw?=
- =?us-ascii?Q?WMU8HVAZAFCiUmRBF5jZbVXvxYPX8oY=3D?=
+ =?us-ascii?Q?Db2jkmyTBieOdhWD7WNKlxo667G2I3N3UE+V2dGUJMypSfL9BYizFnobqDk6?=
+ =?us-ascii?Q?Ie7wQO6Hu0gsQIcUuZmSEYx5hec2juEZwO1GFP9HFMNuCPmfPB7mKQcTCan8?=
+ =?us-ascii?Q?l4xZfNPvkMdh3pHukEwKzN79B7faPKA83+uq1WsUF88/SpapwYHbRT0pOIAY?=
+ =?us-ascii?Q?U9W4vP1NER49tZwDhuf9WzcecsOuVxQWgVakajIBdbuUlBJX2ssZ4XFpiSDG?=
+ =?us-ascii?Q?o/MQmb8zcBYNml/XlLTCWyjY+zi+Fj5lYwi4jpQ56+0hzuC1ZMDC5w9Qlliu?=
+ =?us-ascii?Q?TMIx5eyKRvI5sCH32hYkUgCkvnsXgq6OgVYenEeTqrFpDr/aBEl2gOW24kMs?=
+ =?us-ascii?Q?HE2D9Md9lehW1LaDEzbgWahdndaM+mlLAPSaIWPd1ULQo7EyuDYBefBw4yws?=
+ =?us-ascii?Q?fInzDS6Zu9OOwKm0p9dRCVA9fu5QUxADDFrx/VyhVoOO0trP/KgpDeocnPfR?=
+ =?us-ascii?Q?HVCc2LHLLwwJis/HmyrDCH5E8p1pGJYzemvYKRYzeBOfp3jTReOUhqp8dB3y?=
+ =?us-ascii?Q?NQLkpi/rxGVa/XHdp39l9vsTebE026plF/og092u3f/KV2exfZzOTCCIjJge?=
+ =?us-ascii?Q?9qJ+OOZOzlIKwMCKa7XQtjkzJx67aEOSABHx8HOkYGm8CyTTKq9MveJ6xAfS?=
+ =?us-ascii?Q?hNlTfJqVXHGoUZGAmm+x97n6GvqeM0PlS8is5KcvsOtfZ4m9QXaE7f2IfrGA?=
+ =?us-ascii?Q?AumQfSpzNu/od28yomJj6PrSJ4ahdS6v35FcUFmL/66bNvrYdymqh5CFCzLC?=
+ =?us-ascii?Q?gv1frBThfERzGGhzD5HCJ5+sp7/VcOPl3HvNqmnJOJTSs1PX3NKp1hFPvM5B?=
+ =?us-ascii?Q?O/UbUNnxtw2MtffaYzQvC+2Iyk3kl9XNbhcVI7qZ7K0V9Ok8RQeGh89p6vw3?=
+ =?us-ascii?Q?JSrk0E9KItiaqqAvZyQx1K9t7Zp1mX6ySSKo7PgyZyQHFYKm9W2KJNodGIO8?=
+ =?us-ascii?Q?gM0i4VKJjE06XDSPPPwsSUVkU3RiM5T5Nu2lOnXLmE12Or051VpnROQdNRVD?=
+ =?us-ascii?Q?Enva519nmaFRqdD7mSx6eZALRfI9Gj4ESR9f/xZG06lgbpBUYDUrM5XZEdCJ?=
+ =?us-ascii?Q?IaOJp8Z5q1UBJGotCRg50I/Xtv93OPrnlA+/N8vO6UWqHUcG5IY1wPd61xGW?=
+ =?us-ascii?Q?Cm7OntdSeXSBH8DGGV5Md1qdizFR3j2jBDPYAU1KjnDTckh28YNpNeTqvlY/?=
+ =?us-ascii?Q?ytqgZf2LybrxAQGvOxoh327R8rjo7qnElhrhSfrHwyITA5SWcPdkXdMXD+rS?=
+ =?us-ascii?Q?bskJCtOHsn/ttGA6Yb++VQrlk5/qRgt6iJMrICxlUo8NnZzBt0ZI9do4FbP5?=
+ =?us-ascii?Q?VK8E5BwyZziOQ6+7eiQBGatTQwIEGeZ6Nn1vSDWQ7dStIKeO5E9bLLZEbSmX?=
+ =?us-ascii?Q?eDx1USi/y7b/QILh37HUVNcIWgjlpJRHT0seX/RVv3tJjgV981jIQ3rB41tX?=
+ =?us-ascii?Q?QU8UENhjbxy4SfHPO78Vjqeowl4SNhW+gkb97qt89Hu4wZEi7jENb8XMzQVi?=
+ =?us-ascii?Q?TqazUNVjV3scakly3WOqYWvJT+D/2FSgqpwo3L/ievpjLqsX1SvLs4ty8TiX?=
+ =?us-ascii?Q?F7ZlnV5EQih9TRUo5fpg284hDoQg3/RTepXk9LbuxBZkURX7X2V6OEtNhjfz?=
+ =?us-ascii?Q?mRDutTnFJfXX81UpLXk5/dZ2pyO7vecVxMGfzHdvoTJm3sNGiHJ2SXZ0Fsl3?=
+ =?us-ascii?Q?Y+CV3uMtXQ8s/O0BWWCLH3xdz5lcSW+TU5KsFDdqYE9tQWzYaN7+j8FrnBIe?=
+ =?us-ascii?Q?tkHTLKKf8aI3flzgPXp23X9hRhCqBN4=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -163,18 +163,18 @@ MIME-Version: 1.0
 X-OriginatorOrg: bp.renesas.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: TY6PR01MB17377.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bdb5e320-5073-4fa0-39d7-08de4e0f143f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jan 2026 17:06:20.4091
+X-MS-Exchange-CrossTenant-Network-Message-Id: e94f4079-2c13-4c1f-2615-08de4e0fa034
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Jan 2026 17:10:15.1862
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: S8bW8czbDVraRpJkBj6xHsstQlIqMy1HQOWdQTyKVpfFjdUnQazIgxOuxaKrKHJJFUuEUWoRuwBp1UHdtNtL6OfwJNi86SZn9lUPD0gjfUw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB11074
+X-MS-Exchange-CrossTenant-userprincipalname: P4af9ZzNiGJnxtLcI27Vk6uMHlUuaI0vrp6r/6HdpLVC/6UOokSK8oIKSJUftkKVl7cHLd+LYdMNL4IZQHrrOLOB9+OMFWtK3nZcZ8XAtBI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB7386
 
 Hi Cosmin,
 
-Thanks for the patch.
+Thanks for your patch.
 
 > -----Original Message-----
 > From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
@@ -190,14 +190,19 @@ i
 > Cc: linux-pm@vger.kernel.org; devicetree@vger.kernel.org; linux-
 > kernel@vger.kernel.org; linux-renesas-soc@vger.kernel.org; Cosmin-Gabriel
 > Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-> Subject: [PATCH v3 2/9] thermal: renesas: rzg3e: make min and max
-> temperature per-chip
+> Subject: [PATCH v3 3/9] thermal: renesas: rzg3e: make calibration value
+> retrieval per-chip
 >=20
-> The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs have different
-> minimum and maximum temperatures compared to the already supported RZ/G3E=
-.
+> The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs expose the
+> temperature calibration data via SMC SIP calls.
 >=20
-> Prepare for them by moving these into a chip-specific struct.
+> Prepare for them by moving the syscon usage into a single function, and
+> placing it in the chip-specific struct.
+>=20
+> Rename the functions to match their functionality, and remove single-use
+> variables from the private state.
+>=20
+> Also, move the calibration value mask into a macro.
 >=20
 > Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 > ---
@@ -207,121 +212,153 @@ i
 > V2:
 >  * no changes
 >=20
->  drivers/thermal/renesas/rzg3e_thermal.c | 35 ++++++++++++++++---------
->  1 file changed, 23 insertions(+), 12 deletions(-)
+>  drivers/thermal/renesas/rzg3e_thermal.c | 62 +++++++++++++------------
+>  1 file changed, 32 insertions(+), 30 deletions(-)
 >=20
 > diff --git a/drivers/thermal/renesas/rzg3e_thermal.c
 > b/drivers/thermal/renesas/rzg3e_thermal.c
-> index 86c10810e5bf..3c9ff5e43d7e 100644
+> index 3c9ff5e43d7e..d2525ad3ffcc 100644
 > --- a/drivers/thermal/renesas/rzg3e_thermal.c
 > +++ b/drivers/thermal/renesas/rzg3e_thermal.c
-> @@ -62,8 +62,6 @@
->  #define TSU_SICR_CMPCLR	BIT(1)
->=20
->  /* Temperature calculation constants from datasheet */
-> -#define TSU_TEMP_D		(-41)
-> -#define TSU_TEMP_E		126
->  #define TSU_CODE_MAX		0xFFF
->=20
->  /* Timing specifications from datasheet */ @@ -72,6 +70,11 @@
+> @@ -70,7 +70,12 @@
 >  #define TSU_POLL_DELAY_US	10	/* Polling interval */
 >  #define TSU_MIN_CLOCK_RATE	24000000  /* TSU_PCLK minimum 24MHz */
 >=20
-> +struct rzg3e_thermal_info {
-> +	int temp_d_mc;
-> +	int temp_e_mc;
-> +};
+> +#define TSU_TEMP_MASK		GENMASK(11, 0)
 > +
->  /**
->   * struct rzg3e_thermal_priv - RZ/G3E TSU private data
->   * @base: TSU register base
-> @@ -79,6 +82,7 @@
->   * @syscon: regmap for calibration values
->   * @zone: thermal zone device
->   * @rstc: reset control
-> + * @info: chip type specific information
->   * @trmval0: calibration value 0 (b)
->   * @trmval1: calibration value 1 (c)
->   * @trim_offset: offset for trim registers in syscon @@ -90,6 +94,7 @@
-> struct rzg3e_thermal_priv {
->  	struct regmap *syscon;
+> +struct rzg3e_thermal_priv;
+> +
+>  struct rzg3e_thermal_info {
+> +	int (*get_trim)(struct rzg3e_thermal_priv *priv);
+>  	int temp_d_mc;
+>  	int temp_e_mc;
+>  };
+> @@ -91,13 +96,11 @@ struct rzg3e_thermal_info {  struct rzg3e_thermal_pri=
+v
+> {
+>  	void __iomem *base;
+>  	struct device *dev;
+> -	struct regmap *syscon;
 >  	struct thermal_zone_device *zone;
 >  	struct reset_control *rstc;
-> +	const struct rzg3e_thermal_info *info;
+>  	const struct rzg3e_thermal_info *info;
 >  	u16 trmval0;
 >  	u16 trmval1;
->  	u32 trim_offset;
-> @@ -161,17 +166,17 @@ static void rzg3e_thermal_power_off(struct
+> -	u32 trim_offset;
+>  	struct mutex lock;
+>  };
+>=20
+> @@ -334,22 +337,8 @@ static const struct thermal_zone_device_ops
+> rzg3e_tz_ops =3D {
+>  	.set_trips =3D rzg3e_thermal_set_trips,
+>  };
+>=20
+> -static int rzg3e_thermal_get_calibration(struct rzg3e_thermal_priv *priv=
+)
+> +static int rzg3e_validate_calibration(struct rzg3e_thermal_priv *priv)
+>  {
+> -	u32 val;
+> -	int ret;
+> -
+> -	/* Read calibration values from syscon */
+> -	ret =3D regmap_read(priv->syscon, priv->trim_offset, &val);
+> -	if (ret)
+> -		return ret;
+> -	priv->trmval0 =3D val & GENMASK(11, 0);
+> -
+> -	ret =3D regmap_read(priv->syscon, priv->trim_offset + 4, &val);
+> -	if (ret)
+> -		return ret;
+> -	priv->trmval1 =3D val & GENMASK(11, 0);
+> -
+>  	/* Validate calibration data */
+>  	if (!priv->trmval0 || !priv->trmval1 ||
+>  	    priv->trmval0 =3D=3D priv->trmval1 ||
+> @@ -365,17 +354,30 @@ static int rzg3e_thermal_get_calibration(struct
 > rzg3e_thermal_priv *priv)
->   */
->  static int rzg3e_thermal_code_to_temp(struct rzg3e_thermal_priv *priv,
-> u16 code)  {
-> -	int temp_e_mc =3D TSU_TEMP_E * MILLIDEGREE_PER_DEGREE;
-> -	int temp_d_mc =3D TSU_TEMP_D * MILLIDEGREE_PER_DEGREE;
-> +	const struct rzg3e_thermal_info *info =3D priv->info;
->  	s64 numerator, denominator;
->  	int temp_mc;
->=20
-> -	numerator =3D (temp_e_mc - temp_d_mc) * (s64)(code - priv->trmval0);
-> +	numerator =3D (info->temp_e_mc - info->temp_d_mc) *
-> +		    (s64)(code - priv->trmval0);
->  	denominator =3D priv->trmval1 - priv->trmval0;
->=20
-> -	temp_mc =3D div64_s64(numerator, denominator) + temp_d_mc;
-> +	temp_mc =3D div64_s64(numerator, denominator) + info->temp_d_mc;
->=20
-> -	return clamp(temp_mc, temp_d_mc, temp_e_mc);
-> +	return clamp(temp_mc, info->temp_d_mc, info->temp_e_mc);
+>  	return 0;
 >  }
 >=20
->  /*
-> @@ -180,13 +185,12 @@ static int rzg3e_thermal_code_to_temp(struct
-> rzg3e_thermal_priv *priv, u16 code)
->   */
->  static u16 rzg3e_thermal_temp_to_code(struct rzg3e_thermal_priv *priv,
-> int temp_mc)  {
-> -	int temp_e_mc =3D TSU_TEMP_E * MILLIDEGREE_PER_DEGREE;
-> -	int temp_d_mc =3D TSU_TEMP_D * MILLIDEGREE_PER_DEGREE;
-> +	const struct rzg3e_thermal_info *info =3D priv->info;
->  	s64 numerator, denominator;
->  	s64 code;
+> -static int rzg3e_thermal_parse_dt(struct rzg3e_thermal_priv *priv)
+> +static int rzg3e_thermal_get_syscon_trim(struct rzg3e_thermal_priv
+> +*priv)
+>  {
+>  	struct device_node *np =3D priv->dev->of_node;
+> +	struct regmap *syscon;
+>  	u32 offset;
+> +	int ret;
+> +	u32 val;
 >=20
-> -	numerator =3D (temp_mc - temp_d_mc) * (priv->trmval1 - priv->trmval0);
-> -	denominator =3D temp_e_mc - temp_d_mc;
-> +	numerator =3D (temp_mc - info->temp_d_mc) * (priv->trmval1 - priv-
-> >trmval0);
-> +	denominator =3D info->temp_e_mc - info->temp_d_mc;
+> -	priv->syscon =3D syscon_regmap_lookup_by_phandle_args(np,
+> "renesas,tsu-trim", 1, &offset);
+> -	if (IS_ERR(priv->syscon))
+> -		return dev_err_probe(priv->dev, PTR_ERR(priv->syscon),
+> +	syscon =3D syscon_regmap_lookup_by_phandle_args(np, "renesas,tsu-
+> trim", 1, &offset);
+> +	if (IS_ERR(syscon))
+> +		return dev_err_probe(priv->dev, PTR_ERR(syscon),
+>  				     "Failed to parse renesas,tsu-trim\n");
 >=20
->  	code =3D div64_s64(numerator, denominator) + priv->trmval0;
->=20
-> @@ -392,6 +396,8 @@ static int rzg3e_thermal_probe(struct platform_device
-> *pdev)
->  		return ret;
->  	platform_set_drvdata(pdev, priv);
->=20
-> +	priv->info =3D device_get_match_data(dev);
+> -	priv->trim_offset =3D offset;
+> +	/* Read calibration values from syscon */
+> +	ret =3D regmap_read(syscon, offset, &val);
+> +	if (ret)
+> +		return ret;
+> +	priv->trmval0 =3D val & TSU_TEMP_MASK;
 > +
->  	priv->base =3D devm_platform_ioremap_resource(pdev, 0);
+> +	ret =3D regmap_read(syscon, offset + 4, &val);
+> +	if (ret)
+> +		return ret;
+> +	priv->trmval1 =3D val & TSU_TEMP_MASK;
+> +
+>  	return 0;
+>  }
+>=20
+> @@ -402,11 +404,16 @@ static int rzg3e_thermal_probe(struct
+> platform_device *pdev)
 >  	if (IS_ERR(priv->base))
 >  		return PTR_ERR(priv->base);
-> @@ -526,8 +532,13 @@ static const struct dev_pm_ops rzg3e_thermal_pm_ops =
-=3D
-> {
->  	SYSTEM_SLEEP_PM_OPS(rzg3e_thermal_suspend, rzg3e_thermal_resume)  };
 >=20
-> +static const struct rzg3e_thermal_info rzg3e_thermal_info =3D {
-> +	.temp_d_mc =3D -41000,
-> +	.temp_e_mc =3D 126000,
-> +};
+> -	/* Parse device tree for trim register info */
+> -	ret =3D rzg3e_thermal_parse_dt(priv);
+> +	ret =3D priv->info->get_trim(priv);
+>  	if (ret)
+>  		return ret;
+>=20
+> +	/* Validate calibration data */
+> +	ret =3D rzg3e_validate_calibration(priv);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				     "Failed to get valid calibration data\n");
 > +
->  static const struct of_device_id rzg3e_thermal_dt_ids[] =3D {
-> -	{ .compatible =3D "renesas,r9a09g047-tsu" },
-> +	{ .compatible =3D "renesas,r9a09g047-tsu", .data =3D &rzg3e_thermal_inf=
-o
-> +},
->  	{ /* sentinel */ }
+>  	/* Get clock to verify frequency - clock is managed by power domain
+> */
+>  	clk =3D devm_clk_get(dev, NULL);
+>  	if (IS_ERR(clk))
+> @@ -423,12 +430,6 @@ static int rzg3e_thermal_probe(struct platform_devic=
+e
+> *pdev)
+>  		return dev_err_probe(dev, PTR_ERR(priv->rstc),
+>  				     "Failed to get/deassert reset control\n");
+>=20
+> -	/* Get calibration data */
+> -	ret =3D rzg3e_thermal_get_calibration(priv);
+> -	if (ret)
+> -		return dev_err_probe(dev, ret,
+> -				     "Failed to get valid calibration data\n");
+> -
+>  	/* Get comparison interrupt */
+>  	irq =3D platform_get_irq_byname(pdev, "adcmpi");
+>  	if (irq < 0)
+> @@ -533,6 +534,7 @@ static const struct dev_pm_ops rzg3e_thermal_pm_ops =
+=3D
+> {  };
+>=20
+>  static const struct rzg3e_thermal_info rzg3e_thermal_info =3D {
+> +	.get_trim =3D rzg3e_thermal_get_syscon_trim,
+>  	.temp_d_mc =3D -41000,
+>  	.temp_e_mc =3D 126000,
 >  };
->  MODULE_DEVICE_TABLE(of, rzg3e_thermal_dt_ids);
 > --
 > 2.52.0
 
