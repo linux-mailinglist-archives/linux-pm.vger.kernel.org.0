@@ -1,89 +1,89 @@
-Return-Path: <linux-pm+bounces-40347-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40348-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7867DCFC0A8
-	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 06:08:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 533EBCFC21B
+	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 06:59:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 7F18D30034B2
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 05:08:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 918F830141E5
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 05:57:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DBEB24BBF0;
-	Wed,  7 Jan 2026 05:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED8D62641E3;
+	Wed,  7 Jan 2026 05:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G1D1OOHl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sWywaJas"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC3A225402
-	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 05:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E96235358
+	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 05:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767762512; cv=none; b=dzDVdIKSkwrA/2tkejCv0Or09Mp4eqigJxrJ+niHRlXZWr50Ifu+K//kbCNNAvUKR/4bPYajTLSWIOx2gexZMTGbR4ubstCeKyel6RXLd9GvkhGVdD6wBae8z1TDQww+nCan/5wo9Vn9AVBYjsHsM4lcuWyOgvfOiV1dv5+kfFQ=
+	t=1767765467; cv=none; b=Y8CDIyiUPpwJjbF+Tii+NC8mjKZJzgpDZjSPjsaBd9Q4N/P5XjxVgUNhVs8hnfj2QKMGhL3pFRnoozhPlbuzFBRvPfCrGTG2x/YWFfYxp5TsYPjhbmPP/HP5Qai8jnQRFRa9QBxnswsubLVrWtJxUzOuHO6SbZPHxlh0+StNiP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767762512; c=relaxed/simple;
-	bh=88qWZTn2mDcOSNE2vdWtCzUL/UvAo0squ4kmcbicKoM=;
+	s=arc-20240116; t=1767765467; c=relaxed/simple;
+	bh=iOvdWPELyx+skLN7UXWLkA+/bXZVeSPWgX2ioqSAssc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TsMFxk6iFuBcs75fbwKlxqDe3GcCpCC623oNPcC5LgyaZ7c5URCL46B/6ICiV9e54M+0mOkQVz6HEzNgcLYJjNWlrFVG/psd2cgUXWi6ZW/Uq2On4LUNBcZoIhB7sgD3q91XDPIB75INe0mRi2odUjMq8MVzJmTRxRpnodBS/NA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=G1D1OOHl; arc=none smtp.client-ip=209.85.214.193
+	 Content-Type:Content-Disposition:In-Reply-To; b=CCzbHyThmhX0LXuTpBE3f7DcZpMaMQ0GyL5RP8AzyfUgp49Olv8ZB+JoBPzY6jfczbWfRof4cjN4B+8eDZmyWFRxGlS57zMn65inq5y4VUYZXdTHj/FkB6M6gEyUKatI7t1spM/cgNQQaFWOQ9y9o9qegQ7YBmDXNtwalDh5Zx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sWywaJas; arc=none smtp.client-ip=209.85.215.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2a1388cdac3so12724175ad.0
-        for <linux-pm@vger.kernel.org>; Tue, 06 Jan 2026 21:08:30 -0800 (PST)
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c1e7cdf0905so941300a12.0
+        for <linux-pm@vger.kernel.org>; Tue, 06 Jan 2026 21:57:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1767762510; x=1768367310; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1767765466; x=1768370266; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=at4X6VqEFh529Zi30zW8MQksBOuqXFLRVDa3Tf7QCho=;
-        b=G1D1OOHlZz76SzXVpIL3ZRVil7QTRpPl7hdzPl04xbVGt+b2Isk5E0yiu3rSGSo/qt
-         MaZbYDHvBJeUflwfIaM2/BYRlnRVTdrqbXPTgBbPAxZvXFNPDSKl4tAovWSjxH3yjNQH
-         TdHO6xAREnvzcVM+iQASYz9+KiZIIYDs92dgCqC4FuP6bdtAkrwg2LmctuoBPPt4Pc/E
-         Pi3CoE2uzUWVFrQuodPlhv/F1KPwSQOYw/yeOz6squJ3g4HXk8zrz6DxmOAb2ziw8CS8
-         fkNYovyy48c0p0n63xZe0iSRRaNAQWuC5x7JDS3EqOENUxK+a5bHFWNN0Ck/vnHHKc7n
-         IwKg==
+        bh=LC0H7XXkEOYKc23QOgFpX3RRHegQ2qJKsip88CL9K2Q=;
+        b=sWywaJasLS0e25dnLyTHRyLKKNw/GbbpcHZjHXsQtmWlL2D2mPJscklhT8TNgv4x70
+         NW4dtQd/N5uGbgm2WpXWmmvQPIgKz6cRelmm2hLfKT6EX+CgfJwkEL3kHwSRcHLywlSi
+         YvLmZe9RUIeNu6je3R/VhYp4WsJS54xWq4Qjj6jLUSf5om57IP3CJWOdxbFX8KkX3L41
+         aWk8ss69lN/kM/m0lk8g7MzMhwCm932F4UmZvck6j6jV28np3LxfUUkovqSQhge6J9m5
+         jgd5o2RXUSs2Svf/JSrKTna7tmXscpCj4SWiIEqjsJ9QPRrd6YfD5FEkwPagzL3aa8yq
+         gZMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767762510; x=1768367310;
+        d=1e100.net; s=20230601; t=1767765466; x=1768370266;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=at4X6VqEFh529Zi30zW8MQksBOuqXFLRVDa3Tf7QCho=;
-        b=od8wXz+VWheT/3lAAP+oJjcw5OOjbNz1nj3CN2Zn9hzgB71l9btbHcYtcaHGs0hXhB
-         HOhGMwtT+q3ZqRRmjbXu8ztpfkMFhNJR9sgdh+zR3sVUbI9uTQOG6UYu7TEhWdLW/8AO
-         9i36T/xPPJjYWDEmX9xAfyswf82Bi/11BVdiAlXCnLnkh9LiSxYCTM8X4MZrqTo6pOPY
-         Hh5mx0qmBpevPl0RSOuJDh9rY0a6nW62ps1W6r43j/Fc1j3wUigJ7SmN9p9RgpnyrdaS
-         MF9K4zLjPoRx4gVM1UB4fEZ6b6Cp7gmc8KRtOyp+oebOYpPc3UoGUCgUj3QYRv/CDCW8
-         lP2w==
-X-Forwarded-Encrypted: i=1; AJvYcCU7mriuQtL426ljR9RS8QnvTT52kJEZA1VLa41V+kNSJr0fOXuECdldTzeuRYTg/ySD3MqfAgyonQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzph3MPYuD+KtP96b1QM88GK4Ehkrh/PuGTYon6XQIyom8zTX0Z
-	tKQtH8wT/vX3VwhQFTWC1q57ukhdg1TGeLinKT16YiydvfYGv7qeGyN1mbKYb5OcXY8=
-X-Gm-Gg: AY/fxX41+x4AdXFEEuF+ijobGlvea2JSjWM2ntf0aMd+TSt47uhktkipI/Rm1ZqSMLd
-	ROpvhv6Z5Ua3dXVANztoE3wzywaXn/1O9shWI9sxqaVXENWVcsypY9h8OsnwVBBddM/bpR/oXbH
-	Y44UjsDfMui1FEqniX5JWW1DLfoMyeje26mh3p2tlWr5Xj6ItTgooOoj2D22Cn26wBhTWWf3FPS
-	R8X8mWkL8/4wbuJuB0U+nH/TBohivANLkQlqixXlCjEXTsH8e65BPsH4VCjgtFXIJlCsVhXMM9T
-	od76GYkeVsn35qLMepK+fEPy/AUwj9zzWLeJJBchnNQaCkfG2pRM2pMj3mw9mxiGcrbDul7DhNj
-	ecbffjYCy7sqi82hR7gNa133coIIgCmM7Hz/S8APe8Bg+R2fTVf/UlKA338VlQk/QZETJ+7n7zB
-	nh8A/I1mKi4ZE=
-X-Google-Smtp-Source: AGHT+IE6DIWAPI6xhj/dvOFpGf1N/JyjFHBr3QBR1usdNPYk3+KTAjPz87Md2+NySEM8eS1qf1OW+A==
-X-Received: by 2002:a17:903:2341:b0:2a0:a09b:7b0 with SMTP id d9443c01a7336-2a3ee4c456amr10088815ad.61.1767762510009;
-        Tue, 06 Jan 2026 21:08:30 -0800 (PST)
+        bh=LC0H7XXkEOYKc23QOgFpX3RRHegQ2qJKsip88CL9K2Q=;
+        b=AzaoFSCCJ2luBLDrczBr8P9ZAIdYGidAN/Y4pAOuFrQBVhLOdOjGhiR1/iJE2OTzUX
+         9b0qx0wDkEpLoyDJljNtVab/jTDFTNeojKvORW1i3H6SLGlh6PCEm0OY8CfXcRcL5w06
+         omkzf1/ygH8JHgmBHC1JUoTqWvAN8Lr1obfYU2iHs3/4qn4khlVavv/i2JeQ3DGM48rd
+         bqOiXvsZ+b6zTR7iuNQs2oQ8PbIbhaJexvgFdUPa6j/6tIfi6wHtGUAreIEclKAhozWL
+         49Ii4dpv0s5EBwz+74wi/2OLcj77wFSsroMuoPPcY3ixD5AxhDINxQDRamPJPQ8Vqm9D
+         HgAA==
+X-Forwarded-Encrypted: i=1; AJvYcCXIJe60mbi0+w/7lm9aPtBNlbN9HQhwS8B1OBRQx+iKtDjXkFD+ae6XeYsN7jihsq60Q9XJeZYJMg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwupSNhMUzA47F45otBzvL27fAbR7HFjXmGtCT4kPn4u7q5Zo4D
+	AuEjzurG3RGwGWzsXTv8Id8Koo3DWn9ynMLmiRJPColNHj/Usxeeloen9GlZCV9m0DI=
+X-Gm-Gg: AY/fxX5rSuL/qYh6L8bXJX7yTAQ4ihwBSVmGzxE3P4DEyOoIXM400R9qS/D7JpsYIqB
+	RnV2U8NTQocynpMG8ZengbNMyI7aomUuN7VWaZVFeb117kUccp0bdbphn4WeIsU2UeEMf+7r7ar
+	pryiDpeMWLYJqs+7MbxG1i8mZPS1Ht72AremlrmLipAc/QlYCWhef4Pl6WF8Hja8qa1VI2ArFCR
+	eFrKNCwEafBwiUOmY5rjDroLv4CCu57X9tXz5jgVy7lKFkDdZcAkBIDO6pT3fGOLokUXVXGRIZ5
+	NTfpCc79kQ0bJFR79b/c363JX3FQYjwbU9lkhy4cEdyk6t3cQtzcXFHDHdtJtIXMtO1g7l8lARw
+	lMVkcsfY2KD1pqDdpIEu3LEovKM7HYHVVfpRj8DJ0I2Ffeln8RCjEgxSf7slyBa5seTuZeMqTun
+	qAonfBs226iTkMnanJPXeYGQ==
+X-Google-Smtp-Source: AGHT+IHbKbuUiaGFKdL4diTpNeLR/j5eosCfbHWdAQ8rrrg+/KnQsIV8kE3nI8jz4VVgZv3B/kEBbQ==
+X-Received: by 2002:a05:6a20:7355:b0:361:4f82:e545 with SMTP id adf61e73a8af0-3898fa1f824mr1336775637.53.1767765465528;
+        Tue, 06 Jan 2026 21:57:45 -0800 (PST)
 Received: from localhost ([122.172.80.63])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3c3a560sm36452645ad.21.2026.01.06.21.08.28
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cc8d76sm38106705ad.84.2026.01.06.21.57.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Jan 2026 21:08:29 -0800 (PST)
-Date: Wed, 7 Jan 2026 10:38:26 +0530
+        Tue, 06 Jan 2026 21:57:44 -0800 (PST)
+Date: Wed, 7 Jan 2026 11:27:42 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: K Prateek Nayak <kprateek.nayak@amd.com>
-Cc: Huang Rui <ray.huang@amd.com>, 
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Len Brown <lenb@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Clark Williams <clrkwllms@kernel.org>, Bert Karwatzki <spasswolf@web.de>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, Perry Yuan <perry.yuan@amd.com>
-Subject: Re: [RFC PATCH 0/2] cpufreq/amd-pstate: Prevent scheduling when
- atomic on PREEMPT_RT
-Message-ID: <oeyvz6463yujz63q4ijqsoobvaudtjymrokgb7jesa537vi7ds@jx5c6bgokwx7>
-References: <20260106073608.278644-1-kprateek.nayak@amd.com>
+To: Andreas Kemnade <andreas@kemnade.info>, Nishanth Menon <nm@ti.com>, 
+	Kevin Hilman <khilman@kernel.org>
+Cc: Haotian Zhang <vulab@iscas.ac.cn>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, linux-omap@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] omap-cpufreq: Fix regulator resource leak in probe()
+Message-ID: <y2xyyyyhdoxflj4doa4y3a7prjqulcw63bdkor3fo3qsbmxvzy@dvhmfxkkzdqs>
+References: <20251215030327.1771-1-vulab@iscas.ac.cn>
+ <20260105101412.0ac7baa7@kemnade.info>
+ <pjmwnxp6wae3bbmzmzys4r5szw6ywxphi4qtmpmg7jsqadc5fm@fvozoujr4mi5>
+ <20260106182946.1c54d769@kemnade.info>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,45 +92,44 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260106073608.278644-1-kprateek.nayak@amd.com>
+In-Reply-To: <20260106182946.1c54d769@kemnade.info>
 
-On 06-01-26, 07:36, K Prateek Nayak wrote:
-> Bert reported hitting "BUG: scheduling while atomic" when running
-> amd-pstate-ut on a PREEMPT_RT kernel [1].
-> 
-> Since reader-writer locks turn sleepable on PREEMPT_RT, they are not
-> suitable to be used in the scheduler hot-path under rq_lock to grab the
-> cpufreq policy object.
-> 
-> Unfortunately, the amd-pstate driver has a tight coupling between the
-> cpufreq_policy object and the cpudata stored in it as the driver_data.
-> 
-> Trying to grab a read reference on PREEMPT_RT can cause "scheduling
-> while atomic" if a concurrent writer is active, and trying to grab a
-> nested reference in presence of a writer can cause a deadlock (manifests
-> as lockup) since the reader fast-path is disabled on PREEMPT_RT to
-> prevent write-side starvation.
-> 
-> The two patches included removes cases of grabbing a nested read
-> reference to the cpufreq policy in amd-pstate, and modifies the
-> cpufreq_driver->adjust_perf() callback to take the raw policy reference
-> cached by the schedutil governor respectively.
-> 
-> The policy object outlives the governor and the driver making it safe to
-> use this cache reference from the sugov data. Any changes to the policy
-> will end up calling cpufreq_driver->set_policy() or
-> governor->set_limits() once the policy is modified which should ensure
-> eventual consistency despite not holding the read-side.
-> 
-> Series has been tested with amd-pstate-ut on PREEMPT_RT kernel which
-> successfully passes without any splats on LOCKDEP + DEBUG_ATOMIC_SLEEP
-> config. Additionally, the driver switch test from Gautham [2] was run
-> for 10min on the same config without observing any splats.
-> 
-> [1] https://lore.kernel.org/all/20250731092316.3191-1-spasswolf@web.de/
-> [2] https://lore.kernel.org/all/aJRN2wMLAnhDFykv@BLRRASHENOY1.amd.com/
+On 06-01-26, 18:29, Andreas Kemnade wrote:
+> hmm, it is performed when the device is removed/unbound, which does not necessarily
+> mean the driver is removed.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+For the cpufreq drivers, the device is normally never removed. It either gets
+created from DT or some platform specific code creates the device for ever. But
+anyway, we were both talking about unbound being called, doesn't matter if it is
+the device or driver which is removed.
+
+> But that does not prevent trouble if something
+> is still trying to access stuff here after driver removal. So it is not really
+> helpful.
+
+It is not possible for something to still be using the resources from this
+driver (like the global variables) after remove() is called. If there is a bug
+in there, then that needs to be fixed instead.
+
+> Hmm, how does a device gets bound to this driver?
+
+Nice catch.
+
+Tried to look at history.
+
+commit cb6675d6a868 ("ARM: OMAP2+: Remove legacy PM init")
+
+This commit removed the platform device being created and mentions that stuff
+happens via DT, which AFAIU, creates the cpufreq-dt device instead.
+
+So no one should be using this driver since year 2016.
+
+Kevin, Nishanth, can you please confirm ? We should remove this driver.
+
+> But the fix is good for stable. So I would propose to add this
+> fix (to let it propagate to stable) and deorbit this driver.
+
+I don't think it is worth adding to stable when there are no users.
 
 -- 
 viresh
