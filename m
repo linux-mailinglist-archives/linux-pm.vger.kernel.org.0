@@ -1,44 +1,44 @@
-Return-Path: <linux-pm+bounces-40364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40363-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 654C3CFDBA2
-	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 13:45:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 568EBCFDC35
+	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 13:51:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5DCC030021D9
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 12:45:36 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 50A4130E505D
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 12:45:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B3C32939F;
-	Wed,  7 Jan 2026 12:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C27A9328B58;
+	Wed,  7 Jan 2026 12:37:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hlNR8W/3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FG4AcyXA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19373329395;
-	Wed,  7 Jan 2026 12:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95256328B43;
+	Wed,  7 Jan 2026 12:37:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767789467; cv=none; b=Vb6MXsHRbA9YGXQBRYrZX0RONznh8upf+d2HGGKk/DSqFzVRiitt6CvBSRwddMJdz9uPTNKUCCXRBhRSICpE0Pao8n//Impvcyqlm9nCJ9TuLCfohi5J5hxniGCixfjiYk+8jdhuFUn67B5iN7yTObp1Fy71pMfXm0/K/Y1Gdxo=
+	t=1767789460; cv=none; b=OnNKRHWeuVYS+vd+Mk2FhC01RJts0WW4IbI417EDKCezzuNPKQPqc//VB8mMUH/FqcLcIbLnhZ+vznMi7noka9JM4LHYyS4HCzeueOqL3YdZz8/u+G9o+nNE57DV+MT5ELfJd3Ji68Q+/XOXKXIPkMiGgKq8gzUYf+IW4eXU/KQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767789467; c=relaxed/simple;
-	bh=3rZ3aSqDtIQegdbz0UiHC1dGQWKjQrUwSTJAJTSwECw=;
+	s=arc-20240116; t=1767789460; c=relaxed/simple;
+	bh=0fdwo4lgufSfE9d3Q035mLW/81LeqImK6RZ94JeFmaE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kIa/NI7XWopupXxye9ONlvve/idJ3Vld4yIFlnkNREsM07PzYw614A1+E85oZSjUF9QNYmutwD5fu1Vpa99hUprSXf7Y0cUePe5wRlKzdmShGxk6Jvb5Yl5VQn67RNFL5NcWh+Qz7bu39eJ7dFAQWrynKGpMvExAz/UD1OZC09U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hlNR8W/3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DCEEC4CEF7;
-	Wed,  7 Jan 2026 12:37:42 +0000 (UTC)
+	 MIME-Version:Content-Type; b=RgXOuiUA9wyZWGwr6ujRopSyG7Gf/gNjVszMdXFPvk3xxaxXkPZv6fjUzULvv65A68qtML+ffu5JCxO6rnlL3TBNudDwvA8fyR+faVotNY1+V/XV8cdlu+tWfgsEMtsJ4LCeG5MCr4JathPaYKwbUzluLOCNqEMi/ooSqas+tQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FG4AcyXA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A249C4CEF7;
+	Wed,  7 Jan 2026 12:37:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767789466;
-	bh=3rZ3aSqDtIQegdbz0UiHC1dGQWKjQrUwSTJAJTSwECw=;
+	s=k20201202; t=1767789460;
+	bh=0fdwo4lgufSfE9d3Q035mLW/81LeqImK6RZ94JeFmaE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hlNR8W/3AVrpb8ASe87LFsEhWBoubhWmsxr04CZtHK2Vg/IJeTgzKtZ9um+fFfeOw
-	 bC+4X8FByJwNz2HWfmM8ZWqG51v0/GFeJvs5wFGx/28O7ph2qKD2qDeFb2hPWOH2r2
-	 sdaOmpJ7fmn+FlBYWkRJIMbaCtYB2R/wVSUTCqMF4CBdAS6260wEmyEmf4hkB/Tni4
-	 nAlqEMERywSjxxDxJV24W7fgUuxfIfCH7Mm4+52hFsL5qpdCfQXcgS0xw2QixEU9uQ
-	 s5vNMkcwVI4Ap9y+U/U8eZd1EuQypeASpJ1zO25uJoLNmFH9v8S/KU+p8d2T2ohxye
-	 GDKdLbUAkRb2Q==
+	b=FG4AcyXA+6wZPSqy0OGwlMeMosAAYloIEzCYYBCpSwwiN9WTI6Ekv0miPFAGYNLE8
+	 tr+hv12ShS2Wp+ssN4C/hO42kRpb9D+ftpX4wOrgYF1ntW226WSI7cPJl7aRBCl6u1
+	 1J6uPaSKQlCVe5lGwp1djOU884q938Juq4jMxQFk2UZC+53f2qMc6YwkMcuyaxeSSQ
+	 Y955ol0vshqAgiY5XzeNXvjSQIB9kvC2E4UbD4lupsBPOcefDCm0QjarFimoRp4iau
+	 KWIgiQF5JXeTSUArgZaPZ5C1hIk4mQ1hUzCFls9qiWMTD74s16CE8G+BCacVKsnjdW
+	 k1Lsu/pdKWglg==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
@@ -49,10 +49,10 @@ Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
  Nicolas Ferre <nicolas.ferre@microchip.com>,
  Claudiu Beznea <claudiu.beznea@tuxon.dev>, Simon Horman <horms@kernel.org>
 Subject:
- [RESEND][PATCH v2 1/3] net: ethernet: ti: am65-cpsw: Discard pm_runtime_put()
- return value
-Date: Wed, 07 Jan 2026 13:34:02 +0100
-Message-ID: <5042490.GXAFRqVoOG@rafael.j.wysocki>
+ [RESEND][PATCH v2 2/3] net: cadence: macb: Discard pm_runtime_put() return
+ value
+Date: Wed, 07 Jan 2026 13:35:58 +0100
+Message-ID: <2252292.irdbgypaU6@rafael.j.wysocki>
 Organization: Linux Kernel Development
 In-Reply-To: <2816529.mvXUDI8C0e@rafael.j.wysocki>
 References:
@@ -68,65 +68,47 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 
-Printing error messages on pm_runtime_put() returning negative values
-is not particularly useful.
+Passing pm_runtime_put() return value to the callers is not particularly
+useful.
 
 Returning an error code from pm_runtime_put() merely means that it has
 not queued up a work item to check whether or not the device can be
 suspended and there are many perfectly valid situations in which that
 can happen, like after writing "on" to the devices' runtime PM "control"
-attribute in sysfs for one example.
+attribute in sysfs for one example.  It also happens when the kernel is
+configured with CONFIG_PM unset.
 
-Accordingly, update am65_cpsw_ethtool_op_begin() and cpsw_ethtool_op_begin()
-to simply discard the return value of pm_runtime_put().
+Accordingly, update at91ether_close() to simply discard the return
+value of pm_runtime_put() and always return success to the caller.
 
 This will facilitate a planned change of the pm_runtime_put() return
 type to void in the future.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
 ---
 
-v1 -> v2: No changes
+v1 -> v2: Added Acked-by from Nicolas
 
 ---
- drivers/net/ethernet/ti/am65-cpsw-ethtool.c | 5 +----
- drivers/net/ethernet/ti/cpsw_ethtool.c      | 5 +----
- 2 files changed, 2 insertions(+), 8 deletions(-)
+ drivers/net/ethernet/cadence/macb_main.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-index c57497074ae6..98d60da7cc3b 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-@@ -391,11 +391,8 @@ static int am65_cpsw_ethtool_op_begin(struct net_device *ndev)
- static void am65_cpsw_ethtool_op_complete(struct net_device *ndev)
- {
- 	struct am65_cpsw_common *common = am65_ndev_to_common(ndev);
--	int ret;
+diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+index e461f5072884..1079613953bc 100644
+--- a/drivers/net/ethernet/cadence/macb_main.c
++++ b/drivers/net/ethernet/cadence/macb_main.c
+@@ -4810,7 +4810,9 @@ static int at91ether_close(struct net_device *dev)
  
--	ret = pm_runtime_put(common->dev);
--	if (ret < 0 && ret != -EBUSY)
--		dev_err(common->dev, "ethtool complete failed %d\n", ret);
-+	pm_runtime_put(common->dev);
+ 	at91ether_stop(lp);
+ 
+-	return pm_runtime_put(&lp->pdev->dev);
++	pm_runtime_put(&lp->pdev->dev);
++
++	return 0;
  }
  
- static void am65_cpsw_get_drvinfo(struct net_device *ndev,
-diff --git a/drivers/net/ethernet/ti/cpsw_ethtool.c b/drivers/net/ethernet/ti/cpsw_ethtool.c
-index bdc4db0d169c..a43f75ee269e 100644
---- a/drivers/net/ethernet/ti/cpsw_ethtool.c
-+++ b/drivers/net/ethernet/ti/cpsw_ethtool.c
-@@ -374,11 +374,8 @@ int cpsw_ethtool_op_begin(struct net_device *ndev)
- void cpsw_ethtool_op_complete(struct net_device *ndev)
- {
- 	struct cpsw_priv *priv = netdev_priv(ndev);
--	int ret;
- 
--	ret = pm_runtime_put(priv->cpsw->dev);
--	if (ret < 0)
--		cpsw_err(priv, drv, "ethtool complete failed %d\n", ret);
-+	pm_runtime_put(priv->cpsw->dev);
- }
- 
- void cpsw_get_channels(struct net_device *ndev, struct ethtool_channels *ch)
+ /* Transmit packet */
 -- 
 2.51.0
 
