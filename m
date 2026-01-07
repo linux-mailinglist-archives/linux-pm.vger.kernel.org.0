@@ -1,199 +1,138 @@
-Return-Path: <linux-pm+bounces-40396-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40397-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91E83CFFF02
-	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 21:11:00 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81C78CFFEFF
+	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 21:10:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 26C7F30F94D1
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 19:57:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 987F6303D8B7
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 20:03:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D06D25A2CF;
-	Wed,  7 Jan 2026 19:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF657328631;
+	Wed,  7 Jan 2026 20:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o/6eo/5z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vG38mJQg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC96E3A0B3A
-	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 19:57:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6E726E6E8
+	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 20:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767815824; cv=none; b=ab0nw5/1CfQevOFxqhe4nQRFQZ8kEPy5x1yk8kS0TROUFqwAHT3xEbqeTlyJ5e35kzicn/7H6qigGb2vrnHVG2JiTCzpIH/67J8LzAePBQ6+ymZpo3elOClUlC3j2prxQSul8TqDxmg8PqleGXjOkGWuUbJhnIe/iCqeCOUAaZg=
+	t=1767816214; cv=none; b=ITNkgPTc0LcJgJeFnmxag5qSh4zEZjDFczmVCnjoEn4Zx9XqkEvx2BAreI06FMPClVlYwB/CfbTNfYrxvdN8B0DId3qTa8acZSm5wwkS8vQXRWFYDyatJQh8ySr/cgt6TbTtredL2auJlJ/EAEXZnVBaslVn5COPuUeRO2zRB3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767815824; c=relaxed/simple;
-	bh=+VBjyrmdJBHXv8hFipAjm6s+ntR7S0VRhaAQ6AcLC0g=;
+	s=arc-20240116; t=1767816214; c=relaxed/simple;
+	bh=cG9VQr+jc5f++sTl00Frvp7iPx5ElGSDhEz+iqKB5dc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=vEkYr6ISda0D3Dryl57Mit2qcE7RsfMMZPJ4fKhgT7DGEx7fUqNeW6p1Lv7SwvuEKthyX09XVDgzc7/i/0ZYkiurayyc4QkPOqre3P3PH9PIcPllVrnzE9YXomJ1U7lyG0CUG5b9DAzSLFeahkc6oDbjiwAXRjwtpIaJOhECtj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o/6eo/5z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92AF7C2BC87
-	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 19:57:03 +0000 (UTC)
+	 To:Cc:Content-Type; b=YLunJBqNyxpALRgNKZZsmT3g+Ab7A4Lf5vvuaHhsv6G6pJboxm5pIIc+99jfE1Kn1o+CJlmdiwM+DLFEIS8ExTTg8TUja+s7lOdCAqAX5fBCiQjFh6vnWaMcvgYuJWq0i8DSfvrYt/5B++Vxop1NQ7XphtSMe3LUOJ/UEy5KNbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vG38mJQg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC38C4CEF1
+	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 20:03:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767815823;
-	bh=+VBjyrmdJBHXv8hFipAjm6s+ntR7S0VRhaAQ6AcLC0g=;
+	s=k20201202; t=1767816214;
+	bh=cG9VQr+jc5f++sTl00Frvp7iPx5ElGSDhEz+iqKB5dc=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=o/6eo/5zs0RzXoNw5Ej9A45/1N5wStTrAkCwQJWGqcoSZmcUnd0Z+L8dzDyqux/GG
-	 ger8d/1SVEIuBfiPbwUxUkYxfVj0akHUvCUlocVWEA8dJaJC5vdVoWraq4QHCwzVZi
-	 c6OnRnVP8IR4n3fzJ8l/g30EYVO2t76gGhU9k8apkzF3INh5cvFLIt4EPOYZYEygP6
-	 c1Hw+qRhRR6Ojb0vcyb12O2+HtxkUvGGQAKCcLcYSYMG88umzmcSGlWd+3DLCdiYp6
-	 qebF5+mJkvX8Xyu98keGoBpNtnJgsfXLvLQGeJaYIMd+0ehCz09TPbUe7YoOkSWy2l
-	 hWDVOXgWQQT1g==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-3e8819eda8bso915662fac.3
-        for <linux-pm@vger.kernel.org>; Wed, 07 Jan 2026 11:57:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX50sl7fWcuz/xgEnRVnlhgmtcG441YdKwiORwvnHjnRtPokYH3K+jdTNjAW3vTuAs/fNLjIN+QQA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxshY0uXIe22fG87AW36w0b6CiBJYs3JNciqnEPed7P/mEHP24b
-	oxCPsevdfUSBbmjkrfc1SYQ1yu6cQILnBxMUuWEExxnzDgsBVzeF1wA6taSZNi24mtG/NwysJnP
-	UdDtLukKdPaqILtEGD3LSRC0/FqSLkcs=
-X-Google-Smtp-Source: AGHT+IGD121X1TOzfCHSPDnImhpxYxlydTwNjoEEqXnErTuAQNSSQWGE9TltWwcuH40GRao6lXf2ebmHYSFBy+rTjm0=
-X-Received: by 2002:a4a:da4c:0:b0:65b:387a:835f with SMTP id
- 006d021491bc7-65f54ef230dmr1210110eaf.31.1767815822629; Wed, 07 Jan 2026
- 11:57:02 -0800 (PST)
+	b=vG38mJQgxMl6Ffw8POpzQt366SejPi1MwXx3w0eUJ9BWBV/cWmyRz8uyUQo0xUH5s
+	 tAugQjxhCuH5Pe7pVYsuFmIzle3VX9F9cynCOQOpFCv8yvlsbRbWARip+HNKgEq7GE
+	 KH8ljrCHrUeO7/ieAVhkgHa8bI5jfd6F0wx1wMK6VsranpktOmGV+yZ6eMav9Juse3
+	 gP1sc6xxwdQz/1MBHMz5+Q5Ik89EfUFLrN/5BDuHRXDe6I9PiiUC7poKhzxGp+wkqK
+	 TfxM5izLSj0bc1pqmgg8p3HpBPBvybupGxMb5Qfyg5fFyJo/LpWGuuXDQKjChtxmxQ
+	 6F6qzEs/njmGw==
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-65b6b69baf8so834067eaf.3
+        for <linux-pm@vger.kernel.org>; Wed, 07 Jan 2026 12:03:34 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVA22jw2X58KFIFXbFBUN9E626b2t+CixwAZ2Z2Ol0V9dWt9RNc62BWkQefOVqXE+D9RHCI5BPOTg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YynuzW72A8rQucbecd/kM39+DeMzK8ow0loGmgYNbg1jdHuFsrQ
+	2EkV+fdISDZYlj5hi345H4YsRMsoReOZz52dCA/64sugR7AebC70w8UAnZ0YU5wzaiG2h07cge5
+	K8A2VL8DkbuU/qnlhRtyQYn8qKqvHslw=
+X-Google-Smtp-Source: AGHT+IGcJ6kh7UzFHZJtGeN4iVGFHSWPFXx1fntABef5lMbXA6rFXT5pqZDdF/7JRhkcKVjD5mqofJLoDjgZqf9j11s=
+X-Received: by 2002:a05:6820:220f:b0:65c:fd25:f430 with SMTP id
+ 006d021491bc7-65f54ee4e1bmr1498720eaf.20.1767816213457; Wed, 07 Jan 2026
+ 12:03:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251223072119.3372582-1-zhanjie9@hisilicon.com> <20251223072119.3372582-2-zhanjie9@hisilicon.com>
-In-Reply-To: <20251223072119.3372582-2-zhanjie9@hisilicon.com>
+References: <0e2424d2-7fd1-488d-901c-ba154cbfcd44@linuxfoundation.org>
+In-Reply-To: <0e2424d2-7fd1-488d-901c-ba154cbfcd44@linuxfoundation.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 7 Jan 2026 20:56:50 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h_1nM3S93prH60VPkicQSdH_gzh7VkXHNCzfLq-aLP-Q@mail.gmail.com>
-X-Gm-Features: AQt7F2qmAPuD1J1j6UNwANWUUqw4-V9DUtSrJcD5sPI_qu_DLnXIVN8OvdSsCC8
-Message-ID: <CAJZ5v0h_1nM3S93prH60VPkicQSdH_gzh7VkXHNCzfLq-aLP-Q@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] ACPI: CPPC: Factor out and export per-cpu cppc_perf_ctrs_in_pcc_cpu()
-To: Jie Zhan <zhanjie9@hisilicon.com>
-Cc: viresh.kumar@linaro.org, rafael@kernel.org, ionela.voinescu@arm.com, 
-	beata.michalska@arm.com, pierre.gondois@arm.com, zhenglifeng1@huawei.com, 
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com, 
-	jonathan.cameron@huawei.com, prime.zeng@hisilicon.com, yubowen8@huawei.com, 
-	lihuisong@huawei.com, zhangpengjie2@huawei.com, wangzhi12@huawei.com
+Date: Wed, 7 Jan 2026 21:03:22 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jpx6WhgfX8E2SfWDV0C6OEWK539nYYSVnJ3_xGMBd1Cw@mail.gmail.com>
+X-Gm-Features: AQt7F2oFdXz3y_v-jsa1T_amkH3XtGHWtsSPe2racgnvRB8FZeRCVdU3IxNJyJw
+Message-ID: <CAJZ5v0jpx6WhgfX8E2SfWDV0C6OEWK539nYYSVnJ3_xGMBd1Cw@mail.gmail.com>
+Subject: Re: [GIT PULL] cpupower update for Linux 6.20-rc1
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, shuah <shuah@kernel.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, "John B. Wyatt IV" <jwyatt@redhat.com>, 
+	John Kacur <jkacur@redhat.com>, Thomas Renninger <trenn@suse.com>, Thomas Renninger <trenn@suse.de>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 23, 2025 at 8:23=E2=80=AFAM Jie Zhan <zhanjie9@hisilicon.com> w=
-rote:
->
-> Factor out cppc_perf_ctrs_in_pcc_cpu() for checking whether per-cpu CPC
-> regs are defined in PCC channels, and export it out for further use.
->
-> Reviewed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> Reviewed-by: Pierre Gondois <pierre.gondois@arm.com>
-> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+Hi Shuah,
 
-Acked-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
+On Wed, Jan 7, 2026 at 1:09=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.or=
+g> wrote:
+>
+> Hi Rafael,
+>
+> Please pull the following cpupower update for Linux 6.20-rc1.
+>
+> Fixes to miscellaneous problems in cpupower tool:
+>
+> - idle_monitor: fix incorrect value logged after stop
+> - Fix inverted APERF capability check
+> - Use strcspn() to strip trailing newline
+> - Reset errno before strtoull()
+> - Show C0 in idle-info dump
+>
+> diff is attached.
+>
+> thanks,
+> -- Shuah
+>
+> ----------------------------------------------------------------
+> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1=
+e8:
+>
+>    Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+>
+> are available in the Git repository at:
+>
+>    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-c=
+pupower-6.20-rc1
+>
+> for you to fetch changes up to ff72619e11348ab189e232c59515dd5c33780d7c:
+>
+>    tools/power cpupower: Show C0 in idle-info dump (2025-12-15 12:33:29 -=
+0700)
+>
+> ----------------------------------------------------------------
+> cpupower update for Linux 6.20-rc1
+>
+> Fixes to miscellaneous problems in cpupower tool:
+>
+> - idle_monitor: fix incorrect value logged after stop
+> - Fix inverted APERF capability check
+> - Use strcspn() to strip trailing newline
+> - Reset errno before strtoull()
+> - Show C0 in idle-info dump
+>
+> ----------------------------------------------------------------
+> Kaushlendra Kumar (5):
+>        cpupower: idle_monitor: fix incorrect value logged after stop
+>        tools/cpupower: Fix inverted APERF capability check
+>        tools/cpupower: Use strcspn() to strip trailing newline
+>        tools/power cpupower: Reset errno before strtoull()
+>        tools/power cpupower: Show C0 in idle-info dump
+>
+>   tools/power/cpupower/lib/cpuidle.c                      | 7 +++----
+>   tools/power/cpupower/utils/cpufreq-info.c               | 2 +-
+>   tools/power/cpupower/utils/cpuidle-info.c               | 2 +-
+>   tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c | 2 +-
+>   4 files changed, 6 insertions(+), 7 deletions(-)
+> ----------------------------------------------------------------
 
-and I'd prefer Viresh to take care of this along with the other two
-patches in the series.
-
-> ---
->  drivers/acpi/cppc_acpi.c | 48 ++++++++++++++++++++++------------------
->  include/acpi/cppc_acpi.h |  5 +++++
->  2 files changed, 32 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index e66e20d1f31b..22d7fd669a6c 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1423,6 +1423,32 @@ int cppc_get_perf_caps(int cpunum, struct cppc_per=
-f_caps *perf_caps)
->  }
->  EXPORT_SYMBOL_GPL(cppc_get_perf_caps);
->
-> +/**
-> + * cppc_perf_ctrs_in_pcc_cpu - Check if any perf counters of a CPU are i=
-n PCC.
-> + * @cpu: CPU on which to check perf counters.
-> + *
-> + * Return: true if any of the counters are in PCC regions, false otherwi=
-se
-> + */
-> +bool cppc_perf_ctrs_in_pcc_cpu(unsigned int cpu)
-> +{
-> +       struct cpc_desc *cpc_desc =3D per_cpu(cpc_desc_ptr, cpu);
-> +       struct cpc_register_resource *ref_perf_reg;
-> +
-> +       /*
-> +        * If reference perf register is not supported then we should use=
- the
-> +        * nominal perf value
-> +        */
-> +       ref_perf_reg =3D &cpc_desc->cpc_regs[REFERENCE_PERF];
-> +       if (!CPC_SUPPORTED(ref_perf_reg))
-> +               ref_perf_reg =3D &cpc_desc->cpc_regs[NOMINAL_PERF];
-> +
-> +       return CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> +               CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> +               CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]) ||
-> +               CPC_IN_PCC(ref_perf_reg);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc_cpu);
-> +
->  /**
->   * cppc_perf_ctrs_in_pcc - Check if any perf counters are in a PCC regio=
-n.
->   *
-> @@ -1437,27 +1463,7 @@ bool cppc_perf_ctrs_in_pcc(void)
->         int cpu;
->
->         for_each_online_cpu(cpu) {
-> -               struct cpc_register_resource *ref_perf_reg;
-> -               struct cpc_desc *cpc_desc;
-> -
-> -               cpc_desc =3D per_cpu(cpc_desc_ptr, cpu);
-> -
-> -               if (CPC_IN_PCC(&cpc_desc->cpc_regs[DELIVERED_CTR]) ||
-> -                   CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
-> -                   CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
-> -                       return true;
-> -
-> -
-> -               ref_perf_reg =3D &cpc_desc->cpc_regs[REFERENCE_PERF];
-> -
-> -               /*
-> -                * If reference perf register is not supported then we sh=
-ould
-> -                * use the nominal perf value
-> -                */
-> -               if (!CPC_SUPPORTED(ref_perf_reg))
-> -                       ref_perf_reg =3D &cpc_desc->cpc_regs[NOMINAL_PERF=
-];
-> -
-> -               if (CPC_IN_PCC(ref_perf_reg))
-> +               if (cppc_perf_ctrs_in_pcc_cpu(cpu))
->                         return true;
->         }
->
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index 13fa81504844..4bcdcaf8bf2c 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -154,6 +154,7 @@ extern int cppc_get_perf_ctrs(int cpu, struct cppc_pe=
-rf_fb_ctrs *perf_fb_ctrs);
->  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
->  extern int cppc_set_enable(int cpu, bool enable);
->  extern int cppc_get_perf_caps(int cpu, struct cppc_perf_caps *caps);
-> +extern bool cppc_perf_ctrs_in_pcc_cpu(unsigned int cpu);
->  extern bool cppc_perf_ctrs_in_pcc(void);
->  extern unsigned int cppc_perf_to_khz(struct cppc_perf_caps *caps, unsign=
-ed int perf);
->  extern unsigned int cppc_khz_to_perf(struct cppc_perf_caps *caps, unsign=
-ed int freq);
-> @@ -204,6 +205,10 @@ static inline int cppc_get_perf_caps(int cpu, struct=
- cppc_perf_caps *caps)
->  {
->         return -EOPNOTSUPP;
->  }
-> +static inline bool cppc_perf_ctrs_in_pcc_cpu(unsigned int cpu)
-> +{
-> +       return false;
-> +}
->  static inline bool cppc_perf_ctrs_in_pcc(void)
->  {
->         return false;
-> --
-> 2.33.0
->
+Pulled and added to linux-pm.git/linux-next, thanks!
 
