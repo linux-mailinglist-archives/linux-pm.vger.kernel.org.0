@@ -1,138 +1,102 @@
-Return-Path: <linux-pm+bounces-40397-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40398-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81C78CFFEFF
-	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 21:10:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD2A7CFFF38
+	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 21:15:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 987F6303D8B7
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 20:03:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EE8483024882
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 20:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF657328631;
-	Wed,  7 Jan 2026 20:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84AEB329C60;
+	Wed,  7 Jan 2026 20:09:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vG38mJQg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="duoBhplj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB6E726E6E8
-	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 20:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D668322A24
+	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 20:09:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767816214; cv=none; b=ITNkgPTc0LcJgJeFnmxag5qSh4zEZjDFczmVCnjoEn4Zx9XqkEvx2BAreI06FMPClVlYwB/CfbTNfYrxvdN8B0DId3qTa8acZSm5wwkS8vQXRWFYDyatJQh8ySr/cgt6TbTtredL2auJlJ/EAEXZnVBaslVn5COPuUeRO2zRB3w=
+	t=1767816575; cv=none; b=H3t/K/1HoWoD55dPCnW+kRq+5czVPgUSWjsjzBWcxhIAlWkJ/c1HV8MQ7m06Qd/VsxkAuOIbTm7HwNPxla9UT0qDOkT7CHOVjfiFJ8p/TZUkjNX5xB1oSAGOzkjZmV8JKQSDaNXvBdKoHqqJEo99fNmjfnxaqFLXHj3R6vz0O8o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767816214; c=relaxed/simple;
-	bh=cG9VQr+jc5f++sTl00Frvp7iPx5ElGSDhEz+iqKB5dc=;
+	s=arc-20240116; t=1767816575; c=relaxed/simple;
+	bh=7AipdsGTChHqifqf+Tag+GZrYvgQ3I6INwRaVW7rqGQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YLunJBqNyxpALRgNKZZsmT3g+Ab7A4Lf5vvuaHhsv6G6pJboxm5pIIc+99jfE1Kn1o+CJlmdiwM+DLFEIS8ExTTg8TUja+s7lOdCAqAX5fBCiQjFh6vnWaMcvgYuJWq0i8DSfvrYt/5B++Vxop1NQ7XphtSMe3LUOJ/UEy5KNbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vG38mJQg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CC38C4CEF1
-	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 20:03:34 +0000 (UTC)
+	 To:Cc:Content-Type; b=e+rDrAEzSSfFCp72y8UU7pikgWPnWZo6TiriEBh75qUQKQgiWAJwwi0Li6CwFPD1oBHzF5krPwBOKDc5IL0Pike+oCbvqa5LAOLs6f3Pb0EJ0mmq+3E14EpryDCBIvaXMcLdx+P27HtwBnuWC/w3AqQnfq+zUVev/C9FwoR6LPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=duoBhplj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D802DC4AF09
+	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 20:09:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767816214;
-	bh=cG9VQr+jc5f++sTl00Frvp7iPx5ElGSDhEz+iqKB5dc=;
+	s=k20201202; t=1767816574;
+	bh=7AipdsGTChHqifqf+Tag+GZrYvgQ3I6INwRaVW7rqGQ=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=vG38mJQgxMl6Ffw8POpzQt366SejPi1MwXx3w0eUJ9BWBV/cWmyRz8uyUQo0xUH5s
-	 tAugQjxhCuH5Pe7pVYsuFmIzle3VX9F9cynCOQOpFCv8yvlsbRbWARip+HNKgEq7GE
-	 KH8ljrCHrUeO7/ieAVhkgHa8bI5jfd6F0wx1wMK6VsranpktOmGV+yZ6eMav9Juse3
-	 gP1sc6xxwdQz/1MBHMz5+Q5Ik89EfUFLrN/5BDuHRXDe6I9PiiUC7poKhzxGp+wkqK
-	 TfxM5izLSj0bc1pqmgg8p3HpBPBvybupGxMb5Qfyg5fFyJo/LpWGuuXDQKjChtxmxQ
-	 6F6qzEs/njmGw==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-65b6b69baf8so834067eaf.3
-        for <linux-pm@vger.kernel.org>; Wed, 07 Jan 2026 12:03:34 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVA22jw2X58KFIFXbFBUN9E626b2t+CixwAZ2Z2Ol0V9dWt9RNc62BWkQefOVqXE+D9RHCI5BPOTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YynuzW72A8rQucbecd/kM39+DeMzK8ow0loGmgYNbg1jdHuFsrQ
-	2EkV+fdISDZYlj5hi345H4YsRMsoReOZz52dCA/64sugR7AebC70w8UAnZ0YU5wzaiG2h07cge5
-	K8A2VL8DkbuU/qnlhRtyQYn8qKqvHslw=
-X-Google-Smtp-Source: AGHT+IGcJ6kh7UzFHZJtGeN4iVGFHSWPFXx1fntABef5lMbXA6rFXT5pqZDdF/7JRhkcKVjD5mqofJLoDjgZqf9j11s=
-X-Received: by 2002:a05:6820:220f:b0:65c:fd25:f430 with SMTP id
- 006d021491bc7-65f54ee4e1bmr1498720eaf.20.1767816213457; Wed, 07 Jan 2026
- 12:03:33 -0800 (PST)
+	b=duoBhpljsl02WcYdNJzZV/SdPsqEYgpqHz4K3PLDCGFTQ08Bz/plQgzjQSoBy6+cc
+	 r+Vbp64Cz71IsWmkRdbEaf02Gm12YZcfVH9UllDtU2u+EnZE1dbb+x/3J4oj0HPpqR
+	 Ck6bOP2i5uoCxCn1CpJ93LGAOhBZUj99CebF6oY5P2cMegDZFiDWJ/oE7u1ic8k6vk
+	 CXN4/X9vl4tcmuZohGTtZptBDkHYsQMTb9J3HD49L00I9KJ/MowV+HyBBadi6qR6Ve
+	 yNX6HIWtCv3usiuQCi+vio3iMNZGte+eCmQam0vd3AQNP5pG+sqNc5+hIEsYeaHZht
+	 +kZUQgausAwvA==
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-65e94e128beso694813eaf.0
+        for <linux-pm@vger.kernel.org>; Wed, 07 Jan 2026 12:09:34 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV9AFtE0WNCNIUTVyIT5gf0KG0fmsM72xCo3k66ctfngSRyex6j/iB/I54xU2U4OaPMTniSUKRKpA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YztMUloyqGxFUfaGcLThw/H8wy1T8ldLZQibInjBJMojmA/BE+g
+	FZRlScIl1xubiqY04HDNqVWj/Q2uqZQ59IuSGxMBcIfGg4TjUnXsy8K7WKLZg0fyguBhHsIm0AH
+	3K90SuFJ/AGzctKdtMtePqDzuMIa5DeE=
+X-Google-Smtp-Source: AGHT+IGLF/44+oYDibcAHRBAtWyS1RwKCNHfj4yhtEaLLSEXGdjwWvvoubkxnnj7WvvRoetkgpmFIU2TTQr8H76ippU=
+X-Received: by 2002:a05:6820:2284:b0:659:9a49:8ef3 with SMTP id
+ 006d021491bc7-65f546cf91emr1322339eaf.39.1767816573954; Wed, 07 Jan 2026
+ 12:09:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0e2424d2-7fd1-488d-901c-ba154cbfcd44@linuxfoundation.org>
-In-Reply-To: <0e2424d2-7fd1-488d-901c-ba154cbfcd44@linuxfoundation.org>
+References: <20251215091352.1250531-1-kaushlendra.kumar@intel.com>
+In-Reply-To: <20251215091352.1250531-1-kaushlendra.kumar@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 7 Jan 2026 21:03:22 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jpx6WhgfX8E2SfWDV0C6OEWK539nYYSVnJ3_xGMBd1Cw@mail.gmail.com>
-X-Gm-Features: AQt7F2oFdXz3y_v-jsa1T_amkH3XtGHWtsSPe2racgnvRB8FZeRCVdU3IxNJyJw
-Message-ID: <CAJZ5v0jpx6WhgfX8E2SfWDV0C6OEWK539nYYSVnJ3_xGMBd1Cw@mail.gmail.com>
-Subject: Re: [GIT PULL] cpupower update for Linux 6.20-rc1
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, shuah <shuah@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, "John B. Wyatt IV" <jwyatt@redhat.com>, 
-	John Kacur <jkacur@redhat.com>, Thomas Renninger <trenn@suse.com>, Thomas Renninger <trenn@suse.de>
+Date: Wed, 7 Jan 2026 21:09:22 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0g9TEBQMsW-dSqvM9dkqQRX=-aGr1f-WrBZQXzmo_pDOg@mail.gmail.com>
+X-Gm-Features: AQt7F2rDjk-dJU_6Ez1GV9SmYlPyFmzdFs4S3jHTVlyoWGNjUURv2mGg3LQUeoc
+Message-ID: <CAJZ5v0g9TEBQMsW-dSqvM9dkqQRX=-aGr1f-WrBZQXzmo_pDOg@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel_pch: Drop explicit pci_set_drvdata(NULL)
+ in remove
+To: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Shuah,
+On Mon, Dec 15, 2025 at 10:16=E2=80=AFAM Kaushlendra Kumar
+<kaushlendra.kumar@intel.com> wrote:
+>
+> The driver uses devm_kzalloc() for device allocation, making the
+> pci_set_drvdata(pdev, NULL) call in the remove path unnecessary.
+> The driver core clears drvdata automatically during device removal.
+>
+> Signed-off-by: Kaushlendra Kumar <kaushlendra.kumar@intel.com>
+> ---
+>  drivers/thermal/intel/intel_pch_thermal.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/=
+intel/intel_pch_thermal.c
+> index fc326985796c..52e71af67dc6 100644
+> --- a/drivers/thermal/intel/intel_pch_thermal.c
+> +++ b/drivers/thermal/intel/intel_pch_thermal.c
+> @@ -269,7 +269,6 @@ static void intel_pch_thermal_remove(struct pci_dev *=
+pdev)
+>
+>         thermal_zone_device_unregister(ptd->tzd);
+>         iounmap(ptd->hw_base);
+> -       pci_set_drvdata(pdev, NULL);
+>         pci_release_regions(pdev);
+>         pci_disable_device(pdev);
+>  }
+> --
 
-On Wed, Jan 7, 2026 at 1:09=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.or=
-g> wrote:
->
-> Hi Rafael,
->
-> Please pull the following cpupower update for Linux 6.20-rc1.
->
-> Fixes to miscellaneous problems in cpupower tool:
->
-> - idle_monitor: fix incorrect value logged after stop
-> - Fix inverted APERF capability check
-> - Use strcspn() to strip trailing newline
-> - Reset errno before strtoull()
-> - Show C0 in idle-info dump
->
-> diff is attached.
->
-> thanks,
-> -- Shuah
->
-> ----------------------------------------------------------------
-> The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1=
-e8:
->
->    Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
->
-> are available in the Git repository at:
->
->    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-c=
-pupower-6.20-rc1
->
-> for you to fetch changes up to ff72619e11348ab189e232c59515dd5c33780d7c:
->
->    tools/power cpupower: Show C0 in idle-info dump (2025-12-15 12:33:29 -=
-0700)
->
-> ----------------------------------------------------------------
-> cpupower update for Linux 6.20-rc1
->
-> Fixes to miscellaneous problems in cpupower tool:
->
-> - idle_monitor: fix incorrect value logged after stop
-> - Fix inverted APERF capability check
-> - Use strcspn() to strip trailing newline
-> - Reset errno before strtoull()
-> - Show C0 in idle-info dump
->
-> ----------------------------------------------------------------
-> Kaushlendra Kumar (5):
->        cpupower: idle_monitor: fix incorrect value logged after stop
->        tools/cpupower: Fix inverted APERF capability check
->        tools/cpupower: Use strcspn() to strip trailing newline
->        tools/power cpupower: Reset errno before strtoull()
->        tools/power cpupower: Show C0 in idle-info dump
->
->   tools/power/cpupower/lib/cpuidle.c                      | 7 +++----
->   tools/power/cpupower/utils/cpufreq-info.c               | 2 +-
->   tools/power/cpupower/utils/cpuidle-info.c               | 2 +-
->   tools/power/cpupower/utils/idle_monitor/cpuidle_sysfs.c | 2 +-
->   4 files changed, 6 insertions(+), 7 deletions(-)
-> ----------------------------------------------------------------
-
-Pulled and added to linux-pm.git/linux-next, thanks!
+Applied as 6.20 material, thanks!
 
