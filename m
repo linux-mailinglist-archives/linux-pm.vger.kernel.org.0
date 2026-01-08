@@ -1,96 +1,168 @@
-Return-Path: <linux-pm+bounces-40460-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40461-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B034D0444B
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 17:17:48 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 428F3D04709
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 17:37:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 189B63139D17
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 15:55:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4028831CA752
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 15:28:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C59E73314C1;
-	Thu,  8 Jan 2026 14:07:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 350A4241665;
+	Thu,  8 Jan 2026 14:15:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="utJiWtVK"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="Q33QbIuW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04A1274B42
-	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 14:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767881228; cv=none; b=GlxZR0aROpbcRg3y6JaIjiDESktw6ah0iGRP8lx73PZAkGVMsHSYePc/wz8Kay32wZ231SHEbHtgrIyVjwkTBzQ6V271I4/+xvnGbA739IxXAuBMfRWk3XCAeB54okrdLCglXEreWNPFu58C4xbCnoBiKFE5hoxadN3xZuuCxAk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767881228; c=relaxed/simple;
-	bh=rur/eFIPFwsjnt7rsZv39PcFC9AOyQANaNtWSJe8sXg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZMfK21dHNOxuzIb5jYVxCTTW2BgyQWYf6vLqozzfCBxX2naxfmfN7v4IIBEDH0w+cTszr4Sw5z31vzoLPRtQFmxpbQapIeHK/E3VD2OpeqXpWUiz5vDCVGQmwaK82s5og6OKstvX/knPpE4A+PsTlU8lsbC612ypYwDOZ08jGiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=utJiWtVK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ABABC19424
-	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 14:07:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767881228;
-	bh=rur/eFIPFwsjnt7rsZv39PcFC9AOyQANaNtWSJe8sXg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=utJiWtVKt82v18WXPXSLXOyaxp1Eu3HKgBHdzASLKAEf6FGSSmAD05sAFe7ezApd1
-	 ygcsxrPwl8JEOKcW5Az25I7Ly4meqldaavx4K9PhgynTEwHhaxZVzY7W1tPwRV76ao
-	 w50APrGdUaVhLeFHoVbsJRAjBjW1RfEOCRxZ4rhYReVLuNjB6joenvGiq66KfBLXj+
-	 Byx5ZWW8+gvLUcpJcgDcaVQfSKLR581nIXBx9OIBxYkMo22EoN9ngHmTwRLVH0uz/3
-	 afgWWjgboY9Do0w1SwELSgZmko8gS2wWcGYWEo2kMIX6Q3pHby2nrBjBN8f8Tr1mIN
-	 gePmy5VsUVcfg==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-65cfbc56a29so2164845eaf.3
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 06:07:08 -0800 (PST)
-X-Gm-Message-State: AOJu0YxA3QV7O3ZHmGp7btfCySuvBHXcR9IPyPnRw+xToHjEYzjP1spk
-	a6SULPd8C/+L9FtXbYyZagHw1SrPY962G4M/Q3dZwuAwdPRT4PS974t0Bxyapf+GmPRu510XYxJ
-	KvSsKt8jhl+MW/IENE19/qI8laO4Zytc=
-X-Google-Smtp-Source: AGHT+IGiPG3we/G7gqGAVUfEGYc/MX4SFKJU91JLPhCIbBNtzaJzMd+r3u8tZWz0BzQhoH/VrpQ7/+HJdI7NM9Tt2lw=
-X-Received: by 2002:a05:6820:2283:b0:659:7c9a:942d with SMTP id
- 006d021491bc7-65f54e717d0mr2586755eaf.0.1767881227241; Thu, 08 Jan 2026
- 06:07:07 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634C022DFA4;
+	Thu,  8 Jan 2026 14:15:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767881727; cv=pass; b=ay/KttEVOWmSjtgJ5eHk8HN6bAM+R6EcMeI5bnRUWmBLj9gZh8BD11Wa3iHjqTMWuaZ6W8CexMnBz+QAA62hFpBhKsaRVTZ7n3PVH4XLXrVSxHzqwbprReig0h+SA1AD5G4g7pxF8pkV5xhRxO8zyGTyh50+2TLW5yKzElOouns=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767881727; c=relaxed/simple;
+	bh=qnqk1qDKIPyztJlbwkch2lqWywczfss1xdxkb6sAUsI=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=LttOdEmCWMbkNjPliMsedCfaF9x8COgv5LzOx7ce/o8sgyTyH3E7fK1mfjd74qesJB1Wr+wNTZNh85suq2DmPMZpskknUDS3HtKrEPmQvTegsFttVA04AyF/H5VhimqGUvbBhOHH+5EaAwXWZ6yykoXoB8vN5rOmpy4HBlQolFU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=Q33QbIuW; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1767881700; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=OgOvL1Aj2mnVcSiCXZanKA1S2JdaXAst4uy2XsutDQ64qK5oFfGqRgArHiHCtndDXzUHyUglqp4e1p9rkbhB2n49oY4Xfilsi2M9jg0wFw1h2CRYWss+qp68deHhYUG46wLfl8tTD7BDelMwiu6JEoSGy0hvabtZfkM9wXLv74Y=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1767881700; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=8UM2EJGpOoTDr6b1jkTnYeu3NfhCiVAeZ2kTc9yJTiU=; 
+	b=AD5CegN4htv3QyoMFvZpDT+YdBJBhdtnI7h9fdWt0CNf3Izg69j1OZnXioURgb+4WkvTzWkSbMmW7QPbxTodVhnJXQagYghw/9JcQ8PrcphqG+/Tmst1UUoB5hWWtBOEWMdKByYbnEv8G0oldS5fSqSFFVJuBj77WLlnPU0rrPo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1767881700;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=8UM2EJGpOoTDr6b1jkTnYeu3NfhCiVAeZ2kTc9yJTiU=;
+	b=Q33QbIuWQqMUSKdgziXZxyPQwxnQgEqOfTPTd/jfY10/4wxZfV95J4iBJSGVD4i0
+	W0gRtPHqTzxUelPNlZg39Mx3gLKNHuSuAKKDRmWAmfORaK8B4uzbpKMtLhttQNVN+oW
+	OhlEFTn4MRJkMinkcQUfSZM4U61Wh3EQ7djT+4qg=
+Received: by mx.zohomail.com with SMTPS id 1767881698439518.0714680558849;
+	Thu, 8 Jan 2026 06:14:58 -0800 (PST)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <6245770.lOV4Wx5bFT@rafael.j.wysocki> <2816529.mvXUDI8C0e@rafael.j.wysocki>
-In-Reply-To: <2816529.mvXUDI8C0e@rafael.j.wysocki>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 8 Jan 2026 15:06:55 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ifehCqCdC=rE9eUAe7p2jx=QOv8K=HXo3n9D0WefVMUw@mail.gmail.com>
-X-Gm-Features: AQt7F2ql4dsJ5nNrNXN_XQXzBdZ5i2rjEWr2rh7CMUz2vPUerTQkosZ3m3_QUgE
-Message-ID: <CAJZ5v0ifehCqCdC=rE9eUAe7p2jx=QOv8K=HXo3n9D0WefVMUw@mail.gmail.com>
-Subject: Re: [RESEND][PATCH v2 0/3] net: Discard pm_runtime_put() return value
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Brian Norris <briannorris@chromium.org>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Siddharth Vadapalli <s-vadapalli@ti.com>, Roger Quadros <rogerq@kernel.org>, netdev@vger.kernel.org, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Simon Horman <horms@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <20260108-delectable-fennec-of-sunshine-ffca19@houat>
+Date: Thu, 8 Jan 2026 11:14:37 -0300
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Drew Fustini <fustini@kernel.org>,
+ Guo Ren <guoren@kernel.org>,
+ Fu Wei <wefu@redhat.com>,
+ =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Trevor Gross <tmgross@umich.edu>,
+ linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org,
+ linux-riscv@lists.infradead.org,
+ linux-pwm@vger.kernel.org,
+ linux-clk@vger.kernel.org,
+ rust-for-linux@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <98CD0BF6-3350-40B9-B8A9-F569AE3E3220@collabora.com>
+References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
+ <20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com>
+ <20260108-delectable-fennec-of-sunshine-ffca19@houat>
+To: Maxime Ripard <mripard@kernel.org>
+X-Mailer: Apple Mail (2.3826.700.81)
+X-ZohoMailClient: External
 
-On Wed, Jan 7, 2026 at 1:37=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
->
-> Hi All,
->
-> This is a resend of
->
-> https://lore.kernel.org/linux-pm/5973090.DvuYhMxLoT@rafael.j.wysocki/
->
-> which mostly was a resend of patches [10-12/23] from:
->
-> https://lore.kernel.org/linux-pm/6245770.lOV4Wx5bFT@rafael.j.wysocki/
->
-> as requested by Jakub, except for the last patch that has been fixed
-> while at it and so the version has been bumped up.
->
-> The patches are independent of each other and they are all requisite
-> for converting pm_runtime_put() into a void function.
+Hi Maxime :)
 
-Any news on this or do I need to resend it again?
+>=20
+> I don't know the typestate pattern that well, but I wonder if we don't
+> paint ourselves into a corner by introducing it.
+>=20
+> While it's pretty common to get your clock from the get go into a =
+state,
+> and then don't modify it (like what devm_clk_get_enabled provides for
+> example), and the typestate pattern indeed works great for those, we
+
+Minor correction, devm_clk_get_enabled is not handled by the typestate
+pattern. The next patch does include this function for convenience, but
+you get a Result<()>. The typestate pattern is used when you want more
+control.
+
+> also have a significant number of drivers that will have a =
+finer-grained
+> control over the clock enablement for PM.
+>=20
+> For example, it's quite typical to have (at least) one clock for the =
+bus
+> interface that drives the register, and one that drives the main
+> component logic. The former needs to be enabled only when you're
+> accessing the registers (and can be abstracted with
+> regmap_mmio_attach_clk for example), and the latter needs to be =
+enabled
+> only when the device actually starts operating.
+>=20
+> You have a similar thing for the prepare vs enable thing. The =
+difference
+> between the two is that enable can be called into atomic context but
+> prepare can't.
+>=20
+> So for drivers that would care about this, you would create your =
+device
+> with an unprepared clock, and then at various times during the driver
+> lifetime, you would mutate that state.
+>=20
+> AFAIU, encoding the state of the clock into the Clk type (and thus
+> forcing the structure that holds it) prevents that mutation. If not, =
+we
+> should make it clearer (by expanding the doc maybe?) how such a =
+pattern
+> can be supported.
+>=20
+> Maxime
+
+IIUC, your main point seems to be about mutating the state at runtime? =
+This is
+possible with this code. You can just have an enum, for example:
+
+enum MyClocks {
+	Unprepared(Clk<Unprepared>),
+        Prepared(Clk<Prepared>),
+	Enabled(Clk<Enabled>),=20
+}
+
+In fact, I specifically wanted to ensure that this was possible when =
+writing
+these patches, as it=E2=80=99s needed by drivers. If you want to, I can =
+cover that in
+the examples, no worries.
+
+Same for Regulator<T>, by the way.
+
+=E2=80=94 Daniel=
 
