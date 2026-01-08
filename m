@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-40458-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40459-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3A54D0379F
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 15:47:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF504D036B7
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 15:40:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7749A3038955
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 14:33:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1E0D13050CCF
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 14:15:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CECC84D3DCB;
-	Thu,  8 Jan 2026 14:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D6D04EDD7F;
+	Thu,  8 Jan 2026 14:05:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="LlCk6o3g"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="sUyTwtq8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012052.outbound.protection.outlook.com [52.101.43.52])
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012058.outbound.protection.outlook.com [52.101.43.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75F24D3DA1;
-	Thu,  8 Jan 2026 14:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 534AD4EEF5E;
+	Thu,  8 Jan 2026 14:05:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.58
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767880885; cv=fail; b=cIX0ubKv+pJhZDRLAKYNdr/TIBtZoOMHtaCDwX/f4r+zO7MNgJYXRH+YMXWc+uZGel8LEaEUT3wsb5FYXGS7h9GeKCOPmF5uL2Hj1nczbKCBxT/tdB8yRbmbPgemBQQYfK9fHDsGJJYg+cLfOCgxrSJogVjaFY8/OHFe37nZH6M=
+	t=1767881108; cv=fail; b=MufPydzmUCzHsNL/jpaSbYt85bBubHiO/iAe88rw+MHLk4m7hLcB2FxxZ16zw5DqBi0Hii/jvt1aG0RPtbCA5jG33e/N+ztK1aWg2ixZ4MEVSKB9LIt8ZE02Fai/AaepBHvb5xl43ls1jNAgeY5+yOwVez283z9VEdFACG0w8Yk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767880885; c=relaxed/simple;
-	bh=oaa5C+JgKe6AC70HzLNVtnRpcV0NI6Ng1FsrucUdqYA=;
+	s=arc-20240116; t=1767881108; c=relaxed/simple;
+	bh=yjFosxzaEv3DxFsNBBiVZ4SQrN/QJyPmvPrfdLhLLBE=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=PeohW43z59yM9W4Cocms2/u23Chnrgc/V+7bW6NxJX0zsxZ464htL1gemSpWCbSThnf9jTP3OrQNFYjlUtuqHj91RWZEHcP/p8wT8sE7YUtXnVhDk/64ayKIGGspCKdCWSn6rC2SR0JJjdL83t1O0N3hoLte+Op0C1WmhCuF/wU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=LlCk6o3g; arc=fail smtp.client-ip=52.101.43.52
+	 Content-Type:MIME-Version; b=jHlimTtKM4FqoTM27XVsDYlJHUFQ0nyX8VWvB1YEjOg/2d+UpiCrjnddJDlTI+ulErNJH8IRJWTo1AwHZt9qcNI6fNfqlZPqBx4f3Xi2+TEBEAnrRxmDCcx8IiDWf9JUtdwbiGisXZVXbXUF/4xcGXI5a5SFT8uHhLTJ0u+o2oY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=sUyTwtq8; arc=fail smtp.client-ip=52.101.43.58
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Gpzs699+b1MOgq3fh0UXynqcVPZdagrARmcfkHcRZHda+ZJFcttKwC9oQxnZuXGKWfcDpRQVeT9yIRUL0RRBTLkFuN7upRxuJnj9ryku7x9JmtUSgjL5nNMgRvRuJQuRveMVmuBf6wbmJKrxuHVhh3jHMuuq+9cPmwABlcwPqbtyRRC5NdveMuSTOQdJb1S7gs/0FIbCld153yfqFC7NCYwKm3pEbprNCj6KEp3FqXGUlSECKGeaqvB22zI++GXDFheHM1u2TQYhbX1EBiEPSAMUipUrcjbXYMQrl4e1DYDXOVwlR0O/DBAhFDO8jRF9DriBHsKLhPGrlP00iPoshA==
+ b=TFMoyjYLrHQLvlk1zUCWhMa9jPZlhyGn4OksfAMiESE32kR2SRf6xrfBCCEnSlZuvZ7QnYZdoWWaqUHzmBF1aGfEbIX5yNvGemib2ZBymI4Nn03Ed9v9jEjIB5TkhCSHk9I+r2vYFVDx0x6WcBvC1PMSh+wZGcDLnRYgAAMguFulWTErs7/P9J8Nv9wf0DC/5jbuu31EBd+Q8wyG9088aC1wliOOV83FAeZj9USPrp8ywGPERqcv+9gIHxhG39OhK/GQ5rXrgFk5cKDSCOq6lgAW5Zqn0qyshqzaN8urIgO4C18wAxSmgKvYkqX3K5hEgCM9VW/+gccYcxvVNxYvWA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aYz0nT8FhrCh0JCQYceNCwFBYvkYJJpmqWkpuYHR32I=;
- b=OTiLYjWuH5J/Dj/BCT3q6B9XfZBvJf1AYGbJ1ZGMRg6y2y+O9i2x9s++9jzrdvo+Lrvmgvlz31aemWlhYFHBe0WZLg5zYVaR58MzH8DrX551kCjdnnw49KOvJABUg5bfold+gIppizkwI+SCodolvq79Rg38RGdeHuYi4Wx5xN/4RhXVBuOJ33KdxqqlM+m3Hc+3RFjLGwszcC3N9CyoA1iw/57WWdXq6A/aoycbS/rI6uT1BP604P0AT4rWXvVOlYtIAr9MdbL1nOUN2Z6KBIu6hnw0j09EQlPCQxF0Q1AxvqDULiwDdHacPDjwbT0JUTD2ZefqJoUsiXJ91abmMw==
+ bh=VX5bZbjLcxyJgbN4YhDYL5RyiputAbCR7L0HFeOhw0M=;
+ b=CPAOJTZZeyQENKcWt5ynNs0+oMTf8brfUs9+cj0jRtCw1eviFhDBgpbUbAk386WAzAAlsLI0mQm+pqNxihHkle1mrXnyG+InRpm+VBhDVhLpFwLWD2sbmJFIEHiAwzJmzKWAjY9KLGW2oPCPL1AvQ4ZVSYL5k77I57RrN/1vEvo0dSkGPc3hWIDC/5fTTiIS1WsyrsPz87j+c4nctbA06rjcyJwkdKpH8uObneE6cTFpXjUU3jZScXaAEPPspynA51xdf8pxoSuwdRuid52NepeKsmsXvJqEXbeoBw/KRiavZ9pUlnuluX29m3PwzAf5sYlUelK4jikSTEtKDj/PBQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aYz0nT8FhrCh0JCQYceNCwFBYvkYJJpmqWkpuYHR32I=;
- b=LlCk6o3gTA67aTrcLhKRT3suBHMi0mS/3Xfaiy4MnE7fNIQy+LGyYF1ZFhpppkuGqGIWCLOKYh/TiergjTimSMWJSTdCqo6pZAoAM6LTMvbDhQw2ijf2EVUQQhRlBzyNxzIIyQVnp+RNQWd8Xaqb5KD9ua0/euVbFJlYt0Gw7ZYX7HCp3bRCFl15zNlXmcdfxY8POGrmhlVta/mqaeo7kRxB1XDyTnaV7aKGDeT7JnIlzEgunom+tWee7Fjmo0HZ9Mb4NymWOdse25UhS6BcYs4rBqe+A/tl3e7rfptEyjLtjVgFlN3cQAKwf95tFYcH+py5jhrOeF7yO82JmlwIYg==
+ bh=VX5bZbjLcxyJgbN4YhDYL5RyiputAbCR7L0HFeOhw0M=;
+ b=sUyTwtq8C7LIF+tqJZHSBk3I03cET1Uhd+9G0g8BMEt0mBeYXba46bvalI2B2IlH4fH0WCnCxpUrqG7mUZwlES7j3AaeXfpfacK9kkT/JNA9XIK3wTJE8YGgsivMQOBdypOkz4k+9UWiBNFiTR1MLhMdf99h4O2cfqElGx42xE2NGpc/cnzxC7HYMT2UGxrzuETyVHbf08aomMNQnjh6kaNSeK9cahsONco6SFIbNWU1skq4csmRd3OQJhcjTe+R2samQUrmlCJaQcSB+0LUwWFpuLxXDCTBcyygE87Ed/lbXgxcu+u5VwYAOGhMpeYtrugSNPnY6OEB6B4KXqvv2w==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BN9PR12MB5179.namprd12.prod.outlook.com (2603:10b6:408:11c::18)
- by SA0PR12MB4415.namprd12.prod.outlook.com (2603:10b6:806:70::17) with
+ by DM6PR12MB4172.namprd12.prod.outlook.com (2603:10b6:5:212::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Thu, 8 Jan
- 2026 14:01:21 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.2; Thu, 8 Jan
+ 2026 14:05:03 +0000
 Received: from BN9PR12MB5179.namprd12.prod.outlook.com
  ([fe80::44e5:415d:e1a8:6e42]) by BN9PR12MB5179.namprd12.prod.outlook.com
  ([fe80::44e5:415d:e1a8:6e42%7]) with mapi id 15.20.9499.003; Thu, 8 Jan 2026
- 14:01:21 +0000
-Message-ID: <d7639de1-a5b6-40c1-9d12-1606b558997c@nvidia.com>
-Date: Thu, 8 Jan 2026 19:31:09 +0530
+ 14:05:03 +0000
+Message-ID: <2b059212-0fc7-4bb1-a759-11ea24b58906@nvidia.com>
+Date: Thu, 8 Jan 2026 19:34:51 +0530
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 10/11] cpufreq: CPPC: make scaling_min/max_freq
- read-only when auto_sel enabled
+Subject: Re: [PATCH v5 11/11] cpufreq: CPPC: add autonomous mode boot
+ parameter support
 To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>, rafael@kernel.org,
  viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
  corbet@lwn.net, pierre.gondois@arm.com, rdunlap@infradead.org,
@@ -72,15 +72,15 @@ Cc: linux-tegra@vger.kernel.org, treding@nvidia.com, jonathanh@nvidia.com,
  vsethi@nvidia.com, ksitaraman@nvidia.com, sanjayc@nvidia.com,
  nhartman@nvidia.com, bbasu@nvidia.com, sumitg@nvidia.com
 References: <20251223121307.711773-1-sumitg@nvidia.com>
- <20251223121307.711773-11-sumitg@nvidia.com>
- <66e5ccea-9cc2-429e-856d-e3f420a8b2b2@huawei.com>
+ <20251223121307.711773-12-sumitg@nvidia.com>
+ <3887747b-214e-45e5-9f85-d4e20a5e2e68@huawei.com>
 Content-Language: en-US
 From: Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <66e5ccea-9cc2-429e-856d-e3f420a8b2b2@huawei.com>
+In-Reply-To: <3887747b-214e-45e5-9f85-d4e20a5e2e68@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA5PR01CA0053.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:1b8::15) To BN9PR12MB5179.namprd12.prod.outlook.com
+X-ClientProxiedBy: MA5PR01CA0233.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:1f4::14) To BN9PR12MB5179.namprd12.prod.outlook.com
  (2603:10b6:408:11c::18)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -89,183 +89,195 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5179:EE_|SA0PR12MB4415:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1c42e62a-3044-4780-810a-08de4ebe66aa
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5179:EE_|DM6PR12MB4172:EE_
+X-MS-Office365-Filtering-Correlation-Id: bdcf4891-fd7c-4fea-67da-08de4ebeeaeb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|366016|7416014|921020;
+	BCL:0;ARA:13230040|366016|376014|7416014|1800799024|921020;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?K3NxalZFZnpGVWR5L1JKbHRwcGxrcWpmNWlKWHBqckJJcnA0eEw1cVViNElr?=
- =?utf-8?B?aTl2bTdCZWVKRGxla0RSa1ozZjdWVkJqVDNhTWcyMXB5TW95Sm44MVh0aUxx?=
- =?utf-8?B?Um9aZUJ3TEtXRHlPeXJLQTcvWkxlL2RKalJpMlc3SG8ybzlKNHRRUXFQVVEv?=
- =?utf-8?B?NG5jQ0J0MExiZk5YeGExQ1ZidWQrMGxpNnF1eWU4M1FRQ3oxOUNUWDJjL0J0?=
- =?utf-8?B?YXBtUWV0aE8vM0p6WXUwUGhmUnJwL3lpL3dCWmZ3d1o0RmJNTGFVcmQxUDBn?=
- =?utf-8?B?WS85SlcwSHFld3ZxZ2VaRzZhUmhkSFFrNy94V1phUG0xaCt6dXc2RkNUdzRN?=
- =?utf-8?B?amNTRzJGeEltVTRNaWt4RDFaUjlwUGFmd3VMTlN5cUk0V1hTQ3U0RmJyQ0xJ?=
- =?utf-8?B?VHhja1hkK0hvbFBaeXlhYmVTVUNEd1RtZ28rMDBqR0hiV0hRWElKWDB4TGdz?=
- =?utf-8?B?VjFoTVBCTFViWk5lN093ZEhmT1lFb1NCeVNjcnd2TzV6N2RLZ0lQUldSdVZN?=
- =?utf-8?B?VHR6a3AvYU05ekhZQVRZTWlJcENKMnlzOEpickd0ZGNBUkp5M1VUMUF6NkZC?=
- =?utf-8?B?WUxCVUhkU3BiSFhBcWV2QTUwaEYyQ1pwQWRpTXlGSXp6dm1raDduZ3N0NFdH?=
- =?utf-8?B?QkQrNFVtUjFZQjIwSWxXbjFoWVRpc0l2N2R6aThZeFZwTDVONEowZnhmd1g2?=
- =?utf-8?B?MmxwSDNocERlL25PbzlQVXlvYUZUc2hXMWM1NzArRHpPRERxd1ZEcjZGVzRQ?=
- =?utf-8?B?d0w1akFHRmJnUFQ3SU9jU1h3eHNNcnRhamp3OS95L2sxNE5TT29RSnBXSFE3?=
- =?utf-8?B?ckpZOWRlNnhGZlpuUlcwYnpjckRmajBRanJqTTk0Snk2Y1hIY3NSSEJueTFL?=
- =?utf-8?B?SHc0OUJtYXZEVG1rZGgxT1prcXVuSUpTZmdTNXNQbFV5TTlBSXZMdnFpTVN1?=
- =?utf-8?B?ZW1VM2ZGeU9nRGtOYWVlWDFMK0FRUlU5YlBBTzZQSHZyKzlZSkVjelJ6eHkz?=
- =?utf-8?B?QTd0Sno2ZmlOY0M5YjJETGpSNlpObjZ4TU8rUENoRmJITnBZNjk5R2EveDhn?=
- =?utf-8?B?RVBFUmxjcklLdTZocVY4Y3BmdHhVeDYrVnNHQjgxSVRtUWdyaTk0bDlRaXJa?=
- =?utf-8?B?MDNGRHJyMnJuRk4zbDFXQWxtbEx2OXB2YWJaK1hDQ1J5UUJnRjE1SjEvTEdY?=
- =?utf-8?B?RkNCOHhMa0E2U094Y3l5ak9NRm1rbVVoMXlJTWE5TGsvNTVLK3A2bi9wbTJj?=
- =?utf-8?B?WWRSbnMrRGRYYmlLcDF2em9DL0dwdmdIckNjT21YTWdpK1pLR0FoSWUxMWxu?=
- =?utf-8?B?UVV5bEwrZEhCSTBvaGpnQWxJd242aTRabEN2aUkxTFhZWWI3Y0xMa1VKSFBK?=
- =?utf-8?B?TlBvMDRtWmhucjRZaldIUDB2Wk93d3NlYVNYQ08vR2hvVnFFczFTZVFmWXQr?=
- =?utf-8?B?VU5SbTZVUkhVVzIvS3p6d0lnNWNEN25jZTVScllIZzh6dy9ueHF2a0ttWS9N?=
- =?utf-8?B?VnFDVlU3Y2dmNWpCWVFoWUdkdlBhdjhzMmU3NFg0Y2Iyd2ZOK3Erc1JlMjR6?=
- =?utf-8?B?UVhTTFBtUURQS3k1QUUrZlMvUU5GQVZ1eXdmVFlDaXNCdFJBR0s0a3hjSzFV?=
- =?utf-8?B?M3NjQW5PZDFjejNXMSt0TytDaTNBa05GRTZnOHM4N1lKdndpcXZLbEdGQTI5?=
- =?utf-8?B?N3hlVmtRd0thNnF3Wld5TWVraGJxN2llR3MranR4eFJHczJwYWRLTE1vUkpU?=
- =?utf-8?B?K3ZVdnJYSnliU1gwQzZVcWJvaVVqMWpqNHh4S2ZzSUl6V2ZTcytpU05IWVF2?=
- =?utf-8?B?M2h2VmZhMHkwd3BLT0NEVklaZ2daRFgvSXhHVVJPbi81dVhRVzRsT0FNUWtH?=
- =?utf-8?B?Sy9Nclc2T2xOajZjbGpYRk82VlhKVzN6SnlpK1Z3Z1FrMUlETUpsbzZENCt5?=
- =?utf-8?B?d1pkVXNSbERZbEdZR2ZNMENReVBob1BmWFlVMjdpQ1JxUUlGQ2lQaGJhR3lT?=
- =?utf-8?Q?WxDGpKoN0nDHh8KcerKg9cugEtXjFU=3D?=
+	=?utf-8?B?V2lQRmFFVUQ2NnByMmJmeFBWaTFkMkVhZWdOV3JkdWJNMUMxRnBSaWd5b1h1?=
+ =?utf-8?B?WVNhMkRXeklxM0tYQmUvMk1YZlVhVGVqd1k3ZTlRaFdKRkpUVXplOXBWSDJ4?=
+ =?utf-8?B?Z0NUV2tvQ0t3aFo3UUlBa1A2bUpxUDdmSXdidzBiZGREaTB4SmZPY2FMWEZE?=
+ =?utf-8?B?VlMvOHpEY1Iwa3BNazlURmVDOTg5RUVkc3QycStsNzZMUC8ycm8xaFhmMDBS?=
+ =?utf-8?B?SSs2UGRjSnd6SGwzSEZVUGlqbENVUzZDTitXZy9McDV0Y25JRHd6OTNudWNy?=
+ =?utf-8?B?OXhTK042Rlp4dDRIR0huZzJnbGc4THpaVTNlWlAvR3QvVUp3V0JVK2FjQ1p5?=
+ =?utf-8?B?L0dxODNMcURoVVMzalFGbzVxVGUxZ2RmRDh0NS9pb3FnVncrdnR6cXVZRnFo?=
+ =?utf-8?B?MUluTGc1MDY2UUJ1d3cxeUN2N3JkVzRIUnA0UFNOb0RvSzBMK0RuRlRLSHp6?=
+ =?utf-8?B?WXh5UlRiajg1VHBBV1Z4RkNUQ1hFUDZzMnFGMHBFWDRjZ0FwL1FLVW1mSnZ1?=
+ =?utf-8?B?V2d4cmtPa1BvaXZCNS9rVmJpTGJCdWZDa1cyMzZ0NDlPTnVPZHVjSW8zRCs4?=
+ =?utf-8?B?ZlNKTjZSRGZDTUgvbE1nNThWMVVEK2R4UnBFZ2R2cVJ1UVBUQnpxQ0hTdWJj?=
+ =?utf-8?B?V0JObjQ4K2Z4VmMxZHRZd3FTZTBPRUV1eHUzaUFGTUVqZXllT2xrcjUxbCta?=
+ =?utf-8?B?eUlZVG1UZDM4dVM5TWozZG5qWHByQU1wUCtJNVNRVXp6MlNucldIWlF3M1Nj?=
+ =?utf-8?B?UnR1M2xFZnZSQzNQaWFRcnBoTjNQMzRPdDFSSzlnd3lTUjgrWlM2c1ZGOWc5?=
+ =?utf-8?B?Zk5POFczUjNnSHVoQTdLQTQxL2NYc3lqVWIxOWlDQjVzTXNUbnJUdk5JNDNz?=
+ =?utf-8?B?UGlzMHVGM3JEVGlzaGRMdHJMN3FpYkkyNzNDbzRUSGFMRjFTL0lZbTJ2S2dE?=
+ =?utf-8?B?b05zbEsreml4VXlVMzU0NUpGOEZFRktNMlUyVVVkam5vUFBKemE5VU9XRUZh?=
+ =?utf-8?B?MC9wQ0xNZzMzanNGSDFzR1lTS29QeFZvRElBdTY2R0ViZDFjcEdUd2w1WS83?=
+ =?utf-8?B?YjFKb1Q2TU9ZbHNWMXlpenBRb1p0cXM1NU5nb1JQK0x4TjI2cHY0OHlKZ09s?=
+ =?utf-8?B?Wk5TQmhTbFJxRGdGd3BHVmgvdGo1SElXZHBjRUpzaXZtQXJVWXlBMmQ5MlIx?=
+ =?utf-8?B?bmZjWnlSNy9IZ2dNbzEwU05mVWVKWWx4UWNrbk9oM2J4Y1NxeXVVbEl6eWsw?=
+ =?utf-8?B?UlZQdFpPNk4yWFhtcDUycGszd1MwUlo2NXJPUUd5QnJXSEFuTDRwSzZLMm50?=
+ =?utf-8?B?djNjRUJCZXFQZURkczJYUkp1ek51NDJPSk5FRmtnM0w1MnpzZkRnclpoWmxI?=
+ =?utf-8?B?aUZRNlJETGhqUEhCeWNwaTRBLy85Q2x4d0JpNVBBS2ZjZHhZR1QvUTVXeHhK?=
+ =?utf-8?B?NndqNG93a3JvalpvdEE5TXJHYTBCUnNqNzRNUDhCOFBmZGtTaUI4bHRjRXFt?=
+ =?utf-8?B?SEJyRmtOMkl0SDlKaCtIaXdFcXA4NWZSNHJhd1Rrb3pWSGlxTW50Q2x2N0VV?=
+ =?utf-8?B?ZTVTS3hJZW5OTkVwRHZwd2ZDNTBENFU5VklhNEp6aDFVcjNYTFpSZWg1VERP?=
+ =?utf-8?B?ZU1nb3NENWljZ3ZEY29oUWdTSkJDdTBLYlRIeCtGQ0R4TmZjc0JudWRpTjc1?=
+ =?utf-8?B?dnRrTmhCZS82NVBSL0dLVWJTNEE0VHlyMThQckZ2aVhtSm51UEEyZnMwemRq?=
+ =?utf-8?B?TFlTRHh3RVE2dERZaldrYnJTQzV6STdlYnF4REVCU1ZCTUxxOHh5cEZSNjVw?=
+ =?utf-8?B?YUVCUW9jTVJvYW9veCtQMjIwaXEzT1NDbkJJWTc5OHBzbFp1Rk1za3NjdUsr?=
+ =?utf-8?B?R0VWMC9LcmpTM0J0UE91WDNoMkpCYUxIUTZBaHJVYUNaTC9McHUrSkhpTUZv?=
+ =?utf-8?B?VjBuY0pPYkR0dmhkUzZiRk12SkRCQW1HMG1SY2p3bVlQZ1V0ZGNkNVhsdEhD?=
+ =?utf-8?Q?V+8UfT5BmkMAYrzdBeshaPbTw1rfx0=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(7416014)(921020);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VmxCc1BzbUcrVENiR2syWHRkMTh0SDVub0laYktFNVZrV3Axb1NEVVhvMU1Z?=
- =?utf-8?B?bktHbFc5RDBidzk5RW9SS1dzWlQ3WE0yZTZUaXFFRXpXOFAwTlVhS0dNRFZT?=
- =?utf-8?B?Q2FjWEtxTXZDbHM4WCtlVk1yc3hHblZKYitNTHRmK1IreHlnMFhQU2RGaDZY?=
- =?utf-8?B?dkROdHU4bHEzSlNtNktUTThIdTVBRXZLY1FCK0VaVDN0QlVOMTVsU1Jqd3c2?=
- =?utf-8?B?bkZHZmsyQ05NU1kwNzlhdnQ5cU43VUVJamorRkoydklhSlFlL1h4R2RITlFr?=
- =?utf-8?B?US9La2hCWkVOOHZKcGE5VEZSZmVtMVQ0S3RFY1hPT3ZRNEpTOHdNWW43dnBy?=
- =?utf-8?B?Sm9NdzlOejAwTFhxc3JWS0xFUzZaSFBtTnluMDBBQlA3R2pOSTBTUmFNQ0xG?=
- =?utf-8?B?Yy9OcHpvbE5KODg0dm4rMnpFc2xFdWF4L05ZeWV6MkZhR0xFeDlPTmd4eE96?=
- =?utf-8?B?MzNwLy9STGRCOUtyM1FISEFhQXF3RmhhMENVS3p2OFcrOTZQNExsRnBOSWdM?=
- =?utf-8?B?ak9yOEhxVTFuMGxZdFdqT3RSZy9pTEQwam1iZHZIT1JMY01admxpNEZjWFRY?=
- =?utf-8?B?V0JNWkNwZS9FNlVpUWxyNE9qTVBqMFI4endYd2g3WWFpaXRPQ3BqUisxajNG?=
- =?utf-8?B?cEdFN1cwRFhOcGJOUklacjVBS0RaZ2ZvZit1cXE5aEZ6MmNTY0hQWENaZ3pj?=
- =?utf-8?B?b2t6MTRnS1lkRmM3NnlSejlXbmdGWGVhU0NhSTNWamNxK3I1aVlVTllYV3Ft?=
- =?utf-8?B?MEtnVGRZK2t2YWdqMFV2d05abEpvM2VveGxuYmdiQnV0aGFlM2xSVHd1ZzNP?=
- =?utf-8?B?Q0NzVENMUGNLTDVxSEJveXc5TTV3ekdZZG0ycnNhcUo1MkVSVnZUdXBEb3BV?=
- =?utf-8?B?NUcrKzU4bkNxdkxDMnVTNFdINDI0b2grWmJlQ2dEcVVHNUFLQlJlbHhNajVo?=
- =?utf-8?B?TVRvMkdyb1JMa2UwWkpTRzdjTGJhU3ppdXMvU0VFV2hjTDkzc2Y0bTJSWTh5?=
- =?utf-8?B?ZHN3KzRERkIyekRzRm0xWUc2VDBvNG0yK2R3RUdTNzNhWURQWHlkeUZDUVFp?=
- =?utf-8?B?RmxRcWxURzZhTVhZRHNSa0xEN0ViczdqblNta2xRd3NodGVIaXV2ZllNR2FL?=
- =?utf-8?B?RjQ2eXM3VGtqZzFEMDBrUnYrK1BzYnJkaElJUkxlaFRJU2Y2R3o0ZDJUdVlY?=
- =?utf-8?B?QjNvOVNabVl1YUJlcFU0bG15Q3Z2TzBBbUkzRklKNVNnQ3ptdzQraUIyL25U?=
- =?utf-8?B?Z1A0SUVDRHY2TVpyYkU3M2hGM1VrOXNGbWlBci92WU03MU5LMU5mTDRkR2lT?=
- =?utf-8?B?Znp6Tm81UUY0MHdLbW5RKzFTdEFiM2VjcUhXU2JIMXBYQzNJWlVoTkwzUVZq?=
- =?utf-8?B?QjZEYWVubmdxS2dLdFFMazFmZ2tCK3JURmF1ZWVnM2ZVK2tIcHdoZm1RQ2c2?=
- =?utf-8?B?VDF3aWMvaDM2WWZBWDJadHJRQTVHNmN4em16ZWY2Tmh1T3RxajdsNklIbmlL?=
- =?utf-8?B?NG1YdXlLM29WdVlYT243cjdLVmxwNU9lbkNKS0Q0TFVJeU9hdVJZRE5YSFZi?=
- =?utf-8?B?YjBHNE9reENKTnUyVjdXR2Q5a1U5a0NrYTdmWHl1UTFuZEs0Y3Jvd1pMMjNx?=
- =?utf-8?B?OTJ0Zld1djI0UGZRUVVnRnVHYWhVazdhUzIwaEFodjRqaVNuR3BxUFdocStQ?=
- =?utf-8?B?OURrdFM2aGxtemJIZklTWmhqRTNmT2RzYSs5UzFUTUo4cGFMMW1ZbkJBYk9z?=
- =?utf-8?B?cXZsd09JV3F2L3hxVDN2L0pPU2c5aHZaSGp0ZHhZUjQxUE1VVjZveW03LzEv?=
- =?utf-8?B?R2tvZUNVcnA0KzJKK0d6Z20zeG5mU04xelNIbWxxUjNiYUpvaTBLMGJ4aGF4?=
- =?utf-8?B?QTd3TERnWVNIWTh0RkRmdktXb3JSUTRRVXBpSjY1cGxKN2R3TnFCU0FHb3VO?=
- =?utf-8?B?aHFQaHo4RWlWcFh2SjdNVDg5NkpsYVdwSFltSHhNU3pabEpwWUtMZjRXQ3Fi?=
- =?utf-8?B?Z2FuM1cxTy9sWjR0c3ZxK2F5T3ZKUldqYkJUdFVpVTluN1Y2dGhGNVRwZXFH?=
- =?utf-8?B?WGhyc3BWTXR0TWluaDdOZGtjbmRFbTY1MGVOV3pEVHV0dWk0emQwSjhQV3JW?=
- =?utf-8?B?WEhqUW0yWVUvUnNsYVp3UFZSeTFEbk1ZaGRlR2JVc0V3bFV3YlB6Mi9zaVBs?=
- =?utf-8?B?MUFUOUhVd0sweCtlRUxuOWs5b3BPWDhMRHZCNnEwcUdlUm1kNEdMQVF1TG9y?=
- =?utf-8?B?VjNyb2dZYWtQWVFDY0M3RTJldi9wMjA4UU53UVpxRStSbFRwUjJsN0poWmV5?=
- =?utf-8?B?dEZ3ZHNtM2hwSGw4RVZLWi9mSkY1N00rTjJwODJmaXVmcEtWWHlFZz09?=
+	=?utf-8?B?YTFxcm9wL1dIT0gxdnR5TTBXRGlZemhweHVVc0V3cTFpYjZOM2dJYWt6Z3NH?=
+ =?utf-8?B?eVAydXdQaWRKeXdhMG9heUZQRGUyU0kxODZFNzROMnpqQzNMbW5nS1hyZFhX?=
+ =?utf-8?B?Z3ZJUnJjS3JFM0VDdEs2dEdCWEt0dVVRejRqMzJIUHBmTHJudExYc1dwWmZa?=
+ =?utf-8?B?ZFc5enB0R2ZRR3RtYWlQeDZ4Qnp4RnBnbGRwR1RXeGFBZm9oMmp2b1drbnd3?=
+ =?utf-8?B?bVhBVEI5SlhCSTIrYnlGWkttcVpHNzFtVEVleGoxcDJzQzRHWTZic1JxbDNr?=
+ =?utf-8?B?V1ljWFBkeWFxcWliOExlWkxoUmxwRUVYaCt2cXY2aXlIR1N5VVpRSUx1czQy?=
+ =?utf-8?B?TzQrZkltbmp0QXhtSkJSSXRJVHc0SGRXOGpzU1ZlTUc2MFM2dERTYmFMQmth?=
+ =?utf-8?B?RnJZMGZpVnlyMUMzTlpCa1FSMnRXbmRzZW05YkRJM1gzMjk1RjVWSVF5YVNT?=
+ =?utf-8?B?UGNER2JKWGNBTk5LK25zZStFdGhac0lRelI1YTlTaDA1UlVDS3dGL20yWFV1?=
+ =?utf-8?B?d09pZWVNb3pFQWtJV09rRmFzRlZVMU1Bc3hHZDdpWS9COE9TdDZHRW9GQ3Bj?=
+ =?utf-8?B?Rm5Fd2VaNC9NbDZhTWEySG5YRGt2V1dUNE82dElESU5WV0huRFFHeTdncWVa?=
+ =?utf-8?B?eHJ0Q1dsMEswMFp6VTBWQnluelVzR2hlS3FSTStjVkhjODBNeTQzdmFubDNr?=
+ =?utf-8?B?QzB2MnZoeWI4UDd2TVdhNjNxV3pGcndBZW1GRTY1cEMrQ0hEQkRENGo0czBv?=
+ =?utf-8?B?TVpFK3M5bldtRHU0SHBFZlgzTVNzZ1N2Rm5XeElBTkM4MXNWZy9UV1VRYXZD?=
+ =?utf-8?B?WVV5ZTIrR1c3QWtNQkZnRzdPZFVMQmJOWkxIem5WOTFDZVFEdlNvQXl1NFlQ?=
+ =?utf-8?B?ZVIzL3RJeE9BYzloYXFNMGQzSG1lSGZtTnpmZElETXZTWHF5ZnJyTW4rRWRh?=
+ =?utf-8?B?UUlrMmhXdjBaMDVuZUtaczVTcjN3Kzc5TFAyVlkxMHlkcVBESVI2UlJMYkYx?=
+ =?utf-8?B?TmJOVnQzSGFRWEVOK2JQczh4TzFJOVJGSU5mRmxCQUd0T1NGeWIwdjNSNk0x?=
+ =?utf-8?B?NTI4cENzMEZBVklUSWh1RVpwWjdlUVhZc2Nrb2pnQ1VlVCtMVDN5T25JeE13?=
+ =?utf-8?B?MVlWczhnSUI4cGJLcVFBYjJrYTFmbndMWkpmcHhIUzlPWFpvbTAzWHM1UjFJ?=
+ =?utf-8?B?U3ZzdmhvWjBRSkVyY2xZcGFIalRlWUVSbkV3TnZZMTVlQ1lRaUdDYXV5dENM?=
+ =?utf-8?B?TWwzVlhYQlFESUYwbmxZZGQrVEhTZ0NZZVMrT3lod0hiV1VzeXJ0djdEWnF0?=
+ =?utf-8?B?RnV4SFROZjNpTFowcm1vNlRQTXdjVVJ1Z0pBZjBDRGZCQlNZRmYveUJ2TWJT?=
+ =?utf-8?B?K1kyelZUY0hocXIveHBxOGhtanlCY1E1S0hudWw4OFUwZHdLUTUrMFA1ZmFa?=
+ =?utf-8?B?QmNMdVkwY0tWdnlES0FYckx6MUtxeHBId3FxQW9ObGsvT0hxRi9qQVFTWjZY?=
+ =?utf-8?B?ZWZiRFBVK1hlQUFrbEZrYkQrNGhkVWIzTDYzVFcyS3VTaXlyeFJiUFZ0ZGdL?=
+ =?utf-8?B?dU9qbGtCVkRpZWhmRndsWG55aXp4Y3FFd1lxWG5LbFNabmk4NjNnek1PMDl0?=
+ =?utf-8?B?UlBTTTlaOXdxM2RPd1BVTlNpOEg0ejR0ZExGSVZkaXBNWEo0RE5uQ0IyV2N5?=
+ =?utf-8?B?NVd5b01KYjFwUlhZS1VheGtOMHNTcEVjSDhvY0NxUU11ck12Z3BJSTllL2t0?=
+ =?utf-8?B?WllMTTltelJsa2ZGNXBGK1habm1yTDhkbEJVaTRGb21VWFhDbGdFdldTR3Zz?=
+ =?utf-8?B?VWt3dEVhN2NmQ1E0ZE9uVGw5d1NzQ3R4eXEycFZZVHFtSXhqRFdXN3U4dWtP?=
+ =?utf-8?B?Vk5iUWw5QkV4NEszL09DSVVXai9JMVhWVnNDeGFiWDJONjA3Z20yai9BbW1Y?=
+ =?utf-8?B?ZEpLUTJ1eCtNb1BiWER2WUtHaGFEcjFqLzdoRnl6TVBtQzRrVC9rZ2RFQUVB?=
+ =?utf-8?B?R1pVMXJiOE1sYWdkQnhRYWlibml2VnBTSzQzbExCbWtsVWl5MjdQYjdVSm9i?=
+ =?utf-8?B?b0JFcVF6cDZVZ3gzK3VKSHhJSXpmT1dYTHpoUHNnN1VoSnRsWkVzNkZHQ2NS?=
+ =?utf-8?B?dDgrckZ6SXRqcHVVeTB0RnhDRzhOS3RRV1lJbXBPNUZwM0ZseXlLdDJ4allI?=
+ =?utf-8?B?T1RnZHhjcXNGa1YxNnRTN2M0KzlRWllOVmxBSElnSDQ0blpkZE9xdWxBY25B?=
+ =?utf-8?B?TEw5VGluNlVtcnJ3ZFBUYzVtdG9NREllWmJZbnJoTkpnYmt2YnFhWXI0VHo5?=
+ =?utf-8?B?WkNPUGs4c3l2M1VmNTBKeDlURldmVFMxZWNVVlJZNzZyT2RFekQ1dz09?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c42e62a-3044-4780-810a-08de4ebe66aa
+X-MS-Exchange-CrossTenant-Network-Message-Id: bdcf4891-fd7c-4fea-67da-08de4ebeeaeb
 X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5179.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2026 14:01:21.0589
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2026 14:05:02.9324
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: a0Q976U/ZbObpW3kzOD0F90oeiJqfnT2gS1OgHJ85FRRPhwg5aMN3igXPJOhFBJ319ch9v/v/5jJBNos7iBgZg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4415
+X-MS-Exchange-CrossTenant-UserPrincipalName: IiinAWfj0eDJqUhjB+dWIKYFFbP91IXkLO+0TTONG3r6xuAdsxzqNkhIIu1cmmjZ2hZrhrsNQzoKW0lUOijyFg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4172
 
 
-On 26/12/25 08:56, zhenglifeng (A) wrote:
+On 26/12/25 13:33, zhenglifeng (A) wrote:
 > External email: Use caution opening links or attachments
 >
 >
 > On 2025/12/23 20:13, Sumit Gupta wrote:
->> When autonomous selection (auto_sel) is enabled, the hardware controls
->> performance within min_perf/max_perf register bounds making the
->> scaling_min/max_freq effectively read-only.
+>> Add kernel boot parameter 'cppc_cpufreq.auto_sel_mode' to enable CPPC
+>> autonomous performance selection on all CPUs at system startup without
+>> requiring runtime sysfs manipulation. When autonomous mode is enabled,
+>> the hardware automatically adjusts CPU performance based on workload
+>> demands using Energy Performance Preference (EPP) hints.
 >>
->> Enforce this by setting policy limits to min/max_perf bounds in
->> cppc_verify_policy(). Users must use min_perf/max_perf sysfs interfaces
->> to change performance limits in autonomous mode.
+>> When auto_sel_mode=1:
+>> - All CPUs are configured for autonomous operation during init
+>> - EPP is set to performance preference (0x0) by default
+>> - Min/max performance bounds use defaults or already set values
+>> - CPU frequency scaling is handled by hardware instead of OS governor
 >>
+>> The boot parameter is applied only during first policy initialization.
+>> User's runtime sysfs configuration is preserved across hotplug.
+>>
+>> For Documentation/:
+>> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 >> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
 >> ---
->>   drivers/cpufreq/cppc_cpufreq.c | 32 +++++++++++++++++++++++++++++++-
->>   1 file changed, 31 insertions(+), 1 deletion(-)
+>>   .../admin-guide/kernel-parameters.txt         | 13 +++
+>>   drivers/cpufreq/cppc_cpufreq.c                | 85 +++++++++++++++++--
+>>   2 files changed, 90 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index aab72efa1acd..450f0b0225dc 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -1035,6 +1035,19 @@ Kernel parameters
+>>                        Format:
+>>                        <first_slot>,<last_slot>,<port>,<enum_bit>[,<debug>]
+>>
+>> +     cppc_cpufreq.auto_sel_mode=
+>> +                     [CPU_FREQ] Enable ACPI CPPC autonomous performance
+>> +                     selection. When enabled, hardware automatically adjusts
+>> +                     CPU frequency on all CPUs based on workload demands.
+>> +                     In Autonomous mode, Energy Performance Preference (EPP)
+>> +                     hints guide hardware toward performance (0x0) or energy
+>> +                     efficiency (0xff).
+>> +                     Requires ACPI CPPC autonomous selection register support.
+>> +                     Format: <bool>
+>> +                     Default: 0 (disabled)
+>> +                     0: use cpufreq governors
+>> +                     1: enable if supported by hardware
+>> +
+>>        cpuidle.off=1   [CPU_IDLE]
+>>                        disable the cpuidle sub-system
 >>
 >> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->> index b1f570d6de34..b3da263c18b0 100644
+>> index b3da263c18b0..8c6869e68504 100644
 >> --- a/drivers/cpufreq/cppc_cpufreq.c
 >> +++ b/drivers/cpufreq/cppc_cpufreq.c
->> @@ -305,7 +305,37 @@ static unsigned int cppc_cpufreq_fast_switch(struct cpufreq_policy *policy,
+>> @@ -30,6 +30,9 @@ static struct cpufreq_driver cppc_cpufreq_driver;
 >>
->>   static int cppc_verify_policy(struct cpufreq_policy_data *policy)
->>   {
->> -     cpufreq_verify_within_cpu_limits(policy);
->> +     unsigned int min_freq = policy->cpuinfo.min_freq;
->> +     unsigned int max_freq = policy->cpuinfo.max_freq;
->> +     struct cpufreq_policy *cpu_policy;
->> +     struct cppc_cpudata *cpu_data;
->> +     struct cppc_perf_caps *caps;
+>>   static DEFINE_MUTEX(cppc_cpufreq_update_autosel_config_lock);
+>>
+>> +/* Autonomous Selection boot parameter */
+>> +static bool auto_sel_mode;
 >> +
->> +     cpu_policy = cpufreq_cpu_get(policy->cpu);
-> Better to use:
->
->          struct cpufreq_policy *cpu_policy __free(put_cpufreq_policy) = cpufreq_cpu_get(policy->cpu);
+>>   #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
+>>   static enum {
+>>        FIE_UNSET = -1,
+>> @@ -643,11 +646,16 @@ static int cppc_cpufreq_set_mperf_limit(struct cpufreq_policy *policy, u64 val,
+>>    * cppc_cpufreq_update_autosel_config - Update autonomous selection config
+>>    * @policy: cpufreq policy
+>>    * @is_auto_sel: enable/disable autonomous selection
+>> + * @epp_val: EPP value (used only if update_epp true)
+>> + * @update_epp: whether to update EPP register
+>> + * @update_policy: whether to update policy constraints
+>>    *
+>>    * Return: 0 on success, negative error code on failure
+>>    */
+>>   static int cppc_cpufreq_update_autosel_config(struct cpufreq_policy *policy,
+>> -                                           bool is_auto_sel)
+>> +                                           bool is_auto_sel, u32 epp_val,
+>> +                                           bool update_epp,
+>> +                                           bool update_policy)
+> cppc_cpufreq_set_mperf_limit() and cppc_cpufreq_update_autosel_config()
+> have too much bool input param. Just break them down into several separate
+> functions and call them only when needed. These two functions are now too
+> hard to read.
 
-Will use this in v6.
-
-
->> +     if (!cpu_policy)
->> +             return -ENODEV;
->> +
->> +     cpu_data = cpu_policy->driver_data;
->> +     caps = &cpu_data->perf_caps;
-> cpu_policy, cpu_data and cpas are only used in the if branch. Just put them
-> in it.
-
-Can move caps inside the if branch.
-cpu_policy and cpu_data can't be moved inside because we need
-perf_ctrls.auto_sel to evaluate the condition itself.
-
->> +
->> +     if (cpu_data->perf_ctrls.auto_sel) {
->> +             u32 min_perf, max_perf;
->> +
->> +             /*
->> +              * Set policy limits to HW min/max_perf bounds. In autonomous
->> +              * mode, scaling_min/max_freq is effectively read-only.
->> +              */
->> +             min_perf = cpu_data->perf_ctrls.min_perf ?:
->> +                        caps->lowest_nonlinear_perf;
->> +             max_perf = cpu_data->perf_ctrls.max_perf ?: caps->nominal_perf;
->> +
->> +             policy->min = cppc_perf_to_khz(caps, min_perf);
->> +             policy->max = cppc_perf_to_khz(caps, max_perf);
->> +     } else {
->> +             cpufreq_verify_within_limits(policy, min_freq, max_freq);
-> Why not still using cpufreq_verify_within_cpu_limits()?
-
-Will change to use it in v6.
+Sure, will break them and open code in v6.
 
 Thank you,
 Sumit Gupta
 
->> +     }
->> +
->> +     cpufreq_cpu_put(cpu_policy);
->>        return 0;
->>   }
->>
+....
+
+
 
