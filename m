@@ -1,121 +1,88 @@
-Return-Path: <linux-pm+bounces-40482-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40483-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62C34D045D6
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 17:28:10 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53DDFD04727
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 17:38:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 14FD53060686
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 16:03:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4CD9F3126A73
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 16:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4B61F9ECB;
-	Thu,  8 Jan 2026 16:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 318572C11F6;
+	Thu,  8 Jan 2026 16:16:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B9JSI/b4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWk2Jfim"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA29A1D9346
-	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 16:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB8927E07E;
+	Thu,  8 Jan 2026 16:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767888195; cv=none; b=DDiD6M4Jugh4HPPEJD10OFTdh7+RlwtYuzZuT99sq3njrmVvDQGjli5sb2H7gdpDYzbk+YL2ioFnA+t5uOuFIk8U17JrgG6P7ykcJBzGVjLGHlBrfKWUx5rjMfbUkYteQemXarOqGmmfrcgbqHRNChzPSTfg2YXJnffip6eRgiU=
+	t=1767888985; cv=none; b=RTx1si6ZJm2keukjNxxeOgbPo7cKiRvnXgK7BWPhnSG+fPGo4et21KCG9VnDt8VA7UeLfcADntfeKHgmbQZjJfHrp5lJEXHdS4xSV7K3jox0hMgdcaPsuzbOFZqvdtYxCgUdz+MsSzuPx2TnFRe0idh6Bhbvu/9dvUq5OOUqGLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767888195; c=relaxed/simple;
-	bh=WOrDqkrbtqUutTWM0pWGFIS7f+HTw+Gh0txq1j68ahY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GWjFpNBH53EkEiuRv44LLTyDBCmX+1UpLbRWV0Uimqhy39R+ZDnq0qRo1cysIteMUqByJQynx+wZm63+Dvl5c1OpF1JXkyRg8/SEczXydB9Ek24oZ01Ze0Kytkqi9Dcja99UyeD47vSPLsSvQtS6emxIPu/Y0dGUB78+LE+r3Rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B9JSI/b4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EE47C19422
-	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 16:03:15 +0000 (UTC)
+	s=arc-20240116; t=1767888985; c=relaxed/simple;
+	bh=J4keIckrMN+unKry/5LlXM6rmQEd+113yzhSDK5jTVA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ju1DpFrpxNtgkkgi1MkvbKkIcWnx8+6LK6uO6GrC51Fbt3Hh0UNZ4mEh5xPq+ycbI530WA5ELr5eyV90MmIUEfBOaJjfidlbL+RGaURdoUW+CAUe1pxuXQFvk6XFOjyQnSGz9gvawxKAum+YpTg+SadWlrdR/vmQK+a4QCYYNO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWk2Jfim; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0281DC116C6;
+	Thu,  8 Jan 2026 16:16:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767888195;
-	bh=WOrDqkrbtqUutTWM0pWGFIS7f+HTw+Gh0txq1j68ahY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=B9JSI/b4eogoWAxOearWoM3Jlzz+Jl5l/KLbNeYkwjw8ESQWykwgpEYmHh8KUKi+d
-	 I9m446Gask8LYGO8MgxOSQErnoSqJb4dQvmIc70j2uN4Pg9hjh0Ro2ZU5xFb11XuZn
-	 Om24OiUun1maM5qbaZHATJids5qnvA2SmED8MFV+W4Wh0FHA3kR+rnroLqY7DPh+86
-	 3PDTb0otJiWXzwJ1nPL6v3vsumLNY/T8iNJAg8Mhihj7IvY9VozdrwmpM8cejl4HGM
-	 rl3GjMQSrZx4XT1uG+gcs1VaNHR6apNmTncXIH9kXxrv25sOqj0ZwlGbXF+aizV4Ie
-	 l+7uLPItsVAAg==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-3e0f19a38d0so2343000fac.0
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 08:03:15 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUBLzNXwpYgferFkcgKE9YwCDrkFE0r3Qph6ky/JrWyOCupr9FBMJ2cobq6gm9hu48lM/8r/EMuTw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0iWIIxx+XXBoZLNSSxZmuwK8uPv/vm2GwvxdT9fSelypVy3Mn
-	lQOWyZ9xk3PmH6720QsMkpf6qRv8mbDu5DP9SyTPPmOXo9fj46u5/JtNkgvK3OrpSNcUgvi6VW6
-	nobWEa6cNsXMpplDuHkECSDv4uqRDeu0=
-X-Google-Smtp-Source: AGHT+IFdzqiCe7RIHHaWEsERHuwzsSvp8CWqwQ2VNmrFgtTfDfr+3e5NybL5ySqbTnDZN9dadmogaBkX8BCDTs1RRpU=
-X-Received: by 2002:a05:6871:d3ca:b0:3f5:4d73:1420 with SMTP id
- 586e51a60fabf-3ffc09d4c69mr2986228fac.16.1767888194719; Thu, 08 Jan 2026
- 08:03:14 -0800 (PST)
+	s=k20201202; t=1767888984;
+	bh=J4keIckrMN+unKry/5LlXM6rmQEd+113yzhSDK5jTVA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=hWk2JfimNRse5PNAU7yEeU9Kb0ZfY5pkbg6Vcx0K2hj4TxJcK/ZDo8o2vVswza2kC
+	 SC2+QgQqrfiFb9gRgTgwK6M+DzkazyX4pklBSjLXsmbqqcCS7jVayAYmiM5Ds/0y79
+	 kx3ZizU+tMlGOxT40wUxUIoGzsHWGFmPc4/BmyC+ytHAr8LvleOjD1z6aLv+QOMTEJ
+	 cxG2wm4QvNnG5EIW/ganrIrQDW+5Pl1AyQKd06HjYPLOJosDhwrXoZfw8Fh8j4x2KX
+	 SoUXUQKMEB2m3Xa3oC0CF0/dL9Cp3rGu8kL1Fo2MXrq07C3EY333W4KimQZc92JRiy
+	 z/HwUqTiMYE0A==
+Date: Thu, 8 Jan 2026 08:16:23 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML
+ <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Brian
+ Norris <briannorris@chromium.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Siddharth Vadapalli
+ <s-vadapalli@ti.com>, Roger Quadros <rogerq@kernel.org>,
+ netdev@vger.kernel.org, Nicolas Ferre <nicolas.ferre@microchip.com>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, Simon Horman <horms@kernel.org>
+Subject: Re: [RESEND][PATCH v2 0/3] net: Discard pm_runtime_put() return
+ value
+Message-ID: <20260108081623.6323ca97@kernel.org>
+In-Reply-To: <CAJZ5v0ifehCqCdC=rE9eUAe7p2jx=QOv8K=HXo3n9D0WefVMUw@mail.gmail.com>
+References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
+	<2816529.mvXUDI8C0e@rafael.j.wysocki>
+	<CAJZ5v0ifehCqCdC=rE9eUAe7p2jx=QOv8K=HXo3n9D0WefVMUw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260105-libthermal-pkgconfig-v2-1-e086bdeddb41@bootlin.com>
-In-Reply-To: <20260105-libthermal-pkgconfig-v2-1-e086bdeddb41@bootlin.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 8 Jan 2026 17:03:02 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i_s2AQ5_Uze3SRrkMWvOOHa77wiE+iD_uaJ1HeYHWNrA@mail.gmail.com>
-X-Gm-Features: AQt7F2qiVxYbUC26y87250FAsT-c4QHdYgQwtch72NoISkebnY1meKe5msFegws
-Message-ID: <CAJZ5v0i_s2AQ5_Uze3SRrkMWvOOHa77wiE+iD_uaJ1HeYHWNrA@mail.gmail.com>
-Subject: Re: [PATCH v2] tools: lib: thermal: Correct CFLAGS and LDFLAGS in
- pkg-config template
-To: Romain Gantois <romain.gantois@bootlin.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jan 5, 2026 at 1:31=E2=80=AFPM Romain Gantois
-<romain.gantois@bootlin.com> wrote:
->
-> There are two issues with the current pkg-config template.
->
-> Firstly, the -lthermal linker flag is missing.
->
-> Secondly, the libnl3 include directory compiler flag references "include"
-> instead of "includedir", which leads to an unexpanded variable when
-> pkg-config is called. Moreover, it isn't necessary to add this flag here,
-> since the "Requires" field will cause pkg-config do add it automatically.
-> The same logic applies to the LDFLAGS for libnl3.
->
-> Add the missing -lthermal flag and remove unnecessary and incorrect libnl=
-3
-> flags.
->
-> Fixes: 47c4b0de080a ("tools/lib/thermal: Add a thermal library")
-> Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
-> ---
-> Changes in v2:
-> - Removed unnecessary libnl3 flags.
-> - Added "Fixes" tag.
-> - Link to v1: https://lore.kernel.org/r/20251226-libthermal-pkgconfig-v1-=
-1-3406de5ca8ea@bootlin.com
-> ---
->  tools/lib/thermal/libthermal.pc.template | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/lib/thermal/libthermal.pc.template b/tools/lib/thermal=
-/libthermal.pc.template
-> index ac24d0ab17f5..b984c5ecd20a 100644
-> --- a/tools/lib/thermal/libthermal.pc.template
-> +++ b/tools/lib/thermal/libthermal.pc.template
-> @@ -8,5 +8,5 @@ Name: libthermal
->  Description: thermal library
->  Requires: libnl-3.0 libnl-genl-3.0
->  Version: @VERSION@
-> -Libs: -L${libdir} -lnl-genl-3 -lnl-3
-> -Cflags: -I${includedir} -I${include}/libnl3
-> +Libs: -L${libdir} -lthermal
-> +Cflags: -I${includedir}
->
-> ---
+On Thu, 8 Jan 2026 15:06:55 +0100 Rafael J. Wysocki wrote:
+> > This is a resend of
+> >
+> > https://lore.kernel.org/linux-pm/5973090.DvuYhMxLoT@rafael.j.wysocki/
+> >
+> > which mostly was a resend of patches [10-12/23] from:
+> >
+> > https://lore.kernel.org/linux-pm/6245770.lOV4Wx5bFT@rafael.j.wysocki/
+> >
+> > as requested by Jakub, except for the last patch that has been fixed
+> > while at it and so the version has been bumped up.
+> >
+> > The patches are independent of each other and they are all requisite
+> > for converting pm_runtime_put() into a void function.  
+> 
+> Any news on this or do I need to resend it again?
 
-Applied as 6.20 material, thanks!
+All good, just mis-scheduled my day yesterday and had too little time 
+for upstream :(
 
