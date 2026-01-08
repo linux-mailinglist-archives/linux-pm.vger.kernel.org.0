@@ -1,36 +1,37 @@
-Return-Path: <linux-pm+bounces-40487-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40488-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43B18D052F8
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 18:50:59 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94E03D052FF
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 18:51:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DE43431EE28A
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 16:55:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8B4A531FA0A7
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 16:55:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CB322EC080;
-	Thu,  8 Jan 2026 16:54:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B2BA2F1FFA;
+	Thu,  8 Jan 2026 16:54:55 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C83F2DCF46;
-	Thu,  8 Jan 2026 16:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 311992E5B3D;
+	Thu,  8 Jan 2026 16:54:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767891288; cv=none; b=GpQOCzG+DVFtOJqQWKgoiFyhIBzQ8/62tNwp/Olba/D+wUP8vxpKTp32z/qNyNCkCFwTeOeNe6byXRt18JODBuKwl6IPZKdkDA+lYSpv3wGlUFZ6FCOSxsHpBXQWtuuMIoGtfsur7dAZWpGcThMBPASLdFUhB41aP3cW54EY0lY=
+	t=1767891295; cv=none; b=Ztf1BRyswt+BNLOe7eY6bqP2rAKTn47OfWj0DBx0ury9oAuqthJT8rwS6Mz9HVwAv7x1kqRtOeT4E0EIf4ZOlEYwFNGLYOPj8Nc3lHF5zcHcccqT+D7BZwqcpTWS3nr0EofaxMEQ0J47TQPZWmtLnQI9w8zcU2wRdAxN1sWYBqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767891288; c=relaxed/simple;
-	bh=SXCIemVsSq+men+Rn57f4sIO/YU2PfLkAli871bNEdo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lM+4MmBgz6Rle95GKj3Evvj3ZIroVP9I+KMW36UN9IoJ+P3th6hvBbS2nNlsDKQuBjsuOlhtorow9hlF2tB7yhZZWQRXuGi/EEdEoq0x53VaoU9nj8HQjMdOz0xe7BcX7t2myYEbVGW2ahtqRassF0p24muIgjgIfJePdJEY9ec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.171
+	s=arc-20240116; t=1767891295; c=relaxed/simple;
+	bh=O5aoQ6ov7cgWwpFvqnKGbB0NtkF/D8HX0xQBgawJjuE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cgBORp/0BjAdZKH9QU+CV0+TUHF/8eez+p9G518ttct8TveU3l/+pj7NBX3oioHJEWBf/YWoZ8YdWNcj5obfYA5g1unDeucBvv31dyPn0HxuYF4NwziXnLNCycjCwaPvQC7OeHeT1ojV/LEcXQEjuW2uOpwSgwOgyne/m4cMUls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: /yMf67akRw6C6sks2BJknQ==
-X-CSE-MsgGUID: AkLhgZ2sQgag+jRrEIQk+g==
+X-CSE-ConnectionGUID: 5AhPmNnvQA28NYtH1U5Djg==
+X-CSE-MsgGUID: 4mqWx47+TPax5oPHHI1Z2A==
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 09 Jan 2026 01:54:39 +0900
+  by relmlie6.idc.renesas.com with ESMTP; 09 Jan 2026 01:54:45 +0900
 Received: from demon-pc.localdomain (unknown [10.226.92.68])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 70D8B403137F;
-	Fri,  9 Jan 2026 01:54:34 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 1B09D40313E8;
+	Fri,  9 Jan 2026 01:54:40 +0900 (JST)
 From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 To: John Madieu <john.madieu.xa@bp.renesas.com>,
 	"Rafael J . Wysocki" <rafael@kernel.org>,
@@ -48,10 +49,12 @@ Cc: linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: Add TSU support for RZ/T2H and RZ/N2H
-Date: Thu,  8 Jan 2026 18:53:19 +0200
-Message-ID: <20260108165324.11376-1-cosmin-gabriel.tanislav.xa@renesas.com>
+Subject: [PATCH v4 1/5] thermal: renesas: rzg3e: make reset optional
+Date: Thu,  8 Jan 2026 18:53:20 +0200
+Message-ID: <20260108165324.11376-2-cosmin-gabriel.tanislav.xa@renesas.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260108165324.11376-1-cosmin-gabriel.tanislav.xa@renesas.com>
+References: <20260108165324.11376-1-cosmin-gabriel.tanislav.xa@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -60,50 +63,43 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs expose the
-temperature calibration via SMC SIP and do not have a reset for the
-TSU peripheral, and use different minimum and maximum temperature values
-compared to RZ/G3E.
+The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs do not have a
+reset line.
 
-Although the calibration data is stored in an OTP memory, the OTP itself
-is not memory-mapped, and instead, access to it is done through an OTP
-controller. The OTP controller is only accessible from the secure world,
-but the temperature calibration data stored in the OTP is exposed via
-SMC.
+Prepare for them by making it optional.
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Reviewed-by: John Madieu <john.madieu.xa@bp.renesas.com>
+Tested-by: John Madieu <john.madieu.xa@bp.renesas.com>
+Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+---
 
 V4:
  * pick up Geert's Reviewed-by
  * pick up John's Reviewed-by and Tested-by
- * pick up Conor's Acked-by
- * replace new macro TSU_TEMP_MASK usage with existing macro
-   TSU_CODE_MAX
- * remove "Validate calibration data" comments
- * inline rzg3e_validate_calibration() into rzg3e_thermal_probe()
- * drop dts patches queued up by Geert
 
 V3:
- * dt-bindings: rebase on top of [1]
- * dt-bindings: conditionally add `resets: false` and
-   `renesas,tsu-trim: false` for renesas,r9a09g077-tsu compatibles
+ * no changes
 
 V2:
- * drop clk patch already present in linux-next
- * dt-bindings: merge two items into a single enum
+ * no changes
 
-[1]: https://patchwork.kernel.org/project/linux-pm/cover/20251020143107.13974-1-ovidiu.panait.rb@renesas.com/
+ drivers/thermal/renesas/rzg3e_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cosmin Tanislav (5):
-  thermal: renesas: rzg3e: make reset optional
-  thermal: renesas: rzg3e: make min and max temperature per-chip
-  thermal: renesas: rzg3e: make calibration value retrieval per-chip
-  dt-bindings: thermal: r9a09g047-tsu: document RZ/T2H and RZ/N2H
-  thermal: renesas: rzg3e: add support for RZ/T2H and RZ/N2H
-
- .../thermal/renesas,r9a09g047-tsu.yaml        |  30 ++++-
- drivers/thermal/renesas/rzg3e_thermal.c       | 122 +++++++++++-------
- 2 files changed, 100 insertions(+), 52 deletions(-)
-
+diff --git a/drivers/thermal/renesas/rzg3e_thermal.c b/drivers/thermal/renesas/rzg3e_thermal.c
+index e66d73ca6752..86c10810e5bf 100644
+--- a/drivers/thermal/renesas/rzg3e_thermal.c
++++ b/drivers/thermal/renesas/rzg3e_thermal.c
+@@ -412,7 +412,7 @@ static int rzg3e_thermal_probe(struct platform_device *pdev)
+ 				     "Clock rate %lu Hz too low (min %u Hz)\n",
+ 				     clk_get_rate(clk), TSU_MIN_CLOCK_RATE);
+ 
+-	priv->rstc = devm_reset_control_get_exclusive_deasserted(dev, NULL);
++	priv->rstc = devm_reset_control_get_optional_exclusive_deasserted(dev, NULL);
+ 	if (IS_ERR(priv->rstc))
+ 		return dev_err_probe(dev, PTR_ERR(priv->rstc),
+ 				     "Failed to get/deassert reset control\n");
 -- 
 2.52.0
-
 
