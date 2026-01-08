@@ -1,108 +1,137 @@
-Return-Path: <linux-pm+bounces-40477-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40478-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id A486AD04509
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 17:23:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C3D3D04936
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 17:55:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 48C2931A7AD5
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 15:46:39 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A2433368E782
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 15:47:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15AA72C11CB;
-	Thu,  8 Jan 2026 15:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42CDD2882BB;
+	Thu,  8 Jan 2026 15:43:58 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430C922DFA4
-	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 15:42:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8142D9EF9
+	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 15:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767886926; cv=none; b=TLpqFJiTart7Ma3kc/kCBUz7eruxv5AYdDsYRoheZdewWJxXJ024M8j3IPKdzOY4dZa/mbJ8OecHu7L82j8QHMRRimqkX3Ht313rYsUVowOOxGze/3VNBUMSIzJKxoUhbobvtJwyq8+OqqjSYV5NAt765ROGVi/zoA/FrifB0SU=
+	t=1767887038; cv=none; b=QbE7ySDIv5p9y36+UTVC0fj5F99F29t1U4NOm2/gqMZtqZ7oCxZKmbSYMcBgSj44Ho6g8EnWmtIKfD2KVd4Bb/WrvTFIUiH2kH8/QtZUpCySTYR894w+WwmZ35oeZF1mLHypspRUL+IjBTdIVV9JpB6DWVyGmOoV+s5Kh0uIHwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767886926; c=relaxed/simple;
-	bh=T9TwGPbtb/Jk65sCRD6p+Z4CpjSXQctqiN+jSbkE11s=;
+	s=arc-20240116; t=1767887038; c=relaxed/simple;
+	bh=szg4XoxN3u9g+Ff2h/pAFUtLTJUETFvDphXYepeSKBI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RjPFdIrgzQeCshc4takUKeHPm7XTjvBxIWxlU0V7LENkx2tntixK7m5lAIzS3/Ajc3gpehlmVN49Ol+i1utWaLJyuHvcEqIiBqLILHZUHWb6b0kGnOWJ7YtIgrk2yAijXhwqMTO/Y4V90tgnmOuWhz1ShnQ+tENdrdcn9vxvcWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.175
+	 To:Cc:Content-Type; b=K4mCneLkcTLhFTGr6D2Jo8931N2H6FBV7S75OKSIEDkMHfFopPaumaPSWr2riaJEWM4R2HwG6QDNx6oEdNzXqcuAzBxOH97fsjGJTjuI2wJpD1vDMkLozWS3tGuIayYCi952kkz1UJ8vFcXsML+nYahWtY+fXoi+8SInbB/OgRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-55b26461e78so1048767e0c.3
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 07:42:04 -0800 (PST)
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-93f63d46f34so992560241.2
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 07:43:56 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767886924; x=1768491724;
+        d=1e100.net; s=20230601; t=1767887035; x=1768491835;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jdIqtM+rBkxv36T/mfvwWrTjJhzVX0CXMe7ykzjRBh4=;
-        b=Mz+b8xeeQbKREgmsZAr36tFnCVhjPDhGt27II4L5zNTB9+VlJAGFmIb/3dQmZs+1WU
-         NJOx9zp4EMQVJbBPsak8RwbgzrLnIpfoq4jJNa721f0zixd8/T3LINBqxGa3Co/ESVIG
-         SH5TGyhGJysJfJXxvrfY3WCGEWAj785lVtFzKGDgjt50Y6E38u8opvh+bXVNMQjXGXxv
-         0Z1nbv1BPrER3qw6HkkyvdtbeJH9UHHh70tHVxyKjp/nOW4fgxBDp8XVnCsDEG3NqWMv
-         nOJcAnc0jXg8/KI1GyY6cCfeCIP4z04jiLALmiiTV/7QA+7JPXVUtN4MIwyw+DHWiMYn
-         PFmA==
-X-Forwarded-Encrypted: i=1; AJvYcCX7Om/WKnnTMbxfpXmMhcKb1A90lNexu1VW6qHyj3UHfk9TagZz9UCy5lJG5Bx4IO8isJVCOBXj+Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIxp7Mp12a3Gl1M61+I8rbezOm87HqnPTAh6briGk6mx46sZ7r
-	x3VOlYhH0z9WeOMEUOJb74GPaqBB5AdRrgkSGlHKbQqvHn9aewN3rCncz8sKPNEG
-X-Gm-Gg: AY/fxX6eYiiknnw2TDIJ4PJlrOWyXrGMlZK81aCpLP9eCcDTScUoNTntq9HCTP8syPR
-	klFhJ6RXoVUkOz2QkXy2FARko8u/wzdcQiEyad48t4wZPsGAD7HMZs6Us0dKqrA8/H+srmRlC6w
-	dzsCMMQJi/BrLcpyPWmUHmNwUjLXjlBvFskdDxQ4vqIskmFe7Wg/PbSjEbZH+aspT+vmYkznzmk
-	cArusIqX1NHJANFdLLWvYlculSL4dUttoBb1zigkiSLNhvh0ibMQkqED4O73ZWDNvGWvRSs882n
-	1F/YlTXw/ByQyZmUoD18zunBqIZnzJk8mFXy+5t0rEUzsN036iYzWLIZxR1fFuQ6RIZqjjbbie6
-	r9XeaiP6S3Is8FEKUXY6kgqOeqMPDgUfNmjDNXOjLl7BuDuGPMfEZowrgTI1UM/B7AYeu9onfj8
-	qUwb8IvXeLwx4dBa0FUGLaXTisD8W5ep0CDaCbJY7bBqxHgym1
-X-Google-Smtp-Source: AGHT+IEH9Zptz7aofzKPThbqSUfMeZBEJgfQitmbLoFUnz/kVlKCScL+0LGzNNcD+Pj4tVAkOuTN/w==
-X-Received: by 2002:a05:6122:616e:b0:559:8089:9445 with SMTP id 71dfb90a1353d-56347fad422mr2100010e0c.12.1767886923929;
-        Thu, 08 Jan 2026 07:42:03 -0800 (PST)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5633a20a183sm6384094e0c.9.2026.01.08.07.42.03
+        bh=jAzoJbmxW9Hq33LekfntKKNhXdUxUdN8KMqCFiNMSXI=;
+        b=qx7lbcANWTGR9yr1Hj300UhquL0gghFLnKcEysREbeWGckAXa1fC19z5Y8niRNXGXL
+         mcnwTJFtxsbf7n+Z2ICgzcdZ/1JmYNHn8sQyySgIClBSHn5Vkojzsi3ovlDt1R71KB9i
+         JjYC89BRhRxp+en3uzKY00TOrNJQBCGPX1exIryYpqr3b7iSZpCdRnIdtgoJlTGjmULJ
+         bPsxxFk5DdKur4Anwo1COsE+Dlwb34PH8kU6ULVbh1nI6yfAq9XBakYWvK/FB72D6SbG
+         rfFD/nqHi4FkUHsS8P8DswYDXjKkzZYVOcMlyb4WwCzC356KZ5bIs03w6N5Rbqg3xJdp
+         pS5w==
+X-Forwarded-Encrypted: i=1; AJvYcCWa2+rSsZK4+vbQXrhCHfXcZJOh4Q4+if4OUGV648IK4aUB0HjgDtMowxVrzhKBFtihZ4ja2ukeYA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxylNWajm7wvVD8ZlYIQKbrl4Id5Rs6ctEkZF3Wg8+l0Sj90UX
+	33kxy+rLFwSguYFmvyj/5JQNH7vsKES/sneBB/BBfTsNHpT1SdSH/ewD9dISs2Dv
+X-Gm-Gg: AY/fxX5K2SSfq5vM7FaAZC+METR8j+e/9+qfUtjF/ouTdM7vJ/vlfYIP4U6L500gYpi
+	WxYWx+XpNho1Z2GnSQL8DSLSNfEiDgLCX51WnUfdu4XdvvJ9ML9IyT/V8h2EUzFDTi6KE5ONbDW
+	fLPYLdSWR+ui/4MZlt2FMwyCmB6zjqJcp7Cv9TcN0Sbs7m+wYihOQ4E/JFb7Q16eGsTXALkKc7F
+	bHPc3CMhXIg6jhXisESEO4Ed3kK18iFJfTNlPTxJZVIWbaSxarHfl6vVYWUXDTKX8mOgc6vyaAq
+	EcAL5qYdtQ5VXYI3y0bPfY7mqf3yhvYcUINWaQPGSCGYYhdRBg900u7VnK6HMxWVsRHpWux803i
+	4TF5lTNCP7vadmctjd2JJoG+2AimpNu/i2cku7U7D09kWQWuG0rKScQx4fd8Fxg8mZ8CLYvCn0X
+	owKOwVWl8MHwjDJ4hlxYSdD0o2L9zDTmZfNkRj1cFqUVezuuu6
+X-Google-Smtp-Source: AGHT+IF8Pu7hWsZfsfnFdor+3HKYugCrQ4A0VUw8sCDQ0jvIHQWto7ERaIJxjm8PnmBKganruihZ6Q==
+X-Received: by 2002:a05:6102:3f91:b0:5dd:840f:a449 with SMTP id ada2fe7eead31-5ecb1e95d1emr2443655137.14.1767887035284;
+        Thu, 08 Jan 2026 07:43:55 -0800 (PST)
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5ee9fe7f478sm1674971137.3.2026.01.08.07.43.54
         for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jan 2026 07:42:03 -0800 (PST)
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-93f64ae67dbso1037526241.1
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 07:42:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWdmxu8qkRjIyO5qnfJmWTttk+5IqYio42pylPzbaYdrKr8LV7CsAGX0cfi/rj3PtShIKsIia6VeQ==@vger.kernel.org
-X-Received: by 2002:a67:e112:0:b0:5ee:9e4b:a81c with SMTP id
- ada2fe7eead31-5ee9e4baa91mr722934137.22.1767886923130; Thu, 08 Jan 2026
- 07:42:03 -0800 (PST)
+        Thu, 08 Jan 2026 07:43:54 -0800 (PST)
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-5dd6fbe50c0so1327917137.2
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 07:43:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVoiZW1s1SwxwwmHxUJssUAQhXGm1oQp1icwTDHSu6ZsB2j68qe7IvCPUXsnQeJ2y0xxYqnH86Bvg==@vger.kernel.org
+X-Received: by 2002:a05:6102:554b:b0:5ea:67f4:c1ad with SMTP id
+ ada2fe7eead31-5ecb68aff05mr2439515137.21.1767887034584; Thu, 08 Jan 2026
+ 07:43:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251126130356.2768625-1-cosmin-gabriel.tanislav.xa@renesas.com> <20251126130356.2768625-8-cosmin-gabriel.tanislav.xa@renesas.com>
-In-Reply-To: <20251126130356.2768625-8-cosmin-gabriel.tanislav.xa@renesas.com>
+References: <20251126130356.2768625-1-cosmin-gabriel.tanislav.xa@renesas.com> <20251126130356.2768625-9-cosmin-gabriel.tanislav.xa@renesas.com>
+In-Reply-To: <20251126130356.2768625-9-cosmin-gabriel.tanislav.xa@renesas.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 8 Jan 2026 16:41:51 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUVhHZgd7MugxMk85gvzTXPj7GsgmWRef6KjH2j8WUkEw@mail.gmail.com>
-X-Gm-Features: AQt7F2oqUJcYTOpHjX-h4M0p98Sgtm1uZRHOlAe1Y5tgQeYww1060qUHgkV9uew
-Message-ID: <CAMuHMdUVhHZgd7MugxMk85gvzTXPj7GsgmWRef6KjH2j8WUkEw@mail.gmail.com>
-Subject: Re: [PATCH v3 7/9] arm64: dts: renesas: r9a09g087: add OPP table
+Date: Thu, 8 Jan 2026 16:43:43 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX9zNBNtUNwLN4SgDbMpvyMOBYVhVwufgB4zC+F+OCgVw@mail.gmail.com>
+X-Gm-Features: AQt7F2phv5yFw7C9wXRwfNBduSHOcvNWuCOsJEw2DhFFHSG9sOONm1vVQhQj4OQ
+Message-ID: <CAMuHMdX9zNBNtUNwLN4SgDbMpvyMOBYVhVwufgB4zC+F+OCgVw@mail.gmail.com>
+Subject: Re: [PATCH v3 8/9] arm64: dts: renesas: r9a09g077: add TSU and
+ thermal zones support
 To: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 Cc: John Madieu <john.madieu.xa@bp.renesas.com>, "Rafael J . Wysocki" <rafael@kernel.org>, 
 	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
 	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Magnus Damm <magnus.damm@gmail.com>, Philipp Zabel <p.zabel@pengutronix.de>, linux-pm@vger.kernel.org, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, linux-pm@vger.kernel.org, 
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-renesas-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
 On Wed, 26 Nov 2025 at 14:05, Cosmin Tanislav
 <cosmin-gabriel.tanislav.xa@renesas.com> wrote:
-> Add OPP table for RZ/N2H SoC.
+> The Renesas RZ/T2H (R9A09G077) SoC includes a Temperature Sensor Unit
+> (TSU). The device provides real-time temperature measurements for
+> thermal management, utilizing a single dedicated channel for temperature
+> sensing.
+>
+> The TSU loads calibration data via SMC SIP.
 >
 > Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 i.e. will queue in renesas-devel for v6.20.
 
+> --- a/arch/arm64/boot/dts/renesas/r9a09g077.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/r9a09g077.dtsi
+
+> @@ -952,6 +967,37 @@ sdhi1_vqmmc: vqmmc-regulator {
+>                 };
+>         };
+>
+> +       thermal-zones {
+
+I will move this after stmmac-axi-config while applying, to preserve
+sort order (alphabetical).
+
+> +               cpu-thermal {
+
+[...]
+
+> +       };
+> +
+>         stmmac_axi_setup: stmmac-axi-config {
+>                 snps,lpi_en;
+>                 snps,wr_osr_lmt = <0xf>;
+
 Gr{oetje,eeting}s,
 
                         Geert
 
--- 
+--
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
 In personal conversations with technical people, I call myself a hacker. But
