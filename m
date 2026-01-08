@@ -1,167 +1,119 @@
-Return-Path: <linux-pm+bounces-40503-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40504-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E2B9D05EF5
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 20:56:43 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D7B0D0602D
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 21:16:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 76177301395A
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 19:54:08 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CE3D6301E210
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 20:16:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFD3B320A0A;
-	Thu,  8 Jan 2026 19:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BA8428C5B1;
+	Thu,  8 Jan 2026 20:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="OuJyDc1N"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 830DF32AAC5;
-	Thu,  8 Jan 2026 19:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D2F27F75F
+	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 20:15:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767902047; cv=none; b=u8beHNnLq+yoMPc5gTjP/mPHzyUGDkxR63PLn/vhDpZSafCkLY1Ze0DeuEsNWfIK/nFIRXkJltXxYU7iyRiUWZ/HYpXowmz6kMXdYwtT3ZKVVL/FxbmX2c0phdrT1m1N323udAq78fN6v8yyaTqYcvOeFmp5R5uS0X/PBFN3FtY=
+	t=1767903361; cv=none; b=WqUOSI8zshbv9VRThN+LPA66CrLqAer2pWpcIy1ODt3khbwpvS1FSNekg9bj69qbRgOB9J771V5NoAHNVXYAOhgqRXKVT7Aosoy+/N2FmkL2HDKyiBHFsqwcMSY/v+4+6p2ZVYPCuBBpbh/36FIuHjzoG+mhxsdt2D5FrxPqsfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767902047; c=relaxed/simple;
-	bh=hu14PNedND/UF//Ir2g4zjI9/33xmnYKUgJ5bFvFga0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KGBi2znliYpBou+iQkEy63HISqJwlanp7gMsZuC7K4SdiokyGVrbVsSJEm8AgfBXN2imxdMFe0KhuYyjXmeJwiFaQdw3PFOonyKfavVF5Rn5Zk4zRGYqw5AvPyfJAHPS4iJ+poD534hZIkLSG4IUt4vn6tyO0G0hgI4ELN+ECK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; arc=none smtp.client-ip=210.160.252.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-X-CSE-ConnectionGUID: ioIatjtFS5uo3SRN1voJjQ==
-X-CSE-MsgGUID: Y+V5oaFaR9S/RtTKUQkqdA==
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 09 Jan 2026 04:53:53 +0900
-Received: from demon-pc.localdomain (unknown [10.226.92.68])
-	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 61B76475F1F5;
-	Fri,  9 Jan 2026 04:53:48 +0900 (JST)
-From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-To: John Madieu <john.madieu.xa@bp.renesas.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>
-Cc: linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Subject: [PATCH v5 5/5] thermal: renesas: rzg3e: add support for RZ/T2H and RZ/N2H
-Date: Thu,  8 Jan 2026 21:52:23 +0200
-Message-ID: <20260108195223.193531-6-cosmin-gabriel.tanislav.xa@renesas.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260108195223.193531-1-cosmin-gabriel.tanislav.xa@renesas.com>
-References: <20260108195223.193531-1-cosmin-gabriel.tanislav.xa@renesas.com>
+	s=arc-20240116; t=1767903361; c=relaxed/simple;
+	bh=a/+cPvIJX94uGRv1+YvfPX7h8IidmOsGYVouQwyP1U8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=a24McQWtqxC9x5WqKQ8zGO4u/A5XNYi8TRwJNS59j5ctajkCbx8t+kv27pxP1Z6vi3yR+W9QB4w5AUG8jPE62JrdVkL6CHp5k0b6GVSEQiVRVnxr9v8DEUztVep3/YC1f1YorxrHFeM/aASBG8Asl4VbAwprJSVKc4d5irgbZKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=OuJyDc1N; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7f0db5700b2so1927313b3a.0
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 12:15:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1767903359; x=1768508159; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a/+cPvIJX94uGRv1+YvfPX7h8IidmOsGYVouQwyP1U8=;
+        b=OuJyDc1N2F9gbm3/SdbtD5d0Jn73k06UKtJNYrEtRKjYTRvmwjABfexecr0eFMawMl
+         E/+THkbDVaw4XCftwSQG5hNs8nb2/QrCamN0GAs9yTx/bNwDyBquML2dWIdbnw1wDGmE
+         jlpQ6EivyFSU+K/eqw3Ui6n1ALolnZUDhO39T1oDs57jAaBwc2rjqfIDfXvSca7OzLD5
+         atmXOhJskVVRqrQuPpm4HnFBOMrm1Fh6FSBkmPZjO2o2hOEEOSIg8oQROeikjmWP6pWM
+         mINxZvnEnMYxsNgeknmi9mA6xwF0npTYt+snnpwDlGyM7DLUxwK/79Nr6ddpwGGfI0nT
+         6F/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767903359; x=1768508159;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a/+cPvIJX94uGRv1+YvfPX7h8IidmOsGYVouQwyP1U8=;
+        b=oZAhQ7fb9ueabZkeB01vD9yR6D5BS8c98MX3UTZJEZGPhbX6xvLy0oAFqE8Kzs6pLy
+         6fpQoXgT3qET7Fq75PhRx2/i7JwFk4UZu0lIIEZp0Bm9xoASY7iGbo+0kHpryqFnZ4SL
+         5pj88utUHZ7gH4CxWVWzOrEs+ziPG1jGrUQNbZc9WT3HPUauuPYAIWYoL2hAA0z+Kpuj
+         6u4Bs9MRB9pi6OFAC/s1jpy6VOjeh2VRo8FB935g0lctNg84okLFSgWfgftQ7OMUp/l8
+         vcjZHl/JSX7uOyhA+56XyaUbJ8XVHS27tgT649Nf9q9xWKDUMJWKdR6wCYnzqfdIj6yi
+         vEhg==
+X-Forwarded-Encrypted: i=1; AJvYcCWYHEHzRIwEfK9VhL1v7HpN33tx1T/8K8N4Kg1asbAi9456VPP7tNjtnuiwwqouagS5eY8+3Ve1ug==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCQlCzMR6Dw1Cmgo36nn+ogoXCw8uZH7u6E3m2w0cLYS7s2P6f
+	1Q25mYzjzuzLe+fJKoNqTkDSVQw4isytnrcYwYbasnoy8ZAwxng36PExaDja7j6JqbHR+p/rd0Z
+	y5KZE
+X-Gm-Gg: AY/fxX73cRmFqiJ/25kZr7WeSLtRb/9fcdIQID4FEYa0bp1tJca9NzFwqFWLXIunFc9
+	UgBLwRh++zJro/IpFiwC+OeWyaaBwMdhxERYJGArsKPhKd3aEyI5lVnMdQ6JdLhOTB9iwlnWY8q
+	g/C+1TufIbu11LLrlI/Bik6Qr66iyAYsNDAOzYGJ+1/zd1XllssIGvHt+gRB+T9mBnBz7LxT+XN
+	IXpGYRuxMfWVAegdFbBuhTz72K7Wnj7+sx2k9uG5lxaadQhTRigAD76Mst1bXwLSHWsLCSqhzVJ
+	DOhSAozMO0+jm81ekx2yZEjtJI9h/iU0dWhDDFMqfg5+7OLUTfb6KLnyiEE0VR6jqwt7GjcHvW1
+	Zbygn3emqFlPrdhLWdNORNoCxF1R0uwyciUI/0xndQxooFIuXAJ2TnWGx7V5etdX2brq+CilssT
+	mZ8sr+pTuc
+X-Google-Smtp-Source: AGHT+IGEyNFxCYg+mz/nYXiyeR6SQHeALYFtxCcsGh7BEUBtCA+13vI7tMziVphvGhB+YDfWmtgivw==
+X-Received: by 2002:a05:6a00:2c85:b0:7e8:4398:b352 with SMTP id d2e1a72fcca58-81b7f7e28abmr5865999b3a.37.1767903358688;
+        Thu, 08 Jan 2026 12:15:58 -0800 (PST)
+Received: from localhost ([71.212.208.158])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819c52f90c0sm8425980b3a.41.2026.01.08.12.15.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 12:15:57 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Andreas Kemnade <andreas@kemnade.info>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, Aaro Koskinen
+ <aaro.koskinen@iki.fi>, Andreas Kemnade <andreas@kemnade.info>, Roger
+ Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>,
+ linux-omap@vger.kernel.org
+Subject: Re: [PATCH 0/2] cpufreq: omap: remove driver
+In-Reply-To: <20260108-omap-cpufreq-removal-v1-0-8fe42f130f48@kemnade.info>
+References: <20260108-omap-cpufreq-removal-v1-0-8fe42f130f48@kemnade.info>
+Date: Thu, 08 Jan 2026 12:15:57 -0800
+Message-ID: <7hcy3j6ete.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs expose the
-temperature calibration via SMC SIP and do not have a reset for the
-TSU peripheral, and use different minimum and maximum temperature values
-compared to the already supported RZ/G3E.
+Andreas Kemnade <andreas@kemnade.info> writes:
 
-Although the calibration data is stored in an OTP memory, the OTP itself
-is not memory-mapped, access to it is done through an OTP controller.
+> The driver is not useable since 10 years, and the affected
+> platforms have alternative drivers, so remove it.
+>
+> To: Rafael J. Wysocki <rafael@kernel.org>
+> To: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
+> Cc: Andreas Kemnade <andreas@kemnade.info>
+> Cc: Kevin Hilman <khilman@baylibre.com>
+> Cc: Roger Quadros <rogerq@kernel.org>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Cc: linux-omap@vger.kernel.org
+>
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
 
-The OTP controller is only accessible from the secure world,
-but the temperature calibration data stored in the OTP is exposed via
-SMC.
+Acked-by: Kevin Hilman <khilman@baylibre.com>
 
-Add support for retrieving the calibration data using arm_smcc_smc().
+Viresh, this is/was technically maintained by me, but feel free to take
+this via your tree, or let me know if you want me to queue it up.
 
-Add a compatible for RZ/T2H, RZ/N2H can use it as a fallback.
-
-Reviewed-by: John Madieu <john.madieu.xa@bp.renesas.com>
-Tested-by: John Madieu <john.madieu.xa@bp.renesas.com>
-Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
----
-
-V5:
- * add arm-smccc.h include
-
-V4:
- * pick up John's Reviewed-by and Tested-by
- * replace new macro TSU_TEMP_MASK usage with existing macro
-   TSU_CODE_MAX
-
-V3:
- * no changes
-
-V2:
- * no changes
-
- drivers/thermal/renesas/rzg3e_thermal.c | 27 +++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/drivers/thermal/renesas/rzg3e_thermal.c b/drivers/thermal/renesas/rzg3e_thermal.c
-index 97c4053303e0..dde021e283b7 100644
---- a/drivers/thermal/renesas/rzg3e_thermal.c
-+++ b/drivers/thermal/renesas/rzg3e_thermal.c
-@@ -4,6 +4,7 @@
-  *
-  * Copyright (C) 2025 Renesas Electronics Corporation
-  */
-+#include <linux/arm-smccc.h>
- #include <linux/clk.h>
- #include <linux/cleanup.h>
- #include <linux/delay.h>
-@@ -70,6 +71,10 @@
- #define TSU_POLL_DELAY_US	10	/* Polling interval */
- #define TSU_MIN_CLOCK_RATE	24000000  /* TSU_PCLK minimum 24MHz */
- 
-+#define RZ_SIP_SVC_GET_SYSTSU	0x82000022
-+#define OTP_TSU_REG_ADR_TEMPHI	0x01DC
-+#define OTP_TSU_REG_ADR_TEMPLO	0x01DD
-+
- struct rzg3e_thermal_priv;
- 
- struct rzg3e_thermal_info {
-@@ -362,6 +367,21 @@ static int rzg3e_thermal_get_syscon_trim(struct rzg3e_thermal_priv *priv)
- 	return 0;
- }
- 
-+static int rzg3e_thermal_get_smc_trim(struct rzg3e_thermal_priv *priv)
-+{
-+	struct arm_smccc_res local_res;
-+
-+	arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPLO,
-+		      0, 0, 0, 0, 0, 0, &local_res);
-+	priv->trmval0 = local_res.a0 & TSU_CODE_MAX;
-+
-+	arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPHI,
-+		      0, 0, 0, 0, 0, 0, &local_res);
-+	priv->trmval1 = local_res.a0 & TSU_CODE_MAX;
-+
-+	return 0;
-+}
-+
- static int rzg3e_thermal_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -524,8 +544,15 @@ static const struct rzg3e_thermal_info rzg3e_thermal_info = {
- 	.temp_e_mc = 126000,
- };
- 
-+static const struct rzg3e_thermal_info rzt2h_thermal_info = {
-+	.get_trim = rzg3e_thermal_get_smc_trim,
-+	.temp_d_mc = -40000,
-+	.temp_e_mc = 125000,
-+};
-+
- static const struct of_device_id rzg3e_thermal_dt_ids[] = {
- 	{ .compatible = "renesas,r9a09g047-tsu", .data = &rzg3e_thermal_info },
-+	{ .compatible = "renesas,r9a09g077-tsu", .data = &rzt2h_thermal_info },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, rzg3e_thermal_dt_ids);
--- 
-2.52.0
+Kevin
 
