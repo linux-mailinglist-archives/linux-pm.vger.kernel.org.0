@@ -1,107 +1,130 @@
-Return-Path: <linux-pm+bounces-40428-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40448-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC839D03C85
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 16:23:16 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84A37D03BC6
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 16:18:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 2A326306D730
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 15:16:04 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C0B713019DC2
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 15:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE0EA2FD673;
-	Thu,  8 Jan 2026 08:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA72B4BDEBC;
+	Thu,  8 Jan 2026 12:15:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b="q6I7B6Ww"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iy5+++A8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [178.238.236.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D2335F8BA;
-	Thu,  8 Jan 2026 08:26:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.238.236.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A904BDE8E
+	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 12:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767860816; cv=none; b=madnIzT4SIpD492+vKpzbVcGSI4gMDlcKCl60ZMAkX650oVp4tNlyA54+OHsrm1L2tCFZ9POOVsVdJp7hBp34kS0T/dTXwSks70McQcQ41TZ62YQ5lEWqSaOJ3L44QneoouGqnwrCpg0FgWljsPdwE0MFaw7VRqfhk+T0vFpxLI=
+	t=1767874527; cv=none; b=txACAzLFKtNA+4uyqQL931ew9EgQle9FQ1PhrMaegrWEIU4SUrxwaWmlWKuCeW6ShdIYgOzf2seWwTMPZqy/j4KihJ0zttQUTcs+EkPXMf3NZ2fqTFOLyMlhJz1poNlqfPVhTkkZw87nW+1fcgVkIg06fupdTSosKZufP3nSByg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767860816; c=relaxed/simple;
-	bh=rdEwDabUWU2buJZW2ZyuGq8H/bqEDCqdfFLn0U7j3MQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=M7Rs4D1DzZ3HjJh1V6QCffhTndvayQ2fi2tDOv8UlRMkWIsF6T0HaGEd64TxnFx8iylHLfwqRBjsqIUibg8sLkKxUhZnrv5xAnJwCQnoJR31BZ01LxDxW+mW/lg0BJEfrn5HHcLObjCJGYp1A/akTPCvBcrivWuelYnc+IaFFWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info; spf=pass smtp.mailfrom=kemnade.info; dkim=pass (2048-bit key) header.d=kemnade.info header.i=@kemnade.info header.b=q6I7B6Ww; arc=none smtp.client-ip=178.238.236.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kemnade.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kemnade.info
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kemnade.info; s=20220719; h=Cc:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References;
-	bh=5K1mb25vjRxs8M3KsS9XWxb/bhwtw9aw+OSOppGStAA=; b=q6I7B6Wwl9z6fZUZGi1VlaFmtY
-	8+bNul5jJ3uLqMD/0Lv8u3VOQ12fcrZ4GGmFqOT09at/6IJEkaWaI4ClOi2zu3qDjf5l7yTmByISv
-	qVv0S4jfiMICHgmtfFVc0gW931kzSYbOxxwQ6RqM3gvf5HLSJIcfmewUxiBljQbkaVr7usHslBDGd
-	sSBGmT/Yvtp+S5MDbZ8styy9zmL0MZN0Vwqp1buehMx3hQbBWd+/5xQhMJ+o8szzbGncGTsc2pHOY
-	cPGEkte6H+7lBwUJxrP9m8F43vQcMSfxTvYwvPmhlOvbUQEQjhkiTbubZ0pyJZ/XNTD940vPCa9YP
-	BfCVuiXQ==;
-From: Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH 0/2] cpufreq: omap: remove driver
-Date: Thu, 08 Jan 2026 09:26:11 +0100
-Message-Id: <20260108-omap-cpufreq-removal-v1-0-8fe42f130f48@kemnade.info>
+	s=arc-20240116; t=1767874527; c=relaxed/simple;
+	bh=oN3VJ81TR92t72IorUOGx+yYKZ6zgxZk9xFRV4q/Jvs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rPD8L17Ccf7qUycGM9mIQv8krT5wY+E4008AExuwIQKWUzhsXm7xT3APxpcZdnFeXwHCAwBwHcyGzCUKWH0SIijRuiBlJhbouIiRTNqHbYI40vQrA2fcac+OXCHSqYID/Ul5w/H/qsnBU+5mmXfDh9PXPCABqvJOV6kuGTyuvAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iy5+++A8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49810C2BC9E
+	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 12:15:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767874527;
+	bh=oN3VJ81TR92t72IorUOGx+yYKZ6zgxZk9xFRV4q/Jvs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=iy5+++A86Sd4Opbng5Cpq18bXVkT5o3GMVfzsGGk+tSkDWzJntj1FB6j6rsTmvDV7
+	 htk5tpeZs7QIUTy1l81V0iwHwd+ld3bzRnlSLulPMLJgS5+BHEXo2cQsyv09Gs87c1
+	 6U6WuD9E4fHh9FTyCDiwOvTsfJCfMABaKvIEh/hxlznf66fal6a5ELJKAz+QYDHowm
+	 RSYmfVWwSOTYlMrwmhNGfnhOg87uRQ2rCIdg4Z746axEcP2smmEWDVmqa/Kjm2JKzd
+	 cTRPrW2m084iD5VJcJnB63d5nGR5SkqGE+jzjgNUCjYJgR3S/74C1Exn+71ksFN4o/
+	 YNS2z15g0sydA==
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-59b6d5bd575so2287338e87.1
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 04:15:27 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUONdDXjverSLPUHLYEzAHs2/4b3crWSITSzBTveTGHDQ1Q43nG2g2OjaHPCBUTvWJYKUhM36P37A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywks+fOvWtEJjjqHIB0sGIhW0oManfvXfkWBKoI+lDzTG/qyj1X
+	B9GxkzvUZvN7H8GrI+sz8MF3mbBIuWJAgbVdZoaRryH4jzH73llzzVxEk6caRYYDIJfZr+fvjit
+	Z4yIjMiaCG1Spx1G1UkRen24Hcjtd2MdBvikA4cHrCg==
+X-Google-Smtp-Source: AGHT+IF/4koG/MN6sfNsURUrtRSXZrXyRHd0bqi6p5mzExxZBo2GY4yvcJpb3YE7lL2MK6UqIWbaGQBDGlnCB4B6bas=
+X-Received: by 2002:a05:6512:68f:b0:594:35c4:fed1 with SMTP id
+ 2adb3069b0e04-59b6ef03a2dmr1813240e87.13.1767874525775; Thu, 08 Jan 2026
+ 04:15:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACRqX2kC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDQwML3fzcxALd5ILStKLUQt2i1Nz8ssQcXVMzQ9M0E4PU1GRLMyWg1oK
- i1LTMCrCx0bG1tQC2ALhCZgAAAA==
-X-Change-ID: 20260108-omap-cpufreq-removal-5615f40eec96
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- Aaro Koskinen <aaro.koskinen@iki.fi>, 
- Andreas Kemnade <andreas@kemnade.info>, Kevin Hilman <khilman@baylibre.com>, 
- Roger Quadros <rogerq@kernel.org>, Tony Lindgren <tony@atomide.com>, 
- linux-omap@vger.kernel.org
-X-Mailer: b4 0.15-dev-a6db3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1081; i=andreas@kemnade.info;
- h=from:subject:message-id; bh=rdEwDabUWU2buJZW2ZyuGq8H/bqEDCqdfFLn0U7j3MQ=;
- b=owGbwMvMwCUm/rzkS6lq2x3G02pJDJnxWabXM/qvMBprV+ZqHJpwwCA1v3dS5r2yucuWvtcQK
- pDbq2/XUcrCIMbFICumyPLLWsHtk8qz3OCpEfYwc1iZQIYwcHEKwETkFjEyNG/pVAyTUhNXjHWt
- N9zl2643feHyCU9Y7z8J+B/aLfYxm+G/M8fq0hV/Tmly12m83x3p9Hyx9oHzsgpH2beWfdjUaHC
- GFQA=
-X-Developer-Key: i=andreas@kemnade.info; a=openpgp;
- fpr=EEC0DB858E66C0DA70620AC07DBD6AC74DE29324
+References: <20260107-pci-m2-v5-0-8173d8a72641@oss.qualcomm.com> <20260107-pci-m2-v5-5-8173d8a72641@oss.qualcomm.com>
+In-Reply-To: <20260107-pci-m2-v5-5-8173d8a72641@oss.qualcomm.com>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Thu, 8 Jan 2026 13:15:12 +0100
+X-Gmail-Original-Message-ID: <CAMRc=Md9TQiSX-gFa5q--JgaGyQ2ky4mOwjSpdxHhvHAj-X5Qw@mail.gmail.com>
+X-Gm-Features: AQt7F2puNlVWjbhiRoX8QQnOlbAAs4UdjLNY6ZTbm-vEXEFSeur6kT9w8kO5QSk
+Message-ID: <CAMRc=Md9TQiSX-gFa5q--JgaGyQ2ky4mOwjSpdxHhvHAj-X5Qw@mail.gmail.com>
+Subject: Re: [PATCH v5 5/5] power: sequencing: Add the Power Sequencing driver
+ for the PCIe M.2 connectors
+To: manivannan.sadhasivam@oss.qualcomm.com
+Cc: Bjorn Helgaas <bhelgaas@google.com>, Manivannan Sadhasivam <mani@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-pm@vger.kernel.org, 
+	linux-ide@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The driver is not useable since 10 years, and the affected
-platforms have alternative drivers, so remove it.
+On Wed, Jan 7, 2026 at 3:11=E2=80=AFPM Manivannan Sadhasivam via B4 Relay
+<devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org> wrote:
+>
+> From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+>
+> This driver is used to control the PCIe M.2 connectors of different
+> Mechanical Keys attached to the host machines and supporting different
+> interfaces like PCIe/SATA, USB/UART etc...
+>
+> Currently, this driver supports only the Mechanical Key M connectors with
+> PCIe interface. The driver also only supports driving the mandatory 3.3v
+> and optional 1.8v power supplies. The optional signals of the Key M
+> connectors are not currently supported.
+>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.=
+com>
 
-To: Rafael J. Wysocki <rafael@kernel.org>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
-Cc: Andreas Kemnade <andreas@kemnade.info>
-Cc: Kevin Hilman <khilman@baylibre.com>
-Cc: Roger Quadros <rogerq@kernel.org>
-Cc: Tony Lindgren <tony@atomide.com>
-Cc: linux-omap@vger.kernel.org
+This looks good to me, though there are some nits I may fix when applying.
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
-Andreas Kemnade (2):
-      cpufreq: omap: remove driver
-      MAINTAINERS: remove omap-cpufreq
+I'll pick it up for v7.0 once the bindings are reviewed.
 
- MAINTAINERS                    |   1 -
- drivers/cpufreq/Kconfig.arm    |   5 --
- drivers/cpufreq/Makefile       |   1 -
- drivers/cpufreq/omap-cpufreq.c | 195 -----------------------------------------
- 4 files changed, 202 deletions(-)
----
-base-commit: 9ace4753a5202b02191d54e9fdf7f9e3d02b85eb
-change-id: 20260108-omap-cpufreq-removal-5615f40eec96
+> +++ b/drivers/power/sequencing/pwrseq-pcie-m2.c
+> @@ -0,0 +1,169 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+> + * Author: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com=
+>
+> + */
+> +
+> +#include <linux/device.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_graph.h>
+> +#include <linux/of_platform.h>
 
-Best regards,
---  
-Andreas Kemnade <andreas@kemnade.info>
+It looks like this is a leftover from previous versions and you no
+longer need it?
 
+> +
+> +static void pwrseq_pcie_free_resources(void *data)
+> +{
+> +       struct pwrseq_pcie_m2_ctx *ctx =3D data;
+> +
+> +       regulator_bulk_free(ctx->num_vregs, ctx->regs);
+> +}
+
+I would call it pwrseq_pcie_m2_free_regulators() if you don't mind.
+
+Bart
 
