@@ -1,182 +1,605 @@
-Return-Path: <linux-pm+bounces-40431-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40434-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07BD3D01FBF
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 10:59:05 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0050AD021F7
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 11:31:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9FB5130021F8
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 09:59:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 55881307A910
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 09:49:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6FA034575F;
-	Thu,  8 Jan 2026 08:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFBF537F8BC;
+	Thu,  8 Jan 2026 08:58:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RjoH112P";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="eP3Tw6tW"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="DeRAOpHh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF9833C1A2
-	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 08:43:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0868637F11E
+	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 08:58:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767861820; cv=none; b=Q0HtvyDAHHrOgjZMalePV0VFoPYzvhyxu9hekTWj9npZeEc9PrVtWP2DPFaAsgWo/E1kij2xvrCUltQl7P0AAkPQkUzYIkrKkX3CYuGnKzcr3VwQsQadcbx8NNgLhmrFgixw913nF7CHSZ1Qs86yEb1n7XCwqSyU0EABDHTGyl0=
+	t=1767862729; cv=none; b=ME+RTTUrKOdHiSOd44XvhTYXgEPCZF/JTTavbeKoxm4/AJ3ubJA5QESnUZcXM1aT78t+d1R6+T1kDCByW0PxIHkQgOy62eyKBMPLBqqdKXYQqBnHqERPuykAxkvmNkkz3VM8NTN5WVaNsVXbXL47MX1T+B1La1e4shcPjQmGSaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767861820; c=relaxed/simple;
-	bh=/L1RBGqyxwzt5zmuUJHrm7b2Dc7plZB+AlIdSaEjd6M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y+RrKe2xU1BL/5wJeIudJ9E4CpG0KlDkkVWjcbU/50vPu7aTOJHBXo8X72L9LMcXqXzMujRUrALFmYID/s0/oxtchdyHWqOAdIdZ9viTSTLjPNyk8aupUD3upo/0GPfkh5NELj92hmt6ERZ3j081notT3rmbjh7eg6eKe9UzGnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RjoH112P; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=eP3Tw6tW; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6083uOvv2593330
-	for <linux-pm@vger.kernel.org>; Thu, 8 Jan 2026 08:43:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	BPOoQG1/WLrFfJKEWQFWmYdIx6qCpvKkLYYmUCq7tyA=; b=RjoH112PsEKCbZqA
-	1lVrTTkjDcW6jFRSQnjmeixO+/vKjNcCqVx9RASfzWPIOXc6/uS6pBs8Gxxlu3PT
-	ku867K3/CqnHoNxmNqa6tYGjc0nwWN0BTOBm/7mO0erS9F6OSxWsGXsAYyVANkjD
-	AtHQnVUYfTxOmdnHCySJsXk8j6psp3ksM6uVz8utIdHVod8+17pNs8haG9bMaAe5
-	6I50hCB4dmk1VMemCiszWkl18gsfL7RYhKcZpGGB7z+/BzE3QkRENkrwfibn2l6k
-	qhFJxzFtWQ8hVhUZ+feslP2DO6fpFgjcvygeTOfGN5NZrYLJ4M8qMtP69zVPr4te
-	viRPsw==
-Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bhn293yr9-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 08:43:20 +0000 (GMT)
-Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-81c68fef4d4so1549505b3a.2
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 00:43:20 -0800 (PST)
+	s=arc-20240116; t=1767862729; c=relaxed/simple;
+	bh=oBHErEHnkA1paCau1ARwAjUjnMxGWXWutTLtcVvMytk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=OK/3VwPu3Gm4SJdhUkWUMp5E2cN09FUsn+s/oI4G0iKOc9VvEmQ0CgekAbsg1GEV2HGOiKTdFz1MK7vPAy4ZfR7/SFwJkSgxhPL32xx7d2XkxGL69wsQAH+w90778OOCadBODJt94rC5WDYxNbqroMH1GrT9vTHKwDkDFnpaNm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=DeRAOpHh; arc=none smtp.client-ip=74.125.82.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2b04fb5c7a7so2440749eec.1
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 00:58:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1767861800; x=1768466600; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BPOoQG1/WLrFfJKEWQFWmYdIx6qCpvKkLYYmUCq7tyA=;
-        b=eP3Tw6tWayt2KMjL12H5vXYIH6driyXwNk6+z+oTG6p449KM5gMHLfL4G0lTNCldXE
-         ZYEYcFLBCCqKiD46AG+R1i8unf1yNOL+MG2XfMLX22QawuAP1pc1hJgKAseCeORQj0uW
-         QOekzUQOkQoTs5JzuKDYRkx0tfyOKkKloyra3rzHsZRP92o6EpWRLhzSkZqZnEV2eZKs
-         Q+DByYXp8fi9gKnlCaLwl6vrXaD8h6H9AsrUYDOj2cEYdZTSl73XFHp7oxxyr+xGA8dk
-         gJIPSf8BDF4zMg1e65ywKDts0DXeq46R86vdFYZBdCn4++e1c8Djjgp9F1x7rZz+geSd
-         4T3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767861800; x=1768466600;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=sifive.com; s=google; t=1767862719; x=1768467519; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BPOoQG1/WLrFfJKEWQFWmYdIx6qCpvKkLYYmUCq7tyA=;
-        b=QsE6PD70HLS+f1rrOz/DIhZlPKFmxsQVBmx77c2zSaiwdnTfB+2reqUFx6joAV6d8x
-         MSBEdsdPtanzLudjrft+VxGkTYoiV6PWFkYF4N31OorGiGIEN17n8TaEVhfWb2Wj64cr
-         8401x8Usxcqymq0APgpWf5ht2tkVEQTNC6sWCn2TRGtXODAIaAiscMIpZK9OfGM3bFaW
-         2sNl6lz1TbrEW0JqXnbL6mZ0Nb8AXIS5npoGr5v41DwQe55Q+BE+Khorqjbasrdgs2Wc
-         6roV7cE1QYjOjgocyWTO4tx6mA0ZEfKGn1U3TYn7wOHJh/dzfOXY9HkkqmcZC6nA9WST
-         8w1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUCq7QzTIzSp/9QuOzpTMF7/ezlwb2QGqYBf+GEa1sv7W88x2IVPCS8fW1WwqC6UazG3mMAddPi2A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxlfs19mkMwH4aT1zO3J08SxEAjR1l8ik6fXMDF+HxPkszWzugL
-	kY5x2ZQTa8UU3d/eRcbSrY/aTUmHs6Jkb66IcQL2FI3RyV6p/uq0n8pPvvbFM3vODx/Znxf71Iw
-	Klnn0AQ4rPpsUR8yQU6s7vEWnI56tvnteoYN92tuJQ6UDmG9OwWAOPcB34epqmA==
-X-Gm-Gg: AY/fxX6kLrC0CKSNd/I3SCH676KrP7F8Nhff+C1QxnrYn2Xmq9yUld67MWh29yaDwKr
-	9aEsj0GZm0fT+oQZYAFnzRhhXYEu+UjiEMavx50ms9ktVazwCgoDL+jhX3DFG4EmM5u5XXm+R7k
-	Y38QUHUow4AbStIDsyRd0xhBhc8aDDnzRw70mtTUcCD7eE34lVNE2zS9UcBmbyBu3WctG1rszxs
-	vGY3ZriTHU13+dmzibnZ59XelqlCOwVCekJjGtPGz9y96+07E5HJnYxXXUuBMong51SlBxACWav
-	d8XeQmA9c1BkVQx7PkPfn3dEENHZDUuGyHvIercyJcYjmEo9HTu7/xzIii9S44Zi2fs9+LtoAqu
-	yxPQ7g/YcB2wFZ22ezwp7jjmOWdi4JO23xm1g0Mo=
-X-Received: by 2002:a05:6a00:8d8a:b0:81b:1a87:9eb9 with SMTP id d2e1a72fcca58-81b7dc62248mr5173607b3a.25.1767861799612;
-        Thu, 08 Jan 2026 00:43:19 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH7uaKjXBvAUuSttJfVLqA14vM+b4APrPJU3uKuYVZNZwLgKvmkpMc+SlUXd+RMdyIv3uhYpg==
-X-Received: by 2002:a05:6a00:8d8a:b0:81b:1a87:9eb9 with SMTP id d2e1a72fcca58-81b7dc62248mr5173578b3a.25.1767861799093;
-        Thu, 08 Jan 2026 00:43:19 -0800 (PST)
-Received: from [10.218.27.120] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819c5edcf34sm6934022b3a.67.2026.01.08.00.43.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jan 2026 00:43:18 -0800 (PST)
-Message-ID: <98804ad4-a481-4125-8911-965e3376be83@oss.qualcomm.com>
-Date: Thu, 8 Jan 2026 14:13:12 +0530
+        bh=YHgXYcn6j9hrIoVhqdjOMXkUH+ey28hNkJayufBoRxM=;
+        b=DeRAOpHhqS3ZvoI17I8zTfvIojGTJ495HqIPj56MxWS2457Ss6+G3+81H511y89JUs
+         Dr/h5aF75pZqQAzUB7S+ggQ0q/dxE+hKujNSoQxPLgss/pWpGWBIKb0gkzCOcG0FM5Np
+         y3W6Adg0evIDSCn+pkcz2RsptQ+q0+W9Vrc7dYqxeo5AgbZd/jy+B3+1DfoqWM5nxc9j
+         9DEjqWH8h8kvi2UJZTQ0lGz97uKmt4ia3iSrdTSOaRAXEIB06SOHoDwdoxQ2eJzNyYXr
+         rP8vUwV6AQd5Kek0CO59gU47tlRuv2ZoW5fsVMuiA21TzsUQHwnhq+xOQf941W6R30Vm
+         aSjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767862719; x=1768467519;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YHgXYcn6j9hrIoVhqdjOMXkUH+ey28hNkJayufBoRxM=;
+        b=km5qbQ4VCmFQ+FUIdShWS/EKjcDC2E8vikDW+uRJosorHUJq/nI79PTQBoKPVvGwDW
+         6iyr9Lum8z6s4ss29IOq49i02c0i91uuk+004mg7kjpHKsD/r5IFExzhxhtm+DinD2p8
+         uK392QqVCESKWi6coa+PbIWbWx3krzIdcl4EAhjkVkW1kRoWkw1ce+u4hi5z0eWb7mJD
+         5kGT9HXSLfnu/2xEeRfw8Xjq1YAdvfowD8Ei5r8eHGlUeCmMmzZpQRQof0L8FMSpRyLe
+         LKI6Jp1abHulU/7p27I6a0ZyxWeYmt2DXTPXnEzFroRxGghXOJgRm3iebCPf3bahMKby
+         PYxg==
+X-Forwarded-Encrypted: i=1; AJvYcCWsMEXV7xmJOyJIJ9VfhOmAX+F72Xw9SGge4J5OcMqR0INvTCzgZTUSywR5a5GMGelHVEsxrtcjaQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYTqwrJ8xP5RK/Lqao+RnA0/QL6gXqfSBDjH2dOR0B+TyVHFir
+	/LTmpHCR9TU9DEEDejH5F2RqeaxalyZ0BMZ1R/U1TkYrT/sRMRTA3cdVhSkF0PLJSSI=
+X-Gm-Gg: AY/fxX7s/Oq2+dgMYOPTwHWgn0jj0vwS7ohX72CRSSciDeT2TNl6vmGxWQBZYuWUAz3
+	6Y3wu6Vp+4SHVutRwc4fdSrcw4ilvUIQ0bsHI3AvePewuN8YB6M3jHFkSd8bBRBb/Zkn5lelOD2
+	dtB1I3DPBuvNqu/mXBB11RXRwjenB+wNosQqxyvCnKvpVqcZAlGgz1PC1qmGzecBFRUQXTfghIl
+	iCdGa87xTFy115z/X+gnxuTw3y9+52VipAxuJsHX2YsG2bHHN1cQUUDhEYqBgjTWFgiUSobHHVK
+	GKdVHTAWvfzQY31NSSBb5L9cBNKcZXCD4+c1LFXNZx7/wiQC63kmCWnopFsGMJqcQ0ZpGnmH2dy
+	NAuZFN1MX+Z7ubBsYDTTf+pgqYodhc5sFEHYF16PHV3THwHI3NQfrbAogs1A76djJxQoeIaFEZF
+	HKZa44Ucmf6THwAgbcyZ9RoRQ=
+X-Google-Smtp-Source: AGHT+IG+4Su03prYbt6n5qR1nTAfW+7RTrG8/tcfMCDl8OXrQiz833IsM6Hd3eTjjbNcqhMNkJD8+A==
+X-Received: by 2002:a05:7300:8290:b0:2ae:598e:abe5 with SMTP id 5a478bee46e88-2b17d321a6dmr2554912eec.35.1767862718478;
+        Thu, 08 Jan 2026 00:58:38 -0800 (PST)
+Received: from sw07.internal.sifive.com ([4.53.31.132])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b170675076sm8833634eec.2.2026.01.08.00.58.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Jan 2026 00:58:37 -0800 (PST)
+From: Nick Hu <nick.hu@sifive.com>
+Date: Thu, 08 Jan 2026 00:58:24 -0800
+Subject: [PATCH v4 1/3] cpuidle: riscv-sbi: Split PM domain init out of the
+ cpuidle driver
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 3/8] dt-bindings: thermal: Add qcom,qmi-cooling yaml
- bindings
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, andersson@kernel.org,
-        mathieu.poirier@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
-        conor+dt@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, lukasz.luba@arm.com, konradybcio@kernel.org,
-        amitk@kernel.org, mani@kernel.org, casey.connolly@linaro.org
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20251223123227.1317244-1-gaurav.kohli@oss.qualcomm.com>
- <20251223123227.1317244-4-gaurav.kohli@oss.qualcomm.com>
- <d6396ed0-8529-44af-9d2b-cf0bf03f17f6@oss.qualcomm.com>
-Content-Language: en-US
-From: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-In-Reply-To: <d6396ed0-8529-44af-9d2b-cf0bf03f17f6@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: SHMc0Tvy8ChMdSOZUHTQYfJM2gQFQLrO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA4MDA1OCBTYWx0ZWRfXywid1ZS3fsSG
- yGxgD8zg4Ky6LTo0gR+xYlEDj6O34+YgxKsNFCzs+uj+2ZEcCiZfubl8q9+6QiVhUEMctgGC7Hx
- 01dTgfi2cWUHWQOEU1BUaPHph0HbUcfmrqDrcfIHoJUjTohIpye7cQVGAte7ZsXcKVp4MWfvk5W
- ZQnoO/2+9Nrlpo3nh9FoFDXdGvwZqdYh/G1VQH6P8i5fWLT43aNVwVvT6RsfrwwAXP3HNe3cc+W
- HfJrAVddcgiJJcaidBI1SjcJhT4BagqYc5P+Hq+jCTjVQobR9pHSOwFJmD62yK1AYgViYgYEuQV
- 3umpnJI5gFUFWQRJDQ78FX2nOGClRdGlb8yAOEUrOjtYxY18cOqOtLq368ZDs0x5ujUcMXqZB0T
- 8uBE3XjXHNEiP75srgQHJeHd0CKxY/UhI+y7RTYyKvVxGvcHZ7DGE2bgdMfOcVkA++vakarHnY8
- rdQGa8V0oXYlhe+LeGw==
-X-Authority-Analysis: v=2.4 cv=P7k3RyAu c=1 sm=1 tr=0 ts=695f6e28 cx=c_pps
- a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
- a=1smkeVCflDFu9ac9zQYA:9 a=QEXdDO2ut3YA:10 a=OpyuDcXvxspvyRM73sMx:22
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-GUID: SHMc0Tvy8ChMdSOZUHTQYfJM2gQFQLrO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-08_01,2026-01-07_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 spamscore=0 phishscore=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 impostorscore=0 adultscore=0 priorityscore=1501
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2512120000
- definitions=main-2601080058
+Message-Id: <20260108-sifive-pd-drivers-v4-1-2a523d7d51a0@sifive.com>
+References: <20260108-sifive-pd-drivers-v4-0-2a523d7d51a0@sifive.com>
+In-Reply-To: <20260108-sifive-pd-drivers-v4-0-2a523d7d51a0@sifive.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, 
+ Samuel Holland <samuel.holland@sifive.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Cyan Yang <cyan.yang@sifive.com>, 
+ Nick Hu <nick.hu@sifive.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, devicetree@vger.kernel.org
+X-Mailer: b4 0.14.3
 
+Move the PM domain initialization logic from the RISC-V SBI CPU idle
+driver into a separate driver. This decouples the power domain setup
+from cpuidle and allows the generic PM domain framework to be used
+independently. This change also enables external power domain drivers to
+operate with the RISC-V SBI CPU idle driver
 
-On 12/31/2025 5:29 PM, Konrad Dybcio wrote:
-> On 12/23/25 1:32 PM, Gaurav Kohli wrote:
->> The cooling subnode of a remoteproc represents a client of the Thermal
->> Mitigation Device QMI service running on it. Each subnode of the cooling
->> node represents a single control exposed by the service.
->>
->> Add maintainer name also and update this binding for cdsp substem.
->>
->> Co-developed-by: Casey Connolly <casey.connolly@linaro.org>
->> Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
->> Signed-off-by: Casey Connolly <casey.connolly@linaro.org>
->> ---
-> [...]
->
->> +    remoteproc-cdsp {
->> +        cooling {
->> +            compatible = "qcom,qmi-cooling-cdsp";
->> +
->> +            cdsp_sw0: cdsp_sw {
-> I'm curious about the meaning of the name - does "sw" here stand
-> for "software"?
+Signed-off-by: Nick Hu <nick.hu@sifive.com>
+---
+ MAINTAINERS                                |   2 +
+ drivers/cpuidle/Kconfig.riscv              |  13 ++-
+ drivers/cpuidle/Makefile                   |   1 +
+ drivers/cpuidle/cpuidle-riscv-sbi-domain.c | 176 ++++++++++++++++++++++++++++
+ drivers/cpuidle/cpuidle-riscv-sbi.c        | 178 ++---------------------------
+ drivers/cpuidle/cpuidle-riscv-sbi.h        |  29 +++++
+ 6 files changed, 228 insertions(+), 171 deletions(-)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index a0dd762f5648..b52f11602271 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -6632,7 +6632,9 @@ M:	Anup Patel <anup@brainfault.org>
+ L:	linux-pm@vger.kernel.org
+ L:	linux-riscv@lists.infradead.org
+ S:	Maintained
++F:	drivers/cpuidle/cpuidle-riscv-sbi-domain.c
+ F:	drivers/cpuidle/cpuidle-riscv-sbi.c
++F:	drivers/cpuidle/cpuidle-riscv-sbi.h
+ 
+ CPUMASK API [RUST]
+ M:	Viresh Kumar <viresh.kumar@linaro.org>
+diff --git a/drivers/cpuidle/Kconfig.riscv b/drivers/cpuidle/Kconfig.riscv
+index 78518c26af74..b813018ce401 100644
+--- a/drivers/cpuidle/Kconfig.riscv
++++ b/drivers/cpuidle/Kconfig.riscv
+@@ -8,8 +8,17 @@ config RISCV_SBI_CPUIDLE
+ 	depends on RISCV_SBI
+ 	select DT_IDLE_STATES
+ 	select CPU_IDLE_MULTIPLE_DRIVERS
+-	select DT_IDLE_GENPD if PM_GENERIC_DOMAINS_OF
+ 	help
+ 	  Select this option to enable RISC-V SBI firmware based CPU idle
+-	  driver for RISC-V systems. This drivers also supports hierarchical
++	  driver for RISC-V systems.
++
++config RISCV_SBI_CPUIDLE_DOMAIN
++	bool "RISC-V SBI CPU idle Domain"
++	depends on RISCV_SBI_CPUIDLE
++	depends on PM_GENERIC_DOMAINS_OF
++	select DT_IDLE_GENPD
++	default y
++	help
++	  Select this option to enable RISC-V SBI firmware based CPU idle
++	  driver to use PM domains, which is needed to support the hierarchical
+ 	  DT based layout of the idle state.
+diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
+index 1de9e92c5b0f..82595849b75d 100644
+--- a/drivers/cpuidle/Makefile
++++ b/drivers/cpuidle/Makefile
+@@ -42,3 +42,4 @@ obj-$(CONFIG_POWERNV_CPUIDLE)		+= cpuidle-powernv.o
+ ###############################################################################
+ # RISC-V drivers
+ obj-$(CONFIG_RISCV_SBI_CPUIDLE)		+= cpuidle-riscv-sbi.o
++obj-$(CONFIG_RISCV_SBI_CPUIDLE_DOMAIN)	+= cpuidle-riscv-sbi-domain.o
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi-domain.c b/drivers/cpuidle/cpuidle-riscv-sbi-domain.c
+new file mode 100644
+index 000000000000..24cb70700c22
+--- /dev/null
++++ b/drivers/cpuidle/cpuidle-riscv-sbi-domain.c
+@@ -0,0 +1,176 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * PM domains for CPUs via genpd - managed by cpuidle-riscv-sbi.
++ *
++ * Copyright (c) 2021 Western Digital Corporation or its affiliates.
++ * Copyright (c) 2022 Ventana Micro Systems Inc.
++ */
++
++#define pr_fmt(fmt) "cpuidle-riscv-sbi-domain: " fmt
++
++#include <linux/device.h>
++#include <linux/pm_domain.h>
++
++#include "cpuidle-riscv-sbi.h"
++#include "dt_idle_genpd.h"
++
++struct sbi_pd_provider {
++	struct list_head link;
++	struct device_node *node;
++};
++
++static LIST_HEAD(sbi_pd_providers);
++
++static int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
++{
++	struct genpd_power_state *state = &pd->states[pd->state_idx];
++	u32 *pd_state;
++
++	if (!state->data)
++		return 0;
++
++	/* OSI mode is enabled, set the corresponding domain state. */
++	pd_state = state->data;
++	sbi_set_domain_state(*pd_state);
++
++	return 0;
++}
++
++static int sbi_pd_init(struct device_node *np, bool use_osi)
++{
++	struct generic_pm_domain *pd;
++	struct sbi_pd_provider *pd_provider;
++	struct dev_power_governor *pd_gov;
++	int ret = -ENOMEM;
++
++	pd = dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
++	if (!pd)
++		goto out;
++
++	pd_provider = kzalloc(sizeof(*pd_provider), GFP_KERNEL);
++	if (!pd_provider)
++		goto free_pd;
++
++	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
++
++	/* Allow power off when OSI is available. */
++	if (use_osi)
++		pd->power_off = sbi_cpuidle_pd_power_off;
++	else
++		pd->flags |= GENPD_FLAG_ALWAYS_ON;
++
++	/* Use governor for CPU PM domains if it has some states to manage. */
++	pd_gov = pd->states ? &pm_domain_cpu_gov : NULL;
++
++	ret = pm_genpd_init(pd, pd_gov, false);
++	if (ret)
++		goto free_pd_prov;
++
++	ret = of_genpd_add_provider_simple(np, pd);
++	if (ret)
++		goto remove_pd;
++
++	pd_provider->node = of_node_get(np);
++	list_add(&pd_provider->link, &sbi_pd_providers);
++
++	pr_debug("init PM domain %s\n", pd->name);
++	return 0;
++
++remove_pd:
++	pm_genpd_remove(pd);
++free_pd_prov:
++	kfree(pd_provider);
++free_pd:
++	dt_idle_pd_free(pd);
++out:
++	pr_err("failed to init PM domain ret=%d %pOF\n", ret, np);
++	return ret;
++}
++
++static void sbi_pd_remove(void)
++{
++	struct sbi_pd_provider *pd_provider, *it;
++	struct generic_pm_domain *genpd;
++
++	list_for_each_entry_safe(pd_provider, it, &sbi_pd_providers, link) {
++		of_genpd_del_provider(pd_provider->node);
++
++		genpd = of_genpd_remove_last(pd_provider->node);
++		if (!IS_ERR(genpd))
++			kfree(genpd);
++
++		of_node_put(pd_provider->node);
++		list_del(&pd_provider->link);
++		kfree(pd_provider);
++	}
++}
++
++static int sbi_genpd_probe(struct device_node *np, bool use_osi)
++{
++	int ret = 0, pd_count = 0;
++
++	if (!np)
++		return -ENODEV;
++
++	/*
++	 * Parse child nodes for the "#power-domain-cells" property and
++	 * initialize a genpd/genpd-of-provider pair when it's found.
++	 */
++	for_each_child_of_node_scoped(np, node) {
++		if (!of_property_present(node, "#power-domain-cells"))
++			continue;
++
++		ret = sbi_pd_init(node, use_osi);
++		if (ret)
++			goto remove_pd;
++
++		pd_count++;
++	}
++
++	/* Bail out if not using the hierarchical CPU topology. */
++	if (!pd_count)
++		goto no_pd;
++
++	/* Link genpd masters/subdomains to model the CPU topology. */
++	ret = dt_idle_pd_init_topology(np);
++	if (ret)
++		goto remove_pd;
++
++	return 0;
++
++remove_pd:
++	sbi_pd_remove();
++	pr_err("failed to create CPU PM domains ret=%d\n", ret);
++no_pd:
++	return ret;
++}
++
++static int __init riscv_sbi_idle_init_domains(void)
++{
++	bool use_osi = true;
++	int cpu;
++
++	/* Detect OSI support based on CPU DT nodes */
++	for_each_possible_cpu(cpu) {
++		struct device_node *np __free(device_node) = of_cpu_device_node_get(cpu);
++		if (np &&
++		    of_property_present(np, "power-domains") &&
++		    of_property_present(np, "power-domain-names")) {
++			continue;
++		} else {
++			use_osi = false;
++			break;
++		}
++	}
++
++	sbi_set_osi_mode(use_osi);
++
++	/* Populate generic power domains from DT nodes */
++	struct device_node *pds_node __free(device_node) =
++			of_find_node_by_path("/cpus/power-domains");
++	if (!pds_node)
++		return 0;
++
++	return sbi_genpd_probe(pds_node, use_osi);
++}
++core_initcall(riscv_sbi_idle_init_domains);
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+index 19be6475d356..95a837a1ba31 100644
+--- a/drivers/cpuidle/cpuidle-riscv-sbi.c
++++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+@@ -28,6 +28,7 @@
+ #include <asm/suspend.h>
+ 
+ #include "cpuidle.h"
++#include "cpuidle-riscv-sbi.h"
+ #include "dt_idle_states.h"
+ #include "dt_idle_genpd.h"
+ 
+@@ -46,7 +47,12 @@ static DEFINE_PER_CPU(struct sbi_domain_state, domain_state);
+ static bool sbi_cpuidle_use_osi;
+ static bool sbi_cpuidle_use_cpuhp;
+ 
+-static inline void sbi_set_domain_state(u32 state)
++void sbi_set_osi_mode(bool use_osi)
++{
++	sbi_cpuidle_use_osi = use_osi;
++}
++
++void sbi_set_domain_state(u32 state)
+ {
+ 	struct sbi_domain_state *data = this_cpu_ptr(&domain_state);
+ 
+@@ -188,7 +194,7 @@ static const struct of_device_id sbi_cpuidle_state_match[] = {
+ 	{ },
+ };
+ 
+-static int sbi_dt_parse_state_node(struct device_node *np, u32 *state)
++int sbi_dt_parse_state_node(struct device_node *np, u32 *state)
+ {
+ 	int err = of_property_read_u32(np, "riscv,sbi-suspend-param", state);
+ 
+@@ -345,177 +351,11 @@ static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
+ 	return ret;
+ }
+ 
+-#ifdef CONFIG_DT_IDLE_GENPD
+-
+-static int sbi_cpuidle_pd_power_off(struct generic_pm_domain *pd)
+-{
+-	struct genpd_power_state *state = &pd->states[pd->state_idx];
+-	u32 *pd_state;
+-
+-	if (!state->data)
+-		return 0;
+-
+-	/* OSI mode is enabled, set the corresponding domain state. */
+-	pd_state = state->data;
+-	sbi_set_domain_state(*pd_state);
+-
+-	return 0;
+-}
+-
+-struct sbi_pd_provider {
+-	struct list_head link;
+-	struct device_node *node;
+-};
+-
+-static LIST_HEAD(sbi_pd_providers);
+-
+-static int sbi_pd_init(struct device_node *np)
+-{
+-	struct generic_pm_domain *pd;
+-	struct sbi_pd_provider *pd_provider;
+-	struct dev_power_governor *pd_gov;
+-	int ret = -ENOMEM;
+-
+-	pd = dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
+-	if (!pd)
+-		goto out;
+-
+-	pd_provider = kzalloc(sizeof(*pd_provider), GFP_KERNEL);
+-	if (!pd_provider)
+-		goto free_pd;
+-
+-	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
+-
+-	/* Allow power off when OSI is available. */
+-	if (sbi_cpuidle_use_osi)
+-		pd->power_off = sbi_cpuidle_pd_power_off;
+-	else
+-		pd->flags |= GENPD_FLAG_ALWAYS_ON;
+-
+-	/* Use governor for CPU PM domains if it has some states to manage. */
+-	pd_gov = pd->states ? &pm_domain_cpu_gov : NULL;
+-
+-	ret = pm_genpd_init(pd, pd_gov, false);
+-	if (ret)
+-		goto free_pd_prov;
+-
+-	ret = of_genpd_add_provider_simple(np, pd);
+-	if (ret)
+-		goto remove_pd;
+-
+-	pd_provider->node = of_node_get(np);
+-	list_add(&pd_provider->link, &sbi_pd_providers);
+-
+-	pr_debug("init PM domain %s\n", pd->name);
+-	return 0;
+-
+-remove_pd:
+-	pm_genpd_remove(pd);
+-free_pd_prov:
+-	kfree(pd_provider);
+-free_pd:
+-	dt_idle_pd_free(pd);
+-out:
+-	pr_err("failed to init PM domain ret=%d %pOF\n", ret, np);
+-	return ret;
+-}
+-
+-static void sbi_pd_remove(void)
+-{
+-	struct sbi_pd_provider *pd_provider, *it;
+-	struct generic_pm_domain *genpd;
+-
+-	list_for_each_entry_safe(pd_provider, it, &sbi_pd_providers, link) {
+-		of_genpd_del_provider(pd_provider->node);
+-
+-		genpd = of_genpd_remove_last(pd_provider->node);
+-		if (!IS_ERR(genpd))
+-			kfree(genpd);
+-
+-		of_node_put(pd_provider->node);
+-		list_del(&pd_provider->link);
+-		kfree(pd_provider);
+-	}
+-}
+-
+-static int sbi_genpd_probe(struct device_node *np)
+-{
+-	int ret = 0, pd_count = 0;
+-
+-	if (!np)
+-		return -ENODEV;
+-
+-	/*
+-	 * Parse child nodes for the "#power-domain-cells" property and
+-	 * initialize a genpd/genpd-of-provider pair when it's found.
+-	 */
+-	for_each_child_of_node_scoped(np, node) {
+-		if (!of_property_present(node, "#power-domain-cells"))
+-			continue;
+-
+-		ret = sbi_pd_init(node);
+-		if (ret)
+-			goto remove_pd;
+-
+-		pd_count++;
+-	}
+-
+-	/* Bail out if not using the hierarchical CPU topology. */
+-	if (!pd_count)
+-		goto no_pd;
+-
+-	/* Link genpd masters/subdomains to model the CPU topology. */
+-	ret = dt_idle_pd_init_topology(np);
+-	if (ret)
+-		goto remove_pd;
+-
+-	return 0;
+-
+-remove_pd:
+-	sbi_pd_remove();
+-	pr_err("failed to create CPU PM domains ret=%d\n", ret);
+-no_pd:
+-	return ret;
+-}
+-
+-#else
+-
+-static inline int sbi_genpd_probe(struct device_node *np)
+-{
+-	return 0;
+-}
+-
+-#endif
+-
+ static int sbi_cpuidle_probe(struct platform_device *pdev)
+ {
+ 	int cpu, ret;
+ 	struct cpuidle_driver *drv;
+ 	struct cpuidle_device *dev;
+-	struct device_node *pds_node;
+-
+-	/* Detect OSI support based on CPU DT nodes */
+-	sbi_cpuidle_use_osi = true;
+-	for_each_possible_cpu(cpu) {
+-		struct device_node *np __free(device_node) = of_cpu_device_node_get(cpu);
+-		if (np &&
+-		    of_property_present(np, "power-domains") &&
+-		    of_property_present(np, "power-domain-names")) {
+-			continue;
+-		} else {
+-			sbi_cpuidle_use_osi = false;
+-			break;
+-		}
+-	}
+-
+-	/* Populate generic power domains from DT nodes */
+-	pds_node = of_find_node_by_path("/cpus/power-domains");
+-	if (pds_node) {
+-		ret = sbi_genpd_probe(pds_node);
+-		of_node_put(pds_node);
+-		if (ret)
+-			return ret;
+-	}
+ 
+ 	/* Initialize CPU idle driver for each present CPU */
+ 	for_each_present_cpu(cpu) {
+@@ -576,4 +416,4 @@ static int __init sbi_cpuidle_init(void)
+ 
+ 	return 0;
+ }
+-arch_initcall(sbi_cpuidle_init);
++device_initcall(sbi_cpuidle_init);
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.h b/drivers/cpuidle/cpuidle-riscv-sbi.h
+new file mode 100644
+index 000000000000..f9a0e81d1417
+--- /dev/null
++++ b/drivers/cpuidle/cpuidle-riscv-sbi.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __CPUIDLE_RISCV_SBI_H
++#define __CPUIDLE_RISCV_SBI_H
++
++#ifdef CONFIG_RISCV_SBI_CPUIDLE
++
++void sbi_set_osi_mode(bool use_osi);
++void sbi_set_domain_state(u32 state);
++int sbi_dt_parse_state_node(struct device_node *np, u32 *state);
++
++#else
++
++static inline void sbi_set_osi_mode(bool use_osi)
++{
++}
++
++static inline void sbi_set_domain_state(u32 state)
++{
++}
++
++static inline int sbi_dt_parse_state_node(struct device_node *np, u32 *state)
++{
++	return 0;
++}
++
++#endif
++
++#endif /* __CPUIDLE_RISCV_SBI_H */
 
-This is same like cdsp DCVS capping from firmware instead of hlos.
+-- 
+2.43.7
 
-
->
-> If so, does this essentially mean "a software toggle for throttling the
-> CDSP"?
->
-> Would all such occurrences essentially always have a "sw" suffix?
->
-> Konrad
 
