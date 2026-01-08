@@ -1,136 +1,150 @@
-Return-Path: <linux-pm+bounces-40414-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40415-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id D77E5D0113B
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 06:26:14 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAA42D01144
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 06:27:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DC8C030049FC
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 05:26:10 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 66A163001BF0
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 05:27:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3DBA2E8B8F;
-	Thu,  8 Jan 2026 05:26:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5BE2EDD41;
+	Thu,  8 Jan 2026 05:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=summations-net.20230601.gappssmtp.com header.i=@summations-net.20230601.gappssmtp.com header.b="xGKeAvZc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E992D2DC762;
-	Thu,  8 Jan 2026 05:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A94B2ECEAE
+	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 05:27:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767849967; cv=none; b=XhIKrUFjaeO9bID+z3yQhU0+7tR4W3CoehRpHcleA8HrC1m0QkoRnRPtjb4ZHFBQ56owtiQEq/nBm0CtN/iNviiKNlT5EDPJGvIbaTY+jns152F4bjsa3tP2zz+yeWnKSlXcJdXPAH/9GgYwySk8MkfVarERnr7XqXehAWWSuOc=
+	t=1767850073; cv=none; b=BBd21guo2FBSy6H9pTjm0dXAQy+urQZOJ6Tiy3xHXU7lxsJ3uCwPNng3kTugEEJnOUlXUd7TmZVG/SO8YSnTvOE4zYfiEEB7PzFq1aikJJ+5fdTdWzNhSTjI6Ip1Fa7dLBTrDtSfYO9BvfTHLgb9CW5NgjrCbxaKRoMKsfNuFqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767849967; c=relaxed/simple;
-	bh=yQ8dOP1njGAQjodtQBLAOGpZ5EFxynpIfbjJZpxxevY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=imTgxs1Xa98YOBL9JBrslAbYYQxfUqkqYr0wDmMW59XpztT+ae8h/1viVQpQZ8arx/HHv80aI2McPFmu9FmfxD+f/3vUwqPwy0N8oHz4LG32jp+XrK0nFD57hcHqUgA3tzAe3ZDcc+LU4JRkLqgKhrQ5RiZzSy6sURqIXn4aqHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F8EF497;
-	Wed,  7 Jan 2026 21:25:46 -0800 (PST)
-Received: from [10.163.83.134] (unknown [10.163.83.134])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3A5F83F6A8;
-	Wed,  7 Jan 2026 21:25:48 -0800 (PST)
-Message-ID: <bcb570b2-1adf-43f5-9ef2-063cc7687046@arm.com>
-Date: Thu, 8 Jan 2026 10:55:46 +0530
+	s=arc-20240116; t=1767850073; c=relaxed/simple;
+	bh=axExFEVawx6b/HLBeJrzGMEy2cTYiNuIo7O1q0+jeGs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kp87+EHXOnTUoXd6LVznQPuUlfAKbHvyA9u7xijnB7vBKvTx4F+TUYXU7MwQ4k6KwH1S06zhtJf0mB6+e8Aw+ahSrpSZiKdTkNw5qSO7UB6m5cd56QRgsaWDjrQqqaH50PVdY2g+f5gq8uMSWC/Jueh3zFCY4P2nBniokbyTA5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=summations.net; spf=pass smtp.mailfrom=summations.net; dkim=pass (2048-bit key) header.d=summations-net.20230601.gappssmtp.com header.i=@summations-net.20230601.gappssmtp.com header.b=xGKeAvZc; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=summations.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=summations.net
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-78f99901ed5so30637637b3.3
+        for <linux-pm@vger.kernel.org>; Wed, 07 Jan 2026 21:27:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=summations-net.20230601.gappssmtp.com; s=20230601; t=1767850071; x=1768454871; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BC+osoIwsp+MvsvfieiIYrUxWM9BGrlddB8KAIiHx4w=;
+        b=xGKeAvZcSxK9lW8webwP+1N941XNaFYkt61G/E3lNAci0GtowPkgoiVTl9QSVaXWBR
+         NWQe8Q+Jhim9ceguMLnCa8ihrljpG+P4/GTPznEWVBPPVUGGQcE1QAHTraBESCHwq3kX
+         RnGM4vAdxFs7TFxTxOzlEQMAfRXB3lzqL/2nltlRl1Gn4Z3OOM1XFYihd4I2Pg6HYEI+
+         lgzuuOMN7Z8aCJL0rFbnUBYqomZ1NaPVpmFm/TQwMRSeOZahfYNjMPQzlZJLLVvr0Anb
+         zgZIN7rT030zYJ+BgnXq1LWJC2VEXQdpZHi/IeJSicd0XRgAGn0S/dNN306t5Vq52DcH
+         cLUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767850071; x=1768454871;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=BC+osoIwsp+MvsvfieiIYrUxWM9BGrlddB8KAIiHx4w=;
+        b=FMoDFt+HzFQtipC5qUGUo25qbuPIQ9ifw04qk17fh92D1bf2OhPWki1mAo/D16VXXN
+         QGmCImLlRdp+HN4n8O4TDBOQpCWwdy4GDuNVAYDvhEJimkzDenqj6tiTEAP01IJHZCpp
+         Qbf1aXR4Bp3BSnzIcn5fr3QNcQJ/y24Rq4PnRkMYx/kSizEYlknJYRJSWaNPYZZpSe2U
+         qmPIeu2O7jhniBlWfZ+dnwkP8iJV6e99xJmMURDr8rwi6i0NXQJqjDV7u7p1O6tejQAW
+         yRw+e3KSOQVuX3WGm7VPNpo2ND424IHGNQMbmYUqRauO+9Uvfx2oSPl9Mq1Phgf6PTE9
+         mQiw==
+X-Forwarded-Encrypted: i=1; AJvYcCWanm0R8h0RttEX46ibvtOnjvx8pEbmz/cf7Xu2Mbbi+fCMDsdXJymo335mAp/wfCG0wemZrMwLwQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz25+vWk5hZwPMPCzAhwdytSq9iZLl+vDNVz5oV6ZcqPwYv9vU5
+	eg/dLz5+2CSDRSB47cXLJ04ZVQhg3RYMDQn99JwCeUmmXlCE7z75GcDxt1ZK7zWlU9BMuFwjZ3o
+	MqE3EsVNOKG+aQ/hCyIOHbbUS6divnVxkQyYH2oWNKEU=
+X-Gm-Gg: AY/fxX4BWamZn1HHGTBgHnIdEHHAX2ABBhJMyalpYuTJGeqWSz9ghMBsHUwCpwecYet
+	i97tLl7JeCSEdNd9xK0MOE13iOfbbSa3eYKGA6y/Bo+Algm9JJan8VPZzOM9j1s4aKy2F3xWa9F
+	9gTNpZEundBABuRmdgERO0SJf2PMKy61FyCzqj6jEufITwE4N/8Rp4KzusN/aGJvnyI1/VgEHB8
+	e9EMtoNHW6KIPdUD9eOds01B3ktN86LHPGj2MBwAM2QQu6pXPeUbHlqHHMlFaNA0lYdrFS/vnSx
+	Se67ihgEc9iId/s0BODCOcVoQKHA
+X-Google-Smtp-Source: AGHT+IFOgL9QuUd80/piaFldcHRAVd0y782EaLehHJfIPXTxtTytmiYz4W9EajgqaU/7OrfDZq3ETfFnz3U6oZf/2iM=
+X-Received: by 2002:a05:690e:120f:b0:641:f5bc:696c with SMTP id
+ 956f58d0204a3-64716c60119mr4870525d50.72.1767850071169; Wed, 07 Jan 2026
+ 21:27:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] arm64: fix cleared E0POE bit after
- cpu_suspend()/resume()
-To: Yeoreum Yun <yeoreum.yun@arm.com>, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc: rafael@kernel.org, pavel@kernel.org, catalin.marinas@arm.com,
- will@kernel.org, ryan.roberts@arm.com, yang@os.amperecomputing.com,
- joey.gouly@arm.com, kevin.brodsky@arm.com, stable@vger.kernel.org
-References: <20260107162115.3292205-1-yeoreum.yun@arm.com>
-Content-Language: en-US
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20260107162115.3292205-1-yeoreum.yun@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260106092117.3727152-1-joshua.yeong@starfivetech.com>
+In-Reply-To: <20260106092117.3727152-1-joshua.yeong@starfivetech.com>
+From: Rahul Pathak <rahul@summations.net>
+Date: Thu, 8 Jan 2026 10:57:39 +0530
+X-Gm-Features: AQt7F2qhmjlZCACoqEpff45oADUXIoYNWJ-4094MakljrIym7FWPaVOI4-KiK_c
+Message-ID: <CABdD5xkq=LbaUo=jDGSF2U2Rb0r13EEJQMfSjxEMsSX0mCDyhQ@mail.gmail.com>
+Subject: Re: [PATCH 0/5] RISC-V: RPMI performance service bindings and cpufreq support
+To: Joshua Yeong <joshua.yeong@starfivetech.com>
+Cc: anup@brainfault.org, leyfoon.tan@starfivetech.com, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, pjw@kernel.org, palmer@dabbelt.com, 
+	aou@eecs.berkeley.edu, alex@ghiti.fr, rafael@kernel.org, 
+	viresh.kumar@linaro.org, sboyd@kernel.org, jms@oss.tenstorrent.com, 
+	darshan.prajapati@einfochips.com, charlie@rivosinc.com, 
+	dfustini@oss.tenstorrent.com, michal.simek@amd.com, cyy@cyyself.name, 
+	jassisinghbrar@gmail.com, andriy.shevchenko@linux.intel.com, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jan 6, 2026 at 2:51=E2=80=AFPM Joshua Yeong
+<joshua.yeong@starfivetech.com> wrote:
+>
+> This patch series introduces support for the RISC-V RPMI (RISC-V Platform
+> Management Interface) performance service, covering both Device Tree bind=
+ings
+> and a corresponding cpufreq driver.
+>
+> The first part of the series adds YAML bindings to describe the RPMI perf=
+ormance
+> service as provided by platform firmware, as well as the supervisor-level
+> controller interface exposed to the operating system. The bindings also d=
+ocument
+> how CPU nodes reference performance domains managed by RPMI.
+>
+> The final patch builds on these definitions by introducing a cpufreq driv=
+er that
+> leverages the RPMI performance service to manage CPU frequency scaling on=
+ RISC-V
+> systems. The driver supports RPMI access through SBI-based transport mech=
+anisms
+> as well as dedicated supervisor-mode transports.
+>
+> RPMI specification reference [1] and [2]
+>
+> Test Environment is as follows:
+> https://github.com/yeongjoshua/linux/tree/v6.19-rc4/rpmi-performance
+> https://github.com/riscv-software-src/opensbi
+> https://github.com/yeongjoshua/qemu/tree/rpmi-dev-upstream
+>
+> Use '-M virt -M rpmi=3Dtrue' when running qemu
+>
+> [1] https://github.com/riscv-non-isa/riscv-sbi-doc/releases
+> [2] https://github.com/riscv-non-isa/riscv-rpmi/releases
+>
+> Joshua Yeong (5):
+>   dt-bindings: firmware: Add RPMI performance service message proxy
+>     bindings
+>   dt-bindings: firmware: Add RPMI performance service bindings
+>   dt-bindings: riscv: cpus: document performance-domains property
+>   cpufreq: Add cpufreq driver for the RISC-V RPMI performance service
+>     group
+>   MAINTAINERS: Add RISC-V RPMI performance service group
 
 
+Hi Joshua,
 
-On 07/01/26 9:51 PM, Yeoreum Yun wrote:
-> TCR2_ELx.E0POE is set during smp_init().
-> However, this bit is not reprogrammed when the CPU enters suspension and
-> later resumes via cpu_resume(), as __cpu_setup() does not re-enable E0POE
-> and there is no save/restore logic for the TCR2_ELx system register.
-> 
-> As a result, the E0POE feature no longer works after cpu_resume().
-> 
-> To address this, save and restore TCR2_EL1 in the cpu_suspend()/cpu_resume()
-> path, rather than adding related logic to __cpu_setup(), taking into account
-> possible future extensions of the TCR2_ELx feature.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: bf83dae90fbc ("arm64: enable the Permission Overlay Extension for EL0")
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
-> 
-> Patch History
-> ==============
-> from v1 to v2:
->   - following @Kevin Brodsky suggestion.
->   - https://lore.kernel.org/all/20260105200707.2071169-1-yeoreum.yun@arm.com/
-> 
-> NOTE:
->   This patch based on v6.19-rc4
-> ---
->  arch/arm64/include/asm/suspend.h | 2 +-
->  arch/arm64/mm/proc.S             | 8 ++++++++
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/include/asm/suspend.h b/arch/arm64/include/asm/suspend.h
-> index e65f33edf9d6..e9ce68d50ba4 100644
-> --- a/arch/arm64/include/asm/suspend.h
-> +++ b/arch/arm64/include/asm/suspend.h
-> @@ -2,7 +2,7 @@
->  #ifndef __ASM_SUSPEND_H
->  #define __ASM_SUSPEND_H
-> 
-> -#define NR_CTX_REGS 13
-> +#define NR_CTX_REGS 14
->  #define NR_CALLEE_SAVED_REGS 12
-> 
->  /*
-> diff --git a/arch/arm64/mm/proc.S b/arch/arm64/mm/proc.S
-> index 01e868116448..5d907ce3b6d3 100644
-> --- a/arch/arm64/mm/proc.S
-> +++ b/arch/arm64/mm/proc.S
-> @@ -110,6 +110,10 @@ SYM_FUNC_START(cpu_do_suspend)
->  	 * call stack.
->  	 */
->  	str	x18, [x0, #96]
-> +alternative_if ARM64_HAS_TCR2
-> +	mrs	x2, REG_TCR2_EL1
-> +	str	x2, [x0, #104]
-> +alternative_else_nop_endif
->  	ret
->  SYM_FUNC_END(cpu_do_suspend)
-> 
-> @@ -144,6 +148,10 @@ SYM_FUNC_START(cpu_do_resume)
->  	msr	tcr_el1, x8
->  	msr	vbar_el1, x9
->  	msr	mdscr_el1, x10
-> +alternative_if ARM64_HAS_TCR2
-> +	ldr	x2, [x0, #104]
-> +	msr	REG_TCR2_EL1, x2
-> +alternative_else_nop_endif
-> 
->  	msr	sctlr_el1, x12
->  	set_this_cpu_offset x13
-> --
-> LEVI:{C3F47F37-75D8-414A-A8BA-3980EC8A46D7}
-> 
+I have a general question -  RPMI performance service group is
+primarily defined for devices but can also be used for CPUs.
+Do you plan to add a RPMI devfreq driver too for devices?
 
-LGTM
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
+Thanks
+Rahul
 
