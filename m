@@ -1,85 +1,84 @@
-Return-Path: <linux-pm+bounces-40475-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40476-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8F84D04021
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 16:48:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A129D0427F
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 17:06:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 123E530378A5
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 15:46:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A6BEA315C224
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 15:46:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C614D7405A;
-	Thu,  8 Jan 2026 15:40:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B9D92236FC;
+	Thu,  8 Jan 2026 15:41:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com [209.85.217.54])
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2976025CC79
-	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 15:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9751D32C8B
+	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 15:41:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767886825; cv=none; b=WJSOlEgcW7TlydlOHRNFmC8kKuuo1XJMrZ+XmIlRCfEX8zOWNw81Kv/IuhgWEAnNctiEOW5b+VVKu7IbqgNfA0Ruanp77dDZpXBPHN37hlyiGoKMGHwBxj7fzdfPVDXFiylY8/VIPPTdztmWSzBLhwXbTXUydphfb7blD1pTBHY=
+	t=1767886900; cv=none; b=HsmYWmsEIK61S/hk8jLk8dNUgMvRs5sPV9lDX+jTqKki0SE+Ijy9Q8WLCZSDewpbDmccbF0wZ7oEgje5y8UnZYzJVXHAe8O5+TkhSi7bHcTLmdp4lxDesWRexXqpLfAKmnvA9kRJa0HkVmOWEUaazQ4SQs/nNZ5Z42tyOy50Mhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767886825; c=relaxed/simple;
-	bh=G7JSDJeyfhq10WIyx1yxqUoIHN0VScyPB72n/Phi9m0=;
+	s=arc-20240116; t=1767886900; c=relaxed/simple;
+	bh=nOXI+klEGl26fnDx+EjZGGsuvBdNo6RtFb/zBiHZmGQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L7DL7UIsyaWJ8o0jGGg7wyzv7Oos6iwolS1mDdmK+fqdUouCPlcxQya7mZymh+8+0re7LGuUHAquu1vNZKS8Y4yp/2uUnDPyl/2n4j7GGVAkXX1+7xy9ZPyZyhKi986MWr//Ok89IEI+OQRspQUWKC3uG6NfYxUVIWzqgAdFe+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.54
+	 To:Cc:Content-Type; b=LcveqUGJeV8W2zd5zbMGQVwejMQ5hLPZpb+pX92wS7Jp/2EvSzWipxncEXoJQA5oHmvssKy2bIFtmeXunty9yRmAruAxkCEPlaY4o09jrdZ613O+7XIFnGLecWpuLBYPZ9Gcc8o4F/5T+iatbk3fjbVF8plR4h4u2M3x6DCJP8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-5ed09471ab9so587201137.0
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 07:40:23 -0800 (PST)
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-56021f047d6so1056426e0c.0
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 07:41:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767886823; x=1768491623;
+        d=1e100.net; s=20230601; t=1767886897; x=1768491697;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LPCEMds3NUNJIzMjaHhQoyBDppqgLalAn8n+Qce6geo=;
-        b=Z1PcgE9yE1w3whTv+BoYWfvdMnj1pT69EjRUbtOm4dG+ZF/3WkMsMgNu0hT788dg3m
-         twicVYYNXC3Q7awAUGcTPaqw6zfGl3TqpHXD6hJ8jyXzJPdRSZ9L1j5ClQCgT+hk2sjW
-         qe0iC3AjIbscwi/Oq6p2HxIOceHBv0gcpfOLZV/DYb1C7LpDgs8ATw5tssPYNRSYLhyH
-         AIGSTh6bENcpklGb42bYmz77WBR6D0qEsuOjp0FAbrkTv1RWSY8xAIxfkZR8U9H9YbLe
-         +SowQYq6O+QgybQhLJDbxCX59kPKHLV3qepJQVxuXsLW/iNCqahFJYqgVwJ6OY2HBcs4
-         /VQw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9MokNCbZ9xGm24iS8qUEbxXX3RGdc7uCN753/Sjx3PEX/oTjlMt2Gn4zPj6S9dI7ctL9EUNwuMg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDYA7LiG7rQOahkylnxMI4rts4AdLlD6itSe6tzOHcW2hGvHdm
-	XMT2KKhLzJ91ANo0FmW4WgrALVshBE3DkrMM3L3IM8Ggd0Nhj+q/jEZWqOjVtEeL
-X-Gm-Gg: AY/fxX6p7/g5epNn482veCixVmMTek5gSkuTk+Q4CFcPhdIN6Du/k/YFW8iDFRLF0fp
-	AVUVCBAPzqsfXfBczs3WDMmClETqVHfuefb1jF9TBzlJznQIZCApLwl9VAdRgSjtHv85M/1SqCr
-	dayBmshh4cOyJ2hLvRJS0E3APnvm8wwQMwVF3WnBsfNtFufJUKTO/wEjcPaYwoFYAXy3wWq/vY9
-	lmte4X8F3ER2yOOV12wHxa9eJtmsEu04wozPHM2GUen2zW4UcZY1cnYQwzjJTG9QX3xlK6jPP/n
-	e7HrJwt1HGJXzSqFIJRg7Dp3CEebj4vPFE0jo9cUFHTmEQJVtPqwvIo8yfggllkgthV5Co6kc6d
-	rC/UV5lh9O0cr36cgyf4yPjmWIRuk5o9P1VkDUjrXOg35fsxWHRBHh7eN9dTTZfD+UqDSOGcVQD
-	NAzLde7Q0oTQFBtiOc57KzxuPhcw53/9OCGEG8IS+ipqwaf3DuS4tkXtJTnDqF8RY=
-X-Google-Smtp-Source: AGHT+IGOLGg7shKST7oiASxs7P3sEiU7I3IO9zG5ZG2wxMW3OM/v7nU62p6W+DC8wyZN/z+YTP5ElA==
-X-Received: by 2002:a05:6102:605c:b0:5ed:c98:37d6 with SMTP id ada2fe7eead31-5ed0c983b74mr1853532137.2.1767886822890;
-        Thu, 08 Jan 2026 07:40:22 -0800 (PST)
-Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com. [209.85.221.174])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-944124c452asm6130659241.13.2026.01.08.07.40.22
+        bh=cDBqyQMP/mzqkMYSw6gEE+uyIajrqLvoQIBVBvwesYg=;
+        b=cF0UFB6e2TwgSUuEbtI1ABuvf7YtJPVCqmVpD73gv6FKOXBrEkdkjeVT+alar9bBT9
+         ruMDK9wMEDHyYvGYgyxU3tKiy3E9VmcNnTGw8azQkukMvQihX3OCdn3X7yUOn7XcUqsH
+         LHCYfarH/1Hle4o73Sn0Tdn22uMYmjN/ZuIFD0lAFBxdhPWLkLpusJYpAUPWO4R7y/Xw
+         BOS/mYxFLJfQpDhWe63P0H2Jjovjat3ZW1OuwUh4ClU+f6AxZcLKynH6swjFpVboqRx+
+         fKd+Zdqn/hVZn6c9ZDGThxId/3XDsXMeO5KfnTG0jzksrLhdzqFRMr9JbB9asAc/bTrF
+         0jzg==
+X-Forwarded-Encrypted: i=1; AJvYcCVII+GF9D0HMLXZaAJEEVvbjwhmXh0hdbvEICd/X9e+j0WNdsTm66wpdOysPs8i6QCaZCNBuqQGLg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywwv5LsqDplAkXRRxtnqM/f2p6Xqek+33hS5OyAmdOdyz7jcyln
+	oR/D+072A3Fpddbq6ZB2vGy69SHgap3ubrlE5ObzDrhgWZlYtJwi9RgSgyGscwd9
+X-Gm-Gg: AY/fxX71VF2Bls/NYKHwne10fesDjPybF+tIfIwjCMzm5L0DOiN1vLXkQ3DqQzod6P7
+	Zr+Y/ZFkUJd80Zh5G0ypoQFGRCaRh+K/pk6TqJqVkVT3Hbx5yLSKTOGN0Y9z0k1o+wf+nsR2g+9
+	0dfkJMNnq0xGo4p7fgFsMrnQZJ3NPuzIX4sYkWlKHjtK1Xt+QtiAT6gJBOkUC0swffjFbDXRSxq
+	pY2OSEugBnts8vHuw4FJt6T3xfFHeIeTThrSd1yjwvBFMJj2kc5F4EPjZJBQxdJBbAi/sAtfx/j
+	KYFMvDN22nNC28uHawwDLXUCfWUZce5dQiLHg5tyHfzA20v5nhot6MF2V/r9oCLJz0Sl3Am6/uV
+	/UJQUO2pEWJ2SFJBYpOmoSpA5Ppa/vrCBjTykvs8bcmJ1RfB29itImSEjeAf9UPio6JRJj/4Dpb
+	PIPXbhI90GI0QpOVEt8kd4ZowY32WpDN3FKtGKZqe00ev9Haer
+X-Google-Smtp-Source: AGHT+IHzX33Gu1se8FH2q9vkUF2yjv9wdFa3ERJdqvf4LWb1OqCjM+y8qrntoxLRy06G+P8FFIvXpw==
+X-Received: by 2002:a05:6122:46aa:b0:55b:305b:488d with SMTP id 71dfb90a1353d-56348007493mr2547674e0c.19.1767886897383;
+        Thu, 08 Jan 2026 07:41:37 -0800 (PST)
+Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com. [209.85.217.45])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5635f13471esm1016951e0c.14.2026.01.08.07.41.36
         for <linux-pm@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Jan 2026 07:40:22 -0800 (PST)
-Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-55b2a09ff61so1048857e0c.2
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 07:40:22 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWyWXn99T4USoWgqXlz4r0c51JGLZhLWZTTDAStaA7DHVIjZEFGWkw+qZigGi+sV9krT8Z6FXKvzw==@vger.kernel.org
-X-Received: by 2002:a05:6122:8c8a:b0:539:2a2c:6efe with SMTP id
- 71dfb90a1353d-56347d53d51mr1984301e0c.4.1767886821868; Thu, 08 Jan 2026
- 07:40:21 -0800 (PST)
+        Thu, 08 Jan 2026 07:41:36 -0800 (PST)
+Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-5ed09471ab9so587592137.0
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 07:41:36 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUGo5RU+RtXTGOk8Ap1V8mu0IHwxRDM8r9IPgktw1ZFLNN6fl2leo+eg32ht/Jn4/zvqfrrlxc07A==@vger.kernel.org
+X-Received: by 2002:a05:6102:3f09:b0:5db:f573:a2c with SMTP id
+ ada2fe7eead31-5ecb6875d0fmr1951115137.13.1767886896018; Thu, 08 Jan 2026
+ 07:41:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251126130356.2768625-1-cosmin-gabriel.tanislav.xa@renesas.com> <20251126130356.2768625-6-cosmin-gabriel.tanislav.xa@renesas.com>
-In-Reply-To: <20251126130356.2768625-6-cosmin-gabriel.tanislav.xa@renesas.com>
+References: <20251126130356.2768625-1-cosmin-gabriel.tanislav.xa@renesas.com> <20251126130356.2768625-7-cosmin-gabriel.tanislav.xa@renesas.com>
+In-Reply-To: <20251126130356.2768625-7-cosmin-gabriel.tanislav.xa@renesas.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 8 Jan 2026 16:40:09 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWY1+xo0sLs_OxLNf0ES0pZy+Q-u309gRXuTsZ3cf2ACQ@mail.gmail.com>
-X-Gm-Features: AQt7F2q4mnTwj4mP8-vYCbbynRSDudO3B41aJiCWB2w7nQNsSq50R88G--5ck-E
-Message-ID: <CAMuHMdWY1+xo0sLs_OxLNf0ES0pZy+Q-u309gRXuTsZ3cf2ACQ@mail.gmail.com>
-Subject: Re: [PATCH v3 5/9] thermal: renesas: rzg3e: add support for RZ/T2H
- and RZ/N2H
+Date: Thu, 8 Jan 2026 16:41:25 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU+UOdNjUPWiXbJTv4MYjPwuxLtgXJ2AL0+XVHatJW=6g@mail.gmail.com>
+X-Gm-Features: AQt7F2oXVcr96RqhW7ksn9tJ0uMEbuupTQNMcjQNZoyMUd0wuPKdl5AUIme_0eo
+Message-ID: <CAMuHMdU+UOdNjUPWiXbJTv4MYjPwuxLtgXJ2AL0+XVHatJW=6g@mail.gmail.com>
+Subject: Re: [PATCH v3 6/9] arm64: dts: renesas: r9a09g077: add OPP table
 To: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 Cc: John Madieu <john.madieu.xa@bp.renesas.com>, "Rafael J . Wysocki" <rafael@kernel.org>, 
 	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
@@ -90,63 +89,14 @@ Cc: John Madieu <john.madieu.xa@bp.renesas.com>, "Rafael J . Wysocki" <rafael@ke
 	linux-renesas-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Hi Cosmin,
-
 On Wed, 26 Nov 2025 at 14:05, Cosmin Tanislav
 <cosmin-gabriel.tanislav.xa@renesas.com> wrote:
-> The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs expose the
-> temperature calibration via SMC SIP and do not have a reset for the
-> TSU peripheral, and use different minimum and maximum temperature values
-> compared to the already supported RZ/G3E.
->
-> Although the calibration data is stored in an OTP memory, the OTP itself
-> is not memory-mapped, access to it is done through an OTP controller.
->
-> The OTP controller is only accessible from the secure world,
-> but the temperature calibration data stored in the OTP is exposed via
-> SMC.
->
-> Add support for retrieving the calibration data using arm_smcc_smc().
->
-> Add a compatible for RZ/T2H, RZ/N2H can use it as a fallback.
+> Add OPP table for RZ/T2H SoC.
 >
 > Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 
-Thanks for your patch!
-
-> --- a/drivers/thermal/renesas/rzg3e_thermal.c
-> +++ b/drivers/thermal/renesas/rzg3e_thermal.c
-
-> @@ -381,6 +385,21 @@ static int rzg3e_thermal_get_syscon_trim(struct rzg3e_thermal_priv *priv)
->         return 0;
->  }
->
-> +static int rzg3e_thermal_get_smc_trim(struct rzg3e_thermal_priv *priv)
-> +{
-> +       struct arm_smccc_res local_res;
-
-Missing #include <linux/arm-smccc.h>.
-
-> +
-> +       arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPLO,
-> +                     0, 0, 0, 0, 0, 0, &local_res);
-
-Can this crash? E.g. if this SMC call is not supported by the firmware?
-
-> +       priv->trmval0 = local_res.a0 & TSU_TEMP_MASK;
-> +
-> +       arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPHI,
-> +                     0, 0, 0, 0, 0, 0, &local_res);
-> +       priv->trmval1 = local_res.a0 & TSU_TEMP_MASK;
-> +
-> +       return 0;
-> +}
-> +
->  static int rzg3e_thermal_probe(struct platform_device *pdev)
->  {
->         struct device *dev = &pdev->dev;
-
-The rest LGTM.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.20.
 
 Gr{oetje,eeting}s,
 
