@@ -1,119 +1,131 @@
-Return-Path: <linux-pm+bounces-40408-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40409-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74246D004AC
-	for <lists+linux-pm@lfdr.de>; Wed, 07 Jan 2026 23:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 51685D00CF1
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 04:11:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5205B3014DE9
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Jan 2026 22:17:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 46ADD300A6EB
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 03:11:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A594149659;
-	Wed,  7 Jan 2026 22:17:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 256232C0F8C;
+	Thu,  8 Jan 2026 03:11:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YxyNKw8c"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ANgSuIWn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071441E511
-	for <linux-pm@vger.kernel.org>; Wed,  7 Jan 2026 22:17:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84DE62BEC4A
+	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 03:10:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767824276; cv=none; b=kLvAa+Pr/gjeXfTuF25aPqb0RGmBWMaTEQAAHOMZJwFL4NHLCsx4mvLRR58ctqToD85Vg6yACNt5s+jLjMEArQOLviQs0X7HVMIWk0Nip6k1TDj0zxPwr4SEHn2R8sHt6r2gQDEujO83/LORUMU0weKt+mBs59SB9Afv2uck/6s=
+	t=1767841861; cv=none; b=YTyCyMidQ2eG4w202skkQRtzeN8i3v+D12qHHr4TViOl4zfANg0s5KzRRkoF4pabQDXkZ6JXcPR7x3eNLYcQ7w09M/02NV9Cl2UgAlM8oV3SMyi4vzC+H60/nEm4UGD+vsEu7o5O/vyiKCFZu0y4kubxKwGqBS7zI1v7PjVtk+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767824276; c=relaxed/simple;
-	bh=Zlo0CmN+rPcs3sRSQ7xchoQ1HyxThyGFblgLrl1PFj0=;
+	s=arc-20240116; t=1767841861; c=relaxed/simple;
+	bh=SdqVF3LD7jpBjbdm83nwVaJWKtKSkKhzurj2RKWv7nw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T7f+fstdsG8p9dwb6Qy9wh7Fdph1M4co4NUkLeZSpbKodFcc0ftOER29Ldzv924rKq9ej8a12FSMwQX65EcfArwQW3+tXOuhZYPUr5OVf5vtCIWi8jUTcpF5qWE78BeZvoQiPXzm3YKNefUZY0vZ5vBypWKeGvxc4CsX2YlXNxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YxyNKw8c; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1767824275; x=1799360275;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Zlo0CmN+rPcs3sRSQ7xchoQ1HyxThyGFblgLrl1PFj0=;
-  b=YxyNKw8cjLOa73q59vFPXRRGTf7cOx4OaSOiD7belvARPC5Kxz3OIZjb
-   gvJ0k3sKox56JILvPIdmIIrSAfQtK9ZN8o1VIigT0xdt/WruND8EaYK9D
-   vmljbpdOLnWemD/KBsu2gKLeUgMLAkCYwnWtJodx+CBWnlLRjO7FfgZxZ
-   dvIW79qku+z4YAofLl5a0coLZE2m+/2cwIM2emMGnnpmirSXYzdzaKRnD
-   WMmqJnHreI1zYwZcXl0o75lmXjcHUPoO0eZCVaw6So1N/1YUHKT3dZXfI
-   N+ZXL32yEHxZXN1TU6Ba2iHzU68Q26k2BzbshrmEntUN8qZt1L6Za/GOR
-   w==;
-X-CSE-ConnectionGUID: Kl/uumnkSnCoza8nlb3DSQ==
-X-CSE-MsgGUID: q93ZOy0iQx2d1ZR0NiBgIA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11664"; a="69181968"
-X-IronPort-AV: E=Sophos;i="6.21,209,1763452800"; 
-   d="scan'208";a="69181968"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 14:17:54 -0800
-X-CSE-ConnectionGUID: EVas2kpySpmlWi33SBKJVg==
-X-CSE-MsgGUID: 5qtEwj8qRpOhbUdAIamdQg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,209,1763452800"; 
-   d="scan'208";a="234185958"
-Received: from debox1-desk4.jf.intel.com (HELO localhost) ([10.88.27.138])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2026 14:17:54 -0800
-Date: Wed, 7 Jan 2026 14:17:53 -0800
-From: David Box <david.e.box@linux.intel.com>
-To: Kenneth Crudup <kenny@panix.com>, bhelgaas@google.com
-Cc: Manivannan Sadhasivam <mani@kernel.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: OK, let's try ONE more time to get the VMD ASPM patches in, ...
- please?!
-Message-ID: <d33kx7if7cwin7migv7jm2gaf6s3rf6j5zi3rzvmaddmymi2q6@lnazkzumnclf>
-References: <1a1e80e8-e821-4736-b772-b27f1ad88dc3@panix.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZbKMmAQeHvCJaf4czInobnzxss08yluffzxOH51lGxmtGbss2pNbPur8ZXdPqo//A0cCIDfqwDIw9MMe4ocRuRwHF53J+UeAxIFesTP+oKbWaPPQ9xtcaisV5CN9i9PD7ZxvGxBiEzRIm/TxxA1aZ/wRrIVS7FUKrOSyOXJKwY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ANgSuIWn; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-29f102b013fso28538545ad.2
+        for <linux-pm@vger.kernel.org>; Wed, 07 Jan 2026 19:10:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1767841859; x=1768446659; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W4wKAGkCZEe39pTChgi73m7wO7Ejxj689GXAAP95ccw=;
+        b=ANgSuIWnHIYArQxIOtZmcjWWa8g9vwYK39XEMEmfwF9YgycnYH1Y+IGa9yG91lxruL
+         x5L3v3aOQnqo+hgPy/ee/P30iKnsNduoUID4UIVxZJnhmwSpHRyxKnFPtSotQRoJ45Dh
+         XY2zeKJsD8EQrvkA+2h9acNhvXSXifTuDpYQ7RBkqjBlRROYhdgvKZx8ZY6cfKi3Tazz
+         Kr+mG9sxl2p2IoybK7lOOF49Vfa5WURZw/65pixyyY/Tf51FGQU36BSm5bcqEHN4L9vI
+         CnsPsJa3USRiyHsy1vv6D2KZVJrmH2GZ15uBO11W/tawN883T5xZsHra85JJiQUe2pk/
+         hiUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767841859; x=1768446659;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W4wKAGkCZEe39pTChgi73m7wO7Ejxj689GXAAP95ccw=;
+        b=EKlxhx+9Ruh3PHrXMN5Me876qawtg1RyGA7K/cSQu1o+v684dqUZ5iDTwV3Kp5Rch/
+         2BUTUjsUSEHMZcnYBW1r8rfNaIV5WEGHMojrwv4Xi8RwqiZnVsJEFF9TtcTdOJ13/PMB
+         JLFD1mMplmVULrwlNwm+RpGsHtqxuyIulGC6kzYkcU7unUuND7KxPYYcNJAnbiBJyt+Q
+         9SA+s771pyqo3H/F7+zMMyPsTIg56S1tCIiyk0uVXsHrxHxsvD3xwD2KDLdR8jPX65AQ
+         mC/1qjcgYYjOJoUL/wXU3oEpLIiADr1PRxC518TucSIKwPZn9XVmPfsz2alncecel+WE
+         1thA==
+X-Forwarded-Encrypted: i=1; AJvYcCUpG/ripx9uoLSAMigOJuQ/1utug5VRiKl5+yBh5a13bUYkcM2z4bDZVh6TkQSvdHwcpuyq71b21w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwLAx/IibCn5rZc+GetoZ0dCjELePW+z7nFS7Gn4HPRNxm9GIJ
+	oqeVmeM7P1wck/b3UgeY1Zaq08QW2W5dTI3ZoiZMs5D4eCAd1HGeYpvc6Qp4Hi9VgBE=
+X-Gm-Gg: AY/fxX61gyH+8fTPKfQOhJmjqHcGO+WZXEVmbCrVgx/i6fqQQPmJoVmfdBo15rpsi18
+	x4AKBRZFUQdiK8aa2Ze51VU7zzSx6eSfwsU2P3+LLYGUAGwtHwk9sArw/pQevnUgm70kZc8FC98
+	iKMgun2tbw+2Za3hDipiixvgQOI57kJ56fgRFHSeXIRTkeWd9CKmbxJHGrIeZ6AKLmhTsLbUcro
+	PyvxlUNHlVy/iPFa8O40szOCfKROFEhKHmYtw2diLfQBWBLFk9VfWo2sOXWK8KLy+N3JVTqYNMa
+	1MsfffV5Nuwo6XBx43Nq1Ius28cwyij6UdDKkOXt4UioXDTagzPxX5jJzCDiGRh0x60A0FFha4B
+	SLlgTcBmETdaOKJ8BF0Ywdt5MC4vPRdfGjsA2nOhTcAfL5zrw1vfdIKVnntsgNrYS5OBNIcH7PS
+	Nzn8wtP6/ZFe8=
+X-Google-Smtp-Source: AGHT+IF2GALJIvh/2Rj4DhZwH99ewpTJcYda51Qr0IK1kRHh6QlqlfYPgE0EbGL75vFlvU/nTxL8+A==
+X-Received: by 2002:a17:903:32d1:b0:298:3892:3279 with SMTP id d9443c01a7336-2a3ee4363abmr40555275ad.17.1767841858523;
+        Wed, 07 Jan 2026 19:10:58 -0800 (PST)
+Received: from localhost ([122.172.80.63])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3f3115682sm26328735ad.55.2026.01.07.19.10.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Jan 2026 19:10:57 -0800 (PST)
+Date: Thu, 8 Jan 2026 08:40:55 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Jie Zhan <zhanjie9@hisilicon.com>
+Cc: rafael@kernel.org, ionela.voinescu@arm.com, beata.michalska@arm.com, 
+	pierre.gondois@arm.com, zhenglifeng1@huawei.com, linux-pm@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com, 
+	jonathan.cameron@huawei.com, prime.zeng@hisilicon.com, yubowen8@huawei.com, 
+	lihuisong@huawei.com, zhangpengjie2@huawei.com, wangzhi12@huawei.com
+Subject: Re: [PATCH v5 0/3] cpufreq: CPPC: Update FIE arch_freq_scale in
+ ticks for non-PCC regs
+Message-ID: <6pvkd3y43bscjkw7seyszxazu3fnowogfckp27o6yuupriiuqg@vsol4t42o3uy>
+References: <20251223072119.3372582-1-zhanjie9@hisilicon.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1a1e80e8-e821-4736-b772-b27f1ad88dc3@panix.com>
+In-Reply-To: <20251223072119.3372582-1-zhanjie9@hisilicon.com>
 
-Hi Kenny,
-
-On Mon, Dec 29, 2025 at 03:37:31PM -0800, Kenneth Crudup wrote:
+On 23-12-25, 15:21, Jie Zhan wrote:
+> Currently, the CPPC Frequency Invariance Engine (FIE) is invoked from the
+> scheduler tick but defers the update of arch_freq_scale to a separate
+> thread because cppc_get_perf_ctrs() would sleep if the CPC regs are in PCC.
 > 
-> The good news is that after all the ASPM refactoring of late, the patchset
-> to get VMD ASPM working has dropped from 6 to just two (see attached).
+> However, this deferred update mechanism is unnecessary and introduces extra
+> overhead for non-PCC register spaces (e.g. System Memory or FFH), where
+> accessing the regs won't sleep and can be safely performed from the tick
+> context.
 > 
-> I've been running some form or other of these patches for THREE years now
-> (with, OK, sample-size of "one"), no issues for me in all that time.
+> Furthermore, with the CPPC FIE registered, it throws repeated warnings of
+> "cppc_scale_freq_workfn: failed to read perf counters" on our platform with
+> the CPC regs in System Memory and a power-down idle state enabled.  That's
+> because the remote CPU can be in a power-down idle state, and reading its
+> perf counters returns 0.  Moving the FIE handling back to the scheduler
+> tick process makes the CPU handle its own perf counters, so it won't be
+> idle and the issue would be inherently solved.
 > 
-> But without these, any VMD-enabled laptop never goes into s01x suspend and
-> drains so much more battery when idle or suspended (I'd give anything for a
-> true S3, but that ship has long ago sailed).
+> To address the above issues, update arch_freq_scale directly in ticks for
+> non-PCC regs and keep the deferred update mechanism for PCC regs.
 > 
-> What say everyone? What can I do to help get these into mainline?
+> We have tested this on Kunpeng SoCs with the CPC regs both in System Memory
+> and FFH.  More tests on other platforms are welcome (typically with the
+> regs in PCC).
 > 
-> Thanks,
+> Changelog:
+> v5:
+> - Minor cleanup of cppc_perf_ctrs_in_pcc_cpu() (Thanks to Rafael).
+> - Add a function description for cppc_perf_ctrs_in_pcc_cpu().
+> - Pick up tags from Lifeng and Pierre, Thanks!
 
-To be clear, the two patches you sent do fix the VMD ASPM problem.  The
-reason they didn’t land earlier wasn’t correctness or testing.
+Applied. Thanks.
 
-The concern (Bjorn please correct if I misstate) was that the ASPM enabling
-path in the PCI core is already too complex, and adding a new host-bridge
-override API (even for VMD) made it harder to reason about in the
-long-term. His ask was to first simplify the core flow, then consider
-scoped overrides.
-
-The recent devicetree ASPM work shows the direction this is going. I think
-VMD can fit into that model, but not until that first step is done as it
-requires a different tweak to get around aspm_disabled = 1.
-
-So I can’t resubmit those patches as-is right now, but I am planning
-(within the next 2-3 weeks) to start with the core simplification work,
-transitioning to a default PCIE_LINK_STATE_ALL, that would make a
-VMD-specific override acceptable.
-
-I appreciate your patience and the long-term testing. It’s been important
-in keeping this visible.
-
-David
+-- 
+viresh
 
