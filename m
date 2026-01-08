@@ -1,206 +1,191 @@
-Return-Path: <linux-pm+bounces-40427-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40426-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 583BFD01867
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 09:13:08 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8E47D01E13
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 10:41:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B24EB3072E99
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 08:10:08 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 11EB030BDBB7
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 08:33:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E0639A815;
-	Thu,  8 Jan 2026 08:09:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4668C37F0F0;
+	Thu,  8 Jan 2026 08:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WbMtxix7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BeEyknwU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D764399A58
-	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 08:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37BA33D50C;
+	Thu,  8 Jan 2026 08:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767859778; cv=none; b=EqUBGCOr32jm1GIf7t7sInhhFdmlg9OXTHRlw3mYnJnZkILvf94yjzBVMxYRboxEYnk3O4qxf/QkjRbnNM1HjzeDYaIeyl4tUXqAeqHxVIX0fnn/I01UROs+U9Ka26aLFP5lMNR8ubciSnWNofxfDFEPVf/xsQdNjZT1cMO+EdQ=
+	t=1767859629; cv=none; b=QUH9q7zjAqz9UD/s36cjDG9DONWGN4j2CgkuTQytWIpODIzGM1lJgJha8y5JueUXkPII54UC7XcxVCvCeM8UUEXmj2L0/N3FHfL8u9zXop2ouxxNRNIOMixRsQvrt0yawgPaJUF9/oqXgJQ4s5kDmEydkDMwsPM+dk/hWU0Jdk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767859778; c=relaxed/simple;
-	bh=BkuzIM+xJSw6D9gd0ClP6IeKUS3iAxeuX1yHGi4chXw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yy4ZhKDxcjkys97sOMUri/k6mhwoDLc2+i105Qm7G31d9tv6SbZhyiJtO1MJhZ7e6WzWVO5Hn/1XnUltjHv31R8SHnd6TICI99xvL5eFBAFVhXRX9zVV85wFPg4BogTpJdHXaDI5N5OwIKZNERj+68R6+BRXev7DIcX6rZDPpp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WbMtxix7; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7fc0c1d45a4so1784896b3a.0
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 00:09:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767859767; x=1768464567; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cM8S9Nf7P6gRpX7oKCBS4znehPOLHvbNE32ZCa5tCAA=;
-        b=WbMtxix77iyRiMu/v6TL6S3OE4lOZf0DwNv0JOtIuj0UWdibRbv7EvHx/rC4SrGzEI
-         j8FIUcuUbWNqf3OHvvwnjp16n/ZVsN3Zqqo2u/sPVCPcDY7KRQCIPkCfqBx+MSCgeNrj
-         FhglvRwKieoa43KClvFE1X8AXiHAqWN1u2qcBtrQyxADPdHHAp5J7G0PeJ+VGcmzc16H
-         Qr6mlPaoK+3KHnALV+6lbtMfVlf8sNcOAUz9K0VWPh1zGndJCuKoGfn46pYcTUej8gWW
-         wn3jYiiY6+sQPI/3ufuLrH77ZZvcplgWmNlX601WCLYmsP8NVyDteo8AjjAUd5uAhraR
-         OnKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767859767; x=1768464567;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=cM8S9Nf7P6gRpX7oKCBS4znehPOLHvbNE32ZCa5tCAA=;
-        b=XAV9SEC6G+n3bLOCDheEcFUeXCytxlTP400Ickt4Gwa+Sf1Y+nlyVCGuNrLyyD/uan
-         9Vkm7hqpLOij8SzIhDE24+U6qoKxgIum9H/Y/DmOOhW94irwTj/eWVHmM2KyvKOxam/0
-         bXtw8X7C3k7SVFB9Kzj53ZpwVWvjrWjKSIB/11oOAE0S2WugWsAfknddRZaawbEXY6jP
-         8EHyokNQU8A9F0Am+I376YS4JFlnNKYm5Y71e/6vV2ZLL+Njmom2pNddu6KFyQ9NRKGK
-         qkwIGukg1X8AZHP89LaaVxUORG1uJAy6m1eCRmZBe+7UgYuveDwMtgN5zrImPB5Jy4no
-         91Dw==
-X-Forwarded-Encrypted: i=1; AJvYcCUzg56/BA6J2m8ruMl/ku1Q+ZlUK6GdQu4qSgqieZxxAUtAZFsnfhu2itmLT2itN5U45uLJlzOlcw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfN+uTCzG2Ioj5hUiFEYv67X41praFqYd/bS5KhvjSG8ki+FlA
-	GeTGZewpa+ZDUftm6l2DcEweAEOC3y7Ml+hM+IVeSgNSx97Q8qyYw+Ul
-X-Gm-Gg: AY/fxX5L4KG7OWMhfGyg8dt/RcfD5zEbhKJe8LRQAwIB8B5/q3qnR4eVJyw3JRyHnHz
-	93WCB+W4VXoJ5RmaMHWglimr8awjgCx6bbMqLK0C+6pXjF4mlJSNvdaBpN1idFj1f3F2rX9IpaZ
-	oRryGN9rcUS9CQesVvqmBLnF5+9yjJJ8p2OzNqcKxfIY6OWxOyoMYJWYNd6j8n8PRzdeoEEBgap
-	mQtRAFa942zBoXEUtyVSn0AJ6xPtrvuWMhrnxSIzsOWhO4vq/lYoyvuDA4J/7Gw/cVAea+/xPMe
-	HvWxcsUpT3i807TX38YAANIVjZ2WHIsISjrcQA0EloozH7jPlliWE+863Q4XFIUqpIzqDkRl9cY
-	fNfuVMUMIf8NxMEEX5Gl0XROZ3R2CvAp99RtK6korfx+D55C8v5R8ru9OUqHSg4OqSibstjTmN1
-	h2F8wY9j12TEn4mIPskV+zXP6pVpBVmcFsBVj66avUYn8JjamJw4YSmLFTewDNE2dcnydoZ4d5Y
-	mZwjMPdXDcMyy6JA/3g9KotzGRaZlyB
-X-Google-Smtp-Source: AGHT+IHkLLcdy5t5w8lcYwpa7aN5PM2YSQikFaFZHwIq35VG+97ooL0I8Sxc+NQu2jzK08rf+aGvdA==
-X-Received: by 2002:a05:6a00:1f09:b0:781:16de:cc1a with SMTP id d2e1a72fcca58-81b806c7544mr4661904b3a.32.1767859766947;
-        Thu, 08 Jan 2026 00:09:26 -0800 (PST)
-Received: from visitorckw-work01.c.googlers.com.com (25.118.81.34.bc.googleusercontent.com. [34.81.118.25])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819bafe991dsm6900582b3a.16.2026.01.08.00.09.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 00:09:26 -0800 (PST)
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: airlied@gmail.com,
-	simona@ffwll.ch,
-	maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org,
-	tzimmermann@suse.de,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	dmitry.torokhov@gmail.com,
-	sre@kernel.org,
-	gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	lgirdwood@gmail.com,
-	broonie@kernel.org
-Cc: jserv@ccns.ncku.edu.tw,
-	eleanor15x@gmail.com,
-	dri-devel@lists.freedesktop.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	krzysztof.kozlowski@oss.qualcomm.com,
-	Kuan-Wei Chiu <visitorckw@gmail.com>
-Subject: [PATCH v2 4/6] dt-bindings: power: supply: google,goldfish-battery: Convert to DT schema
-Date: Thu,  8 Jan 2026 08:08:34 +0000
-Message-ID: <20260108080836.3777829-5-visitorckw@gmail.com>
-X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-In-Reply-To: <20260108080836.3777829-1-visitorckw@gmail.com>
-References: <20260108080836.3777829-1-visitorckw@gmail.com>
+	s=arc-20240116; t=1767859629; c=relaxed/simple;
+	bh=orNWLfTHlAJ8gkhDTh1n4hji8OdYk3V3gHzDCeOjTCI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RWkVTM9x4UJLBk74eWDQbzyeMDxEmnFKaRYcXx4XUmrChLWtNmkxeR72/ZFT6IiEc3l/KnA3VCPIuENrsxSJnByShzqVGNIzDnHn7rbq1Kwu7MOCm59NIbZWUq+SMEuS/eQZJTYVWYX77DImQL8n2mPH8VTpToNNWzJIVNivsi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BeEyknwU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A411C116C6;
+	Thu,  8 Jan 2026 08:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767859623;
+	bh=orNWLfTHlAJ8gkhDTh1n4hji8OdYk3V3gHzDCeOjTCI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BeEyknwUpcPuDGpjDkP5veIYOk0/yLzmXC9vcfaqfkIUQGTdf55Ic5EjmJuv/k+7Y
+	 3o9+KTw2usDH1fiyOaK+rh9FomzW5QedExkQaTUWPtd9EaHfpzZuoeniqvpxPo5zYl
+	 2e3w+n9klI1M4pnzEuv6sR4Ka+fCApWvYV+WakcOkc5n/Ae3jGX4mIM7u300WeGDGm
+	 siMAl5+y1sWHvfvtlD3bR0uefUVbbUWceP5cb3yDu6qLK7gNCTe0gbQSc95O5AM917
+	 0X8opl0h+IMwTQ2G92GKSQA1RD9+gBvuR7cHEz0KVPJZKACY2wf9qp9C0rGWT/moPA
+	 cN7Kx0cKvpCqA==
+Date: Thu, 8 Jan 2026 09:07:00 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Daniel Almeida <daniel.almeida@collabora.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, 
+	Fu Wei <wefu@redhat.com>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-riscv@lists.infradead.org, 
+	linux-pwm@vger.kernel.org, linux-clk@vger.kernel.org, rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
+Message-ID: <20260108-delectable-fennec-of-sunshine-ffca19@houat>
+References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
+ <20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="k6t6konq3lslf4xs"
+Content-Disposition: inline
+In-Reply-To: <20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com>
 
-Convert the Android Goldfish Battery binding to DT schema format.
-Move the file to the power/supply directory to match the subsystem.
-Update the example node name to 'battery' to comply with generic node
-naming standards.
 
-Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
----
-Changes in v2:
-- Add reference to power-supply.yaml schema.
-- Change additionalProperties to unevaluatedProperties: false.
+--k6t6konq3lslf4xs
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
+MIME-Version: 1.0
 
- .../devicetree/bindings/goldfish/battery.txt  | 17 --------
- .../power/supply/google,goldfish-battery.yaml | 41 +++++++++++++++++++
- 2 files changed, 41 insertions(+), 17 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/goldfish/battery.txt
- create mode 100644 Documentation/devicetree/bindings/power/supply/google,goldfish-battery.yaml
+Hi Daniel,
 
-diff --git a/Documentation/devicetree/bindings/goldfish/battery.txt b/Documentation/devicetree/bindings/goldfish/battery.txt
-deleted file mode 100644
-index 4fb613933214..000000000000
---- a/Documentation/devicetree/bindings/goldfish/battery.txt
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Android Goldfish Battery
--
--Android goldfish battery device generated by android emulator.
--
--Required properties:
--
--- compatible : should contain "google,goldfish-battery" to match emulator
--- reg        : <registers mapping>
--- interrupts : <interrupt mapping>
--
--Example:
--
--	goldfish_battery@9020000 {
--		compatible = "google,goldfish-battery";
--		reg = <0x9020000 0x1000>;
--		interrupts = <0x3>;
--	};
-diff --git a/Documentation/devicetree/bindings/power/supply/google,goldfish-battery.yaml b/Documentation/devicetree/bindings/power/supply/google,goldfish-battery.yaml
-new file mode 100644
-index 000000000000..909252d91c16
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/google,goldfish-battery.yaml
-@@ -0,0 +1,41 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/google,goldfish-battery.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Android Goldfish Battery
-+
-+maintainers:
-+  - Kuan-Wei Chiu <visitorckw@gmail.com>
-+
-+allOf:
-+  - $ref: power-supply.yaml#
-+
-+description:
-+  Android goldfish battery device generated by Android emulator.
-+
-+properties:
-+  compatible:
-+    const: google,goldfish-battery
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    battery@9020000 {
-+        compatible = "google,goldfish-battery";
-+        reg = <0x9020000 0x1000>;
-+        interrupts = <0x3>;
-+    };
--- 
-2.52.0.457.g6b5491de43-goog
+On Wed, Jan 07, 2026 at 12:09:52PM -0300, Daniel Almeida wrote:
+> The current Clk abstraction can still be improved on the following issues:
+>=20
+> a) It only keeps track of a count to clk_get(), which means that users ha=
+ve
+> to manually call disable() and unprepare(), or a variation of those, like
+> disable_unprepare().
+>=20
+> b) It allows repeated calls to prepare() or enable(), but it keeps no tra=
+ck
+> of how often these were called, i.e., it's currently legal to write the
+> following:
+>=20
+> clk.prepare();
+> clk.prepare();
+> clk.enable();
+> clk.enable();
+>=20
+> And nothing gets undone on drop().
+>=20
+> c) It adds a OptionalClk type that is probably not needed. There is no
+> "struct optional_clk" in C and we should probably not add one.
+>=20
+> d) It does not let a user express the state of the clk through the
+> type system. For example, there is currently no way to encode that a Clk =
+is
+> enabled via the type system alone.
+>=20
+> In light of the Regulator abstraction that was recently merged, switch th=
+is
+> abstraction to use the type-state pattern instead. It solves both a) and =
+b)
+> by establishing a number of states and the valid ways to transition betwe=
+en
+> them. It also automatically undoes any call to clk_get(), clk_prepare() a=
+nd
+> clk_enable() as applicable on drop(), so users do not have to do anything
+> special before Clk goes out of scope.
+>=20
+> It solves c) by removing the OptionalClk type, which is now simply encoded
+> as a Clk whose inner pointer is NULL.
+>=20
+> It solves d) by directly encoding the state of the Clk into the type, e.g=
+=2E:
+> Clk<Enabled> is now known to be a Clk that is enabled.
+>=20
+> The INVARIANTS section for Clk is expanded to highlight the relationship
+> between the states and the respective reference counts that are owned by
+> each of them.
+>=20
+> The examples are expanded to highlight how a user can transition between
+> states, as well as highlight some of the shortcuts built into the API.
+>=20
+> The current implementation is also more flexible, in the sense that it
+> allows for more states to be added in the future. This lets us implement
+> different strategies for handling clocks, including one that mimics the
+> current API, allowing for multiple calls to prepare() and enable().
+>=20
+> The users (cpufreq.rs/ rcpufreq_dt.rs) were updated by this patch (and not
+> a separate one) to reflect the new changes. This is needed, because
+> otherwise this patch would break the build.
+>=20
+> Link: https://crates.io/crates/sealed [1]
+> Signed-off-by: Daniel Almeida <daniel.almeida@collabora.com>
 
+I don't know the typestate pattern that well, but I wonder if we don't
+paint ourselves into a corner by introducing it.
+
+While it's pretty common to get your clock from the get go into a state,
+and then don't modify it (like what devm_clk_get_enabled provides for
+example), and the typestate pattern indeed works great for those, we
+also have a significant number of drivers that will have a finer-grained
+control over the clock enablement for PM.
+
+For example, it's quite typical to have (at least) one clock for the bus
+interface that drives the register, and one that drives the main
+component logic. The former needs to be enabled only when you're
+accessing the registers (and can be abstracted with
+regmap_mmio_attach_clk for example), and the latter needs to be enabled
+only when the device actually starts operating.
+
+You have a similar thing for the prepare vs enable thing. The difference
+between the two is that enable can be called into atomic context but
+prepare can't.
+
+So for drivers that would care about this, you would create your device
+with an unprepared clock, and then at various times during the driver
+lifetime, you would mutate that state.
+
+AFAIU, encoding the state of the clock into the Clk type (and thus
+forcing the structure that holds it) prevents that mutation. If not, we
+should make it clearer (by expanding the doc maybe?) how such a pattern
+can be supported.
+
+Maxime
+
+--k6t6konq3lslf4xs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaV9loAAKCRAnX84Zoj2+
+drF9AYCSX3uIqUt1AfQjLa/7cN8Nwjutujodf3+SeFJhjhKEU4TvJ5vdsbn4Zp3P
+gCxu2cwBgM1tKFg24E7US+/7XPI5vTIBKeN1VEPwwS1Ae6qHQgg8QBB/XncYTO7y
+eDii4U8VGg==
+=WjK0
+-----END PGP SIGNATURE-----
+
+--k6t6konq3lslf4xs--
 
