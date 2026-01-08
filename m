@@ -1,88 +1,107 @@
-Return-Path: <linux-pm+bounces-40506-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40507-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B81C3D06570
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 22:36:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D545CD06576
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 22:36:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1CBA7303E00A
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 21:35:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5645D3011A6B
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 21:35:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6916E328B6C;
-	Thu,  8 Jan 2026 21:35:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD0A3090F5;
+	Thu,  8 Jan 2026 21:35:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lIWLsRRM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y6S6ftNb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6521E1DFC;
-	Thu,  8 Jan 2026 21:35:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD36284B58;
+	Thu,  8 Jan 2026 21:35:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767908105; cv=none; b=r8QNtsuxSx6vkJVHqIz63FskvOXnm+ndsE8+WTaeWiy3vjDJpIsKzCU2+CRdQIb4Sfn6T7kGqsvMDY2SFk/Ynk0xqJcX3jdYnDtNOqIV7DBKXxnWKr+UjqRJdLPEhtiGaj49unTotGUU8ookczmebtu2dBWOeTr8+16celEcVLE=
+	t=1767908153; cv=none; b=JlgjZckWdC5zo1JqZxa8+m5EvWGgXu9qepF12T9YhJV02QYny5c9WLQJpSNl81uiGjqmtgnwyqlZJWLSlHa8AN4I0snAUIFbdPucJLl/zCyD6JuwCZbhZVeDNv0rmkeFiORrLe0rmFzd3JsSI43D6yTMmLZI/HkvAFcR7Y/hAdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767908105; c=relaxed/simple;
-	bh=/dP7HWwFiM5FLFQ5M4Vedi+Udyq6twW6yPD+bFAR6n4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=SgBjkuanA4sqeLKyUc15365bD2J/+3cEmu2GAWQ6rXElEXTofHcUupeccSdCGz5SyncfnyAovflIy3gJlyNfIOYaUrYEgPh6EQgxWJQHtGVT1GWteAyGxESgu+ktcOEDPf1wKnmhkPhHCUMERP6Hvwpqs8OYFCJeKpx7HWlgVd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lIWLsRRM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56529C116C6;
-	Thu,  8 Jan 2026 21:35:04 +0000 (UTC)
+	s=arc-20240116; t=1767908153; c=relaxed/simple;
+	bh=RYTc/j72DSJS6wvoSkh81+TKqgFZgRCTQkO2un1ijM0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XBoiPOXYtBkI1/+e1AuGZNwtpk+6DHHbB0+g2iHem812/14SnyLsCUUl+U2Z5jDnzdDFHZXrUrMO2UeycohB/Xg6/DLbG1xPRDMIDaSuFfh+2rJ7YZWUjCVFNp3DhNKRg+tXjkkHOhhlxdx40Eg19uj9lVA7+IbDH70xyHf0MDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y6S6ftNb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCB41C116C6;
+	Thu,  8 Jan 2026 21:35:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767908104;
-	bh=/dP7HWwFiM5FLFQ5M4Vedi+Udyq6twW6yPD+bFAR6n4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=lIWLsRRMssOf8Lcw71AQ5tL5KRD3plo/gsOo0OWyGday4DLBZbI5RF3v/Zd6ii7hC
-	 kRM08l/6yTu8AF0gTj+ElMvbw1YYiFDtIKehmqTMAjBEkS2LXRPdT14rQfvWrun3T/
-	 CmXitgnaPQbjGsD14v565le1xTDt7hRcbjuiMWMaFAOvEpBWCXZbiGdjyFH9r4Ev9n
-	 2OoQdjmt6CA8GcR4p4goYaC8kwGWDM2oBw3o4Sk3g15gRWHl0Nb2n6aKG1PEZ521AJ
-	 7Zbf5Z0cGUb0KUK5wSOZHRxrJI2bv+M6oz5u9FjMIphirZN0CQk67o3hKhemGQZYLy
-	 JShUzR/EUYuaA==
-From: Thomas Gleixner <tglx@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM
- <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson
- <ulf.hansson@linaro.org>, Brian Norris <briannorris@chromium.org>
-Subject: Re: [PATCH v1 01/23] genirq/chip: Change irq_chip_pm_put() return
- type to void
-In-Reply-To: <4723896.LvFx2qVVIh@rafael.j.wysocki>
-References: <6245770.lOV4Wx5bFT@rafael.j.wysocki>
- <4723896.LvFx2qVVIh@rafael.j.wysocki>
-Date: Thu, 08 Jan 2026 22:35:00 +0100
-Message-ID: <87y0m7ss8r.ffs@tglx>
+	s=k20201202; t=1767908153;
+	bh=RYTc/j72DSJS6wvoSkh81+TKqgFZgRCTQkO2un1ijM0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y6S6ftNbmXXW0NysORAKoesBalPZCAHs3vhEl1XKviZ8aGUT+rkYbX+89sY1BH6Bu
+	 IDuaw5rtrfiadKN9BlQdam9Vv9jp3Goe8wpCMxsOugTx3KsG/drreadnhAfoiCOPkQ
+	 J+r6EYbK72MpG+7aSljrzhCKyvgrVLXfAd0hAIRWRpsD7v3c90oczl4D0U/LYegu/i
+	 sKBmG632pcGxeyceXA2jEYF/+QZdSS5yQv6Dduhpb+dCeH6lA4sziidz9QIKST3peM
+	 RciUgkFv1yKETzqr3mr/SPoDiKjV7xPdrnnpoqsb9cCZTjjUvCXkN2QsY7NodcrDjQ
+	 ByslcFSRZ9xvQ==
+Date: Thu, 8 Jan 2026 21:35:45 +0000
+From: Will Deacon <will@kernel.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+	peterz@infradead.org, akpm@linux-foundation.org,
+	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
+	ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+	memxor@gmail.com, zhenglifeng1@huawei.com,
+	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+Subject: Re: [PATCH v8 04/12] arm64: support WFET in
+ smp_cond_relaxed_timeout()
+Message-ID: <aWAjMbSqN2g7v58Z@willie-the-truck>
+References: <20251215044919.460086-1-ankur.a.arora@oracle.com>
+ <20251215044919.460086-5-ankur.a.arora@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251215044919.460086-5-ankur.a.arora@oracle.com>
 
-On Mon, Dec 22 2025 at 20:50, Rafael J. Wysocki wrote:
+On Sun, Dec 14, 2025 at 08:49:11PM -0800, Ankur Arora wrote:
+> +#define __CMPWAIT_CASE(w, sfx, sz)						\
+> +static inline void __cmpwait_case_##sz(volatile void *ptr,			\
+> +				       unsigned long val,			\
+> +				       s64 timeout_ns)				\
+> +{										\
+> +	unsigned long tmp;							\
+> +										\
+> +	if (!alternative_has_cap_unlikely(ARM64_HAS_WFXT) || timeout_ns <= 0) {	\
+> +		asm volatile(							\
+> +		"	sevl\n"							\
+> +		"	wfe\n"							\
+> +		"	ldxr" #sfx "\t%" #w "[tmp], %[v]\n"			\
+> +		"	eor	%" #w "[tmp], %" #w "[tmp], %" #w "[val]\n"	\
+> +		"	cbnz	%" #w "[tmp], 1f\n"				\
+> +		"	wfe\n"							\
+> +		"1:"								\
+> +		: [tmp] "=&r" (tmp), [v] "+Q" (*(u##sz *)ptr)			\
+> +		: [val] "r" (val));						\
+> +	} else {								\
+> +		u64 ecycles = arch_timer_read_counter() +			\
+> +				NSECS_TO_CYCLES(timeout_ns);			\
+> +		asm volatile(							\
+> +		"	sevl\n"							\
+> +		"	wfe\n"							\
+> +		"	ldxr" #sfx "\t%" #w "[tmp], %[v]\n"			\
+> +		"	eor	%" #w "[tmp], %" #w "[tmp], %" #w "[val]\n"	\
+> +		"	cbnz	%" #w "[tmp], 2f\n"				\
+> +		"	msr s0_3_c1_c0_0, %[ecycles]\n"				\
+> +		"2:"								\
+> +		: [tmp] "=&r" (tmp), [v] "+Q" (*(u##sz *)ptr)			\
+> +		: [val] "r" (val), [ecycles] "r" (ecycles));			\
+> +	}									\
 
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> The irq_chip_pm_put() return value is only used in __irq_do_set_handler()
-> to trigger a WARN_ON() if it is negative, but doing so is not useful
-> because irq_chip_pm_put() simply passes the pm_runtime_put() return value
-> to its callers.
->
-> Returning an error code from pm_runtime_put() merely means that it has
-> not queued up a work item to check whether or not the device can be
-> suspended and there are many perfectly valid situations in which that
-> can happen, like after writing "on" to the devices' runtime PM "control"
-> attribute in sysfs for one example.
->
-> For this reason, modify irq_chip_pm_put() to discard the pm_runtime_put()
-> return value, change its return type to void, and drop the WARN_ON()
-> around the irq_chip_pm_put() invocation from __irq_do_set_handler().
-> Also update the irq_chip_pm_put() kerneldoc comment to be more accurate.
->
-> This will facilitate a planned change of the pm_runtime_put() return
-> type to void in the future.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Why not have a separate helper for the WFXT version and avoid the runtime
+check on timeout_ns?
 
-Reviewed-by: Thomas Gleixner <tglx@kernel.org>
+Will
 
