@@ -1,81 +1,80 @@
-Return-Path: <linux-pm+bounces-40433-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40435-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2130AD02043
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 11:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F04CD01F56
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 10:54:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8B92230AB480
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 09:49:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 88807306D290
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 09:48:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D200C37F8AC;
-	Thu,  8 Jan 2026 08:58:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0C4D37F8DF;
+	Thu,  8 Jan 2026 08:58:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="WRwvQoOl"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="mQGHSmEn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-dy1-f173.google.com (mail-dy1-f173.google.com [74.125.82.173])
+Received: from mail-dy1-f181.google.com (mail-dy1-f181.google.com [74.125.82.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0857337F11D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C1937F10A
 	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 08:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.173
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767862728; cv=none; b=BuSUHxptzXYW20TxqzjrHeYBpkHkVQuVvwiaXYNfrIIBJ5E7h7k8IspQurHNFLBAPh2JTuGiTh7k5btxa5dORvQ27DeWYTulvyWw79pvH6758huTVnnk2gWrqt7aP0NbyUms8PwBzreN/rOb5tIFFziekwMISyctPK8XHebLdyk=
+	t=1767862731; cv=none; b=nVjA9r0acXfMqp5WnGEn5gsqFyc/EkxudvNGwdq5gUYn8zvHD+uAfm2PaLUIGE0YjFuropqYt3TVIljRtYu7BSCPiv8xFMwQT/Fa9+M5M0kEeJFuXNR3ChKXQqgOTTnUKUH2X4au04JG5ABObtQI9F8bUv92/lqlJ3iuvYtvqS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767862728; c=relaxed/simple;
-	bh=g6bPLC0uhgJGfGzdr7jciYO1TYQnfhcR7gx4FwvNLV0=;
+	s=arc-20240116; t=1767862731; c=relaxed/simple;
+	bh=sIkymDyCEmbvxV9ZGQHY++Ov+nqP2mtyu2/hVCGij0w=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rHEoZZ/DTJlHWkzSndGVVReU+KhapZIKCUYyHsFC5rZD+kRm8s7XBiUz30VEkRHCHv3AZ6EVZxqwKCa47JxPLZAkCan5LhlcfspVgK4jTDHypW1yNwSasXO2TatncgzpKSmLtYwQQ3U0sesd7jmUg49jYrQFPMIi12cJ+kiCbug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=WRwvQoOl; arc=none smtp.client-ip=74.125.82.173
+	 In-Reply-To:To:Cc; b=LWjLtu9NF1RFoUkSdmOFLPYNoY1a9EsAiN3L+66ppoJys3NVxSWmgKVgeNvGGDk/7Rj3625vmk849CqZzVU8ab6Y+FlourbfQz10peE+udBZq6SAjhofSmOzxoguoncD6X3k11lOVLTqolZatPFFEhr5AtzgR66t87sv6XQGanI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=mQGHSmEn; arc=none smtp.client-ip=74.125.82.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-dy1-f173.google.com with SMTP id 5a478bee46e88-2ae53df0be7so3786018eec.1
-        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 00:58:42 -0800 (PST)
+Received: by mail-dy1-f181.google.com with SMTP id 5a478bee46e88-2ac3d5ab81bso1865848eec.1
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 00:58:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1767862720; x=1768467520; darn=vger.kernel.org;
+        d=sifive.com; s=google; t=1767862721; x=1768467521; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OPMKY7Ve7//uye45o8kcyRKc3naps5DDhGu7uTz/qYs=;
-        b=WRwvQoOlSBPKAnSmbospln+srPGi8OdXfmt+UX42zam33NA29NOmRIGR3x2nAfiWRp
-         xCdbjmTUpJtn7RUn9oUPkTQZea7xVpUifZ5F7ymYrSE1vZY98Ux/ej8ou9RoH/sFpsG6
-         z8lh8GHzWPP3ZZID67LdlkfoSn6FPaOsSFHf25BS3rbA7sL3EEXisb8uGhnldxE2/OPO
-         6T/Dwba/IpRRGhxG3Tvxh/64dOv5euUbmdwQkG9VW52J0d00vaAx3kRuuTyIVAYRdW3S
-         Ig1lbN/jMeMjwcuWhdEmyqsUU8xueOhCMXpEbr7gpakoDmnkdCsYAmAt1QJrSYka1UKX
-         R6ng==
+        bh=+qYO/gxPTzZ1gsudLMySBCma6iHYfPz33KQqAWsXtts=;
+        b=mQGHSmEnic+S0mS7xgLg+o+6wdYRXY+vt1KLwNdWi3ebWIs4RzQU8a7QTxZiGHLuyD
+         ZjG0ZbcHq/2TyuIcxp09X8FymPW8d0sznQogZikC0C1/ugNg4aS1X256mgLR9imOr+Ht
+         NVvx5LFLoDuLgxMCC5RwXsRJjH1ksxbXPIQegQxFL5/z7esv1jZGTOewvIcUMOaj2Dsr
+         x7DNyg6gs1Fm6COvrfCisZWVcCKEFG/x8muLeWOOHOwMfqr7fFbcll98jgjP/36MZn62
+         EUyIeVhev/vI6uWH1Zz3i13dn3YOCUWf6vCyhUACXp+VqfP24lvi8LaF/RilD5pDYyXr
+         eJpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767862720; x=1768467520;
+        d=1e100.net; s=20230601; t=1767862721; x=1768467521;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=OPMKY7Ve7//uye45o8kcyRKc3naps5DDhGu7uTz/qYs=;
-        b=wqYPIC4eU6LudM2+WdwFzi2QbAEiv0dVGXvRCqlsbVwoLYwPiId5107RB0xehMPSP3
-         C0FIMgkOzOiVbw5dxBiPoQ4q0JIiVHqqoEtaribSmhep53eE0+t0t29KSIxvxf2j6AKa
-         Y5m5MPFkE06U5TKuqy8Vk/Ibs6kt869A13QX+Wp+jP23CcwuN+HA/x0v/KoYuelf8K6Q
-         ULTdEgKYo5RtS1fhWzsCvQ36vCVj/WCTWo7MUteJ0L1TAJuOGWIMiCoOS6lM/xG3tQmp
-         yzIymHHHpgMB7ZlH8lwC4qJoBBQ+S1zQao34Lqd4EyKhVKCUARei5MwbRjENqc0dnA5q
-         eAlA==
-X-Forwarded-Encrypted: i=1; AJvYcCVP2i+wGVDqHFJZTJya500Cpp2PFrqI4W7w0SF/ESSlLZ7DECW4wQKCEVi8wC8Yk5NWrhrkV3l//g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzL+fyI/RssMdTVzj//VnNUfod9JI6m+C4YAcu1boVz8lKGxJIh
-	KX0O7Jo2Ibc9U/NpWywxjeQErvukVowGuOyvMl4yTVkHs5GijU+z+S5fo45Jh4PxRrI=
-X-Gm-Gg: AY/fxX4K3356G9PtlNCte+A5noGGjvsmeqRvOH+NzRxT8CU1vRJ6HDQY8yEC2uWSZVH
-	34nD2J+csqlk2s8HppGoip65fAy3e9AReaUm9mhAbkNURjf5/wmNapCS4yXhFkfewfnq+fZ9SPt
-	M0UJUKRKRTbMa008RjSjQ0skhvilxhoS0MuRVFEGrDhv9PJEhn2L9Qo66CO2dchHEShwsYkTfVL
-	LLpiAzw/lvNCa3uN3kauXloWsPefMb1qgSdvKuOTGhFnFLZ31aRMHElERlD3aHpzl/tiMxmcmg6
-	voTR2xA+mzoKnH6OdzenZxSfkZhgtkImf5j9PN912gbQUEkdc6RKgZ2fLASNtxIR5e5QdZ4R8ck
-	kMGhPZqCvUr4BQfu8v7tXiJkFxUYhoABWhrJxR738WO05LNT4lEX45P7UzC+Xq9InWkq5SZSCyX
-	A0L66CYFR8D1ognG/BNcqDlVc=
-X-Google-Smtp-Source: AGHT+IGeM165oEvyVrh+jJ+fHeTSLxMLf2ir5ZaGZt7O8WdBQ16xZQI4McJDAnPHI+CXjXuTmYlcRg==
-X-Received: by 2002:a05:7300:b09c:b0:2b0:4e86:8163 with SMTP id 5a478bee46e88-2b17d240aeamr3454843eec.13.1767862719638;
-        Thu, 08 Jan 2026 00:58:39 -0800 (PST)
+        bh=+qYO/gxPTzZ1gsudLMySBCma6iHYfPz33KQqAWsXtts=;
+        b=jw2pKynCZH8Ushcu3dR2ZBTvFQGl6cwwQQlpdJ9cY93ORvKCS1J436UwBB1b8AO/YO
+         oCZJch/IRlcljyPtSX3dhVqGW0KX4mCmOVkngPHx+zLFnzuUuVsTcjVOZTyTiCTlU6ok
+         tMI0kKbQ0pcr/ZtT5fxFvjDnoGyIDyH0QS8a/YyAWJdnZOu92xkTdiL9Ttcg8aZCKuvK
+         MviehqHtfyfGBWABXCr38Adc9UOIexMARAWSdhv26sgCTE36fZn1p3y3vWtbGXUDrSst
+         lUHYUN0WTR4yKr+zrUc408LBbJzo+O/M/iLd91N4R49tq6Yn2R659e3+KAunuduClrQn
+         fFTw==
+X-Forwarded-Encrypted: i=1; AJvYcCUDDBfaBMqxVk8TmYp177zpLBjqFbPvgu/zVo8Prc3agfqpeeEi26JbUkNwUawiLTEQSzQ6HUWDBg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzu8nxaNFRh2IF+dg1LKnI56P+maaqbVG8U5pfZc2ijSI6jjbYN
+	58TWGhzaOL6PAxqZmu/0WXv09CZhSMeAdDrH/GznSt10P6qR+eIjUUFD+DqTY/aW57s=
+X-Gm-Gg: AY/fxX7wt4uyKmnRvIatdpArIymu7trjFQWlZ36H6Ro5DyiBZOI4CUpzG1TIzvlwgBE
+	WcZ7ZjROe8HWALQao6Zi1cOs8LhiOKTGCfuHT5C/1dAufR/ccP4QBZ860PDMrv3QbNubsAuidhG
+	YDbbGbwQpzJGqPYNJDdJreRRpBmGGTVoGkxAepzIJJZOKZVCgbszU3m/ASOnoB8DybwiwgHmpru
+	AHLONz4Brjww3KOJop5Y6YsHqsQ3xcPjz/rEDez8dltRhs3GMIOwrfiJ/NRyueHr8+EUHXldZBb
+	dBAhg476uCZhicMJV9AW1DGYPI+xfBlknRLMCjpwdjgHcfD3BhWnXHle3Egp8IjtSLBeEsL/LtZ
+	20JCNJMtg/8pHWoPcKBiYwJ08KUAehzYyr5/ZIeWQMLLvgmQtFs6+h5ejbMsVtkSrL7hQGGfzPc
+	oq3ztrtfYEs9m6VluHbuwvL/s=
+X-Google-Smtp-Source: AGHT+IE1ZYycZa8LfJgM/0T5ClhaC/Ln6YDrHSVxn+Bb2E0ZQUAhY5IK4YTUt16wFaSjFCweu0L/Dw==
+X-Received: by 2002:a05:693c:40db:b0:2ae:55f1:8201 with SMTP id 5a478bee46e88-2b17d23964bmr4070425eec.1.1767862721007;
+        Thu, 08 Jan 2026 00:58:41 -0800 (PST)
 Received: from sw07.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b170675076sm8833634eec.2.2026.01.08.00.58.38
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b170675076sm8833634eec.2.2026.01.08.00.58.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 00:58:39 -0800 (PST)
+        Thu, 08 Jan 2026 00:58:40 -0800 (PST)
 From: Nick Hu <nick.hu@sifive.com>
-Date: Thu, 08 Jan 2026 00:58:25 -0800
-Subject: [PATCH v4 2/3] dt-bindings: power: Add SiFive Domain Management
- controllers
+Date: Thu, 08 Jan 2026 00:58:26 -0800
+Subject: [PATCH v4 3/3] cpuidle: Add SiFive power provider driver
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -84,7 +83,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260108-sifive-pd-drivers-v4-2-2a523d7d51a0@sifive.com>
+Message-Id: <20260108-sifive-pd-drivers-v4-3-2a523d7d51a0@sifive.com>
 References: <20260108-sifive-pd-drivers-v4-0-2a523d7d51a0@sifive.com>
 In-Reply-To: <20260108-sifive-pd-drivers-v4-0-2a523d7d51a0@sifive.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>, 
@@ -99,92 +98,179 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-riscv@lists.infradead.org, devicetree@vger.kernel.org
 X-Mailer: b4 0.14.3
 
-SiFive Domain Management controller includes the following components
-- SiFive Tile Management Controller
-- SiFive Cluster Management Controller
-- SiFive Core Complex Management Controller
+The SiFive DMC is the power provider of the devices that inside the
+SiFive CPU power domains, which include Tile, Cluster and Core Complex
+power domains. Before the cpu entering the firmware-based idle state,
+each devices that inside the corresponding domain should be suspended
+properly. this driver will create the power provider and set the correct
+domain idle state.
 
-These controllers control the clock and power domain of the
-corresponding domain.
-
-Add `- {}` for the first entry [1][2]. Once the SoCs are ready, we will
-add the SoC compatible string at that time.
-
-Links:
-- [1] https://lore.kernel.org/lkml/20250311195953.GA14239-robh@kernel.org/
-- [2] https://lore.kernel.org/lkml/CAKddAkAzDGL-7MbroRqQnZzPXOquUMKNuGGppqB-d_XZXbcvBA@mail.gmail.com/T/#t
-
-Reviewed-by: Samuel Holland <samuel.holland@sifive.com>
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Nick Hu <nick.hu@sifive.com>
 ---
- .../devicetree/bindings/power/sifive,tmc.yaml      | 58 ++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ drivers/cpuidle/Kconfig.riscv               |  12 +++
+ drivers/cpuidle/Makefile                    |   1 +
+ drivers/cpuidle/cpuidle-sifive-dmc-domain.c | 124 ++++++++++++++++++++++++++++
+ 3 files changed, 137 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/sifive,tmc.yaml b/Documentation/devicetree/bindings/power/sifive,tmc.yaml
+diff --git a/drivers/cpuidle/Kconfig.riscv b/drivers/cpuidle/Kconfig.riscv
+index b813018ce401..2fe0912f8027 100644
+--- a/drivers/cpuidle/Kconfig.riscv
++++ b/drivers/cpuidle/Kconfig.riscv
+@@ -22,3 +22,15 @@ config RISCV_SBI_CPUIDLE_DOMAIN
+ 	  Select this option to enable RISC-V SBI firmware based CPU idle
+ 	  driver to use PM domains, which is needed to support the hierarchical
+ 	  DT based layout of the idle state.
++
++config SIFIVE_DMC_CPUIDLE_DOMAIN
++	bool "SiFive DMC CPU idle Domain"
++	depends on ARCH_SIFIVE
++	depends on RISCV_SBI_CPUIDLE
++	depends on PM_GENERIC_DOMAINS_OF
++	select DT_IDLE_GENPD
++	default y
++	help
++	  Select this option to enable RISC-V SBI firmware based CPU idle
++	  driver to use PM domains on SiFive Platforms, which is needed to
++	  support the hierarchical DT based layout of the idle state.
+diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
+index 82595849b75d..eead4c049414 100644
+--- a/drivers/cpuidle/Makefile
++++ b/drivers/cpuidle/Makefile
+@@ -43,3 +43,4 @@ obj-$(CONFIG_POWERNV_CPUIDLE)		+= cpuidle-powernv.o
+ # RISC-V drivers
+ obj-$(CONFIG_RISCV_SBI_CPUIDLE)		+= cpuidle-riscv-sbi.o
+ obj-$(CONFIG_RISCV_SBI_CPUIDLE_DOMAIN)	+= cpuidle-riscv-sbi-domain.o
++obj-$(CONFIG_SIFIVE_DMC_CPUIDLE_DOMAIN)	+= cpuidle-sifive-dmc-domain.o
+diff --git a/drivers/cpuidle/cpuidle-sifive-dmc-domain.c b/drivers/cpuidle/cpuidle-sifive-dmc-domain.c
 new file mode 100644
-index 000000000000..4ab2b94785f4
+index 000000000000..5174bc525a13
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/sifive,tmc.yaml
-@@ -0,0 +1,58 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/sifive,tmc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/cpuidle/cpuidle-sifive-dmc-domain.c
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * SiFive CPUIDLE DMC driver
++ */
 +
-+title: SiFive Domain Management Controller
++#define pr_fmt(fmt) "sifive_dmc_cpuidle_domain: " fmt
 +
-+maintainers:
-+  - Cyan Yang <cyan.yang@sifive.com>
-+  - Nick Hu <nick.hu@sifive.com>
-+  - Samuel Holland <samuel.holland@sifive.com>
++#include <linux/of_device.h>
++#include <linux/platform_device.h>
++#include <linux/pm_domain.h>
++#include <linux/pm_runtime.h>
 +
-+description: |
-+  SiFive Domain Management Controllers includes the following components
-+    - Tile Management Controller (TMC)
-+    - Cluster Management Controller (CMC)
-+    - Subsystem Management Controller (SMC)
-+  These controllers manage both the clock and power domains of the
-+  associated components. They support the SiFive Quiet Interface Protocol
-+  (SQIP) starting from Version 1. The control method differs from Version
-+  0, making them incompatible.
++#include "cpuidle-riscv-sbi.h"
++#include "dt_idle_genpd.h"
 +
-+allOf:
-+  - $ref: power-domain.yaml#
++static bool use_osi = true;
 +
-+properties:
-+  compatible:
-+    oneOf:
-+      - items:
-+          - {} # Leave a empty for future SoC specific compatible string
-+          - const: sifive,cmc2
-+      - items:
-+          - {} # Leave a empty for future SoC specific compatible string
-+          - const: sifive,smc0
-+      - items:
-+          - {} # Leave a empty for future SoC specific compatible string
-+          - const: sifive,smc1
-+      - items:
-+          - {} # Leave a empty for future SoC specific compatible string
-+          - const: sifive,tmc0
-+      - items:
-+          - {} # Leave a empty for future SoC specific compatible string
-+          - const: sifive,tmc1
++static int sifive_cpuidle_dmc_power_off(struct generic_pm_domain *pd)
++{
++	struct genpd_power_state *state = &pd->states[pd->state_idx];
++	u32 *pd_state;
 +
-+  reg:
-+    maxItems: 1
++	if (!state->data)
++		return 0;
 +
-+  "#power-domain-cells":
-+    const: 0
++	/* OSI mode is enabled, set the corresponding domain state. */
++	pd_state = state->data;
++	sbi_set_domain_state(*pd_state);
 +
-+required:
-+  - compatible
-+  - reg
++	return 0;
++}
 +
-+additionalProperties: false
++static int sifive_dmc_probe(struct platform_device *pdev)
++{
++	struct device_node *np = pdev->dev.of_node;
++	struct of_phandle_args child, parent;
++	struct device *dev = &pdev->dev;
++	struct generic_pm_domain *pd;
++	int ret = -ENOMEM;
 +
-+# The example will be added once the SoCs are ready
++	pd = dt_idle_pd_alloc(np, sbi_dt_parse_state_node);
++	if (!pd)
++		goto out;
++
++	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
++	if (use_osi)
++		pd->power_off = sifive_cpuidle_dmc_power_off;
++	else
++		pd->flags |= GENPD_FLAG_ALWAYS_ON;
++
++	ret = pm_genpd_init(pd, &pm_domain_cpu_gov, false);
++	if (ret)
++		goto free_pd;
++
++	ret = of_genpd_add_provider_simple(np, pd);
++	if (ret)
++		goto remove_pd;
++
++	if (!of_parse_phandle_with_args(np, "power-domains", "#power-domain-cells", 0, &parent)) {
++		child.np = np;
++		child.args_count = 0;
++
++		ret = of_genpd_add_subdomain(&parent, &child);
++		of_node_put(parent.np);
++		if (ret) {
++			pr_err("%pOF failed to add subdomain: %pOF\n", parent.np, child.np);
++			goto remove_pd;
++		}
++	}
++
++	pm_runtime_enable(dev);
++	pr_info("init PM domain %s\n", dev_name(dev));
++	return 0;
++
++remove_pd:
++	pm_genpd_remove(pd);
++free_pd:
++	dt_idle_pd_free(pd);
++out:
++	pr_err("failed to init PM domain ret=%d %pOF\n", ret, np);
++	return ret;
++}
++
++static const struct of_device_id sifive_dmc_of_match[] = {
++	{ .compatible = "sifive,tmc1", },
++	{ .compatible = "sifive,tmc0", },
++	{ .compatible = "sifive,smc1", },
++	{ .compatible = "sifive,smc0", },
++	{ .compatible = "sifive,cmc2", },
++	{}
++};
++
++static struct platform_driver sifive_dmc_driver = {
++	.probe = sifive_dmc_probe,
++	.driver = {
++		.name = "sifive_dmc",
++		.of_match_table = sifive_dmc_of_match,
++		.suppress_bind_attrs = true,
++	},
++};
++
++static int __init sifive_dmc_domain_init(void)
++{
++	int cpu;
++
++	/* Detect OSI support based on CPU DT nodes */
++	for_each_possible_cpu(cpu) {
++		struct device_node *np __free(device_node) = of_cpu_device_node_get(cpu);
++		if (np &&
++		    of_property_present(np, "power-domains") &&
++		    of_property_present(np, "power-domain-names")) {
++			continue;
++		} else {
++			use_osi = false;
++			break;
++		}
++	}
++
++	sbi_set_osi_mode(use_osi);
++
++	/* Only probe the DMCs when OSI supported */
++	return platform_driver_register(&sifive_dmc_driver);
++}
++core_initcall(sifive_dmc_domain_init);
 
 -- 
 2.43.7
