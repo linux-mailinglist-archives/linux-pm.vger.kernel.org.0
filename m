@@ -1,150 +1,167 @@
-Return-Path: <linux-pm+bounces-40415-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40416-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAA42D01144
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 06:27:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F979D011B1
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 06:32:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 66A163001BF0
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 05:27:55 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CFBCD301413B
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 05:32:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5BE2EDD41;
-	Thu,  8 Jan 2026 05:27:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6837B314D2A;
+	Thu,  8 Jan 2026 05:32:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=summations-net.20230601.gappssmtp.com header.i=@summations-net.20230601.gappssmtp.com header.b="xGKeAvZc"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="E/oiVAMd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A94B2ECEAE
-	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 05:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39E4314D06;
+	Thu,  8 Jan 2026 05:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767850073; cv=none; b=BBd21guo2FBSy6H9pTjm0dXAQy+urQZOJ6Tiy3xHXU7lxsJ3uCwPNng3kTugEEJnOUlXUd7TmZVG/SO8YSnTvOE4zYfiEEB7PzFq1aikJJ+5fdTdWzNhSTjI6Ip1Fa7dLBTrDtSfYO9BvfTHLgb9CW5NgjrCbxaKRoMKsfNuFqk=
+	t=1767850358; cv=none; b=XSTqIlsYKR76jvg4xwBuVGZWH0zgRIlMVUbkMU9e/vddPnYCLsly3eLUcnf967kkhsbmejUnKR6ab98crNj7AGuKZGxwkbyjY0d2UJ0Mov8zoyePb606sR0yO3IzKRzkC0IIjEQUsE4CritvxftGWzSyysVaAkNbIqhPHH72Z4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767850073; c=relaxed/simple;
-	bh=axExFEVawx6b/HLBeJrzGMEy2cTYiNuIo7O1q0+jeGs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kp87+EHXOnTUoXd6LVznQPuUlfAKbHvyA9u7xijnB7vBKvTx4F+TUYXU7MwQ4k6KwH1S06zhtJf0mB6+e8Aw+ahSrpSZiKdTkNw5qSO7UB6m5cd56QRgsaWDjrQqqaH50PVdY2g+f5gq8uMSWC/Jueh3zFCY4P2nBniokbyTA5I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=summations.net; spf=pass smtp.mailfrom=summations.net; dkim=pass (2048-bit key) header.d=summations-net.20230601.gappssmtp.com header.i=@summations-net.20230601.gappssmtp.com header.b=xGKeAvZc; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=summations.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=summations.net
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-78f99901ed5so30637637b3.3
-        for <linux-pm@vger.kernel.org>; Wed, 07 Jan 2026 21:27:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=summations-net.20230601.gappssmtp.com; s=20230601; t=1767850071; x=1768454871; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BC+osoIwsp+MvsvfieiIYrUxWM9BGrlddB8KAIiHx4w=;
-        b=xGKeAvZcSxK9lW8webwP+1N941XNaFYkt61G/E3lNAci0GtowPkgoiVTl9QSVaXWBR
-         NWQe8Q+Jhim9ceguMLnCa8ihrljpG+P4/GTPznEWVBPPVUGGQcE1QAHTraBESCHwq3kX
-         RnGM4vAdxFs7TFxTxOzlEQMAfRXB3lzqL/2nltlRl1Gn4Z3OOM1XFYihd4I2Pg6HYEI+
-         lgzuuOMN7Z8aCJL0rFbnUBYqomZ1NaPVpmFm/TQwMRSeOZahfYNjMPQzlZJLLVvr0Anb
-         zgZIN7rT030zYJ+BgnXq1LWJC2VEXQdpZHi/IeJSicd0XRgAGn0S/dNN306t5Vq52DcH
-         cLUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767850071; x=1768454871;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=BC+osoIwsp+MvsvfieiIYrUxWM9BGrlddB8KAIiHx4w=;
-        b=FMoDFt+HzFQtipC5qUGUo25qbuPIQ9ifw04qk17fh92D1bf2OhPWki1mAo/D16VXXN
-         QGmCImLlRdp+HN4n8O4TDBOQpCWwdy4GDuNVAYDvhEJimkzDenqj6tiTEAP01IJHZCpp
-         Qbf1aXR4Bp3BSnzIcn5fr3QNcQJ/y24Rq4PnRkMYx/kSizEYlknJYRJSWaNPYZZpSe2U
-         qmPIeu2O7jhniBlWfZ+dnwkP8iJV6e99xJmMURDr8rwi6i0NXQJqjDV7u7p1O6tejQAW
-         yRw+e3KSOQVuX3WGm7VPNpo2ND424IHGNQMbmYUqRauO+9Uvfx2oSPl9Mq1Phgf6PTE9
-         mQiw==
-X-Forwarded-Encrypted: i=1; AJvYcCWanm0R8h0RttEX46ibvtOnjvx8pEbmz/cf7Xu2Mbbi+fCMDsdXJymo335mAp/wfCG0wemZrMwLwQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz25+vWk5hZwPMPCzAhwdytSq9iZLl+vDNVz5oV6ZcqPwYv9vU5
-	eg/dLz5+2CSDRSB47cXLJ04ZVQhg3RYMDQn99JwCeUmmXlCE7z75GcDxt1ZK7zWlU9BMuFwjZ3o
-	MqE3EsVNOKG+aQ/hCyIOHbbUS6divnVxkQyYH2oWNKEU=
-X-Gm-Gg: AY/fxX4BWamZn1HHGTBgHnIdEHHAX2ABBhJMyalpYuTJGeqWSz9ghMBsHUwCpwecYet
-	i97tLl7JeCSEdNd9xK0MOE13iOfbbSa3eYKGA6y/Bo+Algm9JJan8VPZzOM9j1s4aKy2F3xWa9F
-	9gTNpZEundBABuRmdgERO0SJf2PMKy61FyCzqj6jEufITwE4N/8Rp4KzusN/aGJvnyI1/VgEHB8
-	e9EMtoNHW6KIPdUD9eOds01B3ktN86LHPGj2MBwAM2QQu6pXPeUbHlqHHMlFaNA0lYdrFS/vnSx
-	Se67ihgEc9iId/s0BODCOcVoQKHA
-X-Google-Smtp-Source: AGHT+IFOgL9QuUd80/piaFldcHRAVd0y782EaLehHJfIPXTxtTytmiYz4W9EajgqaU/7OrfDZq3ETfFnz3U6oZf/2iM=
-X-Received: by 2002:a05:690e:120f:b0:641:f5bc:696c with SMTP id
- 956f58d0204a3-64716c60119mr4870525d50.72.1767850071169; Wed, 07 Jan 2026
- 21:27:51 -0800 (PST)
+	s=arc-20240116; t=1767850358; c=relaxed/simple;
+	bh=/sry4RXnqhhzWzGDHtngiH6f3rQpnXqg5STFKGz6qAE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=H4jc16MII9K2IUSosHpSPM94VV/KWuqSTfCME6fWEbhBnhfcIc2of+xZwuNUxu7euGrVj9khVoEOjs7cR3+Ko1FO51xuRft0CyChaRIIetAoQQKlpmerpFWcL1cKIHq4wlzzKZtZ8HOOsu03u2CC6H80QxIn4OdIzhyPLO2jJuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=E/oiVAMd; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
+	Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=rsjADZuy3/dvrqWWWeQRCBgAwbSCdq7aKeqqHRcyF0M=; b=E/oiVAMdleEdQiBDp0ADCfa1Yq
+	mBMH1LSWwvo6YMPdGH2dN8fnmY/15DsYhxDyJ2rL47/h9fyKXJTqtFVhszO8NkN/13DgErqM+z53f
+	XhNZHi5etvLG60WrM6nuww1As0HtVLyT3jaXu44rvfhMKgXfGPg1jiNbAFZXTGO2ANP5r3J7TL6Yo
+	bR9BFwLB4a/GyTPeSDdue+BcQao7lUSRA8pbpeeuQlQR6i+Za1NWyU8YbMvR7fmF0z7I5IIQwtPaT
+	m2QLraeNzxb6UB8KiWEqObMPEbIE5wnd5f5sbj9LwJ8DDR+0FDMlao2RwE/+aKyVQeASNnBBgi7tU
+	IFfIYLhQ==;
+Received: from [58.29.143.236] (helo=localhost)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1vdidA-002qDF-J0; Thu, 08 Jan 2026 06:32:21 +0100
+From: Changwoo Min <changwoo@igalia.com>
+To: lukasz.luba@arm.com,
+	rafael@kernel.org,
+	donald.hunter@gmail.com,
+	kuba@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	lenb@kernel.org,
+	pavel@kernel.org,
+	changwoo@igalia.com
+Cc: kernel-dev@igalia.com,
+	linux-pm@vger.kernel.org,
+	netdev@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 for 6.19 0/4] Revise the EM YNL spec to be clearer
+Date: Thu,  8 Jan 2026 14:32:08 +0900
+Message-ID: <20260108053212.642478-1-changwoo@igalia.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260106092117.3727152-1-joshua.yeong@starfivetech.com>
-In-Reply-To: <20260106092117.3727152-1-joshua.yeong@starfivetech.com>
-From: Rahul Pathak <rahul@summations.net>
-Date: Thu, 8 Jan 2026 10:57:39 +0530
-X-Gm-Features: AQt7F2qhmjlZCACoqEpff45oADUXIoYNWJ-4094MakljrIym7FWPaVOI4-KiK_c
-Message-ID: <CABdD5xkq=LbaUo=jDGSF2U2Rb0r13EEJQMfSjxEMsSX0mCDyhQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] RISC-V: RPMI performance service bindings and cpufreq support
-To: Joshua Yeong <joshua.yeong@starfivetech.com>
-Cc: anup@brainfault.org, leyfoon.tan@starfivetech.com, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, pjw@kernel.org, palmer@dabbelt.com, 
-	aou@eecs.berkeley.edu, alex@ghiti.fr, rafael@kernel.org, 
-	viresh.kumar@linaro.org, sboyd@kernel.org, jms@oss.tenstorrent.com, 
-	darshan.prajapati@einfochips.com, charlie@rivosinc.com, 
-	dfustini@oss.tenstorrent.com, michal.simek@amd.com, cyy@cyyself.name, 
-	jassisinghbrar@gmail.com, andriy.shevchenko@linux.intel.com, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 6, 2026 at 2:51=E2=80=AFPM Joshua Yeong
-<joshua.yeong@starfivetech.com> wrote:
->
-> This patch series introduces support for the RISC-V RPMI (RISC-V Platform
-> Management Interface) performance service, covering both Device Tree bind=
-ings
-> and a corresponding cpufreq driver.
->
-> The first part of the series adds YAML bindings to describe the RPMI perf=
-ormance
-> service as provided by platform firmware, as well as the supervisor-level
-> controller interface exposed to the operating system. The bindings also d=
-ocument
-> how CPU nodes reference performance domains managed by RPMI.
->
-> The final patch builds on these definitions by introducing a cpufreq driv=
-er that
-> leverages the RPMI performance service to manage CPU frequency scaling on=
- RISC-V
-> systems. The driver supports RPMI access through SBI-based transport mech=
-anisms
-> as well as dedicated supervisor-mode transports.
->
-> RPMI specification reference [1] and [2]
->
-> Test Environment is as follows:
-> https://github.com/yeongjoshua/linux/tree/v6.19-rc4/rpmi-performance
-> https://github.com/riscv-software-src/opensbi
-> https://github.com/yeongjoshua/qemu/tree/rpmi-dev-upstream
->
-> Use '-M virt -M rpmi=3Dtrue' when running qemu
->
-> [1] https://github.com/riscv-non-isa/riscv-sbi-doc/releases
-> [2] https://github.com/riscv-non-isa/riscv-rpmi/releases
->
-> Joshua Yeong (5):
->   dt-bindings: firmware: Add RPMI performance service message proxy
->     bindings
->   dt-bindings: firmware: Add RPMI performance service bindings
->   dt-bindings: riscv: cpus: document performance-domains property
->   cpufreq: Add cpufreq driver for the RISC-V RPMI performance service
->     group
->   MAINTAINERS: Add RISC-V RPMI performance service group
+This patch set addresses all the concerns raised at [1] to make the EM YNL spec
+clearer. It includes the following changes:
 
+- Fix the lint errors (1/4). 
+- Rename em.yaml to dev-energymodel.yaml (2/4).  “dev-energymodel” was used
+  instead of “device-energy-model”, which was originally proposed [2], because
+  the netlink protocol name cannot exceed GENL_NAMSIZ(16). In addition, docs
+  strings and flags attributes were added.
+- Change cpus' type from string to u64 array of CPU ids (3/4).
+- Add dump to get-perf-domains in the EM YNL spec (4/4). A user can fetch
+  either information about a specific performance domain with do or information
+  about all performance domains with dump. 
 
-Hi Joshua,
+ChangeLog v1 -> v2:
+- Remove perf-domains in the YNL spec, as do and dump of get-perf-domains
+  share the reply format using perf-domain-attrs (4/4).
+- Add example outputs of get-perf-domains and get-perf-table for ease of
+  understanding (cover letter).
 
-I have a general question -  RPMI performance service group is
-primarily defined for devices but can also be used for CPUs.
-Do you plan to add a RPMI devfreq driver too for devices?
+This can be tested using the tool, tools/net/ynl/pyynl/cli.py, for example,
+with the following commands:
 
-Thanks
-Rahul
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/dev-energymodel.yaml \
+     --dump get-perf-domains
+
+    > [{'cpus': [0, 1],                                                                     
+    >   'flags': {'perf-domain-skip-inefficiencies', 'perf-domain-microwatts'},             
+    >   'perf-domain-id': 0},                                                               
+    >  {'cpus': [2, 3, 4], 'flags': {'perf-domain-microwatts'}, 'perf-domain-id': 1},       
+    >  {'cpus': [5, 6], 'flags': {'perf-domain-microwatts'}, 'perf-domain-id': 2},          
+    >  {'cpus': [7], 'flags': {'perf-domain-microwatts'}, 'perf-domain-id': 3}] 
+
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/dev-energymodel.yaml \
+     --do get-perf-domains --json '{"perf-domain-id": 0}'
+
+    > {'cpus': [0, 1],                                                                    
+    >  'flags': {'perf-domain-skip-inefficiencies', 'perf-domain-microwatts'},            
+    >  'perf-domain-id': 0}
+
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/dev-energymodel.yaml \
+     --do get-perf-table --json '{"perf-domain-id": 0}'
+
+    > {'perf-domain-id': 0,                                                               
+    >  'perf-state': [{'cost': 2984,                                                      
+    >                  'flags': {'perf-state-inefficient'},                               
+    >                  'frequency': 364800,                                               
+    >                  'performance': 34,                                                 
+    >                  'power': 10147},                
+    >                                                                                                    
+    >                 ...
+    >                 
+    >                 {'cost': 6982,
+    >                  'flags': set(),
+    >                  'frequency': 2265600,
+    >                  'performance': 216,
+    >                  'power': 150816}]}
+
+  $> tools/net/ynl/pyynl/cli.py \
+     --spec Documentation/netlink/specs/dev-energymodel.yaml \
+     --subscribe event  --sleep 10
+
+[1] https://lore.kernel.org/lkml/CAD4GDZy-aeWsiY=-ATr+Y4PzhMX71DFd_mmdMk4rxn3YG8U5GA@mail.gmail.com/
+[2] https://lore.kernel.org/lkml/CAJZ5v0gpYQwC=1piaX-PNoyeoYJ7uw=DtAGdTVEXAsi4bnSdbA@mail.gmail.com/
+
+Changwoo Min (4):
+  PM: EM: Fix yamllint warnings in the EM YNL spec
+  PM: EM: Rename em.yaml to dev-energymodel.yaml
+  PM: EM: Change cpus' type from string to u64 array in the EM YNL spec
+  PM: EM: Add dump to get-perf-domains in the EM YNL spec
+
+ .../netlink/specs/dev-energymodel.yaml        | 175 ++++++++++++++
+ Documentation/netlink/specs/em.yaml           | 113 ----------
+ MAINTAINERS                                   |   8 +-
+ include/uapi/linux/dev_energymodel.h          |  82 +++++++
+ include/uapi/linux/energy_model.h             |  63 ------
+ kernel/power/em_netlink.c                     | 213 ++++++++++++------
+ kernel/power/em_netlink_autogen.c             |  58 +++--
+ kernel/power/em_netlink_autogen.h             |  22 +-
+ 8 files changed, 449 insertions(+), 285 deletions(-)
+ create mode 100644 Documentation/netlink/specs/dev-energymodel.yaml
+ delete mode 100644 Documentation/netlink/specs/em.yaml
+ create mode 100644 include/uapi/linux/dev_energymodel.h
+ delete mode 100644 include/uapi/linux/energy_model.h
+
+-- 
+2.52.0
+
 
