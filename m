@@ -1,193 +1,166 @@
-Return-Path: <linux-pm+bounces-40493-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40494-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BB5AD05238
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 18:44:45 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00260D0529B
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 18:47:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B71F8302F7AD
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 17:29:27 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C3A843027E5C
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 17:43:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 538A02F7468;
-	Thu,  8 Jan 2026 17:27:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N0FBovyG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E093A3033D0;
+	Thu,  8 Jan 2026 17:43:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BBF02D8393;
-	Thu,  8 Jan 2026 17:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A43A42E7BDC
+	for <linux-pm@vger.kernel.org>; Thu,  8 Jan 2026 17:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767893264; cv=none; b=UAtbBT2HSc0BVxX6GNaFcGVvuOPGX7wrryVShUD0ualSY4M0qzZaD7uf1jK77OTKcBKZXwhWJMwez8ixov3kZD514CmeKqD5HmGsfFtDTg3ewA7WIuFOqA+LYn5paxi/POczZqE+aqi97+4BaVN+l2uYuITLnUnURglnawQ0MdY=
+	t=1767894187; cv=none; b=uW3rZpOb9HoK0d5t0KYNI9w5qoIiRtt3+GYZLivhfAwKqiFMfwK5glvxClwZj2PZIVxq6Pm9f3OsBgWtfyw7VwGlz5jWahGTjcY2MEC0jNVgVWctXDnCjpjiI3nGWE6Ve0kilpLtT5iATZq2UsiI+k1LD8vPlSYBMH/kYxhlCAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767893264; c=relaxed/simple;
-	bh=APV5ntxxphrtGu3GlOx83NQKoLOGqOjtVFfujzMMhq4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fXRxKQTobV1mdIfFd7PZcuetylHr1s2CLB9SfAftksOfPX0ZQ89L21g/9MA6fRDoY7zgO7pDFW6P5nteXT8r3/JT67l1wIMIx4jq825k5WNzVEZe/joexItvMdMN/jRH/8Vw/hdoxW3grcB4wUYzkT/3rzdKhW5Xzz4iLxaceNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N0FBovyG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 815F9C19423;
-	Thu,  8 Jan 2026 17:27:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767893263;
-	bh=APV5ntxxphrtGu3GlOx83NQKoLOGqOjtVFfujzMMhq4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N0FBovyGKwCwkTIJuCh1zGkP/oWG4lKPf6IiQfeuU2LN4kc976awuf3/X2D2xAAB7
-	 LSKRUoCxbPJZIwaqYn+C4npMd37Ve+nIRHg2x+BDFN0At0t2CktFKPwzBLBBeLQs14
-	 n3zbghAwkPFw2OXWcSJbp91R2QPQSe87Rf0aJgVlP1/MyTdeF5Xv2r7qne0jGycf6B
-	 CZV2OqJ9uIgwqtWpFnstWl06+WZsSpMniCdMKfk/f6YfWFYJaUU09mlbR0KtTEjXr0
-	 MmDGdC8QT3RwC+ep6naAsPhVG3dMR/xxB2oHYfq13lE77IqkkhY+QrIL1ZVFf1Zxix
-	 Ebid9/i+qEKrA==
-Date: Thu, 8 Jan 2026 17:27:35 +0000
-From: Lee Jones <lee@kernel.org>
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: Re: [PATCH RESEND v6 00/17] Support ROHM BD72720 PMIC
-Message-ID: <20260108172735.GK302752@google.com>
-References: <cover.1765804226.git.mazziesaccount@gmail.com>
+	s=arc-20240116; t=1767894187; c=relaxed/simple;
+	bh=GAMmRH8WG4SuwJpSk40B1/V0uVXYQJKFg56MoYwmk70=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kcHaX+gICMaoZ7+ic911lJVJ8xEyBwjeyXcGD9rhg1Voi9tTLuM0koVBBHHmZ21eyus3H51BzZ8d0VIGNSn2YuBkaUSX+wAmIgFS0ZcFW9X0sVe4kHyLfHwg6V4P7tY0RDI/HaPyB15wFpg7iPENWyCXRonMfyGNyhuzYMZPwvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-559966a86caso1069849e0c.2
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 09:43:02 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767894179; x=1768498979;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pfe9XNi/Cjru8cNLH+ivGd+Nm2hyK8hmMgtx6v7K+ro=;
+        b=bYg7O88gdDe7dlUvlPbUojxX2X9S+qRK3Y469IbN8k7rnLEcRXKdbTqnwG2FmqwRTY
+         FivCoOsVmGxu+5mOZ3EWNxhUYotmIYXFC+1YpPmbxkO6ftf5oZWQFZvVxHd2JdGJn3R5
+         km81GtTmRz71eLBzHship3qHTfhg/+5Ud5RdBdz5t6m1Bwf6IkgiycwAq1bd/+p0iKyq
+         UgXIafrVV958RcolKaH99enwCwz9Nbylg0TW5xc11Fy/TJJUaAbqHCqnx2KB1gTlQx77
+         MF0wRBm8PnBcun+vuxZ9RAzLRFqklpn4OcWmIgC0Ks+iUZsYALbDEsLMOmtfH/xcsJyl
+         QAig==
+X-Forwarded-Encrypted: i=1; AJvYcCUQO2/DOsc2nnnWM9Vvp1F3zow/TF6w24bVvXaOO7xJFjl1+64ecIB+4L+af+cIf18hPuc148DPEA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywo+3T/mqHbgP/tqdQyxqR17hsat53ZdVOCN0S55CqhLl4ovB3o
+	U/ZR3Ikoj17yapRvgZw/cGnxoLrPApZXVBctCW1Lr0R+mv5Chxocp6PgcSEbBqU+
+X-Gm-Gg: AY/fxX5Grj3Sp+NISvuYymL2e30j67/psEeTYDilzEShEOmJcrtwhC67GQVhSBW29bi
+	i0uzaRdpAuzmWggn6tUxK5J3J/vQdJ5S2Y/TIIMYrAFT3RpEt/s3l8Ghh0hdvxTUZuFiFyg5UgB
+	W0A+aX+o82pzLvKByex/Mg5rxTalSkiFqzPcuzTvRJKbFFA55Xg0XLnXIXChMDR5TCw/fl2zi0/
+	iv5PLftqs/OoN8KcIhYBdxjogIIO6LMFNXCzJfEkj6u7n9HB6Pdefkeo/ryq3SNdd/FckQSB6Ri
+	vUjbZujr0aECAJ94elcrAOwU1Ljlvvqr4XRefgjB6D1+36s9nODWCJr69kDSta1zLpXD/cjGXYr
+	NkYy/h2tSv8o9JgKvU0QAnIL7RZTO4N4QeKPRFE9O1L4+8jr8cTPV48QzpHFEvF8G9AK2AArzp6
+	GT3ayyl8hukS7Jb90d8fCQyM5kJWn2ysLen5bo6Nrbc/uN/MjKofPbAD11iXw=
+X-Google-Smtp-Source: AGHT+IEYiX2gt0xasuBPKT2rGsmQ1S4pclQDx0D5EiVIG2MHZWQsR9NlcSMYLR12cDHGYjyhPO8fRg==
+X-Received: by 2002:a05:6122:8292:b0:559:ed61:46d8 with SMTP id 71dfb90a1353d-56347fb4492mr2100955e0c.10.1767894178983;
+        Thu, 08 Jan 2026 09:42:58 -0800 (PST)
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5633a074d30sm6860559e0c.0.2026.01.08.09.42.58
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Jan 2026 09:42:58 -0800 (PST)
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-93a9f700a8cso1170391241.2
+        for <linux-pm@vger.kernel.org>; Thu, 08 Jan 2026 09:42:58 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVLNLkvQkB4YfBRxisrfkbgsUtOLZCapzP+5KULiw0riyA6Isw8xxvY8LkKohf7SxG4y8m7rXhzHw==@vger.kernel.org
+X-Received: by 2002:a05:6102:5cc7:b0:5dd:89ad:1100 with SMTP id
+ ada2fe7eead31-5ecb5cbb74bmr2376260137.6.1767894178396; Thu, 08 Jan 2026
+ 09:42:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1765804226.git.mazziesaccount@gmail.com>
+References: <20260108165324.11376-1-cosmin-gabriel.tanislav.xa@renesas.com> <20260108165324.11376-6-cosmin-gabriel.tanislav.xa@renesas.com>
+In-Reply-To: <20260108165324.11376-6-cosmin-gabriel.tanislav.xa@renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 8 Jan 2026 18:42:47 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX0G92JmwneZp1h+AOF-Cit2scVGGWXCBZGwBVmJjUAVg@mail.gmail.com>
+X-Gm-Features: AQt7F2oaRcSSM-TJ2lzWvwve1kr4JhP9eX1Et_7XoG_piUmKankXGgTr0tEIJaU
+Message-ID: <CAMuHMdX0G92JmwneZp1h+AOF-Cit2scVGGWXCBZGwBVmJjUAVg@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] thermal: renesas: rzg3e: add support for RZ/T2H
+ and RZ/N2H
+To: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+Cc: John Madieu <john.madieu.xa@bp.renesas.com>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Magnus Damm <magnus.damm@gmail.com>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 15 Dec 2025, Matti Vaittinen wrote:
+Hi Cosmin,
 
-> Resending the v6
-> 
-> Series is same as v6 _except_ being rebased on v6.19-rc1 - and adding rb
-> tags which were replied to v6.
-> 
-> The ROHM BD72720 is a new power management IC for portable, battery
-> powered devices. It integrates 10 BUCKs and 11 LDOs, RTC, charger, LEDs,
-> GPIOs and a clock gate. To me the BD72720 seems like a successor to the
-> BD71828 and BD71815 PMICs.
-> 
-> This series depends on
-> 5bff79dad20a ("power: supply: Add bd718(15/28/78) charger driver")
-> which is in power-supply tree, for-next. Thus, the series is based on
-> it.
-> 
-> The testing since v4 has suffered some hardware-issues after I
-> accidentally enabled charging while the PMIC's battery pin was connected
-> to the I/O domain. Some heat was generated, not terribly lot smoke
-> though...
-> 
-> After the incident I've had occasional I2C failures. I, however, suspect
-> the root cause is HW damage in I/O lines.
-> 
-> Revision history:
->   v6 resend:
->   - Rebased on v6.19-rc1 and collected rb-tags from v6.
-> 
->   v5 => v6:
->   - MFD fixes as suggested by Lee
->     - Styling mostly
->     - New patch to Fix comment style for MFD driver
->   More accurate changelog in individual patches
-> 
->   v4 => v5:
->   - dt-binding fixes as discussed in v4 reviews.
->     - Drop rohm,vdr-battery.yaml and add vdr properties to battery.yaml
->     - Drop 'rohm,' -vendor-prefix from vdr properties
->   - Link to v4:
->     https://lore.kernel.org/all/cover.1763022807.git.mazziesaccount@gmail.com/
->   More accurate changelog in individual patches
-> 
->   v3 => v4:
->   - dt-binding fixes to the BD72720 MFD example and regulator bindings
->   More accurate changelog in individual patches
-> 
->   v2 => v3:
->   - rebased to power-supply/for-next as dependencies are merged to there
->   - plenty of dt-binding changes as suggested by reviewers
->   - add new patch to better document existing 'trickle-charging' property
->   More accurate changelog in individual patches
-> 
->   RFCv1 => v2:
->   - Drop RFC status
->   - Use stacked regmaps to hide secondary map from the sub-drivers
->   - Quite a few styling fixes and improvements as suggested by
->     reviewers. More accurate changelog in individual patches.
->   - Link to v1:
->     https://lore.kernel.org/all/cover.1759824376.git.mazziesaccount@gmail.com/
-> 
+On Thu, 8 Jan 2026 at 17:55, Cosmin Tanislav
+<cosmin-gabriel.tanislav.xa@renesas.com> wrote:
+> The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs expose the
+> temperature calibration via SMC SIP and do not have a reset for the
+> TSU peripheral, and use different minimum and maximum temperature values
+> compared to the already supported RZ/G3E.
+>
+> Although the calibration data is stored in an OTP memory, the OTP itself
+> is not memory-mapped, access to it is done through an OTP controller.
+>
+> The OTP controller is only accessible from the secure world,
+> but the temperature calibration data stored in the OTP is exposed via
+> SMC.
+>
+> Add support for retrieving the calibration data using arm_smcc_smc().
+>
+> Add a compatible for RZ/T2H, RZ/N2H can use it as a fallback.
+>
+> Reviewed-by: John Madieu <john.madieu.xa@bp.renesas.com>
+> Tested-by: John Madieu <john.madieu.xa@bp.renesas.com>
+> Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
 > ---
-> 
-> Matti Vaittinen (17):
->   dt-bindings: regulator: ROHM BD72720
->   dt-bindings: battery: Clarify trickle-charge
->   dt-bindings: battery: Add trickle-charge upper limit
->   dt-bindings: battery: Voltage drop properties
->   dt-bindings: mfd: ROHM BD72720
->   dt-bindings: leds: bd72720: Add BD72720
->   mfd: rohm-bd71828: Use regmap_reg_range()
->   mfd: rohm-bd71828: Use standard file header format
->   mfd: rohm-bd71828: Support ROHM BD72720
->   regulator: bd71828: rename IC specific entities
->   regulator: bd71828: Support ROHM BD72720
->   gpio: Support ROHM BD72720 gpios
->   clk: clk-bd718x7: Support BD72720 clk gate
->   rtc: bd70528: Support BD72720 rtc
->   power: supply: bd71828: Support wider register addresses
->   power: supply: bd71828-power: Support ROHM BD72720
->   MAINTAINERS: Add ROHM BD72720 PMIC
-> 
->  .../bindings/leds/rohm,bd71828-leds.yaml      |    7 +-
->  .../bindings/mfd/rohm,bd72720-pmic.yaml       |  339 ++++++
->  .../bindings/power/supply/battery.yaml        |   33 +-
->  .../regulator/rohm,bd72720-regulator.yaml     |  148 +++
->  MAINTAINERS                                   |    2 +
->  drivers/clk/Kconfig                           |    4 +-
->  drivers/clk/clk-bd718x7.c                     |   10 +-
->  drivers/gpio/Kconfig                          |    9 +
->  drivers/gpio/Makefile                         |    1 +
->  drivers/gpio/gpio-bd72720.c                   |  281 +++++
->  drivers/mfd/Kconfig                           |   18 +-
->  drivers/mfd/rohm-bd71828.c                    |  555 ++++++++-
->  drivers/power/supply/bd71828-power.c          |  160 ++-
->  drivers/regulator/Kconfig                     |    8 +-
->  drivers/regulator/bd71828-regulator.c         | 1025 ++++++++++++++++-
->  drivers/rtc/Kconfig                           |    3 +-
->  drivers/rtc/rtc-bd70528.c                     |   21 +-
->  include/linux/mfd/rohm-bd72720.h              |  634 ++++++++++
->  include/linux/mfd/rohm-generic.h              |    1 +
->  19 files changed, 3127 insertions(+), 132 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
->  create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
->  create mode 100644 drivers/gpio/gpio-bd72720.c
->  create mode 100644 include/linux/mfd/rohm-bd72720.h
+>
+> V4:
+>  * pick up John's Reviewed-by and Tested-by
+>  * replace new macro TSU_TEMP_MASK usage with existing macro
+>    TSU_CODE_MAX
 
-The MFD parts LGTM.
+Thanks for the update!
 
-What Acks are you waiting on?  What's the merge strategy?
+Looks like Gmail blocked my review comments on v4 :-(
 
-> -- 
-> 2.52.0
-> 
+> index c1b586128fa6..ba13ca8cbb8c 100644
+> --- a/drivers/thermal/renesas/rzg3e_thermal.c
+> +++ b/drivers/thermal/renesas/rzg3e_thermal.c
 
+> @@ -362,6 +366,21 @@ static int rzg3e_thermal_get_syscon_trim(struct rzg3e_thermal_priv *priv)
+>         return 0;
+>  }
+>
+> +static int rzg3e_thermal_get_smc_trim(struct rzg3e_thermal_priv *priv)
+> +{
+> +       struct arm_smccc_res local_res;
 
+Missing #include <linux/arm-smccc.h> (on e.g. arm and riscv).
+
+> +
+> +       arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPLO,
+> +                     0, 0, 0, 0, 0, 0, &local_res);
+
+Can this crash? E.g. if this SMC call is not supported by the firmware?
+
+> +       priv->trmval0 = local_res.a0 & TSU_CODE_MAX;
+> +
+> +       arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPHI,
+> +                     0, 0, 0, 0, 0, 0, &local_res);
+> +       priv->trmval1 = local_res.a0 & TSU_CODE_MAX;
+> +
+> +       return 0;
+> +}
+
+Gr{oetje,eeting}s,
+
+                        Geert
 
 -- 
-Lee Jones [李琼斯]
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
