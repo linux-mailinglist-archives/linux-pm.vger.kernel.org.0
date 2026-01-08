@@ -1,50 +1,50 @@
-Return-Path: <linux-pm+bounces-40419-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40420-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6FB5D0120B
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 06:37:04 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBDEED0122C
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 06:38:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9A74A309FD2C
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 05:32:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 735E430B754B
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 05:33:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF2F4316909;
-	Thu,  8 Jan 2026 05:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E15CB3161B1;
+	Thu,  8 Jan 2026 05:33:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="mrH+LKHj"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="h4khqfbg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3FC03164DB;
-	Thu,  8 Jan 2026 05:32:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE4AA1F5842;
+	Thu,  8 Jan 2026 05:33:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767850376; cv=none; b=enORLxFVtD7g8EbHs3Hjl2sq7fjsydB5OAoTWt6lrnDnhPyGYWZdF4eMF4gqK6Ty3OwjL/+Koj3gDok04kPHk/56d4XGXOm5J8mvOIRkUgVQNyBm2545GkLV0eCI6Wu08zoJT0loqWRKxPR5NI9Zrw+XIcEH+Ij/IaKT1e3a2eY=
+	t=1767850383; cv=none; b=B6n/SHX4BaYO9kI7Ydvrrrrl8m+uWQA4aq6o92q0TprNfAsFtVSiQv39MXYifbM68cNTwybn8BinYlaPVsp4Az9vRIwOmxux5h21OzGXq9izQ2ol5pP4h9G1BuorYGPL5uZUgfOhFMORN448iqaXV6Upzy7OA1UFMMs51cg00vQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767850376; c=relaxed/simple;
-	bh=uFeNlJsiFOSFDJYDMZdTK8NEWLsrqGTVSnvDAKwImHg=;
+	s=arc-20240116; t=1767850383; c=relaxed/simple;
+	bh=HLqK0G2kjQAAQqzcyJmfxHdNXJUOr7hSbfv1ALPn8Ig=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NhNCFE9syz+YVLElr0NeYgwi0dNKTJLmOQHZhkfn1LNSUgZSj8P+zxCp2025ws8931zmaLsQ1nSNSIzErueKvpt+VzNAx2PQFqdOrEwdWg+kTuA0BQD1B65lTawjHMmgrdsiZIPVh5YR0Rl7B3xBntYM8cYZ5m/u4TIRfV/xRx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=mrH+LKHj; arc=none smtp.client-ip=213.97.179.56
+	 MIME-Version; b=r7auEJRDiLtedW3qRKKlAAQhYrZ8pCT+sBtGCklCNYoyLKKeUAZYawlRVheUA1oVsBF2ipCFBuDsDKQbbWw45JWz5FL1iUrSgHAD/2JUquqv1PbufLTc2NsVK+RKAnM6rMlU+Xzj+YLWGRTf9fO1kvwhOCPnsv39Lak4gG/4bEM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=h4khqfbg; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-	In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=e4BABN+whOIwpbRjqw8P1lGgt0uMGQduz3cNU8e5qeY=; b=mrH+LKHjl0sW0p2yn9/sA7k7un
-	WixBUBLDIuYyKjo3theUunusr6gyZFFimhkR8+RPbyIuPB5vneIkKhsdLLNeXWA+T+LgirDt2ACsm
-	VitWjBmLFgd9ugbnOYwItAJX1LgDsEOVLB8z7CQmuGXVpQgp+cGrK9gO6+M7j9ljmVVRl4ipdhps+
-	s+zeCj9q2msPkdAcJ0koTSbdXBfQpiw7AG38SsLhuChdcjmgcfiyvfv7eSmToQ8cZvP6N7DG9ENT8
-	LnrqzBqiCNcWHwmqOODbIIfRxqn+P6ekg47WQNR11zKGbkd8MTQL+G/JaSNZ7390aTcJ2PHfAgUJU
-	pIm5gl0Q==;
+	bh=vlRYVuvsQhR4bUPoA6JYXawXi1xPfstRgxtLKj35HrI=; b=h4khqfbgPHJeo6GzglBP/Z6lrb
+	L+0qdusy7qykYoy4Yy5mNz7RVhSoitWKX0vtwpx/jaywxOYAPOQm2MIW4BgHqWlc3OevzeHWUib0K
+	N1yanR6ntpTLctB2e10Yk4W5B3Z+4F52VGWPLVku6GK5y8IjOXO+JVPd3L1v080QzaovIDpIF9SKX
+	jZNba8jX9MWINsx7V37c37Ho0JVXZM2vpskoh/vmPAKeUDtT5ZLKeE9do/IxRnE9sGCs5dTuhSFXH
+	OQk8kmCyqw4ygGvPlK6Hd5zstU8UwfkI775hndNmEsBXeTXYGYVeLoioAZBRrnHFkOjvZ/1Gy1Lnn
+	e+Ly71Tw==;
 Received: from [58.29.143.236] (helo=localhost)
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1vdidY-002qDq-Tb; Thu, 08 Jan 2026 06:32:46 +0100
+	id 1vdidf-002qE6-Ls; Thu, 08 Jan 2026 06:32:52 +0100
 From: Changwoo Min <changwoo@igalia.com>
 To: lukasz.luba@arm.com,
 	rafael@kernel.org,
@@ -62,9 +62,9 @@ Cc: kernel-dev@igalia.com,
 	netdev@vger.kernel.org,
 	sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 for 6.19 3/4] PM: EM: Change cpus' type from string to u64 array in the EM YNL spec
-Date: Thu,  8 Jan 2026 14:32:11 +0900
-Message-ID: <20260108053212.642478-4-changwoo@igalia.com>
+Subject: [PATCH v2 for 6.19 4/4] PM: EM: Add dump to get-perf-domains in the EM YNL spec
+Date: Thu,  8 Jan 2026 14:32:12 +0900
+Message-ID: <20260108053212.642478-5-changwoo@igalia.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260108053212.642478-1-changwoo@igalia.com>
 References: <20260108053212.642478-1-changwoo@igalia.com>
@@ -74,89 +74,266 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Previously, the cpus attribute was a string format which was a "%*pb"
-stringification of a bitmap. That is not very consumable for a UAPI,
-so let’s change it to an u64 array of CPU ids.
+Add dump to get-perf-domains, so that a user can fetch either information
+about a specific performance domain with do or information about all
+performance domains with dump. Share the reply format of do and dump using
+perf-domain-attrs, so remove perf-domains. The YNL spec, autogenerated
+files, and the do implementation are updated, and the dump implementation
+is added.
 
 Suggested-by: Donald Hunter <donald.hunter@gmail.com>
 Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 Reviewed-by: Donald Hunter <donald.hunter@gmail.com>
 Signed-off-by: Changwoo Min <changwoo@igalia.com>
 ---
- .../netlink/specs/dev-energymodel.yaml        |  3 ++-
- kernel/power/em_netlink.c                     | 22 +++++++++----------
- 2 files changed, 13 insertions(+), 12 deletions(-)
+ .../netlink/specs/dev-energymodel.yaml        | 25 ++++---
+ include/uapi/linux/dev_energymodel.h          |  7 --
+ kernel/power/em_netlink.c                     | 68 ++++++++++++++-----
+ kernel/power/em_netlink_autogen.c             | 16 ++++-
+ kernel/power/em_netlink_autogen.h             |  2 +
+ 5 files changed, 80 insertions(+), 38 deletions(-)
 
 diff --git a/Documentation/netlink/specs/dev-energymodel.yaml b/Documentation/netlink/specs/dev-energymodel.yaml
-index cbc4bc38f23c..af8b8f72f722 100644
+index af8b8f72f722..11faabfdfbe8 100644
 --- a/Documentation/netlink/specs/dev-energymodel.yaml
 +++ b/Documentation/netlink/specs/dev-energymodel.yaml
-@@ -73,7 +73,8 @@ attribute-sets:
-         enum: perf-domain-flags
-       -
-         name: cpus
--        type: string
-+        type: u64
-+        multi-attr: true
-         doc: >-
-           CPUs that belong to this performance domain.
+@@ -42,16 +42,6 @@ definitions:
+           missing real power information.
+ 
+ attribute-sets:
+-  -
+-    name: perf-domains
+-    doc: >-
+-      Information on all the performance domains.
+-    attributes:
+-      -
+-        name: perf-domain
+-        type: nest
+-        nested-attributes: perf-domain
+-        multi-attr: true
    -
+     name: perf-domain
+     doc: >-
+@@ -133,12 +123,21 @@ operations:
+   list:
+     -
+       name: get-perf-domains
+-      attribute-set: perf-domains
++      attribute-set: perf-domain
+       doc: Get the list of information for all performance domains.
+       do:
+-        reply:
++        request:
+           attributes:
+-            - perf-domain
++            - perf-domain-id
++        reply:
++          attributes: &perf-domain-attrs
++            - pad
++            - perf-domain-id
++            - flags
++            - cpus
++      dump:
++        reply:
++          attributes: *perf-domain-attrs
+     -
+       name: get-perf-table
+       attribute-set: perf-table
+diff --git a/include/uapi/linux/dev_energymodel.h b/include/uapi/linux/dev_energymodel.h
+index 3399967e1f93..355d8885c9a0 100644
+--- a/include/uapi/linux/dev_energymodel.h
++++ b/include/uapi/linux/dev_energymodel.h
+@@ -36,13 +36,6 @@ enum dev_energymodel_perf_domain_flags {
+ 	DEV_ENERGYMODEL_PERF_DOMAIN_FLAGS_PERF_DOMAIN_ARTIFICIAL = 4,
+ };
+ 
+-enum {
+-	DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN = 1,
+-
+-	__DEV_ENERGYMODEL_A_PERF_DOMAINS_MAX,
+-	DEV_ENERGYMODEL_A_PERF_DOMAINS_MAX = (__DEV_ENERGYMODEL_A_PERF_DOMAINS_MAX - 1)
+-};
+-
+ enum {
+ 	DEV_ENERGYMODEL_A_PERF_DOMAIN_PAD = 1,
+ 	DEV_ENERGYMODEL_A_PERF_DOMAIN_PERF_DOMAIN_ID,
 diff --git a/kernel/power/em_netlink.c b/kernel/power/em_netlink.c
-index 6f6238c465bb..b6edb018c65a 100644
+index b6edb018c65a..5a611d3950fd 100644
 --- a/kernel/power/em_netlink.c
 +++ b/kernel/power/em_netlink.c
-@@ -17,17 +17,14 @@
- #include "em_netlink.h"
+@@ -18,6 +18,13 @@
  #include "em_netlink_autogen.h"
  
--#define DEV_ENERGYMODEL_A_PERF_DOMAIN_CPUS_LEN		256
--
  /*************************** Command encoding ********************************/
++struct dump_ctx {
++	int idx;
++	int start;
++	struct sk_buff *skb;
++	struct netlink_callback *cb;
++};
++
  static int __em_nl_get_pd_size(struct em_perf_domain *pd, void *data)
  {
--	char cpus_buf[DEV_ENERGYMODEL_A_PERF_DOMAIN_CPUS_LEN];
-+	int nr_cpus, msg_sz, cpus_sz;
- 	int *tot_msg_sz = data;
--	int msg_sz, cpus_sz;
- 
--	cpus_sz = snprintf(cpus_buf, sizeof(cpus_buf), "%*pb",
--			   cpumask_pr_args(to_cpumask(pd->cpus)));
-+	nr_cpus = cpumask_weight(to_cpumask(pd->cpus));
-+	cpus_sz = nla_total_size_64bit(sizeof(u64)) * nr_cpus;
- 
- 	msg_sz = nla_total_size(0) +
- 		 /* DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN */
-@@ -44,9 +41,10 @@ static int __em_nl_get_pd_size(struct em_perf_domain *pd, void *data)
- 
- static int __em_nl_get_pd(struct em_perf_domain *pd, void *data)
+ 	int nr_cpus, msg_sz, cpus_sz;
+@@ -43,14 +50,8 @@ static int __em_nl_get_pd(struct em_perf_domain *pd, void *data)
  {
--	char cpus_buf[DEV_ENERGYMODEL_A_PERF_DOMAIN_CPUS_LEN];
  	struct sk_buff *msg = data;
-+	struct cpumask *cpumask;
- 	struct nlattr *entry;
-+	int cpu;
+ 	struct cpumask *cpumask;
+-	struct nlattr *entry;
+ 	int cpu;
  
- 	entry = nla_nest_start(msg,
- 			       DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN);
-@@ -61,10 +59,12 @@ static int __em_nl_get_pd(struct em_perf_domain *pd, void *data)
- 			      pd->flags, DEV_ENERGYMODEL_A_PERF_DOMAIN_PAD))
- 		goto out_cancel_nest;
- 
--	snprintf(cpus_buf, sizeof(cpus_buf), "%*pb",
--		 cpumask_pr_args(to_cpumask(pd->cpus)));
--	if (nla_put_string(msg, DEV_ENERGYMODEL_A_PERF_DOMAIN_CPUS, cpus_buf))
+-	entry = nla_nest_start(msg,
+-			       DEV_ENERGYMODEL_A_PERF_DOMAINS_PERF_DOMAIN);
+-	if (!entry)
 -		goto out_cancel_nest;
-+	cpumask = to_cpumask(pd->cpus);
-+	for_each_cpu(cpu, cpumask) {
-+		if (nla_put_u64_64bit(msg, DEV_ENERGYMODEL_A_PERF_DOMAIN_CPUS,
-+				      cpu, DEV_ENERGYMODEL_A_PERF_DOMAIN_PAD))
-+			goto out_cancel_nest;
-+	}
+-
+ 	if (nla_put_u32(msg, DEV_ENERGYMODEL_A_PERF_DOMAIN_PERF_DOMAIN_ID,
+ 			pd->id))
+ 		goto out_cancel_nest;
+@@ -66,26 +67,50 @@ static int __em_nl_get_pd(struct em_perf_domain *pd, void *data)
+ 			goto out_cancel_nest;
+ 	}
  
- 	nla_nest_end(msg, entry);
+-	nla_nest_end(msg, entry);
+-
+ 	return 0;
+ 
+ out_cancel_nest:
+-	nla_nest_cancel(msg, entry);
+-
+ 	return -EMSGSIZE;
+ }
+ 
++static int __em_nl_get_pd_for_dump(struct em_perf_domain *pd, void *data)
++{
++	const struct genl_info *info;
++	struct dump_ctx *ctx = data;
++	void *hdr;
++	int ret;
++
++	if (ctx->idx++ < ctx->start)
++		return 0;
++
++	info = genl_info_dump(ctx->cb);
++	hdr = genlmsg_iput(ctx->skb, info);
++	if (!hdr) {
++		genlmsg_cancel(ctx->skb, hdr);
++		return -EMSGSIZE;
++	}
++
++	ret = __em_nl_get_pd(pd, ctx->skb);
++	genlmsg_end(ctx->skb, hdr);
++	return ret;
++}
++
+ int dev_energymodel_nl_get_perf_domains_doit(struct sk_buff *skb,
+ 					      struct genl_info *info)
+ {
++	int id, ret = -EMSGSIZE, msg_sz = 0;
++	int cmd = info->genlhdr->cmd;
++	struct em_perf_domain *pd;
+ 	struct sk_buff *msg;
+ 	void *hdr;
+-	int cmd = info->genlhdr->cmd;
+-	int ret = -EMSGSIZE, msg_sz = 0;
+ 
+-	for_each_em_perf_domain(__em_nl_get_pd_size, &msg_sz);
++	if (!info->attrs[DEV_ENERGYMODEL_A_PERF_DOMAIN_PERF_DOMAIN_ID])
++		return -EINVAL;
+ 
++	id = nla_get_u32(info->attrs[DEV_ENERGYMODEL_A_PERF_DOMAIN_PERF_DOMAIN_ID]);
++	pd = em_perf_domain_get_by_id(id);
++
++	__em_nl_get_pd_size(pd, &msg_sz);
+ 	msg = genlmsg_new(msg_sz, GFP_KERNEL);
+ 	if (!msg)
+ 		return -ENOMEM;
+@@ -94,10 +119,9 @@ int dev_energymodel_nl_get_perf_domains_doit(struct sk_buff *skb,
+ 	if (!hdr)
+ 		goto out_free_msg;
+ 
+-	ret = for_each_em_perf_domain(__em_nl_get_pd, msg);
++	ret = __em_nl_get_pd(pd, msg);
+ 	if (ret)
+ 		goto out_cancel_msg;
+-
+ 	genlmsg_end(msg, hdr);
+ 
+ 	return genlmsg_reply(msg, info);
+@@ -106,10 +130,22 @@ int dev_energymodel_nl_get_perf_domains_doit(struct sk_buff *skb,
+ 	genlmsg_cancel(msg, hdr);
+ out_free_msg:
+ 	nlmsg_free(msg);
+-
+ 	return ret;
+ }
+ 
++int dev_energymodel_nl_get_perf_domains_dumpit(struct sk_buff *skb,
++						struct netlink_callback *cb)
++{
++	struct dump_ctx ctx = {
++		.idx = 0,
++		.start = cb->args[0],
++		.skb = skb,
++		.cb = cb,
++	};
++
++	return for_each_em_perf_domain(__em_nl_get_pd_for_dump, &ctx);
++}
++
+ static struct em_perf_domain *__em_nl_get_pd_table_id(struct nlattr **attrs)
+ {
+ 	struct em_perf_domain *pd;
+diff --git a/kernel/power/em_netlink_autogen.c b/kernel/power/em_netlink_autogen.c
+index 44acef0e7df2..fedd473e4244 100644
+--- a/kernel/power/em_netlink_autogen.c
++++ b/kernel/power/em_netlink_autogen.c
+@@ -11,6 +11,11 @@
+ 
+ #include <uapi/linux/dev_energymodel.h>
+ 
++/* DEV_ENERGYMODEL_CMD_GET_PERF_DOMAINS - do */
++static const struct nla_policy dev_energymodel_get_perf_domains_nl_policy[DEV_ENERGYMODEL_A_PERF_DOMAIN_PERF_DOMAIN_ID + 1] = {
++	[DEV_ENERGYMODEL_A_PERF_DOMAIN_PERF_DOMAIN_ID] = { .type = NLA_U32, },
++};
++
+ /* DEV_ENERGYMODEL_CMD_GET_PERF_TABLE - do */
+ static const struct nla_policy dev_energymodel_get_perf_table_nl_policy[DEV_ENERGYMODEL_A_PERF_TABLE_PERF_DOMAIN_ID + 1] = {
+ 	[DEV_ENERGYMODEL_A_PERF_TABLE_PERF_DOMAIN_ID] = { .type = NLA_U32, },
+@@ -18,10 +23,17 @@ static const struct nla_policy dev_energymodel_get_perf_table_nl_policy[DEV_ENER
+ 
+ /* Ops table for dev_energymodel */
+ static const struct genl_split_ops dev_energymodel_nl_ops[] = {
++	{
++		.cmd		= DEV_ENERGYMODEL_CMD_GET_PERF_DOMAINS,
++		.doit		= dev_energymodel_nl_get_perf_domains_doit,
++		.policy		= dev_energymodel_get_perf_domains_nl_policy,
++		.maxattr	= DEV_ENERGYMODEL_A_PERF_DOMAIN_PERF_DOMAIN_ID,
++		.flags		= GENL_CMD_CAP_DO,
++	},
+ 	{
+ 		.cmd	= DEV_ENERGYMODEL_CMD_GET_PERF_DOMAINS,
+-		.doit	= dev_energymodel_nl_get_perf_domains_doit,
+-		.flags	= GENL_CMD_CAP_DO,
++		.dumpit	= dev_energymodel_nl_get_perf_domains_dumpit,
++		.flags	= GENL_CMD_CAP_DUMP,
+ 	},
+ 	{
+ 		.cmd		= DEV_ENERGYMODEL_CMD_GET_PERF_TABLE,
+diff --git a/kernel/power/em_netlink_autogen.h b/kernel/power/em_netlink_autogen.h
+index f7e4bddcbd53..5caf2f7e18a5 100644
+--- a/kernel/power/em_netlink_autogen.h
++++ b/kernel/power/em_netlink_autogen.h
+@@ -14,6 +14,8 @@
+ 
+ int dev_energymodel_nl_get_perf_domains_doit(struct sk_buff *skb,
+ 					     struct genl_info *info);
++int dev_energymodel_nl_get_perf_domains_dumpit(struct sk_buff *skb,
++					       struct netlink_callback *cb);
+ int dev_energymodel_nl_get_perf_table_doit(struct sk_buff *skb,
+ 					   struct genl_info *info);
  
 -- 
 2.52.0
