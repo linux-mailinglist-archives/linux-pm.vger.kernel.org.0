@@ -1,54 +1,62 @@
-Return-Path: <linux-pm+bounces-40467-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40468-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E82DD03D03
-	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 16:25:56 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00E0CD0416E
+	for <lists+linux-pm@lfdr.de>; Thu, 08 Jan 2026 16:57:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id BB307300B348
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 15:20:18 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id EB16530FD062
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Jan 2026 15:39:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0CC2346AC6;
-	Thu,  8 Jan 2026 15:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024BD2DCF46;
+	Thu,  8 Jan 2026 15:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LqliWBhc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e6LkVeGw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 790E93469EF;
-	Thu,  8 Jan 2026 15:05:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29941D435F;
+	Thu,  8 Jan 2026 15:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767884742; cv=none; b=suf+P5Ig6lVSj76YqYcJ0ogiEK20cph8x0zPFl6u7fe1kXI2Dr5scomt1s6KrZbuZpz6tmmYf4O5Nsc6j1aHkq/uJSzi46r2VlK/sOauHBq6oANwDVDyiLE5AYqJMxBiu0nWuvmdwLzCIpUH1eCrEeTmvAkTlI4EjaWizrVzCXg=
+	t=1767885445; cv=none; b=Rtu09STYham1RHPoUa/AMzyLWy82pX+5rrwLIMTsaoPvNSAAPhhzFix7NdBjYn6qmnBWPrcr0iw0KsuHHNVsHctppbLvC+zIohzqhvsC3h7zcvtuI6204qpKgGKt48InX3pH+aAaq0ssGDSMvzAwQW4W+JNm2aOrjX7hkkUWK44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767884742; c=relaxed/simple;
-	bh=R0fTKDCa8xhF7V5q8TY77wd3fWvEGzFAiYFUa9s0Vuc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lbQ1afG3/phO7stRAB5P01U7onLqtEjUcEpYxa8qQIiuuvhnC6nAJafQpRutQ8nf9MogHmeLn6cKoVEzi3bvBTTLswPlk6e/HdXBxVBpvuQtlbMrmKxe/4L7UIVk8NsGLrqnKonnX9sVGJ3P+vXdhc/kpMP9FJhI21au6zfGZi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LqliWBhc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7C6C19422;
-	Thu,  8 Jan 2026 15:05:39 +0000 (UTC)
+	s=arc-20240116; t=1767885445; c=relaxed/simple;
+	bh=MVUd2mPnw+PufvW3fzHiPeR63pakRAw7EqgNUPsOg8c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LlziPR7Axb3Ehmv2alDk0kdUWBFLPj7bAIK3Yto9wIPdgzqhoQ/q3UBXisUpVdvmjAyHpg9Es+ZglIv/whs56Asl5ApSnevk3Vf9fTuj3EWVtvLhwCFk9yS7IGLqNfYqAtVPZgxadOSOYMQL2DLmqpKZ6KaCcFtDG51eySMsJHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e6LkVeGw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2AD8C116C6;
+	Thu,  8 Jan 2026 15:17:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767884742;
-	bh=R0fTKDCa8xhF7V5q8TY77wd3fWvEGzFAiYFUa9s0Vuc=;
+	s=k20201202; t=1767885445;
+	bh=MVUd2mPnw+PufvW3fzHiPeR63pakRAw7EqgNUPsOg8c=;
 	h=From:To:Cc:Subject:Date:From;
-	b=LqliWBhcFTCt6EnDLXoa4NRQqBI4jbdJDAIkAY5t1jiB3c2xG6yeakPFq+yK93pZ7
-	 +CczqO7l2Uq73D9+vppUd0BP7r0JIwJPCyHc3cjFZIlpRc3RJVXVuWOFpndrcj9VFy
-	 xe5vsjsc8n5D9+PwSbkGf9EldBxBQFA9ebyVlwiI7CgrzUi7HXoTU0Oep3ye5LMuAg
-	 LjImsBdK362E8fj3A+tCzoHWM1xktrJ0zv7y180tCmp3TQoPmlppreXnGX//K91yV6
-	 8KZSIrNb3yfmJZYU111xt5GndhcKNeNqnE1ui/P5PK3BPCceXNXnYRhsFb8a7I5bsU
-	 3FR8grnju+tcA==
+	b=e6LkVeGwqmyg+tZH00Pbv0sUjzTkZ12hr4mI6KY0y5j/pn3xpEA6XlYZYLKfDz5BP
+	 2+O12PQ5UQgnMp3F4lemyx63nnkyEhvmchahR9tizUdowPNeIwCDFYQ2HX6zTaRPZM
+	 7fAe82FflAY0g8j2p8pOS17mtkiUXCA2IEphud0uVFqh3K1tZbYaB01w2eEIx7YEWj
+	 9ASDWjyeIqg3zYQYE2+hp/tQfz46VeCKKJ8VTLKIleupiny7QrbM+0/fnftgyjU8Q3
+	 /AR7D/CNyl/eo8U9LjAsy2VKyBN0w/KI55RKnL0tXA5DzwXVXx9this1SLqztjgHcd
+	 7XpXhHOsXfYug==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Thomas Gleixner <tglx@linutronix.de>, Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>, Molnar Ingo <mingo@kernel.org>,
- Marc Zyngier <maz@kernel.org>, Lukas Wunner <lukas@wunner.de>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Jon Hunter <jonathanh@nvidia.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v2] genirq/chip: Change irq_chip_pm_put() return type to void
-Date: Thu, 08 Jan 2026 16:05:37 +0100
-Message-ID: <5075294.31r3eYUQgx@rafael.j.wysocki>
+To: Linux PM <linux-pm@vger.kernel.org>, imx@lists.linux.dev
+Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Brian Norris <briannorris@chromium.org>, Liviu Dudau <liviu.dudau@arm.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>,
+ Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
+ dri-devel@lists.freedesktop.org,
+ =?ISO-8859-1?Q?Ma=EDra?= Canal <mcanal@igalia.com>
+Subject: [RESEND][PATCH v1] drm: Discard pm_runtime_put() return value
+Date: Thu, 08 Jan 2026 16:17:17 +0100
+Message-ID: <2256082.irdbgypaU6@rafael.j.wysocki>
 Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -61,26 +69,26 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The irq_chip_pm_put() return value is only used in __irq_do_set_handler()
-to trigger a WARN_ON() if it is negative, but doing so is not useful
-because irq_chip_pm_put() simply passes the pm_runtime_put() return value
-to its callers.
+Multiple DRM drivers use the pm_runtime_put() return value for printing
+debug or even error messages and all of those messages are at least
+somewhat misleading.
 
 Returning an error code from pm_runtime_put() merely means that it has
 not queued up a work item to check whether or not the device can be
 suspended and there are many perfectly valid situations in which that
 can happen, like after writing "on" to the devices' runtime PM "control"
-attribute in sysfs for one example.
+attribute in sysfs for one example.  It also happens when the kernel
+has been configured with CONFIG_PM unset.
 
-For this reason, modify irq_chip_pm_put() to discard the pm_runtime_put()
-return value, change its return type to void, and drop the WARN_ON()
-around the irq_chip_pm_put() invocation from __irq_do_set_handler().
-Also update the irq_chip_pm_put() kerneldoc comment to be more accurate.
+For this reason, modify all of those drivers to simply discard the
+pm_runtime_put() return value which is what they should be doing.
 
 This will facilitate a planned change of the pm_runtime_put() return
 type to void in the future.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Acked-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
 ---
 
 This patch is requisite for converting pm_runtime_put() into a void
@@ -91,72 +99,180 @@ If you decide to pick it up, please let me know.
 Otherwise, an ACK or equivalent will be appreciated, but also the lack
 of specific criticism will be eventually regarded as consent.
 
-The v1 is here:
+Originally posted here:
 
-https://lore.kernel.org/linux-pm/4723896.LvFx2qVVIh@rafael.j.wysocki/
-
-v1 -> v2:
-   * Fix a typo in the new part of the irq_chip_pm_put() kerneldoc comment
-     and rephrase it slightly.
+https://lore.kernel.org/linux-pm/3045480.e9J7NaK4W3@rafael.j.wysocki/
 
 ---
- include/linux/irq.h |    2 +-
- kernel/irq/chip.c   |   22 +++++++++++-----------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ drivers/gpu/drm/arm/malidp_crtc.c                   |    6 +-----
+ drivers/gpu/drm/bridge/imx/imx8qm-ldb.c             |    4 +---
+ drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c            |    4 +---
+ drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c |    5 +----
+ drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c        |    5 +----
+ drivers/gpu/drm/imx/dc/dc-crtc.c                    |   12 +++---------
+ drivers/gpu/drm/vc4/vc4_hdmi.c                      |    5 +----
+ drivers/gpu/drm/vc4/vc4_vec.c                       |   12 ++----------
+ 8 files changed, 11 insertions(+), 42 deletions(-)
 
---- a/include/linux/irq.h
-+++ b/include/linux/irq.h
-@@ -659,7 +659,7 @@ extern void handle_percpu_devid_fasteoi_
+--- a/drivers/gpu/drm/arm/malidp_crtc.c
++++ b/drivers/gpu/drm/arm/malidp_crtc.c
+@@ -77,7 +77,6 @@ static void malidp_crtc_atomic_disable(s
+ 									 crtc);
+ 	struct malidp_drm *malidp = crtc_to_malidp_device(crtc);
+ 	struct malidp_hw_device *hwdev = malidp->dev;
+-	int err;
  
- extern int irq_chip_compose_msi_msg(struct irq_data *data, struct msi_msg *msg);
- extern int irq_chip_pm_get(struct irq_data *data);
--extern int irq_chip_pm_put(struct irq_data *data);
-+extern void irq_chip_pm_put(struct irq_data *data);
- #ifdef	CONFIG_IRQ_DOMAIN_HIERARCHY
- extern void handle_fasteoi_ack_irq(struct irq_desc *desc);
- extern void handle_fasteoi_mask_irq(struct irq_desc *desc);
---- a/kernel/irq/chip.c
-+++ b/kernel/irq/chip.c
-@@ -995,7 +995,7 @@ __irq_do_set_handler(struct irq_desc *de
- 		irq_state_set_disabled(desc);
- 		if (is_chained) {
- 			desc->action = NULL;
--			WARN_ON(irq_chip_pm_put(irq_desc_get_irq_data(desc)));
-+			irq_chip_pm_put(irq_desc_get_irq_data(desc));
- 		}
- 		desc->depth = 1;
- 	}
-@@ -1551,20 +1551,20 @@ int irq_chip_pm_get(struct irq_data *dat
+ 	/* always disable planes on the CRTC that is being turned off */
+ 	drm_atomic_helper_disable_planes_on_crtc(old_state, false);
+@@ -87,10 +86,7 @@ static void malidp_crtc_atomic_disable(s
+ 
+ 	clk_disable_unprepare(hwdev->pxlclk);
+ 
+-	err = pm_runtime_put(crtc->dev->dev);
+-	if (err < 0) {
+-		DRM_DEBUG_DRIVER("Failed to disable runtime power management: %d\n", err);
+-	}
++	pm_runtime_put(crtc->dev->dev);
  }
  
- /**
-- * irq_chip_pm_put - Disable power for an IRQ chip
-+ * irq_chip_pm_put - Drop a PM reference on an IRQ chip
-  * @data:	Pointer to interrupt specific data
-  *
-- * Disable the power to the IRQ chip referenced by the interrupt data
-- * structure, belongs. Note that power will only be disabled, once this
-- * function has been called for all IRQs that have called irq_chip_pm_get().
-+ * Drop a power management reference, acquired via irq_chip_pm_get(), on the IRQ
-+ * chip represented by the interrupt data structure.
-+ *
-+ * Note that this will not disable power to the IRQ chip until this function
-+ * has been called for all IRQs that have called irq_chip_pm_get() and it may
-+ * not disable power at all (if user space prevents that, for example).
-  */
--int irq_chip_pm_put(struct irq_data *data)
-+void irq_chip_pm_put(struct irq_data *data)
+ static const struct gamma_curve_segment {
+--- a/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
++++ b/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
+@@ -280,9 +280,7 @@ static void imx8qm_ldb_bridge_atomic_dis
+ 	clk_disable_unprepare(imx8qm_ldb->clk_bypass);
+ 	clk_disable_unprepare(imx8qm_ldb->clk_pixel);
+ 
+-	ret = pm_runtime_put(dev);
+-	if (ret < 0)
+-		DRM_DEV_ERROR(dev, "failed to put runtime PM: %d\n", ret);
++	pm_runtime_put(dev);
+ }
+ 
+ static const u32 imx8qm_ldb_bus_output_fmts[] = {
+--- a/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
++++ b/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
+@@ -282,9 +282,7 @@ static void imx8qxp_ldb_bridge_atomic_di
+ 	if (is_split && companion)
+ 		companion->funcs->atomic_disable(companion, state);
+ 
+-	ret = pm_runtime_put(dev);
+-	if (ret < 0)
+-		DRM_DEV_ERROR(dev, "failed to put runtime PM: %d\n", ret);
++	pm_runtime_put(dev);
+ }
+ 
+ static const u32 imx8qxp_ldb_bus_output_fmts[] = {
+--- a/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c
++++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c
+@@ -181,11 +181,8 @@ static void imx8qxp_pc_bridge_atomic_dis
  {
- 	struct device *dev = irq_get_pm_device(data);
--	int retval = 0;
--
--	if (IS_ENABLED(CONFIG_PM) && dev)
--		retval = pm_runtime_put(dev);
+ 	struct imx8qxp_pc_channel *ch = bridge->driver_private;
+ 	struct imx8qxp_pc *pc = ch->pc;
+-	int ret;
  
--	return (retval < 0) ? retval : 0;
-+	if (dev)
-+		pm_runtime_put(dev);
+-	ret = pm_runtime_put(pc->dev);
+-	if (ret < 0)
+-		DRM_DEV_ERROR(pc->dev, "failed to put runtime PM: %d\n", ret);
++	pm_runtime_put(pc->dev);
  }
+ 
+ static const u32 imx8qxp_pc_bus_output_fmts[] = {
+--- a/drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c
++++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c
+@@ -127,11 +127,8 @@ static void imx8qxp_pxl2dpi_bridge_atomi
+ 						  struct drm_atomic_state *state)
+ {
+ 	struct imx8qxp_pxl2dpi *p2d = bridge->driver_private;
+-	int ret;
+ 
+-	ret = pm_runtime_put(p2d->dev);
+-	if (ret < 0)
+-		DRM_DEV_ERROR(p2d->dev, "failed to put runtime PM: %d\n", ret);
++	pm_runtime_put(p2d->dev);
+ 
+ 	if (p2d->companion)
+ 		p2d->companion->funcs->atomic_disable(p2d->companion, state);
+--- a/drivers/gpu/drm/imx/dc/dc-crtc.c
++++ b/drivers/gpu/drm/imx/dc/dc-crtc.c
+@@ -300,7 +300,7 @@ dc_crtc_atomic_disable(struct drm_crtc *
+ 				drm_atomic_get_new_crtc_state(state, crtc);
+ 	struct dc_drm_device *dc_drm = to_dc_drm_device(crtc->dev);
+ 	struct dc_crtc *dc_crtc = to_dc_crtc(crtc);
+-	int idx, ret;
++	int idx;
+ 
+ 	if (!drm_dev_enter(crtc->dev, &idx))
+ 		goto out;
+@@ -313,16 +313,10 @@ dc_crtc_atomic_disable(struct drm_crtc *
+ 	dc_fg_disable_clock(dc_crtc->fg);
+ 
+ 	/* request pixel engine power-off as plane is off too */
+-	ret = pm_runtime_put(dc_drm->pe->dev);
+-	if (ret)
+-		dc_crtc_err(crtc, "failed to put DC pixel engine RPM: %d\n",
+-			    ret);
++	pm_runtime_put(dc_drm->pe->dev);
+ 
+ 	/* request display engine power-off when CRTC is disabled */
+-	ret = pm_runtime_put(dc_crtc->de->dev);
+-	if (ret < 0)
+-		dc_crtc_err(crtc, "failed to put DC display engine RPM: %d\n",
+-			    ret);
++	pm_runtime_put(dc_crtc->de->dev);
+ 
+ 	drm_dev_exit(idx);
+ 
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -848,7 +848,6 @@ static void vc4_hdmi_encoder_post_crtc_p
+ 	struct vc4_hdmi *vc4_hdmi = encoder_to_vc4_hdmi(encoder);
+ 	struct drm_device *drm = vc4_hdmi->connector.dev;
+ 	unsigned long flags;
+-	int ret;
+ 	int idx;
+ 
+ 	mutex_lock(&vc4_hdmi->mutex);
+@@ -867,9 +866,7 @@ static void vc4_hdmi_encoder_post_crtc_p
+ 	clk_disable_unprepare(vc4_hdmi->pixel_bvb_clock);
+ 	clk_disable_unprepare(vc4_hdmi->pixel_clock);
+ 
+-	ret = pm_runtime_put(&vc4_hdmi->pdev->dev);
+-	if (ret < 0)
+-		drm_err(drm, "Failed to release power domain: %d\n", ret);
++	pm_runtime_put(&vc4_hdmi->pdev->dev);
+ 
+ 	drm_dev_exit(idx);
+ 
+--- a/drivers/gpu/drm/vc4/vc4_vec.c
++++ b/drivers/gpu/drm/vc4/vc4_vec.c
+@@ -542,7 +542,7 @@ static void vc4_vec_encoder_disable(stru
+ {
+ 	struct drm_device *drm = encoder->dev;
+ 	struct vc4_vec *vec = encoder_to_vc4_vec(encoder);
+-	int idx, ret;
++	int idx;
+ 
+ 	if (!drm_dev_enter(drm, &idx))
+ 		return;
+@@ -556,17 +556,9 @@ static void vc4_vec_encoder_disable(stru
+ 
+ 	clk_disable_unprepare(vec->clock);
+ 
+-	ret = pm_runtime_put(&vec->pdev->dev);
+-	if (ret < 0) {
+-		drm_err(drm, "Failed to release power domain: %d\n", ret);
+-		goto err_dev_exit;
+-	}
++	pm_runtime_put(&vec->pdev->dev);
+ 
+ 	drm_dev_exit(idx);
+-	return;
+-
+-err_dev_exit:
+-	drm_dev_exit(idx);
+ }
+ 
+ static void vc4_vec_encoder_enable(struct drm_encoder *encoder,
 
 
 
