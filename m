@@ -1,111 +1,108 @@
-Return-Path: <linux-pm+bounces-40575-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40576-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06A3FD0C362
-	for <lists+linux-pm@lfdr.de>; Fri, 09 Jan 2026 21:49:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 129FFD0C37D
+	for <lists+linux-pm@lfdr.de>; Fri, 09 Jan 2026 21:54:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7ADB0301B671
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jan 2026 20:49:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A469E3016367
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jan 2026 20:54:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5E5E29B8C7;
-	Fri,  9 Jan 2026 20:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAC2A2BE655;
+	Fri,  9 Jan 2026 20:54:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oB0W8OXy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AQRdFgfK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C7A248861
-	for <linux-pm@vger.kernel.org>; Fri,  9 Jan 2026 20:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B840729BD95
+	for <linux-pm@vger.kernel.org>; Fri,  9 Jan 2026 20:54:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767991761; cv=none; b=cbcpSS0LcrorK6Mttx0EVeTHXvKuabDCJB0xa71GldIPE3B5Cob49459XIMIQYKJsMA5snexRLx2Ig8hmUA3yQ/v5RSfJQ/ZS13fOYscaU+x9dycU71lelwoecwOwqwxyzcDtvIMmnW//T4UAhi8K66wAicVUpxaidWSCn6r2Vo=
+	t=1767992059; cv=none; b=MxQpohEVAvjKTcjchrY4RoaMBW6coYxBLOTRoWRljtJVQxT/aPy4v/CefXwirUsWn0hLDuMNGvoTDPmwaILVfeQcHPQm47EOIEuE3c0zsi4DcS1Co97WkgrdKTRbE9zMNg/wzbxCELARHeRHgz5seyaLLNIZIIgkaQaonpY/5G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767991761; c=relaxed/simple;
-	bh=lmSrngha8S1iodqCQ5ibvWry8cc5krov+0Wn+POWbVQ=;
+	s=arc-20240116; t=1767992059; c=relaxed/simple;
+	bh=gw3bfShxoWnzan+sPdo1g+W62tWHdKkWDOx20qUStQs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U0teTK6d3eokISQEFYE8nEig/C8cLv52CSzAGCSXtpa0hAKT+rOCxWoY5E6WhW/LG1zudRf1OkZJKCzNEWmGfz2x3h/rhEL8Pf4ZlZ5C6wMOIc3Rj7FD2PSsVvqC3OG7+GA5QTL8oWj7s8BSXkLBSlJERp+VgDQnoAfVPZsz+ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oB0W8OXy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83834C2BC87
-	for <linux-pm@vger.kernel.org>; Fri,  9 Jan 2026 20:49:21 +0000 (UTC)
+	 To:Cc:Content-Type; b=Fq277h4TyaAwlnV7uBti9ZNrwkQql8Z2q4lyAR2xJ4avnNLIY2EaqNy6CNwkFciU0OZMzTbJf6L1Xovf7cjkY1UuxSx8BwCiObzVgkHIhPcwOaDIm/NjvWwUyNHLoJhZZsJvviswIWUPqrCBYTqjWycVAp6K25XugKgNpaklXUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AQRdFgfK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BE75C19423
+	for <linux-pm@vger.kernel.org>; Fri,  9 Jan 2026 20:54:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767991761;
-	bh=lmSrngha8S1iodqCQ5ibvWry8cc5krov+0Wn+POWbVQ=;
+	s=k20201202; t=1767992059;
+	bh=gw3bfShxoWnzan+sPdo1g+W62tWHdKkWDOx20qUStQs=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oB0W8OXyq/KSnIJvf4FGUedAWPpqIwNJky6k+b1sGrKMp9FY3jiU3ndvB4pPYWt+B
-	 YIOyi0vbewYiIDcV3Icta+lSmQlIvX5iBbt6TXGqLx7AE8bocIgIC3ldNu6ZjEpXMR
-	 NeNiMj0LD1b2Z6lEuJyx2frCTLDyz/WVv1T1JDROi2dMyojmX3f2eDumv9m6p8GlAv
-	 QWaEX2SJ5F+5jbCIERr7mdaNLNwk7mqmbJIPEw22KLD5Av4Nsv7cu2vSlnfOPhf+3/
-	 bCcUQxK7kMsMxrCnNTUC7RlMPOh+kkw01+K6e+yIJaOEs6Hwd1IgDDIs4+2CmJFVzu
-	 LwcHLVYj/b3zA==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-3fe9d6179efso2222594fac.1
-        for <linux-pm@vger.kernel.org>; Fri, 09 Jan 2026 12:49:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW2U2ljQ7Xjdp50XZRl6owsSC9zhmKOIGxTm1ykviR33GJiY8MocIG5q++k4Nmrg3N3jJmsAXvZWA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzefMwxYOt7DuJGK3JerUZbqxOAQUwIXn3ea3tvZHLv9MpC+1X0
-	XZdiPdcXVz9vsddEbC3EUt0kSm/GXElUOhAiMO1KQVaeDgPzgWuzb5in9z+/ko1T8xeO09fn9xw
-	aqUlwvRWJADUdHnRsrD3NtTQga9oak9s=
-X-Google-Smtp-Source: AGHT+IH2AF2IKp3+x/fUQIk0eMsiHqZAfSKwVKAtfksfYxjvWvqIHKaIJEvWLlnhDTe+vhJvEnjraHEmyq1ON0yk/7U=
-X-Received: by 2002:a4a:d131:0:b0:659:9a49:8eec with SMTP id
- 006d021491bc7-65f54697151mr4920100eaf.32.1767991760513; Fri, 09 Jan 2026
- 12:49:20 -0800 (PST)
+	b=AQRdFgfKn5Jph3mByonZ1vOcqMjMYupo09ACGw2E1lHsuL5Wh6SFQWcahP2qRSdTf
+	 yTtogBdzx70GlNgmmPFqqDyqEHwWNp6yaGKlxa0T5Of+lHKOMWsi8IOX1B2PGsNcmW
+	 FcpMBgqw1DA5nFgeb+jhhfBltQzzJcJ+OVGQiybX4MU5qv89Z4KYFgzxYwx3bH5xPi
+	 cYq6B3cq9JNcNiNpwlgLS3Vkav6CG0gXnTJ3cuwChIk+oUiQGpmr685HxkFInBXmZo
+	 8TnPmZcrlaLBdyKDqIgy5KJygNFLB2Vuz+otjkMTuezn16xYE29wOh4xESiWAyWo5q
+	 epIHla+N8Vk/A==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-3fa11ba9ed5so3337047fac.0
+        for <linux-pm@vger.kernel.org>; Fri, 09 Jan 2026 12:54:19 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW0uYZKd2bjHxwL4X+rPDOe/ESj219FtDmpaFnB072PfSpcoamgcdNQOCd2V4yo56lN+io5krIf5w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxac0Tra7d9ICePQtSIiUsmllWMNon4GhfSqeEKQTOwutKTJnqz
+	SM4xp0KGfnXqvdrlCQ2QiyYaMW0hhlP44/PDLJ5nJZkb9F8qHUzbZNLaoPdhYcm7vDGAfb18Drx
+	brWC+c1Ymo9jnQxx/ChvvSfOKS+fHAXw=
+X-Google-Smtp-Source: AGHT+IH/294bpsC9Lq1PdpN77JFT03sHqX7BdkZB6DnkpML6K8tYbdVNQUtTTXoZfUopOcgGYZJojfEs9gppEp0UcMU=
+X-Received: by 2002:a05:6870:e0d1:b0:3e8:98d7:72e5 with SMTP id
+ 586e51a60fabf-3ffc0bd60d8mr6505103fac.46.1767992058706; Fri, 09 Jan 2026
+ 12:54:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260108053212.642478-1-changwoo@igalia.com> <m27btswij3.fsf@gmail.com>
-In-Reply-To: <m27btswij3.fsf@gmail.com>
+References: <20260105-annotated_idle-v1-1-10ddf0771b58@debian.org>
+In-Reply-To: <20260105-annotated_idle-v1-1-10ddf0771b58@debian.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 9 Jan 2026 21:49:09 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hPHttsxSS=dfBV4_2ANKuqUYvBnLko++ie5nKwRwbrtA@mail.gmail.com>
-X-Gm-Features: AQt7F2reoHMKcruymvgt9rJybyawGlPF4XAwW4ghPDph-T_U-vdBHDWri3QQcts
-Message-ID: <CAJZ5v0hPHttsxSS=dfBV4_2ANKuqUYvBnLko++ie5nKwRwbrtA@mail.gmail.com>
-Subject: Re: [PATCH v2 for 6.19 0/4] Revise the EM YNL spec to be clearer
-To: Donald Hunter <donald.hunter@gmail.com>, Changwoo Min <changwoo@igalia.com>
-Cc: lukasz.luba@arm.com, kuba@kernel.org, davem@davemloft.net, 
-	edumazet@google.com, pabeni@redhat.com, horms@kernel.org, 
-	kernel-dev@igalia.com, linux-pm@vger.kernel.org, netdev@vger.kernel.org, 
-	sched-ext@lists.linux.dev, linux-kernel@vger.kernel.org
+Date: Fri, 9 Jan 2026 21:54:07 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h2iu9V4DiW8XSmEykw-w7dowdc_=4H2w6OrbBYn1wRWQ@mail.gmail.com>
+X-Gm-Features: AQt7F2oNCztb4pJCIl6dZpdFcw46RcyHGtkOYy0AdozQVMS11nLXzppvanugauk
+Message-ID: <CAJZ5v0h2iu9V4DiW8XSmEykw-w7dowdc_=4H2w6OrbBYn1wRWQ@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: menu: Remove incorrect unlikely() annotation
+To: Breno Leitao <leitao@debian.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 8, 2026 at 10:39=E2=80=AFAM Donald Hunter <donald.hunter@gmail.=
-com> wrote:
+On Mon, Jan 5, 2026 at 3:38=E2=80=AFPM Breno Leitao <leitao@debian.org> wro=
+te:
 >
-> Changwoo Min <changwoo@igalia.com> writes:
+> The unlikely() annotation on the early-return condition in menu_select()
+> is incorrect on systems with only one idle state (e.g., ARM64 servers
+> with a single ACPI LPI state). Branch profiling shows 100% misprediction
+> on such systems since drv->state_count <=3D 1 is always true.
 >
-> > This patch set addresses all the concerns raised at [1] to make the EM =
-YNL spec
-> > clearer. It includes the following changes:
-> >
-> > - Fix the lint errors (1/4).
-> > - Rename em.yaml to dev-energymodel.yaml (2/4).  =E2=80=9Cdev-energymod=
-el=E2=80=9D was used
-> >   instead of =E2=80=9Cdevice-energy-model=E2=80=9D, which was originall=
-y proposed [2], because
-> >   the netlink protocol name cannot exceed GENL_NAMSIZ(16). In addition,=
- docs
-> >   strings and flags attributes were added.
-> > - Change cpus' type from string to u64 array of CPU ids (3/4).
-> > - Add dump to get-perf-domains in the EM YNL spec (4/4). A user can fet=
-ch
-> >   either information about a specific performance domain with do or inf=
-ormation
-> >   about all performance domains with dump.
-> >
-> > ChangeLog v1 -> v2:
-> > - Remove perf-domains in the YNL spec, as do and dump of get-perf-domai=
-ns
-> >   share the reply format using perf-domain-attrs (4/4).
-> > - Add example outputs of get-perf-domains and get-perf-table for ease o=
-f
-> >   understanding (cover letter).
+> On platforms where only state0 is available, this path is the common
+> case, not an unlikely edge case. Remove the misleading annotation to
+> let the branch predictor learn the actual behavior.
 >
-> v2 looks good, thanks!
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  drivers/cpuidle/governors/menu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> Reviewed-by: Donald Hunter <donald.hunter@gmail.com>
+> diff --git a/drivers/cpuidle/governors/menu.c b/drivers/cpuidle/governors=
+/menu.c
+> index 64d6f7a1c776..ef9c5a84643e 100644
+> --- a/drivers/cpuidle/governors/menu.c
+> +++ b/drivers/cpuidle/governors/menu.c
+> @@ -271,7 +271,7 @@ static int menu_select(struct cpuidle_driver *drv, st=
+ruct cpuidle_device *dev,
+>                 data->bucket =3D BUCKETS - 1;
+>         }
+>
+> -       if (unlikely(drv->state_count <=3D 1 || latency_req =3D=3D 0) ||
+> +       if (drv->state_count <=3D 1 || latency_req =3D=3D 0 ||
+>             ((data->next_timer_ns < drv->states[1].target_residency_ns ||
+>               latency_req < drv->states[1].exit_latency_ns) &&
+>              !dev->states_usage[0].disable)) {
+>
+> ---
 
-Applied as 6.19-rc material, thanks!
+Applied as 6.20 material, thanks!
 
