@@ -1,145 +1,102 @@
-Return-Path: <linux-pm+bounces-40539-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40540-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FC9DD0A81F
-	for <lists+linux-pm@lfdr.de>; Fri, 09 Jan 2026 14:53:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B523D0A935
+	for <lists+linux-pm@lfdr.de>; Fri, 09 Jan 2026 15:14:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A697630608BB
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jan 2026 13:49:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A673730517DF
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jan 2026 14:11:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F6035A95A;
-	Fri,  9 Jan 2026 13:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D3C35CBD2;
+	Fri,  9 Jan 2026 14:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UQbDIfcb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A507833B962
-	for <linux-pm@vger.kernel.org>; Fri,  9 Jan 2026 13:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9364433C534;
+	Fri,  9 Jan 2026 14:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767966567; cv=none; b=hzmlAe9LWX5umZil8vVgNemNRrH9DlAdSZDKXqKbWII2xJahVYuzqXO7HCD1TGWI/2PhH+Ba1tmhwlvYwmZ3ddXtbxUdmJ2llBcq0tz23Zm8Bywi22cV06p6QLGAwaC5RVmJ0gsK9dBlkTb0jEPg5aor4rs/lFfZ0eU+0XQ1baw=
+	t=1767967896; cv=none; b=QkNO1ULHJ31seM0n/9qau7LIxw+pU2YDJ9awaZiwg0C9y9u144AmD67PWlZn75yqD+2sEFomPE0+U0jbwBvPl39uFff4BwVv6s+3rDIbh1Q13NqsSPAWM2WTCRzMWpDl9wxQobbJcFCee7RPtRUPNqMOe0G7G6PMsVlDFZFD6Z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767966567; c=relaxed/simple;
-	bh=WLFUrhNxJ/XDPIZxprmACvVsb1Pyo7q0wLa37Xprya8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LgCxwGMNk10Bwjcfr9nsiZR0Lhyzj9PSXJSw400emwcIEBrEv13gdHawZ8au2jtvDtdF727wlITRK3YrKDH2NkVlqeCGH/poH9fN94jMMEcF+ylkoyfupFNaUveLUcM4rV6lxr9D1d2W4OmNw8JVenBODm/Y9SOJ80gf/k0y0DY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-55b24eedd37so3195178e0c.0
-        for <linux-pm@vger.kernel.org>; Fri, 09 Jan 2026 05:49:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767966564; x=1768571364;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1K7NOffoek8SfFkqFSd9+BgcJllduHoywKqDwRr4NrA=;
-        b=xC+xicAiEAgxf7zdVkOz0B4YXf7wiTUw1QTVtbcZjjfsHIj9IWmGRMWXXwE6H4aqVa
-         VZ6MttBckCTpKNXDbcszO/qn7IyhnzZcDPF9fFGND8Tybc34eWbBErlb5YOba4q1hSZo
-         1Z1dbry29mC/ddoXajM8PZYMCUB+6GR4ZzCGTq2httpfQPy4JEJhrXs61bdxxNDeAo7q
-         j3Gj2Wkmadq/i6guhJHPx+Tl5DpVDZ8Ma9YKYf/x7Y6LBu6MuZTYqXe6ghoGWVJzKhy2
-         EjNBJqXX8xK3+qsyMH1sN/RUvtDjTTRLfI5FSZjIhLcD+12kfwEum4j4GbOIXoTm8cOy
-         sYNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVrJSKQt1wKZ3hw8IllcXDQuCbVocPHTC9zaPBZIZi6Sut8lKzt9PMlvha6KZ+SK/fqWN6R6/tkqQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsqgPHl+Wes2G60W/RN9dVDpH/FYGTAG2iXXi/8VTbYDdk9D3o
-	IQfl3PPlPVxwZUPftiP5Qd6xez7HUzJ5wVjNW4SAMtdEBrimnIPhIDW7WQXO+5uS
-X-Gm-Gg: AY/fxX66Kyd1YkHgqGRx1O3gdwDKFWP+mxngi7yBe9B8uQmB+o6rvFCMKjZPnzGmWal
-	5XqSucXtHiwkhcTk3vHvaCgSxa9o2IMULqgJnfFxVQgyl82BrB0KmzXvbwPmILkP+HQG5okkaaz
-	UKYXZKEcRAenl36EwlhzSNVeCrYJlXUfrDGSxI440Zcp7aIZUelB+8Al5xwr1ufU9ahOl6BG6ow
-	sGv1kpnqJj5tBVa9i6rVhqY5uc/bjvEPY7X3ldbZ9mEyVoNcJLewbexsaNTPD/8HE0a6664y1ov
-	idyyDX1YJl0wpjufEomGktYqx2Rj1OhFr7VVqlWku5S6f85PBIaQyKY653/mIj5u8M02iVpctes
-	ApGGfQk35uWd6WNF8wZD16YwhyNMFY9NeaJ1B+hLbNvww5qgWXj7jzK2vqDmHrR1PxQD4MhsALu
-	sEGdF2/3p3sc8cVZIzsTIR0Z/2VZdcnCVdb7avPvo9qhx3iZuxdK1zr/s1vFo=
-X-Google-Smtp-Source: AGHT+IGQxV9y91YKdnCOR4i6/G66t2JhwUCr1tLFTuISymHhHov8wGgUFbs69f9bFFdqv3C7/Rlbdw==
-X-Received: by 2002:a05:6122:6b08:b0:563:4a88:6ea5 with SMTP id 71dfb90a1353d-5634a8870f2mr3213713e0c.5.1767966564598;
-        Fri, 09 Jan 2026 05:49:24 -0800 (PST)
-Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-56345043f83sm8354608e0c.19.2026.01.09.05.49.23
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Jan 2026 05:49:23 -0800 (PST)
-Received: by mail-ua1-f51.google.com with SMTP id a1e0cc1a2514c-941063da73eso2948390241.3
-        for <linux-pm@vger.kernel.org>; Fri, 09 Jan 2026 05:49:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVqrc0ITU5T1MqN9c3n4OA3QHAaNKvHaC4LBLCvOcrjPTWB7mlKZuBY0R/8zsORkBCPrH5YlXoF1A==@vger.kernel.org
-X-Received: by 2002:a05:6102:800e:b0:5ee:d0ff:7254 with SMTP id
- ada2fe7eead31-5eed0ff7574mr1607434137.34.1767966563511; Fri, 09 Jan 2026
- 05:49:23 -0800 (PST)
+	s=arc-20240116; t=1767967896; c=relaxed/simple;
+	bh=Nc65wkMyCazsYeM+KI3rb7LhY4lOgQfED4l3qKX4Srs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D/D8V3Z9RufBr02j4XXOKj/T4Ytmxne4GlU9+21rbnxm+Mkf8J7B3GjyoyDuWhMgB7pjBE+1UGg3ONTIS38+tpkAObjqkxm80OuKhFvkyBpphIF11eCRvGZ0A4ZJXjHTIR9SCjyXo1PQvUlQxXyQr9CEIgjLrxm/UTvoYpVsp4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UQbDIfcb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03713C4CEF1;
+	Fri,  9 Jan 2026 14:11:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767967896;
+	bh=Nc65wkMyCazsYeM+KI3rb7LhY4lOgQfED4l3qKX4Srs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UQbDIfcbMQHPYaONy0xw9eDeUtqr6fNL4fM5tkLehvmUCkfobfoEcTA0ebVhwOpop
+	 euUY3QVP9Pw7W8GAbH9hSjYS43dpx26c5gkwD9TEnnb3/OhKE+UlE3J6/SG24oBLX0
+	 lyoA3JT/+SjKXC1C3wrikvNCNmJuCErVX/X1N0fnffoxWU55+RywqExZsTwdkN6pMB
+	 vsjz27RPhRNXlgXwSPIzwiEh0HHdKf9+iVPFnLI4P6QNKK5Pp4AR6KkGd33FYlhDU3
+	 +vxOFyg5OmvWHtnmGNfR5hFgAxbm2LfbVj4+qlNzYv8eNP2iQNd8T98G4x3ov2t3Sh
+	 dJC7MnnXMnjLA==
+Date: Fri, 9 Jan 2026 14:11:28 +0000
+From: Will Deacon <will@kernel.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+	peterz@infradead.org, akpm@linux-foundation.org,
+	mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
+	ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+	memxor@gmail.com, zhenglifeng1@huawei.com,
+	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com,
+	Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH v8 07/12] atomic: Add atomic_cond_read_*_timeout()
+Message-ID: <aWEMkHbBOgOkx_9f@willie-the-truck>
+References: <20251215044919.460086-1-ankur.a.arora@oracle.com>
+ <20251215044919.460086-8-ankur.a.arora@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260108195223.193531-1-cosmin-gabriel.tanislav.xa@renesas.com> <20260108195223.193531-4-cosmin-gabriel.tanislav.xa@renesas.com>
-In-Reply-To: <20260108195223.193531-4-cosmin-gabriel.tanislav.xa@renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 9 Jan 2026 14:49:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX39Bdg_LBry8QmGTR9Z=CNs6xGksFbzJw-8oDt4CcOqQ@mail.gmail.com>
-X-Gm-Features: AZwV_QgbNm6q3mt1zlj7hyuAc6e9Eu-odKmqzHG0qAir3pZOPVNUb1tURDFNGtE
-Message-ID: <CAMuHMdX39Bdg_LBry8QmGTR9Z=CNs6xGksFbzJw-8oDt4CcOqQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/5] thermal: renesas: rzg3e: make calibration value
- retrieval per-chip
-To: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-Cc: John Madieu <john.madieu.xa@bp.renesas.com>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Magnus Damm <magnus.damm@gmail.com>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251215044919.460086-8-ankur.a.arora@oracle.com>
 
-On Thu, 8 Jan 2026 at 20:53, Cosmin Tanislav
-<cosmin-gabriel.tanislav.xa@renesas.com> wrote:
-> The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs expose the
-> temperature calibration data via SMC SIP calls.
->
-> To prepare for supporting these SoCs, do the following changes.
->
-> Rename rzg3e_thermal_parse_dt() to rzg3e_thermal_get_syscon_trim().
->
-> Move the syscon usage out of rzg3e_thermal_get_calibration() and into
-> rzg3e_thermal_get_syscon_trim() and remove single-use variables from the
-> private state.
->
-> Place a pointer to rzg3e_thermal_get_syscon_trim() into the
-> chip-specific struct, and use it in the probe function to retrieve the
-> calibration values.
->
-> Now that syscon usage has been moved out of
-> rzg3e_thermal_get_calibration(), remove it and inline the calibration
-> validation into the probe function.
->
-> Also, reuse the TSU_CODE_MAX macro to mask the calibration values, as
-> GEMASK(11, 0) and 0xFFF are equivalent, and replace the hardcoded 0xFFF
-> with TSU_CODE_MAX in the calibration validation.
->
-> Reviewed-by: John Madieu <john.madieu.xa@bp.renesas.com>
-> Tested-by: John Madieu <john.madieu.xa@bp.renesas.com>
-> Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+On Sun, Dec 14, 2025 at 08:49:14PM -0800, Ankur Arora wrote:
+> Add atomic load wrappers, atomic_cond_read_*_timeout() and
+> atomic64_cond_read_*_timeout() for the cond-load timeout interfaces.
+> 
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
 > ---
->
-> V5:
->  * replace hardcoded 0xFFF values with TSU_CODE_MAX
->
-> V4:
->  * pick up John's Reviewed-by and Tested-by
->  * replace new macro TSU_TEMP_MASK usage with existing macro
->    TSU_CODE_MAX
->  * remove "Validate calibration data" comments
->  * inline rzg3e_validate_calibration() into rzg3e_thermal_probe()
+>  include/linux/atomic.h | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/include/linux/atomic.h b/include/linux/atomic.h
+> index 8dd57c3a99e9..5bcb86e07784 100644
+> --- a/include/linux/atomic.h
+> +++ b/include/linux/atomic.h
+> @@ -31,6 +31,16 @@
+>  #define atomic64_cond_read_acquire(v, c) smp_cond_load_acquire(&(v)->counter, (c))
+>  #define atomic64_cond_read_relaxed(v, c) smp_cond_load_relaxed(&(v)->counter, (c))
+>  
+> +#define atomic_cond_read_acquire_timeout(v, c, e, t) \
+> +	smp_cond_load_acquire_timeout(&(v)->counter, (c), (e), (t))
+> +#define atomic_cond_read_relaxed_timeout(v, c, e, t) \
+> +	smp_cond_load_relaxed_timeout(&(v)->counter, (c), (e), (t))
+> +
+> +#define atomic64_cond_read_acquire_timeout(v, c, e, t) \
+> +	smp_cond_load_acquire_timeout(&(v)->counter, (c), (e), (t))
+> +#define atomic64_cond_read_relaxed_timeout(v, c, e, t) \
+> +	smp_cond_load_relaxed_timeout(&(v)->counter, (c), (e), (t))
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Please update the atomic_t documentation to explain what these do.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Will
 
