@@ -1,103 +1,133 @@
-Return-Path: <linux-pm+bounces-40516-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40517-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4985ED06EBE
-	for <lists+linux-pm@lfdr.de>; Fri, 09 Jan 2026 04:08:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9047D074D9
+	for <lists+linux-pm@lfdr.de>; Fri, 09 Jan 2026 07:03:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BA3AE3032725
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jan 2026 03:07:17 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C3904305709A
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jan 2026 06:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D5C326D70;
-	Fri,  9 Jan 2026 03:07:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 982B22737FC;
+	Fri,  9 Jan 2026 06:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pqcn5xAL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BHHBBaP0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A5A243387;
-	Fri,  9 Jan 2026 03:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F19519309C;
+	Fri,  9 Jan 2026 06:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767928036; cv=none; b=ISTXiC4FTAoHwZ3dvbFLLAdM4EOSKl7nJPkBhwW95tINN8TP6lRKNv14Vibfb2bA/esixpZtuLZT8/hRfwJ3zciDd2r0CzWeD8RXyyTRxTTuaZiLy9PkvpluslPxATIHKQfK/qzvABOe7ITUnU+BKpv8pDB1maYTVI5ePiMEAQI=
+	t=1767938542; cv=none; b=AC2lQPzKIWPRxvEQtY35drc9I+UhCHQTkhJpItUOu5H5znF6sB97f8orH2DghLqyXckNw+JPBD66ysLabdECsSm01wdDjEH+Ut3yxQOn45kL9g8Dv6L8CQ31Bo6G14aDfqza4AMxWL6D/Ul/mUtYWLbjRn49qmPKZxJ+Fsn1+7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767928036; c=relaxed/simple;
-	bh=SuA+4ZjGkTKfJszZr/F94qjYrQFU261YheQwQvC7VgQ=;
+	s=arc-20240116; t=1767938542; c=relaxed/simple;
+	bh=2ZwanXb3K+wdRbDyhjpQDRTpzVByn8xFIpP+xmyQH/0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lhIpVeJGyrDb4Vo0oiLvy/M8szdrcc3mtyvv5QYL/Jxkvbo2g+/UJkD+9YJu4jiSnGXZfkgg0z4j0eXPkKCS+OhombpVbWDBrhWXGyrgTv/xxwmVhoSNY0iMbKSnr6hiq0W7bcMxZ4nUUmlOTzacOcK9X7akuLw+aTCVRdIjJqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pqcn5xAL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08D5DC116C6;
-	Fri,  9 Jan 2026 03:07:15 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=m2jJpBjIuQJ88YS5LZzrjuTaRG0u0AYKYC2CcFdo37TCld/dqDEfYlTmxFQlHTL37YgO+yL3/dya3lPqHn4egcDMIYH7CM2l0HVkWZf5MGapoVQKy1733QR1GgSE5ikclvIx1xEvXxMlzsvjerwfPORVj4huoXPYv5udt6iitUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BHHBBaP0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 308DFC4CEF1;
+	Fri,  9 Jan 2026 06:02:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767928035;
-	bh=SuA+4ZjGkTKfJszZr/F94qjYrQFU261YheQwQvC7VgQ=;
+	s=k20201202; t=1767938542;
+	bh=2ZwanXb3K+wdRbDyhjpQDRTpzVByn8xFIpP+xmyQH/0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Pqcn5xALsfEQBur8sts2W7grb6lheBRXWxs+Isfos4lloqU43t+b/hZUsc5h5apPn
-	 DLtexPSgzr5RbFYi1QRvU9CvZ11WAY5WutKaWouarfRuh6ABHJWOtQroPfpCv8++mO
-	 ut1jVC4aTf1gkfQrjYFedYI7Md9htvkR8oalTANlfzI7ps/Y5rXTkCvD7CbuD2rMS+
-	 AQMhTZ6BtYs5CKMMrGiXlNa9UkFywNpZAa5zXFi9aiPjzvVzZhXy0UUMG7+E5jC4D4
-	 C/ic7pYBp2rXeHrpIW2LC/cSy0TpLI1lFb6QyMBx5TCie5mTYjlEnNH4CNsAz7c+GE
-	 WkMIFzVBzdcCw==
-Date: Fri, 9 Jan 2026 08:37:12 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nipun Gupta <nipun.gupta@amd.com>,
-	Nikhil Agarwal <nikhil.agarwal@amd.com>,
-	Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-clk@vger.kernel.org, imx@lists.linux.dev,
-	dmaengine@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 09/11] dmaengine: fsl_raid: Simplify with scoped for
- each OF child loop
-Message-ID: <aWBw4EgoaNSGrg_F@vaman>
-References: <20260106-of-for-each-compatible-scoped-v2-0-05eb948d91f2@oss.qualcomm.com>
- <20260106-of-for-each-compatible-scoped-v2-9-05eb948d91f2@oss.qualcomm.com>
+	b=BHHBBaP0kYweSLXa2JXymudu2N5nQC3K5M6mXHNXKBn9jwMvH/rEQZpI23pKI7TqZ
+	 F6nfATSP3l9vB5yYH3FarXk/C/s15MeuSoBxA+bFq06c29BcHIUHxUcJQjSjaVP+hl
+	 YD5UJVmkmV/k4V6OUsqtKv9DXIRpWhAQ2VV2q7iz1nM7MDvqFZnEqAMRuKYKhTiyug
+	 yc1xhsKG12JC0W2nInZHMd+FgcxTxbKQWT7IXI15AtNcysla4hcJ1QV59JYaHGJZeZ
+	 u2x0HVwb2vBWcH1o8PnsiXcP8GvZVdvEWCxTw7Jntu2upnUNFqGGO6pnolwIu4UAjf
+	 MjosRLVcWhtvg==
+Date: Fri, 9 Jan 2026 11:32:12 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Bartosz Golaszewski <brgl@kernel.org>
+Cc: manivannan.sadhasivam@oss.qualcomm.com, 
+	Bjorn Helgaas <bhelgaas@google.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	Stephan Gerhold <stephan.gerhold@linaro.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	linux-pm@vger.kernel.org, linux-ide@vger.kernel.org
+Subject: Re: [PATCH v5 5/5] power: sequencing: Add the Power Sequencing
+ driver for the PCIe M.2 connectors
+Message-ID: <xd5uvfqcx3vcbcqerji556ejstmgvtci4chfzxclkzhizqmqxa@xusf2skt6xhh>
+References: <20260107-pci-m2-v5-0-8173d8a72641@oss.qualcomm.com>
+ <20260107-pci-m2-v5-5-8173d8a72641@oss.qualcomm.com>
+ <CAMRc=Md9TQiSX-gFa5q--JgaGyQ2ky4mOwjSpdxHhvHAj-X5Qw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260106-of-for-each-compatible-scoped-v2-9-05eb948d91f2@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMRc=Md9TQiSX-gFa5q--JgaGyQ2ky4mOwjSpdxHhvHAj-X5Qw@mail.gmail.com>
 
-On 06-01-26, 10:15, Krzysztof Kozlowski wrote:
-> Use scoped for-each loop when iterating over device nodes to make code a
-> bit simpler.
+On Thu, Jan 08, 2026 at 01:15:12PM +0100, Bartosz Golaszewski wrote:
+> On Wed, Jan 7, 2026 at 3:11 PM Manivannan Sadhasivam via B4 Relay
+> <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org> wrote:
+> >
+> > From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> >
+> > This driver is used to control the PCIe M.2 connectors of different
+> > Mechanical Keys attached to the host machines and supporting different
+> > interfaces like PCIe/SATA, USB/UART etc...
+> >
+> > Currently, this driver supports only the Mechanical Key M connectors with
+> > PCIe interface. The driver also only supports driving the mandatory 3.3v
+> > and optional 1.8v power supplies. The optional signals of the Key M
+> > connectors are not currently supported.
+> >
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> 
+> This looks good to me, though there are some nits I may fix when applying.
+> 
+> I'll pick it up for v7.0 once the bindings are reviewed.
+> 
 
-Acked-by: Vinod Koul <vkoul@kernel.org>
+Ok. I'm expecting patch 1 to go through ATA tree, patch 2 through DT, and
+patches 3,4 through PCI tree.
 
+> > +++ b/drivers/power/sequencing/pwrseq-pcie-m2.c
+> > @@ -0,0 +1,169 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
+> > + * Author: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > + */
+> > +
+> > +#include <linux/device.h>
+> > +#include <linux/mod_devicetable.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of.h>
+> > +#include <linux/of_graph.h>
+> > +#include <linux/of_platform.h>
+> 
+> It looks like this is a leftover from previous versions and you no
+> longer need it?
+> 
+
+Yeah.
+
+> > +
+> > +static void pwrseq_pcie_free_resources(void *data)
+> > +{
+> > +       struct pwrseq_pcie_m2_ctx *ctx = data;
+> > +
+> > +       regulator_bulk_free(ctx->num_vregs, ctx->regs);
+> > +}
+> 
+> I would call it pwrseq_pcie_m2_free_regulators() if you don't mind.
+> 
+
+Sure. I indeed missed '_m2'.
+
+- Mani
 
 -- 
-~Vinod
+மணிவண்ணன் சதாசிவம்
 
