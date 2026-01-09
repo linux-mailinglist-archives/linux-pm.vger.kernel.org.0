@@ -1,86 +1,84 @@
-Return-Path: <linux-pm+bounces-40532-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40533-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D147BD086E0
-	for <lists+linux-pm@lfdr.de>; Fri, 09 Jan 2026 11:08:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FB67D0894F
+	for <lists+linux-pm@lfdr.de>; Fri, 09 Jan 2026 11:33:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id E6906302F73C
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jan 2026 10:04:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5442830245CB
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Jan 2026 10:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEB533BBAF;
-	Fri,  9 Jan 2026 10:03:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAE61337BB4;
+	Fri,  9 Jan 2026 10:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="Wt01WdBU"
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="ahz08EJm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from OS0P286CU011.outbound.protection.outlook.com (mail-japanwestazon11010060.outbound.protection.outlook.com [52.101.228.60])
+Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011059.outbound.protection.outlook.com [52.101.125.59])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCC9933B97A;
-	Fri,  9 Jan 2026 10:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.228.60
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B77AA3370EF;
+	Fri,  9 Jan 2026 10:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.59
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767952989; cv=fail; b=BG/277OSedWBIS58DR/iEERcpa38cCZc4070/QXGY/hCflZ7q9JyZchAciEc0sdS74o1DcJUc0xewzWzOUYwIRcw17WO1+SFGdA7WVic9+UYRAv2opwLD1g/cJNNcnnr2z/mrmy+x+9yxm6lu+qTchQfWQ1hHuXgzyX6SvZ8bwc=
+	t=1767954826; cv=fail; b=NvEyEuL5gm9x5WNfRLHPIgE8CmzALlqRRKyxe653MrsJJCZL+GyWne7Qo2X9yy3RY45d1KkLucTc+J1j91yvnM8Imt88W6vEHAHItPgm7lILSZq4PR4Pal3ozEFQQVzAu3VXYWfRA+v8+h/Xh3q3xygRlsVBqjxyql5rwShEGpE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767952989; c=relaxed/simple;
-	bh=gnZLbT45+8c/Y4GOd0BYq7vq0IdplkExHa46Aybh4wY=;
+	s=arc-20240116; t=1767954826; c=relaxed/simple;
+	bh=3E/CTX/h0jkJTkD2MqqFmsEkfTHQDH6ZeubOPzSXNBw=;
 	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=s++uiIj+4Op4zeTiHbgwdsD2kcbXfjAHIbjr43P/3jCOF0e4hZcsQbKm4QiyvJH7UQYdnqjj/H5n0I07gHyCSRAxiltB4Y44CV12nmMte7cqte+a8H+IGv8iGMLq5/3QbzKyy9g/Gpg9D1/3R+/19/y/TJDRZ18K1+IfSgH4zh4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=Wt01WdBU; arc=fail smtp.client-ip=52.101.228.60
+	 Content-Type:MIME-Version; b=YhrPYmkn+ww+gcFi0dg3WYNosPDHLfhqS89V3S2O0IcgpPsSzfnfJcDqev+FIjz/F61Fm50vaJkVkEeZ3h9smSQRSj2GkuQaUVTL4ND4r12FM7sdVPDJ/IphQa56TxuQYbBatYgZzXxjss7a5t1DT71Ykyu2AydvZJDs74anLR0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=ahz08EJm; arc=fail smtp.client-ip=52.101.125.59
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=l2eOXi0W0EJ96ZnPjz7fWQDELqeFuzuTkxJH72C8kdRaY1w2jmdb9p/Pcct1Rk4M4Q0f33rVNhBTWLb4e5eTiOFxrA2D8T/1VbYTrOnazpV3UXYnH0aUqVcNBePC0gUd6LE0RR3qmVjBbuBXObCVG2jYGsRTc2xT/9rtoOHFMf4FlwZ0KwqYS/HeeKXkgxQTJ3c95TucuGKimcKrqMa0FpU22PEeeKkAIldVCd/71kkH4doo+34gGeKxGWApL9oT7hqGD1kCgap1qLRuP57WeRKBQkEId+F5g5WyjXLO1cFUEA/T2wd5k5wFNP2+st6Ae+xXkdmCfwRtSY7/w6KQPg==
+ b=cjhv56uLckbHOMC2GwuZHPA9dbTmZuFgH1B9dQCo33rRJsuljSHHJ7vM+l99SAonsasmGWRvrTjn/ShRfGZjL6JJ4IVaMwZmrel4G4yAHRzkuML+YClvCa57T+wil6vNgQtQIs9/42yCcvoCmTv/Q6YgnKbhI5NDdN5lgtmfSrrgU+MTjH7XxdLvx/Z9hIwKmhBuVKozjm8N+ZzAYqGbFt+ewnflcTXq+ya8WQQrWPYasmy7Zkj4vMMpZTqCjGI7mEzRnSl7SVYV4l2NYmgj/2hdSdA8ejUTlentK30PlCNx42/gRiFLYta7GtlDUmr22r2cVyOiYwzmcq0hJytdZA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jOzPa9FvzNOOha0PUGYYTzKc2UJI3m1rB761PeDimgo=;
- b=OtsptzAybIchyQqqOAChzUp04QJ+FYOjacSIHq0jwM5ocZ/JY84p2/J0a4Bwgunb3HEB8y1YgLVAnr1Gg7MQT7YoMVfXszwVjKxKEcBT3n4MOAtynuuRg77nMjVGWBzpd/W68HTgV2U0H0iQ/Yj6x3UAx5lClVrrfv65+bDYgwEvgtBv2bINuM4a1+nGY93ucRvrVY+OUvuCED0C2xykwO9qtgm8mOj+0SLyX25z0DuyaITXEAol2Q/L9mEMI3UW7xv1USHZJCf67ATe5KJYHEad+A6su1pU/Jk9U6MXoBGJZsph94fVZNsDcZEpc01zidwy7bmkoRM77UCNdybFZA==
+ bh=SHOmUBJ1IfjFMS/2OOTrhhE/x3kVySZsANqPazpYNp4=;
+ b=eLoWTVGkU4uJYJxObPzHQ9oJM32SCQNgQdNsEqZYbzyO83rzzuBmoqT3bXw5oUUIu7uL5304MKhemITd5GXOWopXA2elQj1DAeMxl0/eRNkVthrJ1/0LDa7eQsw2NUFNlK4mn3Tu/vHdAeOK7KNlxHdBlrRScCOqR5FTutRJo67T2NXqkmZ9MpPbwlsmgDaSy3LiWRXEnwQROdm2ATFM7d52FgXo43K6IfU7LeakWaY9URhrLnHzNK/x4P4eMciPFJQuxC1pdncusiqMW9x+Jx3Qb+G58vR/Sr0dP5InLt34GieUtg2sbEmYraDFz3LXQ9z1s/ZoMEMBOVN3natAJg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
  header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jOzPa9FvzNOOha0PUGYYTzKc2UJI3m1rB761PeDimgo=;
- b=Wt01WdBUY7FbFamaZeNDLeXjyDAiq7WctjNU0RX5gl0T3DSGcR70ZVxqBBQ/TNNbbLmI4xZYs807mLT4A7NUhI5N9MlTBV6AgnEjmXLNsB7KU4/37UDoNzJwb586vlHbtFWvLw5IKc+hraJ/UbNJmnQS87ETv1EeVnXDkhYFe44=
+ bh=SHOmUBJ1IfjFMS/2OOTrhhE/x3kVySZsANqPazpYNp4=;
+ b=ahz08EJm6b1liyn9kPaynBGqFQlI4Po+Uvt1LRdTpqw8/EIEqsH0YZ5hNrXv4vBgVQwDozjxl1k7J6pcqPvKL3zkV6vJ3YfUHyyazSxwgUvial8mOL7steEOVGnW/EQDWXxB6g3t7SYtvVB8qe7ZxqdPRZrvpDAhN3QrinstL0w=
 Received: from TYCPR01MB11332.jpnprd01.prod.outlook.com (2603:1096:400:3c0::7)
- by OSZPR01MB8204.jpnprd01.prod.outlook.com (2603:1096:604:1a5::5) with
+ by TYCPR01MB8344.jpnprd01.prod.outlook.com (2603:1096:400:151::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.1; Fri, 9 Jan
- 2026 10:03:01 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.0; Fri, 9 Jan
+ 2026 10:33:40 +0000
 Received: from TYCPR01MB11332.jpnprd01.prod.outlook.com
  ([fe80::2511:10cd:e497:4d97]) by TYCPR01MB11332.jpnprd01.prod.outlook.com
  ([fe80::2511:10cd:e497:4d97%2]) with mapi id 15.20.9520.001; Fri, 9 Jan 2026
- 10:03:01 +0000
+ 10:33:39 +0000
 From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Cosmin-Gabriel Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>, John
- Madieu <john.madieu.xa@bp.renesas.com>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, Geert
- Uytterhoeven <geert+renesas@glider.be>, magnus.damm <magnus.damm@gmail.com>
-CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+To: Geert Uytterhoeven <geert+renesas@glider.be>, Cosmin-Gabriel Tanislav
+	<cosmin-gabriel.tanislav.xa@renesas.com>, John Madieu
+	<john.madieu.xa@bp.renesas.com>
+CC: "conor+dt@kernel.org" <conor+dt@kernel.org>, "daniel.lezcano@linaro.org"
+	<daniel.lezcano@linaro.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+	"lukasz.luba@arm.com" <lukasz.luba@arm.com>, magnus.damm
+	<magnus.damm@gmail.com>, "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+	"rafael@kernel.org" <rafael@kernel.org>, "robh@kernel.org" <robh@kernel.org>,
+	"rui.zhang@intel.com" <rui.zhang@intel.com>
 Subject: RE: [PATCH v5 5/5] thermal: renesas: rzg3e: add support for RZ/T2H
  and RZ/N2H
 Thread-Topic: [PATCH v5 5/5] thermal: renesas: rzg3e: add support for RZ/T2H
  and RZ/N2H
-Thread-Index: AQHcgNjpP7tWju4kVEOD2PeFnHW2A7VJWgkggAAujYCAAABl0IAAEgEAgAAAlKA=
-Date: Fri, 9 Jan 2026 10:03:01 +0000
+Thread-Index: AQHcgNjpP7tWju4kVEOD2PeFnHW2A7VJWgkggAAujYCAAABl0IAAEqaAgAAEpWA=
+Date: Fri, 9 Jan 2026 10:33:39 +0000
 Message-ID:
- <TYCPR01MB11332D8F192023ADF4D8490398682A@TYCPR01MB11332.jpnprd01.prod.outlook.com>
-References: <20260108195223.193531-1-cosmin-gabriel.tanislav.xa@renesas.com>
- <20260108195223.193531-6-cosmin-gabriel.tanislav.xa@renesas.com>
- <TY3PR01MB113464DB06BD82F3CC72B5B458682A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <TYRPR01MB15619CB167FAD4042FE45D95A8582A@TYRPR01MB15619.jpnprd01.prod.outlook.com>
+ <TYCPR01MB11332563E563AE1F941C27A338682A@TYCPR01MB11332.jpnprd01.prod.outlook.com>
+References:
  <TY3PR01MB1134624FF7929D32670CA90F68682A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <TYYPR01MB15615737AD71FC9DBE4923D778582A@TYYPR01MB15615.jpnprd01.prod.outlook.com>
-In-Reply-To:
- <TYYPR01MB15615737AD71FC9DBE4923D778582A@TYYPR01MB15615.jpnprd01.prod.outlook.com>
+ <20260109095937.3317991-1-geert+renesas@glider.be>
+In-Reply-To: <20260109095937.3317991-1-geert+renesas@glider.be>
 Accept-Language: en-GB, en-US
 Content-Language: en-US
 X-MS-Has-Attach:
@@ -88,75 +86,74 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=bp.renesas.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYCPR01MB11332:EE_|OSZPR01MB8204:EE_
-x-ms-office365-filtering-correlation-id: 73cbed54-baf7-4c13-7835-08de4f6645f6
+x-ms-traffictypediagnostic: TYCPR01MB11332:EE_|TYCPR01MB8344:EE_
+x-ms-office365-filtering-correlation-id: 41d6c020-db55-4a9e-25e6-08de4f6a8de7
 x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|7416014|376014|1800799024|921020|38070700021;
+ BCL:0;ARA:13230040|366016|376014|7416014|1800799024|38070700021;
 x-microsoft-antispam-message-info:
- =?us-ascii?Q?SzZizeyd1sv4pbBlI6wIkvH/kfADlhR5IXdkRZwa+lL+SrhNWHvnffph6Qui?=
- =?us-ascii?Q?nmbuR+qk9Z6iHYii/6h+K4vEyQ13pUbcDxkJA1I6vnhdWCaXmTzkbOoicmQT?=
- =?us-ascii?Q?P1VwldXCxTHPrKmwhn6iNg/b+k+tcZFV8H4vk987EXf7FK9AFMNPoqypBUkA?=
- =?us-ascii?Q?yuMQVNr32+LjrXzUkP4niB/FkDrAv+Uu1AY3lnBpwLg8SURKLyMmYe6AgQoe?=
- =?us-ascii?Q?wANVFd8szk5uhmOco5L1TPvDSkNbJVyyV3fWbeoQFia4mPeyMtklBptZjRPX?=
- =?us-ascii?Q?/ce27eX3XtW+2/KESwFB+zSMmtoGSRwR5Ryehk+VrayC9uvxSsCv4AU/AWuq?=
- =?us-ascii?Q?cWssEgoZsFIEZWptXXvOwKTSHoofXpWCO4yCUHghIOnXz+bRPVuUSrR/Yd5Z?=
- =?us-ascii?Q?U0zT05pH5OSPyOTYMdzJGjxEzM6I2KCrrn/ctRx1SiAh6vAkZaN1NLIQFt1x?=
- =?us-ascii?Q?PaRDtGCNGxy9m3iuMzbvAzgw0fmlCFvfUf+CMzY68lLvnj+cfY5ePNx09ee3?=
- =?us-ascii?Q?YoPGgweQEuPsHU3Oc9EOw2kQ1jOxa6ndHY6HUxun0tmD8FjEO9RzWOgSVNcb?=
- =?us-ascii?Q?H+TnJF2GMQL4pX1Spisqj4AV5yHqUz2L74vOsAaeJ8Uqf+MDo/YUxR1djFKv?=
- =?us-ascii?Q?3R3yGzOjSVlfePnZpJmGJtRDBoV/KK6RNPMWa1eHNznQIr1rCKTCC8ifMqfB?=
- =?us-ascii?Q?gUt7J1MKnLvw3/fnfQrLlo4ME1fHcLIEDEWrr+xcVaUie00poUHVouH3rL4l?=
- =?us-ascii?Q?rWNa3a4EP7d1dC9asBx/3m8ZMUXu1Bx0AmuBzBdNgjYIuvxdING0AerVCEpU?=
- =?us-ascii?Q?8qlyj5QEDuZW3nDFb9QbDVnMXkmSHUwsKBu/0cZZAdhGNOjs3ZvfAJZWy/Vp?=
- =?us-ascii?Q?i5UbZkbCWrRdE1vS/HyAH2ylSeW4iMsvr2vY9Fs1kFwWY/aDVwLUdVqcuwY2?=
- =?us-ascii?Q?8yoVd8K5pMRDrMUno9knir45KvXchLBI4cBqncN+VMiQZl9eFbFNgu8B8uAr?=
- =?us-ascii?Q?v9FRsD9VtRgXLytbq+FuGShWoCpQH4IIz8ye90wKAAKD/iO+M4J5X4HsLQzK?=
- =?us-ascii?Q?uynzxwyST9H+25hi6MPlLTKrKMmTuRj0N85hRIMbJaJ174p57e0Av30YMGjF?=
- =?us-ascii?Q?wORN2Cxn6+LZLH4xt8k8QJHX6Z7u1tZ2MzKKnCdtBobc+UgukpJ0PH07v64z?=
- =?us-ascii?Q?ipVT0olfFkGloFENOAYEc7QAIwwCiK0BGMdpLERxhcw1LQ79c/myF9O4hbxs?=
- =?us-ascii?Q?9V+88GI7qSCXe0njGxLi/KdgQ7pmBgpEk+aTe9RIufzKBVCfjwaEG10XGBQs?=
- =?us-ascii?Q?n8x/WNWOh7A/iRSFq0xipo5AQrHg6ZlH5M3euLrAkCf5Y20Ab0wQVSXHX0Lu?=
- =?us-ascii?Q?U56oL2h+mADjGtVlSt1dZMeuKWuud8KzPf/zT2l9UBWOeOBAJL1QnSf3UAKQ?=
- =?us-ascii?Q?rmNkr2tpDH2JuuAeCIAs0sU+B+OuTPkpHnlyCgfpCuOGpLK672Ap4TufTy9K?=
- =?us-ascii?Q?n7YAC4s9wO1opwTdeLNFF9KLUFD/nS4ejaMyHAGzI2N9c12bTjfaTKyg/g?=
- =?us-ascii?Q?=3D=3D?=
+ =?us-ascii?Q?J/JGRIhplmL6AA1I6LE4r3y6w/G7hrXmHAQl2FenxZBgByPvKS1ceBst1ixa?=
+ =?us-ascii?Q?uJyb7MW+vFgHF+KFTu76iE31/uQhBh7i4i9akNY8tP78wSEVWsfVxISc7eb5?=
+ =?us-ascii?Q?6d+LC61Gmx1YoOAMpKUqG7lxtwaIQI6a/M0yKf1RpLPfU/COR47FallF8/tw?=
+ =?us-ascii?Q?XKLaPakNstJuRIPLmWsJN+hr63zkNk080ActsNC2yGbBQsaWgmqsugykRxLS?=
+ =?us-ascii?Q?8x53dwIRwcvkvAuB8vN2WpVXuNwAHgw1YMcblIOX5KPHcSlbkxlCFF3iKusO?=
+ =?us-ascii?Q?ksbH4gYyBj4rNjF7Q3gRyId1DZvKYP40/VshfbtPAM9gvEQwXS9bMKAFLPtZ?=
+ =?us-ascii?Q?UJp0dzSG63S8Zu0NYUK1G3mFiCEFSrQW8snul33gKIQMgXuZBnU8mp3TfWjG?=
+ =?us-ascii?Q?0JVnPA+XL9Ouv2IBq7bR3bMbRaFsKUrjDk+JLYr8TY5wX0zcOiO4TQi8Uvc8?=
+ =?us-ascii?Q?iLbzFWlyxGZhqSizvc84+GH62cPn5TzgNBnKv2j5dLv9Uta1g1t3bv4SzeND?=
+ =?us-ascii?Q?9p8fJrPyS1llrBc4kFhIjD0KMiIsPMBk6zi24hBUVwZljWyzyrdD/3GF1I38?=
+ =?us-ascii?Q?l5xumBPTwv0Xq5ixxM43PnNtcom26QpZnCcnaAd1HtQi2pD+44raPbkEJ3q+?=
+ =?us-ascii?Q?tGPNukY390KFEAlauwfhUTvDNRNN/unUli0UwTlKtsq0lG9ovKoLPLoG4AR6?=
+ =?us-ascii?Q?TV3nGLl/uDdOrdp4aaS/81HFHmyXcionCIwoa9oRFL7pOR5FgGxh4GtBmEwp?=
+ =?us-ascii?Q?Ph28WUK282eQ9Ubg0PVBajht9YwEVDFBimff+wQGWpdQxef+yyoyaU/24UJo?=
+ =?us-ascii?Q?RrO7EVrGHLxusMXZUw8/X1nJHHz5cH5+Tb81cGnQWu4o8s6bo/6DQ2PYhG+D?=
+ =?us-ascii?Q?EfHU4tllOkKlbv+8vL+fPuRWvAvk1KPX3H5aI2u6gGMP7/jLROE+PS3AXD2M?=
+ =?us-ascii?Q?vbeCzOdSSVI1rg6R52xgG02ax1n1k82qZieDhByLXO68sRWl2Qvr1fQ/L+Yk?=
+ =?us-ascii?Q?6DqxsQ5D6kJFUElEppZXguDVHTNe5/gj5COdneh7FjtAp4eL1ySVPHhs32pY?=
+ =?us-ascii?Q?qBZF+S2gmgcV9tPa4nmbVbNCmdcbcHXEhiWggy/WoC9udoibgqprirgN9UUE?=
+ =?us-ascii?Q?3QKnSKRtaN+u3HVzbiyiDUinZfiZ9yDNEQ/ILB5YlsodDJKut7+1anTFBHUB?=
+ =?us-ascii?Q?6fIO71IcD1xv6iep4bebQ6nRt/4wag8wxQSZFXK6mIBCIYGNl4+6UqVF7HX+?=
+ =?us-ascii?Q?DpmIpnCehSMesboAuMwnzkohDHORFUw/yH8f0abEO4qYsQsbdbtmwzI7IvB/?=
+ =?us-ascii?Q?anqn2/FmUkELmnNd3f82dKr/MK+Dq7nyg8WqSwvBFaDVfqVzHSCJ/qe3G5en?=
+ =?us-ascii?Q?wYstbOEg55QDIuWGPhGyIR8ITQ0iWojTXGikIAXMpT/Dwk1S4jU1ipnGKI+q?=
+ =?us-ascii?Q?GS+sBIlacQOo2DJcreQyG9RwpXXj64YQdwNiMwL4Rn9d8RAZoFoKXI8VNWtC?=
+ =?us-ascii?Q?zQRNGkEHTQ3QoathP2Y1zyEHRYhwvUCeWC4o?=
 x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB11332.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(921020)(38070700021);DIR:OUT;SFP:1101;
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB11332.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(38070700021);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
 x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?zA7T0KgS03qmtCcx69FlLQyJVu2xxUZO/tuHe0dlvmfZx86CmWuruSldBOYI?=
- =?us-ascii?Q?rFJjpHJblR0cCSmGpTg87oNqm/FkrE/pbKlZH5qM4bYQbF03Tv8ySmQd6zGs?=
- =?us-ascii?Q?bIK1zpHrg0F14W2W8U755z+j+zAwU23TOkPJnx96il9tQ1lcUkwKIdq9p8Qr?=
- =?us-ascii?Q?Ek0g042jy8TZd9LMSZyx+enXbb5q2B0h9+svn1w8MX26UxGT2hge3hn0xhr3?=
- =?us-ascii?Q?u0OQxOTWC7iyQTrZaa4PiCexGC6UOcthDOzBuEriDFUQ//Oi3Hc+k/IuyH2m?=
- =?us-ascii?Q?5G3tr4cjzQfSYoP7eCStcEY1dgiMVFmP0A5pfKlw+PlECW+i6dyWqylNuqn7?=
- =?us-ascii?Q?KejINzgaR9ODehaIdz3Ew31xicu/y0IjADuSbEYwSq0UBRfSL+wW+RoF0v3H?=
- =?us-ascii?Q?FDwObpvX9QjXhAgn2mUj5fjzbziMt+gHwI6cWISa65dN8VNw0eculeSGxbkD?=
- =?us-ascii?Q?b2vWqyS9c5GBgTKMo7MkeHBcb+cV074mGlEJ9Ka1GaBdbAoej8hwCzkQNZvI?=
- =?us-ascii?Q?vr2j7NKD2Qm2KUSuqBr4PkSSq6k3urMeKg3r3UkLKi0hMeLJCFoV3cYTUJTb?=
- =?us-ascii?Q?zmz5Fen3k7zmrGXh8K08wCFYNNDiGgvqLmaYPjAah3ota8ECIy/GrJ0G8k4M?=
- =?us-ascii?Q?kIQ7XGQ5uGO1yekeyGefpjFGKIuzZ2pm4uUtEOo5BuWeKMocRCA2eQbV5nm8?=
- =?us-ascii?Q?f8i1exICmMfFlsDG0ClwniKwvXKkjx1xqgkKN5wwJogoIQtoCYJEvDUigPH+?=
- =?us-ascii?Q?1c09htZfdgBS5ihmT0Xv/TXkBFX0rwN+i6xRQuAosFr9Eh7B0uPLJObEyw7N?=
- =?us-ascii?Q?6vM96Djbu7NNsbJ14u7LW3lmKdYvoruHW8aenBQmlG9nr2bu47XhQSuROV04?=
- =?us-ascii?Q?NSvUmFOy0eYVZMvVB82EgZXwr2iQULK9Cs6paq0X+l/rXno/f6pG5qPG7t1z?=
- =?us-ascii?Q?AAT5zfJ5ISMrgLHeQkY8leg/DhK0YHe58tRUqSe2hZ29n91DTNqWsyh9mYYJ?=
- =?us-ascii?Q?NKJHM5dH/KPZ3x8d9nODdwKpilHkj0w9VGms7bFZ7XRcWKsKFwYK6GfXWrQ5?=
- =?us-ascii?Q?8sEcQVonrzbpTCVEkjGDVZ4chccyslrXMjBM2hvIL5aco32+cfn0nvcno04t?=
- =?us-ascii?Q?YTBqXiMhKRJAn5Vn0h5FG++sKSXDpFZzckjpfyEr6hdssptkkQ72R3kyUoQL?=
- =?us-ascii?Q?CadLiUb54pNVf01vPPN8tubT4V+zZc4lK7kaaMo3m6g811Ts40Kv4csQGs/h?=
- =?us-ascii?Q?jZZbkaJr9VX26mC5m6pvIPAi5xq00uQjGaP92HVVFJ8Dh1Ui/YEWmJWcK/Um?=
- =?us-ascii?Q?RGF4YpaO0VZhcZLrI++WLJhmgc+YcNT6wPgPjSHRHU/t7mQasDXbrWyI5CLA?=
- =?us-ascii?Q?6mykUuwaLoe+rlfHyOLYYnGeFjhrH3iUwS6NB/rxthBXLT+zx43/yDVkcPqR?=
- =?us-ascii?Q?aCLHNbvvkrGCJ2pmkZNuiZtK56D4y5mSviMrCZJqDLgshrdMzUe1nh364iup?=
- =?us-ascii?Q?lyEaNNypZo+cmbl40aBPCmTUfPnqQWTKY7Ejt+fDsn3pIyT3j/dZQ0zcGiGd?=
- =?us-ascii?Q?24jo0t1Djz6ASPS2xVHK3qbLWLXjYWRuwXIYImLFQrVwIvdsGp3q29lgXAx2?=
- =?us-ascii?Q?qB9d2/GYiGhCfip0dSKUhZU2MBAzR0PRMR48TVXBMMfDLAvFnFS9v1Ugk0I+?=
- =?us-ascii?Q?XYZZ9oOWxx9eu8H3/yIDKl+7NVLqeBtbSqwO8/8zd0BT4OI1zB7KUbm4sysu?=
- =?us-ascii?Q?SaKeBwo3/A=3D=3D?=
+ =?us-ascii?Q?m7LmAM1EDb/CddplnEKc8SprEUkWgkSmV7PI8oXzwvwf8CPx9g7walh47Y9X?=
+ =?us-ascii?Q?mUGLnSQ3kH8dteDEWdcN+d34PfSbE+GtKEWb3wiNGVt68MqbH8yRHjh/Q5D/?=
+ =?us-ascii?Q?CAfua+/K4pFW9xvrhJQ+1ft4/1PWKENvDZk7DxDoNRpXIcEin1e9NeO5p7Lr?=
+ =?us-ascii?Q?EiOhgCEGNeRk5GEq50jSYqN2hadkUCw2gWLWohLON15Zq1t3aXwbqGwFJ+A5?=
+ =?us-ascii?Q?ir9aLQ00zZSGowXpjSnGRAcRZtDGqLDhv0ARyWewXSPULDaqsifbHyV24T6L?=
+ =?us-ascii?Q?CR60xSeaFtpXcWFyj9IFAL0+El9LFVDQ7CM4P2S7LUEkqczJTQ4QnyE8VPmn?=
+ =?us-ascii?Q?j5UrctKo9p/UW3xsKgArSs6xgpRveSK7y9WVvfbcFQHzO1tky7jdCp0R1EEh?=
+ =?us-ascii?Q?eZIJ8BfQ/KEim2ZtC4HfWC/VitA2v5v0aaOWVzOH+MrhrHhpMIm2+056z7cC?=
+ =?us-ascii?Q?qIGhtRyN3TmkZhZdOKDDrBbAaosfoobyNSoWIriEPk6DygbCrReAMd+k5MNK?=
+ =?us-ascii?Q?5z02grMBfkBKWT2K4o4MMNKSzsLeG6j6S6jVXWagaGHrLmdKigkCpnuVaQj9?=
+ =?us-ascii?Q?Igmp203ev8Xw0O6QZRrX3gJBbdEchv1qi4qwclvKKDnVs9uvRyUR1tMTKNIa?=
+ =?us-ascii?Q?pOX8vz3QQ38fzvIv2G8Z4u5ckJgmTckO6QME3kEoOgP9o+7GkKMe0uxuEKRV?=
+ =?us-ascii?Q?FsR5B7bM1m2r+032Ipi0GkgO+aMgdrjVDV/ErRIwv+mHSSyRk4XKdRXFC3F8?=
+ =?us-ascii?Q?FZxBtuZVPdYDD5rObJBGSSDhwweYphRmvoJF1eMJDdMWxzzndnR70ZXhUrrk?=
+ =?us-ascii?Q?wcwNjo0OTU2c55N13ai2T+SoSV0SdgeJE65XRxUyP9ktxjS2KF/AB3Vdupvm?=
+ =?us-ascii?Q?PmtJUlvGnl3Obf8N0YZWCeluzgHtJj2FblsO3rwJ0zXyvr49dujx9GliE1/c?=
+ =?us-ascii?Q?s97IJ7tcnGrRuDRjyLQP6ih2cOSMIQwiV/ZgQvFyCpyheCsYzT+aVnNmd8p6?=
+ =?us-ascii?Q?9lVBY1jrnAKyXhmUKpcr3do/a5a4kcaCneaOa9Xp2euCeuflzFlk3bAqjEph?=
+ =?us-ascii?Q?rw0od1i04gZZWYB7JpXR2NgTwL3Bu/ihZ6jFxcwcFSLU6OOTKF1S2KAH9Izf?=
+ =?us-ascii?Q?M4XtFkUOgpEExis86cqm1fSy3ePFHxa62LJ0zHoklOLOsi9HTt0zgE62uZ4x?=
+ =?us-ascii?Q?ow5zvqqrXr9vHluI4X0njJFM6ZVOpX6gVHDDpvwB5OUfHWS5kwJ/DRbJNh3v?=
+ =?us-ascii?Q?8kaJCgP3KC3J7WjUSmyefFH08mm96lCGhHEHNy6KFMf3yXjZc+rMSgpGmJ+c?=
+ =?us-ascii?Q?ThXdqcSBPz2JP1sajYwlrxP4AYOJdXMbdn57Yu7j9ZVOdwPAZUxtZJH6rpSi?=
+ =?us-ascii?Q?vrhbtY8b7CS34fFevGB/X0AB82ePUyYy31GaL+Ko2VrPgm0HF7czGs8DaoTL?=
+ =?us-ascii?Q?V5I95XBcg+2+TE5SI7FTcTUQWlZ0UZyEG/MpZMAuUtBbsspz8lTbOEMW+OF8?=
+ =?us-ascii?Q?oGUoTawpgxurU9xe0X6hmySQKLbac1+YdDbYBIHdu+92LTN7e34TieoUT60t?=
+ =?us-ascii?Q?2k1qaBdZ8ha2Du3c+SkvsHLpbmugPP4MySgV5nz24TPUa46eV7Z1Y7F629eD?=
+ =?us-ascii?Q?3/aO3Nzz5rIoxrASnyXtkocUcIvTQB/+m8aSZfYtGsn/zUW/caZcw2do86rS?=
+ =?us-ascii?Q?1IHkrjpBxrrnHtr/Y6tEb9001BRkZ2yz4YtvMVkvrkgy82D1P4ZrvHy6jgJI?=
+ =?us-ascii?Q?PR0e/hMMbQ=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
@@ -168,59 +165,41 @@ MIME-Version: 1.0
 X-OriginatorOrg: bp.renesas.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB11332.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73cbed54-baf7-4c13-7835-08de4f6645f6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2026 10:03:01.1923
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41d6c020-db55-4a9e-25e6-08de4f6a8de7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Jan 2026 10:33:39.8636
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: tXQS6N+1VKLB16ErDXQkiFxh/djVDPNhZEmcfTuhPEs1NytqVvFR7a5hu+LGCu0cTCtYFbJwzYq2eH9QfqOE1ZnY1PgJfnWRna30CwuSlp8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8204
+X-MS-Exchange-CrossTenant-userprincipalname: pvAi6+pmZp9KppFTWF1rNYkCeVDs0zrtMiBTobMViGn5Nx74QW0/TsASbAVfn6noTjgwHLVARg6IdtvpvrpA6MR7k8TwIPCeWqsZdqp5HgE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8344
 
-Hi Cosmin,
+Hi Geert,
+
+Thanks for the feedback.
 
 > -----Original Message-----
-> From: Cosmin-Gabriel Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-> Sent: 09 January 2026 09:57
-> Subject: RE: [PATCH v5 5/5] thermal: renesas: rzg3e: add support for RZ/T=
+> From: Geert Uytterhoeven <geert+renesas@glider.be>
+> Sent: 09 January 2026 10:00
+> Subject: Re: [PATCH v5 5/5] thermal: renesas: rzg3e: add support for RZ/T=
 2H and RZ/N2H
 >=20
-> > From: Biju Das <biju.das.jz@bp.renesas.com>
-> > Sent: Friday, January 9, 2026 11:06 AM
-> >
-> >
-> > Hi Cosmin,
-> >
-> > > -----Original Message-----
+> Hi Biju, Cosmin, John,
+>=20
+> On Fri, 9 Jan 2026 at 10:06, Biju Das <biju.das.jz@bp.renesas.com> wrote:
 > > > From: Cosmin-Gabriel Tanislav
 > > > <cosmin-gabriel.tanislav.xa@renesas.com>
-> > > Sent: 09 January 2026 08:51
-> > > Subject: RE: [PATCH v5 5/5] thermal: renesas: rzg3e: add support for
-> > > RZ/T2H and RZ/N2H
-> > >
 > > > > From: Biju Das <biju.das.jz@bp.renesas.com>
-> > > > Sent: Friday, January 9, 2026 8:12 AM
-> > > >
-> > > > Hi Geert/Cosmin/John,
-> > > >
-> > > > > -----Original Message-----
 > > > > > From: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
-> > > > > Sent: 08 January 2026 19:52
-> > > > > Subject: [PATCH v5 5/5] thermal: renesas: rzg3e: add support for
-> > > > > RZ/T2H and RZ/N2H
-> > > > >
 > > > > > The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs
-> > > > > expose the temperature calibration via
-> > > > SMC
-> > > > > SIP and do not have a reset for the TSU peripheral, and use
-> > > > > different minimum and maximum
-> > > > temperature
-> > > > > values compared to the already supported RZ/G3E.
+> > > > > expose the temperature calibration via SMC SIP and do not have a
+> > > > > reset for the TSU peripheral, and use different minimum and
+> > > > > maximum temperature values compared to the already supported
+> > > > > RZ/G3E.
 > > > > >
 > > > > > Although the calibration data is stored in an OTP memory, the
-> > > > > OTP itself is not memory-mapped,
-> > > > access
-> > > > > to it is done through an OTP controller.
+> > > > > OTP itself is not memory-mapped, access to it is done through an
+> > > > > OTP controller.
 > > > > >
 > > > > > The OTP controller is only accessible from the secure world, but
 > > > > > the temperature calibration data stored in the OTP is exposed via=
@@ -235,29 +214,7 @@ c().
 > > > > > Tested-by: John Madieu <john.madieu.xa@bp.renesas.com>
 > > > > > Signed-off-by: Cosmin Tanislav
 > > > > > <cosmin-gabriel.tanislav.xa@renesas.com>
-> > > > > ---
-> > > > >
-> > > > > V5:
-> > > > >  * add arm-smccc.h include
-> > > > >
-> > > > > V4:
-> > > > >  * pick up John's Reviewed-by and Tested-by
-> > > > >  * replace new macro TSU_TEMP_MASK usage with existing macro
-> > > > >    TSU_CODE_MAX
-> > > > >
-> > > > > V3:
-> > > > >  * no changes
-> > > > >
-> > > > > V2:
-> > > > >  * no changes
-> > > > >
-> > > > >  drivers/thermal/renesas/rzg3e_thermal.c | 27
-> > > > > +++++++++++++++++++++++++
-> > > > >  1 file changed, 27 insertions(+)
-> > > > >
-> > > > > diff --git a/drivers/thermal/renesas/rzg3e_thermal.c
-> > > > > b/drivers/thermal/renesas/rzg3e_thermal.c
-> > > > > index 97c4053303e0..dde021e283b7 100644
+>=20
 > > > > > --- a/drivers/thermal/renesas/rzg3e_thermal.c
 > > > > > +++ b/drivers/thermal/renesas/rzg3e_thermal.c
 > > > > > @@ -4,6 +4,7 @@
@@ -269,21 +226,22 @@ c().
 > > > > >  #include <linux/cleanup.h>
 > > > > >  #include <linux/delay.h>
 > > > > > @@ -70,6 +71,10 @@
-> > > > >  #define TSU_POLL_DELAY_US	10	/* Polling interval */
-> > > > >  #define TSU_MIN_CLOCK_RATE	24000000  /* TSU_PCLK minimum 24MHz *=
-/
+> > > > >  #define TSU_POLL_DELAY_US        10      /* Polling interval */
+> > > > >  #define TSU_MIN_CLOCK_RATE       24000000  /* TSU_PCLK minimum 2=
+4MHz */
 > > > > >
-> > > > > +#define RZ_SIP_SVC_GET_SYSTSU	0x82000022
+> > > > > +#define RZ_SIP_SVC_GET_SYSTSU    0x82000022
 > > > >
 > > > > Maybe add a comment mentioning firmware should support this index
 > > > > and the otp value is stored in
 > > > > arm_smccc_res.a0
-> > > >
 > > >
 > > > The fact that the calibration value is stored in .a0 is clear from
 > > > the retrieval code, let's not add comments where the code is straight=
 forward.
-> >
+>=20
+> Agreed.
+>=20
 > > If you have just a0, then driver expect a0 from firmware is either
 > > error and OTP value.
 > >
@@ -294,8 +252,6 @@ forward.
 > >
 > > a1 will have the value from OTP.
 > >
-> >
-> > >
 > > > Regarding the firmware support, it's obvious that the firmware needs
 > > > to support this and that the values don't just magically appear, no?
 > >
@@ -304,51 +260,33 @@ re?
 > >
 > > Eg: Customer firmware is using different service ID and driver uses dif=
 ferent one.
-> >
 >=20
-> If you think it will help customers, we can add a comment like below.
+> Specify the service ID in DT?
 >=20
-> /*
->  * SMC function ID for reading TSU calibration values from OTP needs to
->  * be supported by the TF-A firmware. Calibration value must be returned
->  * in the a0 register.
->  */
-
-
-OK.
-
-> #define RZ_SIP_SVC_GET_SYSTSU	0x82000022
-> #define OTP_TSU_REG_ADR_TEMPHI	0x01DC
-> #define OTP_TSU_REG_ADR_TEMPLO	0x01DD
->=20
-> > >
-> > > Let's see what Geert thinks.
-> > >
-> > > > > +#define OTP_TSU_REG_ADR_TEMPHI	0x01DC
-> > > > > +#define OTP_TSU_REG_ADR_TEMPLO	0x01DD
+> > > > > +#define OTP_TSU_REG_ADR_TEMPHI   0x01DC
+> > > > > +#define OTP_TSU_REG_ADR_TEMPLO   0x01DD
 > > > > > +
 > > > > >  struct rzg3e_thermal_priv;
 > > > > >
 > > > > >  struct rzg3e_thermal_info {
 > > > > > @@ -362,6 +367,21 @@ static int rzg3e_thermal_get_syscon_trim(str=
 uct rzg3e_thermal_priv *priv)
-> > > > >  	return 0;
+> > > > >   return 0;
 > > > > >  }
 > > > > >
 > > > > > +static int rzg3e_thermal_get_smc_trim(struct rzg3e_thermal_priv
 > > > > > +*priv) {
-> > > > > +	struct arm_smccc_res local_res;
+> > > > > + struct arm_smccc_res local_res;
 > > > > > +
-> > > > > +	arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPLO,
-> > > > > +		      0, 0, 0, 0, 0, 0, &local_res);
-> > > > > +	priv->trmval0 =3D local_res.a0 & TSU_CODE_MAX;
+> > > > > + arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPLO,
+> > > > > +               0, 0, 0, 0, 0, 0, &local_res);
+> > > > > + priv->trmval0 =3D local_res.a0 & TSU_CODE_MAX;
 > > > >
 > > > > Do you think it is worth to ask firmware team to return error
 > > > > values in a0 and actual OTP value in a1.
 > > > >
 > > > > So that driver can check the error code and propagate to the caller=
 .
-> > > >
 > > >
 > > > If we do that, we will have one more variant to handle here, as we
 > > > cannot make sure that the TF-A running on the board is always the lat=
@@ -357,24 +295,14 @@ est.
 > > Mainline will use new variant, that can have both a0 and a1, if we take=
  that route.
 > >
->=20
-> Mainline code will be backported to CIP, and customers might try to use o=
-ld firmware with CIP. Not
-> adding another variant is the better way in my opinion.
->=20
-> We can wait for Geert's opinion.
-
-OK.
-
->=20
-> > >
 > > > Right now things are simple as it's either supported or not supported=
 .
-> > >
+>=20
+> Agreed.
+>=20
 > > > If a0 is some error value, how would you distinguish between an
-> > > error in the new variant and a
-> > proper
-> > > value in the old variant? Both cases would only populate a0.
+> > > error in the new variant and a proper value in the old variant? Both =
+cases would only populate a0.
 > > >
 > > > Also, I'm not sure how much use we can get out of a TF-A error value.
 > > >
@@ -384,18 +312,29 @@ already checks against it.
 > >
 > > The OTP value can be 0xFFFFFFFF, if it is not programmed, if that is
 > > case How do you distinguish error with respect actual otp value.
-> >
 >=20
-> From the kernel's standpoint both error case and an unprogrammed value st=
-ored in OTP have the same
-> effect: missing calibration data, cannot use the TSU.
+> What is the expected behavior when the firmware interface is not availabl=
+e, or the OTP is not
+> programmed?
+> Currently the thermal driver fails to probe, which is IMHO suboptimal.
+> An alternative would be to fallback to default calibration values, as don=
+e on R-Car Gen3.  To handle
+> that, rzg3e_thermal_get_smc_trim() should store the unmasked values in tr=
+mval[01], so the probe code
+> can detect this case.
+>=20
+> BTW, what are the default values of the trim registers on RZ/G3E, when th=
+e device is not trimmed? Or
+> is this always done, unlike programming the OTP on RZ/T2H?
 
-If a0 =3D -1
-Error case could be missing SVC handler in TF_A, Wrong ID.
+RZ/G3E Hardware manual mentions the below notes[1]. RZ/G3E also the has val=
+ues stored in OTP
+But the values are mirrored in SYS register, and it has access in normal wo=
+rld.
 
-If a0=3D0 , a1 =3D -1
-Unprogrammed value: missing calibration data, cannot use the TSU.
+[1]
+Note 1. These bits indicate a value for 19Bh to E43h.=20
 
-Cheers,
-Biju
+Chers,
+Biju=20
 
