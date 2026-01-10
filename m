@@ -1,80 +1,81 @@
-Return-Path: <linux-pm+bounces-40600-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40601-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7F91D0D866
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jan 2026 16:15:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDCD6D0D909
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jan 2026 17:14:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id B5DEE3082989
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jan 2026 15:10:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 16F0B303BE3E
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jan 2026 16:14:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C50334845F;
-	Sat, 10 Jan 2026 15:09:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0194B34889F;
+	Sat, 10 Jan 2026 16:14:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="UR3LYot3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HpjKeBdG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A71348884
-	for <linux-pm@vger.kernel.org>; Sat, 10 Jan 2026 15:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28DD9345CD9
+	for <linux-pm@vger.kernel.org>; Sat, 10 Jan 2026 16:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768057793; cv=none; b=C2q9C19ohN8yEEETQ0yt7tJMKiIdMVq6H81fCfhySxzgEXNg+Tkb/8n/sLcm1nLfsNYvw8BHFdE8ZS5d5Y1RBnRpL+WEQ9f1K+R73lumIV44xirvOe4IRuXHZTE3niwzXrhhb70nYqfyaTzEFc6ZjJskeZ1o0mHuUs5B1HoyIto=
+	t=1768061641; cv=none; b=uI06r5pQSdou1X88TqZn9GTHI5ArxZDoPKTYI7A0rA9dzwZFW+hoCfo/yYo/w2ARBFCNRYiBI6i+PwH6qV6Z8FFTvi2t4EkgFT77Tffez1bXqF2DMFSO7l/y+zWhbkqpk7bUFiph2GwnFwSNWA0XxcA7EaH5en/1QWDlaYdyVog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768057793; c=relaxed/simple;
-	bh=veOrw/m8cCXNOzS0YhBEMZHiqb+wrCM+D/j1ZadzRgQ=;
+	s=arc-20240116; t=1768061641; c=relaxed/simple;
+	bh=CZZIXy+M3Hwd2R3IUz/gMxdE6SMi8+NpZ+MFX6odPrI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WTdrJuknZSwZiS8vKuMiRTYVYrCbfsD0mE5/SEKs9iLUEtkIW/Jawd+iSs2I9V06nXIalau+PEp90+Ymo2+esT4kwhx5uFMfRUEvr2TZxWS/m0R0HL9M7uENBco/MnwqbUn/vPux0z8XdDj19hqyWdoVZrHLTo95jh81wPbGBcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=UR3LYot3; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43284ed32a0so2589646f8f.3
-        for <linux-pm@vger.kernel.org>; Sat, 10 Jan 2026 07:09:45 -0800 (PST)
+	 In-Reply-To:Content-Type; b=VNhhoEYKNPXZHYtOb7TW4ygoNFiF+VbEGLR/QHvkgeeu1xlL4ggiBERbpoth5VJUR9MTEfKQEdtUKzGEIEO6IosLlHRtti1vX1C6+AkgzKT7xap0EsM8TaSkjI27kdcYm0G8nWkx/pwmCJJy++GQfdZHbR6LrVWbfyceFxBss78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HpjKeBdG; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b802d5e9f06so751831666b.1
+        for <linux-pm@vger.kernel.org>; Sat, 10 Jan 2026 08:13:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1768057784; x=1768662584; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1768061637; x=1768666437; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZYFiIfX0/KjQWE2M1MYc+2i7VSmAxQXe92tai7T06wg=;
-        b=UR3LYot3X99B0iocnSlHLBo6xcEdvqWff5fJcdU9Exm6L/VyIsE1xVQ3sVYgXj7q3/
-         AJgsd1EMgirOEF5wAn7H3E2taaHVG0xxbScSmK/eNkl7JVSrD9tlrn9K3U+JEY1JherW
-         Qz8doesvUqWD5kfvD+tIrJouA/o6VYr3xVkPxj51Z9B+MKoAfeYgqiPVYyYZKZrNhk/F
-         P9bB6TJNL306n/2z4mmOJ83Oy5KeskaYSjMWq2a8PkNrM/SO+irij/BR+IX+izMpqtjd
-         cF/nBHWOZQPzwd+sng08PL/DHPEqiDOLBhZ8Qyrf6Ffy1AiCqVfxLza0Qx4ukc3S/Gwv
-         Y6Nw==
+        bh=Za5zkOXc/pUTKApHzs7ZvT3Vilb+ymesEJJeGab5uBU=;
+        b=HpjKeBdG1Tzm60BS2k4E+4mTnOjtUQs2/CueCPGiWyXiJmSSabTBO0DvQhD7YGm4S6
+         yi5zkvKBoFnjOpyy3683AHEP8+odRx3EpTrXSQ1S4Jrm4uLbfBHxly25l7h7hV7bcFXd
+         0NmXlCodoh+eVzWUB8vVbuOc4miE9xWuUa1WeZOILX4BWNKLDt4qfPfa++INvNYFdMfd
+         +E9hNxg7awFj+5+4Uh9cBlsFQO8o75df5+KZ0QVyapa3yabm2SGKRZg6M3isjAhIymii
+         YDeUWGn30HxJm/1bUjyP5vAuWRUeMn1CCSRitnnPzGZn+lOXq84sw+3IJIjE1y05KJKa
+         iFAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768057784; x=1768662584;
+        d=1e100.net; s=20230601; t=1768061637; x=1768666437;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZYFiIfX0/KjQWE2M1MYc+2i7VSmAxQXe92tai7T06wg=;
-        b=X0jaNSruwr0tKkbffQWUcUgWn/Y6kBeTgxsH1XdAhlwU67V1fQAVNb7EWPVdprzonU
-         xgFWK8nPNVbsPRrTmv0QnyY5kbaHYyNveb6uuFEXRkouZcyxGDUQkfdyS8eSi8yFO9il
-         Niw+emqPcfkPAAotYBdPpA0O3oiRt1P1FB6xTK0ASb/gxLdJzLlX/0V1rBYPX3sWy2xp
-         P6tSUMTZCVOSkzj8z5jmT4u/wBI6pzMfPN/qlRCfvO1xSVP4iGX6zlbJXmF+zAEW6iJ6
-         iYC6vi1SRAEUntUGBOLkU51dOMf9YW/AT/l05LcUkraJIdJSb23UdLfq27yaRuJ+ULZ2
-         Bjzw==
-X-Forwarded-Encrypted: i=1; AJvYcCU+0dlXjR6qd6utdyYyqItB6qmpCcloe/5bF9tDgLcvEw5cTPOy4gX4nBcS9mzVQuBuTz3vWV1ZEQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywrg7DHzG6Y8/DnM+2doW6MfGqMIvIH4PKtaA5NGAEDFmC8efbH
-	sQ6YHsrXEO9M2B4QorhHsTx5gi4Dmhz0kwa7+oakUYzXlXJTQwSiP77MKTvviMby8dk=
-X-Gm-Gg: AY/fxX5nB89q/kRF2bRsyxgZqi62ZXnzahtI86G9dv5LC43y1SzcVIcmOAE1yLFJe74
-	M44RMuOZH9jNlxTTS03VWGymDv66MqZDY0uL1m/mZOTqyoU+iX57STZ4vba+pNgOED9eaMGqt40
-	jkFEwA8INu3hT1v8X4wwBCTnI+z5ns0WdwU31UMYjim/ZaLoZdlh81ZPODnKh2Ilbt0ZNiTLDCQ
-	ZvMjU6Smvz8u0+dUCp4jSZiER6xCOdQ951gAgCv8Z2HOd0JdTJXshkXd6D0eEI5kPF2sa8vVdz7
-	jrDyeIFQHeRk/bYj6nRXIixHr4RcWFH3DsLfh0TScoXnvfR6ny6rqPRy2OaSWbHTFYeccL7yNKA
-	Uar71XxJMGl2eyjdoX8ntSOfxk2h/UbrB4FmxP2E/IXYOqOcO9xzaIZdCdjMb3Tz8FZET47uU1b
-	kVWuiEGBiIqLAEtNQPfLbkPNT1g/pH
-X-Google-Smtp-Source: AGHT+IHwvRNK+qwBLjP9mJj148RzU5png6+Rsy9u3J7EYhE07UUYa3vVSxYXarlT5BZGC6AC5xVP2w==
-X-Received: by 2002:a05:6000:40da:b0:430:f23f:4bc5 with SMTP id ffacd0b85a97d-432c3760d02mr14529601f8f.45.1768057784134;
-        Sat, 10 Jan 2026 07:09:44 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.31])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd0e199bsm28208208f8f.16.2026.01.10.07.09.41
+        bh=Za5zkOXc/pUTKApHzs7ZvT3Vilb+ymesEJJeGab5uBU=;
+        b=VLWQFYBl4TAorGUBRP9/sRlORh/LTpy4MDkXCF7HpEHV0uiuJE//5yKxOG4okZZxtw
+         5kRgmCE6wnlCDt6o/49surXhFG1EjHmS7Vg9Y5S4QUmpPO+MVo3SJCin1ErdKIeQFwSz
+         I3gr1k3PjCJFngDViEfoA1436mi/d+sIMo/GSJBP9p+uSlirXTjOZWOzzloZwXmdFylo
+         ggTcanaqxL2nXwku5WG6oew8e13WZ3WQTma/aVYpg5ebG5vYegvXBPQqs90Bg1Jm0aEq
+         ADbaU3SB3li3h3696QHu/lln+iW00bag/uAAN32KfEwdD9TdNcW6/XHIR20tfR8hYRg0
+         f51Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUsaItk6TY2+z/0KmGPPwQ2ZzW5rB5qrRmS48yeGCwVvKGHhiQa9cgMqzpxcmeE1rvDSDv1kl81pA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdbUMvvK+tkjOi/fbwMbQojIduyz9sKF/Vf0XquHS5QGyF4U2A
+	dzrRlsG6ngT6zBdyPpsdGFOSk9fsNuMujXGI25ksKseTayf/4DmACepXH5lXCZk5xoU=
+X-Gm-Gg: AY/fxX6h96ywAM7afBkgeLrwBjjaHRfMdr15Y7vDh7OSaOp2ZOY17qo9wTsSogqBKHl
+	xLzK6gwjGL0ulnDQHfzy7bGTXM4M7F/nheEme8TwX2DqadbOBfC9fDat7dB/g2fmKzjM7nQGANi
+	nPvwdWnrk1L10H+bCF+hz7XzbTeQ1v5ACZ2xbYcyPiho9ZhCf9iMK/kd8GkAMKU37x9wr1zOtBU
+	gZPAMZBU53YQvaoGkzlN4KVviI8luKGur7pd0LEPW13mEs21WsC2OeC8/mcdnTnHi6zYmIFYuGo
+	e1SHP28oUegNKwfdCnVwHX8Wy0fMld6pdoZIGp3ngHPggTkIdc+gcpDtbGooXuj30578h64h+k0
+	lIhDqg9sHgqynE4l67TGrhpNLSna4LEjGwWIQ1OMYa1GbkF4MLHrIAqnGV7RaU3vY3YbhLixY/9
+	DWHfozUEO0VrA73zK60hDP6SJ5Fhhimrn/ugVlyVGo8yFj/TeUJhyFQPppELCQFdJIHKajCxVb3
+	4Ky
+X-Google-Smtp-Source: AGHT+IEUIfkx8+lGVACl9YjDlxYymQluSPmgIIVsmxsUKIPlcHRtxRGZm5IY8ly5yIKe9vinZeykRg==
+X-Received: by 2002:a17:907:970c:b0:b80:1348:226e with SMTP id a640c23a62f3a-b844532ae89mr1390302166b.33.1768061637487;
+        Sat, 10 Jan 2026 08:13:57 -0800 (PST)
+Received: from ?IPV6:2001:9e8:17d0:db00:2109:890f:3eab:3c56? ([2001:9e8:17d0:db00:2109:890f:3eab:3c56])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8701e1d467sm79351266b.70.2026.01.10.08.13.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Jan 2026 07:09:43 -0800 (PST)
-Message-ID: <6c2612f9-97de-49e4-a7c2-eacea2d33f51@tuxon.dev>
-Date: Sat, 10 Jan 2026 17:09:40 +0200
+        Sat, 10 Jan 2026 08:13:56 -0800 (PST)
+Message-ID: <2a39719e-e73b-4558-95fa-d54f94c43220@linaro.org>
+Date: Sat, 10 Jan 2026 17:13:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,53 +83,95 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 02/12] ARM: at91: Simplify with scoped for each OF
- child loop
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
- Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>,
- Saravana Kannan <saravanak@google.com>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Russell King <linux@armlinux.org.uk>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
- <alim.akhtar@samsung.com>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Nipun Gupta <nipun.gupta@amd.com>, Nikhil Agarwal <nikhil.agarwal@amd.com>,
- Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Vinod Koul <vkoul@kernel.org>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-clk@vger.kernel.org, imx@lists.linux.dev, dmaengine@vger.kernel.org,
- linux-media@vger.kernel.org, linux-pm@vger.kernel.org,
- Jonathan Cameron <jonathan.cameron@huawei.com>
-References: <20260109-of-for-each-compatible-scoped-v3-0-c22fa2c0749a@oss.qualcomm.com>
- <20260109-of-for-each-compatible-scoped-v3-2-c22fa2c0749a@oss.qualcomm.com>
-Content-Language: en-US
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20260109-of-for-each-compatible-scoped-v3-2-c22fa2c0749a@oss.qualcomm.com>
+Subject: Re: [PATCH v1 0/8] Add RemoteProc cooling support
+To: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, andersson@kernel.org,
+ mathieu.poirier@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+ rui.zhang@intel.com, lukasz.luba@arm.com, konradybcio@kernel.org,
+ amitk@kernel.org, mani@kernel.org
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20251223123227.1317244-1-gaurav.kohli@oss.qualcomm.com>
+Content-Language: en-US, en-GB
+From: Casey Connolly <casey.connolly@linaro.org>
+In-Reply-To: <20251223123227.1317244-1-gaurav.kohli@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 1/9/26 18:57, Krzysztof Kozlowski wrote:
-> Use scoped for-each loop when iterating over device nodes to make code a
-> bit simpler.
+On 12/23/25 13:32, Gaurav Kohli wrote:
+> This series introduces a generic remote proc cooling framework to control
+> thermal sensors located on remote subsystem like modem, dsp etc.
+> Communications with these subsystems occurs through various channels, for example,
+> QMI interface for Qualcomm.
+>   
+> The Framework provides an abstraction layer between thermal subsytem and vendor
+> specific remote subsystem. Vendor drivers are expected to implement callback
+> and registration mechanisms with cooling framework to control cooling
+> devices.
 > 
-> Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-> Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+> This patchset also revives earlier discussions of QMI based TMD cooling
+> devices discussion posted on below series by Casey:
+> https://lore.kernel.org/linux-devicetree/20230905-caleb-qmi_cooling-v1-0-5aa39d4164a7@linaro.org/
+> 
+> That series introduced Qualcomm QMI-based TMD cooling devices which used
+> to mitigate thermal conditions across multiple remote subsystems. These
+> devices operate based on junction temperature sensors (TSENS) associated
+> with thermal zones for each subsystem and registering with remoteproc
+> cooling framework for cooling registration.
+> 
+> This patch series has a compilation/runtime dependency on another series [1].
+> 
+> [1] https://lore.kernel.org/linux-devicetree/20250822042316.1762153-1-quic_gkohli@quicinc.com/
+> 
+> Casey Connolly (2):
+>    remoteproc: qcom: probe all child devices
+>    thermal: qcom: add qmi-cooling driver
+
+I'm glad this series is getting revived. It would be good if you could 
+explain what changes you made to my patches somewhere.
+
+I also remember one of my patches adding the DT parts for SDM845, would 
+you be willing to pick that up for the next revision? I'd be happy to 
+provide my Tested-by.
+
+Kind regards,
+
+> 
+> Gaurav Kohli (6):
+>    thermal: Add Remote Proc cooling driver
+>    dt-bindings: thermal: Add qcom,qmi-cooling yaml bindings
+>    arm64: dts: qcom: Enable cdsp qmi tmd devices for lemans
+>    arm64: dts: qcom: Enable cdsp qmi tmd devices for talos
+>    arm64: dts: qcom: Enable cdsp qmi tmd devices for kodiak
+>    arm64: dts: qcom: Enable cdsp qmi tmd devices for monaco
+> 
+>   .../bindings/remoteproc/qcom,pas-common.yaml  |   6 +
+>   .../bindings/thermal/qcom,qmi-cooling.yaml    |  99 ++++
+>   MAINTAINERS                                   |   8 +
+>   arch/arm64/boot/dts/qcom/kodiak.dtsi          |  36 ++
+>   arch/arm64/boot/dts/qcom/lemans.dtsi          | 138 ++++-
+>   arch/arm64/boot/dts/qcom/monaco.dtsi          |  92 ++++
+>   arch/arm64/boot/dts/qcom/talos.dtsi           |  23 +
+>   drivers/remoteproc/qcom_q6v5.c                |   4 +
+>   drivers/remoteproc/qcom_q6v5_mss.c            |   8 -
+>   drivers/soc/qcom/Kconfig                      |  13 +
+>   drivers/soc/qcom/Makefile                     |   1 +
+>   drivers/soc/qcom/qmi-cooling.c                | 498 ++++++++++++++++++
+>   drivers/soc/qcom/qmi-cooling.h                | 428 +++++++++++++++
+>   drivers/thermal/Kconfig                       |  11 +
+>   drivers/thermal/Makefile                      |   2 +
+>   drivers/thermal/qcom/qmi-cooling.h            | 428 +++++++++++++++
+>   drivers/thermal/remoteproc_cooling.c          | 154 ++++++
+>   include/linux/remoteproc_cooling.h            |  52 ++
+>   18 files changed, 1981 insertions(+), 20 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
+>   create mode 100644 drivers/soc/qcom/qmi-cooling.c
+>   create mode 100644 drivers/soc/qcom/qmi-cooling.h
+>   create mode 100644 drivers/thermal/qcom/qmi-cooling.h
+>   create mode 100644 drivers/thermal/remoteproc_cooling.c
+>   create mode 100644 include/linux/remoteproc_cooling.h
+> 
+
 
