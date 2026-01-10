@@ -1,46 +1,80 @@
-Return-Path: <linux-pm+bounces-40578-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40579-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 723F2D0C81D
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Jan 2026 00:10:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AAFFBD0CCCB
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jan 2026 03:17:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 72DAD300D439
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Jan 2026 23:09:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 853243032FFA
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Jan 2026 02:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F02C6337B87;
-	Fri,  9 Jan 2026 23:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 153A523E334;
+	Sat, 10 Jan 2026 02:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lDO/tcqd"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cU9icCWA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB02330B00;
-	Fri,  9 Jan 2026 23:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835811CAA78
+	for <linux-pm@vger.kernel.org>; Sat, 10 Jan 2026 02:17:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768000150; cv=none; b=WPgYn2V65RS7qjO/yxuqgKGqH5ySJPBUvJm2Z5XhgnTj9cXdOSW/Z5CCnFpE83nbW2146fHDJyEaLeuT9W/vpmPEK7CHws9YEyLA3V3xT+LIUnGPLxOs2kd7pA0ZNNvXbSmuwjWbSv6dVL8zx7ayM9vlqEL6K4QgWR3djDmQEkE=
+	t=1768011424; cv=none; b=IDw/Pq7U1NDiyy/UHB+C6Hoa3rm8gxh2SOLsw6vZS4ng0ogVPxSR5sx3eej8+hTJaHCoHokQWCt8VyRtbV0DrCxIv1T5FeCgeyQbh2rpA9AoDeK0TN7rIgJhuvnKzJmxtzjZjqZ3MFUL5trADAXvjJ6zmL8jqJhICaAfbforqAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768000150; c=relaxed/simple;
-	bh=joLEiJVFYHE4rOJ1s08l87AadqTWMGifTl6PZ/cU+Rw=;
+	s=arc-20240116; t=1768011424; c=relaxed/simple;
+	bh=MR82Uddn6LpIx7Prbvd5G0/4W/Nrnou4KGzkP2OeRrw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JEQtsqc4pfLUAwjBodYqLmR2Om3yL+sJL4WoTGdRCaSFiNN+peIo1HDYortPRTcACVZJkxQNtqOHNiKD75S30Wy/Schl0nxyfkYjuyGnioUmC3Z8RRoU2S5eWMieK0rN9hp35cDm5XLM/rrJRtVKL5JgBH2pBGrn8SJhFfbO3BI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lDO/tcqd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ED7FC4CEF1;
-	Fri,  9 Jan 2026 23:09:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768000150;
-	bh=joLEiJVFYHE4rOJ1s08l87AadqTWMGifTl6PZ/cU+Rw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lDO/tcqdvKnzTEpFsE7Wonp2IVZ/6u/uqMXBFQ0Lha/46uPftFxTT3jJAHYIa8B0B
-	 /6mAZDgoBRAUvAFffJf+sCepyeOFXab3QYQGP67Tqyocc0XD4kI9qpzrblUSCA0X0V
-	 FNHaUrF/95fYYlNmwETem5wHQO0IK9imR0caMvLaxBQjDzzVNDu4tOrZpj1uxQqyFH
-	 8XaTD/ntaOxmOHoJPQNkFNy0jK4raf/Uxh+8tDbqYR2HucyCA3G2PFKI7pzTvA5jpq
-	 BLFQcH5jyxvwxQny7gKGdWmuPLakL1Oqpc7mDz8Qsi3JX3GnlUNST2sB8kKhmiejLn
-	 XEKAFHtpR+WIw==
-Message-ID: <ab1375ae-ee33-4eb4-a54a-f52a67289155@kernel.org>
-Date: Sat, 10 Jan 2026 01:09:03 +0200
+	 In-Reply-To:Content-Type; b=Ai/Ta9v3t8qzUyT3KA3SpyLaZ0l55nKGetXUUfONAh0jEq9thI4e5Cv6dP8tlPl8rFUJBx0iMNyy1QmnogFciMOSAVk7aTOii/RXYAckn4BEplM9vGXaw4YEzhqZ9/qpHYvpM2FBsj/5CKuQ0dDlEwGWvXVVAkz2g4P1TVPnK1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cU9icCWA; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-79028cb7f92so45827947b3.2
+        for <linux-pm@vger.kernel.org>; Fri, 09 Jan 2026 18:17:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1768011421; x=1768616221; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/CS+sPGCudOBw/4dF2tLtNG4zOFpBZ8fj0ZBfM+xSUg=;
+        b=cU9icCWAe69IHgPF9ny/jE9bgV79h1TuCqsvuhAsSJ8+MRS9KeAAyXPKT5oP+lxnQq
+         tZvDL5TpoeaTaVMSSL6w1+Y0oZon0bnl0i8fOhgVcxYeD03/3H4l1c5KFtp1ESOjD7zn
+         Uiyv9mEFNX1ctzeKBUb8WDIw5HvzIhxF5Tm6JkbRoc5v8FhH9erwYfGAijysBUuYp7lh
+         0FyhWdaqhhEZ4gNvCOvXAZSDQRdSHNMdMTx+Ln/Cp9uzfNtAD8p7dM024iO8HGm9/JO/
+         +o6wIe7g46q+ELhPPSCeKTWNziX7YdmLkg5R3IJ0wKzh3Np5niXILsWzlti/TQuOr4Vb
+         Zkrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768011421; x=1768616221;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/CS+sPGCudOBw/4dF2tLtNG4zOFpBZ8fj0ZBfM+xSUg=;
+        b=hLK3WyXeYnACxbOteScaZ1bs1G4NQhQjLs6DlBkayfm0a5eKD5OnUy201vblcQ04Oh
+         rC4XLyuOV0wgJ2fv3YNSiKPu3h1i2VTFyIF9Xsn6uQ1ArnzTrhD0nf/f9TXgD/B8JulT
+         L/SznoVbyqE0cFdQ7VIb9/vlc4FyBcma3ExU09ic3GM/PxVdRG//ZXyv3O02oh7pQLvb
+         1hzBfmGQYNW2krxvSqGwtRjQCkTxGZKvkzqsuV75calIzUJWIXpeS/pKiKA/GXAzSq/I
+         z+tVbuiew/GSHwneRHM7UUwTugZ9YmhXtluCZBZ+spngFHtiIvOq62ay8tioJqBsOtq2
+         21zA==
+X-Forwarded-Encrypted: i=1; AJvYcCVI9IUzrrkE+2v/sWQbtuTvy5ecjk5T+Lx0pjtGiq7oQuy05rTJIBpaMGsYuCdLHESSt0//DHACnQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzaI5yg/abOhoTQ39Jr6t3/oTIEkI0xUvXBVd+6suFZJQ7twsdJ
+	VPsbAwM5sM6+CaMxoffdz7Tw/zcoAr7j/D8HJ0dVk4jJfnyztFXYeDONsBw9PuXApg==
+X-Gm-Gg: AY/fxX6EoD1CxHGNq+Ijzrl3CpyKfe16S03wdmq4kSE0PXWYn1G05gtd5eNyDr8jSL+
+	vZsl/rkxh2IalZqiKR5kB9hjEMYfpX8SAVUluDwJ/5X9G8jszC4JwnkIjVuALM4zcBvzJwbRNoP
+	d5fyGMZyC/IPjnTEj/Q5W3Gx15AxgdYVmZF90CUyi1JymI/AHbTlo5mWG+DT6JOVtCit5bI1X/T
+	tPoJ78okl0AK51vBxhKKWEMSoL+gaPlM+9dChEZ0Sw6bsnVL7Le2ufOoo0T9kBFEkd57i+ysZeo
+	qN3JaDJK3Xpm8ol6f9ta11zu+w0reXUR3o/EBK9UjhJ9V1XBZaD0CsVvyMierHK8U+dG/9lbE4o
+	1o22hNLRy1u4wGWqnxnw1ER72LcJPl9P/X8087J8jpwjLL0KPPxakEjVnvlYolqhkVAfU5qClHF
+	3z6fiFMlrAsqlK5tGzzkqlt4UjZmTH1vijMzHm/+Xg1/XNHivQxRASgr768q+myX6ZZd08SQ==
+X-Google-Smtp-Source: AGHT+IGX5MeGSKttRFeAc0MSgP/y2VLZfmVAUtwN+S37FdIJqLLc9vxJfr4q2stpMVFT7lLIyB/0qA==
+X-Received: by 2002:a05:690c:6809:b0:78f:a6e7:76d8 with SMTP id 00721157ae682-790b5758359mr102216847b3.18.1768011421232;
+        Fri, 09 Jan 2026 18:17:01 -0800 (PST)
+Received: from ?IPV6:2600:1700:4570:89a0:1dd1:9ef2:39ca:beb4? ([2600:1700:4570:89a0:1dd1:9ef2:39ca:beb4])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-790aa553ac3sm47388137b3.5.2026.01.09.18.16.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Jan 2026 18:17:00 -0800 (PST)
+Message-ID: <9f94993e-dd69-4c9e-b467-aad6031c83d4@google.com>
+Date: Fri, 9 Jan 2026 18:16:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -48,242 +82,84 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] interconnect: Add kunit tests for core functionality
-To: Kuan-Wei Chiu <visitorckw@gmail.com>
-Cc: jserv@ccns.ncku.edu.tw, marscheng@google.com, wllee@google.com,
- aarontian@google.com, hsuanting@google.com, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20251210180058.2115010-1-visitorckw@gmail.com>
-From: Georgi Djakov <djakov@kernel.org>
+Subject: Re: [PATCH v3 5/5] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
+ setting charger mode
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, =?UTF-8?Q?Andr=C3=A9_Draszik?=
+ <andre.draszik@linaro.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-samsung-soc@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
+ Kyle Tso <kyletso@google.com>
+References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
+ <20251227-max77759-charger-v3-5-54e664f5ca92@google.com>
+ <aWD_RIPp1ULH9St1@kuha>
+From: Amit Sunil Dhamne <amitsd@google.com>
 Content-Language: en-US
-In-Reply-To: <20251210180058.2115010-1-visitorckw@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <aWD_RIPp1ULH9St1@kuha>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/10/25 8:00 PM, Kuan-Wei Chiu wrote:
-> The interconnect framework currently lacks in-tree unit tests to verify
-> the core logic in isolation. This makes it difficult to validate
-> regression stability when modifying the provider/consumer APIs or
-> aggregation logic.
-> 
-> Introduce a kunit test suite that verifies the fundamental behavior of
-> the subsystem. The tests cover:
-> - Provider API (node creation, linking, topology construction).
-> - Consumer API (path enabling/disabling, bandwidth requests).
-> - Standard aggregation logic (accumulating bandwidth across links).
-> - Bulk operations for setting bandwidth on multiple paths.
-> 
-> The suite simulates a simple SoC topology with multiple masters and a
-> shared bus to validate traffic aggregation behavior in a controlled
-> software environment, without requiring specific hardware or Device
-> Tree support.
-> 
-> Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
-> ---
-> Build and kunit tests passed
-> 
->   drivers/interconnect/Kconfig     |  14 ++
->   drivers/interconnect/Makefile    |   2 +
->   drivers/interconnect/icc-kunit.c | 315 +++++++++++++++++++++++++++++++
->   3 files changed, 331 insertions(+)
->   create mode 100644 drivers/interconnect/icc-kunit.c
-> 
-> diff --git a/drivers/interconnect/Kconfig b/drivers/interconnect/Kconfig
-> index f2e49bd97d31..882dcb0b4a5b 100644
-> --- a/drivers/interconnect/Kconfig
-> +++ b/drivers/interconnect/Kconfig
-> @@ -22,4 +22,18 @@ config INTERCONNECT_CLK
->   	help
->   	  Support for wrapping clocks into the interconnect nodes.
->   
-> +config INTERCONNECT_KUNIT_TEST
-> +	tristate "KUnit tests for Interconnect framework"
-> +	depends on KUNIT
-> +	default KUNIT_ALL_TESTS
-> +	help
-> +	  This builds the KUnit test suite for the generic system interconnect
-> +	  framework.
-> +
-> +	  The tests cover the core functionality of the interconnect subsystem,
-> +	  including provider/consumer APIs, topology management, and bandwidth
-> +	  aggregation logic.
-> +
-> +	  If unsure, say N.
-> +
->   endif
-> diff --git a/drivers/interconnect/Makefile b/drivers/interconnect/Makefile
-> index b0a9a6753b9d..dc4c7b657c9d 100644
-> --- a/drivers/interconnect/Makefile
-> +++ b/drivers/interconnect/Makefile
-> @@ -10,3 +10,5 @@ obj-$(CONFIG_INTERCONNECT_QCOM)		+= qcom/
->   obj-$(CONFIG_INTERCONNECT_SAMSUNG)	+= samsung/
->   
->   obj-$(CONFIG_INTERCONNECT_CLK)		+= icc-clk.o
-> +
-> +obj-$(CONFIG_INTERCONNECT_KUNIT_TEST) += icc-kunit.o
-> diff --git a/drivers/interconnect/icc-kunit.c b/drivers/interconnect/icc-kunit.c
-> new file mode 100644
-> index 000000000000..2178487f9527
-> --- /dev/null
-> +++ b/drivers/interconnect/icc-kunit.c
-> @@ -0,0 +1,315 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit tests for the Interconnect framework.
-> + *
-> + * Copyright (c) 2025 Kuan-Wei Chiu <visitorckw@gmail.com>
-> + *
-> + * This suite verifies the behavior of the interconnect core, including
-> + * topology construction, bandwidth aggregation, and path lifecycle.
-> + */
-> +
-> +#include <kunit/platform_device.h>
-> +#include <kunit/test.h>
-> +#include <linux/interconnect-provider.h>
-> +#include <linux/interconnect.h>
-> +#include <linux/list.h>
-> +#include <linux/module.h>
-> +#include <linux/overflow.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +#include "internal.h"
-> +
-> +enum {
-> +	NODE_CPU = 100,
-> +	NODE_GPU,
-> +	NODE_BUS,
-> +	NODE_DDR,
-> +	NODE_MAX
-> +};
-> +
-> +struct test_node_data {
-> +	int id;
-> +	const char *name;
-> +	int num_links;
-> +	int links[2];
-> +};
-> +
-> +/*
-> + * Static Topology:
-> + * CPU -\
-> + * -> BUS -> DDR
-> + * GPU -/
-> + */
-> +static const struct test_node_data test_topology[] = {
-> +	{ NODE_CPU, "cpu", 1, { NODE_BUS } },
-> +	{ NODE_GPU, "gpu", 1, { NODE_BUS } },
-> +	{ NODE_BUS, "bus", 1, { NODE_DDR } },
-> +	{ NODE_DDR, "ddr", 0, { } },
-> +};
-> +
-> +struct icc_test_priv {
-> +	struct icc_provider provider;
-> +	struct platform_device *pdev;
-> +	struct icc_node *nodes[NODE_MAX];
+Hi Heikki,
 
-So nodes[] is a 104-element array? Is this intentional?
+Thanks for the review!
 
-[..]
-> +static void icc_test_set_bw(struct kunit *test)
-> +{
-> +	struct icc_test_priv *priv = test->priv;
-> +	struct icc_path *path;
-> +	struct icc_node *path_nodes[3];
-> +	int ret;
-> +
-> +	/* Path: CPU -> BUS -> DDR */
-> +	path_nodes[0] = get_node(priv, NODE_CPU);
-> +	path_nodes[1] = get_node(priv, NODE_BUS);
-> +	path_nodes[2] = get_node(priv, NODE_DDR);
-> +
-> +	path = icc_test_create_path(test, path_nodes, 3);
-> +
-> +	ret = icc_enable(path);
-> +	KUNIT_ASSERT_EQ(test, ret, 0);
-> +
-> +	ret = icc_set_bw(path, 1000, 2000);
-> +	KUNIT_EXPECT_EQ(test, ret, 0);
-> +
-> +	KUNIT_EXPECT_EQ(test, path_nodes[0]->avg_bw, 1000);
-> +	KUNIT_EXPECT_EQ(test, path_nodes[0]->peak_bw, 2000);
-> +	KUNIT_EXPECT_EQ(test, path_nodes[1]->avg_bw, 1000);
-> +	KUNIT_EXPECT_EQ(test, path_nodes[1]->peak_bw, 2000);
-> +
-> +	icc_set_tag(path, 0xABC);
-> +	KUNIT_EXPECT_EQ(test, path->reqs[0].tag, 0xABC);
-> +
-> +	icc_disable(path);
-> +	KUNIT_EXPECT_EQ(test, path_nodes[0]->avg_bw, 0);
-> +
-> +	icc_test_destroy_path(test, path);
-> +}
-> +
+On 1/9/26 5:14 AM, Heikki Krogerus wrote:
+> Hi,
+>
+>> +	if (source) {
+>> +		if (!regulator_is_enabled(chip->vbus_reg))
+>> +			ret = regulator_enable(chip->vbus_reg);
+>> +	} else {
+>> +		if (regulator_is_enabled(chip->vbus_reg))
+>> +			ret = regulator_disable(chip->vbus_reg);
+>> +	}
+> It looks like you have to do one more round, so can drop the
+> regulator_is_enabled() checks and just always enable/disable it
+> unconditionally.
+>
+>         if (source)
+> 		ret = regulator_enable(chip->vbus_reg);
+> 	else
+> 		ret = regulator_disable(chip->vbus_reg);
 
-I also tried to run it and noticed that one of the tests is failing on my board...
+The regulator framework uses refcounting on the number of enables. If
+the number of times regulator is disabled > enabled, a warning will be
+thrown. Also, I don't want to call regulator_enable more than once for
+the same refcounting reason (will have to call disable those many number
+of times to actually disable).
 
-KTAP version 1
-1..1
-     KTAP version 1
-     # Subtest: interconnect
-     1..4
-     ok 1 icc_test_topology_integrity
-     # icc_test_set_bw: EXPECTATION FAILED at drivers/interconnect/icc-kunit.c:207
-     Expected path_nodes[0]->avg_bw == 1000, but
-         path_nodes[0]->avg_bw == 2147483647 (0x7fffffff)
-     # icc_test_set_bw: EXPECTATION FAILED at drivers/interconnect/icc-kunit.c:208
-     Expected path_nodes[0]->peak_bw == 2000, but
-         path_nodes[0]->peak_bw == 2147483647 (0x7fffffff)
-     # icc_test_set_bw: EXPECTATION FAILED at drivers/interconnect/icc-kunit.c:209
-     Expected path_nodes[1]->avg_bw == 1000, but
-         path_nodes[1]->avg_bw == 2147483647 (0x7fffffff)
-     # icc_test_set_bw: EXPECTATION FAILED at drivers/interconnect/icc-kunit.c:210
-     Expected path_nodes[1]->peak_bw == 2000, but
-         path_nodes[1]->peak_bw == 2147483647 (0x7fffffff)
-     # icc_test_set_bw: EXPECTATION FAILED at drivers/interconnect/icc-kunit.c:216
-     Expected path_nodes[0]->avg_bw == 0, but
-         path_nodes[0]->avg_bw == 2147483647 (0x7fffffff)
-     not ok 2 icc_test_set_bw
-     ok 3 icc_test_aggregation
-     ok 4 icc_test_bulk_ops
-     # module: icc_kunit
-# interconnect: pass:3 fail:1 skip:0 total:4
-# Totals: pass:3 fail:1 skip:0 total:4
-not ok 1 interconnect
+> I don't think you need the check in any case, but if I've understood
+> this correctly, you should not use that check when the regulator does
+> not support that check because then the API claims it's always
+> enabled. So I guess in that case "if (!regulator_is_enabled())" may
+> not work as expected, and you may actually be left with a disabled
+> regulator. This may not be a problem on current platforms, but who
+> knows what happens in the future.
 
-...and the following diff seem to fix it:
+I don't think this should be an issue in the future as this driver is
+specifically meant for max77759_tcpci device and should only be used
+with max77759 charger (they both exist only in the same package). And
+that the max77759_charger driver does implement the callback. However,
+if you think that regulator_is_enabled() is unreliable, I could track
+the state within the tcpci driver instead of calling
+regulator_is_enabled() and call enable/disable regulator accordingly.
 
-diff --git a/drivers/interconnect/icc-kunit.c b/drivers/interconnect/icc-kunit.c
-index 2178487f9527..060f640818a5 100644
---- a/drivers/interconnect/icc-kunit.c
-+++ b/drivers/interconnect/icc-kunit.c
-@@ -79,6 +79,14 @@ static struct icc_node *icc_test_xlate(const struct of_phandle_args *spec, void
-  	return NULL;
-  }
-
-+static int icc_test_get_bw(struct icc_node *node, u32 *avg, u32 *peak)
-+{
-+	*avg = 0;
-+	*peak = 0;
-+
-+	return 0;
-+}
-+
-  static int icc_test_init(struct kunit *test)
-  {
-  	struct icc_test_priv *priv;
-@@ -95,6 +103,7 @@ static int icc_test_init(struct kunit *test)
-
-  	priv->provider.set = icc_test_set;
-  	priv->provider.aggregate = icc_test_aggregate;
-+	priv->provider.get_bw = icc_test_get_bw;
-  	priv->provider.xlate = icc_test_xlate;
-  	priv->provider.dev = &priv->pdev->dev;
-  	priv->provider.data = priv;
+Let me know wdyt and I'll update the next revision accordingly.
 
 
-Could you please update and re-send?
+BR,
 
-Thanks,
-Georgi
+Amit
+
+>
+> thanks,
+>
 
