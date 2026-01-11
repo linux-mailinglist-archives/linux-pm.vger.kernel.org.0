@@ -1,146 +1,90 @@
-Return-Path: <linux-pm+bounces-40608-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40609-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33EFBD0E160
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jan 2026 06:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 851B5D0E87D
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jan 2026 11:04:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D1577300C5D3
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jan 2026 05:32:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 77FBD3004197
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jan 2026 10:04:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8D28221721;
-	Sun, 11 Jan 2026 05:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 595602153FB;
+	Sun, 11 Jan 2026 10:04:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OkSY4cCE"
+	dkim=pass (4096-bit key) header.d=glanzmann.de header.i=@glanzmann.de header.b="q9S0ka3P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from infra.glanzmann.de (infra.glanzmann.de [88.198.237.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F0AF507;
-	Sun, 11 Jan 2026 05:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1737F330D26
+	for <linux-pm@vger.kernel.org>; Sun, 11 Jan 2026 10:04:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=88.198.237.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768109569; cv=none; b=DM+gNjT107aRhl7ep7bOH2xKoLJcWp9T0fFfcCJgZ1Iv8wEMSJmJu70MRFSviO22oG3REAsGxq3eF01J/ZZz+yz1D7d1NicaYz7mqynbnGpDLg958qPnmqVPiJ53+wojHjqfKzsG2dmiox/jITC7hJJ2EOkJvE4RSKBZa49JlGk=
+	t=1768125845; cv=none; b=DbQIoD1rEMM7TakHEl0IhqSm9t+4zYgA/KiQuyRCbsVhXHo6My9I8rjhAqRHeqvPJmoZaHCwLlC8lQpse1BlDedUZ0QXbgl4MtLU5beIyR7vMcD00knZoRinfa4Ta1cjW8tTyx4joUiRDKNO3+GcmKLm3T8Nuw7c/W6LeIZFIdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768109569; c=relaxed/simple;
-	bh=ThaGW99bSjPIXtpZK4DbvpI9gx7q4i8q8JKy/UWNBGE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=HfDmnDxKqkCMPKuis0OkUEcz2e/fnD1voMU1yMxe/D+x+c+n8Lxw7gt2VmHujhNL0GO3KnfSfrXJueKy1YbZR9256W4l+OkuzpZzKiEd9vjRKH8HayaZYXCARpNCv4RfOUc4+GmEajQLkzSx6ZTyFMwtga3gQNXADdwnW/ulP28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OkSY4cCE; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768109568; x=1799645568;
-  h=date:from:to:cc:subject:message-id;
-  bh=ThaGW99bSjPIXtpZK4DbvpI9gx7q4i8q8JKy/UWNBGE=;
-  b=OkSY4cCE1xN/9YtXLxdSq0sFwC/dziDKMrlgEhEWBriseggyLua6WT3t
-   VbYXEdsZXJpQDqzmS/OWnaz7Oyvwu6KKNFB18hzbOXxqBe1htpBF4WaZP
-   bfGeDiJNltS3OB6GkiLC9jnhjIHjpDLV+Au7ktnFslC9vJklrjiZ3HsEq
-   Gl2W/dEcdnSQy/iJzJ/sKVA3USV6O6F7QoUXI/p0sDOrXP+tCH8xfuTzE
-   can0s2NeJaaeblqeK7R2MnijGkZtZGjMoiiP7U7KoiKx15Qdspytq+nzw
-   EhCgzllylMcrHuje8S9LJg2yFdoBaNQHu9RdGoelXNt537Av7eJgN9S36
-   w==;
-X-CSE-ConnectionGUID: zBna8QJJRfKbmC2GK9vG9Q==
-X-CSE-MsgGUID: fSscm0jJQvagDZPn3Yk0Yg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11667"; a="80065636"
-X-IronPort-AV: E=Sophos;i="6.21,217,1763452800"; 
-   d="scan'208";a="80065636"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2026 21:32:47 -0800
-X-CSE-ConnectionGUID: 6bJEnwvrQvyLdywNMcc8SQ==
-X-CSE-MsgGUID: /b8EQrx3TBmxkSAj2olELg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,217,1763452800"; 
-   d="scan'208";a="234502067"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 10 Jan 2026 21:32:47 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1veo4B-000000009eI-39tu;
-	Sun, 11 Jan 2026 05:32:43 +0000
-Date: Sun, 11 Jan 2026 13:32:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:fixes] BUILD SUCCESS
- 3d05eb1ff7f0d630cd8e80c294648acd06fb8b55
-Message-ID: <202601111331.E865BiR4-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1768125845; c=relaxed/simple;
+	bh=+Qr++2pn+G9P1Wbp0wued+I2cW+a4O1pw3PPKfjUUmg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=KmD4TTsrEPY4gV1ZV8yTclK+GElkIVltEL6DymCOw0dAb8ChnDJoNZvFs9HkJc3/g7E/wW9TWJzKCdHOB31q0ZwsFu9Jb4aj5PJQKeraOAVRZrbBlm2a7RddA0o5uyhYGj5DQpA2eqEjn58WyLggSqSiNsclKZ6akh1SkJIfw2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=glanzmann.de; spf=pass smtp.mailfrom=glanzmann.de; dkim=pass (4096-bit key) header.d=glanzmann.de header.i=@glanzmann.de header.b=q9S0ka3P; arc=none smtp.client-ip=88.198.237.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=glanzmann.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=glanzmann.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=glanzmann.de;
+	s=infra26101010; t=1768125492;
+	bh=o9T60oGP0rBiEbcHMzEGDNjLwu4Dl2Apvz9XEgKR5tE=;
+	h=Date:From:To:Cc:Subject:From;
+	b=q9S0ka3PKIXk6XBZ3mGCn8kUnbbJx3EB6rXzbpj0Jj+FRmh90/hl2XKWnhcvBWfV+
+	 K+FDGhxFp/N86XkJGORdqdTDz/DtBTosdiHSr/Z6NhzwmcaCW3vBv9DxNWnaD39NWR
+	 5vxlL+I+Q9KgGQD1Oi8egWMRlJ9UKIOnypaArIQNDSxOkXNWCyKNNYY0OpasKRTrsE
+	 4X3QWpHbhFDgbDf+e5VpH/FSdF6zxvftJ/BSVI6bpOYkr2hgZHivy7xLOTahyIY6uS
+	 xox5UQhoFC8MFRkaT838+F44d8XKiYCm+jjHxtAAH7TNg0yGRPrVL4WpwKmw/TrW8z
+	 1zXuxmc7wo32eqSP9ZwfMh6LYxQFTlhBK1rcEnEqEtkCT75yzZDn5BbeBKQALkooA6
+	 7IP4dU3UmQc650KNkPNjqjTTojHVpYC9L91h/3b3/rAHvn4AVKOFPY6804R86/aCGO
+	 KZwOPZvseYl1Fw3AgjeooAkip1D9SpQK9OIPEcEizb9Um6LvS4YcKTxkA5cUq9LpiY
+	 EMpzNzetH4H2BNjdMyOEju7FujwQYCLzVW+5ZG0NTEY54hv+gw/Yd0vV4HI7xl8KjX
+	 4CaQOQZDAPR1Y4oc8PvCPo8ePrjvXcfDy+WzWSrDiWppHgO03CBXFl8Q9S3cuxySQW
+	 O0Pb5NWqASmBEawfztJQ/yUY=
+Received: by infra.glanzmann.de (Postfix, from userid 1000)
+	id 2AE4227A333; Sun, 11 Jan 2026 10:58:12 +0100 (CET)
+Date: Sun, 11 Jan 2026 10:58:12 +0100
+From: Thomas Glanzmann <thomas@glanzmann.de>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org
+Cc: Sven Peter <sven@kernel.org>, asahi@lists.linux.dev
+Subject: Proper way to disable hibernate for a platform
+Message-ID: <aWN0NOls6XIj5oXh@glanzmann.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
-branch HEAD: 3d05eb1ff7f0d630cd8e80c294648acd06fb8b55  Merge branch 'pm-sleep-fixes' into fixes
+Hallo,
+arm based macs do not support hibernation at the moment, sometimes they
+crash, sometimes they try to stop the cpu, can't and abort the attempt.
+What is the porper way to tell hibernation code that suspend is not
+available on that platform?
 
-elapsed time: 7850m
+Looking at the code in kernel/power/hibernate.c it appears that
+hibernation_available is the right place to do it:
 
-configs tested: 55
-configs skipped: 1
+bool hibernation_available(void)
+{
+        return nohibernate == 0 &&
+                !security_locked_down(LOCKDOWN_HIBERNATION) &&
+                !secretmem_active() && !cxl_mem_active();
+}
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Or is there a better way? How would a platform agnostic interface best look
+like, something allong the lines:
 
-tested configs:
-alpha         allnoconfig    gcc-15.1.0
-alpha        allyesconfig    gcc-15.2.0
-arc          allmodconfig    gcc-15.2.0
-arc           allnoconfig    gcc-15.1.0
-arc          allyesconfig    gcc-15.2.0
-arm           allnoconfig    clang-22
-arm          allyesconfig    gcc-15.2.0
-arm64        allmodconfig    clang-19
-arm64         allnoconfig    gcc-15.1.0
-csky         allmodconfig    gcc-15.2.0
-csky          allnoconfig    gcc-15.1.0
-hexagon      allmodconfig    clang-17
-hexagon       allnoconfig    clang-22
-i386         allmodconfig    gcc-14
-i386          allnoconfig    gcc-14
-i386         allyesconfig    gcc-14
-loongarch    allmodconfig    clang-19
-loongarch     allnoconfig    clang-22
-m68k         allmodconfig    gcc-15.2.0
-m68k          allnoconfig    gcc-15.1.0
-m68k         allyesconfig    gcc-15.2.0
-microblaze    allnoconfig    gcc-15.1.0
-microblaze   allyesconfig    gcc-15.2.0
-mips         allmodconfig    gcc-15.2.0
-mips          allnoconfig    gcc-15.1.0
-mips         allyesconfig    gcc-15.2.0
-nios2        allmodconfig    gcc-11.5.0
-nios2         allnoconfig    gcc-11.5.0
-openrisc     allmodconfig    gcc-15.2.0
-openrisc      allnoconfig    gcc-15.1.0
-parisc       allmodconfig    gcc-15.2.0
-parisc        allnoconfig    gcc-15.1.0
-parisc       allyesconfig    gcc-15.2.0
-powerpc      allmodconfig    gcc-15.2.0
-powerpc       allnoconfig    gcc-15.1.0
-riscv        allmodconfig    clang-22
-riscv         allnoconfig    gcc-15.1.0
-riscv        allyesconfig    clang-16
-s390         allmodconfig    clang-18
-s390          allnoconfig    clang-22
-s390         allyesconfig    gcc-15.2.0
-sh           allmodconfig    gcc-15.2.0
-sh            allnoconfig    gcc-15.1.0
-sh           allyesconfig    gcc-15.2.0
-sparc         allnoconfig    gcc-15.1.0
-sparc64      allmodconfig    clang-22
-um           allmodconfig    clang-19
-um            allnoconfig    clang-22
-um           allyesconfig    gcc-14
-x86_64       allmodconfig    clang-20
-x86_64        allnoconfig    clang-20
-x86_64       allyesconfig    clang-20
-x86_64      rhel-9.4-rust    clang-20
-xtensa        allnoconfig    gcc-15.1.0
-xtensa       allyesconfig    gcc-15.2.0
+dmi_check_system(hibernate_blacklist)
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Or ist there a better way?
+
+Cheers,
+	Thomas
 
