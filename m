@@ -1,142 +1,121 @@
-Return-Path: <linux-pm+bounces-40612-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40613-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B4F2D0F660
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jan 2026 17:07:52 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B08ED0F794
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jan 2026 17:58:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F31D03033F86
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Jan 2026 16:07:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5BDC4304D48D
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Jan 2026 16:58:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02CB3491E8;
-	Sun, 11 Jan 2026 16:07:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB42134CFD2;
+	Sun, 11 Jan 2026 16:58:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="buV9a9rc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P5PCNrhP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810FA3033E4
-	for <linux-pm@vger.kernel.org>; Sun, 11 Jan 2026 16:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF8E22AE65;
+	Sun, 11 Jan 2026 16:58:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768147669; cv=none; b=nf+Uex3xH2mB4wLMD2c94QFOvZXp+byHta8eqlJJ7Q22qn+EdD+V5dEBqoVFXZldTHDgQZuGiFhG9H9up8HLVeIb5jktdj9gt0ed+UG9hi11QCHwZ1pemOOOwpUdl83lM0gN8FfO+uHFuETIUwgl7WtQHxQgiYB0PAsnCH+ziPc=
+	t=1768150705; cv=none; b=Wvb9Uf1zE51d+7tt+D6jmO9x/C10bLScXv2pfRfTY41cPMYqGrGw8LN5lhcqpekIjM1vwnTR4C6Xr/U5a++jjb15cmUUnUNkTBEjIz9u6170d0w5cYKaefojjPJ1RtRq7Pr4W4WbkJqUxvSxLU/ok9SKPq7yyWcJ5QUAiPrrTDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768147669; c=relaxed/simple;
-	bh=AjihE1tXzhMtiGfocyMzLC0q603Ldg2m0mAOz/9hnmw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bBZhO9Yp4EgNb7HA3V8oblsDpSXLDEs+I4dxfv/K/hee9oaPTknRfsgObabkpp6oBN6++OCL9y1sWn3eFaXKIrqWB0NskH2xwaTBEhh738rb/dL6KhjcbUml5EylqrVJXujSvUZiJqE0GxeCawSccQFPEUnzbxYyvhkIVxhH+as=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=buV9a9rc; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-81f3d6990d6so423168b3a.3
-        for <linux-pm@vger.kernel.org>; Sun, 11 Jan 2026 08:07:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768147668; x=1768752468; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6SdMvLD2sWx3FTJPBUP8cXTdbOmBvwbO6CGnoPJ9/xE=;
-        b=buV9a9rcxZSEaAX1+fiGMiQvdFNDR5vz0P+38K289+tTq7tI/QZTMvme9iZEXV/QLX
-         +/zFaOSkRd/zC7AuOYVb4sS4HtD+Xi08zpybxlD+cqLIcaaFwDYfgCCOfC6A5n5QgsCj
-         tCzZrQkwP2plyPLzet7VqOXJa7hY8DSpxPf9heafo9ioAI61Gil+M0ZnH+6WCw8drmwJ
-         EhWE700afaDHcaSNz3F3g0JoF+Piq0cxYd/RjWWaW8zvzYiEkyMv2MiH8v88M1TpgWja
-         ZaYjrCmJH5LFvEJRWJVxgQ8U9eLLOyS1j96EaebtrG8IkEK5d5auXTK6d3fLO6EKIsBd
-         Lu2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768147668; x=1768752468;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6SdMvLD2sWx3FTJPBUP8cXTdbOmBvwbO6CGnoPJ9/xE=;
-        b=Jc0nvctU3F1nlCtNaV8Rf+rgjeuDUi6BqXJFtFDd2x9Q7UXJ4s0sTCs06iN9eBTQWp
-         91ua63RgAtmzEw52hZ3aaoU4Oj6wYYRSkVa69IvL59YEnXLbCLdvB2TI6MKIEKk2N7Cb
-         uchaBIG7K5xRSoDrDxRdEuwkllAHFe5q3ioHCVl3BDtAFYHSGaIZ8gX2FFvwSAQXG0Jc
-         S4fxXs88VYQrMVz33OjWr3gmUL1EXLdBD5zwkiUfAs3DJJf91nT0+PRd01wlvatvqP7x
-         adrF7sPd0u0Rnsd1QSx6/u/aXatu/8DjXWfZFurK+M9kA29KUkibMdk33x3AeKiKzG67
-         gr9g==
-X-Forwarded-Encrypted: i=1; AJvYcCV1yavckAr9zt3FcuBlDiPbwMpr6jmbhxrEMdn6ex26YlaYurBoTSZC6ET2/bHAiAtHZlwjAf4aqA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIwRllR5yEcK8FFEpcqgflRSFZs1J5SSj91nU2DwAv2+qrHEAI
-	iQM5zg00K7To5rI2KzVpKtvkwYqk12tG1nuB1vdC51bOP23Gm/AbhJgZ
-X-Gm-Gg: AY/fxX5joNJU+bLHipJbXOiOKsz+PwLWElF9svaxVF77iSL+qgOBLz55WePhfMsMa4c
-	Z8OMcYKlQ/mFAa8Op6EciTSCFwIRuLuNMnWMtICxlrEA9XoPqbQV7AxSK+QoD3KthAMYMxP5CuF
-	eO8tq6EqiYEPfMhespG36CBEErL36KLsBeJmt0kF8BUcowsYQOc5VWBWrmiSZGb4YQxXgZwODhZ
-	z78ItsdRyxoQ309jiMkUSW1H831W/NIFiP73dN8l2UgjVw75Xo6if0nHO2EovjwEAVZ18o9RQnn
-	4JMxlm0JPM3IXJvKA6RtQig/PexidRNBabf2Sv1Frc2ShVYXK/xIlskRuEwAMvpi8/EIyj4mhdA
-	ctJrIWCRJhRHk/nLOWUr1dtHBOcR+WWjbPlKtrTuY23aDGU//7b/iOJ0AKDUhj24kJpvq+fZo/9
-	gD6EnSQA10BEw02sc=
-X-Google-Smtp-Source: AGHT+IFeGRfRn7ouHLko8LqNscZovYZVIkQrQga3ciBBylnW6APpH0B4WhS4MXya8AuNydrIc8BrDg==
-X-Received: by 2002:a05:6a21:998b:b0:34f:a16f:15ad with SMTP id adf61e73a8af0-3898f9dcb77mr15804077637.53.1768147667639;
-        Sun, 11 Jan 2026 08:07:47 -0800 (PST)
-Received: from gmail.com ([2402:e280:3e9b:22f:df65:ffa4:d9b6:3e58])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c4cc95d5c66sm15125986a12.24.2026.01.11.08.07.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Jan 2026 08:07:47 -0800 (PST)
-From: Sumeet Pawnikar <sumeet4linux@gmail.com>
-To: rafael@kernel.org,
-	rui.zhang@intel.com,
-	linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	sumeet4linux@gmail.com
-Subject: [PATCH] thermal: intel: fix typo nagative in comment for cpu argument
-Date: Sun, 11 Jan 2026 21:37:39 +0530
-Message-ID: <20260111160739.15984-1-sumeet4linux@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1768150705; c=relaxed/simple;
+	bh=2wbW41C2J76Sms115w/xbUlLwXKlyG+kYWdIrr/qsDc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LJXo9JU2LP7j4MoQdh85KXV7EET6W7VXWOYj+VzQ+jVIK4CoeaOiJedEqKoYNXrKAMwEs2RD1Y2dJc01o3Vsytb8sfoJxStkMl5r6mh+9DULH3HhaJnjCGfIbvg8H5U8RMZvFFDYHpNP7VU0T/sg+QBEF3x3D3mnMvM3rvQeE/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P5PCNrhP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14B94C4CEF7;
+	Sun, 11 Jan 2026 16:58:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768150705;
+	bh=2wbW41C2J76Sms115w/xbUlLwXKlyG+kYWdIrr/qsDc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=P5PCNrhPcaJ6XgRJcU2TduO4WKsQM5ILv9aSb19pPv7i20fpDsJbn3GwB+TeRu6tk
+	 HHlw8YPtqrKhjPnlMxNkxf7Q19UAEmtPdQIr0D1EiKipCQ7T9FTAlsYItaUriFDjXz
+	 OXZBNgbYOY2gG4mwXfJDllKa2k7op7UVTYBmE9ZUetjvyx3ttHcq5DT6vNvpn04aNW
+	 qvDiy2a+o0DG5yc6rGODRfJm4OgxGvY+98HjA2GFpwftHZ3XDOAaCD+rn7qr3dBrxn
+	 ZxB0ByoBmt8MwSToF8OPf3y1B4Obiqrfi2OfJ7xD2vS+K2/LFec2tHqUpRQvORglcl
+	 xoYYSIMBwFh5w==
+Date: Sun, 11 Jan 2026 16:57:57 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Romain Gantois <romain.gantois@bootlin.com>, MyungJoo Ham
+ <myungjoo.ham@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>, Guenter
+ Roeck <linux@roeck-us.net>, Peter Rosin <peda@axentia.se>, David Lechner
+ <dlechner@baylibre.com>, Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>, Andy
+ Shevchenko <andy@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Michael
+ Hennerich <Michael.Hennerich@analog.com>, Mariel Tinaco
+ <Mariel.Tinaco@analog.com>, Kevin Tsai <ktsai@capellamicro.com>, Linus
+ Walleij <linus.walleij@linaro.org>, Dmitry Torokhov
+ <dmitry.torokhov@gmail.com>, Eugen Hristev <eugen.hristev@linaro.org>,
+ Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Hans de
+ Goede <hansg@kernel.org>, Support Opensource
+ <support.opensource@diasemi.com>, Paul Cercueil <paul@crapouillou.net>,
+ Iskren Chernev <me@iskren.info>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, Matheus Castello
+ <matheus@castello.eng.br>, Saravanan Sekar <sravanhome@gmail.com>, Matthias
+ Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+ <angelogioacchino.delregno@collabora.com>, Casey Connolly
+ <casey.connolly@linaro.org>, Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
+ Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, Amit
+ Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Sylwester
+ Nawrocki <s.nawrocki@samsung.com>, Olivier Moysan
+ <olivier.moysan@foss.st.com>, Arnaud Pouliquen
+ <arnaud.pouliquen@foss.st.com>, Maxime Coquelin
+ <mcoquelin.stm32@gmail.com>, Alexandre Torgue
+ <alexandre.torgue@foss.st.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v2 1/2] iio: dac: ds4424: drop unused include IIO
+ consumer header
+Message-ID: <20260111165757.15d1a2bc@jic23-huawei>
+In-Reply-To: <CAHp75VcX_z6q879gmWcb76SeFHtqMvpZ=y9PwNn0=eVFb06wAw@mail.gmail.com>
+References: <20251209-iio-inkern-use-namespaced-exports-v2-0-9799a33c4b7f@bootlin.com>
+	<20251209-iio-inkern-use-namespaced-exports-v2-1-9799a33c4b7f@bootlin.com>
+	<CAHp75VcX_z6q879gmWcb76SeFHtqMvpZ=y9PwNn0=eVFb06wAw@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Fix typo "nagative" -> "negative" for cpu argument value in
-comment section.
+On Tue, 9 Dec 2025 16:45:29 +0200
+Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
 
-Signed-off-by: Sumeet Pawnikar <sumeet4linux@gmail.com>
----
- drivers/thermal/intel/intel_tcc.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> On Tue, Dec 9, 2025 at 10:26=E2=80=AFAM Romain Gantois
+> <romain.gantois@bootlin.com> wrote:
+> >
+> > To prepare for the introduction of namespaced exports for the IIO consu=
+mer
+> > API, remove this include directive which isn't actually used by the dri=
+ver. =20
+>=20
+> Reviewed-by: Andy Shevchenko <andy@kernel.org>
+>=20
+Picked this one up on the togreg branch of iio.git.  I'll sort out the othe=
+r one
+separately given I should do an immutable branch etc and that takes a little
+more effort and time than I'm putting in today!
 
-diff --git a/drivers/thermal/intel/intel_tcc.c b/drivers/thermal/intel/intel_tcc.c
-index b2a615aea7c1..ab61fb122937 100644
---- a/drivers/thermal/intel/intel_tcc.c
-+++ b/drivers/thermal/intel/intel_tcc.c
-@@ -172,7 +172,7 @@ static u32 get_temp_mask(bool pkg)
- 
- /**
-  * intel_tcc_get_tjmax() - returns the default TCC activation Temperature
-- * @cpu: cpu that the MSR should be run on, nagative value means any cpu.
-+ * @cpu: cpu that the MSR should be run on, negative value means any cpu.
-  *
-  * Get the TjMax value, which is the default thermal throttling or TCC
-  * activation temperature in degrees C.
-@@ -199,7 +199,7 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_get_tjmax, "INTEL_TCC");
- 
- /**
-  * intel_tcc_get_offset() - returns the TCC Offset value to Tjmax
-- * @cpu: cpu that the MSR should be run on, nagative value means any cpu.
-+ * @cpu: cpu that the MSR should be run on, negative value means any cpu.
-  *
-  * Get the TCC offset value to Tjmax. The effective thermal throttling or TCC
-  * activation temperature equals "Tjmax" - "TCC Offset", in degrees C.
-@@ -224,7 +224,7 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, "INTEL_TCC");
- 
- /**
-  * intel_tcc_set_offset() - set the TCC offset value to Tjmax
-- * @cpu: cpu that the MSR should be run on, nagative value means any cpu.
-+ * @cpu: cpu that the MSR should be run on, negative value means any cpu.
-  * @offset: TCC offset value in degree C
-  *
-  * Set the TCC Offset value to Tjmax. The effective thermal throttling or TCC
-@@ -267,7 +267,7 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, "INTEL_TCC");
- 
- /**
-  * intel_tcc_get_temp() - returns the current temperature
-- * @cpu: cpu that the MSR should be run on, nagative value means any cpu.
-+ * @cpu: cpu that the MSR should be run on, negative value means any cpu.
-  * @temp: pointer to the memory for saving cpu temperature.
-  * @pkg: true: Package Thermal Sensor. false: Core Thermal Sensor.
-  *
--- 
-2.43.0
+Jonathan
+
 
 
