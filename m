@@ -1,93 +1,109 @@
-Return-Path: <linux-pm+bounces-40686-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40687-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1417D14C2F
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jan 2026 19:27:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EC89D14D61
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jan 2026 20:01:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4307E30F6034
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jan 2026 18:23:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3ABD13026F1B
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jan 2026 19:00:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F88238759C;
-	Mon, 12 Jan 2026 18:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C78F43112B0;
+	Mon, 12 Jan 2026 19:00:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jU+O4RXk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ItS2q+t8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3ED387583
-	for <linux-pm@vger.kernel.org>; Mon, 12 Jan 2026 18:23:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0863101B2
+	for <linux-pm@vger.kernel.org>; Mon, 12 Jan 2026 19:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768242207; cv=none; b=LR3RiUKiKphrL6MByOE5KmLU8Mxb6CR8c1ULkB4EeknibYMA1FUKR6N2tyCzLnT38iSg4KoAgUQQrEFT7W48NStLUaPXHLqoUXeN7YnVlAKsjOwIBuR9H+++w6aiFOaLwNFMHQehjIPf/FMTi0aAU+jzdWpfnPhFSpgdj6j9ZvE=
+	t=1768244436; cv=none; b=TReZ+LphN/IFQ/388bAMjb8RSpx4wQo7hvZEOMfLw72gb7Z57MYs3GclEUG9CMPTNYXZKUiPkXPZhxEDkJ3KYtObxMm6gTasaez1Vc75K8M1jOSdnTFCpExzejrRO4znzrZDp7xYEwsrt4DWgwhHeHkljQBUiZ86iV2OMjS18Uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768242207; c=relaxed/simple;
-	bh=Kxc48WP3JMgRcgbxaB+vq6PuqCnjrP3YyAQS4BlYEQM=;
+	s=arc-20240116; t=1768244436; c=relaxed/simple;
+	bh=R975+6cFhZbxfj7AcmB2qCDxz2fjGpYeQFlJNfAlsrY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BLcGCr323R94gSJ9iKnIfthNZVzroGCj3g853JAnLFhRnMf2uGCF4ijSC1jAyTRksqEUreVCQTN3juYlKKt5wmfAL7JwnMiZ8hrQce5Ug/mxB24j16WFVLLW/HZgTvoxtFPwAyUfVBNOdjbaUX1bAnC/stl8ptBFJn9rWydnA1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jU+O4RXk; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=num4RCWUEug4XlEiPwEr+G9CLm5hsAh9+ImRHyydREfi7ubRyBKmmI6ygmBFKZ5024mssBQhPquXtyqBuStR4KIKfTY1ThvB7SD7/sjeGR64TkmoiDFkB0QCF/WuO2yxKgXTH/63nqAnLSul/suZVHtD7xPhzfq05tQFU0uBVRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ItS2q+t8; arc=none smtp.client-ip=209.85.160.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a0d5c365ceso45169975ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jan 2026 10:23:22 -0800 (PST)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-3f5aaa0c8d7so5107782fac.3
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jan 2026 11:00:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768242202; x=1768847002; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1768244434; x=1768849234; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yoCe2UhjfoZKQZoLbe4Gba2T09UGHCeiBMJ/gxSy8bI=;
-        b=jU+O4RXkUvB5DFZHEAbH8NKHMRUSQMwiBgxvZn95nYz2CzeKFCPGBkUoCu2T25P8jO
-         p3ue8i9VE0yYM0EBCwbBlzTQEVov4iFXEGhrcv+zQ4TB2X66wocSsJnoF2XUev+qyER2
-         +cQwQuD2woHUIhvNgYQXeMQrDrxeXg/92IhrYce4hUhw4/hqifT9Iz/Yoet1orPMdolM
-         3IkKKmkvqGTJ4qB4J+iv+2q/tg2It5Ty9I3SZS1VwnJSiDbWN5vOJmE1u7MxNL1/n9m3
-         dYcm2E4fRfMGzCX+XathPAu1WFgJC+9oWzciVrfw28VIqDkNCsibVkytkt9npkRIA5+2
-         ZKnQ==
+        bh=zcjtfYLr/hzQ7i+u9m84wCmIOhDfx7TiS5rWTLTDi7o=;
+        b=ItS2q+t8N194VHKIsQdU75+50hXv6eD242HBROgHCgphqBPF6SO9cFHGYWSPtmS8FL
+         VEphjSnRoIthT9lnwdyQ741wEmpb/6ZyZZ/Dl2fhyObwpyy62grKYbPs5XqLj2SU/CwM
+         PHhXVemAFNTeVUntHysPGSDh58v3tI4EgLZ8DybaUP37nUYcGjRdo790SRwPGZgFC9P0
+         cFKX8uZl7Sh05jriLTmcPx6Xl+FABqANYgYPHAZEaa8AJlYZDMyY3yW1Ki3JW7aXzupD
+         1aLHrKwxP+ZNMOxvqf7UeNaWUA2zufUj2bVMKtuEZUdjbyIAiTVLdXQldIWxfwyAvgzD
+         2cVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768242202; x=1768847002;
+        d=1e100.net; s=20230601; t=1768244434; x=1768849234;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=yoCe2UhjfoZKQZoLbe4Gba2T09UGHCeiBMJ/gxSy8bI=;
-        b=LGpIGBcE11zCIDQOpSuue6vKP8lCMvE1EBo0yrgtYUHbpIqIm3/5t8NjpBnZpnfee9
-         +WNauMDZi1dFKTzHfrR56iD0BQAH1HoPRTyWBSZuxUd3Rtz4+YaGfahj15vneA4KD1l/
-         M1Z+R1s6Np09Wib45zCsEaMccMLJtwvvy4iNhjPw/nFCaqjwfjdq1CnTcRJBCMihJ21E
-         zFmtPmVbvrF61+el/L4RabzSYRUWrJwXBryc0K6k1zK4vz5tWcanvV39FZewQVu0XMkP
-         TRJar/DDvoj7pF4ebQu82YsyxlJvrJyAS8RYJNkIJG9iV07A7h1ljF82HnmC7OnzeEcE
-         4iog==
-X-Forwarded-Encrypted: i=1; AJvYcCXQ5wwwTV4btR/nmVfaw80kBkpXtW7dwQZ5X4nNMi+tWwM+5DTYw2HW07cnW4BqhH0qxODVfU1A/A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywa7MSNXqM6aczq/6j1qh07t2ECGfg4BDlM45fiphFMG9DJke9i
-	UIjKg0R7l/061KEBdRa4QuuUFXM6rdHliB9gw1K0w0NvsgysHCnt6G43
-X-Gm-Gg: AY/fxX7Ltus1N9alOdG9DEDfkel0WE+0AZJPABICkE/X2G2538BSZ0KbG4aiQQdktdc
-	IQIFfdU5JHob0IXDOnIrqaI0Eqt6uYpZ6d02uUluLRRpPsTQ0oov6thGHka/gu1qHkFg45ixo8u
-	koqdaSJSqY6pIKsHSH670Wldb04GEPn36UkoYSJtXIpiVP9j1AjZuIuIvM6IZncAZcW+yBCWlm6
-	XbUPHY3Vs7pWEUSMcdFfD3f7MelNGWsUKqt8jqeXK06BbE5TCRlRTR6ms3RBzvT1b0bjPhgudwM
-	jXP0R9taWQJXWSuI3qKT7deD3qsN4p8bYn57TWwIwwYz9IdZah8/MrneBP13sKSnZf/32gTj0Xu
-	hLkuX3H52nlWIYgH2Qx7Zb5lGL1e9Pq+5LgMN41XPsdnSB6qixap9ZEtJF/vwUn5wrsi3F8lzI/
-	aoubwyAZtnNhBF3QyG3ocyqnjmhXaqSIc/4FEaaQ2xbDtIG8k4n/jdvR88q/PIStukFAY6sEL6u
-	5gYdiYaZ36nJlRQBQ0X79u9NM/N6knO
-X-Google-Smtp-Source: AGHT+IFOhUPoNBwog45Pm9TL7FzCA1sp3oukPpoTWT6iUCTMKypbSZPVqb0VZiOgYc5YjqZK29Rrkw==
-X-Received: by 2002:a17:903:291:b0:2a0:afeb:fbb2 with SMTP id d9443c01a7336-2a3ee4f5a79mr156866405ad.60.1768242201853;
-        Mon, 12 Jan 2026 10:23:21 -0800 (PST)
+        bh=zcjtfYLr/hzQ7i+u9m84wCmIOhDfx7TiS5rWTLTDi7o=;
+        b=M64tE6CSuQkEHYVldoaEoCPr+DGUu0DFL1YkD71KijtNfzoJ4RxMjYakNLwrtwA7eQ
+         3J0d1Lv1XjSEhgD2T8HdppVlXtfXe4v05/TAl78W5jQ41uUD9HyoGrowdTc1Fv243lwC
+         s2fwW1NOnIliVSRIyCDJqf/GiVMp6mh83CJukcZWbobYRvM6Y3rG7FJOYFETLk3iA8IA
+         QXZfN8VRwDQm+NASuK7LwOU2fS+AYcdUcWYuhmFnpiew3fJJ7PKS9Od8k9jPtG2bDlWM
+         KzI4bjwonRMbMbDh78tlArliE2jYS1jxRvr5Gxf1jpJfatsvkvMUFIo4qWNCKOnQ8X7e
+         kINw==
+X-Forwarded-Encrypted: i=1; AJvYcCXv0f/n+bY6tyLquM0tUk0liKVWtAORrnoNS+IVZpJjmYaitAUCCYRDY6m/ruY7MboieCB6rTgxXg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpFFtaoO7dwW4g5VwCaDE8PdQ2lNWU7dsbZCWOTQc5R4ztaAb7
+	qUgPXMdyjXRQHNSNE0PZ7dfpcMcVYTtdQE7lAazvjQeESYY2gqaqi1G6t+V/bg==
+X-Gm-Gg: AY/fxX5ukORDT+PKP7avwaXiZQihTGOafmtCJ/jdR/1kzF4zp01YzIoMLMo58x3E8L5
+	1u7UqvT+t8ZU8dRDXy6wYajkW7zRElO8r+BUaP2GSLCOOo+FXkFrOLK8YAOjoIzv8cWBbdhfxaG
+	jxBJcKggHjb6lwlEZraQ5qudzWIFrj5aAfImxxz+oXxLlhSuGBB6fCGgqcOjc10pRXXG2N+9Zlu
+	MXsIn1otoaz24b70nJKZiTmw/TFu9iBfbNbkid5CtgP5WxEzrLZj73tCkCmtX86QL3cJ7IzWu1i
+	bQGIyBCnfHdPFhJGRFfJxLLrqavhkFBhyaz0QGaUNEG8OixeTjsllKYNHwkUWprtR0BfMRBwL5J
+	7TDj/IxWdlhYHCYDzggZ4/0GBhZgkWU4P+LaEpPA/gX8SEH6Nd6AKfmOFKvVyqIN31M8lqPRT4R
+	O5DkF8pP515if7DYESUmsYGyUIRDpFHTltW196Nm0KB8A4AlTd4YhwlvwME4g1acXmvw1I09nC7
+	wlyscFKgiqZ2N6xOkGU4A==
+X-Google-Smtp-Source: AGHT+IEhhjkMRhLtfe06HmVUiVLdJt4MdPUnRHhK5mx9O/EoN/yul2X9MrifSFUaAnpKZe76DRHW3A==
+X-Received: by 2002:a05:6a20:430f:b0:366:14ac:8c72 with SMTP id adf61e73a8af0-3898f9db825mr17301674637.72.1768243931042;
+        Mon, 12 Jan 2026 10:52:11 -0800 (PST)
 Received: from visitorckw-work01.c.googlers.com.com (25.118.81.34.bc.googleusercontent.com. [34.81.118.25])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cc794asm180981205ad.70.2026.01.12.10.23.20
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c4cca06b16fsm18874197a12.31.2026.01.12.10.52.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 12 Jan 2026 10:23:21 -0800 (PST)
+        Mon, 12 Jan 2026 10:52:10 -0800 (PST)
 From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: geert@linux-m68k.org,
-	sre@kernel.org
+To: airlied@gmail.com,
+	simona@ffwll.ch,
+	maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org,
+	tzimmermann@suse.de,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	dmitry.torokhov@gmail.com,
+	sre@kernel.org,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	lgirdwood@gmail.com,
+	broonie@kernel.org
 Cc: jserv@ccns.ncku.edu.tw,
 	eleanor15x@gmail.com,
+	dri-devel@lists.freedesktop.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org,
+	linux-input@vger.kernel.org,
 	linux-pm@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-sound@vger.kernel.org,
 	Kuan-Wei Chiu <visitorckw@gmail.com>
-Subject: [PATCH 2/2] m68k: virt: Switch to qemu-virt-ctrl driver
-Date: Mon, 12 Jan 2026 18:22:57 +0000
-Message-ID: <20260112182258.1851769-3-visitorckw@gmail.com>
+Subject: [PATCH v3 5/6] dt-bindings: sound: google,goldfish-audio: Convert to DT schema
+Date: Mon, 12 Jan 2026 18:50:43 +0000
+Message-ID: <20260112185044.1865605-6-visitorckw@gmail.com>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-In-Reply-To: <20260112182258.1851769-1-visitorckw@gmail.com>
-References: <20260112182258.1851769-1-visitorckw@gmail.com>
+In-Reply-To: <20260112185044.1865605-1-visitorckw@gmail.com>
+References: <20260112185044.1865605-1-visitorckw@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -96,140 +112,89 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Register the "qemu-virt-ctrl" platform device during board
-initialization to utilize the new generic power/reset driver.
-
-Consequently, remove the legacy reset and power-off implementations
-specific to the virt machine. The platform's mach_reset callback is
-updated to call do_kernel_restart(), bridging the legacy m68k reboot
-path to the generic kernel restart handler framework for this machine.
+Convert the Android Goldfish Audio binding to DT schema format.
+Move the file to the sound directory to match the subsystem.
+Update the example node name to 'sound' to comply with generic node
+naming standards.
 
 Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 ---
- arch/m68k/virt/config.c   | 42 +--------------------------------------
- arch/m68k/virt/platform.c | 20 ++++++++++++++++---
- 2 files changed, 18 insertions(+), 44 deletions(-)
+Changes in v3:
+- Use decimal format for interrupts in the example.
 
-diff --git a/arch/m68k/virt/config.c b/arch/m68k/virt/config.c
-index 632ba200ad42..b338e2a8da6a 100644
---- a/arch/m68k/virt/config.c
-+++ b/arch/m68k/virt/config.c
-@@ -13,18 +13,6 @@
- 
- struct virt_booter_data virt_bi_data;
- 
--#define VIRT_CTRL_REG_FEATURES	0x00
--#define VIRT_CTRL_REG_CMD	0x04
+ .../devicetree/bindings/goldfish/audio.txt    | 17 ---------
+ .../bindings/sound/google,goldfish-audio.yaml | 38 +++++++++++++++++++
+ 2 files changed, 38 insertions(+), 17 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/goldfish/audio.txt
+ create mode 100644 Documentation/devicetree/bindings/sound/google,goldfish-audio.yaml
+
+diff --git a/Documentation/devicetree/bindings/goldfish/audio.txt b/Documentation/devicetree/bindings/goldfish/audio.txt
+deleted file mode 100644
+index d043fda433ba..000000000000
+--- a/Documentation/devicetree/bindings/goldfish/audio.txt
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Android Goldfish Audio
 -
--static struct resource ctrlres;
+-Android goldfish audio device generated by android emulator.
 -
--enum {
--	CMD_NOOP,
--	CMD_RESET,
--	CMD_HALT,
--	CMD_PANIC,
--};
+-Required properties:
 -
- static void virt_get_model(char *str)
- {
- 	/* str is 80 characters long */
-@@ -33,25 +21,9 @@ static void virt_get_model(char *str)
- 		(u8)(virt_bi_data.qemu_version >> 16),
- 		(u8)(virt_bi_data.qemu_version >> 8));
- }
+-- compatible : should contain "google,goldfish-audio" to match emulator
+-- reg        : <registers mapping>
+-- interrupts : <interrupt mapping>
 -
--static void virt_halt(void)
--{
--	void __iomem *base = (void __iomem *)virt_bi_data.ctrl.mmio;
+-Example:
 -
--	iowrite32be(CMD_HALT, base + VIRT_CTRL_REG_CMD);
--	local_irq_disable();
--	while (1)
--		;
--}
--
- static void virt_reset(void)
- {
--	void __iomem *base = (void __iomem *)virt_bi_data.ctrl.mmio;
--
--	iowrite32be(CMD_RESET, base + VIRT_CTRL_REG_CMD);
--	local_irq_disable();
--	while (1)
--		;
-+	do_kernel_restart(NULL);
- }
- 
- /*
-@@ -113,20 +85,8 @@ void __init config_virt(void)
- 		 virt_bi_data.tty.mmio);
- 	setup_earlycon(earlycon);
- 
--	ctrlres = (struct resource)
--		   DEFINE_RES_MEM_NAMED(virt_bi_data.ctrl.mmio, 0x100,
--					"virtctrl");
--
--	if (request_resource(&iomem_resource, &ctrlres)) {
--		pr_err("Cannot allocate virt controller resource\n");
--		return;
--	}
--
- 	mach_init_IRQ = virt_init_IRQ;
- 	mach_sched_init = virt_sched_init;
- 	mach_get_model = virt_get_model;
- 	mach_reset = virt_reset;
--	mach_halt = virt_halt;
--
--	register_platform_power_off(virt_halt);
- }
-diff --git a/arch/m68k/virt/platform.c b/arch/m68k/virt/platform.c
-index 1560c4140ab9..764f556b4b32 100644
---- a/arch/m68k/virt/platform.c
-+++ b/arch/m68k/virt/platform.c
-@@ -30,7 +30,10 @@ static int __init virt_platform_init(void)
- 		DEFINE_RES_MEM(virt_bi_data.rtc.mmio + 0x1000, 0x1000),
- 		DEFINE_RES_IRQ(virt_bi_data.rtc.irq + 1),
- 	};
--	struct platform_device *pdev1, *pdev2;
-+	const struct resource virt_ctrl_res[] = {
-+		DEFINE_RES_MEM(virt_bi_data.ctrl.mmio, 0x100),
-+	};
-+	struct platform_device *pdev1, *pdev2, *pdev3;
- 	struct platform_device *pdevs[VIRTIO_BUS_NB];
- 	unsigned int i;
- 	int ret = 0;
-@@ -57,19 +60,30 @@ static int __init virt_platform_init(void)
- 		goto err_unregister_tty;
- 	}
- 
-+	pdev3 = platform_device_register_simple("qemu-virt-ctrl",
-+						PLATFORM_DEVID_NONE,
-+						virt_ctrl_res,
-+						ARRAY_SIZE(virt_ctrl_res));
-+	if (IS_ERR(pdev3)) {
-+		ret = PTR_ERR(pdev3);
-+		goto err_unregister_rtc;
-+	}
+-	goldfish_audio@9030000 {
+-		compatible = "google,goldfish-audio";
+-		reg = <0x9030000 0x100>;
+-		interrupts = <0x4>;
+-	};
+diff --git a/Documentation/devicetree/bindings/sound/google,goldfish-audio.yaml b/Documentation/devicetree/bindings/sound/google,goldfish-audio.yaml
+new file mode 100644
+index 000000000000..d395a5cbc945
+--- /dev/null
++++ b/Documentation/devicetree/bindings/sound/google,goldfish-audio.yaml
+@@ -0,0 +1,38 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/sound/google,goldfish-audio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 	for (i = 0; i < VIRTIO_BUS_NB; i++) {
- 		pdevs[i] = virt_virtio_init(i);
- 		if (IS_ERR(pdevs[i])) {
- 			ret = PTR_ERR(pdevs[i]);
--			goto err_unregister_rtc_virtio;
-+			goto err_unregister_virtio;
- 		}
- 	}
- 
- 	return 0;
- 
--err_unregister_rtc_virtio:
-+err_unregister_virtio:
- 	while (i > 0)
- 		platform_device_unregister(pdevs[--i]);
-+	platform_device_unregister(pdev3);
-+err_unregister_rtc:
- 	platform_device_unregister(pdev2);
- err_unregister_tty:
- 	platform_device_unregister(pdev1);
++title: Android Goldfish Audio
++
++maintainers:
++  - Kuan-Wei Chiu <visitorckw@gmail.com>
++
++description:
++  Android goldfish audio device generated by Android emulator.
++
++properties:
++  compatible:
++    const: google,goldfish-audio
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    sound@9030000 {
++        compatible = "google,goldfish-audio";
++        reg = <0x9030000 0x100>;
++        interrupts = <4>;
++    };
 -- 
 2.52.0.457.g6b5491de43-goog
 
