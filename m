@@ -1,43 +1,44 @@
-Return-Path: <linux-pm+bounces-40622-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40628-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF281D104BE
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jan 2026 02:56:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 011ACD104E8
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jan 2026 02:58:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4E6AC3026529
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jan 2026 01:56:07 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EE74930B8FD4
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Jan 2026 01:56:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B69CB23E350;
-	Mon, 12 Jan 2026 01:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2917923E350;
+	Mon, 12 Jan 2026 01:56:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3F523BD1D;
-	Mon, 12 Jan 2026 01:56:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 102D31A724C;
+	Mon, 12 Jan 2026 01:56:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768182966; cv=none; b=IfbR0X2CVku87WmaCY0VJR5s8PmkKVLTUuAgUkk5oNG8vYSLcfy7mthOfUKnivu6BQn2AZimj8+s2rhcSQPkXP1NoYVfElUwA5ecnAX9VRLMn4dlUGDwx02LU+ZUj49eawpkRXx6zl9JrJh0VBadDxHgPGBiO2jRdwHRycXZ0IA=
+	t=1768182977; cv=none; b=DjrdplQ2WyDMsv8HlK2Tll8XqOXJ/ztjgt4oJTqqHWfH/jWzLYXntYH82ryBk0cMr5cJlhEQ+uA0icmPDnaucsMIuwffVCK6D++pkZwl74l6t4o00LFtciAL3bDG4TMVUMN+eIbhDuUAk81iJEmUGc7a4z5ScZ5DSuc44vOGefE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768182966; c=relaxed/simple;
-	bh=rJ40Onk2WfUIDqCrJg2CPci+mjzX7eyFpqmDoDAOQcg=;
-	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=UMgB+GnpNo8cZivB01RcxopTVgm3GcThi8H9kD8Mfto/avr5nF+utiEXJgG5WWST8u0C+oF+liJCPNo5AHueXwK52XNxQ540au76ICFwg9ZqYvKoQrhU3xHIzVWOlJ/6AK0MKV331ihHv5yLRDzjP9S0G1SU/xyWuBshwgryqwU=
+	s=arc-20240116; t=1768182977; c=relaxed/simple;
+	bh=9clN++4Z4iquPbDAcNzpXt4fUsMtmuB7a52J4o4Rzic=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=GRF9TdNJAe07ZJj7tt226CJM0KDYzr1wD64uWeaEDdLFvjyRl0TtOV0S1sbVE0tCQ+8Kd2nPJQ+j1GBTDERt0jhKMAiYxwXHNTI/ZQX8fitfzyGZHuJiWAF9/9q7fd0f5wxiPRrhOJL4aeUFmiiKrkzjG4hyMdjvtJ75YUcmMlk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 324F1C4AF0C;
-	Mon, 12 Jan 2026 01:56:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E4BC2BCB2;
+	Mon, 12 Jan 2026 01:56:08 +0000 (UTC)
 Received: by venus (Postfix, from userid 1000)
-	id 1DC23180616; Mon, 12 Jan 2026 02:56:04 +0100 (CET)
+	id 2C11B180749; Mon, 12 Jan 2026 02:56:04 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-In-Reply-To: <20251126171859.72465-2-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20251126171859.72465-2-krzysztof.kozlowski@oss.qualcomm.com>
-Subject: Re: [PATCH] power: supply: sysfs: Constify pointer passed to
- dev_attr_psp()
-Message-Id: <176818296411.643060.2005068815402392167.b4-ty@collabora.com>
+To: Sebastian Reichel <sre@kernel.org>, 
+ Anton Vorontsov <avorontsov@ru.mvista.com>, 
+ Marek Vasut <marek.vasut@gmail.com>, Waqar Hameed <waqar.hameed@axis.com>
+Cc: kernel@axis.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <cover.1766270196.git.waqar.hameed@axis.com>
+References: <cover.1766270196.git.waqar.hameed@axis.com>
+Subject: Re: (subset) [PATCH 0/3] power: supply: wm97xx: Fix NULL pointer
+ dereference in power_supply_changed()
+Message-Id: <176818296417.643060.10579242574378526613.b4-ty@collabora.com>
 Date: Mon, 12 Jan 2026 02:56:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -50,17 +51,21 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.3
 
 
-On Wed, 26 Nov 2025 18:19:00 +0100, Krzysztof Kozlowski wrote:
-> Memory pointer by pointer passed to dev_attr_psp() is not modified, so
-> with help of container_of_const() (preferred than container_of()) can be
-> made pointer to const for code safety.
+On Sat, 20 Dec 2025 23:46:24 +0100, Waqar Hameed wrote:
+> The majority of the drivers in `drivers/power/supply/` do the right
+> thing when registering an interrupt handler and the `power_supply`
+> handle; namely making sure that the interrupt handler only runs while
+> the `power_supply` handle is valid. This driver requests the IRQ a
+> little too soon, and this can lead to a nasty NULL pointer dereference
+> as thoroughly explained in the commit message. This patch series also
+> contains some other related clean-ups that makes life a little easier.
 > 
-> 
+> [...]
 
 Applied, thanks!
 
-[1/1] power: supply: sysfs: Constify pointer passed to dev_attr_psp()
-      commit: 2c7e46e1318d4fbf514f454d5a746a1b76d06ebe
+[1/3] power: supply: wm97xx: Fix NULL pointer dereference in power_supply_changed()
+      commit: 39fe0eac6d755ef215026518985fcf8de9360e9e
 
 Best regards,
 -- 
