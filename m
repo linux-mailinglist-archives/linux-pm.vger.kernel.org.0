@@ -1,145 +1,181 @@
-Return-Path: <linux-pm+bounces-40758-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40759-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8C76D1A913
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 18:17:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75504D1A982
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 18:23:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8CA4F3063E64
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 17:16:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 33C27302AFA2
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 17:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87A44350D60;
-	Tue, 13 Jan 2026 17:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 941EA32B98F;
+	Tue, 13 Jan 2026 17:23:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ceqS5wOJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I4OE6i6l"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A702E9749;
-	Tue, 13 Jan 2026 17:16:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20E512EC090
+	for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 17:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768324562; cv=none; b=V7ob23fv6HLs2EF74dt+DS+wIiD/d24Drs/JbAszUFQ10ZRty1JOJkxqNLQ4FomGaxlzB5tYi3bC08V7kgMtTji3VEP7BxlMh+YJoV51YGsFP+KMAyyg1EOikY30gsNVwJXuT7gkhlx93UJHvsHcXp9QD274Dr0jMLTnV7R4FAE=
+	t=1768325017; cv=none; b=bU2SpKfHHx4AF/Iobksxxvv8YMizi2p1JSiAcu/18jZh5swSJPdSKVwH7X30XzpeSsSSoG0bWIZK4wqz1nK8o6kCnwQ2LjvE5zn/gtzFBEbC1O/4X4tU5Jr61CHluWxerIhLE9f3Ofv6aOvXTV1dEIuV4bZrkllf8cC7+HSNuqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768324562; c=relaxed/simple;
-	bh=sBc6VAi4e2uXwVmEHe+k/tZ/kE1s+VqQvdAg/NmnaE4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PCaYV/FmwqumryvhKom+KxIftHnCeZLmeMRX7lU+1CjdkzQks95wLdPaQS+Eif1u3vwOYkN4cpfNl2GKk3LFLhspVQC65ToZWPb6zFVRGoyf8AuX+saEeA4xJX8u2SK1FT44rVF9SkGwzabqXSPtunpVPV0HG1idd3eYrgyAfw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ceqS5wOJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6FA8C116C6;
-	Tue, 13 Jan 2026 17:16:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768324562;
-	bh=sBc6VAi4e2uXwVmEHe+k/tZ/kE1s+VqQvdAg/NmnaE4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ceqS5wOJhyhHKTzNPr1OEjs7fqfGGIs7pzNIjMVapws6zbIGxavQvGAtw2l2qde36
-	 h2F37eL7yNqGjI+mmdISQDml2pETMveJehHQUrolcajvhFGjdn4DG5iri0084G8MaV
-	 qaaE3/fg+y5VXZvUZRCdZXZwk2YrLFOVa/ozNZdxOo1ahh5AdklyNoEKRITwnD35v4
-	 kvTpumKpjV02yoCp+c9kyZEu0kFp3bUdPNYbuYd6EYsZ9ZZ9ubmZxU3lsOkxsrhMNF
-	 c18Y+97gwM8TnjQpUZbzO9mzXoefBUZLdlbycP7Yw7Ovs28JVjRtiCS9QFBIls6mXS
-	 V54v/GeMHL4FQ==
-Date: Tue, 13 Jan 2026 11:16:01 -0600
-From: Rob Herring <robh@kernel.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Hans de Goede <hansg@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	"Derek J. Clark" <derekjohn.clark@gmail.com>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bartosz Golaszewski <brgl@kernel.org>, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org,
-	Stephan Gerhold <stephan.gerhold@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v4 5/9] dt-bindings: connector: Add PCIe M.2 Mechanical
- Key E connector
-Message-ID: <20260113171601.GB3925312-robh@kernel.org>
-References: <20260112-pci-m2-e-v4-0-eff84d2c6d26@oss.qualcomm.com>
- <20260112-pci-m2-e-v4-5-eff84d2c6d26@oss.qualcomm.com>
+	s=arc-20240116; t=1768325017; c=relaxed/simple;
+	bh=P7aE1Qa3WVLlpttH3UXpmJbSePs8WKbe0bTGb7NXfWM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dMehuEOQPvdL/GNtfl8Ty9AB34uNu1aHOpnwUnXgeeoq703Hz/Gzjft6r+gbCphv1Iny80HPv9O7zl1l5spIr3VoUvSPcpsd/xgf6UVvL7Y0jhTcoUka0O66Tsdx7DdEK6avU4ERTJaqrMMdbNz9v/HuHasUw2bSsli4iIOj4/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I4OE6i6l; arc=none smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-50146fcf927so299261cf.0
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 09:23:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768325015; x=1768929815; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z5Bnm7HgbucF89WDkbcJd+qDxBtmrALRfhqTrZMCy6Y=;
+        b=I4OE6i6lnUGujiomvv9KF4mrH3ytoogxdfL61d0eITz7I8UPxXxXSJhietWWSul1o7
+         8j/SP9dKuwIiIa382i7UWb5Qv7vPV+wzXsd2tp8fv4Uep3H+wYknI41NkuaKN4HZLaWU
+         nPALxloYiGRjyhaRY5AeejBDgX18pDykOqxCnY8awBgqcCNgSYCx+GIn9ADj5BjKrc2m
+         6SS4FQHLfR1J9Br4U7+N5IW3+ROR9oRJkQ0SsOR9umNqF/yWcT/sL1iX4Ulj1y0VWAtW
+         796WuhvL8NJ0FMSdLUpiSDSsHf62/ULROzNc6E8gqaEPnmFLVFmd/Pg8UD4mIrmVu6rd
+         YtTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768325015; x=1768929815;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z5Bnm7HgbucF89WDkbcJd+qDxBtmrALRfhqTrZMCy6Y=;
+        b=SxKqQY75nP6Ot7tzt104eVWCcloAyYi/XkLG11lY+YvAorXETJr4L3RsQbNJrg/23m
+         7HTQs5CWYR/Lt0PfqJOtb9Okdg+kTETYv9VhC8aCUzsYFFBOMCbx2h0jAiBTE3BM0ALs
+         ZzbylvWobP0512DvQgdo/93XFgIpr2nozJH4jCuPUGnw3tHAw5Dw5vbmd/wPGZooRkEl
+         Jfewp/7V/W8Y7ABhvWeRRbeVTHWzSg50wxUbrppKvaByTAxEoSKTzUwu+G92hRIoPK/e
+         1mkPQxSvtCdKUTeTWBGtRsogF/SXTfmuy0E+f6XPDeW4bwSNPwcdvhV6W+xDgnifObFV
+         DFDA==
+X-Forwarded-Encrypted: i=1; AJvYcCXUXsujLoVJb10YZQ2q11CSm2X7dvX7iJXzQrwiTL2b21StKx5Gcb4QenSfRkCrIC50WEzjKAwV8g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9ROGfvpO4b4U1t0DodDwWyPnBnsKOuxI3J8owpm09V33QgzQE
+	f0ha8HB6Z6J9m1aVRvKK/V1XeNf+44P0NzEPo+PE84z7D5BbxsLOAQgO
+X-Gm-Gg: AY/fxX4RFJju7bFjLqHD4cAFeGqh07b4+qbZYF4y63HJBVv/XdAuq/ImKxlaE+b7W6u
+	Z+Kb6FRjAYTfir13EERFlWys0td977/kBJWYcimVFXpLJ7ifthrHWGHcXaOrRrnhdDpL08E+ojG
+	bSqGmR6H2P3UB0UFxqLOcRxXHGRCmx9M5vxvXlRqYUzOlb2qzp1nAOaBgzA/4XQjUXi3jWN+PVp
+	jrzT88NxUbQLmbwc3puw7NfmHSqG/8cIcp7RCi95NMxfZye0H6VQFhKkCGqS1wgPufaMpvC1+Ps
+	vNMS4tqbNnQ+NKbZRD4l2VSbpm6wErLyGpI7Zc53r2hDJbI18GkMQRe0mSdGGVkHVcMlvT3a2yf
+	9zkHPVT5EZ8otuQIYRBdMn9QIbW2qu1HNvYgYCOC0Pb2nZJD3+XCC2jCMkoBQibvP2R0GxxHq8i
+	mANOR/rQR94iVJhsb437Q1dMWOZ8ayo8kHB6yxlA==
+X-Google-Smtp-Source: AGHT+IFRuEumeFruv6mA2Hy4fQiK41BpjEOJSmGvbRDdB5MnNJjmYB/QnnJKE/+rie6ONCbWC7LSdg==
+X-Received: by 2002:ac8:6f19:0:b0:4b3:8ee:520c with SMTP id d75a77b69052e-50139784c7emr46319131cf.19.1768325015003;
+        Tue, 13 Jan 2026 09:23:35 -0800 (PST)
+Received: from [192.168.0.155] ([170.10.253.128])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4ffb9e97ef2sm122859951cf.10.2026.01.13.09.23.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Jan 2026 09:23:34 -0800 (PST)
+Message-ID: <5f33c687-63e3-4d3a-8117-106b41584c53@gmail.com>
+Date: Tue, 13 Jan 2026 13:23:33 -0400
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260112-pci-m2-e-v4-5-eff84d2c6d26@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: max77620: fix kernel-doc for
+ max77620_thermal_read_temp
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20251201054036.2143455-1-vivek.balachandhar@gmail.com>
+ <2a3dc51e-ead2-4612-bf7f-6cdb49bf9570@gmail.com>
+ <12ba1c1d-fb20-476c-ae24-3e1007afb199@arm.com>
+Content-Language: en-CA
+From: Vivek BalachandharTN <vivek.balachandhar@gmail.com>
+In-Reply-To: <12ba1c1d-fb20-476c-ae24-3e1007afb199@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 12, 2026 at 09:56:04PM +0530, Manivannan Sadhasivam wrote:
-> Add the devicetree binding for PCIe M.2 Mechanical Key E connector defined
-> in the PCI Express M.2 Specification, r4.0, sec 5.1.2. This connector
-> provides interfaces like PCIe or SDIO to attach the WiFi devices to the
-> host machine, USB or UART+PCM interfaces to attach the Bluetooth (BT)
-> devices. Spec also provides an optional interface to connect the UIM card,
-> but that is not covered in this binding.
-> 
-> The connector provides a primary power supply of 3.3v, along with an
-> optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
-> 1.8v sideband signaling.
-> 
-> The connector also supplies optional signals in the form of GPIOs for fine
-> grained power management.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> ---
->  .../bindings/connector/pcie-m2-e-connector.yaml    | 154 +++++++++++++++++++++
->  MAINTAINERS                                        |   1 +
->  2 files changed, 155 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
-> new file mode 100644
-> index 000000000000..b65b39ddfd19
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
-> @@ -0,0 +1,154 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/connector/pcie-m2-e-connector.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: PCIe M.2 Mechanical Key E Connector
-> +
-> +maintainers:
-> +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> +
-> +description:
-> +  A PCIe M.2 E connector node represents a physical PCIe M.2 Mechanical Key E
-> +  connector. Mechanical Key E connectors are used to connect Wireless
-> +  Connectivity devices including combinations of Wi-Fi, BT, NFC to the host
-> +  machine over interfaces like PCIe/SDIO, USB/UART+PCM, and I2C.
-> +
-> +properties:
-> +  compatible:
-> +    const: pcie-m2-e-connector
-> +
-> +  vpcie3v3-supply:
-> +    description: A phandle to the regulator for 3.3v supply.
-> +
-> +  vpcie1v8-supply:
-> +    description: A phandle to the regulator for VIO 1.8v supply.
-> +
-> +  ports:
+Thanks a lot, Lukasz — appreciate the review.
 
-Also, nodes go after all properties.
+Understood regarding the Fixes/stable point.
+I’ll make sure to include a Fixes tag for similar cases in future 
+contributions.
 
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +    description: OF graph bindings modeling the interfaces exposed on the
-> +      connector. Since a single connector can have multiple interfaces, every
-> +      interface has an assigned OF graph port number as described below.
+Thanks again.
+
+Best
+Vivek
+
+
+On 2026-01-13 8:30 a.m., Lukasz Luba wrote:
+> Hi Vivek,
+>
+> On 1/13/26 01:54, Vivek BalachandharTN wrote:
+>> Hi Rafael, Daniel,
+>>
+>> Just a gentle follow-up on this patch — I wanted to check if there 
+>> are any concerns or if any changes are needed from my side.
+>>
+>> Happy to revise or resend if required.
+>
+> I think it was just missed.
+>
+>>
+>> Thanks for your time.
+>>
+>> Best,
+>> Vivek
+>>
+>>
+>> On 2025-12-01 1:40 a.m., Vivek BalachandharTN wrote:
+>>> Building with W=1 reports a kernel-doc warning in
+>>> drivers/thermal/max77620_thermal.c:
+>>>
+>>>    Warning: max77620_thermal.c:47 function parameter 'tz'
+>>>    not described in 'max77620_thermal_read_temp'
+>>>
+>>> Update the kernel-doc comment for max77620_thermal_read_temp() to match
+>>> the current function prototype. Replace the stale @data entry with @tz
+>>> and describe the thermal zone device argument so that all parameters 
+>>> are
+>>> documented.
+>>>
+>>> This fixes the W=1 kernel-doc warning and keeps the documentation in
+>>> sync with the code.
+>>>
+>>> Signed-off-by: Vivek BalachandharTN<vivek.balachandhar@gmail.com>
+>>> ---
+>>>   drivers/thermal/max77620_thermal.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/thermal/max77620_thermal.c 
+>>> b/drivers/thermal/max77620_thermal.c
+>>> index 85a12e98d6dc..8d37a04eb5a8 100644
+>>> --- a/drivers/thermal/max77620_thermal.c
+>>> +++ b/drivers/thermal/max77620_thermal.c
+>>> @@ -32,7 +32,7 @@ struct max77620_therm_info {
+>>>     /**
+>>>    * max77620_thermal_read_temp: Read PMIC die temperatue.
+>>> - * @data:    Device specific data.
+>>> + * @tz:    Thermal zone device
+>>>    * @temp:    Temperature in millidegrees Celsius
+>>>    *
+>>>    * The actual temperature of PMIC die is not available from PMIC.
+>
+>
+> The patch looks good. Although, I'm not sure if such change
+> should go through the stable tree.
+> Usually we would ask you to add 'Fixes:' line with the
+> hash of the commit which left that stale comment in this case.
+> If we were strict to the processes that should be there.
+> If we judge the effort and traffic for stable-linux folks
+> I would say, not needed.
+>
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+>
+> Regards,
+> Lukasz
+>
 
