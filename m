@@ -1,227 +1,144 @@
-Return-Path: <linux-pm+bounces-40691-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40698-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31DF4D15168
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jan 2026 20:37:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76512D162AD
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 02:30:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D7569303C2BB
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Jan 2026 19:37:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 37065300D43C
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 01:30:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EED6264FBD;
-	Mon, 12 Jan 2026 19:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8871A1DF248;
+	Tue, 13 Jan 2026 01:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="30Hqqb/Q"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HmOLztkH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-dl1-f49.google.com (mail-dl1-f49.google.com [74.125.82.49])
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B1832471B
-	for <linux-pm@vger.kernel.org>; Mon, 12 Jan 2026 19:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356A1173
+	for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 01:30:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768246666; cv=none; b=Zt0b4OMQEucrCQInFcvRMUkY9zCy+rGNOWDkcbb7CqGBxG4dJIzQteiVxDI6MUsFhv2Chw+sSwhz6VnMxbNanTHiUMBzi8FRLZZIcotoMx7QschoyQCIRxwyUzWJMHvMq2blrgs85rtRXNH8Xv6q5r+dlJpgsSKW0Dq3wSRrQ4w=
+	t=1768267846; cv=none; b=J2RtNimOe2ezPzdAQIY5vd3NGKRNla0QmW+SZd+X1UgHfpstDH5L9nRwtJd/Rf4s+4xkSZ884EqhRxP1MXa19FA49zilqlJ31g72vYSSH2XoITZpVYvUnWyE+ttAPZ2nxnPVsUo4iip4NppzF4B8SiZGa+Z4Q1yhh8N6JOZyXPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768246666; c=relaxed/simple;
-	bh=kCNuLKa3OcBY6DWrPNqUq+zuzLUQGDhG7wkIuXt18dM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U1DOqUnf7rXKiy4vO2kBrHY1JVZyc6oG7L+p627Q6Tg1cFtUFKJaXa/vQGfHlznxe2rHLegJdgneyzjlpv4LEjIyV4V1vis+OwZshaGU4CKEgCOawgxCMqSVj8RQYM2Izd46Be1RkkFLzg18zZgB/8tm7NBm5UtuylxijmqEzfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=30Hqqb/Q; arc=none smtp.client-ip=74.125.82.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-dl1-f49.google.com with SMTP id a92af1059eb24-11f42e971d6so1769091c88.0
-        for <linux-pm@vger.kernel.org>; Mon, 12 Jan 2026 11:37:44 -0800 (PST)
+	s=arc-20240116; t=1768267846; c=relaxed/simple;
+	bh=a/5rTh71GT21U7kcypqP8f0I+CjObQ+k0IbOvQTe0Ew=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=laQuEdNWmFC9VN4rowqM2Ru7pnXMUwggot2/QSQFdFVKaiOIAIORZ86OoYgEzs0NSXjoG+LkdRxJt+ZHS+GhE2XsslZs/69XDEMPivVvDaLgUKOBbYOkOhm1VRofPRTf7YyJrcAesf3od3bLS4rkkaIXAqB08jFgTGbRW6LMjUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HmOLztkH; arc=none smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c2dc870e194so3626475a12.2
+        for <linux-pm@vger.kernel.org>; Mon, 12 Jan 2026 17:30:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768246663; x=1768851463; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MMKzD4neKMQA/a71hLZaF9K+onAvp6LuTb7/ocIRVF8=;
-        b=30Hqqb/Qg2M/DClti7RHUsO+bjKz5um6j/PP38je7T6hzY+F81eKQdpUUe90FNkYZ9
-         K6NxlxJuym74IBjIuqdT6q5bBk55d042HV7DOfmdi5BxtX8UhsYUagRCVGpdbF+4e/xo
-         wsRwEjty5yIG/FyYbaqul+TVca/ukDii1i7ExgICs9o7I6RribQekPjhJyNx5eZcUSbo
-         cRdBcXSZfQQ+KTyiFN9ACq6VmBunxro3WsuH6vasiw1tC3pBfIhGyPk+qOFaME5eMMvw
-         6Bnwfy8uIqF9++ZkPerBWdrBrLXYBfy0Vc8SPfS8TWv7FYXmbhqFD2bMx4cECL2icqg+
-         XlQA==
+        d=linaro.org; s=google; t=1768267844; x=1768872644; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=58UqtPkFFGDQxORFFboEVUxGaEihGLqNoblI1MNIBio=;
+        b=HmOLztkHtZBv8vo+QEw/voKSFhtPGyhsD4HqhmVSLSgVFIXZXhcx8cakhNQ0kMKik+
+         Fu9ALr7Y7kgU7hDoNTiIf3OTjgMhEFM2Sceki5zy/6OFtwA8bT/oMknFmdBYX3usc/1N
+         ArwSLU4r+99C5mPOP68FK+/CLMNG4UCxMcjdyK3PhzEzym5OcEX3OaV1IKxoVo3ytFln
+         08r6O9lWBusODMUrlpmiS0lf1GCWPlC49bDMI8ltYPz4bJhvQTelYPaSxPjYFV0NdIYA
+         AA61WyV6kB4zU8pmpCBpBBPttCQXkRNQZtjC15px/l4q47IJ8oGwhHd5orBFy5O13aei
+         YPtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768246663; x=1768851463;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MMKzD4neKMQA/a71hLZaF9K+onAvp6LuTb7/ocIRVF8=;
-        b=qd3f6eE7J5JCqTcBzkHkJLgloy89WAqEILeAGUr5SDGKJz1vEJCXeiAp7GvxnKrxCJ
-         8AXhvX0FMejEYZTw0GRamxfbWeA5acO9wTQABrFBm6olWsWml7CnKZphBTulI1w5Wacn
-         9UB6d4nVVYQ1DV48Z1vZP6ZsBKVOPgHnRDoiNslRatSPEW+FOJIlzWoMdICGSUjeFCVw
-         YrbUZ0kLgI6HhqnhyEEPH25WkhiO/5NcDcWJSasaBw37gZ4h/rIsyZ+MRwqANFQRehcd
-         uxS2DT0d4uOOIkrZwTnBF0u/XroxrRNHfbh9TcP8Ov7qBUVWG1zJtP08Kfq/G0HAKIRW
-         hszw==
-X-Forwarded-Encrypted: i=1; AJvYcCUlB45s6kzSJ1uXgEEDXfMNPwWunpjASkx/6podl0ZAQtlK/aFGzovNdhmUOp4GvW8tL/aeBU2pAQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxT2+qTp+OXwYFyknqpZTpq3xkpruRZ2/JjYfEqlGGIObciqMDQ
-	TzgGJD0ixGv2GHBwmeNL0TjfBXbhCNUZhjLnJSjtdtAcwlileJI/8+TYE7BT/yakSQ==
-X-Gm-Gg: AY/fxX6bmmwTQhAdHWobRnlUxgDqKdicnnIjEAT1OzItlXK9flMOgjg0CxMksWd4eKt
-	aB1YhnT4P/SxeK4OqJo0rwdZj96pqX5Ry9CZyqTHFY74/qi/N8pqkPS7exMNYZPjobNrI1k02+9
-	P6YXYW/Koi5Ik1ib5A18KcMJDIcBTGpSSyoq47lADCMUwWtGYsITLBeoI4fRHDRSvPcUFhdAPaT
-	rc5OlFyeaxhUrF5lzfcrwCzJLvJKN3KhIQk5jpK1eNi6qe3sBxIC2RIJkT1XXBWDBn/1IAt/n+Q
-	wAvdUjCUMXxvnBCmF0pfAs3SJ1n7EPYg4pW9Dv7Dt905PQxgC0pQKaabrP5cZyYO2FGbxJOVrAc
-	Yh1Bal8CzPhi1Nj/Jppj0lDUdRCibHIK2UC/xzxCxcg/S3sL0FOoa6AA2veqKKHPqt1pPO4sRmr
-	yLZP1uX0Js9ZBngsopYbPuPXB+r+kDLJv+X08UJJY6tWi4GcLYmVs9rYuzzIMhJwWNBADT1yk9U
-	5DDZg5XYePakg==
-X-Google-Smtp-Source: AGHT+IEmezECFIaAtAhii/tXhYAvteHOsxJwusDFq7+Qy4kltOc3o9BThd5irNt42thvcdsfukrSaA==
-X-Received: by 2002:a05:7301:29a5:b0:2b0:3d03:37db with SMTP id 5a478bee46e88-2b17d2e2b29mr11583342eec.35.1768246663076;
-        Mon, 12 Jan 2026 11:37:43 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e7c:8:8e84:2c31:d2b4:9c1f? ([2a00:79e0:2e7c:8:8e84:2c31:d2b4:9c1f])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b17078d818sm15886663eec.21.2026.01.12.11.37.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Jan 2026 11:37:42 -0800 (PST)
-Message-ID: <bb9b9afa-0bfa-428e-9372-549d9ba8603c@google.com>
-Date: Mon, 12 Jan 2026 11:37:40 -0800
+        d=1e100.net; s=20230601; t=1768267844; x=1768872644;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=58UqtPkFFGDQxORFFboEVUxGaEihGLqNoblI1MNIBio=;
+        b=cMLhYxma9mQrrcHdpvbOBrbAKv0iEBR/w4dCVGnxRs0gzdjWKoB7K/7vCqj+tS8FlE
+         nIgIQfMrKPx7T/8MbZD093A4Nn18bNBYUkH/kXu2EejVB0x74Tp2ng8WdZgkCsa7wfdt
+         Svr0xz+WISpia55m44vFgi+b3iZDVX/VCyFAUp/scwjsXBeEBK0mPzn4/yDAkmYShQbr
+         IgGTZ48x4Bes7COnSZWf205bbsDtlolo6BSTnXUX5knZYds9aQ85+oUXOFOa6Skat0Dh
+         N0+tu1EAuRN7+ZNuGrEU8uOlGoLB/MUH+aDdF6i9pnZOEDEuxXRwBL47tRvBu7H1WzZh
+         W4Bw==
+X-Forwarded-Encrypted: i=1; AJvYcCXUYSHzrpqjFF+SSJHxnVbNHioVYRnmZpu92NofIVhFs6xK5a3WqMAFzoFXiUwNBsDRJnhw22bgvQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywd4hNJ9tFgN3EfPPt1sDJB/r7nuQuf6kc6YK6csjIa8fPqcnQA
+	kpl22rRaYH4I2j9kusXWbf2nc1Wddw/ETPkGlVjkq2c95ijL5hgPx/9gKs9cjp7e6yw=
+X-Gm-Gg: AY/fxX5Z2lCh61BuaAdzUmLMiC1Ln0F/cw77MSyAmGrw41RLuazrGd+Iu6HfW0cP2nc
+	LVVmNrwJ1HVcw2Uia8UDvGDkRvlD8h7aKR/6pENr22KsNjd/8dtzGa/rD86I/c/4cNudCjWZNx5
+	UIqWd+K10GQcbjO9iaLUSf/CR62hPWLy4oozpVGSXIsw6bP3W5Z+xASzQHAzM8t150iKjj7uXIi
+	jJ/bJXcSt4aoCHagVQSGh2A/5f9c2llm9UdKPcMsbAcqlH9M8fqv9BhWSyYM3WGp0yZLfXa35DD
+	jbU4Zeu1mimXZDRhvTwL9cXH8Z1eUqc5b3FtWIpyfNQ8VQ4jA1tkPCKvDrzj138w8y4ZPvEqhBj
+	aVWfcpe9eh0bqJOyIBR4Nw5QZFdOJDZsrAMiKKvIzDwGRBhqOdoSgaNfG8Hfw33LN9cvi13CZQv
+	53kQ5Mwa2AoUQ=
+X-Google-Smtp-Source: AGHT+IGwAxsnzphJnaoHj9J1duApxVIL1q56mxfOQ8QBe/RBJnZ5avX9JIm0exOtxAXc6EicwXOzug==
+X-Received: by 2002:a05:6a20:3947:b0:344:97a7:8c6a with SMTP id adf61e73a8af0-3898f9cc49cmr20372155637.51.1768267843930;
+        Mon, 12 Jan 2026 17:30:43 -0800 (PST)
+Received: from localhost ([122.172.80.63])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c4cca06b77bsm18618105a12.33.2026.01.12.17.30.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Jan 2026 17:30:43 -0800 (PST)
+Date: Tue, 13 Jan 2026 07:00:40 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Pierre Gondois <pierre.gondois@arm.com>
+Cc: "zhenglifeng (A)" <zhenglifeng1@huawei.com>, 
+	linux-kernel@vger.kernel.org, Christian Loehle <christian.loehle@arm.com>, 
+	Ionela Voinescu <ionela.voinescu@arm.com>, Jie Zhan <zhanjie9@hisilicon.com>, Huang Rui <ray.huang@amd.com>, 
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
+	Perry Yuan <perry.yuan@amd.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] cpufreq: Update set_boost callbacks to rely on
+ boost_freq_req
+Message-ID: <ppzoeb4wod6jjhlvkiqogcd26v3shfh5cjiuq63r7bbnsyzzok@sdx5usgvcqzu>
+References: <20251208105933.1369125-1-pierre.gondois@arm.com>
+ <20251208105933.1369125-4-pierre.gondois@arm.com>
+ <14ad55ce-413f-46e0-9ce0-f35fc421056c@huawei.com>
+ <73da1186-5edd-4465-bd49-e18d9064a501@arm.com>
+ <ea9111b5-cd85-4526-a959-54d8037d6ffb@huawei.com>
+ <36630a40-b6e6-4bf6-8fa1-1a004e0d2798@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/5] power: supply: max77759: add charger driver
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
- <20251227-max77759-charger-v3-4-54e664f5ca92@google.com>
- <298ca35590d2180fdcf334f94964b6110e17c606.camel@linaro.org>
- <50c29a62-1fdb-4de2-8887-0d551eee5ec0@google.com>
- <255d7726-6758-43ed-b35f-db14726bcc9b@google.com>
- <2869d309358f27652289c40810ca36b2ec155d1d.camel@linaro.org>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <2869d309358f27652289c40810ca36b2ec155d1d.camel@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <36630a40-b6e6-4bf6-8fa1-1a004e0d2798@arm.com>
 
-Hi Andre',
+On 12-01-26, 16:02, Pierre Gondois wrote:
+> In:
+> cpufreq_set_policy()
+> \-cpufreq_driver->verify(&new_data)
+> � \-cpufreq_verify_within_cpu_limits()
+> 
+> the requested min/max values are clamped wrt the cpuinfo.[min|max]_freq.
+> However this clamping happens after the QoS constraints have been
+> aggregated. This means that if a CPU has:
+> - min = 100.000 kHz
+> - max = 1.000.000 kHz
+> - boost = 1.200.000 kHz
+> 
+> With boost enabled, the user requests:
+> - scaling_min: 1.100.000
+> - scaling_max: 1.200.000
+> 
+> If boost is disabled, we will have:
+> policy->min == policy->max == 1.000.000
+> without notifying anybody.
+> 
+> Ideally I assume it would be better to prevent the user from disabling
+> boost without first asking to update the scaling_[min|max] frequencies,
+> or at least detecting this case and have a warning message.
 
-On 1/12/26 5:47 AM, André Draszik wrote:
-> Hi Amit,
->
-> On Tue, 2026-01-06 at 17:14 -0800, Amit Sunil Dhamne wrote:
->> On 1/6/26 3:41 PM, Amit Sunil Dhamne wrote:
->>> Hi Andre',
->>>
->>> On 1/5/26 9:32 AM, André Draszik wrote:
->>>> Hi Amit,
->>>>
->>>> I haven't done a full review, but a few things caught my eye.
->>>>
->>>> On Sat, 2025-12-27 at 00:04 +0000, Amit Sunil Dhamne via B4 Relay wrote:
->>>>> diff --git a/drivers/power/supply/Makefile
->>>>> b/drivers/power/supply/Makefile
->>>>> index 4b79d5abc49a..6af905875ad5 100644
->>>>> --- a/drivers/power/supply/Makefile
->>>>> +++ b/drivers/power/supply/Makefile
->>>>> [...]
->>>>> +
->>>>> +static irqreturn_t irq_handler(int irq, void *data)
->>>>> +{
->>>>> +    struct max77759_charger *chg = data;
->>>>> +    struct device *dev = chg->dev;
->>>>> +    u32 chgint_ok;
->>>>> +    int i;
->>>>> +
->>>>> +    regmap_read(chg->regmap, MAX77759_CHGR_REG_CHG_INT_OK,
->>>>> &chgint_ok);
->>>> You might want to check the return value and return IRQ_NONE if it
->>>> didn't
->>>> work?
->>>>
->>>>> +
->>>>> +    for (i = 0; i < ARRAY_SIZE(irqs); i++) {
->>>>> +        if (irqs[i] == irq)
->>>>> +            break;
->>>>> +    }
->>>>> +
->>>>> +    switch (i) {
->>>>> +    case AICL:
->>>>> +        dev_dbg(dev, "AICL mode: %s",
->>>>> +            str_no_yes(chgint_ok & MAX77759_CHGR_REG_CHG_INT_AICL));
->>>>> +        break;
->>>>> +    case CHGIN:
->>>>> +        dev_dbg(dev, "CHGIN input valid: %s",
->>>>> +            str_yes_no(chgint_ok & MAX77759_CHGR_REG_CHG_INT_CHGIN));
->>>>> +        break;
->>>>> +    case CHG:
->>>>> +        dev_dbg(dev, "CHG status okay/off: %s",
->>>>> +            str_yes_no(chgint_ok & MAX77759_CHGR_REG_CHG_INT_CHG));
->>>>> +        break;
->>>>> +    case INLIM:
->>>>> +        dev_dbg(dev, "Current Limit reached: %s",
->>>>> +            str_no_yes(chgint_ok & MAX77759_CHGR_REG_CHG_INT_INLIM));
->>>>> +        break;
->>>>> +    case BAT_OILO:
->>>>> +        dev_dbg(dev, "Battery over-current threshold crossed");
->>>>> +        break;
->>>>> +    case CHG_STA_CC:
->>>>> +        dev_dbg(dev, "Charger reached CC stage");
->>>>> +        break;
->>>>> +    case CHG_STA_CV:
->>>>> +        dev_dbg(dev, "Charger reached CV stage");
->>>>> +        break;
->>>>> +    case CHG_STA_TO:
->>>>> +        dev_dbg(dev, "Charger reached TO stage");
->>>>> +        break;
->>>>> +    case CHG_STA_DONE:
->>>>> +        dev_dbg(dev, "Charger reached TO stage");
->>>>> +        break;
->>>> Are the above debug messages really all needed?
->> I forgot to respond to this comment in my previous email.
->>
->> I think we can keep AICL, BAT_OILO, INLIM. They're either special
->> conditions (AICL) or faulty conditions (like BAT_OILO) and we can in
->> fact keep them at dev_info level. Rest can be removed and a
->> power_supply_changed() is sufficient.
->>
->> Let me know what you think?
-> I don't think dev_info() in an interrupt handler is appropriate. At
-> least it should be ratelimited.
->
-> If it's something special / unexpected that needs attention, having
-> a dev_dbg() message only will usually not be visible to anybody.
+I don't think this is a problem and doesn't really need special care.
+It is the user who is disabling the boost feature, its okay to force
+set to clamped values.
 
-I agree. I can change the prints to dev_info_ratelimited for the stuff 
-we care about.
+> Please let me know if you prefer not adding the new qos constraint,
+> I ll try harder not to have it if yes.
 
+But even with that (the issue pointed earlier not being a problem), I
+think a new constraint for boost does make the code cleaner and easy
+to follow.
 
->
-> Also will the call to power_supply_changed() down below handle the
-> special conditions (e.g. convey to upper levels)? If not, can it be
-> made to do so?
+Rafael ?
 
-Yes it does, as I can see a call to kobject_uevent() inside 
-power_supply_changed_work(). Also, power_supply_changed() also notifies 
-other subsystems that have registered their notifiers downstream of this 
-power_supply object. So I believe we're good there.
-
-If all the above sounds good, I will proceed with sending the next 
-revision including the fixes  :).
-
-
-BR,
-
-Amit
-
->
-> Cheers,
-> Andre
->
+-- 
+viresh
 
