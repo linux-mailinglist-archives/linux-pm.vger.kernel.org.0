@@ -1,339 +1,201 @@
-Return-Path: <linux-pm+bounces-40745-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40746-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0F43D19700
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 15:27:47 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3D7DD19AC5
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 16:00:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8F9463115F3C
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 14:19:15 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D69BB30124D9
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 14:59:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 010BA2836B5;
-	Tue, 13 Jan 2026 14:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F0602D7DE2;
+	Tue, 13 Jan 2026 14:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uYg9WzGH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PHWsIAxy"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF263280309
-	for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 14:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340372D73AD
+	for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 14:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768313936; cv=none; b=g3jlzHRl2Ua8gC1uoObBFDIqP9RSmSVurOff6cOFS9tjYxsdQ7sEboQYp3CViStxlTvKicLzAb9CgvjPYDUSW+ahvniwTCmBmrJAeHGu8sv+YjXNfGOqRo/VX8l9izahTn7HYvHyoHOrtl52A+bazkNS6usfIA2+bUWnFokPxQk=
+	t=1768316389; cv=none; b=sxNDwSySuE9VTLTSChxddW5XuuHQUgph4Ye39t0Tl7DX8rjZFgGtRf8pk1K3vvN0eD6m5OoSoub0+oNihvez3V+HnpyJrWHIFF8fRiVyHDIGa03MnGaVFCol1voWzMduSTICMYZaQt/mJLsKYiiuSKfBJZfQGyUOBaXU3rnA3mw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768313936; c=relaxed/simple;
-	bh=C/NQEYKuOx57Dar5CvKiUKFPmORWHpOSvEL2EultHPI=;
+	s=arc-20240116; t=1768316389; c=relaxed/simple;
+	bh=tQadruJtxmTbpXQwTK9LfM1gAaIAvYJ7hwO3+2qDwKQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UzlTBPzVlBbDHRf5AWHsCRw+wPYdVUhaJSc4bBclQLWpV6PFzCBHJyjLJf9IyKt7kK9xlpUhiRkkFkSmLtHLUMQAe78u6q5WK44lVVA6mYZNNqUvYY2PUKjApsJmdk4nQteVV54zCL48gFL5yI31ITMhjpSR2Y04QFfmTlrWGy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uYg9WzGH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90B7AC2BC87
-	for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 14:18:56 +0000 (UTC)
+	 To:Cc:Content-Type; b=XWTNVun19le0eeS2R3EZW0ljR95w30Ha8/v1kPYfb1thOQtypuT1q8rOoTkJyub3jALXj4ORbPDtVudwbrxN/qOb968h7LrbCjN7eLd226iOhMGRY3J8NxDvm6SlDb/xDqkbq/ZZIadNhaoql/L9XLhYJkrWQLiZfF2sV4d/4EE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PHWsIAxy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE22C2BC87
+	for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 14:59:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768313936;
-	bh=C/NQEYKuOx57Dar5CvKiUKFPmORWHpOSvEL2EultHPI=;
+	s=k20201202; t=1768316388;
+	bh=tQadruJtxmTbpXQwTK9LfM1gAaIAvYJ7hwO3+2qDwKQ=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=uYg9WzGHFVUNzyhu1+3YKVvZ85RIuDfEsrYmQlsmamN3y/GgQY19SH2BQmiWdaDG4
-	 80A6uN0VXmIRrk2S5bEyrs7hEEJoO8jAJDQ1pu2fI0XKxYnzTfDvaBHZJ7/VvSw6pW
-	 sfCJWPRJzf5WzKG8+qUNK77GhEtExM2rZdOc7Z3cDV4tHvQo3elw7yr9wrN96bAbOP
-	 LZIW3B9ZK5gnv6/WB8oJg6C000RGcAywk2X5oIkV/W5KxiR3urS5ZsGITTon4EXyXn
-	 71rtoTrB64ftKi34TWhtOw6SJclYZzl2P7gTS02M6Iv0bNuuBFOfjiCUHqt59ivv0k
-	 ltJuu0xpOIadw==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-65745a436f7so4523465eaf.3
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 06:18:56 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWmgwrZ93hfIGKjG1KDITl/AVbAsJDC/2p9NTVnb65bCafzJTlg6tOIThQWM1CxbDXWEDBm6BcsKg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwH/xIb+OqoBB3qPN14lXX2+faFU8RTl1SHRHMjHDeqh5ZdjL2U
-	JfslVwZKw3HCBM+owOaMRa2lztkTJnL+aDYe/Sdn36QSUSqnk7ihmeNaGHAB/Smh7XdzpdNUHML
-	VO/SNUm/2zKKJ2PHjQ5J6u9uLlL8ujj0=
-X-Google-Smtp-Source: AGHT+IHoU8lWRvG8XnZuaoo5qWSo7ecD1RbHwG7v7RTMFEOBj+NGlE1HHIVlHnro7xgtRS4Z1OEXnLz/hP1VooKtmDQ=
-X-Received: by 2002:a05:6820:16a9:b0:659:81f1:fec4 with SMTP id
- 006d021491bc7-65f54ed5ff3mr10856533eaf.6.1768313935480; Tue, 13 Jan 2026
- 06:18:55 -0800 (PST)
+	b=PHWsIAxyxOfbmJicN6UnT/sD3VAMyEEV7GbJNBx9MoC9DvfLdwHPgmoOvngifkAg1
+	 FpfQv3GlCsCq4GbGfGiF7G0h46YlV1aId46JMX6qHmYE/mTP4ATNGZhYgQFTXkx48X
+	 4SGTeuWYh35KmKxEu6QGSyPAPnGEOkVhNOZFf002PgRKK/c5JKlnjjBkY5mRCna81M
+	 /SiyO1/PD9HHfzsJW/DtSpjinrHUZewwnu9pvhQC2dOB2fOiWXvTVWsG58/cgcZCTj
+	 ZNqMC8k0v4Ii2+VvtYXK9SSzpVdz7RRVDFcG3KxHPx4YqrYx8VtUsFqAU4dPdCfLwp
+	 8ywGTH6s4hKIQ==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-59b685d2b79so7368831e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 06:59:48 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVdluK4N1fcdSO4Pr6gYObCgBCnTfn9jerBz0AKoZAYkca0NwH5eGB4RgFQwGWx2pl6YFPRSlRS/w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwfBGfG3/8IDbA0rPbITYm540mSkLHMKdSfiBub1cX7ICyf8NQQ
+	URalDnjMayRS24RMXy71TrxkxDlT6yOy2TO4sfsimZFyK+LqJ+TBxjThplC9BSSobwnNIU9PK4+
+	qSQcGDEjF3Vf2onWOyJm9Z8kQ9EbdpuqEiGDj9opvBA==
+X-Google-Smtp-Source: AGHT+IHoAkGe0e3qdUlYSk0a+ywNjp7vVj+8KXkbYwW12DVf5qs2c3LuhktveDflBx3nm/JLFmrM67710bfXAlbaMrs=
+X-Received: by 2002:a05:6512:1593:b0:59b:7311:b261 with SMTP id
+ 2adb3069b0e04-59b7311b469mr7215517e87.3.1768316387451; Tue, 13 Jan 2026
+ 06:59:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <d4690be7-9b81-498e-868b-fb4f1d558e08@oracle.com>
- <39c7d882-6711-4178-bce6-c1e4fc909b84@arm.com> <005401dc64a4$75f1d770$61d58650$@telus.net>
- <b36a7037-ca96-49ec-9b39-6e9808d6718c@oracle.com> <6347bf83-545b-4e85-a5af-1d0c7ea24844@arm.com>
- <e1572bc2-08e7-4669-a943-005da4d59775@oracle.com> <CAJZ5v0ja21yONr-F8sfzzV-E4CQ=0NqLPmOeaSiepjS4mKEhog@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ja21yONr-F8sfzzV-E4CQ=0NqLPmOeaSiepjS4mKEhog@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 13 Jan 2026 15:18:44 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hgFeeXw6UM67Ty9w9HHQYTydFxqEr-j+wHz4B7w-aB1Q@mail.gmail.com>
-X-Gm-Features: AZwV_QjZzJTAM9PLWOmHb2zYHNih3BusBrJti614c5y2yUDChEmLSb-CdvJ0U4o
-Message-ID: <CAJZ5v0hgFeeXw6UM67Ty9w9HHQYTydFxqEr-j+wHz4B7w-aB1Q@mail.gmail.com>
-Subject: Re: Performance regressions introduced via Revert "cpuidle: menu:
- Avoid discarding useful information" on 5.15 LTS
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Harshvardhan Jha <harshvardhan.j.jha@oracle.com>, 
-	Christian Loehle <christian.loehle@arm.com>, Doug Smythies <dsmythies@telus.net>, 
-	Sasha Levin <sashal@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org, 
-	stable@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20251227-next-15nov_expose_sysfs-v22-0-2d153438ba19@oss.qualcomm.com>
+ <20251227-next-15nov_expose_sysfs-v22-2-2d153438ba19@oss.qualcomm.com>
+ <CAMRc=MewoxcijL_OYi=LwWMJmYCSsYFQ2j+koOF5b2_w8VyGsg@mail.gmail.com> <ee0c4a7b-e3d1-1816-d5b3-e53ec3cf2e8f@oss.qualcomm.com>
+In-Reply-To: <ee0c4a7b-e3d1-1816-d5b3-e53ec3cf2e8f@oss.qualcomm.com>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Tue, 13 Jan 2026 15:59:34 +0100
+X-Gmail-Original-Message-ID: <CAMRc=MedMkQTGYzSFeiCovKTb_3Mpy8sOa66usQxtu+yi46-2g@mail.gmail.com>
+X-Gm-Features: AZwV_QhXj_Fm3OeEdkdOlVokkUjWWgob1WLfiq5N2joWXWmXf-Q3ErgwLdMcQlo
+Message-ID: <CAMRc=MedMkQTGYzSFeiCovKTb_3Mpy8sOa66usQxtu+yi46-2g@mail.gmail.com>
+Subject: Re: [PATCH v22 2/2] power: reset: reboot-mode: Expose sysfs for
+ registered reboot_modes
+To: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>, 
+	Bartosz Golaszewski <bgolasze@quicinc.com>, Bjorn Andersson <andersson@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 13, 2026 at 3:13=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
+On Mon, Jan 5, 2026 at 6:45=E2=80=AFPM Shivendra Pratap
+<shivendra.pratap@oss.qualcomm.com> wrote:
 >
-> On Tue, Jan 13, 2026 at 8:06=E2=80=AFAM Harshvardhan Jha
-> <harshvardhan.j.jha@oracle.com> wrote:
-> >
-> > Hi Crhistian,
-> >
-> > On 08/12/25 6:17 PM, Christian Loehle wrote:
-> > > On 12/8/25 11:33, Harshvardhan Jha wrote:
-> > >> Hi Doug,
-> > >>
-> > >> On 04/12/25 4:00 AM, Doug Smythies wrote:
-> > >>> On 2025.12.03 08:45 Christian Loehle wrote:
-> > >>>> On 12/3/25 16:18, Harshvardhan Jha wrote:
-> > >>>>> Hi there,
-> > >>>>>
-> > >>>>> While running performance benchmarks for the 5.15.196 LTS tags , =
-it was
-> > >>>>> observed that several regressions across different benchmarks is =
-being
-> > >>>>> introduced when compared to the previous 5.15.193 kernel tag. Run=
-ning an
-> > >>>>> automated bisect on both of them narrowed down the culprit commit=
- to:
-> > >>>>> - 5666bcc3c00f7 Revert "cpuidle: menu: Avoid discarding useful
-> > >>>>> information" for 5.15
-> > >>>>>
-> > >>>>> Regressions on 5.15.196 include:
-> > >>>>> -9.3% : Phoronix pts/sqlite using 2 processes on OnPrem X6-2
-> > >>>>> -6.3% : Phoronix system/sqlite on OnPrem X6-2
-> > >>>>> -18%  : rds-stress -M 1 (readonly rdma-mode) metrics with 1 depth=
- & 1
-> > >>>>> thread & 1M buffer size on OnPrem X6-2
-> > >>>>> -4 -> -8% : rds-stress -M 2 (writeonly rdma-mode) metrics with 1 =
-depth &
-> > >>>>> 1 thread & 1M buffer size on OnPrem X6-2
-> > >>>>> Up to -30% : Some Netpipe metrics on OnPrem X5-2
-> > >>>>>
-> > >>>>> The culprit commits' messages mention that these reverts were don=
-e due
-> > >>>>> to performance regressions introduced in Intel Jasper Lake system=
-s but
-> > >>>>> this revert is causing issues in other systems unfortunately. I w=
-anted
-> > >>>>> to know the maintainers' opinion on how we should proceed in orde=
-r to
-> > >>>>> fix this. If we reapply it'll bring back the previous regressions=
- on
-> > >>>>> Jasper Lake systems and if we don't revert it then it's stuck wit=
-h
-> > >>>>> current regressions. If this problem has been reported before and=
- a fix
-> > >>>>> is in the works then please let me know I shall follow developmen=
-ts to
-> > >>>>> that mail thread.
-> > >>>> The discussion regarding this can be found here:
-> > >>>> https://urldefense.com/v3/__https://lore.kernel.org/lkml/36iykr223=
-vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7/__;!!ACWV5N9M2RV99hQ=
-!MWXEz_wRbaLyJxDign2EXci2qNzAPpCyhi8qIORMdReh0g_yIVIt-Oqov23KT23A_rGBRRxJ4b=
-Hb_e6UQA-b9PW7hw$
-> > >>>> we explored an alternative to the full revert here:
-> > >>>> https://urldefense.com/v3/__https://lore.kernel.org/lkml/4687373.L=
-vFx2qVVIh@rafael.j.wysocki/__;!!ACWV5N9M2RV99hQ!MWXEz_wRbaLyJxDign2EXci2qNz=
-APpCyhi8qIORMdReh0g_yIVIt-Oqov23KT23A_rGBRRxJ4bHb_e6UQA9PSf_uMQ$
-> > >>>> unfortunately that didn't lead anywhere useful, so Rafael went wit=
-h the
-> > >>>> full revert you're seeing now.
-> > >>>>
-> > >>>> Ultimately it seems to me that this "aggressiveness" on deep idle =
-tradeoffs
-> > >>>> will highly depend on your platform, but also your workload, Jaspe=
-r Lake
-> > >>>> in particular seems to favor deep idle states even when they don't=
- seem
-> > >>>> to be a 'good' choice from a purely cpuidle (governor) perspective=
-, so
-> > >>>> we're kind of stuck with that.
-> > >>>>
-> > >>>> For teo we've discussed a tunable knob in the past, which comes na=
-turally with
-> > >>>> the logic, for menu there's nothing obvious that would be comparab=
-le.
-> > >>>> But for teo such a knob didn't generate any further interest (so f=
-ar).
-> > >>>>
-> > >>>> That's the status, unless I missed anything?
-> > >>> By reading everything in the links Chrsitian provided, you can see
-> > >>> that we had difficulties repeating test results on other platforms.
-> > >>>
-> > >>> Of the tests listed herein, the only one that was easy to repeat on=
- my
-> > >>> test server, was the " Phoronix pts/sqlite" one. I got (summary: no=
- difference):
-> > >>>
-> > >>> Kernel 6.18                                                        =
-         Reverted
-> > >>> pts/sqlite-2.3.0                    menu rc4                menu rc=
-1                menu rc1                menu rc3
-> > >>>                             performance             performance    =
-         performance             performance
-> > >>> test        what                    ave                     ave    =
-                 ave                     ave
-> > >>> 1   T/C 1                   2.147   -0.2%           2.143   0.0%   =
-         2.16    -0.8%           2.156   -0.6%
-> > >>> 2   T/C 2                   3.468   0.1%            3.473   0.0%   =
-         3.486   -0.4%           3.478   -0.1%
-> > >>> 3   T/C 4                   4.336   0.3%            4.35    0.0%   =
-         4.355   -0.1%           4.354   -0.1%
-> > >>> 4   T/C 8                   5.438   -0.1%           5.434   0.0%   =
-         5.456   -0.4%           5.45    -0.3%
-> > >>> 5   T/C 12                  6.314   -0.2%           6.299   0.0%   =
-         6.307   -0.1%           6.29    0.1%
-> > >>>
-> > >>> Where:
-> > >>> T/C means: Threads / Copies
-> > >>> performance means: intel_pstate CPU frequency scaling driver and th=
-e performance CPU frequencay scaling governor.
-> > >>> Data points are in Seconds.
-> > >>> Ave means the average test result. The number of runs per test was =
-increased from the default of 3 to 10.
-> > >>> The reversion was manually applied to kernel 6.18-rc1 for that test=
-.
-> > >>> The reversion was included in kernel 6.18-rc3.
-> > >>> Kernel 6.18-rc4 had another code change to menu.c
-> > >>>
-> > >>> In case the formatting gets messed up, the table is also attached.
-> > >>>
-> > >>> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz, 6 cores 12 CP=
-Us.
-> > >>> HWP: Enabled.
-> > >> I was able to recover performance on 5.15 and 5.4 LTS based kernels
-> > >> after reapplying the revert on X6-2 systems.
-> > >>
-> > >> Architecture:                x86_64
-> > >>   CPU op-mode(s):            32-bit, 64-bit
-> > >>   Address sizes:             46 bits physical, 48 bits virtual
-> > >>   Byte Order:                Little Endian
-> > >> CPU(s):                      56
-> > >>   On-line CPU(s) list:       0-55
-> > >> Vendor ID:                   GenuineIntel
-> > >>   Model name:                Intel(R) Xeon(R) CPU E5-2690 v4 @ 2.60G=
-Hz
-> > >>     CPU family:              6
-> > >>     Model:                   79
-> > >>     Thread(s) per core:      2
-> > >>     Core(s) per socket:      14
-> > >>     Socket(s):               2
-> > >>     Stepping:                1
-> > >>     CPU(s) scaling MHz:      98%
-> > >>     CPU max MHz:             2600.0000
-> > >>     CPU min MHz:             1200.0000
-> > >>     BogoMIPS:                5188.26
-> > >>     Flags:                   fpu vme de pse tsc msr pae mce cx8 apic=
- sep
-> > >> mtrr pg
-> > >>                              e mca cmov pat pse36 clflush dts acpi m=
-mx
-> > >> fxsr sse
-> > >>                              sse2 ss ht tm pbe syscall nx pdpe1gb rd=
-tscp
-> > >> lm cons
-> > >>                              tant_tsc arch_perfmon pebs bts rep_good
-> > >> nopl xtopol
-> > >>                              ogy nonstop_tsc cpuid aperfmperf pni
-> > >> pclmulqdq dtes
-> > >>                              64 monitor ds_cpl vmx smx est tm2 ssse3
-> > >> sdbg fma cx
-> > >>                              16 xtpr pdcm pcid dca sse4_1 sse4_2 x2a=
-pic
-> > >> movbe po
-> > >>                              pcnt tsc_deadline_timer aes xsave avx f=
-16c
-> > >> rdrand l
-> > >>                              ahf_lm abm 3dnowprefetch cpuid_fault ep=
-b
-> > >> cat_l3 cdp
-> > >>                              _l3 pti intel_ppin ssbd ibrs ibpb stibp
-> > >> tpr_shadow
-> > >>                              flexpriority ept vpid ept_ad fsgsbase
-> > >> tsc_adjust bm
-> > >>                              i1 hle avx2 smep bmi2 erms invpcid rtm =
-cqm
-> > >> rdt_a rd
-> > >>                              seed adx smap intel_pt xsaveopt cqm_llc
-> > >> cqm_occup_l
-> > >>                              lc cqm_mbm_total cqm_mbm_local dtherm a=
-rat
-> > >> pln pts
-> > >>                              vnmi md_clear flush_l1d
-> > >> Virtualization features:
-> > >>   Virtualization:            VT-x
-> > >> Caches (sum of all):
-> > >>   L1d:                       896 KiB (28 instances)
-> > >>   L1i:                       896 KiB (28 instances)
-> > >>   L2:                        7 MiB (28 instances)
-> > >>   L3:                        70 MiB (2 instances)
-> > >> NUMA:
-> > >>   NUMA node(s):              2
-> > >>   NUMA node0 CPU(s):         0-13,28-41
-> > >>   NUMA node1 CPU(s):         14-27,42-55
-> > >> Vulnerabilities:
-> > >>   Gather data sampling:      Not affected
-> > >>   Indirect target selection: Not affected
-> > >>   Itlb multihit:             KVM: Mitigation: Split huge pages
-> > >>   L1tf:                      Mitigation; PTE Inversion; VMX conditio=
-nal
-> > >> cache fl
-> > >>                              ushes, SMT vulnerable
-> > >>   Mds:                       Mitigation; Clear CPU buffers; SMT vuln=
-erable
-> > >>   Meltdown:                  Mitigation; PTI
-> > >>   Mmio stale data:           Mitigation; Clear CPU buffers; SMT vuln=
-erable
-> > >>   Reg file data sampling:    Not affected
-> > >>   Retbleed:                  Not affected
-> > >>   Spec rstack overflow:      Not affected
-> > >>   Spec store bypass:         Mitigation; Speculative Store Bypass
-> > >> disabled via p
-> > >>                              rctl
-> > >>   Spectre v1:                Mitigation; usercopy/swapgs barriers an=
-d
-> > >> __user poi
-> > >>                              nter sanitization
-> > >>   Spectre v2:                Mitigation; Retpolines; IBPB conditiona=
-l;
-> > >> IBRS_FW;
-> > >>                              STIBP conditional; RSB filling; PBRSB-e=
-IBRS
-> > >> Not aff
-> > >>                              ected; BHI Not affected
-> > >>   Srbds:                     Not affected
-> > >>   Tsa:                       Not affected
-> > >>   Tsx async abort:           Mitigation; Clear CPU buffers; SMT vuln=
-erable
-> > >>   Vmscape:                   Mitigation; IBPB before exit to userspa=
-ce
-> > >>
-> > > It would be nice to get the idle states here, ideally how the states'=
- usage changed
-> > > from base to revert.
-> > > The mentioned thread did this and should show how it can be done, but=
- a dump of
-> > > cat /sys/devices/system/cpu/cpu*/cpuidle/state*/*
-> > > before and after the workload is usually fine to work with:
-> > > https://urldefense.com/v3/__https://lore.kernel.org/linux-pm/8da42386=
--282e-4f97-af93-4715ae206361@arm.com/__;!!ACWV5N9M2RV99hQ!PEhkFcO7emFLMaNxW=
-EoE2Gtnw3zSkpghP17iuEvZM3W6KUpmkbgKw_tr91FwGfpzm4oA5f7c5sz8PkYvKiEVwI_iLIPp=
-Mt53$
-> >
-> > Bumping this as I discovered this issue on 6.12 stable branch also. The
-> > reapplication seems inevitable. I shall get back to you with these
-> > details also.
 >
-> Yes, please, because I have another reason to restore the reverted commit=
-.
+>
+> On 1/2/2026 6:55 PM, Bartosz Golaszewski wrote:
+> > On Fri, 26 Dec 2025 19:56:34 +0100, Shivendra Pratap
+> > <shivendra.pratap@oss.qualcomm.com> said:
+> >> Currently, there is no standardized mechanism for userspace to discove=
+r
+> >> which reboot-modes are supported on a given platform. This limitation
+> >> forces tools and scripts to rely on hardcoded assumptions about the
+> >> supported reboot-modes.
+>
 
-Sergey, did you see a performance regression from 85975daeaa4d
-("cpuidle: menu: Avoid discarding useful information") on any
-platforms other than the Jasper Lake it was reported for?
+Sorry for the delayed response.
+
+> [SNIP..]
+>
+> >>
+> >> +struct sysfs_data {
+> >
+> > Let's make this more descriptive? struct reboot_mode_sysfs_data?
+>
+> Ack. thanks.
+>
+> >
+> >> +    const char *mode;
+> >> +    struct list_head list;
+> >> +};
+> >> +
+>
+> [SNIP..]
+>
+> >> +
+> >> +    reboot->reboot_mode_device =3D device_create(&reboot_mode_class, =
+NULL, 0,
+> >> +                                               (void *)head, reboot->=
+dev->driver->name);
+> >
+> > No, why pass the list? You should create an instance of struct sysfs_da=
+ta per
+> > device_create(). If it needs to contain a list, then let it contain a l=
+ist but
+> > don't allocate the list_head, that's really unusual.
+> >
+>
+> ok. Will create struct reboot_mode_sysfs_data with a list head and
+> allocate it as data.
+>
+> >> +
+>
+> [SNIP..]
+>
+> >>
+> >> +static inline void reboot_mode_unregister_device(struct reboot_mode_d=
+river *reboot)
+> >> +{
+> >> +    struct sysfs_data *sysfs_info;
+> >> +    struct sysfs_data *next;
+> >> +    struct list_head *head;
+> >> +
+> >> +    head =3D dev_get_drvdata(reboot->reboot_mode_device);
+> >> +    device_unregister(reboot->reboot_mode_device);
+> >> +    reboot->reboot_mode_device =3D NULL;
+> >> +
+> >> +    if (head) {
+> >> +            list_for_each_entry_safe(sysfs_info, next, head, list) {
+> >> +                    list_del(&sysfs_info->list);
+> >> +                    kfree_const(sysfs_info->mode);
+> >> +                    kfree(sysfs_info);
+> >> +            }
+> >
+> > This loop is duplicated, can you please factor it out into a dedicated
+> > function?
+>
+> The loop frees the sysfs data. You mean i should directly call
+> reboot_mode_unregister_device in error path of reboot_mode_create_device
+> as not to duplicate the loop?
+>
+
+I was thinking about wrapping it in a dedicated function and calling
+it here and in the error path in reboot_mode_create_device().
+
+> >
+>
+> [SNIP..]
+>
+> >> diff --git a/include/linux/reboot-mode.h b/include/linux/reboot-mode.h
+> >> index 4a2abb38d1d612ec0fdf05eb18c98b210f631b7f..b56783c32068096325f924=
+45b9530d1856c4826c 100644
+> >> --- a/include/linux/reboot-mode.h
+> >> +++ b/include/linux/reboot-mode.h
+> >> @@ -5,6 +5,7 @@
+> >>  struct reboot_mode_driver {
+> >>      struct device *dev;
+> >>      struct list_head head;
+> >> +    struct device *reboot_mode_device;
+> >
+> > Why can't this be part of struct (reboot_mode_)sysfs_data?
+> >
+>
+> If reboot_mode_device is kept in sysfs_data, we need a reference to free
+> it. Should I maintain reference for it in "reboot struct" and store
+> sysfs_data pointer, so that it can be used to call device_unregister()?
+>
+> Eg:
+> struct reboot
+> {
+> ..
+> ..
+>   void *priv;
+> };
+>
+> struct reboot_mode_sysfs_data {
+>     struct device *reboot_mode_device;
+>     struct list_head head;
+> };
+>
+
+You can use class_find_device(). Store the address of the associated
+reboot_mode_driver in the private structure and compare by it in the
+match callback.
+
+Bart
 
