@@ -1,260 +1,300 @@
-Return-Path: <linux-pm+bounces-40756-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40757-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EC92D1A67D
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 17:51:18 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F226D1A8AA
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 18:14:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C5CF4303C285
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 16:48:49 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E29D1300FD41
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 17:14:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B22D934CFDB;
-	Tue, 13 Jan 2026 16:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09F6534FF59;
+	Tue, 13 Jan 2026 17:14:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DSQDeeEP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BLOjpCdB"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E37334CFCC;
-	Tue, 13 Jan 2026 16:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D39C031691C;
+	Tue, 13 Jan 2026 17:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768322928; cv=none; b=YwpEUiRArKOuQ7ChbOp74vNLWTkE0MvcBTrHvhEjy4pVh6FCATQfVxmHKvWRz8+cDUqzlXQBUOJBuqEC8vStuyuRugAvTE54vG8kPYlTEuJI63zcQjHzmyDiYW6ts3DnTYNmYNQf5LLSR5+gtkxoNRmXIkAhzFdllrRP5LizDT4=
+	t=1768324465; cv=none; b=Ly4an1X9aMVCyU0mzdRxYPMPSjTmpct22h0FDOvnT8HbQD9nCK2NuYd6CYU8fgXThoVZIzcHWD2vqWRcrsYfGffKuSTtEknw7Ug1mA4zeD7TiKpjfFqtB/5yWhaPaCsLvt9pVgPi3qTmibyAI0TYZWrjUoGkRAnP8EigrKwCyJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768322928; c=relaxed/simple;
-	bh=9Xi4F4hDVlUXQAZiuT7/skN/sMa6mBICWxabbaie9bo=;
+	s=arc-20240116; t=1768324465; c=relaxed/simple;
+	bh=ZBx4IUNH8GH4xIMQMN3IJVeKXnfqRPnKpD2PxHIjcPA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ea8kLLyJHb/lw9JTuX/EunMvusO+ShAE9zAVr2ASEdiZsbbLWn72Wwz+QgdhIJh4Soxq67YY7t9gTqa9T9cU2d6FqqTLDYkVb4LalAUTaUjKyMFEMj5zyNyZC1LQI3UBkjLDTwDqXO7h3MeJSKsSKO1vaMD+d3qth8OLBsjJBUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DSQDeeEP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD37BC19422;
-	Tue, 13 Jan 2026 16:48:42 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=c6DfZGw93uihYyLJy0lbY+D+odrY8DINhXnatbp3Ndx/aoekAekuYS6WnBjzXwilcZSBLbPam/4ce9Ochypc4laqbKyrK7AADAUCAPdQUWD24ym2j9VSGmVHr1Vpkrf2HdkaBuKNCbFuz3pxradWyYU2vnXXKk997QXARjhZLEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BLOjpCdB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43ACAC116C6;
+	Tue, 13 Jan 2026 17:14:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768322928;
-	bh=9Xi4F4hDVlUXQAZiuT7/skN/sMa6mBICWxabbaie9bo=;
+	s=k20201202; t=1768324465;
+	bh=ZBx4IUNH8GH4xIMQMN3IJVeKXnfqRPnKpD2PxHIjcPA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DSQDeeEP3Ac1HUW7ML9da+hYHgxI5RJ0f2MMfzbJSzVBZpioIAiqG/Pa2edk5MH+p
-	 dT2ipZcgIeS2csLEFvgScSCMgNs+IAcz3aPxnwbJbM9EnZiq4Pw4ccK6TdlIQkjs8W
-	 bUo2LRvT3QM05Hv1i2wadPMsgM6fphmlmkLzNk+iNVqq0f8LkDdep8fMEtT+a4zlgu
-	 nZUBWI3g6RI9ptg0W8y2FL7QjzvRtE0msLoP5CmEHbxzcFYMRwHiKJhTAIBlRMXO6E
-	 uoPOwnpgyG0RyC31amahaWSekoj+C/gWrcSwHbCzE/WTT9DQfoZM5GCIpPq3MnZpH5
-	 hY9xmI13JIiqA==
-Date: Tue, 13 Jan 2026 22:18:38 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-pm@vger.kernel.org, linux-ide@vger.kernel.org, 
-	Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH v5 2/5] dt-bindings: connector: Add PCIe M.2 Mechanical
- Key M connector
-Message-ID: <mlgfs2v4eoovrdjba5l72yceudut5fa3xvi57s6cxukyfkyau4@7oo3dfohn2z3>
-References: <20260107-pci-m2-v5-0-8173d8a72641@oss.qualcomm.com>
- <20260107-pci-m2-v5-2-8173d8a72641@oss.qualcomm.com>
- <20260113163733.GA3743579-robh@kernel.org>
+	b=BLOjpCdBHxGwoLhclkulyUghM2smO6UVg4pZhZkcSTGm47uQB+DjMmzNfqTQui5dh
+	 qqzS9qRkcmZy1w9rByOY3VDURN0V5JQ7DoE2pKXdb/onXJm99fmvC7h9W4P1U6AUWJ
+	 IrcT0GxkND/hQzqgRk3JR7y2m7/ITF6kBW1gXndisppPZUtmapggcjtK7xRaloUpFa
+	 ZMAuqYHpWgARuDBAB2flKR2LM5VeW015PTvqk+U10D6ReIl7cjArB3JPbQMOmK/iLZ
+	 xYivNLmLGIyHG0HO1tDglYQNHPo8sJSI8oAtpTj478cgW9nhs4RCNVsWAL1px9p8oW
+	 SiX+SM3llCe9g==
+Date: Tue, 13 Jan 2026 11:14:24 -0600
+From: Rob Herring <robh@kernel.org>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Hans de Goede <hansg@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	"Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bartosz Golaszewski <brgl@kernel.org>, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org,
+	Stephan Gerhold <stephan.gerhold@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v4 5/9] dt-bindings: connector: Add PCIe M.2 Mechanical
+ Key E connector
+Message-ID: <20260113171424.GA3925312-robh@kernel.org>
+References: <20260112-pci-m2-e-v4-0-eff84d2c6d26@oss.qualcomm.com>
+ <20260112-pci-m2-e-v4-5-eff84d2c6d26@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260113163733.GA3743579-robh@kernel.org>
+In-Reply-To: <20260112-pci-m2-e-v4-5-eff84d2c6d26@oss.qualcomm.com>
 
-On Tue, Jan 13, 2026 at 10:37:33AM -0600, Rob Herring wrote:
-> On Wed, Jan 07, 2026 at 07:41:24PM +0530, Manivannan Sadhasivam wrote:
-> > Add the devicetree binding for PCIe M.2 Mechanical Key M connector defined
-> > in the PCI Express M.2 Specification, r4.0, sec 5.3. This connector
-> > provides interfaces like PCIe and SATA to attach the Solid State Drives
-> > (SSDs) to the host machine along with additional interfaces like USB, and
-> > SMBus for debugging and supplementary features.
-> > 
-> > The connector provides a primary power supply of 3.3v, along with an
-> > optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
-> > 1.8v sideband signaling.
-> > 
-> > The connector also supplies optional signals in the form of GPIOs for fine
-> > grained power management.
-> > 
-> > Reviewed-by: Frank Li <Frank.Li@nxp.com>
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > ---
-> >  .../bindings/connector/pcie-m2-m-connector.yaml    | 133 +++++++++++++++++++++
-> >  1 file changed, 133 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
-> > new file mode 100644
-> > index 000000000000..e912ee6f6a59
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
-> > @@ -0,0 +1,133 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/connector/pcie-m2-m-connector.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: PCIe M.2 Mechanical Key M Connector
-> > +
-> > +maintainers:
-> > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > +
-> > +description:
-> > +  A PCIe M.2 M connector node represents a physical PCIe M.2 Mechanical Key M
-> > +  connector. The Mechanical Key M connectors are used to connect SSDs to the
-> > +  host system over PCIe/SATA interfaces. These connectors also offer optional
-> > +  interfaces like USB, SMBus.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: pcie-m2-m-connector
-> > +
-> > +  vpcie3v3-supply:
-> > +    description: A phandle to the regulator for 3.3v supply.
-> > +
-> > +  vpcie1v8-supply:
-> > +    description: A phandle to the regulator for VIO 1.8v supply.
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +    description: OF graph bindings modeling the interfaces exposed on the
-> > +      connector. Since a single connector can have multiple interfaces, every
-> > +      interface has an assigned OF graph port number as described below.
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: Host interfaces of the connector
-> > +
-> > +        properties:
-> > +          endpoint@0:
-> > +            $ref: /schemas/graph.yaml#/properties/endpoint
-> > +            description: PCIe interface
-> > +
-> > +          endpoint@1:
-> > +            $ref: /schemas/graph.yaml#/properties/endpoint
-> > +            description: SATA interface
-> > +
-> > +        anyOf:
-> > +          - required:
-> > +              - endpoint@0
-> > +          - required:
-> > +              - endpoint@1
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: USB 2.0 interface
-> > +
-> > +      i2c-parent:
-> > +        $ref: /schemas/types.yaml#/definitions/phandle
-> > +        description: SMBus interface
+On Mon, Jan 12, 2026 at 09:56:04PM +0530, Manivannan Sadhasivam wrote:
+> Add the devicetree binding for PCIe M.2 Mechanical Key E connector defined
+> in the PCI Express M.2 Specification, r4.0, sec 5.1.2. This connector
+> provides interfaces like PCIe or SDIO to attach the WiFi devices to the
+> host machine, USB or UART+PCM interfaces to attach the Bluetooth (BT)
+> devices. Spec also provides an optional interface to connect the UIM card,
+> but that is not covered in this binding.
 > 
-> This belongs outside of 'ports'. I would expect you'd get an error if 
-> you tried to put it here as '/schemas/graph.yaml#/properties/ports' 
-> shouldn't allow it. Please include the property in the example.
+> The connector provides a primary power supply of 3.3v, along with an
+> optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
+> 1.8v sideband signaling.
 > 
-
-Okay.
-
-> > +
-> > +    required:
-> > +      - port@0
-> > +
-> > +  clocks:
-> > +    description: 32.768 KHz Suspend Clock (SUSCLK) input from the host system to
-> > +      the M.2 card. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.1 for
-> > +      more details.
-> > +    maxItems: 1
-> > +
-> > +  pedet-gpios:
-> > +    description: GPIO input to PEDET signal. This signal is used by the host
-> > +      systems to determine the communication protocol that the M.2 card uses;
-> > +      SATA signaling (low) or PCIe signaling (high). Refer, PCI Express M.2
-> > +      Specification r4.0, sec 3.3.4.2 for more details.
-> > +    maxItems: 1
-> > +
-> > +  viocfg-gpios:
-> > +    description: GPIO output to IO voltage configuration (VIO_CFG) signal. This
-> > +      signal is used by the M.2 card to indicate to the host system that the
-> > +      card supports an independent IO voltage domain for the sideband signals.
-> > +      Refer, PCI Express M.2 Specification r4.0, sec 3.1.15.1 for more details.
-> > +    maxItems: 1
-> > +
-> > +  pwrdis-gpios:
-> > +    description: GPIO input to Power Disable (PWRDIS) signal. This signal is
-> > +      used by the host system to disable power on the M.2 card. Refer, PCI
-> > +      Express M.2 Specification r4.0, sec 3.3.5.2 for more details.
-> > +    maxItems: 1
-> > +
-> > +  pln-gpios:
-> > +    description: GPIO output to Power Loss Notification (PLN#) signal. This
-> > +      signal is use to notify the M.2 card by the host system that the power
-> > +      loss event is expected to occur. Refer, PCI Express M.2 Specification
-> > +      r4.0, sec 3.2.17.1 for more details.
-> > +    maxItems: 1
-> > +
-> > +  plas3-gpios:
-> > +    description: GPIO output to Power Loss Acknowledge (PLA_S3#) signal. This
+> The connector also supplies optional signals in the form of GPIOs for fine
+> grained power management.
 > 
-> GPIO input?
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> ---
+>  .../bindings/connector/pcie-m2-e-connector.yaml    | 154 +++++++++++++++++++++
+>  MAINTAINERS                                        |   1 +
+>  2 files changed, 155 insertions(+)
 > 
+> diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
+> new file mode 100644
+> index 000000000000..b65b39ddfd19
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
+> @@ -0,0 +1,154 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/connector/pcie-m2-e-connector.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: PCIe M.2 Mechanical Key E Connector
+> +
+> +maintainers:
+> +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> +
+> +description:
+> +  A PCIe M.2 E connector node represents a physical PCIe M.2 Mechanical Key E
+> +  connector. Mechanical Key E connectors are used to connect Wireless
+> +  Connectivity devices including combinations of Wi-Fi, BT, NFC to the host
+> +  machine over interfaces like PCIe/SDIO, USB/UART+PCM, and I2C.
+> +
+> +properties:
+> +  compatible:
+> +    const: pcie-m2-e-connector
+> +
+> +  vpcie3v3-supply:
+> +    description: A phandle to the regulator for 3.3v supply.
+> +
+> +  vpcie1v8-supply:
+> +    description: A phandle to the regulator for VIO 1.8v supply.
 
-I defined the role from a card PoV, but it should be the other way around, from
-the connector/host PoV. In that case, this will become input. I will change
-others also.
+I don't see any 1.8V supply on the connector. There are 1.8V IOs and you 
+may need something in DT to ensure those are powered. However, there's 
+no guarantee that it's a single supply.
 
-> > +      signal is used by the M.2 card to notify the host system, the status of
-> > +      the M.2 card's preparation for power loss.
-> > +    maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - vpcie3v3-supply
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +    description: OF graph bindings modeling the interfaces exposed on the
+> +      connector. Since a single connector can have multiple interfaces, every
+> +      interface has an assigned OF graph port number as described below.
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Connector interfaces for Wi-Fi
+> +
+> +        properties:
+> +          endpoint@0:
+> +            $ref: /schemas/graph.yaml#/properties/endpoint
+> +            description: PCIe interface
+> +
+> +          endpoint@1:
+> +            $ref: /schemas/graph.yaml#/properties/endpoint
+> +            description: SDIO interface
+
+I think I already said this, but multiple endpoints are generally for 
+something that's muxed. Looking at the connector pinout, PCIe and SDIO 
+are not muxed. So these 2 should be 2 port nodes.
+
+> +
+> +        anyOf:
+> +          - required:
+> +              - endpoint@0
+> +          - required:
+> +              - endpoint@1
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Connector interfaces for BT
+> +
+> +        properties:
+> +          endpoint@0:
+> +            $ref: /schemas/graph.yaml#/properties/endpoint
+> +            description: USB 2.0 interface
+> +
+> +          endpoint@1:
+> +            $ref: /schemas/graph.yaml#/properties/endpoint
+> +            description: UART interface
+
+And UART and USB are not muxed either.
+
+
+> +
+> +        anyOf:
+> +          - required:
+> +              - endpoint@0
+> +          - required:
+> +              - endpoint@1
+> +
+> +      port@2:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: PCM/I2S interface
+> +
+> +      i2c-parent:
+> +        $ref: /schemas/types.yaml#/definitions/phandle
+> +        description: I2C interface
+
+Move out of 'ports'.
+
+> +
+> +    oneOf:
+> +      - required:
+> +          - port@0
+> +
+> +  clocks:
+> +    description: 32.768 KHz Suspend Clock (SUSCLK) input from the host system to
+> +      the M.2 card. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.1 for
+> +      more details.
+> +    maxItems: 1
+> +
+> +  w-disable1-gpios:
+> +    description: GPIO input to W_DISABLE1# signal. This signal is used by the
+> +      system to disable WiFi radio in the M.2 card. Refer, PCI Express M.2
+> +      Specification r4.0, sec 3.1.12.3 for more details.
+> +    maxItems: 1
+> +
+> +  w-disable2-gpios:
+> +    description: GPIO input to W_DISABLE2# signal. This signal is used by the
+> +      system to disable WiFi radio in the M.2 card. Refer, PCI Express M.2
+> +      Specification r4.0, sec 3.1.12.3 for more details.
+> +    maxItems: 1
+> +
+> +  viocfg-gpios:
+> +    description: GPIO output to IO voltage configuration (VIO_CFG) signal. This
+> +      signal is used by the M.2 card to indicate to the host system that the
+> +      card supports an independent IO voltage domain for the sideband signals.
+> +      Refer, PCI Express M.2 Specification r4.0, sec 3.1.15.1 for more details.
+> +    maxItems: 1
+
+What about SDIO and UART WAKE, SDIO RESET, and vendor defined signals?
+
+> +
+> +required:
+> +  - compatible
+> +  - vpcie3v3-supply
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  # PCI M.2 Key E connector for Wi-Fi/BT with PCIe/UART interfaces
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    connector {
+> +        compatible = "pcie-m2-e-connector";
+> +        vpcie3v3-supply = <&vreg_wcn_3p3>;
+> +        vpcie1v8-supply = <&vreg_l15b_1p8>;
+> +        w-disable1-gpios = <&tlmm 117 GPIO_ACTIVE_LOW>;
+> +        w-disable2-gpios = <&tlmm 116 GPIO_ACTIVE_LOW>;
+> +
+> +        ports {
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            port@0 {
+> +                reg = <0>;
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                endpoint@0 {
+> +                    reg = <0>;
+> +                    remote-endpoint = <&pcie4_port0_ep>;
+> +                };
+> +            };
+> +
+> +            port@1 {
+> +                reg = <1>;
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                endpoint@1 {
+> +                    reg = <1>;
+> +                    remote-endpoint = <&uart14_ep>;
+> +                };
+> +            };
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 2eb7b6d26573..451c54675b24 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -20795,6 +20795,7 @@ PCIE M.2 POWER SEQUENCING
+>  M:	Manivannan Sadhasivam <mani@kernel.org>
+>  L:	linux-pci@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
+>  F:	Documentation/devicetree/bindings/connector/pcie-m2-m-connector.yaml
+>  F:	drivers/power/sequencing/pwrseq-pcie-m2.c
+>  
 > 
-> All the GPIOs are really optional?
+> -- 
+> 2.48.1
 > 
-
-Yes.
-
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  # PCI M.2 Key M connector for SSDs with PCIe interface
-> > +  - |
-> > +    connector {
-> > +        compatible = "pcie-m2-m-connector";
-> > +        vpcie3v3-supply = <&vreg_nvme>;
-> > +
-> > +        ports {
-> > +            #address-cells = <1>;
-> > +            #size-cells = <0>;
-> > +
-> > +            port@0 {
-> > +                #address-cells = <1>;
-> > +                #size-cells = <0>;
-> > +
-> > +                reg = <0>;
-> > +
-> > +                endpoint@0 {
-> > +                    reg = <0>;
-> > +                    remote-endpoint = <&pcie6_port0_ep>;
-> > +                };
-> 
-> Please make the example as complete as possible.
-> 
-
-Okay.
-
-- Mani
-
--- 
-மணிவண்ணன் சதாசிவம்
 
