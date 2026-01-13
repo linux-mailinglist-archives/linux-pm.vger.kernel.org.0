@@ -1,91 +1,124 @@
-Return-Path: <linux-pm+bounces-40732-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40733-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93D9BD18AFC
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 13:24:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F257D18B80
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 13:30:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4941E30082E5
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 12:24:06 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 78A30302FBE4
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 12:30:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0504E38F248;
-	Tue, 13 Jan 2026 12:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLsloDXe"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E4838F937;
+	Tue, 13 Jan 2026 12:30:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F966389DE1
-	for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 12:24:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C713238F257;
+	Tue, 13 Jan 2026 12:30:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768307044; cv=none; b=LBLOW9TYJYKcc91ABF+9SuXqHak9sVLr4+V3F00HALeI1EOm10Xs5P3RQgiCUu7hcMx9UW8lOJxKdwz0kA5AoeqfvRKyIojhGZaFAAtFdUUv9OfVShaZCrRUqCAsBlnP/8UNfyE/m2oExIuxDoERXjVj1xNeCLTQXGpQWPIfAJQ=
+	t=1768307433; cv=none; b=ZQCAn5PCqFb13pz/Kc0TbhPQDqUe7FYmCFLgUhSi6jD3hH/FP3+Rrkjycn1AE/x6RvhVUWcvq8Re5CRIxIij/VlmZlySIIXUWoEsLZh9s/b3aMAZwKfm2AeWUMMe3grHWquGAYgwHiNwCmQgulqIb40qe0OAwiDbkQc7Ehcwxj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768307044; c=relaxed/simple;
-	bh=n2O+8S+jpTerGsJOPL5jzjcMN1tKFELJLHPmeyg+3kY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OBojm2ne1mfXGlUsuQGYxvgOjTULoq6btnIr10fxL8ecuYHota5m34+Xb3zvf7Y3oSDd9/DFK6BXMiksuSPMlHZSKqQcYH98Lrr/svBu1H4jKRSSrZ7J7cOpodi/JoBAXNUy7OqFvw0n2dP82PYc0doXSaTaYEa5AOiN1Lr8AEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLsloDXe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D602C16AAE
-	for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 12:24:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768307044;
-	bh=n2O+8S+jpTerGsJOPL5jzjcMN1tKFELJLHPmeyg+3kY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fLsloDXekgF+jN99mm3MQgITqE3lBGKpyFY+5qGmcXrNodVt4PyXPO/UfBubn59fH
-	 RjdD7+UmhQNROK/QV0VUCi50sMbodbXvqHogvdnGIpbfwwwYxFw+R1tNsxDDEQ9hhj
-	 xuXEznwvnzaHXi2JawqzxQCJmsmraosIlUB/oVW5ycH594l43BT5O0yUxyDt/3stOz
-	 XZOu9+sH0H1a9xco8FPsudaJv0xdmhXLdu6lkI1rCuldfOTttqnpE88kYz3DKukHF6
-	 30uGM/NahxLkJLrVxrT8LVI132a/3uPqRB7ikhn7MfWAtB7fwy/ErNL1+HMCeCh3DR
-	 T9cjzSGrFG9Qw==
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-3f0d1a39cabso5235968fac.3
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 04:24:04 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVBLsy2bwyCYKITlvbY4TRuLBGIeU+wcuFAH0EWHJSiBxXw+JPzV5vWfr5nTm6aOt6Yy8jrHmdcTA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIE5bJzpMoZmwgWx9XfI3Gh0yiFU0FTsB5xymon0Vk4glbpJB4
-	fwG9cjnWbSpiDUQRvV2EzL1ipmibceLq3HT/Xw5poX+fXF0IrLSAcL1XXgz1P0D9EVBbeAczwX/
-	ph7Rk6XDXcAqDJjp4CSnVCiik4UR33Zw=
-X-Google-Smtp-Source: AGHT+IFtArymh5MJGF7j0B2G7oobB6Cj6U7oXuW3L8H2n7ETCAuKTUKsB7QgkZhfXCTOmVq6X1I+J2n60VS+rsB/ygY=
-X-Received: by 2002:a05:6870:c0ce:b0:3e8:44ec:3416 with SMTP id
- 586e51a60fabf-3ffc0b721dcmr11317088fac.46.1768307043419; Tue, 13 Jan 2026
- 04:24:03 -0800 (PST)
+	s=arc-20240116; t=1768307433; c=relaxed/simple;
+	bh=+1r5JpINxGkRuotYJBXcmYZ2M+ajJ3igP7WUfZN9ZGA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=e3b3TQU3p9PoiUJmL7klvtCoyQrbtm8nRfMvRNhx7aGrOdpBa6a0lSTSqrR2nea6Z/RcFp0NFtBa2nRScKAKctllssOYxD3Zcdb1G9ZkaZ+lSzT7fwc6zGekzBU0OH8Q7x0ofUqsyb7zZ0ovJzrDUP6VrMZqsK08A8llsxuuuhg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B47A0497;
+	Tue, 13 Jan 2026 04:30:16 -0800 (PST)
+Received: from [10.57.12.230] (unknown [10.57.12.230])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 740343F59E;
+	Tue, 13 Jan 2026 04:30:22 -0800 (PST)
+Message-ID: <12ba1c1d-fb20-476c-ae24-3e1007afb199@arm.com>
+Date: Tue, 13 Jan 2026 12:30:22 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260112151441.1860607-1-yanhuoguifan@gmail.com>
-In-Reply-To: <20260112151441.1860607-1-yanhuoguifan@gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 13 Jan 2026 13:23:49 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ihxgyqcG_dU0XS48g6TwHhw5rA58niTfc1SDtHBEPxJg@mail.gmail.com>
-X-Gm-Features: AZwV_QinrwZQCsM2U3y2JwtIaLFf5iYbniCZf6wwJIhJmIiAPkXp1FeEjHAz8aU
-Message-ID: <CAJZ5v0ihxgyqcG_dU0XS48g6TwHhw5rA58niTfc1SDtHBEPxJg@mail.gmail.com>
-Subject: Re: [PATCH v0] PM: wakeup: call device resume after superior device
- complete resume
-To: Li XingYang <yanhuoguifan@gmail.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: max77620: fix kernel-doc for
+ max77620_thermal_read_temp
+To: Vivek BalachandharTN <vivek.balachandhar@gmail.com>
+Cc: Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20251201054036.2143455-1-vivek.balachandhar@gmail.com>
+ <2a3dc51e-ead2-4612-bf7f-6cdb49bf9570@gmail.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <2a3dc51e-ead2-4612-bf7f-6cdb49bf9570@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 12, 2026 at 4:15=E2=80=AFPM Li XingYang <yanhuoguifan@gmail.com=
-> wrote:
->
-> Background:
-> Extist device A,B and C.A is parent of B,C has no dependency on
-> either A or B.A is an asynchronously resume device,
-> while B and C are synchronously resume devices.dpm_list: A->B->C.
-> When A has not completed asynchronous resume,
-> the main loop will be blocked at B,and C cannot start resume
-> even if it is not associated with either A or B.
+Hi Vivek,
 
-Yes, that's how "synchronous" works by design.
+On 1/13/26 01:54, Vivek BalachandharTN wrote:
+> Hi Rafael, Daniel,
+> 
+> Just a gentle follow-up on this patch — I wanted to check if there are 
+> any concerns or if any changes are needed from my side.
+> 
+> Happy to revise or resend if required.
 
-If you need/want C to suspend/resume independently of A and B, make it
-async instead of hacking the core code.
+I think it was just missed.
 
-Thanks!
+> 
+> Thanks for your time.
+> 
+> Best,
+> Vivek
+> 
+> 
+> On 2025-12-01 1:40 a.m., Vivek BalachandharTN wrote:
+>> Building with W=1 reports a kernel-doc warning in
+>> drivers/thermal/max77620_thermal.c:
+>>
+>>    Warning: max77620_thermal.c:47 function parameter 'tz'
+>>    not described in 'max77620_thermal_read_temp'
+>>
+>> Update the kernel-doc comment for max77620_thermal_read_temp() to match
+>> the current function prototype. Replace the stale @data entry with @tz
+>> and describe the thermal zone device argument so that all parameters are
+>> documented.
+>>
+>> This fixes the W=1 kernel-doc warning and keeps the documentation in
+>> sync with the code.
+>>
+>> Signed-off-by: Vivek BalachandharTN<vivek.balachandhar@gmail.com>
+>> ---
+>>   drivers/thermal/max77620_thermal.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/thermal/max77620_thermal.c b/drivers/thermal/max77620_thermal.c
+>> index 85a12e98d6dc..8d37a04eb5a8 100644
+>> --- a/drivers/thermal/max77620_thermal.c
+>> +++ b/drivers/thermal/max77620_thermal.c
+>> @@ -32,7 +32,7 @@ struct max77620_therm_info {
+>>   
+>>   /**
+>>    * max77620_thermal_read_temp: Read PMIC die temperatue.
+>> - * @data:	Device specific data.
+>> + * @tz:	Thermal zone device
+>>    * @temp:	Temperature in millidegrees Celsius
+>>    *
+>>    * The actual temperature of PMIC die is not available from PMIC.
+
+
+The patch looks good. Although, I'm not sure if such change
+should go through the stable tree.
+Usually we would ask you to add 'Fixes:' line with the
+hash of the commit which left that stale comment in this case.
+If we were strict to the processes that should be there.
+If we judge the effort and traffic for stable-linux folks
+I would say, not needed.
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+
+Regards,
+Lukasz
+
 
