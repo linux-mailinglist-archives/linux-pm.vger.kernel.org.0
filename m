@@ -1,130 +1,124 @@
-Return-Path: <linux-pm+bounces-40736-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40737-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12C7ED19183
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 14:28:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97832D191E9
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 14:37:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BCEB1300FE0D
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 13:28:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8BB8C30155D5
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 13:36:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEE4338A9BF;
-	Tue, 13 Jan 2026 13:28:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C017A3904F2;
+	Tue, 13 Jan 2026 13:36:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="tMDJLA7+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tcAZXn31"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE27238F252
-	for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 13:28:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D11838FF0B;
+	Tue, 13 Jan 2026 13:36:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768310895; cv=none; b=d5gnP5djedekR4kx7ypxkmheljkKzKep03MPIVKLZPE0dgAEp0zBgDavmRk7g0MzlXvcK8sTft93kfdCU1YKDBXSxzHFwT3mWHKnm26NfLRco7C+arW6fYCUGLlzNDFDl2kVq+kHqALbPkA3vk9mHfhrOMrYJVez/V60nZshxv0=
+	t=1768311417; cv=none; b=R8lMCdOcBHMu69A6f2ohCJxlkCFxGrLMYwXlRaKuyksQ86tD127D3GIVgcB7oXUo4ZtmhDH7hrj7XosqNrXxg1UOGoXeSfi8Go3h96IDWKcAO4e5LCR3FXxVsjniPgxn9sAoD/vA77KuSxgKN5A3+F1ZOx7quXguHlXfb7BpyLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768310895; c=relaxed/simple;
-	bh=dgSjymh9lk5yPBBAyWitgYtOMmmnLkxKRBCsLcqk0o4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kF2hLowB29XF8yjHn/d0ysHuGezv7RKsz2iZcsJ2iWpZuXPWGe3c5Ks32pNTF7VrqwIrbVI/ed4wBFmHG5g72oTFWlX1SSADELuAVM2xsLUy5v9jZky+eyd9UPugPQ/uNxzVYE49O7hPUEiO6oITDc4mYlheo5rfX+qjqcmYV8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=tMDJLA7+; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id DFF52C1EC81;
-	Tue, 13 Jan 2026 13:27:45 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 755C260701;
-	Tue, 13 Jan 2026 13:28:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 317C6103C81A2;
-	Tue, 13 Jan 2026 14:28:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1768310892; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=Kg0TANHqq4Rv/IeDeYGMtCHebEqbA5pAlisCPOs8KMk=;
-	b=tMDJLA7+x3n/Vmh37vl5QjB/5UsK+hwP7FhP0MbbCqRJt28mo29BvRlktHp+cnaCyTI0Xp
-	G1OcGNtm8OuLZLnXHwE+Fv6rAZr+FSvibB1x/tHg111vRrFd0gOi6EDvChSQgdLoMi9Ojp
-	YKXk3v/1+BaEe9kIHzJFJlDtPrQhzm8uBSOgD0IM1LL8X3OrXTKkhcJhzs3WnDNYXg0LPf
-	OEvmNu9VMkwoZjbxw1Z/Kd+uZIyz1U82U6YhJ2trNoOEjKs4SUxK8tQ1+QDEnfMYg0rz0Y
-	mhSRiwabcAY/gYaDHk/Ca5IxCVVNPtHzamYDf0D1FGjAbcHZCGn6k6+H56zv5Q==
-From: =?UTF-8?q?Jo=C3=A3o=20Marcos=20Costa?= <joaomarcos.costa@bootlin.com>
-To: linux-pm@vger.kernel.org
-Cc: thomas.petazzoni@bootlin.com,
-	shuah@kernel.org,
-	trenn@suse.com,
-	jwyatt@redhat.com,
-	jkacur@redhat.com,
-	=?UTF-8?q?Jo=C3=A3o=20Marcos=20Costa?= <joaomarcos.costa@bootlin.com>
-Subject: [PATCH 1/1] cpupower: make systemd unit installation optional
-Date: Tue, 13 Jan 2026 14:27:53 +0100
-Message-ID: <20260113132753.1730020-2-joaomarcos.costa@bootlin.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20260113132753.1730020-1-joaomarcos.costa@bootlin.com>
-References: <20260113132753.1730020-1-joaomarcos.costa@bootlin.com>
+	s=arc-20240116; t=1768311417; c=relaxed/simple;
+	bh=IXvx5aXrBcUXshtJXld2okFqAwlbZa5hJRy3jy9dF+w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nQmWoob8AmnFk05TThc3yXkP3wzN+occyiRhK6HL+TLDuEQMFtLExpDni7EvcdysZkaB54dKIbeOXZM2revn20bIcCTu36P4VdPiBmBpm/0VnKMooLUmHJ0mKAGjgXiqB1S6HVcEF3KEdlLjeMCNyfrnfYaFhxuWJhmXLdOo2w0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tcAZXn31; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73CCCC16AAE;
+	Tue, 13 Jan 2026 13:36:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768311417;
+	bh=IXvx5aXrBcUXshtJXld2okFqAwlbZa5hJRy3jy9dF+w=;
+	h=From:To:Cc:Subject:Date:From;
+	b=tcAZXn31bkLBlcigInta1oir746tMWc6W1LBfKVnR3Y6CrzCBk72qV4vbD+6J62Ek
+	 uhn3E2kveTtrVeQFNB2Dmnhtp4RBdtFXv2uECqGilwEig4Zs7yY3vMS98KYQMx7h95
+	 DY150KkW33ZyWW9zEei24+RBcW4rzB6fRh7wyFigROeDjYcBS+FQvw2oZlG1vPddvt
+	 78Bf6owUYSQxgqJlA8wUtq8f10mgxqQgVaMcbTeG0CpnB/yHwRmu5jWGEb2LQFtTC9
+	 9Nou0d6TpmnDdC8lHdElzX+qdfwB88InhfZoqtCW+zt4DUkybmDjqrYsHnGlORInpP
+	 K4qkExKffiJpA==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux ACPI <linux-acpi@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject:
+ [PATCH v1] ACPI: PM: s2idle: Add module parameter for LPS0 constraints
+ checking
+Date: Tue, 13 Jan 2026 14:36:54 +0100
+Message-ID: <2827214.mvXUDI8C0e@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-cpupower currently installs a cpupower.service unit file into unitdir
-unconditionally, regardless of whether systemd is used by the host.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Improve the installation procedure by making this systemd step optional:
-a 'SYSTEMD' build parameter that defaults to 'true' and can be set to
-'false' to disable the installation of systemd's unit file.
+Commit 32ece31db4df ("ACPI: PM: s2idle: Only retrieve constraints when
+needed") attempted to avoid useless evaluation of LPS0 _DSM Function 1
+in lps0_device_attach() because pm_debug_messages_on might never be set
+(and that is the case on production systems most of the time), but it
+turns out that LPS0 _DSM Function 1 is generally problematic on some
+platforms and causes suspend issues to occur when pm_debug_messages_on
+is set now.
 
-Since 'SYSTEMD' defaults to true, the current behavior is kept as the
-default.
+In Linux, LPS0 _DSM Function 1 is only useful for diagnostics and only
+in the cases when the system does not reach the deepest platform idle
+state during suspend-to-idle for some reason.  If such diagnostics is
+not necessary, evaluating it is a loss of time, so using it along with
+the other pm_debug_messages_on diagnostics is questionable because the
+latter is expected to be suitable for collecting debug information even
+during production use of system suspend.
 
-Signed-off-by: João Marcos Costa <joaomarcos.costa@bootlin.com>
+For this reason, add a module parameter called check_lps0_constraints
+to control whether or not the list of LPS0 constraints will be checked
+in acpi_s2idle_prepare_late_lps0() and so whether or not to evaluate
+LPS0 _DSM Function 1 (once) in acpi_s2idle_begin_lps0().
+
+Fixes: 32ece31db4df ("ACPI: PM: s2idle: Only retrieve constraints when needed")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- tools/power/cpupower/Makefile | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ drivers/acpi/x86/s2idle.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index a1df9196dc45..969716dfe8de 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -315,7 +315,17 @@ endif
- 	$(INSTALL_DATA) lib/cpuidle.h $(DESTDIR)${includedir}/cpuidle.h
- 	$(INSTALL_DATA) lib/powercap.h $(DESTDIR)${includedir}/powercap.h
+--- a/drivers/acpi/x86/s2idle.c
++++ b/drivers/acpi/x86/s2idle.c
+@@ -28,6 +28,10 @@ static bool sleep_no_lps0 __read_mostly;
+ module_param(sleep_no_lps0, bool, 0644);
+ MODULE_PARM_DESC(sleep_no_lps0, "Do not use the special LPS0 device interface");
  
--install-tools: $(OUTPUT)cpupower
-+# SYSTEMD=false disables installation of the systemd unit file
-+SYSTEMD ?=	true
++static bool check_lps0_constraints __read_mostly;
++module_param(check_lps0_constraints, bool, 0644);
++MODULE_PARM_DESC(check_lps0_constraints, "Check LPS0 device constraints");
 +
-+install-systemd:
-+	$(INSTALL) -d $(DESTDIR)${unitdir}
-+	sed 's|___CDIR___|${confdir}|; s|___LDIR___|${libexecdir}|' cpupower.service.in > '$(DESTDIR)${unitdir}/cpupower.service'
-+	$(SETPERM_DATA) '$(DESTDIR)${unitdir}/cpupower.service'
-+
-+INSTALL_SYSTEMD := $(if $(filter true,$(strip $(SYSTEMD))),install-systemd)
-+
-+install-tools: $(OUTPUT)cpupower $(INSTALL_SYSTEMD)
- 	$(INSTALL) -d $(DESTDIR)${bindir}
- 	$(INSTALL_PROGRAM) $(OUTPUT)cpupower $(DESTDIR)${bindir}
- 	$(INSTALL) -d $(DESTDIR)${bash_completion_dir}
-@@ -324,9 +334,6 @@ install-tools: $(OUTPUT)cpupower
- 	$(INSTALL_DATA) cpupower-service.conf '$(DESTDIR)${confdir}'
- 	$(INSTALL) -d $(DESTDIR)${libexecdir}
- 	$(INSTALL_PROGRAM) cpupower.sh '$(DESTDIR)${libexecdir}/cpupower'
--	$(INSTALL) -d $(DESTDIR)${unitdir}
--	sed 's|___CDIR___|${confdir}|; s|___LDIR___|${libexecdir}|' cpupower.service.in > '$(DESTDIR)${unitdir}/cpupower.service'
--	$(SETPERM_DATA) '$(DESTDIR)${unitdir}/cpupower.service'
+ static const struct acpi_device_id lps0_device_ids[] = {
+ 	{"PNP0D80", },
+ 	{"", },
+@@ -515,7 +519,7 @@ static struct acpi_scan_handler lps0_han
  
- install-man:
- 	$(INSTALL_DATA) -D man/cpupower.1 $(DESTDIR)${mandir}/man1/cpupower.1
-@@ -406,4 +413,4 @@ help:
- 	@echo  '  uninstall	  - Remove previously installed files from the dir defined by "DESTDIR"'
- 	@echo  '                    cmdline or Makefile config block option (default: "")'
+ static int acpi_s2idle_begin_lps0(void)
+ {
+-	if (lps0_device_handle && !sleep_no_lps0 && pm_debug_messages_on &&
++	if (lps0_device_handle && !sleep_no_lps0 && check_lps0_constraints &&
+ 	    !lpi_constraints_table) {
+ 		if (acpi_s2idle_vendor_amd())
+ 			lpi_device_get_constraints_amd();
+@@ -540,7 +544,7 @@ static int acpi_s2idle_prepare_late_lps0
+ 	if (!lps0_device_handle || sleep_no_lps0)
+ 		return 0;
  
--.PHONY: all utils libcpupower update-po create-gmo install-lib install-tools install-man install-gmo install uninstall clean help
-+.PHONY: all utils libcpupower update-po create-gmo install-lib install-systemd install-tools install-man install-gmo install uninstall clean help
--- 
-2.47.0
+-	if (pm_debug_messages_on)
++	if (check_lps0_constraints)
+ 		lpi_check_constraints();
+ 
+ 	/* Screen off */
+
+
 
 
