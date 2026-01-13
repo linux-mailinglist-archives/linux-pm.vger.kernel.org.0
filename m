@@ -1,140 +1,251 @@
-Return-Path: <linux-pm+bounces-40751-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40752-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F24D5D1A173
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 17:08:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31978D1A547
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 17:39:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 94D433032133
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 16:08:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 99F9630C6CCC
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Jan 2026 16:34:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDCF234676F;
-	Tue, 13 Jan 2026 16:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D47730EF9E;
+	Tue, 13 Jan 2026 16:34:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="AXenmkWO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FBQIpbWj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8B63043CE;
-	Tue, 13 Jan 2026 16:08:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2BA280A5A;
+	Tue, 13 Jan 2026 16:34:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768320492; cv=none; b=JSIcza/ZquvXwuXrZOYzmcSmsa74l24G4+kw9mxi2uzT1Vxd/05+VmABfH0/eIFrS5Gj/Drc/KXXjcFmWWdI/YdHMRJNk3VRITEj/8RhTj0B4sZpFdNAo9jeh+vcNZwaIlnGwPo/LZ7mcEJ4WTnBd5kECkOhrEq1n/UHN051Mkk=
+	t=1768322088; cv=none; b=No1UYvaSuvS7z6kedw/9nm1pRuc8jxMIk9PlpMRsd//6RbIGpRxPOfDDD2KmFPwx+h5KISzlAEezi3lsUnIwPtcAYzsxbASbAgU67PepFuk6ckrxtzXGeNPFvafcXZC3qmEVqmh7aEYgjyXl6kx8AbUxUfYxZLdFCQXCVnvbhXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768320492; c=relaxed/simple;
-	bh=XrcoqIdL7mqLMAZSLEUBjwk3677mywTfFnps1LIr2qA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JQCig/njWqBIQoSeA+o8OOhLUCrYvgCt7nJ04MvMhAZ2jrCI7HsGGdOpl9Q1YeWqrkWkTdj0eFTww5BXhCDFnUHePvf49GBTZVrKKXxqwKsqU/zowcqh1VlewPdtOKEmaQ2e/L4VizpmUkEfaYa2TP5aF+hIfou60Nbc4+LTVO8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=AXenmkWO; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1768320489;
-	bh=XrcoqIdL7mqLMAZSLEUBjwk3677mywTfFnps1LIr2qA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=AXenmkWO0eq5YWShnSaSv3RU3e/vIfy2AYsdeNYFaYb63vC1Wfxa4deyTH9bKjZdA
-	 zkIfbiY4MFlNVaAbEHedzyfCo5epss/7f9Fe41KSANOp3W7SJ6jqA3jj5IhjA5cHfp
-	 jXMlLjN45Ix9TjPtsQyew8bp+hTWRzToGrBW5tPz9k3W8mUlOtHczuEQWkOnA7tK8E
-	 iY9NUTgtz4t5KziPuiYtjkxoj+jZ53hT/w1WayTNHan+buwycMpWWBUpp5tYW2wFgK
-	 8AtxVdb+UXSRg183npbS02u28cojtXfs1ns0AwIVQsmKKaVZDsyNpBbd/6qiSZ6l89
-	 DWmoRged+oF+w==
-Received: from fedora (unknown [IPv6:2a01:e0a:2c:6930:d919:a6e:5ea1:8a9f])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bbrezillon)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9819B17E026C;
-	Tue, 13 Jan 2026 17:08:08 +0100 (CET)
-Date: Tue, 13 Jan 2026 17:08:03 +0100
-From: Boris Brezillon <boris.brezillon@collabora.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, Steven Price
- <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
- <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
- <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Chen-Yu Tsai <wenst@chromium.org>, Chia-I Wu <olvaffe@gmail.com>,
- kernel@collabora.com, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] Make MT8196 get its Mali GPU shader_present from
- nvmem
-Message-ID: <20260113170803.6e5ebedb@fedora>
-In-Reply-To: <CAPDyKFqkPg5rWYk7cwDywRn_pexQhd2V3R63atjruJnSpYxfZQ@mail.gmail.com>
-References: <20251220-mt8196-shader-present-v2-0-45b1ff1dfab0@collabora.com>
-	<CAPDyKFqkPg5rWYk7cwDywRn_pexQhd2V3R63atjruJnSpYxfZQ@mail.gmail.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1768322088; c=relaxed/simple;
+	bh=h0gckYf/2eQitVs/qpheSug3BpiAFpijfck5eDwbWGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gM/Mo1dGO4rID6nsKrYO4+WeLGLIbMI66OS3Ul6PT/vbLU2KyVGH2EVLiEDDIaEAYkzggZc1Ydu9bGDBi0Gik4kzi1QyWbuui5EGYD6oZjZQc7BMYxxJn975ByHpz0GB+eeGQueCsJ7BJyGjIUGfr/ZQ/ZY0chhzgatoefMdSlk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FBQIpbWj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E8B0C116C6;
+	Tue, 13 Jan 2026 16:34:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768322088;
+	bh=h0gckYf/2eQitVs/qpheSug3BpiAFpijfck5eDwbWGg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FBQIpbWjH24K4Z06fK0wcuB9dT0G7ItXDQ7rKdptW7iiuM/mixJ1Z3/mDBMRMu4W2
+	 cZYo/UGeP92toiDT+ZADi1aDiKQdDNsGIx/09uENsNkcdDfllDgrIurJ2qPcix+LUq
+	 FhLxuv+gcvmnjabCS2sFd1CmdIiAWVSERAGXfBVOv9cP9C7HKCplH61YFkM7gkpQCX
+	 A1sHICLXghk5m6+bUyHsgE4LUehprgZwsn5DlnVHliC/BSPqMnHGNByl5mmsCWJG6M
+	 wwIDlTSBsb3jrTdnMgZq6ai1y3+vE65FObQAiypLy4k1ZMe7UNouaKmWIQkIideAqC
+	 wSPzt8FE5AddQ==
+Date: Tue, 13 Jan 2026 22:04:35 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Sean Anderson <sean.anderson@linux.dev>
+Cc: manivannan.sadhasivam@oss.qualcomm.com, Rob Herring <robh@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Hans de Goede <hansg@kernel.org>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Bartosz Golaszewski <brgl@kernel.org>, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v4 8/9] power: sequencing: pcie-m2: Add support for PCIe
+ M.2 Key E connectors
+Message-ID: <rxfnx6cq6dqifongrmhanpltacjqdkcn2yor7d7qsrrskmhueo@m3se3iyd4pfy>
+References: <20260112-pci-m2-e-v4-0-eff84d2c6d26@oss.qualcomm.com>
+ <20260112-pci-m2-e-v4-8-eff84d2c6d26@oss.qualcomm.com>
+ <2432dafc-4101-4b23-90b2-85ea5459435c@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2432dafc-4101-4b23-90b2-85ea5459435c@linux.dev>
 
-On Mon, 29 Dec 2025 12:52:13 +0100
-Ulf Hansson <ulf.hansson@linaro.org> wrote:
-
-> On Sat, 20 Dec 2025 at 19:50, Nicolas Frattaroli
-> <nicolas.frattaroli@collabora.com> wrote:
-> >
-> > The MediaTek MT8196 SoC's Mali SHADER_PRESENT register does not list
-> > only functional shader cores, but also those that are fused off to
-> > improve yield.
-> >
-> > The SHADER_PRESENT bitmask with the one fused off core omitted is to be
-> > found in an efuse. However, the efuse address is considered
-> > confidential, and is not public knowledge.
-> >
-> > The MT8196 GPUEB MCU, which does the power management for the Mali GPU
-> > on this SoC, knows and reads the efuse however, and exposes it in the
-> > shared memory intended to communicate state to the application
-> > processor. Reading the bitmask from this shared memory area is the
-> > vendor's intended solution.
-> >
-> > This series models this in the binding and implements it in the
-> > corresponding Linux drivers:
-> > - the mali-valhall-csf binding gets an nvmem-cells/nvmem-cell-names
-> >   property to declare that shader-present is in a different castle
-> > - the mt8196-gpufreq binding requires nodes to expose the shader-present
-> >   cell
-> > - panthor checks for the presence of the shader-present cell and uses it
-> >   as the shader-present value if it's found, instead of the Mali GPU
-> >   register contents
-> > - mtk-mfg-pmdomain becomes an nvmem provider and will happily serve
-> >   queries for the shader-present cell
-> >
-> > While it would be preferable if we could read the efuse directly, it's
-> > not possible as things stand, and insisting on it will just keep this
-> > hardware from working in mainline. Running a GPU workload with a
-> > SHADER_PRESENT bitmask that includes a faulty core results in corrupt
-> > GPU rendering output.
-> >
-> > Modelling the mt8196-gpufreq device as a nvmem-cell provider however is
-> > not lying about the hardware's capabilities, as it truly does provide
-> > access to the nvmem-cell, even if it acts as a proxy.
-> >
-> > From a bindings and panthor perspective, this is also generic enough to
-> > where hypothetical other vendors doing the same thing (even with direct
-> > efuse access) can rely on the same cell name and implementation.
-> >
-> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>  
+On Tue, Jan 13, 2026 at 10:26:04AM -0500, Sean Anderson wrote:
+> On 1/12/26 11:26, Manivannan Sadhasivam via B4 Relay wrote:
+> > From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > 
+> > Add support for handling the power sequence of the PCIe M.2 Key E
+> > connectors. These connectors are used to attach the Wireless Connectivity
+> > devices to the host machine including combinations of WiFi, BT, NFC using
+> > interfaces such as PCIe/SDIO for WiFi, USB/UART for BT and I2C for NFC.
+> > 
+> > Currently, this driver supports only the PCIe interface for WiFi and UART
+> > interface for BT. The driver also only supports driving the 3.3v/1.8v power
+> > supplies and W_DISABLE{1/2}# GPIOs. The optional signals of the Key E
+> > connectors are not currently supported.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > ---
+> >  drivers/power/sequencing/Kconfig          |   1 +
+> >  drivers/power/sequencing/pwrseq-pcie-m2.c | 110 ++++++++++++++++++++++++++++--
+> >  2 files changed, 104 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/drivers/power/sequencing/Kconfig b/drivers/power/sequencing/Kconfig
+> > index f5fff84566ba..29bd204319cc 100644
+> > --- a/drivers/power/sequencing/Kconfig
+> > +++ b/drivers/power/sequencing/Kconfig
+> > @@ -38,6 +38,7 @@ config POWER_SEQUENCING_TH1520_GPU
+> >  config POWER_SEQUENCING_PCIE_M2
+> >  	tristate "PCIe M.2 connector power sequencing driver"
+> >  	depends on OF || COMPILE_TEST
+> > +	depends on PCI
+> >  	help
+> >  	  Say Y here to enable the power sequencing driver for PCIe M.2
+> >  	  connectors. This driver handles the power sequencing for the M.2
+> > diff --git a/drivers/power/sequencing/pwrseq-pcie-m2.c b/drivers/power/sequencing/pwrseq-pcie-m2.c
+> > index e01e19123415..4b85a40d7692 100644
+> > --- a/drivers/power/sequencing/pwrseq-pcie-m2.c
+> > +++ b/drivers/power/sequencing/pwrseq-pcie-m2.c
+> > @@ -4,12 +4,16 @@
+> >   * Author: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> >   */
+> >  
+> > +#include <linux/err.h>
+> >  #include <linux/device.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/gpio/consumer.h>
+> >  #include <linux/mod_devicetable.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of.h>
+> >  #include <linux/of_graph.h>
+> >  #include <linux/of_platform.h>
+> > +#include <linux/pci.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/pwrseq/provider.h>
+> >  #include <linux/regulator/consumer.h>
+> > @@ -25,17 +29,19 @@ struct pwrseq_pcie_m2_ctx {
+> >  	const struct pwrseq_pcie_m2_pdata *pdata;
+> >  	struct regulator_bulk_data *regs;
+> >  	size_t num_vregs;
+> > -	struct notifier_block nb;
+> > +	struct gpio_desc *w_disable1_gpio;
+> > +	struct gpio_desc *w_disable2_gpio;
+> > +	struct device *dev;
+> >  };
+> >  
+> > -static int pwrseq_pcie_m2_m_vregs_enable(struct pwrseq_device *pwrseq)
+> > +static int pwrseq_pcie_m2_vregs_enable(struct pwrseq_device *pwrseq)
+> >  {
+> >  	struct pwrseq_pcie_m2_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
+> >  
+> >  	return regulator_bulk_enable(ctx->num_vregs, ctx->regs);
+> >  }
+> >  
+> > -static int pwrseq_pcie_m2_m_vregs_disable(struct pwrseq_device *pwrseq)
+> > +static int pwrseq_pcie_m2_vregs_disable(struct pwrseq_device *pwrseq)
+> >  {
+> >  	struct pwrseq_pcie_m2_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
+> >  
+> > @@ -44,18 +50,84 @@ static int pwrseq_pcie_m2_m_vregs_disable(struct pwrseq_device *pwrseq)
+> >  
+> >  static const struct pwrseq_unit_data pwrseq_pcie_m2_vregs_unit_data = {
+> >  	.name = "regulators-enable",
+> > -	.enable = pwrseq_pcie_m2_m_vregs_enable,
+> > -	.disable = pwrseq_pcie_m2_m_vregs_disable,
+> > +	.enable = pwrseq_pcie_m2_vregs_enable,
+> > +	.disable = pwrseq_pcie_m2_vregs_disable,
+> >  };
+> >  
+> > -static const struct pwrseq_unit_data *pwrseq_pcie_m2_m_unit_deps[] = {
+> > +static const struct pwrseq_unit_data *pwrseq_pcie_m2_unit_deps[] = {
+> >  	&pwrseq_pcie_m2_vregs_unit_data,
+> >  	NULL
+> >  };
+> >  
+> > +static int pwrseq_pci_m2_e_uart_enable(struct pwrseq_device *pwrseq)
+> > +{
+> > +	struct pwrseq_pcie_m2_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
+> > +
+> > +	return gpiod_set_value_cansleep(ctx->w_disable2_gpio, 0);
+> > +}
+> > +
+> > +static int pwrseq_pci_m2_e_uart_disable(struct pwrseq_device *pwrseq)
+> > +{
+> > +	struct pwrseq_pcie_m2_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
+> > +
+> > +	return gpiod_set_value_cansleep(ctx->w_disable2_gpio, 1);
+> > +}
+> > +
+> > +static const struct pwrseq_unit_data pwrseq_pcie_m2_e_uart_unit_data = {
+> > +	.name = "uart-enable",
+> > +	.deps = pwrseq_pcie_m2_unit_deps,
+> > +	.enable = pwrseq_pci_m2_e_uart_enable,
+> > +	.disable = pwrseq_pci_m2_e_uart_disable,
+> > +};
+> > +
+> > +static int pwrseq_pci_m2_e_pcie_enable(struct pwrseq_device *pwrseq)
+> > +{
+> > +	struct pwrseq_pcie_m2_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
+> > +
+> > +	return gpiod_set_value_cansleep(ctx->w_disable1_gpio, 0);
+> > +}
+> > +
+> > +static int pwrseq_pci_m2_e_pcie_disable(struct pwrseq_device *pwrseq)
+> > +{
+> > +	struct pwrseq_pcie_m2_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
+> > +
+> > +	return gpiod_set_value_cansleep(ctx->w_disable1_gpio, 1);
+> > +}
+> > +
+> > +static const struct pwrseq_unit_data pwrseq_pcie_m2_e_pcie_unit_data = {
+> > +	.name = "pcie-enable",
+> > +	.deps = pwrseq_pcie_m2_unit_deps,
+> > +	.enable = pwrseq_pci_m2_e_pcie_enable,
+> > +	.disable = pwrseq_pci_m2_e_pcie_disable,
+> > +};
+> > +
+> >  static const struct pwrseq_unit_data pwrseq_pcie_m2_m_pcie_unit_data = {
+> >  	.name = "pcie-enable",
+> > -	.deps = pwrseq_pcie_m2_m_unit_deps,
+> > +	.deps = pwrseq_pcie_m2_unit_deps,
+> > +};
+> > +
+> > +static int pwrseq_pcie_m2_e_pwup_delay(struct pwrseq_device *pwrseq)
+> > +{
+> > +	/*
+> > +	 * FIXME: This delay is only required for some Qcom WLAN/BT cards like
+> > +	 * WCN7850 and not for all devices. But currently, there is no way to
+> > +	 * identify the device model before enumeration.
+> > +	 */
+> > +	msleep(50);
 > 
-> I have applied the pmdomain changes in patch2 and patch 4 for next, thanks!
+> Section 3.1.4 of the M.2 spec says that "Power Valid to PERST# input
+> inactive" (T_PVPGL) is "Implementation specific recommended 50 ms." So I
+> think we should delay for at least 50 ms for all M.2 cards.
+
+Yes, this pretty much looks like T_PVPGL, but this delay is already accounted
+for in pcie-qcom.c as a part of PERST# deassertion (I believe WCN7850 was tested
+with Qcom host). I will check it and get back.
+
+> Additionally, the PCIe CEM specifies that "Power stable to PERST#
+> inactive" (T_PVPERL) must be at least 100 ms. So I think we should just
+> delay for 100 ms regardless of the slot, perhaps making this
+> configurable in the devicetree if e.g. the system integrator knows the
+> soldered-down M.2 requires less initialization time. This is exactly
+> what I proposed in [1].
 > 
-> I assume the gpu changes will be funneled via another tree, but let me
-> know if there is a reason to keep these changes together.
 
-Yep, I just queued the remaining two patches to drm-misc-next.
+I'd love to do it in the pwrctrl/pwrseq driver, but most of the controller
+drivers are already handling this delay as a part of their PERST# deassertion.
+This was the only reason I didn't add the T_PVPERL delay here. Also, those
+controller drivers handle non-pwrctrl design as well (for backwards
+compatibility), so they need the delay anyway and it will make them messy if the
+delay is only handled in non-pwrctrl case.
 
-Thanks,
+- Mani
 
-Boris
+-- 
+மணிவண்ணன் சதாசிவம்
 
