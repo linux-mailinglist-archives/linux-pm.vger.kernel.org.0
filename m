@@ -1,208 +1,182 @@
-Return-Path: <linux-pm+bounces-40843-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40844-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C72DD1E12C
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 11:32:17 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C91DD1E391
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 11:50:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 225EC3007F1A
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 10:32:06 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 376533076F1B
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 10:48:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B643538A9D8;
-	Wed, 14 Jan 2026 10:32:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8ABB393DD9;
+	Wed, 14 Jan 2026 10:48:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="co6DMUHs";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="C7l3Xju4"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="QJdSDxJt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013012.outbound.protection.outlook.com [52.101.83.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A88C342CB1
-	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 10:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768386723; cv=none; b=Y/JEmr6+IFq1Z44a5L09gCHXRzB888XQoOgzHF6u9eemtPwmtTebpsoIQx4im1T48JcHKZfMdQ+RP9M8FiFy7ODH1Ogs0DudOKZz3f7OJAV5a5EBQH3SZFYhwX2hjs+w76HTK4tojt8lS1A3nX71NBibmZmSCZYIMa2k2kp9it8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768386723; c=relaxed/simple;
-	bh=jla/MYd4+2oFBVKTdb3a1CvjAVITJvhxRNE4Y4ypt6w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kNNKxUGIFtFfEf/w3TzqVgekLTzYHPFw/aWy8b+Gi9cCHAxKSie0V+s1pwRGrDq2zSQ1VKq8lqlOweoqKfZ6t+Fh08vJoU45Fcjtgi5EYse5G7e5jQSdzZRaeJda3kkydWDl/y4fXzVX4A9SyIxbRGeYxEAKNDSOx0lT2EQPRXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=co6DMUHs; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=C7l3Xju4; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60E7j53N2056596
-	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 10:32:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	MQGrxRY3HuMFkUxGavmviPtyWCXgkL9hJSHhfZfU4sE=; b=co6DMUHsbl9XeMSd
-	rNFCaPTEC9LpOzgEsskhcL72QqliPgyCxuFPIdC4/ICdV+dHfe6xnvNEFdutUVRh
-	cXlipdiy4pfoMdW4KBUGPvml0ViiD5NTw1/bUd64S9Mc0Wuflsfq+H1du4WklSSh
-	pR14j881ghqvXzwrM5RavzKTmOtCLFhI9nSeN5Nnm43GCszFRAmicPnqvVOTrrvw
-	30j1feRYl5ccz9gGQQxXOTo78QcggjpLMBUNL+wrUVzxrw342QyzeBm8OX4HzoCh
-	9Z/1AMTz4psmsRjcbwtQUY3R0kE2cECWO527dkVpXisKuckR7CZs6AC9Dql0cFp9
-	Mq+fbw==
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bnr3ebrrd-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 10:32:01 +0000 (GMT)
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-50149945d26so1869991cf.3
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 02:32:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1768386721; x=1768991521; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MQGrxRY3HuMFkUxGavmviPtyWCXgkL9hJSHhfZfU4sE=;
-        b=C7l3Xju4WGCnj6TOGPf3pHOrQ/jBIXgAV5Nb0F8kXSXfM0rekLmXPUJdRxSuS7bp+t
-         2reBUuZVyVfItpxwzRwQ80gTWXcI5tnalrbZqK1e9ZrHGah4hau9Z1d5AdamBqVy/U8U
-         sOw9+OjrpIkhode7uB+bOfPglTTvYy5LujKETU/2kpR8Jb1xNUfmnoyUe81XtkiGpMOj
-         NZa4zKe41qe2b8iEd1mraLyabYMjbfmILYR9c3DNfCyVZX2BdQ00kNIPudZ64Rwz12ak
-         UpNRnVUEF3KsyNRkhIk3nCe3tCQURAVaALKRO3yTMPOGCv2CkLfWqskZrdMXvdksVUed
-         2ESw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768386721; x=1768991521;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MQGrxRY3HuMFkUxGavmviPtyWCXgkL9hJSHhfZfU4sE=;
-        b=bmV5zTD7msssItFFCzkdO9FHSiZ/HgQ6YZWGkNV1iVSolMo+0JiClTJ7m/hTqaAyHB
-         KSKIAyStReEh4f4cEavWszmWMLNbJUcAGnZV1lDTlGCfSvOAGLxxAwiBWG5M2R7u9yzL
-         P4nr412I6W3JHn7quWEoakGZtTXmUw+If5yooJlkM/FZWxeAYaUjhUSUtnXR9BGseTdM
-         B3IzbBZDE6AkYfLSdu1kaP6p5luYmxWkAFtL2YwaEzsQ4GHWCPTRSZYT8OvBsdv65wPt
-         QyUk1OPVh0e3Bt53i6dFiUZrTRLZw05GFls2wR/Sxlnf1LfroWfxJ+hBJpZ/9ap0Pr+Q
-         1H4A==
-X-Forwarded-Encrypted: i=1; AJvYcCUoyzAuERHjaHMTPhFRsZ7Rs9QBlf5ggHSlYT5+C3h0Kjp7GQ/t4qx/5MFnvzRmUEZj1+NlwOlo5g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFktkHfSFKTjdiq24BUa68IAKfYDbdmCcZs7ol/fuEH/Q99hwe
-	jm1Yqt0TT54SavFNA1W4s3g27bvRv+R0B1rQIjpmdijtFVBwrU67CDKD5XRe1h1sfXdxRIEAaAY
-	prJU6yFT2u6oAxQ5OgB1D10girWCO50rNpbISvXYHp20csf2gRMLJnE8a1HvXYg/tDPMRhg==
-X-Gm-Gg: AY/fxX7DCBFQMqd0QX5LbKo9Ts7Yk0Ui2qZ5cLQPYplZ5moLZSvXOybDn9gtZ8RH9KM
-	+HfmKTqGaquSS2M2Gqdc6p8J2JL0CAdo+K5cjDyjZNZtHmBL7c6ESMcQj4jTLmwrzoaARdQwlP7
-	VkMIahKvI6A1k3WeSBOL60dxlDtQzyD77YC8nbCPDOn7KczdHhCpgM1LQFYaLjqVRAEXzUmL3Cg
-	y9UnQ4ydd73VZDcx8AvJolgtFfkAevpyjwQYVNh5yGlV1GUc4OQg649X8dHvdx0VIGUs2HEYGpC
-	8fWcqXrGQIWSieL97wEq8Mv2jXgKn4APrxW6XyKEgVB73pAiICLfG0HmQB2Xe6rkhEuQLd9S2WN
-	9KAq7/uvYwzbLLxg0L7L5cgYJt9aldGhb0Riwec2O9mmEB94AbU2vaCgUr4o0rfj9CAI=
-X-Received: by 2002:ac8:5894:0:b0:4e8:a001:226d with SMTP id d75a77b69052e-5014846f892mr20028611cf.7.1768386720511;
-        Wed, 14 Jan 2026 02:32:00 -0800 (PST)
-X-Received: by 2002:ac8:5894:0:b0:4e8:a001:226d with SMTP id d75a77b69052e-5014846f892mr20028481cf.7.1768386719918;
-        Wed, 14 Jan 2026 02:31:59 -0800 (PST)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507bf6d5e0sm22308961a12.31.2026.01.14.02.31.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jan 2026 02:31:59 -0800 (PST)
-Message-ID: <ae97da56-7e4c-4ff2-b0fa-9724b95229eb@oss.qualcomm.com>
-Date: Wed, 14 Jan 2026 11:31:57 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EAE394463;
+	Wed, 14 Jan 2026 10:48:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768387702; cv=fail; b=cPiML9eBXX9yDFIsd2UFdVmkx9VtRgGOK25OJMrGSTNMcvw3DtT6GC3J06S3bie4/ddgvu1v9WEF8648ZzgG2LjTwjab9tFrbih4bjbkHglxEk3hd4W/O98VTfex/hVHzsvNQYe9GVUs75p3LMNs8qnRFkgIondZ1UXpcdpqlQQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768387702; c=relaxed/simple;
+	bh=2TQpqSLxF7XIOGYLaPWvQARf4pPN1c7U05d+xtbN/Y8=;
+	h=From:To:CC:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WKXACJjrAedgufpCRc1xmBi87mUL7rP/jdcam9pc3VirldVAIOfd3l3LqpshRN4ys2erajKTGNBfMCiWNxmX9GJKGdIJ3r8bOyFDNGzCz/8OIn0PsGDJs/BMu/M7EHg2F3BNWzaCRr+b8tzziROWIA6krop7tPTsYtDEkehPu1s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=QJdSDxJt; arc=fail smtp.client-ip=52.101.83.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UK9cUAA3zBM8hyjncgtfOfl2H23d674s6UrpPEs9QEE71NF10DhmvnXa/hSzPSYir9yD0PCAzJgor/hGeTalxMBfS9JIeFFyBRUnYlICXlJ/Mu3/amBlYfplOpq5CTo1PgJ5dNXWmHr6maMeFyJGvgSqAXNBVJVTIPF6q0r5y1gggqpbcPyBR7a6SxWjk5PhkS2QSuqoFQlhI2BQ037dNYGCBeFDNIi8OTaJnSVn/I5D9w382tmB7IUFNeURaCdXzFZRk1dL9YM/N97y7/4VuSIAf9NLCACj6VzHgokHpgPeY8iLY9rgU+5IkADnsvupM5wL1Y4mC4R3ZauUlPaQRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d4Du2ZHUWKPqx2Otp72OOKJ/sqrPgDEX0Gbe3HmpoOA=;
+ b=Ovjbz2GcsBuKOqI1gQOfe9Bc6Se972fx1/UuWd4HybcUqpYTi0hIYtCOueChQCW0YCAgUYpya2JZs2CVEpIuf1yA+5MyQ2zjmdFxT3MNSqgPV4nCYRG0x9H9XMxCrlCZ79Pi+vW5kqX2OrAWTQqGou7b75NxH+ERFznHl1lCEfrRMK+P68zSNhS8ouWii3qGXRCPKNKxHjFJblxw79HUpL+Vbx48PfHtDoBkywL24VsKBhCkDgAvjk3BLp827hGm//ByzOBMqZtVFNqsaJVOkaTbA8DSIc8TAE4H4vkGQ/vYCJ3k+6ec1F7bzAKAqXbnT3irnpJ7SSomStUyQzMr8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d4Du2ZHUWKPqx2Otp72OOKJ/sqrPgDEX0Gbe3HmpoOA=;
+ b=QJdSDxJtNyan7YemoH5YVm3y51TtenJ6sdECAesLygBLB6eM+6nj5ygQOFo4e0GoGGX9b/uGtCu0NhXMVQouzHaaJ3tiBNJFbNIjGDI+/3hblOA1DLZHUFuRahUOIe1FjVMijXErNLVMFZXb0t8KhhqJ6ayuPLFmiORL5Tbg5KI=
+Received: from DUZPR01CA0165.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:4b3::6) by PAWPR02MB10238.eurprd02.prod.outlook.com
+ (2603:10a6:102:367::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.5; Wed, 14 Jan
+ 2026 10:48:10 +0000
+Received: from DB1PEPF000509E6.eurprd03.prod.outlook.com
+ (2603:10a6:10:4b3:cafe::10) by DUZPR01CA0165.outlook.office365.com
+ (2603:10a6:10:4b3::6) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9520.6 via Frontend Transport; Wed,
+ 14 Jan 2026 10:48:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ DB1PEPF000509E6.mail.protection.outlook.com (10.167.242.56) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9520.1 via Frontend Transport; Wed, 14 Jan 2026 10:48:10 +0000
+Received: from pc52311-2249 (10.4.0.13) by se-mail10w.axis.com (10.20.40.10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.39; Wed, 14 Jan
+ 2026 11:48:07 +0100
+From: Waqar Hameed <waqar.hameed@axis.com>
+To: Nikita Travkin <nikita@trvn.ru>
+CC: Sebastian Reichel <sre@kernel.org>, <kernel@axis.com>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 09/11] power: supply: pm8916_lbc: Fix use-after-free in
+ power_supply_changed()
+In-Reply-To: <pndtswxebnc.a.out@axis.com> (Waqar Hameed's message of "Wed, 07
+	Jan 2026 15:32:39 +0100")
+References: <cover.1766268280.git.waqar.hameed@axis.com>
+	<64d8dd3675a4e59fa32c3e0ef451f12d1f7ed18f.1766268280.git.waqar.hameed@axis.com>
+	<5f3152f01420823ef8ae2932ed781cf4@trvn.ru> <pndtswxebnc.a.out@axis.com>
+User-Agent: a.out
+Date: Wed, 14 Jan 2026 11:48:06 +0100
+Message-ID: <pndo6mwtqqh.a.out@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC RFT] interconnect: qcom: implement get_bw with
- rpmh_read
-To: Neil Armstrong <neil.armstrong@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-References: <20251106-topic-sm8x50-icc-read-rpmh-v1-1-d03a2e5ca5f7@linaro.org>
- <8eb528dd-71fc-408e-a97c-d484198e4f81@kernel.org>
- <1be287ac-fce9-4f27-aa88-b1f786e968cd@oss.qualcomm.com>
- <95becfde-ba4b-4024-9b90-e64e77551f0a@linaro.org>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <95becfde-ba4b-4024-9b90-e64e77551f0a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Authority-Analysis: v=2.4 cv=TPFIilla c=1 sm=1 tr=0 ts=696770a1 cx=c_pps
- a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
- a=kMUB7RtO3m2hnyBDxvcA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=dawVfQjAaf238kedN5IG:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDA4NiBTYWx0ZWRfX4wRIyXSZeZjD
- /ebk6d0J7R/NXIhyOzDPaUYYFnQqizJDouP5BAxsSnbegxKomzpH/eUNp5RFJFBo90gQDAvY4Gn
- q4QFb62Zec7oAYjaCHp6duAqvCnt8T3NxJW7O6wbsPYiJcNWlNsaEMIwOQmjygdpU+YG0RL4NF8
- vEvHCdgGgWknK+0T/ejhRf/vtGArXQxuPEKOPTClKJtZBW4gtp+VqEAqvBtbdnC85ChIy2Aw2Oh
- HxHsJuadmbTEif9B+xQQKsTwUG4xLSV3A6/B2wyyAWADkjA5PNZNBrROK7RSRbmnBt3NvsjyNvM
- pK5mOCQ1nNliHoHGNBKdBcFtWS4tRPc+PbUjXw5GCE2FYMGqqwboEyMPDZLewbRUUIlMqtmm3Mn
- +GSbIeKAAJHC9gsO/ZhdDL92iJyiDergyV1wWWqlmAqgDXPLeo5/cND3M/lk8j7wZbrDUBjyeTt
- 4Td7KKPZTTIsAQwSHeg==
-X-Proofpoint-GUID: OCl8WTEo9zZAM_PvpjRTsC6E4dSKOwE1
-X-Proofpoint-ORIG-GUID: OCl8WTEo9zZAM_PvpjRTsC6E4dSKOwE1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-14_03,2026-01-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 phishscore=0 clxscore=1015 spamscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 impostorscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601140086
+Content-Type: text/plain
+X-ClientProxiedBy: se-mail01w.axis.com (10.20.40.7) To se-mail10w.axis.com
+ (10.20.40.10)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB1PEPF000509E6:EE_|PAWPR02MB10238:EE_
+X-MS-Office365-Filtering-Correlation-Id: f8b12f7d-99d6-4e0d-a4c7-08de535a68ff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|30052699003|376014|82310400026|1800799024|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?lMNW++JFlf/4qyyIq3nf0zu/5TqOucuALowClAhG/Ma2Rs7s/ZTUcQMY+Seb?=
+ =?us-ascii?Q?d5Gai0tkuPRrgqV3L0BPP5XM6J1s4wU3Mt3admaQ59lZaurrSxrJY7Z9BzKm?=
+ =?us-ascii?Q?i29Y9OvADR+A8xaYM+gAuMH6j8ZB7CUMMb3tddEA71KCKoZ1hosA1i3cx1DM?=
+ =?us-ascii?Q?oiiSx5amuvckPOhbv9R0VWNLQBrNFcjCqRvpNRyeuDjva6MvyuZv0qNOjG3E?=
+ =?us-ascii?Q?eHjmynYF0KUblCnV/woSGT6tjn9vSAq59s2euEfidzv/6uFPjHFutE8o3Ds9?=
+ =?us-ascii?Q?99jD3peYXyfeJiAMwR2ps7RXcAYWdsSFYMXrG7kJAzj+ieGS+moHgvxzhGyH?=
+ =?us-ascii?Q?7/dlIHgl5BKYoXkgLNuWHm7mMFvGCCYKlb/ngqmV5zw8/wO3EeD8hrt3ItU7?=
+ =?us-ascii?Q?aBWER1EsueCErcTzBB4SyV3lY5KqwpeTMdEVTPVoG6zPFGvdsJ83dm2zkUs3?=
+ =?us-ascii?Q?0dtWAmSqVHOHK8xAy2ThKs2rYpw2gFpT3FHwwf+ijGeMLE/MJUUyANUoO/8F?=
+ =?us-ascii?Q?Wz3Eqf0SkhmjbvfwtvsABb9Ue+4D+6gyAagQyRW7Xhoq9VOHJI1AErEQRt5w?=
+ =?us-ascii?Q?8HovDITmrc9uAy+K+2+S5A+f9z9YRxvbdUiNr+8nWoIq2xuHACjoU1FknfA4?=
+ =?us-ascii?Q?LCCmuOOMlyia2QkdBi9WOjqbSGoa/I9N0CoriGyV5QwbELOhl3crKLAPusXG?=
+ =?us-ascii?Q?vfDGFu+xWLOq49GMbqGU4kAIk9sYTuaK60l2H7eRIcnxyvHfzZk1gGjxx2GT?=
+ =?us-ascii?Q?FXg9QM/s8TTZ+MQKe2TBLGoFeawx6OVxGqyGj6xLW7adpiCVXp73Jo0jNMqB?=
+ =?us-ascii?Q?mH271JSqup6g7SS8UmvRZ3tpOjh0oYcWjvjRZKTMSUuBO08tg4xjIy8uxAJi?=
+ =?us-ascii?Q?Z9PxtBQDJEjiuVLBdjEgCzbnekvyR9agf8xMrRXGiTRpZrXMvq5F4Rujdkm/?=
+ =?us-ascii?Q?ANxmW1JVUN74AYFDx1j5l0vIWjldzsP5H6SStThVDII8+/3o7kzsR/3NCDW8?=
+ =?us-ascii?Q?g8CRgLcolkRP7FJj57F5tlfHsl7zLkzyc4bq5fkP+l7IbhtHdrsLsm3USnf2?=
+ =?us-ascii?Q?M7GW3cEiRAHKJ6qZht2NNvkYoT/E7kp3RssvHAYY4bTxusbWV1uOdRo3w9Ch?=
+ =?us-ascii?Q?NxxOFs7Af96g70Qcz5dCRzDhCAqPdjyZ5nOAh8rwp67C1ldcDhgZHTSrA/oU?=
+ =?us-ascii?Q?X+ANA4ODkD1rzGMi7ICtef3ipLrBRAffY68+dMMDjT9Sh1bZXDET2UoLwYd2?=
+ =?us-ascii?Q?ZIkCtUXiWBCsI0pFSUhswIDbUWet8s/w6HFKMpzGQjBQbGra3H4ifRQFoDfZ?=
+ =?us-ascii?Q?cZ8WeWgSpAeN47vG9J33f4/HYZyGsy3P3/4uHoo9k92EEIdLd/M1n2EdBZVx?=
+ =?us-ascii?Q?XSvGFDaWXj9kh3PQRy1jmqWwTlIRSFLtwdvSa3M46b+EeBfW4YxFjwYth67J?=
+ =?us-ascii?Q?ZmuBnnW3xr3ZbZPqOVRKLI6xYagne2qVVrSry6Mbd0reArq6UwZDLz70ScgT?=
+ =?us-ascii?Q?+I02oS1m2rkMelkHD/nvo3OS17v7YDZMkGx51jE34zUmO6Wuz8fG2jyzM3J3?=
+ =?us-ascii?Q?hg4ZqOb1hhbeoIR6kic+elaeszlafKjTn+BPz6CHQKIMbwYBfSQOhprEBxR2?=
+ =?us-ascii?Q?/xILDrsoUHyOA+iUNILeQD8=3D?=
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(30052699003)(376014)(82310400026)(1800799024)(13003099007);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2026 10:48:10.6422
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8b12f7d-99d6-4e0d-a4c7-08de535a68ff
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF000509E6.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR02MB10238
 
-On 1/14/26 11:07 AM, Neil Armstrong wrote:
-> On 1/14/26 11:01, Konrad Dybcio wrote:
->> On 1/13/26 6:53 PM, Georgi Djakov wrote:
->>> On 11/6/25 6:46 PM, Neil Armstrong wrote:
->>>> Since we can actually read back the APPS rpmh interconnect
->>>> BCM votes we can actually implement the get_bw() callback
->>>> and provide a coherent average and peak bandwidth at probe time.
->>>>
->>>> The benefits of that are:
->>>> - keep disabled BCMs disabled
->>>> - avoid voting unused BCMs to INT_MAX
->>>>
->>>> If the interconnects are correctly described for a platform,
->>>> all the required BCMs would be voted to the maximum bandwidth
->>>> until sync_state is reached.
->>>>
->>>> Since we only get the BCM vote, we need to redistribute
->>>> the vote values to the associated nodes. The initial BCM
->>>> votes are read back at probe time in order to be ready when
->>>> the get_bw() is called when a node is added.
->>>>
->>>
->>> FWIW, I was able to finally test this on sdm845. Some nodes are indeed
->>> showing reasonable bandwidth values instead of the default INT_MAX.
->>
->> As I learnt here
->>
->> https://lore.kernel.org/linux-arm-msm/1e7594dc-dca6-42e7-b478-b063e3325aff@oss.qualcomm.com/
->>
->> rpmh_read() will only retrieve the currently active values, so as-is,
->> this hunk:
->>
->> +    /* For boot-up, fill the AMC vote in all buckets */
->> +    for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
->> +        bcm->vote_x[i] = x;
->> +        bcm->vote_y[i] = y;
->> +    }
->>
->> is lying about the state of wake/sleep buckets
->>
->> this is ""fine"" today, as I don't see any "if (old_bw == new_bw)" checks
->> across the framework, but debugfs is going to report incorrect values and
->> if anyone decides to add the aforementioned check, it may introduce issues
->> where the values aren't commited to the hardware (because Linux is going
->> to believe they're already set)
-> 
-> This is only for the pre-sync-state phase, where we don't need the wake/sleep
-> values but the interconnect rpmh implementation needs them, and anyway they will
-> be replaced by proper values in sync_state
+On Wed, Jan 07, 2026 at 15:32 +0100 Waqar Hameed <waqar.hameed@axis.com> wrote:
 
-I realize this may not be the most convincing argument, but consider
-the case where sync_state can not be hit, for example with the Venus
-driver that requests FW at probe time and errors out if it's absent
+> On Sun, Dec 21, 2025 at 10:45 +0500 Nikita Travkin <nikita@trvn.ru> wrote:
 
-> So this is an informed & assumed choice I did here. It's a small optimization
-> to avoid turning on _all_ interconnects at INT_MAX, and keep boot votes
-> up to sync_state.
+[...]
 
-Another question is, whether that's a desired change - I could easily
-see pinning buses to the maximum speed helping boot time KPIs, but
-perhaps that could/should be configurable?
+>> As a small note, the interrupt handler also has a call to
+>> extcon_set_state_sync(chg->edev,...) which is allocated right below.
+>> I don't think this is actually a problem since it has a null check for
+>> edev (unlike psy core) so I think this patch is fine as-is. However if
+>> for some reason you'd have to respin this series, perhaps it would be
+>> nice to move irq registration slightly lower, after extcon registration.
+>
+> Hm, it _is_ actually a problem. During `probe()`, it's fine, due to the
+> NULL check in `extcon_set_state()` (and the interrupt handler doesn't
+> check the return value anyway), as you mention. However, during removal,
+> we have the exact same situation as for `power_supply_changed()` as
+> explained in the commit message; `devm_extcon_dev_release()` runs and
+> frees `struct extcon_dev *edev`, the interrupt handler would now call
+>
+>   `extcon_set_state_sync(chg->edev, ...)` ->
+>   `extcon_set_state(edev, ...)` ->
+>   `find_cable_index_by_id(edev, ...)`
+>   
+> with an invalid `edev` triggering a crash/corruption in
+> `find_cable_index_by_id()` (before we get the chance to release the IRQ
+> handler)!
+>
+> Good catch! Let's move the registration a further bit down to fix this.
+> I will send v2 as soon as the other patches in the series also get
+> feedback.
 
-Konrad
+Since Sebastian says that he applied the whole series as is, I'll just
+send a new separate patch for that now instead. I couldn't find anything
+in his tree [1] yet so let's chill a bit until things get pushed.
+
+[1] git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git
 
