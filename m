@@ -1,107 +1,129 @@
-Return-Path: <linux-pm+bounces-40826-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40827-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2751BD1D974
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 10:37:09 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3AAED1DA43
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 10:42:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6B4F6307F71A
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 09:31:47 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 81526301A80C
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 09:40:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C93A33816E0;
-	Wed, 14 Jan 2026 09:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B1E5389DFC;
+	Wed, 14 Jan 2026 09:40:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VFt9BeDg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FyYyp1k0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E9B437F73D;
-	Wed, 14 Jan 2026 09:31:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF90A38944F;
+	Wed, 14 Jan 2026 09:40:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768383082; cv=none; b=Oq95RFkQF523Bp1w9AHuD3pnSHu6KXhH0iKxCh27qOzrx8HaGGfdnzDzy/7wxw3l3uR5hi4T7o9iP9I9GLuZfDpRDbWgH20Gak5oYyth8SWM/+t1NMIPyfrd1IH13ZgRzwVYK+rEl6e7LbwyAQ9yFYUmRzdCaJEWpx59ExIQf4U=
+	t=1768383648; cv=none; b=lf59iec9CcSbi1nuK4P1FIVm2VvfvowFQ74FYPPLladQmpsMJBaxXrzOEdctoO8wUGr4843kuPHtWPh6p4zIrgeJLas8Zl9elRciyS7uCO0vLRcR2lzSyWx0khQGqKmofaidRcJqmaNPaZFILuRWJuo+Mi9wQecYBJWeM19STEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768383082; c=relaxed/simple;
-	bh=W1Bmt89v8Pf6UMerRTXvTJxOGZ7dEWv16CN3Pc4CY/g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n2WIBTHtygTL2XFgSyrXRpq4kz83tJy8/yPcIlUoDHIXnRe/zUBo1C5pPlsBbTApywr0qtFQK/LaGevJQ1fJqwDsfChCCTH81UBGiiWqvBDT+78lE9dEgksx8BH1pZ2NtyizPAjyqPPh/lYuqc9N7LAJwqQSHZGJ7XH9Vqi3jH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VFt9BeDg; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1768383648; c=relaxed/simple;
+	bh=1qCJbDf3LNBQnokPmnk8fcBE3EDda534imX16lpluf8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LKRJgdUMJxFzQa2hLJeSyKykASlNfuV85pxr0kMiyHlEzdvjKSUEQuVb4azfa3gOadHErVrVIfjETQK2tecnUlQD8ZZsG5DiGaPK1J/MauSIj7CQ9nT7dpk0Lj/ajpM7eehqfZBGFo7MB0hDVX5UJquiGsQvxgkh21qnNCaPRR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FyYyp1k0; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768383081; x=1799919081;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=W1Bmt89v8Pf6UMerRTXvTJxOGZ7dEWv16CN3Pc4CY/g=;
-  b=VFt9BeDgq/6m87eCy8DVcmyLieltByfFE675i2WM8J+fpU8+6eEsv/Ru
-   spU/QHAqucCsvjziFf+YrmuJ0x+ls3KZi3WG6OaUzfQQXYI07UKgpLwot
-   bJnGfNhHcEICrMnI0tcv4qZa/ipU8i8He4A0+atkJWwOG3aVNTylMHxFw
-   d3Ipox9iJf2ymK1d1ZEZuyBOoaA8O5a0fv0BqMRdZ4hXPNcwjgEA3rScw
-   Nb+6Ho+DFlKRkcqHgDz3BfR0OraRlP9CCDBmA4WCeTnL5Sq88hXCdBBkj
-   I0+c19VMdO3D0ZyY2j52clccExSOjhGv38tyTtIGi12FAqVLN+M7pUyx0
+  t=1768383647; x=1799919647;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1qCJbDf3LNBQnokPmnk8fcBE3EDda534imX16lpluf8=;
+  b=FyYyp1k0nK0l1VMNxfYh+LPufx7wPmQTjpAohcUDYMAnDEG52x92O1TL
+   +H2LdgrTQHIaoYjkKhuTYHl4ms4+xvVUf2kA66I9r7MdxhG/5aLAfGd9C
+   R85fluXakBs0k+BDJ1rxrDzGxjzw/ABqn+w1hPB07tgQtrSGjbQfTvD+m
+   rFjWZJhGgTs7w8z8vW8hH1oWcaX1tSO+Rxt+L1Gzkhnmxw6J/a/tKf/rs
+   K+7F4Mz7YfxQmYUa9XkUUksdaGwdu1402QnrNXKx7ukMjeLJysdeuxqLj
+   tQtI8VinDoyphpIzboeJQ2JzCTTLqnfEt0ziIZKipUWOOKslt3z5Q1sVD
    w==;
-X-CSE-ConnectionGUID: NH7GSLfJT7afpjWUXDRz0Q==
-X-CSE-MsgGUID: Q3wfpD3vQ2m4USR5WKnCTw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="69598036"
+X-CSE-ConnectionGUID: Osp62IS2QFekKapWdr4kyw==
+X-CSE-MsgGUID: 5B5h+8mCQuSx4xCYdnjFZQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="87259328"
 X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="69598036"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 01:31:21 -0800
-X-CSE-ConnectionGUID: h0py1DpxTKGFzLrVpVOOEw==
-X-CSE-MsgGUID: mZZSu3bNQyuoS2MOVHX5Zw==
+   d="scan'208";a="87259328"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 01:40:46 -0800
+X-CSE-ConnectionGUID: mw6jqSNOTz6KKRVCXQZMUg==
+X-CSE-MsgGUID: HUqMSmL5QUeIkI8VEWpavw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="235345839"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by orviesa002.jf.intel.com with ESMTP; 14 Jan 2026 01:31:20 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id 0F03A98; Wed, 14 Jan 2026 10:31:18 +0100 (CET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Chanwoo Choi <cw00.choi@samsung.com>,
-	Lifeng Zheng <zhenglifeng1@huawei.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] PM/devfreq: Remove unneeded casting for HZ_PER_KHZ
-Date: Wed, 14 Jan 2026 10:31:15 +0100
-Message-ID: <20260114093115.276818-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.50.1
+   d="scan'208";a="209478599"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.83])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 01:40:40 -0800
+Date: Wed, 14 Jan 2026 11:40:38 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
+	andy@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
+	srini@kernel.org, vkoul@kernel.org, neil.armstrong@linaro.org,
+	sre@kernel.org, sboyd@kernel.org, krzk@kernel.org,
+	dmitry.baryshkov@oss.qualcomm.com, quic_wcheng@quicinc.com,
+	melody.olvera@oss.qualcomm.com, quic_nsekar@quicinc.com,
+	ivo.ivanov.ivanov1@gmail.com, abelvesa@kernel.org,
+	luca.weiss@fairphone.com, konrad.dybcio@oss.qualcomm.com,
+	mitltlatltl@gmail.com, krishna.kurapati@oss.qualcomm.com,
+	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org, kernel@collabora.com,
+	Abel Vesa <abel.vesa@linaro.org>
+Subject: Re: [PATCH v7 07/10] phy: qualcomm: eusb2-repeater: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+Message-ID: <aWdklo0u1g0oHn3z@smile.fi.intel.com>
+References: <20260114083957.9945-1-angelogioacchino.delregno@collabora.com>
+ <20260114083957.9945-8-angelogioacchino.delregno@collabora.com>
+ <aWdbB4vJ6Z8k0g4s@smile.fi.intel.com>
+ <8f5c79e0-5f7e-4fe4-b9d7-60375e779892@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8f5c79e0-5f7e-4fe4-b9d7-60375e779892@collabora.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-HZ_PER_KHZ is defined as UL (unsigned long), no need to repeat that.
+On Wed, Jan 14, 2026 at 10:26:42AM +0100, AngeloGioacchino Del Regno wrote:
+> Il 14/01/26 09:59, Andy Shevchenko ha scritto:
+> > On Wed, Jan 14, 2026 at 09:39:54AM +0100, AngeloGioacchino Del Regno wrote:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/devfreq/devfreq.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+...
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 00979f2e0e27..51eb67fba44b 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -146,10 +146,9 @@ void devfreq_get_freq_range(struct devfreq *devfreq,
- 					     DEV_PM_QOS_MIN_FREQUENCY);
- 	qos_max_freq = dev_pm_qos_read_value(devfreq->dev.parent,
- 					     DEV_PM_QOS_MAX_FREQUENCY);
--	*min_freq = max(*min_freq, (unsigned long)HZ_PER_KHZ * qos_min_freq);
-+	*min_freq = max(*min_freq, HZ_PER_KHZ * qos_min_freq);
- 	if (qos_max_freq != PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE)
--		*max_freq = min(*max_freq,
--				(unsigned long)HZ_PER_KHZ * qos_max_freq);
-+		*max_freq = min(*max_freq, HZ_PER_KHZ * qos_max_freq);
- 
- 	/* Apply constraints from OPP interface */
- 	*max_freq = clamp(*max_freq, devfreq->scaling_min_freq, devfreq->scaling_max_freq);
+> > > +	struct regmap_config eusb2_regmap_config = {
+> > > +		.reg_bits = 16,
+> > > +		.val_bits = 8,
+> > > +		.max_register = 0x100,
+> > > +		.fast_io = true,
+> > > +	};
+> > 
+> > This is third time of the same. Make it part of SPMI core and export to
+> > the users. Or are they semantically different like different slices?
+> > In that case you can export it under generic name like
+> > 
+> > 	spmi_default_slice_regmap_config
+> 
+> There are more complicated devices around that I didn't port to the new
+> spmi subdevices, and I really don't want to make a default for now.
+> 
+> At least some of those need different params (including some MediaTek ones
+> that are not upstream yet).
+> 
+> Can we please let this in and *then* see how much can be commonized after
+> the majority of more complicated drivers are migrated in the future?
+
+Sure, but it looks like a pattern currently...
+
 -- 
-2.50.1
+With Best Regards,
+Andy Shevchenko
+
 
 
