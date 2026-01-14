@@ -1,108 +1,128 @@
-Return-Path: <linux-pm+bounces-40888-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40889-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99F33D215F5
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 22:37:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 794C2D2190C
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 23:29:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A7AEE30802B2
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 21:36:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AC6883013966
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 22:29:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EB1D378D63;
-	Wed, 14 Jan 2026 21:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614903B52FB;
+	Wed, 14 Jan 2026 22:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e8HsnKDp"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="EJEzYcZm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9EDB36CDE8;
-	Wed, 14 Jan 2026 21:36:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B501C3ACF0D;
+	Wed, 14 Jan 2026 22:29:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768426608; cv=none; b=P7qor6mGNhrf3cXGyppSFcHqbKle3g8fWWTNLasWKBeeeIj5U0Ilr359U2931bsy/gkZdGKzkW6tR1bFwM0DjiIZlY0pK5WTG0VXhRtIHyVNpuzxlcpL8E5iZ4ApKHxW/Erd9d02At7hQAZpy7duppvqZXKCHg0nVhZun1fLK0A=
+	t=1768429768; cv=none; b=LsHGrg9beDINoWAUqUBrmI9NLaqOhhEspq/SzFWYogx+Zj0vDY4bNRb+6J8EB1E+Jfwx7+snlOxLoQFEcQvan8qQFOpSNpe2vPJKD0A5+HD+RdzB0nvwnuyPgW8G1VBavzch0GcFy9M8y512lL/p45IKLTiRQkj50yAsKx2mTUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768426608; c=relaxed/simple;
-	bh=WVO6osBIohiBYtrg3CeMVJao578MY2yze+0eFa3vztY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=OMwXZ/iUNLyL/6iLvyCJ8aFCsVif32R4EV8U+Rx3GPuFBuXQwqHSfUjAyjRfi5sQnngjRzIK+lD87sRDoT04buJXji+ZknvPM+HbVF9OSNuP6Wp4e7GWWMYM9RnVzWG3XoMZPsZm3ahwqf7rP2nF2SYH2CuRgMSILmzGRWLEQmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e8HsnKDp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5819AC19424;
-	Wed, 14 Jan 2026 21:36:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768426607;
-	bh=WVO6osBIohiBYtrg3CeMVJao578MY2yze+0eFa3vztY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=e8HsnKDpwFN6/zQvtnWiC1TLCk1/a/d23fOLW+6w1LqjLlSkWQEgmfn1JLJLlDE7v
-	 cqRykWw1V57S492AZY6rJ+0yck1CplYYN3r1j+a6RwPHNUdemEEsY3N8TzTnLR/Gm6
-	 C9BmcagtEs7ODmgDAcv+M/20fiPhlm+7KH55Glpp/ukxJR8s23gJJZBA1VAZYlEO8q
-	 F8X68mDaW3JT+aMLmPGFJTV1N6zQx1CgOsQfQOa3FW6Rgl1WPvpxyqDN5NCxKEvhsW
-	 4/L/uNl4K3lGyvY9eN2tqMnd+YBc/reDpPBgD0lq6yqt/vlmTCHypFyRkY2MBfqy5F
-	 oBBlu1fKJ7uew==
-From: Mark Brown <broonie@kernel.org>
-To: airlied@gmail.com, simona@ffwll.ch, maarten.lankhorst@linux.intel.com, 
- mripard@kernel.org, tzimmermann@suse.de, robh@kernel.org, 
- krzk+dt@kernel.org, conor+dt@kernel.org, dmitry.torokhov@gmail.com, 
- sre@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org, 
- lgirdwood@gmail.com, Kuan-Wei Chiu <visitorckw@gmail.com>
-Cc: jserv@ccns.ncku.edu.tw, dri-devel@lists.freedesktop.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-serial@vger.kernel.org, linux-sound@vger.kernel.org, 
- Yu-Chun Lin <eleanor.lin@realtek.com>
-In-Reply-To: <20260113092602.3197681-1-visitorckw@gmail.com>
-References: <20260113092602.3197681-1-visitorckw@gmail.com>
-Subject: Re: (subset) [PATCH v4 0/6] dt-bindings: goldfish: Convert to DT
- schema
-Message-Id: <176842660309.229619.6412457616367822654.b4-ty@kernel.org>
-Date: Wed, 14 Jan 2026 21:36:43 +0000
+	s=arc-20240116; t=1768429768; c=relaxed/simple;
+	bh=UaZFr4hl10mcWar3ySggf/yWyzFeKQkv3nU3vZ2O4q8=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=nDIwAW5fvm+W7Z+v0TT1DZWmP9thjA2kBnKu7lvJli56SpFUrPsZjrzYUm0stNFYvRBY+NbNwXfSCm4IC41SjHKnuYDGOofUCsib1HxEar3ofJG+33IfzZIe1P5tIhIZ2yTSo0i+iuriEj/M9b1M5jptQvB429uU8Md1kXzmIao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=EJEzYcZm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414DDC4CEF7;
+	Wed, 14 Jan 2026 22:29:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1768429768;
+	bh=UaZFr4hl10mcWar3ySggf/yWyzFeKQkv3nU3vZ2O4q8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EJEzYcZmclR6eee5WcA+Z0GsBCXTzw/VoU9qux0aE2D1CLbb/tFDjfcBlF1fBDezM
+	 MsN3isOQhq5clBGCFHYhbnHT4pAVwePw0QNdNvriXn8YbsG8oHOxhXjE0Ak57lf5t1
+	 szPwNdCy42G6FVmKsPyLmShMBWQ6STCuDAwyil8c=
+Date: Wed, 14 Jan 2026 14:29:21 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Kairui Song <ryncsn@gmail.com>
+Cc: linux-mm@kvack.org, Baoquan He <bhe@redhat.com>, Barry Song
+ <baohua@kernel.org>, Chris Li <chrisl@kernel.org>, Nhat Pham
+ <nphamcs@gmail.com>, Yosry Ahmed <yosry.ahmed@linux.dev>, David Hildenbrand
+ <david@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, Youngjun Park
+ <youngjun.park@lge.com>, Hugh Dickins <hughd@google.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Ying Huang <ying.huang@linux.alibaba.com>,
+ Kemeng Shi <shikemeng@huaweicloud.com>, Lorenzo Stoakes
+ <lorenzo.stoakes@oracle.com>, "Matthew Wilcox (Oracle)"
+ <willy@infradead.org>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, "Rafael J. Wysocki (Intel)" <rafael@kernel.org>,
+ Chris Mason <clm@meta.com>, Yi Lai <yi1.lai@intel.com>
+Subject: Re: [PATCH v5 14/19] mm, swap: cleanup swap entry management
+ workflow
+Message-Id: <20260114142921.1b47d27a3bb22b41ed0c5526@linux-foundation.org>
+In-Reply-To: <CAMgjq7AUz10uETVm8ozDWcB3XohkOqf0i33KGrAquvEVvfp5cg@mail.gmail.com>
+References: <20251220-swap-table-p2-v5-0-8862a265a033@tencent.com>
+	<20251220-swap-table-p2-v5-14-8862a265a033@tencent.com>
+	<CAMgjq7AUz10uETVm8ozDWcB3XohkOqf0i33KGrAquvEVvfp5cg@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-47773
 
-On Tue, 13 Jan 2026 09:25:56 +0000, Kuan-Wei Chiu wrote:
-> Convert the Android Goldfish emulator platform bindings from text
-> format to DT schema.
-> 
-> Most of these bindings are currently located in
-> Documentation/devicetree/bindings/goldfish/. Move them to the
-> appropriate subsystem directories (serial, input, power, sound, misc)
-> to align with the kernel directory structure.
-> 
-> [...]
+On Thu, 15 Jan 2026 00:53:41 +0800 Kairui Song <ryncsn@gmail.com> wrote:
 
-Applied to
+> Is it convenient for you to squash this attached fix into this patch?
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Done, below
 
-Thanks!
+> That's the two issues from Chris Mason and Lai Yi combined in a clean
+> to apply format, only 3 lines change.
 
-[5/6] dt-bindings: sound: google,goldfish-audio: Convert to DT schema
-      commit: 10303b32519f52a5afd40593a507543143c8ec6a
+Let's cc them!
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+> There might be minor conflict by removing the WARN_ON in two following
+> patches, but should be easy to resolve. I can send a v6 if that's
+> troublesome.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+All fixed up, thanks.
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+From: Kairui Song <kasong@tencent.com>
+Subject: mm, swap: fix locking and leaking with hibernation snapshot releasing
+Date: Thu, 15 Jan 2026 00:15:27 +0800
 
-Thanks,
-Mark
+fix leak, per Chris Mason.  Remove WARN_ON, per Lai Yi
+
+Link: https://lkml.kernel.org/r/CAMgjq7AUz10uETVm8ozDWcB3XohkOqf0i33KGrAquvEVvfp5cg@mail.gmail.com
+Signed-off-by: Kairui Song <kasong@tencent.com>
+Cc: Lai Yi <yi1.lai@linux.intel.com>
+Cc: Chris Mason <clm@fb.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+ kernel/power/swap.c |    2 +-
+ mm/swapfile.c       |    1 -
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+--- a/kernel/power/swap.c~mm-swap-cleanup-swap-entry-management-workflow-fix
++++ a/kernel/power/swap.c
+@@ -199,7 +199,7 @@ void free_all_swap_pages(int swap)
+ 		ext = rb_entry(node, struct swsusp_extent, node);
+ 		rb_erase(node, &swsusp_extents);
+ 
+-		for (offset = ext->start; offset < ext->end; offset++)
++		for (offset = ext->start; offset <= ext->end; offset++)
+ 			swap_free_hibernation_slot(swp_entry(swap, offset));
+ 
+ 		kfree(ext);
+--- a/mm/swapfile.c~mm-swap-cleanup-swap-entry-management-workflow-fix
++++ a/mm/swapfile.c
+@@ -2096,7 +2096,6 @@ void swap_free_hibernation_slot(swp_entr
+ 
+ 	ci = swap_cluster_lock(si, offset);
+ 	swap_entry_put_locked(si, ci, entry, 1);
+-	WARN_ON(swap_entry_swapped(si, entry));
+ 	swap_cluster_unlock(ci);
+ 
+ 	/* In theory readahead might add it to the swap cache by accident */
+_
 
 
