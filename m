@@ -1,176 +1,195 @@
-Return-Path: <linux-pm+bounces-40780-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40781-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA011D1C8F7
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 06:16:28 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3800BD1CD25
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 08:27:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 61DD630382BC
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 05:16:27 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 62FC530703D1
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 07:27:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F5D236BCC4;
-	Wed, 14 Jan 2026 05:16:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A641736164C;
+	Wed, 14 Jan 2026 07:27:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AGWShI5u"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jsy3RiMK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F21C29DB99
-	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 05:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC163612F3
+	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 07:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768367785; cv=none; b=WEaQda/nsC4w4ZMcaJcNSWiy++NU431GwhDcEd+8P0PQZwejDiM1V49DZp33TnGHycdf9rGd4Zjm7uF23wDJKs1N/jaItwKKu4OZDo8TlkKCL1JeA/bNZrPLKoAKetMuA2vI9Td/AAnn+rLu0+G8ZifF2dviBCtkjZDBEfhL4nY=
+	t=1768375650; cv=none; b=HnCaonqYoOb1valZv+cSN3JYjks2B+1LrF28GCxSU4m4L6fAGBVLpee2CkKo8ZpM8VyaqvjTSdXjZ9Hu5ojzwqI8mohXpSJpKqyY3QGaLoaXelEIC48nkDS6NlBjv02vvXmMAidxQrWPmnWCzPkTgiHolIvSGQ1PnvX/wgsjpAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768367785; c=relaxed/simple;
-	bh=iP3S/72fuu/L/exhomw5MypN4Y5Gkqbqe4ilsP/Xh9c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QU8uMGoLGnEMm9DeBPnlI1dR/hCzKL6P0D56oxBftFhvLa383+UYDEPBRCkzwDmHX1B3MphBisGHdPi9daCXbF1ZlCul51lUXyXAVrf5VahTa+uL+0Q73gF055lnj17/2YhYBbyntnPTU+Abiv+CmAD9v4w1FOCZZjSv+4EjR0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=AGWShI5u; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-5013d163e2fso15759921cf.0
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 21:16:18 -0800 (PST)
+	s=arc-20240116; t=1768375650; c=relaxed/simple;
+	bh=DQUeirNpPP89aLFHeqsLAGeTASvH8cy8TfogQVOev1c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=L+4wiMW063YqPVzkHlTRAW/GZ4oU1LL4ZSu42rAIa1jcJPIb4jMk/2jVPvUtrQTaSCe9itgUB8aMLnE5IG+tvFXhdb00II1s6Smw3WiRQKgHxNz4iy8432ip7XqShsDIRN6ANrF7P3kK6fAejP+SqZnqU1PN8V3DSQoElwukEkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jsy3RiMK; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43246af170aso296340f8f.0
+        for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 23:27:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1768367777; x=1768972577; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1768375643; x=1768980443; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ezdkIkld7c/oSBzC35T3zK1WNNmb2BZY9Vgt94zhRnA=;
-        b=AGWShI5ukz+MKdxNPLtOwZgyJQTNeY3ny9fKjHl4pdQS6gzBWt1huFwktcRHURgNhV
-         eYVcotE8UWAkunY+H9oHpf4+cJfgd7Kfgx/WrWRokfnxhvtVnzC5/U3pbMqWw+XKRBbr
-         x1lNlYXNDKPnmMn/h9tHqc0VCWeMHrxqrAT5E=
+        bh=Iatfbkb039XtZtG7yO5eMvoMHygvxkVJOdhG6yXVCuE=;
+        b=Jsy3RiMKatD5gGcBzlt8vZgyZbSjtRMF8NHUerUpH4iSTn7cmUTXXg40ZxLiDVI4S+
+         lMU6+0a3Vml9Oh4ebjleWnz1bjJDztZ9k3iAHceao/RIIQyE4Ou6Ago20/rDN2s6xZIV
+         2Y0ZC61ca89sSy/eNeTN6tZqpAw4QSkuZX2X3u0JXIndZIppyAP0uZfg4T86VCjy1Mdz
+         1GdJif+MPFpHCjjdnTsWlw9oWTmDkgiDNW25tQ5iwWjdEcBTtD9BuycYum9dGuJ1QRVX
+         spcA1/CUW1fgVL2W14ffZsgyTWT07+WrJ+qsiNDoScL7QtD8/yR1kDToKCNvB1KFN9wh
+         6/QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768367777; x=1768972577;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1768375643; x=1768980443;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ezdkIkld7c/oSBzC35T3zK1WNNmb2BZY9Vgt94zhRnA=;
-        b=gVUilnFT9nNEqldcUk2XlJv+56zg43VSJU5I3fZCxNAaqZXzNw3wEmrAZUKl0Cv64U
-         gpM6LJcu9I9I5V6QdBgg/c3R9H+89c1hBwU+lJg7hk7LM+o1QUR3/j+zcy9CRjXfSCFN
-         GcM5k69FbNCUvulv1M95MDNjGyakN35to5gi8/H8jpYaD2QvFOnVa4ohnczA8d2i3ulO
-         GeHn0pxmUYv8nn/xZO1nd0V751mtdyhK6KUA+8d6VboSroMM/SarsLB4Y+zWBzckfg5z
-         jlBG4G3wPis9p1U/9XpovLuK25ppp71E7BNeP0DTf+mxxn10DhGYUbpoZk0a4tlYus3a
-         jEWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUQOvqnofQJarMkqtgi+XGRO5I8Rx+7uin4h0GlUm2gkAU83H2p5R/0Gvs9ePB2sQNlt+n4xnnVrg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyWjJPHzJg1Koc5pHiWAqXMn4+Tx3hA6mCfC984n+X4MpxRF17
-	UVOdqsiAj3L/PNqFVAbe0FFQw5FqsXWCli+C8ppCzAhxOkeEUA3Y0uYfeTRW/TOepDwTqDwpuoE
-	sieryqg==
-X-Gm-Gg: AY/fxX4zeDdJSTM+NqFVO+vzdiufpC2KJNvV/VZTthfqOfK6WSPMdKMqi+wn0cFhItx
-	+syjSNaLgQ2p1h6LMl42WUpFsI5iXFhFbTb/m0EjGeCnQoVvaGLP8tfuxx/B+Ntex9PXpky7Hlx
-	yJgbWTfRnacbhyCuIom4vMXImO5mYQB62f+DT6knzG1Ma0cvNcim0erpbqgDSo2oodPXt5r+G4A
-	2dymvEiR+jW2rV4ClwPywQTwV1K1y9VWrxO2SUlxiHg7rH/C3SON8nOZ47ZT7wzX3IqUuRjz9hk
-	KIaNlMjz7TqksiJY1BBnxW94HyNS6Qx6pngrwUAi4ktZ46KJfiOed6q5TS1hXrp1qjTEL8OydhY
-	4Fc39GiPclAZ5w6dcHwN/rIMUoZnIj8E3qBDVv2SASj48OK0YmgFMKej8mmqapsFsuih790Gd74
-	Kdr1Ro5EC9eXHdgnkbkJuYih5YiU7Rwas/wol7Z8g5LjYZeEkQfw==
-X-Received: by 2002:a05:622a:5585:b0:4ff:cadf:310c with SMTP id d75a77b69052e-5014822e1b5mr22250071cf.36.1768367776988;
-        Tue, 13 Jan 2026 21:16:16 -0800 (PST)
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com. [209.85.160.172])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50148eba456sm7468371cf.20.2026.01.13.21.16.15
-        for <linux-pm@vger.kernel.org>
+        bh=Iatfbkb039XtZtG7yO5eMvoMHygvxkVJOdhG6yXVCuE=;
+        b=sE96y5bCxWpSd/NhrOdMLHK+PmP092rjB5aYbS10efC4kcgwGGsD3W4MpiHTbN/zyX
+         GOXHJJzKJwQ24ZXfG/IEAyPpboqX5I3Gzv8x3bFGwlsLzZED0UU8z0iGj2cX8o1ZcyBD
+         bxmoqNVizrX7RkeGCtBYqeIFzYtuH1jkPa0O6pc+67cxxt2xtuwjQ1uWX3kKtA7QdYlS
+         LB2ioAKckCRSO5pnAwDj8hARck7L94/IaA3UwAwvKwqPnezcya9sZbRkAFbTX9k0aFVa
+         T61fOEjhJeJ2u8VzVRPIa+6bthYVuIuuB9Gz6l+VNHhLqGFSsot0+vNW69Sz5UNsldWp
+         PHnA==
+X-Forwarded-Encrypted: i=1; AJvYcCVEHVs8ANULn6gxm4ATB68ExJt2ZGGO9lfMur5Kpo1WzRW3GCZrwzA5DbBJ6b/C0l/kfN/jRfI69Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJmy5NmjdM/Rgtf0E2hGAZ4gwa2IJVHsHfb0u/RDgNoGKyFNzW
+	GuVt0/wdMypfkTMqEXI7gXqp+leaQjQD3bBcuClevBD4MGnGJ00FX6tG
+X-Gm-Gg: AY/fxX43wkDqBujjtnIt5TNzjU+i8ZQAtr9NiM4dDqddoehifijCuZzpHZfRAsbdfIw
+	jUgRZNCiMfy1FSjI7Z+DDk+6l2hkza6H5g1neEgXF+Cj/Tl0ZMO2UrjmwDvFV6DYGK1ztfCUmBF
+	OF9i0Lq7zaGC9UX8f6UDedAqwwtqe61Z1SabkiADXaBpuS2CgpTf+IraZWx9t6cCgAE/aNzIhK0
+	75kTAGSGlHRNV+eECLuQvf7pO0bh04qfYA1+aZxqGLAjY5GATEX5FS31ev39NxjEk69TqsoNw9x
+	acZ2sKJWM+vhZonc+sQiWWx5NJpyZ/qn7Y0FXP5rnDK6pgJtD0l2N2Lv2Yp5prTS3/riao2CTmj
+	d6G4dRSpyc9SZPbI4lsCcHyT+jkFN6ny8dszSgkBpXO2GU+GgSwkC2oAyy+J5e6wZY3h8+O7FuM
+	sNmq8M2Nk=
+X-Received: by 2002:a05:6000:402c:b0:431:66a:cbda with SMTP id ffacd0b85a97d-43423d4709emr6998700f8f.0.1768375642965;
+        Tue, 13 Jan 2026 23:27:22 -0800 (PST)
+Received: from localhost ([212.73.77.104])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-432bd0dacd1sm47532193f8f.4.2026.01.13.23.27.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jan 2026 21:16:15 -0800 (PST)
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4ffbaaafac4so269051cf.0
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 21:16:15 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUGBZ34eAr2JtPq+lZR3siCpYxMeDNHvxUEXuCVK/IHjLlC00ICWbv2UvEYnoXpxjrJBbg5J42IRQ==@vger.kernel.org
-X-Received: by 2002:ac8:5e48:0:b0:4f1:a61a:1e8 with SMTP id
- d75a77b69052e-5014825a304mr6273611cf.10.1768367775388; Tue, 13 Jan 2026
- 21:16:15 -0800 (PST)
+        Tue, 13 Jan 2026 23:27:22 -0800 (PST)
+From: Askar Safin <safinaskar@gmail.com>
+To: mpatocka@redhat.com
+Cc: Dell.Client.Kernel@dell.com,
+	agk@redhat.com,
+	brauner@kernel.org,
+	dm-devel@lists.linux.dev,
+	ebiggers@kernel.org,
+	kix@kix.es,
+	linux-block@vger.kernel.org,
+	linux-btrfs@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-lvm@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-pm@vger.kernel.org,
+	linux-raid@vger.kernel.org,
+	lvm-devel@lists.linux.dev,
+	milan@mazyland.cz,
+	msnitzer@redhat.com,
+	mzxreary@0pointer.de,
+	nphamcs@gmail.com,
+	pavel@ucw.cz,
+	rafael@kernel.org,
+	ryncsn@gmail.com,
+	torvalds@linux-foundation.org
+Subject: Re: [RFC PATCH 2/2] swsusp: make it possible to hibernate to device mapper devices
+Date: Wed, 14 Jan 2026 10:27:05 +0300
+Message-ID: <20260114072705.2798057-1-safinaskar@gmail.com>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <b32d0701-4399-9c5d-ecc8-071162df97a7@redhat.com>
+References: <b32d0701-4399-9c5d-ecc8-071162df97a7@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <d4690be7-9b81-498e-868b-fb4f1d558e08@oracle.com>
- <39c7d882-6711-4178-bce6-c1e4fc909b84@arm.com> <005401dc64a4$75f1d770$61d58650$@telus.net>
- <b36a7037-ca96-49ec-9b39-6e9808d6718c@oracle.com> <6347bf83-545b-4e85-a5af-1d0c7ea24844@arm.com>
- <e1572bc2-08e7-4669-a943-005da4d59775@oracle.com> <CAJZ5v0ja21yONr-F8sfzzV-E4CQ=0NqLPmOeaSiepjS4mKEhog@mail.gmail.com>
- <CAJZ5v0hgFeeXw6UM67Ty9w9HHQYTydFxqEr-j+wHz4B7w-aB1Q@mail.gmail.com>
- <rsqh4kpcyodnmcxcdd3yvysdmnfj34fgjtr4pmfhlg2cqtvlhh@iakffruxcnac> <ndqg2mysdc4bsvokmrqubx6rw3oj3lrflxw3naqiohbg7yablf@ccm3rl36dnai>
-In-Reply-To: <ndqg2mysdc4bsvokmrqubx6rw3oj3lrflxw3naqiohbg7yablf@ccm3rl36dnai>
-From: Tomasz Figa <tfiga@chromium.org>
-Date: Wed, 14 Jan 2026 14:15:58 +0900
-X-Gmail-Original-Message-ID: <CAAFQd5DBsd4tMcRuVwD3=csJ=4=DMcJhzah+-CTq31qOZHyJEg@mail.gmail.com>
-X-Gm-Features: AZwV_QgaEM5U0dghv7arOEC9sAg-1oiklciKgVxEPDm8-o619IU-2A6jT2MKyE8
-Message-ID: <CAAFQd5DBsd4tMcRuVwD3=csJ=4=DMcJhzah+-CTq31qOZHyJEg@mail.gmail.com>
-Subject: Re: Performance regressions introduced via Revert "cpuidle: menu:
- Avoid discarding useful information" on 5.15 LTS
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Harshvardhan Jha <harshvardhan.j.jha@oracle.com>, 
-	Christian Loehle <christian.loehle@arm.com>, Doug Smythies <dsmythies@telus.net>, 
-	Sasha Levin <sashal@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org, 
-	stable@vger.kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi all,
+Mikulas Patocka <mpatocka@redhat.com>:
+> Askar Safin requires swap and hibernation on the dm-integrity device mapper
+> target because he needs to protect his data.
 
-On Wed, Jan 14, 2026 at 1:49=E2=80=AFPM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> Cc-ing Tomasz
->
-> On (26/01/14 13:28), Sergey Senozhatsky wrote:
-> > Hi,
-> >
-> > On (26/01/13 15:18), Rafael J. Wysocki wrote:
-> > [..]
-> > > > > Bumping this as I discovered this issue on 6.12 stable branch als=
-o. The
-> > > > > reapplication seems inevitable. I shall get back to you with thes=
-e
-> > > > > details also.
-> > > >
-> > > > Yes, please, because I have another reason to restore the reverted =
-commit.
+Now I see that your approach is valid. (But some small changes are needed.)
 
-Is the performance difference the reporter observed an actual
-regression, or is it just a return to the level before the
-optimization was merged into stable branches? If the latter, shouldn't
-avoiding regressions be a priority over further optimizing for other
-users?
+[[ TL;DR: you approach is good. I kindly ask you to continue with this patch.
+Needed changes are in section "Needed changes". ]]
 
-If there is a really strong desire to reland this optimization, could
-it at least be applied selectively to the CPUs that it's known to
-help, or alternatively, made configurable?
+Let me explain why I initially rejected your patch and why now I think it is good.
 
-Best,
-Tomasz
 
-> > >
-> > > Sergey, did you see a performance regression from 85975daeaa4d
-> > > ("cpuidle: menu: Avoid discarding useful information") on any
-> > > platforms other than the Jasper Lake it was reported for?
-> >
-> > Let me try to dig it up.  I think I saw regressions on a number of
-> > devices:
-> >
-> > ---
-> > cpu family      : 6
-> > model           : 122
-> > model name      : Intel(R) Pentium(R) Silver N5000 CPU @ 1.10GHz
-> > ---
-> > cpu family      : 6
-> > model           : 122
-> > model name      : Intel(R) Celeron(R) N4100 CPU @ 1.10GHz
-> > ---
-> > cpu family      : 6
-> > model           : 156
-> > model name      : Intel(R) Celeron(R) N4500 @ 1.10GHz
-> > ---
-> > cpu family      : 6
-> > model           : 156
-> > model name      : Intel(R) Celeron(R) N4500 @ 1.10GHz
-> > ---
-> > cpu family      : 6
-> > model           : 156
-> > model name      : Intel(R) Pentium(R) Silver N6000 @ 1.10GHz
-> >
-> >
-> > I guess family 6/model 122 is not Jasper Lake?
-> >
-> > I also saw some where the patch in question seemed to improve the
-> > metrics, but regressions are more important, so the revert simply
-> > put all of the boards back to the previous state.
+= Why I rejected =
+
+In your patch "notify_swap_device" call located before "pm_restrict_gfp_mask".
+
+But "pm_restrict_gfp_mask" is call, which forbids further swapping. I. e.
+we still can swap till "pm_restrict_gfp_mask" call!
+
+Thus "notify_swap_device" should be moved after "pm_restrict_gfp_mask" call.
+
+But then I thought about more complex storage hierarchies. For example,
+swap on top of some dm device on top of loop device on top of some filesystem
+on top of some another dm device, etc.
+
+If we have such hierarchy, then hibernating dm devices should be intertwined
+with freezing of filesystems, which happens in "filesystems_freeze" call.
+
+But "filesystems_freeze" call located before "pm_restrict_gfp_mask" call, so
+here we got contradiction.
+
+In other words, we should satisfy this 3 things at the same time:
+
+- Hibernating of dm devices should happen inside "filesystems_freeze" call
+intermixed with freezing of filesystems
+- Hibernating of dm devices should happen after "pm_restrict_gfp_mask" call
+- "pm_restrict_gfp_mask" is located after "filesystems_freeze" call in current
+kernel
+
+These 3 points obviously contradict to each other.
+
+So in this point I gave up.
+
+The only remaining solution (as I thought at that time) was to move
+"filesystems_freeze" after "pm_restrict_gfp_mask" call (or to move
+"pm_restrict_gfp_mask" before "filesystems_freeze").
+
+But:
+- Freezing of filesystem might require memory. It is bad idea to call
+"filesystems_freeze" after we forbid to swap
+- This would be pretty big change to the kernel. I'm not sure that my
+small use case justifies such change
+
+So in this point I totally gave up.
+
+
+= Why now I think your patch is good =
+
+But then I found this your email:
+https://lore.kernel.org/all/3f3d871a-6a86-354f-f83d-a871793a4a47@redhat.com/ .
+
+And now I see that complex hierarchies, such as described above, are not
+supported anyway!
+
+This fully ruins my argument above.
+
+And this means that your patch in fact works!
+
+
+= Needed changes =
+
+Please, move "notify_swap_device" after "pm_restrict_gfp_mask".
+
+Also: you introduced new operation to target_type: hibernate.
+I'm not sure we need this operation, we already have presuspend
+and postsuspend. In my personal hacky patch I simply added
+"dm_bufio_client_reset" to the end of "dm_integrity_postsuspend",
+and it worked. But I'm not sure about this point, i. e. if
+you think that we need "hibernate", then go with it.
+
+
+-- 
+Askar Safin
 
