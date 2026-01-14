@@ -1,320 +1,292 @@
-Return-Path: <linux-pm+bounces-40774-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40775-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2DFAD1BDBB
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 01:49:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28016D1BDFD
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 01:56:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EE5C7304EDA7
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 00:47:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 259083032CEE
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 00:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFC17227599;
-	Wed, 14 Jan 2026 00:47:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3695F223DD6;
+	Wed, 14 Jan 2026 00:56:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hoGGEBWN"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="ERWZVRix"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2201A1E1A17
-	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 00:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768351666; cv=none; b=A4SI8xMg9aXOwn9YQpI78d8gnGrxaGhSa/fa9COtDXGQ9kMUn9LwTGNU1sP4wMUepzKKg9cQqjG1SJ9IwLOI/2wYhb+vtQEq7uA8ZeR8A935tq8AM4Cx2KL24nsv6H8iu6ALMPRqiow9hBktgrkUY8UEzkL+k8Yt1oEN0YeIxDY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768351666; c=relaxed/simple;
-	bh=FiEQxWP0gBazySZVKdQMaxlFntTAJXhqfST8zZRauYQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mdpte4nDA6rqW4zsl4f8rVLE7ESoWjPfbgFxDx/9mDQLq1c5C6DwiYuvTOOorGbVTFtuszIJ/FYdZF3am1Og+WUAvkNCiXK3s4GlcbEnk/lJev8gnhs5H195YE6lqwhNNvXF4aLDiT55RNy/kwwt4DJaAzmUSqM/xEoI/4INTT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hoGGEBWN; arc=none smtp.client-ip=74.125.82.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2ae5af476e1so202375eec.1
-        for <linux-pm@vger.kernel.org>; Tue, 13 Jan 2026 16:47:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768351663; x=1768956463; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KrG7y4Xlsrv3rqpWtCTovQ72S57auUFAQpNG8Gw5noI=;
-        b=hoGGEBWNb3UCiGtiX7SL85zovHBykVEUvanIGuU+d6EsgY6RjElXGIHFhDnGUukBSw
-         8rvzUvQtTY6QBHhWsAzT/n27TcfOFrmPZh02H2FbVdSFa+HG12io17DZhDdJzsrP0iyp
-         6jb895lHqHNVtxRWCCx4jVzpaTBVVi1sJdySxNhl7vOo5unXiZ/2I4ZxyFxJ7bJ1wQcx
-         Ay0dk/gyDQWGa1ip+qJoxjv9Ayjb2mTsI3JiC9E+S/jSkQWgZxXVS3UGlEewbx97uMPU
-         RoGa32TGp7wlcl/raBi/uQmpQr+zt5yrT8DiDDIx55n9K70eCQxPD2uRLkrxc8gCro3Q
-         9jew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768351663; x=1768956463;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KrG7y4Xlsrv3rqpWtCTovQ72S57auUFAQpNG8Gw5noI=;
-        b=Nu/YxV7+ormUmPgs96HoKgl/WVCajfo6cNdbMyOIfgCHUP5FZkHHSD3FMiKJj1VEF9
-         6QrosyZwrhT21F5Rp8IAOd1UvXdvyO8N/t/tI5ms8weGdLu16rZp80vyzEXLsviBV8a3
-         5z3SCI9tAo2dV0m7yilH82w1oaFlL37RMhEcfcDG3kGgmY+vrwFcb1xy0R+iIsm3MEXa
-         kLtZGTWnRnzwxrmCnF7SlTQYowRv1I9EJQKwhMX7jh3+LQuiulSeX01y8nPP18xdbz+R
-         Cd97Ab5cISW25uYIkhx258bclfJ9SpLR1DoVX3Ycrw084RB3bbypW5zQDYRK3LI+EeZO
-         OWqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV/Kb6qY7J96283YjtKVBa2leKrxQfjLaFtUTwuksGsUitz6NP2wq70PViCKa/Gmo4z6umdlQW5ow==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOEC/IjnaYWTLCojwVP+xRKjEq4PV7vtyCE1RMsJHv4cB1sTW+
-	BX6Cp0zhpg/8iBXNGVIzxpRG3VmJfWpyRLAY5JC8sNEe6fHR4tGVL3u1/aezLvoAWQ==
-X-Gm-Gg: AY/fxX5PCvBhKKrMY9mZ16WjvA44YyEETnsDFU2AjuFMcDiXapub9ASKxuskIrgrWCP
-	YLM5FkcWRdJtNYlBV8QkjL1PSP5mmREH43RfS0ipmfeDKzKVAKkRbTNLKjZCs9mGIGozlru9Xz8
-	thwOAo5MvE+zDM8y5HsEpkWz/x86sBwesk+nROA3pueP7iPQGVi/XgVr5zGil4Wbw3nVSVdLMY3
-	Xi/vpUj17XuTwyzzwdfPp1wiAx/qZPtHlgeWzUZUU/5dmA0pNjGUmiehSNfYgypOV8gELYhz/vG
-	9pgWazlNYj1zd0nUdbNRJPf2eG7pruz/RaPCM8J32t7d0zI3IfvBbg7QO77txYSgyPq6BcWzXLV
-	QWLXUD4yhFE+WhZK48SR1rQvRYCPTi26Evb7Fn0WDBsIPHMz2pvanKzGEzs2AgLRmYhl4FS4ZyI
-	DISderwwmYBp1xAxXXrAy2R5nO3pKVnWzLfJB0zsJoQB0Rt03wc91EJLxHQtEbfynCou0kXlgX2
-	hel6WHfhZ7MyA==
-X-Received: by 2002:a05:7301:19ad:b0:2a4:6c74:c54a with SMTP id 5a478bee46e88-2b486f41ca8mr940567eec.18.1768351662492;
-        Tue, 13 Jan 2026 16:47:42 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e7c:8:b660:2cbe:a9b7:fc12? ([2a00:79e0:2e7c:8:b660:2cbe:a9b7:fc12])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1706a5d3dsm17693801eec.13.2026.01.13.16.47.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jan 2026 16:47:41 -0800 (PST)
-Message-ID: <378ee786-2b44-44e7-a3f6-0cd1db3c0481@google.com>
-Date: Tue, 13 Jan 2026 16:47:40 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0A7D14A8E;
+	Wed, 14 Jan 2026 00:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768352176; cv=pass; b=ld2ebLmQl/jsK81JNCS/djHReoM7lYb45gFNbU+6mzJzuLkHf73l5G5IT+qWE3UVxMK8iJuYROfKtCSzu7hrgb1VYn7KjeCufhfWNYAwW20aGWf1nN+Dxfz2eLXlqHEbdNQIB3RwMKwWT6XzifXWW8eBfr27pU6L1Q3Fe3V6w4Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768352176; c=relaxed/simple;
+	bh=IkZ347Tvh5UxWpgJAceJUvRXHnVqjkqtVJclMQ6s3/g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UOD4SB64QETj+iLUMMj7Vc7hWPsKzoytLm9OrfCVpVOWIpSIwg1IpR8+2FftA/s3VHNIjCvXGzpiTUBAIthJI/p9NuB22a+o3KCe5RWONm352uqhM6VhjwKzAhvhWYUwQF01jzH1Z8R9Byljq79Ba552thRWuWVdXB4/IWqeDHE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=ERWZVRix; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1768352154; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=me9Ls9oYKtfulWvqnrW70RBJKuT3fgrHZlaS6eZZIlmo2fBZp8RpzLKj1pRsVQJRHIeo/g7hTGsNT0x/l8Ee8T/tRuaTkgQ0Hpltl4NUEy5Y6IXozvNSRabS8wwq19GnAJIjUrQwIxHLpX9qQTHnPrEXEAXIe1tv6buBzxMXxEs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1768352154; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=+Ext8msLhoBecX7Fpbdp+73tXE9MeV0UomGOCXQFEQM=; 
+	b=ZA53bfwfeeTbNZ1beM57SYhMTcuC7W56YEQo6wYuyO465DYkyD2HnMaCR4ZLIQHSqX1k8Ix3I4anJdAaH+xip5dXh2NFnkEChQXVFazVXI2OAaLNGEuR0omeS+GBrovLZ4kFgX1fLqSMyoz1C9lUftrX6ZI803a3M5O59wCeYEU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768352154;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=+Ext8msLhoBecX7Fpbdp+73tXE9MeV0UomGOCXQFEQM=;
+	b=ERWZVRixuIRt4OzNh7HTLrMngknLqEDfsmVUuTd/aILZuNqhvFmtw5KWG3O7mBgh
+	HYrxV2Gs6iozUBdS039SiIYyNQq1xZgpPuqnVnwwQKeCoGEmUkT8AoQLTzIcTevCbC2
+	fEjU4VJV8NlGFJCVwtNxB1XS5ejYqteYHuMumQy8=
+Received: by mx.zohomail.com with SMTPS id 1768352152701661.3386817883359;
+	Tue, 13 Jan 2026 16:55:52 -0800 (PST)
+Received: by venus (Postfix, from userid 1000)
+	id BDB05181010; Wed, 14 Jan 2026 01:55:47 +0100 (CET)
+Date: Wed, 14 Jan 2026 01:55:47 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Josua Mayer <josua.mayer@jm0.eu>
+Cc: Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
+	Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 3/4] power: supply: add battery driver for netronix ec
+Message-ID: <aWblrimQTy5-khZF@venus>
+References: <20260102-kobo-aura-battery-v1-0-501f2a8fa575@jm0.eu>
+ <20260102-kobo-aura-battery-v1-3-501f2a8fa575@jm0.eu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/5] power: supply: max77759: add charger driver
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- Tudor Ambarus <tudor.ambarus@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-References: <20251227-max77759-charger-v3-0-54e664f5ca92@google.com>
- <20251227-max77759-charger-v3-4-54e664f5ca92@google.com>
- <298ca35590d2180fdcf334f94964b6110e17c606.camel@linaro.org>
- <50c29a62-1fdb-4de2-8887-0d551eee5ec0@google.com>
- <255d7726-6758-43ed-b35f-db14726bcc9b@google.com>
- <2869d309358f27652289c40810ca36b2ec155d1d.camel@linaro.org>
- <bb9b9afa-0bfa-428e-9372-549d9ba8603c@google.com>
- <6b37b88e9b7ee57eb1c006916fd995c813ab5e6e.camel@linaro.org>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <6b37b88e9b7ee57eb1c006916fd995c813ab5e6e.camel@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-
-Hi Andre',
-
-On 1/13/26 2:02 AM, André Draszik wrote:
-> Hi Amit,
->
-> On Mon, 2026-01-12 at 11:37 -0800, Amit Sunil Dhamne wrote:
->> Hi Andre',
->>
->> On 1/12/26 5:47 AM, André Draszik wrote:
->>> Hi Amit,
->>>
->>> On Tue, 2026-01-06 at 17:14 -0800, Amit Sunil Dhamne wrote:
->>>> On 1/6/26 3:41 PM, Amit Sunil Dhamne wrote:
->>>>> Hi Andre',
->>>>>
->>>>> On 1/5/26 9:32 AM, André Draszik wrote:
->>>>>> Hi Amit,
->>>>>>
->>>>>> I haven't done a full review, but a few things caught my eye.
->>>>>>
->>>>>> On Sat, 2025-12-27 at 00:04 +0000, Amit Sunil Dhamne via B4 Relay wrote:
->>>>>>> diff --git a/drivers/power/supply/Makefile
->>>>>>> b/drivers/power/supply/Makefile
->>>>>>> index 4b79d5abc49a..6af905875ad5 100644
->>>>>>> --- a/drivers/power/supply/Makefile
->>>>>>> +++ b/drivers/power/supply/Makefile
->>>>>>> [...]
->>>>>>> +
->>>>>>> +static irqreturn_t irq_handler(int irq, void *data)
->>>>>>> +{
->>>>>>> +    struct max77759_charger *chg = data;
->>>>>>> +    struct device *dev = chg->dev;
->>>>>>> +    u32 chgint_ok;
->>>>>>> +    int i;
->>>>>>> +
->>>>>>> +    regmap_read(chg->regmap, MAX77759_CHGR_REG_CHG_INT_OK,
->>>>>>> &chgint_ok);
->>>>>> You might want to check the return value and return IRQ_NONE if it
->>>>>> didn't
->>>>>> work?
->>>>>>
->>>>>>> +
->>>>>>> +    for (i = 0; i < ARRAY_SIZE(irqs); i++) {
->>>>>>> +        if (irqs[i] == irq)
->>>>>>> +            break;
->>>>>>> +    }
->>>>>>> +
->>>>>>> +    switch (i) {
->>>>>>> +    case AICL:
->>>>>>> +        dev_dbg(dev, "AICL mode: %s",
->>>>>>> +            str_no_yes(chgint_ok & MAX77759_CHGR_REG_CHG_INT_AICL));
->>>>>>> +        break;
->>>>>>> +    case CHGIN:
->>>>>>> +        dev_dbg(dev, "CHGIN input valid: %s",
->>>>>>> +            str_yes_no(chgint_ok & MAX77759_CHGR_REG_CHG_INT_CHGIN));
->>>>>>> +        break;
->>>>>>> +    case CHG:
->>>>>>> +        dev_dbg(dev, "CHG status okay/off: %s",
->>>>>>> +            str_yes_no(chgint_ok & MAX77759_CHGR_REG_CHG_INT_CHG));
->>>>>>> +        break;
->>>>>>> +    case INLIM:
->>>>>>> +        dev_dbg(dev, "Current Limit reached: %s",
->>>>>>> +            str_no_yes(chgint_ok & MAX77759_CHGR_REG_CHG_INT_INLIM));
->>>>>>> +        break;
->>>>>>> +    case BAT_OILO:
->>>>>>> +        dev_dbg(dev, "Battery over-current threshold crossed");
->>>>>>> +        break;
->>>>>>> +    case CHG_STA_CC:
->>>>>>> +        dev_dbg(dev, "Charger reached CC stage");
->>>>>>> +        break;
->>>>>>> +    case CHG_STA_CV:
->>>>>>> +        dev_dbg(dev, "Charger reached CV stage");
->>>>>>> +        break;
->>>>>>> +    case CHG_STA_TO:
->>>>>>> +        dev_dbg(dev, "Charger reached TO stage");
->>>>>>> +        break;
->>>>>>> +    case CHG_STA_DONE:
->>>>>>> +        dev_dbg(dev, "Charger reached TO stage");
->>>>>>> +        break;
->>>>>> Are the above debug messages really all needed?
->>>> I forgot to respond to this comment in my previous email.
->>>>
->>>> I think we can keep AICL, BAT_OILO, INLIM. They're either special
->>>> conditions (AICL) or faulty conditions (like BAT_OILO) and we can in
->>>> fact keep them at dev_info level. Rest can be removed and a
->>>> power_supply_changed() is sufficient.
->>>>
->>>> Let me know what you think?
->>> I don't think dev_info() in an interrupt handler is appropriate. At
->>> least it should be ratelimited.
->>>
->>> If it's something special / unexpected that needs attention, having
->>> a dev_dbg() message only will usually not be visible to anybody.
->> I agree. I can change the prints to dev_info_ratelimited for the stuff
->> we care about.
-> If it's an erroneous condition, maybe warn or even err are more appropriate?
->
-> But then, what is the expectation upon the user observing these messages?
-> What can or should they do? Who is going to look at these and can do
-> something sensible based on them?
-
-The logging will help in postmortem analysis which may or may not 
-possible with just publishing uevents to userspace hoping that they log 
-the psy properties. Illustrating a situation:
-
-1. Over current situation happened where the Battery to System current 
-exceeds the BAT_OILO threshold. This would also generate an interrupt.
-
-2. The MAX77759 takes protective measures if the condition lasts for a 
-certain specified time and reset. Resetting will cause Vsys to collapse 
-to 0 if the system is only battery powered.
-
-3. It'd be better that the BAT_OILO interrupt is logged in dmesg, 
-instead of just delegating it to user space as user can debug this 
-condition by looking at last_kmsg or pstore.
-
-4. This signal can help the user debug conditions such as moisture (this 
-signal + contaminant detection) or indicative of a mechanical failure.
-
-I do agree though that this is a hypothetical or very rare situation and 
-if you have a strong opinion against this I am okay with removing the 
-prints completely.
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sqik7oiq3dkakjj4"
+Content-Disposition: inline
+In-Reply-To: <20260102-kobo-aura-battery-v1-3-501f2a8fa575@jm0.eu>
+X-Zoho-Virus-Status: 1
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.5.1/268.322.40
+X-ZohoMailClient: External
 
 
->
->>> Also will the call to power_supply_changed() down below handle the
->>> special conditions (e.g. convey to upper levels)? If not, can it be
->>> made to do so?
->> Yes it does, as I can see a call to kobject_uevent() inside
->> power_supply_changed_work(). Also, power_supply_changed() also notifies
->> other subsystems that have registered their notifiers downstream of this
->> power_supply object. So I believe we're good there.
-> If erroneous conditions are handled by other / upper layers, why print a
-> message in this interrupt handler in the first place?
+--sqik7oiq3dkakjj4
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 3/4] power: supply: add battery driver for netronix ec
+MIME-Version: 1.0
 
-I tried illustrating an example above.
+Hi,
 
+On Fri, Jan 02, 2026 at 07:00:32PM +0100, Josua Mayer wrote:
+> Implement a simple battery driver for monitoring voltage with the
+> netronix embedded controller found in certain ebook readers.
+>=20
+> Signed-off-by: Josua Mayer <josua.mayer@jm0.eu>
+> ---
+>  drivers/power/supply/Kconfig         |   9 ++++
+>  drivers/power/supply/Makefile        |   1 +
+>  drivers/power/supply/ntxec-battery.c | 101 +++++++++++++++++++++++++++++=
+++++++
 
->
-> Also, I just noticed there is a max77705 charger driver. It seems quite
-> similar to this one, maybe it can be leveraged / extended?
+That's indeed simple :)
 
-Thanks for the feedback. I reviewed the max77705 charger driver. .
+>  3 files changed, 111 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 92f9f7aae92f..0f944c10e50b 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -1132,4 +1132,13 @@ config FUEL_GAUGE_MM8013
+>  	  the state of charge, temperature, cycle count, actual and design
+>  	  capacity, etc.
+> =20
+> +config BATTERY_NTXEC
+> +	tristate "Battery driver for Netronix embedded controller"
+> +	depends on MFD_NTXEC
 
-Here is a breakdown of why I believe a separate driver may be a better 
-approach:
+You can add "|| COMPILE_TEST"
 
-Similarities:
+> +	help
+> +	  Say yes here to enable netronix ec battery monitoring driver.
+> +	  It enables the monitoring battery voltage on certain e-book readers
+> +	  using an embedded controller by ODM Netronix. Battery design
+> +	  characteristics are read from device-tree if available.
+> +
+>  endif # POWER_SUPPLY
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index 4b79d5abc49a..db6fc815f9da 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -128,3 +128,4 @@ obj-$(CONFIG_CHARGER_SURFACE)	+=3D surface_charger.o
+>  obj-$(CONFIG_BATTERY_UG3105)	+=3D ug3105_battery.o
+>  obj-$(CONFIG_CHARGER_QCOM_SMB2)	+=3D qcom_smbx.o
+>  obj-$(CONFIG_FUEL_GAUGE_MM8013)	+=3D mm8013.o
+> +obj-$(CONFIG_BATTERY_NTXEC)	+=3D ntxec-battery.o
+> diff --git a/drivers/power/supply/ntxec-battery.c b/drivers/power/supply/=
+ntxec-battery.c
+> new file mode 100644
+> index 000000000000..f49f0966d18d
+> --- /dev/null
+> +++ b/drivers/power/supply/ntxec-battery.c
+> @@ -0,0 +1,101 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * The Netronix embedded controller is a microcontroller found in some
+> + * e-book readers designed by the original design manufacturer Netronix,=
+ Inc.
+> + * It contains RTC, battery monitoring, system power management, and PWM
+> + * functionality.
+> + *
+> + * This driver implements battery monitoring.
+> + *
+> + * Copyright 2021 Josua Mayer <josua.mayer@jm0.eu>
+> + */
+> +
+> +#include <linux/mfd/ntxec.h>
 
-1. Helper Functions: We could potentially leverage common logic for 
-get_charge_type, get_status, get_health, and get_input_current.
+^ you probably don't need this with my comments down below :)
 
-2. Register Access: MAX77705 uses regfield abstractions to handle 
-register operations which can also be potentially leveraged.
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/power_supply.h>
+> +#include <linux/property.h>
+> +#include <linux/regmap.h>
+> +
+> +static const enum power_supply_property ntxec_battery_properties[] =3D {
+> +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+> +};
+> +
+> +struct ntxec_battery {
+> +	struct ntxec *ec;
+> +};
 
-3. Initialization: Some hardware initialization steps appear similar, 
-though about 60% of the max77705 initialization (e.g., switching 
-frequency, WCIN regulation voltage, top-off time) is irrelevant for the 
-max77759 configuration I need.
+Store the regmap instead of the ec. You don't need anything else.
 
-Differences:
+> +#define NTXEC_REG_READ_BATTERY	0x41
+> +
+> +static int ntxec_battery_get_property(struct power_supply *psy,
+> +				     enum power_supply_property psp,
+> +				     union power_supply_propval *val)
+> +{
+> +	struct ntxec_battery *priv =3D power_supply_get_drvdata(psy);
+> +	int ret;
+> +	unsigned int value;
+> +
+> +	switch (psp) {
+> +		case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+> +			ret =3D regmap_read(priv->ec->regmap, NTXEC_REG_READ_BATTERY, &value);
+> +			if (ret < 0)
+> +				return ret;
+> +
+> +			/* ec value to microvolt conversion:
+> +			 * vendor kernel source suggests linear behaviour from 3V to 4.2V
+> +			 * with readings 767 to 1023; each increment represents 4687,5uV.
 
-1. OTG Support: The max77759 driver supports OTG boost mode, which is a 
-key requirement for my use case. While the max77705 hardware might 
-support OTG based on its registers, the current driver implementation 
-does not support it.
+4687.5uV ?
 
-2. TCPCI/TCPM Integration: The max77759 driver is explicitly architected 
-to work with a TCPCI/TCPM-compliant Type-C controller to set input 
-current limits dynamically. It is ambiguous whether the max77705 device 
-uses a standard TCPCI/TCPM model or a proprietary one.
+> +			 * adjust 3V boundary slightly to report exactly 4.2V when full.
+> +			 */
+> +			val->intval =3D 2999872 + (value - 767) * 4688;
+> +			break;
+> +		default:
+> +			dev_err(&psy->dev, "%s: invalid property %u\n", __func__, psp);
+> +			return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct power_supply_desc ntxec_battery_desc =3D {
+> +	.name =3D "ec-battery",
+> +	.type =3D POWER_SUPPLY_TYPE_BATTERY,
+> +	.properties =3D ntxec_battery_properties,
+> +	.get_property =3D ntxec_battery_get_property,
+> +	.num_properties =3D ARRAY_SIZE(ntxec_battery_properties),
+> +};
+> +
+> +static int ntxec_battery_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev =3D &pdev->dev;
+> +	struct ntxec *ec =3D dev_get_drvdata(dev->parent);
 
-3. Register Incompatibility: There are distinct register differences. 
-For example, the max77705 driver relies on BATP and BATP_DTLS registers, 
-which do not exist in the max77759. Conversely, the max77759 has a 
-dedicated second interrupt register (CHG_INT2) that reports critical 
-signals like BAT_OILO, SYS_UVLO, and charging stages, which appear 
-absent or handled differently in the max77705. Additionally, MAX77759 
-has input selection (wireless, usb) and uses it in the driver but it's 
-not evident from register definitions whether max77705 has it.
+Based on the regmap comment above, I think you can just do the
+following and completley avoid 'struct ntxec' (please test):
 
-4. Parameter Calculations: The formulas for calculating parameters like 
-Fast Charge Current (CHGCC) and Float Voltage are different between the 
-two chips. Merging the drivers would require separate, chip-specific 
-getter/setter functions for these core properties.
+struct regmap *regmap =3D dev_get_regmap(dev->parent, NULL);
 
-5. Device-Specific Workarounds: The max77705 driver includes a 
-workaround in max77705_aicl_irq that is not relevant to the max77759. 
-There may also be future workarounds which may not be applicable to one 
-or the other.
+> +	struct power_supply_config psy_cfg =3D {};
+> +	struct ntxec_battery *priv;
+> +	struct power_supply *psy;
+> +
+> +	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +
+> +	priv->ec =3D ec;
+> +	psy_cfg.drv_data =3D priv;
+> +	psy_cfg.fwnode =3D dev_fwnode(dev->parent);
+> +	psy_cfg.no_wakeup_source =3D true;
+> +	psy =3D devm_power_supply_register(dev, &ntxec_battery_desc, &psy_cfg);
+> +	if (IS_ERR(psy))
+> +		return PTR_ERR(psy);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct platform_driver ntxec_battery_driver =3D {
+> +	.driver =3D {
+> +		.name =3D "ntxec-battery",
+> +	},
+> +	.probe =3D ntxec_battery_probe,
+> +};
+> +module_platform_driver(ntxec_battery_driver);
+> +
+> +MODULE_AUTHOR("Josua Mayer <josua.mayer@jm0.eu>");
+> +MODULE_DESCRIPTION("Battery driver for Netronix EC");
+> +MODULE_LICENSE("GPL");
+> +MODULE_ALIAS("platform:ntxec-battery");
 
-Logistical Constraints: I don't have access to max77705 hardware or its 
-full datasheet. This makes it impossible for me to test any shared code 
-changes to ensure I haven't introduced regressions on the max77705. IMO, 
-given these constraints and technical divergences, maintaining separate 
-drivers maybe a better choice. Please let me know wdyt?
+I know there are a bunch of wrong examples in my subsystem, but the
+proper way to do this is to drop this alias and instead add a
+platform_device_id table together with MODULE_DEVICE_TABLE(platform, ...).
+See for example cros_peripheral_charger.c
 
+Greetings,
 
-BR,
+-- Sebastian
 
-Amit
+--sqik7oiq3dkakjj4
+Content-Type: application/pgp-signature; name="signature.asc"
 
->
->
-> Cheers,
-> Andre'
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmlm6ZAACgkQ2O7X88g7
++pq9fg/9G9xfrQVyTahHnzobU36zUpcA4CWZCRUiREKpiVLJYXLaR3j6bhluf4cU
+DUP7DBU5U+OqFxS6pLuPJUe4m92iy2t3YEGiSCxGUmf7Mss5z2UytzFl1aqaZzgX
+UZeu6n073CtgPwILLykDZJq6dFDlVFVRS2JuN27XiqZy/rZ0XbE6YKna/HxLAHCo
+MNPg0kjtfya69ULOtiTxk1PJqkyoq5k6D4A/2kEDtKBPAgj/fosghtJZAaepPLz+
+5TrtBW0XeSMz1u0aKKvdyRWHM67NqTggXhxVa9R9gRVzaCAp9wUWmQBSHKgaXEGg
+jTz4N3VJMtcFrPVMnE5J1TgKRZT68xJlgnmd3tX1Eby2SoiiBdzgzNwaILnoyDDL
+fidH96UM9/lC8GlWM0FKeoY5xlWMcEbj8vogBRfO2XSfgAhGIaX8986QE7d6tMtW
+K5A6LRfjtvpZCA6uSJK/Flw7MDZ+3z6bwL1WlLAjeVh4ubxU+aWjgQRgH381DjlO
+FDqJgfQf3WCEMfmfhCpCeGQc7xRKcvL3U5ymJD2eh256p0XS47Oj2qzgQ+kr7KNQ
+Bcp0IIypmebUyoo3xYaRIctevxdB++pFvFPBioCSHRjxH0nwaFBeel900VW2Yq04
+qIweScg+GJjyzepFcjxN/CDE9pfLfW4yK+0lVz8pm0L4UxKp8yE=
+=fqrB
+-----END PGP SIGNATURE-----
+
+--sqik7oiq3dkakjj4--
 
