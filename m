@@ -1,245 +1,271 @@
-Return-Path: <linux-pm+bounces-40854-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40855-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1180D1F111
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 14:28:12 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9998D1F37F
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 14:54:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 72EB23009550
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 13:28:11 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4BD73300EB91
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 13:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AB2438BF96;
-	Wed, 14 Jan 2026 13:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XHiRAvuN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E825275AF0;
+	Wed, 14 Jan 2026 13:54:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B8B38E120;
-	Wed, 14 Jan 2026 13:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3561F274B37
+	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 13:54:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768397291; cv=none; b=IumqjbKJssMV50NoiZ3vrtIkB1cUkAstFqZXGzvmeiRic0lp2E6lXX/sDxLBIQkxub3q8cl7wmAhNPlJeoRLLwqhl5Qkvlp7eylBFYEBCZhkYX8KSnkzqx5Lh5u1SYI1rkmVSOauxXX+DrLSXgKbLDoHMqSWxreJkw29NBOaRZw=
+	t=1768398893; cv=none; b=p6DIk85rh0wlONufkkTKtcJ5GaBAShzDv4n0rgfwHrxluFMz7XvZXcBXKkU/78DcWhZgKxUX0yyc5n+VCNABAThnh0z8ecEGkSX+51wuNUXXIdZVTUSxmhmI9/Q9CD6bSN6ydP18EIvLyIZYaX0uT1h6YWvw/IP4jrFFUo7P3Oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768397291; c=relaxed/simple;
-	bh=drFNgjA8qXHpljbntcl8BlBSYuo3kCvxKvrLsGSOAXM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Eod1HcAMMauIe2HWSDp7iu+kLYRubTupFcgGG4XZRuSRYyTnooaNQ2ffm9P7iRJrW6s17wzxq1aSxMdrxPmVxMPV0qXT6Qli1YpdoC71Vf4dlJXYev1xQ+OLSx43PQM+uePfxii/S84wohucoJ14nLPjf2K1JrPg1HthW74FWpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XHiRAvuN; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768397289; x=1799933289;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=drFNgjA8qXHpljbntcl8BlBSYuo3kCvxKvrLsGSOAXM=;
-  b=XHiRAvuN6CpToBUct6FeGeqTQm/JhLkc4nVB5iPKHW4pIKOPwa5JUJuq
-   p73KpCpXW5zhYqDfyo3mPEVJViDY1cloYSeeP5NFMf7pMhZM3Zb+o9dB2
-   +ffufbYZkuFCIDnwSoOUMk5RlQK54wSoRzcX7IXmXYWWlYePecNHsfrF+
-   VYj8HW+xBkny7NjhcwerSdOxt1itb83qKZY1RAU1wqrEIVsqA+XVBUeT9
-   x8A79Zr9RYRoDlkq7lczyxHcfc/1jNUCzAf2orZ2w52JT3wDomOGSWoCb
-   lVJSsrNG0OvIm4uVYe3zGKWBu87ex+P4UReykCTT5BERyGRKQx82LWdt6
-   Q==;
-X-CSE-ConnectionGUID: L0xaoZ1dSd6rzWl+fNLsKw==
-X-CSE-MsgGUID: gKE/WQN+Rf+BCMzZVnlADw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="81141002"
-X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="81141002"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 05:28:08 -0800
-X-CSE-ConnectionGUID: 6Sx48oIiQyOVKT8FQiMakA==
-X-CSE-MsgGUID: nqkvukhNTwSAHSvJbLRSVQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="209525497"
-Received: from ly-workstation.sh.intel.com (HELO ly-workstation) ([10.239.182.64])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 05:28:04 -0800
-Date: Wed, 14 Jan 2026 21:28:00 +0800
-From: "Lai, Yi" <yi1.lai@linux.intel.com>
-To: Kairui Song <ryncsn@gmail.com>
-Cc: linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-	Baoquan He <bhe@redhat.com>, Barry Song <baohua@kernel.org>,
-	Chris Li <chrisl@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
-	Yosry Ahmed <yosry.ahmed@linux.dev>,
-	David Hildenbrand <david@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Youngjun Park <youngjun.park@lge.com>,
-	Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Ying Huang <ying.huang@linux.alibaba.com>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	linux-kernel@vger.kernel.org, Kairui Song <kasong@tencent.com>,
-	linux-pm@vger.kernel.org,
-	"Rafael J. Wysocki (Intel)" <rafael@kernel.org>
-Subject: Re: [PATCH v5 14/19] mm, swap: cleanup swap entry management workflow
-Message-ID: <aWeZ4LmfwiS9iwYF@ly-workstation>
-References: <20251220-swap-table-p2-v5-0-8862a265a033@tencent.com>
- <20251220-swap-table-p2-v5-14-8862a265a033@tencent.com>
+	s=arc-20240116; t=1768398893; c=relaxed/simple;
+	bh=KC6CzTSKWMfxqz4JG4C85CGQWTLzY6Yl9nFumKlYQ+s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cpD+ap7AooriH8lrrfP3dNkTe0gC1RhNMiTZ5/0O+xd52BuMoYnaCAQR5uXNxzM7V9ITAZnhFwQcj5+8WXEhYqGZxEsOHgonFg1ExPn/EUGdFStNxx6IUfIhBrN1em2fzacUOyyw8VuYc5ck937YRFBZNRjRPOMhjmMbxTXT+cQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-93f5774571eso2901152241.1
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 05:54:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768398889; x=1769003689;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RZLqC1bLBjSQm/oEEjmqpl5nTEIq7+AXCXiTqeXbF7A=;
+        b=mztmswuV4U1k0W0CgA8Ak+lxBmf+JY+qIf0K+0a2vaIiNNBSTCpuKICmHalGCg+7ix
+         9QnwawVO2qnYxc1BSjWDf6jPJ3rMHjZR1LD2m2/WcEQr2VIh/btUtFGA8ic7aj4Ks9to
+         QDQzdclgBRJlch7P6jUV9Qlu8hZEz3Jm6aHl/3J8XdDiLTCKVoH90V67H5/IMBslwxAv
+         rM4yz8M+TFYvVRee3JTYB+dR2zNjornPJEAW9+RQc2W2eJqqDo30KFbScTckCxsKdyCG
+         J7H99+IQGdjks7JA9N/u4NLe4JLbUmT0SJWVELA2h/8vtl3fG09tP4MN1gsgUVx7uPeo
+         xedw==
+X-Forwarded-Encrypted: i=1; AJvYcCX0P4KwLhcY3xv8LNw2Cp0D7TI3RdAJozSzzL0VXSfL+q6Hzm1pPEWVVVjlAK/wBAF0qD4HtGQxVQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5agvtJIDFDm9z70wWPgjxV/gqz6lyRV/eYSzoVCEYaQ09BLVP
+	Vh9l2FDt2MwMJzU+hQbI9Pf6dsBYlHytUbm7delROPE85IRVO5OmlbbL/uCE4dFJ
+X-Gm-Gg: AY/fxX6l3vZmzlw3IfuamBmc6AA1HGWfc8um9S69rQClmOadBdF49grQeozqyyv5cxQ
+	9nXjOSlcvj1uAVVV6huFcKHUUQBUB/B4ryBeQvq/+tiXOpH1rUxRJH1isT7cVxFHs3JgJ1MVa7/
+	NYQkM0mpJHuzlEHgJZdYVQ7rmFbNYMdncsgm5zcm70Cm3sLUSoyPdgdwWpOhyoKgirYYB5tY/PP
+	3ecR5lW6JNOjn4fQFvQ04URR9qMG27rlEB7XCttg7cCHSDC2MTEinpKLnLpJ67zXokIiwzQv3IL
+	4BxoXWnc3rfn/BZ3SbPgWHzyveayo+jQK3pjgDNzQDkSJoxAi4SOxfJ2qQdXH1H4LJxt2e/L42E
+	8Mz4lqQyHD35LAiuVFA5zvyjVsSTs+YlFdQUYki6afpYqRl0BUJ4wmqS1qkL69tDLVAE2bjom77
+	pkxSU063PkmTficBcfQJTORp7/XfHuwQfcXIm054S50JnCtTIa1sZTdy87H6Q=
+X-Received: by 2002:a05:6102:cca:b0:5ef:9a75:cf21 with SMTP id ada2fe7eead31-5f17f416bb2mr863384137.8.1768398888969;
+        Wed, 14 Jan 2026 05:54:48 -0800 (PST)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5ec770644d5sm23400665137.8.2026.01.14.05.54.47
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Jan 2026 05:54:48 -0800 (PST)
+Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-5ee99dec212so2264294137.0
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 05:54:47 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXjxXUUnqd3IUV+OPu5QX9kEDAre1wqbzH4u+2DPqUQGE4ZZ4A1ZX/rdeuNoWBvg4L/biZtLJzuZQ==@vger.kernel.org
+X-Received: by 2002:a05:6102:4a96:b0:5ed:77d:fd6c with SMTP id
+ ada2fe7eead31-5f17f5d8436mr999268137.21.1768398886733; Wed, 14 Jan 2026
+ 05:54:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251220-swap-table-p2-v5-14-8862a265a033@tencent.com>
+References: <20251230080115.2120612-1-zhenglifeng1@huawei.com>
+ <20251230080115.2120612-4-zhenglifeng1@huawei.com> <CAMuHMdVeHk-Enc-M9ztwSdeAtE8YPKtJwq+273bGPEFOEsu=Rw@mail.gmail.com>
+ <aWZriVlQZ5jRx2o4@arm.com>
+In-Reply-To: <aWZriVlQZ5jRx2o4@arm.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 14 Jan 2026 14:54:35 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVgbQnaCQ8U8FK6J1vJLsqc0_MC7zSTX2B=rsuF2kpEKg@mail.gmail.com>
+X-Gm-Features: AZwV_Qjx2dELiMfsKzad8VnoGFI8Ocod5E-6j0toQajY1saFLqz5CsCrIlg1Tmo
+Message-ID: <CAMuHMdVgbQnaCQ8U8FK6J1vJLsqc0_MC7zSTX2B=rsuF2kpEKg@mail.gmail.com>
+Subject: Re: [REPOST PATCH v6 3/3] arm64: topology: Handle AMU FIE setup on
+ CPU hotplug
+To: Beata Michalska <beata.michalska@arm.com>
+Cc: Lifeng Zheng <zhenglifeng1@huawei.com>, catalin.marinas@arm.com, will@kernel.org, 
+	rafael@kernel.org, viresh.kumar@linaro.org, sudeep.holla@arm.com, 
+	gregkh@linuxfoundation.org, dakr@kernel.org, ionela.voinescu@arm.com, 
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linuxarm@huawei.com, jonathan.cameron@huawei.com, vincent.guittot@linaro.org, 
+	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com, 
+	zhangpengjie2@huawei.com, wangzhi12@huawei.com, linhongye@h-partners.com, 
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Kairui Song,
+Hi Beata,
 
-Greetings!
+On Tue, 13 Jan 2026 at 16:58, Beata Michalska <beata.michalska@arm.com> wrote:
+> On Tue, Jan 13, 2026 at 11:51:45AM +0100, Geert Uytterhoeven wrote:
+> > On Tue, 30 Dec 2025 at 09:02, Lifeng Zheng <zhenglifeng1@huawei.com> wrote:
+> > > Currently, when a cpufreq policy is created, the AMU FIE setup process
+> > > checks all CPUs in the policy -- including those that are offline. If any
+> > > of these CPUs are offline at that time, their AMU capability flag hasn't
+> > > been verified yet, leading the check fail. As a result, AMU FIE is not
+> > > enabled, even if the CPUs that are online do support it.
+> > >
+> > > Later, when the previously offline CPUs come online and report AMU support,
+> > > there's no mechanism in place to re-enable AMU FIE for the policy. This
+> > > leaves the entire frequency domain without AMU FIE, despite being eligible.
+> > >
+> > > Restrict the initial AMU FIE check to only those CPUs that are online at
+> > > the time the policy is created, and allow CPUs that come online later to
+> > > join the policy with AMU FIE enabled.
+> > >
+> > > Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> > > Acked-by: Beata Michalska <beata.michalska@arm.com>
+> >
+> > Thanks for your patch, which is now commit 6fd9be0b7b2e957d
+> > ("arm64: topology: Handle AMU FIE setup on CPU hotplug") in
+> > arm64/for-next/core (next-20260107 and later).
+> >
+> > > --- a/arch/arm64/kernel/topology.c
+> > > +++ b/arch/arm64/kernel/topology.c
+> > > @@ -284,7 +284,7 @@ static int init_amu_fie_callback(struct notifier_block *nb, unsigned long val,
+> > >         struct cpufreq_policy *policy = data;
+> > >
+> > >         if (val == CPUFREQ_CREATE_POLICY)
+> > > -               amu_fie_setup(policy->related_cpus);
+> > > +               amu_fie_setup(policy->cpus);
+> > >
+> > >         /*
+> > >          * We don't need to handle CPUFREQ_REMOVE_POLICY event as the AMU
+> > > @@ -303,10 +303,71 @@ static struct notifier_block init_amu_fie_notifier = {
+> > >         .notifier_call = init_amu_fie_callback,
+> > >  };
+> > >
+> > > +static int cpuhp_topology_online(unsigned int cpu)
+> > > +{
+> > > +       struct cpufreq_policy *policy = cpufreq_cpu_policy(cpu);
+> > > +
+> > > +       /* Those are cheap checks */
+> > > +
+> > > +       /*
+> > > +        * Skip this CPU if:
+> > > +        *  - it has no cpufreq policy assigned yet,
+> > > +        *  - no policy exists that spans CPUs with AMU counters, or
+> > > +        *  - it was already handled.
+> > > +        */
+> > > +       if (unlikely(!policy) || !cpumask_available(amu_fie_cpus) ||
+> > > +           cpumask_test_cpu(cpu, amu_fie_cpus))
+> > > +               return 0;
+> > > +
+> > > +       /*
+> > > +        * Only proceed if all already-online CPUs in this policy
+> > > +        * support AMU counters.
+> > > +        */
+> > > +       if (unlikely(!cpumask_subset(policy->cpus, amu_fie_cpus)))
+> > > +               return 0;
+> > > +
+> > > +       /*
+> > > +        * If the new online CPU cannot pass this check, all the CPUs related to
+> > > +        * the same policy should be clear from amu_fie_cpus mask, otherwise they
+> > > +        * may use different source of the freq scale.
+> > > +        */
+> > > +       if (!freq_counters_valid(cpu)) {
+> > > +               pr_warn("CPU[%u] doesn't support AMU counters\n", cpu);
+> >
+> > This is triggered during resume from s2ram on Renesas R-Car H3
+> > (big.LITTLE 4x Cortex-A57 + 4x Cortex-A53), when enabling the first
+> > little core:
+> >
+> >     AMU: CPU[4] doesn't support AMU counters
+> >
+> > Adding debug code:
+> >
+> >     pr_info("Calling
+> > topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH, %*pbl)\n",
+> > cpumask_pr_args(policy->related_cpus));
+> >     pr_info("Calling cpumask_andnot(..., %*pbl, %*pbl)\n",
+> > cpumask_pr_args(amu_fie_cpus), cpumask_pr_args(policy->related_cpus));
+> >
+> > gives:
+> >
+> >     AMU: Calling topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH, 4-7)
+> >     AMU: Calling cpumask_andnot(..., , 4-7)
+> >
+> > so AMU is disabled for all little cores.
+> >
+> > Since this only happens during s2ram, and not during initial CPU
+> > bring-up on boot, this looks wrong to me?
+> This does look rather surprising. If that CPU was marked as supporting AMUs at
+> the initial bring-up it should be part of amu_fie_cpus mask, so the hp callback
+> should bail out straight away. Would you be able to add some logs to see what
+> that mask actually contains ?
+> Furthermore, freq_counters_valid is logging issues when validating the counters.
+> Would you be able to re-run it with the debug level to see what might be
+> happening under the hood, although I am still unsure why it is even reaching
+> that point ...
 
-I used Syzkaller and found that there is possible deadlock in swap_free_hibernation_slot in linux-next next-20260113.
+Adding extra debugging info, and "#define DEBUG" at the top.
 
-After bisection and the first bad commit is:
-"
-33be6f68989d mm. swap: cleanup swap entry management workflow
-"
+During boot:
 
-All detailed into can be found at:
-https://github.com/laifryiee/syzkaller_logs/tree/main/260114_102849_swap_free_hibernation_slot
-Syzkaller repro code:
-https://github.com/laifryiee/syzkaller_logs/tree/main/260114_102849_swap_free_hibernation_slot/repro.c
-Syzkaller repro syscall steps:
-https://github.com/laifryiee/syzkaller_logs/tree/main/260114_102849_swap_free_hibernation_slot/repro.prog
-Syzkaller report:
-https://github.com/laifryiee/syzkaller_logs/tree/main/260114_102849_swap_free_hibernation_slot/repro.report
-Kconfig(make olddefconfig):
-https://github.com/laifryiee/syzkaller_logs/tree/main/260114_102849_swap_free_hibernation_slot/kconfig_origin
-Bisect info:
-https://github.com/laifryiee/syzkaller_logs/tree/main/260114_102849_swap_free_hibernation_slot/bisect_info.log
-bzImage:
-https://github.com/laifryiee/syzkaller_logs/raw/refs/heads/main/260114_102849_swap_free_hibernation_slot/bzImage_0f853ca2a798ead9d24d39cad99b0966815c582a
-Issue dmesg:
-https://github.com/laifryiee/syzkaller_logs/blob/main/260114_102849_swap_free_hibernation_slot/0f853ca2a798ead9d24d39cad99b0966815c582a_dmesg.log
+    AMU: amu_fie_setup:260: cpus 0-3 amu_fie_cpus
+    ^^^ empty amu_fie_cpus
+    AMU: CPU0: counters are not supported.
+    ^^^ pr_debug
+    AMU: amu_fie_setup:260: cpus 4-7 amu_fie_cpus
+    ^^^ empty amu_fie_cpus
+    AMU: CPU4: counters are not supported.
+    ^^^ pr_debug
 
-"
-[   62.477554] ============================================
-[   62.477802] WARNING: possible recursive locking detected
-[   62.478059] 6.19.0-rc5-next-20260113-0f853ca2a798 #1 Not tainted
-[   62.478324] --------------------------------------------
-[   62.478549] repro/668 is trying to acquire lock:
-[   62.478759] ffff888011664018 (&cluster_info[i].lock){+.+.}-{3:3}, at: swap_free_hibernation_slot+0x13e/0x2a0
-[   62.479271]
-[   62.479271] but task is already holding lock:
-[   62.479519] ffff888011664018 (&cluster_info[i].lock){+.+.}-{3:3}, at: swap_free_hibernation_slot+0xfa/0x2a0
-[   62.479984]
-[   62.479984] other info that might help us debug this:
-[   62.480293]  Possible unsafe locking scenario:
-[   62.480293]
-[   62.480565]        CPU0
-[   62.480686]        ----
-[   62.480809]   lock(&cluster_info[i].lock);
-[   62.481010]   lock(&cluster_info[i].lock);
-[   62.481205]
-[   62.481205]  *** DEADLOCK ***
-[   62.481205]
-[   62.481481]  May be due to missing lock nesting notation
-[   62.481481]
-[   62.481802] 2 locks held by repro/668:
-[   62.481981]  #0: ffffffff87542e28 (system_transition_mutex){+.+.}-{4:4}, at: lock_system_sleep+0x92/0xb0
-[   62.482439]  #1: ffff888011664018 (&cluster_info[i].lock){+.+.}-{3:3}, at: swap_free_hibernation_slot+0xfa/0x0
-[   62.482936]
-[   62.482936] stack backtrace:
-[   62.483131] CPU: 0 UID: 0 PID: 668 Comm: repro Not tainted 6.19.0-rc5-next-20260113-0f853ca2a798 #1 PREEMPT(l
-[   62.483143] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.q4
-[   62.483151] Call Trace:
-[   62.483156]  <TASK>
-[   62.483160]  dump_stack_lvl+0xea/0x150
-[   62.483195]  dump_stack+0x19/0x20
-[   62.483206]  print_deadlock_bug+0x22e/0x300
-[   62.483215]  __lock_acquire+0x1325/0x2210
-[   62.483226]  lock_acquire+0x170/0x2f0
-[   62.483234]  ? swap_free_hibernation_slot+0x13e/0x2a0
-[   62.483249]  _raw_spin_lock+0x38/0x50
-[   62.483267]  ? swap_free_hibernation_slot+0x13e/0x2a0
-[   62.483279]  swap_free_hibernation_slot+0x13e/0x2a0
-[   62.483291]  ? __pfx_swap_free_hibernation_slot+0x10/0x10
-[   62.483303]  ? locks_remove_file+0xe2/0x7f0
-[   62.483322]  ? __pfx_snapshot_release+0x10/0x10
-[   62.483331]  free_all_swap_pages+0xdd/0x160
-[   62.483339]  ? __pfx_snapshot_release+0x10/0x10
-[   62.483346]  snapshot_release+0xac/0x200
-[   62.483353]  __fput+0x41f/0xb70
-[   62.483369]  ____fput+0x22/0x30
-[   62.483376]  task_work_run+0x19e/0x2b0
-[   62.483391]  ? __pfx_task_work_run+0x10/0x10
-[   62.483398]  ? nsproxy_free+0x2da/0x5b0
-[   62.483410]  ? switch_task_namespaces+0x118/0x130
-[   62.483421]  do_exit+0x869/0x2810
-[   62.483435]  ? do_group_exit+0x1d8/0x2c0
-[   62.483445]  ? __pfx_do_exit+0x10/0x10
-[   62.483451]  ? __this_cpu_preempt_check+0x21/0x30
-[   62.483463]  ? _raw_spin_unlock_irq+0x2c/0x60
-[   62.483474]  ? lockdep_hardirqs_on+0x85/0x110
-[   62.483486]  ? _raw_spin_unlock_irq+0x2c/0x60
-[   62.483498]  ? trace_hardirqs_on+0x26/0x130
-[   62.483516]  do_group_exit+0xe4/0x2c0
-[   62.483524]  __x64_sys_exit_group+0x4d/0x60
-[   62.483531]  x64_sys_call+0x21a2/0x21b0
-[   62.483544]  do_syscall_64+0x6d/0x1180
-[   62.483560]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   62.483584] RIP: 0033:0x7fe84fb18a4d
-[   62.483595] Code: Unable to access opcode bytes at 0x7fe84fb18a23.
-[   62.483602] RSP: 002b:00007fff3e35c928 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-[   62.483610] RAX: ffffffffffffffda RBX: 00007fe84fbf69e0 RCX: 00007fe84fb18a4d
-[   62.483615] RDX: 00000000000000e7 RSI: ffffffffffffff80 RDI: 0000000000000001
-[   62.483620] RBP: 0000000000000001 R08: 0000000000000000 R09: 0000000000000020
-[   62.483624] R10: 00007fff3e35c7d0 R11: 0000000000000246 R12: 00007fe84fbf69e0
-[   62.483629] R13: 00007fe84fbfbf00 R14: 0000000000000001 R15: 00007fe84fbfbee8
-[   62.483640]  </TASK>
-"
+During resume from s2ram:
 
-Hope this cound be insightful to you.
+    AMU: cpuhp_topology_online:314: cpu 1 amu_fie_cpus
+    AMU: cpuhp_topology_online:343: skipped
+(!cpumask_subset(policy->cpus, amu_fie_cpus))
+    AMU: cpuhp_topology_online:314: cpu 2 amu_fie_cpus
+    AMU: cpuhp_topology_online:343: skipped
+(!cpumask_subset(policy->cpus, amu_fie_cpus))
+    AMU: cpuhp_topology_online:314: cpu 3 amu_fie_cpus
+    AMU: cpuhp_topology_online:343: skipped
+(!cpumask_subset(policy->cpus, amu_fie_cpus))
+    AMU: cpuhp_topology_online:314: cpu 4 amu_fie_cpus
+    AMU: CPU4: counters are not supported.
+    ^^^ pr_debug
+    AMU: CPU[4] doesn't support AMU counters
+    ^^^ pr_warn
+    AMU: Calling topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH, 4-7)
+    AMU: Calling cpumask_andnot(..., , 4-7)
+    AMU: cpuhp_topology_online:314: cpu 5 amu_fie_cpus
+    AMU: cpuhp_topology_online:343: skipped
+(!cpumask_subset(policy->cpus, amu_fie_cpus))
+    AMU: cpuhp_topology_online:314: cpu 6 amu_fie_cpus
+    AMU: cpuhp_topology_online:343: skipped
+(!cpumask_subset(policy->cpus, amu_fie_cpus))
+    AMU: cpuhp_topology_online:314: cpu 7 amu_fie_cpus
+    AMU: cpuhp_topology_online:343: skipped
+(!cpumask_subset(policy->cpus, amu_fie_cpus))
 
-Regards,
-Yi Lai
+Hence there is no issue, as AMU is not supported at all!
 
----
+The confusing part is in the (absence of) logging.
+If AMU is not supported, freq_counters_valid() uses:
 
-If you don't need the following environment to reproduce the problem or if you
-already have one reproduced environment, please ignore the following information.
+     pr_debug("CPU%d: counters are not supported.\n", cpu);
 
-How to reproduce:
-git clone https://gitlab.com/xupengfe/repro_vm_env.git
-cd repro_vm_env
-tar -xvf repro_vm_env.tar.gz
-cd repro_vm_env; ./start3.sh  // it needs qemu-system-x86_64 and I used v7.1.0
-  // start3.sh will load bzImage_2241ab53cbb5cdb08a6b2d4688feb13971058f65 v6.2-rc5 kernel
-  // You could change the bzImage_xxx as you want
-  // Maybe you need to remove line "-drive if=pflash,format=raw,readonly=on,file=./OVMF_CODE.fd \" for different qemu version
-You could use below command to log in, there is no password for root.
-ssh -p 10023 root@localhost
+which is typically not printed, unless DEBUG is enabled.
 
-After login vm(virtual machine) successfully, you could transfer reproduced
-binary to the vm by below way, and reproduce the problem in vm:
-gcc -pthread -o repro repro.c
-scp -P 10023 repro root@localhost:/root/
+If freq_counters_valid() failed, the new cpuhp_topology_online() uses:
 
-Get the bzImage for target kernel:
-Please use target kconfig and copy it to kernel_src/.config
-make olddefconfig
-make -jx bzImage           //x should equal or less than cpu num your pc has
+    pr_warn("CPU[%u] doesn't support AMU counters\n", cpu);
 
-Fill the bzImage file into above start3.sh to load the target kernel in vm.
+which is always printed.
 
+Given freq_counters_valid() already prints a (debug) message, I think
+the pr_warn() should just be removed.  Do you agree, or is there still
+another incorrect check that should prevent getting this far?
 
-Tips:
-If you already have qemu-system-x86_64, please ignore below info.
-If you want to install qemu v7.1.0 version:
-git clone https://github.com/qemu/qemu.git
-cd qemu
-git checkout -f v7.1.0
-mkdir build
-cd build
-yum install -y ninja-build.x86_64
-yum -y install libslirp-devel.x86_64
-../configure --target-list=x86_64-softmmu --enable-kvm --enable-vnc --enable-gtk --enable-sdl --enable-usb-redir --enable-slirp
-make
-make install 
+Thanks!
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
