@@ -1,76 +1,94 @@
-Return-Path: <linux-pm+bounces-40878-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40884-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64158D210D3
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 20:37:30 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0456CD2118D
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 20:50:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6684D301D627
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 19:37:29 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id EB61D3015ADB
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 19:49:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA76432B9A7;
-	Wed, 14 Jan 2026 19:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678E3352C2D;
+	Wed, 14 Jan 2026 19:49:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N/pPVVnx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jibrqmVA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A0A2FBDF0;
-	Wed, 14 Jan 2026 19:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4485A34D911;
+	Wed, 14 Jan 2026 19:48:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768419446; cv=none; b=AMK6RhaBb2PZVPz7SE/tykvMpSHBQReC4kxepbbop5PlxhfHlQHUDZ2p29mJ0qvvN/wYTRHHzVg92Mzcp41QdT6hojSzfwrqkI1Ykg3EIg0njG8LWVQ1wgpzEs8dT5UJEfEJRZW0ScwOdsn9uqllp32XMKGBcI0M0O8MCME1PFc=
+	t=1768420140; cv=none; b=Ct+BGCeKuwIn/m+ybRw38rbXBDLv2vTefcE4Y27SQSQNinwZCSMNweTQCkPdcei2gQIHuprD2X10GodLicNS66fX61gRvDNQU8g5TZO90faMWLtsH1Tt/wlISnY32AHwBM+X1IspWiaImimC5VPGSP8TrXFM22gD6xXevU1Ks48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768419446; c=relaxed/simple;
-	bh=gpjWR6mV8zEfx/lFoa1psD5J8e/g5WdQMimKlhrES2c=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=tLqaPpu8NAcfwcyqY4GL6r8R3/1YObkOlRSt86RUwO85GkJ56uHsSF792qgd+62ro8bHbmFq74PHgJ4tGGgX0M6LpAdnKS4Us6wBEkxFmGG1c5IyJri9BCLzvcJrdpXHNt1jFzXstpYACapTUruSzO80Qbv+hE9QwWoJGuWKhuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N/pPVVnx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62E27C4CEF7;
-	Wed, 14 Jan 2026 19:37:22 +0000 (UTC)
+	s=arc-20240116; t=1768420140; c=relaxed/simple;
+	bh=tp23sPobZL67a+lYGtr7uSviXFwlADBrQjQ9Yo2xg6k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CY0loAS6InrsDvzytzsIgpUGQmTYO8XxalJO3CVL4If8X5fdf2Mwau//Y+YfcA0bZHSuhoDOrtn3y9agGS36qWJapfbQAcN2wtjZ/CRE031gn5H/93nPlGiX0unKkeEJ1JCezu/QVBCcjb94kmPZXt1tenNAxO0HZl1Jy+X3UYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jibrqmVA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90589C19422;
+	Wed, 14 Jan 2026 19:48:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768419446;
-	bh=gpjWR6mV8zEfx/lFoa1psD5J8e/g5WdQMimKlhrES2c=;
-	h=Date:Subject:Cc:To:From:References:In-Reply-To:From;
-	b=N/pPVVnxxhiavK9yo7XCGYVKuSRIbmnu2mc94frq4KMY0S6bXoI/BO54jW9KQCAPb
-	 ffBNzlyKuZTYTwzw8DWZsbCd62Oo7oXPMNxSaK4DETDSkTH1vkCrp7OPBNMKcKMzmu
-	 +rnqXDMmYs6QjT1wUKAZPmuStvFLCmZ4vx1/5D3c/oKFtxEZlvnzTpIc/UHW+2wz42
-	 B6v1YC8VKf3GgJvq8TvD/HUhKvFaK+OMnp0o/CeDSF1txB/DFSS0090IdkUto+lls3
-	 u0wuxXntUk4NsoWVcbB0z6U/4a9NsjFLVi0M/cKHM/EZm5MqYaupCZNfl07pAPpa5p
-	 3cGG2QjOEKT6g==
+	s=k20201202; t=1768420139;
+	bh=tp23sPobZL67a+lYGtr7uSviXFwlADBrQjQ9Yo2xg6k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jibrqmVAfR7d8anhjuzbMe5jLG3c78gZsySsL6/d/kzZ80NFfRzcK4bVWRJC9dXIJ
+	 Iay0aeLV/sOOzjE5uXl68d7jvYnSmmBtStx/t5ajPufO7dtirAOfpKaCrPSMTf70G3
+	 h8IGz2MAr4sY4bezs7ZDqYQ0bqHqcKJwUMspuUJjDfki8R4qXTTbgH13w+QIMDDdP5
+	 YaIIA/7U8NJ4vvBe6abIkgDWw9VbOlQITrXRfyW95ACAWndqjxYpg8utOcJ37i3JJA
+	 Oh3FFORz6JnqNyjrngvQIC06kbqSJApbhINNwwbrpKXt6qkknf86MOQRY++DBXrb4U
+	 b99EA1c1bpkRg==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Christian Loehle <christian.loehle@arm.com>,
+ Doug Smythies <dsmythies@telus.net>
+Subject:
+ [PATCH v1 0/5] cpuidle: governors: teo: Wakeup events classification change
+ and some refinements
+Date: Wed, 14 Jan 2026 20:42:55 +0100
+Message-ID: <2257365.irdbgypaU6@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 14 Jan 2026 20:37:20 +0100
-Message-Id: <DFOKDFM2UW4X.YA1TI202V73F@kernel.org>
-Subject: Re: [PATCH v3 0/7] rust: build_assert: document and fix use with
- function arguments
-Cc: "Alice Ryhl" <aliceryhl@google.com>, "Daniel Almeida"
- <daniel.almeida@collabora.com>, "Miguel Ojeda" <ojeda@kernel.org>, "Alex
- Gaynor" <alex.gaynor@gmail.com>, "Boqun Feng" <boqun.feng@gmail.com>, "Gary
- Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
- "Rafael J. Wysocki" <rafael@kernel.org>, "Viresh Kumar"
- <viresh.kumar@linaro.org>, "Will Deacon" <will@kernel.org>, "Peter
- Zijlstra" <peterz@infradead.org>, "Mark Rutland" <mark.rutland@arm.com>,
- <rust-for-linux@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-pm@vger.kernel.org>, <stable@vger.kernel.org>
-To: "Alexandre Courbot" <acourbot@nvidia.com>
-From: "Danilo Krummrich" <dakr@kernel.org>
-References: <20251208-io-build-assert-v3-0-98aded02c1ea@nvidia.com>
-In-Reply-To: <20251208-io-build-assert-v3-0-98aded02c1ea@nvidia.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon Dec 8, 2025 at 3:46 AM CET, Alexandre Courbot wrote:
->       rust: io: always inline functions using build_assert with arguments
->       rust: irq: always inline functions using build_assert with argument=
-s
+Hi All,
 
-Applied to driver-core-linus, thanks!
+This material has been in my local queue for almost a full development cycle,
+so time to post it.
+
+The motivation for the changes in this series is mostly theoretical, but I do
+see some idle power improvements from patch [4/5], for example, but nothing
+specifically worth reporting.
+
+The first patch simply prevents idle states with zero-size bins from being
+selected sometimes when teo_select() runs with stopped tick.
+
+Patch [2/5] avoids counting tick wakeups as intercepts unless there are
+sufficiently many intercepts within the tick period range to assume that
+the tick wakeup may have clobbered a genuine intercept.
+
+Patch [3/5] simply updates a coefficient in one of the inequalities to be
+somewhat easier to interpret (this should be a cosmetic change).
+
+Patch [4/5] changes the criteria used for classifying wakeup events as hits
+or intercepts to (hopefully) make the classification work better for large
+state bins.
+
+Patch [5/5] refines the idle state lookup based on intercepts to first
+consider the state with the maximum intercepts metric, so that state is
+always taken into consideration.
+
+Please see the individual patch changelogs for details.
+
+Thanks!
+
+
+
 
