@@ -1,217 +1,309 @@
-Return-Path: <linux-pm+bounces-40849-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40850-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EF99D1EA37
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 13:05:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 581E5D1EA0D
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 13:03:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A3BB0305328C
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 12:01:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0F82A3028DB2
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 12:03:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7331D396B87;
-	Wed, 14 Jan 2026 12:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 826EF38A28D;
+	Wed, 14 Jan 2026 12:03:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JStleW+v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j/qBKCUe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB42396B92
-	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 12:01:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA0E632
+	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 12:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768392108; cv=none; b=tboN/Ay9gMJHOCWGHQyEKNrmMv73bwW4K551MsB2AtwrjUOwpxYpbSBdnddQZ7K1A8sse8xGL39WEnwN/0wklduP3friwFh/bGraA6ae1de0xg0nUBtWwBXh3ANNkwGywJr/KSctEYdpEBBinSC10AMtmh1ykMz8r7/27KHoJ1I=
+	t=1768392219; cv=none; b=PYz7/BvZbrqr9OLWRWurYqPjrsUXHqM7hYw8BAWlMC3a2mrex7POcaaV6gYBTDpvkIGkb7+uO3q6p+sZmpvOFoDmCYJdMXhG5YrnbAvTSl2VOApacOcT9Wx4RVpV4qmgW+wZDlornzZyyXkqPckZ65DeRJ8K7RDduC5gbGKd+r8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768392108; c=relaxed/simple;
-	bh=iNai+G6NshxOHQsZJbNlAnBOyInMuTA1VsQcpywwbMQ=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=HpLeMYC8AhRZ/4QGkn6Krr0UtK8fnqxVbinwWyLZ1qqjXSUaaL6arylXvYWcPyrrruyI/u3DyehUZMEiluKDRtSzcNL9Leip+NgTFpOYzAo5vjkR/U2VNRZDSczI77ADR96RuAPVuKrU82zg9HMJMcdGpci6a8AXoyHtMmSB8/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JStleW+v; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-47796a837c7so58923045e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 04:01:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1768392099; x=1768996899; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bMmxpMMJUTD5dATkBZmEMwx1+ZMsaHboVGIdX1ME97Y=;
-        b=JStleW+vfxhWAkTVq/nWMw4SkOACkni8r4B90PLRjz6xHRZzrR0lRGOXXldcSluyRU
-         i7MjA2ETEFg0czPnUT4MvlEe/VHItJL38n5Vd961s+m7wg+BXSjhy5vLTSrrUhWxVYWG
-         3/AEE3KM0yDXG7HiJrV9VCyf7txnFJdf99A62n1uyP6kAKkQwKARzA70hbQfS7yGZHgz
-         EVVuLq/aU/lINv/FvhOgRWCzoxtHCp60ml8iVnyunkx9Y80tvZTEtiJj9BmWSNG8I4Ue
-         QTPASKoxfpV2cvwWoDoCY+67eYzbzC4ygz2bwYzAGDz2kxa8KYuyNwHwEQoUDhPcTArM
-         KR8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768392099; x=1768996899;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:references:cc:to:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bMmxpMMJUTD5dATkBZmEMwx1+ZMsaHboVGIdX1ME97Y=;
-        b=qbSuViv3w3mmxg44ktXcfvcf376JF+k7fuDpYSV9JY+IdrJjltu05WodeAunXpk9RE
-         +Imp+Bs3V5nBMfKi8YULu1eFM/MRm3zzmCv4wTUTguYEmdjHNAD7zryJd+YWHSEAiWs/
-         Cvx0eXDz6ng5jLAk7J7P6hcn+1hpalj57DpkaAGByMEH1sob9fXry7WsXnw+8wQym3HB
-         jZAEmjO6ulKWp2SYmclH62BiIy8XjC0W2J/6V89Q1KgiH+gnIK46mzdZKo6VewgIZpCE
-         Zin9CqyBwrdb4t+GOEeik+GLN3vKV0WVbXb+yeP0vWRoWOfYwVWfaXRc4Sk8cNmri+tF
-         I7HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVICTuWYDkIaSiTwF+Hi3qsdYW73xVfwbfj8VhOYhz5uxKZuO9N54EJAEYqzMUljCqZc1oKGDJ77A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5h7eahCUTLLybrkFOQVV8IwR9F0UFRVi4kvjdqveqwNNzvxeo
-	KHG8b800uHPRUpEDJTBDNacF5BLJNBp40WuCH9uaAEkakZoitul2fRWAqJo1/bQNFfo=
-X-Gm-Gg: AY/fxX58OL4OnRveh9+V4mRKiJi6VIys/hphcPPAFMeUv4apJeUbAA34zLR8096n5ct
-	HVolgLoQtLikfwXd09+l4yv7U3MaapX1dp7RzzlxZ4tXCCC9JSpDkEeZGgfs5n7Zzl5peKYSWCf
-	TEYm4CoodK5R5AytccVbizGJF+jJ1S3IlU/yQJkfbkIwFL9ciWa3Mjjb3rkZgfP4NeyEi1XIqXi
-	rWPmtLr4d8fRGx+oLfTX7dQRGzveE1xDX7OrQQH27W8JRdsGtqIioSzGzm9+VEtykJFBMrdBtK1
-	7RyNBnDF95bAywfMYk7pZhBSA8WxLOk1eICqwwH+ir+Im9zu9KhgS7phgSj5T+sgPZCB0wo1BY0
-	gk1cYl7cxPEkJyGnSE8v5RQ1TkYP4SHllsA/8HoXeYJRcGjS1696yg5QVZX9hXlxpaHTTFLGc8B
-	5wzPWepRR3niOj5abMm/bVUcgj2Km2hGFnLf4eG9Is3/tGRSDKeE+MWzxltUr2zhw=
-X-Received: by 2002:a05:600c:3510:b0:47e:e05f:643c with SMTP id 5b1f17b1804b1-47ee33916e6mr22558155e9.20.1768392094380;
-        Wed, 14 Jan 2026 04:01:34 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:3d9:2080:b357:7e03:65d5:1450? ([2a01:e0a:3d9:2080:b357:7e03:65d5:1450])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47ee2814587sm18125945e9.10.2026.01.14.04.01.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jan 2026 04:01:33 -0800 (PST)
-Message-ID: <3f3653d2-d40b-48d9-a131-08d3ff44dba5@linaro.org>
-Date: Wed, 14 Jan 2026 13:01:33 +0100
+	s=arc-20240116; t=1768392219; c=relaxed/simple;
+	bh=ISwBmXtqlbwyWss/fBVSoHfvpN3szzQVi/RRDl8VsMQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QdzSBcoBxc2otuo2wHhJYvzy37bdFLHkvBBPzAx1f8IOyVHgCheSNlpWitb3EVVJ5QgiozShDY3e22sWp13yI/fb9avIdIwYkNHoujt9TiZ+w85vHe9446GhwrmcSwKCP17HkqWVAfzpzCkORwoqUm9NPOXpSC/wC+vfbGh4afY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j/qBKCUe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ABC9C2BC87
+	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 12:03:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768392217;
+	bh=ISwBmXtqlbwyWss/fBVSoHfvpN3szzQVi/RRDl8VsMQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=j/qBKCUe40NVBeas996xnwtfvLquI+x+D6OyuOCjRCSgtAVwj8lyi84ytIfW0IAH7
+	 K1kkl16xZWHL0Aa9Zp7I0JN+5vM8n50Iv+vwS+GnRWIbIU10Y4x7rnmGNriGGDD5CV
+	 RB4r9VD4R1uhMEHMYYkTJXDmzMLXQwfxl9B9V8CvA7ZntNst4gv3lMyedamhnCPAPm
+	 o7Q9Ri7zWPqLuddTM25ZG60K14Ad9aVQYlvw2sS1jQP58f0LW72bhzw7UJq9+GtaKg
+	 hjL4rumYZAuPLKMysxvvOr1yynP+skYT/xd+/q6Q1Yz3il8fx+UFpPEiX9QzjY0ZSS
+	 K9uWViWCnhrxA==
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7c7660192b0so6058784a34.0
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 04:03:37 -0800 (PST)
+X-Gm-Message-State: AOJu0YzQFjniRF4kpLu3MG//1WyhQ3uwZj1Z9LF9v+Uqj31lwRUsSFV1
+	kGMvH/GVCZtntUAgu/6bevwvQf07Bwd9+igkRYiK7hAmaxlRfHU62VLqTDlngIY0rtgKfzzrDBq
+	BSYQ/sxh83LMw6G4FYeRGGJXr467Q8Io=
+X-Received: by 2002:a05:6808:229f:b0:450:d693:4d1b with SMTP id
+ 5614622812f47-45c7144e9cdmr1695229b6e.26.1768392216637; Wed, 14 Jan 2026
+ 04:03:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH RFC RFT] interconnect: qcom: implement get_bw with
- rpmh_read
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
- Georgi Djakov <djakov@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
-References: <20251106-topic-sm8x50-icc-read-rpmh-v1-1-d03a2e5ca5f7@linaro.org>
- <8eb528dd-71fc-408e-a97c-d484198e4f81@kernel.org>
- <1be287ac-fce9-4f27-aa88-b1f786e968cd@oss.qualcomm.com>
- <95becfde-ba4b-4024-9b90-e64e77551f0a@linaro.org>
- <ae97da56-7e4c-4ff2-b0fa-9724b95229eb@oss.qualcomm.com>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <ae97da56-7e4c-4ff2-b0fa-9724b95229eb@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <2256082.irdbgypaU6@rafael.j.wysocki>
+In-Reply-To: <2256082.irdbgypaU6@rafael.j.wysocki>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 14 Jan 2026 13:03:25 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gdj6Oe=LSJX8+6JbxTt42W3RkabLDWh=VqEkjUvAWxow@mail.gmail.com>
+X-Gm-Features: AZwV_QhbVK5oii9_3CGxCluXrI-tqHdo9S29eDTUEUKRjhI1ctLbD3rwyvO_M9I
+Message-ID: <CAJZ5v0gdj6Oe=LSJX8+6JbxTt42W3RkabLDWh=VqEkjUvAWxow@mail.gmail.com>
+Subject: Re: [RESEND][PATCH v1] drm: Discard pm_runtime_put() return value
+To: Linux PM <linux-pm@vger.kernel.org>, imx@lists.linux.dev
+Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Brian Norris <briannorris@chromium.org>, Liviu Dudau <liviu.dudau@arm.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
+	dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/14/26 11:31, Konrad Dybcio wrote:
-> On 1/14/26 11:07 AM, Neil Armstrong wrote:
->> On 1/14/26 11:01, Konrad Dybcio wrote:
->>> On 1/13/26 6:53 PM, Georgi Djakov wrote:
->>>> On 11/6/25 6:46 PM, Neil Armstrong wrote:
->>>>> Since we can actually read back the APPS rpmh interconnect
->>>>> BCM votes we can actually implement the get_bw() callback
->>>>> and provide a coherent average and peak bandwidth at probe time.
->>>>>
->>>>> The benefits of that are:
->>>>> - keep disabled BCMs disabled
->>>>> - avoid voting unused BCMs to INT_MAX
->>>>>
->>>>> If the interconnects are correctly described for a platform,
->>>>> all the required BCMs would be voted to the maximum bandwidth
->>>>> until sync_state is reached.
->>>>>
->>>>> Since we only get the BCM vote, we need to redistribute
->>>>> the vote values to the associated nodes. The initial BCM
->>>>> votes are read back at probe time in order to be ready when
->>>>> the get_bw() is called when a node is added.
->>>>>
->>>>
->>>> FWIW, I was able to finally test this on sdm845. Some nodes are indeed
->>>> showing reasonable bandwidth values instead of the default INT_MAX.
->>>
->>> As I learnt here
->>>
->>> https://lore.kernel.org/linux-arm-msm/1e7594dc-dca6-42e7-b478-b063e3325aff@oss.qualcomm.com/
->>>
->>> rpmh_read() will only retrieve the currently active values, so as-is,
->>> this hunk:
->>>
->>> +    /* For boot-up, fill the AMC vote in all buckets */
->>> +    for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
->>> +        bcm->vote_x[i] = x;
->>> +        bcm->vote_y[i] = y;
->>> +    }
->>>
->>> is lying about the state of wake/sleep buckets
->>>
->>> this is ""fine"" today, as I don't see any "if (old_bw == new_bw)" checks
->>> across the framework, but debugfs is going to report incorrect values and
->>> if anyone decides to add the aforementioned check, it may introduce issues
->>> where the values aren't commited to the hardware (because Linux is going
->>> to believe they're already set)
->>
->> This is only for the pre-sync-state phase, where we don't need the wake/sleep
->> values but the interconnect rpmh implementation needs them, and anyway they will
->> be replaced by proper values in sync_state
-> 
-> I realize this may not be the most convincing argument, but consider
-> the case where sync_state can not be hit, for example with the Venus
-> driver that requests FW at probe time and errors out if it's absent
+On Thu, Jan 8, 2026 at 4:38=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
+> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Multiple DRM drivers use the pm_runtime_put() return value for printing
+> debug or even error messages and all of those messages are at least
+> somewhat misleading.
+>
+> Returning an error code from pm_runtime_put() merely means that it has
+> not queued up a work item to check whether or not the device can be
+> suspended and there are many perfectly valid situations in which that
+> can happen, like after writing "on" to the devices' runtime PM "control"
+> attribute in sysfs for one example.  It also happens when the kernel
+> has been configured with CONFIG_PM unset.
+>
+> For this reason, modify all of those drivers to simply discard the
+> pm_runtime_put() return value which is what they should be doing.
+>
+> This will facilitate a planned change of the pm_runtime_put() return
+> type to void in the future.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Acked-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+> ---
+>
+> This patch is requisite for converting pm_runtime_put() into a void
+> function.
+>
+> If you decide to pick it up, please let me know.
+>
+> Otherwise, an ACK or equivalent will be appreciated, but also the lack
+> of specific criticism will be eventually regarded as consent.
+>
+> Originally posted here:
+>
+> https://lore.kernel.org/linux-pm/3045480.e9J7NaK4W3@rafael.j.wysocki/
 
-We're talking about initial states here, if a device votes for an interconnect
-path, even before sync_state, the path will be voted with the requested bandwidth.
+This is the last patch from the "discard pm_runtime_put() return
+values" lot that has not been applied yet, AFAICS, so this is the last
+call for objections or concerns related to it.
 
-https://elixir.bootlin.com/linux/v6.18.5/source/drivers/interconnect/core.c#L295
-
-Before this patch:
-node->init_avg & node->init_peak are set to INT_MAX, so max(x, INT_MAX) always gives INT_MAX
-After this patch:
-node->init_avg & node->init_peak are from the boot, which can be 0. So we either vote
-for the requested bandwidth, or floor the bandwidth set by the bootloader (could be a higher value).
-
-> 
->> So this is an informed & assumed choice I did here. It's a small optimization
->> to avoid turning on _all_ interconnects at INT_MAX, and keep boot votes
->> up to sync_state.
-> 
-> Another question is, whether that's a desired change - I could easily
-> see pinning buses to the maximum speed helping boot time KPIs, but
-> perhaps that could/should be configurable?
-
-It's all about the rest of the bussed endpoints, enabling _all_ endpoints
-to INT_MAX could potentially lead to in fact reducing bandwidth for crucial
-devices like UFS because we configure everything to the max bandwidth, and enable
-unused busses (and associated clocks & power domains) for nothing.
-
-The idea in this patch is to keep the votes from bootloader, keep the disabled
-endpoints and vote with requested bandwidth for devices which are used in the boot process.
-
-Neil
-
-> 
-> Konrad
-
+> ---
+>  drivers/gpu/drm/arm/malidp_crtc.c                   |    6 +-----
+>  drivers/gpu/drm/bridge/imx/imx8qm-ldb.c             |    4 +---
+>  drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c            |    4 +---
+>  drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c |    5 +----
+>  drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c        |    5 +----
+>  drivers/gpu/drm/imx/dc/dc-crtc.c                    |   12 +++---------
+>  drivers/gpu/drm/vc4/vc4_hdmi.c                      |    5 +----
+>  drivers/gpu/drm/vc4/vc4_vec.c                       |   12 ++----------
+>  8 files changed, 11 insertions(+), 42 deletions(-)
+>
+> --- a/drivers/gpu/drm/arm/malidp_crtc.c
+> +++ b/drivers/gpu/drm/arm/malidp_crtc.c
+> @@ -77,7 +77,6 @@ static void malidp_crtc_atomic_disable(s
+>                                                                          =
+crtc);
+>         struct malidp_drm *malidp =3D crtc_to_malidp_device(crtc);
+>         struct malidp_hw_device *hwdev =3D malidp->dev;
+> -       int err;
+>
+>         /* always disable planes on the CRTC that is being turned off */
+>         drm_atomic_helper_disable_planes_on_crtc(old_state, false);
+> @@ -87,10 +86,7 @@ static void malidp_crtc_atomic_disable(s
+>
+>         clk_disable_unprepare(hwdev->pxlclk);
+>
+> -       err =3D pm_runtime_put(crtc->dev->dev);
+> -       if (err < 0) {
+> -               DRM_DEBUG_DRIVER("Failed to disable runtime power managem=
+ent: %d\n", err);
+> -       }
+> +       pm_runtime_put(crtc->dev->dev);
+>  }
+>
+>  static const struct gamma_curve_segment {
+> --- a/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
+> +++ b/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
+> @@ -280,9 +280,7 @@ static void imx8qm_ldb_bridge_atomic_dis
+>         clk_disable_unprepare(imx8qm_ldb->clk_bypass);
+>         clk_disable_unprepare(imx8qm_ldb->clk_pixel);
+>
+> -       ret =3D pm_runtime_put(dev);
+> -       if (ret < 0)
+> -               DRM_DEV_ERROR(dev, "failed to put runtime PM: %d\n", ret)=
+;
+> +       pm_runtime_put(dev);
+>  }
+>
+>  static const u32 imx8qm_ldb_bus_output_fmts[] =3D {
+> --- a/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
+> +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
+> @@ -282,9 +282,7 @@ static void imx8qxp_ldb_bridge_atomic_di
+>         if (is_split && companion)
+>                 companion->funcs->atomic_disable(companion, state);
+>
+> -       ret =3D pm_runtime_put(dev);
+> -       if (ret < 0)
+> -               DRM_DEV_ERROR(dev, "failed to put runtime PM: %d\n", ret)=
+;
+> +       pm_runtime_put(dev);
+>  }
+>
+>  static const u32 imx8qxp_ldb_bus_output_fmts[] =3D {
+> --- a/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c
+> +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c
+> @@ -181,11 +181,8 @@ static void imx8qxp_pc_bridge_atomic_dis
+>  {
+>         struct imx8qxp_pc_channel *ch =3D bridge->driver_private;
+>         struct imx8qxp_pc *pc =3D ch->pc;
+> -       int ret;
+>
+> -       ret =3D pm_runtime_put(pc->dev);
+> -       if (ret < 0)
+> -               DRM_DEV_ERROR(pc->dev, "failed to put runtime PM: %d\n", =
+ret);
+> +       pm_runtime_put(pc->dev);
+>  }
+>
+>  static const u32 imx8qxp_pc_bus_output_fmts[] =3D {
+> --- a/drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c
+> +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c
+> @@ -127,11 +127,8 @@ static void imx8qxp_pxl2dpi_bridge_atomi
+>                                                   struct drm_atomic_state=
+ *state)
+>  {
+>         struct imx8qxp_pxl2dpi *p2d =3D bridge->driver_private;
+> -       int ret;
+>
+> -       ret =3D pm_runtime_put(p2d->dev);
+> -       if (ret < 0)
+> -               DRM_DEV_ERROR(p2d->dev, "failed to put runtime PM: %d\n",=
+ ret);
+> +       pm_runtime_put(p2d->dev);
+>
+>         if (p2d->companion)
+>                 p2d->companion->funcs->atomic_disable(p2d->companion, sta=
+te);
+> --- a/drivers/gpu/drm/imx/dc/dc-crtc.c
+> +++ b/drivers/gpu/drm/imx/dc/dc-crtc.c
+> @@ -300,7 +300,7 @@ dc_crtc_atomic_disable(struct drm_crtc *
+>                                 drm_atomic_get_new_crtc_state(state, crtc=
+);
+>         struct dc_drm_device *dc_drm =3D to_dc_drm_device(crtc->dev);
+>         struct dc_crtc *dc_crtc =3D to_dc_crtc(crtc);
+> -       int idx, ret;
+> +       int idx;
+>
+>         if (!drm_dev_enter(crtc->dev, &idx))
+>                 goto out;
+> @@ -313,16 +313,10 @@ dc_crtc_atomic_disable(struct drm_crtc *
+>         dc_fg_disable_clock(dc_crtc->fg);
+>
+>         /* request pixel engine power-off as plane is off too */
+> -       ret =3D pm_runtime_put(dc_drm->pe->dev);
+> -       if (ret)
+> -               dc_crtc_err(crtc, "failed to put DC pixel engine RPM: %d\=
+n",
+> -                           ret);
+> +       pm_runtime_put(dc_drm->pe->dev);
+>
+>         /* request display engine power-off when CRTC is disabled */
+> -       ret =3D pm_runtime_put(dc_crtc->de->dev);
+> -       if (ret < 0)
+> -               dc_crtc_err(crtc, "failed to put DC display engine RPM: %=
+d\n",
+> -                           ret);
+> +       pm_runtime_put(dc_crtc->de->dev);
+>
+>         drm_dev_exit(idx);
+>
+> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> @@ -848,7 +848,6 @@ static void vc4_hdmi_encoder_post_crtc_p
+>         struct vc4_hdmi *vc4_hdmi =3D encoder_to_vc4_hdmi(encoder);
+>         struct drm_device *drm =3D vc4_hdmi->connector.dev;
+>         unsigned long flags;
+> -       int ret;
+>         int idx;
+>
+>         mutex_lock(&vc4_hdmi->mutex);
+> @@ -867,9 +866,7 @@ static void vc4_hdmi_encoder_post_crtc_p
+>         clk_disable_unprepare(vc4_hdmi->pixel_bvb_clock);
+>         clk_disable_unprepare(vc4_hdmi->pixel_clock);
+>
+> -       ret =3D pm_runtime_put(&vc4_hdmi->pdev->dev);
+> -       if (ret < 0)
+> -               drm_err(drm, "Failed to release power domain: %d\n", ret)=
+;
+> +       pm_runtime_put(&vc4_hdmi->pdev->dev);
+>
+>         drm_dev_exit(idx);
+>
+> --- a/drivers/gpu/drm/vc4/vc4_vec.c
+> +++ b/drivers/gpu/drm/vc4/vc4_vec.c
+> @@ -542,7 +542,7 @@ static void vc4_vec_encoder_disable(stru
+>  {
+>         struct drm_device *drm =3D encoder->dev;
+>         struct vc4_vec *vec =3D encoder_to_vc4_vec(encoder);
+> -       int idx, ret;
+> +       int idx;
+>
+>         if (!drm_dev_enter(drm, &idx))
+>                 return;
+> @@ -556,17 +556,9 @@ static void vc4_vec_encoder_disable(stru
+>
+>         clk_disable_unprepare(vec->clock);
+>
+> -       ret =3D pm_runtime_put(&vec->pdev->dev);
+> -       if (ret < 0) {
+> -               drm_err(drm, "Failed to release power domain: %d\n", ret)=
+;
+> -               goto err_dev_exit;
+> -       }
+> +       pm_runtime_put(&vec->pdev->dev);
+>
+>         drm_dev_exit(idx);
+> -       return;
+> -
+> -err_dev_exit:
+> -       drm_dev_exit(idx);
+>  }
+>
+>  static void vc4_vec_encoder_enable(struct drm_encoder *encoder,
+>
+>
+>
+>
 
