@@ -1,111 +1,101 @@
-Return-Path: <linux-pm+bounces-40829-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40830-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9EC8D1DAAD
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 10:44:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0746DD1DAE7
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 10:46:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 229B8301897A
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 09:43:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 57CAC3008F97
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 09:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C6F7389E02;
-	Wed, 14 Jan 2026 09:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FB5A32AAB3;
+	Wed, 14 Jan 2026 09:46:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DvYV7qVI"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="5jo9mmpr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B9AC37F8BC;
-	Wed, 14 Jan 2026 09:43:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDB022D7B1;
+	Wed, 14 Jan 2026 09:46:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768383832; cv=none; b=KrvKuiMe0/PfTpi/XyXJ26jn+TREWBeB14xNFDmhjRhnDaBBstgZl2P3jVgIWmo1Cmg0A97QFEQqgkASSnTAsoEzov6w3gflN4nCSm9pMNnktlSJZ7/KuVgPGjFfZ1rjVFp3K52mLMW+9Pg21UhdwjdDRFl1mRuTZwTvptUyvUo=
+	t=1768384004; cv=none; b=bHObyPV1Fe4pg4fWI12Q1/EuXPN/YfVeCbPYAcaxN6XwZTvVD0BlZHheYY4JREiq7UtJFYvL9SgsTznz0DuqzjRVdYEbIfobFi0IvLHObyzJPONv3AoWcii0LLrVZosTlCx0QTY8v3Y4YZTXcl3rUnY4azgzenTw8w5Dx8+qbsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768383832; c=relaxed/simple;
-	bh=L9IhLHxjWYeBsO8OEGHzLOjllo7uXiWf/O2foAudpdU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FRG2G9N1mYNBqebzZkQn1WpGWgjBwNygbZs/9Pv+KAtCYsbMbhCQhIPJtFeSuq1JjCdgv8Dj8kNED1OUZynnzGReyhx0iAqx/a24io+CzMwtyHGnGSOMwfn2vQeY+yBfG707zAefu7PTO9F75a9BjGUY6N4EJroUV8JF4LXZPUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DvYV7qVI; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768383832; x=1799919832;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=L9IhLHxjWYeBsO8OEGHzLOjllo7uXiWf/O2foAudpdU=;
-  b=DvYV7qVILlZ99W1Deb2+ZApCMXxR7kfCVqAhArJoY29KZPsfND7PyYCO
-   10KUlOJSWid/dvcGUWYfyyPa1sRfjiI0cR7pRa1NHbyMcxxeQEIFPAVoe
-   xNYW0H+s6kJWPaf1QaGcmqqbC+c1AZTLkzBYjaTyUJmXqYDh23zAmCQjH
-   r2Wj7jA5w6Gfa19JfsaeT5O/0ey0K8jUXYX5jAOmxHuKT1UKzXw/hs8BB
-   x7zXx3HQrNYvVUi297K7FssGcXpu8MuiOWJx8ytkIrlZkbsrVVpw6zcZn
-   8J2rf7+CzPPoCOjv19M5PMYV0M6G6HpETuB1lM5zT/kHp593n+L3LZT/s
-   g==;
-X-CSE-ConnectionGUID: rkROO7I6Qi6slsB7wowmqg==
-X-CSE-MsgGUID: FMQiIosKSn2n1VBUWrYBuA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="73315011"
-X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="73315011"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 01:43:47 -0800
-X-CSE-ConnectionGUID: It0L+crLSkulcHNBCOzdMA==
-X-CSE-MsgGUID: 67kHELfRTT2+AF40OL6r3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="209092335"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.83])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 01:43:40 -0800
-Date: Wed, 14 Jan 2026 11:43:38 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
-	andy@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
-	srini@kernel.org, vkoul@kernel.org, neil.armstrong@linaro.org,
-	sre@kernel.org, sboyd@kernel.org, krzk@kernel.org,
-	dmitry.baryshkov@oss.qualcomm.com, quic_wcheng@quicinc.com,
-	melody.olvera@oss.qualcomm.com, quic_nsekar@quicinc.com,
-	ivo.ivanov.ivanov1@gmail.com, abelvesa@kernel.org,
-	luca.weiss@fairphone.com, konrad.dybcio@oss.qualcomm.com,
-	mitltlatltl@gmail.com, krishna.kurapati@oss.qualcomm.com,
-	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v8 00/10] SPMI: Implement sub-devices and migrate drivers
-Message-ID: <aWdlSlI85ro7SbJv@smile.fi.intel.com>
-References: <20260114092742.13231-1-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1768384004; c=relaxed/simple;
+	bh=FYk+f+xozHsnGSAS3m4BcQvGM9bggaWnTuTt0y9N9zA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Uw3zUmnopj/owmvyDXbwgrxQ5rs1FxclsLQ0IAm6TI4I656SaGtpkRuopFe3iO+XND3RiF8JQbmD4j528ibDrfnnqoG/HkdUfiT2vHvDeQSvBzHS3ltZLJHeFg2zgi4gNgtYfjqxWRR6PtCZo0VpF/jLFI0G6zIJm0XGc7USGRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=5jo9mmpr; arc=none smtp.client-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=wsrP6mWtwnnMRQXneby0cjMNzQtgd6nlCorz11nyHvw=;
+	b=5jo9mmprXSi7Yx1m+9oUlj0CFwIWhbGthF3s5eGT9uFXRGs7gwJr96r8PN3/MI/Uv3WWqqXeb
+	h2v4ZKDoaQwtwxJQ0X3udQesufWM6xhK7d+pDeZQH3Clf0VBlbDK6WElYBOIjNw25GIxNEJLnYs
+	aqv7MwxxLwPirmBhSWOjnrY=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4drh486D3tzcb0B;
+	Wed, 14 Jan 2026 17:42:48 +0800 (CST)
+Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7314240538;
+	Wed, 14 Jan 2026 17:46:33 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
+ (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 14 Jan
+ 2026 17:46:32 +0800
+Message-ID: <e1b5ad4f-79ef-4c5c-8e4c-b9e7b9598d76@huawei.com>
+Date: Wed, 14 Jan 2026 17:46:32 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260114092742.13231-1-angelogioacchino.delregno@collabora.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] PM/devfreq: Remove unneeded casting for HZ_PER_KHZ
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Chanwoo Choi
+	<cw00.choi@samsung.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+CC: MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin Park
+	<kyungmin.park@samsung.com>
+References: <20260114093115.276818-1-andriy.shevchenko@linux.intel.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <20260114093115.276818-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemf200001.china.huawei.com (7.202.181.227)
 
-On Wed, Jan 14, 2026 at 10:27:32AM +0100, AngeloGioacchino Del Regno wrote:
-> Changes in v8:
->  - Renamed *res to *sub_sdev in devm_spmi_subdevice_remove() (Andy)
->  - Changed kerneldoc wording to "error pointer" for function
->    spmi_subdevice_alloc_and_add() (Andy)
->  - Shuffled around some assignments in spmi_subdevice_alloc_and_add() (Andy)
->  - Used device_property_read_u32() instead of of_property_read_u32()
->    in all of the migrated drivers (Andy)
->  - Changed .max_register field in all of the migrated drivers from
->    0x100 to 0xff (Andy)
->  - Kept `sta1` declaration in reversed xmas tree order in function
->    iadc_poll_wait_eoc() of qcom-spmi-iadc.c (Andy)
+On 2026/1/14 17:31, Andy Shevchenko wrote:
+> HZ_PER_KHZ is defined as UL (unsigned long), no need to repeat that.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/devfreq/devfreq.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index 00979f2e0e27..51eb67fba44b 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -146,10 +146,9 @@ void devfreq_get_freq_range(struct devfreq *devfreq,
+>  					     DEV_PM_QOS_MIN_FREQUENCY);
+>  	qos_max_freq = dev_pm_qos_read_value(devfreq->dev.parent,
+>  					     DEV_PM_QOS_MAX_FREQUENCY);
+> -	*min_freq = max(*min_freq, (unsigned long)HZ_PER_KHZ * qos_min_freq);
+> +	*min_freq = max(*min_freq, HZ_PER_KHZ * qos_min_freq);
+>  	if (qos_max_freq != PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE)
+> -		*max_freq = min(*max_freq,
+> -				(unsigned long)HZ_PER_KHZ * qos_max_freq);
+> +		*max_freq = min(*max_freq, HZ_PER_KHZ * qos_max_freq);
+>  
+>  	/* Apply constraints from OPP interface */
+>  	*max_freq = clamp(*max_freq, devfreq->scaling_min_freq, devfreq->scaling_max_freq);
 
-Thanks, in principle I'm okay with this version, but it would be nice to have
-clarification on the max_register for sure (it doesn't prevent the series from
-being applied).
+Make sense. Thanks!
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Reviewed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
 
