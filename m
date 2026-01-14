@@ -1,99 +1,80 @@
-Return-Path: <linux-pm+bounces-40838-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40839-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6F71D1DD92
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 11:09:24 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 027FAD1DD62
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 11:08:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7655C305A2CE
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 10:04:41 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B2C30300FECB
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 10:07:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF16938A295;
-	Wed, 14 Jan 2026 10:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AC9638A719;
+	Wed, 14 Jan 2026 10:07:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nRlFufa3";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="dwJliYWE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H9DsiHHl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B7DF3876DF
-	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 10:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D86F38A2B6
+	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 10:07:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768385078; cv=none; b=YIBV8JGtLibE/F2Qj1aoyYZAqLGbI8tQFw1LW51GHRtVeHATQD0J3iGISkK2nJhcm0q2gTY6jhZ1HGJc9XVErMa101Xf8Alf+njcTRBRXzXOwCEPHzqiTQuhoOdGmpAmQXPDlaJzmo6iIg8w+w9vdoxDoBTL7r3kTSgyJ0f9Hxs=
+	t=1768385262; cv=none; b=cDRYUs/RetD1c/xxOgxnj4oVQPFQlpgeQ8Ad1EL1Cqpk3863t0W5C3bS37cVoN2k27GuIc1GFjKICgjSjVp+waaE63vkK3tgH/pHkdHMfguITvt3x+Dx4bbzW3BVK2iC47JlBQBECKWmNCF6mKF/ImWhYuDDGQvh8VeaMm0rm28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768385078; c=relaxed/simple;
-	bh=bk5+NHu/P6gafqqhb4aOu+UXDpyWuvNVnGbIOZ2XFnI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QZN94jDiPqV/eBorC7t2eUbLJWcwX5DW59ylx1w3/fD6KVVBhSehyu9BkYdchRKfZ5cyUQWZeqztoLeVt3WSpbktCLuWqHFFhlzk7j7dStEbV3inRsOZLoyh2vR00kVWojnLB1xEjHDK0l0+1DcZDEgUU4E8G/eKEECdndRcbJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nRlFufa3; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=dwJliYWE; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60E7jEPs2497637
-	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 10:04:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	LwJOhAcoLnubcI+OpTANBa1Q6k/a05uNgL+zKTmJFTM=; b=nRlFufa38/C8KQB+
-	t7XdLj/CP9XUzHX6kWnl2Rlc1rwX9KIJjikY9wM/5Q9iySLu2B4fkeoDvqn516oK
-	uyod7fBAZCc0pYL9Y8MLdxf+/T0cG1b9rZClV0BFouqc1pjgowpokTlVjo5zqXUw
-	Y1fjQRDlfBDN/RxQtxSL6x+icmC6Hr8WfrKHDm3Ymz1mhqD4qQZWf2V4rtaZsXAB
-	TIX8MX7TcSdmk3/LcXDPpKdGIK1crmazxy22Fha9ntRaQT1xPYvkwIquWSlXrOcJ
-	CiIA48AHc1QvRap1tDjZv5yL7dZmMsIpi/02o7vhIhh2VvgP3ketv7mM5NDUpx8M
-	XC4/+Q==
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com [209.85.222.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bp16x1utd-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 10:04:36 +0000 (GMT)
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-8b5ff26d6a9so175797685a.0
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 02:04:36 -0800 (PST)
+	s=arc-20240116; t=1768385262; c=relaxed/simple;
+	bh=aqHYCoOIh2zY40JLbyZ6FfpCHfXNb5CknOmVdBYwquw=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=FCX7QjlRSP/oJBzccRVDqCs8frqXybgTu/9SdTPEoYmDSonMkSqR0omuqOPB/usiJA8DXMLK5NJFymU7pouFhBhesKN1P5mj/L0+tL6yL5/xRACxzWQossB0sBZe3Ad81ZC19RT1qDZeyv6IkqzFiDoQhSiM2rbV/wpOKSrUV7c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=H9DsiHHl; arc=none smtp.client-ip=209.85.221.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-4308d81fdf6so4413391f8f.2
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 02:07:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1768385076; x=1768989876; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LwJOhAcoLnubcI+OpTANBa1Q6k/a05uNgL+zKTmJFTM=;
-        b=dwJliYWEM9qwTmFj8UPlToeRDAesNCO+ZXHdrCtUre5f4ru8Q4gKXHH+JSdavV4RTe
-         DhQBEzWS5O1y/+yh+6HYgyYH1gQzAcZDbGyuwnAKCFdWpu5SITmB7d6ZXA/mRr/SlXTL
-         BNb8OtWKUwK3NgpTrr8Q0ZXREknbXGqvK8nnzhMTeLSNje93Om40eS3vtHKAJC/1w8Bv
-         BhgWEFMO8UdqDpEPYNg+QEyK4BO9fXkxvnpz8oI+cXZpRHpdYUaZygw5+SZVE+80P8uo
-         Zq7TRDdB48gr2+dKJRJCxSdIQwY89/EwUqbsA31uEvk4zpA7V5vLQj0iLyXswjlLJ+aZ
-         EzkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768385076; x=1768989876;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1768385258; x=1768990058; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LwJOhAcoLnubcI+OpTANBa1Q6k/a05uNgL+zKTmJFTM=;
-        b=UVG1fF8TdgV9Y9VeKlm2BSML2FB34BENqa8QL79lDMgE6KTsu7Ya4sxVSoN53MSeRv
-         S+eczNialpo+c8GU83ATXhCsYZ/szbRQ3mZH3l92ek318w13cCqNbwdtZtLdzfjSa2GF
-         4KOmDOi791U8+97kaFGo65i56ojGwgF/sQQtLNoMrPu9NWL2uMOpjllspDP7VP4tE9/u
-         UzIbzbJzuerziaklQvEFQyj8jgg94WUQPPc3zRyiIqmC7GHmAIiPX7k6f3b0AVEDruqV
-         lowKNwIDsg/EfCrg80ZeMDuUL0S8mqpyvEPO7SkP/nfuBQThmL8kpS3R+XqkKLruVyKm
-         P1JA==
-X-Forwarded-Encrypted: i=1; AJvYcCUMPROG/K7cdg1wXuKIktOB/cHQtheb4uRnaACTGMdauS822fWNdKkWNmSTL1FUr1F+xyxY0os9Mw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkphawPlsQp+GwhAJ2OBMe+Vb6AbEc4WjI2opp6HT7PwuqgCen
-	FkpneGYjwiPW/s/2WIb9gR1OebzQsDILT5IL5AXKT3YhejhX2LQ5qRf570aKqyt1eP8tcO0v+R5
-	hkqrHaWkAPTXmp66KdSMSshJlpvYWarBoyHZ8LGqbYaXMMJE+DaB05s/J7nVz2w==
-X-Gm-Gg: AY/fxX6ecKAV9ZxUIx7RaHd21sl3WE6/0Br3ShGkefrWghkzWSi/dzEREWZYBKaxlzM
-	qy+2DLZNteAgGabZ7QVZzrHpAMwvHJI10n680n76n2T0fXsGjqpfjPL8xl75+TVLzLS15JfaKuM
-	lkudgMEm3Xhzg/55+atRJK/P5KZ7x0OrJ8CnbpOqeSXctYyPCeDtgP/O32ljdG0pgZHpZrcbzht
-	9dQGwGZdJJpSUQ/pmNLnSHg/I5St4EkLdIuZ6uMBlwrQQ12zj8wB2c5BtUw0vd+YRyHxcudnGI9
-	zai4HlVSM6e+fQGxLpo7aI9WQ7o5IRK+Hv4XO9xTIemgP1HQlDDEkAm2jLTMzUplBkcpEFVCE39
-	X0e3UrjnMfaZfUZFzIMP/nVfBhYGujh5L49GCK/nSQ489uPiwEJjvDn078JQrM3Hx7nE=
-X-Received: by 2002:a05:620a:4411:b0:8b9:e0ea:af3b with SMTP id af79cd13be357-8c52fb74bd4mr221987085a.5.1768385075613;
-        Wed, 14 Jan 2026 02:04:35 -0800 (PST)
-X-Received: by 2002:a05:620a:4411:b0:8b9:e0ea:af3b with SMTP id af79cd13be357-8c52fb74bd4mr221982985a.5.1768385075013;
-        Wed, 14 Jan 2026 02:04:35 -0800 (PST)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6507b22c3absm22533208a12.0.2026.01.14.02.04.31
+        bh=n8mW+tYY/3O9GKx5C5cOgVc4F9fjWRFBqMrxS64uloQ=;
+        b=H9DsiHHlhF4GL2p9dBZbln5Avj0w/7rwZ9gGeA3BK/R/gAv4GGUCX+Sw+Z08r7hg9w
+         jBlwb/Uha/af66u6pnuKQIcilUwY5ony+RCTzlJQwQ8b2frbBfvBEAtgKvWddA+ELGIR
+         IjOpoFzR19rIqvR+s+LKhXlAxnq1bF2xl96yMRURXTlsmR/mRArTDB4qV1BYVkToohRQ
+         76pRkYLaly8KMYf+7sVIOjYMVSPE+wx5bX38vk8UgYSFEIvxYG2fZKabLA5f+Eghd8B9
+         zQZpcEuY0kt90RdzZMjATI4k8xBZzkokiKXuR+FoYbpH4sm4AEyIiYCNht/y87p76BcY
+         YTDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768385258; x=1768990058;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n8mW+tYY/3O9GKx5C5cOgVc4F9fjWRFBqMrxS64uloQ=;
+        b=DWpFo7DNTa9lDdNacpJ6QTyhvIicXI3omjGHbFDyC2atBQzI4qswxYtUsLM5NGYrSL
+         3gWVqBaRehUYWQYiRSC5ZAw8WLSqInWmrUc8ez9cnswskhN7cO8GtXZ3vEZjt4pvsTkF
+         chO5oGGmKbKecETIxUL/HmBUtBYSN6Z2kNNijX0G+kuO//tyjYFRvdtgtcWU4WXTbRYt
+         bPoiVSM0uZg/MzPFd4ZNlvYhzzFeWS+NaEm1hoOIx5cuFXatmT37UxZ4vb1kGFJv808N
+         bPanoNFrHiZyMprrbpEuEdXqo/FAQqJaVcvcvWNQDeN9bi8ZJfEG5ikTxhiEjDXgFd59
+         dVpw==
+X-Forwarded-Encrypted: i=1; AJvYcCUJtNbbfIq5viEQjCFOO2d1QLprkEa0fB0f5t+0WwvZmy9YKP34I8L/6/AFOg3h5Z3OX7w1MQz7JQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHzLdvDpiA9Jky7RHSlpfA8MggFbwd+r+uCoXrtUXnf8BlR5g0
+	3Du8tBsCRl0TjMYauZ4XVKfwRyc/ZNnvYSoSmnKyXJ3SQRma/VShEGvEm6CW9IRAdz0=
+X-Gm-Gg: AY/fxX45tqGtKYV4MJ9wGcO6h3SAuyglRb5jyO52nw35adcQe9ulcRl9eil4iN4ufxX
+	Bdb0r4s8zEDq3qPmyRRRT3UE7ytarMugbq7SUMbtkXt7xUTiLE+iVMhfsp1PLmjymR69rpLKTFX
+	uHAu5XgwJoQgATwz+I6PYuHTvNLCih6D5D37ixIjCchghYwcHdXH7JFRDkXXGTA9apld4oBM2mZ
+	2ruzef8T1f3ztQLeraF7DFybx3ZOURCmICqkT4LQxnNnvFRjFID6KEgObFooP7wG+YyLQ/ZgCZ6
+	ITgRyIFUIHGGnya0skmabyWNDISko+Up95HZ23FO2KQUeauO3GaZSldZMxi6nXcGky+h9hfx4rb
+	JotfSOk6uGsNZefi0xXHO5OpOiXChHSIg1LoJDY3eojt8eU4D7K4jnQbAF8j1atAICtqMjvS3+6
+	etxXk60PVhAdVktv1b1bzg3KlkL8NJC2JoI8eoDyh8jqtO86X4gVNZ+HVXNuAvfic=
+X-Received: by 2002:a05:6000:2893:b0:430:fd84:3171 with SMTP id ffacd0b85a97d-4342c500119mr2192528f8f.22.1768385258402;
+        Wed, 14 Jan 2026 02:07:38 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:3d9:2080:b357:7e03:65d5:1450? ([2a01:e0a:3d9:2080:b357:7e03:65d5:1450])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-432bd5ff1e9sm51179179f8f.41.2026.01.14.02.07.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Jan 2026 02:04:34 -0800 (PST)
-Message-ID: <dd877ea8-b634-4cc9-8280-08663f82776d@oss.qualcomm.com>
-Date: Wed, 14 Jan 2026 11:04:30 +0100
+        Wed, 14 Jan 2026 02:07:38 -0800 (PST)
+Message-ID: <95becfde-ba4b-4024-9b90-e64e77551f0a@linaro.org>
+Date: Wed, 14 Jan 2026 11:07:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -101,122 +82,104 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 05/10] nvmem: qcom-spmi-sdam: Migrate to
- devm_spmi_subdevice_alloc_and_add()
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
-        andy@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org,
-        srini@kernel.org, vkoul@kernel.org, neil.armstrong@linaro.org,
-        sre@kernel.org, sboyd@kernel.org, krzk@kernel.org,
-        dmitry.baryshkov@oss.qualcomm.com, quic_wcheng@quicinc.com,
-        melody.olvera@oss.qualcomm.com, quic_nsekar@quicinc.com,
-        ivo.ivanov.ivanov1@gmail.com, abelvesa@kernel.org,
-        luca.weiss@fairphone.com, mitltlatltl@gmail.com,
-        krishna.kurapati@oss.qualcomm.com, linux-arm-msm@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-pm@vger.kernel.org,
-        kernel@collabora.com
-References: <20260114083957.9945-1-angelogioacchino.delregno@collabora.com>
- <20260114083957.9945-6-angelogioacchino.delregno@collabora.com>
- <aWdaWY2tWUMllOHH@smile.fi.intel.com>
- <8bf79979-0946-4ed9-b8d4-c442a6e54833@collabora.com>
- <aWdbPze-f_2_5EbL@smile.fi.intel.com>
- <401c5e7b-ff33-44e8-98a5-8cc6af4f2a87@collabora.com>
- <aWdcy2ouQHtkPd6q@smile.fi.intel.com>
- <647b4acc-3310-4329-ac7a-77e86bab74a3@collabora.com>
- <aWdk-RP-59cJeCBo@smile.fi.intel.com>
- <ae46b504-58d3-4042-be05-f31e9e01091b@oss.qualcomm.com>
- <aWdn_j7SOKq97vpY@smile.fi.intel.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <aWdn_j7SOKq97vpY@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: iyT7J0oRY9MVtZLSY96lkdq-XZHevEEo
-X-Proofpoint-ORIG-GUID: iyT7J0oRY9MVtZLSY96lkdq-XZHevEEo
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE0MDA4MiBTYWx0ZWRfX4tyJ0416jf1f
- DEIKa1pd5P320oJYhxGHwBm3SVkyQ0F8DdE4YgqlGlvOJGrrSPrbiFp02MjzLTuTRq8iuDUUQbb
- o1nDaMRO5UcK6Ik0uKYOU2sn36IBOUCiMrV32rgbhbXU1F3TG5fRRj8lyW5hD9JjrrkGUOl+N5E
- v9o4yxjw49iKAhtAe8R/JekrwveuqEaA0EwT0d78AGaCE3sTqjxzLq/gmMcEJTSRCRuJDFN0sF5
- poHSehQmGOyZGrYdizRES9DEae77P8/TzJOe/Cdq6uKTgBRAWd6b8sIDw3N677+4H5TdpLAsIxN
- A+xvloFYKwaOh3AQGhHQ6y3WmwekgMJRrBodyFVpV4VpEnzq53aUjt6yI6sqzSOOxj5uM0AxWFC
- jgF3KPKG5u6OGzpCCYpL3Bxq10pQxrGLZhRNMlyALZUCK7JVxec+1kX4iO/D092r8S1HcEWx821
- 8rlJe8oJmjVByLjpm5Q==
-X-Authority-Analysis: v=2.4 cv=JvT8bc4C c=1 sm=1 tr=0 ts=69676a34 cx=c_pps
- a=50t2pK5VMbmlHzFWWp8p/g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=K6O-kMeRs0nb6JyVbzgA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=IoWCM6iH3mJn3m4BftBB:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-14_03,2026-01-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 bulkscore=0 suspectscore=0 adultscore=0 priorityscore=1501
- clxscore=1015 impostorscore=0 malwarescore=0 phishscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601140082
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH RFC RFT] interconnect: qcom: implement get_bw with
+ rpmh_read
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Georgi Djakov <djakov@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+References: <20251106-topic-sm8x50-icc-read-rpmh-v1-1-d03a2e5ca5f7@linaro.org>
+ <8eb528dd-71fc-408e-a97c-d484198e4f81@kernel.org>
+ <1be287ac-fce9-4f27-aa88-b1f786e968cd@oss.qualcomm.com>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <1be287ac-fce9-4f27-aa88-b1f786e968cd@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 1/14/26 10:55 AM, Andy Shevchenko wrote:
-> On Wed, Jan 14, 2026 at 10:47:20AM +0100, Konrad Dybcio wrote:
->> On 1/14/26 10:42 AM, Andy Shevchenko wrote:
->>> On Wed, Jan 14, 2026 at 10:09:45AM +0100, AngeloGioacchino Del Regno wrote:
->>>> Il 14/01/26 10:07, Andy Shevchenko ha scritto:
->>>>> On Wed, Jan 14, 2026 at 10:03:57AM +0100, AngeloGioacchino Del Regno wrote:
->>>>>> Il 14/01/26 10:00, Andy Shevchenko ha scritto:
->>>>>>> On Wed, Jan 14, 2026 at 09:59:40AM +0100, AngeloGioacchino Del Regno wrote:
->>>>>>>> Il 14/01/26 09:56, Andy Shevchenko ha scritto:
->>>>>>>>> On Wed, Jan 14, 2026 at 09:39:52AM +0100, AngeloGioacchino Del Regno wrote:
-> 
-> ...
-> 
->>>>>>>>>> +	struct regmap_config sdam_regmap_config = {
->>>>>>>>>> +		.reg_bits = 16,
->>>>>>>>>> +		.val_bits = 8,
->>>>>>>>>
->>>>>>>>>> +		.max_register = 0x100,
->>>>>>>>>
->>>>>>>>> Are you sure? This might be a bad naming, but here max == the last accessible.
->>>>>>>>> I bet it has to be 0xff (but since the address is 16-bit it might be actually
->>>>>>>>> 257 registers, but sounds very weird).
->>>>>>>>
->>>>>>>> Yes, I'm sure.
->>>>>>>
->>>>>>> So, what is resided on address 0x100 ?
->>>>>>
->>>>>> I don't remember, this is research from around 5 months ago, when I've sent
->>>>>> the v1 of this.
->>>>>>
->>>>>> If you really want though, I can incorrectly set max_register to 0xff.
->>>>>
->>>>> Why incorrectly? Can you dig into the datasheet and check, please? We don't
->>>>> know what is the 0x100 address means.
->>>>
->>>> I don't have any datasheets for Qualcomm IPs.
+On 1/14/26 11:01, Konrad Dybcio wrote:
+> On 1/13/26 6:53 PM, Georgi Djakov wrote:
+>> On 11/6/25 6:46 PM, Neil Armstrong wrote:
+>>> Since we can actually read back the APPS rpmh interconnect
+>>> BCM votes we can actually implement the get_bw() callback
+>>> and provide a coherent average and peak bandwidth at probe time.
 >>>
->>> Hmm... Can we have somebody from QC to check on this?
->>> Perhaps Dmitry?
+>>> The benefits of that are:
+>>> - keep disabled BCMs disabled
+>>> - avoid voting unused BCMs to INT_MAX
+>>>
+>>> If the interconnects are correctly described for a platform,
+>>> all the required BCMs would be voted to the maximum bandwidth
+>>> until sync_state is reached.
+>>>
+>>> Since we only get the BCM vote, we need to redistribute
+>>> the vote values to the associated nodes. The initial BCM
+>>> votes are read back at probe time in order to be ready when
+>>> the get_bw() is called when a node is added.
+>>>
 >>
->> 0xe6 is the last usable register today
+>> FWIW, I was able to finally test this on sdm845. Some nodes are indeed
+>> showing reasonable bandwidth values instead of the default INT_MAX.
 > 
-> Thanks for checking!
+> As I learnt here
 > 
->> But I wouldn't mind either 0xff or 0x100 because I don't want
->> anyone to pull their hair out if a regmap access is dropped some day..
+> https://lore.kernel.org/linux-arm-msm/1e7594dc-dca6-42e7-b478-b063e3325aff@oss.qualcomm.com/
 > 
-> There is actually about the exact window size where registers are belong to the
-> same entity (subdevice). As in the HW world most of the things are stuck with
-> power-of-two numbers, and taking into account the naming of the field, I do not
-> believe one provides a 257 (256 + 1 = 2⁸ + 1) register _windows_ ("s" is also
-> important here, as it points out to the pattern) for the subdevices. I bet the
-> 0xff, i.e. 256, is the *correct* window from the HW perspective.
+> rpmh_read() will only retrieve the currently active values, so as-is,
+> this hunk:
+> 
+> +	/* For boot-up, fill the AMC vote in all buckets */
+> +	for (i = 0; i < QCOM_ICC_NUM_BUCKETS; i++) {
+> +		bcm->vote_x[i] = x;
+> +		bcm->vote_y[i] = y;
+> +	}
+> 
+> is lying about the state of wake/sleep buckets
+> 
+> this is ""fine"" today, as I don't see any "if (old_bw == new_bw)" checks
+> across the framework, but debugfs is going to report incorrect values and
+> if anyone decides to add the aforementioned check, it may introduce issues
+> where the values aren't commited to the hardware (because Linux is going
+> to believe they're already set)
 
-Right, [0x100n, 0x100n + 0xff] inclusive is the reserved register window
-for all Qualcomm PMIC peripherals, so I guess 0xff is the correct choice
-here
+This is only for the pre-sync-state phase, where we don't need the wake/sleep
+values but the interconnect rpmh implementation needs them, and anyway they will
+be replaced by proper values in sync_state
 
-If a peripheral is more complex, it's split into a couple of these
-same-sized blocks
+So this is an informed & assumed choice I did here. It's a small optimization
+to avoid turning on _all_ interconnects at INT_MAX, and keep boot votes
+up to sync_state.
 
-Konrad
+Neil
+
+> 
+> Konrad
+
 
