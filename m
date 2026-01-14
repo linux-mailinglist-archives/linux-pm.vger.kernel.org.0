@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-40882-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22D04D2117B
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 20:49:46 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C834D21172
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 20:49:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2EF5C305500E
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 19:49:03 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 59CD53038CFD
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 19:48:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15FE434EF12;
-	Wed, 14 Jan 2026 19:48:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA98F32571B;
+	Wed, 14 Jan 2026 19:48:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="THGcfVhZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K0RTgv1L"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E50FF280A5A;
-	Wed, 14 Jan 2026 19:48:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97851322C78;
+	Wed, 14 Jan 2026 19:48:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768420133; cv=none; b=Iz31P6x5ounyJXKK+LCOGUoOWGCpOnpOTWWUtnJrCi3HhNEluLWLYthc5KqIMFiIFjo5eKMcSUpZrK2PGFC6bLt+GjLyCke9pUzObSg0rcZCxsTnWmFlFlDHetBVjUhKvl521aIf4lyY6TL4G18hN5sULaOOXFsxspBJrV8nnQ0=
+	t=1768420129; cv=none; b=XTfet4sZg/7I+vt1kMwGs9Oh6fvxzLVUzAS02cAla88Oyj2gffdQ4DdBFrHBMHtmXCNjVM94d0rS+9HmpqsGgALs3SaO5lu/UvZxOKzka/EQRdLwHP4shhsPpVO2KG1MBTvWPJrJknh3tcHYPZ+3tEXDDX3l9HwFyUXdQ5RDpa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768420133; c=relaxed/simple;
-	bh=zhryapkG2c9pQx60JvjS9D2cBynGd4krI98bHe0uwok=;
+	s=arc-20240116; t=1768420129; c=relaxed/simple;
+	bh=s4+zyNQOCW3pRbSw6GbxKwlXfaqGq0ABP/cnwA2NwL0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uJKkolYhBOtTaDePRL9uQIg/6oNIvoGxmY17LeCylpXTmAYuBrMXPasvg0Y9zKAibnYfYZnZPX60QvbpkuJtkoVJyyO57YemjIO2JRhHK9CHBxPv5MgG58Offx4F5dmCd/Jpmb0wCnyRt8Uwbl7O//BZiMDLoqFgEBRC8/rD58I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=THGcfVhZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BB2EC4CEF7;
-	Wed, 14 Jan 2026 19:48:51 +0000 (UTC)
+	 MIME-Version:Content-Type; b=cE+7FRFAEVmBJuX/syz2Z4jTdJym3ZY2KO5kQ3yE7PVnrhs2a8Mv9b7we/Kk7a7KqddBqF6GAkL119G3S8lnC51d3rFaFxy1DSISNi8pZ/3AVnvg/xcyevHIcqNSimUvbij8UkGhXehLIumnj7w+HYTyosHYPv5EmCNpAmAjHSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K0RTgv1L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 821FCC4CEF7;
+	Wed, 14 Jan 2026 19:48:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768420132;
-	bh=zhryapkG2c9pQx60JvjS9D2cBynGd4krI98bHe0uwok=;
+	s=k20201202; t=1768420128;
+	bh=s4+zyNQOCW3pRbSw6GbxKwlXfaqGq0ABP/cnwA2NwL0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=THGcfVhZLjbAvlkOLnvIAFq2zrqeF5uXbQrgdojcleQaP5huLJk2zhzwEVyp/HWqv
-	 hxBt7N2gzocWvPdGLewguV6UAbq9S5iGUVZJ85wwd9T1O9wELrP2Iqta4UOeUEpEsb
-	 Tt+RgnrffsfNMrQEfq3A4Rd7EPQ+VYtsNzJ6pwZy6fuXbPqzFVZuAgCjV3aQm/2kMn
-	 G4O60i4GZSXGvPd3ZG2ua0k9sRtiP0VWGuhv1rkZodbwliNLBx67pXmAZCC3K4KSs4
-	 7IXAqjvQYheiw6Ecrk7o6LFwCilzVIrrTmP1QM17MbPhlf7MwCDTKsF6aBXfwNKq54
-	 BGzR1BGfEd5LQ==
+	b=K0RTgv1LfdAAmD7ZQolICfv7L+p7TXOreSVnymct4bBANKrV/duI4iBIOBL851QZM
+	 CRdGZXsuC7mDOEQ6sT6bcUUUg1JOlTjDi+cnC3S1uN078St26o2ofIMYrNqnbwyJA1
+	 1XCxNZLQAm3cBFdSDaiEp0HoFM4z17YIHFt0eZ8C+Ncy6LeMkMqLapQkhND/L0hw1m
+	 4JriU4E6bTJVFaYGNhe+CyN1Alc62Baa2EMZW7Mep1KBQ3t1Z5EQINwLYIb0TzmLzu
+	 nn3c+aDqy4wBTx3CG5bSOaRuhgNkjkaXB/uczaYVN2QueAVxj1VCOSvJc6lsWM3UaR
+	 4w2v3NTyZjNDQ==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Christian Loehle <christian.loehle@arm.com>,
  Doug Smythies <dsmythies@telus.net>
 Subject:
- [PATCH v1 2/5] cpuidle: governors: teo: Avoid fake intercepts produced by
- tick
-Date: Wed, 14 Jan 2026 20:44:53 +0100
-Message-ID: <3404606.44csPzL39Z@rafael.j.wysocki>
+ [PATCH v1 3/5] cpuidle: governors: teo: Refine tick_intercepts vs total
+ events check
+Date: Wed, 14 Jan 2026 20:45:30 +0100
+Message-ID: <10793374.nUPlyArG6x@rafael.j.wysocki>
 Organization: Linux Kernel Development
 In-Reply-To: <2257365.irdbgypaU6@rafael.j.wysocki>
 References: <2257365.irdbgypaU6@rafael.j.wysocki>
@@ -63,39 +63,28 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Tick wakeups can lead to fake intercepts that may skew idle state
-selection towards shallow states, so it is better to avoid counting
-them as intercepts.
-
-For this purpose, add a check causing teo_update() to only count
-tick wakeups as intercepts if intercepts within the tick period
-range are at least twice as frequent as any other events.
+Use 2/3 as the proportion coefficient in the check comparing
+cpu_data->tick_intercepts with cpu_data->total because it is close
+enough to the current one (5/8) and it allows of more straightforward
+interpretation (on average, intercepts within the tick period length
+are twice as frequent as other events).
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpuidle/governors/teo.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/cpuidle/governors/teo.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 --- a/drivers/cpuidle/governors/teo.c
 +++ b/drivers/cpuidle/governors/teo.c
-@@ -239,6 +239,17 @@ static void teo_update(struct cpuidle_dr
- 			cpu_data->state_bins[drv->state_count-1].hits += PULSE;
- 			return;
- 		}
-+		/*
-+		 * If intercepts within the tick period range are not frequent
-+		 * enough, count this wakeup as a hit, since it is likely that
-+		 * the tick has woken up the CPU because an expected intercept
-+		 * was not there.  Otherwise, one of the intercepts may have
-+		 * been incidentally preceded by the tick wakeup.
-+		 */
-+		if (3 * cpu_data->tick_intercepts < 2 * total) {
-+			cpu_data->state_bins[idx_timer].hits += PULSE;
-+			return;
-+		}
- 	}
+@@ -485,7 +485,7 @@ constraint:
+ 	 * total wakeup events, do not stop the tick.
+ 	 */
+ 	if (drv->states[idx].target_residency_ns < TICK_NSEC &&
+-	    cpu_data->tick_intercepts > cpu_data->total / 2 + cpu_data->total / 8)
++	    3 * cpu_data->tick_intercepts >= 2 * cpu_data->total)
+ 		duration_ns = TICK_NSEC / 2;
  
- 	/*
+ end:
 
 
 
