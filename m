@@ -1,166 +1,154 @@
-Return-Path: <linux-pm+bounces-40866-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40867-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6D4DD1F8EC
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 15:55:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3763FD200D0
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 17:05:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7AD5230738B9
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 14:53:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7E2E63078D97
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 15:58:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47B7C30C353;
-	Wed, 14 Jan 2026 14:53:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFDE23A1CE8;
+	Wed, 14 Jan 2026 15:58:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="Mrw29Mkm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ur3U5zKd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25EF30CD94;
-	Wed, 14 Jan 2026 14:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768402391; cv=pass; b=iQ6ZRETMN/SWunFBiwQZoAgHqEajn9S0Favr0QOcF1Uvy1iTxfO763QdM4gb38tZMEJR0QINTAWo6dh3w5D6WwyWXPDzzTv+NKi40gt2L36/PIZDCODIy0pT6qB/3kg4vlzZUaaUM+l+rAzA0h+0ua7meoc1xYa89jwMtHP5Mgg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768402391; c=relaxed/simple;
-	bh=b/NvqoTRSBBXd5TxyUJdW1xOdTtjpMRQCvl0VZgazRw=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B853A1A4B;
+	Wed, 14 Jan 2026 15:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768406296; cv=none; b=EqlJmTv+Tkqg16iFoV0gqkISplzL8K4ZkiskmBCcvty4QMGhpzSbUDq00er9apFKoAI2riDGb7jJY5JO53WoQ8wrUaMh/hAqXNfrN9UM0ifEe/nx6BFZPvaZGvOzT+1JW8sdpUsiW/w+6t/EQnwAkw2kxsY+oJEQlPzBNY+yw3Q=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768406296; c=relaxed/simple;
+	bh=QanyVSWBKe+JzUOUmqB7BTbGxRlV2DYOfGGSfkoxW/s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=StD/1HH5F1UDFGqpRLlRIgAZjVVAXAnHuPsVAGxxDVXGKZk0xpLl9i+4W1QTKaLx3dw+pkm/ze+g0WTUsZTfwS+89ZdIxD/mbJlHYaH3gcD9f1nNFnCJF0x843HxX2LUdjRwQjcDoYcxzhNKDDQTajzzedAC8alf/+t6eWWzG1g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=Mrw29Mkm; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1768402379; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=gECXeetuZWukOLqMp6t50NzUIVh0EjSBLLwymBbeeJnxDS8pjWzvSRh4/XhlumH/BmB5SmqgRP/a11GyVYnK1ugoZLXjEDibNh7D7gV6AZnbpa+w/BDAL7baj6PSanfz/h7j8syIc6EyNhMcOnAypv6wImx3VrV5OOTXDdErvxE=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1768402379; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=D01Owa/velr5mOOG55lZuQ9GAjD38Uv7bb1N9qySDm0=; 
-	b=nZU3z9vLGFNb3IrDljyR8OuxO1myETs6gv/42hxpoKuLE3L40NPpuZy9NTrmfvwM4CChS7fKTm3+kPIsfU9B+2uMgmxPzm4F31lZDA1Yw4P34T/JBZ6Pmsl7d/1ZFrrnL1nmmN5I1Oijg3VqxbAYY2vBIUg9gpiYyXx9EWADyG0=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768402379;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=D01Owa/velr5mOOG55lZuQ9GAjD38Uv7bb1N9qySDm0=;
-	b=Mrw29MkmkaO35fVteuVubTHiztBGNXuwZZqrOZRx1FDevnQVjKtSUZkYPL8Kif8E
-	nqHaXRxFFmNnOSRZqFuG52QyyrUEfUybpTSTqVYoyD+7TfRrP47xrTxGRUTlKLWf8t+
-	FlyIfNYAI2K03PTFHT+k1K8hNyeLauv+fUFuRW08=
-Received: by mx.zohomail.com with SMTPS id 1768402377766769.7780210039161;
-	Wed, 14 Jan 2026 06:52:57 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id 2467A180881; Wed, 14 Jan 2026 15:52:54 +0100 (CET)
-Date: Wed, 14 Jan 2026 15:52:54 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Waqar Hameed <waqar.hameed@axis.com>
-Cc: Nikita Travkin <nikita@trvn.ru>, kernel@axis.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/11] power: supply: pm8916_lbc: Fix use-after-free in
- power_supply_changed()
-Message-ID: <aWetAuBgUsPfiGCZ@venus>
-References: <cover.1766268280.git.waqar.hameed@axis.com>
- <64d8dd3675a4e59fa32c3e0ef451f12d1f7ed18f.1766268280.git.waqar.hameed@axis.com>
- <5f3152f01420823ef8ae2932ed781cf4@trvn.ru>
- <pndtswxebnc.a.out@axis.com>
- <pndo6mwtqqh.a.out@axis.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y8oCQGimH9+dticGNnuulnDtrRP7XGP8ZhwPfuLWo3eoIbpwjrTNl7RGtCrDdDN46GxAGUyfWEV+CngHZp6zy+GX3LFWzW6P33TGHDTz6mXdFD3x9Gw4mpceDy0mT/NaXoiAgciva44KUTfl28UXz1qqWF3JS0FMRqSI2oD7a74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ur3U5zKd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7E54C2BC86;
+	Wed, 14 Jan 2026 15:58:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768406296;
+	bh=QanyVSWBKe+JzUOUmqB7BTbGxRlV2DYOfGGSfkoxW/s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ur3U5zKd022GEGRb35k3dsX/tO52q0f3pgneM/wQUcB9PpHxHRTRQtfjlAQ3+qFlE
+	 ItIDvKE6ABHe/VW87R1pES/MnSr7CcPkuNs/FW7k7bqF8lNba8t5TB2khwQUMhdnRg
+	 WurWq/sGkak85C5s65HIalRX21bpmTR0attY8YyeiS8Yl2xLYHQ0KY93/3RxRt16fo
+	 WAlH4LQv8i8+uda+N6kp9oHJXHwxhKIF1QmUInreUXKEhJW97shC8W40dlEif/XBPD
+	 ZsqwZGarT1b+8buck8v7R/kyzSwQlfYl9fpgTgz0+MSVdZ1rd96IAyU9M0LriKip2F
+	 FYVUTKvMXBHsw==
+Date: Wed, 14 Jan 2026 21:27:58 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Bartosz Golaszewski <brgl@kernel.org>
+Cc: manivannan.sadhasivam@oss.qualcomm.com, Rob Herring <robh@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Hans de Goede <hansg@kernel.org>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v4 2/9] serdev: Add an API to find the serdev controller
+ associated with the devicetree node
+Message-ID: <ulj3qaurlauut76oyatdtkbo22jqsll43kzu272y2j32753ac6@gwmolgrilxeh>
+References: <20260112-pci-m2-e-v4-0-eff84d2c6d26@oss.qualcomm.com>
+ <20260112-pci-m2-e-v4-2-eff84d2c6d26@oss.qualcomm.com>
+ <CAMRc=McDvQoqfH0Gy-wzbcEGvNCZACSACCcviwpCc4YNSpKYrw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7pliuq26ks6ex23y"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <pndo6mwtqqh.a.out@axis.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.5.1/268.349.40
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMRc=McDvQoqfH0Gy-wzbcEGvNCZACSACCcviwpCc4YNSpKYrw@mail.gmail.com>
 
-
---7pliuq26ks6ex23y
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 09/11] power: supply: pm8916_lbc: Fix use-after-free in
- power_supply_changed()
-MIME-Version: 1.0
-
-Hi,
-
-On Wed, Jan 14, 2026 at 11:48:06AM +0100, Waqar Hameed wrote:
-> On Wed, Jan 07, 2026 at 15:32 +0100 Waqar Hameed <waqar.hameed@axis.com> =
-wrote:
->=20
-> > On Sun, Dec 21, 2025 at 10:45 +0500 Nikita Travkin <nikita@trvn.ru> wro=
-te:
->=20
-> [...]
->=20
-> >> As a small note, the interrupt handler also has a call to
-> >> extcon_set_state_sync(chg->edev,...) which is allocated right below.
-> >> I don't think this is actually a problem since it has a null check for
-> >> edev (unlike psy core) so I think this patch is fine as-is. However if
-> >> for some reason you'd have to respin this series, perhaps it would be
-> >> nice to move irq registration slightly lower, after extcon registratio=
-n.
+On Tue, Jan 13, 2026 at 08:54:55AM -0500, Bartosz Golaszewski wrote:
+> On Mon, 12 Jan 2026 17:26:01 +0100, Manivannan Sadhasivam via B4 Relay
+> <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org> said:
+> > From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 > >
-> > Hm, it _is_ actually a problem. During `probe()`, it's fine, due to the
-> > NULL check in `extcon_set_state()` (and the interrupt handler doesn't
-> > check the return value anyway), as you mention. However, during removal,
-> > we have the exact same situation as for `power_supply_changed()` as
-> > explained in the commit message; `devm_extcon_dev_release()` runs and
-> > frees `struct extcon_dev *edev`, the interrupt handler would now call
+> > Add of_find_serdev_controller_by_node() API to find the serdev controller
+> > device associated with the devicetree node.
 > >
-> >   `extcon_set_state_sync(chg->edev, ...)` ->
-> >   `extcon_set_state(edev, ...)` ->
-> >   `find_cable_index_by_id(edev, ...)`
-> >  =20
-> > with an invalid `edev` triggering a crash/corruption in
-> > `find_cable_index_by_id()` (before we get the chance to release the IRQ
-> > handler)!
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > ---
+> >  drivers/tty/serdev/core.c | 16 ++++++++++++++++
+> >  include/linux/serdev.h    |  9 +++++++++
+> >  2 files changed, 25 insertions(+)
 > >
-> > Good catch! Let's move the registration a further bit down to fix this.
-> > I will send v2 as soon as the other patches in the series also get
-> > feedback.
->=20
-> Since Sebastian says that he applied the whole series as is, I'll just
-> send a new separate patch for that now instead. I couldn't find anything
-> in his tree [1] yet so let's chill a bit until things get pushed.
+> > diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+> > index b33e708cb245..25382c2d63e6 100644
+> > --- a/drivers/tty/serdev/core.c
+> > +++ b/drivers/tty/serdev/core.c
+> > @@ -504,6 +504,22 @@ struct serdev_controller *serdev_controller_alloc(struct device *host,
+> >  }
+> >  EXPORT_SYMBOL_GPL(serdev_controller_alloc);
+> >
+> > +/**
+> > + * of_find_serdev_controller_by_node() - Find the serdev controller associated
+> > + *					 with the devicetree node
+> > + * @node:	Devicetree node
+> > + *
+> > + * Return: Pointer to the serdev controller associated with the node. NULL if
+> > + * the controller is not found.
+> > + */
+> 
+> Please also say that the caller is responsible for calling
+> serdev_controller_put() on the returned object.
+> 
 
-Ah yes, I planed to reply to this and ask for doing exactly that and
-then forgot about it :)
+Ack.
 
-FWIW you can find this patch here:
+- Mani
 
-https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/=
-commit/?h=3Dfor-next&id=3Db7508129978ae1e2ed9b0410396abc05def9c4eb
+> Bart
+> 
+> > +struct serdev_controller *of_find_serdev_controller_by_node(struct device_node *node)
+> > +{
+> > +	struct device *dev = bus_find_device_by_of_node(&serdev_bus_type, node);
+> > +
+> > +	return (dev && dev->type == &serdev_ctrl_type) ? to_serdev_controller(dev) : NULL;
+> > +}
+> > +EXPORT_SYMBOL_GPL(of_find_serdev_controller_by_node);
+> > +
+> >  static int of_serdev_register_devices(struct serdev_controller *ctrl)
+> >  {
+> >  	struct device_node *node;
+> > diff --git a/include/linux/serdev.h b/include/linux/serdev.h
+> > index ecde0ad3e248..db9bfaba0662 100644
+> > --- a/include/linux/serdev.h
+> > +++ b/include/linux/serdev.h
+> > @@ -333,4 +333,13 @@ static inline bool serdev_acpi_get_uart_resource(struct acpi_resource *ares,
+> >  }
+> >  #endif /* CONFIG_ACPI */
+> >
+> > +#ifdef CONFIG_OF
+> > +struct serdev_controller *of_find_serdev_controller_by_node(struct device_node *node);
+> > +#else
+> > +struct serdev_controller *of_find_serdev_controller_by_node(struct device_node *node)
+> > +{
+> > +	return NULL;
+> > +}
+> > +#endif /* CONFIG_OF */
+> > +
+> >  #endif /*_LINUX_SERDEV_H */
+> >
+> > --
+> > 2.48.1
+> >
+> >
+> >
 
-Greetings,
-
--- Sebastian
-
---7pliuq26ks6ex23y
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmlnrcIACgkQ2O7X88g7
-+prYMg/+JkmJWiHEVqqYGD884z5AuuyrBVHmyW22urZPKYLesaQf2PUXlL2kzPtE
-pLamrw4o9YNkwuKPmCn1XWMZaMBKCdn36qpLFbivGTeMLKf1jhVVbKFOrCDSnaQH
-7DtFy+MDdt24xpyDhGuy7aMLKi+KvTCFUfqMu8+qLJEhZfvA33Q3kuodisLiwOh/
-dm1RmFRkAQUPL0nYFBDhCy/EItYf0NE0AkMa+9qbHZMyrFxz8VZkniXD9dKyh6VJ
-yuq5dnRaqW0D9QWyWReRnYPd1bW3ZQrqTvdym93+j1LMr/Zz41mhWozgg8r3TeO0
-AqPDDh55tiwgrBK+jztQ0qvZaENIL3owTMl2mgLdX0L2gHJ1PuZPxSUup+evoF63
-qtzG/3CjY1DUqnDUhnyBtFxOz6/77fwYyWweB+mp8BxXPoBdKyy1aB35R5+F+Pfp
-46wCaRTYTzbMsWBbSxJCs03/3QsqFfrEk6uAmv0xXGb/85OqTZCACvkSIjSySKCe
-AP5Y+FvjBJ2unXucPMjLd2bOmH+uYJZQqUsnN/DN+4tVkYquWzyDqMBQjJ+2f12L
-TBbP4O/nt2LbQgagkRX49QV3ONRSgZOIKABliyW9XfNaiJZIzEfJjxpaAC6Xk7UV
-NtWEHo/K1LQcoPdYgVkOKMky7xltPHzEA7WteECJRk7sOyKJ3QA=
-=8tpf
------END PGP SIGNATURE-----
-
---7pliuq26ks6ex23y--
+-- 
+மணிவண்ணன் சதாசிவம்
 
