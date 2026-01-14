@@ -1,62 +1,62 @@
-Return-Path: <linux-pm+bounces-40799-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40804-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 237D2D1D4C4
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 09:58:29 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A302DD1D4FB
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 10:00:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CB14B305DDB6
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 08:51:36 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6CA963068755
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 08:58:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E697337FF40;
-	Wed, 14 Jan 2026 08:51:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C325B387340;
+	Wed, 14 Jan 2026 08:58:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WfCP6TXN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QuVQm8pq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D00A37BE85;
-	Wed, 14 Jan 2026 08:51:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930973803D6;
+	Wed, 14 Jan 2026 08:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768380692; cv=none; b=CZRXwbPqUrCQLRwpsPzvJ0f3fWrVXJSj7PzsJdBWl55GAtchbU6CcJJGiI1Vgon/GdVcq6W/Ve822I5hel0rZn0ZnZHjyTdFUh+uzwAe+PkJH1wK8za6nXmX6ifnLF2edcf5CLi0MY2NAO94hAvMt0Jx7HWV6FJhbmRDwN/Qv5k=
+	t=1768381082; cv=none; b=bw4pbi2aRA7r4TtCWmEh6wqQDl5BbvKO9cdumWRLTjv4/hLEiR0KeTY+/9mqfu9QszeY8qUiHrn2Ub96ZSH1VCKQU0/ZgHWlKwul88FXUPWDNG34UXcosfLvBEzhG7LDQ1X442WTiPDibFs+zApvrGQTJXk2mjmXreIwQ4kMvDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768380692; c=relaxed/simple;
-	bh=dgAZttYLRaCe9m5TzCKJ6+TFt2wSCjRKjFsbXPtQkvI=;
+	s=arc-20240116; t=1768381082; c=relaxed/simple;
+	bh=092LXwRtl3E3+JMBPc+hQPk7+1GDnDFvIMA9uYo3EgI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mbk4alvS+wOkHrwOljBO0YFCSQL8bgP/7I1ATiMBkysFrNf8oKFAfnNVsA60SBNHBlsZv5V+s3b1FZs1i6XifCgKXJGGoGRZ1yQuRA8BB7vvYOCkzxvMmHIw5tumZynpb9ILEm5RmACvgG1vug2Px+nx4QVig1KVxAV2i30lMqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WfCP6TXN; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=MioOj43W4bjMJ4ViVA04DKiKyz3D3u8cxsoNel8eUH4U47lxdV2LEjTelvWd9tnM1dZ1xC2Joa8mfIu7a78RZeNm53KIaziYXseWzxaVz6+0ipu/dj+tkQ9nUjmcbqe+OvH+C7BKECf5kG5vIz7K5yxlmn5WaAvTo6M21B7T6hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QuVQm8pq; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768380688; x=1799916688;
+  t=1768381079; x=1799917079;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=dgAZttYLRaCe9m5TzCKJ6+TFt2wSCjRKjFsbXPtQkvI=;
-  b=WfCP6TXNOWALkwSHysplicCCwqqPH72y5yOYtzh3JiPyfa6xhj9AMVtW
-   vZ2lIOnYwqHjT9YsboB+U00OSh02aApQ18X1pSjUA2V4+kp9u6vRwcVf9
-   Dgf7SGm6/0UBvY7wDwtk4x22s0T46b7wpL76BUDiimnRxGYucH7I46uZH
-   2Gkq81RJ03LBeE0edYtam9HVf1UnYhGQIidSZ4XkD4hvTRCL5Wvirj1oK
-   5HbnFd0e07DT/KNCX3KXzo3Gswi3uXvrP2x3hvAUDnlh88aLndxNC2H6H
-   kPhkjluj02dSbDGBKZT3Cs8UJi+Zkmxt33OI3mDT1bBkvKuG44tnCRv+x
-   A==;
-X-CSE-ConnectionGUID: 9a68fWfAQuOLPi9xF2558Q==
-X-CSE-MsgGUID: UThUJun0TtebpZ1uUZaVGA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="95150901"
+  bh=092LXwRtl3E3+JMBPc+hQPk7+1GDnDFvIMA9uYo3EgI=;
+  b=QuVQm8pqW2HnME4HNtP7MyQdI4KQmuOcd0hGaI16jaVnlSl3uvvOR7T2
+   4jM2BO+kvGPEUoenoN2JQbNH9bzpsPlBSHCJFflL0Nfyq/AY3K+ibtv9a
+   MplZMuYmz4Yz3clZw7RWUiGytRCjNKe3btf+6vB5pl09WsS9N5lajnqJC
+   uki52hXtF0xx7q0rfrkEf2OJDOu3GecEzPf1/WaViO3B39PWCqd5fbhqX
+   Vdwg4MCucRQ5RccRUoGxK40RXOEYka4CqjMsmZPW7a7PrHH2BMqdhwSl0
+   NI8mdd5yOxzbBuFRtT3sOdHzCXD1g8nOasWNRe615DlXLfyqG5LFLAwBE
+   w==;
+X-CSE-ConnectionGUID: y4qaBdONSMWvvbXHXerLjg==
+X-CSE-MsgGUID: R8WU+mW5TIyBPNwWFmlFkQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11670"; a="68882800"
 X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="95150901"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 00:51:23 -0800
-X-CSE-ConnectionGUID: w5KBXLSkT5GwlKETmfz/1g==
-X-CSE-MsgGUID: 20YHxAaLTi6mkDSnYbmoqw==
+   d="scan'208";a="68882800"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 00:57:55 -0800
+X-CSE-ConnectionGUID: 7YkKbVRHRcKhwYylcXtH/Q==
+X-CSE-MsgGUID: BIuXDWFRSvWAcOZPm03Njg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,225,1763452800"; 
-   d="scan'208";a="209465922"
+   d="scan'208";a="205045288"
 Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.83])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 00:51:17 -0800
-Date: Wed, 14 Jan 2026 10:51:15 +0200
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 00:57:48 -0800
+Date: Wed, 14 Jan 2026 10:57:46 +0200
 From: Andy Shevchenko <andriy.shevchenko@intel.com>
 To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
@@ -71,12 +71,12 @@ Cc: jic23@kernel.org, dlechner@baylibre.com, nuno.sa@analog.com,
 	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
 	linux-pm@vger.kernel.org, kernel@collabora.com,
-	Jonathan Cameron <jonathan.cameron@huawei.com>
-Subject: Re: [PATCH v7 04/10] spmi: Implement spmi_subdevice_alloc_and_add()
- and devm variant
-Message-ID: <aWdZAyqQQ4KwCJx-@smile.fi.intel.com>
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH v7 06/10] power: reset: qcom-pon: Migrate to
+ devm_spmi_subdevice_alloc_and_add()
+Message-ID: <aWdailGSr_RmJrP2@smile.fi.intel.com>
 References: <20260114083957.9945-1-angelogioacchino.delregno@collabora.com>
- <20260114083957.9945-5-angelogioacchino.delregno@collabora.com>
+ <20260114083957.9945-7-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -85,119 +85,25 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260114083957.9945-5-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20260114083957.9945-7-angelogioacchino.delregno@collabora.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Wed, Jan 14, 2026 at 09:39:51AM +0100, AngeloGioacchino Del Regno wrote:
-> Some devices connected over the SPMI bus may be big, in the sense
-> that those may be a complex of devices managed by a single chip
-> over the SPMI bus, reachable through a single SID.
+On Wed, Jan 14, 2026 at 09:39:53AM +0100, AngeloGioacchino Del Regno wrote:
+> Some Qualcomm PMICs integrates a Power On device supporting pwrkey
+> and resin along with the Android reboot reason action identifier.
 > 
-> Add new functions aimed at managing sub-devices of a SPMI device
-> spmi_subdevice_alloc_and_add() and a spmi_subdevice_put_and_remove()
-> for adding a new subdevice and removing it respectively, and also
-> add their devm_* variants.
+> Instead of using the parent SPMI device (the main PMIC) as a kind
+> of syscon in this driver, register a new SPMI sub-device for PON
+> and initialize its own regmap with this sub-device's specific base
+> address, retrieved from the devicetree.
 > 
-> The need for such functions comes from the existence of	those
-> complex Power Management ICs (PMICs), which feature one or many
-> sub-devices, in some cases with these being even addressable on
-> the chip in form of SPMI register ranges.
-> 
-> Examples of those devices can be found in both Qualcomm platforms
-> with their PMICs having PON, RTC, SDAM, GPIO controller, and other
-> sub-devices, and in newer MediaTek platforms showing similar HW
-> features and a similar layout with those also having many subdevs.
-> 
-> Also, instead of generally exporting symbols, export them with a
-> new "SPMI" namespace: all users will have to import this namespace
-> to make use of the newly introduced exports.
+> This allows to stop manually adding the register base address to
+> every R/W call in this driver, as this can be, and is now, handled
+> by the regmap API instead.
 
-...
+Same comments as per previous patch.
 
-> +static void devm_spmi_subdevice_remove(void *res)
-
-For better readability we usually call the variable with a meaningful name, and
-sub_sdev here seems the best.
-
-> +{
-> +	spmi_subdevice_remove(res);
-> +}
-
-...
-
-> + * Pointer to newly allocated SPMI sub-device for success or negative ERR_PTR.
-
-This is "negative ERR_PTR" nonsense. Either "negative errno" or "error pointer".
-Or something alike.
-
-> +struct spmi_subdevice *spmi_subdevice_alloc_and_add(struct spmi_device *sparent)
-> +{
-> +	struct spmi_subdevice *sub_sdev;
-> +	struct spmi_device *sdev;
-> +	int ret;
-> +
-> +	sub_sdev = kzalloc(sizeof(*sub_sdev), GFP_KERNEL);
-> +	if (!sub_sdev)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	ret = ida_alloc(&spmi_subdevice_ida, GFP_KERNEL);
-> +	if (ret < 0) {
-> +		kfree(sub_sdev);
-> +		return ERR_PTR(ret);
-> +	}
-> +
-> +	sdev = &sub_sdev->sdev;
-> +	sdev->ctrl = sparent->ctrl;
-> +	device_initialize(&sdev->dev);
-> +	sdev->dev.parent = &sparent->dev;
-> +	sdev->dev.bus = &spmi_bus_type;
-> +	sdev->dev.type = &spmi_subdev_type;
-
-> +	sub_sdev->devid = ret;
-
-Too far, may be prone to mistakes in the future. The rewritten one would look
-like
-
-	sub_sdev = kzalloc(sizeof(*sub_sdev), GFP_KERNEL);
-	if (!sub_sdev)
-		return ERR_PTR(-ENOMEM);
-
-	sdev = &sub_sdev->sdev;
-	sdev->ctrl = sparent->ctrl;
-
-	ret = ida_alloc(&spmi_subdevice_ida, GFP_KERNEL);
-	if (ret < 0) {
-		kfree(sub_sdev);
-		return ERR_PTR(ret);
-	}
-	sub_sdev->devid = ret;
-
-	device_initialize(&sdev->dev);
-	sdev->dev.parent = &sparent->dev;
-	sdev->dev.bus = &spmi_bus_type;
-	sdev->dev.type = &spmi_subdev_type;
-
-
-> +	sdev->usid = sparent->usid;
-> +
-> +	ret = dev_set_name(&sdev->dev, "%d-%02x.%d.auto",
-> +			   sdev->ctrl->nr, sdev->usid, sub_sdev->devid);
-> +	if (ret)
-> +		goto err_put_dev;
-> +
-> +	ret = device_add(&sdev->dev);
-> +	if (ret) {
-> +		dev_err(&sdev->dev, "Can't add device, status %pe\n", ERR_PTR(ret));
-> +		goto err_put_dev;
-> +	}
-> +
-> +	return sub_sdev;
-> +
-> +err_put_dev:
-> +	put_device(&sdev->dev);
-> +	return ERR_PTR(ret);
-> +}
 
 -- 
 With Best Regards,
