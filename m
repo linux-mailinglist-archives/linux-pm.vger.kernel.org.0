@@ -1,54 +1,54 @@
-Return-Path: <linux-pm+bounces-40880-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40879-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0FDBD2116C
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 20:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A548DD21166
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 20:48:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 81E6730407DA
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 19:48:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7889830239C4
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Jan 2026 19:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EDAD2D73AE;
-	Wed, 14 Jan 2026 19:48:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D3512F1FEC;
+	Wed, 14 Jan 2026 19:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hlKR9QHp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="actvCBZa"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3F2A41;
-	Wed, 14 Jan 2026 19:48:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A1BD2D5410;
+	Wed, 14 Jan 2026 19:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768420125; cv=none; b=B6obMadHshk8QCgm7ZBb7N7yvehP6sVqXrx3HjJZUIX6eTRX5yUeKT4MPEKNhO7ZQ+p8OvTu3/BmTwYbZojtnjhyNlQssOrrp7Urnomo7i+qlx3xTSpjqOoBInxwE4FrZzRonK098T3wYf40OMUWzTFosgSQLRHVGDHVJA7cua8=
+	t=1768420121; cv=none; b=iOeh10Dw0OdmF1ytDzto8Hhl1W6Ro9rHrjSXInImOKVgqHKWru/al8JfBvVo834LFAkEK07MVxO31VcDdfZm+vsd1Nznz8IqFh8cdTsPZbZLE9uvEJLu9hcJSpPJGYyhAUl+mZ2Iv3THtz7XMwvrTZiF7pxhYKAWTjtl4JGGOFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768420125; c=relaxed/simple;
-	bh=JYal1LHhF3Uxoy6NE/Qt8YDegA7c0ntG5a9eXA+X9KY=;
+	s=arc-20240116; t=1768420121; c=relaxed/simple;
+	bh=fBPAsJpQifTNlT3+4XiMZYA6irZ2Pe4hZRZtId3buP0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Mu7KiR6TuwDZXQ8PJahQppRav9g5doqPpXH58CIrztp1F6gyLrJ/y5HgmqezWSJWpN0/qrpfb4bo7WzQkcXg6HA9WUc/8yjOD0J/OLmlk735EzVSa8v7NG/uN8O+Zh/1oTMi/ik4N7K09BCRJ9eeLXDh8N2H1LVjzjBQE8jkhnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hlKR9QHp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F63C19421;
-	Wed, 14 Jan 2026 19:48:43 +0000 (UTC)
+	 MIME-Version:Content-Type; b=qGmaYsRnBy+Jcri01V9v6VuQw2XKT8aGmBsH4gKx+a7FU/GuxBpCpA3P4CKurWAOIfdql+a3z+JcVDo/TFohHQeNJKLCIjANec+xiFotCGMnPK242wTfvfoc+GCzNgd3OV9eYqtps/mq+E2AjTZgWttKmGTYYAFL4sow7KzhD3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=actvCBZa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F711C4CEF7;
+	Wed, 14 Jan 2026 19:48:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768420125;
-	bh=JYal1LHhF3Uxoy6NE/Qt8YDegA7c0ntG5a9eXA+X9KY=;
+	s=k20201202; t=1768420120;
+	bh=fBPAsJpQifTNlT3+4XiMZYA6irZ2Pe4hZRZtId3buP0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hlKR9QHpbUyYCzv6yggdfqnAcqRvZwK48Mz9EX+fmvwNiJ97SK8uVQ4b5p5BdFA7m
-	 iO4XS0QoFULC3TLNsYlXhe2hFcLojKHEFPly2BMcn2xPNZnBKzqeTvEiCJ7b0S6a2v
-	 9RIPsPRFl1IZKryh8hKAe7eFvt4tTPnw4EFnL1oDnYpm9ryMKZIgOg9OGoaImb4ewi
-	 YwvZ3UmyHYA/nASy2183Dj9nGksMPYghY/51rQ3+XVi9qw5L/YbJj0uRE73P4rNEqQ
-	 wI4oBKJFcJMrSK0H2Q98n3RO25ce0/aVCAr8kKeh4axaunJyybCaWtfB8LenWP2qcm
-	 r5O3YwUd9x3uw==
+	b=actvCBZa9Vt3gxaGYzptEZ3Ur1z4OELcFQlhnYNXuPc4niyU1dqh6hv/vL94Bpwd4
+	 7cEJxsNSkN8iulJxtKSqIXkO6aVwCvzmZ0SjuiGGoA0rbjNU6sPERJhDKcoyiG0dXB
+	 ZHLvsNZnAddsJ1EpHdhstS9VgTcdI0VwPTiuDO1yXD6dj3ZuVDg1308NJKkxyCTTRp
+	 aJWVAuSETTYKvwZrvXfUyHxMmsTMZEipxV7DXFGe6J0ZK92AL52KeO1hiXjUTnS08O
+	 fJJ+IY14k91jJsKoRov4DafXrt8xnL38VlOhBJtSGMxk3oXoI2K9t2ImgO3tQFgGRh
+	 xiJ11xOIdIZfg==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Christian Loehle <christian.loehle@arm.com>,
  Doug Smythies <dsmythies@telus.net>
 Subject:
- [PATCH v1 4/5] cpuidle: governors: teo: Adjust the classification of wakeup
- events
-Date: Wed, 14 Jan 2026 20:46:12 +0100
-Message-ID: <2033689.PYKUYFuaPT@rafael.j.wysocki>
+ [PATCH v1 5/5] cpuidle: governors: teo: Refine intercepts-based idle state
+ lookup
+Date: Wed, 14 Jan 2026 20:47:09 +0100
+Message-ID: <3931434.kQq0lBPeGt@rafael.j.wysocki>
 Organization: Linux Kernel Development
 In-Reply-To: <2257365.irdbgypaU6@rafael.j.wysocki>
 References: <2257365.irdbgypaU6@rafael.j.wysocki>
@@ -63,104 +63,128 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-If differences between target residency values of adjacent idle states
-of a given CPU are relatively large, the corresponding idle state bins
-used by the teo governors are large either and the rule by which hits
-are distinguished from intercepts is inaccurate.
+There are cases in which decisions made by the teo governor are
+arguably overly conservative.
 
-Namely, by that rule, a wakeup event is classified as a hit if the
-sleep length (the time till the closest timer other than the tick)
-and the measured idle duration, adjusted for the entered idle state
-exit latency, fall into the same idle state bin.  However, if that bin
-is large enough, the actual difference between the sleep length and
-the measured idle duration may be significant.  It may in fact be
-significantly greater than the analogous difference for an event where
-the sleep length and the measured idle duration fall into different
-bins.
+For instance, suppose that there are 4 idle states and the values of
+the intercepts metric for the first 3 of them are 400, 250, and 251,
+respectively.  If the total sum computed in teo_update() is 1000, the
+governor will select idle state 1 (provided that all idle states are
+enabled and the scheduler tick has not been stopped) although arguably
+idle state 0 would be a better choice because the likelihood of getting
+an idle duration below the target residency of idle state 1 is greater
+than the likelihood of getting an idle duration between the target
+residency of idle state 1 and the target residency of idle state 2.
 
-For this reason, amend the rule in question with a check that will
-only allow a wakeup event to be counted as a hit if the difference
-between the sleep length and the measured idle duration is less than
-LATENCY_THRESHOLD_NS (which means that the difference between the
-sleep length and the raw measured idle duration is below the sum of
-LATENCY_THRESHOLD_NS and 1/2 of the entered idle state exit latency).
-Otherwise, the event will be counted as an intercept.
-
-Moreover, since the above change is likely to cause more intercepts
-and fewer hits to be counted than before, at least in some cases, also
-adjust the check in teo_select() deciding whether or not to take
-intercepts into account at all.  Specifically, remove idx_hit_sum from
-the right-hand side of the inequality in that check on the premise that
-intercepts previously counted as hits will now be included in
-idx_intercept_sum and there is no reason to subtract the remaining
-events (that are still counted as hits) from cpu_data->total.  Also
-adjust the comment preceding the check in question to reflect that
-modification.
+To address this, refine the candidate idle state lookup based on
+intercepts to start at the state with the maximum intercepts metric,
+below the deepest enabled one, to avoid the cases in which the search
+may stop before reaching that state.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpuidle/governors/teo.c |   32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+ drivers/cpuidle/governors/teo.c |   46 +++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 41 insertions(+), 5 deletions(-)
 
 --- a/drivers/cpuidle/governors/teo.c
 +++ b/drivers/cpuidle/governors/teo.c
-@@ -48,13 +48,11 @@
-  * in accordance with what happened last time.
+@@ -73,12 +73,17 @@
+  *      than the candidate one (it represents the cases in which the CPU was
+  *      likely woken up by a non-timer wakeup source).
   *
-  * The "hits" metric reflects the relative frequency of situations in which the
-- * sleep length and the idle duration measured after CPU wakeup fall into the
-- * same bin (that is, the CPU appears to wake up "on time" relative to the sleep
-- * length).  In turn, the "intercepts" metric reflects the relative frequency of
-- * non-timer wakeup events for which the measured idle duration falls into a bin
-- * that corresponds to an idle state shallower than the one whose bin is fallen
-- * into by the sleep length (these events are also referred to as "intercepts"
-- * below).
-+ * sleep length and the idle duration measured after CPU wakeup are close enough
-+ * (that is, the CPU appears to wake up "on time" relative to the sleep length).
-+ * In turn, the "intercepts" metric reflects the relative frequency of non-timer
-+ * wakeup events for which the measured idle duration is measurably less than
-+ * the sleep length (these events are also referred to as "intercepts" below).
++ *    Also find the idle state with the maximum intercepts metric (if there are
++ *    multiple states with the maximum intercetps metric, choose the one with
++ *    the highest index).
++ *
+  * 2. If the second sum computed in step 1 is greater than a half of the sum of
+  *    both metrics for the candidate state bin and all subsequent bins (if any),
+  *    a shallower idle state is likely to be more suitable, so look for it.
   *
-  * The governor also counts "intercepts" with the measured idle duration below
-  * the tick period length and uses this information when deciding whether or not
-@@ -253,12 +251,16 @@ static void teo_update(struct cpuidle_dr
- 	}
+  *    - Traverse the enabled idle states shallower than the candidate one in the
+- *      descending order.
++ *      descending order, starting at the state with the maximum intercepts
++ *      metric found in step 1.
+  *
+  *    - For each of them compute the sum of the "intercepts" metrics over all
+  *      of the idle states between it and the candidate one (including the
+@@ -306,9 +311,12 @@ static int teo_select(struct cpuidle_dri
+ 	s64 latency_req = cpuidle_governor_latency_req(dev->cpu);
+ 	ktime_t delta_tick = TICK_NSEC / 2;
+ 	unsigned int idx_intercept_sum = 0;
++	unsigned int intercept_max_sum = 0;
+ 	unsigned int intercept_sum = 0;
++	unsigned int intercept_max = 0;
+ 	unsigned int idx_hit_sum = 0;
+ 	unsigned int hit_sum = 0;
++	int intercept_max_idx = -1;
+ 	int constraint_idx = 0;
+ 	int idx0 = 0, idx = -1;
+ 	s64 duration_ns;
+@@ -339,17 +347,33 @@ static int teo_select(struct cpuidle_dri
+ 	if (!dev->states_usage[0].disable)
+ 		idx = 0;
  
- 	/*
--	 * If the measured idle duration falls into the same bin as the sleep
--	 * length, this is a "hit", so update the "hits" metric for that bin.
-+	 * If the measured idle duration falls into the same bin as the
-+	 * sleep length and the difference between them is less than
-+	 * LATENCY_THRESHOLD_NS, this is a "hit", so update the "hits"
-+	 * metric for that bin.
-+	 *
- 	 * Otherwise, update the "intercepts" metric for the bin fallen into by
- 	 * the measured idle duration.
- 	 */
--	if (idx_timer == idx_duration) {
-+	if (idx_timer == idx_duration &&
-+	    cpu_data->sleep_length_ns - measured_ns < LATENCY_THRESHOLD_NS) {
- 		cpu_data->state_bins[idx_timer].hits += PULSE;
- 	} else {
- 		cpu_data->state_bins[idx_duration].intercepts += PULSE;
-@@ -381,13 +383,11 @@ static int teo_select(struct cpuidle_dri
- 	}
+-	/* Compute the sums of metrics for early wakeup pattern detection. */
++	/*
++	 * Compute the sums of metrics for early wakeup pattern detection and
++	 * look for the state bin with the maximum intercepts metric below the
++	 * deepest enabled one (if there are multiple states with the maximum
++	 * intercepts metric, choose the one with the highest index).
++	 */
+ 	for (i = 1; i < drv->state_count; i++) {
+ 		struct teo_bin *prev_bin = &cpu_data->state_bins[i-1];
++		unsigned int prev_intercepts = prev_bin->intercepts;
+ 		struct cpuidle_state *s = &drv->states[i];
  
- 	/*
--	 * If the sum of the intercepts metric for all of the idle states
--	 * shallower than the current candidate one (idx) is greater than the
--	 * sum of the intercepts and hits metrics for the candidate state and
--	 * all of the deeper states, a shallower idle state is likely to be a
--	 * better choice.
-+	 * If intercepts in the range below the target residency of the current
-+	 * candidate state are the majority of all wakeups, a shallower state is
-+	 * likely to be a better choice.
- 	 */
--	if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
-+	if (2 * idx_intercept_sum > cpu_data->total) {
- 		int min_idx = idx0;
+ 		/*
+ 		 * Update the sums of idle state metrics for all of the states
+ 		 * shallower than the current one.
+ 		 */
+-		intercept_sum += prev_bin->intercepts;
+ 		hit_sum += prev_bin->hits;
++		intercept_sum += prev_intercepts;
++		/*
++		 * Check if this is the bin with the maximum number of
++		 * intercepts so far and in that case update the index of
++		 * the state with the maximum intercetps metric.
++		 */
++		if (prev_intercepts >= intercept_max) {
++			intercept_max = prev_intercepts;
++			intercept_max_sum = intercept_sum;
++			intercept_max_idx = i - 1;
++		}
  
- 		if (tick_nohz_tick_stopped()) {
+ 		if (dev->states_usage[i].disable)
+ 			continue;
+@@ -411,14 +435,26 @@ static int teo_select(struct cpuidle_dri
+ 		}
+ 
+ 		/*
+-		 * Look for the deepest idle state whose target residency had
++		 * If the minimum state index is greater than or equal to the
++		 * index of the state with the maximum intercepts metric, there
++		 * is no need to look at the shallower states.
++		 */
++		if (min_idx >= intercept_max_idx) {
++			idx = min_idx;
++			goto constraint;
++		}
++
++		/*
++		 * Look for the deepest idle state at least as deep as the one
++		 * with the maximum intercetps metric whose target residency had
+ 		 * not exceeded the idle duration in over a half of the relevant
+ 		 * cases in the past.
+ 		 *
+ 		 * Take the possible duration limitation present if the tick
+ 		 * has been stopped already into account.
+ 		 */
+-		for (i = idx - 1, intercept_sum = 0; i >= min_idx; i--) {
++		intercept_sum = idx_intercept_sum - intercept_max_sum;
++		for (i = intercept_max_idx; i >= min_idx; i--) {
+ 			intercept_sum += cpu_data->state_bins[i].intercepts;
+ 
+ 			if (dev->states_usage[i].disable)
 
 
 
