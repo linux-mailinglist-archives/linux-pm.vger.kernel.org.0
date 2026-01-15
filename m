@@ -1,122 +1,296 @@
-Return-Path: <linux-pm+bounces-40922-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40923-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A75DED241D3
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 12:17:32 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F002D246D2
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 13:20:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A8581300698D
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 11:17:31 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 42F25301EC52
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 12:20:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A22314B71;
-	Thu, 15 Jan 2026 11:17:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDC7430B50D;
+	Thu, 15 Jan 2026 12:20:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A65AB35B125;
-	Thu, 15 Jan 2026 11:17:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74EB354AF0
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 12:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768475850; cv=none; b=i2hFhPw5NMp/SOD6P6U5o6eOFRDKY6mZuDuk4t0ygkQOQFa5jXDGepiJ5CluFHfPu7mW/K8eEzHkx4SWChEvcjAIb7KzR3QEHK2jwPtaeNtaCoTqdrXoN/ZLrOj70pCQO/qByzj32QjZObesLdjXzcds5u72AWPbulmAT17X978=
+	t=1768479604; cv=none; b=fFVwm1h0EelepRguZpJtGV5S54TmOM+pVhc7fj2vtdbf5HpxcUvIqkpTTmrTgv8rJuGJYWMbR2TyH+uBbvOOAuKuNj0D2PTJH3xA0Z9FA4auM2Y4evqYnEZhKgrufZs6G3u3N2c/cchcx4bzT+hatFlkrm/F7jmjQ313Ix3DomI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768475850; c=relaxed/simple;
-	bh=Eg8fBWrolo6udHHO75eu/I+s+u90cH7QotrwanlvoYE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nKtkpnDofcQ2bWCvDvbDxTKQsjH1AwItnBQ161LzjtaTzoNUl0t8MB3r5JsQLizDzVfjVehta+8QVwkWqLTqPKCKu2iSMeL1ZB/zuSyuDf5/Wo8rX1Y893lZ6xZvoY2aNeZuJiEH2+gQX6C00LyGkHAKX2AaTXtdUFHdUNvsoZ4=
+	s=arc-20240116; t=1768479604; c=relaxed/simple;
+	bh=XbZeiVadDL1em+X5ix5kJg72pICTyhzg0XSNXAb3S3U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dY2+xN2xtr+WrJX/iSFpO8oGhNrz0bBwW9rGOvVo2gR7rGNIGj4C7m2W6lfdv1EdP1cJHD0fcE1cvNws15d1Kbc1chSdsL0SHUFu16UYtkpFIRd7GIOj61jr0z0rI7b6auF6d8AHP1rfU0fbO0LnBAF6ysD6Pc4njGbxCvOe+XI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD170FEC;
-	Thu, 15 Jan 2026 03:17:18 -0800 (PST)
-Received: from [10.1.37.67] (e127648.arm.com [10.1.37.67])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A89EE3F694;
-	Thu, 15 Jan 2026 03:17:23 -0800 (PST)
-Message-ID: <8e230c6d-ddd7-4385-865e-257168dc0057@arm.com>
-Date: Thu, 15 Jan 2026 11:17:21 +0000
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 711951515
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 04:19:55 -0800 (PST)
+Received: from e142607.local (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E51E53F632
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 04:20:01 -0800 (PST)
+Date: Thu, 15 Jan 2026 12:19:10 +0000
+From: Liviu Dudau <liviu.dudau@arm.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, imx@lists.linux.dev,
+	LKML <linux-kernel@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Brian Norris <briannorris@chromium.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Robert Foss <rfoss@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
+	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>,
+	dri-devel@lists.freedesktop.org
+Subject: Re: [RESEND][PATCH v1] drm: Discard pm_runtime_put() return value
+Message-ID: <aWjbPpkDd_SORcfC@e142607>
+References: <2256082.irdbgypaU6@rafael.j.wysocki>
+ <CAJZ5v0gdj6Oe=LSJX8+6JbxTt42W3RkabLDWh=VqEkjUvAWxow@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/1] sched: Ignore overutilized by lone task on max-cap
- CPU
-To: Qais Yousef <qyousef@layalina.io>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rafael@kernel.org,
- peterz@infradead.org, pierre.gondois@arm.com, qperret@google.com,
- sven@svenpeter.dev
-References: <20251230093037.427141-1-christian.loehle@arm.com>
- <20260113131134.n4ixed2awnikgmeq@airbuntu>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <20260113131134.n4ixed2awnikgmeq@airbuntu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0gdj6Oe=LSJX8+6JbxTt42W3RkabLDWh=VqEkjUvAWxow@mail.gmail.com>
 
-On 1/13/26 13:11, Qais Yousef wrote:
-> On 12/30/25 09:30, Christian Loehle wrote:
->> I'm trying to deliver on my overdue promise of redefining overutilized state.
->> My investigation basically lead to redefinition of overutilized state
->> bringing very little hard improvements, while it comes with at least
->> some risk of worsening platforms and workload combinations I might've
->> overlooked, therefore I only concentrate on one, the least
->> controversial, for now.
+On Wed, Jan 14, 2026 at 01:03:25PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Jan 8, 2026 at 4:38 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Multiple DRM drivers use the pm_runtime_put() return value for printing
+> > debug or even error messages and all of those messages are at least
+> > somewhat misleading.
+> >
+> > Returning an error code from pm_runtime_put() merely means that it has
+> > not queued up a work item to check whether or not the device can be
+> > suspended and there are many perfectly valid situations in which that
+> > can happen, like after writing "on" to the devices' runtime PM "control"
+> > attribute in sysfs for one example.  It also happens when the kernel
+> > has been configured with CONFIG_PM unset.
+> >
+> > For this reason, modify all of those drivers to simply discard the
+> > pm_runtime_put() return value which is what they should be doing.
+> >
+> > This will facilitate a planned change of the pm_runtime_put() return
+> > type to void in the future.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Acked-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> > Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+> > ---
+> >
+> > This patch is requisite for converting pm_runtime_put() into a void
+> > function.
+> >
+> > If you decide to pick it up, please let me know.
+> >
+> > Otherwise, an ACK or equivalent will be appreciated, but also the lack
+> > of specific criticism will be eventually regarded as consent.
+> >
+> > Originally posted here:
+> >
+> > https://lore.kernel.org/linux-pm/3045480.e9J7NaK4W3@rafael.j.wysocki/
 > 
-> What are the controversial bits?
-> 
-> This is a step forward, but not sure it is in the right direction. The concept
-> of a *cpu* being overutilized === rd is overutilized no longer makes sense
-> since misfit was decoupled from this logic which was the sole reason to
-> require this check at CPU level.  Overutilized state is, rightly, set at the
-> rootdomain level. And the check makes sense to be done at that level too by
-> traversing the perf domains and seeing if we are in a state that requires
-> moving tasks around. Which should be done in update_{sg,sd}_lb_stats() logic
-> only.
-> 
-> I guess the difficult question (which might be what you're referring to as
-> controversial), is at what point we can no longer pack (use EAS) and must
-> distribute tasks around?
+> This is the last patch from the "discard pm_runtime_put() return
+> values" lot that has not been applied yet, AFAICS, so this is the last
+> call for objections or concerns related to it.
 
-And that is precisely the 'controversial bits', I didn't want to touch them
-with this patch specifically.
-A more holistic redefinition of OU is still on the table, but it needs to
-a) Still fulfill the requirements we want from it (guarantee of accurate PELT
-values because compute capacity was 'always' provided, switching to throughput
-maximization when needed).
-b) Provide sufficient testing to convince us of not regressing anything majorly
-on the quite diverse EAS platforms we have today.
+I think you can go ahead and apply it, I don't see how the imx8 driver will
+be affected by the lack of debug messages.
 
-I think $SUBJECT does a) and b) well, but of course it's for improving a
-specific set of systems and doesn't address the issues with OU that have been
-named in the past.
+Best regards,
+Liviu
 
 > 
-> I think this question is limited by what the lb can do today. With push lb,
-> I believe the current global lb is likely to be unnecessary in small systems
-> (single LLC) since it can shuffle things around immediately to handle misfit
-> and overload.
-> 
-> On top of that, what can the existing global lb do? I am not sure to be honest.
-> The system has to have a number of long running tasks > num_cpus for it to be
-> useful. But given util signal will lose its meaning under these circumstances,
-> I am not sure the global lb can do a better job than push lb trying to move
-> these tasks around. But it could do a more comprehensive job in one go? I'll
-> defer to Vincent, he probably more able to answer this from the top of his
-> head. But the answer to this question is the key to how we want to define this
-> *system* is overutilized state.
-> 
-> Assuming this is on top of push lb, I believe something like below which will
-> trigger overutilized only if all cpus are overutilized (ie system is nearly
-> maxed out (has 20% or less headroom)) is a good starting point at least.
-
-It's an approach, but it needs a lot of data to convince everyone that
-push lb + much more liberal OU state outperforms current global LB OU.
-
-Given this is not really about defining OU in a final state, any comments from
-you and Vincent on $SUBJECT and the problem it's addressing would be 
-much appreciated!
-
-> [snip]
+> > ---
+> >  drivers/gpu/drm/arm/malidp_crtc.c                   |    6 +-----
+> >  drivers/gpu/drm/bridge/imx/imx8qm-ldb.c             |    4 +---
+> >  drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c            |    4 +---
+> >  drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c |    5 +----
+> >  drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c        |    5 +----
+> >  drivers/gpu/drm/imx/dc/dc-crtc.c                    |   12 +++---------
+> >  drivers/gpu/drm/vc4/vc4_hdmi.c                      |    5 +----
+> >  drivers/gpu/drm/vc4/vc4_vec.c                       |   12 ++----------
+> >  8 files changed, 11 insertions(+), 42 deletions(-)
+> >
+> > --- a/drivers/gpu/drm/arm/malidp_crtc.c
+> > +++ b/drivers/gpu/drm/arm/malidp_crtc.c
+> > @@ -77,7 +77,6 @@ static void malidp_crtc_atomic_disable(s
+> >                                                                          crtc);
+> >         struct malidp_drm *malidp = crtc_to_malidp_device(crtc);
+> >         struct malidp_hw_device *hwdev = malidp->dev;
+> > -       int err;
+> >
+> >         /* always disable planes on the CRTC that is being turned off */
+> >         drm_atomic_helper_disable_planes_on_crtc(old_state, false);
+> > @@ -87,10 +86,7 @@ static void malidp_crtc_atomic_disable(s
+> >
+> >         clk_disable_unprepare(hwdev->pxlclk);
+> >
+> > -       err = pm_runtime_put(crtc->dev->dev);
+> > -       if (err < 0) {
+> > -               DRM_DEBUG_DRIVER("Failed to disable runtime power management: %d\n", err);
+> > -       }
+> > +       pm_runtime_put(crtc->dev->dev);
+> >  }
+> >
+> >  static const struct gamma_curve_segment {
+> > --- a/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
+> > +++ b/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
+> > @@ -280,9 +280,7 @@ static void imx8qm_ldb_bridge_atomic_dis
+> >         clk_disable_unprepare(imx8qm_ldb->clk_bypass);
+> >         clk_disable_unprepare(imx8qm_ldb->clk_pixel);
+> >
+> > -       ret = pm_runtime_put(dev);
+> > -       if (ret < 0)
+> > -               DRM_DEV_ERROR(dev, "failed to put runtime PM: %d\n", ret);
+> > +       pm_runtime_put(dev);
+> >  }
+> >
+> >  static const u32 imx8qm_ldb_bus_output_fmts[] = {
+> > --- a/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
+> > +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
+> > @@ -282,9 +282,7 @@ static void imx8qxp_ldb_bridge_atomic_di
+> >         if (is_split && companion)
+> >                 companion->funcs->atomic_disable(companion, state);
+> >
+> > -       ret = pm_runtime_put(dev);
+> > -       if (ret < 0)
+> > -               DRM_DEV_ERROR(dev, "failed to put runtime PM: %d\n", ret);
+> > +       pm_runtime_put(dev);
+> >  }
+> >
+> >  static const u32 imx8qxp_ldb_bus_output_fmts[] = {
+> > --- a/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c
+> > +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c
+> > @@ -181,11 +181,8 @@ static void imx8qxp_pc_bridge_atomic_dis
+> >  {
+> >         struct imx8qxp_pc_channel *ch = bridge->driver_private;
+> >         struct imx8qxp_pc *pc = ch->pc;
+> > -       int ret;
+> >
+> > -       ret = pm_runtime_put(pc->dev);
+> > -       if (ret < 0)
+> > -               DRM_DEV_ERROR(pc->dev, "failed to put runtime PM: %d\n", ret);
+> > +       pm_runtime_put(pc->dev);
+> >  }
+> >
+> >  static const u32 imx8qxp_pc_bus_output_fmts[] = {
+> > --- a/drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c
+> > +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c
+> > @@ -127,11 +127,8 @@ static void imx8qxp_pxl2dpi_bridge_atomi
+> >                                                   struct drm_atomic_state *state)
+> >  {
+> >         struct imx8qxp_pxl2dpi *p2d = bridge->driver_private;
+> > -       int ret;
+> >
+> > -       ret = pm_runtime_put(p2d->dev);
+> > -       if (ret < 0)
+> > -               DRM_DEV_ERROR(p2d->dev, "failed to put runtime PM: %d\n", ret);
+> > +       pm_runtime_put(p2d->dev);
+> >
+> >         if (p2d->companion)
+> >                 p2d->companion->funcs->atomic_disable(p2d->companion, state);
+> > --- a/drivers/gpu/drm/imx/dc/dc-crtc.c
+> > +++ b/drivers/gpu/drm/imx/dc/dc-crtc.c
+> > @@ -300,7 +300,7 @@ dc_crtc_atomic_disable(struct drm_crtc *
+> >                                 drm_atomic_get_new_crtc_state(state, crtc);
+> >         struct dc_drm_device *dc_drm = to_dc_drm_device(crtc->dev);
+> >         struct dc_crtc *dc_crtc = to_dc_crtc(crtc);
+> > -       int idx, ret;
+> > +       int idx;
+> >
+> >         if (!drm_dev_enter(crtc->dev, &idx))
+> >                 goto out;
+> > @@ -313,16 +313,10 @@ dc_crtc_atomic_disable(struct drm_crtc *
+> >         dc_fg_disable_clock(dc_crtc->fg);
+> >
+> >         /* request pixel engine power-off as plane is off too */
+> > -       ret = pm_runtime_put(dc_drm->pe->dev);
+> > -       if (ret)
+> > -               dc_crtc_err(crtc, "failed to put DC pixel engine RPM: %d\n",
+> > -                           ret);
+> > +       pm_runtime_put(dc_drm->pe->dev);
+> >
+> >         /* request display engine power-off when CRTC is disabled */
+> > -       ret = pm_runtime_put(dc_crtc->de->dev);
+> > -       if (ret < 0)
+> > -               dc_crtc_err(crtc, "failed to put DC display engine RPM: %d\n",
+> > -                           ret);
+> > +       pm_runtime_put(dc_crtc->de->dev);
+> >
+> >         drm_dev_exit(idx);
+> >
+> > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> > @@ -848,7 +848,6 @@ static void vc4_hdmi_encoder_post_crtc_p
+> >         struct vc4_hdmi *vc4_hdmi = encoder_to_vc4_hdmi(encoder);
+> >         struct drm_device *drm = vc4_hdmi->connector.dev;
+> >         unsigned long flags;
+> > -       int ret;
+> >         int idx;
+> >
+> >         mutex_lock(&vc4_hdmi->mutex);
+> > @@ -867,9 +866,7 @@ static void vc4_hdmi_encoder_post_crtc_p
+> >         clk_disable_unprepare(vc4_hdmi->pixel_bvb_clock);
+> >         clk_disable_unprepare(vc4_hdmi->pixel_clock);
+> >
+> > -       ret = pm_runtime_put(&vc4_hdmi->pdev->dev);
+> > -       if (ret < 0)
+> > -               drm_err(drm, "Failed to release power domain: %d\n", ret);
+> > +       pm_runtime_put(&vc4_hdmi->pdev->dev);
+> >
+> >         drm_dev_exit(idx);
+> >
+> > --- a/drivers/gpu/drm/vc4/vc4_vec.c
+> > +++ b/drivers/gpu/drm/vc4/vc4_vec.c
+> > @@ -542,7 +542,7 @@ static void vc4_vec_encoder_disable(stru
+> >  {
+> >         struct drm_device *drm = encoder->dev;
+> >         struct vc4_vec *vec = encoder_to_vc4_vec(encoder);
+> > -       int idx, ret;
+> > +       int idx;
+> >
+> >         if (!drm_dev_enter(drm, &idx))
+> >                 return;
+> > @@ -556,17 +556,9 @@ static void vc4_vec_encoder_disable(stru
+> >
+> >         clk_disable_unprepare(vec->clock);
+> >
+> > -       ret = pm_runtime_put(&vec->pdev->dev);
+> > -       if (ret < 0) {
+> > -               drm_err(drm, "Failed to release power domain: %d\n", ret);
+> > -               goto err_dev_exit;
+> > -       }
+> > +       pm_runtime_put(&vec->pdev->dev);
+> >
+> >         drm_dev_exit(idx);
+> > -       return;
+> > -
+> > -err_dev_exit:
+> > -       drm_dev_exit(idx);
+> >  }
+> >
+> >  static void vc4_vec_encoder_enable(struct drm_encoder *encoder,
+> >
+> >
+> >
+> >
 
