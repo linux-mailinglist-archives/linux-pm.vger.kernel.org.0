@@ -1,296 +1,290 @@
-Return-Path: <linux-pm+bounces-40923-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40924-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F002D246D2
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 13:20:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1D44D24918
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 13:40:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 42F25301EC52
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 12:20:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id CA8EF30E233B
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 12:32:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDC7430B50D;
-	Thu, 15 Jan 2026 12:20:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0EFB396D3D;
+	Thu, 15 Jan 2026 12:32:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="sWEDDI3o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74EB354AF0
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 12:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19A636D507;
+	Thu, 15 Jan 2026 12:32:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768479604; cv=none; b=fFVwm1h0EelepRguZpJtGV5S54TmOM+pVhc7fj2vtdbf5HpxcUvIqkpTTmrTgv8rJuGJYWMbR2TyH+uBbvOOAuKuNj0D2PTJH3xA0Z9FA4auM2Y4evqYnEZhKgrufZs6G3u3N2c/cchcx4bzT+hatFlkrm/F7jmjQ313Ix3DomI=
+	t=1768480369; cv=none; b=TwDBoMIkg/PPjo5UPZ2sZlYkxI9D5mEY7ulhy6XJmHYv+uMotelXYK3rnN70Fo4EODiPm8T9HBlFps+ALQDSYGOkMgRlM0+z5j3F5jCccpgmDvZtzeO5m1AfztL0bgrhGRyo3m5QbdTBFqjkBwKXw8fk+IXjLeLWzYZagciKWgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768479604; c=relaxed/simple;
-	bh=XbZeiVadDL1em+X5ix5kJg72pICTyhzg0XSNXAb3S3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dY2+xN2xtr+WrJX/iSFpO8oGhNrz0bBwW9rGOvVo2gR7rGNIGj4C7m2W6lfdv1EdP1cJHD0fcE1cvNws15d1Kbc1chSdsL0SHUFu16UYtkpFIRd7GIOj61jr0z0rI7b6auF6d8AHP1rfU0fbO0LnBAF6ysD6Pc4njGbxCvOe+XI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 711951515
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 04:19:55 -0800 (PST)
-Received: from e142607.local (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E51E53F632
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 04:20:01 -0800 (PST)
-Date: Thu, 15 Jan 2026 12:19:10 +0000
-From: Liviu Dudau <liviu.dudau@arm.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, imx@lists.linux.dev,
-	LKML <linux-kernel@vger.kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Brian Norris <briannorris@chromium.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>,
-	=?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>,
-	dri-devel@lists.freedesktop.org
-Subject: Re: [RESEND][PATCH v1] drm: Discard pm_runtime_put() return value
-Message-ID: <aWjbPpkDd_SORcfC@e142607>
-References: <2256082.irdbgypaU6@rafael.j.wysocki>
- <CAJZ5v0gdj6Oe=LSJX8+6JbxTt42W3RkabLDWh=VqEkjUvAWxow@mail.gmail.com>
+	s=arc-20240116; t=1768480369; c=relaxed/simple;
+	bh=qM3ack70Dp4/06hOyaIehHJ+0/Zax0TbmaCqfMwt6oM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YCwXgHyU3OEvxa/wkUYQS9OV7xqWXwuZyWdBcbPaxE4eMt2dfjjZYgU1GHBE0Mq7AEWt4xSZJNFrlFIVYa81nhtCeimAMmSue8qTD2nYrJdClveC+Z+PazJnVLAKEtyao8KTL8zGVFhSjY5UYnzXXS9u0exUNxs59gEcrZoJPlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=sWEDDI3o; arc=none smtp.client-ip=113.46.200.217
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=ODPddeF010lfuUEUkRqhVe8w5VlmaVFHJmKvQxtERpA=;
+	b=sWEDDI3okoWq4IynNrjDPJVVw/BrNyVxPNePW6AsTlEaQVRY7052BBsV89prrjI5k/m0bV38t
+	8yTRZWr6YX3TFV5BzE14JqVrgAA1GbJyPqT0Q1s79f0jV974tUSJYHSISwDHxnOlq/Uw3Ae2wBj
+	mYhB0UDTZp3av1PwjJGZVA0=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4dsMjN25pXzcb45;
+	Thu, 15 Jan 2026 20:28:56 +0800 (CST)
+Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id DD30940538;
+	Thu, 15 Jan 2026 20:32:42 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
+ (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 15 Jan
+ 2026 20:32:41 +0800
+Message-ID: <27750fe9-8b0e-4687-bc5f-21e4ec38bf66@huawei.com>
+Date: Thu, 15 Jan 2026 20:32:41 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 10/11] cpufreq: CPPC: make scaling_min/max_freq
+ read-only when auto_sel enabled
+To: Pierre Gondois <pierre.gondois@arm.com>, Sumit Gupta <sumitg@nvidia.com>,
+	<rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC: <linux-tegra@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<ray.huang@amd.com>, <corbet@lwn.net>, <robert.moore@intel.com>,
+	<lenb@kernel.org>, <acpica-devel@lists.linux.dev>,
+	<mario.limonciello@amd.com>, <rdunlap@infradead.org>,
+	<linux-kernel@vger.kernel.org>, <gautham.shenoy@amd.com>,
+	<zhanjie9@hisilicon.com>, <ionela.voinescu@arm.com>, <perry.yuan@amd.com>,
+	<linux-doc@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<treding@nvidia.com>, <jonathanh@nvidia.com>, <vsethi@nvidia.com>,
+	<ksitaraman@nvidia.com>, <sanjayc@nvidia.com>, <nhartman@nvidia.com>,
+	<bbasu@nvidia.com>
+References: <20251223121307.711773-1-sumitg@nvidia.com>
+ <20251223121307.711773-11-sumitg@nvidia.com>
+ <ed9015a3-42b5-4c0e-af6f-2b4d65c34cd5@arm.com>
+ <0fe78528-db0c-494d-8d5e-b89abdc993b2@nvidia.com>
+ <f85ce68a-91cb-4b8e-b67e-413e5b62cd03@arm.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <f85ce68a-91cb-4b8e-b67e-413e5b62cd03@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0gdj6Oe=LSJX8+6JbxTt42W3RkabLDWh=VqEkjUvAWxow@mail.gmail.com>
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemf200001.china.huawei.com (7.202.181.227)
 
-On Wed, Jan 14, 2026 at 01:03:25PM +0100, Rafael J. Wysocki wrote:
-> On Thu, Jan 8, 2026 at 4:38 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Multiple DRM drivers use the pm_runtime_put() return value for printing
-> > debug or even error messages and all of those messages are at least
-> > somewhat misleading.
-> >
-> > Returning an error code from pm_runtime_put() merely means that it has
-> > not queued up a work item to check whether or not the device can be
-> > suspended and there are many perfectly valid situations in which that
-> > can happen, like after writing "on" to the devices' runtime PM "control"
-> > attribute in sysfs for one example.  It also happens when the kernel
-> > has been configured with CONFIG_PM unset.
-> >
-> > For this reason, modify all of those drivers to simply discard the
-> > pm_runtime_put() return value which is what they should be doing.
-> >
-> > This will facilitate a planned change of the pm_runtime_put() return
-> > type to void in the future.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Acked-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> > Acked-by: Liviu Dudau <liviu.dudau@arm.com>
-> > ---
-> >
-> > This patch is requisite for converting pm_runtime_put() into a void
-> > function.
-> >
-> > If you decide to pick it up, please let me know.
-> >
-> > Otherwise, an ACK or equivalent will be appreciated, but also the lack
-> > of specific criticism will be eventually regarded as consent.
-> >
-> > Originally posted here:
-> >
-> > https://lore.kernel.org/linux-pm/3045480.e9J7NaK4W3@rafael.j.wysocki/
+Hello Pierre,
+
+On 2026/1/12 19:44, Pierre Gondois wrote:
+> Hello Sumit,
 > 
-> This is the last patch from the "discard pm_runtime_put() return
-> values" lot that has not been applied yet, AFAICS, so this is the last
-> call for objections or concerns related to it.
+> On 1/9/26 15:37, Sumit Gupta wrote:
+>>
+>> On 08/01/26 22:16, Pierre Gondois wrote:
+>>> External email: Use caution opening links or attachments
+>>>
+>>>
+>>> Hello Sumit, Lifeng,
+>>>
+>>> On 12/23/25 13:13, Sumit Gupta wrote:
+>>>> When autonomous selection (auto_sel) is enabled, the hardware controls
+>>>> performance within min_perf/max_perf register bounds making the
+>>>> scaling_min/max_freq effectively read-only.
+>>>
+>>> If auto_sel is set, the governor associated to the policy will have no
+>>> actual control.
+>>>
+>>> E.g.:
+>>> If the schedutil governor is used, attempts to set the
+>>> frequency based on CPU utilization will be periodically
+>>> sent, but they will have no effect.
+>>>
+>>> The same thing will happen for the ondemand, performance,
+>>> powersave, userspace, etc. governors. They can only work if
+>>> frequency requests are taken into account.
+>>>
+>>> ------------
+>>>
+>>> This looks like the intel_pstate governor handling where it is possible
+>>> not to have .target() or .target_index() callback and the hardware is in
+>>> charge (IIUC).
+>>> For this case, only 2 governor seem available: performance and powersave.
+>>>
 
-I think you can go ahead and apply it, I don't see how the imx8 driver will
-be affected by the lack of debug messages.
+As you mentioned in [2], 'it still makes sense to have cpufreq requesting a
+certain performance level even though autonomous selection is enabled'. So I
+think it's OK to have a governor when auto_selection is enabled.
 
-Best regards,
-Liviu
+[2] https://lore.kernel.org/all/9f46991d-98c3-41f5-8133-6612b397e33a@arm.com/
+
+>>
+> Thanks for pointing me to the first version, I forgot how your
+> first implementation was.
+> 
+> 
+>> In v1 [1], I added a separate cppc_cpufreq_epp_driver instance without
+>> target*() hooks, using setpolicy() instead (similar to AMD pstate).
+>> However, this approach doesn't allow per-CPU control: if we boot with the
+>> EPP driver, we can't dynamically disable auto_sel for individual CPUs and
+>> return to OS governor control (no target hook available). AMD and Intel
+>> pstate drivers seem to set HW autonomous mode for all CPUs globally,
+>> not per-CPU. So, changed it in v2.
+>> [1] https://lore.kernel.org/lkml/20250211103737.447704-6-sumitg@nvidia.com/
+>>
+> Ok right.
+> This is something I don't really understand in the current intel/amd cpufreq
+> drivers. FWIU:
+> - the cpufreq drivers abstractions allow to access different hardware
+> - the governor abstraction allows to switch between different algorithms
+> to select the 'correct' frequency.
+> 
+> So IMO switching to autonomous selection should be done by switching
+> to another governor and the 'auto_sel' file should not be accessible to users.
+> 
+> ------------
+> 
+> Being able to enable/disable the autonomous selection on a per-policy
+> base seems a valid use-case. It also seems to fit the per-policy governor
+> capabilities.
+
+I'm OK with adding an auto-selection governor. It's better to keep this
+governor only in cppc_cpufreq for now I think.
+
+> However toggling the auto_sel on different CPUs inside the same policy
+> seems inappropriate (this is is not what is done in  this patchset IIUC).
+> 
+
+I think Sumit means per-policy when he said per-CPU.
 
 > 
-> > ---
-> >  drivers/gpu/drm/arm/malidp_crtc.c                   |    6 +-----
-> >  drivers/gpu/drm/bridge/imx/imx8qm-ldb.c             |    4 +---
-> >  drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c            |    4 +---
-> >  drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c |    5 +----
-> >  drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c        |    5 +----
-> >  drivers/gpu/drm/imx/dc/dc-crtc.c                    |   12 +++---------
-> >  drivers/gpu/drm/vc4/vc4_hdmi.c                      |    5 +----
-> >  drivers/gpu/drm/vc4/vc4_vec.c                       |   12 ++----------
-> >  8 files changed, 11 insertions(+), 42 deletions(-)
-> >
-> > --- a/drivers/gpu/drm/arm/malidp_crtc.c
-> > +++ b/drivers/gpu/drm/arm/malidp_crtc.c
-> > @@ -77,7 +77,6 @@ static void malidp_crtc_atomic_disable(s
-> >                                                                          crtc);
-> >         struct malidp_drm *malidp = crtc_to_malidp_device(crtc);
-> >         struct malidp_hw_device *hwdev = malidp->dev;
-> > -       int err;
-> >
-> >         /* always disable planes on the CRTC that is being turned off */
-> >         drm_atomic_helper_disable_planes_on_crtc(old_state, false);
-> > @@ -87,10 +86,7 @@ static void malidp_crtc_atomic_disable(s
-> >
-> >         clk_disable_unprepare(hwdev->pxlclk);
-> >
-> > -       err = pm_runtime_put(crtc->dev->dev);
-> > -       if (err < 0) {
-> > -               DRM_DEBUG_DRIVER("Failed to disable runtime power management: %d\n", err);
-> > -       }
-> > +       pm_runtime_put(crtc->dev->dev);
-> >  }
-> >
-> >  static const struct gamma_curve_segment {
-> > --- a/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
-> > +++ b/drivers/gpu/drm/bridge/imx/imx8qm-ldb.c
-> > @@ -280,9 +280,7 @@ static void imx8qm_ldb_bridge_atomic_dis
-> >         clk_disable_unprepare(imx8qm_ldb->clk_bypass);
-> >         clk_disable_unprepare(imx8qm_ldb->clk_pixel);
-> >
-> > -       ret = pm_runtime_put(dev);
-> > -       if (ret < 0)
-> > -               DRM_DEV_ERROR(dev, "failed to put runtime PM: %d\n", ret);
-> > +       pm_runtime_put(dev);
-> >  }
-> >
-> >  static const u32 imx8qm_ldb_bus_output_fmts[] = {
-> > --- a/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
-> > +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-ldb.c
-> > @@ -282,9 +282,7 @@ static void imx8qxp_ldb_bridge_atomic_di
-> >         if (is_split && companion)
-> >                 companion->funcs->atomic_disable(companion, state);
-> >
-> > -       ret = pm_runtime_put(dev);
-> > -       if (ret < 0)
-> > -               DRM_DEV_ERROR(dev, "failed to put runtime PM: %d\n", ret);
-> > +       pm_runtime_put(dev);
-> >  }
-> >
-> >  static const u32 imx8qxp_ldb_bus_output_fmts[] = {
-> > --- a/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c
-> > +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-combiner.c
-> > @@ -181,11 +181,8 @@ static void imx8qxp_pc_bridge_atomic_dis
-> >  {
-> >         struct imx8qxp_pc_channel *ch = bridge->driver_private;
-> >         struct imx8qxp_pc *pc = ch->pc;
-> > -       int ret;
-> >
-> > -       ret = pm_runtime_put(pc->dev);
-> > -       if (ret < 0)
-> > -               DRM_DEV_ERROR(pc->dev, "failed to put runtime PM: %d\n", ret);
-> > +       pm_runtime_put(pc->dev);
-> >  }
-> >
-> >  static const u32 imx8qxp_pc_bus_output_fmts[] = {
-> > --- a/drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c
-> > +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pxl2dpi.c
-> > @@ -127,11 +127,8 @@ static void imx8qxp_pxl2dpi_bridge_atomi
-> >                                                   struct drm_atomic_state *state)
-> >  {
-> >         struct imx8qxp_pxl2dpi *p2d = bridge->driver_private;
-> > -       int ret;
-> >
-> > -       ret = pm_runtime_put(p2d->dev);
-> > -       if (ret < 0)
-> > -               DRM_DEV_ERROR(p2d->dev, "failed to put runtime PM: %d\n", ret);
-> > +       pm_runtime_put(p2d->dev);
-> >
-> >         if (p2d->companion)
-> >                 p2d->companion->funcs->atomic_disable(p2d->companion, state);
-> > --- a/drivers/gpu/drm/imx/dc/dc-crtc.c
-> > +++ b/drivers/gpu/drm/imx/dc/dc-crtc.c
-> > @@ -300,7 +300,7 @@ dc_crtc_atomic_disable(struct drm_crtc *
-> >                                 drm_atomic_get_new_crtc_state(state, crtc);
-> >         struct dc_drm_device *dc_drm = to_dc_drm_device(crtc->dev);
-> >         struct dc_crtc *dc_crtc = to_dc_crtc(crtc);
-> > -       int idx, ret;
-> > +       int idx;
-> >
-> >         if (!drm_dev_enter(crtc->dev, &idx))
-> >                 goto out;
-> > @@ -313,16 +313,10 @@ dc_crtc_atomic_disable(struct drm_crtc *
-> >         dc_fg_disable_clock(dc_crtc->fg);
-> >
-> >         /* request pixel engine power-off as plane is off too */
-> > -       ret = pm_runtime_put(dc_drm->pe->dev);
-> > -       if (ret)
-> > -               dc_crtc_err(crtc, "failed to put DC pixel engine RPM: %d\n",
-> > -                           ret);
-> > +       pm_runtime_put(dc_drm->pe->dev);
-> >
-> >         /* request display engine power-off when CRTC is disabled */
-> > -       ret = pm_runtime_put(dc_crtc->de->dev);
-> > -       if (ret < 0)
-> > -               dc_crtc_err(crtc, "failed to put DC display engine RPM: %d\n",
-> > -                           ret);
-> > +       pm_runtime_put(dc_crtc->de->dev);
-> >
-> >         drm_dev_exit(idx);
-> >
-> > --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> > +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> > @@ -848,7 +848,6 @@ static void vc4_hdmi_encoder_post_crtc_p
-> >         struct vc4_hdmi *vc4_hdmi = encoder_to_vc4_hdmi(encoder);
-> >         struct drm_device *drm = vc4_hdmi->connector.dev;
-> >         unsigned long flags;
-> > -       int ret;
-> >         int idx;
-> >
-> >         mutex_lock(&vc4_hdmi->mutex);
-> > @@ -867,9 +866,7 @@ static void vc4_hdmi_encoder_post_crtc_p
-> >         clk_disable_unprepare(vc4_hdmi->pixel_bvb_clock);
-> >         clk_disable_unprepare(vc4_hdmi->pixel_clock);
-> >
-> > -       ret = pm_runtime_put(&vc4_hdmi->pdev->dev);
-> > -       if (ret < 0)
-> > -               drm_err(drm, "Failed to release power domain: %d\n", ret);
-> > +       pm_runtime_put(&vc4_hdmi->pdev->dev);
-> >
-> >         drm_dev_exit(idx);
-> >
-> > --- a/drivers/gpu/drm/vc4/vc4_vec.c
-> > +++ b/drivers/gpu/drm/vc4/vc4_vec.c
-> > @@ -542,7 +542,7 @@ static void vc4_vec_encoder_disable(stru
-> >  {
-> >         struct drm_device *drm = encoder->dev;
-> >         struct vc4_vec *vec = encoder_to_vc4_vec(encoder);
-> > -       int idx, ret;
-> > +       int idx;
-> >
-> >         if (!drm_dev_enter(drm, &idx))
-> >                 return;
-> > @@ -556,17 +556,9 @@ static void vc4_vec_encoder_disable(stru
-> >
-> >         clk_disable_unprepare(vec->clock);
-> >
-> > -       ret = pm_runtime_put(&vec->pdev->dev);
-> > -       if (ret < 0) {
-> > -               drm_err(drm, "Failed to release power domain: %d\n", ret);
-> > -               goto err_dev_exit;
-> > -       }
-> > +       pm_runtime_put(&vec->pdev->dev);
-> >
-> >         drm_dev_exit(idx);
-> > -       return;
-> > -
-> > -err_dev_exit:
-> > -       drm_dev_exit(idx);
-> >  }
-> >
-> >  static void vc4_vec_encoder_enable(struct drm_encoder *encoder,
-> >
-> >
-> >
-> >
+>>
+>>> ------------
+>>>
+>>> In our case, I think it is desired to unload the scaling governor
+>>> currently in
+>>> use if auto_sel is selected. Letting the rest of the system think it has
+>>> control
+>>> over the freq. selection seems incorrect.
+>>> I am not sure what to replace it with:
+>>> -
+>>> There are no specific performance/powersave modes for CPPC.
+>>> There is a range of values between 0-255
+>>> -
+>>> A firmware auto-selection governor could be created just for this case.
+>>> Being able to switch between OS-driven and firmware driven freq. selection
+>>> is not specific to CPPC (for the future).
+>>> However I am not really able to say the implications of doing that.
+>>>
+>>> ------------
+>>>
+>>> I think it would be better to split your patchset in 2:
+>>> 1. adding APIs for the CPPC spec.
+>>> 2. using the APIs, especially for auto_sel
+>>>
+>>> 1. is likely to be straightforward as the APIs will still be used
+>>> by the driver at some point.
+>>> 2. is likely to bring more discussion.
+>>>
+>>
+>> We discussed adding a hw_auto_sel governor as a second step, though the
+>> approach may need refinement during implementation.
+> 
+> I didn't find in the thread adding a new governor was discussed in the
+> threads, in case you have a direct link.
+> 
+>>
+>> Deferred it (to second step) because adding a new governor requires
+>> broader discussion.
+>>
+>> This issue already exists in current code - store_auto_select() enables
+>> auto_sel without any governor awareness. These patches improve the
+>> situation by:
+>> - Updating scaling_min/max_freq when toggling auto_sel mode
+>> - Syncing policy limits with actual HW min/max_perf bounds
+>> - Making scaling_min/max_freq read-only in auto_sel mode
+>>
+>> Would it be acceptable to merge this as a first step, with the governor
+>> handling as a follow-up?
+>> If not and you prefer splitting, which grouping works better:
+>>   A) Patches 1-8 then 9-11.
+>>   B) "ACPI: CPPC *" patches then "cpufreq: CPPC *" patches.
+>>
+> If it's possible I would like to understand what the end result should
+> look like. If ultimately enabling auto_sel implies switching governor
+> I understand, but I didn't find the thread that discussed about that
+> unfortunately.
+> 
+> 
+>>
+>>>
+>>>> Enforce this by setting policy limits to min/max_perf bounds in
+>>>> cppc_verify_policy(). Users must use min_perf/max_perf sysfs interfaces
+>>>> to change performance limits in autonomous mode.
+>>>>
+>>>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>>>> ---
+>>>>   drivers/cpufreq/cppc_cpufreq.c | 32 +++++++++++++++++++++++++++++++-
+>>>>   1 file changed, 31 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>>>> index b1f570d6de34..b3da263c18b0 100644
+>>>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>>>> @@ -305,7 +305,37 @@ static unsigned int cppc_cpufreq_fast_switch(struct cpufreq_policy *policy,
+>>>>
+>>>>   static int cppc_verify_policy(struct cpufreq_policy_data *policy)
+>>>>   {
+>>>> -     cpufreq_verify_within_cpu_limits(policy);
+>>>> +     unsigned int min_freq = policy->cpuinfo.min_freq;
+>>>> +     unsigned int max_freq = policy->cpuinfo.max_freq;
+>>>> +     struct cpufreq_policy *cpu_policy;
+>>>> +     struct cppc_cpudata *cpu_data;
+>>>> +     struct cppc_perf_caps *caps;
+>>>> +
+>>>> +     cpu_policy = cpufreq_cpu_get(policy->cpu);
+>>>> +     if (!cpu_policy)
+>>>> +             return -ENODEV;
+>>>> +
+>>>> +     cpu_data = cpu_policy->driver_data;
+>>>> +     caps = &cpu_data->perf_caps;
+>>>> +
+>>>> +     if (cpu_data->perf_ctrls.auto_sel) {
+>>>> +             u32 min_perf, max_perf;
+>>>> +
+>>>> +             /*
+>>>> +              * Set policy limits to HW min/max_perf bounds. In autonomous
+>>>> +              * mode, scaling_min/max_freq is effectively read-only.
+>>>> +              */
+>>>> +             min_perf = cpu_data->perf_ctrls.min_perf ?:
+>>>> +                        caps->lowest_nonlinear_perf;
+>>>> +             max_perf = cpu_data->perf_ctrls.max_perf ?: caps->nominal_perf;
+>>>> +
+>>>> +             policy->min = cppc_perf_to_khz(caps, min_perf);
+>>>> +             policy->max = cppc_perf_to_khz(caps, max_perf);
+>>>
+>>> policy->min/max values are overwritten, but the governor which is
+>>> supposed to use them to select the most fitting frequency will be
+>>> ignored by the firmware I think.
+>>>
+>>
+>> Yes.
+>>
+>>>> +     } else {
+>>>> +             cpufreq_verify_within_limits(policy, min_freq, max_freq);
+>>>> +     }
+>>>> +
+>>>> +     cpufreq_cpu_put(cpu_policy);
+>>>>       return 0;
+>>>>   }
+>>>>
+> 
+
 
