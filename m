@@ -1,138 +1,139 @@
-Return-Path: <linux-pm+bounces-40931-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40932-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEE98D24C44
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 14:39:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F07E3D24CEC
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 14:49:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6E706300FECE
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 13:39:57 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id DBD5330248A6
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 13:49:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C2E4396D10;
-	Thu, 15 Jan 2026 13:39:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC75339E6EB;
+	Thu, 15 Jan 2026 13:49:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZziHddup"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7e6QAJ4"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0976D376BE1
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 13:39:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B660130EF95;
+	Thu, 15 Jan 2026 13:49:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768484396; cv=none; b=UC36W5qhi9KIHdg6PCU94j9TdgDITi/0jdHRfIFEFu2ysRvxhjzzqj8zV7et7x/C+tFbv9zhQ9M2tXaBwaDVc5cFHCtNnlOVnh1ZBNUrQBLou69f/nUJ++FQh2uJrcRE8CanexuDOJAoECGfHRxkhR0xaEILt9LpVCzJ9Ich988=
+	t=1768484983; cv=none; b=MFnJ5269ePCELYGKSn2Zd7ABE58JFVdJQWsjVpfWyAQI25t9bFo8Eoa0hFqk0lZjUF8Xu6Fy7qkLbDouyNRzWJenyzMpiAEnrU+VPRU/lOAKI2wTaJQxhIjThafrYlVfyBY2EWsR4TfXUYGnw+9nLq7oijn5UwLBOaINh3gKcL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768484396; c=relaxed/simple;
-	bh=mrAbzAWxr60dAFBMUskJrOYI7tum+hisLhbJRq6FwWM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HBeSX1DcRt38x7mLipoSGOSFUWuCBgbVv3P+652xpq//JycMFIa0ZfKL2z3nIFafpPlhmk0zvo0m7njglYcRSiNYvY6dXhGzKx0kOzNLJqSdsIOGIH+qzFsJVqlod3oiQsS9RH9OMNjRUty2rh9gF1zAwG/rNbQ3m244J9WbKD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZziHddup; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2529C19424
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 13:39:55 +0000 (UTC)
+	s=arc-20240116; t=1768484983; c=relaxed/simple;
+	bh=mLm6QqFggcSSbVGl21YSwdDfGF0CDC1QFc128taHR8c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UcJbkkZErsXkElGBl80yYZBS7cAvD1duJ6Y487f+VD+vkoKxTXG67cq4Uj1nlydmGPGuaWZo8G/rXos242lNRjEU4xaLp0L6dqZfFzlpFpW3cQfVqlsJsM3dhHQ8XoG2x0av9voji1GkyUGKGA4YyRAWD00uKGXBwEZwnbYV3YU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7e6QAJ4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46A6C116D0;
+	Thu, 15 Jan 2026 13:49:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768484395;
-	bh=mrAbzAWxr60dAFBMUskJrOYI7tum+hisLhbJRq6FwWM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ZziHddupwweaDJHKB4QPDQsEU/zifxtBTtF2Aszv7k8FMgBOh+/UgJZAm7gnsd1+S
-	 MDMIt6yw5kr4GVTIvjLvwZ83aCmimHfRs2MycQ0LaxXCOlbTGXDE7WGDe3qk5wJaKT
-	 f3mZBoRADLMYpH3zNxqDPqP37fhA7bVcQqfejpGg/JP8XUBLG5IkYAfY69LAFlJYto
-	 R7rUd/c2gDx1L9Cxfz1FWsXRrq5jUj9JNFUVvxXWYvHSZi90APdQ9EXkKROIHzdIcW
-	 AkdjWGIc3kFueo2+WypYz4CQcUlpvaT3nR/PWMddvha6Rj+Gxo73nI8xHRrJYUzKXe
-	 RHqgjzNs+h5lg==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-6610f407959so215963eaf.2
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 05:39:55 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVL5cZy94m1LsClYzC/vAgwxXIzr9fAEgZKmlvy4OIFj5W2mXgSKail0HeN3I+OMbY2y/rp1iftug==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIZEVCDZ6p68wlzMNRGEruQs+Cot5ddp/psgAImYD/iXNMOBy1
-	eIz956oswAOc3/YZHS6x89DmYOVpWTVZDBijJfZY7OZpv99CMQ8PaMZ5hCYZVvkSqMrsyzbS1bt
-	i4TisWokRaNWpkXROupuYSfxYpE5vwzc=
-X-Received: by 2002:a05:6820:229b:b0:660:fd8d:9567 with SMTP id
- 006d021491bc7-661006caf58mr4486708eaf.42.1768484394669; Thu, 15 Jan 2026
- 05:39:54 -0800 (PST)
+	s=k20201202; t=1768484983;
+	bh=mLm6QqFggcSSbVGl21YSwdDfGF0CDC1QFc128taHR8c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=i7e6QAJ44Bf2JaIwbYSBiJpGbCRthi2VIqme1Ke1ACn2O5pMFo2NNQIQRSedVmmnC
+	 4KRmtTWiuXjx+zMOqoflPZ7CIjshWguMaz0biDqMMujSveVX2Jp/xlQXZicZi2dwiw
+	 fa+G9LKOcSF9JgrPyf2X9FgxE2sN7N8MMkVsPn1SZoZqcjc54W5rudRiKPyYoOZAZC
+	 Sz7VayUPxIYPaO1ACAL99ztt1iBUUQ9tawYYDfsEnmbSZJutfz0mWGRnjR3NtSc6Jj
+	 0a6z10JdqG3JfovaLgaXg2zg5zD64tPyxVGTRrShfqI8iLsk+kwXper360+6MEiig2
+	 BxYKjFdkDiwBA==
+Date: Thu, 15 Jan 2026 13:49:35 +0000
+From: Lee Jones <lee@kernel.org>
+To: Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
+Subject: [GIT PULL] Immutable branch between MFD, Clk, GPIO, Power, Regulator
+ and RTC due for the v6.20 merge window
+Message-ID: <20260115134935.GD2842980@google.com>
+References: <cover.1765804226.git.mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2256082.irdbgypaU6@rafael.j.wysocki> <CAJZ5v0gdj6Oe=LSJX8+6JbxTt42W3RkabLDWh=VqEkjUvAWxow@mail.gmail.com>
- <aWjbPpkDd_SORcfC@e142607>
-In-Reply-To: <aWjbPpkDd_SORcfC@e142607>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 15 Jan 2026 14:39:43 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i+uXsCRk7kxLb8t+96k-SOJY-wEwNvYBXTdMKWSCdR9w@mail.gmail.com>
-X-Gm-Features: AZwV_QjYJ0BHmX3LmoNRKoKvX64bvSOuZN1goYZbg_jJwN3xZNHgDMdAG5htFnI
-Message-ID: <CAJZ5v0i+uXsCRk7kxLb8t+96k-SOJY-wEwNvYBXTdMKWSCdR9w@mail.gmail.com>
-Subject: Re: [RESEND][PATCH v1] drm: Discard pm_runtime_put() return value
-To: Liviu Dudau <liviu.dudau@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, imx@lists.linux.dev, 
-	LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Brian Norris <briannorris@chromium.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, 
-	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
-	dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1765804226.git.mazziesaccount@gmail.com>
 
-On Thu, Jan 15, 2026 at 1:20=E2=80=AFPM Liviu Dudau <liviu.dudau@arm.com> w=
-rote:
->
-> On Wed, Jan 14, 2026 at 01:03:25PM +0100, Rafael J. Wysocki wrote:
-> > On Thu, Jan 8, 2026 at 4:38=E2=80=AFPM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > Multiple DRM drivers use the pm_runtime_put() return value for printi=
-ng
-> > > debug or even error messages and all of those messages are at least
-> > > somewhat misleading.
-> > >
-> > > Returning an error code from pm_runtime_put() merely means that it ha=
-s
-> > > not queued up a work item to check whether or not the device can be
-> > > suspended and there are many perfectly valid situations in which that
-> > > can happen, like after writing "on" to the devices' runtime PM "contr=
-ol"
-> > > attribute in sysfs for one example.  It also happens when the kernel
-> > > has been configured with CONFIG_PM unset.
-> > >
-> > > For this reason, modify all of those drivers to simply discard the
-> > > pm_runtime_put() return value which is what they should be doing.
-> > >
-> > > This will facilitate a planned change of the pm_runtime_put() return
-> > > type to void in the future.
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > Acked-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-> > > Acked-by: Liviu Dudau <liviu.dudau@arm.com>
-> > > ---
-> > >
-> > > This patch is requisite for converting pm_runtime_put() into a void
-> > > function.
-> > >
-> > > If you decide to pick it up, please let me know.
-> > >
-> > > Otherwise, an ACK or equivalent will be appreciated, but also the lac=
-k
-> > > of specific criticism will be eventually regarded as consent.
-> > >
-> > > Originally posted here:
-> > >
-> > > https://lore.kernel.org/linux-pm/3045480.e9J7NaK4W3@rafael.j.wysocki/
-> >
-> > This is the last patch from the "discard pm_runtime_put() return
-> > values" lot that has not been applied yet, AFAICS, so this is the last
-> > call for objections or concerns related to it.
->
-> I think you can go ahead and apply it, I don't see how the imx8 driver wi=
-ll
-> be affected by the lack of debug messages.
+Enjoy!
 
-Applied then, thanks!
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-clk-gpio-power-regulator-rtc-v6.20
+
+for you to fetch changes up to e39951f8ad500648b9ab132f8042d6e47da441cf:
+
+  MAINTAINERS: Add ROHM BD72720 PMIC (2026-01-13 12:50:37 +0000)
+
+----------------------------------------------------------------
+Immutable branch between MFD, Clk, GPIO, Power, Regulator and RTC due for the v6.20 merge window
+
+----------------------------------------------------------------
+Matti Vaittinen (17):
+      dt-bindings: regulator: ROHM BD72720
+      dt-bindings: battery: Clarify trickle-charge
+      dt-bindings: battery: Add trickle-charge upper limit
+      dt-bindings: battery: Voltage drop properties
+      dt-bindings: mfd: ROHM BD72720
+      dt-bindings: leds: bd72720: Add BD72720
+      mfd: rohm-bd71828: Use regmap_reg_range()
+      mfd: rohm-bd71828: Use standard file header format
+      mfd: rohm-bd71828: Support ROHM BD72720
+      regulator: bd71828: rename IC specific entities
+      regulator: bd71828: Support ROHM BD72720
+      gpio: Support ROHM BD72720 gpios
+      clk: clk-bd718x7: Support BD72720 clk gate
+      rtc: bd70528: Support BD72720 rtc
+      power: supply: bd71828: Support wider register addresses
+      power: supply: bd71828-power: Support ROHM BD72720
+      MAINTAINERS: Add ROHM BD72720 PMIC
+
+ .../bindings/leds/rohm,bd71828-leds.yaml           |    7 +-
+ .../devicetree/bindings/mfd/rohm,bd72720-pmic.yaml |  339 +++++++
+ .../devicetree/bindings/power/supply/battery.yaml  |   33 +-
+ .../bindings/regulator/rohm,bd72720-regulator.yaml |  148 +++
+ MAINTAINERS                                        |    2 +
+ drivers/clk/Kconfig                                |    4 +-
+ drivers/clk/clk-bd718x7.c                          |   10 +-
+ drivers/gpio/Kconfig                               |    9 +
+ drivers/gpio/Makefile                              |    1 +
+ drivers/gpio/gpio-bd72720.c                        |  281 ++++++
+ drivers/mfd/Kconfig                                |   18 +-
+ drivers/mfd/rohm-bd71828.c                         |  555 ++++++++++-
+ drivers/power/supply/bd71828-power.c               |  160 ++-
+ drivers/regulator/Kconfig                          |    8 +-
+ drivers/regulator/bd71828-regulator.c              | 1025 +++++++++++++++++++-
+ drivers/rtc/Kconfig                                |    3 +-
+ drivers/rtc/rtc-bd70528.c                          |   21 +-
+ include/linux/mfd/rohm-bd72720.h                   |  634 ++++++++++++
+ include/linux/mfd/rohm-generic.h                   |    1 +
+ 19 files changed, 3127 insertions(+), 132 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
+ create mode 100644 drivers/gpio/gpio-bd72720.c
+ create mode 100644 include/linux/mfd/rohm-bd72720.h
+
+-- 
+Lee Jones [李琼斯]
 
