@@ -1,123 +1,138 @@
-Return-Path: <linux-pm+bounces-40930-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40931-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FD71D24C14
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 14:36:09 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEE98D24C44
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 14:39:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 4EBCC300FEE0
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 13:36:08 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 6E706300FECE
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 13:39:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5492C3A0E81;
-	Thu, 15 Jan 2026 13:36:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C2E4396D10;
+	Thu, 15 Jan 2026 13:39:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UvNex5q2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZziHddup"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3107620C029;
-	Thu, 15 Jan 2026 13:36:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0976D376BE1
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 13:39:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768484164; cv=none; b=PxQMmPJ/X2mWDo9FgESV2NQMp9H+fP1ob8z6j8dI5PYX5CLG1MumlP9suISagt91gu5ZkQumsMia/5c3uSwUoBWLoTGAbLfNaOeVoYqCbEoTfDsKihuvp4vCujeryjPBjx4Yo6XTGpZEiC3Sx5DkzM5yRFhbAwOk01LfvsticBU=
+	t=1768484396; cv=none; b=UC36W5qhi9KIHdg6PCU94j9TdgDITi/0jdHRfIFEFu2ysRvxhjzzqj8zV7et7x/C+tFbv9zhQ9M2tXaBwaDVc5cFHCtNnlOVnh1ZBNUrQBLou69f/nUJ++FQh2uJrcRE8CanexuDOJAoECGfHRxkhR0xaEILt9LpVCzJ9Ich988=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768484164; c=relaxed/simple;
-	bh=0W6V9fyTShLK7ULIIxW8FNo5OfRF3NXJTodFVN9ZRdM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m68tbWH5xihp89EP9EW2eQjPoYO7LyAJFhu6jzEd+vRFaB20HTJAHhMp68wuqQB0FtH8erTb11sNI1uQH22qITu/hs8ojkJgWXYB2UpQm8hyPzqh/cEQp2S3kJpJAP5lpebpGGVGGc5Z6+LbVBt0VZQdRsIakxgZAktSroIaNJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UvNex5q2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FC40C16AAE;
-	Thu, 15 Jan 2026 13:36:03 +0000 (UTC)
+	s=arc-20240116; t=1768484396; c=relaxed/simple;
+	bh=mrAbzAWxr60dAFBMUskJrOYI7tum+hisLhbJRq6FwWM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HBeSX1DcRt38x7mLipoSGOSFUWuCBgbVv3P+652xpq//JycMFIa0ZfKL2z3nIFafpPlhmk0zvo0m7njglYcRSiNYvY6dXhGzKx0kOzNLJqSdsIOGIH+qzFsJVqlod3oiQsS9RH9OMNjRUty2rh9gF1zAwG/rNbQ3m244J9WbKD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZziHddup; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2529C19424
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 13:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768484163;
-	bh=0W6V9fyTShLK7ULIIxW8FNo5OfRF3NXJTodFVN9ZRdM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UvNex5q2V6dpcWncjXAuZswFgvOfUKB9y8VJ+T9KyiTvWPfqGe20p26fqk/KPKdCy
-	 fC2w61TTrdGLFSrazUHLDWG8EIQf2mYn5yZfbB8r93Ln8Fxp3SwJE8NiFPHReq8BWZ
-	 HuKz33cfCWzSTQLUjcBZW90t3pL5F1DXCVoka3Hwei35ATDkkqP6WnCLur1V6F+wnX
-	 gEgU/xfdqJTaX/u9Tba9WHGjKOvHk32N3c2VEGD+OrwZHN5QV2hMhnQAuvzciZXDk8
-	 9v3lzyqXTA4/OKcWVkYmldl+k7Ndb+ApMLf0hzt4zLmrvsgDjM7obnvfZgS9qVbLYx
-	 Gpp78xR32pXiA==
-Date: Thu, 15 Jan 2026 14:36:01 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Peter Griffin <peter.griffin@linaro.org>, 
-	=?utf-8?B?QW5kcsOp?= Draszik <andre.draszik@linaro.org>, Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, 
-	Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	willmcvicker@google.com, jyescas@google.com, shin.son@samsung.com, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 3/8] dt-bindings: mfd: Add Google GS101 TMU Syscon
-Message-ID: <20260115-slim-denim-potoo-cad9cb@quoll>
-References: <20260114-acpm-tmu-v1-0-cfe56d93e90f@linaro.org>
- <20260114-acpm-tmu-v1-3-cfe56d93e90f@linaro.org>
+	s=k20201202; t=1768484395;
+	bh=mrAbzAWxr60dAFBMUskJrOYI7tum+hisLhbJRq6FwWM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ZziHddupwweaDJHKB4QPDQsEU/zifxtBTtF2Aszv7k8FMgBOh+/UgJZAm7gnsd1+S
+	 MDMIt6yw5kr4GVTIvjLvwZ83aCmimHfRs2MycQ0LaxXCOlbTGXDE7WGDe3qk5wJaKT
+	 f3mZBoRADLMYpH3zNxqDPqP37fhA7bVcQqfejpGg/JP8XUBLG5IkYAfY69LAFlJYto
+	 R7rUd/c2gDx1L9Cxfz1FWsXRrq5jUj9JNFUVvxXWYvHSZi90APdQ9EXkKROIHzdIcW
+	 AkdjWGIc3kFueo2+WypYz4CQcUlpvaT3nR/PWMddvha6Rj+Gxo73nI8xHRrJYUzKXe
+	 RHqgjzNs+h5lg==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-6610f407959so215963eaf.2
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 05:39:55 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVL5cZy94m1LsClYzC/vAgwxXIzr9fAEgZKmlvy4OIFj5W2mXgSKail0HeN3I+OMbY2y/rp1iftug==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIZEVCDZ6p68wlzMNRGEruQs+Cot5ddp/psgAImYD/iXNMOBy1
+	eIz956oswAOc3/YZHS6x89DmYOVpWTVZDBijJfZY7OZpv99CMQ8PaMZ5hCYZVvkSqMrsyzbS1bt
+	i4TisWokRaNWpkXROupuYSfxYpE5vwzc=
+X-Received: by 2002:a05:6820:229b:b0:660:fd8d:9567 with SMTP id
+ 006d021491bc7-661006caf58mr4486708eaf.42.1768484394669; Thu, 15 Jan 2026
+ 05:39:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260114-acpm-tmu-v1-3-cfe56d93e90f@linaro.org>
+References: <2256082.irdbgypaU6@rafael.j.wysocki> <CAJZ5v0gdj6Oe=LSJX8+6JbxTt42W3RkabLDWh=VqEkjUvAWxow@mail.gmail.com>
+ <aWjbPpkDd_SORcfC@e142607>
+In-Reply-To: <aWjbPpkDd_SORcfC@e142607>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 15 Jan 2026 14:39:43 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0i+uXsCRk7kxLb8t+96k-SOJY-wEwNvYBXTdMKWSCdR9w@mail.gmail.com>
+X-Gm-Features: AZwV_QjYJ0BHmX3LmoNRKoKvX64bvSOuZN1goYZbg_jJwN3xZNHgDMdAG5htFnI
+Message-ID: <CAJZ5v0i+uXsCRk7kxLb8t+96k-SOJY-wEwNvYBXTdMKWSCdR9w@mail.gmail.com>
+Subject: Re: [RESEND][PATCH v1] drm: Discard pm_runtime_put() return value
+To: Liviu Dudau <liviu.dudau@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, imx@lists.linux.dev, 
+	LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Brian Norris <briannorris@chromium.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>, =?UTF-8?B?TWHDrXJhIENhbmFs?= <mcanal@igalia.com>, 
+	dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 14, 2026 at 02:16:31PM +0000, Tudor Ambarus wrote:
-> Document the bindings for the Thermal Management Unit (TMU) System
-> Controller found on Google GS101 SoCs.
-> 
-> This memory-mapped block exposes the registers required for reading
-> thermal interrupt status bits. It functions as a syscon provider,
+On Thu, Jan 15, 2026 at 1:20=E2=80=AFPM Liviu Dudau <liviu.dudau@arm.com> w=
+rote:
+>
+> On Wed, Jan 14, 2026 at 01:03:25PM +0100, Rafael J. Wysocki wrote:
+> > On Thu, Jan 8, 2026 at 4:38=E2=80=AFPM Rafael J. Wysocki <rafael@kernel=
+.org> wrote:
+> > >
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > Multiple DRM drivers use the pm_runtime_put() return value for printi=
+ng
+> > > debug or even error messages and all of those messages are at least
+> > > somewhat misleading.
+> > >
+> > > Returning an error code from pm_runtime_put() merely means that it ha=
+s
+> > > not queued up a work item to check whether or not the device can be
+> > > suspended and there are many perfectly valid situations in which that
+> > > can happen, like after writing "on" to the devices' runtime PM "contr=
+ol"
+> > > attribute in sysfs for one example.  It also happens when the kernel
+> > > has been configured with CONFIG_PM unset.
+> > >
+> > > For this reason, modify all of those drivers to simply discard the
+> > > pm_runtime_put() return value which is what they should be doing.
+> > >
+> > > This will facilitate a planned change of the pm_runtime_put() return
+> > > type to void in the future.
+> > >
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > Acked-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+> > > Acked-by: Liviu Dudau <liviu.dudau@arm.com>
+> > > ---
+> > >
+> > > This patch is requisite for converting pm_runtime_put() into a void
+> > > function.
+> > >
+> > > If you decide to pick it up, please let me know.
+> > >
+> > > Otherwise, an ACK or equivalent will be appreciated, but also the lac=
+k
+> > > of specific criticism will be eventually regarded as consent.
+> > >
+> > > Originally posted here:
+> > >
+> > > https://lore.kernel.org/linux-pm/3045480.e9J7NaK4W3@rafael.j.wysocki/
+> >
+> > This is the last patch from the "discard pm_runtime_put() return
+> > values" lot that has not been applied yet, AFAICS, so this is the last
+> > call for objections or concerns related to it.
+>
+> I think you can go ahead and apply it, I don't see how the imx8 driver wi=
+ll
+> be affected by the lack of debug messages.
 
-I don't think this is syscon, but the actual TMU. Syscon is various,
-unrelated system configuration registers.
-
-> allowing the main thermal driver to access these registers while
-> the firmware manages the core thermal logic.
-> 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
->  .../bindings/mfd/google,gs101-tmu-syscon.yaml      | 37 ++++++++++++++++++++++
->  1 file changed, 37 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/mfd/google,gs101-tmu-syscon.yaml b/Documentation/devicetree/bindings/mfd/google,gs101-tmu-syscon.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..6a11e43abeaa23ee473be2153478436856277714
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/google,gs101-tmu-syscon.yaml
-
-Not MFD either, but soc.
-
-> @@ -0,0 +1,37 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/google,gs101-tmu-syscon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Google GS101 TMU System Controller
-> +
-> +maintainers:
-> +  - Tudor Ambarus <tudor.ambarus@linaro.org>
-> +
-> +description: |
-
-Drop |
-
-> +  The TMU System Controller provides a memory-mapped interface for
-> +  accessing the interrupt status registers of the Thermal Management
-> +  Unit. It is used as a syscon provider for the main TMU driver.
-
-No, it is not a syscon provider. Entire last sentence is incorrect. You
-must describe here hardware and this hardware does not provide any sort
-of syscon to any sort of driver.
-
-Best regards,
-Krzysztof
-
+Applied then, thanks!
 
