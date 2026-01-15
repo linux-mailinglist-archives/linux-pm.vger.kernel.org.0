@@ -1,109 +1,139 @@
-Return-Path: <linux-pm+bounces-40905-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40908-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5409BD22B7B
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 08:08:30 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C3EAD22EEB
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 08:50:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6E949305DE4C
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 07:08:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AC5C5308559C
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 07:49:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C7CA3254B1;
-	Thu, 15 Jan 2026 07:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DF9632D0D3;
+	Thu, 15 Jan 2026 07:49:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vwufild1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NKW+Q6pD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27AB21E7C03;
-	Thu, 15 Jan 2026 07:08:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768460905; cv=none; b=TdOXVDFUSXsc/NGop8eNTx0SZD9UyPWIJCckISUZqB9D2K/pnsbxAhyB4Fq6vRrgDoX6z9g/aDlFZjtIdVoxYUxTkDrUtCw5P13znvF4eQVMJw3DMn0OpDrgmwqTdFUTHyd+g7amGNKaqZgcM/IoDCjlflBNmzlDGLTm/npyuPw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768460905; c=relaxed/simple;
-	bh=cP4GmaEtVpxPmeyytNYbYkgAMv3oQd/5ywe08WS5YKs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cYky1FeiLK+TeqK7uP7btmZqztSdAeDhEmeyJGlkQQP4Z3fd9j8MqEvEDeHmdJEIOhBj9SIWoZacSjXPy09tem2FPaCwqPLLeAE96wI1y/dEEdpbDvszn+1tb5g6WdzRil8r0OgesBGWjjlq9/0eiWisXsbpIOqSnZKFhIXJx7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vwufild1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CE265C19424;
-	Thu, 15 Jan 2026 07:08:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768460904;
-	bh=cP4GmaEtVpxPmeyytNYbYkgAMv3oQd/5ywe08WS5YKs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=Vwufild17USCNmpj1sGc7MrkwuGz5Jn7wcPOe5w8tpta6qJv4+hIDNCYYJHHHu61f
-	 ANnGTcP8WEFKRlQz/Pvz50GQ/ipAdVjKLaVdU3ZXiLCwwzgzrZvN/0OhHXGyPpI5mZ
-	 Xa6vK5YH2WjK7voOGdlSU/m3ouimPru8WSchkTzAhF7CKtHFee2NlqTwEZKY1uI7oM
-	 HB5RgOMcMHvA5EvgBcofpOaHN6Z2m/hlU1btlGLrlgyGb5Eqd2r5QA1tbNvWr1FvH7
-	 2rk16kkZno2byx/Su1E/4IysT2ZTZNZLo/lWv1ppuAQDvDPJKU+xjXkZu4Z1LxrDTL
-	 xFoii/UPDxvFg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id BE9B3D3CCB7;
-	Thu, 15 Jan 2026 07:08:24 +0000 (UTC)
-From: Michael Reeves via B4 Relay <devnull+michael.reeves077.gmail.com@kernel.org>
-Date: Thu, 15 Jan 2026 18:08:16 +1100
-Subject: [PATCH v3 2/2] mfd: macsmc: Wire up Apple SMC power driver
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E951A32825B
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 07:49:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768463360; cv=pass; b=rJxMtZyUb+djDHQyWXktWMbXAd+VLSl4wDnSwUxl+5tD4Y+6rvH5VVfw/kLzyktnvgHRLvR2FhIrZu7uaeUcg6bHnQMrhrcgD8nT/mJhjGM7i5z0KrIR7Mz0H78TgAXE74S6p7DxqGdasYXIQfMKtIeBwRCeSLFruPMiQr/2v18=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768463360; c=relaxed/simple;
+	bh=nOQz0muhgLoELpd5FN9SYvUUu2wnEMl9sQ0vYgazaxk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pQY+NJpHVmb0c6YyEBBMTTlXQeREhedyg99eckyyb8Z8eS2h+PZ+UA3GCKgd8YDaYBG7AKL0/JAiHPbS5at8qO1rQnqxpnqmQwPAagVPxQg1T1kGxQ+sVKpPbo1rvG0nPSByayovAfUhOCrqgZguTnvYFW2hnjapz1C+0Poeiy0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NKW+Q6pD; arc=pass smtp.client-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2ae60d8a05dso85544eec.2
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 23:49:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768463358; cv=none;
+        d=google.com; s=arc-20240605;
+        b=JlFqxfg56oR9JB/xZT+31stIFHqhNwQIb0E385k10y24Ts5AzQivBPaizWzuf0b3Ft
+         FOJLym71ND7WCVJYrUk2ABDz3HbqC+cBNNuSwCq4ndIy2dxFvsbljyeJZGOaBFzAb444
+         wLp3Z3OT190ikBaXB1n6dFGzmT4L/3JoQoI3Vnd72M39+l4c4JLqT+EZwzdud0ykSR/O
+         pbjigBIIO/KVMuQ9ZYnm071vYTrSypmLY8LHHq1sv7LueoTnrr8gmZEuE/vESl1Zmr+0
+         tFN/jsKGSvYSZWegGjwECyhJp8hQ49ifjiws0TriP+4x0BJcBJ5M7jxrGMkxAIzOOmdx
+         gPmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=nOQz0muhgLoELpd5FN9SYvUUu2wnEMl9sQ0vYgazaxk=;
+        fh=/BGf8WCxAmCbpNXQRUFh2/cP4coAefCRyrGdFX26F+k=;
+        b=J3aprkCDQwR49NVFSDMVhS6a2hqZ+NVjWIq/jJxyBCSlIqKzl9bscGIhPjiF2teGs1
+         Gb+0sZtaSABCq+jcXkEWqdEHUYEKavG/8PvfPm6gbupItCZgrWqLq+rXcU94qJajYyA7
+         o6yes45URPJT5AHcXXd9FVh3lZa/HWpepj++DHYn6DrEOpcQFRrebNybX7NWvDju1q+N
+         fyvPQptuxVVzzN1ByXI5FspSuziExstgtQPtKPGPb3y1VLgiJCmIQgNVhqMHnbfSKXCV
+         /cQ8YaGgi8TJ8I+hMcRQiLQOfuQeKPdqaicU+rZ5yvtxY8hMvtCpDsPqHajnjKwqcQJ2
+         P+Ug==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768463358; x=1769068158; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nOQz0muhgLoELpd5FN9SYvUUu2wnEMl9sQ0vYgazaxk=;
+        b=NKW+Q6pDTwy+lHxrW9/jbrOIO2fXs60xw4O5+ZA6cc1ofr7oQC0w2PymPmrXox+n2A
+         mOOETmZ2Gy4by/WtC8f4JQvihVyboi3HVD10A4iwW0jZ1p83k1jbFzYl4BpFOjcZ+cIf
+         11XP0Opfoax+3yI3nqfvI28QTT5bXbUC+PM4lkmTc2aBuMmYClYmlj4pVlJuoQ2qlPIB
+         NBW7slOfbR7kgeDErZ8DM+usaM1ZgU2YGqvbDn6wtoj/JfEAxvNSyidZ4TkkqqqW86Sl
+         nF2T2/EF+UD9zQZ7lhMgDse7xQ/fPe8YmtL59cANi2eNhzDyuzwv0irID7dzWJ88+D81
+         83JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768463358; x=1769068158;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nOQz0muhgLoELpd5FN9SYvUUu2wnEMl9sQ0vYgazaxk=;
+        b=reH1Ulr2AI8RcHk1bKKwsQQLc4DwVNi77Yn0Dn/Yjz306RN4sQnPUvUf9F+7Okw6ao
+         UiTZnYCDOu3wdmMbxGiU6W4oMy/2PqAYCx9OR8CZYXjIgWjWcMZyDY5I58b9OraylLRG
+         VVQS2zJMOX7aDdyao7yF3LjerOr0mCDxtFI5BRnXJrOXSwYXg9tNfkKehDjpYEliCyhJ
+         TOAdpdIsCycrvC92dFbG9AwGg1lK82P97ZDd3UEITGW+JJ309YBtvmmSjdp7Gbod8MGf
+         lOjpP1IvZC0m6Dp2GsneQHfbwVm8OOAQiEtOOXR4+WzAqx6uhWtrmJO2ydquoNgdbeeG
+         0sfg==
+X-Forwarded-Encrypted: i=1; AJvYcCWfKKHaVyAB7MBm1xdr/5kpaIkSNjVMBz4NPtbHiw1n4lUEUBuyjTWuZ6b6Rg8KSLKnStGKgAtBhQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJmxgGuqU3VMpPU/jMvidPXuMs/60JhgOthcYKszlStbiE4bS3
+	0MsmQc1n1TLlIQBOP1A1jwXwfVcPR5AGNnJX5BkQM6LA9vSLBt6f5dpb3s0yWa3EdRPVZvYIzV2
+	azfaIKJVFNHZbFX7+v1X1p+HBA+kMA9Y=
+X-Gm-Gg: AY/fxX4gDx/E/nbK0I2W0vVWu0B2l6fHBTReQeIfqbJdRKS2CcljRI9odGZr8ZeVfS1
+	AnlXDSJp1/MdAVOgPlRWxJIlK9GgIvr3erPd90f1KB6jK0RcWDzJhJtrUC66BIQ6kb4DXkvY9tE
+	izhbUzKXy+MsiiBj6WeTX5xmq0UYMI/hV2awhMuJ70VY2Kz+bDGQRXqzpfG0Dj7tcprTOVoe+9E
+	WDzm07O0e7UmlV2MyrACOSwUxi3e40+ST5h0hDbdzX84RKxw5YOoeB9BBrl58VKTdZ/hN5FzZuu
+	lY/TjDaVgVX0mDz4eV9MG5iyea2dM6wNO280UCMEQlFXVog8+QqGIltajBGjj03k3nOi45rH70q
+	6O7trkiCwD7mZ
+X-Received: by 2002:a05:7300:3b1a:b0:2b0:4f9a:724b with SMTP id
+ 5a478bee46e88-2b4871e9771mr3815587eec.6.1768463357956; Wed, 14 Jan 2026
+ 23:49:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260115-b4-macsmc-power-v3-2-c236e09874be@gmail.com>
-References: <20260115-b4-macsmc-power-v3-0-c236e09874be@gmail.com>
-In-Reply-To: <20260115-b4-macsmc-power-v3-0-c236e09874be@gmail.com>
-To: Sebastian Reichel <sre@kernel.org>, Sven Peter <sven@kernel.org>, 
- Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>, 
- Lee Jones <lee@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- Michael Reeves <michael.reeves077@gmail.com>, 
- Hector Martin <marcan@marcan.st>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768460903; l=869;
- i=michael.reeves077@gmail.com; s=20260105; h=from:subject:message-id;
- bh=pPwBsBWIsTSasQaGOKu1mKoA6/kk951MwDXnYg4cljc=;
- b=T0S9aQuOIdFj4nfC6B+Vg43orEdfW0DIHViAU1+v5ZiMTHNvE3hvNDbTomYG6ra0z+W61p8yM
- InFmkvwd5cMD79KgFLvLihDvNhGirHB3cIkMVn24asgWqhYXygum2pd
-X-Developer-Key: i=michael.reeves077@gmail.com; a=ed25519;
- pk=QIrgWBGCm3LG0YYc6MLCDkwuVXLTGGooVBdWX/KhSiU=
-X-Endpoint-Received: by B4 Relay for michael.reeves077@gmail.com/20260105
- with auth_id=591
-X-Original-From: Michael Reeves <michael.reeves077@gmail.com>
-Reply-To: michael.reeves077@gmail.com
+References: <20251208-io-build-assert-v3-0-98aded02c1ea@nvidia.com> <20251208-io-build-assert-v3-5-98aded02c1ea@nvidia.com>
+In-Reply-To: <20251208-io-build-assert-v3-5-98aded02c1ea@nvidia.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 15 Jan 2026 08:49:05 +0100
+X-Gm-Features: AZwV_Qh28YVcYO6VVyfidVd7hc-EBw_qgwEmENRAhtkTb9yLXtecSM5NN0ft-tA
+Message-ID: <CANiq72=U93ceCxLH_HYesCvCywpCsou98kM2Z53x=cx=iVXm0Q@mail.gmail.com>
+Subject: Re: [PATCH v3 5/7] rust: sync: refcount: always inline functions
+ using build_assert with arguments
+To: Alexandre Courbot <acourbot@nvidia.com>, Boqun Feng <boqun.feng@gmail.com>
+Cc: Danilo Krummrich <dakr@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Michael Reeves <michael.reeves077@gmail.com>
+On Mon, Dec 8, 2025 at 3:47=E2=80=AFAM Alexandre Courbot <acourbot@nvidia.c=
+om> wrote:
+>
+> `build_assert` relies on the compiler to optimize out its error path.
+> Functions using it with its arguments must thus always be inlined,
+> otherwise the error path of `build_assert` might not be optimized out,
+> triggering a build error.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: bb38f35b35f9 ("rust: implement `kernel::sync::Refcount`")
+> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
 
-Add the cell for the macsmc-power driver so it is probed by the
-MFD core.
+Boqun et al.: do you want to pick this one or should I take it with
+your Acked-by?
 
-Co-developed-by: Hector Martin <marcan@marcan.st>
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Reviewed-by: Neal Gompa <neal@gompa.dev>
-Signed-off-by: Michael Reeves <michael.reeves077@gmail.com>
----
- drivers/mfd/macsmc.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks!
 
-diff --git a/drivers/mfd/macsmc.c b/drivers/mfd/macsmc.c
-index 1b7e7b3e785f..358feec2d088 100644
---- a/drivers/mfd/macsmc.c
-+++ b/drivers/mfd/macsmc.c
-@@ -46,6 +46,7 @@
- 
- static const struct mfd_cell apple_smc_devs[] = {
- 	MFD_CELL_NAME("macsmc-input"),
-+	MFD_CELL_NAME("macsmc-power"),
- 	MFD_CELL_OF("macsmc-gpio", NULL, NULL, 0, 0, "apple,smc-gpio"),
- 	MFD_CELL_OF("macsmc-hwmon", NULL, NULL, 0, 0, "apple,smc-hwmon"),
- 	MFD_CELL_OF("macsmc-reboot", NULL, NULL, 0, 0, "apple,smc-reboot"),
-
--- 
-2.51.2
-
-
+Cheers,
+Miguel
 
