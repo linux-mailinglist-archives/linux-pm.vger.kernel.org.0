@@ -1,141 +1,187 @@
-Return-Path: <linux-pm+bounces-40920-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40921-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1ADBD2401A
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 11:45:32 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5642D241D6
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 12:17:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E8D7C301B2D7
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 10:45:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9E5E93009812
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 11:15:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70BC336C588;
-	Thu, 15 Jan 2026 10:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1202A3376A3;
+	Thu, 15 Jan 2026 11:15:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bzw1nZu0"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="nm07ZQy1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C0036C0CC;
-	Thu, 15 Jan 2026 10:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68EC6376BC3
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 11:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768473900; cv=none; b=qdzlAemVo7+4MCX/2IvV6t6yVALBtoJBpCpL+5BquJFmu9isMTdz3eQhZKoJiw8i6/NjsnXXCaqrl+K7n2jk51uyVQzM6TBsBCpObtK41ElBmubqgeA5FM7wwuOsrN63G3ICGng7zO5ksEbRccQIFMQZL5/n+gMOwJvu+xK+xIY=
+	t=1768475702; cv=none; b=pUE7RtMSKCC0eb/RpODFrcDTzpuw//ywjlLkf5LVwSKBAIx1UkL73hn20LuQTRk5enTrPUltWG1bSHPGc+arqs6xKYNOFv0Fiqaly86hj/lePt6mPKIKGTsljnrEnMIGv+BRuU+TYbJCjr0JQso0/jIXTXox8o0Gp4cD5TrcoKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768473900; c=relaxed/simple;
-	bh=KCf9/BUWQWrV3YzZSQGIBitilFEV6z7FvLz9+gF37+I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Oex+vl1fhQmlZHLjnjUgH+5Ef382bp86X6OXITRa7IBg95eYAos71Mwob4tzCX9dAc7V+3Xyuw0xM04P8va69RY6A3CisXeR/FgKkQMbOdeUT07/W2nlfyxpJIv/ECaL4M5nYkeGweZUQmu1p3roWABM8hPbdwwtmdNX6fBnaQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bzw1nZu0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE9EAC116D0;
-	Thu, 15 Jan 2026 10:44:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768473899;
-	bh=KCf9/BUWQWrV3YzZSQGIBitilFEV6z7FvLz9+gF37+I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bzw1nZu02dQejptA0JvWTI5Kzv8ZivGSWw//ar5HN7g3e3fvnK7diB8O0pmaWexh4
-	 5XojmtjQzGc+FqgbwVH2OFPPVeB906fgkmpSff5sPYhHM9sX74IQMkFXLXtpzuQfpO
-	 Pk8R5eLtUsALQjTeXVEzkQhHjDEr5iiYb4F3/cPOxl99In93iEdalxJ3MLkIBxWSLs
-	 H+RNlPsIdKmA7LfQjWgynvtJn1jEMFnR4fv0CDiviCt6UruWq6Lva0mb7fk3SP90DC
-	 JomhCfyV4tem4mdNhgWhbDBkTX7C0gcNvZ9B6aLLKSKPDPMSTV0V4oPzyFvhH5q9zu
-	 hvi8JEqsO6aag==
-Date: Thu, 15 Jan 2026 16:14:41 +0530
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
-	Hans de Goede <hansg@kernel.org>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Bartosz Golaszewski <brgl@kernel.org>, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v4 5/9] dt-bindings: connector: Add PCIe M.2 Mechanical
- Key E connector
-Message-ID: <pfyzilu4xpggftei4th37uv7wb4gpfsntjlagctsydrrc35qci@4uyd3zog6t7j>
-References: <20260112-pci-m2-e-v4-0-eff84d2c6d26@oss.qualcomm.com>
- <20260112-pci-m2-e-v4-5-eff84d2c6d26@oss.qualcomm.com>
- <20260113171601.GB3925312-robh@kernel.org>
+	s=arc-20240116; t=1768475702; c=relaxed/simple;
+	bh=oeFCSQd193B7M3U7GlanEaDjGvU31U3+p7TfFQNK5Po=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=DiHXhjkuvjw5Ae9YBv0U65KH1W30XXBi6kHfTOnSzIx4tfMiV59/CcqRmLGKpHAyadMUO0SZrWfKC1PQqlOB729XCeEETsSJRfLxJmQ4DL4mX2hZbC1MY3iHWFIStEqurkbZ8NNPHwhjaEHyTRjvI7o3+mArs8zFdvkWRENsoTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=nm07ZQy1; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20260115111452euoutp025dc67c91fb4380c4fd33933c1510d2e7~K40Wscj0P0756707567euoutp02n
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 11:14:52 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20260115111452euoutp025dc67c91fb4380c4fd33933c1510d2e7~K40Wscj0P0756707567euoutp02n
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1768475692;
+	bh=ODlM0ncXnlrLvxb4ihqQBJ3CUEnwHzZLJ0VgMlXzdh8=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=nm07ZQy1IRUCTYodbBRF6jonHTbl+TsoF3782MwFWtr/OE16+IsQVG+cctI089KWa
+	 uN8qkOZguPp9PMHzAm/0yGPHACY5mk3uYJW6J8e3RXoy8o6wkz3OB9X5Bo5e9JyP/d
+	 6FsHbs3hYFZR0ryxpExac1CuhHH0EXvEqyPJAzlk=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20260115111451eucas1p145ac65c845c6cd3bcbb9bccf75993a2a~K40WSZZlf2186821868eucas1p1q;
+	Thu, 15 Jan 2026 11:14:51 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20260115111450eusmtip2851be6a89c0b4f48966dc2bbc0e6c902~K40VaBTI03110431104eusmtip2c;
+	Thu, 15 Jan 2026 11:14:50 +0000 (GMT)
+Message-ID: <61e8c93c-d096-4807-b2dd-a22657f2e06a@samsung.com>
+Date: Thu, 15 Jan 2026 12:14:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Betterbird (Windows)
+Subject: Re: [PATCH v4] PCI/PM: Prevent runtime suspend before devices are
+ fully initialized
+To: Brian Norris <briannorris@chromium.org>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Lukas Wunner <lukas@wunner.de>, linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, "Rafael J . Wysocki"
+	<rafael@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
+	<ilpo.jarvinen@linux.intel.com>
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <aWf4KyTSIocWTmXw@google.com>
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260113171601.GB3925312-robh@kernel.org>
+X-CMS-MailID: 20260115111451eucas1p145ac65c845c6cd3bcbb9bccf75993a2a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8
+X-EPHeader: CA
+X-CMS-RootMailID: 20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8
+References: <20260106222715.GA381397@bhelgaas>
+	<CGME20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8@eucas1p1.samsung.com>
+	<0e35a4e1-894a-47c1-9528-fc5ffbafd9e2@samsung.com>
+	<aWf4KyTSIocWTmXw@google.com>
 
-On Tue, Jan 13, 2026 at 11:16:01AM -0600, Rob Herring wrote:
-> On Mon, Jan 12, 2026 at 09:56:04PM +0530, Manivannan Sadhasivam wrote:
-> > Add the devicetree binding for PCIe M.2 Mechanical Key E connector defined
-> > in the PCI Express M.2 Specification, r4.0, sec 5.1.2. This connector
-> > provides interfaces like PCIe or SDIO to attach the WiFi devices to the
-> > host machine, USB or UART+PCM interfaces to attach the Bluetooth (BT)
-> > devices. Spec also provides an optional interface to connect the UIM card,
-> > but that is not covered in this binding.
-> > 
-> > The connector provides a primary power supply of 3.3v, along with an
-> > optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
-> > 1.8v sideband signaling.
-> > 
-> > The connector also supplies optional signals in the form of GPIOs for fine
-> > grained power management.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > ---
-> >  .../bindings/connector/pcie-m2-e-connector.yaml    | 154 +++++++++++++++++++++
-> >  MAINTAINERS                                        |   1 +
-> >  2 files changed, 155 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
-> > new file mode 100644
-> > index 000000000000..b65b39ddfd19
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
-> > @@ -0,0 +1,154 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/connector/pcie-m2-e-connector.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: PCIe M.2 Mechanical Key E Connector
-> > +
-> > +maintainers:
-> > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-> > +
-> > +description:
-> > +  A PCIe M.2 E connector node represents a physical PCIe M.2 Mechanical Key E
-> > +  connector. Mechanical Key E connectors are used to connect Wireless
-> > +  Connectivity devices including combinations of Wi-Fi, BT, NFC to the host
-> > +  machine over interfaces like PCIe/SDIO, USB/UART+PCM, and I2C.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: pcie-m2-e-connector
-> > +
-> > +  vpcie3v3-supply:
-> > +    description: A phandle to the regulator for 3.3v supply.
-> > +
-> > +  vpcie1v8-supply:
-> > +    description: A phandle to the regulator for VIO 1.8v supply.
-> > +
-> > +  ports:
-> 
-> Also, nodes go after all properties.
-> 
+Hi Brian,
 
-Ack.
+On 14.01.2026 21:10, Brian Norris wrote:
+> On Wed, Jan 14, 2026 at 10:46:41AM +0100, Marek Szyprowski wrote:
+>> On 06.01.2026 23:27, Bjorn Helgaas wrote:
+>>> On Thu, Oct 23, 2025 at 02:09:01PM -0700, Brian Norris wrote:
+>>>> Today, it's possible for a PCI device to be created and
+>>>> runtime-suspended before it is fully initialized. When that happens, the
+>>>> device will remain in D0, but the suspend process may save an
+>>>> intermediate version of that device's state -- for example, without
+>>>> appropriate BAR configuration. When the device later resumes, we'll
+>>>> restore invalid PCI state and the device may not function.
+>>>>
+>>>> Prevent runtime suspend for PCI devices by deferring pm_runtime_enable()
+>>>> until we've fully initialized the device.
+> ...
+>> This patch landed recently in linux-next as commit c796513dc54e
+>> ("PCI/PM: Prevent runtime suspend until devices are fully initialized").
+>> In my tests I found that it sometimes causes the "pci 0000:01:00.0:
+>> runtime PM trying to activate child device 0000:01:00.0 but parent
+>> (0000:00:00.0) is not active" warning on Qualcomm Robotics RB5 board
+>> (arch/arm64/boot/dts/qcom/qrb5165-rb5.dts). This in turn causes a
+>> lockdep warning about console lock, but this is just a consequence of
+>> the runtime pm warning. Reverting $subject patch on top of current
+>> linux-next hides this warning.
+>>
+>> Here is a kernel log:
+>>
+>> pci 0000:01:00.0: [17cb:1101] type 00 class 0xff0000 PCIe Endpoint
+>> pci 0000:01:00.0: BAR 0 [mem 0x00000000-0x000fffff 64bit]
+>> pci 0000:01:00.0: PME# supported from D0 D3hot D3cold
+>> pci 0000:01:00.0: 4.000 Gb/s available PCIe bandwidth, limited by 5.0
+>> GT/s PCIe x1 link at 0000:00:00.0 (capable of 7.876 Gb/s with 8.0 GT/s
+>> PCIe x1 link)
+>> pci 0000:01:00.0: Adding to iommu group 13
+>> pci 0000:01:00.0: ASPM: default states L0s L1
+>> pcieport 0000:00:00.0: bridge window [mem 0x60400000-0x604fffff]: assigned
+>> pci 0000:01:00.0: BAR 0 [mem 0x60400000-0x604fffff 64bit]: assigned
+>> pci 0000:01:00.0: runtime PM trying to activate child device
+>> 0000:01:00.0 but parent (0000:00:00.0) is not active
+> Thanks for the report. I'll try to look at reproducing this, or at least
+> getting a better mental model of exactly why this might fail (or,
+> "warn") this way. But if you have the time and desire to try things out
+> for me, can you give v1 a try?
+>
+> https://lore.kernel.org/all/20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid/
+>
+> I'm pretty sure it would not invoke the same problem.
 
-- Mani
+Right, this one works fine.
 
+> I also suspect v3
+> might not, but I'm less sure:
+>
+> https://lore.kernel.org/all/20251022141434.v3.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid/
+This one too, at least I was not able to reproduce any fail.
+
+>> ======================================================
+>> WARNING: possible circular locking dependency detected
+>> 6.19.0-rc1+ #16398 Not tainted
+>> ------------------------------------------------------
+>> kworker/3:0/33 is trying to acquire lock:
+>> ffffcd182ff1ae98 (console_owner){..-.}-{0:0}, at:
+>> console_lock_spinning_enable+0x44/0x78
+>>
+>> but task is already holding lock:
+>> ffff0000835c5238 (&dev->power.lock/1){....}-{3:3}, at:
+>> __pm_runtime_set_status+0x240/0x384
+>>
+>> which lock already depends on the new lock.
+> The lockdep warning is a bit messier, and I'd also have to take some
+> more time to be sure, but in principle, this sounds like a totally
+> orthogonal problem. It seems like simply performing printk() to a qcom
+> UART in the "wrong" context is enough to cause this. If so, that's
+> definitely a console/UART bug (or maybe a lockdep false positive) and
+> not a PCI/runtime-PM bug.
+
+Yes, the lockdep warning is not really a problem, it is just a 
+consequence of the printing that "runtime PM trying to activate child 
+device 0000:01:00.0 but parent (0000:00:00.0) is not active" message. 
+However that message is itself a problem imho.
+
+>> (...)
+>>
+>> This looks a bit similar to the issue reported some time ago on a
+>> different board:
+>>
+>> https://lore.kernel.org/all/6d438995-4d6d-4a21-9ad2-8a0352482d44@samsung.com/
+> Huh, yeah, the lockdep warning is rather similar looking. So that bug
+> (whether real or false positive) may have been around a while.
+>
+> And the "Enabling runtime PM for inactive device with active children"
+> log is similar, but it involves a different set of devices -- now we're
+> dealing with the PCIe port and child device, whereas that report was
+> about the host bridge/controller device.
+
+Okay, so a bit different case. At least it confirms that the lockdep 
+issue is not really a problem.
+
+Best regards
 -- 
-மணிவண்ணன் சதாசிவம்
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
 
