@@ -1,193 +1,122 @@
-Return-Path: <linux-pm+bounces-40941-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40942-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2CB5D25BE1
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 17:28:32 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FAC8D25B81
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 17:24:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E1D3E300BEC5
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 16:24:24 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 066A33008150
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 16:24:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E2C239C624;
-	Thu, 15 Jan 2026 16:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8453BB9E9;
+	Thu, 15 Jan 2026 16:24:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XXPLsGKp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="msLNEHfB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7873A39E6EB
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 16:24:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DD43B9616
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 16:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768494263; cv=none; b=LXJVrnz6GP94M0tF41t5nIS//CSyU6A8dkxsZ0QXtmr7K6DBJqh0B6HktAaFZ6bBS5+EkDjy3NWlGmyHEVpjjfvw8jrLl/vYG4sQYUgZFC6ok5DVI725jlG91ynr/stIpUdXPe4Cn1zv9txV+twnxnkVzF7MwovZ0VmzY1xniIQ=
+	t=1768494273; cv=none; b=AdBuhB0NWGi96Nqb0260t0xpVTLPN2MxT981nAMUIBCvLwJtRnkPCVCocRKLPrsAeTapT2PeyiHznlBER8QAauOoGZeQbWtuq3u+5yrkrujlNswWpWVpj9fprLdS76cdzgWyIWNchPyQ+PjkvutK5HRYu+ZHY18pLenjbqXSXvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768494263; c=relaxed/simple;
-	bh=/DuIE6mRzwj/+bMbVcAeEzXFJYClbB5uV0Jy0njq9n4=;
+	s=arc-20240116; t=1768494273; c=relaxed/simple;
+	bh=k7lNDE5gCSmeRgbwOBkK/9sHNPAfd5pEa5j5lNfKJws=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LvVv7Stmn4tvgjsD0KOMYw1H5ZoKxtdmlnvwuk2Rtj/3VR4PA94TCzBFLJycVw/6TwCU8+4Y9vBrtY5WrV8idngrJVX7ok3HKEOoDLqq3U8tUKioNc52FgU71Dz2CTxGw8MLtmEfUnjxWy83xj2HzC6OCjoXl/4/oPXfRWgXfe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XXPLsGKp; arc=none smtp.client-ip=209.85.208.172
+	 To:Cc:Content-Type; b=FBuRAmcFL4amAISpfVMkxa2TA1CnZy+jUiJafmPx8j15m48h8TsXn0g1ZpuI+ODRZe775xbQPeMAY2JMrBi8+YTuUrp8GkP1cy6lNMXQedoA8OYCfMRHFwYxpSl8aojXKAc942AoT8AcUyY0DwcXEAKc2YIqSlqBZqYzfqKkoHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=msLNEHfB; arc=none smtp.client-ip=209.85.208.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-382fd8aaa6eso9811191fa.1
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 08:24:21 -0800 (PST)
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-383010b77b8so8498791fa.1
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 08:24:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1768494260; x=1769099060; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1768494268; x=1769099068; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=z6eQcDBBoiOSc1c+K4AoT/0VH8sQq4tUq5ijhJiu4pU=;
-        b=XXPLsGKpK3vwk7YWp4n2jIYiomSiGjGkISy5Qk0AFYxYqLlo2F+uzkkzjaXTl+hYiD
-         p3vPRZA/vly+/gW2X+QkyhWqcssrHZJYE5whaquhoUD+oRriRbuP7BRnQcihRJ7lHHjr
-         1EmHmsKH9xlvDbTY9Z+YhKxYNJrd4HkqkN9oett3iVoFOsDkVzQtX5BU66c1zyl9Xs77
-         eIETJybmZ1lPFQMEEm0diFnCrObBf9uv9ACCBhiawWXmk3I1a552r/X257yvJ1GUjEKY
-         1WdaqXeeXlu8veNc0l5QOLlbMckXs0LjQBGa3DdkHp2yhd+6/+DqPt2zKVECtvsP289o
-         uvHA==
+        bh=UcPjMQs8wlZ69D72bOHJHv8LmpfNACepVb1D7xG/5V4=;
+        b=msLNEHfBm8T7z1hOrKA17neRzVkyOrmk1NvuvMcmJqgb+rg+LVvlzR6GMUunQvhcp2
+         R5g+ToG8+/rnSm9mBZ56uIklJVmlC75lI8o8dO5VwtE3H7z9nTMOOoGsnDB7jYa/oAZY
+         GFsFjxaRxEQUrX0+3GGtrX0jiJOnzgkYNoOu7cjoNvkNkto8RdYLkRN3izHaToxzYmba
+         SR44sqUP8z+96LABZSAld9cnxCGlxEGG6VpB/I97EnJqpx0nH9k8vvCMFzKIFCycb93W
+         JgDE8fQDzgFfbjE1O6eHsWUPuLKXosjIfoPT9xkewZF9254KNuKNouZol37+lzXabMcG
+         LEKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768494260; x=1769099060;
+        d=1e100.net; s=20230601; t=1768494268; x=1769099068;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=z6eQcDBBoiOSc1c+K4AoT/0VH8sQq4tUq5ijhJiu4pU=;
-        b=UmMjJe1aAhSiu+y2udkPjk9z3SddGJmmQEV5zReJkZuV3kxVWUD+sbekCkO0mrycpx
-         fDs2V+n3rWYxTSI8jYBXJx+HcUyCNLixMUfetRDv005lCz6wwgn4y7SVwdq6M8RecWfu
-         GooObYM+rJ+fkZ6DeTr7NdS2xdDaKvxhe3qHvJWxONuXPiAJZNhX1phk1Z/86w6wfP21
-         sYBBi35hZR+bwRW0XMeFtXPTWRsNJEopdfOCxU5wFs+tuxzelIRV0mEM9Y+yWFjwATvb
-         0hfub6et853zYC1+81MUzUouABFkmwc0AVGrbTtWNNMGjR6aMOmv06FGJrWKpKo1D3Ef
-         z/uA==
-X-Forwarded-Encrypted: i=1; AJvYcCWBj79yFI3gCa1KWaHMzo2ekvqb2uoTHQSEtUGa+iNCQa3jUSWg+7NvHFsQmyPscns8BXsR4Tjhiw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwK4Uar7iGWijWySDsfxcY2P6qYZqLzilMjccHn/hpLN9ShGEK/
-	hWGFf/c52j2zdvkT8GSCIp3AjtPnUc0WDzMXzCSSWfcGiK4DiwVuAvFQEMzoPQyKpJpPLaWLwgy
-	N2bslV+8miGo7kgSIiWMzCS9XFnf53VgqmvysB3R1RVRPV5p1Q3Oj
-X-Gm-Gg: AY/fxX6kAqucx+C3tTcS7e45p0t5D3f9/jHmGGhY+o1Q6CO3JHz0KmlpAGbY3gFMcIT
-	FSYnc/caNUWVIXIqmLpJ9uKYCX+rjVj4o6jloqrAZft+H+d1UvQKWV5VOIq9WMrxOYvyW0l7qvj
-	Tjl59qlsFwZz6pdqY9lZ+6GK2/8fgeVoxfbhXMxvvv7U4XFSuNDdP5ll7HOWJWVVEzlqxGOtS3g
-	p2ceANpWOwRtoVY4ULAxiGiom4I1omLouWj39OrSrE29+YxUn/b7VnmlXCo7jQB2d7+zsuL
-X-Received: by 2002:a05:651c:4397:10b0:383:1962:b8ec with SMTP id
- 38308e7fff4ca-383842ed669mr838691fa.33.1768494259450; Thu, 15 Jan 2026
- 08:24:19 -0800 (PST)
+        bh=UcPjMQs8wlZ69D72bOHJHv8LmpfNACepVb1D7xG/5V4=;
+        b=eBTXULcOrriE8WbROx9B0M3Eq2qdXX3qGHrCnt2xg44sbOoyPC6Fksqzb7FCXX1TUR
+         oaIP3OcmpoBsU/d3nMz3c5giLzO4osxY4kEi6gcbbMueTQ1KyQgd53SI8bEzrDu0gTF+
+         rjZiDlpRJKW+byme7687sA3Frhck83HU7d5W0QgiqeIpd/pjoIbPLpPQcC2Uzg1I3ibM
+         F+V758iMpJlbu9tpHgo16ma25td7D68ikabn4A9w/bNYpbb/M1ZG6borKoTUbgihHKfb
+         c++AcpgNULjv7wVApXOTA/e1UmfUqE76PnVwupa9Gxff3BkqozjtR74z0PGNNpynZFTY
+         Vyag==
+X-Forwarded-Encrypted: i=1; AJvYcCVkkFBmtHkLk8qrstdx3GazPEGBXP7l+Z8yKJV/XBo8lUTKnP1myfmGbq/0UWqIjAnreyz1OT+zQg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0ofS2D6VFgbqlTN99dQj382DbUlqBMauxQQ4hViSlyn8rjS5Z
+	uTBB00tIsh2ihQKKdA5de1k8HSSCiZ0/geK3vZaKVQGp6N/DSdPMblXy0Jq7q272hxoTgKB/A9D
+	pzunkgihLmsTzIfM5D+ViDTjGzfWeoZuwUQtLFsqs7Q==
+X-Gm-Gg: AY/fxX4IRgEmoktD4q8SjCrONxtsILzw0VQSGGFZ18g1JQZKIhlhg+8rQLyi2gVH029
+	sCCvVpOrgQLtJdMzAiP3qqlT6mJdYiXC45o+4787dgpglLA4ORV9D4T2gnMnZk7AXU6YiXPGNbr
+	wmS/B51jxUo2k7o8Ql4oiaqaE9CyYCxyKts1HaPM57YqwReFoe3lpGJGFfXKii8NB2RjE/Wy/q6
+	1MN01JVtWu3nS2Tnjmk0Y7q+LSirQfOk/SC7Yfd26mzxrCb9CoGetH6AHpVECNuQixqqME6
+X-Received: by 2002:a2e:3003:0:b0:383:543:66d with SMTP id 38308e7fff4ca-3836f09c3afmr8580341fa.16.1768494267944;
+ Thu, 15 Jan 2026 08:24:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251216055247.13150-1-rmxpzlb@gmail.com> <CAPDyKFpx-hxv4QVW+zp8Zbd=-9vvmwsVJ2adem6V1gWLQteYsQ@mail.gmail.com>
- <aWRG8w8GxzV9gpUK@venus>
-In-Reply-To: <aWRG8w8GxzV9gpUK@venus>
+References: <20260113110012.36984-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20260113110012.36984-1-angelogioacchino.delregno@collabora.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 15 Jan 2026 17:23:42 +0100
-X-Gm-Features: AZwV_QgAedw6OVodqeBfNnhbwFIsw1Q42_a8HBS3WTSHHw6GBLICdo8b4ARh_kY
-Message-ID: <CAPDyKFo49sptbbESdr8a=6E5KL-bDmH9nFJPrigjM8piwecVkg@mail.gmail.com>
-Subject: Re: [PATCH v2] pmdomain:rockchip: Fix init genpd as GENPD_STATE_ON
- before regulator ready
-To: Frank Zhang <rmxpzlb@gmail.com>, Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: heiko@sntech.de, linux-rockchip@lists.infradead.org, 
-	linux-pm@vger.kernel.org, chaoyi.chen@rock-chips.com, 
-	quentin.schulz@cherry.de, 
-	Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Date: Thu, 15 Jan 2026 17:23:51 +0100
+X-Gm-Features: AZwV_Qgstc2v5holxo2-uqRefc6HR54B_5kwg-eT_5uV86kY4RNFn6HUBQ_JID8
+Message-ID: <CAPDyKFohjOfdg1vz1o4FAhThm_1CTF46SgrWSJuJYt3mLLJwNA@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Fix dtbs_check warnings for MediaTek MT7622 platform
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-mediatek@lists.infradead.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, 
+	matthias.bgg@gmail.com, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org, kernel@collabora.com
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 12 Jan 2026 at 02:11, Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
+On Tue, 13 Jan 2026 at 12:00, AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> Hi,
+> This series fixes various dtbs_check warnings happening on the MediaTek
+> MT7622 Home Router platforms devicetrees.
 >
-> On Tue, Dec 30, 2025 at 03:07:37PM +0100, Ulf Hansson wrote:
-> > + Nicolas
-> >
-> > On Tue, 16 Dec 2025 at 06:53, Frank Zhang <rmxpzlb@gmail.com> wrote:
-> > >
-> > > RK3588_PD_NPU initialize as GENPD_STATE_ON before regulator ready.
-> > > rknn_iommu initlized success and suspend RK3588_PD_NPU. When rocket
-> > > driver register, it will resume rknn_iommu.
-> > >
-> > > If regulator is still not ready at this point, rknn_iommu resume fail,
-> > > pm runtime status will be error: -EPROBE_DEFER.
-> > >
-> > > This patch set pmdomain to off if it need regulator during probe,
-> > > consumer device can power on pmdomain after regulator ready.
-> > >
-> > > Signed-off-by: Frank Zhang <rmxpzlb@gmail.com>
-> > > Tested-by: Chaoyi Chen <chaoyi.chen@rock-chips.com>
-> > > Tested-by: Quentin Schulz <quentin.schulz@cherry.de>
-> >
-> > The problem with the child-domain using a regulator has been discussed
-> > before [1] between Nicolas, Heiko and me. That said, I have looped in
-> > Nicolas to allow him to share his opinion about this too.
-> > fauxbus
-> > My view on is that I would prefer that we try to address/fix the root
-> > cause, rather than trying to paper over the problem as what seems to
-> > be suggested in the $subject patch. Or at least I need Nicolas/Heiko
-> > to confirm that they are fine with the $subject patch, before I pick
-> > it up.
+> Depending on correctness, either the bindings or the devicetree was
+> changed as a dtbs_check warning fix.
 >
-> FWIW my thoughts on this:
+> AngeloGioacchino Del Regno (5):
+>   dt-bindings: clock: mediatek,mt7622-pciesys: Remove syscon compatible
+>   dt-bindings: power: mt7622-power: Add MT7622_POWER_DOMAIN_AUDIO
+>   pmdomain: mediatek: scpsys: Add MT7622 Audio power domain to legacy
+>     driver
+>   arm64: dts: mediatek: mt7622: Add missing clock to audio-controller
+>   arm64: dts: mediatek: mt7622: Add missing power domain to afe
 >
-> I believe the proper solution would be to acquire the regulator at
-> probe time how it is usually being done in other drivers. I think
-> this requires restructuring the driver, so that the sub-domains are
-> registered as sub-devices (e.g. via fauxbus) to avoid the
-> chicken-and-egg problem of the regulator for pmdomain1 needing
-> pmdomain2. As this modification is most likely too big to be
-> backported I think this patch should be merged for now:
+>  .../bindings/clock/mediatek,mt7622-pciesys.yaml        | 10 ++++------
+>  arch/arm64/boot/dts/mediatek/mt7622.dtsi               |  7 +++++--
+>  drivers/pmdomain/mediatek/mtk-scpsys.c                 | 10 ++++++++++
+>  include/dt-bindings/power/mt7622-power.h               |  1 +
+>  4 files changed, 20 insertions(+), 8 deletions(-)
+>
+> --
+> 2.52.0
+>
 
-Fair enough!
+Patch 2 and 3 applied for next, thanks!
 
-I agree with the above, while perhaps the auxiliary bus is probably a
-better choice instead of the fauxbus for this case.
-
->
-> Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Cc: stable@vger.kernel.org
-> Fixes: db6df2e3fc16 ("pmdomain: rockchip: add regulator support")
-
-Applied for fixes, thanks!
+Note, the DT patch (patch2) is also available at the immutable dt
+branch, for soc maintainers to pull in.
 
 Kind regards
 Uffe
-
-
-
->
-> Greetings,
->
-> -- Sebastian
->
-> >
-> > Kind regards
-> > Uffe
-> >
-> > > ---
-> > > Changes in v2:
-> > > - Simplified the regulator check logic, trun off pmdomain if need
-> > >   regulator.
-> > > ---
-> > >  drivers/pmdomain/rockchip/pm-domains.c | 10 ++++++++++
-> > >  1 file changed, 10 insertions(+)
-> > >
-> > > diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-> > > index 4f1336a0f49a..997e93c12951 100644
-> > > --- a/drivers/pmdomain/rockchip/pm-domains.c
-> > > +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> > > @@ -879,6 +879,16 @@ static int rockchip_pm_add_one_domain(struct rockchip_pmu *pmu,
-> > >                 pd->genpd.name = pd->info->name;
-> > >         else
-> > >                 pd->genpd.name = kbasename(node->full_name);
-> > > +
-> > > +       /*
-> > > +        * power domain's needing a regulator should default to off, since
-> > > +        * the regulator state is unknown at probe time. Also the regulator
-> > > +        * state cannot be checked, since that usually requires IP needing
-> > > +        * (a different) power domain.
-> > > +        */
-> > > +       if (pd->info->need_regulator)
-> > > +               rockchip_pd_power(pd, false);
-> > > +
-> > >         pd->genpd.power_off = rockchip_pd_power_off;
-> > >         pd->genpd.power_on = rockchip_pd_power_on;
-> > >         pd->genpd.attach_dev = rockchip_pd_attach_dev;
-> >
-> > [1]
-> > https://lore.kernel.org/all/CAPDyKFr=GwJ+cO3cW4Ed_LsS=q_JtuuQPDweDpLgDO4hBLFXUA@mail.gmail.com/
-> >
 
