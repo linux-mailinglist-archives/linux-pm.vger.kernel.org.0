@@ -1,104 +1,110 @@
-Return-Path: <linux-pm+bounces-40952-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40953-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 773CED28921
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 22:00:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2499ED28978
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 22:03:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4211B300D334
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 21:00:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 80E4F3025FA8
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 21:03:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1DAB1FBC8E;
-	Thu, 15 Jan 2026 21:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6574331A542;
+	Thu, 15 Jan 2026 21:03:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ACPWfmPb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ujGiB/MH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC58AEED8;
-	Thu, 15 Jan 2026 21:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE22286409;
+	Thu, 15 Jan 2026 21:03:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768510837; cv=none; b=AcqqQz5hn9ixbFZcPqvX3rsdEcqqx1cY2JWZCCT5MzoEYWa1UDk4agRPFVIZs9PHzsxOFpbS9TiIbeXy4XmM3Z7tK0u9sCEX8Z8Ln8lhRmH01pMedLgc8cckdJkWd4iPyikL8Pf2yp9ebdHatjR81PuUFhYcz2X1GFKjuHlAfOs=
+	t=1768511020; cv=none; b=s3tPssqz4u3YzI7aj0muGJvVsfgoHnl16sSGsv6UkHrdc/KCbDQJFsG/mXC/bjmenYsyjP+cIsW1GAzoVxReAT3O1t6mnPu5+Psi4ehWcCNEGsJ06Pn/hWgRBhwobDQAgGJQv+HWHGkTzslDEQ/KnOPG9Sr9S0bHM1qiYf2VjvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768510837; c=relaxed/simple;
-	bh=DykiV8OWIGZBqj5EbF75NN1M9XHMbeDKlJ0/Mh6XJ7c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oTJuTg5regwjAS114ZGC7LUGqbMXftqaEO8eTZ1QR7BtPI1cDYML+IYKVO4RKbJwf+TIEooAE+wFMBPhs6a/cjpSfr/7dTJcafFQX6DSIUmGSvMnwp+XtZyTU7K5+PVDf4ydqOJxZjrGAd3f8DYdo1KQP7LvLH6b0qM2C6+L8Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ACPWfmPb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 659BFC116D0;
-	Thu, 15 Jan 2026 21:00:35 +0000 (UTC)
+	s=arc-20240116; t=1768511020; c=relaxed/simple;
+	bh=Bfdh1ihpqGHMGuPqW6c73mjv5JMezBBfg7OgdT7IM0I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rdMneXmlOqXdNo2sdx35kulHVSOG9UhIvqj2zGS+MEQZdmLpVrbmWSRoutjzlUHjsiKSja7V20TF+Up/3RaauVN1zqZj5joM0mFc3z/ytyw0fK2DwEoX6EcjOMtMglS2kIqHoINyn+ZL4/imR1GEfgXJSlzQuPScKVsU3QpgEV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ujGiB/MH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 213FEC116D0;
+	Thu, 15 Jan 2026 21:03:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768510837;
-	bh=DykiV8OWIGZBqj5EbF75NN1M9XHMbeDKlJ0/Mh6XJ7c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ACPWfmPbEgahCgAzAGCzEtKriOasnghvP7Zt5xB74K+zymKMYmEBJKKQeqnC0/L0V
-	 WWLdAu28hiNXXQYVnhA3mRtaktnX2ldstmms5z1sPg6ekeQOMKb2k/LzCrbAwp4zas
-	 n90v6kuMXR/bnXuFagW23WaVi8nx0vMxQq7ssJv3dKwVCzW6sKBvHPGgjE72vRhdo9
-	 ht49jMDgwzEMfywZTg7/Xxz7ze9mKGWU1cMFVxt/Vs74SW8PkuXc8WwKhrMoMDG1l1
-	 MEf/c/3nFhHYiU2hVsPD+gCQiNtpUJEaChBAX1ym93lAvFMLAbfTYp3j4ZLaz+rQEP
-	 qdoC1AElh2idA==
-Message-ID: <af3204c0-0492-4555-9a75-3716fa264ecd@kernel.org>
-Date: Thu, 15 Jan 2026 22:00:33 +0100
+	s=k20201202; t=1768511019;
+	bh=Bfdh1ihpqGHMGuPqW6c73mjv5JMezBBfg7OgdT7IM0I=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ujGiB/MHcXEUMMquCTYeVW1Z0CuGRIv8DgW6mCFGMHRcB2vuIrvLfZJh02ZJImnP7
+	 sRldwyf6qDQ36d/NVnzw9Y3qJiUwLaovnG97wG3tEfcaosNqi8/5xgiIRgpZN5fDzO
+	 kZ/gYoJnNEAGxCkhoNa3mcOqzXug70iUJ9atlHWOGjMdeuJE1KJw/ycWeBN6CNC6Qb
+	 4/VszlIprBQjAkI8f5itv8U7Mf4kNyB/TXU+j457T9HVkXIqtiyW2VnLcTzhuDmwtw
+	 Ak2yhw7DPo+RcLpVn9IzKWk3MCBD84J46JX+pNSEVPhz8eJ32eI+k88IZn6xnNDEYB
+	 BhMmx45rwOP5w==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Jeff Johnson <jjohnson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Balakrishna Godavarthi <quic_bgodavar@quicinc.com>,
+	Matthias Kaehlcke <mka@chromium.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-bluetooth@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	ath10k@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: (subset) [PATCH v2 00/14] power: sequencing: extend WCN driver to support WCN399x device
+Date: Thu, 15 Jan 2026 15:03:34 -0600
+Message-ID: <176851101091.263753.12255000072756523298.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260106-wcn3990-pwrctl-v2-0-0386204328be@oss.qualcomm.com>
+References: <20260106-wcn3990-pwrctl-v2-0-0386204328be@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] power: supply: Add macsmc-power driver for Apple
- Silicon
-To: michael.reeves077@gmail.com
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- Hector Martin <marcan@marcan.st>, Lee Jones <lee@kernel.org>,
- Neal Gompa <neal@gompa.dev>, Janne Grunau <j@jannau.net>,
- Sebastian Reichel <sre@kernel.org>
-References: <20260115-b4-macsmc-power-v3-0-c236e09874be@gmail.com>
- <20260115-b4-macsmc-power-v3-1-c236e09874be@gmail.com>
-Content-Language: en-US
-From: Sven Peter <sven@kernel.org>
-In-Reply-To: <20260115-b4-macsmc-power-v3-1-c236e09874be@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-Hi,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
 
-On 1/15/26 08:08, Michael Reeves via B4 Relay wrote:
-> From: Michael Reeves <michael.reeves077@gmail.com>
->
-> This driver provides battery and AC status monitoring for Apple Silicon
-> Macs via the SMC (System Management Controller). It supports
-> reporting capacity, voltage, current, and charging status.
->
-> Co-developed-by: Hector Martin <marcan@marcan.st>
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> Reviewed-by: Neal Gompa <neal@gompa.dev>
-> Signed-off-by: Michael Reeves <michael.reeves077@gmail.com>
-> ---
->   MAINTAINERS                         |   1 +
->   drivers/power/supply/Kconfig        |  11 +
->   drivers/power/supply/Makefile       |   1 +
->   drivers/power/supply/macsmc-power.c | 834 ++++++++++++++++++++++++++++++++++++
->   4 files changed, 847 insertions(+)
-[...]
-> +
-> +static int macsmc_power_event(struct notifier_block *nb, unsigned long event, void *data)
-> +{
-> +	struct macsmc_power *power = container_of(nb, struct macsmc_power, nb);
-> +
-> +	/*
-> +	 * SMC Event IDs are reverse-engineered.
+On Tue, 06 Jan 2026 03:01:10 +0200, Dmitry Baryshkov wrote:
+> Qualcomm WCN3950, WCN3988 and WCN399x families of WiFi/BT chips preceed
+> the later WCN / QCA devices, but they still incorporate a very simple
+> PMU on die. It controls internal on-chip power networks, but, most
+> importantly, it also requires a certain start-up procedure (first bring
+> up VDD_IO, then bring up other voltages). In order to further unify code
+> supporting different families of QCA / WCN chips and in order to
+> maintain the required power up sequence, properly represent these chips
+> in DTs and modify drivers to use power sequencing for these chips.
+> 
+> [...]
 
-Any chance you meant something else here? The event IDs aren't special, 
-everything here is reverse-engineered ;)
-No need to change this imho unless there's another reason for a v4 though:
+Applied, thanks!
 
-Reviewed-by: Sven Peter <sven@kernel.org>
+[06/14] arm64: dts: qcom: qrb4210-rb2: Fix UART3 wakeup IRQ storm
+        commit: c5dc4812f6bf397b82290c540085e9ec98b47b30
+[07/14] arm64: dts: qcom: sdm845-db845c: drop CS from SPIO0
+        commit: 8bfb696ccdc5bcfad7a45b84c2c8a36757070e19
+[08/14] arm64: dts: qcom: sdm845-db845c: specify power for WiFi CH1
+        commit: c303e89f7f17c29981d09f8beaaf60937ae8b1f2
+[09/14] arm64: dts: qcom: sm8150: add uart13
+        commit: 0404b98c6bbca7a3b1e59a20d173fa149ac20194
 
-
-Sven
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
