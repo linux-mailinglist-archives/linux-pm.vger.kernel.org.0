@@ -1,78 +1,68 @@
-Return-Path: <linux-pm+bounces-40932-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40933-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F07E3D24CEC
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 14:49:53 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B23D6D24DFF
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 15:08:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DBD5330248A6
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 13:49:44 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 95AF43006706
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 14:08:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC75339E6EB;
-	Thu, 15 Jan 2026 13:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5656739527F;
+	Thu, 15 Jan 2026 14:08:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7e6QAJ4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QjrIdv1C"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B660130EF95;
-	Thu, 15 Jan 2026 13:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333C217736;
+	Thu, 15 Jan 2026 14:08:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768484983; cv=none; b=MFnJ5269ePCELYGKSn2Zd7ABE58JFVdJQWsjVpfWyAQI25t9bFo8Eoa0hFqk0lZjUF8Xu6Fy7qkLbDouyNRzWJenyzMpiAEnrU+VPRU/lOAKI2wTaJQxhIjThafrYlVfyBY2EWsR4TfXUYGnw+9nLq7oijn5UwLBOaINh3gKcL8=
+	t=1768486082; cv=none; b=Q1TW4dFgHtXDN7MelpcS2lfezQULYs7ByFKzgrw31WC+0h9qjJHpfPlporc+MGBGWZ65NbGkiy1ogyTM8EFpAxdvx4CJdH4sSWVQrpa+9oNdjG2xz1Qx1cx37Izq0Hkhs3WJk1pxZe/aTEqNBFNx+ciHe2GhwZVzA0JFnBLxQTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768484983; c=relaxed/simple;
-	bh=mLm6QqFggcSSbVGl21YSwdDfGF0CDC1QFc128taHR8c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UcJbkkZErsXkElGBl80yYZBS7cAvD1duJ6Y487f+VD+vkoKxTXG67cq4Uj1nlydmGPGuaWZo8G/rXos242lNRjEU4xaLp0L6dqZfFzlpFpW3cQfVqlsJsM3dhHQ8XoG2x0av9voji1GkyUGKGA4YyRAWD00uKGXBwEZwnbYV3YU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7e6QAJ4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E46A6C116D0;
-	Thu, 15 Jan 2026 13:49:38 +0000 (UTC)
+	s=arc-20240116; t=1768486082; c=relaxed/simple;
+	bh=e9eUlhqK8N+yAWMYljQjUpUyYJbVk6xYKHo4S9fl0H4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iT48IN1Ha2EWj43hIDVMVWv6NKC9PgBiEf3DUJO0/bk3wIAn+ZImS0vUx+IsvopoVICL8IQoXy/2/bFqyUJPCxseamHEnyb+0Ej8zNNfY81Wj4s5ijGXf5Hem1wszBL5ob+O1QBITWUiySvxnWAc4De5cq75Aymv9+vdUIwBnHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QjrIdv1C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A760EC19423;
+	Thu, 15 Jan 2026 14:08:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768484983;
-	bh=mLm6QqFggcSSbVGl21YSwdDfGF0CDC1QFc128taHR8c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i7e6QAJ44Bf2JaIwbYSBiJpGbCRthi2VIqme1Ke1ACn2O5pMFo2NNQIQRSedVmmnC
-	 4KRmtTWiuXjx+zMOqoflPZ7CIjshWguMaz0biDqMMujSveVX2Jp/xlQXZicZi2dwiw
-	 fa+G9LKOcSF9JgrPyf2X9FgxE2sN7N8MMkVsPn1SZoZqcjc54W5rudRiKPyYoOZAZC
-	 Sz7VayUPxIYPaO1ACAL99ztt1iBUUQ9tawYYDfsEnmbSZJutfz0mWGRnjR3NtSc6Jj
-	 0a6z10JdqG3JfovaLgaXg2zg5zD64tPyxVGTRrShfqI8iLsk+kwXper360+6MEiig2
-	 BxYKjFdkDiwBA==
-Date: Thu, 15 Jan 2026 13:49:35 +0000
-From: Lee Jones <lee@kernel.org>
-To: Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Pavel Machek <pavel@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linusw@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-rtc@vger.kernel.org, Andreas Kemnade <andreas@kemnade.info>
-Subject: [GIT PULL] Immutable branch between MFD, Clk, GPIO, Power, Regulator
- and RTC due for the v6.20 merge window
-Message-ID: <20260115134935.GD2842980@google.com>
-References: <cover.1765804226.git.mazziesaccount@gmail.com>
+	s=k20201202; t=1768486081;
+	bh=e9eUlhqK8N+yAWMYljQjUpUyYJbVk6xYKHo4S9fl0H4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=QjrIdv1CLJ7UWe9eRNhAoYV9c9ul9pHToTK1U/9wfr9LG4rYdVj2PxWiIMG1xX4+f
+	 tEp4sPPjPTHLonZ0v1scxsm6l3QDMu6aXvgCBuMLrLm0IhIy+V60ijg7WvurKA4X2S
+	 0Wmbrtr//pbyZjw94mNDKgtgpxCeamz4RHEpEW5WTFTaHtaSSoJpg/VDJxnzzDISi0
+	 BYU2pcW8RSVXZPk7B8zeQo1EX569sfe4TI0E8BZDTdAotD5+4eRFSiYTreauiZ4/Ld
+	 iew+lyFfrxauCbWjx/WShAH18WAE9UMbJQZojdPz+nYAAd7LjC+XJ9F9eWXjV2oKuc
+	 wvVxVuXoPU4wA==
+From: Georgi Djakov <djakov@kernel.org>
+To: gregkh@linuxfoundation.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	djakov@kernel.org
+Subject: [GIT PULL] interconnect fixes for 6.19-rc
+Date: Thu, 15 Jan 2026 16:07:28 +0200
+Message-Id: <20260115140728.494253-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1765804226.git.mazziesaccount@gmail.com>
 
-Enjoy!
+Hello Greg,
+
+This pull request contains a couple of small fixes for v6.19. They are
+listed in the signed tag. All have been in linux-next for a few days.
+Please pull them into char-misc-linus when you get a chance.
+
+Thanks,
+Georgi
 
 The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
@@ -80,60 +70,35 @@ The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
 
 are available in the Git repository at:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git ib-mfd-clk-gpio-power-regulator-rtc-v6.20
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.19-rc6
 
-for you to fetch changes up to e39951f8ad500648b9ab132f8042d6e47da441cf:
+for you to fetch changes up to 8cc27f5c6dd17dd090f3a696683f04336c162ff5:
 
-  MAINTAINERS: Add ROHM BD72720 PMIC (2026-01-13 12:50:37 +0000)
-
-----------------------------------------------------------------
-Immutable branch between MFD, Clk, GPIO, Power, Regulator and RTC due for the v6.20 merge window
+  interconnect: debugfs: initialize src_node and dst_node to empty strings (2026-01-12 01:58:36 +0200)
 
 ----------------------------------------------------------------
-Matti Vaittinen (17):
-      dt-bindings: regulator: ROHM BD72720
-      dt-bindings: battery: Clarify trickle-charge
-      dt-bindings: battery: Add trickle-charge upper limit
-      dt-bindings: battery: Voltage drop properties
-      dt-bindings: mfd: ROHM BD72720
-      dt-bindings: leds: bd72720: Add BD72720
-      mfd: rohm-bd71828: Use regmap_reg_range()
-      mfd: rohm-bd71828: Use standard file header format
-      mfd: rohm-bd71828: Support ROHM BD72720
-      regulator: bd71828: rename IC specific entities
-      regulator: bd71828: Support ROHM BD72720
-      gpio: Support ROHM BD72720 gpios
-      clk: clk-bd718x7: Support BD72720 clk gate
-      rtc: bd70528: Support BD72720 rtc
-      power: supply: bd71828: Support wider register addresses
-      power: supply: bd71828-power: Support ROHM BD72720
-      MAINTAINERS: Add ROHM BD72720 PMIC
+interconnect fixes for v6.19-rc
 
- .../bindings/leds/rohm,bd71828-leds.yaml           |    7 +-
- .../devicetree/bindings/mfd/rohm,bd72720-pmic.yaml |  339 +++++++
- .../devicetree/bindings/power/supply/battery.yaml  |   33 +-
- .../bindings/regulator/rohm,bd72720-regulator.yaml |  148 +++
- MAINTAINERS                                        |    2 +
- drivers/clk/Kconfig                                |    4 +-
- drivers/clk/clk-bd718x7.c                          |   10 +-
- drivers/gpio/Kconfig                               |    9 +
- drivers/gpio/Makefile                              |    1 +
- drivers/gpio/gpio-bd72720.c                        |  281 ++++++
- drivers/mfd/Kconfig                                |   18 +-
- drivers/mfd/rohm-bd71828.c                         |  555 ++++++++++-
- drivers/power/supply/bd71828-power.c               |  160 ++-
- drivers/regulator/Kconfig                          |    8 +-
- drivers/regulator/bd71828-regulator.c              | 1025 +++++++++++++++++++-
- drivers/rtc/Kconfig                                |    3 +-
- drivers/rtc/rtc-bd70528.c                          |   21 +-
- include/linux/mfd/rohm-bd72720.h                   |  634 ++++++++++++
- include/linux/mfd/rohm-generic.h                   |    1 +
- 19 files changed, 3127 insertions(+), 132 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/rohm,bd72720-pmic.yaml
- create mode 100644 Documentation/devicetree/bindings/regulator/rohm,bd72720-regulator.yaml
- create mode 100644 drivers/gpio/gpio-bd72720.c
- create mode 100644 include/linux/mfd/rohm-bd72720.h
+This contains a few small fixes for the current cycle.
 
--- 
-Lee Jones [李琼斯]
+- dt-bindings: interconnect: qcom,sa8775p-rpmh: Fix incorrectly added reg and clocks
+- MAINTAINERS: Add interconnect-clk.h to interconnect API entry
+- interconnect: debugfs: initialize src_node and dst_node to empty strings
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Georgi Djakov (1):
+      interconnect: debugfs: initialize src_node and dst_node to empty strings
+
+Krzysztof Kozlowski (1):
+      dt-bindings: interconnect: qcom,sa8775p-rpmh: Fix incorrectly added reg and clocks
+
+Kuan-Wei Chiu (1):
+      MAINTAINERS: Add interconnect-clk.h to interconnect API entry
+
+ .../devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml      | 31 ++++++++
+ MAINTAINERS                                                      |  1 +
+ drivers/interconnect/debugfs-client.c                            |  5 ++
+ 3 files changed, 37 insertions(+)
 
