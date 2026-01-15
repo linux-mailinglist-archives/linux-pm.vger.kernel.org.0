@@ -1,134 +1,113 @@
-Return-Path: <linux-pm+bounces-40896-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40897-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03AFAD2252D
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 04:41:58 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DFF3D225A3
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 05:10:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B78DB3025A48
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 03:41:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C2144301E167
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 04:10:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13DB029E110;
-	Thu, 15 Jan 2026 03:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1CB2BE05F;
+	Thu, 15 Jan 2026 04:10:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="3a2O+IrY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wDjuo5Tg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049CC1531C8;
-	Thu, 15 Jan 2026 03:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A3A01EA7DF
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 04:10:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768448516; cv=none; b=ELkyrGSnbb0yVNJveRYB7uDaxVQzWKtx/gGGENzeAcbW0e4gXAr1YMhFazLc6OLJHx8BCMcgtjgQKdl0WPQD8IqzABj3UEvjXOnUIpqhVSduuafiDQvUshWE++ZqBFGfjyvIrlC1KcJv1ebbvBcx5lC31Hv7yIzytKNzCjzJygk=
+	t=1768450205; cv=none; b=kSqyEEOq7im+7NXPs3VMnnY+yu9bqidRhEH4zQc6gFLjUw5ioYr0vH3kHmM5QqzXni3XgQL40sobZ8XkmlGln1+uQYwdYCi1hdtLZ2OslWGxef6iAKuWgjdrUJ6AlsFJyVE3Lbhuaz77Fjk76kHVKQqN8pIqPYWtBEqBmxFzo8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768448516; c=relaxed/simple;
-	bh=/0J65nERfDk84Z8Kg7SWERzpPaopmKYiaZ8mYGBC/gc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ZNsoIKapuJruKoDuBWldxAZuz0eRZGVsvorhWVr+jEAuvykXV6wEFZz7C1KDLKdyD01ighOR82P7Y273fPqIyHFvuWY7BC9dHqxZj34LkgErvs1GMjvwjMrxHc/QN8lMlhBpq4P8qJb77iakYHBXLQmmknlgieZO2+5Q2f7Lqvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=3a2O+IrY; arc=none smtp.client-ip=113.46.200.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=ZVkvkXxYcfmY+ycsushaE5yujw58WG17UahLiZ3mnOA=;
-	b=3a2O+IrYhVDBxlumUT3vQnCJJ4qVvXKVrfPT8d4Bym/wqHjK+nw3sfuRY5qS8qfEMmEQ/V8vr
-	STcRMvOTGpO+QAM1/vZTxIcLjIGbEMcREiwP8+B+EE2uNpIh2qFQZQ6bSe+ppPN85rPi6kSsr5r
-	SnccqlSvsmnnIO7YfKgavi0=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4ds7xL4NBFzRhRw;
-	Thu, 15 Jan 2026 11:38:30 +0800 (CST)
-Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
-	by mail.maildlp.com (Postfix) with ESMTPS id E325F40537;
-	Thu, 15 Jan 2026 11:41:50 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
- (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 15 Jan
- 2026 11:41:50 +0800
-Message-ID: <0c06c697-69e1-48c7-99c5-e54581e7818a@huawei.com>
-Date: Thu, 15 Jan 2026 11:41:49 +0800
+	s=arc-20240116; t=1768450205; c=relaxed/simple;
+	bh=W3YTlyIyTEmUUWUK+ddJl6j1aIj4PqfVfc+lQKZOQC0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gDckvAsl6RHypMgEdS9rsSJxR1le8c7WE4g3+eFDBAWHJy288SeDk69ILPidpinzwDopXwGTJpgd/yyc+HnFqmPUSikH+iwgzabByPaSk0ZcJIvBTEyMLE3Hl3NVLm91pet4u/Hh1cJhI2lu4FIceQcTCtqskCkiRaxt8wC5OP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wDjuo5Tg; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-81f42a49437so246632b3a.0
+        for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 20:10:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1768450204; x=1769055004; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=A5gl3gMVAyOtPUMAz83ngr2tNJpXwKQ2fr+w2KMc5JI=;
+        b=wDjuo5TgZWqgeTRb9man7RJKywKBhefT4zNJHXEWAZLV6Ny0G37Ao8a8iacViTWEFu
+         RBvlws+vnZR2o0r5v9jCR+2z5/9wqGpWAuTSEmMPldkzvPLmJYEnp7FB6hXtMMqnOntq
+         tfB1b70BugX4x5fGW/8Xf/JPnnbU/Tx9lApCabxMAtoK7fAmPcRAAdU/+/TwSmOsEk66
+         /bXOBNNAbYuYojCXeZiE/qAFZy9mAQxcvcMMwJozPMbUoOk9frzlEDGxihvLnRlSqRFe
+         4ybYuZatPVE14H8B7ns89sStupodf8oZJHQyXj4fDQbzHtsGD1Mcg7LOoHloWT8ZNnuS
+         YVEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768450204; x=1769055004;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=A5gl3gMVAyOtPUMAz83ngr2tNJpXwKQ2fr+w2KMc5JI=;
+        b=VIi5XhRw/hw8ERQNIe8Z6yLbXZYuHhdPMQQ/oZfxkhFwHjUieVxtV/IhyZC/28vsv+
+         F142/eNO8GpPTNQIgiZ5NXZCgYqCfdlUWaZyoK75fvfd34qv+s3AiGmvR7kS3C8O5LBn
+         QYM7SQWFC2MWlavGPHjzKp8+bV0Af1V3kxRhw6QF29GuL8LQcUJybi2EWjR6VoCLLyYC
+         oldXXl+Kl9FNym059UARFsS5+H3BFQtkS2q3dwIISkU0PGxHvRm56DZrhqr7FGrYcQ9p
+         rVfkSjmtG3nc9185vPsmrXaINUR7yqbC1Wxtrc1M9dAI6Ds1vm8xdXL0i9AJOpxu6HK7
+         LZ8w==
+X-Forwarded-Encrypted: i=1; AJvYcCW1Nqmlu8PjayRbij2NuWuU84kc0Z7UmoMqG+F7S0qkwI49PTk+2FEpShc3Wa/LTxSOK2HNzNX4Xg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGD0EbnVOCdGc6Ecxxqcjs5u9LEDQIVYc4fHF/zaFhBuVLVgkk
+	uPIGS64XzFC923BiC97PgIEbX90eTZeeIdPfDgYuU0DvMJWRSCGAnLtr6Jd1cVTSQqw=
+X-Gm-Gg: AY/fxX7CqEZqDbN5Xr97yZz/Vz4gdfiBM9YnhcKv3YQb7qiwbczxMVMc+AMVq2oh8tx
+	e6upRUuSQGUp89ZbJCSt7cmZdq1jCWYqX9Pt4JrtaH5gf7If5yEii+8v1DzN6plgE8WwJQrmnZV
+	dq2w4Nr5ppNP53a0QeUxoAClzsyRz9Q7tWZB6XSVIyku/41w6P+WrBuI3axzeYWN5QZjEhS05cG
+	6KiGEi1vMSAmUr9bmMo4n/OINDwZJty+B3kc9WOt7NkKNmGPMLOwJj9CYkp4ewb+eRFGNyVH77P
+	JHifNjAyclLnNafw4v+OZdR5hMJI9AWuZ21LeBtHqzPOsjLKHV/0a99jZODbfckQ0vmTYRrwQ1H
+	KngMiy4jSJeWDM3y+IyjSZ1McfiCwZlYFuf+IQxyQJMSFkI1e28WF1jQSvqAVP73FtkMjBUDr6k
+	06ociLWznJg4Q=
+X-Received: by 2002:a05:6a00:4008:b0:81f:477d:58da with SMTP id d2e1a72fcca58-81f8200cdb2mr3948607b3a.60.1768450203685;
+        Wed, 14 Jan 2026 20:10:03 -0800 (PST)
+Received: from localhost ([122.172.80.63])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81f8e4c2293sm1058671b3a.13.2026.01.14.20.10.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Jan 2026 20:10:02 -0800 (PST)
+Date: Thu, 15 Jan 2026 09:40:00 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH v2] cpufreq: dt-platdev: Block the driver from probing on
+ more QC platforms
+Message-ID: <zlt6uqucsbbyua65wy5epr6fmjoydoqf7sub7idkijb3meccq7@53vuidepfvyg>
+References: <20260113-topic-cpufreq_block-v2-1-537cc7f06866@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] cpufreq: Update set_boost callbacks to rely on
- boost_freq_req
-To: Pierre Gondois <pierre.gondois@arm.com>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar
-	<viresh.kumar@linaro.org>, <linux-kernel@vger.kernel.org>, Christian Loehle
-	<christian.loehle@arm.com>, Ionela Voinescu <ionela.voinescu@arm.com>, Jie
- Zhan <zhanjie9@hisilicon.com>, Huang Rui <ray.huang@amd.com>, "Gautham R.
- Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello
-	<mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>,
-	<linux-pm@vger.kernel.org>
-References: <20251208105933.1369125-1-pierre.gondois@arm.com>
- <20251208105933.1369125-4-pierre.gondois@arm.com>
- <14ad55ce-413f-46e0-9ce0-f35fc421056c@huawei.com>
- <73da1186-5edd-4465-bd49-e18d9064a501@arm.com>
- <ea9111b5-cd85-4526-a959-54d8037d6ffb@huawei.com>
- <36630a40-b6e6-4bf6-8fa1-1a004e0d2798@arm.com>
- <ppzoeb4wod6jjhlvkiqogcd26v3shfh5cjiuq63r7bbnsyzzok@sdx5usgvcqzu>
- <CAJZ5v0hZMSWxd6u0ZpPosDu9j0ibYeGyqRRqnaiVBNcA1kmPXA@mail.gmail.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <CAJZ5v0hZMSWxd6u0ZpPosDu9j0ibYeGyqRRqnaiVBNcA1kmPXA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemf200001.china.huawei.com (7.202.181.227)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260113-topic-cpufreq_block-v2-1-537cc7f06866@oss.qualcomm.com>
 
-Hi Pierre,
-
-On 2026/1/13 20:20, Rafael J. Wysocki wrote:
-> On Tue, Jan 13, 2026 at 2:30 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->>
->> On 12-01-26, 16:02, Pierre Gondois wrote:
->>> In:
->>> cpufreq_set_policy()
->>> \-cpufreq_driver->verify(&new_data)
->>>   \-cpufreq_verify_within_cpu_limits()
->>>
->>> the requested min/max values are clamped wrt the cpuinfo.[min|max]_freq.
->>> However this clamping happens after the QoS constraints have been
->>> aggregated. This means that if a CPU has:
->>> - min = 100.000 kHz
->>> - max = 1.000.000 kHz
->>> - boost = 1.200.000 kHz
->>>
->>> With boost enabled, the user requests:
->>> - scaling_min: 1.100.000
->>> - scaling_max: 1.200.000
->>>
->>> If boost is disabled, we will have:
->>> policy->min == policy->max == 1.000.000
->>> without notifying anybody.
->>>
->>> Ideally I assume it would be better to prevent the user from disabling
->>> boost without first asking to update the scaling_[min|max] frequencies,
->>> or at least detecting this case and have a warning message.
->>
->> I don't think this is a problem and doesn't really need special care.
->> It is the user who is disabling the boost feature, its okay to force
->> set to clamped values.
->>
->>> Please let me know if you prefer not adding the new qos constraint,
->>> I ll try harder not to have it if yes.
->>
->> But even with that (the issue pointed earlier not being a problem), I
->> think a new constraint for boost does make the code cleaner and easy
->> to follow.
->>
->> Rafael ?
+On 13-01-26, 16:25, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > 
-> I agree.
+> Add a number of QC platforms to the blocklist, they all use either the
+> qcom-cpufreq-hw driver.
 > 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> ---
+> Changes in v2:
+> - Drop entries associated with scmi-cpufreq (no OPP table => wont probe anyway)
+> - Add SM7125
+> - Link to v1: https://lore.kernel.org/r/20260113-topic-cpufreq_block-v1-1-91f27df19028@oss.qualcomm.com
+> ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 3 +++
+>  1 file changed, 3 insertions(+)
 
-An explicitly defined QoS helps make the code cleaner and easy to follow.
-I agree too. Let's do it that way.
+Applied. Thanks.
 
-
-
+-- 
+viresh
 
