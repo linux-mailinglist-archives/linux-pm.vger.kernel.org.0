@@ -1,313 +1,175 @@
-Return-Path: <linux-pm+bounces-40912-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40911-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B87FD233C7
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 09:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EA67D23382
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 09:44:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B0382300CBAB
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 08:45:56 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 67B7A30181B0
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 08:40:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1377233DED6;
-	Thu, 15 Jan 2026 08:45:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1C8233A9E2;
+	Thu, 15 Jan 2026 08:40:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CTsFDnHu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-qk1-f195.google.com (mail-qk1-f195.google.com [209.85.222.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB3233E357
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 08:45:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3134633B947
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 08:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768466756; cv=none; b=Z4JwnsUG5xGATq+dORF+aWsoYFW4bGjpUF/RVj3T7NsDxHfjp6oXsIBN8mR+iHNclFS1BYf4tvvaZwnc2jepNcxWmqvalo3gTbuh/IUGPTguoip3wUys9AoR6N6rqwq8HgO++ks9S/j7ERubWNSwB1LhK8B6LJ1lGQvs1piO5DE=
+	t=1768466441; cv=none; b=LhS7qxvP2wP6fhf323STqU//HwMTrUtiTlGuJPD3b6AivZUOfSEVmJZwhs3jcOhG0W2kdzZst0EcDgw0M2tl80FDimTW4QBp791iLwqQrqmnI6bWm3Vhe/pJJ/EDJNRvC7IMWDxvC41rfoNQExDrcYbZN/ya3rW93S79L5ZBQpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768466756; c=relaxed/simple;
-	bh=paTnkoL9xUak4CUxnRb/yoa9tXE3w3bGYQXVfiVJENY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FdIumQF/sPeOePlXq21pRPWSr7f2P2aIh/lZqNnBjjhvqVT12A9Bsnl0EoLYGoMhGnj2ZeyJbFvJOI7dGP3Khg8BydBm+4EhDKKkbyqRj8b4tF5OCsgOcN3pfzgw+D4tjXQ9LCjy11troXgyf7Q1ifxMcUDETq0ykj+7cwZTRCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1768466441; c=relaxed/simple;
+	bh=kGAjDZzXN4M/Us+cwgsQzxcZ0zrYKWPTy1HSPmM0J2I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gjvTIubJRSE6+9v9/kyIkwjyGINgtGAggUhUHjH4Oh96AAAltFe8lSkj99A5UYT3+7AY3Wvv3bkmLsfsWYy30HaqYmAw1/B3fF/NRcc/PDPE8RRMk6EKEchhJnexYAlPxghwnTD0tjYS83pvjN8MmdiaVkG4crbvBjBm9cvQ1BI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CTsFDnHu; arc=none smtp.client-ip=209.85.222.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-81dbc0a99d2so335975b3a.1
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 00:45:54 -0800 (PST)
+Received: by mail-qk1-f195.google.com with SMTP id af79cd13be357-8c530866cf0so65875585a.1
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 00:40:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768466439; x=1769071239; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=MMFj9gQvn0V+NVRRKsqf5Eg6BpjQZxX0IqjKremmDdc=;
+        b=CTsFDnHuyto/ZUtIPByPVikfRnCgoSMcygMfyk440aMVgUruAYRaebcg9VIzs0VaJ0
+         BEKAkeJ1r53tgallMAqw7TBzCsqDDT8GJZF9vSrGBXzfvVdl1L3begTZWi4rjilDjyYO
+         n5byGXGhbSD7lWLW67rTWVfEVH/MotjGmAExAV30OJ5/IeWeY8pruzIuoOZ20RNsSY9T
+         wH48ppJTVODK0rU3cXeo6Bj9fPqApwDaxW6sVaNKGGtDfZk1Xr7Wma42vpit7CnhVDEz
+         dNQZsLjuabACw/aggfcEz1sLm3hoRYvuvXusF+Eud37tJ4P8lkVZKZOuDhil3+RtKw84
+         gHDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768466754; x=1769071554;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1768466439; x=1769071239;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :feedback-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yEhW79U6doUL/JqAk9Ut/HyEczQFD5R9B9xZcFtsnOI=;
-        b=n/C12+Zj6sQVP8rHsbRTrPtKSdkmXBYxMoqNMjiAZohqGz7Scv6HgeRC9IdbA+jMHc
-         EXsc1TKIGKTYdytGfDNvrSyWW+HFqT2X4b0blx1k+6RMHaWgE4EOyCqbBhfAE/bSwapo
-         bMlTqdIMLhlVw5M8Xxg/CFVQiCzzm2yRSfT/FaD7tYzaCPC4dUHXUkrG4AuYSakgMIT9
-         Wnsgi60s+3YKqUd7q8RyHN9levpeA72NlA23E2UJKJyc3UT5eRhKJEVVVwyXIsQTLaVN
-         OeA+7/6u0/OVoNCGtUIaxr3XJVIxulj5hpqTkgB5qaE8e0aS8+9gq0tq/muFmabxHbFc
-         z+gg==
-X-Forwarded-Encrypted: i=1; AJvYcCXBkhzsvcnooG6qBGX0PXN/BPfG9pdUQ0Vr1Noqr9Tj37OCNe7Ql5wg9DUJ4a1oxz+Z+mEvo8yrGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzt+xZuszd3cEK2vSEq7gcNbeBX8qoMyfYFv/g1Ejp+qY0uw54y
-	IdIe8DrfbQS0Z8lw39mwC/2T3usnX3EGrkzEEomSHoqOt/jf1T8BrAQTcdvYDMsS
-X-Gm-Gg: AY/fxX6k17I+Z0TgE+KgIgI1JHBE+LVlD84IKSr5lRA5XXznMi85QnGb913vp9+hrxV
-	ZY6ZEVSvb6NxoHLuDlvSiSdn51/ExMl3lcXG6TEYcZTnvlBdzQOGpipXYk/a3MbCZdSzUDEPNgw
-	ngAknAyenD+q1Lz9XxLAXuvN/58JJwJwY+avwX8ClEs+0Jk6mSdFxxtDOkBtfZi6nJz6YUUsXpu
-	rLoodBDt4lQMfBfY69oTt4j5av2cdBf40BLrLiw9qUqZUhHoJ+vpyKtzoMBhXDsys0lWOl7xSnE
-	JJrjeBgN2jVNjDApb6E/U3lJ1WyB4BEzdKvX4eBR0eNoZh+cZuSyJtzkt4KvvHxttX5XOnTDvnq
-	B7zVmKlMnEdbAuZod8Bl40XVkP5gMjKFss7PXMNUpWtSf8ucyfUeboVmIVuD8BM3hYO35wFR1Qv
-	GYg/k1hFg3I+GhObWtDBi+AswEzstV5E9mqdPwDITPyBE7khU=
-X-Received: by 2002:a05:6a00:3311:b0:81e:5a6e:339 with SMTP id d2e1a72fcca58-81f83c881aemr4592595b3a.22.1768466753583;
-        Thu, 15 Jan 2026 00:45:53 -0800 (PST)
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com. [74.125.82.50])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81f8e4f61fdsm1818105b3a.26.2026.01.15.00.45.53
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jan 2026 00:45:53 -0800 (PST)
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-12331482b8fso2165181c88.1
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 00:45:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXwXumaBuepuC/0F4keSgifhjy9ijSE7GHPagawhZ4hB0si7tIWfNvmf4MJ8Gxwhf+n3DneacTsBw==@vger.kernel.org
-X-Received: by 2002:a05:6122:3b81:b0:563:4a88:6ea5 with SMTP id
- 71dfb90a1353d-563a2093a5dmr1838362e0c.5.1768466262231; Thu, 15 Jan 2026
- 00:37:42 -0800 (PST)
+        bh=MMFj9gQvn0V+NVRRKsqf5Eg6BpjQZxX0IqjKremmDdc=;
+        b=H0PD/00A/MUuczUAV4WX24dTwwVo5W3MY14jRWQIHfHnLr1y+nyI17xh5EJBkRDBq9
+         xfSNf2Dcxsk7qii4JNDRLqITe1YtllkjmBa4YO9ZddDipTOq2mPBj3f1VWvrU70nAl9t
+         mxjfhEFjtzKGERFcZd6pBg1jNm57J4C7cU2sQP8Z+t2ijav+cO/daTMgQXwNGVZ8CzrJ
+         N1RtzDt9GwyhYuZYKtP2yAiH4NlfC4RPg9edATEM2y8EG4YyI6Z1CjEGiQzZtLco7ttK
+         MUVrJDQ27wo4QFIV2AlJwFjJJ3Ny1Nt5SeAVSN8lwjb6jrKWYBKDapNBZd6GQsJSstcJ
+         /Ypw==
+X-Forwarded-Encrypted: i=1; AJvYcCVHbKpPEXpG5uQwsTOyAUntxQiTCYholPiJl7xC4znmlDfeFsmmwHVbcX9RBIhcqPnYuT6kVTOQkQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyho1GcWUap7lksCTjFUv7IK7UCM5DjZ2ZohfxuMEb4JS1Sd/4+
+	QpKGvLfBfJpQRDWqyuxQuk6DKNIdVcC1rwzRl6hyqsDUTDj7i+oGKku5Rbq4A2ABet+V1Q==
+X-Gm-Gg: AY/fxX6kQYCsbJ+U5poziy5uVvYNY4HMvIQi8rkHKNCBjBgWpnsyJJStgm0NQjeJH2W
+	hv5FFskqul1Jn1wJGVO5i1DQyA/lr6/A7MgNnwJAhiankby3LskNIhiI98BuqH7JPHR1NGsZv0R
+	F8cg4SN+B03a2TvaPMB7UNa7IbXUzMfOmIoeaBLqkiERaMpDVa9vAQrozZI+7bhEN2vI+LWDsqw
+	EssS8oZNNRP00c78zDXgQhxZFxQiOrFtRWIAXptAyho+Bo5FkSoZ8e0youIIFTU0BeTVwQEm2GC
+	4MuiWmw67RfBh5uSySM6VgqWMdQASiCG7re0bgp5e79UuqOX4VZ6dVuBn6NjJ4GxdB19IK8mWO3
+	O7r+uh2tJtxCIX3/0F+BRnx8LMjRCn5e0yMYvPCT1ff2Xx8VRCCkC8qovNc1hL2jePJ+ts79nBm
+	ajqVTlHgn5QHMTAe6wNLhYMHMss+Y23H1rSv73WwFmNUC8uO6exWJ5pxatCMqktRX24HMH05CFr
+	69XHfI/3im8KQg=
+X-Received: by 2002:a05:620a:45a8:b0:8c5:2032:3766 with SMTP id af79cd13be357-8c52fb26dd6mr717196885a.35.1768466438971;
+        Thu, 15 Jan 2026 00:40:38 -0800 (PST)
+Received: from fauth-a1-smtp.messagingengine.com (fauth-a1-smtp.messagingengine.com. [103.168.172.200])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c530aab8f1sm343318785a.23.2026.01.15.00.40.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jan 2026 00:40:38 -0800 (PST)
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id D1B16F40068;
+	Thu, 15 Jan 2026 03:40:37 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Thu, 15 Jan 2026 03:40:37 -0500
+X-ME-Sender: <xms:BahoaXVof-Jyw7Z6RITyRBaIkZ5XlAX1C9SPLmFn5Es3DNK4JVtNFA>
+    <xme:Bahoaf9LA3THVNmine0aE8aflwQlZ3_uLKjR2R2kzsd4gPzs2NdIY3rG1BaiwX-fc
+    -lmtZgzkpuKH2PD9gETd8EIy2VhNjcYN1wVbr35UcoirbE5R4Hg8w>
+X-ME-Received: <xmr:BahoaUiDfAs4aSlYtB_QAPiqUKlJxJe_8pTiE0RWs2r18mToudumnOyj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduvdehiedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
+    htvghrnhepvefghfeuveekudetgfevudeuudejfeeltdfhgfehgeekkeeigfdukefhgfeg
+    leefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsg
+    hoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedtieeg
+    qddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfhhigi
+    hmvgdrnhgrmhgvpdhnsggprhgtphhtthhopedvuddpmhhouggvpehsmhhtphhouhhtpdhr
+    tghpthhtohepmhhighhuvghlrdhojhgvuggrrdhsrghnughonhhishesghhmrghilhdrtg
+    homhdprhgtphhtthhopegrtghouhhrsghothesnhhvihguihgrrdgtohhmpdhrtghpthht
+    ohepuggrkhhrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrlhhitggvrhihhhhlse
+    hgohhoghhlvgdrtghomhdprhgtphhtthhopegurghnihgvlhdrrghlmhgvihgurgestgho
+    lhhlrggsohhrrgdrtghomhdprhgtphhtthhopehojhgvuggrsehkvghrnhgvlhdrohhrgh
+    dprhgtphhtthhopehgrghrhiesghgrrhihghhuohdrnhgvthdprhgtphhtthhopegsjhho
+    rhhnfegpghhhsehprhhothhonhhmrghilhdrtghomhdprhgtphhtthhopehlohhsshhinh
+    eskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:BahoaeVGKNaYGqbaDEfjcF7V3emi7UAZMjkIRbsJRCByuXZd5Gtzlw>
+    <xmx:BahoaQvyIuuAifADi7UrBTdfqCJux7tGe3R64zvjrjG0bQMSgb_Ebg>
+    <xmx:BahoaX-YNtrf8GLDNJtUy7zSy3jrSeXp0gslTd8GgCVCQ5GJi_n04Q>
+    <xmx:BahoaYulevMC2AFGaIIvQL1TcHWAYBPwsGl3Dttai3j8AT1MNXZGHA>
+    <xmx:BahoaV4lhB06B0R1fxVkyF9e_GlHDU0OyeqB1eYzoSCmzNJH_DlvT0P7>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 15 Jan 2026 03:40:37 -0500 (EST)
+Date: Thu, 15 Jan 2026 16:40:35 +0800
+From: Boqun Feng <boqun.feng@gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Alexandre Courbot <acourbot@nvidia.com>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Trevor Gross <tmgross@umich.edu>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Mark Rutland <mark.rutland@arm.com>, rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3 5/7] rust: sync: refcount: always inline functions
+ using build_assert with arguments
+Message-ID: <aWinBMASjagM8gNQ@tardis-2.local>
+References: <20251208-io-build-assert-v3-0-98aded02c1ea@nvidia.com>
+ <20251208-io-build-assert-v3-5-98aded02c1ea@nvidia.com>
+ <CANiq72=U93ceCxLH_HYesCvCywpCsou98kM2Z53x=cx=iVXm0Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251230080115.2120612-1-zhenglifeng1@huawei.com>
- <20251230080115.2120612-4-zhenglifeng1@huawei.com> <CAMuHMdVeHk-Enc-M9ztwSdeAtE8YPKtJwq+273bGPEFOEsu=Rw@mail.gmail.com>
- <aWZriVlQZ5jRx2o4@arm.com> <CAMuHMdVgbQnaCQ8U8FK6J1vJLsqc0_MC7zSTX2B=rsuF2kpEKg@mail.gmail.com>
- <41b7398c-b1a4-4b87-b6f9-07eacf4f4752@huawei.com>
-In-Reply-To: <41b7398c-b1a4-4b87-b6f9-07eacf4f4752@huawei.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 15 Jan 2026 09:37:31 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUuTrF=eN5tMsjmOfWuuT9r7aCOTS7=YP6+KrSdNrhEpw@mail.gmail.com>
-X-Gm-Features: AZwV_QgJfgfwWgiDZ0xWQqvqqWOvLCpdrYhSVw3ZJkes_w8m6CntQRIYTUo-KYk
-Message-ID: <CAMuHMdUuTrF=eN5tMsjmOfWuuT9r7aCOTS7=YP6+KrSdNrhEpw@mail.gmail.com>
-Subject: Re: [REPOST PATCH v6 3/3] arm64: topology: Handle AMU FIE setup on
- CPU hotplug
-To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-Cc: Beata Michalska <beata.michalska@arm.com>, catalin.marinas@arm.com, will@kernel.org, 
-	rafael@kernel.org, viresh.kumar@linaro.org, sudeep.holla@arm.com, 
-	gregkh@linuxfoundation.org, dakr@kernel.org, ionela.voinescu@arm.com, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linuxarm@huawei.com, jonathan.cameron@huawei.com, vincent.guittot@linaro.org, 
-	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com, 
-	zhangpengjie2@huawei.com, wangzhi12@huawei.com, linhongye@h-partners.com, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72=U93ceCxLH_HYesCvCywpCsou98kM2Z53x=cx=iVXm0Q@mail.gmail.com>
 
-Hi Lifeng,
-
-On Thu, 15 Jan 2026 at 03:25, zhenglifeng (A) <zhenglifeng1@huawei.com> wrote:
-> On 2026/1/14 21:54, Geert Uytterhoeven wrote:
-> > On Tue, 13 Jan 2026 at 16:58, Beata Michalska <beata.michalska@arm.com> wrote:
-> >> On Tue, Jan 13, 2026 at 11:51:45AM +0100, Geert Uytterhoeven wrote:
-> >>> On Tue, 30 Dec 2025 at 09:02, Lifeng Zheng <zhenglifeng1@huawei.com> wrote:
-> >>>> Currently, when a cpufreq policy is created, the AMU FIE setup process
-> >>>> checks all CPUs in the policy -- including those that are offline. If any
-> >>>> of these CPUs are offline at that time, their AMU capability flag hasn't
-> >>>> been verified yet, leading the check fail. As a result, AMU FIE is not
-> >>>> enabled, even if the CPUs that are online do support it.
-> >>>>
-> >>>> Later, when the previously offline CPUs come online and report AMU support,
-> >>>> there's no mechanism in place to re-enable AMU FIE for the policy. This
-> >>>> leaves the entire frequency domain without AMU FIE, despite being eligible.
-> >>>>
-> >>>> Restrict the initial AMU FIE check to only those CPUs that are online at
-> >>>> the time the policy is created, and allow CPUs that come online later to
-> >>>> join the policy with AMU FIE enabled.
-> >>>>
-> >>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> >>>> Acked-by: Beata Michalska <beata.michalska@arm.com>
-> >>>
-> >>> Thanks for your patch, which is now commit 6fd9be0b7b2e957d
-> >>> ("arm64: topology: Handle AMU FIE setup on CPU hotplug") in
-> >>> arm64/for-next/core (next-20260107 and later).
-> >>>
-> >>>> --- a/arch/arm64/kernel/topology.c
-> >>>> +++ b/arch/arm64/kernel/topology.c
-> >>>> @@ -284,7 +284,7 @@ static int init_amu_fie_callback(struct notifier_block *nb, unsigned long val,
-> >>>>         struct cpufreq_policy *policy = data;
-> >>>>
-> >>>>         if (val == CPUFREQ_CREATE_POLICY)
-> >>>> -               amu_fie_setup(policy->related_cpus);
-> >>>> +               amu_fie_setup(policy->cpus);
-> >>>>
-> >>>>         /*
-> >>>>          * We don't need to handle CPUFREQ_REMOVE_POLICY event as the AMU
-> >>>> @@ -303,10 +303,71 @@ static struct notifier_block init_amu_fie_notifier = {
-> >>>>         .notifier_call = init_amu_fie_callback,
-> >>>>  };
-> >>>>
-> >>>> +static int cpuhp_topology_online(unsigned int cpu)
-> >>>> +{
-> >>>> +       struct cpufreq_policy *policy = cpufreq_cpu_policy(cpu);
-> >>>> +
-> >>>> +       /* Those are cheap checks */
-> >>>> +
-> >>>> +       /*
-> >>>> +        * Skip this CPU if:
-> >>>> +        *  - it has no cpufreq policy assigned yet,
-> >>>> +        *  - no policy exists that spans CPUs with AMU counters, or
-> >>>> +        *  - it was already handled.
-> >>>> +        */
-> >>>> +       if (unlikely(!policy) || !cpumask_available(amu_fie_cpus) ||
-> >>>> +           cpumask_test_cpu(cpu, amu_fie_cpus))
-> >>>> +               return 0;
-> >>>> +
-> >>>> +       /*
-> >>>> +        * Only proceed if all already-online CPUs in this policy
-> >>>> +        * support AMU counters.
-> >>>> +        */
-> >>>> +       if (unlikely(!cpumask_subset(policy->cpus, amu_fie_cpus)))
-> >>>> +               return 0;
-> >>>> +
-> >>>> +       /*
-> >>>> +        * If the new online CPU cannot pass this check, all the CPUs related to
-> >>>> +        * the same policy should be clear from amu_fie_cpus mask, otherwise they
-> >>>> +        * may use different source of the freq scale.
-> >>>> +        */
-> >>>> +       if (!freq_counters_valid(cpu)) {
-> >>>> +               pr_warn("CPU[%u] doesn't support AMU counters\n", cpu);
-> >>>
-> >>> This is triggered during resume from s2ram on Renesas R-Car H3
-> >>> (big.LITTLE 4x Cortex-A57 + 4x Cortex-A53), when enabling the first
-> >>> little core:
-> >>>
-> >>>     AMU: CPU[4] doesn't support AMU counters
-> >>>
-> >>> Adding debug code:
-> >>>
-> >>>     pr_info("Calling
-> >>> topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH, %*pbl)\n",
-> >>> cpumask_pr_args(policy->related_cpus));
-> >>>     pr_info("Calling cpumask_andnot(..., %*pbl, %*pbl)\n",
-> >>> cpumask_pr_args(amu_fie_cpus), cpumask_pr_args(policy->related_cpus));
-> >>>
-> >>> gives:
-> >>>
-> >>>     AMU: Calling topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH, 4-7)
-> >>>     AMU: Calling cpumask_andnot(..., , 4-7)
-> >>>
-> >>> so AMU is disabled for all little cores.
-> >>>
-> >>> Since this only happens during s2ram, and not during initial CPU
-> >>> bring-up on boot, this looks wrong to me?
-> >> This does look rather surprising. If that CPU was marked as supporting AMUs at
-> >> the initial bring-up it should be part of amu_fie_cpus mask, so the hp callback
-> >> should bail out straight away. Would you be able to add some logs to see what
-> >> that mask actually contains ?
-> >> Furthermore, freq_counters_valid is logging issues when validating the counters.
-> >> Would you be able to re-run it with the debug level to see what might be
-> >> happening under the hood, although I am still unsure why it is even reaching
-> >> that point ...
+On Thu, Jan 15, 2026 at 08:49:05AM +0100, Miguel Ojeda wrote:
+> On Mon, Dec 8, 2025 at 3:47 AM Alexandre Courbot <acourbot@nvidia.com> wrote:
 > >
-> > Adding extra debugging info, and "#define DEBUG" at the top.
+> > `build_assert` relies on the compiler to optimize out its error path.
+> > Functions using it with its arguments must thus always be inlined,
+> > otherwise the error path of `build_assert` might not be optimized out,
+> > triggering a build error.
 > >
-> > During boot:
-> >
-> >     AMU: amu_fie_setup:260: cpus 0-3 amu_fie_cpus
-> >     ^^^ empty amu_fie_cpus
-> >     AMU: CPU0: counters are not supported.
-> >     ^^^ pr_debug
-> >     AMU: amu_fie_setup:260: cpus 4-7 amu_fie_cpus
-> >     ^^^ empty amu_fie_cpus
-> >     AMU: CPU4: counters are not supported.
-> >     ^^^ pr_debug
-> >
-> > During resume from s2ram:
-> >
-> >     AMU: cpuhp_topology_online:314: cpu 1 amu_fie_cpus
-> >     AMU: cpuhp_topology_online:343: skipped
-> > (!cpumask_subset(policy->cpus, amu_fie_cpus))
-> >     AMU: cpuhp_topology_online:314: cpu 2 amu_fie_cpus
-> >     AMU: cpuhp_topology_online:343: skipped
-> > (!cpumask_subset(policy->cpus, amu_fie_cpus))
-> >     AMU: cpuhp_topology_online:314: cpu 3 amu_fie_cpus
-> >     AMU: cpuhp_topology_online:343: skipped
-> > (!cpumask_subset(policy->cpus, amu_fie_cpus))
-> >     AMU: cpuhp_topology_online:314: cpu 4 amu_fie_cpus
-> >     AMU: CPU4: counters are not supported.
-> >     ^^^ pr_debug
-> >     AMU: CPU[4] doesn't support AMU counters
-> >     ^^^ pr_warn
-> >     AMU: Calling topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_ARCH, 4-7)
-> >     AMU: Calling cpumask_andnot(..., , 4-7)
->
-> Something strange here. If AMU is not supported at all, amu_fie_cpus should
-> never be available and cpuhp_topology_online() should return in the first
-> 'if'. Why it runs this far?
+> > Cc: stable@vger.kernel.org
+> > Fixes: bb38f35b35f9 ("rust: implement `kernel::sync::Refcount`")
+> > Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
+> > Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+> 
+> Boqun et al.: do you want to pick this one or should I take it with
+> your Acked-by?
+> 
 
-You mean the "!cpumask_available(amu_fie_cpus)" test?
+Acked-by: Boqun Feng <boqun.feng@gmail.com>
 
-include/linux/cpumask.h:
+Going via rust-next seems more appropriate to me, thanks!
 
-    #ifdef CONFIG_CPUMASK_OFFSTACK
-    static __always_inline bool cpumask_available(cpumask_var_t mask)
-    {
-            return mask != NULL;
-    }
-    #else
-    static __always_inline bool cpumask_available(cpumask_var_t mask)
-    {
-            return true;
-    }
-    #endif /* CONFIG_CPUMASK_OFFSTACK */
+Regards,
+Boqun
 
-include/linux/cpumask_types.h:
-
-    #ifdef CONFIG_CPUMASK_OFFSTACK
-    typedef struct cpumask *cpumask_var_t;
-    #else
-    typedef struct cpumask cpumask_var_t[1];
-    #endif /* CONFIG_CPUMASK_OFFSTACK */
-
-So if CONFIG_CPUMASK_OFFSTACK is not enabled, it always returns true.
-
-arch/arm64/Kconfig:
-
-    config ARM64
-        [...]
-        select CPUMASK_OFFSTACK if NR_CPUS > 256
-
-> >     AMU: cpuhp_topology_online:314: cpu 5 amu_fie_cpus
-> >     AMU: cpuhp_topology_online:343: skipped
-> > (!cpumask_subset(policy->cpus, amu_fie_cpus))
-> >     AMU: cpuhp_topology_online:314: cpu 6 amu_fie_cpus
-> >     AMU: cpuhp_topology_online:343: skipped
-> > (!cpumask_subset(policy->cpus, amu_fie_cpus))
-> >     AMU: cpuhp_topology_online:314: cpu 7 amu_fie_cpus
-> >     AMU: cpuhp_topology_online:343: skipped
-> > (!cpumask_subset(policy->cpus, amu_fie_cpus))
-> >
-> > Hence there is no issue, as AMU is not supported at all!
-> >
-> > The confusing part is in the (absence of) logging.
-> > If AMU is not supported, freq_counters_valid() uses:
-> >
-> >      pr_debug("CPU%d: counters are not supported.\n", cpu);
-> >
-> > which is typically not printed, unless DEBUG is enabled.
-> >
-> > If freq_counters_valid() failed, the new cpuhp_topology_online() uses:
-> >
-> >     pr_warn("CPU[%u] doesn't support AMU counters\n", cpu);
-> >
-> > which is always printed.
-> >
-> > Given freq_counters_valid() already prints a (debug) message, I think
-> > the pr_warn() should just be removed.  Do you agree, or is there still
-> > another incorrect check that should prevent getting this far?
->
-> I'm OK with removing it.
-
-OK, I will send a patch.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> Thanks!
+> 
+> Cheers,
+> Miguel
 
