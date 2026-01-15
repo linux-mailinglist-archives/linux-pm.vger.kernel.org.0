@@ -1,113 +1,213 @@
-Return-Path: <linux-pm+bounces-40916-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40918-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEB0DD23F7B
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 11:37:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9BE3D23FD2
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 11:43:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0B584301B12C
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 10:37:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B28D4309350E
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 10:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7EA736AB6D;
-	Thu, 15 Jan 2026 10:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ACEA36C599;
+	Thu, 15 Jan 2026 10:42:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aQZ8s3Xu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Una2UUlr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2832036BCF4
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 10:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14EF536C0AA;
+	Thu, 15 Jan 2026 10:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768473439; cv=none; b=j8KmeJR7IUBQTVnre5LL1erDuh2gW8NpJQ/1k7pHqEW4X4MAI3PgKwg4GabzAK7jjq7G3b9eqFPSSnTUb4yguPKhQVfHiC07Kwvp7stqfyVxtqctMuf4U3vu1xdIUWWEJiwINrr5uUQ7N4SKYze7+7moIsVWGDgws1hTFvSAlAY=
+	t=1768473763; cv=none; b=r8+5ZpswkebblZA6vtujb7T6jKaUgK41EkWdK3lB0avWeOwvc8k5U6MUjKzS17NYovkBooQkIbwNvBg6I1yTM5d7UDUh034cRs+P1h/pkJmoWTenquyURzQIbhZANAMV7griPVaUGkjJjWJ70nlSUSZ5SQNyO906jdCewxsOTa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768473439; c=relaxed/simple;
-	bh=mroer21tyn+VD73El7nXuBQ45D8aT09v1u5rNLXbTnY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c6Hy9I+XNze/zPBMKwL4Ui4iSgQUPzaWM7RJu8zNMWj8eK0TQnDE8CCPrxoWEebP7boxBCIKsTI57gY2gBaBpRqQ/WLCAJfUWijYDELLGF5tomBro31rDnQ5BYJ73Vmhs31dURQqtLHBrtRCBI2QxVaxLWymC9q87WaEzjgHIoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aQZ8s3Xu; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768473437;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=nxAyT8OzTNULMr7XLos5FaceRIYaialub9HWZHZwsXw=;
-	b=aQZ8s3Xusr96HiWTmP+WuMLnYMeWLEg9U5k+7DlcE4YuyJvjwWQRJTIDCEXcvL8n5hv/kx
-	EAYVUeCwMjFth3bNPkCLUgSPWkc5JNIGXQgpYphcU1KezEZyKCQ3AjAEzoq9wzis1fTM3t
-	aWNoVIOtGkwkSI3O45IBh6X8NG4ctx0=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-491-Rm2HCpxvM2ywjPe_ZzUfAA-1; Thu,
- 15 Jan 2026 05:37:12 -0500
-X-MC-Unique: Rm2HCpxvM2ywjPe_ZzUfAA-1
-X-Mimecast-MFC-AGG-ID: Rm2HCpxvM2ywjPe_ZzUfAA_1768473431
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 06F4218005B4;
-	Thu, 15 Jan 2026 10:37:11 +0000 (UTC)
-Received: from mrout-thinkpadp16vgen1.punetw6.csb (unknown [10.74.64.47])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 50AF71955F22;
-	Thu, 15 Jan 2026 10:37:06 +0000 (UTC)
-From: Malaya Kumar Rout <mrout@redhat.com>
-To: lukasz.luba@arm.com
-Cc: mrout@redhat.com,
-	malayarout91@gmail.com,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] PM: EM: Fix NULL pointer dereference in em_create_pd()
-Date: Thu, 15 Jan 2026 16:07:00 +0530
-Message-ID: <20260115103700.177997-1-mrout@redhat.com>
+	s=arc-20240116; t=1768473763; c=relaxed/simple;
+	bh=llEBPxw2+pMZWxuWT4kSJKy3MloVCCidvTx0iLzR37A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EEyuwExKzof00JWHDCc/1Pw0h2xEU6I6leZjk0yFfeySMN8qvEgYg8wowz+RPDmP73j0B5DKeW6qHf4qkTJLsvRdmZQ6xITLJlbkzQbXBAs/Rp56PVRnrKDc/DF60llJtAFzEPrBelz54mf9LWALsNsbMwgLFDOQrOqMmBCGaDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Una2UUlr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5C0C116D0;
+	Thu, 15 Jan 2026 10:42:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768473762;
+	bh=llEBPxw2+pMZWxuWT4kSJKy3MloVCCidvTx0iLzR37A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Una2UUlrcBz4SHlUiUp5PrFBWLmf9udmXhChU4WIFgX3C1hxfO3dWAPXKXeJoc8uo
+	 yHxSqV2EMldhU+3sgUIm8T2iLCsfknAe3vM4rSDivCL/tgWwkduL17CqMGYIa5/Om4
+	 IiDaTGERYO4sPRyY8ovwO5VsV5ncx/ksiGLw31LieoMJ9SZHTflpato7llsHLHSA20
+	 mQRpJNMIvamS8EiJ7VwekA5ZSKpjnlQ6EhNGGhwyTJ9NZ0//b03mbLAVU5aNPxoxV7
+	 hYUxUy3kSBmt8/eucatEA3Lgq1zSefgjZ3Jue8GuuIAu3dhJU/ptnO6Nolzxo/7E8I
+	 UiS5UAgEd4p9Q==
+Date: Thu, 15 Jan 2026 16:12:23 +0530
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Hans de Goede <hansg@kernel.org>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Bartosz Golaszewski <brgl@kernel.org>, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v4 5/9] dt-bindings: connector: Add PCIe M.2 Mechanical
+ Key E connector
+Message-ID: <gcmm23ji4fkcqeshcyiehuyega7kdbtvmofp4usmol2icwn6gy@i46icelwwqh5>
+References: <20260112-pci-m2-e-v4-0-eff84d2c6d26@oss.qualcomm.com>
+ <20260112-pci-m2-e-v4-5-eff84d2c6d26@oss.qualcomm.com>
+ <20260113171424.GA3925312-robh@kernel.org>
+ <xyttom64ht5hrrp5hecjqehnyfgsv4mfl2t36e2sveu44ccpjl@lkzquse2kqsx>
+ <CAL_JsqJxBNm0y6T7vji6MXgsO65iDJ-tdUEo0cOxkw7EuMKpkg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+In-Reply-To: <CAL_JsqJxBNm0y6T7vji6MXgsO65iDJ-tdUEo0cOxkw7EuMKpkg@mail.gmail.com>
 
-The get_cpu_device() function can return NULL if the CPU device is
-not registered. However, the code in em_create_pd() dereferences the
-returned pointer without checking for NULL, which can lead to a kernel
-panic during energy model initialization.
+On Wed, Jan 14, 2026 at 11:45:42AM -0600, Rob Herring wrote:
+> On Wed, Jan 14, 2026 at 10:14 AM Manivannan Sadhasivam <mani@kernel.org> wrote:
+> >
+> > On Tue, Jan 13, 2026 at 11:14:24AM -0600, Rob Herring wrote:
+> > > On Mon, Jan 12, 2026 at 09:56:04PM +0530, Manivannan Sadhasivam wrote:
+> > > > Add the devicetree binding for PCIe M.2 Mechanical Key E connector defined
+> > > > in the PCI Express M.2 Specification, r4.0, sec 5.1.2. This connector
+> > > > provides interfaces like PCIe or SDIO to attach the WiFi devices to the
+> > > > host machine, USB or UART+PCM interfaces to attach the Bluetooth (BT)
+> > > > devices. Spec also provides an optional interface to connect the UIM card,
+> > > > but that is not covered in this binding.
+> > > >
+> > > > The connector provides a primary power supply of 3.3v, along with an
+> > > > optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
+> > > > 1.8v sideband signaling.
+> > > >
+> > > > The connector also supplies optional signals in the form of GPIOs for fine
+> > > > grained power management.
+> > > >
+> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > > > ---
+> > > >  .../bindings/connector/pcie-m2-e-connector.yaml    | 154 +++++++++++++++++++++
+> > > >  MAINTAINERS                                        |   1 +
+> > > >  2 files changed, 155 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
+> > > > new file mode 100644
+> > > > index 000000000000..b65b39ddfd19
+> > > > --- /dev/null
+> > > > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
+> > > > @@ -0,0 +1,154 @@
+> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > +%YAML 1.2
+> > > > +---
+> > > > +$id: http://devicetree.org/schemas/connector/pcie-m2-e-connector.yaml#
+> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > +
+> > > > +title: PCIe M.2 Mechanical Key E Connector
+> > > > +
+> > > > +maintainers:
+> > > > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > > > +
+> > > > +description:
+> > > > +  A PCIe M.2 E connector node represents a physical PCIe M.2 Mechanical Key E
+> > > > +  connector. Mechanical Key E connectors are used to connect Wireless
+> > > > +  Connectivity devices including combinations of Wi-Fi, BT, NFC to the host
+> > > > +  machine over interfaces like PCIe/SDIO, USB/UART+PCM, and I2C.
+> > > > +
+> > > > +properties:
+> > > > +  compatible:
+> > > > +    const: pcie-m2-e-connector
+> > > > +
+> > > > +  vpcie3v3-supply:
+> > > > +    description: A phandle to the regulator for 3.3v supply.
+> > > > +
+> > > > +  vpcie1v8-supply:
+> > > > +    description: A phandle to the regulator for VIO 1.8v supply.
+> > >
+> > > I don't see any 1.8V supply on the connector. There are 1.8V IOs and you
+> > > may need something in DT to ensure those are powered. However, there's
+> > > no guarantee that it's a single supply.
+> > >
+> >
+> > 1.8v VIO supply is an optional supply and is only required if the platform
+> > supports 1.8v for sideband signals such as PERST#, WAKE#... I can include it in
+> > the example for completeness.
+> 
+> My point is that PERST# and WAKE# supplies could be 2 different 1.8V
+> supplies and those supply the I/O pads of the GPIO pins (and possibly
+> external pull-ups) that drive them. The 1.8V supply doesn't supply
+> 1.8V to the slot, so making it a slot/connector property is wrong.
+> 
 
-Add a NULL check before dereferencing cpu_dev. If get_cpu_device()
-returns NULL, return -ENODEV and properly clean up allocated resources
-through the existing error path.
+Ok, I get your point that VIO 1.8v supply is just limited to the I/O logic and
+not the whole card/adapter. But I don't get your multiple supplies concern. Spec
+says, "A 1.8 V supply pin called VIO 1.8 V is used to supply the on-Adapter I/O
+buffer circuitry operating at 1.8 V." So it implies that either the single
+supply available to the card through VIO might be used to power the whole I/O
+circuit logic or the card can derive its own 1.8v supply from 3.3v supply.
 
-This issue was found by code inspection. The same function is correctly
-handled with NULL checking in em_cpu_get() at line 555-557.
+So how come the card can have 2 different 1.8v supplies powering the I/O
+circuitry?
 
-Fixes: 1bc138c62295 ("PM / EM: add support for other devices than CPUs in Energy Model")
-Signed-off-by: Malaya Kumar Rout <mrout@redhat.com>
----
- kernel/power/energy_model.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> This isn't exactly a new issue. It could be an issue on any binding
+> with GPIOs. Perhaps this needs to be handled within GPIO or pinctrl.
+> 
+> > > > +
+> > > > +    oneOf:
+> > > > +      - required:
+> > > > +          - port@0
+> > > > +
+> > > > +  clocks:
+> > > > +    description: 32.768 KHz Suspend Clock (SUSCLK) input from the host system to
+> > > > +      the M.2 card. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.1 for
+> > > > +      more details.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  w-disable1-gpios:
+> > > > +    description: GPIO input to W_DISABLE1# signal. This signal is used by the
+> > > > +      system to disable WiFi radio in the M.2 card. Refer, PCI Express M.2
+> > > > +      Specification r4.0, sec 3.1.12.3 for more details.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  w-disable2-gpios:
+> > > > +    description: GPIO input to W_DISABLE2# signal. This signal is used by the
+> > > > +      system to disable WiFi radio in the M.2 card. Refer, PCI Express M.2
+> > > > +      Specification r4.0, sec 3.1.12.3 for more details.
+> > > > +    maxItems: 1
+> > > > +
+> > > > +  viocfg-gpios:
+> > > > +    description: GPIO output to IO voltage configuration (VIO_CFG) signal. This
+> > > > +      signal is used by the M.2 card to indicate to the host system that the
+> > > > +      card supports an independent IO voltage domain for the sideband signals.
+> > > > +      Refer, PCI Express M.2 Specification r4.0, sec 3.1.15.1 for more details.
+> > > > +    maxItems: 1
+> > >
+> > > What about SDIO and UART WAKE, SDIO RESET, and vendor defined signals?
+> > >
+> >
+> > Not sure about vendor defined signals as they can be either GPIO or interface
+> > signals. How should them be defined?
+> 
+> That kind of breaks any notion of this being a generic slot/connector.
+> How's the host supposed to know how to connect them? What if a card
+> required them to be driven a certain way before you can discover the
+> card? If they can be GPIOs and can be hooked up to the host system
+> GPIOs, then you should define GPIOs for them. If they aren't GPIOs on
+> a host, then you omit them.
+> 
 
-diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-index 11af9f64aa82..3971743d7e67 100644
---- a/kernel/power/energy_model.c
-+++ b/kernel/power/energy_model.c
-@@ -466,6 +466,10 @@ static int em_create_pd(struct device *dev, int nr_states,
- 	if (_is_cpu_device(dev))
- 		for_each_cpu(cpu, cpus) {
- 			cpu_dev = get_cpu_device(cpu);
-+			if (!cpu_dev) {
-+				ret = -ENODEV;
-+				goto free_pd_table;
-+			}
- 			cpu_dev->em_pd = pd;
- 		}
- 
+Ok, then defining them as 'vendorN-gpios' is fine?
+
+- Mani
+
 -- 
-2.52.0
-
+மணிவண்ணன் சதாசிவம்
 
