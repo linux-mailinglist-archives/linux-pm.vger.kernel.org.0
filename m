@@ -1,139 +1,307 @@
-Return-Path: <linux-pm+bounces-40908-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40909-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C3EAD22EEB
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 08:50:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8AC3D22FCF
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 09:02:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AC5C5308559C
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 07:49:21 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BD8E8304BD3E
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 08:01:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DF9632D0D3;
-	Thu, 15 Jan 2026 07:49:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0CC432E739;
+	Thu, 15 Jan 2026 08:01:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NKW+Q6pD"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="L2x0TQlK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E951A32825B
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 07:49:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768463360; cv=pass; b=rJxMtZyUb+djDHQyWXktWMbXAd+VLSl4wDnSwUxl+5tD4Y+6rvH5VVfw/kLzyktnvgHRLvR2FhIrZu7uaeUcg6bHnQMrhrcgD8nT/mJhjGM7i5z0KrIR7Mz0H78TgAXE74S6p7DxqGdasYXIQfMKtIeBwRCeSLFruPMiQr/2v18=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768463360; c=relaxed/simple;
-	bh=nOQz0muhgLoELpd5FN9SYvUUu2wnEMl9sQ0vYgazaxk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pQY+NJpHVmb0c6YyEBBMTTlXQeREhedyg99eckyyb8Z8eS2h+PZ+UA3GCKgd8YDaYBG7AKL0/JAiHPbS5at8qO1rQnqxpnqmQwPAagVPxQg1T1kGxQ+sVKpPbo1rvG0nPSByayovAfUhOCrqgZguTnvYFW2hnjapz1C+0Poeiy0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NKW+Q6pD; arc=pass smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2ae60d8a05dso85544eec.2
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 23:49:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1768463358; cv=none;
-        d=google.com; s=arc-20240605;
-        b=JlFqxfg56oR9JB/xZT+31stIFHqhNwQIb0E385k10y24Ts5AzQivBPaizWzuf0b3Ft
-         FOJLym71ND7WCVJYrUk2ABDz3HbqC+cBNNuSwCq4ndIy2dxFvsbljyeJZGOaBFzAb444
-         wLp3Z3OT190ikBaXB1n6dFGzmT4L/3JoQoI3Vnd72M39+l4c4JLqT+EZwzdud0ykSR/O
-         pbjigBIIO/KVMuQ9ZYnm071vYTrSypmLY8LHHq1sv7LueoTnrr8gmZEuE/vESl1Zmr+0
-         tFN/jsKGSvYSZWegGjwECyhJp8hQ49ifjiws0TriP+4x0BJcBJ5M7jxrGMkxAIzOOmdx
-         gPmw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nOQz0muhgLoELpd5FN9SYvUUu2wnEMl9sQ0vYgazaxk=;
-        fh=/BGf8WCxAmCbpNXQRUFh2/cP4coAefCRyrGdFX26F+k=;
-        b=J3aprkCDQwR49NVFSDMVhS6a2hqZ+NVjWIq/jJxyBCSlIqKzl9bscGIhPjiF2teGs1
-         Gb+0sZtaSABCq+jcXkEWqdEHUYEKavG/8PvfPm6gbupItCZgrWqLq+rXcU94qJajYyA7
-         o6yes45URPJT5AHcXXd9FVh3lZa/HWpepj++DHYn6DrEOpcQFRrebNybX7NWvDju1q+N
-         fyvPQptuxVVzzN1ByXI5FspSuziExstgtQPtKPGPb3y1VLgiJCmIQgNVhqMHnbfSKXCV
-         /cQ8YaGgi8TJ8I+hMcRQiLQOfuQeKPdqaicU+rZ5yvtxY8hMvtCpDsPqHajnjKwqcQJ2
-         P+Ug==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768463358; x=1769068158; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nOQz0muhgLoELpd5FN9SYvUUu2wnEMl9sQ0vYgazaxk=;
-        b=NKW+Q6pDTwy+lHxrW9/jbrOIO2fXs60xw4O5+ZA6cc1ofr7oQC0w2PymPmrXox+n2A
-         mOOETmZ2Gy4by/WtC8f4JQvihVyboi3HVD10A4iwW0jZ1p83k1jbFzYl4BpFOjcZ+cIf
-         11XP0Opfoax+3yI3nqfvI28QTT5bXbUC+PM4lkmTc2aBuMmYClYmlj4pVlJuoQ2qlPIB
-         NBW7slOfbR7kgeDErZ8DM+usaM1ZgU2YGqvbDn6wtoj/JfEAxvNSyidZ4TkkqqqW86Sl
-         nF2T2/EF+UD9zQZ7lhMgDse7xQ/fPe8YmtL59cANi2eNhzDyuzwv0irID7dzWJ88+D81
-         83JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768463358; x=1769068158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=nOQz0muhgLoELpd5FN9SYvUUu2wnEMl9sQ0vYgazaxk=;
-        b=reH1Ulr2AI8RcHk1bKKwsQQLc4DwVNi77Yn0Dn/Yjz306RN4sQnPUvUf9F+7Okw6ao
-         UiTZnYCDOu3wdmMbxGiU6W4oMy/2PqAYCx9OR8CZYXjIgWjWcMZyDY5I58b9OraylLRG
-         VVQS2zJMOX7aDdyao7yF3LjerOr0mCDxtFI5BRnXJrOXSwYXg9tNfkKehDjpYEliCyhJ
-         TOAdpdIsCycrvC92dFbG9AwGg1lK82P97ZDd3UEITGW+JJ309YBtvmmSjdp7Gbod8MGf
-         lOjpP1IvZC0m6Dp2GsneQHfbwVm8OOAQiEtOOXR4+WzAqx6uhWtrmJO2ydquoNgdbeeG
-         0sfg==
-X-Forwarded-Encrypted: i=1; AJvYcCWfKKHaVyAB7MBm1xdr/5kpaIkSNjVMBz4NPtbHiw1n4lUEUBuyjTWuZ6b6Rg8KSLKnStGKgAtBhQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJmxgGuqU3VMpPU/jMvidPXuMs/60JhgOthcYKszlStbiE4bS3
-	0MsmQc1n1TLlIQBOP1A1jwXwfVcPR5AGNnJX5BkQM6LA9vSLBt6f5dpb3s0yWa3EdRPVZvYIzV2
-	azfaIKJVFNHZbFX7+v1X1p+HBA+kMA9Y=
-X-Gm-Gg: AY/fxX4gDx/E/nbK0I2W0vVWu0B2l6fHBTReQeIfqbJdRKS2CcljRI9odGZr8ZeVfS1
-	AnlXDSJp1/MdAVOgPlRWxJIlK9GgIvr3erPd90f1KB6jK0RcWDzJhJtrUC66BIQ6kb4DXkvY9tE
-	izhbUzKXy+MsiiBj6WeTX5xmq0UYMI/hV2awhMuJ70VY2Kz+bDGQRXqzpfG0Dj7tcprTOVoe+9E
-	WDzm07O0e7UmlV2MyrACOSwUxi3e40+ST5h0hDbdzX84RKxw5YOoeB9BBrl58VKTdZ/hN5FzZuu
-	lY/TjDaVgVX0mDz4eV9MG5iyea2dM6wNO280UCMEQlFXVog8+QqGIltajBGjj03k3nOi45rH70q
-	6O7trkiCwD7mZ
-X-Received: by 2002:a05:7300:3b1a:b0:2b0:4f9a:724b with SMTP id
- 5a478bee46e88-2b4871e9771mr3815587eec.6.1768463357956; Wed, 14 Jan 2026
- 23:49:17 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59DA92E8B98;
+	Thu, 15 Jan 2026 08:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768464071; cv=none; b=K8YlHzihxs9nIL/MhcdcuE8evIMG5R5iKrbJq1Sy2vKRXH8+Z8cGLsAcsuENtaGlkcI5kdfNM03CjCgvl4bzeV5hY8OhBxT4X4eSg2hDv2MM8HFZ/3Q7q9o2hGnQ+lSe5p5eGaXg3Qgrc/Y8mMFCDUFwuSBQREp0OXRyblxUYmc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768464071; c=relaxed/simple;
+	bh=il+ur2AmFhBIas4/rfObzdgF/u8NIMfbFkNRWVDGI5Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=nXn9IpQDK0OxE3m8JhJBmhhHLOrNYfFABrcYSRJV7HpRhmolln5ik063f2jexLIyOI9yCp2/txvq5yPTkDJK5GRUO4NnpjLxdNB0jSIFNaJswdEwDG2wciT7g8yCp+iTtnn4/ukFhmC5s28pDMdvcGQ1u7BwhRa+b9tCt7ELMkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=L2x0TQlK; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=oip95iPWTAaoPcXICTEjsNFUgVofongS4JHq1pQa6L4=;
+	b=L2x0TQlK4LzJbCmJflrRMkpTVxA6gI83/6eZn6KclUo4gpTexniFkeVPPZiHQhfze0R5d0q50
+	gncTICkF2qU7f+3t0GNZEGQqkpil4lcHYzM7UtXsvmTsF6if4POl3WYfSAfaudDPXpKA3RYcOIN
+	XxciGDdoRqqFJGWA2w9P58E=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4dsFhs5dPxz12Lc0;
+	Thu, 15 Jan 2026 15:58:05 +0800 (CST)
+Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id 72E6B201E9;
+	Thu, 15 Jan 2026 16:01:05 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
+ (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 15 Jan
+ 2026 16:01:04 +0800
+Message-ID: <abc72d3a-990b-4eaa-9043-185e1d205df5@huawei.com>
+Date: Thu, 15 Jan 2026 16:01:03 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251208-io-build-assert-v3-0-98aded02c1ea@nvidia.com> <20251208-io-build-assert-v3-5-98aded02c1ea@nvidia.com>
-In-Reply-To: <20251208-io-build-assert-v3-5-98aded02c1ea@nvidia.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 15 Jan 2026 08:49:05 +0100
-X-Gm-Features: AZwV_Qh28YVcYO6VVyfidVd7hc-EBw_qgwEmENRAhtkTb9yLXtecSM5NN0ft-tA
-Message-ID: <CANiq72=U93ceCxLH_HYesCvCywpCsou98kM2Z53x=cx=iVXm0Q@mail.gmail.com>
-Subject: Re: [PATCH v3 5/7] rust: sync: refcount: always inline functions
- using build_assert with arguments
-To: Alexandre Courbot <acourbot@nvidia.com>, Boqun Feng <boqun.feng@gmail.com>
-Cc: Danilo Krummrich <dakr@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Miguel Ojeda <ojeda@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, stable@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 06/11] ACPI: CPPC: add APIs and sysfs interface for
+ perf_limited
+To: Sumit Gupta <sumitg@nvidia.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<corbet@lwn.net>, <pierre.gondois@arm.com>, <rdunlap@infradead.org>,
+	<ray.huang@amd.com>, <gautham.shenoy@amd.com>, <mario.limonciello@amd.com>,
+	<perry.yuan@amd.com>, <ionela.voinescu@arm.com>, <zhanjie9@hisilicon.com>,
+	<linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>
+CC: <linux-tegra@vger.kernel.org>, <treding@nvidia.com>,
+	<jonathanh@nvidia.com>, <vsethi@nvidia.com>, <ksitaraman@nvidia.com>,
+	<sanjayc@nvidia.com>, <nhartman@nvidia.com>, <bbasu@nvidia.com>
+References: <20251223121307.711773-1-sumitg@nvidia.com>
+ <20251223121307.711773-7-sumitg@nvidia.com>
+ <14851f8e-b6ac-42ff-9623-b7ac8d8893e2@huawei.com>
+ <0a2b7d49-bd1f-442e-9247-705cd2eb0d1c@nvidia.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <0a2b7d49-bd1f-442e-9247-705cd2eb0d1c@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemf200001.china.huawei.com (7.202.181.227)
 
-On Mon, Dec 8, 2025 at 3:47=E2=80=AFAM Alexandre Courbot <acourbot@nvidia.c=
-om> wrote:
->
-> `build_assert` relies on the compiler to optimize out its error path.
-> Functions using it with its arguments must thus always be inlined,
-> otherwise the error path of `build_assert` might not be optimized out,
-> triggering a build error.
->
-> Cc: stable@vger.kernel.org
-> Fixes: bb38f35b35f9 ("rust: implement `kernel::sync::Refcount`")
-> Reviewed-by: Daniel Almeida <daniel.almeida@collabora.com>
-> Signed-off-by: Alexandre Courbot <acourbot@nvidia.com>
+On 2026/1/8 22:38, Sumit Gupta wrote:
+> 
+> On 25/12/25 17:36, zhenglifeng (A) wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 2025/12/23 20:13, Sumit Gupta wrote:
+>>> Add sysfs interface to read/write the Performance Limited register.
+>>>
+>>> The Performance Limited register indicates to the OS that an
+>>> unpredictable event (like thermal throttling) has limited processor
+>>> performance. It contains two sticky bits set by the platform:
+>>>    - Bit 0 (Desired_Excursion): Set when delivered performance is
+>>>      constrained below desired performance. Not used when Autonomous
+>>>      Selection is enabled.
+>>>    - Bit 1 (Minimum_Excursion): Set when delivered performance is
+>>>      constrained below minimum performance.
+>>>
+>>> These bits remain set until OSPM explicitly clears them. The write
+>>> operation accepts a bitmask of bits to clear:
+>>>    - Write 1 to clear bit 0
+>>>    - Write 2 to clear bit 1
+>>>    - Write 3 to clear both bits
+>> It's a bit odd that users write a 1 to and then read a 0 from the sysfs
+>> file. I think it is better to seperate these two bits, as two sysfs files.
+>> Then users can write '0' or 'clear' or others into them to clear each bit.
+> 
+> I think its better to keep one sysfs interface per HW register.
+> Can change the perf_limited write interface to accept bit index
+> instead of bitmask.
+>  - Write 0 to clear bit 0 (desired performance excursion)
+>  - Write 1 to clear bit 1 (minimum performance excursion)
+> 
+> Thank you,
+> Sumit Gupta
 
-Boqun et al.: do you want to pick this one or should I take it with
-your Acked-by?
+I believe that user-facing interfaces should prioritize usability, ideally
+allowing users to guess how to use them simply from the interface name
+without reading any documentation. While this is nearly impossible, user
+interfaces should strive towards this goal, rather than being rigidly bound
+to register implementations.
 
-Thanks!
+Viresh, Rafael, what do you think?
 
-Cheers,
-Miguel
+> 
+> 
+>>
+>>> This enables users to detect if platform throttling impacted a workload.
+>>> Users clear the register before execution, run the workload, then check
+>>> afterward - if set, hardware throttling occurred during that time window.
+>>>
+>>> The interface is exposed as:
+>>>    /sys/devices/system/cpu/cpuX/cpufreq/perf_limited
+>>>
+>>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>>> ---
+>>>   drivers/acpi/cppc_acpi.c       | 56 ++++++++++++++++++++++++++++++++++
+>>>   drivers/cpufreq/cppc_cpufreq.c | 31 +++++++++++++++++++
+>>>   include/acpi/cppc_acpi.h       | 15 +++++++++
+>>>   3 files changed, 102 insertions(+)
+>>>
+>>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>>> index 9f28c20d902d..ffd866c1c00d 100644
+>>> --- a/drivers/acpi/cppc_acpi.c
+>>> +++ b/drivers/acpi/cppc_acpi.c
+>>> @@ -1786,6 +1786,62 @@ int cppc_set_max_perf(int cpu, u32 max_perf)
+>>>   }
+>>>   EXPORT_SYMBOL_GPL(cppc_set_max_perf);
+>>>
+>>> +/**
+>>> + * cppc_get_perf_limited - Get the Performance Limited register value.
+>>> + * @cpu: CPU from which to get Performance Limited register.
+>>> + * @perf_limited: Pointer to store the Performance Limited value.
+>>> + *
+>>> + * The returned value contains sticky status bits indicating platform-imposed
+>>> + * performance limitations.
+>>> + *
+>>> + * Return: 0 for success, -EIO on failure, -EOPNOTSUPP if not supported.
+>>> + */
+>>> +int cppc_get_perf_limited(int cpu, u64 *perf_limited)
+>>> +{
+>>> +     return cppc_get_reg_val(cpu, PERF_LIMITED, perf_limited);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(cppc_get_perf_limited);
+>>> +
+>>> +/**
+>>> + * cppc_set_perf_limited() - Clear bits in the Performance Limited register.
+>>> + * @cpu: CPU on which to write register.
+>>> + * @bits_to_clear: Bitmask of bits to clear in the perf_limited register.
+>>> + *
+>>> + * The Performance Limited register contains two sticky bits set by platform:
+>>> + *   - Bit 0 (Desired_Excursion): Set when delivered performance is constrained
+>>> + *     below desired performance. Not used when Autonomous Selection is enabled.
+>>> + *   - Bit 1 (Minimum_Excursion): Set when delivered performance is constrained
+>>> + *     below minimum performance.
+>>> + *
+>>> + * These bits are sticky and remain set until OSPM explicitly clears them.
+>>> + * This function only allows clearing bits (the platform sets them).
+>>> + *
+>>> + * Return: 0 for success, -EINVAL for invalid bits, -EIO on register
+>>> + *         access failure, -EOPNOTSUPP if not supported.
+>>> + */
+>>> +int cppc_set_perf_limited(int cpu, u64 bits_to_clear)
+>>> +{
+>>> +     u64 current_val, new_val;
+>>> +     int ret;
+>>> +
+>>> +     /* Only bits 0 and 1 are valid */
+>>> +     if (bits_to_clear & ~CPPC_PERF_LIMITED_MASK)
+>>> +             return -EINVAL;
+>>> +
+>>> +     if (!bits_to_clear)
+>>> +             return 0;
+>>> +
+>>> +     ret = cppc_get_perf_limited(cpu, &current_val);
+>>> +     if (ret)
+>>> +             return ret;
+>>> +
+>>> +     /* Clear the specified bits */
+>>> +     new_val = current_val & ~bits_to_clear;
+>>> +
+>>> +     return cppc_set_reg_val(cpu, PERF_LIMITED, new_val);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(cppc_set_perf_limited);
+>>> +
+>>>   /**
+>>>    * cppc_set_enable - Set to enable CPPC on the processor by writing the
+>>>    * Continuous Performance Control package EnableRegister field.
+>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>>> index 1e282dfabc76..1f8825006940 100644
+>>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>>> @@ -1052,12 +1052,42 @@ static ssize_t store_max_perf(struct cpufreq_policy *policy, const char *buf,
+>>>        return count;
+>>>   }
+>>>
+>>> +/**
+>>> + * show_perf_limited - Show Performance Limited register status
+>>> + * @policy: cpufreq policy
+>>> + * @buf: buffer to write the value to
+>>> + *
+>>> + * Read the Performance Limited register to check if platform throttling
+>>> + * (thermal/power/current limits) occurred.
+>>> + */
+>>> +static ssize_t show_perf_limited(struct cpufreq_policy *policy, char *buf)
+>>> +{
+>>> +     return cppc_cpufreq_sysfs_show_u64(policy->cpu,
+>>> +                                        cppc_get_perf_limited, buf);
+>>> +}
+>>> +
+>>> +/**
+>>> + * store_perf_limited - Clear Performance Limited register bits
+>>> + * @policy: cpufreq policy
+>>> + * @buf: buffer containing the bitmask of bits to clear
+>>> + * @count: number of bytes in buf
+>>> + *
+>>> + * Write 1 to clear bit 0, 2 to clear bit 1, or 3 to clear both.
+>>> + */
+>>> +static ssize_t store_perf_limited(struct cpufreq_policy *policy,
+>>> +                               const char *buf, size_t count)
+>>> +{
+>>> +     return cppc_cpufreq_sysfs_store_u64(policy->cpu,
+>>> +                                         cppc_set_perf_limited, buf, count);
+>>> +}
+>>> +
+>>>   cpufreq_freq_attr_ro(freqdomain_cpus);
+>>>   cpufreq_freq_attr_rw(auto_select);
+>>>   cpufreq_freq_attr_rw(auto_act_window);
+>>>   cpufreq_freq_attr_rw(energy_performance_preference_val);
+>>>   cpufreq_freq_attr_rw(min_perf);
+>>>   cpufreq_freq_attr_rw(max_perf);
+>>> +cpufreq_freq_attr_rw(perf_limited);
+>>>
+>>>   static struct freq_attr *cppc_cpufreq_attr[] = {
+>>>        &freqdomain_cpus,
+>>> @@ -1066,6 +1096,7 @@ static struct freq_attr *cppc_cpufreq_attr[] = {
+>>>        &energy_performance_preference_val,
+>>>        &min_perf,
+>>>        &max_perf,
+>>> +     &perf_limited,
+>>>        NULL,
+>>>   };
+>>>
+>>> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+>>> index a49b50bddaf9..57e04326a4b6 100644
+>>> --- a/include/acpi/cppc_acpi.h
+>>> +++ b/include/acpi/cppc_acpi.h
+>>> @@ -42,6 +42,11 @@
+>>>   #define CPPC_EPP_PERFORMANCE_PREF            0x00
+>>>   #define CPPC_EPP_ENERGY_EFFICIENCY_PREF              0xFF
+>>>
+>>> +#define CPPC_PERF_LIMITED_DESIRED_EXCURSION  BIT(0)
+>>> +#define CPPC_PERF_LIMITED_MINIMUM_EXCURSION  BIT(1)
+>>> +#define CPPC_PERF_LIMITED_MASK               (CPPC_PERF_LIMITED_DESIRED_EXCURSION | \
+>>> +                                      CPPC_PERF_LIMITED_MINIMUM_EXCURSION)
+>>> +
+>>>   /* Each register has the folowing format. */
+>>>   struct cpc_reg {
+>>>        u8 descriptor;
+>>> @@ -177,6 +182,8 @@ extern int cppc_get_min_perf(int cpu, u64 *min_perf);
+>>>   extern int cppc_set_min_perf(int cpu, u32 min_perf);
+>>>   extern int cppc_get_max_perf(int cpu, u64 *max_perf);
+>>>   extern int cppc_set_max_perf(int cpu, u32 max_perf);
+>>> +extern int cppc_get_perf_limited(int cpu, u64 *perf_limited);
+>>> +extern int cppc_set_perf_limited(int cpu, u64 perf_limited);
+>>>   extern int amd_get_highest_perf(unsigned int cpu, u32 *highest_perf);
+>>>   extern int amd_get_boost_ratio_numerator(unsigned int cpu, u64 *numerator);
+>>>   extern int amd_detect_prefcore(bool *detected);
+>>> @@ -285,6 +292,14 @@ static inline int cppc_set_max_perf(int cpu, u32 max_perf)
+>>>   {
+>>>        return -EOPNOTSUPP;
+>>>   }
+>>> +static inline int cppc_get_perf_limited(int cpu, u64 *perf_limited)
+>>> +{
+>>> +     return -EOPNOTSUPP;
+>>> +}
+>>> +static inline int cppc_set_perf_limited(int cpu, u64 perf_limited)
+>>> +{
+>>> +     return -EOPNOTSUPP;
+>>> +}
+>>>   static inline int amd_get_highest_perf(unsigned int cpu, u32 *highest_perf)
+>>>   {
+>>>        return -ENODEV;
+> 
+
 
