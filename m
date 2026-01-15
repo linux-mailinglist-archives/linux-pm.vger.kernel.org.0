@@ -1,132 +1,141 @@
-Return-Path: <linux-pm+bounces-40917-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40914-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF78FD23FAE
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 11:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B7627D23E5E
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 11:19:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CCB0E3010AA5
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 10:41:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7A4943014D86
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 10:19:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5278E36BCFC;
-	Thu, 15 Jan 2026 10:41:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024E9337B9F;
+	Thu, 15 Jan 2026 10:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Lf97RDW9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C46BE36BCD8
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 10:41:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9A5E221DAE
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 10:19:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768473714; cv=none; b=djqWvrXyy9d1kovf/+HqJ+wkuV8L4O3mrblN/1HUtPlAKXhVN5nVZ3JfvqwgXIyot5JlSO4L23j/5WmC97phqqNF45JYVcqVGMmBZBNXNpmvVE2dpjLlYiTAON1thOWc9Uol/58GY5Z2zv4V93gPjltZFTnsIQl9PTxG+ReOLcc=
+	t=1768472359; cv=none; b=MqDmMZF4UZ5fXVRO7BXMehmrXWZJXVh4lDvGUltQuOeTTmNRciIwMRlbce2t/7s3UTG+Ywy+OGPiepZ+zE0P8bouUpX6mvZdDAfAs4TyW83W5yebGnKKt/DPfbV9wtHo3dv2rRtbFOsU2p8dY+M85VAOg8Opaoj0Ii0opuHWNDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768473714; c=relaxed/simple;
-	bh=Ic+BG6PwFENklasmULObFPSGqA588zsHCZepmm6A/P4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R/5lL0HhSM6ELdIsvJiUqs7Kz+CZjLbBPxEkOcsh5rjlUqaNj8UvR1JePQY9WFjjK6gMpzPQ9jZq0UVZHPBccKqI42xDvVyTVKllR5jpdV6WReYi/jttwYfO3lX3Mmxsre6Hoh6QALzHrz5bJ7LCyrjnZXuRV9phIAfgi3iVNIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8b31a665ba5so98241585a.2
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 02:41:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768473712; x=1769078512;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1p2XoRu+N3MN1gMwzSh5wyB5gfaCBHLjeZ1kZTlyHmo=;
-        b=X+IBVxvf+N3EU3dmY9xNyC5/bi3oWXPWE03ITLn6gb+dDylbmLOaf+Al8k1Pccr5mk
-         PFuw7Xa+kJmBimv9hZymjEgNSySn0vBMHdCndfor/P9ythh8ytmTI3+CEZZI4fyUEjNx
-         s7XQcrLUj+QNjLY25iBivwtwPDE1MWWFCSYORLTw9kqNBJ6AGy0aIdQsWidkvCGqMb4U
-         8vPPiEoMbYbTSoS54K4quarFhgnasaCNnuLmhxLgppfPi0POzyvs1kN6IP4bsEBDFIaw
-         +M5COglrbHsKk6vloK2BMm0xRYdsQjqJEDPV/KfpiK0Cn4HNVaYaRn97Dfc/LiqoAz7j
-         Iacg==
-X-Forwarded-Encrypted: i=1; AJvYcCUHgaAGsV0bZ3QCJIqyFyW9HfdvU2JWnBxLqtX+wCTOtQW35WQmWdu0TJ8AtUIt8pWOZSxVlt3ktA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcgRgpP/OVMV+8rDNbt8vrZTttNPTiuJbMys/lUhqqP3p/HODR
-	iF2RvMGfFhcTDbcFO0OxVCF50u3PLE7wUr1xE9+q/pAR+3kLt3Imnf6Ys6H7N6R9Q/U=
-X-Gm-Gg: AY/fxX4JvpaF7ML6YChtPpjXRtA7kG3M1+lsiuIfjXMzboycLKYaOYP51xS2UVxyn/G
-	H6ubbWTkVDjy/EDJo+qKf1NYiJY4SVXKf/CEQDIidYINd0LEKRqmGbTzKbupQddtj+09T96zdCz
-	+icNP24m+89eFosvsBjwkJmmi0KK6UeAvKxieQLmGPOITIxZkBKfkUeHjAQOCs5w+PTDMcdG29V
-	2z4PHvucFnr8aE1py56+sAn9+XmrPS/CW1eEM7D7EP83n52yo3lsyKL6xa+T5AcRnrKewz0nTUg
-	FeBeryDyDky9pVgVITcRnFl2Xsaf6FFd2Sr1VPAwTWfI6eQmDQ/KTVWwiOd7+5bTYU4hVvh7viK
-	7bVhoOelu9DhPSvQJjjvvRg0hOR63Gctf3U79WhOxH+g8JZohAr58PPxMX0ZIRKn/vLjetDeCdR
-	4iHGQlOIhgSeB5VnBJH+Oj0/IrGjN1wI09kdnCQtTXRmfkFRTceq3VsSQRspU=
-X-Received: by 2002:a05:6122:2887:b0:559:7acd:1d3a with SMTP id 71dfb90a1353d-563a0924a58mr2005488e0c.2.1768467643857;
-        Thu, 15 Jan 2026 01:00:43 -0800 (PST)
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com. [209.85.222.42])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5636dc36a20sm16846242e0c.13.2026.01.15.01.00.43
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jan 2026 01:00:43 -0800 (PST)
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-94130b88642so454922241.3
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 01:00:43 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUsbXLamIfocgXn0LTyKSWPn6RRfUwzE1z+FsEZ71zIMqtAeeU0ghv/6PJDoGR0MbydiUeVboXhCQ==@vger.kernel.org
-X-Received: by 2002:a05:6102:4b83:b0:5f1:4fb8:6b92 with SMTP id
- ada2fe7eead31-5f17f58c046mr2296699137.22.1768467196661; Thu, 15 Jan 2026
- 00:53:16 -0800 (PST)
+	s=arc-20240116; t=1768472359; c=relaxed/simple;
+	bh=VlB5rBBkWSMx7ezL9jBK+o+zTlbr1hEkzIUO8z7NLCM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Xhv2kCll8NqHAamiWxuwLUm3gAl2U/y/zYnkEd+cB97u6dUnpwTfAOG9TY8r6VdTcWXzE7HeZmn1w7z3guHWr93kUcpcP+6eDDRxbDYiH+os5aIHWleJmbElUMCXEPQ3iZx73kT23tL/AjPuP3F/mWV6MzKozyxrX5eszL6T+ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Lf97RDW9; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Thu, 15 Jan 2026 12:19:04 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1768472356; h=from:from:reply-to:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type; bh=5+BOOFzH8ArDS4gtyMkYiUMDSfO+DALiP0vJPwkcvPQ=;
+	b=Lf97RDW91g3RW1auL7z4mxIqEyzuAgxbBq1455TF8f55/0eo4pDdHa9PrFk/kx5j/l9/+R
+	Y51qDyEETifr6IyffvslpEPlktD2fcM8XKeJv/Q4IQsYmcdgRSg6gQ/RkqRfOonSEN2PDt
+	hsKR1SEeos7/wVLbsBQzXIad6uT0Qgw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Matti Vaittinen <matti.vaittinen@linux.dev>
+To: Matti Vaittinen <mazziesaccount@gmail.com>,
+	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc: Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH] power: supply: bd71828: Use dev_err_probe()
+Message-ID: <aWi_GG74sZRfajA_@mva-rohm>
+Reply-To: Matti Vaittinen <mazziesaccount@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251230080115.2120612-1-zhenglifeng1@huawei.com>
- <20251230080115.2120612-4-zhenglifeng1@huawei.com> <CAMuHMdVeHk-Enc-M9ztwSdeAtE8YPKtJwq+273bGPEFOEsu=Rw@mail.gmail.com>
- <aWZriVlQZ5jRx2o4@arm.com> <CAMuHMdVgbQnaCQ8U8FK6J1vJLsqc0_MC7zSTX2B=rsuF2kpEKg@mail.gmail.com>
- <41b7398c-b1a4-4b87-b6f9-07eacf4f4752@huawei.com> <CAMuHMdUuTrF=eN5tMsjmOfWuuT9r7aCOTS7=YP6+KrSdNrhEpw@mail.gmail.com>
-In-Reply-To: <CAMuHMdUuTrF=eN5tMsjmOfWuuT9r7aCOTS7=YP6+KrSdNrhEpw@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 15 Jan 2026 09:53:05 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVxZ5bbkDqib7jyG50YEnKX=KuHs-svMX7-o2SPz8WF6g@mail.gmail.com>
-X-Gm-Features: AZwV_QiQCjp_xx6Rd7qqH4UVq_yR09vqEc-Jt_NOVYext6gLSj5FqsRdjfyRE28
-Message-ID: <CAMuHMdVxZ5bbkDqib7jyG50YEnKX=KuHs-svMX7-o2SPz8WF6g@mail.gmail.com>
-Subject: Re: [REPOST PATCH v6 3/3] arm64: topology: Handle AMU FIE setup on
- CPU hotplug
-To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-Cc: Beata Michalska <beata.michalska@arm.com>, catalin.marinas@arm.com, will@kernel.org, 
-	rafael@kernel.org, viresh.kumar@linaro.org, sudeep.holla@arm.com, 
-	gregkh@linuxfoundation.org, dakr@kernel.org, ionela.voinescu@arm.com, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linuxarm@huawei.com, jonathan.cameron@huawei.com, vincent.guittot@linaro.org, 
-	zhanjie9@hisilicon.com, lihuisong@huawei.com, yubowen8@huawei.com, 
-	zhangpengjie2@huawei.com, wangzhi12@huawei.com, linhongye@h-partners.com, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="HlnHiPctAo4Hjm7t"
+Content-Disposition: inline
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 15 Jan 2026 at 09:37, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> On Thu, 15 Jan 2026 at 03:25, zhenglifeng (A) <zhenglifeng1@huawei.com> wrote:
-> > On 2026/1/14 21:54, Geert Uytterhoeven wrote:
-> > > The confusing part is in the (absence of) logging.
-> > > If AMU is not supported, freq_counters_valid() uses:
-> > >
-> > >      pr_debug("CPU%d: counters are not supported.\n", cpu);
-> > >
-> > > which is typically not printed, unless DEBUG is enabled.
-> > >
-> > > If freq_counters_valid() failed, the new cpuhp_topology_online() uses:
-> > >
-> > >     pr_warn("CPU[%u] doesn't support AMU counters\n", cpu);
-> > >
-> > > which is always printed.
-> > >
-> > > Given freq_counters_valid() already prints a (debug) message, I think
-> > > the pr_warn() should just be removed.  Do you agree, or is there still
-> > > another incorrect check that should prevent getting this far?
-> >
-> > I'm OK with removing it.
->
-> OK, I will send a patch.
 
-https://lore.kernel.org/a8dbf49bfa44a6809fa4f34b918516847dc14460.1768466986.git.geert+renesas@glider.be/
+--HlnHiPctAo4Hjm7t
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Gr{oetje,eeting}s,
+=46rom: Matti Vaittinen <mazziesaccount@gmail.com>
 
-                        Geert
+The driver uses separate error printing and error returning at probe()
+for locations where the error value is hard-coded and can't be
+EPROBE_DEFER. This helps to omit the extra return value check which is
+done in dev_err_probe().
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Using the dev_err_probe() has some other benefits besides handling the
+-EPROBE_DEFER though, like standardizing the print for error numbers.
+Some believe thes outweigh the benefit of skipping the extra check.
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Use dev_err_probe() consistently in the bd71828 power-supply probe.
+
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+---
+
+This patch depends on, and is done on top of, the series:
+https://lore.kernel.org/all/cover.1765804226.git.mazziesaccount@gmail.com/
+as discussed:
+https://lore.kernel.org/all/aWbg3PTf677Jt9rG@venus/
+
+ drivers/power/supply/bd71828-power.c | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/power/supply/bd71828-power.c b/drivers/power/supply/bd=
+71828-power.c
+index 438e220a9cb7..0e00acb58993 100644
+--- a/drivers/power/supply/bd71828-power.c
++++ b/drivers/power/supply/bd71828-power.c
+@@ -1058,10 +1058,8 @@ static int bd71828_power_probe(struct platform_devic=
+e *pdev)
+ 		pwr->regmap =3D dev_get_regmap(pdev->dev.parent, NULL);
+ 	else
+ 		pwr->regmap =3D dev_get_regmap(pdev->dev.parent, "wrap-map");
+-	if (!pwr->regmap) {
+-		dev_err(&pdev->dev, "No parent regmap\n");
+-		return -EINVAL;
+-	}
++	if (!pwr->regmap)
++		return dev_err_probe(&pdev->dev, -EINVAL, "No parent regmap\n");
+=20
+ 	pwr->dev =3D &pdev->dev;
+=20
+@@ -1083,8 +1081,7 @@ static int bd71828_power_probe(struct platform_device=
+ *pdev)
+ 		dev_dbg(pwr->dev, "Found ROHM BD72720\n");
+ 		break;
+ 	default:
+-		dev_err(pwr->dev, "Unknown PMIC\n");
+-		return -EINVAL;
++		return dev_err_probe(pwr->dev, -EINVAL, "Unknown PMIC\n");
+ 	}
+=20
+ 	ret =3D bd7182x_get_rsens(pwr);
+--=20
+2.52.0
+
+
+--HlnHiPctAo4Hjm7t
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCgAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmlovxMACgkQeFA3/03a
+ocXuVAgAiw62+uVf5uS15LxDE87X1clV/GIzvuz6h5N3cec4a7jwPzWfzLIUqZ4a
+u2iw2I3KxnCjL6oy9xkM/q+mxweTKFzlM/YMaWxfc7cWF/AvzDXG0UyOgNfnxVkK
+BvVTFR6V7IckG18CqrYWd13Hfb8BDkO37uO05fYSB3/rljrlpRPy+CU7lrZgs3qE
+0MBjEqsxJ3hdBpCe1KTizWQxXGeCat8a9y1pVsTE804XiXcod/R8OkWJNIdVK0ao
+etjBmeiTY8UqdhFl/2YtAkj9KZ3+pul/gbi5/DUrLvmeszC4Z2m9L/6cqfyDIgFY
+1pF1cQFJwuUrMFR478pOcTzDCCSd+Q==
+=xU3s
+-----END PGP SIGNATURE-----
+
+--HlnHiPctAo4Hjm7t--
 
