@@ -1,89 +1,86 @@
-Return-Path: <linux-pm+bounces-40899-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40900-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3501D225CD
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 05:14:46 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE65ED225FB
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 05:43:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0FE1C301D644
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 04:14:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D0A57301E6C1
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 04:43:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 784722C15A9;
-	Thu, 15 Jan 2026 04:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E252C0323;
+	Thu, 15 Jan 2026 04:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rC4GMEL6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mmta06fk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20EF02857CD
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 04:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C95029B224;
+	Thu, 15 Jan 2026 04:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768450464; cv=none; b=ZkmGdpYVIlOBAYTksKCtn2IOT0pVXxJfCHellUH5ixRlijZu7SvjpmCYaBSwJGoA3CyZ9FLh2sbEWMco/8Zh4F5zrzshHcqXraEtqkhIe8ldoiwl4k9RokrAPZ0KH/syYahaAMNsyCjD4mJdzGqPWnsngnGKkMtE4hwI8O42Pm0=
+	t=1768452233; cv=none; b=LYAsVSg76AEi6LD0rmGXJ2QQP55bzXX+YE6kPI9XPYQWcXDJSlbysIaBwpJnnS67ryiJ5YAXo7W95/YuYS2lw2giNXPHdxwQyClGn449dxvhF/C2U/T+TR35abRgGekLBW3K8kvPtuEr/2h58xxYE4tEjreKR76GG2fw4eTkpWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768450464; c=relaxed/simple;
-	bh=iQXAcib2oRD600WPIfM+1RfvWKx32iOPMF/YK+XRJ64=;
+	s=arc-20240116; t=1768452233; c=relaxed/simple;
+	bh=PU18uA2LJk51uw3aVkod2MrmRi0NGqJm2Zlpr+b2mgI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SeiI9UzrkxvXZ+pCrSkZNWRm0/pVyrgXRhpBBEw1rh6LqU+hulZHoirdMotYbOkHci9auAW3mdvXhn2DqzfgESHb3oMwSnXse1OAtZk+alVOFGHGc/2YhyaUDcoYRreNqZSWxiY+Tt/L43rbmpiAgnMTHqJGQ3TbvPh4ozrhEqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rC4GMEL6; arc=none smtp.client-ip=209.85.214.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-2a0fe77d141so3937505ad.1
-        for <linux-pm@vger.kernel.org>; Wed, 14 Jan 2026 20:14:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1768450462; x=1769055262; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ttW/0VPnzpmGU5Uwq1WgWZISL693I/ws1/HEZYT9FVc=;
-        b=rC4GMEL6ULZlhjo27obeCMRfycHfYMd78bh8RyHKikAhFBNAgK69UFyq1raK8TWhQf
-         ZwAUVpboXaLmO8/ZaRM0oRhUR1bwO6+ZuFKP80kJAoUkFkVR+nxGwhQ8dhtj7LezJYXZ
-         3zEaoynd3qXgKII0+JwudoxcIGFR13AOK7leLT3OISvGxCq2wSNcPQTwkZHbZhPhp1yI
-         tPCO/nxZPJwEL2pWx4KyDHWxG7de4x8vBykBgW/b8XBAYwywIqpC0uO0E2GCw7gquUHx
-         C8fSOWf7TQiU/8aP7Yi4gMp21baY4DeplqJeMXJx5fxrlrOeOSNeVF/Abfi4LnPB8Iim
-         VX8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768450462; x=1769055262;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ttW/0VPnzpmGU5Uwq1WgWZISL693I/ws1/HEZYT9FVc=;
-        b=KlOw5E5AXMxjvCLa0xeu/H+fiJFOvnCMYxITpvSyEfNyERHIvI/A1EY8B7Is6tL77j
-         HoghtHmWgtujk+pbkf5Uw5kpnW6wa4GPJXFkdVY59DvkNNSlTJmwcgqCXypVieYsrmbT
-         fjx+br915ORsDLdZHCKc1sfDB5WiHMiFgneRjd/H8U0kFD1p1vCZ8rcEU0lXiQY7cIOd
-         GyDoAOZtJveJp20f8pcZ0X3wOQBfRBONPzSXuacUmiNZus66hncNhTU6mTT/JyY3TQtS
-         FdI0SIRYpMCEHk2uyOpE3bvARXrDK7kNl++P/GBDzOqNN98mfrxqEYmt0NrSOtIgyrkZ
-         uS7A==
-X-Forwarded-Encrypted: i=1; AJvYcCVqJ87489VMFsEMiIA+dmhm4k2vy6ImWLUyzAm2ce/wkfotTK3LYqDPja0nz3G/luk/XPvkduAbyg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIHN3lAP/MssWqLPcHPhObHxZJ+P5TyzSGaXas85MBicdW0TTD
-	/exRNrHe5aqkBfQdzp4Ptw7KO+WBX7pvMwtQXU4SiQWjWALnezmPevlupTvEFpP1iMk=
-X-Gm-Gg: AY/fxX4fWmZds4cf20cvOiy+x4RTKTdBDSN0pzJgGmOMR2xiL2678FD7fnf17FnYcVN
-	FXvo9hyMA001GMl/BndqOcuLMkiPcdS69VmPhnXFFWp3kIeUYPM/bodDCasVCDYRiUWC45gjR7c
-	pXg/r+Ibko5Ah8Eiciy+SEeWLhysxScIyTHE3MksQnlMZsaqMB7wP+G5SChEcnMuIW8W/zbo3Cg
-	NlBMjfYSG38ybxlXNe1zJBXlAieZ5lkvM+TdqwihRzzmBtPQqmxg8AcUKZ1FnAsBu2Z0Podgh2R
-	Q3A/NboRHNmt+4qof/WPpHXD6jBFQuRlRyaKFf8e2NMqe8EAFQYY5lMUikk/gDJQcBjf88vgEJq
-	A1aQ/0lXlNPKuQh+mZ0b6RpYKHLRj1ERQouhHjQVjw+FAmZx/gYfDh85LRagXr5fCU1NvgWp66C
-	DkuBx0FsV3flg=
-X-Received: by 2002:a17:903:189:b0:298:4ee2:19f3 with SMTP id d9443c01a7336-2a599e51d5fmr51014125ad.49.1768450462206;
-        Wed, 14 Jan 2026 20:14:22 -0800 (PST)
-Received: from localhost ([122.172.80.63])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a3e3cb2d6csm242276725ad.64.2026.01.14.20.14.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 20:14:21 -0800 (PST)
-Date: Thu, 15 Jan 2026 09:44:19 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: K Prateek Nayak <kprateek.nayak@amd.com>
-Cc: Huang Rui <ray.huang@amd.com>, 
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Len Brown <lenb@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Clark Williams <clrkwllms@kernel.org>, Bert Karwatzki <spasswolf@web.de>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, Perry Yuan <perry.yuan@amd.com>
-Subject: Re: [PATCH v2 2/2] cpufreq: Pass the policy to
- cpufreq_driver->adjust_perf()
-Message-ID: <bqvpt465nowq3jipfsciaoafjpjhu42l63vi6p67qscwx5oil4@t2tkh2u5giuy>
-References: <20260114085113.21378-1-kprateek.nayak@amd.com>
- <20260114085113.21378-3-kprateek.nayak@amd.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nVdYI3f14gkV2QRejCEHET6k3r4w6qxBnrfRr/N3+lcH09m5BiclkQsWK+KWRRut1l5lkRdY1OdJmESCtEWZGvURfDFgZc0k3OF68sW8YDWccKWN6G7ICqSHjzt/BUthfEO9DHnFoFcBJp5U06LB6I2/ZKAjfGqAQiHMztlbr24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mmta06fk; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1768452230; x=1799988230;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PU18uA2LJk51uw3aVkod2MrmRi0NGqJm2Zlpr+b2mgI=;
+  b=Mmta06fk5N5JnR0s25UxnzGsyXb8yheJ01Rkf8JINm3HRHKDVRE7WfUA
+   zEGyHsR4FgU6RkxkrOBVzxP/eMXYZB5Y08hxrZA2CBqyz1GnKOtNCXSTE
+   apSQOnuq3qoioBy+oQUZYdTME4ddOEjcdwVifCgbpwSYVa4UUx+D4rQOg
+   TSSelCq+xyalpUBLXQc/qAGb+CJRMQOE6XBl902yxLPO8C4buGwIx1Ae4
+   nbMp0bbLtwuelDlunPxDGk4GNeglWdWANLOmYVeyYNGKacPE1aJ/jQ1Qt
+   B3kUZyuAUQNlEZz3tAv8F8EGQ131if+GiNH0V5B179tMH8OmILsEuy0DV
+   A==;
+X-CSE-ConnectionGUID: v/8hEP8IQgGfK0W/pyw2KA==
+X-CSE-MsgGUID: 0QBWAK+XQnSAUkORP6CE9A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11671"; a="68767461"
+X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
+   d="scan'208";a="68767461"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2026 20:43:49 -0800
+X-CSE-ConnectionGUID: IesX45u0Sw2DyWyX5uh/Ig==
+X-CSE-MsgGUID: UZf1tsOzQpeOZpqjANL9XQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,226,1763452800"; 
+   d="scan'208";a="209720405"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 14 Jan 2026 20:43:46 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vgFCx-00000000HYC-18v4;
+	Thu, 15 Jan 2026 04:43:43 +0000
+Date: Thu, 15 Jan 2026 12:43:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>,
+	John Madieu <john.madieu.xa@bp.renesas.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+Subject: Re: [PATCH v4 5/5] thermal: renesas: rzg3e: add support for RZ/T2H
+ and RZ/N2H
+Message-ID: <202601151246.oPHRcNB4-lkp@intel.com>
+References: <20260108165324.11376-6-cosmin-gabriel.tanislav.xa@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,34 +89,65 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260114085113.21378-3-kprateek.nayak@amd.com>
+In-Reply-To: <20260108165324.11376-6-cosmin-gabriel.tanislav.xa@renesas.com>
 
-On 14-01-26, 08:51, K Prateek Nayak wrote:
-> cpufreq_cpu_get() can sleep on PREEMPT_RT in presence of concurrent
-> writer(s), however amd-pstate depends on fetching the cpudata via the
-> policy's driver data which necessitates grabbing the reference.
-> 
-> Since schedutil governor can call "cpufreq_driver->update_perf()"
-> during sched_tick/enqueue/dequeue with rq_lock held and IRQs disabled,
-> fetching the policy object using the cpufreq_cpu_get() helper in the
-> scheduler fast-path leads to "BUG: scheduling while atomic" on
-> PREEMPT_RT [1].
-> 
-> Pass the cached cpufreq policy object in sg_policy to the update_perf()
-> instead of just the CPU. The CPU can be inferred using "policy->cpu".
-> 
-> The lifetime of cpufreq_policy object outlasts that of the governor and
-> the cpufreq driver (allocated when the CPU is onlined and only reclaimed
-> when the CPU is offlined / the CPU device is removed) which makes it
-> safe to be referenced throughout the governor's lifetime.
-> 
-> Reported-by: Bert Karwatzki <spasswolf@web.de>
-> Closes:https://lore.kernel.org/all/20250731092316.3191-1-spasswolf@web.de/ [1]
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Signed-off-by: K Prateek Nayak <kprateek.nayak@amd.com>
+Hi Cosmin,
 
-Ahh, you need to fix the Rust binding as well. Minor change there.
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on linus/master v6.19-rc5 next-20260114]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Cosmin-Tanislav/thermal-renesas-rzg3e-make-min-and-max-temperature-per-chip/20260109-015424
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20260108165324.11376-6-cosmin-gabriel.tanislav.xa%40renesas.com
+patch subject: [PATCH v4 5/5] thermal: renesas: rzg3e: add support for RZ/T2H and RZ/N2H
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20260115/202601151246.oPHRcNB4-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260115/202601151246.oPHRcNB4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601151246.oPHRcNB4-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   drivers/thermal/renesas/rzg3e_thermal.c: In function 'rzg3e_thermal_get_smc_trim':
+>> drivers/thermal/renesas/rzg3e_thermal.c:371:30: error: storage size of 'local_res' isn't known
+     371 |         struct arm_smccc_res local_res;
+         |                              ^~~~~~~~~
+>> drivers/thermal/renesas/rzg3e_thermal.c:373:9: error: implicit declaration of function 'arm_smccc_smc' [-Wimplicit-function-declaration]
+     373 |         arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPLO,
+         |         ^~~~~~~~~~~~~
+>> drivers/thermal/renesas/rzg3e_thermal.c:371:30: warning: unused variable 'local_res' [-Wunused-variable]
+     371 |         struct arm_smccc_res local_res;
+         |                              ^~~~~~~~~
+
+
+vim +371 drivers/thermal/renesas/rzg3e_thermal.c
+
+   368	
+   369	static int rzg3e_thermal_get_smc_trim(struct rzg3e_thermal_priv *priv)
+   370	{
+ > 371		struct arm_smccc_res local_res;
+   372	
+ > 373		arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPLO,
+   374			      0, 0, 0, 0, 0, 0, &local_res);
+   375		priv->trmval0 = local_res.a0 & TSU_CODE_MAX;
+   376	
+   377		arm_smccc_smc(RZ_SIP_SVC_GET_SYSTSU, OTP_TSU_REG_ADR_TEMPHI,
+   378			      0, 0, 0, 0, 0, 0, &local_res);
+   379		priv->trmval1 = local_res.a0 & TSU_CODE_MAX;
+   380	
+   381		return 0;
+   382	}
+   383	
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
