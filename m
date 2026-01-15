@@ -1,187 +1,122 @@
-Return-Path: <linux-pm+bounces-40921-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40922-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5642D241D6
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 12:17:47 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A75DED241D3
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 12:17:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9E5E93009812
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 11:15:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A8581300698D
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 11:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1202A3376A3;
-	Thu, 15 Jan 2026 11:15:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="nm07ZQy1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4A22314B71;
+	Thu, 15 Jan 2026 11:17:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68EC6376BC3
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 11:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A65AB35B125;
+	Thu, 15 Jan 2026 11:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768475702; cv=none; b=pUE7RtMSKCC0eb/RpODFrcDTzpuw//ywjlLkf5LVwSKBAIx1UkL73hn20LuQTRk5enTrPUltWG1bSHPGc+arqs6xKYNOFv0Fiqaly86hj/lePt6mPKIKGTsljnrEnMIGv+BRuU+TYbJCjr0JQso0/jIXTXox8o0Gp4cD5TrcoKE=
+	t=1768475850; cv=none; b=i2hFhPw5NMp/SOD6P6U5o6eOFRDKY6mZuDuk4t0ygkQOQFa5jXDGepiJ5CluFHfPu7mW/K8eEzHkx4SWChEvcjAIb7KzR3QEHK2jwPtaeNtaCoTqdrXoN/ZLrOj70pCQO/qByzj32QjZObesLdjXzcds5u72AWPbulmAT17X978=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768475702; c=relaxed/simple;
-	bh=oeFCSQd193B7M3U7GlanEaDjGvU31U3+p7TfFQNK5Po=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=DiHXhjkuvjw5Ae9YBv0U65KH1W30XXBi6kHfTOnSzIx4tfMiV59/CcqRmLGKpHAyadMUO0SZrWfKC1PQqlOB729XCeEETsSJRfLxJmQ4DL4mX2hZbC1MY3iHWFIStEqurkbZ8NNPHwhjaEHyTRjvI7o3+mArs8zFdvkWRENsoTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=nm07ZQy1; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20260115111452euoutp025dc67c91fb4380c4fd33933c1510d2e7~K40Wscj0P0756707567euoutp02n
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 11:14:52 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20260115111452euoutp025dc67c91fb4380c4fd33933c1510d2e7~K40Wscj0P0756707567euoutp02n
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1768475692;
-	bh=ODlM0ncXnlrLvxb4ihqQBJ3CUEnwHzZLJ0VgMlXzdh8=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=nm07ZQy1IRUCTYodbBRF6jonHTbl+TsoF3782MwFWtr/OE16+IsQVG+cctI089KWa
-	 uN8qkOZguPp9PMHzAm/0yGPHACY5mk3uYJW6J8e3RXoy8o6wkz3OB9X5Bo5e9JyP/d
-	 6FsHbs3hYFZR0ryxpExac1CuhHH0EXvEqyPJAzlk=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20260115111451eucas1p145ac65c845c6cd3bcbb9bccf75993a2a~K40WSZZlf2186821868eucas1p1q;
-	Thu, 15 Jan 2026 11:14:51 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20260115111450eusmtip2851be6a89c0b4f48966dc2bbc0e6c902~K40VaBTI03110431104eusmtip2c;
-	Thu, 15 Jan 2026 11:14:50 +0000 (GMT)
-Message-ID: <61e8c93c-d096-4807-b2dd-a22657f2e06a@samsung.com>
-Date: Thu, 15 Jan 2026 12:14:49 +0100
+	s=arc-20240116; t=1768475850; c=relaxed/simple;
+	bh=Eg8fBWrolo6udHHO75eu/I+s+u90cH7QotrwanlvoYE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nKtkpnDofcQ2bWCvDvbDxTKQsjH1AwItnBQ161LzjtaTzoNUl0t8MB3r5JsQLizDzVfjVehta+8QVwkWqLTqPKCKu2iSMeL1ZB/zuSyuDf5/Wo8rX1Y893lZ6xZvoY2aNeZuJiEH2+gQX6C00LyGkHAKX2AaTXtdUFHdUNvsoZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD170FEC;
+	Thu, 15 Jan 2026 03:17:18 -0800 (PST)
+Received: from [10.1.37.67] (e127648.arm.com [10.1.37.67])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A89EE3F694;
+	Thu, 15 Jan 2026 03:17:23 -0800 (PST)
+Message-ID: <8e230c6d-ddd7-4385-865e-257168dc0057@arm.com>
+Date: Thu, 15 Jan 2026 11:17:21 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: [PATCH v4] PCI/PM: Prevent runtime suspend before devices are
- fully initialized
-To: Brian Norris <briannorris@chromium.org>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Lukas Wunner <lukas@wunner.de>, linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, "Rafael J . Wysocki"
-	<rafael@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
-	<ilpo.jarvinen@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/1] sched: Ignore overutilized by lone task on max-cap
+ CPU
+To: Qais Yousef <qyousef@layalina.io>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rafael@kernel.org,
+ peterz@infradead.org, pierre.gondois@arm.com, qperret@google.com,
+ sven@svenpeter.dev
+References: <20251230093037.427141-1-christian.loehle@arm.com>
+ <20260113131134.n4ixed2awnikgmeq@airbuntu>
 Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <aWf4KyTSIocWTmXw@google.com>
-Content-Transfer-Encoding: 8bit
-X-CMS-MailID: 20260115111451eucas1p145ac65c845c6cd3bcbb9bccf75993a2a
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8
-X-EPHeader: CA
-X-CMS-RootMailID: 20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8
-References: <20260106222715.GA381397@bhelgaas>
-	<CGME20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8@eucas1p1.samsung.com>
-	<0e35a4e1-894a-47c1-9528-fc5ffbafd9e2@samsung.com>
-	<aWf4KyTSIocWTmXw@google.com>
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <20260113131134.n4ixed2awnikgmeq@airbuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Brian,
+On 1/13/26 13:11, Qais Yousef wrote:
+> On 12/30/25 09:30, Christian Loehle wrote:
+>> I'm trying to deliver on my overdue promise of redefining overutilized state.
+>> My investigation basically lead to redefinition of overutilized state
+>> bringing very little hard improvements, while it comes with at least
+>> some risk of worsening platforms and workload combinations I might've
+>> overlooked, therefore I only concentrate on one, the least
+>> controversial, for now.
+> 
+> What are the controversial bits?
+> 
+> This is a step forward, but not sure it is in the right direction. The concept
+> of a *cpu* being overutilized === rd is overutilized no longer makes sense
+> since misfit was decoupled from this logic which was the sole reason to
+> require this check at CPU level.  Overutilized state is, rightly, set at the
+> rootdomain level. And the check makes sense to be done at that level too by
+> traversing the perf domains and seeing if we are in a state that requires
+> moving tasks around. Which should be done in update_{sg,sd}_lb_stats() logic
+> only.
+> 
+> I guess the difficult question (which might be what you're referring to as
+> controversial), is at what point we can no longer pack (use EAS) and must
+> distribute tasks around?
 
-On 14.01.2026 21:10, Brian Norris wrote:
-> On Wed, Jan 14, 2026 at 10:46:41AM +0100, Marek Szyprowski wrote:
->> On 06.01.2026 23:27, Bjorn Helgaas wrote:
->>> On Thu, Oct 23, 2025 at 02:09:01PM -0700, Brian Norris wrote:
->>>> Today, it's possible for a PCI device to be created and
->>>> runtime-suspended before it is fully initialized. When that happens, the
->>>> device will remain in D0, but the suspend process may save an
->>>> intermediate version of that device's state -- for example, without
->>>> appropriate BAR configuration. When the device later resumes, we'll
->>>> restore invalid PCI state and the device may not function.
->>>>
->>>> Prevent runtime suspend for PCI devices by deferring pm_runtime_enable()
->>>> until we've fully initialized the device.
-> ...
->> This patch landed recently in linux-next as commit c796513dc54e
->> ("PCI/PM: Prevent runtime suspend until devices are fully initialized").
->> In my tests I found that it sometimes causes the "pci 0000:01:00.0:
->> runtime PM trying to activate child device 0000:01:00.0 but parent
->> (0000:00:00.0) is not active" warning on Qualcomm Robotics RB5 board
->> (arch/arm64/boot/dts/qcom/qrb5165-rb5.dts). This in turn causes a
->> lockdep warning about console lock, but this is just a consequence of
->> the runtime pm warning. Reverting $subject patch on top of current
->> linux-next hides this warning.
->>
->> Here is a kernel log:
->>
->> pci 0000:01:00.0: [17cb:1101] type 00 class 0xff0000 PCIe Endpoint
->> pci 0000:01:00.0: BAR 0 [mem 0x00000000-0x000fffff 64bit]
->> pci 0000:01:00.0: PME# supported from D0 D3hot D3cold
->> pci 0000:01:00.0: 4.000 Gb/s available PCIe bandwidth, limited by 5.0
->> GT/s PCIe x1 link at 0000:00:00.0 (capable of 7.876 Gb/s with 8.0 GT/s
->> PCIe x1 link)
->> pci 0000:01:00.0: Adding to iommu group 13
->> pci 0000:01:00.0: ASPM: default states L0s L1
->> pcieport 0000:00:00.0: bridge window [mem 0x60400000-0x604fffff]: assigned
->> pci 0000:01:00.0: BAR 0 [mem 0x60400000-0x604fffff 64bit]: assigned
->> pci 0000:01:00.0: runtime PM trying to activate child device
->> 0000:01:00.0 but parent (0000:00:00.0) is not active
-> Thanks for the report. I'll try to look at reproducing this, or at least
-> getting a better mental model of exactly why this might fail (or,
-> "warn") this way. But if you have the time and desire to try things out
-> for me, can you give v1 a try?
->
-> https://lore.kernel.org/all/20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid/
->
-> I'm pretty sure it would not invoke the same problem.
+And that is precisely the 'controversial bits', I didn't want to touch them
+with this patch specifically.
+A more holistic redefinition of OU is still on the table, but it needs to
+a) Still fulfill the requirements we want from it (guarantee of accurate PELT
+values because compute capacity was 'always' provided, switching to throughput
+maximization when needed).
+b) Provide sufficient testing to convince us of not regressing anything majorly
+on the quite diverse EAS platforms we have today.
 
-Right, this one works fine.
+I think $SUBJECT does a) and b) well, but of course it's for improving a
+specific set of systems and doesn't address the issues with OU that have been
+named in the past.
 
-> I also suspect v3
-> might not, but I'm less sure:
->
-> https://lore.kernel.org/all/20251022141434.v3.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid/
-This one too, at least I was not able to reproduce any fail.
+> 
+> I think this question is limited by what the lb can do today. With push lb,
+> I believe the current global lb is likely to be unnecessary in small systems
+> (single LLC) since it can shuffle things around immediately to handle misfit
+> and overload.
+> 
+> On top of that, what can the existing global lb do? I am not sure to be honest.
+> The system has to have a number of long running tasks > num_cpus for it to be
+> useful. But given util signal will lose its meaning under these circumstances,
+> I am not sure the global lb can do a better job than push lb trying to move
+> these tasks around. But it could do a more comprehensive job in one go? I'll
+> defer to Vincent, he probably more able to answer this from the top of his
+> head. But the answer to this question is the key to how we want to define this
+> *system* is overutilized state.
+> 
+> Assuming this is on top of push lb, I believe something like below which will
+> trigger overutilized only if all cpus are overutilized (ie system is nearly
+> maxed out (has 20% or less headroom)) is a good starting point at least.
 
->> ======================================================
->> WARNING: possible circular locking dependency detected
->> 6.19.0-rc1+ #16398 Not tainted
->> ------------------------------------------------------
->> kworker/3:0/33 is trying to acquire lock:
->> ffffcd182ff1ae98 (console_owner){..-.}-{0:0}, at:
->> console_lock_spinning_enable+0x44/0x78
->>
->> but task is already holding lock:
->> ffff0000835c5238 (&dev->power.lock/1){....}-{3:3}, at:
->> __pm_runtime_set_status+0x240/0x384
->>
->> which lock already depends on the new lock.
-> The lockdep warning is a bit messier, and I'd also have to take some
-> more time to be sure, but in principle, this sounds like a totally
-> orthogonal problem. It seems like simply performing printk() to a qcom
-> UART in the "wrong" context is enough to cause this. If so, that's
-> definitely a console/UART bug (or maybe a lockdep false positive) and
-> not a PCI/runtime-PM bug.
+It's an approach, but it needs a lot of data to convince everyone that
+push lb + much more liberal OU state outperforms current global LB OU.
 
-Yes, the lockdep warning is not really a problem, it is just a 
-consequence of the printing that "runtime PM trying to activate child 
-device 0000:01:00.0 but parent (0000:00:00.0) is not active" message. 
-However that message is itself a problem imho.
+Given this is not really about defining OU in a final state, any comments from
+you and Vincent on $SUBJECT and the problem it's addressing would be 
+much appreciated!
 
->> (...)
->>
->> This looks a bit similar to the issue reported some time ago on a
->> different board:
->>
->> https://lore.kernel.org/all/6d438995-4d6d-4a21-9ad2-8a0352482d44@samsung.com/
-> Huh, yeah, the lockdep warning is rather similar looking. So that bug
-> (whether real or false positive) may have been around a while.
->
-> And the "Enabling runtime PM for inactive device with active children"
-> log is similar, but it involves a different set of devices -- now we're
-> dealing with the PCIe port and child device, whereas that report was
-> about the host bridge/controller device.
-
-Okay, so a bit different case. At least it confirms that the lockdep 
-issue is not really a problem.
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+> [snip]
 
