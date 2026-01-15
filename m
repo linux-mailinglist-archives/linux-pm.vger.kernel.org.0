@@ -1,122 +1,87 @@
-Return-Path: <linux-pm+bounces-40942-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40943-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FAC8D25B81
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 17:24:39 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABC6FD26D86
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 18:51:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 066A33008150
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 16:24:37 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id E9C2C3012A9D
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 17:42:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C8453BB9E9;
-	Thu, 15 Jan 2026 16:24:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B65693BFE2E;
+	Thu, 15 Jan 2026 17:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="msLNEHfB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HaIYSOFk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DD43B9616
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 16:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 903CA3AA1A8;
+	Thu, 15 Jan 2026 17:41:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768494273; cv=none; b=AdBuhB0NWGi96Nqb0260t0xpVTLPN2MxT981nAMUIBCvLwJtRnkPCVCocRKLPrsAeTapT2PeyiHznlBER8QAauOoGZeQbWtuq3u+5yrkrujlNswWpWVpj9fprLdS76cdzgWyIWNchPyQ+PjkvutK5HRYu+ZHY18pLenjbqXSXvM=
+	t=1768498919; cv=none; b=EsYTqlUUdNhkLhj6NcGnaQSuoX4+Vs2IHDzpEqa5lc7qTOMCC/EGjyVWVSGFrWq/D87dWTvHVa/xvvTfRnlDST2xT6xrWI4LR3zRwErU44hdoog8ii60sZkU1k48aSSwy6+ZRixqZe8f/cGkv2G/GYFSj23mw7McMcOhVchh3BU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768494273; c=relaxed/simple;
-	bh=k7lNDE5gCSmeRgbwOBkK/9sHNPAfd5pEa5j5lNfKJws=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FBuRAmcFL4amAISpfVMkxa2TA1CnZy+jUiJafmPx8j15m48h8TsXn0g1ZpuI+ODRZe775xbQPeMAY2JMrBi8+YTuUrp8GkP1cy6lNMXQedoA8OYCfMRHFwYxpSl8aojXKAc942AoT8AcUyY0DwcXEAKc2YIqSlqBZqYzfqKkoHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=msLNEHfB; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-383010b77b8so8498791fa.1
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 08:24:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1768494268; x=1769099068; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UcPjMQs8wlZ69D72bOHJHv8LmpfNACepVb1D7xG/5V4=;
-        b=msLNEHfBm8T7z1hOrKA17neRzVkyOrmk1NvuvMcmJqgb+rg+LVvlzR6GMUunQvhcp2
-         R5g+ToG8+/rnSm9mBZ56uIklJVmlC75lI8o8dO5VwtE3H7z9nTMOOoGsnDB7jYa/oAZY
-         GFsFjxaRxEQUrX0+3GGtrX0jiJOnzgkYNoOu7cjoNvkNkto8RdYLkRN3izHaToxzYmba
-         SR44sqUP8z+96LABZSAld9cnxCGlxEGG6VpB/I97EnJqpx0nH9k8vvCMFzKIFCycb93W
-         JgDE8fQDzgFfbjE1O6eHsWUPuLKXosjIfoPT9xkewZF9254KNuKNouZol37+lzXabMcG
-         LEKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768494268; x=1769099068;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UcPjMQs8wlZ69D72bOHJHv8LmpfNACepVb1D7xG/5V4=;
-        b=eBTXULcOrriE8WbROx9B0M3Eq2qdXX3qGHrCnt2xg44sbOoyPC6Fksqzb7FCXX1TUR
-         oaIP3OcmpoBsU/d3nMz3c5giLzO4osxY4kEi6gcbbMueTQ1KyQgd53SI8bEzrDu0gTF+
-         rjZiDlpRJKW+byme7687sA3Frhck83HU7d5W0QgiqeIpd/pjoIbPLpPQcC2Uzg1I3ibM
-         F+V758iMpJlbu9tpHgo16ma25td7D68ikabn4A9w/bNYpbb/M1ZG6borKoTUbgihHKfb
-         c++AcpgNULjv7wVApXOTA/e1UmfUqE76PnVwupa9Gxff3BkqozjtR74z0PGNNpynZFTY
-         Vyag==
-X-Forwarded-Encrypted: i=1; AJvYcCVkkFBmtHkLk8qrstdx3GazPEGBXP7l+Z8yKJV/XBo8lUTKnP1myfmGbq/0UWqIjAnreyz1OT+zQg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0ofS2D6VFgbqlTN99dQj382DbUlqBMauxQQ4hViSlyn8rjS5Z
-	uTBB00tIsh2ihQKKdA5de1k8HSSCiZ0/geK3vZaKVQGp6N/DSdPMblXy0Jq7q272hxoTgKB/A9D
-	pzunkgihLmsTzIfM5D+ViDTjGzfWeoZuwUQtLFsqs7Q==
-X-Gm-Gg: AY/fxX4IRgEmoktD4q8SjCrONxtsILzw0VQSGGFZ18g1JQZKIhlhg+8rQLyi2gVH029
-	sCCvVpOrgQLtJdMzAiP3qqlT6mJdYiXC45o+4787dgpglLA4ORV9D4T2gnMnZk7AXU6YiXPGNbr
-	wmS/B51jxUo2k7o8Ql4oiaqaE9CyYCxyKts1HaPM57YqwReFoe3lpGJGFfXKii8NB2RjE/Wy/q6
-	1MN01JVtWu3nS2Tnjmk0Y7q+LSirQfOk/SC7Yfd26mzxrCb9CoGetH6AHpVECNuQixqqME6
-X-Received: by 2002:a2e:3003:0:b0:383:543:66d with SMTP id 38308e7fff4ca-3836f09c3afmr8580341fa.16.1768494267944;
- Thu, 15 Jan 2026 08:24:27 -0800 (PST)
+	s=arc-20240116; t=1768498919; c=relaxed/simple;
+	bh=tegX0Z/kfZv1/AcKJNcGxRXv024yyTYAJnUN/qrxplY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pnPtaKgUswYieZWi8OBh/zmbl+lLA/Z6E7iTtYIlDWxRJ7Fi38nDt8BwvXq6z0f7GIToe5Jvtc3BPNKqCLy1E5IjhaSpOTRtmC694ymOYWNmVeQ6wk4vVjbSNhof9zjhlzZDSr1GIfCgCk8djIcdwd8gN2fPIJLXPnoxaQU4uOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HaIYSOFk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF17C19422;
+	Thu, 15 Jan 2026 17:41:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768498919;
+	bh=tegX0Z/kfZv1/AcKJNcGxRXv024yyTYAJnUN/qrxplY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HaIYSOFkzGOX1FELeMIxNJBCUp2pBsmJr+vWtH9c22QOuR3bWR1i9x1arvu7BpZ5M
+	 zJptP4/6imL6piFKD8gTvA+pOLriBbLiEyIF1E535zkpNchLbZjGjuE9UwN2CZ6cae
+	 MnRw1IeoleGfz0rzIy8GO81+3hjwMen29CDZ0MdvCwF5RICh/RAWZTbVX3hWhlXzZn
+	 bJchVcQWlc5Ar1XBcNmQtz14fBZleQsW62EVir1DibiN0LDmIb/ki5hKYI4+BISq38
+	 KaGiLCo3RyZBKEkf+GTUN7n2UQQ4rMpGZeGTABOhGdizM3NqxRml61QpJcjoFmrhP8
+	 zaXTszb+mFFXA==
+Date: Thu, 15 Jan 2026 11:41:58 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	sre@kernel.org, conor+dt@kernel.org, eleanor15x@gmail.com,
+	simona@ffwll.ch, airlied@gmail.com, tzimmermann@suse.de,
+	krzk+dt@kernel.org, gregkh@linuxfoundation.org,
+	jserv@ccns.ncku.edu.tw, mripard@kernel.org,
+	linux-input@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	broonie@kernel.org, maarten.lankhorst@linux.intel.com,
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+	dmitry.torokhov@gmail.com, jirislaby@kernel.org,
+	lgirdwood@gmail.com, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 6/6] dt-bindings: display: google,goldfish-fb: Convert
+ to DT schema
+Message-ID: <176849890696.935461.15138796644724079676.robh@kernel.org>
+References: <20260113092602.3197681-1-visitorckw@gmail.com>
+ <20260113092602.3197681-7-visitorckw@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260113110012.36984-1-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20260113110012.36984-1-angelogioacchino.delregno@collabora.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 15 Jan 2026 17:23:51 +0100
-X-Gm-Features: AZwV_Qgstc2v5holxo2-uqRefc6HR54B_5kwg-eT_5uV86kY4RNFn6HUBQ_JID8
-Message-ID: <CAPDyKFohjOfdg1vz1o4FAhThm_1CTF46SgrWSJuJYt3mLLJwNA@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Fix dtbs_check warnings for MediaTek MT7622 platform
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-mediatek@lists.infradead.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, 
-	matthias.bgg@gmail.com, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260113092602.3197681-7-visitorckw@gmail.com>
 
-On Tue, 13 Jan 2026 at 12:00, AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> This series fixes various dtbs_check warnings happening on the MediaTek
-> MT7622 Home Router platforms devicetrees.
->
-> Depending on correctness, either the bindings or the devicetree was
-> changed as a dtbs_check warning fix.
->
-> AngeloGioacchino Del Regno (5):
->   dt-bindings: clock: mediatek,mt7622-pciesys: Remove syscon compatible
->   dt-bindings: power: mt7622-power: Add MT7622_POWER_DOMAIN_AUDIO
->   pmdomain: mediatek: scpsys: Add MT7622 Audio power domain to legacy
->     driver
->   arm64: dts: mediatek: mt7622: Add missing clock to audio-controller
->   arm64: dts: mediatek: mt7622: Add missing power domain to afe
->
->  .../bindings/clock/mediatek,mt7622-pciesys.yaml        | 10 ++++------
->  arch/arm64/boot/dts/mediatek/mt7622.dtsi               |  7 +++++--
->  drivers/pmdomain/mediatek/mtk-scpsys.c                 | 10 ++++++++++
->  include/dt-bindings/power/mt7622-power.h               |  1 +
->  4 files changed, 20 insertions(+), 8 deletions(-)
->
-> --
-> 2.52.0
->
 
-Patch 2 and 3 applied for next, thanks!
+On Tue, 13 Jan 2026 09:26:02 +0000, Kuan-Wei Chiu wrote:
+> Convert the Android Goldfish Framebuffer binding to DT schema format.
+> Update the example node name to 'display' to comply with generic node
+> naming standards.
+> 
+> Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
+> ---
+>  .../bindings/display/google,goldfish-fb.txt   | 17 ---------
+>  .../bindings/display/google,goldfish-fb.yaml  | 38 +++++++++++++++++++
+>  2 files changed, 38 insertions(+), 17 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/display/google,goldfish-fb.txt
+>  create mode 100644 Documentation/devicetree/bindings/display/google,goldfish-fb.yaml
+> 
 
-Note, the DT patch (patch2) is also available at the immutable dt
-branch, for soc maintainers to pull in.
+Applied, thanks!
 
-Kind regards
-Uffe
 
