@@ -1,102 +1,140 @@
-Return-Path: <linux-pm+bounces-40948-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40949-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05AECD285D6
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 21:18:54 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 357E3D285E9
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 21:19:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D3B70309EE24
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 20:16:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B173E3009772
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 20:19:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E9E430BB96;
-	Thu, 15 Jan 2026 20:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C2131ED83;
+	Thu, 15 Jan 2026 20:19:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVfQk6Ih"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+dIDRPM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D95F267B05
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 20:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71461318EE4
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 20:19:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768508188; cv=none; b=kpfdvx+4ROm0jiWlX/O7QdS+3phs85IOjdINITZUEqCY47QRQ5s+aP0yXP3xShuMZgLcu90ouwX/tPfuidQW5I2kigvX42l4H7Rc9R+kgxcw+wL7wZZtdfzg92HBNNqqBvVpywpWo3sWg1is2cHU6nB01hW6CKsv9vz+9ms7LAo=
+	t=1768508365; cv=none; b=iXIwJ+NR0UdhSjl6hl1aeoSa/8ChaXyfYteumWZnQsyg9XQ9hfBtm0YZk8vtxEukr+KYvg8cnOZjQLH0EV7ZLJuDEjKvgD+TbOz0C8etL9PlPyClQ6FOUd8pxy9y+5yIGhfP5wi2Qj3amzfO/NnKk395RBwwcizBXYpI8D80bFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768508188; c=relaxed/simple;
-	bh=8MdZSIbCcHdL2bbYvYTZIBnNJjEHWNYaOGC+UA5b/x8=;
+	s=arc-20240116; t=1768508365; c=relaxed/simple;
+	bh=D+9Qly1Fgsq3losB67Sm4tT9opvyDpiVd2qHD27zmYY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m/+Hr+gbYnOXWWFAh9uuLzmBZU/TQM/FALtoWtNVtpdiryLBNLGHYjjlCPONLyUYQFuEJsZT8psnGQRzozhusvU15wvGYEQ/A+62i1v6o4S97GWaYjEUXJKCHeFYcrl0oPbKIbCs79N7RdP+D7Khf8+HTywhBBPqAP0w5ZRJh40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVfQk6Ih; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AE0CC19423
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 20:16:28 +0000 (UTC)
+	 To:Cc:Content-Type; b=IG7Vtq/VtEmiY/WrNK6HroTsMyabirQt1GWLokQF8zVWYGEqB7NVkI9romrtYAtFR/b2R3b7cosvYAfwM3qH8SwT98mgEeEv/GU2FV3geV8aATuFEDZCRfEoSAJy7deQ627BYHOg6oqxtXI0vFXcP3dLbIj46qwtZUMu+zJnKUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+dIDRPM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D8AC4AF09
+	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 20:19:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768508188;
-	bh=8MdZSIbCcHdL2bbYvYTZIBnNJjEHWNYaOGC+UA5b/x8=;
+	s=k20201202; t=1768508365;
+	bh=D+9Qly1Fgsq3losB67Sm4tT9opvyDpiVd2qHD27zmYY=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=mVfQk6Ih4FmTsuMXrjq1SzCskZWPFovDnCiLekgDFuM0s371IZKfPrgflFzoBET/B
-	 KwtgGprBThslZNBv+rCa2wsexeUmWmhOWme6cooOmPLCjt7OIHmD67OZagiqZLnrAU
-	 mhFIWFoMRfE2/LeB/eO/eyqhqExezmqcyZtedAGn6V1PPN5PTlRdePXziKJr2xBlIr
-	 TyUeryZpXIURIddZDu7oLdDniTXjJ+yCUa8gMkmjgeNqUtMqhLP8zGmfqsg4B+7PmE
-	 bhvZvHnt3DkN4HWKd9jXZs4SvVE1xx4tDHtBcf1Y8G3LLPFdxmfYDMWLNOsjTkRsKg
-	 JpVIdg20WSixQ==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-3fe3cc80bc3so840739fac.0
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 12:16:28 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXaDqIEJgqMtc6kE/gQRLh3yIgx9n2SVGLqWgYQHl1W5twjCt76LV60H6syYz6530XcVPA5gcKzYA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/ibb2WLr57HM0TIgXwenNJZY99byz5AFC6regBz4pS2Dpar2/
-	ZBKqvU7gQ6AEtbL0IUEOwOctf8Kc4OpUIH1ZV9xUgnkJckWXDShEopt3HJE/d+oeo9jYSRFFLTd
-	Oaz5XfEPKRMjwBNl3Nc8C4apqjzXRCTg=
-X-Received: by 2002:a05:6820:4deb:b0:660:ffd3:32b with SMTP id
- 006d021491bc7-661179e036fmr413987eaf.44.1768508187179; Thu, 15 Jan 2026
- 12:16:27 -0800 (PST)
+	b=g+dIDRPMo6aWR44SSf1kvfsTn0jyIybV/6eT0pZ33/RqS/Kecfdm1JrQ4zu96NSYs
+	 EfUMSTvOirs4CpH01stYOqDACR653/8ujs2pRSPyVf5z+wrFeC2/+hdWqXa04Kt0Wi
+	 VKvTR2muwwcXLRNqWZDGs6WZMo+9gdNFwIs8KL42wqAkWXjhIRU8C340N0PBofbhEX
+	 8ReoZS34cnMCjZc8UFeEmKT6biDWZPf4E76wBsx+Uxy36d0C7+43IinBWHt3xAwQjF
+	 FL83GLqdiCQSM9+i0Ot++UTSusmbvQwb+Z2cgJc3/DLEEWJJU1oPH6teJJDKUSxCDm
+	 GCECJCG/xSp8A==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-66106a2f8c0so367292eaf.1
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 12:19:25 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWIyIoPyyIKooyh39Ouyycs/PyXApgFA79VVhbvx28cSQcQwI88fdBCX/9bMQ8IRe+AP59nDHkivA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yza32Cmknl/0ZVKU+6iwMDtTN/Xd/E2zwmFnNImPEDdhT+XBJVd
+	rTuYGYxiJGCkOvRO76VA6YfhNxoRikcZplRwv5FplWhBXxl9R3RDitcZ49KH/zs4zdWmU9NBcMD
+	QoJFVi0FfCMTQ/cwBvq3wrkKLP0Wa9BE=
+X-Received: by 2002:a05:6820:1507:b0:65b:32b4:840a with SMTP id
+ 006d021491bc7-661189814demr189418eaf.51.1768508364281; Thu, 15 Jan 2026
+ 12:19:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6088605.ChMirdbgyp@daniel-desktop3>
-In-Reply-To: <6088605.ChMirdbgyp@daniel-desktop3>
+References: <20260111160739.15984-1-sumeet4linux@gmail.com>
+In-Reply-To: <20260111160739.15984-1-sumeet4linux@gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 15 Jan 2026 21:16:15 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jA6DiP=FoiWo2fs3sU7Do3ykgURoV+dzKE68NL9T5YFQ@mail.gmail.com>
-X-Gm-Features: AZwV_QgGRSVBwp4uM0dPHamlPTvc8etDfdZwr36b02cJ3PlK8kbfSfmLtbovNmI
-Message-ID: <CAJZ5v0jA6DiP=FoiWo2fs3sU7Do3ykgURoV+dzKE68NL9T5YFQ@mail.gmail.com>
-Subject: Re: [PATCH] powercap: intel_rapl: Add PL4 support for Ice Lake
-To: Daniel Tang <danielzgtg.opensource@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Zhang Rui <rui.zhang@intel.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Date: Thu, 15 Jan 2026 21:19:13 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gUBQgJHdhum4Q94XzeF+vMDbjdeeWUXMTE=UrJg3nT2w@mail.gmail.com>
+X-Gm-Features: AZwV_QjBRzQ6YNyTvDh4N6Ex2vyAlHFw07zOUWAFBezyMT6LS8l3JB8WKz-vABQ
+Message-ID: <CAJZ5v0gUBQgJHdhum4Q94XzeF+vMDbjdeeWUXMTE=UrJg3nT2w@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel: fix typo nagative in comment for cpu argument
+To: Sumeet Pawnikar <sumeet4linux@gmail.com>
+Cc: rafael@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 15, 2026 at 3:01=E2=80=AFAM Daniel Tang
-<danielzgtg.opensource@gmail.com> wrote:
+On Sun, Jan 11, 2026 at 5:07=E2=80=AFPM Sumeet Pawnikar <sumeet4linux@gmail=
+.com> wrote:
 >
-> Microsoft Surface Pro 7 firmware throttles the processor upon
-> boot/resume. Userspace needs to be able to restore the correct value.
+> Fix typo "nagative" -> "negative" for cpu argument value in
+> comment section.
 >
-> Link: https://github.com/linux-surface/linux-surface/issues/706
-> Signed-off-by: Daniel Tang <danielzgtg.opensource@gmail.com>
+> Signed-off-by: Sumeet Pawnikar <sumeet4linux@gmail.com>
 > ---
->  drivers/powercap/intel_rapl_msr.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/thermal/intel/intel_tcc.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_r=
-apl_msr.c
-> index 9a7e150b3536..a2bc0a9c1e10 100644
-> --- a/drivers/powercap/intel_rapl_msr.c
-> +++ b/drivers/powercap/intel_rapl_msr.c
-> @@ -162,6 +162,7 @@ static int rapl_msr_write_raw(int cpu, struct reg_act=
-ion *ra)
+> diff --git a/drivers/thermal/intel/intel_tcc.c b/drivers/thermal/intel/in=
+tel_tcc.c
+> index b2a615aea7c1..ab61fb122937 100644
+> --- a/drivers/thermal/intel/intel_tcc.c
+> +++ b/drivers/thermal/intel/intel_tcc.c
+> @@ -172,7 +172,7 @@ static u32 get_temp_mask(bool pkg)
 >
->  /* List of verified CPUs. */
->  static const struct x86_cpu_id pl4_support_ids[] =3D {
-> +       X86_MATCH_VFM(INTEL_ICELAKE_L, NULL),
->         X86_MATCH_VFM(INTEL_TIGERLAKE_L, NULL),
->         X86_MATCH_VFM(INTEL_ALDERLAKE, NULL),
->         X86_MATCH_VFM(INTEL_ALDERLAKE_L, NULL),
+>  /**
+>   * intel_tcc_get_tjmax() - returns the default TCC activation Temperatur=
+e
+> - * @cpu: cpu that the MSR should be run on, nagative value means any cpu=
+.
+> + * @cpu: cpu that the MSR should be run on, negative value means any cpu=
+.
+>   *
+>   * Get the TjMax value, which is the default thermal throttling or TCC
+>   * activation temperature in degrees C.
+> @@ -199,7 +199,7 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_get_tjmax, "INTEL_TCC"=
+);
+>
+>  /**
+>   * intel_tcc_get_offset() - returns the TCC Offset value to Tjmax
+> - * @cpu: cpu that the MSR should be run on, nagative value means any cpu=
+.
+> + * @cpu: cpu that the MSR should be run on, negative value means any cpu=
+.
+>   *
+>   * Get the TCC offset value to Tjmax. The effective thermal throttling o=
+r TCC
+>   * activation temperature equals "Tjmax" - "TCC Offset", in degrees C.
+> @@ -224,7 +224,7 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, "INTEL_TCC=
+");
+>
+>  /**
+>   * intel_tcc_set_offset() - set the TCC offset value to Tjmax
+> - * @cpu: cpu that the MSR should be run on, nagative value means any cpu=
+.
+> + * @cpu: cpu that the MSR should be run on, negative value means any cpu=
+.
+>   * @offset: TCC offset value in degree C
+>   *
+>   * Set the TCC Offset value to Tjmax. The effective thermal throttling o=
+r TCC
+> @@ -267,7 +267,7 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, "INTEL_TCC=
+");
+>
+>  /**
+>   * intel_tcc_get_temp() - returns the current temperature
+> - * @cpu: cpu that the MSR should be run on, nagative value means any cpu=
+.
+> + * @cpu: cpu that the MSR should be run on, negative value means any cpu=
+.
+>   * @temp: pointer to the memory for saving cpu temperature.
+>   * @pkg: true: Package Thermal Sensor. false: Core Thermal Sensor.
+>   *
 > --
 
-Applied 6.20 material, thanks!
+Applied as 6.20 material, thanks!
 
