@@ -1,151 +1,269 @@
-Return-Path: <linux-pm+bounces-40956-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40957-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A92CD29448
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 00:35:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EA99D29A4F
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 02:40:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 042983035CC1
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Jan 2026 23:35:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C56B0301A731
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 01:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D015330D29;
-	Thu, 15 Jan 2026 23:35:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2EA73358CF;
+	Fri, 16 Jan 2026 01:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mzt+qbtJ"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="hLMudqQP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DF332E6BC
-	for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 23:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF5C335545;
+	Fri, 16 Jan 2026 01:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768520137; cv=none; b=EoiWGjyV1I/9poG5mKa76MWnjwNvUbkxlP9X0qLrJhwScMhD+McSBx4lHs6olFgd6LcjT9/mruIhnfdW3543rNPJzxCh+jL/QfDSj85IYiuygKt3Yq46nJnXK84iWa5uPa4ftutF7zE38k57uf2CagkadN0WVgztPpYvC3NRDdI=
+	t=1768527632; cv=none; b=Ejvt7mYmt6oPYt2WqfiSda/kiAA99G6mYSfEOiy6R/RMHpFY6S0mTxIIuaxjaHg1eNp8VbT4NdupnmqPfvVRL9jqeMrJFHubAAFkaROMxCrbxmbUpR6mungXx/9MiMG6EdcqkgN7A5yMR6okQ+vCwlMiuvbkqZZpcsIhCSHNBmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768520137; c=relaxed/simple;
-	bh=Sd5u1m4hBvY3ac+Xo0S7P6bC5jfOmx5rGLi7Jyx41H0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EsbyaSe+PBLbfdG9BHEbx+PQ4bQrOtIgn7m20kDgNHS74g8TIs3mVQHgi18443VlVVh26vpnhix62PZKykOU/8tddi6qrtq4roOW4kDKxEYZyUW8gj3B23XUDDaiQ9nIe27LLawXji5he1vB57LA0yd3twxzGUICc4nIPny2DGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mzt+qbtJ; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b871cfb49e6so256560266b.1
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 15:35:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768520134; x=1769124934; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sd5u1m4hBvY3ac+Xo0S7P6bC5jfOmx5rGLi7Jyx41H0=;
-        b=Mzt+qbtJ10hAeqYHRFXJUHvk2GtxJzcoPJozj+fg//Ci+xE1EKsS0ZwbNiWBg32nwf
-         KocUAGWC5B8evL1gny5lPBAxnq/aNZjWxYn5dYmMAFJzksR9VOtW51ynVxA5duGgWSFH
-         CHajMKJSk5Zgl23ZrhQkSIHnDahRkVqf0OxArPMDPZPdTgzVFYkb9a18aeXm9yGiKaxi
-         rtMN6h7DZLrizD+mdHvu7hmLyZmSvQCZfWIyj5H6m9QLDxKYmRAOQkZw/WuIZt3z2XDB
-         WgCx6AlKc9scIS4pJNr2Nou5hwE0FNnddY5pRnEBLRw0g6XnPghrMME1MyPbefANUcNH
-         zneg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768520134; x=1769124934;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Sd5u1m4hBvY3ac+Xo0S7P6bC5jfOmx5rGLi7Jyx41H0=;
-        b=H8SRO9x3mdWX2oDWs+J46ZTR1qcPQfRn3Z5xZB8Nb6VqQVZSJ0Ejzzee5q9QJkDiM2
-         Z2fOUsWwgoKDLiD0yg1yKT8Rze2oMyteIFBq7tnpELomcNun6QixAwNwcKk/uMX5sSn3
-         tGcPaKkRhlCgKfeWCM7JktXGf6FqhhvJ65T9lr9NajpTAarigmneHOARyj43/6svcEbD
-         nIa50CO6/317XK7ygRxX+DljyCEuwbyD8X5ablbqcLkLfPryPNSkiUjMiEku+Bvq3DQ9
-         leZBej6lNl74zPtadzmaLlfIgA4Hf3Y09fxDjLkESdS4xOJYUBMA0g/JTe3b7U5mK6+v
-         xh5w==
-X-Forwarded-Encrypted: i=1; AJvYcCUyLJGOohTsvU6X/L1au+1BcrzhGRg6Y9xchmpG1tmOg3WDZnbSCSaPJkSEwkKG3yeyZvdLU6Kg9Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9v6lZauRtzMG8whNmIId07hPMkAhU3wLTg7PdgzWS7b6sULRK
-	w6nRDKIne7g7KhrjI83c23Xhqm5TJAlSx1qxr2nGbG64mtv3JFfiX+3XVs2IH2Z5tYV+LzlDkT+
-	6vM0mXmVqYe/6cX6gb0x8vxLKrxoTDow0XrPK79fc
-X-Gm-Gg: AY/fxX4G3NBLCwuDXk1fj1s7OkgLdR8wDDG9nWSETk6bMw529ootoaqxrKC71cmvas6
-	+YvvO4lvVxUa5Gym/Ainwthz/Cx3zkuXqPSnpol9Azq922mS3dmQAiYFafXO6yezwvu0Kbxvu7/
-	3wsCFCY6lhqCSjHiclh78U6gSkdtifyNUFKAYz+Dro1q0v1fDr/PlPqdLqODtQPpwlez0OvJksT
-	w3pNAjIC5fCWK40NU4+XIQ3RRBcJAWxcuYmzWBH5OwYBAOO/QQL3nWly3TZBu0FsjKNzlSR2A6S
-	0DwqZO61HVO9GMbXBJ48/K7cyg==
-X-Received: by 2002:a17:907:7ba0:b0:b87:701d:341a with SMTP id
- a640c23a62f3a-b879691c97dmr60702466b.25.1768520133853; Thu, 15 Jan 2026
- 15:35:33 -0800 (PST)
+	s=arc-20240116; t=1768527632; c=relaxed/simple;
+	bh=cl9G9gUCCefSwZQztfZ/hIVtxBY3FjWjwztkJQsRzbo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=PdXNcbtG6a4uEEa7OMgXOMsre2M7eAWBUBs+MSRFjD7Nk4Wh/6BCgv5PYiP9Zog+AYAdtLXNydqH1JKPL+VxZIqF9XcUqKB9JHiLQLimTa4C1kW7ABY7LzLceERX1fvEYO+jhPPkgQaPaXFuAK8BzrYU0kqNn+lUxdJkpa4Fnfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=hLMudqQP; arc=none smtp.client-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1768527582;
+	bh=i8sax+Q6GvwgMz1ddDPfZuAAjgqNWAWZQw9z3RdR4M8=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=hLMudqQPJ+9S+KEumWu7wDdQJug3lWRxqGKM9SRU3t/n/BoYM8BkZ+h1aqQ0mPkIo
+	 kmyaVOC9C+yOWIw7AFkv4PnsThzcE2H/YrvAzIl0Bg5WUUyxJlmhc7OsFmewmND4Fy
+	 NEMu2ymLxfLD4sj0xrZzAGIBAvkYi3Qt2IVNseLY=
+X-QQ-mid: zesmtpip3t1768527565t30b1972b
+X-QQ-Originating-IP: FZA9/ZOd7kklH5gWdfU9zIva4egROiXgcWnwkELrUe4=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 16 Jan 2026 09:39:24 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 12821783964837250733
+EX-QQ-RecipientCnt: 7
+From: tuhaowen <tuhaowen@uniontech.com>
+To: pavel@kernel.org,
+	rafael@kernel.org
+Cc: tuhaowen@uniontech.com,
+	lenb@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	saravanak@google.com
+Subject: [PATCH v1 RESEND] PM: sleep: Add configurable timeout and mode control for filesystem sync
+Date: Fri, 16 Jan 2026 09:39:17 +0800
+Message-Id: <20260116013917.979567-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20251229065251.3315787-1-tuhaowen@uniontech.com>
+References: <20251229065251.3315787-1-tuhaowen@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251201202437.3750901-1-wusamuel@google.com> <20251201202437.3750901-2-wusamuel@google.com>
- <f28577c1-ca95-43ca-b179-32e2cd46d054@arm.com> <CAJZ5v0hAmgjozeX0egBs_ii_zzKXGPsPBUWwmGD+23KD++Rzqw@mail.gmail.com>
- <20251204114844.54953b01@gandalf.local.home> <CAJZ5v0irO1zmh=un+8vDQ8h2k-sHFTpCPCwr=iVRPcozHMRKHA@mail.gmail.com>
- <20251229165212.5bd8508d@gandalf.local.home> <20251229170021.71cc5425@gandalf.local.home>
-In-Reply-To: <20251229170021.71cc5425@gandalf.local.home>
-From: Samuel Wu <wusamuel@google.com>
-Date: Thu, 15 Jan 2026 15:35:22 -0800
-X-Gm-Features: AZwV_Qjrxjv68dd8vV8YximCsepNvBfmIJ1YNLb9adYYh_EA_LMsFGVBQLimKwc
-Message-ID: <CAG2KctqvAKUYwWex=8vDeMvAaDEUJ0D4gEoAZczapnpeM5p-SQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] cpufreq: Replace trace_cpu_frequency with trace_policy_frequency
-To: Steven Rostedt <steven@rostedt.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Christian Loehle <christian.loehle@arm.com>, 
-	Huang Rui <ray.huang@amd.com>, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Perry Yuan <perry.yuan@amd.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
-	kernel-team@android.com, linux-pm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: MSyoPQEuxKCufVAPApr51F91mbvk1zcYI51/jjxcd0tllBvg3vfbHhrA
+	nC2nagLgsJ2DV30+XUIz3il+kecn9zdp7doMC9DqNhD0t7YDbUqG3GsNwhFctcGSVCFSL/6
+	DCGwCHGKavELWHvKdexkBJZjGEPC4+fU9WxGkR4NBDO4e4GaqFfH/DR2G74Omen8w9722XH
+	Woy8WIhUBWSAguw3QvqeWU28X0aFjzVyi1AkcJ8CuHSt5TZOCUJGkSFUZovSlsReC0zsV8q
+	eRhQUksyypo2z/u0krmxp51ofYszt6s2P45RMUkAhKZ8SOpdiZiudCIRRvS/5d6lSxu9vGU
+	z/SKtV2opPJFZWsReuLZhxJY6M4rWCLTiSgaSW+5ZZo8/ZNGxJZMezx92BuJJ1WiccgLrIv
+	6YWRkcW069bKYvTa9PuwfpfuzO1p+i+ekgtlsviFqBK5tgsazU2MUyCqyrrEmyMGH6T271d
+	mIFLNT1FaaZ0+KMMgFHU3JMmxvFqdXjgtkPBXm3VYpXkkMfRN1F4jbDdsqOE/d9kMqC/UCS
+	1S68HReaNuF2y5I9qdpHpsGa0A8nfG/sv5LxYUZmFV7MpWDSVr7AeKhxQ49bUpL9svrWUbq
+	K5IRPp6QSIIfcwo2olvYFIxs9yyE16oojk6eyvYFf0igEMJ9C43L9bzoMepv2fOXrqeOnHL
+	OpI2OgfSpDWpZ/nnh3FwGOMDfE+oa7xitgNAu/cepiSzrbRjQRglfYCps1Y1FGBRPIWI43J
+	FDCwIwqVjbCB34Lx35uffosBnXLv2lP9lS9AngsO5VbUxJyu3ZnP61/IPCuImjvnVeZ7NTy
+	KvHGNnF4ngsQQ6uM2kEAC4hUoMWHS3hNVCivBrubY9LCQMFCpXvbBdxjaYjGfGmpKepX9kZ
+	4qnNtqomvT6/Rq2RM4yw+hRxBdSQB/G24G4ZMPY9SZTz7T2Fqtneb7VkhhVBgVMu6MjTmlb
+	sYXpAVAlgTk0/9UsJQCteAVbffgzZZpH2nQRyXh8VKoMpgSxy4pqc+ERA0LpyZWbRWpJSmE
+	d0GgQ1PYCxttqCiSIBy8Cna7EEV7h4me/aW8HzUg==
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
+X-QQ-RECHKSPAM: 0
 
-On Mon, Dec 29, 2025 at 2:00=E2=80=AFPM Steven Rostedt <steven@rostedt.org>=
- wrote:
->
-> On Mon, 29 Dec 2025 16:52:12 -0500
-> Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> > On Thu, 4 Dec 2025 18:24:57 +0100
-> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> >
-> > > My concern is that the patch effectively removes one trace point
-> > > (cpu_frequency) and adds another one with a different format
-> > > (policy_frequency), updates one utility in the kernel tree and expect=
-s
-> > > everyone else to somehow know that they should switch over.
-> > >
-> > > I know about at least several people who have their own scripts using
-> > > this tracepoint though.
-> >
-> > Hi Rafael,
-> >
-> > Can you reach out to those that have scripts that use this trace event =
-to
-> > see if it can be changed?
-> >
-> > Thanks,
->
-> I got a bunch of "Undelivered Mail Returned to Sender". It seems that gma=
-il
-> thinks my goodmis.org account is now spam :-p
->
-> -- Steve
->
-Hi Rafael,
+When users trigger system suspend on desktop systems, filesystem sync
+can take 10-25 seconds or even longer if there are slow/faulty storage
+devices (e.g., a failing hard drive or disconnected USB drive). During
+this time, the screen goes black and the system appears completely
+frozen with no visual feedback. Users cannot distinguish whether the
+system is "syncing filesystems" or has "crashed/hung", leading them
+to perform a hard reset, potentially causing data loss.
 
-Bumping thread since it's unclear if Steven's email has gone through.
+While the existing wakeup event mechanism allows aborting sync via key
+presses (designed for mobile devices), desktop/laptop users often don't
+realize they can press keys during the black screen. Instead, they tend
+to force power off by holding the power button, assuming the system has
+hung. This is especially problematic with faulty storage devices that
+cause indefinite sync hangs.
 
-Are you able to reach out to those with the scripts using this
-tracepoint to see if they can be changed? Hopefully this update can be
-proactive, but I'm optimistic even a reactive update would be
-straightforward.
+This patch adds a timeout mechanism to automatically abort filesystem
+sync after a configurable duration, preventing indefinite hangs without
+requiring user intervention:
 
--- Sam
+1. /sys/power/fs_sync_mode (0 or 1, default: 0)
+   - Mode 0: Check wakeup events, allow user to abort sync
+   - Mode 1: Only use timeout, ignore wakeup events
+
+2. /sys/power/fs_sync_timeout (0-300 seconds, default: 0)
+   - Set maximum wait time for filesystem sync
+
+The fix adds timeout mechanism to pm_sleep_fs_sync(). When timeout
+expires or user presses a key (mode 0), the sync is aborted and
+suspend proceeds, preventing indefinite hangs. The default behavior
+(mode 0, timeout 0) maintains backward compatibility.
+
+Link: https://lore.kernel.org/all/CAJZ5v0g_HXQjWfp=L0KetRCHMTD=QsP3wJKNZnadJic2yccCUQ@mail.gmail.com/
+
+Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
+---
+ kernel/power/main.c | 94 +++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 91 insertions(+), 3 deletions(-)
+
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 03b2c5495c77..bb7dd73e18fc 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -102,6 +102,12 @@ static atomic_t pm_fs_sync_count = ATOMIC_INIT(0);
+ static struct workqueue_struct *pm_fs_sync_wq;
+ static DECLARE_WAIT_QUEUE_HEAD(pm_fs_sync_wait);
+ 
++/* Timeout for file system sync during suspend/hibernate (in seconds) */
++static unsigned int fs_sync_timeout_secs;
++
++/* File system sync mode: 0 = interrupt mode, 1 = timeout mode */
++static unsigned int fs_sync_mode;
++
+ static bool pm_fs_sync_completed(void)
+ {
+ 	return atomic_read(&pm_fs_sync_count) == 0;
+@@ -119,11 +125,15 @@ static DECLARE_WORK(pm_fs_sync_work, pm_fs_sync_work_fn);
+ /**
+  * pm_sleep_fs_sync() - Sync file systems in an interruptible way
+  *
+- * Return: 0 on successful file system sync, or -EBUSY if the file system sync
+- * was aborted.
++ * Return: 0 on successful file system sync,
++ *         -EBUSY if the file system sync was aborted by wakeup event,
++ *         -ETIME if the file system sync timed out.
+  */
+ int pm_sleep_fs_sync(void)
+ {
++	unsigned long timeout_jiffies = 0;
++	unsigned long start_time;
++
+ 	pm_wakeup_clear(0);
+ 
+ 	/*
+@@ -137,16 +147,90 @@ int pm_sleep_fs_sync(void)
+ 		queue_work(pm_fs_sync_wq, &pm_fs_sync_work);
+ 	}
+ 
++	/* Setup timeout only in timeout mode (mode 1) */
++	if (fs_sync_mode && fs_sync_timeout_secs > 0) {
++		timeout_jiffies = msecs_to_jiffies(fs_sync_timeout_secs * 1000);
++		start_time = jiffies;
++	}
++
+ 	while (!pm_fs_sync_completed()) {
+-		if (pm_wakeup_pending())
++		if (!fs_sync_mode && pm_wakeup_pending())
+ 			return -EBUSY;
+ 
++		if (fs_sync_mode && timeout_jiffies > 0 &&
++		    time_after(jiffies, start_time + timeout_jiffies)) {
++			pr_warn("PM: File system sync timed out after %u seconds, proceeding with suspend\n",
++				fs_sync_timeout_secs);
++			return -ETIME;
++		}
++
+ 		wait_event_timeout(pm_fs_sync_wait, pm_fs_sync_completed(),
+ 				   PM_FS_SYNC_WAKEUP_RESOLUTION);
+ 	}
+ 
+ 	return 0;
+ }
++
++/*
++ * fs_sync_timeout: Control file system sync timeout during suspend/hibernate.
++ *
++ * show() returns the timeout value in seconds.
++ * store() accepts a value in seconds. 0 means no timeout (only interrupted by wakeup events).
++ * Non-zero values will cause the sync to be interrupted after the specified time.
++ */
++static ssize_t fs_sync_timeout_show(struct kobject *kobj,
++				    struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%u\n", fs_sync_timeout_secs);
++}
++
++static ssize_t fs_sync_timeout_store(struct kobject *kobj,
++				     struct kobj_attribute *attr,
++				     const char *buf, size_t n)
++{
++	unsigned long val;
++
++	if (kstrtoul(buf, 10, &val))
++		return -EINVAL;
++
++	/* Allow values from 0 to 300 seconds (5 minutes) */
++	if (val > 300)
++		return -EINVAL;
++
++	fs_sync_timeout_secs = val;
++	return n;
++}
++
++power_attr(fs_sync_timeout);
++
++/*
++ * fs_sync_mode: Control file system sync behavior mode
++ *
++ * 0 = interrupt mode (default): check wakeup events during sync, can abort suspend/hibernate
++ * 1 = timeout mode: ignore wakeup events during sync, only use timeout
++ */
++static ssize_t fs_sync_mode_show(struct kobject *kobj,
++				  struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%u\n", fs_sync_mode);
++}
++
++static ssize_t fs_sync_mode_store(struct kobject *kobj,
++				   struct kobj_attribute *attr,
++				   const char *buf, size_t n)
++{
++	unsigned long val;
++
++	if (kstrtoul(buf, 10, &val))
++		return -EINVAL;
++
++	if (val > 1)
++		return -EINVAL;
++
++	fs_sync_mode = val;
++	return n;
++}
++power_attr(fs_sync_mode);
+ #endif /* CONFIG_SUSPEND || CONFIG_HIBERNATION */
+ 
+ /* Routines for PM-transition notifications */
+@@ -1085,6 +1169,10 @@ static struct attribute * g[] = {
+ 	&mem_sleep_attr.attr,
+ 	&sync_on_suspend_attr.attr,
+ #endif
++#if defined(CONFIG_SUSPEND) || defined(CONFIG_HIBERNATION)
++	&fs_sync_timeout_attr.attr,
++	&fs_sync_mode_attr.attr,
++#endif
+ #ifdef CONFIG_PM_AUTOSLEEP
+ 	&autosleep_attr.attr,
+ #endif
+-- 
+2.20.1
+
 
