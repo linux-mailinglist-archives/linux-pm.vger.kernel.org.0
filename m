@@ -1,146 +1,147 @@
-Return-Path: <linux-pm+bounces-40972-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40973-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F09E9D2D3B9
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 08:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A511FD2D7E9
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 08:51:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 22C68308953D
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 07:30:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 46C293089538
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 07:48:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE6402DC33F;
-	Fri, 16 Jan 2026 07:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4892E2D0C79;
+	Fri, 16 Jan 2026 07:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I7sj79pE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EfHWtxtS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20CC52C327D
-	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 07:30:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2281B224240;
+	Fri, 16 Jan 2026 07:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768548611; cv=none; b=c9a0cfkvo+7yuvWviTgS3KYAG61dRelRhtvbGDjG9uipF1NqwT0NQczJU9E2bJdBPOH2Zknsjf5fIrY6Grh37hq4YipRV12xw1SOM+39elkV8xsllDC4qlx1CFc7I3MYXtypyDaS0pdp1xIjlBzNUIwmBMvXkKdMHg0iupByRq0=
+	t=1768549691; cv=none; b=d7+BkWzFs/NUYqlNz4OjU5fLrjtD/5+4/SZXjJEBiT/aVD1koK1yly5zcINSMfh4dzQFFZcWwGck8w5ykGccCAySA5lvR55/6akrQvfXdjTln8wEDETZ1L6JNMUENheA1EEV5F53JtpidMjxBhgBLQJdTkPf3GAM8FMqyDwaG70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768548611; c=relaxed/simple;
-	bh=kfc2gu+JDiA504aEuqqB2yOn1wTCL0D1jfoSwyCjLNg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=d8pLIH22Rea4v6erV9tYcGg/I7qPQR9EcTzrs11xhikWudfliOAr3uqClYUpSNDpnGajjQlA7nBc3IaV5MV7EzzFs6hhx7Z2QyH6jAp9ZiOodWHe6zreaVumwpTeTpcLQJlu/bspYjIF/K5or0fAINIZgvLbLSF4Gqgruzo0i+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I7sj79pE; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7b75e366866so517193b3a.2
-        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 23:30:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768548609; x=1769153409; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8z9dR9n/XbIPD+NwoXj4aiKTiL+BG3no3tdpgFPxOgg=;
-        b=I7sj79pEEVb6YqTkpYa8ZQ7DkuAuYNUQ0F9DO11/w656RPFABpxnFUnD1EklZnk11H
-         B+3vj5avKulXmgiLrNr2KqWsGoCNxQ1VXGwwX1mA6VlYBr7cpJkGN+LdswGzfQ0946Z5
-         sF4BX6MfgIj0xF8FauYwX/2mGEhDuahzNt7zJ5Drd5R/FCzI7EPwvfd01uxocUyyeyJn
-         upSqZ9YxibY+qlXTUcuziyjxdl0dCObch8AkJVyXxzqUwKX2arLfjtUE45eUJH/dVLgG
-         DS5VICsYbCgI1irqvMD4f3OMo43008Dc/R/EDBDqHUF3vY0LTioTL/MKlemOU48HXtN3
-         GJIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768548609; x=1769153409;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8z9dR9n/XbIPD+NwoXj4aiKTiL+BG3no3tdpgFPxOgg=;
-        b=lzvs6By7wNZxVOSe5E7WrGEeNFZVvsKjNA4MDeKxf++rXDqkVDA9ekM8E6KTU87jb9
-         8jfWYFEE1fuX71UJTYe9kRGwSslToidIXjQv6xRhPumxg078jRrvj6QAdADWPji7WiNa
-         qYkytMpTtkZZ0usefbKHaLKj0rYfDK5WPJYE/rZAAHgR899IcOuzUFzdWrWxqegsVYIm
-         XUEIFC2Y6o4+M3rUpbY6xLuPuT6jNCJ0kT33cBlAzYR/nAirWDaV8KBqslBqXnBuTWzY
-         xCloHYOcnNrka6t8ljh1hDPROCAOhGuxach7EXOqh0afbRPs5tTSVj8zsQI47FJR9vPh
-         uUuA==
-X-Forwarded-Encrypted: i=1; AJvYcCV4xE86nSAXGY3ztz/SoCJrG5B0t5CDzhsQJuHmhyCThmL5H5oo+s1JP81v89gfQfJK1H3ESBOn4w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YylvfvJcPOeNc7Ee72mdm9Ru9kdr8iU+Lb+oVhl5c+G8oTsyBaG
-	wWIm10ir0NMgKTIeMiNgZP/H4DU2RB2mgB317r5weUVQFz59Xsle8LNy
-X-Gm-Gg: AY/fxX521eRyIB/55r8GYQ5eXZ2nl7qfTJLMh6vC34/YHEF4pCszLQXX7cJCkhgE7/N
-	O9FCXZatFe549RHvDutW1r9dCbAy86mNX3A5Rc5f3qlO7KarbFL6jKRTVFcCS39UZjMfwJKpABc
-	/DrBkjmUCTozA2M2h+Boaom3pO9zaJM0f2PsbdUgsLljAhJLQbOrdFAIOV1WLGccroLYbxpmpFJ
-	uvFAYzrHXNtNqRYFHY8zyzRRh05rq0RlkmFJQ96LCq3Xu5HIQDqTeQT5ZPE5vHzehUhcutlEUAW
-	PH1Z7+1pO+hU7pkDS1pv3ryfEhcNKc/LjMzOVzFiM4dKSXrk0EGHg89TAfNOGfC/BxEI1ZWgtkc
-	pNC1nF5VSK1FHV+Y2YwkBHXBWDkjv6cqNj4+UJ7QAQypgXcb0kv5VL8xUsZ5i+G8ZfTs2QG+gBh
-	esnCuJLAPSdIPRS/Z9gVUM5nFUrDw3G144obq8dmWLd61TZKjgR6S3i0x1PP5WrZtrYTzHpn4Bv
-	pHAuULJo3nHO3yGDW20vj/GIYKBMwIlmmnsMxxGYtWs8y4=
-X-Received: by 2002:a05:6a00:4008:b0:81e:6d2d:a121 with SMTP id d2e1a72fcca58-81fa03395bbmr2087675b3a.62.1768548608940;
-        Thu, 15 Jan 2026 23:30:08 -0800 (PST)
-Received: from c8971f1abf06.ap-southeast-2.compute.internal (ec2-54-252-206-51.ap-southeast-2.compute.amazonaws.com. [54.252.206.51])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-81fa1291a48sm1261509b3a.50.2026.01.15.23.30.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Jan 2026 23:30:08 -0800 (PST)
-From: Weigang He <geoffreyhe2@gmail.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Weigang He <geoffreyhe2@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] thermal/of: fix device node refcount leak in thermal_of_cm_lookup()
-Date: Fri, 16 Jan 2026 07:30:02 +0000
-Message-Id: <20260116073002.86597-1-geoffreyhe2@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1768549691; c=relaxed/simple;
+	bh=hwK8EGlTJ1EIjyEloDszBsecr+/Pkv1BZzVjqMRkpSo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WbBHpGtQr+IWEf+f81a7fDYz5ulied3Hm3l5nEQ3Ti8LEaoNE3yMRQRzHSIGCnAnCDPf3vt8txyXdJFkYtLSbEPOArOOmziu3fKPz25WEweayJUsg9It/yCvxPWYg5fR2c1lX8cuNTiU7ghiI2AEAcEXigqgKiOFapN2rWQ0IWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EfHWtxtS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0AEAC116C6;
+	Fri, 16 Jan 2026 07:48:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768549690;
+	bh=hwK8EGlTJ1EIjyEloDszBsecr+/Pkv1BZzVjqMRkpSo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=EfHWtxtSq4IYQwdcBrNT/NoMm3IXC6ai8WuMBZcYuwGQ8NrauEdqhcg01YE4P3OU5
+	 WYDaW+6SpAUV8pTlL6FHEajIX2UCRRtVALYN6PYvCaVIFyNtsKbn/w/8mKkHt45DFN
+	 X9igJ3dVfKmDPPbf9kdilCa1v5SCxfi2PYkBgM7Ozgux/mvuyd8I77nmsBhVVQ6vV7
+	 kWyLw8Qo0sFUQM9AC1eNUDvIdSqOoiHvRNfgEwBEPIUu01tDJa95BMMsbRMga2qSCv
+	 T1GrhP+yJ50Jjt29xIpjbzj2dJfW4dYFEaS4Q040fSfa4r+8vswk54RqScDeF1qjD/
+	 VodbCRaAx4OlA==
+Message-ID: <15470b51-d398-449d-9017-304df5ad7cef@kernel.org>
+Date: Fri, 16 Jan 2026 08:48:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 04/14] wifi: ath10k: snoc: support powering on the
+ device via pwrseq
+To: Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>,
+ Marcel Holtmann <marcel@holtmann.org>,
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+ Jeff Johnson <jjohnson@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Manivannan Sadhasivam <mani@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+ Balakrishna Godavarthi <quic_bgodavar@quicinc.com>,
+ Matthias Kaehlcke <mka@chromium.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+ linux-wireless@vger.kernel.org, ath10k@lists.infradead.org,
+ linux-pm@vger.kernel.org,
+ Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+References: <20260106-wcn3990-pwrctl-v2-0-0386204328be@oss.qualcomm.com>
+ <20260106-wcn3990-pwrctl-v2-4-0386204328be@oss.qualcomm.com>
+ <52b2b799-09e6-40a4-bea8-c7e8bf21cf51@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <52b2b799-09e6-40a4-bea8-c7e8bf21cf51@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-of_parse_phandle() returns a device_node pointer with refcount
-incremented. The caller must use of_node_put() when done.
+On 15/01/2026 23:30, Jeff Johnson wrote:
+> On 1/5/2026 5:01 PM, Dmitry Baryshkov wrote:
+>> The WCN39xx family of WiFi/BT chips incorporates a simple PMU, spreading
+>> voltages over internal rails. Implement support for using powersequencer
+>> for this family of ATH10k devices in addition to using regulators.
+>>
+>> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+>> ---
+>>  drivers/net/wireless/ath/ath10k/snoc.c | 54 ++++++++++++++++++++++++++++++++--
+>>  drivers/net/wireless/ath/ath10k/snoc.h |  2 ++
+> 
+> My automation flagged:
+> * drivers/net/wireless/ath/ath10k/snoc.c has no QTI copyright
+> * drivers/net/wireless/ath/ath10k/snoc.h has no QTI copyright
+> * 2 copyright issues
+> 
+> I'll add these manually in my 'pending' branch
+> 
 
-thermal_of_cm_lookup() acquires a reference to tr_np via
-of_parse_phandle() but fails to release it on multiple paths:
-  - When tr_np != trip->priv (continue path)
-  - When thermal_of_get_cooling_spec() returns true (early return)
-  - At the end of each loop iteration
+And why is this a problem? You are not here to impose Qualcomm rules, bu
+care about Linux kernel. You cannot add copyrights based on what exactly?
 
-Add the missing of_node_put() calls on all paths to prevent the
-reference count leak.
-
-Fixes: 423de5b5bc5b ("thermal/of: Fix cdev lookup in thermal_of_should_bind()")
-Cc: stable@vger.kernel.org
-Signed-off-by: Weigang He <geoffreyhe2@gmail.com>
----
- drivers/thermal/thermal_of.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 1a51a4d240ff6..ef3e5d4e3b6e8 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -284,8 +284,10 @@ static bool thermal_of_cm_lookup(struct device_node *cm_np,
- 		int count, i;
- 
- 		tr_np = of_parse_phandle(child, "trip", 0);
--		if (tr_np != trip->priv)
-+		if (tr_np != trip->priv) {
-+			of_node_put(tr_np);
- 			continue;
-+		}
- 
- 		/* The trip has been found, look up the cdev. */
- 		count = of_count_phandle_with_args(child, "cooling-device",
-@@ -294,9 +296,12 @@ static bool thermal_of_cm_lookup(struct device_node *cm_np,
- 			pr_err("Add a cooling_device property with at least one device\n");
- 
- 		for (i = 0; i < count; i++) {
--			if (thermal_of_get_cooling_spec(child, i, cdev, c))
-+			if (thermal_of_get_cooling_spec(child, i, cdev, c)) {
-+				of_node_put(tr_np);
- 				return true;
-+			}
- 		}
-+		of_node_put(tr_np);
- 	}
- 
- 	return false;
--- 
-2.34.1
-
+Best regards,
+Krzysztof
 
