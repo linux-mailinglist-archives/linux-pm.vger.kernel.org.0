@@ -1,91 +1,150 @@
-Return-Path: <linux-pm+bounces-40962-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40963-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD4ADD29E7E
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 03:09:00 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A555D2A1CE
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 03:27:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 25ECE301C904
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 02:08:58 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 8956E300EE41
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 02:27:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D647311C01;
-	Fri, 16 Jan 2026 02:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E7C8311C21;
+	Fri, 16 Jan 2026 02:27:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cUxzyPH1"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="COvtd5de"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA53419D065;
-	Fri, 16 Jan 2026 02:08:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4847FBAC;
+	Fri, 16 Jan 2026 02:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=15.184.224.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768529337; cv=none; b=b+ensUFcarGB8J9UUZ2L1GerlznWS1g8hkYksGy0RFxPNhEBaRx/LKri29A+VBbQfrXAlenHGpr6s1ooVm0o80BMyB9BcboeypSaTUHHNJsQmjcptNr0fJYKAfpwXXFX7sDQn4vfFRMiiKYvfGgS6+Zuou7vjWa6DGNbcc2aV8M=
+	t=1768530431; cv=none; b=qavu3f7gq1P4LBkyN3sMsbVEyPT02xgNmv5QdSYnIBQv05VKI69ujQvMGEJ6ovvhnloniHkZ0LLQx7ZS2VRV2OX18JxNvptBavmZSfKRHPu8djEcjqRDTa9pgO/iYfjOZt2vQO/R+IQO6hpb7tKnvE9joq9EYqNoTqzF7TDV+S8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768529337; c=relaxed/simple;
-	bh=sno2tWjsBNPmpnaKlE6qtXy545sE4ON2GCYjm2//rew=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=oFHK6Ec0jr+zIQRriIQ/m+zxCzr+zWKyl/heqTlunesgez2XIVoB8JSav/yM2AFJDHRq4Y2hc7RQczbS/hYYOclPx3m/5MM3dnPWOe9ZHQlbGIajeO9SKpG/AAzRpaEOoeKwjMQPggzyGPBkwmltb8Choh14HfsxNij/Stb/ESo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cUxzyPH1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7890FC116D0;
-	Fri, 16 Jan 2026 02:08:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768529336;
-	bh=sno2tWjsBNPmpnaKlE6qtXy545sE4ON2GCYjm2//rew=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=cUxzyPH1/GE0ZbZk/CuOg6tqprq5nDKPLtaNV16nL6PhCDMsGPF4JERgpWvmcBnw4
-	 NerEoIpBdO0aQQtqMbQW1zF/darIsPRQGttdVTiyqJw422E8tgVSCdcqFJ1gcYtGH4
-	 QA529vsED10PaXQsIYI7m4BEja+zsTXygdvMKGbX9naiUsMBchvwU4M4m5aeEGVGAP
-	 oP1q6+//9LFe36a+QFuxXdb8BJo2w0LGzfIkKPHE3AAgpP5Xl3kcxXlXeLi+Q6ws/P
-	 6E6VcGnYdUxAE6K771ftOhrTHpudxLP5G8Qy5y3vD1Lt2WUI9Tqoe+ZXDWPV3H1vtt
-	 lMP79gf5Nt1vQ==
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1768530431; c=relaxed/simple;
+	bh=HL1JYR8iT4KToi9Zi3fQzp19+KeMBlC8f7H/IJPGCEU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DNlX+xDbQxpvmPkarXgpO086U8d4cF7KS0Vp8kJOmFW+xV2gBHm3GyBfHVxTtsxGx9vLl0LMrglCBY0go+M7+k4SzMytdEQ8QFETouYcvtFHXAwXy2jKRT5Rcdfs2gacQhNsrvWkl4QXGv90Xr+UhKf54iJcuxnrRJcklLTzaFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=COvtd5de; arc=none smtp.client-ip=15.184.224.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1768530409;
+	bh=Adf1krTepVahhYXg6eWv32QiCOCC5DCd/xA8Df44gAg=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version;
+	b=COvtd5devnvzlWB72+rQpMd3U6mO4RBQhMcHMSPaGoHUqcBLhXluzpzPlmkbZhEz0
+	 87RR3wNS7pD0nWKmA9huAimPBIunekrvchmQC74waxtjQaUmSMSfu9IpxZo6Q2Fjhm
+	 cBGvKFjCxlsXM0f8VRFF6doaPnTZNz41A6uEXm44=
+X-QQ-mid: zesmtpip3t1768530404ta2ef6898
+X-QQ-Originating-IP: gPb3OSHiwBf+v89M3yP7ae8slwOm8n4qbxXksca7fEI=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 16 Jan 2026 10:26:43 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 15760255121268463657
+EX-QQ-RecipientCnt: 6
+From: tuhaowen <tuhaowen@uniontech.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	tuhaowen@uniontech.com
+Subject: [PATCH] PM: sleep: Fix race condition in suspend statistics updates
+Date: Fri, 16 Jan 2026 10:26:38 +0800
+Message-Id: <20260116022638.994778-1-tuhaowen@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260114092742.13231-5-angelogioacchino.delregno@collabora.com>
-References: <20260114092742.13231-1-angelogioacchino.delregno@collabora.com> <20260114092742.13231-5-angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v8 04/10] spmi: Implement spmi_subdevice_alloc_and_add() and devm variant
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org, arnd@arndb.de, gregkh@linuxfoundation.org, srini@kernel.org, vkoul@kernel.org, neil.armstrong@linaro.org, sre@kernel.org, angelogioacchino.delregno@collabora.com, krzk@kernel.org, dmitry.baryshkov@oss.qualcomm.com, quic_wcheng@quicinc.com, melody.olvera@oss.qualcomm.com, quic_nsekar@quicinc.com, ivo.ivanov.ivanov1@gmail.com, abelvesa@kernel.org, luca.weiss@fairphone.com, konrad.dybcio@oss.qualcomm.com, mitltlatltl@gmail.com, krishna.kurapati@oss.qualcomm.com, linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, kernel@collabora.com, Jonathan Cameron <jonathan.cameron@huawei.com>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, jic23@kernel.org
-Date: Thu, 15 Jan 2026 20:08:54 -0600
-Message-ID: <176852933471.16445.12620793496789127631@lazor>
-User-Agent: alot/0.11
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: Mo1nXFSF9E7vKRoQaPYc185GU2g1gOREjqovzYlBybSOZJU/4lmkqTcy
+	cCthgybqS7o6GerGMk2dk3FOPxZrfha+9flAQjARrEzZ1wWD7jje3DiH1ApOsWiNzGq9Ub9
+	J6vpVEemvbGD9AprH2PDmfqpZJYMOTShFfo0L0INlZaORWOkvLJG+4qZqKQPYSGO08ilgFm
+	r6EP7VUwqJ35VCPzgyFO9uOIE9IORNAo4g4LQtq/pJsodg4VImuJsKKHPTcnQcrPS1mB9OC
+	NrSF7X4DtpvFINkDekDRAu7taYNVNulkaUsJzt/VudgUuULQW0d6aAzu/km6kxUp+nwId/S
+	aI9xDMapmB8OfzPzn1khK6T7Jsi9J4IFy+Gilm69LPXyj/g1TEeTjbuVsXY5pM3K/06BBJb
+	ZvUIs5rI6qAvMJhiVfHwILoCgKDGrn2Ly4hwYcoA139dbzt0Yu0uvvAdy+FSTGlXsQN+/Cq
+	gfWSrMXKqxaNjFx4uPMeD48SeAfu/pBWZJF66FwKZ75qA5U5OJipiYUA61yvBpH6vj9/3LX
+	MHg1k4KCg2QVChCdKz73Y8pKh50qaBtHAJp8YxnFMb7Nd5MO/u3tFRS3ijaYV6kd5Z0L0vi
+	hLNeoXBZE1KT7VqUDeEax6yXgnYc32JmGIneV4Dz6M/+cD4FQKnOSD4JmQvtNgKA+CLdVtA
+	ZGcUdsz+bX4vW2Y43WYUyfeXIrc/0lp8UeDG61owiFSZyZi5JxroZvm3cZxjJbQe3c7SYgv
+	mQR2Uvxj0q+rvUAOSYjUSli9BwgtbIpxXhIhKl1q9u0KUK/tqnZw3oL8rS2Ycnh+/HkN5nF
+	a4dw6TTQSsHZfQbVF3gp2nbmKn5ibzeodcC0fqrPgX8QJSsrAiMkgUXXBg5K6NovkYjbKs5
+	iNY6/OGVtzJMRcCUl4PsBOVcMbL+AAPNspbh9thF+TIIOvLOpu7HvusViIQqINQXCNsVoOk
+	DwOOTm/D4Kejfuc38MNJCxViiIXUntDBy8WfJmetDKZrEgKkVI9gKNzkfIzsSbCjGzXcfik
+	9SBznLHHFPOS5rNXNtDrHqHaPAsfBGgDe73lHbtA==
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
+X-QQ-RECHKSPAM: 0
 
-Quoting AngeloGioacchino Del Regno (2026-01-14 03:27:36)
-> Some devices connected over the SPMI bus may be big, in the sense
-> that those may be a complex of devices managed by a single chip
-> over the SPMI bus, reachable through a single SID.
->=20
-> Add new functions aimed at managing sub-devices of a SPMI device
-> spmi_subdevice_alloc_and_add() and a spmi_subdevice_put_and_remove()
-> for adding a new subdevice and removing it respectively, and also
-> add their devm_* variants.
->=20
-> The need for such functions comes from the existence of those
-> complex Power Management ICs (PMICs), which feature one or many
-> sub-devices, in some cases with these being even addressable on
-> the chip in form of SPMI register ranges.
->=20
-> Examples of those devices can be found in both Qualcomm platforms
-> with their PMICs having PON, RTC, SDAM, GPIO controller, and other
-> sub-devices, and in newer MediaTek platforms showing similar HW
-> features and a similar layout with those also having many subdevs.
->=20
-> Also, instead of generally exporting symbols, export them with a
-> new "SPMI" namespace: all users will have to import this namespace
-> to make use of the newly introduced exports.
->=20
-> Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on SM8650-QRD
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
+The suspend_stats structure tracks suspend/resume failure information
+and is protected by suspend_stats_lock. However, while
+dpm_save_failed_dev() correctly uses this lock, dpm_save_failed_step()
+and dpm_save_errno() modify the same structure without any locking
+protection.
 
-Acked-by: Stephen Boyd <sboyd@kernel.org>
+This can cause races between writers (suspend/resume code updating
+stats) and readers (userspace reading from /sys/power/suspend_stats/
+or debugfs), leading to:
+
+- Lost updates to counters (success, fail, step_failures)
+- Corrupted circular buffer indices (last_failed_step,
+  last_failed_errno)
+- Inconsistent data when reading statistics from sysfs/debugfs
+
+Fix this by adding mutex_lock/unlock protection to both
+dpm_save_failed_step() and dpm_save_errno(). These functions are
+always called in process context, so mutex can be used safely.
+
+Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
+---
+ kernel/power/main.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index bb7dd73e18fc..d8b053d85dc0 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -503,16 +503,23 @@ void dpm_save_failed_dev(const char *name)
+ 
+ void dpm_save_failed_step(enum suspend_stat_step step)
+ {
++	mutex_lock(&suspend_stats_lock);
++
+ 	suspend_stats.step_failures[step-1]++;
+ 	suspend_stats.failed_steps[suspend_stats.last_failed_step] = step;
+ 	suspend_stats.last_failed_step++;
+ 	suspend_stats.last_failed_step %= REC_FAILED_NUM;
++
++	mutex_unlock(&suspend_stats_lock);
+ }
+ 
+ void dpm_save_errno(int err)
+ {
++	mutex_lock(&suspend_stats_lock);
++
+ 	if (!err) {
+ 		suspend_stats.success++;
++		mutex_unlock(&suspend_stats_lock);
+ 		return;
+ 	}
+ 
+@@ -521,6 +528,8 @@ void dpm_save_errno(int err)
+ 	suspend_stats.errno[suspend_stats.last_failed_errno] = err;
+ 	suspend_stats.last_failed_errno++;
+ 	suspend_stats.last_failed_errno %= REC_FAILED_NUM;
++
++	mutex_unlock(&suspend_stats_lock);
+ }
+ 
+ void pm_report_hw_sleep_time(u64 t)
+-- 
+2.20.1
+
 
