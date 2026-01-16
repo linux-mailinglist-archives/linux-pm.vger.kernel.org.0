@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-40979-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40980-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F2C2D2E94F
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 10:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 75256D2E9E2
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 10:18:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1737C301459E
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 09:14:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2218D300EE70
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 09:16:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10D8531DDB8;
-	Fri, 16 Jan 2026 09:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D763385BF;
+	Fri, 16 Jan 2026 09:16:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iIdiTAhL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="siH4yiqU"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEAEC31D393;
-	Fri, 16 Jan 2026 09:14:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2133433769F;
+	Fri, 16 Jan 2026 09:16:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768554876; cv=none; b=K38B7Hit14iRJuRb6QLM2PyQVOREr7N+UBCik6fcukG/Q++oKlHeeNL88+m7dnDsCYUzg8YoyOs0yYrwybuQJ+GygqG96bNxfJuYaiwheTipwjpTtGzukR/VBLWD0cXOjyDtg91jW5HeDCa4JDs37LQNsphWTita4zEsYiNvjrM=
+	t=1768554974; cv=none; b=cziAVsvcgf63szpy4Xh3VS07/dvEtmYCBzGHfc9HCQB28IJ1ZUCToBRVlCRQ6DjFVXZ+DyY1rORkN1zcBDl+f+HigiUdpZwUNBs2NnJnRYxEYUgp0UZyFfipOooRz3WKcZvEi7E2j6YsciBKRNm/WmqT1luWmAYa/XdvDXPPJ3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768554876; c=relaxed/simple;
-	bh=38VJjEOBybxvpA5oM4E2ds0CLpavJo1u9OUC5LqR17s=;
+	s=arc-20240116; t=1768554974; c=relaxed/simple;
+	bh=5ruNkvaF+Rmg+5LyMC70XNPVeJyuhzT/pkBC8YQs/fo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C6oHl15WjexYs6Q2KRJIMa1VpHiS3oSLOxpEQpgWDw1rFbgMOz5Rpw4MFby5PU9u4OCMC/1HCcNisqzEh4kEyi9y2iyN7mMXbVLa4DXYGhd1GonoPAgh8v6wiswBx9x4t2+NciJ2s9gplrvle+cJ89Rm+/qaOoVFtUQJ/Pcb/qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iIdiTAhL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97816C19421;
-	Fri, 16 Jan 2026 09:14:30 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=QsDMIQn8ebw3+K9cmGqZI+Bs2xBjyEg5YYrn0wq2r8aswWROXJVQCRYV9rMMug1YedafM3O0ITgZz7+3XmGFrQpcayPILBU4x27NsW57WKLFV5WYi0htJRZiEIzGgDboTJnsvf/z1xqVADS0noKW/IHC6Zhy5T55nZu3H3KRYwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=siH4yiqU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 021C3C116C6;
+	Fri, 16 Jan 2026 09:16:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768554875;
-	bh=38VJjEOBybxvpA5oM4E2ds0CLpavJo1u9OUC5LqR17s=;
+	s=k20201202; t=1768554973;
+	bh=5ruNkvaF+Rmg+5LyMC70XNPVeJyuhzT/pkBC8YQs/fo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iIdiTAhLPedoyWD6OHq9eN6g1Eo5hGac+89ismIW8zO9oufZsUeYNrgE0f0LcAUav
-	 TNGxRKkZy+aOxgIgc2YMrrkKNYnK9Z/C2GgCmDjzCoYuk5ZsOtB8kFo7VyWEkoooKF
-	 MKBAZZGVdgXuidxIdeulEPGqfz92b4SWsxjCUMldXnlf+TIvWmdAXkRIWdBwqBdKWR
-	 mt2Yoa3FcYUr2+E41sSADqLYQtVTqQgaX5lBu75WoX12v2XkEkrKjkniY060AMVmf5
-	 TANYRWq3j59mvkAEpVHGqcftLg/1Esf6Rk4oPeA8hMeWGVB9mwhtT/U+k9KEhv4oS6
-	 4kxyqFpY+emeQ==
-Message-ID: <0176a63a-6b04-4e30-b718-847133882050@kernel.org>
-Date: Fri, 16 Jan 2026 10:14:28 +0100
+	b=siH4yiqU+brTnXZCX3bMd8TTQy+U2jEfv8Qh7QYDBSF1h9gwZcOsIGjmeJ8cm7kQK
+	 Yyh4gt046Jfj+X8n+dVRvekd5KW4C6IMHlyvHYeRumOEG2yMuZFXua4lPjc0vz3vH5
+	 PFFL2Yk5LQOtfmlQ9okrqhkNa92ieTWmyuBiON8b7Eg0eJRSjQvLjaCI73r5bDO8yB
+	 i1SWwm/Szud0WaWqYxPbOTPaK4ylQ5cGUowFx986/i4YkjrxTi3YbfGVrU2yP+rCnK
+	 9ToHCtGwGJDSOQ/wqyUL7fQmShj9ZBzfsk2eaSeXucEumXh+6ZUgBoqlcgfJYdyIWf
+	 8LP+OXtDTlNQg==
+Message-ID: <d479060c-6b47-456c-abb6-9c5139bbd36d@kernel.org>
+Date: Fri, 16 Jan 2026 10:16:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -48,29 +48,18 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/8] dt-bindings: mfd: Add Google GS101 TMU Syscon
-To: Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Kees Cook <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, willmcvicker@google.com,
- jyescas@google.com, shin.son@samsung.com, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20260114-acpm-tmu-v1-0-cfe56d93e90f@linaro.org>
- <20260114-acpm-tmu-v1-3-cfe56d93e90f@linaro.org>
- <20260115-slim-denim-potoo-cad9cb@quoll>
- <200d34bf-150e-4f8a-b400-2f54863502ac@linaro.org>
- <e2f028d6-774f-4773-889f-7d56b833067e@kernel.org>
- <fcc5405e-189d-4195-8db0-3acf35bbc0a9@linaro.org>
- <26d86470-aaa2-46e3-9940-010a903df4fd@linaro.org>
+Subject: Re: [PATCH 1/3] cpufreq: dt-platdev: Add ti,am62l3 to blocklist
+To: Dhruva Gole <d-gole@ti.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Nishanth Menon <nm@ti.com>,
+ Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Kendall Willis <k-willis@ti.com>, Sebin Francis <sebin.francis@ti.com>,
+ Bryan Brattlof <bb@ti.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ devicetree@vger.kernel.org
+References: <20260116-am62l-cpufreq-v1-0-63d062317ae9@ti.com>
+ <20260116-am62l-cpufreq-v1-1-63d062317ae9@ti.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -116,30 +105,35 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <26d86470-aaa2-46e3-9940-010a903df4fd@linaro.org>
+In-Reply-To: <20260116-am62l-cpufreq-v1-1-63d062317ae9@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16/01/2026 09:50, Tudor Ambarus wrote:
+On 16/01/2026 10:01, Dhruva Gole wrote:
+> Add AM62L3 SoC to the dt-platdev blocklist to ensure proper handling
+> of CPUFreq functionality. The AM62L3 will use its native TI CPUFreq
+> driver implementation instead of the generic dt-platdev driver.
 > 
-> Because of the hybrid approach I'm arguing the ACPM child node does not
-> fully describe the hardware, and it's just a firmware abstraction.
-> So option 2/ would be to have just the TMU IP block described with a
-> phandle to the ACPM IPC:
+> This follows the same pattern as other TI SoCs like AM62A7, AM62D2,
+> and AM62P5 which have been previously added to this blocklist.
 > 
-> soc: soc@0 {
->     tmu@100a0000 {
->         compatible = "google,gs101-tmu-top";
->         reg = <0x100a0000 0x800>;
->         clocks = <&cmu_misc CLK_GOUT_MISC_TMU_TOP_PCLK>;
->         interrupts = <GIC_SPI 769 IRQ_TYPE_LEVEL_HIGH 0>;
->         
->         /* The "Firmware Phandle" approach */
->         samsung,acpm-ipc = <&acpm_ipc>;
->         
->         #thermal-sensor-cells = <1>;
+> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index 1708179b2610bca6035d10f0f4766eee6f73912e..29122bac2e22f6e7a8e8294cc01923c8a13d53c1 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -194,6 +194,7 @@ static const struct of_device_id blocklist[] __initconst = {
+>  	{ .compatible = "ti,am62a7", },
+>  	{ .compatible = "ti,am62d2", },
+>  	{ .compatible = "ti,am62p5", },
+> +	{ .compatible = "ti,am62l3", },
 
-Yes, this one, I think it's the best representation.
+p > l
+
 
 Best regards,
 Krzysztof
