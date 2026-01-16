@@ -1,44 +1,44 @@
-Return-Path: <linux-pm+bounces-41021-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41022-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC212D330D8
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 16:07:34 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F538D33144
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 16:11:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id F3FDE314B3D0
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 14:54:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D2EE3324184D
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 14:54:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A685E3933FD;
-	Fri, 16 Jan 2026 14:53:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7DD395D80;
+	Fri, 16 Jan 2026 14:53:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CNHyGy9x"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QTuE+pev"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8334B274FC1;
-	Fri, 16 Jan 2026 14:53:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA6438A2AE;
+	Fri, 16 Jan 2026 14:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768575228; cv=none; b=DiUGYfEkE7m+tiLC+iBrLNm97BmpCpY1rR/23xw3VzUZ/8+sDcWZ8tG5+FOUh0ILJIrLxd7ajeT+DQtH7RohnhM9lWRavl/AaI0WC9oFvrh3ChvuaV5bpqTWqSD0QopLLBMp0Lv82G0w9ML99LSTua8FI7AaFyqXLVBDO6tzU4s=
+	t=1768575236; cv=none; b=YKCI9iAYy/1FxVEi5ZWiNZYd+TggcFmohKVv6ZuysmWmJux0te0AA3NoQlul79EE2cSxYtXaLzPG6j8maeYQQzs/IkmUZDv50I623X7YjZp4fktuyt7vAgY2MA64IaWDj8QklKKnxGTFFUKCCMd3mE7EK/3msLbNeTrKavNhzT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768575228; c=relaxed/simple;
-	bh=6rMuEpbQZXvwjKA1HjWhJVfT/gG1/xfSb0ElvkTOWjQ=;
+	s=arc-20240116; t=1768575236; c=relaxed/simple;
+	bh=8v3ULYDqt0dF0OoyYvjCFXVF3r/R8dp2K5PMXJFm6yY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ofVqpmgH1ExCiWdNm1j/WveUa9b6NdqfjKpFZDnDKvf3a7aF4b5AYCVRCLaz3et7NAxtg6pB01NjV7w2RbsQIwrea0zlw8Kz09WusTazw8qTO4ujOgv4RkmFy9wNTvX3WJG3/SD/Vpnn4nFxeRHjg43aWHVDi69GgUdAnibmi/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CNHyGy9x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FE2AC16AAE;
-	Fri, 16 Jan 2026 14:53:41 +0000 (UTC)
+	 MIME-Version; b=jl3B62ObX2V5KqqnZ5NY9iTQGpGNP8WPAImGcr66qVOX0GWqzKsBbBPIZlWEIp2YQqmKpofoKp04jenXYh/fkZKfOiMkpixiCObwSspmUGF363k3HUtRB6NpD2zO+is9sKhOzzofpnKoO2XHuMYB5vJToRCHPyW/2otrRx6f7iE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QTuE+pev; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BFCFC116C6;
+	Fri, 16 Jan 2026 14:53:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768575228;
-	bh=6rMuEpbQZXvwjKA1HjWhJVfT/gG1/xfSb0ElvkTOWjQ=;
+	s=k20201202; t=1768575235;
+	bh=8v3ULYDqt0dF0OoyYvjCFXVF3r/R8dp2K5PMXJFm6yY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CNHyGy9x0ZCCX3hcPWuzKQoZdn2unDE3tiZ3OHWATurUeRfzrcyer0Bizt3PhEHNs
-	 VeXOLM91VS3T7jU6c+Oomdzra6apJuw5lvulqLk2RNJM8W2atJwfXU3bmOQrRhcMGK
-	 dhLpJHmLnLCrzmHDvtyJNh5lG2FqU6eGSaVbvu6dpyoc99Q46h6YEkbnB8NxttweMt
-	 4+T3RxEeQPIACQs50+Rr0IclsAjLeekt5UsMdBaVhxEwjWRULX/BeE9qy/w1yrQ3ET
-	 3arl4YDBDpRDM6J9kZ5pl1ddZb/l311wmJrjTSkyvPPaYoij16nZ7tekNqE3TrLhNP
-	 zte6143jEN7qg==
+	b=QTuE+pevi7Ewtc5J4XzS2UyPIDX6nKym9hfu473HaWWIdWlledSc2OUe2hDm9GjOu
+	 aIpXiBUIscS+O2fSFPLXX3Tag46bUkGLCfL75SiNLjoAITlPVWYZuanFHF6VjbaKdw
+	 daTCh/g4e/qMOdWH3BpJWKAuEzWjK/sDbXfsXBnjZ5mVW6FI5Z33aH80Afp37MySD8
+	 Jxi8QkRD+ZeXuYuXyAgdatTG1bSK6XRmNw9+ZaYjhhSMzGB8vaMxhspoZJfxHBSPo3
+	 CkHOTOCFZB2yfJWRjUQfoFmcssxDFrE+v0AAlOiNVBOdxgzmUMTuR4lKnN+oaWQQoG
+	 mNnXatX/ElVkg==
 From: Frederic Weisbecker <frederic@kernel.org>
 To: LKML <linux-kernel@vger.kernel.org>
 Cc: Frederic Weisbecker <frederic@kernel.org>,
@@ -75,9 +75,9 @@ Cc: Frederic Weisbecker <frederic@kernel.org>,
 	linux-pm@vger.kernel.org,
 	linux-s390@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 12/15] tick/sched: Consolidate idle time fetching APIs
-Date: Fri, 16 Jan 2026 15:52:05 +0100
-Message-ID: <20260116145208.87445-13-frederic@kernel.org>
+Subject: [PATCH 13/15] sched/cputime: Consolidate get_cpu_[idle|iowait]_time_us()
+Date: Fri, 16 Jan 2026 15:52:06 +0100
+Message-ID: <20260116145208.87445-14-frederic@kernel.org>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20260116145208.87445-1-frederic@kernel.org>
 References: <20260116145208.87445-1-frederic@kernel.org>
@@ -89,303 +89,158 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fetching the idle cputime is available through a variety of accessors
-all over the place depending on the different accounting flavours and
-needs:
+get_cpu_idle/iowait_time_us() may ultimately fail if generic vtime
+accounting is enabled.
 
-- idle vtime generic accounting can be accessed by kcpustat_field(),
-  kcpustat_cpu_fetch(), or get_idle/iowait_time() but not by
-  get_cpu_idle/iowait_time_us()
+The ad-hoc replacement solution by cpufreq is to compute jiffies minus
+the whole busy cputime. Although the intention should provide a coherent
+low resolution estimation of the idle and iowait time, the
+implementation is buggy because jiffies don't start at 0.
 
-- dynticks-idle accounting can only be accessed by get_idle/iowait_time()
-  or get_cpu_idle/iowait_time_us()
-
-- CONFIG_NO_HZ_COMMON=n idle accounting can be accessed by kcpustat_field()
-  kcpustat_cpu_fetch(), or get_idle/iowait_time() but not by
-  get_cpu_idle/iowait_time_us()
-
-Moreover get_idle/iowait_time() relies on get_cpu_idle/iowait_time_us()
-with a non-sensical conversion to microseconds and back to nanoseconds
-on the way.
-
-Start consolidating the APIs with removing get_idle/iowait_time() and
-make kcpustat_field() and kcpustat_cpu_fetch() work for all cases.
+Enhance instead get_cpu_[idle|iowait]_time_us() to provide support for
+vtime generic accounting.
 
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- fs/proc/stat.c              | 40 +++-----------------------
- fs/proc/uptime.c            |  8 ++----
- include/linux/kernel_stat.h | 34 +++++++++++++++++++---
- kernel/sched/cputime.c      | 57 ++++++++++++++++++++++++++-----------
- 4 files changed, 76 insertions(+), 63 deletions(-)
+ drivers/cpufreq/cpufreq.c   | 29 +----------------------------
+ include/linux/kernel_stat.h |  3 +++
+ include/linux/tick.h        |  4 ----
+ kernel/sched/cputime.c      | 14 ++++++++++----
+ 4 files changed, 14 insertions(+), 36 deletions(-)
 
-diff --git a/fs/proc/stat.c b/fs/proc/stat.c
-index 6ac2a13b8be5..c00468a83f64 100644
---- a/fs/proc/stat.c
-+++ b/fs/proc/stat.c
-@@ -22,38 +22,6 @@
- #define arch_irq_stat() 0
- #endif
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 4472bb1ec83c..ecb9634cd06b 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -130,38 +130,11 @@ struct kobject *get_governor_parent_kobj(struct cpufreq_policy *policy)
+ }
+ EXPORT_SYMBOL_GPL(get_governor_parent_kobj);
  
--u64 get_idle_time(struct kernel_cpustat *kcs, int cpu)
+-static inline u64 get_cpu_idle_time_jiffy(unsigned int cpu, u64 *wall)
 -{
--	u64 idle, idle_usecs = -1ULL;
+-	struct kernel_cpustat kcpustat;
+-	u64 cur_wall_time;
+-	u64 idle_time;
+-	u64 busy_time;
 -
--	if (cpu_online(cpu))
--		idle_usecs = get_cpu_idle_time_us(cpu, NULL);
+-	cur_wall_time = jiffies64_to_nsecs(get_jiffies_64());
 -
--	if (idle_usecs == -1ULL)
--		/* !NO_HZ or cpu offline or vtime so we can rely on cpustat.idle */
--		idle = kcpustat_field(CPUTIME_IDLE, cpu);
--	else
--		idle = idle_usecs * NSEC_PER_USEC;
+-	kcpustat_cpu_fetch(&kcpustat, cpu);
 -
--	return idle;
+-	busy_time = kcpustat.cpustat[CPUTIME_USER];
+-	busy_time += kcpustat.cpustat[CPUTIME_SYSTEM];
+-	busy_time += kcpustat.cpustat[CPUTIME_IRQ];
+-	busy_time += kcpustat.cpustat[CPUTIME_SOFTIRQ];
+-	busy_time += kcpustat.cpustat[CPUTIME_STEAL];
+-	busy_time += kcpustat.cpustat[CPUTIME_NICE];
+-
+-	idle_time = cur_wall_time - busy_time;
+-	if (wall)
+-		*wall = div_u64(cur_wall_time, NSEC_PER_USEC);
+-
+-	return div_u64(idle_time, NSEC_PER_USEC);
 -}
 -
--static u64 get_iowait_time(struct kernel_cpustat *kcs, int cpu)
--{
--	u64 iowait, iowait_usecs = -1ULL;
--
--	if (cpu_online(cpu))
--		iowait_usecs = get_cpu_iowait_time_us(cpu, NULL);
--
--	if (iowait_usecs == -1ULL)
--		/* !NO_HZ or cpu offline or vtime so we can rely on cpustat.iowait */
--		iowait = kcpustat_field(CPUTIME_IOWAIT, cpu);
--	else
--		iowait = iowait_usecs * NSEC_PER_USEC;
--
--	return iowait;
--}
--
- static void show_irq_gap(struct seq_file *p, unsigned int gap)
+ u64 get_cpu_idle_time(unsigned int cpu, u64 *wall, int io_busy)
  {
- 	static const char zeros[] = " 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0";
-@@ -105,8 +73,8 @@ static int show_stat(struct seq_file *p, void *v)
- 		user		+= cpustat[CPUTIME_USER];
- 		nice		+= cpustat[CPUTIME_NICE];
- 		system		+= cpustat[CPUTIME_SYSTEM];
--		idle		+= get_idle_time(&kcpustat, i);
--		iowait		+= get_iowait_time(&kcpustat, i);
-+		idle		+= cpustat[CPUTIME_IDLE];
-+		iowait		+= cpustat[CPUTIME_IOWAIT];
- 		irq		+= cpustat[CPUTIME_IRQ];
- 		softirq		+= cpustat[CPUTIME_SOFTIRQ];
- 		steal		+= cpustat[CPUTIME_STEAL];
-@@ -146,8 +114,8 @@ static int show_stat(struct seq_file *p, void *v)
- 		user		= cpustat[CPUTIME_USER];
- 		nice		= cpustat[CPUTIME_NICE];
- 		system		= cpustat[CPUTIME_SYSTEM];
--		idle		= get_idle_time(&kcpustat, i);
--		iowait		= get_iowait_time(&kcpustat, i);
-+		idle		= cpustat[CPUTIME_IDLE];
-+		iowait		= cpustat[CPUTIME_IOWAIT];
- 		irq		= cpustat[CPUTIME_IRQ];
- 		softirq		= cpustat[CPUTIME_SOFTIRQ];
- 		steal		= cpustat[CPUTIME_STEAL];
-diff --git a/fs/proc/uptime.c b/fs/proc/uptime.c
-index b5343d209381..433aa947cd57 100644
---- a/fs/proc/uptime.c
-+++ b/fs/proc/uptime.c
-@@ -18,12 +18,8 @@ static int uptime_proc_show(struct seq_file *m, void *v)
- 	int i;
+ 	u64 idle_time = get_cpu_idle_time_us(cpu, io_busy ? wall : NULL);
  
- 	idle_nsec = 0;
--	for_each_possible_cpu(i) {
--		struct kernel_cpustat kcs;
--
--		kcpustat_cpu_fetch(&kcs, i);
--		idle_nsec += get_idle_time(&kcs, i);
--	}
-+	for_each_possible_cpu(i)
-+		idle_nsec += kcpustat_field(CPUTIME_IDLE, i);
+-	if (idle_time == -1ULL)
+-		return get_cpu_idle_time_jiffy(cpu, wall);
+-	else if (!io_busy)
++	if (!io_busy)
+ 		idle_time += get_cpu_iowait_time_us(cpu, wall);
  
- 	ktime_get_boottime_ts64(&uptime);
- 	timens_add_boottime(&uptime);
+ 	return idle_time;
 diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
-index a906492eb680..e1efd26e56f0 100644
+index e1efd26e56f0..e59916477075 100644
 --- a/include/linux/kernel_stat.h
 +++ b/include/linux/kernel_stat.h
-@@ -110,32 +110,59 @@ extern void kcpustat_dyntick_start(ktime_t now);
- extern void kcpustat_dyntick_stop(ktime_t now);
- extern void kcpustat_irq_enter(ktime_t now);
- extern void kcpustat_irq_exit(ktime_t now);
-+extern u64 kcpustat_field_idle(int cpu);
-+extern u64 kcpustat_field_iowait(int cpu);
- 
- static inline bool kcpustat_idle_dyntick(void)
- {
- 	return __this_cpu_read(kernel_cpustat.idle_dyntick);
- }
- #else
-+static inline u64 kcpustat_field_idle(int cpu)
-+{
-+	return kcpustat_cpu(cpu).cpustat[CPUTIME_IDLE];
-+}
-+static inline u64 kcpustat_field_iowait(int cpu)
-+{
-+	return kcpustat_cpu(cpu).cpustat[CPUTIME_IOWAIT];
-+}
-+
- static inline bool kcpustat_idle_dyntick(void)
- {
- 	return false;
+@@ -133,6 +133,9 @@ static inline bool kcpustat_idle_dyntick(void)
  }
  #endif /* CONFIG_NO_HZ_COMMON */
  
-+/* Fetch cputime values when vtime is disabled on a CPU */
-+static inline u64 kcpustat_field_default(enum cpu_usage_stat usage, int cpu)
-+{
-+	if (usage == CPUTIME_IDLE)
-+		return kcpustat_field_idle(cpu);
-+	if (usage == CPUTIME_IOWAIT)
-+		return kcpustat_field_iowait(cpu);
-+	return kcpustat_cpu(cpu).cpustat[usage];
-+}
++extern u64 get_cpu_idle_time_us(int cpu, u64 *last_update_time);
++extern u64 get_cpu_iowait_time_us(int cpu, u64 *last_update_time);
 +
-+static inline void kcpustat_cpu_fetch_default(struct kernel_cpustat *dst, int cpu)
-+{
-+	*dst = kcpustat_cpu(cpu);
-+	dst->cpustat[CPUTIME_IDLE] = kcpustat_field_idle(cpu);
-+	dst->cpustat[CPUTIME_IOWAIT] = kcpustat_field_iowait(cpu);
-+}
-+
- #ifdef CONFIG_VIRT_CPU_ACCOUNTING_GEN
- extern u64 kcpustat_field(enum cpu_usage_stat usage, int cpu);
- extern void kcpustat_cpu_fetch(struct kernel_cpustat *dst, int cpu);
- #else
- static inline u64 kcpustat_field(enum cpu_usage_stat usage, int cpu)
+ /* Fetch cputime values when vtime is disabled on a CPU */
+ static inline u64 kcpustat_field_default(enum cpu_usage_stat usage, int cpu)
  {
--	return kcpustat_cpu(cpu).cpustat[usage];
-+	return kcpustat_field_default(usage, cpu);
+diff --git a/include/linux/tick.h b/include/linux/tick.h
+index ac76ae9fa36d..1296cba67bee 100644
+--- a/include/linux/tick.h
++++ b/include/linux/tick.h
+@@ -138,8 +138,6 @@ extern bool tick_nohz_idle_got_tick(void);
+ extern ktime_t tick_nohz_get_next_hrtimer(void);
+ extern ktime_t tick_nohz_get_sleep_length(ktime_t *delta_next);
+ extern unsigned long tick_nohz_get_idle_calls_cpu(int cpu);
+-extern u64 get_cpu_idle_time_us(int cpu, u64 *last_update_time);
+-extern u64 get_cpu_iowait_time_us(int cpu, u64 *last_update_time);
+ #else /* !CONFIG_NO_HZ_COMMON */
+ #define tick_nohz_enabled (0)
+ static inline int tick_nohz_tick_stopped(void) { return 0; }
+@@ -160,8 +158,6 @@ static inline ktime_t tick_nohz_get_sleep_length(ktime_t *delta_next)
+ 	*delta_next = TICK_NSEC;
+ 	return *delta_next;
  }
+-static inline u64 get_cpu_idle_time_us(int cpu, u64 *unused) { return -1; }
+-static inline u64 get_cpu_iowait_time_us(int cpu, u64 *unused) { return -1; }
+ #endif /* !CONFIG_NO_HZ_COMMON */
  
- static inline void kcpustat_cpu_fetch(struct kernel_cpustat *dst, int cpu)
- {
--	*dst = kcpustat_cpu(cpu);
-+	kcpustat_cpu_fetch_default(dst, cpu);
- }
--
- #endif /* !CONFIG_VIRT_CPU_ACCOUNTING_GEN */
- 
- extern void account_user_time(struct task_struct *, u64);
-@@ -145,7 +172,6 @@ extern void account_system_index_time(struct task_struct *, u64,
- 				      enum cpu_usage_stat);
- extern void account_steal_time(u64);
- extern void account_idle_time(u64);
--extern u64 get_idle_time(struct kernel_cpustat *kcs, int cpu);
- 
- #ifdef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
- static inline void account_process_tick(struct task_struct *tsk, int user)
+ /*
 diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-index 16d6730efe6d..9906abe5d7bc 100644
+index 9906abe5d7bc..f0620b429698 100644
 --- a/kernel/sched/cputime.c
 +++ b/kernel/sched/cputime.c
-@@ -475,21 +475,14 @@ void kcpustat_irq_exit(ktime_t now)
- 		kcpustat_idle_start(kc, now);
+@@ -511,6 +511,13 @@ u64 kcpustat_field_iowait(int cpu)
+ 				      nr_iowait_cpu(cpu), ktime_get());
  }
- 
--static u64 get_cpu_sleep_time_us(int cpu, enum cpu_usage_stat idx,
--				 bool compute_delta, u64 *last_update_time)
+ EXPORT_SYMBOL_GPL(kcpustat_field_iowait);
++#else
 +static u64 kcpustat_field_dyntick(int cpu, enum cpu_usage_stat idx,
 +				  bool compute_delta, ktime_t now)
- {
- 	struct kernel_cpustat *kc = &kcpustat_cpu(cpu);
- 	u64 *cpustat = kc->cpustat;
--	ktime_t now, idle;
-+	ktime_t idle;
- 	unsigned int seq;
++{
++	return kcpustat_cpu(cpu).cpustat[idx];
++}
++#endif /* CONFIG_NO_HZ_COMMON */
  
--	if (vtime_generic_enabled_cpu(cpu))
+ static u64 get_cpu_sleep_time_us(int cpu, enum cpu_usage_stat idx,
+ 				 bool compute_delta, u64 *last_update_time)
+@@ -519,7 +526,7 @@ static u64 get_cpu_sleep_time_us(int cpu, enum cpu_usage_stat idx,
+ 	u64 res;
+ 
+ 	if (vtime_generic_enabled_cpu(cpu))
 -		return -1;
--
--	now = ktime_get();
--	if (last_update_time)
--		*last_update_time = ktime_to_us(now);
--
- 	do {
- 		seq = read_seqcount_begin(&kc->idle_sleeptime_seq);
++		res = kcpustat_field(idx, cpu);
+ 	else
+ 		res = kcpustat_field_dyntick(cpu, idx, compute_delta, now);
  
-@@ -502,7 +495,38 @@ static u64 get_cpu_sleep_time_us(int cpu, enum cpu_usage_stat idx,
- 		}
- 	} while (read_seqcount_retry(&kc->idle_sleeptime_seq, seq));
- 
--	return ktime_to_us(idle);
-+	return idle;
-+}
-+
-+u64 kcpustat_field_idle(int cpu)
-+{
-+	return kcpustat_field_dyntick(cpu, CPUTIME_IDLE,
-+				      !nr_iowait_cpu(cpu), ktime_get());
-+}
-+EXPORT_SYMBOL_GPL(kcpustat_field_idle);
-+
-+u64 kcpustat_field_iowait(int cpu)
-+{
-+	return kcpustat_field_dyntick(cpu, CPUTIME_IOWAIT,
-+				      nr_iowait_cpu(cpu), ktime_get());
-+}
-+EXPORT_SYMBOL_GPL(kcpustat_field_iowait);
-+
-+static u64 get_cpu_sleep_time_us(int cpu, enum cpu_usage_stat idx,
-+				 bool compute_delta, u64 *last_update_time)
-+{
-+	ktime_t now = ktime_get();
-+	u64 res;
-+
-+	if (vtime_generic_enabled_cpu(cpu))
-+		return -1;
-+	else
-+		res = kcpustat_field_dyntick(cpu, idx, compute_delta, now);
-+
-+	if (last_update_time)
-+		*last_update_time = ktime_to_us(now);
-+
-+	return ktime_to_us(res);
- }
- 
- /**
-@@ -552,7 +576,6 @@ u64 get_cpu_iowait_time_us(int cpu, u64 *last_update_time)
+@@ -544,7 +551,7 @@ static u64 get_cpu_sleep_time_us(int cpu, enum cpu_usage_stat idx,
+  * This time is measured via accounting rather than sampling,
+  * and is as accurate as ktime_get() is.
+  *
+- * Return: -1 if generic vtime is enabled, else total idle time of the @cpu
++ * Return: total idle time of the @cpu
+  */
+ u64 get_cpu_idle_time_us(int cpu, u64 *last_update_time)
+ {
+@@ -568,7 +575,7 @@ EXPORT_SYMBOL_GPL(get_cpu_idle_time_us);
+  * This time is measured via accounting rather than sampling,
+  * and is as accurate as ktime_get() is.
+  *
+- * Return: -1 if generic vtime is enabled, else total iowait time of @cpu
++ * Return: total iowait time of @cpu
+  */
+ u64 get_cpu_iowait_time_us(int cpu, u64 *last_update_time)
+ {
+@@ -576,7 +583,6 @@ u64 get_cpu_iowait_time_us(int cpu, u64 *last_update_time)
  				     nr_iowait_cpu(cpu), last_update_time);
  }
  EXPORT_SYMBOL_GPL(get_cpu_iowait_time_us);
--
- #endif /* CONFIG_NO_HZ_COMMON */
+-#endif /* CONFIG_NO_HZ_COMMON */
  
  /*
-@@ -1110,8 +1133,8 @@ u64 kcpustat_field(enum cpu_usage_stat usage, int cpu)
- 	struct rq *rq;
- 	int err;
- 
--	if (!vtime_accounting_enabled_cpu(cpu))
--		return val;
-+	if (!vtime_generic_enabled_cpu(cpu))
-+		return kcpustat_field_default(usage, cpu);
- 
- 	rq = cpu_rq(cpu);
- 
-@@ -1206,8 +1229,8 @@ void kcpustat_cpu_fetch(struct kernel_cpustat *dst, int cpu)
- 	struct rq *rq;
- 	int err;
- 
--	if (!vtime_accounting_enabled_cpu(cpu)) {
--		*dst = *src;
-+	if (!vtime_generic_enabled_cpu(cpu)) {
-+		kcpustat_cpu_fetch_default(dst, cpu);
- 		return;
- 	}
- 
-@@ -1220,7 +1243,7 @@ void kcpustat_cpu_fetch(struct kernel_cpustat *dst, int cpu)
- 		curr = rcu_dereference(rq->curr);
- 		if (WARN_ON_ONCE(!curr)) {
- 			rcu_read_unlock();
--			*dst = *src;
-+			kcpustat_cpu_fetch_default(dst, cpu);
- 			return;
- 		}
- 
+  * Use precise platform statistics if available:
 -- 
 2.51.1
 
