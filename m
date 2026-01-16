@@ -1,189 +1,101 @@
-Return-Path: <linux-pm+bounces-41026-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41027-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAC0AD33275
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 16:23:15 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9B13D33404
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 16:40:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D39F630A244E
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 15:19:00 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C18B43001BFA
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 15:40:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D6EC338F39;
-	Fri, 16 Jan 2026 15:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9248D33A9E4;
+	Fri, 16 Jan 2026 15:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cVJjBioS";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="gRwka4On"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f+yOwYjT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1D83112BA
-	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 15:18:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7005721ABB9
+	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 15:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768576736; cv=none; b=WujIx5q3l+OquqGrQGK7B8LsTl42dvjftHRyp5Nq3pMlGiH5pwytBOD3BiDVagveahGrRZyhcmTtP4Tn5dm5bhk4vTW3D+e40TFYkSagoz1beX5wDa+rauV25csTuAzNACuoXaE1wcissD13E4J0WvvS5kiCMaYlPknhcWN3t6g=
+	t=1768578006; cv=none; b=OclngDKvqUZPpOMak56xN+I2SHNCudJ/FPfprT8x7HnHWhbK5A4V4Xv8OD9IsH3tLIBqPiHeo7/7TfpUf9bqGxKNvOPvD3N8TRQs4123DlxDXaUfetT/CyZEJNJ7zl+cEdlU5MeFpZrAsABZGavbS8jCgv0/N6NNDvEbcGaln8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768576736; c=relaxed/simple;
-	bh=q/2i4QMctXHF+dDhlqSpXa8ULXx0wN8PBam97iLzyx4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NcRmVZVwcJIh0xrlTcKB7lkToRNroTgEGNimudtSRqBMaoMRchkqS3JL3bqEIhU6qMBDt1dxCpwQcC5MTUudvAyfPXfN7o8q1MJZwNCnArXX4MxGGk57b3EWKjdo5wN+3b9AmDeoHVa4t6fGrVQPymHMaMXCNTlfvV8qtuZDbLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cVJjBioS; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=gRwka4On; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60G88hAN3892777
-	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 15:18:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	XRcRwBypFQShmuN0jEyzBJtIwf6t2aDrIBCTyHNhTLs=; b=cVJjBioSxB1YM+YY
-	RD/27+OD87cRm4c4XZ/ogHSNFlOO8viEL7BYEuV7xyqP8RUVuydBEEiazoWosaUe
-	9Abv8bYRdOhVrWCtF2SAgUfncEMV50B+RqA/TYTk7TPa2nncozkQjPgWi8bsgHWK
-	GA/kB4+nGUz9VhuXS5IMarQHEA9f122rrrTy15vq4f/B1+/bF4zzDmwil/je60Gq
-	Y2+HNvObXdlUfEpGAE3gA/TMANX1D/GWoQZ3pc5xOXrBgtUID1NGIp5GmV8CjGrE
-	XvjYFnBZikD5fE4uSa11axV1i05KIGI6xwQCtNXpddTFis2V4APEtLy+qNe0opXt
-	1+j1oA==
-Received: from mail-dl1-f71.google.com (mail-dl1-f71.google.com [74.125.82.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bq9b0am99-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 15:18:53 +0000 (GMT)
-Received: by mail-dl1-f71.google.com with SMTP id a92af1059eb24-123308e5e6aso3940980c88.1
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 07:18:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1768576733; x=1769181533; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XRcRwBypFQShmuN0jEyzBJtIwf6t2aDrIBCTyHNhTLs=;
-        b=gRwka4OnfqkmCqwHfOo322XVwx4GjXUdUVOU5HggIn4ohOLEDj7kRQNwZDEOEnCBcu
-         OcXOsnBMCHyAhbiODgMJhrl4wFdJmBaJwStfV/74t7k+nfSkeXUZIhXteDFloqR9P6wR
-         +WMQCpLxdvarlKqWW0Ol7Nerg9cYdkrQSMgDpmel77XpJsFRY5iulYHg+UrHS3TojyyR
-         clPwkqzb+Hf5euA/H9dNGv3CfhytMbi+pFTKEHdL1M6IwyD+ybL0hWpB08t3e3gUy4I9
-         9JkydzcTBirXZiEDRJKfeCyMH6H9GulHlgTEreTiJYRwDUxBSfAzxiqagONyBeTSl74S
-         otQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768576733; x=1769181533;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XRcRwBypFQShmuN0jEyzBJtIwf6t2aDrIBCTyHNhTLs=;
-        b=tqMwNJUUD0Y2B3jiGOm+UmPfk+UiW2Gx+XADhNwUkEpGCAEhpWgZnqLFHq2kDuAKXE
-         upGchUyLHhxnwxScUJP2/CvZqy+VxpcLkhzHO5RzVqMiLTEubcGhrUAHw5YvBOyC7Tqy
-         BRFl5ZAkRXiEV90c4fdV5tBbb5xNXXdpgAnzsGlHv04Wk32dxGr87dy5sRaPqWyQ8pQt
-         7GZXZxYdemUDdjK6qXLbO3SnFLYad+QA01/lI97+t7m9x+y2X9LIatIu/bglm+GCR2cC
-         0qirIQ5OVYqI5ATbDLj0OSbD9XtBNd1WPPsiuOrSP5KNBTyjENAdlST1o+YKTp8VtrYE
-         /oaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWx2XKQzpBKrCW99/LIPq7soF+owKc+fLc2xt0M+PF6zReI7X9beX5qt/gtTKYGLWchXuSXs+0lvg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLaM0iTJjlQj4xhzpYt9MN7RcbfLukYFhfHWH+fmiwnyE2+P3F
-	sJG4BPlBVVLow4TmNfpd2E7eIStaqXIUOPf2vxLrAOqq00+PmWwC3LtSwiNGAHp493aPMALCJ3E
-	gmO6IS7sdtbYl8+YxS15aqhn8gFIOhO9jCfkdDijiC6pIV1QZ2mCxOUGZp0VXSQ==
-X-Gm-Gg: AY/fxX5vHhjtbDTffxKHNs9lnKMvtw4L8jgvcSkeyAn1viMs1ci9NXJ1Odl2BYBnXlO
-	RxoA50vjwBkg4R/BP8z2eNpQ9f05uCIQlDu0Y1RV09n0sHYayjcJfgUJ3WSL3Vby2zIIx76e/XT
-	WD/3fZ8vhqqgMYVa+bkIdoL/HRnuWIdlqbvK9Eu1GwpZge3XGyqoqM6psluBOxYsjF3qB7ZAdUP
-	w0f1M6vHMLMwzCndt5Fxxkb8Y9gu6nMH8U1B5MPKK9GGQu8KP27Cmk4KhPUSQpwBqbnDhTvqsAc
-	L/3C/k3RI/ZqfsNCPKSyw6NuDkNnzIWnouC6DOwt9jiCOZAtzDSUQh8S1HCEMzRQ91Mx8QmjgMV
-	w8wVTWgRCnfNCfAy6ncKJeyw6TKNng5MR1Px8biPUXNQIvNL/atkL2w0NiHIJOaqhJuGsVkkVCv
-	0c
-X-Received: by 2002:a05:7022:4185:b0:119:e56b:98a4 with SMTP id a92af1059eb24-1244a6e070amr2977283c88.11.1768576732823;
-        Fri, 16 Jan 2026 07:18:52 -0800 (PST)
-X-Received: by 2002:a05:7022:4185:b0:119:e56b:98a4 with SMTP id a92af1059eb24-1244a6e070amr2977248c88.11.1768576732230;
-        Fri, 16 Jan 2026 07:18:52 -0800 (PST)
-Received: from [192.168.1.3] (c-24-130-122-79.hsd1.ca.comcast.net. [24.130.122.79])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1244ac5842csm2773177c88.1.2026.01.16.07.18.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jan 2026 07:18:51 -0800 (PST)
-Message-ID: <132c34db-07c6-491b-bfda-f3c51462a184@oss.qualcomm.com>
-Date: Fri, 16 Jan 2026 07:18:50 -0800
+	s=arc-20240116; t=1768578006; c=relaxed/simple;
+	bh=04X7+MRBfDwk4A96W7qSrgEak+qKX7jmTHQhdHsY0xg=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=LAVyuko3UWF6wtCsPCyko2oTb5oP4YjOQQ+MgHeceFxPaqI70Fg1BdubGfZteHdFN5t5IJGsJP8cMisFHOGhbDkfuj1YU032y29I8yTQ/nMT0AUim1HBnwLTgshebgT9sLuFPhat+BIcvheIn+bEY09f64LG2OBgiC6rBD0h190=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f+yOwYjT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EACDC16AAE
+	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 15:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768578006;
+	bh=04X7+MRBfDwk4A96W7qSrgEak+qKX7jmTHQhdHsY0xg=;
+	h=From:Date:Subject:To:Cc:From;
+	b=f+yOwYjT2eChcK9gLgewDOyKHiz/yUtHZzSMopu+ME8vnluFuKWbkyRbHR1cXd7tw
+	 ijDgJTRXDUew6vTKom72AjX/kBj4Cfsq7D4Xrur/89Rv4oD+fb9dBBsWq03WDydMrC
+	 6TKwhjRyZH4J8x+5iJ+l7EAG0sXEuVfrbkcIih788G00+bnHyqXCZuUxm/wG+v3Cqd
+	 rL3qkFNy/EInW5T2gou1ZBNs1B8opxd5j07x74zv5J6p71HXUpXph2oH0/jH0fapde
+	 1WzLkVcJxaM5EKWfwqoS1fUe5T/iHmC22i8+YVYIE2fJyZNi83bA3HHPt3Cl7XyyRs
+	 xsLclBXpygdkA==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-404254ffe8aso1636954fac.0
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 07:40:06 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU/19ZLCtM4BygiDQXRvg96OKJAbEKCZg1qnxaMJiZ2FSMC8/6WTqsN4j0xkT203+xRCmOu2z8Vqg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbwXu9e59En2BddElOFoSRU1LGb9dt78nVILsA0az4nc5djRxK
+	GXqYaOF/8YxPh8Xx+bzf5bU5y02BfwBio5voI7sRuy5y04qzDK0cUeHAErlvE369RrqUXlaDhXE
+	YumFPK3pw+Lp7HWS8BKw2mxZVyJMgNps=
+X-Received: by 2002:a05:6870:f018:b0:404:38fb:5434 with SMTP id
+ 586e51a60fabf-40438fb68damr2310719fac.29.1768578005266; Fri, 16 Jan 2026
+ 07:40:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 04/14] wifi: ath10k: snoc: support powering on the
- device via pwrseq
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Jeff Johnson <jjohnson@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Balakrishna Godavarthi <quic_bgodavar@quicinc.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-wireless@vger.kernel.org, ath10k@lists.infradead.org,
-        linux-pm@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-References: <20260106-wcn3990-pwrctl-v2-0-0386204328be@oss.qualcomm.com>
- <20260106-wcn3990-pwrctl-v2-4-0386204328be@oss.qualcomm.com>
- <52b2b799-09e6-40a4-bea8-c7e8bf21cf51@oss.qualcomm.com>
- <15470b51-d398-449d-9017-304df5ad7cef@kernel.org>
-From: Jeff Johnson <jeff.johnson@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <15470b51-d398-449d-9017-304df5ad7cef@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: N9y4QUmdCaT7jbn_1VQkfPMF_UJnbLDT
-X-Proofpoint-ORIG-GUID: N9y4QUmdCaT7jbn_1VQkfPMF_UJnbLDT
-X-Authority-Analysis: v=2.4 cv=TcmbdBQh c=1 sm=1 tr=0 ts=696a56dd cx=c_pps
- a=JYo30EpNSr/tUYqK9jHPoA==:117 a=Tg7Z00WN3eLgNEO9NLUKUQ==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=fl7gpmSGIpyIZsR_3woA:9
- a=QEXdDO2ut3YA:10 a=Fk4IpSoW4aLDllm1B1p-:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE2MDEwOSBTYWx0ZWRfX0eaqTwB8/TRI
- xwlkrmcMbrqUfMtJGSQ1/X9llhMUkmmjVDWC4UDJ1hWW3hdvna4lJOOMdtYO1yo5ILh934lTULE
- ag/lfpcZDNget+SbvYl6Pl78FjQ09KsdzUN50TRyiUWzAI/ZkwNZNVfqdSgmIWtqvAhd0h1yMUR
- 49Zomj4IlZ3DBWaoG9zRarhCKW6mTZ88Iaxtm5yQWW4nOPFSeX2ysQAuM7p9bEFt2QGPk238/Lq
- hMs8y7Zo8WiexW13PRtGyfGbkOJsFzPoExjnGmlmxiuiqYm+Z/F8IUWMbGs6Xf/qFXo73DrXiNB
- Vza8ecSYMr06rsk6NjJiajzLzlx+p4xaP7UVzSUvnI4L4yzGPwaO+79GtkVS6W2P9MYi2yHKa/6
- WUHzdvyoV3RKZUjpTcu/XnltWN2gqg78e62oeOgeppiKqqq3c0s2cdYiEeCQjs/wOQpOIifdwXJ
- YJHK1ShL5TTZsHkJWrA==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-16_06,2026-01-15_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 spamscore=0 bulkscore=0 suspectscore=0 lowpriorityscore=0
- adultscore=0 clxscore=1015 priorityscore=1501 impostorscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601160109
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 16 Jan 2026 16:39:52 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jppKw_SCf+wia8HKwc0YkxHewfZXSjqiQf-C5AFozR3w@mail.gmail.com>
+X-Gm-Features: AZwV_QgZMIOS9PWrE9GZ3ButhTsY5JRiVAEBzMpaZabjTVzPpY5xafPqbE6P3yc
+Message-ID: <CAJZ5v0jppKw_SCf+wia8HKwc0YkxHewfZXSjqiQf-C5AFozR3w@mail.gmail.com>
+Subject: [GIT PULL] ACPI support fixes for v6.19-rc6
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 1/15/2026 11:48 PM, Krzysztof Kozlowski wrote:
-> On 15/01/2026 23:30, Jeff Johnson wrote:
->> On 1/5/2026 5:01 PM, Dmitry Baryshkov wrote:
->>> The WCN39xx family of WiFi/BT chips incorporates a simple PMU, spreading
->>> voltages over internal rails. Implement support for using powersequencer
->>> for this family of ATH10k devices in addition to using regulators.
->>>
->>> Reviewed-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
->>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
->>> ---
->>>  drivers/net/wireless/ath/ath10k/snoc.c | 54 ++++++++++++++++++++++++++++++++--
->>>  drivers/net/wireless/ath/ath10k/snoc.h |  2 ++
->>
->> My automation flagged:
->> * drivers/net/wireless/ath/ath10k/snoc.c has no QTI copyright
->> * drivers/net/wireless/ath/ath10k/snoc.h has no QTI copyright
->> * 2 copyright issues
->>
->> I'll add these manually in my 'pending' branch
->>
-> 
-> And why is this a problem? You are not here to impose Qualcomm rules, bu
-> care about Linux kernel. You cannot add copyrights based on what exactly?
+Hi Linus,
 
-I am a maintainer that is paid by Qualcomm to perform that role, and hence I
-have a duty to enforce the legal guidance from Qualcomm when it comes to
-contributions from other Qualcomm employees.
+Please pull from the tag
 
-/jeff
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-6.19-rc6
+
+with top-most commit 7edf6f7ef5345e1b4202912ca98aaa7c73e1e82c
+
+ ACPI: PM: s2idle: Add module parameter for LPS0 constraints checking
+
+on top of commit 0f61b1860cc3f52aef9036d7235ed1f017632193
+
+ Linux 6.19-rc5
+
+to receive ACPI support fixes for 6.19-rc6.
+
+These add checks missed by a previous recent update to the ACPI
+suspend-to-idle code and add a debug module parameter to it to work
+around a platform firmware issue exposed by that update.
+
+Thanks!
+
+
+---------------
+
+Rafael J. Wysocki (2):
+      ACPI: PM: s2idle: Add missing checks to acpi_s2idle_begin_lps0()
+      ACPI: PM: s2idle: Add module parameter for LPS0 constraints checking
+
+---------------
+
+ drivers/acpi/x86/s2idle.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
