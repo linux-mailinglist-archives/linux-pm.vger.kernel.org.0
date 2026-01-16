@@ -1,46 +1,79 @@
-Return-Path: <linux-pm+bounces-40981-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40982-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D0BFD2EA07
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 10:19:05 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B37E6D2EA8D
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 10:21:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AA12030AFCEE
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 09:17:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A1BCA3048ED8
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 09:18:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33C9233EB00;
-	Fri, 16 Jan 2026 09:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A4872E1758;
+	Fri, 16 Jan 2026 09:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KNBgk0XQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pPaj2LfF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB3B2D7DDF;
-	Fri, 16 Jan 2026 09:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74053332EA7
+	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 09:18:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768555021; cv=none; b=rzd/xGOXBJoP5t0oi7qFRe0tf3Mr1pLsUc22CNSJSMz3Va+Iab78MtlzRsVRCHNICHHlUlNxC+7o+f5bA/We3oaxVGDH+ZIFVdrZ40Op4hzxTPVNFlYbaXVYB5/9rmnAbOHEMJr8/78CPLA2A0plFlWsVXQHGvgI/F0v6T2qD3I=
+	t=1768555109; cv=none; b=rVUAwi7o3MglO+JgVEaG4AwJ0eOwJc32aAh25MO4igoQQl1507Zxs2N1aE2me/59fqPP5WmNJw9Q4q09OOYYutUgyaZdiZLI8SC+Gmu4bnnvOHbHVC31l8nXFZLw2gP+ZtMUnYEQITfNy6xETErc/LmcvDsN11MEyVeoO2DhX8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768555021; c=relaxed/simple;
-	bh=yVX7441AwNWpwo7n7A35edDx9OckAgwgwNXHR/OVQZk=;
+	s=arc-20240116; t=1768555109; c=relaxed/simple;
+	bh=AghABfkarHqDZQKCjjyiZmDcR7FwtgnGUdqMcOQ//v0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ca7n4xjcrCFSkW/kCkZSBfp+mpDj/6qiOUmL9MGNO3y6Yoh3+0XfePgZzPMyFAKXdfTU+Irvy8ZWaWISiVYrTMOe7rercBTX/kXlz2nLhxeIbI+WjJn2L42xkOPTlEhzb0H8pmlaqa6RBr/AoeC4KZ9v6KXRwvi5iCSeUkFEUBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KNBgk0XQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 620A9C116C6;
-	Fri, 16 Jan 2026 09:16:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768555020;
-	bh=yVX7441AwNWpwo7n7A35edDx9OckAgwgwNXHR/OVQZk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KNBgk0XQGXAxynsirvfB3jsyVKiqctWzYXwetbTMD8gLGWjrmXSRM0fD1rZGQYcxf
-	 zyFdl6n7AKA9W4mKlXGJpDqArtoVFGim0AERe3kitaOMqv7eOybZVcaGl8OV16BuEr
-	 9WBmX/5h7PsfZ8mUFeNU/Pdx5Q+iKYlOv32B+8IhlHyi3IutknIcKqE2gQwuSDTdPT
-	 bFyDdmvicUMrrwFbLcHozLaon2SG2xQefobm2Bb/Q5aodQJU0KFpJX7BWqWffs3N3h
-	 GB0j6lanOrx7GWRsC/PFXtSYDt6Pg88GgynojxtT+5TiJE9YbUQG5ANrA7eiwt//T+
-	 9lQxX2uV4JWew==
-Message-ID: <79d0f072-80f9-4757-b25d-84260551e217@kernel.org>
-Date: Fri, 16 Jan 2026 10:16:55 +0100
+	 In-Reply-To:Content-Type; b=LsA9RF8QHXjg9BdZ2EfoR/sY9su1pMAj8BLAaMRvifnXR1R7D4CdtjiA//bce64N9XZm3Fad7i4QmD6ZQAMcnbc0nLmPVfqSwpv/pJBnR7XAlh2Xg11OViVWnBDQy91aLjxJNrg7JVJ8ydk329Uk800tFCILFuii4ft7Rkt2Vu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pPaj2LfF; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47f3b7ef761so9729815e9.0
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 01:18:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1768555106; x=1769159906; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Z+AGXRtrMXkyrXKzRmoE9z026WTEqpV4D7gQD8MxXK4=;
+        b=pPaj2LfFQNsV88/GHrQq8j7NyFSfU/ZTDN+4B8nBIYcZJrzTPueWLPTs/Q0d1gyv/c
+         HgdMyYHx8FLjkpzE2hY7VFzLJSKVDHDMSNa42+8Y919PDLXNcAJOOW8jrU9NM0z0c5o4
+         FvXWiuzEtD6EjoYC+U1BUyQPd2te4/iiWI43aai+IbYvMOYO+ii4DcpPGFqhWUo0fx9J
+         DnAqW2ZeVyRho43aCwDPZrtXkPsUdcW9XHNnm1R00tYWW5jJmTzPJCvJa72QG84mYyvV
+         424yZJ8tX3V5N/hjMCH0pRxE0qZ9m/edSu5OLEXRJ7UNVcViOY4YPedEMQW7eEoyWAG9
+         2mkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768555106; x=1769159906;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z+AGXRtrMXkyrXKzRmoE9z026WTEqpV4D7gQD8MxXK4=;
+        b=fTilhxNwByB2V/hIuzb178PUV8fpVDsM0djmsnUIrwFs7eOxyjNyiCsmfQcoHdtan/
+         A1Nwgsvrdapn/BNx04naIUTeRDIQfQyG1SnD5mioZFFlvgscWqsvse7Unr4xZb1xZ+af
+         BDto4FOCLdHWLB0yN47/NV7mk31sDbm5cCJcR0BKdUnpDS8VjkWcU+WDc9QBkorWIGT+
+         MImXxf09XKev2f1ZCQ+/SWeAiXgOvcEvqHxBy0BKWfgqOFdVKboulQdiK+WYtZoAx6JM
+         UPc1xnDrHNpUed2J+gSi0v/dfY0c5vbjln6hHGVm6wShXLV0mrwm5l1wGRalbu2gyf0h
+         3lOg==
+X-Forwarded-Encrypted: i=1; AJvYcCVcYeXLsmiBaHvL8uS/dqERoX6I9/5kpvszBdO/M6VYLiFHxztDwqlNv6DCprEg3Ky0IRWeKIbpfQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZmMGXwXBP1xS/GZcSCIJ+9g8krF6z8rLiEnbRQlbfudzQHAyA
+	s2CXS9QhPNvxPeAIhPzPU7Vrz/j0L1mhBzi18RaMQvc8N0wDu0p5VV/IEtlVj48J4Ic=
+X-Gm-Gg: AY/fxX7veqTGuLe7H4Mev0aO4ZYvPkbkDl5+sIBEeQUMtZD997lTeuwrhKTBFaXJtd1
+	R/I/2f9x1y0ASHHp3pl/Ir+3o2CyyLBNYJibo6H0kw51tZNn/VismAR33LLalj3imbOWRrSZfAH
+	VNqaFLHtk8OLOrF6RiZ9Eegoxea0S0UDWtXWzfzdr6jw13JXcFSIW+rl3b9ybUvFvgIJfsm33p5
+	+THX+2HIBOAX7Fv4jcFDePhuErZaKVxwGXNj57t/Ge5qiYvdLybPWE3cRz60Kpsr7CoLtBm+PXY
+	g+tPnkNM+CTa8lLnmiNHR6RtcwmNtQk0qpEuRMEPe+/Hu7+TnpZ/bEyTuc90lkg8hudQWbkXfI4
+	JsctZXt2fCuvVgPAH9Wm/772d4lzUFjRkjUcq7nBfGi4fs4VKvwdTsuxS+QNmBVKJYl7iRApKmN
+	6b+/B5JFa796xe7U/SXA==
+X-Received: by 2002:a05:600c:6209:b0:477:641a:1402 with SMTP id 5b1f17b1804b1-48023ea2fc7mr6725565e9.4.1768555105706;
+        Fri, 16 Jan 2026 01:18:25 -0800 (PST)
+Received: from [10.11.12.107] ([86.127.43.8])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47f429071besm87551575e9.10.2026.01.16.01.18.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Jan 2026 01:18:25 -0800 (PST)
+Message-ID: <d3dedf5e-ada3-4d33-b1a5-7556ba80ffb1@linaro.org>
+Date: Fri, 16 Jan 2026 11:18:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -48,162 +81,64 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] cpufreq: ti-cpufreq: add support for AM62L3 SoC
-To: Dhruva Gole <d-gole@ti.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Kendall Willis <k-willis@ti.com>, Sebin Francis <sebin.francis@ti.com>,
- Bryan Brattlof <bb@ti.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- devicetree@vger.kernel.org
-References: <20260116-am62l-cpufreq-v1-0-63d062317ae9@ti.com>
- <20260116-am62l-cpufreq-v1-2-63d062317ae9@ti.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH 3/8] dt-bindings: mfd: Add Google GS101 TMU Syscon
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Kees Cook <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, willmcvicker@google.com,
+ jyescas@google.com, shin.son@samsung.com, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+References: <20260114-acpm-tmu-v1-0-cfe56d93e90f@linaro.org>
+ <20260114-acpm-tmu-v1-3-cfe56d93e90f@linaro.org>
+ <20260115-slim-denim-potoo-cad9cb@quoll>
+ <200d34bf-150e-4f8a-b400-2f54863502ac@linaro.org>
+ <e2f028d6-774f-4773-889f-7d56b833067e@kernel.org>
+ <fcc5405e-189d-4195-8db0-3acf35bbc0a9@linaro.org>
+ <26d86470-aaa2-46e3-9940-010a903df4fd@linaro.org>
+ <0176a63a-6b04-4e30-b718-847133882050@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20260116-am62l-cpufreq-v1-2-63d062317ae9@ti.com>
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+In-Reply-To: <0176a63a-6b04-4e30-b718-847133882050@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16/01/2026 10:01, Dhruva Gole wrote:
-> Add CPUFreq support for the AM62L3 SoC with the appropriate
-> AM62L3 speed grade constants according to the datasheet [1].
+
+
+On 1/16/26 11:14 AM, Krzysztof Kozlowski wrote:
+> On 16/01/2026 09:50, Tudor Ambarus wrote:
+>>
+>> Because of the hybrid approach I'm arguing the ACPM child node does not
+>> fully describe the hardware, and it's just a firmware abstraction.
+>> So option 2/ would be to have just the TMU IP block described with a
+>> phandle to the ACPM IPC:
+>>
+>> soc: soc@0 {
+>>     tmu@100a0000 {
+>>         compatible = "google,gs101-tmu-top";
+>>         reg = <0x100a0000 0x800>;
+>>         clocks = <&cmu_misc CLK_GOUT_MISC_TMU_TOP_PCLK>;
+>>         interrupts = <GIC_SPI 769 IRQ_TYPE_LEVEL_HIGH 0>;
+>>         
+>>         /* The "Firmware Phandle" approach */
+>>         samsung,acpm-ipc = <&acpm_ipc>;
+>>         
+>>         #thermal-sensor-cells = <1>;
 > 
-> This follows the same architecture-specific implementation pattern
-> as other TI SoCs in the AM6x family.
-> 
-> [1] https://www.ti.com/lit/pdf/SPRSPA1
-> 
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> ---
->  drivers/cpufreq/ti-cpufreq.c | 32 ++++++++++++++++++++++++++++++++
->  1 file changed, 32 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/ti-cpufreq.c b/drivers/cpufreq/ti-cpufreq.c
-> index 6ee76f5fe9c567b0b88797ddb51764a2a5606b16..8d8fdb068dcdc2caa0b656405f38a072c0700f71 100644
-> --- a/drivers/cpufreq/ti-cpufreq.c
-> +++ b/drivers/cpufreq/ti-cpufreq.c
-> @@ -48,6 +48,12 @@
->  #define AM625_SUPPORT_S_MPU_OPP			BIT(1)
->  #define AM625_SUPPORT_T_MPU_OPP			BIT(2)
->  
-> +#define AM62L3_EFUSE_E_MPU_OPP			5
-> +#define AM62L3_EFUSE_O_MPU_OPP			15
-> +
-> +#define AM62L3_SUPPORT_E_MPU_OPP		BIT(0)
-> +#define AM62L3_SUPPORT_O_MPU_OPP		BIT(1)
-> +
->  enum {
->  	AM62A7_EFUSE_M_MPU_OPP =		13,
->  	AM62A7_EFUSE_N_MPU_OPP,
-> @@ -213,6 +219,22 @@ static unsigned long am625_efuse_xlate(struct ti_cpufreq_data *opp_data,
->  	return calculated_efuse;
->  }
->  
-> +static unsigned long am62l3_efuse_xlate(struct ti_cpufreq_data *opp_data,
-> +				       unsigned long efuse)
-> +{
-> +	unsigned long calculated_efuse = AM62L3_SUPPORT_E_MPU_OPP;
-> +
-> +	switch (efuse) {
-> +	case AM62L3_EFUSE_O_MPU_OPP:
-> +		calculated_efuse |= AM62L3_SUPPORT_O_MPU_OPP;
-> +		fallthrough;
-> +	case AM62L3_EFUSE_E_MPU_OPP:
-> +		calculated_efuse |= AM62L3_SUPPORT_E_MPU_OPP;
-> +	}
-> +
-> +	return calculated_efuse;
-> +}
-> +
->  static struct ti_cpufreq_soc_data am3x_soc_data = {
->  	.efuse_xlate = amx3_efuse_xlate,
->  	.efuse_fallback = AM33XX_800M_ARM_MPU_MAX_FREQ,
-> @@ -315,6 +337,7 @@ static const struct soc_device_attribute k3_cpufreq_soc[] = {
->  	{ .family = "AM62AX", },
->  	{ .family = "AM62PX", },
->  	{ .family = "AM62DX", },
-> +	{ .family = "AM62LX", },
+> Yes, this one, I think it's the best representation.
 
-So you just stuff at the end in every commit leading to unnecessary risk
-of conflicts.
+I was leaning towards this as well. Thank you! I'll start reworking the
+patches.
 
->  	{ /* sentinel */ }
->  };
->  
-> @@ -327,6 +350,14 @@ static struct ti_cpufreq_soc_data am625_soc_data = {
->  	.quirks = TI_QUIRK_SYSCON_IS_SINGLE_REG,
->  };
->  
-> +static struct ti_cpufreq_soc_data am62l3_soc_data = {
-> +	.efuse_xlate = am62l3_efuse_xlate,
-> +	.efuse_offset = 0x0,
-> +	.efuse_mask = 0x07c0,
-> +	.efuse_shift = 0x6,
-> +	.multi_regulator = false,
-> +};
-> +
->  static struct ti_cpufreq_soc_data am62a7_soc_data = {
->  	.efuse_xlate = am62a7_efuse_xlate,
->  	.efuse_offset = 0x0,
-> @@ -463,6 +494,7 @@ static const struct of_device_id ti_cpufreq_of_match[]  __maybe_unused = {
->  	{ .compatible = "ti,am625", .data = &am625_soc_data, },
->  	{ .compatible = "ti,am62a7", .data = &am62a7_soc_data, },
->  	{ .compatible = "ti,am62d2", .data = &am62a7_soc_data, },
-> +	{ .compatible = "ti,am62l3", .data = &am62l3_soc_data, },
+Cheers,
+ta
 
-Oh no, here it is correct. Random choices?
-
->  	{ .compatible = "ti,am62p5", .data = &am62p5_soc_data, },
->  	/* legacy */
->  	{ .compatible = "ti,omap3430", .data = &omap34xx_soc_data, },
-> 
-
-
-Best regards,
-Krzysztof
 
