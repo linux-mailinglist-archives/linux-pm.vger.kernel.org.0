@@ -1,44 +1,44 @@
-Return-Path: <linux-pm+bounces-41023-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41024-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F1D1D330DE
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 16:07:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD297D3309F
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 16:06:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2A84430B588F
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 14:54:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5EB5D3246DF3
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 14:54:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE6739449B;
-	Fri, 16 Jan 2026 14:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E945394483;
+	Fri, 16 Jan 2026 14:54:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jcKqW+8Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P58I4pON"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C51D394493;
-	Fri, 16 Jan 2026 14:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B1833939B9;
+	Fri, 16 Jan 2026 14:54:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768575243; cv=none; b=e2RorPuM4sCBOAc9KIlw8rMmoe6lieWgX640wm0w6kv0pj9ulnUsY6uQVpnWY3rjy7YYhnFIScbGz7MCpZST9CIQCByoN0OBcDnVVcHJF+P7T+niybFnTRX1cuRkyHt73UKtkAPa/sQiPYirXBeLnjKKe15Ijf8FPqfBZdT4PiM=
+	t=1768575250; cv=none; b=MdrcWGyUOLcDdu6d4KdglETnztOseyJfDN3gP5sYw+mcZKO0Q9llPno40e9h0ZxR73JEx45BPvRXAJLUkanUxPAUoHY3WxiblIE7gCDSJ8QSyVr3j4B2di1ZzkLqeRx1qfpwdnw5t1tk8qkkD3Q7HK9nwQkW9Qgjmpuy8nSSpW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768575243; c=relaxed/simple;
-	bh=mk05EtvK6jmV7aIMR9OssU/GyByeNnVfxkVqMJUomLs=;
+	s=arc-20240116; t=1768575250; c=relaxed/simple;
+	bh=NiFNP1dNEv/R0O+iuBotsMn8keb9Y+JzQXP3O6DHJSw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FdIBfTPNhyavZfVtjBw+z7R0MkELpApEiN2JdGxuJgzI/U8+79RaiqaDOoNm4uftAfjCsfGUoABojmyvcWZ+X8n0hsDpbkpApnbuxg8mVkMhDmPhDPsd95JxrhwZ+xDWi2AOiwg20wqXbC18DLeTDNGmsAm47LIsz+7Jd2bn38Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jcKqW+8Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E67EAC16AAE;
-	Fri, 16 Jan 2026 14:53:55 +0000 (UTC)
+	 MIME-Version; b=sVlpf1DtfKJ3mqV7Z1DQI47GgGOEwqjnpmv4j67EE9vVjWRJWmwd+EhteHnjtvrAowkCUuJPExnzQQMVTUC71Wmuvms08KBdI9GHa5HhsmQv8LthF2M59nzjsQDzaBa6Y8JYr2w9F8KNlSHXb1TaMTJbpFXPWswTVyxrQeA4650=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P58I4pON; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4568DC19423;
+	Fri, 16 Jan 2026 14:54:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768575242;
-	bh=mk05EtvK6jmV7aIMR9OssU/GyByeNnVfxkVqMJUomLs=;
+	s=k20201202; t=1768575250;
+	bh=NiFNP1dNEv/R0O+iuBotsMn8keb9Y+JzQXP3O6DHJSw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jcKqW+8YV5y1IBAUOSldpi6lBEuvnxsszdxaFzWfPn7SddeH5Def9WFC2Py2Rf3s1
-	 kqIvancp1XfneOrmmW7MKk5yddG/PHjbkzUFSorJymu0aooz5hahZ1Lh0+T6opdkOE
-	 fJfDF5W5QOx+FeE7+vrYNsd3pwntG6OxOiuiLUZ5aXcRrjlaLw3h0n9HQaRPsIFyAy
-	 ZStxpfLCZ61SMsXAucgtCaUGybpk84IKlSdjQeYajSIeOCaD6y1U0Bt/xDBqdj687t
-	 DS12t/MQtuMmnyzcmHSN6oYAiLgwKh3WvZLzWugRIROVvRXaE3Cs/JV4cuHcNtZK/R
-	 uvWyiDRhINhcg==
+	b=P58I4pONEqgRKgQ76ZkWUDt5XWzZMMI1w+pz+lcYFsRcbcsZHQupqMSvLSprbGueN
+	 b+pk/yo1pIdVpFUg3JXsmxcb/PGfRQU9pNdfd8Jr9hk0A1q6noGtXzxgWyURE9ouC3
+	 1APMRpVzRm8n/zG3SHUGHD64MLVTPwa7TIMgoVeMS6BoBYJPpxS8Mw6kww+qUJDUgN
+	 uiIDVVVHWgH05pom4hl7O6l7IccpprH56k6WxOcl/M06cBnf3pySTKttXVjeZktmJd
+	 jPd5Cm2EqpHdhEMCmACSzFve7xNaBHvoUtLunX2kvWz82JJJyBOVA8xHbLW4Ftq6Hh
+	 ouLpAwlTIoQ0g==
 From: Frederic Weisbecker <frederic@kernel.org>
 To: LKML <linux-kernel@vger.kernel.org>
 Cc: Frederic Weisbecker <frederic@kernel.org>,
@@ -75,9 +75,9 @@ Cc: Frederic Weisbecker <frederic@kernel.org>,
 	linux-pm@vger.kernel.org,
 	linux-s390@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 14/15] sched/cputime: Handle idle irqtime gracefully
-Date: Fri, 16 Jan 2026 15:52:07 +0100
-Message-ID: <20260116145208.87445-15-frederic@kernel.org>
+Subject: [PATCH 15/15] sched/cputime: Handle dyntick-idle steal time correctly
+Date: Fri, 16 Jan 2026 15:52:08 +0100
+Message-ID: <20260116145208.87445-16-frederic@kernel.org>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20260116145208.87445-1-frederic@kernel.org>
 References: <20260116145208.87445-1-frederic@kernel.org>
@@ -89,117 +89,81 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The dyntick-idle cputime accounting always assumes that IRQ time
-accounting is enabled and consequently stops elapsing the idle time
-during dyntick-idle IRQs.
+The dyntick-idle steal time is currently accounted when the tick
+restarts but the stolen idle time is not substracted from the idle time
+that was already accounted. This is to avoid observing the idle time
+going backward as the dyntick-idle cputime accessors can't reliably know
+in advance the stolen idle time.
 
-This doesn't mix up well with disabled IRQ time accounting because then
-idle IRQs become a cputime blind-spot. Also this feature is disabled
-on most configurations and the overhead of pausing dyntick-idle
-accounting while in idle IRQs could then be avoided.
-
-Fix the situation with conditionally pausing dyntick-idle accounting
-during idle IRQs only if neither native vtime (which does IRQ time
-accounting) nor generic IRQ time accounting are enabled.
-
-Also make sure that the accumulated IRQ time is not accidentally
-substracted from later accounting.
+In order to maintain a forward progressing idle cputime while
+substracting idle steal time from it, keep track of the previously
+accounted idle stolen time and substract it from _later_ idle cputime
+accounting.
 
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- kernel/sched/cputime.c | 24 +++++++++++++++++++++---
- kernel/sched/sched.h   |  1 +
- 2 files changed, 22 insertions(+), 3 deletions(-)
+ include/linux/kernel_stat.h | 1 +
+ kernel/sched/cputime.c      | 9 ++++++++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/kernel_stat.h b/include/linux/kernel_stat.h
+index e59916477075..a5b5a25c3cc1 100644
+--- a/include/linux/kernel_stat.h
++++ b/include/linux/kernel_stat.h
+@@ -39,6 +39,7 @@ struct kernel_cpustat {
+ 	bool		idle_elapse;
+ 	seqcount_t	idle_sleeptime_seq;
+ 	ktime_t		idle_entrytime;
++	u64		idle_steal;
+ #endif
+ 	u64		cpustat[NR_STATS];
+ };
 diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
-index f0620b429698..3dadfaa92b27 100644
+index 3dadfaa92b27..749a6ed4d2fa 100644
 --- a/kernel/sched/cputime.c
 +++ b/kernel/sched/cputime.c
-@@ -45,7 +45,8 @@ static void irqtime_account_delta(struct irqtime *irqtime, u64 delta,
- 	u64_stats_update_begin(&irqtime->sync);
- 	cpustat[idx] += delta;
- 	irqtime->total += delta;
--	irqtime->tick_delta += delta;
-+	if (!irqtime->idle_dyntick)
-+		irqtime->tick_delta += delta;
- 	u64_stats_update_end(&irqtime->sync);
- }
- 
-@@ -80,6 +81,16 @@ void irqtime_account_irq(struct task_struct *curr, unsigned int offset)
- 		irqtime_account_delta(irqtime, delta, CPUTIME_SOFTIRQ);
- }
- 
-+static inline void irqtime_dyntick_start(void)
-+{
-+	__this_cpu_write(cpu_irqtime.idle_dyntick, true);
-+}
-+
-+static inline void irqtime_dyntick_stop(void)
-+{
-+	__this_cpu_write(cpu_irqtime.idle_dyntick, false);
-+}
-+
- static u64 irqtime_tick_accounted(u64 maxtime)
+@@ -424,18 +424,25 @@ static void kcpustat_idle_stop(struct kernel_cpustat *kc, ktime_t now)
  {
- 	struct irqtime *irqtime = this_cpu_ptr(&cpu_irqtime);
-@@ -93,6 +104,9 @@ static u64 irqtime_tick_accounted(u64 maxtime)
+ 	u64 *cpustat = kc->cpustat;
+ 	ktime_t delta;
++	u64 steal, steal_delta;
  
- #else /* !CONFIG_IRQ_TIME_ACCOUNTING: */
+ 	if (!kc->idle_elapse)
+ 		return;
  
-+static inline void irqtime_dyntick_start(void) { }
-+static inline void irqtime_dyntick_stop(void) { }
+ 	delta = ktime_sub(now, kc->idle_entrytime);
++	steal = steal_account_process_time(delta);
+ 
+ 	write_seqcount_begin(&kc->idle_sleeptime_seq);
++	steal_delta = min_t(u64, kc->idle_steal, delta);
++	delta -= steal_delta;
++	kc->idle_steal -= steal_delta;
 +
- static u64 irqtime_tick_accounted(u64 dummy)
- {
- 	return 0;
-@@ -443,6 +457,7 @@ void kcpustat_dyntick_stop(ktime_t now)
- 		WARN_ON_ONCE(!kc->idle_dyntick);
- 		kcpustat_idle_stop(kc, now);
+ 	if (nr_iowait_cpu(smp_processor_id()) > 0)
+ 		cpustat[CPUTIME_IOWAIT] = ktime_add(cpustat[CPUTIME_IOWAIT], delta);
+ 	else
+ 		cpustat[CPUTIME_IDLE] = ktime_add(cpustat[CPUTIME_IDLE], delta);
+ 
++	kc->idle_steal += steal;
+ 	kc->idle_entrytime = now;
+ 	kc->idle_elapse = false;
+ 	write_seqcount_end(&kc->idle_sleeptime_seq);
+@@ -459,7 +466,6 @@ void kcpustat_dyntick_stop(ktime_t now)
  		kc->idle_dyntick = false;
-+		irqtime_dyntick_stop();
+ 		irqtime_dyntick_stop();
  		vtime_dyntick_stop();
- 		steal_account_process_time(ULONG_MAX);
+-		steal_account_process_time(ULONG_MAX);
  	}
-@@ -454,6 +469,7 @@ void kcpustat_dyntick_start(ktime_t now)
- 
- 	if (!vtime_generic_enabled_this_cpu()) {
- 		vtime_dyntick_start();
-+		irqtime_dyntick_start();
- 		kc->idle_dyntick = true;
- 		kcpustat_idle_start(kc, now);
- 	}
-@@ -463,7 +479,8 @@ void kcpustat_irq_enter(ktime_t now)
- {
- 	struct kernel_cpustat *kc = kcpustat_this_cpu;
- 
--	if (!vtime_generic_enabled_this_cpu())
-+	if (!vtime_generic_enabled_this_cpu() &&
-+	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu()))
- 		kcpustat_idle_stop(kc, now);
  }
  
-@@ -471,7 +488,8 @@ void kcpustat_irq_exit(ktime_t now)
- {
- 	struct kernel_cpustat *kc = kcpustat_this_cpu;
+@@ -507,6 +513,7 @@ static u64 kcpustat_field_dyntick(int cpu, enum cpu_usage_stat idx,
+ 		if (kc->idle_elapse && compute_delta) {
+ 			ktime_t delta = ktime_sub(now, kc->idle_entrytime);
  
--	if (!vtime_generic_enabled_this_cpu())
-+	if (!vtime_generic_enabled_this_cpu() &&
-+	    (irqtime_enabled() || vtime_accounting_enabled_this_cpu()))
- 		kcpustat_idle_start(kc, now);
- }
- 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index d30cca6870f5..cf677ff12b10 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -3307,6 +3307,7 @@ static inline void sched_core_tick(struct rq *rq) { }
- #ifdef CONFIG_IRQ_TIME_ACCOUNTING
- 
- struct irqtime {
-+	bool			idle_dyntick;
- 	u64			total;
- 	u64			tick_delta;
- 	u64			irq_start_time;
++			delta -= min_t(u64, kc->idle_steal, (u64)delta);
+ 			idle = ktime_add(cpustat[idx], delta);
+ 		} else {
+ 			idle = cpustat[idx];
 -- 
 2.51.1
 
