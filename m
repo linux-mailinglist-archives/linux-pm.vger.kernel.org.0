@@ -1,144 +1,126 @@
-Return-Path: <linux-pm+bounces-40982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B37E6D2EA8D
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 10:21:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD3E7D2EFD9
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 10:47:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A1BCA3048ED8
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 09:18:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B764630486A0
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 09:46:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A4872E1758;
-	Fri, 16 Jan 2026 09:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0966535C18E;
+	Fri, 16 Jan 2026 09:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pPaj2LfF"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="yGTx1woF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74053332EA7
-	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 09:18:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B103A303A07;
+	Fri, 16 Jan 2026 09:45:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768555109; cv=none; b=rVUAwi7o3MglO+JgVEaG4AwJ0eOwJc32aAh25MO4igoQQl1507Zxs2N1aE2me/59fqPP5WmNJw9Q4q09OOYYutUgyaZdiZLI8SC+Gmu4bnnvOHbHVC31l8nXFZLw2gP+ZtMUnYEQITfNy6xETErc/LmcvDsN11MEyVeoO2DhX8c=
+	t=1768556762; cv=none; b=iFz/XfXTxXfx2jU+G1FocJnKKVQIcHVwnxamR6ck7yqYaweqCDaS+enn/YWymR1HHsDkqdULO5Dqt2KumQb5EFc8XryZ87gaF4sE/74Au8fF7uB/eRL14YGY/bfmW4qu9j2ILjezwNH1YJedLXR3hZOlbEoFiM6ZpLbLn5C8tbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768555109; c=relaxed/simple;
-	bh=AghABfkarHqDZQKCjjyiZmDcR7FwtgnGUdqMcOQ//v0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LsA9RF8QHXjg9BdZ2EfoR/sY9su1pMAj8BLAaMRvifnXR1R7D4CdtjiA//bce64N9XZm3Fad7i4QmD6ZQAMcnbc0nLmPVfqSwpv/pJBnR7XAlh2Xg11OViVWnBDQy91aLjxJNrg7JVJ8ydk329Uk800tFCILFuii4ft7Rkt2Vu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pPaj2LfF; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47f3b7ef761so9729815e9.0
-        for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 01:18:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1768555106; x=1769159906; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Z+AGXRtrMXkyrXKzRmoE9z026WTEqpV4D7gQD8MxXK4=;
-        b=pPaj2LfFQNsV88/GHrQq8j7NyFSfU/ZTDN+4B8nBIYcZJrzTPueWLPTs/Q0d1gyv/c
-         HgdMyYHx8FLjkpzE2hY7VFzLJSKVDHDMSNa42+8Y919PDLXNcAJOOW8jrU9NM0z0c5o4
-         FvXWiuzEtD6EjoYC+U1BUyQPd2te4/iiWI43aai+IbYvMOYO+ii4DcpPGFqhWUo0fx9J
-         DnAqW2ZeVyRho43aCwDPZrtXkPsUdcW9XHNnm1R00tYWW5jJmTzPJCvJa72QG84mYyvV
-         424yZJ8tX3V5N/hjMCH0pRxE0qZ9m/edSu5OLEXRJ7UNVcViOY4YPedEMQW7eEoyWAG9
-         2mkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768555106; x=1769159906;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z+AGXRtrMXkyrXKzRmoE9z026WTEqpV4D7gQD8MxXK4=;
-        b=fTilhxNwByB2V/hIuzb178PUV8fpVDsM0djmsnUIrwFs7eOxyjNyiCsmfQcoHdtan/
-         A1Nwgsvrdapn/BNx04naIUTeRDIQfQyG1SnD5mioZFFlvgscWqsvse7Unr4xZb1xZ+af
-         BDto4FOCLdHWLB0yN47/NV7mk31sDbm5cCJcR0BKdUnpDS8VjkWcU+WDc9QBkorWIGT+
-         MImXxf09XKev2f1ZCQ+/SWeAiXgOvcEvqHxBy0BKWfgqOFdVKboulQdiK+WYtZoAx6JM
-         UPc1xnDrHNpUed2J+gSi0v/dfY0c5vbjln6hHGVm6wShXLV0mrwm5l1wGRalbu2gyf0h
-         3lOg==
-X-Forwarded-Encrypted: i=1; AJvYcCVcYeXLsmiBaHvL8uS/dqERoX6I9/5kpvszBdO/M6VYLiFHxztDwqlNv6DCprEg3Ky0IRWeKIbpfQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZmMGXwXBP1xS/GZcSCIJ+9g8krF6z8rLiEnbRQlbfudzQHAyA
-	s2CXS9QhPNvxPeAIhPzPU7Vrz/j0L1mhBzi18RaMQvc8N0wDu0p5VV/IEtlVj48J4Ic=
-X-Gm-Gg: AY/fxX7veqTGuLe7H4Mev0aO4ZYvPkbkDl5+sIBEeQUMtZD997lTeuwrhKTBFaXJtd1
-	R/I/2f9x1y0ASHHp3pl/Ir+3o2CyyLBNYJibo6H0kw51tZNn/VismAR33LLalj3imbOWRrSZfAH
-	VNqaFLHtk8OLOrF6RiZ9Eegoxea0S0UDWtXWzfzdr6jw13JXcFSIW+rl3b9ybUvFvgIJfsm33p5
-	+THX+2HIBOAX7Fv4jcFDePhuErZaKVxwGXNj57t/Ge5qiYvdLybPWE3cRz60Kpsr7CoLtBm+PXY
-	g+tPnkNM+CTa8lLnmiNHR6RtcwmNtQk0qpEuRMEPe+/Hu7+TnpZ/bEyTuc90lkg8hudQWbkXfI4
-	JsctZXt2fCuvVgPAH9Wm/772d4lzUFjRkjUcq7nBfGi4fs4VKvwdTsuxS+QNmBVKJYl7iRApKmN
-	6b+/B5JFa796xe7U/SXA==
-X-Received: by 2002:a05:600c:6209:b0:477:641a:1402 with SMTP id 5b1f17b1804b1-48023ea2fc7mr6725565e9.4.1768555105706;
-        Fri, 16 Jan 2026 01:18:25 -0800 (PST)
-Received: from [10.11.12.107] ([86.127.43.8])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47f429071besm87551575e9.10.2026.01.16.01.18.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Jan 2026 01:18:25 -0800 (PST)
-Message-ID: <d3dedf5e-ada3-4d33-b1a5-7556ba80ffb1@linaro.org>
-Date: Fri, 16 Jan 2026 11:18:22 +0200
+	s=arc-20240116; t=1768556762; c=relaxed/simple;
+	bh=m421hIYQP+yfxRdrQflIbJiXC3dU4Q1BQPDfFggy3ro=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=I7fNCfR5K888MLewdQis24xC1CkENGr/hvQ0+Luq+SqIKJGMiMK0xtQfsWRjzu+y4k/tLsQ9VJZ2cQeMXRZucdocRl/SeADM1wda/fjqOGwIcajx3LzlrWbZdD6kTHSjlEAORa6nTF8ZLl7tq2s0PENsXrbIGOuDnZGSkz0MmLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=yGTx1woF; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=QF7zU4hJWyAMbYXRHGLRiurL79EX5KOCS0CC1Z22cyM=;
+	b=yGTx1woFTEn6ph6cZ3Jtzl5W3cI1TSp+fgsYiDRggHuuJBuwwECUUlNr6d0hwRHnGqmZG30ru
+	TeX4yMuHX+mFc0W13FQ22t+mrE8M/+wFIOdoQl5U1EQdVZQBe13iCbA+ZtnPn37iSKBsJkPE0Tq
+	FTGW1G6BrpJAn09bwh/jImQ=
+Received: from mail.maildlp.com (unknown [172.19.162.140])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4dsvzQ1XvXz12LDt;
+	Fri, 16 Jan 2026 17:42:58 +0800 (CST)
+Received: from kwepemr200004.china.huawei.com (unknown [7.202.195.241])
+	by mail.maildlp.com (Postfix) with ESMTPS id 438A8201E9;
+	Fri, 16 Jan 2026 17:45:57 +0800 (CST)
+Received: from huawei.com (10.50.163.32) by kwepemr200004.china.huawei.com
+ (7.202.195.241) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 16 Jan
+ 2026 17:45:56 +0800
+From: Pengjie Zhang <zhangpengjie2@huawei.com>
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>, <lihuisong@huawei.com>,
+	<yubowen8@huawei.com>, <linhongye@h-partners.com>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <zhangpengjie2@huawei.com>,
+	<wangzhi12@huawei.com>
+Subject: [PATCH] cpufreq: cppc: Use lowest_nonlinear_perf as a soft minimum limit
+Date: Fri, 16 Jan 2026 17:45:55 +0800
+Message-ID: <20260116094555.2978887-1-zhangpengjie2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/8] dt-bindings: mfd: Add Google GS101 TMU Syscon
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>,
- Peter Griffin <peter.griffin@linaro.org>,
- =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
- Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Kees Cook <kees@kernel.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>, willmcvicker@google.com,
- jyescas@google.com, shin.son@samsung.com, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20260114-acpm-tmu-v1-0-cfe56d93e90f@linaro.org>
- <20260114-acpm-tmu-v1-3-cfe56d93e90f@linaro.org>
- <20260115-slim-denim-potoo-cad9cb@quoll>
- <200d34bf-150e-4f8a-b400-2f54863502ac@linaro.org>
- <e2f028d6-774f-4773-889f-7d56b833067e@kernel.org>
- <fcc5405e-189d-4195-8db0-3acf35bbc0a9@linaro.org>
- <26d86470-aaa2-46e3-9940-010a903df4fd@linaro.org>
- <0176a63a-6b04-4e30-b718-847133882050@kernel.org>
-Content-Language: en-US
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <0176a63a-6b04-4e30-b718-847133882050@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemr200004.china.huawei.com (7.202.195.241)
 
+The ACPI 6.5 specification describes "Lowest Performance" as the absolute
+lowest performance level of the platform. It notes:
 
+"Selecting a performance level lower than the lowest nonlinear performance
+level may actually cause an efficiency penalty, but should reduce the
+instantaneous power consumption of the processor. In traditional terms,
+this represents the T-state range of performance levels."
 
-On 1/16/26 11:14 AM, Krzysztof Kozlowski wrote:
-> On 16/01/2026 09:50, Tudor Ambarus wrote:
->>
->> Because of the hybrid approach I'm arguing the ACPM child node does not
->> fully describe the hardware, and it's just a firmware abstraction.
->> So option 2/ would be to have just the TMU IP block described with a
->> phandle to the ACPM IPC:
->>
->> soc: soc@0 {
->>     tmu@100a0000 {
->>         compatible = "google,gs101-tmu-top";
->>         reg = <0x100a0000 0x800>;
->>         clocks = <&cmu_misc CLK_GOUT_MISC_TMU_TOP_PCLK>;
->>         interrupts = <GIC_SPI 769 IRQ_TYPE_LEVEL_HIGH 0>;
->>         
->>         /* The "Firmware Phandle" approach */
->>         samsung,acpm-ipc = <&acpm_ipc>;
->>         
->>         #thermal-sensor-cells = <1>;
-> 
-> Yes, this one, I think it's the best representation.
+Currently, the cpufreq core initializes the minimum QoS request to 0.
+While this allows userspace to modify limits, it causes the CPU frequency
+to drop below lowest_nonlinear_perf by default. This hurts performance with
+negligible power savings.
 
-I was leaning towards this as well. Thank you! I'll start reworking the
-patches.
+To fix this, implement a "soft" limit in cppc_verify_policy(). If the
+policy minimum is still the default (0), it is clamped to
+lowest_nonlinear_perf. However, if userspace has explicitly set a lower
+limit, that configuration takes precedence.
 
-Cheers,
-ta
+Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
+---
+ drivers/cpufreq/cppc_cpufreq.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 9eac77c4f294..59aa1721438b 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -301,9 +301,23 @@ static unsigned int cppc_cpufreq_fast_switch(struct cpufreq_policy *policy,
+ 	return target_freq;
+ }
+ 
+-static int cppc_verify_policy(struct cpufreq_policy_data *policy)
++static int cppc_verify_policy(struct cpufreq_policy_data *policy_data)
+ {
+-	cpufreq_verify_within_cpu_limits(policy);
++	if (policy_data->min == FREQ_QOS_MIN_DEFAULT_VALUE) {
++		struct cpufreq_policy *policy __free(put_cpufreq_policy) =
++					      cpufreq_cpu_get(policy_data->cpu);
++		struct cppc_cpudata *cpu_data;
++
++		if (!policy)
++			return -EINVAL;
++
++		cpu_data = policy->driver_data;
++		policy_data->min = cppc_perf_to_khz(&cpu_data->perf_caps,
++			cpu_data->perf_caps.lowest_nonlinear_perf);
++	}
++
++	cpufreq_verify_within_cpu_limits(policy_data);
++
+ 	return 0;
+ }
+ 
+-- 
+2.33.0
 
 
