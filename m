@@ -1,150 +1,221 @@
-Return-Path: <linux-pm+bounces-40963-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-40964-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A555D2A1CE
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 03:27:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44D2ED2A6E5
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 03:57:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8956E300EE41
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 02:27:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EBED9301C90D
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 02:57:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E7C8311C21;
-	Fri, 16 Jan 2026 02:27:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A9AC340A5A;
+	Fri, 16 Jan 2026 02:57:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="COvtd5de"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="hvtn6roK";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="idKNgPg6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpbg154.qq.com (smtpbg154.qq.com [15.184.224.54])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4847FBAC;
-	Fri, 16 Jan 2026 02:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=15.184.224.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB9B308F39
+	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 02:57:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768530431; cv=none; b=qavu3f7gq1P4LBkyN3sMsbVEyPT02xgNmv5QdSYnIBQv05VKI69ujQvMGEJ6ovvhnloniHkZ0LLQx7ZS2VRV2OX18JxNvptBavmZSfKRHPu8djEcjqRDTa9pgO/iYfjOZt2vQO/R+IQO6hpb7tKnvE9joq9EYqNoTqzF7TDV+S8=
+	t=1768532277; cv=none; b=Os/vtFOO2ASaEnyZtTO1pVdCUYx2vLl7bt2DCiQI5HpPHlQEjVl/loTsyrRA4TFeINA4ZKAqY+UtpcmENTiE4282sUfWRyXmqygkiAH6oe0wYcuCmj/lO3ubQa3+D45/wLlO1p6oaHDldTt2zIsT3lXPx+LGRFKpX3Og45DXcOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768530431; c=relaxed/simple;
-	bh=HL1JYR8iT4KToi9Zi3fQzp19+KeMBlC8f7H/IJPGCEU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=DNlX+xDbQxpvmPkarXgpO086U8d4cF7KS0Vp8kJOmFW+xV2gBHm3GyBfHVxTtsxGx9vLl0LMrglCBY0go+M7+k4SzMytdEQ8QFETouYcvtFHXAwXy2jKRT5Rcdfs2gacQhNsrvWkl4QXGv90Xr+UhKf54iJcuxnrRJcklLTzaFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=COvtd5de; arc=none smtp.client-ip=15.184.224.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1768530409;
-	bh=Adf1krTepVahhYXg6eWv32QiCOCC5DCd/xA8Df44gAg=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version;
-	b=COvtd5devnvzlWB72+rQpMd3U6mO4RBQhMcHMSPaGoHUqcBLhXluzpzPlmkbZhEz0
-	 87RR3wNS7pD0nWKmA9huAimPBIunekrvchmQC74waxtjQaUmSMSfu9IpxZo6Q2Fjhm
-	 cBGvKFjCxlsXM0f8VRFF6doaPnTZNz41A6uEXm44=
-X-QQ-mid: zesmtpip3t1768530404ta2ef6898
-X-QQ-Originating-IP: gPb3OSHiwBf+v89M3yP7ae8slwOm8n4qbxXksca7fEI=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 16 Jan 2026 10:26:43 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 15760255121268463657
-EX-QQ-RecipientCnt: 6
-From: tuhaowen <tuhaowen@uniontech.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>
-Cc: Pavel Machek <pavel@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	tuhaowen@uniontech.com
-Subject: [PATCH] PM: sleep: Fix race condition in suspend statistics updates
-Date: Fri, 16 Jan 2026 10:26:38 +0800
-Message-Id: <20260116022638.994778-1-tuhaowen@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+	s=arc-20240116; t=1768532277; c=relaxed/simple;
+	bh=mHFtDo1b6G4mIW5vvb4D8Xxgfyc5Fbt63oVVDEDFJcE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bNwNJdGnOGguVX/vXHwIiyF8iZqoebAHmX0X2mlYOuDbvyj2Bj27P1TdFLh8pQxHA236RhIa36IEeOXPkqvfQgVHoPr6uaLmjXtmNHDrh+CnjwbrWOnRA4s8s2riYxxSdEGP+RiPfmLJjxV37LAC7IktbBGfAyV7ALyFiN6Fw5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=hvtn6roK; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=idKNgPg6; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60FMhGfa2818740
+	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 02:57:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=EA0PgA0/LPBITWEYyXie9wh+
+	KymQ/5ynEDnlQXiuIHg=; b=hvtn6roKLvsf+MkLAkKGRtN7OwhnbvBf0c+RrLBA
+	Y+GIhhSS7dxlconWeSpzFS96+pdf7bqyPS4FyCVZVee5A4fAuhntpHPQCYyomOF+
+	l1WhTobjarfja+wJWC+9saFbB7a4GupYMIcqbOrSug8ztV0KWa+3X0Dnl0JbZrA3
+	1kYdnGcr2bVnNkjkuheJEPG+qsh+4iXlElaD+4Sp5kjDqlBIBkq7JtMs9TBNqvpG
+	jUd/+Kwd98BlGcV8+CI7oGvrVZl3tbGOcpqbxCa0rV2RASQT0r1s0PA42F3M3l32
+	DUvlVsp/FEXdYT83Gg9b23XMv7V5fXSAtLxQgYnSpNiAXA==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bq99aghr5-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 02:57:54 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c6a5bc8c43so198925985a.2
+        for <linux-pm@vger.kernel.org>; Thu, 15 Jan 2026 18:57:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1768532274; x=1769137074; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EA0PgA0/LPBITWEYyXie9wh+KymQ/5ynEDnlQXiuIHg=;
+        b=idKNgPg6HUfeAX3VOfyPWs83CfVdJnvXqWcgz/i88t7ZBSn2o7u7Y85iOYILsNN/mk
+         08d9zPKGIEadLKuGIlOsP6PrmuF1ltcoVPlqTnlthrv/BeQu3Chm40HgSvPTVUUYFr41
+         eZWlrvg9jZ0n5VLYv6nqEnIqnI+y/BP6OAAaxEfbh5pxNH9ZE9Ypo5h21rF2YjCwxb2u
+         Sz1joaqBCl3B62iCDIspaygH+BkKkp1nupNuV2QVL0DcpZJV5dzogqpelDH/Ede3rwZy
+         CHUtvaBcQ8iAQ9b348Nu+uGrKa093RIgKnMSEG9UpQY60Eb5bE8PyXfA1cGkcmWUfVBS
+         So8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768532274; x=1769137074;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EA0PgA0/LPBITWEYyXie9wh+KymQ/5ynEDnlQXiuIHg=;
+        b=MvmmW9IHjaL6St4ZhaeDz/PzVTrBj/dtnbpIGft9e0D4qFE4qNLefHBMQCkQs0ZgQ1
+         HEpzbuJgX4WlAGk/yPMjszNNxCtTBZaWWbRm5fpZiDDNy1TmOEn9SnbzvOiB2+j1PsY4
+         oT//BFUm+m+yC1c+ZRPmqjK4PlSA7OntFBZ8236DVMP2iXz0rhq2ZgYpekhZmxKvdgTa
+         k9v8JtZUVq2CJGv10BMuClz/MJKdoC0Nta99OrCPOkrveDazSDdfFrR8wTrix2pNIFUH
+         qccIEMx5QcM48HA2c3lwOPftfQhn5RurVU67rBhFam1GqYAvZmF8vvUbpCi5p/SI3c0l
+         71XQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVIEmxPev0g6om+j3mfC/PIvfOBEUI7TlKl57A+JnXuwJzxN3NEctcAcx0vevG6F/OLPdD5EsubWg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDOEKiBjul+LMuob2Aw7gb6Wlx1DdaAOBgbqSSgst0wHRx/TEW
+	cOryTo7B66Ppl8y3U6NUkyHE3VFR8IAjfxgjc+PBzqq3B2xbwLWFbbp6btdpiXgLj8DWZbzb46R
+	/NCc7q9KFMydlkVYKEU4o6lv3W//jW6AELxUoqqEoeP528bvhu0/B7YOwlys12g==
+X-Gm-Gg: AY/fxX6AcArmhSt6SuvOddI0iRTRD4RvCR9vfAAjqC2F+fkxULOK5+j5t0ZL3t6uRq8
+	4iXTFfjAkpl1healX3o6lqbS94ofJutAa2Y4bJJT1ZXQciNQjuueqpJPChMUeXgd9Oxo+mglgLA
+	3VpimuNLg/+z2J+to5xkeYyydeaLojApQdQR5RfvCjDOpwqnEj1TFnlismhn+XEX+N7MIs2EmAa
+	0Gvvp+R3EKW2g3rzrK/7Igu0sR1w2K1d0jQxAh0nT3/8POfqpyk7qmr5F9a7mkbLlQr0EkcrxD6
+	WLwyNV+z7RKOOMEUtysJeLKjkjjNaoGNPh1RFmQIRRffg7yli421M3sCQ0Gk/9pzDP/2WAXdidd
+	bT34rsv6pjKKsGWuKRugIt5BFdW82AkVTeCyk5rIIFU7xAeRulsI5KrcE+GYfcZhMr0YWbMzS+G
+	eZSvPjODjxwWdW4oDCi2ngjUs=
+X-Received: by 2002:a05:620a:4544:b0:8c5:2b63:2d21 with SMTP id af79cd13be357-8c6a67bf47bmr235712685a.88.1768532273836;
+        Thu, 15 Jan 2026 18:57:53 -0800 (PST)
+X-Received: by 2002:a05:620a:4544:b0:8c5:2b63:2d21 with SMTP id af79cd13be357-8c6a67bf47bmr235709585a.88.1768532273306;
+        Thu, 15 Jan 2026 18:57:53 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-38384f85b8csm3334171fa.37.2026.01.15.18.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Jan 2026 18:57:51 -0800 (PST)
+Date: Fri, 16 Jan 2026 04:57:48 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Jeff Johnson <jeff.johnson@oss.qualcomm.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bartosz Golaszewski <brgl@kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Jeff Johnson <jjohnson@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Balakrishna Godavarthi <quic_bgodavar@quicinc.com>,
+        Matthias Kaehlcke <mka@chromium.org>, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-wireless@vger.kernel.org,
+        ath10k@lists.infradead.org, linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
+Subject: Re: [PATCH v2 04/14] wifi: ath10k: snoc: support powering on the
+ device via pwrseq
+Message-ID: <jxnfzb442ii2ucbttlcu47emycxeqn2bvu5vi6xjdis77hkes7@tshuuiwv6fte>
+References: <20260106-wcn3990-pwrctl-v2-0-0386204328be@oss.qualcomm.com>
+ <20260106-wcn3990-pwrctl-v2-4-0386204328be@oss.qualcomm.com>
+ <6db7a42e-7f12-499b-b36e-687ec93b2e62@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: Mo1nXFSF9E7vKRoQaPYc185GU2g1gOREjqovzYlBybSOZJU/4lmkqTcy
-	cCthgybqS7o6GerGMk2dk3FOPxZrfha+9flAQjARrEzZ1wWD7jje3DiH1ApOsWiNzGq9Ub9
-	J6vpVEemvbGD9AprH2PDmfqpZJYMOTShFfo0L0INlZaORWOkvLJG+4qZqKQPYSGO08ilgFm
-	r6EP7VUwqJ35VCPzgyFO9uOIE9IORNAo4g4LQtq/pJsodg4VImuJsKKHPTcnQcrPS1mB9OC
-	NrSF7X4DtpvFINkDekDRAu7taYNVNulkaUsJzt/VudgUuULQW0d6aAzu/km6kxUp+nwId/S
-	aI9xDMapmB8OfzPzn1khK6T7Jsi9J4IFy+Gilm69LPXyj/g1TEeTjbuVsXY5pM3K/06BBJb
-	ZvUIs5rI6qAvMJhiVfHwILoCgKDGrn2Ly4hwYcoA139dbzt0Yu0uvvAdy+FSTGlXsQN+/Cq
-	gfWSrMXKqxaNjFx4uPMeD48SeAfu/pBWZJF66FwKZ75qA5U5OJipiYUA61yvBpH6vj9/3LX
-	MHg1k4KCg2QVChCdKz73Y8pKh50qaBtHAJp8YxnFMb7Nd5MO/u3tFRS3ijaYV6kd5Z0L0vi
-	hLNeoXBZE1KT7VqUDeEax6yXgnYc32JmGIneV4Dz6M/+cD4FQKnOSD4JmQvtNgKA+CLdVtA
-	ZGcUdsz+bX4vW2Y43WYUyfeXIrc/0lp8UeDG61owiFSZyZi5JxroZvm3cZxjJbQe3c7SYgv
-	mQR2Uvxj0q+rvUAOSYjUSli9BwgtbIpxXhIhKl1q9u0KUK/tqnZw3oL8rS2Ycnh+/HkN5nF
-	a4dw6TTQSsHZfQbVF3gp2nbmKn5ibzeodcC0fqrPgX8QJSsrAiMkgUXXBg5K6NovkYjbKs5
-	iNY6/OGVtzJMRcCUl4PsBOVcMbL+AAPNspbh9thF+TIIOvLOpu7HvusViIQqINQXCNsVoOk
-	DwOOTm/D4Kejfuc38MNJCxViiIXUntDBy8WfJmetDKZrEgKkVI9gKNzkfIzsSbCjGzXcfik
-	9SBznLHHFPOS5rNXNtDrHqHaPAsfBGgDe73lHbtA==
-X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
-X-QQ-RECHKSPAM: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6db7a42e-7f12-499b-b36e-687ec93b2e62@oss.qualcomm.com>
+X-Proofpoint-ORIG-GUID: GX8LXAYEUGsAbcm284UeHWYdbLVz4USB
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE2MDAyMyBTYWx0ZWRfXyntipFwnqnce
+ /pvx6mew/68Qw7ypopBqfcMozPhM2Bj9YoAzGHC49eS5UbAa3aPl7LDo2S06ZJ7iY4617/piUzC
+ KFVk+GssL3jn9c1CA6RlXS+kKMRWjG3uE5m4b7GMfCS7DiqewYIF+eofJTaxX4AGUdjmdOUhzAq
+ PSXBhcTCqQq0qW0unULoucDpEAAkZVTbTm0QTkWkvrv7Xwla3TM2lKUc9lWcLlgrmJsjZorb9Yc
+ Wl82BV2dzb9ZPpDjJMh001+CYG818OVzOu4SKb0fE/rQTrGaCW2Y37Va8oAwJjNIbx8A2zZkEnv
+ ZRvT1+xESuYX+nacGZ/V0NAJYk2ioYYQd1YYhPF0LpbBteQ7OPKmF2Kjw4Cibtz7ddogcb00E8U
+ Ll109M2rsc3TSVprw/jeqFWQaBF9ieqOdAbFQ+calj6d6DIrZPexhdaOIvJ267Vtdrbnod1pVsO
+ U50Xh19ffA0SkULkI5Q==
+X-Proofpoint-GUID: GX8LXAYEUGsAbcm284UeHWYdbLVz4USB
+X-Authority-Analysis: v=2.4 cv=f5ZFxeyM c=1 sm=1 tr=0 ts=6969a932 cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=mLrUVEitaDHWRjaOxVAA:9 a=CjuIK1q_8ugA:10 a=NFOGd7dJGGMPyQGDc5-O:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-16_01,2026-01-15_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 impostorscore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 priorityscore=1501 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2512120000 definitions=main-2601160023
 
-The suspend_stats structure tracks suspend/resume failure information
-and is protected by suspend_stats_lock. However, while
-dpm_save_failed_dev() correctly uses this lock, dpm_save_failed_step()
-and dpm_save_errno() modify the same structure without any locking
-protection.
+On Thu, Jan 15, 2026 at 03:12:19PM -0800, Jeff Johnson wrote:
+> On 1/5/2026 5:01 PM, Dmitry Baryshkov wrote:
+> > @@ -1023,9 +1024,15 @@ static int ath10k_hw_power_on(struct ath10k *ar)
+> >  
+> >  	ath10k_dbg(ar, ATH10K_DBG_SNOC, "soc power on\n");
+> >  
+> > +	if (ar_snoc->pwrseq) {
+> > +		ret = pwrseq_power_on(ar_snoc->pwrseq);
+> > +		if (ret)
+> > +			return ret;
+> > +	}
+> > +
+> >  	ret = regulator_bulk_enable(ar_snoc->num_vregs, ar_snoc->vregs);
+> >  	if (ret)
+> > -		return ret;
+> > +		goto pwrseq_off;
+> >  
+> >  	ret = clk_bulk_prepare_enable(ar_snoc->num_clks, ar_snoc->clks);
+> >  	if (ret)
+> > @@ -1035,18 +1042,28 @@ static int ath10k_hw_power_on(struct ath10k *ar)
+> >  
+> >  vreg_off:
+> >  	regulator_bulk_disable(ar_snoc->num_vregs, ar_snoc->vregs);
+> > +pwrseq_off:
+> > +	pwrseq_power_off(ar_snoc->pwrseq);
+> 
+> in this function you conditionally call pwrseq_power_on()
+> but on error you unconditionally call pwrseq_power_off()
+> 
+> in the below function you conditionally call pwrseq_power_off()
+> 
+> so there is inconsistency.
+> 
+> note that both pwrseq_power_on() and pwrseq_power_off() handle a NULL
+> pwrseq_desc so is there any reason to not just call both both functions
+> unconditionally everywhere?
 
-This can cause races between writers (suspend/resume code updating
-stats) and readers (userspace reading from /sys/power/suspend_stats/
-or debugfs), leading to:
+Indeed, it should not be necessary. I'll send a new iteration (and also
+update the copyright).
 
-- Lost updates to counters (success, fail, step_failures)
-- Corrupted circular buffer indices (last_failed_step,
-  last_failed_errno)
-- Inconsistent data when reading statistics from sysfs/debugfs
+> 
+> > +
+> >  	return ret;
+> >  }
+> >  
+> >  static int ath10k_hw_power_off(struct ath10k *ar)
+> >  {
+> >  	struct ath10k_snoc *ar_snoc = ath10k_snoc_priv(ar);
+> > +	int ret_seq = 0;
+> > +	int ret_vreg;
+> >  
+> >  	ath10k_dbg(ar, ATH10K_DBG_SNOC, "soc power off\n");
+> >  
+> >  	clk_bulk_disable_unprepare(ar_snoc->num_clks, ar_snoc->clks);
+> >  
+> > -	return regulator_bulk_disable(ar_snoc->num_vregs, ar_snoc->vregs);
+> > +	ret_vreg = regulator_bulk_disable(ar_snoc->num_vregs, ar_snoc->vregs);
+> > +
+> > +	if (ar_snoc->pwrseq)
+> > +		ret_seq = pwrseq_power_off(ar_snoc->pwrseq);
+> > +
+> > +	return ret_vreg ? : ret_seq;
+> >  }
+> >  
+> >  static void ath10k_snoc_wlan_disable(struct ath10k *ar)
 
-Fix this by adding mutex_lock/unlock protection to both
-dpm_save_failed_step() and dpm_save_errno(). These functions are
-always called in process context, so mutex can be used safely.
-
-Signed-off-by: tuhaowen <tuhaowen@uniontech.com>
----
- kernel/power/main.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index bb7dd73e18fc..d8b053d85dc0 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -503,16 +503,23 @@ void dpm_save_failed_dev(const char *name)
- 
- void dpm_save_failed_step(enum suspend_stat_step step)
- {
-+	mutex_lock(&suspend_stats_lock);
-+
- 	suspend_stats.step_failures[step-1]++;
- 	suspend_stats.failed_steps[suspend_stats.last_failed_step] = step;
- 	suspend_stats.last_failed_step++;
- 	suspend_stats.last_failed_step %= REC_FAILED_NUM;
-+
-+	mutex_unlock(&suspend_stats_lock);
- }
- 
- void dpm_save_errno(int err)
- {
-+	mutex_lock(&suspend_stats_lock);
-+
- 	if (!err) {
- 		suspend_stats.success++;
-+		mutex_unlock(&suspend_stats_lock);
- 		return;
- 	}
- 
-@@ -521,6 +528,8 @@ void dpm_save_errno(int err)
- 	suspend_stats.errno[suspend_stats.last_failed_errno] = err;
- 	suspend_stats.last_failed_errno++;
- 	suspend_stats.last_failed_errno %= REC_FAILED_NUM;
-+
-+	mutex_unlock(&suspend_stats_lock);
- }
- 
- void pm_report_hw_sleep_time(u64 t)
 -- 
-2.20.1
-
+With best wishes
+Dmitry
 
