@@ -1,44 +1,44 @@
-Return-Path: <linux-pm+bounces-41019-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41012-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C798D33039
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 16:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EF9FD33096
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 16:06:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E187D31A7381
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 14:53:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 912BE3110556
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 14:52:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4E69394487;
-	Fri, 16 Jan 2026 14:53:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA32C2E22BA;
+	Fri, 16 Jan 2026 14:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7f1kh7r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Adomgxsk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8D323D2B2;
-	Fri, 16 Jan 2026 14:53:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86CB5221DAD;
+	Fri, 16 Jan 2026 14:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768575213; cv=none; b=Wu1x5ol+glsgsv5QE3YjoaB1fjxQZM05D4JiCkVuBs2bhlknTsfm2P2oQj40OeVyOYeISyeeTk2zGQXv/OePM1iPd3o596bY5SP1zALKLrzChXhkIbM+na75yc6XZYfB9p/nn9mE1PgM4DwR9gjc358v0dLp4OtI40rIj3BTTQ4=
+	t=1768575162; cv=none; b=pAdYmHHOv4SzK6edFGNoygFcq2fO/neDNMC9F31FTUUoLyHDYUscQvx7lZgBtGRZXe7DlF7wSmZWVoUz8DCk27/xZb0nhMsv+d1wTO175NU9RPCBIF8Max+bj4LNiK3qNV+P2rW8Hh6xTRiqyf6VOT3YmWxQmoJ1+/ntk4j6ad0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768575213; c=relaxed/simple;
-	bh=+EcaS9wpjAI5nYExsBELcaZu8W8ohxG84dL93BxRlIw=;
+	s=arc-20240116; t=1768575162; c=relaxed/simple;
+	bh=KdTiRwNqvvTUCK29uJFVf97xOZdvdCR4xQadD5dd7Pc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rFW7q0ke2g4PJfABMXC+3oxbGTZDPCbb2b+gapTPLMz/INX9vpu/OWH6gKPegEixZS2Lby3vvIqneTkmhPruXCJlOJpbhJfoiW8X1d3RLAWRxFDL8h4e/0TVCSItpIxidMSMMlZ/r+PdOj33VITumvI1wkoTXoXB/ba8tnVpT8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7f1kh7r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4247FC19425;
-	Fri, 16 Jan 2026 14:53:26 +0000 (UTC)
+	 MIME-Version; b=O1C75L3p++jD9hUxULtRWXVVqadq/6d8BSE9IZuvGE8Qmo1D3M9+6vAp9GU/3uGMyt+83CPf8RdVQ819QayvqDOtuQ/hw9J27n/vkRENyQpXoYlsZkwepZCBdgD4PL49aMo3An5+S80D6KqKPxclD8CTOJSTkC2CCLPcRfDo+ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Adomgxsk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D42C116C6;
+	Fri, 16 Jan 2026 14:52:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768575213;
-	bh=+EcaS9wpjAI5nYExsBELcaZu8W8ohxG84dL93BxRlIw=;
+	s=k20201202; t=1768575162;
+	bh=KdTiRwNqvvTUCK29uJFVf97xOZdvdCR4xQadD5dd7Pc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=U7f1kh7rJjODodXqRraFZwOOQ0AX4fWSIf9o/E9fD1XYzZBx+5fe236YW0A3Ve8O1
-	 Rz04lUtX6W0Gw6C314tLM0ft3an+9Nd8rmqrWtM0Vhg6x0+EvQe2+e6aDyUNfLVhon
-	 0A/oWIFSINFiw5FCD1JK/pclfTftfMl9sh3tJos2b6nVCiOf19VU4C3AZuhhFqDtjQ
-	 QwaQZu0Nnu2URB700+D7zJp6yNwtJJ9uRVarOFgNrqtd0i5eO4zzPyC1Hmdi8COYRc
-	 vyQapnbNGGxOsmIOJu1LHgQBI29sqN/KUWMmFR8J2STLF9hH/rT/6h1EPP7gcz39KZ
-	 0Pk5QK2wl08WQ==
+	b=AdomgxskzkU+sLSsmMYNhuPB6+HiDEHNe3Wx7a5u+FWDJg+MoxaTG491VnRfG9PM4
+	 VwbMgd8WvqQBs+1XvJXxvoeBnrlgLJX4ddHNATB2nvc3bzW1P5fZH7TMd9PD7Zs0Ob
+	 iw9aQxCHGZMljcG1K9g1yIum4xwa4jXkLhrpGfUlviKobG9w5c/9QaA/VOuC7caFVD
+	 RiZ6VtCj1xk7+4MUVfNWd+NZJjGWbi5mjVOvnMERLr0gpI+C/ckt1g0ZJba6j9ssLh
+	 tpFq4s92Hngh5oZAKD5TmBIvJs71ct71mj7+/GNtJhxxEn6446EjsuepigZH1TKZnW
+	 07Ocp25nPF4Mw==
 From: Frederic Weisbecker <frederic@kernel.org>
 To: LKML <linux-kernel@vger.kernel.org>
 Cc: Frederic Weisbecker <frederic@kernel.org>,
@@ -75,9 +75,9 @@ Cc: Frederic Weisbecker <frederic@kernel.org>,
 	linux-pm@vger.kernel.org,
 	linux-s390@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 10/15] tick/sched: Remove unused fields
-Date: Fri, 16 Jan 2026 15:52:03 +0100
-Message-ID: <20260116145208.87445-11-frederic@kernel.org>
+Subject: [PATCH 03/15] sched/cputime: Correctly support generic vtime idle time
+Date: Fri, 16 Jan 2026 15:51:56 +0100
+Message-ID: <20260116145208.87445-4-frederic@kernel.org>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20260116145208.87445-1-frederic@kernel.org>
 References: <20260116145208.87445-1-frederic@kernel.org>
@@ -89,112 +89,176 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove fields after the dyntick-idle cputime migration to scheduler
-code.
+Currently whether generic vtime is running or not, the idle cputime is
+fetched from the nohz accounting.
+
+However generic vtime already does its own idle cputime accounting. Only
+the kernel stat accessors are not plugged to support it.
+
+Read the idle generic vtime cputime when it's running, this will allow
+to later more clearly split nohz and vtime cputime accounting.
 
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- kernel/time/tick-sched.h       | 12 ------------
- kernel/time/timer_list.c       |  6 +-----
- scripts/gdb/linux/timerlist.py |  4 ----
- 3 files changed, 1 insertion(+), 21 deletions(-)
+ fs/proc/stat.c           |  8 ++++----
+ include/linux/vtime.h    |  7 ++++++-
+ kernel/sched/cputime.c   | 38 +++++++++++++++++++++++++++++++-------
+ kernel/time/tick-sched.c |  2 +-
+ 4 files changed, 42 insertions(+), 13 deletions(-)
 
-diff --git a/kernel/time/tick-sched.h b/kernel/time/tick-sched.h
-index b4a7822f495d..79b9252047b1 100644
---- a/kernel/time/tick-sched.h
-+++ b/kernel/time/tick-sched.h
-@@ -44,9 +44,7 @@ struct tick_device {
-  *			to resume the tick timer operation in the timeline
-  *			when the CPU returns from nohz sleep.
-  * @next_tick:		Next tick to be fired when in dynticks mode.
-- * @idle_jiffies:	jiffies at the entry to idle for idle time accounting
-  * @idle_waketime:	Time when the idle was interrupted
-- * @idle_sleeptime_seq:	sequence counter for data consistency
-  * @idle_entrytime:	Time when the idle call was entered
-  * @last_jiffies:	Base jiffies snapshot when next event was last computed
-  * @timer_expires_base:	Base time clock monotonic for @timer_expires
-@@ -55,9 +53,6 @@ struct tick_device {
-  * @idle_expires:	Next tick in idle, for debugging purpose only
-  * @idle_calls:		Total number of idle calls
-  * @idle_sleeps:	Number of idle calls, where the sched tick was stopped
-- * @idle_exittime:	Time when the idle state was left
-- * @idle_sleeptime:	Sum of the time slept in idle with sched tick stopped
-- * @iowait_sleeptime:	Sum of the time slept in idle with sched tick stopped, with IO outstanding
-  * @tick_dep_mask:	Tick dependency mask - is set, if someone needs the tick
-  * @check_clocks:	Notification mechanism about clocksource changes
-  */
-@@ -73,12 +68,10 @@ struct tick_sched {
- 	struct hrtimer			sched_timer;
- 	ktime_t				last_tick;
- 	ktime_t				next_tick;
--	unsigned long			idle_jiffies;
- 	ktime_t				idle_waketime;
- 	unsigned int			got_idle_tick;
+diff --git a/fs/proc/stat.c b/fs/proc/stat.c
+index 8b444e862319..6ac2a13b8be5 100644
+--- a/fs/proc/stat.c
++++ b/fs/proc/stat.c
+@@ -30,8 +30,8 @@ u64 get_idle_time(struct kernel_cpustat *kcs, int cpu)
+ 		idle_usecs = get_cpu_idle_time_us(cpu, NULL);
  
- 	/* Idle entry */
--	seqcount_t			idle_sleeptime_seq;
- 	ktime_t				idle_entrytime;
+ 	if (idle_usecs == -1ULL)
+-		/* !NO_HZ or cpu offline so we can rely on cpustat.idle */
+-		idle = kcs->cpustat[CPUTIME_IDLE];
++		/* !NO_HZ or cpu offline or vtime so we can rely on cpustat.idle */
++		idle = kcpustat_field(CPUTIME_IDLE, cpu);
+ 	else
+ 		idle = idle_usecs * NSEC_PER_USEC;
  
- 	/* Tick stop */
-@@ -90,11 +83,6 @@ struct tick_sched {
- 	unsigned long			idle_calls;
- 	unsigned long			idle_sleeps;
+@@ -46,8 +46,8 @@ static u64 get_iowait_time(struct kernel_cpustat *kcs, int cpu)
+ 		iowait_usecs = get_cpu_iowait_time_us(cpu, NULL);
  
--	/* Idle exit */
--	ktime_t				idle_exittime;
--	ktime_t				idle_sleeptime;
--	ktime_t				iowait_sleeptime;
--
- 	/* Full dynticks handling */
- 	atomic_t			tick_dep_mask;
+ 	if (iowait_usecs == -1ULL)
+-		/* !NO_HZ or cpu offline so we can rely on cpustat.iowait */
+-		iowait = kcs->cpustat[CPUTIME_IOWAIT];
++		/* !NO_HZ or cpu offline or vtime so we can rely on cpustat.iowait */
++		iowait = kcpustat_field(CPUTIME_IOWAIT, cpu);
+ 	else
+ 		iowait = iowait_usecs * NSEC_PER_USEC;
  
-diff --git a/kernel/time/timer_list.c b/kernel/time/timer_list.c
-index 488e47e96e93..e77b512e8597 100644
---- a/kernel/time/timer_list.c
-+++ b/kernel/time/timer_list.c
-@@ -154,14 +154,10 @@ static void print_cpu(struct seq_file *m, int cpu, u64 now)
- 		P_flag(highres, TS_FLAG_HIGHRES);
- 		P_ns(last_tick);
- 		P_flag(tick_stopped, TS_FLAG_STOPPED);
--		P(idle_jiffies);
- 		P(idle_calls);
- 		P(idle_sleeps);
- 		P_ns(idle_entrytime);
- 		P_ns(idle_waketime);
--		P_ns(idle_exittime);
--		P_ns(idle_sleeptime);
--		P_ns(iowait_sleeptime);
- 		P(last_jiffies);
- 		P(next_timer);
- 		P_ns(idle_expires);
-@@ -258,7 +254,7 @@ static void timer_list_show_tickdevices_header(struct seq_file *m)
+diff --git a/include/linux/vtime.h b/include/linux/vtime.h
+index 29dd5b91dd7d..737930f66c3e 100644
+--- a/include/linux/vtime.h
++++ b/include/linux/vtime.h
+@@ -27,6 +27,11 @@ static inline void vtime_guest_exit(struct task_struct *tsk) { }
+ static inline void vtime_init_idle(struct task_struct *tsk, int cpu) { }
+ #endif
  
- static inline void timer_list_header(struct seq_file *m, u64 now)
++static inline bool vtime_generic_enabled_cpu(int cpu)
++{
++	return context_tracking_enabled_cpu(cpu);
++}
++
+ #ifdef CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
+ extern void vtime_account_irq(struct task_struct *tsk, unsigned int offset);
+ extern void vtime_account_softirq(struct task_struct *tsk);
+@@ -74,7 +79,7 @@ static inline bool vtime_accounting_enabled(void)
+ 
+ static inline bool vtime_accounting_enabled_cpu(int cpu)
  {
--	SEQ_printf(m, "Timer List Version: v0.10\n");
-+	SEQ_printf(m, "Timer List Version: v0.11\n");
- 	SEQ_printf(m, "HRTIMER_MAX_CLOCK_BASES: %d\n", HRTIMER_MAX_CLOCK_BASES);
- 	SEQ_printf(m, "now at %Ld nsecs\n", (unsigned long long)now);
- 	SEQ_printf(m, "\n");
-diff --git a/scripts/gdb/linux/timerlist.py b/scripts/gdb/linux/timerlist.py
-index ccc24d30de80..c14ce55674c9 100644
---- a/scripts/gdb/linux/timerlist.py
-+++ b/scripts/gdb/linux/timerlist.py
-@@ -90,14 +90,10 @@ def print_cpu(hrtimer_bases, cpu, max_clock_bases):
-             text += f"  .{'nohz':15s}: {int(bool(ts['flags'] & TS_FLAG_NOHZ))}\n"
-             text += f"  .{'last_tick':15s}: {ts['last_tick']}\n"
-             text += f"  .{'tick_stopped':15s}: {int(bool(ts['flags'] & TS_FLAG_STOPPED))}\n"
--            text += f"  .{'idle_jiffies':15s}: {ts['idle_jiffies']}\n"
-             text += f"  .{'idle_calls':15s}: {ts['idle_calls']}\n"
-             text += f"  .{'idle_sleeps':15s}: {ts['idle_sleeps']}\n"
-             text += f"  .{'idle_entrytime':15s}: {ts['idle_entrytime']} nsecs\n"
-             text += f"  .{'idle_waketime':15s}: {ts['idle_waketime']} nsecs\n"
--            text += f"  .{'idle_exittime':15s}: {ts['idle_exittime']} nsecs\n"
--            text += f"  .{'idle_sleeptime':15s}: {ts['idle_sleeptime']} nsecs\n"
--            text += f"  .{'iowait_sleeptime':15s}: {ts['iowait_sleeptime']} nsecs\n"
-             text += f"  .{'last_jiffies':15s}: {ts['last_jiffies']}\n"
-             text += f"  .{'next_timer':15s}: {ts['next_timer']}\n"
-             text += f"  .{'idle_expires':15s}: {ts['idle_expires']} nsecs\n"
+-	return context_tracking_enabled_cpu(cpu);
++	return vtime_generic_enabled_cpu(cpu);
+ }
+ 
+ static inline bool vtime_accounting_enabled_this_cpu(void)
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index 5dcb0f2e01bc..f32c169da11a 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -761,7 +761,11 @@ EXPORT_SYMBOL_GPL(vtime_guest_exit);
+ 
+ void vtime_account_idle(struct task_struct *tsk)
+ {
+-	account_idle_time(get_vtime_delta(&tsk->vtime));
++	struct vtime *vtime = &tsk->vtime;
++
++	write_seqcount_begin(&vtime->seqcount);
++	account_idle_time(get_vtime_delta(vtime));
++	write_seqcount_end(&vtime->seqcount);
+ }
+ 
+ void vtime_task_switch_generic(struct task_struct *prev)
+@@ -912,6 +916,7 @@ static int kcpustat_field_vtime(u64 *cpustat,
+ 				int cpu, u64 *val)
+ {
+ 	struct vtime *vtime = &tsk->vtime;
++	struct rq *rq = cpu_rq(cpu);
+ 	unsigned int seq;
+ 
+ 	do {
+@@ -953,6 +958,14 @@ static int kcpustat_field_vtime(u64 *cpustat,
+ 			if (state == VTIME_GUEST && task_nice(tsk) > 0)
+ 				*val += vtime->gtime + vtime_delta(vtime);
+ 			break;
++		case CPUTIME_IDLE:
++			if (state == VTIME_IDLE && !atomic_read(&rq->nr_iowait))
++				*val += vtime_delta(vtime);
++			break;
++		case CPUTIME_IOWAIT:
++			if (state == VTIME_IDLE && atomic_read(&rq->nr_iowait) > 0)
++				*val += vtime_delta(vtime);
++			break;
+ 		default:
+ 			break;
+ 		}
+@@ -1015,8 +1028,8 @@ static int kcpustat_cpu_fetch_vtime(struct kernel_cpustat *dst,
+ 		*dst = *src;
+ 		cpustat = dst->cpustat;
+ 
+-		/* Task is sleeping, dead or idle, nothing to add */
+-		if (state < VTIME_SYS)
++		/* Task is sleeping or dead, nothing to add */
++		if (state < VTIME_IDLE)
+ 			continue;
+ 
+ 		delta = vtime_delta(vtime);
+@@ -1025,15 +1038,17 @@ static int kcpustat_cpu_fetch_vtime(struct kernel_cpustat *dst,
+ 		 * Task runs either in user (including guest) or kernel space,
+ 		 * add pending nohz time to the right place.
+ 		 */
+-		if (state == VTIME_SYS) {
++		switch (vtime->state) {
++		case VTIME_SYS:
+ 			cpustat[CPUTIME_SYSTEM] += vtime->stime + delta;
+-		} else if (state == VTIME_USER) {
++			break;
++		case VTIME_USER:
+ 			if (task_nice(tsk) > 0)
+ 				cpustat[CPUTIME_NICE] += vtime->utime + delta;
+ 			else
+ 				cpustat[CPUTIME_USER] += vtime->utime + delta;
+-		} else {
+-			WARN_ON_ONCE(state != VTIME_GUEST);
++			break;
++		case VTIME_GUEST:
+ 			if (task_nice(tsk) > 0) {
+ 				cpustat[CPUTIME_GUEST_NICE] += vtime->gtime + delta;
+ 				cpustat[CPUTIME_NICE] += vtime->gtime + delta;
+@@ -1041,6 +1056,15 @@ static int kcpustat_cpu_fetch_vtime(struct kernel_cpustat *dst,
+ 				cpustat[CPUTIME_GUEST] += vtime->gtime + delta;
+ 				cpustat[CPUTIME_USER] += vtime->gtime + delta;
+ 			}
++			break;
++		case VTIME_IDLE:
++			if (atomic_read(&cpu_rq(cpu)->nr_iowait) > 0)
++				cpustat[CPUTIME_IOWAIT] += delta;
++			else
++				cpustat[CPUTIME_IDLE] += delta;
++			break;
++		default:
++			WARN_ON_ONCE(1);
+ 		}
+ 	} while (read_seqcount_retry(&vtime->seqcount, seq));
+ 
+diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+index 8ddf74e705d3..f1d07a0276a5 100644
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -780,7 +780,7 @@ static u64 get_cpu_sleep_time_us(struct tick_sched *ts, ktime_t *sleeptime,
+ 	ktime_t now, idle;
+ 	unsigned int seq;
+ 
+-	if (!tick_nohz_active)
++	if (!tick_nohz_active || vtime_generic_enabled_cpu(cpu))
+ 		return -1;
+ 
+ 	now = ktime_get();
 -- 
 2.51.1
 
