@@ -1,159 +1,211 @@
-Return-Path: <linux-pm+bounces-41006-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41007-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC4C0D321CA
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 14:51:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 360B7D3281B
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 15:21:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 95E0D300E003
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 13:49:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D20C630F0834
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Jan 2026 14:19:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04FC227AC54;
-	Fri, 16 Jan 2026 13:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA29328B78;
+	Fri, 16 Jan 2026 14:19:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="ILDQ70hg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OxL4pcBU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3ED4145348;
-	Fri, 16 Jan 2026 13:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44AF328B5B
+	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 14:19:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768571369; cv=none; b=vCygtX0f78vpWQLm3r31x9p2g5Rcj3xzLffpPf0RCzw3W/QouhaTtqagitWRHpEntcKMMI/vxLc1LVr3Oh0fQ5wlWKAEvlYpQID1msbaDghqi9/P7BhE+TMI1UVt+L0E/rq/haY5Usj9Seida75i7XEu8ZgKTNvreBHGiZLc1N4=
+	t=1768573161; cv=none; b=iS1vSyI75TRlF6FS0WMWIcY0Ub+iBM+j0LlXam1UnrYiR+fRroSX3VGeNAlNVv+ONdua2Ijrraqt23nJ++EWc58pOkXEbLUK+SwUPRfC+ymVz4tJcs3JyiaUdhL03Oo/auqvcVQ2IQpOlpRHFiuGN/2wFsJTJlprMIAuiiIDG58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768571369; c=relaxed/simple;
-	bh=4yNBP3vB9RH16PoRgyRCzWlrJO3OolfPfVR2l0mr07E=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=s1HO2bVW0U8BLscTY6VojQgM8wDF/mF+hwz6uASsRNatMN03ZF60Kt87PAUAWSupODKLnfI4E3LG4iayioOKkRHt8WkrYdtyh2HT7Wn3h0MNH84lLfFnhUkMN9Lk7O+p3I5UlpROWPDfMvYbCige9Vst1XdF7Eg8r0uMoiYFp6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=ILDQ70hg; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1768571335; x=1769176135; i=markus.elfring@web.de;
-	bh=4yNBP3vB9RH16PoRgyRCzWlrJO3OolfPfVR2l0mr07E=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=ILDQ70hg28DaEALb0i0ss6K//wBVe8sdCXT2pJA2uRgVFwLS/ds+1m7HNulUngtg
-	 2cNqH4sZSKoKDsyTb0o59/5MGWHBBb92UJpuAV+QNeIILqM8IaMuDoRAmNt+GlKXb
-	 LezpSBXMUOFDmYmKHhL8+efGqwuArlKNHt1neys8rUEOeMQnjiXEmNlccVE6gHodY
-	 aQ/8meETtkAAdMmo/kqcj19sp21UqC0+L90KsC18/cmbobDvpRBYzVf5lTqkn/GRP
-	 LG5nMP4/+VBqsez57TORh/pepucqfV1rN4MjVxWMjJXPWzJeZ2/4BVetewDqtgPL8
-	 1x046If1Bmlgr6Bz0g==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.69.218]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MRk0W-1vDZXR3QPC-00THLH; Fri, 16
- Jan 2026 14:48:55 +0100
-Message-ID: <4d5d819b-6c3d-4228-a4bb-f7afc71af023@web.de>
-Date: Fri, 16 Jan 2026 14:48:53 +0100
+	s=arc-20240116; t=1768573161; c=relaxed/simple;
+	bh=JghXPm6HOBFNktLIBiI8eyfuN76nwomk97JpiXS3QS0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JTO8DqkDf0z0te3sV1FZDgg0jyqTY+JQ4SRWIJdcYkfYt1SupUjhGXwphsFFawwBinaa6ogNZROrsO6MLUCb8EAw5cjdOWjyn2egtfkdGcne40To/THhkfvgU50g/Mru3lVNX6W85M4oCo4C++l2jET/VIBDced/gg/BcU+YZXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OxL4pcBU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50903C2BCB1
+	for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 14:19:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768573161;
+	bh=JghXPm6HOBFNktLIBiI8eyfuN76nwomk97JpiXS3QS0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=OxL4pcBU9qQTdx9n8ylW4+63JJn3jJQq1mb+5GohfdbIkucdwgCLkyjualU8mlIyy
+	 KxP0DkLB/NyJewlJloc2Fr0VoT54B2cMfGhElk2oGuLk/HATJ2d9MzlmU+xlLNVKLi
+	 UdxOLCIiz/MBK4oMCLlstwC4mmVWzFqsjfE2WAPVfZ98PBKaU/gylwOIuMy3iBVnSS
+	 FI2bcwrjfnZ0xPfq38Jr5byWaPhIJFGWpXgFYfrCyyrVBEfGaUwReAp4jwJLCZoWvb
+	 O/8HwT//akwL51JCMSdMN8En3448ykrd3BUbpmXuYrUeQLGPvkOUu7Q9lJY0SGmlRm
+	 GUEfyx4z/vcsQ==
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b879d5c1526so129214366b.1
+        for <linux-pm@vger.kernel.org>; Fri, 16 Jan 2026 06:19:21 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV6aE/5DU0n3NQpeAfvIdMUTDYLLfN5X4ARsea4c9hgtAPXYSgmdVedZMws7z/mwlMEOF4BiZytqQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yymv6dtkbaiAWQgFkcjLwDO5s9BR+M0ZQtERjpMeW1xSfMJBTkK
+	BjugCjMAGRQ9UipoVHxeIP0HI+FgSr8aNgG5Et77wMMUiw5zF6tRc4xCiV47Vc+bbqBaGW4NDNx
+	ZQHk778HKG6PtWmOIsn2W06GAYELt/w==
+X-Received: by 2002:a17:907:d03:b0:b87:892:f43f with SMTP id
+ a640c23a62f3a-b87969386d0mr231202266b.29.1768573159725; Fri, 16 Jan 2026
+ 06:19:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Felix Gu <gu_0233@qq.com>, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Cc: LKML <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>,
- Santosh Shilimkar <ssantosh@kernel.org>, Tony Lindgren <tony@atomide.com>,
- Ulf Hansson <ulf.hansson@linaro.org>
-References: <tencent_E20B88FB4461F8F299301AE67009CF1E8708@qq.com>
-Subject: Re: [PATCH] pmdomain: ti: omap_prm: Fix a reference leak on device
- node
-Content-Language: en-GB, de-DE
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <tencent_E20B88FB4461F8F299301AE67009CF1E8708@qq.com>
-Content-Type: text/plain; charset=UTF-8
+References: <20260112-pci-m2-e-v4-0-eff84d2c6d26@oss.qualcomm.com>
+ <20260112-pci-m2-e-v4-5-eff84d2c6d26@oss.qualcomm.com> <20260113171424.GA3925312-robh@kernel.org>
+ <xyttom64ht5hrrp5hecjqehnyfgsv4mfl2t36e2sveu44ccpjl@lkzquse2kqsx>
+ <CAL_JsqJxBNm0y6T7vji6MXgsO65iDJ-tdUEo0cOxkw7EuMKpkg@mail.gmail.com> <gcmm23ji4fkcqeshcyiehuyega7kdbtvmofp4usmol2icwn6gy@i46icelwwqh5>
+In-Reply-To: <gcmm23ji4fkcqeshcyiehuyega7kdbtvmofp4usmol2icwn6gy@i46icelwwqh5>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 16 Jan 2026 08:19:07 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKKBjurY7ZrScayvkTijR-F6GWBofry48xoPFBFi55u4w@mail.gmail.com>
+X-Gm-Features: AZwV_QhaVXIgz8bq4CqPsm9NXLoIfFaoT-4jNhJ-ZskY8n0WuXohQmqAGOhuiUQ
+Message-ID: <CAL_JsqKKBjurY7ZrScayvkTijR-F6GWBofry48xoPFBFi55u4w@mail.gmail.com>
+Subject: Re: [PATCH v4 5/9] dt-bindings: connector: Add PCIe M.2 Mechanical
+ Key E connector
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Hans de Goede <hansg@kernel.org>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Mark Pearson <mpearson-lenovo@squebb.ca>, "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Bartosz Golaszewski <brgl@kernel.org>, linux-serial@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Stephan Gerhold <stephan.gerhold@linaro.org>, 
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:XyXtaedlbPvmqgjUdtgSK7cHvRUebZgIwknA7+hXjmsWdwHkIFj
- t6QAEjAuCKJbvEV4gP0HNY/cIQTtX8x31iOIGI+aOGf30f6wq/WE2DBwLt3CE9OFVWeX01V
- kr0beOZzQWCweiZt3Oylaak/3SvmblCL+6+X8AJmy+QdVz/g3tiyLH0Ykbq5EkL1h401o+x
- 7znmV9x34+wwVDD6W/B2Q==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:n1dQtBO19Uc=;3wZtXq61YU0ELBQ0a7d1EeKmuku
- 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
 
-=E2=80=A6
-> In omap_prm_domain_attach_dev, it does not release the reference.
+On Thu, Jan 15, 2026 at 4:42=E2=80=AFAM Manivannan Sadhasivam <mani@kernel.=
+org> wrote:
+>
+> On Wed, Jan 14, 2026 at 11:45:42AM -0600, Rob Herring wrote:
+> > On Wed, Jan 14, 2026 at 10:14=E2=80=AFAM Manivannan Sadhasivam <mani@ke=
+rnel.org> wrote:
+> > >
+> > > On Tue, Jan 13, 2026 at 11:14:24AM -0600, Rob Herring wrote:
+> > > > On Mon, Jan 12, 2026 at 09:56:04PM +0530, Manivannan Sadhasivam wro=
+te:
+> > > > > Add the devicetree binding for PCIe M.2 Mechanical Key E connecto=
+r defined
+> > > > > in the PCI Express M.2 Specification, r4.0, sec 5.1.2. This conne=
+ctor
+> > > > > provides interfaces like PCIe or SDIO to attach the WiFi devices =
+to the
+> > > > > host machine, USB or UART+PCM interfaces to attach the Bluetooth =
+(BT)
+> > > > > devices. Spec also provides an optional interface to connect the =
+UIM card,
+> > > > > but that is not covered in this binding.
+> > > > >
+> > > > > The connector provides a primary power supply of 3.3v, along with=
+ an
+> > > > > optional 1.8v VIO supply for the Adapter I/O buffer circuitry ope=
+rating at
+> > > > > 1.8v sideband signaling.
+> > > > >
+> > > > > The connector also supplies optional signals in the form of GPIOs=
+ for fine
+> > > > > grained power management.
+> > > > >
+> > > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.q=
+ualcomm.com>
+> > > > > ---
+> > > > >  .../bindings/connector/pcie-m2-e-connector.yaml    | 154 +++++++=
+++++++++++++++
+> > > > >  MAINTAINERS                                        |   1 +
+> > > > >  2 files changed, 155 insertions(+)
+> > > > >
+> > > > > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-=
+e-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-e-co=
+nnector.yaml
+> > > > > new file mode 100644
+> > > > > index 000000000000..b65b39ddfd19
+> > > > > --- /dev/null
+> > > > > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-e-conne=
+ctor.yaml
+> > > > > @@ -0,0 +1,154 @@
+> > > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > > > +%YAML 1.2
+> > > > > +---
+> > > > > +$id: http://devicetree.org/schemas/connector/pcie-m2-e-connector=
+.yaml#
+> > > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > > > +
+> > > > > +title: PCIe M.2 Mechanical Key E Connector
+> > > > > +
+> > > > > +maintainers:
+> > > > > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.co=
+m>
+> > > > > +
+> > > > > +description:
+> > > > > +  A PCIe M.2 E connector node represents a physical PCIe M.2 Mec=
+hanical Key E
+> > > > > +  connector. Mechanical Key E connectors are used to connect Wir=
+eless
+> > > > > +  Connectivity devices including combinations of Wi-Fi, BT, NFC =
+to the host
+> > > > > +  machine over interfaces like PCIe/SDIO, USB/UART+PCM, and I2C.
+> > > > > +
+> > > > > +properties:
+> > > > > +  compatible:
+> > > > > +    const: pcie-m2-e-connector
+> > > > > +
+> > > > > +  vpcie3v3-supply:
+> > > > > +    description: A phandle to the regulator for 3.3v supply.
+> > > > > +
+> > > > > +  vpcie1v8-supply:
+> > > > > +    description: A phandle to the regulator for VIO 1.8v supply.
+> > > >
+> > > > I don't see any 1.8V supply on the connector. There are 1.8V IOs an=
+d you
+> > > > may need something in DT to ensure those are powered. However, ther=
+e's
+> > > > no guarantee that it's a single supply.
+> > > >
+> > >
+> > > 1.8v VIO supply is an optional supply and is only required if the pla=
+tform
+> > > supports 1.8v for sideband signals such as PERST#, WAKE#... I can inc=
+lude it in
+> > > the example for completeness.
+> >
+> > My point is that PERST# and WAKE# supplies could be 2 different 1.8V
+> > supplies and those supply the I/O pads of the GPIO pins (and possibly
+> > external pull-ups) that drive them. The 1.8V supply doesn't supply
+> > 1.8V to the slot, so making it a slot/connector property is wrong.
+> >
+>
+> Ok, I get your point that VIO 1.8v supply is just limited to the I/O logi=
+c and
+> not the whole card/adapter. But I don't get your multiple supplies concer=
+n. Spec
+> says, "A 1.8 V supply pin called VIO 1.8 V is used to supply the on-Adapt=
+er I/O
+> buffer circuitry operating at 1.8 V." So it implies that either the singl=
+e
+> supply available to the card through VIO might be used to power the whole=
+ I/O
+> circuit logic or the card can derive its own 1.8v supply from 3.3v supply=
+.
+>
+> So how come the card can have 2 different 1.8v supplies powering the I/O
+> circuitry?
 
-See also once more:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
-cumentation/process/submitting-patches.rst?h=3Dv6.19-rc5#n94
+Is there a pin on the connector for 1.8V supply? I don't have the
+spec, but the pinout I found[1] didn't show one. If there's a pin,
+then I have no concern.
 
-Regards,
-Markus
+Rob
+
+[1] https://pinoutguide.com/HD/M.2_NGFF_connector_pinout.shtml
 
