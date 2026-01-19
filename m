@@ -1,241 +1,222 @@
-Return-Path: <linux-pm+bounces-41126-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41125-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04BA6D3B013
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 17:11:12 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B248DD3B019
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 17:11:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2158B3016936
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 16:10:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4BBD030801E1
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 16:10:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB6D628850B;
-	Mon, 19 Jan 2026 16:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C54C29E0E8;
+	Mon, 19 Jan 2026 16:10:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qxz9qncY"
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="bl2Ywp83"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020117.outbound.protection.outlook.com [52.101.196.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7913299959
-	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 16:10:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768839053; cv=none; b=EpmfyCUP3Xt8za4OeYRr719850yU9JO1EVPvH3arhUJu6ymR+nhONPgf6IFH/swrHRSEeRUyru8hxwkpOOwLWiSHzSknCnAUN9zz2LdohN6Z3837HoBk0Fri1xA/7JEr5jy5UVlLjmPEOpUyrkEF66q2hV6ASRMinTjaz41vwdA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768839053; c=relaxed/simple;
-	bh=xojvTFzwpY+4N5Z8neU2E8/iFj7GHyaguBJW+DTwJy8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cNEO7l5+D/omNkbpEurLZWIrNWq+PQLrLrlL731VRHae+dNV6FQyemicwFu+w9bLSfq8IEcVIhxeDscjIUp3xEvjr67Zq0MRoZNBE8GMpv6OqpL5rep0fv55pWM/gQvSPvugKwJVgzgycvs8sQuohzbhjvGUKU1wVOhGpOSVaow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qxz9qncY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CAD4C4AF09
-	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 16:10:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768839049;
-	bh=xojvTFzwpY+4N5Z8neU2E8/iFj7GHyaguBJW+DTwJy8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qxz9qncY+oIPkzL/7V144ewMK/7ZEUo93fN3CrBV7nyBJXN8K1o64mkpkLuaql7+L
-	 pjtUcyDyXmpMYsFTEOmK47iUO4clMBxgKT9T7XNwfyTfbt6Pyj/vr35FBJ4p+Jc6Am
-	 K4E84PoWZ3r60TVhTFLLj9aCX7QDCGgxhQjjYKx2esXpzhIt2/I9oHv00uRhyklEin
-	 xqcpo/M/lTDWpXdPf15L65MHL2OV9YXspVJWIJlsV9cADshAgCFAfWtN4knDWl1Agj
-	 JFRIA/GS8fOs6ZVXTp/4JCHLJVmQi/35ZJ9ogp2qA+f6wD5nqgfwijBlttvZk4Qbd7
-	 3SX/j+smPHkxg==
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-40438380b88so2769772fac.3
-        for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 08:10:49 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVgAAFsG0TKpE/eugc5pA9MD2XKWyo1SfPXHdkuncDA31WJbZMRUvbH+fC7LABzAR/lUfLWemzuOw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgjMp5uQcMYqzSQJ+1Q10L6a+Xp1KRRmNIj+QXCvWdnx7l+bzk
-	p4vjX9qEFmz4QbrkUafN+t+5tHlywihW8E1ApIx5xcyjXf8f2S97oHTFJRHswe/o04Fr6Vayh0d
-	v/s006QPooQhvJDwVjmp8TYnw5NFcyY0=
-X-Received: by 2002:a05:687c:12d:b0:3f5:4172:21 with SMTP id
- 586e51a60fabf-4044c65c1ddmr5361229fac.58.1768839043584; Mon, 19 Jan 2026
- 08:10:43 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1011028850B;
+	Mon, 19 Jan 2026 16:10:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.117
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768839045; cv=fail; b=fYL2T7V2qWuaZEmFpIaxgFNbkcIJwcEjlhAkp+3JFJ0tx5UYMAjpJnOAw3qNx/NM72itAKLOKoiudc7n+nEHbLzk+3GCgzgo+pXIPIdEKNBTlJ/9A/iZPVeYqaLmMzIBC9taaacaq6TbJR8MjsDDlKM9rXROJc5sNDhQBIs6hUg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768839045; c=relaxed/simple;
+	bh=VNsxF0BZQeUbHh+C8UM/T4wD9mfBiEW33Vxk1wPMKzs=;
+	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:References:
+	 In-Reply-To:MIME-Version; b=oxUTs3vC65FJ1P0DKZSpQUKTcLyqsrmkPE94QqivM1jmtNw+WqMJ+1LTEl6HBXBMl6J2A5CD31/PMTdAgJ9CoaMkBpY7vS5YsjiNBy5wXKJeM19b99+B9FlsDIvLMiDKtNlh2iuR1bio3IspDbBPXdkQSVA85zvovwcBCL2JsC0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=bl2Ywp83; arc=fail smtp.client-ip=52.101.196.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XNNDgje0TrmWXb9Ckma1BadnU3VJ57bzxr6yYUWIXWglMh7scK4xchdUU3Sr7kAvVX4xBje2eemHY7kI46mlPJuZm8AFSEhrMtbRFM49aYqUlLkaVmveO6TPmvZJ8zet9D85GeCAAMK6KtKNnqM8xgMc/1J9hMHjcnGKURfwqxDEhqdJOGXDHIbxTDnnXCDafTyvXSjBRo9fpVbTAIyq6ahNH66s2BA3x1p96LhiOsXR2kqCWhu4MFWk9dIWX8wCv3S7CM7v2MZ4Dm1bP6szWsNKXgA2ySMO7cXfbgpdxQslBynUU3T3MTdKpoYgKfPJJWt0NdG2W2uAv/wfImdpZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VNsxF0BZQeUbHh+C8UM/T4wD9mfBiEW33Vxk1wPMKzs=;
+ b=bUr3rMXHfXPli30KGmh6OaCCTiOVNTVLbRoJLlQISlfUewU14uROlfMo3qQQi4x2vXlUle+awa+prVx5A07miaoSvzUv261LGpzBQeXqJc8EmSDqCsj9Z6Gx7OW2BthxEBvh7rv5UrDMLhJJpjyLznAOyvlJdZ2GUZ3BHMb6FR1nLwyZkTv0xusDCar80y6pSRmG/cbj6AfaEQ+lBhBOhqyohy26W8Ap5wSxRROxl8i5aclZlKfeHzc1rbKOxQmzI8sOx2fJz2ZJllu4iSuiWBw6lo16bJ4qe678v+YAyfWhD3NwfJlt5hrCp/oD5Zq84eUuRRzP4Y9t6n14D5UKOw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VNsxF0BZQeUbHh+C8UM/T4wD9mfBiEW33Vxk1wPMKzs=;
+ b=bl2Ywp83FAOHX2LP33aWkHhovZ/UGhtxIPKyUtT5UZkFIEJJFKEhEgIM78nUh2f4xMfTQsUs7dkmmFdl4RzghWTaIElIDCFGPe/gv/uMjKB/lMHhLJR8JukOzJmUweSWw+i01yXgcAXv/pvfrsGWRMfAsHrNlFl7fl5R3ZFq6wM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:488::16)
+ by CWLP265MB2274.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:71::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.12; Mon, 19 Jan
+ 2026 16:10:40 +0000
+Received: from LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986]) by LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1c3:ceba:21b4:9986%5]) with mapi id 15.20.9520.011; Mon, 19 Jan 2026
+ 16:10:40 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 19 Jan 2026 16:10:39 +0000
+Message-Id: <DFSP3WYS9DNB.N49UG5X44LKK@garyguo.net>
+To: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>, "Gary Guo"
+ <gary@garyguo.net>
+Cc: "Daniel Almeida" <daniel.almeida@collabora.com>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>, "Danilo
+ Krummrich" <dakr@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>, "Maarten
+ Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime Ripard"
+ <mripard@kernel.org>, "Thomas Zimmermann" <tzimmermann@suse.de>, "David
+ Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "Drew
+ Fustini" <fustini@kernel.org>, "Guo Ren" <guoren@kernel.org>, "Fu Wei"
+ <wefu@redhat.com>, =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ "Michael Turquette" <mturquette@baylibre.com>, "Stephen Boyd"
+ <sboyd@kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng"
+ <boqun.feng@gmail.com>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
+ <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <dri-devel@lists.freedesktop.org>, <linux-riscv@lists.infradead.org>,
+ <linux-pwm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+ <rust-for-linux@vger.kernel.org>
+Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
+From: "Gary Guo" <gary@garyguo.net>
+X-Mailer: aerc 0.21.0
+References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
+ <20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com>
+ <DFSMRQFIYQPO.1A38Y84XZ1GZO@garyguo.net>
+ <CANiq72kcRQShDgMJKZ+ekUEdP1T6Jr=4PDiMJCqnQjgCQEK_eA@mail.gmail.com>
+ <DFSODY3NWRBQ.2VGQWXERVW1R1@garyguo.net>
+ <CANiq72kCi8=mK8V282O-tsbWvLC6M2vdc50mnLW3M3pWTACyOA@mail.gmail.com>
+In-Reply-To: <CANiq72kCi8=mK8V282O-tsbWvLC6M2vdc50mnLW3M3pWTACyOA@mail.gmail.com>
+X-ClientProxiedBy: LO4P123CA0573.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:276::6) To LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:488::16)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260106222715.GA381397@bhelgaas> <CGME20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8@eucas1p1.samsung.com>
- <0e35a4e1-894a-47c1-9528-fc5ffbafd9e2@samsung.com> <aWf4KyTSIocWTmXw@google.com>
- <61e8c93c-d096-4807-b2dd-a22657f2e06a@samsung.com> <aWrjhqC_6I2UNXC5@google.com>
- <CAJZ5v0hWt63=0yjFrbTY8zXubh-Uc6ZwAndT73VL7itMkTe81A@mail.gmail.com>
- <CAJZ5v0gKZFWzuFT=cF_Ydjpro+sXzdeZ_+B4GEfiifa-cxpbGw@mail.gmail.com>
- <d2c006c3-44c3-4270-b1ca-5d1a0d7f4e09@samsung.com> <CAJZ5v0j=TM6DoGbW1agbiHUbq46G7pyd25E=ih2at7dvYr83Sg@mail.gmail.com>
- <6e0c511f-1127-4a35-a40c-0161de0ec752@samsung.com>
-In-Reply-To: <6e0c511f-1127-4a35-a40c-0161de0ec752@samsung.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 19 Jan 2026 17:10:32 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h-f5kgJ-p4LqX_8fpz3T3AVqq_7S2n4b1vZdPQoF-MFA@mail.gmail.com>
-X-Gm-Features: AZwV_QjcZaSlUnYJhTjJWUVJFBc_fqUs4PM7jI8f22EWDYO4JXSq9j7CUt_nGvw
-Message-ID: <CAJZ5v0h-f5kgJ-p4LqX_8fpz3T3AVqq_7S2n4b1vZdPQoF-MFA@mail.gmail.com>
-Subject: Re: [PATCH v4] PCI/PM: Prevent runtime suspend before devices are
- fully initialized
-To: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Brian Norris <briannorris@chromium.org>, 
-	Bjorn Helgaas <helgaas@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>, 
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-pm@vger.kernel.org, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LOVP265MB8871:EE_|CWLP265MB2274:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8894c9c7-c503-45f0-85f8-08de57754a85
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?bUtMemJPS2c0UjV2WWNLNldnR3YvQmZ1OVhaZlVKNldsVVRKRHhGMkFTMkRS?=
+ =?utf-8?B?V2pWQXkxYldBSXErOG1JZ0d5OUIrZXhlbUF2TkpXTDkzNFBvZ3Q0SnNTdVFD?=
+ =?utf-8?B?MVdLNGROZUtpRUlyYkg4THpxaFVFL0NjUWNFY21Tejc1RWRkMldRRmk0WGFZ?=
+ =?utf-8?B?bHVpWDR4MFFQL0ViM1BtVTV0b25BSGI1akU3KzZCdjNZOU1LbWQ1WGNGWUEy?=
+ =?utf-8?B?bk9teDQwUitRV05HUkFwaE9NSGFYOERibVI4R2JyZElvd3JnUFdvZkp6QzBY?=
+ =?utf-8?B?bmNUcG5ybGZJNnU2OExSZVl2ckI0RmpTNnVBZVNvODNaanV0dHdNVkJRQW5F?=
+ =?utf-8?B?cnR0RlVNcWFWVGI4T0pJZkxZSDY1N0ZlSnJRSFBpNjhVUTQ5SWtVSkhnemF4?=
+ =?utf-8?B?WXQ2R1hydEpSVkJxZ1JwdFZ2YTVZUjBNektIQW9vSGFGcHlQc1dTZU9JbjYx?=
+ =?utf-8?B?VGp0T3hjTzF4ME1TVXk1amNWQ2s5Si9QMG80UzRqZ0pyeFcrQUd6YXRGd2NR?=
+ =?utf-8?B?VjUrcFJGYzZBeFZLNm8yejV0SFR0SjJzVGZUZXUwMFh4NmpiMS92NjliRm1L?=
+ =?utf-8?B?MmUreWhxZHBROWpWL0h6aHd3Z0llSnBzTGs2YkNFSVZtdVJsMmZJRzJ5UTZL?=
+ =?utf-8?B?bmNHUVBXK3JVSXdIMCt2YTRKMS8vY1c3MUN1VVpuTjFHaUIvOThXVm1RcEV1?=
+ =?utf-8?B?VUFqZVVPK096aUY0RExjeXc4QlJRcXJveWpSa09tQUtweSt5WGtFVVRjZ0Ro?=
+ =?utf-8?B?dnNVaWdHRVIrazBhSUN5dEc4cFNUVFdqOHNHL2xxbmF1dWU0KysvZ1JKRkVX?=
+ =?utf-8?B?MHlBejhOTUY2QmJJQnJTdlpiZ1lkaXpTQ3c5WnJYMEF0dEN2VXFlayt5VzVk?=
+ =?utf-8?B?UmQ0bkJQTmNIbitpMjI4ZzNRSThkQzdCVnNNVjJBbmp2L29PbHIyY24xY0dl?=
+ =?utf-8?B?ZW5xUHBIRU9rS2Z1dVpYVGVZQ2dKSTRYVkZ6cDdyUmNkM3dPSFF1SmdlOHFl?=
+ =?utf-8?B?NHdBaDFjSDZaSzBIWDgvMEtaWmJOQ3B0QWxCd3U3MVRBMWo0V1RyTjhNeGVP?=
+ =?utf-8?B?UzRZcWpWbXEyWmd3b210blpVdHFINjR3dlRwZGowOUh3TGZkdjVlNjh4elZo?=
+ =?utf-8?B?ZlVoVHcvamJuS1d0SFFlN1Rad2RDZTYzeW9EV2t4ai84dGFwVkpXdXVmWlZV?=
+ =?utf-8?B?NXQzdVpOS0dHTkRCRTZ4eEx1b3RtSnp0UjRUZWhuSjFZNTAvb0NpRTg1UWl4?=
+ =?utf-8?B?OHFaZ1I0RlBKa0N1QVFRYlB5aEk2eC8wSDhhU2lYcXU3d25wWjlEYWNnZ2Fa?=
+ =?utf-8?B?N3JkU0VDMlZ0N3NPdkZkOWRXTTNodnpJaE1PTU16SW9BaTBHdXVEU1B1UFMw?=
+ =?utf-8?B?cFBmSDJHbGRDMGNVSTJTTWxXZGYwYlRoNWd4bE5LZURXRTBxK0k2M3h4VHJq?=
+ =?utf-8?B?QkJiSHZYQlFQUXdSQzF1bVY5a21oVEdydE1tV3VxTDdyOVlESjZ4OVJlR2dt?=
+ =?utf-8?B?eEJ4WmJQOEpMalkzMmVLYW8yaWdERW1PQTBSVElJaTJ6cUNJZ0h0T3htWThk?=
+ =?utf-8?B?TE5qVk4ySXA4aSs3L3J4RHZjTGFoSEM5K3dQYzl5eG9PMUY5VXRhZ0RLaC9S?=
+ =?utf-8?B?c3VyZzFWRGplQWdCcDE4Y2IxM3RsYkRvYmU4bDZ1c2V6T0sxNVdESkZoQWg3?=
+ =?utf-8?B?VEE5dFVKWHVBYjVLMnBTa3BYMVRRZWZrOEN4VWY2Wlo0MHpCZVEwN256QnFW?=
+ =?utf-8?B?VFBNaDVMWmxoelhxUWwrZ3BiSTRqWlhjSnNWa2NQMDNVRUdXcjJmdllySWlR?=
+ =?utf-8?B?ODJ2R05lWXl0T3BUTVl2V05SK0lkRWVFWTduMENXNTFWK015NzNKbXB1Z1Jq?=
+ =?utf-8?B?eUlNQ1IzTVpUNjF3OTNTc0xhaWw5bk0wcUFkaEFJeVBkQ0I3eTRBNGFkYWVT?=
+ =?utf-8?B?SDJYNm43dFQ1b2EyZWZxVVBOc3ZXQVY5TlRVcDlzMllqUUxVcnU3RHRUVTQ4?=
+ =?utf-8?B?bGdGalZEQjVlMnJ2bTJZN1Eya1FKTGdJejluclFkWGFhdXl0UlR4QUpiVnFL?=
+ =?utf-8?B?cDcxUFdEZVRtaFdabCtkRGhOOHpSY042QWNXai85aitUeDN1R25Cdldwd0FN?=
+ =?utf-8?Q?x0/o=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Z2RkT2twTmJuUGxxN0RJSTM4djFjN1poZFU4clZrb3JPeE1WMUZJTkRKaTJo?=
+ =?utf-8?B?bWg1ZjhiaG4yZ05SUnJTTDlvdmVYQlJNWW5QZGQzQTdxdkp1VFA4d0dnVGFD?=
+ =?utf-8?B?SGFmQytsbFNKUmVzUE9LaVJ6ZnBrWE9Ob0xPSUxzQnowY0xWVEIrVjhEVVoy?=
+ =?utf-8?B?OFdoK3JiekJwZm1mRStTWFVkbC8xN21FVkxQM29uNkZpcm1Vd2lXWjVNWFNH?=
+ =?utf-8?B?YkIzOGowS3dRVUlBMDI3NTU1MTNoYUpIOSs4VlR5eGE0U3B3TTBEZTBuQWxJ?=
+ =?utf-8?B?T3lhbFBqWUp6aVg4U2RlenJiZFlqcFN2Y3NWNnZadGpKU2JkNjFUSDcwQmRp?=
+ =?utf-8?B?MCtDWjdiNDB3UkNuL0dFa3BPUURaWDNjNlMyTUFaZDYydzRiYUFBbEJGeTll?=
+ =?utf-8?B?STZPNzRHUnA2U2hhdzU1cFRlVlltdzZPVWNBTGtjTEl6RWd1V2JpOFZWZkUw?=
+ =?utf-8?B?ajlmc2pmcXpZTnVMV1ZhVm1CSnplMjlOcXhUaGt4SXk2cnVpd3NXMjFkNTNY?=
+ =?utf-8?B?TGYxQnRkT09SOENoaFc1azduR3ZDQlBDaGk4bi9kRHh1b0FjY05zYytybkhl?=
+ =?utf-8?B?Q0c5dUxIdDExaVRLMU1zVkozcENUVW91cDVaNWJSU2hKUnlubnIvKy9ja25i?=
+ =?utf-8?B?dDN6eUxwNEhlVjhaTDFaM201R2ZnQkdEb1RTdXNiUm1sQVZZZTdObmF5czBQ?=
+ =?utf-8?B?c0ZCQlJjc2hRcmZ3WHlHMFJBbGpCRUJXVjk4UFdibExYbGpPQW5QaEdPa3Z2?=
+ =?utf-8?B?bnBlVHZCczJZTi9TQUNqTHRLbTZHRWM5eWFjTXhzTXVaYlFCRDRQMER4VFEx?=
+ =?utf-8?B?Qisvb0JQejc1Rlc0eFlIdmk5ak9CSkZzNGN2cSsvR0N1NVV6aWZqSUxTSzVF?=
+ =?utf-8?B?YTNwWjF6bU1tWHo1STNQK21CbkptVnQrUEJ1c0VhOHd6enk3d2haemY1SEtJ?=
+ =?utf-8?B?ek5QK05BN2JoRG9KK1BPY2cwM3ZESXZTaFNiRWErcUc5YmZ1bm4xUUc4Tlo3?=
+ =?utf-8?B?S3BUVlRFekNMTHR1T2RVYnFzTk9MVUdXQXhXY3pzeFllMFRJKzI5Rkx1ajFs?=
+ =?utf-8?B?M1RlMVE2eDdjZmlhY0RtRkdDbXJJbmhobXZad0sxV01lSHE0UzRtTndMQnQz?=
+ =?utf-8?B?WVNaeUdJdXkrS0pLY1NuWjVxQVhyM1BPVjJKVmVpYitOUkdaS1c2N3hHbWZ4?=
+ =?utf-8?B?Q291aTB0aWpyQTMyYjhxZkExSXdBZXN0K0xaaEprdmhKQzJhc05BQkRrcHlK?=
+ =?utf-8?B?OVI2cFUxNlFzOE5LaGRaaDdLdERoNEZCWFpuZENJS0pRK1JoZnQ5N1RYT0Vy?=
+ =?utf-8?B?Y3Y2SGVKMTE2QmdkVVNQN3VFY2pRb2hjTURHWXVJNDM2QlFDbU9mOFAxQnlN?=
+ =?utf-8?B?N3N0OEJUZlBRZTNraTNacVZjVXBKME5PS2Z1YkNaaEE1ay91V3c5cU1WYVk5?=
+ =?utf-8?B?aEZiZStjZjJmOHNjUVoxR1lpS3VPN05qMlVNbzh5S3l1eGFPRmJtN0RETE5K?=
+ =?utf-8?B?cE9HSGcwSlArSENtbEZ2UUQ0VFNvZUJudm1aQzNpRFJkRUlsK3hjOUgzZGVH?=
+ =?utf-8?B?QW9MV1dQNnZHdXJtSmRkbXdicStmeHlPSHUwa05SK1VSMjZZaWMzWS9XR2J6?=
+ =?utf-8?B?clE2UWwvVndVUml3ZEJGSWt1Y0pKL0Q2SWIyL202b1hKZzdLSmg3VjNHRVV2?=
+ =?utf-8?B?dUZScWdNN3E5MXFlbURSZDRzdnd6a1hUQXZFbXFTTGgxVW9vdjNpQi9mdmVk?=
+ =?utf-8?B?Ylo1cEZMTy9rKy9WUGJRTGtjOENSTDRDQXlJeHRmSFNRQkVWWnRGbFlOU3VB?=
+ =?utf-8?B?N2V3MjRWY0xTT0xybGgrVHJtbDAvdVJWV0txYS9FdXg2d01rZDc2Ykl5SVgy?=
+ =?utf-8?B?TUtiSFZnVXVYRUdYVE1ma2RhekFUMGNYeXE4MDR5cHBSNUpOUWlGL1JBZkZH?=
+ =?utf-8?B?bnY1ZmEwcVFoYWw0Q3djNE1FREdQZ0s2LzZ3K2lhUC9zdGpncUFsTWFydEgv?=
+ =?utf-8?B?MGVDUmNxOXRTZEEzbXYvUlFvQUl2Y1lKSnJiSTdBTmx1QmlqQm82RDE1bGJN?=
+ =?utf-8?B?c21YbEQ1Yk9MRTdBeEJhMHI4VEc1bWgvelUzNTh3T0lVTUplTGIxWjdscE01?=
+ =?utf-8?B?dXhTUk4vNnphd1VLM0hNd3RoUW5JR0kvb3ZDRzFObzVQRXFCY3ltUFFmQmtp?=
+ =?utf-8?B?WG1wdEFpUnlsK202VWtjOWRDS3BoK20vZnBYNHZBN05XWmpKM0NidE5PN3N0?=
+ =?utf-8?B?SWhOSmVZeklxazk2bmIyaEJBdS9tVjh6blY1bnBPcmh4dndFSlAwd1hvYmQz?=
+ =?utf-8?B?bUs4eE1UR0pTK3dhZUJzcDM0bjJJeVVsVUl5T1FqSWhOTjUzbDhoUT09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8894c9c7-c503-45f0-85f8-08de57754a85
+X-MS-Exchange-CrossTenant-AuthSource: LOVP265MB8871.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2026 16:10:40.6881
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Kpra/Dx75d9cvoHEQJJQMPlPNnKDyVXNdeDl5gLwxjUYhMlG3Qcrhly7+Vo4sIcm2HSgpjERDtIKwO1ECSpdTw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB2274
 
-On Mon, Jan 19, 2026 at 2:13=E2=80=AFPM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
+On Mon Jan 19, 2026 at 3:46 PM GMT, Miguel Ojeda wrote:
+> On Mon, Jan 19, 2026 at 4:36=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote=
+:
+>>
+>> Which crate are you talking about? I can't find a linked crate in the is=
+sue.
 >
-> On 19.01.2026 13:26, Rafael J. Wysocki wrote:
-> > On Mon, Jan 19, 2026 at 11:01=E2=80=AFAM Marek Szyprowski
-> > <m.szyprowski@samsung.com> wrote:
-> >> On 18.01.2026 12:59, Rafael J. Wysocki wrote:
-> >>> On Sun, Jan 18, 2026 at 12:53=E2=80=AFPM Rafael J. Wysocki <rafael@ke=
-rnel.org> wrote:
-> >>>> On Sat, Jan 17, 2026 at 2:19=E2=80=AFAM Brian Norris <briannorris@ch=
-romium.org> wrote:
-> >>>>> On Thu, Jan 15, 2026 at 12:14:49PM +0100, Marek Szyprowski wrote:
-> >>>>>> On 14.01.2026 21:10, Brian Norris wrote:
-> >>>>>>> On Wed, Jan 14, 2026 at 10:46:41AM +0100, Marek Szyprowski wrote:
-> >>>>>>>> On 06.01.2026 23:27, Bjorn Helgaas wrote:
-> >>>>>>>>> On Thu, Oct 23, 2025 at 02:09:01PM -0700, Brian Norris wrote:
-> >>>>>>>>>> Today, it's possible for a PCI device to be created and
-> >>>>>>>>>> runtime-suspended before it is fully initialized. When that ha=
-ppens, the
-> >>>>>>>>>> device will remain in D0, but the suspend process may save an
-> >>>>>>>>>> intermediate version of that device's state -- for example, wi=
-thout
-> >>>>>>>>>> appropriate BAR configuration. When the device later resumes, =
-we'll
-> >>>>>>>>>> restore invalid PCI state and the device may not function.
-> >>>>>>>>>>
-> >>>>>>>>>> Prevent runtime suspend for PCI devices by deferring pm_runtim=
-e_enable()
-> >>>>>>>>>> until we've fully initialized the device.
-> >>>>>>> ...
-> >>>>>>>> This patch landed recently in linux-next as commit c796513dc54e
-> >>>>>>>> ("PCI/PM: Prevent runtime suspend until devices are fully initia=
-lized").
-> >>>>>>>> In my tests I found that it sometimes causes the "pci 0000:01:00=
-.0:
-> >>>>>>>> runtime PM trying to activate child device 0000:01:00.0 but pare=
-nt
-> >>>>>>>> (0000:00:00.0) is not active" warning on Qualcomm Robotics RB5 b=
-oard
-> >>>>>>>> (arch/arm64/boot/dts/qcom/qrb5165-rb5.dts). This in turn causes =
-a
-> >>>>>>>> lockdep warning about console lock, but this is just a consequen=
-ce of
-> >>>>>>>> the runtime pm warning. Reverting $subject patch on top of curre=
-nt
-> >>>>>>>> linux-next hides this warning.
-> >>>>>>>>
-> >>>>>>>> Here is a kernel log:
-> >>>>>>>>
-> >>>>>>>> pci 0000:01:00.0: [17cb:1101] type 00 class 0xff0000 PCIe Endpoi=
-nt
-> >>>>>>>> pci 0000:01:00.0: BAR 0 [mem 0x00000000-0x000fffff 64bit]
-> >>>>>>>> pci 0000:01:00.0: PME# supported from D0 D3hot D3cold
-> >>>>>>>> pci 0000:01:00.0: 4.000 Gb/s available PCIe bandwidth, limited b=
-y 5.0
-> >>>>>>>> GT/s PCIe x1 link at 0000:00:00.0 (capable of 7.876 Gb/s with 8.=
-0 GT/s
-> >>>>>>>> PCIe x1 link)
-> >>>>>>>> pci 0000:01:00.0: Adding to iommu group 13
-> >>>>>>>> pci 0000:01:00.0: ASPM: default states L0s L1
-> >>>>>>>> pcieport 0000:00:00.0: bridge window [mem 0x60400000-0x604fffff]=
-: assigned
-> >>>>>>>> pci 0000:01:00.0: BAR 0 [mem 0x60400000-0x604fffff 64bit]: assig=
-ned
-> >>>>>>>> pci 0000:01:00.0: runtime PM trying to activate child device
-> >>>>>>>> 0000:01:00.0 but parent (0000:00:00.0) is not active
-> >>>>>>> Thanks for the report. I'll try to look at reproducing this, or a=
-t least
-> >>>>>>> getting a better mental model of exactly why this might fail (or,
-> >>>>>>> "warn") this way. But if you have the time and desire to try thin=
-gs out
-> >>>>>>> for me, can you give v1 a try?
-> >>>>>>>
-> >>>>>>> https://lore.kernel.org/all/20251016155335.1.I60a53c170a859666188=
-3bd2b4ef475155c7aa72b@changeid/
-> >>>>>>>
-> >>>>>>> I'm pretty sure it would not invoke the same problem.
-> >>>>>> Right, this one works fine.
-> >>>>>>
-> >>>>>>> I also suspect v3
-> >>>>>>> might not, but I'm less sure:
-> >>>>>>>
-> >>>>>>> https://lore.kernel.org/all/20251022141434.v3.1.I60a53c170a859666=
-1883bd2b4ef475155c7aa72b@changeid/
-> >>>>>> This one too, at least I was not able to reproduce any fail.
-> >>>>> Thanks for testing. I'm still not sure exactly how to reproduce you=
-r
-> >>>>> failure, but it seems as if the root port is being allowed to suspe=
-nd
-> >>>>> before the endpoint is added to the system, and it remains so while=
- the
-> >>>>> endpoint is about to probe. device_initial_probe() will be OK with
-> >>>>> respect to PM, since it will wake up the port if needed. But this
-> >>>>> particular code is not OK, since it doesn't ensure the parent devic=
-e is
-> >>>>> active while preparing the endpoint power state.
-> >>>>>
-> >>>>> I suppose one way to "solve" that is (untested):
-> >>>>>
-> >>>>> --- a/drivers/pci/bus.c
-> >>>>> +++ b/drivers/pci/bus.c
-> >>>>> @@ -380,8 +380,12 @@ void pci_bus_add_device(struct pci_dev *dev)
-> >>>>>                   put_device(&pdev->dev);
-> >>>>>           }
-> >>>>>
-> >>>>> +       if (dev->dev.parent)
-> >>>>> +               pm_runtime_get_sync(dev->dev.parent);
-> >>>>>           pm_runtime_set_active(&dev->dev);
-> >>>>>           pm_runtime_enable(&dev->dev);
-> >>>>> +       if (dev->dev.parent)
-> >>>>> +               pm_runtime_put(dev->dev.parent);
-> >>>>>
-> >>>>>           if (!dn || of_device_is_available(dn))
-> >>>>>                   pci_dev_allow_binding(dev);
-> >>>>>
-> >>>>> Personally, I'm more inclined to go back to v1, since it prepares t=
-he
-> >>>>> runtime PM status when the device is first discovered. That way, it=
-s
-> >>>>> ancestors are still active, avoiding these sorts of problems. I'm
-> >>>>> frankly not sure of all the reasons Rafael recommended I make the
-> >>>>> v1->v3->v4 changes, and now that they cause problems, I'm inclined =
-to
-> >>>>> question them again.
-> >>>>>
-> >>>>> Rafael, do you have any thoughts?
-> >>>> Yeah.
-> >>>>
-> >>>> Move back pm_runtime_set_active(&dev->dev) back to pm_runtime_init()
-> >>> Or rather leave it there to be precise, but I think you know what I m=
-ean. :-)
-> >>>
-> >>>> because that would prevent the parent from suspending and keep
-> >>>> pm_runtime_enable() here because that would prevent the device itsel=
-f
-> >>>> from suspending between pm_runtime_init() and this place.
-> >>>>
-> >>>> And I would add comments in both places.
-> >> Confirmed, the following change (compared to $subject patch) fixed my =
-issue:
-> >>
-> >> diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
-> >> index 3ef60c2fbd89..7e2b7e452d51 100644
-> >> --- a/drivers/pci/bus.c
-> >> +++ b/drivers/pci/bus.c
-> >> @@ -381,7 +381,6 @@ void pci_bus_add_device(struct pci_dev *dev)
-> >>           }
-> >>
-> >>           pm_runtime_set_active(&dev->dev);
-> >> -       pm_runtime_enable(&dev->dev);
-> > That works too, but it would defeat the purpose of the original
-> > change, so I mean the other way around.
-> >
-> > That is, leave the pm_runtime_enable() here and move the
-> > pm_runtime_set_active() back to the other place.
+> The commit message (i.e. not the issue) has an (unused) link with the
+> `sealed` crate:
 >
-> Okay, I mixed that. This way it works too and fixes the observed issue.
->
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Link: https://crates.io/crates/sealed [1]
 
-Cool, thanks for verifying!
+Yeah, some thing similar. Probably an even simpler version with only things=
+ that
+we need.
+
+Best,
+Gary
+
+>
+> Cheers,
+> Miguel
+
 
