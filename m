@@ -1,140 +1,236 @@
-Return-Path: <linux-pm+bounces-41100-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41102-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FD9ED3A98B
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:54:27 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81144D3A992
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:55:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 25B09305D9A3
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 12:54:14 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id D11EF300B8A4
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 12:55:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC7C35EDDB;
-	Mon, 19 Jan 2026 12:54:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D81D36212F;
+	Mon, 19 Jan 2026 12:54:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="vJqhYbqP"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="R4MWI0V3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9781733ADA0;
-	Mon, 19 Jan 2026 12:54:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768827253; cv=none; b=ZWcle/8VIHl7CgK6a4BbB3OVy6e/BpiEo03jwxikYFUeKP2R9IsBrJlzFtOXdqbwhzmBjLj6ee+1pyI9fSlJX/guy3ryn/lTavZGNPMxPFOsRWfk59EwjTp12DMKnatTyDkQ1JpcZQGrvQHMHsefBzui6qvuqT+6dqgajI2nigk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768827253; c=relaxed/simple;
-	bh=6fcd//7R70x07guaxNai+ickFmIDLdc1YPzmFaHHm4Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=urDFqYNI0QaVs+gsxXWhNmim4iX17ZSaqVMXs1Ui4+dSDEsF0660L/mrTs6SP4WMTIQvYPx3IZhReajiVxNWiZt0gdVtDTKsOx/ukPNBhkHRrSXiMDtKf2TbTe2A5F93dAfvgrDyUWKdsdB0e7xZDHLv/nn65UExLXcsBjVsAxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=vJqhYbqP; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=kMRIv+5PhMX2w16KgQw853ivOAJWaId7zAyJ1dkF8Fs=; b=vJqhYbqP6wfcMsUoLbLcFpjsau
-	pI7huCZ4tlxvsg+DVviYeVT2rAjpCdlgMX0xhW6Apw02NRK/rB2eg/iW4NnwEOO0kAErfvYFSPWk9
-	734l0Za/d9cxaeQK2uT1eINH9rhHpbR9GKb152FQimp1T2wZb+GGvuUYykgCLszN3VtJW8Lzk4A5U
-	I7HWRPBi6JP+TQUFwkIhfciFA57j87zbbzYyjAm85/XKFLKNDHEaIovIzqXa5vwraVeJilH+RIe5m
-	eHQCATVnjsYDQz4I6tW/xtza4HMqyNN3M3/QWvIp7iiSqaDuctm2odTrkTJ0rdobU+uL9iBncrkK9
-	qn/+5T6Q==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vholQ-0000000DJVY-0Yog;
-	Mon, 19 Jan 2026 12:53:48 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id A58743006CD; Mon, 19 Jan 2026 13:53:47 +0100 (CET)
-Date: Mon, 19 Jan 2026 13:53:47 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
-	Jan Kiszka <jan.kiszka@siemens.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Kieran Bingham <kbingham@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Xin Zhao <jackzxcui1989@163.com>, linux-pm@vger.kernel.org,
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 01/15] sched/idle: Handle offlining first in idle loop
-Message-ID: <20260119125347.GT830755@noisy.programming.kicks-ass.net>
-References: <20260116145208.87445-1-frederic@kernel.org>
- <20260116145208.87445-2-frederic@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8B43326954;
+	Mon, 19 Jan 2026 12:54:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768827298; cv=pass; b=dpFRlI2d2pANTuxNleiK0VQY7SU71cGdBq4WnbXap8F2HghSF25AKu/HcIm0WE76/OzrnfyhRePQbKK5DHyUIDCEE4mqYNK8UIWMP0vRv010eYk9Oh8c21eM2ZKl8mbfeoDDoK4VbKUWDBy0ydXpbQfYqWkRzvOvZ/U9U4jzfxQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768827298; c=relaxed/simple;
+	bh=3Q4kAu5N7NP4BEvDuZpcTOpqQnVfNkUqcwDHY6Ed4OM=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=UiHv6Uaar/boF9g8GQ5ZX1OysKpLy06z8MaHZbrMagKzr1t3hqJG8u2govvGI49mDcsQ9UjBYAVxSkoxYKkAFeE2O81DiHG2Pl3R741GsZ8DXCDewbJDPwRI7TVPqV1Z0ok7CrDCmnQnAqbm/ykqxreSu6K2FQdoV0tTn563Vv4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=R4MWI0V3; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1768827273; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=EMz8U/slnbqZVwl92w3iqz0shk9k0y/WL1n4Htr0AfZoktCSU5Zn2K/B6CnCFrrc9d6+/HFPvpmxX8rA/xcsSKodl2lTrrHK9qDyE4QOUpOcFw6O+4ImOfsARRtC6sPthf005IKkfRFZH/io0om/gAaUyjIzngjBGg5Jur98t94=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1768827273; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=zLDnJZLgAOrpoEGFnBjgHoA0s4migwFpwVUCiQLiYbE=; 
+	b=auuDHlGY39i8UFoY2S3ax0Ylo3TMvo/gCo8Ydo+0OembHXTR86/6E4pnwWPkDsEKL9KRxX74cIxpKPpo4tuJUwu3ADAT2EQIaUJOW+LqGXakCFnPJJJjBbShQyJH3mCRJD8xRYOO2M7VG2EaqSDqK3jtsJWkSVDyI2kr7zugf7s=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768827273;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=zLDnJZLgAOrpoEGFnBjgHoA0s4migwFpwVUCiQLiYbE=;
+	b=R4MWI0V3IEJiVaX8Hq9T9sxTQcgm9LF2HJ0ECpjnvRIG7s4E4c2DlRzP2kCq2vZt
+	vxIbkTXjyOlGqjskS0iuccLwzIKp8dRdbmkrLrmlBjWafvqM8YlWU3GlUj+sR0rs3N4
+	HzPR0YjucxiEXXyp95gt6LvlwbYSs8Hmlcc5DVS4=
+Received: by mx.zohomail.com with SMTPS id 1768827272041656.4115222452002;
+	Mon, 19 Jan 2026 04:54:32 -0800 (PST)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260116145208.87445-2-frederic@kernel.org>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <aW4lCfUyumOKRRJm@google.com>
+Date: Mon, 19 Jan 2026 09:54:10 -0300
+Cc: Maxime Ripard <mripard@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Drew Fustini <fustini@kernel.org>,
+ Guo Ren <guoren@kernel.org>,
+ Fu Wei <wefu@redhat.com>,
+ =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Trevor Gross <tmgross@umich.edu>,
+ linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org,
+ linux-riscv@lists.infradead.org,
+ linux-pwm@vger.kernel.org,
+ linux-clk@vger.kernel.org,
+ rust-for-linux@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <518D8B09-B9A1-4DB4-85CD-37A2DD3D5FB1@collabora.com>
+References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
+ <20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com>
+ <20260108-delectable-fennec-of-sunshine-ffca19@houat>
+ <98CD0BF6-3350-40B9-B8A9-F569AE3E3220@collabora.com>
+ <20260119-thundering-tested-robin-4be817@houat> <aW4lCfUyumOKRRJm@google.com>
+To: Alice Ryhl <aliceryhl@google.com>
+X-Mailer: Apple Mail (2.3826.700.81)
+X-ZohoMailClient: External
 
-On Fri, Jan 16, 2026 at 03:51:54PM +0100, Frederic Weisbecker wrote:
 
->  kernel/sched/idle.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-> index c174afe1dd17..35d79af3286d 100644
-> --- a/kernel/sched/idle.c
-> +++ b/kernel/sched/idle.c
-> @@ -260,6 +260,12 @@ static void do_idle(void)
->  {
->  	int cpu = smp_processor_id();
->  
-> +	if (cpu_is_offline(cpu)) {
 
-Does it make sense to make that: if (unlikely(cpu_is_offline(cpu))) ?
+> On 19 Jan 2026, at 09:35, Alice Ryhl <aliceryhl@google.com> wrote:
+>=20
+> On Mon, Jan 19, 2026 at 11:45:57AM +0100, Maxime Ripard wrote:
+>> On Thu, Jan 08, 2026 at 11:14:37AM -0300, Daniel Almeida wrote:
+>>>> For example, it's quite typical to have (at least) one clock for =
+the bus
+>>>> interface that drives the register, and one that drives the main
+>>>> component logic. The former needs to be enabled only when you're
+>>>> accessing the registers (and can be abstracted with
+>>>> regmap_mmio_attach_clk for example), and the latter needs to be =
+enabled
+>>>> only when the device actually starts operating.
+>>>>=20
+>>>> You have a similar thing for the prepare vs enable thing. The =
+difference
+>>>> between the two is that enable can be called into atomic context =
+but
+>>>> prepare can't.
+>>>>=20
+>>>> So for drivers that would care about this, you would create your =
+device
+>>>> with an unprepared clock, and then at various times during the =
+driver
+>>>> lifetime, you would mutate that state.
+>=20
+> The case where you're doing it only while accessing registers is
+> interesting, because that means the Enable bit may be owned by a local
+> variable. We may imagine an:
+>=20
+>    let enabled =3D self.prepared_clk.enable_scoped();
+>    ... use registers
+>    drop(enabled);
 
-> +		local_irq_disable();
 
-Also, do we want something like:
+Not sure I understand. You can get a Clk<Enabled>, do what you need, and =
+then
+consume Clk<Enabled> to go back to Clk<Prepared>. I think I added this, =
+but if
+I didn=E2=80=99t, it=E2=80=99s a trivial thing to do.
 
-		WARN_ON_ONCE(need_resched());
+>=20
+> Now ... this doesn't quite work with the current API - the current
+> Enabled stated owns both a prepare and enable count, but the above =
+keeps
+> the prepare count in `self` and the enabled count in a local variable.
+> But it could be done with a fourth state, or by a closure method:
+>=20
+>    self.prepared_clk.with_enabled(|| {
+>        ... use registers
+>    });
+>=20
+> All of this would work with an immutable variable of type =
+Clk<Prepared>.
+>=20
+>>>> AFAIU, encoding the state of the clock into the Clk type (and thus
+>>>> forcing the structure that holds it) prevents that mutation. If =
+not, we
+>>>> should make it clearer (by expanding the doc maybe?) how such a =
+pattern
+>>>> can be supported.
+>>>>=20
+>>>> Maxime
+>>>=20
+>>> IIUC, your main point seems to be about mutating the state at =
+runtime? This is
+>>> possible with this code. You can just have an enum, for example:
+>>>=20
+>>> enum MyClocks {
+>>>    Unprepared(Clk<Unprepared>),
+>>>    Prepared(Clk<Prepared>),
+>>>    Enabled(Clk<Enabled>),=20
+>>> }
+>=20
+> I believe you need an extra state if the state is not bound to the =
+scope
+> of a function:
+>=20
+> enum MyClocks {
+>    Unprepared(Clk<Unprepared>),
+>    Prepared(Clk<Prepared>),
+>    Enabled(Clk<Enabled>),=20
+>    Transitioning,
+> }
+>=20
+> since mem::replace() needs a new value before you can take ownership =
+of
+> the existing Clk value.
 
-?
+Right, I need to update the docs to account for this, as they imply that =
+you
+can do this with only two states.
 
-> +		cpuhp_report_idle_dead();
-> +		arch_cpu_idle_dead();
-> +	}
-> +
->  	/*
->  	 * Check if we need to update blocked load
->  	 */
-> @@ -311,11 +317,6 @@ static void do_idle(void)
->  		 */
->  		local_irq_disable();
->  
-> -		if (cpu_is_offline(cpu)) {
-> -			cpuhp_report_idle_dead();
-> -			arch_cpu_idle_dead();
-> -		}
-> -
->  		arch_cpu_idle_enter();
->  		rcu_nocb_flush_deferred_wakeup();
->  
-> -- 
-> 2.51.1
-> 
+>=20
+>>> In fact, I specifically wanted to ensure that this was possible when =
+writing
+>>> these patches, as it=E2=80=99s needed by drivers. If you want to, I =
+can cover that in
+>>> the examples, no worries.
+>>=20
+>> Yes, that would be great. I do wonder though if it wouldn't make =
+sense
+>> to turn it the other way around. It creates a fair share of =
+boilerplate
+>> for a number of drivers. Can't we keep Clk the way it is as a
+>> lower-level type, and crate a ManagedClk (or whatever name you =
+prefer)
+>> that drivers can use, and would be returned by higher-level helpers, =
+if
+>> they so choose?
+>>=20
+>> That way, we do have the typestate API for whoever wants to, without
+>> creating too much boilerplate for everybody else.
+>=20
+> I think that if you still want an API where you just call =
+enable/disable
+> directly on it with no protection against unbalanced calls, then that
+> should be the special API. Probably called RawClk and functions marked
+> unsafe. Unbalanced calls seem really dangerous and use should not be
+> encouraged.
+
+I think we should discourage RawClk if at all possible. But if the =
+consensus
+is that we *really* need this easily-abused thing, I can provide a =
+follow-up.
+
+>=20
+> The current type-state based API is the least-boilerplate option for
+> drivers that exist today.
+>=20
+> Alice
+
 
