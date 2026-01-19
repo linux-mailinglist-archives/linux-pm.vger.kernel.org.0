@@ -1,242 +1,238 @@
-Return-Path: <linux-pm+bounces-41095-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41096-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43C59D3A871
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:18:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28630D3A8B6
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:27:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1D0C0305A5D1
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 12:14:35 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 939F730215C4
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 12:26:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4342A359FBD;
-	Mon, 19 Jan 2026 12:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D060D325716;
+	Mon, 19 Jan 2026 12:26:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="LlhyNelP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kk7RWiKB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE59A276050;
-	Mon, 19 Jan 2026 12:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768824874; cv=pass; b=ChO062QuUDhhxszWJUVC1flCXl2gRCISBNVUE9okGo2NnLQralLiys6+O/jOZXYPJpJvnv/VHz2TqEtkyzcQZdNY7JAs4S1WQmubqqKRYLUQXZxOzy3bP/+pxOKxo9PRoU/LZDXhXeuBWhfMrc5TEzMPeHLITc7NCYZCR6bBT4I=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768824874; c=relaxed/simple;
-	bh=QcO42zC8THmtJbrqtd9Ygaqe1OR5YTbCpW7l1IkycBQ=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=KM15SULH6NeVZrcl+uv7uBi6i5M2P1mh50E0LT3bcRs7wxLDymrqeIBEwAMps2fTIWrGSsyviqQMmZHXifCwD/2C9zPgkEvXh6wf6S3WfPTJJZhcJDCVar5KXmOPquJfXMgKIJGt/ueBoMKCSumPs+O79E0HBOvS9zew/t+sRew=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=LlhyNelP; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1768824845; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=KcH7GdA7xBbH241i8NfLausAddZyz5ZlVGcytkTvCFJXBaA1vUO5Rp034wbCuKZ3Fqjbxmu4MCMOzor6ONFvrToKZPNYfAJ3q5tUMVj58cLajsxQ5nJhuQWyJradG4fePU7j+UhLknsTkcd1UGRIj+PBk4zWKSadvCwhWUdTRg8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1768824845; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=BfXcIt0tBHjjnsqIXHlPzY4FaLVvmObvvbSPyRVGDJw=; 
-	b=B7r2bhf1aqYK4OQhfSjxB7LKy2l0mXKBzV0JObD+J5aXvnXABeA37KdUMKgFJQGsmxTjK1gaW83dsmhSIrxSh4K1wue3eMmCWMvOSwVGPpMwpMDKOxrIfGX3e2+tKPKsizJOhH5yl9g6G5Kafs1SszcRV+ZUPOtNNndiz5jwRh8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768824845;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=BfXcIt0tBHjjnsqIXHlPzY4FaLVvmObvvbSPyRVGDJw=;
-	b=LlhyNelPGUcdcnD3sv710vqtJ394DhGzCFIYy1VDO/AqvAtqn8iV315jYgwKQTkg
-	iVh6l9dmKL+dt+yz7PIARqIJV3TJEzHUjI7ZVsNDS7ctjEzlzypmJnIIsqCbfSz9y/N
-	02gC9vOvF/g4PJdAVl1/5lqZQqQxaSO9WWtyAJPo=
-Received: by mx.zohomail.com with SMTPS id 1768824843531275.960036876614;
-	Mon, 19 Jan 2026 04:14:03 -0800 (PST)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4DB3254AA
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 12:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768825599; cv=none; b=taOn9P0rChFonJsWZHotrCM7hmAPGTmWR501TJdbK2CNAwbPiS1jyY6WrNQz6uJ1FS23NHPv3G4wA/bYwX/6d7Qa+B5bOJ+oiISRa+pv7QKjvFSZQLm3qdlDal9xKAKpbgs3BcB2wX2yc9HXY8J2rDYaoOqjKC/K3p4uF/kY+1o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768825599; c=relaxed/simple;
+	bh=SSIzOzaDE7//KmY5FNsdMbqnfiMffoRKHmOuNKGOaJo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z47ULuT0e11gODBYprZayu1z6t0wtOAV+7A10T41vNE9aYW7zEcAG7HhCZKd4NfvTN0OoGkHqfUtHff6uUmUPNeM33GHAMGcmW31mHgrGJFprWf2E/rmuSqCviOvv7j7/6YjdH/vfPGsTudNM5cjgTluYuB48uqCMzkPEIWwxB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kk7RWiKB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDFE0C2BC9E
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 12:26:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768825598;
+	bh=SSIzOzaDE7//KmY5FNsdMbqnfiMffoRKHmOuNKGOaJo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=kk7RWiKB7H/bDiQh5fEfb8KgwAvcFFVb/Gti6KuNeNjhuVHp0HQvVaspsQ9t8bPQL
+	 vlfZqM8ejjOTD9XcxRGSA7QZBids8ZeTZ1PUiutIB019yJrumMYah12rNKnIQlqW99
+	 0Q2p4wUPIJgi2KWchzfRNUIECvpZhwb95p11XwQHygnRNnlP+91UR9/qs6eAh4boiq
+	 dr/HPm3jpGa07bRuvtPAJyXP43W0eS4zJ57aSXJiATKDLMANcxi9tUSuVi5/yRg0WA
+	 0u5vECjD1CDdmqvg4SZatMM9pBFbKqcsnGGV5QWw+nxranDuG6WF4fme7/qK2/GiEt
+	 wdwXn8uLOEaiQ==
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-66109b09b53so1359072eaf.1
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 04:26:38 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUmOuv6QR+V1eLEV80wwl1SgAfmmrlgwK788DTXYnR7J6I+m4eM+5mcElsyNDVeKRHIDXLxeiuDJw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqPZ2hQnKO54yTPlqxLQAFN6kLrra1Z/yYD5bB2R2rUMCG3jBd
+	n2Kzy3OdypFSp9bZIbWQgH1Ev67Ni3i6TEtWc7rSXjskv1AWPFCndcmckCWZ5toq81hpgv5fInl
+	YVk5bf2MVQ1BsB1ZEBxRkoOuy/EJtKM4=
+X-Received: by 2002:a05:6820:488d:b0:65d:441:5fbc with SMTP id
+ 006d021491bc7-66117a3736amr3743949eaf.79.1768825597715; Mon, 19 Jan 2026
+ 04:26:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <20260119-thundering-tested-robin-4be817@houat>
-Date: Mon, 19 Jan 2026 09:13:43 -0300
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Danilo Krummrich <dakr@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Drew Fustini <fustini@kernel.org>,
- Guo Ren <guoren@kernel.org>,
- Fu Wei <wefu@redhat.com>,
- =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>,
- Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Trevor Gross <tmgross@umich.edu>,
- linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org,
- linux-riscv@lists.infradead.org,
- linux-pwm@vger.kernel.org,
- linux-clk@vger.kernel.org,
- rust-for-linux@vger.kernel.org
+MIME-Version: 1.0
+References: <20260106222715.GA381397@bhelgaas> <CGME20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8@eucas1p1.samsung.com>
+ <0e35a4e1-894a-47c1-9528-fc5ffbafd9e2@samsung.com> <aWf4KyTSIocWTmXw@google.com>
+ <61e8c93c-d096-4807-b2dd-a22657f2e06a@samsung.com> <aWrjhqC_6I2UNXC5@google.com>
+ <CAJZ5v0hWt63=0yjFrbTY8zXubh-Uc6ZwAndT73VL7itMkTe81A@mail.gmail.com>
+ <CAJZ5v0gKZFWzuFT=cF_Ydjpro+sXzdeZ_+B4GEfiifa-cxpbGw@mail.gmail.com> <d2c006c3-44c3-4270-b1ca-5d1a0d7f4e09@samsung.com>
+In-Reply-To: <d2c006c3-44c3-4270-b1ca-5d1a0d7f4e09@samsung.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 19 Jan 2026 13:26:25 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0j=TM6DoGbW1agbiHUbq46G7pyd25E=ih2at7dvYr83Sg@mail.gmail.com>
+X-Gm-Features: AZwV_Qjr0d4ZRXuwqr_fC6lif0BGKq2UmHdyOHtiSe_Mso2lVi0z1WpKEY3FSh0
+Message-ID: <CAJZ5v0j=TM6DoGbW1agbiHUbq46G7pyd25E=ih2at7dvYr83Sg@mail.gmail.com>
+Subject: Re: [PATCH v4] PCI/PM: Prevent runtime suspend before devices are
+ fully initialized
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Brian Norris <briannorris@chromium.org>, 
+	Bjorn Helgaas <helgaas@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>, 
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-pm@vger.kernel.org, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <14A9284F-A773-4F21-A5FC-9762AE5A5390@collabora.com>
-References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
- <20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com>
- <20260108-delectable-fennec-of-sunshine-ffca19@houat>
- <98CD0BF6-3350-40B9-B8A9-F569AE3E3220@collabora.com>
- <20260119-thundering-tested-robin-4be817@houat>
-To: Maxime Ripard <mripard@kernel.org>
-X-Mailer: Apple Mail (2.3826.700.81)
-X-ZohoMailClient: External
 
+On Mon, Jan 19, 2026 at 11:01=E2=80=AFAM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
+>
+> On 18.01.2026 12:59, Rafael J. Wysocki wrote:
+> > On Sun, Jan 18, 2026 at 12:53=E2=80=AFPM Rafael J. Wysocki <rafael@kern=
+el.org> wrote:
+> >> On Sat, Jan 17, 2026 at 2:19=E2=80=AFAM Brian Norris <briannorris@chro=
+mium.org> wrote:
+> >>> On Thu, Jan 15, 2026 at 12:14:49PM +0100, Marek Szyprowski wrote:
+> >>>> On 14.01.2026 21:10, Brian Norris wrote:
+> >>>>> On Wed, Jan 14, 2026 at 10:46:41AM +0100, Marek Szyprowski wrote:
+> >>>>>> On 06.01.2026 23:27, Bjorn Helgaas wrote:
+> >>>>>>> On Thu, Oct 23, 2025 at 02:09:01PM -0700, Brian Norris wrote:
+> >>>>>>>> Today, it's possible for a PCI device to be created and
+> >>>>>>>> runtime-suspended before it is fully initialized. When that happ=
+ens, the
+> >>>>>>>> device will remain in D0, but the suspend process may save an
+> >>>>>>>> intermediate version of that device's state -- for example, with=
+out
+> >>>>>>>> appropriate BAR configuration. When the device later resumes, we=
+'ll
+> >>>>>>>> restore invalid PCI state and the device may not function.
+> >>>>>>>>
+> >>>>>>>> Prevent runtime suspend for PCI devices by deferring pm_runtime_=
+enable()
+> >>>>>>>> until we've fully initialized the device.
+> >>>>> ...
+> >>>>>> This patch landed recently in linux-next as commit c796513dc54e
+> >>>>>> ("PCI/PM: Prevent runtime suspend until devices are fully initiali=
+zed").
+> >>>>>> In my tests I found that it sometimes causes the "pci 0000:01:00.0=
+:
+> >>>>>> runtime PM trying to activate child device 0000:01:00.0 but parent
+> >>>>>> (0000:00:00.0) is not active" warning on Qualcomm Robotics RB5 boa=
+rd
+> >>>>>> (arch/arm64/boot/dts/qcom/qrb5165-rb5.dts). This in turn causes a
+> >>>>>> lockdep warning about console lock, but this is just a consequence=
+ of
+> >>>>>> the runtime pm warning. Reverting $subject patch on top of current
+> >>>>>> linux-next hides this warning.
+> >>>>>>
+> >>>>>> Here is a kernel log:
+> >>>>>>
+> >>>>>> pci 0000:01:00.0: [17cb:1101] type 00 class 0xff0000 PCIe Endpoint
+> >>>>>> pci 0000:01:00.0: BAR 0 [mem 0x00000000-0x000fffff 64bit]
+> >>>>>> pci 0000:01:00.0: PME# supported from D0 D3hot D3cold
+> >>>>>> pci 0000:01:00.0: 4.000 Gb/s available PCIe bandwidth, limited by =
+5.0
+> >>>>>> GT/s PCIe x1 link at 0000:00:00.0 (capable of 7.876 Gb/s with 8.0 =
+GT/s
+> >>>>>> PCIe x1 link)
+> >>>>>> pci 0000:01:00.0: Adding to iommu group 13
+> >>>>>> pci 0000:01:00.0: ASPM: default states L0s L1
+> >>>>>> pcieport 0000:00:00.0: bridge window [mem 0x60400000-0x604fffff]: =
+assigned
+> >>>>>> pci 0000:01:00.0: BAR 0 [mem 0x60400000-0x604fffff 64bit]: assigne=
+d
+> >>>>>> pci 0000:01:00.0: runtime PM trying to activate child device
+> >>>>>> 0000:01:00.0 but parent (0000:00:00.0) is not active
+> >>>>> Thanks for the report. I'll try to look at reproducing this, or at =
+least
+> >>>>> getting a better mental model of exactly why this might fail (or,
+> >>>>> "warn") this way. But if you have the time and desire to try things=
+ out
+> >>>>> for me, can you give v1 a try?
+> >>>>>
+> >>>>> https://lore.kernel.org/all/20251016155335.1.I60a53c170a8596661883b=
+d2b4ef475155c7aa72b@changeid/
+> >>>>>
+> >>>>> I'm pretty sure it would not invoke the same problem.
+> >>>> Right, this one works fine.
+> >>>>
+> >>>>> I also suspect v3
+> >>>>> might not, but I'm less sure:
+> >>>>>
+> >>>>> https://lore.kernel.org/all/20251022141434.v3.1.I60a53c170a85966618=
+83bd2b4ef475155c7aa72b@changeid/
+> >>>> This one too, at least I was not able to reproduce any fail.
+> >>> Thanks for testing. I'm still not sure exactly how to reproduce your
+> >>> failure, but it seems as if the root port is being allowed to suspend
+> >>> before the endpoint is added to the system, and it remains so while t=
+he
+> >>> endpoint is about to probe. device_initial_probe() will be OK with
+> >>> respect to PM, since it will wake up the port if needed. But this
+> >>> particular code is not OK, since it doesn't ensure the parent device =
+is
+> >>> active while preparing the endpoint power state.
+> >>>
+> >>> I suppose one way to "solve" that is (untested):
+> >>>
+> >>> --- a/drivers/pci/bus.c
+> >>> +++ b/drivers/pci/bus.c
+> >>> @@ -380,8 +380,12 @@ void pci_bus_add_device(struct pci_dev *dev)
+> >>>                  put_device(&pdev->dev);
+> >>>          }
+> >>>
+> >>> +       if (dev->dev.parent)
+> >>> +               pm_runtime_get_sync(dev->dev.parent);
+> >>>          pm_runtime_set_active(&dev->dev);
+> >>>          pm_runtime_enable(&dev->dev);
+> >>> +       if (dev->dev.parent)
+> >>> +               pm_runtime_put(dev->dev.parent);
+> >>>
+> >>>          if (!dn || of_device_is_available(dn))
+> >>>                  pci_dev_allow_binding(dev);
+> >>>
+> >>> Personally, I'm more inclined to go back to v1, since it prepares the
+> >>> runtime PM status when the device is first discovered. That way, its
+> >>> ancestors are still active, avoiding these sorts of problems. I'm
+> >>> frankly not sure of all the reasons Rafael recommended I make the
+> >>> v1->v3->v4 changes, and now that they cause problems, I'm inclined to
+> >>> question them again.
+> >>>
+> >>> Rafael, do you have any thoughts?
+> >> Yeah.
+> >>
+> >> Move back pm_runtime_set_active(&dev->dev) back to pm_runtime_init()
+> > Or rather leave it there to be precise, but I think you know what I mea=
+n. :-)
+> >
+> >> because that would prevent the parent from suspending and keep
+> >> pm_runtime_enable() here because that would prevent the device itself
+> >> from suspending between pm_runtime_init() and this place.
+> >>
+> >> And I would add comments in both places.
+>
+> Confirmed, the following change (compared to $subject patch) fixed my iss=
+ue:
+>
+> diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
+> index 3ef60c2fbd89..7e2b7e452d51 100644
+> --- a/drivers/pci/bus.c
+> +++ b/drivers/pci/bus.c
+> @@ -381,7 +381,6 @@ void pci_bus_add_device(struct pci_dev *dev)
+>          }
+>
+>          pm_runtime_set_active(&dev->dev);
+> -       pm_runtime_enable(&dev->dev);
 
+That works too, but it would defeat the purpose of the original
+change, so I mean the other way around.
 
-> On 19 Jan 2026, at 07:45, Maxime Ripard <mripard@kernel.org> wrote:
->=20
-> On Thu, Jan 08, 2026 at 11:14:37AM -0300, Daniel Almeida wrote:
->> Hi Maxime :)
->>=20
->>>=20
->>> I don't know the typestate pattern that well, but I wonder if we =
-don't
->>> paint ourselves into a corner by introducing it.
->>>=20
->>> While it's pretty common to get your clock from the get go into a =
-state,
->>> and then don't modify it (like what devm_clk_get_enabled provides =
-for
->>> example), and the typestate pattern indeed works great for those, we
->>=20
->> Minor correction, devm_clk_get_enabled is not handled by the =
-typestate
->> pattern. The next patch does include this function for convenience, =
-but
->> you get a Result<()>. The typestate pattern is used when you want =
-more
->> control.
->>=20
->>> also have a significant number of drivers that will have a =
-finer-grained
->>> control over the clock enablement for PM.
->>>=20
->>> For example, it's quite typical to have (at least) one clock for the =
-bus
->>> interface that drives the register, and one that drives the main
->>> component logic. The former needs to be enabled only when you're
->>> accessing the registers (and can be abstracted with
->>> regmap_mmio_attach_clk for example), and the latter needs to be =
-enabled
->>> only when the device actually starts operating.
->>>=20
->>> You have a similar thing for the prepare vs enable thing. The =
-difference
->>> between the two is that enable can be called into atomic context but
->>> prepare can't.
->>>=20
->>> So for drivers that would care about this, you would create your =
-device
->>> with an unprepared clock, and then at various times during the =
-driver
->>> lifetime, you would mutate that state.
->>>=20
->>> AFAIU, encoding the state of the clock into the Clk type (and thus
->>> forcing the structure that holds it) prevents that mutation. If not, =
-we
->>> should make it clearer (by expanding the doc maybe?) how such a =
-pattern
->>> can be supported.
->>>=20
->>> Maxime
->>=20
->> IIUC, your main point seems to be about mutating the state at =
-runtime? This is
->> possible with this code. You can just have an enum, for example:
->>=20
->> enum MyClocks {
->> Unprepared(Clk<Unprepared>),
->>        Prepared(Clk<Prepared>),
->> Enabled(Clk<Enabled>),=20
->> }
->>=20
->> In fact, I specifically wanted to ensure that this was possible when =
-writing
->> these patches, as it=E2=80=99s needed by drivers. If you want to, I =
-can cover that in
->> the examples, no worries.
->=20
-> Yes, that would be great. I do wonder though if it wouldn't make sense
-> to turn it the other way around. It creates a fair share of =
-boilerplate
-> for a number of drivers. Can't we keep Clk the way it is as a
-> lower-level type, and crate a ManagedClk (or whatever name you prefer)
-> that drivers can use, and would be returned by higher-level helpers, =
-if
-> they so choose?
+That is, leave the pm_runtime_enable() here and move the
+pm_runtime_set_active() back to the other place.
 
-The problem with keeping it the way it is that you=E2=80=99re back to =
-manual
-prepare/unprepare and enable/disable, as the type-state is what=E2=80=99s =
-enforcing
-the correct order of calls. This is also the case when the type is =
-dropped.
-
-In fact, one of the aims of this patch is to get rid of the current Clk =
-type
-before we have more users. The current series fixes this by enforcing a =
-sane
-order of operations. Most importantly, it enforces that the refcounts to =
-get(),
-enable() and etc are handled correctly using the type system.
-
-It rids us of this problem, which is possible today:
-
-clk.enable();
-clk.prepare();
-clk.prepare();
-clk.disable_unprepare();
-clk.set_rate();
-
-
->=20
-> That way, we do have the typestate API for whoever wants to, without
-> creating too much boilerplate for everybody else.
-
-
-But that's how it works in this series. The typestate pattern is opt-in. =
-If you
-need to "set and forget" there's the devm API that's introduced by the =
-next
-patch. I can expose more devm_* APIs if you want.
-
-I'm not sure the boilerplate is significant, by the way. You can just =
-do:
-
-
-Clk::<Enabled>::get();
-
-
-As a starting point, and have the enum thing (which is also simple) _if_ =
-you
-need to manually enable/disable at runtime. Most of the time, you will =
-only
-need to mention the type state once, like I did in the call above, and =
-then
-the type system will figure out the rest when transitions take place.
-
-What boilerplate did you have in mind?
-
-=E2=80=94 Daniel
-
-
+>
+>          if (!dn || of_device_is_available(dn))
+>                  pci_dev_allow_binding(dev);
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index fae5a683cf87..22b897416025 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -3201,6 +3201,7 @@ void pci_pm_init(struct pci_dev *dev)
+>   poweron:
+>          pci_pm_power_up_and_verify_state(dev);
+>          pm_runtime_forbid(&dev->dev);
+> +       pm_runtime_enable(&dev->dev);
+>   }
+>
+>   static unsigned long pci_ea_flags(struct pci_dev *dev, u8 prop)
 
