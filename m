@@ -1,132 +1,214 @@
-Return-Path: <linux-pm+bounces-41085-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41086-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10DA5D3A829
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:12:21 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22296D3A809
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:09:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A37C4306C56B
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 12:07:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id DB70F3007194
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 12:08:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDA90359F80;
-	Mon, 19 Jan 2026 12:07:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FCD6359F85;
+	Mon, 19 Jan 2026 12:08:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="CV6DrZSq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nIN1Bb7q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8AB3191C0;
-	Mon, 19 Jan 2026 12:07:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8C9322FE0E
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 12:08:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768824421; cv=none; b=dntsQ/1sEwSwXYeb1slsLU/VEw5MPPlXpTmKr4Lhld1J0cy+Oe93LbwIJLjb8S7Df1OOWo3Bg4JaCD5ja+QhJyfxq+ebR+p3fsXJSe0aDQD1CypM3om7xnklObxq4ASafeditHOlKqA0qM9IHw/25DVJ5Kt/lQAG+WnRzRcw0Bw=
+	t=1768824537; cv=none; b=dqIDXabBo5Usu09eX0anI7aCGA0e+VN+aFgpbB1b+H1bKrm099ls63j+0jRQ+NR61xSR9UFhAX/In8r87MveRZEFN9rKZbsA+ZxBBnRAEYxoncVDczpWrQgbvzDKVSTpF+OF+74Lx6uxCsGh4K/O2QyW+bljV5psmQYGKHL4gTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768824421; c=relaxed/simple;
-	bh=smVe+F+p92Be8MNVffomnHhZ2pZhHkzY+FZJ7CSclQg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Lnvy5ZXcUSsAu+ocbZ3kPyXrU+g41Cs5tCzc7p1lqo8o29rHmNrn6jA7mU0/6LHZZF4IW6WIb0+zVrND28weFOsp7gF3BQM3MCsWuph2zG9g0cKQmA2B4lwLmQkznH+aHI+pezrjvMNQPDqqlArqQoYU8k1ooPP3P3lxIKAlOOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=CV6DrZSq; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1768824418;
-	bh=smVe+F+p92Be8MNVffomnHhZ2pZhHkzY+FZJ7CSclQg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CV6DrZSqcyK5ZOXYaeoQ85nbfdM5QNTKFFe1B2KXkwrbpd1uUI5xj3MY8l92dPpJ/
-	 u5DumxeRFkwLCBpI2VQav5oJ1tzrg6uxE0E6X/pRUGJKSYwSH+De5OGcsy+N4oXUfP
-	 xKvfudI8qG0tPcmrH0hLtFDsZCbFQgA0n7DY8mayhXeurlFB+Z2Uy4B38HoVmW4sy8
-	 TWhr5B3lf619G17o2buhd+X/p8tBcu7jrhoWxGSQs2ML48m4vl3WsydNUhwtUYLMx2
-	 8CuQryJ7ZEE1nOOeqI4D0K8DIkvn2HXl+yvCGTjXsXpK1S9Wt8n26FGMyBYIS2ViMr
-	 RE+M1dURETQ8Q==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id D8EFF17E0117;
-	Mon, 19 Jan 2026 13:06:57 +0100 (CET)
-Message-ID: <382ef406-6abf-4d6f-9f0c-42b0bbbd6918@collabora.com>
-Date: Mon, 19 Jan 2026 13:06:57 +0100
+	s=arc-20240116; t=1768824537; c=relaxed/simple;
+	bh=vjxKctKqh1C+lpYUfF3aR59o+hjb5fIwKm+AM9mWzG8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=t9SOME6Kr+Edq0RVxiF4CTLew462tfcwQcMRaXjoNa0cgZBicfNY2G8OVDF23Sxen+qEmwZi1gmVCLFjMtAJWhpjg2lDxogWNVQ1cUY6WU6FjrbMsLDgRPpTUZSXMURG3sxi847suei6ovW4tF//8DPesQxwD5iGfjInqTFzeb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nIN1Bb7q; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-42fed090e5fso2304566f8f.1
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 04:08:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1768824533; x=1769429333; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iKnIFFfc9VQE0U5sGGzfGa64S/N4XCAB3mzxFk6dO2I=;
+        b=nIN1Bb7qawMvf+xAbBYQXZ1Ut0pvPCurNunxmtamD1NmJMUWeY5rvqNc4+QfttkYrh
+         ceX50FnHKz3QsalFkZkouroQdbT2SilA6Gii8QVox9e+tqGDTl6tKZVqIEs7kdkscem4
+         siMOGsH4FBlnpOg+hfSKabGaDHv06hjsJYWoZDOK/YgAyK0GoR+RSd0yLlDVx2yI0N6e
+         tioPAPSjLD58DuI5w1xC58v4gKaamkHoNkNNB09r1GkJpsD1+XLJ5vIRj4wfNMKX0sAh
+         Mlydof1HPDXpowWnRZXThwO9B5O4ORtY0njHSOPwFmFmjgRPxkkHNMYm6PjIBW9yQGyr
+         geCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768824533; x=1769429333;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iKnIFFfc9VQE0U5sGGzfGa64S/N4XCAB3mzxFk6dO2I=;
+        b=ht/GwZywzxN9K1pG6ypb4aZrzTTjj3oytgrAUmuM0lmVusxQjhxzKXs3tqGnncMgVJ
+         NqCIS90pUvVgJzDu2anrCCGg71eVK8Fg+iUKnqYGC2QUZs7t9yF8urfuC790a+tQZY5Z
+         4vcWqk+fw2XAPXKcgb7UOP0zJEDV69vf89qy4tPB09XAmbykMymfVx5oClVUecGHhmH/
+         PFW2jAnEL6vBGCl2Boeqd7dMNxIwKLIbUZFEwoBy9gKG1+mr+nfYlp8JI3duvItEZp+t
+         5nLhswsQBNlH6OUf0jhWh/NnhEebdPBvCTgNLqb2PVLdlgz/Lm0nE/UHvj3EObYZfZID
+         WH+g==
+X-Forwarded-Encrypted: i=1; AJvYcCVrOHHzEsHRrDdNg1VFLR8A/GtXQFHrDa2ihJ4vWCYleKMEIz/qKyz8gO+U0DhFBUZiskPrWkrfAA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdUjZ6qeDAcCbOeQcX6MmA7jDAoiw8uIuj8Cwb0t7qcU2S03Dx
+	n7sbTd3igBNEXdUkwQ/YUz2V2i39uyP5gwqsr+AelMcRxo8jEH/w61JEIcMFt97Qg6I=
+X-Gm-Gg: AZuq6aKzulx+JRp9y8vUKbM2VivV2BUCdd/8oBnpKx9Xp6SF06Whtu1NNJWEhn3W2TA
+	nZNTwPUJxtIgDB+OY5LBGTvzu1zVpHPnRvqygHbRLbt10ajr7pRruOIMQaq2R53NCAAV2/zUnsi
+	lF27c5JtaHJ65TuVARXUTR9u2NaWW2rGzIfsJ+EaNuEx0l5zElnDsTpLwuDmov2mitiGzvbsfZy
+	vdMO+i8LuGNznQD3qiJpeK7yytofetkxGObEOGKd0x3/VP66amjIK0LkME4Uq9ZmdW3U0QSmz3u
+	9dJgXvkSPBHVvxwFpWZorulIL3m+yXgFA1Tks2e3Btpum5FCqJc6xgtDkOyWTmWO8RcrA893ENz
+	6i6iqYhymSBJ9t768quyrUq0GrD0CZ8j1qtOWV2KDr3P2UBl5DHvvnLNI538ZtB2MU/HEFfuAE/
+	9xbpNpHFf05BfUCNKVQLHKDD8qaMIEc5K//GyvH89oe4HYEIy+028JRkGof65CHL0vRS+KiQ==
+X-Received: by 2002:a05:6000:3109:b0:430:96bd:411b with SMTP id ffacd0b85a97d-43569bd47e7mr15049639f8f.58.1768824533142;
+        Mon, 19 Jan 2026 04:08:53 -0800 (PST)
+Received: from ta2.c.googlers.com (164.102.240.35.bc.googleusercontent.com. [35.240.102.164])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4356997e664sm20698421f8f.30.2026.01.19.04.08.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jan 2026 04:08:52 -0800 (PST)
+From: Tudor Ambarus <tudor.ambarus@linaro.org>
+Subject: [PATCH v2 0/7] thermal: samsung: Add support for Google GS101 TMU
+Date: Mon, 19 Jan 2026 12:08:46 +0000
+Message-Id: <20260119-acpm-tmu-v2-0-e02a834f04c6@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/8] Add thermal sensor driver support for Mediatek
- MT8196
-To: srini@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
- rui.zhang@intel.com, lukasz.luba@arm.com, matthias.bgg@gmail.com
-Cc: nfraprado@collabora.com, arnd@arndb.de, colin.i.king@gmail.com,
- u.kleine-koenig@baylibre.com, andrew-ct.chen@mediatek.com,
- lala.lin@mediatek.com, bchihi@baylibre.com, frank-w@public-files.de,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, kernel@collabora.com,
- wenst@chromium.org, fshao@chromium.org, Laura Nao <laura.nao@collabora.com>
-References: <20251125-mt8196-lvts-v4-v5-0-6db7eb903fb7@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20251125-mt8196-lvts-v4-v5-0-6db7eb903fb7@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAM4ebmkC/0XMQQrCMBCF4auUWRtJJlqpq95DuojppB2wTUlqU
+ ErubiyIy//x+DaIFJgiXKsNAiWO7OcSeKjAjmYeSHBfGlBiLZXSwthlEuv0FHghVE4SWn2Hcl8
+ COX7t1K0rPXJcfXjvclLf9Yec/khSQgrr6Fz3jaZGuvbBswn+6MMAXc75A46eC7ChAAAA
+X-Change-ID: 20260113-acpm-tmu-27e21f0e2c3b
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, 
+ Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Kees Cook <kees@kernel.org>, 
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Cc: willmcvicker@google.com, jyescas@google.com, shin.son@samsung.com, 
+ linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-hardening@vger.kernel.org, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768824532; l=4379;
+ i=tudor.ambarus@linaro.org; s=20241212; h=from:subject:message-id;
+ bh=vjxKctKqh1C+lpYUfF3aR59o+hjb5fIwKm+AM9mWzG8=;
+ b=wXnHsdPH6H91y8OZ1SvxH9pevq+ULVCQNWr1P0Do/JfHOlidnlm9D04J3aht/OhyxQt+CpmUS
+ mfS2vbxsmfWAWC5izRW9M7ycjSgKXtMl+tIQ0mSkr9PsPJ5HylEv5TM
+X-Developer-Key: i=tudor.ambarus@linaro.org; a=ed25519;
+ pk=uQzE0NXo3dIjeowMTOPCpIiPHEz12IA/MbyzrZVh9WI=
 
-Il 25/11/25 17:16, Laura Nao ha scritto:
-> This patch series extends the MediaTek LVTS thermal driver to support the
-> MT8196 SoC.
-> 
+Add support for the Thermal Management Unit (TMU) on the Google GS101
+SoC.
 
-This series has been there on the lists for *5 months* now, and it still
-applies as-is.
+The GS101 TMU implementation utilizes a hybrid architecture where
+management is shared between the kernel and the Alive Clock and
+Power Manager (ACPM) firmware.
 
-Can we *please* get this picked?
+Dependencies
+============
 
-Thanks,
-Angelo
+- firmware patches 2, 3: required by the thermal driver (patch 4).
+- bindings (patch 1): required for DTS validation.
+- thermal driver patch 4: required by defconfig (patch 7) - logical
+dependency. 
 
-> MT8196 requires a different implementation of the lvts_temp_to_raw()
-> function.
-> 
-> To support this, the series introduces:
-> 
-> - A new struct lvts_platform_ops to allow platform-specific
->    conversion logic between raw sensor values and temperature
-> - A variant of the lvts_temp_to_raw() implementation
-> - Platform data and controller definitions for MT8196
-> 
-> Link to v4: https://lore.kernel.org/r/20251121-mt8196-lvts-v4-v4-0-357f955a3176@collabora.com
-> 
-> Changes in v5:
-> - Dropped patch 3
-> - Added LVTS_NUM_CAL_OFFSETS_MT7988/LVTS_NUM_CAL_OFFSETS_MT8196 defines
-> - Moved code that assembles calibration bytes from the efuse data into
->    a dedicated lvts_decode_sensor_calibration() helper
-> - Fixed prefix in patch 4 commit message
-> - Dropped R-b/T-b tags on patch 2
-> 
-> ---
-> Laura Nao (8):
->        dt-bindings: thermal: mediatek: Add LVTS thermal controller support for MT8196
->        thermal/drivers/mediatek/lvts: Make number of calibration offsets configurable
->        thermal/drivers/mediatek/lvts: Add platform ops to support alternative conversion logic
->        thermal/drivers/mediatek/lvts: Add lvts_temp_to_raw variant
->        thermal/drivers/mediatek/lvts: Add support for ATP mode
->        thermal/drivers/mediatek/lvts: Support MSR offset for 16-bit calibration data
->        thermal/drivers/mediatek/lvts_thermal: Add MT8196 support
->        dt-bindings: nvmem: mediatek: efuse: Add support for MT8196
-> 
->   .../devicetree/bindings/nvmem/mediatek,efuse.yaml  |   1 +
->   .../bindings/thermal/mediatek,lvts-thermal.yaml    |   2 +
->   drivers/thermal/mediatek/lvts_thermal.c            | 326 +++++++++++++++++++--
->   .../dt-bindings/thermal/mediatek,lvts-thermal.h    |  26 ++
->   4 files changed, 333 insertions(+), 22 deletions(-)
-> ---
-> base-commit: abadc219d77ce0e61fcac0147cc6cc69164af43e
-> change-id: 20251121-mt8196-lvts-v4-a61fb5c27216
-> 
-> Best regards,
+Given the thermal driver is a new addition, I suggest everything to go
+through the Samsung SoC tree, with ACKs from the Thermal maintainers.
+
+If the Thermal maintainers prefer to take the bindings and the thermal
+driver patches via their tree we'll need:
+- an immutable branch containing the firmware patches (2 and 3) from the
+  Samsung SoC tree to serve as a base for the thermal driver.
+- an immutable branch containing the bindings and the thermal driver
+  from the thermal tree to serve as a base for the dts and defconfig.
+
+Architecture Overview
+=====================
+
+The hardware supports two parallel control paths. For this
+implementation, responsibilities are split as follows:
+
+1. Kernel Responsibility:
+- maintain direct memory-mapped access to the interrupt pending
+  (INTPEND) registers to identify thermal events.
+- map physical hardware interrupts to logical thermal zones.
+- coordinate functional operations through the ACPM IPC protocol.
+
+2. Firmware Responsibility (ACPM):
+- handle sensor initialization and calibration.
+- manage thermal thresholds and hysteresis configuration.
+- perform temperature acquisition and expose data via IPC.
+
+Sensor Mapping (One-to-Many)
+============================
+
+The SoC contains multiple physical temperature sensors, but the ACPM
+firmware abstracts these into logical groups (Clusters) for reporting:
+
+- ACPM Sensor 0 (Big Cluster): Aggregates physical sensors 0, 6, 7, 8, 9.
+- ACPM Sensor 1 (Mid Cluster): Aggregates physical sensors 4, 5.
+- ACPM Sensor 2 (Little Cluster): Aggregates physical sensors 1, 2.
+
+The driver maps physical interrupt bits back to these logical parents.
+When an interrupt fires, the driver checks the bitmask in the INTPEND
+registers and updates the corresponding logical thermal zone.
+
+Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+---
+Changes in v2:
+- architecture: switch from a syscon/MFD approach to a thermal-sensor
+  node with a phandle to the ACPM interface
+- bindings: address Krzysztof's feedback, drop redundencies,
+  interrupts description.
+- firmware: introduce devm_acpm_get_by_phandle() to standardize IPC
+  handle acquisition.
+- thermal driver: drop compatible's data and use the static data from
+  the driver directly.
+- defconfig, make EXYNOS_ACPM_THERMAL a module
+- Link to v1: https://lore.kernel.org/r/20260114-acpm-tmu-v1-0-cfe56d93e90f@linaro.org
+
+---
+Tudor Ambarus (7):
+      dt-bindings: thermal: Add Google GS101 TMU
+      firmware: samsung: acpm: Add TMU protocol support
+      firmware: samsung: acpm: Add devm_acpm_get_by_phandle helper
+      thermal: samsung: Add support for GS101 TMU
+      MAINTAINERS: Add entry for Samsung Exynos ACPM thermal driver
+      arm64: dts: exynos: gs101: Add thermal management unit
+      arm64: defconfig: enable Exynos ACPM thermal support
+
+ .../bindings/thermal/google,gs101-tmu-top.yaml     |  67 +++
+ MAINTAINERS                                        |   8 +
+ arch/arm64/boot/dts/exynos/google/gs101-tmu.dtsi   | 209 +++++++
+ arch/arm64/boot/dts/exynos/google/gs101.dtsi       |  18 +
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/firmware/samsung/Makefile                  |   1 +
+ drivers/firmware/samsung/exynos-acpm-tmu.c         | 212 +++++++
+ drivers/firmware/samsung/exynos-acpm-tmu.h         |  33 ++
+ drivers/firmware/samsung/exynos-acpm.c             |  35 ++
+ drivers/thermal/samsung/Kconfig                    |  16 +
+ drivers/thermal/samsung/Makefile                   |   2 +
+ drivers/thermal/samsung/acpm-tmu.c                 | 643 +++++++++++++++++++++
+ .../linux/firmware/samsung/exynos-acpm-protocol.h  |  30 +
+ 13 files changed, 1275 insertions(+)
+---
+base-commit: e2211f5d980086dd9fbdab3bcd86b715e12cae13
+change-id: 20260113-acpm-tmu-27e21f0e2c3b
+
+Best regards,
+-- 
+Tudor Ambarus <tudor.ambarus@linaro.org>
 
 
