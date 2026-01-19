@@ -1,68 +1,67 @@
-Return-Path: <linux-pm+bounces-41071-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41072-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68338D3A224
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 09:54:18 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BD1CD3A229
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 09:55:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5B2703016CE4
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 08:53:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0769E306E67F
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 08:54:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5A2C350282;
-	Mon, 19 Jan 2026 08:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20F23502AA;
+	Mon, 19 Jan 2026 08:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Hh2f+KxC"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="g76zNIN7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010001.outbound.protection.outlook.com [52.101.69.1])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010049.outbound.protection.outlook.com [52.101.69.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7FF3451CE;
-	Mon, 19 Jan 2026 08:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50FA350280;
+	Mon, 19 Jan 2026 08:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768812837; cv=fail; b=ADDo0IvYGcSrTyKjjTpq2xQ7lX3cGOF14tctjtvr6xzP/UjXGlaPvAP0Fqrqe9OTaD3RmGFoWiH6MBCp3NfEg6PaGb2oHWoa2U6Mo/p8ZMuJ7F5dC4CEDuXge4fR4t+qF+TTSjFYdooFwiyPPR/dE37sc8lEwTPUKvnEVNewdbI=
+	t=1768812845; cv=fail; b=unY1A8/Iyqip4HZkOE7UIl1ZSA1Vo48yt2nIeLPFLuhyCzfkZB9TBffP2i6pjJ6Fj9nJOF9VtHezd+QA8DTZwtCubj4nd1QsZjhO/rahEuVAb+l6KXTXgKQc0aFJBZYjW8MQtWgaynF9Gjulfr1uyAVWrYGYfdTODesYUo8UBA0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768812837; c=relaxed/simple;
-	bh=WtjjGEeTsWxOyX2OzQYqrTJofP0kuCsDmwQ0XHVUmxE=;
-	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=GQnu4h3mEXlJqJiogO1xOJTUVpWVGqtgmeaqebOIEOkBKxQbQAoUpcUiicUcQJ7wXYubYENPNG/BopGbaESVuOd9vvrV087u/apU3JsxgYoAHAlnklQ4tVK3Mp5RFdMo77zueg28+asWTcscKLnYEqOXMMrzGtjtVFJ/unf7su8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Hh2f+KxC; arc=fail smtp.client-ip=52.101.69.1
+	s=arc-20240116; t=1768812845; c=relaxed/simple;
+	bh=QGMIHHTLYjGiYKvjsNQqGzJoWrvA+xhcDCM+1zfLL1Q=;
+	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
+	 To:Cc:MIME-Version; b=jh+YYC3COoEZmPoKqgi18DERfv02A2H1LD9Sj/XDVJjaqLJQNirSXVIX1pHiW40pwz59vpMIyZYCf4QBxwYiZLHk8Bbm/Z6LxtLeGRKRLt1Ea2+ven1nrzzRd0fU2Xhi4hjTtC1GrYRJf/NYIiej8a2HNWnMx4XkLOkEsIn5dQg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=g76zNIN7; arc=fail smtp.client-ip=52.101.69.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WUV9F5+7K2NCF6nxQaFusgvyNr2NlA7EqJXUCX0clT3Po9G2RMYShO1QDSi2Bt3Sa6jLU6FZR80rXOxFnyD0Vzj4fxy/EzTXnKGR8DiyFEZIX+ZFh2qWomHwg9+kjFBH3Xy9G9ySuj/R1X1EDW5UFhZktYHlxbEGlLrJsPK/03yuKQXUSKYnlkRLpm1QRj1nhobwq9i6CqmmEZtVT9V7YjTX1lv/3f5P2ld+IVRALZvYEu73rXbafh4uIly5mrT4ORQANbvpE7BVsO26u78Bj9HgRNXsyIsr0hkvmbmurlI2qNiChPu9HsZT7vI9fyODINv/2Zb6Y7sGQqx4aCv8XA==
+ b=vIqJJtDMho1gR61AZO1vFnUXA0O3qCu9yTv7NA9oaS33pKwziHctjPkJ6jEVw4mtjl/Mu6tbMGm2nvz93AOMiipbpQjs2xR2C6rf55BQBs2BoOuvTaW5d5JqeHkjn2idwAfOF3aeHGZIiUiOqmSo4+2t0neEA+wi/sW0pcWqRiKraAIKspHXb1159L52+2nlIUXQTYU/dE8Lv987iM//qnenJtCHMqfaoD0AtJgu8t1mHs81fklQAgDIrp1SzlYZL8uBa+R6lZ5ZGQP0hcu008Qu+gnaHjLd0ZYC1zOD8dlaOjL1MSsrunrpkDyPz+1VFsf6FfqiXhtzs5oIrfnT4Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cegwIPNdJZ9sYnSMzXEoPGUG0s//pq8ueWP1OmWNTGU=;
- b=vF2G5Oo+B8/CafPnrNCiUASfPtA2dSrxHtm1a9DZrzxtNWXEEIz8u0UL6IdOg6Rldzn2Nn2+2SuuW2ld/DU5sIWrebg/HVLKmkVVOcHn/16ry0N7GT5a46jXgkAyy578FJ71lo5XyEp/zjJEOCV66AcfqUWkmDK2VFYCG3IXWutCByzA1Dgu+JnlLny26jRdlPjaJTwnizK5U1M5dryFm/J4oXq8I++lN7JbbsfkUq8HBOyzCLGJh5oPjV7Ov05qMiyrbVj6Da1DGsreZIWVJ8SI4M2j5a+9HvBdscIfBwRiowQxeIUCY+1s410so5TcM0V8XWln3oQqdLI+xwmMqg==
+ bh=H0O6uygT0jLr6ztO0stf2rPwcZSYcRFQ54ehkrVesxU=;
+ b=e1pOt12RLN2fNSrkpzuKUbVkphAcZmRb21Kn6fgHCVAaBYrA6if28PyPoYpMzm4PJfUQCS5OMlt1nRnvcmiPC8OTdmE2bRAV8n0vm8addYj3zsNWjjGCIpwk+bcmJjNnHjXXYLtaWEyrV02Yoo/JuTU6QFXQ1o/WTxyJTs6LExLWx2CzY9tu8We5YZ1ti7EeYAknsS2h/tI1k2ndIxFRpOFfQkuHBGofIGvDL+LjK+jIf5Yrww4YANe3TNF+xnXbx/9jaxuha4zOefkiAiD6TWO9GQmu1R8dtd0M1k3trDxpR6P3JcPaYINxUKOuFSwr0xp1e3US8nLTKxXBWD66Vg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cegwIPNdJZ9sYnSMzXEoPGUG0s//pq8ueWP1OmWNTGU=;
- b=Hh2f+KxCPX2GGvHh7Deo64kaMFAHbmsZnFibduBVMSplqZODSuLVvX4mZTbGzZabeHvMI/1Az1DpHjzF5oxv2o+qzqQbucguY+qOVvU/4l0EBxRyic7ob2oSgm4xhzG7YD5Y84yM0NV0SX5fnzHZGOPu8pVxjp/2ZE11MmfKl3ucuNdCr9fCxO5CxtroyWa4OZRPylGFY3PomuelKdLU/GcLYB0TBzSupeLVrJ6+q/Z+EkDmuo0vdVwJqOzzkuVFagA3lfhwVxq7WIQrYus98VzgIl+hPXNu9QTHxejcY+V6FWEZNFFB/kUkF8oCF/qaPQzxER0K2Pg8RJA+V4sQtQ==
+ bh=H0O6uygT0jLr6ztO0stf2rPwcZSYcRFQ54ehkrVesxU=;
+ b=g76zNIN78lnZLDW+L2AYTaba1+Hz2FRNRJNvKlLgCkEFSyXb4YZWttpkwa5HePmJAUFu4s/wrT0YzPKD3G7yweu5PIYaF4F0t1yEJkJjxehh3/9S8ej8G1Lv1la1LPXxdkmtEAWdpHKVLALgWadRVPaU0ab2voccbOtHgvV4cXMOWXo9xkDsFiw/Zr9QZ4ryGA+ao+H+UqVcCZaK6uP3sDwXFHQxA/r85oAgYD1NpzC/8ilMoLSTrvLRJm3IiGOxgujuEe2T4jYwP+VC/ma3LHAn7sD3gt1fj9XzwsyVxZlL0THaWd5BwamMpjZRsPJRAIpaEM2X2a1VJeIgHKJONg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from VE1PR04MB7213.eurprd04.prod.outlook.com (2603:10a6:800:1b3::8)
  by DU4PR04MB10743.eurprd04.prod.outlook.com (2603:10a6:10:588::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9520.12; Mon, 19 Jan
- 2026 08:53:53 +0000
+ 2026 08:53:57 +0000
 Received: from VE1PR04MB7213.eurprd04.prod.outlook.com
  ([fe80::93cb:5423:e3b:9a0d]) by VE1PR04MB7213.eurprd04.prod.outlook.com
  ([fe80::93cb:5423:e3b:9a0d%7]) with mapi id 15.20.9520.009; Mon, 19 Jan 2026
- 08:53:53 +0000
+ 08:53:57 +0000
 From: Jacky Bai <ping.bai@nxp.com>
-Subject: [PATCH 0/2] Update the gpu power domain support on i.MX8MM
-Date: Mon, 19 Jan 2026 16:53:40 +0800
-Message-Id: <20260119-imx8mm_gpu_power_domain-v1-0-34d81c766916@nxp.com>
+Date: Mon, 19 Jan 2026 16:53:41 +0800
+Subject: [PATCH 1/2] Fix the imx8mm gpu hang due to adb400 reset wrongly
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABTxbWkC/x3MTQqEMAxA4atI1lNoIop4FRlKqVGz6A8tMxbEu
- 1tcfov3LiichQvM3QWZ/1Ikhgb8dOAOG3ZWsjYDaRo1Yq/E18l7s6efSfHkbNborQQ1jI7IsUa
- yCK1OmTep73n53vcD1cKx7mkAAAA=
-X-Change-ID: 20260113-imx8mm_gpu_power_domain-56c22ce012a1
+Message-Id: <20260119-imx8mm_gpu_power_domain-v1-1-34d81c766916@nxp.com>
+References: <20260119-imx8mm_gpu_power_domain-v1-0-34d81c766916@nxp.com>
+In-Reply-To: <20260119-imx8mm_gpu_power_domain-v1-0-34d81c766916@nxp.com>
 To: Ulf Hansson <ulf.hansson@linaro.org>, Shawn Guo <shawnguo@kernel.org>, 
  Sascha Hauer <s.hauer@pengutronix.de>, 
  Pengutronix Kernel Team <kernel@pengutronix.de>, 
@@ -73,11 +72,11 @@ Cc: linux-pm@vger.kernel.org, imx@lists.linux.dev,
  linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
  devicetree@vger.kernel.org, Jacky Bai <ping.bai@nxp.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768812829; l=1157;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768812829; l=6168;
  i=ping.bai@nxp.com; s=20250804; h=from:subject:message-id;
- bh=WtjjGEeTsWxOyX2OzQYqrTJofP0kuCsDmwQ0XHVUmxE=;
- b=9FBOBaj8Cw1+vz90Iq+dr0KUV2V57fSESCcn8ZiMvvtcqm5MGB7ZcY7jOyv3Rb1RE2O1rIP7/
- sJgWDp2w1qIBaezMCIsJxPyTfxyREgph8Xq1nKgOtMEFyZ/OYS+b1JN
+ bh=QGMIHHTLYjGiYKvjsNQqGzJoWrvA+xhcDCM+1zfLL1Q=;
+ b=SAcHfFlNCr+XM07i+erI4a7qNv/glIxbckN+0TxdKTKQNmBHcDRr6UCro5B3FzU9uqmMPl3FY
+ 3H4wd0bNh29CPEOoVKfdttEgU/YHkokCOQHW6Stkk9Oadx2DRPH9tiY
 X-Developer-Key: i=ping.bai@nxp.com; a=ed25519;
  pk=ckFjCfRynXBjQGmSmzOVI5hggMD9XnnNlwj/jcO/j1U=
 X-ClientProxiedBy: SI2PR06CA0001.apcprd06.prod.outlook.com
@@ -91,132 +90,288 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: VE1PR04MB7213:EE_|DU4PR04MB10743:EE_
-X-MS-Office365-Filtering-Correlation-Id: 109bcf32-5364-479f-f8a8-08de57384585
+X-MS-Office365-Filtering-Correlation-Id: b4dc02d7-f654-4651-ba90-08de573847fd
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|1800799024|19092799006|376014|7416014|52116014|366016|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?RmVsSDNaOW00Uk15cVU0YmwyUW9wRHJQb2p1OVJyUHZPZ20zNmY2R3FIcCtR?=
- =?utf-8?B?OFFLNHl4UnM4UjhPUERSUnRDcDNjd2pLNGx5ODlFazIxeDg0dFFQeSsxK1o4?=
- =?utf-8?B?Ni9BNk9aWjdyVDQweSsrZGFlK1RaMjNGT2l0U1A2cWtQbGFwRGZwWDU4QzZB?=
- =?utf-8?B?MlROaEdIb1J6RG9UU3Zmcys3Z2NmVGgyckk2SzZPelFXNGNIR29EaDVlbmti?=
- =?utf-8?B?TTJHQzg5OEhNREhiL0hDUEhrMnNyaDdXUVNhRTlsVElBNUxBUCtRVk5RZUtH?=
- =?utf-8?B?RUgwcUZSZlBTSHkyRWVwTHRkY1I0WlFzeUFKRWJ5eGRCME9sL2FLbTdmMklr?=
- =?utf-8?B?em9SMWtWLzZsOTdrODBsOUdGUWg0WjdMakl5ZTdqb2ZCaVY1cmdQbU9NdlJL?=
- =?utf-8?B?SEt2V0ZmbWVORGM3U09kby9QWlh5ZytGRFdVRy9LWDVKSWhjS25BTTg5dUx3?=
- =?utf-8?B?bktSYWxNMFpSZ0Fra0dyRXNMYmpSdEwrbzI1UkNnUmJQLzRkZHVOUlU5NWRz?=
- =?utf-8?B?OUdMRDB5d3ZhTXYveit5dThOSnhOWVBkOVQ3cmRiRm9HaE53UnQwRTVRRkdQ?=
- =?utf-8?B?ZXdkbUVrRE5oYmY2SElMQ0dCbVNucUFpclNxSUNLU1czWXh4SXZFVE5NVFBO?=
- =?utf-8?B?MldzaXI2Tnc3K2ZuSTJiWVFudVFTSG00cm5Ed2x2R1RhMnRKbDFMeGtnVTQ1?=
- =?utf-8?B?Yk5KRFpmSEdiR0dwWEJxRDdkZklxaHpkbkhQcitjb2xSR010R2Erc1lOQXl0?=
- =?utf-8?B?NlF4a3R5cUY5bVZTQXBsdUxtdzE0WHJNdkJFMEVDS0gveXJ4K2FtaDJLaTJK?=
- =?utf-8?B?Rzlldis5bDlnd3FHUEZwNXVNeTBMejUvaG5Bd2dscnpCVW1YWXFaSkE1eEtt?=
- =?utf-8?B?SjNJZjFoYmJVTHpvNTNWWUtlMGRmZzlERHFxOW9EQlQveVhSZytRaTF0SUNT?=
- =?utf-8?B?WlZUaGRtZUtTL3k2Q0dEdk1CMXEwb2EyUStxbjdmalBzTHJma2czTUNTbHpt?=
- =?utf-8?B?RWMvcFdJMFBQODFqMzRnbnF0N2RwU3pRTDFwbUVvaENRbmlCaHhsRHMrZDRa?=
- =?utf-8?B?Rm1wQ3p3UjIrT1BhcUY4L0ZvcjFadEpNV0NkK3RxbUl5enZUUU90amZwNC9Z?=
- =?utf-8?B?Sm1jVm5FL0JoVDNJQU9QTVlmRlJ3dkFrckRyb0JjNzJpMjhoeFdMWjVuUm1L?=
- =?utf-8?B?VzJYTW94eDgwd3p0UzdEVDZZUTNoWmlFdTgxUUE0SEErVmJISDI1QkMyb2hl?=
- =?utf-8?B?S2FRT1lnU2krV1lXcEk4c2Y4U0F2Zit0dnNTejFpUk1OTUUvYzBWSGtYTU11?=
- =?utf-8?B?Y21YaVhDY2JSUXJud0RCNm9zZ2E1OW5nOURFL2Nid2h1Wlg5V1ZiLzRIUm5O?=
- =?utf-8?B?L2czMDMxK2YxWnhMR0xwSWRBQ2czTXI2Ym4xYzVPQWhoMlAwZU9lUmFnWnZi?=
- =?utf-8?B?U3loTVBDNGVRMmhoQ3hISUZFampTWE5YRkoxWWMzWHFxdzhBYlFxYzZpSmZX?=
- =?utf-8?B?TERhOFp4bjR4ZCtWdGZEY3lqNzM3MzQxUWN3aXcwd0JEVWlNQlUwbWw2NVRO?=
- =?utf-8?B?a3JSa2s0anBIY21jaFl4SkVxWEZjemY4NUxnaExNYWg1bjhFcnNPRFBtcy90?=
- =?utf-8?B?Q3JDUVF5NldXWEFZN2tXcUxhY085WXVYWDFab1N0L083b0VGZTI3WCtJV0pF?=
- =?utf-8?B?TjFvUDlBZVhXL1dRbGZCT2sxTkJvN0dlb2JmbHFYSjdOL0Y4QjE0cGNPNUEr?=
- =?utf-8?B?cG1IbXZqc0UxSEl0cEc0UGtBOHBLc3RHaUxFQk13SFgyZ1dMNExDVDhzaTUz?=
- =?utf-8?B?Q3pqYTJUeUJnV2xVRGhHUWF0SjZZQ1VXSWNLbjg4UFNrU0hvRWxGY3hPSTQ1?=
- =?utf-8?B?SFZVdGVFc2dnN3pRWGE3WHJ0dmhsR01BUnRpWEhma002b3VXR1lUZzBDalR1?=
- =?utf-8?B?STNhYlArTHN5WVN1WnVKbUN0ejlpMStURmhIMkRiM1NNU1kxV1R6cHJIV0lZ?=
- =?utf-8?B?TGhtWXRJbG8zd1VDL1V4Wm8vaUxZSmp4MlpYZC9Ra0YrcTlaOUU5TTdwYlpj?=
- =?utf-8?B?UndhT09qaU80Z2cvNGo2TXlCNWtPL0pwd3AxNWZkNUlZV2dYbi9MRlU1dEVr?=
- =?utf-8?B?Q1lFbTNFU0lubnRsZk5vVUdSUUdoTDVvLzRCa05nWHJSTU5lQ3RlOGRveFE3?=
- =?utf-8?Q?inaiFHCW3yvWNc+hPpzeW30=3D?=
+	=?utf-8?B?SkFYbERVbUxXUEMxcXU0dURPVEhxZk5nR3I2d0ZHRWJBRHFETVJlTVcxRFIw?=
+ =?utf-8?B?OEVkaDRlREVpbGNoVklPYVpxcmlReTFQajlzL2lDaEhtTkQ0K1Z2dDhJbmxJ?=
+ =?utf-8?B?bGNFNXpucTRFSzZCaWt1Nm03WTVTT2NpbmdSU205am0wZHlWMFN4QnRyTkRW?=
+ =?utf-8?B?UU4zSUsrUDB6MVRSTmFiK3pzdnFrOFplOUQxWE1uM2VCa1FMOFZFaEdDaWwx?=
+ =?utf-8?B?MkxpNmpHYUduS2E3cHhVYmRJeEVFUFhDWWNYQU9PMUtRSGxvWXF4QUlmQk1r?=
+ =?utf-8?B?aXluRTBsZW9QSmZFcXhwVzNPM1dUbUlJejE2N0NBckthMFNVa1JGeEVLN0ZK?=
+ =?utf-8?B?eWs0Y2Q4TFpBWjJHOWtmSlVhdG9BWXJic0s3VTgwQlM2VDBqcUpDYUI5elZ0?=
+ =?utf-8?B?T1U5TGF0bStWK0dwcGdxN0RudUNkc1pTMVBlMXJBekxCWDBXN283UFA1R21D?=
+ =?utf-8?B?UkRVRkI1eCtzdlE4dC9oVHhUT3A0LzBQSFkydkpLd2ZBRGtyU2Q1b1ZUc0FZ?=
+ =?utf-8?B?blhleGlrZDhuaWJDN25DcDBZS3JrWWNtaDY4ajNmbnZqbmVCS0E3SUpYVDNY?=
+ =?utf-8?B?RE5Oc29zZmxxNFd6ZTh0ZnVYWGtrdThGSHZuSjB6Qlg1Y0RUZ1ZBZEtPUnl3?=
+ =?utf-8?B?dmFsOFMwS0NWS0lvaDJwVXJrK25UQXM4eXhXVlNaTHQxTE5RaSt0c3BTc0Rr?=
+ =?utf-8?B?emdvSjVVSU5iTHVkODJuLzMra1IrRDJhd2lGbWVDK0NTUnMwb0YxM291VkJI?=
+ =?utf-8?B?WVRqR0I3YlMvaXFGVy9xZ25PYzFBNXVkOFFpWnV1QkJ3Wk5kblhvWnBleXAw?=
+ =?utf-8?B?Q2N6aTlJNjUyWlJROWZ1bGpSNUlnTUIzMFFaNUprNXNyeFB2TlBSaTJxeFIx?=
+ =?utf-8?B?WGxQQjZIbERQcnZDS0VTSDVFaGRVSEI4eDJvSDJGUHQ1eGowQzNoTDNZVkhJ?=
+ =?utf-8?B?R2p3NHZ2cTBwT0g4alRTWGk1bXpvckdvbXZhRnJ3NEJqRVRNbUJOY2RSdkFq?=
+ =?utf-8?B?R25YVW4yc3ZjNzBxRko3c1Q4dVh5cGY1YXVTeEYrbHNwY3JvUmhoT3dvK1B6?=
+ =?utf-8?B?TlQ1Q1Q5dGkxNU1vL1phRy9wUXRYd2k3WW5vVHNLM0JvZktXTlNyV1R1bVI4?=
+ =?utf-8?B?cldldUk0emJQZGhPUzVOYk9DYWl5RUZKK2VFak9SaVlNOWdCYis1WngxOEpq?=
+ =?utf-8?B?bnRiVTIzbjNwZGQvME1GZmM2MUlycWMyWXNBVzNod1FiemVwYkJyY2h4bW1y?=
+ =?utf-8?B?dHB5WVRYbENxOThITkdiQkRzVHdzZWxISThHWktZWmVrYUdVZ1V6VVRVVm9Q?=
+ =?utf-8?B?bGVWUmNjVWNZbyt0R21hSHBQY2tmaG9CNUw2STZ6YndZMUp0UEozMmNBcDVk?=
+ =?utf-8?B?UDRMOHdCOE5yVGVrc2RhVUdRYTF2SjBWMzFkUkRxNzJXdHBjbFBxVDJyV1VC?=
+ =?utf-8?B?RXp3RFRtNUIxME1lakpPckZYVlhra3FrK3VkbjdEdElod1RSZ3VTbmtMMFl2?=
+ =?utf-8?B?SmtJREk0NU1JcVhhcStPUDdvMldFTWc4T1o2NVQrTE1IcUg5NzNyNHNDQWtL?=
+ =?utf-8?B?NEpQUThCcFNPTk9sbEZhdG9qeFlVOVUwR3V4QzhwQ2RYMXlmL28xaG1KYTRw?=
+ =?utf-8?B?a1Vqbm9JN3E0bGFwQ2szbjRoQXRMY1lnLzFXbnZlN0puOWNYUHI1Z21ITWdN?=
+ =?utf-8?B?SDltcTNTUDJaNEVHRjVEVTlVWjBoZDhtMFNwdVFjZEhVTDdvZG1ZTmRqaE00?=
+ =?utf-8?B?K0R3aTkzR0t4dGRhaU15TElGaXJqcWtGei9SK3hzNUs2MlNOdkZIUXBzWFdR?=
+ =?utf-8?B?N2hJcVRjcmUwT1JOZUN0WlZxbWUwNmpSY3prYUVkdkM2cHl4c2ZhenBJZGpu?=
+ =?utf-8?B?WXFvS3ZmTDFvcndYN3B5N0dzWVVzMSswQzdmcW1iM0JOamhJTHNidm1qL21V?=
+ =?utf-8?B?cVdHVzlOVTh2Zjg5cnZaV2N0bTFKd0tIUDB2bkhYRURTNGpIMkZCOU1RbVd6?=
+ =?utf-8?B?TU16aFgwTGkwRFpmR0swWjZtTzdSVDE2Zjh5OWxnczF4NWpIdVZpUkxmb1l6?=
+ =?utf-8?B?RkNiaXlYL0lLRlRGRWp1M3NrUnphTUl4NCt1bVRvVEZoV3J5aGNDYW1VNmM5?=
+ =?utf-8?B?WnREL3lteVZhMTdVU3BzcGQyWnJvanV1VXJPYlJlVmpkZTZQTjRlUDcxMUpN?=
+ =?utf-8?Q?vWnNIcSPdKCst/L9R4WuluI=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB7213.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(19092799006)(376014)(7416014)(52116014)(366016)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?T3BNV2grc0Z0K3B3SFhESkVYSjdjakZ3WTlQT2EralRMWlVFNnNtY2k0TlVy?=
- =?utf-8?B?NmRtVnhwbW1uYllKWXc0Z3pHMXd5UVZPVExhOXpqSG9vT1ZlWjRiZ1hFTkw2?=
- =?utf-8?B?Q0tPemMyNGJ3Tk9CRzBQcFFGd1lyY2NhUEdJTmEzM0o3WmEvTDdDNDBYWWx1?=
- =?utf-8?B?VVlPNllseHVHMUh6MGR6bkVnVEFwaFNtTHJXV1F2WGlLUFBua1I4Q3hUM3da?=
- =?utf-8?B?V0VLdjhlazB4djUraDVaWkNVQ3JkeDNRdUFKU1hnNXEwczI4Y0gzSGI5dmdT?=
- =?utf-8?B?Tk1ncDUwL2xKdm9TN29pWURVbkIxc214UjVmTWNZN3I3cm9zZitibWhUWXE4?=
- =?utf-8?B?UlVQSjdUczF0SG16V05QOUphMGxsbkRzYUZtYm9YZEUxS3RHcWhGRG9GWHA5?=
- =?utf-8?B?c0ZHeFFSSGlYTis2SCtYRzJjdk5KZjF1enpiRmxucXlIcFhsK2pwMnpZOWpi?=
- =?utf-8?B?MzRMeUdiYmVvcHBId0VrV1RIVk56TUVWZWJSUWZOZ3hIMllkSHJvQzk2ZVhD?=
- =?utf-8?B?RDFSMDFxbUdlMnhNRHl0c3lvQUpaQno0cy9wSllGV25SVDVGMWpjUXZYUzhq?=
- =?utf-8?B?UmZXeE82bTF0R1RBRmFmc2pkQnNweXBGeWphOTI0Y1FIWStoWVI5WnQ2QXNh?=
- =?utf-8?B?UUFuTW5OLzlVdkhidXlid1ZBTzczY1BwcTRiOGphaTVLeU9EUlRTN1cxQzk5?=
- =?utf-8?B?ejBvQmExTUg4LzAza1diVmhMOHRpN3hEV0ZJVEt2TUpZcjlDVW5Sb2tiTEVx?=
- =?utf-8?B?NVVvNncyaFBaUG4vNGVVaEFBYi80QTJUTHNoNS9tMnp3VFVTSHVBNGZPbWcv?=
- =?utf-8?B?TWltOUxQY0c3M2R6SHU0bHIvY3pHblVoZnNlb0x1bXlXK2VXNG9zaXhZRWNF?=
- =?utf-8?B?RThqYTNMcEJxWG1GRUl1QUtxWGpEQVhBeHZxYkxzZHdhL0hYL05zSHFjZ0Rx?=
- =?utf-8?B?YUpUeVl2MTZiWnhSVlZYSDVaNjRiZ3pPTTNmeG93bktjS3hGbklKb2RZTHlk?=
- =?utf-8?B?K0Qwb1lua3NTQWRIZEc3MmRjQUk1WEcxc25uM0hKQko2NnQvS05lb1ViSkQ0?=
- =?utf-8?B?U2t6WHNLT3JJWkpleGIrdFJtRGFqTUd6V3ZQSlYrMFBtWUNRenVrQXcxRzBH?=
- =?utf-8?B?RjZaYjJFVWdRanpkUXJsbzlxa2lQaExOdStZM3dzSHhmM2JkWUZWaHRqOStV?=
- =?utf-8?B?S1liQWhPYUpHcU0yYVZuV2l5cVpQK1R1ZGwwQWczZHJQbU1iUVZGV215cGJa?=
- =?utf-8?B?Vk4rWnArNXF1dVVKZWdzSktkcEhHT2laYUY5aFZkcVhkb0huN2cwcGJkdTRQ?=
- =?utf-8?B?b0RqZjhJSWpjYk1VTGNUQVB2bUF6TjlOaldoWnovREUrMkdkc1NsMlVUQTFC?=
- =?utf-8?B?K0tMQmhNbEd6Kzd1ai9aOUhiTDdlQzdmYkgyeXFsNW0yVEdyL3l6RTVyNjk1?=
- =?utf-8?B?MmkzMlBSK1dETjdnZ2lvQkg5ZlVqcnNuK0cwd0VjRkxpZGdZdWNFclFjRUJP?=
- =?utf-8?B?ckN2MDVQcDBaVVQyMUVUYzhNNUFpV0N4TjZwNEl3Q2RxVEZGaU94YWRmeWlw?=
- =?utf-8?B?MExocVR4VTRFekhDZkpGeGw2ZkpCeWZweTM3TU9sV0owV3R0ejlwa09CVTU3?=
- =?utf-8?B?WmRtWjN1L0F2MjN5YUhheUkxazJSdzIydFdoTUNpdUVkNHR6VTRyYXlkbXhr?=
- =?utf-8?B?Q3RKNzdJN29DSDVwN2d1a0FpeGV5WUNpcGVHRlZidmladzZwWkRmTEl4ZHFo?=
- =?utf-8?B?amFpQUd3K0VSU2Q4UDZRYkhvSnFJZVdOT2trcFpVdElyTzVjc2d1bGxvV2tr?=
- =?utf-8?B?dTFESkZwRnlZd0hiZVF2Y25xeDBaQnFROUk3NU0wY2JlZDBsbnJxQy8yWFNn?=
- =?utf-8?B?dXQ4d3ZDNUVrZDJYLzBYY2JXTVhXeVVEcWtLb3RFT1c5MXM2ODVKUjlDbnRr?=
- =?utf-8?B?U1c0eUtSYWlXcGFDdFROc2I2RHhtbkhMQ21TbDEyYWJxb1J1RjN6RWI4R2Vy?=
- =?utf-8?B?bFFzQTNUSUQzUGpPRWh3blNXTlJRTkpqMUN6WEM2Z2UvMCtCa1hYeDRpMTly?=
- =?utf-8?B?R0xPNDlSZXNHcEZ4UjFBTU1Yd3l5UDE3QXBJdXZ2QUJFVjZqeW9sRjlxb3M5?=
- =?utf-8?B?Qzk0K2g0azJBU0Q5c0J1SUQ3QkZETm5ENjJpbjJaeHVJZkt1bkE1bHFUdTAr?=
- =?utf-8?B?MlphTnlHdHBmU2txUzd3UlBGcndUNGxrR0c5V2kwQTEyTFUyeGJYc29qbTNC?=
- =?utf-8?B?b3g0empXT0xieE80bmZaZ0NWNUtWZkFUeUJhaWVOQmt4S1k5MG9tVVNtNFNn?=
- =?utf-8?B?YTBPZDZydWl2MHFzaVNpczZzTy9pcldFdWxGMHNacjhOcEJFSVpSZz09?=
+	=?utf-8?B?b1NxVTN4ZTVXS2wrUVdYQ3VVaU1CdHVNK0MwU0hTaWZrMDdGZUpYbFhZR3d2?=
+ =?utf-8?B?RzJ2UWE3N2FyQ3JwOWhhMFg1enJOL1prc2p3UXF4QksvOFJZQXRUUnc5RHVW?=
+ =?utf-8?B?MUI2eFJBNVJISjNrVVFBbUovdjYwOURvaDNXckZ4YUw3YzdYU0hzK0VCL084?=
+ =?utf-8?B?Z1IvSzdIWUNiRlpQelhGVldtbFd6Ujc2eDFCZVBENlR3SWhyU3VqTWE2RFFJ?=
+ =?utf-8?B?RFplcHNMT0pkVVF2ekd1eXlJdHExTGZobTlNWU5yVk9FSFhFVXI5R0l5Zis3?=
+ =?utf-8?B?c1IyTmEwZlZhT1QxeFV6WWFZUzRQVGYwUlZSdkZFTzZGY3JpY2l6SUxhalBk?=
+ =?utf-8?B?bmt0WlJMY05oWU5tQVNnRkFTaklvRkl3clQwcDRnYnU2cGh6ejNWTnhHK1BQ?=
+ =?utf-8?B?K1gwNFNVcjFkakFQcWtkVFFCeDdZS1U3TGgwUElReXlsWjVRMXdvQUtlY2sw?=
+ =?utf-8?B?UmRFRU9wOTJMdW5WL2F0eW5melR3WVBjVU9vV1VtK2dGVSs4QVJ5aDhiOFVt?=
+ =?utf-8?B?TXBiczMzeVJSRHVGa3d4WVphODBpT1UrNk1QRWJmSGpKb0FvZk9MWTM4bHgz?=
+ =?utf-8?B?ZWtxc2t6dzg5dlh6UFQ4Um1paWp6NDN4MzZUdGdUc09wRmVTcWVZdzhlY0lV?=
+ =?utf-8?B?UTV0aFhycDVHL2lPcTVucDhjNUs4STRDRnVxWC90ci96a0IxUUtMUTh1NkZU?=
+ =?utf-8?B?YXh5VzJ1dEZlaUtlSzcvdUt3YUcvVGUwS0hxTm0xV2NUWGtqSzJRVjREekFw?=
+ =?utf-8?B?TXE3MlZVOFhRaWpBMGNtQ0ZBZmFzL0gwSFlBSG1zeHVpSERlbWNCWE12Wlhr?=
+ =?utf-8?B?d0dlVjJ5YTdCYWpIaHo4cGVCRTdlc2N0NmJYSzFHcms0L1kveEYrb01DQ0RX?=
+ =?utf-8?B?Z01WaFZQZVpvbUhIc2tTZEVKdDI0NURwU01KYkdSeTdmWmlJaU1nb1o3Qjc4?=
+ =?utf-8?B?M2FiWlVTZzgwam1Ib3R3YzFldzZBcWZlNkhmQWNJRDBlYjY2VzRJZ29zeG0v?=
+ =?utf-8?B?REw2UFRjd2pLcGtaVWRScnR5M25SR3VOS0NUbE1pV2pZTEs0Umt4TjFxS0x4?=
+ =?utf-8?B?YTNEVkIrMjRleVFydWZsRXZNVXZFcjR6aWtxZjFxRzVwKzlXYXE0bzd0MERs?=
+ =?utf-8?B?YlNwOUQ1TlMyMzExemV1RUFibW5YdlMvTnhiYm4wT1c5M3Fib1JzU1RIUVdm?=
+ =?utf-8?B?TWZpV3htOGtJMk1mbWZVMTlDZHJXYjRWeE90a0JiczdQTGpNTWEyUHdxRjQx?=
+ =?utf-8?B?Y3hvaU0yZ1g1N0hNOXh5ZWwraEtRQm83MGpFQ2Z0Y1dPOUZpV0srY1lEZzBa?=
+ =?utf-8?B?ak4yQkFKUjZZbEt4QWtjZEVFWVBWZzc2bkluZTRFRUJFYm44OWJoVFJpWDJJ?=
+ =?utf-8?B?T05iMmZ6QmZxenk2d3JtNm9JNTZFSFVQdlc0c1RjaElOcGVoZTBES0lTdUZ2?=
+ =?utf-8?B?eXhPUlBVYkxVdi8xTFlKcm5Mbzl4ZEp5dFVLdTJ4WjU0ZWVNd2t4emR1Zjdv?=
+ =?utf-8?B?cXpQUmVCK2F4SnF4RDR5TGxzMnpvUFdoTXNCalB1dEc2OENlV3R4M3R5NEF0?=
+ =?utf-8?B?c0FTTWovcmFIREt0T1FDMzZKYU1kSkxITlRFbDNXZHpkY0dRRzFWci9rWUJj?=
+ =?utf-8?B?WldqZG1yOW50MDYxNGN2dWQrMnhCVkV0Z2tGaHY0Z3lGTUlPZU5UanFYR1hw?=
+ =?utf-8?B?Rk1SdnVBbEhFTXdrcXUydlh0anFURHhYWVhsUWRqTS81TkVneVRlaU9tS203?=
+ =?utf-8?B?V3FuKzBXbHdBSnlHbUZLMndYTVBmWFYzREJqSTVIU1dkdUFMdGhQK2F2S3VN?=
+ =?utf-8?B?NmJoRXJKeTJyTFdDbjVxMnc0N1RWT2p5UXA1M2FJd1gxOTRKZHlod21oS3BM?=
+ =?utf-8?B?Y0Y3UU55bENJeVc1TnFNaWZMa1ZnSUtadXZWelNoQW0wS3YwQnpnYkpmdWQ5?=
+ =?utf-8?B?SFBCb2JtQlNhWXV5M1FTOXBBUkFjVmFnRHhtUkNnZDJuZml4amcyLysxYjF3?=
+ =?utf-8?B?N3p2TndoRWFLNmQrZzF5VU9jQzRINEdKR1gwTGxVN3o2OFcrVmFGQXV4R25Y?=
+ =?utf-8?B?VVdNUlJIZVBXajR0RDRIRzF1cVBjREsrTVlUVXl0VVBMbWJtKy9CZG5SU1U0?=
+ =?utf-8?B?M3VubjBUQVA2SWFUcEZIVHJQTTlpNXpwd0JWY0ZBUXFvc2NzRkJkM3FnSG9o?=
+ =?utf-8?B?NUNKdnVMN1ViU2lZaDVLUGptNm5oMnhhQUltSlhISDV0TFF4UEoxdGNVNHZI?=
+ =?utf-8?B?cjRrMktVb09wQzBQdXBwam0zS0lNZS9GZ0NXUitSZ2JSTnE2bk1KRmxrTWxr?=
+ =?utf-8?B?UWxvaXVtQlU5bEpRWkxSaHBLZHQ4YjJibnJBZnppVE9RdEt4OThtQT09?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 109bcf32-5364-479f-f8a8-08de57384585
+X-MS-Exchange-CrossTenant-Network-Message-Id: b4dc02d7-f654-4651-ba90-08de573847fd
 X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB7213.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2026 08:53:53.0575
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2026 08:53:57.1750
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LKMueYbnOSVnjLk+bkfVhWxMZJNLXIMIArBb3QGx5SzH03s/klVNGT7N+IuLlyvJnUq7Sy8BnT33K6wrcqCnbA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: VqLqSzE7U5mJmac0w5+2puw2qimD+oNv1Uyi1OSvbjuPI4mT+6Ir6DBIh1AmOvRQxSZZQxvCyv93PnkcNqe/IA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR04MB10743
 
-On i.MX8MM, due to the hardware design limitation, the GPUMIX, GPU2D &
-GPU3D power domains share one reset domain. It is hard to coordinate
-all the three power domains dependency correctly, then lead to power
-on/off sequence violation.
+Due to the HW limitation on i.MX8MM, the gpumix, gpu2d and
+gpu3d share the same reset domain, that means when gpu2d/3d
+go through the power off/on cycle, the gpu2d/3d reset will
+also reset the gpumix domain, The GPUMIX ADB400 port also be
+reset. But the ADB400 must be put into power down before reset
+it.
 
-With the current GPCv2 driver implemenation, when doing the GPU stress
-test, in some corner case, the GPUMIX ADB400 will be reset wrongly,
-then lead to GPU hang.
+currently, gpumix, gpu2d/3d power domain use the pm runtime_pm
+to handle these power domain dependency, but in some corner case,
+the gpumix power off will be skipped, then the ADB400 port will
+be in active while gpu2d/3d doing the reset. The GPUMIX the ADB400
+port will be reset wrongly, so lead to unpredictable bus behavior.
 
-It is reasonable to use just virtual GPU power domain to control the
-three physical power domains as they share the same reset domain.
+To simplify these domain on/off order & dependency, refine the
+code to directly handle GPUMIX domain on/off along with the
+gpu2d/3d power on/off flow.
 
 Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 ---
-Jacky Bai (2):
-      Fix the imx8mm gpu hang due to adb400 reset wrongly
-      Remove the gpumix power domain node on imx8mm
+ drivers/pmdomain/imx/gpcv2.c | 100 ++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 84 insertions(+), 16 deletions(-)
 
- .../boot/dts/freescale/imx8mm-venice-gw7901.dts    |   4 -
- arch/arm64/boot/dts/freescale/imx8mm.dtsi          |  18 ++--
- drivers/pmdomain/imx/gpcv2.c                       | 100 +++++++++++++++++----
- 3 files changed, 89 insertions(+), 33 deletions(-)
----
-base-commit: 0f853ca2a798ead9d24d39cad99b0966815c582a
-change-id: 20260113-imx8mm_gpu_power_domain-56c22ce012a1
+diff --git a/drivers/pmdomain/imx/gpcv2.c b/drivers/pmdomain/imx/gpcv2.c
+index b7cea89140ee8923f32486eab953c0e1a36bf06d..3a13aa7f1888863048106c2432eec80c7364c462 100644
+--- a/drivers/pmdomain/imx/gpcv2.c
++++ b/drivers/pmdomain/imx/gpcv2.c
+@@ -53,8 +53,7 @@
+ #define IMX8MM_VPUG1_A53_DOMAIN			BIT(13)
+ #define IMX8MM_DISPMIX_A53_DOMAIN		BIT(12)
+ #define IMX8MM_VPUMIX_A53_DOMAIN		BIT(10)
+-#define IMX8MM_GPUMIX_A53_DOMAIN		BIT(9)
+-#define IMX8MM_GPU_A53_DOMAIN			(BIT(8) | BIT(11))
++#define IMX8MM_GPU_A53_DOMAIN			(BIT(8) | BIT(9) | BIT(11))
+ #define IMX8MM_DDR1_A53_DOMAIN			BIT(7)
+ #define IMX8MM_OTG2_A53_DOMAIN			BIT(5)
+ #define IMX8MM_OTG1_A53_DOMAIN			BIT(4)
+@@ -292,6 +291,13 @@ struct imx_pgc_domain {
+ 		u32 hskack;
+ 	} bits;
+ 
++	const struct {
++		u32 pxx;
++		u32 hskreq;
++		u32 hskack;
++		unsigned long pgc;
++	} parent_bits;
++
+ 	const int voltage;
+ 	const bool keep_clocks;
+ 	struct device *dev;
+@@ -335,6 +341,30 @@ static int imx_pgc_power_up(struct generic_pm_domain *genpd)
+ 		}
+ 	}
+ 
++	/* Need to do special handling for parent domain like GPUMIX on i.MX8MM */
++	if (domain->parent_bits.pxx) {
++			/* request the domain to power up */
++		regmap_update_bits(domain->regmap, domain->regs->pup,
++				   domain->parent_bits.pxx, domain->parent_bits.pxx);
++		/*
++		 * As per "5.5.9.4 Example Code 4" in IMX7DRM.pdf wait
++		 * for PUP_REQ/PDN_REQ bit to be cleared
++		 */
++		ret = regmap_read_poll_timeout(domain->regmap,
++					       domain->regs->pup, reg_val,
++					       !(reg_val & domain->parent_bits.pxx),
++					       0, USEC_PER_MSEC);
++		if (ret)
++			dev_err(domain->dev, "failed to command parent PGC\n");
++
++		/* disable power control */
++		for_each_set_bit(pgc, &domain->parent_bits.pgc, 32) {
++			regmap_clear_bits(domain->regmap, GPC_PGC_CTRL(pgc),
++					  GPC_PGC_CTRL_PCR);
++		}
++
++	}
++
+ 	reset_control_assert(domain->reset);
+ 
+ 	/* Enable reset clocks for all devices in the domain */
+@@ -376,6 +406,11 @@ static int imx_pgc_power_up(struct generic_pm_domain *genpd)
+ 
+ 	reset_control_deassert(domain->reset);
+ 
++	/* request parent ADB400 to power up */
++	if (domain->parent_bits.hskreq)
++		regmap_update_bits(domain->regmap, domain->regs->hsk,
++				   domain->parent_bits.hskreq, domain->parent_bits.hskreq);
++
+ 	/* request the ADB400 to power up */
+ 	if (domain->bits.hskreq) {
+ 		regmap_update_bits(domain->regmap, domain->regs->hsk,
+@@ -438,6 +473,21 @@ static int imx_pgc_power_down(struct generic_pm_domain *genpd)
+ 		}
+ 	}
+ 
++	/* request the Parent domain ADB400 to power down */
++	if (domain->parent_bits.hskreq) {
++		regmap_clear_bits(domain->regmap, domain->regs->hsk,
++				  domain->parent_bits.hskreq);
++
++		ret = regmap_read_poll_timeout(domain->regmap, domain->regs->hsk,
++					       reg_val,
++					       !(reg_val & domain->parent_bits.hskack),
++					       0, USEC_PER_MSEC);
++		if (ret) {
++			dev_err(domain->dev, "failed to power down parent ADB400\n");
++			goto out_clk_disable;
++		}
++	}
++
+ 	/* request the ADB400 to power down */
+ 	if (domain->bits.hskreq) {
+ 		regmap_clear_bits(domain->regmap, domain->regs->hsk,
+@@ -477,6 +527,30 @@ static int imx_pgc_power_down(struct generic_pm_domain *genpd)
+ 		}
+ 	}
+ 
++	if (domain->parent_bits.pxx) {
++		/* enable power control */
++		for_each_set_bit(pgc, &domain->parent_bits.pgc, 32) {
++			regmap_update_bits(domain->regmap, GPC_PGC_CTRL(pgc),
++					   GPC_PGC_CTRL_PCR, GPC_PGC_CTRL_PCR);
++		}
++
++		/* request the domain to power down */
++		regmap_update_bits(domain->regmap, domain->regs->pdn,
++				   domain->parent_bits.pxx, domain->parent_bits.pxx);
++		/*
++		 * As per "5.5.9.4 Example Code 4" in IMX7DRM.pdf wait
++		 * for PUP_REQ/PDN_REQ bit to be cleared
++		 */
++		ret = regmap_read_poll_timeout(domain->regmap,
++					       domain->regs->pdn, reg_val,
++					       !(reg_val & domain->parent_bits.pxx),
++					       0, USEC_PER_MSEC);
++		if (ret) {
++			dev_err(domain->dev, "failed to command Parent PGC\n");
++			goto out_clk_disable;
++		}
++	}
++
+ 	/* Disable reset clocks for all devices in the domain */
+ 	clk_bulk_disable_unprepare(domain->num_clks, domain->clks);
+ 
+@@ -787,20 +861,6 @@ static const struct imx_pgc_domain imx8mm_pgc_domains[] = {
+ 		.pgc   = BIT(IMX8MM_PGC_OTG2),
+ 	},
+ 
+-	[IMX8MM_POWER_DOMAIN_GPUMIX] = {
+-		.genpd = {
+-			.name = "gpumix",
+-		},
+-		.bits  = {
+-			.pxx = IMX8MM_GPUMIX_SW_Pxx_REQ,
+-			.map = IMX8MM_GPUMIX_A53_DOMAIN,
+-			.hskreq = IMX8MM_GPUMIX_HSK_PWRDNREQN,
+-			.hskack = IMX8MM_GPUMIX_HSK_PWRDNACKN,
+-		},
+-		.pgc   = BIT(IMX8MM_PGC_GPUMIX),
+-		.keep_clocks = true,
+-	},
+-
+ 	[IMX8MM_POWER_DOMAIN_GPU] = {
+ 		.genpd = {
+ 			.name = "gpu",
+@@ -811,6 +871,14 @@ static const struct imx_pgc_domain imx8mm_pgc_domains[] = {
+ 			.hskreq = IMX8MM_GPU_HSK_PWRDNREQN,
+ 			.hskack = IMX8MM_GPU_HSK_PWRDNACKN,
+ 		},
++
++		.parent_bits = {
++			.pxx = IMX8MM_GPUMIX_SW_Pxx_REQ,
++			.hskreq = IMX8MM_GPUMIX_HSK_PWRDNREQN,
++			.hskack = IMX8MM_GPUMIX_HSK_PWRDNACKN,
++			.pgc = BIT(IMX8MM_PGC_GPUMIX),
++		},
++
+ 		.pgc   = BIT(IMX8MM_PGC_GPU2D) | BIT(IMX8MM_PGC_GPU3D),
+ 	},
+ 
 
-Best regards,
 -- 
-Jacky Bai <ping.bai@nxp.com>
+2.34.1
 
 
