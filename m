@@ -1,133 +1,114 @@
-Return-Path: <linux-pm+bounces-41119-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41120-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF670D3AC78
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 15:43:01 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDDA1D3AE57
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 16:07:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2ACDF3019374
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 14:37:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1823A307B397
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 14:56:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE30533ADA9;
-	Mon, 19 Jan 2026 14:37:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED8C39280F;
+	Mon, 19 Jan 2026 14:53:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g+EN7LOJ"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ov9hOHxz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B646236437;
-	Mon, 19 Jan 2026 14:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5D239281B;
+	Mon, 19 Jan 2026 14:53:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768833444; cv=none; b=CVa+Yqfxh1f8aZERW6aDAfQVd2Ob4dE8bjw1Y+XrT9RAqSii8B6I5yxsjTQduv8i4vRs0YU6ppo3RvQJ3rRRqJXOzfqXvNWNdfckz2+Lc5Hj3esEQ+g3+MSw7unePj2thTGri3icHAzkzCQF9VpRBdLKrqvFdEUOCfSjGeKlnIU=
+	t=1768834426; cv=none; b=rKzbQDwNM/chiXb9o+3Gf6FWDFBEjraqrUsbZatjHou4fZHTjgcoRprGP6Ds9z6Pr2xF/9Cy9xhgrbZ+G+HERrTlCb2Wklr5pdDbFul/nfxRyV+ivQiz5twBQskR06WaPic0QfgzVvv5cROHXlIrLTKkuc4Ca22zwyAjIKTgJkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768833444; c=relaxed/simple;
-	bh=CSTmPBA6jWnROZuwiJTIQySlhBcVu9NnVrQTCL3GAR4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=KJUTwt3U9oue1WtBeLTj8zVCaLmeEuDMpWHUWwK/2GOJnGowX0CX71HSGVD4Y7ETYdlLirghC4gPYpAkP6LRabjhmgKbxMpeH+5kMjsqv6HbMUl/mVLByoQv/Run5zOGzXTIMRDMG2AGZWQjJtovXdrV4V8j5naG2czS3MGxIgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g+EN7LOJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B64A4C116C6;
-	Mon, 19 Jan 2026 14:37:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768833444;
-	bh=CSTmPBA6jWnROZuwiJTIQySlhBcVu9NnVrQTCL3GAR4=;
-	h=Date:From:Subject:Cc:To:References:In-Reply-To:From;
-	b=g+EN7LOJd5DlifzhjK5E3WGKGFyat9PZSAr8WAdmz92XyVQwA0sE/+zXvsfHrjksQ
-	 OzdVmrMR3A/aRfcu/3/a0yumSxnw0rPX+iBlowxF1yAGR8zh/F1xYC90p+YvxlsH3O
-	 wMLpMieaxjyyQMQeCeBS1XOvZKPKITy9j2MgViu9ZHZow3Ud3u7Gv8+AziAiCXF8so
-	 En3otoLhwMVyrfC6vukQRGMfXLyhBp3d5j6ey6aacwOFGcn+gDlSVGFgm1iS1mX6DW
-	 e7vP5v4tJCpBSILrj/cOdTfMrqHDnqSUfdzt0XVst1ej3wx6AJUgrv8QMkU5OLUF5/
-	 HWAhYAbPvnOuw==
+	s=arc-20240116; t=1768834426; c=relaxed/simple;
+	bh=T/HmJfxY0ZqSNDHs1UOoXna80pEALR8yUlN6/bQPKVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BHFpKKcprKhDRnoLwNYdkK53EhSZYS0Gnis0sabMVt4Jthe8Ci+QZ8WDXKUOlWS3qnu33sM1xPBTlUP190Kn1KwzU2Ybt9H7oJa+0/lp7JUxLhbM2M5xfNdzzoCRUvVjWoc+yjE8Zb1hhMDM0HToQm2nqPr0zwDAaTwE6HDwA8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ov9hOHxz; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=jrDAxjhFf3FPLMbr/IOqWmWDDR5q/doAeWiuVFjaQvY=; b=ov9hOHxzzbUcf3Ie3aSb0QShDF
+	+YggQwKOQw7guQyXSafiQuLquH2AQbsBQ3vkAOn72zXdtbwnjH7i/NB1rWne47GWzjcFfdit1ZyvC
+	0EMVON8aMu6/psOQ5YiuIsyOgTH88WTbE+Tf7kmQzZbEp1VcvVBUV/KFQIab9FCWncqn5bUdc1lrs
+	uoQND/4S7c4z4KnKbJYBuR+fY0Qipf+lsWIqYo9Hd+Go3BfKLBUf9Xiwmqg6IDtji8FRXBjy1tbBp
+	NTyLzfmVtOnLvPkLTKHfEjWnAtsk/sZ2cqJltxnpRBd6WEidzOCDKMmjzFI2oe57Wwa068Bx9GzuR
+	YPQz3Z2g==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vhqdH-0000000CLEC-0iMk;
+	Mon, 19 Jan 2026 14:53:31 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 959123006CD; Mon, 19 Jan 2026 15:53:30 +0100 (CET)
+Date: Mon, 19 Jan 2026 15:53:30 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Kieran Bingham <kbingham@kernel.org>,
+	Ben Segall <bsegall@google.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Ingo Molnar <mingo@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Xin Zhao <jackzxcui1989@163.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Jan Kiszka <jan.kiszka@siemens.com>, linuxppc-dev@lists.ozlabs.org,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Heiko Carstens <hca@linux.ibm.com>, linux-pm@vger.kernel.org,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Nicholas Piggin <npiggin@gmail.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 00/15] tick/sched: Refactor idle cputime accounting
+Message-ID: <20260119145330.GI830229@noisy.programming.kicks-ass.net>
+References: <20260116145208.87445-1-frederic@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Jan 2026 15:37:17 +0100
-Message-Id: <DFSN4FDCYHMW.3J3237PEBV2ZP@kernel.org>
-From: "Danilo Krummrich" <dakr@kernel.org>
-Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
-Cc: "Daniel Almeida" <daniel.almeida@collabora.com>, "Alice Ryhl"
- <aliceryhl@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>, "Viresh
- Kumar" <viresh.kumar@linaro.org>, "Maarten Lankhorst"
- <maarten.lankhorst@linux.intel.com>, "Thomas Zimmermann"
- <tzimmermann@suse.de>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Drew Fustini" <fustini@kernel.org>, "Guo Ren"
- <guoren@kernel.org>, "Fu Wei" <wefu@redhat.com>,
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, "Michael
- Turquette" <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>,
- "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>,
- "Gary Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Trevor Gross" <tmgross@umich.edu>,
- <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <dri-devel@lists.freedesktop.org>, <linux-riscv@lists.infradead.org>,
- <linux-pwm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>
-To: "Maxime Ripard" <mripard@kernel.org>
-References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
- <20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com>
- <20260108-delectable-fennec-of-sunshine-ffca19@houat>
- <98CD0BF6-3350-40B9-B8A9-F569AE3E3220@collabora.com>
- <20260119-thundering-tested-robin-4be817@houat>
- <aW4lCfUyumOKRRJm@google.com>
- <518D8B09-B9A1-4DB4-85CD-37A2DD3D5FB1@collabora.com>
- <DFSLCI9U4NCW.2HI2UPUI7G134@kernel.org>
- <20260119-weightless-pelican-of-anger-190db0@houat>
-In-Reply-To: <20260119-weightless-pelican-of-anger-190db0@houat>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260116145208.87445-1-frederic@kernel.org>
 
-On Mon Jan 19, 2026 at 3:18 PM CET, Maxime Ripard wrote:
-> On Mon, Jan 19, 2026 at 02:13:48PM +0100, Danilo Krummrich wrote:
->> On Mon Jan 19, 2026 at 1:54 PM CET, Daniel Almeida wrote:
->> >> On 19 Jan 2026, at 09:35, Alice Ryhl <aliceryhl@google.com> wrote:
->> >> I think that if you still want an API where you just call enable/disa=
-ble
->> >> directly on it with no protection against unbalanced calls, then that
->> >> should be the special API. Probably called RawClk and functions marke=
-d
->> >> unsafe. Unbalanced calls seem really dangerous and use should not be
->> >> encouraged.
->>=20
->> +1; and unless there is a use-case that requires otherwise, it should no=
-t even
->> be possible to do this at all -- at least for driver code.
->
-> I mean, it's great, it's safe, etc. but it's also suboptimal from a PM
-> perspective on many platforms. It's totally fine to provide nice, safe,
-> ergonomic wrappers for the drivers that don't care (or can't, really),
-> but treating a legitimate optimisation as something we should consider
-> impossible to do is just weird to me.
+On Fri, Jan 16, 2026 at 03:51:53PM +0100, Frederic Weisbecker wrote:
+>  kernel/sched/cputime.c             | 302 +++++++++++++++++++++++++++++++------
 
-I said that an unsafe API with potentially unbalanced calls is something we
-should clearly avoid for drivers. This is *not* equivalent to "treating a
-legitimate optimisation as something we should consider impossible".
+My editor feels strongly about the below; with that it still has one
+complaint about paravirt_steal_clock() which does not have a proper
+declaration.
 
-If we discover use-cases where the current API doesn't work well, we can
-invenstigate further.
 
->> > I think we should discourage RawClk if at all possible. But if the con=
-sensus
->> > is that we *really* need this easily-abused thing, I can provide a fol=
-low-up.
->>=20
->> I think we should only do this if there are use-case with no alternative=
-, so far
->> there haven't been any AFAIK.
->
-> I don't really care about which alternative we come up with, but look at
-> devm_regmap_init_mmio_clk for example. It is a valid use-case that
-> already exists today, and has had for more than a decade at this point.
-
-I don't see the issue with devm_regmap_init_mmio_clk()? It takes a referenc=
-e
-count of the clock and prepares it when called and unprepares the clk in dr=
-ops
-its reference in regmap_mmio_free_context() called from the devres callback=
-.
-
-That something we can easily do with the current API, no?
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index 7ff8dbec7ee3..248232fa6e27 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -2,6 +2,7 @@
+ /*
+  * Simple CPU accounting cgroup controller
+  */
++#include <linux/sched/clock.h>
+ #include <linux/sched/cputime.h>
+ #include <linux/tsacct_kern.h>
+ #include "sched.h"
 
