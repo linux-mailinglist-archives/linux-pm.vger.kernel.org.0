@@ -1,113 +1,219 @@
-Return-Path: <linux-pm+bounces-41105-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41106-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09D12D3A9CC
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 14:02:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7522DD3AA07
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 14:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ACC803042741
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:02:42 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4CBE430838E9
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:13:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B0833624D9;
-	Mon, 19 Jan 2026 13:02:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 188AE365A0B;
+	Mon, 19 Jan 2026 13:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AfC2LjX+"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="b3AjMzJl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2729363C5A;
-	Mon, 19 Jan 2026 13:02:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEDD361DDB
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 13:13:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768827760; cv=none; b=dWfCXyrGJEV1bpbZy8YapEuZl8oCW9E2BDz13+mdI/eRmXV5rmTYkOIslAI9YVjq8D21iPAEyiFMoe/sNNz0WZGsjx6sd2rdJYQf0GMGvXTmiCYzKa1h+wZKfl/90gAaBnCFsqdPgCAAl2dvGBq2F3boo/EUBxoagSZD9f+Lf8w=
+	t=1768828389; cv=none; b=evh1Ye12QFxT9ateXvMEf0hhzrWm7ts2UXAZqwcuQ28C0F8vNq0aNG2AXXVdJMHzEj2LipkZDKYoCx0RJzmmzAc+hbqaSg75ilI7mEu8b2AiSUmo2vt0BBn0Qr22xvUi2/gyVXCJaVIfnv/hfpgKKFgZSnWYTkR3/M2WcRvzigo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768827760; c=relaxed/simple;
-	bh=dioFFkMm6JTrUu9b23Spsfx6MzNnQgiKzNjXl7BTIvU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UInbtCSeIqdeMkevqZnANO4Z1WagjJfi8bnNj2pjw1NBJGuGExfB9vA0yxb6dfLTCM05B3SjhHiU+UpRAnZ4P9bVD+zhWAAH6yokVGrmSsKqShZZzUhaIPCjpCVcElVBt1rlT6aihz+pDzm1B5ketP/ZVW+RvrNcLIUZSTuTrtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=AfC2LjX+; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=K6GIJX4FXlvpq7uMxNyYRLbfDKf0u3wG72kJM/83578=; b=AfC2LjX+NrAKtI09VCS2VApu5r
-	TB5u50TAe6rKe0UqNLR+zN084CjDkMuVhwbSmzDwY5UuDDh6EQUGlMMqMbKkNK7ql4UfANuiloz35
-	A4S7ItXfX/XkXB8KxXFSF6PKoALuvUcmNK6a6vPKYzeV3HdIgx0VPPlO0XrA1ja/ADs3vlqkDI9tA
-	dMQrtDJtzWjg9N7sK+OSoDxPGnKgR4E0BZ2GMH6mKDynRvgFkXi3/bvnbZEcl2081N3hZQ03APAMD
-	u+naESOWRL7j5M8hE9v/EdwcoDUWPevfhimo1rR7/PMnk3vRVMEib6SULgy/fk8ZkN5PBmOV9H9KT
-	9Cqb9VNw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vhoti-0000000C870-3hn0;
-	Mon, 19 Jan 2026 13:02:23 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 58E263006CD; Mon, 19 Jan 2026 14:02:22 +0100 (CET)
-Date: Mon, 19 Jan 2026 14:02:22 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Heiko Carstens <hca@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
-	Jan Kiszka <jan.kiszka@siemens.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Kieran Bingham <kbingham@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Xin Zhao <jackzxcui1989@163.com>, linux-pm@vger.kernel.org,
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 03/15] sched/cputime: Correctly support generic vtime
- idle time
-Message-ID: <20260119130222.GU830755@noisy.programming.kicks-ass.net>
-References: <20260116145208.87445-1-frederic@kernel.org>
- <20260116145208.87445-4-frederic@kernel.org>
+	s=arc-20240116; t=1768828389; c=relaxed/simple;
+	bh=k/h50n8vWqc+q0B9zN6Fs+ILbQYyrcMkfxlM47D6Gk4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=llVx7IHTxefYtbLxSo/lyUyQ0Ajb/RdKvsZqM9L9JpUPbve5Y4ZI4n+8wL5P9u+z3R2sExeOI1i2ZYOdxptpy0WOBEtUYby5oksg9R9u9oRh7Y617O5Jzt6NAnETF/3davLUlCCzZ3lZ26j3CDIHF3rINUHWjoCAIt8jUzMVlnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=b3AjMzJl; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20260119131304euoutp01e12a73c8daafe786ef973908675aac98~MJAtRjan_0548105481euoutp01z
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 13:13:04 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20260119131304euoutp01e12a73c8daafe786ef973908675aac98~MJAtRjan_0548105481euoutp01z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1768828384;
+	bh=Bj9sRPcxMKBSsLFWUn5X+Cp367Ih4xF1g80Xq3QtY4E=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=b3AjMzJlNqVReL03wgAgp5fgYNwCUW7rqFdSOOTxXo58Orf5pGegGQPT5Ogx9dr34
+	 bwfTyQ7iyTM6JqUepnojrRorYP4a5bEndWH8y9Wgih9NudniteO/PXe5L8uL6YBbph
+	 lYzYKhKZ0K8+t3OkbLaE/QHEsXqukt/ad6WWyWeY=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20260119131304eucas1p1d10c043c29d8fefa78dc1a3221231f27~MJAs1SWgR2584625846eucas1p1W;
+	Mon, 19 Jan 2026 13:13:04 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20260119131303eusmtip15c9111c50afc306b518769c68ae4c02b~MJAsVLxov2848728487eusmtip1s;
+	Mon, 19 Jan 2026 13:13:03 +0000 (GMT)
+Message-ID: <6e0c511f-1127-4a35-a40c-0161de0ec752@samsung.com>
+Date: Mon, 19 Jan 2026 14:13:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260116145208.87445-4-frederic@kernel.org>
+User-Agent: Betterbird (Windows)
+Subject: Re: [PATCH v4] PCI/PM: Prevent runtime suspend before devices are
+ fully initialized
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Brian Norris <briannorris@chromium.org>, Bjorn Helgaas
+	<helgaas@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner
+	<lukas@wunner.de>, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?=
+	<ilpo.jarvinen@linux.intel.com>
+Content-Language: en-US
+From: Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <CAJZ5v0j=TM6DoGbW1agbiHUbq46G7pyd25E=ih2at7dvYr83Sg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20260119131304eucas1p1d10c043c29d8fefa78dc1a3221231f27
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8
+X-EPHeader: CA
+X-CMS-RootMailID: 20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8
+References: <20260106222715.GA381397@bhelgaas>
+	<CGME20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8@eucas1p1.samsung.com>
+	<0e35a4e1-894a-47c1-9528-fc5ffbafd9e2@samsung.com>
+	<aWf4KyTSIocWTmXw@google.com>
+	<61e8c93c-d096-4807-b2dd-a22657f2e06a@samsung.com>
+	<aWrjhqC_6I2UNXC5@google.com>
+	<CAJZ5v0hWt63=0yjFrbTY8zXubh-Uc6ZwAndT73VL7itMkTe81A@mail.gmail.com>
+	<CAJZ5v0gKZFWzuFT=cF_Ydjpro+sXzdeZ_+B4GEfiifa-cxpbGw@mail.gmail.com>
+	<d2c006c3-44c3-4270-b1ca-5d1a0d7f4e09@samsung.com>
+	<CAJZ5v0j=TM6DoGbW1agbiHUbq46G7pyd25E=ih2at7dvYr83Sg@mail.gmail.com>
 
-On Fri, Jan 16, 2026 at 03:51:56PM +0100, Frederic Weisbecker wrote:
+On 19.01.2026 13:26, Rafael J. Wysocki wrote:
+> On Mon, Jan 19, 2026 at 11:01 AM Marek Szyprowski
+> <m.szyprowski@samsung.com> wrote:
+>> On 18.01.2026 12:59, Rafael J. Wysocki wrote:
+>>> On Sun, Jan 18, 2026 at 12:53 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>>> On Sat, Jan 17, 2026 at 2:19 AM Brian Norris <briannorris@chromium.org> wrote:
+>>>>> On Thu, Jan 15, 2026 at 12:14:49PM +0100, Marek Szyprowski wrote:
+>>>>>> On 14.01.2026 21:10, Brian Norris wrote:
+>>>>>>> On Wed, Jan 14, 2026 at 10:46:41AM +0100, Marek Szyprowski wrote:
+>>>>>>>> On 06.01.2026 23:27, Bjorn Helgaas wrote:
+>>>>>>>>> On Thu, Oct 23, 2025 at 02:09:01PM -0700, Brian Norris wrote:
+>>>>>>>>>> Today, it's possible for a PCI device to be created and
+>>>>>>>>>> runtime-suspended before it is fully initialized. When that happens, the
+>>>>>>>>>> device will remain in D0, but the suspend process may save an
+>>>>>>>>>> intermediate version of that device's state -- for example, without
+>>>>>>>>>> appropriate BAR configuration. When the device later resumes, we'll
+>>>>>>>>>> restore invalid PCI state and the device may not function.
+>>>>>>>>>>
+>>>>>>>>>> Prevent runtime suspend for PCI devices by deferring pm_runtime_enable()
+>>>>>>>>>> until we've fully initialized the device.
+>>>>>>> ...
+>>>>>>>> This patch landed recently in linux-next as commit c796513dc54e
+>>>>>>>> ("PCI/PM: Prevent runtime suspend until devices are fully initialized").
+>>>>>>>> In my tests I found that it sometimes causes the "pci 0000:01:00.0:
+>>>>>>>> runtime PM trying to activate child device 0000:01:00.0 but parent
+>>>>>>>> (0000:00:00.0) is not active" warning on Qualcomm Robotics RB5 board
+>>>>>>>> (arch/arm64/boot/dts/qcom/qrb5165-rb5.dts). This in turn causes a
+>>>>>>>> lockdep warning about console lock, but this is just a consequence of
+>>>>>>>> the runtime pm warning. Reverting $subject patch on top of current
+>>>>>>>> linux-next hides this warning.
+>>>>>>>>
+>>>>>>>> Here is a kernel log:
+>>>>>>>>
+>>>>>>>> pci 0000:01:00.0: [17cb:1101] type 00 class 0xff0000 PCIe Endpoint
+>>>>>>>> pci 0000:01:00.0: BAR 0 [mem 0x00000000-0x000fffff 64bit]
+>>>>>>>> pci 0000:01:00.0: PME# supported from D0 D3hot D3cold
+>>>>>>>> pci 0000:01:00.0: 4.000 Gb/s available PCIe bandwidth, limited by 5.0
+>>>>>>>> GT/s PCIe x1 link at 0000:00:00.0 (capable of 7.876 Gb/s with 8.0 GT/s
+>>>>>>>> PCIe x1 link)
+>>>>>>>> pci 0000:01:00.0: Adding to iommu group 13
+>>>>>>>> pci 0000:01:00.0: ASPM: default states L0s L1
+>>>>>>>> pcieport 0000:00:00.0: bridge window [mem 0x60400000-0x604fffff]: assigned
+>>>>>>>> pci 0000:01:00.0: BAR 0 [mem 0x60400000-0x604fffff 64bit]: assigned
+>>>>>>>> pci 0000:01:00.0: runtime PM trying to activate child device
+>>>>>>>> 0000:01:00.0 but parent (0000:00:00.0) is not active
+>>>>>>> Thanks for the report. I'll try to look at reproducing this, or at least
+>>>>>>> getting a better mental model of exactly why this might fail (or,
+>>>>>>> "warn") this way. But if you have the time and desire to try things out
+>>>>>>> for me, can you give v1 a try?
+>>>>>>>
+>>>>>>> https://lore.kernel.org/all/20251016155335.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid/
+>>>>>>>
+>>>>>>> I'm pretty sure it would not invoke the same problem.
+>>>>>> Right, this one works fine.
+>>>>>>
+>>>>>>> I also suspect v3
+>>>>>>> might not, but I'm less sure:
+>>>>>>>
+>>>>>>> https://lore.kernel.org/all/20251022141434.v3.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid/
+>>>>>> This one too, at least I was not able to reproduce any fail.
+>>>>> Thanks for testing. I'm still not sure exactly how to reproduce your
+>>>>> failure, but it seems as if the root port is being allowed to suspend
+>>>>> before the endpoint is added to the system, and it remains so while the
+>>>>> endpoint is about to probe. device_initial_probe() will be OK with
+>>>>> respect to PM, since it will wake up the port if needed. But this
+>>>>> particular code is not OK, since it doesn't ensure the parent device is
+>>>>> active while preparing the endpoint power state.
+>>>>>
+>>>>> I suppose one way to "solve" that is (untested):
+>>>>>
+>>>>> --- a/drivers/pci/bus.c
+>>>>> +++ b/drivers/pci/bus.c
+>>>>> @@ -380,8 +380,12 @@ void pci_bus_add_device(struct pci_dev *dev)
+>>>>>                   put_device(&pdev->dev);
+>>>>>           }
+>>>>>
+>>>>> +       if (dev->dev.parent)
+>>>>> +               pm_runtime_get_sync(dev->dev.parent);
+>>>>>           pm_runtime_set_active(&dev->dev);
+>>>>>           pm_runtime_enable(&dev->dev);
+>>>>> +       if (dev->dev.parent)
+>>>>> +               pm_runtime_put(dev->dev.parent);
+>>>>>
+>>>>>           if (!dn || of_device_is_available(dn))
+>>>>>                   pci_dev_allow_binding(dev);
+>>>>>
+>>>>> Personally, I'm more inclined to go back to v1, since it prepares the
+>>>>> runtime PM status when the device is first discovered. That way, its
+>>>>> ancestors are still active, avoiding these sorts of problems. I'm
+>>>>> frankly not sure of all the reasons Rafael recommended I make the
+>>>>> v1->v3->v4 changes, and now that they cause problems, I'm inclined to
+>>>>> question them again.
+>>>>>
+>>>>> Rafael, do you have any thoughts?
+>>>> Yeah.
+>>>>
+>>>> Move back pm_runtime_set_active(&dev->dev) back to pm_runtime_init()
+>>> Or rather leave it there to be precise, but I think you know what I mean. :-)
+>>>
+>>>> because that would prevent the parent from suspending and keep
+>>>> pm_runtime_enable() here because that would prevent the device itself
+>>>> from suspending between pm_runtime_init() and this place.
+>>>>
+>>>> And I would add comments in both places.
+>> Confirmed, the following change (compared to $subject patch) fixed my issue:
+>>
+>> diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
+>> index 3ef60c2fbd89..7e2b7e452d51 100644
+>> --- a/drivers/pci/bus.c
+>> +++ b/drivers/pci/bus.c
+>> @@ -381,7 +381,6 @@ void pci_bus_add_device(struct pci_dev *dev)
+>>           }
+>>
+>>           pm_runtime_set_active(&dev->dev);
+>> -       pm_runtime_enable(&dev->dev);
+> That works too, but it would defeat the purpose of the original
+> change, so I mean the other way around.
+>
+> That is, leave the pm_runtime_enable() here and move the
+> pm_runtime_set_active() back to the other place.
 
-> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-> index 8ddf74e705d3..f1d07a0276a5 100644
-> --- a/kernel/time/tick-sched.c
-> +++ b/kernel/time/tick-sched.c
-> @@ -780,7 +780,7 @@ static u64 get_cpu_sleep_time_us(struct tick_sched *ts, ktime_t *sleeptime,
->  	ktime_t now, idle;
->  	unsigned int seq;
->  
-> -	if (!tick_nohz_active)
-> +	if (!tick_nohz_active || vtime_generic_enabled_cpu(cpu))
->  		return -1;
->  
->  	now = ktime_get();
+Okay, I mixed that. This way it works too and fixes the observed issue.
 
-Is this not broken? IIUC this means that you can no longer use
-get_cpu_{idle,iowait}_time_us() the moment you have context tracking
-enabled.
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
 
