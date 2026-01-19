@@ -1,217 +1,147 @@
-Return-Path: <linux-pm+bounces-41061-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41065-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 925B7D39C7B
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 03:42:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92435D39DDB
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 06:37:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 869323006598
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 02:42:46 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E2B8F300A354
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 05:37:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7AB24A046;
-	Mon, 19 Jan 2026 02:42:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FADA33032C;
+	Mon, 19 Jan 2026 05:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="LTAYb0cZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aN32r5M0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC774A33;
-	Mon, 19 Jan 2026 02:42:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC591C7012
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 05:37:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768790565; cv=none; b=mWLmAxCkhYR/T6QkNjFKLKRVXbQOcVnSCn2TVzyBm73VQCzZ0lUh/lSp6vQXNWFMVZG4RQ3Sy11vGclYPy6T4UcCPWvsAhSiM+3yOZHGsD1f3T0QvjYhlm032uF7ALMSiTdo9k8GlWehGJ7dexN84r/twtJA6LX0J/G6Eev8jsc=
+	t=1768801072; cv=none; b=SU1/fzIG0gEEZHit6KhgldWQaTNBMw2aS0Zq/533rABkoTecylootdyl0x0GuHeOZ/yh6KJxJjhnrDEgG8tdMndC74uzjwfCssG6PhprtbX2byudvXhPal+pvTcfWEELD5fFzuETdXvfc5bqSSOziBhvxV4geo2ZV3zmTo7b/kE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768790565; c=relaxed/simple;
-	bh=jlkmpKuncoyZu/hQowccSdqRI6uAzQEs5bFcVnOzYoo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RQ199tndU6wokHqU06xXhremnUPcoZ8TRGb8DNEffpdRetwDkTGoULyyEJ1gcH0aY8Mus/xs/zs8CfLTJUCbt59jz8qQxKFFu7cddAsVbpUBzFSAmWaivWrjE6mtbozEjrSiTjvos/Y10bk5fRcg3UkhlbRYlC8XqOBGwWOWyco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=LTAYb0cZ; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Date:Subject:MIME-Version:Content-Type:
-	Message-Id:To; bh=mMKteYJ83AABaeoBQ2umjnHT9xppt0usrG+mGsUDZqk=;
-	b=LTAYb0cZbKS1UiogSQortGSlAEh44ZikefZFv+3ZAHwmFe8X0SMITe5VdV8wqP
-	nEM0cdmez+9Td+oPrVm3CeI/U1KP6b9OeGnDHBwVxCm/Z1I8/suB3SYRbGcSTlYy
-	ap046L4ONveohGqxpgitmheJgwoLy2ym7NHIAuX5F7eGk=
-Received: from [113.54.162.98] (unknown [])
-	by gzsmtp4 (Coremail) with SMTP id PygvCgAXQfnSmW1pNwHHLg--.6S5;
-	Mon, 19 Jan 2026 10:41:32 +0800 (CST)
-From: Shuwei Wu <shuweiwoo@163.com>
-Date: Mon, 19 Jan 2026 10:41:23 +0800
-Subject: [PATCH v3 3/3] riscv: dts: spacemit: Add thermal sensor for K1 SoC
+	s=arc-20240116; t=1768801072; c=relaxed/simple;
+	bh=kpZ6kpUv/7LKQiaUs7sFoIfYQd0e2AXe/uijT3vOfW4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TEHALItCSqUsVscSa1xAfQnsGmE94wLoqOh1sSqydN16L5lAVAkdGU8sGnNsqj0Rtwa+Vkk/3lN64F12eo3aXrA717qyh6sDGjvg1/CPmJR5VM7VG52Gi7sHzRyS8zgNVQ5ONhrB3m8oBJPtLSFPSvBkeI0epT/FfEMnBTEKoeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=aN32r5M0; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2a1022dda33so23609145ad.2
+        for <linux-pm@vger.kernel.org>; Sun, 18 Jan 2026 21:37:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1768801070; x=1769405870; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rV07savPRO0IKbzKw21+aHwR+cCqLisS1/gIxq8rFVs=;
+        b=aN32r5M0+IYay5flQUpiovdjwzlOwX4ikkWLriAJV5DLlcr7Th5sxrXH+SLd2l40YE
+         4j27zrpyKMso/mYQch954DuE9KUOlNTNUU5J7UiUvUEeyFzIw1fND1KzwVuK+W/BiyY6
+         KisfHfjJaPn7l99XX0UIkWgZT9rBOqDCiLF64k5hnxGXW1ZS++lC0cfM00gcL4JjQVko
+         RwY3kNa9F02BX37gxGKUSAP6uTcL+eEDc+AnMxz+tDXTzEk4NgHcaBZgTWMc2M978bRU
+         hr7FqIzuedrjPNZE3OLHJy726Ncr0aPTr7GuVZLlsLUS06dIFdXGgMgFw9LNMHKqztNm
+         gXKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768801070; x=1769405870;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rV07savPRO0IKbzKw21+aHwR+cCqLisS1/gIxq8rFVs=;
+        b=vnrVrgHb2mdHbEPjTXnjR9u9hZV5g4+cmkzcZqT+m9Qz8nFF2ZaVvGnFSoR5NuPXbA
+         tN99CZveDTzecWayBmX6+zk4o0/8Nio57G4psehITuBGSqXT35zUUQrWUz6oB2ljWh2F
+         rbkoODFDn7KSdD+IDiO5ULmqCySx0JytZlUgXQ4NYLbNVhf4k4WwEIVbUtUdACYpG8hP
+         ifig5q9FmLgB9SOGSActEQdvBy3TyCKWNbWl5XvATQFrhzFzLznEtFIfZQWueOjPm8AC
+         sD8XrfJ/HGsNHmSxikgis8/3YaB9zlWtJn4GKaljaJQB906MSz+CC7c1eebyJxo5326m
+         Fy7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWXxNiqLWla28oWiJPk/uEDi6Z3LdxHa6Xk9RQ9mz8h/dxrgNX4XRp640TVsig3Uxc8e2NOCpL5wQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyu3tP54OmLb4wYOdIjd9ayXQ7c4uSfQVSjf7bsJl15ixtMq5QJ
+	3D4lv9Z7V1OkCfVTME0zwG1fCqeJUc47B88TfXDGQbxfrtK4smNdVhphhdqJsQZIZ6A=
+X-Gm-Gg: AZuq6aISLafP9wHokBLF+OcXx4BFHDQnXiwT3bm3ME/3mHMCTn1YtxG0XxocAdw0JJt
+	h1/8tZMKwos55rukL/OIFx3GPBkW3unJB3kiyZgbmwIkMnvWVgKdUQEekXMvDPL+tywHQKJfqbR
+	nO0pJSYZaUKjWKYO+uXou6/IIWJODOHn7k5WMd3w5SQQgSjuO6dwUmiUgWY+eCKYgrY2OC2MY7T
+	+NPvakSXykHEc4SLp4IxX1LxgQEVsqyKdRLBbKjiaN0xnRn47OU1XljcTprnr5p2kNbFgHunLZ1
+	vaCZUgI5M/5XMLdTggV/Mkf+hWItr0AUcsZFKRVejLceniRUesR5ZtxnVmQnHO6gUG9hWa9ENYQ
+	+Pys6MuOKXWQTKSZPmtYgIjHXqsFehXy5ar0Iv+RX8NjMiR58Oxr2V4W3D1tPOBCPz4TzXC2+76
+	O3O2wL2Zls4Ak=
+X-Received: by 2002:a17:903:28d:b0:298:efa:511f with SMTP id d9443c01a7336-2a7176c5c7amr104119265ad.39.1768801070083;
+        Sun, 18 Jan 2026 21:37:50 -0800 (PST)
+Received: from localhost ([122.172.80.63])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a7190eee4fsm81033725ad.42.2026.01.18.21.37.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Jan 2026 21:37:49 -0800 (PST)
+Date: Mon, 19 Jan 2026 11:07:47 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, 
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, 
+	Jan Kiszka <jan.kiszka@siemens.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
+	Juri Lelli <juri.lelli@redhat.com>, Kieran Bingham <kbingham@kernel.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Mel Gorman <mgorman@suse.de>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
+	Nicholas Piggin <npiggin@gmail.com>, "Paul E . McKenney" <paulmck@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	Uladzislau Rezki <urezki@gmail.com>, Valentin Schneider <vschneid@redhat.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Xin Zhao <jackzxcui1989@163.com>, linux-pm@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 07/15] cpufreq: ondemand: Simplify idle cputime
+ granularity test
+Message-ID: <rnnx7nges4otjixz4n62q7vtgrdcphepbkpmdntupbdft2yvi7@b3ong66tikoh>
+References: <20260116145208.87445-1-frederic@kernel.org>
+ <20260116145208.87445-8-frederic@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260119-patchv2-k1-thermal-v3-3-3d82c9ebe8a4@163.com>
-References: <20260119-patchv2-k1-thermal-v3-0-3d82c9ebe8a4@163.com>
-In-Reply-To: <20260119-patchv2-k1-thermal-v3-0-3d82c9ebe8a4@163.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@gentoo.org>, 
- Shuwei Wu <shuweiwoo@163.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
- linux-kernel@vger.kernel.org
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768790485; l=3080;
- i=shuweiwoo@163.com; s=20251125; h=from:subject:message-id;
- bh=jlkmpKuncoyZu/hQowccSdqRI6uAzQEs5bFcVnOzYoo=;
- b=CX+y1cjUVFr7e38iePBSWyN6eKWA31woMuzZvV5KnypFjVVQiUuNerBGLH/Ptk4SqImckRF6t
- cA0yAeXtF3GCkSHqspQsN5r6wblANQZFBuhftdxyxKOKzAjX6Kwo92p
-X-Developer-Key: i=shuweiwoo@163.com; a=ed25519;
- pk=qZs6i2UZnXkmjUrwO5HJxcfpCvgSNrR4dcU5cjtfTSk=
-X-CM-TRANSID:PygvCgAXQfnSmW1pNwHHLg--.6S5
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZrW8Gw45ZFy3Xw4xJr13urg_yoW5XF4xpF
-	ySkws5GFZrJryfXa13CrWDKa98KanYva48Xan7uryrArn0qFZI93y0k3W5tF1kGr4rW34j
-	vr1qy34DuF1qy3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pNFAJkUUUUU=
-X-CM-SenderInfo: 5vkx4vplzr0qqrwthudrp/xtbC5BxT4WltmdyFLgAA3g
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260116145208.87445-8-frederic@kernel.org>
 
-Include the Thermal Sensor node in the SpacemiT K1 dtsi
-with definitions for registers, clocks, and interrupts.
-Additionally, configure thermal zones for the soc, package, gpu, and
-clusters to enable temperature monitoring via the thermal framework.
+On 16-01-26, 15:52, Frederic Weisbecker wrote:
+> cpufreq calls get_cpu_idle_time_us() just to know if idle cputime
+> accounting has a nanoseconds granularity.
+> 
+> Use the appropriate indicator instead to make that deduction.
+> 
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> ---
+>  drivers/cpufreq/cpufreq_ondemand.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
+> index a6ecc203f7b7..2d52ee035702 100644
+> --- a/drivers/cpufreq/cpufreq_ondemand.c
+> +++ b/drivers/cpufreq/cpufreq_ondemand.c
+> @@ -334,17 +334,12 @@ static void od_free(struct policy_dbs_info *policy_dbs)
+>  static int od_init(struct dbs_data *dbs_data)
+>  {
+>  	struct od_dbs_tuners *tuners;
+> -	u64 idle_time;
+> -	int cpu;
+>  
+>  	tuners = kzalloc(sizeof(*tuners), GFP_KERNEL);
+>  	if (!tuners)
+>  		return -ENOMEM;
+>  
+> -	cpu = get_cpu();
+> -	idle_time = get_cpu_idle_time_us(cpu, NULL);
+> -	put_cpu();
+> -	if (idle_time != -1ULL) {
+> +	if (tick_nohz_enabled) {
+>  		/* Idle micro accounting is supported. Use finer thresholds */
+>  		dbs_data->up_threshold = MICRO_FREQUENCY_UP_THRESHOLD;
+>  	} else {
 
-Signed-off-by: Shuwei Wu <shuweiwoo@163.com>
----
-Changes in v2:
-- Update compatible to "spacemit,k1-tsensor"
----
- arch/riscv/boot/dts/spacemit/k1.dtsi | 101 +++++++++++++++++++++++++++++++++++
- 1 file changed, 101 insertions(+)
-
-diff --git a/arch/riscv/boot/dts/spacemit/k1.dtsi b/arch/riscv/boot/dts/spacemit/k1.dtsi
-index 7818ca4979b6..0fe7396ea6e4 100644
---- a/arch/riscv/boot/dts/spacemit/k1.dtsi
-+++ b/arch/riscv/boot/dts/spacemit/k1.dtsi
-@@ -338,6 +338,96 @@ osc_32k: clock-32k {
- 		};
- 	};
- 
-+	thermal-zones {
-+		soc-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&thermal 0>;
-+
-+			trips {
-+				soc-crit {
-+					temperature = <115000>;
-+					hysteresis = <0>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		package-thermal {
-+			polling-delay-passive = <0>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&thermal 1>;
-+
-+			trips {
-+				package-crit {
-+					temperature = <115000>;
-+					hysteresis = <0>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		gpu-thermal {
-+			polling-delay-passive = <100>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&thermal 2>;
-+
-+			trips {
-+				gpu-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				gpu-crit {
-+					temperature = <115000>;
-+					hysteresis = <0>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cluster0-thermal {
-+			polling-delay-passive = <100>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&thermal 3>;
-+
-+			trips {
-+				cluster0-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cluster0-crit {
-+					temperature = <115000>;
-+					hysteresis = <0>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+
-+		cluster1-thermal {
-+			polling-delay-passive = <100>;
-+			polling-delay = <0>;
-+			thermal-sensors = <&thermal 4>;
-+
-+			trips {
-+				cluster1-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cluster1-crit {
-+					temperature = <115000>;
-+					hysteresis = <0>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+
- 	soc {
- 		compatible = "simple-bus";
- 		interrupt-parent = <&plic>;
-@@ -434,6 +524,17 @@ syscon_apbc: system-controller@d4015000 {
- 			#reset-cells = <1>;
- 		};
- 
-+		thermal: thermal@d4018000 {
-+			compatible = "spacemit,k1-tsensor";
-+			reg = <0x0 0xd4018000 0x0 0x100>;
-+			clocks = <&syscon_apbc CLK_TSEN>,
-+				 <&syscon_apbc CLK_TSEN_BUS>;
-+			clock-names = "core", "bus";
-+			interrupts = <61>;
-+			resets = <&syscon_apbc RESET_TSEN>;
-+			#thermal-sensor-cells = <1>;
-+		};
-+
- 		i2c6: i2c@d4018800 {
- 			compatible = "spacemit,k1-i2c";
- 			reg = <0x0 0xd4018800 0x0 0x38>;
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
-2.52.0
-
+viresh
 
