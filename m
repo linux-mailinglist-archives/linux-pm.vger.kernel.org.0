@@ -1,120 +1,130 @@
-Return-Path: <linux-pm+bounces-41068-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41069-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F7C1D3A058
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 08:45:55 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73A41D3A167
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 09:20:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 98E2C303AE87
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 07:41:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D34DC301957B
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 08:20:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF72C33710C;
-	Mon, 19 Jan 2026 07:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 731E133C1BC;
+	Mon, 19 Jan 2026 08:20:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CRiSVeWn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 755D027991E;
-	Mon, 19 Jan 2026 07:41:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768808491; cv=none; b=Is0apiHEj4W2lgMZ1bNK5ytt180YNWpFYXpoPMJqzoL28ygIFyH7jzZ9Vm458qDWrFQ4rpHCibPE3+1w7e9qYbNiTxjVU7NS1G355ID/sA7L5tbPeCW6ridIbTn9RbSX+xljLt5ENGGX+1CVldIHWwDbqnvQETFecoxc8oWPn80=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768808491; c=relaxed/simple;
-	bh=7nsHIS/QnVEKFUy1GC/CoEzptIHny4zw23cSYBLtE/w=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=k8GpnALH0Z4UBes0iGaRh0dhAnUoJ9kFPVqIzibnKnTdukKMgnvNhtp7vaJgLZ7br0AzvshWHnN+c2EYvkRNRZl0jSqc4Mmqx3B88I27KYV/GiYQeGaeVC0K3Cdayk8L5uW8sQhHPClJmHm0QwmvLsXg8Fptsf1rtxxN5X2qetI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 3ffa15d2f50a11f0b0f03b4cfa9209d1-20260119
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR, DN_TRUSTED
-	SRC_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD_SPF, CIE_UNKNOWN
-	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:ca55c94c-a0ef-489d-8167-927da7bbc450,IP:10,U
-	RL:0,TC:0,Content:29,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:34
-X-CID-INFO: VERSION:1.3.6,REQID:ca55c94c-a0ef-489d-8167-927da7bbc450,IP:10,URL
-	:0,TC:0,Content:29,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:34
-X-CID-META: VersionHash:a9d874c,CLOUDID:6b666443d6d70ef6984d3658ae4b7402,BulkI
-	D:260119154123EBY2RLKP,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102|127|
-	850|898,TC:nil,Content:4|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
-	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
-	0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 3ffa15d2f50a11f0b0f03b4cfa9209d1-20260119
-X-User: tianyaxiong@kylinos.cn
-Received: from localhost.localdomain [(175.2.91.64)] by mailgw.kylinos.cn
-	(envelope-from <tianyaxiong@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1076215843; Mon, 19 Jan 2026 15:41:22 +0800
-From: Yaxiong Tian <tianyaxiong@kylinos.cn>
-To: srinivas.pandruvada@linux.intel.com,
-	lenb@kernel.org,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	ricardo.neri-calderon@linux.intel.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yaxiong Tian <tianyaxiong@kylinos.cn>
-Subject: [PATCH] cpufreq: intel_pstate: Disable SMT when hybrid systems are enabled
-Date: Mon, 19 Jan 2026 15:41:18 +0800
-Message-Id: <20260119074118.835922-1-tianyaxiong@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F4D33B97B
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 08:20:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768810814; cv=pass; b=cJ7m40m45io0UX6m5FAIv5ra+EXMX2nlxTx67T6jcQteXANR20j0o1p3oM7EdBAUl6yeispnBbDEoTKgZ3xzp1hgDBhVSdWeyBIwwiOY/mN1g+4YEY2V5+QM8hVdTgSK2uRlFycDgx3bb6s1JjN+94fp6M6M6c3NFrNblwV7GyE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768810814; c=relaxed/simple;
+	bh=1OYoSnQPQ6tygAvVT+bdbhRQI7JtOGMwYUUCyliHotM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Rav9kl4kGu++mLZtyxbO1HDm8Ku7M/4I9rBAcymOL3K5IkeuExa7r1iirhDEjLL/Dqf6auh4A1mtt2Pdp/xi1hN3qgmRv295doEvaYAOegpt9wujWFcPOguyZFN/3/HbqpTrE6eZ/EwZoWtkXHgaj759g52Fgoj+TwJrfjzzqX0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CRiSVeWn; arc=pass smtp.client-ip=74.125.82.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-2ae5283dae8so248342eec.2
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 00:20:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1768810812; cv=none;
+        d=google.com; s=arc-20240605;
+        b=D6TPYYzBzfnelQknzQZGxsZUheTLTVOgm8BOpclIAJBRvJYTf/U94mEQbndRaOUkss
+         fu+hO2odeEXGjxORFQ4i0foL/1YPKioRFLsbMBdVaaU5kMbq22i1wcY99RwY6l3WYZhY
+         uTBQjrrvUQBKgYrn2XUtRQRpif/xQdNY+pqUFwNwSX1s/vi0+4RtfSBfkoDkwLelYaE5
+         GfNn30of62dYNf4ldDviBCX/SfhkSQxTH08lmUd8rac54rQlazxpzVTDQNMGYPw9AGaG
+         9r6XK5DGBZ0z6DhuwxsgAUH71PgzczYdKrLGITm4tlJGFnjHZM9sevGQNt49uFtRew0u
+         KVRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=W4qwFK8ioKelkojLIJh2X9LVVg4pbqzpYUCaeu6PnLY=;
+        fh=griIdKXNXuw/UyG5sSBwnbfQLfzcxfWDz11ixDOOEg0=;
+        b=Dbu9J+GiEn7R3qwQev8GXQ8QEqIEkzgLIIEoznWgRlCuarecoB7biVXu9vCul7PQvo
+         hyVP9uYW4JWBiLFdc1wtxr5302Ltq4bCSPdv93sEhS2D1Yece87phV4iV2UORl/JzJDE
+         UgR7oLKuc0Ii2oieWG89FPdagVVZ/cYaXpKVM45NX86n9ShS5sJkj5rowMpnMcGw6il2
+         8j54zBord+5t2+6rQ4CKJw68lCHLoQIdwdHz1kCb+oEA2f38EcdRIjH1oYgaEQpdSrln
+         iZxvFC7j/Ix1hJHVNXu9B2p5gVgS0/8EwVsGKyZX7YgwA2V7uyJeAC5fpnX+wsYxqDSb
+         6UGA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768810812; x=1769415612; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W4qwFK8ioKelkojLIJh2X9LVVg4pbqzpYUCaeu6PnLY=;
+        b=CRiSVeWnI66NeHgEmY9JPjeyk9loebw0pCNF5Rpbov0OnMVS1yPnthleOm3g765guR
+         Kuc7WPFpfA86plbxg9Fms5pKQbyyj4tF5KsjiJ8Z9jt0faVj+ux8JqZCCgUWc4he+nxq
+         1/mPyRUsJY6s4U+RPsDfrrXrnqxj40hautBt+Ww1pWl3hmhf+Q/WjFL721EfK3rTcJi2
+         XiOhCIb23jSiWnun2C692LsTScD5FFULEVnB8aG/sSv2p4Q2osUt/xu5k6hSysaF2CSk
+         SlBXEZlOV2Vw0zxHv/jUrExKt1Tqi8+cdCRXnjIPFIcCXtUqqS1CDUSuXwggF2cch/Ox
+         jhJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768810812; x=1769415612;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=W4qwFK8ioKelkojLIJh2X9LVVg4pbqzpYUCaeu6PnLY=;
+        b=CaGu6p1YCL2IHcy09xZ2qu+9UU6ABqhIiiTD+DID1NG9G9RI7w15DUXGkstgxZhnlE
+         IBMNslxoQWOXCimLGCmpyKHXbVSbuKX8txpD0//WKd4vLRLFr9skXqiElOaKFsGtpOHO
+         8ew1QAJ+IObUndKyjfUAltgUsVN0XxtPYzyBlYyByL2lHvE6lDynwBn+LoVPnr8Da9cS
+         MF5rdsc8qeRCPfIcaqRXzVIY9nS826+eMMb6ofGR70P/EO5M5NOogUP1dPmLXDvNDqMN
+         mv5hz5bsPX35hCoqEGOg1VJ3cCsZ0m9k04mqydm0cwicjttL6i+4cjF8NmtCSbQGx0Oz
+         8+nw==
+X-Forwarded-Encrypted: i=1; AJvYcCW96qhG/oIx/ZA4HtzQFQ2sSTdoBtDjpkHBK1HIV6wrqUaRmTBlRh00IvGVfrYAV3BowBKGCQRG0g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYhB4UyMso26JDdM/sjnHwT4m+eqaKzVY/sTTKE09epbqx1fQj
+	ltwAvTQTI4qJoo9CyNSZaIhJdj7DrsSKObuoyC377FmtOviSRGU1C/SSD0k3YJ2o2VHSc3ICpW3
+	bqPBqE9qxdZNeFXzYXHWIWyIK+MXthU4=
+X-Gm-Gg: AY/fxX6Uh43u8kcV42SLudzWExFgReDmAcfhscD+P5lSDBO9te3gsykf3MJBihDTnRz
+	UBQ2aVjIXA0EYImhOBodRzalrvvwotkKs5rkMcmr4XzA01Ys8W1QVnp6n/TMIM+RtrAI8dPmdQ4
+	32/69kTDTa4cm433M3OVxeyHk+vF4as/nrSbwmppv1uJC97RjhxF7WfQVGXC2E7rtCYOfq+diRb
+	rgNYvHy8YM9mD3C77d6dXiwdDyW/wh6zv7zH2YrjD3AERRIXq2hcEBEg5b69qsYfk/brYE7M0Ek
+	THSkntGCLxsSSnij9NfR22EIMB9VU34JEdQzUsKt9ejOBa9IuB6z9j0lGf+214wW6LHqLNH+mCY
+	nqIQEWDXx5HGk9YNnTNdaI0c=
+X-Received: by 2002:a05:7300:f18f:b0:2b4:5d92:3e7f with SMTP id
+ 5a478bee46e88-2b6b3918011mr4284330eec.0.1768810811849; Mon, 19 Jan 2026
+ 00:20:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20251208-io-build-assert-v3-0-98aded02c1ea@nvidia.com>
+In-Reply-To: <20251208-io-build-assert-v3-0-98aded02c1ea@nvidia.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 19 Jan 2026 09:19:58 +0100
+X-Gm-Features: AZwV_QhxAiFaIcvwX8h9uKf6H4azma3UhOyTlcnZ27Zijuat-yr3VdVO8Qat4vs
+Message-ID: <CANiq72nDtcSQ=GPvGUObaxqA6WaOGM8oUCqV80k-Sxm3zT5G=A@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] rust: build_assert: document and fix use with
+ function arguments
+To: Alexandre Courbot <acourbot@nvidia.com>
+Cc: Danilo Krummrich <dakr@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Mark Rutland <mark.rutland@arm.com>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When hwp_is_hybrid && !sched_smt_active(), the driver enables
-hybrid_capacity_scale and disables ITMT. According to the original code
-logic, these related actions are one-time operations; therefore, I
-believe the original design intent did not support dynamic runtime
-switching.
+On Mon, Dec 8, 2025 at 3:47=E2=80=AFAM Alexandre Courbot <acourbot@nvidia.c=
+om> wrote:
+>
+>       rust: build_assert: add instructions for use with function argument=
+s
 
-However, SMT can be toggled via related interfaces in /sys. When SMT is
-enabled, the system is no longer hybrid, and the original settings become
-incorrect.
+Applied to `rust-next` -- thanks everyone!
 
-To resolve this confusion, permanently disable SMT by calling
-cpuhp_smt_disable().
-
-Fixes: 929ebc93ccaa ("cpufreq: intel_pstate: Set asymmetric CPU capacity on hybrid systems")
-Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
----
- drivers/cpufreq/intel_pstate.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index ec4abe374573..d0274a3ece2d 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -1163,6 +1163,11 @@ static void hybrid_init_cpu_capacity_scaling(bool refresh)
- 	 */
- 	if (hwp_is_hybrid && !sched_smt_active() && arch_enable_hybrid_capacity_scale()) {
- 		hybrid_refresh_cpu_capacity_scaling();
-+		/*
-+		 * Permanently disable SMT to prevent confusion caused by users
-+		 * enabling SMT via /sys.
-+		 */
-+		cpuhp_smt_disable(CPU_SMT_FORCE_DISABLED);
- 		/*
- 		 * Disabling ITMT causes sched domains to be rebuilt to disable asym
- 		 * packing and enable asym capacity and EAS.
--- 
-2.25.1
-
+Cheers,
+Miguel
 
