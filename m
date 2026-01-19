@@ -1,236 +1,136 @@
-Return-Path: <linux-pm+bounces-41101-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41103-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1079D3A995
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:55:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4B7DD3A9A7
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:57:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 775A1302E847
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 12:55:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BD7D330BCFDE
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 12:57:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2534C36167F;
-	Mon, 19 Jan 2026 12:54:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B806361DB1;
+	Mon, 19 Jan 2026 12:57:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="R4MWI0V3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eFv1wSRM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C60136164E;
-	Mon, 19 Jan 2026 12:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768827297; cv=pass; b=ogeDdbX3cYqyKjEyk5d/UMkfw94VOFA7yFVy9PRPbIP1zcqxfcwomEiugIM/dQHh8a8/WW1ORUGa3J5LuSsPW6KutKStWO4Sa7FEkWpxeMSbRgww2xaNjAcFLDHyCJMrbNtKsaQ9mmLEW7GNUyVJdS9lTUii50tTHS9SnibUSj8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768827297; c=relaxed/simple;
-	bh=3Q4kAu5N7NP4BEvDuZpcTOpqQnVfNkUqcwDHY6Ed4OM=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=dbCbe6NuQypNRad/4KHupClAlSaMupQqFhMSuOgdhcg5eScoNaa1+y4TDR7hWGzHHeXy9VBc3nNM2asMTsQKtEHOiV8C0lzpRV3xe3JmQTMgNHfJqS8XlvtlSx//v+FdbNurqojRohR1hqDgzAErRYtRgBLscAYqXivVlpitIhw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=R4MWI0V3; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1768827273; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=EMz8U/slnbqZVwl92w3iqz0shk9k0y/WL1n4Htr0AfZoktCSU5Zn2K/B6CnCFrrc9d6+/HFPvpmxX8rA/xcsSKodl2lTrrHK9qDyE4QOUpOcFw6O+4ImOfsARRtC6sPthf005IKkfRFZH/io0om/gAaUyjIzngjBGg5Jur98t94=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1768827273; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=zLDnJZLgAOrpoEGFnBjgHoA0s4migwFpwVUCiQLiYbE=; 
-	b=auuDHlGY39i8UFoY2S3ax0Ylo3TMvo/gCo8Ydo+0OembHXTR86/6E4pnwWPkDsEKL9KRxX74cIxpKPpo4tuJUwu3ADAT2EQIaUJOW+LqGXakCFnPJJJjBbShQyJH3mCRJD8xRYOO2M7VG2EaqSDqK3jtsJWkSVDyI2kr7zugf7s=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1768827273;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=zLDnJZLgAOrpoEGFnBjgHoA0s4migwFpwVUCiQLiYbE=;
-	b=R4MWI0V3IEJiVaX8Hq9T9sxTQcgm9LF2HJ0ECpjnvRIG7s4E4c2DlRzP2kCq2vZt
-	vxIbkTXjyOlGqjskS0iuccLwzIKp8dRdbmkrLrmlBjWafvqM8YlWU3GlUj+sR0rs3N4
-	HzPR0YjucxiEXXyp95gt6LvlwbYSs8Hmlcc5DVS4=
-Received: by mx.zohomail.com with SMTPS id 176882727146931.323097316967164;
-	Mon, 19 Jan 2026 04:54:31 -0800 (PST)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337EB279DB1;
+	Mon, 19 Jan 2026 12:57:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768827434; cv=none; b=kNc4wd82qNUr3E/WQPatHE9NiPDILYVNXc97WlEwnTMMybYaJFQtliFv9F7pj6Hb5X6V8/yGfJOLd+napqvk33pDfx2wY65cV/mapSkLYGu0SF4zZ4pRY/wGCiforkjQdFMyDjOsyfevhuuGHlwUhv8qtkUrP+XzS3qS2814Fo0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768827434; c=relaxed/simple;
+	bh=OgMNjOdhoMX2w+/5F+CC4YSnzMuGIrDO2lOdsq5Jm7w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=noOqSPrp8PmWQXE/LdP6lE/ysU+KhKdJYUayKvBQ7goHt9eQDBgWpNO/vaK1umCiQMAi05MIW8GLuncP9Wj1Uzc1LoiycYPiD6iYzVk2ZuHZ6EfLh67D5lml/O/CuP0v07x3ixyI23WFJYcN5OXCh1FPGiZtmWX2BLXU+QkF+kM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eFv1wSRM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7E16C19423;
+	Mon, 19 Jan 2026 12:57:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768827433;
+	bh=OgMNjOdhoMX2w+/5F+CC4YSnzMuGIrDO2lOdsq5Jm7w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=eFv1wSRMYzCeDcQjHAaoP8BOAd6OVBzsPCOk7L2FN8E6SufOg0mwiLAlb7jVLDj5B
+	 WIVYtC5vOaoPnC+TGLcmtqOkW5Nr6LlCcC1FiF5hCqcShm+Tg2NxcB2q5mlBVA1FvG
+	 p2PMN7k8t0TcvQTCqcUf9Audwpi6AJm67mDQC1ivebjrEdqFPL0GhuXmeBBMtjNCHp
+	 OwrhNfQDelnBOTE2aqvzwnOJHN/FIHb66ZWBTOnMF44n2oRN84mp1zcfcI3DzF6mQb
+	 Xr8wMRGLXarovnMTxj5Id19UDeHmhDRZ+6J9yXU5ZZbnhHjnoGjrPKsMpvkMBZOa2c
+	 ylPOwdOUjgdZA==
+Message-ID: <9314be11-5a2f-47f6-a317-c085fbd5f842@kernel.org>
+Date: Mon, 19 Jan 2026 13:57:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <aW4lCfUyumOKRRJm@google.com>
-Date: Mon, 19 Jan 2026 09:54:10 -0300
-Cc: Maxime Ripard <mripard@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Danilo Krummrich <dakr@kernel.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Drew Fustini <fustini@kernel.org>,
- Guo Ren <guoren@kernel.org>,
- Fu Wei <wefu@redhat.com>,
- =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>,
- Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Trevor Gross <tmgross@umich.edu>,
- linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org,
- linux-riscv@lists.infradead.org,
- linux-pwm@vger.kernel.org,
- linux-clk@vger.kernel.org,
- rust-for-linux@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <518D8B09-B9A1-4DB4-85CD-37A2DD3D5FB1@collabora.com>
-References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
- <20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com>
- <20260108-delectable-fennec-of-sunshine-ffca19@houat>
- <98CD0BF6-3350-40B9-B8A9-F569AE3E3220@collabora.com>
- <20260119-thundering-tested-robin-4be817@houat> <aW4lCfUyumOKRRJm@google.com>
-To: Alice Ryhl <aliceryhl@google.com>
-X-Mailer: Apple Mail (2.3826.700.81)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/8] dt-bindings: thermal: Add Google GS101 TMU
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, Kees Cook <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, willmcvicker@google.com,
+ jyescas@google.com, shin.son@samsung.com, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+References: <20260114-acpm-tmu-v1-0-cfe56d93e90f@linaro.org>
+ <20260114-acpm-tmu-v1-1-cfe56d93e90f@linaro.org>
+ <20260115-ultramarine-wildebeest-of-completion-ea1bc0@quoll>
+ <10cb51ae-9cec-49a9-96c4-757cd1410d8a@linaro.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <10cb51ae-9cec-49a9-96c4-757cd1410d8a@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 19/01/2026 13:45, Tudor Ambarus wrote:
+>>> +  "#thermal-sensor-cells":
+>>> +    const: 1
+>>> +
+>>
+>> No supply?
+> 
+> It seems not. Nothing specified downstream. Couldn't find anything in the
+> schematics that I have either.
+> 
+> I addressed the rest of the feedback in v2.
 
+Then maybe it moved to power domain, because TMU always needed power...
 
-> On 19 Jan 2026, at 09:35, Alice Ryhl <aliceryhl@google.com> wrote:
->=20
-> On Mon, Jan 19, 2026 at 11:45:57AM +0100, Maxime Ripard wrote:
->> On Thu, Jan 08, 2026 at 11:14:37AM -0300, Daniel Almeida wrote:
->>>> For example, it's quite typical to have (at least) one clock for =
-the bus
->>>> interface that drives the register, and one that drives the main
->>>> component logic. The former needs to be enabled only when you're
->>>> accessing the registers (and can be abstracted with
->>>> regmap_mmio_attach_clk for example), and the latter needs to be =
-enabled
->>>> only when the device actually starts operating.
->>>>=20
->>>> You have a similar thing for the prepare vs enable thing. The =
-difference
->>>> between the two is that enable can be called into atomic context =
-but
->>>> prepare can't.
->>>>=20
->>>> So for drivers that would care about this, you would create your =
-device
->>>> with an unprepared clock, and then at various times during the =
-driver
->>>> lifetime, you would mutate that state.
->=20
-> The case where you're doing it only while accessing registers is
-> interesting, because that means the Enable bit may be owned by a local
-> variable. We may imagine an:
->=20
->    let enabled =3D self.prepared_clk.enable_scoped();
->    ... use registers
->    drop(enabled);
-
-
-Not sure I understand. You can get a Clk<Enabled>, do what you need, and =
-then
-consume Clk<Enabled> to go back to Clk<Prepared>. I think I added this, =
-but if
-I didn=E2=80=99t, it=E2=80=99s a trivial thing to do.
-
->=20
-> Now ... this doesn't quite work with the current API - the current
-> Enabled stated owns both a prepare and enable count, but the above =
-keeps
-> the prepare count in `self` and the enabled count in a local variable.
-> But it could be done with a fourth state, or by a closure method:
->=20
->    self.prepared_clk.with_enabled(|| {
->        ... use registers
->    });
->=20
-> All of this would work with an immutable variable of type =
-Clk<Prepared>.
->=20
->>>> AFAIU, encoding the state of the clock into the Clk type (and thus
->>>> forcing the structure that holds it) prevents that mutation. If =
-not, we
->>>> should make it clearer (by expanding the doc maybe?) how such a =
-pattern
->>>> can be supported.
->>>>=20
->>>> Maxime
->>>=20
->>> IIUC, your main point seems to be about mutating the state at =
-runtime? This is
->>> possible with this code. You can just have an enum, for example:
->>>=20
->>> enum MyClocks {
->>>    Unprepared(Clk<Unprepared>),
->>>    Prepared(Clk<Prepared>),
->>>    Enabled(Clk<Enabled>),=20
->>> }
->=20
-> I believe you need an extra state if the state is not bound to the =
-scope
-> of a function:
->=20
-> enum MyClocks {
->    Unprepared(Clk<Unprepared>),
->    Prepared(Clk<Prepared>),
->    Enabled(Clk<Enabled>),=20
->    Transitioning,
-> }
->=20
-> since mem::replace() needs a new value before you can take ownership =
-of
-> the existing Clk value.
-
-Right, I need to update the docs to account for this, as they imply that =
-you
-can do this with only two states.
-
->=20
->>> In fact, I specifically wanted to ensure that this was possible when =
-writing
->>> these patches, as it=E2=80=99s needed by drivers. If you want to, I =
-can cover that in
->>> the examples, no worries.
->>=20
->> Yes, that would be great. I do wonder though if it wouldn't make =
-sense
->> to turn it the other way around. It creates a fair share of =
-boilerplate
->> for a number of drivers. Can't we keep Clk the way it is as a
->> lower-level type, and crate a ManagedClk (or whatever name you =
-prefer)
->> that drivers can use, and would be returned by higher-level helpers, =
-if
->> they so choose?
->>=20
->> That way, we do have the typestate API for whoever wants to, without
->> creating too much boilerplate for everybody else.
->=20
-> I think that if you still want an API where you just call =
-enable/disable
-> directly on it with no protection against unbalanced calls, then that
-> should be the special API. Probably called RawClk and functions marked
-> unsafe. Unbalanced calls seem really dangerous and use should not be
-> encouraged.
-
-I think we should discourage RawClk if at all possible. But if the =
-consensus
-is that we *really* need this easily-abused thing, I can provide a =
-follow-up.
-
->=20
-> The current type-state based API is the least-boilerplate option for
-> drivers that exist today.
->=20
-> Alice
-
+Best regards,
+Krzysztof
 
