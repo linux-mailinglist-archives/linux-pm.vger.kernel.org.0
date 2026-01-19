@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-41114-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41115-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E63CBD3AC7E
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 15:43:20 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47F6ED3ACB4
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 15:48:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 528B630CCD05
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 14:31:38 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 88CE93015AD0
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 14:31:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2816135E55A;
-	Mon, 19 Jan 2026 14:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7C12238C23;
+	Mon, 19 Jan 2026 14:31:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jbTEF4dx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="x7XnROix"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533C4231836
-	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 14:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A02A329E50
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 14:31:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768833092; cv=none; b=Hrpo4HFx/EeY3g+DHRQo2UMCqkzK/uicPrMXvKbCyovtW4PPqoZSFi30tQzIF97RhghFMlyIAhnzZp+BVvtqXk2bayP0wDeKngNz19Uyrst90cYCv5qycZEVmPUqSlAVrYkex++1fWbctrmVVu0yTMog65CJRSy5b9JHdKxN500=
+	t=1768833093; cv=none; b=uVqgIGEq5hnj+FmtdK1zjIQLk9He9khFEiP3p9nFDzVSB9czdj46yNKO7DZJ7h8a9vwJ5ZtKq6V/ih30m+CbzhOdgFg4iPvsJrlNSxDPGMCpf/0f91HoDbhe0VpDFcwBlZqoSclUs1U97/yCxXEc/ymzggZYHTBZjl/OlJPNb7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768833092; c=relaxed/simple;
-	bh=h63v7DdGLRtlIfqMHyUIhqVL2bPvgYNJszyikys8Ey8=;
+	s=arc-20240116; t=1768833093; c=relaxed/simple;
+	bh=yGeQdbn6x9oSBbHSzCn9rm1Vz2KBAcj4GxREfHkdZRs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rk0267ZD58spC3UlUH4ntCv2BZSXszZ4p5oqb6VEoQB3MoIkfVzKwxg6vW9tMsICgTvP8bEXhl8chKOjkFhPMzyXgtsId1SpTelSI7XQ2X2oKv2O3HTqnIWymv0QH3Rln75svhX5twpjUd1hTVgiVjSGpDFPV2YDTlGrh3W9E5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jbTEF4dx; arc=none smtp.client-ip=209.85.167.44
+	 MIME-Version; b=YwutQYPTXRp6RYQ3P6wGbB85716nyRETiycpyvZIVjKTk1pqyom0yL1JjLeH7sxWVoEnuyN/Q/TsEMJ6aRYgpYmS2j3tmEpR+PqrJ47Y8TyKpQPg/b2ylmeytFfEnYw6URO4eL6niXBU3tGAossFHW6/7edQgYJbTirPQo0loaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=x7XnROix; arc=none smtp.client-ip=209.85.167.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-59b8364e4ccso4733368e87.3
-        for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 06:31:30 -0800 (PST)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-59b79451206so3959958e87.1
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 06:31:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1768833088; x=1769437888; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1768833089; x=1769437889; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jObY0CxQBZKbycpkPqiQaIebxzWVFrjrCXXvaXSeJs8=;
-        b=jbTEF4dxHvxOfmchCA3x1GZ3X4YCD4jfAaVOaOwxCqoUAlMHfJc7BrFOhnZccHcLG7
-         42yU+MW4Emd6/siFKSOOM5LrJ/vTRfIwGs/iWVzAwyj6jxOOaasqTBm5Le3XXF+TpDr4
-         QpDPk+rQioXcP1jv2RsCX1DXp6C98yCMJfI6beDIbpRw9ok9WqV8Ygv5tJaRDhK7XVDm
-         swz4lZXU9u/7oqr9AgyEa/lc9dAp6l9nMl6X2gf1JBQE7P/82tmzPH8Tk+bKQyBILbBZ
-         R8LTjU7thHhvfZdGollf3SS4PNSNFPkxXkx+3yfbR1Z4AroTyNbEiiVIen381JEna0aX
-         yqmQ==
+        bh=b/GHq/FwupelaKODLYbp4EN6rGymDtQOU5bIeaMRLa0=;
+        b=x7XnROixH/kzrYc0lgRug5jC/OECF9NYqqNZYkpOIASx7kLoqD+qP8XnXb2lHYLqZ0
+         l04D6qnqeWKf8i6imX1mIutq3qnCCCjMh6DqLkhaDszBo/bQ+MUnzij3b6/JNJ5PLG0f
+         kR9wSbvKYkUEeQT0BzPuoIi7Sl/dTF77RF44+BgjNvypUv1diSNrI+QalF3Boiq6TlPT
+         tU2uCAq5G2zgih4sQpbE+HQgSMDknbKf0TNk9NFgvLdgOfbzqxqvtanZ/PHWIkAwzgrC
+         WWHGu25JE/mlMcC9bj8NaJ39WFyaw4RWFXwdJaNYJg4ssFcdhfkV2mjo8IVoktip7X+b
+         k9ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768833088; x=1769437888;
+        d=1e100.net; s=20230601; t=1768833089; x=1769437889;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=jObY0CxQBZKbycpkPqiQaIebxzWVFrjrCXXvaXSeJs8=;
-        b=v6Z3lSBVkVESc/wAcqhPY+Ie1rLteX8b7uleLA9Ue/FH+9gl71IDUitreOYV2FBngf
-         OI80nkNjo+WFTDMXyxsLwTz730r28tW06IsFNB7t3wgsEsAImnqIgZOY2q9BxuUQlnEB
-         vJCTiGwqafRKE1Mq/isQkrk0T6Dq4NG/tNXdPvenAM9SrD5j/h9lWlD98khl2onaHr35
-         KIhRbkavLew/DlBvfF5eY5UBKaQU6iKB86MREVNOkOZxUXpVMMIuet3C04AydHc4dnQZ
-         Dnoyx4rQOQAPvWZYwGlVyQD5Dm4I6CrtD3YHDU1sNrSg4seYqodGYV6kEdG67yj4OmUM
-         U4ig==
-X-Forwarded-Encrypted: i=1; AJvYcCVhZ3GsHa2w3Faqd9tymSiVYOENpLADhzDW/TlLK4aQj4q/tQvDeA+0rGwG9mF/0eQicYIPzPqnaQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5Ody9GH8fWrQNKPtV6w2lw1RxB3UhixbF8cF3K+HUnjSp0Zwm
-	eRdc1mh3+WP8LJobiakiZKRE9WDEK1xDvSyk3QozMZ0M2n2UuY3Pna73bfj7lrhyUKQ=
-X-Gm-Gg: AY/fxX4rFhIBNamKVl4y709tNN67piSjsFtonrX4zmTX4MyTOGjLoDn211gDNGLKWlg
-	xU6Ncxj6vqSNaBPPZDI4if0ldgaDULLZGMs4f/NbgFzeltj97GbT5i5+xkqgi3oxHBO0pAK7QOJ
-	Oya4q28TKeOZQknp4ii7b3LQX6qwPBjBUwmxlFW/CVfbvPuH1+mqKo5oF0iIozomOH8Ez3X4OyI
-	M3h1fhlMGpqlGTMVfmfXAPt0+u6tifS3ylQ7OLyeQ0eTXqIMx7QRdXKn9o4dYHuBblGgnwQqWTj
-	xd4FIV4X8SPdLvp5m3lHsZkG0PlVaApx48ws/xW/n9HdsyGCZHsPZrugyFZbk9dImNJK82bw/yb
-	RirLhpBptgDrPJFeqr4miDdB5laBpaeqfzSfUrn6Lld+jsF78IK+5tcMJjy1LCzYwU2nVXoX1mi
-	4q8OCyYSABA5D9DepYXdhqB2ygu4VCPv3vtVqT9hIcr1xu4dkl2jsWhNHWvWJ8
-X-Received: by 2002:a05:6512:b95:b0:59b:7e2b:33db with SMTP id 2adb3069b0e04-59baeef6d5bmr3309809e87.28.1768833088255;
-        Mon, 19 Jan 2026 06:31:28 -0800 (PST)
+        bh=b/GHq/FwupelaKODLYbp4EN6rGymDtQOU5bIeaMRLa0=;
+        b=v/4ysvFhFqXFXJeMdj+skoJrP+Z2k/hUdqBp52qY7S4mEaz1iyIn1uXbrpFWcijKkR
+         Ny66RNiy2xqS3Tz+iT04gxoZhIz/psvg7GV4H/B5pajIOXqCFCo1dehG7WpTk0yRtZZE
+         qOZHbUZmRAFk61iR9U37d5RWYEzQOFD9dLpINdQbRYL2q7M8kwgK3vuqx4OSka6Mx6K6
+         2ptC+Frn/b6RW+iRvIUO730djthoBiQipGZcNqCN1+Fy9HEF9DPQswHnyukZQRVc5OnC
+         9bTnNAVuqjW8M3pnBo3Qzu7TH0boZdWDOw1whJCMrkPH1YqwkLI0VrQTYmM2yY7Ar8Nl
+         0plQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWe59Enyh1Sw0KtwSpEKgkSG8WKFOXHK0qZg1ttvOIaxcVLnuaulC9rMbW0S6AdfNxO6WfH7vLCiw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7R4+ND3MMKqNufclZ2Jb7MstBiPjvinK0Tm7TgOs7IEEgxab4
+	SRS7m7eVDH8CXstV0M7pfGiVaH+sxtAsgS1Oez9mWGa3LbVocE63/aA2gCCY8fP4Gug=
+X-Gm-Gg: AY/fxX5WNqEkTx02g0hmZCCaazZc60rR3LfSd2l+rtebQ6Ye/zxTsHWkx8KKUvAiLAD
+	vBcjIkWdiZP1XJZ+CY3uzPbKdWVZj8H1VqKSCM1i3uGOZgd+MTRlMG98x1J2HIdDTf0/LnF79Od
+	cpRLKCpJ/WV3WQ02WxxyeVrohckQrnzA01rD4EoFvNuCZ2aCanzmILPVcXrpF88Gh+pYQ1bv+HB
+	JIp6BnB8qQFrgKXZpQVk42opK8CW+LqQF5eZ6Q/ODN8BaYyGNmo+nko+nGhICs4/nPtvL7+29O1
+	t0W7+6x4vRWlirdkxmtspofv4khJojU4VsWnlrZrdfoU+qsLjGJ89/CKIS9/hfMyPCBLbKrS2oH
+	VbXdXfUzu+z+fxCZajkqpH1o/byvcKW4gIMHnuJyNDOQWO0s+yrY07UV9FUMG6pNqYwvEKBP8v0
+	YeGpwipNMai5GJAw98yJVh1eTdoVlUze8nn/GVj6lg5xRugIRse20s3A2lI8A0
+X-Received: by 2002:a05:6512:33cc:b0:59b:7a1e:d3e with SMTP id 2adb3069b0e04-59baeef85d1mr4063767e87.43.1768833089322;
+        Mon, 19 Jan 2026 06:31:29 -0800 (PST)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59baf33e7fcsm3407211e87.20.2026.01.19.06.31.27
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59baf33e7fcsm3407211e87.20.2026.01.19.06.31.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jan 2026 06:31:27 -0800 (PST)
+        Mon, 19 Jan 2026 06:31:28 -0800 (PST)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: Ulf Hansson <ulf.hansson@linaro.org>,
 	Dhruva Gole <d-gole@ti.com>,
@@ -79,9 +79,9 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Kevin Hilman <khilman@baylibre.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] pmdomain: core: Restructure domain idle states data for genpd in debugfs
-Date: Mon, 19 Jan 2026 15:31:13 +0100
-Message-ID: <20260119143121.161583-2-ulf.hansson@linaro.org>
+Subject: [PATCH 2/3] pmdomain: core: Show latency/residency for domain idle states in debugfs
+Date: Mon, 19 Jan 2026 15:31:14 +0100
+Message-ID: <20260119143121.161583-3-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260119143121.161583-1-ulf.hansson@linaro.org>
 References: <20260119143121.161583-1-ulf.hansson@linaro.org>
@@ -93,95 +93,48 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-To prepare for additional information to be added for the domain idle
-states in genpd's debugfs, let's make the existing information denser. To
-allow that, let's move the static information of the domain idle states
-into a separate debugfs file.
+Similar to how cpuidle provides the values for latency and residency for
+CPU's idle states through sysfs, let's make the corresponding data for PM
+domain's idle states available for user space, via genpd's debugfs support.
 
+Suggested-by: Dhruva Gole <d-gole@ti.com>
 Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 ---
- drivers/pmdomain/core.c | 43 ++++++++++++++++++++++++++++++++---------
- 1 file changed, 34 insertions(+), 9 deletions(-)
+ drivers/pmdomain/core.c | 15 ++++++++++++---
+ 1 file changed, 12 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index bf82775f6a67..919dff2081d6 100644
+index 919dff2081d6..bf512ff0857d 100644
 --- a/drivers/pmdomain/core.c
 +++ b/drivers/pmdomain/core.c
-@@ -3772,11 +3772,11 @@ static int idle_states_show(struct seq_file *s, void *data)
+@@ -3809,15 +3809,24 @@ static int idle_states_desc_show(struct seq_file *s, void *data)
  	if (ret)
  		return -ERESTARTSYS;
  
--	seq_puts(s, "State          Time Spent(ms) Usage      Rejected   Above      Below\n");
-+	seq_puts(s, "State  Time(ms)       Usage      Rejected   Above      Below\n");
+-	seq_puts(s, "State  Name\n");
++	seq_puts(s, "State  Latency(us)  Residency(us)  Name\n");
  
  	for (i = 0; i < genpd->state_count; i++) {
  		struct genpd_power_state *state = &genpd->states[i];
--		char state_name[15];
-+		char state_name[7];
++		u64 latency, residency;
+ 		char state_name[7];
  
- 		idle_time += state->idle_time;
- 
-@@ -3788,14 +3788,36 @@ static int idle_states_show(struct seq_file *s, void *data)
- 			}
- 		}
- 
--		if (!state->name)
--			snprintf(state_name, ARRAY_SIZE(state_name), "S%-13d", i);
--
-+		snprintf(state_name, ARRAY_SIZE(state_name), "S%-5d", i);
- 		do_div(idle_time, NSEC_PER_MSEC);
--		seq_printf(s, "%-14s %-14llu %-10llu %-10llu %-10llu %llu\n",
--			   state->name ?: state_name, idle_time,
--			   state->usage, state->rejected, state->above,
--			   state->below);
-+		seq_printf(s, "%-6s %-14llu %-10llu %-10llu %-10llu %llu\n",
-+			   state_name, idle_time, state->usage, state->rejected,
-+			   state->above, state->below);
-+	}
++		latency = state->power_off_latency_ns +
++			state->power_on_latency_ns;
++		do_div(latency, NSEC_PER_USEC);
 +
-+	genpd_unlock(genpd);
-+	return ret;
-+}
++		residency = state->residency_ns;
++		do_div(residency, NSEC_PER_USEC);
 +
-+static int idle_states_desc_show(struct seq_file *s, void *data)
-+{
-+	struct generic_pm_domain *genpd = s->private;
-+	unsigned int i;
-+	int ret = 0;
-+
-+	ret = genpd_lock_interruptible(genpd);
-+	if (ret)
-+		return -ERESTARTSYS;
-+
-+	seq_puts(s, "State  Name\n");
-+
-+	for (i = 0; i < genpd->state_count; i++) {
-+		struct genpd_power_state *state = &genpd->states[i];
-+		char state_name[7];
-+
-+		snprintf(state_name, ARRAY_SIZE(state_name), "S%-5d", i);
-+		seq_printf(s, "%-6s %s\n",
-+			   state_name, state->name ?: "N/A");
+ 		snprintf(state_name, ARRAY_SIZE(state_name), "S%-5d", i);
+-		seq_printf(s, "%-6s %s\n",
+-			   state_name, state->name ?: "N/A");
++		seq_printf(s, "%-6s %-12llu %-14llu %s\n",
++			   state_name, latency, residency,
++			   state->name ?: "N/A");
  	}
  
  	genpd_unlock(genpd);
-@@ -3891,6 +3913,7 @@ DEFINE_SHOW_ATTRIBUTE(summary);
- DEFINE_SHOW_ATTRIBUTE(status);
- DEFINE_SHOW_ATTRIBUTE(sub_domains);
- DEFINE_SHOW_ATTRIBUTE(idle_states);
-+DEFINE_SHOW_ATTRIBUTE(idle_states_desc);
- DEFINE_SHOW_ATTRIBUTE(active_time);
- DEFINE_SHOW_ATTRIBUTE(total_idle_time);
- DEFINE_SHOW_ATTRIBUTE(devices);
-@@ -3911,6 +3934,8 @@ static void genpd_debug_add(struct generic_pm_domain *genpd)
- 			    d, genpd, &sub_domains_fops);
- 	debugfs_create_file("idle_states", 0444,
- 			    d, genpd, &idle_states_fops);
-+	debugfs_create_file("idle_states_desc", 0444,
-+			    d, genpd, &idle_states_desc_fops);
- 	debugfs_create_file("active_time", 0444,
- 			    d, genpd, &active_time_fops);
- 	debugfs_create_file("total_idle_time", 0444,
 -- 
 2.43.0
 
