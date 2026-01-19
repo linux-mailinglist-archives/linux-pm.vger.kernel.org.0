@@ -1,86 +1,106 @@
-Return-Path: <linux-pm+bounces-41066-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41067-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A527ED39E02
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 06:48:56 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C56DD39EBC
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 07:40:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BE5EF300ACCA
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 05:48:54 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0F183301D634
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 06:39:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2753A1AAE28;
-	Mon, 19 Jan 2026 05:48:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C30372727E0;
+	Mon, 19 Jan 2026 06:39:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dwo6cmBW"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="gFATkz3v";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Q/LQ+OPc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1DD500960
-	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 05:48:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82833271450
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 06:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768801734; cv=none; b=G7w6Sx7Tn0IxE9U4m5128VVb6c43qzVtyOk+O+YfArxjxsYGYkZvJ2TFF1T/jVSKLM5UmpnYjlLEhj7NIGCviI/mcA0afimEiEMNBmd1n5Q9MZwjYRVv6C576REgUkMi5cPj1n9XdMcfbZYb9c5AwPkg+I1RWwcCQ/3V63JiemY=
+	t=1768804763; cv=none; b=WdgghRpH5DLOIm0kaJuKjlcmR0KmWud1BOWXau+xwqJ40NRdYU0hlZWIgIyXtcVJIiW6AryqZCxA/DrUGk1yy/dAeC0sVS9zulRksbB+iH7u9jfvIskN2TjjfWmYRUqg15nbdW3jdnSc7Ec4SnstfbIryCSSXbV96pI1MpW9Jb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768801734; c=relaxed/simple;
-	bh=ysB7SxTOh5ZyKA5DysZWLp3MiKHbwJvwwstm/AQkBjg=;
+	s=arc-20240116; t=1768804763; c=relaxed/simple;
+	bh=cdoIc5vD89kFd3CSCwCjRq+7uAe4L+ntCB8WZ7mF/r4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F/Hsz+VvNpvFBvNPCq2mZehclRd3YBhgnVQbGIMVxR4/D19S9L7Yr/PxANezW/PCsnPStj/kTHFpUTicvH7J37X6fcios1BD3M2xup7XE7sXNfAS89zmcs7s5q6NxCxEge4cHNudy5THwdCGU4toN/XHyhEw+vWg8D90NccsMfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dwo6cmBW; arc=none smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-bc17d39ccd2so1525202a12.3
-        for <linux-pm@vger.kernel.org>; Sun, 18 Jan 2026 21:48:52 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ChtutkIxO5xBZbt0JYSELME4wrMIt/899RbOSNwGgPg36NRDMnIPrHB0+HmBw6MxuP4C9/7LsACnBdCPrGPXln6C0577I8526MkaV5fVZAuLQWbKohC9COHLJ6XQgGUXvWAqYOK8OkNP7G8bZFCt3JbegkHJraDy+hmhcsqG3ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=gFATkz3v; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Q/LQ+OPc; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60ILGKZB3749060
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 06:39:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=IA/eo2iVwvXN/TKZSuoLgwo8
+	wSFQC43ZkLYtHdqBfws=; b=gFATkz3vD73RP3r2k/+R/W09xigfPTs6w8baLvM7
+	HIoxueF9JanZrBYDu5Syh3Gg+h38kxwbehZ53HXhhTclUAG7vJOBHyHQ6Vs3xtrl
+	DD4Nhj4SB7vBJmirTjpf78sOXGm/hGMlHQZOHlF3TjhCsGhYGRTTsq4hTpX2Cze0
+	A4um35Zd7MYM0cM7Iyc1p1Nj8C/+8fKxpbaqWQOC7R6WCHQfx6ot5CuOJ0qwSc3b
+	Yj0sC2beMM1OJUOhAYPBGErbqN5yX72KE9v5JRhUt9Mjo7qK2hMD0XANLu0P1oSm
+	lzLNDo8kCS3xB6bm/XFR6h1clwhW/ct0mUVmzCMdck2fgA==
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bs79egyad-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 06:39:19 +0000 (GMT)
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c52dcf85b2so151485485a.0
+        for <linux-pm@vger.kernel.org>; Sun, 18 Jan 2026 22:39:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1768801732; x=1769406532; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1768804741; x=1769409541; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I+/S68usaW+kTcKvw3RLnxGJfu2TKIUUxfyXIfkHcDk=;
-        b=dwo6cmBWPz7Cc+gE6lzHvllgGDRMhjyLxiIuJKgR9WuMS2+8pBgTKmIbNLts3fWHyQ
-         wW0i/jvsXDYdh8PE8R2rGuo+hQo+fZCG7Pg+Ik6zyW9jkxbY6ASMQ5/RFg9ITINtPEAY
-         BZff37hzQu10k/qZgnUKb/sJqzwzb5AvWyixh33Q8VrzsJMMt3YgTs0E86qbZeIdA2SG
-         PbqTtSejCsYWNSdneEB2OVNyafn/7O+QFkWM0EoyMAA9V1z++qYUTWZqnOb7ouEKiyAX
-         dEXABAMXiLsDZF2lUyPRrAvBAJlVQ9/n/uFy1UVogOcmRTMSnchy+3m13dHO8hv2q+gL
-         tYnQ==
+        bh=IA/eo2iVwvXN/TKZSuoLgwo8wSFQC43ZkLYtHdqBfws=;
+        b=Q/LQ+OPc2oNFR/oIoBMohF5HMcr2dSuL+uexYQxi5P3z+WwKcpBmJCo5oSkXQOFniG
+         18CvsGknHuUrCQHfudFHajbg+ygcgpqFrAx34tDOp9adVT713hxLV8eySGvVQs52B5kU
+         06lKkW2Xeu83CcgNjZBG3EugkVcWb2yIZL2sPvpbsfyNwB/zaQDociygPOW10R7X78jD
+         ozJu6MV2wk7ThMhXchDF1HFE9kVDLgcUX8uyYW+B9NUeYCHP7n800xPdy23SO+ki6Ec+
+         uk33QItCUFAic/jvITrjbewqqOq3mo5pQ5bW22/W3uABoruwhblcRBKPqv1Ah1FwjnGl
+         ecyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768801732; x=1769406532;
+        d=1e100.net; s=20230601; t=1768804741; x=1769409541;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=I+/S68usaW+kTcKvw3RLnxGJfu2TKIUUxfyXIfkHcDk=;
-        b=c6H86t0r9o2j5rR9ri2xAicxEHnNZyKU9nLbwvaiyW5dbQFebSoRP86RUuvoWGxMvn
-         lRc8wwv9QV/N3LU84AUwk1CR/mA1mp8adZvyDGpPu2C10vhsihDuHweKwlVMB8e6Y788
-         s6ifSv07JFJ3XqDXWAl8OUIzdWxPtYETODJZgpm3M0OESWuFzkd4RfnCOMWRGGmWSCck
-         yexGpLCyxlruWauBUxcgjHRf+r2CvuRRiVPi41g45QjXOMfh8GYZyghHDX/hkobdL152
-         b6ThaBDfsmmoSkeOn5DhexFlyyC7yH0HFR+4k620Rno2jZyZ7LinMJi+2td0fg2FXW65
-         17aw==
-X-Forwarded-Encrypted: i=1; AJvYcCUKyQEg9LQ9b5D51WRnnnMm07NC47qb4VvQHLEgRqUjRAR9TAjG2681vzGXGAtr63jCz/hd1WcU9w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZLAqVFnYpB0LmCQ0cFGDYxL9Md8SGdN6F73W+Wm5H9tGUw4iR
-	mjWlGO2FWmtgNcta0l7ON1T071ZyWhdpFRDJBlo4TUNeo9YoAKj4eU5PhZghNf83Me1GuxpLDvg
-	cUjLk
-X-Gm-Gg: AY/fxX7DfdTnnuA8Er2d6k4HHNVrLER3ceRmKJ1jnmiVcwjh2NLqpw+0GSsVsZ8fhjI
-	/PalhjYebnUip/HcSBsTLUKsGXBgW08xH1kJkKoT9NsJ2UlHBN77tiAWFOT+n30+z6DHqUnIfNC
-	t3vfG3MRCCSeMsPPWmBtWarByrlqhysa0aPFfyArWvLGqcGtdM5BcgVAdQWBElSp/1yOI4lfOKp
-	t6NMI40wbO4kqdn3Z7UUPTnu9g0QuRxLN4pf4zbYkm3tjynr706pKiLyWIhPp9VwF4G5mdTLJEL
-	PMhJiSMnlJR+2kOS4bkpJSN6Xi/ZvaANZg1wodezEYPmeaBN3lTA60tN991ZoFhV5MBzXhR/otT
-	1M+wrlVrflFBAac8fSMewkewO4IaSbYiKqOWIAq5oX+nVr/e1TeZ/y4aY5GZ83sMgWez4/WUDHL
-	qBcn8xPc5Jc6XkjWoNm1KqSA==
-X-Received: by 2002:a05:6a21:9d48:b0:371:53a7:a48a with SMTP id adf61e73a8af0-38dfe572a0cmr10318092637.1.1768801732018;
-        Sun, 18 Jan 2026 21:48:52 -0800 (PST)
-Received: from localhost ([122.172.80.63])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c5edf251a6csm7921857a12.13.2026.01.18.21.48.50
+        bh=IA/eo2iVwvXN/TKZSuoLgwo8wSFQC43ZkLYtHdqBfws=;
+        b=Coc9RMoJpWfHfltdN0hp3lwBimO5BRFW9iTIk5qI0+3rP7+nx9kqrT/xTV/eLfHXwM
+         84dqBBTKiQxI+hhu5eESZFtam8XtuOPcsYtkToLqc+VwmP60+tSq8dLlXWbTfsZBDJbq
+         ZJxqxpXPe1taf4P1V8I4UN5VELIhP/+18pU+bfP7jB5A91fuqSkYg+JJpBwT8BuY5RYl
+         jgeMWjuWTJ9V28WMJnOZkk7ciZrI2qlo/KPP/gd+XB1S9CpFsC2xP+IDiXevKZKv3ZvC
+         T74if28B+7h9IvJBpZe9bjetxof/gUtuJEfEap/BQhtSh2bh8rUQIjY55U1wWKcqtiad
+         fZMg==
+X-Forwarded-Encrypted: i=1; AJvYcCV6i6oW5v5kSFMFVk/L7bIqDn7hxY1cdY/JfuklcTFSzwxX7cGKhteaerqQqvfNBK8kgGLzdCmWYg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDB+7UYX9Lft15CsHSvPWLtUGw/EhWRNvtVXIqEbv+riXJlQMs
+	jEf0i5whB/JpwQWJygK9MFmoYHEYNQm0GUpI09rGtGb1xxbvi8PtWSR1kE3P0nSczJsLTLQt7Te
+	u71jUL1hdrbkhg+sMD2I731OhurorSgfV9mNzqU+rTHLPKOOuMGaPkn4wPols8w==
+X-Gm-Gg: AY/fxX6sv2YXOHKLky5E6guT1k6ZVH4u564rmeesxfJoTLC8e6sCVdca0QiCwXro8+H
+	kFurFDO4VwUKnS4zamrxVuP+QmHSKSbZA1IrdD28FJqmqQyy3K3ACfTJUjxgt/VbeIIxqv7uihr
+	dnrcLb13Zf1UR5YqUDPJdSA63r6i33F0ia0z6PTkXAHn4bcSLnxEkM2INsFVqG0Pe1FfSaSwiJl
+	lFI8luue435Z6ctDBzM6d4uUgnjQnp/1lAAVMsCGK19UIYqclALec/vEkes/AfC8H1AoZwhXkQQ
+	jbH44Rl7niA2QatJxscj6/5pU8J0SIrf1vCaCWIvLEFrU2zJI/tIx4BJqVvXVjnz60BCZxuESA5
+	lZcl+/g77stL1tHuPK+85O10fOvhJ1QP3Rnb6VwhUea2OXBvdiGJjmEGKnlIgZTSI59yAiWPp6a
+	N+n32S18w2XMIjfIYkZ8OaADc=
+X-Received: by 2002:a05:620a:4490:b0:8c5:c9a0:ac28 with SMTP id af79cd13be357-8c6a68ea37dmr1359568285a.21.1768804741496;
+        Sun, 18 Jan 2026 22:39:01 -0800 (PST)
+X-Received: by 2002:a05:620a:4490:b0:8c5:c9a0:ac28 with SMTP id af79cd13be357-8c6a68ea37dmr1359566985a.21.1768804740997;
+        Sun, 18 Jan 2026 22:39:00 -0800 (PST)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59baf3a6dd9sm3083719e87.101.2026.01.18.22.39.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jan 2026 21:48:51 -0800 (PST)
-Date: Mon, 19 Jan 2026 11:18:49 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Juan Martinez <juan.martinez@amd.com>
-Cc: Ray.Huang@amd.com, gautham.shenoy@amd.com, Mario.Limonciello@amd.com, 
-	rafael@kernel.org, Perry.Yuan@amd.com, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, Kaushik.ReddyS@amd.com
-Subject: Re: [PATCH] cpufreq/amd-pstate: Add comment explaining nominal_perf
- usage for performance policy
-Message-ID: <rdym4zzkiokzvmlj6qmxzomgyazggzfbj4euwlbp2nq7yhop6u@3qg4yo6zamkl>
-References: <20260116214539.8139-1-juan.martinez@amd.com>
+        Sun, 18 Jan 2026 22:39:00 -0800 (PST)
+Date: Mon, 19 Jan 2026 08:38:58 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Val Packett <val@packett.cool>
+Cc: Sebastian Reichel <sre@kernel.org>, Abel Vesa <abelvesa@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: qcom_battmgr: Recognize "LiP" as
+ lithium-polymer
+Message-ID: <bih6lxs4u7q2kfe4kmid35cpmnqmvjltvzv4wrowah6x7v3tth@kptyk7bnmnhv>
+References: <20260117210941.6219-1-val@packett.cool>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,45 +109,65 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260116214539.8139-1-juan.martinez@amd.com>
+In-Reply-To: <20260117210941.6219-1-val@packett.cool>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTE5MDA1MiBTYWx0ZWRfX5qt4w7icQu8k
+ XFMXLzw8ybdSrwgfWPsGN8I0+mvPtcqtmX0GeFFty/8p/karNHCIiRRFLxC5qUY1l3SJc28OEw7
+ ae86sDTHCOTyieE0vx0qLDy2P94Zv99+OdCPNc46Ven1nv2jvhObWPGMI43o5neQZKKGE9rbKmm
+ zfzLBPb6VydIt8mFURD8K3AjDlWUZiAcPaOSceFFHnZ+08va4a2ONzmF7/uRuNSGOjsGFgBOsEK
+ DPgMpc9EOXJJP8zlb2mrTE/+m84eiIqH6hSclR8hZJzMTuucf0sILobI3ABcYkLl9k8atMSrBRV
+ 37Ak3lZ3bR9b20+HvqesAMJGARZBKQF2MKAJhVwiVgrT5E7GAB1n2qa93oLcFgRI6Vg9D7GWR98
+ p4BN/s4JTRpa5Jj+k2vQsHBL4dGAEFl6FtPE8P4+/KkqyNDY4ABUhDmetqRO/TDLPYo8wF3G6LH
+ msUWfM4ptNmxRDl0A6A==
+X-Authority-Analysis: v=2.4 cv=NY3rFmD4 c=1 sm=1 tr=0 ts=696dd197 cx=c_pps
+ a=qKBjSQ1v91RyAK45QCPf5w==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=1UYfKuQU2Z-oU-oOffMA:9 a=CjuIK1q_8ugA:10 a=NFOGd7dJGGMPyQGDc5-O:22
+X-Proofpoint-ORIG-GUID: NQqPTg9imNx2QCn5_mLjmTTx3PLckcqH
+X-Proofpoint-GUID: NQqPTg9imNx2QCn5_mLjmTTx3PLckcqH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
+ definitions=2026-01-19_01,2026-01-19_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 adultscore=0 phishscore=0 bulkscore=0 clxscore=1015
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2601190052
 
-On 16-01-26, 15:45, Juan Martinez wrote:
-> Add comment explaining why nominal_perf is used for MinPerf when the
-> CPU frequency policy is set to CPUFREQ_POLICY_PERFORMANCE, rather than
-> using highest_perf or lowest_nonlinear_perf.
+On Sat, Jan 17, 2026 at 06:09:24PM -0300, Val Packett wrote:
+> On the Dell Latitude 7455, the firmware uses "LiP" with a lowercase 'i'
+> for the battery chemistry type, but only all-uppercase "LIP" was being
+> recognized. Add the CamelCase variant to the check to fix the "Unknown
+> battery technology" warning.
 > 
-> Signed-off-by: Juan Martinez <juan.martinez@amd.com>
+> Fixes: 202ac22b8e2e ("power: supply: qcom_battmgr: Add lithium-polymer entry")
+> Signed-off-by: Val Packett <val@packett.cool>
 > ---
->  drivers/cpufreq/amd-pstate.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+>  drivers/power/supply/qcom_battmgr.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index c45bc98721d2..88b26f36937b5 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -636,6 +636,19 @@ static void amd_pstate_update_min_max_limit(struct cpufreq_policy *policy)
->  	WRITE_ONCE(cpudata->max_limit_freq, policy->max);
->  
->  	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE) {
-> +		/*
-> +		 * For performance policy, set MinPerf to nominal_perf rather than
-> +		 * highest_perf or lowest_nonlinear_perf.
-> +		 *
-> +		 * Per commit 0c411b39e4f4c, using highest_perf was observed
-> +		 * to cause frequency throttling on power-limited platforms, leading to
-> +		 * performance regressions. Using lowest_nonlinear_perf would limit
-> +		 * performance too much for HPC workloads requiring high frequency
-> +		 * operation and minimal wakeup latency from idle states.
-> +		 *
-> +		 * nominal_perf therefore provides a balance by avoiding throttling
-> +		 * while still maintaining enough performance for HPC workloads.
-> +		 */
->  		perf.min_limit_perf = min(perf.nominal_perf, perf.max_limit_perf);
->  		WRITE_ONCE(cpudata->min_limit_freq, min(cpudata->nominal_freq, cpudata->max_limit_freq));
->  	} else {
+> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+> index c8028606bba0..80e701c66434 100644
+> --- a/drivers/power/supply/qcom_battmgr.c
+> +++ b/drivers/power/supply/qcom_battmgr.c
+> @@ -1240,7 +1240,8 @@ static unsigned int qcom_battmgr_sc8280xp_parse_technology(const char *chemistry
+>  	if ((!strncmp(chemistry, "LIO", BATTMGR_CHEMISTRY_LEN)) ||
+>  	    (!strncmp(chemistry, "OOI", BATTMGR_CHEMISTRY_LEN)))
+>  		return POWER_SUPPLY_TECHNOLOGY_LION;
+> -	if (!strncmp(chemistry, "LIP", BATTMGR_CHEMISTRY_LEN))
+> +	if (!strncmp(chemistry, "LIP", BATTMGR_CHEMISTRY_LEN) ||
+> +	    (!strncmp(chemistry, "LiP", BATTMGR_CHEMISTRY_LEN)))
 
-Applied. Thanks.
+Why do you have extra brackets around the second strncmp?
+
+>  		return POWER_SUPPLY_TECHNOLOGY_LIPO;
+>  
+>  	pr_err("Unknown battery technology '%s'\n", chemistry);
+> -- 
+> 2.51.2
+> 
 
 -- 
-viresh
+With best wishes
+Dmitry
 
