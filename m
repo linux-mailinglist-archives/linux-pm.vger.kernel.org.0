@@ -1,136 +1,195 @@
-Return-Path: <linux-pm+bounces-41097-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41098-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAA85D3A8D3
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:32:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6DB5D3A919
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 13:38:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 381CA30A5983
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 12:30:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ED0463071543
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Jan 2026 12:35:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4247835B13C;
-	Mon, 19 Jan 2026 12:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5C235BDD0;
+	Mon, 19 Jan 2026 12:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BUJo4cYk"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="why3I2/c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA8E35B138
-	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 12:30:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 879B035BDA3
+	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 12:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768825822; cv=none; b=lhR4TcjLA4ucAGPpGBZvR/UCW4PkcdrBp5fzQC5b4wFYzTGq9KmTkkA1eDQiPUdHRf0KHNARLc6efLCZZM0IygkGrsa4ouRKYuKwl+8SqQeQZ6+JQltqIn0vkaPnqbshSxRIU0mE6cqrSDjr4NSYJVKUC9A013GQtIFaIZylWPA=
+	t=1768826127; cv=none; b=SP+LMJgfFEMApQ7fA1jtLBUCQH0QfqaM246U7lehT0q7siS7jF0J2SZarTJVSTlXHj6wObiv/9Cs3IBdRBH5c9xIy8PzKZ4teUp6OE6YflRb+Fp2a3l3fSV9d6I8wLEhWRAeMCKmbLDPyV1epaAlYNnNSRF81SCa25FOSSuX/+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768825822; c=relaxed/simple;
-	bh=AGiSWdIjqcCkIzUWZ+e2XIl/XdcoubBgfAl3S0l0Yy4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LyFPkQ4Rk8HfYIVpCvWBbPrqLfZpn2FKfeIqtY5Gy39oXG1L4fvy8VkSWAWEh4Ta7mjqVV0OqVJ1PcBmrah85wqmiJx65ES5LT1bgevK8zf2E7zUOWTyMdu5CBhZTfysL2qFTkdYjWNElMaKT3zw82xOM9fctjTndrRxO3nw+0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BUJo4cYk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C8AC2BC86
-	for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 12:30:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768825821;
-	bh=AGiSWdIjqcCkIzUWZ+e2XIl/XdcoubBgfAl3S0l0Yy4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=BUJo4cYknabYZtdBbL+/mLHuuDSar6nIIwS1EvDKN3SwsYO7sZET9/lQywm1vdesA
-	 OhPiVl7AYa1DO85LIiYFx6ee7r/TzQ7EE+VZtijohfZ4Ec4iFcfRhGWc79gqHwPN+X
-	 IeqXTb9HEwq0wsq3eRGy1DWh3ovF8HFIZkUXNNYMOjcBo/rP8OJQ7z+c2NoL/C8Plv
-	 srVRkJhugAjIPHV7HfCGpiOWlrh1n+De9/CZZ3DwBDiOxtWWIyWtYjIzl1NuttS9CE
-	 r1c+zinZVYu6/oMs6jNjauvLcFmTPUuUXW5n/Tt13c9Gk1twM4dLtaWwlmLIcQFZWG
-	 zgCOvQvcFhteA==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-6611ca93e45so1495584eaf.3
-        for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 04:30:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWzYJ8w2W3u+u1pL2NZDqjhsYtlAib8aOiX+kXQcIMiHHORPYQDL6iScwmiENePb6znL8UyX/1+Zg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaJPfgRkvuUmgmf50Dcmm1P5bKOuiycjpK/grCIU7u8vVumbZS
-	cff/yq00p1PyJZCVfCcYF0cd8Q07o/rWX02zM2/+zSHaA7y+UKDvHofBAhH63yCOFxwgesWgrPn
-	zAeElUYAYhdqPLWDwYOBV2Wz8foeWs+0=
-X-Received: by 2002:a05:6820:625:b0:661:ae2:95ed with SMTP id
- 006d021491bc7-661189adbd2mr4500479eaf.60.1768825820390; Mon, 19 Jan 2026
- 04:30:20 -0800 (PST)
+	s=arc-20240116; t=1768826127; c=relaxed/simple;
+	bh=QgtIrq2v5XTFNi5vlU8fw46Ar/tthUMJiTbRAMcagGQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=hMFtqDdlSToW5ZzUVqSDXx//TxREcpv/lBiS0XhEUJxB7k5hrfkPo5WDNu7N1zlVRcgMPwRJfuwfZVHHrkFmJLNNXujhsHhv2uX0nnwzVwUkZZz+Bi+JPpUqhz0NN6t3RWHiYjlq3qf/H+Q6hofIcXo2JvssoxK1oWweVb65vI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=why3I2/c; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4801e2e3532so15802625e9.2
+        for <linux-pm@vger.kernel.org>; Mon, 19 Jan 2026 04:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1768826123; x=1769430923; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=L339R8Vsk/eWURHJ0AqPSpw3w1NFXPchbsihcVaLjUM=;
+        b=why3I2/cUVdJrdwiko+xycCbGMCLYBh6gO5rNTfm5HRilICJTdQb0UzM286OCmHZ5x
+         Az/ENk7+vDBcon8Fs2ADANebi5Z2KIMU2Tb7yeslwJT2ml3MHhxs4gKIa3A5beuB73qD
+         uyLz2olrXCOWO1KOWrf5KF/QPKnSKrpct6TjpprI8HB/YIe/jg0oudYl7fgKc6TwaeZa
+         kF2EMLOw3evT3kR2EmDPLipZ9Iva9cVEBp0OG2VuBliG8eaSmeRhx8SHY57GKckV8Dyn
+         X++SkN+bJhV+haiOBUz7tdjDWNsoONI+LJz+iPeAikjoqspaos6wWS+oCVY9PXVPc8oK
+         1b1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768826123; x=1769430923;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=L339R8Vsk/eWURHJ0AqPSpw3w1NFXPchbsihcVaLjUM=;
+        b=EGn39kfog6Xp9sh5BZA72nVdBBTptCPSPGthnY/DWpQpkh1+xj0+1ubKgJkuEWkftH
+         DT8kNiqpT88atmY+B+HbheV8jpCEpiBa6/bODqvKFVAONiAogNnFym/DKYLg+eXwgBE4
+         Hekm5SYX/32VPCCndS9LUREcYapzakfNAKKDrkcWFEhGc+NiTPfejtDB1cLHBXWQMOD7
+         HqOFA30lJzrEXuQgBu4ZiJzVsFyLLRkbrvW/ZWGXi2uX7GN9PP2lYgO/m8dNl3Qf+hAq
+         q0G4ry1psB2r8olNrdX4+kdtcRfvO44MQqp/Xlo5xB8RVuYnzMa+8+wxQnIba/44j6Ne
+         YTQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVWKXIMHtGtDafoMMN73+vtNbfsBsNeq1EByyuqGkgtqcwlt+JNv8d/9CLjNa1QGg+ubF6Yz2Ou9A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+MCGO91miUth8YV3Oe8ScbS0nwHWe21FlRKtkrBxpnnQkrKPQ
+	Drfj/7GS2Dg0gBr2+Smj0TtFUjqtUVhPb9cI684xABDPguuQQE0IlNJ/xqRV8Fp859drughJlUS
+	5QFaduJaU4cN+gow55w==
+X-Received: from wmbh20.prod.google.com ([2002:a05:600c:a114:b0:47d:586e:2b7b])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:811a:b0:480:1dc6:2686 with SMTP id 5b1f17b1804b1-4801eac0cfcmr114218055e9.13.1768826122871;
+ Mon, 19 Jan 2026 04:35:22 -0800 (PST)
+Date: Mon, 19 Jan 2026 12:35:21 +0000
+In-Reply-To: <20260119-thundering-tested-robin-4be817@houat>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260116145208.87445-1-frederic@kernel.org> <20260116145208.87445-8-frederic@kernel.org>
-In-Reply-To: <20260116145208.87445-8-frederic@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 19 Jan 2026 13:30:07 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hn81J_0N0Hy6QYtc3655w-9hDqVgWWY1BVhW=DT56Deg@mail.gmail.com>
-X-Gm-Features: AZwV_QijNtZmi1zR4iwR07o__vPOI-DD5wfQBm2ysAJARvjnZxZ46W3q48jp7lk
-Message-ID: <CAJZ5v0hn81J_0N0Hy6QYtc3655w-9hDqVgWWY1BVhW=DT56Deg@mail.gmail.com>
-Subject: Re: [PATCH 07/15] cpufreq: ondemand: Simplify idle cputime
- granularity test
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, 
-	Jan Kiszka <jan.kiszka@siemens.com>, Joel Fernandes <joelagnelf@nvidia.com>, 
-	Juri Lelli <juri.lelli@redhat.com>, Kieran Bingham <kbingham@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Mel Gorman <mgorman@suse.de>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
-	Nicholas Piggin <npiggin@gmail.com>, "Paul E . McKenney" <paulmck@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Sven Schnelle <svens@linux.ibm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Uladzislau Rezki <urezki@gmail.com>, Valentin Schneider <vschneid@redhat.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Xin Zhao <jackzxcui1989@163.com>, 
-	linux-pm@vger.kernel.org, linux-s390@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
+ <20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com> <20260108-delectable-fennec-of-sunshine-ffca19@houat>
+ <98CD0BF6-3350-40B9-B8A9-F569AE3E3220@collabora.com> <20260119-thundering-tested-robin-4be817@houat>
+Message-ID: <aW4lCfUyumOKRRJm@google.com>
+Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
+From: Alice Ryhl <aliceryhl@google.com>
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Daniel Almeida <daniel.almeida@collabora.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Danilo Krummrich <dakr@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, Drew Fustini <fustini@kernel.org>, 
+	Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	"Uwe =?utf-8?Q?Kleine-K=C3=B6nig?=" <ukleinek@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, 
+	"=?utf-8?B?QmrDtnJu?= Roy Baron" <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-riscv@lists.infradead.org, linux-pwm@vger.kernel.org, 
+	linux-clk@vger.kernel.org, rust-for-linux@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 16, 2026 at 3:53=E2=80=AFPM Frederic Weisbecker <frederic@kerne=
-l.org> wrote:
->
-> cpufreq calls get_cpu_idle_time_us() just to know if idle cputime
-> accounting has a nanoseconds granularity.
->
-> Use the appropriate indicator instead to make that deduction.
->
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+On Mon, Jan 19, 2026 at 11:45:57AM +0100, Maxime Ripard wrote:
+> On Thu, Jan 08, 2026 at 11:14:37AM -0300, Daniel Almeida wrote:
+> > > For example, it's quite typical to have (at least) one clock for the =
+bus
+> > > interface that drives the register, and one that drives the main
+> > > component logic. The former needs to be enabled only when you're
+> > > accessing the registers (and can be abstracted with
+> > > regmap_mmio_attach_clk for example), and the latter needs to be enabl=
+ed
+> > > only when the device actually starts operating.
+> > >=20
+> > > You have a similar thing for the prepare vs enable thing. The differe=
+nce
+> > > between the two is that enable can be called into atomic context but
+> > > prepare can't.
+> > >=20
+> > > So for drivers that would care about this, you would create your devi=
+ce
+> > > with an unprepared clock, and then at various times during the driver
+> > > lifetime, you would mutate that state.
 
-Acked-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
+The case where you're doing it only while accessing registers is
+interesting, because that means the Enable bit may be owned by a local
+variable. We may imagine an:
 
-or please let me know if you want me to take this patch.
+    let enabled =3D self.prepared_clk.enable_scoped();
+    ... use registers
+    drop(enabled);
 
-> ---
->  drivers/cpufreq/cpufreq_ondemand.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq=
-_ondemand.c
-> index a6ecc203f7b7..2d52ee035702 100644
-> --- a/drivers/cpufreq/cpufreq_ondemand.c
-> +++ b/drivers/cpufreq/cpufreq_ondemand.c
-> @@ -334,17 +334,12 @@ static void od_free(struct policy_dbs_info *policy_=
-dbs)
->  static int od_init(struct dbs_data *dbs_data)
->  {
->         struct od_dbs_tuners *tuners;
-> -       u64 idle_time;
-> -       int cpu;
->
->         tuners =3D kzalloc(sizeof(*tuners), GFP_KERNEL);
->         if (!tuners)
->                 return -ENOMEM;
->
-> -       cpu =3D get_cpu();
-> -       idle_time =3D get_cpu_idle_time_us(cpu, NULL);
-> -       put_cpu();
-> -       if (idle_time !=3D -1ULL) {
-> +       if (tick_nohz_enabled) {
->                 /* Idle micro accounting is supported. Use finer threshol=
-ds */
->                 dbs_data->up_threshold =3D MICRO_FREQUENCY_UP_THRESHOLD;
->         } else {
-> --
-> 2.51.1
->
->
+Now ... this doesn't quite work with the current API - the current
+Enabled stated owns both a prepare and enable count, but the above keeps
+the prepare count in `self` and the enabled count in a local variable.
+But it could be done with a fourth state, or by a closure method:
+
+    self.prepared_clk.with_enabled(|| {
+        ... use registers
+    });
+
+All of this would work with an immutable variable of type Clk<Prepared>.
+
+> > > AFAIU, encoding the state of the clock into the Clk type (and thus
+> > > forcing the structure that holds it) prevents that mutation. If not, =
+we
+> > > should make it clearer (by expanding the doc maybe?) how such a patte=
+rn
+> > > can be supported.
+> > >=20
+> > > Maxime
+> >=20
+> > IIUC, your main point seems to be about mutating the state at runtime? =
+This is
+> > possible with this code. You can just have an enum, for example:
+> >=20
+> > enum MyClocks {
+> >     Unprepared(Clk<Unprepared>),
+> >     Prepared(Clk<Prepared>),
+> >     Enabled(Clk<Enabled>),=20
+> > }
+
+I believe you need an extra state if the state is not bound to the scope
+of a function:
+
+enum MyClocks {
+    Unprepared(Clk<Unprepared>),
+    Prepared(Clk<Prepared>),
+    Enabled(Clk<Enabled>),=20
+    Transitioning,
+}
+
+since mem::replace() needs a new value before you can take ownership of
+the existing Clk value.
+
+> > In fact, I specifically wanted to ensure that this was possible when wr=
+iting
+> > these patches, as it=E2=80=99s needed by drivers. If you want to, I can=
+ cover that in
+> > the examples, no worries.
+>=20
+> Yes, that would be great. I do wonder though if it wouldn't make sense
+> to turn it the other way around. It creates a fair share of boilerplate
+> for a number of drivers. Can't we keep Clk the way it is as a
+> lower-level type, and crate a ManagedClk (or whatever name you prefer)
+> that drivers can use, and would be returned by higher-level helpers, if
+> they so choose?
+>=20
+> That way, we do have the typestate API for whoever wants to, without
+> creating too much boilerplate for everybody else.
+
+I think that if you still want an API where you just call enable/disable
+directly on it with no protection against unbalanced calls, then that
+should be the special API. Probably called RawClk and functions marked
+unsafe. Unbalanced calls seem really dangerous and use should not be
+encouraged.
+
+The current type-state based API is the least-boilerplate option for
+drivers that exist today.
+
+Alice
 
