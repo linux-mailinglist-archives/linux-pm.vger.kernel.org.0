@@ -1,60 +1,64 @@
-Return-Path: <linux-pm+bounces-41182-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41183-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uEDsLpbRb2mgMQAAu9opvQ
-	(envelope-from <linux-pm+bounces-41182-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 20:03:50 +0100
+	id 2P4JLuPGb2mgMQAAu9opvQ
+	(envelope-from <linux-pm+bounces-41183-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 19:18:11 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45D9249F8C
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 20:03:50 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57B35494C4
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 19:18:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CFEA5928032
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 15:46:24 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DA3627ECA06
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 15:56:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A103477E2D;
-	Tue, 20 Jan 2026 15:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB8A043D4F2;
+	Tue, 20 Jan 2026 15:30:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C0RxOSk0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X1zf/kJh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C59E477E27;
-	Tue, 20 Jan 2026 15:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9571643DA3C;
+	Tue, 20 Jan 2026 15:30:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768922778; cv=none; b=EaZTr6LSBzzIHQwYKlDgv80ZU9dLVBttVxBSlpkKKf54uQ0A+2Gh87RWeAD1ZyDQKZ0cad6ZkB0mtcyqgxK26b5tqIM0hTeRGkNUJzytWo0/UXm34Ovshfa91gtzSo/7TV05fZMxXtPuLYaeKM7M7FMzYQ2Omj3sVT87yakvNos=
+	t=1768923003; cv=none; b=nDrYdMD7xvDXS0BumyWC9MtRdFbiF7h7bFCM+gAjRUa3qlgZvjXlqOjA4KZodnHRZc0B935/GmfS40Ewqf0Q4Xmus6SPxr7cWOVVUyqYqsvtBI5RN8BzqwS6t8tFPMSV+MqrvPSKv0D+vcoIRpSyW89xHChwDJ51+iY1Gf9y0eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768922778; c=relaxed/simple;
-	bh=YJYvgxBd2qNJndkwJ9WWeubU/T+r3vnDqMWmSrmfqVs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=iWZSGiAQxH4oJxo4DjFbl+hxfrLnm+gJvEqRlNLH5QeYblJPMzNm/cr7CoixjItvGGdGJmpek6K04YiaT+xNEn0sC1NIpDKLDUdkAIFV8yMjkTwp8fUYIXOGzQIgbZRkbyhn3j5XHvtNftoxQVwdOfF2tn7EBcyU7PBam3ukKhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C0RxOSk0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24C10C16AAE;
-	Tue, 20 Jan 2026 15:26:16 +0000 (UTC)
+	s=arc-20240116; t=1768923003; c=relaxed/simple;
+	bh=wx2PTvUA8XiPbeKJPwWhvmYVE3zPcEvWB5FSA+rmcXc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ImcbsesB+Lq5ZXDQB7EI8vqviFXEM5I6yU+vIR0ss5sqc0Ss8YmRtC3Ql+ZopZ20yKtzshgOjN3K71tbi0L7iqDsJlSfmmWkjBeK3pSdlbB05UvkygMcaIPYUgDd0nJcwoVzazg5xVllpu80zoa1pRIhGV2rhG+DhWWe/vpirdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X1zf/kJh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0504DC19422;
+	Tue, 20 Jan 2026 15:30:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768922778;
-	bh=YJYvgxBd2qNJndkwJ9WWeubU/T+r3vnDqMWmSrmfqVs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=C0RxOSk0OYvizktA1rWo2LIoFcZJmtwYypWad0xbFIJrIchtymBYRX8LkfGdBtHhw
-	 Mpq8iRUTbzruF90Q3eyaCzACYBDhbb5xqiL4554xKFVJia0ZPIUjOviMDzLfmBGPDL
-	 Ix5R7B2tDECzBnA3uxUYk1m8iGqQWLOSf5FU5tQGULQo+2DIE2O7mY9xfTsh0M2wW3
-	 g5PmE5aHk2Sh9i57VabYpYv2lE0Di6MQUf10LPAn6+HgCe4dTgbeFLLPpqXzaHKh7Z
-	 X5WGcoWpFI8yxJZzJNUNql4bqXqchkQ+AplCR4orHRWBu9GNSNTpxi9wrUPXR3Btk4
-	 53u6PEcT1KRWg==
+	s=k20201202; t=1768923003;
+	bh=wx2PTvUA8XiPbeKJPwWhvmYVE3zPcEvWB5FSA+rmcXc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=X1zf/kJhaiPpRQe5XLbqDdmv0zXk9306UPbaMjs5H/1GRkT2ZFZ269Z4kGgKA+azZ
+	 tdGvVSrGniOSgk0ga/EUccTbnBLR7iUAnCmB9DKfOnjVJcyBequp8PuwJPvHleRPa6
+	 AbUtHqPdbYrNiEFIw/kiM/7JN20mAZrST5m1PmhhzJOW27npDMNDal3dGns0d8KCsn
+	 QiAMQbuYF+L+J14ZaBrJgOimFL8MwIsWQ0e/3Vnhm4sxPmPyihOUgr2DA4b/dwdr/m
+	 7SCrAz9mTahy7JOFHC3+wrCZSeV9WPkF9uEztlORyLt/POS1kcVT5o6CYthFaus5YN
+	 vMmCIvSOuBTgg==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Christian Loehle <christian.loehle@arm.com>,
  Doug Smythies <dsmythies@telus.net>
 Subject:
- [PATCH v1] cpuidle: governors: menu: Always check timers with tick stopped
-Date: Tue, 20 Jan 2026 16:26:14 +0100
-Message-ID: <5959091.DvuYhMxLoT@rafael.j.wysocki>
+ [Update][PATCH v1.1 4/5] cpuidle: governors: teo: Adjust the classification
+ of wakeup events
+Date: Tue, 20 Jan 2026 16:29:59 +0100
+Message-ID: <4707705.LvFx2qVVIh@rafael.j.wysocki>
 Organization: Linux Kernel Development
+In-Reply-To: <2257365.irdbgypaU6@rafael.j.wysocki>
+References: <2257365.irdbgypaU6@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -71,7 +75,7 @@ X-Spamd-Result: default: False [-1.46 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41182-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41183-lists,linux-pm=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_ALL(0.00)[];
@@ -87,87 +91,92 @@ X-Spamd-Result: default: False [-1.46 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
 	RCPT_COUNT_THREE(0.00)[4];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,rafael.j.wysocki:mid]
-X-Rspamd-Queue-Id: 45D9249F8C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,intel.com:email]
+X-Rspamd-Queue-Id: 57B35494C4
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-After commit 5484e31bbbff ("cpuidle: menu: Skip tick_nohz_get_sleep_length()
-call in some cases"), if the return value of get_typical_interval()
-multiplied by NSEC_PER_USEC is not greater than RESIDENCY_THRESHOLD_NS,
-the menu governor will skip computing the time till the closest timer.
-If that happens when the tick has been stopped already, the selected
-idle state may be too deep due to the subsequent check comparing
-predicted_ns with TICK_NSEC and causing its value to be replaced with
-the expected time till the closest timer, which is KTIME_MAX in that
-case.  That will cause the deepest enabled idle state to be selected,
-but the time till the closest timer very well may be shorter than the
-target residency of that state, in which case a shallower state should
-be used.
+If differences between target residency values of adjacent idle states
+of a given CPU are relatively large, the corresponding idle state bins
+used by the teo governors are large either and the rule by which hits
+are distinguished from intercepts is inaccurate.
 
-Address this by making menu_select() always compute the time till the
-closest timer when the tick has been stopped.
+Namely, by that rule, a wakeup event is classified as a hit if the
+sleep length (the time till the closest timer other than the tick)
+and the measured idle duration, adjusted for the entered idle state
+exit latency, fall into the same idle state bin.  However, if that bin
+is large enough, the actual difference between the sleep length and
+the measured idle duration may be significant.  It may in fact be
+significantly greater than the analogous difference for an event where
+the sleep length and the measured idle duration fall into different
+bins.
 
-Also move the predicted_ns check mentioned above into the branch in
-which the time till the closest timer is determined because it only
-needs to be done in that case.
+For this reason, amend the rule in question with a check that will
+only allow a wakeup event to be counted as a hit if the difference
+between the sleep length and the measured idle duration is less than
+LATENCY_THRESHOLD_NS (which means that the difference between the
+sleep length and the raw measured idle duration is below the sum of
+LATENCY_THRESHOLD_NS and 1/2 of the entered idle state exit latency).
+Otherwise, the event will be counted as an intercept.
 
-Fixes: 5484e31bbbff ("cpuidle: menu: Skip tick_nohz_get_sleep_length() call in some cases")
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/cpuidle/governors/menu.c |   22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
 
---- a/drivers/cpuidle/governors/menu.c
-+++ b/drivers/cpuidle/governors/menu.c
-@@ -239,7 +239,7 @@ static int menu_select(struct cpuidle_dr
- 
- 	/* Find the shortest expected idle interval. */
- 	predicted_ns = get_typical_interval(data) * NSEC_PER_USEC;
--	if (predicted_ns > RESIDENCY_THRESHOLD_NS) {
-+	if (predicted_ns > RESIDENCY_THRESHOLD_NS || tick_nohz_tick_stopped()) {
- 		unsigned int timer_us;
- 
- 		/* Determine the time till the closest timer. */
-@@ -259,6 +259,16 @@ static int menu_select(struct cpuidle_dr
- 				   RESOLUTION * DECAY * NSEC_PER_USEC);
- 		/* Use the lowest expected idle interval to pick the idle state. */
- 		predicted_ns = min((u64)timer_us * NSEC_PER_USEC, predicted_ns);
-+		/*
-+		 * If the tick is already stopped, the cost of possible short
-+		 * idle duration misprediction is much higher, because the CPU
-+		 * may be stuck in a shallow idle state for a long time as a
-+		 * result of it.  In that case, say we might mispredict and use
-+		 * the known time till the closest timer event for the idle
-+		 * state selection.
-+		 */
-+		if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC)
-+			predicted_ns = data->next_timer_ns;
- 	} else {
- 		/*
- 		 * Because the next timer event is not going to be determined
-@@ -285,16 +295,6 @@ static int menu_select(struct cpuidle_dr
+v1 -> v1.1
+   * Drop the change in teo_select() along with the corresponding
+     part of the changelog (after receiving testing feedback from
+     Christian)
+
+---
+ drivers/cpuidle/governors/teo.c |   32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
+
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -48,13 +48,11 @@
+  * in accordance with what happened last time.
+  *
+  * The "hits" metric reflects the relative frequency of situations in which the
+- * sleep length and the idle duration measured after CPU wakeup fall into the
+- * same bin (that is, the CPU appears to wake up "on time" relative to the sleep
+- * length).  In turn, the "intercepts" metric reflects the relative frequency of
+- * non-timer wakeup events for which the measured idle duration falls into a bin
+- * that corresponds to an idle state shallower than the one whose bin is fallen
+- * into by the sleep length (these events are also referred to as "intercepts"
+- * below).
++ * sleep length and the idle duration measured after CPU wakeup are close enough
++ * (that is, the CPU appears to wake up "on time" relative to the sleep length).
++ * In turn, the "intercepts" metric reflects the relative frequency of non-timer
++ * wakeup events for which the measured idle duration is measurably less than
++ * the sleep length (these events are also referred to as "intercepts" below).
+  *
+  * The governor also counts "intercepts" with the measured idle duration below
+  * the tick period length and uses this information when deciding whether or not
+@@ -253,12 +251,16 @@ static void teo_update(struct cpuidle_dr
  	}
  
  	/*
--	 * If the tick is already stopped, the cost of possible short idle
--	 * duration misprediction is much higher, because the CPU may be stuck
--	 * in a shallow idle state for a long time as a result of it.  In that
--	 * case, say we might mispredict and use the known time till the closest
--	 * timer event for the idle state selection.
--	 */
--	if (tick_nohz_tick_stopped() && predicted_ns < TICK_NSEC)
--		predicted_ns = data->next_timer_ns;
--
--	/*
- 	 * Find the idle state with the lowest power while satisfying
- 	 * our constraints.
+-	 * If the measured idle duration falls into the same bin as the sleep
+-	 * length, this is a "hit", so update the "hits" metric for that bin.
++	 * If the measured idle duration falls into the same bin as the
++	 * sleep length and the difference between them is less than
++	 * LATENCY_THRESHOLD_NS, this is a "hit", so update the "hits"
++	 * metric for that bin.
++	 *
+ 	 * Otherwise, update the "intercepts" metric for the bin fallen into by
+ 	 * the measured idle duration.
  	 */
+-	if (idx_timer == idx_duration) {
++	if (idx_timer == idx_duration &&
++	    cpu_data->sleep_length_ns - measured_ns < LATENCY_THRESHOLD_NS) {
+ 		cpu_data->state_bins[idx_timer].hits += PULSE;
+ 	} else {
+ 		cpu_data->state_bins[idx_duration].intercepts += PULSE;
 
 
 
