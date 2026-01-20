@@ -1,258 +1,156 @@
-Return-Path: <linux-pm+bounces-41187-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41188-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KJqzDIrnb2lhUQAAu9opvQ
-	(envelope-from <linux-pm+bounces-41187-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 21:37:30 +0100
+	id 0OChLw/nb2lhUQAAu9opvQ
+	(envelope-from <linux-pm+bounces-41188-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 21:35:27 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C3544B694
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 21:37:29 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FF4F4B639
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 21:35:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 418C566DECF
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 19:38:44 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 38D6F7EBBB0
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 19:39:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D3247B402;
-	Tue, 20 Jan 2026 19:38:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F1647D932;
+	Tue, 20 Jan 2026 19:38:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FFH9wQHM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NvQ+wO0R"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EDD644D028;
-	Tue, 20 Jan 2026 19:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1933847CC9E
+	for <linux-pm@vger.kernel.org>; Tue, 20 Jan 2026 19:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768937883; cv=none; b=AZ/GhZCBFq383ujrWtpWC0R/fhjPxdL5ZxYCOUQCL9tvQMjesNNstw5VtXRk8H9wz5zbBNVLnNQGklPhf0kxpGl4H61iN24AOky7z+iKYjUsZB6R47X+7Sl67LHaLhyTAQ8/skFMF1Mht+QJZwQ/mMWR1HoZm8e7RIUvT77/W8E=
+	t=1768937893; cv=none; b=iMw8ynZ1koijiL2jX92mzYNA6yo5AbuHXcPQVUW/05Epd7iu6c33AFMJKvSX1WKwMD49wxZh7crpwyOLHhu8J/IoRTGNKZuuc2DRiXURz8aL7Vn3zXwe5Bm8WKiqWZvCYt17VszuaHr67Zrk9h+FhfFEIZMzHwB7FvRvPgTEMTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768937883; c=relaxed/simple;
-	bh=aLYewYaidV95JSBfkMgzIpwgMWf1mMuoxBwdhsvxb2g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GtlzV14XraDQLZxuNsVlbaUySfrfFzM0MzzuleXVE883J9MpEnLqLmIaqmrdSTjJncMxVJHT+z8OKIcIkfTpN9p4Hghym5sK7CzxTSovi1EUNCHWFuUqxfRCrrvrJ6UI2pmScn/TQU8eOJEr/MjT0QUP2mqf+wVCateJRrugF+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FFH9wQHM; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1768937882; x=1800473882;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=aLYewYaidV95JSBfkMgzIpwgMWf1mMuoxBwdhsvxb2g=;
-  b=FFH9wQHM3drbqZgyx0/OzJ7NZe+BTYB84hJF0Z6afu7wxzhhKTMeUfZE
-   9aAzJS3GhPfj++fUuDL3CuIGLJYkoe2jETBaJQIbfkUgUQCzepSSpgjwo
-   wRvRQN2u0GKetrTqpl7A0n0rzV0+zDDq+M23W5j/r62fnRH4HRIKKHpL2
-   i6R5JIXzr4jRpk6QcpWW6oMYLUN0TQ5u7lTgM2EAySvKYAlcUo0631z+T
-   MAQ1M8x/mT0NARzCp23Y95/TxiImeECiClw3OQRnOVSlYF5Kf4mHzz0PO
-   QvjPQvciWVIpKZkhrFKo/3NaKAFVsk02dIIxtA3JSOhhGf2oIZr/yUNGi
-   Q==;
-X-CSE-ConnectionGUID: /ZFfWdayThekinlsqL7bug==
-X-CSE-MsgGUID: VUVwr74HSrG7ZTVOGLvIqg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11677"; a="70323654"
-X-IronPort-AV: E=Sophos;i="6.21,241,1763452800"; 
-   d="scan'208";a="70323654"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2026 11:38:00 -0800
-X-CSE-ConnectionGUID: cQamuSVDSKmyrHbjuRvDPg==
-X-CSE-MsgGUID: M3Zt97TzQMK9R7gTkA3DeA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,241,1763452800"; 
-   d="scan'208";a="210666001"
-Received: from black.igk.intel.com ([10.91.253.5])
-  by fmviesa005.fm.intel.com with ESMTP; 20 Jan 2026 11:37:57 -0800
-Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id DFA4595; Tue, 20 Jan 2026 20:37:55 +0100 (CET)
-Date: Tue, 20 Jan 2026 20:37:55 +0100
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Thorsten Leemhuis <regressions@leemhuis.info>
-Cc: Vijay <vijayg0127@gmail.com>, regressions@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	jikos@kernel.org
-Subject: Re: Regression: SYNA3602 I2C touchpad broken in Linux 6.17.7 (works
- in 6.17.6 and previous versions)
-Message-ID: <aW_Zk7v63HPJl01C@black.igk.intel.com>
-References: <CAMBhvbYA=onQkkcgkODaTj=+tkybwo28Cdi6P3vodGpVZi8OVA@mail.gmail.com>
- <CAO-hwJJRisVpZWeSA+3_fLaa8_52f7ypUocDcD+PojuF3KjHYw@mail.gmail.com>
- <08000f1a-2c1e-4a0d-a5b5-fc7dcea3d8a8@leemhuis.info>
- <CAMBhvbZHcOwd-i04TGMXdbvi1vmpnyPD1p7SgkUtjfFsc+9nWQ@mail.gmail.com>
- <2c8d4baa-679f-4af7-a78d-41774410e9a6@leemhuis.info>
+	s=arc-20240116; t=1768937893; c=relaxed/simple;
+	bh=qzGTiN2DSgATC7AFVwABYmmpSrfrGrCKEt9PfSUj1y4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ddIegWQAtZj28AHliRghFF9BeRfqStAKWM1hLUdqqAtPQ8oI4Ke1eu6k5xFhY/Un3YWJe6TKFTP5oPgR8/uSuaD77MC2Eq+DXP91TzfenYVTasZuxXcep139ft5VGqgK+WaILZyy59jvEUbuz5MpeHV2BY8KgK+wCRvUWKZszcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NvQ+wO0R; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-59b77f2e43aso252202e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 20 Jan 2026 11:38:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1768937889; x=1769542689; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=s5oQNJxHngLfb7biqEV9kKz7u/Vfq13tGGqUE/lHiBo=;
+        b=NvQ+wO0RqcW/fSmJGiJj15UVsjEfrpS9i55ntqGxqpMHVzxP1uhGkEOmPWWSTPSIox
+         FM2Mz+Wc6x2SoQW1UZkABQR/IyjhJRrfUceaxXZTuvso3RtEi4vFYU5D/Oi1OV7mliLn
+         y3k8OkouKS+ze3+/Z7JFfUbB5UfGFxm3MiSqz7E8dOYhD9dOPEAoilWTkF3Rx048WDXo
+         04529Q9gjZ/Zg3cbk+M5Oc5V3A++ZPAZTjRuOxpP0AX8dM0h7v1jBVkAPyTmwqKsxpi7
+         RaAC2xkjJKYCyux2HGR8Cf3oD6FcUbh4dOB3A8dRgDdCUciQphBbaE9/Kj4/GhmqjxC4
+         5Zgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768937889; x=1769542689;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s5oQNJxHngLfb7biqEV9kKz7u/Vfq13tGGqUE/lHiBo=;
+        b=dK2oQXTPuTuk+J3JfR0lvB7BDceFw8BkvrRmJZQ3NcAm8eh+xjrIZy1tpJLLaZIj0M
+         zxjhMXDjzK0ELFAwQPdQ8aklwDisMr9y44aZsSa21niHolTKdVK7wr+ceQgsVIBOwu+y
+         YX7Plzn5kxnqivJNZLp1IXQgqHMIbD0GNEvtqJDw3S2lg/INpz7IGzkP3uEKvweLI0+R
+         NHLywYXsV0xg5X8Wkv7cFO8MQus0qQ/SsZmFTSsGXOrUSswJK3AcjF34EXSjCWrLG14T
+         O6a976I3EomVd2KvUASMCsbxIdXJaTM0VHVQkM2BLQVjZA8wBKp3EPBIf6GHza2OQvNj
+         z06A==
+X-Forwarded-Encrypted: i=1; AJvYcCV2Tz1QzwtSyPr6K3l91oIhoFDUFH75jrRNuEjcdB/31913tzbI0/vHZ43OJAAJMCL1bRnnCcMv/Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YybjL5HagtFQV5Qr0NMF9tbguVyDqm9m+q9qU5laAT9KsrGZbyV
+	ZJydxQ0zY/oZP0mrzDKl6iRdHjejqYyGG+rAziUHmrpVgzvrfjk3bcAxjW/1gaPOwEM=
+X-Gm-Gg: AZuq6aL8PPN261Sl84C2uc5A2GopyRWkhrWzihjgM0RcTcnogdKFVnlLB1qSkK1P8oV
+	VhtLA8V9PrIcM6gT/lOYiUF+nvrC/v6Jjy+Q9QLxXG+UsLoYdUTZaCWUrT0lVMQR1r0qynhHD7j
+	IBbnCEcO8aq0bUBPIzpYuA+gqEEnMBUBbCLAy+2IQ1AysAxCY4kpGpxjF5kvOec+OGDQROJtjg3
+	DX3abUekK9Pgfd0//uCnFECDTSG7QStAkxl9lDUyMupyuqOc9EfL81FTZoLAhm6qfXztL4o6tqO
+	f8xf1BUb/6cmy4YxMTVJgoDts834R11METJeW7bwc1AJb0C1TjUOWmzBuNbaKhGhJOJD+gJQ3ep
+	CI+1JyMh89HkT0uhD3vdt4kgdj51EqEtfIo1ktGknjtvDW4IQLqoqtc6J3o0BQ3tkXh6NQcaNUd
+	Ez9thK35RZ5rHZonJc82kL4z7Q3oZl6IQO5D0mQHCrirzM+9WFmS+gkTwZwuKkTB4=
+X-Received: by 2002:a05:6512:3ca8:b0:59b:6d18:d777 with SMTP id 2adb3069b0e04-59baf192842mr5614998e87.22.1768937888893;
+        Tue, 20 Jan 2026 11:38:08 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:ebda:5627:9bc:1ede? ([2a05:6e02:1041:c10:ebda:5627:9bc:1ede])
+        by smtp.googlemail.com with ESMTPSA id 2adb3069b0e04-59baf3a17b9sm4293525e87.92.2026.01.20.11.38.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jan 2026 11:38:08 -0800 (PST)
+Message-ID: <4c7dc145-1b25-443d-9ac8-e5c7561e2597@linaro.org>
+Date: Tue, 20 Jan 2026 20:38:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] tools: lib: thermal: Correct CFLAGS and LDFLAGS in
+ pkg-config template
+To: Romain Gantois <romain.gantois@bootlin.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20251226-libthermal-pkgconfig-v1-1-3406de5ca8ea@bootlin.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20251226-libthermal-pkgconfig-v1-1-3406de5ca8ea@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2c8d4baa-679f-4af7-a78d-41774410e9a6@leemhuis.info>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 X-Spamd-Result: default: False [-1.96 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
-	FREEMAIL_CC(0.00)[gmail.com,lists.linux.dev,vger.kernel.org,redhat.com,kernel.org];
-	DMARC_POLICY_ALLOW(0.00)[intel.com,none];
-	TAGGED_FROM(0.00)[bounces-41187-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[linaro.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	DMARC_POLICY_ALLOW(0.00)[linaro.org,none];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41188-lists,linux-pm=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	REDIRECTOR_URL(0.00)[twitter.com];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@intel.com,linux-pm@vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[daniel.lezcano@linaro.org,linux-pm@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: 7C3544B694
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,linaro.org:dkim,linaro.org:mid,linaro.org:url]
+X-Rspamd-Queue-Id: 7FF4F4B639
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On Mon, Dec 08, 2025 at 02:54:20PM +0100, Thorsten Leemhuis wrote:
-> On 12/8/25 13:13, Vijay wrote:
-> > 
-> > Yes, the touchpad is not working in 6.18 also, getting the same errors
-> > as mentioned previously, 
+On 12/26/25 08:54, Romain Gantois wrote:
+> There are two issues with the current pkg-config template. Firstly, the
+> -lthermal linker flag is missing. Secondly, the libnl3 include directory
+> compiler flag references "include" instead of "includedir", which leads to
+> an unexpanded variable when pkg-config is called.
 > 
-> That's really good to know, thx!
+> Add the missing -lthermal flag and correct the libnl3 include directory.
 > 
-> Thing is: I fear that nobody will look into this, unless you or somebody
-> else affected checks which change broke things. Benjamin mentioned three
-> you could try reverting in 6.17.y; alternatively, perform a bisection in
-> 6.17.y. For details, see:
-> https://docs.kernel.org/admin-guide/verify-bugs-and-bisect-regressions.html
+> Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+> ---
 
-Might be related:
-https://bugzilla.kernel.org/show_bug.cgi?id=219799
+Applied, thanks
 
-> > On Thu, 4 Dec 2025 at 20:40, Thorsten Leemhuis
-> > <regressions@leemhuis.info <mailto:regressions@leemhuis.info>> wrote:
-> > 
-> >     Lo!
-> > 
-> >     @AM Vijay: 6.17.y will be EOL in about ten days, so this is unlikely to
-> >     get fixed there. The big question is:
-> > 
-> >     Is 6.18 affected?
-> > 
-> >     If it is, we need your help identifying want went wrong; if not, then
-> >     it's likely not worth looking closer into this
-> > 
-> >     Ciao, Thorsten
-> > 
-> >     On 11/28/25 09:05, Benjamin Tissoires wrote:
-> >     > Hi,
-> >     >
-> >     > On Fri, Nov 28, 2025 at 7:40 AM Vijay <vijayg0127@gmail.com
-> >     <mailto:vijayg0127@gmail.com>> wrote:
-> >     >>
-> >     >> Hello,
-> >     >>
-> >     >> I would like to report a regression in the Linux kernel affecting
-> >     I2C-HID
-> >     >> touchpads that run through the Intel ISH + DesignWare I2C controller.
-> >     >>
-> >     >> Hardware:
-> >     >> - Laptop: Infinix Y4 Max
-> >     >> - CPU: Intel (13th gen core i5)
-> >     >> - Touchpad: SYNA3602:00 093A:35ED (I2C HID)
-> >     >> - Bus path: SYNA3602 → i2c_designware → Intel ISH → HID
-> >     >> - OS: Linux (Arch/CachyOS)
-> >     >> - Kernel config: Default distro config
-> >     >>
-> >     >> Regression summary:
-> >     >> - Touchpad works perfectly in Linux 6.17.6 and below versions
-> >     >> - Touchpad stops working in Linux 6.17.7 and all newer versions
-> >     (6.17.8, 6.17.9, etc.)
-> >     >> - Desktop environment does not matter (Hyprland/GNOME both fail)
-> >     >> - The failure happens before userspace loads
-> >     >> - Touchpad also works fine in Linux 6.12 LTS
-> >     >>
-> >     >> This is a kernel-level regression introduced between:
-> >     >>     Good: Linux 6.17.6
-> >     >>     Bad:  Linux 6.17.7
-> >     >>
-> >     >> **Dmesg logs from broken kernel (6.17.7 and newer):**
-> >     >>
-> >     >>     i2c-SYNA3602:00: can't add hid device: -110
-> >     >>     hid_sensor_hub: reading report descriptor failed
-> >     >>     intel-hid INTC1078:00: failed to enable HID power button
-> >     >
-> >     > Looks like i2c-hid can't even communicate with any I2C device, so this
-> >     > is slightly worrying.
-> >     >
-> >     >>
-> >     >> And the DesignWare I2C controller logs around the failure:
-> >     >>     i2c_designware 0000:00:15.0: controller timed out
-> >     >>     i2c_designware 0000:00:15.0: lost arbitration
-> >     >>     i2c_designware 0000:00:15.0: transfer aborted (status = -110)
-> >     >>
-> >     >> These errors appear only on 6.17.7+ and not on 6.17.6.
-> >     >>
-> >     >> On working versions (6.17.6 and 6.12 LTS), the touchpad
-> >     initializes normally:
-> >     >>
-> >     >>     input: SYNA3602:00 093A:35ED Touchpad as /devices/.../input/
-> >     inputX
-> >     >>     hid-multitouch: I2C HID v1.00 device initialized
-> >     >>     i2c_designware 0000:00:15.0: controller operating normally
-> >     >>
-> >     >> This narrow regression window should make it possible to identify
-> >     the offending
-> >     >> change in either:
-> >     >> - HID core
-> >     >> - I2C-HID
-> >     >> - Intel ISH HID
-> >     >> - DesignWare I2C controller
-> >     >> - ACPI timing changes
-> >     >>
-> >     >> I can provide:
-> >     >> - Full dmesg (working and broken)
-> >     >> - acpidump
-> >     >
-> >     > Are you running on a full vanilla kernel?
-> >     >
-> >     > The changelog between 6.17.6 and 6.17.7 is rather small, so it should
-> >     > be easy enough to bisect and get the offending commit.
-> >     >
-> >     > I have my suspicions on:
-> >     > f1971d5ba2ef ("genirq/manage: Add buslock back in to enable_irq()")
-> >     > b990b4c6ea6b ("genirq/manage: Add buslock back in to
-> >     __disable_irq_nosync()")
-> >     > 3c97437239df ("genirq/chip: Add buslock back in to irq_set_handler()")
-> >     >
-> >     > Because anything else is unrelated to any component involved in
-> >     i2c-hid.
-> >     > (But that's also assuming you are running vanilla kernels without any
-> >     > extra patches.)
-> >     >
-> >     > OTOH, I've booted a 6.17.8 and 6.17.7 shipped by Fedora and I don't
-> >     > see any issues related to i2c-hid, so those 3 commits might not be the
-> >     > culprits.
 
-> >     >> Please let me know what additional data is needed.
-> >     >
-> >     > Can you do a bisect between v6.17.7 and v6.17.6?
 
 -- 
-With Best Regards,
-Andy Shevchenko
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
