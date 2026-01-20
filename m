@@ -1,387 +1,233 @@
-Return-Path: <linux-pm+bounces-41547-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41159-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iFJ5My7aeGmwtgEAu9opvQ
-	(envelope-from <linux-pm+bounces-41547-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 16:30:54 +0100
+	id mLLIBZe/cGmKZgAAu9opvQ
+	(envelope-from <linux-pm+bounces-41159-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 12:59:19 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4653696BBD
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 16:30:54 +0100 (CET)
-Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3D571309B6C7
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 15:18:19 +0000 (UTC)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE4CE56663
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 12:59:18 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6B70F5E67EC
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Jan 2026 11:00:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 134F635B65F;
-	Tue, 27 Jan 2026 15:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A927040FD89;
+	Tue, 20 Jan 2026 11:00:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="Y7Guxh82";
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="fJdgKSL/";
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="fJdgKSL/"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="WR9ae14e"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail1.bemta39.messagelabs.com (mail1.bemta39.messagelabs.com [195.245.231.3])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011029.outbound.protection.outlook.com [52.101.62.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B253EBF03;
-	Tue, 27 Jan 2026 15:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.245.231.3
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769526945; cv=none; b=BpdwXJNMIRvTAmX9UzNuzcKP/AunlLA1jRofba6MEQiPL8St2hm4Rsekg3a7jdVR8b5FxCfydcfut1XEg+1IzJLFHf6bv6mwBiWNUH8pP6P7nwPIwpYl/8DTkys/MQg5wYrQGX2XnTAZSzIhI+o8+3hISc5skyOrXEDyW0Xr+XI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769526945; c=relaxed/simple;
-	bh=3Ocr8+IV+WRlNqAHeAyIW1ArEK7R5P3dT2S+WayxlrY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J+Qr7QGXv6rl0eF+yE1xdHrOgU5HDrVOv3Q4MYCHxqld+9IBJHZVDrTblHNIRX6EuhCVpPzLxa3I7Mbt4HSnjzfq3DmpVF51eDNBbk5Rc1lUq9S/3DjRmkh24Vn+YGfEXxwydp9Pt/jiGL+V9FqFo4A+/G/9MEGPOYGgoLqhwzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=Y7Guxh82; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=fJdgKSL/; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=fJdgKSL/; arc=none smtp.client-ip=195.245.231.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-	s=170520fj; t=1769526940; i=@fujitsu.com;
-	bh=eKJgZOL9+TZVs7y3reqL2VrxdmtxW8FanAU5WaL7bc4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding;
-	b=Y7Guxh82jmLxwnMDghz1zHbcVBArW8J+LaRspyiKbkxRUZ5LWtc7kIufNtR+xQqiP
-	 LB3mcqmumQt0c5d85PeSSx1OHn0zFA12n1QXXeGGQrbp9dS2jfEtG/V5g/Mum3SKd9
-	 oVyiV31Fy/D8tBlvUtgq/Ebl+m1Gnw+9uAFTYkYDGAXHy89iYK3/NPJuPvehilUk7N
-	 lIaZHfrT+tsIzwjkZtnYTGj80m0rdKGPWM7RkLjpBcZDjDfhoSeUDEAHFBQW4GFtL6
-	 gGU0rYJpjrFScxVSWZBiK49bt/QXIyHKH3lPNv0/PSzwJZeKhsu4y0k38oywH9g8kL
-	 uRXgqq+oUa3PA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA22Sb0xTVxyGOffe3l6Qkkth49jBXGrGFjKKBDU
-  nSJiLWXJNlskcWdQP0xaubbEt2FtcWTIHAhMq/ywgWKTgnIYxsimIFEKFYUVEHRWEFRgBVFS6
-  MGFlCCJsrYhzyb69yfOc97wffhQuvEWKKFavY7UaqUpM+hCxMZQx3DSgV25oXRKhkXt2Eo1O/
-  MFDC7OPATpunsOQ6/wyicpK7QB1DWaQ6IfBOoAyz/xEop6GZyRqm3hIoIqyTAwZLf04qj09QC
-  JTiRVDPaZuArVarxOor+UUiVz5NoCyzVMA5UyUYuj7+Wc8lPM4HUfX8tsxVDlbiqPfTpwDqOz
-  REg/Vzc7gaLirh4eGijoxtDjvLrhsGyW2vsU8yS4gmOzeJZJpNo3wmSzbFI9pqAljzrROYkx9
-  bS7JtFXW8ZlHDScB0+5cAkxpxdfMzWobn3HVv8ksVnSCOL89PKVGlqzfx1OUFeTgKcXb9VVXe
-  3jpYD7GAHwoIX0RwD7Lbb4BeFMEvQMOjV0lPYCgLxHwwe+V/BXrKAZvPWghV63ixivY/1jlAL
-  oyGnEDoCiSjoDm4SjPg0A6EHYMzRCejNN2ElbPqj05gGbhmKsAWyl9G1Y3OZ/PENCxsHdhGvd
-  kSK+DzpIGnid701vgNx1nn/cI6Wh431yDr/j+8PrJ+y/618HMxooXb0Nh/y/1eBEIML2imV7R
-  qgFWCxDHag+x2vAoiUyrlCt0aqlSJZF+GS6VsKna5BQ2/AuW022UyBNSJCzHSbg0dYIqUaJhd
-  fXAfVM+03HVFrC4lB3RAdZSmPg1wbfn9Eqhnyw5MU0h5RR7takqlusAwRQlhoKdd9zMX8vKWf
-  1+pcp9masYUr7iQMHcFTcWcClSNaeUr6BuEEWNnLZacWpmsvRnXEhokjWsKEiQ5WmiPaoiVfO
-  yaPXKe0GIKEAAvLy8hL4prFat1P2XO0EQBcQBgoP97hZfpUb38j+newrmnlJ1LdUzRSf9F4nS
-  sQMjZ0N3Xmzb1Talc9LeuRsvx2zVPhTv/9v2+fr3x/aFSR19EUnxH+OFm/NJ0d17sjfkBscn2
-  z/t+dABBV6vb8OPp/Yb1Y4P3jWOL9oHJqbXDDvLhafMCwfN0Rtmm4yR+aBFPw4lg7K1GZs1U3
-  TNQpXhuz+X94yb8nZtEfqX+O22fXThEBFbkYSFdM40TQ4bnx7rK1/ey4/qarZM/9WeuNi5Oz4
-  9odjgv806lP9ZUrfq5pHKmFx73JG8icOhzkvRQwfumqZCZM2qr07EpNl/fOfX9+YsF47eOD8a
-  bAy6HejKztq0YCGD76yp7XwSVnQjXm7NOHY47ymKdMjXG8Y21YcUFooJTiGNDMO1nPQfhoo4K
-  WAEAAA=
-X-Env-Sender: Tomasz.Wolski@fujitsu.com
-X-Msg-Ref: server-10.tower-874.messagelabs.com!1769526937!463212!1
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received:
-X-StarScan-Version: 9.120.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 22084 invoked from network); 27 Jan 2026 15:15:38 -0000
-Received: from unknown (HELO n03ukasimr02.n03.fujitsu.local) (62.60.8.146)
-  by server-10.tower-874.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 27 Jan 2026 15:15:38 -0000
-Received: from n03ukasimr02.n03.fujitsu.local (localhost [127.0.0.1])
-	by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTP id 942E010060B;
-	Tue, 27 Jan 2026 15:15:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 n03ukasimr02.n03.fujitsu.local 942E010060B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-	s=dspueurope; t=1769526937;
-	bh=eKJgZOL9+TZVs7y3reqL2VrxdmtxW8FanAU5WaL7bc4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fJdgKSL/yInFjLLT+wnUQb6GDlEIDNpHFMGTqp9lBw2HGu58Rcz4jgevdJ2KJ5cY8
-	 0FCERaA2b8iAxlUkoLOmuwTyxZZ29x84ztPiqIhZaiyP6LyyD3hNIsxa5xhO+lSrFP
-	 mWifWKeX42HdVbypZOmvbZRqXQgC4e0uZ1rVWz5IvcA8o3FQn8W3UkRQRkEAo8GRT8
-	 4n6BICzHOm2G/OCnCl6xOwQxYyrCcWZR2B75yAT8o3G/a2zhoiNKpoTL/Gvkx7TQra
-	 I99aEbQOSAbmrSvhxWwBvwaSFWEwXqu/4RHVfxHH2VFh3eSk+FpzszrZOgPutSaJ3/
-	 BAD9spur12iag==
-Received: from ubuntudhcp (unknown [10.172.107.4])
-	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTPS id 6920C100605;
-	Tue, 27 Jan 2026 15:15:37 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 n03ukasimr02.n03.fujitsu.local 6920C100605
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-	s=dspueurope; t=1769526937;
-	bh=eKJgZOL9+TZVs7y3reqL2VrxdmtxW8FanAU5WaL7bc4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fJdgKSL/yInFjLLT+wnUQb6GDlEIDNpHFMGTqp9lBw2HGu58Rcz4jgevdJ2KJ5cY8
-	 0FCERaA2b8iAxlUkoLOmuwTyxZZ29x84ztPiqIhZaiyP6LyyD3hNIsxa5xhO+lSrFP
-	 mWifWKeX42HdVbypZOmvbZRqXQgC4e0uZ1rVWz5IvcA8o3FQn8W3UkRQRkEAo8GRT8
-	 4n6BICzHOm2G/OCnCl6xOwQxYyrCcWZR2B75yAT8o3G/a2zhoiNKpoTL/Gvkx7TQra
-	 I99aEbQOSAbmrSvhxWwBvwaSFWEwXqu/4RHVfxHH2VFh3eSk+FpzszrZOgPutSaJ3/
-	 BAD9spur12iag==
-Received: from localhost.BIOS.GDCv6 (unknown [10.172.196.44])
-	by ubuntudhcp (Postfix) with ESMTP id 037E12202F9;
-	Tue, 27 Jan 2026 15:15:37 +0000 (UTC)
-From: Tomasz Wolski <Tomasz.Wolski@fujitsu.com>
-To: alucerop@amd.com
-Cc: Smita.KoralahalliChannabasappa@amd.com,
-	alison.schofield@intel.com,
-	ardb@kernel.org,
-	benjamin.cheatham@amd.com,
-	bp@alien8.de,
-	dan.j.williams@intel.com,
-	dave.jiang@intel.com,
-	dave@stgolabs.net,
-	gregkh@linuxfoundation.org,
-	huang.ying.caritas@gmail.com,
-	ira.weiny@intel.com,
-	jack@suse.cz,
-	jeff.johnson@oss.qualcomm.com,
-	jonathan.cameron@huawei.com,
-	len.brown@intel.com,
-	linux-cxl@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	lizhijian@fujitsu.com,
-	ming.li@zohomail.com,
-	nathan.fontenot@amd.com,
-	nvdimm@lists.linux.dev,
-	pavel@kernel.org,
-	peterz@infradead.org,
-	rafael@kernel.org,
-	rrichter@amd.com,
-	skoralah@amd.com,
-	terry.bowman@amd.com,
-	tomasz.wolski@fujitsu.com,
-	vishal.l.verma@intel.com,
-	willy@infradead.org,
-	yaoxt.fnst@fujitsu.com,
-	yazen.ghannam@amd.com
-Subject: Re: [PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of Soft Reserved memory ranges
-Date: Wed,  1 Oct 2025 19:15:46 +0200
-Message-ID: <20251001171553.31343-1-Tomasz.Wolski@fujitsu.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <f4bdf04d-7481-4282-b9da-ce5fcf911af9@amd.com>
-References: <f4bdf04d-7481-4282-b9da-ce5fcf911af9@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013E540F8E4;
+	Tue, 20 Jan 2026 11:00:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.29
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1768906807; cv=fail; b=nmX2wm9olt6/mN1NYkTJmrK7XEzaoaUNNh4CvZMz+ju8tlswUyTMcRXUItlIy4ACzNWPX//URtd+FxA8zRu+FO//GwuXhJaKKLcB9UdniemA/FIyN2M2ARz7JhicHCG7NjgzvOZXD3C7w/84O07r+olY/s6nmVrvtAE9Qvme+Wc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1768906807; c=relaxed/simple;
+	bh=82V96A1hWePyqfL0/F55y9IMF4gMZZOFvgYJKVd3MuI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cZfKc0+4GgiZe3Fz38rbE5n5XnGKz6HpyY+JXUHKs+ViyHjeRTYpYufoNae4G4sbQDps2h55S5vsHIJaZtBXLr+rUWNoO1JlzxJ/jB1iCMUSA9QbsiDoNpmjheoRdikfDmFTeImA6NpZEGCjaZDy+/WRNvBWNoLOIDYogQ101SQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=WR9ae14e; arc=fail smtp.client-ip=52.101.62.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hf85s2Ngxpz6sRQHFZRUXkdPssGXNJjN2UD1niK2XoSCuk9gn1EBMCI2e4R5i+GO3kjWdZsB+cdvN34gpJRjw+hYI5lluK6DAVvtijUkJ4gbQaqjcQ3kK2Dldgm7IWOxSmglheQXuNHFpoLyW8nNlIHNk9q7vM0qms4D+1GJ50Tp/b9X/L2hU6MEx9WrbbNeTbh5YTB3bh+Gsx4/PN+zSQu+aTYyCxpZXTc+z8fSR53deyI3vLYKKuNc7ckGYlcDCYHedrEKQINnH3a9Kvwe69p+s2pj/2HptsNXVVaMrs3fEsAjI+Th/tGiMIZtH7zB756M/H0YmPE37I+N15LX1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lhM7353DALglHSoEre/dlpldjlrhhQPNp06cWpV02Xs=;
+ b=v6Zuw3IM72r2bEVxgNeHi18TEwjVIv8eERjzhD44UtaVm8jY/xl9a4XRYjw2QMcLtNXFgcjtgxPXfvxBrjayOKZxkqACWIJRI0FvnzV8x+N22xKtApCiLohTvfQs8yQ/2M4sOylOX+PahG0bYKU5Fmh/7CZVN2KY+LaMIFZJaOb7uvZ2Cvw2mHLAKOPAvtxTWjUtZ9SHkLbjfIGLoibn4RJbkH6c/0HxW+uDcUk2T7svJVRTWo88gg8/yYDzrGWAnLe86JUwn2WRFAUA3gEgzauS0SH8OWhMhGUmgfAyD5wFqKTwq7AliBOVsVzYw+ulumze36RCvxPefPnZt1ljOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 198.47.23.194) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=ti.com;
+ dmarc=pass (p=quarantine sp=none pct=100) action=none header.from=ti.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lhM7353DALglHSoEre/dlpldjlrhhQPNp06cWpV02Xs=;
+ b=WR9ae14e6BymlqphgIEdRw9GwKsK47dMk9AUhqVqGjT3yGGxEXJB/+06vQq1z7ohLtmRJZ1CDMcdEVqYYOHMpBJiYYfrlH4cUSWqKuc0ars5Aej1TGYj1zB1e2acRQZunlSGCjspEj6yUMqbb2JhjYVkLjlPtN3i8vRPBtpqPkA=
+Received: from SJ0PR13CA0075.namprd13.prod.outlook.com (2603:10b6:a03:2c4::20)
+ by LV8PR10MB7821.namprd10.prod.outlook.com (2603:10b6:408:1e6::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.9; Tue, 20 Jan
+ 2026 11:00:02 +0000
+Received: from SJ1PEPF00001CDE.namprd05.prod.outlook.com
+ (2603:10b6:a03:2c4:cafe::70) by SJ0PR13CA0075.outlook.office365.com
+ (2603:10b6:a03:2c4::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.8 via Frontend Transport; Tue,
+ 20 Jan 2026 11:00:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 198.47.23.194)
+ smtp.mailfrom=ti.com; dkim=none (message not signed) header.d=none;dmarc=pass
+ action=none header.from=ti.com;
+Received-SPF: Pass (protection.outlook.com: domain of ti.com designates
+ 198.47.23.194 as permitted sender) receiver=protection.outlook.com;
+ client-ip=198.47.23.194; helo=lewvzet200.ext.ti.com; pr=C
+Received: from lewvzet200.ext.ti.com (198.47.23.194) by
+ SJ1PEPF00001CDE.mail.protection.outlook.com (10.167.242.6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9542.4 via Frontend Transport; Tue, 20 Jan 2026 11:00:01 +0000
+Received: from DLEE207.ent.ti.com (157.170.170.95) by lewvzet200.ext.ti.com
+ (10.4.14.103) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 20 Jan
+ 2026 04:59:59 -0600
+Received: from DLEE203.ent.ti.com (157.170.170.78) by DLEE207.ent.ti.com
+ (157.170.170.95) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 20 Jan
+ 2026 04:59:59 -0600
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DLEE203.ent.ti.com
+ (157.170.170.78) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20 via Frontend
+ Transport; Tue, 20 Jan 2026 04:59:59 -0600
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.233.130])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 60KAxvQt956077;
+	Tue, 20 Jan 2026 04:59:58 -0600
+Date: Tue, 20 Jan 2026 16:29:57 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Kendall Willis <k-willis@ti.com>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar
+	<viresh.kumar@linaro.org>, Nishanth Menon <nm@ti.com>, Vignesh Raghavendra
+	<vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, Rob Herring
+	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+	<conor+dt@kernel.org>, Sebin Francis <sebin.francis@ti.com>, Bryan Brattlof
+	<bb@ti.com>, <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 1/3] cpufreq: dt-platdev: Add ti,am62l3 to blocklist
+Message-ID: <20260120105957.73p2belbi2wrxjn3@lcpd911>
+References: <20260116-am62l-cpufreq-v2-0-eac7e2e78d29@ti.com>
+ <20260116-am62l-cpufreq-v2-1-eac7e2e78d29@ti.com>
+ <c4ab2e7a-6d58-4ab0-a063-23a779e1c1ab@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.84 / 15.00];
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <c4ab2e7a-6d58-4ab0-a063-23a779e1c1ab@ti.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CDE:EE_|LV8PR10MB7821:EE_
+X-MS-Office365-Filtering-Correlation-Id: fa2f70c9-facd-4632-da2d-08de58130f27
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|82310400026|1800799024|36860700013;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?zfidVPEDMa7DJa1boO6t9vKhoQVh/8U7xGh/TxQb7/loX9YgW65vRad7xm9U?=
+ =?us-ascii?Q?+Mw5X0fgUZPD0oO11W+UtkaMb36WbEuBlTB49he1HdauEir4aKHIlIW86H6E?=
+ =?us-ascii?Q?jkBqZgEGC7/dAKlDV4C1Z0MafE69sHjvf8Sa6YseQRfVDOvh+Q0jyZGkuuEo?=
+ =?us-ascii?Q?6M/s1JnRBxrfjW1EW6AU/Fsqa2M//tKbmWvAFd+DQkXoqL1X+M2c7E7qrQyH?=
+ =?us-ascii?Q?WZNk81sfcbvYuwG+i3uWiqHQc1vlM4YxXAbcsrLCbmDE8FI7Vlrm1+ONXh5h?=
+ =?us-ascii?Q?iK8i1KAcIfurglrJLieO9aIopxuhHmoK8oJFTKgdGrehXmacgZkax6x8QRhi?=
+ =?us-ascii?Q?6WvHiQHrEryE8vlf1Ba+0TaylmvW5ToKADJxrgN2GGHkuV5D2aVyqlVcZM3W?=
+ =?us-ascii?Q?QP0afvzBciqy921onTatMdbfHUfovVwn9JSHPtOwkaA+G3uktuk3KlDPkZNZ?=
+ =?us-ascii?Q?8jWqAOTJY1NMNdFaPFG7XN3ZdgA1wzskE2yMFeXo+hTMQTByXUx7uybOoAUo?=
+ =?us-ascii?Q?g2ox+5Z/iGKIOFi4MG1/WG3nAdQgXPmiqm3RJpudDopc7DodewugjMRiybKm?=
+ =?us-ascii?Q?9BEoKzTXbLCYOtRLlo4Vcw59nT+VRMrr86ch1gJlxE2D483oylU29zv/Njhg?=
+ =?us-ascii?Q?xgwHo+D8mPSV7YC6KQ/ik0S4wtKSAtjjhY21dvhJIKQMSjhilmvEGgFPNBVS?=
+ =?us-ascii?Q?s3SfFzcL4D7Huuve3Ch9esZUYBv8T0NUmmIA/JpDAfYA9oJHAq29hW0M4AZg?=
+ =?us-ascii?Q?+Db1rloHpwDtA6iTI9raaYyrEox6DBiltiVem98a5xaQ5XVBMFkHmTKuqVE+?=
+ =?us-ascii?Q?hV7MrS5HcZo4z3S8MrCWu5NoiiVaoLtJCC0pIqSM5pwUl2+nSwqmB4uis1aL?=
+ =?us-ascii?Q?wvEsFjwGoG3ZIDxo5CXJK48ut5/txB5zJ8oEDVr9NLod3/F1JlZq/KCP5Z5F?=
+ =?us-ascii?Q?6nwfYtZRPyou5S9Wqo5OA3kTbJEEvs3H+/fcTXCxWTJ2vjT+97lPpJEhWDgZ?=
+ =?us-ascii?Q?b7oAJZ+kwYdOMXBy2TJjntPacKtHM+K76D9hhWW+j0pAZRy26cndW4+LOpNL?=
+ =?us-ascii?Q?R2q/WRjxtSesb4YxcL5fnop0zw1/EvYluYJApRAbQxXvIYKCZEIz7sYM5/Nl?=
+ =?us-ascii?Q?PyPhJFeYlylOk2EBHACVtct1bVaegQs2E99tiYfQ/c6qmSDAh015R3DAhwv5?=
+ =?us-ascii?Q?IWxxkn75PBqWTkWrpAX4VQsI3oh9LNBNaRgRFLWtK+vMwCr5ByWremqJ6ZwZ?=
+ =?us-ascii?Q?lHQtiPNRdG7E+zWzOqOCSdbyxK3li95NXjkQNFXQuq1cvSu27v+oTEDP7HrA?=
+ =?us-ascii?Q?bSI7zCp9TWGVeLNvlKhLK09PvoAm42eiC26A38JJACFYBU1VbBVnjCTRWjSw?=
+ =?us-ascii?Q?tES065EsqoD81f/5mr7EjHIxNozEhQtOYwOasfmHifT/BPWHRr+VOZWxs/C/?=
+ =?us-ascii?Q?X6kQWCp8AhtXIHTlgteEu7aamgV6iKDdzt5/Z43hAhzdbNdRIxfk7LRNLYQY?=
+ =?us-ascii?Q?wtU5DaYblo20Y0vQDIWrL2itlXVf/ygYW6jLv7gg/HLaik/bYMzzJpXlUjQF?=
+ =?us-ascii?Q?ak/ggzsLTYdEbFcmsOdYKkPO5eSkUG5T8PdYF/KnOBenSRNJ0+liNoWS4jNG?=
+ =?us-ascii?Q?UBOVtnb2IPDgdxXyUdO1Tc1sTtwFlGDFhQANeoLwIKMFuT8yGDYGQdyE4yZX?=
+ =?us-ascii?Q?Vn7wWg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:198.47.23.194;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:lewvzet200.ext.ti.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: ti.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2026 11:00:01.3714
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa2f70c9-facd-4632-da2d-08de58130f27
+X-MS-Exchange-CrossTenant-Id: e5b49634-450b-4709-8abb-1e2b19b982b7
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e5b49634-450b-4709-8abb-1e2b19b982b7;Ip=[198.47.23.194];Helo=[lewvzet200.ext.ti.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF00001CDE.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR10MB7821
+X-Spamd-Result: default: False [3.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	DATE_IN_PAST(1.00)[2830];
-	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[fujitsu.com,reject];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[fujitsu.com:s=170520fj,fujitsu.com:s=dspueurope];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DATE_IN_PAST(1.00)[24];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
+	R_DKIM_ALLOW(-0.20)[ti.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[amd.com,intel.com,kernel.org,alien8.de,stgolabs.net,linuxfoundation.org,gmail.com,suse.cz,oss.qualcomm.com,huawei.com,vger.kernel.org,fujitsu.com,zohomail.com,lists.linux.dev,infradead.org];
+	TAGGED_FROM(0.00)[bounces-41159-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41547-lists,linux-pm=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ti.com:email,ti.com:dkim,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo];
+	DKIM_TRACE(0.00)[ti.com:+];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Tomasz.Wolski@fujitsu.com,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[d-gole@ti.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[fujitsu.com:+];
-	TO_DN_NONE(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lpc.events:url,fujitsu.com:mid,fujitsu.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
-	RCPT_COUNT_TWELVE(0.00)[35];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 4653696BBD
+	DMARC_POLICY_ALLOW(0.00)[ti.com,quarantine];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[10]
+X-Rspamd-Queue-Id: AE4CE56663
 X-Rspamd-Action: no action
+X-Rspamd-Server: lfdr
 
->> [responding to the questions raised here before reviewing the patch...]
->>
->> Koralahalli Channabasappa, Smita wrote:
->>> Hi Alejandro,
->>>
->>> On 1/23/2026 3:59 AM, Alejandro Lucero Palau wrote:
->>>> On 1/22/26 04:55, Smita Koralahalli wrote:
->>>>> The current probe time ownership check for Soft Reserved memory based
->>>>> solely on CXL window intersection is insufficient. dax_hmem probing is
->>>>> not
->>>>> always guaranteed to run after CXL enumeration and region assembly, which
->>>>> can lead to incorrect ownership decisions before the CXL stack has
->>>>> finished publishing windows and assembling committed regions.
->>>>>
->>>>> Introduce deferred ownership handling for Soft Reserved ranges that
->>>>> intersect CXL windows at probe time by scheduling deferred work from
->>>>> dax_hmem and waiting for the CXL stack to complete enumeration and region
->>>>> assembly before deciding ownership.
->>>>>
->>>>> Evaluate ownership of Soft Reserved ranges based on CXL region
->>>>> containment.
->>>>>
->>>>>      - If all Soft Reserved ranges are fully contained within committed
->>>>> CXL
->>>>>        regions, DROP handling Soft Reserved ranges from dax_hmem and allow
->>>>>        dax_cxl to bind.
->>>>>
->>>>>      - If any Soft Reserved range is not fully claimed by committed CXL
->>>>>        region, tear down all CXL regions and REGISTER the Soft Reserved
->>>>>        ranges with dax_hmem instead.
->>>>
->>>> I was not sure if I was understanding this properly, but after looking
->>>> at the code I think I do ... but then I do not understand the reason
->>>> behind. If I'm right, there could be two devices and therefore different
->>>> soft reserved ranges, with one getting an automatic cxl region for all
->>>> the range and the other without that, and the outcome would be the first
->>>> one getting its region removed and added to hmem. Maybe I'm missing
->>>> something obvious but, why? If there is a good reason, I think it should
->>>> be documented in the commit and somewhere else.
->>> Yeah, if I understood Dan correctly, that's exactly the intended behavior.
->>>
->>> I'm trying to restate the "why" behind this based on Dan's earlier
->>> guidance. Please correct me if I'm misrepresenting it Dan.
->>>
->>> The policy is meant to be coarse: If all SR ranges that intersect CXL
->>> windows are fully contained by committed CXL regions, then we have high
->>> confidence that the platform descriptions line up and CXL owns the memory.
->>>
->>> If any SR range that intersects a CXL window is not fully covered by
->>> committed regions then we treat that as unexpected platform shenanigans.
->>> In that situation the intent is to give up on CXL entirely for those SR
->>> ranges because partial ownership becomes ambiguous.
->>>
->>> This is why the fallback is global and not per range. The goal is to
->>> leave no room for mixed some SR to CXL, some SR to HMEM configurations.
->>> Any mismatch should push the platform issue back to the vendor to fix
->>> the description (ideally preserving the simplifying assumption of a 1:1
->>> correlation between CXL Regions and SR).
->>>
->>> Thanks for pointing this out. I will update the why in the next revision.
->> You have it right. This is mostly a policy to save debug sanity and
->> share the compatibility pain. You either always get everything the BIOS
->> put into the memory map, or you get the fully enlightened CXL world.
->>
->> When accelerator memory enters the mix it does require an opt-in/out of
->> this scheme. Either the device completely opts out of this HMEM fallback
->> mechanism by marking the memory as Reserved (the dominant preference),
->> or it arranges for CXL accelerator drivers to be present at boot if they
->> want to interoperate with this fallback. Some folks want the fallback:
->> https://lpc.events/event/19/contributions/2064/
->
->
->I will take a look at this presentation, but I think there could be 
->another option where accelerators information is obtained during pci 
->enumeration by the kernel and using this information by this 
->functionality skipping those ranges allocated to them. Forcing them to 
->be compiled with the kernel would go against what distributions 
->currently and widely do with initramfs. Not sure if some current "early" 
->stubs could be used for this though but the information needs to be 
->recollected before this code does the checks.
->
->
->>>> I have also problems understanding the concurrency when handling the
->>>> global dax_cxl_mode variable. It is modified inside process_defer_work()
->>>> which I think can have different instances for different devices
->>>> executed concurrently in different cores/workers (the system_wq used is
->>>> not ordered). If I'm right race conditions are likely.
->> It only works as a single queue of regions. One sync point to say "all
->> collected regions are routed into the dax_hmem or dax_cxl bucket".
->
->
->That is how I think it should work, handling all the soft reserved 
->ranges vs regions by one code execution. But that is not the case. More 
->later.
->
->
->>> Yeah, this is something I spent sometime thinking on. My rationale
->>> behind not having it and where I'm still unsure:
->>>
->>> My assumption was that after wait_for_device_probe(), CXL topology
->>> discovery and region commit are complete and stable.
->> ...or more specifically, any CXL region discovery after that point is a
->> typical runtime dynamic discovery event that is not subject to any
->> deferral.
->>
->>> And each deferred worker should observe the same CXL state and
->>> therefore compute the same final policy (either DROP or REGISTER).
->> The expectation is one queue, one event that takes the rwsem and
->> dispositions all present regions relative to initial soft-reserve memory
->> map.
->>
->>> Also, I was assuming that even if multiple process_defer_work()
->>> instances run, the operations they perform are effectively safe to
->>> repeat.. though I'm not sure on this.
->> I think something is wrong if the workqueue runs more than once. It is
->> just a place to wait for initial device probe to complete and then fixup
->> all the regions (allow dax_region registration to proceed) that were
->> waiting for that.
->>
->>> cxl_region_teardown_all(): this ultimately triggers the
->>> devm_release_action(... unregister_region ...) path. My expectation was
->>> that these devm actions are single shot per device lifecycle, so
->>> repeated teardown attempts should become noops.
->> Not noops, right? The definition of a devm_action is that they always
->> fire at device_del(). There is no facility to device_del() a device
->> twice.
->>
->>> cxl_region_teardown_all() ultimately leads to cxl_decoder_detach(),
->>> which takes "cxl_rwsem.region". That should serialize decoder detach and
->>> region teardown.
->>>
->>> bus_rescan_devices(&cxl_bus_type): I assumed repeated rescans during
->>> boot are fine as the rescan path will simply rediscover already present
->>> devices..
->> The rescan path likely needs some logic to give up on CXL region
->> autodiscovery for devices that failed their memmap compatibility check.
->>
->>> walk_hmem_resources(.., hmem_register_device): in the DROP case,I
->>> thought running the walk multiple times is safe because devm managed
->>> platform devices and memregion allocations should prevent duplicate
->>> lifetime issues.
->>>
->>> So, even if multiple process_defer_work() instances execute
->>> concurrently, the CXL operations involved in containment evaluation
->>> (cxl_region_contains_soft_reserve()) and teardown are already guarded.
->>>
->>> But I'm still trying to understand if bus_rescan_devices(&cxl_bus_type)
->>> is not safe when invoked concurrently?
->> It already races today between natural bus enumeration and the
->> cxl_bus_rescan() call from cxl_acpi. So it needs to be ok, it is
->> naturally synchronized by the region's device_lock and regions' rwsem.
->>
->>> Or is the primary issue that dax_cxl_mode is a global updated from one
->>> context and read from others, and should be synchronized even if the
->>> computed final value will always be the same?
->> There is only one global hmem_platform device, so only one potential
->> item in this workqueue.
->
->
->Well, I do not think so.
->
->
->hmem_init() in drivers/dax/device.c walks IORESOURCE_MEM looking for 
->IORES_DESC_SOFT_RESERVED descriptors and calling hmem_register_one for 
->each of them. That leads to create an hmem_platform platform device (no 
->typo, just emphasizing this is a platform device with name 
->hmem_platform) so there will be as many hmem_platform devices as 
->descriptors found.
->
->
->Then each hmem_platform probe() will create an hmem platform device, 
->where a work will be schedule passing this specific hmem platform device 
->as argument. So, each work will check for the specific ranges of its own 
->pdev and not all of them. The check can result in a different value 
->assigned to dax_cxl_mode leading to potential race conditions with 
->concurrent workers and also potentially leaving soft reserved ranges 
->without both, a dax or an hmem device.
+On Jan 16, 2026 at 15:16:01 -0600, Kendall Willis wrote:
+> On 1/16/26 04:21, Dhruva Gole wrote:
+> > Add AM62L3 SoC to the dt-platdev blocklist to ensure proper handling
+> > of CPUFreq functionality. The AM62L3 will use its native TI CPUFreq
+> > driver implementation instead of the generic dt-platdev driver.
+> > 
+> > This follows the same pattern as other TI SoCs like AM62A7, AM62D2,
+> > and AM62P5 which have been previously added to this blocklist.
+> > 
+> > Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> > ---
+> >   drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+> >   1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> > index 1708179b2610bca6035d10f0f4766eee6f73912e..16310e190d9ff96af3d20cc5d98dc0e4af4d1bf1 100644
+> > --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> > +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> > @@ -193,6 +193,7 @@ static const struct of_device_id blocklist[] __initconst = {
+> >   	{ .compatible = "ti,am625", },
+> >   	{ .compatible = "ti,am62a7", },
+> >   	{ .compatible = "ti,am62d2", },
+> > +	{ .compatible = "ti,am62l3", },
+> >   	{ .compatible = "ti,am62p5", },
+> >   	{ .compatible = "qcom,ipq5332", },
+> > 
+> 
+> Reviewed-by: Kendall Willis <k-willis@ti.com>
 
-Hi Alejandro,
+Thanks!
 
-Isn't below  check in __hmem_register_resource ensuring that only one
-hmem_platform device can be created? So first resource would
-create platform device and set the platform_initialized bool to true
-
-static void __hmem_register_resource(int target_nid, struct resource *res)
-..
-	if (platform_initialized)
-		return;
-..
-
-Thanks,
-Tomasz
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
