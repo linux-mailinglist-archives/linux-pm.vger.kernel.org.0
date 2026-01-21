@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-41231-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41232-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MPUYMBvacGnCaQAAu9opvQ
-	(envelope-from <linux-pm+bounces-41231-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 14:52:27 +0100
+	id 6AI2OardcGnCaQAAu9opvQ
+	(envelope-from <linux-pm+bounces-41232-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 15:07:38 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C9F557F02
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 14:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF09D5825A
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 15:07:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 984DF68BE41
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 13:36:42 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 230317019F7
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 13:37:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 027AD40F8E5;
-	Wed, 21 Jan 2026 13:34:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26EFA3D333C;
+	Wed, 21 Jan 2026 13:36:58 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA45E3A7F45;
-	Wed, 21 Jan 2026 13:34:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD8023EAA3;
+	Wed, 21 Jan 2026 13:36:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769002491; cv=none; b=ligBWEMyhZSewmQUBtGHD+6E90iqNctsO5JKe5/CYBM+LBaJLt+GygHdFv1wtPPIASGI4ND2Fih4Rm7XDx6Cqpn4C6V5GjRcVk1SxVZ+qjJXUsZks2+Dm15KKCb1smhrsIF75HwhmkW17AiWGy7dVDP9jVAOW4bLJrQyQBf/nc8=
+	t=1769002618; cv=none; b=Sjxh7i0VwlGPZAAkxZyxGcN/Y5XeNL0vWN5qOEJcoQLtP1xLy2P/w/TsUhYXC+4H9AbB7q6w2eMqT8ZL8t2t0jDyFuF2RRaLJ0GXkbVJ9oX5BrEsS+B/Kqgh3cohsgKdzvxRo8ftQAJfYYdrDCEHW/aj6j0DZ9gP0sKT5KbRMh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769002491; c=relaxed/simple;
-	bh=x5HQhfxWvrE7q7DqwIpP7JLi4Mm2u/pB36vrOQzeCoc=;
+	s=arc-20240116; t=1769002618; c=relaxed/simple;
+	bh=euSeREND68fs8Fu86AWhcjafiIhsQVNHdrxPlLdH6PI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uAU8ODvLxFv6pmSCwbt2EJgWVELgBlmdprFzNlJpaYd1Woa7nj4pUPJUiURMCq97nE8XWEUgddNSPERkdXFbnhlm0pDNtNOZJaExM9ivLWoff0YeIAzrONxZbM8gn7S75vYKskTRp4V8klEX6tVQoVFKB9WktSugnHTTXjZmgbU=
+	 In-Reply-To:Content-Type; b=nzfSr4s5GAx/yv92FgSDNVtRs5x4khiqJMAbw11CMYiDnSRcxtitAc3MYfD5l1KHZ4hf72Qzx00L4+Kigt/UMYWN5khc/eIexIOJ06xmZYxAnRQTR7aRyAy+HaDSZEEVk+KPpaGT7XlN55v9+dwCtnQxlBqd38lJkh3SER//12w=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 734C41476;
-	Wed, 21 Jan 2026 05:34:42 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2325D1476;
+	Wed, 21 Jan 2026 05:36:49 -0800 (PST)
 Received: from [10.1.35.68] (e127648.arm.com [10.1.35.68])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1556E3F632;
-	Wed, 21 Jan 2026 05:34:47 -0800 (PST)
-Message-ID: <f32d40ff-dc1d-4c37-a607-77dd9423ec91@arm.com>
-Date: Wed, 21 Jan 2026 13:34:46 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D499E3F632;
+	Wed, 21 Jan 2026 05:36:54 -0800 (PST)
+Message-ID: <f366937a-1748-4319-b545-48f3f2a728d7@arm.com>
+Date: Wed, 21 Jan 2026 13:36:52 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -47,16 +47,16 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/5] cpuidle: governors: teo: Avoid fake intercepts
- produced by tick
+Subject: Re: [PATCH v1 3/5] cpuidle: governors: teo: Refine tick_intercepts vs
+ total events check
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
  Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Doug Smythies <dsmythies@telus.net>
 References: <2257365.irdbgypaU6@rafael.j.wysocki>
- <3404606.44csPzL39Z@rafael.j.wysocki>
+ <10793374.nUPlyArG6x@rafael.j.wysocki>
 Content-Language: en-US
 From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <3404606.44csPzL39Z@rafael.j.wysocki>
+In-Reply-To: <10793374.nUPlyArG6x@rafael.j.wysocki>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-1.16 / 15.00];
@@ -79,49 +79,41 @@ X-Spamd-Result: default: False [-1.16 / 15.00];
 	FROM_HAS_DN(0.00)[];
 	RCPT_COUNT_THREE(0.00)[4];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	TAGGED_FROM(0.00)[bounces-41231-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41232-lists,linux-pm=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
 	TO_DN_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:email,arm.com:mid,intel.com:email,ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: 7C9F557F02
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,intel.com:email,arm.com:email,arm.com:mid]
+X-Rspamd-Queue-Id: DF09D5825A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 1/14/26 19:44, Rafael J. Wysocki wrote:
+On 1/14/26 19:45, Rafael J. Wysocki wrote:
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Tick wakeups can lead to fake intercepts that may skew idle state
-> selection towards shallow states, so it is better to avoid counting
-> them as intercepts.
-> 
-> For this purpose, add a check causing teo_update() to only count
-> tick wakeups as intercepts if intercepts within the tick period
-> range are at least twice as frequent as any other events.
+> Use 2/3 as the proportion coefficient in the check comparing
+> cpu_data->tick_intercepts with cpu_data->total because it is close
+> enough to the current one (5/8) and it allows of more straightforward
+> interpretation (on average, intercepts within the tick period length
+> are twice as frequent as other events).
 > 
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  drivers/cpuidle/governors/teo.c |   11 +++++++++++
->  1 file changed, 11 insertions(+)
+>  drivers/cpuidle/governors/teo.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > --- a/drivers/cpuidle/governors/teo.c
 > +++ b/drivers/cpuidle/governors/teo.c
-> @@ -239,6 +239,17 @@ static void teo_update(struct cpuidle_dr
->  			cpu_data->state_bins[drv->state_count-1].hits += PULSE;
->  			return;
->  		}
-> +		/*
-> +		 * If intercepts within the tick period range are not frequent
-> +		 * enough, count this wakeup as a hit, since it is likely that
-> +		 * the tick has woken up the CPU because an expected intercept
-> +		 * was not there.  Otherwise, one of the intercepts may have
-> +		 * been incidentally preceded by the tick wakeup.
-> +		 */
-> +		if (3 * cpu_data->tick_intercepts < 2 * total) {
-> +			cpu_data->state_bins[idx_timer].hits += PULSE;
-> +			return;
-> +		}
->  	}
+> @@ -485,7 +485,7 @@ constraint:
+>  	 * total wakeup events, do not stop the tick.
+>  	 */
+>  	if (drv->states[idx].target_residency_ns < TICK_NSEC &&
+> -	    cpu_data->tick_intercepts > cpu_data->total / 2 + cpu_data->total / 8)
+> +	    3 * cpu_data->tick_intercepts >= 2 * cpu_data->total)
+>  		duration_ns = TICK_NSEC / 2;
+>  
+
+Sure, I guess the 2 and 8 was just as arbitrary to avoid a division.
 
 Reviewed-by: Christian Loehle <christian.loehle@arm.com>
-Makes sense to me, let me try to find something that triggers this (often)
+
 
