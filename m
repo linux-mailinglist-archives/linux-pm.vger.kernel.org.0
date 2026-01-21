@@ -1,161 +1,116 @@
-Return-Path: <linux-pm+bounces-41248-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41249-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GCz2KfIrcWl1fAAAu9opvQ
-	(envelope-from <linux-pm+bounces-41248-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 20:41:38 +0100
+	id +EFwBcYtcWmcfAAAu9opvQ
+	(envelope-from <linux-pm+bounces-41249-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 20:49:26 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 533045C61E
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 20:41:38 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 915585C86C
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 20:49:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 726127C51DC
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 18:07:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8F3D2B82182
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 18:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A22D354AC6;
-	Wed, 21 Jan 2026 18:07:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F90A3ECBFA;
+	Wed, 21 Jan 2026 18:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c7QJ7UVs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Frdt+oEU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31F6352942
-	for <linux-pm@vger.kernel.org>; Wed, 21 Jan 2026 18:07:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5856C3ECBC8;
+	Wed, 21 Jan 2026 18:44:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769018856; cv=none; b=JZCdUpm/eYgdyINgAwYPgsTrfBF2vqL9CVrA6Qjz/cUGQbeR04mJL/60leFhnmbZCIqffYL1DlWd7KlqD1XJJCSbBBMWRmROsa1qLsAOIMnd4QlFeIz+Q8tFtTtxOeN7TaFVJUPUJqx9C8ABg2B6xnpdTj2SM3w3pJf7rZRnPPw=
+	t=1769021079; cv=none; b=gJGpsV6BL0vCFQeroUohxQQVMPlPO6frwImpZSgxdSEMVQ+RFqZanbDHLTOxkDU2Thc+4XLPKKmX5sxzxxi713JTseSv1lWTgb6ezO12ioG/OQaD7XtRm2t9YxIc70fvtWgppl4P2CshogjL80Vf8HqU7J6kubITTiMQ+kFQFRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769018856; c=relaxed/simple;
-	bh=0wix78J+oRKHXLt6hmkz9fVUcHgh7+lJ2gOgzCD/oXw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B8SG4/XrFpE84TPVV/FXv8HZ171FkUERMQgIm4rFMh1yaO1Epim+/tYvD5WZhB7tPdNdl5pshSm/uRJ4BrDCFo0q1eyDlmVPTw9et4R7jISbTD1TsXQ0a0e0CXpueYBuj5Yk6klevxKfS5B2wowHEKoNqrsrTUmtxPhaYfBC4QA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c7QJ7UVs; arc=none smtp.client-ip=209.85.128.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-47ee0291921so1211625e9.3
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jan 2026 10:07:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1769018852; x=1769623652; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nL8x1nhynzlORWDLr//wqOzaruj70zMwzKxcsaB/Ebw=;
-        b=c7QJ7UVsd+TuyWE16el0eX81HUT9pCnk06lL2tgZGUWpB9pP4kMKma5JRL4qQbXz/H
-         lQP4cAPbxegP5a1V4xVEf/Aduw0DFQyltyl9StaZ4U4r/3nCQ9Q6wpg4AvEBvOF6Vd6w
-         wSyVLXuztxuC7rkrtXnfZAZBP8XWgq8mNNrooPLRy8nVyY8u6pqmIxyOf5OsBN5mvFXj
-         97BMrxOqqgIotilBrdGbXTKCF7uJ90cEJWVTdAHhb7+WLrDSgWbxavGqx/eO401Vz5kH
-         rgBI0ZgRMPULCQXDWAdfPbY+Q5BCvEf1qgHyp/5PsXuKysz98WimgHr3HJY8dTHBl0iL
-         /tTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769018852; x=1769623652;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nL8x1nhynzlORWDLr//wqOzaruj70zMwzKxcsaB/Ebw=;
-        b=t6d7dLt6Q1W7vA6vs3pTm033iO21dJRWaZsmfinWGPcuz3HLol+v3pQDhTzC4iFEKo
-         X5XKTJ2gZhXvFJCHNpNYNqZSLjQIFIb5fOoZDcrtj0HZrA9wdS+bCJcy5QbbD54sqqYW
-         mK44NfOAko4XUA+hGxFEFhU+Qtvrm8HshKFoASuDauQEJIH0RtFQBLwM+8QgvAdnk9Lw
-         Rp//nyKJJQz1Q4jEiEJ7BE+DUunThS+wT2wcYLa5O9tJeUL5aQsu38Ei8l2LUuppyHrr
-         Nc1IQG/SeEotxZs/WBmYhjRdSgOXnnTR01WeIj/R/VD2UuQ6UlSgeGhBIlZ9mACDRZgJ
-         RHvg==
-X-Gm-Message-State: AOJu0YyrJ74QlP28PNq5AO3XelkP5/om8Nqa8IOdM/KHLcgPSGKNxZyg
-	RIS5KiENsxdm36lI4RmC3osXAcDetLOx8rPDnkj+C9BV7yievW9XbDMatgU0w9wfJDo=
-X-Gm-Gg: AZuq6aISgucsSD/SpNZfw+PejrIWf2c5BDL1LHSNxhfFjOmAGREw2qROt66nduXtWCL
-	jlXPmo46gh+bM8DQiK0PbD9fo60cQI8cQwA2SBrZhXRww0jEKgXzMuccujvUMWEF2F2HBD1b3fR
-	Rrc2Uy05ZzJkwjcucjOZCvxnYxBv50Xuzd7kbri5o/W7R2B5Bbjb4TRyqhWq0kI2g7M2K/uSpuw
-	UZ2/RlC0E/w+uFJtCFbRGBkj1VI2Y2SQlsiE7j5YBLVbRuQblygF5xE6wwq8CTdU9KvIUu+2XiG
-	Dl8UlMdPUNCehH2FHjy/8LuWCCnfjPGX6bJlG7KIUEgOchHxhaGBdPmlxUZy06Ad1fTdh8zKL+v
-	tL8FPojzVgyt4oqGvsJI2r5BdBC2YQExZlyQeWSfizdplJiZYfuNgaOUaLE++ARZdmtX6tV7heR
-	qYReusUK0iJ/j8ZiZK/RBci7KQAWw63hQJ5UNZalGcsfaBBFkEFWsKF/8O9/YoK11ThQ==
-X-Received: by 2002:a05:600c:811a:b0:480:1dc6:2686 with SMTP id 5b1f17b1804b1-4801eac0cfcmr217187915e9.13.1769018851700;
-        Wed, 21 Jan 2026 10:07:31 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:c29a:525d:d900:4d71? ([2a05:6e02:1041:c10:c29a:525d:d900:4d71])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-435a431c189sm2135611f8f.24.2026.01.21.10.07.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jan 2026 10:07:31 -0800 (PST)
-Message-ID: <eea8470c-6659-4d9d-9b91-28fbbd1d2814@linaro.org>
-Date: Wed, 21 Jan 2026 19:07:30 +0100
+	s=arc-20240116; t=1769021079; c=relaxed/simple;
+	bh=wZE/s1l1NOJXYc8o2baQjkj9gVvGsCEaAvDmPO+gaMk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MLWlurHcLoxv/pU9i0w19Ys6F+7Umu2Nuo9Vl3PhnHjjCHran+KwN7czdCpyoQobz2TWhbYBpLY7fgOg/J45ujJ6IPdnNTSp5p+KypgE+Y7Y7+C3fOgJ7HWw9iONDHRcfPNN9rsWcq2OtFYpD4Bdjd/ebNV+UDCqDJTSozbcKlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Frdt+oEU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54ED0C16AAE;
+	Wed, 21 Jan 2026 18:44:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769021078;
+	bh=wZE/s1l1NOJXYc8o2baQjkj9gVvGsCEaAvDmPO+gaMk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Frdt+oEUZNmgSY81no4KQ4SWHaX8UV9q6oHzYrTauxwn6EY06LkllofP3ZhTr+5v8
+	 s3qASNeWBs96LWLvrVt1n8jlHArExTqSvCXA0uN+tkkXvoW8NBSqIwb0+o7ZrfB294
+	 URFXrC4bXefltMQIbSw50mt29gLlL/ZeMoU9VN0ajHO9FjIawX25UrTFxi+8J804Ut
+	 ItG1YOEV2/agcMWLyGOEhMZ64XZT2zYSAIMdSSOqSaAtb2PP0FVoDdeqwkHyLXa5nc
+	 9ivYlNQk93Vk9Av81NpnRuN7V2S97j+HxQdK7iMwaF0oz858/YWfSsxlte4fApLZzE
+	 J5DpSI4aQMNzA==
+Date: Wed, 21 Jan 2026 12:44:37 -0600
+From: Rob Herring <robh@kernel.org>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-mediatek@lists.infradead.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+	matthias.bgg@gmail.com, ulf.hansson@linaro.org,
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 4/5] arm64: dts: mediatek: mt7622: Add missing clock to
+ audio-controller
+Message-ID: <20260121184437.GB3842411-robh@kernel.org>
+References: <20260113110012.36984-1-angelogioacchino.delregno@collabora.com>
+ <20260113110012.36984-5-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/5] thermal: renesas: rzg3e: make reset optional
-To: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>,
- John Madieu <john.madieu.xa@bp.renesas.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Magnus Damm <magnus.damm@gmail.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-References: <20260108195223.193531-1-cosmin-gabriel.tanislav.xa@renesas.com>
- <20260108195223.193531-2-cosmin-gabriel.tanislav.xa@renesas.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20260108195223.193531-2-cosmin-gabriel.tanislav.xa@renesas.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-0.46 / 15.00];
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260113110012.36984-5-angelogioacchino.delregno@collabora.com>
+X-Spamd-Result: default: False [0.54 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41248-lists,linux-pm=lfdr.de];
-	DMARC_POLICY_ALLOW(0.00)[linaro.org,none];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41249-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[renesas.com,bp.renesas.com,kernel.org,intel.com,arm.com,pengutronix.de,glider.be,gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
+	FREEMAIL_CC(0.00)[lists.infradead.org,kernel.org,baylibre.com,gmail.com,linaro.org,vger.kernel.org,collabora.com];
+	RCPT_COUNT_TWELVE(0.00)[14];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
-	TO_DN_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[daniel.lezcano@linaro.org,linux-pm@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-pm,dt,renesas];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-pm@vger.kernel.org];
+	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	REDIRECTOR_URL(0.00)[twitter.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,renesas.com:email,glider.be:email,linaro.org:dkim,linaro.org:mid,linaro.org:url]
-X-Rspamd-Queue-Id: 533045C61E
+	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,collabora.com:email]
+X-Rspamd-Queue-Id: 915585C86C
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-On 1/8/26 20:52, Cosmin Tanislav wrote:
-> The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs do not have a
-> reset line.
+On Tue, Jan 13, 2026 at 12:00:11PM +0100, AngeloGioacchino Del Regno wrote:
+> Add the missing audio_mrgif_pd clock to the audio-controller node
+> to both resolve a dtbs_check warning and ensure that the AFE merge
+> interface is clocked while using audio.
 > 
-> Prepare for them by making it optional.
-> 
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Reviewed-by: John Madieu <john.madieu.xa@bp.renesas.com>
-> Tested-by: John Madieu <john.madieu.xa@bp.renesas.com>
-> Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > ---
+>  arch/arm64/boot/dts/mediatek/mt7622.dtsi | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
-Applied, thanks
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
