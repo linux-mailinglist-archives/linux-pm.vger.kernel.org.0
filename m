@@ -1,210 +1,161 @@
-Return-Path: <linux-pm+bounces-41247-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41248-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mCcELSYqcWniewAAu9opvQ
-	(envelope-from <linux-pm+bounces-41247-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 20:33:58 +0100
+	id GCz2KfIrcWl1fAAAu9opvQ
+	(envelope-from <linux-pm+bounces-41248-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 20:41:38 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B9985C407
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 20:33:58 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 533045C61E
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 20:41:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 75FC17E6373
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 18:04:50 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 726127C51DC
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 18:07:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3125C345734;
-	Wed, 21 Jan 2026 18:04:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A22D354AC6;
+	Wed, 21 Jan 2026 18:07:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R8mnX7pQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c7QJ7UVs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AB6346E41;
-	Wed, 21 Jan 2026 18:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B31F6352942
+	for <linux-pm@vger.kernel.org>; Wed, 21 Jan 2026 18:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769018680; cv=none; b=cUcwIktMUp0egLjHK1YB5HCX+jqwPcEwclczxAIToC75ypnOq7tJ05rDJkBiaoKftCdOvj7XV+PupvWpD+D04xrAjcvNQKX6Pn0bLLzI2GUwFscOrMPEnvniszTrHeGvAdYOvAtBpbCD4oPycvOmK1PVXDbRfqHKbKuXJMoFKbg=
+	t=1769018856; cv=none; b=JZCdUpm/eYgdyINgAwYPgsTrfBF2vqL9CVrA6Qjz/cUGQbeR04mJL/60leFhnmbZCIqffYL1DlWd7KlqD1XJJCSbBBMWRmROsa1qLsAOIMnd4QlFeIz+Q8tFtTtxOeN7TaFVJUPUJqx9C8ABg2B6xnpdTj2SM3w3pJf7rZRnPPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769018680; c=relaxed/simple;
-	bh=zgHajdVw61MqSQX6CzNOyKpHHjKBbIr1ZOLWeN8umBo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yo/MApLVKA3UzHaluwBe0T97kqv+SK7wINZbSm/28a7KN0IdvVZHxruDDCNq0XDs57coJYSff8pwqeSXYLItHSC4wFSoOAepnT68UmH25VLMM6+6S7NT6DqfuGA78yaBSMP1EWHNB/DlaJadf5z6yq5uCeA4xE76PHxC1nmMeAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R8mnX7pQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4622CC19422;
-	Wed, 21 Jan 2026 18:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769018679;
-	bh=zgHajdVw61MqSQX6CzNOyKpHHjKBbIr1ZOLWeN8umBo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R8mnX7pQClLyRszYv6lZRWRdiGNnqFJVNvE+Z4pRPauE/B5J84fJI11PNQMH1FpdF
-	 lvVk+nNc1pR35MlRZX2TJZxasZFeYFgtsAIiupoZ1+Mu2nqwtnFa4Pq0xkLuK84QU1
-	 5nLpIwResJGOP9yVZm6DcV52yoEGIuz9HzqLJdqkPu2VTyKJd58tOMT3jVv+MKz1Zo
-	 Rthm5BKmMGOGaLeGW8ezfj1xH4FCNBHHoJ1p+9eeTG3r+qMbTRIpDI9OJcMVtucqs2
-	 jrblMtbHN8h5QqjYpsjlc92BkyVYkW8RD59XEMglysdk1t164EM4kbuay4PvII/fuy
-	 emULbyvfdS+qQ==
-Date: Wed, 21 Jan 2026 19:04:35 +0100
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ingo Molnar <mingo@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Kieran Bingham <kbingham@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Xin Zhao <jackzxcui1989@163.com>, linux-pm@vger.kernel.org,
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 05/15] s390/time: Prepare to stop elapsing in
- dynticks-idle
-Message-ID: <aXEVM-04lj0lntMr@localhost.localdomain>
-References: <20260116145208.87445-1-frederic@kernel.org>
- <20260116145208.87445-6-frederic@kernel.org>
- <20260121121748.9719Bab-hca@linux.ibm.com>
+	s=arc-20240116; t=1769018856; c=relaxed/simple;
+	bh=0wix78J+oRKHXLt6hmkz9fVUcHgh7+lJ2gOgzCD/oXw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B8SG4/XrFpE84TPVV/FXv8HZ171FkUERMQgIm4rFMh1yaO1Epim+/tYvD5WZhB7tPdNdl5pshSm/uRJ4BrDCFo0q1eyDlmVPTw9et4R7jISbTD1TsXQ0a0e0CXpueYBuj5Yk6klevxKfS5B2wowHEKoNqrsrTUmtxPhaYfBC4QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c7QJ7UVs; arc=none smtp.client-ip=209.85.128.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-47ee0291921so1211625e9.3
+        for <linux-pm@vger.kernel.org>; Wed, 21 Jan 2026 10:07:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1769018852; x=1769623652; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nL8x1nhynzlORWDLr//wqOzaruj70zMwzKxcsaB/Ebw=;
+        b=c7QJ7UVsd+TuyWE16el0eX81HUT9pCnk06lL2tgZGUWpB9pP4kMKma5JRL4qQbXz/H
+         lQP4cAPbxegP5a1V4xVEf/Aduw0DFQyltyl9StaZ4U4r/3nCQ9Q6wpg4AvEBvOF6Vd6w
+         wSyVLXuztxuC7rkrtXnfZAZBP8XWgq8mNNrooPLRy8nVyY8u6pqmIxyOf5OsBN5mvFXj
+         97BMrxOqqgIotilBrdGbXTKCF7uJ90cEJWVTdAHhb7+WLrDSgWbxavGqx/eO401Vz5kH
+         rgBI0ZgRMPULCQXDWAdfPbY+Q5BCvEf1qgHyp/5PsXuKysz98WimgHr3HJY8dTHBl0iL
+         /tTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769018852; x=1769623652;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nL8x1nhynzlORWDLr//wqOzaruj70zMwzKxcsaB/Ebw=;
+        b=t6d7dLt6Q1W7vA6vs3pTm033iO21dJRWaZsmfinWGPcuz3HLol+v3pQDhTzC4iFEKo
+         X5XKTJ2gZhXvFJCHNpNYNqZSLjQIFIb5fOoZDcrtj0HZrA9wdS+bCJcy5QbbD54sqqYW
+         mK44NfOAko4XUA+hGxFEFhU+Qtvrm8HshKFoASuDauQEJIH0RtFQBLwM+8QgvAdnk9Lw
+         Rp//nyKJJQz1Q4jEiEJ7BE+DUunThS+wT2wcYLa5O9tJeUL5aQsu38Ei8l2LUuppyHrr
+         Nc1IQG/SeEotxZs/WBmYhjRdSgOXnnTR01WeIj/R/VD2UuQ6UlSgeGhBIlZ9mACDRZgJ
+         RHvg==
+X-Gm-Message-State: AOJu0YyrJ74QlP28PNq5AO3XelkP5/om8Nqa8IOdM/KHLcgPSGKNxZyg
+	RIS5KiENsxdm36lI4RmC3osXAcDetLOx8rPDnkj+C9BV7yievW9XbDMatgU0w9wfJDo=
+X-Gm-Gg: AZuq6aISgucsSD/SpNZfw+PejrIWf2c5BDL1LHSNxhfFjOmAGREw2qROt66nduXtWCL
+	jlXPmo46gh+bM8DQiK0PbD9fo60cQI8cQwA2SBrZhXRww0jEKgXzMuccujvUMWEF2F2HBD1b3fR
+	Rrc2Uy05ZzJkwjcucjOZCvxnYxBv50Xuzd7kbri5o/W7R2B5Bbjb4TRyqhWq0kI2g7M2K/uSpuw
+	UZ2/RlC0E/w+uFJtCFbRGBkj1VI2Y2SQlsiE7j5YBLVbRuQblygF5xE6wwq8CTdU9KvIUu+2XiG
+	Dl8UlMdPUNCehH2FHjy/8LuWCCnfjPGX6bJlG7KIUEgOchHxhaGBdPmlxUZy06Ad1fTdh8zKL+v
+	tL8FPojzVgyt4oqGvsJI2r5BdBC2YQExZlyQeWSfizdplJiZYfuNgaOUaLE++ARZdmtX6tV7heR
+	qYReusUK0iJ/j8ZiZK/RBci7KQAWw63hQJ5UNZalGcsfaBBFkEFWsKF/8O9/YoK11ThQ==
+X-Received: by 2002:a05:600c:811a:b0:480:1dc6:2686 with SMTP id 5b1f17b1804b1-4801eac0cfcmr217187915e9.13.1769018851700;
+        Wed, 21 Jan 2026 10:07:31 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:c29a:525d:d900:4d71? ([2a05:6e02:1041:c10:c29a:525d:d900:4d71])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-435a431c189sm2135611f8f.24.2026.01.21.10.07.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jan 2026 10:07:31 -0800 (PST)
+Message-ID: <eea8470c-6659-4d9d-9b91-28fbbd1d2814@linaro.org>
+Date: Wed, 21 Jan 2026 19:07:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/5] thermal: renesas: rzg3e: make reset optional
+To: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>,
+ John Madieu <john.madieu.xa@bp.renesas.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+References: <20260108195223.193531-1-cosmin-gabriel.tanislav.xa@renesas.com>
+ <20260108195223.193531-2-cosmin-gabriel.tanislav.xa@renesas.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20260108195223.193531-2-cosmin-gabriel.tanislav.xa@renesas.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260121121748.9719Bab-hca@linux.ibm.com>
 X-Spamd-Result: default: False [-0.46 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-41248-lists,linux-pm=lfdr.de];
+	DMARC_POLICY_ALLOW(0.00)[linaro.org,none];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41247-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,linux.ibm.com,linutronix.de,google.com,gmail.com,arm.com,redhat.com,siemens.com,nvidia.com,suse.de,ellerman.id.au,infradead.org,goodmis.org,linaro.org,163.com,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[34];
+	FREEMAIL_TO(0.00)[renesas.com,bp.renesas.com,kernel.org,intel.com,arm.com,pengutronix.de,glider.be,gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[15];
 	MIME_TRACE(0.00)[0:+];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
 	TO_DN_SOME(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[frederic@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	FROM_NEQ_ENVFROM(0.00)[daniel.lezcano@linaro.org,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-pm,dt,renesas];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[localhost.localdomain:mid,dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: 2B9985C407
+	REDIRECTOR_URL(0.00)[twitter.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,renesas.com:email,glider.be:email,linaro.org:dkim,linaro.org:mid,linaro.org:url]
+X-Rspamd-Queue-Id: 533045C61E
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Le Wed, Jan 21, 2026 at 01:17:48PM +0100, Heiko Carstens a écrit :
-> On Fri, Jan 16, 2026 at 03:51:58PM +0100, Frederic Weisbecker wrote:
-> > diff --git a/arch/s390/kernel/idle.c b/arch/s390/kernel/idle.c
-> > index 39cb8d0ae348..54bb932184dd 100644
-> > --- a/arch/s390/kernel/idle.c
-> > +++ b/arch/s390/kernel/idle.c
-> > @@ -35,6 +35,12 @@ void account_idle_time_irq(void)
-> >  			this_cpu_add(mt_cycles[i], cycles_new[i] - idle->mt_cycles_enter[i]);
-> >  	}
-> >  
-> > +	WRITE_ONCE(idle->idle_count, READ_ONCE(idle->idle_count) + 1);
-> > +
-> > +	/* Dyntick idle time accounted by nohz/scheduler */
-> > +	if (idle->idle_dyntick)
-> > +		return;
-> > +
-> >  	idle_time = lc->int_clock - idle->clock_idle_enter;
-> >  
-> >  	lc->steal_timer += idle->clock_idle_enter - lc->last_update_clock;
-> > @@ -45,7 +51,6 @@ void account_idle_time_irq(void)
-> >  
-> >  	/* Account time spent with enabled wait psw loaded as idle time. */
-> >  	WRITE_ONCE(idle->idle_time, READ_ONCE(idle->idle_time) + idle_time);
-> > -	WRITE_ONCE(idle->idle_count, READ_ONCE(idle->idle_count) + 1);
-> >  	account_idle_time(cputime_to_nsecs(idle_time));
-> >  }
+On 1/8/26 20:52, Cosmin Tanislav wrote:
+> The Renesas RZ/T2H (R9A09G077) and RZ/N2H (R9A09G087) SoCs do not have a
+> reset line.
 > 
-> This breaks idle time reporting (aka enabled wait psw time) via the per-cpu
-> sysfs files (see show_idle_time()). That is: the second WRITE_ONCE() should
-> also go above the early return statement; but of course this leads to other
-> dependencies...
-
-Oh right! Will fix that.
-
-BTW here is a question for you, does the timer (as in get_cpu_timer()) still
-decrements while in idle? I would assume not, given how lc->system_timer
-is updated in account_idle_time_irq().
-
-And another question in this same function is this :
-
-    lc->steal_timer += idle->clock_idle_enter - lc->last_update_clock;
-
-clock_idle_enter is updated right before halting the CPU. But when was
-last_update_clock updated last? Could be either task switch to idle, or
-a previous idle tick interrupt or a previous idle IRQ entry. In any case
-I'm not sure the difference is meaningful as steal time.
-
-I must be missing something.
-
-> Not sure what to do with this. I thought about removing those sysfs files
-> already in the past, since they are of very limited use; and most likely
-> nothing in user space would miss them.
-
-Perhaps but this file is a good comparison point against /proc/stat because
-s390 vtime is much closer to measuring the actual CPU halted time than what
-the generic nohz accounting does (which includes more idle code execution).
-
+> Prepare for them by making it optional.
 > 
-> Anyway, you need to integrate the trivial patch below, so everything compiles
-> for s390. It also _seems_ to work.
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Reviewed-by: John Madieu <john.madieu.xa@bp.renesas.com>
+> Tested-by: John Madieu <john.madieu.xa@bp.renesas.com>
+> Signed-off-by: Cosmin Tanislav <cosmin-gabriel.tanislav.xa@renesas.com>
+> ---
 
-Thanks, I'll include that.
-
-> 
-> Guess I need to spend some more time on accounting and see what it would take
-> to convert to VIRT_CPU_ACCOUNTING_GEN, while keeping the current precision and
-> functionality.
-
-I would expect more overhead with VIRT_CPU_ACCOUNTING_GEN, though that has yet
-to be measured. In any case you'll lose some idle cputime precision (but
-you need to read that through s390 sysfs files) if what we want to measure
-here is the actual halted time.
-
-Perhaps we could enhance VIRT_CPU_ACCOUNTING_GEN and nohz idle cputime
-accounting to match s390 precision. Though I expect some cost
-accessing the clock inevitably more often on some machines.
-
-Thanks.
+Applied, thanks
 
 -- 
-Frederic Weisbecker
-SUSE Labs
+<http://www.linaro.org/> Linaro.org â”‚ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
