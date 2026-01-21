@@ -1,159 +1,129 @@
-Return-Path: <linux-pm+bounces-41243-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41244-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YJg3B2opcWniewAAu9opvQ
-	(envelope-from <linux-pm+bounces-41243-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 20:30:50 +0100
+	id 0N8zMF0QcWlEcgAAu9opvQ
+	(envelope-from <linux-pm+bounces-41244-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 18:43:57 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AD005C33C
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 20:30:50 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 561245AB3F
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 18:43:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D342042ECC8
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 17:08:09 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4F0388D0382
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 17:12:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCA7275AEB;
-	Wed, 21 Jan 2026 16:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080014A2E07;
+	Wed, 21 Jan 2026 16:57:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i4zQlP9q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IJDkxvZx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0C3205E26;
-	Wed, 21 Jan 2026 16:55:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C130843DA48
+	for <linux-pm@vger.kernel.org>; Wed, 21 Jan 2026 16:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769014531; cv=none; b=FmPtyaDNNCqlvyBAOT3MTl754fXZLYG2hNg7OwUnEApJ8sajKGn9CLpgZY5s1oeEHlNT7Lz3OzkD6jsUCryBNq1oZ1fIsmmYzyfxx7JR3XXR3DnN7vvVNtB5QaIpmDfbXu3lmvTEaDt+dUfgv3AUr3lVg9Hm+jNll1RH+wlhFnk=
+	t=1769014647; cv=none; b=bwLR9qbSewuBukPtJMj5C/ej7cGN5wUApUaNISuUGH4PJm9ssBES6VK/6EMIk8VzbrMED3WV3R35ct/Wor+GGZL2YfyEDhFyZIca3RORwQSfADH4TgcL/CsyTu09xCV/RlyghsCWahiNzV7PWgOCm0AAzhnok+/n+LJyGSHrDiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769014531; c=relaxed/simple;
-	bh=mxuQx8myh37sFEu9+vJLmpyCKKaNhjPDjdia8zaYzsE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WLUduW0qf+1XzsQLomfF3gGkeRJOO71FsB9a6SvbJODGTiMRpW1MF0VtAyAR3trvnsrU6oJSFQ+Dvk4Rd5b9VretB5a6JS4FY+O8rQ/XB6LkqVN4tCYoYCtbJ9eKCsWCRLCytbTu25PrWShpysst/tm09xAQYylyzkoaI4D7MJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i4zQlP9q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F892C4CEF1;
-	Wed, 21 Jan 2026 16:55:30 +0000 (UTC)
+	s=arc-20240116; t=1769014647; c=relaxed/simple;
+	bh=0NuxRWSMVYoqYa2CdqKNGIwNkq236hLKM5PBVKb+OQ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ddRxNshWFt2m6KBXaa2evv9Bl4L/6BAUi/ENNnoIYZOM9al74XqO5eBaOTHdOmvjoZmpb6UD3eFMMbqHYkZBPLb6Hu5Vl1Wbal3Tk0APxQBq2ZTvCgtH/fqaBOXvyBs+wNamd95NE7TeSf3X/tZUeJJ7aHnsgl7n+vRt4fQrbQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IJDkxvZx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F164FC4CEF1;
+	Wed, 21 Jan 2026 16:57:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769014531;
-	bh=mxuQx8myh37sFEu9+vJLmpyCKKaNhjPDjdia8zaYzsE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i4zQlP9qJjB6AQvf49Y9Ufsh9lLsJ6bgZDrju7360I1I550ZnhpWAwEhlEoR9En0J
-	 y6/+oLJdJnMdYltuM3MRou3lpBFM3dQjjN6PzEResWJIqV+XkmAk4eyCJq2+1ZLjyD
-	 aQLh3joSmHc4hig6Ewwj3u3Tl6EQRXKppt8VR+cgGDTQdrlYJVRKNFZqvklqakPBWY
-	 OWXFLzFKVuyDHwqGzad53oDQuURAzIfzlqt4EtTh8VHFtXd/0GY3pZh+ePdP1ub/q3
-	 F4FRPA0IyGS9x8qxwRk/fYy0I+TKHGub9a3Sp7PBRLyZBWkY/dcH8M84Au0PkruVH+
-	 OEqS1sr2cxlOg==
-Date: Wed, 21 Jan 2026 17:55:27 +0100
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Shrikanth Hegde <sshegde@linux.ibm.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Kieran Bingham <kbingham@kernel.org>,
-	Ben Segall <bsegall@google.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Ingo Molnar <mingo@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Xin Zhao <jackzxcui1989@163.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Jan Kiszka <jan.kiszka@siemens.com>, linuxppc-dev@lists.ozlabs.org,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Heiko Carstens <hca@linux.ibm.com>, linux-pm@vger.kernel.org,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Nicholas Piggin <npiggin@gmail.com>, linux-s390@vger.kernel.org,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 00/15] tick/sched: Refactor idle cputime accounting
-Message-ID: <aXEE_5vT03dlTCyN@localhost.localdomain>
-References: <20260116145208.87445-1-frederic@kernel.org>
- <aWpRxyt8HuXkSuxs@localhost.localdomain>
- <a4037857-b161-4536-9a2e-2cf4c168736d@linux.ibm.com>
+	s=k20201202; t=1769014647;
+	bh=0NuxRWSMVYoqYa2CdqKNGIwNkq236hLKM5PBVKb+OQ0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=IJDkxvZxFlQn6qgqKMvCt2G8nP11/sb6jX0G2KcCiNBjCh+R4GBtb8/0hBWToG4Bi
+	 dXpP3Cp7HxHkgbTE6tv3hOEoQfxFRc++Q7RJ1ceeGdEX9sDr8VVBBP4FrtDExrXpCU
+	 xhIxWFngJy2Qgs2vkr5AQIzm3GZg0Nl2ELkXoD2qWNYKtg5nB0Wv0KsV0rAcd0onKz
+	 Z/RORhkK5Q302wZbScYvm51YJzKrxcjy1OOPviFOO5/lUS3Tp3mhKkDJpzD9yL0S8a
+	 ubCqJrZA49AbHVkJrsO8agTBzglgbq+lFFpJyPSxGnfKH4KRirHvelpR6At41yZ8bK
+	 QDBqPzpge6meQ==
+Message-ID: <050ebed4-955d-4694-9341-d18105b82991@kernel.org>
+Date: Wed, 21 Jan 2026 09:57:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/1] cpupower: make systemd unit installation optional
+To: Joao Marcos Costa <joaomarcos.costa@bootlin.com>, linux-pm@vger.kernel.org
+Cc: thomas.petazzoni@bootlin.com, shuah@kernel.org, trenn@suse.com,
+ jwyatt@redhat.com, jkacur@redhat.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20260113132753.1730020-1-joaomarcos.costa@bootlin.com>
+ <20260113132753.1730020-2-joaomarcos.costa@bootlin.com>
+ <43461785-37a6-4228-abec-2364cae190ea@bootlin.com>
+Content-Language: en-US
+From: Shuah <shuah@kernel.org>
+In-Reply-To: <43461785-37a6-4228-abec-2364cae190ea@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <a4037857-b161-4536-9a2e-2cf4c168736d@linux.ibm.com>
-X-Spamd-Result: default: False [-0.46 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.96 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41243-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
+	TAGGED_FROM(0.00)[bounces-41244-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,gmail.com,linutronix.de,goodmis.org,google.com,ellerman.id.au,redhat.com,linaro.org,163.com,linux.ibm.com,suse.de,siemens.com,lists.ozlabs.org,arm.com,nvidia.com,infradead.org];
-	RCPT_COUNT_TWELVE(0.00)[35];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[shuah@kernel.org,linux-pm@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[frederic@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,localhost.localdomain:mid]
-X-Rspamd-Queue-Id: 0AD005C33C
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,bootlin.com:email]
+X-Rspamd-Queue-Id: 561245AB3F
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-Le Tue, Jan 20, 2026 at 06:12:08PM +0530, Shrikanth Hegde a �crit :
+On 1/21/26 03:16, Joao Marcos Costa wrote:
+> Hello,
 > 
-> Hi Frederic.
+> I hope this emails finds you well!
 > 
-> On 1/16/26 8:27 PM, Frederic Weisbecker wrote:
-> > I forgot to mention I haven't yet tested CONFIG_VIRT_CPU_ACCOUNTING_NATIVE
-> > (s390 and powerpc).
-> > 
-> > Thanks.
+> On 1/13/26 14:27, João Marcos Costa wrote:
+>> cpupower currently installs a cpupower.service unit file into unitdir
+>> unconditionally, regardless of whether systemd is used by the host.
+>>
+>> Improve the installation procedure by making this systemd step optional:
+>> a 'SYSTEMD' build parameter that defaults to 'true' and can be set to
+>> 'false' to disable the installation of systemd's unit file.
+>>
+>> Since 'SYSTEMD' defaults to true, the current behavior is kept as the
+>> default.
+>>
+>> Signed-off-by: João Marcos Costa <joaomarcos.costa@bootlin.com>
+> (...)
 > 
+> Gentle ping on this patch in case it slipped through, and any feedback would be appreciated. Thanks!
 > 
-> tl;dr
-> 
-> I ran this on powerNV(Non virtualized) with 144 CPUs with below config. (default ones)
-> Patch *breaks* the cpu idle stats most of the time. idle values are wrong.
 
-Right I somehow lost the TS_FLAG_INIDLE setting in tick_nohz_idle_enter(),
-which ruins the whole thing.
+I sent this up in my pull request to PM maintainer - will be
+included in the next release.
 
-You probably think I should have detected that with light testing and you're
-right. Not checking dmesg was a bit sloppy from my end...
+https://lore.kernel.org/all/8cd367ed-3b80-4233-ac71-77a88782ed2f@linuxfoundation.org/
 
-I'm fixing that and will send a v2 soonish.
-
-Thanks a lot for testing!
-
--- 
-Frederic Weisbecker
-SUSE Labs
+thanks,
+-- Shuah
 
