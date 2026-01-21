@@ -1,57 +1,58 @@
-Return-Path: <linux-pm+bounces-41202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41201-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cCmcJCklcGlRVwAAu9opvQ
-	(envelope-from <linux-pm+bounces-41202-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 02:00:25 +0100
+	id +CWeDCMlcGlRVwAAu9opvQ
+	(envelope-from <linux-pm+bounces-41201-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 02:00:19 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 003B44EC94
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 02:00:24 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB76E4EC8A
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 02:00:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7E9AA8AAC15
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 01:00:21 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6A2E38231BF
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Jan 2026 01:00:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8E72DF143;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04F9C2E8B8D;
 	Wed, 21 Jan 2026 01:00:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S4eRzsAb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NkQuit1+"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30E11DFD96;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A31602E1746;
 	Wed, 21 Jan 2026 01:00:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768957214; cv=none; b=jf57ElDMUYQ2oAbKMXzKia9VLGwZAk/b17CXE0A7hmTAkmQCz21lxc1FnAvcUiuI6eZqttDCLsQUpZDsts1p+WSH0nRInws6jI9xWCvzRVMtMFR3GKxFeoGc+499jCiK18OyhyIDc1lDCO/+3wtPxQ6E5UCMZWWqBuj7nXUf/WM=
+	t=1768957214; cv=none; b=g1fkCE9dybPc7QApx0UT8wwdGgLfKPKGW1sF1xTItgCc4MOHXhIn0Aq6vgqKQw3Pi6519pJj76kYsfzYNkDYbDShLn7FItcVpKyUhia0r7cQFfhwpHFTOdE+vcAI4J9xc1YuEvx+HFPnbDiJkmWMxe6+cP0JLef6MkFJxMbo4fk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768957214; c=relaxed/simple;
-	bh=SFo9t6l3/bhf9aZgOhzuecaeoOY+SMMUkhye3rCxRng=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QIvfxBiD1JX2lKQjr00gTx8HgABgYZ45w8SVpHt71bTYbCw3d21gkjDPYRx/QVbZIDdHCN/oJVgJQkbPjFveWRbzjMGS1WBefPvA9WlRFUdvNzZLgksH3JVlwb50323gcuu2pwvsNNQtL+NHgHOp8kEZiqSewbfNmP4qDsVxkSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S4eRzsAb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1D997C16AAE;
+	bh=vME9erZ8v4/3XnAfc41aTNJXW0Ogk90LyJ2PO02vRi4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=NeJ1149OOMih+XBN9RLhMr71vLdqJ39/eGIyLc3iL+xrNURTLX5w5WMN7yQBzKAdJZK4avXOXclOs1AKOyw4U5jEVOi1/COLaOye58hpZI8BQ6ideEr/aqt7MXB+LT8dhGptKA2Ixug4ej4ImRrhfsRMCP1Glw0g1os+GewzFWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NkQuit1+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2CB3BC19424;
 	Wed, 21 Jan 2026 01:00:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1768957214;
-	bh=SFo9t6l3/bhf9aZgOhzuecaeoOY+SMMUkhye3rCxRng=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=S4eRzsAbzwvs2ntfsdUs7fjUzEWQkhWjk1Qy3l3lhk53nh1gUoOFyzNQvA1ODK+FJ
-	 QF/RFmUn1CwLEuoE2RTboul244TNTUKkV0IoLyWsRCqdrblBKYqj+WwlazaN0L8ET4
-	 pMc8pgOyTE0a9Pm6xefiaZnZZ6sDLGj8IbXNbrERp55JN4j/HRIuGnkj8vj7cW+o65
-	 M5cmG3mR3K4tOKXYI1pnSna9PZnLSB7ZysVtyLR1mrNo7Gm70Uudu8K07fFFXWdjjR
-	 ajmO3iR5VAb+mTdLVmN4jLOfUlRVgSRQ6IvM9GLdkVSwvZy1XcNjQfAzKb55BpxyLT
-	 GfgVZlbodDgzg==
+	bh=vME9erZ8v4/3XnAfc41aTNJXW0Ogk90LyJ2PO02vRi4=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=NkQuit1+YerIgsdmdqI/BDECqvOz01CTzj2LHnEFZcddYZHm8EWI9l9pQPrsIotih
+	 ZzeZL2zKAm81FLHkMg01woe5JGMg4hgVsD7ayb3qLpyUtpRm6XitsAJqxqRRw7cUyJ
+	 HU1K7vF/TY2xNcwRkZnrBbINsEKGYeFMS1yh7/zcS1ffwlO6RCsi+cXT+VmTo1uvEB
+	 AJ9Dk3IIl6XrNZ4mAdXxCJG+j0lldSZkYXp5JmXr6omBxYwDKUup8GJzK+a4wG4Bgr
+	 GD41RO1+JNML9VIdcCL36S4wCgAxwfC1UvkzCm2v3ltEoOqYk4JN0kCzf2ISXcAImZ
+	 N5zbLay+qKGsQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 05B3BD262AF;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1ACF1D2629F;
 	Wed, 21 Jan 2026 01:00:14 +0000 (UTC)
 From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
-Subject: [PATCH v4 0/5] Introduce MAX77759 charger driver
-Date: Wed, 21 Jan 2026 00:59:34 +0000
-Message-Id: <20260121-max77759-charger-v4-0-694234c8ded1@google.com>
+Date: Wed, 21 Jan 2026 00:59:35 +0000
+Subject: [PATCH v4 1/5] dt-bindings: mfd: maxim,max77759: reference
+ power-supply schema and add regulator property
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -60,11 +61,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAPYkcGkC/23NwQ6CMAyA4VcxOzvDytYNT76H8TCgwBJhZhiCI
- by7g5iogePfpl8n1lNw1LPzYWKBBtc738WQxwMrGtvVxF0Zm0ECSohE8daOWmuV8bgONQVuFOQ
- IWCIKy+LZI1DlxpW83mI3rn/68Fo/DGKZfjBIt9ggeMIxB5K5qXSl5KX2vr7TqfAtW7QBvgIIs
- yNAFCAHlWUmsWhwI6Q/AugdIY2CkoQoK1XYDP6EeZ7fnDUeDTUBAAA=
-X-Change-ID: 20251105-max77759-charger-852b626d661a
+Message-Id: <20260121-max77759-charger-v4-1-694234c8ded1@google.com>
+References: <20260121-max77759-charger-v4-0-694234c8ded1@google.com>
+In-Reply-To: <20260121-max77759-charger-v4-0-694234c8ded1@google.com>
 To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, 
@@ -82,11 +81,11 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  Amit Sunil Dhamne <amitsd@google.com>, 
  Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768957213; l=3693;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768957213; l=1953;
  i=amitsd@google.com; s=20241031; h=from:subject:message-id;
- bh=SFo9t6l3/bhf9aZgOhzuecaeoOY+SMMUkhye3rCxRng=;
- b=g5zA+uB4d1Wa/5ShS5DQUoY2BLnVMD4oc3yrZDuqc8GmN5IkqD3Qy22CuDGsNfBTSRi5mXIzJ
- tKPFsrYfD+sDOlg+u2VTYxFR8sMRxpc90iDxyqIEcPjqMqU/CdECDiI
+ bh=a3JQ5uiaaaZKvPLZencodzGQn/qwlSwCMZMZqJW9xWs=;
+ b=/Dkg+PTGUGK0kXU7AFdyUc7uWzaQgeKdzrr+LNPm1d7Z3kGJx+PyKcod2eCmhdDA/0gr8N07g
+ VbQRheR1gV0DqUBOgEvWxytslVvvQoR6kYG6YxRvC4yflAjgDBzQvsT
 X-Developer-Key: i=amitsd@google.com; a=ed25519;
  pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
 X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
@@ -101,7 +100,7 @@ X-Spamd-Result: default: False [-0.46 / 15.00];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41202-lists,linux-pm=lfdr.de,amitsd.google.com];
+	TAGGED_FROM(0.00)[bounces-41201-lists,linux-pm=lfdr.de,amitsd.google.com];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -117,90 +116,76 @@ X-Spamd-Result: default: False [-0.46 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-pm@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	RCVD_COUNT_FIVE(0.00)[5];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo]
-X-Rspamd-Queue-Id: 003B44EC94
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:rdns,ams.mirrors.kernel.org:helo,linaro.org:email]
+X-Rspamd-Queue-Id: CB76E4EC8A
 X-Rspamd-Action: no action
 X-Rspamd-Server: lfdr
 
-MAX77759 PMIC is used in Pixel 6 and 6 Pro (Oriole/Raven) boards.
-One of the functions of the MAX77759 PMIC is a battery charger. This
-patchset introduces a driver for this function. One of the unique
-features of this charger driver is that it works with a USB input where
-the Type-C controller is TCPCI based.
+From: Amit Sunil Dhamne <amitsd@google.com>
 
-Changes to the board files will follow soon once this patchset is reviewed.
-
-For reference to the MAX77759 MFD based patchset (present in upstream):
-https://lore.kernel.org/all/20250509-max77759-mfd-v10-0-962ac15ee3ef@linaro.org/
+Extend the max77759 binding to reference power-supply schema, so that
+PMIC node can reference its supplier. Also, add regulator property to
+control CHGIN (OTG) voltage.
 
 Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Reviewed-by: André Draszik <andre.draszik@linaro.org>
 ---
-Changes in v4:
-- Removed a stray tabspace in mfd/max77759.h. (André Draszik)
-- Fixed the following issues in Patch 4/5 (André Draszik):
-  - Re-order Kconfig entry
-  - Refactored to not use global variable
-  - Use of clamp() to clamp values instead of duplicating logic
-  - Return IRQ_NONE for unhandled irqs or error conditions
-  - Remove debug messages in irq handler
-  - Refactor code to use dev_err_probe in *_init_irqhandler()
-  - Remove unneeded irq_flags
-  - Check return values of regmap ops
-  - Other nits like newlines, not using greedy init, using print stmnts
-- Link to v3: https://lore.kernel.org/r/20251227-max77759-charger-v3-0-54e664f5ca92@google.com
+ .../devicetree/bindings/mfd/maxim,max77759.yaml          | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-Changes in v3:
-- Had incorrectly folded the charger sub-device with the pmic parent.
-  Corrected it. (Krzysztof Kozlowski)
-- Link to v2: https://lore.kernel.org/r/20251218-max77759-charger-v2-0-2b259980a686@google.com
+diff --git a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+index 525de9ab3c2b7b431e48497330640857540625b1..42e4a84d52043c09bd073dec391a3bd76dbd359b 100644
+--- a/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
++++ b/Documentation/devicetree/bindings/mfd/maxim,max77759.yaml
+@@ -16,6 +16,9 @@ description: |
+   The MAX77759 includes Battery Charger, Fuel Gauge, temperature sensors, USB
+   Type-C Port Controller (TCPC), NVMEM, and a GPIO expander.
+ 
++allOf:
++  - $ref: /schemas/power/supply/power-supply.yaml#
++
+ properties:
+   compatible:
+     const: maxim,max77759
+@@ -37,12 +40,18 @@ properties:
+   nvmem-0:
+     $ref: /schemas/nvmem/maxim,max77759-nvmem.yaml
+ 
++  chgin-otg-regulator:
++    type: object
++    description: Provides Boost for sourcing VBUS.
++    $ref: /schemas/regulator/regulator.yaml#
++    unevaluatedProperties: false
++
+ required:
+   - compatible
+   - interrupts
+   - reg
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+@@ -59,6 +68,11 @@ examples:
+ 
+             interrupt-controller;
+             #interrupt-cells = <2>;
++            power-supplies = <&maxtcpci>;
++
++            chgin-otg-regulator {
++                regulator-name = "chgin-otg";
++            };
+ 
+             gpio {
+                 compatible = "maxim,max77759-gpio";
 
-Changes in v2:
-- Fold charger binding in maxim,max77759-charger.yaml to its parent
-  node. (Krzysztof Kozlowski)
-- Renamed regulator supplier & consumer. (Krzysztof Kozlowski & Heikki
-  Krogerus)
-- Removed explicit setting of irq trigger types in max77759 driver.
-  (André Draszik & Krzysztof Kozlowski)
-- Complete bit definitions for IRQ registers. (André Draszik)
-- Consolidate all bit definitions for charger IP in mfd/max77759.h.
-  (André Draszik)
-- Modify the handling of charger IRQs such that regmap IRQ chip handles
-  masking, de-mux and acking of interrupts. (André Draszik)
-- Remove unused macro definitions relating to Charger modes in tcpci
-  maxim driver (André Draszik)
-- Add dependency on Regulator class in Kconfig definition for max77759
-  chg. (Kernel Test Robot)
-- Link to v1: https://lore.kernel.org/r/20251123-max77759-charger-v1-0-6b2e4b8f7f54@google.com
-
----
-Amit Sunil Dhamne (5):
-      dt-bindings: mfd: maxim,max77759: reference power-supply schema and add regulator property
-      dt-bindings: usb: maxim,max33359: Add supply property for vbus
-      mfd: max77759: add register bitmasks and modify irq configs for charger
-      power: supply: max77759: add charger driver
-      usb: typec: tcpm/tcpci_maxim: deprecate WAR for setting charger mode
-
- .../devicetree/bindings/mfd/maxim,max77759.yaml    |  16 +-
- .../devicetree/bindings/usb/maxim,max33359.yaml    |   4 +
- MAINTAINERS                                        |   6 +
- drivers/mfd/max77759.c                             |  91 ++-
- drivers/power/supply/Kconfig                       |  11 +
- drivers/power/supply/Makefile                      |   1 +
- drivers/power/supply/max77759_charger.c            | 737 +++++++++++++++++++++
- drivers/usb/typec/tcpm/tcpci_maxim.h               |   1 +
- drivers/usb/typec/tcpm/tcpci_maxim_core.c          |  54 +-
- include/linux/mfd/max77759.h                       | 202 +++++-
- 10 files changed, 1064 insertions(+), 59 deletions(-)
----
-base-commit: b71e635feefc852405b14620a7fc58c4c80c0f73
-change-id: 20251105-max77759-charger-852b626d661a
-
-Best regards,
 -- 
-Amit Sunil Dhamne <amitsd@google.com>
+2.52.0.457.g6b5491de43-goog
 
 
 
