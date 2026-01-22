@@ -1,188 +1,184 @@
-Return-Path: <linux-pm+bounces-41285-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41286-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wMACMTnocWkONAAAu9opvQ
-	(envelope-from <linux-pm+bounces-41285-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 10:04:57 +0100
+	id 4A1nD/TtcWlKZwAAu9opvQ
+	(envelope-from <linux-pm+bounces-41286-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 10:29:24 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32062642F3
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 10:04:57 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB24964896
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 10:29:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 122317615FD
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 08:57:43 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id DDED86012B5
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 09:19:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DA7634F489;
-	Thu, 22 Jan 2026 08:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF87B31A044;
+	Thu, 22 Jan 2026 09:18:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mld9DEyN"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="pfZWIrRg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout08.his.huawei.com (canpmsgout08.his.huawei.com [113.46.200.223])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB21313550
-	for <linux-pm@vger.kernel.org>; Thu, 22 Jan 2026 08:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769072254; cv=pass; b=qLUnrKS30na0HlndHZcbDC5W3SdaqLKyKamAw9NqcUtb666/JLPSNDS9U0952Op8+pJRv07C0KezlJy7Eef1oROquVZJLNvblp0AJUmf37vAnCJS2YpeZtogw0iZtd/Oz2SAqOZd6IWlXNBAkfcFr+kwTxFvscJVTi7J3LAfX38=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769072254; c=relaxed/simple;
-	bh=3J6gYorDtO7mNp6Qmg57Ase80b6wKmggy4kn3B0XUVM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FvbMxF7IZLGBiXRVCIduzCMjzkw/6MHvFAYfL2eE6INM1JMe6WCgY/xAqMQvi2IOnHwbi1tEXdJ6rUMLFcWB1zWBAjOEQcb/Ijk05m+0WCSkPwyosSXU0IZJEVACNi5KS+U+Vdd1hZt/hblzddR27ndxU4L40remO1Ngq8J4JmA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mld9DEyN; arc=pass smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1233b172f02so1097287c88.0
-        for <linux-pm@vger.kernel.org>; Thu, 22 Jan 2026 00:57:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769072251; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Vo7gnn1FVdEV3HWaAUegwxoz1Yx3mKwF79wnUJ/qDG8lPQvwYLMpFgxBClzegXE6cO
-         fX3EhtTwdvMfGZui95J1JTMX9VOD23geWPhlZK2dSjPO6rJXTUm6UkfzevbRrL2p+uYN
-         2bpAoN5wS0lbX3zWIEMMNBsTvAg3b6VHeROLEZvCvyQEsL/XPPfOAbwGNGQ+MwplMcGw
-         TbCgXbdUMCi7c5Yjp1XWWkT/sUmfoOrAVqWyGpABGgMU1yug9LY3RaIDRPMc147StoDi
-         jhgWPqWvMyZeiJwlMVpak4bGPfMzI+CAVv0jwC8Coo31gLpkGs7k0Lfg+fxLFMPl4nJ2
-         j/jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3J6gYorDtO7mNp6Qmg57Ase80b6wKmggy4kn3B0XUVM=;
-        fh=B8xsql7sauzEvYxg2LEE6s+N1772W2OIy7kuzC95y+A=;
-        b=Z9IFNOPZeCxmtTrbDsNU7Yhbz9iDaH8fA+q0VLx7W4K9X83SvQkElTxO3JlntwxpYF
-         bd1Yf/DzE3VsXJPl5WyZE7JbftHF1h2saoL1tiqnKGSexi/MnK9caIbUltOnXlfcb37r
-         A89yBEPeYHj/H76oA/48Tkx0eotW4F3P4d8crJmN8Vh+DL4Z2oR2ZsizjGaiKakP4Q+c
-         vAkiipd/731zMJVHodQCq8z4gz1LbNkctBxbYgCgo/s4oggbS6VhGAb/umvhCsMuLKb1
-         qPO6awVz9N5SDZ79W85xiQ0I1d8TLqrREQclSs/xVLlySwhhk402/Z3mZYIj9M+Y2pUY
-         y3Iw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769072251; x=1769677051; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3J6gYorDtO7mNp6Qmg57Ase80b6wKmggy4kn3B0XUVM=;
-        b=mld9DEyNrR3wMJ9O7cIiMykatxx9De1bP9atRA/FqT5FyP2uZj6SJPxcZFj139K9wB
-         dVZjPSZDRXC13jXda/PChEf0Tv9DVSaKiz+x8H5TE5WgxRBVxp/VVgOkL5acpTqZ7cwY
-         dtX9fVxG8p65lfHDFh7LueqonYvg2P2BMTKauqv2CT5pES+kUjHhR6jsX+GyR7Dmvkgg
-         u8OlO7No4074NtDivk9EYs5N+X8Dl1Opx3LreoF7MtXa+s4kg22UZoc/5ekczlE+c4wk
-         e327J1ZjXk9zxLH+YmTN+03JYTj322eJelfoHeAkaxCY6TA+Qf5rTMQreOR5wWymbDX1
-         YfnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769072251; x=1769677051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3J6gYorDtO7mNp6Qmg57Ase80b6wKmggy4kn3B0XUVM=;
-        b=i1gjkkTjwnGNrY2O7V7r77wS6HhHrLPBupTN4BtBn6ei6OAuzkl0IHQfsFlRyAdQAU
-         J/WIptQlndsbxbrzzZfBG996WdcOoZwgciFByCqQMwLvaZrgCC3xw5SxzDUym5Lz+V/B
-         Ul+F+XXAjz9wlFc+vcEWb6+tUK6Dp8s2Gqi+GL3iD1xExemEST8jLl73/CAqE+qLWbxG
-         vWlFcJ4PuO7akoALVkM1IIBJo5YNV2Hx6u4DNVTyaVAJEO/LhXN92IHKkVdBCEbfoF8+
-         ff5Zs9a3ol7NZrCBwoFo1gejeMq3EcaRIFVyaMpWMwz6RVcwNex4kiPl4PMkpvyYDAYp
-         /9AQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW5QI8IG3uRypiD2mluPuVPtBEwlTyvWXYcNR8RbStQ9Z1p7Koh7gIOj684QcZ8ZV9ep1sBKMEgQw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyX1Ozer58RYvihAuWFutUcQHdvWGftGrfVoudpwiVxoeO5EQyW
-	xiOzineC18ZsiSBgjK5Mv0MMQiMfKyqffeBg08K+1QeW7TuqEmObt56QKOqLWjNHgM8/1ZvqmLf
-	4hv8RSlddDDE7Yu57NI93wPIC6darUgn1xR5Ynxzc8civ
-X-Gm-Gg: AZuq6aKTcA4x2RD0ceF8o6lSCdyL7iyAD6Cd8XQ49FImc9ZchDaHZgEME6g1ljXvAvB
-	Jh1BMRPkSfeSmrFpmhssCCRxLPl6cTBbklhZw3eYXAV10n+ZOqFJz90eug3QHMRISJcipY6/eh/
-	ydXc8oqWLeMe63uvUOF8eJ2XTTQzNRmVmX0YbvcbyOmr/21pOQsF8+TDYz9X8hn154pNrSN/7yu
-	ytwLLrxoP3SU5mb9GZO5lTkbT9iZplfuCZtPGgSOPM38rvKFy/ManWDkMsglYMrYIxHuYAvkTsf
-	UI1KkNBFDCo93lOx5GqUR3d4OKSHicUwTD3tVYKmir+rl2SX2k6606oe2PE5g45k4YTCLh49M89
-	WTyATwQbWJw==
-X-Received: by 2002:a05:7022:f86:b0:123:3364:2ca8 with SMTP id
- a92af1059eb24-1246aac4ac7mr5540316c88.39.1769072250797; Thu, 22 Jan 2026
- 00:57:30 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E957132C939;
+	Thu, 22 Jan 2026 09:18:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.223
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769073535; cv=none; b=mJxdEDf0kgTDso7jCSGAJhFIPlJtFRB7bzbux4rxM3eK5AxPZB3LMUliQUehdr/akcb0G2+K4FHA5Ure7KiYGU4AAb22UH2EmKQAyyPCJ0GKHErQ+VAjwRJRBVXo8gXTSvyfKTgJ20SKDeoDMeNpa7bvAOyJ8QLFI+d01fR6wTs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769073535; c=relaxed/simple;
+	bh=k1vLCZxBh2pEce2WLUIty3WrFFC+IYh3CoHUZFCCAnw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Iu28kwRN2ty90IaPyegBUH/dTQ5M1lmQCQgvqjEUHS3C4T3xpgMXCmb3qat3UOwyhgDiyyXEeZuYVkMfkI6rGxKF+hu3vp3sQAnGhiXFLK+VKV37mSU5Y85TOT0cAa2DEuPYblKtrRACp9kv1QJuSM16SgAt+NaPLB4FffGO9yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=pfZWIrRg; arc=none smtp.client-ip=113.46.200.223
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=hj5qo0VXuLVg7QUuygYodXkqi79esrBXG4hcCec4FkM=;
+	b=pfZWIrRgu0AWyxmJKowFYr1F8stIjaWf/j/sNCNQE5rf3Hrg7aEdLiSkGJlcUe9S5fc7gBUHF
+	3riCN1sKX9eUwmfl2raal9FImMtY/1FDR4hzCXzVwCGGG1Aa0qIuISwJYjlvRuMvljB6PpctSzB
+	lPUq7nKUTmLmoFACp3WpsuQ=
+Received: from mail.maildlp.com (unknown [172.19.163.200])
+	by canpmsgout08.his.huawei.com (SkyGuard) with ESMTPS id 4dxb4l1jd5zmV69;
+	Thu, 22 Jan 2026 17:15:19 +0800 (CST)
+Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3D42C40563;
+	Thu, 22 Jan 2026 17:18:44 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
+ (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 22 Jan
+ 2026 17:18:43 +0800
+Message-ID: <a7a4d351-eed3-4ea6-a84f-e525b7ac13a6@huawei.com>
+Date: Thu, 22 Jan 2026 17:18:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260120-imx8mm_gpu_power_domain-v2-1-be10fd018108@nxp.com>
-In-Reply-To: <20260120-imx8mm_gpu_power_domain-v2-1-be10fd018108@nxp.com>
-From: Daniel Baluta <daniel.baluta@gmail.com>
-Date: Thu, 22 Jan 2026 11:00:08 +0200
-X-Gm-Features: AZwV_QizKXTxpcD509WTM7FJXkGnjUZe72Tjh_1y1VK3GaZGPTzVAx6Yhm6EfFE
-Message-ID: <CAEnQRZDo3Y+m3+Pdq3QTaPi0M71NGAc40NxCw0c-GUuAQ5ZRhQ@mail.gmail.com>
-Subject: Re: [PATCH v2] pmdomain: imx: gpcv2: Fix the imx8mm gpu hang due to
- wrong adb400 reset
-To: Jacky Bai <ping.bai@nxp.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Lucas Stach <l.stach@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	linux-pm@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 5/9] ACPI: CPPC: Extend cppc_set_epp_perf() for
+ FFH/SystemMemory
+To: Sumit Gupta <sumitg@nvidia.com>
+CC: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <pierre.gondois@arm.com>,
+	<ionela.voinescu@arm.com>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<corbet@lwn.net>, <rdunlap@infradead.org>, <ray.huang@amd.com>,
+	<gautham.shenoy@amd.com>, <mario.limonciello@amd.com>, <perry.yuan@amd.com>,
+	<zhanjie9@hisilicon.com>, <linux-pm@vger.kernel.org>,
+	<linux-acpi@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<acpica-devel@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-tegra@vger.kernel.org>, <treding@nvidia.com>, <jonathanh@nvidia.com>,
+	<vsethi@nvidia.com>, <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>,
+	<nhartman@nvidia.com>, <bbasu@nvidia.com>
+References: <20260120145623.2959636-1-sumitg@nvidia.com>
+ <20260120145623.2959636-6-sumitg@nvidia.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <20260120145623.2959636-6-sumitg@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemf200001.china.huawei.com (7.202.181.227)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.46 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+X-Spamd-Result: default: False [-1.96 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41285-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41286-lists,linux-pm=lfdr.de];
+	DMARC_POLICY_ALLOW(0.00)[huawei.com,quarantine];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FREEMAIL_CC(0.00)[linaro.org,kernel.org,pengutronix.de,gmail.com,vger.kernel.org,lists.linux.dev,lists.infradead.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[danielbaluta@gmail.com,linux-pm@vger.kernel.org];
-	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	DKIM_TRACE(0.00)[huawei.com:+];
+	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
 	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:email,mail.gmail.com:mid,dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns,pengutronix.de:email]
-X-Rspamd-Queue-Id: 32062642F3
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhenglifeng1@huawei.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	R_SPF_SOFTFAIL(0.00)[~all];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:mid,huawei.com:dkim,nvidia.com:email,ams.mirrors.kernel.org:helo,ams.mirrors.kernel.org:rdns]
+X-Rspamd-Queue-Id: DB24964896
 X-Rspamd-Action: no action
 
-On Thu, Jan 22, 2026 at 7:54=E2=80=AFAM Jacky Bai <ping.bai@nxp.com> wrote:
->
-> On i.MX8MM, the GPUMIX, GPU2D, and GPU3D blocks share a common reset
-> domain. Due to this hardware limitation, powering off/on GPU2D or GPU3D
-> also triggers a reset of the GPUMIX domain, including its ADB400 port.
-> However, The ADB400 interface must always be placed into power=E2=80=91do=
-wn
-> before being reset.
->
-> Currently the GPUMIX and GPU2D/3D power domains rely on runtime PM to
-> handle dependency ordering. In some corner cases, the GPUMIX power=E2=80=
-=91off
-> sequence is skipped, leaving the ADB400 port active when GPU2D/3D resets.
-> This causes the GPUMIX ADB400 port to be reset while still active,
-> leading to unpredictable bus behavior and GPU hangs.
->
-> To avoid this, refine the power=E2=80=91domain control logic so that the =
-GPUMIX
-> ADB400 port is explicitly powered down and powered up as part of the GPU
-> power=E2=80=91domain on/off sequence. This ensures proper ordering and pr=
-events
-> incorrect ADB400 resets.
->
-> Suggested by: Lucas Stach <l.stach@pengutronix.de>
+On 2026/1/20 22:56, Sumit Gupta wrote:
+> Extend cppc_set_epp_perf() to write both auto_sel and energy_perf
+> registers when they are in FFH or SystemMemory address space.
+> 
+> This keeps the behavior consistent with PCC case where both registers
+> are already updated together, but was missing for FFH/SystemMemory.
+> 
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+> ---
+>  drivers/acpi/cppc_acpi.c | 24 +++++++++++++++++++++---
+>  1 file changed, 21 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index de35aeb07833..45c6bd6ec24b 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -1562,6 +1562,8 @@ int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
+>  	struct cpc_register_resource *auto_sel_reg;
+>  	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+>  	struct cppc_pcc_data *pcc_ss_data = NULL;
+> +	bool autosel_ffh_sysmem;
+> +	bool epp_ffh_sysmem;
+>  	int ret;
+>  
+>  	if (!cpc_desc) {
+> @@ -1572,6 +1574,11 @@ int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
+>  	auto_sel_reg = &cpc_desc->cpc_regs[AUTO_SEL_ENABLE];
+>  	epp_set_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
+>  
+> +	epp_ffh_sysmem = CPC_SUPPORTED(epp_set_reg) &&
+> +		(CPC_IN_FFH(epp_set_reg) || CPC_IN_SYSTEM_MEMORY(epp_set_reg));
+> +	autosel_ffh_sysmem = CPC_SUPPORTED(auto_sel_reg) &&
+> +		(CPC_IN_FFH(auto_sel_reg) || CPC_IN_SYSTEM_MEMORY(auto_sel_reg));
+> +
+>  	if (CPC_IN_PCC(epp_set_reg) || CPC_IN_PCC(auto_sel_reg)) {
+>  		if (pcc_ss_id < 0) {
+>  			pr_debug("Invalid pcc_ss_id for CPU:%d\n", cpu);
+> @@ -1597,11 +1604,22 @@ int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
+>  		ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+>  		up_write(&pcc_ss_data->pcc_lock);
+>  	} else if (osc_cpc_flexible_adr_space_confirmed &&
+> -		   CPC_SUPPORTED(epp_set_reg) && CPC_IN_FFH(epp_set_reg)) {
+> -		ret = cpc_write(cpu, epp_set_reg, perf_ctrls->energy_perf);
+> +		   (epp_ffh_sysmem || autosel_ffh_sysmem)) {
+> +		if (autosel_ffh_sysmem) {
+> +			ret = cpc_write(cpu, auto_sel_reg, enable);
+> +			if (ret)
+> +				return ret;
+> +		}
+> +
+> +		if (epp_ffh_sysmem) {
+> +			ret = cpc_write(cpu, epp_set_reg,
+> +					perf_ctrls->energy_perf);
+> +			if (ret)
+> +				return ret;
+> +		}
 
-Correct tag here is:
+Don't know if such a scenario exists, but if one of them is in PCC and the
+other is in FFH or system memory, only the one in PCC will be updated
+based on your modifications.
 
-Suggested-by: Lucas Stach <l.stach@pengutronix.de>
+>  	} else {
+>  		ret = -ENOTSUPP;
+> -		pr_debug("_CPC in PCC and _CPC in FFH are not supported\n");
+> +		pr_debug("_CPC in PCC/FFH/SystemMemory are not supported\n");
+>  	}
+>  
+>  	return ret;
 
-Also, no need for a new line between tags.
->
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 
