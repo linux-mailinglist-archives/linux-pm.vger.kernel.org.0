@@ -1,176 +1,153 @@
-Return-Path: <linux-pm+bounces-41258-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41259-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YNFODLmGcWk1IAAAu9opvQ
-	(envelope-from <linux-pm+bounces-41258-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 03:08:57 +0100
+	id WMYtE7WJcWk1IAAAu9opvQ
+	(envelope-from <linux-pm+bounces-41259-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 03:21:41 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8131360B7E
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 03:08:56 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA45A60D5C
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 03:21:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CC95A8268AE
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 02:06:37 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CD3B8407903
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 02:18:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6956C31960A;
-	Thu, 22 Jan 2026 02:06:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ek/RC051"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8AC938A702;
+	Thu, 22 Jan 2026 02:18:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [61.152.208.219])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF2830C615
-	for <linux-pm@vger.kernel.org>; Thu, 22 Jan 2026 02:06:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B188389E0B
+	for <linux-pm@vger.kernel.org>; Thu, 22 Jan 2026 02:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=61.152.208.219
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769047587; cv=none; b=cH6G6ZOASu3mIaHLW6/cMyYiQ9jxA0+NDgLZ8eDQ1qH/rwo/HTszrZQEeZyEp+NfqNjkw6G5dDDWDcZejSIjDGlW37p336xr8O6N7CJRHgjIC2tppMQuPPNduN+PlVcnCjJVomFHVb4NF6CSF/L3UI0hjL7mcqQSg76ox1MnnxI=
+	t=1769048313; cv=none; b=GK6u1tHcwI+IC2M3SL6bMzFaHdMd/37H49SVnfd35ZbKVD3lW18w5hTu0de5FJ4+w8bQd0rtJmev2KyJxMvqfOk7M2pO23DJXLVukWYbbYgKF4n4SxjqUKuEyHSmqj0Z7xvgoG9qDIagmuK6sqxFINTptETDJU9EJWLaC27pUPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769047587; c=relaxed/simple;
-	bh=U+dvsWtDZv50Oz4kWfPVIu70ozgI5yQ4sMPjpZG3iBs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kqrpDXv7x8NZ04Jj75lZeIJdfS8ex7qjbdmKYJp247PdgLMGhxppfdp31H12qWJvlCS8XaES/8p9N7oWQhMbntBwUsnkMFSqVXZTt0Y1R6R+tUPufd/Q3+05B92RaNjL6f/s/Irvs1D9YzjPHOy8W8OBu6FKuEyIjB86gNfV56U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ek/RC051; arc=none smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-11f36012fb2so862827c88.1
-        for <linux-pm@vger.kernel.org>; Wed, 21 Jan 2026 18:06:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769047584; x=1769652384; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q1aetEum6/U73Ku2v3eVebk2UGZPppByGVWbKAtEnsY=;
-        b=ek/RC051nbknkJE9D8rX7RmceR/BjaWh4iisbyieGca43Z9nt66b6Tie7GqxNUp3RM
-         gYLBRhJCfzzampawBYAFZJE48eswjVqTI0bu/4GmNKMZ/6xxvBsKl9LWmR5N6tf6FCYx
-         EYgZxjuXofgzrqui5lZfBlzYw+IMaAeaMsH5d9cRf4+cjtKMSSNOl/OunOEQvYStFgNk
-         eyxVoJaLtvz8Q2GD+SxlZ6j2VEhhXK9a3BKHgIVp5gjTrujtA09FyhUJREQJ0HXrvsBB
-         jq2eP3IsOn5QP9SdWAIMpEuB17itH72Ir9xu406779MUHDpfHX19R/SSnWgLaOBhV6v7
-         bi2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769047584; x=1769652384;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q1aetEum6/U73Ku2v3eVebk2UGZPppByGVWbKAtEnsY=;
-        b=cfLlnPRKa+s6cLVmGm/Aw7jyg2sZANoUXExOTFZYQMFZ/kVA5plk6La27g4G5IKGig
-         8zvUziiZGQeI1BvXAbqpunc9BtXW+i6uUiDCjmLgenKir10VNrdagt9G3azC1uyXaqRZ
-         1NNmxXHPBkYk7HPTWyZWg3ieZRpUQzrgkY1k+n7sH8SIkxWtUXNpxC87knT/y6xXxVy9
-         X1q3avfK04gEPjoXYIYNxHc9qYdipLojvkDzY3+Xp9skdFCupWE5IadJxxIxd4bBgkab
-         XfQvzj1O+rkXDb528ZKEvXfUVBKXx1nhxzqYyPozA9uWl9jb8MC+1chhE9/Y3CFbQJhT
-         XrCw==
-X-Forwarded-Encrypted: i=1; AJvYcCWn1M3/zLBnPgl+tUJ4dd6qWBsc7Uyz6BNL7YBjhd4PuxKz7T70RQea9ANtf+g9vqCBQa1n1lzuEA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywl1mesFG8zTM7cf0XTxdkNmJmoYeJFztwCROOtCK/OxTeu/b7S
-	RfIM/RInrVLTWJqMCWm20UeGHdPU/ZO3OJBffS34+aeNtdqeI42aVOtJ
-X-Gm-Gg: AZuq6aKcxAJFl8Zus3/1ovvq6eX0nxALPjdLWNLY4JCywc/NzkZbrmRpUxNqW5sMXNf
-	Yp8Wt+/7hSIxVbRKRr/pRujEm7LxIGFJ9tZBG2jyNa7H8OqNE0Vowt30oe7ZpHUL4WOFmymhklq
-	S8OvKBvQag0OMmmvoLiwzPj4TMQKLRXLzEPZ00wPULTax7swLBXGBK0VWIw7F9fJJ69cKXLHMhu
-	peCIJov7B+Yef+RTmeAQ37B2FZdaynh8JeBDrSgdvVxacFs55RcJ21kl48L7u+srLGUyivYSXxL
-	FI7eCEvLx4v64/e3mZXAe4bUB2XspAMFe6iWyhtDz+kdjmqmPqFybafXCJhgKAeE3na3kwM5Z9Z
-	YYrsTZJRpsYsfXgCB39SVj6eOuOfMeD6xF8DuzUX73tfbU9NBTq+T0Azp4uPy4yU7oH7QJ+5biZ
-	o5qJrCufIQyxN+AEeY4sNTr+3w7LesEkVVxzqAZVy/3J7xBTd+6rEm
-X-Received: by 2002:a05:7022:6b8b:b0:123:3345:810e with SMTP id a92af1059eb24-1244b35fb92mr12923849c88.31.1769047584138;
-        Wed, 21 Jan 2026 18:06:24 -0800 (PST)
-Received: from google.com ([2a00:79e0:2ebe:8:abb8:3a31:328a:3594])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1244ac58140sm25248140c88.4.2026.01.21.18.06.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jan 2026 18:06:23 -0800 (PST)
-Date: Wed, 21 Jan 2026 18:06:20 -0800
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux ACPI <linux-acpi@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v1] ACPI: PM: Adjust messages regarding postponed ACPI PM
-Message-ID: <fzcmlu2iew2sc7dvooig43c6kkzk74rj5gkseenyvhjesakepu@qn2256b4i6zw>
-References: <5969819.DvuYhMxLoT@rafael.j.wysocki>
+	s=arc-20240116; t=1769048313; c=relaxed/simple;
+	bh=mc8oAqdPKTrLSgBk9ssD4ehgVOIYktLIFwYhAv2PF6g=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=T7V3PRbRHV7lg7T/dHmSdlVR2YjhmfKfI0ZkwxuzNxuuFJYWHj7R/SDtK+Vc/vhhSBJNW6FpoaBlj4Uq1XJV3bNsAafBjmuCqf90Fc4LIaSaAdirDb9uehV0/laUMBmZxFOs1AheD85ooLuIAo7QifcazhKzoHc/rvqjVeWUceU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=61.152.208.219
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1769048306-1eb14e7c0425a80001-MQbzy6
+Received: from ZXBJMBX03.zhaoxin.com (ZXBJMBX03.zhaoxin.com [10.29.252.7]) by mx2.zhaoxin.com with ESMTP id BsFZw2z7U3h3jF4U (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 22 Jan 2026 10:18:26 +0800 (CST)
+X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
+Received: from ZXSHMBX1.zhaoxin.com (10.28.252.163) by ZXBJMBX03.zhaoxin.com
+ (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.59; Thu, 22 Jan
+ 2026 10:18:25 +0800
+Received: from ZXSHMBX1.zhaoxin.com ([fe80::936:f2f9:9efa:3c85]) by
+ ZXSHMBX1.zhaoxin.com ([fe80::936:f2f9:9efa:3c85%7]) with mapi id
+ 15.01.2507.059; Thu, 22 Jan 2026 10:18:25 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.7
+Received: from [10.32.64.8] (10.32.64.8) by ZXBJMBX03.zhaoxin.com
+ (10.29.252.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.59; Thu, 22 Jan
+ 2026 10:13:28 +0800
+Message-ID: <c138c3dc-14ab-4daa-bbed-3cbe5d7c33e4@zhaoxin.com>
+Date: Thu, 22 Jan 2026 10:13:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5969819.DvuYhMxLoT@rafael.j.wysocki>
+User-Agent: Mozilla Thunderbird
+From: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Subject: Re: [PATCH] cpufreq: Add CPU frequency policy change notification
+ support
+To: Viresh Kumar <viresh.kumar@linaro.org>
+X-ASG-Orig-Subj: Re: [PATCH] cpufreq: Add CPU frequency policy change notification
+ support
+CC: <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
+	<LeoLiu-oc@zhaoxin.com>, <LindaChai@zhaoxin.com>
+References: <20260120092445.5711-1-TonyWWang-oc@zhaoxin.com>
+ <pdp3oabac4g6bakm46w5wj7edl446dqhggdfrlke55gniuju5b@jzodjar7tc2e>
+ <345044bb-15e8-48d3-bc03-d5f327aeb3ae@zhaoxin.com>
+ <qlcwa27dujkhxdyeminfzc3435xdz6z7bc627hd4fukr5qbhiw@anrsyspxw4mz>
+Content-Language: en-US
+In-Reply-To: <qlcwa27dujkhxdyeminfzc3435xdz6z7bc627hd4fukr5qbhiw@anrsyspxw4mz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ ZXBJMBX03.zhaoxin.com (10.29.252.7)
+X-Moderation-Data: 1/22/2026 10:18:18 AM
+X-Barracuda-Connect: ZXBJMBX03.zhaoxin.com[10.29.252.7]
+X-Barracuda-Start-Time: 1769048306
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 1166
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.153386
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [-1.26 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41258-lists,linux-pm=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_ALL(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dmitrytorokhov@gmail.com,linux-pm@vger.kernel.org];
-	RCPT_COUNT_THREE(0.00)[4];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8131360B7E
+	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
+	R_DKIM_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DMARC_NA(0.00)[zhaoxin.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:helo,ams.mirrors.kernel.org:rdns];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[TonyWWang-oc@zhaoxin.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	R_SPF_SOFTFAIL(0.00)[~all];
+	TAGGED_FROM(0.00)[bounces-41259-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: BA45A60D5C
 X-Rspamd-Action: no action
 
-On Tue, Jan 13, 2026 at 02:38:41PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+
+On 2026/1/21 18:02, Viresh Kumar wrote:
 > 
-> The debug messages added by commit f7599be2bb76 ("ACPI: PM: postpone
-> bringing devices to D0 unless we need them") in acpi_subsys_resume_early()
-> and acpi_subsys_resume() are not quite accurate because what is postponed
-> is not just a transition to D0, but also an adjustment of the device's
-> wakeup setting (which may involve disabling a GPE among other things).
-> Moreover, these messages don't even mention ACPI.
 > 
-> Rephrase them and adjust the style to match other messages in device_pm.c.
+> On 21-01-26, 16:37, Tony W Wang-oc wrote:
+>> The expectation is to register a notifier of type CPUFREQ_POLICY_NOTIFIER
+>> via cpufreq_register_notifier in one of our drivers. The notifier callback
+>> will configure Zhaoxin registers to different values based on the different
+>> cpufreq governors when the event is CPUFREQ_GOVERNOR_CHANGE, thereby
+>> allowing the Zhaoxin hardware to adopt different power management
+>> strategies.
 > 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-Makes sense to me.
-
-Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
-> ---
->  drivers/acpi/device_pm.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> Firstly, for this change to be acceptable, we would need your upstream
+> platform specific changes as well.
 > 
-> --- a/drivers/acpi/device_pm.c
-> +++ b/drivers/acpi/device_pm.c
-> @@ -1251,7 +1251,7 @@ static int acpi_subsys_resume_early(stru
->  		return 0;
->  
->  	if (pm && !pm->resume_early) {
-> -		dev_dbg(dev, "postponing D0 transition to normal resume stage\n");
-> +		dev_dbg(dev, "Postponing ACPI PM to normal resume stage\n");
->  		return 0;
->  	}
->  
-> @@ -1273,7 +1273,7 @@ static int acpi_subsys_resume(struct dev
->  	int ret = 0;
->  
->  	if (!dev_pm_skip_resume(dev) && pm && !pm->resume_early) {
-> -		dev_dbg(dev, "executing postponed D0 transition\n");
-> +		dev_dbg(dev, "Applying postponed ACPI PM\n");
->  		ret = acpi_dev_resume(dev);
->  	}
->  
+> And then I am still not sure if this it the right way to solve this
+> problem.
+> 
+The driver for Zhaoxin using this patch still needs further verification 
+on actual platforms; it cannot yet be submitted to the mainline. 
+However, we have already verified that this patch itself has no issues 
+with Zhaoxin's driver.
 
-Thanks.
+ From the perspective of this patch itself, we think it provides the 
+capability to perceive changes in cpufreq policy for all modules 
+concerned, and it can serve not just this Zhaoxin driver.
 
--- 
-Dmitry
+Sincerely
+TonyWWang-oc
 
