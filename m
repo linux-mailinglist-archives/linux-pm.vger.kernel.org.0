@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-41311-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41312-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wMOTOJJccml7jAAAu9opvQ
-	(envelope-from <linux-pm+bounces-41311-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 18:21:22 +0100
+	id UBUoEypfcmnbjAAAu9opvQ
+	(envelope-from <linux-pm+bounces-41312-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 18:32:26 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FEEE6B1E3
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 18:21:22 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDD636B5A1
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 18:32:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 164F331AAAB6
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 16:44:40 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 9386530FB02D
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 17:00:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0A5F344D87;
-	Thu, 22 Jan 2026 16:26:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC85385ECA;
+	Thu, 22 Jan 2026 16:33:27 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345312C11C6;
-	Thu, 22 Jan 2026 16:26:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1243587D9;
+	Thu, 22 Jan 2026 16:33:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769099172; cv=none; b=aEN6hPXRNrMfZFzYxmErd4rddyit9HZru6wUMRfiSZAT+Lfq9iIjir9zRFCL1WDHSSp0rp7iKFfoGsTDqumQQyC457CTnwtfzUqH9v8z+Xw7Y/NninLx76IeOtADPAjHdVr6W+7o+7m4KYD74BobStBAzJxUZswvzqpKa5XS//Q=
+	t=1769099605; cv=none; b=KaO6V5b4gZxVldpEIIwMvYEvZFf2ucsB2S7pzcksBvsodlI4EJsXQpmi9xPm1cfAsHKO3sJEg3hLfJdQe/yEh4IEqeceuIuFcVap4XKRvfdv3iUJeaxG4nAUIwvx3omwQNPo0MlvIRRjiHtYk2LRSc4GJVhWvEPaRD3mPZ4oMdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769099172; c=relaxed/simple;
-	bh=Yux+13WebJSh2CuLYkyVFAPCg7jEDaQF1QMBa/gn6mw=;
+	s=arc-20240116; t=1769099605; c=relaxed/simple;
+	bh=wn1urjTtvfUYYMyYs8VAtdp6iF2y3WhCtxkayhL+ioU=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PHsQ0ngjMkbIr5p7yRB7MQ0yl3Zp4G6MpH7mR36nF63FvQYcVoxUuNIU4ql3ok6ZSc56/5VhFoMLCu/RSYJU0ZpQGFLqtv4a4pgugaFLGonuFBPlsH6D89lRA7NKd7jwNmBn+GAnX3uXlUH5CIymjNq8s9a2A4vx/Qsfq3hWwIg=
+	 MIME-Version:Content-Type; b=c3Vgvm3AvRGr5Jhd0efFuoPqloejYlv0epc5yNLbJ4fME8aJJCtYtu7oqWozo7eDVOhiOxbqYnoxXDSpaCwHeeayvXU3wDFfiKGqmbN3hPlZcJXI1kGkOpZ8mQqw/L81dX1eZD1a4wwYe+YbkLl1UzPmKnsG5pNLJl1HHY9KghI=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.224.150])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dxmcz1cPBzHnGdN;
-	Fri, 23 Jan 2026 00:25:23 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4dxmnM5ltlzHnGf4;
+	Fri, 23 Jan 2026 00:32:39 +0800 (CST)
 Received: from dubpeml500005.china.huawei.com (unknown [7.214.145.207])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3626740563;
-	Fri, 23 Jan 2026 00:25:59 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id C56264056A;
+	Fri, 23 Jan 2026 00:33:15 +0800 (CST)
 Received: from localhost (10.203.177.15) by dubpeml500005.china.huawei.com
  (7.214.145.207) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 22 Jan
- 2026 16:25:57 +0000
-Date: Thu, 22 Jan 2026 16:25:56 +0000
+ 2026 16:33:14 +0000
+Date: Thu, 22 Jan 2026 16:33:13 +0000
 From: Jonathan Cameron <jonathan.cameron@huawei.com>
 To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
 CC: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
@@ -62,12 +62,11 @@ CC: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
 	<terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>, Benjamin Cheatham
 	<benjamin.cheatham@amd.com>, Zhijian Li <lizhijian@fujitsu.com>, Borislav
  Petkov <bp@alien8.de>, Tomasz Wolski <tomasz.wolski@fujitsu.com>
-Subject: Re: [PATCH v5 4/7] cxl/region: Add helper to check Soft Reserved
- containment by CXL regions
-Message-ID: <20260122162556.0000184d@huawei.com>
-In-Reply-To: <20260122045543.218194-5-Smita.KoralahalliChannabasappa@amd.com>
+Subject: Re: [PATCH v5 5/7] dax: Introduce dax_cxl_mode for CXL coordination
+Message-ID: <20260122163313.00003e22@huawei.com>
+In-Reply-To: <20260122045543.218194-6-Smita.KoralahalliChannabasappa@amd.com>
 References: <20260122045543.218194-1-Smita.KoralahalliChannabasappa@amd.com>
-	<20260122045543.218194-5-Smita.KoralahalliChannabasappa@amd.com>
+	<20260122045543.218194-6-Smita.KoralahalliChannabasappa@amd.com>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -84,7 +83,7 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	DMARC_POLICY_QUARANTINE(1.50)[huawei.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -93,7 +92,7 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	RCPT_COUNT_TWELVE(0.00)[32];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-41311-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41312-lists,linux-pm=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FROM_HAS_DN(0.00)[];
@@ -101,32 +100,69 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[jonathan.cameron@huawei.com,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	NEURAL_HAM(-0.00)[-0.999];
 	MID_RHS_MATCH_FROM(0.00)[];
 	R_DKIM_NA(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[amd.com:email,huawei.com:mid,huawei.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3FEEE6B1E3
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,amd.com:email]
+X-Rspamd-Queue-Id: EDD636B5A1
 X-Rspamd-Action: no action
 
-On Thu, 22 Jan 2026 04:55:40 +0000
+On Thu, 22 Jan 2026 04:55:41 +0000
 Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> wrote:
 
-> Add a helper to determine whether a given Soft Reserved memory range is
-> fully contained within the committed CXL region.
+> Introduce dax_cxl_mode to coordinate between dax_cxl and dax_hmem when
+> handling CXL tagged memory ranges.
 > 
-> This helper provides a primitive for policy decisions in subsequent
-> patches such as co-ordination with dax_hmem to determine whether CXL has
-> fully claimed ownership of Soft Reserved memory ranges.
+> This patch defines the dax_cxl_mode enum and establishes a default policy.
+> Subsequent patches will wire this into dax_cxl and dax_hmem to decide
+> whether CXL tagged memory ranges should be deferred, registered or
+> dropped.
 > 
-> No functional changes are introduced by this patch.
-
-Given it's not used yet, I'd not have this line of description.
-We tend to say things like that on refactor patches.
-
+> No functional changes.
 > 
 > Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
+> ---
+>  drivers/dax/bus.c | 3 +++
+>  drivers/dax/bus.h | 8 ++++++++
+>  2 files changed, 11 insertions(+)
+> 
+> diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
+> index fde29e0ad68b..72bc5b76f061 100644
+> --- a/drivers/dax/bus.c
+> +++ b/drivers/dax/bus.c
+> @@ -24,6 +24,9 @@ DECLARE_RWSEM(dax_region_rwsem);
+>   */
+>  DECLARE_RWSEM(dax_dev_rwsem);
+>  
+> +enum dax_cxl_mode dax_cxl_mode = DAX_CXL_MODE_DEFER;
+> +EXPORT_SYMBOL_GPL(dax_cxl_mode);
+> +
+>  #define DAX_NAME_LEN 30
+>  struct dax_id {
+>  	struct list_head list;
+> diff --git a/drivers/dax/bus.h b/drivers/dax/bus.h
+> index cbbf64443098..a40cbbf1e26b 100644
+> --- a/drivers/dax/bus.h
+> +++ b/drivers/dax/bus.h
+> @@ -41,6 +41,14 @@ struct dax_device_driver {
+>  	void (*remove)(struct dev_dax *dev);
+>  };
+>  
+> +enum dax_cxl_mode {
+I'd suggest kernel-doc for these. Their meaning isn't entirely obvious
+from the names.
+
+> +	DAX_CXL_MODE_DEFER,
+> +	DAX_CXL_MODE_REGISTER,
+> +	DAX_CXL_MODE_DROP,
+> +};
+> +
+> +extern enum dax_cxl_mode dax_cxl_mode;
+> +
+>  int __dax_driver_register(struct dax_device_driver *dax_drv,
+>  		struct module *module, const char *mod_name);
+>  #define dax_driver_register(driver) \
 
 
