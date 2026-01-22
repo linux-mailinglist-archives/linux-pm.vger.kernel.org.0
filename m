@@ -1,192 +1,250 @@
-Return-Path: <linux-pm+bounces-41321-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41322-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cPBfOhtscmnckQAAu9opvQ
-	(envelope-from <linux-pm+bounces-41321-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 19:27:39 +0100
+	id APx1JMJpcmnckQAAu9opvQ
+	(envelope-from <linux-pm+bounces-41322-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 19:17:38 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B9906C671
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 19:27:39 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E04F96C325
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 19:17:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B63423012165
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 17:50:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4CF60300275D
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 18:17:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB47E3612C8;
-	Thu, 22 Jan 2026 17:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A44237475B;
+	Thu, 22 Jan 2026 18:17:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="FUnbEHcI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I9x4C6I1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-dl1-f46.google.com (mail-dl1-f46.google.com [74.125.82.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74EF34DCC7
-	for <linux-pm@vger.kernel.org>; Thu, 22 Jan 2026 17:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 438AC358D23
+	for <linux-pm@vger.kernel.org>; Thu, 22 Jan 2026 18:17:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769104211; cv=none; b=Vr+XkIUDi1XtteFjBPGBp4eLBS2CfSD/GvJsDxTb3t4XmTBqoGCVhcjeRcwoLgV9hm7NfHHI5qcH8JI/Yv21tI6c8KNM8AqaZGw1TRvkXriPebfLEQBZjKw7illQPCkIOp52tV3NYHJuBUC00pVA6LNKIrikiZ0Cc3POo7uo7h4=
+	t=1769105854; cv=none; b=bG5ezppdMmFsHhh2TmRk2zn3ytqjLAbCJAVESKEt/FC/454nd1G5mpzWVFR7f+CIJYfJJB8QyOEKF3afPKOsl88/bjAv5lTNHe25NTT4GacHf26x2oHV8Se7iELUOc3W/ztboKafJDAGaJPnvvJdqH/Lskc2NlItzZFbSAEE9cE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769104211; c=relaxed/simple;
-	bh=Fy3XirdW3o4O+QTo79Ey4FXxvk1xhYIcaqrUFj49MDY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VGe6iTb4azieLe0YtJbKo2WcsjY6kiccJa+9Sy+7VAOxFIpXGjiYpShPWreOfb5M3yY24L6LTJ/K3z01UwjJ3JtlSI1s+AmUC7WVAHZtBnubo1Vkwj5BmArwfjwNqL1v7nbIs437f7BQXz0gji/kZ0wgbqKkS9ifTOrHdpzZqPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=FUnbEHcI; arc=none smtp.client-ip=74.125.82.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-dl1-f46.google.com with SMTP id a92af1059eb24-121a0bcd376so3486263c88.0
-        for <linux-pm@vger.kernel.org>; Thu, 22 Jan 2026 09:49:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1769104183; x=1769708983; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Cts/XmrIsitUkgW4W0CPI9+Y5A4oJrjzrlI5Y9vqVAc=;
-        b=FUnbEHcINfzrYaeQhEuTNy4kGslu9mp46Mq5Qinf3z8vY1geZH0osl34Mtmw3GXf35
-         rDX3D+99W8wn0o1SVPrYJHun4mo5OzD7LC8w7Rn3I6h82TW8FPRszv7Y5RwWBzj8oEzd
-         SZJrnu5rkwXwao29Wmo3IuwpMzm5OQr4pToyI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769104183; x=1769708983;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cts/XmrIsitUkgW4W0CPI9+Y5A4oJrjzrlI5Y9vqVAc=;
-        b=pXxRV3Ewdy6H4WQ1TqeJVsxe6cAuhbyaQw9Y6N+JqdcimvbP0rZyv5NeeTby9eiaS6
-         RXtnV5CMFXAGbPSpXO4LxHr4l7n9Q82Dee4BzkGFyhkdXlk3fFPuosWLlcdX8EwSy3+D
-         sfqLuEaEkQnR3LyJ/4ljrgiCuedvmuQDN4SaTOVrTwP5Z1UATbK1FgxYXXqe3/MOtBym
-         3z1aS2tBAMJh13PhP5cyDUyZCNpIEZuuGA+O9vWAh7H+Mi2rakTXfNiLJqSqPx5p9xbq
-         ETe0/8iQ2R3e9uUnsvoYBWmGFpAY0e4p9R0VjDE5R2apKHEs+m7QmolI4ncSK6SBvOcm
-         Zvdg==
-X-Forwarded-Encrypted: i=1; AJvYcCW6ULMZ3f/YuIT7UztPeEcEONxCEKKy3DQ4Wqzr2OPThCZIhU6GRaOdU9MlEZWMvpHSPh/WqwNmrQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnVXyHWt3Fo/oN4mfF12ngDLmh3t9vJqXGq80K3OEVGKDhyrvd
-	AB3++21qJkAO+SWyqw31oE7fONBjozZ4S5LfvEX6Eal13pkxcxLSYBT6oFOvrPkdGw==
-X-Gm-Gg: AZuq6aIexbxnmzgLo2hFO0uAYtOR8+/abcPmfbdcoFGf48FHcqE8a6S4C9MLN2y29o+
-	jcWBoPRTAyguyPwKLUtMn1g8ivkIU7boIB49fVrzsCtaM9WRd6J1tOFJK4w5/mANq+/80XvJgLX
-	ZfkpHz5bv840xTKamK+VFN6i8M82th5eYYyNGgftllv55LhQ+WDnmr8lJpdKrtbSqDJJ/Tksofc
-	HcAHrxZuVoVQSiuxQOUIicszJYRiIOnTgUzbmq38QFSDe1I4dDrIr4KgN3+mOkVA+CyhFJymHAB
-	oPRM4r8ivVteuZzCFaRuvN2BcXl87gS6WeK6dM1jyOJSgeN5Ml8m+uW1D5U5TFnGDJOll41bL0L
-	0i9NMSFWOPKcsLhF8uLZpSs0zF93YmInQXW9OqEBfjmEwzvGMdb7pai/52UbNwucAbqsTxUevsW
-	kfJPd/Fo8aJLx9+JCbPbGBsgin0dN8PDJi1m/94NF5+wpv3loC+w==
-X-Received: by 2002:a05:7022:660c:b0:119:e56b:c75a with SMTP id a92af1059eb24-1247dbf8d14mr61525c88.31.1769104183224;
-        Thu, 22 Jan 2026 09:49:43 -0800 (PST)
-Received: from localhost ([2a00:79e0:2e7c:8:f995:553f:5ab5:f684])
-        by smtp.gmail.com with UTF8SMTPSA id a92af1059eb24-1247d997f7bsm197174c88.11.2026.01.22.09.49.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jan 2026 09:49:42 -0800 (PST)
-Date: Thu, 22 Jan 2026 09:49:41 -0800
-From: Brian Norris <briannorris@chromium.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: Re: [PATCH v4] PCI/PM: Prevent runtime suspend before devices are
- fully initialized
-Message-ID: <aXJjNfqcZrXw1_h2@google.com>
-References: <20260106222715.GA381397@bhelgaas>
- <CGME20260114094643eucas1p1a2fdc6c35dd27741c18831b34bbed0c8@eucas1p1.samsung.com>
- <0e35a4e1-894a-47c1-9528-fc5ffbafd9e2@samsung.com>
- <aWf4KyTSIocWTmXw@google.com>
- <61e8c93c-d096-4807-b2dd-a22657f2e06a@samsung.com>
- <aWrjhqC_6I2UNXC5@google.com>
- <CAJZ5v0hWt63=0yjFrbTY8zXubh-Uc6ZwAndT73VL7itMkTe81A@mail.gmail.com>
+	s=arc-20240116; t=1769105854; c=relaxed/simple;
+	bh=TmssjQpy0gPeI3MvETkTe0akq0ZNsQvtV6a0dJ+okhw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Oz3RkJ+BdVaRmf3LnKxDY5G6xAXf23EwUKQY7e3BcHX2D2pO/VYmVCVfd8z44TRJQ0Ffgjel1pNqrKdXosrouc/1GPrwR//nYalakj6Lebi61NiBOb4ALs/G7MszCPOBOom9m4MOTFE3qlppdnQrl0lWRqEc66Fd0UirJq4D9fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I9x4C6I1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35E28C116C6
+	for <linux-pm@vger.kernel.org>; Thu, 22 Jan 2026 18:17:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769105853;
+	bh=TmssjQpy0gPeI3MvETkTe0akq0ZNsQvtV6a0dJ+okhw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=I9x4C6I1tVd6MneyDRpEC5aNSbSXQxQXTallrhnZUDPGKw2Le8t5QgATR+9w9ri9B
+	 E/aGkLfdAJ4gXQuC4YO1SH3SPgeYrECuSmyEA0lRkd98DBjYm2LqMvYgHx20T0ebOh
+	 tRSe2k6Mx2ejq0rcXtqy1+Qegs41Cd/4uTsQIJ+hnRKjhure5ZNdrp1jxHeJgLsIja
+	 SYVMkIK/Jl+A/B80TRlY+gFBDCuoGI/n+nIF0D42Fgd6/F200LzdDZZWTlsmbbOgp7
+	 mLUpJrQVLW4QAiF3Gz90QW1SmUWa5gFt9dyafAj/gHNayT41uzXLTCNXo+8L49zsFM
+	 oTpeSebRgubMw==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-3f9ebb269c3so596560fac.3
+        for <linux-pm@vger.kernel.org>; Thu, 22 Jan 2026 10:17:33 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWkGvbG6C++eYf1h1jmutxde5BVa7lMuTW7GTG+Ca2VAbIt8QlgCfxm4u7pfg33V8IshMgdgwMX7A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywxnk+6dej0fKe3mpCIcoS/BoP1N80JJ2/spfOmQvR12i9PLK4l
+	cvHN2uSnkZrziGKn0STtmKOXzNEOInblr2MUvbbf1H+dhf2E7DwO/v3IPIRvWywZOCHsOx3Hu4j
+	bEcNtzZPmN1sszB6fgOYc3I3vpr7zUr4=
+X-Received: by 2002:a05:6820:8188:b0:65c:2501:6c79 with SMTP id
+ 006d021491bc7-662cab9db87mr321159eaf.59.1769105852230; Thu, 22 Jan 2026
+ 10:17:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hWt63=0yjFrbTY8zXubh-Uc6ZwAndT73VL7itMkTe81A@mail.gmail.com>
+References: <20260122094815.v5.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
+In-Reply-To: <20260122094815.v5.1.I60a53c170a8596661883bd2b4ef475155c7aa72b@changeid>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 22 Jan 2026 19:17:21 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iBNOmMtqfqEbrYyuK2u+2J2+zZ-iQd1FvyCPjdvU2TJg@mail.gmail.com>
+X-Gm-Features: AZwV_QjB3_rEGhESO5nhmyv1QvYjfK0Xx62wIlqHdgeo9nkRC28i7dwynrvApHE
+Message-ID: <CAJZ5v0iBNOmMtqfqEbrYyuK2u+2J2+zZ-iQd1FvyCPjdvU2TJg@mail.gmail.com>
+Subject: Re: [PATCH v5] PCI/PM: Prevent runtime suspend until devices are
+ fully initialized
+To: Brian Norris <briannorris@chromium.org>
+Cc: Bjorn Helgaas <bhelgaas@google.com>, linux-kernel@vger.kernel.org, 
+	linux-pci@vger.kernel.org, Lukas Wunner <lukas@wunner.de>, linux-pm@vger.kernel.org, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[chromium.org,none];
-	R_DKIM_ALLOW(-0.20)[chromium.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41321-lists,linux-pm=lfdr.de];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	DKIM_TRACE(0.00)[chromium.org:+];
-	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41322-lists,linux-pm=lfdr.de];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[briannorris@chromium.org,linux-pm@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-0.999];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,chromium.org:email,chromium.org:dkim]
-X-Rspamd-Queue-Id: 8B9906C671
+	RCPT_COUNT_SEVEN(0.00)[9];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[samsung.com:email,chromium.org:email,mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E04F96C325
 X-Rspamd-Action: no action
 
-Hi Rafael,
+On Thu, Jan 22, 2026 at 6:49=E2=80=AFPM Brian Norris <briannorris@chromium.=
+org> wrote:
+>
+> Previously, it was possible for a PCI device to be runtime-suspended befo=
+re
+> it was fully initialized. When that happened, the suspend process could
+> save invalid device state, for example, before BAR assignment. Restoring
+> the invalid state during resume may leave the device non-functional.
+>
+> Prevent runtime suspend for PCI devices until they are fully initialized =
+by
+> deferring pm_runtime_enable().
+>
+> More details on how exactly this may occur:
+>
+>   1. PCI device is created by pci_scan_slot() or similar
+>
+>   2. As part of pci_scan_slot(), pci_pm_init() puts the device in D0 and
+>      prevents runtime suspend prevented via pm_runtime_forbid()
+>
+>   3. pci_device_add() adds the underlying 'struct device' via device_add(=
+),
+>      which means user space can allow runtime suspend, e.g.,
+>
+>        echo auto > /sys/bus/pci/devices/.../power/control
+>
+>   4. PCI device receives BAR configuration
+>      (pci_assign_unassigned_bus_resources(), etc.)
+>
+>   5. pci_bus_add_device() applies final fixups, saves device state, and
+>      tries to attach a driver
+>
+> The device may potentially be suspended between #3 and #5, so this is rac=
+y
+> with user space (udev or similar).
+>
+> Many PCI devices are enumerated at subsys_initcall time and so will not
+> race with user space, but devices created later by hotplug or modular
+> pwrctrl or host controller drivers are susceptible to this race.
+>
+> More runtime PM details at the first Link: below.
+>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> Cc: stable@vger.kernel.org
+> Link: https://lore.kernel.org/all/20251016155335.1.I60a53c170a8596661883b=
+d2b4ef475155c7aa72b@changeid/
+> Link: https://lore.kernel.org/all/0e35a4e1-894a-47c1-9528-fc5ffbafd9e2@sa=
+msung.com/
+>
+> Link: https://lore.kernel.org/all/20251016155335.1.I60a53c170a8596661883b=
+d2b4ef475155c7aa72b@changeid/
+> Cc: <stable@vger.kernel.org>
+> ---
+>
+> Changes in v5:
+>  * Put pm_runtime_set_active() back where it was, to ensure our parent
+>    can't suspend before we're really ready. (See bug report in 2nd
+>    "Link:")
+>  * Add comments
+>  * Update commit description with Bjorn's rewrite
+>  * Add Marek's Tested-by
+>
+> Changes in v4:
+>  * Move pm_runtime_set_active() too
+>
+> Changes in v3:
+>  * Add Link to initial discussion
+>  * Add Rafael's Reviewed-by
+>  * Add lengthier footnotes about forbid vs allow vs sysfs
+>
+> Changes in v2:
+>  * Update CC list
+>  * Rework problem description
+>  * Update solution: defer pm_runtime_enable(), instead of trying to
+>    get()/put()
+>
+>  drivers/pci/bus.c | 7 +++++++
+>  drivers/pci/pci.c | 5 ++++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
+> index 4383a36fd6ca..90954f81962b 100644
+> --- a/drivers/pci/bus.c
+> +++ b/drivers/pci/bus.c
+> @@ -15,6 +15,7 @@
+>  #include <linux/of.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/proc_fs.h>
+>  #include <linux/slab.h>
+>
+> @@ -379,6 +380,12 @@ void pci_bus_add_device(struct pci_dev *dev)
+>                 put_device(&pdev->dev);
+>         }
+>
+> +       /*
+> +        * Enable runtime PM (and potentially suspend) only after we've f=
+ully
+> +        * configured the PCI state.
+> +        */
 
-Thanks for your thoughts!
+I would make it a bit more precise, something like "Enable runtime PM,
+which potentially allows the device to suspend immediately, only after
+the PCI state has been configured completely."
 
-On Sun, Jan 18, 2026 at 12:53:21PM +0100, Rafael J. Wysocki wrote:
-> On Sat, Jan 17, 2026 at 2:19 AM Brian Norris <briannorris@chromium.org> wrote:
-> > I suppose one way to "solve" that is (untested):
-> >
-> > --- a/drivers/pci/bus.c
-> > +++ b/drivers/pci/bus.c
-> > @@ -380,8 +380,12 @@ void pci_bus_add_device(struct pci_dev *dev)
-> >                 put_device(&pdev->dev);
-> >         }
-> >
-> > +       if (dev->dev.parent)
-> > +               pm_runtime_get_sync(dev->dev.parent);
-> >         pm_runtime_set_active(&dev->dev);
-> >         pm_runtime_enable(&dev->dev);
-> > +       if (dev->dev.parent)
-> > +               pm_runtime_put(dev->dev.parent);
-> >
-> >         if (!dn || of_device_is_available(dn))
-> >                 pci_dev_allow_binding(dev);
-> >
-> > Personally, I'm more inclined to go back to v1, since it prepares the
-> > runtime PM status when the device is first discovered. That way, its
-> > ancestors are still active, avoiding these sorts of problems. I'm
-> > frankly not sure of all the reasons Rafael recommended I make the
-> > v1->v3->v4 changes, and now that they cause problems, I'm inclined to
-> > question them again.
-> >
-> > Rafael, do you have any thoughts?
-> 
-> Yeah.
-> 
-> Move back pm_runtime_set_active(&dev->dev) back to pm_runtime_init()
-> because that would prevent the parent from suspending and keep
-> pm_runtime_enable() here because that would prevent the device itself
-> from suspending between pm_runtime_init() and this place.
+Also, it is not particularly what "we" means in kernel code comments,
+so I generally avoid phrasing them this way.
 
-I'll admit, I was a little fuzzy on the details of the first part of the
-sentence here -- specifically, that an "active" (but still "disabled")
-device will prevent suspend of its parent. I suppose I'm more familiar
-with the typical "disabled and suspended" device, which essentially has
-no effect on its parent.
+> +       pm_runtime_enable(&dev->dev);
+> +
+>         if (!dn || of_device_is_available(dn))
+>                 pci_dev_allow_binding(dev);
+>
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 13dbb405dc31..07b0d029aa51 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -3196,8 +3196,11 @@ void pci_pm_init(struct pci_dev *dev)
+>  poweron:
+>         pci_pm_power_up_and_verify_state(dev);
+>         pm_runtime_forbid(&dev->dev);
+> +       /*
+> +        * Mark ourselves active now, to prevent our parent from suspendi=
+ng
+> +        * while we finish configuring the PCI device.
+> +        */
 
-Anyway, that's basically v3, so I rerolled a v5 that looks similar.
+I would rephrase the comment this way:
 
-> And I would add comments in both places.
+"Runtime PM will be enabled for the device when it has been fully
+configured, but since its parent and suppliers may suspend in the
+meantime, prevent them from doing so by changing the device's runtime
+PM status to "active"."
 
-I tried to add a short comment to each. It's an art form to write
-exactly the right size of comment to make everyone happy (people
-complain about too much commenting, and then others complain about
-non-obvious behaviors that could have used more comments), especially
-when it comes to something as tricky as runtime PM. At least I tried...
-
-Brian
+>         pm_runtime_set_active(&dev->dev);
+> -       pm_runtime_enable(&dev->dev);
+>  }
+>
+>  static unsigned long pci_ea_flags(struct pci_dev *dev, u8 prop)
+> --
 
