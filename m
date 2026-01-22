@@ -1,245 +1,198 @@
-Return-Path: <linux-pm+bounces-41302-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41303-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AEl+JL5BcmnpfAAAu9opvQ
-	(envelope-from <linux-pm+bounces-41302-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 16:26:54 +0100
+	id qDr3DI48cmnTfAAAu9opvQ
+	(envelope-from <linux-pm+bounces-41303-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 16:04:46 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0944568C0E
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 16:26:54 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D0AC686D430
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 14:42:10 +0000 (UTC)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF7EA6853B
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 16:04:45 +0100 (CET)
+Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
+	by sea.lore.kernel.org (Postfix) with ESMTP id D046530177BC
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 15:02:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A5134AAE2;
-	Thu, 22 Jan 2026 14:41:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 629B634F47C;
+	Thu, 22 Jan 2026 15:01:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hz/q2RQy"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="LDgSjIzp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7477315D25;
-	Thu, 22 Jan 2026 14:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFF4339B3C;
+	Thu, 22 Jan 2026 15:01:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769092902; cv=none; b=TODOsQiUZid5auD2BkqHHpU1EQONW3jxucakNC84hXjzpt0cESwY0yTfnSzdL6abWdenmAXpbYbeni/w75rxokUZ5nT9qhoE/LPNOJgxtu0fI7yFbU95XfzLPE2P2r97z6Q1OdPNTw2MdunMBLf2sXbFU0OxBn9liqmQKWV/8CA=
+	t=1769094079; cv=none; b=DMxtutgv/9vTsYVT7XQzl7QhgCi7ImsoeAvNv703xTdxj6zzK+65nMYmd7tHwzkCpdGYVOAfYw3cOIgjnOa+XLMSknTqBGYJkKcCZsevfW4Gip7ecAnjXiQW8xDYBAcxyK5/I3nbyXF7WCy0GggIXFPw2vhto0BCcaqghLxOQfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769092902; c=relaxed/simple;
-	bh=zG0ILCbJZHZjRnNt+ywYJAScfiKo16BgeNrGUkNybjA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lIxIFKW97pplqNjvxDzTVCzZXx18gKPpVBwsUrKMVYm8Va3kFvIHiiyBjVo8eKy2M/Mr3ghD4E3DZT2s/feNzPTjp79ZYuBNmXrdkxLi5srkol6ClP9q5HxPfeQFr7cQN7jlMV/Umz2PjYA41Mt1/6j1NsL1LV5wYULMC40letY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hz/q2RQy; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60M0x22w010093;
-	Thu, 22 Jan 2026 14:40:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=X66k6uCJZ5ko/KQv3KFeFir9muTBP/
-	s+7BdrEE2gUT4=; b=hz/q2RQyPn5Dzqkzk/U2F4B+j8cOEeNGwn2IbOqfoaTFd9
-	aEYCbCVjmz6/i0z0ZdNj6myQtYBaizWiJrU9q7OTKEX+vpNw4sikty1Y2L4iusgn
-	kTFUlX67VCx6NgvE6d7JiaJOUGXWpL2zB6iaXHVMmdQdWPbHXgHfjs2GFVsUv2vz
-	/wrnLPtUZx87LvTNN76N0KZWLlY+z4i5Kk/JbPj1Rxcw4FCJBYpSN+KySvQ5Zzhm
-	FzZdrlqOBucY7006jd3V0uybg8lv/5dNMBC9q9rTGXLC3dFAMujNikqR6wTRTRJJ
-	VH8ECVJvGh7Nl10KZVS8YQ15yqQpTUqjx2tUmMDA==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bqyukh136-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jan 2026 14:40:53 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60MEebR0009462;
-	Thu, 22 Jan 2026 14:40:52 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bqyukh134-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jan 2026 14:40:52 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60MDVv7Z009266;
-	Thu, 22 Jan 2026 14:40:52 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4brp8kjmvf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 22 Jan 2026 14:40:51 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60MEeloG8782198
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 22 Jan 2026 14:40:48 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CEDEC20043;
-	Thu, 22 Jan 2026 14:40:47 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 49A7E20040;
-	Thu, 22 Jan 2026 14:40:47 +0000 (GMT)
-Received: from osiris (unknown [9.52.214.206])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 22 Jan 2026 14:40:47 +0000 (GMT)
-Date: Thu, 22 Jan 2026 15:40:45 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
-        Joel Fernandes <joelagnelf@nvidia.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
-        Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Xin Zhao <jackzxcui1989@163.com>, linux-pm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 05/15] s390/time: Prepare to stop elapsing in
- dynticks-idle
-Message-ID: <20260122144045.38254A3e-hca@linux.ibm.com>
-References: <20260116145208.87445-1-frederic@kernel.org>
- <20260116145208.87445-6-frederic@kernel.org>
- <20260121121748.9719Bab-hca@linux.ibm.com>
- <aXEVM-04lj0lntMr@localhost.localdomain>
+	s=arc-20240116; t=1769094079; c=relaxed/simple;
+	bh=0LC2JUV8CUJ2J1XRF5YZfCktBg9LAbLRSIFc8a3lxPA=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=GeMrwrS3H36b8yb6ZZEGc/7QKRFRGVdd1Ju3sX+2ZF+p/28D+KRqM/VwiOSiXrhdvdymm4e4MTlzacBE+/7nHRaIdJXlGX8vCvGV1xi3sPlbyhJDiZfxTyE+vZlLIHJz2Bq4RDMiQVZp0Y5MJWmsW9LlEiUI51Gb9rWP5yoe1h4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=LDgSjIzp; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1769094069; x=1769698869; i=markus.elfring@web.de;
+	bh=0LC2JUV8CUJ2J1XRF5YZfCktBg9LAbLRSIFc8a3lxPA=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=LDgSjIzpu5pPGPM0NY9ZQrk94d87rbNAee5i8spe/P2E8YEXf1QzP/mmHBuqPoJt
+	 lOZbRJGGCrKZKOJQ6uIc1CDj++RMjZdFtGyy28Gab7RYFS9hovG3GezQ2KghVCe/v
+	 L+PBuV3K22Q+r9MMw0s1YJcd2LFvzTm/U+25ABqporJJ2I0AomggC9mj2shM+Gt/5
+	 qrhjEzABpYuWhYV8tWv+dqN8bYEVOrLD29I/4nzU07Z64jHbgZw+h7/5sW/s0qIIa
+	 Y+9kMEbaNQ9zcR7VJHgATCb0qSS1Trd7rzczPklqaWsPwLpzHpCuiVxljqa39Bulb
+	 R1a9gr6XWOYW4nRyXw==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.92.239]) by smtp.web.de (mrweb005
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1MECGX-1vbTv61lxd-00AEfw; Thu, 22
+ Jan 2026 16:01:09 +0100
+Message-ID: <a69e08ea-c4b6-43a5-95ca-eba9263e8211@web.de>
+Date: Thu, 22 Jan 2026 16:01:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aXEVM-04lj0lntMr@localhost.localdomain>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIyMDEwOCBTYWx0ZWRfX8gLINXy+Z9k3
- JUXospF8/2ZiRx312Y+OKWseVZGg87tW/AHi3UlcOjuT+Z1ExuPuMqf1XJENc88uV/QlgzIgZf4
- i9BOxDLnNqkoy1U+F+zL8nKfx/iMZ47ifh+bMF1jASfSP9hUZOW0SvObci+fUL2S6kNuFs2NNCy
- M7gWzPQvuGQ7jkCt3ccOoUyPrHNzmdmR2ZOlLi132uYlRwE4YgDA6y3fwQKLwScwus2fPLRP7QU
- t7q44dK3dIevzpjTIMgpwqQqz2b97Y8miAVV/kV9XhMYiekT97153mrZNtubhE6vGNzuV3+6L99
- KOb/6f0FpqLNyo0XGv02dabyOIq6sNrZ882gNUENb5MCikihkUj8iMli3jkpFzLQdV+RMeaETfa
- pspBiqzdAE3Mjb8l5abEAWTYui9hnRG5KJF80dn71yWAl/GoMOoIjKdgPYkTPjAMzQxvNbLnbBh
- JztBjQeZzudk2cE9YAA==
-X-Authority-Analysis: v=2.4 cv=bsBBxUai c=1 sm=1 tr=0 ts=697236f5 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=tulLadCw3Y6qvbDvsxgA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: 7VXiPjiK4Lzhma9iWRs041PVpUTj7AwF
-X-Proofpoint-GUID: NDKlZuiFLoyGkNxQOUrbSEnRaNfS7StP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-22_02,2026-01-22_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 phishscore=0 lowpriorityscore=0 bulkscore=0
- impostorscore=0 malwarescore=0 clxscore=1015 adultscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2601220108
+User-Agent: Mozilla Thunderbird
+To: Felix Gu <ustc.gu@gmail.com>, imx@lists.linux.dev, kernel@pengutronix.de,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+ Fabio Estevam <festevam@gmail.com>, Peng Fan <peng.fan@nxp.com>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Shawn Guo <shawnguo@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+References: <20260121-b4-scu-pd-v1-1-f993e4082089@gmail.com>
+Subject: Re: [PATCH] firmware: imx: scu-pd: Fix device_node reference leak in
+ imx_sc_pd_get_console_rsrc()
+Content-Language: en-GB, de-DE
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20260121-b4-scu-pd-v1-1-f993e4082089@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:+H6pZaKyymJWYd84hJBe78XHubU65IuQq4W/oAJCt2DHb+OJ4kS
+ CFhYbrMFxabwIGt9Co6NhWSfcOJGJUzZjki4pWXLU7WZHng9St0qLcMt9pcS6jmuQCOI1g+
+ WcNhVuHLbZybqbTyMmupbaT8DqbGm45ARgG7sN+qw7vYJ+rbKzYKXG741z+PtgeG/GDzkD2
+ z/89F3VUqiFEEB9wzls6w==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:2pLqjF6h4A0=;ylnJFJCx+YvnX2kdFqnx2MUK9kt
+ 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
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.54 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[ibm.com:s=pp1];
+	DMARC_POLICY_ALLOW(-0.50)[web.de,quarantine];
+	R_DKIM_ALLOW(-0.20)[web.de:s=s29768273];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41302-lists,linux-pm=lfdr.de];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,linux.ibm.com,linutronix.de,google.com,gmail.com,arm.com,redhat.com,siemens.com,nvidia.com,suse.de,ellerman.id.au,infradead.org,goodmis.org,linaro.org,163.com,lists.ozlabs.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41303-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[34];
+	FREEMAIL_FROM(0.00)[web.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	MIME_TRACE(0.00)[0:+];
-	DMARC_POLICY_ALLOW(0.00)[ibm.com,none];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_TO(0.00)[gmail.com,lists.linux.dev,pengutronix.de,lists.infradead.org,vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[web.de:+];
 	TO_DN_SOME(0.00)[];
-	R_SPF_SOFTFAIL(0.00)[~all];
+	MID_RHS_MATCH_FROM(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hca@linux.ibm.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[ibm.com:+];
-	RCVD_COUNT_TWELVE(0.00)[13];
-	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
+	FROM_NEQ_ENVFROM(0.00)[Markus.Elfring@web.de,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,nxp.com,gmail.com,pengutronix.de,kernel.org,linaro.org];
 	TAGGED_RCPT(0.00)[linux-pm];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns,linux.ibm.com:mid]
-X-Rspamd-Queue-Id: 0944568C0E
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: CF7EA6853B
 X-Rspamd-Action: no action
 
-On Wed, Jan 21, 2026 at 07:04:35PM +0100, Frederic Weisbecker wrote:
-> BTW here is a question for you, does the timer (as in get_cpu_timer()) still
-> decrements while in idle? I would assume not, given how lc->system_timer
-> is updated in account_idle_time_irq().
+=E2=80=A6
+> In imx_sc_pd_get_console_rsrc(), it does not release the reference.
 
-It is not decremented while in idle (or when the hypervisor schedules
-the virtual cpu away). We use the fact that the cpu timer is not
-decremented when the virtual cpu is not running vs the real
-time-of-day clock to calculate steal time.
+See also once more:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/submitting-patches.rst?h=3Dv6.19-rc6#n94
 
-> And another question in this same function is this :
-> 
->     lc->steal_timer += idle->clock_idle_enter - lc->last_update_clock;
-> 
-> clock_idle_enter is updated right before halting the CPU. But when was
-> last_update_clock updated last? Could be either task switch to idle, or
-> a previous idle tick interrupt or a previous idle IRQ entry. In any case
-> I'm not sure the difference is meaningful as steal time.
-> 
-> I must be missing something.
-
-"It has been like that forever" :) However I do agree that this doesn't seem
-to make any sense. At least with the current implementation I cannot see how
-that makes sense, since the difference of two time stamps, which do not
-include any steal time are added.
-
-Maybe it broke by some of all the changes over the years, or it was always
-wrong, or I am missing something too.
-
-Will investigate and address it if required. Thank you for bringing this up!
-
-> > Not sure what to do with this. I thought about removing those sysfs files
-> > already in the past, since they are of very limited use; and most likely
-> > nothing in user space would miss them.
-> 
-> Perhaps but this file is a good comparison point against /proc/stat because
-> s390 vtime is much closer to measuring the actual CPU halted time than what
-> the generic nohz accounting does (which includes more idle code execution).
-
-Yes, while comparing those files I also see an unexpected difference of
-several seconds after two days of uptime; that is before your changes.
-
-In theory the sum of idle and iowait in /proc/stat should be the same like the
-per-cpu idle_time_us sysfs file. But there is a difference, which shouldn't be
-there as far as I can tell. Yet another thing to look into.
-
-> > Guess I need to spend some more time on accounting and see what it would take
-> > to convert to VIRT_CPU_ACCOUNTING_GEN, while keeping the current precision and
-> > functionality.
-> 
-> I would expect more overhead with VIRT_CPU_ACCOUNTING_GEN, though that has yet
-> to be measured. In any case you'll lose some idle cputime precision (but
-> you need to read that through s390 sysfs files) if what we want to measure
-> here is the actual halted time.
-> 
-> Perhaps we could enhance VIRT_CPU_ACCOUNTING_GEN and nohz idle cputime
-> accounting to match s390 precision. Though I expect some cost
-> accessing the clock inevitably more often on some machines.
-
-Let me experiment with that, but first I want to understand the oddities
-pointed out above.
+Regards,
+Markus
 
