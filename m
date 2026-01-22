@@ -1,171 +1,202 @@
-Return-Path: <linux-pm+bounces-41300-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41301-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mH2RITM2cmmadwAAu9opvQ
-	(envelope-from <linux-pm+bounces-41300-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 15:37:39 +0100
+	id eGH/MDs0cmmadwAAu9opvQ
+	(envelope-from <linux-pm+bounces-41301-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 15:29:15 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAF816801C
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 15:37:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 79C6767F21
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 15:29:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D996E50B2D6
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 13:40:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E39938E6265
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 13:44:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC68830FC37;
-	Thu, 22 Jan 2026 13:40:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96CDE318EFC;
+	Thu, 22 Jan 2026 13:44:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JKcA7luV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MiijZP2P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA0552F39A3;
-	Thu, 22 Jan 2026 13:40:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60FEC26A0A7;
+	Thu, 22 Jan 2026 13:44:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769089245; cv=none; b=BYsMuoYmhSQKSuUDdHlCqVWVVvu8+viF6awreJLp5bOZxYH7Cmn+hhksWocbwLX4/RuWu5zC/nJMygh/0AbECOMfz39B3VQCCViiIPXwPa3jC4hcBqfLGF6zZ9VOcZNPzN9pRnvvro92xIen/aYtwhJLQOagf7VF8V0bGOBwSes=
+	t=1769089492; cv=none; b=A7FhzhOB1NTTfL2F7mm2cdUuSyn1SBKMy/IaQQS2yABEjFpeubxD+Tgu9j2Rez3NkyG/zmlgaxmSxx8Ykk5LvbgPRdT2utMtPxunsV196nk5gBNrU/zbfrZsBEHc3zllSVlSLlwQqIcHTE55Zjsj8uBvuqsQ2+5P6+ItzRXaKqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769089245; c=relaxed/simple;
-	bh=Yy88WumMQAcgbaUQHL0fvgadfLS+HaqFVLxycPPXXV8=;
+	s=arc-20240116; t=1769089492; c=relaxed/simple;
+	bh=j8JEqlvIFnXt9gGEm0Oheoh75nKbbz8Bdg2iudx4Y8w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DqTHGeUHV36Xj09oA0VEqLZ7I0dAP8hRPR7lL+4A2u2S5wq/mroSkDs3b50IUXYFOrZGwiBYVSUgClaSd1QW33Fsgj6koMtWGDW2mdceVlYQS4NbbNIt/hXsPYaFmvuezQk9DNXT9tlPwzz/Y97UAF1n1tQkvi8qmGiK0i2S/Gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JKcA7luV; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769089243; x=1800625243;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Yy88WumMQAcgbaUQHL0fvgadfLS+HaqFVLxycPPXXV8=;
-  b=JKcA7luVPGr4Ak6T8G+TWKUZuBm8Zojq2A8srXHNazB2vCR/YyuwSOHI
-   vSbiSpft6Lup9S99b99VAjHRlmLFw9wC27TX3VVwHaiNpo22ZYX8d6HFg
-   sBlSXZ5Wzgv6A41ZgpX5MEVZOz6WuPjuZ+GTFW9gCiocjqhA5U0qAg6vR
-   MgsiQtg6wyVC1/zzRvZlcu9sU+sZmGB10WggFY5ISpZ5nMojSSJjSoQ1q
-   PXReF0CTU2pULsymGU03YsFUp1umiJpnrb9DXAqn87Htm5sXHFAN1krWu
-   NUsfAovlJB7k69C2L7TiARGy6Pn4q1n1noynz0ig0YjOkBW8J6tD05bZ9
-   g==;
-X-CSE-ConnectionGUID: XJwskSpoQaOB1wi1ptDaYA==
-X-CSE-MsgGUID: dklZKz6XQLyMZxDAYUVIJQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="69347965"
-X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
-   d="scan'208";a="69347965"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 05:40:42 -0800
-X-CSE-ConnectionGUID: hGEU0bdURHi+hgCa+Mv4zg==
-X-CSE-MsgGUID: hBI2IIdNR4SFhsa2xbjIzg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
-   d="scan'208";a="207171546"
-Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
-  by fmviesa009.fm.intel.com with ESMTP; 22 Jan 2026 05:40:36 -0800
-Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1viuvJ-000000000VB-0Mh6;
-	Thu, 22 Jan 2026 13:40:33 +0000
-Date: Thu, 22 Jan 2026 14:40:07 +0100
-From: kernel test robot <lkp@intel.com>
-To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
-	linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-	nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
-	Li Ming <ming.li@zohomail.com>,
-	Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
-	Ying Huang <huang.ying.caritas@gmail.com>,
-	Yao Xingtao <yaoxt.fnst@fujitsu.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Nathan Fontenot <nathan.fontenot@amd.com>,
-	Terry Bowman <terry.bowman@amd.com>,
-	Robert Richter <rrichter@amd.com>,
-	Benjamin Cheatham <benjamin.cheatham@amd.com>,
-	Zhijian Li <lizhijian@fujitsu.com>
-Subject: Re: [PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of
- Soft Reserved memory ranges
-Message-ID: <202601221448.OYyjVxEC-lkp@intel.com>
-References: <20260122045543.218194-7-Smita.KoralahalliChannabasappa@amd.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=eAW7eew5ggT9JIpyjSfqUoSgtpc6bbJhLGct0kz6kUsdnqShdLQkV7OLVz22c5QVDkvn5MdrPq6+ZBgy1OPV7w8lzvh9B5TRbXrL3HOmzkMHVyJjIpJEDndHnN5/jZtxUCXHvoX4f996H3gqgantmq2fX/Om+NZBW5X2yOes/Xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MiijZP2P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C125C116C6;
+	Thu, 22 Jan 2026 13:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769089491;
+	bh=j8JEqlvIFnXt9gGEm0Oheoh75nKbbz8Bdg2iudx4Y8w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MiijZP2PgQ7cWwM/BrL4/aHqDuWgWt7buVDitzOLLgQdCeGQbRri9VRoWsknB6BOs
+	 MW4NXW6W74RdY0fAsK6Bdd8gp3rRRx5EUSq74/zd+Y3DQk3JDvoomz7nvfQXW4sYLt
+	 5NK4v3hzZ1ozM6HXvxIyYNRKjNtql6nEd8fORfMN3aJ57Fm0fNPpqIpF07lBZJNEqe
+	 bh1lrnUZrr3xfZB+VMQmhgzNd1DvOX4XxCozUKLJsUOQjxjF4TFLjOaa5sReHLH4/Q
+	 rdTHw5qscsZCtb4v7dlQUXKGr6CN30WBw/AIPOWvt9r6gzUfBUhamrC89amGEuE/MZ
+	 erbPngC11saWw==
+Date: Thu, 22 Jan 2026 14:44:49 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: Daniel Almeida <daniel.almeida@collabora.com>, 
+	Alice Ryhl <aliceryhl@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, 
+	Fu Wei <wefu@redhat.com>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-riscv@lists.infradead.org, 
+	linux-pwm@vger.kernel.org, linux-clk@vger.kernel.org, rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
+Message-ID: <20260122-majestic-masterful-jaguarundi-d0abde@houat>
+References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
+ <20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com>
+ <20260108-delectable-fennec-of-sunshine-ffca19@houat>
+ <98CD0BF6-3350-40B9-B8A9-F569AE3E3220@collabora.com>
+ <20260119-thundering-tested-robin-4be817@houat>
+ <aW4lCfUyumOKRRJm@google.com>
+ <518D8B09-B9A1-4DB4-85CD-37A2DD3D5FB1@collabora.com>
+ <DFSLCI9U4NCW.2HI2UPUI7G134@kernel.org>
+ <20260119-weightless-pelican-of-anger-190db0@houat>
+ <DFSN4FDCYHMW.3J3237PEBV2ZP@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="zgoq7kx6iu4jzgjw"
 Content-Disposition: inline
-In-Reply-To: <20260122045543.218194-7-Smita.KoralahalliChannabasappa@amd.com>
+In-Reply-To: <DFSN4FDCYHMW.3J3237PEBV2ZP@kernel.org>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.54 / 15.00];
+X-Spamd-Result: default: False [-2.06 / 15.00];
+	SIGNED_PGP(-2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41300-lists,linux-pm=lfdr.de];
-	FREEMAIL_CC(0.00)[lists.linux.dev,kernel.org,intel.com,huawei.com,amd.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41301-lists,linux-pm=lfdr.de];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FREEMAIL_CC(0.00)[collabora.com,google.com,kernel.org,linaro.org,linux.intel.com,suse.de,gmail.com,ffwll.ch,redhat.com,baylibre.com,garyguo.net,protonmail.com,umich.edu,vger.kernel.org,lists.freedesktop.org,lists.infradead.org];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[33];
-	MIME_TRACE(0.00)[0:+];
-	DMARC_POLICY_ALLOW(0.00)[intel.com,none];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
-	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	FROM_NEQ_ENVFROM(0.00)[mripard@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[29];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,01.org:url,dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns]
-X-Rspamd-Queue-Id: EAF816801C
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: 79C6767F21
 X-Rspamd-Action: no action
 
-Hi Smita,
 
-kernel test robot noticed the following build errors:
+--zgoq7kx6iu4jzgjw
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
+MIME-Version: 1.0
 
-[auto build test ERROR on bc62f5b308cbdedf29132fe96e9d591e526527e1]
+On Mon, Jan 19, 2026 at 03:37:17PM +0100, Danilo Krummrich wrote:
+> On Mon Jan 19, 2026 at 3:18 PM CET, Maxime Ripard wrote:
+> > On Mon, Jan 19, 2026 at 02:13:48PM +0100, Danilo Krummrich wrote:
+> >> On Mon Jan 19, 2026 at 1:54 PM CET, Daniel Almeida wrote:
+> >> >> On 19 Jan 2026, at 09:35, Alice Ryhl <aliceryhl@google.com> wrote:
+> >> >> I think that if you still want an API where you just call enable/di=
+sable
+> >> >> directly on it with no protection against unbalanced calls, then th=
+at
+> >> >> should be the special API. Probably called RawClk and functions mar=
+ked
+> >> >> unsafe. Unbalanced calls seem really dangerous and use should not be
+> >> >> encouraged.
+> >>=20
+> >> +1; and unless there is a use-case that requires otherwise, it should =
+not even
+> >> be possible to do this at all -- at least for driver code.
+> >
+> > I mean, it's great, it's safe, etc. but it's also suboptimal from a PM
+> > perspective on many platforms. It's totally fine to provide nice, safe,
+> > ergonomic wrappers for the drivers that don't care (or can't, really),
+> > but treating a legitimate optimisation as something we should consider
+> > impossible to do is just weird to me.
+>=20
+> I said that an unsafe API with potentially unbalanced calls is something =
+we
+> should clearly avoid for drivers. This is *not* equivalent to "treating a
+> legitimate optimisation as something we should consider impossible".
+>=20
+> If we discover use-cases where the current API doesn't work well, we can
+> invenstigate further.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Smita-Koralahalli/dax-hmem-Request-cxl_acpi-and-cxl_pci-before-walking-Soft-Reserved-ranges/20260122-130032
-base:   bc62f5b308cbdedf29132fe96e9d591e526527e1
-patch link:    https://lore.kernel.org/r/20260122045543.218194-7-Smita.KoralahalliChannabasappa%40amd.com
-patch subject: [PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of Soft Reserved memory ranges
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260122/202601221448.OYyjVxEC-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260122/202601221448.OYyjVxEC-lkp@intel.com/reproduce)
+I'm not sure I'm following what you're saying, sorry. I've pointed out
+such a use-case already.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601221448.OYyjVxEC-lkp@intel.com/
+> >> > I think we should discourage RawClk if at all possible. But if the c=
+onsensus
+> >> > is that we *really* need this easily-abused thing, I can provide a f=
+ollow-up.
+> >>=20
+> >> I think we should only do this if there are use-case with no alternati=
+ve, so far
+> >> there haven't been any AFAIK.
+> >
+> > I don't really care about which alternative we come up with, but look at
+> > devm_regmap_init_mmio_clk for example. It is a valid use-case that
+> > already exists today, and has had for more than a decade at this point.
+>=20
+> I don't see the issue with devm_regmap_init_mmio_clk()? It takes a refere=
+nce
+> count of the clock and prepares it when called and unprepares the clk in =
+drops
+> its reference in regmap_mmio_free_context() called from the devres callba=
+ck.
+>=20
+> That something we can easily do with the current API, no?
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+The current one, yes. Doing that in the API suggested here would involve
+some boilerplate in all those drivers they don't have right now.
 
->> ERROR: modpost: "cxl_bus_type" [drivers/dax/hmem/dax_hmem.ko] undefined!
+Maxime
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--zgoq7kx6iu4jzgjw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaXIp0AAKCRAnX84Zoj2+
+dv/rAX9htC+v4VP6TU5rtpJ5yxn/5pIK0gwosc19iO/daFXAUH7fxYosU1HBuveb
+KxjMgb8BgMuQtaOp2idk6EzXwAecWf/CAQ08Ci5MNA2QR6rNT2nYPbr8TNKaiLWq
+nIzGXz2HvQ==
+=cTWW
+-----END PGP SIGNATURE-----
+
+--zgoq7kx6iu4jzgjw--
 
