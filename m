@@ -1,135 +1,261 @@
-Return-Path: <linux-pm+bounces-41306-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41307-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4Cv1NfhIcmnpfAAAu9opvQ
-	(envelope-from <linux-pm+bounces-41306-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 16:57:44 +0100
+	id 4BQULjtecmnbjAAAu9opvQ
+	(envelope-from <linux-pm+bounces-41307-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 18:28:27 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 490AF69557
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 16:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 059B66B45A
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 18:28:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 20DDB302BE39
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 15:54:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 38C0B3036764
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Jan 2026 16:59:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48B444D8DA9;
-	Thu, 22 Jan 2026 15:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="miPkebd/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 753FE39CB3E;
+	Thu, 22 Jan 2026 16:08:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7304D2EE3;
-	Thu, 22 Jan 2026 15:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DFD439DB28;
+	Thu, 22 Jan 2026 16:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769096979; cv=none; b=XMdnm7A7KFNOd/mor7vuCYCEaebqOUGSkoHS7BiHBedeTWkO7IC+NMFdZn/JSXZ+0qOpjPSGshawgy41X0x0iWoB0gPPApSJEy2ripyVJE2VY0Ywc8gKaUMlSeeml+3xTi2Tpt9QojvnkS/SL3GkyEjgDWsEWTsqk8HgTKXCHWc=
+	t=1769098120; cv=none; b=OV+5X3W9dkirgd/rWgKECcQDz5nx33LREj5ue/wxB6Xa0de3BoMPXAKFYToDhqTdXouQXlYQxwYT3mLw8nPS0/ia74ur6O0Uq95S/B8kdFrCqZLgWbKNjD3lB964McLwIwnKlvD0Jrsvl9BtwDzy+f85f0KMTRV01JXP2+OD0hM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769096979; c=relaxed/simple;
-	bh=jiiGYS7yIEt86jT4gMkHWUd8F/0dtdZtPIKbbDy3cEE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pr3dhAU6MC3SxEhpoCtH4uu6eR2M0sOXc/XHYdzaYqzJDtWD90kJNTAsYRgR6gmiRTBLaZvzyoOH2dqLo8Nq7/BYbYJfvEtVnMR5bg9vqA7ACDBpQtN7J2PM4vzAfQT7eMrixIj7F17Sv3jSImrvCUMKH8pJpx9OsLo8EwCy9Kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=miPkebd/; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769096976; x=1800632976;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jiiGYS7yIEt86jT4gMkHWUd8F/0dtdZtPIKbbDy3cEE=;
-  b=miPkebd/ACFJqdAfckAhUe0S9lVZznjAo5442+Lv3XNnt0vMqQVq8h1w
-   3O20Wm9y24MC/zagXRnwXqqrKKQr/ga7wOvOcnystORsimeFFsovWx9ua
-   oG8USlglkKcbsrw2YZuxmU7yxFBjp4k0Nh5xo7rLjFgi2ITxHH30SiYDl
-   gcn2NitnTt0AZIYV5m59y8m/LGJd7gym1SGFvAdNzOTNc2LK5kptTPW8F
-   F88sZ/KcEcmuLQZWp9D0Gn5/K+78BwwJ5ZrBPfVcC/T4tlUg9LChR4meR
-   8jwCy4XFboDLYYpJf8be7K8FHcF8uosb4UlkT7juVRnN5xjFrOQZnKXG4
-   w==;
-X-CSE-ConnectionGUID: OIw0MkSOT4qEzALw7bL0SQ==
-X-CSE-MsgGUID: XqpO1bvOT5qD+/GLUM/E8Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="87920158"
-X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
-   d="scan'208";a="87920158"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 07:49:33 -0800
-X-CSE-ConnectionGUID: iyeuz8qfSZSiaLkk+7C83Q==
-X-CSE-MsgGUID: zYANt7XOT5CsfP9keON1Tw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
-   d="scan'208";a="206672073"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 07:49:32 -0800
-Date: Thu, 22 Jan 2026 07:55:49 -0800
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: Yaxiong Tian <tianyaxiong@kylinos.cn>
-Cc: srinivas.pandruvada@linux.intel.com, lenb@kernel.org, rafael@kernel.org,
-	viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: intel_pstate: Disable SMT when hybrid systems
- are enabled
-Message-ID: <20260122155549.GA18021@ranerica-svr.sc.intel.com>
-References: <20260119074118.835922-1-tianyaxiong@kylinos.cn>
+	s=arc-20240116; t=1769098120; c=relaxed/simple;
+	bh=CDvASQGEXjam5l5r0343J9RMg/PPU4Ag2Qx848ES1/4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DJyCad9E7M38sTZcs4EkrWooz9RWObLZ2PjVrsGsVmUO8UM1q5vQ2d1IOuhtl7p4YMSdlAM8PRT1Tvfwcb+Ua3NSmaOKH+PFELyptk9i2o0JFMmSjM37bqqqMjMmVEMy4Wnqaz437eGeFV7q8deSDvGo/qtKdiHAdotrR7f06Jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C68B0C2BCAF;
+	Thu, 22 Jan 2026 16:08:36 +0000 (UTC)
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Frank Binns <frank.binns@imgtec.com>,
+	Matt Coster <matt.coster@imgtec.com>,
+	Marek Vasut <marek.vasut@mailbox.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>
+Cc: dri-devel@lists.freedesktop.org,
+	linux-pm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] drm/imagination: Convert to dev_pm_domain_{at,de}tach_list()
+Date: Thu, 22 Jan 2026 17:08:32 +0100
+Message-ID: <194465eda54d1f852a9226cf691ddc5aa208e0a3.1769097977.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260119074118.835922-1-tianyaxiong@kylinos.cn>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.54 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_MISSING_CHARSET(0.50)[];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ranerica-svr.sc.intel.com:mid];
-	TO_DN_SOME(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ricardo.neri-calderon@linux.intel.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41306-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DMARC_NA(0.00)[glider.be];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+]
-X-Rspamd-Queue-Id: 490AF69557
+	RCVD_COUNT_THREE(0.00)[4];
+	PRECEDENCE_BULK(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41307-lists,linux-pm=lfdr.de,renesas];
+	FREEMAIL_TO(0.00)[imgtec.com,mailbox.org,linux.intel.com,kernel.org,suse.de,gmail.com,ffwll.ch];
+	RCPT_COUNT_TWELVE(0.00)[13];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[geert@glider.be,linux-pm@vger.kernel.org];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.998];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,renesas];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 059B66B45A
 X-Rspamd-Action: no action
 
-On Mon, Jan 19, 2026 at 03:41:18PM +0800, Yaxiong Tian wrote:
-> When hwp_is_hybrid && !sched_smt_active(), the driver enables
-> hybrid_capacity_scale and disables ITMT. According to the original code
-> logic, these related actions are one-time operations; therefore, I
-> believe the original design intent did not support dynamic runtime
-> switching.
-> 
-> However, SMT can be toggled via related interfaces in /sys. When SMT is
-> enabled, the system is no longer hybrid, and the original settings become
-> incorrect.
+Call the dev_pm_domain_attach_list() and dev_pm_domain_detach_list()
+helpers instead of open-coding multi PM Domain handling.
 
-Indeed I was able to enable SMT siblings:
+This changes behavior slightly:
+  - The new handling is also applied in case of a single PM Domain,
+  - PM Domains are now referred to by index instead of by name, but
+    "make dtbs_check" enforces the actual naming and ordering anyway,
+  - There are no longer device links created between virtual domain
+    devices, only between virtual devices and the parent device.
+None of this should have an actual impact on functionality.
 
-	$ echo on > /sys/devices/system/cpu/smt
-	$ echo 1 > /sys/devices/system/cpu/cpu1/online
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+Tested lightly on R-Car M3-W: driver probes and firmware is loaded.
+---
+ drivers/gpu/drm/imagination/pvr_device.h |  13 +--
+ drivers/gpu/drm/imagination/pvr_power.c  | 105 ++---------------------
+ 2 files changed, 9 insertions(+), 109 deletions(-)
 
-> 
-> To resolve this confusion, permanently disable SMT by calling
-> cpuhp_smt_disable().
+diff --git a/drivers/gpu/drm/imagination/pvr_device.h b/drivers/gpu/drm/imagination/pvr_device.h
+index 491718fb87a1b608..a823f6f7e0b659c6 100644
+--- a/drivers/gpu/drm/imagination/pvr_device.h
++++ b/drivers/gpu/drm/imagination/pvr_device.h
+@@ -148,19 +148,12 @@ struct pvr_device {
+ 	struct clk *mem_clk;
+ 
+ 	/**
+-	 * @power: Optional power domain devices.
++	 * @pds: Optional power domain devices.
+ 	 *
+ 	 * On platforms with more than one power domain for the GPU, they are
+-	 * stored here in @domain_devs, along with links between them in
+-	 * @domain_links. The size of @domain_devs is given by @domain_count,
+-	 * while the size of @domain_links is (2 * @domain_count) - 1.
++	 * stored here, along with links between them.
+ 	 */
+-	struct pvr_device_power {
+-		struct device **domain_devs;
+-		struct device_link **domain_links;
+-
+-		u32 domain_count;
+-	} power;
++	struct dev_pm_domain_list *pds;
+ 
+ 	/**
+ 	 * @reset: Optional reset line.
+diff --git a/drivers/gpu/drm/imagination/pvr_power.c b/drivers/gpu/drm/imagination/pvr_power.c
+index b9f801c63260cb81..cc6efab3c8b015ce 100644
+--- a/drivers/gpu/drm/imagination/pvr_power.c
++++ b/drivers/gpu/drm/imagination/pvr_power.c
+@@ -594,110 +594,17 @@ pvr_watchdog_fini(struct pvr_device *pvr_dev)
+ int pvr_power_domains_init(struct pvr_device *pvr_dev)
+ {
+ 	struct device *dev = from_pvr_device(pvr_dev)->dev;
++	int ret;
+ 
+-	struct device_link **domain_links __free(kfree) = NULL;
+-	struct device **domain_devs __free(kfree) = NULL;
+-	int domain_count;
+-	int link_count;
+-
+-	char dev_name[2] = "a";
+-	int err;
+-	int i;
+-
+-	domain_count = of_count_phandle_with_args(dev->of_node, "power-domains",
+-						  "#power-domain-cells");
+-	if (domain_count < 0)
+-		return domain_count;
+-
+-	if (domain_count <= 1)
+-		return 0;
+-
+-	link_count = domain_count + (domain_count - 1);
+-
+-	domain_devs = kcalloc(domain_count, sizeof(*domain_devs), GFP_KERNEL);
+-	if (!domain_devs)
+-		return -ENOMEM;
+-
+-	domain_links = kcalloc(link_count, sizeof(*domain_links), GFP_KERNEL);
+-	if (!domain_links)
+-		return -ENOMEM;
+-
+-	for (i = 0; i < domain_count; i++) {
+-		struct device *domain_dev;
+-
+-		dev_name[0] = 'a' + i;
+-		domain_dev = dev_pm_domain_attach_by_name(dev, dev_name);
+-		if (IS_ERR_OR_NULL(domain_dev)) {
+-			err = domain_dev ? PTR_ERR(domain_dev) : -ENODEV;
+-			goto err_detach;
+-		}
+-
+-		domain_devs[i] = domain_dev;
+-	}
+-
+-	for (i = 0; i < domain_count; i++) {
+-		struct device_link *link;
+-
+-		link = device_link_add(dev, domain_devs[i], DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME);
+-		if (!link) {
+-			err = -ENODEV;
+-			goto err_unlink;
+-		}
+-
+-		domain_links[i] = link;
+-	}
+-
+-	for (i = domain_count; i < link_count; i++) {
+-		struct device_link *link;
+-
+-		link = device_link_add(domain_devs[i - domain_count + 1],
+-				       domain_devs[i - domain_count],
+-				       DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME);
+-		if (!link) {
+-			err = -ENODEV;
+-			goto err_unlink;
+-		}
+-
+-		domain_links[i] = link;
+-	}
+-
+-	pvr_dev->power = (struct pvr_device_power){
+-		.domain_devs = no_free_ptr(domain_devs),
+-		.domain_links = no_free_ptr(domain_links),
+-		.domain_count = domain_count,
+-	};
++	ret = dev_pm_domain_attach_list(dev, NULL, &pvr_dev->pds);
++	if (ret < 0)
++		return ret;
+ 
+ 	return 0;
+-
+-err_unlink:
+-	while (--i >= 0)
+-		device_link_del(domain_links[i]);
+-
+-	i = domain_count;
+-
+-err_detach:
+-	while (--i >= 0)
+-		dev_pm_domain_detach(domain_devs[i], true);
+-
+-	return err;
+ }
+ 
+ void pvr_power_domains_fini(struct pvr_device *pvr_dev)
+ {
+-	const int domain_count = pvr_dev->power.domain_count;
+-
+-	int i = domain_count + (domain_count - 1);
+-
+-	while (--i >= 0)
+-		device_link_del(pvr_dev->power.domain_links[i]);
+-
+-	i = domain_count;
+-
+-	while (--i >= 0)
+-		dev_pm_domain_detach(pvr_dev->power.domain_devs[i], true);
+-
+-	kfree(pvr_dev->power.domain_links);
+-	kfree(pvr_dev->power.domain_devs);
+-
+-	pvr_dev->power = (struct pvr_device_power){ 0 };
++	dev_pm_domain_detach_list(pvr_dev->pds);
++	pvr_dev->pds = NULL;
+ }
+-- 
+2.43.0
 
-IMHO, the user should be able to enable SMT back if she or he chooses to. Instead,
-the sched domains should be rebuilt with asym packing and without asymmetric
-capacity.
 
