@@ -1,84 +1,85 @@
-Return-Path: <linux-pm+bounces-41339-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41341-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oOcuHG7LcmlgpgAAu9opvQ
-	(envelope-from <linux-pm+bounces-41339-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 02:14:22 +0100
+	id oONdN4jLcmlgpgAAu9opvQ
+	(envelope-from <linux-pm+bounces-41341-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 02:14:48 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D69276EEF5
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 02:14:21 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58BEC6EF22
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 02:14:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C2C06300850A
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 01:14:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 910BD301D32D
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 01:14:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B7836655A;
-	Fri, 23 Jan 2026 01:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268F22EC55C;
+	Fri, 23 Jan 2026 01:14:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="J3QaCRwG"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="LUyKIaGR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030D81CAA7D
-	for <linux-pm@vger.kernel.org>; Fri, 23 Jan 2026 01:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29F8344DB2
+	for <linux-pm@vger.kernel.org>; Fri, 23 Jan 2026 01:14:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769130856; cv=none; b=p5xFtx0AtlOuXD9ntL9eiUzcc81BmLW6tOUDkXoVrCWQB2BdOhAdONL4ITnjiMmicuA4gdAb9PqNdtU6sjeVfFqZVEGV+V/vMtthoRbSp/5NjUfTVLcaGZszWkAudm/6uj7iClUYgxgDGKz5w1Qo1Chz30ZD7weV5xtBUZovA3g=
+	t=1769130858; cv=none; b=AVGAESIxHnqrkBF+ZIc417iejJ4jhb0ZtUAgfsrIIeYlaYaS9zYAo5m1QaIVJMfH9bPxqj1qXYxz82VT/QNAqcAqMDXRJUo1BWP8rsc+cf/yQovnI1oLQcjaJcbmkK+v5leHL14BVE0j8fA7EECmntJrpVWqCbRWX3YLzrLsDIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769130856; c=relaxed/simple;
-	bh=aY3lzdYo34rzzl5rEA1NOAbbPbFMvxFb3wjxISqu7SQ=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=qRndlXMGOZA9rHzEZIGu9fiNc4anQQKRMU/1Y0yuePEbfeqqBBSqKmGEPLxCzgtGRsP1UH7eDGWoFfNVLpCMupsY5rZ272MHGuXmIW4LqCtuYEYG6nTeMcEsTuSprDSXA2XkgP9d5NNRPod/pEWzYF6u8ZjM5x8vJ9JCjmIf7eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=J3QaCRwG; arc=none smtp.client-ip=209.85.214.176
+	s=arc-20240116; t=1769130858; c=relaxed/simple;
+	bh=lzR3NEhB2g7iCRM+bJ588/XYQ1irfnPbijYHHqE2mb0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=aDmfp+1ws697xvrqrgKiWdKH1ja6svdra8cCoV0Y6jSRBMteARyWtBsT4udIYQX83RuuIo1MIM+TyMqGpm461ftVI+mAj4OGhHviF9db82zSrJOscI+WT/Yoi+usyTnxunEnq3w10pMDINLtf8JI1x1Qr3l3WPZPxhSqYsx3jUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=LUyKIaGR; arc=none smtp.client-ip=209.85.210.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2a7b47a5460so10814475ad.1
-        for <linux-pm@vger.kernel.org>; Thu, 22 Jan 2026 17:14:09 -0800 (PST)
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-81ecbdfdcebso946745b3a.1
+        for <linux-pm@vger.kernel.org>; Thu, 22 Jan 2026 17:14:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1769130847; x=1769735647; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WRGD2YWjrtmwGYVwivTN08CsAVPXSr88y6f4NIlNfN8=;
-        b=J3QaCRwGdyavKFsHN5awhCZf+u1HtFoeQvffyHjMsLC501Rdy/w3ttC4v3J83ekTgb
-         ODqn9SsS5WImJ1hC2CKwxpEAPJ7fuMFWvvd1JkTGFtvGAFP7MAKuIgnbQF4X+3CYBasI
-         MRs13SPzl88zMAoZ6L+SdYNorSU6wga6E5JiY6ZfYuCiE9t6Dl1C2fxHIBl7fCOQVPk1
-         jljLjWNJLrHKrbFU6rZ5Q9kPFDVkLdpyAC8s+UNVvOIX4BJToQ0JL+mFhEQyZRjQzioP
-         3e+Jphy4nHgAdIjoPi/uok63WGgX9/RPU04cRmphDbX+EaljB/MkUuMZitZEcRQevE3L
-         xj8Q==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1769130848; x=1769735648; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aHt+mmH4C5nxGUCfgNrBDFG/vUcO3dbURh+yi1mxNm8=;
+        b=LUyKIaGRIpheIGdp0yKFGdzr0U1qdx5mYQcDms5odjnfkUx37cLKUx7hgJvUVbdU1F
+         uuX0RWhLlNMcix2W6aSeG45R7ET9gGKuk3QtrBVR6YSb3epHMY3Nucwp0zp+XYAJPST2
+         DHL4rN3wyymwZX2yDZtKb+w0JrQkse4s8275juX658M0rD1nW99kJWm8NIp7MPcyN1hu
+         HEisa7voX2PE4rUxF+o7hO72KIEVVPyjgusIqGGl8mxpiiSStTue1ifRJP0utekUOVc1
+         wDWaB1Xh2ISCublU0d+pS77/7JlLQ6a9KuNWrWwCDkGcUazVVgQmreje1yWj/nlBC2c/
+         +yiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769130847; x=1769735647;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WRGD2YWjrtmwGYVwivTN08CsAVPXSr88y6f4NIlNfN8=;
-        b=uBatVG2B1yj9hWUdpPzH04fhmDiwj8jw+zxMBp7xVsLNR+yijlTHD/s8NQ8BOFu2L7
-         Ch8r/fd8hBKRPJnE5PPtR3TIKl8ftfocVCXSeeNpf8RPLyorOtqd5nZuNyyEI8vQbiDe
-         u8I354IdLOkOharS1uQaVj46KWglM+I39ntWPCCsixzZ0i+1Aarb6sSG1AVaA12jkMdb
-         wEx3rVH64pKMrtGxHukwzB8TiAz0e/wuJInlsAUwqM1gEMv0W1T/3gebcE/i0Hpf8wA0
-         kmDdool/sfN9g6KOPHPegMOLdi06P6uRYyPRuWXnZjLvN9Vqp+iMEaQ9K3Po8uMNi5Nq
-         ZiuA==
-X-Forwarded-Encrypted: i=1; AJvYcCW4hwxC420rtqm+WQH4GyDK6Y84esx5xFJvlsVDuDy1xGMEvDT8RnudjTi+Mg3wOWfkvSx30SWpOw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzi8dWpNh+dDm6pNEQHGSjh6v4gINFh8TfYj2/Rppy/DlDX6qq+
-	Bn8Gr0gJIFf9u72UYELa2gzi8Sx9iH6KVatKAPGnY9jv3Isd2xhtP2idN/Yu5hLkTpE=
-X-Gm-Gg: AZuq6aK82z59EtPWWpJkXqPM3XcHU+XOy/B3Hf5Y13sM6Wh8unXzJV/pbqEyWS4CSo6
-	Og9bMvFgDElMhmwMbJyPev+I555fN+YEiTmrW8HSkfCF/s8P04hzxvRLHJeNn5xBqddvo8fXsgl
-	HLkjQY8MOLs7W1+wFkSQltVCU2u6oivCfJA/p/p8+wHIlVx8yRvPj9gLR+jiIrkb8JWOByJkjSd
-	auLHBkGM6PVXNgvoRdv7m6K0WWzPHrCT3XHHnWkuIfkJfTahNPd4c+0Pmye/VlaIhpxg2xY9pzE
-	K71OPKNBCt8senVtd3IJ+mY3PQ8CjT1lK33A9bAiw1jRg8DPJZy/kMkjolQwr34vPhG2ljyt5ua
-	chk3ObaYbOk52pZjRcem1eLazNRmteBtL9AHiklHz8ctSIcDFWVOp3+j+1WqC9yqtaIfYNfnTNj
-	k1mLWjLShY
-X-Received: by 2002:a17:902:f54b:b0:2a0:9238:881d with SMTP id d9443c01a7336-2a7d2f7cca4mr48720845ad.15.1769130847498;
-        Thu, 22 Jan 2026 17:14:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769130848; x=1769735648;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=aHt+mmH4C5nxGUCfgNrBDFG/vUcO3dbURh+yi1mxNm8=;
+        b=Beuj7PhNYT8c6EFiNFWAtbCFPGydwshxaDzPJFIByFMVNLNOU8DXo3/yIH4EBVhOzk
+         sZ8t+/UciixW9VF4nsiw7EhX/jU1Krp6/h0OVaJAIpH/G6eJFFS1RsReyogPcnWmqxG2
+         sVGlncjeY/AsEhTH9RWmrBT4vqlqik/B6D5fFtflGH14phnWvamW0yvCZVW4bV96BJuW
+         inEm2WlMoR5pS8bf7EHj9ZKYFia8Q2El1/r3gMp9qeo7h4JbpStyNFJx1vRfo+sZjCD/
+         K52pNPvUjMrZRrtr+PlOdEtuPsrabJF5L2xo+5BoMb+SvkmuCBp4rSMaVOBpnACq2/Rs
+         6U1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCX8XHxenw01qU4EWuU1c3BuESLV/rqUCbYCgerQgo/Cr0RkF7x0xW9HSay2IMIkl8TqYRi+eutaPQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpNAiCXKcg1yZrakEYgjvABiR9HaqNNfGiEHlxnqIQULv8k/Ph
+	h1XbODNJHCD9upHf7AqHGOkqcSXPjbs0LLM7R2bFoJcPbDKZc7ISDwxM0/iEwTc4u/s=
+X-Gm-Gg: AZuq6aKhdCtOMfEeC24TsidTaPCyzdRISlQBy9st31UmCviBhu3+tGC8AviXjFEuC1u
+	FSGfREUIHs9gOKk0UHJPYbPy3SZwRg3t86QzGbPoj7004HMibWvfLvaGYzcR6dtrrCyLThBgr9i
+	snK7FNVi0HiWBSkAZGrk7V4+0JH1tkkdcB7//IJTth3C7j6uji/PZHQ5xUv2SQtCMIwzaSJV/vH
+	bTmyMI2NMYtEmQ/auODJYwc5O3lfjJ/ZbA37vbCPSWbcCSqFtmB3Ohbvn2IpB2k51njiTbWUi05
+	MMMi8uhi95jqt2Slp1bHxouzY3tTPlhOxAZPjbhCLGRnSBzaPdNR+k2S80IrZF6akBBHu5juHDh
+	+MNxwi3odvWKwfWoqHS8ZuhdJiuhCoGea7t51qZ2O0yM8dtDtgMmxlbmr3c2IgxPo/hjFt4BKcc
+	Tp/6FikEjf
+X-Received: by 2002:a05:6a00:228a:b0:823:ad3:4ff4 with SMTP id d2e1a72fcca58-82317e1f2fbmr995725b3a.37.1769130848424;
+        Thu, 22 Jan 2026 17:14:08 -0800 (PST)
 Received: from localhost ([71.212.200.220])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a802fda160sm3960495ad.88.2026.01.22.17.14.06
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8231876e5d0sm495195b3a.61.2026.01.22.17.14.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 17:14:06 -0800 (PST)
+        Thu, 22 Jan 2026 17:14:07 -0800 (PST)
 From: "Kevin Hilman (TI)" <khilman@baylibre.com>
-Subject: [PATCH RFC v5 0/2] pmdomain: core: add support for domain
- hierarchies in DT
-Date: Thu, 22 Jan 2026 17:13:59 -0800
-Message-Id: <20260122-pmdomain-hierarchy-onecell-v5-0-76855ec856bd@baylibre.com>
+Date: Thu, 22 Jan 2026 17:14:00 -0800
+Subject: [PATCH RFC v5 1/2] pmdomain: core: support domain hierarchy via
+ power-domain-map
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -87,13 +88,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFfLcmkC/43RTWrDMBAF4KsYrTtBkvUXrwqFHqDbksVEHtcC2
- 3Jl19SE3L3CLWkpIWQ5GvgemndiE6VAE6uKE0u0hCnEIQ/6oWC+xeGNINR5ZpJLzbV0MPZ17DE
- M0AZKmHy7QhzIU9cBKtNgrWzttGYZGBM14XPDX9nL8xM75Mc2THNM6xa4iG11j70IEOC0sI5bz
- r1xj0dcu3BMtPOx3+RF3q9J4GCd00hKk977K1r5qxlR3tTKrGlvLTfWNJ7sFU1dNCHE/qamstZ
- IjaLWXMrm/0/P35dN9P6R25p/znvEiSDv+zBXxWJ2OSN5wf7WWBWX+DmOwUM39hAb6HGE7CTMv
- cBiQDhAI5SySpZY+yrf9XA+fwHl5LjwKgIAAA==
-X-Change-ID: 20250528-pmdomain-hierarchy-onecell-a46fad47d855
+Message-Id: <20260122-pmdomain-hierarchy-onecell-v5-1-76855ec856bd@baylibre.com>
+References: <20260122-pmdomain-hierarchy-onecell-v5-0-76855ec856bd@baylibre.com>
+In-Reply-To: <20260122-pmdomain-hierarchy-onecell-v5-0-76855ec856bd@baylibre.com>
 To: Ulf Hansson <ulf.hansson@linaro.org>, 
  "Rafael J. Wysocki" <rafael@kernel.org>, 
  Sudeep Holla <sudeep.holla@arm.com>, 
@@ -102,99 +99,300 @@ Cc: devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
  arm-scmi@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-arm-kernel@lists.infradead.org
 X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2221; i=khilman@baylibre.com;
- h=from:subject:message-id; bh=aY3lzdYo34rzzl5rEA1NOAbbPbFMvxFb3wjxISqu7SQ=;
- b=owEBbQKS/ZANAwAIAVk3GJrT+8ZlAcsmYgBpcstejbN/+il4BUXiOOZpRcNwNGsz74GvjwhTB
- 7ou/Vz0eMaJAjMEAAEIAB0WIQR7h0YOFpJ/qfW/8QxZNxia0/vGZQUCaXLLXgAKCRBZNxia0/vG
- ZWeHEACe7CpdiIWB2PxK/uKxOKEiOMTBcVQNvq4lj1vZw4q9o7qyG5DQL5hUSCPWUWtvyoU+2EP
- t5xX53KzA2crRXbSzkhfOBRv/fJ2BN8eHrjBbca9OaSIpbLDKVXbjViDn2RpuOHwM3KTxFHV4w2
- 5Dp6BngEnIPrz3IARPdH5R2tB04xMIUgevYw/83E6WkixELZGsNaof7uQQT6vE2nxHFlkOGRNrh
- 29QDnZ/21z1p9uqDGjBAKvY17Pc2IckmEEWVWf3++3PzC2On+IxlAV9bAuKqjNbjqaELAFmtctI
- Tj1MoCTM3RywCAia85SjJPOCyGRw5NE2C1c3yPl+Vpnf4ZMeti0GZZ4MwHp3CO2IGFLuiiaUfvS
- SbVhmXjao4xXBL8xJHUhbKC5GSSYGjb49WQrbYP+RZCaZaqPXPy3afgS28rRqafd2hljFW5ilZ8
- jJLnntwZVYpqdskBDlQaor0Yz7mpBMIXuMzsOvK2WqRIIDqLTBMZBkE1VUjFOo1FnPb9LMma4ik
- 42TKoQTflbbagSeoofQ9ic6gi1drt+ArEOyu3f6v4d7i3FsHzgwF9obnxVtLNrQseQql5nKh3DC
- 2v39nHn7ooOwGGO4QM1lA9W0JS4xIEm5p0LUkpZdSUC1o1eFY3L7G2RlZ0mUgFyv9JpjNf/6NuC
- in79ZCaFdxuAF1g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8104; i=khilman@baylibre.com;
+ h=from:subject:message-id; bh=lzR3NEhB2g7iCRM+bJ588/XYQ1irfnPbijYHHqE2mb0=;
+ b=owEBbQKS/ZANAwAIAVk3GJrT+8ZlAcsmYgBpcstegivFzLujdyy/XYyCoOTFhTKHJRAJ8NSZt
+ PKtjt8GNvKJAjMEAAEIAB0WIQR7h0YOFpJ/qfW/8QxZNxia0/vGZQUCaXLLXgAKCRBZNxia0/vG
+ ZYTyEACh3s27sFpbfZ/ydsd8FMkRCxosg8QXT/a2xgDoeAuFNT+1jyG2LMV6Cjudi5xBIfK5o5+
+ K3rCkRFQItyaH0a2LcgHP1ysn+3J+w2O9jUPpq9M/bPVLnvG0wrPPggT5UyVG7/tuHVDuXbEUym
+ E3YJRv9CholjJhRnXmP/Kr3ZBnbGrol0MS9vaP5sCLYbKRZR5dysNMLxbv4Tgq3N/AKfgBfw6b3
+ Q74xOX/xuxPeFQD2H2MRdkrxmo9B62WkZkuMRYVMVERQxnn2oYBHTtl0X4e8IHnR1TtQBrhFAaa
+ T6YDp5ROfuR0IFTYO1JkOYl2SkaCB5FvyM+nJx6GbuWKGzcUo/QsyzdiWSSiCfe6nGkwcuvnGa3
+ 2wje3dW4WqQfamM80nMSj1P6vznxc55kdLF/KxoRZRw/4pZwuoHt+Xuryy6vuV40VRntvMRE10D
+ OxizOhFu6oqR26Yneomed1EZP0UaI66OIqdyQVj9Rqm8ZrTeVfJ35Y3hEjpHPr1HsRFZ/Ir4kCB
+ LI59eoPpfLf+zMyBvm2ycc9gabfPz64DoKuvsnoGOgbxbSb0E8AIPP1XJ1mNJoelQmFGh8L1jhO
+ /txN/VKIOHIm+hyiJleWlDYBJ2VOc8zeFSqePAamWNlzSi8bg91+VSFiBVONnrg409+suH1Gu2r
+ kx4s+ReBZ01uOpg==
 X-Developer-Key: i=khilman@baylibre.com; a=openpgp;
  fpr=7B87460E16927FA9F5BFF10C5937189AD3FBC665
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[baylibre-com.20230601.gappssmtp.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	DKIM_TRACE(0.00)[baylibre-com.20230601.gappssmtp.com:+];
-	TAGGED_FROM(0.00)[bounces-41339-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41341-lists,linux-pm=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	DMARC_NA(0.00)[baylibre.com];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[khilman@baylibre.com,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TO_DN_SOME(0.00)[];
+	DBL_PROHIBIT(0.00)[0.0.0.11:email];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCPT_COUNT_SEVEN(0.00)[9];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,baylibre.com:mid,baylibre.com:email,baylibre-com.20230601.gappssmtp.com:dkim]
-X-Rspamd-Queue-Id: D69276EEF5
+	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:mid,baylibre.com:email,parent_args.np:url,baylibre-com.20230601.gappssmtp.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 58BEC6EF22
 X-Rspamd-Action: no action
 
-Currently, PM domains can only support hierarchy for simple
-providers (e.g. ones with #power-domain-cells = 0).
+Add of_genpd_[add|remove]_subdomain_map() helper functions to support
+hierarchical PM domains defined by using power-domains-map
+property (c.f. nexus node maps in DT spec, section 2.5.1).
 
-Add more generic support by creating an of_genpd helper which can
-parse a nexus node map, and create domain hierarchy.
+This enables PM domain providers with #power-domain-cells > 0 to
+establish subdomain relationships via the power-domain-map property,
+which was not previously possible.
+
+These new helper functions:
+- uses an OF helper to iterate to over entries in power-domain-map
+- For each mapped entry: extracts child specifier, resolves parent phandle,
+  extracts parent specifier args, and establishes subdomain relationship
+- Calls genpd_[add|remove]_subdomain() with proper gpd_list_lock mutex protection
+
+Example from k3-am62l.dtsi:
+
+  scmi_pds: protocol@11 {
+      #power-domain-cells = <1>;
+      power-domain-map = <15 &MAIN_PD>,  /* TIMER0 */
+                         <19 &WKUP_PD>;  /* WKUP_TIMER0 */
+  };
+
+  MAIN_PD: power-controller-main {
+      #power-domain-cells = <0>;
+  };
+
+  WKUP_PD: power-controller-main {
+      #power-domain-cells = <0>;
+  };
+
+This allows SCMI power domain 15 to become a subdomain of MAIN_PD, and
+domain 19 to become a subdomain of WKUP_PD.
 
 Signed-off-by: Kevin Hilman (TI) <khilman@baylibre.com>
 ---
-Changes in v5:
-- update subdomain language to parent/child
-- add remove function to remove all children
-- if any children in the map fail to add, remove them all
-- Link to v4: https://patch.msgid.link/20251119-pmdomain-hierarchy-onecell-v4-0-f25a1d5022f8@baylibre.com
+ drivers/pmdomain/core.c   | 160 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ include/linux/pm_domain.h |  16 ++++++++++++++++
+ 2 files changed, 176 insertions(+)
 
-Changes in v4:
-- use new OF iterator for parsing map. See:
-  https://lore.kernel.org/r/20251119-topic-lpm-of-map-iterator-v6-18-v1-1-1f0075d771a3@baylibre.com
-- instead of mapping on probe, create of_genpd helper to be called by providers
-- Link to v3: https://lore.kernel.org/r/20250613-pmdomain-hierarchy-onecell-v3-0-5c770676fce7@baylibre.com
+diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+index bf82775f6a67..cee7fbbda829 100644
+--- a/drivers/pmdomain/core.c
++++ b/drivers/pmdomain/core.c
+@@ -3556,6 +3556,166 @@ static struct device_driver genpd_provider_drv = {
+ 	.suppress_bind_attrs = true,
+ };
+ 
++/**
++ * of_genpd_remove_subdomain_map - Remove subdomain relationships from map
++ *
++ * @np: pointer to parent node containing map property
++ * @data: pointer to PM domain onecell data
++ *
++ * Iterate over entries in a power-domain-map, and remove the subdomain
++ * relationships that were previously established by of_genpd_add_subdomain_map().
++ * This allows cleanup during driver removal or error handling.
++ *
++ * Return: 0 on success, negative error code on failure
++ */
++int of_genpd_remove_subdomain_map(struct device_node *np,
++				  struct genpd_onecell_data *data)
++{
++	struct generic_pm_domain *genpd, *parent_genpd;
++	struct of_phandle_args child_args, parent_args;
++	int index = 0;
++	int ret = 0;
++	u32 child_index;
++
++	if (!np || !data)
++		return -EINVAL;
++
++	/* Iterate through power-domain-map entries using the OF helper */
++	while (!of_parse_map_iter(np, "power-domain", &index,
++				   &child_args, &parent_args)) {
++		/* Extract the child domain index from the child specifier */
++		if (child_args.args_count < 1) {
++			of_node_put(parent_args.np);
++			continue;
++		}
++		child_index = child_args.args[0];
++
++		/* Validate child domain index */
++		if (child_index >= data->num_domains) {
++			of_node_put(parent_args.np);
++			continue;
++		}
++
++		genpd = data->domains[child_index];
++		if (!genpd) {
++			of_node_put(parent_args.np);
++			continue;
++		}
++
++		/* Get parent power domain from provider */
++		mutex_lock(&gpd_list_lock);
++
++		parent_genpd = genpd_get_from_provider(&parent_args);
++		if (IS_ERR(parent_genpd)) {
++			mutex_unlock(&gpd_list_lock);
++			of_node_put(parent_args.np);
++			dev_warn(&genpd->dev, "failed to get parent domain for removal\n");
++			continue;
++		}
++
++		/* Remove subdomain relationship */
++		ret = pm_genpd_remove_subdomain(parent_genpd, genpd);
++		mutex_unlock(&gpd_list_lock);
++		of_node_put(parent_args.np);
++
++		if (ret)
++			dev_warn(&genpd->dev, "failed to remove as subdomain of %s: %d\n",
++				 parent_genpd->name, ret);
++		else
++			dev_dbg(&genpd->dev, "removed as subdomain of %s\n",
++				parent_genpd->name);
++	}
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(of_genpd_remove_subdomain_map);
++
++/**
++ * of_genpd_add_subdomain_map - Parse and map child PM domains
++ *
++ * @np: pointer to parent node containing map property
++ * @data: pointer to PM domain onecell data
++ *
++ * Iterate over entries in a power-domain-map, and add them as
++ * children of the parent domain. If any child fails to be added,
++ * all previously added children are removed to maintain atomicity.
++ *
++ * Return: 0 on success, negative error code on failure
++ */
++int of_genpd_add_subdomain_map(struct device_node *np,
++			       struct genpd_onecell_data *data)
++{
++	struct generic_pm_domain *genpd, *parent_genpd;
++	struct of_phandle_args child_args, parent_args;
++	int index = 0;
++	int ret = 0;
++	u32 child_index;
++
++	if (!np || !data)
++		return -EINVAL;
++
++	/* Iterate through power-domain-map entries using the OF helper */
++	while (!of_parse_map_iter(np, "power-domain", &index,
++				   &child_args, &parent_args)) {
++		/* Extract the child domain index from the child specifier */
++		if (child_args.args_count < 1) {
++			of_node_put(parent_args.np);
++			ret = -EINVAL;
++			goto cleanup;
++		}
++		child_index = child_args.args[0];
++
++		/* Validate child domain index */
++		if (child_index >= data->num_domains) {
++			of_node_put(parent_args.np);
++			pr_debug("map's child index (%u) > number of domains (%u).  Skipping.\n",
++				 child_index, data->num_domains);
++			ret = -EINVAL;
++			goto cleanup;
++		}
++
++		genpd = data->domains[child_index];
++		if (!genpd) {
++			of_node_put(parent_args.np);
++			continue;
++		}
++
++		/* Get parent power domain from provider and establish subdomain relationship */
++		mutex_lock(&gpd_list_lock);
++
++		parent_genpd = genpd_get_from_provider(&parent_args);
++		if (IS_ERR(parent_genpd)) {
++			mutex_unlock(&gpd_list_lock);
++			of_node_put(parent_args.np);
++			ret = PTR_ERR(parent_genpd);
++			dev_err(&genpd->dev, "failed to get parent domain: %d\n", ret);
++			goto cleanup;
++		}
++
++		ret = genpd_add_subdomain(parent_genpd, genpd);
++		mutex_unlock(&gpd_list_lock);
++		of_node_put(parent_args.np);
++
++		if (ret) {
++			dev_err(&genpd->dev, "failed to add as subdomain of %s: %d\n",
++				parent_genpd->name, ret);
++			goto cleanup;
++		}
++
++		dev_dbg(&genpd->dev, "added as subdomain of %s\n",
++			parent_genpd->name);
++	}
++
++	return 0;
++
++cleanup:
++	/* Remove all successfully added subdomains using the removal function */
++	pr_err("rolling back child map additions due to error: %d\n", ret);
++	of_genpd_remove_subdomain_map(np, data);
++	return ret;
++}
++EXPORT_SYMBOL_GPL(of_genpd_add_subdomain_map);
++
+ static int __init genpd_bus_init(void)
+ {
+ 	int ret;
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index 93ba0143ca47..3baf224e4f24 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -463,6 +463,10 @@ int of_genpd_add_subdomain(const struct of_phandle_args *parent_spec,
+ int of_genpd_remove_subdomain(const struct of_phandle_args *parent_spec,
+ 			      const struct of_phandle_args *subdomain_spec);
+ struct generic_pm_domain *of_genpd_remove_last(struct device_node *np);
++int of_genpd_add_subdomain_map(struct device_node *np,
++			       struct genpd_onecell_data *data);
++int of_genpd_remove_subdomain_map(struct device_node *np,
++				  struct genpd_onecell_data *data);
+ int of_genpd_parse_idle_states(struct device_node *dn,
+ 			       struct genpd_power_state **states, int *n);
+ void of_genpd_sync_state(struct device_node *np);
+@@ -505,6 +509,18 @@ static inline int of_genpd_remove_subdomain(const struct of_phandle_args *parent
+ 	return -ENODEV;
+ }
+ 
++static inline int of_genpd_add_subdomain_map(struct device_node *np,
++					     struct genpd_onecell_data *data)
++{
++	return -ENODEV;
++}
++
++static inline int of_genpd_remove_subdomain_map(struct device_node *np,
++						struct genpd_onecell_data *data)
++{
++	return -ENODEV;
++}
++
+ static inline int of_genpd_parse_idle_states(struct device_node *dn,
+ 			struct genpd_power_state **states, int *n)
+ {
 
-Changes in v3:
-- use of_parse_phandle_with_args_map() instead of custom parsing
-- probe when device is attatched to PM domain
-- Link to v2: https://lore.kernel.org/r/20250528-pmdomain-hierarchy-onecell-v2-0-7885ae45e59c@baylibre.com
-
-Changes in v2:
-- Use nexus map instead of creating new property as suggested by Rob H.
-- Link to v1: https://lore.kernel.org/r/20250528-pmdomain-hierarchy-onecell-v1-1-851780700c68@baylibre.com
-
----
-Kevin Hilman (TI) (2):
-      pmdomain: core: support domain hierarchy via power-domain-map
-      pmdomain: arm_scmi: add support for domain hierarchies
-
- drivers/pmdomain/arm/scmi_pm_domain.c |   5 +++++
- drivers/pmdomain/core.c               | 160 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- include/linux/pm_domain.h             |  16 ++++++++++++++++
- 3 files changed, 181 insertions(+)
----
-base-commit: 3e7f562e20ee87a25e104ef4fce557d39d62fa85
-change-id: 20250528-pmdomain-hierarchy-onecell-a46fad47d855
-prerequisite-change-id: 20251119-topic-lpm-of-map-iterator-v6-18-a61447423adc:v2
-prerequisite-patch-id: e5697df059c17cf967fa6e4b1edb70874fee4ad3
-
-Best regards,
---  
-Kevin Hilman (TI) <khilman@baylibre.com>
+-- 
+2.51.0
 
 
