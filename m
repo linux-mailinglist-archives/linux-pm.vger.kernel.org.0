@@ -1,256 +1,143 @@
-Return-Path: <linux-pm+bounces-41377-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41378-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4DkuOgx+c2mQwwAAu9opvQ
-	(envelope-from <linux-pm+bounces-41377-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 14:56:28 +0100
+	id OKksOASBc2nxwwAAu9opvQ
+	(envelope-from <linux-pm+bounces-41378-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 15:09:08 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8799476853
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 14:56:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FBDF76C10
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 15:09:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 2C0453007B00
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 13:56:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C9920305993F
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 14:03:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2A5F2D7DDB;
-	Fri, 23 Jan 2026 13:56:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86EF83101B1;
+	Fri, 23 Jan 2026 14:03:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="heSDTkc5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="umWR+2XV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E39A1CAA68;
-	Fri, 23 Jan 2026 13:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF21B311C33
+	for <linux-pm@vger.kernel.org>; Fri, 23 Jan 2026 14:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769176571; cv=none; b=gxSakSY74LI3UCMp9IaUb+VLw51RlPXJVPYVaLyEe+UGvKSIjzBS1TrUCi2TjAEQasV3+vAaWsLoZ2yHwPoE5nTDpD9Ot+h4f+FU/S/UaWmUIS+ZlRoHPAnqL89y2EGmHR2odeXgGy97IUIPZkV0swUdCKTinK87ZJrGOn1Wong=
+	t=1769177034; cv=none; b=dCtNlc0JU58/IhGe7ac7IfWSR3+LSsfMRRMI11+8uYPgH0yIdvOQYJ3rJ4J+w619QeIbzEBQczIe25ExcE1Y6G6jDxCdiP5bGiwoyrv7ONj2YChIHJXTOYf79GVZgsHZ8BqNvQHQiJqBkxe+Non6k15cj/jbuFH2jYNaxISh/og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769176571; c=relaxed/simple;
-	bh=QSOx2eE67HzDrrswbsxCRfzJN1fJujSWWNEDMVmEFjE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ON5iWbUjeYz9q+39+R9Y67uPK2rNN9zwiwzfTeD5ySOFMlerO6QjB61a93P+BXEaBg9bQyIboivV/IYOGe+4KWt5HLBvjMZCqwamPUBMoLcf1BVUEFIJFHnzT9I5vu39nJsnn8LNS4TlGEYnJcCCcSV1NzLItHPcbME7+AevPKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=heSDTkc5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7AA1C4CEF1;
-	Fri, 23 Jan 2026 13:56:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769176571;
-	bh=QSOx2eE67HzDrrswbsxCRfzJN1fJujSWWNEDMVmEFjE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=heSDTkc5XrJ7Na+T8tlMn5nwZKCULjgQ645sRwxTS1pd6Q3cakd6pU1aUFZndI6/V
-	 Umdg53G84uMgHYOkOVEmgl/qESMYRxOn0g3VtxBdW1amQWxYC/TAPwXb/QNzYu8Jn2
-	 kf7kb/rK8R0yzkc30d+XkNgkki9UVx4iycoNHDRlHXbdrgauT0N0JYIfBm6515znwC
-	 qpVkQDhT+PsVkzPXmB54HdmQX2gd4l06HC2VnqOPA7ze6sHECqVcZPWJxFOErq+Wga
-	 /rdjfQBKTMPQZfCdlgKYK5gXHVGHUsbaZXT43C3EUki5WTqiGxImhXtLAqBCqEViTa
-	 DJoqEKhoZNZfA==
-Date: Fri, 23 Jan 2026 14:56:08 +0100
-From: Frederic Weisbecker <frederic@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: Re: [rafael-pm:bleeding-edge 175/176] ERROR: modpost:
- "tick_nohz_enabled" [drivers/cpufreq/cpufreq_ondemand.ko] undefined!
-Message-ID: <aXN9-KrR0YyC7YDV@localhost.localdomain>
-References: <202601231505.4Q8tb33s-lkp@intel.com>
+	s=arc-20240116; t=1769177034; c=relaxed/simple;
+	bh=cbwL/YZ4UilhCaiHWa3UUw8jnvLlX8j1XzPaUoH7ovs=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=DNb+as+ObRgjfyrjvOHlJWjGfDoczYnet3jpLZ3+ntlZ6KVSCYIxkSfGgHys1TOURsY+oyKmPdF8qh4N7shWaPpBZ2Ao8Ig3XyNz8/yfsQ/9AA/u7BUlV0hwdnfOTjt/116fV76WGboWzLMETHgC1x76ejITeLDq9N5EcO0RuHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aleksbgbg.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=umWR+2XV; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aleksbgbg.bounces.google.com
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-47d62cc05daso21584975e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 23 Jan 2026 06:03:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769177029; x=1769781829; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=EoeGlA3h5CpIHkfVehuCUZuXt6jRZ7PdOxFkdAMedEI=;
+        b=umWR+2XVuQqTAec8MaWQnORWj6tv3VZnvnveBrMw9R3lDc2jV8jJGwVSOZ/KRjoqqR
+         tsrrN19J/Ospg7ZHqDo32mPMRx3Prz+APyUG442kVtYTjbyJX7LCzTjNdrxTU4CcXux3
+         V0Jx/aXEH181FjlRWrO2gM+n0b5ybB6Pw1Bv4+gDu9A5SJMVoGm6UA/bcEcfSEuBQni0
+         J1qoMXX3zJoAoGtqkO7msHAdByeupLZ/pHLpw9N2mzyV1w9VKN+cg7+BDFHUUICB3ku7
+         3adMqa56JAESSGFb6cDCkGXrqcZ7GZZqnDKzsz7UdK+i5JruJCRoNIaT0sb9/t3Nc2Tl
+         rU2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769177029; x=1769781829;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EoeGlA3h5CpIHkfVehuCUZuXt6jRZ7PdOxFkdAMedEI=;
+        b=eZ4gAsQVxJA0Hb4WqdeICXRMdfXZWiTp00RLZ04UhD+8Xcp75ml1cLDYFoEkyXwhWy
+         ZMhTXqhBusY8lSzwoNEVLymUF1WpO4+knlCk0lRqfmUIH0oZGmiNkf9GG2NwJE5n4JVu
+         qWSObtK+P6wjhngd7ok05S82fzaI5+z7rw2Gj35h2k+7Q0Ce7rJtOqEmwu+cG2QEBrDx
+         AJoGR8Fhtv7ZqdhXWHoxVgsZUYxjw6SpWBtB4RplwD1d4fYFThN2JBK8G3eQgRgH8l+s
+         GK80cR0lWPeKuKZMoCncrWXxUaMvvTou9a6zF9EpVQi7007anmbFPCxL8mq1Xz0uEGfK
+         fH6g==
+X-Forwarded-Encrypted: i=1; AJvYcCVPG+fz9HLaH8NlQzNhXiJpGKR1IDCPgJPipFOkY3K/GvSoeIeZsXpgaUhqpcemEJHegfQtWiP3QA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRO17oGW+jsNdrsXk1M/X1D5SEEtW0P6bM3zF+qP1p0LRX0yKj
+	oGu27U3Onjy3x52LVKwqUJRYQ0Uctwor9FRIb1c7iH/JDe/FTe5NDJOSV7F+oCesCpGk2fBxH3u
+	9tC+fD9ieje9JDiOvYw==
+X-Received: from wman18.prod.google.com ([2002:a05:600c:6c52:b0:47e:e07c:131b])
+ (user=aleksbgbg job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:34d0:b0:480:32da:f33e with SMTP id 5b1f17b1804b1-4804c9ae6a0mr56897025e9.17.1769177029295;
+ Fri, 23 Jan 2026 06:03:49 -0800 (PST)
+Date: Fri, 23 Jan 2026 14:03:44 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <202601231505.4Q8tb33s-lkp@intel.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
+Message-ID: <20260123140344.449458-1-aleksbgbg@google.com>
+Subject: [PATCH v1] OPP: Return correct value in dev_pm_opp_get_level
+From: Aleks Todorov <aleksbgbg@google.com>
+To: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Aleks Todorov <aleksbgbg@google.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	MV_CASE(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-41378-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-41377-lists,linux-pm=lfdr.de];
-	SUBJECT_ENDS_EXCLAIM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[frederic@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FROM_NEQ_ENVFROM(0.00)[aleksbgbg@google.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,01.org:url,linaro.org:email,localhost.localdomain:mid,intel.com:email]
-X-Rspamd-Queue-Id: 8799476853
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8FBDF76C10
 X-Rspamd-Action: no action
 
-Le Fri, Jan 23, 2026 at 03:37:07PM +0800, kernel test robot a écrit :
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-> head:   8a22b02a1427ff0eab01a1b7cd62355238ba3d5b
-> commit: cc85c350babcb86c65da5393532f1cb255c750bc [175/176] cpufreq: ondemand: Simplify idle cputime granularity test
-> config: i386-buildonly-randconfig-002-20260123 (https://download.01.org/0day-ci/archive/20260123/202601231505.4Q8tb33s-lkp@intel.com/config)
-> compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260123/202601231505.4Q8tb33s-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202601231505.4Q8tb33s-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
-> >> ERROR: modpost: "tick_nohz_enabled" [drivers/cpufreq/cpufreq_ondemand.ko] undefined!
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Commit 073d3d2ca7d4 ("OPP: Level zero is valid") modified the
+documentation for this function to indicate that errors should return a
+non-zero value to avoid colliding with the OPP level zero, however
+forgot to actually update the return.
 
-Right...
+No in-tree kernel code depends on the error value being 0.
 
-Is it better with this replacement?
-
+Fixes: 073d3d2ca7d4 ("OPP: Level zero is valid")
+Signed-off-by: Aleks Todorov <aleksbgbg@google.com>
 ---
-From: Frederic Weisbecker <frederic@kernel.org>
-Date: Wed, 7 Jan 2026 17:25:09 +0100
-Subject: [PATCH] cpufreq: ondemand: Simplify idle cputime granularity test
+ drivers/opp/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-cpufreq calls get_cpu_idle_time_us() just to know if idle cputime
-accounting has a nanoseconds granularity.
-
-Use the appropriate indicator instead to make that deduction.
-
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-pm@vger.kernel.org
----
- drivers/cpufreq/cpufreq_ondemand.c | 7 +------
- include/linux/tick.h               | 1 +
- kernel/time/hrtimer.c              | 2 +-
- kernel/time/tick-internal.h        | 2 --
- kernel/time/tick-sched.c           | 8 +++++++-
- kernel/time/timer.c                | 2 +-
- 6 files changed, 11 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq_ondemand.c
-index a6ecc203f7b7..bb7db82930e4 100644
---- a/drivers/cpufreq/cpufreq_ondemand.c
-+++ b/drivers/cpufreq/cpufreq_ondemand.c
-@@ -334,17 +334,12 @@ static void od_free(struct policy_dbs_info *policy_dbs)
- static int od_init(struct dbs_data *dbs_data)
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index dbebb8c829bc..ae43c656f108 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -241,7 +241,7 @@ unsigned int dev_pm_opp_get_level(struct dev_pm_opp *opp)
  {
- 	struct od_dbs_tuners *tuners;
--	u64 idle_time;
--	int cpu;
+ 	if (IS_ERR_OR_NULL(opp) || !opp->available) {
+ 		pr_err("%s: Invalid parameters\n", __func__);
+-		return 0;
++		return U32_MAX;
+ 	}
  
- 	tuners = kzalloc(sizeof(*tuners), GFP_KERNEL);
- 	if (!tuners)
- 		return -ENOMEM;
- 
--	cpu = get_cpu();
--	idle_time = get_cpu_idle_time_us(cpu, NULL);
--	put_cpu();
--	if (idle_time != -1ULL) {
-+	if (tick_nohz_is_active()) {
- 		/* Idle micro accounting is supported. Use finer thresholds */
- 		dbs_data->up_threshold = MICRO_FREQUENCY_UP_THRESHOLD;
- 	} else {
-diff --git a/include/linux/tick.h b/include/linux/tick.h
-index ac76ae9fa36d..fe7f51451ba1 100644
---- a/include/linux/tick.h
-+++ b/include/linux/tick.h
-@@ -126,6 +126,7 @@ enum tick_dep_bits {
- 
- #ifdef CONFIG_NO_HZ_COMMON
- extern bool tick_nohz_enabled;
-+extern bool tick_nohz_is_active(void);
- extern bool tick_nohz_tick_stopped(void);
- extern bool tick_nohz_tick_stopped_cpu(int cpu);
- extern void tick_nohz_idle_stop_tick(void);
-diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-index f8ea8c8fc895..e1bbf883dfa8 100644
---- a/kernel/time/hrtimer.c
-+++ b/kernel/time/hrtimer.c
-@@ -943,7 +943,7 @@ void clock_was_set(unsigned int bases)
- 	cpumask_var_t mask;
- 	int cpu;
- 
--	if (!hrtimer_hres_active(cpu_base) && !tick_nohz_active)
-+	if (!hrtimer_hres_active(cpu_base) && !tick_nohz_is_active())
- 		goto out_timerfd;
- 
- 	if (!zalloc_cpumask_var(&mask, GFP_KERNEL)) {
-diff --git a/kernel/time/tick-internal.h b/kernel/time/tick-internal.h
-index 4e4f7bbe2a64..597d816d22e8 100644
---- a/kernel/time/tick-internal.h
-+++ b/kernel/time/tick-internal.h
-@@ -156,7 +156,6 @@ static inline void tick_nohz_init(void) { }
- #endif
- 
- #ifdef CONFIG_NO_HZ_COMMON
--extern unsigned long tick_nohz_active;
- extern void timers_update_nohz(void);
- extern u64 get_jiffies_update(unsigned long *basej);
- # ifdef CONFIG_SMP
-@@ -171,7 +170,6 @@ extern void timer_expire_remote(unsigned int cpu);
- # endif
- #else /* CONFIG_NO_HZ_COMMON */
- static inline void timers_update_nohz(void) { }
--#define tick_nohz_active (0)
- #endif
- 
- DECLARE_PER_CPU(struct hrtimer_cpu_base, hrtimer_bases);
-diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-index 21ac561a8545..81c619bf662c 100644
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -691,7 +691,7 @@ void __init tick_nohz_init(void)
-  * NO HZ enabled ?
-  */
- bool tick_nohz_enabled __read_mostly  = true;
--unsigned long tick_nohz_active  __read_mostly;
-+static unsigned long tick_nohz_active  __read_mostly;
- /*
-  * Enable / Disable tickless mode
-  */
-@@ -702,6 +702,12 @@ static int __init setup_tick_nohz(char *str)
- 
- __setup("nohz=", setup_tick_nohz);
- 
-+bool tick_nohz_is_active(void)
-+{
-+	return tick_nohz_active;
-+}
-+EXPORT_SYMBOL_GPL(tick_nohz_is_active);
-+
- bool tick_nohz_tick_stopped(void)
- {
- 	struct tick_sched *ts = this_cpu_ptr(&tick_cpu_sched);
-diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 1f2364126894..7e1e3bde6b8b 100644
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -281,7 +281,7 @@ DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
- 
- static void timers_update_migration(void)
- {
--	if (sysctl_timer_migration && tick_nohz_active)
-+	if (sysctl_timer_migration && tick_nohz_is_active())
- 		static_branch_enable(&timers_migration_enabled);
- 	else
- 		static_branch_disable(&timers_migration_enabled);
+ 	return opp->level;
 -- 
-2.51.1
-
+2.52.0.457.g6b5491de43-goog
 
 
