@@ -1,41 +1,41 @@
-Return-Path: <linux-pm+bounces-41366-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41367-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gC91IXhgc2kCvQAAu9opvQ
-	(envelope-from <linux-pm+bounces-41366-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 12:50:16 +0100
+	id cElEFsJgc2kCvQAAu9opvQ
+	(envelope-from <linux-pm+bounces-41367-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 12:51:30 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8D6375625
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 12:50:15 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1A0275661
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 12:51:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1E14F303FFF9
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 11:48:00 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A212E3031039
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 11:48:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 952923242D6;
-	Fri, 23 Jan 2026 11:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 596662EDD63;
+	Fri, 23 Jan 2026 11:48:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE5BE30E848;
-	Fri, 23 Jan 2026 11:47:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4392417FB;
+	Fri, 23 Jan 2026 11:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769168879; cv=none; b=f44zSM4RFCshpuH65sdUUl4QGV0VQQwUxfQQ3RrRMLO0RXRJhvjGXA0ex0RaV5ae62dvYY4g6YMxtevEdq8vMMLGDL0/JfDBbjGLkDME3aHLvhQSeUJjPlBpI+SDTssSLm6lFmXgUXQVzlUYZauB3kwnI0xNmsuTlB+BvNJGob8=
+	t=1769168890; cv=none; b=FhQZwZVfK37GwM42JVgRB6egWSS8LghU6xMIg8PvsYl1i1mQakGjceFUFQuhR7iC9SNGxzUVTbU+4Wa49wMjnIkIOQYFETAnzwlMtnmuJazFHKZZAO5eSgESbTjjPnrgxGh0OSmsMHpE0Vu3Eko6WJAhg+0ak15llct29uT1xic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769168879; c=relaxed/simple;
-	bh=K3kmJpWTdNx8nnEN7tJMT/DXdbAa6g8xViEWXkWYrlI=;
+	s=arc-20240116; t=1769168890; c=relaxed/simple;
+	bh=lIoT50cWDMo+exBKpNX+oR/KZFJTiTa7fdaY4+YHvOY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=REmx1gnNm2Ju2/2lodKK7Jw1IvsSQFM37grLgAkj1YOxe4KDJcMTynUmpxw9XmVzQARnXr/y9RvCe31BFsTCzHCsVrWpHVYKPieMqkAYZzSBjsxn8wkik+tTBBQm4LlkHjsv5UHlVe2gqg8qAUj61YX2o6Brv2hVSJHcTZ8abDY=
+	 MIME-Version:Content-Type; b=Jfqjbnsc2shvyXw2MEQsK4orXTqFz/q/D2oOjKzXxx/JJOZeqfkTC7gCjlPy1xl5fzc+P9KXYNF/pv5Q1Xzx68cbyS0z3HDeb5d7zRptD73BPmItJfmKaLhx8wTYIjvf+Q/6rBUPaNNoEScIKl+/yyR78hQ1h0F5VT3ZUxhhfX4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 56709cb0f85111f0b0f03b4cfa9209d1-20260123
+X-UUID: 5e51c22ef85111f0b0f03b4cfa9209d1-20260123
 X-CTIC-Tags:
 	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
 	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
 	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
 	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR
@@ -44,27 +44,27 @@ X-CTIC-Tags:
 	CIE_UNKNOWN, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
 	ABX_MISS_RDNS
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:392627cd-6d1c-45fc-814e-03a99bafb16f,IP:10,U
-	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:0
-X-CID-INFO: VERSION:1.3.6,REQID:392627cd-6d1c-45fc-814e-03a99bafb16f,IP:10,URL
-	:0,TC:0,Content:-5,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:cc28927e8b866054e77c78b6dec8ab76,BulkI
-	D:260123194749EN799ZWJ,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
+X-CID-O-INFO: VERSION:1.3.6,REQID:bb8c6732-4ab5-4a85-91c0-85c60c9697c6,IP:10,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:5
+X-CID-INFO: VERSION:1.3.6,REQID:bb8c6732-4ab5-4a85-91c0-85c60c9697c6,IP:10,URL
+	:0,TC:0,Content:0,EDM:0,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:5
+X-CID-META: VersionHash:a9d874c,CLOUDID:3441023eb4c53db1484d72b1731de75c,BulkI
+	D:260123194801EPVXKAH7,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|81|82|10
 	2|127|850|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bu
 	lk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:
 	0,BRE:0,ARC:0
 X-CID-BVR: 2,SSN|SDN
 X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
 X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 56709cb0f85111f0b0f03b4cfa9209d1-20260123
+X-UUID: 5e51c22ef85111f0b0f03b4cfa9209d1-20260123
 X-User: tianyaxiong@kylinos.cn
 Received: from localhost.localdomain [(223.153.58.254)] by mailgw.kylinos.cn
 	(envelope-from <tianyaxiong@kylinos.cn>)
 	(Generic MTA)
-	with ESMTP id 100858518; Fri, 23 Jan 2026 19:47:47 +0800
+	with ESMTP id 244023420; Fri, 23 Jan 2026 19:48:00 +0800
 From: Yaxiong Tian <tianyaxiong@kylinos.cn>
 To: tglx@kernel.org,
 	mingo@redhat.com,
@@ -80,9 +80,9 @@ To: tglx@kernel.org,
 Cc: linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	Yaxiong Tian <tianyaxiong@kylinos.cn>
-Subject: [PATCH 2/3] cpufreq: intel_pstate: Remove refresh logic in hybrid_init_cpu_capacity_scaling()
-Date: Fri, 23 Jan 2026 19:47:43 +0800
-Message-Id: <20260123114743.1616900-1-tianyaxiong@kylinos.cn>
+Subject: [PATCH 3/3] cpufreq: intel_pstate: Enable toggling cpu_capacity_scaling on hybrid platforms during SMT transitions
+Date: Fri, 23 Jan 2026 19:47:56 +0800
+Message-Id: <20260123114756.1617527-1-tianyaxiong@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20260123113712.1590187-1-tianyaxiong@kylinos.cn>
 References: <20260123113712.1590187-1-tianyaxiong@kylinos.cn>
@@ -92,124 +92,146 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [-0.46 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_NA(0.00)[kylinos.cn];
-	RCVD_COUNT_THREE(0.00)[4];
-	PRECEDENCE_BULK(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	TAGGED_FROM(0.00)[bounces-41366-lists,linux-pm=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tianyaxiong@kylinos.cn,linux-pm@vger.kernel.org];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
 	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	R_DKIM_NA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kylinos.cn:mid,kylinos.cn:email]
-X-Rspamd-Queue-Id: D8D6375625
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tianyaxiong@kylinos.cn,linux-pm@vger.kernel.org];
+	NEURAL_HAM(-0.00)[-0.998];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,kylinos.cn:mid,kylinos.cn:email];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41367-lists,linux-pm=lfdr.de];
+	DMARC_NA(0.00)[kylinos.cn];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[]
+X-Rspamd-Queue-Id: C1A0275661
 X-Rspamd-Action: no action
 
 Users can disable SMT (Simultaneous Multi-Threading) via
 /sys/devices/system/cpu/smt, meaning that CPU hybrid capabilities
 and related features like EAS (Energy Aware Scheduling) may become
-dynamically eligible. Since the driver provides sysfs interfaces
-for cpufreq_driver switching, merely performing a refresh is
-insufficient.
+dynamically eligible. This implies that when an SMT transition
+occurs,the system may no longer be considered hybrid, rendering the
+original configurations incorrect.
 
-To address this issue, remove the refresh-related logic.
+To address this issue, note that SMT transitions are accompanied
+by cpufreq online/offline operations, allowing conditional checks
+within this path. Specifically:
+
+    When SMT transitions from off → on, cpufreq online operations
+occur. If hybrid settings were previously applied, disable-related
+operations should be performed.
+
+    When SMT transitions from on → off, cpufreq offline operations
+occur. If the system meets hybrid conditions at this point,
+enable-related operations should be performed.
 
 Fixes: 929ebc93ccaa ("cpufreq: intel_pstate: Set asymmetric CPU capacity on hybrid systems")
 Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
 ---
- drivers/cpufreq/intel_pstate.c | 29 ++---------------------------
- 1 file changed, 2 insertions(+), 27 deletions(-)
+ drivers/cpufreq/intel_pstate.c | 60 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
 diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index ec4abe374573..76fb79b8068a 100644
+index 76fb79b8068a..fad25aa4b5f8 100644
 --- a/drivers/cpufreq/intel_pstate.c
 +++ b/drivers/cpufreq/intel_pstate.c
-@@ -1140,22 +1140,12 @@ static void hybrid_refresh_cpu_capacity_scaling(void)
- 	hybrid_register_all_perf_domains();
+@@ -1234,6 +1234,59 @@ static void hybrid_update_capacity(struct cpudata *cpu)
+ 	mutex_unlock(&hybrid_capacity_lock);
  }
  
--static void hybrid_init_cpu_capacity_scaling(bool refresh)
-+static void hybrid_init_cpu_capacity_scaling(void)
++static bool hybrid_need_enable_cpu_capacity_scaling(void)
++{
++	guard(mutex)(&hybrid_capacity_lock);
++
++	if (!hybrid_max_perf_cpu && hwp_is_hybrid &&
++		!no_cas && !sched_smt_active())
++		return true;
++	else
++		return false;
++}
++
++static bool hybrid_need_disable_cpu_capacity_scaling(void)
++{
++	guard(mutex)(&hybrid_capacity_lock);
++
++	if (hybrid_max_perf_cpu && sched_smt_active()) {
++		hybrid_max_perf_cpu = NULL;
++		return true;
++	} else {
++		return false;
++	}
++}
++
++static void hybrid_enable_cpu_capacity_scaling_work_fn(struct work_struct *work)
++{
++	if (arch_enable_hybrid_capacity_scale()) {
++		hybrid_refresh_cpu_capacity_scaling();
++		/*
++		 * Disabling ITMT causes sched domains to be rebuilt to disable asym
++		 * packing and enable asym capacity and EAS.
++		 */
++		sched_clear_itmt_support();
++
++	}
++}
++
++static void hybrid_disable_cpu_capacity_scaling_work_fn(struct work_struct *work)
++{
++	unsigned int cpu;
++
++	arch_disable_hybrid_capacity_scale();
++	for_each_possible_cpu(cpu)
++		topology_set_cpu_scale(cpu, arch_scale_cpu_capacity(cpu));
++
++	/* Heterogeneous CPUs have different capabilities, therefore enable
++	 * ITMT when SMT is active.
++	 */
++	sched_set_itmt_support();
++}
++
++static DECLARE_WORK(hybrid_enable_work, hybrid_enable_cpu_capacity_scaling_work_fn);
++static DECLARE_WORK(hybrid_disable_work, hybrid_disable_cpu_capacity_scaling_work_fn);
++
+ static void intel_pstate_hwp_set(unsigned int cpu)
  {
- 	/* Bail out if enabling capacity-aware scheduling is prohibited. */
- 	if (no_cas)
- 		return;
+ 	struct cpudata *cpu_data = all_cpu_data[cpu];
+@@ -2967,6 +3020,10 @@ static int intel_cpufreq_cpu_offline(struct cpufreq_policy *policy)
  
--	/*
--	 * If hybrid_max_perf_cpu is set at this point, the hybrid CPU capacity
--	 * scaling has been enabled already and the driver is just changing the
--	 * operation mode.
--	 */
--	if (refresh) {
--		hybrid_refresh_cpu_capacity_scaling();
--		return;
--	}
--
- 	/*
- 	 * On hybrid systems, use asym capacity instead of ITMT, but because
- 	 * the capacity of SMT threads is not deterministic even approximately,
-@@ -1171,18 +1161,6 @@ static void hybrid_init_cpu_capacity_scaling(bool refresh)
- 	}
- }
+ 	intel_pstate_exit_perf_limits(policy);
  
--static bool hybrid_clear_max_perf_cpu(void)
--{
--	bool ret;
--
--	guard(mutex)(&hybrid_capacity_lock);
--
--	ret = !!hybrid_max_perf_cpu;
--	hybrid_max_perf_cpu = NULL;
--
--	return ret;
--}
--
- static void __intel_pstate_get_hwp_cap(struct cpudata *cpu)
- {
- 	u64 cap;
-@@ -3428,7 +3406,6 @@ static void intel_pstate_driver_cleanup(void)
- 
- static int intel_pstate_register_driver(struct cpufreq_driver *driver)
- {
--	bool refresh_cpu_cap_scaling;
- 	int ret;
- 
- 	if (driver == &intel_pstate)
-@@ -3441,8 +3418,6 @@ static int intel_pstate_register_driver(struct cpufreq_driver *driver)
- 
- 	arch_set_max_freq_ratio(global.turbo_disabled);
- 
--	refresh_cpu_cap_scaling = hybrid_clear_max_perf_cpu();
--
- 	intel_pstate_driver = driver;
- 	ret = cpufreq_register_driver(intel_pstate_driver);
- 	if (ret) {
-@@ -3452,7 +3427,7 @@ static int intel_pstate_register_driver(struct cpufreq_driver *driver)
- 
- 	global.min_perf_pct = min_perf_pct_min();
- 
--	hybrid_init_cpu_capacity_scaling(refresh_cpu_cap_scaling);
-+	hybrid_init_cpu_capacity_scaling();
- 
++	if (unlikely(hybrid_need_enable_cpu_capacity_scaling()))
++		schedule_work(&hybrid_enable_work);
++
++
  	return 0;
  }
+ 
+@@ -2974,6 +3031,9 @@ static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
+ {
+ 	struct cpudata *cpu = all_cpu_data[policy->cpu];
+ 
++	if (unlikely(hybrid_need_disable_cpu_capacity_scaling()))
++		schedule_work(&hybrid_disable_work);
++
+ 	pr_debug("CPU %d going online\n", cpu->cpu);
+ 
+ 	intel_pstate_init_acpi_perf_limits(policy);
 -- 
 2.25.1
 
