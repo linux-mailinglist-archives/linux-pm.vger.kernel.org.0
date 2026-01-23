@@ -1,266 +1,202 @@
-Return-Path: <linux-pm+bounces-41350-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41353-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IJEOImgyc2lItAAAu9opvQ
-	(envelope-from <linux-pm+bounces-41350-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 09:33:44 +0100
+	id 6OIkGsE3c2lItAAAu9opvQ
+	(envelope-from <linux-pm+bounces-41353-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 09:56:33 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F51E72904
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 09:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EBE4D72C77
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 09:56:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 62667301589B
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 08:32:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1F5F8302F7C3
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Jan 2026 08:56:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27BB2DF153;
-	Fri, 23 Jan 2026 08:32:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89EBE339B34;
+	Fri, 23 Jan 2026 08:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HpRHYyyg"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="QRj8ycdU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011013.outbound.protection.outlook.com [40.107.130.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0942C11D9;
-	Fri, 23 Jan 2026 08:32:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769157167; cv=none; b=mXmySp+AaJDZ+siAAoE74lPGLp4KA2DOgGw+tIcySQP9DZwlNGF4B/piarukxtz1AlhaLZhZ41xgwnK3PtIhtORF/nUXVKu0CZG1eQ5WYsM16JinY49XSckfKBa4ggxYyrPNPd9mTsg4HD6o+DQTnudcx43uTPnoy0CgVAZ6Qfw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769157167; c=relaxed/simple;
-	bh=HdNnpo9nq/0E5XPtCDogUHy6OiuDbDh3XodkdpDtKOg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gQtvMieC+5vzLfBUM/TOJjJZ4rZpsgVruM1AyF3/GFXU9EAT+KJme7rrRUfA7XHCKxQdUS2pB+A8ovq6n2OAngLcp7aoOIKMyCEQd1im0sDH71tZwji14UwNtev57MgSJHQpYFfZLGGNi1az3aP2vOA4/hmyc2tJNDsxY/xtbQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HpRHYyyg; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769157165; x=1800693165;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HdNnpo9nq/0E5XPtCDogUHy6OiuDbDh3XodkdpDtKOg=;
-  b=HpRHYyygH7BhbgYURi0lN5W6ODQOVWdr3/W3FemtzuYveyaInZrI9QPA
-   /1twrntfJA9FOQR7bL8J3Ip2NgjZAk2PQ/SaEI7A4A+ljxafwZdFqUshj
-   LNW9P6gwl3vc6cMXYCMkadu/ESgWaHEMwugj17zdjZczRStgNt/jGDj2R
-   S7Ac5PWphQBAW+Dg+2A+fol4MitpQGpW4JC1HY9o1gl5tERpnUc0HKWk4
-   4+Y2AHwfeMk08kq5AbcvFOpGAxD+RGDqcnpYSK5m1W7tlBw0EXhcIHBsi
-   ivPBaG6nK8+GhzLQxhp3EZe8hiSGsKBGE6rwg+WqSwpJnMNkRYYrEgcI4
-   w==;
-X-CSE-ConnectionGUID: w0Y1UOCoTJKVMU5VzgTO6g==
-X-CSE-MsgGUID: msJZdGy2Qmmdqsa5s9yKAA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11679"; a="70309834"
-X-IronPort-AV: E=Sophos;i="6.21,248,1763452800"; 
-   d="scan'208";a="70309834"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 00:32:45 -0800
-X-CSE-ConnectionGUID: ls8GZ4dRSdCYnMlL52aHnw==
-X-CSE-MsgGUID: obQ1P4AeQw2pRvIJvia3pQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,248,1763452800"; 
-   d="scan'208";a="237619083"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 23 Jan 2026 00:32:42 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vjCat-00000000Thq-05dr;
-	Fri, 23 Jan 2026 08:32:39 +0000
-Date: Fri, 23 Jan 2026 16:31:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Aaron Tomlin <atomlin@atomlin.com>, rafael@kernel.org, dakr@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, pavel@kernel.org, lenb@kernel.org,
-	neelx@suse.com, atomlin@atomlin.com, sean@ashe.io,
-	mproche@gmail.com, chjohnst@gmail.com, nick.lange@gmail.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PM: QoS: Introduce boot parameter
- pm_qos_resume_latency_us
-Message-ID: <202601231616.nbo2ijJf-lkp@intel.com>
-References: <20260123010024.3301276-1-atomlin@atomlin.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C74E2FD685;
+	Fri, 23 Jan 2026 08:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769158552; cv=fail; b=T4BEzwq295mrD4EITF7pTY1xAze60hwlgpxGcnsD1MCRezLpAVl0OMhDOlHSUFvbXpsQFQmoiDs18oZf7sVXWpQz+kCs1gDsxUS7dAscIx/b5BJATajENJYxfdHbqwK7AXxz8QF9x1xxgM4t5saI0RP3IY7U3xWJ7Q5+KR30Emc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769158552; c=relaxed/simple;
+	bh=hifIBIPAapB4qd4IvtYHvdorB3E4AZkGQ95BONeSCtY=;
+	h=From:To:CC:Subject:Message-ID:Date:MIME-Version:Content-Type; b=PA8g28USmjfafbeIFGf7/k3f5E93tEY92tVTb7uwu3IDMaFvpnNeIxZxMQFGaqHo4UMFFyluGbPnJ/Czl6N6h4E0pyJzKMzPJ8Vz0g8gXXGj/tYA037ww/6u1K+rYor43+KOSuxbTMTSO8IJKfx7bYq2XkMDBSl4hGsqJz3wm3M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=QRj8ycdU; arc=fail smtp.client-ip=40.107.130.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ATVg7cdKmDe0Bn7lRFk3XmYzD+W8TGx2aX1Z2GB+d6VIwOk7BiYHDFotXMExzC97DWwc0nPt1vTpVonRjh5Lw5/hBeTpxTV94gcGkmtKoL4okcH5h2eM75EWL7/N15Od1zBU6OUzug7e1HmX123iYLD6+U4wkPa60BoCP4wqvkhckJpd1vSqbBxJAh7iHQo0kEv9DMRib3MUlwkQnyQJ7rnpdUh0+CxMjZHVUrO9skebYvDp+ZexWC39O+Wma+b1xNDxJobRT5euup2JpGdfcWp9rRwK4M28Jp0NvwWGIv0NFen3fvkRIhHEvXJOXn5dbJM/Re5XeyV79Fpm4TKykw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MDSzqJiBUCpJXWA6GHDX1ILvcNSfH7KsZc/c+LRiBJA=;
+ b=aWmyJaUNCTxFtd5d35WBJDBtU5rcLccQl0JjcIlyalgPkBLK+I9j3Quj+NFsq6G/jC3vw+hOhCpuGkYTXZT5gE9kW33WFXq0aWq4H58HhJ/t8vA4CLzb63cB5nSqgN/Q6qONAAUIvK0IfMbCKMLuWmsCPY14eZv6y78BWKc3J2dMCC2DKl/NpIUihi0QSL1waHCKRYQT503CIz1fEg6Dq/u/54oQqQWQPjbUX/0dDcdl9H6c6tzJmt2vpENP38Sw+X2lUCQggCJqR76C/iP/eR/chzDnxraOGXZkHAn2M8rzi00xm2alssUTh9Tw2OqGGoJ0sGZuQf989aVR3nn5WQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=axis.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MDSzqJiBUCpJXWA6GHDX1ILvcNSfH7KsZc/c+LRiBJA=;
+ b=QRj8ycdU4mHOUhY+bHs1yqMqD0CrwEVIe63ynSM15WGvTJwF7Y8vZAI2sk4hJGE/YEcenXm9e8aPwv+Vet/DVHFXeFPlS+AV3oNnP1gc/G62ArUgQxW4Bvzkbg+W9h2zbLVkOHFjGW0VXLP14w65IJzDpexvWEblo4Oj/oMER9U=
+Received: from DU7PR01CA0022.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:50f::10) by VI1PR02MB10251.eurprd02.prod.outlook.com
+ (2603:10a6:800:1cf::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.10; Fri, 23 Jan
+ 2026 08:55:44 +0000
+Received: from DB1PEPF000509F7.eurprd02.prod.outlook.com
+ (2603:10a6:10:50f:cafe::fa) by DU7PR01CA0022.outlook.office365.com
+ (2603:10a6:10:50f::10) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.12 via Frontend Transport; Fri,
+ 23 Jan 2026 08:55:55 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=axis.com;
+Received-SPF: Pass (protection.outlook.com: domain of axis.com designates
+ 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com; pr=C
+Received: from mail.axis.com (195.60.68.100) by
+ DB1PEPF000509F7.mail.protection.outlook.com (10.167.242.153) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9564.3 via Frontend Transport; Fri, 23 Jan 2026 08:55:43 +0000
+Received: from pc52311-2249 (10.4.0.13) by se-mail10w.axis.com (10.20.40.10)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.2.1748.39; Fri, 23 Jan
+ 2026 09:55:42 +0100
+From: Waqar Hameed <waqar.hameed@axis.com>
+To: Sebastian Reichel <sre@kernel.org>
+CC: <kernel@axis.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/2] power: supply: wm97xx: Use devm-variants in probe
+User-Agent: a.out
+Message-ID: <cover.1769158280.git.waqar.hameed@axis.com>
+Date: Fri, 23 Jan 2026 09:55:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260123010024.3301276-1-atomlin@atomlin.com>
+Content-Type: text/plain
+X-ClientProxiedBy: se-mail01w.axis.com (10.20.40.7) To se-mail10w.axis.com
+ (10.20.40.10)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB1PEPF000509F7:EE_|VI1PR02MB10251:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4d947e83-b414-49db-4cee-08de5a5d3123
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?14PAPNTj4y3lP7TFQUqcwmqdSCBgYoBhDpyzD7JOAtf2ijrV5mgtxDHaoHwU?=
+ =?us-ascii?Q?JpI3GDjY21ypPnjm4AmgBd0iK1YRRQzHsV3L03wcGoTPxEkicKrZuTZMQwej?=
+ =?us-ascii?Q?0Z7NEZQQnQ9l57hLLiTOXMBHaDI95u9x0MYTNWt4tcV9UUj+0wCzewzGSNH1?=
+ =?us-ascii?Q?DITRF3pgP034wuWGAjNo7ibT9i5uYZQqtYnOCU2T5xtf2n6LwGsXFl723Sht?=
+ =?us-ascii?Q?1QBD4t+kYRk9aleVr1WaIKeLrFk1fBNMZLNl0fV45LsV+35QHNAgAyjhj3WF?=
+ =?us-ascii?Q?QGYP17JSA64VoKShidML4epyzz0naAYDTWGcZE88Bsnz1YL4xPMNxo7zx6Tv?=
+ =?us-ascii?Q?1IjfbB9hUzUn2XKkDQ3VQJRxN/fU6Y/NEW/fT26hoKbJSGEBYY621cSjmBYG?=
+ =?us-ascii?Q?IZqDjRnlV82nrP21J+LDCs4savkojykDMPmobjaBPzYK0LKKlMmdk/vKco4e?=
+ =?us-ascii?Q?UDSSJSGHzg5jl7X7OCBYEdohit/xeDluKVE+CwE8RgZi7TS8rnxS80Wet6UG?=
+ =?us-ascii?Q?vLHlxlxk6gYuMBZGiwvTUy2iEXabJOcQO5Lj2YUFtbkyj+pLePHhuyySWcF7?=
+ =?us-ascii?Q?FN3ectkQQtCK/5NXUTU8zisqfEHuhAUH7x5THS6Rm+RmTuIrsZ9+KE/Es7po?=
+ =?us-ascii?Q?E8Kgyhs6A6nZN1clO8jKw/dfNZZfAepQ2p21FRnZeLygd8op8RauPuNU/JPT?=
+ =?us-ascii?Q?x7thLgzjKtzYMTgihQOHs59Ile8L285C31oKKNeQ1jjYVcOXJCLZBEKIfGGv?=
+ =?us-ascii?Q?FIA4WXvHBLep3xm0Ho9hCYlfKfL5DbYjb2jAnJLjcKop2bpO5Z3V/5ZOqvRF?=
+ =?us-ascii?Q?PoXiq63tv59x1LN5CrQpZoiw3YVGphVfIiEAiPiM77ADnLG5yf7idALBmam+?=
+ =?us-ascii?Q?ZfcVL8cdz/XYxMvEQqlpMT9ABdZLMvfjURMS1OFKS5O1S9zUZV6hyQxvAl5F?=
+ =?us-ascii?Q?G+CL4FkEVskF+F4Nn0V1vnfwxrgyFWiZlyOag5IPJ6ZVUbNFHQpIt6rPcd6y?=
+ =?us-ascii?Q?7YUKdNk1t7T0gPiLWoY6glpd3rPWxksczH2gSnntJ30EvSuDYeKf2bR0JZuU?=
+ =?us-ascii?Q?ldtfQIgR/pnACv7onFhG0mVn5NwqOnvBcAkJteMZs64MgXMa/GXD3axzXZ+I?=
+ =?us-ascii?Q?SUluDL132PpvfKK7kJLN+yhuUtkgryke2e3PM5+nwIZEJmryDhynprNIeKRM?=
+ =?us-ascii?Q?iwEiZMRJutQqDePSxYvgWWvErWsU297SLRbgrxDo5E6SFKfPVcOkEmM3ZTfR?=
+ =?us-ascii?Q?a76sUaSgweTdoE8Q8LaHAydLa3YMxXT1cDu4msVaX11p3UTkSfF8PzIsRigm?=
+ =?us-ascii?Q?mqRPZC7BgXmPG8JX8F8RaMAyYki6fyUiLLR9tluLVdBqYlYd62XMs5iNRs8j?=
+ =?us-ascii?Q?f4Z5aMTy/89PbZx7WKZtd41sSSulYsv0+qB3e4JpCuXWDNZQhI3kl5xez/VV?=
+ =?us-ascii?Q?0xRPp+wk/o6z2P5arN+BBD9C5VoflC6kAs0dO26Lk2Kw906HZAz4f46tYrLh?=
+ =?us-ascii?Q?2ZYOK9jTh4h8uQ1Z8eL8keWGIEMI3GwshbuzxjQvTC/qUUa7jNFZGjQWXO00?=
+ =?us-ascii?Q?OXfoyJSnOkDEBcuT1kYR5nKd6kB9tkwU5BG8zab7NkjG2trOkGvAsEIQxOZE?=
+ =?us-ascii?Q?DUxi9CmLP+1KcMa7m07FiQDeyfJkQHMluxj/bWsKbzmFM5qajnwXhH1kIa1H?=
+ =?us-ascii?Q?0osWJQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2026 08:55:43.5546
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d947e83-b414-49db-4cee-08de5a5d3123
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF000509F7.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR02MB10251
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [1.35 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[axis.com,none];
+	R_DKIM_ALLOW(-0.20)[axis.com:s=selector1];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	FREEMAIL_CC(0.00)[lists.linux.dev,kernel.org,suse.com,atomlin.com,ashe.io,gmail.com,vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-41350-lists,linux-pm=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41353-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-0.987];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[waqar.hameed@axis.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[axis.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,axis.com:mid,axis.com:dkim];
 	TAGGED_RCPT(0.00)[linux-pm];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,01.org:url,intel.com:email,intel.com:dkim,intel.com:mid]
-X-Rspamd-Queue-Id: 0F51E72904
+	NEURAL_HAM(-0.00)[-0.996];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: EBE4D72C77
 X-Rspamd-Action: no action
 
-Hi Aaron,
+This patch series contains some clean-ups that makes life a little
+easier. It was originally triggered by a NULL pointer fix in this driver
+that has already been applied from the previous version [1]. Therefore
+note that this series is based on `for-next` branch in Sebastian
+Reichel's tree [2].
 
-kernel test robot noticed the following build warnings:
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/commit/?h=for-next&id=39fe0eac6d755ef215026518985fcf8de9360e9e
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/?h=for-next
 
-[auto build test WARNING on driver-core/driver-core-testing]
-[also build test WARNING on driver-core/driver-core-next driver-core/driver-core-linus rafael-pm/linux-next rafael-pm/bleeding-edge linus/master amd-pstate/linux-next amd-pstate/bleeding-edge v6.19-rc6 next-20260122]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Changes in v2:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Aaron-Tomlin/PM-QoS-Introduce-boot-parameter-pm_qos_resume_latency_us/20260123-090409
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20260123010024.3301276-1-atomlin%40atomlin.com
-patch subject: [PATCH] PM: QoS: Introduce boot parameter pm_qos_resume_latency_us
-config: x86_64-randconfig-161-20260123 (https://download.01.org/0day-ci/archive/20260123/202601231616.nbo2ijJf-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-smatch version: v0.5.0-8994-gd50c5a4c
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260123/202601231616.nbo2ijJf-lkp@intel.com/reproduce)
+* Fix clean-up order by applying `devm_kcalloc()`-patch before the
+  `devm_power_supply_register()`-patch.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601231616.nbo2ijJf-lkp@intel.com/
+Link to v1: https://lore.kernel.org/lkml/cover.1766270196.git.waqar.hameed@axis.com/
 
-All warnings (new ones prefixed by >>):
+Waqar Hameed (2):
+  power: supply: wm97xx: Use devm_kcalloc()
+  power: supply: wm97xx: Use devm_power_supply_register()
 
->> kernel/power/qos.c:339:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     339 |         return ret;
-         |                ^~~
-   kernel/power/qos.c:266:9: note: initialize the variable 'ret' to silence this warning
-     266 |         int ret;
-         |                ^
-         |                 = 0
-   kernel/power/qos.c:354:5: error: redefinition of 'pm_qos_get_boot_cpu_latency_limit'
-     354 | s32 pm_qos_get_boot_cpu_latency_limit(unsigned int cpu)
-         |     ^
-   include/linux/pm_qos.h:222:19: note: previous definition is here
-     222 | static inline s32 pm_qos_get_boot_cpu_latency_limit(unsigned int cpu)
-         |                   ^
-   1 warning and 1 error generated.
+ drivers/power/supply/wm97xx_battery.c | 32 ++++++++-------------------
+ 1 file changed, 9 insertions(+), 23 deletions(-)
 
 
-vim +/ret +339 kernel/power/qos.c
-
-   245	
-   246	/* init_pm_qos_latency_us_setup - Parse the pm_qos_latency_us boot parameter.
-   247	 *
-   248	 * Parses the kernel command line option "pm_qos_resume_latency_us=" to establish
-   249	 * per-CPU resume latency constraints. These constraints are applied
-   250	 * immediately when a CPU is registered.
-   251	 *
-   252	 * Syntax: pm_qos_resume_latency_us=<cpu-list>:<value>[,<cpu-list>:<value>...]
-   253	 * Example: pm_qos_resume_latency_us=0-3:0,4-7:20
-   254	 *
-   255	 * The parsing logic enforces a "First Match Wins" policy. If a CPU is
-   256	 * covered by multiple entries in the list, only the first valid entry
-   257	 * applies. Any subsequent overlapping ranges for that CPU are ignored.
-   258	 *
-   259	 * Return: 0 on success, or a negative error code on failure.
-   260	 */
-   261	static int __init init_pm_qos_latency_us_setup(void)
-   262	{
-   263		char *token, *cmd = pm_qos_resume_latency_cmdline;
-   264		struct pm_qos_boot_entry *entry, *tentry;
-   265		cpumask_var_t covered;
-   266		int ret;
-   267	
-   268		if (boot_option_idle_override == IDLE_POLL) {
-   269			pr_warn("pm_qos: Cannot be used with idle=poll\n");
-   270			return -EINVAL;
-   271		}
-   272	
-   273		if (!zalloc_cpumask_var(&covered, GFP_KERNEL)) {
-   274			pr_warn("pm_qos: Failed to allocate memory for parsing boot parameter\n");
-   275			return -ENOMEM;
-   276		}
-   277	
-   278		while ((token = strsep(&cmd, ",")) != NULL) {
-   279			char *str_range, *str_val;
-   280	
-   281			str_range = strsep(&token, ":");
-   282			str_val = token;
-   283	
-   284			if (!str_val) {
-   285				pr_warn("pm_qos: Missing value range %s\n",
-   286					str_range);
-   287				continue;
-   288			}
-   289	
-   290			entry = kzalloc(sizeof(*entry), GFP_KERNEL);
-   291			if (!entry) {
-   292				pr_warn("pm_qos: Failed to allocate memory for boot entry\n");
-   293				goto cleanup;
-   294			}
-   295	
-   296			if (cpulist_parse(str_range, &entry->mask)) {
-   297				pr_warn("pm_qos: Failed to parse cpulist range %s\n",
-   298					str_range);
-   299				kfree(entry);
-   300				continue;
-   301			}
-   302	
-   303			cpumask_andnot(&entry->mask, &entry->mask, covered);
-   304			if (cpumask_empty(&entry->mask)) {
-   305				pr_warn("pm_qos: Entry %s already covered, ignoring\n",
-   306					str_range);
-   307				kfree(entry);
-   308				continue;
-   309			}
-   310			cpumask_or(covered, covered, &entry->mask);
-   311	
-   312			if (kstrtos32(str_val, 0, &entry->latency)) {
-   313				pr_warn("pm_qos: Invalid latency requirement value %s\n",
-   314					str_val);
-   315				kfree(entry);
-   316				continue;
-   317			}
-   318	
-   319			if (entry->latency < 0) {
-   320				pr_warn("pm_qos: Latency requirement cannot be negative: %d\n",
-   321					entry->latency);
-   322				kfree(entry);
-   323				continue;
-   324			}
-   325	
-   326			list_add_tail(&entry->node, &pm_qos_boot_list);
-   327		}
-   328	
-   329		free_cpumask_var(covered);
-   330		return 0;
-   331	
-   332	cleanup:
-   333		list_for_each_entry_safe(entry, tentry, &pm_qos_boot_list, node) {
-   334			list_del(&entry->node);
-   335			kfree(entry);
-   336		}
-   337	
-   338		free_cpumask_var(covered);
- > 339		return ret;
-   340	}
-   341	early_initcall(init_pm_qos_latency_us_setup);
-   342	
-
+base-commit: 432b119ab8d8bf1f550c247f7fbe960e87ba6c92
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.39.5
+
 
