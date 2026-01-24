@@ -1,558 +1,241 @@
-Return-Path: <linux-pm+bounces-41403-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41404-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4IYOF7yPdGnZ7AAAu9opvQ
-	(envelope-from <linux-pm+bounces-41403-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Jan 2026 10:24:12 +0100
+	id gJB6GiihdGmd8AAAu9opvQ
+	(envelope-from <linux-pm+bounces-41404-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Jan 2026 11:38:32 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id D090D7D151
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Jan 2026 10:24:11 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA5347D435
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Jan 2026 11:38:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A7A463012BFD
-	for <lists+linux-pm@lfdr.de>; Sat, 24 Jan 2026 09:24:10 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 0AEFA3004DF0
+	for <lists+linux-pm@lfdr.de>; Sat, 24 Jan 2026 10:38:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F60A21D5BC;
-	Sat, 24 Jan 2026 09:24:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF832D6E44;
+	Sat, 24 Jan 2026 10:38:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PBDnGTb7"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="owB/dEXl";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="fCqv7qHS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519341C862F;
-	Sat, 24 Jan 2026 09:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C662D1F4E
+	for <linux-pm@vger.kernel.org>; Sat, 24 Jan 2026 10:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769246649; cv=none; b=r3kleO6ex43o8g32QOipFH7wCe1am1JtTzz5f9SX6l5SBuPKQjtYLjKtroXuB7YLdfULbJmVKAQk43928ULCiMCwgJkuvIV8SH9AzGYKgQv2Yg1+PcM8WCj44eDSntQTAnvJUJC8YCG+exmoVyZl2Dyi9xwoC3ZuNAfMlEWcA+s=
+	t=1769251106; cv=none; b=XKYEvje24PmfAneiLlNf+IYnPAd+k+YeocYg4KGy1G7qeY3iAulMkxgR9edXI4smGAfOaHhcsnXMLoeBNpLQyXS5KinCBLeX3QxzHd0D9oJKp6rEfhj8LvaZARtZnGIbCpBySuWZTSnE5vZysbKlgsFq0mXhvk7Hqmac61cBXuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769246649; c=relaxed/simple;
-	bh=ASDKnlbk8KScQ5yRP/C+k2grZ3sx3wEelWW7OEWVvx8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=svcIoSjmNpBh2It3MpA7V56iykllRhY4Xup7rWkuBFzoIRUHldaRFcj8x7ZWVTh+k2E1IVGdy+ws2wRLSrTuvYrUW+psvNapbiV0S+tktWR5Z9tJ58H3+ME/sQSgJLLvU5eMO7YIqaVUZ6AnhUZw1ePTGBT3CpX+33g7nu9PFoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PBDnGTb7; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769246646; x=1800782646;
-  h=date:from:to:cc:subject:message-id;
-  bh=ASDKnlbk8KScQ5yRP/C+k2grZ3sx3wEelWW7OEWVvx8=;
-  b=PBDnGTb7mSrv0UXmXLwUnupCYJ7aNiUQTteZKMMiJsAu04rFOLsK30OY
-   CamMb/PJscdqtaZgxPsSBf6/07vcywGl64eDUKnAuW9foLegp9vfPdlLH
-   FhwhttkoGmN5xf2KukO1QRJtKyEOyM3r93Yvj0udNTStvLl/KKTo7IH31
-   RVTx80k42XZRnE13ZK4/Yu9rdh1TaL981PDCEfGMdQAOP+CXJJfOiI+Co
-   wK4GfrDI50v4uJ27QT2ACbPGLj0DZ64/nRBXgy5hrv5SnFV1f3oUPUPFH
-   39Hjx8kGOkIjCTJpZZZdAXe2MFWXWYLr5gVk9HjgfP56xV3L8s33a4sC7
-   Q==;
-X-CSE-ConnectionGUID: lSCOoZS8QJ+Fun2GsJ345w==
-X-CSE-MsgGUID: SCnuvUN0TGGsBhhOXw3hGQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="74346511"
-X-IronPort-AV: E=Sophos;i="6.21,250,1763452800"; 
-   d="scan'208";a="74346511"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2026 01:24:06 -0800
-X-CSE-ConnectionGUID: ZmQrZOJcSCW9/cZuvFDS7A==
-X-CSE-MsgGUID: rFJ6J0AUQH2s4gCxoPMy3w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,250,1763452800"; 
-   d="scan'208";a="207044794"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 24 Jan 2026 01:24:04 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vjZs8-00000000V3O-2Zdw;
-	Sat, 24 Jan 2026 09:24:00 +0000
-Date: Sat, 24 Jan 2026 17:23:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD REGRESSION
- 7e9b0371ed5b9bf9a80c59487f47fca0ba638f61
-Message-ID: <202601241744.a4CSYSUl-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1769251106; c=relaxed/simple;
+	bh=meCPGOEBebHX544YaS09Yi/qU6DHzkeG1c+Of/FBSvg=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=XMVayxDJ0ezXohADYUVu63Q3Spn5d1p+GtniJtIoJHch0WqUNroy6ltXkqTDk3BLMty5f8SQJOvQdEzVvcwyz2v57oJRAlh37iG7oJ+/7WI648FEScblf4KxLClkR+a8QXj3nHW1UJZKpV6sUYnDbPcVmVAdH2ulp6ZlvmSVMB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=owB/dEXl; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=fCqv7qHS; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60O4RYoQ922133
+	for <linux-pm@vger.kernel.org>; Sat, 24 Jan 2026 10:38:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	3J7xNQPfpRsnFYqFLGHAgQpWibMHp3cy/N6JarG//vo=; b=owB/dEXl6EG1sQhl
+	Dbwb6ZPggUxUHdR3egfMzWaliYdi1G0mYwZ0AXf3ckuVvGBxTO/PiFG6hUB7wO1A
+	xXVYhBm5zqciqMKuNV7hLLeZJP5rWV4AddvoalvFZrB7UTpeYHwftrNF32DetIlX
+	ZtfY948XxqfPaZEg07+znEvfk56HaFyQ/MRwIxqHGOIdbfiTpjCnbRCwarpjiCOD
+	KAlNfGVJPi6d5JsRv9FtQZ/Mjj2Sw/LVMIfxcF0QcHT/AnHD9uOKyb+Iwe3ddtTX
+	5npIla2m6l5XgTyFNTuTcDqWf/kH5d3CjjH2o8pqlUD00bLcwb2jLo0CNZi5CjME
+	D9i/Rw==
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bvq2q0exv-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Sat, 24 Jan 2026 10:38:23 +0000 (GMT)
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-822426d21a8so3408555b3a.3
+        for <linux-pm@vger.kernel.org>; Sat, 24 Jan 2026 02:38:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1769251103; x=1769855903; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3J7xNQPfpRsnFYqFLGHAgQpWibMHp3cy/N6JarG//vo=;
+        b=fCqv7qHSyviasHg1Mt4AyAZDymnMHNfPmgjqpTy14CtYERkdk4xQ7goOJxE+3MoEWM
+         zvKlMy4o0VkMV8zuuRtx2a8Zu0Zr4oNPJqy7Zd8KRSFMUS5ywl2T9aESRuq7XDogW8Bw
+         Pi8vLP/POFWlWLiMzpV6YlOCkdv0uwWxHtPS702lsYhCmawHSFJvan8swfWRzGI1CnHj
+         gWfQjwLHqUvKceWajedy0qklSZZ7XBHCjSpURSq+AiM+xjzviU38BMufj+HgFrowUiSb
+         jYJ7IpTx1DlO0hidtK+m+gTWCSpNKr6QqKgO/0RW64X1hKWw/VIN90Rq5Oc1SpiDOhrn
+         Z5kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769251103; x=1769855903;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3J7xNQPfpRsnFYqFLGHAgQpWibMHp3cy/N6JarG//vo=;
+        b=i9/ac6kelKiOuO0l0GMZxRY5GIrDj2waxIz2ucoL/eNjcbrDE+qXut0wSbzmej4xPf
+         6ZzGib2cRzbw6eAzNlzLZ5eyqhcNa9h0Olaz0SnnX1kcmrnKQTN4C+5OdTUg7kayP4cM
+         7/UPrpoUekJekyH+YFUgd1R5oo9KMyAiIyZzeefM/293emB7GjaDSlJjOkcdDtNXOwMu
+         c6RJomf6Ah2rpTbJZF/NMrffoB3hN/6T0PpJWA+29iyR68utzELF6RQReN0TfCz/AxrT
+         Mb9PgkLPTSHP+p0cIcOS6IuVS8FiMgsvizVOowz0Cuy2DQZ38mysjNIY5ZQg1/uVlM6t
+         GBDA==
+X-Forwarded-Encrypted: i=1; AJvYcCWus34a+Px407jObxK3B+Glj1emKinA27q3l6vTdfMQjHmh9+IY4yeioStTGuxWPGLAopjgbiWggg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywh0EqYSzeknJIHpWs3v01MebWkmeihWxRHqGXYgUQJGTqdNoCT
+	1Lygfw0JuUxzSVxXIoFcV/wbe7D4PGkzacwGOzZBEXPMxl27nQ58abxruCNlV8RDJPZFNCvhKUw
+	ZN7X5paExqpdMNJnHV1nP/bNFAZkiHK6FZodoaqu494qm75KalFc0M8uh6FGTSA==
+X-Gm-Gg: AZuq6aLYcyFgsGB4L2zgOiU66x2VXd2PrHm3mDG4zFACAbEGF1LSfVE4jrSrr+ZUdNB
+	s+TEQq6UhQQlAHwfUFfyw1R0Eae5EhPb/pIQMpcVmx+gUyEpRS2/JoLm6vjYGEBJtD4B88AiDpV
+	QUW9uNVwARLWpHDOauJbEiA5qyiocnZhwWQLv/BvNmUqnagO+/cHiyZAtcAxdd4uhk0hpEQkC2n
+	XfcsQFEYtgZCXRlXYmOQJ6YQdYjAtqFCSw3e3NnUGYfzzhYFhoqOTralYiTFFVcZXrsxxX69QaK
+	h+4qdE4TC4d+PxQ0jXkjh8ScDOfzqSVtjHI5xfeW+DZS+e/6bdRe8p4xaJVS3cASKIjVweuShNa
+	b1ElIBJbe7DBGqXf5jK26R+LZFuHzSbpgYy1KkqDx8C9F
+X-Received: by 2002:a05:6a00:3e05:b0:823:1392:ba5d with SMTP id d2e1a72fcca58-82317e15240mr5785375b3a.38.1769251102701;
+        Sat, 24 Jan 2026 02:38:22 -0800 (PST)
+X-Received: by 2002:a05:6a00:3e05:b0:823:1392:ba5d with SMTP id d2e1a72fcca58-82317e15240mr5785339b3a.38.1769251102181;
+        Sat, 24 Jan 2026 02:38:22 -0800 (PST)
+Received: from [10.218.16.150] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82318671e1csm4495631b3a.27.2026.01.24.02.38.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 24 Jan 2026 02:38:21 -0800 (PST)
+Message-ID: <9e9b9faf-7c5d-2e83-a8ac-37afeffd81d4@oss.qualcomm.com>
+Date: Sat, 24 Jan 2026 16:08:11 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v19 00/10] Implement PSCI reboot mode driver for PSCI
+ resets
+From: Shivendra Pratap <shivendra.pratap@oss.qualcomm.com>
+To: Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+        Andre Draszik <andre.draszik@linaro.org>,
+        Kathiravan Thirumoorthy <kathiravan.thirumoorthy@oss.qualcomm.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, Srinivas Kandagatla <srini@kernel.org>,
+        Umang Chheda <umang.chheda@oss.qualcomm.com>,
+        Nirmesh Kumar Singh <nirmesh.singh@oss.qualcomm.com>,
+        Song Xue <quic_songxue@quicinc.com>, Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Souvik Chakravarty <Souvik.Chakravarty@arm.com>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Yan
+ <andy.yan@rock-chips.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Moritz Fischer <moritz.fischer@ettus.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Bartosz Golaszewski <brgl@kernel.org>
+References: <20251228-arm-psci-system_reset2-vendor-reboots-v19-0-ebb956053098@oss.qualcomm.com>
+ <2dcd9e3a-0a40-0dfb-29b8-99b70b73a59a@oss.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <2dcd9e3a-0a40-0dfb-29b8-99b70b73a59a@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: 3PVgDt9xoOQBn463Y5HX_8Euzn8t7DQQ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI0MDA4NCBTYWx0ZWRfX5WuoUkygK/vI
+ 2TtxN8fzgOp/WkusN9GwQ+l6DdyYhQdFNT0npFQ6Au0orRHlDh4/dOQ57RHTSoLZuM8GRm3Wf49
+ 0SDXIqJcCOZ0PAj1ghkzO1EQ9JFZ5nbfIgCkBb3Zx+D9E2IKbqp+KJ9NQ3RA42AeN8ZfMci9vgq
+ HjoSywpXKlDYAMycBA+H5coc1qw3VVZowTv+6Gk3O0iUvhJvtPUrxeAxhaf8TNIl15NF48eRsOB
+ QK/SN6v5oLPGRJYguN8GbwBNv2IUx/X+6RZjN20cFd+F6wOgaiTC0DIf7uHGtiTAxf7dimWPtFm
+ 5ixExSX2j5pFK+dUbpXBvWUXqnFz9ZmtLZcH5+PSTpAAAdkBhgfZzoNVBRWC8e5etB13a0eRsKa
+ XDwz0iKWET/+bYb9KnTF+OdB66E4Gev3NGJbo+dBvVwPveZX6j+LXq+ArEyQ0fghOq2jikR4Shg
+ buRTA/PK2hMUL8/bUkA==
+X-Proofpoint-ORIG-GUID: 3PVgDt9xoOQBn463Y5HX_8Euzn8t7DQQ
+X-Authority-Analysis: v=2.4 cv=POECOPqC c=1 sm=1 tr=0 ts=6974a11f cx=c_pps
+ a=m5Vt/hrsBiPMCU0y4gIsQw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=r0sTgVGAZfIT8Xa8ZzUA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=IoOABgeZipijB_acs4fv:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-24_02,2026-01-22_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 malwarescore=0 suspectscore=0 lowpriorityscore=0 clxscore=1015
+ bulkscore=0 priorityscore=1501 spamscore=0 impostorscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601240084
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[intel.com:+];
+	RCPT_COUNT_TWELVE(0.00)[30];
+	FREEMAIL_CC(0.00)[broadcom.com,kernel.org,oss.qualcomm.com,linaro.org,vger.kernel.org,lists.infradead.org,quicinc.com,arndb.de,arm.com,rock-chips.com,gmail.com,ettus.com];
 	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-41404-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41403-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_THREE(0.00)[3];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[shivendra.pratap@oss.qualcomm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:mid,intel.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D090D7D151
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: EA5347D435
 X-Rspamd-Action: no action
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 7e9b0371ed5b9bf9a80c59487f47fca0ba638f61  Merge branch 'thermal-intel' into bleeding-edge
 
-Error/Warning (recently discovered and may have been fixed):
 
-    https://lore.kernel.org/oe-kbuild-all/202601240833.jYdOreP4-lkp@intel.com
-    https://lore.kernel.org/oe-kbuild-all/202601240853.XfwHlHep-lkp@intel.com
+On 1/6/2026 4:38 PM, Shivendra Pratap wrote:
+> 
+> 
+> On 12/28/2025 10:50 PM, Shivendra Pratap wrote:
+>> Userspace should be able to initiate device reboots using the various
+>> PSCI SYSTEM_RESET and SYSTEM_RESET2 types defined by PSCI spec. This
+>> patch series introduces psci-reboot-mode driver that registers with
+>> reboot-mode framework to provide this functionality.
+>>
+>> The PSCI system reset calls takes two arguments: reset_type and cookie.
+>> It defines predefined reset types, such as warm and cold reset, and
+>> vendor-specific reset types which are SoC vendor specific. To support
+>> these requirements, the reboot-mode framework is enhanced in two key
+>> ways:
+>> 1. 64-bit magic support: Extend reboot-mode to handle two 32-bit
+>> arguments (reset_type and cookie) by encoding them into a single 64-bit
+>> magic value.
+>> 2. Predefined modes: Add support for predefined reboot modes in the
+>> framework.
+>>
+>> With these enhancements, the patch series enables:
+>>  - Warm reset and cold reset as predefined reboot modes.
+>>  - Vendor-specific resets exposed as tunables, configurable via the
+>>    SoC-specific device tree.
+>>
+>> Together, these changes allow userspace to trigger all above PSCI resets
+>> from userspace.
+>>
+> 
+> Hi Lorenzo,
+> 
+> Is this patch series now converging towards the design changes you
+> proposed in v17? We’d like to conclude the design so we can move it
+> towards closure.
 
-    drivers/cpufreq/cpufreq_ondemand.c:342:13: error: implicit declaration of function 'tick_nohz_is_active' [-Wimplicit-function-declaration]
-    drivers/cpufreq/cpufreq_ondemand.c:342:6: error: call to undeclared function 'tick_nohz_is_active'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    drivers/cpufreq/cpufreq_ondemand.c:342:6: error: implicit declaration of function 'tick_nohz_is_active' [-Werror=implicit-function-declaration]
-    drivers/cpufreq/cpufreq_ondemand.c:342:6: error: implicit declaration of function 'tick_nohz_is_active'; did you mean 'tick_nohz_idle_exit'? [-Werror=implicit-function-declaration]
-    kernel/time/hrtimer.c:946:41: error: call to undeclared function 'tick_nohz_is_active'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    kernel/time/hrtimer.c:946:41: error: implicit declaration of function 'tick_nohz_is_active'; did you mean 'tick_nohz_init'? [-Werror=implicit-function-declaration]
-    kernel/time/hrtimer.c:946:48: error: implicit declaration of function 'tick_nohz_is_active'; did you mean 'tick_nohz_init'? [-Werror=implicit-function-declaration]
-    kernel/time/hrtimer.c:946:48: error: implicit declaration of function 'tick_nohz_is_active'; did you mean 'tick_nohz_init'? [-Wimplicit-function-declaration]
-    kernel/time/hrtimer.c:954:41: error: call to undeclared function 'tick_nohz_is_active'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    kernel/time/hrtimer.c:954:41: error: implicit declaration of function 'tick_nohz_is_active'; did you mean 'tick_nohz_init'? [-Werror=implicit-function-declaration]
-    kernel/time/hrtimer.c:954:48: error: implicit declaration of function 'tick_nohz_is_active'; did you mean 'tick_nohz_init'? [-Werror=implicit-function-declaration]
-    kernel/time/hrtimer.c:954:48: error: implicit declaration of function 'tick_nohz_is_active'; did you mean 'tick_nohz_init'? [-Wimplicit-function-declaration]
+Hi Lorenzo,
 
-Error/Warning ids grouped by kconfigs:
+Can you please review if the design aligns with your proposed changes?
 
-recent_errors
-|-- alpha-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- alpha-defconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- alpha-randconfig-r121-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- arc-alldefconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- arc-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- arc-nsim_700_defconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- arc-randconfig-001-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- arc-randconfig-r123-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- arm-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- arm-s3c6400_defconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- arm-spear3xx_defconfig
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- arm64-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- arm64-randconfig-002-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- arm64-randconfig-003-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- arm64-randconfig-004-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- csky-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- csky-randconfig-002-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- hexagon-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- hexagon-defconfig
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- hexagon-randconfig-001-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- hexagon-randconfig-r064-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- hexagon-randconfig-r073-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- hexagon-randconfig-r113-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- i386-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- i386-buildonly-randconfig-001-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- i386-buildonly-randconfig-003-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- i386-buildonly-randconfig-004-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- i386-randconfig-001-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- i386-randconfig-003-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- i386-randconfig-005-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- i386-randconfig-006-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- i386-randconfig-012-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- i386-randconfig-013-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- i386-randconfig-016-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- i386-randconfig-017-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- i386-randconfig-063-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- i386-randconfig-141-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- i386-randconfig-r062-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- loongarch-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- loongarch-randconfig-001-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- loongarch-randconfig-002-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- loongarch-randconfig-r054-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- loongarch-randconfig-r072-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- m68k-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- m68k-defconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- m68k-randconfig-r052-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- microblaze-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- microblaze-defconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- mips-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- mips-randconfig-r053-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- mips-randconfig-r073-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- mips-randconfig-r131-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- nios2-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- nios2-randconfig-002-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- openrisc-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- parisc-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- parisc-defconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- parisc-randconfig-002-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- parisc64-defconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- powerpc-akebono_defconfig
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- powerpc-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- powerpc-ppa8548_defconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- powerpc64-randconfig-r133-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- riscv-alldefconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- riscv-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- riscv-nommu_k210_sdcard_defconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- riscv-randconfig-001-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- riscv-randconfig-r064-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- s390-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- s390-randconfig-001-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- s390-randconfig-002-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- sh-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- sh-randconfig-001-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- sh-randconfig-002-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- sh-randconfig-r132-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- sparc-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- sparc-defconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- sparc-randconfig-001-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- sparc64-randconfig-002-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- sparc64-randconfig-r061-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- sparc64-randconfig-r134-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- um-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- um-randconfig-002-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- x86_64-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- x86_64-buildonly-randconfig-001-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- x86_64-buildonly-randconfig-003-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- x86_64-buildonly-randconfig-005-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- x86_64-buildonly-randconfig-006-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- x86_64-randconfig-001-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- x86_64-randconfig-003-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- x86_64-randconfig-013-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- x86_64-randconfig-014-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- x86_64-randconfig-015-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- x86_64-randconfig-072-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- x86_64-randconfig-075-20260124
-|   `-- kernel-time-hrtimer.c:error:call-to-undeclared-function-tick_nohz_is_active-ISO-C99-and-later-do-not-support-implicit-function-declarations
-|-- x86_64-randconfig-101-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- x86_64-randconfig-121-20260124
-|   |-- drivers-cpufreq-cpufreq_ondemand.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- x86_64-randconfig-123-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- x86_64-randconfig-r072-20260124
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-|-- xtensa-allnoconfig
-|   `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-`-- xtensa-randconfig-001-20260124
-    `-- kernel-time-hrtimer.c:error:implicit-declaration-of-function-tick_nohz_is_active
-
-elapsed time: 737m
-
-configs tested: 195
-configs skipped: 3
-
-tested configs:
-alpha                             allnoconfig    gcc-15.2.0
-alpha                            allyesconfig    gcc-15.2.0
-alpha                               defconfig    gcc-15.2.0
-arc                              allmodconfig    clang-16
-arc                               allnoconfig    gcc-15.2.0
-arc                              allyesconfig    clang-22
-arc                              allyesconfig    gcc-15.2.0
-arc                      axs103_smp_defconfig    gcc-15.2.0
-arc                                 defconfig    gcc-15.2.0
-arc                     haps_hs_smp_defconfig    clang-17
-arc                   randconfig-001-20260124    clang-18
-arc                   randconfig-002-20260124    clang-18
-arm                               allnoconfig    gcc-15.2.0
-arm                              allyesconfig    clang-16
-arm                                 defconfig    gcc-15.2.0
-arm                       imx_v4_v5_defconfig    gcc-15.2.0
-arm                   randconfig-001-20260124    clang-18
-arm                   randconfig-002-20260124    clang-18
-arm                   randconfig-003-20260124    clang-18
-arm                   randconfig-004-20260124    clang-18
-arm                        spear3xx_defconfig    clang-17
-arm                       versatile_defconfig    gcc-15.2.0
-arm64                            allmodconfig    clang-19
-arm64                            allmodconfig    clang-22
-arm64                             allnoconfig    gcc-15.2.0
-arm64                               defconfig    gcc-15.2.0
-arm64                 randconfig-001-20260124    gcc-15.2.0
-arm64                 randconfig-002-20260124    gcc-15.2.0
-arm64                 randconfig-003-20260124    gcc-15.2.0
-arm64                 randconfig-004-20260124    gcc-15.2.0
-csky                             allmodconfig    gcc-15.2.0
-csky                              allnoconfig    gcc-15.2.0
-csky                                defconfig    gcc-15.2.0
-csky                  randconfig-001-20260124    gcc-15.2.0
-csky                  randconfig-002-20260124    gcc-15.2.0
-hexagon                          allmodconfig    gcc-15.2.0
-hexagon                           allnoconfig    gcc-15.2.0
-hexagon                             defconfig    gcc-15.2.0
-hexagon               randconfig-001-20260124    gcc-15.2.0
-hexagon               randconfig-002-20260124    gcc-15.2.0
-i386                             allmodconfig    clang-20
-i386                             allmodconfig    gcc-14
-i386                              allnoconfig    gcc-15.2.0
-i386                             allyesconfig    clang-20
-i386                             allyesconfig    gcc-14
-i386        buildonly-randconfig-001-20260124    gcc-14
-i386        buildonly-randconfig-002-20260124    gcc-14
-i386        buildonly-randconfig-003-20260124    gcc-14
-i386        buildonly-randconfig-004-20260124    gcc-14
-i386        buildonly-randconfig-005-20260124    gcc-14
-i386        buildonly-randconfig-006-20260124    gcc-14
-i386                                defconfig    gcc-15.2.0
-i386                  randconfig-001-20260124    gcc-14
-i386                  randconfig-002-20260124    gcc-14
-i386                  randconfig-003-20260124    gcc-14
-i386                  randconfig-004-20260124    gcc-14
-i386                  randconfig-005-20260124    gcc-14
-i386                  randconfig-006-20260124    gcc-14
-i386                  randconfig-007-20260124    gcc-14
-i386                  randconfig-011-20260124    clang-20
-i386                  randconfig-012-20260124    clang-20
-i386                  randconfig-013-20260124    clang-20
-i386                  randconfig-014-20260124    clang-20
-i386                  randconfig-015-20260124    clang-20
-i386                  randconfig-016-20260124    clang-20
-i386                  randconfig-017-20260124    clang-20
-loongarch                        allmodconfig    clang-19
-loongarch                        allmodconfig    clang-22
-loongarch                         allnoconfig    gcc-15.2.0
-loongarch                           defconfig    clang-19
-loongarch             randconfig-001-20260124    gcc-15.2.0
-loongarch             randconfig-002-20260124    gcc-15.2.0
-m68k                             allmodconfig    gcc-15.2.0
-m68k                              allnoconfig    gcc-15.2.0
-m68k                             allyesconfig    clang-16
-m68k                                defconfig    clang-19
-microblaze                        allnoconfig    gcc-15.2.0
-microblaze                       allyesconfig    gcc-15.2.0
-microblaze                          defconfig    clang-19
-mips                             allmodconfig    gcc-15.2.0
-mips                              allnoconfig    gcc-15.2.0
-mips                             allyesconfig    gcc-15.2.0
-mips                  maltasmvp_eva_defconfig    gcc-15.2.0
-mips                        maltaup_defconfig    gcc-15.2.0
-mips                    maltaup_xpa_defconfig    gcc-15.2.0
-nios2                            allmodconfig    clang-22
-nios2                             allnoconfig    clang-22
-nios2                             allnoconfig    gcc-11.5.0
-nios2                               defconfig    clang-19
-nios2                 randconfig-001-20260124    gcc-15.2.0
-nios2                 randconfig-002-20260124    gcc-15.2.0
-openrisc                         allmodconfig    clang-22
-openrisc                          allnoconfig    clang-22
-openrisc                          allnoconfig    gcc-15.2.0
-openrisc                            defconfig    gcc-15.2.0
-parisc                           allmodconfig    gcc-15.2.0
-parisc                            allnoconfig    clang-22
-parisc                            allnoconfig    gcc-15.2.0
-parisc                           allyesconfig    clang-19
-parisc                              defconfig    gcc-15.2.0
-parisc                randconfig-001-20260124    gcc-8.5.0
-parisc                randconfig-002-20260124    gcc-8.5.0
-parisc64                            defconfig    clang-19
-powerpc                     akebono_defconfig    clang-17
-powerpc                          allmodconfig    gcc-15.2.0
-powerpc                           allnoconfig    clang-22
-powerpc                           allnoconfig    gcc-15.2.0
-powerpc                     ppa8548_defconfig    gcc-15.2.0
-powerpc               randconfig-001-20260124    gcc-8.5.0
-powerpc               randconfig-002-20260124    gcc-8.5.0
-powerpc                     redwood_defconfig    clang-17
-powerpc64             randconfig-001-20260124    gcc-8.5.0
-powerpc64             randconfig-002-20260124    gcc-8.5.0
-riscv                            alldefconfig    clang-17
-riscv                            allmodconfig    clang-22
-riscv                             allnoconfig    clang-22
-riscv                             allnoconfig    gcc-15.2.0
-riscv                            allyesconfig    clang-16
-riscv                               defconfig    gcc-15.2.0
-riscv             nommu_k210_sdcard_defconfig    clang-17
-riscv                 randconfig-001-20260124    gcc-8.5.0
-riscv                 randconfig-002-20260124    gcc-8.5.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-22
-s390                             allyesconfig    gcc-15.2.0
-s390                                defconfig    gcc-15.2.0
-s390                  randconfig-001-20260124    gcc-8.5.0
-s390                  randconfig-002-20260124    gcc-8.5.0
-sh                               allmodconfig    gcc-15.2.0
-sh                                allnoconfig    clang-22
-sh                                allnoconfig    gcc-15.2.0
-sh                               allyesconfig    clang-19
-sh                                  defconfig    gcc-14
-sh                    randconfig-001-20260124    gcc-8.5.0
-sh                    randconfig-002-20260124    gcc-8.5.0
-sparc                             allnoconfig    clang-22
-sparc                             allnoconfig    gcc-15.2.0
-sparc                               defconfig    gcc-15.2.0
-sparc                 randconfig-001-20260124    gcc-13.4.0
-sparc                 randconfig-002-20260124    gcc-13.4.0
-sparc                       sparc64_defconfig    gcc-15.2.0
-sparc64                          allmodconfig    clang-22
-sparc64                             defconfig    gcc-14
-sparc64               randconfig-001-20260124    gcc-13.4.0
-sparc64               randconfig-002-20260124    gcc-13.4.0
-um                               allmodconfig    clang-19
-um                                allnoconfig    clang-22
-um                               allyesconfig    gcc-15.2.0
-um                                  defconfig    gcc-14
-um                             i386_defconfig    gcc-14
-um                    randconfig-001-20260124    gcc-13.4.0
-um                    randconfig-002-20260124    gcc-13.4.0
-um                           x86_64_defconfig    gcc-14
-x86_64                           allmodconfig    clang-20
-x86_64                            allnoconfig    clang-20
-x86_64                            allnoconfig    clang-22
-x86_64                           allyesconfig    clang-20
-x86_64      buildonly-randconfig-001-20260124    clang-20
-x86_64      buildonly-randconfig-002-20260124    clang-20
-x86_64      buildonly-randconfig-003-20260124    clang-20
-x86_64      buildonly-randconfig-004-20260124    clang-20
-x86_64      buildonly-randconfig-005-20260124    clang-20
-x86_64      buildonly-randconfig-006-20260124    clang-20
-x86_64                              defconfig    gcc-14
-x86_64                                  kexec    clang-20
-x86_64                randconfig-001-20260124    gcc-13
-x86_64                randconfig-002-20260124    gcc-13
-x86_64                randconfig-003-20260124    gcc-13
-x86_64                randconfig-004-20260124    gcc-13
-x86_64                randconfig-005-20260124    gcc-13
-x86_64                randconfig-006-20260124    gcc-13
-x86_64                randconfig-011-20260124    gcc-12
-x86_64                randconfig-012-20260124    gcc-12
-x86_64                randconfig-013-20260124    gcc-12
-x86_64                randconfig-014-20260124    gcc-12
-x86_64                randconfig-015-20260124    gcc-12
-x86_64                randconfig-016-20260124    gcc-12
-x86_64                randconfig-071-20260124    gcc-14
-x86_64                randconfig-072-20260124    gcc-14
-x86_64                randconfig-073-20260124    gcc-14
-x86_64                randconfig-074-20260124    gcc-14
-x86_64                randconfig-075-20260124    gcc-14
-x86_64                randconfig-076-20260124    gcc-14
-x86_64                               rhel-9.4    clang-20
-x86_64                           rhel-9.4-bpf    gcc-14
-x86_64                          rhel-9.4-func    clang-20
-x86_64                    rhel-9.4-kselftests    clang-20
-x86_64                         rhel-9.4-kunit    gcc-14
-x86_64                           rhel-9.4-ltp    gcc-14
-x86_64                          rhel-9.4-rust    clang-20
-xtensa                            allnoconfig    clang-22
-xtensa                            allnoconfig    gcc-15.2.0
-xtensa                           allyesconfig    clang-22
-xtensa                randconfig-001-20260124    gcc-13.4.0
-xtensa                randconfig-002-20260124    gcc-13.4.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+thanks,
+Shivendra
 
