@@ -1,209 +1,169 @@
-Return-Path: <linux-pm+bounces-41438-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41443-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mGTINY11dmnHQwEAu9opvQ
-	(envelope-from <linux-pm+bounces-41438-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 20:57:01 +0100
+	id iF3fOsukdmnnTgEAu9opvQ
+	(envelope-from <linux-pm+bounces-41443-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 00:18:35 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2507C82476
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 20:57:01 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51CAC83206
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 00:18:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D1AB730036EC
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 19:56:58 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 48622300425E
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 23:18:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589772FF643;
-	Sun, 25 Jan 2026 19:56:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8481D30FC15;
+	Sun, 25 Jan 2026 23:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M+q73UM9"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="srvNykPF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798D62FF17A;
-	Sun, 25 Jan 2026 19:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB7935975;
+	Sun, 25 Jan 2026 23:18:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769371018; cv=none; b=jlPkqcF0/5O/RyfdMqKITfEmurKvJ0kEEXFZZnvNgwkY5BjPxQG6gKbXoiKHSSdph0fVYk7IpVVOqkcknigVHUMnUw0weBTohXT+e0baQlYXK8PCtL0I6eX2AIvUqhZib4Nzo+P+L06dGioK6pu2ayAp2m6MH+Pu3HamaSooGPw=
+	t=1769383111; cv=none; b=Bl9MkGaDhScwU9EORm9Rth7m8RAd4mfrDZDDkYGqUxaVr/Rk9WM0MkF+F9Jpc/4C4c+TUeYFE1fCSX4Ks7gXhommLwN35sUFJ3jhuMvFbprTEWrN39kzuzlISLoVRM7o4ltvflomNq1W5+ty66Ktdef11qBODKVLYLk6mZotFw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769371018; c=relaxed/simple;
-	bh=qTKxnEAJp/Ki0VGMVmpt0zh+HCdIB1MFyEaQiBTjsxg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o+99pRn34Eo2jmKKq8+sRWPFvAqCedmQOLIXidDtu6UQEe2ehffRK1bNsmuvSd182jTbr4CjX+SE1HRVzgWtTyPB7ZAPw28nNwk90/Xwj1vjO8CAChLG8g2xu+khx8R1m3WxB02fuHRtZkB2i9jSxgcNs/BBfasIwp8JRzSgJFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M+q73UM9; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769371017; x=1800907017;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qTKxnEAJp/Ki0VGMVmpt0zh+HCdIB1MFyEaQiBTjsxg=;
-  b=M+q73UM9YwX4PFXdXOkWFuVDqhoc1hn+1vqjgYQIE9pRvnxb5XzkApKI
-   JihXOgarY/hOBORl+1LV7VRc72Fb0M0So19A0zqvWgqIZ/3ZyXq0i01fU
-   sxJiOKWrt7c8icCD/e9WmjbVlAk5XJ9oqmb7yjU3kajpO1q/KWF7388iL
-   P1VmE4ryFy2MxD3Hn5fpei/rckA2K93Fi864E/tRU28uaBfoW0DfIfXda
-   xuO3dSYHOVxq4w0SbOF5sr/KSaDEJnygml2YB0aa9PbqZn/qYqwje0a3d
-   A4iS3tfiY6QhAnyy8lU7goSr+WtFndN10RWRQYeT6dMU86dlys8/evwXl
-   g==;
-X-CSE-ConnectionGUID: 1I+D4FgST9mtVeTefmJIcQ==
-X-CSE-MsgGUID: rSaVVg6iRhG0EUd7KDZbfw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11682"; a="70601010"
-X-IronPort-AV: E=Sophos;i="6.21,253,1763452800"; 
-   d="scan'208";a="70601010"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2026 11:56:56 -0800
-X-CSE-ConnectionGUID: BvjibUp4RkOnR7Ek7NSQDQ==
-X-CSE-MsgGUID: D0xhRt44Qv2cUqSn23xRjA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,253,1763452800"; 
-   d="scan'208";a="207564226"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 25 Jan 2026 11:56:52 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vk6E5-00000000Wba-1WlU;
-	Sun, 25 Jan 2026 19:56:49 +0000
-Date: Mon, 26 Jan 2026 03:56:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michael Reeves via B4 Relay <devnull+michael.reeves077.gmail.com@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>, Sven Peter <sven@kernel.org>,
-	Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>,
-	Lee Jones <lee@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	Michael Reeves <michael.reeves077@gmail.com>,
-	Hector Martin <marcan@marcan.st>, Joey Gouly <joey.gouly@arm.com>
-Subject: Re: [PATCH v5 1/2] power: supply: Add macsmc-power driver for Apple
- Silicon
-Message-ID: <202601260326.ZuabPAK0-lkp@intel.com>
-References: <20260126-b4-macsmc-power-v5-1-302462673b18@gmail.com>
+	s=arc-20240116; t=1769383111; c=relaxed/simple;
+	bh=bnHPIDRUoIrORd8liCaWNaG8d6KldAF6D70CR+vyJOU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U0AdmGhJOfynOVp9GOxbnWSqt4/r+BTMu7Y7klo6Oxik4wG/5shLWglITVTXUbiDk9U7VZpI94uMndZQYAv5GHKGAxU3Dj21bW08y3n2h5EqhQOVjfx4KyQ/CYSLWVYTx8UNBSPLQ5QYiHbnZCwopzoPNxW/RRbY67chMOmcYLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=srvNykPF; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4dznf26l1pz9tgl;
+	Mon, 26 Jan 2026 00:18:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1769383099;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=m/asOs9DyQ5THRpDLADk+Y2I0OVr6O6ljdNzMDKMqo4=;
+	b=srvNykPFoMbdNkm95JsqCubOCcArIDiK11P92dDAugrfofyLVpxqcubR11bb9blGgbeMFs
+	i/9DQg4I3K2zQ55MfVpw/t+tA4zykrLpgreokrW3Umrnj1IEvMhvHDS8z8gnHP2xiDL2ZN
+	DPvyYhusuj1yj2mfBxSwG+NksqdkK448uH0bgTW0jBR4SEynmDP9amI/96OC/GEb4PKJC2
+	xfS95RmIEfcsiUq4fG9p4ukv/v7ajRSu29SxgelLDYUcoHIR95URZhQ0jSi8pUUGXr/Rr0
+	NoiMVRSmTckRoGCjjhfdXwtD1s8k7Z1nqpD9A/c8z0y6RXkKS0dsfsatFr5s6g==
+Message-ID: <9efa9daa-6584-44b3-8055-bc160e46d8a5@mailbox.org>
+Date: Sun, 25 Jan 2026 21:24:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260126-b4-macsmc-power-v5-1-302462673b18@gmail.com>
+Subject: Re: drm/imagination: genpd_runtime_suspend() crash
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Frank Binns <frank.binns@imgtec.com>, Matt Coster
+ <matt.coster@imgtec.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ DRI Development <dri-devel@lists.freedesktop.org>,
+ Linux PM list <linux-pm@vger.kernel.org>,
+ Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+References: <CAMuHMdWapT40hV3c+CSBqFOW05aWcV1a6v_NiJYgoYi0i9_PDQ@mail.gmail.com>
+ <0e9f963b-00e0-43d1-b567-cb10b8f66df1@mailbox.org>
+ <CAMuHMdVOUzanEufhWqOL0nv81xCYh4YNAX_waG6y9PyUZ030tg@mail.gmail.com>
+Content-Language: en-US
+From: Marek Vasut <marek.vasut@mailbox.org>
+In-Reply-To: <CAMuHMdVOUzanEufhWqOL0nv81xCYh4YNAX_waG6y9PyUZ030tg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-MBO-RS-META: m7z9jqcet3zwhy5m8ud1ex4tencrz7fd
+X-MBO-RS-ID: 280231b825f43649aaa
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FREEMAIL_CC(0.00)[lists.linux.dev,vger.kernel.org,lists.infradead.org,gmail.com,marcan.st,arm.com];
-	TAGGED_FROM(0.00)[bounces-41438-lists,linux-pm=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41443-lists,linux-pm=lfdr.de];
+	TO_DN_ALL(0.00)[];
+	DKIM_TRACE(0.00)[mailbox.org:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm,michael.reeves077.gmail.com];
+	FROM_NEQ_ENVFROM(0.00)[marek.vasut@mailbox.org,linux-pm@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 2507C82476
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mailbox.org:mid,mailbox.org:dkim]
+X-Rspamd-Queue-Id: 51CAC83206
 X-Rspamd-Action: no action
 
-Hi Michael,
+On 1/22/26 4:35 PM, Geert Uytterhoeven wrote:
 
-kernel test robot noticed the following build errors:
+Hello Geert,
 
-[auto build test ERROR on ca3a02fda4da8e2c1cb6baee5d72352e9e2cfaea]
+>> Can you please test this change and see if it fixes the problem ?
+>>
+>> The barrier should guarantee that the domain is settled and no more
+>> callbacks are still running.
+> 
+> Thank you, that indeed fixes the issue!
+> 
+> However, I am not so sure this barrier belongs in the .detach_dev()
+> callback.  The documentation for almost all dev_pm_domain_{at,de}tach*()
+> functions states:
+> 
+>       * Callers must ensure proper synchronization of this function with power
+>       * management callbacks.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Reeves-via-B4-Relay/power-supply-Add-macsmc-power-driver-for-Apple-Silicon/20260125-211800
-base:   ca3a02fda4da8e2c1cb6baee5d72352e9e2cfaea
-patch link:    https://lore.kernel.org/r/20260126-b4-macsmc-power-v5-1-302462673b18%40gmail.com
-patch subject: [PATCH v5 1/2] power: supply: Add macsmc-power driver for Apple Silicon
-config: um-allmodconfig (https://download.01.org/0day-ci/archive/20260126/202601260326.ZuabPAK0-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260126/202601260326.ZuabPAK0-lkp@intel.com/reproduce)
+Isn't cpg_mssr_detach_dev() the caller in this case ?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601260326.ZuabPAK0-lkp@intel.com/
+> However, I couldn't find any user that calls pm_runtime_barrier() first.
+> 
+> In case of multiple PM domains, it is even more complicated, as
+> dev_pm_domain_attach_list() (and pvr_power_domains_init(), which is
+> basically an open-coded variant of the former) creates a list of virtual
+> devices, which all need synchronization.  For the devres-enabled version
+> (devm_pm_domain_attach_list()), the caller cannot take care of calling
+> pm_runtime_barrier() anyway, so it has to be handled by the PM core?
 
-All errors (new ones prefixed by >>):
+I am also a bit surprised the PM core does not handle it.
 
->> drivers/power/supply/macsmc-power.c:559:3: error: call to undeclared function 'emergency_sync'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     559 |                 emergency_sync();
-         |                 ^
-   1 error generated.
-
-
-vim +/emergency_sync +559 drivers/power/supply/macsmc-power.c
-
-   531	
-   532	static void macsmc_power_critical_work(struct work_struct *wrk)
-   533	{
-   534		struct macsmc_power *power = container_of(wrk, struct macsmc_power, critical_work);
-   535		u16 bitv, b0av;
-   536		u32 bcf0;
-   537	
-   538		if (!power->batt)
-   539			return;
-   540	
-   541		/*
-   542		 * Avoid duplicate atempts at emergency shutdown
-   543		 */
-   544		if (power->emergency_shutdown_triggered || system_state > SYSTEM_RUNNING)
-   545			return;
-   546	
-   547		/*
-   548		 * EMERGENCY: Check voltage vs design minimum.
-   549		 * If we are below BITV, the battery is physically exhausted.
-   550		 * We must shut down NOW to protect the filesystem.
-   551		 */
-   552		if (apple_smc_read_u16(power->smc, SMC_KEY(BITV), &bitv) >= 0 &&
-   553		    apple_smc_read_u16(power->smc, SMC_KEY(B0AV), &b0av) >= 0 &&
-   554		    b0av < bitv) {
-   555			power->emergency_shutdown_triggered = true;
-   556			dev_emerg(power->dev,
-   557				  "Battery voltage (%d mV) below design minimum (%d mV)! Emergency shutdown.\n",
-   558				  b0av, bitv);
- > 559			emergency_sync();
-   560			kernel_power_off();
-   561		}
-   562	
-   563		/*
-   564		 * Avoid duplicate attempts at orderly shutdown.
-   565		 * Voltage check is above this as we may want to
-   566		 * "upgrade" an orderly shutdown to a critical power
-   567		 * off if voltage drops.
-   568		 */
-   569		if (power->orderly_shutdown_triggered || system_state > SYSTEM_RUNNING)
-   570			return;
-   571	
-   572		/*
-   573		 * Check if SMC flagged the battery as empty.
-   574		 * We trigger a graceful shutdown to let the OS save data.
-   575		 */
-   576		if (apple_smc_read_u32(power->smc, SMC_KEY(BCF0), &bcf0) == 0 && bcf0 != 0) {
-   577			power->orderly_shutdown_triggered = true;
-   578			dev_crit(power->dev, "Battery critical (empty flag set). Triggering orderly shutdown.\n");
-   579			orderly_poweroff(true);
-   580		}
-   581	}
-   582	
+>> --- a/drivers/clk/renesas/renesas-cpg-mssr.c
+>> +++ b/drivers/clk/renesas/renesas-cpg-mssr.c
+>> @@ -24,6 +24,7 @@
+>>    #include <linux/platform_device.h>
+>>    #include <linux/pm_clock.h>
+>>    #include <linux/pm_domain.h>
+>> +#include <linux/pm_runtime.h>
+>>    #include <linux/psci.h>
+>>    #include <linux/reset-controller.h>
+>>    #include <linux/slab.h>
+>> @@ -656,8 +657,10 @@ int cpg_mssr_attach_dev(struct generic_pm_domain
+>> *unused, struct device *dev)
+>>
+>>    void cpg_mssr_detach_dev(struct generic_pm_domain *unused, struct
+>> device *dev)
+>>    {
+>> -       if (!pm_clk_no_clocks(dev))
+>> +       if (!pm_clk_no_clocks(dev)) {
+>> +               pm_runtime_barrier(dev);
+>>                  pm_clk_destroy(dev);
+>> +       }
+>>    }
+>>
+>>    static void cpg_mssr_genpd_remove(void *data)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Marek Vasut
 
