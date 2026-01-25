@@ -1,337 +1,192 @@
-Return-Path: <linux-pm+bounces-41416-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41417-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YXCoM1SOdWnqGAEAu9opvQ
-	(envelope-from <linux-pm+bounces-41416-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 04:30:28 +0100
+	id MBrEDyQVdmkfLgEAu9opvQ
+	(envelope-from <linux-pm+bounces-41417-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 14:05:40 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id C255C7F949
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 04:30:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66D3F80932
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 14:05:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 1D6BF3002519
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 03:30:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A7E1930087BE
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 13:05:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C60E1F583D;
-	Sun, 25 Jan 2026 03:30:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7966231AAAF;
+	Sun, 25 Jan 2026 13:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="0KLwi89Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l5Ngo5pY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010063.outbound.protection.outlook.com [52.101.193.63])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182ABF9E8;
-	Sun, 25 Jan 2026 03:30:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.63
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769311822; cv=fail; b=mynCDcuN3B5aiyA8yPyWtQ5uMMPZwh6h2iXfNyPKfocK+15VlMPSHHnXOoo+IYyF7JfiAOchYGHGqiZcYYd3g4uGqbh6RUMNPQ6bIxHoO5b0JotMokyRYb3RK3fp0kNO3x/O3pdAXEiu+wlRUgZw03Ch3EhUA7dUWh+PZzivAF0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769311822; c=relaxed/simple;
-	bh=ise6kZhSnUv1/r/Imx7yvX0Qgs311YD2yT55DeR1N4g=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Q2RGtWgHP2eFhhOEl/kOwSFYHF/yIeA0qRtm9ARjhF5XrLUW1sdl6is/BbvFy0EmAP7/TIdX8Fql/H1DGZcS1+HbqAqWW3esX4NYCO6Qhr1uMP1SpESBt+nYT0OkwNYx5YJ9Uyw3lWm1DuRNO4AOx+BisdRd2jmpB0rKuA2Z8yo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=0KLwi89Q; arc=fail smtp.client-ip=52.101.193.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mmlM42IWXJgIvtrnQMIVnyKsoFJqFgnqI0ZX6fSgO7aDzct0p9sDoj2ppMx0JQwjcb+tc3MUjB/qWAxBkcbySTYhvHW2J5iXXYcw1AxWepLbFJ8N/grQrXCEKHoQYmUoM4bH2Zxupsz9ijPtFnua98V4LUF6bwuBi9xtCyCXBH6H/VxZ7GTkBSty4HpgDVlaGswUu9KcSEIJFPGsXvrzSw0XF0Kcenfx8PEh4fTByNsLVVla/gS8yNVaYMPa9TZW3BghoYOduH1K/kBBI8nncy+LCTFIrK/Jb+/j3FMPwkHeHRdglS9710nY+KQAvx0eqbnXWlaJKHqJ1SXEIJSubQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PC5MgIjg3mGn0V5mun4Rj2170qliBST9+JTVi7s0Pyg=;
- b=Z9jz6iO9mvckH7/Vx3rxBb/shktI/L23TyOwaZigBcrXaBItYJdfi9Uv3Pl/hCVtR17m2nuY8zSo4Qed56DSLgalJVuT3PsHPd6sbNX6fTxmK/mKlfYxvECvRTode96WFeYQgJPZ1U2LoUQBy0B2Fj2gFtF8POKKkbIlvf3H1TSFmzlsxQuoPqPwFP7DY7YXrC6yCB3XEptn8gIZimWq3dKvPslj5bA4oy4LbVjYZBPd2c1zghXBGN4FomAlvAtvE8I8nP5ZWgICoG3lxqkmSwWjsBJoB/0MaFRgDvfwE6vrTvHYBnqEJ0ziU0uowApgZAzGw49TT7LrlH7oZAV+qA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PC5MgIjg3mGn0V5mun4Rj2170qliBST9+JTVi7s0Pyg=;
- b=0KLwi89QBDcsZk/JxUG9nuWzhQ1QHtucqe/9xXvwex3UrGay4IbN2/+asHfAhSuQQlIPW1plZ4zMX38RiIFuUDIrqnvCTunPxCEpwDW9PcnamI8MiQx9pTPGRLmDuwRYmL74g3Bs6ICFIPUEcXljkS7zUpHd/5i+OgvaQ+EXI7I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from LV8PR12MB9714.namprd12.prod.outlook.com (2603:10b6:408:2a0::5)
- by SJ2PR12MB9088.namprd12.prod.outlook.com (2603:10b6:a03:565::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.14; Sun, 25 Jan
- 2026 03:30:15 +0000
-Received: from LV8PR12MB9714.namprd12.prod.outlook.com
- ([fe80::8c9f:3a5b:974b:99c6]) by LV8PR12MB9714.namprd12.prod.outlook.com
- ([fe80::8c9f:3a5b:974b:99c6%6]) with mapi id 15.20.9542.010; Sun, 25 Jan 2026
- 03:30:14 +0000
-Message-ID: <65c9679c-6e9e-4a31-a4dc-ae3c416bfd13@amd.com>
-Date: Sat, 24 Jan 2026 19:30:10 -0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/7] cxl/region: Add helper to check Soft Reserved
- containment by CXL regions
-To: Dave Jiang <dave.jiang@intel.com>,
- Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
- linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
- nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
- linux-pm@vger.kernel.org, Jonathan Cameron <jonathan.cameron@huawei.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>,
- Alison Schofield <alison.schofield@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Dan Williams <dan.j.williams@intel.com>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Yazen Ghannam <yazen.ghannam@amd.com>, Davidlohr Bueso <dave@stgolabs.net>,
- Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@kernel.org>, Li Ming <ming.li@zohomail.com>,
- Jeff Johnson <jeff.johnson@oss.qualcomm.com>,
- Ying Huang <huang.ying.caritas@gmail.com>,
- Yao Xingtao <yaoxt.fnst@fujitsu.com>, Peter Zijlstra <peterz@infradead.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nathan Fontenot <nathan.fontenot@amd.com>,
- Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
- Benjamin Cheatham <benjamin.cheatham@amd.com>,
- Zhijian Li <lizhijian@fujitsu.com>, Borislav Petkov <bp@alien8.de>,
- Tomasz Wolski <tomasz.wolski@fujitsu.com>
-References: <20260122045543.218194-1-Smita.KoralahalliChannabasappa@amd.com>
- <20260122045543.218194-5-Smita.KoralahalliChannabasappa@amd.com>
- <ee064449-d0a3-41df-a83e-d83ca17b61dd@intel.com>
-Content-Language: en-US
-From: "Koralahalli Channabasappa, Smita" <skoralah@amd.com>
-In-Reply-To: <ee064449-d0a3-41df-a83e-d83ca17b61dd@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR05CA0035.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::10) To LV8PR12MB9714.namprd12.prod.outlook.com
- (2603:10b6:408:2a0::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 537681D88B4;
+	Sun, 25 Jan 2026 13:05:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769346335; cv=none; b=DC92N5zNuKNpt/33ecdjhSer1e/F7nRhydoyHCVEcsCn6BxKddwRVUQxt08USIwEx1MtenYFnxOOtNji5TilTwbmx3MXhe1jdvMWgXnvQCDev3UMyzrkzU728lyq3g5ai6iqlmQmChFgaG2mXPnuZotvDO2wn12IvHtMEJXZYNs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769346335; c=relaxed/simple;
+	bh=3nVJfHoPeIK1kwbJp85jAtXyh/3kl/mn5dtmy7TOuao=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JmzTeAxyz06J9EeE+S0gPlLYrWZ9zgvuzDicoBwbUyfxIkhIPaj2n7TZXBGPLTrj/E9/YA6P9oXFiiLtiE+WmBcv2d3FYISeYYb5cTZ5/dZUBmthIYMtdSAqHWQBJQgHzTLOkcviA4G03D69F3jCwr98HDfMopulhCZ6niGRYq8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l5Ngo5pY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D9D50C4CEF1;
+	Sun, 25 Jan 2026 13:05:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769346334;
+	bh=3nVJfHoPeIK1kwbJp85jAtXyh/3kl/mn5dtmy7TOuao=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=l5Ngo5pYqzrq0r4RytKaCaq38TZovoV1p/C2/tuzvHGsorbTOJ87tgWUS+L5V2/18
+	 OJFDRp6hmHAJhnrucJqKPnEgFosKUwOPLcMWIVSE8kS8vSqkgM2PclZ90XCMF72Vyu
+	 0kMDYcNE76EfSG5HtzZPoCfFM3jzj1RAShpdX7KQATmyA5rTXUJeKSQhcl4R6XGtXs
+	 QYTft2nMKrnBp4OKPaqFim438ZIE2tQUrsUh6bybBpxRKcZhnNuAlnRUDwG/lOG+H3
+	 6SnMtuBlYNpaf53aYa4Grwf+awtMyoPXFhctJAmGD/+bnRK3aQEI3KrA0cMOfYcgpc
+	 fff7xUQxFtPEg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7FB0E63CA2;
+	Sun, 25 Jan 2026 13:05:34 +0000 (UTC)
+From: Michael Reeves via B4 Relay <devnull+michael.reeves077.gmail.com@kernel.org>
+Subject: [PATCH v4 0/2] (no cover subject)
+Date: Mon, 26 Jan 2026 00:05:19 +1100
+Message-Id: <20260126-b4-macsmc-power-v4-0-aa2a682ca650@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9714:EE_|SJ2PR12MB9088:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2ec9dc5e-b97b-4c2d-8617-08de5bc20dad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?UmNCZnBEWVZoR2prZmpWYXlkc2hvU0ZWOExaekdwcU5COUtnRjZDMFhhdDRN?=
- =?utf-8?B?cHBnNTlFUit4RXJXckVBRnZIS3FmbjMvNTloUENaSW1NNThmR1BLSEdEMmdv?=
- =?utf-8?B?WmhiVi9vdnFKVlJiUWFQVFN6Z0xpQm1keW13bFRJUDdEcmxRSDl5TEVpZzBl?=
- =?utf-8?B?ZEFqUHE5QXBPZ0tvWmhHL2Zta3pxNVV0ejlNeng0UWJvek1JZGRBUjNFMjll?=
- =?utf-8?B?OGUyY0tjaFFoamFWUHg0c2kvRHpDSmlMYkxuMlJZc3NtUlZWZUZ3UnFabDZo?=
- =?utf-8?B?U3RNWE94QzBwNll0VUFBMlJFTFZ3dmJRL1lmWE1rLzUyN05LS25PeXhRYlRK?=
- =?utf-8?B?VUFQcXpRT2w5YjczajFtOXNTYlM0MHBoMUZNS1NFbkp5V1NWNURMSDVDbjh1?=
- =?utf-8?B?R1I2YzUzbkVsaEdxL0FXMnlqaHhEMGlYeW9vSUZJcjlCQ0puTUU4b1ZXckpk?=
- =?utf-8?B?NTRNVWJNQk1zaHBwRjhRcVRaTldLM2V3RGtxTXFTZVN1VHNaVFFyNXNURnp0?=
- =?utf-8?B?VExZNlRSbll6UEdnampQaXdXM1BlWWYwdkF4ek9JbDlxbXFHVHVCbXpTb0FC?=
- =?utf-8?B?K21XaXFiSXh4ZTNVWk1EUE13Nkw0aHNTTXd6b1JyYkx4N0EyMlNXZG42ODJl?=
- =?utf-8?B?dmFoV2s3NVVwdWc4TUVnK1RzMVB6cUtBejFWUFppdnlMQTVmVC9yd285WGFr?=
- =?utf-8?B?dy94RmtVYmptM2l2NEZabllWV1E2M09WNFVETnJMaG1wOGVTSnJkQ3VRWlpT?=
- =?utf-8?B?QUZsS25RZitrcVNhdDVQWkZ1dUtLWTZCMnFLQUZ2S3JHRTd0TUNtYVpyUlZW?=
- =?utf-8?B?eFlQVkljSElCR3g0SHlZRFZaRFd1R2gyVmExZ21vL0Y0SjJvVUFPdVJBclFm?=
- =?utf-8?B?RFRBalBmRi9Ed1RKcE91OWZxYVpJK1ZTM0t6RG8rQUZudFJEWGdJdHc3MlVr?=
- =?utf-8?B?NXRUbjBadCtjT2Jqck5rQ3V2WFZMNFFQRUJoNG1GUVNISHRwRmFwcEZjek1E?=
- =?utf-8?B?TnpKbUkyQVNtc0pJUnMrdEhDNW0vVTd4cVFjTjRwWEpORWl2WVNvMDduK2hl?=
- =?utf-8?B?OHJ2TTN4bkxIRE9Udm90QkZxbjEwV2o4ZjdzY3pibXVRSjR1TUNlWDIxcDlN?=
- =?utf-8?B?NHZqOEpMbnVmT3U0WExaRFY0UnBqcm5ROERwdktnelBlM2pMeklCUzh2dE5C?=
- =?utf-8?B?OHh5OG9Wd09IajhCMmNMd3JZQ29acDZBNTB6L2FHbm1Eb2VsV09EODFyZ3JL?=
- =?utf-8?B?b09vRzNQbFdxUXBlcEpITlpHbWVrTCtKbHM1cUlUbUhxSmpwVmRnUDVMWGkx?=
- =?utf-8?B?dlM5SzdyLzRhUHFTczgzc1B4WjJod2oyM3FEa2pMWU9GR0RLc1hVMzFOemNB?=
- =?utf-8?B?c1NZT1VNODdYY3dsQWcvSU9vbkZ3bUNHV0VUNU56eWszZUVrR2ppNTM0TjdS?=
- =?utf-8?B?cXptWUp2azdZcWlIeVBUM3RacThJejJCcW1TYU5USlpTUUprbk1HeitVMmpE?=
- =?utf-8?B?NWlRQ2NrL1BXNG5JMVRBcGR1eGZHWjJmZ0NSM0RCS1FZaGMrbWp6QStGWnBz?=
- =?utf-8?B?TnhtejBvM1RhaDlGbHVJaWFpT1JlYzZ2SStaMkdzYjE3aU40TENvVXEzb1FZ?=
- =?utf-8?B?TEF2dFRyb2F6T2UySk9UU3dBQ2ZXL21zNThkY3piOVh1WE5ha3JGK1BvS2Zv?=
- =?utf-8?B?UVVRenY2SmkrNDBWdnJLT0VtQWdDUmFsUFZCbXJLeldjL1ZTS2NGNG1lVGxa?=
- =?utf-8?B?T2RRNFhVVnJIUVBUME91eUtuQ1FGQ3hPTjVhZWI2OW8wMWU5dDhoVVQxL05s?=
- =?utf-8?B?d1dleGQ5azc4Q0VLa1pZZFcvNmlaUUZKSWVZTHFvSEdnV1pHakpxQkJESmIy?=
- =?utf-8?B?aDM0SVQzdnZSOVVKM1pOcWpFeTV5QVlzVXRySDNjQVBNOHJPMFBreFFmTUpQ?=
- =?utf-8?B?U3phRmJOaDNHNW85cXdHWWZ1YUc3NU9YeVpSTXUwNXBpb25MWDE1anFJS1FK?=
- =?utf-8?B?cTRLNUFHQzVKaHI4ZmVLbE01d0ZhYVlhQ1RRK2FVak9XV0V4NFBOZEVDU1BF?=
- =?utf-8?B?aGN6UDNmUnhNV0E3bUhMNTVNS3pac2FPU25GZTkyN2p4RWdjZDJIbmZDTVpD?=
- =?utf-8?Q?yCIc=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9714.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZjAvNEttQ1JJL1Nya2MxTzlCWVdCTzZ0M2xCZ1ZOTHBiOXhZbUE3MFdEU0Rr?=
- =?utf-8?B?N0t6eFVVZmlaSzkyZlhQenhCQ1gzVUVDWXBJdm9Ba216aFk5eEdnR0dZRHQv?=
- =?utf-8?B?Mmgrb0l5UnZ4amtiZkFkeWhENjU2aXhjcmJnb3dvUDdnelg4SFpVMysyUTNI?=
- =?utf-8?B?MXErNFFqd1pOajY3WXA0a3JRT0xlNUM5Tm9aYi8wMWdUd3Z5UE9nQXM0MFB2?=
- =?utf-8?B?SXlPNGJuYzdCTDFITGZ5alYwQklmbTFYcE5UbXR0OFFGdWJFSnNIa0lrNVlN?=
- =?utf-8?B?cTZra2lVNEh4TWdtNXduSWhTL0NBd3NqcG1oajdxYzJTRDNFTzlpdFBxaHFP?=
- =?utf-8?B?MUxYb2VOaFhxcXd6bEpGVzhFVk9Yd012MXQ3YXRqb2hUdHc4WGdxZzZuclNE?=
- =?utf-8?B?VHFUVFcxdXVyNHYzekc2WU1tY0FiRWlFakE1and2bDZidUtwdTlJWHMvYUwz?=
- =?utf-8?B?RGpCL1l3c3ZhVE00SHJmWGM1TWJpTUhua2xwZnRUcEp4b0VhWFVGTEVnWHZS?=
- =?utf-8?B?S1RFUU5rbnJIeE9aRk1rSE1VQm8zUW4rQzhOVi8rQVAxWUV6VHBxTHBoMnRs?=
- =?utf-8?B?STVrUEcyYzdXU2NhcEdUWlhjRjJsb3hoa1hXTTJJdEtORmx5SHpJZTk3cHQ5?=
- =?utf-8?B?bXcvdUxwUkpJZjJlbTA4MFJpejkzYkVCV3ErY2NvSWlCTTdZOUY4OE9PWDI2?=
- =?utf-8?B?c2dwaFN0by8zM2Nra0dYMGtJcWNRWmtMSEtUaS9nY1lZaFpmRjdva3JXWlk4?=
- =?utf-8?B?c2M1V3dnR3N2V1JZKzhPVXdzWE9Ob05Fcmp6ZFNsY2YzbGFxazVWYkhMSnVt?=
- =?utf-8?B?eTNMb2ZQZ29YWExZeVc0QW5BNk5OQ1p2clFnMEUrdmNYbkhkNEtkdm8wZlpV?=
- =?utf-8?B?OC9Tdm44RnIzNEJ2dUpkMk9jVnFDdVlvWTZ3b21FdTZvUnNuUVhUdXNHc09O?=
- =?utf-8?B?UWdtdzdVSzBTM0xMY1ZOUWFxbEhUbit4OGY2Mm9UTGZnMFEyK29Gakh2N1Vv?=
- =?utf-8?B?b2dtRDJEdFFveE9CWklRYk9xbXhqcFVSNHI3TWVHZDN0YzRJMW5qc2F0cTJF?=
- =?utf-8?B?eXZVaHJ4MFVQbWZrZ09vYS9BTTgwWGFUK0lld1FwWUU4aEE3SEdtY1RHcjR4?=
- =?utf-8?B?T3hhcExZeFowSmtQenMzVmxHd0x6Y3BrVTNOR1pzSS9LT2dyZm9JVnY0ZWhv?=
- =?utf-8?B?UmttNTExRlh5QVZIVG03RUhvK1NLeUlYOVp5d01GRm0zSk5ENklyU1h2dWN5?=
- =?utf-8?B?TDR4SnpwTkJyQkc1TlI5dGtKUXczSkpFVnNLMVJydFlzM25xSkJFRW9uTTJO?=
- =?utf-8?B?VU1hNjhlVDN4ZDdTc1VJcXB2SWErcmlhK1BzaWg3T0xNelJBMHBIWDF0L2Vu?=
- =?utf-8?B?eE50U09WZEJPOVlWdG1XY25mUlh6ZFowRDZvaW5tK2pFelNPa2lBQTZzUlNQ?=
- =?utf-8?B?MElIcDFIWDlsL09BeTkrSXFHREVkQ2NHNEdvdlFqNzUwTWd6UU1EZkNMcW1v?=
- =?utf-8?B?c0RxTmNkVnNmWkwyM0VLNGJOYkhxc1pXRXYvUTdTaFNzSUgxMWdXdVIxcGN4?=
- =?utf-8?B?RHZaaGUwSC9sQ1dpWXA3MFc5VFdFSkcxZHdQeFkxelo0RGdOaFlMaFIvQU8v?=
- =?utf-8?B?UlJhWUF0STB6SFFsUU5LazZUdklJUm05Q1FYVkxKSkhmNDA2eEprSi9xNTYy?=
- =?utf-8?B?RmdQaFB3dVNMbmt1SVI4UDlkbVJUR25vbGlzTDE5WGNURWZRdGRSajdQcjYz?=
- =?utf-8?B?cnZqYjlONDNqZzMrZDJ0ZmdPYjhwS3paMlByclc5c3dVTVRibDQ1TGZwNERX?=
- =?utf-8?B?b3h5VlR1ZTd2L0VYQkhtZFMzTzRKYXQ3dXNFT3hkUDJ0Z3ZGZ0xwY1hla01F?=
- =?utf-8?B?Nmd4WlBrTHk2WG5BOUQ5Z0tGMmtOdTJndjJkSXJpOVhoSW1IUndkeXFZTEJW?=
- =?utf-8?B?WEgvdHU4dkJrYm0vWmt1cTM4OS9TRWVqWUN5ZWwzWlFJNnVmNXJjMmxqSURD?=
- =?utf-8?B?aE40Mlp3RDd2ejRabDFuTzA3dHlpZWZQOWxnM0FVd0c2NG43Zi94KzMzUU1K?=
- =?utf-8?B?dkc1UGJZem1JU2tqZGxNNTJCd0VZZDA0cVN5RE01cHN0ZnFhTk5RSkdVT00w?=
- =?utf-8?B?c0dnbnVOckora3g2Z0p5TCsvQWw1T25qczhRbnM4WWFaZ3g4TjRWR2R1c2hQ?=
- =?utf-8?B?NDU0OCtQVVhsSVN5U1liTENnbzIwQjhoYVc3SkYyVjFFMkVGVnc0NGdoMHdp?=
- =?utf-8?B?UUpEVFg5R2hmM0JUd25YWkJFZ2ZBSjN6Rk0rZThqenVFb1VqVmNHQnkxVld3?=
- =?utf-8?B?TnF5VWhvbm5wRC9JcDRhRkF3aGs0ZnpvejZtdDNyeGIrR2VmTmpBUT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ec9dc5e-b97b-4c2d-8617-08de5bc20dad
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9714.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Jan 2026 03:30:14.5346
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: z3b45DpocEv5VbYdCWWWewBMLhLygQ2ct5gmC8gc3N/WDu/pIq8DERpGNzRf15fgfl2Y/KVypxz5sZacZ++0Fw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9088
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABAVdmkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyTHQUlJIzE
+ vPSU3UzU4B8JSMDIzMDQyNT3SQT3dzE5OLcZN2C/PLUIt2kJGMDYwvLVAPTNEMloK6CotS0zAq
+ widGxtbUAXSi/4mEAAAA=
+X-Change-ID: 20260125-b4-macsmc-power-bb30389e05f1
+To: Sebastian Reichel <sre@kernel.org>, Sven Peter <sven@kernel.org>, 
+ Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>, 
+ Lee Jones <lee@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ Michael Reeves <michael.reeves077@gmail.com>, 
+ Hector Martin <marcan@marcan.st>, Joey Gouly <joey.gouly@arm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1769346333; l=3237;
+ i=michael.reeves077@gmail.com; s=20260105; h=from:subject:message-id;
+ bh=3nVJfHoPeIK1kwbJp85jAtXyh/3kl/mn5dtmy7TOuao=;
+ b=f9YdilHx6WpwE5bb46PjUgNU7L08sOqM5p/8Q9JPHM5B9FvkIYtQmOg20dkPEpoBQEwM58ZLu
+ dqpUzgNEQk5B6TfMg3i/+YeSnSVeYF8d3cXQQgLZoiuhNNf0cUgDHnI
+X-Developer-Key: i=michael.reeves077@gmail.com; a=ed25519;
+ pk=QIrgWBGCm3LG0YYc6MLCDkwuVXLTGGooVBdWX/KhSiU=
+X-Endpoint-Received: by B4 Relay for michael.reeves077@gmail.com/20260105
+ with auth_id=591
+X-Original-From: Michael Reeves <michael.reeves077@gmail.com>
+Reply-To: michael.reeves077@gmail.com
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.34 / 15.00];
+	FREEMAIL_REPLYTO_NEQ_FROM(2.00)[];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41416-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41417-lists,linux-pm=lfdr.de,michael.reeves077.gmail.com];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[34];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[kernel.org,intel.com,huawei.com,amd.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org,alien8.de];
-	DKIM_TRACE(0.00)[amd.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[skoralah@amd.com,linux-pm@vger.kernel.org];
 	TO_DN_SOME(0.00)[];
+	FREEMAIL_REPLYTO(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	FROM_HAS_DN(0.00)[];
+	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
+	HAS_REPLYTO(0.00)[michael.reeves077@gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
-	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,lists.infradead.org,gmail.com,marcan.st,arm.com];
 	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email]
-X-Rspamd-Queue-Id: C255C7F949
+	DKIM_TRACE(0.00)[kernel.org:+];
+	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 66D3F80932
 X-Rspamd-Action: no action
 
-On 1/23/2026 2:19 PM, Dave Jiang wrote:
-> 
-> 
-> On 1/21/26 9:55 PM, Smita Koralahalli wrote:
->> Add a helper to determine whether a given Soft Reserved memory range is
->> fully contained within the committed CXL region.
->>
->> This helper provides a primitive for policy decisions in subsequent
->> patches such as co-ordination with dax_hmem to determine whether CXL has
->> fully claimed ownership of Soft Reserved memory ranges.
->>
->> No functional changes are introduced by this patch.
->>
->> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-> 
-> Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> 
-> Just a nit below.
+This series adds a power supply driver for the Apple SMC found on
+Apple Silicon devices. This allows the kernel to report AC status,
+battery charging status, and power metrics, and modify the charging
+behaviour.
 
-Thank you Jonathan and Dave for the review.
+The first patch adds the driver itself, and the second patch wires it
+up to the MFD core.
 
-> 
->> ---
->>   drivers/cxl/core/region.c | 29 +++++++++++++++++++++++++++++
->>   drivers/cxl/cxl.h         |  5 +++++
->>   2 files changed, 34 insertions(+)
->>
->> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
->> index 45ee598daf95..9827a6dd3187 100644
->> --- a/drivers/cxl/core/region.c
->> +++ b/drivers/cxl/core/region.c
->> @@ -3875,6 +3875,35 @@ static int cxl_region_debugfs_poison_clear(void *data, u64 offset)
->>   DEFINE_DEBUGFS_ATTRIBUTE(cxl_poison_clear_fops, NULL,
->>   			 cxl_region_debugfs_poison_clear, "%llx\n");
->>   
->> +static int cxl_region_contains_sr_cb(struct device *dev, void *data)
-> 
-> Since it's a local helper, maybe just call it region_contains_soft_reserve()?
+The driver is based on an original out-of-tree implementation by
+Hector Martin. It has been refactored by myself for upstream inclusion, 
+including support for newer SMC firmwares, devices without batteries,
+dynamic property detection and improved state management, among other
+things.
 
-Okay I will rename in next revision.
+This series is based ontop of the current linux-next at time of writing,
+the exact commit hash is listed below.
 
-Thanks
-Smita
-> 
-> DJ
-> 
->> +{
->> +	struct resource *res = data;
->> +	struct cxl_region *cxlr;
->> +	struct cxl_region_params *p;
->> +
->> +	if (!is_cxl_region(dev))
->> +		return 0;
->> +
->> +	cxlr = to_cxl_region(dev);
->> +	p = &cxlr->params;
->> +
->> +	if (p->state != CXL_CONFIG_COMMIT)
->> +		return 0;
->> +
->> +	if (!p->res)
->> +		return 0;
->> +
->> +	return resource_contains(p->res, res) ? 1 : 0;
->> +}
->> +
->> +bool cxl_region_contains_soft_reserve(const struct resource *res)
->> +{
->> +	guard(rwsem_read)(&cxl_rwsem.region);
->> +	return bus_for_each_dev(&cxl_bus_type, NULL, (void *)res,
->> +				cxl_region_contains_sr_cb) != 0;
->> +}
->> +EXPORT_SYMBOL_GPL(cxl_region_contains_soft_reserve);
->> +
->>   static int cxl_region_can_probe(struct cxl_region *cxlr)
->>   {
->>   	struct cxl_region_params *p = &cxlr->params;
->> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
->> index c796c3db36e0..b0ff6b65ea0b 100644
->> --- a/drivers/cxl/cxl.h
->> +++ b/drivers/cxl/cxl.h
->> @@ -906,6 +906,7 @@ struct cxl_pmem_region *to_cxl_pmem_region(struct device *dev);
->>   int cxl_add_to_region(struct cxl_endpoint_decoder *cxled);
->>   struct cxl_dax_region *to_cxl_dax_region(struct device *dev);
->>   u64 cxl_port_get_spa_cache_alias(struct cxl_port *endpoint, u64 spa);
->> +bool cxl_region_contains_soft_reserve(const struct resource *res);
->>   #else
->>   static inline bool is_cxl_pmem_region(struct device *dev)
->>   {
->> @@ -928,6 +929,10 @@ static inline u64 cxl_port_get_spa_cache_alias(struct cxl_port *endpoint,
->>   {
->>   	return 0;
->>   }
->> +static inline bool cxl_region_contains_soft_reserve(const struct resource *res)
->> +{
->> +	return false;
->> +}
->>   #endif
->>   
->>   void cxl_endpoint_parse_cdat(struct cxl_port *port);
-> 
+Tested on: Apple M3 (MacBook Air, J613)
+
+Signed-off-by: Michael Reeves <michael.reeves077@gmail.com>
+---
+Changes in v4:
+- Restore Hector Martin as primary author for the series.
+- Restore downstream Co-developed-by and Signed-off-by tags.
+- Add Reviewed-by: Sven Peter <sven@kernel.org>.
+- Simplify MFD patch authorship and remove redundant tags.
+- Fix probe return value being overwritten by devm_work_autocancel.
+- Return -ENODEV in probe if neither battery nor AC adapter are found.
+- Add bounds check for nprops against MACSMC_MAX_BATT_PROPS.
+- Refactor macsmc_battery_set_charge_behaviour to remove unnecessary resets.
+- Improve critical_work shutdown flags and remove return.
+- Add comments explaining SMC key firmware history and flag meanings.
+- Clarify event ID descriptions and restore BSFC flag comments.
+- Remove redundant dev_dbg logs for missing battery or AC.
+- Link to v3: https://lore.kernel.org/r/20260115-b4-macsmc-power-v3-0-c236e09874be@gmail.com
+
+Changes in v3:
+- Rebase on top of latest linux-next
+- Drop charge control threshold properties.
+- Switch to devm_work_autocancel() for critical work.
+- Add platform ID table and remove MODULE_ALIAS.
+- Simplify property array management in struct macsmc_power.
+- Improve probe error handling and device pointer usage.
+- Minor style and indentation fixes.
+- Link to v2: https://lore.kernel.org/r/20260109-b4-macsmc-power-v2-0-93818f1e7d62@gmail.com
+
+Changes in v2:
+- Added Reviewed-by: Neal Gompa <neal@gompa.dev> to all patches.
+- Fixed Makefile alignment by using tabs for the macsmc-power entry.
+- Upgraded physical battery exhaustion log level to EMERG.
+- Downgraded software-triggered orderly poweroff log level to CRIT.
+- Added check for CHIS key to skip AC registration on desktop models.
+- Link to v1: https://lore.kernel.org/r/20260105-b4-macsmc-power-v1-0-62954c42a555@gmail.com
+
+---
+Hector Martin (2):
+      power: supply: Add macsmc-power driver for Apple Silicon
+      mfd: macsmc: Wire up Apple SMC power driver
+
+ MAINTAINERS                         |   1 +
+ drivers/mfd/macsmc.c                |   1 +
+ drivers/power/supply/Kconfig        |  11 +
+ drivers/power/supply/Makefile       |   1 +
+ drivers/power/supply/macsmc-power.c | 851 ++++++++++++++++++++++++++++++++++++
+ 5 files changed, 865 insertions(+)
+---
+base-commit: ca3a02fda4da8e2c1cb6baee5d72352e9e2cfaea
+change-id: 20260125-b4-macsmc-power-bb30389e05f1
+
+Best regards,
+-- 
+Michael Reeves <michael.reeves077@gmail.com>
+
 
 
