@@ -1,169 +1,222 @@
-Return-Path: <linux-pm+bounces-41443-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41439-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iF3fOsukdmnnTgEAu9opvQ
-	(envelope-from <linux-pm+bounces-41443-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 00:18:35 +0100
+	id QCQlEhuEdmn/RQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41439-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 21:59:07 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51CAC83206
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 00:18:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id E229A826F4
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 21:59:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 48622300425E
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 23:18:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AA9EA3004C74
+	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 20:59:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8481D30FC15;
-	Sun, 25 Jan 2026 23:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93A3330C62B;
+	Sun, 25 Jan 2026 20:59:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="srvNykPF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hvGOcKb2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CB7935975;
-	Sun, 25 Jan 2026 23:18:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C702FFFB7;
+	Sun, 25 Jan 2026 20:59:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769383111; cv=none; b=Bl9MkGaDhScwU9EORm9Rth7m8RAd4mfrDZDDkYGqUxaVr/Rk9WM0MkF+F9Jpc/4C4c+TUeYFE1fCSX4Ks7gXhommLwN35sUFJ3jhuMvFbprTEWrN39kzuzlISLoVRM7o4ltvflomNq1W5+ty66Ktdef11qBODKVLYLk6mZotFw0=
+	t=1769374742; cv=none; b=T2bO7CFh+mVweRTqayeMNMv83JAxwDqmoHVT2p5hIz3fsmCNLJ94SkoDMiKdCNayJcgZY2IZ+9w2a996/t8zkLCopAgEbVAQeGafQGnJKxibW3A/vTvswfaHMCL2uunoWcTYl1UQ0I9kx6z5Npk9MnIkTE2PNGRc8BjKsXQtdos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769383111; c=relaxed/simple;
-	bh=bnHPIDRUoIrORd8liCaWNaG8d6KldAF6D70CR+vyJOU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U0AdmGhJOfynOVp9GOxbnWSqt4/r+BTMu7Y7klo6Oxik4wG/5shLWglITVTXUbiDk9U7VZpI94uMndZQYAv5GHKGAxU3Dj21bW08y3n2h5EqhQOVjfx4KyQ/CYSLWVYTx8UNBSPLQ5QYiHbnZCwopzoPNxW/RRbY67chMOmcYLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=srvNykPF; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4dznf26l1pz9tgl;
-	Mon, 26 Jan 2026 00:18:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1769383099;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=m/asOs9DyQ5THRpDLADk+Y2I0OVr6O6ljdNzMDKMqo4=;
-	b=srvNykPFoMbdNkm95JsqCubOCcArIDiK11P92dDAugrfofyLVpxqcubR11bb9blGgbeMFs
-	i/9DQg4I3K2zQ55MfVpw/t+tA4zykrLpgreokrW3Umrnj1IEvMhvHDS8z8gnHP2xiDL2ZN
-	DPvyYhusuj1yj2mfBxSwG+NksqdkK448uH0bgTW0jBR4SEynmDP9amI/96OC/GEb4PKJC2
-	xfS95RmIEfcsiUq4fG9p4ukv/v7ajRSu29SxgelLDYUcoHIR95URZhQ0jSi8pUUGXr/Rr0
-	NoiMVRSmTckRoGCjjhfdXwtD1s8k7Z1nqpD9A/c8z0y6RXkKS0dsfsatFr5s6g==
-Message-ID: <9efa9daa-6584-44b3-8055-bc160e46d8a5@mailbox.org>
-Date: Sun, 25 Jan 2026 21:24:42 +0100
+	s=arc-20240116; t=1769374742; c=relaxed/simple;
+	bh=uW3NnWbbioHf1Wwc1adwz85D6FdFfB4Hx+hudi0d1Bw=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=O3D77EMzchdrdSNRI/E/vaSjyHx4qkr2u7XgjLsfsvgYj/1RDdepOIk82YSqVPSqKzmf8DV4gh6KEueTiA9xaMWuKwFmolxS7ra6Yl7opPEhwPIXl4PjVAESSHY5EVjGGhHxUEyvA16RF6OtHxCHmuxEiF4nvTlVcV+cIXH2PvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hvGOcKb2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3534C4CEF1;
+	Sun, 25 Jan 2026 20:59:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769374741;
+	bh=uW3NnWbbioHf1Wwc1adwz85D6FdFfB4Hx+hudi0d1Bw=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=hvGOcKb2H9PIR981wUGt5u9bKNY1OfunMfiVBBc14Q5sxhVKuLYvRLQzdpVt0G1yq
+	 Sv08tgRklpt6fA5T2VGAlNp1Fd6f91B1b8qn7yjvF4utOnPxaPx3J8Y6jAj8oP1KFw
+	 qSrlTaClzTJhzRH2So4rPUF/IQv4SxYvobMAw4YGPLniYFqFrUukFoUiBWdxbWK2wn
+	 sV23na01oe7iBxC+NnftM1lZHlxNmpnljAFrnx02UfbmD1P1pmSbkUo4bqblzhN/UL
+	 pap2ZrK0r+4bRfTzTcDITRkCyBa7JWBgLXDaOrMTTBPL2eDaeOb2GkAwM7KvZZZUMs
+	 NCzkjKF+ziT7g==
+Date: Sun, 25 Jan 2026 14:59:00 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: drm/imagination: genpd_runtime_suspend() crash
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Frank Binns <frank.binns@imgtec.com>, Matt Coster
- <matt.coster@imgtec.com>, Ulf Hansson <ulf.hansson@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- DRI Development <dri-devel@lists.freedesktop.org>,
- Linux PM list <linux-pm@vger.kernel.org>,
- Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-References: <CAMuHMdWapT40hV3c+CSBqFOW05aWcV1a6v_NiJYgoYi0i9_PDQ@mail.gmail.com>
- <0e9f963b-00e0-43d1-b567-cb10b8f66df1@mailbox.org>
- <CAMuHMdVOUzanEufhWqOL0nv81xCYh4YNAX_waG6y9PyUZ030tg@mail.gmail.com>
-Content-Language: en-US
-From: Marek Vasut <marek.vasut@mailbox.org>
-In-Reply-To: <CAMuHMdVOUzanEufhWqOL0nv81xCYh4YNAX_waG6y9PyUZ030tg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-MBO-RS-META: m7z9jqcet3zwhy5m8ud1ex4tencrz7fd
-X-MBO-RS-ID: 280231b825f43649aaa
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk@kernel.org>, linux-pm@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ linux-samsung-soc@vger.kernel.org, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, devicetree@vger.kernel.org, 
+ linux-leds@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>
+To: Kaustabh Chakraborty <kauschluss@disroot.org>
+In-Reply-To: <20260126-s2mu005-pmic-v2-5-78f1a75f547a@disroot.org>
+References: <20260126-s2mu005-pmic-v2-0-78f1a75f547a@disroot.org>
+ <20260126-s2mu005-pmic-v2-5-78f1a75f547a@disroot.org>
+Message-Id: <176937474094.3832173.10855555775312969664.robh@kernel.org>
+Subject: Re: [PATCH v2 05/12] dt-bindings: mfd: s2mps11: add documentation
+ for S2MU005 PMIC
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[mailbox.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[mailbox.org:s=mail20150812];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41443-lists,linux-pm=lfdr.de];
-	TO_DN_ALL(0.00)[];
-	DKIM_TRACE(0.00)[mailbox.org:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-41439-lists,linux-pm=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[marek.vasut@mailbox.org,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mailbox.org:mid,mailbox.org:dkim]
-X-Rspamd-Queue-Id: 51CAC83206
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: E229A826F4
 X-Rspamd-Action: no action
 
-On 1/22/26 4:35 PM, Geert Uytterhoeven wrote:
 
-Hello Geert,
-
->> Can you please test this change and see if it fixes the problem ?
->>
->> The barrier should guarantee that the domain is settled and no more
->> callbacks are still running.
+On Mon, 26 Jan 2026 00:37:12 +0530, Kaustabh Chakraborty wrote:
+> Samsung's S2MU005 PMIC includes subdevices for a charger, an MUIC (Micro
+> USB Interface Controller), and flash and RGB LED controllers.
 > 
-> Thank you, that indeed fixes the issue!
+> Since regulators are not supported by this device, unmark this property
+> as required and instead set this in a per-device basis for ones which
+> need it.
 > 
-> However, I am not so sure this barrier belongs in the .detach_dev()
-> callback.  The documentation for almost all dev_pm_domain_{at,de}tach*()
-> functions states:
+> Add the compatible and documentation for the S2MU005 PMIC. Also, add an
+> example for nodes for supported sub-devices, i.e. charger, extcon,
+> flash, and rgb.
 > 
->       * Callers must ensure proper synchronization of this function with power
->       * management callbacks.
-
-Isn't cpg_mssr_detach_dev() the caller in this case ?
-
-> However, I couldn't find any user that calls pm_runtime_barrier() first.
+> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+> ---
+>  .../devicetree/bindings/mfd/samsung,s2mps11.yaml   | 103 ++++++++++++++++++++-
+>  1 file changed, 102 insertions(+), 1 deletion(-)
 > 
-> In case of multiple PM domains, it is even more complicated, as
-> dev_pm_domain_attach_list() (and pvr_power_domains_init(), which is
-> basically an open-coded variant of the former) creates a list of virtual
-> devices, which all need synchronization.  For the devres-enabled version
-> (devm_pm_domain_attach_list()), the caller cannot take care of calling
-> pm_runtime_barrier() anyway, so it has to be handled by the PM core?
 
-I am also a bit surprised the PM core does not handle it.
+My bot found errors running 'make dt_binding_check' on your patch:
 
->> --- a/drivers/clk/renesas/renesas-cpg-mssr.c
->> +++ b/drivers/clk/renesas/renesas-cpg-mssr.c
->> @@ -24,6 +24,7 @@
->>    #include <linux/platform_device.h>
->>    #include <linux/pm_clock.h>
->>    #include <linux/pm_domain.h>
->> +#include <linux/pm_runtime.h>
->>    #include <linux/psci.h>
->>    #include <linux/reset-controller.h>
->>    #include <linux/slab.h>
->> @@ -656,8 +657,10 @@ int cpg_mssr_attach_dev(struct generic_pm_domain
->> *unused, struct device *dev)
->>
->>    void cpg_mssr_detach_dev(struct generic_pm_domain *unused, struct
->> device *dev)
->>    {
->> -       if (!pm_clk_no_clocks(dev))
->> +       if (!pm_clk_no_clocks(dev)) {
->> +               pm_runtime_barrier(dev);
->>                  pm_clk_destroy(dev);
->> +       }
->>    }
->>
->>    static void cpg_mssr_genpd_remove(void *data)
+yamllint warnings/errors:
 
--- 
-Best regards,
-Marek Vasut
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml: Unresolvable reference: /schemas/power/supply/samsung,s2m-charger.yaml
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/dist-packages/referencing/_core.py", line 428, in get_or_retrieve
+    resource = registry._retrieve(uri)
+  File "/usr/local/lib/python3.13/dist-packages/dtschema/validator.py", line 426, in retrieve
+    return DRAFT201909.create_resource(self.schemas[uri])
+                                       ~~~~~~~~~~~~^^^^^
+KeyError: 'http://devicetree.org/schemas/power/supply/samsung,s2m-charger.yaml'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/dist-packages/referencing/_core.py", line 682, in lookup
+    retrieved = self._registry.get_or_retrieve(uri)
+  File "/usr/local/lib/python3.13/dist-packages/referencing/_core.py", line 435, in get_or_retrieve
+    raise exceptions.Unretrievable(ref=uri) from error
+referencing.exceptions.Unretrievable: 'http://devicetree.org/schemas/power/supply/samsung,s2m-charger.yaml'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.13/dist-packages/jsonschema/validators.py", line 462, in _validate_reference
+    resolved = self._resolver.lookup(ref)
+  File "/usr/local/lib/python3.13/dist-packages/referencing/_core.py", line 686, in lookup
+    raise exceptions.Unresolvable(ref=ref) from error
+referencing.exceptions.Unresolvable: /schemas/power/supply/samsung,s2m-charger.yaml
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/local/bin/dt-validate", line 8, in <module>
+    sys.exit(main())
+             ~~~~^^
+  File "/usr/local/lib/python3.13/dist-packages/dtschema/dtb_validate.py", line 158, in main
+    sg.check_dtb(filename)
+    ~~~~~~~~~~~~^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/dtschema/dtb_validate.py", line 95, in check_dtb
+    self.check_subtree(dt, subtree, False, "/", "/", filename)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/dtschema/dtb_validate.py", line 88, in check_subtree
+    self.check_subtree(tree, value, disabled, name, fullname + name, filename)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/dtschema/dtb_validate.py", line 88, in check_subtree
+    self.check_subtree(tree, value, disabled, name, fullname + name, filename)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/dtschema/dtb_validate.py", line 88, in check_subtree
+    self.check_subtree(tree, value, disabled, name, fullname + name, filename)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/dtschema/dtb_validate.py", line 83, in check_subtree
+    self.check_node(tree, subtree, disabled, nodename, fullname, filename)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/dtschema/dtb_validate.py", line 34, in check_node
+    for error in self.validator.iter_errors(node, filter=match_schema_file,
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                            compatible_match=compatible_match):
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/dtschema/validator.py", line 448, in iter_errors
+    for error in self.DtValidator(schema, registry=self.registry).iter_errors(instance):
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/jsonschema/validators.py", line 383, in iter_errors
+    for error in errors:
+                 ^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/jsonschema/_keywords.py", line 296, in properties
+    yield from validator.descend(
+    ...<4 lines>...
+    )
+  File "/usr/local/lib/python3.13/dist-packages/jsonschema/validators.py", line 431, in descend
+    for error in errors:
+                 ^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/jsonschema/_keywords.py", line 275, in ref
+    yield from validator._validate_reference(ref=ref, instance=instance)
+               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/jsonschema/validators.py", line 464, in _validate_reference
+    raise exceptions._WrappedReferencingError(err) from err
+jsonschema.exceptions._WrappedReferencingError: Unresolvable: /schemas/power/supply/samsung,s2m-charger.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.kernel.org/project/devicetree/patch/20260126-s2mu005-pmic-v2-5-78f1a75f547a@disroot.org
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
