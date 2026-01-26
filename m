@@ -1,188 +1,202 @@
-Return-Path: <linux-pm+bounces-41489-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41490-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AADVG4C4d2nKkQEAu9opvQ
-	(envelope-from <linux-pm+bounces-41489-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 19:54:56 +0100
+	id YCzLGwTEd2nckgEAu9opvQ
+	(envelope-from <linux-pm+bounces-41490-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:44:04 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1891A8C3BC
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 19:54:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C19D38CB4D
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:44:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 01CC4301FA7A
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 18:54:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8761530247EC
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 19:41:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D47D25BF13;
-	Mon, 26 Jan 2026 18:54:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03FD928643C;
+	Mon, 26 Jan 2026 19:41:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O08VUooE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="derieL3L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0AC725487B
-	for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 18:54:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05AA01F4CBC;
+	Mon, 26 Jan 2026 19:41:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769453691; cv=none; b=r6Rf521CwPdF2XO9ll5kw5HYaY1H5j2cJiUAs33bpSzT2qtUOFT93tinzX2Azei++nL31fqQF1LCCcxV2zMLPqkBKH4LaMx81yzFfahaAAJ1SHCyF6tpnSwMviuHPEqwQcpexpBFjbnGgU3e+ShdCdLmgZwoh4YvsIuB+bsYBhU=
+	t=1769456496; cv=none; b=tszCGxiEoTzYg61xJlPEzeb6XugsR7Vegh9nw9wQWDnq3YCTQ9DN3Ohl9j9RbNoDTgwyBX/p73KYojGsvA/g9WDUC2MxapSdiXfGho6O4uew3d+OTZvjzVPPyc1m4tk2Q86bom3z62IXsMG0j44HLALPKGc57Cm/syfDPFdm7Hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769453691; c=relaxed/simple;
-	bh=1+5DCp6OHuKcpHx/26jzXFcnmrgHGTiIgTauDkixbRU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gMI0qSAFCRBJOxNvsmVjbxJPgK48MkoQ84sTuLPuQQEpmohzcx7LkBUoi2UX7tpsR8zG9zeFC+h0rBti192n3Rc1/rhmBx4Ca+WayWc7qrL+5qOIzyLDZjcEEDvYIJOvypCN55Ogh1VLHqifx4tbcKlU7SIRpTe1DZ8+nAo6Mmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O08VUooE; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4801d24d91bso50773275e9.2
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 10:54:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769453688; x=1770058488; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DkYHBbf51iPoTKTb/DYQ1Urxy3yreGvpCuibSsYjEfk=;
-        b=O08VUooEHqZP99OBKgphpyM1x2G+l5I83pvvSWY9ZwHkn1mCOD35UmFETDnntnW4wY
-         O82qDe1A4AWpVU6hIU0ONs97tn/Jt3/5HDXq767wXz/AqcB7ZEj7GMFAHS1IEClI2uYM
-         eJk2kkeXJAMgiB4AG3Nfjb8H6nIYDce4WgIwFVDJ/sNzY2BrWOep5IArk/lXcIt+yji5
-         lYbkKmkpTj7ilGFYe4K7nsot9Quyl+G9HX5GyrrzZSfcsFMYAIXjn/hRwXuGZqshHrls
-         H6ORjnI/4w9WQpou0iDtR6H4NCm/8lsuVk9ySQZ5vPdExrJWywdlG3xEFLaOcVI6qL2D
-         dWiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769453688; x=1770058488;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=DkYHBbf51iPoTKTb/DYQ1Urxy3yreGvpCuibSsYjEfk=;
-        b=WBgya4GRi+7sbro8umqvakeKiOh5jq9FX5ks9CCUDFrR2/EkKQoGkkN3paZkctCtY3
-         3Wj+gWLjVVL6cmW/4LqZTl5TmKI+u1VJXSKfmVZ/j3bDPXfyLEBdPql8lyyAmFGFmn5p
-         EbxswzEliQSrS05IcI0/fk8sUKi9JlNpwj6a2LO0W/zzK0UT8L94za1viV3RvRSU5hiv
-         PAs/VoFzcwY9CqXLMM6wslYAKX2cpMODWb8Vrnw6GF7j1i4CoWUgXKionxjgf+HjI65M
-         DbmigebgibqgkNL2qGsxW63CaZM4erkKgdO+YUeoLKWcKVrBc5I6P9UhGvEFxyJA3bqk
-         swCQ==
-X-Gm-Message-State: AOJu0YxtTPh7SaAmS0xgJy+uIZPKlPUo3He+PDEulzVzxcpeISpATd3R
-	S30LyWzijyerFaVXFrUCaJRFH9pgsPQNikttAQh2O3PDmgKsf5UjFLA6
-X-Gm-Gg: AZuq6aIgJV32vDEpn3bA1BDqNllFZRrw20C2FHb93WAKVM724z4GV9VtwhookftimW5
-	T7/Io+/0kodqpFiWvbn/lrEGRmuYeB4EFlOS8+kHxM900gEq2WqB8CL+0B3fYw5sHEPsUnkPbF8
-	c/DmHmFTOhkWX5b5kL/IspEF3zC0+H+JrUIVw/2UrYpalR5giQ4zisHkQBp+hsQEiXExkANFsdD
-	lQx3maZh9inZ/Vr1oXSM1jg3qzmQ0cjN0WMGkTmorFEEaiGvc0cNJpRJGDHmQyz/4u88SW6Y0n1
-	xy/ygWobvD7KW0Fs/UWsacZ/yCFucJRprvATGGlPJYKLd1X9RomLpBX/WQyo1RfjZqrhvMZShB3
-	ilhNS45i2g14zyUpv5xtyyEl8yuRMJFACQL2OcYfM6q7Cs3sJin9x00JU55CvquXFIS0rh5PP/r
-	75
-X-Received: by 2002:a05:6000:2313:b0:430:fa58:a03d with SMTP id ffacd0b85a97d-435ca3ac2aamr9067059f8f.63.1769453687994;
-        Mon, 26 Jan 2026 10:54:47 -0800 (PST)
-Received: from xeon ([188.163.112.49])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1f742d6sm31793947f8f.30.2026.01.26.10.54.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jan 2026 10:54:47 -0800 (PST)
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-To: Dmitry Osipenko <digetx@gmail.com>,
+	s=arc-20240116; t=1769456496; c=relaxed/simple;
+	bh=uQFMWGnGGz/UkepHe6qNZM7ssltN76ODEap8qFaeK2s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MaxGYJjD8+uW8iVU+S8U47p4FCiAG158GQF6LzqqlT0RdjfdzTU4ffibIZ/LJNc8n/AtfYuw8821aoPy/uBcBlLnhWILXJlaYOr+xgvnGWb5IzGLKJ5CNq65qZ9X0zs++m32J7MPAbYLypJ5eJ9ArWZkN5k/sKVDVb2wL9i7gcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=derieL3L; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769456494; x=1800992494;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uQFMWGnGGz/UkepHe6qNZM7ssltN76ODEap8qFaeK2s=;
+  b=derieL3LLtDdLkKo62F/2aghx7RorjhNNvIFNM3y62aJ5uFizAoBe8iu
+   1At6KcH7MVaWC7f/J+n5FVM/nDFpxINAXVofD5cCafOk34W7ylQgBcjRW
+   YQVSKVx/lor3hPrirIzN3FEn8vcMQ70p81nBdw9hpC4gLSzKew0HVXj/o
+   bcjRpAOnEghYpq3zBCpNZzkICk/a9HgkVNRoeCrocxC/Zd/+Bf4u6aApH
+   3PxnOh6h1iQXCcj3EVp8F7SU9ZyXuzS6x3t3jmXz4+t3gUsNXPhJhhRns
+   ElT6aYmdgP1MDzLOoppsA72Bx99NFD6xO8ARm30znAx8xzKbk6Ht1QXTj
+   Q==;
+X-CSE-ConnectionGUID: iROUj1cSSs2gn1LuTof2hQ==
+X-CSE-MsgGUID: cdogRa0CQ4Gqx2hPytNR1g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="70545872"
+X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
+   d="scan'208";a="70545872"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 11:41:33 -0800
+X-CSE-ConnectionGUID: n0esMp9ySU+Mz1YRzxo6RQ==
+X-CSE-MsgGUID: jseCndPdQO2p/ZZbLSbXCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
+   d="scan'208";a="206992580"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 26 Jan 2026 11:41:28 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vkSSj-00000000XdK-0FbY;
+	Mon, 26 Jan 2026 19:41:25 +0000
+Date: Tue, 27 Jan 2026 03:41:05 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kaustabh Chakraborty <kauschluss@disroot.org>,
+	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
 	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Kyungmin Park <kyungmin.park@samsung.com>,
 	Chanwoo Choi <cw00.choi@samsung.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Mikko Perttunen <mperttunen@nvidia.com>,
-	Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-pm@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/1] devfreq: tegra30-devfreq: add support for Tegra114
-Date: Mon, 26 Jan 2026 20:54:23 +0200
-Message-ID: <20260126185423.77786-2-clamor95@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260126185423.77786-1-clamor95@gmail.com>
-References: <20260126185423.77786-1-clamor95@gmail.com>
+	Sebastian Reichel <sre@kernel.org>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	Kaustabh Chakraborty <kauschluss@disroot.org>
+Subject: Re: [PATCH v2 06/12] mfd: sec: add support for S2MU005 PMIC
+Message-ID: <202601270307.Ds4yus7I-lkp@intel.com>
+References: <20260126-s2mu005-pmic-v2-6-78f1a75f547a@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260126-s2mu005-pmic-v2-6-78f1a75f547a@disroot.org>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_FROM(0.00)[bounces-41489-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,samsung.com,nvidia.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41490-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[23];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-pm@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nvidia.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1891A8C3BC
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,intel.com:mid]
+X-Rspamd-Queue-Id: C19D38CB4D
 X-Rspamd-Action: no action
 
-Lets add Tegra114 support to activity monitor device as a preparation to
-upcoming EMC controller support.
+Hi Kaustabh,
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-Reviewed-by: Mikko Perttunen <mperttunen@nvidia.com>
----
- drivers/devfreq/tegra30-devfreq.c | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/devfreq/tegra30-devfreq.c b/drivers/devfreq/tegra30-devfreq.c
-index 8ea5b482bfb3..fa83480a923f 100644
---- a/drivers/devfreq/tegra30-devfreq.c
-+++ b/drivers/devfreq/tegra30-devfreq.c
-@@ -963,16 +963,22 @@ static int tegra_devfreq_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
-+/*
-+ * The activity counter is incremented every 256 memory transactions. However,
-+ * the number of clock cycles required for each transaction varies across
-+ * different SoC generations. For instance, a single transaction takes 2 EMC
-+ * clocks on Tegra30, 1 EMC clock on Tegra114, and 4 EMC clocks on Tegra124.
-+ */
- static const struct tegra_devfreq_soc_data tegra124_soc = {
- 	.configs = tegra124_device_configs,
--
--	/*
--	 * Activity counter is incremented every 256 memory transactions,
--	 * and each transaction takes 4 EMC clocks.
--	 */
- 	.count_weight = 4 * 256,
- };
- 
-+static const struct tegra_devfreq_soc_data tegra114_soc = {
-+	.configs = tegra124_device_configs,
-+	.count_weight = 256,
-+};
-+
- static const struct tegra_devfreq_soc_data tegra30_soc = {
- 	.configs = tegra30_device_configs,
- 	.count_weight = 2 * 256,
-@@ -980,6 +986,7 @@ static const struct tegra_devfreq_soc_data tegra30_soc = {
- 
- static const struct of_device_id tegra_devfreq_of_match[] = {
- 	{ .compatible = "nvidia,tegra30-actmon",  .data = &tegra30_soc, },
-+	{ .compatible = "nvidia,tegra114-actmon", .data = &tegra114_soc, },
- 	{ .compatible = "nvidia,tegra124-actmon", .data = &tegra124_soc, },
- 	{ },
- };
+[auto build test ERROR on ca3a02fda4da8e2c1cb6baee5d72352e9e2cfaea]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kaustabh-Chakraborty/dt-bindings-leds-document-Samsung-S2M-series-PMIC-flash-LED-device/20260126-031457
+base:   ca3a02fda4da8e2c1cb6baee5d72352e9e2cfaea
+patch link:    https://lore.kernel.org/r/20260126-s2mu005-pmic-v2-6-78f1a75f547a%40disroot.org
+patch subject: [PATCH v2 06/12] mfd: sec: add support for S2MU005 PMIC
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260127/202601270307.Ds4yus7I-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260127/202601270307.Ds4yus7I-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601270307.Ds4yus7I-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/mfd/sec-irq.c:218:7: error: expression is not an integer constant expression
+           case irqf_regs[0]:
+                ^~~~~~~~~~~~
+   drivers/mfd/sec-irq.c:218:7: note: initializer of 'irqf_regs' is not a constant expression
+   drivers/mfd/sec-irq.c:204:21: note: declared here
+           const unsigned int irqf_regs[] = {
+                              ^
+   drivers/mfd/sec-irq.c:220:7: error: expression is not an integer constant expression
+           case mask_regs[0]:
+                ^~~~~~~~~~~~
+   drivers/mfd/sec-irq.c:220:7: note: initializer of 'mask_regs' is not a constant expression
+   drivers/mfd/sec-irq.c:210:21: note: declared here
+           const unsigned int mask_regs[] = {
+                              ^
+   2 errors generated.
+
+
+vim +218 drivers/mfd/sec-irq.c
+
+   200	
+   201	static unsigned int s2mu005_irq_get_reg(struct regmap_irq_chip_data *data,
+   202						unsigned int base, int index)
+   203	{
+   204		const unsigned int irqf_regs[] = {
+   205			S2MU005_REG_CHGR_INT1,
+   206			S2MU005_REG_FLED_INT1,
+   207			S2MU005_REG_MUIC_INT1,
+   208			S2MU005_REG_MUIC_INT2,
+   209		};
+   210		const unsigned int mask_regs[] = {
+   211			S2MU005_REG_CHGR_INT1M,
+   212			S2MU005_REG_FLED_INT1M,
+   213			S2MU005_REG_MUIC_INT1M,
+   214			S2MU005_REG_MUIC_INT2M,
+   215		};
+   216	
+   217		switch (base) {
+ > 218		case irqf_regs[0]:
+   219			return irqf_regs[index];
+   220		case mask_regs[0]:
+   221			return mask_regs[index];
+   222		}
+   223	
+   224		return base;
+   225	}
+   226	
+
 -- 
-2.51.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
