@@ -1,136 +1,238 @@
-Return-Path: <linux-pm+bounces-41453-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41454-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id eG2bHBsyd2mrdAEAu9opvQ
-	(envelope-from <linux-pm+bounces-41453-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 10:21:31 +0100
+	id qOC2LghAd2mMdQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41454-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 11:20:56 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B122E85F03
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 10:21:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4485886BB1
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 11:20:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 7182A30036E3
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 09:21:28 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id D79403019389
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 10:18:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64471283FD6;
-	Mon, 26 Jan 2026 09:21:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D9C43161B5;
+	Mon, 26 Jan 2026 10:18:51 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17DCE21D3F2
-	for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 09:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF16230E0F4;
+	Mon, 26 Jan 2026 10:18:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769419287; cv=none; b=XuRyKe4l1LKFxuTUSpt1tUnCxlLBlMsF29z19D/x402oKKpjIh0Bb5sN3mxEAusVZnCX+RZ5SX65GlH56I/dO1+FLyFpY4dXtbPRrxmaSh9EsTZf3Bc7QfZUVdywQYHtMXnqMa5Upe8jSQJQ19PIZf0Dg6G+sI6gCrYjuACkMek=
+	t=1769422731; cv=none; b=gUp1cQIuhXgONHFDFKkNBBhWJqhJWvTr0duFkvvUuVPPaV3LVyx0lq16ood60VjCfgkDP0a15Y3V7yv6UH2d7brEqW6foAbWvavHtOb4t79cZnyj0CMXcgIlHMBIF1Fy6DDz9Vg/8NrlInC21oeMy7Nwsz0s2fBBiqCcBqYzk9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769419287; c=relaxed/simple;
-	bh=zuLTNu10t9Op8BVt2TUYGYUes51ASXSsTqsYh2FmfbA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=C+Q/rWbWmWHjSPwwDGlvfYKGhN40ILY05nzfYVRR+H+c18fOyyrrfhPfZjfWcwZ1quTOCEmHzn8zIw7VUKZyqoGzF2mISKBbmhG0cx3aJEVRcaACh9ZGmrckumogcWlZ+4Q3k3MtSy1EyZuqA2TovUEoKaPvV5bKxpmmDPQ7OMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <l.stach@pengutronix.de>)
-	id 1vkImW-0000cv-MV; Mon, 26 Jan 2026 10:21:12 +0100
-Message-ID: <255e1946a67efadf13f468fc24c907074037a45e.camel@pengutronix.de>
-Subject: Re: [PATCH v3] pmdomain: imx: gpcv2: Fix the imx8mm gpu hang due to
- wrong adb400 reset
-From: Lucas Stach <l.stach@pengutronix.de>
-To: Fabio Estevam <festevam@gmail.com>, Jacky Bai <ping.bai@nxp.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- linux-pm@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org
-Date: Mon, 26 Jan 2026 10:21:11 +0100
-In-Reply-To: <CAOMZO5Ag6jtVqeXW30QNy5+1ykmGTt4G8DxcsyOUMvNaeJf5Ug@mail.gmail.com>
-References: <20260123-imx8mm_gpu_power_domain-v3-1-3752618050c9@nxp.com>
-	 <CAOMZO5Ag6jtVqeXW30QNy5+1ykmGTt4G8DxcsyOUMvNaeJf5Ug@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1769422731; c=relaxed/simple;
+	bh=NOaST1yJNyBGuyh8C+R5M0Mbc9xewBwYmRw5To0wXjU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NZj1WHlQy88iop0UKPWJvq+JSH6HfiyGIuQ6Zl4IpiTfiaIzO4NSKY/Ci9zZlxyiLg7NNxr8g3m5h+fBs+HojmDYkZ/QbeRk12gFut82x7wcon7DDYe0ENdNQ4MlhXEpoZjDKtbZPhnlFBbHwZmoOp1MsV/3xslN9NHDskGUwTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B661339;
+	Mon, 26 Jan 2026 02:18:41 -0800 (PST)
+Received: from e135073.nice.arm.com (e135073.arm.com [10.34.125.23])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3D9613F632;
+	Mon, 26 Jan 2026 02:18:44 -0800 (PST)
+From: Pierre Gondois <pierre.gondois@arm.com>
+To: linux-kernel@vger.kernel.org
+Cc: Jie Zhan <zhanjie9@hisilicon.com>,
+	zhenglifeng1@huawei.com,
+	Ionela Voinescu <ionela.voinescu@arm.com>,
+	Christian Loehle <christian.loehle@arm.com>,
+	sumitg@nvidia.com,
+	Pierre Gondois <pierre.gondois@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Huang Rui <ray.huang@amd.com>,
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Len Brown <lenb@kernel.org>,
+	Saravana Kannan <saravanak@kernel.org>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH 0/6] cpufreq: Introduce boost frequency QoS
+Date: Mon, 26 Jan 2026 11:18:09 +0100
+Message-ID: <20260126101826.94030-1-pierre.gondois@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [0.14 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41453-lists,linux-pm=lfdr.de];
-	DMARC_NA(0.00)[pengutronix.de];
-	FREEMAIL_TO(0.00)[gmail.com,nxp.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-41454-lists,linux-pm=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	FROM_NEQ_ENVFROM(0.00)[pierre.gondois@arm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[14];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[l.stach@pengutronix.de,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.997];
+	RCVD_COUNT_FIVE(0.00)[5];
 	R_DKIM_NA(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: B122E85F03
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4485886BB1
 X-Rspamd-Action: no action
 
-Am Samstag, dem 24.01.2026 um 18:20 -0300 schrieb Fabio Estevam:
-> On Thu, Jan 22, 2026 at 11:51=E2=80=AFPM Jacky Bai <ping.bai@nxp.com> wro=
-te:
-> >=20
-> > On i.MX8MM, the GPUMIX, GPU2D, and GPU3D blocks share a common reset
-> > domain. Due to this hardware limitation, powering off/on GPU2D or GPU3D
-> > also triggers a reset of the GPUMIX domain, including its ADB400 port.
-> > However, the ADB400 interface must always be placed into power=E2=80=91=
-down mode
-> > before being reset.
-> >=20
-> > Currently the GPUMIX and GPU2D/3D power domains rely on runtime PM to
-> > handle dependency ordering. In some corner cases, the GPUMIX power off
-> > sequence is skipped, leaving the ADB400 port active when GPU2D/3D reset=
-.
-> > This causes the GPUMIX ADB400 port to be reset while still active,
-> > leading to unpredictable bus behavior and GPU hangs.
-> >=20
-> > To avoid this, refine the power=E2=80=91domain control logic so that th=
-e GPUMIX
-> > ADB400 port is explicitly powered down and powered up as part of the GP=
-U
-> > power domain on/off sequence. This ensures proper ordering and prevents
-> > incorrect ADB400 reset.
-> >=20
-> > Suggested-by: Lucas Stach <l.stach@pengutronix.de>
-> > Signed-off-by: Jacky Bai <ping.bai@nxp.com>
->=20
-> Shouldn't this have a Fixes tag?
+The Power Management Quality of Service (PM QoS) allows to
+aggregate constraints from multiple entities. It is currently
+used to manage the min/max frequency of a given policy.
 
-Yes, it needs to go into at least the active 6.12 LTS series, as the
-patch changing the domain suspend ordering is in 6.10. Other than the
-missing tags:
+Frequency constraints can come from:
+- Thermal framework: acpi_thermal_cpufreq_init()
+- Firmware: _PPC objects: acpi_processor_ppc_init()
+- User: by setting policyX/scaling_[min|max]_freq
+The minimum of the max frequency constraints is used to compute
+the resulting maximum allowed frequency.
 
-Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+When enabling boost frequencies, the same frequency request object
+(policy->max_freq_req) as to handle requests from users is used.
+As a result, when setting:
+- scaling_max_freq
+- boost
+The last sysfs file used overwrites the request from the other
+sysfs file.
 
-Regards,
-Lucas
+To avoid this:
+1. Create a per-policy boost_freq_req to save the boost
+constraints instead of overwriting the last scaling_max_freq
+constraint.
+
+2. policy_set_boost() calls the cpufreq set_boost callback.
+Update the newly added boost_freq_req request from there:
+- whenever boost is toggled
+- to cover all possible paths
+
+3. In the existing set_boost() callbacks:
+- Don't update policy->max as this is done through the qos notifier
+  cpufreq_notifier_max() which calls cpufreq_set_policy().
+- Remove freq_qos_update_request() calls as the qos request is now
+  done in policy_set_boost() and updates the new boost_freq_req
+
+This patch-set additionally does:
+- if a driver .init() callback sets policy->min and policy->max,
+  these values are used are min/max_freq_req QoS constraints
+- Remove policy->min and policy->max initialization in .init()
+  callback if the value is identical to cpuinfo.min/max_freq
+- RFC: allow decreasing cpuinfo.max_freq when using freq_table.
+
+------------
+
+E.g.:
+On a Juno with available frequencies: 600.000, 1.000.000
+Boost frequencies: 1.200.000
+Using the cppc-cpufreq driver.
+
+---
+Without the patches:
+# ## Init state
+scaling_max_freq:1000000
+cpuinfo_max_freq:1000000
+
+# echo 700000 > scaling_max_freq
+scaling_max_freq:700000
+cpuinfo_max_freq:1000000
+
+# echo 1 > ../boost
+scaling_max_freq:1200000
+cpuinfo_max_freq:1200000
+
+# echo 800000 > scaling_max_freq
+scaling_max_freq:800000
+cpuinfo_max_freq:1200000
+
+# echo 0 > ../boost
+scaling_max_freq:1000000
+cpuinfo_max_freq:1000000
+
+---
+With the patches:
+# ## Init
+scaling_max_freq:1000000
+cpuinfo_max_freq:1000000
+
+# echo 700000 > scaling_max_freq
+scaling_max_freq:700000
+cpuinfo_max_freq:1000000
+
+# echo 1 > ../boost
+scaling_max_freq:700000
+cpuinfo_max_freq:1200000
+
+# echo 800000 > scaling_max_freq
+scaling_max_freq:800000
+cpuinfo_max_freq:1200000
+
+# echo 0 > ../boost
+scaling_max_freq:800000
+cpuinfo_max_freq:1000000
+
+---
+
+With the patches, the maximum scaling frequency requested is
+conserved even though boosting is enabled/disabled.
+
+---
+
+v1: https://lore.kernel.org/all/20251204101344.192678-1-pierre.gondois@arm.com/#t
+v2: https://lore.kernel.org/all/20251208105933.1369125-1-pierre.gondois@arm.com/#t
+Changes:
+- Fixed error path
+- Integrated [PATCH 1/4] Revert "cpufreq: Fix re-boost issue after hotplugging a CPU"
+  to another patch
+v3:
+Changes:
+- Fixed error path
+- Extracted the revert of:
+  "cpufreq: Fix re-boost issue after hotplugging a CPU"
+  for clarity purpose
+- Set cpuinfo.max_freq as a max_freq_req QoS constraint by default
+New patches:
+- "cpufreq: Allow decreasing cpuinfo.max_freq"
+- "cpufreq: Set policy->min and max as QoS constraints"
+
+Pierre Gondois (6):
+  cpufreq: Remove per-CPU QoS constraint
+  cpufreq: Add boost_freq_req QoS request
+  cpufreq: Centralize boost freq QoS requests
+  cpufreq: Update .set_boost() callbacks to rely on boost_freq_req
+  cpufreq: Set policy->min and max as real QoS constraints
+  cpufreq/freq_table: Allow decreasing cpuinfo.max_freq
+
+ drivers/cpufreq/acpi-cpufreq.c    |  1 +
+ drivers/cpufreq/amd-pstate.c      | 26 +++++----
+ drivers/cpufreq/cppc_cpufreq.c    | 10 +---
+ drivers/cpufreq/cpufreq-nforce2.c |  4 +-
+ drivers/cpufreq/cpufreq.c         | 87 +++++++++++++++++++++++--------
+ drivers/cpufreq/freq_table.c      | 14 ++---
+ drivers/cpufreq/gx-suspmod.c      |  9 ++--
+ drivers/cpufreq/intel_pstate.c    |  3 --
+ drivers/cpufreq/pcc-cpufreq.c     |  8 +--
+ drivers/cpufreq/pxa3xx-cpufreq.c  |  4 +-
+ drivers/cpufreq/virtual-cpufreq.c |  6 +--
+ include/linux/cpufreq.h           |  1 +
+ 12 files changed, 101 insertions(+), 72 deletions(-)
+
+--
+2.43.0
 
