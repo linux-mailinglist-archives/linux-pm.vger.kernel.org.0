@@ -1,353 +1,135 @@
-Return-Path: <linux-pm+bounces-41446-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41447-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oPKgIRcKd2lGawEAu9opvQ
-	(envelope-from <linux-pm+bounces-41446-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 07:30:47 +0100
+	id eM1SNd0dd2lDcQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41447-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 08:55:09 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3C92848A3
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 07:30:45 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E1F2851F4
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 08:55:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8ABB53003319
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 06:30:44 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id F03FD30193AC
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 07:48:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1FD1C860A;
-	Mon, 26 Jan 2026 06:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C123128B0;
+	Mon, 26 Jan 2026 07:48:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="mI7To+cQ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GsrxcAw5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout09.his.huawei.com (canpmsgout09.his.huawei.com [113.46.200.224])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A154D3EBF05;
-	Mon, 26 Jan 2026 06:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.224
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8941F31077A
+	for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 07:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769409043; cv=none; b=NymRX42uRNvU/aQ0nyGEmjWJarReV26OlW0E9OEn3DhNqpHkCSrfqH8XYTwU6aYzfHT091McYvkBUHLrqvztnkXZ5GYUm90GVP1s8eGLjTCdKQYzazQiiNb89HJ59KxlVZP3rw6lOI5fK7x5tClUWDqG0LoeZXUDkdMEyVXmMOc=
+	t=1769413685; cv=none; b=YJfyIooeFxG6x3IJEDY+2WaNLyUHkG9RxMd2mbv9OQdreldL574jJf4dAAI5SqHxKINH5Mp1p/u9jJFfudsR2/oCeRcMdgHmqqQX1IbxPHAEynP5Bx6xk9i6/gmlq1jmvnqKBih8Ege1xTjUhbHMKQnkkqu0E0m5wTXppQT+eUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769409043; c=relaxed/simple;
-	bh=zfx+ZdjWYyWynzlsgF2+pFgEzHLKUkpIesYoMN5dYqo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=XComfZvaypjRowRmKNPiV8kJPnSuu6kbd2TvpMxhEqn1Pygjnp53Ley9z2PC/varSy0Bni3AjvFL0QL6Kqao4J3nKf9XXV9A5ZR54q9wJ+5e/Wih6WIiqp/CLDzQT2Vt6CKxMA6HXuM2yexKWA2d6bL9PE3ocBHSeMRWqn2XNBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=mI7To+cQ; arc=none smtp.client-ip=113.46.200.224
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=/ABQVLGsx9iquiaTfz39kzyJUZlaubPwlfYS5KjGm+c=;
-	b=mI7To+cQd2EyCOpeXJmbhLe2ApiTKTQyiMrGocZ1UKD5DUBHF2/hnyB4zOUmwazsZeyFVtzFG
-	hSIyFxLNdKDfK8BngHM9oSNWZmgeMEgOjXz9Wt5BdjmaSO2Uka14KOO7SZL2NvNAxMEwh1c+Jo0
-	xGEm1ZcXPj1VjEWmQUwie0s=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout09.his.huawei.com (SkyGuard) with ESMTPS id 4dzz8v4gyGz1cyR2;
-	Mon, 26 Jan 2026 14:27:11 +0800 (CST)
-Received: from kwepemr200004.china.huawei.com (unknown [7.202.195.241])
-	by mail.maildlp.com (Postfix) with ESMTPS id D836540565;
-	Mon, 26 Jan 2026 14:30:37 +0800 (CST)
-Received: from [10.67.121.62] (10.67.121.62) by kwepemr200004.china.huawei.com
- (7.202.195.241) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 26 Jan
- 2026 14:30:37 +0800
-Message-ID: <7222f923-672a-4a33-9412-bf825883f217@huawei.com>
-Date: Mon, 26 Jan 2026 14:30:36 +0800
+	s=arc-20240116; t=1769413685; c=relaxed/simple;
+	bh=kZgSjaR7mhP38wsRmF8leF3SOT7rcWV2z0nmuGGAdzI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hS1RcmzPIEPXWJaZEeTeINr9rRvRGkSZ9C7qFwndzpQ1FVkN02ijNBx7S27al+GCfuNs80G+uWblua5TKxdrw+dkspaKxfm5LIO+0t3ufn5ZG9yRScSFs1YLfTBotlqQ3gq31HBmKzcr5f4L5tWnQ1Dpxb8326pcUix4IM2COGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GsrxcAw5; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769413671;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KcAsZ3CHaQytxOA1JEl/SWaOKrjOymd2YsqbqcBYKOo=;
+	b=GsrxcAw5RcmHslkBiefmtaKAC2d7XXKm+qwAX7vWVXz7wXbWMtq/dpu10mvBnWxTbJv7gl
+	aj9YFPBGXmkXhTN8KZ1iRFNYg86Ji7r8w3riff4HYYm2nFPIDpX8Mh4I3CSRDlt1MkBE6b
+	Xqwhy4sSSJEc2K/GokSU/jiyen85X+c=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Freeman Liu <freeman.liu@unisoc.com>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	stable@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] thermal: sprd: Fix raw temperature clamping in sprd_thm_rawdata_to_temp
+Date: Mon, 26 Jan 2026 08:47:19 +0100
+Message-ID: <20260126074719.211959-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] PM / devfreq: use _visible attribute to replace
- create/remove_sysfs_files()
-To: <myungjoo.ham@samsung.com>, <kyungmin.park@samsung.com>,
-	<cw00.choi@samsung.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>, <lihuisong@huawei.com>,
-	<yubowen8@huawei.com>, <linhongye@h-partners.com>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <wangzhi12@huawei.com>
-References: <20251216031153.2242306-1-zhangpengjie2@huawei.com>
-From: "zhangpengjie (A)" <zhangpengjie2@huawei.com>
-In-Reply-To: <20251216031153.2242306-1-zhangpengjie2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemr200004.china.huawei.com (7.202.195.241)
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[huawei.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41447-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[12];
 	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_TO(0.00)[kernel.org,linaro.org,intel.com,arm.com,gmail.com,linux.alibaba.com,unisoc.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41446-lists,linux-pm=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
+	RCVD_COUNT_THREE(0.00)[3];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zhangpengjie2@huawei.com,linux-pm@vger.kernel.org];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[thorsten.blum@linux.dev,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[linux.dev:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,hisilicon.com:email]
-X-Rspamd-Queue-Id: D3C92848A3
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,alibaba.com:email,linux.dev:email,linux.dev:dkim,linux.dev:mid]
+X-Rspamd-Queue-Id: 8E1F2851F4
 X-Rspamd-Action: no action
 
-Gentle ping.
+The raw temperature data was never clamped to SPRD_THM_RAW_DATA_LOW or
+SPRD_THM_RAW_DATA_HIGH because the return value of clamp() was not used.
+Fix this by assigning the clamped value to 'rawdata'.
 
-This patch has received some positive reviews but hasn't been
+Casting SPRD_THM_RAW_DATA_LOW and SPRD_THM_RAW_DATA_HIGH to u32 is also
+redundant and can be removed.
 
-picked up yet. Would it be possible to consider it for application?
+Cc: stable@vger.kernel.org
+Fixes: 554fdbaf19b1 ("thermal: sprd: Add Spreadtrum thermal driver support")
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ drivers/thermal/sprd_thermal.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks,
-Pengjie
+diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
+index e546067c9621..f7fa83b2428e 100644
+--- a/drivers/thermal/sprd_thermal.c
++++ b/drivers/thermal/sprd_thermal.c
+@@ -178,7 +178,7 @@ static int sprd_thm_sensor_calibration(struct device_node *np,
+ static int sprd_thm_rawdata_to_temp(struct sprd_thermal_sensor *sen,
+ 				    u32 rawdata)
+ {
+-	clamp(rawdata, (u32)SPRD_THM_RAW_DATA_LOW, (u32)SPRD_THM_RAW_DATA_HIGH);
++	rawdata = clamp(rawdata, SPRD_THM_RAW_DATA_LOW, SPRD_THM_RAW_DATA_HIGH);
+ 
+ 	/*
+ 	 * According to the thermal datasheet, the formula of converting
+-- 
+Thorsten Blum <thorsten.blum@linux.dev>
+GPG: 1D60 735E 8AEF 3BE4 73B6  9D84 7336 78FD 8DFE EAD4
 
-On 12/16/2025 11:11 AM, Pengjie Zhang wrote:
-> Previously, non-generic attributes (polling_interval, timer) used separate
-> create/delete logic, leading to race conditions during concurrent access in
-> creation/deletion. Multi-threaded operations also caused inconsistencies
-> between governor capabilities and attribute states.
->
-> 1.Use is_visible + sysfs_update_group() to unify management of these
-> attributes, eliminating creation/deletion races.
-> 2.Add locks and validation to these attributes, ensuring consistency
-> between current governor capabilities and attribute operations in
-> multi-threaded environments.
->
-> Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-> Reviewed-by: Jie Zhan <zhanjie9@hisilicon.com>
-> Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
-> ---
-> changes in v5:
-> -Remove the curly braces of an if statement
-> -Added a note explaining why locking is necessary.
-> Link to v4:https://lore.kernel.org/all/20251205083724.4068896-1-zhangpengjie2@huawei.com/
->
-> changes in v4:
-> -Remove the DEFINE_SYSFS_GROUP_VISIBLE macro and directly set the is_visible function.
-> -Remove unnecessary ret variables
-> Link to v3:https://lore.kernel.org/lkml/20251107031706.1698396-1-zhangpengjie2@huawei.com/
->
-> changes in v3:
-> - Use guard() to simplify lock acquisition and destruction.
-> - Eliminate redundant checks for df.
-> Link to v2:https://lore.kernel.org/lkml/20251028022458.2824872-1-zhangpengjie2@huawei.com/
->
-> Changes in v2:
-> - Fix one problem reported by the kernel test robot.
-> - Redirect all error paths in timer_store() to out to ensure locks are not
->   left unReleased.
-> Link to v1:https://lore.kernel.org/lkml/20251025135238.3576861-1-zhangpengjie2@huawei.com/
->
->   drivers/devfreq/devfreq.c | 103 ++++++++++++++++++++++----------------
->   1 file changed, 60 insertions(+), 43 deletions(-)
->
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index 2e8d01d47f69..7673a39baaa6 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -38,6 +38,7 @@
->   
->   static struct class *devfreq_class;
->   static struct dentry *devfreq_debugfs;
-> +static const struct attribute_group gov_attr_group;
->   
->   /*
->    * devfreq core provides delayed work based load monitoring helper
-> @@ -785,11 +786,6 @@ static void devfreq_dev_release(struct device *dev)
->   	kfree(devfreq);
->   }
->   
-> -static void create_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov);
-> -static void remove_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov);
-> -
->   /**
->    * devfreq_add_device() - Add devfreq feature to the device
->    * @dev:	the device to add devfreq feature.
-> @@ -956,7 +952,10 @@ struct devfreq *devfreq_add_device(struct device *dev,
->   			 __func__);
->   		goto err_init;
->   	}
-> -	create_sysfs_files(devfreq, devfreq->governor);
-> +
-> +	err = sysfs_update_group(&devfreq->dev.kobj, &gov_attr_group);
-> +	if (err)
-> +		goto err_init;
->   
->   	list_add(&devfreq->node, &devfreq_list);
->   
-> @@ -995,12 +994,9 @@ int devfreq_remove_device(struct devfreq *devfreq)
->   
->   	devfreq_cooling_unregister(devfreq->cdev);
->   
-> -	if (devfreq->governor) {
-> +	if (devfreq->governor)
->   		devfreq->governor->event_handler(devfreq,
->   						 DEVFREQ_GOV_STOP, NULL);
-> -		remove_sysfs_files(devfreq, devfreq->governor);
-> -	}
-> -
->   	device_unregister(&devfreq->dev);
->   
->   	return 0;
-> @@ -1460,7 +1456,6 @@ static ssize_t governor_store(struct device *dev, struct device_attribute *attr,
->   			 __func__, df->governor->name, ret);
->   		goto out;
->   	}
-> -	remove_sysfs_files(df, df->governor);
->   
->   	/*
->   	 * Start the new governor and create the specific sysfs files
-> @@ -1489,7 +1484,7 @@ static ssize_t governor_store(struct device *dev, struct device_attribute *attr,
->   	 * Create the sysfs files for the new governor. But if failed to start
->   	 * the new governor, restore the sysfs files of previous governor.
->   	 */
-> -	create_sysfs_files(df, df->governor);
-> +	ret = sysfs_update_group(&df->dev.kobj, &gov_attr_group);
->   
->   out:
->   	mutex_unlock(&devfreq_list_lock);
-> @@ -1807,14 +1802,17 @@ static struct attribute *devfreq_attrs[] = {
->   	&dev_attr_trans_stat.attr,
->   	NULL,
->   };
-> -ATTRIBUTE_GROUPS(devfreq);
->   
->   static ssize_t polling_interval_show(struct device *dev,
->   				     struct device_attribute *attr, char *buf)
->   {
->   	struct devfreq *df = to_devfreq(dev);
->   
-> -	if (!df->profile)
-> +	/* Protect against race between sysfs attrs update and read/write */
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->profile || !df->governor ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, POLLING_INTERVAL))
->   		return -EINVAL;
->   
->   	return sprintf(buf, "%d\n", df->profile->polling_ms);
-> @@ -1828,7 +1826,10 @@ static ssize_t polling_interval_store(struct device *dev,
->   	unsigned int value;
->   	int ret;
->   
-> -	if (!df->governor)
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->governor ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, POLLING_INTERVAL))
->   		return -EINVAL;
->   
->   	ret = sscanf(buf, "%u", &value);
-> @@ -1847,7 +1848,10 @@ static ssize_t timer_show(struct device *dev,
->   {
->   	struct devfreq *df = to_devfreq(dev);
->   
-> -	if (!df->profile)
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->profile || !df->governor ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, TIMER))
->   		return -EINVAL;
->   
->   	return sprintf(buf, "%s\n", timer_name[df->profile->timer]);
-> @@ -1861,7 +1865,10 @@ static ssize_t timer_store(struct device *dev, struct device_attribute *attr,
->   	int timer = -1;
->   	int ret = 0, i;
->   
-> -	if (!df->governor || !df->profile)
-> +	guard(mutex)(&devfreq_list_lock);
-> +
-> +	if (!df->governor || !df->profile ||
-> +	    !IS_SUPPORTED_ATTR(df->governor->attrs, TIMER))
->   		return -EINVAL;
->   
->   	ret = sscanf(buf, "%16s", str_timer);
-> @@ -1905,37 +1912,47 @@ static ssize_t timer_store(struct device *dev, struct device_attribute *attr,
->   }
->   static DEVICE_ATTR_RW(timer);
->   
-> -#define CREATE_SYSFS_FILE(df, name)					\
-> -{									\
-> -	int ret;							\
-> -	ret = sysfs_create_file(&df->dev.kobj, &dev_attr_##name.attr);	\
-> -	if (ret < 0) {							\
-> -		dev_warn(&df->dev,					\
-> -			"Unable to create attr(%s)\n", "##name");	\
-> -	}								\
-> -}									\
-> +static struct attribute *governor_attrs[] = {
-> +	&dev_attr_polling_interval.attr,
-> +	&dev_attr_timer.attr,
-> +	NULL
-> +};
->   
-> -/* Create the specific sysfs files which depend on each governor. */
-> -static void create_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov)
-> +static umode_t gov_attr_visible(struct kobject *kobj,
-> +				struct attribute *attr, int n)
->   {
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, POLLING_INTERVAL))
-> -		CREATE_SYSFS_FILE(devfreq, polling_interval);
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, TIMER))
-> -		CREATE_SYSFS_FILE(devfreq, timer);
-> -}
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct devfreq *df = to_devfreq(dev);
->   
-> -/* Remove the specific sysfs files which depend on each governor. */
-> -static void remove_sysfs_files(struct devfreq *devfreq,
-> -				const struct devfreq_governor *gov)
-> -{
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, POLLING_INTERVAL))
-> -		sysfs_remove_file(&devfreq->dev.kobj,
-> -				&dev_attr_polling_interval.attr);
-> -	if (IS_SUPPORTED_ATTR(gov->attrs, TIMER))
-> -		sysfs_remove_file(&devfreq->dev.kobj, &dev_attr_timer.attr);
-> +	if (!df->governor || !df->governor->attrs)
-> +		return 0;
-> +
-> +	if (attr == &dev_attr_polling_interval.attr &&
-> +	    IS_SUPPORTED_ATTR(df->governor->attrs, POLLING_INTERVAL))
-> +		return attr->mode;
-> +
-> +	if (attr == &dev_attr_timer.attr &&
-> +	    IS_SUPPORTED_ATTR(df->governor->attrs, TIMER))
-> +		return attr->mode;
-> +
-> +	return 0;
->   }
->   
-> +static const struct attribute_group devfreq_group = {
-> +	.attrs = devfreq_attrs,
-> +};
-> +
-> +static const struct attribute_group gov_attr_group = {
-> +	.attrs = governor_attrs,
-> +	.is_visible = gov_attr_visible,
-> +};
-> +
-> +static const struct attribute_group *devfreq_groups[] = {
-> +	&devfreq_group,
-> +	&gov_attr_group,
-> +	NULL
-> +};
-> +
->   /**
->    * devfreq_summary_show() - Show the summary of the devfreq devices
->    * @s:		seq_file instance to show the summary of devfreq devices
 
