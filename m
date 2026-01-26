@@ -1,146 +1,273 @@
-Return-Path: <linux-pm+bounces-41496-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41497-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IGOSMIHLd2lylAEAu9opvQ
-	(envelope-from <linux-pm+bounces-41496-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:16:01 +0100
+	id tR7+ErvLd2mxlQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41497-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:16:59 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60BC08CF2B
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:16:01 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08A7E8CF44
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:16:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 989703004609
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:16:00 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 6F8933007521
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF1B286890;
-	Mon, 26 Jan 2026 20:15:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 301592D3EC1;
+	Mon, 26 Jan 2026 20:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="Jyd1j1eD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kgDV8Qd6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6706F3EBF1C;
-	Mon, 26 Jan 2026 20:15:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1C91DE8AE;
+	Mon, 26 Jan 2026 20:16:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769458559; cv=none; b=dUMhAPhskc2bIzGy5Gl9SWwPSF9tPMHrhrQQSBAuGgrAhmAUGaTxPvelOGefXNpfzb/3KCAuUfUqSuIteZN/wmEJUodEMbAhWwGMMTv24iVadykK5d/j9AHU0NyTxXUvn5GwXHFYZE0n855CzkCI+JdtiaaSOEscS9Dezyu3UYE=
+	t=1769458615; cv=none; b=cvxv9M+cZ+fQ91HALdDo4sVhkm9FeY1TJrcjnUWUSTyKUbtLLqQCPd8W0Wgov4g6RVgOdYiNMLxcsIvJKzBDqk28i2PaLKeHXT2l4VkOxmUhddqHZgp8T9aOmjIutK4SpSLXBj4zfbKU9plTRtw+HZrXvG5opg+1h9OcyHlQIMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769458559; c=relaxed/simple;
-	bh=UM95fvK6A1BkKGqlC4HPDGXlJP2IsnWed/FuApSBzo4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=luCmwnZtyPFFItv7cxFI1L3dhfiVTZsU0OLjZjUPbGFM4BXXxl2nk3A8rQnDKigZknzWE61rFB6qnZDWGmghMdZeNIIdLDiJvAY2WfBFwI4Wm1Ox+mPIFbA5pqpSxmDreBW+V1//aKBRs5WzGjkw2gZSVKA2QnyFKyvFriMTURw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=Jyd1j1eD; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id C97F926107;
-	Mon, 26 Jan 2026 21:15:47 +0100 (CET)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id uESUxJKg_CGL; Mon, 26 Jan 2026 21:15:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1769458546; bh=UM95fvK6A1BkKGqlC4HPDGXlJP2IsnWed/FuApSBzo4=;
-	h=Date:To:Cc:Subject:From:References:In-Reply-To;
-	b=Jyd1j1eDrgL2v7g2g7f2J/8/d3+j8TVNMPIXIxNd16flG6pCLCN2Tgw3+r5GdNmeJ
-	 zd5izRmr+yX51iJbwlLRnhS/Yfh9NVxAz1ST+NC0/J+DyyLUYuu27g7Lvw0lXCNcOF
-	 /4BjYnUT+kJqjz2jwJtQNqG3UAWvH3bKhtNYAGRyTlaJ9zYcypvy8MjnpqrZXNWayV
-	 /DwYUIPhQkbAfMfb48DuCBbxuTjDj4IpnEj3AOCabfc9xb1zn8ofX3U5OWH0+kALQl
-	 xP+F0iONy21q3HidOCYEKp7603Td+KaP5tTpgCzbKANHEE5F6djKCVRIEZM7v+hrfU
-	 1NHTDMfQ1CRoQ==
+	s=arc-20240116; t=1769458615; c=relaxed/simple;
+	bh=jDTJt28eS0OoJ53PsZXeEECWkT1UGi1eT3ZMSzGB25M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tefQNQaf5/kdwUCTs64fO3Y7srpBxaJR24EuSkjlytnCTgCA3q5U/jW1o3VJKRa5IMoDahkAgzHZ128KpIr1jFwLjau1qIKeiUGXZTVeB7y2qoyBcuYnXr07fqV7Ojdu9kKCikwrYWlB/xEZRckrlnWNPBKeVBmoVLQKtA5ergA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kgDV8Qd6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01506C116C6;
+	Mon, 26 Jan 2026 20:16:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769458614;
+	bh=jDTJt28eS0OoJ53PsZXeEECWkT1UGi1eT3ZMSzGB25M=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=kgDV8Qd6nYF8zBFQPhFHXo8DLxGwM1sFByWRSjdf2B4nK8GHyILToDsGWcS2sbgSJ
+	 WypEHy8Ic5kMPpX/hS437eVpNKOx7tSI8mEE11fm8cRkvCcrTgFWCkGz+6Rsbj4TrB
+	 xTHCWj7tg9tXwPu4WZHGeKSlHDr7CT6TCJucpPXy1kyydP+wocvh7J8zz2i4VUGgOK
+	 gKZ00hQchg9jSWBqNAWSusenBje3lcIVDUAsoTB2Y5FQ1VqLlsd5fUYfMS4VXPwNMR
+	 IvFVt1LZO7vLmcxVqYof+g4OR/d1c+Mil2tJNpxcy8CehyGidmRZSzW1waoRzY7axf
+	 SLrz9kJMPA0Nw==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: kernel test robot <lkp@intel.com>,
+ Frederic Weisbecker <frederic@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject:
+ Re: [rafael-pm:bleeding-edge 175/176] ERROR: modpost: "tick_nohz_enabled"
+ [drivers/cpufreq/cpufreq_ondemand.ko] undefined!
+Date: Mon, 26 Jan 2026 21:16:49 +0100
+Message-ID: <4709230.LvFx2qVVIh@rafael.j.wysocki>
+Organization: Linux Kernel Development
+In-Reply-To: <aXN9-KrR0YyC7YDV@localhost.localdomain>
+References:
+ <202601231505.4Q8tb33s-lkp@intel.com>
+ <aXN9-KrR0YyC7YDV@localhost.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 27 Jan 2026 01:45:35 +0530
-Message-Id: <DFYSP9E4NKZY.2Q5YX7RUOXUD5@disroot.org>
-To: "Conor Dooley" <conor@kernel.org>, "Kaustabh Chakraborty"
- <kauschluss@disroot.org>
-Cc: "Yassine Oudjana" <y.oudjana@protonmail.com>, "Sebastian Reichel"
- <sre@kernel.org>, "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski"
- <krzk+dt@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
- <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: document Samsung
- S2MU005 battery fuel gauge
-From: "Kaustabh Chakraborty" <kauschluss@disroot.org>
-References: <20260126-s2mu005-fuelgauge-v1-0-68a146ed0819@disroot.org>
- <20260126-s2mu005-fuelgauge-v1-1-68a146ed0819@disroot.org>
- <20260126-goal-wasp-fa3f20d2a06a@spud>
-In-Reply-To: <20260126-goal-wasp-fa3f20d2a06a@spud>
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MV_CASE(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[disroot.org,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[disroot.org:s=mail];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[protonmail.com,kernel.org,vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41497-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41496-lists,linux-pm=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[disroot.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kauschluss@disroot.org,linux-pm@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	HAS_ORG_HEADER(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	SUBJECT_ENDS_EXCLAIM(0.00)[];
 	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[microchip.com:email,3b:email,disroot.org:mid,disroot.org:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 60BC08CF2B
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,01.org:url,intel.com:email,linaro.org:email,rafael.j.wysocki:mid]
+X-Rspamd-Queue-Id: 08A7E8CF44
 X-Rspamd-Action: no action
 
-On 2026-01-26 20:06 +00:00, Conor Dooley wrote:
-> On Mon, Jan 26, 2026 at 09:09:48PM +0530, Kaustabh Chakraborty wrote:
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +
->> +    i2c {
->> +      #address-cells =3D <1>;
->> +      #size-cells =3D <0>;
->> +
->> +      fuelgauge@3b {
->
-> Should be "fuel-gauge" iirc (at least, that's what all the bindings do).
+On Friday, January 23, 2026 2:56:08 PM CET Frederic Weisbecker wrote:
+> Le Fri, Jan 23, 2026 at 03:37:07PM +0800, kernel test robot a =C3=A9crit :
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+=2Egit bleeding-edge
+> > head:   8a22b02a1427ff0eab01a1b7cd62355238ba3d5b
+> > commit: cc85c350babcb86c65da5393532f1cb255c750bc [175/176] cpufreq: ond=
+emand: Simplify idle cputime granularity test
+> > config: i386-buildonly-randconfig-002-20260123 (https://download.01.org=
+/0day-ci/archive/20260123/202601231505.4Q8tb33s-lkp@intel.com/config)
+> > compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20260123/202601231505.4Q8tb33s-lkp@intel.com/reproduce)
+> >=20
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202601231505.4Q8tb33s-l=
+kp@intel.com/
+> >=20
+> > All errors (new ones prefixed by >>, old ones prefixed by <<):
+> >=20
+> > >> ERROR: modpost: "tick_nohz_enabled" [drivers/cpufreq/cpufreq_ondeman=
+d.ko] undefined!
+> >=20
+>=20
+> Right...
+>=20
+> Is it better with this replacement?
 
-There are a few which use "fuelgauge", but majority use "fuel-gauge".
-Will change in the next revision.
+It is still failing the build.
 
-> Seems fine to me though otherwise,
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> pw-bot: not-applicable
->
->> +        compatible =3D "samsung,s2mu005-fuel-gauge";
->> +        reg =3D <0x3b>;
->> +
->> +        interrupt-parent =3D <&gpa0>;
->> +        interrupts =3D <3 IRQ_TYPE_EDGE_BOTH>;
->> +
->> +        monitored-battery =3D <&battery>;
->> +      };
->> +    };
->>=20
->> --=20
->> 2.52.0
->>=20
+I'll fix it up tomorrow.
+
+> ---
+> From: Frederic Weisbecker <frederic@kernel.org>
+> Date: Wed, 7 Jan 2026 17:25:09 +0100
+> Subject: [PATCH] cpufreq: ondemand: Simplify idle cputime granularity test
+>=20
+> cpufreq calls get_cpu_idle_time_us() just to know if idle cputime
+> accounting has a nanoseconds granularity.
+>=20
+> Use the appropriate indicator instead to make that deduction.
+>=20
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Viresh Kumar <viresh.kumar@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> ---
+>  drivers/cpufreq/cpufreq_ondemand.c | 7 +------
+>  include/linux/tick.h               | 1 +
+>  kernel/time/hrtimer.c              | 2 +-
+>  kernel/time/tick-internal.h        | 2 --
+>  kernel/time/tick-sched.c           | 8 +++++++-
+>  kernel/time/timer.c                | 2 +-
+>  6 files changed, 11 insertions(+), 11 deletions(-)
+>=20
+> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq=
+_ondemand.c
+> index a6ecc203f7b7..bb7db82930e4 100644
+> --- a/drivers/cpufreq/cpufreq_ondemand.c
+> +++ b/drivers/cpufreq/cpufreq_ondemand.c
+> @@ -334,17 +334,12 @@ static void od_free(struct policy_dbs_info *policy_=
+dbs)
+>  static int od_init(struct dbs_data *dbs_data)
+>  {
+>  	struct od_dbs_tuners *tuners;
+> -	u64 idle_time;
+> -	int cpu;
+> =20
+>  	tuners =3D kzalloc(sizeof(*tuners), GFP_KERNEL);
+>  	if (!tuners)
+>  		return -ENOMEM;
+> =20
+> -	cpu =3D get_cpu();
+> -	idle_time =3D get_cpu_idle_time_us(cpu, NULL);
+> -	put_cpu();
+> -	if (idle_time !=3D -1ULL) {
+> +	if (tick_nohz_is_active()) {
+>  		/* Idle micro accounting is supported. Use finer thresholds */
+>  		dbs_data->up_threshold =3D MICRO_FREQUENCY_UP_THRESHOLD;
+>  	} else {
+> diff --git a/include/linux/tick.h b/include/linux/tick.h
+> index ac76ae9fa36d..fe7f51451ba1 100644
+> --- a/include/linux/tick.h
+> +++ b/include/linux/tick.h
+> @@ -126,6 +126,7 @@ enum tick_dep_bits {
+> =20
+>  #ifdef CONFIG_NO_HZ_COMMON
+>  extern bool tick_nohz_enabled;
+> +extern bool tick_nohz_is_active(void);
+>  extern bool tick_nohz_tick_stopped(void);
+>  extern bool tick_nohz_tick_stopped_cpu(int cpu);
+>  extern void tick_nohz_idle_stop_tick(void);
+> diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
+> index f8ea8c8fc895..e1bbf883dfa8 100644
+> --- a/kernel/time/hrtimer.c
+> +++ b/kernel/time/hrtimer.c
+> @@ -943,7 +943,7 @@ void clock_was_set(unsigned int bases)
+>  	cpumask_var_t mask;
+>  	int cpu;
+> =20
+> -	if (!hrtimer_hres_active(cpu_base) && !tick_nohz_active)
+> +	if (!hrtimer_hres_active(cpu_base) && !tick_nohz_is_active())
+>  		goto out_timerfd;
+> =20
+>  	if (!zalloc_cpumask_var(&mask, GFP_KERNEL)) {
+> diff --git a/kernel/time/tick-internal.h b/kernel/time/tick-internal.h
+> index 4e4f7bbe2a64..597d816d22e8 100644
+> --- a/kernel/time/tick-internal.h
+> +++ b/kernel/time/tick-internal.h
+> @@ -156,7 +156,6 @@ static inline void tick_nohz_init(void) { }
+>  #endif
+> =20
+>  #ifdef CONFIG_NO_HZ_COMMON
+> -extern unsigned long tick_nohz_active;
+>  extern void timers_update_nohz(void);
+>  extern u64 get_jiffies_update(unsigned long *basej);
+>  # ifdef CONFIG_SMP
+> @@ -171,7 +170,6 @@ extern void timer_expire_remote(unsigned int cpu);
+>  # endif
+>  #else /* CONFIG_NO_HZ_COMMON */
+>  static inline void timers_update_nohz(void) { }
+> -#define tick_nohz_active (0)
+>  #endif
+> =20
+>  DECLARE_PER_CPU(struct hrtimer_cpu_base, hrtimer_bases);
+> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+> index 21ac561a8545..81c619bf662c 100644
+> --- a/kernel/time/tick-sched.c
+> +++ b/kernel/time/tick-sched.c
+> @@ -691,7 +691,7 @@ void __init tick_nohz_init(void)
+>   * NO HZ enabled ?
+>   */
+>  bool tick_nohz_enabled __read_mostly  =3D true;
+> -unsigned long tick_nohz_active  __read_mostly;
+> +static unsigned long tick_nohz_active  __read_mostly;
+>  /*
+>   * Enable / Disable tickless mode
+>   */
+> @@ -702,6 +702,12 @@ static int __init setup_tick_nohz(char *str)
+> =20
+>  __setup("nohz=3D", setup_tick_nohz);
+> =20
+> +bool tick_nohz_is_active(void)
+> +{
+> +	return tick_nohz_active;
+> +}
+> +EXPORT_SYMBOL_GPL(tick_nohz_is_active);
+> +
+>  bool tick_nohz_tick_stopped(void)
+>  {
+>  	struct tick_sched *ts =3D this_cpu_ptr(&tick_cpu_sched);
+> diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+> index 1f2364126894..7e1e3bde6b8b 100644
+> --- a/kernel/time/timer.c
+> +++ b/kernel/time/timer.c
+> @@ -281,7 +281,7 @@ DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
+> =20
+>  static void timers_update_migration(void)
+>  {
+> -	if (sysctl_timer_migration && tick_nohz_active)
+> +	if (sysctl_timer_migration && tick_nohz_is_active())
+>  		static_branch_enable(&timers_migration_enabled);
+>  	else
+>  		static_branch_disable(&timers_migration_enabled);
+>=20
+
+
+
 
 
