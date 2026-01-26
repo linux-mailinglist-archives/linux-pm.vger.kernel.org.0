@@ -1,158 +1,202 @@
-Return-Path: <linux-pm+bounces-41451-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41452-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oNdnDCoxd2lVdAEAu9opvQ
-	(envelope-from <linux-pm+bounces-41451-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 10:17:30 +0100
+	id IC1VEngxd2lVdAEAu9opvQ
+	(envelope-from <linux-pm+bounces-41452-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 10:18:48 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A966585EB3
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 10:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D9AC85EE2
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 10:18:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 35F463009140
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 09:16:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2B6C830037E2
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 09:18:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4611306489;
-	Mon, 26 Jan 2026 09:16:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39ECB248880;
+	Mon, 26 Jan 2026 09:18:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275572C08D5
-	for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 09:16:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.45
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B93E21D3F2;
+	Mon, 26 Jan 2026 09:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769418961; cv=none; b=XdZ0LqbNqESAEhwCJlwe/Ha0+qqijEr1eBDlazhN0mrKsRKwi+wtW+Ct9ghtWnix6brnVbD8Jd6vL0Bx2za4ISlKdtW9hPKNLnNLU41hDrhP5Ofy79DR63brSY+Mxm7I6Xz54TN7YbE06y1718NUFzLPH30+BksvdfDai+nYJ8Y=
+	t=1769419096; cv=none; b=gAQV1xW6czjqn4zop6GmjMFwcseHSuPYJitp5fqLyexI5BS4pb0DOoxe9QUT7caSar+hMIW3DP+ob5j2eqsdEKCoLXfU6KFlKA45hVvCl2B5gEuUooRvBkJHldZsW/+rCiYa+IjKKDScD76OYwqlyvvyJRbTqR+RUGySo8TQymM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769418961; c=relaxed/simple;
-	bh=d2s5PoOQAVaSt+MyTbx7UGGwO6+rfXIRXeEKt/FKfyQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ND11QvJROnIrmCdn29ocBQP+MDfkBocEUUcWOYi18YfPTO5TdGBBPH2aIMM5fIqFs4v+x+omuJu8UWCg36RzcGJNBjQBVq5sI6wGysIWCU0ML1kSTxbba8n2NLYP4KPuXpp8hhOLST7C/SJEfneirwyO8RTNfCaohVy97miL4KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-5f547823192so1164836137.0
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 01:16:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769418959; x=1770023759;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uQaOzj2tKnU8ORNYpG6usL1AFHimKPjCyXKjxferGL0=;
-        b=VoKPT1eoZXRZLhB+Z0fMEB2I9IjhT4La/Nf7AxajRJzbqRfYlb/V+zOoqdtJ+MDoJQ
-         dgyxk9ZQwNWmvfIZAlD3Yhpt0EucHzE785LKIFDW5a4YxyYl27h2pzsdEQUVRe5UVzxy
-         Xvvpi4lSspGT7ZH4C0aHrVyELe4KU91fwou81cpRh0W91lC0hXtOeO8Hucsis382FAkc
-         jyrL7GELocvQktXk/7B6Wep/JNQDtiCKNbLYmcHiMqAxVM6RHe0Sen/fwyJxPnWlsfXa
-         eEx0zCL//ZJu50PtXd51qu41nmSQY7zq3i5ufChkWo5Yu7TlWthn0ZemQEUuslUN9w5b
-         Wzdw==
-X-Forwarded-Encrypted: i=1; AJvYcCUNdkEZnsGJAXjdplOyMAdLXS0sda3K8Z9gU0Gdh8C5ymx8+g9VYuHRg0P8cpzgPfYSp4faB3Tbhg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/33mFFT9bUH65sCNJjKq5R/gfypPLoczTF3lWP+zqMZT3FprZ
-	Ucsu6gtVnI6BWemJCj6zFleL8ZBOL39KgyFsQ4Q4Ri4U9evTGJ/77yWmFom0rNGw
-X-Gm-Gg: AZuq6aI1RU/w0BQvQKbo9YKHRpYJWfMcmt88lQI/yI3SNG8t7Ict3hDPo7DGeh2mP3l
-	Dk3Y5q18mEXqmIuGF/P0JMEcoFM5Vw+NaP3ckEhxVzTWAq8loJiTitx5UE8OiaksDo88aFbHd0h
-	XMozA8/wM2AK3m7eMbW6sAEK03hBGz48Dc5z3aUAvET1hGm5eVgvTkskTd3XV7UWG0kcplbX+hl
-	98hyU2llq4hGhEyjXu/6fIl/dMdC15UujNz7CY0wHs5l6L80NtULOHKWj12XCMRzOT26uY8yqFJ
-	nKeVIJg1a5Ib/5rEJQuxC6KlJtd3IArl+7m8M3Frt15lqryDESYnwBeuLJEZMUugptez7ltdZGp
-	GnARJI2uZhha0WZYUqnfID9dDAoqH42s2mNDUFnwU4epfnYPHHf+LBOvu78Mdqh+uAFmJVF95cD
-	wwmZjUt+n4vO19dqisse38bvaO2lty9qKqfiHzzOfpTJxXE6Oi
-X-Received: by 2002:a05:6102:1562:b0:5f5:7718:72e9 with SMTP id ada2fe7eead31-5f577187855mr659096137.2.1769418959044;
-        Mon, 26 Jan 2026 01:15:59 -0800 (PST)
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com. [209.85.222.53])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-9482e2aa79asm1860023241.2.2026.01.26.01.15.58
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jan 2026 01:15:58 -0800 (PST)
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-93f56a97064so843107241.1
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 01:15:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUlwN3eh5RpfmrwxVPS+UvcpuKz57FqCjog0elgMsFiX8qD+ITL4Ic/QQe+Z7VVJCuu+e+cMNN7+Q==@vger.kernel.org
-X-Received: by 2002:a05:6102:f0e:b0:5f5:33e4:12ea with SMTP id
- ada2fe7eead31-5f576493c1bmr1088062137.31.1769418957878; Mon, 26 Jan 2026
- 01:15:57 -0800 (PST)
+	s=arc-20240116; t=1769419096; c=relaxed/simple;
+	bh=rSJtuUW1nh61RobK6PZkWQD1UJcpgjBEU/vXCjYv+8o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JXAtFCVm0489+GVgBWn2vPyJF3AACdz33ZDtdGvZP6N6kE5lgsBynaFOv1Sc6yw6gDEop8Fez3DrdkA4g3GHDjLFFwbjDat0Ou+OudvlYGqDVW1uRehg/sl/fA4r7z1SBZjHw3hz6ZUH3Hk8FdY3/IPPELgEz2tX1PA4IoA5WwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC9E5339;
+	Mon, 26 Jan 2026 01:18:05 -0800 (PST)
+Received: from [10.1.32.17] (e127648.arm.com [10.1.32.17])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5D60C3F632;
+	Mon, 26 Jan 2026 01:18:11 -0800 (PST)
+Message-ID: <401cbcab-5a41-4aa2-97f8-3dccc069e836@arm.com>
+Date: Mon, 26 Jan 2026 09:18:09 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAMuHMdWapT40hV3c+CSBqFOW05aWcV1a6v_NiJYgoYi0i9_PDQ@mail.gmail.com>
- <0e9f963b-00e0-43d1-b567-cb10b8f66df1@mailbox.org> <CAMuHMdVOUzanEufhWqOL0nv81xCYh4YNAX_waG6y9PyUZ030tg@mail.gmail.com>
- <9efa9daa-6584-44b3-8055-bc160e46d8a5@mailbox.org>
-In-Reply-To: <9efa9daa-6584-44b3-8055-bc160e46d8a5@mailbox.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 26 Jan 2026 10:15:47 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWqqRJnY+ATZdzw1=XnmXUko3+wPhKtT+PVP+CRmdFAYg@mail.gmail.com>
-X-Gm-Features: AZwV_Qj2iYTeK4T2fVq6WUyIHg21dwOYiE1pJSzFBFBrBjhDjig-MNpg9IvarOQ
-Message-ID: <CAMuHMdWqqRJnY+ATZdzw1=XnmXUko3+wPhKtT+PVP+CRmdFAYg@mail.gmail.com>
-Subject: Re: drm/imagination: genpd_runtime_suspend() crash
-To: Marek Vasut <marek.vasut@mailbox.org>
-Cc: Frank Binns <frank.binns@imgtec.com>, Matt Coster <matt.coster@imgtec.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	DRI Development <dri-devel@lists.freedesktop.org>, Linux PM list <linux-pm@vger.kernel.org>, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/5] cpuidle: governors: teo: Avoid selecting states
+ with zero-size bins
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Doug Smythies <dsmythies@telus.net>
+References: <2257365.irdbgypaU6@rafael.j.wysocki>
+ <3033265.e9J7NaK4W3@rafael.j.wysocki>
+ <0d066ce0-b0bf-43f2-a1c4-56e5ac47cce1@arm.com>
+ <CAJZ5v0iVPDY5wvz0KY7aHJXnX=7ZCMbqi1G5mWTYdYsi2xf9+g@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAJZ5v0iVPDY5wvz0KY7aHJXnX=7ZCMbqi1G5mWTYdYsi2xf9+g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.46 / 15.00];
+X-Spamd-Result: default: False [-1.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	NEURAL_HAM(-0.00)[-0.999];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
 	R_DKIM_NA(0.00)[];
-	DMARC_NA(0.00)[linux-m68k.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[christian.loehle@arm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_THREE(0.00)[4];
 	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41451-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_FROM(0.00)[bounces-41452-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TO_DN_ALL(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: A966585EB3
+X-Rspamd-Queue-Id: 9D9AC85EE2
 X-Rspamd-Action: no action
 
-Hi Marek,
+On 1/23/26 20:46, Rafael J. Wysocki wrote:
+> On Wed, Jan 21, 2026 at 2:10 PM Christian Loehle
+> <christian.loehle@arm.com> wrote:
+>>
+>> On 1/14/26 19:44, Rafael J. Wysocki wrote:
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> If the last two enabled idle states have the same target residency which
+>>> is at least equal to TICK_NSET, teo may select the next-to-last one even
+>>
+>> s/TICK_NSET/TICK_NSEC
+> 
+> Yup, thanks!
+> 
+>>> though the size of that state's bin is 0, which is confusing.
+>>>
+>>> Prevent that from happening by adding a target residency check to the
+>>> relevant code path.
+>>>
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>> ---
+>>>  drivers/cpuidle/governors/teo.c |   10 ++++++++++
+>>>  1 file changed, 10 insertions(+)
+>>>
+>>> --- a/drivers/cpuidle/governors/teo.c
+>>> +++ b/drivers/cpuidle/governors/teo.c
+>>> @@ -388,6 +388,15 @@ static int teo_select(struct cpuidle_dri
+>>>                       while (min_idx < idx &&
+>>>                              drv->states[min_idx].target_residency_ns < TICK_NSEC)
+>>>                               min_idx++;
+>>> +
+>>> +                     /*
+>>> +                      * Avoid selecting a state with a lower index, but with
+>>> +                      * the same target residency as the current candidate
+>>> +                      * one.
+>>> +                      */
+>>> +                     if (drv->states[min_idx].target_residency_ns ==
+>>> +                                     drv->states[idx].target_residency_ns)
+>>
+>> We need to check that min_idx isn't disabled though, otherwise we now skip a
+>> potential (enabled) idx==1 if min_idx==2 and min_idx is disabled.
+> 
+> Not really because idx is the current candidate state and it is
+> enabled.  We'll use idx if this check is true, not min_idx.
+> 
 
-On Mon, 26 Jan 2026 at 00:18, Marek Vasut <marek.vasut@mailbox.org> wrote:
-> On 1/22/26 4:35 PM, Geert Uytterhoeven wrote:
-> >> Can you please test this change and see if it fixes the problem ?
-> >>
-> >> The barrier should guarantee that the domain is settled and no more
-> >> callbacks are still running.
-> >
-> > Thank you, that indeed fixes the issue!
-> >
-> > However, I am not so sure this barrier belongs in the .detach_dev()
-> > callback.  The documentation for almost all dev_pm_domain_{at,de}tach*()
-> > functions states:
-> >
-> >       * Callers must ensure proper synchronization of this function with power
-> >       * management callbacks.
->
-> Isn't cpg_mssr_detach_dev() the caller in this case ?
+Are you sure?
+I meant initially:
 
-No, cpg_mssr_detach_dev() is merely the generic_pm_domain.detach_dev()
-callback, which is called eventually from dev_pm_domain_detach().
+		for (i = intercept_max_idx; i >= min_idx; i--) {
+			intercept_sum += cpu_data->state_bins[i].intercepts;
 
-End users like pvr_power_domains_{fini,init}(), and the helpers
-dev_pm_domain_{at,de}tach_list() call dev_pm_domain_{at,de}tach*().
+			if (dev->states_usage[i].disable)
+				continue;
 
-Gr{oetje,eeting}s,
+			idx = i;
+			if (2 * intercept_sum > idx_intercept_sum)
+				break;
+		}
+might skip an idx==3 if it enters with min_idx==2 (sorry, messed up the +-1 in the initial mail)
+even though idx==3 might have the same residency as idx==2.
+So if idx==2 is disabled we could've selected idx==3, but now won't and will go for idx==1 or
+whatever is the next shallower enabled state.
 
-                        Geert
+Additionally an issue with this and patch 5/5:
 
+		if (min_idx >= intercept_max_idx) {
+			idx = min_idx;
+			goto constraint; // CL: this will just select min_idx
+		}
+
+will use min_idx even though it might be disabled and also the scenario
+
+I think we should just add something like
+
+------8<-------
+
+cpuidle: teo: Fix intercept-logic selecting disabled
+
+Prevent min_idx to be set to a disabled state, which could lead to
+both a disabled state being returned by teo, but also an equally good
+state being skipped because it has a higher index than a disabled state.
+
+Signed-off-by: Christian Loehle <christian.loehle@arm.com>
+---
+ drivers/cpuidle/governors/teo.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
+index 4cf6302f99ad..94c5ef5df467 100644
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -420,9 +420,11 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
+ 			 * candidate one whose target residency is at least
+ 			 * equal to the tick period length.
+ 			 */
+-			while (min_idx < idx &&
+-			       drv->states[min_idx].target_residency_ns < TICK_NSEC)
+-				min_idx++;
++			while (i < idx && drv->states[i].target_residency_ns < TICK_NSEC) {
++				i++;
++				if (!dev->states_usage[i].disable)
++					min_idx = i;
++			}
+ 
+ 			/*
+ 			 * Avoid selecting a state with a lower index, but with
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+
+
 
