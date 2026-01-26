@@ -1,146 +1,206 @@
-Return-Path: <linux-pm+bounces-41487-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41488-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6L1ABbGTd2n0iwEAu9opvQ
-	(envelope-from <linux-pm+bounces-41487-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 17:17:53 +0100
+	id 2CouC7iTd2n0iwEAu9opvQ
+	(envelope-from <linux-pm+bounces-41488-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 17:18:00 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54C628A927
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 17:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A02958A937
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 17:17:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 03A75301F991
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 16:14:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 979C6302F3A9
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 16:14:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEE902DEA77;
-	Mon, 26 Jan 2026 16:14:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1B9A2DF151;
+	Mon, 26 Jan 2026 16:14:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="BRYHe0/B"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="280F4xTc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f67.google.com (mail-oa1-f67.google.com [209.85.160.67])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 350302DB7B4
-	for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 16:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.67
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769444087; cv=none; b=KlJcsUhx6s6rFYUt93kCoidpttGVPRmbFN+5Y/omJa1VJ9evdoRUqgs6Hira76IljRZ+1J1tH2JL8IoKK1AF9j5ODMltuFze+3X5ChCsnInb0SmjFZUb4nM3r2iA7qjilvTSoLnYp60FBJulDTS2umqOOf5R3MpKP0IsdIsl78g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769444087; c=relaxed/simple;
-	bh=b8iu2qWRQsu6tc3pNc2X9ucBCRQ4P+tsRyL9+lUs2hQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=qahok5Rqo+i74nflr1u0Rrhq1J3IBbno+rcnNGUHSgBc2h/p7mLjmC7VAVKjIhG2YNpiF/VtZu6uKH1eDJZSo0OkjfwjHH7VAkT/j9IxOUli4yx3nLWHEf/AkgL1XOqOiwrBzc/iWXBrlVDWwfRu4UXoRiNYVZSk3Vs/iVmRfGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=BRYHe0/B; arc=none smtp.client-ip=209.85.160.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
-Received: by mail-oa1-f67.google.com with SMTP id 586e51a60fabf-40438380b88so1165386fac.3
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 08:14:45 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05702DB7A4
+	for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 16:14:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769444098; cv=pass; b=MaWQwkO20sfzNcAtL+bGcTsPb6o2nkGFO5+4098ON5S99ZA2d9w43YibU8EPU3wxAZUGvAhdtMmszLr3PAL3ODG1/1XTnj2bFz5UJWdgJKctG6cB6gHg9WbaiNSa0QLhuNBF6wGzngq0lsfqSz8XDyoh3hbqBvIzTmW5v76nmso=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769444098; c=relaxed/simple;
+	bh=b3m3/VVdwm1L5JwvxjexOIEy5wN31isjno52EUeePNw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eu4jkSbkPBRf0bZIDYCeWCWKHXl0l/p76XZosAX+r6lifB+X3faA6qc80ERgAt4+ghj9B/FI3/UjJ1txBuvGyMg3o2/LEvenHhWRlh8QqniEaGYbw8ssEuAg8tnJDCMdrJPogF+ernG8ydC7mS+0eT1w2PYmw9kRQcCVJiSejQw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=280F4xTc; arc=pass smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-432d2670932so4336209f8f.2
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 08:14:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769444095; cv=none;
+        d=google.com; s=arc-20240605;
+        b=BcPNGCU8QNw0ecdVAegKFgpRoLk8WXuKQ6bcZ0wgVtrv5ESeJ+V99cclChD1kgLfXV
+         Id1+5AgKt/kfwEvm49dFQDtracCVLp+bppC1lWcmr5sstGi4t6o4MnZa1HwadlwXuL6Z
+         Ypa7X/YmjDSkx77dfqU5TpFz26/LtvG+AOe9t3+6vvKjnm0Sp3mnyLL/aDOLvvT0woRP
+         CdVRH2WdUS96ja+VbP4n3Db50WhCGGTb6GP7iIQE98nZVU5832Wt92iQ5sUGU1V+nVno
+         kaIDyjoPahUhcCkAa6Fba5PVkEHzGew1+4mr4OGMlTdUHacauJRoyYXDheDkCLelQyzN
+         7y7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=b3m3/VVdwm1L5JwvxjexOIEy5wN31isjno52EUeePNw=;
+        fh=ujNJ2yYG2CgWAmTXIhcKQMZE6TN3QXG/Xz/Fz9nNBWc=;
+        b=OvMfYzMTntTCX6UFjoCgUn5VhwwSksHijux0qo+XfeLsyYeiinGe53f9nZBvaei5Wm
+         qP3kgRMjt+YDRxOXdNjYlh/L6v/DrejgNjOrepy4KeTRMzELVhQyZJeHeY9Txk7oIMMn
+         sT3M4mqSL0m9Hgoc+HxIsLTnBJ9Vk36or104WUXBF3LgT2CyyshS/x7jC9lwlfnRW623
+         lQu6ZQCBhH4hoRda9YR7eL5+JRsRVZWcAS121FH+KJhnUnVlnZ4JLFArgOOd9wFZ+C29
+         cHzicGTQCuEoOWmmBFxuFuW1+sv2+X1jzrV91g2pCojILrD46GHty7h4hofNBG60zJv5
+         aTjA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1769444085; x=1770048885; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:organization
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1769444095; x=1770048895; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7dEOLrKl+1dJwRUtD1uFFs3khzhZWFUaz5FEbEwHl00=;
-        b=BRYHe0/BtgCzbZwHRIcGV+aaIJJSFtvt0sZoNP3Hyum9vk9WoQmUkeSUYL0IWxFcLL
-         LfdTv355KSlZsHvHm8nsQTBdptJdltrGOpgKzWLgGEFxR0JDFApTH7nCPChGL1P900Ku
-         jTfqGYFUVz+EhA5OZujPXU0kIgfoKLO8Npp58NmFqSCiL6QbE/1bkCOI9b3PPFkl7RQE
-         RcrcFSOSwC5A2eXb4Ec3sDGFxTGwQEgmaKAs4Gc5KpVjbdJVrfPljbA+3FsBq1D4ePyq
-         +NoS0ENnqoLvf/t4+WBVJcWoDID7R2tE9nRnC2eBdVVXLdgv3gU9Qi/5gBBft8h1fCAD
-         gXeA==
+        bh=b3m3/VVdwm1L5JwvxjexOIEy5wN31isjno52EUeePNw=;
+        b=280F4xTcTA5p7vg5B5/a3tkfZPvH27OboATow6174PXCIko+LqdKpnRfDP8XHBnAUe
+         ArRkDkQB1pGbSc8tIMGhDbZWZyUw2bads/RiqeCEpgkQELOYoDdDEYVVlF97swjgQcYM
+         iyDfImGYsVwTEsDdDplBx78x2U7PyZ6fmHemHUDjligMpvVATecJRJW0H5G4tuPF/O7r
+         4H7mqfbxziXX56rlp1VkMWMGv/cbhiC5GQRZdwdacQFE0GXHx+psu0RRWLwWv3TVbjsJ
+         b0GMKSE+mOs9F+xV48ThsTRbQNlZUxif5RrYPdXAjFCEFQ77ovtfJiY8VDZSBqslU2JZ
+         D4PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769444085; x=1770048885;
-        h=content-transfer-encoding:mime-version:in-reply-to:organization
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1769444095; x=1770048895;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=7dEOLrKl+1dJwRUtD1uFFs3khzhZWFUaz5FEbEwHl00=;
-        b=GZPu80NCpY0/7Y1SsHt8sXuuBkjGJuWtCjAJ6zR8S7AlIpuzl1azQWdb9j+RfyEs1u
-         PEzkup/UztN7nZAAA1FgDgX0NR/BMmm54xDaKywv+Ig8rIG2ZWZYmYt31Oz1cx/shGBf
-         jw75XD7BZlsEDy78s+YYYgptaKIaQ2YABXdcE14DHO0+Xma5P/7qFLFDVDpo50FNayzm
-         21AD8iwCexw73Rh7etmSNdK3zsmjtLzwQ9I7qhX/M3Ipj5Q+E2syqlM4dHpA5xeTCrXv
-         tFKQm/rdwRI9DAmeyfGHQH8hadoMSKIB82jbEyMttULTVXvAsqm/cgS3p0FRnW3WzPAZ
-         weCg==
-X-Forwarded-Encrypted: i=1; AJvYcCV8JXVdsTbSVgNy1pHUk7Dhzm7tUCH9lZCrgqv+Jl7w6M9HH8+Ct7CjuE7NTozTS01Jg14ysVTutg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoTWLitiBFwj5b96ruJpk332/3i/5NuHxfgKdFPU8F6yW1QkKa
-	+PXtmjbC4uQFvcbcRHY1v7gz3XwOhpToW38D79xU+nXyJTtDoh4z15tpPMDZ1yP+mNI=
-X-Gm-Gg: AZuq6aIMnO6ZESY3kq1Ehl9eOOANRBQ7+1ClgsTMJ/Gx/gGQrtVtTWMFKjdAnykjt0m
-	/Rb9GftAB8++pchklUBIXh9USZJCA/jHZJCck5GOV7aFreSyy/E7Xxd+b2V6IRpm2/362KwuA5F
-	J8oQKuWIGMwowZUEr8xjlNeaDcAuP0crRGEOL0bjjjJmqO4lnEvi3OfVsDXLwf5FHkzzqRftHxy
-	XvMEEzyR1VrcSgpFxajiqhVi2RI2go8+Z2w8IFVXAZs6JOseR8GdlcSWZifqreGI1fNDYy5Qd6n
-	fnDM/Y+KmeQNOPBUpFkyq0rLf5EXlIew59B96fxKyo1j+AT/8q9ynBjolLC67p5BHza54m495Jq
-	sTyjrR7xT4k8UY79bIVdDv/nXbaPrLecZIAf1ZbytBBCurMo75ojd4BqnHRV97JdzX/y2R9Se9C
-	zcPxhKkqNoXwwMFoa4mCk=
-X-Received: by 2002:a05:6820:c88:b0:65c:fff0:818e with SMTP id 006d021491bc7-662e045aa13mr1947679eaf.63.1769444084998;
-        Mon, 26 Jan 2026 08:14:44 -0800 (PST)
-Received: from kf-m2g5 ([2607:fb90:cf15:8cd3:4e09:100f:d91c:8765])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-408af80348fsm7389144fac.2.2026.01.26.08.14.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jan 2026 08:14:44 -0800 (PST)
-Date: Mon, 26 Jan 2026 10:14:37 -0600
-From: Aaron Rainbolt <arainbolt@kfocus.org>
-To: yumpusamongus@gmail.com
-Cc: arainbolt@kfocus.org, kernel-team@lists.ubuntu.com, lenb@kernel.org,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
- srinivas.pandruvada@linux.intel.com
-Subject: Re: [BUG] intel_pstate: CPU frequencies miscalculated/incorrectly
- detected on Arrow Lake hardware
-Message-ID: <20260126101437.338255f3@kf-m2g5>
-Organization: Kubuntu Focus
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.41; x86_64-pc-linux-gnu)
-In-Reply-To: <ddfa4153-023a-4f48-bff9-6d6a211b6d52@gmail.com>
+        bh=b3m3/VVdwm1L5JwvxjexOIEy5wN31isjno52EUeePNw=;
+        b=qaRQ92Q+/bqDiHX5dfTJlH7aBQ/vEcZy4P+pHAfEpvVi5Jer183tK+k1w1vmHWSjDX
+         +K9Q/MorwL5t1g9Ug6YtA6PLrEEhSgKL2IJ/QjtbIECJzdfHqsAodwWfV1JG7iSfOlO1
+         +qlujUZqmwHP1MDNaBFQXJyBAF5NX83bEzQ2i0c5wPs/rRSLkgb6/ixJ9Z1/qUggB0ni
+         /6CdYyqK2KnsUbKFDrq2N4LMj8PZFBT7ZhxMvTGBNCF+mR6n8/2djNpR7sV/qoFk3at2
+         5WlySc8vzkFmNeyIVPGqH6Cz86MRqYuXPPj1hKMEgLALzRyjtjvFZXJORT5kGUD4XodS
+         6K9w==
+X-Forwarded-Encrypted: i=1; AJvYcCW6GjYcQDOhJ26yzVL049rtJQ/VdTh046ldYB8u0aGQFhXzxEylB5k1kOOOpFWHYmxDUOzAdDD4GA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYCAt3sPaDV3kMD628Y49N2TlUbsif37CEs2WgqTAiWW8mzRUy
+	93IfhN6Sg4iUvuSFzhcgGNaMWuVBLOGCxbVSgyEYKypIBkvX0xtuBe8hZHoSco9iww3WzNnnHGH
+	/K7evsmLvkFHFVj9cMcvs50guNeZI+mnX5lCkrFPy
+X-Gm-Gg: AZuq6aJDovISmVPmHLe9WpLpNgnU8MvL0WvqLswoXJI3H99LhBgUVQZJdWXhNXB06x+
+	4FeqXHBiRCDjIuXtZ4JPvoACgCIkxEh+Gk6ZJwcaX+JBOt6OkONPheQRFnIZ1Mt//M0vac/JbyC
+	Mh8jBz1KYAmCSkx6mdgf44J+r8gvElARljjKmdvgHpBgjl9PvFvy+V+AWUYqMTTjtAmowdc/GOz
+	6/nHstgR3XuBqjXrAshXFw7vVNnVsIyQyW6F+SaAHZhfMBC98yruDVaT+beCmeHL4vnJ5yFk9vz
+	KaRpjKUX6EFQ8NwGh6Y+JD2hXg==
+X-Received: by 2002:a5d:5d0a:0:b0:42f:b690:6788 with SMTP id
+ ffacd0b85a97d-435ca0e2909mr7711789f8f.10.1769444095193; Mon, 26 Jan 2026
+ 08:14:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20260126-zeroable-ffi-v1-0-0ef101d1ed85@google.com>
+ <DFYJRWUHCOMQ.3L6ZVLOJTNDNO@garyguo.net> <aXdrUsrKVmzpBVd8@google.com>
+ <DFYNFSOP2UVY.27KHATUQMCXHQ@kernel.org> <DFYNILJPAYJE.3CFM49W80ED4O@garyguo.net>
+In-Reply-To: <DFYNILJPAYJE.3CFM49W80ED4O@garyguo.net>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Mon, 26 Jan 2026 17:14:43 +0100
+X-Gm-Features: AZwV_Qhm51ZvNtcAl24ity6Z1oGdEZsigYZ9qHzy-oChasQeMJ3ey0HJ1RLeuNE
+Message-ID: <CAH5fLggAfRkjSmYuYAZioXn3OP31Fwr=VGd2znnaHQvPL3tKHg@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Re-export Zeroable and zeroed() from ffi module
+To: Gary Guo <gary@garyguo.net>
+Cc: Benno Lossin <lossin@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun.feng@gmail.com>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Igor Korotin <igor.korotin.linux@gmail.com>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Len Brown <lenb@kernel.org>, 
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kfocus-org.20230601.gappssmtp.com:s=20230601];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-41487-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	DMARC_NA(0.00)[kfocus.org: no valid DMARC record];
-	DKIM_TRACE(0.00)[kfocus-org.20230601.gappssmtp.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41488-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,protonmail.com,umich.edu,linaro.org,collabora.com,vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[arainbolt@kfocus.org,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_NONE(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	FROM_NEQ_ENVFROM(0.00)[aliceryhl@google.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[google.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 54C628A927
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[garyguo.net:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: A02958A937
 X-Rspamd-Action: no action
 
-> It also sounds similar to a situation I reported here [1]. My machine
-> is a desktop 265K in an ASRock motherboard.
+On Mon, Jan 26, 2026 at 5:11=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
 >
-> The problem was fixed when I updated the firmware to version 3.11,
-> which contained microcode 0x11a. That firmware was released in
-> September. The latest 3.15 from Dec 29 contains microcode 0x11d. You
-> can check by grepping dmesg for "microcode".
->  1.
-> https://lore.kernel.org/all/53027db5-f750-4b6f-8ac5-a849dff2524b@gmail.com/
+> On Mon Jan 26, 2026 at 4:08 PM GMT, Benno Lossin wrote:
+> > On Mon Jan 26, 2026 at 2:25 PM CET, Alice Ryhl wrote:
+> >> On Mon, Jan 26, 2026 at 01:15:53PM +0000, Gary Guo wrote:
+> >>> On Mon Jan 26, 2026 at 1:05 PM GMT, Alice Ryhl wrote:
+> >>> > Currently, the Zeroable trait is defined by pin-init because pin-in=
+it
+> >>> > happens to use the trait. However, zeroed types are useful for many
+> >>> > purposes other than pin-init. Also, we wish to implement Zeroable f=
+or
+> >>> > types generated by bindgen. For both of these reasons, re-export
+> >>> > Zeroable from the ffi crate, which is a already dependency of the c=
+rates
+> >>> > with bindgen output.
+> >>>
+> >>> I don't see a benefit of re-exporting these from the `ffi` crate? Esp=
+ecially
+> >>> that we re-export `ffi` crate from kernel crate anyway, and `Zeroable=
+` is
+> >>> already in the kernel prelude.
+> >>>
+> >>> We already derive `Zeroable` for bindgen via `MaybeZeroable` derive i=
+n
+> >>> rust/bindgen_parameters.
+> >>
+> >> I can't find the convo now, but this change is on my list from when we
+> >> discussed also implementing FromBytes / IntoBytes for the bindings
+> >> types. To do that, we need to move our FromBytes / IntoBytes traits
+> >> somewhere that bindings/uapi can access, and we agreed that the ffi
+> >> crate was a good place for it.
+> >>
+> >> And then for consistency, also reexport Zeroable from the same locatio=
+n.
+> >
+> > I think you also mentioned at some point that using `pin_init` from
+> > `bindings` seemed strange and also using the `pin_init::zeroed()`
+> > function also doesn't fit, since it doesn't have to do with pinned
+> > initialization.
+>
+> Shouldn't it be that a crate that implements Zeroable / FromBytes / IntoB=
+ytes
+> and then pin_init becoming an user of that crate, then?
 
-Thanks! We'll take a look at this and see if a microcode update
-resolves the issue.
+The Zeroable trait has to be in pin-init because it's also outside the
+kernel. You *could* add yet another crate just for this and let
+pin-init depend on it, but just putting it in the existing ffi seems
+reasonable to me, and ffi is not a bad name for the owner of those
+traits anyway.
 
---
-Aaron
+Though I guess if we add zerocopy, that concern goes away.
+
+Alice
 
