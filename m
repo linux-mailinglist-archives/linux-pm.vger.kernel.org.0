@@ -1,136 +1,204 @@
-Return-Path: <linux-pm+bounces-41494-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41495-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +ENvE7XId2lOkwEAu9opvQ
-	(envelope-from <linux-pm+bounces-41494-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:04:05 +0100
+	id QGorFlzJd2lOkwEAu9opvQ
+	(envelope-from <linux-pm+bounces-41495-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:06:52 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B03348CDCB
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:04:04 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2F7D8CDF3
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:06:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id F2A6C301326C
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:04:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 06F613013A9D
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:06:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77AAE29ACDD;
-	Mon, 26 Jan 2026 20:04:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A0E2BFC70;
+	Mon, 26 Jan 2026 20:06:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cd4bPBqw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FMn6U2jv"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1721A29A309;
-	Mon, 26 Jan 2026 20:04:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D052882AA;
+	Mon, 26 Jan 2026 20:06:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769457842; cv=none; b=MCZ6GRAi9wxAhQmw6DThsDkmiw//rBkWLiNHQQLxj4CegjTbGEMrZG3or9XavccDLVLhPLynT+05tsPPRM1YXnj6qR0laY5wTpYRsnBWMFebxHn7x/b88uTQuyfFDFyi5EFv9Cz/w+GtquSrrHfenedT8QExe5RSH4X+u8GO82c=
+	t=1769458008; cv=none; b=nunaoaXRw9qabZplE6knJ4yhIjtlBPNMVPVfRMOgUYAblw8XXdUSR6IcjK7cv+Sox1xFJ9lhvwWLm6ZrDxOcse57VmaxTyOWlEzcMoIeVLXrGe1ktfDO1Q3r64y4cedzC+NP0MezPM6ZEIHwaoo7UsQ3emkY6bIAGAK9HrE8C4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769457842; c=relaxed/simple;
-	bh=SA7qlov+EqbMPYhGHRRyAU6CqRSIo6pVyv8k9XJfObM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FofYLNSfHuYvZNfCVxq22pPlacqj4xq5fkvFdV8jRsfcYgcnkFqcuiPM2bnRMoD7PGzJ+fOdLkwZYgA+XWCHSn1xv92mhXUZIJfdk5PCEtvydXJNzp7QW8/R4+dZVGFJGFahA0rCuCuelrB6Omi1q8AQTyVPyOFysBQegidswh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cd4bPBqw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A2DC116C6;
-	Mon, 26 Jan 2026 20:04:00 +0000 (UTC)
+	s=arc-20240116; t=1769458008; c=relaxed/simple;
+	bh=xiCb09/Lp+x3Rm8FtVL8vB9rPGDkllPWV05XFxT3PJ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q2cfsI1BkWx2b7MtIQ6kp+lmaMnYQEFfGCNdc13D+JUFDn7nYSKHaofm1uJZqBI7jQgIX6HXH2zmbuzwKEPrEBXbgS/EL162eGc2+I6qvYL5QxI/QAqFWyehjkek38OuAtFn+hEY9DOFwZ/mPhCMIGFMqEWo8Y3nut/ts43w8ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FMn6U2jv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D326EC116C6;
+	Mon, 26 Jan 2026 20:06:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769457841;
-	bh=SA7qlov+EqbMPYhGHRRyAU6CqRSIo6pVyv8k9XJfObM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=Cd4bPBqw25KrsXNxeOKPvfr8k1MLmNnuifpLP+Cz3QBtK68lNAof1BURjpKBuyHHF
-	 1mEf1Rym5rkAt0BW6HAQIvnnH8EPCrIUIQKv8MVHEcmH0AmEvguge0F0Yu8zULLvGw
-	 c0zriG+MOhcuMLL9aTNqIk9xAWiFjy4JZ3t+wCclm5CBaCozBVU73S3tVvD18L5CWG
-	 EffTPF7sgHtBtE2R70XgTFg/c5RTvIrOxoMnEUNR5p0M/oLFKE/ACr15MxnY9wIL9q
-	 y+sW/h2us7yo7HqDFdjudkWyNzdePEOPkZuiwrRdQuVJDzcfctjPMkG/rmpPY6881c
-	 EEB3s+6z++E6g==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Malaya Kumar Rout <mrout@redhat.com>
-Subject:
- [PATCH v1] PM: hibernate: Drop NULL pointer checks before
- acomp_request_free()
-Date: Mon, 26 Jan 2026 21:03:57 +0100
-Message-ID: <6233709.lOV4Wx5bFT@rafael.j.wysocki>
-Organization: Linux Kernel Development
+	s=k20201202; t=1769458007;
+	bh=xiCb09/Lp+x3Rm8FtVL8vB9rPGDkllPWV05XFxT3PJ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FMn6U2jvIY+GIUSqLjNLFcA9at33CZc0EH0JoGSlb8rQeIEtf/Wfdb4Fp51GUqPWO
+	 nVchVJi1SeXSrvAcE4doZ729KYrnAUjWAi0Dn9Y7jVGnYG1eBMUPnNqoA+HGSSSof5
+	 3G+lHNZuoqnabAtqzy6wyqbzSmCMp5XO0vudyinNbUkjNq/QTP4g9Op7Xhgi8LZJUg
+	 quHXlBwNIefDHisT7WSQvRxr6JAtG9O97Eb6JJA7m6trDiomKPBSgHFhWfwVU9E5eD
+	 8LurxpkxCZYOX6qwZmhFN2reQkBvBu93PKPJ/KU+4i7nbi3WVdGE4DA3n5MsFuiPwp
+	 p8VOomHbhMsSQ==
+Date: Mon, 26 Jan 2026 20:06:43 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Kaustabh Chakraborty <kauschluss@disroot.org>
+Cc: Yassine Oudjana <y.oudjana@protonmail.com>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: document Samsung S2MU005
+ battery fuel gauge
+Message-ID: <20260126-goal-wasp-fa3f20d2a06a@spud>
+References: <20260126-s2mu005-fuelgauge-v1-0-68a146ed0819@disroot.org>
+ <20260126-s2mu005-fuelgauge-v1-1-68a146ed0819@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bHY26mlX+ts/oR0l"
+Content-Disposition: inline
+In-Reply-To: <20260126-s2mu005-fuelgauge-v1-1-68a146ed0819@disroot.org>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-2.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	CTE_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41494-lists,linux-pm=lfdr.de];
-	TO_DN_ALL(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	HAS_ORG_HEADER(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	TAGGED_FROM(0.00)[bounces-41495-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[protonmail.com,kernel.org,vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-pm@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[9];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[rafael.j.wysocki:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email]
-X-Rspamd-Queue-Id: B03348CDCB
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,3b:email,disroot.org:email,devicetree.org:url]
+X-Rspamd-Queue-Id: A2F7D8CDF3
 X-Rspamd-Action: no action
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Since acomp_request_free() checks its argument against NULL, the NULL
-pointer checks before calling it added by commit ("7966cf0ebe32 PM:
-hibernate: Fix crash when freeing invalid crypto compressor") are
-redundant, so drop them.
+--bHY26mlX+ts/oR0l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-No intentional functional impact.
+On Mon, Jan 26, 2026 at 09:09:48PM +0530, Kaustabh Chakraborty wrote:
+> Samsung S2MU005 is a PMIC device which has LED controllers, an MUIC and
+> a battery charger. The battery charger is paired with an independent
+> device connected via I2C which can be used to access various metrics of
+> the battery. Document the device as a schema.
+>=20
+> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+> ---
+>  .../power/supply/samsung,s2mu005-fuel-gauge.yaml   | 49 ++++++++++++++++=
+++++++
+>  1 file changed, 49 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/supply/samsung,s2mu0=
+05-fuel-gauge.yaml b/Documentation/devicetree/bindings/power/supply/samsung=
+,s2mu005-fuel-gauge.yaml
+> new file mode 100644
+> index 0000000000000..5f945a5369dc8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/samsung,s2mu005-fuel=
+-gauge.yaml
+> @@ -0,0 +1,49 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/samsung,s2mu005-fuel-gau=
+ge.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Battery Fuel Gauge for Samsung S2M series PMICs
+> +
+> +maintainers:
+> +  - Kaustabh Chakraborty <kauschluss@disroot.org>
+> +
+> +allOf:
+> +  - $ref: power-supply.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - samsung,s2mu005-fuel-gauge
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    i2c {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +
+> +      fuelgauge@3b {
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- kernel/power/swap.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Should be "fuel-gauge" iirc (at least, that's what all the bindings do).
+Seems fine to me though otherwise,
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+pw-bot: not-applicable
 
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -902,8 +902,8 @@ out_clean:
- 		for (thr = 0; thr < nr_threads; thr++) {
- 			if (data[thr].thr)
- 				kthread_stop(data[thr].thr);
--			if (data[thr].cr)
--				acomp_request_free(data[thr].cr);
-+
-+			acomp_request_free(data[thr].cr);
- 
- 			if (!IS_ERR_OR_NULL(data[thr].cc))
- 				crypto_free_acomp(data[thr].cc);
-@@ -1502,8 +1502,8 @@ out_clean:
- 		for (thr = 0; thr < nr_threads; thr++) {
- 			if (data[thr].thr)
- 				kthread_stop(data[thr].thr);
--			if (data[thr].cr)
--				acomp_request_free(data[thr].cr);
-+
-+			acomp_request_free(data[thr].cr);
- 
- 			if (!IS_ERR_OR_NULL(data[thr].cc))
- 				crypto_free_acomp(data[thr].cc);
+> +        compatible =3D "samsung,s2mu005-fuel-gauge";
+> +        reg =3D <0x3b>;
+> +
+> +        interrupt-parent =3D <&gpa0>;
+> +        interrupts =3D <3 IRQ_TYPE_EDGE_BOTH>;
+> +
+> +        monitored-battery =3D <&battery>;
+> +      };
+> +    };
+>=20
+> --=20
+> 2.52.0
+>=20
 
+--bHY26mlX+ts/oR0l
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaXfJUwAKCRB4tDGHoIJi
+0jrdAP0Qa6sBG5CobBHsxaU+LhlTaRDC8CJr8mdImz2ybyt3nQD/TTXLIOQ7oTfo
+5STPs8wl4eWlzsQscAyqprqzR9pLrQg=
+=Mtc4
+-----END PGP SIGNATURE-----
+
+--bHY26mlX+ts/oR0l--
 
