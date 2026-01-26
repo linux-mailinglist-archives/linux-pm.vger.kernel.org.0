@@ -1,40 +1,41 @@
-Return-Path: <linux-pm+bounces-41454-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41455-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qOC2LghAd2mMdQEAu9opvQ
-	(envelope-from <linux-pm+bounces-41454-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 11:20:56 +0100
+	id eMKrI60/d2mMdQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41455-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 11:19:25 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4485886BB1
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 11:20:56 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id A99C386B07
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 11:19:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D79403019389
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 10:18:53 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 066C9300680D
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 10:19:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D9C43161B5;
-	Mon, 26 Jan 2026 10:18:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EB2A330660;
+	Mon, 26 Jan 2026 10:18:55 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF16230E0F4;
-	Mon, 26 Jan 2026 10:18:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD1B32F761;
+	Mon, 26 Jan 2026 10:18:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769422731; cv=none; b=gUp1cQIuhXgONHFDFKkNBBhWJqhJWvTr0duFkvvUuVPPaV3LVyx0lq16ood60VjCfgkDP0a15Y3V7yv6UH2d7brEqW6foAbWvavHtOb4t79cZnyj0CMXcgIlHMBIF1Fy6DDz9Vg/8NrlInC21oeMy7Nwsz0s2fBBiqCcBqYzk9Y=
+	t=1769422735; cv=none; b=GHmC3WZ+cCMaCbhV/PoNoed4ocnxzf8NR2EpJtcLPYLZUkZ8ByklY7HX+WDVkWvvU6Us3VenDK3AShWwxWRgBHzhxMNNzKc+jyN5ci6dK1xPVYoa7fAHdayVYZko0JQMTxYMk8zx68doBPrhTSPTqwHP7y4ijyjjgXSUxicp+44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769422731; c=relaxed/simple;
-	bh=NOaST1yJNyBGuyh8C+R5M0Mbc9xewBwYmRw5To0wXjU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NZj1WHlQy88iop0UKPWJvq+JSH6HfiyGIuQ6Zl4IpiTfiaIzO4NSKY/Ci9zZlxyiLg7NNxr8g3m5h+fBs+HojmDYkZ/QbeRk12gFut82x7wcon7DDYe0ENdNQ4MlhXEpoZjDKtbZPhnlFBbHwZmoOp1MsV/3xslN9NHDskGUwTo=
+	s=arc-20240116; t=1769422735; c=relaxed/simple;
+	bh=5SmnI7xKFFWoHVZZ/JELbovu9NDevXGbdihnZfFH59I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bdlSRQ92aLfa29iu6e/sX6p1QL+OqE/wibYvyKOrXdJmUfuRQMoO9/HJqh+H2JLb44o3N1pKknwADKTMeo06vvpHN2UnnbhcTonf81MOsCelXK60xuSVDtprYOkudLr1KIVQzOnpW2p/nGx4iOdjmJdED7hzrPa9+ceC70vpmOw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B661339;
-	Mon, 26 Jan 2026 02:18:41 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DFCDF497;
+	Mon, 26 Jan 2026 02:18:46 -0800 (PST)
 Received: from e135073.nice.arm.com (e135073.arm.com [10.34.125.23])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3D9613F632;
-	Mon, 26 Jan 2026 02:18:44 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8D06F3F632;
+	Mon, 26 Jan 2026 02:18:49 -0800 (PST)
 From: Pierre Gondois <pierre.gondois@arm.com>
 To: linux-kernel@vger.kernel.org
 Cc: Jie Zhan <zhanjie9@hisilicon.com>,
@@ -53,10 +54,12 @@ Cc: Jie Zhan <zhanjie9@hisilicon.com>,
 	Len Brown <lenb@kernel.org>,
 	Saravana Kannan <saravanak@kernel.org>,
 	linux-pm@vger.kernel.org
-Subject: [PATCH 0/6] cpufreq: Introduce boost frequency QoS
-Date: Mon, 26 Jan 2026 11:18:09 +0100
-Message-ID: <20260126101826.94030-1-pierre.gondois@arm.com>
+Subject: [PATCH 1/6] cpufreq: Remove per-CPU QoS constraint
+Date: Mon, 26 Jan 2026 11:18:10 +0100
+Message-ID: <20260126101826.94030-2-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260126101826.94030-1-pierre.gondois@arm.com>
+References: <20260126101826.94030-1-pierre.gondois@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,7 +72,7 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
@@ -77,162 +80,57 @@ X-Spamd-Result: default: False [0.14 / 15.00];
 	RCPT_COUNT_TWELVE(0.00)[17];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-41454-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41455-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
 	FROM_NEQ_ENVFROM(0.00)[pierre.gondois@arm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-0.997];
+	NEURAL_HAM(-0.00)[-0.995];
 	RCVD_COUNT_FIVE(0.00)[5];
 	R_DKIM_NA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 4485886BB1
+	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:mid,arm.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A99C386B07
 X-Rspamd-Action: no action
 
-The Power Management Quality of Service (PM QoS) allows to
-aggregate constraints from multiple entities. It is currently
-used to manage the min/max frequency of a given policy.
+policy->max_freq_req represents the maximum allowed frequency as
+requested by the policyX/scaling_max_freq sysfs file. This request
+applies to all CPUs of the policy. It is not possible to request
+a per-CPU maximum frequency.
 
-Frequency constraints can come from:
-- Thermal framework: acpi_thermal_cpufreq_init()
-- Firmware: _PPC objects: acpi_processor_ppc_init()
-- User: by setting policyX/scaling_[min|max]_freq
-The minimum of the max frequency constraints is used to compute
-the resulting maximum allowed frequency.
+Thus, the interaction between the policy boost and scaling_max_freq
+settings should be handled by adding a boost specific QoS constraint.
+This will be handled in the following patches.
 
-When enabling boost frequencies, the same frequency request object
-(policy->max_freq_req) as to handle requests from users is used.
-As a result, when setting:
-- scaling_max_freq
-- boost
-The last sysfs file used overwrites the request from the other
-sysfs file.
+This patch reverts of:
+commit 1608f0230510 ("cpufreq: Fix re-boost issue after hotplugging
+a CPU")
 
-To avoid this:
-1. Create a per-policy boost_freq_req to save the boost
-constraints instead of overwriting the last scaling_max_freq
-constraint.
-
-2. policy_set_boost() calls the cpufreq set_boost callback.
-Update the newly added boost_freq_req request from there:
-- whenever boost is toggled
-- to cover all possible paths
-
-3. In the existing set_boost() callbacks:
-- Don't update policy->max as this is done through the qos notifier
-  cpufreq_notifier_max() which calls cpufreq_set_policy().
-- Remove freq_qos_update_request() calls as the qos request is now
-  done in policy_set_boost() and updates the new boost_freq_req
-
-This patch-set additionally does:
-- if a driver .init() callback sets policy->min and policy->max,
-  these values are used are min/max_freq_req QoS constraints
-- Remove policy->min and policy->max initialization in .init()
-  callback if the value is identical to cpuinfo.min/max_freq
-- RFC: allow decreasing cpuinfo.max_freq when using freq_table.
-
-------------
-
-E.g.:
-On a Juno with available frequencies: 600.000, 1.000.000
-Boost frequencies: 1.200.000
-Using the cppc-cpufreq driver.
-
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
-Without the patches:
-# ## Init state
-scaling_max_freq:1000000
-cpuinfo_max_freq:1000000
+ drivers/cpufreq/cpufreq.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-# echo 700000 > scaling_max_freq
-scaling_max_freq:700000
-cpuinfo_max_freq:1000000
-
-# echo 1 > ../boost
-scaling_max_freq:1200000
-cpuinfo_max_freq:1200000
-
-# echo 800000 > scaling_max_freq
-scaling_max_freq:800000
-cpuinfo_max_freq:1200000
-
-# echo 0 > ../boost
-scaling_max_freq:1000000
-cpuinfo_max_freq:1000000
-
----
-With the patches:
-# ## Init
-scaling_max_freq:1000000
-cpuinfo_max_freq:1000000
-
-# echo 700000 > scaling_max_freq
-scaling_max_freq:700000
-cpuinfo_max_freq:1000000
-
-# echo 1 > ../boost
-scaling_max_freq:700000
-cpuinfo_max_freq:1200000
-
-# echo 800000 > scaling_max_freq
-scaling_max_freq:800000
-cpuinfo_max_freq:1200000
-
-# echo 0 > ../boost
-scaling_max_freq:800000
-cpuinfo_max_freq:1000000
-
----
-
-With the patches, the maximum scaling frequency requested is
-conserved even though boosting is enabled/disabled.
-
----
-
-v1: https://lore.kernel.org/all/20251204101344.192678-1-pierre.gondois@arm.com/#t
-v2: https://lore.kernel.org/all/20251208105933.1369125-1-pierre.gondois@arm.com/#t
-Changes:
-- Fixed error path
-- Integrated [PATCH 1/4] Revert "cpufreq: Fix re-boost issue after hotplugging a CPU"
-  to another patch
-v3:
-Changes:
-- Fixed error path
-- Extracted the revert of:
-  "cpufreq: Fix re-boost issue after hotplugging a CPU"
-  for clarity purpose
-- Set cpuinfo.max_freq as a max_freq_req QoS constraint by default
-New patches:
-- "cpufreq: Allow decreasing cpuinfo.max_freq"
-- "cpufreq: Set policy->min and max as QoS constraints"
-
-Pierre Gondois (6):
-  cpufreq: Remove per-CPU QoS constraint
-  cpufreq: Add boost_freq_req QoS request
-  cpufreq: Centralize boost freq QoS requests
-  cpufreq: Update .set_boost() callbacks to rely on boost_freq_req
-  cpufreq: Set policy->min and max as real QoS constraints
-  cpufreq/freq_table: Allow decreasing cpuinfo.max_freq
-
- drivers/cpufreq/acpi-cpufreq.c    |  1 +
- drivers/cpufreq/amd-pstate.c      | 26 +++++----
- drivers/cpufreq/cppc_cpufreq.c    | 10 +---
- drivers/cpufreq/cpufreq-nforce2.c |  4 +-
- drivers/cpufreq/cpufreq.c         | 87 +++++++++++++++++++++++--------
- drivers/cpufreq/freq_table.c      | 14 ++---
- drivers/cpufreq/gx-suspmod.c      |  9 ++--
- drivers/cpufreq/intel_pstate.c    |  3 --
- drivers/cpufreq/pcc-cpufreq.c     |  8 +--
- drivers/cpufreq/pxa3xx-cpufreq.c  |  4 +-
- drivers/cpufreq/virtual-cpufreq.c |  6 +--
- include/linux/cpufreq.h           |  1 +
- 12 files changed, 101 insertions(+), 72 deletions(-)
-
---
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 4472bb1ec83c7..db414c052658b 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1481,10 +1481,6 @@ static int cpufreq_policy_online(struct cpufreq_policy *policy,
+ 
+ 		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
+ 				CPUFREQ_CREATE_POLICY, policy);
+-	} else {
+-		ret = freq_qos_update_request(policy->max_freq_req, policy->max);
+-		if (ret < 0)
+-			goto out_destroy_policy;
+ 	}
+ 
+ 	if (cpufreq_driver->get && has_target()) {
+-- 
 2.43.0
+
 
