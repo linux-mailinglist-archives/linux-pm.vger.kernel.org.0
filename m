@@ -1,202 +1,120 @@
-Return-Path: <linux-pm+bounces-41490-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41493-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YCzLGwTEd2nckgEAu9opvQ
-	(envelope-from <linux-pm+bounces-41490-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:44:04 +0100
+	id AIWqG8zFd2nckgEAu9opvQ
+	(envelope-from <linux-pm+bounces-41493-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:51:40 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C19D38CB4D
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:44:03 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 126E38CC64
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:51:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8761530247EC
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 19:41:37 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 420473007492
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 19:51:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03FD928643C;
-	Mon, 26 Jan 2026 19:41:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A306E2882A1;
+	Mon, 26 Jan 2026 19:51:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="derieL3L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tQPVtOck"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05AA01F4CBC;
-	Mon, 26 Jan 2026 19:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F6027F010;
+	Mon, 26 Jan 2026 19:51:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769456496; cv=none; b=tszCGxiEoTzYg61xJlPEzeb6XugsR7Vegh9nw9wQWDnq3YCTQ9DN3Ohl9j9RbNoDTgwyBX/p73KYojGsvA/g9WDUC2MxapSdiXfGho6O4uew3d+OTZvjzVPPyc1m4tk2Q86bom3z62IXsMG0j44HLALPKGc57Cm/syfDPFdm7Hw=
+	t=1769457097; cv=none; b=APE440oQB6D14aQ2FqtVrzDgVLeN3ELWIt3zlXnJfAuIg9PnKETiCPBHw3lezTrD4ZxvyEJUd3CrtaBgH/LdrctTiObulsqDuHE7d36KgUAK1hGYrn+BJj1muFtzVPbSkbJ+u0NnF8p157hrI5UAtMefgKTQ+lhtng4SKuNvUgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769456496; c=relaxed/simple;
-	bh=uQFMWGnGGz/UkepHe6qNZM7ssltN76ODEap8qFaeK2s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MaxGYJjD8+uW8iVU+S8U47p4FCiAG158GQF6LzqqlT0RdjfdzTU4ffibIZ/LJNc8n/AtfYuw8821aoPy/uBcBlLnhWILXJlaYOr+xgvnGWb5IzGLKJ5CNq65qZ9X0zs++m32J7MPAbYLypJ5eJ9ArWZkN5k/sKVDVb2wL9i7gcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=derieL3L; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769456494; x=1800992494;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uQFMWGnGGz/UkepHe6qNZM7ssltN76ODEap8qFaeK2s=;
-  b=derieL3LLtDdLkKo62F/2aghx7RorjhNNvIFNM3y62aJ5uFizAoBe8iu
-   1At6KcH7MVaWC7f/J+n5FVM/nDFpxINAXVofD5cCafOk34W7ylQgBcjRW
-   YQVSKVx/lor3hPrirIzN3FEn8vcMQ70p81nBdw9hpC4gLSzKew0HVXj/o
-   bcjRpAOnEghYpq3zBCpNZzkICk/a9HgkVNRoeCrocxC/Zd/+Bf4u6aApH
-   3PxnOh6h1iQXCcj3EVp8F7SU9ZyXuzS6x3t3jmXz4+t3gUsNXPhJhhRns
-   ElT6aYmdgP1MDzLOoppsA72Bx99NFD6xO8ARm30znAx8xzKbk6Ht1QXTj
-   Q==;
-X-CSE-ConnectionGUID: iROUj1cSSs2gn1LuTof2hQ==
-X-CSE-MsgGUID: cdogRa0CQ4Gqx2hPytNR1g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="70545872"
-X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
-   d="scan'208";a="70545872"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 11:41:33 -0800
-X-CSE-ConnectionGUID: n0esMp9ySU+Mz1YRzxo6RQ==
-X-CSE-MsgGUID: jseCndPdQO2p/ZZbLSbXCg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,255,1763452800"; 
-   d="scan'208";a="206992580"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 26 Jan 2026 11:41:28 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vkSSj-00000000XdK-0FbY;
-	Mon, 26 Jan 2026 19:41:25 +0000
-Date: Tue, 27 Jan 2026 03:41:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kaustabh Chakraborty <kauschluss@disroot.org>,
-	Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Sebastian Reichel <sre@kernel.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Kaustabh Chakraborty <kauschluss@disroot.org>
-Subject: Re: [PATCH v2 06/12] mfd: sec: add support for S2MU005 PMIC
-Message-ID: <202601270307.Ds4yus7I-lkp@intel.com>
-References: <20260126-s2mu005-pmic-v2-6-78f1a75f547a@disroot.org>
+	s=arc-20240116; t=1769457097; c=relaxed/simple;
+	bh=Ol8aDY3Q49xnXUpvEH4jYDb4zehR7zBug6joZMftA1U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FjJKDL2Es+vGSQbD5UFyUSX8KXBWkbeomSvBLiYUIUh4MHrEWIzCCI2gCkEmw6q+S7it5vDBaUeHGoQu1sh4U5k+VUBHckGchEfGRsevJIQjRG+yySvMNbcucF/fDFR6sJ5iMszSL/kwKx+pLm90JKPGd/xXNi5AhU2K4RLoku0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tQPVtOck; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F59C116C6;
+	Mon, 26 Jan 2026 19:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769457097;
+	bh=Ol8aDY3Q49xnXUpvEH4jYDb4zehR7zBug6joZMftA1U=;
+	h=From:To:Cc:Subject:Date:From;
+	b=tQPVtOckVBcwLkjFD2vX7Jw+x6rT1+luLK6HcN2dJWkQ5tnEvKYJTPeu15nAXX1uc
+	 Rxx8TLqNKi8slIUbXJc44DO5pz01GDOfoMZXkKh9jeRf4a75WqDBRem1N5EgOg7NJf
+	 CG7oc/9j5KijqM2QulKnQz+RMgBod8zPElU0LbqyMz3erdJQc9ishPH8EhfGUGPmV2
+	 ya3i9ir/PGw709e5P4ED2d74BMF2WP5786FdOW7fYrB2bNfHm8fqOHNJnbGXzjKD7B
+	 9W0DBKYVLF+TAmBv9aEpIdpP9ckJpvmg/zE+Smd7s3PEGDX4vMC94oqKswJ7ZEsDKS
+	 FuyN6IgmTM/kw==
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Christian Loehle <christian.loehle@arm.com>,
+ Doug Smythies <dsmythies@telus.net>
+Subject:
+ [PATCH v2 0/2] cpuidle: governors: teo: Wakeup events classification change
+ and refinement
+Date: Mon, 26 Jan 2026 20:41:25 +0100
+Message-ID: <12831359.O9o76ZdvQC@rafael.j.wysocki>
+Organization: Linux Kernel Development
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260126-s2mu005-pmic-v2-6-78f1a75f547a@disroot.org>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	CTE_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41490-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[23];
+	TAGGED_FROM(0.00)[bounces-41493-lists,linux-pm=lfdr.de];
+	TO_DN_ALL(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	HAS_ORG_HEADER(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
+	RCPT_COUNT_THREE(0.00)[4];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,intel.com:mid]
-X-Rspamd-Queue-Id: C19D38CB4D
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,rafael.j.wysocki:mid]
+X-Rspamd-Queue-Id: 126E38CC64
 X-Rspamd-Action: no action
 
-Hi Kaustabh,
+Hi All,
 
-kernel test robot noticed the following build errors:
+This is a follow-up to
 
-[auto build test ERROR on ca3a02fda4da8e2c1cb6baee5d72352e9e2cfaea]
+https://lore.kernel.org/linux-pm/2257365.irdbgypaU6@rafael.j.wysocki/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kaustabh-Chakraborty/dt-bindings-leds-document-Samsung-S2M-series-PMIC-flash-LED-device/20260126-031457
-base:   ca3a02fda4da8e2c1cb6baee5d72352e9e2cfaea
-patch link:    https://lore.kernel.org/r/20260126-s2mu005-pmic-v2-6-78f1a75f547a%40disroot.org
-patch subject: [PATCH v2 06/12] mfd: sec: add support for S2MU005 PMIC
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260127/202601270307.Ds4yus7I-lkp@intel.com/config)
-compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260127/202601270307.Ds4yus7I-lkp@intel.com/reproduce)
+including new versions of patches [4-5/5] in that series.  The other patches
+from it have been already queued up for 6.20.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601270307.Ds4yus7I-lkp@intel.com/
+Patch [1/2] changes the criteria used for classifying wakeup events as hits
+or intercepts to (hopefully) make the classification work better for large
+state bins.
 
-All errors (new ones prefixed by >>):
+Patch [2/2] refines the idle state lookup based on intercepts to first
+consider the state with the maximum intercepts metric, so that state is
+always taken into consideration.
 
->> drivers/mfd/sec-irq.c:218:7: error: expression is not an integer constant expression
-           case irqf_regs[0]:
-                ^~~~~~~~~~~~
-   drivers/mfd/sec-irq.c:218:7: note: initializer of 'irqf_regs' is not a constant expression
-   drivers/mfd/sec-irq.c:204:21: note: declared here
-           const unsigned int irqf_regs[] = {
-                              ^
-   drivers/mfd/sec-irq.c:220:7: error: expression is not an integer constant expression
-           case mask_regs[0]:
-                ^~~~~~~~~~~~
-   drivers/mfd/sec-irq.c:220:7: note: initializer of 'mask_regs' is not a constant expression
-   drivers/mfd/sec-irq.c:210:21: note: declared here
-           const unsigned int mask_regs[] = {
-                              ^
-   2 errors generated.
+Please see the individual patch changelogs for details.
+
+Thanks!
 
 
-vim +218 drivers/mfd/sec-irq.c
 
-   200	
-   201	static unsigned int s2mu005_irq_get_reg(struct regmap_irq_chip_data *data,
-   202						unsigned int base, int index)
-   203	{
-   204		const unsigned int irqf_regs[] = {
-   205			S2MU005_REG_CHGR_INT1,
-   206			S2MU005_REG_FLED_INT1,
-   207			S2MU005_REG_MUIC_INT1,
-   208			S2MU005_REG_MUIC_INT2,
-   209		};
-   210		const unsigned int mask_regs[] = {
-   211			S2MU005_REG_CHGR_INT1M,
-   212			S2MU005_REG_FLED_INT1M,
-   213			S2MU005_REG_MUIC_INT1M,
-   214			S2MU005_REG_MUIC_INT2M,
-   215		};
-   216	
-   217		switch (base) {
- > 218		case irqf_regs[0]:
-   219			return irqf_regs[index];
-   220		case mask_regs[0]:
-   221			return mask_regs[index];
-   222		}
-   223	
-   224		return base;
-   225	}
-   226	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
