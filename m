@@ -1,128 +1,206 @@
-Return-Path: <linux-pm+bounces-41449-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41450-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IJq3EMEed2ntcQEAu9opvQ
-	(envelope-from <linux-pm+bounces-41449-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 08:58:57 +0100
+	id eJFLI58hd2lmcgEAu9opvQ
+	(envelope-from <linux-pm+bounces-41450-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 09:11:11 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B33B2852C7
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 08:58:56 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 356A5855AD
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 09:11:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 1AB003015A59
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 07:51:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 318783008766
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 08:11:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6931C2F60A7;
-	Mon, 26 Jan 2026 07:51:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7912F7449;
+	Mon, 26 Jan 2026 08:11:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AEjxKHYF"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="LKNeZMbq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from canpmsgout12.his.huawei.com (canpmsgout12.his.huawei.com [113.46.200.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFEB029E109
-	for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 07:51:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B7A27A47F;
+	Mon, 26 Jan 2026 08:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769413908; cv=none; b=uwzLANCgN9vZX5C3ElB0dVbt12RNZQhihcXE7vtaYW0JZHyUDnzpHcDWi/E/Q8VmNuzCflyMsJev1S0xPMZj9GWauqCsUuf1I21SFm+Nq+UsSssGQL+i7b8n53EGGuEfvX3GPj/ciD1W+NMIfCFchD5wFmY4KxzMPo0vkbxgm40=
+	t=1769415061; cv=none; b=goBPBYRCXwZhtpUrMX+38B7IWdGAGJiF32vR5toAqWt7DfapGNN/nMp7SeIBTE0O/4ql+yuxZU9g7Vvgb67EoFUQxjQn0CGKajjSIdFKGO1/TTcp1XFRzrOYqsRmxF545X750xN/CuGUICFHj35esC16eYYbF7iGF36Bm4cw4Jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769413908; c=relaxed/simple;
-	bh=zeRYwHDFga5XDAtn2Mh6+61unaagIljzBvZ+FU4zhT8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qOU0dUWy8HArPrHYymd91eL+nibHjQ17Sm3C3fhlR0d/GnoTieArnuafuGyOmf0WIPfuc4T6Y7+/27DFJndRVgmSfR2dwLL2CEm7DoZ8mjxMGGgyyliXYATquu8TGGGJwV0HLr3SvrP5l73L0zmyGuFXYS36vwqx5bB1QYn+Sgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AEjxKHYF; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769413895;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/+VZMh4GEF8Zz3re4kwGvvFRb4CIYeGeUY9ZbG3g6Cw=;
-	b=AEjxKHYFcMTUSsfvYK+te5W6I+t6cwz1YZ+VBrFfmRUC11GAgq/45U6JDimD4lqIqiXYmW
-	TA/JLbySmpjY30/VBuT2k456wpDFi5+9s9XWYr7tOtw9eKn2lHPLlilsEZsojkiyfYXfNQ
-	sJwDer+ffI55kFJB8g1hlNITV2SPiwE=
-From: Thorsten Blum <thorsten.blum@linux.dev>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND] thermal: sprd: Use min instead of clamp in sprd_thm_temp_to_rawdata
-Date: Mon, 26 Jan 2026 08:51:23 +0100
-Message-ID: <20260126075124.212593-1-thorsten.blum@linux.dev>
+	s=arc-20240116; t=1769415061; c=relaxed/simple;
+	bh=GR3zckIVpt6LCL6jaARW/kyCfDLSF1sXbOxzIXTnr6Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=kh9yCQxDGCchzxWtwl9tgmGpqCib/nH7n1artrh1m2wjLFrzGOdUP6kHA5qLRz458wVmUgA+hJ5efiVxuBYfSi6+u5GARecFURqu5OJfDrkr83KAdB6jGI4BPYx0Q9Wzpsu60luFqrBH7yLumI6c3ov/i2eifVIxynDIrixtA3g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=LKNeZMbq; arc=none smtp.client-ip=113.46.200.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=YyYWratAnhyYvIsPU6aAB6x0/xonNgcbkzbNqPshYGQ=;
+	b=LKNeZMbqFLdvYz2YeBy0aAN1E+7l3nKA5q817rd/b/G3STx/GRuBXiAD5c861+osb+hPe8NUC
+	pvDYwKR//CrXuJwdmkMyKZGn2JYr8OLoJ3RAXiHnM6epBPN8ctp87YALoaZ/2SLjIRhOY7Er/YS
+	BmQvUpYiD+1CrPP+7DxOHXg=
+Received: from mail.maildlp.com (unknown [172.19.163.127])
+	by canpmsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4f01Mz3VmGznTVZ;
+	Mon, 26 Jan 2026 16:06:55 +0800 (CST)
+Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8F6D740363;
+	Mon, 26 Jan 2026 16:10:50 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
+ (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 26 Jan
+ 2026 16:10:49 +0800
+Message-ID: <7e86cdbe-f16c-4fe8-92c5-e6fb89f49811@huawei.com>
+Date: Mon, 26 Jan 2026 16:10:49 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 5/9] ACPI: CPPC: Extend cppc_set_epp_perf() for
+ FFH/SystemMemory
+To: Sumit Gupta <sumitg@nvidia.com>
+CC: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <pierre.gondois@arm.com>,
+	<ionela.voinescu@arm.com>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<corbet@lwn.net>, <rdunlap@infradead.org>, <ray.huang@amd.com>,
+	<gautham.shenoy@amd.com>, <mario.limonciello@amd.com>, <perry.yuan@amd.com>,
+	<zhanjie9@hisilicon.com>, <linux-pm@vger.kernel.org>,
+	<linux-acpi@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<acpica-devel@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-tegra@vger.kernel.org>, <treding@nvidia.com>, <jonathanh@nvidia.com>,
+	<vsethi@nvidia.com>, <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>,
+	<nhartman@nvidia.com>, <bbasu@nvidia.com>
+References: <20260120145623.2959636-1-sumitg@nvidia.com>
+ <20260120145623.2959636-6-sumitg@nvidia.com>
+ <a7a4d351-eed3-4ea6-a84f-e525b7ac13a6@huawei.com>
+ <86303677-6124-424f-999d-c420eac0cceb@nvidia.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <86303677-6124-424f-999d-c420eac0cceb@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-ClientProxiedBy: kwepems500002.china.huawei.com (7.221.188.17) To
+ kwepemf200001.china.huawei.com (7.202.181.227)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
+	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,linaro.org,intel.com,arm.com,gmail.com,linux.alibaba.com];
-	TAGGED_FROM(0.00)[bounces-41449-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	TAGGED_FROM(0.00)[bounces-41450-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[huawei.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[thorsten.blum@linux.dev,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[linux.dev:+];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhenglifeng1@huawei.com,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[alibaba.com:email,linux.dev:email,linux.dev:dkim,linux.dev:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: B33B2852C7
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nvidia.com:email,huawei.com:mid,huawei.com:dkim]
+X-Rspamd-Queue-Id: 356A5855AD
 X-Rspamd-Action: no action
 
-Clamping 'val' to itself is unnecessary and the expression can be
-simplified by using min() instead. Casting SPRD_THM_RAW_DATA_HIGH to u32
-is also redundant and can be removed.
+On 2026/1/25 4:08, Sumit Gupta wrote:
+> 
+> On 22/01/26 14:48, zhenglifeng (A) wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> On 2026/1/20 22:56, Sumit Gupta wrote:
+>>> Extend cppc_set_epp_perf() to write both auto_sel and energy_perf
+>>> registers when they are in FFH or SystemMemory address space.
+>>>
+>>> This keeps the behavior consistent with PCC case where both registers
+>>> are already updated together, but was missing for FFH/SystemMemory.
+>>>
+>>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>>> ---
+>>>   drivers/acpi/cppc_acpi.c | 24 +++++++++++++++++++++---
+>>>   1 file changed, 21 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>>> index de35aeb07833..45c6bd6ec24b 100644
+>>> --- a/drivers/acpi/cppc_acpi.c
+>>> +++ b/drivers/acpi/cppc_acpi.c
+>>> @@ -1562,6 +1562,8 @@ int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
+>>>        struct cpc_register_resource *auto_sel_reg;
+>>>        struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+>>>        struct cppc_pcc_data *pcc_ss_data = NULL;
+>>> +     bool autosel_ffh_sysmem;
+>>> +     bool epp_ffh_sysmem;
+>>>        int ret;
+>>>
+>>>        if (!cpc_desc) {
+>>> @@ -1572,6 +1574,11 @@ int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
+>>>        auto_sel_reg = &cpc_desc->cpc_regs[AUTO_SEL_ENABLE];
+>>>        epp_set_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
+>>>
+>>> +     epp_ffh_sysmem = CPC_SUPPORTED(epp_set_reg) &&
+>>> +             (CPC_IN_FFH(epp_set_reg) || CPC_IN_SYSTEM_MEMORY(epp_set_reg));
+>>> +     autosel_ffh_sysmem = CPC_SUPPORTED(auto_sel_reg) &&
+>>> +             (CPC_IN_FFH(auto_sel_reg) || CPC_IN_SYSTEM_MEMORY(auto_sel_reg));
+>>> +
+>>>        if (CPC_IN_PCC(epp_set_reg) || CPC_IN_PCC(auto_sel_reg)) {
+>>>                if (pcc_ss_id < 0) {
+>>>                        pr_debug("Invalid pcc_ss_id for CPU:%d\n", cpu);
+>>> @@ -1597,11 +1604,22 @@ int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
+>>>                ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+>>>                up_write(&pcc_ss_data->pcc_lock);
+>>>        } else if (osc_cpc_flexible_adr_space_confirmed &&
+>>> -                CPC_SUPPORTED(epp_set_reg) && CPC_IN_FFH(epp_set_reg)) {
+>>> -             ret = cpc_write(cpu, epp_set_reg, perf_ctrls->energy_perf);
+>>> +                (epp_ffh_sysmem || autosel_ffh_sysmem)) {
+>>> +             if (autosel_ffh_sysmem) {
+>>> +                     ret = cpc_write(cpu, auto_sel_reg, enable);
+>>> +                     if (ret)
+>>> +                             return ret;
+>>> +             }
+>>> +
+>>> +             if (epp_ffh_sysmem) {
+>>> +                     ret = cpc_write(cpu, epp_set_reg,
+>>> +                                     perf_ctrls->energy_perf);
+>>> +                     if (ret)
+>>> +                             return ret;
+>>> +             }
+>> Don't know if such a scenario exists, but if one of them is in PCC and the
+>> other is in FFH or system memory, only the one in PCC will be updated
+>> based on your modifications.
+> The current code handles mixed cases correctly.
+> When either register is in PCC, the first if block executes and calls
+> cpc_write() for both registers. The cpc_write() internally handles
+> each register's type (PCC, FFH, or SystemMemory)
 
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
----
- drivers/thermal/sprd_thermal.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yes, I was wrong.
 
-diff --git a/drivers/thermal/sprd_thermal.c b/drivers/thermal/sprd_thermal.c
-index e546067c9621..511f1e7959b6 100644
---- a/drivers/thermal/sprd_thermal.c
-+++ b/drivers/thermal/sprd_thermal.c
-@@ -201,7 +201,7 @@ static int sprd_thm_temp_to_rawdata(int temp, struct sprd_thermal_sensor *sen)
- 	 */
- 	val = (temp + sen->cal_offset) / sen->cal_slope;
- 
--	return clamp(val, val, (u32)(SPRD_THM_RAW_DATA_HIGH - 1));
-+	return min(val, SPRD_THM_RAW_DATA_HIGH - 1);
- }
- 
- static int sprd_thm_read_temp(struct thermal_zone_device *tz, int *temp)
--- 
-Thorsten Blum <thorsten.blum@linux.dev>
-GPG: 1D60 735E 8AEF 3BE4 73B6  9D84 7336 78FD 8DFE EAD4
+According to the first if block, cpc_wite() is OK to be called for a
+register not in PCC. So it looks like this 'else if' is unnecessary. Only
+CPC_SUPPORTED is needed to be checked before calling cpc_write(), isn't it?
+
+> 
+> 
+> Thank you,
+> Sumit Gupta
+> 
+> 
+> 
+>>>        } else {
+>>>                ret = -ENOTSUPP;
+>>> -             pr_debug("_CPC in PCC and _CPC in FFH are not supported\n");
+>>> +             pr_debug("_CPC in PCC/FFH/SystemMemory are not supported\n");
+>>>        }
+>>>
+>>>        return ret;
 
 
