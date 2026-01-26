@@ -1,273 +1,212 @@
-Return-Path: <linux-pm+bounces-41497-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41498-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id tR7+ErvLd2mxlQEAu9opvQ
-	(envelope-from <linux-pm+bounces-41497-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:16:59 +0100
+	id 6AbXJczMd2mxlQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41498-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:21:32 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08A7E8CF44
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:16:59 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4CB88CFDA
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 21:21:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 6F8933007521
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:16:58 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 6F45F300531E
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 20:21:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 301592D3EC1;
-	Mon, 26 Jan 2026 20:16:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 543BD2D5408;
+	Mon, 26 Jan 2026 20:21:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kgDV8Qd6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dAl4i0h7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1C91DE8AE;
-	Mon, 26 Jan 2026 20:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3FA4271A71
+	for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 20:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769458615; cv=none; b=cvxv9M+cZ+fQ91HALdDo4sVhkm9FeY1TJrcjnUWUSTyKUbtLLqQCPd8W0Wgov4g6RVgOdYiNMLxcsIvJKzBDqk28i2PaLKeHXT2l4VkOxmUhddqHZgp8T9aOmjIutK4SpSLXBj4zfbKU9plTRtw+HZrXvG5opg+1h9OcyHlQIMI=
+	t=1769458888; cv=none; b=tgb30/XvgqRf9j23dgaJ0xlc3WB3FnKREWLMD4kFQIp7s/wyrR6uLfubwffgXD3M42MMvVb7E5v6Oy3NkkkidkYmQDTKFoZxRy/zuqyP6qHuBsOnYS/U4o+EUtoybLTYqKN7+4soS2qQeVuBV2NFerRkYXiG3Krsp9Fjc4JwJAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769458615; c=relaxed/simple;
-	bh=jDTJt28eS0OoJ53PsZXeEECWkT1UGi1eT3ZMSzGB25M=;
+	s=arc-20240116; t=1769458888; c=relaxed/simple;
+	bh=xqu3YwpJVEVQZH29jJY+vRv4Bg+re1h9wvYTGv6IRJ8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tefQNQaf5/kdwUCTs64fO3Y7srpBxaJR24EuSkjlytnCTgCA3q5U/jW1o3VJKRa5IMoDahkAgzHZ128KpIr1jFwLjau1qIKeiUGXZTVeB7y2qoyBcuYnXr07fqV7Ojdu9kKCikwrYWlB/xEZRckrlnWNPBKeVBmoVLQKtA5ergA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kgDV8Qd6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01506C116C6;
-	Mon, 26 Jan 2026 20:16:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769458614;
-	bh=jDTJt28eS0OoJ53PsZXeEECWkT1UGi1eT3ZMSzGB25M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kgDV8Qd6nYF8zBFQPhFHXo8DLxGwM1sFByWRSjdf2B4nK8GHyILToDsGWcS2sbgSJ
-	 WypEHy8Ic5kMPpX/hS437eVpNKOx7tSI8mEE11fm8cRkvCcrTgFWCkGz+6Rsbj4TrB
-	 xTHCWj7tg9tXwPu4WZHGeKSlHDr7CT6TCJucpPXy1kyydP+wocvh7J8zz2i4VUGgOK
-	 gKZ00hQchg9jSWBqNAWSusenBje3lcIVDUAsoTB2Y5FQ1VqLlsd5fUYfMS4VXPwNMR
-	 IvFVt1LZO7vLmcxVqYof+g4OR/d1c+Mil2tJNpxcy8CehyGidmRZSzW1waoRzY7axf
-	 SLrz9kJMPA0Nw==
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-To: kernel test robot <lkp@intel.com>,
- Frederic Weisbecker <frederic@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
- linux-pm@vger.kernel.org
-Subject:
- Re: [rafael-pm:bleeding-edge 175/176] ERROR: modpost: "tick_nohz_enabled"
- [drivers/cpufreq/cpufreq_ondemand.ko] undefined!
-Date: Mon, 26 Jan 2026 21:16:49 +0100
-Message-ID: <4709230.LvFx2qVVIh@rafael.j.wysocki>
-Organization: Linux Kernel Development
-In-Reply-To: <aXN9-KrR0YyC7YDV@localhost.localdomain>
-References:
- <202601231505.4Q8tb33s-lkp@intel.com>
- <aXN9-KrR0YyC7YDV@localhost.localdomain>
+	 MIME-Version; b=lgrLnMtBtiYlI4vqPvXpX+7aLE/g9RI9vFar+lFWDl6v8oB8bbj/OzFmuOFg1FtihzBBavG3XOQzihFhdJYOM7BDiqO2QcdHQ6uOk0yK/G/hIbSE+cfrE6moQdv8iNOFLBueON6YMdO8QLUo2IUaPnCR/rEO2A3SbdoJE5v+cOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dAl4i0h7; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4801c731d0aso38936045e9.1
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 12:21:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769458885; x=1770063685; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UhqRfC+ZkjKLBE27+UTSNmoxUrR+mo//ucpkrQIn4x4=;
+        b=dAl4i0h7boIgW0uIEEKTxNpC0P9r4PcScZKTusrs2i6LmPohifk86m7DLXmmV3DUlY
+         7WuuH2EaFuwqaUYK0idLZ2tpZmWtmLIL6j8dt65Ia6w9gMmt1swT842oAi4vs9Kx0rT/
+         1klJvhSoP8KN5D8FuRDRfoB4I8hI2lNOGHMygFbjomtGPza4EmI55d/rGKV5QXSEBx8B
+         iq9QqF1qbmfL/QE2F1cgplKZuwDy13Nd/y5baysA594U2zxxrK7zRReAD+ULq5nAPEc0
+         7yfFdo2wCqEAbCYvmjhJ5ym/yrw/3JMpjV1+ny7MtyHN+FgJaQfJOJfJfeOf01hDOc1M
+         Gb1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769458885; x=1770063685;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UhqRfC+ZkjKLBE27+UTSNmoxUrR+mo//ucpkrQIn4x4=;
+        b=p7gP7a8kRF5vGG1j4g0sjIsDyd0NBbMdDVlG2eYiQJujH/9bLcCnjJbZEcqRLhDN7A
+         yVeOJ+0tZgfnuZMA4P8vYl6hC57hgH2Qq0wTx3RfXC4PORqYlW3l6/1b/xYCHBxNs6cm
+         HGt0ZnJfy7hReADwvOgm+2XLsudTWv9Efil5HFWWCxQfZF2eAxwG9e9o4axxgDT7M5fU
+         jOOLs/kzwy8VThrhaIfue9Sendgow83RHSJMpm66keu//jbSkmqIntc5jtq+8gEMKYLi
+         aIJ8X28qdc3uZps5QOytuw9zU0SWeyEcJmYR2yWLCmDJkInMnEghLB6/5DLFElT1mzCT
+         lgPw==
+X-Forwarded-Encrypted: i=1; AJvYcCXAosGLVqcHfO419fjdKu1MM4Z0hhpeHZHKWXUPU9xQCfDVCCtmmEAQtCoOyWoP9EUI+5ZX1pwQNg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxK+DayMvRvifqKzJBk10KMRyb+WjdtonTQ1MKeQKyy9EWcJn59
+	/uI3iUYzTzNeq09/WQccHymA0XrajrW955MD2CJSrtx8M3yjF6/KHp8n
+X-Gm-Gg: AZuq6aJQVr2HMgKSXCMYAydMSX3Cj+0FH+L7riFdsDUROlRCuLNhj+X1bK1DpdnRIeM
+	BQqU7KX41xZFhgSH31EcFjOi72Duq4VbSLyUud9QIfEO1YgwlqzeZBlo6xC+hGFfbZ1kGSqN1zT
+	8bwPrB3RnFMKId7MGzydaqD9bYMkPnURziA9qXCC9p1j/b4Yku1agayDlvUxempGS+Z8mYbMCIh
+	aNxFKdOSZDi83IIMsiC/0PGoIuKBM4kYTIoTpD1UkyZ0WATxK04JkTlNRdv63NWjFkQAN674+HJ
+	kc+vA2r7X3Pux3wbLexDI4B9DSRClbw/YzRCVN5RFz5NF3faPpJ59paEpgGmG/m/9JKvCuZEueg
+	0XZOM4xM1ITj2qg6iE7/rCT1RtsSbC54AnFP84egVwwKWnCE+p5f88paS0lVRNLy1WMVa6B0jcX
+	bin6bG5OH2tFjwbIK5eTesT8OkyhUbnSRYRI1CVA==
+X-Received: by 2002:a05:600c:34ca:b0:480:4a4f:c366 with SMTP id 5b1f17b1804b1-4805cf5ebdcmr95592855e9.20.1769458884833;
+        Mon, 26 Jan 2026 12:21:24 -0800 (PST)
+Received: from ionutnechita-arz2022.local ([2a02:2f0e:c30b:500:c472:222f:bc60:d893])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48066bee24dsm10554565e9.5.2026.01.26.12.21.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jan 2026 12:21:24 -0800 (PST)
+From: "Ionut Nechita (Sunlight Linux)" <sunlightlinux@gmail.com>
+To: christian.loehle@arm.com
+Cc: daniel.lezcano@linaro.org,
+	ionut_n2001@yahoo.com,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	rafael@kernel.org,
+	sunlightlinux@gmail.com,
+	yumpusamongus@gmail.com
+Subject: Re: [PATCH v2 0/1] cpuidle: menu: Fix high wakeup latency on modern platforms
+Date: Mon, 26 Jan 2026 22:19:44 +0200
+Message-ID: <20260126201943.11505-2-sunlightlinux@gmail.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <54478318-cbee-46f2-9ff1-9c0ae15a89ab@arm.com>
+References: <20260122080937.22347-2-sunlightlinux@gmail.com> <54478318-cbee-46f2-9ff1-9c0ae15a89ab@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41497-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_COUNT_THREE(0.00)[4];
-	SUBJECT_ENDS_EXCLAIM(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	TAGGED_FROM(0.00)[bounces-41498-lists,linux-pm=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[linaro.org,yahoo.com,vger.kernel.org,kernel.org,gmail.com];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sunlightlinux@gmail.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,01.org:url,intel.com:email,linaro.org:email,rafael.j.wysocki:mid]
-X-Rspamd-Queue-Id: 08A7E8CF44
+	RCPT_COUNT_SEVEN(0.00)[8];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B4CB88CFDA
 X-Rspamd-Action: no action
 
-On Friday, January 23, 2026 2:56:08 PM CET Frederic Weisbecker wrote:
-> Le Fri, Jan 23, 2026 at 03:37:07PM +0800, kernel test robot a =C3=A9crit :
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-=2Egit bleeding-edge
-> > head:   8a22b02a1427ff0eab01a1b7cd62355238ba3d5b
-> > commit: cc85c350babcb86c65da5393532f1cb255c750bc [175/176] cpufreq: ond=
-emand: Simplify idle cputime granularity test
-> > config: i386-buildonly-randconfig-002-20260123 (https://download.01.org=
-/0day-ci/archive/20260123/202601231505.4Q8tb33s-lkp@intel.com/config)
-> > compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
-hive/20260123/202601231505.4Q8tb33s-lkp@intel.com/reproduce)
-> >=20
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202601231505.4Q8tb33s-l=
-kp@intel.com/
-> >=20
-> > All errors (new ones prefixed by >>, old ones prefixed by <<):
-> >=20
-> > >> ERROR: modpost: "tick_nohz_enabled" [drivers/cpufreq/cpufreq_ondeman=
-d.ko] undefined!
-> >=20
->=20
-> Right...
->=20
-> Is it better with this replacement?
+From: Ionut Nechita <sunlightlinux@gmail.com>
 
-It is still failing the build.
+On Thu, Jan 22 2026 at 08:49, Christian Loehle wrote:
 
-I'll fix it up tomorrow.
+> It was more of a question than a suggestion outright... And I still have
+> more of them, quoting v1:
 
-> ---
-> From: Frederic Weisbecker <frederic@kernel.org>
-> Date: Wed, 7 Jan 2026 17:25:09 +0100
-> Subject: [PATCH] cpufreq: ondemand: Simplify idle cputime granularity test
->=20
-> cpufreq calls get_cpu_idle_time_us() just to know if idle cputime
-> accounting has a nanoseconds granularity.
->=20
-> Use the appropriate indicator instead to make that deduction.
->=20
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> ---
->  drivers/cpufreq/cpufreq_ondemand.c | 7 +------
->  include/linux/tick.h               | 1 +
->  kernel/time/hrtimer.c              | 2 +-
->  kernel/time/tick-internal.h        | 2 --
->  kernel/time/tick-sched.c           | 8 +++++++-
->  kernel/time/timer.c                | 2 +-
->  6 files changed, 11 insertions(+), 11 deletions(-)
->=20
-> diff --git a/drivers/cpufreq/cpufreq_ondemand.c b/drivers/cpufreq/cpufreq=
-_ondemand.c
-> index a6ecc203f7b7..bb7db82930e4 100644
-> --- a/drivers/cpufreq/cpufreq_ondemand.c
-> +++ b/drivers/cpufreq/cpufreq_ondemand.c
-> @@ -334,17 +334,12 @@ static void od_free(struct policy_dbs_info *policy_=
-dbs)
->  static int od_init(struct dbs_data *dbs_data)
->  {
->  	struct od_dbs_tuners *tuners;
-> -	u64 idle_time;
-> -	int cpu;
-> =20
->  	tuners =3D kzalloc(sizeof(*tuners), GFP_KERNEL);
->  	if (!tuners)
->  		return -ENOMEM;
-> =20
-> -	cpu =3D get_cpu();
-> -	idle_time =3D get_cpu_idle_time_us(cpu, NULL);
-> -	put_cpu();
-> -	if (idle_time !=3D -1ULL) {
-> +	if (tick_nohz_is_active()) {
->  		/* Idle micro accounting is supported. Use finer thresholds */
->  		dbs_data->up_threshold =3D MICRO_FREQUENCY_UP_THRESHOLD;
->  	} else {
-> diff --git a/include/linux/tick.h b/include/linux/tick.h
-> index ac76ae9fa36d..fe7f51451ba1 100644
-> --- a/include/linux/tick.h
-> +++ b/include/linux/tick.h
-> @@ -126,6 +126,7 @@ enum tick_dep_bits {
-> =20
->  #ifdef CONFIG_NO_HZ_COMMON
->  extern bool tick_nohz_enabled;
-> +extern bool tick_nohz_is_active(void);
->  extern bool tick_nohz_tick_stopped(void);
->  extern bool tick_nohz_tick_stopped_cpu(int cpu);
->  extern void tick_nohz_idle_stop_tick(void);
-> diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
-> index f8ea8c8fc895..e1bbf883dfa8 100644
-> --- a/kernel/time/hrtimer.c
-> +++ b/kernel/time/hrtimer.c
-> @@ -943,7 +943,7 @@ void clock_was_set(unsigned int bases)
->  	cpumask_var_t mask;
->  	int cpu;
-> =20
-> -	if (!hrtimer_hres_active(cpu_base) && !tick_nohz_active)
-> +	if (!hrtimer_hres_active(cpu_base) && !tick_nohz_is_active())
->  		goto out_timerfd;
-> =20
->  	if (!zalloc_cpumask_var(&mask, GFP_KERNEL)) {
-> diff --git a/kernel/time/tick-internal.h b/kernel/time/tick-internal.h
-> index 4e4f7bbe2a64..597d816d22e8 100644
-> --- a/kernel/time/tick-internal.h
-> +++ b/kernel/time/tick-internal.h
-> @@ -156,7 +156,6 @@ static inline void tick_nohz_init(void) { }
->  #endif
-> =20
->  #ifdef CONFIG_NO_HZ_COMMON
-> -extern unsigned long tick_nohz_active;
->  extern void timers_update_nohz(void);
->  extern u64 get_jiffies_update(unsigned long *basej);
->  # ifdef CONFIG_SMP
-> @@ -171,7 +170,6 @@ extern void timer_expire_remote(unsigned int cpu);
->  # endif
->  #else /* CONFIG_NO_HZ_COMMON */
->  static inline void timers_update_nohz(void) { }
-> -#define tick_nohz_active (0)
->  #endif
-> =20
->  DECLARE_PER_CPU(struct hrtimer_cpu_base, hrtimer_bases);
-> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-> index 21ac561a8545..81c619bf662c 100644
-> --- a/kernel/time/tick-sched.c
-> +++ b/kernel/time/tick-sched.c
-> @@ -691,7 +691,7 @@ void __init tick_nohz_init(void)
->   * NO HZ enabled ?
->   */
->  bool tick_nohz_enabled __read_mostly  =3D true;
-> -unsigned long tick_nohz_active  __read_mostly;
-> +static unsigned long tick_nohz_active  __read_mostly;
->  /*
->   * Enable / Disable tickless mode
->   */
-> @@ -702,6 +702,12 @@ static int __init setup_tick_nohz(char *str)
-> =20
->  __setup("nohz=3D", setup_tick_nohz);
-> =20
-> +bool tick_nohz_is_active(void)
-> +{
-> +	return tick_nohz_active;
-> +}
-> +EXPORT_SYMBOL_GPL(tick_nohz_is_active);
-> +
->  bool tick_nohz_tick_stopped(void)
->  {
->  	struct tick_sched *ts =3D this_cpu_ptr(&tick_cpu_sched);
-> diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-> index 1f2364126894..7e1e3bde6b8b 100644
-> --- a/kernel/time/timer.c
-> +++ b/kernel/time/timer.c
-> @@ -281,7 +281,7 @@ DEFINE_STATIC_KEY_FALSE(timers_migration_enabled);
-> =20
->  static void timers_update_migration(void)
->  {
-> -	if (sysctl_timer_migration && tick_nohz_active)
-> +	if (sysctl_timer_migration && tick_nohz_is_active())
->  		static_branch_enable(&timers_migration_enabled);
->  	else
->  		static_branch_disable(&timers_migration_enabled);
->=20
+Thank you for the detailed feedback. Let me provide more context about
+the workload and the platforms where I observed this issue.
 
+> You also measured 150us wakeup latency, does this match the reported exit
+> latency for your platform (roughly)?
+> What do the platform states look like for you?
 
+Yes, the measured latency matches the reported exit latencies. Here are
+the platforms I've tested:
 
+1. Intel Xeon Gold 6443N (Sapphire Rapids):
+   - C6 state: 190us latency, 600us residency target
+   - C1E state: 2us latency, 4us residency target
+   - Driver: intel_idle
 
+2. AMD Ryzen 9 5900HS (laptop):
+   - C3 state: 350us latency, 700us residency target
+   - C2 state: 18us latency, 36us residency target
+   - Driver: acpi_idle
+
+The problem manifests primarily on the Sapphire Rapids platform where
+C6 has 190us exit latency.
+
+> Also regarding NOHZ_FULL, does that make a difference for your workload?
+
+Yes, absolutely. The workload context is:
+
+- PREEMPT_RT kernel (realtime)
+- Isolated cores (isolcpus=)
+- NOHZ_FULL enabled on isolated cores
+- Inter-core communication latency testing with qperf
+- kthreads and IRQ affinity set to non-isolated cores
+
+The scenario: Core A (isolated, NOHZ_FULL) sends a message to Core B
+(also isolated, NOHZ_FULL, currently idle). Core B enters C6 during
+idle, then when the message arrives, the 190us exit latency dominates
+the response time. This is unacceptable for realtime workloads.
+
+> Frankly, if there's relatively strict latency requirements on the system
+> you need to let cpuidle know via pm qos or dma_latency....
+
+I considered PM QoS and /dev/cpu_dma_latency, but they have limitations
+for this use case:
+
+1. Global PM QoS affects all cores, not just the isolated ones
+2. Per-task PM QoS requires application modifications
+3. /dev/cpu_dma_latency is system-wide, not per-core
+
+For isolated cores with NOHZ_FULL in a realtime environment, we want
+the governor to make smarter decisions based on actual predicted idle
+time rather than relying on next_timer_ns which can be arbitrarily large
+on tickless cores.
+
+> A trace or cpuidle sysfs dump pre and post workload would really help to
+> understand the situation.
+
+I will collect and provide:
+- ftrace cpuidle event traces
+- Complete sysfs cpuidle dumps pre/post workload
+- C-state residency and usage statistics
+- Detailed qperf latency measurements
+
+Regarding the safety margin question from v1: you're right that I need
+to clarify the logic. The goal is to clamp the upper bound to avoid
+unnecessarily deep states when prediction suggests short idle, while
+still respecting the prediction for target residency selection.
+
+I'll send a follow-up with the detailed trace data and measurements.
+
+Thanks for your patience and valuable feedback,
+Ionut
 
