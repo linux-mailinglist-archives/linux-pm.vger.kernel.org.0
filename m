@@ -1,148 +1,170 @@
-Return-Path: <linux-pm+bounces-41441-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41444-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gBJNJXKkdmnnTgEAu9opvQ
-	(envelope-from <linux-pm+bounces-41441-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 00:17:06 +0100
+	id YAFNCzrOdmktWwEAu9opvQ
+	(envelope-from <linux-pm+bounces-41444-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 03:15:22 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E205831D8
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 00:17:06 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DAA283786
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 03:15:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 889A230048FF
-	for <lists+linux-pm@lfdr.de>; Sun, 25 Jan 2026 23:17:00 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 33361300423B
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 02:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A1030F923;
-	Sun, 25 Jan 2026 23:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gqIdgHmj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 830DD271457;
+	Mon, 26 Jan 2026 02:15:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C834482EB;
-	Sun, 25 Jan 2026 23:16:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF1591EB5CE;
+	Mon, 26 Jan 2026 02:15:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769383019; cv=none; b=Sax9oKXhx0pgpJ9qhcAa794JegRKDzHOISvGRMX7kEooEGsBo7INe1CVfN92r5sLT3r3KTGKLejLjH7XtwqUJtVqZ1NU/v+QfbtdhNNvWVJEaK+rW/jJki6bbUuSir7C1UkMa1YPur9k7h2+oZSBhMyT4lCIIuj95R67ckpJMtU=
+	t=1769393719; cv=none; b=gXW0ZFHLp5uiSdvJx2b/44roq02Plp29NXuq9CTC1WVStZJoCyU/jhzGMWxNvaV8v0jAQE7Sik7VCsIjCFd1Ao2a+OwkgzlJl6/n6JRdpEygWETadOMDidq29qusr4aHeXJxJ9T0JUMpM8HeWFKyT+0FlMDO59AREGTbC5GBwrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769383019; c=relaxed/simple;
-	bh=4qeRI0/8CXPNVIq8qwuTcyMxP3YlJM0KAF+LDIonx7s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HbLEuI/fHLMuQdvBFk8GO8xS9E/ye72qixVq5nYjUYCzUKEleRYjtvnz3AypLrK0o+KuUybcN903I6PQpTegdyH9RuMoRPOCusQT0f62+97M15Hnzdk9GwEtn7ExSycdjchJTl1DqvjTH26EKzahOEVKIli29dYJ5t61ujFJyOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gqIdgHmj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E67D9C2BC86;
-	Sun, 25 Jan 2026 23:16:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769383019;
-	bh=4qeRI0/8CXPNVIq8qwuTcyMxP3YlJM0KAF+LDIonx7s=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=gqIdgHmjdBFkgtT5D2Djd/W2fkSewxlSD3/dnNhgvuyg8AdEFjoYC6qr8gEJyN7Xk
-	 g1LzupgczcTS7p35mjBhPktGyRvxVBZOkj0KYwNuUsdd6JUPlsUEHVc9ZC6Aqbx+ZR
-	 Bp8MXsx6D2SrDTNQavq7swTHyP0/Tg5wKyOa4QkH2Zc96puvgcEFxHoafKQNoP896k
-	 hSsTeN7ASvbAvf9wjsuZS1GkpGM4eMPGA7nGR3iNNFKMMsfUfZJuesBuPz08FAY/sR
-	 JYOoBXlt7p6g5YflApL3mEsTxvPde4lOr9IpC5kvFIyEtHfDRl48rk03+6iTzjlVTV
-	 +UWMS9lDHiCIg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id DE03DD7237C;
-	Sun, 25 Jan 2026 23:16:58 +0000 (UTC)
-From: Michael Reeves via B4 Relay <devnull+michael.reeves077.gmail.com@kernel.org>
-Date: Mon, 26 Jan 2026 10:16:57 +1100
-Subject: [PATCH v6 2/2] mfd: macsmc: Wire up Apple SMC power driver
+	s=arc-20240116; t=1769393719; c=relaxed/simple;
+	bh=2xonHilkglJLDpJtl+zt0s9P4O9/Ufhle9VG7FlFWPM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QxwO9lhjLWAxVuQgyAUTZYng+1GWJY27+RCubQF2eV5bb46bLRJAUmCtR7Dn/17+ADhyDRrXzJ8rIOKReWbLD7Q6qOb96x4D3AZkcMpEcG8PiVWfsW1l5JgNKqsHzvOxW0UWio1Wr9AcaSgPGiilx05mxDpKc6g0r5cqXe/W5Xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: d8050ef2fa5c11f0b0f03b4cfa9209d1-20260126
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:c0f6efe4-0e63-43ae-ac9e-67f3ae7f1642,IP:0,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:0
+X-CID-META: VersionHash:a9d874c,CLOUDID:7e547d82792cc2dc309ead04742bf7ae,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|898,TC:nil,Content:0|15|
+	52,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
+	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: d8050ef2fa5c11f0b0f03b4cfa9209d1-20260126
+X-User: tianyaxiong@kylinos.cn
+Received: from [10.42.13.21] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <tianyaxiong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 1287277219; Mon, 26 Jan 2026 10:15:11 +0800
+Message-ID: <b9c9eb84-04a9-4a16-9a31-df8216f3460b@kylinos.cn>
+Date: Mon, 26 Jan 2026 10:15:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260126-b4-macsmc-power-v6-2-9861d4070f92@gmail.com>
-References: <20260126-b4-macsmc-power-v6-0-9861d4070f92@gmail.com>
-In-Reply-To: <20260126-b4-macsmc-power-v6-0-9861d4070f92@gmail.com>
-To: Sebastian Reichel <sre@kernel.org>, Sven Peter <sven@kernel.org>, 
- Janne Grunau <j@jannau.net>, Neal Gompa <neal@gompa.dev>, 
- Lee Jones <lee@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
- Michael Reeves <michael.reeves077@gmail.com>, 
- Hector Martin <marcan@marcan.st>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769383017; l=861;
- i=michael.reeves077@gmail.com; s=20260105; h=from:subject:message-id;
- bh=l66XKVNJtI8aTWFc0QpUQyQBnqT+6mvF4xxxt3DtiJc=;
- b=uoSznPSEabJ5NZFxdWcbenM4QaBiXh3TI2kzBru0/M+Wn6q0ZRaOdIO3890UXGmEGQ9/PFuwT
- WaqNCDqEPUwD+q9/lwiRGfIa2lX/B6l9xIxzEkvKsie9OzFnrGTFCGU
-X-Developer-Key: i=michael.reeves077@gmail.com; a=ed25519;
- pk=QIrgWBGCm3LG0YYc6MLCDkwuVXLTGGooVBdWX/KhSiU=
-X-Endpoint-Received: by B4 Relay for michael.reeves077@gmail.com/20260105
- with auth_id=591
-X-Original-From: Michael Reeves <michael.reeves077@gmail.com>
-Reply-To: michael.reeves077@gmail.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq: intel_pstate: Disable SMT when hybrid systems
+ are enabled
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
+ viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260119074118.835922-1-tianyaxiong@kylinos.cn>
+ <20260122155549.GA18021@ranerica-svr.sc.intel.com>
+ <7cc76b59-964d-4ce2-b3c4-e1337dbe0c67@kylinos.cn>
+ <CAJZ5v0ipPwmBe0bxKBJc203ug6ENzT6OEaOruyL=vUw6NWMZfQ@mail.gmail.com>
+Content-Language: en-US
+From: Yaxiong Tian <tianyaxiong@kylinos.cn>
+In-Reply-To: <CAJZ5v0ipPwmBe0bxKBJc203ug6ENzT6OEaOruyL=vUw6NWMZfQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	FREEMAIL_REPLYTO_NEQ_FROM(2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41441-lists,linux-pm=lfdr.de,michael.reeves077.gmail.com];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_REPLYTO(0.00)[gmail.com];
-	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,lists.infradead.org,gmail.com,marcan.st];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-pm@vger.kernel.org];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
-	HAS_REPLYTO(0.00)[michael.reeves077@gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[marcan.st:email,gompa.dev:email]
-X-Rspamd-Queue-Id: 1E205831D8
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,kylinos.cn:mid,kylinos.cn:email];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	R_DKIM_NA(0.00)[];
+	DMARC_NA(0.00)[kylinos.cn];
+	FROM_NEQ_ENVFROM(0.00)[tianyaxiong@kylinos.cn,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41444-lists,linux-pm=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[]
+X-Rspamd-Queue-Id: 7DAA283786
 X-Rspamd-Action: no action
 
-From: Hector Martin <marcan@marcan.st>
 
-Add the cell for the macsmc-power driver so it is probed by the
-MFD core.
+在 2026/1/24 04:12, Rafael J. Wysocki 写道:
+> On Fri, Jan 23, 2026 at 2:20 AM Yaxiong Tian <tianyaxiong@kylinos.cn> wrote:
+>>
+>> 在 2026/1/22 23:55, Ricardo Neri 写道:
+>>> On Mon, Jan 19, 2026 at 03:41:18PM +0800, Yaxiong Tian wrote:
+>>>> When hwp_is_hybrid && !sched_smt_active(), the driver enables
+>>>> hybrid_capacity_scale and disables ITMT. According to the original code
+>>>> logic, these related actions are one-time operations; therefore, I
+>>>> believe the original design intent did not support dynamic runtime
+>>>> switching.
+>>>>
+>>>> However, SMT can be toggled via related interfaces in /sys. When SMT is
+>>>> enabled, the system is no longer hybrid, and the original settings become
+>>>> incorrect.
+>>> Indeed I was able to enable SMT siblings:
+>>>
+>>>        $ echo on > /sys/devices/system/cpu/smt
+>>>        $ echo 1 > /sys/devices/system/cpu/cpu1/online
+>>>
+>>>> To resolve this confusion, permanently disable SMT by calling
+>>>> cpuhp_smt_disable().
+>>> IMHO, the user should be able to enable SMT back if she or he chooses to. Instead,
+>>> the sched domains should be rebuilt with asym packing and without asymmetric
+>>> capacity.
+>> Yes, I also agree with this viewpoint.
+> I don't agree though.
+>
+>> I think a better solution is to
+>> place it within cpufreq online for heterogeneous judgment and to clearly
+>> address sched domain rebuilt and asymmetry issues.
+> Maybe in theory, but in practice the EAS-related code in intel_pstate
+> really only targets systems with no SMT.
+>
+> While it is possible to use it on SMT systems with SMT disabled, I
+> really wouldn't recommend doing that beyond debug/diagnostics and no,
+> it is not sufficient to disable stuff when SMT is re-enabled, you'd
+> basically need to unregister the driver and register it from scratch
+> in that case.
+Thank you for your explanation. It seems I didn’t read the document 
+carefully enough before.
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
-Reviewed-by: Neal Gompa <neal@gompa.dev>
-Reviewed-by: Sven Peter <sven@kernel.org>
-Signed-off-by: Michael Reeves <michael.reeves077@gmail.com>
----
- drivers/mfd/macsmc.c | 1 +
- 1 file changed, 1 insertion(+)
+>
+>> I ran some tests the
+>> day before yesterday and encountered a few locking problems. I will
+>> publish the patch a bit later.
+> Given the complexity involved, I don't think it is worth the effort.
+>
+> I can apply this patch though.
 
-diff --git a/drivers/mfd/macsmc.c b/drivers/mfd/macsmc.c
-index 1b7e7b3e785f..358feec2d088 100644
---- a/drivers/mfd/macsmc.c
-+++ b/drivers/mfd/macsmc.c
-@@ -46,6 +46,7 @@
- 
- static const struct mfd_cell apple_smc_devs[] = {
- 	MFD_CELL_NAME("macsmc-input"),
-+	MFD_CELL_NAME("macsmc-power"),
- 	MFD_CELL_OF("macsmc-gpio", NULL, NULL, 0, 0, "apple,smc-gpio"),
- 	MFD_CELL_OF("macsmc-hwmon", NULL, NULL, 0, 0, "apple,smc-hwmon"),
- 	MFD_CELL_OF("macsmc-reboot", NULL, NULL, 0, 0, "apple,smc-reboot"),
+Um, although I've already done it, I agree with your point.
 
--- 
-2.51.2
+Besides, I don't think this patch is very suitable either, because I 
+supposethat on a n system without SMT, the SMT-related|/sys|interface 
+should indicate unsupported (though I don't have such a machine).
+
+Moreover, based on the previous discussion, would it be more appropriate 
+to use !cpu_smt_possible() instead of !sched_smt_active()? After all, 
+the original design was intended for systems without SMT. If you also 
+agree with this perspective, I can test it on a machine with SMT.
+
 
 
 
