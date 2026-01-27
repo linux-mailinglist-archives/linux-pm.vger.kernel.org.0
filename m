@@ -1,198 +1,153 @@
-Return-Path: <linux-pm+bounces-41546-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41548-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gADgDV7TeGmNtQEAu9opvQ
-	(envelope-from <linux-pm+bounces-41546-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 16:01:50 +0100
+	id 8KJxLSXbeGmwtgEAu9opvQ
+	(envelope-from <linux-pm+bounces-41548-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 16:35:01 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0BB29638D
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 16:01:49 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5829496D0E
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 16:35:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 7B3C0315BC31
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 14:47:49 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id A3062308460A
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 15:19:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4237B35CBAC;
-	Tue, 27 Jan 2026 14:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F74235EDBE;
+	Tue, 27 Jan 2026 15:17:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k1FxynCb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sHES0Nxa"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CBCD1DEFE9;
-	Tue, 27 Jan 2026 14:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B834EAE7;
+	Tue, 27 Jan 2026 15:17:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769525132; cv=none; b=VDKTZzG9zIk4tvLha2+Erc8eWuUJMNph0xOk1o8bSNeUwRl6JAr5psC0ZOrJfe48cC6f/un94ZQrxEqLY8X+4/DORA4myzVJd5gCtGcF4fm89A0ng52LGF4kq2lrxr090vlOi3dNnjz05zhyCTaY9Fc53U9PvYv5cNZBB/ahZPI=
+	t=1769527057; cv=none; b=AC1xSz5ipc3Vu9Lqw/SA0FVmlv7atLKd6TMCcLtvYSpWFKPQN7TEaacbx59PcTdiI359dFZg5QlxoblCfk/KMkd//c2bacxj8a19kXrNDFM3e+CZiPRAl+f0QXIoO5alCZ+HHilPK7r+rZ65gGGLMzZMJ9lfatTcf22kN3gslMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769525132; c=relaxed/simple;
-	bh=0YGeP0O62Pc53bwcfFkz6Pdb1KEkMMpDyI0yE++MS9Q=;
+	s=arc-20240116; t=1769527057; c=relaxed/simple;
+	bh=06YFaYPc4N1f9nnWVb6MYBol7sp8w7ue49DiDGANxVs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C3Yg/eTOBnVgdXMVAIH6VT70hs/jKYuTG2hyLPSSmoBO/UU2CZKa8SlkJXEB8YrP+Zt+fvDnE1xdXNY4lm4uy1pwoZ50RLsy2LKeeMHrMITTEi5dl9hdh1kMhFpTK13O2UJaiquGOPT7k2fh5Q2sv4GvTQr16yeEJsMeq6w9y/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k1FxynCb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C21C116C6;
-	Tue, 27 Jan 2026 14:45:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=pUmRJboK7pbFjdDwFlJQY7Nk59fJxQrHLj1yXUJzcbBMC0mKOEXgWesc4f7ZYsjmYpARPF2dCgli16MbIkIup3guqHSYcquOOARMpdxbd8S1c4RoSqwibeYH3IgJlAnwU8K8XxLZ5JZmmmc3g1goOTKB5pZKdS+RstgQ4b2PdHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sHES0Nxa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81194C116C6;
+	Tue, 27 Jan 2026 15:17:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769525131;
-	bh=0YGeP0O62Pc53bwcfFkz6Pdb1KEkMMpDyI0yE++MS9Q=;
+	s=k20201202; t=1769527056;
+	bh=06YFaYPc4N1f9nnWVb6MYBol7sp8w7ue49DiDGANxVs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k1FxynCbgFyhQaZBWbdQ3U3/gG7zvUiYTdT05s4SfRvueGwkwdMXfQ67RXYmWXNMt
-	 nJcwbHtZ7igNbyW3UV297EDBMkUnggDFqkNCcRRA+vRpQtytrAnvyEHNrTU6qtdODo
-	 1LbCma+SiMl2LT5ZuLyH7tZpYFN9UJ2XKhsK4xuHGPaRH8LD/O8BLUfTlNb0oHlPNi
-	 O/otIJveig2kXrzcfYZMWTt5fvWceAjmmlhVGZjLExQFzzscRRARYyYJJl4ENA3zWK
-	 zldlROZ0P7SlFX+FcV4aIGqzhLCTEzmtf2d26kCH+JflCjYXc+hEeq7F76jfRgZo4e
-	 vcqAUDXHE61jQ==
-Date: Tue, 27 Jan 2026 15:45:29 +0100
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	b=sHES0NxaudMq/qmeoTiz0aeclmGvJfz6FxHT6K36GqTbqX7FuX2L4MAYRvyv2v4+X
+	 BO8l5M8snhZ8zh6nJ9R9fVzCk1PGKpa0Si8inyfomPFntwM/9OBbQEYi5+xV2hK9Zt
+	 qRMHdYlFhrhArQZJJNNQoMB/UGmUjNpyKB0ttAxROg3Q8JEWRMqN2ZeLs4Yh2y8GiJ
+	 RTfouRyNIM2aGEtnaMuLeCyPstykfmMm75Sb8mUaDNqSZNW1KN9ronMaiveSfvW+A5
+	 qi47mLikdVZfjQDeb5VjMW11aG3f+FEG8+eJlswA8Muqs7glrWyhKuZxH4fXd5YFwx
+	 ZeZoJNND0LucQ==
+Date: Tue, 27 Jan 2026 09:17:35 -0600
+From: Rob Herring <robh@kernel.org>
+To: "Kevin Hilman (TI)" <khilman@baylibre.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ingo Molnar <mingo@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Kieran Bingham <kbingham@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Xin Zhao <jackzxcui1989@163.com>, linux-pm@vger.kernel.org,
-	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 05/15] s390/time: Prepare to stop elapsing in
- dynticks-idle
-Message-ID: <aXjPiZCHZ77R4awi@localhost.localdomain>
-References: <20260116145208.87445-1-frederic@kernel.org>
- <20260116145208.87445-6-frederic@kernel.org>
- <20260121121748.9719Bab-hca@linux.ibm.com>
- <aXEVM-04lj0lntMr@localhost.localdomain>
- <20260122144045.38254A3e-hca@linux.ibm.com>
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+	arm-scmi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFC v5 1/2] pmdomain: core: support domain hierarchy via
+ power-domain-map
+Message-ID: <20260127151735.GA1699112-robh@kernel.org>
+References: <20260122-pmdomain-hierarchy-onecell-v5-0-76855ec856bd@baylibre.com>
+ <20260122-pmdomain-hierarchy-onecell-v5-1-76855ec856bd@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260122144045.38254A3e-hca@linux.ibm.com>
+In-Reply-To: <20260122-pmdomain-hierarchy-onecell-v5-1-76855ec856bd@baylibre.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41546-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,linux.ibm.com,linutronix.de,google.com,gmail.com,arm.com,redhat.com,siemens.com,nvidia.com,suse.de,ellerman.id.au,infradead.org,goodmis.org,linaro.org,163.com,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[34];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-41548-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[frederic@kernel.org,linux-pm@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
+	DBL_PROHIBIT(0.00)[0.0.0.11:email];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[robh@kernel.org,linux-pm@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[localhost.localdomain:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A0BB29638D
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 5829496D0E
 X-Rspamd-Action: no action
 
-Le Thu, Jan 22, 2026 at 03:40:45PM +0100, Heiko Carstens a écrit :
-> On Wed, Jan 21, 2026 at 07:04:35PM +0100, Frederic Weisbecker wrote:
-> > BTW here is a question for you, does the timer (as in get_cpu_timer()) still
-> > decrements while in idle? I would assume not, given how lc->system_timer
-> > is updated in account_idle_time_irq().
+On Thu, Jan 22, 2026 at 05:14:00PM -0800, Kevin Hilman (TI) wrote:
+> Add of_genpd_[add|remove]_subdomain_map() helper functions to support
+> hierarchical PM domains defined by using power-domains-map
+
+power-domain-map. No 's'.
+
+> property (c.f. nexus node maps in DT spec, section 2.5.1).
 > 
-> It is not decremented while in idle (or when the hypervisor schedules
-> the virtual cpu away). We use the fact that the cpu timer is not
-> decremented when the virtual cpu is not running vs the real
-> time-of-day clock to calculate steal time.
-
-Ok, good then!
-
+> This enables PM domain providers with #power-domain-cells > 0 to
+> establish subdomain relationships via the power-domain-map property,
+> which was not previously possible.
 > 
-> > And another question in this same function is this :
-> > 
-> >     lc->steal_timer += idle->clock_idle_enter - lc->last_update_clock;
-> > 
-> > clock_idle_enter is updated right before halting the CPU. But when was
-> > last_update_clock updated last? Could be either task switch to idle, or
-> > a previous idle tick interrupt or a previous idle IRQ entry. In any case
-> > I'm not sure the difference is meaningful as steal time.
-> > 
-> > I must be missing something.
+> These new helper functions:
+> - uses an OF helper to iterate to over entries in power-domain-map
+> - For each mapped entry: extracts child specifier, resolves parent phandle,
+>   extracts parent specifier args, and establishes subdomain relationship
+> - Calls genpd_[add|remove]_subdomain() with proper gpd_list_lock mutex protection
 > 
-> "It has been like that forever" :) However I do agree that this doesn't seem
-> to make any sense. At least with the current implementation I cannot see how
-> that makes sense, since the difference of two time stamps, which do not
-> include any steal time are added.
+> Example from k3-am62l.dtsi:
 > 
-> Maybe it broke by some of all the changes over the years, or it was always
-> wrong, or I am missing something too.
+>   scmi_pds: protocol@11 {
+>       #power-domain-cells = <1>;
+>       power-domain-map = <15 &MAIN_PD>,  /* TIMER0 */
+>                          <19 &WKUP_PD>;  /* WKUP_TIMER0 */
+>   };
 > 
-> Will investigate and address it if required. Thank you for bringing this up!
-
-Ok, I take some relief from the fact it's not only unclear to me :-)
-
+>   MAIN_PD: power-controller-main {
+>       #power-domain-cells = <0>;
+>   };
 > 
-> > > Not sure what to do with this. I thought about removing those sysfs files
-> > > already in the past, since they are of very limited use; and most likely
-> > > nothing in user space would miss them.
-> > 
-> > Perhaps but this file is a good comparison point against /proc/stat because
-> > s390 vtime is much closer to measuring the actual CPU halted time than what
-> > the generic nohz accounting does (which includes more idle code execution).
+>   WKUP_PD: power-controller-main {
+>       #power-domain-cells = <0>;
+>   };
 > 
-> Yes, while comparing those files I also see an unexpected difference of
-> several seconds after two days of uptime; that is before your changes.
-> 
-> In theory the sum of idle and iowait in /proc/stat should be the same like the
-> per-cpu idle_time_us sysfs file. But there is a difference, which shouldn't be
-> there as far as I can tell. Yet another thing to look into.
+> This allows SCMI power domain 15 to become a subdomain of MAIN_PD, and
+> domain 19 to become a subdomain of WKUP_PD.
 
-Yes and that's expected both before and after my changes.
+One concern I have here is generally *-map is transparent meaning when 
+you lookup <&scmi_pds 15>, &MAIN_PD is returned as the provider. It's 
+also possible to have a map point to another map until you get to the 
+final provider. The only way we have to support both behaviors is the 
+consumer has to specify (i.e. with of_parse_phandle_with_args_map() vs. 
+of_parse_phandle_with_args()), but the consumer shouldn't really know 
+this detail.
 
-* /proc/stat is the time spent between tick_nohz_idle_enter() and
-  tick_nohz_idle_exit() (to simplify, because there are some pause during
-  idle IRQs).
+Maybe a transparent map of power-domains would never make sense. IDK. If 
+so, then there's not really any issue since the pmdomain core handles 
+everyone the same way.
 
-* The s390 idle sysfs file depicts more closely the time spent while the
-  CPU is really idle (and not executing idle code).
-
-Different semantics and this is why you observe different results. I guess
-/proc/stat has higher values (with idle + iowait) and that is expected.
-
-Thanks.
-
--- 
-Frederic Weisbecker
-SUSE Labs
+Rob
 
