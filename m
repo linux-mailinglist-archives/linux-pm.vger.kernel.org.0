@@ -1,434 +1,457 @@
-Return-Path: <linux-pm+bounces-41504-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41505-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IAdhGN7+d2lqnAEAu9opvQ
-	(envelope-from <linux-pm+bounces-41504-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 00:55:10 +0100
+	id uN7jORgQeGnqngEAu9opvQ
+	(envelope-from <linux-pm+bounces-41505-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 02:08:40 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B787B8E58A
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 00:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A7DA8E9F2
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 02:08:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 716573044BAB
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Jan 2026 23:54:06 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E816A30166ED
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 01:08:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3566C311963;
-	Mon, 26 Jan 2026 23:54:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE1D21A444;
+	Tue, 27 Jan 2026 01:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W9G3qB3O"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YSOrMhnw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E19309EF5;
-	Mon, 26 Jan 2026 23:54:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769471645; cv=fail; b=Qo7f/qkieLWuzBggC6c2jWdwZ/aJYIFoZbjm4K2Vef4U4Hr666rUCi2I6I1rpElX5tKH7oNCHc0PyWSrTcDdRO4pYIuKfKmYuF9dehraDMk3VXz3rD3ZJb5/PVHIvkuBIwzE+pfQuP0dmcCWwDRB8EaRkQfdlrcy9TcnnEV4BC4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769471645; c=relaxed/simple;
-	bh=UT+ID87fa06cyOoSvFzdyNyHCYim9AMBRxcveDfsKvs=;
-	h=From:Date:To:CC:Message-ID:In-Reply-To:References:Subject:
-	 Content-Type:MIME-Version; b=WnMb0je848/pBw3X1YTCzGuKd0sbz/87xeZS/DwD1GF5Vp42RrOhbrhIENp6pLPwiraF2YFkEziDkNv/c7rVFumPIYMvLnliJCTgTVdAHXXpFBMU96f9RQHB9enUwS3qc6cynjmJ1PX8vpNn67LVqZQV4vh/VEl1WZzOwDJyxA0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W9G3qB3O; arc=fail smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769471642; x=1801007642;
-  h=from:date:to:cc:message-id:in-reply-to:references:
-   subject:content-transfer-encoding:mime-version;
-  bh=UT+ID87fa06cyOoSvFzdyNyHCYim9AMBRxcveDfsKvs=;
-  b=W9G3qB3Orze5ZqPS09xU6zGu53DHrPX6g/ne3aIJkcBCYv1bfV+rxPSJ
-   6JC7iaiAXgUps6+JLeNMWfJJ0boTtO1wldADVEh5p0/N4SqPeXszKmX4P
-   AFHQm30RCYF24Eqe81SP48YxS1f42hbWvOb1qt+YAcU5JIoCMfYpOn+1I
-   JgWcSXQu0RpHQxOPB93RKm3JuUKWqoIxN7xUpxFXHGMEtpPkDyHUdDMi+
-   +oREaHc4xPeaJPB8Rd34YUChfKYDxGw0wk+92F8YRRAF4Gqze5+YM2EfM
-   rQJctLhy/XZNRNoOEUwEu6ERZzRtp/jOjRy3/AKUdP0UktItpXBnxRSvy
-   A==;
-X-CSE-ConnectionGUID: J5UbyY7qRoSfyX40IAxQdA==
-X-CSE-MsgGUID: YfrmF+77T3eR/JNKnU7PIg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="81376285"
-X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
-   d="scan'208";a="81376285"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 15:54:01 -0800
-X-CSE-ConnectionGUID: jrK8Osx1RH6BYNDagm94+w==
-X-CSE-MsgGUID: 2/fa+ZYBRbm1N73kAVLQyQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
-   d="scan'208";a="230771042"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 15:54:01 -0800
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 26 Jan 2026 15:54:00 -0800
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35 via Frontend Transport; Mon, 26 Jan 2026 15:54:00 -0800
-Received: from BN1PR04CU002.outbound.protection.outlook.com (52.101.56.16) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 26 Jan 2026 15:54:00 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wYeGFrSZxQZ0zpetwZElLooyDkoJF9Z0cCHgz739jtx/bQKQz7RQJ9RS3p9cLOdftcHj0avIZcFegit01eS1BlVidvLw8Ub8bNcndom17elodnTlLr2wDhwUxAp8qOBp8e+2QhzCEHvYeBvXdjOrN5kCgR/eN8evdqmNoECrpZITtu0/C2dGi+rK2JOCnxmixAOD6xGiAepf8Re9IWwqTNzCWWYkazvo/OymmljzdpuSgg9if1GlaYCePYDIL4coC0p766/16mBalBZXusc/VipkH1VZf6KNvAf8mDZ024rRdegrLa9G6Bu41SX1DBuWtPob13vo9KXWLKavHBsVzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UT+ID87fa06cyOoSvFzdyNyHCYim9AMBRxcveDfsKvs=;
- b=hmC/8GdE8DqvyIWqnAg1UgMUaSmQnPkgokDoMxx6LmG59f7MKHf4zkQGsK/RgJkjD+wZD4ijuNUdjKE4ZLTzHigdIma8sIXrHa4zjjhvWrhucMynrd4lQBVxBXrTiRLNzjO1AiPYpKRj2lTfsqbb7lx6Vx0p4jTN6wlyxdLYcYZhAteG3zcS+Q5ooiXVeouW2TBLLh02Qab6kJUeh6BmF8nT1exTerPn3y4u/xyp9dELLghkJ27fA6EPnrUWB29Z4MaX7aKx/RJ/f8iIb7MXqkhQcsgotf++lMqqVQ963MsE/H7fjjaUB0ECpFszpK8wSwgK9pMS0ioj9N1vQ3T3Fg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
- by SJ0PR11MB7701.namprd11.prod.outlook.com (2603:10b6:a03:4e4::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.16; Mon, 26 Jan
- 2026 23:53:57 +0000
-Received: from PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::1ff:1e09:994b:21ff]) by PH8PR11MB8107.namprd11.prod.outlook.com
- ([fe80::1ff:1e09:994b:21ff%6]) with mapi id 15.20.9542.010; Mon, 26 Jan 2026
- 23:53:57 +0000
-From: <dan.j.williams@intel.com>
-Date: Mon, 26 Jan 2026 15:53:56 -0800
-To: "Koralahalli Channabasappa, Smita" <skoralah@amd.com>, "Alejandro Lucero
- Palau" <alucerop@amd.com>, Smita Koralahalli
-	<Smita.KoralahalliChannabasappa@amd.com>, <linux-cxl@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <nvdimm@lists.linux.dev>,
-	<linux-fsdevel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-CC: Ard Biesheuvel <ardb@kernel.org>, Alison Schofield
-	<alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, "Ira
- Weiny" <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>, Yazen Ghannam
-	<yazen.ghannam@amd.com>, Dave Jiang <dave.jiang@intel.com>, Davidlohr Bueso
-	<dave@stgolabs.net>, Matthew Wilcox <willy@infradead.org>, Jan Kara
-	<jack@suse.cz>, "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown
-	<len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, Li Ming
-	<ming.li@zohomail.com>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, "Ying
- Huang" <huang.ying.caritas@gmail.com>, Yao Xingtao <yaoxt.fnst@fujitsu.com>,
-	Peter Zijlstra <peterz@infradead.org>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Nathan Fontenot <nathan.fontenot@amd.com>,
-	Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
-	Benjamin Cheatham <benjamin.cheatham@amd.com>, Zhijian Li
-	<lizhijian@fujitsu.com>, Borislav Petkov <bp@alien8.de>, Tomasz Wolski
-	<tomasz.wolski@fujitsu.com>
-Message-ID: <6977fe94d8ee_309510033@dwillia2-mobl4.notmuch>
-In-Reply-To: <84d0ede7-b39d-4a41-b2b6-8183d9ccbb9e@amd.com>
-References: <20260122045543.218194-1-Smita.KoralahalliChannabasappa@amd.com>
- <20260122045543.218194-7-Smita.KoralahalliChannabasappa@amd.com>
- <e38625c5-16fd-4fa2-bec0-6773d91fd2b4@amd.com>
- <84d0ede7-b39d-4a41-b2b6-8183d9ccbb9e@amd.com>
-Subject: Re: [PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of Soft
- Reserved memory ranges
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: SJ0PR03CA0143.namprd03.prod.outlook.com
- (2603:10b6:a03:33c::28) To PH8PR11MB8107.namprd11.prod.outlook.com
- (2603:10b6:510:256::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A241C212B0A
+	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 01:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769476090; cv=none; b=GllOHVT6vXRNjN1j3nkfWIB7eTqI1RETX87rBX+jai3iRjWJQXmA0dUDHKvplcamReFA6FLmXo4T/6212XlwU7GnPJfqhhK3saepPpLQcaBNEFIhsXgLmT/Xh3mXfFvmGnvMPu5dvFU+910/LOG/TfimzmD+H9C2rCTH6F8PiJA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769476090; c=relaxed/simple;
+	bh=kTC8SpEnQvbvmgYcHhwJO/QuVdlOgR21+GrsFAyhgvM=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=DKvOAR6TlY1PPSqjzQbrowwm/2qBcK9JPwhbDNch8pyWAD7Hbz2NaY0FyLw9xtFHQpj6uhTEKLnzTamGbHKN6uPafd37dQLKuDMCJfsxOFLf24JcCVY2heKfTUXCEfEicJ3/Qv6NjTFWbc8XbFEUd4hwOIXojvUKHlbX2t4HOGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YSOrMhnw; arc=none smtp.client-ip=74.125.82.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-1233b953bebso12808630c88.1
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 17:08:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769476088; x=1770080888; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NuNdTfBRKHbZs0pq9qEm16VabkampCsi8zuWM9+u4LA=;
+        b=YSOrMhnw4E/BMO/EfyPvtiWjYKOormU/OGz9KOUfIljwdqArjfVmepH1wYXTmhvqzK
+         QGKAiPmNdeswBnYxsGFy/os+cNnzSXIzUqtWDeoFqFV3fqpVjgOuvGZTlWgW70+41GtQ
+         UulE/eEZGSINWSqN+dzjgKhsGQX1WCQ94KpdY3+FUZWU4xtrhECii/xgD4YdZJJ8+fMU
+         jB6guD0AodBjKhbL0D6DEkN2vRLqg3sA8/3CWU6bOlthzWYTLteR9MmnGeKiYWETvmLq
+         FwKyHLTiwqLPDyyulXS+vibPzK9WkCsEpkpDVJuX+pP0l8gE4cAzHwXthzvdQ3foWJzH
+         TC4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769476088; x=1770080888;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NuNdTfBRKHbZs0pq9qEm16VabkampCsi8zuWM9+u4LA=;
+        b=T8QJvxA+BHKgZxzsNwg9hcUvc9A8U2BZJgyP4h+M0nxCEHl3m4U8dhtSFktekH7iN5
+         TDwuTZUOGTuNO9gAsefSwOprUk/BCtRTt5WgDP+Pznibmwr4JxZNqUAoD6+Kvdi061Ax
+         m34ObnlnKFJRLiAgLaJ8syRV4sMbvF3ebo23RHkX82iCu+Mu87T2Ws21Sg7UOehjoZQ7
+         RCwKk8Eko5Vo49hw78LX1T+nM9+R08937hOlfPy++H0nIrtPCuUhfx9GUAJXJZuCmRd+
+         hRopJO1YEXMIyVLs/7/qqKth0FKUMuFf7r2WGDg/r0Yc+EYkD/UUJ/DCj71QYL0zfLaA
+         2w0g==
+X-Forwarded-Encrypted: i=1; AJvYcCV57eBtEP+pXC5U6+lux7ht3E322ki/qdjLezGf7xxHiw8Zkj7d3K3Cw5bVRjXa8cpSpbqUwG3D8g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9KNZEpAIL7DvCADNUGkdL5mtNilV1747ICRV2E6aTcKk237Qx
+	ressFEv0I0cxog0nfkyLIAqo9rzLwCqACeWCfZbHS1ssD8g5s8lFaBzihLm7EIY1og==
+X-Gm-Gg: AZuq6aI9XMH6yD6ya5QfD2YTjSKBDkgzmGfDRj77dnyNuNcCqNCzaUYOvsXt7JVOMaX
+	Z0hV0Xdwrb8bF838LutTF/tX1tbv3SRPAQ3EW9n20i9uyS2tCPVfW91+xVXDckNkkTTknPHgwae
+	iMIhc46ageQc/1yUffxff3PMFFL+xPostz4lTab5I8/RoTzNDCtlvcxgYOr7dEz8sa8oR93JsS1
+	zBWRK1wDbfnr7Eo5mcrs9XMpLiRMeLxCK+BmUnYxAOa2aVwTIcFaXMn8lrq4NjGPoQ1FHaCWKr7
+	3y1Xexp20wgYvhsy3do67ciVPZ2TOfi3meTWdu2kEfQeIsURxY3sPl7WL7Yf1VfxTrxgq6MhYMr
+	WH1eSVo2ecixviQVZJC2lM8t92CZP+r2K1HpV8tWXEwWTwuuroKt49frATQ11cALWH8oFhVJ//X
+	8hj/MgSMVKmjxtA7afjZw/ybRCmN1UHSGopuSBKd5TNiX95vwIHzN2iFJpz72dPPJRu4MwWvrUa
+	5eByWmKPFSjRg==
+X-Received: by 2002:a05:7022:2485:b0:119:e56b:c73d with SMTP id a92af1059eb24-124a006801fmr22088c88.2.1769476087269;
+        Mon, 26 Jan 2026 17:08:07 -0800 (PST)
+Received: from ?IPV6:2a00:79e0:2e7c:8:8902:a6ab:edb7:522b? ([2a00:79e0:2e7c:8:8902:a6ab:edb7:522b])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1247d91c52bsm22164484c88.6.2026.01.26.17.08.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Jan 2026 17:08:06 -0800 (PST)
+Message-ID: <ff8d1c62-3bb3-4026-b69e-db26e939aa28@google.com>
+Date: Mon, 26 Jan 2026 17:08:04 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SJ0PR11MB7701:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3fa6f21-133a-474c-6db1-08de5d362b48
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?cU1pdzd1MDViV0JsS2JPUDdOLzBEVEVJTHg5WkRCRDNyN2pBWTlwdDY5aUt1?=
- =?utf-8?B?QU9GeEFXRGJzMjh4T1BqeGdYcVErc3c4YnJyM1N5aDFzYkhRek1nQkVDZ292?=
- =?utf-8?B?a1NicVdQTWhvWGpBWHh5Q1pBemJES0gyUVU1cG4rUGZ0SXQ2amFiSXlTTyth?=
- =?utf-8?B?Z215VUx3V0tvblBSNEx2UFpLSnYvMDh5RnUyTVBTdWwweWhLZjhYZzdIUk5B?=
- =?utf-8?B?YjN1cnFhMzJ1U2RNNzNGS3VBS1MyUWFoOTdNb3RyOCticGcrVUc4Z2ZiQlJv?=
- =?utf-8?B?NWdOZ1lvcndhM1BITG03T3dwRm5yMDFVUUhjaTFBa08wR3RrUTd2Q0ZlQ2Vu?=
- =?utf-8?B?dCtqcitpd3FkR0hWNG9ZcUVGemhRMVZQVjRJekhKM0M5YURlU2ZRUmRmZUdM?=
- =?utf-8?B?bndrbWsyVnY1RC9ad0daaFFLd200Q3lFbnR2YU1oY0h3aS9UcU9nRUJod21v?=
- =?utf-8?B?d3RVclVwd3dFYTEzWGxuam9HR044c1JsNDJpa0FmMkF3cllSQVZ1Q2h0NlVR?=
- =?utf-8?B?ZGw0QjZIaEZ3b2ViZzdMYytFakNLWkpwVE9tQnpZRkRxRUFCQWlOWWlxMk1P?=
- =?utf-8?B?Y3BpaXZENVF6aXRtblNXelVCWlFDZkl5QzRHSlJXTDRkVWdMTjlUd3V4bTVt?=
- =?utf-8?B?WWxQd05aeWYzQllLVm5MWEUyWHVNOUZTNWJqRkJuZzBSS1FyWFMxNEFvSkZV?=
- =?utf-8?B?OEhiN0pQa3pVM1Mva29LRFBYckU3QW5VVUx0enk1Ny9GaUE2NmRzdmxhdkdk?=
- =?utf-8?B?VWN3UWc1TG8yM0JnSmJUbnJLeVllUFhYYnZINHpMWkhEUUkrVmF3MGNsOE5B?=
- =?utf-8?B?Y1dDSjV1aDcrdm9qTFZWdlJxVUpVVGM2emM4Zjg0czNlazMwZzFPem1rMmpE?=
- =?utf-8?B?bE5vQk9udy9uenhxUTY1TTZ0QStJQVZrWUV3TW5lNWpsdUlIblVkT3MxdjVG?=
- =?utf-8?B?ZkUzc21GY3lBSlVZYmdHM3FoMWFZKzI3YnM4SDdBN1gzNlJrMVFTNWppS1p1?=
- =?utf-8?B?ajFocmpDamJNKy85K2RCNG4xcDcyU201aFErNG9aMFRuMm94WFlTUnVOM0Rj?=
- =?utf-8?B?ME5ObzJ2RWRUS0NITk1zSTFybWw0ZndCdjJuaXJUbVhmcnBYWVVZckMzdkE2?=
- =?utf-8?B?ZDlRUEZVdUYxcmlaMHpWais5WkhtNVNrbzhYWTlaby93SklYazlDdXdpZG5W?=
- =?utf-8?B?Y1hMcEtUdS9jVkJFR21ieW5rNWtUUVI1QVBiekR6dHNmYmtzY2NZTzlLaEZr?=
- =?utf-8?B?T2svSlBMMFhGQ2xNN21MYm9Eb1ZOU3lkMWhxSW1aNWZ1UXIzRTlrem5mYzFi?=
- =?utf-8?B?N0hSTWRuNm52U25TbWcwNXVRdng0M09qemlDdHFIelpnb3ZVdXdOSFZNWkdv?=
- =?utf-8?B?UEFwV1JSUUI5czY5eEI1MW8yZGdINE9TajJiTDFSZEl3NFRYR0VuTHpScS8r?=
- =?utf-8?B?cG12R0VNeC9qTDFiUXBuc2YyNDVDVU1WV1lKVFdnaVlYWnZNOFJhUG5zeVF3?=
- =?utf-8?B?TnlWekc0YzQ5ZUR3ZDk4emVoSWt4WTdjVGhYRExJa1lDWHVJU2ZUWkdtemUv?=
- =?utf-8?B?c0xTN2N4QlBVNU1jdkxtZjB4Yk9NL1kyc0R2Wjc3Z3gyNXVNeTJ3TjFvcEQ0?=
- =?utf-8?B?MTZmQjBkcDV5NFRsYThrdm9RUkY5RlN2MFVOcFVYMnR4V3FwV1hJL25wbXpG?=
- =?utf-8?B?dWF2SytNeS9FSVJucG5TdzdYaXJVMk1DOFNQQTdXdlQvNEhhUlB2SXoyQU5X?=
- =?utf-8?B?MnBTTkxlbFJzNjArUU5KWjBmbkdnRzJ6ek54RTMxcG01bXZQV0g2OUtkWHJr?=
- =?utf-8?B?V0JXdlkvU1FnYmhJajhUS2dUQzJWYjl6bS9qQldlMHo0V0RzUmVxRmEyNi9Q?=
- =?utf-8?B?elBXWXEycXl2QTVpV1pRaTIvMTZKTytQa3VZRVRaSVJOdGZnSnlhNHlFRG9K?=
- =?utf-8?B?Nng5QkU0Rk5GaDQ4ak5WKzNVaVRDa0RyTkNpL3NYb0NRMEIzY1ozMGlaOFhH?=
- =?utf-8?B?UndHNXdHdURzbGN1YXRnWWRjamErUkxDRmdld3lRZklMeWlUS2kwTmRDdjNI?=
- =?utf-8?Q?BAnPLc?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MnpWdnp0czJYVXFpMmxIcEdIdDYrV0UvUm1ucS9FQkpnTHd5eVlob0tjMzhj?=
- =?utf-8?B?VjNWeVpqSWRuWlJqR1VkWGFib1YrSEZteFlVUUxSa011RVBUZ3puQzNlVkph?=
- =?utf-8?B?WE5zYnVWc291TkliQnJVOUp0U3k2TXRYc21wdG9qVWZoalJTckpoN0pRUndr?=
- =?utf-8?B?V0t4Q2FIaVU0c29yUFR6eVpMaTNEU2FPNXBjR3FPdWcrY01NaUUvSXZUUTk5?=
- =?utf-8?B?bkZ1N1g0dFRUUUZPd2dJQ2NRWkh0OVVBTnh1MHcrcVpzZnJpUE9xZDR1dWZH?=
- =?utf-8?B?bTFic3RSajh4b3pXUldtVmFQZVRTaEFKbjhiZ1h1WEVlR08vQkVZbmlvaEU3?=
- =?utf-8?B?cS9WYTZvUEpFaHRoOEw3bnRxMG5oYWFJRXB6aDg2Y1Y3WktHUEhCL240alZo?=
- =?utf-8?B?dFM0UGpmUTZBdmRrSTg0SkptdjJDbURJY1VsazNLS1RmdmlwZWtDMGNXNkdX?=
- =?utf-8?B?NTdoZ0d4d0xuK0o1bGpLbGluQ0NOTTA3Yk5PZzkzZWpobHhPRUoydk92eUtt?=
- =?utf-8?B?aWMrQWRDRHhUL3YvRDFCUUQ1TzlkdHVXSDlpSlRQSVFXUmg2TllObTgrVitk?=
- =?utf-8?B?TEtCR01vNmpldjFIcmNZdG1vSFI2MWFYaXp3NFVnVEczS0d2c21NZDFOa1kr?=
- =?utf-8?B?VjU0akY2ZzJ2R1FJOUdUOTBhY1FGMUVONE1LeDc0RzJ6NnJJUHNIUTIwZ2pS?=
- =?utf-8?B?THcwRXhGTmxQK09IelpWbUgzVGVwbkdkcDFsKzdXWFhVRlRXTmYxRUNFMlJa?=
- =?utf-8?B?VVo4dW1ZN1g3RFdqT1NkOHhsVEJTWS9wVVRDMCtNNkxQTVBxUDdtVU9TOHZK?=
- =?utf-8?B?enE5UGxmcDRsSDNXdktFcU1abmwvbm9XcmxtT0U3Zi9GNzVnc2FFMUl6cnFC?=
- =?utf-8?B?RThBRE1iU0UydDR6V2t0MCtOYTErakNoaC90OHRQaHhKbWhTSTFMYVlWWlhG?=
- =?utf-8?B?Rkd3Mm5kRGhXcHFnNW4vMEhINnpTRWI5UUxqNlVjNk5UZ04wSGM3WFJvNHNO?=
- =?utf-8?B?K2w0MndrTXB4M1k0d0xMOWY2cldFNE5xclE2NVJyajJnQjZiMmNzOGQvTmxB?=
- =?utf-8?B?cU8yWnFCRFFaYkVFZ2NTUEpvdWRZMTdnNnE1Q24wVGtLdVpOL3FndlloSC9r?=
- =?utf-8?B?NVF3eldOZVVrdWM2YVRqUW9lK00yQ0F6QkhDYUVBc2FUTG5odk1OVXQvY21u?=
- =?utf-8?B?Z1FuSEVuUWNya0tYSE53bjAzVTdDUXFiWU5VSGtUM2hGLzNRNGNWR1lSOURh?=
- =?utf-8?B?OE9pMjQxeXpZdzQ5UWFwVE5kK1BTV1FIdVIwM3NmeXVtVVljVklia1RvM3NM?=
- =?utf-8?B?N3pXWkRnZjRBUk54bkxVS1JoNDUyU0NKTWFEekNyTmMzM2paU01nR29hdEg2?=
- =?utf-8?B?ejZjRW04RHVPbWtHa005NUQwR2tFd0hCVTY1ZVYxTjNNN05sWFI5Q0syRXU2?=
- =?utf-8?B?aUpRVDMyazU0OXJzSGJlcFVqRDhPWUZWRnBHTUttOVFRcFFqKzlzY2VMY3dj?=
- =?utf-8?B?bjNocTJxV1VtVEVVR3lpM0JCTTRDWlVocjhXQ3JkbTBiUXZpOEJrczduSnRV?=
- =?utf-8?B?azVVd09aRkY1MGl1Qjd2NW4zVUpaRnFDT1pxaGlpRXJvam13bXlTajE0YmZk?=
- =?utf-8?B?OG9VWmtZTDVTMzgwVEhXYnhXYlFCQlZXUEhzWWRPWTJLRDFwbG1QQ0Ewakg5?=
- =?utf-8?B?R0UyR1dDMkoyc05SbGZGZUZweEFlUnFqaVQ4aHpQQzlaTUpDYXFCQUNtaFZP?=
- =?utf-8?B?QmRiOWlIVG5nc1RaQUFuMTRDWnZmV2ViYWYzRU10b0UrNVBQcXJGUVhFQ1Ri?=
- =?utf-8?B?bnF3N2J5elhIc3VTTkZ0MW1WNFkrMTRQR0REc0o4b2c0bDk2cGVqOUVRUWlE?=
- =?utf-8?B?WUJFaHVFOWwyM0dIT0pWeXMyUDFoR3NVYXltck1yc0k0dko4R1JOQ2tPUGhq?=
- =?utf-8?B?TG5mU0FGejh3N2drWmg5SGlYSC9MUkowdFlVZURTK2w0dmxwUkhmci9yMENC?=
- =?utf-8?B?MzNDcUJUR2F6OEFpMHRtSERRRkdGb2Rpc0VaU01MNGV1MXY2dXVmVVhVMjBk?=
- =?utf-8?B?ZmVyZTk5MldqQjhSU1lnMzU0U1lXdU9oTUcwMCtkdDNHVWNocTVQYmNubVJT?=
- =?utf-8?B?Tnl0SzdUZWNlN3hDYnJTL0VNaTFkdU1jaVVTMTc4Z3FMdzNHYURNd0F1ZlVZ?=
- =?utf-8?B?YlNoVUF6QUFUcitwb09XSDhNbzh5NXpwUVZkR2wza0lsL0w3dDV4LzlhK1NM?=
- =?utf-8?B?TEg0ZG1wYnYwbE1QODltTENZKzZnNS9EdHkvaGRyNXh5aVBKM2U5dElOdjA4?=
- =?utf-8?B?US9FalJBOXFvT2hVdG83aTM1QUxtbW9TZFROSWdFZk15dWNVcm5kSFZjZTlC?=
- =?utf-8?Q?hSArVGMUhxYfgWm8=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3fa6f21-133a-474c-6db1-08de5d362b48
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2026 23:53:57.0268
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +THWfcfZL3jVHptTePBq9J4VnlD7Rj/gSwpYRT0mMSLXj1GHwsXd0NRvpjlJ0Qf88jo47PZcKQy9q3t1mOQ839XLp+XAc67A+XGctiRiTII=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB7701
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 4/5] power: supply: max77759: add charger driver
+From: Amit Sunil Dhamne <amitsd@google.com>
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
+References: <20260121-max77759-charger-v4-0-694234c8ded1@google.com>
+ <20260121-max77759-charger-v4-4-694234c8ded1@google.com>
+ <71d816c5ed4ee2d13ec63b8fd4acd49f4e418284.camel@linaro.org>
+ <bf3bd5f7-28e1-4fe3-afca-34f12b2cede8@google.com>
+Content-Language: en-US
+In-Reply-To: <bf3bd5f7-28e1-4fe3-afca-34f12b2cede8@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[35];
-	TAGGED_FROM(0.00)[bounces-41504-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[20];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,intel.com,huawei.com,amd.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org,alien8.de];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lpc.events:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:dkim];
+	TAGGED_FROM(0.00)[bounces-41505-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[google.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dan.j.williams@intel.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	FROM_NO_DN(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-pm@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[10]
-X-Rspamd-Queue-Id: B787B8E58A
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,dowhile0.org:email]
+X-Rspamd-Queue-Id: 5A7DA8E9F2
 X-Rspamd-Action: no action
 
-[responding to the questions raised here before reviewing the patch...]
+Hi Andre',
 
-Koralahalli Channabasappa, Smita wrote:
-> Hi Alejandro,
->=20
-> On 1/23/2026 3:59 AM, Alejandro Lucero Palau wrote:
-> >=20
-> > On 1/22/26 04:55, Smita Koralahalli wrote:
-> >> The current probe time ownership check for Soft Reserved memory based
-> >> solely on CXL window intersection is insufficient. dax_hmem probing is=
-=20
-> >> not
-> >> always guaranteed to run after CXL enumeration and region assembly, wh=
-ich
-> >> can lead to incorrect ownership decisions before the CXL stack has
-> >> finished publishing windows and assembling committed regions.
-> >>
-> >> Introduce deferred ownership handling for Soft Reserved ranges that
-> >> intersect CXL windows at probe time by scheduling deferred work from
-> >> dax_hmem and waiting for the CXL stack to complete enumeration and reg=
-ion
-> >> assembly before deciding ownership.
-> >>
-> >> Evaluate ownership of Soft Reserved ranges based on CXL region
-> >> containment.
-> >>
-> >> =C2=A0=C2=A0=C2=A0 - If all Soft Reserved ranges are fully contained w=
-ithin committed=20
-> >> CXL
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 regions, DROP handling Soft Reserved ra=
-nges from dax_hmem and allow
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dax_cxl to bind.
-> >>
-> >> =C2=A0=C2=A0=C2=A0 - If any Soft Reserved range is not fully claimed b=
-y committed CXL
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 region, tear down all CXL regions and R=
-EGISTER the Soft Reserved
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ranges with dax_hmem instead.
-> >=20
-> >=20
-> > I was not sure if I was understanding this properly, but after looking=
-=20
-> > at the code I think I do ... but then I do not understand the reason=20
-> > behind. If I'm right, there could be two devices and therefore differen=
-t=20
-> > soft reserved ranges, with one getting an automatic cxl region for all=
-=20
-> > the range and the other without that, and the outcome would be the firs=
-t=20
-> > one getting its region removed and added to hmem. Maybe I'm missing=20
-> > something obvious but, why? If there is a good reason, I think it shoul=
-d=20
-> > be documented in the commit and somewhere else.
->=20
-> Yeah, if I understood Dan correctly, that's exactly the intended behavior=
-.
->=20
-> I'm trying to restate the "why" behind this based on Dan's earlier=20
-> guidance. Please correct me if I'm misrepresenting it Dan.
->=20
-> The policy is meant to be coarse: If all SR ranges that intersect CXL=20
-> windows are fully contained by committed CXL regions, then we have high=20
-> confidence that the platform descriptions line up and CXL owns the memory=
-.
->=20
-> If any SR range that intersects a CXL window is not fully covered by=20
-> committed regions then we treat that as unexpected platform shenanigans.=
-=20
-> In that situation the intent is to give up on CXL entirely for those SR=20
-> ranges because partial ownership becomes ambiguous.
->=20
-> This is why the fallback is global and not per range. The goal is to
-> leave no room for mixed some SR to CXL, some SR to HMEM configurations.=20
-> Any mismatch should push the platform issue back to the vendor to fix=20
-> the description (ideally preserving the simplifying assumption of a 1:1=20
-> correlation between CXL Regions and SR).
->=20
-> Thanks for pointing this out. I will update the why in the next revision.
+On 1/22/26 4:07 PM, Amit Sunil Dhamne wrote:
+> Hi Andre',
+>
+> On 1/22/26 4:47 AM, André Draszik wrote:
+>> Hi Amit,
+>>
+>> Thanks for your patches, just a few minor comments below.
+>
+> Thanks for your feedback!
+>
+>
+>>
+>> On Wed, 2026-01-21 at 00:59 +0000, Amit Sunil Dhamne via B4 Relay wrote:
+>>> From: Amit Sunil Dhamne <amitsd@google.com>
+>>>
+>>> Add support for MAX77759 battery charger driver. This is a 4A 1-Cell
+>>> Li+/LiPoly dual input switch mode charger. While the device can support
+>>> USB & wireless charger inputs, this implementation only supports USB
+>>> input. This implementation supports both buck and boost modes.
+>>>
+>>> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+>>> ---
+>>>   MAINTAINERS                             |   6 +
+>>>   drivers/power/supply/Kconfig            |  11 +
+>>>   drivers/power/supply/Makefile           |   1 +
+>>>   drivers/power/supply/max77759_charger.c | 737 
+>>> ++++++++++++++++++++++++++++++++
+>>>   4 files changed, 755 insertions(+)
+>>>
+>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>> index 
+>>> 0d044a58cbfe0f2b97f3682a86708e1ece108e9f..38354964a85c34611b1b54e20651b360f3b9c11e 
+>>> 100644
+>>> --- a/MAINTAINERS
+>>> +++ b/MAINTAINERS
+>>> @@ -15546,6 +15546,12 @@ F:    drivers/mfd/max77759.c
+>>>   F:    drivers/nvmem/max77759-nvmem.c
+>>>   F:    include/linux/mfd/max77759.h
+>>>   +MAXIM MAX77759 BATTERY CHARGER DRIVER
+>>> +M:    Amit Sunil Dhamne <amitsd@google.com>
+>>> +L:    linux-kernel@vger.kernel.org
+>>> +S:    Maintained
+>>> +F:    drivers/power/supply/max77759_charger.c
+>>> +
+>>>   MAXIM MAX77802 PMIC REGULATOR DEVICE DRIVER
+>>>   M:    Javier Martinez Canillas <javier@dowhile0.org>
+>>>   L:    linux-kernel@vger.kernel.org
+>>> diff --git a/drivers/power/supply/Kconfig 
+>>> b/drivers/power/supply/Kconfig
+>>> index 
+>>> 92f9f7aae92f249aa165e68dbcd4cebb569286ea..3a2cdb95c98e44324151ac2b86d740ae2923ee77 
+>>> 100644
+>>> --- a/drivers/power/supply/Kconfig
+>>> +++ b/drivers/power/supply/Kconfig
+>>> @@ -631,6 +631,17 @@ config CHARGER_MAX77705
+>>>       help
+>>>         Say Y to enable support for the Maxim MAX77705 battery charger.
+>>>   +config CHARGER_MAX77759
+>>> +    tristate "Maxim MAX77759 battery charger driver"
+>>> +    depends on MFD_MAX77759 && REGULATOR
+>>> +    default MFD_MAX77759
+>>> +    help
+>>> +      Say M or Y here to enable the MAX77759 battery charger. MAX77759
+>>> +      charger is a function of the MAX77759 PMIC. This is a dual input
+>>> +      switch-mode charger. This driver supports buck and OTG boost 
+>>> modes.
+>>> +
+>>> +      If built as a module, it will be called max77759_charger.
+>>> +
+>>>   config CHARGER_MAX77976
+>>>       tristate "Maxim MAX77976 battery charger driver"
+>>>       depends on I2C
+>>> diff --git a/drivers/power/supply/Makefile 
+>>> b/drivers/power/supply/Makefile
+>>> index 
+>>> 4b79d5abc49a7fd1e37a26d0c89f94d9fe3a916f..6af905875ad5e3b393a7030405355b9a975870f6 
+>>> 100644
+>>> --- a/drivers/power/supply/Makefile
+>>> +++ b/drivers/power/supply/Makefile
+>>> @@ -128,3 +128,4 @@ obj-$(CONFIG_CHARGER_SURFACE)    += 
+>>> surface_charger.o
+>>>   obj-$(CONFIG_BATTERY_UG3105)    += ug3105_battery.o
+>>>   obj-$(CONFIG_CHARGER_QCOM_SMB2)    += qcom_smbx.o
+>>>   obj-$(CONFIG_FUEL_GAUGE_MM8013)    += mm8013.o
+>>> +obj-$(CONFIG_CHARGER_MAX77759)    += max77759_charger.o
+>>> diff --git a/drivers/power/supply/max77759_charger.c 
+>>> b/drivers/power/supply/max77759_charger.c
+>>> new file mode 100644
+>>> index 
+>>> 0000000000000000000000000000000000000000..34b5ea0967eb7b4716e81ee1a55227ac872493b0
+>>> --- /dev/null
+>>> +++ b/drivers/power/supply/max77759_charger.c
+>>> @@ -0,0 +1,737 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +/*
+>>> + * max77759_charger.c - Battery charger driver for MAX77759 charger 
+>>> device.
+>>> + *
+>>> + * Copyright 2025 Google LLC.
+>>> + */
+>>> +
+>>> +#include <linux/bitfield.h>
+>>> +#include <linux/cleanup.h>
+>>> +#include <linux/device.h>
+>>> +#include <linux/devm-helpers.h>
+>>> +#include <linux/interrupt.h>
+>>> +#include <linux/irq.h>
+>>> +#include <linux/math64.h>
+>>> +#include <linux/mfd/max77759.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/mod_devicetable.h>
+>>> +#include <linux/mutex.h>
+>>> +#include <linux/of.h>
+>>> +#include <linux/platform_device.h>
+>>> +#include <linux/power_supply.h>
+>>> +#include <linux/regmap.h>
+>>> +#include <linux/regulator/driver.h>
+>>> +#include <linux/string_choices.h>
+>>> +
+>>> +/* Default values for Fast Charge Current & Float Voltage */
+>>> +#define CHG_CC_DEFAULT_UA            2266770
+>>> +#define CHG_FV_DEFAULT_MV            4300
+>>> +
+>>> +#define FOREACH_IRQ(S)            \
+>>> +    S(AICL),            \
+>>> +    S(CHGIN),            \
+>>> +    S(CHG),                \
+>>> +    S(INLIM),            \
+>>> +    S(BAT_OILO),            \
+>>> +    S(CHG_STA_CC),            \
+>>> +    S(CHG_STA_CV),            \
+>>> +    S(CHG_STA_TO),            \
+>>> +    S(CHG_STA_DONE)
+>>> +
+>>> +#define GENERATE_ENUM(e)        e
+>>> +#define GENERATE_STRING(s)        #s
+>>> +
+>>> +enum {
+>>> +    FOREACH_IRQ(GENERATE_ENUM)
+>>> +};
+>>> +
+>>> +static const char *const chgr_irqs_str[] = {
+>>> +    FOREACH_IRQ(GENERATE_STRING)
+>>> +};
+>>> +
+>>> +#define NUM_IRQS            ARRAY_SIZE(chgr_irqs_str)
+>>> +
+>>> +struct max77759_charger {
+>>> +    struct device *dev;
+>>> +    struct regmap *regmap;
+>>> +    struct power_supply *psy;
+>>> +    struct regulator_dev *chgin_otg_rdev;
+>>> +    struct notifier_block nb;
+>>> +    struct power_supply *tcpm_psy;
+>>> +    struct work_struct psy_work;
+>>> +    int irqs[NUM_IRQS];
+>>> +    struct mutex lock; /* protects the state below */
+>>> +    enum max77759_chgr_mode mode;
+>>> +};
+>>> +
+>>> +static inline int regval_to_val(int reg, int reg_offset, int step, 
+>>> int minval)
+>>> +{
+>>> +    return ((reg - reg_offset) * step) + minval;
+>>> +}
+>>> +
+>>> +static inline int val_to_regval(int val, int minval, int step, int 
+>>> reg_offset)
+>>> +{
+>>> +    s64 dividend;
+>>> +
+>>> +    if (unlikely(step == 0))
+>>> +        return reg_offset;
+>> Does it really make an impact on performance to specify unlikely? 
+>> Also, I seem to
+>> remember that the if branch is treated as unlikely anyway, but can't 
+>> find any hard
+>> evidence on that right now.
+>
+> I was hoping it's performance improving even if negligible, though I 
+> don't have evidence to support either arguments. In any case, I kept 
+> it for readability.
+>
+>
+>>
+>>> +
+>>> +    dividend = (s64)val - minval;
+>>> +    return DIV_S64_ROUND_CLOSEST(dividend, step) + reg_offset;
+>>> +}
+>> For these two functions above, have you considered using the APIs from
+>> include/linux/linear_range.h instead of duplicating in this driver? The
+>> implementations of the above match linear_range_get_value() and
+>> linear_range_get_selector_low() quite nicely.
+>
+> I think it looks useful, will check it out.
+>
+>
+>>> +
+>>> +static inline int unlock_prot_regs(struct max77759_charger *chg, 
+>>> bool unlock)
+>>> +{
+>>> +    return regmap_update_bits(chg->regmap, 
+>>> MAX77759_CHGR_REG_CHG_CNFG_06,
+>>> +                  MAX77759_CHGR_REG_CHG_CNFG_06_CHGPROT, unlock
+>>> +                  ? MAX77759_CHGR_REG_CHG_CNFG_06_CHGPROT : 0);
+>>> +}
+>>> +
+>> [...]
+>>
+>>> +static irqreturn_t irq_handler(int irq, void *data)
+>>> +{
+>>> +    struct max77759_charger *chg = data;
+>>> +    struct device *dev = chg->dev;
+>>> +    int i;
+>>> +
+>>> +    for (i = 0; i < NUM_IRQS && chg->irqs[i] != irq; i++)
+>>> +        ;
+>>> +
+>>> +    if (i == NUM_IRQS) {
+>>> +        dev_err(dev, "Unable to handle irq=%d", irq);
+>>> +        return IRQ_NONE;
+>>> +    } else if (i == BAT_OILO) {
+>>> +        dev_warn(dev, "Battery over-current threshold crossed");
+>>> +    }
+>> Generally, no 'else' is required after return.
+>
+> I will refactor it in the next rev.
+>
+>
+>>> +
+>>> +    power_supply_changed(chg->psy);
+>>> +    return IRQ_HANDLED;
+>>> +}
+>>> +
+>> [...]
+>>
+>>> +static void psy_work_item(struct work_struct *work)
+>>> +{
+>>> +    struct max77759_charger *chg =
+>>> +        container_of(work, struct max77759_charger, psy_work);
+>>> +    union power_supply_propval current_limit, online;
+>>> +    int ret;
+>>> +
+>>> +    ret = power_supply_get_property(chg->tcpm_psy,
+>>> +                    POWER_SUPPLY_PROP_CURRENT_MAX,
+>>> +                    &current_limit);
+>>> +    if (ret) {
+>>> +        dev_err(chg->dev,
+>>> +            "Failed to get CURRENT_MAX psy property, ret=%d",
+>>> +            ret);
+>>> +        return;
+>>> +    }
+>>> +
+>>> +    ret = power_supply_get_property(chg->tcpm_psy, 
+>>> POWER_SUPPLY_PROP_ONLINE,
+>>> +                    &online);
+>>> +    if (ret) {
+>>> +        dev_err(chg->dev,
+>>> +            "Failed to get ONLINE psy property, ret=%d",
+>>> +            ret);
+>>> +        return;
+>>> +    }
+>>> +
+>>> +    if (online.intval && current_limit.intval) {
+>>> +        ret = set_input_current_limit(chg, current_limit.intval);
+>>> +        if (ret)
+>>> +            dev_err(chg->dev,
+>>> +                "Unable to set current limit, ret=%d", ret);
+>>> +
+>>> +        charger_set_mode(chg, MAX77759_CHGR_MODE_CHG_BUCK_ON);
+>>> +    } else {
+>>> +        charger_set_mode(chg, MAX77759_CHGR_MODE_OFF);
+>>> +    }
+>> For all the possible errors in this function, should the driver try a 
+>> bit
+>> harder, even if unlikely to occur?
+>
+> Maybe we can do this:
+>
+> On failure of either of the power_supply_get_property() calls or 
+> set_input_current_limit(), we should first turn off the charger (as 
+> that's the safest choice) and reschedule this work for a certain 
+> number of times (maybe 3). Obviously, if we recover from this state, 
+> we reset the error limit and don't reschedule this work anymore. Do 
+> you concur?
+>
+>
+>> What if the current limit needed to be
+>> reduced, e.g. due to thermal or any other reasons?
+>
+> This specific piece of code is for setting current limit that is 
+> driven by USB Type-C subsystem. If the Type-C subsystem re-negotiates 
+> a PD contract this piece of code will re-run as this subsystem will be 
+> re-notified by TCPM. For cases where we need to cap the current limit 
+> due to thermal management, that's a hardware driven feature. It is 
+> enabled by enabling JEITA management. That's not in the scope atm.
+>
+>
+>>
+>> Could rescheduling the work be something to consider?
+>>
+> Responded in the previous comment.. 
 
-You have it right. This is mostly a policy to save debug sanity and
-share the compatibility pain. You either always get everything the BIOS
-put into the memory map, or you get the fully enlightened CXL world.
 
-When accelerator memory enters the mix it does require an opt-in/out of
-this scheme. Either the device completely opts out of this HMEM fallback
-mechanism by marking the memory as Reserved (the dominant preference),
-or it arranges for CXL accelerator drivers to be present at boot if they
-want to interoperate with this fallback. Some folks want the fallback:
-https://lpc.events/event/19/contributions/2064/
+Following up on this comment, in case you missed it :)
 
-> > I have also problems understanding the concurrency when handling the=20
-> > global dax_cxl_mode variable. It is modified inside process_defer_work(=
-)=20
-> > which I think can have different instances for different devices=20
-> > executed concurrently in different cores/workers (the system_wq used is=
-=20
-> > not ordered). If I'm right race conditions are likely.
 
-It only works as a single queue of regions. One sync point to say "all
-collected regions are routed into the dax_hmem or dax_cxl bucket".
+Thanks,
 
-> Yeah, this is something I spent sometime thinking on. My rationale=20
-> behind not having it and where I'm still unsure:
->=20
-> My assumption was that after wait_for_device_probe(), CXL topology=20
-> discovery and region commit are complete and stable.
+Amit
 
-...or more specifically, any CXL region discovery after that point is a
-typical runtime dynamic discovery event that is not subject to any
-deferral.
-
-> And each deferred worker should observe the same CXL state and
-> therefore compute the same final policy (either DROP or REGISTER).
-
-The expectation is one queue, one event that takes the rwsem and
-dispositions all present regions relative to initial soft-reserve memory
-map.
-
-> Also, I was assuming that even if multiple process_defer_work()=20
-> instances run, the operations they perform are effectively safe to=20
-> repeat.. though I'm not sure on this.
-
-I think something is wrong if the workqueue runs more than once. It is
-just a place to wait for initial device probe to complete and then fixup
-all the regions (allow dax_region registration to proceed) that were
-waiting for that.
-
-> cxl_region_teardown_all(): this ultimately triggers the=20
-> devm_release_action(... unregister_region ...) path. My expectation was=20
-> that these devm actions are single shot per device lifecycle, so=20
-> repeated teardown attempts should become noops.
-
-Not noops, right? The definition of a devm_action is that they always
-fire at device_del(). There is no facility to device_del() a device
-twice.
-
-> cxl_region_teardown_all() ultimately leads to cxl_decoder_detach(),=20
-> which takes "cxl_rwsem.region". That should serialize decoder detach and=
-=20
-> region teardown.
->=20
-> bus_rescan_devices(&cxl_bus_type): I assumed repeated rescans during=20
-> boot are fine as the rescan path will simply rediscover already present=20
-> devices..
-
-The rescan path likely needs some logic to give up on CXL region
-autodiscovery for devices that failed their memmap compatibility check.
-
-> walk_hmem_resources(.., hmem_register_device): in the DROP case,I=20
-> thought running the walk multiple times is safe because devm managed=20
-> platform devices and memregion allocations should prevent duplicate=20
-> lifetime issues.
->=20
-> So, even if multiple process_defer_work() instances execute=20
-> concurrently, the CXL operations involved in containment evaluation=20
-> (cxl_region_contains_soft_reserve()) and teardown are already guarded.
->=20
-> But I'm still trying to understand if bus_rescan_devices(&cxl_bus_type)=20
-> is not safe when invoked concurrently?
-
-It already races today between natural bus enumeration and the
-cxl_bus_rescan() call from cxl_acpi. So it needs to be ok, it is
-naturally synchronized by the region's device_lock and regions' rwsem.
-
-> Or is the primary issue that dax_cxl_mode is a global updated from one=20
-> context and read from others, and should be synchronized even if the=20
-> computed final value will always be the same?
-
-There is only one global hmem_platform device, so only one potential
-item in this workqueue.=
 
