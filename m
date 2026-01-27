@@ -1,269 +1,208 @@
-Return-Path: <linux-pm+bounces-41516-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41518-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4CwjFlpyeGnEpwEAu9opvQ
-	(envelope-from <linux-pm+bounces-41516-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 09:07:54 +0100
+	id INnvORN/eGkFqQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41518-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 10:02:11 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C71AE90EEA
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 09:07:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89143916B0
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 10:02:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A6BA63008769
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 08:07:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 69DB43042D6F
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 09:02:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BB3B27FD4A;
-	Tue, 27 Jan 2026 08:07:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 674BF332917;
+	Tue, 27 Jan 2026 09:01:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="DGsfWoft"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VzyF7xrI";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="Ellh6pu7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013028.outbound.protection.outlook.com [40.107.201.28])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C18A225775;
-	Tue, 27 Jan 2026 08:07:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.28
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769501253; cv=fail; b=CoLsoWaI6AgzS80x0y4Z4yR6k9qmHLXuqzL6YaiTjKlcrfls+2XZosNZUCLf2Vs3eH7qSHAt0dkw1FnphMrLYIACI0qBFwqFgNcQOgzlHSSWKynAyTJZhI27jCpDLtqKVmGt/YKZYleLdUNhyVbpYNZVQhq/Xih0hp/lxSB5hcw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769501253; c=relaxed/simple;
-	bh=qgeyC7g3n0Blh4eYXkoay3vJNz60xO0BOxFuZsZUceI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NCn6fETQukGAt9gwLI/tLme5MWNgsCGCFmzadfEeeePlHIxznQZewt57AxFgOLo74PBby/MYkAq3fKatG9Z9JLD9iyfdK3qXGjF+GxbitK1RhopimHvREP5X43ugaQuzrfWcN8Yq7Utd1ZR0X+q7hHNFaiDNpDEEMiFy7JMCPpE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=DGsfWoft; arc=fail smtp.client-ip=40.107.201.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lSnAZN6Iau8+Kp6uAUlmubmH9klxrZAYDpOOBHgAOx4VvWLvnsZJ4vRVZfbqQJWUmBWffFm9pah2hEKT/cuwrNLAmZBFyzCHVgOvdTcVjp/OFb0stnbXK1SRfOazwchzTuDgpUTCRjtkI36GdXCP52gIjnbpxakmLuCr+vhyQJjPjJIVgNONuyqAD99AwHHLScKc6ClqslfuGppHxrXKqk4a4WtdKOiPifXsEQ98jy4S36WzRsMeyq0y5wNtasdwXpOODyleXfmEFoz5KUB40C664oI0os6gY9NStgrEROF0OIJvnA3hIYhhiMf8XSxJYsNDX7+DhjeYZJQbBebyYw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dBd9iAsdM0uDnGnSqriuSE9SRmgRVRur+Y8Lpy/FyVo=;
- b=Q96q6hMRHPadSupg3ezTxPHhwjPkB4ezWNsoeqzIDOHSpSev3qBa5EoEo8APQ2CSWviJwezS1qzopzIdtMNNxJ+nwzL/KjYMXwJQiP/g5+oIr6tUSJhj5hWAAdxVKZvqPNz1snql/JyemRY/GN11r/TTb9ByPaKxUlJvi0uu8nkzPHF49DywyGF0js+iLe1LLus7W8BfsWWD6LokOp5KJDoCMwNeNaVbt/ILzjZhhisdNMU2Y0OHuR7pVXBdbagxF8sX6/R/7E8hgAyp7S5ojyYj752KKrlMUXvXSfXeQYqLGdCxGLoZmHhmnRsjbgGXzF3HdzC4EgaTtXj9EAD7QA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dBd9iAsdM0uDnGnSqriuSE9SRmgRVRur+Y8Lpy/FyVo=;
- b=DGsfWoftAog9bJq3oYUfDT4/6UQ3iwlU6NSRj+h5uaHvlrpPRebWV+MAUPypJ/j9j1yEZMt1dGYYbRxWVpNcdGOP+5zJkDp1gVbkUbG6gVJ5YQUP96FnMW7H/rl/zJP2rJe8nJzCRYzn2miKJ7n54dGcYS3+831EG+THiQo3vINahXV2bZtqnI2O2FIa0ghIhYSyvwNiw2tUUkihpOwgW+Oe1vNRJkDpDP0SKIByqNBHI0esbctm8iTxL+RG9FY1SZpdySsFDNNDjUWbQj5UkviiXVTmWH/1Odmb+HEm+hjw5oO6qHM09mHflgHhs3lW3IZy2uQKgtHJDNICCX7YTg==
-Received: from BN9PR03CA0634.namprd03.prod.outlook.com (2603:10b6:408:13b::9)
- by DS7PR12MB6309.namprd12.prod.outlook.com (2603:10b6:8:96::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.15; Tue, 27 Jan
- 2026 08:07:25 +0000
-Received: from BN3PEPF0000B06E.namprd21.prod.outlook.com
- (2603:10b6:408:13b:cafe::1d) by BN9PR03CA0634.outlook.office365.com
- (2603:10b6:408:13b::9) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.16 via Frontend Transport; Tue,
- 27 Jan 2026 08:07:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN3PEPF0000B06E.mail.protection.outlook.com (10.167.243.73) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.9587.0 via Frontend Transport; Tue, 27 Jan 2026 08:07:24 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 27 Jan
- 2026 00:07:10 -0800
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Tue, 27 Jan
- 2026 00:07:07 -0800
-Received: from sumitg-l4t.nvidia.com (10.127.8.14) by mail.nvidia.com
- (10.129.68.7) with Microsoft SMTP Server id 15.2.2562.20 via Frontend
- Transport; Tue, 27 Jan 2026 00:07:03 -0800
-From: Sumit Gupta <sumitg@nvidia.com>
-To: <catalin.marinas@arm.com>, <will@kernel.org>, <zhanjie9@hisilicon.com>,
-	<zhenglifeng1@huawei.com>, <viresh.kumar@linaro.org>, <rafael@kernel.org>,
-	<beata.michalska@arm.com>, <pierre.gondois@arm.com>,
-	<ionela.voinescu@arm.com>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-tegra@vger.kernel.org>
-CC: <treding@nvidia.com>, <jonathanh@nvidia.com>, <bbasu@nvidia.com>,
-	<sumitg@nvidia.com>
-Subject: [PATCH] arm64: topology: Fix false warning in counters_read_on_cpu() for same-CPU reads
-Date: Tue, 27 Jan 2026 13:37:00 +0530
-Message-ID: <20260127080700.3565546-1-sumitg@nvidia.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5B543321AA
+	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 09:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769504515; cv=none; b=LeDqOqTT080grSE5h/zyWMSNclBS+1tK8EcZrDcfqgKbdcve+DgEbxy6TSmm1FM6X93nK2skgsPj2SBvim2C7TgVn12odl0Rl2rMD/G/jveEMs8nimwL59WjzeUInB03SmBrHD2z/QTof9UCyXGzJSgKhn+eKG2YrLU3VGY33wU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769504515; c=relaxed/simple;
+	bh=kNS3mRzR9euxc1dfj5q3SILvs7z0UTa/J18sZOeIlA0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NV5XFbP/iGju3Ub2/HfWBPQgMeQr7qosRCbG6nWpX+tmbREnVvnEaDiwQ+96INWb8WPhYq21j+ghZ+uet+ilEnOfM9cl8648bOPIjZcSyechNm63zGqgsWeWdbDGxFvOc8fWYUbdkIV5CmDfzaZEeEJ0Ng/j61cthK3al/sL5fM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VzyF7xrI; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=Ellh6pu7; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60R4U2fo786620
+	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 09:01:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=zO8uh2P7KePpposrMGLditDRhEDDneSWvz3
+	+8lT2xWk=; b=VzyF7xrIJN2WxAbxMg1Bfhdh2gKYRzp4N9rdzgQUiQLM8SNUV99
+	Pr0lwNvS42LjRhLeWYL9pUpjr6E/puydLZqm+VrcJrL9SxPeI/I8rXyNMsF24VPf
+	4Uaid2IeUgx52d76kk/yL6Uld7+4X2eaG0KqGLnStSRtDbCPnuQouumFgbcNIBnZ
+	wSHHHm85o1c3OulfbTcsVBoMicUAy8utGZEHGvVtyYeWZs/d/54cjc+Y3HoIgG8D
+	G8jaPZJL2UVD73wNzndirp+QvyDdizwp0WOk8Vw+5c11q02VVWlhV2Y51i5s17uw
+	NvbuYNCSiEvYwZX2exGRl5d3MTLWnZA3Tmw==
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bxg93hwn8-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 09:01:46 +0000 (GMT)
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-c52d37d346dso2772515a12.3
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 01:01:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1769504505; x=1770109305; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zO8uh2P7KePpposrMGLditDRhEDDneSWvz3+8lT2xWk=;
+        b=Ellh6pu7MlrR/ou899M36HWzXpUVJVoYuB46/HQnVELXFAZvgrByqfZ8lYn3bQ9PBP
+         DfRWh5Lt5Ds3Hslt1AxOrXMa6TKYGEj6FZsBHm8SqiqLuMn7UtaT1yTiQ7pzYw362R4y
+         /5Ygk0rMCowwHNoXROpqYIfOP+LwBX7YzqTcVRfttdsKpXpsnFAJ1g4mMvqn4kNft1LE
+         4pxo+1X/4/Y6darDNLn7PsaecswRLeu/I5Iwn1Sn5CdXmd6cKloccRvP8AWJVxsBY+1Q
+         OzIS6ohfEvCFlo9mL1DCoHvd+MAuoqmspmOOdbQlY0+9Rp2f8aVt3eI2JV85TsQimdu3
+         cu2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769504505; x=1770109305;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zO8uh2P7KePpposrMGLditDRhEDDneSWvz3+8lT2xWk=;
+        b=qHrMRis4EBzBp6kaSd57TnSP5MioBk1ritJoCmg6zwMZuvQZCOIexovTbyxRcQHNgS
+         knI+EjsNuvKusPE027ggbI7DFGthnUDgwsx3B8Q1xqbQls9+AbCrN0+/1+/Ln7+ucUg1
+         O/DM6MvQ4D3hVZur5LfiU8k2uxDb9xXgXLMCEKWcLJvq6KHra2GsXGNcv1Cz5s64asjK
+         PI6MfCOPf9Q6P5c6V/WG0wO5iMdEzD3LsCqaBhSUY7Du+oc8bVSEEgsC25dGnD0tEAT4
+         cor7YXA03/qgSH77nHnvn1vc3XuDb/Hn72bmS8niXidIu6fjG1ZKigxX065Pf2FdSF/A
+         5JpA==
+X-Forwarded-Encrypted: i=1; AJvYcCX+bPqrl/2iEniq3u6IuuE8DHTRgYs/SpUUtGwJifVPt8IBME6+80ijq29LD+bD39Qt+kv7tBZ8lg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1re1cvVV5XtSYW772ZpzCmc4zcus2oVXtsfzYIVseh3VSQSpC
+	ioUxfhaqiH8NjqP3A9g/zWvVNzkDN0BAE9B2pz8IwcEwbxvP7d6LuEmDaaDHVPPGWTrYgg15zkO
+	wLRurrNqZOsEWeLVm7L1riOrT8hVGP1yqfYI0j0BdJfq94z/v/D7RjvA/WGED6A==
+X-Gm-Gg: AZuq6aJl2d51gNOQymzIaLsEoWB0vqSAYGFG6F0NFjsMn/iqPdwrCjUYzKXZrek0KKe
+	T70s451HHJ+AjVy0MFxlbtmk3ZUsvpUQkGNKHJd8HBja1W6/uTkWN1tc5h38JBhp7xrS5nI1s0V
+	xF8B90OHihgimZqfW/gpYnR+mwgSybuhQNCPuoQTRowlop1vnY2zQg6lf8/t+H34oOKF8V01dxx
+	zRdhdNLV++q5XqnfBrCU36ZDyXSXOFGFNbD6wIXp24G8IA7kLjs2vFD5yE7txN1Wc5H/xjM3iT+
+	g4Ab2Menvhm+P67VPYNE2ZgvuANaZ3LZmNrFq3s7XJ6mDZ0Ol+iX7sDLUVOYR0UR7dGfZiE96Kl
+	sORWvDEr2Uv185a1L/MAJwAORxMqiPez+S/uYYum1pMg=
+X-Received: by 2002:a05:6a00:8d94:b0:823:244f:1f91 with SMTP id d2e1a72fcca58-8236916b19fmr1019886b3a.11.1769504505476;
+        Tue, 27 Jan 2026 01:01:45 -0800 (PST)
+X-Received: by 2002:a05:6a00:8d94:b0:823:244f:1f91 with SMTP id d2e1a72fcca58-8236916b19fmr1019859b3a.11.1769504504856;
+        Tue, 27 Jan 2026 01:01:44 -0800 (PST)
+Received: from hu-okukatla-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8231873bf53sm11579228b3a.45.2026.01.27.01.01.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jan 2026 01:01:44 -0800 (PST)
+From: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
+        Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Tipton <mike.tipton@oss.qualcomm.com>
+Subject: [PATCH v2 0/3] Enable QoS configuration on QCS8300
+Date: Tue, 27 Jan 2026 14:31:13 +0530
+Message-ID: <20260127090116.1438780-1-odelu.kukatla@oss.qualcomm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN3PEPF0000B06E:EE_|DS7PR12MB6309:EE_
-X-MS-Office365-Filtering-Correlation-Id: 427c725f-c8d6-4d1a-bbb8-08de5d7b1b2f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|7416014|376014|1800799024|36860700013|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?f096rxUs+XVtb9etbe9dtpB6dUteQ949mbRFTpaOZKSf+8FENQ5F9NW9K6GJ?=
- =?us-ascii?Q?LCnGxSSwZlG4ldfck6urm6947oAzeGwB+49qTLpSk+C7HqPURMpJOzFpFp8h?=
- =?us-ascii?Q?3PYeiq4f1fuFT6bTIzmgNHr/ZCQB0Jm210xOW4RMxs+cNHViRMdbhxd9dlPk?=
- =?us-ascii?Q?9yWOKB2RacsSWfecNsya/0IBM+wtIqDLMVIsbc+UvtL0R0U/jy3c1VSG/em/?=
- =?us-ascii?Q?Zx/ZUaKfY9RI1HiCBNFaEI9Eq7YCjMm//+0knDpq8JmeQEKJguaEYiC/TEIp?=
- =?us-ascii?Q?TC9I7ZTHNarLLC+gn9lAKoLX20xYPP1ZVh/7COupt+XElROqvzZQKWe5mkG1?=
- =?us-ascii?Q?17/JoFn4KGNVYQtEux8fAkrRbL5yd2ZG+7J8MR+zS/wLHEkxbiMhMNKtV6eX?=
- =?us-ascii?Q?N93Q5EVU8MhysyW1fF/V73+n9jbK+Ice/p4qIVoEwnZtb+VZXoGtHi8ItzFB?=
- =?us-ascii?Q?lCjAaXbf7qqpxoUZl3IXgP9lUs8svO9VuP4IO6LmhdylECS0Awri9VSOO8Zj?=
- =?us-ascii?Q?o5lTRJTG3cKQRL7TRz9f2wifs04i6t2wfM5beOmmX3pKsAJKh6Cwm8au1Tuv?=
- =?us-ascii?Q?xRyHpyInsG2Y/CPgPFn+2CeF1VIMP+Yq7rWhskWhKJ2Rn1/HieVIwBilOnQ2?=
- =?us-ascii?Q?Sm/SWKfYEVHQL2lqlOzMMueGwPglgxWgy9o/ao/m2SYXQMOFJISp/cV9h9Hb?=
- =?us-ascii?Q?TF0+QDvhL1k/j7QmoorLoSfehe8eg1pFl22ce/IxebI6tfckd/jnR10mT+m7?=
- =?us-ascii?Q?4IgQH+pMFTMUo7lHnmqtgwKKGBq3UG67eCs3uvh4B0bwLcnALi3WBTr55DZx?=
- =?us-ascii?Q?Yl5bBkTOuLfcaslghPAyj46OHuu49XdvzI9X+TIfy4qzIhd8gtTMxKepgd6C?=
- =?us-ascii?Q?bYUernUQ+zEio2860zIHoNFN8/fNkcstBsXqFgfLaJFf5AWrhQlg/QOBmqoK?=
- =?us-ascii?Q?TEhrKZlp4nJnizovhHcw2dXwCf1Us8/jJz2XvMkGjD0lhfMob3L6nwgvypqw?=
- =?us-ascii?Q?FUvsYOHlcBEjpg3OlhUQlbhGFm8yWb+oQPfb6PKde6ckAESal0hoRk6rgc1o?=
- =?us-ascii?Q?rKBDWlr1E5zVtUGEXNwJz9dqXVAK6nzCE058SISCvQRvVxX7ADGI7T8LbC2W?=
- =?us-ascii?Q?Kg5YsADq77KJGr+B+1JjhclHq8J4f5+Gz3+OoSAJfsE0xd5KvWmTP9y4RDCm?=
- =?us-ascii?Q?QyFVDo84MJ3f7e63oNd06Gwwp8srY/p7PShY7VY2m02obO+hWxbGSFmHgDIq?=
- =?us-ascii?Q?Q5Oq3JqhlsANNbfRlZIteAdUdSDosLD+6Kt8moa4V+Lwc55gvUlXfvO1EnWv?=
- =?us-ascii?Q?tS0pnSbxeKRiwimNRZ42sOvpDtqwAM8qGI1FLXzPE8uq9RbWnjUYSb3gVzin?=
- =?us-ascii?Q?fqfmctqeKLNEMcDtvbqZwrHUX2lbb/P4+gKNyPHBz9pvxnFnZXQo19Di700z?=
- =?us-ascii?Q?mBRMsmmmklVb8HQ/ucOoq/AqSn+2Z1aJyI52taynRmJ4taKvP39iw6UixIBf?=
- =?us-ascii?Q?811ZK0zlKex23POYYESnsbcSg9DSLy4d74l5GlrlGUOoeJ8CXebMR4FJ4pe7?=
- =?us-ascii?Q?sodNDp6r+yzmV4SWYu8wdM3CmB7wZp7U/EqzzJ5H8T2wfsB3ViwM2ii5fa+D?=
- =?us-ascii?Q?/FGWk9Ja/Pk5RDnga4l59EIJE/LRB8m2t5qFhH6Zuea7N4PxvKyAIxv2Sbxx?=
- =?us-ascii?Q?AbvSWiVDKIiBI074SdbuDYv5Dv4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(7416014)(376014)(1800799024)(36860700013)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2026 08:07:24.9772
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 427c725f-c8d6-4d1a-bbb8-08de5d7b1b2f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN3PEPF0000B06E.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6309
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI3MDA3MyBTYWx0ZWRfXzExdQxz+7VOm
+ j/QxiDEE/+T1Vhmk8sunxThf+gsubboMNhRfc1rNdHgrfQ4f5NALzov5zKXm6iG3eAIW+Ysm1G3
+ M60taxujjF/MhoS8/EJrKi6nSx9C+H1CFVOvTzXdsMy74BLXGq9xcQURZxUsEonyCKzP3ydPywd
+ ec+yQ54P2wQgB4rjC4L1GYX8sAkQkQR81Hxwff7xbcGSxe77o8w0R96NLOUHfnE0M8bFp4/imCr
+ fwnX/rUaxO73yVC1HGuhg73OJ8iox0gAm1HqR56q4tD7ZnyP5UKrd9bOYLzpwHD72Ja2cnJ1RXH
+ OWhHVHDorz3+TD3DxyD3INBil94dI8q9ae/rltJEaWx5dbzaW6aZHrAlEGGgsiN66T5Q0MoiPiA
+ y78KGBJ8SnTbrhq2mDtM+kID+db8mWwZUqS/hue2v0kc7UbteKSAwjQAXy+XvaXuu1jE0sSMjEz
+ dTZ3xEVgJT0NzYdCMsw==
+X-Authority-Analysis: v=2.4 cv=Uc1ciaSN c=1 sm=1 tr=0 ts=69787efa cx=c_pps
+ a=Qgeoaf8Lrialg5Z894R3/Q==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=zE-JDaMYF2uaPRVanG4A:9 a=x9snwWr2DeNwDh03kgHS:22
+X-Proofpoint-ORIG-GUID: RZ9qaqaO94VVlx3Q4sPMqFVYPq9oGkMl
+X-Proofpoint-GUID: RZ9qaqaO94VVlx3Q4sPMqFVYPq9oGkMl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-27_01,2026-01-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 lowpriorityscore=0 clxscore=1015 priorityscore=1501
+ impostorscore=0 malwarescore=0 phishscore=0 spamscore=0 bulkscore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2601270073
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[nvidia.com,reject];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[Nvidia.com:s=selector2];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41516-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41518-lists,linux-pm=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,qualcomm.com:dkim];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[Nvidia.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sumitg@nvidia.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FROM_NEQ_ENVFROM(0.00)[odelu.kukatla@oss.qualcomm.com,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_NONE(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
 	NEURAL_HAM(-0.00)[-1.000];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nvidia.com:mid,nvidia.com:email,Nvidia.com:dkim];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCVD_COUNT_SEVEN(0.00)[9]
-X-Rspamd-Queue-Id: C71AE90EEA
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 89143916B0
 X-Rspamd-Action: no action
 
-The counters_read_on_cpu() function warns when called with IRQs disabled
-to prevent deadlock in smp_call_function_single(). However, this warning
-is spurious when reading counters on the current CPU since no IPI is
-needed for same-CPU reads.
+This series enables QoS configuration for QNOC type device which
+can be found on QCS8300 platform. It enables QoS configuration
+for master ports with predefined priority and urgency forwarding.
+This helps in prioritizing the traffic originating from different
+interconnect masters at NOC (Network On Chip). 
+The system may function normally without this feature. However,
+enabling QoS helps optimize latency and bandwidth across subsystems
+like CPU, GPU, and multimedia engines, which becomes important in
+high-throughput scenarios. This is a feature aimed at performance
+enhancement to improve system performance under concurrent workloads.
 
-Commit 12eb8f4fff24 ("cpufreq: CPPC: Update FIE arch_freq_scale in ticks
-for non-PCC regs") changed the CPPC Frequency Invariance Engine to read
-AMU counters directly from the scheduler tick for non-PCC register
-spaces (like FFH), instead of deferring to a kthread. This means
-counters_read_on_cpu() is now called with IRQs disabled from the tick
-handler, triggering the warning:
+Changes in v2:
+ - Updated the binding so that the `clocks` property accurately
+   reflects the hardware and does not allow describing non-existing
+   hardware (same approach as followed on sa8775p)
+ - Corrected patch subject to follow dt-bindings prefix conventions
+ - Reworked commit message and binding text to drop "optional" wording
+   and perfomance related description
+ - Dropped the redundant additional example in bindings
 
-| WARNING: arch/arm64/kernel/topology.c:410 at counters_read_on_cpu
-| ...
-| Call trace:
-|  counters_read_on_cpu+0x88/0xa8 (P)
-|  cpc_read_ffh+0xdc/0x148
-|  cpc_read+0x260/0x518
-|  cppc_get_perf_ctrs+0xf0/0x398
-|  __cppc_scale_freq_tick+0x4c/0x148 [cppc_cpufreq]
-|  cppc_scale_freq_tick+0x44/0x88 [cppc_cpufreq]
-|  topology_scale_freq_tick+0x34/0x58
-|  sched_tick+0x58/0x300
-|  update_process_times+0xcc/0x120
-|  tick_nohz_handler+0xa8/0x260
-|  __hrtimer_run_queues+0x154/0x360
-|  hrtimer_interrupt+0xf4/0x2b0
-|  arch_timer_handler_phys+0x4c/0x78
-|  ....
-|  CPPC Cpufreq:__cppc_scale_freq_tick: failed to read perf counters
-|  ....
+Odelu Kukatla (3):
+  dt-bindings: interconnect: qcom,qcs8300-rpmh: add clocks property to
+    enable QoS
+  interconnect: qcom: qcs8300: enable QoS configuration
+  arm64: dts: qcom: qcs8300: Add clocks for QoS configuration
 
-Fix this by calling the counter read function directly for same-CPU
-case, bypassing smp_call_function_single() entirely. Use get_cpu() to
-disable preemption as the counter read functions call this_cpu_has_cap()
-which requires a non-preemptible context.
+ .../interconnect/qcom,qcs8300-rpmh.yaml       |  63 +++
+ arch/arm64/boot/dts/qcom/monaco.dtsi          |   6 +
+ drivers/interconnect/qcom/qcs8300.c           | 375 ++++++++++++++++++
+ 3 files changed, 444 insertions(+)
 
-Fixes: 12eb8f4fff24 ("cpufreq: CPPC: Update FIE arch_freq_scale in ticks for non-PCC regs")
-Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
----
- arch/arm64/kernel/topology.c | 21 +++++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
-
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index 539b38935182..57b71f403007 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -401,12 +401,29 @@ static inline
- int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
- {
- 	/*
--	 * Abort call on counterless CPU or when interrupts are
--	 * disabled - can lead to deadlock in smp sync call.
-+	 * Abort call on counterless CPU.
- 	 */
- 	if (!cpu_has_amu_feat(cpu))
- 		return -EOPNOTSUPP;
- 
-+	/*
-+	 * For same-CPU reads, call the function directly since no IPI
-+	 * is needed and this is safe even with IRQs disabled.
-+	 * Use get_cpu() to disable preemption as the counter read
-+	 * functions call this_cpu_has_cap() which requires a
-+	 * non-preemptible context.
-+	 */
-+	if (cpu == get_cpu()) {
-+		func(val);
-+		put_cpu();
-+		return 0;
-+	}
-+	put_cpu();
-+
-+	/*
-+	 * Reading from a remote CPU requires IRQs enabled to avoid
-+	 * deadlock in smp_call_function_single().
-+	 */
- 	if (WARN_ON_ONCE(irqs_disabled()))
- 		return -EPERM;
- 
 -- 
-2.34.1
+2.43.0
 
 
