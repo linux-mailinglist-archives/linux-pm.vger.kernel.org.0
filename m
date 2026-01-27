@@ -1,89 +1,86 @@
-Return-Path: <linux-pm+bounces-41512-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41513-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gJ3BNEhOeGk4pQEAu9opvQ
-	(envelope-from <linux-pm+bounces-41512-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 06:34:00 +0100
+	id aIn1LPhTeGnbpQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41513-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 06:58:16 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 508F4901ED
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 06:34:00 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BA1790321
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 06:58:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 72EE1301BEFB
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 05:33:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 88A523027967
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 05:57:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFB2283FEA;
-	Tue, 27 Jan 2026 05:33:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B7892F1FEF;
+	Tue, 27 Jan 2026 05:57:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="awnsufdQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nK8BshzU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5C51EBFE0
-	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 05:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C23AC2DB7B8
+	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 05:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769492035; cv=none; b=TSWWNMLtDWT1svpHbvhHWspd6XCnYHya5yewtGTcSSeNJRkhvBmZVdXUjTRWZJuEOpzOD4TCJZDXE7/2vF6ydbZGNY6mUO0iE0nSJSY4C2gTkCQ6piIJ5mt3H6oghidg+7n3qjxkZggzR8Fb0KLdFvIEG2GnLGb8DcGTo/5LZAQ=
+	t=1769493450; cv=none; b=J22vgZBI3fG6+3RuxvJSEU0xYXS3im8IcbTGawt8+H41CwZ8SFngS7dnfxfdrJy17joIykW8UiR3Q1Pj6T5TlxwqJqot04KvdRakMgM4kICy7FQwcTC4xHvfkBXILbfRCAYPtzL6P6SXuFG0k7xjcmKAPD3TockAL5yBLHhqNV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769492035; c=relaxed/simple;
-	bh=VPVt90l0n1FDc6y/5iqeP1EG1k+bkfiVr1UwMQflg9g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tlHW1yzA/jF4g7cN7Tl7Zwn+WZCimHdDWU8NliLuaK3fUW1FQRSS+9shJdv1XxZ8cCih1ZgG5Juc2vFXqc8W/NPRYhIOYDg9LA6RCUDVG/OJjkyO/bgW0wGuqL/1On6CRVxpuAXzRn3+hBqyCBXp+CDdiDdWcBz0K4q+4ePKWIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=awnsufdQ; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1769493450; c=relaxed/simple;
+	bh=XPvG3+7byBwsjoBOpXDDqwgH+jtY628GE61tjz52YLU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DnZrDHb3TNXl70FZotwMR7inz0YibBFTgT5/tf1WYWNqilXsvftEFJ4z8/UUCzaRpDH8oREpNbPvweUPkOeqKF5OWvLhVs8KxVvR8bphbSnqsSxqzis1UtaR8T6sn3fyIRIEhzu2KyKmwTmo+Sjadi2mVox/Q5D+ZqRtx1Nlp/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nK8BshzU; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-81f5381d168so4900611b3a.2
-        for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 21:33:53 -0800 (PST)
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-3530f597ea3so2359780a91.1
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 21:57:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1769492033; x=1770096833; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZhM5WGRNd2lTAZhVGtf3iDQf10cuSEQ42awpHwqmnIc=;
-        b=awnsufdQ41NIloq5AxQOOQkxsEEdF5c0Zc3f4kj9NYVxr1pEslDM9h/kA9/olxiE3J
-         RnqC2TbGsfL4ezLS1X5Zkh/2IyKP0FuibVpQvPOlltoPmgS0jRjJ+qBfrWV8NKy8zQb9
-         cH1py0If2odcagZde5Lq27JKSfSaUC54ZP1p4+oiPE1naHGDh4mFf/R97PhAipolsyUy
-         hjWcTRUP5pF9HJUELtZC7UXivWA4w+gsXxPylbsYzE5acdoXHBj+NT4IXLy15jlgfmXQ
-         MOg6jsjfETx8OvMi0unTxt00yaH7MeEX8wH8LIlmwceR2bLumf0v8FGN7frQBDNXDFpE
-         dqWw==
+        d=linaro.org; s=google; t=1769493449; x=1770098249; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UhFLcT/RM7twPJRiwgEXRp6cSRq0YTknnubGG9Zs3dw=;
+        b=nK8BshzUAM75TPBtWHM2b+ak7a+y0AXPWetcBrFwvZaql3+RHDoCd0w4Q3g91MRVYd
+         fsqGWjEdmmx8O+EioMr7TjZX3O3XjoRg+SSbcASKK26frTv1XGkNWhe9UjDD/CNlbxpU
+         xgrPgW7y+FL8T7GEVty/0rhN22CDBnaE8A5sswIQPk4iPFSh3mEeDpmIYyKQFuj6vQp5
+         iuGxCeFIIk05dHUk+BtZbN2k8ebwzcqPQMelyD1Qcr+XX14+DSjTAXPXWDscnEsk8B3f
+         XFwRyKcOU2fPvhww7WoaV+TAcW85epjBpxmivkxVDf9UNDxpVeToBWbPBxYKOOLxHTSV
+         6lww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769492033; x=1770096833;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZhM5WGRNd2lTAZhVGtf3iDQf10cuSEQ42awpHwqmnIc=;
-        b=NumWywsyB79QKhHEGVOQvcZucVzHIGlQtwlpuu32t+6K9B9xwFPVsdbdOvkDimtodD
-         qEYYAAtcs8zpAQQz1f3ML1uYXSK+CvvOCBmMhg5OY8F4gEyOL7uKCLl3YieFdt8Oz8xM
-         JsiDxG95PdAAaqdrv4gx+1mTT1D1shLQBrzMTZ1NLtYld0Fa5oY/Ln3x5wQw8Gj7WTtN
-         3gTR7W2BmuggHlKypjCo1unuF+IA+uVgza7g7kM2sb6DvPJUrJbHJQ7WBsYp/NmIecWT
-         XeXr7Vb+nu4YVG6qq/Ozcq7FoQDpRziLtY8MV+TIdkq3eWsT1jymGvQufoRUcoM20xSc
-         Pmvw==
-X-Forwarded-Encrypted: i=1; AJvYcCVe3l6wwYWiNfMaCZ+h5sFrGgVqgH5SsPwFYljhoPUERnDoPRHmRADTm434ZxztEmkCPtsT6o9t1w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywwg2G/09XJGjwzfn6IJcY063afCZ+o790h9VNKM2/e6F8jII61
-	bj08XG2kXgGpmI1XTy1HyNqaD6OjqAGWnw1IIzBJ0TMKlXTzDk3Fq3OIcLpVSkPTJWo=
-X-Gm-Gg: AZuq6aJchIQe+nUjAifjdOWgMIuEpdssK/XldKCu9VuamrVT1Uo4M1/RVXA4nkPP5FS
-	mB9/aSG/LZ3XnTUvLnoNRzawczxnkP8eIr/7rcOGsUtCr7DRzK0ivRuUM+S2crSJrRb1nQcClZZ
-	DU4p41Eut2Lw2AVIUYZkmaq6SGqaRJ+bdK/+uT4juaPf+3QDNwWL3xuprIzXYA6jTPoNzpZOSwn
-	2KvzffrqPr3CkLcRblmRjrg5VOpqB9/rtW0SISlS8DsamHSF9zPZllZm4xaaYfsqaReiY373UEs
-	THaRyFzLri1Ab4KmN/NDoR+bpY/SWFuYMcsjVOyiCp6A5fKiM3hjCdtQaARyojowbi1Z0uDwpyZ
-	SAF+TEznDGd8krKXhRDdYp9c1DKefEeFpEbFYsc8TlKfdq62907yzkWu3+uV7B2dgQHsnGGaVhJ
-	2YDvXa8HTaJOg=
-X-Received: by 2002:a05:6a20:bea6:b0:358:dc7d:a2be with SMTP id adf61e73a8af0-38ec62d5ec2mr468783637.17.1769492033265;
-        Mon, 26 Jan 2026 21:33:53 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769493449; x=1770098249;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UhFLcT/RM7twPJRiwgEXRp6cSRq0YTknnubGG9Zs3dw=;
+        b=P69RXy5VHcrPqEK+6Ftev2I0tvOSfsK3y6xakvBqyJL+e/QQI4epFKXbbeiSimCVSY
+         Wbakc9XyyTG0FGDj4JS2yl4mIJHr80Md+/+UfS65HsuOaTBe2zgx539WwR2kVRX9l3cP
+         N9OpcVkfmy6bSz2ThCFOVbOQgKavIcaljv2kmbauW+hP2cBuToXmnDD7DNk5m7soYM40
+         1Y9aLogkD+rCvahST8VE1osIQhDGhP2TXcop2RAizVnnG6KYUASFLZgbaJLG4U1VH9R/
+         6b81Nm7UpqupKI7+tusmsoqSVsrcnTzxfgfsa/bYd1zMksdsvY+cTwpy+x1Xgsvz+GUI
+         PUeA==
+X-Gm-Message-State: AOJu0YywhOdMyLZLIZPkIJoiczLMWf2yhsK1BMhJkrbd82ErMZ15q4/j
+	/vTDUxOOIdTvb+LNWxKsZoBQ4W7mjAlc82lhGeKT75dITZiq4Z/8H86Roq0GmVimphCb2F3Fhus
+	a9tzQ
+X-Gm-Gg: AZuq6aL8gDtHI6JALcrc6XZuOig27EUiXQM01HvZZRucG+89rtt+3BLAJRbXvsaY+HB
+	fsoTAPOfhcTUx4tbr5kO+TqXyOpJdlVcd+kIAcPA0IOeG24kGWJNoY5Max80eLi/UViKH6L8u63
+	YpsE+Q+9VBV+PAwOyPT4TyVtnwOpR+ggbaEcT0rPo3u1+UjTln2AM8oj7jtSv5z0eqbALVtXnPi
+	yAetKTwHJkP12oNnViWN3fALpE88GEyi0rVbhBdNJSBUcoBw1aOSGwn/WvJub10S0nclBSQV9mm
+	RNuzojY4PMjA1B51ir8IB2K625La42eJA2fcISCd0q41i6NtuIAzeBJdLepurFHzAhgKfYtnD6i
+	fU57Gj/8kGl0TnDhA9Z+RpyyUN8UI5ovEf0LROqBUwgJqBYbNwl+INT4o8LDlA1tcsKkWXlgDrg
+	bCM0VlRsQ15ic=
+X-Received: by 2002:a17:90b:1b46:b0:34e:63c1:4a08 with SMTP id 98e67ed59e1d1-353fed6ec0amr805260a91.20.1769493448927;
+        Mon, 26 Jan 2026 21:57:28 -0800 (PST)
 Received: from localhost ([122.172.80.63])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-353f6128145sm1173492a91.8.2026.01.26.21.33.52
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8234fd9a5a7sm3486783b3a.63.2026.01.26.21.57.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jan 2026 21:33:52 -0800 (PST)
-Date: Tue, 27 Jan 2026 11:03:50 +0530
+        Mon, 26 Jan 2026 21:57:28 -0800 (PST)
+Date: Tue, 27 Jan 2026 11:27:25 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Aleks Todorov <aleksbgbg@google.com>
-Cc: Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] OPP: Return correct value in dev_pm_opp_get_level
-Message-ID: <a3comdacnan2ztxsxfkjqh6wp732ytsrixmqvm4pb7xlfvuiho@2fycbsezj5xw>
-References: <20260123140344.449458-1-aleksbgbg@google.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] cpufreq/arm fixes for 6.19
+Message-ID: <k3brbzyfuqulewxmkyjolnxtkn7nnsduf7keqch5obgpcqyovl@jtopk3yoqlr5>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,68 +89,63 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260123140344.449458-1-aleksbgbg@google.com>
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41512-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	DKIM_TRACE(0.00)[linaro.org:+];
+	TO_DN_ALL(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41513-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TO_DN_SOME(0.00)[];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[viresh.kumar@linaro.org,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linaro.org:dkim]
-X-Rspamd-Queue-Id: 508F4901ED
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:dkim]
+X-Rspamd-Queue-Id: 1BA1790321
 X-Rspamd-Action: no action
 
-On 23-01-26, 14:03, Aleks Todorov wrote:
-> Commit 073d3d2ca7d4 ("OPP: Level zero is valid") modified the
-> documentation for this function to indicate that errors should return a
-> non-zero value to avoid colliding with the OPP level zero, however
-> forgot to actually update the return.
-> 
-> No in-tree kernel code depends on the error value being 0.
-> 
-> Fixes: 073d3d2ca7d4 ("OPP: Level zero is valid")
-> Signed-off-by: Aleks Todorov <aleksbgbg@google.com>
-> ---
->  drivers/opp/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-> index dbebb8c829bc..ae43c656f108 100644
-> --- a/drivers/opp/core.c
-> +++ b/drivers/opp/core.c
-> @@ -241,7 +241,7 @@ unsigned int dev_pm_opp_get_level(struct dev_pm_opp *opp)
->  {
->  	if (IS_ERR_OR_NULL(opp) || !opp->available) {
->  		pr_err("%s: Invalid parameters\n", __func__);
-> -		return 0;
-> +		return U32_MAX;
->  	}
->  
->  	return opp->level;
+Hi Rafael,
 
-Applied. Thanks.
+The following changes since commit 8f0b4cce4481fb22653697cced8d0d04027cb1e8:
+
+  Linux 6.19-rc1 (2025-12-14 16:05:07 +1200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-fixes-6.19-rc8
+
+for you to fetch changes up to 7e3debb4c72fe840d60014192cf93950871fb3be:
+
+  cpufreq: qcom-nvmem: add sentinel to qcom_cpufreq_ipq806x_match_list (2026-01-27 11:21:22 +0530)
+
+----------------------------------------------------------------
+CPUFreq fixes for 6.19
+
+- Add sentinel to qcom_cpufreq_ipq806x_match_list (Pei Xiao).
+
+----------------------------------------------------------------
+Pei Xiao (1):
+      cpufreq: qcom-nvmem: add sentinel to qcom_cpufreq_ipq806x_match_list
+
+ drivers/cpufreq/qcom-cpufreq-nvmem.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 -- 
 viresh
