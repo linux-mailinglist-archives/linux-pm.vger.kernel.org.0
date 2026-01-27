@@ -1,542 +1,183 @@
-Return-Path: <linux-pm+bounces-41538-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41539-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id APQdJdnEeGmltAEAu9opvQ
-	(envelope-from <linux-pm+bounces-41538-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 14:59:53 +0100
+	id WHhWON7MeGmNtQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41539-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 15:34:06 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B6B395407
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 14:59:53 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36F9795C90
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 15:34:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CBFD930241B5
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 13:58:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E00DB312779E
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 14:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6FD235B655;
-	Tue, 27 Jan 2026 13:58:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 805C035B62C;
+	Tue, 27 Jan 2026 14:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YQAgBqEB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mWP6p7ZA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD7C35B139
-	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 13:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5967350285
+	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 14:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769522306; cv=pass; b=eaTc1P4AdJnLfdTAsSUNkwe1SKHZl0DLpaANu8T/wrlXZxkEwUodeDVDn5rOMHyu81peqRq8BI3zY8TrH8P9lpDaU+Qqxqivq2NV3HZaSgfgp2mP3o+OuIZzIt8+efuJ8O76jiq+foEN+IrD/I4mYTXiYDg5wXoTQ5sHOs0tE5Q=
+	t=1769524066; cv=pass; b=TeGGxqrLHlbRgrIhm9KM6u00QchsBrVYXytIzKe4w3w56iQPR45vcq63gWyxheM/hq6UIl5CkMS+eUhQTNnr1H/ytp5R9y/+CjrHy8RkTQpisVZ0e5hhzofNR/XD8muQvZYuITO0KWbs+fTtWMV7dVw1+dBUbmwkf1Q6wG1kAtk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769522306; c=relaxed/simple;
-	bh=sePAErvMVTp+q4zgBvMJV3gxhTYfl4ciBeJNjyq2SPU=;
+	s=arc-20240116; t=1769524066; c=relaxed/simple;
+	bh=LmoyJc0U7t64dEBkJj7rqwEVKdsAUJvHf8RCJP0N1OM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uK0Y1t0KhdW75bWTmjKDHUjVcA/DmO5FXkrIE9EsZq3Bp7rp9UK1Z0l1I3ogD5AUhNNObXYLQMsNYw7n8840Pf+2e7MfYILPBuErZuuVuV1UlFEpDg2k4t+pPLwSI9mCsYlu4fME+D2AtRDG8OHH2rKD6jbEh5wSFi666rKTns8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YQAgBqEB; arc=pass smtp.client-ip=209.85.167.54
+	 To:Cc:Content-Type; b=aw8IBQyN92olbgQzGUyNn/kMQ8PVj4CcKxM7HHjfU1ahchk7MAIsdIA9A0lD90irs4Qtna6lN4a2T9KvwnoiIGR/UdN9X7e52vqJKt7VTaV7TcicBWTHJx7P8JF6MrTAO9OG8VMyRdO7nu6tYGYOvW64VFzhi8WAZdK8YsKdbTw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mWP6p7ZA; arc=pass smtp.client-ip=209.85.167.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-59b7c2614f7so5354926e87.3
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 05:58:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769522302; cv=none;
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59dd34f8120so6854038e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 06:27:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769524063; cv=none;
         d=google.com; s=arc-20240605;
-        b=kqZjmpQLJQdGAsbyMqLeHgtH1ByVIalMN9Kkn5eVrypYsvCPk0vI3RnK1q11dak6L7
-         7Dn6M4oDd19wG2iGSS/64xaa7RlnAQFVDQEu0D7ZkpDri/AWJiCP9qAT3N8bffiG2q8t
-         OKDq1zLtFVUYKSyrfBuOJTRWpvFMyUVKa4+BnbLxayfSZM6oxIpmYoURRSfu82HcPTWI
-         TFMIyxem3jSbwHH5iaiBzfFfib8tFzEZkvYl0pRJZaT041ibEJJI6jhO7Eh+yRoUKSNo
-         i/OjKDHWjPcWRRmegxJdQWCLsoY6jZFSoChVvV1EC+05Ey1b61/Jnt6K8oEeFkP2PO2A
-         5Znw==
+        b=fV1O1uS+V/KlED3tDh3NWQp3wUfcbdjz9o2LFJdLQfVjysMIUzmX6kP4PbbjNaNPLg
+         xZDYS6hh/0o1tRPZk/51jBQEOgzjpgLhG5adG2gCS3c6itY6lE2QdpVfwX8WJjY7VV1L
+         vC3WqV3ta8CgeCtjkYMX/FVYHE7WDacGTFK1y5IzQjvtHY1iLSbJB1SErVgRg/iJgU8F
+         o1qIk7vJ4iJ+Ivyvg41kwgyft5vhJCc3g6/BoP2qHW6d3Wc3ciOMoEfCQenY1pidY6bK
+         /myL9IkzRlIEfm8A7VNkZ94tnBl5T3zm/YcTN5iRzTsDxizPagBve5u9W3XWs4QVVZIe
+         nKPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lfk0u8jijXvQF1SoXyqvsVpMiit2Fv9RQS39R0lpECo=;
-        fh=aW5TC1PKG77Lu+c4PRptNMXneDnzJ6Q3wjW/whsVtZo=;
-        b=QEmo+s4LjK9lKPoE70UCZrc588jTODr/nTGVlCTHKAtmlP1wpoytpB6I6O/rIsbwOF
-         yeqSoJtJ5Z6p3S/2GWJPvvrtZgdkynH/zlSLx1VkJdwqJ8v5vCK7x4OD+eJAwNVkMBAv
-         ZHKtj7Z2IEEHRdJ6nJDbwwusEg/WVgluODrbddl/16Bq+63lPuK+tsTDVqrQEmWcW2ik
-         oLN12+hSb3+zug7Yt0jYMDPhLGnNKdPq1O9VavsLVp0m2fCdTEN726wIrAJkLh8gMOiB
-         +YgNA1i1O2moqXo4CWySO50Fszq9I2bPrxtxmijkWCXE8CCid7YrNYt4C+ZO/GWpaXUR
-         CsoQ==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=RxLJbyzq0obe4KNPLIQmlRLpVx7gXGsUdWL42nC0oZU=;
+        fh=ar1dGXMnvFPU0O/7TdXXe7UG3TrNCdq11L0dl03wQ+4=;
+        b=KaPcrDkTne9bkQ2CJsfUkVitMZTpYEwoFefh0Jyx0H1XF7tQ8zL/gLskrCvQ/OYtoD
+         jc04hvPjJWhBvg3LxBZYUqGevRqbEwPGCbFXpQPSCb6NkTdb7y4HF6bVPertcWXc2mbI
+         L1GRVqvrdTwD5Z16VrqAKvLcyW0UrylaeKQNimj6X2a+nYq0IJO6inEp4ir42JppLhpo
+         aF+GCW4NZguR3Y6qxqLtBrk9KlXWxefWMnAqMw4admjRNHDvN2sZC9PKqDUgdSCPRA72
+         k43LaW6+nR4csr/o1ax2x9LL119+DSvScxDYT6i76YtdzYfz2L85FA5t5LvHiOQDUxbQ
+         vrLA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1769522302; x=1770127102; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lfk0u8jijXvQF1SoXyqvsVpMiit2Fv9RQS39R0lpECo=;
-        b=YQAgBqEBzgIiZKvvHv9lkoB8jkr091s84Z/n4t7hZQinPZ+qVo7PuxNGSQzi1lQ+D/
-         KbiPZROvH5g2gvS8jaFuRhKhYkgs3dDL7zdDQTQyspGv2jXFUH/C81qSC+zuy0Ldfh1u
-         ma2z5iYm4Rugun8JSqZLf4QdYuGrpLY90RXHff9F8WG4WtAObzG9XMWCjZt9hpEVq+ss
-         cAFsu5eKIX7MuW0PSRQa1TPbNu7ZtHwPD/G6/xYVBvVk+16Eo87IcBkg8PpAAz2eno6l
-         K6QJzZrAP+nSExbGtO+egcLFrSqDslTAnPrbTUpBrmdhJlmyfpgs+I1kysSIDDYRzO3N
-         QeSA==
+        d=linaro.org; s=google; t=1769524063; x=1770128863; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RxLJbyzq0obe4KNPLIQmlRLpVx7gXGsUdWL42nC0oZU=;
+        b=mWP6p7ZAhhV0BJjzyRC3AY2aOWNE1uyYmXJuDIq06k9aPJVd8kQAOgQYHZqPTvwZJG
+         ri93B0JaqIaLWbO7djC2LySrS+/5Dt95bdhwlcZRrk8r7Du9ARBVPWcvk5MaF7f3bFFV
+         sujiOoO0yOPAnZxerQz4ckCP09O2rrYVOnDoAJHopibP3Ghs/zDPzzAOizfcqK+m1zky
+         GLjl438tZS0nzeKcDp0FzR6yuFvi+71RqPiEMO8ZPdxcVfzqBNQzCpwXh4PjrpngkPmb
+         qD/U7Rvo19SVvutBL3e5keeHWwRNuf6w0UuRXbaNIwpF318KXXXipCnAQEc/o4jtg4/t
+         eeQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769522302; x=1770127102;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lfk0u8jijXvQF1SoXyqvsVpMiit2Fv9RQS39R0lpECo=;
-        b=EP/c5cSZP1LPA75kU20R+okAZJC3dd4oq9RtlHBORZBppG5cSDSBc/VLx6P3yx2Xn4
-         smyohiiU/o80BpqG6SsLLZGKn3j0ZLjBOIaL77mwpgtejrGvR6Bum3vnHMGt9HTK/j4e
-         GrpVerQTYQall1x46JaZLHDram3+h3x4HnWbJvu6wSf7NpwR2VLFlDtMbaqUNPwsbVYY
-         fOhrH0qIa4Ma4atQ93uDAtwtailrSQgIGkEl/+6eS3Ucuv0RP8VerQDNfFJ2H1t6Voxu
-         jTHqNrHhpsvg/ngwaH8K6PgR/4MGACilMEdrZu40uwqLXlHfcKT9PMVK/UjTUMMCfVNC
-         ajJA==
-X-Forwarded-Encrypted: i=1; AJvYcCX0BiWu/0UE1dZ+Rpl5V0tL4rBfmornrmxwJcR15h12XvCMBIURtwrSoBs2JZUsmojfTk8xrXyIFA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmRxBOR/RdInO8oheKINh4B+lHIXNco/FroP8xNXIAItm/mJBN
-	AyOOPR+bCi5CdhV9YjmrG+b0ct0RyWLon9f8sNGojAdsoakbUlKKJUMJc4U3nrp8LO9U303dN4N
-	M4ZfTix2Uj6Wod15Jj/tb6DEz042U+rOoUfIJphayyg==
-X-Gm-Gg: AZuq6aLnq8rxGPhMMB4VssVZA08v39iACCT2PLb3FJXpBJ/9pym0zkp3ab23DKzNE/E
-	jdctSHR18Sua+6CsxFu4cgn4siIbPxZX5tmoleGcCGLhR36NAI38hOJ7KrPEchPb1oeBMLooGZT
-	RU1+qMJVasew6qPqK3fuP7ceHWt14ms13thOumbQabk37YRbwZUB2D4LrXvRKAgSWPPLoRRyf2h
-	IqwCHGXoofEz/Gi/qB6IyeN3hcqGK8/Y7IWbDGawx2qyoZGHHLW7y3xkGikfKPwGIzj64VeOwD4
-	d6x3O3Y=
-X-Received: by 2002:a05:6512:4005:b0:59d:f12c:9f05 with SMTP id
- 2adb3069b0e04-59e0401a4eamr918529e87.23.1769522302270; Tue, 27 Jan 2026
- 05:58:22 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769524063; x=1770128863;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RxLJbyzq0obe4KNPLIQmlRLpVx7gXGsUdWL42nC0oZU=;
+        b=vuraO8MpE8th7tALSoH+8rbJh1bENiKGWb4qYyrbTRh4vVpGYd5DXghDqDUkVk7J33
+         o+l45icSBED+rXNs1bGijbqzZ+NmbSPvlVoBZjFQy5tZIW9/amqSc8fYPR84H4GxXOrA
+         2WIvTKmKfa65koF990ErioFtSZLcFiKlYix4/RfOTpglNszafR6aAkhtGQxJdgYv7Atc
+         K7UcSA2Vcl3eryPiYeoIxG+JYaLIjAbTU0G8cy0Xgteyb1MJoL9ImeaWb8h+VRf+jyko
+         CRYxA8wCjqxmLrE++9NKBd9pOpVE0gjnzDjtqWu0ZXVM+4SwKmHPGCJYEbPOSLANZ5f5
+         e56w==
+X-Forwarded-Encrypted: i=1; AJvYcCUN3lhsyHTcknAkSeTM/E9PmPQE2LWVNb+/ZhqFuthMnWxI23xiWsO0dIwSSmTfSPLcPymDMGx4Vw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxs4wugTgKeHk2S+68cjD2BO1+5q2oyPGAo4wJLO4h2nPf8W/B0
+	47pEWfcgLDgsjZRF7wEVpzovHWUv412G20DLPDCcQOdOEHiaAhiLNkuQETkuLlb901PLKNySF23
+	iHL84PiBw7b7i77MfrVcQsrNCJEE42WdkZ02mDkMwJw==
+X-Gm-Gg: AZuq6aJ/VZYXRyWeKym4V7EkAozlvlqXFzSzLrAt0TqIl5WV6U6lAAS5FUm1yQFY+9t
+	klDNBl9Qh6p/4+xSiWL7SerY14EjrXFEnshTfCss9h0iS4MoygycjWBkUMK40eOkHoXFUvrKBgL
+	ll7E79XUNFCh7rjC/3Sz9qHVrc9OFsIxq2cS+DQtPWJk9106PU0epfvELOJl5N5Sby4Jbxuke8w
+	GmYWNOy5dKTpVGywEci5XpYFfbw0jyDSr8hsSZX5dz+/B84ZRmXPp/ymrtIOSK+GGIkYGhm8u6H
+	Hn4+ArI=
+X-Received: by 2002:a05:6512:3b9d:b0:59d:e774:db0e with SMTP id
+ 2adb3069b0e04-59e0401a133mr1025420e87.23.1769524063038; Tue, 27 Jan 2026
+ 06:27:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251231035357.1147578-1-tzungbi@kernel.org> <CAGXv+5Fm7DFkZ_JONhHN4467=oVhuw-e1XtXuD53qBQDWd7cNw@mail.gmail.com>
-In-Reply-To: <CAGXv+5Fm7DFkZ_JONhHN4467=oVhuw-e1XtXuD53qBQDWd7cNw@mail.gmail.com>
+References: <tencent_E20B88FB4461F8F299301AE67009CF1E8708@qq.com>
+In-Reply-To: <tencent_E20B88FB4461F8F299301AE67009CF1E8708@qq.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 27 Jan 2026 14:57:46 +0100
-X-Gm-Features: AZwV_QgVAr_2niJYiUonIGgapgyqBQwATPHJ_yDF_S4wCInP9xq5Hp1p8jkeJQA
-Message-ID: <CAPDyKFrqqXYy_Y-7WA=5taBhE4rcYX+Uz_RnGpOtD-AF3eipVQ@mail.gmail.com>
-Subject: Re: [PATCH v2] pmdomain: mediatek: Break lock dependency to `prepare_lock`
-To: Tzung-Bi Shih <tzungbi@kernel.org>, Chen-Yu Tsai <wenst@chromium.org>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-pm@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org
+Date: Tue, 27 Jan 2026 15:27:07 +0100
+X-Gm-Features: AZwV_Qhi8UzxlF5LVwmX4f7HQZtYZhiLDcb_EwLIgdqVDsG5Rq1NvMoa6p6uOA0
+Message-ID: <CAPDyKFqCewZeQV6UVGXXuuxjPa_amThaHz0TmLpLksP1A=G9Eg@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: ti: omap_prm: Fix a reference leak on device node
+To: Felix Gu <gu_0233@qq.com>
+Cc: Nishanth Menon <nm@ti.com>, Santosh Shilimkar <ssantosh@kernel.org>, Tony Lindgren <tony@atomide.com>, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41538-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41539-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[qq.com];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,collabora.com,vger.kernel.org,lists.infradead.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,mail.gmail.com:mid,linaro.org:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,chromium.org:email]
-X-Rspamd-Queue-Id: 1B6B395407
+	RCPT_COUNT_SEVEN(0.00)[7];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[pd_args.np:url,qq.com:email,linaro.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: 36F9795C90
 X-Rspamd-Action: no action
 
-On Thu, 22 Jan 2026 at 09:38, Chen-Yu Tsai <wenst@chromium.org> wrote:
+On Fri, 16 Jan 2026 at 13:27, Felix Gu <gu_0233@qq.com> wrote:
 >
-> On Wed, Dec 31, 2025 at 11:54=E2=80=AFAM Tzung-Bi Shih <tzungbi@kernel.or=
-g> wrote:
-> >
-> > Break a circular locking dependency between the Generic Power Domain
-> > lock (`genpd->mlock`) and the clock framework's `prepare_lock`.  Move
-> > the prepare() to the domain initialization phase and the unprepare()
-> > to the cleanup phase.
-> >
-> > The possible deadlock occurs in the following scenario:
-> >
-> > 1. `genpd_power_on` acquires `genpd->mlock` and then calls the driver's
-> >    `scpsys_power_on`.  The driver calls `clk_bulk_prepare_enable`,
-> >    which attempts to acquire `prepare_lock`.
-> >
-> > > -> #0 (prepare_lock){+.+.}-{3:3}:
-> > >        __lock_acquire
-> > >        lock_acquire
-> > >        __mutex_lock_common
-> > >        mutex_lock_nested
-> > >        clk_prepare
-> > >        clk_bulk_prepare
-> > >        scpsys_power_on
-> > >        genpd_power_on
-> >
-> > 2. A clock provider (managed by a power domain) is resumed.
-> >    `clk_prepare` acquires `prepare_lock` and triggers a runtime resume =
-of
-> >    its power domain, which attempts to acquire `genpd->mlock`.
-> >
-> > > -> #1 (&genpd->mlock){+.+.}-{3:3}:
-> > >        __mutex_lock_common
-> > >        mutex_lock_nested
-> > >        genpd_lock_mtx
-> > >        genpd_runtime_resume
-> > >        __rpm_callback
-> > >        rpm_callback
-> > >        rpm_resume
-> > >        __pm_runtime_resume
-> > >        clk_core_prepare
-> > >        clk_prepare
-> > >        clk_bulk_prepare
-> >
-> > This creates a cycle: `mlock` -> `prepare_lock` -> `mlock`.
-> >
-> > > Possible unsafe locking scenario:
-> > >
-> > >       CPU0                    CPU1
-> > >       ----                    ----
-> > >  lock(&genpd->mlock);
-> > >                               lock(prepare_lock);
-> > >                               lock(&genpd->mlock);
-> > >  lock(prepare_lock);
-> >
-> > This breaks the dependency chain in #0.
-> >
-> > This is a revert of f0fce06e345d ("soc: mtk-pm-domains: Fix the clock
-> > prepared issue").  However, addressing the issue by moving the
-> > unprepare()/prepare() to PM suspend()/resume() callbacks.
-> >
-> > Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
+> When calling of_parse_phandle_with_args(), the caller is responsible
+> to call of_node_put() to release the reference of device node.
+> In omap_prm_domain_attach_dev, it does not release the reference.
 >
-> Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org> # MT8183 & MT8188 no regress=
-ions
->
-> This is unfortunately a known problem of the interaction between pmdomain=
-s
-> and the clk subsystem. This *breaks* the circular lock dependency. AFAIU
-> this works because the clk prepare op is a no-op, because all the clocks
-> are MMIO based.
+> Fixes: 58cbff023bfa ("soc: ti: omap-prm: Add basic power domain support")
+> Signed-off-by: Felix Gu <gu_0233@qq.com>
 
-Yes, this is a known problem that we need to fix properly for the
-clock/genpd subsystems.
-
-As an intermediate step, we could consider platform specific patches
-to fix the problem too, along with $subject patch. However, $subject
-patch has issues too, see more comments below.
-
->
-> There is another question of whether this actually deadlocks or not, i.e.
-> if the involved &genpd->mlock is the same object or not. Perhaps the
-> accuracy of lockdep could be improved by setting a different lock class
-> key and name? See what regmap does.
->
->
-> > ---
-> > v2:
-> > - Fix build error reported by "kernel test robot <lkp@intel.com>".
-> >
-> > v1: https://lore.kernel.org/all/20251229043244.4103262-1-tzungbi@kernel=
-.org/
-> >
-> >  drivers/pmdomain/mediatek/mtk-pm-domains.c | 101 +++++++++++++++++----
-> >  1 file changed, 81 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdom=
-ain/mediatek/mtk-pm-domains.c
-> > index 80561d27f2b2..c371b08c9170 100644
-> > --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> > +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> > @@ -318,12 +318,12 @@ static int scpsys_hwv_power_on(struct generic_pm_=
-domain *genpd)
-> >         if (ret)
-> >                 goto err_infra;
-> >
-> > -       ret =3D clk_bulk_prepare_enable(pd->num_clks, pd->clks);
-> > +       ret =3D clk_bulk_enable(pd->num_clks, pd->clks);
-> >         if (ret)
-> >                 goto err_reg;
-> >
-> >         /* For HWV the subsys clocks refer to the HWV low power subsyst=
-em */
-> > -       ret =3D clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys=
-_clks);
-> > +       ret =3D clk_bulk_enable(pd->num_subsys_clks, pd->subsys_clks);
-> >         if (ret)
-> >                 goto err_disable_clks;
-> >
-> > @@ -365,7 +365,7 @@ static int scpsys_hwv_power_on(struct generic_pm_do=
-main *genpd)
-> >         }
-> >
-> >         /* It's done! Disable the HWV low power subsystem clocks */
-> > -       clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks=
-);
-> > +       clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
-> >
-> >         if (MTK_SCPD_CAPS(pd, MTK_SCPD_INFRA_PWR_CTL))
-> >                 scpsys_sec_infra_power_on(false);
-> > @@ -373,9 +373,9 @@ static int scpsys_hwv_power_on(struct generic_pm_do=
-main *genpd)
-> >         return 0;
-> >
-> >  err_disable_subsys_clks:
-> > -       clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks=
-);
-> > +       clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
-> >  err_disable_clks:
-> > -       clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
-> > +       clk_bulk_disable(pd->num_clks, pd->clks);
-> >  err_reg:
-> >         scpsys_regulator_disable(pd->supply);
-> >  err_infra:
-> > @@ -398,7 +398,7 @@ static int scpsys_hwv_power_off(struct generic_pm_d=
-omain *genpd)
-> >                         return ret;
-> >         }
-> >
-> > -       ret =3D clk_bulk_prepare_enable(pd->num_subsys_clks, pd->subsys=
-_clks);
-> > +       ret =3D clk_bulk_enable(pd->num_subsys_clks, pd->subsys_clks);
-
-scpsys_hwv_power_off() is typically called by genpd in the suspend
-noirq() phase, when all devices attached to the genpd in question have
-been suspended too. See genpd_suspend_noirq().
-
-This means that scpsys_suspend() (below) may be called to unprepare
-the clock, before scpsys_hwv_power_off() may call clk_disable(). This
-is a bug according to the clock framework.
-
-Moving scpsys_suspend() to the noirq phase too could maybe work.
-Although, perhaps an even simpler solution would be to do the
-clk_prepare() during ->probe() and clk_unprepare() during ->remove()
-(and error path in probe). Of course, this assumes that
-clk_prepare/unprepare doesn't really do anything hardware wise, so we
-don't start wasting power by keeping the clocks prepared.
-
-> >         if (ret)
-> >                 goto err_infra;
-> >
-> > @@ -437,8 +437,8 @@ static int scpsys_hwv_power_off(struct generic_pm_d=
-omain *genpd)
-> >         if (ret)
-> >                 goto err_disable_subsys_clks;
-> >
-> > -       clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks=
-);
-> > -       clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
-> > +       clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
-> > +       clk_bulk_disable(pd->num_clks, pd->clks);
-> >
-> >         scpsys_regulator_disable(pd->supply);
-> >
-> > @@ -448,7 +448,7 @@ static int scpsys_hwv_power_off(struct generic_pm_d=
-omain *genpd)
-> >         return 0;
-> >
-> >  err_disable_subsys_clks:
-> > -       clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks=
-);
-> > +       clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
-> >  err_infra:
-> >         if (MTK_SCPD_CAPS(pd, MTK_SCPD_INFRA_PWR_CTL))
-> >                 scpsys_sec_infra_power_on(false);
-> > @@ -616,7 +616,7 @@ static int scpsys_power_on(struct generic_pm_domain=
- *genpd)
-> >         if (ret)
-> >                 return ret;
-> >
-> > -       ret =3D clk_bulk_prepare_enable(pd->num_clks, pd->clks);
-> > +       ret =3D clk_bulk_enable(pd->num_clks, pd->clks);
-> >         if (ret)
-> >                 goto err_reg;
-> >
-> > @@ -638,8 +638,7 @@ static int scpsys_power_on(struct generic_pm_domain=
- *genpd)
-> >          * access.
-> >          */
-> >         if (!MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
-> > -               ret =3D clk_bulk_prepare_enable(pd->num_subsys_clks,
-> > -                                             pd->subsys_clks);
-> > +               ret =3D clk_bulk_enable(pd->num_subsys_clks, pd->subsys=
-_clks);
-> >                 if (ret)
-> >                         goto err_pwr_ack;
-> >         }
-> > @@ -653,8 +652,7 @@ static int scpsys_power_on(struct generic_pm_domain=
- *genpd)
-> >                 goto err_disable_sram;
-> >
-> >         if (MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION)) {
-> > -               ret =3D clk_bulk_prepare_enable(pd->num_subsys_clks,
-> > -                                             pd->subsys_clks);
-> > +               ret =3D clk_bulk_enable(pd->num_subsys_clks, pd->subsys=
-_clks);
-> >                 if (ret)
-> >                         goto err_enable_bus_protect;
-> >         }
-> > @@ -667,10 +665,9 @@ static int scpsys_power_on(struct generic_pm_domai=
-n *genpd)
-> >         scpsys_sram_disable(pd);
-> >  err_disable_subsys_clks:
-> >         if (!MTK_SCPD_CAPS(pd, MTK_SCPD_STRICT_BUS_PROTECTION))
-> > -               clk_bulk_disable_unprepare(pd->num_subsys_clks,
-> > -                                          pd->subsys_clks);
-> > +               clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
-> >  err_pwr_ack:
-> > -       clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
-> > +       clk_bulk_disable(pd->num_clks, pd->clks);
-> >  err_reg:
-> >         scpsys_regulator_disable(pd->supply);
-> >         return ret;
-> > @@ -695,7 +692,7 @@ static int scpsys_power_off(struct generic_pm_domai=
-n *genpd)
-> >                 regmap_set_bits(scpsys->base, pd->data->ext_buck_iso_of=
-fs,
-> >                                 pd->data->ext_buck_iso_mask);
-> >
-> > -       clk_bulk_disable_unprepare(pd->num_subsys_clks, pd->subsys_clks=
-);
-> > +       clk_bulk_disable(pd->num_subsys_clks, pd->subsys_clks);
-> >
-> >         if (MTK_SCPD_CAPS(pd, MTK_SCPD_MODEM_PWRSEQ))
-> >                 scpsys_modem_pwrseq_off(pd);
-> > @@ -708,7 +705,7 @@ static int scpsys_power_off(struct generic_pm_domai=
-n *genpd)
-> >         if (ret < 0)
-> >                 return ret;
-> >
-> > -       clk_bulk_disable_unprepare(pd->num_clks, pd->clks);
-> > +       clk_bulk_disable(pd->num_clks, pd->clks);
-> >
-> >         scpsys_regulator_disable(pd->supply);
-> >
-> > @@ -855,6 +852,14 @@ generic_pm_domain *scpsys_add_one_domain(struct sc=
-psys *scpsys, struct device_no
-> >                 pd->genpd.flags |=3D GENPD_FLAG_IRQ_SAFE;
-> >         }
-> >
-> > +       ret =3D clk_bulk_prepare(pd->num_clks, pd->clks);
-> > +       if (ret)
-> > +               goto err_put_subsys_clocks;
-> > +
-> > +       ret =3D clk_bulk_prepare(pd->num_subsys_clks, pd->subsys_clks);
-> > +       if (ret)
-> > +               goto err_unprepare_clocks;
-> > +
-> >         /*
-> >          * Initially turn on all domains to make the domains usable
-> >          * with !CONFIG_PM and to get the hardware in sync with the
-> > @@ -869,7 +874,7 @@ generic_pm_domain *scpsys_add_one_domain(struct scp=
-sys *scpsys, struct device_no
-> >                 ret =3D pd->genpd.power_on(&pd->genpd);
-> >                 if (ret < 0) {
-> >                         dev_err(scpsys->dev, "%pOF: failed to power on =
-domain: %d\n", node, ret);
-> > -                       goto err_put_subsys_clocks;
-> > +                       goto err_unprepare_subsys_clocks;
-> >                 }
-> >
-> >                 if (MTK_SCPD_CAPS(pd, MTK_SCPD_ALWAYS_ON))
-> > @@ -888,6 +893,10 @@ generic_pm_domain *scpsys_add_one_domain(struct sc=
-psys *scpsys, struct device_no
-> >
-> >         return scpsys->pd_data.domains[id];
-> >
-> > +err_unprepare_subsys_clocks:
-> > +       clk_bulk_unprepare(pd->num_subsys_clks, pd->subsys_clks);
-> > +err_unprepare_clocks:
-> > +       clk_bulk_unprepare(pd->num_clks, pd->clks);
-> >  err_put_subsys_clocks:
-> >         clk_bulk_put(pd->num_subsys_clks, pd->subsys_clks);
-> >  err_put_clocks:
-> > @@ -965,6 +974,8 @@ static void scpsys_remove_one_domain(struct scpsys_=
-domain *pd)
-> >         if (scpsys_domain_is_on(pd))
-> >                 scpsys_power_off(&pd->genpd);
-> >
-> > +       clk_bulk_unprepare(pd->num_clks, pd->clks);
-> > +       clk_bulk_unprepare(pd->num_subsys_clks, pd->subsys_clks);
-> >         clk_bulk_put(pd->num_clks, pd->clks);
-> >         clk_bulk_put(pd->num_subsys_clks, pd->subsys_clks);
-> >  }
-> > @@ -1208,6 +1219,7 @@ static int scpsys_probe(struct platform_device *p=
-dev)
-> >         if (!scpsys)
-> >                 return -ENOMEM;
-> >
-> > +       platform_set_drvdata(pdev, scpsys);
-> >         scpsys->dev =3D dev;
-> >         scpsys->soc_data =3D soc;
-> >
-> > @@ -1270,12 +1282,61 @@ static int scpsys_probe(struct platform_device =
-*pdev)
-> >         return ret;
-> >  }
-> >
-> > +#ifdef CONFIG_PM_SLEEP
-> > +static int scpsys_suspend(struct device *dev)
-> > +{
-> > +       struct scpsys *scpsys =3D dev_get_drvdata(dev);
-> > +       struct generic_pm_domain *genpd;
-> > +       struct scpsys_domain *pd;
-> > +       int i;
-> > +
-> > +       for (i =3D 0; i < scpsys->pd_data.num_domains; i++) {
-> > +               genpd =3D scpsys->pd_data.domains[i];
-> > +               if (!genpd)
-> > +                       continue;
-> > +
-> > +               pd =3D to_scpsys_domain(genpd);
-> > +               clk_bulk_unprepare(pd->num_clks, pd->clks);
-> > +               clk_bulk_unprepare(pd->num_subsys_clks, pd->subsys_clks=
-);
-> > +       }
-> > +       return 0;
-> > +}
-> > +
-> > +static int scpsys_resume(struct device *dev)
-> > +{
-> > +       struct scpsys *scpsys =3D dev_get_drvdata(dev);
-> > +       struct generic_pm_domain *genpd;
-> > +       struct scpsys_domain *pd;
-> > +       int i, ret;
-> > +
-> > +       for (i =3D 0; i < scpsys->pd_data.num_domains; i++) {
-> > +               genpd =3D scpsys->pd_data.domains[i];
-> > +               if (!genpd)
-> > +                       continue;
-> > +
-> > +               pd =3D to_scpsys_domain(genpd);
-> > +               ret =3D clk_bulk_prepare(pd->num_clks, pd->clks);
-> > +               if (ret)
-> > +                       return ret;
-> > +               ret =3D clk_bulk_prepare(pd->num_subsys_clks, pd->subsy=
-s_clks);
-> > +               if (ret)
-> > +                       return ret;
-> > +       }
-> > +       return 0;
-> > +}
-> > +#endif
-> > +
-> > +static const struct dev_pm_ops scpsys_pm_ops =3D {
-> > +       SET_SYSTEM_SLEEP_PM_OPS(scpsys_suspend, scpsys_resume)
-> > +};
-> > +
-> >  static struct platform_driver scpsys_pm_domain_driver =3D {
-> >         .probe =3D scpsys_probe,
-> >         .driver =3D {
-> >                 .name =3D "mtk-power-controller",
-> >                 .suppress_bind_attrs =3D true,
-> >                 .of_match_table =3D scpsys_of_match,
-> > +               .pm =3D &scpsys_pm_ops,
-> >         },
-> >  };
-> >  builtin_platform_driver(scpsys_pm_domain_driver);
-> > --
-> > 2.52.0.351.gbe84eed79e-goog
-> >
-> >
+Applied for next, thanks!
 
 Kind regards
 Uffe
+
+
+> ---
+>  drivers/pmdomain/ti/omap_prm.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/pmdomain/ti/omap_prm.c b/drivers/pmdomain/ti/omap_prm.c
+> index 5142f064bf5c..64a187f79a1a 100644
+> --- a/drivers/pmdomain/ti/omap_prm.c
+> +++ b/drivers/pmdomain/ti/omap_prm.c
+> @@ -655,6 +655,7 @@ static int omap_prm_domain_attach_dev(struct generic_pm_domain *domain,
+>         if (pd_args.args_count != 0)
+>                 dev_warn(dev, "%s: unusupported #power-domain-cells: %i\n",
+>                          prmd->pd.name, pd_args.args_count);
+> +       of_node_put(pd_args.np);
+>
+>         genpd_data = dev_gpd_data(dev);
+>         genpd_data->data = NULL;
+>
+> ---
+> base-commit: 9b7977f9e39b7768c70c2aa497f04e7569fd3e00
+> change-id: 20260116-omap_prm-c7bdd9726abc
+>
+> Best regards,
+> --
+> Felix Gu <gu_0233@qq.com>
+>
 
