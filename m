@@ -1,275 +1,139 @@
-Return-Path: <linux-pm+bounces-41579-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41580-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oLqNA4QdeWkQvgEAu9opvQ
-	(envelope-from <linux-pm+bounces-41579-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 21:18:12 +0100
+	id IFMYKUoteWk9vwEAu9opvQ
+	(envelope-from <linux-pm+bounces-41580-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 22:25:30 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 785B59A4AC
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 21:18:11 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEFDC9AB0B
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 22:25:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EBDC5303FF0D
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 20:17:44 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 767B6302D5D4
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 21:25:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86C7336EAAE;
-	Tue, 27 Jan 2026 20:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE03D29A31C;
+	Tue, 27 Jan 2026 21:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HW70FeFZ"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="BGgwXnBG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641A636EAA1
-	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 20:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5D8299949
+	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 21:25:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769545063; cv=none; b=uJo39JtPqovGLCTQdUDhftCUaU9NNg+3ZXJ2AhDlaa4xptqeqgf1dj2iWb9oj4QJk5CmJFdyaFs8siMIkeF4GYmrSv2MaF7qIYPXMCiGZIg9TtrMLeRfzBRXl55DX8Z4fixsnuqRzVvPMe9P25zvgd1XeBsuefC7EHQreP8FIIw=
+	t=1769549114; cv=none; b=BMxsNDrwi6VKM3yhdoVBxCXZtHYm+EMksn6Ma9Lef4GDNmD/e0pyTwEXkpHMRhyHfO3L+zDQO1sx4wLclKWwsLd/+1t0DJNr3tdWBDjoaNNnRxPIh/nYAGEB0AsAP9CMesoMEfnEE7yZuQdo6umi5YsnVslw3rRo/IaP166O9eE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769545063; c=relaxed/simple;
-	bh=a33Hqp1gxCbHs3ozHKcUQHsfvseir6CgyC/3r5RJM6I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JbVRhnEH/0DeniMAxp7iGa2ZJbfwbP+uXtsne/G8LcpsDDhKPol+Q0DtiQlRtRlFa8/DysSBGbl3FrzH2qqE1uY2IlpjnbtwYna5HakXf2fTckJk4Gyn9LkJaVnhhOvedXlbOUjz2wemAD/Lr2H0xrIWY02aEXRYLXjvuu1P3K4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HW70FeFZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA84C2BCAF
-	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 20:17:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769545063;
-	bh=a33Hqp1gxCbHs3ozHKcUQHsfvseir6CgyC/3r5RJM6I=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=HW70FeFZrSJ5tBsfLLlIAQhEzhETh6tGJ8tsLmA0yCoS3laS0upD795WkBN21W5zq
-	 B8ciEbjNYs6hbdNNW+kVuQ5z5T3eDTRzjv7tC8n/3yakZRq6PJpEGuuQ4XZnWsBw0T
-	 wAWDeOfbJz8Re4DdBwfr7/KuHsJ/IfMgGS2JWa+lCgBEGGWu3M6s5a90nnzE/aqx52
-	 3XussOr8obvtKWz4Ei2gYzEA4AloJKZNuC+UC8qLC0xdwkigb0x+Y3K38uttqKiwhL
-	 72aArRFqF+7eQd8x+V9XAiuTuAeJEbRYqpKmrbXk5EKag7XV0oWkPchUkwUUpCsSF7
-	 /bPfKndaxVoJQ==
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-45f09874c4cso62545b6e.3
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 12:17:43 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXhpqkebeUt2/yZr78BzmqXwa0mTBEorcypbgeOvrR4YGRWLVGb1GlCbVwz//25fD433j5gMkoEQQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaXlc2/6dBdynzRLN1n0Zkb1YSpw8ABDrNRH4Jiuerbp2nVjhH
-	oUPewobHsMDusqKXhTyVn+6pPf8wIA4uNM2aI01C6McQUew66IuOzDtx1bgvX87Iyjs5sV42Wcq
-	3RUUnRg6qCbqR7OFFWSI1ITLGeRdUqWY=
-X-Received: by 2002:a4a:cf16:0:b0:662:f6b4:8c4e with SMTP id
- 006d021491bc7-662f6b48e48mr773192eaf.80.1769545062036; Tue, 27 Jan 2026
- 12:17:42 -0800 (PST)
+	s=arc-20240116; t=1769549114; c=relaxed/simple;
+	bh=jVg2sq0i2FG6o9FjCNKPhQuA6q+fa0mYRD/1zcVfWOM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=iEi5mWv8g96X3DvDXOfWQZ4jIYy5t3dOsG6Epoq83F4BiKHWNIWxEVFHv2uxegZU4bMrKFLENe1pEuWWoIyd9bUdBvf1I0ca6bpA7qk+eK5XMrnqpienyKq2r7Sa2p8noOAF8b4kuZL6afp6MqVPoglTce5T30LG7omH6eTJzdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=BGgwXnBG; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-bc29d64b39dso2236758a12.3
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 13:25:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1769549112; x=1770153912; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jVg2sq0i2FG6o9FjCNKPhQuA6q+fa0mYRD/1zcVfWOM=;
+        b=BGgwXnBGh0/SbIpmnx29/DCLhzfO2G9Avq91v9MwxLoHfBUe4/7yvYTi9yAoDnzx/D
+         ImXv0owabmKIzW3YlF6PWksYIEF/YDiROhPw5iMmGLPX8VDs7eU9jK0dNmYeQ2xnvMbC
+         degS8potCaACqXdA3lA9BUrZPV2SOInMh3tWQjH+NwXxSNow+OJ8uZM+MQLYycc42M8E
+         GeF/nwTGv9p4gM4GJsWMle5bBPmZXTgiwXuZS6fYfeTGsZ3ty8e5dOItGtjXPHpntAvn
+         aD3nLMNWP9GGrubLXoCdeJ3dC2o53kDdhhid4eZ+FMCDtRt3MwY3kcvdwaPINzq1firf
+         4zLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769549112; x=1770153912;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jVg2sq0i2FG6o9FjCNKPhQuA6q+fa0mYRD/1zcVfWOM=;
+        b=E5vq6BMNXxL/86Wd7VgpVHw/ckzj8iN9N4b0/OrnNBp+ajPLj69N0FQJ1o/V+D0gMN
+         0XjH7f8wJLWhHUUD6i5Kj5ayE9zzOndXr2SBWQRQBsFysYMdjTsrI9bYAhrGgFCTIDFD
+         uZlBqhvLX3dbMqfbPGXybGQkxBUcn5FprcdJyK0r0yKeI3C2D8yMfGOAZXOo/qMgSQfr
+         tNS7wQJNXYXQzm7m/cCq9qRCObT4bzkOgDHkFxjr/3UsRnMqGis2qZydW7Sb1HNsPG3F
+         tlmSnMWx1yxQTdymK2F7TB91mqcW8k3R5I8Z+Df0Z7s69NIlNJ2tlJzy5eRpa/Lh1pIs
+         aD4w==
+X-Forwarded-Encrypted: i=1; AJvYcCXdlPPSRdSNeutkvzFiOldlqRyl9U7PJfPvFhptSTMiKy6yZJdIIIqBZBhNBiFSkDEP/Tl8xhDK3g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGO5PDX2Uz6pwOPk7Ly279xu7rwnGsmx4qwxQBmcKo9htCoN/g
+	S4RFMJvenX2XbQp+I0Q1dkh8adGzghX3MqiUoyU9+LXzPsG7GVCA0oQMriYbEaIl730xZJbCYMs
+	4aCs2GlM=
+X-Gm-Gg: AZuq6aIixEntddKlh0wRlAGwiZQByK+2KVzQbxGRnvYSNmPpOnDIiMoefL47mLQBmxg
+	e48weixFMbCCyf3/bgQ1RFcxALpMdbftzzpb+urZPffkS0RpLQ3dBwCK2EYhugOK2r6Bw3ABAsV
+	kFObQFL21OF1CoryM7AQs5GcQkvwzuu3eO3hC5aeNKatKlyP9/m35klp2SWYS5JH/KcGPYyvxVc
+	S7OPmJBanDRkmmwERcWL4/qO8cnckAawf1dtSi9Wl59wDbI/kxHHWd3GMa9DAHOCCqnQN4kI2Pq
+	GoY4daWMjRn+8WyyYx0nw3iYZtC9Yo9aZdPKQizCrc0CiislViEONpTXQ0LhUUUh667saRW8l92
+	1jq16oLhSMeRYd5//lPWf45maFdd0xp3+AuPhSV4GmzSTafXjWGMXC73wkMKPU/JC7SR6BAfGdV
+	U0yljjCSgM
+X-Received: by 2002:a17:90b:3a81:b0:34c:cb3c:f544 with SMTP id 98e67ed59e1d1-353fecde876mr2663861a91.14.1769549111946;
+        Tue, 27 Jan 2026 13:25:11 -0800 (PST)
+Received: from localhost ([71.212.200.220])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-353f61dfac1sm3475922a91.9.2026.01.27.13.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jan 2026 13:25:11 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>, Ulf Hansson
+ <ulf.hansson@linaro.org>, Dhruva Gole <d-gole@ti.com>,
+ linux-pm@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] pmdomain: core: Extend domain idle states debugfs
+ support
+In-Reply-To: <20260119143121.161583-1-ulf.hansson@linaro.org>
+References: <20260119143121.161583-1-ulf.hansson@linaro.org>
+Date: Tue, 27 Jan 2026 13:25:11 -0800
+Message-ID: <7h8qdi6954.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260120145623.2959636-1-sumitg@nvidia.com> <20260120145623.2959636-2-sumitg@nvidia.com>
- <CAJZ5v0ipgGt7tetY6p0CW0jyOh9TVeWxgXpFzveTa2CaGB8ZpA@mail.gmail.com> <6be02e54-dd4a-4d8f-b2ee-291da63b0bf2@nvidia.com>
-In-Reply-To: <6be02e54-dd4a-4d8f-b2ee-291da63b0bf2@nvidia.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 27 Jan 2026 21:17:31 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j8Z3dUZUuUUZPiGthN7yg03yDpWARGJLE8U2fCeUK8Qw@mail.gmail.com>
-X-Gm-Features: AZwV_QhFFimFgohPagii-2LtTrRkBzebBcIWZn4w-qFlB50tTtELmDGXQrkWWSI
-Message-ID: <CAJZ5v0j8Z3dUZUuUUZPiGthN7yg03yDpWARGJLE8U2fCeUK8Qw@mail.gmail.com>
-Subject: Re: [PATCH v6 1/9] cpufreq: CPPC: Add generic helpers for sysfs show/store
-To: Sumit Gupta <sumitg@nvidia.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, viresh.kumar@linaro.org, pierre.gondois@arm.com, 
-	zhenglifeng1@huawei.com, ionela.voinescu@arm.com, lenb@kernel.org, 
-	robert.moore@intel.com, corbet@lwn.net, rdunlap@infradead.org, 
-	ray.huang@amd.com, gautham.shenoy@amd.com, mario.limonciello@amd.com, 
-	perry.yuan@amd.com, zhanjie9@hisilicon.com, linux-pm@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org, 
-	acpica-devel@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, treding@nvidia.com, jonathanh@nvidia.com, 
-	vsethi@nvidia.com, ksitaraman@nvidia.com, sanjayc@nvidia.com, 
-	nhartman@nvidia.com, bbasu@nvidia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[baylibre-com.20230601.gappssmtp.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41579-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCPT_COUNT_TWELVE(0.00)[28];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DKIM_TRACE(0.00)[baylibre-com.20230601.gappssmtp.com:+];
+	DMARC_NA(0.00)[baylibre.com];
+	TAGGED_FROM(0.00)[bounces-41580-lists,linux-pm=lfdr.de];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[khilman@baylibre.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-pm];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,nvidia.com:email]
-X-Rspamd-Queue-Id: 785B59A4AC
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCPT_COUNT_SEVEN(0.00)[7];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: EEFDC9AB0B
 X-Rspamd-Action: no action
 
-On Tue, Jan 27, 2026 at 8:01=E2=80=AFPM Sumit Gupta <sumitg@nvidia.com> wro=
-te:
->
->
-> On 27/01/26 21:54, Rafael J. Wysocki wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > On Tue, Jan 20, 2026 at 3:57=E2=80=AFPM Sumit Gupta <sumitg@nvidia.com>=
- wrote:
-> >> Add generic helper functions for u64 sysfs attributes that follow the
-> >> common pattern of calling CPPC get/set APIs:
-> >> - cppc_cpufreq_sysfs_show_u64(): reads value and handles -EOPNOTSUPP
-> >> - cppc_cpufreq_sysfs_store_u64(): parses input and calls set function
-> >>
-> >> Add CPPC_CPUFREQ_ATTR_RW_U64() macro to generate show/store functions
-> >> using these helpers, reducing boilerplate for simple attributes.
-> >>
-> >> Convert auto_act_window and energy_performance_preference_val to use
-> >> the new macro.
-> >>
-> >> No functional changes.
-> >>
-> >> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> >> ---
-> >>   drivers/cpufreq/cppc_cpufreq.c | 69 ++++++++++++--------------------=
---
-> >>   1 file changed, 25 insertions(+), 44 deletions(-)
-> >>
-> >> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpu=
-freq.c
-> >> index 36e8a75a37f1..c95dcd7719c3 100644
-> >> --- a/drivers/cpufreq/cppc_cpufreq.c
-> >> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> >> @@ -863,73 +863,54 @@ static ssize_t store_auto_select(struct cpufreq_=
-policy *policy,
-> >>          return count;
-> >>   }
-> >>
-> >> -static ssize_t show_auto_act_window(struct cpufreq_policy *policy, ch=
-ar *buf)
-> >> +static ssize_t cppc_cpufreq_sysfs_show_u64(unsigned int cpu,
-> >> +                                          int (*get_func)(int, u64 *)=
-,
-> >> +                                          char *buf)
-> >>   {
-> >>          u64 val;
-> >> -       int ret;
-> >> -
-> >> -       ret =3D cppc_get_auto_act_window(policy->cpu, &val);
-> >> +       int ret =3D get_func((int)cpu, &val);
-> >>
-> >> -       /* show "<unsupported>" when this register is not supported by=
- cpc */
-> >>          if (ret =3D=3D -EOPNOTSUPP)
-> >>                  return sysfs_emit(buf, "<unsupported>\n");
-> >> -
-> >>          if (ret)
-> >>                  return ret;
-> >>
-> >>          return sysfs_emit(buf, "%llu\n", val);
-> >>   }
-> >>
-> >> -static ssize_t store_auto_act_window(struct cpufreq_policy *policy,
-> >> -                                    const char *buf, size_t count)
-> >> +static ssize_t cppc_cpufreq_sysfs_store_u64(unsigned int cpu,
-> >> +                                           int (*set_func)(int, u64),
-> >> +                                           const char *buf, size_t co=
-unt)
-> >>   {
-> >> -       u64 usec;
-> >> +       u64 val;
-> >>          int ret;
-> >>
-> >> -       ret =3D kstrtou64(buf, 0, &usec);
-> >> +       ret =3D kstrtou64(buf, 0, &val);
-> >>          if (ret)
-> >>                  return ret;
-> >>
-> >> -       ret =3D cppc_set_auto_act_window(policy->cpu, usec);
-> >> -       if (ret)
-> >> -               return ret;
-> >> +       ret =3D set_func((int)cpu, val);
-> >>
-> >> -       return count;
-> >> +       return ret ? ret : count;
-> >>   }
-> >>
-> >> -static ssize_t show_energy_performance_preference_val(struct cpufreq_=
-policy *policy, char *buf)
-> >> -{
-> >> -       u64 val;
-> >> -       int ret;
-> >> -
-> >> -       ret =3D cppc_get_epp_perf(policy->cpu, &val);
-> >> -
-> >> -       /* show "<unsupported>" when this register is not supported by=
- cpc */
-> >> -       if (ret =3D=3D -EOPNOTSUPP)
-> >> -               return sysfs_emit(buf, "<unsupported>\n");
-> >> -
-> >> -       if (ret)
-> >> -               return ret;
-> >> -
-> >> -       return sysfs_emit(buf, "%llu\n", val);
-> >> +#define CPPC_CPUFREQ_ATTR_RW_U64(_name, _get_func, _set_func)        =
-  \
-> >> +static ssize_t show_##_name(struct cpufreq_policy *policy, char *buf)=
-  \
-> >> +{                                                                    =
-  \
-> >> +       return cppc_cpufreq_sysfs_show_u64(policy->cpu, _get_func, buf=
-);\
-> >> +}                                                                    =
-  \
-> >> +static ssize_t store_##_name(struct cpufreq_policy *policy,          =
-  \
-> >> +                            const char *buf, size_t count)           =
-  \
-> >> +{                                                                    =
-  \
-> >> +       return cppc_cpufreq_sysfs_store_u64(policy->cpu, _set_func,   =
-  \
-> >> +                                           buf, count);              =
-  \
-> >>   }
-> >>
-> >> -static ssize_t store_energy_performance_preference_val(struct cpufreq=
-_policy *policy,
-> >> -                                                      const char *buf=
-, size_t count)
-> >> -{
-> >> -       u64 val;
-> >> -       int ret;
-> >> +CPPC_CPUFREQ_ATTR_RW_U64(auto_act_window, cppc_get_auto_act_window,
-> >> +                        cppc_set_auto_act_window)
-> >>
-> >> -       ret =3D kstrtou64(buf, 0, &val);
-> >> -       if (ret)
-> >> -               return ret;
-> >> -
-> >> -       ret =3D cppc_set_epp(policy->cpu, val);
-> >> -       if (ret)
-> >> -               return ret;
-> >> -
-> >> -       return count;
-> >> -}
-> >> +CPPC_CPUFREQ_ATTR_RW_U64(energy_performance_preference_val,
-> >> +                        cppc_get_epp_perf, cppc_set_epp)
-> >>
-> >>   cpufreq_freq_attr_ro(freqdomain_cpus);
-> >>   cpufreq_freq_attr_rw(auto_select);
-> >> --
-> > It looks like this patch could be applied independently of the other
-> > patches in the series.
-> >
-> > Do you want me to do so?
->
-> Yes, this patch is independent and can be applied.
+Ulf Hansson <ulf.hansson@linaro.org> writes:
 
-Applied as 6.20 material, thanks!
+> This small series moves around and extends the information that genpd shows for
+> the domain idle states in debugs.
+>
+> Please help review and test!
+
+Reviewed-by: Kevin Hilman <khilman@baylibre.com>
 
