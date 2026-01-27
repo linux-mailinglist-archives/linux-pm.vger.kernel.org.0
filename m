@@ -1,492 +1,208 @@
-Return-Path: <linux-pm+bounces-41506-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41507-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MAxyJCAXeGkynwEAu9opvQ
-	(envelope-from <linux-pm+bounces-41506-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 02:38:40 +0100
+	id OFQnFX8veGn5ogEAu9opvQ
+	(envelope-from <linux-pm+bounces-41507-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 04:22:39 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8BC28EC48
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 02:38:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C88D08F81D
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 04:22:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6675030292C4
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 01:38:38 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id A9AFD302E7D8
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 03:22:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9739827F736;
-	Tue, 27 Jan 2026 01:38:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85FE530AAC9;
+	Tue, 27 Jan 2026 03:22:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P/X0DULm"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="fRtpLNGd";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="W6bdcl8K"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA20199949;
-	Tue, 27 Jan 2026 01:38:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769477914; cv=fail; b=QIPKzXdw2901HXUE8vm2FDW/HD6eRyrFBjC4vo0CPSALzVao1DPP8wdi23dGVuAI1+khJAy5mpm0JizKQa/XcICaz/64fY+pDlVwcOLDGS5rzwBKwYNYTBAq/awBZWK9HUQLpML9rSDj0K2b6KAba7+upJLIw/UfiL6NAnaLOSI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769477914; c=relaxed/simple;
-	bh=UDb4YbFtqMdNjqhTYduyLskXI6Be7BEtsUnS2BDnzoY=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=HmLj8SvbJqHecoHo5ZfhdvewUJ1CqLKelgomJu8VkMTOkB85mZXXNRq+jd/UyelgmmvgJdWtEVK8Gi0jgcOLodfX1lFQ7jOOknyfUxHRsY7XbtArx5UciibzwxzUlBzztrb9JFHEx5RLhJZbtsf19+C7DocK1v1hwfuufMTyFzY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P/X0DULm; arc=fail smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769477913; x=1801013913;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=UDb4YbFtqMdNjqhTYduyLskXI6Be7BEtsUnS2BDnzoY=;
-  b=P/X0DULmfnVzV2MZ6ViPikwMmb9fLym4GSCbJ7sR5mL94Kk3NeGh0Ea4
-   r6sGAINxRT4zrDz9clbOsMy+SbURWSmMCqxEY4O+btr+gpT+56rLTb/bO
-   bOoEyGMJ8764nwPgmN4lMeqIjsLOjCTyKAzPIyFV7ou9IEKs9jBpi8oQq
-   g7/PuN5cz4xirZZ01Y2GtD5XFAEVQDFqXGvsOi+Qg+Tl/6jtYUzeL1WTm
-   hHbGeZFyS+FFBjMxLeMZHZTZc3qEh9rYbZ00L2hfbnoKf6scXzPL+qKIF
-   TyvuiMqZD3z8Mm2mu7GEXwal93dKBSxMgUW9a5DrmInlvszxfZS1jrt8z
-   w==;
-X-CSE-ConnectionGUID: T62Cswp/SwScVRPtZRCfOQ==
-X-CSE-MsgGUID: uKDQc76QTHWuidZGXhvVAw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="96127420"
-X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
-   d="scan'208";a="96127420"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 17:38:25 -0800
-X-CSE-ConnectionGUID: 1vXvL+yfTGGImgk/vsWkJA==
-X-CSE-MsgGUID: 4GJx6IqiSsq1T3utbtUBiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
-   d="scan'208";a="208194872"
-Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 17:38:24 -0800
-Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
- fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 26 Jan 2026 17:38:23 -0800
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35 via Frontend Transport; Mon, 26 Jan 2026 17:38:23 -0800
-Received: from PH0PR06CU001.outbound.protection.outlook.com (40.107.208.36) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 26 Jan 2026 17:38:23 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vrbhqe/TtOWCJpaG5KYPsarurBRam27YIwsd1jUq2gO9Hq5AFzCH3f25TSoMIZAF8fCvj9hYlrakTDOLKnV/xljeDSDStHOksgj42S4ECWngVYqZnO1aZkYZxmuMLefPsMz7G8DHYHU3n7ZQDBRbvxL2y4ZCHRjuS5WXdFDDEYNTx5ZudE/UVECGjeTpqnznkzY9lkRFryGzvzaKsZLTNNIqVZ5fUKvxGRad3iBhMa3WJwvprUQ8Nb8cgo+1Xg7QFhQCVJPcouwsFn+a8iO3v07U9v7Z4E7o1ePTJyhy8S5wjpxJT3eaTLD+nIWYGDsge4VuDGvXdnRQHK6F4gdaPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QSb2WdGMTYFuAvsria+NcZ5HJPkuk3gD+YhEzH8LH3I=;
- b=MDwUoGkjs857KM7cZQf4OuEErBrZzBAx7NQj9wpljiSV9DBri2bxIckHP+yicOg8U4UYrJaWxdd8HY2tP1z6IHTwlMcvTWCppipDIzFLWlQxinfzEHoqUwdDVHmKQjlNcsVe9HYVlLp2ZnMg4T7XCw0ux53hUEsNpAwcsoqUmi9vW9yQXJ9RU82+VBp1ji6YgHC8VTqkHmjQbhJfbbm5g6QsyeUD4Ki1n685jcG82ig8RPAm28NH6eCkA1f8d19ImTaJ2ZoMjJst/UUWlkvY6SzyLJiI2S9J+mreXokjNC7UrcGYywi5fWMvH9h+FLgrqe5E4nPW3VaWhaOGxm4DAg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS4PPF0BAC23327.namprd11.prod.outlook.com (2603:10b6:f:fc02::9)
- by IA3PR11MB9424.namprd11.prod.outlook.com (2603:10b6:208:583::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.15; Tue, 27 Jan
- 2026 01:38:21 +0000
-Received: from DS4PPF0BAC23327.namprd11.prod.outlook.com
- ([fe80::46c9:7f71:993d:8aee]) by DS4PPF0BAC23327.namprd11.prod.outlook.com
- ([fe80::46c9:7f71:993d:8aee%8]) with mapi id 15.20.9542.015; Tue, 27 Jan 2026
- 01:38:21 +0000
-Date: Mon, 26 Jan 2026 17:38:11 -0800
-From: Alison Schofield <alison.schofield@intel.com>
-To: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-CC: <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <linux-fsdevel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>, Vishal Verma
-	<vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, Dan Williams
-	<dan.j.williams@intel.com>, Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Yazen Ghannam <yazen.ghannam@amd.com>, Dave Jiang <dave.jiang@intel.com>,
-	Davidlohr Bueso <dave@stgolabs.net>, Matthew Wilcox <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>, "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown
-	<len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, Li Ming
-	<ming.li@zohomail.com>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, "Ying
- Huang" <huang.ying.caritas@gmail.com>, Yao Xingtao <yaoxt.fnst@fujitsu.com>,
-	Peter Zijlstra <peterz@infradead.org>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Nathan Fontenot <nathan.fontenot@amd.com>,
-	Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
-	Benjamin Cheatham <benjamin.cheatham@amd.com>, Zhijian Li
-	<lizhijian@fujitsu.com>, Borislav Petkov <bp@alien8.de>, Tomasz Wolski
-	<tomasz.wolski@fujitsu.com>
-Subject: Re: [PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of
- Soft Reserved memory ranges
-Message-ID: <aXgXA2OYOUfyGlQF@aschofie-mobl2.lan>
-References: <20260122045543.218194-1-Smita.KoralahalliChannabasappa@amd.com>
- <20260122045543.218194-7-Smita.KoralahalliChannabasappa@amd.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260122045543.218194-7-Smita.KoralahalliChannabasappa@amd.com>
-X-ClientProxiedBy: SJ0PR03CA0057.namprd03.prod.outlook.com
- (2603:10b6:a03:33e::32) To DS4PPF0BAC23327.namprd11.prod.outlook.com
- (2603:10b6:f:fc02::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFA62E6CD8
+	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 03:22:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769484155; cv=none; b=VXTOeP2jTHMLZHMEP91Ya/KmprTBz0O2dQpL4guds0QROiIQe8WJ3HGo9za/K6tqQY0dzgzAYZ//Tif/5UoHhDjgaKHjU/1oMvYHQdHyo/7+WzvVjcHM6ciD2UXN2me1+6ijZkXXkbVcHmIF+MfEq+GT2fyd6ZgOx3TRtfJ4PU4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769484155; c=relaxed/simple;
+	bh=XZQ0O1EPnSL7r9FFEsZoC2s4+Kablk8hkQt0H01Xwn8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jwHZvq0TKB3zHuLCx1CRuJZ+Zf10O99Hg+COSU5ZYlYYQPVVobUzG/3GxyyXBrysWOe7fY+GwFapa3ziSY9KGI2zrgg+wdsrqE4TZr8/jbhWiEDc7epX/Yfv5iJM5kav49o9vG/qVifK8s0TG6rXm7UHq1r83TxlCdYeHQFPl9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=fRtpLNGd; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=W6bdcl8K; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60QKgclZ286903
+	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 03:22:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=Wfmi4d4Qh22Ezl3SyesCXU
+	AHzPvoIkVgPWXr2K/lMtY=; b=fRtpLNGdPu7rOVRKZl4qqU1dkPde5t1IFi9fUS
+	tIW4oFnLpyJQhpcElUT6QTgscvkxePer/ILl4E/QlqA9V3tNoeJHSTG8yKRiWJ/E
+	6FcWKQPDUWvs/CmT0vhjfmMpE80wPfe78swlOd8dbw9kEP2/fOOTa/caXaKLVJay
+	PjcLx5jsZSJ84vL70zFdn5idzsQfrydmkYW13AYVaSPqSjyP6rHrOsMsv0Rqw6Kh
+	tp9Ny0mgzCu9pZaq3CrTnnCc76TX1z2Iw5a+y6NsVRnHX8pyqO8VxvsjaZd0IJxb
+	8TS+Y0cijoTfsYg9N0h6sSxlw7LmDyhGNHP2ECYe2eJAb2iw==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bxdva18ac-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 03:22:32 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-29f25e494c2so57483555ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 26 Jan 2026 19:22:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1769484151; x=1770088951; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wfmi4d4Qh22Ezl3SyesCXUAHzPvoIkVgPWXr2K/lMtY=;
+        b=W6bdcl8K0AzFhp+KcTkSSrcGDmaFVXMCGLmoIEw9m7HiGaeT/+nfzDNllLOlSMVT5R
+         CPRDVzFEQo8ZSt9tBjmEE2OTpsmV+a/XkAi8EWtGrm7Q1rHJnBAxYBJ16JP29+o7KT6z
+         0olt/51ojiWBISOlkDBIcEOxsdc3gYNnZpJOvm01k50UDY2XzRYwvE4r7nXK4MhalYaD
+         QShMpIxFCauMZdcsh5CArsFNvgpJdREalOdX1BE0odv+fycmdKX3sYCQ/cbsdOASnEVv
+         8yI9LZCIp5w5DibXuUD/iaEPdGbMn/UHHX7tgHTgCAPUlQnSWA55itwzcrJW9zz21wsO
+         /lYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769484151; x=1770088951;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wfmi4d4Qh22Ezl3SyesCXUAHzPvoIkVgPWXr2K/lMtY=;
+        b=alMWiqOp2pC0EBhD90ZH4sbdXLpChNdlPeT08YQfWLSVIgPmIDOUM16n42KXhMZfsj
+         rrORIGHoVx175MmR6XIrh89XzEwqPuzeLhnZh7cPsqmxj3xc/EgNpPWQBrwOOwEObLtr
+         jkKrCJ3RMhVN4AfjU7KdUxLKBe9GrrZS6ZnVmAx724rAQMjrFiSvCv334/A+spK/JmcI
+         oqO8qK/DDVEgCBHe/xziATQqUdT8X33TBaJsjJ/FDmcqDeRTUZ8qIM3+jv9M9SJQppQ8
+         1BH2ODuq17Z/6dq/4Motbg5XlNeTcyeqIgKUW8QZQPoA1BQrGs2B0b/vOAVogDNujaKg
+         vgEA==
+X-Forwarded-Encrypted: i=1; AJvYcCXMp3+yaK5xQttEX+0WX8Ex6+rgUuoCTnDqTZ3kVE+oL0mmw5x6236ru3v1nXtSSzbFv2tJn/7EWQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxhq8kGUCYxJRJIjB0L9M+CHcToO0TQgUuIRX/8uQ/ZQs9w0dmA
+	5AgbUrrRhSbHTrv3MkZg5P6os99lw3S6Npziy8SA6+LuNtxPnP98BSA15ec75uN4KyCC29JAODR
+	ELwO2LO6m8mQsqIQGcyCpmH1Xn/X3ZtybOwF7kgFEZDxH2enPnXP4dLwX9DqnDg==
+X-Gm-Gg: AZuq6aK19+VbdRnU1cWSon2qHLar53wdbGNWm3IaQ7HPFsOJL9BV3ZypakN2/GYq5D1
+	OggG1wFdEKj5Byu0V5bKr2RDbj7D1D23hB2Y0026ImgVe4kYJz0FMs3ui0Lrb5v8s89SVfy6UPY
+	3m6djsfuxVlj0d5hteZkMyeds1v7/16WTpB04jnCdr1OcKM/AG/xe9M7+NJSF56gdH66rvhiUcg
+	W1nBnDzrqr9xR4oC67suwuQDG6AY9bknEx+QEM0jR0U1dGMzyACBm6sFuTFPf1ElrhrrkPgM02J
+	X1epv2B8FSqf46tOp+35xDPI1kUlc6bj/B/rls2pBj9W32eRmWR+4Uk6ku0fAWc/JA8AJFQGPip
+	sexotRbBk63tzknZ2BLv2NaHvfUEea9SO
+X-Received: by 2002:a17:903:190:b0:2a0:7f8b:c0cb with SMTP id d9443c01a7336-2a87120f415mr3332895ad.4.1769484151210;
+        Mon, 26 Jan 2026 19:22:31 -0800 (PST)
+X-Received: by 2002:a17:903:190:b0:2a0:7f8b:c0cb with SMTP id d9443c01a7336-2a87120f415mr3332685ad.4.1769484150665;
+        Mon, 26 Jan 2026 19:22:30 -0800 (PST)
+Received: from [169.254.0.6] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a802daa874sm101341625ad.13.2026.01.26.19.22.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Jan 2026 19:22:30 -0800 (PST)
+From: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
+Subject: [PATCH v2 0/2] Add interconnect support for Qualcomm Mahua SoC
+Date: Tue, 27 Jan 2026 03:22:05 +0000
+Message-Id: <20260127-mahua_icc-v2-0-f0d8ddf7afca@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS4PPF0BAC23327:EE_|IA3PR11MB9424:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4bb89926-8cc9-45d1-7340-08de5d44c139
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014|7053199007;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?U/GErVttnxf4YSMCaWNJTa5TRXEEFFd14KYxIQ1L7W55NzMjoKEN7VbB+Sbn?=
- =?us-ascii?Q?k3pccDT8JbLjkVpRv/d6lSEYg55FVLhx4mfl2inkPYiWHN6G3CNMD6zywDHS?=
- =?us-ascii?Q?8etC+woaBAXJbJCIhKUtjLRpHHBq44xq97mdcLGl9v3ETy3DcAaXsBrSA4Dv?=
- =?us-ascii?Q?fzj4iw9IkmV5/lxk2Lm3IOO1MxuEhFeIzCM2Q1e9MeltyRvd9Kdw0xPM31i9?=
- =?us-ascii?Q?mQPo6pHkvu9qnuJvLP0UAmU2BowL0b5R3/GHwJiDfbw5e3E8XCejDhZL9dhD?=
- =?us-ascii?Q?jMVK0OGMj6N2rqt1BrwkTrQhA6woNNH9EZAa1k3PLSDKn49HSeDbK76UZfq1?=
- =?us-ascii?Q?tUojmhUwvX085nWnU1eeqBdkAnMMLtXqIzrdy52W3+oJr1IrFOq8n1wsdSbf?=
- =?us-ascii?Q?tUpERwZyRZNxfdkhE+y1dJwbhF5fwg04+/AGSFJDGL/iNC4VTcLzrZa4aiGb?=
- =?us-ascii?Q?ngLQS9BC1EoltjJLeHR3LETKiMVr2g2A4CXu7rXGz1hd+crhi+O6P42bF41l?=
- =?us-ascii?Q?FjAkuV1Pwv/sjabdCCwibxUT2PAB8zDmRR1QaR68n5bO/JsQDJaI4fUQpbbV?=
- =?us-ascii?Q?qk77oQKKleosB+RDyBUvc6cESTvPfqafqUiCpundrD9bBlo/WZeDgaOICLiH?=
- =?us-ascii?Q?5uFZUqf+qONVWD7uG9q/iL/ByZaMXxOqFLgNBF13Op85Ukx95+35kepGErd5?=
- =?us-ascii?Q?2Cg611K1UADwseEd0/6Exgw554COnoclsxWlfEAE3tah2QZlT1vkoRDhHCGt?=
- =?us-ascii?Q?ficW3jQkgwEE//SnOxL5t1SPEhxJ9qmXcjwH6Zr5D0mAb38V9fsXuGpBTJ4Y?=
- =?us-ascii?Q?POm83uBr8KRYFR/EvV33pOOaKK2VzccJQmOrQNe/nmIpHiWoueBoTlNIjAc6?=
- =?us-ascii?Q?ORRZ9MCfcQvNqvkoM7eDSkfKq6pQH9LJPwmveKiyGRFuEZy19E97fFK0Hj/u?=
- =?us-ascii?Q?fjbrSEDse1inNdceu5QrRwKS15lgaCvdmiZ9/gS4Cp0jXoP9Kop9XSRIu2Cg?=
- =?us-ascii?Q?aOxG10uan/+kSG+HM33FlW56Y4BOiaEFnZisc20aFvwuD7zhT0R9FqLo8HDs?=
- =?us-ascii?Q?NmLp71//8GmEz2BjFykUemotPKwj+dLma8HU+CsxBZrI8uQITbvI9qW7THq2?=
- =?us-ascii?Q?2Sr36KyQ+iClqBn87fRilvO0JOJerSdLBx9GjIGdvYANyWSSiLo79Qr+5rnj?=
- =?us-ascii?Q?EQ6K1IqfCQ0GtIjfS8V8Pz5De3TPsBYM9qX9Lx/Po97nOAq1Kc9sNacO0Npz?=
- =?us-ascii?Q?Cjpnh4tRrbezddICynXvo9hDdN2rq1yuAZFJKaRVyS4qdLipP5fEk8/A5ZBm?=
- =?us-ascii?Q?cDhHkMNADMlanp44+JDUwFTqnzRwNy9Y8OiP0HQCGcL521nsj9sx2cOLnrt3?=
- =?us-ascii?Q?eGcLnMBNf0qlwjIMbal67jaWwAEumyaVxrHZneqhSIfJIxuu9Hkfz6oAb70o?=
- =?us-ascii?Q?bBwPc/s+93vLfsrIrRmFOuLiU99zIG9Li6IvvBTVOSEvWzSQ6ecdf8wtFmEu?=
- =?us-ascii?Q?mrzt+7N1dBUITeLWFu9Qa1jsSiL4ZLsp4+1BA58RjSfxoZJ+z+OqNbnEhcXH?=
- =?us-ascii?Q?gSybrLYA7ZP16ra6Nmw=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPF0BAC23327.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/hZ+o5IK7xdKqKgeQPq9zb45z8aPy7SMNcXkF5R4X+tZvEJsFh/j++njRM8P?=
- =?us-ascii?Q?2qNadwDhV7NzFZ7fSwj4D9p2GUSKwGZnJe9jdUjW1ve0uHjduvkLUKDsApw8?=
- =?us-ascii?Q?05wCRgagqLaNN5Ec8mi+I2sHzTMhZ6tqzt+7yvBAhri0VcVaoagHyBJopcvm?=
- =?us-ascii?Q?ZgOnP1XMfylywJMnhdf6j9rVWtF4jPdryreUtrxaoTg5MKN1sJzlxatyIJav?=
- =?us-ascii?Q?jyq9LX8hOJykYKmZrppajOBGbWRtYjdQuYUHN4y5653qa+monjuom8npf/xR?=
- =?us-ascii?Q?9G5StZVPjmxsmUoARwknAmZMnwtzNWkj9VEcKPSneT11zuDxC+uDUGyNVR0w?=
- =?us-ascii?Q?HyfieTEDB05rn5v/BLq6UNdTc0sNDviba8BeWETz1ZhQp27ArNWdrTzmGQVl?=
- =?us-ascii?Q?43d35T6WtldI4qUfJx/UtTQo/KU/GZCqkYxPdpnFjwhtAmDeJ9p90c4kKt1r?=
- =?us-ascii?Q?mBiGQdH0GjwEfOWhIuGCIbIeeiEkmpZC16pEBp3f8fAoRtTF5uFzQTsI81PO?=
- =?us-ascii?Q?x4mwcZ3wOnMUnRKlry8TbVljgjuFsHu+byeHYbArha8w9vwOJEwjTUmOQxCt?=
- =?us-ascii?Q?LgbX2FqaesvbZnt5wyfXACiIsL6oDZlSRuJzV6LYehv9T05vC8ZHKTCo+9zM?=
- =?us-ascii?Q?hG51RHdV5ueU50rn6g82OywdObnzs9KsoZRTf+u42Opoj3uC7LWIm6Y+RBw4?=
- =?us-ascii?Q?OiC+ejA7JBcdzotf97Lvwh6NGqn286+rvEsYrm8Lp/YwpqNlm+XdRYmGxhM5?=
- =?us-ascii?Q?lOfqsN244b/BMPtMbde5dFlr3xTON1Y3g98pwkFEZhp9EKdhosZ+fWaesbAl?=
- =?us-ascii?Q?dUS2uWm8VhNCIlabwt87FVPjJhOQB1u6Dh+zpmPYxLhl67SL75StJJo0zHFn?=
- =?us-ascii?Q?fTe1ITrlgEM5P0dthiOFHKq0LAaW1y4OXMAWpzaCYFYmkQXEqJ2eUYK6nqY7?=
- =?us-ascii?Q?wFKmtv7PDhhlVZf2EDnBvsaU7sbVbB5O0E+VWO9Bl1BUV5eow+O1r7vYhFdb?=
- =?us-ascii?Q?SeAry95gU6d1XwRKt9bKJDyLw9/vZQxgyZ/f4UmYJpOARYvs4I3vFFXybKEP?=
- =?us-ascii?Q?/rfKRwnYivrM87FmT8RFIeUWW2HoK63/+S703WKf+5i8yvnjvLiRoslYk2jq?=
- =?us-ascii?Q?8GSPYdj8b7Q6TSSA1xPAevD22ZE3mdaxXtVrzdBBmlJAGweDzxdEgrASgKtA?=
- =?us-ascii?Q?AhQLeiEEXOlrDHwv9Q0NXgLuIvS0jNLPPvOHySoGOWMfNNf4NP8tzlvRPWnE?=
- =?us-ascii?Q?aM8FBxltUDJzuVBTFS2gnI1rD5PD2VgxJTcr81lrnRbrXQhUduEymuWgNX/7?=
- =?us-ascii?Q?S2JY84hHLW4PDTHQrvVkFGm3YOT0ZzchVA6boU+LFs5nDURIKYfdnHwKz5qA?=
- =?us-ascii?Q?26RBoduCXfnCIJ/+JPi22z+laOdyBV4Ft7JcypCJCijPv7K9F0epNZC8XpVB?=
- =?us-ascii?Q?fywe/N5hrrn7guktYayREAevIXexc+zSIb+xP0Ll+L3rR6e+aIatVxTxdeHr?=
- =?us-ascii?Q?Aj4oOr8PbXaF4qkaTc23ZXvOhhrR3zmJ0U2W2EzJ4qTatUDIJGQ/11cJWLo0?=
- =?us-ascii?Q?vBGjfLx3MrsXgu0+B8sVioMM5jnwk3Gk6r9AZJ3k9uztqNNcl8REkQYwIuDH?=
- =?us-ascii?Q?bYBzMR9svvenSKrWZWOkiFqS+6ktW1fjmvAc3tpR61LpJIo9Zf4N6XiijUq0?=
- =?us-ascii?Q?7jN4e2jqahPVKtzd9ZfV4Cs9UgQrAhuT/UjVBQqNyJtgbWB0ZQtm8KXyYQBl?=
- =?us-ascii?Q?z0XxykhZzO7RDP+qMDn7AiCMs8izzpE=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4bb89926-8cc9-45d1-7340-08de5d44c139
-X-MS-Exchange-CrossTenant-AuthSource: DS4PPF0BAC23327.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2026 01:38:21.5694
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dRRJSmznD0OFER1bY8w7M3HwtGZ1htMKBLxrlWZ3BEGqbqa0tRFo0Pu3DTwwxNAfEATnmm7wbjHjyiHcIJMQUuDtd5lg3Da0HnUfp3PKZ/8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA3PR11MB9424
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAF0veGkC/23M0QrCIBTG8VcZXudQS+e66j0iwp25dqDN0ibF8
+ N1zg2AX3Rz4Hz5+MwnWow3kWMzE24gB3ZhD7AoCvRlvlmKbmwgmFOOC0cH0k7kiAK0Uk4daKa1
+ ZQ/L+4W2H79U6X3L3GF7Of1Y6iuX7U/hGiYIyapRswUgjodYnF0L5nMwd3DCU+ZAFi3wL7LcAz
+ 0ADWkDDdNVx+wdIKX0Bar1q4+oAAAA=
+X-Change-ID: 20260120-mahua_icc-76054966880b
+To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
+        Mike Tipton <mike.tipton@oss.qualcomm.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Proofpoint-ORIG-GUID: CdCaqUWqjmTx-rA-1kqhCq3_sFhir1BX
+X-Proofpoint-GUID: CdCaqUWqjmTx-rA-1kqhCq3_sFhir1BX
+X-Authority-Analysis: v=2.4 cv=I+5ohdgg c=1 sm=1 tr=0 ts=69782f78 cx=c_pps
+ a=IZJwPbhc+fLeJZngyXXI0A==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=Arc9D6tUohrwRZOLOYkA:9 a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI3MDAyNSBTYWx0ZWRfXzGe6MHVvjrQO
+ t4AJHBq9DqVD3QJhJUdQEuY5YJwVa34qP0cLlKf34nqQOUKuTS9rEevy/N3xXy0//8tWsTdKQJO
+ CDrJ87H7uTULgkki5aCKsbc/KgrbdM76KucQ+IB3EaOdVWQVdOhAf1hj1KZ5pRPbIgehTazWgft
+ xhzmkm6k4X/XFlQUPRPiyu/GxrzQ4YHdsMg4FTLIONcI7p7+7cQ+XLab9sErj2Bpi4Rd4qaEf/Q
+ 3akVk4AXHJTPX498/75MSiN0IrAeQyaV3wEzn3LFtqnuIZQd64vr+0YJAl6INgtVasF9Sh+NnD7
+ lII/6JTOONm7M05pYY835wugJ7SBu7wO6nv+m61e8kCky+KPB3n3dtm0ILmt6Bgh5WQYHplNAvr
+ WS7VCkwMKiycnxKmDJBT+m9RytsUiXHxCxOtgh+1Vc2/8k/B5B2LnzDq5LKqdg/QdVD2n7eU9iM
+ HVdvhpAOc05PlRrEvDA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-27_01,2026-01-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 adultscore=0 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 clxscore=1015 phishscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2601270025
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[32];
-	TAGGED_FROM(0.00)[bounces-41506-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,lists.linux.dev,kernel.org,intel.com,huawei.com,amd.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org,alien8.de];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,aschofie-mobl2.lan:mid,amd.com:email];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41507-lists,linux-pm=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	FROM_NEQ_ENVFROM(0.00)[raviteja.laggyshetty@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[alison.schofield@intel.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[intel.com:+];
+	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[10]
-X-Rspamd-Queue-Id: A8BC28EC48
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: C88D08F81D
 X-Rspamd-Action: no action
 
-On Thu, Jan 22, 2026 at 04:55:42AM +0000, Smita Koralahalli wrote:
-> The current probe time ownership check for Soft Reserved memory based
-> solely on CXL window intersection is insufficient. dax_hmem probing is not
-> always guaranteed to run after CXL enumeration and region assembly, which
-> can lead to incorrect ownership decisions before the CXL stack has
-> finished publishing windows and assembling committed regions.
-> 
-> Introduce deferred ownership handling for Soft Reserved ranges that
-> intersect CXL windows at probe time by scheduling deferred work from
-> dax_hmem and waiting for the CXL stack to complete enumeration and region
-> assembly before deciding ownership.
-> 
-> Evaluate ownership of Soft Reserved ranges based on CXL region
-> containment.
-> 
->    - If all Soft Reserved ranges are fully contained within committed CXL
->      regions, DROP handling Soft Reserved ranges from dax_hmem and allow
->      dax_cxl to bind.
-> 
->    - If any Soft Reserved range is not fully claimed by committed CXL
->      region, tear down all CXL regions and REGISTER the Soft Reserved
->      ranges with dax_hmem instead.
+Mahua is a derivative of the Glymur SoC and shares a significant 
+portion of its interconnect topology with Glymur. As such, this 
+series extends the existing Glymur interconnect driver to support 
+Mahua, reusing common definitions where possible and adding 
+SoC-specific configurations where necessary.
 
-Question about the teardown below..
+Device tree changes aren't part of this series and will be posted
+separately.
 
+---
+Changes in v2:
+- Reuse the Glymur device data for Mahua and override with Mahua
+  specific values [Dmitry]
+- Update the commit text to be imperative [Dmitry]
+- Link to v1: https://lore.kernel.org/r/20260123-mahua_icc-v1-0-bc82cb087f1e@oss.qualcomm.com
 
-> 
-> While ownership resolution is pending, gate dax_cxl probing to avoid
-> binding prematurely.
-> 
-> This enforces a strict ownership. Either CXL fully claims the Soft
-> Reserved ranges or it relinquishes it entirely.
-> 
-> Co-developed-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
-> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-> ---
->  drivers/cxl/core/region.c | 25 ++++++++++++
->  drivers/cxl/cxl.h         |  2 +
->  drivers/dax/cxl.c         |  9 +++++
->  drivers/dax/hmem/hmem.c   | 81 ++++++++++++++++++++++++++++++++++++++-
->  4 files changed, 115 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
-> index 9827a6dd3187..6c22a2d4abbb 100644
-> --- a/drivers/cxl/core/region.c
-> +++ b/drivers/cxl/core/region.c
-> @@ -3875,6 +3875,31 @@ static int cxl_region_debugfs_poison_clear(void *data, u64 offset)
->  DEFINE_DEBUGFS_ATTRIBUTE(cxl_poison_clear_fops, NULL,
->  			 cxl_region_debugfs_poison_clear, "%llx\n");
->  
-> +static int cxl_region_teardown_cb(struct device *dev, void *data)
-> +{
-> +	struct cxl_root_decoder *cxlrd;
-> +	struct cxl_region *cxlr;
-> +	struct cxl_port *port;
-> +
-> +	if (!is_cxl_region(dev))
-> +		return 0;
-> +
-> +	cxlr = to_cxl_region(dev);
-> +
-> +	cxlrd = to_cxl_root_decoder(cxlr->dev.parent);
-> +	port = cxlrd_to_port(cxlrd);
-> +
-> +	devm_release_action(port->uport_dev, unregister_region, cxlr);
-> +
-> +	return 0;
-> +}
-> +
-> +void cxl_region_teardown_all(void)
-> +{
-> +	bus_for_each_dev(&cxl_bus_type, NULL, NULL, cxl_region_teardown_cb);
-> +}
-> +EXPORT_SYMBOL_GPL(cxl_region_teardown_all);
-> +
->  static int cxl_region_contains_sr_cb(struct device *dev, void *data)
->  {
->  	struct resource *res = data;
-> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
-> index b0ff6b65ea0b..1864d35d5f69 100644
-> --- a/drivers/cxl/cxl.h
-> +++ b/drivers/cxl/cxl.h
-> @@ -907,6 +907,7 @@ int cxl_add_to_region(struct cxl_endpoint_decoder *cxled);
->  struct cxl_dax_region *to_cxl_dax_region(struct device *dev);
->  u64 cxl_port_get_spa_cache_alias(struct cxl_port *endpoint, u64 spa);
->  bool cxl_region_contains_soft_reserve(const struct resource *res);
-> +void cxl_region_teardown_all(void);
->  #else
->  static inline bool is_cxl_pmem_region(struct device *dev)
->  {
-> @@ -933,6 +934,7 @@ static inline bool cxl_region_contains_soft_reserve(const struct resource *res)
->  {
->  	return false;
->  }
-> +static inline void cxl_region_teardown_all(void) { }
->  #endif
->  
->  void cxl_endpoint_parse_cdat(struct cxl_port *port);
-> diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
-> index 13cd94d32ff7..b7e90d6dd888 100644
-> --- a/drivers/dax/cxl.c
-> +++ b/drivers/dax/cxl.c
-> @@ -14,6 +14,15 @@ static int cxl_dax_region_probe(struct device *dev)
->  	struct dax_region *dax_region;
->  	struct dev_dax_data data;
->  
-> +	switch (dax_cxl_mode) {
-> +	case DAX_CXL_MODE_DEFER:
-> +		return -EPROBE_DEFER;
-> +	case DAX_CXL_MODE_REGISTER:
-> +		return -ENODEV;
-> +	case DAX_CXL_MODE_DROP:
-> +		break;
-> +	}
-> +
->  	if (nid == NUMA_NO_NODE)
->  		nid = memory_add_physaddr_to_nid(cxlr_dax->hpa_range.start);
->  
-> diff --git a/drivers/dax/hmem/hmem.c b/drivers/dax/hmem/hmem.c
-> index 1e3424358490..bcb57d8678d7 100644
-> --- a/drivers/dax/hmem/hmem.c
-> +++ b/drivers/dax/hmem/hmem.c
-> @@ -3,6 +3,7 @@
->  #include <linux/memregion.h>
->  #include <linux/module.h>
->  #include <linux/dax.h>
-> +#include "../../cxl/cxl.h"
->  #include "../bus.h"
->  
->  static bool region_idle;
-> @@ -58,9 +59,15 @@ static void release_hmem(void *pdev)
->  	platform_device_unregister(pdev);
->  }
->  
-> +struct dax_defer_work {
-> +	struct platform_device *pdev;
-> +	struct work_struct work;
-> +};
-> +
->  static int hmem_register_device(struct device *host, int target_nid,
->  				const struct resource *res)
->  {
-> +	struct dax_defer_work *work = dev_get_drvdata(host);
->  	struct platform_device *pdev;
->  	struct memregion_info info;
->  	long id;
-> @@ -69,8 +76,18 @@ static int hmem_register_device(struct device *host, int target_nid,
->  	if (IS_ENABLED(CONFIG_DEV_DAX_CXL) &&
->  	    region_intersects(res->start, resource_size(res), IORESOURCE_MEM,
->  			      IORES_DESC_CXL) != REGION_DISJOINT) {
-> -		dev_dbg(host, "deferring range to CXL: %pr\n", res);
-> -		return 0;
-> +		switch (dax_cxl_mode) {
-> +		case DAX_CXL_MODE_DEFER:
-> +			dev_dbg(host, "deferring range to CXL: %pr\n", res);
-> +			schedule_work(&work->work);
-> +			return 0;
-> +		case DAX_CXL_MODE_REGISTER:
-> +			dev_dbg(host, "registering CXL range: %pr\n", res);
-> +			break;
-> +		case DAX_CXL_MODE_DROP:
-> +			dev_dbg(host, "dropping CXL range: %pr\n", res);
-> +			return 0;
-> +		}
->  	}
->  
->  	rc = region_intersects_soft_reserve(res->start, resource_size(res));
-> @@ -123,8 +140,67 @@ static int hmem_register_device(struct device *host, int target_nid,
->  	return rc;
->  }
->  
-> +static int cxl_contains_soft_reserve(struct device *host, int target_nid,
-> +				     const struct resource *res)
-> +{
-> +	if (region_intersects(res->start, resource_size(res), IORESOURCE_MEM,
-> +			      IORES_DESC_CXL) != REGION_DISJOINT) {
-> +		if (!cxl_region_contains_soft_reserve(res))
-> +			return 1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void process_defer_work(struct work_struct *_work)
-> +{
-> +	struct dax_defer_work *work = container_of(_work, typeof(*work), work);
-> +	struct platform_device *pdev = work->pdev;
-> +	int rc;
-> +
-> +	/* relies on cxl_acpi and cxl_pci having had a chance to load */
-> +	wait_for_device_probe();
-> +
-> +	rc = walk_hmem_resources(&pdev->dev, cxl_contains_soft_reserve);
-> +
-> +	if (!rc) {
-> +		dax_cxl_mode = DAX_CXL_MODE_DROP;
-> +		rc = bus_rescan_devices(&cxl_bus_type);
-> +		if (rc)
-> +			dev_warn(&pdev->dev, "CXL bus rescan failed: %d\n", rc);
-> +	} else {
-> +		dax_cxl_mode = DAX_CXL_MODE_REGISTER;
-> +		cxl_region_teardown_all();
+---
+Raviteja Laggyshetty (2):
+      dt-bindings: interconnect: document the RPMh Network-On-Chip interconnect in Mahua SoC
+      interconnect: qcom: glymur: Add Mahua SoC support
 
-The region teardown appears as a one-shot sweep of existing regions
-without considering regions not yet assembled. After this point will
-a newly arriving region, be racing with HMEM again to create a DAX
-region?
+ .../bindings/interconnect/qcom,glymur-rpmh.yaml    | 132 +++++++++++++++++----
+ drivers/interconnect/qcom/glymur.c                 |  38 +++++-
+ 2 files changed, 142 insertions(+), 28 deletions(-)
+---
+base-commit: 6cd6c12031130a349a098dbeb19d8c3070d2dfbe
+change-id: 20260120-mahua_icc-76054966880b
 
+Best regards,
+-- 
+Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>
 
-> +	}
-> +
-> +	walk_hmem_resources(&pdev->dev, hmem_register_device);
-> +}
-> +
-> +static void kill_defer_work(void *_work)
-> +{
-> +	struct dax_defer_work *work = container_of(_work, typeof(*work), work);
-> +
-> +	cancel_work_sync(&work->work);
-> +	kfree(work);
-> +}
-> +
->  static int dax_hmem_platform_probe(struct platform_device *pdev)
->  {
-> +	struct dax_defer_work *work = kzalloc(sizeof(*work), GFP_KERNEL);
-> +	int rc;
-> +
-> +	if (!work)
-> +		return -ENOMEM;
-> +
-> +	work->pdev = pdev;
-> +	INIT_WORK(&work->work, process_defer_work);
-> +
-> +	rc = devm_add_action_or_reset(&pdev->dev, kill_defer_work, work);
-> +	if (rc)
-> +		return rc;
-> +
-> +	platform_set_drvdata(pdev, work);
-> +
->  	return walk_hmem_resources(&pdev->dev, hmem_register_device);
->  }
->  
-> @@ -174,3 +250,4 @@ MODULE_ALIAS("platform:hmem_platform*");
->  MODULE_DESCRIPTION("HMEM DAX: direct access to 'specific purpose' memory");
->  MODULE_LICENSE("GPL v2");
->  MODULE_AUTHOR("Intel Corporation");
-> +MODULE_IMPORT_NS("CXL");
-> -- 
-> 2.17.1
-> 
 
