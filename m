@@ -1,251 +1,198 @@
-Return-Path: <linux-pm+bounces-41545-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41546-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OBQeO/XNeGmNtQEAu9opvQ
-	(envelope-from <linux-pm+bounces-41545-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 15:38:45 +0100
+	id gADgDV7TeGmNtQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41546-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 16:01:50 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DB2495D76
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 15:38:45 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0BB29638D
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 16:01:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C9D0830818AB
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 14:32:16 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 7B3C0315BC31
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 14:47:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE9B135C18E;
-	Tue, 27 Jan 2026 14:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4237B35CBAC;
+	Tue, 27 Jan 2026 14:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VvV6MVxn";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="NTgR9RT3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k1FxynCb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618A535B65F
-	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 14:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CBCD1DEFE9;
+	Tue, 27 Jan 2026 14:45:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769524334; cv=none; b=iqnnTXjVIJ8UuEfmkRWP8QvtQ/bedOa7Pu8VRhzEpH9xlkD9zzM4TdXoriFuwXu65rjeyYFJ6VK7WVQTj7aKCi0M7GfCPHvKKPt9dImOEz6H8Te5OgoBg1xZDKwb9YgnmButH59XfWMb+lEB+YtLFNUtqFwOAmeVwEVAGqke8kA=
+	t=1769525132; cv=none; b=VDKTZzG9zIk4tvLha2+Erc8eWuUJMNph0xOk1o8bSNeUwRl6JAr5psC0ZOrJfe48cC6f/un94ZQrxEqLY8X+4/DORA4myzVJd5gCtGcF4fm89A0ng52LGF4kq2lrxr090vlOi3dNnjz05zhyCTaY9Fc53U9PvYv5cNZBB/ahZPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769524334; c=relaxed/simple;
-	bh=7VXB1W83ikac6HwtZPI8A7T7A1xzAjgKY7T53e0jxAk=;
+	s=arc-20240116; t=1769525132; c=relaxed/simple;
+	bh=0YGeP0O62Pc53bwcfFkz6Pdb1KEkMMpDyI0yE++MS9Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Beua51jmwWmhRDcfljIxjJQNViKC4TQWYMtMMkSsSgptBqi9qTdangsZ4h7VpZKLv+1YvCO+aJ0RL1L7QcgvO0TQc5AP7sLfO25QF+PDbTe+bASQwwfubL0HA8B7mren7n9Emva8jyvWxZJDtQVQcW+U147wb7SHrioYWvyk2E8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VvV6MVxn; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=NTgR9RT3; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60RBwo331136098
-	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 14:32:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=/JZfqn4pG1aepAs8U6hjEKbh
-	NO9LoeCJ/TwZWLdXsS4=; b=VvV6MVxnKqWgkVcxcrN5sXdR5t1kQ9UQCjChNu/y
-	VBJIo3GtInplcwgriuEkXIR7YpkYt5qQSflvYRp5ThsY/fEo2eQF6DVEn8KvPR8Z
-	ANuxtmAXQaVpmzMqCVIOU5YPmI1TsQ77FEJBNfDReQJGcFGcxaVh3tprqH3bZogN
-	yFHhRRYklY/hWtSdFNzv0uCitkHh+cLCESFqpu4g1hsFOT3hlj/X3zK9ZtT+7n29
-	C6+Q47VN4aug5YKETtElqopTK4fObc+e4dXAfJkdijeNullYnJ4BvrQpqq9UDbfe
-	IRXSM7x4fsdrLR3dNX6bqV4iqBj7URNqz1hWxjopawlhPA==
-Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com [209.85.217.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bxsjeh5j4-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 14:32:12 +0000 (GMT)
-Received: by mail-vs1-f72.google.com with SMTP id ada2fe7eead31-5f52597aca4so6229955137.3
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 06:32:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1769524331; x=1770129131; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/JZfqn4pG1aepAs8U6hjEKbhNO9LoeCJ/TwZWLdXsS4=;
-        b=NTgR9RT37U1+vGNJm4EdLaoG7E5OzxcrnxX/4fDQcsISCqBpoQ7zUypVLMRlqHleVI
-         CBkhkv6iTjhTpnMuOCUTt3Vli9+6LVKRcqTMi7Ki7Ed46hynJ8OW6P4+aJqjAWTwUMlt
-         QAClNCTn6o2THT7J9f8ch9wgawlD4POJ160cI6R2bx49tC2ne1CsDPG8/JpaROk0GPGY
-         t7QVUscRDqISiJyMzMzHA7gQl7Lxok188mxz8zx6gH8z6rtErPgaFY+IdXyLISgvHCkM
-         3NTi3WC5IS5gXMR15SEKMcRM3Nqan+iNhMQeAJdW8a4c/NY/HNDfcSgsGBlvDBMoc562
-         AcWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769524331; x=1770129131;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/JZfqn4pG1aepAs8U6hjEKbhNO9LoeCJ/TwZWLdXsS4=;
-        b=gzOweaN0WY7yRKuchff1UmxQfDYCs4RTywU+6zjGRAo8G5pMAozAw2xCyZdVZiikPP
-         uO1zDRupfJnk7VAp69E2CiSTE5JHjkBzUb9eFDxUEFJSVm71q7iFL8EWBbvjrRxTFWHk
-         j07UcgLCVoCSivnleK2UOhjbhjT7LRwOPJadAlSrq/dmbrJoSoSwtJPtt/OYZjcT12Zw
-         jOAuRKOiSg2rR3I7OPeUJ1eEOOBEk/Pzv7ylUnU2ZDIgEHCgjXDzi5NmKfRpSl2qFEMH
-         gJ3YCQ8FbrtAym6+7ZNH+W1OTouY5kS1S70qUIXBPiaKSExsQ1tyvnJNiPYSgrHCX+8U
-         BRWw==
-X-Forwarded-Encrypted: i=1; AJvYcCXF38YADLovcQ3hz2oKm2LMdP6yigm6hOYIsx8kieWIj74LHo/uZtydD0QUajWkbxz0zWhA1/6m4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyG6D/6RbhL+Sb2+KBSrVDcrw89l1G72iRv7hkgnSnVyHU9HfXg
-	FygPN1bsEwl6ZG2yfpgcDilTptHzSctvY46q3A+gKovy/gXJGIqOiWsxRyasRauH+zeUXY8XWRV
-	SNBVobRryDDHYjcUM30BspJxwZqYVRsBAgWJE38PxFiD+QVe/Z8yC4eHObGb6gQ==
-X-Gm-Gg: AZuq6aJLcTxC3ytPb+dNKS2BcBeDa+boue1xyQtCJ/WLRSaELbrIVhgcP7Yl2Iqn6Iq
-	dRcMIQfFji1XnH5knullm17qL+a1GxK3FhXvmn9bHh2s7PhnrF6n4jjOKdE/AmMBk00m2LDf1MU
-	RCIpIJei2ID28SwPT/ul1uYP5c7mHKT1ootKZusD4KMdF/QC1oQygI2e+iVSy1Am6DXXej+45Tn
-	O7s1QYXqOIKWNCHYB0nKT2VWStcGkJOG/n1pYJUBOyQFRygipUxWKAhW5SeTfSdlzRtLeYUda9L
-	3YPjgVgxg0WRepXL9kz3BUXQQFRNhi7gRcaSY+oLYAZLbWGT9A/MYVEnhHqkZ36Qnvt86ZYbwgY
-	6dXR34hL8pNeVD9z7vsGZP6Ob
-X-Received: by 2002:a05:6102:94f:b0:5db:cba0:941 with SMTP id ada2fe7eead31-5f72380ed5bmr763976137.38.1769524330883;
-        Tue, 27 Jan 2026 06:32:10 -0800 (PST)
-X-Received: by 2002:a05:6102:94f:b0:5db:cba0:941 with SMTP id ada2fe7eead31-5f72380ed5bmr763912137.38.1769524330210;
-        Tue, 27 Jan 2026 06:32:10 -0800 (PST)
-Received: from oss.qualcomm.com ([86.121.162.109])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48066c37433sm62354795e9.10.2026.01.27.06.32.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 06:32:09 -0800 (PST)
-Date: Tue, 27 Jan 2026 16:32:08 +0200
-From: Abel Vesa <abel.vesa@oss.qualcomm.com>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] interconnect: qcom: Add Eliza interconnect provider
- driver
-Message-ID: <jvvj6eehw3gxthrldtafc26xua4ai7nheojfdflbgabjwxbdxl@ymrgczsq4zhy>
-References: <20260123-eliza-interconnect-v1-0-010ff0d100c9@oss.qualcomm.com>
- <20260123-eliza-interconnect-v1-2-010ff0d100c9@oss.qualcomm.com>
- <8015c8d1-6eee-44e0-9a50-df23126bf7f1@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=C3Yg/eTOBnVgdXMVAIH6VT70hs/jKYuTG2hyLPSSmoBO/UU2CZKa8SlkJXEB8YrP+Zt+fvDnE1xdXNY4lm4uy1pwoZ50RLsy2LKeeMHrMITTEi5dl9hdh1kMhFpTK13O2UJaiquGOPT7k2fh5Q2sv4GvTQr16yeEJsMeq6w9y/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k1FxynCb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C21C116C6;
+	Tue, 27 Jan 2026 14:45:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769525131;
+	bh=0YGeP0O62Pc53bwcfFkz6Pdb1KEkMMpDyI0yE++MS9Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=k1FxynCbgFyhQaZBWbdQ3U3/gG7zvUiYTdT05s4SfRvueGwkwdMXfQ67RXYmWXNMt
+	 nJcwbHtZ7igNbyW3UV297EDBMkUnggDFqkNCcRRA+vRpQtytrAnvyEHNrTU6qtdODo
+	 1LbCma+SiMl2LT5ZuLyH7tZpYFN9UJ2XKhsK4xuHGPaRH8LD/O8BLUfTlNb0oHlPNi
+	 O/otIJveig2kXrzcfYZMWTt5fvWceAjmmlhVGZjLExQFzzscRRARYyYJJl4ENA3zWK
+	 zldlROZ0P7SlFX+FcV4aIGqzhLCTEzmtf2d26kCH+JflCjYXc+hEeq7F76jfRgZo4e
+	 vcqAUDXHE61jQ==
+Date: Tue, 27 Jan 2026 15:45:29 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ingo Molnar <mingo@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Kieran Bingham <kbingham@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Mel Gorman <mgorman@suse.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Xin Zhao <jackzxcui1989@163.com>, linux-pm@vger.kernel.org,
+	linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 05/15] s390/time: Prepare to stop elapsing in
+ dynticks-idle
+Message-ID: <aXjPiZCHZ77R4awi@localhost.localdomain>
+References: <20260116145208.87445-1-frederic@kernel.org>
+ <20260116145208.87445-6-frederic@kernel.org>
+ <20260121121748.9719Bab-hca@linux.ibm.com>
+ <aXEVM-04lj0lntMr@localhost.localdomain>
+ <20260122144045.38254A3e-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <8015c8d1-6eee-44e0-9a50-df23126bf7f1@oss.qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI3MDExOCBTYWx0ZWRfX/vP3hrfsDlny
- c+SRFM1LBQXdIn4jZFyL80Ix67r6C8Weynl6EorZPWQfBduOOCqy8D9GQm5Pum4NjXZRsO79xSB
- s0zWkdsK/c5rZGvh8mke2SBKERznQ0slgO/ALbGT6B9JXtI1lyH4YahWJbeQQzCrM5nbzlqBvSv
- flYT1WLRZvl9MCg+/8INneEM6HkUvcOusABRTSj4dF1j5xx2+Eifo4V7YZVnzNOIbogWfsVOynf
- lCAcM4dMwpXOixRuqESBVAwhSxFVWcM7FAbypRcnmRYk/Q26Xf0bEZ1agPVHkKLuzYZ0gM0dxXj
- j4GsQDXTDmHHOacFRSxaz+ZjdGRx9o0W5NLRCVNrtubVFs7t2m13Mr3jG7jYaFxidZrxakn1u/b
- U/i4lwxAm/H92NQttAvNtpA9j99zG555dQ183OGswKdGgpVTWT43AH+iKzyasW1p+SrsUsBFCnH
- EgiufOUjH87l5EccELg==
-X-Authority-Analysis: v=2.4 cv=Qelrf8bv c=1 sm=1 tr=0 ts=6978cc6c cx=c_pps
- a=DUEm7b3gzWu7BqY5nP7+9g==:117 a=oauzzCmhM186DRC0Y2yWPg==:17
- a=kj9zAlcOel0A:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=npw072eAQMWWEgrtj34A:9
- a=CjuIK1q_8ugA:10 a=-aSRE8QhW-JAV6biHavz:22
-X-Proofpoint-ORIG-GUID: PO2i4fcFi7oA8cNKqYTJccNLjxL4Xs56
-X-Proofpoint-GUID: PO2i4fcFi7oA8cNKqYTJccNLjxL4Xs56
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-27_03,2026-01-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 malwarescore=0 adultscore=0 phishscore=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 clxscore=1015 bulkscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601270118
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260122144045.38254A3e-hca@linux.ibm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41546-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41545-lists,linux-pm=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:dkim];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[abel.vesa@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,linux.ibm.com,linutronix.de,google.com,gmail.com,arm.com,redhat.com,siemens.com,nvidia.com,suse.de,ellerman.id.au,infradead.org,goodmis.org,linaro.org,163.com,lists.ozlabs.org];
+	RCPT_COUNT_TWELVE(0.00)[34];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[frederic@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 5DB2495D76
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[localhost.localdomain:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A0BB29638D
 X-Rspamd-Action: no action
 
-On 26-01-26 11:26:07, Konrad Dybcio wrote:
-> On 1/23/26 1:43 PM, Abel Vesa wrote:
-> > From: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+Le Thu, Jan 22, 2026 at 03:40:45PM +0100, Heiko Carstens a écrit :
+> On Wed, Jan 21, 2026 at 07:04:35PM +0100, Frederic Weisbecker wrote:
+> > BTW here is a question for you, does the timer (as in get_cpu_timer()) still
+> > decrements while in idle? I would assume not, given how lc->system_timer
+> > is updated in account_idle_time_irq().
+> 
+> It is not decremented while in idle (or when the hypervisor schedules
+> the virtual cpu away). We use the fact that the cpu timer is not
+> decremented when the virtual cpu is not running vs the real
+> time-of-day clock to calculate steal time.
+
+Ok, good then!
+
+> 
+> > And another question in this same function is this :
 > > 
-> > Add driver for the Qualcomm interconnect buses found in Eliza
-> > based platforms. The topology consists of several NoCs that are
-> > controlled by a remote processor that collects the aggregated
-> > bandwidth for each master-slave pairs.
+> >     lc->steal_timer += idle->clock_idle_enter - lc->last_update_clock;
 > > 
-> > Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-> > Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
-> > ---
-> 
-> [...]
-> 
-> >  drivers/interconnect/qcom/Kconfig  |    9 +
-> >  drivers/interconnect/qcom/Makefile |    2 +
-> >  drivers/interconnect/qcom/eliza.c  | 1586 ++++++++++++++++++++++++++++++++++++
-> >  3 files changed, 1597 insertions(+)
+> > clock_idle_enter is updated right before halting the CPU. But when was
+> > last_update_clock updated last? Could be either task switch to idle, or
+> > a previous idle tick interrupt or a previous idle IRQ entry. In any case
+> > I'm not sure the difference is meaningful as steal time.
 > > 
-> > diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-> > index bb1cb8a640c1..53398e972458 100644
-> > --- a/drivers/interconnect/qcom/Kconfig
-> > +++ b/drivers/interconnect/qcom/Kconfig
-> > @@ -8,6 +8,15 @@ config INTERCONNECT_QCOM
-> >  config INTERCONNECT_QCOM_BCM_VOTER
-> >  	tristate
-> >  
-> > +config INTERCONNECT_QCOM_ELIZA
-> > +       tristate "Qualcomm ELIZA interconnect driver"
+> > I must be missing something.
 > 
-> Please don't scream
+> "It has been like that forever" :) However I do agree that this doesn't seem
+> to make any sense. At least with the current implementation I cannot see how
+> that makes sense, since the difference of two time stamps, which do not
+> include any steal time are added.
+> 
+> Maybe it broke by some of all the changes over the years, or it was always
+> wrong, or I am missing something too.
+> 
+> Will investigate and address it if required. Thank you for bringing this up!
 
-But this would make it "the one-off" though...
-All other ones are all caps. :-)
+Ok, I take some relief from the fact it's not only unclear to me :-)
 
 > 
-> > +       depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
-> > +       select INTERCONNECT_QCOM_RPMH
-> > +       select INTERCONNECT_QCOM_BCM_VOTER
-> > +       help
-> > +         This is a driver for the Qualcomm Network-on-Chip on eliza-based
+> > > Not sure what to do with this. I thought about removing those sysfs files
+> > > already in the past, since they are of very limited use; and most likely
+> > > nothing in user space would miss them.
+> > 
+> > Perhaps but this file is a good comparison point against /proc/stat because
+> > s390 vtime is much closer to measuring the actual CPU halted time than what
+> > the generic nohz accounting does (which includes more idle code execution).
 > 
-> Whispering afterwards is odd too
+> Yes, while comparing those files I also see an unexpected difference of
+> several seconds after two days of uptime; that is before your changes.
+> 
+> In theory the sum of idle and iowait in /proc/stat should be the same like the
+> per-cpu idle_time_us sysfs file. But there is a difference, which shouldn't be
+> there as far as I can tell. Yet another thing to look into.
 
-Will fix.
+Yes and that's expected both before and after my changes.
 
-> 
-> [...]
-> 
-> > +++ b/drivers/interconnect/qcom/eliza.c
-> > @@ -0,0 +1,1586 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
-> > + *
-> > + */
-> 
-> Stray empty comment line above
+* /proc/stat is the time spent between tick_nohz_idle_enter() and
+  tick_nohz_idle_exit() (to simplify, because there are some pause during
+  idle IRQs).
 
-Will drop.
+* The s390 idle sysfs file depicts more closely the time spent while the
+  CPU is really idle (and not executing idle code).
 
-> 
-> [...]
-> 
-> > +MODULE_DESCRIPTION(" Qualcomm ELIZA NoC driver");
-> 
-> Please don't scream
+Different semantics and this is why you observe different results. I guess
+/proc/stat has higher values (with idle + iowait) and that is expected.
 
-Yep, this one needs to be "Eliza". Will fix.
+Thanks.
 
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> 
-> Konrad
-> 
+-- 
+Frederic Weisbecker
+SUSE Labs
 
