@@ -1,186 +1,180 @@
-Return-Path: <linux-pm+bounces-41540-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41541-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6MBCD+zMeGmNtQEAu9opvQ
-	(envelope-from <linux-pm+bounces-41540-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 15:34:20 +0100
+	id 8FZmKmnNeGmNtQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41541-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 15:36:25 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59FD795CA8
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 15:34:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FB2795D1C
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 15:36:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A0CB03137573
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 14:27:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id F0867317309C
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 14:28:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340F135B139;
-	Tue, 27 Jan 2026 14:27:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9383835CB73;
+	Tue, 27 Jan 2026 14:27:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="l6p9OPYd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fvFMQJ4g"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5233587A4
-	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 14:27:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D973B35B63F
+	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 14:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769524073; cv=pass; b=FIC6/1Pv4RUkWi3nqptDZVBSN5W5etTKF5C1lHhIz0aUqQ3bawmzzZOEIppYPSEKvTcbDKCO0vjZP11KN8OCJ87JoLXAQ9dC4tL3GvEmjWD3gX4kJdPtRGLfUo7Z7bgNf2BsIbbBtWykZVa9cHgNT81+uz2bmA8DsL/EH4Pt/t8=
+	t=1769524078; cv=pass; b=XLx6EenvigD2sCqGo5E0mCwRYypVDZkai5hcQ0GdZAN8mMleQVyZHeGnSJvANfGcSmlXi7jwI12hcjH/wkYRnCZqp3HtGhpP68RjQ2w0Zz1Mqo8jeJGqsihDme0+eZ5ysNjPCV7uHQ4U6GMr35/DmJQ1Ck4rHPXvD1ejxR3J/do=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769524073; c=relaxed/simple;
-	bh=+6hira2PqCv4Dp6+TEfz3Cq4R6dRyt8LBQxDtVxSs/E=;
+	s=arc-20240116; t=1769524078; c=relaxed/simple;
+	bh=SYsG+RVz9eLQyTlia9fufMVAFPXhbhQ57zjotGeFv0U=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B7QWqXaa8K/Hxaxqc0C7ID5DH+IxfM4nG0eA3/7IonPQHvZf/12qjD+lwCqsXauHxxnx6HKHqCaW2tuKkH58RxO5qgeATVzDAfECCqNEndfkY2uC3sI2F0gEkvKqgAC6kL52FX8nlHmPLFeT73cHQSMBaxS66OAmJiF4qwYCLmo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=l6p9OPYd; arc=pass smtp.client-ip=209.85.167.48
+	 To:Cc:Content-Type; b=L0zQP3z7SrMXtmzUlr+6BsdRjDKQPzpud+2oDOYezZUCFywKVKafv+Rq6Pz8+pfPgY3qfbcxma0NiKTj0HKxcCnWQZWGYYbvCc/9LvMg37QNnYCW9lm+42xTzozNCr2k25qoAudXA1mlL1iPwdfP3NSb8Uj03ScSMDgTgdMjvrA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fvFMQJ4g; arc=pass smtp.client-ip=209.85.167.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-59dd22b9895so6853070e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 06:27:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769524070; cv=none;
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-59dcd9b89ecso7152489e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 06:27:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769524075; cv=none;
         d=google.com; s=arc-20240605;
-        b=D0BffO9vg5W8kyR59s//t+aC/9fB/VIQeKruIBxloLFihnxslJn1DHKj5kiLeI/S1+
-         bE+njADAaQEps+VN8xGbbZMY2O5deRkaATbwh3KJBLbydlvHDYvAe2H/464lszuIk2e2
-         RSkgtzldjRo/4PT5GPG9Hqzy28A86z81CD6PO5QAZRB7w82dw6zAUDTW1t0SwC7UYMmb
-         F1qxvdO62o3I2p67mA+mzaf3d1Jk775X9wk/Ix/YXkj2NIzRAm+7oFXFTuAfgC3LmDky
-         KWmqqZwQT8p5naRcRot6fznu1OpkqGRrHy/HSS1w2ZLjYZStqsunt1J47iG4LnAPEyyv
-         giag==
+        b=Hmz930RdEJHOwSN1ofouIQTGmF/R3BKGT29AEORL+P7DCEDdgkQrjjpSt0Ty1b+RKe
+         DB+X7NT3FT6lpG+pmGn+g7jhqxRg2jWuMoo5Po7TZ8tp3nT9f93nHnVVC9MO4jNYl1Pj
+         E8MMeUROWSm8oKgXIlAxaLkAFbWHtGeHpD3N0afWM57SkMfJsmuIAbdeL2BOnNYeFrw5
+         TW8JCGLjMW42Juy6Q/fxQjZjiMGdT5uZTPnwSUngHCZ7U3VzDHLbqKgo995slezo5tDM
+         C+98wihDFv4hYFKWynFu/qVLVSiaSTFUrGC3sbthjeuR9zJQXOhL64XF8ibfQj0UXV8J
+         OI2A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=1B+ZgAK0ulFf8Rg/ERS29Nw9Z/V30A92LHGwn+CwqEs=;
-        fh=L7zV6gJG9TxM0x4NInFCj6WuhaSo5/iVInuFkuUV9Qk=;
-        b=LkedDkhvCjkqS/nWoYYp5pJQIvZawlZv4PaVlG977S3H74YUos+QU1q8M7qcGoDUeo
-         2KBbV9ZB9bDouhGuRtMyZQ2ZgbHBUvSlT6K7p7Uof1VocW4a892pJKH+ZET6QPieMfbR
-         5QEL3o+6nGzizO0sel3CR/lLdTj0k8L0gISB9coVgR3quKZGVVlKM+o/QX2BHryupVwz
-         /qwKli8hnXHrRGqoNsQ14CJeR6snkDpK+9DUxYxgtz0QSOwT+aZOdu5OhPY9ntmjB9Nl
-         Z7pd6mktcXOny14LbKU7cnD0K3QjuHoM7dtC3ArMqtOKvVlBqlwZR8GxOriHvGcWPYgJ
-         sO8Q==;
+        bh=bixFc51zHggwjEg6bYco2p0W03PflnDZlTMDYcdiHMM=;
+        fh=5Dx8Nlxs9Go7iwsIA2AcaWmT0xOCbVABZWLRcervCXw=;
+        b=j6YrAJwkNYfVxwli7fOlQwE2OWpMY0c6Mn86TYqmK00EpEIPBbMD+HDlO+2wq1kR1M
+         S+fQXzBvSYlCWuZOJzva4W5Hh98vMiVPEmbNvgpjbiJc5dLTKQZPSsyMI6AmFQktWKbs
+         luDoGNqzEABQ/m3iM/+Gwqeemhvw9Jk+03adP4eOw6hx1b8wu0P+N/n3lT6PyHbf84Cs
+         q/UhgqwhkRebrtLhLK6ifrM74hrpLSnBRFsOj1e8fr4iEeBhbLuphomqHY2KvTyv+6sZ
+         lHR69La4eQ136xwfOurc0fceAJYZvXUIaPccsdFohsok4KXizmuekUIl6s8SxIyZYm8x
+         AzYg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1769524070; x=1770128870; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1769524075; x=1770128875; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1B+ZgAK0ulFf8Rg/ERS29Nw9Z/V30A92LHGwn+CwqEs=;
-        b=l6p9OPYd2NTdsvixaUH0Zc5UeZaGojXhLljp5gc8xS1OvwAAHucF8NNa0akoLPcfGJ
-         hIgSC9r4XKsp9GJ+ajtNEANeqtPacH+kHE7w8pjaXUqz89jEohvREMHNi/ZDZEuz/5IW
-         nUtW1DeQ54TaHXtA8nAP4Jt62QDdqa1KwcrvuIVSuqVROYaNc3HrRgUJGQVTRgGoCkMS
-         HFCewLmgp/h10rxzyFKKf8rDTbV0cgvwKBg5ARt6jyPXUq6YfilZZ66xrH2SjernOd7Y
-         gq6IPWXjLbuptCC9xC/IB1ZM51lh7Zh43mRITZhH3ocg5c7reovZ2cR0YWdwLP+irfpN
-         F1AA==
+        bh=bixFc51zHggwjEg6bYco2p0W03PflnDZlTMDYcdiHMM=;
+        b=fvFMQJ4gfGi92gfwUD9WjZ9ub8d3SSmOuIZvWCzHJ0hCvUr6AI3JQHsJ5Esf/wrTzw
+         5rAbQBYiKmb2AKNLrGr8SoUyWTUxVG1Bt0LienMEA3Lvm/Qm1YAxCmv4j2ugYHRgZzbY
+         xH13Vr8O/s47CBEx8ej5cdjFIm/H/vj09DVJIel8i7n+sj9MmYj+FzRiLJa8dTyfDAKJ
+         Eu1uADCvZueHENRA868ZGYffIaaKAXYmhj+zoSPyqIvH2FG3qAND+jciIjziOYUhIl8a
+         G21BJkJkJpgSRm6EIHO76O0tmRQdF6d/ZZS5gxp8bIdR+wAXg1EwMTeNc/BNmMo4SYdX
+         ssQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769524070; x=1770128870;
+        d=1e100.net; s=20230601; t=1769524075; x=1770128875;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1B+ZgAK0ulFf8Rg/ERS29Nw9Z/V30A92LHGwn+CwqEs=;
-        b=hVs5zcfc81ndiL8L7i/45rS7fr61WwMzVAgVhDoGx3KquJ34ManzwZZQW3wemp3g8w
-         x/byWeq16Z9hNEfjcVyQy8Lghz6TVnrmPwpc1mb6kxzWFRxQxebcmXoCTptKVosgETg3
-         iJ3hb7QPxLp7KDBpJHgoGA8lCzpYK/M9PTKwgnrazYS0099cuYg4Odxufhy8pEnto9vm
-         cB0YxuV6963zkJLH+N+LINZrPoJOrGUFAJJyvf0sGa/iQByEXGmw2Ik9nEGVDCSeJ4nd
-         MvqUMZdFDb58aBoFDlsVHkE5AWxR+puCbflRGMXzO9DOQGsHaId93gBo2N5WR6ad6vxY
-         d5dQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXKAnjxiKIrKHn4YfTtAtrpyl9XhD27kDTBQxEE1pwwI3+PvicLkynKHMrteypjqpkLfx8y3lU7VA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YypzA4A7YdpGzlNNF3LOvkqKV+z1F/hT9S18Nus8LxLtdh8m1sT
-	zr+6PHJoiCmqWBXdFWoDPqIhuUooT469FvNwX44ZrCX5vYFFajk/7h3ArBEqAeZwo9bwst/RVva
-	GKl1mdlPI/sypcD5s0x3ckiUKaAkVAVdaHT7aayh85w==
-X-Gm-Gg: AZuq6aJbNr+B9XRm5n5BLz2p7/U57gLoHYnMhn6nEjHx5SEAcXFRy8DiKSXP3qHAyog
-	IFgRCCPtLTaiTz4fvIjOCork0DECMJb+gqSnTsnTKj+b43NoKCW1qAD+rSsOO0xHGl/t4uHEfmQ
-	iO9oBB37FzdEv3d9nJNz7gEzVw5/2dLl1OJdKw2CJMdZDOu04nwy4+m0+JYx7O6DnTG1R/l901z
-	I19yELwrvCKRWJAeoAKNULJZROjxGz+HUoT+fjpRS1ByS088VUElx0qcVKZB+W+WPqSQgbC
-X-Received: by 2002:a05:6512:234e:b0:59b:6a9c:530b with SMTP id
- 2adb3069b0e04-59e04142c1bmr857103e87.26.1769524069786; Tue, 27 Jan 2026
- 06:27:49 -0800 (PST)
+        bh=bixFc51zHggwjEg6bYco2p0W03PflnDZlTMDYcdiHMM=;
+        b=Ojhw2L0Z5RUXX+9TATJwbfYRZxrtqvEwgFQKkFwP1VdjDoERK8bDCtppPOy9IL8o1F
+         t1DVxNRAfEMZaKriob6zCBJZQFILLAAWv2E7Gj8nIv9NkMpIBxKrw01QfPm88M0sbo56
+         4HAGOLgQ8/JfO5yXae3uCse3PyA6LT3wcu8FJL1Gl/LUdRRMMUy/FgnfidV94PJGOCp+
+         wrAtvl036WnRM8o3lGSm31IyVxUzwGtZ4rhS23tD8fj9VwHN/nk7FoorngvNrfRcYD7Y
+         BIgEdZD5oBHOZshouD9op62CfGolvDJEQnvNMUb/MXMpcBzdz7Gi//4WuDzEj6+WSAZo
+         SUcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWaEajq2s1u61D07DtgPqdQhoffCkgA3nxgpvGQf4ZB+QqxZGIr63N2Qd0nDA9XDQhw+Ch/67e4gw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLOvN+BUbHtotHDbQ60F+h4BoZ4zxROEh3GqA8U4Bd08IG5dM8
+	cohQAFP9/kD5H4LMP9vTM47b6v/wZUFxx0mAbETpjKxJnqgUt96EnWgcTa03m2c8HDSt15pE/wy
+	ZgFz/xPFNVehJp9swGFL7X4e00QBO6eoKzEya69i59g==
+X-Gm-Gg: AZuq6aIzGqWwYQWmteXUFbQ+ea+TTll6Wab9dXQkUBvQRu0Lm52JZyazDhsctFu/fcv
+	oP0rd+iXKrPvgRClGmNgo+8KWPPIZNriSPssD1RIoRk2tODmbsJa61JwBAczaml66usWtpcp2Fk
+	q9LvidEgJmkNH77+UffMKEE2EsKhvONkk7BsCC3JetSkBr63WbVtmewYjtbFJYHgJ+7qf/Ope/G
+	Hb97GhEsnM5zgJCiRJGrZ7CjdMgT9vT0lz1o5oRTt6XJVOl9igPfFlrfii+4ZnBpXzUe8Ym
+X-Received: by 2002:a05:6512:2312:b0:59c:bf32:26fb with SMTP id
+ 2adb3069b0e04-59e0401e3c4mr975834e87.2.1769524075019; Tue, 27 Jan 2026
+ 06:27:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260121-b4-scu-pd-v1-1-f993e4082089@gmail.com>
-In-Reply-To: <20260121-b4-scu-pd-v1-1-f993e4082089@gmail.com>
+References: <20260121-qcom-rpmpd-semicolon-v1-1-9bbdd9478ba8@gmail.com>
+In-Reply-To: <20260121-qcom-rpmpd-semicolon-v1-1-9bbdd9478ba8@gmail.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 27 Jan 2026 15:27:13 +0100
-X-Gm-Features: AZwV_QjMAX96nvdaiHP7TCZjGVMhp0ccF964SK-rZQQO1W4Cw8JdkkpQ3MeW438
-Message-ID: <CAPDyKFr+USco=KMAnQWz8J_VkqftYwKFV9QtRN0vyc=ERJK8ew@mail.gmail.com>
-Subject: Re: [PATCH] firmware: imx: scu-pd: Fix device_node reference leak in imx_sc_pd_get_console_rsrc()
-To: Felix Gu <ustc.gu@gmail.com>
-Cc: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Dong Aisheng <aisheng.dong@nxp.com>, linux-pm@vger.kernel.org, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date: Tue, 27 Jan 2026 15:27:19 +0100
+X-Gm-Features: AZwV_Qhnx3ee7nXtzcBaurlEhXjdnBHlTXVsUOF4f979GZrgQoW9map96vZbscs
+Message-ID: <CAPDyKFpSaaiCwk6wHrygQCbtHaWJ7R8r_xNDpBWZNfbn1z0SCA@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: qcom: rpmpd: drop stray semicolon
+To: Gabor Juhos <j4g8y7@gmail.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
 	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-41541-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41540-lists,linux-pm=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[kernel.org,pengutronix.de,gmail.com,nxp.com,vger.kernel.org,lists.linux.dev,lists.infradead.org];
+	DKIM_TRACE(0.00)[linaro.org:+];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCPT_COUNT_THREE(0.00)[4];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:dkim,mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,specs.np:url]
-X-Rspamd-Queue-Id: 59FD795CA8
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:dkim]
+X-Rspamd-Queue-Id: 0FB2795D1C
 X-Rspamd-Action: no action
 
-On Wed, 21 Jan 2026 at 15:17, Felix Gu <ustc.gu@gmail.com> wrote:
+On Wed, 21 Jan 2026 at 17:18, Gabor Juhos <j4g8y7@gmail.com> wrote:
 >
-> When calling of_parse_phandle_with_args(), the caller is responsible
-> to call of_node_put() to release the reference of device node.
-> In imx_sc_pd_get_console_rsrc(), it does not release the reference.
+> Drop the unnecessary semicolon after the rpmpd_send_corner()
+> function's declaration.
 >
-> Fixes: 893cfb99734f ("firmware: imx: scu-pd: do not power off console domain")
-> Signed-off-by: Felix Gu <ustc.gu@gmail.com>
+> Signed-off-by: Gabor Juhos <j4g8y7@gmail.com>
 
-Applied for next by amending the commit-msg-header, thanks!
+Applied for next, thanks!
 
 Kind regards
 Uffe
 
 
-
 > ---
->  drivers/pmdomain/imx/scu-pd.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/pmdomain/qcom/rpmpd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/pmdomain/imx/scu-pd.c b/drivers/pmdomain/imx/scu-pd.c
-> index 01d465d88f60..3ec33667a308 100644
-> --- a/drivers/pmdomain/imx/scu-pd.c
-> +++ b/drivers/pmdomain/imx/scu-pd.c
-> @@ -326,6 +326,7 @@ static void imx_sc_pd_get_console_rsrc(void)
->                 return;
+> diff --git a/drivers/pmdomain/qcom/rpmpd.c b/drivers/pmdomain/qcom/rpmpd.c
+> index f8580ec0f73785544aeb6f686438f39b477d134d..a7b311f966a04210dbb499066cd1105e2c621cd5 100644
+> --- a/drivers/pmdomain/qcom/rpmpd.c
+> +++ b/drivers/pmdomain/qcom/rpmpd.c
+> @@ -978,7 +978,7 @@ static int rpmpd_send_corner(struct rpmpd *pd, int state, unsigned int corner)
 >
->         imx_con_rsrc = specs.args[0];
-> +       of_node_put(specs.np);
->  }
+>         return qcom_rpm_smd_write(rpmpd_smd_rpm, state, pd->res_type, pd->res_id,
+>                                   &req, sizeof(req));
+> -};
+> +}
 >
->  static int imx_sc_get_pd_power(struct device *dev, u32 rsrc)
+>  static void to_active_sleep(struct rpmpd *pd, unsigned int corner,
+>                             unsigned int *active, unsigned int *sleep)
 >
 > ---
-> base-commit: 053966c344dbd346e71305f530e91ea77916189f
-> change-id: 20260121-b4-scu-pd-257a9a40e84e
+> base-commit: 95fad101a21d31b4facd1b9e0713bba1c517db6e
+> change-id: 20260121-qcom-rpmpd-semicolon-1f985a101e0b
 >
 > Best regards,
 > --
-> Felix Gu <ustc.gu@gmail.com>
+> Gabor Juhos <j4g8y7@gmail.com>
 >
 
