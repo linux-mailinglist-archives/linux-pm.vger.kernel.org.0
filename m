@@ -1,240 +1,379 @@
-Return-Path: <linux-pm+bounces-41522-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41523-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id c12wJVOZeGk9rQEAu9opvQ
-	(envelope-from <linux-pm+bounces-41522-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 11:54:11 +0100
+	id KNeODcyceGlurQEAu9opvQ
+	(envelope-from <linux-pm+bounces-41523-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 12:09:00 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 782A593361
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 11:54:11 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45F2D93624
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 12:08:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D96BF300463F
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 10:54:10 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id AD4813009800
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Jan 2026 11:08:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24EE83451AF;
-	Tue, 27 Jan 2026 10:54:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB17333554B;
+	Tue, 27 Jan 2026 11:08:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oCvf6tJ7";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="WixY8IQz"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="C0vfQJSV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010019.outbound.protection.outlook.com [52.101.85.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7082341654
-	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 10:54:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769511250; cv=none; b=n2d2Ny5FN1ljN9+HTEO8w+Mt7M7mMSkbRdg3uBR2scf14Jj0NBo6gDy9yt4hqMuH3xVgH9VlbGHfY971DjI635o453EFtz4y9RhxAXRJudrl2ohUfP1Untf/gUF8SUP90tPnoZPU/fqOx0pZ228TGj7IpUDUHIwcI+GpY1/diA8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769511250; c=relaxed/simple;
-	bh=3lYC2VXEZvD4zHtMTiboYcP1RkNOiAaEefn0klNs7gQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ss8FxgGYRWEdlb3o0a7y7Cirn/wcxedmCdb9d0HzbR5fjtuxObDUFgMShj/AQSrUCNhk2FxUJZL1IVBbw84bSQoapvzdNV+m5u+vwoTOINWGIbJ2MRDPBLrJeH5ZFoThj1ROb9jFutPMPQY7+sRbAud+bYjEbbl3B3e8PhRbO0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oCvf6tJ7; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=WixY8IQz; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60RAnqgs700163
-	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 10:54:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	vYuSWdmfhxQX6yuMdRBnfuP4ch7+j1djxAq3/I6J3HI=; b=oCvf6tJ77bApei1a
-	yr1Jwb9SAPf3KNeqq3SpFygXHryxYKaZQ7AR6yLyTz/Of1ltmRjNX35DVXkmqxnS
-	xpkMpwmu+Re1PxfG58NFwKADAGrG0n2fLSAeMSl/J5nxfvCM2nJMjtBvLB8I/pio
-	SSlceBlXMoY7z+mbYK83k448j0QMF1i8HsIRxmWHeZPGHV38Is5LRM5DifbJLtmH
-	ZsOi54GfcDV1ZKutWwoLJNkOnVrg9Gb5iUvjO+0D7rF+c4GtVtPpSlyYixWhVnOc
-	FnP7ZJEiu3a6ZMFyVPfh6QkOiyjCZrzJdRJI9e4W6qd0go9Rh250X/6ZYSfUfBM0
-	MYZqYQ==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bxew3tfjr-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 10:54:07 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-5014549e7d6so17014621cf.0
-        for <linux-pm@vger.kernel.org>; Tue, 27 Jan 2026 02:54:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1769511246; x=1770116046; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vYuSWdmfhxQX6yuMdRBnfuP4ch7+j1djxAq3/I6J3HI=;
-        b=WixY8IQz6t3FgIubz8tD1EgN3psDMkizMmTTyWiKO7u2vNOfeY5j7oPRsMMLPnfHO+
-         jvAcYGdATewoBCZq1IW6rAP9bJ6I+vuhMDNjFlZoPA6h03Ifs5lJL7fICV7Lrlru/NN5
-         3HLthegfTD4NV5MWwCrQ6Xb05VTrO/3UJpszVXbCIA7CGAoiEeR4OUUsc4Si2g96bvIN
-         8ZLcb/Ua64IHXXPrh409ypVpPvNMditoAA/qV9aPCumkOjK/vyJ6NfWJX0uf56lCzCkd
-         Rt4SV8xjcp17WranE7QtC1adn59LU64UqfRJJug4BtqwGkhGRN6400naRA3ymLKarxg6
-         hSuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769511246; x=1770116046;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vYuSWdmfhxQX6yuMdRBnfuP4ch7+j1djxAq3/I6J3HI=;
-        b=IzBdB9XI8nop1aB/iJYqbIat8kxodeQg2sU2Crv8x45nzjQInvXiwxAcGP5WgmDFFO
-         YO+TWmWbpauv9F9MxQsvPntxYnjp2TWViJzVSeuVLkHyiDmTCp9vQ+HfE0vMWQwRfZQl
-         fOEJxgaswHlMUsCp153fO/VuKs6CQJrkYolGriH+9SGjWrYF1vCOH+VH4CuNY40hcHUu
-         c8IfFpufDOw7Fp9OgbDJevPQapXzrrfItqpcoVv7fRlZ68oSb8uFkxGjht+xMkClxi7Z
-         2QcILH+NRdi7J+Ve8L9S31a+56D/AXmctmPsigz7Pxms3V3cVdbEBIvZlRqhr7sTPgN0
-         8yeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWEDrs5OEXN/VzGz7l4ycU2idUg5AhUoRJvbPFPdoQhG8VNQtg9lKtspX27xJqICF5GI1BXLvXDRA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwI9VW5q1A8ftu1bIcoW/omFkATiuu7mZA8p6ank5xYAdJJdoqV
-	3ilkGwW5eVgx/GCea8Bq+m23P5aEQM6z7/gHP95oh1CQBVKHePLr/qbG4K9NzleEjP3GInIlbXA
-	mn58f0ycMhK9aRgHX+wla5nggMFSW8ZkpmA6DDAGebG1n7zrbHjcLW8iZLL1xaTe0MOLxCg==
-X-Gm-Gg: AZuq6aITpeBMeKbue2VWQ4QFLU1teRXNVBEkGAfnw6LCjtQwAgkgHUjnsChsJ3iwHLB
-	FgdjcGADovsjxkrALAffDwQ8AFhklkPwVBKAivimPefO4Rtmkvuy+vzFTtTOyPfdrrxY/KPSzd3
-	8aDWdSrbh83guEGpeG/el6f4jugczer1+OeI2BalitjA+SqZRrUSrgq7HVrwFB/3+ymqObjy0OW
-	qH4rlYmVUUT+aY1aHrns2B5s8yr4jJZG2fTc1rE8/jQ/c0ePqg7xTmq/uTKE0P3EaCez75JpuE6
-	5dOW7JpCwRJrkrBbqYNP1hjAa4miwk8mJi+B2e+5EDPAmZNDgnQh8fe6DYX4uFtyMI6i1y82lWk
-	aFzgfvVFDjbhb0Asz3oqlDnwRNj6VliARP6u+gYnoy5GYhVh41J3Ok3gUCLxmpsocGuY=
-X-Received: by 2002:ac8:5a49:0:b0:4fc:989e:f776 with SMTP id d75a77b69052e-5032f89a76cmr9794781cf.4.1769511246070;
-        Tue, 27 Jan 2026 02:54:06 -0800 (PST)
-X-Received: by 2002:ac8:5a49:0:b0:4fc:989e:f776 with SMTP id d75a77b69052e-5032f89a76cmr9794511cf.4.1769511245685;
-        Tue, 27 Jan 2026 02:54:05 -0800 (PST)
-Received: from [192.168.119.254] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6584b3e0a8esm6187574a12.5.2026.01.27.02.54.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jan 2026 02:54:05 -0800 (PST)
-Message-ID: <5b62fc63-314e-40a0-a975-9df75ec49e9a@oss.qualcomm.com>
-Date: Tue, 27 Jan 2026 11:54:02 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A1F345CA6;
+	Tue, 27 Jan 2026 11:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769512115; cv=fail; b=lGDCITKC4Kper1OmSqaGSXN29uMJkOnQeOW5Xk83c7u+TeeEx6HU2JEt8iUD2GQkgSNeSB27YR+HG+GB+1fmuKy7/rAsIv4DeW9ove4RAVP1BslOiZszfHGseB43hsrk5fjQ5sV2e6Z6bbvHkFNv6I1C2na/2FSXR870Kp26hqk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769512115; c=relaxed/simple;
+	bh=cw0RWalwtx3+ZPKtUhuJvykQnUMkDw887Tal6f6KqPg=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=P8hX964syMbTIyay/YipSquLE0IfzVKIYTanQ36aFTKKlK+AZlR3I8HylqkRaOBRUb4o4QN2Kdxbb89mTaGSwq7/aZDAkWnAqotUEec0ch8UrAXlvONhHFpQ85b359WNGXPks8aRtLguQ0wjSUBfQWSgKf8gFTdXc5NwjUnpgZY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=C0vfQJSV; arc=fail smtp.client-ip=52.101.85.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RXR7R3STUycBE9Ueh2bSBboQlwTMhP+Duyyj5jMUd1UXLuOoC2jxnzq2WTW3FoqavLDhoV7XcfVmdYFqGFw3Icusm++QvcEbNDliPy9RlZTthRvF/zGOiMXOP4VfOMT5uvUQcCckl1PDpBqDSCUjlgZWa69qLGEGRHqhwkK1yyrQ87ojWAiDUaUGoI75LONP+UPNLdV6tdv4VzgzPfUr3wZikuzSKc80xxTJkY2PbuzMOG00nmyIvRYxkx4HDP/15xIeNJg3U+Ii+anLUrhhdGKr+ZLIbCyHRw8MSKNj+a4KO1vVjv+POaL0fWr6yW2WcwOV6OgNw1D+F6oWZh6sgg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jHNqRXr1JBM1q+38WjROpOkoF8WoRRJXQq76n7LanlA=;
+ b=qP0XeHhFXFXW5VLntgqaA1gqhW1TDGvPK/6ZUinEk31Veez/guY8GDrp0Y1qVEbhAv3agaR5CGwQyjU3FH17ei1Ppk1r+/6nhkAoFK8LcrO9bdkIlrWaScc4G17IV/o2uzzh3OjqumG4NS9CyRm8Y6sOHEbwU4D5HBuPPV62LBD1zItkPVQKudGZZ/rc3Ue9LJ33G0fMnsjg5UUoOPG0RlLE5RC4RXd3jnLqWlmdn18rJoZ86edm8Cz4JyqQ7cE8shbGeAtkwva9ro6IUTrc4UPYUiMrg6fT4Bu91XXtJqYpH3jwlj2dxNSMWZxaZ3zMcsjUWY8+B7FIBHzMlDsDsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jHNqRXr1JBM1q+38WjROpOkoF8WoRRJXQq76n7LanlA=;
+ b=C0vfQJSVjyrNc8SORT0NmeVU//DquOJI+hsiq6ghq1r+3iB0XJB5F3BwhMdJeFE1At9zqabpKMGlcC/GVQv2phlO5BQmSUWFbl8a+x0yIlyodMbfeHEOu4RweafrJsQQQbaoesgX14xA8CoQHJzWfDZEKRc9L/sHolnNlq8BxRyJe1G7yBiUBcvuxwUZ0inUfwORORyX1yKZfPDCEYF/E7n3wB+tftMg36hRPLMMUcoSln8CAI4YidubKE/ZzL/eMmxth6S3BGALoIHaPX0MdnwRjXk2LjlCNStXlv0QbMhmQdrGtnTp9cjzkqN5fT+3bFs9RZGwsjI4jLQc1DUYlA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN9PR12MB5179.namprd12.prod.outlook.com (2603:10b6:408:11c::18)
+ by IA1PR12MB6601.namprd12.prod.outlook.com (2603:10b6:208:3a3::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9499.2; Tue, 27 Jan
+ 2026 11:08:29 +0000
+Received: from BN9PR12MB5179.namprd12.prod.outlook.com
+ ([fe80::cf08:f59b:d016:c95f]) by BN9PR12MB5179.namprd12.prod.outlook.com
+ ([fe80::cf08:f59b:d016:c95f%5]) with mapi id 15.20.9542.010; Tue, 27 Jan 2026
+ 11:08:29 +0000
+Message-ID: <9fa21599-004a-4af8-acc2-190fd0404e35@nvidia.com>
+Date: Tue, 27 Jan 2026 16:38:14 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/9] ACPI: CPPC: Add cppc_get_perf() API to read
+ performance controls
+To: Pierre Gondois <pierre.gondois@arm.com>,
+ "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, ionela.voinescu@arm.com,
+ lenb@kernel.org, robert.moore@intel.com, corbet@lwn.net,
+ rdunlap@infradead.org, ray.huang@amd.com, gautham.shenoy@amd.com,
+ mario.limonciello@amd.com, perry.yuan@amd.com, zhanjie9@hisilicon.com,
+ linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+ treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
+ ksitaraman@nvidia.com, sanjayc@nvidia.com, nhartman@nvidia.com,
+ bbasu@nvidia.com, sumitg@nvidia.com
+References: <20260120145623.2959636-1-sumitg@nvidia.com>
+ <20260120145623.2959636-5-sumitg@nvidia.com>
+ <7f0b280d-9c22-46dc-a924-a85591e1034d@huawei.com>
+ <fb4b68f7-ec64-4660-99a3-d288bc20ffac@nvidia.com>
+ <53827af7-f3b6-4e1c-8c8d-2f57ef5be97e@nvidia.com>
+ <3097e4dd-a895-4c55-96c7-433ae1d046f9@arm.com>
+Content-Language: en-US
+From: Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <3097e4dd-a895-4c55-96c7-433ae1d046f9@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MA5PR01CA0236.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:1f4::10) To BN9PR12MB5179.namprd12.prod.outlook.com
+ (2603:10b6:408:11c::18)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/3] dt-bindings: interconnect: qcom,qcs8300-rpmh: add
- clocks property to enable QoS
-To: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>,
-        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mike Tipton <mike.tipton@oss.qualcomm.com>
-References: <20260127090116.1438780-1-odelu.kukatla@oss.qualcomm.com>
- <20260127090116.1438780-2-odelu.kukatla@oss.qualcomm.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20260127090116.1438780-2-odelu.kukatla@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: OV-u1tCRe5d9Kf0PKoI0lPUnFHcSTvM1
-X-Proofpoint-GUID: OV-u1tCRe5d9Kf0PKoI0lPUnFHcSTvM1
-X-Authority-Analysis: v=2.4 cv=J8CnLQnS c=1 sm=1 tr=0 ts=6978994f cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=AbLP64ttnd7elSJatLQA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI3MDA4OSBTYWx0ZWRfX/U0DVPRaLgxQ
- ljNNODCZrN26HaxhyYaNWbUUz+AOw4y68lNpLnBBwwCL+6nM4OUbacb3BgRO6w5wjBkgPgP08RF
- 8DLBlOk6ZWlFqNDYjlafqTevcfEGBHX3CpR9lrdnvUQIiS9mHGmlkh/nGQMBXkHT36yMy7ynpUe
- qIaKzZCN14Q5XREfIc9P+cfiXE+eKwOcHuAejNvWOqbfkZZJPvfiwpA2GDTgbPlzZSdLJeo5Umr
- cO4v5Adyqwf8kFJRPS53bCnbEszUebvoYPtsxw8dv4Kn9zqAI/AwPGVyMC5B/Er+dkSB8/JSk+7
- OWRHzglDYkY0OcnlYJensJYb1NorXJ5Cmsrk9oU6zqK5qErijE/BJmK6RhMA87P9+ANLxROzG/0
- DJMjONiUWd95+VNpheGnCGUCvMKcwbbHMUD3hgJ3wMi+AtqFueSW3wzw7/uv+LYy3nDaAX8vhfv
- q3Oaz5JVUeDPNvCvGTw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-27_02,2026-01-26_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015 bulkscore=0
- priorityscore=1501 adultscore=0 impostorscore=0 suspectscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601270089
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN9PR12MB5179:EE_|IA1PR12MB6601:EE_
+X-MS-Office365-Filtering-Correlation-Id: ac84f9bc-4708-4720-0057-08de5d946672
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?Qm5YWVdhQjRDOVFHR0dEMHZuM1hJY1ZBSjQwc0svTzF3Y2tYZG03Q0dsMXhK?=
+ =?utf-8?B?OGtndWZxSlp5eklHMS9nYVllVDhGajdqeXdoVUpqdTNkSUZBRTZRUzI0T29t?=
+ =?utf-8?B?Y2JMQ2J3c2RadlRNSFBHSlNMRVdxeWJHTWlzUkYyeWR4OEZMNjNleG9xV2Fr?=
+ =?utf-8?B?OWJteW05VW01dVo5bUZ4LzBObmdkYWlHeDBwekdSTkwrU0VZdk41Y29wVWk0?=
+ =?utf-8?B?WjZEdEJHTTB4WVBQOUtvRzY4U0VLUndDMkVuWmIvQkZNRWVhWjNVYjZ3dmdj?=
+ =?utf-8?B?VnZVOEtHcFhZeHRkbFpXUFFhR1gzZ2J1ZStBSTZhY1NDMTR2UjgvOXhWRnl0?=
+ =?utf-8?B?eSs0MXNMZ1ptZDg5L2E5ZzZXMUx4bG9kSjJwdVU5ZEJ0ajluTnVPK1lmTkYw?=
+ =?utf-8?B?MWgvdDNuY3JqYVdDSTVVM1FxSWZJY2hML2lvZ3pJdkhEWlgwNi9ud29EMUNo?=
+ =?utf-8?B?RWFKWGpRVit4RWp2TWNseDYrNmpxUnNoOXQ0RWJFMXArRWh4ZVNFNCszdkJV?=
+ =?utf-8?B?QW1PdkduTkFNMXZ1dlpIRERHVnV4MUFLdkxsTnQ4N1ZtZUxhaElLNDYwL1h6?=
+ =?utf-8?B?R25qeUFWekxFMXNwU1M4cVQ2ZjJqWHdxUWx0UlBPZWlINWh1Y0J4Qno5eVA5?=
+ =?utf-8?B?d29ya3ZMYWNuYnJDK3FUdkpMY1N6emFwOUhyYnI2UnlrS3BnSS94VnBCZXgx?=
+ =?utf-8?B?bjRNR3MveUJlcjRuYUsrR29ZdUZ0WTg4WXpqeVFudjFuUlhXYWVxTEtaMEt3?=
+ =?utf-8?B?YkR6Y0lrcm9ScFU0TkFqT3JySnc1Zml2LzVEOWo0cThIdGNnNmtLUHdrZjZm?=
+ =?utf-8?B?eEpWaTFXOFg5OE1lY2xnUVdySFR6RTRNMm1DYW1kUHViUDhVZ3V6MTVwaW5Y?=
+ =?utf-8?B?K2p2YmxyaEpTM3pLUlBrd2hib21rYmt6VURMdEpYMTZZQnMvUjVmVmNadUxk?=
+ =?utf-8?B?U05aODY3VDlsMTBiWEplMXlzOVJObmwyd1ROTzcrdU5QaGFPazFVUUh6VEsz?=
+ =?utf-8?B?Y3hFR3I0Z3Q2Qk5KUTR1YldyL1lHQ1pYSndDQ1VzOG5OVjd0R0dJQXI4cndQ?=
+ =?utf-8?B?ak4zWnZCdEVxcStYb213Q1lnMUpob2FQM085WW5UaWJ1R0Ixdk9Fa3RXOUx4?=
+ =?utf-8?B?aDErcmRUblVuczFzZ0lZUDEyTytZQUl1VlR0WWxBRU9yNmZMcjJvQ09WSWg1?=
+ =?utf-8?B?a0g1SGlUWFRMWC9CSmVwcjdWN2kwc1ljWGlZUFl1OEhxSEdkTkprRlo5VU5Y?=
+ =?utf-8?B?M1NGYXlDSkFnclVVMVFhMnpaZWpTdVVZODJBa1lYKzFuL3h4RzRoZ21ZZ01G?=
+ =?utf-8?B?MjlYakxIRnhFZW9Kcnd2Q3lWQ3RVK0pzNkxNd0hFYkdHdFFjaEM5OGtxYjQ0?=
+ =?utf-8?B?ME0zYTFWbm4weWt5cXZGcDNhRHF3OWk3RzlVaGlhOC85RlJyV3RPWjBlQ1d6?=
+ =?utf-8?B?ZlBGcis5RjBkaFJadzdXN2hGRW8rTnRUQnhUbEJET1Q3dVBqK21LZ1RoenJV?=
+ =?utf-8?B?VWljcHpUVXQ0R0hDWS81K0gzQ0JZMUVWRzl2M3B5K1pKVEw2YUpFZDY4V1pG?=
+ =?utf-8?B?M1Avdkxkd0NzYk9aN1ZOcjVRald0RHFQTFVYZjA2eTVEY0dCRUlyRGxLVnk1?=
+ =?utf-8?B?aENwMjBqNm5PZm9FeERiWDE2MjF0OGh0NWd4WUcrckFSRUNxVzN4ZC9lYUZy?=
+ =?utf-8?B?SU5BYkNoNHhwQ3lBbkw3NjNVRDViOXlhR2tqL1cyTnI2bjloczd2Vm1jbXRL?=
+ =?utf-8?B?eGlRNXBZZnVjZHg4eXFzVU5LQjF3WW5Mc2p1VnI1MFNWNWZkVWpaREFQZldq?=
+ =?utf-8?B?TDluaktReFBnR2xCeFZmaGwwVHVya0kzdlFYeWw4ckc5NlphM1VQdTBidU4r?=
+ =?utf-8?B?cVZuanJ5Rk1FSXZJRk1CdmZ0N0Fndll2eUdEV3NDaTJGenFFa3JGZnhVZ2JV?=
+ =?utf-8?B?QTRiMFhLVVpEenM3M2drd2dvMzhwQTd5Y3R0NEVmZ0MyeG1UU0dKalZ5cHN6?=
+ =?utf-8?B?MzVIL3BQU0xoVGpPMFFWOWt1ODVKU1JYMEdlR1k4VkNDRFpPZzB0RUIwTFRO?=
+ =?utf-8?B?ZWFoaVl5UEQxQVVEK1pqL21tb0FtUHd1b0FnNjFWTVlyU091M2pwWUwybEw0?=
+ =?utf-8?Q?4AU8IV8YVyIGHF5M16O3ozGA6?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TmpkOWFOb3h4VkdURDZOLzJKZ0I3bGtaakk0U2EzWXpjQit2ejc3c0R4V003?=
+ =?utf-8?B?UXZHZExuZ2RveEtibUFTNzV4bGJ0QWNBV2dmNGNJcW9ER1hBVWg4d1lnQnlz?=
+ =?utf-8?B?TklQZ1U2TWtEMUwyV0ppa2xNN0h5SEVTeDdPa3p3em90L1pUak1iZXV6MTZQ?=
+ =?utf-8?B?OGIxcDBFNjNFRTJVdXIyeVAwVVgyUFljUmhkRkZDVngxeU9NWVRwcVVWVmlZ?=
+ =?utf-8?B?aXJXNmtZOXN1Wi9LMFRvN3BLYmx3NWRobVVCYVNtTTJvK25lQlRvYlA5Zm9m?=
+ =?utf-8?B?VjF1OWJvZ1VJbndDOHdzK0h5SjB4UGdOanVWZ2tEVyszSVB1Q0UvT0RGQzBO?=
+ =?utf-8?B?NlQ1OVUvNWlaakJCT1g0dTJGcGFrVUFxZzN1MTdLSGdNWEUxdXhsLytJQ0dq?=
+ =?utf-8?B?MisvZ1lmK25vbnZmZnlodFFVa0tYVTFmVjMrSEFZSjJKQTZiQldWd2JoekhL?=
+ =?utf-8?B?TWVwNHQvZlNvTVlPOXFQVWM5UTZVQklnaWM0a1A1UG1sU0dUclZ0SVV0MHo4?=
+ =?utf-8?B?c084MEs4dDZVaGJnTmMvLys5QWhFbE9jTGFTWGRIaGYzTE04dndaUmhSMmJ0?=
+ =?utf-8?B?UVM1OHVrQVJlWlpjVHltRmJ4QXBCeXJTME1oNkVoNERQQUE5VDlqbDFudGQ1?=
+ =?utf-8?B?L1dYNjR1TFFsRFl2cFVpcFZzR0IxU0M4T0pzeHA2VDV1c2ZIemxFUHpaa0sy?=
+ =?utf-8?B?T1padHFVL0syaGxSejc1NjVmbTV4RUtjeGIwOEgzUE1xc3lWbDhrVG51VnJy?=
+ =?utf-8?B?andHTmxtMVpvNUtUSHZlbUlJbzE0OUl2cktxcUhoWTNGcTd3WjczMWtDd1F0?=
+ =?utf-8?B?ejU4aVJ6eTduUmR5eWVFT3hydGNyOU5YMWQxZFY5NStIK29acVV4aUd5Q1ZQ?=
+ =?utf-8?B?emhUMW0vZ0NaNFc1b1RSekpISDhXeURJT2VYalJKUDRlZG1oWEVJK093dkJP?=
+ =?utf-8?B?aE5ZdVNMNW0zYmFxVkdGOE1TaDdPOHgrbWVoczhJaUdtRGpReUhQVnBiZjlv?=
+ =?utf-8?B?Q1ljdG9HdmNGa2p5ZGFXRTlVRE4zTG9GZzZkUnpvYXkxa2NkZFRYRkpzMEhD?=
+ =?utf-8?B?b09INE1nVFFWV0hueENRbGhtZXRra0dZTWJ2eW1JZThhSCtDMHRZbER4ZTFl?=
+ =?utf-8?B?R1A4dlk3VXFOMlhUWjVkcFdDSTltR2tkSE05UlM5OW12d1IxQXpYVWlOV1F1?=
+ =?utf-8?B?eW5HbEljSUhLaTdVMzRqN3h6c1g3M2FOUkJJTlNGOUh2UmI2bnpISWlCVy9r?=
+ =?utf-8?B?Y1FZdlVmazNpR2RET0txRUo5eURpbVNuMUZidkVRMVltQ1oxeDRxYjh1Yzdl?=
+ =?utf-8?B?VlVsNm1wNXlBVkROckVnK2toQ3VUZ2FsZHUyT0lLY0g1R3NYa2FuZXVRVW5j?=
+ =?utf-8?B?ZTZMWkhZNTdkOUlXb3FVMUI2TGZGaDNWdkZGM1A1NEpPZk45TDhjNWEyOFV5?=
+ =?utf-8?B?SFJvZzJ2UTdKY0pPODJNVXFoNkxDK3p6RnBVVHhwT1VNdmdLS1ozVXBmczYw?=
+ =?utf-8?B?dzFSZ1k2VHVmZzd1RFlsNm8yb2ZaRm11Q0F3ak5MQ0Q0NEtLY21hMmF2dmlt?=
+ =?utf-8?B?WkgyaE5ZNm1CY25LYlRyTmgxNkhrTmE0eit0cTdLMkZNanFnUEJsY3BhNGRu?=
+ =?utf-8?B?TlE0OVZiR0pScGo4NEFCQUM2WkRqWWtlMUhZSm5kczdoemlUYjFDSlF0Mmdv?=
+ =?utf-8?B?cGJtWHZrZit5b1kzczJPK2pNU3VMZjB4Y2tLZldtTnFrREZzQ2pDM1ZNeStJ?=
+ =?utf-8?B?STVoWHJpUTZ2aU5FQkthT1lOSmt1L0R0YWttS0NkMW1uRER5R0toMWN1YW5x?=
+ =?utf-8?B?TFoyTCtGdStNL3ZCeGxRUTIyWFFQNEJ5VHB6UU04KzFCRDdNTmdDMmR6ZjBN?=
+ =?utf-8?B?NTNqQ09jemZWR3hhS1NaeHowV3BHMngvWk9IdUV2MG02S3VvS1ZDNFBTTjl3?=
+ =?utf-8?B?SDYwZnJXS1pRM3VVUXFHRWgzMkVmQnU1SEhscnZYUVEzOTFTeVJvSC9XRW5v?=
+ =?utf-8?B?ellnNE5VdW5MZ0VhTkJyVlM0Mm96RllnLzRVZC82ZkhDQ1JQdmxIVktVUmU5?=
+ =?utf-8?B?TWFMdGZwbTU3RjBielJKdS9VcmR3SnluU0ZXQTZqdHNIMHFHRWdzazhIN3NR?=
+ =?utf-8?B?SXRQNVc5VkdHSktNTTc3TTREVTRUOE9OamV1MTdueWhNU0FNdEF3NC92ckw5?=
+ =?utf-8?B?OHh1cnJ4dkYwMFZKU1ZyNGJzVWh4MXBvMDcxY0ZITHZCSDJlejkwZWRrVEl6?=
+ =?utf-8?B?dnM0MEFjTFp3U0MzVXFMRTNtQ0RzVEszRzdwSzV2MHBqQll0alBaUHlUc2NU?=
+ =?utf-8?Q?pO6XpU9LKMc4JvgdqI?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac84f9bc-4708-4720-0057-08de5d946672
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2026 11:08:29.2451
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kCkzW+rOBWla3d3Ni6aJeCyOkG3pJDaBokoYMH1ypkYuJnf4JOICmhJTvN7d/LbRArClJaoPUo8t+DWm3Tt+GA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6601
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[nvidia.com,reject];
+	R_DKIM_ALLOW(-0.20)[Nvidia.com:s=selector2];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	TAGGED_FROM(0.00)[bounces-41522-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41523-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
+	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	DKIM_TRACE(0.00)[Nvidia.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[konrad.dybcio@oss.qualcomm.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
+	FROM_NEQ_ENVFROM(0.00)[sumitg@nvidia.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 782A593361
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[Nvidia.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,nvidia.com:mid,nvidia.com:email]
+X-Rspamd-Queue-Id: 45F2D93624
 X-Rspamd-Action: no action
 
-On 1/27/26 10:01 AM, Odelu Kukatla wrote:
-> Some QCS8300 interconnect nodes have QoS registers located inside
-> a block whose interface is clock-gated. For those nodes, driver
-> must enable the corresponding clock(s) before accessing the
-> registers. Add the 'clocks' property so the driver can obtain
-> and enable the required clock(s).
-> 
-> Only interconnects that have clock‑gated QoS register interface
-> use this property; it is not applicable to all interconnect nodes.
-> 
-> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
-> ---
 
-[...]
-
-> +            - description: aggre UFS PHY AXI clock
-> +            - description: aggre QUP PRIM AXI clock
-> +            - description: aggre USB2 PRIM AXI clock
-> +            - description: aggre USB3 PRIM AXI clock
-
-LeMans has one more USB3 clock here, but it also happens to have
-1 more USB3 host, so that checks out
-
+>>>> On 2026/1/20 22:56, Sumit Gupta wrote:
+>>>>> Add cppc_get_perf() function to read values of performance control
+>>>>> registers including desired_perf, min_perf, max_perf, energy_perf,
+>>>>> and auto_sel.
+>>>>>
+>>>>> This provides a read interface to complement the existing
+>>>>> cppc_set_perf() write interface for performance control registers.
+>>>>>
+>>>>> Note that auto_sel is read by cppc_get_perf() but not written by
+>>>>> cppc_set_perf() to avoid unintended mode changes during performance
+>>>>> updates. It can be updated with existing dedicated 
+>>>>> cppc_set_auto_sel()
+>>>>> API.
+>>>>>
+>>>>> Use cppc_get_perf() in cppc_cpufreq_get_cpu_data() to initialize
+>>>>> perf_ctrls with current hardware register values during cpufreq
+>>>>> policy initialization.
+>>>>>
+>>>>> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
+>>>>> ---
+>>>>>   drivers/acpi/cppc_acpi.c       | 80
+>>>>> ++++++++++++++++++++++++++++++++++
+>>>>>   drivers/cpufreq/cppc_cpufreq.c |  6 +++
+>>>>>   include/acpi/cppc_acpi.h       |  5 +++
+>>>>>   3 files changed, 91 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>>>>> index a09bdabaa804..de35aeb07833 100644
+>>>>> --- a/drivers/acpi/cppc_acpi.c
+>>>>> +++ b/drivers/acpi/cppc_acpi.c
+>>>>> @@ -1739,6 +1739,86 @@ int cppc_set_enable(int cpu, bool enable)
+>>>>>   }
+>>>>>   EXPORT_SYMBOL_GPL(cppc_set_enable);
+>>>>>
+>>>>> +/**
+>>>>> + * cppc_get_perf - Get a CPU's performance controls.
+>>>>> + * @cpu: CPU for which to get performance controls.
+>>>>> + * @perf_ctrls: ptr to cppc_perf_ctrls. See cppc_acpi.h
+>>>>> + *
+>>>>> + * Return: 0 for success with perf_ctrls, -ERRNO otherwise.
+>>>>> + */
+>>>>> +int cppc_get_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
+>>>>> +{
+>>>>> +     struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+>>>>> +     struct cpc_register_resource *desired_perf_reg,
+>>>>> +                                  *min_perf_reg, *max_perf_reg,
+>>>>> +                                  *energy_perf_reg, *auto_sel_reg;
+>>>>> +     u64 desired_perf = 0, min = 0, max = 0, energy_perf = 0,
+>>>>> auto_sel = 0;
+>>>>> +     int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+>>>>> +     struct cppc_pcc_data *pcc_ss_data = NULL;
+>>>>> +     int ret = 0, regs_in_pcc = 0;
+>>>>> +
+>>>>> +     if (!cpc_desc) {
+>>>>> +             pr_debug("No CPC descriptor for CPU:%d\n", cpu);
+>>>>> +             return -ENODEV;
+>>>>> +     }
+>>>>> +
+>>>>> +     if (!perf_ctrls) {
+>>>>> +             pr_debug("Invalid perf_ctrls pointer\n");
+>>>>> +             return -EINVAL;
+>>>>> +     }
+>>>>> +
+>>>>> +     desired_perf_reg = &cpc_desc->cpc_regs[DESIRED_PERF];
+>>>>> +     min_perf_reg = &cpc_desc->cpc_regs[MIN_PERF];
+>>>>> +     max_perf_reg = &cpc_desc->cpc_regs[MAX_PERF];
+>>>>> +     energy_perf_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
+>>>>> +     auto_sel_reg = &cpc_desc->cpc_regs[AUTO_SEL_ENABLE];
+>>>>> +
+>>>>> +     /* Are any of the regs PCC ?*/
+>>>>> +     if (CPC_IN_PCC(desired_perf_reg) || CPC_IN_PCC(min_perf_reg) ||
+>>>>> +         CPC_IN_PCC(max_perf_reg) || CPC_IN_PCC(energy_perf_reg) ||
+>>>>> +         CPC_IN_PCC(auto_sel_reg)) {
+>>>>> +             if (pcc_ss_id < 0) {
+>>>>> +                     pr_debug("Invalid pcc_ss_id for CPU:%d\n", 
+>>>>> cpu);
+>>>>> +                     return -ENODEV;
+>>>>> +             }
+>>>>> +             pcc_ss_data = pcc_data[pcc_ss_id];
+>>>>> +             regs_in_pcc = 1;
+>>>>> +             down_write(&pcc_ss_data->pcc_lock);
+>>>>> +             /* Ring doorbell once to update PCC subspace */
+>>>>> +             if (send_pcc_cmd(pcc_ss_id, CMD_READ) < 0) {
+>>>>> +                     ret = -EIO;
+>>>>> +                     goto out_err;
+>>>>> +             }
+>>>>> +     }
+>>>>> +
+>>>>> +     /* Read optional elements if present */
+>>>>> +     if (CPC_SUPPORTED(max_perf_reg))
+>>>>> +             cpc_read(cpu, max_perf_reg, &max);
+>>>>> +     perf_ctrls->max_perf = max;
+>>>>> +
+>>>>> +     if (CPC_SUPPORTED(min_perf_reg))
+>>>>> +             cpc_read(cpu, min_perf_reg, &min);
+>>>>> +     perf_ctrls->min_perf = min;
+>>>>> +
+>>>>> +     if (CPC_SUPPORTED(desired_perf_reg))
+>>>>> +             cpc_read(cpu, desired_perf_reg, &desired_perf);
+>>>>> +     perf_ctrls->desired_perf = desired_perf;
+>>>> desired_perf_reg is not an optional one, so it has to be supported.
+>>
+>> Please ignore my previous reply on this. Had some problem with my email
+>> client and both mails got mixed.
+>>
+>> The register is optional when Autonomous mode is enabled.
+>> Seems the comment here is already resolved with Pierre's reply.
+>> We discussed this during v4 [1] also.
+>> [1]
+>> https://lore.kernel.org/lkml/ccd45c1b-2f69-4725-918f-18063f00a864@nvidia.com/ 
+>>
+>>
+>> Thank you,
+>> Sumit Gupta
+>>
+>>
+> As suggested at:
+>
+> https://lore.kernel.org/all/5afea521-7d80-4e72-8809-77af60b0d957@arm.com/
+>
+> Maybe it would be useful to add a patch checking this:
+>
+>
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>
+> index e3796b520e473..7db74e19425e6 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -854,6 +854,12 @@ int acpi_cppc_processor_probe(struct acpi_processor
+> *pr)
+>         }
+>         per_cpu(cpu_pcc_subspace_idx, pr->id) = pcc_subspace_id;
+>
+> +       if (!CPC_SUPPORTED(&cpc_ptr->cpc_regs[DESIRED_PERF]) &&
+> +           (!osc_sb_cppc2_support_acked ||
+> + !CPC_SUPPORTED(&cpc_ptr->cpc_regs[AUTO_SEL_ENABLE])))
+> +               pr_warn("Desired perf. register is mandatory if CPPCV2
+> is not supported "
+> +                       "or autonomous selection is disabled.\n");
 > +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,qcs8300-aggre2-noc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: RPMH CC IPA clock
+>         /*
+>          * Initialize the remaining cpc_regs as unsupported.
+>          * Example: In case FW exposes CPPC v2, the below loop will
+> initialize
+>
 
-LeMans also has ufscard clk here
+Thanks for the suggestion. I will add this as a separate patch in v7.
 
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,qcs8300-gem-noc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: GCC DDRSS GPU AXI clock
+Thank you,
+Sumit Gupta
 
-and lacks this one
 
-Are there actual reasons for these differences?
-
-Konrad
 
