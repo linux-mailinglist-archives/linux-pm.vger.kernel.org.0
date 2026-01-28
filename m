@@ -1,43 +1,49 @@
-Return-Path: <linux-pm+bounces-41602-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41603-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2EkrHC7oeWkF1AEAu9opvQ
-	(envelope-from <linux-pm+bounces-41602-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 11:42:54 +0100
+	id qBiRFw3qeWkF1AEAu9opvQ
+	(envelope-from <linux-pm+bounces-41603-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 11:50:53 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 119359FA07
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 11:42:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3CC29FB3C
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 11:50:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E58743004618
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 10:42:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 86B7E300C244
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 10:50:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97C202F1FD7;
-	Wed, 28 Jan 2026 10:42:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A669E31062C;
+	Wed, 28 Jan 2026 10:50:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F8A729B78F;
-	Wed, 28 Jan 2026 10:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD66F28CF6F;
+	Wed, 28 Jan 2026 10:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769596971; cv=none; b=kGgj1biVOLnAnEndWcIvSiOIDEjK5utn5luk3jbUjspCvwP1wYjKG4BhjxvofP8SEJJqhTwnTCxnAKkSkBAh3LMbuLvMRcjEBWtyL2NFl/WyzR99CwzaXy7XttApIQNf36Pb9H267CYwIviDe1erv8Ip507JZktEYBRZxCwa2Qc=
+	t=1769597450; cv=none; b=L3hDUL7ChUvWC7D2bpenOuUD9VuBw1/rd+k7yMcFKP1i/TcRklSQP/0TfLSdLQ6Xh496DKIr6l/jT1yC1IPuLVjPFW9u/0YTOhSKpgvSfhtKmLEnJw5HTms1DlA6L/F3m9RPxvxvP8Fz+nXm+qPfq/l6w5s1o1kPvzHqA0yk1Qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769596971; c=relaxed/simple;
-	bh=XuLhm7lxuNCOLV9QyUWF4q0xm+qYs+xetGXCyt3L55w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GOUXhchyxFVeFTkA+wSjoUOVF+bUBDUGCMZFTmd3YRr7+ea6KFaVHqcU+iFuklJ/PVjvxZuDDHubfHiWVMtOHkbCFQPcHVLh+VU9sT2uL5ACwSXo5gAbWUU03G+kRm5blyGXRmGdWWckSEMU/qs3pNVZse1+y4UYG9GgSX40xww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 464B61515;
-	Wed, 28 Jan 2026 02:42:42 -0800 (PST)
-Received: from [10.57.17.95] (unknown [10.57.17.95])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 20B9C3F5CA;
-	Wed, 28 Jan 2026 02:42:46 -0800 (PST)
-Message-ID: <67d1584c-a474-4873-8cc2-9899296ea7ea@arm.com>
-Date: Wed, 28 Jan 2026 10:42:48 +0000
+	s=arc-20240116; t=1769597450; c=relaxed/simple;
+	bh=BV0gNi+tc0yyHVuAWTUC07E1tMEAHg+We+j6aGJMvHg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=r/C5M68R8ppQM4S1cSK/P8b5jveXW2DiApKwPg7jGKuP5msZ5KMTKExjHj8LbmBS2iHrOZOFuMf2810VdCvpZxw4BYdPhwmPYs0Iec8ZP5pyWFBczSQIm6N5yq1mlLbWbHIOuATnJc7TFI4E1roJWAFcHur65xDsd9hZIZlGQ9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=113.46.200.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4f1JqY2ps8z12LDY;
+	Wed, 28 Jan 2026 18:46:49 +0800 (CST)
+Received: from kwepemf200017.china.huawei.com (unknown [7.202.181.10])
+	by mail.maildlp.com (Postfix) with ESMTPS id 9731240538;
+	Wed, 28 Jan 2026 18:50:43 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemf200017.china.huawei.com
+ (7.202.181.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 28 Jan
+ 2026 18:50:42 +0800
+Message-ID: <3c6d58b2-b4c9-4dc7-a705-b7626e127f33@hisilicon.com>
+Date: Wed, 28 Jan 2026 18:50:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -45,94 +51,151 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal/of: Fix reference leak in thermal_of_cm_lookup()
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Felix Gu <ustc.gu@gmail.com>
-Cc: Zhang Rui <rui.zhang@intel.com>, Yu-Che Cheng <giver@chromium.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260124-thermal_of-v1-1-54d3416948cf@gmail.com>
- <CAJZ5v0gL92f3g4oj47jaYQKG_V6vd_oBawbwQVWjUP7u9QKS7g@mail.gmail.com>
+Subject: Re: [PATCH] arm64: topology: Fix false warning in
+ counters_read_on_cpu() for same-CPU reads
+To: Sumit Gupta <sumitg@nvidia.com>, <catalin.marinas@arm.com>,
+	<will@kernel.org>, <zhenglifeng1@huawei.com>, <viresh.kumar@linaro.org>,
+	<rafael@kernel.org>, <beata.michalska@arm.com>, <pierre.gondois@arm.com>,
+	<ionela.voinescu@arm.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-tegra@vger.kernel.org>
+CC: <treding@nvidia.com>, <jonathanh@nvidia.com>, <bbasu@nvidia.com>
+References: <20260127080700.3565546-1-sumitg@nvidia.com>
 Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0gL92f3g4oj47jaYQKG_V6vd_oBawbwQVWjUP7u9QKS7g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <20260127080700.3565546-1-sumitg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemf200017.china.huawei.com (7.202.181.10)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.14 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [0.04 / 15.00];
+	DMARC_POLICY_QUARANTINE(1.50)[hisilicon.com : SPF not aligned (relaxed), No valid DKIM,quarantine];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-41602-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,gmail.com];
 	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lukasz.luba@arm.com,linux-pm@vger.kernel.org];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	R_DKIM_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	TAGGED_RCPT(0.00)[linux-pm];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 119359FA07
+	R_DKIM_NA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhanjie9@hisilicon.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41603-lists,linux-pm=lfdr.de];
+	NEURAL_HAM(-0.00)[-1.000];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A3CC29FB3C
 X-Rspamd-Action: no action
 
 
+Hi Sumit,
 
-On 1/27/26 16:22, Rafael J. Wysocki wrote:
-> On Fri, Jan 23, 2026 at 8:06 PM Felix Gu <ustc.gu@gmail.com> wrote:
->>
->> In thermal_of_cm_lookup(), tr_np is obtained via of_parse_phandle(). But
->> it never be released.
->> Use the __free(device_node) cleanup attribute to automatically release
->> the node and fix the leak.
->>
->> Fixes: 423de5b5bc5b ("thermal/of: Fix cdev lookup in thermal_of_should_bind()")
->>
->> Signed-off-by: Felix Gu <ustc.gu@gmail.com>
->> ---
->>   drivers/thermal/thermal_of.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
->> index 1a51a4d240ff..b6d0c92f5522 100644
->> --- a/drivers/thermal/thermal_of.c
->> +++ b/drivers/thermal/thermal_of.c
->> @@ -280,10 +280,10 @@ static bool thermal_of_cm_lookup(struct device_node *cm_np,
->>                                   struct cooling_spec *c)
->>   {
->>          for_each_child_of_node_scoped(cm_np, child) {
->> -               struct device_node *tr_np;
->>                  int count, i;
->>
->> -               tr_np = of_parse_phandle(child, "trip", 0);
->> +               struct device_node *tr_np __free(device_node) =
->> +                       of_parse_phandle(child, "trip", 0);
->>                  if (tr_np != trip->priv)
->>                          continue;
->>
->>
->> ---
+On 1/27/2026 4:07 PM, Sumit Gupta wrote:
+> The counters_read_on_cpu() function warns when called with IRQs disabled
+> to prevent deadlock in smp_call_function_single(). However, this warning
+> is spurious when reading counters on the current CPU since no IPI is
+> needed for same-CPU reads.
 > 
-> This looks good to me.
+> Commit 12eb8f4fff24 ("cpufreq: CPPC: Update FIE arch_freq_scale in ticks
+> for non-PCC regs") changed the CPPC Frequency Invariance Engine to read
+> AMU counters directly from the scheduler tick for non-PCC register
+> spaces (like FFH), instead of deferring to a kthread. This means
+> counters_read_on_cpu() is now called with IRQs disabled from the tick
+> handler, triggering the warning:
 > 
-> Lukasz, Daniel?
+> | WARNING: arch/arm64/kernel/topology.c:410 at counters_read_on_cpu
+> | ...
+> | Call trace:
+> |  counters_read_on_cpu+0x88/0xa8 (P)
+> |  cpc_read_ffh+0xdc/0x148
+> |  cpc_read+0x260/0x518
+> |  cppc_get_perf_ctrs+0xf0/0x398
+> |  __cppc_scale_freq_tick+0x4c/0x148 [cppc_cpufreq]
+> |  cppc_scale_freq_tick+0x44/0x88 [cppc_cpufreq]
+> |  topology_scale_freq_tick+0x34/0x58
+> |  sched_tick+0x58/0x300
+> |  update_process_times+0xcc/0x120
+> |  tick_nohz_handler+0xa8/0x260
+> |  __hrtimer_run_queues+0x154/0x360
+> |  hrtimer_interrupt+0xf4/0x2b0
+> |  arch_timer_handler_phys+0x4c/0x78
+> |  ....
+> |  CPPC Cpufreq:__cppc_scale_freq_tick: failed to read perf counters
+> |  ....
+> 
+> Fix this by calling the counter read function directly for same-CPU
+> case, bypassing smp_call_function_single() entirely. Use get_cpu() to
+> disable preemption as the counter read functions call this_cpu_has_cap()
+> which requires a non-preemptible context.
+> 
+> Fixes: 12eb8f4fff24 ("cpufreq: CPPC: Update FIE arch_freq_scale in ticks for non-PCC regs")
+> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
 
+Reviewed-by: Jie Zhan <zhanjie9@hisilicon.com>
 
-Good catch thanks! That looks good. This scoped device node
-handling approach simplifies a lot the error paths (and is less
-error-prone).
+Looks fine for me except for the minor comment wrapping.
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Thanks for spotting this.
+I may have missed the warning log in the FFH test.
+
+This happens during the short window in cpufreq_policy_online() between
+driver->init() and the CREATE_POLICY notifier that gets AMU FIE ready.
+After that, CPPC FIE will be stopped.
+
+Ideally this can be merged together with Viresh's PR since the CPPC FIE
+changes are there.
+https://lore.kernel.org/all/j4qdid7iqmng4gzb5ozefemjkep3wx2b5z2yki5tnqc3vzvzf4@kvrnarvdod5p/
+
+Jie
+
+> ---
+>  arch/arm64/kernel/topology.c | 21 +++++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> index 539b38935182..57b71f403007 100644
+> --- a/arch/arm64/kernel/topology.c
+> +++ b/arch/arm64/kernel/topology.c
+> @@ -401,12 +401,29 @@ static inline
+>  int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
+>  {
+>  	/*
+> -	 * Abort call on counterless CPU or when interrupts are
+> -	 * disabled - can lead to deadlock in smp sync call.
+> +	 * Abort call on counterless CPU.
+>  	 */
+>  	if (!cpu_has_amu_feat(cpu))
+>  		return -EOPNOTSUPP;
+>  
+> +	/*
+> +	 * For same-CPU reads, call the function directly since no IPI
+> +	 * is needed and this is safe even with IRQs disabled.
+> +	 * Use get_cpu() to disable preemption as the counter read
+> +	 * functions call this_cpu_has_cap() which requires a
+> +	 * non-preemptible context.
+> +	 */
+Wrap at 80 chars?
+> +	if (cpu == get_cpu()) {
+> +		func(val);
+> +		put_cpu();
+> +		return 0;
+> +	}
+> +	put_cpu();
+> +
+> +	/*
+> +	 * Reading from a remote CPU requires IRQs enabled to avoid
+> +	 * deadlock in smp_call_function_single().
+> +	 */
+>  	if (WARN_ON_ONCE(irqs_disabled()))
+>  		return -EPERM;
+>  
 
