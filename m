@@ -1,83 +1,83 @@
-Return-Path: <linux-pm+bounces-41652-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41653-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id oL/cDreOeml+7wEAu9opvQ
-	(envelope-from <linux-pm+bounces-41652-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 23:33:27 +0100
+	id IIgfFfiOeml+7wEAu9opvQ
+	(envelope-from <linux-pm+bounces-41653-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 23:34:32 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0FC9A993C
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 23:33:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7BDFA99C2
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 23:34:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 822B730098BC
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 22:33:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D892C30602F0
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 22:33:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE43344DA4;
-	Wed, 28 Jan 2026 22:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 883DA344D9D;
+	Wed, 28 Jan 2026 22:33:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ihjnMdmz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DjOcwbZ3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f193.google.com (mail-qk1-f193.google.com [209.85.222.193])
+Received: from mail-qv1-f66.google.com (mail-qv1-f66.google.com [209.85.219.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B733D343D75
-	for <linux-pm@vger.kernel.org>; Wed, 28 Jan 2026 22:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA7E344D90
+	for <linux-pm@vger.kernel.org>; Wed, 28 Jan 2026 22:33:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769639604; cv=none; b=qYmLS0nAKqRerAt/Ir51Ls85wTAU88YXCblWjD5UrqMOrqLVdrQpALf4wWlvtRQui1RWANe4xq0KdvpxSjhY2JJfFEgKdgNXt2wYpnPKAIk1fs2+Ngtf0HfTiphYeM+QMdbIueKqEp6xp3hSEz5NAJB8xhO9cK3YcuxfIMyH/14=
+	t=1769639605; cv=none; b=nNs4PNe1Lo4zcL7TrcXvxKU8kNDkreBmpMNoWhD/6IUNu/0xNDgAXsUem1R3SA4pac+zhlg6JirrdnQebc4KMbSQMO4hs7t46IUuEqdyp3DBXUnWCuWBqj3KPk/E9iZ+s8PAeZjCbzD49MOn8PlLAkZgX1bmZN3sglXhANmd26Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769639604; c=relaxed/simple;
-	bh=D9uKfpeWHNBio5oH1DcAL26H2VLljL1egsD4t2eIGUM=;
+	s=arc-20240116; t=1769639605; c=relaxed/simple;
+	bh=/tBnQTjEep2ws12SiZlf0MTyXA2SNfUMQKmSH5r54mQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bu8+8M9yAryIWDXN3Yo3E/PFC5tHhyqEr0p2LcTaHU9CcIi5sDlrf2kAnOcxI3MFqt9Unm6PUtmmKC+pc1JXgJCCut3tqiuPQ1e9ZXhxiEv8G3EG/a54G3/wLf3DYaWZyadYNBN8uYpDo5eVEjrhUfUtfan1l/tbvA7obRDxnyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ihjnMdmz; arc=none smtp.client-ip=209.85.222.193
+	 In-Reply-To:To:Cc; b=baSTNf4mSUokOiIBFIxKg3PH6bMSyDxOd8dQ7zE3OHSvOMiDdTjK+3vMb11bBWj/VDQegByv69jnDdoxvgGu0M44mpYx9FUHbqJwkzo0A8NeBX8V7d1gmK+7dnMaTL4cspDP4j0Obb6bNSSrkRwFbMuNXBMKj1RHRR9FiKDQgec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DjOcwbZ3; arc=none smtp.client-ip=209.85.219.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f193.google.com with SMTP id af79cd13be357-8c532d8be8cso42118385a.2
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jan 2026 14:33:22 -0800 (PST)
+Received: by mail-qv1-f66.google.com with SMTP id 6a1803df08f44-8946a794e4fso4648226d6.2
+        for <linux-pm@vger.kernel.org>; Wed, 28 Jan 2026 14:33:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769639601; x=1770244401; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769639603; x=1770244403; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=njPB1RSPP56Oj1b/hlNI9WV3wRfeQUwqPZNJy/r65hY=;
-        b=ihjnMdmzyIAu36TmcwXhKfVzu3JjtyqTU8iGLxqe+j52JdUQtBgR4fxQQ8HgPgYUCj
-         TX1FG9z88Z7epVgKC1wzP3om7sUjDCdCrVGzxHtzv012pkfnbu4yhY2+mwwG3Tj+KWqF
-         VR4FOKgDw37MdnL/xupwdjmKxaBfnvH565DoyXWgDDPeHhoFr1wKM9092ceVFXRLHfC7
-         hWUX/6oyif8iNrJcPVRgqEtczK/iW27bO+jBhcxsqCKMb4AjxrNsIQ1xM/PWhMRLmXME
-         X14gPh+Vqr8xNxt1aJubx3A0B3JVgE3oaHe5sD6dJ9+6oaTfHWR1ZUiEoVl5zR8gw55R
-         S48A==
+        bh=Twb2Mn6eFSbnhF2U8WEvYnbtdTbNFMWzq+PnSQfsHzM=;
+        b=DjOcwbZ35dEqtdcnY2MIvRdP1i9OAzh6+Z1ZJwQ3XhNaOp/Ffg5JRiTxZNN+NhAhjj
+         KEjaPm2XYakS7uGazCodEtZ4xqNmhMFXZBeQ3Cs/JcXmjBGGU7sBOevn+2Fe8tQf+6ZR
+         xnCpyf2UUxNh1yM+8dhGzTg8NllaU56nfC7WQu3o+rlbS8uodl6EuwTySI64B/5O55ML
+         j2euDpqriIjufIbjB21N/Zun7tCDWHpPG+ncllnnoegS4/gIGkyLFt9mNkZFBtIjqrH0
+         b+z2hwuAcombqyeH8NIbAKUVB8Q+Igr28VGWzlRchoLImoI9Co86q7UouwaS8eZCHYij
+         2yOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769639601; x=1770244401;
+        d=1e100.net; s=20230601; t=1769639603; x=1770244403;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=njPB1RSPP56Oj1b/hlNI9WV3wRfeQUwqPZNJy/r65hY=;
-        b=P0a3mduEHZz87ydQEdTvSmdks4P8EnTMkE7jrjy5ahiVsmuALZ3xnbuJPugpkfK5V8
-         Ah6WoP3xpCpl8Hzd4N6E7Ei6nwO58nOxfrlcfRPsHYbF6+sJvCpESCz1dSkviBNm19nW
-         o/OJ0HCuWez1XyAKr/4a8ifzPf5zYw0WxDHbpjvo6MphxzH6LN38ZZ1tEpr/wEYdnWPe
-         I7CTsxuSF/kn+RY0+9D8CALFMKEzm2GGs0KC6JG91MosZE1+FjZbYwwAvGkkQXK0/Jrz
-         WsYelH2y8wzDR+Wa2Atc1AUoMDwov6JFLwK0j7O3A6Htst6nBKHBxC7zsAKJLn4BUput
-         MVFA==
-X-Gm-Message-State: AOJu0Yxt2S73GMgrlsRc4z/71HVdwRnmTcIkB6/qY6Bul9Sh1D4akggQ
-	f76Q+L254U0da+xY/r5oY17O+uyEvXYoCCbSi6OVtAFUM/nRFnf6NNmjtlNTW2Fhh7U=
-X-Gm-Gg: AZuq6aLca+ifaJJj4AL3ckb9KsW98mZ0FD9430WKf5T7G1UCfdY7uIcXfBsiWf1Xp4Y
-	CSdOTBriZ4+yKH40kFjg6G8Uw8oMU/rJSAonvk+SBbXHLVgokqbR3zSt3q6w65r3SR9GyfeM6s0
-	AH43RNhqxOd+qTAva1XW9vu8nGd+S4lEQd029Uc8MNiMqmX/O+boTKorNTyhvjE2EYzIVMSfXNX
-	kGR10encSJBAdCUC59y9F/ULqe2FLkMN/3wbhwTyFR/zysLU0jGdlvQqhKnS58lihNJAW7J/kuL
-	cZdr0pFso6Pd66yg+cKTswAH4kt2Q19lblHGVLEJA1XrI9qGD03F6kJz3GbLGufITdzN6nPtVi0
-	8K8Ma9WFehcn22E4TKhUNkmlcWVMocO2iSPjOpwxSa5UGB7mHuZUWS+tkFQAK80V/yKa4DiSbsv
-	lEf7qCAV/Mz5volUT2SUrJQ3fMBlTUTjQ=
-X-Received: by 2002:a05:620a:3942:b0:8c6:af5b:d50a with SMTP id af79cd13be357-8c70b8f2f76mr850329385a.43.1769639601472;
-        Wed, 28 Jan 2026 14:33:21 -0800 (PST)
+        bh=Twb2Mn6eFSbnhF2U8WEvYnbtdTbNFMWzq+PnSQfsHzM=;
+        b=peuW4IEjvSN6kpqfEi4Yn1r7Em6P54aNFfGzDCT8j/+QCS9AhBRvKhU4wBtp7jAAt+
+         Dzfs60DGoYgkPkuVWqdIZIPbmMLHD/nyB/QQt074pY4+ZD7QrHhpj7LoE9Z+E+/5cBAq
+         DHHkSzyLFpxdFE0JChn/7h3P2WExkBo5q5BP3ING/6oh466w/LbTVQcN0fvtzPMra/76
+         kY/H0W5YvIKgOGG5S6C/enK4SO4f+H1CX6W9qPpwqWZCjiVJ767FuQsx1H6AN6xeTABB
+         RkwO8/VwOHajwAtx1joML67n61Pss2PInzYLdGVMC/SmM0o8+HBmUuT1pbXywoyiTLXE
+         3MMA==
+X-Gm-Message-State: AOJu0YxplwFK1Kbf1GDTgSXsEbj2FQRnklTsOu2Z2L3oQ/qjEtKUxFTE
+	c6p7Ck7dEizk9GoLgBhhb5XHbulKFSBEFc9lY21e4CeKuLMO8Ga6DyWO
+X-Gm-Gg: AZuq6aKoY4CFwquCrUHtskwMuh0opU6KIBIV19RmnMGFSbBozG4H4xxXJrOjytDCBiV
+	YnQrTdJqaFrmeSpoLar2vd0TGMsnnVJ7NfSrMqnA1IHN1zyQiS2zhD01QXTHAU52j0W5HWDDDbm
+	4qfsHFmGTZ6WczwxvpmuSYkbxviI2JdXRW1lkXRvCmJclALfAYujRKnBPDXxrvJAO+dWFSjDEv2
+	AOez7cpiwg+s63rLss7ypAM4jbLGG95HBnZHe4Gz78PpfwuV7Ep+FT7BVG37vV6CUuINPzC6oR8
+	LtRMSoyP6eIlg/55IxrOOOkxg0n0zFsD4YC8O62qrsdkvkTcPQm6M63H+HHiWH3meT9wJfcsVlH
+	KTeIcjBHA6rhzhRthK5eA9nvsWBrdG4pLdeTG0+DeHCN1GwJ1YeBYlpL5uMAXLcoxIyJvEhJA1A
+	sE8qV5PndWyo06CoS14nvzv8P7fh3qSOg=
+X-Received: by 2002:a05:6214:2a8b:b0:88f:ca79:844a with SMTP id 6a1803df08f44-894cc910231mr107230816d6.48.1769639602822;
+        Wed, 28 Jan 2026 14:33:22 -0800 (PST)
 Received: from [127.0.0.1] ([154.7.78.65])
-        by smtp.googlemail.com with ESMTPSA id af79cd13be357-8c711b95e4esm304528085a.15.2026.01.28.14.33.20
+        by smtp.googlemail.com with ESMTPSA id af79cd13be357-8c711b95e4esm304528085a.15.2026.01.28.14.33.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 14:33:21 -0800 (PST)
+        Wed, 28 Jan 2026 14:33:22 -0800 (PST)
 From: Patrick Little <plittle@gmail.com>
-Date: Wed, 28 Jan 2026 16:33:11 -0600
-Subject: [PATCH 1/2] Documentation: Fix typos
+Date: Wed, 28 Jan 2026 16:33:12 -0600
+Subject: [PATCH 2/2] Documentation: Fix bug in example code snippet
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,7 +86,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260128-documentation-fix-grammar-v1-1-39238dc471f9@gmail.com>
+Message-Id: <20260128-documentation-fix-grammar-v1-2-39238dc471f9@gmail.com>
 References: <20260128-documentation-fix-grammar-v1-0-39238dc471f9@gmail.com>
 In-Reply-To: <20260128-documentation-fix-grammar-v1-0-39238dc471f9@gmail.com>
 To: Joseph Kogut <joseph.kogut@gmail.com>, 
@@ -96,12 +96,12 @@ To: Joseph Kogut <joseph.kogut@gmail.com>,
 Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-doc@vger.kernel.org, Patrick Little <plittle@gmail.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6507; i=plittle@gmail.com;
- h=from:subject:message-id; bh=D9uKfpeWHNBio5oH1DcAL26H2VLljL1egsD4t2eIGUM=;
- b=owGbwMvMwCW2/Ptzn70V3ucZT6slMWRW9a3b4iUrOlnJm/t5xOekCcvdK75GCrT9sTh9UnOuZ
- NeqhVrLOkpZGMS4GGTFFFl2uokVZjlPz53ptXoSzBxWJpAhDFycAjCRUxsZGc4qzdhbFmt8uWrt
- 0XT93JeVHUnBGbs2MjyUWb9v4cntiwMZ/qkruO+xbVkgXhF6rabD5pt4jf++r/48d+7X9MgLeZo
- v5AUA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1104; i=plittle@gmail.com;
+ h=from:subject:message-id; bh=/tBnQTjEep2ws12SiZlf0MTyXA2SNfUMQKmSH5r54mQ=;
+ b=owGbwMvMwCW2/Ptzn70V3ucZT6slMWRW9a3bV+92Sdl4Zklt+tuss3xGD3W8vQ5f/BoSfL65z
+ vZt+m2RjlIWBjEuBlkxRZadbmKFWc7Tc2d6rZ4EM4eVCWQIAxenAEwk9w4jw0mBK7lfOjqbVW3V
+ 532VO9Au1sed1fOjh181cKad/NWt8gz/403qhaeZn/pw+fa+7Njl99sTP+r2fHl0PHud8UTehTN
+ MeAE=
 X-Developer-Key: i=plittle@gmail.com; a=openpgp;
  fpr=B94616716A43976D994AAB92A7F7E74CBD784BCF
 X-Rspamd-Server: lfdr
@@ -110,12 +110,12 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-41652-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41653-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -123,7 +123,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FREEMAIL_TO(0.00)[gmail.com,arm.com,kernel.org,lwn.net];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
@@ -135,117 +135,38 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
 	FREEMAIL_FROM(0.00)[gmail.com]
-X-Rspamd-Queue-Id: C0FC9A993C
+X-Rspamd-Queue-Id: E7BDFA99C2
 X-Rspamd-Action: no action
 
-Fix typos in Documentation.
+A semicolon was mistakenly placed at the end of 'if' statements.
+If example is copied as-is, it would lead to the subsequent return
+being executed unconditionally, which is incorrect, and the rest of the
+function would never be reached.
 
 Signed-off-by: Patrick Little <plittle@gmail.com>
 ---
- Documentation/power/energy-model.rst     | 14 +++++++-------
- Documentation/scheduler/sched-energy.rst |  8 ++++----
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ Documentation/power/energy-model.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/power/energy-model.rst b/Documentation/power/energy-model.rst
-index cbdf7520aaa6..65133187f2ad 100644
+index 65133187f2ad..0d4644d72767 100644
 --- a/Documentation/power/energy-model.rst
 +++ b/Documentation/power/energy-model.rst
-@@ -14,8 +14,8 @@ subsystems willing to use that information to make energy-aware decisions.
- The source of the information about the power consumed by devices can vary greatly
- from one platform to another. These power costs can be estimated using
- devicetree data in some cases. In others, the firmware will know better.
--Alternatively, userspace might be best positioned. And so on. In order to avoid
--each and every client subsystem to re-implement support for each and every
-+Alternatively, userspace might be best positioned. In order to avoid
-+having each and every client subsystem re-implement support for each and every
- possible source of information on its own, the EM framework intervenes as an
- abstraction layer which standardizes the format of power cost tables in the
- kernel, hence enabling to avoid redundant work.
-@@ -32,7 +32,7 @@ be found in the Intelligent Power Allocation in
- Documentation/driver-api/thermal/power_allocator.rst.
- Kernel subsystems might implement automatic detection to check whether EM
- registered devices have inconsistent scale (based on EM internal flag).
--Important thing to keep in mind is that when the power values are expressed in
-+An important thing to keep in mind is that when the power values are expressed in
- an 'abstract scale' deriving real energy in micro-Joules would not be possible.
- 
- The figure below depicts an example of drivers (Arm-specific here, but the
-@@ -82,7 +82,7 @@ using kref mechanism. The device driver which provided the new EM at runtime,
- should call EM API to free it safely when it's no longer needed. The EM
- framework will handle the clean-up when it's possible.
- 
--The kernel code which want to modify the EM values is protected from concurrent
-+The kernel code which wants to modify the EM values is protected from concurrent
- access using a mutex. Therefore, the device driver code must run in sleeping
- context when it tries to modify the EM.
- 
-@@ -113,7 +113,7 @@ Registration of 'advanced' EM
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- The 'advanced' EM gets its name due to the fact that the driver is allowed
--to provide more precised power model. It's not limited to some implemented math
-+to provide a more precise power model. It's not limited to some implemented math
- formula in the framework (like it is in 'simple' EM case). It can better reflect
- the real power measurements performed for each performance state. Thus, this
- registration method should be preferred in case considering EM static power
-@@ -172,7 +172,7 @@ Registration of 'simple' EM
- ~~~~~~~~~~~~~~~~~~~~~~~~~~~
- 
- The 'simple' EM is registered using the framework helper function
--cpufreq_register_em_with_opp(). It implements a power model which is tight to
-+cpufreq_register_em_with_opp(). It implements a power model which is tied to a
- math formula::
- 
- 	Power = C * V^2 * f
-@@ -251,7 +251,7 @@ It returns the 'struct em_perf_state' pointer which is an array of performance
- states in ascending order.
- This function must be called in the RCU read lock section (after the
- rcu_read_lock()). When the EM table is not needed anymore there is a need to
--call rcu_real_unlock(). In this way the EM safely uses the RCU read section
-+call rcu_read_unlock(). In this way the EM safely uses the RCU read section
- and protects the users. It also allows the EM framework to manage the memory
- and free it. More details how to use it can be found in Section 3.2 in the
- example driver.
-diff --git a/Documentation/scheduler/sched-energy.rst b/Documentation/scheduler/sched-energy.rst
-index 70e2921ef725..4e47aaf103eb 100644
---- a/Documentation/scheduler/sched-energy.rst
-+++ b/Documentation/scheduler/sched-energy.rst
-@@ -244,7 +244,7 @@ Example 2.
- 
- 
-     From these calculations, the Case 1 has the lowest total energy. So CPU 1
--    is be the best candidate from an energy-efficiency standpoint.
-+    is the best candidate from an energy-efficiency standpoint.
- 
- Big CPUs are generally more power hungry than the little ones and are thus used
- mainly when a task doesn't fit the littles. However, little CPUs aren't always
-@@ -252,7 +252,7 @@ necessarily more energy-efficient than big CPUs. For some systems, the high OPPs
- of the little CPUs can be less energy-efficient than the lowest OPPs of the
- bigs, for example. So, if the little CPUs happen to have enough utilization at
- a specific point in time, a small task waking up at that moment could be better
--of executing on the big side in order to save energy, even though it would fit
-+off executing on the big side in order to save energy, even though it would fit
- on the little side.
- 
- And even in the case where all OPPs of the big CPUs are less energy-efficient
-@@ -285,7 +285,7 @@ much that can be done by the scheduler to save energy without severely harming
- throughput. In order to avoid hurting performance with EAS, CPUs are flagged as
- 'over-utilized' as soon as they are used at more than 80% of their compute
- capacity. As long as no CPUs are over-utilized in a root domain, load balancing
--is disabled and EAS overridess the wake-up balancing code. EAS is likely to load
-+is disabled and EAS overrides the wake-up balancing code. EAS is likely to load
- the most energy efficient CPUs of the system more than the others if that can be
- done without harming throughput. So, the load-balancer is disabled to prevent
- it from breaking the energy-efficient task placement found by EAS. It is safe to
-@@ -385,7 +385,7 @@ Using EAS with any other governor than schedutil is not supported.
- 6.5 Scale-invariant utilization signals
- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
--In order to make accurate prediction across CPUs and for all performance
-+In order to make accurate predictions across CPUs and for all performance
- states, EAS needs frequency-invariant and CPU-invariant PELT signals. These can
- be obtained using the architecture-defined arch_scale{cpu,freq}_capacity()
- callbacks.
+@@ -308,12 +308,12 @@ EM framework::
+   05
+   06		/* Use the 'foo' protocol to ceil the frequency */
+   07		freq = foo_get_freq_ceil(dev, *KHz);
+-  08		if (freq < 0);
++  08		if (freq < 0)
+   09			return freq;
+   10
+   11		/* Estimate the power cost for the dev at the relevant freq. */
+   12		power = foo_estimate_power(dev, freq);
+-  13		if (power < 0);
++  13		if (power < 0)
+   14			return power;
+   15
+   16		/* Return the values to the EM framework */
 
 -- 
 2.51.0
