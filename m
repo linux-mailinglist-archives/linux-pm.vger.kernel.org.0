@@ -1,158 +1,145 @@
-Return-Path: <linux-pm+bounces-41598-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41599-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wM1GDVrdeWnI0QEAu9opvQ
-	(envelope-from <linux-pm+bounces-41598-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 10:56:42 +0100
+	id aB8lIX/geWm50gEAu9opvQ
+	(envelope-from <linux-pm+bounces-41599-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 11:10:07 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B71D9F134
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 10:56:41 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF7979F43D
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 11:10:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2C736300F11C
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 09:56:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9B1663029A6F
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Jan 2026 10:09:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E0F334DB6C;
-	Wed, 28 Jan 2026 09:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="QrsW2B9m";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Q9zEE5Ok"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A82BF2D8364;
+	Wed, 28 Jan 2026 10:09:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC91334EF0D;
-	Wed, 28 Jan 2026 09:56:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD5DE2C028F;
+	Wed, 28 Jan 2026 10:09:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769594166; cv=none; b=mZnQASv82P9yP9zEVz4XJ4CkycUPHLKrnBGDaQPT6y5+TZitrd7Bhc5i89BsMaGvQP+6lZqdZLHis8YOK9n7nQ0JJeV+iw6i2N37nLvuSSrn3DvxJU+R5wEYuqOqXFnInPl+H/1LRWZcVMxlT0hU9c2z1ze1Dk0hj+sBUyHsOiY=
+	t=1769594984; cv=none; b=GQ+2UdSvn43WkiKCf9o4BzvbRMRqMIOKGsbTND2AVpZHJFCSUcBL7Mo3q/RWTxyhQFSqvqPIOPVYyZK+4kV1mp9gOd/dARv7FMbP8stbmaN/08dOxycAvzeVScrFBdDgHkW+klrNI1kk+iNE0MuR/dLPnfzl15sU45UlvgO5+4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769594166; c=relaxed/simple;
-	bh=Tv9VtT/tuyIkVlqTZedEc7eEI3ttMxjU9nyE/1eczKA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CHRuWLRBBfsuTmbRIGKnDIxvtY/v1owesTtkIdupHaCqAF0h0KUAaUWSsPPGBGW6/UwNQbfglloNjfBPtXKq61KVCqDCXa8dVqzdi8nsfP22s37VBjnXldw+5UYyKpuHtIP0OwZXVRq9ha8WU3usN+EkDfppFlh7T4VBjbg8M1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=QrsW2B9m; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Q9zEE5Ok; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1769594162;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y1CkU/HVc2ibILKVdI+xG85Mza9wEmLT+9RFRhOmAis=;
-	b=QrsW2B9mzvVSeDxdgZ58k37uaTiRsEIcoBAj/3gtSMNU7mee/7YgMKb7tLtC2+9pt+ZsCp
-	/Qlw7YGtu+D8w9zI/jfeR02K7jkwCwMNWveGSoXd/HJOxdI03H2J/JQnRpe04zb6hVmOLU
-	6ASRhGEHkhKPaTQohUyYsml+d/vho4+pvTGLFB4mQzQVPIPUPCaLO+RLz6zjpV63cEsMTQ
-	xPtSg7nTryjHvNtvH0FHABPelcg74vSzXfNc+gj5f4lI7wc1/pPrrp58ajIcLLJOSztS03
-	WgEci4Jq4kCqDrMLhEueefUgThJw36YmrOP+31eZ8FgG1BJYks7C45Sn47bQgQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1769594162;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y1CkU/HVc2ibILKVdI+xG85Mza9wEmLT+9RFRhOmAis=;
-	b=Q9zEE5OkRXme6lpHRO+aeYBAG308JfFrDu40HCchk0mHzXsOfjeI4oWDURKNazVljzm7TQ
-	2JIz0EXhWlqaWlAg==
-To: linux-kernel@vger.kernel.org
-Cc: "Thomas Gleixner" <tglx@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2 13/20] thermal/qcom/lmh: Replace IRQF_ONESHOT with IRQF_NO_THREAD
-Date: Wed, 28 Jan 2026 10:55:33 +0100
-Message-ID: <20260128095540.863589-14-bigeasy@linutronix.de>
-In-Reply-To: <20260128095540.863589-1-bigeasy@linutronix.de>
-References: <20260128095540.863589-1-bigeasy@linutronix.de>
+	s=arc-20240116; t=1769594984; c=relaxed/simple;
+	bh=OcWYAdegVat6FxDyCF9VSx531W/V1LRB6j8sSAuLjpw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=befQ8rwJ92REpfmHKMxI0y+2gletlcVmud+4j7aBTKkSdIQEL3Al6JwJtbJZ9XbfxNfaEgCA6PzMsBbVPXq/obXULdA6S9ZIEAUezkBfhiwiv2/UQLHSj3bf0RWk66oXJNITTh0uGBXAr6fjJIUe/Zai01OKhcAGYnICmJXVhy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 86ED11515;
+	Wed, 28 Jan 2026 02:09:34 -0800 (PST)
+Received: from [10.57.17.95] (unknown [10.57.17.95])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BBD123F5CA;
+	Wed, 28 Jan 2026 02:09:39 -0800 (PST)
+Message-ID: <79619479-8d59-4894-90a5-b83cd24fc987@arm.com>
+Date: Wed, 28 Jan 2026 10:09:41 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: core: thermal_core.h: fix all kernel-doc
+ warnings
+To: Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ linux-pm@vger.kernel.org
+References: <20260128062446.402175-1-rdunlap@infradead.org>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20260128062446.402175-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,linutronix.de,gmail.com,linaro.org,intel.com,arm.com,vger.kernel.org];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-41599-lists,linux-pm=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41598-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[3];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bigeasy@linutronix.de,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	NEURAL_HAM(-0.00)[-0.997];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linutronix.de:email,linutronix.de:dkim,linutronix.de:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,intel.com:email,linaro.org:email,arm.com:email]
-X-Rspamd-Queue-Id: 8B71D9F134
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lukasz.luba@arm.com,linux-pm@vger.kernel.org];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,arm.com:mid,arm.com:email,infradead.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email]
+X-Rspamd-Queue-Id: EF7979F43D
 X-Rspamd-Action: no action
 
-Passing IRQF_ONESHOT ensures that the interrupt source is masked until
-the secondary (threaded) handler is done. If only a primary handler is
-used then the flag makes no sense because the interrupt can not fire
-(again) while its handler is running.
-The flag also disallows force-threading of the primary handler and the
-irq-core will warn about this.
 
-The intention here was probably not allowing forced-threading.
 
-Replace IRQF_ONESHOT with IRQF_NO_THREAD.
+On 1/28/26 06:24, Randy Dunlap wrote:
+> Resolve all kernel-doc warnings in thermal_core.h:
+> 
+> Warning: drivers/thermal/thermal_core.h:99 bad line: trip point.
+> Warning: drivers/thermal/thermal_core.h:101 bad line: passive trip point.
+> Warning: drivers/thermal/thermal_core.h:152 struct member 'trips_attribute_group' not described in 'thermal_zone_device'
+> Warning: drivers/thermal/thermal_core.h:152 struct member 'debugfs' not described in 'thermal_zone_device'
+> Warning: drivers/thermal/thermal_core.h:152 struct member 'user_thresholds' not described in 'thermal_zone_device'
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> ---
+> Cc: Rafael J. Wysocki <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: linux-pm@vger.kernel.org
+> 
+>   drivers/thermal/thermal_core.h |    7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> --- linux-next-20260126.orig/drivers/thermal/thermal_core.h
+> +++ linux-next-20260126/drivers/thermal/thermal_core.h
+> @@ -77,6 +77,7 @@ struct thermal_governor {
+>    * @device:	&struct device for this thermal zone
+>    * @removal:	removal completion
+>    * @resume:	resume completion
+> + * @trips_attribute_group: trip point sysfs attributes
+>    * @trips_high:	trips above the current zone temperature
+>    * @trips_reached:	trips below or at the current zone temperature
+>    * @trips_invalid:	trips with invalid temperature
+> @@ -97,9 +98,9 @@ struct thermal_governor {
+>    * @emul_temperature:	emulated temperature when using CONFIG_THERMAL_EMULATION
+>    * @passive:		1 if you've crossed a passive trip point, 0 otherwise.
+>    * @prev_low_trip:	the low current temperature if you've crossed a passive
+> -			trip point.
+> + *			trip point.
+>    * @prev_high_trip:	the above current temperature if you've crossed a
+> -			passive trip point.
+> + *			passive trip point.
+>    * @ops:	operations this &thermal_zone_device supports
+>    * @tzp:	thermal zone parameters
+>    * @governor:	pointer to the governor for this thermal zone
+> @@ -111,6 +112,8 @@ struct thermal_governor {
+>    * @poll_queue:	delayed work for polling
+>    * @notify_event: Last notification event
+>    * @state: 	current state of the thermal zone
+> + * @debugfs:	this thermal zone device's thermal zone debug info
+> + * @user_thresholds: list of userspace thresholds for temp. limit notifications
+>    * @trips:	array of struct thermal_trip objects
+>    */
+>   struct thermal_zone_device {
 
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Thara Gopinath <thara.gopinath@gmail.com>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-arm-msm@vger.kernel.org
----
- drivers/thermal/qcom/lmh.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-index ddadcfada5136..3d072b7a4a6dd 100644
---- a/drivers/thermal/qcom/lmh.c
-+++ b/drivers/thermal/qcom/lmh.c
-@@ -220,7 +220,7 @@ static int lmh_probe(struct platform_device *pdev)
- 	/* Disable the irq and let cpufreq enable it when ready to handle the int=
-errupt */
- 	irq_set_status_flags(lmh_data->irq, IRQ_NOAUTOEN);
- 	ret =3D devm_request_irq(dev, lmh_data->irq, lmh_handle_irq,
--			       IRQF_ONESHOT | IRQF_NO_SUSPEND,
-+			       IRQF_NO_THREAD | IRQF_NO_SUSPEND,
- 			       "lmh-irq", lmh_data);
- 	if (ret) {
- 		dev_err(dev, "Error %d registering irq %x\n", ret, lmh_data->irq);
---=20
-2.51.0
-
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
