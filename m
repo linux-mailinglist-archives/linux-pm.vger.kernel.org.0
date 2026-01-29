@@ -1,383 +1,330 @@
-Return-Path: <linux-pm+bounces-41686-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41687-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yJcxN7NCe2n6CwIAu9opvQ
-	(envelope-from <linux-pm+bounces-41686-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 12:21:23 +0100
+	id gBRkL25Ne2n9DgIAu9opvQ
+	(envelope-from <linux-pm+bounces-41687-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 13:07:10 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id E112DAF906
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 12:21:22 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7526FAFE4E
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 13:07:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 2D27A3006117
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 11:21:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 9CE3E3033E5B
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 12:06:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AC483859E3;
-	Thu, 29 Jan 2026 11:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6752B385EE1;
+	Thu, 29 Jan 2026 12:06:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="MIigh4Nx"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="hP4RpCwI";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="EeBRYQ6U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5781C33F8C6;
-	Thu, 29 Jan 2026 11:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886EC37C0F6
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 12:06:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769685678; cv=none; b=F3CfB8Ee18ga6t5wOOqX8S7uEyKEXnahDycIfwwYz6wt4OObqwgjZ6PM38M92KeEGTIvttlZugic173nmIc4AYGwvz0Zfd+Xxw23J/uzf3jsjuR7uguisocE3pfxXHAD51zXAiu9s6TgwOljNQzjA9wc3RkaLyNHinsDyPV6/Og=
+	t=1769688407; cv=none; b=CbhPRigEJu1S4Mnyf+LZprw9/QaUUFUPTenJpNDSb97nLCVMcRxDleOeK0q5yFraksGuj59PgaupTwr7A/ObQ52Puf0+uj7UNNeoOASAE1bzTpFO3qWg6Nq8rCnMMXFg2tqYWBwba1fiZ3xUoqHqJZHZnvLqElxEjD+yuH4kvwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769685678; c=relaxed/simple;
-	bh=PTHdOC/2u0HARHpH6dVwNTlez2bWqjnvXYzMqUnzC3Y=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=px11MDcmxkTNSnAFMOB9QtsFPU53q6hAdHqfNMvg4UQshkypSDN+ZZ7Q5IM50JPsl//HXRxNyTDYYBLA2wxxKfNqy7wxWJGGn7PzCluyeO/WjVR8QDQB7A2g2Ri0LfCK+jNJGOxFupaOTig2sUhRyLK1Ioy2hcJ31+ZQj2+fIAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=MIigh4Nx; arc=none smtp.client-ip=113.46.200.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=EZRpp77HytR0PUe3OSD6TBzO+l8szB7m4ti/mVeAWw4=;
-	b=MIigh4Nx5x89QpbjF2ltaVUTjEKkkoPpF0vo2dM16IuHxDMCvNGRNuRGsi/GZRr+S7yW7MQwN
-	F6uzf7b3XqWHEKrsNbX1dxQTOTSZ3qbvTWERB/RXZPdG5d2ItEnHkNE4SKwLs+Rn1P4nYsOyE9c
-	flXfuzEO9M47JS/+2NPr1gw=
-Received: from mail.maildlp.com (unknown [172.19.163.15])
-	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4f1xSh184cz1K97P;
-	Thu, 29 Jan 2026 19:17:40 +0800 (CST)
-Received: from kwepemr200004.china.huawei.com (unknown [7.202.195.241])
-	by mail.maildlp.com (Postfix) with ESMTPS id B61BA40565;
-	Thu, 29 Jan 2026 19:21:06 +0800 (CST)
-Received: from huawei.com (10.50.163.32) by kwepemr200004.china.huawei.com
- (7.202.195.241) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 29 Jan
- 2026 19:21:05 +0800
-From: Pengjie Zhang <zhangpengjie2@huawei.com>
-To: <rafael@kernel.org>, <lenb@kernel.org>, <viresh.kumar@linaro.org>,
-	<robert.moore@intel.com>
-CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
-	<zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>, <lihuisong@huawei.com>,
-	<yubowen8@huawei.com>, <linhongye@h-partners.com>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <zhangpengjie2@huawei.com>,
-	<wangzhi12@huawei.com>
-Subject: [PATCH] ACPI: CPPC: Move reference performance to capabilities
-Date: Thu, 29 Jan 2026 19:21:05 +0800
-Message-ID: <20260129112105.2511748-1-zhangpengjie2@huawei.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1769688407; c=relaxed/simple;
+	bh=8gxlJkk8EHQOdU+Z1KTD3mYTaBbYe2N4DaiyZn2CxzI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MjDCa+0az7DFNVcn4DYM6rtOyXLRe2kVTGjZYdaNYel8dAHD5r9fr0/XHNHPyA9ia9GErhuZ6bV7qdns2QuINTF1g8INyU7fW4cXv41m1D7fBMIv0K5JCMe+5I4QwL2yioISfB+Mkh149tdFprUWfpCfU/ZHObSIc5BTs/P4uCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=hP4RpCwI; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=EeBRYQ6U; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60TAlngT2953444
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 12:06:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	n3UfQ8q7rHeebtViek1S/wIhzBh39JpfRNMUSJ+Q2EA=; b=hP4RpCwIRyxLkpho
+	4L6ZLgqlpmeiytiB4GhqZNbvGKGChZV1GtC3MAjOH5NcrdTEgnzlCxyWMnCbM8zY
+	QRcpVhW7dJmXelxe9ztzFOgQjsQjaJpBjjCVK7tjJqghg/mF2t4Z0ixMvCQCVee3
+	RsMi+VBVtI2f94UHNBehjcwx2N1MUmAHx9zJCibAU0bVuEa1VVUL/mMdwKp590sg
+	2ywqsVSd9G8/fp947fS8PlkG2eVRNQKlaoIDX4Um68bfbSKxaG5hnAZHk/2bNQD/
+	P2MCofKu4678C68XQGA+s4Lbb2Q39akpeTz6mb3OmxfIkkzMR+JeVU61rL+8mgsA
+	sivAjQ==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c0642070e-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 12:06:40 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2a773db3803so10635675ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 04:06:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1769688400; x=1770293200; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n3UfQ8q7rHeebtViek1S/wIhzBh39JpfRNMUSJ+Q2EA=;
+        b=EeBRYQ6ULNsc9Q5sC6iYv99b7ZHJ4DOTXQiRU/ej970Yeugb4ys5XQozB8n9jPk1AF
+         ziM8lwVZdG6E6qdb/pgRqnfKifSaSjutE7W05eWh99uN3Mzx2jzc0D1PmoiFhyZJ5lqV
+         msRUKE8ARwc635KusYmdkr1N2A2gkjJkC/3VQrvAyzjLNr9lStHCuLvwjTc3dLqA+H9d
+         YJDc785WUbO4kHqpHB+mv7L6owa3vCd2GMFMZzt4grex6qftP1WrLgJYgZi6TqxrJqco
+         NDE4GO8EKsZLDlE06SIKmtZLBKhGpi1ZVupTnZI9U7h3rjNh1QnC83PWoYWM42y1TdkV
+         IyBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769688400; x=1770293200;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n3UfQ8q7rHeebtViek1S/wIhzBh39JpfRNMUSJ+Q2EA=;
+        b=f1W9kptm20E/Qzci1j1tP0zcNPEgiGg4xCGvgx3vgtRogMRG3A7RdVJMNEQr+/Fk4d
+         EeXjxjKYBdyxv0ZVdDH4LgdckO/XLcnXMcv6vm4ntuYHXwoPRvQGvbIDeovylQPTJZ5Z
+         r+bcA6DVFRrsG6LiPPVEconOUmnagoZpgmc3ivvAn/BOtYuzMbC3YursSTj9hChIidVE
+         rGzO6NNolMYYqb7UrC5MqW0dGoXUdTBNh+hRckI0TyNQC/5KmitLxFs4XJkAijB82BCq
+         fwG57GUIgVlK2/xDQzFfIH/iKTUT2/QpgkP4N6hdxFNSiHTPXSpgS3d+wqKgBtPMKapA
+         Nc7A==
+X-Forwarded-Encrypted: i=1; AJvYcCVJGkG1cvsyFzYcJOB6JRxDSf6zVjp8PwDDKAVJi/clrGYHGDOPkwIKnTfU9YXSEDAIJLF9m0+uOQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYoa7Eu5uMOG4g7xHiDlRPuTfSYWkewUXcby1PL6WdiScaU83r
+	oSmYREbEzkDMUtVJ9ZVQJPR/JUPvCEx6/UAg8s6iXmwfzvCxkdltJPeuzsL8zMpqxdU4WEqzLHX
+	AOkF4sEwaXK8dgOTK934QO93LpqZgE/aFfCDh6ByA5Tyl6RyXzRnqJYO2gZrnZA==
+X-Gm-Gg: AZuq6aLTHDg4XPGtfU3qVUyjXS63KMW3kX/H4OPYKorRt0OEar2sckxUJN+xVa5pLg0
+	1/mB/VYFqbfN3zA4t7VaBu0pXTT94cGgC/U2yIXupSM2MXNbsOYkdzZXzWikJLsWgII3I7mAsEZ
+	O/H8a0vJJqcW+ZN6qEKvVyi/XVfgkuQaNZm2NQVdrYcLwypwqI7Lr+qIbglPrd42pEx1Q8dEQgw
+	pDoNGn5l4ki9Csjio0d3ps086NRmE9ilDg651u9V+7GOEmeQMhEGm8a54BaQ2x7LcNCNgH1ThxH
+	O/pxUmuR/M9PkgkO3c/RCpgOEAI3rudyIvAriYEQxN7E9gtRu+MX7tTfpFuUJ78fMk0qVNc2w88
+	YwnWnW2FDVxfZ3IXqBLwlaYBq5jLCacR3BBCmeW4p
+X-Received: by 2002:a17:903:2411:b0:2a7:cb46:7075 with SMTP id d9443c01a7336-2a870e30bfemr89072265ad.53.1769688399908;
+        Thu, 29 Jan 2026 04:06:39 -0800 (PST)
+X-Received: by 2002:a17:903:2411:b0:2a7:cb46:7075 with SMTP id d9443c01a7336-2a870e30bfemr89071685ad.53.1769688399192;
+        Thu, 29 Jan 2026 04:06:39 -0800 (PST)
+Received: from [10.217.199.117] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a8bd74e9bbsm23193775ad.95.2026.01.29.04.06.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jan 2026 04:06:38 -0800 (PST)
+Message-ID: <36706481-2549-4716-8e6d-0e4db42591a2@oss.qualcomm.com>
+Date: Thu, 29 Jan 2026 17:36:32 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemr200004.china.huawei.com (7.202.195.241)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/8] dt-bindings: thermal: Add qcom,qmi-cooling yaml
+ bindings
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: andersson@kernel.org, mathieu.poirier@linaro.org, robh@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, rui.zhang@intel.com,
+        lukasz.luba@arm.com, konradybcio@kernel.org, mani@kernel.org,
+        casey.connolly@linaro.org, amit.kucheria@oss.qualcomm.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        manaf.pallikunhi@oss.qualcomm.com
+References: <20260127155722.2797783-1-gaurav.kohli@oss.qualcomm.com>
+ <20260127155722.2797783-3-gaurav.kohli@oss.qualcomm.com>
+ <20260128-whispering-caracal-of-respect-a26638@quoll>
+Content-Language: en-US
+From: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+In-Reply-To: <20260128-whispering-caracal-of-respect-a26638@quoll>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI5MDA4MSBTYWx0ZWRfX9/S4yjGMzJ0H
+ rPOtcmstPYxiMdAD+F3CNqo1fU/c+QK4KMpH5H8/b/jCuWUGMlgEBKYS3+9SqyR6LPoM/TKD2rC
+ yzshGdLOeJ2qgUV5BczcCFWK2Vr6yryRAjdkssCCdnl+AKkO/1AmMqdYpbnFJEqBjQJ2JPDcUOu
+ RDIVYmylf1kcwyoboQ2qdUWQ4SKGZaYThmwlgnRHKUUiIfredSJaz4NK9qBT1UdRcmZMNfNHbuu
+ J+VbmhpShwmcpWeBIc2kK2NT6+t1kL1XxDMibPlN1keCYaKDPddls4ytL9myCzFdBwmTEJwyP9t
+ FBTawsD09WICOSkJser/qY0QFS55CeyDyTongE66Nc9iLE+IMy+AJg+m2vouz6/bF3wQf7i5+oU
+ nIrwJpQ8Dcbd9FFJFRC9YjKfOHLKf1NSehczPwaUNIaDU8ac52oaMK4ifTuL5lSOHYmfUfZesIb
+ OzQxit+m5i7jL+2t/fg==
+X-Proofpoint-GUID: eCg5efjtYp-tBS4Exm1_j3L3BR1LQzW5
+X-Proofpoint-ORIG-GUID: eCg5efjtYp-tBS4Exm1_j3L3BR1LQzW5
+X-Authority-Analysis: v=2.4 cv=dpTWylg4 c=1 sm=1 tr=0 ts=697b4d50 cx=c_pps
+ a=MTSHoo12Qbhz2p7MsH1ifg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=gEfo2CItAAAA:8 a=EUspDBNiAAAA:8
+ a=gmo51-8M2HEWv_ieLR8A:9 a=QEXdDO2ut3YA:10 a=GvdueXVYPmCkWapjIL-Q:22
+ a=sptkURWiP4Gy88Gu7hUp:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-01-29_02,2026-01-28_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 malwarescore=0 bulkscore=0 clxscore=1015
+ spamscore=0 adultscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601290081
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41686-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-41687-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zhangpengjie2@huawei.com,linux-pm@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TO_DN_NONE(0.00)[];
-	DKIM_TRACE(0.00)[huawei.com:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[17];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:email,huawei.com:dkim,huawei.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E112DAF906
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gaurav.kohli@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 7526FAFE4E
 X-Rspamd-Action: no action
 
-Currently, the `Reference Performance` register is read every time
-the CPU frequency is sampled in `cppc_get_perf_ctrs()`. This function
-is on the hot path of the cpufreq driver.
 
-Reference Performance indicates the performance level that corresponds
-to the Reference Counter incrementing and is not expected to change
-dynamically during runtime (unlike the Delivered and Reference counters).
+On 1/28/2026 4:57 PM, Krzysztof Kozlowski wrote:
+> On Tue, Jan 27, 2026 at 09:27:16PM +0530, Gaurav Kohli wrote:
+>> The cooling subnode of a remoteproc represents a client of the Thermal
+>> Mitigation Device QMI service running on it. Each subnode of the cooling
+>> node represents a single control exposed by the service.
+>>
+>> Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+>> ---
+>>   .../bindings/remoteproc/qcom,pas-common.yaml  |  6 ++
+>>   .../bindings/thermal/qcom,qmi-cooling.yaml    | 72 +++++++++++++++++++
+>>   2 files changed, 78 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
+>> index 68c17bf18987..6a736161d5ae 100644
+>> --- a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
+>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
+>> @@ -80,6 +80,12 @@ properties:
+>>         and devices related to the ADSP.
+>>       unevaluatedProperties: false
+>>   
+>> +  cooling:
+>> +    $ref: /schemas/thermal/qcom,qmi-cooling.yaml#
+>> +    description:
+>> +      Cooling subnode which represents the cooling devices exposed by the Modem.
+> I do not see the reason why you need 3 (!!!) children here. Everything
+> should be folded here.
 
-Reading this register in the hot path incurs unnecessary overhead,
-particularly on platforms where CPC registers are located in the PCC
-(Platform Communication Channel) subspace. This patch moves
-`reference_perf` from the dynamic feedback counters structure
-(`cppc_perf_fb_ctrs`) to the static capabilities structure
-(`cppc_perf_caps`).
 
-Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
----
- drivers/acpi/cppc_acpi.c       | 57 ++++++++++++++--------------------
- drivers/cpufreq/cppc_cpufreq.c | 21 +++++++------
- include/acpi/cppc_acpi.h       |  2 +-
- 3 files changed, 36 insertions(+), 44 deletions(-)
+Thanks Krzysztof for review.
 
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index e66e20d1f31b..7573ec1cf5f7 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -177,12 +177,12 @@ __ATTR(_name, 0444, show_##_name, NULL)
- show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, highest_perf);
- show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, lowest_perf);
- show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, nominal_perf);
-+show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, reference_perf);
- show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, lowest_nonlinear_perf);
- show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, guaranteed_perf);
- show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, lowest_freq);
- show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, nominal_freq);
- 
--show_cppc_data(cppc_get_perf_ctrs, cppc_perf_fb_ctrs, reference_perf);
- show_cppc_data(cppc_get_perf_ctrs, cppc_perf_fb_ctrs, wraparound_time);
- 
- /* Check for valid access_width, otherwise, fallback to using bit_width */
-@@ -1343,9 +1343,10 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
- {
- 	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
- 	struct cpc_register_resource *highest_reg, *lowest_reg,
--		*lowest_non_linear_reg, *nominal_reg, *guaranteed_reg,
--		*low_freq_reg = NULL, *nom_freq_reg = NULL;
--	u64 high, low, guaranteed, nom, min_nonlinear, low_f = 0, nom_f = 0;
-+		*lowest_non_linear_reg, *nominal_reg, *reference_reg,
-+		*guaranteed_reg, *low_freq_reg = NULL, *nom_freq_reg = NULL;
-+	u64 high, low, guaranteed, nom, ref, min_nonlinear,
-+	    low_f = 0, nom_f = 0;
- 	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
- 	struct cppc_pcc_data *pcc_ss_data = NULL;
- 	int ret = 0, regs_in_pcc = 0;
-@@ -1359,6 +1360,7 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
- 	lowest_reg = &cpc_desc->cpc_regs[LOWEST_PERF];
- 	lowest_non_linear_reg = &cpc_desc->cpc_regs[LOW_NON_LINEAR_PERF];
- 	nominal_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
-+	reference_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
- 	low_freq_reg = &cpc_desc->cpc_regs[LOWEST_FREQ];
- 	nom_freq_reg = &cpc_desc->cpc_regs[NOMINAL_FREQ];
- 	guaranteed_reg = &cpc_desc->cpc_regs[GUARANTEED_PERF];
-@@ -1366,6 +1368,7 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
- 	/* Are any of the regs PCC ?*/
- 	if (CPC_IN_PCC(highest_reg) || CPC_IN_PCC(lowest_reg) ||
- 		CPC_IN_PCC(lowest_non_linear_reg) || CPC_IN_PCC(nominal_reg) ||
-+		(CPC_SUPPORTED(reference_reg) && CPC_IN_PCC(reference_reg)) ||
- 		CPC_IN_PCC(low_freq_reg) || CPC_IN_PCC(nom_freq_reg) ||
- 		CPC_IN_PCC(guaranteed_reg)) {
- 		if (pcc_ss_id < 0) {
-@@ -1391,6 +1394,17 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
- 	cpc_read(cpunum, nominal_reg, &nom);
- 	perf_caps->nominal_perf = nom;
- 
-+	/*
-+	 * If reference perf register is not supported then we should
-+	 * use the nominal perf value
-+	 */
-+	if (CPC_SUPPORTED(reference_reg)) {
-+		cpc_read(cpunum, reference_reg, &ref);
-+		perf_caps->reference_perf = ref;
-+	} else {
-+		perf_caps->reference_perf = nom;
-+	}
-+
- 	if (guaranteed_reg->type != ACPI_TYPE_BUFFER  ||
- 	    IS_NULL_REG(&guaranteed_reg->cpc_entry.reg)) {
- 		perf_caps->guaranteed_perf = 0;
-@@ -1402,7 +1416,7 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
- 	cpc_read(cpunum, lowest_non_linear_reg, &min_nonlinear);
- 	perf_caps->lowest_nonlinear_perf = min_nonlinear;
- 
--	if (!high || !low || !nom || !min_nonlinear)
-+	if (!high || !low || !nom || !ref || !min_nonlinear)
- 		ret = -EFAULT;
- 
- 	/* Read optional lowest and nominal frequencies if present */
-@@ -1437,7 +1451,6 @@ bool cppc_perf_ctrs_in_pcc(void)
- 	int cpu;
- 
- 	for_each_online_cpu(cpu) {
--		struct cpc_register_resource *ref_perf_reg;
- 		struct cpc_desc *cpc_desc;
- 
- 		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
-@@ -1446,19 +1459,6 @@ bool cppc_perf_ctrs_in_pcc(void)
- 		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
- 		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
- 			return true;
--
--
--		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
--
--		/*
--		 * If reference perf register is not supported then we should
--		 * use the nominal perf value
--		 */
--		if (!CPC_SUPPORTED(ref_perf_reg))
--			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
--
--		if (CPC_IN_PCC(ref_perf_reg))
--			return true;
- 	}
- 
- 	return false;
-@@ -1476,10 +1476,10 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
- {
- 	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
- 	struct cpc_register_resource *delivered_reg, *reference_reg,
--		*ref_perf_reg, *ctr_wrap_reg;
-+		*ctr_wrap_reg;
- 	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
- 	struct cppc_pcc_data *pcc_ss_data = NULL;
--	u64 delivered, reference, ref_perf, ctr_wrap_time;
-+	u64 delivered, reference, ctr_wrap_time;
- 	int ret = 0, regs_in_pcc = 0;
- 
- 	if (!cpc_desc) {
-@@ -1489,19 +1489,11 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
- 
- 	delivered_reg = &cpc_desc->cpc_regs[DELIVERED_CTR];
- 	reference_reg = &cpc_desc->cpc_regs[REFERENCE_CTR];
--	ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
- 	ctr_wrap_reg = &cpc_desc->cpc_regs[CTR_WRAP_TIME];
- 
--	/*
--	 * If reference perf register is not supported then we should
--	 * use the nominal perf value
--	 */
--	if (!CPC_SUPPORTED(ref_perf_reg))
--		ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
--
- 	/* Are any of the regs PCC ?*/
- 	if (CPC_IN_PCC(delivered_reg) || CPC_IN_PCC(reference_reg) ||
--		CPC_IN_PCC(ctr_wrap_reg) || CPC_IN_PCC(ref_perf_reg)) {
-+		CPC_IN_PCC(ctr_wrap_reg)) {
- 		if (pcc_ss_id < 0) {
- 			pr_debug("Invalid pcc_ss_id\n");
- 			return -ENODEV;
-@@ -1518,8 +1510,6 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
- 
- 	cpc_read(cpunum, delivered_reg, &delivered);
- 	cpc_read(cpunum, reference_reg, &reference);
--	cpc_read(cpunum, ref_perf_reg, &ref_perf);
--
- 	/*
- 	 * Per spec, if ctr_wrap_time optional register is unsupported, then the
- 	 * performance counters are assumed to never wrap during the lifetime of
-@@ -1529,14 +1519,13 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
- 	if (CPC_SUPPORTED(ctr_wrap_reg))
- 		cpc_read(cpunum, ctr_wrap_reg, &ctr_wrap_time);
- 
--	if (!delivered || !reference ||	!ref_perf) {
-+	if (!delivered || !reference) {
- 		ret = -EFAULT;
- 		goto out_err;
- 	}
- 
- 	perf_fb_ctrs->delivered = delivered;
- 	perf_fb_ctrs->reference = reference;
--	perf_fb_ctrs->reference_perf = ref_perf;
- 	perf_fb_ctrs->wraparound_time = ctr_wrap_time;
- out_err:
- 	if (regs_in_pcc)
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 9eac77c4f294..90dafb43ab18 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -50,7 +50,8 @@ struct cppc_freq_invariance {
- static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
- static struct kthread_worker *kworker_fie;
- 
--static int cppc_perf_from_fbctrs(struct cppc_perf_fb_ctrs *fb_ctrs_t0,
-+static int cppc_perf_from_fbctrs(u64 reference_perf,
-+				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
- 				 struct cppc_perf_fb_ctrs *fb_ctrs_t1);
- 
- /**
-@@ -76,7 +77,7 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
- 	struct cppc_perf_fb_ctrs fb_ctrs = {0};
- 	struct cppc_cpudata *cpu_data;
- 	unsigned long local_freq_scale;
--	u64 perf;
-+	u64 perf, ref_perf;
- 
- 	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
- 	cpu_data = cppc_fi->cpu_data;
-@@ -86,7 +87,9 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
- 		return;
- 	}
- 
--	perf = cppc_perf_from_fbctrs(&cppc_fi->prev_perf_fb_ctrs, &fb_ctrs);
-+	ref_perf = cpu_data->perf_caps.reference_perf;
-+	perf = cppc_perf_from_fbctrs(ref_perf,
-+				     &cppc_fi->prev_perf_fb_ctrs, &fb_ctrs);
- 	if (!perf)
- 		return;
- 
-@@ -691,13 +694,11 @@ static inline u64 get_delta(u64 t1, u64 t0)
- 	return (u32)t1 - (u32)t0;
- }
- 
--static int cppc_perf_from_fbctrs(struct cppc_perf_fb_ctrs *fb_ctrs_t0,
-+static int cppc_perf_from_fbctrs(u64 reference_perf,
-+				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
- 				 struct cppc_perf_fb_ctrs *fb_ctrs_t1)
- {
- 	u64 delta_reference, delta_delivered;
--	u64 reference_perf;
--
--	reference_perf = fb_ctrs_t0->reference_perf;
- 
- 	delta_reference = get_delta(fb_ctrs_t1->reference,
- 				    fb_ctrs_t0->reference);
-@@ -734,7 +735,7 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
- 	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
- 	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
- 	struct cppc_cpudata *cpu_data;
--	u64 delivered_perf;
-+	u64 delivered_perf, reference_perf;
- 	int ret;
- 
- 	if (!policy)
-@@ -751,7 +752,9 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
- 			return 0;
- 	}
- 
--	delivered_perf = cppc_perf_from_fbctrs(&fb_ctrs_t0, &fb_ctrs_t1);
-+	reference_perf = cpu_data->perf_caps.reference_perf;
-+	delivered_perf = cppc_perf_from_fbctrs(reference_perf,
-+					       &fb_ctrs_t0, &fb_ctrs_t1);
- 	if (!delivered_perf)
- 		goto out_invalid_counters;
- 
-diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-index 13fa81504844..1f7e5f164795 100644
---- a/include/acpi/cppc_acpi.h
-+++ b/include/acpi/cppc_acpi.h
-@@ -115,6 +115,7 @@ struct cppc_perf_caps {
- 	u32 guaranteed_perf;
- 	u32 highest_perf;
- 	u32 nominal_perf;
-+	u32 reference_perf;
- 	u32 lowest_perf;
- 	u32 lowest_nonlinear_perf;
- 	u32 lowest_freq;
-@@ -133,7 +134,6 @@ struct cppc_perf_ctrls {
- struct cppc_perf_fb_ctrs {
- 	u64 reference;
- 	u64 delivered;
--	u64 reference_perf;
- 	u64 wraparound_time;
- };
- 
--- 
-2.33.0
+Each subsystem may support multiple thermal mitigation devices through 
+remote TMD service.
 
+Because of this multiplicity, introduced separate binding file.
+
+>> +    unevaluatedProperties: false
+>> +
+>>   required:
+>>     - clocks
+>>     - clock-names
+>> diff --git a/Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml b/Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
+>> new file mode 100644
+>> index 000000000000..0dd3bd84c176
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
+>> @@ -0,0 +1,72 @@
+>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>> +
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/thermal/qcom,qmi-cooling.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm QMI based thermal mitigation (TMD) cooling devices
+>> +
+>> +maintainers:
+>> +  - Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+>> +
+>> +description:
+>> +  Qualcomm QMI-based TMD cooling devices are used to mitigate thermal conditions
+>> +  across multiple remote subsystems. These devices operate based on junction
+>> +  temperature sensors (TSENS) associated with thermal zones for each subsystem.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - qcom,qmi-cooling-cdsp
+>> +      - qcom,qmi-cooling-cdsp1
+> What are the differences between them?
+
+
+Some SOcs support multiple CDSP/NSP instances. Each instance requires 
+it's own
+
+compatible string to distinguish.
+
+
+> Why these are not SoC specific?
+
+
+They are not soc specific because the qmi thermal mitigation interface 
+exposed by CDSP is architecturally
+
+identical across multiple SOCS.
+
+
+>> +
+>> +patternProperties:
+>> +  "cdsp-tmd[0-9]*$":
+>> +    type: object
+> No, you do not need childnode. See writing bindings (covers exactly this
+> case).
+
+
+Each subsystem may support multiple thermal mitigation devices through 
+remote TMD service. So
+
+need childnode to distinguish for different mitigations.
+
+>
+>> +
+>> +    description:
+>> +      Each subnode which represents qmi communication to CDSP.
+>> +
+>> +    properties:
+>> +      label:
+>> +        maxItems: 1
+>> +
+>> +      "#cooling-cells":
+>> +        $ref: /schemas/thermal/thermal-cooling-devices.yaml#/properties/#cooling-cells
+>> +
+>> +    required:
+>> +      - label
+>> +      - "#cooling-cells"
+>> +
+>> +    additionalProperties: false
+>> +
+>> +required:
+>> +  - compatible
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    remoteproc-cdsp {
+>> +        cooling {
+>> +            compatible = "qcom,qmi-cooling-cdsp";
+>> +
+>> +            cdsp_tmd0: cdsp-tmd0 {
+>> +              label = "cdsp_sw";
+>> +              #cooling-cells = <2>;
+>> +            };
+>> +        };
+>> +    };
+>> +
+>> +  - |
+>> +    remoteproc-cdsp1 {
+> No, don't create unnecessary examples. Please read some slides from
+> earlier talks so you won't need 10 iterations.
+
+
+Sure, will update this.
+
+
+> Best regards,
+> Krzysztof
+>
 
