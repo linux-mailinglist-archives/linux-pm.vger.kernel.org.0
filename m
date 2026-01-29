@@ -1,356 +1,264 @@
-Return-Path: <linux-pm+bounces-41723-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41725-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id lxpoNVu8e2mgIAIAu9opvQ
-	(envelope-from <linux-pm+bounces-41723-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 21:00:27 +0100
+	id sGgnBna+e2mnIAIAu9opvQ
+	(envelope-from <linux-pm+bounces-41725-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 21:09:26 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A0B9B41F4
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 21:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E23DB4286
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 21:09:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E5AF43018BCF
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 20:00:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3061D30210C2
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 20:09:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EA84238C1F;
-	Thu, 29 Jan 2026 20:00:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3D7B32E120;
+	Thu, 29 Jan 2026 20:09:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="NO86FIhA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ufozF9ZX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013020.outbound.protection.outlook.com [40.107.162.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAE82581;
-	Thu, 29 Jan 2026 20:00:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.20
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769716825; cv=fail; b=TII68Lz7+5F4hsnpBrpeuQ6Fgcm8UF3INZ6hRR27Asfd7pRjftxBzvN6AOu/CuBg6lTH9V9VCyqjtTWeZGcqLr6BlHJFqmVAcOsCeEgdOdnVttuHUWcEDOFenC+2/sEqh4c+B4MHw+OeuLjUqMFkGScGwYDwKAskngSuYSYKKOc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769716825; c=relaxed/simple;
-	bh=oa6/+wbyo2AIBs+wBt62pqDq2w5UObLGsavNNuEKHls=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=iZHE2ebiO32tXZtrKziCtzuzupgFg7bZ4aQTf6NJIop/dP+D320Cs2SLwHnvfOJqfz4szd6rh1F7jA45ECur7o4+e4V/4OQw8R823GpoFoUZlomLorxH2i/1+zF6a7JxWMZII2XHLMJAQoFVc0HuLV0MYA46EkpGKrNf5b/iZFE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=NO86FIhA; arc=fail smtp.client-ip=40.107.162.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CcIlBCBhftv7J3bcA8QdVCRHel22s0Bh+nKD1O9vL0dGcGf/M9TUUlR6K5WdQAPBz5LSX5Wa1QpCQAOb8Fb3alf1M4PgcPiIy0gtFyOTx89/jl47KYohighv4t03fQQPL+p0uX1L6TJF3FqT1YNsmY0YUOcDiczzG8iTMs5VbFxK6NwvCY1SIdG//C3NMNexcwBRzm9diYYnxnBhjIul828kwlw1AZMIdOTPQywje9OzMnyQldP2REEWYc90Yk+WhcW+A7xIBzc1LDtmtn0V1Pg71ehYOIfA6clxIK9CyCoseIvo7+cDMSjkSJCY86KeI9a6oyBXvyh39NdrvNR/Yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5EPlQY3wkWQ4yoVkr3KNZc+1lpTDqoZD9FiJRINhVMw=;
- b=nOoRqJnLFx85aNAXt6GT7bOj2PwAfDQ+v2U1TJz1zqXdhqobH+FxjAr2VS5GVTm4PZmXim49NjCC/DfjRfofF7KEdvv7EOKIRBdHfGXepemVJG6C/Hlh4YqFqOmQey3yB5RJYYl9vYcavLn2CW66xCIj579NW8TsonywNeXrqbMCeSBzGMeFA1i1iiMBBAeZ7WxlWtu8v5LjWvVqD3QTAny0oyWmLZ9gsbFgfDpGIzRX2ljBhqPzvbuC+argGr3IUxMSCjPpuZWkm1673dltgl4X+hF1uEC7Grelk2EGO/sYhEXH8nEpNjbFLMYUZsP6BQiLimZ8wkwkYbQh9Po+pQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5EPlQY3wkWQ4yoVkr3KNZc+1lpTDqoZD9FiJRINhVMw=;
- b=NO86FIhAhmDOSE7PtN6XfgzWvrdrpfw+le3m74hqNsdfJE2LHzJy+WMLG1kR9Q/DVQ8u6x2BVGpV2cCk9hj/g86jTHfYmdEphNwMsOb1FrmcJQKdJjlmB0/jSw+9bzE4vo4jT+rnYbsIICNmy9f9EMjvL9oE/YzTqNo+91ze7AVjEpeZ56vON7fs5aAb8L8Gcd27rtrWLKKIeNEL8G4MKaoB3b+sbqbhBJuAvvH9dUBzxUvaAKMcZ+50db/fB5wYBJyidPP+R6zA+0S4JyaMNpwaQFbeGHXTMIIH9gE80bEAXdGVYiTnEukY2PgjWd+aFX3fvkbJxA1xwRxGGo4KLQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8)
- by AM9PR04MB8859.eurprd04.prod.outlook.com (2603:10a6:20b:40a::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.7; Thu, 29 Jan
- 2026 20:00:21 +0000
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588]) by PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588%6]) with mapi id 15.20.9520.005; Thu, 29 Jan 2026
- 20:00:20 +0000
-Date: Thu, 29 Jan 2026 15:00:14 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Adrian Hunter <adrian.hunter@intel.com>
-Cc: alexandre.belloni@bootlin.com, linux-i3c@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 5/7] i3c: mipi-i3c-hci: Allow parent to manage runtime PM
-Message-ID: <aXu8TiFpMiIVk5Iq@lizhi-Precision-Tower-5810>
-References: <20260129181841.130864-1-adrian.hunter@intel.com>
- <20260129181841.130864-6-adrian.hunter@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260129181841.130864-6-adrian.hunter@intel.com>
-X-ClientProxiedBy: SJ0PR05CA0124.namprd05.prod.outlook.com
- (2603:10b6:a03:33d::9) To PA4PR04MB9366.eurprd04.prod.outlook.com
- (2603:10a6:102:2a9::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0EB7327C06
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 20:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769717350; cv=none; b=kP8+M2kJLSwbsjN5Oru9jTnjX/LI7DyWxbs6NfE/Nll6bRw+Tl+SvowI/C540sSVaU+4rf0MCm3tj2HNYp+BNUmB5dlc6r+KuPJR2iqFMDat/dqgIno6noNQasE8o7okbLumQi4NGB5mE/8dzOkkgCri8ZXrGfdNlePAkFCFX68=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769717350; c=relaxed/simple;
+	bh=5g4PJcJGtRew9woIi4OoTST/tP0m2PWttFuHI8O14so=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=t6SJHxvYfyE9h4HNF7jiKcKWpPbNTmUEjd5u3q4pCjJYx7ROq2DeV6KZCIA25OibEgbtaMjPesQdrEMZcE7T73Bbvn87Mo9rgb/qaL8zmqNK4p9SNbjNgm3Hyse17fhdXyH51PI04j2hDURLM6TzJB0fjx2BeiPTzB94F0oybbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ufozF9ZX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76A70C4CEF7
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 20:09:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769717350;
+	bh=5g4PJcJGtRew9woIi4OoTST/tP0m2PWttFuHI8O14so=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ufozF9ZXtp9o1BuCwWbHJmZ8mx6gcJSGF1OKwCkTCwaWTGScpEdm0biFtS2te3MN7
+	 RyBMaRWlqEX93/T6JrTDHX1JBPjtC4kKKIgg7TyP8VY0/TsezZGkNxx9aP4hcEk6ut
+	 ZNMRKBp4v9RDy4FTDzFI+ahQzuAPnGs/4hpI/Iojrh4fCpLE2nfUwIAHme8G2M7cZn
+	 UAyRfDaQH0JA4ngnwG07mlf0kJa9hce3q7RLvTaCALcEWLTbCnc+zgimQiXQgzAP1X
+	 N2yTlR3APlLcGLXswdLxHd8qp+txJrajDJXFFwi6FW0lcgExI2OGTqQZMF8Apfqtmv
+	 E7cnlZvFQjMtg==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6610f407959so425032eaf.2
+        for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 12:09:10 -0800 (PST)
+X-Gm-Message-State: AOJu0Yw/OWC4WKW3b0/ILTNsa5xOwPTHHV9Hk+iHSRj91XEbeswR3kts
+	KC2FOZ9g3ld1JMqDtPVw75ePdvVVlRz1f8ULVH51pjasRkMJ0mFz91hZH26bGqONNQbIBvANWoM
+	/3aUNH1bUUaGBWV+7OmQJ1dmk5WdUJXs=
+X-Received: by 2002:a05:6820:4910:b0:663:74e:b642 with SMTP id
+ 006d021491bc7-6630f3f56d9mr289408eaf.66.1769717346287; Thu, 29 Jan 2026
+ 12:09:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB9366:EE_|AM9PR04MB8859:EE_
-X-MS-Office365-Filtering-Correlation-Id: a98bbf36-3f68-46e9-e700-08de5f71080d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|366016|1800799024|19092799006|38350700014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NkswUWdVdWpvays0N1Q2NXh0dmtYbnBQZFVlRlZCM0NsZDB5c2k3TytIVGZ1?=
- =?utf-8?B?ZWZLdENxallmQmRyMHI4MkluUFZZL3hVdFJveTFOUG94MWxpWjFhbHprQzll?=
- =?utf-8?B?SFFkaU1LZHFrTVF1Z2dFWjQxUFZEbmRaWGxTQzlGNzdGbjBJdGxkdjZzeHU2?=
- =?utf-8?B?UC9nRUZqOHFxcmtrU2dwc00rQlZQcGpRUWpxenIzT0hqeEMxUEExLzdrNGpB?=
- =?utf-8?B?aHpFaEdWOFpEZ3pCRE1VcnBKSGdkQjQxVjFxZ2FlamREcExqREJqanNTMjZl?=
- =?utf-8?B?UGs5Y0hFMU1Gdll1QXVkNnA0ZTY2V0FQQTVlSmhZS0RTN3RZRTdpS3pzUml6?=
- =?utf-8?B?RVFzOHpTbk1ua29sQ2JVSGdha2RIYXQ1cVNTbGRUZFZJdFc4VUVOazVlQ24w?=
- =?utf-8?B?Sno0RG8rZEpVVXZmU2JwSUtGbUYrNFBwdFpoWXNIb05aTG8raEFwcUNvdXBI?=
- =?utf-8?B?MzQ4d0xHZEFERVBINVZvcnVReFlhMng4Z2tXTXgzUEE0NlpJaVhtZnhRK2dj?=
- =?utf-8?B?cTRqU2N4YnhZcTV3eVhVMUFKT2dta2c3SkR2TDdleURpS2hhQ3lQUG9KUHBj?=
- =?utf-8?B?cXM3MkR0QWtnMjFiUGdkdmlzeHhkTDI2ak54NEJTdmtYbEJUREdWeEJDWUJr?=
- =?utf-8?B?QUFKQVZhQjZ2S2VkeEw4WlpFZDBZWGVha3ZpZzhTWXBJdkhzOTV1QVJzWWxh?=
- =?utf-8?B?dTN3cm8veHdGVEdSbmVxd1pSYm5yWHJVUjJFY1NaUDFWd1MyaEdCdGRCYndw?=
- =?utf-8?B?cHRjY25WY2dTS3B0VkpyTGwvd2V2aTRadVhZN3NxOGFjY2xDS0w5QnZheGxm?=
- =?utf-8?B?SHRkSFdvSHB0MVlqU0VqazhRWlczai9VbTJrdHpGMForZ2ZuY3lPWm1uTjBU?=
- =?utf-8?B?TnZDbXVjWHJIYUFOdlEwTlNKU3NacUtsMzVGcDFqdEpOMzVjTmppNU5NakNo?=
- =?utf-8?B?U0RDM2wzLzNDNndzYy9OZVc3VTNtTHdheVREc09LdG50LzV5N0k4ZFN3MHM5?=
- =?utf-8?B?c0ZnTzM5MHQ5TUU1a2UvSFJzMnJEeU9QMCtZb01wSnBEc21CTnczQVZTczRv?=
- =?utf-8?B?L1VSQUxPdlFBTkw3MURDSmI2Q1VPTVRTN0d5THd6cHNnZFNvUS9pbHFWd3M1?=
- =?utf-8?B?V3loUU9sdFRPc3c5R2JNTU5PK2lQWVV3ZGJTak1yL09BYTlyN3kvS2EyU1lX?=
- =?utf-8?B?ZndsN2xZRU4rcWtXcGpFRlF5YW9kWUFlM2JmbVRnc1hiY0xia3U4VnhMTmFn?=
- =?utf-8?B?eUxQRzQ2MVM5SEc1STJzSjZhMXJBdk4wZ2g4ekhRNnptNzFKMzcrUmZ5WUxp?=
- =?utf-8?B?NXVjWVFVekVHL0tQV2haenhHY29Bd1RoWWNYTzFTbmpmTlRCZjdCMURsa29j?=
- =?utf-8?B?eUdJOEJPM05HaTdRRU5YckpDdzB2YllVQStyandWRnZVUG44ZlFVOVFWcHEx?=
- =?utf-8?B?VkJiMUR0bHJKRkQ0dW8wbGZaZ0g1clFnNzNYc29uRElCRjRTS0NPcTFReDdO?=
- =?utf-8?B?aXlpZjgwWFBxUnozcnRscWNRUjBkN0ZFeHMvKy9kZEx0MytlTzBGNzVpR2ly?=
- =?utf-8?B?MWdTM0tqV0VuWmRmbU03Q0NmeHZRdDNwNVlxZms3TE9MRnhUZ3V3c2x6ZFN2?=
- =?utf-8?B?Tzg5VGFOMGhqb0NlYjJkNjMwKzNZby83Wm9nanh5R2NXNjZmRytXTFltVzVp?=
- =?utf-8?B?STZCM0wvKzN5TzhBTkRnSTNpbDFuOW8wZ0NqcStsdGdoVmtjQ2ZnQmNtbWNR?=
- =?utf-8?B?KzdtelVCSFpxSFNHVm1uRUpqdjBod212MGZCRFdac3dGL0lFMWpjY2s0ZmlQ?=
- =?utf-8?B?K1IzcHgyOTlVc1VuTmVpbGJzNUUzakpteDlSTkdDUEpMblkwQXdxdFNPTnZi?=
- =?utf-8?B?UDVtbDBNZ2hTWW1oOTQ3SWRvdlg3LzlGYVJxNWtDcmpoZHhRR1laSEJ6Y1BF?=
- =?utf-8?B?NllOVGczaGVlYkJidkxMalRmdDJSVmRUZkt6bVJablNCQW42U3haY3l0S0Yv?=
- =?utf-8?B?VGhLWG9kYjg2eHl3Q2o5akZXWXg0Tm8yQVpHMTFqNVBxaWdVc1k0Wi9VazJv?=
- =?utf-8?B?N2d0UmRJSU90aVovaW9jZkRsZEFnVmJvQWhkQVVUNjc1ZmJpaEwwUGROR0o0?=
- =?utf-8?B?dXZ4Q3BOcy9PNTNwdUNrRE9QdGhsaTd5Y2RxVmhjVVpuQ0s5MHpXaldXbjRT?=
- =?utf-8?Q?G2G9xKDpsFS/HGLopGwo194=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9366.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(366016)(1800799024)(19092799006)(38350700014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SVVQZ2ZBaGZFM3J4UGJXTWVKSGMyaHpXRVgvdVBBMlloRHZvYVJxVVh0YzZh?=
- =?utf-8?B?VVNGMTl5RmxmY21MYnFocjRzWDd1VXF3L0RzTTB3VGY4eWVyRmRnNDUwdmpu?=
- =?utf-8?B?bWJlYWV5ZEM3Vkc3MUxhMmtVaTV0RzBLSmoramcxaVgwVzZSczBOLzh5b1hX?=
- =?utf-8?B?VW03S3ZLdnJuZ0lnUll5SmJXWmE2d1Noak42VS9yT0ovOUNZeDR2M29WMFVs?=
- =?utf-8?B?WER2NnlJcWZsUldjSTdRSGhGVGdPL2xGUVE0bnZ3YlpNZnBvWTF6N3JaelRM?=
- =?utf-8?B?ZjhqU01JMTJJamwvVWZVaE9wSUw2bGxxSk80MlA2V0VxWlROZmY3d0ZNS1hP?=
- =?utf-8?B?ODFCbWNxWkFtcW1BZ2gxcndPeGxPR0czbnVmRHRla01RMEl3VDFJUHdoR2Rw?=
- =?utf-8?B?VE04elJ2bDFrdkZrbStwVUoraUQ3WlFwWEx4QkJwVmdzTkZJOUdlTnlKeUp6?=
- =?utf-8?B?dnpJNkRDenZEbnB1L0V4bHJQUlUvckI4WW5FcjdMcGtDNDhSb21Ib1FucUtI?=
- =?utf-8?B?TUFoT1c5Z1ZYV01SbnEwQUgrVHV5SnFuSzF6TWExRFV2NjJJQUswUVBUQ3BH?=
- =?utf-8?B?ZjJqc2ZqZVRJSTJncWVlT3NzOTQ0dDd0ekNGZndSWTVKZ0dIbi9MVVI5WUVM?=
- =?utf-8?B?NDNhR0poOGpkUVFCQ0N5R3V5NWdHVnozcW5Wcm9qczhzRTJSK2Y2ZXBycjJP?=
- =?utf-8?B?bEJ4ejJRQklBUEhQaTM2OTNwSU81RjBnS25qZnVmUVVWT1BzNkRVWmdQUHFu?=
- =?utf-8?B?MmZmWWpCSnJXKzVxOWZuaHpuV3pFTENDenBvekRkR0huT1VUSHhlTk5DazUv?=
- =?utf-8?B?dEM1SUVXb2U4Z1VvRXZPYy9pWEFtcmdsQUdtb2FobGhZNm1zWkdSTXJEWU8w?=
- =?utf-8?B?dk4wNC9SOUE3UllFdlV6VzlTUG5SQ2pUOFRYRlVldFdxTUtqcExiVit0SGhD?=
- =?utf-8?B?OXhselB0L1MrbTJUSDBYek5DZjJUWTQzQXVPbExScXE0RDhLWDF5Nm5yMnBj?=
- =?utf-8?B?aVlZckFvRzNpcEw4S2RlZ2hxdGhMM3cyOGpSYlZxMVlkZ3hkU0czdmxBMEFt?=
- =?utf-8?B?amFNdm1LdGVVeEJGR3EyT3M1RHFUMVMwQU5YSnpPZ0kxMm5DWllpK2hvR0dU?=
- =?utf-8?B?NjhEZ1lDQS9WVW5FSUg4WWJ1OGJTYno0aVlMYVpYNXhmbm5mOXJTbU1CRjQv?=
- =?utf-8?B?MlRjTzVFRUVKeThyNjJIV2R4NmZhVndReGtscW5jQUtaeWx3ZkFFWU0xRHE3?=
- =?utf-8?B?enVBd0NaVW1wTFk2Yzl0RjZ2VHl1L1E5RUplb0UwbTJIc3ZSak5xRGpVZ2Yr?=
- =?utf-8?B?L0xCVjVCUkNuZjgwVkdaZ25Fbm1ORWpjTDJyWGR5UDVtcVRRbE00SE1kbzVK?=
- =?utf-8?B?Wmo1OHhpcmxKZnN2dk1FakVCREdpeXV1MWFuaGE0WGxTM1kzTTV2Yld3ZDd6?=
- =?utf-8?B?dFRTdndiKzgzNHRXUGZ5ZDdkdzFubmhEZUxSMnp2N1pqSktjVCtqNEF0bXdn?=
- =?utf-8?B?WlhocTVwU1RObitEL2JNVVZaMHpnU3g0R1k0SmJ3RU9nOFZzK2hmQnljS21O?=
- =?utf-8?B?V2JtcWh0Rmt0VjE5TmtVR05nMzhkeEtkaE1xWmFodlFFZEhaRERnc0lJR3NN?=
- =?utf-8?B?VDdoZndmQ0F0ajhCOHBBeXpzZ3g2RHpqaENDT2sxMFZMTGVWVTNUelM5RVBj?=
- =?utf-8?B?d05QMThBbVZoOHlSYVZJQmlMckdldlJEeFBkRm5yZzlBa0lSRm56L252T0px?=
- =?utf-8?B?SzcxQVB4OC9jT2IrV0VWSkpnNWovT0NYN2w5WDN2THBCTDd0MW1LTFJhc3NM?=
- =?utf-8?B?RmV1cEw2RjJ2bitibWlUeDRnWlZSanZ6ang4NkluN3FNN0trWHMzNS9CYUZO?=
- =?utf-8?B?bi9CTGhYUHlCNlZBdzdHNHphZ3JDdERoZnNYeTkyaXRESmoyZkVMTlBOZEtk?=
- =?utf-8?B?WFByQkFyYytpcVNVRTlVY0FyTlEyS2JPc1VxK29PUUhXRVdGdWh0eUR3Znlx?=
- =?utf-8?B?Y1l2QlVWckJJa3BKRkV4Nk40elFFbUxTdHdOL1RFTFdwMFU0SmZrMnVXdzdx?=
- =?utf-8?B?WmZyQlpDbnp1MU04dFBZaXZPeUZ1blFzR0EwNHQzOW9SUktCc1RSSzM1cUlL?=
- =?utf-8?B?WVVNcVlkWU9GVmltVTU5bDVZRkhrM211OVBYTEVrZUNyS09LS3F6RTVyTVF3?=
- =?utf-8?B?WFdEdHR4c0d0bWtBdDFZUVRYUUpUSHgrczNjN1RNT1JDOXZXMm9OYzd6T214?=
- =?utf-8?B?OTlka2dVSkcxK0plUE5TNURjc3B5SWxPSmhKOFhTRGo0eVU3ZmNpVVVXRURT?=
- =?utf-8?Q?ORddk090d7sf8rpOs0?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a98bbf36-3f68-46e9-e700-08de5f71080d
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2026 20:00:20.6998
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vOJHmuhUkj4l6aJ5ZM65T473fZHr1kSRRX1cLNKL3PxilwJwJu0CKswdaFYqUcAvJAsolPC4Vi58Fs95SP7afw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8859
+References: <12831359.O9o76ZdvQC@rafael.j.wysocki> <5079287.31r3eYUQgx@rafael.j.wysocki>
+ <44c4ee5a-34ec-4b23-b06b-05bd0fda6585@arm.com> <CAJZ5v0i8q=UoZMmNpe6KLQDk_0Fsmh6pYcxxMUitv68VueA9hA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0i8q=UoZMmNpe6KLQDk_0Fsmh6pYcxxMUitv68VueA9hA@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 29 Jan 2026 21:08:55 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jo=gbCZoPPHxUTyCV-h81G1amTonc5CgA3HJW_aeUqoA@mail.gmail.com>
+X-Gm-Features: AZwV_QhYTQb9V8yi705W71drdmCAvPi7VPTdubHgkSrxwg6WoCjyB6R5RvosYEk
+Message-ID: <CAJZ5v0jo=gbCZoPPHxUTyCV-h81G1amTonc5CgA3HJW_aeUqoA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] cpuidle: governors: teo: Adjust the classification
+ of wakeup events
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Doug Smythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41723-lists,linux-pm=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FROM_HAS_DN(0.00)[];
+	TO_DN_ALL(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-41725-lists,linux-pm=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Frank.li@nxp.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[nxp.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
 	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm];
+	MIME_TRACE(0.00)[0:+];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:dkim,intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3A0B9B41F4
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-pm];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,arm.com:email,intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6E23DB4286
 X-Rspamd-Action: no action
 
-On Thu, Jan 29, 2026 at 08:18:39PM +0200, Adrian Hunter wrote:
-> Some platforms implement the MIPI I3C HCI Multi-Bus Instance capability,
-> where a single parent device hosts multiple I3C controller instances.  In
-> such designs, the parent - not the individual child instances - may need to
-> coordinate runtime PM so that all controllers enter low-power states
-> together, and all runtime suspend callbacks are invoked in a controlled
-> and synchronized manner.
+On Thu, Jan 29, 2026 at 6:18=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
 >
-> For example, if the parent enables IBI-wakeup when transitioning into a
-> low-power state,
+> On Thu, Jan 29, 2026 at 10:16=E2=80=AFAM Christian Loehle
+> <christian.loehle@arm.com> wrote:
+> >
+> > On 1/26/26 19:45, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > If differences between target residency values of adjacent idle state=
+s
+> > > of a given CPU are relatively large, the corresponding idle state bin=
+s
+> > > used by the teo governors are large either and the rule by which hits
+> > > are distinguished from intercepts is inaccurate.
+> > >
+> > > Namely, by that rule, a wakeup event is classified as a hit if the
+> > > sleep length (the time till the closest timer other than the tick)
+> > > and the measured idle duration, adjusted for the entered idle state
+> > > exit latency, fall into the same idle state bin.  However, if that bi=
+n
+> > > is large enough, the actual difference between the sleep length and
+> > > the measured idle duration may be significant.  It may in fact be
+> > > significantly greater than the analogous difference for an event wher=
+e
+> > > the sleep length and the measured idle duration fall into different
+> > > bins.
+> > >
+> > > For this reason, amend the rule in question with a check that will
+> > > only allow a wakeup event to be counted as a hit if the difference
+> > > between the sleep length and the measured idle duration is less than
+> > > LATENCY_THRESHOLD_NS (which means that the difference between the
+> > > sleep length and the raw measured idle duration is below the sum of
+> > > LATENCY_THRESHOLD_NS and 1/2 of the entered idle state exit latency).
+> > > Otherwise, the event will be counted as an intercept.
+> > >
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > ---
+> > >
+> > > v1.1 -> v2: No changes
+> > >
+> > > v1 -> v1.1
+> > >    * Drop the change in teo_select() along with the corresponding
+> > >      part of the changelog (after receiving testing feedback from
+> > >      Christian)
+> > >
+> > > This is a resend of
+> > >
+> > > https://lore.kernel.org/linux-pm/4707705.LvFx2qVVIh@rafael.j.wysocki/
+> > >
+> > > It applies on top of the first three patches from
+> > >
+> > > https://lore.kernel.org/linux-pm/2257365.irdbgypaU6@rafael.j.wysocki/
+> > >
+> > > ---
+> > >  drivers/cpuidle/governors/teo.c |   32 ++++++++++++++++-------------=
+---
+> > >  1 file changed, 16 insertions(+), 16 deletions(-)
+> > >
+> > > --- a/drivers/cpuidle/governors/teo.c
+> > > +++ b/drivers/cpuidle/governors/teo.c
+> > > @@ -48,13 +48,11 @@
+> > >   * in accordance with what happened last time.
+> > >   *
+> > >   * The "hits" metric reflects the relative frequency of situations i=
+n which the
+> > > - * sleep length and the idle duration measured after CPU wakeup fall=
+ into the
+> > > - * same bin (that is, the CPU appears to wake up "on time" relative =
+to the sleep
+> > > - * length).  In turn, the "intercepts" metric reflects the relative =
+frequency of
+> > > - * non-timer wakeup events for which the measured idle duration fall=
+s into a bin
+> > > - * that corresponds to an idle state shallower than the one whose bi=
+n is fallen
+> > > - * into by the sleep length (these events are also referred to as "i=
+ntercepts"
+> > > - * below).
+> > > + * sleep length and the idle duration measured after CPU wakeup are =
+close enough
+> > > + * (that is, the CPU appears to wake up "on time" relative to the sl=
+eep length).
+> > > + * In turn, the "intercepts" metric reflects the relative frequency =
+of non-timer
+> > > + * wakeup events for which the measured idle duration is measurably =
+less than
+> > > + * the sleep length (these events are also referred to as "intercept=
+s" below).
+> > >   *
+> > >   * The governor also counts "intercepts" with the measured idle dura=
+tion below
+> > >   * the tick period length and uses this information when deciding wh=
+ether or not
+> > > @@ -253,12 +251,16 @@ static void teo_update(struct cpuidle_dr
+> > >       }
+> > >
+> > >       /*
+> > > -      * If the measured idle duration falls into the same bin as the=
+ sleep
+> > > -      * length, this is a "hit", so update the "hits" metric for tha=
+t bin.
+> > > +      * If the measured idle duration falls into the same bin as the
+> > > +      * sleep length and the difference between them is less than
+> > > +      * LATENCY_THRESHOLD_NS, this is a "hit", so update the "hits"
+> > > +      * metric for that bin.
+> > > +      *
+> > >        * Otherwise, update the "intercepts" metric for the bin fallen=
+ into by
+> > >        * the measured idle duration.
+> > >        */
+> > > -     if (idx_timer =3D=3D idx_duration) {
+> > > +     if (idx_timer =3D=3D idx_duration &&
+> > > +         cpu_data->sleep_length_ns - measured_ns < LATENCY_THRESHOLD=
+_NS) {
+> >
+> > So it needs to be within 7.5us here.
+> > Can we always expect that to be true?
+>
+> It's just a margin.
+>
+> > Especially since measured_ns does this "infer average from worst-case e=
+xit
+> > latency" handling.
+> > On deeper states this
+> > measured_ns -=3D lat_ns / 2;
+> > is an order of magnitude higher than our threshold.
+>
+> True.
+>
+> > So it should probably be something like
+> > exit_latency / 2 + LATENCY_THRESHOLD_NS?
+> > Or just exit_latency and allow the error to both sides?
+>
+> Well, the exit latency is already there in this inequality because
+> measured_ns =3D=3D raw_measured_ns - exit_latency / 2 and I didn't want t=
+o
+> take it into account twice.
+>
+> And in fact I want sleep_length_ns and measured_us (already adjusted
+> for the entered state exit latency) to be equal up to a margin and I
+> just think that the margin can be the same for all of the state bins
+> because it's basically the granularity of the comparison.
 
-Does your hardware support recieve IBI when runtime suspend?
+Well, scratch the above paragraph.
 
-Frank
+The point is that cpu_data->sleep_length_ns should be less than
+measured_ns (which means that the wakeup appears to have occurred
+after the anticipated timer event) or at least not much greater than
+it (the actual wakeup latency might be shorter than 1/2 of the
+declared one due to a prewake or similar).  How much sleep_length_ns
+can be greater than measured_ns for the wakeup to still count as a
+"hit" is, of course, a matter of choice and I thought that it would be
+reasonable to use a constant limit.
 
-> every bus instance must remain able to receive IBIs up
-> until that point.  This requires deferring the individual controllers’
-> runtime suspend callbacks (which disable bus activity) until the parent
-> decides it is safe for all instances to suspend together.
->
-> To support this usage model:
->
->   * Export the controller's runtime PM suspend/resume callbacks so that
->     the parent can invoke them directly.
->
->   * Add a new quirk, HCI_QUIRK_RPM_PARENT_MANAGED, which designates the
->     parent device as the controller’s runtime PM device (rpm_dev).  When
->     used without HCI_QUIRK_RPM_ALLOWED, this also prevents the child
->     instance’s system-suspend callbacks from using
->     pm_runtime_force_suspend()/pm_runtime_force_resume(), since runtime
->     PM is managed entirely by the parent.
->
->   * Move DEFAULT_AUTOSUSPEND_DELAY_MS into the header so it can be shared
->     by parent-managed PM implementations.
->
-> The new quirk allows platforms with multi-bus parent-managed PM
-> infrastructure to correctly coordinate runtime PM across all I3C HCI
-> instances.
->
-> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> ---
->  drivers/i3c/master/mipi-i3c-hci/core.c | 25 ++++++++++++++++---------
->  drivers/i3c/master/mipi-i3c-hci/hci.h  |  6 ++++++
->  2 files changed, 22 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/i3c/master/mipi-i3c-hci/core.c b/drivers/i3c/master/mipi-i3c-hci/core.c
-> index ec4dbe64c35e..cb974b0f9e17 100644
-> --- a/drivers/i3c/master/mipi-i3c-hci/core.c
-> +++ b/drivers/i3c/master/mipi-i3c-hci/core.c
-> @@ -733,7 +733,7 @@ static int i3c_hci_reset_and_init(struct i3c_hci *hci)
->  	return 0;
->  }
->
-> -static int i3c_hci_runtime_suspend(struct device *dev)
-> +int i3c_hci_runtime_suspend(struct device *dev)
->  {
->  	struct i3c_hci *hci = dev_get_drvdata(dev);
->  	int ret;
-> @@ -746,8 +746,9 @@ static int i3c_hci_runtime_suspend(struct device *dev)
->
->  	return 0;
->  }
-> +EXPORT_SYMBOL_GPL(i3c_hci_runtime_suspend);
->
-> -static int i3c_hci_runtime_resume(struct device *dev)
-> +int i3c_hci_runtime_resume(struct device *dev)
->  {
->  	struct i3c_hci *hci = dev_get_drvdata(dev);
->  	int ret;
-> @@ -768,6 +769,7 @@ static int i3c_hci_runtime_resume(struct device *dev)
->
->  	return 0;
->  }
-> +EXPORT_SYMBOL_GPL(i3c_hci_runtime_resume);
->
->  static int i3c_hci_suspend(struct device *dev)
->  {
-> @@ -784,12 +786,14 @@ static int i3c_hci_resume_common(struct device *dev, bool rstdaa)
->  	struct i3c_hci *hci = dev_get_drvdata(dev);
->  	int ret;
->
-> -	if (!(hci->quirks & HCI_QUIRK_RPM_ALLOWED))
-> -		return 0;
-> +	if (!(hci->quirks & HCI_QUIRK_RPM_PARENT_MANAGED)) {
-> +		if (!(hci->quirks & HCI_QUIRK_RPM_ALLOWED))
-> +			return 0;
->
-> -	ret = pm_runtime_force_resume(dev);
-> -	if (ret)
-> -		return ret;
-> +		ret = pm_runtime_force_resume(dev);
-> +		if (ret)
-> +			return ret;
-> +	}
->
->  	ret = i3c_master_do_daa_ext(&hci->master, rstdaa);
->  	if (ret)
-> @@ -812,8 +816,6 @@ static int i3c_hci_restore(struct device *dev)
->  	return i3c_hci_resume_common(dev, true);
->  }
->
-> -#define DEFAULT_AUTOSUSPEND_DELAY_MS 1000
-> -
->  static void i3c_hci_rpm_enable(struct device *dev)
->  {
->  	struct i3c_hci *hci = dev_get_drvdata(dev);
-> @@ -962,6 +964,11 @@ static int i3c_hci_probe(struct platform_device *pdev)
->  	if (hci->quirks & HCI_QUIRK_RPM_IBI_ALLOWED)
->  		hci->master.rpm_ibi_allowed = true;
->
-> +	if (hci->quirks & HCI_QUIRK_RPM_PARENT_MANAGED) {
-> +		hci->master.rpm_dev = pdev->dev.parent;
-> +		hci->master.rpm_allowed = true;
-> +	}
-> +
->  	return i3c_master_register(&hci->master, &pdev->dev, &i3c_hci_ops, false);
->  }
->
-> diff --git a/drivers/i3c/master/mipi-i3c-hci/hci.h b/drivers/i3c/master/mipi-i3c-hci/hci.h
-> index 819328a85b84..d0e7ad58ac15 100644
-> --- a/drivers/i3c/master/mipi-i3c-hci/hci.h
-> +++ b/drivers/i3c/master/mipi-i3c-hci/hci.h
-> @@ -147,6 +147,7 @@ struct i3c_hci_dev_data {
->  #define HCI_QUIRK_RESP_BUF_THLD		BIT(4)  /* Set resp buf thld to 0 for AMD platforms */
->  #define HCI_QUIRK_RPM_ALLOWED		BIT(5)  /* Runtime PM allowed */
->  #define HCI_QUIRK_RPM_IBI_ALLOWED	BIT(6)  /* IBI and Hot-Join allowed while runtime suspended */
-> +#define HCI_QUIRK_RPM_PARENT_MANAGED	BIT(7)  /* Runtime PM managed by parent device */
->
->  /* global functions */
->  void mipi_i3c_hci_resume(struct i3c_hci *hci);
-> @@ -156,4 +157,9 @@ void amd_set_od_pp_timing(struct i3c_hci *hci);
->  void amd_set_resp_buf_thld(struct i3c_hci *hci);
->  void i3c_hci_sync_irq_inactive(struct i3c_hci *hci);
->
-> +#define DEFAULT_AUTOSUSPEND_DELAY_MS 1000
-> +
-> +int i3c_hci_runtime_suspend(struct device *dev);
-> +int i3c_hci_runtime_resume(struct device *dev);
-> +
->  #endif
-> --
-> 2.51.0
->
+However, the limit may as well be chosen to depend on the exit latency
+of the entered state and it can be as large as 1/2 of that number (I
+don't think that using a larger number would make a lot of sense).
 
