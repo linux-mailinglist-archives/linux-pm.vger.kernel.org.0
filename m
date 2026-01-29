@@ -1,286 +1,233 @@
-Return-Path: <linux-pm+bounces-41693-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41694-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KJ9iCChfe2kdEQIAu9opvQ
-	(envelope-from <linux-pm+bounces-41693-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 14:22:48 +0100
+	id yK13CIFje2l2EQIAu9opvQ
+	(envelope-from <linux-pm+bounces-41694-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 14:41:21 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7312EB0582
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 14:22:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EACAB07D2
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 14:41:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 0AAB23011C48
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 13:21:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C599030297B6
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 13:41:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74FB920E023;
-	Thu, 29 Jan 2026 13:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ABD2312812;
+	Thu, 29 Jan 2026 13:41:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EwnRyGc2"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="MGnLjHQj";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="bw6Ib9Sh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521E71F09A8
-	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 13:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22972868B2
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 13:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769692913; cv=none; b=KSsqnCvcK+SHiI7DTUlrZXSXWsRM9aLE9D+EPMN0i83PBGH/O1L3qp2bxyb2aD1Q0Nmm7WpfXkI7wZHnP1XjG/0+llCExMjSfJH9PEqbh+/1tc6QOHZOZtQV6pR7C/iRe+t76uUxx1syW38cCSVGJJb90H6DGvwphH31uXDhfG8=
+	t=1769694060; cv=none; b=DWqL0idfTo084M1NcszYSzHxXl9Jiz9C6MeV73p+/1NLkdYPpPHFq1PNAq2W7G9/5GlQi1vGBDfGYgUTJdqXLvO2rjSyhGZ4CMOeVn/MWhAwn0l/xbYykQIJLc2fqF6gy0/bta2Y8qwLTFHm7cF8fyKjOLn+jwt4P/MbpsiDqn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769692913; c=relaxed/simple;
-	bh=cM0yGEQCeQZTosrh3kAkD07fbfLpEZ0F7FA8/6PnHoo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r8C7jYhXZxP8tRQz/QAKGt17yTXaLcSOPiNNgmW/hvoygNH2gfZshG3wi2X6gDeSBgNWcppcDmyeR+E8DfI7OOt6SbSuzl199/lmLkFXGWR+VQTuy6kZbfAPq5DEywsgrr/CcNC0wnI8BMv+GAAZVx1hIu8hI305ydGyl4kVmHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EwnRyGc2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D1BC4CEF7
-	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 13:21:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769692913;
-	bh=cM0yGEQCeQZTosrh3kAkD07fbfLpEZ0F7FA8/6PnHoo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=EwnRyGc2UFDxui+xd4xS+ROTYAhzEFsu+yh/mkJmpmJkjZv9DzdInrtvyhQnOG/fu
-	 +PTDvUx81FxNmx2UnA9FXG5maztb7vT8nimpvAxlockd7JTMCuN6UubI4kL8KiqGYc
-	 P2OxkNKAaOs5BLvjlxlFzT8qzDeqHzwyVYIUYQC7dTRL7W56ihJkt61d4pRoPxqirA
-	 x0WhqeEtRLA/Wr8kskb3yKJI8+rLeikWCPkb81Xr9BiYJpcRUsbCMjHEpNID2deIlS
-	 Yi2IZJFKIvL2g/RGooDy01tS/iCCmV+cHw8op77mq2m+dJT8MIpm9M1oHrBBy58fBF
-	 fPQZ1vmBzpdoQ==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-409521ba360so556981fac.2
-        for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 05:21:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVj+m3pXzuOIwSpTFJfcpFBYO/yMcN0apqiMG6z4JfqvCoYcdR3V8c8IxJEjhPu2GZ5oUWtFVvupw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVIxfvSu+dN1etCWeCk0uuNxLkXwqyh3dPykPigO/x15HXqvnQ
-	9Atz+NdXqm+1LtlYPdczmYA279nPTuLg8Lih6P6IMS5+pAAnXs4aTDMo7p0/TVWVJOVCqOavYZ3
-	1rU7ejNpmEOo9oJsz0PNMk3kpP1yZJfc=
-X-Received: by 2002:a05:6820:80c7:b0:65b:26c8:d9e7 with SMTP id
- 006d021491bc7-662f204543cmr4751428eaf.31.1769692912223; Thu, 29 Jan 2026
- 05:21:52 -0800 (PST)
+	s=arc-20240116; t=1769694060; c=relaxed/simple;
+	bh=vWejJ6RINCFssuqUgSCvnocLdwpH/AOaM6RJ6UgJySw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F05DWPkc+06U7/g2WpEGGI9sQqgy+7yWyX1ZCGxjdKAeKO/M5nDXbnckEDFGHFqGzgZj6FAsRkmprPqFtcFl7EKI/cACde6va373xahy9DBbhhmH4JRt1/l9EQoWPU8zyjb36ddLeOG5t01PVfcKD8mV2TQ7kNkjfxpSFoa+O7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=MGnLjHQj; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=bw6Ib9Sh; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60TASnmO3712137
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 13:40:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	SptoXrg8ov3mPkWXiaAkMD6y48psr6SnVN8ENdgkWXU=; b=MGnLjHQjCetdxPXy
+	Syh6kFA/gjeF3dLsKEpVORRcCe0+DtwazUvZ3GIJOSESyvZxRk5mV48MKnOpgapj
+	DUOFWml8+LTjsbmVw90jzTiR9+5FpF9+w/+XE6m5k9+88+tgjGj0yTQo5F0iJqe9
+	mQusoB+ZEq060YVX/uwU6worJQtAOUBp2tdxFJqcafcUezIqh2J2a2jAOZjEXEmd
+	sbAQkAyIdOSqoD02Rm8Fs3kFZOw1Qe6O8BH1YAVk+ZQvrydvVv+B6RqMAKxgA97I
+	oFf5QRohywAJTSoc6uSu7hoHPd55Nn3mnZH5+D2lhIbWkix8AA1gdRpBw1M1tiul
+	zxxI/A==
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4byxcu9yqu-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 13:40:58 +0000 (GMT)
+Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-81f3c36dd2cso816011b3a.2
+        for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 05:40:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1769694057; x=1770298857; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SptoXrg8ov3mPkWXiaAkMD6y48psr6SnVN8ENdgkWXU=;
+        b=bw6Ib9ShVQPc/LYaxN1369a3n3dhvt2MflBgjxWfnSBsCsDfZmKlPp769sJomFUT1B
+         auN8zwmaZyPvFSoqWcIa2VLbcTOzDKCJzqRdZqK7iMi3NgYAivTmDSWsEQDc5ogJ1DZe
+         n/ydtqGTMe1Nc98Af8/3VfM5LNHmL+Kopo5xZGZ/xv2ohRD5MsXrZX5ZbAueY4Jp/e0h
+         TO/BhjLTbgGYu4dd0O3opoSOWFhppyBm7KgjDTmyHqDBXCIeOhwf7TZmghmymj30KShi
+         Tb7U/AbPMdO0kzC0CEp8NZhF5M6+VYyG/BhBQw5bMbHt2zy8/dKTsLvZAn1Gkn6vekso
+         YgBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769694057; x=1770298857;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SptoXrg8ov3mPkWXiaAkMD6y48psr6SnVN8ENdgkWXU=;
+        b=E8aBg9D9VEpFx0iEHXnqzLH0zPqYRli/rLtkaxd48n/huZU3eizfP3pKZCXoQUyOCO
+         v0wXTmZSYukEAGsEBtaFO0g1ol4hc7aavkdWwKwomYqLWSHRuylf0vyzZkUFUuwyvmV0
+         j1LiuwF0cG80CPOKfbQFd9hsvr22kFqWE3tpqW71tk5iasSisuF5QEl/yhZHbthgsn+G
+         RrXAhjdtsZtVRaUSipiHapPtzS5Cs4X4QMdPJGs9rOdquCr3tzrZnYcdgsPvbUuZEBrk
+         r8gueZJds+WMebPGffeMiCUfgtXm2F8Ke31mADmxWMmQKn9/Cy1i0KcR/yoq2zE2yr/P
+         jaWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUfn5pt1L9U5C35uWNGvbKLuHMiZbvGFf7gMwNJkO2Z6QtCqfwDlyZRWBBxfuQz9MRlcIJxl9W/rw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7lvhH61UDfTGZ08/eETYVActAspGvzMlu3/QD2Ig1o35Ad+kb
+	WtDBSifmv8Rv4DXCXi6V4S0IZ6Qony+SvsfpIXWneYEF6jtYyR0nDnBPsljSQsWJpC/WWIgQN4C
+	cy6ure1jdtzBA2ZAxm8fraCJeSQhtR4euHlqBlqR0kLh0msQqe8ef7THwfUptRA==
+X-Gm-Gg: AZuq6aLTM/ffwzux6nrbgdP+aEOnfqjhhr8FIPzFZQ7w7gL7/l/DjDvSDgxJXiQaVR4
+	lMhg/p20QfGb2mdpZ21Q0rslol3vsIwC6TjnhkCKVml7gjn6B8G1cl3nvHuuxXR7s1+glwPA66p
+	/42EaHJh8CEFHUFC1HqEj3hRqZ0U3e7pyl6XdaUXI9WpiCV32TeNJNQ+jLWbiV+LIJN1ogAJCRG
+	qnJrFpvDyhAtv5fxiNrbznneV9AI09hRIusA+t8WrUTovaywn7X6NniBys9AAKEL1QE1t1EJirS
+	Zdh196CC4UYmX6ng8wljaHJOWaxT8R/lgH5ZkV6xbpPx0cydHbVoBAqKhhzEwtIjx26Pjpqm6Oa
+	q0xo5U+RlbK+XtQV5UekGoSFlkWNg3CgzAzoW7dE=
+X-Received: by 2002:aa7:9066:0:b0:7e8:43f5:bd39 with SMTP id d2e1a72fcca58-823692b2103mr9847380b3a.37.1769694057317;
+        Thu, 29 Jan 2026 05:40:57 -0800 (PST)
+X-Received: by 2002:aa7:9066:0:b0:7e8:43f5:bd39 with SMTP id d2e1a72fcca58-823692b2103mr9847356b3a.37.1769694056847;
+        Thu, 29 Jan 2026 05:40:56 -0800 (PST)
+Received: from [192.168.1.6] ([106.222.229.24])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82379bfcaadsm6048711b3a.37.2026.01.29.05.40.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jan 2026 05:40:56 -0800 (PST)
+Message-ID: <62666d7e-7b8a-417e-8224-4cc69b3e7c29@oss.qualcomm.com>
+Date: Thu, 29 Jan 2026 19:10:49 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12831359.O9o76ZdvQC@rafael.j.wysocki> <1951534.tdWV9SEqCh@rafael.j.wysocki>
- <a44aa54e-cfcf-4f3f-a832-da09cd9be70e@arm.com>
-In-Reply-To: <a44aa54e-cfcf-4f3f-a832-da09cd9be70e@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 29 Jan 2026 14:21:38 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iBiqfa=JV5w=2hAFVkz=ZCgQk9uOMBfqfY80dN7+DSNg@mail.gmail.com>
-X-Gm-Features: AZwV_Qgozf4IFZyX_NA3NlGyS4vPn6m6WSo9XDAzzQaOYhUZOCksCEq0kDweGgo
-Message-ID: <CAJZ5v0iBiqfa=JV5w=2hAFVkz=ZCgQk9uOMBfqfY80dN7+DSNg@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] cpuidle: governors: teo: Refine intercepts-based
- idle state lookup
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/8] arm64: dts: qcom: lemans: Enable CDSP cooling
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: andersson@kernel.org, mathieu.poirier@linaro.org, robh@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, rui.zhang@intel.com,
+        lukasz.luba@arm.com, konradybcio@kernel.org, mani@kernel.org,
+        casey.connolly@linaro.org, amit.kucheria@oss.qualcomm.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        manaf.pallikunhi@oss.qualcomm.com
+References: <20260127155722.2797783-1-gaurav.kohli@oss.qualcomm.com>
+ <20260127155722.2797783-6-gaurav.kohli@oss.qualcomm.com>
+ <o3gdovqbkmclpmrhjtg3lknhqcecwfrp73bpbv6nsspzvkjfm7@qqkrzte3cdy5>
+ <3a1b3a2b-d73a-4dae-b866-14abec2ff18d@oss.qualcomm.com>
+ <stmlthovu36kyhhnn7s7rpn5l53chnvmn3lmyepzpg33o7hpo4@cnoknywqgry2>
+Content-Language: en-US
+From: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+In-Reply-To: <stmlthovu36kyhhnn7s7rpn5l53chnvmn3lmyepzpg33o7hpo4@cnoknywqgry2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI5MDA5MyBTYWx0ZWRfXzIml44BRMNtN
+ WwypIwH/AYzyiwk+/+4OjWYLd/KFTq1ahMyaL48O7kuK83MhkUrMssa0CGHHzf5X/c267LSoHqS
+ Zr+vAZK0AXVVlv73bR2/Nh+jw9k3Wq6niO3ZoFr484aX6/+W5u5ACgELJr2zW3+z3XwHFRIs5zu
+ C5UaCQ6+unW3hHrfK/XgftRMOBrt/mEGl8YN0IMQn3LdqafU7R0SX4MqMfCMZN7l0+jxIgLzUeY
+ o18HcoRy215Gy3FhuRd9CZQPH2Q8Fcw14ri4PNBRy8XIP8Z+vgmhbxxX8WNmRa+Z6GTuF0F++pO
+ 2oJqXZ4Zd430+n6IRxw1eOIuHk5czWTYKll5AtFO9kVWwWMIy2tuKnbFzAgIhlLAPCrhEu6mL86
+ yP8QNoS1QaDoADFdi+kfj/Bn9BWBTeEs2w5JlJGOQPbPUFO5hc+LRDeOPHbo/lIjD1FQakohPOk
+ mTi5xZJk8nGxP3NG3wA==
+X-Authority-Analysis: v=2.4 cv=QpRTHFyd c=1 sm=1 tr=0 ts=697b636a cx=c_pps
+ a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=EBd7WcfsMYPMwvoCMWz0vA==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=Zput9ccCDsYeypLpkN8A:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=zc0IvFSfCIW2DFIPzwfm:22
+X-Proofpoint-GUID: 7w4Wpy76c0SwLkrabDA_DF0ifCRifqUe
+X-Proofpoint-ORIG-GUID: 7w4Wpy76c0SwLkrabDA_DF0ifCRifqUe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-01-29_02,2026-01-28_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ adultscore=0 lowpriorityscore=0 clxscore=1015 priorityscore=1501 phishscore=0
+ impostorscore=0 bulkscore=0 malwarescore=0 spamscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601290093
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41693-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TO_DN_ALL(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[17];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41694-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[0.0.0.11:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,2a0c0000:email,qualcomm.com:email,qualcomm.com:dkim,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
+	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-pm];
+	FROM_NEQ_ENVFROM(0.00)[gaurav.kohli@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[arm.com:email,mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email]
-X-Rspamd-Queue-Id: 7312EB0582
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 9EACAB07D2
 X-Rspamd-Action: no action
 
-On Thu, Jan 29, 2026 at 10:19=E2=80=AFAM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 1/26/26 19:51, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > There are cases in which decisions made by the teo governor are
-> > arguably overly conservative.
-> >
-> > For instance, suppose that there are 4 idle states and the values of
-> > the intercepts metric for the first 3 of them are 400, 250, and 251,
-> > respectively.  If the total sum computed in teo_update() is 1000, the
-> > governor will select idle state 1 (provided that all idle states are
-> > enabled and the scheduler tick has not been stopped) although arguably
-> > idle state 0 would be a better choice because the likelihood of getting
-> > an idle duration below the target residency of idle state 1 is greater
-> > than the likelihood of getting an idle duration between the target
-> > residency of idle state 1 and the target residency of idle state 2.
-> >
-> > To address this, refine the candidate idle state lookup based on
-> > intercepts to start at the state with the maximum intercepts metric,
-> > below the deepest enabled one, to avoid the cases in which the search
-> > may stop before reaching that state.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > v1 -> v2:
-> >    * Multiple fixes related to the handling of cases in which some stat=
-es
-> >      are disabled.
-> >    * Fixes in new comments (there was some confusion in those comments
-> >      regarding the direction of idle states table traversal).
-> >    * Fixed typos in new comments.
-> >
-> > ---
-> >  drivers/cpuidle/governors/teo.c |   50 +++++++++++++++++++++++++++++++=
-+++------
-> >  1 file changed, 43 insertions(+), 7 deletions(-)
-> >
-> > --- a/drivers/cpuidle/governors/teo.c
-> > +++ b/drivers/cpuidle/governors/teo.c
-> > @@ -73,12 +73,17 @@
-> >   *      than the candidate one (it represents the cases in which the C=
-PU was
-> >   *      likely woken up by a non-timer wakeup source).
-> >   *
-> > + *    Also find the idle state with the maximum intercepts metric (if =
-there are
-> > + *    multiple states with the maximum intercepts metric, choose the o=
-ne with
-> > + *    the highest index).
-> > + *
-> >   * 2. If the second sum computed in step 1 is greater than a half of t=
-he sum of
-> >   *    both metrics for the candidate state bin and all subsequent bins=
- (if any),
-> >   *    a shallower idle state is likely to be more suitable, so look fo=
-r it.
-> >   *
-> >   *    - Traverse the enabled idle states shallower than the candidate =
-one in the
-> > - *      descending order.
-> > + *      descending order, starting at the state with the maximum inter=
-cepts
-> > + *      metric found in step 1.
-> >   *
-> >   *    - For each of them compute the sum of the "intercepts" metrics o=
-ver all
-> >   *      of the idle states between it and the candidate one (including=
- the
-> > @@ -307,8 +312,10 @@ static int teo_select(struct cpuidle_dri
-> >       ktime_t delta_tick =3D TICK_NSEC / 2;
-> >       unsigned int idx_intercept_sum =3D 0;
-> >       unsigned int intercept_sum =3D 0;
-> > +     unsigned int intercept_max =3D 0;
-> >       unsigned int idx_hit_sum =3D 0;
-> >       unsigned int hit_sum =3D 0;
-> > +     int intercept_max_idx =3D -1;
-> >       int constraint_idx =3D 0;
-> >       int idx0 =3D 0, idx =3D -1;
-> >       s64 duration_ns;
-> > @@ -339,17 +346,32 @@ static int teo_select(struct cpuidle_dri
-> >       if (!dev->states_usage[0].disable)
-> >               idx =3D 0;
-> >
-> > -     /* Compute the sums of metrics for early wakeup pattern detection=
-. */
-> > +     /*
-> > +      * Compute the sums of metrics for early wakeup pattern detection=
- and
-> > +      * look for the state bin with the maximum intercepts metric belo=
-w the
-> > +      * deepest enabled one (if there are multiple states with the max=
-imum
-> > +      * intercepts metric, choose the one with the highest index).
-> > +      */
-> >       for (i =3D 1; i < drv->state_count; i++) {
-> >               struct teo_bin *prev_bin =3D &cpu_data->state_bins[i-1];
-> > +             unsigned int prev_intercepts =3D prev_bin->intercepts;
-> >               struct cpuidle_state *s =3D &drv->states[i];
-> >
-> >               /*
-> >                * Update the sums of idle state metrics for all of the s=
-tates
-> >                * shallower than the current one.
-> >                */
-> > -             intercept_sum +=3D prev_bin->intercepts;
-> >               hit_sum +=3D prev_bin->hits;
-> > +             intercept_sum +=3D prev_intercepts;
-> > +             /*
-> > +              * Check if this is the bin with the maximum number of
-> > +              * intercepts so far and in that case update the index of
-> > +              * the state with the maximum intercepts metric.
-> > +              */
-> > +             if (prev_intercepts >=3D intercept_max) {
-> > +                     intercept_max =3D prev_intercepts;
-> > +                     intercept_max_idx =3D i - 1;
-> > +             }
-> >
-> >               if (dev->states_usage[i].disable)
-> >                       continue;
-> > @@ -413,9 +435,22 @@ static int teo_select(struct cpuidle_dri
-> >               }
-> >
-> >               /*
-> > -              * Look for the deepest idle state whose target residency=
- had
-> > -              * not exceeded the idle duration in over a half of the r=
-elevant
-> > -              * cases in the past.
-> > +              * If the minimum state index is greater than or equal to=
- the
-> > +              * index of the state with the maximum intercepts metric =
-and
-> > +              * the corresponding state is enabled, there is no need t=
-o look
-> > +              * at the deeper states.
-> > +              */
-> > +             if (min_idx >=3D intercept_max_idx &&
-> > +                 !dev->states_usage[min_idx].disable) {
-> > +                     idx =3D min_idx;
-> > +                     goto constraint;
-> > +             }
-> > +
-> > +             /*
-> > +              * Look for the deepest enabled idle state, at most as de=
-ep as
-> > +              * the one with the maximum intercepts metric, whose targ=
-et
-> > +              * residency had not been greater than the idle duration =
-in over
-> > +              * a half of the relevant cases in the past.
-> >                *
-> >                * Take the possible duration limitation present if the t=
-ick
-> >                * has been stopped already into account.
-> > @@ -427,7 +462,8 @@ static int teo_select(struct cpuidle_dri
-> >                               continue;
-> >
-> >                       idx =3D i;
-> > -                     if (2 * intercept_sum > idx_intercept_sum)
-> > +                     if (2 * intercept_sum > idx_intercept_sum &&
-> > +                         i <=3D intercept_max_idx)
->
-> Should this be i >=3D intercept_max_idx?
 
-No, the point is to get to intercept_max_idx, or below it if it is
-disabled (note that i is decremented in each step of the loop, so i
-cannot be greater than intercept_max_idx if its initial value isn't).
+On 1/29/2026 5:59 PM, Dmitry Baryshkov wrote:
+> On Thu, Jan 29, 2026 at 05:40:56PM +0530, Gaurav Kohli wrote:
+>> On 1/29/2026 6:13 AM, Dmitry Baryshkov wrote:
+>>> On Tue, Jan 27, 2026 at 09:27:19PM +0530, Gaurav Kohli wrote:
+>>>> Unlike the CPU, the CDSP does not throttle its speed automatically
+>>>> when it reaches high temperatures in Lemans.
+>>>>
+>>>> Set up CDSP cooling by throttling the cdsp when it reaches 105°C.
+>>>>
+>>>> Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
+>>>> ---
+>>>>    arch/arm64/boot/dts/qcom/lemans.dtsi | 138 ++++++++++++++++++++++++---
+>>>>    1 file changed, 126 insertions(+), 12 deletions(-)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/qcom/lemans.dtsi b/arch/arm64/boot/dts/qcom/lemans.dtsi
+>>>> index 808827b83553..c747dd534caa 100644
+>>>> --- a/arch/arm64/boot/dts/qcom/lemans.dtsi
+>>>> +++ b/arch/arm64/boot/dts/qcom/lemans.dtsi
+>>>> @@ -7281,6 +7281,15 @@ compute-cb@11 {
+>>>>    					};
+>>>>    				};
+>>>>    			};
+>>>> +
+>>>> +			cooling {
+>>>> +				compatible = "qcom,qmi-cooling-cdsp";
+>>>> +
+>>>> +				cdsp_tmd0: cdsp-tmd0 {
+>>> This question was already raised. Are there more than one cooling device
+>>> for the DSP? If not, drop the subnodes.
+>>
+>> Thanks Dmitry for review.
+>>
+>> Yes, Each subsystem may support multiple thermal mitigation devices through
+>> remote TMD service.
+> May or does?
 
-> >                               break;
-> >               }
-> >       }
-> >
-> >
-> >
+
+It does support. that's why need child node to trigger different mitigation.
+
+
 >
->
+>> So, need to define subnodes.
+>>
+>>
+>>>> +					label = "cdsp_sw";
+>>>> +					#cooling-cells = <2>;
+>>>> +				};
+>>>> +			};
+>>>>    		};
+>>>>    		nspb_noc: interconnect@2a0c0000 {
 
