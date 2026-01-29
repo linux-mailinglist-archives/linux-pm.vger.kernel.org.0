@@ -1,231 +1,383 @@
-Return-Path: <linux-pm+bounces-41685-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41686-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mIwsJ0dAe2nECwIAu9opvQ
-	(envelope-from <linux-pm+bounces-41685-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 12:11:03 +0100
+	id yJcxN7NCe2n6CwIAu9opvQ
+	(envelope-from <linux-pm+bounces-41686-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 12:21:23 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18A3BAF75B
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 12:11:03 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id E112DAF906
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 12:21:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AF04530265BC
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 11:05:34 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 2D27A3006117
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 11:21:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE88385533;
-	Thu, 29 Jan 2026 11:05:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AC483859E3;
+	Thu, 29 Jan 2026 11:21:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Svs+sTXI"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="MIigh4Nx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout10.his.huawei.com (canpmsgout10.his.huawei.com [113.46.200.225])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB1C33D4F4
-	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 11:05:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769684734; cv=pass; b=r+RqhA98EOm3+viaSgj3irb2MVQEMk13qnBoxLseLQ5v6gG9SFWJr/bmjhLWVtKZXT109VHzXiMZygIjuTucpjqurGckAiGWssAxfJRj/2Pdt8Bxm0s29r31pcBwvPXpM6b9i/gZV37GdUclc2kC4YhVS0y1vDw8UczDWAfpAmo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769684734; c=relaxed/simple;
-	bh=7yuu1JYviO1djzSP1BaansbjSfUAuA4UNxhrWftwtzA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c7Pf58tR/jRszX35AuJ0R8PZ8b6AjRJUF+iYo7rj08huBSsS4XSvqd0jiTqWNK0YCgA+auws1+6UTNvPK7ZGt19HgFvS0orDVmxMMH0Fm+aaAgZN0ixQx+atH1aia13aKp1OZt3CT+MXffd2vD0qTAmimKOcCLwETSwlb+nuxUA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Svs+sTXI; arc=pass smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-59dd54b1073so906079e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 03:05:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769684730; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bo91kCKhtr7Fr0qgNbMsTgjWkbuzwT7OMbA6jgv4uXp7hSbfZzInU/dyOXSkklzucr
-         YqALv5q1r5E2eXt1h7KCeWkE3nkqvYj2lgGcZUEn1s23gvoM544/FyYjCLhIIBd5V1W6
-         wokuywqgQtypuwoIB7CCeUmDlbEodrHqF4SYkxdSMNewXV1byB9D8wGRohwwLKs0iIK9
-         bq6eT9y2B0cZ7vWoM7Edj8BSzYICkA4qEq4wrmj6BhXi80VsQwe87OzQFdMvD0AKNLAa
-         otMxmxA+4qMDi264BFUQvynkcNRNn4FQiPGxxhhjKk/YJy7Gwlke9b6qTrEU3kMURfK2
-         3Z8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=vwPpr9zqDAkQy/uNtJh3bTp13liqZQrowkluMGHo3tc=;
-        fh=1KEE95fg/qqYLzFRGnc6itm70i2ycR99OXECdm1D8x8=;
-        b=AyPiOxn+ieX6fHzT53aysF147OpX1ni3iiaBGFWqNFxFpu/X9yPY4sk4npWDiiQHjk
-         xgQIk9Abd84l8niGbNIynZTw3WGxnJPhaOmxKQhZEik70+ixnpRLKmpT/tj+LoFaslcI
-         mEt7rh+ZnI23dNB1ToXEFpEceEnCJFi1ZdnazZNouXqNZHVt/BPSWNGmMnYd+0H03JXi
-         D2kuCfruZL6yvnit94T9Cox1w6q3IAo3Sc6IXqb6rB2/yTFVT9wfMxYoPfMVLMb8Hz3i
-         GmGrfCsU7Ravc62xJlQMZFhg+HEl0Kb9zHMaTd71JuLIG9NhxXzoeKebD6Cd0kd01my9
-         zVYg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1769684730; x=1770289530; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vwPpr9zqDAkQy/uNtJh3bTp13liqZQrowkluMGHo3tc=;
-        b=Svs+sTXIOyVrxDy6DMvmPfSf2CV9eUZjn/Mcl/k5scqOcVcgifALAIPhpE6J1bXoSe
-         rllf3PSB/AQpNEygo5yTozYrWwZDO/rCEe14nCnSdT3kxT/iATFiUa4+5AlKgok/7WS3
-         ACvHlYSvTqzS7Mab/8TeOFMknC1mwW6n9D+H6IXV8cNSVYkzwZy6g8ohLoyP7wqO4jnw
-         1nTpcjqLRL+Gjr0x7VlreZiaW0iDNTnBXbxPm+glqtrIOhdwCS3kL08JCVjBlcqBnCqO
-         JF/S+x7VDO3itdouqesgi2BNSX6YfWG+y8UGWPsPgzNeiJ+LLdtjOQ0BKnnMJ4tWpUk8
-         KXIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769684730; x=1770289530;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vwPpr9zqDAkQy/uNtJh3bTp13liqZQrowkluMGHo3tc=;
-        b=bGR1h/w+XY/BQx+Piel3fffhBcLf1kVJIMkQwGA+Aw57l/rwxs8G8EBF4zu/H67I6e
-         jem9ICFwysdp79CnEENsPtYn6mkNsEIaMqeUwujmA6vIxMv2TUVwIPETdq4D2ACK5ORY
-         iOl89E/r2tFFB/OSvFoiMYZAA1XXFqT2H5IR4l/sxxIpiOzpCb1U7snlqrBgPyBKtoxq
-         IxqDr3CeAzDbKV7KVAXxt0unZT9/l0IcByI/TdBTmItpo/zKNDc+HSJDTgp55EKF0Pw4
-         rVG9paqevh3INIRcJOxeclqWugRkpruEXGyOg0iNVw9sS5t0cQe3uSX+Qd1YWFaob4Yl
-         2Fdw==
-X-Forwarded-Encrypted: i=1; AJvYcCVawAr2Qe0+RjHYP6bCkVC8AxXrhZPvwZCsxtPlNQMAjes0PXgCEyuejQxQrqjB957A65o+mEvW3w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzR0udW59yZrEyXE1TKcC6JBXoRCz5MuRJkku5C3Ulvz4Qtvxiq
-	yRMkmU5/H+19J7b9wN17aqlscH1JggDh/g2CwXTekRsob99kaZUVHERkzNqFANoPOs6W1stJBx3
-	5A1b0I0vM6Z9PM22NUZzdLxZ7IG80k8ltImGcZJKl+w==
-X-Gm-Gg: AZuq6aJaSATK7eVvHxhu+odGv6iT6a+kPtNmOE2op1F6QD4B5eVe4KwxU1q7WlaowZl
-	rc+MtsHxu9g2b68tAmocU1U9TodqUxiBrRpXiAn/pfwvxO/4hlfaZfSd43NFNzMwQy1gwtiBoLn
-	B1vfC5xga9VufYfXHUqEbtZI9ez3ZqHXmymCo7PAiPttVGcq9qObU1YVfFhm+QlaUh2mU3Bvz/h
-	FSVXW1Tp9lWlpWX2MTv/WgCBMlxFne8RzUT2UAWoHxy/xIl0Jbg7pP/Lh2M0gjjlVLTQ5m85xxs
-	gAeJIA4=
-X-Received: by 2002:a05:6512:3d91:b0:59d:f474:656b with SMTP id
- 2adb3069b0e04-59e040297damr3473133e87.42.1769684730455; Thu, 29 Jan 2026
- 03:05:30 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5781C33F8C6;
+	Thu, 29 Jan 2026 11:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.225
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769685678; cv=none; b=F3CfB8Ee18ga6t5wOOqX8S7uEyKEXnahDycIfwwYz6wt4OObqwgjZ6PM38M92KeEGTIvttlZugic173nmIc4AYGwvz0Zfd+Xxw23J/uzf3jsjuR7uguisocE3pfxXHAD51zXAiu9s6TgwOljNQzjA9wc3RkaLyNHinsDyPV6/Og=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769685678; c=relaxed/simple;
+	bh=PTHdOC/2u0HARHpH6dVwNTlez2bWqjnvXYzMqUnzC3Y=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=px11MDcmxkTNSnAFMOB9QtsFPU53q6hAdHqfNMvg4UQshkypSDN+ZZ7Q5IM50JPsl//HXRxNyTDYYBLA2wxxKfNqy7wxWJGGn7PzCluyeO/WjVR8QDQB7A2g2Ri0LfCK+jNJGOxFupaOTig2sUhRyLK1Ioy2hcJ31+ZQj2+fIAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=MIigh4Nx; arc=none smtp.client-ip=113.46.200.225
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=EZRpp77HytR0PUe3OSD6TBzO+l8szB7m4ti/mVeAWw4=;
+	b=MIigh4Nx5x89QpbjF2ltaVUTjEKkkoPpF0vo2dM16IuHxDMCvNGRNuRGsi/GZRr+S7yW7MQwN
+	F6uzf7b3XqWHEKrsNbX1dxQTOTSZ3qbvTWERB/RXZPdG5d2ItEnHkNE4SKwLs+Rn1P4nYsOyE9c
+	flXfuzEO9M47JS/+2NPr1gw=
+Received: from mail.maildlp.com (unknown [172.19.163.15])
+	by canpmsgout10.his.huawei.com (SkyGuard) with ESMTPS id 4f1xSh184cz1K97P;
+	Thu, 29 Jan 2026 19:17:40 +0800 (CST)
+Received: from kwepemr200004.china.huawei.com (unknown [7.202.195.241])
+	by mail.maildlp.com (Postfix) with ESMTPS id B61BA40565;
+	Thu, 29 Jan 2026 19:21:06 +0800 (CST)
+Received: from huawei.com (10.50.163.32) by kwepemr200004.china.huawei.com
+ (7.202.195.241) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 29 Jan
+ 2026 19:21:05 +0800
+From: Pengjie Zhang <zhangpengjie2@huawei.com>
+To: <rafael@kernel.org>, <lenb@kernel.org>, <viresh.kumar@linaro.org>,
+	<robert.moore@intel.com>
+CC: <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
+	<zhanjie9@hisilicon.com>, <zhenglifeng1@huawei.com>, <lihuisong@huawei.com>,
+	<yubowen8@huawei.com>, <linhongye@h-partners.com>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <zhangpengjie2@huawei.com>,
+	<wangzhi12@huawei.com>
+Subject: [PATCH] ACPI: CPPC: Move reference performance to capabilities
+Date: Thu, 29 Jan 2026 19:21:05 +0800
+Message-ID: <20260129112105.2511748-1-zhangpengjie2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260120-topic-lpm-pmdomain-device-constraints-v1-0-108fc4cfafce@baylibre.com>
- <CAPDyKFr+OjWLnzxBOhfJaMZb1GY7axgyeUAPinQTXMB6Ngpz8w@mail.gmail.com> <7hh5s547ot.fsf@baylibre.com>
-In-Reply-To: <7hh5s547ot.fsf@baylibre.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 29 Jan 2026 12:04:53 +0100
-X-Gm-Features: AZwV_QiNPN-kjHzKdxLc8KSBlB74s99MMDHxVx-RGZX2m45DwdtabHb6-YOHPXE
-Message-ID: <CAPDyKFoxbYtPTs+Egsn=2pJYdsw8g+yXfFjy-NAyq+X2ohyEhA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] PM: QoS/pmdomains: support resume latencies for
- system-wide PM
-To: Kevin Hilman <khilman@baylibre.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	Dhruva Gole <d-gole@ti.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemr200004.china.huawei.com (7.202.195.241)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-41686-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41685-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhangpengjie2@huawei.com,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TO_DN_NONE(0.00)[];
+	DKIM_TRACE(0.00)[huawei.com:+];
 	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_FIVE(0.00)[5];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre.com:email,linaro.org:email,linaro.org:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 18A3BAF75B
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[huawei.com:email,huawei.com:dkim,huawei.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E112DAF906
 X-Rspamd-Action: no action
 
-On Thu, 29 Jan 2026 at 00:51, Kevin Hilman <khilman@baylibre.com> wrote:
->
-> Hi Ulf,
->
-> Ulf Hansson <ulf.hansson@linaro.org> writes:
->
-> > On Wed, 21 Jan 2026 at 02:54, Kevin Hilman (TI) <khilman@baylibre.com> wrote:
-> >>
-> >> Currently QoS resume latencies are only considered for runtime PM
-> >> transitions of pmdomains, which remains the default.
-> >>
-> >> In order to also support QoS resume latencies during system-wide PM,
-> >> add a new flag to indicate a resume latency should be used for
-> >> system-wide PM *instead of* runtime PM.
-> >>
-> >> For example, by doing this:
-> >>
-> >>    # echo 500000 > /sys/devices/.../<dev0>/power/pm_qos_resume_latency_us
-> >>
-> >> dev0 now has a resume latency of 500000 usec for runtime PM
-> >> transitions.
-> >>
-> >> Then, if the new flag is also set:
-> >>
-> >>    # echo 1 > /sys/devices/.../<dev0>/power/pm_qos_latency_sys
-> >>
-> >> That 500000 usec delay now applies to system-wide PM (and not to
-> >> runtime PM).
-> >>
-> >> If a user requires a different latency value for system-wide PM
-> >> compared to runtime PM, then the runtime PM value can be set for
-> >> normal operations, and the system-wide value (and flag) can be set by
-> >> userspace before suspend, and the runtime PM value can be restored
-> >> after resume.
-> >
-> > That's sounds complicated for user-space to manage - and causes churns
-> > during every suspend/resume cycle. Why don't we just add a new latency
-> > value instead, that applies both to runtime PM and system-wide PM,
-> > similar and consistent to what we did for CPU QoS?
->
-> First, I don't think it will be very common to have different *device*
-> latency values between runtime PM and system PM, because the reasons for
-> device-specific wakeup latency will likely be the same in both cases, at
-> least for all the usecases I've thought about.  The only real distiction
-> being whether the latency should be applied to runtime or system-wide
-> PM, which the new flag provides.
->
-> Second, this doesn't have to be in userspace at all, that's just the
-> example I used to illustrate.  In fact, today not many latency
-> constraints are exposed to userspace, so this can be acheived by the
-> kernel API for setting latency values & flags, which I think is the more
-> likely usecase anyways.  For example, for a driver that is managing a
-> wakeup latency constraint, it could update it's own constraint and set
-> the flag in it's ->prepare() and ->complete() hook if it needs separate
-> values for system-wide vs. runtime PM.
+Currently, the `Reference Performance` register is read every time
+the CPU frequency is sampled in `cppc_get_perf_ctrs()`. This function
+is on the hot path of the cpufreq driver.
 
-Right, as long as the use cases can be managed by the kernel itself,
-then this should be fine. So, I guess the question is, if we should
-consider use-cases that requires user space involvement at this point?
+Reference Performance indicates the performance level that corresponds
+to the Reference Counter incrementing and is not expected to change
+dynamically during runtime (unlike the Delivered and Reference counters).
 
-Also note, patch1 do exposes a new QoS sysfs file, to allow user space
-to manage the new QoS flag - so this becomes ABI.
+Reading this register in the hot path incurs unnecessary overhead,
+particularly on platforms where CPC registers are located in the PCC
+(Platform Communication Channel) subspace. This patch moves
+`reference_perf` from the dynamic feedback counters structure
+(`cppc_perf_fb_ctrs`) to the static capabilities structure
+(`cppc_perf_caps`).
 
->
-> Third, adding a new QoS value for this involves a bunch of new code that
-> is basically copy/paste of the current latency code.  That includes APIs
-> for
->
->   - sysfs interface
->   - notifiers (add, remove)
->   - read/add/update value adds a new type
->   - expose value to userspace (becomes ABI)
->   - tolerance
->
-> I actually went down this route first, and realized this would be lots
-> of duplicated code for a usecase that we're not even sure exists, so I
-> found the flag approach to be much more straight forward for the
-> usecases at hand.
+Signed-off-by: Pengjie Zhang <zhangpengjie2@huawei.com>
+---
+ drivers/acpi/cppc_acpi.c       | 57 ++++++++++++++--------------------
+ drivers/cpufreq/cppc_cpufreq.c | 21 +++++++------
+ include/acpi/cppc_acpi.h       |  2 +-
+ 3 files changed, 36 insertions(+), 44 deletions(-)
 
-I understand your concern and I agree!
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index e66e20d1f31b..7573ec1cf5f7 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -177,12 +177,12 @@ __ATTR(_name, 0444, show_##_name, NULL)
+ show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, highest_perf);
+ show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, lowest_perf);
+ show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, nominal_perf);
++show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, reference_perf);
+ show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, lowest_nonlinear_perf);
+ show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, guaranteed_perf);
+ show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, lowest_freq);
+ show_cppc_data(cppc_get_perf_caps, cppc_perf_caps, nominal_freq);
+ 
+-show_cppc_data(cppc_get_perf_ctrs, cppc_perf_fb_ctrs, reference_perf);
+ show_cppc_data(cppc_get_perf_ctrs, cppc_perf_fb_ctrs, wraparound_time);
+ 
+ /* Check for valid access_width, otherwise, fallback to using bit_width */
+@@ -1343,9 +1343,10 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+ {
+ 	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
+ 	struct cpc_register_resource *highest_reg, *lowest_reg,
+-		*lowest_non_linear_reg, *nominal_reg, *guaranteed_reg,
+-		*low_freq_reg = NULL, *nom_freq_reg = NULL;
+-	u64 high, low, guaranteed, nom, min_nonlinear, low_f = 0, nom_f = 0;
++		*lowest_non_linear_reg, *nominal_reg, *reference_reg,
++		*guaranteed_reg, *low_freq_reg = NULL, *nom_freq_reg = NULL;
++	u64 high, low, guaranteed, nom, ref, min_nonlinear,
++	    low_f = 0, nom_f = 0;
+ 	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
+ 	struct cppc_pcc_data *pcc_ss_data = NULL;
+ 	int ret = 0, regs_in_pcc = 0;
+@@ -1359,6 +1360,7 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+ 	lowest_reg = &cpc_desc->cpc_regs[LOWEST_PERF];
+ 	lowest_non_linear_reg = &cpc_desc->cpc_regs[LOW_NON_LINEAR_PERF];
+ 	nominal_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
++	reference_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+ 	low_freq_reg = &cpc_desc->cpc_regs[LOWEST_FREQ];
+ 	nom_freq_reg = &cpc_desc->cpc_regs[NOMINAL_FREQ];
+ 	guaranteed_reg = &cpc_desc->cpc_regs[GUARANTEED_PERF];
+@@ -1366,6 +1368,7 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+ 	/* Are any of the regs PCC ?*/
+ 	if (CPC_IN_PCC(highest_reg) || CPC_IN_PCC(lowest_reg) ||
+ 		CPC_IN_PCC(lowest_non_linear_reg) || CPC_IN_PCC(nominal_reg) ||
++		(CPC_SUPPORTED(reference_reg) && CPC_IN_PCC(reference_reg)) ||
+ 		CPC_IN_PCC(low_freq_reg) || CPC_IN_PCC(nom_freq_reg) ||
+ 		CPC_IN_PCC(guaranteed_reg)) {
+ 		if (pcc_ss_id < 0) {
+@@ -1391,6 +1394,17 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+ 	cpc_read(cpunum, nominal_reg, &nom);
+ 	perf_caps->nominal_perf = nom;
+ 
++	/*
++	 * If reference perf register is not supported then we should
++	 * use the nominal perf value
++	 */
++	if (CPC_SUPPORTED(reference_reg)) {
++		cpc_read(cpunum, reference_reg, &ref);
++		perf_caps->reference_perf = ref;
++	} else {
++		perf_caps->reference_perf = nom;
++	}
++
+ 	if (guaranteed_reg->type != ACPI_TYPE_BUFFER  ||
+ 	    IS_NULL_REG(&guaranteed_reg->cpc_entry.reg)) {
+ 		perf_caps->guaranteed_perf = 0;
+@@ -1402,7 +1416,7 @@ int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+ 	cpc_read(cpunum, lowest_non_linear_reg, &min_nonlinear);
+ 	perf_caps->lowest_nonlinear_perf = min_nonlinear;
+ 
+-	if (!high || !low || !nom || !min_nonlinear)
++	if (!high || !low || !nom || !ref || !min_nonlinear)
+ 		ret = -EFAULT;
+ 
+ 	/* Read optional lowest and nominal frequencies if present */
+@@ -1437,7 +1451,6 @@ bool cppc_perf_ctrs_in_pcc(void)
+ 	int cpu;
+ 
+ 	for_each_online_cpu(cpu) {
+-		struct cpc_register_resource *ref_perf_reg;
+ 		struct cpc_desc *cpc_desc;
+ 
+ 		cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+@@ -1446,19 +1459,6 @@ bool cppc_perf_ctrs_in_pcc(void)
+ 		    CPC_IN_PCC(&cpc_desc->cpc_regs[REFERENCE_CTR]) ||
+ 		    CPC_IN_PCC(&cpc_desc->cpc_regs[CTR_WRAP_TIME]))
+ 			return true;
+-
+-
+-		ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+-
+-		/*
+-		 * If reference perf register is not supported then we should
+-		 * use the nominal perf value
+-		 */
+-		if (!CPC_SUPPORTED(ref_perf_reg))
+-			ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+-
+-		if (CPC_IN_PCC(ref_perf_reg))
+-			return true;
+ 	}
+ 
+ 	return false;
+@@ -1476,10 +1476,10 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+ {
+ 	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
+ 	struct cpc_register_resource *delivered_reg, *reference_reg,
+-		*ref_perf_reg, *ctr_wrap_reg;
++		*ctr_wrap_reg;
+ 	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
+ 	struct cppc_pcc_data *pcc_ss_data = NULL;
+-	u64 delivered, reference, ref_perf, ctr_wrap_time;
++	u64 delivered, reference, ctr_wrap_time;
+ 	int ret = 0, regs_in_pcc = 0;
+ 
+ 	if (!cpc_desc) {
+@@ -1489,19 +1489,11 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+ 
+ 	delivered_reg = &cpc_desc->cpc_regs[DELIVERED_CTR];
+ 	reference_reg = &cpc_desc->cpc_regs[REFERENCE_CTR];
+-	ref_perf_reg = &cpc_desc->cpc_regs[REFERENCE_PERF];
+ 	ctr_wrap_reg = &cpc_desc->cpc_regs[CTR_WRAP_TIME];
+ 
+-	/*
+-	 * If reference perf register is not supported then we should
+-	 * use the nominal perf value
+-	 */
+-	if (!CPC_SUPPORTED(ref_perf_reg))
+-		ref_perf_reg = &cpc_desc->cpc_regs[NOMINAL_PERF];
+-
+ 	/* Are any of the regs PCC ?*/
+ 	if (CPC_IN_PCC(delivered_reg) || CPC_IN_PCC(reference_reg) ||
+-		CPC_IN_PCC(ctr_wrap_reg) || CPC_IN_PCC(ref_perf_reg)) {
++		CPC_IN_PCC(ctr_wrap_reg)) {
+ 		if (pcc_ss_id < 0) {
+ 			pr_debug("Invalid pcc_ss_id\n");
+ 			return -ENODEV;
+@@ -1518,8 +1510,6 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+ 
+ 	cpc_read(cpunum, delivered_reg, &delivered);
+ 	cpc_read(cpunum, reference_reg, &reference);
+-	cpc_read(cpunum, ref_perf_reg, &ref_perf);
+-
+ 	/*
+ 	 * Per spec, if ctr_wrap_time optional register is unsupported, then the
+ 	 * performance counters are assumed to never wrap during the lifetime of
+@@ -1529,14 +1519,13 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+ 	if (CPC_SUPPORTED(ctr_wrap_reg))
+ 		cpc_read(cpunum, ctr_wrap_reg, &ctr_wrap_time);
+ 
+-	if (!delivered || !reference ||	!ref_perf) {
++	if (!delivered || !reference) {
+ 		ret = -EFAULT;
+ 		goto out_err;
+ 	}
+ 
+ 	perf_fb_ctrs->delivered = delivered;
+ 	perf_fb_ctrs->reference = reference;
+-	perf_fb_ctrs->reference_perf = ref_perf;
+ 	perf_fb_ctrs->wraparound_time = ctr_wrap_time;
+ out_err:
+ 	if (regs_in_pcc)
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 9eac77c4f294..90dafb43ab18 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -50,7 +50,8 @@ struct cppc_freq_invariance {
+ static DEFINE_PER_CPU(struct cppc_freq_invariance, cppc_freq_inv);
+ static struct kthread_worker *kworker_fie;
+ 
+-static int cppc_perf_from_fbctrs(struct cppc_perf_fb_ctrs *fb_ctrs_t0,
++static int cppc_perf_from_fbctrs(u64 reference_perf,
++				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
+ 				 struct cppc_perf_fb_ctrs *fb_ctrs_t1);
+ 
+ /**
+@@ -76,7 +77,7 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
+ 	struct cppc_perf_fb_ctrs fb_ctrs = {0};
+ 	struct cppc_cpudata *cpu_data;
+ 	unsigned long local_freq_scale;
+-	u64 perf;
++	u64 perf, ref_perf;
+ 
+ 	cppc_fi = container_of(work, struct cppc_freq_invariance, work);
+ 	cpu_data = cppc_fi->cpu_data;
+@@ -86,7 +87,9 @@ static void cppc_scale_freq_workfn(struct kthread_work *work)
+ 		return;
+ 	}
+ 
+-	perf = cppc_perf_from_fbctrs(&cppc_fi->prev_perf_fb_ctrs, &fb_ctrs);
++	ref_perf = cpu_data->perf_caps.reference_perf;
++	perf = cppc_perf_from_fbctrs(ref_perf,
++				     &cppc_fi->prev_perf_fb_ctrs, &fb_ctrs);
+ 	if (!perf)
+ 		return;
+ 
+@@ -691,13 +694,11 @@ static inline u64 get_delta(u64 t1, u64 t0)
+ 	return (u32)t1 - (u32)t0;
+ }
+ 
+-static int cppc_perf_from_fbctrs(struct cppc_perf_fb_ctrs *fb_ctrs_t0,
++static int cppc_perf_from_fbctrs(u64 reference_perf,
++				 struct cppc_perf_fb_ctrs *fb_ctrs_t0,
+ 				 struct cppc_perf_fb_ctrs *fb_ctrs_t1)
+ {
+ 	u64 delta_reference, delta_delivered;
+-	u64 reference_perf;
+-
+-	reference_perf = fb_ctrs_t0->reference_perf;
+ 
+ 	delta_reference = get_delta(fb_ctrs_t1->reference,
+ 				    fb_ctrs_t0->reference);
+@@ -734,7 +735,7 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+ 	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
+ 	struct cppc_perf_fb_ctrs fb_ctrs_t0 = {0}, fb_ctrs_t1 = {0};
+ 	struct cppc_cpudata *cpu_data;
+-	u64 delivered_perf;
++	u64 delivered_perf, reference_perf;
+ 	int ret;
+ 
+ 	if (!policy)
+@@ -751,7 +752,9 @@ static unsigned int cppc_cpufreq_get_rate(unsigned int cpu)
+ 			return 0;
+ 	}
+ 
+-	delivered_perf = cppc_perf_from_fbctrs(&fb_ctrs_t0, &fb_ctrs_t1);
++	reference_perf = cpu_data->perf_caps.reference_perf;
++	delivered_perf = cppc_perf_from_fbctrs(reference_perf,
++					       &fb_ctrs_t0, &fb_ctrs_t1);
+ 	if (!delivered_perf)
+ 		goto out_invalid_counters;
+ 
+diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+index 13fa81504844..1f7e5f164795 100644
+--- a/include/acpi/cppc_acpi.h
++++ b/include/acpi/cppc_acpi.h
+@@ -115,6 +115,7 @@ struct cppc_perf_caps {
+ 	u32 guaranteed_perf;
+ 	u32 highest_perf;
+ 	u32 nominal_perf;
++	u32 reference_perf;
+ 	u32 lowest_perf;
+ 	u32 lowest_nonlinear_perf;
+ 	u32 lowest_freq;
+@@ -133,7 +134,6 @@ struct cppc_perf_ctrls {
+ struct cppc_perf_fb_ctrs {
+ 	u64 reference;
+ 	u64 delivered;
+-	u64 reference_perf;
+ 	u64 wraparound_time;
+ };
+ 
+-- 
+2.33.0
 
-However, my main issue is the user space ABI part. Is the QoS flag,
-that patch1 exposes, future proof enough when considering user cases
-that needs to be managed by user space? In my opinion, I don't think
-so.
-
-Kind regards
-Uffe
 
