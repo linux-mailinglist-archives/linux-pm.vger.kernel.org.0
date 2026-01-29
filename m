@@ -1,171 +1,473 @@
-Return-Path: <linux-pm+bounces-41663-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41664-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6GzFOsW3emmo9gEAu9opvQ
-	(envelope-from <linux-pm+bounces-41663-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 02:28:37 +0100
+	id +ODrNS2/emnw+AEAu9opvQ
+	(envelope-from <linux-pm+bounces-41664-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 03:00:13 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49053AABFA
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 02:28:37 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78D1DAAF7F
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 03:00:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 52D0C3064933
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 01:22:37 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 3674B30059A6
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 02:00:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4810A3370FF;
-	Thu, 29 Jan 2026 01:21:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2A442DCBFA;
+	Thu, 29 Jan 2026 02:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="ghruuMaT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A709331A53;
-	Thu, 29 Jan 2026 01:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769649704; cv=none; b=PX8TwH+3iEWd6yumEefzJ5JyeESw4Z9it61vdwTKoEsg5oBQN9VYwDVMaOwRV9GVLkah7U8ke+NqSn7n5qhc0Auov0aBmPxDspwwUkqcgU3C+nR+V5aqlJKk9AhtxcnnKUoDZNHtug5jtBIXFVnJm/PIda0R53IibaBULqjU3xs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769649704; c=relaxed/simple;
-	bh=O6A0/fKaEF2zJtOtRw1Iv45SbfdspD4XHGsK4RQkoPM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dQfCwIvRieGCWPKZt+XOmWXUTCkPBKXzAPUXJ5oo3O/Zx6ByHr4exiUi99WA0jVzvStvL6oLVayuqQqitOLiFEHfBZ8mi/Oky64KdfoMFaRVgXFy1abZj+xv7AW0eOecN/Y20DGkNfRhTdTqPZetXKzZ5dqweK5zJOoaulbR5nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: d9954538fcb011f0b0f03b4cfa9209d1-20260129
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.6,REQID:b6a432e9-2c91-4b01-8afb-eb2c3b8be0a2,IP:0,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:0
-X-CID-META: VersionHash:a9d874c,CLOUDID:90950a44424b4f0cc98c464794b1aebd,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|898,TC:nil,Content:0|15|
-	52,EDM:-3,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0
-	,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: d9954538fcb011f0b0f03b4cfa9209d1-20260129
-X-User: tianyaxiong@kylinos.cn
-Received: from [10.42.13.21] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <tianyaxiong@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 1457484038; Thu, 29 Jan 2026 09:21:34 +0800
-Message-ID: <2fe6e22c-aa8d-4514-9f10-91265facedd4@kylinos.cn>
-Date: Thu, 29 Jan 2026 09:21:31 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF1932939A;
+	Thu, 29 Jan 2026 01:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769652006; cv=pass; b=HYrNXaREox9Ef1nHE1V2wDSjWGBW5KVR/geHdM8Kn3uHuPCCyG9+k8ReMzl+38EbRwy6IZgPwhnHUMgl4rbkx7sSoSotm9djex2lNEYXPo557mEia7Irw21y/rNma6Ne192ingt0yzzH44LYPiacnFDJIi5U86iiJnGurZe0sW0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769652006; c=relaxed/simple;
+	bh=dNEMvvA7Po74dPo+VkXMBYfoEJKz7EwcUzE1RrpHAmQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qxEUYNUZd7z+LjvuGpyfYhAMxhJevifpXIGjatOWx+ITGRLA6xJrC0rzAzlUoQ3YPxoJAdOZlVTdtwwiOSDuwyQmCtgg2oAvWQ+TjjQnhMVnN8jL0OdLumzeU+n8/GbTlP0gzlrsrSUuza13P3Mlvi85nITR1aAA+Wps/2Z6qNA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=ghruuMaT; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1769651984; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=gfhdkELQ+r9VRoig5g3ceCRoO1KM5yCJmcdLfFEmlesal5zAlHZzEuahO0j9+2GrMmgb7SajG/OKuFFtYPb35h09xsS+Lbih0iesuTxP9HeNkUUgQHYOAHixk3T7pyKdjR6x5RK99QGKRoTtdgnOr40SaoaeM0Sbo0nltWTklb8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1769651984; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=T3aKX84kGxI1xxaoYSc/3afEikkxjamWfp3cnXS6LCk=; 
+	b=CcM7ghj+dKBRdqKOF2CNoG/agmkPmj+s7IVPUzOU9Xm6u0NK1RrLBKHr5mMmGfAuaOc0tlhWl7GFZHqNl2IJopqTjTtxxmVCCxLbEYUQcfMSp4sjrmcBv72x7niaRAwuPgerZ3bjzoa/rV8uORRyY5jAqbBWRyOTbxFCa8+ma2o=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1769651984;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=T3aKX84kGxI1xxaoYSc/3afEikkxjamWfp3cnXS6LCk=;
+	b=ghruuMaTCTutArmV7+GMqjzzbh85cW0vDGhdzK7XuFEUNJ+9MEO+V6iA9DObp7rB
+	8VKaDuIbz26pI/WimZTSHuKDlw050W1CiKCbLqJiX2jMiJZwfsy2/Sz2qtQogv/8+q6
+	BCo0xgtObeWNMfkxuqgnv9txqDWCzAE5yMW20ChE=
+Received: by mx.zohomail.com with SMTPS id 176965198298465.12795747038842;
+	Wed, 28 Jan 2026 17:59:42 -0800 (PST)
+Received: by venus (Postfix, from userid 1000)
+	id 7941818060F; Thu, 29 Jan 2026 02:59:39 +0100 (CET)
+Date: Thu, 29 Jan 2026 02:59:39 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Kaustabh Chakraborty <kauschluss@disroot.org>
+Cc: Yassine Oudjana <y.oudjana@protonmail.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] power: supply: add support for S2MU005 battery fuel
+ gauge device
+Message-ID: <aXq7NohfIy3c5AWL@venus>
+References: <20260126-s2mu005-fuelgauge-v1-0-68a146ed0819@disroot.org>
+ <20260126-s2mu005-fuelgauge-v1-2-68a146ed0819@disroot.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: intel_pstate: Enable asym capacity only when cpu
- smt is not possible
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
- viresh.kumar@linaro.org, ricardo.neri-calderon@linux.intel.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260128031521.389765-1-tianyaxiong@kylinos.cn>
- <CAJZ5v0g8xM62_882WP8__x_RjCN_yeLUg=itXVTXsL=0T_mUsw@mail.gmail.com>
-Content-Language: en-US
-From: Yaxiong Tian <tianyaxiong@kylinos.cn>
-In-Reply-To: <CAJZ5v0g8xM62_882WP8__x_RjCN_yeLUg=itXVTXsL=0T_mUsw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rsep7zu3ekqtwnyl"
+Content-Disposition: inline
+In-Reply-To: <20260126-s2mu005-fuelgauge-v1-2-68a146ed0819@disroot.org>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-0.2.1.1.4.3/269.648.70
+X-ZohoMailClient: External
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.46 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [-2.26 / 15.00];
+	SIGNED_PGP(-2.00)[];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[collabora.com:s=zohomail];
+	MIME_GOOD(-0.20)[multipart/signed,text/plain];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
-	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,kylinos.cn:mid,kylinos.cn:email];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCPT_COUNT_SEVEN(0.00)[7];
-	R_DKIM_NA(0.00)[];
-	DMARC_NA(0.00)[kylinos.cn];
-	FROM_NEQ_ENVFROM(0.00)[tianyaxiong@kylinos.cn,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[protonmail.com,kernel.org,vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41663-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: 49053AABFA
+	TAGGED_FROM(0.00)[bounces-41664-lists,linux-pm=lfdr.de];
+	MIME_TRACE(0.00)[0:+,1:+,2:~];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[collabora.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sebastian.reichel@collabora.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[protonmail.com:email,collabora.com:dkim]
+X-Rspamd-Queue-Id: 78D1DAAF7F
 X-Rspamd-Action: no action
 
 
-在 2026/1/29 05:21, Rafael J. Wysocki 写道:
-> On Wed, Jan 28, 2026 at 4:15 AM Yaxiong Tian <tianyaxiong@kylinos.cn> wrote:
->> According to the description in the intel_pstate.rst documentation,
->> Capacity-Aware Scheduling and Energy-Aware Scheduling are only
->> supported on a hybrid processor without SMT. Previously, the system
->> used sched_smt_active() for judgment, which is not a strict condition
->> because users can switch it on or off via /sys at any time.
->>
->> This could lead to incorrect driver settings in certain scenarios.
->>   For example, on a CPU that supports SMT, a user can disable SMT
->> via the nosmt parameter to enable asym capacity, and then re-enable
->> SMT via /sys. In such cases, some settings in the driver would no
->> longer be correct.
->>
->> To address this issue, replace sched_smt_active() with cpu_smt_possible(),
->> and only enable asym capacity when cpu smt is not possible.
->>
->> Fixes: 929ebc93ccaa ("cpufreq: intel_pstate: Set asymmetric CPU capacity on hybrid systems")
->> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
->> ---
->>   drivers/cpufreq/intel_pstate.c | 15 +++++++--------
->>   1 file changed, 7 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
->> index ec4abe374573..8105c41861a3 100644
->> --- a/drivers/cpufreq/intel_pstate.c
->> +++ b/drivers/cpufreq/intel_pstate.c
->> @@ -1142,8 +1142,11 @@ static void hybrid_refresh_cpu_capacity_scaling(void)
->>
->>   static void hybrid_init_cpu_capacity_scaling(bool refresh)
->>   {
->> -       /* Bail out if enabling capacity-aware scheduling is prohibited. */
->> -       if (no_cas)
->> +       /*
->> +        * Bail out if capacity-aware scheduling is prohibited, or if SMT is
->> +        * possible, as the capacity of SMT threads cannot be determined reliably.
->> +        */
->> +       if (no_cas || cpu_smt_possible())
->>                  return;
->>
->>          /*
->> @@ -1156,12 +1159,8 @@ static void hybrid_init_cpu_capacity_scaling(bool refresh)
->>                  return;
->>          }
->>
->> -       /*
->> -        * On hybrid systems, use asym capacity instead of ITMT, but because
->> -        * the capacity of SMT threads is not deterministic even approximately,
->> -        * do not do that when SMT is in use.
->> -        */
->> -       if (hwp_is_hybrid && !sched_smt_active() && arch_enable_hybrid_capacity_scale()) {
-> Why don't you replace sched_smt_active() here with cpu_smt_possible()?
->
-> There's no point calling arch_enable_hybrid_capacity_scale() if the
-> latter is true.
-Because I think cpu_smt_possible() becomes fixed after kernel startup. 
-Placing this check earlier can also prevent calling 
-arch_enable_hybrid_capacity_scale(). Additionally, when users switch the 
-cpufreq driver via /sys/devices/system/cpu/intel_pstate/status, it's 
-unnecessary to proceed with further checks.
->> +       /* On hybrid systems, use asym capacity instead of ITMT */
->> +       if (hwp_is_hybrid && arch_enable_hybrid_capacity_scale()) {
->>                  hybrid_refresh_cpu_capacity_scaling();
->>                  /*
->>                   * Disabling ITMT causes sched domains to be rebuilt to disable asym
->> --
+--rsep7zu3ekqtwnyl
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 2/2] power: supply: add support for S2MU005 battery fuel
+ gauge device
+MIME-Version: 1.0
+
+Hi,
+
+On Mon, Jan 26, 2026 at 09:09:49PM +0530, Kaustabh Chakraborty wrote:
+> From: Yassine Oudjana <y.oudjana@protonmail.com>
+>=20
+> Samsung's S2MU005 PMIC, which contains battery charger functionality
+> also includes a battery fuel gauge device, which is separate from the
+> PMIC itself, and typically connected to an I2C bus. Add a generic driver
+> to support said device.
+>=20
+> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> Co-developed-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+> ---
+>  drivers/power/supply/Kconfig           |   9 ++
+>  drivers/power/supply/Makefile          |   1 +
+>  drivers/power/supply/s2mu005-battery.c | 234 +++++++++++++++++++++++++++=
+++++++
+>  3 files changed, 244 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 92f9f7aae92f2..a5777309b1f62 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -229,6 +229,15 @@ config BATTERY_SAMSUNG_SDI
+>  	  Say Y to enable support for Samsung SDI battery data.
+>  	  These batteries are used in Samsung mobile phones.
+> =20
+> +config BATTERY_S2MU005
+> +	tristate "Samsung S2MU005 PMIC fuel gauge driver"
+> +	help
+> +	  Say Y to enable support for the Samsung S2MU005 PMIC integrated
+> +	  fuel gauge, which works indepenently of the PMIC battery charger
+> +	  counterpart, and reports battery metrics.
+> +
+> +	  This driver, if built as a module, will be called s2mu005-fuel-gauge.
+> +
+>  config BATTERY_COLLIE
+>  	tristate "Sharp SL-5500 (collie) battery"
+>  	depends on SA1100_COLLIE && MCP_UCB1200
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index 4b79d5abc49a7..cd061887c1727 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -40,6 +40,7 @@ obj-$(CONFIG_BATTERY_PMU)	+=3D pmu_battery.o
+>  obj-$(CONFIG_BATTERY_QCOM_BATTMGR)	+=3D qcom_battmgr.o
+>  obj-$(CONFIG_BATTERY_OLPC)	+=3D olpc_battery.o
+>  obj-$(CONFIG_BATTERY_SAMSUNG_SDI)	+=3D samsung-sdi-battery.o
+> +obj-$(CONFIG_BATTERY_S2MU005)	+=3D s2mu005-battery.o
+>  obj-$(CONFIG_BATTERY_COLLIE)	+=3D collie_battery.o
+>  obj-$(CONFIG_BATTERY_INGENIC)	+=3D ingenic-battery.o
+>  obj-$(CONFIG_BATTERY_INTEL_DC_TI) +=3D intel_dc_ti_battery.o
+> diff --git a/drivers/power/supply/s2mu005-battery.c b/drivers/power/suppl=
+y/s2mu005-battery.c
+> new file mode 100644
+> index 0000000000000..914308e82683b
+> --- /dev/null
+> +++ b/drivers/power/supply/s2mu005-battery.c
+> @@ -0,0 +1,234 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Battery Fuel Gauge Driver for Samsung S2MU005 PMIC.
+> + *
+> + * Copyright (C) 2015 Samsung Electronics
+> + * Copyright (C) 2023 Yassine Oudjana <y.oudjana@protonmail.com>
+> + * Copyright (C) 2025 Kaustabh Chakraborty <kauschluss@disroot.org>
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/i2c.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/irq.h>
+> +#include <linux/of.h>
+> +#include <linux/power_supply.h>
+> +#include <linux/regmap.h>
+> +
+> +#define S2MU005_FG_REG_STATUS		0x00
+> +#define S2MU005_FG_REG_IRQ		0x02
+> +#define S2MU005_FG_REG_RVBAT		0x04
+> +#define S2MU005_FG_REG_RCUR_CC		0x06
+> +#define S2MU005_FG_REG_RSOC		0x08
+> +#define S2MU005_FG_REG_MONOUT		0x0a
+> +#define S2MU005_FG_REG_MONOUT_SEL	0x0c
+> +#define S2MU005_FG_REG_RBATCAP		0x0e
+> +#define S2MU005_FG_REG_RZADJ		0x12
+> +#define S2MU005_FG_REG_RBATZ0		0x16
+> +#define S2MU005_FG_REG_RBATZ1		0x18
+> +#define S2MU005_FG_REG_IRQ_LVL		0x1a
+> +#define S2MU005_FG_REG_START		0x1e
+> +
+> +struct s2mu005_fg {
+> +	struct device *dev;
+> +	struct regmap *regmap;
+> +	struct power_supply *psy;
+> +};
+> +
+> +static const struct regmap_config s2mu005_fg_regmap_config =3D {
+> +	.reg_bits =3D 8,
+> +	.val_bits =3D 8,
+> +};
+
+Looks like all register addresses are 2 byte aligned and you are
+always using regmap_raw_read to get 16bit values. So just use
+=2Eval_bits =3D 16 here?
+
+> +static irqreturn_t s2mu005_handle_irq(int irq, void *data)
+> +{
+> +	struct s2mu005_fg *priv =3D data;
+> +
+> +	msleep(100);
+> +	power_supply_changed(priv->psy);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int s2mu005_fg_get_voltage_now(struct s2mu005_fg *priv, int *valu=
+e)
+> +{
+> +	struct regmap *regmap =3D priv->regmap;
+> +	u16 reg;
+> +	int ret;
+> +
+> +	ret =3D regmap_raw_read(regmap, S2MU005_FG_REG_RVBAT, &reg, sizeof(reg)=
+);
+> +	if (ret < 0) {
+> +		dev_err(priv->dev, "failed to read voltage register (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	*value =3D ((unsigned long)reg * 1000000) >> 13; /* uV */
+> +
+> +	return 0;
+> +}
+> +
+> +static int s2mu005_fg_get_current_now(struct s2mu005_fg *priv, int *valu=
+e)
+> +{
+> +	struct regmap *regmap =3D priv->regmap;
+> +	s16 reg;
+> +	int ret;
+> +
+> +	ret =3D regmap_raw_read(regmap, S2MU005_FG_REG_RCUR_CC, &reg, sizeof(re=
+g));
+> +	if (ret < 0) {
+> +		dev_err(priv->dev, "failed to read current register (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	*value =3D -((long)reg * 1000000) >> 12; /* uA */
+> +
+> +	return 0;
+> +}
+> +
+> +static int s2mu005_fg_get_capacity(struct s2mu005_fg *priv, int *value)
+> +{
+> +	struct regmap *regmap =3D priv->regmap;
+> +	s16 reg;
+> +	int ret;
+> +
+> +	ret =3D regmap_raw_read(regmap, S2MU005_FG_REG_RSOC, &reg, sizeof(reg));
+> +	if (ret < 0) {
+> +		dev_err(priv->dev, "failed to read capacity register (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	*value =3D (reg * 100) >> 14; /* percentage */
+> +
+> +	return 0;
+> +}
+> +
+> +static int s2mu005_fg_get_status(struct s2mu005_fg *priv, int *value)
+> +{
+> +	int current_now;
+> +	int capacity;
+> +	int ret;
+> +
+> +	ret =3D s2mu005_fg_get_current_now(priv, &current_now);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (current_now <=3D 0) {
+> +		*value =3D POWER_SUPPLY_STATUS_DISCHARGING;
+> +		return 0;
+> +	}
+> +
+> +	ret =3D s2mu005_fg_get_capacity(priv, &capacity);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (capacity < 90)
+> +		*value =3D POWER_SUPPLY_STATUS_CHARGING;
+> +	else
+> +		*value =3D POWER_SUPPLY_STATUS_FULL;
+
+Usually there is some kind of hysteresis that stops charging
+when the battery is full and then restarts charging once the
+battery drops under a certain capacity. As this code first
+checks the current to determine if the battery is discharging
+and only then checks if the battery is full - does your code
+toggle between FULL and DISCHARGING?
+
+> +	return 0;
+> +}
+> +
+> +static const enum power_supply_property s2mu005_fg_properties[] =3D {
+> +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+> +	POWER_SUPPLY_PROP_CURRENT_NOW,
+> +	POWER_SUPPLY_PROP_CAPACITY,
+> +	POWER_SUPPLY_PROP_STATUS,
+> +};
+> +
+> +static int s2mu005_fg_get_property(struct power_supply *psy,
+> +				   enum power_supply_property psp,
+> +				   union power_supply_propval *val)
+> +{
+> +	struct s2mu005_fg *priv =3D power_supply_get_drvdata(psy);
+> +	int ret =3D 0;
+> +
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+> +		ret =3D s2mu005_fg_get_voltage_now(priv, &val->intval);
+> +		break;
+> +	case POWER_SUPPLY_PROP_CURRENT_NOW:
+> +		ret =3D s2mu005_fg_get_current_now(priv, &val->intval);
+> +		break;
+> +	case POWER_SUPPLY_PROP_CAPACITY:
+> +		ret =3D s2mu005_fg_get_capacity(priv, &val->intval);
+> +		break;
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		ret =3D s2mu005_fg_get_status(priv, &val->intval);
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct power_supply_desc s2mu005_fg_desc =3D {
+> +	.name =3D "s2mu005-fuel-gauge",
+> +	.type =3D POWER_SUPPLY_TYPE_BATTERY,
+> +	.properties =3D s2mu005_fg_properties,
+> +	.num_properties =3D ARRAY_SIZE(s2mu005_fg_properties),
+> +	.get_property =3D s2mu005_fg_get_property,
+> +};
+> +
+> +static int s2mu005_fg_i2c_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev =3D &client->dev;
+> +	struct s2mu005_fg *priv;
+> +	struct power_supply_config psy_cfg =3D {};
+> +	const struct power_supply_desc *psy_desc;
+> +	int flags;
+> +	int ret;
+> +
+> +	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return dev_err_probe(dev, -ENOMEM,
+> +				     "failed to allocate driver private\n");
+
+Do not print error messages for -ENOMEM.
+
+> +
+> +	dev_set_drvdata(dev, priv);
+> +	priv->dev =3D dev;
+> +
+> +	priv->regmap =3D devm_regmap_init_i2c(client, &s2mu005_fg_regmap_config=
+);
+> +	if (IS_ERR(priv->regmap))
+> +		return dev_err_probe(dev, PTR_ERR(priv->regmap),
+> +				     "failed to initialize regmap\n");
+> +
+> +	psy_desc =3D device_get_match_data(dev);
+> +
+> +	psy_cfg.drv_data =3D priv;
+> +	priv->psy =3D devm_power_supply_register(priv->dev, psy_desc, &psy_cfg);
+> +	if (IS_ERR(priv->psy))
+> +		return dev_err_probe(dev, PTR_ERR(priv->psy),
+> +				     "failed to register power supply subsystem\n");
+> +
+> +	flags =3D irq_get_trigger_type(client->irq);
+
+This is not needed. By not specifying the trigger type the irq core
+code will do this internally.
+
+> +	ret =3D devm_request_threaded_irq(priv->dev, client->irq, NULL,
+> +					s2mu005_handle_irq, IRQF_ONESHOT | flags,
+> +					psy_desc->name, priv);
+> +	if (ret)
+> +		dev_err_probe(dev, ret, "failed to request IRQ\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id s2mu005_fg_of_match_table[] =3D {
+> +	{
+> +		.compatible =3D "samsung,s2mu005-fuel-gauge",
+> +		.data =3D &s2mu005_fg_desc,
+> +	}, { },
+
+Please put the terminator into its own line and remove the final ,
+
+> +};
+> +MODULE_DEVICE_TABLE(of, s2mu005_fg_of_match_table);
+> +
+> +static struct i2c_driver s2mu005_fg_i2c_driver =3D {
+> +	.probe =3D s2mu005_fg_i2c_probe,
+> +	.driver =3D {
+> +		.name =3D "s2mu005-fuel-gauge",
+> +		.of_match_table =3D of_match_ptr(s2mu005_fg_of_match_table),
+
+Remove of_match_ptr().
+
+> +	},
+> +};
+> +module_i2c_driver(s2mu005_fg_i2c_driver);
+> +
+> +MODULE_DESCRIPTION("Samsung S2MU005 PMIC Battery Fuel Gauge Driver");
+> +MODULE_AUTHOR("Yassine Oudjana <y.oudjana@protonmail.com>");
+> +MODULE_AUTHOR("Kaustabh Chakraborty <kauschluss@disroot.org>");
+> +MODULE_LICENSE("GPL");
+
+Greetings,
+
+-- Sebastian
+
+--rsep7zu3ekqtwnyl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAml6vwgACgkQ2O7X88g7
++pouihAAktRDxmuZDyU1KNjt+7R10pBlcDIt4VaeEpTIBgCp9WlUTREwAQUim1bd
+UnFkjQOzXdQO6HqrEsu0AuUjyPfzXG8xmL63G1RMMZsd9fD2V3QaSNBSRFsUIW8Y
+dtE1B2PmNz1y3dS7Enbao7T5LaFQ6/dgnkchDlTK6nQv6ThcPM353eQXkmYeG7Ji
+w80MGlMp3gUwMUwK8Gw/+kacDMgl7d0UicRCFmZsmbjJRkwjvVTmOYq91xK0O+tL
+6oE8vrxQJL6lk3kvy84DdNa6ZgYpJM326VMOgxlJhRhj2Lv4euQ5rUiKGRqTKV3C
+5jfuq/ZvBIjSlgKjHKGOvTaIyTMEhWf/WSL9HpH9pDEsDBhtjBdtv1WDTWfC4ROa
+cZ5NWZdDwVDxefEq/UTDcox3XJxqqu0Kl8vUkzgIxhuMgsqDgXbymjxef6j5hDpp
+ly7O3RZegax+wtp6GpZ3Zl+cqc9D87gXtSYQEt3fDjnRM5DYzhqXlNPWSAVA8wvh
+3F6C6yHQu2M+CmwU3mwhhFrWTifS8Jw7MRNKvEn/QMxseL8IgUI+iXT5fgnYYeKT
+kvVZRHJq2+PyH+/Mbx98BPNNavpujDF8l7svQSkZXt9SLVBrhLLtF0YERHcHwByI
+qG4Hg3+naim9hO0rVYevAsRcWlMJ0y+RipOAW7FCh7cQQGsxHlA=
+=BtkD
+-----END PGP SIGNATURE-----
+
+--rsep7zu3ekqtwnyl--
 
