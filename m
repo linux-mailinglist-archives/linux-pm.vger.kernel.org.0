@@ -1,160 +1,195 @@
-Return-Path: <linux-pm+bounces-41670-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41671-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MBamIuMRe2nqAwIAu9opvQ
-	(envelope-from <linux-pm+bounces-41670-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 08:53:07 +0100
+	id EMR9DWsle2nXBgIAu9opvQ
+	(envelope-from <linux-pm+bounces-41671-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 10:16:27 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C6E4AD077
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 08:53:07 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C42C7AE091
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 10:16:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id CCAB330058DD
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 07:53:05 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 78FCF301453C
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 09:16:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26AEB37B417;
-	Thu, 29 Jan 2026 07:53:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hITg21l2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEA2E37F8BD;
+	Thu, 29 Jan 2026 09:16:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CA137AA92
-	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 07:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A98837F8A9;
+	Thu, 29 Jan 2026 09:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769673183; cv=none; b=ZIG3BcX0X2wl+btTIe0Qspk501ufEvbfoJITGhrUQf+CMV2RX/dX1Rettf+OsB0FzjFwKOOYj+DCKoJXEbn/0+rWUxaMytDjpyrc40/rIFNnry8OLU9ph6oRoKh9TbHm0BAQBzETtJwjnSwtAj/5jz39fHXhORevh30xOhwQS0A=
+	t=1769678173; cv=none; b=p7p+ELMf9CW70D28cdbGfo73fZYZ4zPttc1evDrZwAUHoGVKHZmFLl8HEh8ZO+jEpK49pyDo2dy/a9K6N7l/ocFpXHReullakutjU6mU6o/pDZgomMlqeMov+uJTK+6+vEPA9l6Y1tfZHOImRTuBI4uvM7c9UGwYQCbuAWELyHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769673183; c=relaxed/simple;
-	bh=TreBPbYcd+qcEfeyzd9gSmsPnjmGM3aP8CkrKuGABXo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LSTG6GTgnnAvfqOrtwAmk8kMZZfPXg4TGfSohV44pQXYbDUY4Eg5LaTxEQdcdV5zdfbCjEU3zHBViauiTG1ogNAEp4rJc+ioxxhocrK4gVQbX5qC+eXGAvbKy2/aPcCS8Pa8oqD2q8U3OOiLjcuo3AFBqwIbWIij6z9aOjgKnfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hITg21l2; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47ff94b46afso5361045e9.1
-        for <linux-pm@vger.kernel.org>; Wed, 28 Jan 2026 23:53:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1769673179; x=1770277979; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=TreBPbYcd+qcEfeyzd9gSmsPnjmGM3aP8CkrKuGABXo=;
-        b=hITg21l2RRszOmIciwQjy2uAj0jupjwwklVg+fvb3B7bBd58xF/oWBM4QRvWZu07N1
-         L+xjAlc0SoxWIv1dued1hCfn/9RgC+RpO4ggr1yTuUTuyr2kpZfARFF8G/yzbVd5jLLQ
-         FXpRGxp4RyEBMdc7yC2y2KkTYGY5WQS0wfM4ED5hBEEadYh2sfp1x3qvSSxFIxlomM7D
-         cOiIQgw3/PrqNclCYEkuypajUxcanDP+vk/HS90xsH62ESbSNXExOtwjBJwAzMNn7O2R
-         AmOdAgmjWUY6ojcn5HQU3jY9WJPERuJmrA2so7Ip8zNhSwbMB+W6PWD5ltFG48CZKSKx
-         odiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769673179; x=1770277979;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TreBPbYcd+qcEfeyzd9gSmsPnjmGM3aP8CkrKuGABXo=;
-        b=lHhPgxOsjswAv9xnocQbcThvBp9s1d1Z//v8a5kiAwTG2BSl8d5fNUaJfHzcq+yuaN
-         A3sKzYHrXU8HrEESmN5Erw1+WmM2p913/kJ8Rn9l0IViBFGBOUHJZ0D7kXeG19sGxnOI
-         db0WETXpNX2KfUZTnjkXJKKWI8NaPjy6pL32rCM8p1KMfBD+I89MD4/El68eF4Qh3bJQ
-         Nk6eCjWdeU14IsB3SWCHPFhnxKAFzSYOyZhG/xpjAkRyTzqedydbxnAFv0Z7PjaHuCKM
-         UPYlwYkOuGziFj9eK/mAY5ehYzfKtcAbVVw7sJ6EjKdFdkYi1p1ww6eLsYt+jKsM0XHO
-         uEmg==
-X-Forwarded-Encrypted: i=1; AJvYcCU7uE0e08R/lOM7F2Ix4P6Vr5uXpf2LI62QQDO027KgLJvlBlEVksnjdXYGl55YER2D12EiIaP+qw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx86kdY0Wh3UyH3oY6yRvQKsfFy+/Y7drvsC2fls1KW6lcosAOE
-	wXjbRaPI6W7w95LIw+e80mWZ7Y5JowBrRfBOsQcKbhEICYjoeADSArMllNEzmWEhgXE=
-X-Gm-Gg: AZuq6aK/opKOa1YIGqgLsJyw8GwCo53yXX3iv2pBCgehG+MUYdkHAAPG7tGphAGqevr
-	j2JLeJzg+/tKrE/Ze5j6EMekB+JleVSc3Pei/IEvk4b3p4jxyMzxNp+auB663L/ubtiM1jOyXm8
-	g7kJbvwxfvcLT3xJLRk7SBWQSzUaBh12fdjs7t9EpCd68OkaTmjFTM/ESzL6JnaVfwnhrDb9DVE
-	2qkdEisV194P+MQ23W3UZ6u+SMf+8dl6fW952kmzSXvCaXCazHUwVFAmCsxViwNkahn44yC+cRT
-	5dw+jDoyrTgVr2fnyRDkQB/Yy4GMTL1B0KFI3RMy/OxAMevlBu82cUm4sfidf5YehxPsW59KbkP
-	eQOa7qrx29a7v2X7VPfM2PfkJMs+nxUkfIQZ5rm78vIge/RkdFpjlZgOnTHEuIZ18MHY8n5EZt4
-	2crvmdyeNbjsI3LNogrw==
-X-Received: by 2002:a05:600c:450c:b0:47d:6c36:a125 with SMTP id 5b1f17b1804b1-480829beec9mr29095775e9.17.1769673178631;
-        Wed, 28 Jan 2026 23:52:58 -0800 (PST)
-Received: from draszik.lan ([212.129.82.147])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-481a5d31756sm4253955e9.2.2026.01.28.23.52.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 23:52:58 -0800 (PST)
-Message-ID: <3471955c681a8f9fb0ddf2dd421e1b4552dfbea5.camel@linaro.org>
-Subject: Re: [PATCH v4 10/10] pmdomain: samsung: implement domain-supply
- regulator
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
- <alim.akhtar@samsung.com>,  Rob Herring <robh@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,  Ulf
- Hansson <ulf.hansson@linaro.org>, Liam Girdwood <lgirdwood@gmail.com>, Mark
- Brown <broonie@kernel.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, Tudor Ambarus	
- <tudor.ambarus@linaro.org>, Juan Yescas <jyescas@google.com>, Will McVicker
-	 <willmcvicker@google.com>, kernel-team@android.com, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Date: Thu, 29 Jan 2026 07:53:10 +0000
-In-Reply-To: <20260128-gs101-pd-v4-10-cbe7bd5a4060@linaro.org>
-References: <20260128-gs101-pd-v4-0-cbe7bd5a4060@linaro.org>
-	 <20260128-gs101-pd-v4-10-cbe7bd5a4060@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-2+build3 
+	s=arc-20240116; t=1769678173; c=relaxed/simple;
+	bh=yysg48hJVtkntgBWDj6KpaqsjSKSaBJBPPMari3IL3g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IzrW4KSLo029MLVWbx0vPHlNWUsPQ+n/dvWU/FzOCV/yAMpdjEmxWoze4Y4S72zEy8DD9WNPUcY416bpZqNb4BdsoW+ko+h4PGiBLtzPGlQVNOe/rLEOnV6MVy7g96GzthoDeL/D1T3FQZV8xd5aw9p1gQbNmk1BFJjJFcuWLCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BD2711516;
+	Thu, 29 Jan 2026 01:15:56 -0800 (PST)
+Received: from [10.1.33.27] (e127648.arm.com [10.1.33.27])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5763B3F73F;
+	Thu, 29 Jan 2026 01:16:02 -0800 (PST)
+Message-ID: <44c4ee5a-34ec-4b23-b06b-05bd0fda6585@arm.com>
+Date: Thu, 29 Jan 2026 09:16:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] cpuidle: governors: teo: Adjust the classification
+ of wakeup events
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Doug Smythies <dsmythies@telus.net>
+References: <12831359.O9o76ZdvQC@rafael.j.wysocki>
+ <5079287.31r3eYUQgx@rafael.j.wysocki>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <5079287.31r3eYUQgx@rafael.j.wysocki>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41670-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[kernel.org,samsung.com,linaro.org,gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	TAGGED_FROM(0.00)[bounces-41671-lists,linux-pm=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-pm@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[christian.loehle@arm.com,linux-pm@vger.kernel.org];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linaro.org:email,linaro.org:dkim,linaro.org:mid]
-X-Rspamd-Queue-Id: 2C6E4AD077
+	NEURAL_HAM(-0.00)[-1.000];
+	MID_RHS_MATCH_FROM(0.00)[];
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: C42C7AE091
 X-Rspamd-Action: no action
 
-On Wed, 2026-01-28 at 16:10 +0000, Andr=C3=A9 Draszik wrote:
-> Some power domains on Exynos are fed by a regulator rail and therefore
-> regulator control needs be implemented for Exynos power domains.
->=20
-> On Google gs101, HSI0 (USB) is one example of such a power domain.
->=20
-> While at it, add a to_exynos_pd() to avoid direct use of
-> container_of() in various additional places, and update existing code
-> to use it.
->=20
-> Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+On 1/26/26 19:45, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> If differences between target residency values of adjacent idle states
+> of a given CPU are relatively large, the corresponding idle state bins
+> used by the teo governors are large either and the rule by which hits
+> are distinguished from intercepts is inaccurate.
+> 
+> Namely, by that rule, a wakeup event is classified as a hit if the
+> sleep length (the time till the closest timer other than the tick)
+> and the measured idle duration, adjusted for the entered idle state
+> exit latency, fall into the same idle state bin.  However, if that bin
+> is large enough, the actual difference between the sleep length and
+> the measured idle duration may be significant.  It may in fact be
+> significantly greater than the analogous difference for an event where
+> the sleep length and the measured idle duration fall into different
+> bins.
+> 
+> For this reason, amend the rule in question with a check that will
+> only allow a wakeup event to be counted as a hit if the difference
+> between the sleep length and the measured idle duration is less than
+> LATENCY_THRESHOLD_NS (which means that the difference between the
+> sleep length and the raw measured idle duration is below the sum of
+> LATENCY_THRESHOLD_NS and 1/2 of the entered idle state exit latency).
+> Otherwise, the event will be counted as an intercept.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
-> =C2=A0drivers/pmdomain/samsung/exynos-pm-domains.c | 53 +++++++++++++++++=
-++++++++---
-> =C2=A01 file changed, 48 insertions(+), 5 deletions(-)
+> 
+> v1.1 -> v2: No changes
+> 
+> v1 -> v1.1
+>    * Drop the change in teo_select() along with the corresponding
+>      part of the changelog (after receiving testing feedback from
+>      Christian)
+> 
+> This is a resend of
+> 
+> https://lore.kernel.org/linux-pm/4707705.LvFx2qVVIh@rafael.j.wysocki/
+> 
+> It applies on top of the first three patches from
+> 
+> https://lore.kernel.org/linux-pm/2257365.irdbgypaU6@rafael.j.wysocki/
+> 
+> ---
+>  drivers/cpuidle/governors/teo.c |   32 ++++++++++++++++----------------
+>  1 file changed, 16 insertions(+), 16 deletions(-)
+> 
+> --- a/drivers/cpuidle/governors/teo.c
+> +++ b/drivers/cpuidle/governors/teo.c
+> @@ -48,13 +48,11 @@
+>   * in accordance with what happened last time.
+>   *
+>   * The "hits" metric reflects the relative frequency of situations in which the
+> - * sleep length and the idle duration measured after CPU wakeup fall into the
+> - * same bin (that is, the CPU appears to wake up "on time" relative to the sleep
+> - * length).  In turn, the "intercepts" metric reflects the relative frequency of
+> - * non-timer wakeup events for which the measured idle duration falls into a bin
+> - * that corresponds to an idle state shallower than the one whose bin is fallen
+> - * into by the sleep length (these events are also referred to as "intercepts"
+> - * below).
+> + * sleep length and the idle duration measured after CPU wakeup are close enough
+> + * (that is, the CPU appears to wake up "on time" relative to the sleep length).
+> + * In turn, the "intercepts" metric reflects the relative frequency of non-timer
+> + * wakeup events for which the measured idle duration is measurably less than
+> + * the sleep length (these events are also referred to as "intercepts" below).
+>   *
+>   * The governor also counts "intercepts" with the measured idle duration below
+>   * the tick period length and uses this information when deciding whether or not
+> @@ -253,12 +251,16 @@ static void teo_update(struct cpuidle_dr
+>  	}
+>  
+>  	/*
+> -	 * If the measured idle duration falls into the same bin as the sleep
+> -	 * length, this is a "hit", so update the "hits" metric for that bin.
+> +	 * If the measured idle duration falls into the same bin as the
+> +	 * sleep length and the difference between them is less than
+> +	 * LATENCY_THRESHOLD_NS, this is a "hit", so update the "hits"
+> +	 * metric for that bin.
+> +	 *
+>  	 * Otherwise, update the "intercepts" metric for the bin fallen into by
+>  	 * the measured idle duration.
+>  	 */
+> -	if (idx_timer == idx_duration) {
+> +	if (idx_timer == idx_duration &&
+> +	    cpu_data->sleep_length_ns - measured_ns < LATENCY_THRESHOLD_NS) {
 
-Looks like I forgot to include the binding patch for this, will
-do a v5 shortly.
+So it needs to be within 7.5us here.
+Can we always expect that to be true?
+Especially since measured_ns does this "infer average from worst-case exit
+latency" handling.
+On deeper states this
+measured_ns -= lat_ns / 2;
+is an order of magnitude higher than our threshold.
 
-Cheers,
-Andre'
+So it should probably be something like
+exit_latency / 2 + LATENCY_THRESHOLD_NS?
+Or just exit_latency and allow the error to both sides?
+
+>  		cpu_data->state_bins[idx_timer].hits += PULSE;
+>  	} else {
+>  		cpu_data->state_bins[idx_duration].intercepts += PULSE;
+> 
+> 
+> 
+
 
