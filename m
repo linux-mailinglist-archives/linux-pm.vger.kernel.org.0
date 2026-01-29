@@ -1,473 +1,377 @@
-Return-Path: <linux-pm+bounces-41664-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41665-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +ODrNS2/emnw+AEAu9opvQ
-	(envelope-from <linux-pm+bounces-41664-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 03:00:13 +0100
+	id MJ1oM4XPemnU+gEAu9opvQ
+	(envelope-from <linux-pm+bounces-41665-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 04:09:57 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78D1DAAF7F
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 03:00:13 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48A21AB56F
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 04:09:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 3674B30059A6
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 02:00:12 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 3E3CD300DA64
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 03:09:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2A442DCBFA;
-	Thu, 29 Jan 2026 02:00:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197CB5D8F0;
+	Thu, 29 Jan 2026 03:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="ghruuMaT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XiO7A/p5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF1932939A;
-	Thu, 29 Jan 2026 01:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4702976026;
+	Thu, 29 Jan 2026 03:09:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769652006; cv=pass; b=HYrNXaREox9Ef1nHE1V2wDSjWGBW5KVR/geHdM8Kn3uHuPCCyG9+k8ReMzl+38EbRwy6IZgPwhnHUMgl4rbkx7sSoSotm9djex2lNEYXPo557mEia7Irw21y/rNma6Ne192ingt0yzzH44LYPiacnFDJIi5U86iiJnGurZe0sW0=
+	t=1769656193; cv=fail; b=L2CJ2p3xjo26mitaReonoM1J/8T/a3LxaDLAY7wpt5zwZgYwhTfSztot3ecxQxl3QUNtaHadql9RdfbyOR7VOT7f4Yf2hdsJzfnJKcxPMz31IMAYy08Z+c/SWdW/VKZoF2nIaDBUPY1i1jaOZ20poQprAPyfY1IwOqTHEHdzy+w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769652006; c=relaxed/simple;
-	bh=dNEMvvA7Po74dPo+VkXMBYfoEJKz7EwcUzE1RrpHAmQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qxEUYNUZd7z+LjvuGpyfYhAMxhJevifpXIGjatOWx+ITGRLA6xJrC0rzAzlUoQ3YPxoJAdOZlVTdtwwiOSDuwyQmCtgg2oAvWQ+TjjQnhMVnN8jL0OdLumzeU+n8/GbTlP0gzlrsrSUuza13P3Mlvi85nITR1aAA+Wps/2Z6qNA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=ghruuMaT; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1769651984; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=gfhdkELQ+r9VRoig5g3ceCRoO1KM5yCJmcdLfFEmlesal5zAlHZzEuahO0j9+2GrMmgb7SajG/OKuFFtYPb35h09xsS+Lbih0iesuTxP9HeNkUUgQHYOAHixk3T7pyKdjR6x5RK99QGKRoTtdgnOr40SaoaeM0Sbo0nltWTklb8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1769651984; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=T3aKX84kGxI1xxaoYSc/3afEikkxjamWfp3cnXS6LCk=; 
-	b=CcM7ghj+dKBRdqKOF2CNoG/agmkPmj+s7IVPUzOU9Xm6u0NK1RrLBKHr5mMmGfAuaOc0tlhWl7GFZHqNl2IJopqTjTtxxmVCCxLbEYUQcfMSp4sjrmcBv72x7niaRAwuPgerZ3bjzoa/rV8uORRyY5jAqbBWRyOTbxFCa8+ma2o=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1769651984;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=T3aKX84kGxI1xxaoYSc/3afEikkxjamWfp3cnXS6LCk=;
-	b=ghruuMaTCTutArmV7+GMqjzzbh85cW0vDGhdzK7XuFEUNJ+9MEO+V6iA9DObp7rB
-	8VKaDuIbz26pI/WimZTSHuKDlw050W1CiKCbLqJiX2jMiJZwfsy2/Sz2qtQogv/8+q6
-	BCo0xgtObeWNMfkxuqgnv9txqDWCzAE5yMW20ChE=
-Received: by mx.zohomail.com with SMTPS id 176965198298465.12795747038842;
-	Wed, 28 Jan 2026 17:59:42 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id 7941818060F; Thu, 29 Jan 2026 02:59:39 +0100 (CET)
-Date: Thu, 29 Jan 2026 02:59:39 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Kaustabh Chakraborty <kauschluss@disroot.org>
-Cc: Yassine Oudjana <y.oudjana@protonmail.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] power: supply: add support for S2MU005 battery fuel
- gauge device
-Message-ID: <aXq7NohfIy3c5AWL@venus>
-References: <20260126-s2mu005-fuelgauge-v1-0-68a146ed0819@disroot.org>
- <20260126-s2mu005-fuelgauge-v1-2-68a146ed0819@disroot.org>
+	s=arc-20240116; t=1769656193; c=relaxed/simple;
+	bh=l11HeQs8kl39sgNN+uWpOvc08aA2u95Rv3Grw5XsvyM=;
+	h=From:Date:To:CC:Message-ID:In-Reply-To:References:Subject:
+	 Content-Type:MIME-Version; b=gWoOPQG0jkrTGlVnNSKFushNagnB3tmVRvlSRtyVOgKLs8MgnOrcbkcHAn7ivIbU7nH50cYp4H5CP0zYAMuYJA8mGcoS2cO/JssmUt9wIy+HDnWGkjCMx9CMPxuyMWLiEOJuEaGNTDPypGXFTRVX6NBOpGCW2dyQBRwJ1d+DJbk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XiO7A/p5; arc=fail smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769656191; x=1801192191;
+  h=from:date:to:cc:message-id:in-reply-to:references:
+   subject:content-transfer-encoding:mime-version;
+  bh=l11HeQs8kl39sgNN+uWpOvc08aA2u95Rv3Grw5XsvyM=;
+  b=XiO7A/p5Wc8MmuuFA8fAqavjWLRSJXEeDiV6OSyzpnmKJzyrpWibalIV
+   9avao9wHyOJVg5kEFEEO+MhhqRLXLjjCtpMbQSu8r1OjfgCMGK+e38Li1
+   oLE1Td2C8j3Cfj8XiAmuubTMtmy5pr2I5pWe7G7n/OhAZaEs2pI+vMmXm
+   Bokx61U5kTZvR/kpUAWfH4yiaQ0TDsTAeJvj6VUWP5fmX6KFy63QMdn0w
+   yDVmLUKJBKGGgUFZLRbqqnabNRjFFz3EG55Z3pJmxHhGJLhje5JPwFsSv
+   ZvwPWMYZF7XXw+/ZyArqycPDcMI3ef85/Rxwyc4I2opSWEvHrwRzWOz/o
+   Q==;
+X-CSE-ConnectionGUID: n86a5Fh2R/mk+4k1b8UYZw==
+X-CSE-MsgGUID: eXFJ+VZ4R+G+z6kvKtG6fw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11685"; a="58463299"
+X-IronPort-AV: E=Sophos;i="6.21,260,1763452800"; 
+   d="scan'208";a="58463299"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 19:09:50 -0800
+X-CSE-ConnectionGUID: wBHXD/FaSOmRBCUE0R7Vfw==
+X-CSE-MsgGUID: 8ahZJqjqTqSTXfBVhlhWIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,260,1763452800"; 
+   d="scan'208";a="212950861"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 19:09:49 -0800
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Wed, 28 Jan 2026 19:09:49 -0800
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Wed, 28 Jan 2026 19:09:49 -0800
+Received: from BYAPR05CU005.outbound.protection.outlook.com (52.101.85.10) by
+ edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Wed, 28 Jan 2026 19:09:48 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=WzGfXKZ3XvTQhrf0cR+VxJx57X2qZnTNEOFKQb4iRlUeIPU1iaK+WbNe8ldezClHP0ipmS2m0B4zq8P4/m3cmhh0FkVJnVfrpCvj0OTCN8MipoTTNf125ecyfZfNTOEL4QGsdQfzWjjhPWsofHRK/eF1+XQ48kRIob3iLTZVH14Z4rpYCQk0ejiLWhzKE27Pami5T/kGt8VG+w4i+E83OluZcTmtxOwP28Rp+Wn7qHucNcy+CniZ038W4y399KSS2vvqtUoRU0f0B4s7UakqaM6VB2vINlf2JXvm1cAcjjasu/R6Kbjky/uERv62OIi2g/CZpe+rJBbxz3byloy3zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4n4rTtYxB88lbdL9lEdOx/LJDY1l4Exkaa0UfubmoSg=;
+ b=h5Cvk4d9OsXJdzijSlydHcxoMySwrIPRWzFuVBvZ32trDmUivUpgPGu1PUv0jkpMs4C4Q0RUZ5tD8wXf6lXafDzn6dZBSNvoLN2UHNU9SrfxY6F/D/oTpJG0xYTIlrFJuSP/tAFlm9pmvm4pZNESQkJa0V1Vj/s+RwftZWownihP+o2l6kJuNfBfubNYnNOrhL6CBlo9vIormUWWJPqMOzto8Qck55+hcLRNkJbM9hap0WeKhTVy3+YAYffbFKirFg1EQ98oHKjc5RP2og1lv0SqCjs2fUNTG+/5KR3emL++zf6U9fvr/cNN0c6UupqCB322DqQA7TbDBEr+dP4+lQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com (2603:10b6:510:256::6)
+ by SJ2PR11MB7504.namprd11.prod.outlook.com (2603:10b6:a03:4c5::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.11; Thu, 29 Jan
+ 2026 03:09:46 +0000
+Received: from PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::1ff:1e09:994b:21ff]) by PH8PR11MB8107.namprd11.prod.outlook.com
+ ([fe80::1ff:1e09:994b:21ff%6]) with mapi id 15.20.9564.006; Thu, 29 Jan 2026
+ 03:09:46 +0000
+From: <dan.j.williams@intel.com>
+Date: Wed, 28 Jan 2026 19:09:44 -0800
+To: <dan.j.williams@intel.com>, Smita Koralahalli
+	<Smita.KoralahalliChannabasappa@amd.com>, <linux-cxl@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <nvdimm@lists.linux.dev>,
+	<linux-fsdevel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC: Ard Biesheuvel <ardb@kernel.org>, Alison Schofield
+	<alison.schofield@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, "Ira
+ Weiny" <ira.weiny@intel.com>, Dan Williams <dan.j.williams@intel.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>, Yazen Ghannam
+	<yazen.ghannam@amd.com>, Dave Jiang <dave.jiang@intel.com>, Davidlohr Bueso
+	<dave@stgolabs.net>, Matthew Wilcox <willy@infradead.org>, Jan Kara
+	<jack@suse.cz>, "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown
+	<len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, Li Ming
+	<ming.li@zohomail.com>, Jeff Johnson <jeff.johnson@oss.qualcomm.com>, "Ying
+ Huang" <huang.ying.caritas@gmail.com>, Yao Xingtao <yaoxt.fnst@fujitsu.com>,
+	Peter Zijlstra <peterz@infradead.org>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Nathan Fontenot <nathan.fontenot@amd.com>,
+	Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
+	Benjamin Cheatham <benjamin.cheatham@amd.com>, Zhijian Li
+	<lizhijian@fujitsu.com>, Borislav Petkov <bp@alien8.de>, Smita Koralahalli
+	<Smita.KoralahalliChannabasappa@amd.com>, Tomasz Wolski
+	<tomasz.wolski@fujitsu.com>
+Message-ID: <697acf78acf70_3095100c@dwillia2-mobl4.notmuch>
+In-Reply-To: <697a9d46b147e_309510027@dwillia2-mobl4.notmuch>
+References: <20260122045543.218194-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20260122045543.218194-7-Smita.KoralahalliChannabasappa@amd.com>
+ <697a9d46b147e_309510027@dwillia2-mobl4.notmuch>
+Subject: Re: [PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of Soft
+ Reserved memory ranges
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR05CA0063.namprd05.prod.outlook.com
+ (2603:10b6:a03:74::40) To PH8PR11MB8107.namprd11.prod.outlook.com
+ (2603:10b6:510:256::6)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rsep7zu3ekqtwnyl"
-Content-Disposition: inline
-In-Reply-To: <20260126-s2mu005-fuelgauge-v1-2-68a146ed0819@disroot.org>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-0.2.1.1.4.3/269.648.70
-X-ZohoMailClient: External
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH8PR11MB8107:EE_|SJ2PR11MB7504:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0991a23e-95fb-44cc-5ba1-08de5ee3db3a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|7053199007;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?Ymg3YTdQVDVZSTcrTndxMW5KYzRCMGUxYWJaOGUweHA2OHNlYVlUZnRLL01U?=
+ =?utf-8?B?WVVaRm1TZldvZ084dDFDdHZWOWZGblZaRFZiNmhKa0p1dDRvU1VnL3RBZmNk?=
+ =?utf-8?B?UlI3MXVCZHJYd1VKYkFVQUF0aXBUM3dqSU5hQlQvakhNT1dlQ1RuN3RKb25N?=
+ =?utf-8?B?a3F6ZUlvY0EvMW5KekI2T2FNc1JhcXN6TElaRktxWjBFVGlpV3dEWjBIc3hW?=
+ =?utf-8?B?dTR4cW94SER5WXBLQy83YWlQK3VsRlFZU04wN1NURjQ2K0lKM0hNbEY2Z2Nz?=
+ =?utf-8?B?WnNSRjQ4WVdBYnhsYXc4RkRUM29QRlZFOTB3amNFQ3ZYajd4SWgyVVhYYkFI?=
+ =?utf-8?B?WWJFc3k5VVNxZ254Nlg4ZkIwYUJLenhlWUd5OU01YUZ2akNlSXNvSkVFSnlF?=
+ =?utf-8?B?ZVNubUhFY3hZVkN4T3FWKysyN0pjdWp0K3ovY2ZJeHo5ODNyMmR1YTJQc3Rh?=
+ =?utf-8?B?dkFNS0w0M2hYMktkNk1xVCtlRzlqNUdSMlE1clZPMnByMlpnYWdyTmpkMmdS?=
+ =?utf-8?B?WGZaT0s0VlFWM0cxQW8rRmdEdWdLYXhPRUR6bWJZaXdGbmZTQ0ppcHc4b29h?=
+ =?utf-8?B?ZEllV1FKWFlYTnkxZFdobHVHTjhUa1lkMFdTdEI3cjI4U2xGZUt4cHU2R0hC?=
+ =?utf-8?B?VzhJWWw0dElpamo4RHVLUytIc0hJWndNK240UE40VGpwc0wzZG1Sc1NqaEND?=
+ =?utf-8?B?Y1FFWUdHQnRTOVhkWUFlc0MyRGFjMnowWThyN2xKWHUyNXJ3SWRVRlJGUXpZ?=
+ =?utf-8?B?VTJZTTdKcjV2bXVIZUdhT25paEJmdEwyRm14M1NCUklVd3pIS3RENVJzQ2pa?=
+ =?utf-8?B?NjFXSUZKdUxoOTVpMkFXU25FNmVncHdoT0FWK1lqbExiM3RlcFA2UDl2THkw?=
+ =?utf-8?B?amt0UUhwWHlLQUl0SzYxVUhtVDU2YTdYQXd4TWxWaXZtY3VURnd0VWNlRXZy?=
+ =?utf-8?B?bW83dHhPUkRVZzV4QlVUSllnZXNpaG1vbFhxTFZ1R1Z4aHFyQlZNU3NYbjRQ?=
+ =?utf-8?B?OUZERzFNTG14UGs0ZlJ3R3VxQjZuakViams2Z3lMaTdQUEgyWEV6azI4UTUx?=
+ =?utf-8?B?dUdNWFBDWStJcWNMd0RINFQyMitacVRuMmRtOHVaQmVnbEdNaG0rdTQ2U1VK?=
+ =?utf-8?B?SHI0VVVHbFFNa1JjekVTNklYa0pISmorc3R4WWFiYkRpeGJlQ1lZeS9zK3gy?=
+ =?utf-8?B?RmgrSjViWXNOYXMwSFBpeXNYdVFhUVVXWUg3bnZhTmowRzZRbWtweWhBbXJB?=
+ =?utf-8?B?SDJpVitaZG56enNmdmpkWXFoR0ZpdkU2V1JnYTlJbitpeHNGN2pnUkViSm9S?=
+ =?utf-8?B?dGFpVGdkMEpibU1aSWN1bDFFVmc2YW90TzZLY2ZBUEdzdTFibXJOUzdrckkv?=
+ =?utf-8?B?M0dNQVNiQW1EUjRxOUZyZExFOWhXZ3JiQ1ZnV1BpQWRMUG5tZ25rbFJEazlj?=
+ =?utf-8?B?ODZFdlF5TUZyQ1d2elVScm1NMnZMTnhWQlZLQzd1bUdzaVZJOWJMTHEvcnNM?=
+ =?utf-8?B?cjhJeDRrUWN0ald2c3BOR3BvOHI0UzVIY2o2QUIwcVlnWFU5S1lML2VLeEpM?=
+ =?utf-8?B?eG8rcEttbXBXNzVsNHBsVS9NTUNvZDFyNTJMaEEwM3FGb1hLeVlja3N2Z1l1?=
+ =?utf-8?B?R2lHZGxWZmdwRCs1L2tDSnVhOHBkaUtCdFZEaFBCRnkrTGpkcmZnMVM3UGhC?=
+ =?utf-8?B?SkpsV2lqSDUvM1A0dmduWG5qenpPUzdRNmFkV3NPUitBK2l0UUlQSmlmcXFo?=
+ =?utf-8?B?azVyU2FNb1FGTWh5MlBzS2pSMGcza0pJbjQxaU0vME9aT3ZSNEMxUnBtWE12?=
+ =?utf-8?B?a2N5b2I5VTVISWRzVGpaZ1ZzTHk2NGxiMStzWEk3OUp6N1lXOXE0WUVrRlBm?=
+ =?utf-8?B?TEtVcGtHWlR6dVJxSVZwRXU5VTRmL3dhTThnS3c0WTFGclRKTTg2blo5NW9i?=
+ =?utf-8?B?ZzdRaHRRczRFeG9VR0tuYis4akkxNDE1clI0cG5iaGFiQzdKRTdCQWxiTGxN?=
+ =?utf-8?B?emJ2dlJ2ODRrODUvdHRXMXNqNUR3ZlREQ1dnWVhHWDFBcU5jMllSZnlzcGVr?=
+ =?utf-8?B?VENGeUtvTCtOTnRFbWttM09UVStpV29Fd2NTSUYxc1piekdOdUI4TThUVDlO?=
+ =?utf-8?Q?F4ic=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB8107.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d0c3dWxoU3FwTFVWZ0hpZFJDMStkSWV4b0N4cWlQa1B0MWk1RE80dUFvWWJT?=
+ =?utf-8?B?S2U0VEFiMWZKalBoZThUYm8yTXpnTDVCWFRxeVFRLzMvZkU5YytNZzdFUmJY?=
+ =?utf-8?B?VExwcWwwSXRaayswSTduZFdkVGR3LzdjZURXN1UxOVdpcGtBY3FDSE44M3k2?=
+ =?utf-8?B?eFFkclBXQmkrRmdGZXdReWdWWjdsWWdrWmFVS0Q4bHl6M0Y1Q1EybGQ3SGU1?=
+ =?utf-8?B?RG4xTTFOOUg1MlhDcGxYS204bi9CdmlvazR0SkVmNUsrYzZVWVNyZTZFSkNL?=
+ =?utf-8?B?dnFJWUNVdksyZVdnQnpQT01VSm5hbzNmdlZ1VCtCTjBNM0hheWJnNnFjZnkz?=
+ =?utf-8?B?cEJSU0tCSUkrazEvUGphT1NnT1Y1MTkyTWZnbFd0aWtFL2tzbkllMFhFMGhY?=
+ =?utf-8?B?dTh5Nm84b0NQQnZndDFwVXRwc3kxaUdIMTUwdGtmblZjbWNhbXV5S0pROEgy?=
+ =?utf-8?B?RGNJaTdDTURkOHdMMUZXN2EvekhIS2VQeEp4YStONExvWE92dFhXUTZlYStn?=
+ =?utf-8?B?UzVyUnQxcVZnTHpnbml4WXMxeFVQMm1vYzZKK3g5ZFZWak9OaWdXVXB0eWlJ?=
+ =?utf-8?B?MUMxSVRKSnB5NkhGaUVxWjlCMDhOVVhHVkxTYVAzMUpVcXNjb3ZQbWI2eW51?=
+ =?utf-8?B?K3VDU1EvdDdmTlJkRWw0K1RoNmVwSTREd3V0ajYzbU5sMTB0SGRleDNPWWg0?=
+ =?utf-8?B?WktybDJwc3pROW03MFdGaUxXaEFEb056QkJpRVljRnpDdFlNWDBmS1BIVzEw?=
+ =?utf-8?B?NVFtRGxuRzd1Y1lNd3lpeitrOHhGSXJlK05NT3RZVllFalB1OTQzZENuVkpa?=
+ =?utf-8?B?ZmhMRHMrcStkSGdUcnhtbVBaU3pVdXRLM0ptVXJQMXdBU1A2ZDdrWjJoTkVK?=
+ =?utf-8?B?Tk5PNjFaWnhqQW1Xb3BORDlrWnRkMkNRUGgwZ0QwS1dKdjFqQkhuRDBvTTVW?=
+ =?utf-8?B?aEpPVUxxTWJsTGFZdVZtYmRlWVFLTEhaZUJybW5CMWNGTCtOeFlFV0dlZTY2?=
+ =?utf-8?B?andvUVQwanoyN2g0UXFlTzFRME1xeGZRVXowT2RnZUR1OFliUHFnQ1I5SE9t?=
+ =?utf-8?B?Smg1eVArZXJNamREVHJSRHFQWkEzUXV6cDFBbWdDd2tRclBkWFpNOUhlci8z?=
+ =?utf-8?B?VGVidWFFN2RSc2I2OGxHWFF0c2xLc2w1S1BOOGhLWjlORkhKaTFJTllUSTdk?=
+ =?utf-8?B?cURnUEI5aHJ0VnFSN2lYTkVZZjFMZDFuTkc3OGc0ZlFobUhKNGZIaVZ3cnd4?=
+ =?utf-8?B?UEVmYlVkQWJyencvVklRT2x0LzFtejRlOEJwYzVUOHJrcWNIcTlBYTE5K0Zk?=
+ =?utf-8?B?bzNPR25xdEhmekw1T2E3R3FMalZ3ZkpzTWxPZmZIMDNGN1hTdW1KOXZ0SW9u?=
+ =?utf-8?B?b2hyVnhNSjliK0VkZ1BLb082TERyV1lLb25pMFFqZzNpSzBjcXlzdE1KWUQz?=
+ =?utf-8?B?c3ROVGt5WERYZjg3WUI3MUcxMzN5bDkzSnlLZHdzYk9VYVNBcEVCWnQxK0Jt?=
+ =?utf-8?B?dVlydlpidER1RllIaXhoZXhmbU5Qb0kxV3VYOURIMlgvN1E0amFBRHFhT09h?=
+ =?utf-8?B?UXloMnBxYVFmaXZGUFBkYzdMWjlncE9TRHIrYU5POVVtcHRnb2p6dnZmT0dz?=
+ =?utf-8?B?UVlGSUpQQVNMaG9Uai9XL3lGdzBJYTh2bFBSRjZ6TTBXc3ZQbmVZWXkzUmpK?=
+ =?utf-8?B?ZzNITTdZMXpLZ3hHZzQyL2JReGJ2emtiMit3QkxvRjY0RzJLQzV2SHNTS3BW?=
+ =?utf-8?B?TmFHV2hDSGovbS81ZXNBNXZwcENDSjFoeG5tNEpMTk5ER2svMWU4UUplK09R?=
+ =?utf-8?B?Q2xMZjhJWWxIdDFwRVJBWW5WRU5nNzJLRTJrd3dmU0cwL1BjVWpYQTIwMUda?=
+ =?utf-8?B?TFFwZnIveVhKeU4yRXJYcDdzSlNjbHFablh5OGdkbFJST3c4UnlMQjM4bmgv?=
+ =?utf-8?B?Y2Y5S25ReHVmSU5rOVhENUVVeW1TN0taK20yVXZJY042am1zS1g5WkJaSkhm?=
+ =?utf-8?B?T1AyQXJqMU5PTjRTdFN4VnJXQkhkTHh2OGE0eUoxaWI3TFlSVncya2tuN0JK?=
+ =?utf-8?B?K0J6RGVDZ2lvdGNJeFBweVhxWmNEQVdKTXdCVHppRnhIcFptbGt1SHFNRThp?=
+ =?utf-8?B?ZzUrdUNtMjQrSXNEaW4xS1ZiWTNIY09odXNTREpaWmx4ck95SkRHT1NrZUJ0?=
+ =?utf-8?B?RmtGTkJSQ0owSFUxSkhjMGR2UWRNbXFKTlltZnNqOVZqUEpLaDZpYTY0aTEy?=
+ =?utf-8?B?S04wMncvdlU4MUJpUVlSQlVPWlNvWmpOTFppMDEwWW5yTDJ4SHZ2SU92ajM2?=
+ =?utf-8?B?SU9ZMiszNENSNitkN3FpSzVMV2lYdWM1NnplMmZYRjNwV0h5cXl1Y2lnSkha?=
+ =?utf-8?Q?eBFPaSDrr00KYctM=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0991a23e-95fb-44cc-5ba1-08de5ee3db3a
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB8107.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2026 03:09:46.3424
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: wsaO+gsFqb+S/jR2PANXz9gNLkffaSMVJ7IT6jYsg7Yd/uJawyc0I2BoxCBxhMImgr9ZHZyDrobwr7sMMv66OoGI1NZjFXLqV2GAuW4LQ28=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB7504
+X-OriginatorOrg: intel.com
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.26 / 15.00];
-	SIGNED_PGP(-2.00)[];
+X-Spamd-Result: default: False [1.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[collabora.com:s=zohomail];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[protonmail.com,kernel.org,vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[35];
+	TAGGED_FROM(0.00)[bounces-41665-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41664-lists,linux-pm=lfdr.de];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[collabora.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[sebastian.reichel@collabora.com,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,intel.com,huawei.com,amd.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org,alien8.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,amd.com:email,dwillia2-mobl4.notmuch:mid];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	RCPT_COUNT_SEVEN(0.00)[8];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[protonmail.com:email,collabora.com:dkim]
-X-Rspamd-Queue-Id: 78D1DAAF7F
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[dan.j.williams@intel.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
+	TAGGED_RCPT(0.00)[linux-pm];
+	FROM_NO_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[10]
+X-Rspamd-Queue-Id: 48A21AB56F
 X-Rspamd-Action: no action
 
+dan.j.williams@ wrote:
+> Smita Koralahalli wrote:
+> > The current probe time ownership check for Soft Reserved memory based
+> > solely on CXL window intersection is insufficient. dax_hmem probing is not
+> > always guaranteed to run after CXL enumeration and region assembly, which
+> > can lead to incorrect ownership decisions before the CXL stack has
+> > finished publishing windows and assembling committed regions.
+> > 
+> > Introduce deferred ownership handling for Soft Reserved ranges that
+> > intersect CXL windows at probe time by scheduling deferred work from
+> > dax_hmem and waiting for the CXL stack to complete enumeration and region
+> > assembly before deciding ownership.
+> > 
+> > Evaluate ownership of Soft Reserved ranges based on CXL region
+> > containment.
+> > 
+> >    - If all Soft Reserved ranges are fully contained within committed CXL
+> >      regions, DROP handling Soft Reserved ranges from dax_hmem and allow
+> >      dax_cxl to bind.
+> > 
+> >    - If any Soft Reserved range is not fully claimed by committed CXL
+> >      region, tear down all CXL regions and REGISTER the Soft Reserved
+> >      ranges with dax_hmem instead.
+> > 
+> > While ownership resolution is pending, gate dax_cxl probing to avoid
+> > binding prematurely.
+> > 
+> > This enforces a strict ownership. Either CXL fully claims the Soft
+> > Reserved ranges or it relinquishes it entirely.
+> > 
+> > Co-developed-by: Dan Williams <dan.j.williams@intel.com>
+> > Signed-off-by: Dan Williams <dan.j.williams@intel.com>
+> > Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+> > ---
+> >  drivers/cxl/core/region.c | 25 ++++++++++++
+> >  drivers/cxl/cxl.h         |  2 +
+> >  drivers/dax/cxl.c         |  9 +++++
+> >  drivers/dax/hmem/hmem.c   | 81 ++++++++++++++++++++++++++++++++++++++-
+> >  4 files changed, 115 insertions(+), 2 deletions(-)
+> > 
+[..]
+> > diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
+> > index 13cd94d32ff7..b7e90d6dd888 100644
+> > --- a/drivers/dax/cxl.c
+> > +++ b/drivers/dax/cxl.c
+> > @@ -14,6 +14,15 @@ static int cxl_dax_region_probe(struct device *dev)
+> >  	struct dax_region *dax_region;
+> >  	struct dev_dax_data data;
+> >  
+> > +	switch (dax_cxl_mode) {
+> > +	case DAX_CXL_MODE_DEFER:
+> > +		return -EPROBE_DEFER;
+> 
+> So, I think this causes a mess because now you have 2 workqueues (driver
+> core defer-queue and hmem work) competing to disposition this device.
+> What this seems to want is to only run in the post "soft reserve
+> dispositioned" world. Something like (untested!)
+> 
+> diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
+> index 13cd94d32ff7..1162495eb317 100644
+> --- a/drivers/dax/cxl.c
+> +++ b/drivers/dax/cxl.c
+> @@ -14,6 +14,9 @@ static int cxl_dax_region_probe(struct device *dev)
+>         struct dax_region *dax_region;
+>         struct dev_dax_data data;
+>  
+> +       /* Make sure that dax_cxl_mode is stable, only runs once at boot */
+> +       flush_hmem_work();
+> +
 
---rsep7zu3ekqtwnyl
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 2/2] power: supply: add support for S2MU005 battery fuel
- gauge device
-MIME-Version: 1.0
+It occurs to me that this likely insta-hangs because
+wait_for_device_probe() waits forever for itself to flush. So it may
+need to be a scheme where the cxl_dax_region_driver registration does
+something like this (untested!):
 
-Hi,
-
-On Mon, Jan 26, 2026 at 09:09:49PM +0530, Kaustabh Chakraborty wrote:
-> From: Yassine Oudjana <y.oudjana@protonmail.com>
->=20
-> Samsung's S2MU005 PMIC, which contains battery charger functionality
-> also includes a battery fuel gauge device, which is separate from the
-> PMIC itself, and typically connected to an I2C bus. Add a generic driver
-> to support said device.
->=20
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> Co-developed-by: Kaustabh Chakraborty <kauschluss@disroot.org>
-> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
-> ---
->  drivers/power/supply/Kconfig           |   9 ++
->  drivers/power/supply/Makefile          |   1 +
->  drivers/power/supply/s2mu005-battery.c | 234 +++++++++++++++++++++++++++=
-++++++
->  3 files changed, 244 insertions(+)
->=20
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index 92f9f7aae92f2..a5777309b1f62 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -229,6 +229,15 @@ config BATTERY_SAMSUNG_SDI
->  	  Say Y to enable support for Samsung SDI battery data.
->  	  These batteries are used in Samsung mobile phones.
-> =20
-> +config BATTERY_S2MU005
-> +	tristate "Samsung S2MU005 PMIC fuel gauge driver"
-> +	help
-> +	  Say Y to enable support for the Samsung S2MU005 PMIC integrated
-> +	  fuel gauge, which works indepenently of the PMIC battery charger
-> +	  counterpart, and reports battery metrics.
-> +
-> +	  This driver, if built as a module, will be called s2mu005-fuel-gauge.
-> +
->  config BATTERY_COLLIE
->  	tristate "Sharp SL-5500 (collie) battery"
->  	depends on SA1100_COLLIE && MCP_UCB1200
-> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-> index 4b79d5abc49a7..cd061887c1727 100644
-> --- a/drivers/power/supply/Makefile
-> +++ b/drivers/power/supply/Makefile
-> @@ -40,6 +40,7 @@ obj-$(CONFIG_BATTERY_PMU)	+=3D pmu_battery.o
->  obj-$(CONFIG_BATTERY_QCOM_BATTMGR)	+=3D qcom_battmgr.o
->  obj-$(CONFIG_BATTERY_OLPC)	+=3D olpc_battery.o
->  obj-$(CONFIG_BATTERY_SAMSUNG_SDI)	+=3D samsung-sdi-battery.o
-> +obj-$(CONFIG_BATTERY_S2MU005)	+=3D s2mu005-battery.o
->  obj-$(CONFIG_BATTERY_COLLIE)	+=3D collie_battery.o
->  obj-$(CONFIG_BATTERY_INGENIC)	+=3D ingenic-battery.o
->  obj-$(CONFIG_BATTERY_INTEL_DC_TI) +=3D intel_dc_ti_battery.o
-> diff --git a/drivers/power/supply/s2mu005-battery.c b/drivers/power/suppl=
-y/s2mu005-battery.c
-> new file mode 100644
-> index 0000000000000..914308e82683b
-> --- /dev/null
-> +++ b/drivers/power/supply/s2mu005-battery.c
-> @@ -0,0 +1,234 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Battery Fuel Gauge Driver for Samsung S2MU005 PMIC.
-> + *
-> + * Copyright (C) 2015 Samsung Electronics
-> + * Copyright (C) 2023 Yassine Oudjana <y.oudjana@protonmail.com>
-> + * Copyright (C) 2025 Kaustabh Chakraborty <kauschluss@disroot.org>
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/i2c.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/irq.h>
-> +#include <linux/of.h>
-> +#include <linux/power_supply.h>
-> +#include <linux/regmap.h>
-> +
-> +#define S2MU005_FG_REG_STATUS		0x00
-> +#define S2MU005_FG_REG_IRQ		0x02
-> +#define S2MU005_FG_REG_RVBAT		0x04
-> +#define S2MU005_FG_REG_RCUR_CC		0x06
-> +#define S2MU005_FG_REG_RSOC		0x08
-> +#define S2MU005_FG_REG_MONOUT		0x0a
-> +#define S2MU005_FG_REG_MONOUT_SEL	0x0c
-> +#define S2MU005_FG_REG_RBATCAP		0x0e
-> +#define S2MU005_FG_REG_RZADJ		0x12
-> +#define S2MU005_FG_REG_RBATZ0		0x16
-> +#define S2MU005_FG_REG_RBATZ1		0x18
-> +#define S2MU005_FG_REG_IRQ_LVL		0x1a
-> +#define S2MU005_FG_REG_START		0x1e
-> +
-> +struct s2mu005_fg {
-> +	struct device *dev;
-> +	struct regmap *regmap;
-> +	struct power_supply *psy;
-> +};
-> +
-> +static const struct regmap_config s2mu005_fg_regmap_config =3D {
-> +	.reg_bits =3D 8,
-> +	.val_bits =3D 8,
-> +};
-
-Looks like all register addresses are 2 byte aligned and you are
-always using regmap_raw_read to get 16bit values. So just use
-=2Eval_bits =3D 16 here?
-
-> +static irqreturn_t s2mu005_handle_irq(int irq, void *data)
-> +{
-> +	struct s2mu005_fg *priv =3D data;
-> +
-> +	msleep(100);
-> +	power_supply_changed(priv->psy);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int s2mu005_fg_get_voltage_now(struct s2mu005_fg *priv, int *valu=
-e)
-> +{
-> +	struct regmap *regmap =3D priv->regmap;
-> +	u16 reg;
-> +	int ret;
-> +
-> +	ret =3D regmap_raw_read(regmap, S2MU005_FG_REG_RVBAT, &reg, sizeof(reg)=
-);
-> +	if (ret < 0) {
-> +		dev_err(priv->dev, "failed to read voltage register (%d)\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	*value =3D ((unsigned long)reg * 1000000) >> 13; /* uV */
-> +
-> +	return 0;
-> +}
-> +
-> +static int s2mu005_fg_get_current_now(struct s2mu005_fg *priv, int *valu=
-e)
-> +{
-> +	struct regmap *regmap =3D priv->regmap;
-> +	s16 reg;
-> +	int ret;
-> +
-> +	ret =3D regmap_raw_read(regmap, S2MU005_FG_REG_RCUR_CC, &reg, sizeof(re=
-g));
-> +	if (ret < 0) {
-> +		dev_err(priv->dev, "failed to read current register (%d)\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	*value =3D -((long)reg * 1000000) >> 12; /* uA */
-> +
-> +	return 0;
-> +}
-> +
-> +static int s2mu005_fg_get_capacity(struct s2mu005_fg *priv, int *value)
-> +{
-> +	struct regmap *regmap =3D priv->regmap;
-> +	s16 reg;
-> +	int ret;
-> +
-> +	ret =3D regmap_raw_read(regmap, S2MU005_FG_REG_RSOC, &reg, sizeof(reg));
-> +	if (ret < 0) {
-> +		dev_err(priv->dev, "failed to read capacity register (%d)\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	*value =3D (reg * 100) >> 14; /* percentage */
-> +
-> +	return 0;
-> +}
-> +
-> +static int s2mu005_fg_get_status(struct s2mu005_fg *priv, int *value)
-> +{
-> +	int current_now;
-> +	int capacity;
-> +	int ret;
-> +
-> +	ret =3D s2mu005_fg_get_current_now(priv, &current_now);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (current_now <=3D 0) {
-> +		*value =3D POWER_SUPPLY_STATUS_DISCHARGING;
-> +		return 0;
-> +	}
-> +
-> +	ret =3D s2mu005_fg_get_capacity(priv, &capacity);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (capacity < 90)
-> +		*value =3D POWER_SUPPLY_STATUS_CHARGING;
-> +	else
-> +		*value =3D POWER_SUPPLY_STATUS_FULL;
-
-Usually there is some kind of hysteresis that stops charging
-when the battery is full and then restarts charging once the
-battery drops under a certain capacity. As this code first
-checks the current to determine if the battery is discharging
-and only then checks if the battery is full - does your code
-toggle between FULL and DISCHARGING?
-
-> +	return 0;
-> +}
-> +
-> +static const enum power_supply_property s2mu005_fg_properties[] =3D {
-> +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-> +	POWER_SUPPLY_PROP_CURRENT_NOW,
-> +	POWER_SUPPLY_PROP_CAPACITY,
-> +	POWER_SUPPLY_PROP_STATUS,
-> +};
-> +
-> +static int s2mu005_fg_get_property(struct power_supply *psy,
-> +				   enum power_supply_property psp,
-> +				   union power_supply_propval *val)
-> +{
-> +	struct s2mu005_fg *priv =3D power_supply_get_drvdata(psy);
-> +	int ret =3D 0;
-> +
-> +	switch (psp) {
-> +	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-> +		ret =3D s2mu005_fg_get_voltage_now(priv, &val->intval);
-> +		break;
-> +	case POWER_SUPPLY_PROP_CURRENT_NOW:
-> +		ret =3D s2mu005_fg_get_current_now(priv, &val->intval);
-> +		break;
-> +	case POWER_SUPPLY_PROP_CAPACITY:
-> +		ret =3D s2mu005_fg_get_capacity(priv, &val->intval);
-> +		break;
-> +	case POWER_SUPPLY_PROP_STATUS:
-> +		ret =3D s2mu005_fg_get_status(priv, &val->intval);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct power_supply_desc s2mu005_fg_desc =3D {
-> +	.name =3D "s2mu005-fuel-gauge",
-> +	.type =3D POWER_SUPPLY_TYPE_BATTERY,
-> +	.properties =3D s2mu005_fg_properties,
-> +	.num_properties =3D ARRAY_SIZE(s2mu005_fg_properties),
-> +	.get_property =3D s2mu005_fg_get_property,
-> +};
-> +
-> +static int s2mu005_fg_i2c_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev =3D &client->dev;
-> +	struct s2mu005_fg *priv;
-> +	struct power_supply_config psy_cfg =3D {};
-> +	const struct power_supply_desc *psy_desc;
-> +	int flags;
-> +	int ret;
-> +
-> +	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return dev_err_probe(dev, -ENOMEM,
-> +				     "failed to allocate driver private\n");
-
-Do not print error messages for -ENOMEM.
-
-> +
-> +	dev_set_drvdata(dev, priv);
-> +	priv->dev =3D dev;
-> +
-> +	priv->regmap =3D devm_regmap_init_i2c(client, &s2mu005_fg_regmap_config=
-);
-> +	if (IS_ERR(priv->regmap))
-> +		return dev_err_probe(dev, PTR_ERR(priv->regmap),
-> +				     "failed to initialize regmap\n");
-> +
-> +	psy_desc =3D device_get_match_data(dev);
-> +
-> +	psy_cfg.drv_data =3D priv;
-> +	priv->psy =3D devm_power_supply_register(priv->dev, psy_desc, &psy_cfg);
-> +	if (IS_ERR(priv->psy))
-> +		return dev_err_probe(dev, PTR_ERR(priv->psy),
-> +				     "failed to register power supply subsystem\n");
-> +
-> +	flags =3D irq_get_trigger_type(client->irq);
-
-This is not needed. By not specifying the trigger type the irq core
-code will do this internally.
-
-> +	ret =3D devm_request_threaded_irq(priv->dev, client->irq, NULL,
-> +					s2mu005_handle_irq, IRQF_ONESHOT | flags,
-> +					psy_desc->name, priv);
-> +	if (ret)
-> +		dev_err_probe(dev, ret, "failed to request IRQ\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id s2mu005_fg_of_match_table[] =3D {
-> +	{
-> +		.compatible =3D "samsung,s2mu005-fuel-gauge",
-> +		.data =3D &s2mu005_fg_desc,
-> +	}, { },
-
-Please put the terminator into its own line and remove the final ,
-
-> +};
-> +MODULE_DEVICE_TABLE(of, s2mu005_fg_of_match_table);
-> +
-> +static struct i2c_driver s2mu005_fg_i2c_driver =3D {
-> +	.probe =3D s2mu005_fg_i2c_probe,
-> +	.driver =3D {
-> +		.name =3D "s2mu005-fuel-gauge",
-> +		.of_match_table =3D of_match_ptr(s2mu005_fg_of_match_table),
-
-Remove of_match_ptr().
-
-> +	},
-> +};
-> +module_i2c_driver(s2mu005_fg_i2c_driver);
-> +
-> +MODULE_DESCRIPTION("Samsung S2MU005 PMIC Battery Fuel Gauge Driver");
-> +MODULE_AUTHOR("Yassine Oudjana <y.oudjana@protonmail.com>");
-> +MODULE_AUTHOR("Kaustabh Chakraborty <kauschluss@disroot.org>");
-> +MODULE_LICENSE("GPL");
-
-Greetings,
-
--- Sebastian
-
---rsep7zu3ekqtwnyl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAml6vwgACgkQ2O7X88g7
-+pouihAAktRDxmuZDyU1KNjt+7R10pBlcDIt4VaeEpTIBgCp9WlUTREwAQUim1bd
-UnFkjQOzXdQO6HqrEsu0AuUjyPfzXG8xmL63G1RMMZsd9fD2V3QaSNBSRFsUIW8Y
-dtE1B2PmNz1y3dS7Enbao7T5LaFQ6/dgnkchDlTK6nQv6ThcPM353eQXkmYeG7Ji
-w80MGlMp3gUwMUwK8Gw/+kacDMgl7d0UicRCFmZsmbjJRkwjvVTmOYq91xK0O+tL
-6oE8vrxQJL6lk3kvy84DdNa6ZgYpJM326VMOgxlJhRhj2Lv4euQ5rUiKGRqTKV3C
-5jfuq/ZvBIjSlgKjHKGOvTaIyTMEhWf/WSL9HpH9pDEsDBhtjBdtv1WDTWfC4ROa
-cZ5NWZdDwVDxefEq/UTDcox3XJxqqu0Kl8vUkzgIxhuMgsqDgXbymjxef6j5hDpp
-ly7O3RZegax+wtp6GpZ3Zl+cqc9D87gXtSYQEt3fDjnRM5DYzhqXlNPWSAVA8wvh
-3F6C6yHQu2M+CmwU3mwhhFrWTifS8Jw7MRNKvEn/QMxseL8IgUI+iXT5fgnYYeKT
-kvVZRHJq2+PyH+/Mbx98BPNNavpujDF8l7svQSkZXt9SLVBrhLLtF0YERHcHwByI
-qG4Hg3+naim9hO0rVYevAsRcWlMJ0y+RipOAW7FCh7cQQGsxHlA=
-=BtkD
------END PGP SIGNATURE-----
-
---rsep7zu3ekqtwnyl--
+diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
+index 13cd94d32ff7..6a1a38b4f64b 100644
+--- a/drivers/dax/cxl.c
++++ b/drivers/dax/cxl.c
+@@ -41,7 +41,32 @@ static struct cxl_driver cxl_dax_region_driver = {
+        },
+ };
+ 
+-module_cxl_driver(cxl_dax_region_driver);
++static void cxl_dax_region_driver_register(struct work_struct *work)
++{
++       flush_hmem_work();
++       cxl_driver_register(&cxl_dax_region_driver);
++}
++
++static DECLARE_WORK(cxl_dax_region_driver_work, cxl_dax_region_driver_register);
++
++static int __init cxl_dax_region_init(void)
++{
++       /*
++        * Need to resolve a race with dax_hmem wanting to drive regions 
++        * instead of CXL
++        */
++       queue_work(system_long_wq, &cxl_dax_region_driver_work);
++       return 0;
++}
++module_init(cxl_dax_region_init);
++
++static void __exit cxl_dax_region_exit(void)
++{
++       flush_work(&cxl_dax_region_driver_work);
++       cxl_driver_unregister(&cxl_dax_region_driver);
++}
++module_exit(cxl_dax_region_exit);
++
+ MODULE_ALIAS_CXL(CXL_DEVICE_DAX_REGION);
+ MODULE_DESCRIPTION("CXL DAX: direct access to CXL regions");
+ MODULE_LICENSE("GPL");
 
