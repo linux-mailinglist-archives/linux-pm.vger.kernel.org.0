@@ -1,37 +1,37 @@
-Return-Path: <linux-pm+bounces-41712-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41714-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QE2kFPKoe2m8HgIAu9opvQ
-	(envelope-from <linux-pm+bounces-41712-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 19:37:38 +0100
+	id 2OLfGeKoe2m8HgIAu9opvQ
+	(envelope-from <linux-pm+bounces-41714-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 19:37:22 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8E2CB3A04
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 19:37:37 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E00DEB39DE
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 19:37:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 3C3B43038AEA
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 18:37:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8B6C63028122
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 18:37:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6068C2FC00D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB87D2FBDED;
 	Thu, 29 Jan 2026 18:37:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bglzhkLj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jGq1LRXt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39ED2F9984;
-	Thu, 29 Jan 2026 18:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7462FB0B9;
+	Thu, 29 Jan 2026 18:37:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769711828; cv=none; b=sNOH+jOOVQkdoCY36ucyp8iWWi62I6GaYfvOf2+GsO5d/BFbxL9Td/YVwGzFb0i57V/CuExqDzicZyYR9lJG1lQRoBKxZens0h9IzulljYfjR5YyuKmILkjgj6lENHLYEP4KI0Qt1J4RRl0IKfzsFdyGmnhMqFGVIwF7fzZPGHY=
+	t=1769711828; cv=none; b=h6qe0mlwNpIBdSHC+tr0G9FJnbR0Y0UhX8h8JHkYJ6JS6WqydaTfeuOuhaVkbv4tp2C3Nc3gryBt/spxX1FnfwUuQkOJXlVjgEaHFFVH4SrvdTIAlcHG/G32YEZx1ICVzZqLpWwB/v0YtHiqOk5NDBf6kZNT7Pn8eFH2QO3E7Ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1769711828; c=relaxed/simple;
-	bh=RQXf3rqsQ3wvdkn5lJc58ZpRzqeHt4q+lDv4SoGb6Es=;
+	bh=m91yGa01BJGvQIQd8V8kwIaiUDcEEaPiwT9/wKPpdq0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uchWsZk0pH8YaMWaNfVIYSeoPCUCLEGuGH8fCMpguviWRrP7AuCsIGzLrNkw7ycT6Ka7rs3B7VhjuMnwzK164TzeAEVtlDs6AO+ZAXiEfPj0lScK4vmZMSKlrnvFZFrTipoT3SQEslJFAw92QXWztXsdhFoW9aP+5G2X/WPbjS4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bglzhkLj; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=jBmxgZe/mN9ohdbklO+oe8UZjPO59lDyWz1Lhi/cpGsa4uYdfXSPw7wHM1iuoqUDd2dtTaJ17gwBB1WvbaVv6N/FI/GIwNUHjxkMaJLAGz4pHNMfdMAFeJ5W+C0FgFGV/+KovH+1bJ/513Pqk64m0xHySqEv9WMmHDKuGv2NThg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jGq1LRXt; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -39,28 +39,28 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1769711827; x=1801247827;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RQXf3rqsQ3wvdkn5lJc58ZpRzqeHt4q+lDv4SoGb6Es=;
-  b=bglzhkLjv4ScIfZJ2JjBlfO2spYSXTO18b/HcxQcR71Jg6JMHLY/U+wM
-   tAQFEihiJi34X0Tmsp0StkkxMBcXmp6DMha9eYha1ETRrxBz+Ahe7DvOp
-   Xg4wUJoyf9oJTpbGRrH+Nv85BHPggdUB9qilXvbQSBp5WZtfdhWQqOOmX
-   2a+5rqfAw0oz+zpfh/JJN8WJvofw1S2zeDmyhvr1te6yuoiyJyVhGwk93
-   trdkufdqxxdmWfTNXT9SfE6/1wZFACRrH57DNYzdduLXPMPKTb2P11wMY
-   Vxhj5dzeWzMLI80tKixToNVXg+QmkIm1m6k4LNeX/GQtY7MV+VflNMOL+
-   A==;
-X-CSE-ConnectionGUID: hhxXC/ooSgCT9vr89Gim+g==
-X-CSE-MsgGUID: DVea+I2STuiM1S+YNpBvqw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="82388360"
+  bh=m91yGa01BJGvQIQd8V8kwIaiUDcEEaPiwT9/wKPpdq0=;
+  b=jGq1LRXtvSe+zDFid7wEETk0UhzNPZEgeyCfi50m4nlVg0d5F2V179ap
+   Cbshi68xdwVCeEbsDjAN1zVHFEBY89bMFsmG0/oL78W8RCMS5rknts3H1
+   oyZ43cCroP9RkkMhU0lVhjlJazkx33bML8zIgNBjCCs+friCBt+1HxsE1
+   XzX4WlFvFgFMOBMiAawk7a5VVStJ5+HVjGhicv0NvpCB4BWTMk/z2BpNb
+   S/aNgm+HNXCpseA9f8TbcqtRc2VqPZBSVXXQX1ZpglxmiKdqDp3ad69N0
+   y5oAZ+wNjW98IaR2Pn5wDj0ZK/o7UvX0K0NogSirzyJyr85WUgvb8qtnx
+   w==;
+X-CSE-ConnectionGUID: XCgjzVwlS3u9umhTW9XtmQ==
+X-CSE-MsgGUID: QbKGJZZ/RZ67p/LY3s0haw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="82388364"
 X-IronPort-AV: E=Sophos;i="6.21,261,1763452800"; 
-   d="scan'208";a="82388360"
+   d="scan'208";a="82388364"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
   by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 10:37:06 -0800
-X-CSE-ConnectionGUID: N0qi9STRRCmnZewdmkFusg==
-X-CSE-MsgGUID: ST4YKXsSR2K9pSkqrGJsBQ==
+X-CSE-ConnectionGUID: 3hTz1OcETVe0RaI5ugX+5Q==
+X-CSE-MsgGUID: 3ToLsi50Q16YbldgF20Iyw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,261,1763452800"; 
-   d="scan'208";a="209070961"
+   d="scan'208";a="209070966"
 Received: from skuppusw-desk2.jf.intel.com ([10.165.154.101])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 10:37:05 -0800
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 10:37:06 -0800
 From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>
@@ -69,9 +69,9 @@ Cc: Zhang Rui <rui.zhang@intel.com>,
 	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/9] powercap: intel_rapl: Use GENMASK() and BIT() macros
-Date: Thu, 29 Jan 2026 10:36:40 -0800
-Message-ID: <20260129183646.558866-4-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v1 4/9] powercap: intel_rapl: Use unit conversion macros from units.h
+Date: Thu, 29 Jan 2026 10:36:41 -0800
+Message-ID: <20260129183646.558866-5-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260129183646.558866-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20260129183646.558866-1-sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -88,13 +88,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41712-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41714-lists,linux-pm=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -106,198 +106,110 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	DKIM_TRACE(0.00)[intel.com:+];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim]
-X-Rspamd-Queue-Id: A8E2CB3A04
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,linux.intel.com:mid]
+X-Rspamd-Queue-Id: E00DEB39DE
 X-Rspamd-Action: no action
 
-Replace hardcoded bitmasks and bit shift operations with standard
-GENMASK(), GENMASK_ULL(), BIT(), and BIT_ULL() macros for better
-readability and to follow kernel coding conventions.
+Replace hardcoded numeric constants with standard unit conversion
+macros from linux/units.h for better code clarity and
+self-documentation.
+
+Add MICROJOULE_PER_JOULE and NANOJOULE_PER_JOULE to units.h to
+support energy unit conversions, following the existing pattern
+for power units.
 
 No functional changes.
 
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
- drivers/powercap/intel_rapl_common.c | 78 ++++++++++++++--------------
- 1 file changed, 39 insertions(+), 39 deletions(-)
+ drivers/powercap/intel_rapl_common.c | 19 ++++++++++---------
+ include/linux/units.h                |  3 +++
+ 2 files changed, 13 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
-index 74a74af8f0ec..0faafba8cc7c 100644
+index 0faafba8cc7c..8f9d504fb64c 100644
 --- a/drivers/powercap/intel_rapl_common.c
 +++ b/drivers/powercap/intel_rapl_common.c
-@@ -31,62 +31,62 @@
- #include <asm/msr.h>
+@@ -24,6 +24,7 @@
+ #include <linux/suspend.h>
+ #include <linux/sysfs.h>
+ #include <linux/types.h>
++#include <linux/units.h>
  
- /* bitmasks for RAPL MSRs, used by primitive access functions */
--#define ENERGY_STATUS_MASK		0xffffffff
-+#define ENERGY_STATUS_MASK		GENMASK(31, 0)
- 
--#define POWER_LIMIT1_MASK		0x7FFF
-+#define POWER_LIMIT1_MASK		GENMASK(14, 0)
- #define POWER_LIMIT1_ENABLE		BIT(15)
- #define POWER_LIMIT1_CLAMP		BIT(16)
- 
--#define POWER_LIMIT2_MASK		(0x7FFFULL<<32)
-+#define POWER_LIMIT2_MASK		GENMASK_ULL(46, 32)
- #define POWER_LIMIT2_ENABLE		BIT_ULL(47)
- #define POWER_LIMIT2_CLAMP		BIT_ULL(48)
- #define POWER_HIGH_LOCK			BIT_ULL(63)
- #define POWER_LOW_LOCK			BIT(31)
- 
--#define POWER_LIMIT4_MASK		0x1FFF
-+#define POWER_LIMIT4_MASK		GENMASK(12, 0)
- 
--#define TIME_WINDOW1_MASK		(0x7FULL<<17)
--#define TIME_WINDOW2_MASK		(0x7FULL<<49)
-+#define TIME_WINDOW1_MASK		GENMASK_ULL(23, 17)
-+#define TIME_WINDOW2_MASK		GENMASK_ULL(55, 49)
- 
- #define POWER_UNIT_OFFSET		0x00
--#define POWER_UNIT_MASK			0x0F
-+#define POWER_UNIT_MASK			GENMASK(3, 0)
- 
- #define ENERGY_UNIT_OFFSET		0x08
--#define ENERGY_UNIT_MASK		0x1F00
-+#define ENERGY_UNIT_MASK		GENMASK(12, 8)
- 
- #define TIME_UNIT_OFFSET		0x10
--#define TIME_UNIT_MASK			0xF0000
-+#define TIME_UNIT_MASK			GENMASK(19, 16)
- 
--#define POWER_INFO_MAX_MASK		(0x7fffULL<<32)
--#define POWER_INFO_MIN_MASK		(0x7fffULL<<16)
--#define POWER_INFO_MAX_TIME_WIN_MASK	(0x3fULL<<48)
--#define POWER_INFO_THERMAL_SPEC_MASK	0x7fff
-+#define POWER_INFO_MAX_MASK		GENMASK_ULL(46, 32)
-+#define POWER_INFO_MIN_MASK		GENMASK_ULL(30, 16)
-+#define POWER_INFO_MAX_TIME_WIN_MASK	GENMASK_ULL(53, 48)
-+#define POWER_INFO_THERMAL_SPEC_MASK	GENMASK(14, 0)
- 
--#define PERF_STATUS_THROTTLE_TIME_MASK	0xffffffff
--#define PP_POLICY_MASK			0x1F
-+#define PERF_STATUS_THROTTLE_TIME_MASK	GENMASK(31, 0)
-+#define PP_POLICY_MASK			GENMASK(4, 0)
- 
- /*
-  * SPR has different layout for Psys Domain PowerLimit registers.
-  * There are 17 bits of PL1 and PL2 instead of 15 bits.
-  * The Enable bits and TimeWindow bits are also shifted as a result.
-  */
--#define PSYS_POWER_LIMIT1_MASK		0x1FFFF
-+#define PSYS_POWER_LIMIT1_MASK		GENMASK_ULL(16, 0)
- #define PSYS_POWER_LIMIT1_ENABLE	BIT(17)
- 
--#define PSYS_POWER_LIMIT2_MASK		(0x1FFFFULL<<32)
-+#define PSYS_POWER_LIMIT2_MASK		GENMASK_ULL(48, 32)
- #define PSYS_POWER_LIMIT2_ENABLE	BIT_ULL(49)
- 
--#define PSYS_TIME_WINDOW1_MASK		(0x7FULL<<19)
--#define PSYS_TIME_WINDOW2_MASK		(0x7FULL<<51)
-+#define PSYS_TIME_WINDOW1_MASK		GENMASK_ULL(25, 19)
-+#define PSYS_TIME_WINDOW2_MASK		GENMASK_ULL(57, 51)
- 
- /* bitmasks for RAPL TPMI, used by primitive access functions */
--#define TPMI_POWER_LIMIT_MASK		0x3FFFF
-+#define TPMI_POWER_LIMIT_MASK		GENMASK_ULL(17, 0)
- #define TPMI_POWER_LIMIT_ENABLE		BIT_ULL(62)
--#define TPMI_TIME_WINDOW_MASK		(0x7FULL<<18)
--#define TPMI_INFO_SPEC_MASK		0x3FFFF
--#define TPMI_INFO_MIN_MASK		(0x3FFFFULL << 18)
--#define TPMI_INFO_MAX_MASK		(0x3FFFFULL << 36)
--#define TPMI_INFO_MAX_TIME_WIN_MASK	(0x7FULL << 54)
-+#define TPMI_TIME_WINDOW_MASK		GENMASK_ULL(24, 18)
-+#define TPMI_INFO_SPEC_MASK		GENMASK_ULL(17, 0)
-+#define TPMI_INFO_MIN_MASK		GENMASK_ULL(35, 18)
-+#define TPMI_INFO_MAX_MASK		GENMASK_ULL(53, 36)
-+#define TPMI_INFO_MAX_TIME_WIN_MASK	GENMASK_ULL(60, 54)
- 
- /* Non HW constants */
- #define RAPL_PRIMITIVE_DERIVED		BIT(1)	/* not from raw data */
-@@ -111,9 +111,9 @@
- #define TPMI_POWER_UNIT_OFFSET		POWER_UNIT_OFFSET
- #define TPMI_POWER_UNIT_MASK		POWER_UNIT_MASK
- #define TPMI_ENERGY_UNIT_OFFSET		0x06
--#define TPMI_ENERGY_UNIT_MASK		0x7C0
-+#define TPMI_ENERGY_UNIT_MASK		GENMASK_ULL(10, 6)
- #define TPMI_TIME_UNIT_OFFSET		0x0C
--#define TPMI_TIME_UNIT_MASK		0xF000
-+#define TPMI_TIME_UNIT_MASK		GENMASK_ULL(15, 12)
- 
- #define RAPL_EVENT_MASK			GENMASK(7, 0)
- 
-@@ -964,13 +964,13 @@ static int rapl_check_unit_core(struct rapl_domain *rd)
+ #include <asm/cpu_device_id.h>
+ #include <asm/intel-family.h>
+@@ -964,13 +965,13 @@ static int rapl_check_unit_core(struct rapl_domain *rd)
  	}
  
  	value = (ra.value & ENERGY_UNIT_MASK) >> ENERGY_UNIT_OFFSET;
--	rd->energy_unit = ENERGY_UNIT_SCALE * 1000000 / (1 << value);
-+	rd->energy_unit = ENERGY_UNIT_SCALE * 1000000 / BIT(value);
+-	rd->energy_unit = ENERGY_UNIT_SCALE * 1000000 / BIT(value);
++	rd->energy_unit = ENERGY_UNIT_SCALE * MICROJOULE_PER_JOULE / BIT(value);
  
  	value = (ra.value & POWER_UNIT_MASK) >> POWER_UNIT_OFFSET;
--	rd->power_unit = 1000000 / (1 << value);
-+	rd->power_unit = 1000000 / BIT(value);
+-	rd->power_unit = 1000000 / BIT(value);
++	rd->power_unit = MICROWATT_PER_WATT / BIT(value);
  
  	value = (ra.value & TIME_UNIT_MASK) >> TIME_UNIT_OFFSET;
--	rd->time_unit = 1000000 / (1 << value);
-+	rd->time_unit = 1000000 / BIT(value);
+-	rd->time_unit = 1000000 / BIT(value);
++	rd->time_unit = USEC_PER_SEC / BIT(value);
  
  	pr_debug("Core CPU %s:%s energy=%dpJ, time=%dus, power=%duW\n",
  		 rd->rp->name, rd->name, rd->energy_unit, rd->time_unit, rd->power_unit);
-@@ -992,13 +992,13 @@ static int rapl_check_unit_atom(struct rapl_domain *rd)
- 	}
- 
- 	value = (ra.value & ENERGY_UNIT_MASK) >> ENERGY_UNIT_OFFSET;
--	rd->energy_unit = ENERGY_UNIT_SCALE * 1 << value;
-+	rd->energy_unit = ENERGY_UNIT_SCALE * BIT(value);
+@@ -995,10 +996,10 @@ static int rapl_check_unit_atom(struct rapl_domain *rd)
+ 	rd->energy_unit = ENERGY_UNIT_SCALE * BIT(value);
  
  	value = (ra.value & POWER_UNIT_MASK) >> POWER_UNIT_OFFSET;
--	rd->power_unit = (1 << value) * 1000;
-+	rd->power_unit = BIT(value) * 1000;
+-	rd->power_unit = BIT(value) * 1000;
++	rd->power_unit = BIT(value) * MILLIWATT_PER_WATT;
  
  	value = (ra.value & TIME_UNIT_MASK) >> TIME_UNIT_OFFSET;
--	rd->time_unit = 1000000 / (1 << value);
-+	rd->time_unit = 1000000 / BIT(value);
+-	rd->time_unit = 1000000 / BIT(value);
++	rd->time_unit = USEC_PER_SEC / BIT(value);
  
  	pr_debug("Atom %s:%s energy=%dpJ, time=%dus, power=%duW\n",
  		 rd->rp->name, rd->name, rd->energy_unit, rd->time_unit, rd->power_unit);
-@@ -1102,8 +1102,8 @@ static void set_floor_freq_atom(struct rapl_domain *rd, bool enable)
- 			      &power_ctrl_orig_val);
- 	mdata = power_ctrl_orig_val;
- 	if (enable) {
--		mdata &= ~(0x7f << 8);
--		mdata |= 1 << 8;
-+		mdata &= ~GENMASK(14, 8);
-+		mdata |= BIT(8);
- 	}
- 	iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_CR_WRITE,
- 		       defaults->floor_freq_reg_addr, mdata);
-@@ -1136,7 +1136,7 @@ static u64 rapl_compute_time_window_core(struct rapl_domain *rd, u64 value,
- 		if (y > 0x1f)
- 			return 0x7f;
- 
--		f = div64_u64(4 * (value - (1ULL << y)), 1ULL << y);
-+		f = div64_u64(4 * (value - BIT_ULL(y)), BIT_ULL(y));
- 		value = (y & 0x1f) | ((f & 0x3) << 5);
- 	}
- 	return value;
-@@ -1169,13 +1169,13 @@ static int rapl_check_unit_tpmi(struct rapl_domain *rd)
+@@ -1169,13 +1170,13 @@ static int rapl_check_unit_tpmi(struct rapl_domain *rd)
  	}
  
  	value = (ra.value & TPMI_ENERGY_UNIT_MASK) >> TPMI_ENERGY_UNIT_OFFSET;
--	rd->energy_unit = ENERGY_UNIT_SCALE * 1000000 / (1 << value);
-+	rd->energy_unit = ENERGY_UNIT_SCALE * 1000000 / BIT(value);
+-	rd->energy_unit = ENERGY_UNIT_SCALE * 1000000 / BIT(value);
++	rd->energy_unit = ENERGY_UNIT_SCALE * MICROJOULE_PER_JOULE / BIT(value);
  
  	value = (ra.value & TPMI_POWER_UNIT_MASK) >> TPMI_POWER_UNIT_OFFSET;
--	rd->power_unit = 1000000 / (1 << value);
-+	rd->power_unit = 1000000 / BIT(value);
+-	rd->power_unit = 1000000 / BIT(value);
++	rd->power_unit = MICROWATT_PER_WATT / BIT(value);
  
  	value = (ra.value & TPMI_TIME_UNIT_MASK) >> TPMI_TIME_UNIT_OFFSET;
--	rd->time_unit = 1000000 / (1 << value);
-+	rd->time_unit = 1000000 / BIT(value);
+-	rd->time_unit = 1000000 / BIT(value);
++	rd->time_unit = USEC_PER_SEC / BIT(value);
  
  	pr_debug("Core CPU %s:%s energy=%dpJ, time=%dus, power=%duW\n",
  		 rd->rp->name, rd->name, rd->energy_unit, rd->time_unit, rd->power_unit);
+@@ -1208,7 +1209,7 @@ static const struct rapl_defaults rapl_defaults_spr_server = {
+ 	.check_unit = rapl_check_unit_core,
+ 	.set_floor_freq = set_floor_freq_default,
+ 	.compute_time_window = rapl_compute_time_window_core,
+-	.psys_domain_energy_unit = 1000000000,
++	.psys_domain_energy_unit = NANOJOULE_PER_JOULE,
+ 	.spr_psys_bits = true,
+ };
+ 
+diff --git a/include/linux/units.h b/include/linux/units.h
+index 00e15de33eca..8c17d98cd67e 100644
+--- a/include/linux/units.h
++++ b/include/linux/units.h
+@@ -35,6 +35,9 @@
+ #define MICROWATT_PER_MILLIWATT	1000UL
+ #define MICROWATT_PER_WATT	1000000UL
+ 
++#define MICROJOULE_PER_JOULE	1000000UL
++#define NANOJOULE_PER_JOULE	1000000000UL
++
+ #define BYTES_PER_KBIT		(KILO / BITS_PER_BYTE)
+ #define BYTES_PER_MBIT		(MEGA / BITS_PER_BYTE)
+ #define BYTES_PER_GBIT		(GIGA / BITS_PER_BYTE)
 -- 
 2.43.0
 
