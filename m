@@ -1,199 +1,268 @@
-Return-Path: <linux-pm+bounces-41673-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41674-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kHkkMfgte2mbCAIAu9opvQ
-	(envelope-from <linux-pm+bounces-41673-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 10:52:56 +0100
+	id SIFaNjEye2kVCQIAu9opvQ
+	(envelope-from <linux-pm+bounces-41674-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 11:10:57 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E51C2AE47B
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 10:52:55 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15FD6AE695
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 11:10:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 6D9B33009552
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 09:52:54 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 66280300611B
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 10:10:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C72E337FF67;
-	Thu, 29 Jan 2026 09:52:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A843806B7;
+	Thu, 29 Jan 2026 10:10:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n0os6OKy"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Y7k/FHt/";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="K4JLPL8c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623B337474C;
-	Thu, 29 Jan 2026 09:52:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DFB334CFD6
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 10:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769680373; cv=none; b=rO/zPSTEerJ3vYCFQNWMaHKF8ZCTj3uR0ZdMplFZpBPM9TaUKInn85XUqSOYl0dGQpKKw4m3cnAVrpISp7Z4705qryXx0CKthMBuwDvlYyrSyrvLKmlVTtpgBrHri4Y3YTXVDP++AsULHxLarZXYdJ/VE2fs8VoRmE0tEKPHmfc=
+	t=1769681453; cv=none; b=leqznEz2ji1GQK6zcFx5KUp65yl+WhtY2sQM5oinV0ThNiyJgo5RYtb056S7XWwzvMnSeu0K9vT52CVkvt6XdeYL884aHMb123V1e99k6wC9apGQ7gVvR96JFE8xKzhPKuuayuphYvUJH/IKtagCOPmuyovNPrVXH2/pwmsFiHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769680373; c=relaxed/simple;
-	bh=zFTy40P++A/fj80s2qLzscLKWBZGOQDRR0TgMNIVEJM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=envDERO46uzbCpH7uJUQmXplsFVyDtSB67ojU/7DmAjkRmBYrDY5HqV7BlyiqFamdtXjHIiDO0dj/5Z+JyepQExrnsJWFpfsad9HmCyY1Y4vj4r06jv+Hgxdl9qCjUhvCGY1Krd5bfG3xJZgvlrT81n4qqm1tSy/ukdjzOAJb9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n0os6OKy; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769680372; x=1801216372;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zFTy40P++A/fj80s2qLzscLKWBZGOQDRR0TgMNIVEJM=;
-  b=n0os6OKyHiL5oX+QPopJIeC9ajHwTbzQNI6vzf+ar8MGJpwcJhhCTtO0
-   7tbAA4Vka1T/Zphw7Xg/VGlTCCHsxRr3s94vdiPojkq8XREjDO9fWokDV
-   1dOBZnNSf2azdAT3j3emLZbnje0/DSItnujRdlTQA3nH0XBUpa9P1pqh7
-   8h2sPqNyVw+eK+HhhOW7U/ttnAO7wp0lQ83khRNPQBf/68VilruuogosT
-   HLo6gihF/4G9Oo4ewTaVN7M0QMm2FjSe18RVBKY8ymPL9B7hGONDymKjO
-   KAkEalD4Jv4yuuCFogBu45q2sS96GsnzReLnSEMIbLR++HiErY6vSPxb2
-   w==;
-X-CSE-ConnectionGUID: xjX5T/04TMqNlahnmjd2Rw==
-X-CSE-MsgGUID: 2JCAvr7iT+WYH5gjsSKyoQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11685"; a="70109461"
-X-IronPort-AV: E=Sophos;i="6.21,260,1763452800"; 
-   d="scan'208";a="70109461"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 01:52:51 -0800
-X-CSE-ConnectionGUID: 2KX1gktWSq+Q9StTj6QC0w==
-X-CSE-MsgGUID: mZN+qnMeSVqqXyC606aUOg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,260,1763452800"; 
-   d="scan'208";a="207775246"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 29 Jan 2026 01:52:47 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vlOhg-00000000bL6-3guq;
-	Thu, 29 Jan 2026 09:52:44 +0000
-Date: Thu, 29 Jan 2026 17:52:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pierre Gondois <pierre.gondois@arm.com>, linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Jie Zhan <zhanjie9@hisilicon.com>,
-	zhenglifeng1@huawei.com, Ionela Voinescu <ionela.voinescu@arm.com>,
-	Christian Loehle <christian.loehle@arm.com>, sumitg@nvidia.com,
-	Pierre Gondois <pierre.gondois@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Huang Rui <ray.huang@amd.com>,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Len Brown <lenb@kernel.org>, Saravana Kannan <saravanak@kernel.org>,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 5/6] cpufreq: Set policy->min and max as real QoS
- constraints
-Message-ID: <202601291700.LY8K4K9v-lkp@intel.com>
-References: <20260126101826.94030-6-pierre.gondois@arm.com>
+	s=arc-20240116; t=1769681453; c=relaxed/simple;
+	bh=LuZRuTg9fMuEEloEdXRAtWRlDocJ1QarEDNgCjqMgbo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=A+X47cYrp7CK8MIQVGB8rSJbMse8bCGpCn6OVfdJhx6Jtk5z7kJ6K003GbpiLryHWY+HizEavuzKcMlIqJFF9oVEjXoYsvLzUWEgp4ZynW6g4cRrU2ouVSU/vfio/1ZSr6qIshuov4CujSfzp7rbc/4/LveqGl/blEXT7aSTtjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Y7k/FHt/; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=K4JLPL8c; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60TA1Eh22373376
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 10:10:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	alAfcCd/Ehd7s5xHRU4AhlsJz4CsaVXmql0CQt5+ogc=; b=Y7k/FHt/Ssxmtu53
+	LPsBEjZ2ykGkMewziYT0ibwhc3FkVNYC0pBYzTMeGA0ii7EgE2vbzWckt2y5kK6J
+	S2J5t0VbAnbKUjcrumXl56G5/QXBX9OV51kKg3TM9fXPW4ustZA45VyJvcUyV24O
+	LrGxeQ14gYpBdZVky4t3MizYIott3NgFDYLGTWEDpsHanjFFEwGzTUrBUCrQ3sRZ
+	u70pDUR3kpelkkdxdK+LCMEP+B/HHaJq4xOM5lRpbZMk5dzdLVak4TH3U450cBu2
+	MaM3XrB8Gfd1D6K1ndSLCqfUuhjxK6FfSVV706yiuKWvJZyn7zKG8unqjqxkvMQs
+	m5WN1g==
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4bypk22wgg-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 10:10:50 +0000 (GMT)
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-34c5d203988so1459981a91.3
+        for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 02:10:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1769681450; x=1770286250; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=alAfcCd/Ehd7s5xHRU4AhlsJz4CsaVXmql0CQt5+ogc=;
+        b=K4JLPL8c17ccpD1bsW6/8YyL425Y+UKN1ypxieFSAia7BWIAXiB/9IqtYh/AR/a3V7
+         I4EcQNDG7796lcM9T4AUx25kfGw2XymCC4St4VtPxOOmefMNIssn8bXnQFFqDmhZjs6e
+         Qt2zl83+k/pqIXFhbmEbt2NAavI4mIjQAp8doZ9kC9lp4foJmcVAhZyTtbWAbUmofxH1
+         you+tywnch9ed+U7o6DwGqhoCliWlNkPGasfl7EQKrWLZmkJDSeBjuBPcajzjkohG39v
+         Ye5mbFVFWevcDfzhc0jTzkHhwsWJaNq82LPnKEei+erNNITdxHkWG48u52Aj6xvy+98u
+         3glg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769681450; x=1770286250;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=alAfcCd/Ehd7s5xHRU4AhlsJz4CsaVXmql0CQt5+ogc=;
+        b=uZAbNYkJEJ4Cg8/v0V6ydjXxQ9rTLi3Rnzxc62aVdVgFIOFR1/o+Wx1yhlqdk6OKLr
+         hjppJY1shAE2ZQJ73V5wY8ReMWxML9s6A7QX9d2lG31pmhBpDrDmFkvc8CN3IAuTev1F
+         AVMHAuOdLlJvkeKRyAikVMOZ6rCrFHQy095+NDY/FigAuKzBjRA2o8d5QmUrhqmEr2FW
+         d77L9nrslvb5JvtgMKbRyHymSPe7rgeTOJIvtAFKdIh4aN+w6hzwVfl0N6LkPF3NFmQH
+         G2AoVHsM9Y/tnbEmYPR5kovWRmM1pjImQInB9BRcjuHGA8S14WXwnz2mUcybUF0e4MZu
+         UbHA==
+X-Forwarded-Encrypted: i=1; AJvYcCWiMDH1DEubScMkqls4v5qyrHBM6IX9P4B9X7G4Q9UVsRNabUiHdrX9qsZC3dgOoWs1amOs2xvC+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJFQGPOM22CuVURrbvQue96yG0On2abmBUQlXay9UG8Ls5MzeA
+	1QNsYIiROcIphsfLmvPaZiX0Rqs+niGXMCTGTeEuidRVmlXeIPNGFAnpmfBr680nWQs5DD8YP95
+	g1/pMZbC2X7QztfcwxZPWQvw+oQRctHakEQO6sVGfCjhI+tp1AW8NkP/KQXiDSQ==
+X-Gm-Gg: AZuq6aIULEnKxYmCuuGAPRoHD/fSWY8QavpjZzlKsOHJrOTeNMhnErglyuQ2R+AjKJD
+	wUViFzhPMtbELc+IQCmBfyeQ76q94CyJaXZuG9Y9rvWPLkEtlIBE/uU6kDrBmyUPax4Uy8ai3Ea
+	S23AV29ZRkEjo0OFdlJ9wR2z/KcZbdV7RhO0WEBUTgsvzTfaKJYSqHZKq9E3MEoxICobp7PhKQl
+	wA9y5XV1l1MSwcB8BvA4uROTAhslCSUI8fLla+2dwCx5FD9MMvT4NFj+fD4fk9Ysv16fcXU6j/Y
+	1qzdW7L5dC4fvuBTdAyC2/r0EoHaoxOAnACaoTr2gxf8E3jHGD5m2ls3OMivlaMS2qu+Z/pHh0f
+	JaeYHtvZ09otykLwbwqlrU6cCPQ3wzKcN6calm6ddjg==
+X-Received: by 2002:a17:90b:3901:b0:353:e91:9b2f with SMTP id 98e67ed59e1d1-353fedcc422mr7778772a91.37.1769681450190;
+        Thu, 29 Jan 2026 02:10:50 -0800 (PST)
+X-Received: by 2002:a17:90b:3901:b0:353:e91:9b2f with SMTP id 98e67ed59e1d1-353fedcc422mr7778738a91.37.1769681449740;
+        Thu, 29 Jan 2026 02:10:49 -0800 (PST)
+Received: from [10.217.217.159] ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3540f3cc7c6sm4960669a91.10.2026.01.29.02.10.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jan 2026 02:10:49 -0800 (PST)
+Message-ID: <ee02056d-34a4-4300-acab-98fc50c43a0b@oss.qualcomm.com>
+Date: Thu, 29 Jan 2026 15:40:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260126101826.94030-6-pierre.gondois@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] dt-bindings: interconnect: qcom,qcs8300-rpmh: add
+ clocks property to enable QoS
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: Raviteja Laggyshetty <raviteja.laggyshetty@oss.qualcomm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Tipton <mike.tipton@oss.qualcomm.com>
+References: <20260127090116.1438780-1-odelu.kukatla@oss.qualcomm.com>
+ <20260127090116.1438780-2-odelu.kukatla@oss.qualcomm.com>
+ <5b62fc63-314e-40a0-a975-9df75ec49e9a@oss.qualcomm.com>
+Content-Language: en-US
+From: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+In-Reply-To: <5b62fc63-314e-40a0-a975-9df75ec49e9a@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Authority-Analysis: v=2.4 cv=PfvyRyhd c=1 sm=1 tr=0 ts=697b322a cx=c_pps
+ a=RP+M6JBNLl+fLTcSJhASfg==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=EUspDBNiAAAA:8 a=hncvHjIp_o2DDOFygSEA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=iS9zxrgQBfv6-_F4QbHw:22
+X-Proofpoint-GUID: JzIzRDRk2LNPY-CSYKBrs7Md6II_orcu
+X-Proofpoint-ORIG-GUID: JzIzRDRk2LNPY-CSYKBrs7Md6II_orcu
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI5MDA2NiBTYWx0ZWRfX8LH3b5dYhJ/k
+ izWQ8TTXy9Z89/3l5LSfMUJNWkiYv6rffOp52FkYk/wQqyX8+JhA7tAWzXtM0s5Ks3k96Qwi11s
+ otx5oLZr96qdy691TSs6P1TxhBUhYN8XCrqYhKvp+VDSc81i2qvpnpa+kAuoACSwx9PDQWK9que
+ gbBL20ejQR5rCPfS6KTwQ1d34tdqWI7zXzxb67vjcOcT4zd7vo0gZHqoTGdqCZyDbOwTD0LjVL6
+ RNscLxnDYy/yxRGbuHVFiEC4BbZadn1fqezilbyDO4h8HVTakggaasnuXBU0yUQDmjng1+hVpIu
+ auiU7M3TNkm46jDlDOAMJk7cPioL6mBlrgd1k5HxVS9hTmMr5hRnGO8UbAssfaw27eSF1tdTRhh
+ rgdCUEoZ3NysOVb+fiqO4WjhJ6p0icjewx15qZoAg6ZFUQKr4OVWeZr6m3MaTrHEZn/CEZ/a/DV
+ nLIGFKVNUzDxCziLXww==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-01-29_02,2026-01-28_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 bulkscore=0 priorityscore=1501 impostorscore=0 spamscore=0
+ malwarescore=0 adultscore=0 clxscore=1015 phishscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601290066
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.16 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41673-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	TAGGED_FROM(0.00)[bounces-41674-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[intel.com:+];
-	MISSING_XM_UA(0.00)[];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:dkim,qualcomm.com:email,qualcomm.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-pm];
+	FROM_NEQ_ENVFROM(0.00)[odelu.kukatla@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[01.org:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,intel.com:mid]
-X-Rspamd-Queue-Id: E51C2AE47B
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 15FD6AE695
 X-Rspamd-Action: no action
 
-Hi Pierre,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/bleeding-edge linus/master v6.19-rc7 next-20260128]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pierre-Gondois/cpufreq-Remove-per-CPU-QoS-constraint/20260126-182440
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20260126101826.94030-6-pierre.gondois%40arm.com
-patch subject: [PATCH 5/6] cpufreq: Set policy->min and max as real QoS constraints
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20260129/202601291700.LY8K4K9v-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 15.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260129/202601291700.LY8K4K9v-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601291700.LY8K4K9v-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/cpufreq/virtual-cpufreq.c: In function 'virt_cpufreq_get_freq_info':
->> drivers/cpufreq/virtual-cpufreq.c:167:32: warning: statement with no effect [-Wunused-value]
-     167 |                 policy->cpuinfo.min_freq;
-         |                 ~~~~~~~~~~~~~~~^~~~~~~~~
-   drivers/cpufreq/virtual-cpufreq.c:168:32: warning: statement with no effect [-Wunused-value]
-     168 |                 policy->cpuinfo.max_freq;
-         |                 ~~~~~~~~~~~~~~~^~~~~~~~~
 
 
-vim +167 drivers/cpufreq/virtual-cpufreq.c
+On 1/27/2026 4:24 PM, Konrad Dybcio wrote:
+> On 1/27/26 10:01 AM, Odelu Kukatla wrote:
+>> Some QCS8300 interconnect nodes have QoS registers located inside
+>> a block whose interface is clock-gated. For those nodes, driver
+>> must enable the corresponding clock(s) before accessing the
+>> registers. Add the 'clocks' property so the driver can obtain
+>> and enable the required clock(s).
+>>
+>> Only interconnects that have clock‑gated QoS register interface
+>> use this property; it is not applicable to all interconnect nodes.
+>>
+>> Signed-off-by: Odelu Kukatla <odelu.kukatla@oss.qualcomm.com>
+>> ---
+> 
+> [...]
+> 
+>> +            - description: aggre UFS PHY AXI clock
+>> +            - description: aggre QUP PRIM AXI clock
+>> +            - description: aggre USB2 PRIM AXI clock
+>> +            - description: aggre USB3 PRIM AXI clock
+> 
+> LeMans has one more USB3 clock here, but it also happens to have
+> 1 more USB3 host, so that checks out
+> 
 
-   155	
-   156	static int virt_cpufreq_get_freq_info(struct cpufreq_policy *policy)
-   157	{
-   158		struct cpufreq_frequency_table *table;
-   159		u32 num_perftbl_entries, idx;
-   160	
-   161		num_perftbl_entries = per_cpu(perftbl_num_entries, policy->cpu);
-   162	
-   163		if (num_perftbl_entries == 1) {
-   164			policy->cpuinfo.min_freq = 1;
-   165			policy->cpuinfo.max_freq = virt_cpufreq_get_perftbl_entry(policy->cpu, 0);
-   166	
- > 167			policy->cpuinfo.min_freq;
-   168			policy->cpuinfo.max_freq;
-   169	
-   170			policy->cur = policy->cpuinfo.max_freq;
-   171			return 0;
-   172		}
-   173	
-   174		table = kcalloc(num_perftbl_entries + 1, sizeof(*table), GFP_KERNEL);
-   175		if (!table)
-   176			return -ENOMEM;
-   177	
-   178		for (idx = 0; idx < num_perftbl_entries; idx++)
-   179			table[idx].frequency = virt_cpufreq_get_perftbl_entry(policy->cpu, idx);
-   180	
-   181		table[idx].frequency = CPUFREQ_TABLE_END;
-   182		policy->freq_table = table;
-   183	
-   184		return 0;
-   185	}
-   186	
+Thanks for the review, Konrad!
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On aggre1 noc, QCS8300 has only a single USB3 path, which corresponds to
+the clock in the binding. LeMans includes an additional USB3 host block,
+and therefore has an extra USB3 related clock that QCS8300 does not
+have. The difference reflects a real hardware variation between the two
+platforms.
+
+>> +
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,qcs8300-aggre2-noc
+>> +    then:
+>> +      properties:
+>> +        clocks:
+>> +          items:
+>> +            - description: RPMH CC IPA clock
+> 
+> LeMans also has ufscard clk here
+> 
+
+For aggre2 noc, QCS8300 does not integrate the ufscard controller
+present on LeMans, so that clock is not part of the QCS8300 hardware.
+The only QoS relevant clock on this node for QCS8300 is the RPMH CC IPA
+clock, which is why only that one appears in the binding.
+
+>> +
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            enum:
+>> +              - qcom,qcs8300-gem-noc
+>> +    then:
+>> +      properties:
+>> +        clocks:
+>> +          items:
+>> +            - description: GCC DDRSS GPU AXI clock
+> 
+> and lacks this one
+> 
+> Are there actual reasons for these differences?
+> 
+
+The gem noc QoS interface on QCS8300 requires the DDRSS GPU AXI clock to
+be enabled for QoS register access, so it is listed in the binding. The
+difference is therefore due to SoC level differences.
+
+Thanks,
+Odelu
+
+> Konrad
+
 
