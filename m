@@ -1,59 +1,62 @@
-Return-Path: <linux-pm+bounces-41731-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41730-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UDATNbvIe2n5IQIAu9opvQ
-	(envelope-from <linux-pm+bounces-41731-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 21:53:15 +0100
+	id eCSpBaHIe2n5IQIAu9opvQ
+	(envelope-from <linux-pm+bounces-41730-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 21:52:49 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 812A9B45CF
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 21:53:15 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CBB1B45C8
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 21:52:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2409E3018292
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 20:52:29 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2571130297BD
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 20:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B4A359FA5;
-	Thu, 29 Jan 2026 20:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 762D535A92B;
+	Thu, 29 Jan 2026 20:52:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dfJ3ePgm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Joi/Rwfb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C06326D76;
-	Thu, 29 Jan 2026 20:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C513587BB;
+	Thu, 29 Jan 2026 20:52:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769719947; cv=none; b=XEIVUmZL/loB7Xgop+bafGocOMCx++EVfs05cUcVyKeNBJiCVBiK889Jp+Vy5CEWoz5ndZHsldKojzxua9oMqPnnzFjgD6BMtzYnjfH57ocLXII7z6Aj2pd5NV1E4+eyJCdVvj9itmo3L09qlGjfnBIyghvYEs2MGOmBfAkYNgs=
+	t=1769719944; cv=none; b=qWUlTliu3gx/1eVa88cs7NjqZ9SAZp7FJW1tyad2MCSebDhvRhSOLUScLQWbN0v1LzSVzjDM31bsiV1cX/PfhcueYxQXcUCGGbEmX5ZcicageOlWKrVv1xbELjgvaPcHfSxWMX1+JK9K6QTw+VswOjd//mVNixgmHIUzAEW4qQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769719947; c=relaxed/simple;
-	bh=r4nJmTNffHsty58rfHmKHziy9ddqSa1HeYW12wQ/OBY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pjozznZ7s/MG2MBw0OHBGNcTuuoCAn747BABVW9MFKFwgAB5Vx2tuveHEHlW3cs3LilB1AX0rZ5bM3N+3X7WL7icUoJD6N6tlpZETvu4+TAEYJWy8UFSTRLdo4Ih+RWYr5434KcTRW7xWghWL+9YnqZb6xzoucDaQhPFSdlet0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dfJ3ePgm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96EB5C4CEF7;
-	Thu, 29 Jan 2026 20:52:26 +0000 (UTC)
+	s=arc-20240116; t=1769719944; c=relaxed/simple;
+	bh=/t4zdbI5HR5X97cGbXWP2RIM8+8+6YNuocWktiW/olA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XRyud/1g4eU0BwstzjAAUVBG0mtPnhCZbmfcI6Ya3zctKCHu6sxj5rforciWSAYXCkAbtAT4TQKectLsxYbJ5KLJyS7NlThrUdiRtdK6kHSY8sr+uGtCP6KR5j1/0qFH/D79HZAeg7LUkyubay9Mog3DC2/NQKIZjUYuDnmtQUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Joi/Rwfb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5343C4CEF7;
+	Thu, 29 Jan 2026 20:52:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769719947;
-	bh=r4nJmTNffHsty58rfHmKHziy9ddqSa1HeYW12wQ/OBY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=dfJ3ePgmgFmaFPwl8d8WRen7IWrfxx9ilFjYmRV38yg29OiufSNWgiEJFBGHyDCY9
-	 jfLvgYBXH07dtmupheB5E/wfUB5kf4JdRczsHFCSZJ0c8MT51sw9jncBHvs0pph30N
-	 6OsPno9x0Dhr5nvZzmS4ZUAD3CGDLkhzM0z8l2USjm04Uh+CIGoNqEuwp5GIc/OZSS
-	 YpLPMT/lE6NmKFUTFnaVKjZ/H77UVuEbCRAE33TIrVR+8jR+nmZgpiZfmT/jJeh2zZ
-	 wzwhGkKGK4joZCHa/lgbnaVMT8CyKITHhbIV2dMN06RYKtUmqx6QfMvYwKVwEcetz8
-	 gPr0kl3FJqkSg==
+	s=k20201202; t=1769719943;
+	bh=/t4zdbI5HR5X97cGbXWP2RIM8+8+6YNuocWktiW/olA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Joi/Rwfb188jf22Z1JmTKFFV5w8d/RHwI8T8BlnkbuVFaF+ffe0LMIvOBhN5BTpG2
+	 dDu4FbTMf1FwWgPVQo3SAmxPfVmw7AFWAohOj/W9LBPKSphPE2b+TupjxUP84Wy4RY
+	 9PfFJTXY8eUOQyp3RkIbdVl0Lr30k1xPaWN9cekn/ByMISbC39Xu0A2qP4HHAdWO/9
+	 WEEdrKkKds5Bu+ETjc0hEjX74FfYknwgl9j1FoIjXcoIygszxI/DpD47zr4Rnq/wwE
+	 5Tn5vuYnrN3ntWXrNXZW2PxP09bKfpXoFaGnVm29InfdoPhzqTa6kSaJzxT6ohCxO/
+	 VQsvWL9Xi3M/g==
 From: "Rafael J. Wysocki" <rafael@kernel.org>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
  Christian Loehle <christian.loehle@arm.com>,
  Doug Smythies <dsmythies@telus.net>
 Subject:
- [PATCH v3 0/2] cpuidle: governors: teo: Wakeup events classification change
- and refinement
-Date: Thu, 29 Jan 2026 21:46:34 +0100
-Message-ID: <12846604.O9o76ZdvQC@rafael.j.wysocki>
+ [PATCH v3 1/2] cpuidle: governors: teo: Adjust the classification of wakeup
+ events
+Date: Thu, 29 Jan 2026 21:49:12 +0100
+Message-ID: <5093379.31r3eYUQgx@rafael.j.wysocki>
 Organization: Linux Kernel Development
+In-Reply-To: <12846604.O9o76ZdvQC@rafael.j.wysocki>
+References: <12846604.O9o76ZdvQC@rafael.j.wysocki>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,12 +70,12 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	CTE_CASE(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41731-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41730-lists,linux-pm=lfdr.de];
 	TO_DN_ALL(0.00)[];
 	MIME_TRACE(0.00)[0:+];
 	HAS_ORG_HEADER(0.00)[];
@@ -87,32 +90,116 @@ X-Spamd-Result: default: False [-1.66 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
 	DKIM_TRACE(0.00)[kernel.org:+];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,rafael.j.wysocki:mid]
-X-Rspamd-Queue-Id: 812A9B45CF
+	DBL_BLOCKED_OPENRESOLVER(0.00)[rafael.j.wysocki:mid,intel.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 8CBB1B45C8
 X-Rspamd-Action: no action
 
-Hi All,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This is a new version of
+If differences between target residency values of adjacent idle states
+of a given CPU are relatively large, the corresponding idle state bins
+used by the teo governors are large either and the rule by which hits
+are distinguished from intercepts is inaccurate.
 
-https://lore.kernel.org/linux-pm/12831359.O9o76ZdvQC@rafael.j.wysocki/
+Namely, by that rule, a wakeup event is classified as a hit if the
+sleep length (the time till the closest timer other than the tick)
+and the measured idle duration, adjusted for the entered idle state
+exit latency, fall into the same idle state bin.  However, if that bin
+is large enough, the actual difference between the sleep length and
+the measured idle duration may be significant.  It may in fact be
+significantly greater than the analogous difference for an event where
+the sleep length and the measured idle duration fall into different
+bins.
 
-updating the first patch.  The second one is unchanged.
+For this reason, amend the rule in question with a check that will only
+allow a wakeup event to be counted as a hit if the sleep length is less
+than the "raw" measured idle duration (which means that the wakeup
+appears to have occurred after the anticipated timer event).  Otherwise,
+the event will be counted as an intercept.
 
-Patch [1/2] changes the criteria used for classifying wakeup events as hits
-or intercepts to (hopefully) make the classification work better, especially
-for large state bins.
+Also update the documentation part explaining the difference between
+"hits" and "intercepts" to take the above change into account.
 
-Patch [2/2] refines the idle state lookup based on intercepts to first
-consider the state with the maximum intercepts metric, so that state is
-always taken into consideration.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-Please see the individual patch changelogs for details.
+v2 -> v3:
+   * Use 1/2 of the entered state exit latency instead of a constant
+     margin in the inequality driving the classification (Christian).
+   * Update code comments and the changelog.
 
-Thanks!
+v1.1 -> v2: No changes
+
+v1 -> v1.1
+   * Drop the change in teo_select() along with the corresponding
+     part of the changelog (after receiving testing feedback from
+     Christian)
+
+---
+ drivers/cpuidle/governors/teo.c |   25 ++++++++++++++-----------
+ 1 file changed, 14 insertions(+), 11 deletions(-)
+
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -48,12 +48,11 @@
+  * in accordance with what happened last time.
+  *
+  * The "hits" metric reflects the relative frequency of situations in which the
+- * sleep length and the idle duration measured after CPU wakeup fall into the
+- * same bin (that is, the CPU appears to wake up "on time" relative to the sleep
+- * length).  In turn, the "intercepts" metric reflects the relative frequency of
+- * non-timer wakeup events for which the measured idle duration falls into a bin
+- * that corresponds to an idle state shallower than the one whose bin is fallen
+- * into by the sleep length (these events are also referred to as "intercepts"
++ * sleep length and the idle duration measured after CPU wakeup are close enough
++ * (that is, the CPU appears to wake up "on time" relative to the sleep length).
++ * In turn, the "intercepts" metric reflects the relative frequency of non-timer
++ * wakeup events for which the measured idle duration is significantly different
++ * from the sleep length (these events are also referred to as "intercepts"
+  * below).
+  *
+  * The governor also counts "intercepts" with the measured idle duration below
+@@ -167,6 +166,7 @@ static void teo_decay(unsigned int *metr
+  */
+ static void teo_update(struct cpuidle_driver *drv, struct cpuidle_device *dev)
+ {
++	s64 lat_ns = drv->states[dev->last_state_idx].exit_latency_ns;
+ 	struct teo_cpu *cpu_data = this_cpu_ptr(&teo_cpus);
+ 	int i, idx_timer = 0, idx_duration = 0;
+ 	s64 target_residency_ns, measured_ns;
+@@ -182,8 +182,6 @@ static void teo_update(struct cpuidle_dr
+ 		 */
+ 		measured_ns = S64_MAX;
+ 	} else {
+-		s64 lat_ns = drv->states[dev->last_state_idx].exit_latency_ns;
+-
+ 		measured_ns = dev->last_residency_ns;
+ 		/*
+ 		 * The delay between the wakeup and the first instruction
+@@ -253,12 +251,17 @@ static void teo_update(struct cpuidle_dr
+ 	}
+ 
+ 	/*
+-	 * If the measured idle duration falls into the same bin as the sleep
+-	 * length, this is a "hit", so update the "hits" metric for that bin.
++	 * If the measured idle duration (adjusted for the entered state exit
++	 * latency) falls into the same bin as the sleep length and the latter
++	 * is less than the "raw" measured idle duration (so the wakeup appears
++	 * to have occurred after the anticipated timer event), this is a "hit",
++	 * so update the "hits" metric for that bin.
++	 *
+ 	 * Otherwise, update the "intercepts" metric for the bin fallen into by
+ 	 * the measured idle duration.
+ 	 */
+-	if (idx_timer == idx_duration) {
++	if (idx_timer == idx_duration &&
++	    cpu_data->sleep_length_ns - measured_ns < lat_ns / 2) {
+ 		cpu_data->state_bins[idx_timer].hits += PULSE;
+ 	} else {
+ 		cpu_data->state_bins[idx_duration].intercepts += PULSE;
 
 
 
