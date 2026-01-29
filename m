@@ -1,66 +1,66 @@
-Return-Path: <linux-pm+bounces-41715-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41718-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2LhvGPCoe2m8HgIAu9opvQ
-	(envelope-from <linux-pm+bounces-41715-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 19:37:36 +0100
+	id SOymFV2pe2m8HgIAu9opvQ
+	(envelope-from <linux-pm+bounces-41718-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 19:39:25 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC28AB39F4
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 19:37:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2B12B3A64
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 19:39:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3969E30300E0
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 18:37:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9DE86306CEC2
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 18:37:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 650E02FF66B;
-	Thu, 29 Jan 2026 18:37:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06B9E306496;
+	Thu, 29 Jan 2026 18:37:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GGfpP5aE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NgyQxicY"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC052FD69B;
-	Thu, 29 Jan 2026 18:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61F5A2FF66A;
+	Thu, 29 Jan 2026 18:37:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769711830; cv=none; b=gyAKLAlwdMPlcDcy02hhQps5L+Gpvzu/29oqucFfg+JSVS3t60u41zfjrUx9Y2U4DCWbCHGEl7txqhwf9RtD8uKYpaWv5r6QnOxB55UTaxBRzCkIIPhPR0FwdYOAZSx50g+PMHH58qTEiDnC/WbW2Eshw1I6rbs4KwcDRVDucGU=
+	t=1769711831; cv=none; b=LXvfb/JQ1RlvTEmicr5qfrlRf1V8Fu+x+yZujriYL6V7UwXurSJL8srffp8lhHf5qfhzklGEv99ybMmJBKAjk44FnGiEN1Gt6jurIEgLKfnYyTWnQmmPITp9U58Jw8ORD7PCYEEBhG5zN01mwpoRWkEqb2zppLjkKKZM34Qmp9k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769711830; c=relaxed/simple;
-	bh=RVFZpXwE4vtzMd4GfMWmFSn4TMciv5u0tMiSsfa7AkU=;
+	s=arc-20240116; t=1769711831; c=relaxed/simple;
+	bh=25tXUFVoLOKuOO+G8EUsCAt0s9JS+grpc7Qbd++kaHE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tYVCPHwp5X4Rvh5tduqcrPFUtrqEmJYjvOklLVXj/2jYypszSfEFpjeNsSvX5CMQKbPd/Cw7ea41AaPTdWNS93iWxNiHgKnGy/1FeMCa00RVuPdmP3Lmyqx41doFcfcWxRTfGZTrh1ZAWo/z+ryAa+t8Zm61eOSftKaycGWF+Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GGfpP5aE; arc=none smtp.client-ip=198.175.65.12
+	 MIME-Version; b=b2CGuqPCp3BQCiPr6T5kNx0iMPGrUIYOd193gBx+kKNT3sO640h7UctKKmKXQPjqjz1ivOmp1jQayTElMxwDdrVG8i2SrVGZktHhfYheSD7fK86Rqnh7BcO0ZsY3UzHeT2n9BFfheENblDyPNSwfsgvDqt9ZTfZvn/qWLXWcaiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NgyQxicY; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769711829; x=1801247829;
+  t=1769711830; x=1801247830;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RVFZpXwE4vtzMd4GfMWmFSn4TMciv5u0tMiSsfa7AkU=;
-  b=GGfpP5aEQYYIfA1zS6Zca9Q2VG/aZrgMBziQCaXTrWv7GYtdA3maVTQ4
-   /GLX0gQz4m7/ucI9il+lkpt5lYL+Fg/+0IaNdsLJp7oLrQ4kLDmeSP15U
-   +1f6Yv5ZDFa2/pcUBOKcMOIdfbp/BkWQS6qJNDlrSqrqeucoBjTZXif+E
-   8xXnTH06UxOIzA90ns3gm03S4EubYmRo/sV4/IJ7FqEW+19tAP9nc2vjv
-   5COcl2yEqK4YJWxz90oK/08YQD8rnY0sRMKJcuSG9D/r3TgRaQ2t3eDLE
-   sgxc+SIHesQ9zvdB2i9QCsRti99Kob6H38YbSmECHti9mP57M43Exhqlz
-   g==;
-X-CSE-ConnectionGUID: wujjtVuLQY+mcT5JT/SCjg==
-X-CSE-MsgGUID: WZAUnwdmS96jCZlX+hMt8g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="82388377"
+  bh=25tXUFVoLOKuOO+G8EUsCAt0s9JS+grpc7Qbd++kaHE=;
+  b=NgyQxicY894CfASNliSsRRfbdLUxfFoKA1/mxGz7PMbKxFJJRyfCPOga
+   ZlnIVCyw3iMGI9fEwJ4vxrBwqYfsK9+wtPRSk7BL2qA/Hs889Ad9ivSyR
+   un9p77V9pFoCuhxy25lmTHbYSMHPta7DaRmlBqub2d4PhpegcOlVe8PRf
+   9+IvYNSUsLfbftcwca+vsf/eOusriI6waDsuYLVqyqAdG2ht/T9CVveLJ
+   1XJPZ930E+EjouptJt2wbFcOfn+KOSDaoXBA7IRxXBIJYW6CXnTI5iEMt
+   HWwu28nAI7hcZSDPAc6lZtl3GtqSdndhsleZE3Jrdg5IHdkefJgknEeqe
+   w==;
+X-CSE-ConnectionGUID: /A9NGWNrQQq0Y3jaS6lkIQ==
+X-CSE-MsgGUID: Ce0tpkkgQ4Gz3WGOT1VHKg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="82388383"
 X-IronPort-AV: E=Sophos;i="6.21,261,1763452800"; 
-   d="scan'208";a="82388377"
+   d="scan'208";a="82388383"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
   by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 10:37:08 -0800
-X-CSE-ConnectionGUID: UdOX2cy+TnqpgCjnlT6HsQ==
-X-CSE-MsgGUID: 0YDo8c4MTEi1D0VkkaDwpA==
+X-CSE-ConnectionGUID: icbgyR63SJubtLLmlOk4PA==
+X-CSE-MsgGUID: La9bY5QFQrGNyRx4qEB1XQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,261,1763452800"; 
-   d="scan'208";a="209070977"
+   d="scan'208";a="209070981"
 Received: from skuppusw-desk2.jf.intel.com ([10.165.154.101])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 10:37:07 -0800
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 10:37:08 -0800
 From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>
@@ -69,9 +69,9 @@ Cc: Zhang Rui <rui.zhang@intel.com>,
 	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 7/9] thermal: intel: int340x: processor: Move RAPL defaults to MMIO driver
-Date: Thu, 29 Jan 2026 10:36:44 -0800
-Message-ID: <20260129183646.558866-8-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v1 8/9] powercap: intel_rapl: Register PM notifier only when RAPL package exists
+Date: Thu, 29 Jan 2026 10:36:45 -0800
+Message-ID: <20260129183646.558866-9-sathyanarayanan.kuppuswamy@linux.intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260129183646.558866-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 References: <20260129183646.558866-1-sathyanarayanan.kuppuswamy@linux.intel.com>
@@ -88,13 +88,13 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41715-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41718-lists,linux-pm=lfdr.de];
 	RCVD_COUNT_FIVE(0.00)[5];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
@@ -106,61 +106,200 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	DKIM_TRACE(0.00)[intel.com:+];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email,intel.com:dkim,linux.intel.com:mid]
-X-Rspamd-Queue-Id: DC28AB39F4
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email,intel.com:dkim]
+X-Rspamd-Queue-Id: B2B12B3A64
 X-Rspamd-Action: no action
 
-Previously, the MMIO and MSR RAPL interfaces shared the same set of
-RAPL defaults provided by common code. However, unlike the MSR
-interface, the MMIO RAPL interface does not require CPU-specific
-variations in its default handling. Keeping the RAPL defaults in
-the RAPL common driver therefore provides no additional benefit.
+The PM notifier callbacks are needed only when a valid RAPL package
+device is registered. Register and unregister the PM notifier callbacks
+when a RAPL package device is added or removed.
 
-Move the MMIO defaults into the MMIO interface driver. This change
-includes the following updates:
-
-  * Introduce a MMIO-local rapl_defaults instance with the appropriate
-    default callbacks.
-  * Assign the MMIO-specific rapl_defaults to priv->defaults during
-    MMIO driver initialization.
-
-No functional changes are expected.
+This is a preparatory patch before moving MSR rapl_defaults into the
+MSR RAPL interface driver.
 
 Co-developed-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
- .../intel/int340x_thermal/processor_thermal_rapl.c        | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/powercap/intel_rapl_common.c | 130 +++++++++++++--------------
+ 1 file changed, 64 insertions(+), 66 deletions(-)
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-index e56b18aeda71..5dbeb0a43c8c 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rapl.c
-@@ -19,6 +19,13 @@ static const struct rapl_mmio_regs rapl_mmio_default = {
- 	.limits[RAPL_DOMAIN_DRAM] = BIT(POWER_LIMIT2),
- };
+diff --git a/drivers/powercap/intel_rapl_common.c b/drivers/powercap/intel_rapl_common.c
+index 54d88f1311ed..648bef1d5de1 100644
+--- a/drivers/powercap/intel_rapl_common.c
++++ b/drivers/powercap/intel_rapl_common.c
+@@ -2077,6 +2077,64 @@ void rapl_package_remove_pmu(struct rapl_package *rp)
+ EXPORT_SYMBOL_NS_GPL(rapl_package_remove_pmu, "INTEL_RAPL");
+ #endif
  
-+static const struct rapl_defaults rapl_defaults_mmio = {
-+	.floor_freq_reg_addr = 0,
-+	.check_unit = rapl_default_check_unit,
-+	.set_floor_freq = rapl_default_set_floor_freq,
-+	.compute_time_window = rapl_default_compute_time_window,
++/* pm notifier for saving/restoring Power Limit settings */
++static void power_limit_state_save(void)
++{
++	struct rapl_package *rp;
++	struct rapl_domain *rd;
++	int ret;
++
++	cpus_read_lock();
++	list_for_each_entry(rp, &rapl_packages, plist) {
++		if (!rp->power_zone)
++			continue;
++		rd = power_zone_to_rapl_domain(rp->power_zone);
++		for (int i = POWER_LIMIT1; i < NR_POWER_LIMITS; i++) {
++			ret = rapl_read_pl_data(rd, i, PL_LIMIT, true,
++						&rd->rpl[i].last_power_limit);
++			if (ret)
++				rd->rpl[i].last_power_limit = 0;
++		}
++	}
++	cpus_read_unlock();
++}
++
++static void power_limit_state_restore(void)
++{
++	struct rapl_package *rp;
++	struct rapl_domain *rd;
++
++	cpus_read_lock();
++	list_for_each_entry(rp, &rapl_packages, plist) {
++		if (!rp->power_zone)
++			continue;
++		rd = power_zone_to_rapl_domain(rp->power_zone);
++		for (int i = POWER_LIMIT1; i < NR_POWER_LIMITS; i++)
++			if (rd->rpl[i].last_power_limit)
++				rapl_write_pl_data(rd, i, PL_LIMIT,
++						   rd->rpl[i].last_power_limit);
++	}
++	cpus_read_unlock();
++}
++
++static int rapl_pm_callback(struct notifier_block *nb,
++			    unsigned long mode, void *_unused)
++{
++	switch (mode) {
++	case PM_SUSPEND_PREPARE:
++		power_limit_state_save();
++		break;
++	case PM_POST_SUSPEND:
++		power_limit_state_restore();
++		break;
++	}
++	return NOTIFY_OK;
++}
++
++static struct notifier_block rapl_pm_notifier = {
++	.notifier_call = rapl_pm_callback,
 +};
 +
- static int rapl_mmio_read_raw(int cpu, struct reg_action *ra, bool atomic)
+ /* called from CPU hotplug notifier, hotplug lock held */
+ void rapl_remove_package_cpuslocked(struct rapl_package *rp)
  {
- 	if (!ra->reg.mmio)
-@@ -67,6 +74,7 @@ int proc_thermal_rapl_add(struct pci_dev *pdev, struct proc_thermal_device *proc
+@@ -2106,6 +2164,9 @@ void rapl_remove_package_cpuslocked(struct rapl_package *rp)
+ 				 &rd_package->power_zone);
+ 	list_del(&rp->plist);
+ 	kfree(rp);
++
++	if (list_empty(&rapl_packages))
++		unregister_pm_notifier(&rapl_pm_notifier);
+ }
+ EXPORT_SYMBOL_NS_GPL(rapl_remove_package_cpuslocked, "INTEL_RAPL");
  
- 	rapl_mmio_priv.read_raw = rapl_mmio_read_raw;
- 	rapl_mmio_priv.write_raw = rapl_mmio_write_raw;
-+	rapl_mmio_priv.defaults = &rapl_defaults_mmio;
+@@ -2208,6 +2269,8 @@ struct rapl_package *rapl_add_package_cpuslocked(int id, struct rapl_if_priv *pr
+ 	}
+ 	ret = rapl_package_register_powercap(rp);
+ 	if (!ret) {
++		if (list_empty(&rapl_packages))
++			register_pm_notifier(&rapl_pm_notifier);
+ 		INIT_LIST_HEAD(&rp->plist);
+ 		list_add(&rp->plist, &rapl_packages);
+ 		return rp;
+@@ -2227,64 +2290,6 @@ struct rapl_package *rapl_add_package(int id, struct rapl_if_priv *priv, bool id
+ }
+ EXPORT_SYMBOL_NS_GPL(rapl_add_package, "INTEL_RAPL");
  
- 	rapl_mmio_priv.control_type = powercap_register_control_type(NULL, "intel-rapl-mmio", NULL);
- 	if (IS_ERR(rapl_mmio_priv.control_type)) {
+-static void power_limit_state_save(void)
+-{
+-	struct rapl_package *rp;
+-	struct rapl_domain *rd;
+-	int ret, i;
+-
+-	cpus_read_lock();
+-	list_for_each_entry(rp, &rapl_packages, plist) {
+-		if (!rp->power_zone)
+-			continue;
+-		rd = power_zone_to_rapl_domain(rp->power_zone);
+-		for (i = POWER_LIMIT1; i < NR_POWER_LIMITS; i++) {
+-			ret = rapl_read_pl_data(rd, i, PL_LIMIT, true,
+-						 &rd->rpl[i].last_power_limit);
+-			if (ret)
+-				rd->rpl[i].last_power_limit = 0;
+-		}
+-	}
+-	cpus_read_unlock();
+-}
+-
+-static void power_limit_state_restore(void)
+-{
+-	struct rapl_package *rp;
+-	struct rapl_domain *rd;
+-	int i;
+-
+-	cpus_read_lock();
+-	list_for_each_entry(rp, &rapl_packages, plist) {
+-		if (!rp->power_zone)
+-			continue;
+-		rd = power_zone_to_rapl_domain(rp->power_zone);
+-		for (i = POWER_LIMIT1; i < NR_POWER_LIMITS; i++)
+-			if (rd->rpl[i].last_power_limit)
+-				rapl_write_pl_data(rd, i, PL_LIMIT,
+-					       rd->rpl[i].last_power_limit);
+-	}
+-	cpus_read_unlock();
+-}
+-
+-static int rapl_pm_callback(struct notifier_block *nb,
+-			    unsigned long mode, void *_unused)
+-{
+-	switch (mode) {
+-	case PM_SUSPEND_PREPARE:
+-		power_limit_state_save();
+-		break;
+-	case PM_POST_SUSPEND:
+-		power_limit_state_restore();
+-		break;
+-	}
+-	return NOTIFY_OK;
+-}
+-
+-static struct notifier_block rapl_pm_notifier = {
+-	.notifier_call = rapl_pm_callback,
+-};
+-
+ static struct platform_device *rapl_msr_platdev;
+ 
+ static int __init rapl_init(void)
+@@ -2307,19 +2312,12 @@ static int __init rapl_init(void)
+ 		}
+ 	}
+ 
+-	ret = register_pm_notifier(&rapl_pm_notifier);
+-	if (ret && rapl_msr_platdev) {
+-		platform_device_del(rapl_msr_platdev);
+-		platform_device_put(rapl_msr_platdev);
+-	}
+-
+-	return ret;
++	return 0;
+ }
+ 
+ static void __exit rapl_exit(void)
+ {
+ 	platform_device_unregister(rapl_msr_platdev);
+-	unregister_pm_notifier(&rapl_pm_notifier);
+ }
+ 
+ fs_initcall(rapl_init);
 -- 
 2.43.0
 
