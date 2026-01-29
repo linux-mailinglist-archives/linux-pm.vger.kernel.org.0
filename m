@@ -1,518 +1,329 @@
-Return-Path: <linux-pm+bounces-41734-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41735-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KLdeBDTPe2mdIgIAu9opvQ
-	(envelope-from <linux-pm+bounces-41734-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 22:20:52 +0100
+	id OOeNNBrWe2klIwIAu9opvQ
+	(envelope-from <linux-pm+bounces-41735-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 22:50:18 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B050B48D3
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 22:20:51 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D770B5147
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 22:50:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 08EDB300CC20
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 21:20:48 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id ACF9F3003BD4
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Jan 2026 21:50:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6405F32BF41;
-	Thu, 29 Jan 2026 21:20:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F083366824;
+	Thu, 29 Jan 2026 21:50:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="pwVRwkw+"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="huk3KOUf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011053.outbound.protection.outlook.com [52.101.52.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ABA72C08D1;
-	Thu, 29 Jan 2026 21:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769721646; cv=fail; b=u4N9IBAmM3R1u30HWzNhd37cinS8Y7v3VWqbyd4zbZACQR8Md4l/0yhKRqihIomtJTAITjy2ICyIAYTp1JXuH10VxYEawCPp6l6KL+nhXfP8zGT9D/HaMZUYPzM8RmAng49JsDwZL8OxXmYBDhs/9gWIC/3pH/JmdjoVa/xr5X4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769721646; c=relaxed/simple;
-	bh=Jt1/KA/Lso6C6okFm2OiIigcuYGYEe9S2NJ1yzxx3I0=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Jl0bz+1Q2EXWQXAfWq00/7rMfbXATNW8WPorTUHrFjg4AH23GfxtCaVb34i1TnQAo6p/0mX3gmfo555uduzfdFLCi2tfVHrs+4totak2eD7/kc1nY1TTE+vIX8jPE0ZLdOAefB/vOAwGvZz6nttO+ZTqZi7US004MY/dP/Q+uio=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=pwVRwkw+; arc=fail smtp.client-ip=52.101.52.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=uegHeLHudJjRai9hrrjzwfoMidJsLPFE/g/HIvp0lUiaQL7uQCJM3kYFTXdUVbjBrbxXQKCFdRzNWCAkkgq4lFxOhA+DhqpnYBJRuYs3aQYMBYoPrmHi7vlnFbJ6OdseF/aU2byNCYEuXqw1JQmRAW+6QcfYbFcZlTHWW5YcYjdg3y3TeH0AbQLDMljByBGSXsV26+nk/+S3ZbZK8lof+DUqtOqK3aMhGe++mvKk+uwDzofB/QY2pn27CX2ZhHXnSsLnD8QHbqb8w62iwSM/N0jyxvqfGXM5I3cdhxQqwz6fy8raC7XiHKAxKc34rIisvicALWKS4DlP4qQDu/mH7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FZNS/3lNVpunP88ENs7j7KMDTh4XEuBjlzwIScCZFZA=;
- b=tjvmj5bQT6huaslqnPIDVVeyYPFpNzyd66h66MBamlNH0ahNb7zrDOo/KsHvd5it2cfG6332V4h2hvZKk44QPL6RtjeRLQ68KBBTt3qN652pdxHfD6KS7okQkHyr09UIgoqaeBdKGGBdcQJgDTkKlhGrW+3lT2s8LGhael8GBaMzHvR0L9aJ6EWJlFbIC8gN7mPAnJBFvRKFd49m2YjGtCPP1XHeCvBP9L8U5i3BOCxvdaHRKnY2L0XJdu7TZ6n6yFVXlowKv/eb0HQb1NZKZmB3pzSy59Nlm6UdauQhd045Ggtti6oytnAvxRMeWxQwzPthxpeZj5jPl/Z66FVAew==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FZNS/3lNVpunP88ENs7j7KMDTh4XEuBjlzwIScCZFZA=;
- b=pwVRwkw+3cBWgutP1I97g849Dmfjm5pdOQYP1sfHsCVi5gGL8pCDTpG60HKvhyGxaeYfPhuZcFb6yPYFo1PXxctmt/pXHz8QSThJhC+8nIQGFiKWhY/Je1RGJPPmLMpZ385QCH8hn07npQjZYHLmiZrd1cyPKMa73XhOYwNMm3o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from LV8PR12MB9714.namprd12.prod.outlook.com (2603:10b6:408:2a0::5)
- by CH3PR12MB8511.namprd12.prod.outlook.com (2603:10b6:610:15c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.8; Thu, 29 Jan
- 2026 21:20:40 +0000
-Received: from LV8PR12MB9714.namprd12.prod.outlook.com
- ([fe80::8c9f:3a5b:974b:99c6]) by LV8PR12MB9714.namprd12.prod.outlook.com
- ([fe80::8c9f:3a5b:974b:99c6%6]) with mapi id 15.20.9564.006; Thu, 29 Jan 2026
- 21:20:40 +0000
-Message-ID: <b137dd39-dcf6-4203-adab-8c9ee2b3e6ef@amd.com>
-Date: Thu, 29 Jan 2026 13:20:36 -0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of Soft
- Reserved memory ranges
-To: dan.j.williams@intel.com,
- Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
- linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
- nvdimm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Cc: Ard Biesheuvel <ardb@kernel.org>,
- Alison Schofield <alison.schofield@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>,
- Jonathan Cameron <jonathan.cameron@huawei.com>,
- Yazen Ghannam <yazen.ghannam@amd.com>, Dave Jiang <dave.jiang@intel.com>,
- Davidlohr Bueso <dave@stgolabs.net>, Matthew Wilcox <willy@infradead.org>,
- Jan Kara <jack@suse.cz>, "Rafael J . Wysocki" <rafael@kernel.org>,
- Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>,
- Li Ming <ming.li@zohomail.com>, Jeff Johnson
- <jeff.johnson@oss.qualcomm.com>, Ying Huang <huang.ying.caritas@gmail.com>,
- Yao Xingtao <yaoxt.fnst@fujitsu.com>, Peter Zijlstra <peterz@infradead.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Nathan Fontenot <nathan.fontenot@amd.com>,
- Terry Bowman <terry.bowman@amd.com>, Robert Richter <rrichter@amd.com>,
- Benjamin Cheatham <benjamin.cheatham@amd.com>,
- Zhijian Li <lizhijian@fujitsu.com>, Borislav Petkov <bp@alien8.de>,
- Tomasz Wolski <tomasz.wolski@fujitsu.com>
-References: <20260122045543.218194-1-Smita.KoralahalliChannabasappa@amd.com>
- <20260122045543.218194-7-Smita.KoralahalliChannabasappa@amd.com>
- <697a9d46b147e_309510027@dwillia2-mobl4.notmuch>
-Content-Language: en-US
-From: "Koralahalli Channabasappa, Smita" <skoralah@amd.com>
-In-Reply-To: <697a9d46b147e_309510027@dwillia2-mobl4.notmuch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BY5PR03CA0005.namprd03.prod.outlook.com
- (2603:10b6:a03:1e0::15) To LV8PR12MB9714.namprd12.prod.outlook.com
- (2603:10b6:408:2a0::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6974A36655A
+	for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 21:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769723413; cv=none; b=njzJ+FSFzNAxUKv6x+CXw17RmLyr1BfAYeLs7b8fuLwRSipJJuMH/oYz9azFu6LGtepFT9/x/TmghFOi7EJB/Jq3nGlpzjSc3cuKrUUjSJj/RioxbfhU/GKKVQe/kQ1l0APrK7bL1FqRRiMH4qye5ddj12q5j0FM1OivD0E3Y8w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769723413; c=relaxed/simple;
+	bh=cd9mN9FTxtobZucZUadzh1p8mFgy/n/xbH66wjlpJfg=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=r8CB4Juzbm7WXCDSkiyFHDJa2QCxY8KmM29BH9jKXGTPbGdbymZvfEVzm31VMQTFPV1rxrkG+ZSPMAXVyJ4SMLuZC3eP41yqi6hKAi3pitghZ9XL5cgMXTOq5NmRNylpu0vgwgeIepWVbHqOSyWoIiVDhNwXnzIGrTJRUVaozr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=huk3KOUf; arc=none smtp.client-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-2b704f08e73so883818eec.1
+        for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 13:50:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769723410; x=1770328210; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=fnFZtFlF7N4pN1jjAdwC3X0D7hes9W8LIgmymlTg2eQ=;
+        b=huk3KOUfDbcdpXfAWGGv6beIQ5dOPJY5+TBosOp8hreoJpMmGitXBTi0K+iE+xx3dT
+         tqovgNb85G6lpxL9BquSaCZx6MY2l0exNt5rOYkPq0S2JqTAUTEGoIkOcJR0619gqnHw
+         jcV1iJbccxtSUadRbk9hYXvXuiCeOdHlQK2X2HZn7n5vTDwKrI6kWbnoFeLvnYcwIHO3
+         31co32Hx6oDMTGxVu/gtQpGNh3I2XesVspNq3Rl54pUYDiotrJDqeL+yGROPkpSVeUJz
+         AnEDcoAWBODIGChlmVXblU9sO/0aZ5hQ368ECHUMSOumGXXoC22g/KfZ3hIGa9WnVH3P
+         QyeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769723410; x=1770328210;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fnFZtFlF7N4pN1jjAdwC3X0D7hes9W8LIgmymlTg2eQ=;
+        b=sDWaPHdyUhWlgCuS78qhascSFfZNyYt+6b2tz+SVMbGeqWPVayrjkOM77l4ufpc7at
+         1feagO9mhq7gktkWWYM9HrUvy+zKWlHjDVr+1XbgJ5SMKvsVQgNQV/zPKlfAURtzdJgM
+         VMrfrBkafkGJp1aBnkQdt6BjM5iZEMFZBw/+fLEK6FTzYdzqqqE55Ht5p+t9tJnlvZmT
+         PRETioUW36zHSSkc7bVb1/PBAG9VtfzRv9qff9PTkNuUqvJbiHALq2rOQmQQHWjca7gu
+         xs0bFkBQKfnEDgAfNfV8Bon57ZA+Jike5du4uLOnHHPkKyMi4LNRBhx3Z+SiB6RzccWz
+         cEzg==
+X-Forwarded-Encrypted: i=1; AJvYcCW0NSlbzS7DL/IXige52fhQHfrNHi6K4pIHjElEeBD+sl2a9nFd50jTbTKDVaIFe9EE8AihcAMWqA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNMLgWXSOu0fUAjsvU99nPFuivg4XJ0xGkm5tIrswJY3qctNHs
+	zuwpqZ37g7RCNQ1mWhTH2g0KoLPIxxyxNIgjtCoIrCdy1uyShqXg7PScEAiNgx+0RA==
+X-Gm-Gg: AZuq6aIxwVZ3tGwfUL/IctFya9Na8lEU5/JmbypL1IWLRZsksqxz+2afDwlwhktSnwt
+	LkSfmKqiiclnsiPG1mFFdrEpfn49QnaV/iIAgJrNIey7xG0BK1z5WteumvzCkpyujDTRJiTXe7Y
+	Ff+F7qxM2EqKeZTs17/8QrRUcFTQTe4q40RcII7GjE2hhXrYqNoHnSLu/fXRKZOyP2iIhyeWcz0
+	EkYATRsW5xJ7SPFh1cm1uHqHF8D956ZU3JTDvKoXfPc5cwkFuO3PlhELm0HFSVEGcNHKcYx2FW9
+	n+1mJr868Ve94MbVoPd2GSPtlGigtVbxglqdLmemPim7BwKjxc0de1/LLgns0ACWEbwg/hU948U
+	dCJqb6EHcbN2IWIbFAuXpdLp+j60j+Go0auBROxwaV7P7OJnxSBnYgJfsAHYa0bGnTgNalgqT/T
+	LDltqCPgsfyhWlsa4jCUy3bbE0gC3GNf1jI18xWEwzLqSvqBaWE/KHjqXqTkqUesS5+0qDYJVHX
+	0gfEhZNBfPslg==
+X-Received: by 2002:a05:7301:678d:b0:2ae:5022:fe7c with SMTP id 5a478bee46e88-2b7b178aae9mr2039688eec.1.1769723410111;
+        Thu, 29 Jan 2026 13:50:10 -0800 (PST)
+Received: from ?IPV6:2a00:79e0:2e7c:8:2ca3:c2a2:3ff7:e16e? ([2a00:79e0:2e7c:8:2ca3:c2a2:3ff7:e16e])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a1abedcasm8528777eec.21.2026.01.29.13.50.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jan 2026 13:50:09 -0800 (PST)
+Message-ID: <b6cccee7-1acb-49ab-8970-a828aa86f056@google.com>
+Date: Thu, 29 Jan 2026 13:50:07 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9714:EE_|CH3PR12MB8511:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2a781872-6735-432a-36a6-08de5f7c40f6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Q3FTUjdnc1JHWFN4Y05CbHcwdVpwRGM1N1hzWWJldnB0aXcyYUM4cjBwVmlW?=
- =?utf-8?B?UWpkYUFHQkJ4OUZoN0NUNXFXZGRYdHNtT0VoZlhtRXVheGFKSlRRSytyN1FC?=
- =?utf-8?B?ZnZRb1ZLSjlmTVBOWkJtcEN0dFlRd2JYc1g4bHEyQ2NnNTd5b3ZVZWhxZWRm?=
- =?utf-8?B?bkdUbFgvc3ZYeFdIY1Fud1h1eGI2ajJ1RFkwcm91SWVrc2JlbDZZTzBvemo2?=
- =?utf-8?B?ZmpKRld3dFF3VEZYRWNRVmpMV2VIam82ZmM4b1lYN1grbmJrb245dmY4S0c5?=
- =?utf-8?B?NnY5UnlVRjRubUFVRWdKNmlaWUdxbDA0Y2RNZVgwMjFOWVZSeE1OaGVJdVNm?=
- =?utf-8?B?ZXBwdy9Yc3RoSnNWNFFDTTNwTi9xWlhrelJBYW9TZjFZVlQ5NHhLYUFkUU1U?=
- =?utf-8?B?UlFUZ3JDMnlsc0FKWmQ4eG9GVDVBT1pOZENraTE4SWM5a1ordFNENTFVcUh6?=
- =?utf-8?B?RFJ0Ylk2ZmxwNlRLbytPOEY0cGJrNlBHd01oQlZpVEdEV1E1Z1lDUUV2TGo0?=
- =?utf-8?B?dWdJUHhrRzVSVjBlZWdvMlA0NFlOWmhpcDFmdUZlQjNwd2daY0FwQ2dva05y?=
- =?utf-8?B?SFE0elZqUE80cHB3SGtXbmVzOGFlRVZnTDFZTEdiT2NxOGhjNFl2ZGI5Vy9t?=
- =?utf-8?B?ZUNEUFZPaE9uSitqZmZSZGZKWm81aHh1Y25FYmJBa2FUZll3Uk1jdUJndHV2?=
- =?utf-8?B?Q3N3NWpDNXYyeUtSY2plYXpFcEVuYlFyVlFTZmJBcFl3Yi9OSFlUSk5QQURG?=
- =?utf-8?B?dG40TFljZXR6WktteUVjY1l5NHhYWGJnYmZpR04rWlp5R1crM3JkdzQwdlc1?=
- =?utf-8?B?RTB2ZWtxODExaXN1dzhTRTVSV1VCb0xrVkRsUFByaU41MjBqQ1YydUMwMitk?=
- =?utf-8?B?elBmQTJ6cGhCbkpaTWVLS0xDWXUzU21laXRmUGVhNWc4dDIyRjZOWGxJdkQv?=
- =?utf-8?B?KzRQeDl6M3RDcitQVExLSkRENWt4WFJqbWVRS1BEMFd3SEl1dUVlWnZrYzVX?=
- =?utf-8?B?d0dDeU1RMmVrc3NEZ0VkaWhjbzNrSjY5a3laV3pXeml4djVudTRIeHJUbW5i?=
- =?utf-8?B?dDhpUzVUc1VyRHFFdmZKSmU5ay9xM29IcDhya1BOYTgrbldVeTI4akVEYno3?=
- =?utf-8?B?djNYMHd4Wk9Yb3ZqSk1Ed01QbU1QWXR6S3Q4MXRxaU1Tc3kxYW9ZazF5VTRW?=
- =?utf-8?B?MGRlcnJhcUJFMVo1UmNLdkJTRHNXb0trdlhpb2dOWXByR3hZalFKKzF1cFRD?=
- =?utf-8?B?cEIwelBWWlJCMmpVbWkvNTJMT0JUaFhPa2pPK3NUYVJoSVIwci9WYXdPZkh4?=
- =?utf-8?B?VVBXV1Vtd1FZazQxOTAzMStQMUhYd1VVOTZtS1BiRE1WN295VkpuNnhLTXgw?=
- =?utf-8?B?SGcxWWdwMlBMRjYya0dhNW9OUFN0czF1R09ZdDh2VzJUbU1pMHpyRGc3TU1k?=
- =?utf-8?B?QlJQa1d3QUx2dk4ycWZ2bElBNUhsUUROaTduSkRQenR1bVVLT2xhUDFVT3Z2?=
- =?utf-8?B?bnpsWElvMEttYlBpU1lORGtUTjJqMWlzMXlOa25lN21LckcvKytIS0hNZDF0?=
- =?utf-8?B?TkNPZ0NrdHNwTzdaaDlnZUlyVkVoYXh3dng2aS9ZT1pQcmpkNnpXRmh1cVVO?=
- =?utf-8?B?Nno2YTNCcWN1Y2llTThvdnBvYzBkdGl5cUdiaGRKOWNGQU1rUWlid1IyOTdz?=
- =?utf-8?B?c0h6UHpXNmllaDdQSWJaT2pMYUNPU0tXUi9idkgxY21jQlNmdTQzZUc4Ulp2?=
- =?utf-8?B?aEo4dzlueXA4RUF4YmVScThqSEhDOFI2d254NnJBTzF4YmJZMU1sVU41a1Nx?=
- =?utf-8?B?Q084S3d5dlhnQ1dMNUxSc2NITERWeFFmRGVYNjd0RFExalhzQ212RW1jVHY0?=
- =?utf-8?B?RU9iN1ZadHZkbkh0b3dRVGpPdzBhNDJLaEhrdTJzWFdBSDBvMTJxcWZnalN1?=
- =?utf-8?B?QytlK0dHdHVJa1FKVXQxZktmSmUrVVZLUGNUWnppbTcrOUVoQ3d2eGdRVW1M?=
- =?utf-8?B?MnI3UmNucmpGeE91cytEMFBKTWtMVnNLRVdMeGx3ZXR6b3E4LzZUbEJKclhi?=
- =?utf-8?B?SklmbHJ1WSt1OXFMT1JPTGthTXRqOU56VVpNVWNlRG9wRzhIR3lqeHVFbFJZ?=
- =?utf-8?Q?GrhI=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9714.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZGd0a1N6ZkxZSFliZFp6YzJOWThBMXVBZTFCd3U0NVlFeFJkS2IxTnNXbHBm?=
- =?utf-8?B?c1Q1MjZCWTdJenJMakxCTmRjanZrWGZqTHVNNkpvYzg5TTRzc09FNVQxd0xT?=
- =?utf-8?B?N3ZGbzNwZi9jbGptUVdMOEVUdzVjRFllT0dIZ0dYcGF0MzhjeFN4ekpCL01p?=
- =?utf-8?B?cUgxY0pqRUYrcHdIUFJOazVRSUpIWGRYV3B5cEtmZ29pRnJ1aEs2Yk54bXlr?=
- =?utf-8?B?M094SnlkTWZmVHJaYlFpVXhodHRvK2M0OFVuQnRNd3JNYUtSZU1wWnJnQUVP?=
- =?utf-8?B?K0g4VlI2OWNoNk5VUktTUzJQdWxsRlVFeGNUUTh0YVZPUExmdTlIQjhXdzly?=
- =?utf-8?B?Tm5Oa3YzSVdkZHB1OWpMOER3Q0RXWnJXMlQzUGxMcDZHM2lHdFFPTWpnOVlH?=
- =?utf-8?B?M3hEQkw0UzJFcXNjNVVCSmdMT21SMVVFUVpuODZkL056ZXptaWx1M0taRmlF?=
- =?utf-8?B?emhhcktML2J0K0hPakc1TmtpSVpYN2NRTGFIYVY3eHFhOEk3aGY5V0Zac2NL?=
- =?utf-8?B?dnNFdkpUVTh4YzNWMXBUL1pRZmw0UUlucjFiMFhSN3RzcUpEenp3MlJlM3F3?=
- =?utf-8?B?R1Q2ajkxRkcrL0lUVmRQTXdSaTg1MThKWDVwN2JKWktGanI0bnpiRzRjanVY?=
- =?utf-8?B?a3NQdHRyWDBFUzc2RkZ2d2FPbjNLSVdmd05LUTc2YVNkNjdqZUZRamhBbStV?=
- =?utf-8?B?UUJFcFZTK1AvK3NHTUpJV1dDemVxZ2xIZGdkblJxSkVFeHlFQjZNbHNQdTlS?=
- =?utf-8?B?TTJxbld4KzVPRjcrRlV4U0ZEVjhGc0lJVXVLaEpJNWlTbkJnNW82NHBPTDZI?=
- =?utf-8?B?QkJzUW04TUNDNVlwa0tyNlcwR1lmZTJSN2FDOEc1OHdlV1g2TnNzSGR0TTlV?=
- =?utf-8?B?c0JjRHlYYVRTUUJBQ1MwMkJDbU9PcTQwa3gyVE9ldXhzb1A4REpiR3hQM3Fo?=
- =?utf-8?B?WC9DMHlZRk8xcWRydW1yNlRsYVc5bmlUbnFtUnpjSHU4b2pKZlRrQmd2TUZh?=
- =?utf-8?B?bzZrUTBsN2hvNGhLbEtUWndXejZtbldQbk5UT2NTZWtrV09GK0prcG1oeE45?=
- =?utf-8?B?ZGpTd2lLZ1owN3RuTE01ZGRaZ3FMdDhEUlBzK00yS3U2VXUxTDRXaGpKakRo?=
- =?utf-8?B?Y0M1dG44Q2EzSGN1alh2eXJkR2o0NjdBcTA5UXdqTWNsRk1iZzJLcW5WTE83?=
- =?utf-8?B?c3R4OTlTWHhrRlMyKytxREljWHE5RS9GZ0d1dVExVlYrNVBaMmp5aHQyYmNs?=
- =?utf-8?B?S2FnSFk5MXFBbzVZclE4eW9HUVJXWmtBVGVWT3RqVDVFQ1V5MjYvc3BUS2xm?=
- =?utf-8?B?OXprcXJtR0VJRWdxRExqVjA2ckFXYkd6L0F4NmZWQ0JvVk9WVUh4MnZjVDRp?=
- =?utf-8?B?cmtJdmZhREt0bzdOTTdDUVg5SFljRlYzb2VPeFI3cFNxZGNVN1ZkQVNsam9n?=
- =?utf-8?B?ZU5zU3lXZmNhSnBKakF6d0I0Y3hYVmt2OVorUlZsTHl1dXJVRGEwb242T2dD?=
- =?utf-8?B?aWZSbWNScTRvL0RVT093eGIyWDRPcURKdzc1OVFQSDlROWE4NFdnYU5wbm1O?=
- =?utf-8?B?cExlVTJlOTFsQ01KaHBmWkoyanpqZzQ4UFFmZEI4eHR1RUlaOUdsYldMTGxT?=
- =?utf-8?B?VXJ0WWxxL1hiWkU0TDl1RW9KeUZqWkVUVTlYTCs5ZnpxeUxQSmZGOGs5emRq?=
- =?utf-8?B?d2ZyT2Jqb2dUUkxranptRW9pSlRER1FqY0xwRWJRV3NJamkyVnhxTUFGbk9u?=
- =?utf-8?B?MngwaWdLbEN1NU52UmlhblJJWEc3ZllQemx0OG5SOFV1ck1ROE1PTFVmYklJ?=
- =?utf-8?B?T2I0N0o3bFU2NUc1ckI2TWNWUHRqbFF0dGkxN1d5cGs2YmlVY1ZQaTBvVVEv?=
- =?utf-8?B?RU1IWTBqdm80S2JxZ0JESUxQd0hPa09kalR1a2FZemYrTFE3NENnTnVwWElo?=
- =?utf-8?B?MnF1TmIwRitpVVpDbG0xdVJSMEd2Sy9tZkdLc3U0R0hIRXE2Vjd3UU9Fc0ZU?=
- =?utf-8?B?QUs4NERxbFpEcDUzcGJvYzU0WDNjMkRXMzgvNFAwYXNqb3Flb1o3MW5XbzhX?=
- =?utf-8?B?QTlncHpRemhicWFZS0p6K0t0MzhmcGFvdDhldTJ3Um9rVnlnS2NGbWk0UDZ1?=
- =?utf-8?B?M0ZiTU96Y1JTZzMxYm1ybFYrRlpxbk5wSm0rcjRLK04rQ3dHWU16ZHVDRDYw?=
- =?utf-8?B?U3paRGlxY3p4dCtBSjBuRFFoMU9lV0paeGZlTzlIa0xoNkNwaThBYkJjdzY2?=
- =?utf-8?B?bUU4MFg3WCs5NkVaNkhNd0x6T25KK1VOdEpRWU1kR1dzakN1VjlQSzl2SnlD?=
- =?utf-8?B?dlhueXdUeGNSWjNyemdwenpmOTA3SG5ZeHZ3UmsvMHovZ0cyMXVNUT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a781872-6735-432a-36a6-08de5f7c40f6
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9714.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2026 21:20:40.4722
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: s6YE2M5Ttcr3EiTrFVXZC8OQqnVbKDLSB7V/yi3bJuUWoePWg1gmqci2rbL5jz8y7mxl5WLbBQWntnvkPmTc+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8511
+User-Agent: Mozilla Thunderbird
+From: Amit Sunil Dhamne <amitsd@google.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: connector: extend ports property to
+ model power connections
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Badhri Jagan Sridharan <badhri@google.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@kernel.org>, Kyle Tso <kyletso@google.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ "rdbabiera@google.com" <rdbabiera@google.com>
+References: <20250507-batt_ops-v2-0-8d06130bffe6@google.com>
+ <20250507-batt_ops-v2-1-8d06130bffe6@google.com>
+ <20250514194249.GA2881453-robh@kernel.org>
+ <b4a22161-8cab-4d76-a4b0-4bfd0d79cdc1@google.com>
+ <z2wrzts6cgunxs5tc764izvrfi4i2d637zpt6tj5f4piry6j66@cke2yxhih6dg>
+Content-Language: en-US
+In-Reply-To: <z2wrzts6cgunxs5tc764izvrfi4i2d637zpt6tj5f4piry6j66@cke2yxhih6dg>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[amd.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[amd.com:s=selector1];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[google.com,reject];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_DKIM_ALLOW(-0.20)[google.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[33];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41734-lists,linux-pm=lfdr.de];
-	FREEMAIL_CC(0.00)[kernel.org,intel.com,huawei.com,amd.com,stgolabs.net,infradead.org,suse.cz,zohomail.com,oss.qualcomm.com,gmail.com,fujitsu.com,linuxfoundation.org,alien8.de];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41735-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[google.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[skoralah@amd.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[amd.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm];
+	FROM_NEQ_ENVFROM(0.00)[amitsd@google.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,intel.com:email]
-X-Rspamd-Queue-Id: 5B050B48D3
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,0.0.0.0:email]
+X-Rspamd-Queue-Id: 0D770B5147
 X-Rspamd-Action: no action
 
-Hi Dan,
+Hi Sebastian,
 
-On 1/28/2026 3:35 PM, dan.j.williams@intel.com wrote:
-> Smita Koralahalli wrote:
->> The current probe time ownership check for Soft Reserved memory based
->> solely on CXL window intersection is insufficient. dax_hmem probing is not
->> always guaranteed to run after CXL enumeration and region assembly, which
->> can lead to incorrect ownership decisions before the CXL stack has
->> finished publishing windows and assembling committed regions.
+I hope you're doing well!
+
+On 6/23/25 3:08 PM, Sebastian Reichel wrote:
+> Hi,
+>
+> On Tue, May 20, 2025 at 01:10:25PM -0700, Amit Sunil Dhamne wrote:
+>> Hi Rob,
 >>
->> Introduce deferred ownership handling for Soft Reserved ranges that
->> intersect CXL windows at probe time by scheduling deferred work from
->> dax_hmem and waiting for the CXL stack to complete enumeration and region
->> assembly before deciding ownership.
+>> Thanks for your response!
 >>
->> Evaluate ownership of Soft Reserved ranges based on CXL region
->> containment.
+>> On 5/14/25 12:42 PM, Rob Herring wrote:
+>>> On Wed, May 07, 2025 at 06:00:22PM -0700, Amit Sunil Dhamne wrote:
+>>>> Extend ports property to model power lines going between connector to
+>>>> charger or battery/batteries. As an example, connector VBUS can supply
+>>>> power in & out of the battery for a DRP.
+>>>>
+>>>> Additionally, add ports property to maxim,max33359 controller example.
+>>>>
+>>>> Signed-off-by: Amit Sunil Dhamne<amitsd@google.com>
+>>>> ---
+>>>>   .../bindings/connector/usb-connector.yaml          | 20 +++++++++++------
+>>>>   .../devicetree/bindings/usb/maxim,max33359.yaml    | 25 ++++++++++++++++++++++
+>>>>   2 files changed, 38 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>>>> index 11e40d225b9f3a0d0aeea7bf764f1c00a719d615..706094f890026d324e6ece8b0c1e831d04d51eb7 100644
+>>>> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>>>> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+>>>> @@ -181,16 +181,16 @@ properties:
+>>>>   
+>>>>     port:
+>>>>       $ref: /schemas/graph.yaml#/properties/port
+>>>> -    description: OF graph bindings modeling a data bus to the connector, e.g.
+>>>> -      there is a single High Speed (HS) port present in this connector. If there
+>>>> -      is more than one bus (several port, with 'reg' property), they can be grouped
+>>>> -      under 'ports'.
+>>>> +    description: OF graph binding to model a logical connection between a device
+>>>> +      and connector. This connection may represent a data bus or power line. For
+>>>> +      e.g. a High Speed (HS) data port present in this connector or VBUS line.
+>>>> +      If there is more than one connection (several port, with 'reg' property),
+>>>> +      they can be grouped under 'ports'.
+>>> 'port' and 'port@0' are equivalent. So you can't be changing its
+>>> definition.
+>> Noted!
 >>
->>     - If all Soft Reserved ranges are fully contained within committed CXL
->>       regions, DROP handling Soft Reserved ranges from dax_hmem and allow
->>       dax_cxl to bind.
 >>
->>     - If any Soft Reserved range is not fully claimed by committed CXL
->>       region, tear down all CXL regions and REGISTER the Soft Reserved
->>       ranges with dax_hmem instead.
+>>> I'm not sure showing a power connection with the graph is the right
+>>> approach.
+>> I want to provide some more context and rationale behind using this design.
 >>
->> While ownership resolution is pending, gate dax_cxl probing to avoid
->> binding prematurely.
+>>  From a hardware perspective:
 >>
->> This enforces a strict ownership. Either CXL fully claims the Soft
->> Reserved ranges or it relinquishes it entirely.
+>> The max77759/max33359 IC has Type-C port controller, charger, fuel gauge
+>> (FG) ICs. The Vbus from the connector goes to/from the TCPC and connects
+>> with the charger IP via circuitry & from there on to the battery. The FG
+>> is connected to the battery in parallel. As it can be seen that while
+>> these IPs are interconnected, there's no direct connection of the fuel
+>> gauge & the connector.
 >>
->> Co-developed-by: Dan Williams <dan.j.williams@intel.com>
->> Signed-off-by: Dan Williams <dan.j.williams@intel.com>
->> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
->> ---
->>   drivers/cxl/core/region.c | 25 ++++++++++++
->>   drivers/cxl/cxl.h         |  2 +
->>   drivers/dax/cxl.c         |  9 +++++
->>   drivers/dax/hmem/hmem.c   | 81 ++++++++++++++++++++++++++++++++++++++-
->>   4 files changed, 115 insertions(+), 2 deletions(-)
+>> For this feature, I am interested in getting the reference to the FG. As
+>> per graph description: "...These common bindings do not contain any
+>> information about the direction or type of the connections, they just
+>> map their existence." This works for my case because I just want the
+>> connector to be aware of the Fuel gauge device without imposing a
+>> specific directionality in terms of power supplier/supplied. This is
+>> also the reason why I didn't use
+>> "/schemas/power/supply/power-supply.yaml#power-supplies" binding.
 >>
->> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
->> index 9827a6dd3187..6c22a2d4abbb 100644
->> --- a/drivers/cxl/core/region.c
->> +++ b/drivers/cxl/core/region.c
->> @@ -3875,6 +3875,31 @@ static int cxl_region_debugfs_poison_clear(void *data, u64 offset)
->>   DEFINE_DEBUGFS_ATTRIBUTE(cxl_poison_clear_fops, NULL,
->>   			 cxl_region_debugfs_poison_clear, "%llx\n");
->>   
->> +static int cxl_region_teardown_cb(struct device *dev, void *data)
->> +{
->> +	struct cxl_root_decoder *cxlrd;
->> +	struct cxl_region *cxlr;
->> +	struct cxl_port *port;
->> +
->> +	if (!is_cxl_region(dev))
->> +		return 0;
->> +
->> +	cxlr = to_cxl_region(dev);
->> +
->> +	cxlrd = to_cxl_root_decoder(cxlr->dev.parent);
->> +	port = cxlrd_to_port(cxlrd);
->> +
->> +	devm_release_action(port->uport_dev, unregister_region, cxlr);
->> +
->> +	return 0;
->> +}
->> +
->> +void cxl_region_teardown_all(void)
->> +{
->> +	bus_for_each_dev(&cxl_bus_type, NULL, NULL, cxl_region_teardown_cb);
->> +}
->> +EXPORT_SYMBOL_GPL(cxl_region_teardown_all);
->> +
->>   static int cxl_region_contains_sr_cb(struct device *dev, void *data)
->>   {
->>   	struct resource *res = data;
->> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
->> index b0ff6b65ea0b..1864d35d5f69 100644
->> --- a/drivers/cxl/cxl.h
->> +++ b/drivers/cxl/cxl.h
->> @@ -907,6 +907,7 @@ int cxl_add_to_region(struct cxl_endpoint_decoder *cxled);
->>   struct cxl_dax_region *to_cxl_dax_region(struct device *dev);
->>   u64 cxl_port_get_spa_cache_alias(struct cxl_port *endpoint, u64 spa);
->>   bool cxl_region_contains_soft_reserve(const struct resource *res);
->> +void cxl_region_teardown_all(void);
->>   #else
->>   static inline bool is_cxl_pmem_region(struct device *dev)
->>   {
->> @@ -933,6 +934,7 @@ static inline bool cxl_region_contains_soft_reserve(const struct resource *res)
->>   {
->>   	return false;
->>   }
->> +static inline void cxl_region_teardown_all(void) { }
->>   #endif
->>   
->>   void cxl_endpoint_parse_cdat(struct cxl_port *port);
->> diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
->> index 13cd94d32ff7..b7e90d6dd888 100644
->> --- a/drivers/dax/cxl.c
->> +++ b/drivers/dax/cxl.c
->> @@ -14,6 +14,15 @@ static int cxl_dax_region_probe(struct device *dev)
->>   	struct dax_region *dax_region;
->>   	struct dev_dax_data data;
->>   
->> +	switch (dax_cxl_mode) {
->> +	case DAX_CXL_MODE_DEFER:
->> +		return -EPROBE_DEFER;
-> 
-> So, I think this causes a mess because now you have 2 workqueues (driver
-> core defer-queue and hmem work) competing to disposition this device.
-> What this seems to want is to only run in the post "soft reserve
-> dispositioned" world. Something like (untested!)
-> 
-> diff --git a/drivers/dax/cxl.c b/drivers/dax/cxl.c
-> index 13cd94d32ff7..1162495eb317 100644
-> --- a/drivers/dax/cxl.c
-> +++ b/drivers/dax/cxl.c
-> @@ -14,6 +14,9 @@ static int cxl_dax_region_probe(struct device *dev)
->          struct dax_region *dax_region;
->          struct dev_dax_data data;
->   
-> +       /* Make sure that dax_cxl_mode is stable, only runs once at boot */
-> +       flush_hmem_work();
-> +
->          if (nid == NUMA_NO_NODE)
->                  nid = memory_add_physaddr_to_nid(cxlr_dax->hpa_range.start);
->   
-> @@ -38,6 +41,7 @@ static struct cxl_driver cxl_dax_region_driver = {
->          .id = CXL_DEVICE_DAX_REGION,
->          .drv = {
->                  .suppress_bind_attrs = true,
-> +               .probe_type = PROBE_PREFER_ASYNCHRONOUS,
->          },
->   };
->   
-> ...where that flush_hmem_work() is something provided by
-> drivers/dax/bus.c. The asynchronous probe is to make sure that the wait
-> is always out-of-line of any other synchronous probing.
-> 
-> You could probably drop the work item from being a per hmem_platform
-> drvdata and just make it a singleton work item in bus.c that hmem.c
-> queues and cxl.c flushes.
-> 
-> Probably also need to make sure that hmem_init() always runs before
-> dax_cxl module init with something like this for the built-in case:
-> 
-> diff --git a/drivers/dax/Makefile b/drivers/dax/Makefile
-> index 5ed5c39857c8..70e996bf1526 100644
-> --- a/drivers/dax/Makefile
-> +++ b/drivers/dax/Makefile
-> @@ -1,4 +1,5 @@
->   # SPDX-License-Identifier: GPL-2.0
-> +obj-y += hmem/
->   obj-$(CONFIG_DAX) += dax.o
->   obj-$(CONFIG_DEV_DAX) += device_dax.o
->   obj-$(CONFIG_DEV_DAX_KMEM) += kmem.o
-> @@ -10,5 +11,3 @@ dax-y += bus.o
->   device_dax-y := device.o
->   dax_pmem-y := pmem.o
->   dax_cxl-y := cxl.o
-> -
-> -obj-y += hmem/
-> 
-> [..]
->> +static void process_defer_work(struct work_struct *_work)
->> +{
->> +	struct dax_defer_work *work = container_of(_work, typeof(*work), work);
->> +	struct platform_device *pdev = work->pdev;
->> +	int rc;
->> +
->> +	/* relies on cxl_acpi and cxl_pci having had a chance to load */
->> +	wait_for_device_probe();
->> +
->> +	rc = walk_hmem_resources(&pdev->dev, cxl_contains_soft_reserve);
-> 
-> Like I said before this probably wants to be named something like
-> soft_reserve_has_cxl_match() to make it clear what is happening.
-> 
->> +
->> +	if (!rc) {
->> +		dax_cxl_mode = DAX_CXL_MODE_DROP;
->> +		rc = bus_rescan_devices(&cxl_bus_type);
->> +		if (rc)
->> +			dev_warn(&pdev->dev, "CXL bus rescan failed: %d\n", rc);
->> +	} else {
->> +		dax_cxl_mode = DAX_CXL_MODE_REGISTER;
->> +		cxl_region_teardown_all();
-> 
-> I was thinking through what Alison asked about what to do later in boot
-> when other regions are being dynamically created. It made me wonder if
-> this safety can be achieved more easily by just making sure that the
-> alloc_dax_region() call fails.
+>>> We have a binding for that already with the regulator binding.
+>> I haven't explored the option of using regulator bindings. But in my
+>> case I am interested in fuel gauge and unfortunately, they're modeled as
+>> power_supply devices.
+>  From hardware point of view there is no direct connection at all
+> between the fuel gauge and the connector. The usual hardware
+> connection is
+>
+> connector -> charger -> battery
+>
+> With the charger potentially supporting reverse operation to provide
+> energy from the battery to the connector (with "battery" I assume
+> a "smart" battery, so the raw cells and some kind of fuel gauge).
+>
+> Thus the following example should properly document the hardware
+> connections:
+>
+> ---------------------------------------
+> typec-connector {
+>      /* ... */
+> };
+>
+> charger {
+>      /* ... */
+>      power-supplies = <&connector>;
+> };
+>
+> fuel-gauge {
+>      /* ... */
+>      power-supplies = <&charger>;
+> };
+> ---------------------------------------
+>
+> It means instead of the direct graph lookup for the fuel gauge,
+> you would need a function walking through the graph build by the
+> power-supplies phandles. But it also means that the DT properly
+> describes the hardware instead of adding random graph connections.
 
-Agreed with all the points above, including making alloc_dax_region() 
-fail as the safety mechanism. This also cleanly avoids the no Soft 
-Reserved case Alison pointed out, where dax_cxl_mode can remain stuck in 
-DEFER and return -EPROBE_DEFER.
+I would like to revisit this thread.
 
-What I’m still trying to understand is the case of “other regions being 
-dynamically created.” Once HMEM has claimed the relevant HPA range, any 
-later userspace attempts to create regions (via cxl create-region) 
-should naturally fail due to the existing HPA allocation. This already 
-shows up as an HPA allocation failure currently.
+I have tested the hierarchical power-supplies approach you suggested 
+while working with the charger [1] and fuel gauge [2] drivers currently 
+being upstreamed. Unfortunately, this approach introduces two blockers 
+for USB PD compliance (with the first one being the most critical and 
+relevant to bindings):
 
-#cxl create-region -d decoder0.0 -m mem2 -w 1 -g256
-cxl region: create_region: region0: set_size failed: Numerical result 
-out of range
-cxl region: cmd_create_region: created 0 regions
 
-And in the dmesg:
-[  466.819353] alloc_hpa: cxl region0: HPA allocation error (-34) for 
-size:0x0000002000000000 in CXL Window 0 [mem 0x850000000-0x284fffffff 
-flags 0x200]
+Issue #1: Deterministic Probe Ordering and Feature Deferral
+Early in the boot cycle, the TCPM is the first to probe (based on the 
+power-supplies hierarchy). Without a direct phandle in the connector 
+node to the fg devices, the TCPM is "blind" to the system's battery 
+topology. If a power adapter initiates a Battery Status/Battery Caps AMS 
+before the FG driver has registered its power_supply object, the TCPM 
+response indicates no batteries as the TCPM doesn't have a complete view 
+of the FGs in the system at that time.
 
-Also, at this point, with the probe-ordering fixes and the use of 
-wait_for_device_probe(), region probing should have fully completed.
+Issue #2: Violating Sender Response Timeout
+Iteratively traversing the power supply tree to resolve the hierarchy 
+(Connector -> Charger -> FG) is computationally expensive in the context 
+of USB PD. In testing, this traversal frequently exceeds the Sender 
+Response Timeout (27-33 ms). While caching psy references helps 
+subsequent requests, the failure of the initial request triggers a soft 
+reset by the adapter. This results in an inconsistent and unreliable 
+charging experience upon first plug-in.
 
-Am I missing any other scenario where regions could still be created 
-dynamically beyond this?
+While I have thought about how we can mitigate these issues if we still 
+must have to go with the above approach, I strongly believe that TCPM 
+having actual references to the fg/charger phandles seems to be the 
+appropriate way here. Are there alternative methods you would suggest 
+that allow the TCPM to (1) know a priori that an FG device exists to 
+manage deferral, and (2) meet the <30 ms response window without direct 
+phandles?
 
-> 
-> Something like (untested / incomplete, needs cleanup handling!)
-> 
-> diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
-> index fde29e0ad68b..fd18343e0538 100644
-> --- a/drivers/dax/bus.c
-> +++ b/drivers/dax/bus.c
-> @@ -10,6 +10,7 @@
->   #include "dax-private.h"
->   #include "bus.h"
->   
-> +static struct resource dax_regions = DEFINE_RES_MEM_NAMED(0, -1, "DAX Regions");
->   static DEFINE_MUTEX(dax_bus_lock);
->   
->   /*
-> @@ -661,11 +662,7 @@ struct dax_region *alloc_dax_region(struct device *parent, int region_id,
->          dax_region->dev = parent;
->          dax_region->target_node = target_node;
->          ida_init(&dax_region->ida);
-> -       dax_region->res = (struct resource) {
-> -               .start = range->start,
-> -               .end = range->end,
-> -               .flags = IORESOURCE_MEM | flags,
-> -       };
-> +       dax_region->res = __request_region(&dax_regions, range->start, range->end, flags);
->   
->          if (sysfs_create_groups(&parent->kobj, dax_region_attribute_groups)) {
->                  kfree(dax_region);
-> 
-> ...which will result in enforcing only one of dax_hmem or dax_cxl being
-> able to register a dax_region.
-> 
-> Yes, this would leave a mess of disabled cxl_dax_region devices lying
-> around, but it would leave more breadcrumbs for debug, and reduce the
-> number of races you need to worry about.
-> 
-> In other words, I thought total teardown would be simpler, but as the
-> feedback keeps coming in, I think that brings a different set of
-> complexity. So just inject failures for dax_cxl to trip over and then we
-> can go further later to effect total teardown if that proves to not be
-> enough.
 
-One concern with the approach of not tearing down CXL regions is the 
-state it leaves behind in /proc/iomem. Soft Reserved ranges are 
-REGISTERed to HMEM while CXL regions remain present. The resulting 
-nesting (dax under region, region under window and window under SR) 
-visually suggests a coherent CXL hierarchy, even though ownership has 
-effectively moved to HMEM. When users, then attempt to tear regions down 
-and recreate them from userspace, they hit the same HPA allocation 
-failures described above.
+[1]
+https://lore.kernel.org/all/20260121-max77759-charger-v4-0-694234c8ded1@google.com/
 
-If we decide not to tear down regions in the REGISTER case, should we 
-gate decoder resets during user initiated region teardown? Today, 
-decoders are reset when regions are torn down dynamically, and 
-subsequent attempts to recreate regions can trigger a large amount of 
-mailbox traffic. Much of what shows up as repeated “Reading event logs/ 
-Clearing …” messages which ends up interleaved with the HPA allocation 
-failure, which can be confusing.
+[2]
+https://lore.kernel.org/all/20250915-b4-gs101_max77759_fg-v6-0-31d08581500f@uclouvain.be/
 
-Thanks
-Smita
+
+Thanks,
+
+Amit
+
+> Greetings,
+>
+> -- Sebastian
+>
+>>> Perhaps the connector needs to be a supply. It's already using that
+>>> binding in the supplying power to the connector case.
+>> Want to clarify, in this case you mean
+>> /schemas/regulator/regulator.yaml#*-supply$ right?
+>>
+>> Adding to my response above, the reason I don't want to impose a
+>> directionality in terms of supplier/supplied is that in case of USB Dual
+>> Role Port they're dynamic i.e., when USB is source, the power is
+>> supplied out of the battery (battery/FG will be supplier) and in case
+>> USB is sink, battery is supplied power. Whether the connector port is in
+>> source or sink role is determined on a connection to connection basis.
+>> Also, the knowledge of the supply direction is of no consequence for
+>> this feature.
+>>
+>>
+>> Please let me know what you think.
+>>
+>> Thanks,
+>>
+>> Amit
+>>
+>>
+>>> Rob
 
