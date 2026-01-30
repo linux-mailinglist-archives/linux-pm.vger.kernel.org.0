@@ -1,212 +1,228 @@
-Return-Path: <linux-pm+bounces-41750-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41751-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SKsgAOdSfGmwLwIAu9opvQ
-	(envelope-from <linux-pm+bounces-41750-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 07:42:47 +0100
+	id UMuNCxRUfGnTLwIAu9opvQ
+	(envelope-from <linux-pm+bounces-41751-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 07:47:48 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95F76B7ABE
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 07:42:46 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 793C6B7B02
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 07:47:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id D820C30058D5
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 06:42:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 650EE3015857
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 06:47:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0ACF33CE8F;
-	Fri, 30 Jan 2026 06:42:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34691288C25;
+	Fri, 30 Jan 2026 06:47:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Fs68VRF2";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="CiX+GxHn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NSu12NcL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7169B27586C
-	for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 06:42:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD23B227EA8;
+	Fri, 30 Jan 2026 06:47:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769755364; cv=none; b=UwWb8rpDbv94Yh7wltctc6seBUjfvOXlPBQTjV3K8uW7m2kMRcIi7gcjxxESyK/VIsBJ6aXLfzR/+P+iU8bTcdC8IAZD7GNY+mjwNiRqcqYnE3wweXMbVR8dk7olsy7u4xzl67C+7lNGEosuXYenFkeiark2IKJnFD+CrFEyrSE=
+	t=1769755663; cv=none; b=PKCVzrShofKi7COi8k7+QC72mpNelj20zu9YFQQhs0MIVVwUr75EbJdU7mcTF+8gEKmPrwtZYLMNVJa17vRiEY/bY5gXAtb71aU6XXAF3RIMmCWb1zxz8s4cc68NmLiOo+eaQGCyZXeZkmiHT9oqm/40J7xJav7BZWP5/DK5Txg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769755364; c=relaxed/simple;
-	bh=jtw7KOGqnd1x5l3rhpf+dMbdDDnSOzeycNLqpZCEhVI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bJXEGxd9GbRBmesvxcCZ2pd3tvHv2S1Z/ooppH8Vns0RJZ0EpVHvq2ECpeBzBc28WCVMjttPBF2KnxUNQ/g+YcGVa1ebl6DxZ+oYwbBFB2aWjE3IpkzcXtQ4iXEIpWxVliMyT2zt1Z9wOWoMSak8OEReZ0vo1DWuhshqv14FkbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Fs68VRF2; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=CiX+GxHn; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60U3Vms71488312
-	for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 06:42:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	cJ6t4kgrhe1eIPNb8YLYC7/0mcFgobKjT0RiB3Hsnm8=; b=Fs68VRF22CKmiccx
-	FmOmRTIFBnxljUXUSnk3ieaPwfoIXFl1+Hd1gc3S+/mjm139hniRlsz1Hnvijq1R
-	EQtlkSNqnaL4FY54ufY7nf3Xn0ILrHSW8uMwlU+XctZkeoeqZ0klBxPnH48rHykA
-	BiqewU7v5Umm7KL3TlDH6JEX/FAm5kyfU4b1k9lNxvtYf2SXZUBrG6eQTELVpCFI
-	yVkUDY0PxNh3B3OpE+KDmvsr4eS0nI80orvla0zEBVE+0n7KOn9AYQ/FYpqGjYOT
-	DklKDXTRhzivgwbXXhZo3qPl9mfJjs1RHpZ4gHYe+mQ78E5iluQ8lBxN4SCIqceA
-	aWqGsA==
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c0bp3t3y6-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 06:42:42 +0000 (GMT)
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-34c704d5d15so3511412a91.1
-        for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 22:42:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1769755362; x=1770360162; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cJ6t4kgrhe1eIPNb8YLYC7/0mcFgobKjT0RiB3Hsnm8=;
-        b=CiX+GxHnORvNS8Guo5F1IRJneTyoTfW9ugHNFNXCrGIoAjl4N3gLo8jcIqKeWMUzvs
-         tHOdABTE20ZMx72XiBLqJtvDdGHMhqr+EFdDRpzjp5R7CRZMMuzF9Ql0fuNUZxcvQ9FN
-         4WcC1o+ZZMUL40+uztc9ho8vUkmlnD9nqYJa4Jh5mHmAAfSleVBqiaUnrfBkTkkzmUt7
-         8ZcHdZn55oYLXFvcV+KaxtPCKj3Ce1XRzbwR3h3HORdscKFcKGtu+swID8CFHHkfLYWY
-         49Zt/oLywjwMwaxFy8BCnzLjE177LHc3E+N2L/uHc1V+Oh0r4NfZLx65A0GxqWbo7Rqv
-         eSqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769755362; x=1770360162;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cJ6t4kgrhe1eIPNb8YLYC7/0mcFgobKjT0RiB3Hsnm8=;
-        b=K1MtETtKkhdP1s95qFljWTpDM6HOhk/9YL6U9hQZZptCZb4X9FCwzCbeub7xeB3w/V
-         ZrSuKbXKvRykT+9deQUloXl26wd9NaG9eWSIV9H6Wg11S7Ujjvmmnw2ppqem6XDQc0+2
-         2Br8ZDsv7fCkxBNxMT3B4HL4YzI+XePe1RTDEOoonN30RSGL3u/zpGWW+ay5v6HupxFt
-         lcHol6L2wHUP9bM/F9PMkgqj8yQMFyIF5tdRCklHphkKmv8A3kwZXF41qhPnxNfQvgNK
-         KtLNVUP4u+AP9cZf43KJeFRQJYKDLO3ipmAYQcyEjSWyepn3hvQu8TB1NmVRwNbwDXFP
-         l8vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJMyw8T7XMzj+Jy2QPk+UKZB4U0tM0icv4rD2a4U4LgyIY/cYV2EEUhMOLaXniSmxRqMoleM8EsA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbjEHFXYOeMYjtwAZLUfuimGr2aBtCx/R1wqfLIamxjevzvjUg
-	61HOyAWAFu6J+SqgVLgkasm9zloXe7L4d6cfW1NMKh7NsN+Gn0qB+ZETNSy/BZVcxq0y6qBPr0I
-	zhYXibRvgJEL7XiGx4XMqb8XrMIlVhoP0uvF5Y5IJvwVcgIk1rVy1xhCfidryjw==
-X-Gm-Gg: AZuq6aJ2gv034dD96W3R1v70PoZ4l+Xhoo/ycgcgPw6nU/fO3z12zNfeSNs5zZ34maT
-	S4fFQbcNmzBHdMx5t9VMZZjFo8jGZxFuLCKOxUw8iNAu7hR0TWwNfm+3JNlAKe6HQLhIjlQRER/
-	TMIHRua73tva7jMY4KFkg/mC3yPrQKUYZcLoEAHwXLBj1zFGFmUShbZkebK1/I30HH4C5dtQsYI
-	wjRJEwNN7K9WdnPErAn2DOnqrqGxDHz6i1osPZcdrVDwXP6toCgy+ZKZC9YnIGBseaX81RfhOWx
-	8gbTBLRkeOTAliXBtGO9jyaTrgvyCCFwbV46e9/xoBMOxdwvI/NIWhQoZgY2OAtJJRwMbX9AxDk
-	Y9BKml54VPseHZXHPn/GdlEARtl5bjtKsHQvOAKgM
-X-Received: by 2002:a17:90b:1c09:b0:349:2154:eef4 with SMTP id 98e67ed59e1d1-3543b2dc04fmr1791626a91.5.1769755362098;
-        Thu, 29 Jan 2026 22:42:42 -0800 (PST)
-X-Received: by 2002:a17:90b:1c09:b0:349:2154:eef4 with SMTP id 98e67ed59e1d1-3543b2dc04fmr1791592a91.5.1769755361608;
-        Thu, 29 Jan 2026 22:42:41 -0800 (PST)
-Received: from [10.217.199.117] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3540f2cb419sm7086345a91.1.2026.01.29.22.42.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jan 2026 22:42:41 -0800 (PST)
-Message-ID: <07f0515a-8c1a-456a-aaa8-1533717573ab@oss.qualcomm.com>
-Date: Fri, 30 Jan 2026 12:12:35 +0530
+	s=arc-20240116; t=1769755663; c=relaxed/simple;
+	bh=Iv59V8CKc0qtXos8K9LAn+rxLfb+csskkymoBjija0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mKTo+vD8/L0NDn5kL0fBvIz+rSZ6rZAvmGouztjVaewz5bcp0RRqOdlB6RkLrvPrcDCpJWVpFfv6gPPKCH0dI9oQeAHh49f3g3ItG5aJ4GAKI+4KCChstVbnL/wC1g4E1xK17wxwqeSg/1WTJJU/JstX/WaMFAZ72+7TYphbeaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NSu12NcL; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769755662; x=1801291662;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Iv59V8CKc0qtXos8K9LAn+rxLfb+csskkymoBjija0M=;
+  b=NSu12NcL1/vYlnIjTu+B6LxO0gYmroac4Ccsn9ucQNSkWF3hds7FTE5Z
+   JumJ0rVo/s+ukEJM46xkU6W2W5VaFUy9t7PBkkJjUhvFJ/lSmfBT+kv53
+   B699DXMpNdejIYqr9kyKBh6efrQznfPsrbh/Y2YaeRnhlnAs2mFaDuR7g
+   LJ5LkvT3A3u1zr+2tlGSIyKlnZUHC+eNQG8DE1SkHLv6W4YOmDlf7EYiR
+   CT34woRXf/77BpJw6cG9rKGsNswaVzKmNx+jMrdFCs9X1a1SKjNN4rmDx
+   dCYJVrLdo3zkyOl57WU2NsGBtpEK0w5BfVFGZ8vpaKIJjf5Vc5Ea7aq3A
+   w==;
+X-CSE-ConnectionGUID: W8GkgsBeQbySdF6GKDpQDw==
+X-CSE-MsgGUID: W883w8FZQ4SnqnB0Hsj1UQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="81737459"
+X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
+   d="scan'208";a="81737459"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 22:47:41 -0800
+X-CSE-ConnectionGUID: 3L9c0NKCTwiY8cJqLmo1mw==
+X-CSE-MsgGUID: HJLuYA3oScWUn6tZ2Plaxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
+   d="scan'208";a="212861100"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 29 Jan 2026 22:47:36 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vliI1-00000000cHc-3Plc;
+	Fri, 30 Jan 2026 06:47:33 +0000
+Date: Fri, 30 Jan 2026 14:47:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, andersson@kernel.org,
+	mathieu.poirier@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
+	konradybcio@kernel.org, mani@kernel.org, casey.connolly@linaro.org,
+	amit.kucheria@oss.qualcomm.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	gaurav.kohli@oss.qualcomm.com, manaf.pallikunhi@oss.qualcomm.com
+Subject: Re: [PATCH v2 1/8] thermal: Add Remote Proc cooling driver
+Message-ID: <202601301416.z6Jz4P0R-lkp@intel.com>
+References: <20260127155722.2797783-2-gaurav.kohli@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/8] thermal: Add Remote Proc cooling driver
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: andersson@kernel.org, mathieu.poirier@linaro.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, rui.zhang@intel.com,
-        lukasz.luba@arm.com, konradybcio@kernel.org, mani@kernel.org,
-        casey.connolly@linaro.org, amit.kucheria@oss.qualcomm.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        manaf.pallikunhi@oss.qualcomm.com
-References: <20260127155722.2797783-1-gaurav.kohli@oss.qualcomm.com>
- <20260127155722.2797783-2-gaurav.kohli@oss.qualcomm.com>
- <20260128-colorful-caracara-of-persistence-dbfaf2@quoll>
-Content-Language: en-US
-From: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-In-Reply-To: <20260128-colorful-caracara-of-persistence-dbfaf2@quoll>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: roSoYdupZoykOvl7XvcJois7HHCILNUv
-X-Proofpoint-ORIG-GUID: roSoYdupZoykOvl7XvcJois7HHCILNUv
-X-Authority-Analysis: v=2.4 cv=d6T4CBjE c=1 sm=1 tr=0 ts=697c52e2 cx=c_pps
- a=vVfyC5vLCtgYJKYeQD43oA==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=SE6imBzcV5aIF2VMCmAA:9 a=QEXdDO2ut3YA:10
- a=rl5im9kqc5Lf4LNbBjHf:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTMwMDA1MCBTYWx0ZWRfX+9gkslNBgGjE
- GKrmA+Df5s3zZHipwbh5Hyeiw3r/l8rw24Tjw2HZFErEhfmyJaRuygDa8NI1Nbe8xGh6w+FFL9U
- T4HLdtB554TgzgkMIYEuwpYYmiNghXDVMz81XomHZP957NPSui9EEuwJSPwifR8C8QPhoPKEpb7
- gB5040vmvR9v0gprJM9YFnEHyqyTyrEyRQDJhn/INkZRrXvgV4ZDNOkifY9fA9KdmyursvO3WHl
- NamQ1asZapboRa59nb4uwQY+kKkJnUg7rQczPPx7RV3gPjcWwA1WBJkwF+0FVhRasgtfNMJHVNa
- qJPyk2QsO+LwmE1NKL8V0SbC3PB19lo4koz6Qa1wkc/sr7PmfYV7nZ/zH0IpiJXeUy0UPx3dV4a
- BiTtlE46wECguGebXKfgfy882/5Un7crAm3ke4uSVq3O4b21aaHBborhdIY26EUYE7X6RxJQhp2
- 10W8TojQQ4x+hFkvlKg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-29_03,2026-01-29_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0 adultscore=0
- bulkscore=0 malwarescore=0 clxscore=1015 phishscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601300050
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260127155722.2797783-2-gaurav.kohli@oss.qualcomm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-41751-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[20];
 	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41750-lists,linux-pm=lfdr.de];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,oss.qualcomm.com:mid,oss.qualcomm.com:dkim];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[gaurav.kohli@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 95F76B7ABE
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,git-scm.com:url,01.org:url]
+X-Rspamd-Queue-Id: 793C6B7B02
 X-Rspamd-Action: no action
 
+Hi Gaurav,
 
-On 1/28/2026 5:06 PM, Krzysztof Kozlowski wrote:
-> On Tue, Jan 27, 2026 at 09:27:15PM +0530, Gaurav Kohli wrote:
->> +	if (!name || !ops)
->> +		return ERR_PTR(-EINVAL);
->> +
->> +	rproc_cdev = kzalloc(sizeof(*rproc_cdev), GFP_KERNEL);
->> +	if (!rproc_cdev)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	rproc_cdev->ops = ops;
->> +	rproc_cdev->devdata = devdata;
->> +	mutex_init(&rproc_cdev->lock);
->> +
->> +	char *rproc_name __free(kfree) =
->> +		kasprintf(GFP_KERNEL, REMOTEPROC_PREFIX "%s", name);
-> Ah, you keep ignoring review and sending the same buggy code.
->
-> There is no point to spend any time here. It's also fastest way to get
-> your future contributions ignored or NAKed.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on next-20260126]
+[also build test WARNING on v6.19-rc7]
+[cannot apply to robh/for-next rafael-pm/thermal remoteproc/rproc-next linus/master v6.19-rc7 v6.19-rc6 v6.19-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Gaurav-Kohli/thermal-Add-Remote-Proc-cooling-driver/20260128-000753
+base:   next-20260126
+patch link:    https://lore.kernel.org/r/20260127155722.2797783-2-gaurav.kohli%40oss.qualcomm.com
+patch subject: [PATCH v2 1/8] thermal: Add Remote Proc cooling driver
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260130/202601301416.z6Jz4P0R-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601301416.z6Jz4P0R-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601301416.z6Jz4P0R-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/thermal/remoteproc_cooling.c:87:1: warning: no previous prototype for function 'remoteproc_cooling_register' [-Wmissing-prototypes]
+   remoteproc_cooling_register(struct device_node *np,
+   ^
+   drivers/thermal/remoteproc_cooling.c:86:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   struct remoteproc_cdev *
+   ^
+   static 
+>> drivers/thermal/remoteproc_cooling.c:131:6: warning: no previous prototype for function 'remoteproc_cooling_unregister' [-Wmissing-prototypes]
+   void remoteproc_cooling_unregister(struct remoteproc_cdev *rproc_cdev)
+        ^
+   drivers/thermal/remoteproc_cooling.c:131:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void remoteproc_cooling_unregister(struct remoteproc_cdev *rproc_cdev)
+   ^
+   static 
+   2 warnings generated.
 
 
-Apologies for the miss, will make sure not to miss this in future version.
+vim +/remoteproc_cooling_register +87 drivers/thermal/remoteproc_cooling.c
 
+    85	
+    86	struct remoteproc_cdev *
+  > 87	remoteproc_cooling_register(struct device_node *np,
+    88				    const char *name, const struct remoteproc_cooling_ops *ops,
+    89				     void *devdata)
+    90	{
+    91		struct remoteproc_cdev *rproc_cdev;
+    92		struct thermal_cooling_device *cdev;
+    93		int ret;
+    94	
+    95		if (!name || !ops)
+    96			return ERR_PTR(-EINVAL);
+    97	
+    98		rproc_cdev = kzalloc(sizeof(*rproc_cdev), GFP_KERNEL);
+    99		if (!rproc_cdev)
+   100			return ERR_PTR(-ENOMEM);
+   101	
+   102		rproc_cdev->ops = ops;
+   103		rproc_cdev->devdata = devdata;
+   104		mutex_init(&rproc_cdev->lock);
+   105	
+   106		char *rproc_name __free(kfree) =
+   107			kasprintf(GFP_KERNEL, REMOTEPROC_PREFIX "%s", name);
+   108		/* Register with thermal framework */
+   109		if (np)
+   110			cdev = thermal_of_cooling_device_register(np, rproc_name, rproc_cdev,
+   111								  &remoteproc_cooling_ops);
+   112		else
+   113			cdev = thermal_cooling_device_register(rproc_name, rproc_cdev,
+   114							       &remoteproc_cooling_ops);
+   115	
+   116		if (IS_ERR(cdev)) {
+   117			ret = PTR_ERR(cdev);
+   118			goto free_rproc_cdev;
+   119		}
+   120	
+   121		rproc_cdev->cdev = cdev;
+   122	
+   123		return rproc_cdev;
+   124	
+   125	free_rproc_cdev:
+   126		kfree(rproc_cdev);
+   127		return ERR_PTR(ret);
+   128	}
+   129	EXPORT_SYMBOL_GPL(remoteproc_cooling_register);
+   130	
+ > 131	void remoteproc_cooling_unregister(struct remoteproc_cdev *rproc_cdev)
+   132	{
+   133		if (!rproc_cdev)
+   134			return;
+   135	
+   136		thermal_cooling_device_unregister(rproc_cdev->cdev);
+   137		mutex_destroy(&rproc_cdev->lock);
+   138		kfree(rproc_cdev);
+   139	}
+   140	EXPORT_SYMBOL_GPL(remoteproc_cooling_unregister);
+   141	
 
->
-> Well, ignoring review is obviously:
-> NAK
->
-> Best regards,
-> Krzysztof
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
