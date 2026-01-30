@@ -1,117 +1,84 @@
-Return-Path: <linux-pm+bounces-41766-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41767-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UKszDa5zfGmAMwIAu9opvQ
-	(envelope-from <linux-pm+bounces-41766-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 10:02:38 +0100
+	id SOc+I3N0fGmAMwIAu9opvQ
+	(envelope-from <linux-pm+bounces-41767-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 10:05:55 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7F4AB8B0A
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 10:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 00B3CB8B58
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 10:05:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AC18B30166E0
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 09:02:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E81ED3012CB4
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 09:05:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7013F34F48C;
-	Fri, 30 Jan 2026 09:02:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 525A034BA3A;
+	Fri, 30 Jan 2026 09:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Eb9NxTH+";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="G53nNpaT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JZzAkn18"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B492E62A8
-	for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 09:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD712D9EEF;
+	Fri, 30 Jan 2026 09:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769763752; cv=none; b=JqkmX1Fg0eVvH9YkCWMS4uKOOBX+r5qGCcuv7viNqPHrJriLocy6/FCC6E8vUMuPOLHd6yCm5Ta86e73WbAFAOtY4u3wgUCCCiADW71KMHhl4P9qpTCdkHjzWq4hoyjYLwXfZg0dOaPlYLzI0ksFCc38qi4fCZQw+gMaxSgOvqc=
+	t=1769763950; cv=none; b=VB7mKv9FyUPp5bhET5CL4qGGZ0Dm7/3jDAWTWLQVPjfJ2tKSmMJtA13P6R5zckS5Rit03WCbvAv5WAl/u6xhgegmEV64YOSPLJACjN+g3OPtM37T6VZ9eyq2PH0o9whFUNbgrfEwwZ1Lt9Rrw3jUROZK6V7IfvaZdeAIegIS5VI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769763752; c=relaxed/simple;
-	bh=lZiSX+GOYyeK2cTNnF3jCVDKcBgdZYADrsppgbY6DXk=;
+	s=arc-20240116; t=1769763950; c=relaxed/simple;
+	bh=dtsMVpWsRq542qay1TUukXpTY8xACpf3TP/mKsjjC2c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WANHV0P2rA0sNq0f7tSS4ySQBOVGldB0g8cq6QEb6PQigI20klBFi5UpeOcE5jmbOB+GB9aCOl6fOU4Gc5b8Or566Pw5+FoLgk2lygGD+s5WSa9kqWzpc/QSLnWHJwHGG98GnYUq2VceKnz5l387puHCc/2pjDKWFijAS7m7MX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Eb9NxTH+; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=G53nNpaT; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60U3Vlqg1488285
-	for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 09:02:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=FhNCWjY3XGEmd/v1YHMV6HTP
-	pNss/Cza9IpYt0QL/as=; b=Eb9NxTH+6KfJnKF34JJuyKclr4xcsWqZNJKnnZNM
-	NushvzY/rgfDhP+kPT/GPoghIBvjizGIYV68rInCvBm1jFtALiF6uvtVFjUPo8Vt
-	5OUCiE2sgLUkhl414EqCXwiRjLpZ9FujtM8aswkWBlBKE6KdLznn/K7F9jKe6jI6
-	j81lNM1hJrkepcGrWQb4E//RUFJ2y5cRqLj2jJXJHAAec5i97LxaPN4S/YaJ34QY
-	XD7qZi3/8cwbMKdCIssWDLJM4Bz4iZmADgI2NbeAK8+oBkdvPO3Z9pOB7q08m/yE
-	1uc7ALjyNF/t4Vuz1VmxPxZkzHC/KUUBN50JciKgNKUdTw==
-Received: from mail-vs1-f72.google.com (mail-vs1-f72.google.com [209.85.217.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c0bp3thb9-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 09:02:29 +0000 (GMT)
-Received: by mail-vs1-f72.google.com with SMTP id ada2fe7eead31-5f535184cc5so1707854137.1
-        for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 01:02:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1769763748; x=1770368548; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FhNCWjY3XGEmd/v1YHMV6HTPpNss/Cza9IpYt0QL/as=;
-        b=G53nNpaT+0QE5/fvG7uRYWJ967qJvE4dOmCVFEgv0XqnGUHyQRlqEwzW37/0iNw53T
-         7E/UGQhk/pHsvWAkI+8gporBt6nWD+P7fon9WIfnYK3rmvcqf4TnCONN/pmRacJvae/F
-         AXGsemZkwmNjjA9k9Cf81fheFH8tL3avWr8nIOXPwvFFckaBcDlpSLuOa3CjW7xdS8CK
-         fl4ZLni4TcxnBTLWSwZe/I+QHUj6ygKQv1Q8JuZ52mnxYtgKYNd9focZ9NqBY0df3iMz
-         kW1y5VRewShy1dH6YgszAjLyt1Eoffy4bqtcqi6gIQDzqhgkWPupB8T0mHIrifBCwTnl
-         UZLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769763748; x=1770368548;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FhNCWjY3XGEmd/v1YHMV6HTPpNss/Cza9IpYt0QL/as=;
-        b=RUCXg5LQZ9D41EInZm8Nx6pAr4QVlXiNHb5BuP2Oox/s9UEeXsevB5gKtQe/XpR/+o
-         yR5CDkD7agaFBIvhLIV4R9dGhInAT6HZ1beAH9NUl00WT+UFxcwv5uuMkU8hNXlFXFwg
-         BosPTXkEMFM/icozhiPzw+Duef12UFj2OV9mIO3Wfy6jvwHA/Bg6OLHSDo3icoV4W7p0
-         ZajCmG0pXhfkgM+PDebcJ1efODpP/g4yXUCenx9fUt5o+h0chSorplOEywCAxRhJ75pv
-         ll91GSxQfAx7qyqgEgNatCWWC+p2tHcOyaQ54gJojJMbtPZAKsj6qoCmiWIa/cba3kGM
-         8/JA==
-X-Forwarded-Encrypted: i=1; AJvYcCURPfdpmU66QWI+7XkXwBpISqDTJBQ4CnUx+oOIDTsTsX8MIAxX6MErT7QorA8kmuGB8zFLB3swng==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwYzPRN47S1DXFT7L4WnM57L/k2x+2/ZSh3n21GqyhMsA492/Lm
-	PL3rEFBAIdQ4OAr4DdZrpVgicCJQ1tUScwf4eTr0mf+l5Jea+YKssSXw1Ur2Hh9iWROiHlrP2fq
-	v3mUzOOXciciM6/HJsnBycSVv5v296gLmbjfKeOCRIDdHA6vX7emRhSmxZzJGyg==
-X-Gm-Gg: AZuq6aIZunmUdE/82E15eXt6u7gbUon849IlGos61b0q/jJG07jkqxLaTMW+FqC80ho
-	jiQnX4sglOYTikheQUcNV6IeSweSflW11Rp6XxVYqdEiftzba0QennT3EsLDox845PaVCyGr2/B
-	+76tsA8YlsqKcjgsFTMYp72DWylizaIzhAwcNTKVlYiWXZx96Z29eDs0EL1RZtQBW+IIo8syR4+
-	sAr9xeB0rXLGU6TNs56wJte9HMicguR2+NcK+HqmwMl9WQG1tmDcVU3xFm+m0o+hnF14AcrMA+1
-	aiid6gXyK7aaxreEDgW8B6JBRU/nHIRLrYpF/yS1RlGhme0jwpr7+DcjD6Hl41k1Q0YT7WByrJS
-	UmD4Ri4XOsWaFfxk4WVbdL1JwWs29X7saZd/bhuei7Od9Nmg4Gj/O6aObd1VKD6A1dd4PczcV6i
-	YvWnCtGE3OrXp8dJZCUslBzNY=
-X-Received: by 2002:a05:6102:32d3:b0:5f0:2451:5f5 with SMTP id ada2fe7eead31-5f8e245778emr597245137.7.1769763748229;
-        Fri, 30 Jan 2026 01:02:28 -0800 (PST)
-X-Received: by 2002:a05:6102:32d3:b0:5f0:2451:5f5 with SMTP id ada2fe7eead31-5f8e245778emr597237137.7.1769763747798;
-        Fri, 30 Jan 2026 01:02:27 -0800 (PST)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e07481b67sm1645717e87.16.2026.01.30.01.02.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jan 2026 01:02:27 -0800 (PST)
-Date: Fri, 30 Jan 2026 11:02:25 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-Cc: andersson@kernel.org, mathieu.poirier@linaro.org, robh@kernel.org,
-        krzk+dt@kernel.org, conor+dt@kernel.org, rui.zhang@intel.com,
-        lukasz.luba@arm.com, konradybcio@kernel.org, mani@kernel.org,
-        casey.connolly@linaro.org, amit.kucheria@oss.qualcomm.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        manaf.pallikunhi@oss.qualcomm.com
-Subject: Re: [PATCH v2 2/8] dt-bindings: thermal: Add qcom,qmi-cooling yaml
- bindings
-Message-ID: <6zoth72n4pgzmfafv2sqhhsyiqz727t5wnrono4jicvxxhzu4n@bdw5643qieov>
-References: <20260127155722.2797783-1-gaurav.kohli@oss.qualcomm.com>
- <20260127155722.2797783-3-gaurav.kohli@oss.qualcomm.com>
- <k3q5hsdsxhtf2yxibyqzzldhgrbv366n3rd6wdcoju7gcksiu3@uplmllaihm7h>
- <09298c37-4cbf-4486-b720-5e96cc08a1ab@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ene3NtQg2m1CJQ9wuOxtgQby6/rLel5oUT5yKN9IOWhMBkWFQzinLkaSDln5CWwx659YvITWAl1rIGksSx2pm2tqQpbOFkQLNjXakSUG6ZTk3H9GciKF5KfIa7Y/IZmmY5Wss9T+QHQjFyIcmjfNppE1voLRqmUMq99hYOhc2M0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JZzAkn18; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769763949; x=1801299949;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=dtsMVpWsRq542qay1TUukXpTY8xACpf3TP/mKsjjC2c=;
+  b=JZzAkn18L3VZy01hBZZEC6VU3HTp/97iqTVsq8i59lKvpF/IKoMBxz6r
+   3930hJwK4QYQegSmHJLDmXdE0hAwQV35LzIFWK38rgegF0IYMvSfUkyZJ
+   QbsUQEVWk18D1uMV2vqz9G0zSZQ845AZKafWK3dHLTgaLcUcFOBV0HVop
+   XFtmXnWlMhz80YmY8rr72y055dsTob1sUeuAbq4yyJzGyqqs4cG3eCJSZ
+   oa0r2lIy+s8zSgd7/L8+7xZ+cUUasOz0ChoKw7jjhZehELD672kyu6J1v
+   htzFFg7o2VEJAvpM5YLelu4E81xuq3Joblqtpwlms081QaA99X6nqBdAI
+   Q==;
+X-CSE-ConnectionGUID: g9wl5Ee3TpCj3fedh5AIQA==
+X-CSE-MsgGUID: YQt9+7KBSDaGjiQ+kKV59Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="70924156"
+X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
+   d="scan'208";a="70924156"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2026 01:05:49 -0800
+X-CSE-ConnectionGUID: 7d0iVYCgS5ObQ74/XIyVXw==
+X-CSE-MsgGUID: LLGVLAV/RB+K14r2/yDkOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
+   d="scan'208";a="231730996"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 30 Jan 2026 01:05:44 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vlkRh-00000000cQ0-3v84;
+	Fri, 30 Jan 2026 09:05:41 +0000
+Date: Fri, 30 Jan 2026 17:05:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, andersson@kernel.org,
+	mathieu.poirier@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
+	konradybcio@kernel.org, mani@kernel.org, casey.connolly@linaro.org,
+	amit.kucheria@oss.qualcomm.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, gaurav.kohli@oss.qualcomm.com,
+	manaf.pallikunhi@oss.qualcomm.com
+Subject: Re: [PATCH v2 4/8] thermal: qcom: add qmi-cooling driver
+Message-ID: <202601301640.GVrYk2iB-lkp@intel.com>
+References: <20260127155722.2797783-5-gaurav.kohli@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -120,147 +87,151 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <09298c37-4cbf-4486-b720-5e96cc08a1ab@oss.qualcomm.com>
-X-Proofpoint-GUID: Wy178zcSTNbMi4PNtZNMETrdltp_bpk-
-X-Proofpoint-ORIG-GUID: Wy178zcSTNbMi4PNtZNMETrdltp_bpk-
-X-Authority-Analysis: v=2.4 cv=d6T4CBjE c=1 sm=1 tr=0 ts=697c73a5 cx=c_pps
- a=DUEm7b3gzWu7BqY5nP7+9g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=gEfo2CItAAAA:8 a=EUspDBNiAAAA:8 a=je_95Jt8qlmsa4y-PKoA:9 a=CjuIK1q_8ugA:10
- a=-aSRE8QhW-JAV6biHavz:22 a=sptkURWiP4Gy88Gu7hUp:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTMwMDA3MSBTYWx0ZWRfX4OMVtih5+Ok0
- tnkEgrompgThTBzAhB9sof3eJ8IpVFA/Z+irN+eIux3bHZ8R+n+kEoBeuTXqOV8iS9KhJVJF48F
- X45rqq4X1lKzpM+OK4QA+T3yQvXSnT92od2uVd76zgJgpkgbZj4HRFDiy9QbhDMRcevC5/KZXG0
- /2nfs3U3zGdscit9wae7PrJ7+xN1g1adS7/+cEq6qzWoiE/IhY6SclrFaIpKFrFKNXiaqSDhN/4
- Jrdk7G098OBR22WMs1HudXnyBFlaWCp4mPbIyKXZsS/LoiNqE4SatKoYkz2gx+tRrYXLv9kyqPc
- 41qb2+K+zGRjyLgQ36AGN8y8LBTIezvWHgUOyMfzzHtdd/VcWHBYbeLSqZ5kEzlQAHtLls+sOZm
- 6SBFWqmcfCd/XcFH6ryAXApW+kMhnOqdaLvSueoYEB3sRh1mxT6Wj3TRftwObbyH0uDZmpOA5vK
- XtWQlBtDtHEBGc2Mf9Q==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-29_03,2026-01-29_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0 adultscore=0
- bulkscore=0 malwarescore=0 clxscore=1015 phishscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601300071
+In-Reply-To: <20260127155722.2797783-5-gaurav.kohli@oss.qualcomm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41766-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns];
+	TAGGED_FROM(0.00)[bounces-41767-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[19];
 	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dmitry.baryshkov@oss.qualcomm.com,linux-pm@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[intel.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
 	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: E7F4AB8B0A
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,01.org:url,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,git-scm.com:url]
+X-Rspamd-Queue-Id: 00B3CB8B58
 X-Rspamd-Action: no action
 
-On Fri, Jan 30, 2026 at 12:38:52PM +0530, Gaurav Kohli wrote:
-> 
-> On 1/29/2026 6:15 AM, Dmitry Baryshkov wrote:
-> > On Tue, Jan 27, 2026 at 09:27:16PM +0530, Gaurav Kohli wrote:
-> > > The cooling subnode of a remoteproc represents a client of the Thermal
-> > > Mitigation Device QMI service running on it. Each subnode of the cooling
-> > > node represents a single control exposed by the service.
-> > > 
-> > > Signed-off-by: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-> > > ---
-> > >   .../bindings/remoteproc/qcom,pas-common.yaml  |  6 ++
-> > >   .../bindings/thermal/qcom,qmi-cooling.yaml    | 72 +++++++++++++++++++
-> > >   2 files changed, 78 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
-> > > index 68c17bf18987..6a736161d5ae 100644
-> > > --- a/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
-> > > +++ b/Documentation/devicetree/bindings/remoteproc/qcom,pas-common.yaml
-> > > @@ -80,6 +80,12 @@ properties:
-> > >         and devices related to the ADSP.
-> > >       unevaluatedProperties: false
-> > > +  cooling:
-> > > +    $ref: /schemas/thermal/qcom,qmi-cooling.yaml#
-> > > +    description:
-> > > +      Cooling subnode which represents the cooling devices exposed by the Modem.
-> > > +    unevaluatedProperties: false
-> > > +
-> > >   required:
-> > >     - clocks
-> > >     - clock-names
-> > > diff --git a/Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml b/Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
-> > > new file mode 100644
-> > > index 000000000000..0dd3bd84c176
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/thermal/qcom,qmi-cooling.yaml
-> > > @@ -0,0 +1,72 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/thermal/qcom,qmi-cooling.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Qualcomm QMI based thermal mitigation (TMD) cooling devices
-> > > +
-> > > +maintainers:
-> > > +  - Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>
-> > > +
-> > > +description:
-> > > +  Qualcomm QMI-based TMD cooling devices are used to mitigate thermal conditions
-> > > +  across multiple remote subsystems. These devices operate based on junction
-> > > +  temperature sensors (TSENS) associated with thermal zones for each subsystem.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - qcom,qmi-cooling-cdsp
-> > > +      - qcom,qmi-cooling-cdsp1
-> > If I read your schema as you've it written, then ADSP, SLPI and modem
-> > also can have _CDSP_ cooling device. Seems like an overkill.
-> > 
-> > Please take care to describe cooling devices for all DSPs at once and
-> > describe them properly.
-> > 
-> 
-> Thanks for review.
-> 
-> All the target supported in this series are limited to CDSP, so i will
-> update the binding to describe
-> 
-> only the CDSP.
+Hi Gaurav,
 
-Why are you limiting yourself to just CDSP? I don't think there is a
-significant difference between CDSP and other DSPs from the cooling
-point of view.
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on next-20260126]
+[also build test WARNING on v6.19-rc7]
+[cannot apply to robh/for-next rafael-pm/thermal remoteproc/rproc-next linus/master v6.19-rc7 v6.19-rc6 v6.19-rc5]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Gaurav-Kohli/thermal-Add-Remote-Proc-cooling-driver/20260128-000753
+base:   next-20260126
+patch link:    https://lore.kernel.org/r/20260127155722.2797783-5-gaurav.kohli%40oss.qualcomm.com
+patch subject: [PATCH v2 4/8] thermal: qcom: add qmi-cooling driver
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20260130/202601301640.GVrYk2iB-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601301640.GVrYk2iB-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601301640.GVrYk2iB-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/soc/qcom/qmi-cooling.c: In function 'qmi_tmd_alloc_cdevs':
+>> drivers/soc/qcom/qmi-cooling.c:377:29: warning: unused variable 'subnode' [-Wunused-variable]
+     377 |         struct device_node *subnode;
+         |                             ^~~~~~~
+   In file included from drivers/soc/qcom/qmi-cooling.c:24:
+   drivers/soc/qcom/qmi-cooling.h: At top level:
+>> drivers/soc/qcom/qmi-cooling.h:402:35: warning: 'tmd_mitigation_level_report_ind_msg_v01_ei' defined but not used [-Wunused-const-variable=]
+     402 | static const struct qmi_elem_info tmd_mitigation_level_report_ind_msg_v01_ei[] = {
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/soc/qcom/qmi-cooling.h:377:9: warning: 'tmd_deregister_notification_mitigation_level_resp_msg_v01_ei' defined but not used [-Wunused-const-variable=]
+     377 |         tmd_deregister_notification_mitigation_level_resp_msg_v01_ei[] = {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/soc/qcom/qmi-cooling.h:352:9: warning: 'tmd_deregister_notification_mitigation_level_req_msg_v01_ei' defined but not used [-Wunused-const-variable=]
+     352 |         tmd_deregister_notification_mitigation_level_req_msg_v01_ei[] = {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/soc/qcom/qmi-cooling.h:327:9: warning: 'tmd_register_notification_mitigation_level_resp_msg_v01_ei' defined but not used [-Wunused-const-variable=]
+     327 |         tmd_register_notification_mitigation_level_resp_msg_v01_ei[] = {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/soc/qcom/qmi-cooling.h:302:9: warning: 'tmd_register_notification_mitigation_level_req_msg_v01_ei' defined but not used [-Wunused-const-variable=]
+     302 |         tmd_register_notification_mitigation_level_req_msg_v01_ei[] = {
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/soc/qcom/qmi-cooling.h:243:35: warning: 'tmd_get_mitigation_level_resp_msg_ei' defined but not used [-Wunused-const-variable=]
+     243 | static const struct qmi_elem_info tmd_get_mitigation_level_resp_msg_ei[] = {
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/soc/qcom/qmi-cooling.h:216:35: warning: 'tmd_get_mitigation_level_req_msg_v01_ei' defined but not used [-Wunused-const-variable=]
+     216 | static const struct qmi_elem_info tmd_get_mitigation_level_req_msg_v01_ei[] = {
+         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--
+>> Warning: drivers/soc/qcom/qmi-cooling.c:72 struct member 'node' not described in 'qmi_tmd'
+>> Warning: drivers/soc/qcom/qmi-cooling.c:82 expecting prototype for struct qmi_instance_id. Prototype was for struct qmi_instance_data instead
+--
+>> Warning: drivers/soc/qcom/qmi-cooling.c:72 struct member 'node' not described in 'qmi_tmd'
 
 
-BTW: could you please also fix your email editor, it inserts extra
-unneeded newline characters.
+vim +/subnode +377 drivers/soc/qcom/qmi-cooling.c
 
-> 
-> 
+   371	
+   372	/* Parse the controls and allocate a qmi_tmd for each of them */
+   373	static int qmi_tmd_alloc_cdevs(struct qmi_tmd_client *client)
+   374	{
+   375		struct device *dev = client->dev;
+   376		struct device_node *node = dev->of_node;
+ > 377		struct device_node *subnode;
+   378		struct qmi_tmd *tmd;
+   379		int ret;
+   380	
+   381		for_each_available_child_of_node_scoped(node, subnode) {
+   382			const char *name;
+   383	
+   384			tmd = devm_kzalloc(dev, sizeof(*tmd), GFP_KERNEL);
+   385			if (!tmd)
+   386				return dev_err_probe(client->dev, -ENOMEM,
+   387						     "Couldn't allocate tmd\n");
+   388	
+   389			tmd->type = devm_kasprintf(client->dev, GFP_KERNEL, "%s",
+   390						   subnode->name);
+   391			if (!tmd->type)
+   392				return dev_err_probe(dev, -ENOMEM,
+   393						     "Couldn't allocate cooling device name\n");
+   394	
+   395			if (of_property_read_string(subnode, "label", &name))
+   396				return dev_err_probe(client->dev, -EINVAL,
+   397						     "Failed to parse dev name for %s\n",
+   398						     subnode->name);
+   399	
+   400			ret = strscpy(tmd->qmi_name, name,
+   401				      QMI_TMD_MITIGATION_DEV_ID_LENGTH_MAX_V01 + 1);
+   402			if (ret == -E2BIG)
+   403				return dev_err_probe(dev, -EINVAL, "TMD label %s is too long\n",
+   404						     name);
+   405	
+   406			tmd->client = client;
+   407			tmd->np = subnode;
+   408			tmd->cur_state = 0;
+   409			list_add(&tmd->node, &client->cdev_list);
+   410		}
+   411	
+   412		if (list_empty(&client->cdev_list))
+   413			return dev_err_probe(client->dev, -EINVAL,
+   414					     "No cooling devices specified for client %s (%#x)\n",
+   415					     client->name, client->id);
+   416	
+   417		return 0;
+   418	}
+   419	
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
