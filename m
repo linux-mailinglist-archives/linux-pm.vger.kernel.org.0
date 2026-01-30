@@ -1,219 +1,275 @@
-Return-Path: <linux-pm+bounces-41746-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41745-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YJ3HHFtEfGnZLgIAu9opvQ
-	(envelope-from <linux-pm+bounces-41746-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 06:40:43 +0100
+	id mIuyKT5EfGnZLgIAu9opvQ
+	(envelope-from <linux-pm+bounces-41745-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 06:40:14 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id C573DB75D1
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 06:40:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4291FB75B1
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 06:40:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 39C333003725
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 05:40:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AE788301C59D
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 05:40:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B83A437418B;
-	Fri, 30 Jan 2026 05:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26D1937473D;
+	Fri, 30 Jan 2026 05:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TSn+NuRt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WVIw/bUd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 298AC36D4F1;
-	Fri, 30 Jan 2026 05:40:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EF8372B47
+	for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 05:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769751638; cv=none; b=IbHYSQxWTSaDSIOnNH98LI3nAxmmCZ1KZrcXIu6nfmHCMGUtAKed8pjcNChy4Gl/1daFs4AEvVvJZIacDuo88ggNhZ+bmPMfBwjhx6KQzI1u0uW2rpUvivoehVlUB0fgoio588psmum8I72xKkOQbax/zG+cFSkoy26QQMClFV4=
+	t=1769751605; cv=none; b=ay7+le2kq0T4fvKHN4rqn5M9bAi1zZhJWxfuFx3oxO5ky3TP83Qc0WfNEzcfafaCqMTu26hCUz77x3M0IPqHzl0gKE7bS7gE8ruMCoAoJg64SqXn+LVyDeJSGXgfm0eA3eQ7hAX4oAuIoJiPW77Rq7FU/PF0LFeWIsD3TbW6MvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769751638; c=relaxed/simple;
-	bh=O0yrTfM/db7ruCmnkUxHUcsXFLt25Gn8UsW4TJhHR4w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rSQGNFnM3ovYWYfQmQ8sknIZOq1Eda5bwYjFtnzGpaYCT96Desv0ooBxwNRMEQg8FPVEl1PYPfmGvMLkx5/C+9ol10E5+kluYt5yxmQmgGXPldo5QpSBheiJ1AhmITjACeJKNb0N6Xsdl4UzVmgHG6bCN3u1pd57sXpgGicQk5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TSn+NuRt; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769751637; x=1801287637;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O0yrTfM/db7ruCmnkUxHUcsXFLt25Gn8UsW4TJhHR4w=;
-  b=TSn+NuRtw7KmX1SceMaZJyVUlKhfvSv8Ji5D1L6U+oRiUcGB8k34T4Jw
-   Mljv/nQOPnsoavZ1s8l0Si9BoO7LahZGaNsQ5LlfBPMQwHxf66r1zo+7Y
-   NE/Q1BjuRbEfRLywfhQqjOLmk67lv5RJek143Fn+L0oKKL+EC5mTG4NjP
-   eMZCUAqFZWlxx+dGRrBpLjQSCf8yIEBCP/B1kB5cwWxP4qpUG+sRQ5jMr
-   oAzuqmLeO0VyyLXqpRHm6IkjO8cHv3UDS35CIVeCF26K0OwhA5HDrRrLh
-   X/0Ka0BIm5AFLUSWNiS8vboh9v9DiUgXQYE8xM/RVUaaGkVrdc8nNxN+Y
-   w==;
-X-CSE-ConnectionGUID: aX4KMcCwToa4Sk+4Pzc39Q==
-X-CSE-MsgGUID: PVJbhADMSdCDEoSQ+McgKQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="71037445"
-X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="71037445"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 21:40:36 -0800
-X-CSE-ConnectionGUID: zoU1rLYHTa6f8aixvlR8nw==
-X-CSE-MsgGUID: a2vdqcYNQAOq6a4llo9v+w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="213299494"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 29 Jan 2026 21:40:31 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vlhF7-00000000cDg-0npS;
-	Fri, 30 Jan 2026 05:40:29 +0000
-Date: Fri, 30 Jan 2026 13:39:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Gaurav Kohli <gaurav.kohli@oss.qualcomm.com>, andersson@kernel.org,
-	mathieu.poirier@linaro.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
-	konradybcio@kernel.org, mani@kernel.org, casey.connolly@linaro.org,
-	amit.kucheria@oss.qualcomm.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, gaurav.kohli@oss.qualcomm.com,
-	manaf.pallikunhi@oss.qualcomm.com
-Subject: Re: [PATCH v2 1/8] thermal: Add Remote Proc cooling driver
-Message-ID: <202601301354.3ERTn2SC-lkp@intel.com>
-References: <20260127155722.2797783-2-gaurav.kohli@oss.qualcomm.com>
+	s=arc-20240116; t=1769751605; c=relaxed/simple;
+	bh=yIe21WmmCRBGpfamsaPD70rXSAEdEefxukZI/kZ3IRM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OUtnYBpJvMOlbawVZjvbdLSz6Ng/M/7eV+56x2AZCGyYWinBpHb5LCX/2Fg7uHUccODM5p6pr6KI9aocrsV09jO1PTMJGetVzsZCfxbieAjKhQ2AbjZj48VmHY10BKJbJrQCLjhyRc4pkEuFtClkAzgQC/TnTepTT5Pld0XXpmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WVIw/bUd; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-43591b55727so1505856f8f.3
+        for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 21:40:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1769751602; x=1770356402; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nlTV89wrXWzzojHmqRNsNeMryN5g+8W1Ft/Vshjb7sg=;
+        b=WVIw/bUdxqT1oqWpnmRpFYppKxYztU8EyoAnLyfuG7E2LrdIWowtemVyn3USGtFoNA
+         1Im3rDfBYSfmaqgxkXz/j8jJNNaCjQgiZg4r4+1nkAElnOsjE2C6C9bEPCkvKvn7J4hk
+         JrOi5Ryi7oO0v0b4BJ+MROGirLBryQnT0XeuxfxJmGOh2e48fdBhLZesJMUeDgyblY3k
+         khtlZ3Tgdwj3YNpDx1GgyiHU8dB7lxDtvWriSsvyWL4CiE5jdwHHVDzDVFVOLB6YrnYY
+         F3dCQkNDW8iwh6Dd+7i2zvevacV1bOEVKj7/9xfbJKCQS+xNJKAFhIgJNkbJ9q7Ocu2p
+         ezpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769751602; x=1770356402;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nlTV89wrXWzzojHmqRNsNeMryN5g+8W1Ft/Vshjb7sg=;
+        b=f4/qBugkhIV4S2eq0g64OHrvAyjP7lR0fnFxf854P2TDkdfEMbaddo1PQavuQPSQeG
+         jGkEkndQyyFql9uDvcI+I7vPhXDr//9fGn5/lU2UPRKg2UypsuAYmeV1ptCpYw1zukeY
+         laLBMz7G7dch6jy0iQfDH5GfdbhhxP5F7DpQGfu0WpfNbFQyo6LzBJlU2wHK9f/+iXlp
+         FBc4XHRkmv7vwTekTB++7/A/+NyFZ8A+/gmUOaR93H0PJ+v3XHPS6/jyDKY3G/vq5tmd
+         NrP+/5Hb8zJhicIMcYjCPBLDtMslLPxJG2pTAjpuTgQnRlST3o5ioDUHOQE/GCjL4+G/
+         Qbug==
+X-Forwarded-Encrypted: i=1; AJvYcCVy94PGvWSHecjbuC2jXNZMHTwWNG0w2R1sF5X9jKpgLpz/4JNGG4AB+A6U4WPiFGB3C1Kq/tDTnw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMiEsMZJTJAKk7/C7qHIBnX8tfAclwU/gPqWEw2PcBF/K54e/c
+	Tvg2zI5A05YM2/b3NDZxbNuf/z2WuEtMAN/fri94aULGE3D/HQMLeh5QLJrK2s/LAiM=
+X-Gm-Gg: AZuq6aLf00FRF8ctIyHwbJuERHDGUtNWwC2846O2S0OFFdxrm1PgyP2bD3XqnLrFK6+
+	KrmHj2J8QJQNM/W2MnJihv/Cfp0fJF9+uRglPQAKr6EwjHnrrP7ZrlUQpmPwh6d+S8fqhbAs8Vp
+	K3m4viJKzz/eGAls8MF6o28vYw6JLtaJMHqW73iIujJN/1p4F+x9Un5xe2GA1q6oLmxUyfW9mEF
+	ubOaW5jv3H0EguPUpLZaFko6Rx1HyfStgKZfHFRKiVLmYF0V3Hbchmb+mXtG3hviY4btdkIQdv0
+	1lCiWaej+sUFUIaWLJ5JQtjoMxZjfamT2fQ8rWcnMWSIcdzq//gZzfjrJeRiJxqZ4QW78s4wsLX
+	IWKYebCYIwg+J5JPvlObk3L3BDczOjDGyeK/HS2vXwNuaAmPUv1++V43r/ilP48H6lT3+POJKNZ
+	vjxJDecrR9IAcztoTsAw==
+X-Received: by 2002:a05:6000:1a8d:b0:435:b776:304c with SMTP id ffacd0b85a97d-435f3aaa5d0mr2448740f8f.30.1769751601650;
+        Thu, 29 Jan 2026 21:40:01 -0800 (PST)
+Received: from draszik.lan ([212.129.87.248])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10ee040sm19280607f8f.11.2026.01.29.21.39.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Jan 2026 21:40:00 -0800 (PST)
+Message-ID: <74eb8fb542966c46d0a8c77041aeef21dd1a7e14.camel@linaro.org>
+Subject: Re: [PATCH v4 01/10] dt-bindings: soc: google: add
+ google,gs101-dtzpc
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Alim Akhtar
+ <alim.akhtar@samsung.com>,  Conor Dooley <conor+dt@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Ulf Hansson	 <ulf.hansson@linaro.org>, Liam
+ Girdwood <lgirdwood@gmail.com>, Mark Brown	 <broonie@kernel.org>, Peter
+ Griffin <peter.griffin@linaro.org>, Tudor Ambarus	
+ <tudor.ambarus@linaro.org>, Juan Yescas <jyescas@google.com>, Will McVicker
+	 <willmcvicker@google.com>, kernel-team@android.com, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Date: Fri, 30 Jan 2026 05:40:13 +0000
+In-Reply-To: <20260129165531.GA1269692-robh@kernel.org>
+References: <20260128-gs101-pd-v4-0-cbe7bd5a4060@linaro.org>
+	 <20260128-gs101-pd-v4-1-cbe7bd5a4060@linaro.org>
+	 <20260129165531.GA1269692-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-2+build4 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260127155722.2797783-2-gaurav.kohli@oss.qualcomm.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41746-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[19];
 	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	FREEMAIL_CC(0.00)[kernel.org,samsung.com,linaro.org,gmail.com,google.com,android.com,lists.infradead.org,vger.kernel.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41745-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[linaro.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[lkp@intel.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[intel.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,01.org:url,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: C573DB75D1
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_PROHIBIT(0.00)[0.167.255.208:email];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linaro.org:email,linaro.org:dkim,linaro.org:mid,devicetree.org:url]
+X-Rspamd-Queue-Id: 4291FB75B1
 X-Rspamd-Action: no action
 
-Hi Gaurav,
+Hi Rob,
 
-kernel test robot noticed the following build warnings:
+On Thu, 2026-01-29 at 10:55 -0600, Rob Herring wrote:
+> On Wed, Jan 28, 2026 at 04:10:50PM +0000, Andr=C3=A9 Draszik wrote:
+> > The Exynos Distributed TruztZone Protection Control (D_TZPC) provides
+> > an interface to the protection bits that are included in the TrustZone
+> > design in a secure system. It configures each area of the memory as
+> > secure or non-secure.
+>=20
+> This sounds like what access-controllers binding is for. Does that work=
+=20
+> here?
 
-[auto build test WARNING on next-20260126]
-[also build test WARNING on v6.19-rc7]
-[cannot apply to robh/for-next rafael-pm/thermal remoteproc/rproc-next linus/master v6.19-rc7 v6.19-rc6 v6.19-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thank you for the pointer, and yes, I did consider it, but decided against
+it in the end for the following reasons:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Gaurav-Kohli/thermal-Add-Remote-Proc-cooling-driver/20260128-000753
-base:   next-20260126
-patch link:    https://lore.kernel.org/r/20260127155722.2797783-2-gaurav.kohli%40oss.qualcomm.com
-patch subject: [PATCH v2 1/8] thermal: Add Remote Proc cooling driver
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20260130/202601301354.3ERTn2SC-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 15.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601301354.3ERTn2SC-lkp@intel.com/reproduce)
+* downstream drivers don't actually do much with this, it's only used to
+  issue a request to the firmware to save / restore the configuration
+  when power domains are turned off / on (via SMC call). There is no
+  actual configuration happening unlike e.g. the drivers/bus/stm32_*
+  case. Configuration etc. seems to be handled statically in the firmware
+  in my case.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202601301354.3ERTn2SC-lkp@intel.com/
+* therefore I didn't write an actual driver for this compatible and my
+  patches are proposing to simply issue the SMC from the power domain
+  driver in the respective paths.
+  What I observed without having a driver matching the compatible, Linux
+  will defer binding of consumer drivers (power domain via phandle in my
+  case) until the access controller driver has bound. Since no such driver
+  exists in my case, Linux keeps deferring the binding of my power domain
+  driver forever, meaning it doesn't probe.
 
-All warnings (new ones prefixed by >>):
+Maybe this restriction could be loosened for cases like this instead. Or
+maybe I do need to write a dtzpc driver with the only purpose to issue the
+SMC calls at the right time. Having such a driver seemed like overkill,
+though.
 
->> drivers/thermal/remoteproc_cooling.c:87:1: warning: no previous prototype for 'remoteproc_cooling_register' [-Wmissing-prototypes]
-      87 | remoteproc_cooling_register(struct device_node *np,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/thermal/remoteproc_cooling.c:131:6: warning: no previous prototype for 'remoteproc_cooling_unregister' [-Wmissing-prototypes]
-     131 | void remoteproc_cooling_unregister(struct remoteproc_cdev *rproc_cdev)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I realise not using access-controller in DT looks like working-around an
+issue in the kernel, but due to the minimal interaction from the Linux-side
+I was hoping for that to be OK.
+
+What do you think?
 
 
-vim +/remoteproc_cooling_register +87 drivers/thermal/remoteproc_cooling.c
+Cheers,
+Andre'
 
-    85	
-    86	struct remoteproc_cdev *
-  > 87	remoteproc_cooling_register(struct device_node *np,
-    88				    const char *name, const struct remoteproc_cooling_ops *ops,
-    89				     void *devdata)
-    90	{
-    91		struct remoteproc_cdev *rproc_cdev;
-    92		struct thermal_cooling_device *cdev;
-    93		int ret;
-    94	
-    95		if (!name || !ops)
-    96			return ERR_PTR(-EINVAL);
-    97	
-    98		rproc_cdev = kzalloc(sizeof(*rproc_cdev), GFP_KERNEL);
-    99		if (!rproc_cdev)
-   100			return ERR_PTR(-ENOMEM);
-   101	
-   102		rproc_cdev->ops = ops;
-   103		rproc_cdev->devdata = devdata;
-   104		mutex_init(&rproc_cdev->lock);
-   105	
-   106		char *rproc_name __free(kfree) =
-   107			kasprintf(GFP_KERNEL, REMOTEPROC_PREFIX "%s", name);
-   108		/* Register with thermal framework */
-   109		if (np)
-   110			cdev = thermal_of_cooling_device_register(np, rproc_name, rproc_cdev,
-   111								  &remoteproc_cooling_ops);
-   112		else
-   113			cdev = thermal_cooling_device_register(rproc_name, rproc_cdev,
-   114							       &remoteproc_cooling_ops);
-   115	
-   116		if (IS_ERR(cdev)) {
-   117			ret = PTR_ERR(cdev);
-   118			goto free_rproc_cdev;
-   119		}
-   120	
-   121		rproc_cdev->cdev = cdev;
-   122	
-   123		return rproc_cdev;
-   124	
-   125	free_rproc_cdev:
-   126		kfree(rproc_cdev);
-   127		return ERR_PTR(ret);
-   128	}
-   129	EXPORT_SYMBOL_GPL(remoteproc_cooling_register);
-   130	
- > 131	void remoteproc_cooling_unregister(struct remoteproc_cdev *rproc_cdev)
-   132	{
-   133		if (!rproc_cdev)
-   134			return;
-   135	
-   136		thermal_cooling_device_unregister(rproc_cdev->cdev);
-   137		mutex_destroy(&rproc_cdev->lock);
-   138		kfree(rproc_cdev);
-   139	}
-   140	EXPORT_SYMBOL_GPL(remoteproc_cooling_unregister);
-   141	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>=20
+> > Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+> > ---
+> > =C2=A0.../bindings/soc/google/google,gs101-dtzpc.yaml=C2=A0=C2=A0=C2=A0=
+ | 42 ++++++++++++++++++++++
+> > =C2=A0MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 1 +
+> > =C2=A02 files changed, 43 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/soc/google/google,gs101-=
+dtzpc.yaml
+> > b/Documentation/devicetree/bindings/soc/google/google,gs101-dtzpc.yaml
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..a8c61ce069d6910c47753bf=
+14a792eb58e6ae182
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/soc/google/google,gs101-dtzpc.y=
+aml
+> > @@ -0,0 +1,42 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/soc/google/google,gs101-dtzpc.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Samsung Exynos Distributed TruztZone Protection Control.
+> > +
+> > +description:
+> > +=C2=A0 Distributed TrustZone Protection Control (D_TZPC) provides an i=
+nterface to the
+> > +=C2=A0 protection bits that are included in the TrustZone design in a =
+secure system.
+> > +=C2=A0 It configures each area of the memory as secure or non-secure.
+> > +
+> > +maintainers:
+> > +=C2=A0 - Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+> > +
+> > +properties:
+> > +=C2=A0 compatible:
+> > +=C2=A0=C2=A0=C2=A0 const: google,gs101-dtzpc
+> > +
+> > +=C2=A0 clocks:
+> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
+> > +
+> > +=C2=A0 reg:
+> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
+> > +
+> > +required:
+> > +=C2=A0 - compatible
+> > +=C2=A0 - clocks
+> > +=C2=A0 - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +=C2=A0 - |
+> > +=C2=A0=C2=A0=C2=A0 #include <dt-bindings/clock/google,gs101.h>
+> > +
+> > +=C2=A0=C2=A0=C2=A0 dtzpc_hsi0: dtzpc@11010000 {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "google,gs101-dtzpc";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x11010000 0x10000>;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 clocks =3D <&cmu_hsi0 CLK_GOUT_HSI0_D_T=
+ZPC_HSI0_PCLK>;
+> > +=C2=A0=C2=A0=C2=A0 };
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index a56f8f00aebb938aa765a8a6d66dfeb7f062dac8..98b2ef47c809ac0232e6941=
+c9483b19d7c798bb4 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -10833,6 +10833,7 @@ P:	Documentation/process/maintainer-soc-clean-d=
+ts.rst
+> > =C2=A0C:	irc://irc.oftc.net/pixel6-kernel-dev
+> > =C2=A0F:	Documentation/devicetree/bindings/clock/google,gs101-clock.yam=
+l
+> > =C2=A0F:	Documentation/devicetree/bindings/phy/google,lga-usb-phy.yaml
+> > +F:	Documentation/devicetree/bindings/soc/google/google,gs101-dtzpc.yam=
+l
+> > =C2=A0F:	Documentation/devicetree/bindings/soc/google/google,gs101-pmu-=
+intr-gen.yaml
+> > =C2=A0F:	Documentation/devicetree/bindings/usb/google,lga-dwc3.yaml
+> > =C2=A0F:	arch/arm64/boot/dts/exynos/google/
+> >=20
+> > --=20
+> > 2.52.0.457.g6b5491de43-goog
+> >=20
 
