@@ -1,211 +1,238 @@
-Return-Path: <linux-pm+bounces-41755-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41756-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8PC9MxJafGkYMAIAu9opvQ
-	(envelope-from <linux-pm+bounces-41755-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 08:13:22 +0100
+	id sFrgLSBbfGkYMAIAu9opvQ
+	(envelope-from <linux-pm+bounces-41756-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 08:17:52 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58407B7CF9
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 08:13:22 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56385B7D3F
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 08:17:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 030053021E67
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 07:13:06 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id B726D3004D37
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Jan 2026 07:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEDC434DCE0;
-	Fri, 30 Jan 2026 07:13:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD3192D2491;
+	Fri, 30 Jan 2026 07:17:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QBGItkWb"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Ow2eZeOs";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="fW+4/iHf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A392E9EBB
-	for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 07:13:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761EE284898
+	for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 07:17:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769757183; cv=none; b=PHtK4Wa7xnkuIKffo7jy+d5biYMFqe0nPTuSkkpmbNONkMIAOwptvTKgK4y8jjwRfBZc2kka8rj2zfjS8/301IW5Gf0qAJTePv7MCcXb9Wo5iVe8giihDOdpEEJ4JKVIeA9vrQEw4j5FD2zVEYR6tEEsRrSaXv6C7n5pERwrl/4=
+	t=1769757468; cv=none; b=l6ozI02UFb65VCtiP7ZmntYja3+lWCyl1oH0WN6NvCnx4Wl0ykknLdevFkDjYe4rxvMuGw7Uy1SA5rm0XFJfphbHQHa4z4hU9aCqQQyH8u6s1N3K4kMPBmGWTIlX/l3KwszEMdQyqTfgYBppfVXbsddqRIahPgBRKDMKUke2SJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769757183; c=relaxed/simple;
-	bh=vVxHFH6Yc8NWRiRG32Mnm8241KHahA48nTKLUwCZR9w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JtSKr+zyrs1bT25Sn562pY81Gv7FPGO0PEUqlA7QHT5HCvjTk70ctKu7YPhzA7sy5df2Yy8AtrASonI/pcx5Oy92mbYuS1SquoIRNmURgpOlSgP06rJRsJNWieLVv/Pwk6xUh48alrFM+GU0A/SHVQY6SsIhD/i8QlQ6bUSBCEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QBGItkWb; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42fbbc3df8fso1337042f8f.2
-        for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 23:13:00 -0800 (PST)
+	s=arc-20240116; t=1769757468; c=relaxed/simple;
+	bh=kHg979/y4U/HsE5bnhdA8os5YKKrKNoOWwxMR9nynpA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qFjYb0ZFHtD2erwjAku6VRK9I6sur5BzcjRX0jV7oxy3H5GKPDK6UiDOUBzQZZh4KBxMlhzKgS3OgnMqSJ8RaMKsmUye3HJZKnCvyeZVxGU94XvmTh6UPwvSSjVzC5nH/hceDgn0+Bd1+4clYdQQzPxpDU9U/0HJCi7jMsX/qIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Ow2eZeOs; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=fW+4/iHf; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60U7GR3J2413922
+	for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 07:17:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	BMGWf9KMb5syoT8JF8IUAJeZ1ITFz+zESEaYHIpsEGM=; b=Ow2eZeOsbwaRhy8c
+	KrPDrKJa5PjkAirCjN0g8VH/4ZUDSdkgYrXK3RRbdLJzaC5kZ8lCiWwk4ZAp0MUz
+	8o0GQmVLqtWirjouYU6/k9pcJmcmXRiD45pn7vcU3Tpp3Nk1KAjo35hoQdArRktE
+	4WiAS2Yj3LxAKemkUj4+W29ltar19gggcJhBhVIz7FqjXlLuLraP1eP7gwEdxw0p
+	99sN1jDQ6dF/g8RoxQRry9EwiqUTmwD7t+ac1OTK78dI88RKGm32WCLdQUgmSFq6
+	KDJuOAH/BU6nAea4ARzJ/Hrpfa605oujalCvubC2kCHs92TXlJa+rfDVgOifF3ph
+	q7WIfQ==
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c0r41g04b-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 30 Jan 2026 07:17:46 +0000 (GMT)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-29f2381ea85so41745825ad.0
+        for <linux-pm@vger.kernel.org>; Thu, 29 Jan 2026 23:17:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769757179; x=1770361979; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qOWxZQdmNaToaPwUEH1k3Iwm/h1XYwVGWPJU1KGWwqo=;
-        b=QBGItkWbI6HDwaFF8McF008WgMtJIQZJzk41LQxqenxSxlP4cy0MCRaIcy+/vq4PtX
-         nbf7A66rOPLN4PD0j9fUG/iF5Nn/B8Fs2PEwYesh7CHeGKDIB2M4dA9LHBuhURNDGcCb
-         5evE63VGZWDCc5hEQeTYCkuQjhd/e7+5MXW8rHdCjr8jltq3HXECgnCCngQd44RoPIjW
-         XvRPZYl9Q4naSEFHUVRKLmMoL//lwSXbHLo6wmQrVzabmfn/GwnWf4U0qgRAkUVjtk5/
-         RQMZ6Makap6YdiTN0O49cTuOwLD1pTFx9w3j9ICgwVLYk2rNKdX2Gw9FSbddh4zqutmz
-         PbIA==
+        d=oss.qualcomm.com; s=google; t=1769757465; x=1770362265; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BMGWf9KMb5syoT8JF8IUAJeZ1ITFz+zESEaYHIpsEGM=;
+        b=fW+4/iHfBKmy+N2XHMDtC77HJOGQKGZvUmqiamJy3LuNDa/3oRpyRiiwRKghGx5/To
+         V7aowu/GrvYLDlvC/PhAsxyWd7matLPH/I2wH+d914t/U+hXLnzWTIZFOWmiagT2BL/k
+         49vIcTB5duK39PrIHshCXdzPd808+gV6AdcuU/z1cg0r+efSiyreWUm3vucMSKYBZ/FZ
+         zUlso0lpn+kap61kU4Js9cA/8nhPsZTa0CMhoadFj366cdNrY/XVoZPHfuPFlmAnlUq+
+         z/5zW8bMYiyerQVezwCeTmt2QfIxINKb/l8RnNxgsMFnJAA3kPlG3ykUM6FovMCbltIt
+         4eIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769757179; x=1770361979;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qOWxZQdmNaToaPwUEH1k3Iwm/h1XYwVGWPJU1KGWwqo=;
-        b=xPU0IbgtAbACmxD2T058O3o5Q5eQ19zK+Rr250o58d22gjPAvqhP1Ib5d0zvX5Do48
-         4A6p1UTwkdzLQerFuWA7Zse2jC5xJcTiG8AyJgr6wq7ekNpjKTe3OCmO0YO3kahmrbDY
-         6ppuREn8eZZmaOTM5UXKinCoU3LXvsIwdP+XSHZaAvwQM42RK7S+KBjGcv7RJi9zZZOk
-         mky/7EBos7F75znbVWOW0wxD3GJO1X9p5+x6kZvDOvwMnBwe5jQTGeSKdOZY/PwX/4zW
-         g/YpIaRKWaqBsgvwFaejvLp26HSOLoiakAnI3Sy8pNnk9/RnC9+U6jQWZ1dT6tjG+Zb1
-         ywSA==
-X-Forwarded-Encrypted: i=1; AJvYcCX0mxS+Yi/8VA0i0mnE38M4sAeC7ge6UWg0OfJdeZ+owzyiuQUoVgb8G+5Xmdi41Yfr3Ty/WkrJqg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYLY9WVrdx1K8SMc++9Cubg/Hz727aIp9ITP0RMJ18FBLeoCe0
-	cvtV7lQW+e4bS5NAWfDGDE0qHFAZ9bcz9Lf3i4bXJfOpOOs3T7AIizwG
-X-Gm-Gg: AZuq6aJMuUHd5EkNQ8Fk8vqzStWb2noOjftVwDE7d6tvSoZ0Wq652cK+ktWoVHROq0T
-	tmGtLMXsY5iK224PvHm+EgT6KeeynJEoPOXBVFYnZEveGWVldvJkr2VKmigRDQaFYvAWSnjoxMv
-	qjgEQbQ1q7sQhp6+amTMrOaHgdNJ58Yxe2HLgMirqYmPWjOVuSM7uwUUSEp97njY6d9FryDQRsG
-	oa92HsKoPjJ5KQrwBINNZ1iR0aogZUC80ezlxhlqoqeMgh/z7L8Btany/bk18146NLCOu52Mz2w
-	l4hU4qXnPrsk7zTBVMFSoBQurxJgkhtj4PKLFzOCA3p1WcM7CaK4eNGq65kZBKH5bspDknVCYSj
-	AeE8Nmx2iralo4X4fStGdjPaawwNJBTz6lt6VbmjbXbFZg4zuMJ/bkdlsSx/ig1Tn1GZf5kVoj4
-	aPwDN0R+lbyH6nY7kM2UqHc88ppTCv2eVTAlY/xO3ECdRsT6RyR4iKrEumNovElTKqqZSB8o78
-X-Received: by 2002:a05:6000:430e:b0:435:a48a:1239 with SMTP id ffacd0b85a97d-435f3a79d86mr2893572f8f.14.1769757179322;
-        Thu, 29 Jan 2026 23:12:59 -0800 (PST)
-Received: from emanuele-nb.int.toradex.com (93-34-120-147.ip49.fastwebnet.it. [93.34.120.147])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e132368csm18261389f8f.31.2026.01.29.23.12.58
+        d=1e100.net; s=20230601; t=1769757465; x=1770362265;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BMGWf9KMb5syoT8JF8IUAJeZ1ITFz+zESEaYHIpsEGM=;
+        b=f07OrK0halbDbN8NOH2DB8OIxtlLX2vVcOyKK6kn4CKkN/vaewYUQr6iu/xPFH0+br
+         rUlvWE2qehyvUCmHW3RV6HMajaFuTCJV+TbtRkRXFer4WGPnjy3ADOq4g5vksHNRxCdU
+         ag9nTC6wfqT/bPlidsIsoL5S2VpOrgr+Fy1K+NUl0ij/M8Daj7P5hIVdUXX5uGGaiptO
+         gqDStivSMzzxCnGkyrwEGizZ3ijMaLNL4aCNZ/PIQ7UK+0gzvFpor8ppRJUNuOUXVpBX
+         3zLl8Bl6ZBUmPBpZ66XTAiW6OqQq/N5YE549XdVyzFZWnzpa6cPFgvaq9s4Q4wUkE8sz
+         4VAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVM+b6uiDM/LXJ2TbtsE3cvhjeZMQxzeRYRas+LFCifHzC0zBwrm8EOZaPwqVPY5HgRkHVprBD8PA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRd8k5snJ+VaH4SmeM08T1e9CFMr86U0jGNXR7uu5FrnJVPutC
+	eZuZRpT+GbFpLm4WtDzjF1NVSWjvJXQkfvuF3OUqbKd4dD6S/W7apg1r8+s/zQLC8ewUYDYXyES
+	vrI5bJGktglfuwN7vMmPfdCnng7LofWq5Ba44ptvVBpH4n80rJ564qgRuwkrnPA==
+X-Gm-Gg: AZuq6aJIc7cN67i/rjlTyMfHlTMpIjkwI7Vdfv7rOtKuYD6wYT2FcBLXu2+zhu7fqyV
+	jyNBtgLXefLOvzQxwFIhykWraRn5THQ3jKS6EOnPipgoVlYA5WZhKkGuDLpyc0MNST6R81sRFvr
+	wUghA1BvtF7zm2+0WBa7rKSQKrObF2IDcKyEswz2AU7qYgebzEwp3bzxmpCxIiEFPNBhkd0UhqY
+	CKTdhabjeN8lSQMVjp1r5/yskoW/2nhtRkouTBA9kOU56cSaB0RxaF6TMAheckSpgQx/F7eBv5R
+	AeHV1nQHwEvJ0s+24GA6B6IJXTGz2LY1+XZeM0IyMDU0aHLFKd+zhInEDNvJ22A2+AOxAkVmb7A
+	98kFWnFC+/XdDy0dFuEBaCKESdg==
+X-Received: by 2002:a17:902:f605:b0:2a8:ac0f:9aee with SMTP id d9443c01a7336-2a8d993d6e1mr18414345ad.51.1769757463679;
+        Thu, 29 Jan 2026 23:17:43 -0800 (PST)
+X-Received: by 2002:a17:902:f605:b0:2a8:ac0f:9aee with SMTP id d9443c01a7336-2a8d993d6e1mr18413685ad.51.1769757461653;
+        Thu, 29 Jan 2026 23:17:41 -0800 (PST)
+Received: from work ([120.60.134.148])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b414f1esm67645165ad.24.2026.01.29.23.17.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Jan 2026 23:12:58 -0800 (PST)
-From: Emanuele Ghidoli <ghidoliemanuele@gmail.com>
-To: Francesco Dolcini <francesco@dolcini.it>,
-	Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>
-Cc: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v1] power: reset: tdx-ec-poweroff: fix restart
-Date: Fri, 30 Jan 2026 08:11:35 +0100
-Message-ID: <20260130071208.1184239-1-ghidoliemanuele@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Thu, 29 Jan 2026 23:17:41 -0800 (PST)
+Date: Fri, 30 Jan 2026 12:47:36 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>
+Subject: Re: [PATCH] OPP: debugfs: Use performance level to distinguish
+ between rates
+Message-ID: <nbm2hpbh5ejpyig344tlfod7armbavv33u7mwo7ur3nhaarnvl@jkelr2ni4vpy>
+References: <20260129173310.7241-1-manivannan.sadhasivam@oss.qualcomm.com>
+ <caqrguaqd4zvtxscnvptcdevftmml6w4g3xtaypwyzybziv4td@gdofbpdd7b4b>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <caqrguaqd4zvtxscnvptcdevftmml6w4g3xtaypwyzybziv4td@gdofbpdd7b4b>
+X-Proofpoint-GUID: 6tj0BgD8ISGHsrhT8_rlwW48fe3z6z6X
+X-Authority-Analysis: v=2.4 cv=W541lBWk c=1 sm=1 tr=0 ts=697c5b1a cx=c_pps
+ a=cmESyDAEBpBGqyK7t0alAg==:117 a=2V1Ify4SBoSVV1xbfEOURw==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=jYuZTurSy6CcedfpMW0A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=1OuFwYUASf3TG4hYMiVC:22
+X-Proofpoint-ORIG-GUID: 6tj0BgD8ISGHsrhT8_rlwW48fe3z6z6X
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTMwMDA1NSBTYWx0ZWRfXw1CkrZXEehvB
+ MG3TGdC+NbPaTdm2mHuTYLjGsD4bFB4//aKDgOylQ1DwBRvfqQybCklWGoHsPY/qinCYxg0hPfb
+ Xe3wQyE/NJDtWvnUMn8azG29t1da8GK/epj4OFtqRwApRNMg5qOhs+ckh5SzUQEAk8FoADQDA2w
+ YYLHdA9l/TyVyI8LzI9R4CN4GI95CJay+9UtgIBMrrOyCQdWz+sfLX04E6c0u3alDpoG9tOj4qW
+ VhaGdvlQMFI0pr5m/gGYjq3uqi3BEZCXm793a36RsrR53yJ/Ft9qwcJB8Of3pHM8rZSdy30kj4r
+ cJcok9I2g3lgQHhumJ9pkwhCnBK5dXGi3KRVx9i58HbUR9wy2XALQC+e2/rA4/z4Fh0HM+Yl6jP
+ P/lMFV50dss3IrQfRTFEmuORW5yrGc0Alxkm8LdM5F5ZoAeVjziHBsVF9/EmThj4HLztMI+yFBH
+ chW82u0iEPz09RV/PsQ==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-01-29_03,2026-01-29_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0 priorityscore=1501
+ adultscore=0 clxscore=1015 impostorscore=0 phishscore=0 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2601300055
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41755-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ghidoliemanuele@gmail.com,linux-pm@vger.kernel.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41756-lists,linux-pm=lfdr.de];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[qualcomm.com:email,qualcomm.com:dkim,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,oss.qualcomm.com:dkim];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	FROM_NEQ_ENVFROM(0.00)[manivannan.sadhasivam@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,toradex.com:email]
-X-Rspamd-Queue-Id: 58407B7CF9
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: 56385B7D3F
 X-Rspamd-Action: no action
 
-From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+On Fri, Jan 30, 2026 at 12:01:37PM +0530, Viresh Kumar wrote:
+> On 29-01-26, 23:03, Manivannan Sadhasivam wrote:
+> > Some OPP tables have entries with same rate and different performance
+> > level. For these entries, using only the rate as the debugfs directory name
+> > causes below error:
+> > 
+> > debugfs: 'opp:5000000' already exists in 'soc@0-1c00000.pci'
+> > 
+> > Fix it by appending the performance level to the dir name.
+> > 
+> > Reported-by: Bjorn Andersson <andersson@kernel.org>
+> > Closes: https://lore.kernel.org/linux-arm-msm/75lzykd37zdvrks5i2bb4zb2yzjtm25kv3hegmikndkbr772mz@w2ykff3ny45u/
+> > Fixes: 05db35963eef ("OPP: Add support to find OPP for a set of keys")
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > ---
+> >  drivers/opp/debugfs.c | 13 ++++++++-----
+> >  1 file changed, 8 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+> > index 8fc6238b1728..7c912bae2a5a 100644
+> > --- a/drivers/opp/debugfs.c
+> > +++ b/drivers/opp/debugfs.c
+> > @@ -131,21 +131,24 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
+> >  	struct dentry *pdentry = opp_table->dentry;
+> >  	struct dentry *d;
+> >  	unsigned long id;
+> > -	char name[25];	/* 20 chars for 64 bit value + 5 (opp:\0) */
+> > +	char name[36];	/* "opp:"(4) + u64(20) + "-" (1) + u32(10) + NULL(1) */
+> >  
+> >  	/*
+> >  	 * Get directory name for OPP.
+> >  	 *
+> > -	 * - Normally rate is unique to each OPP, use it to get unique opp-name.
+> > +	 * - Normally rate is unique to each OPP, use it to get unique opp-name,
+> > +	 *   together with performance level.
+> >  	 * - For some devices rate isn't available or there are multiple, use
+> >  	 *   index instead for them.
+> >  	 */
+> > -	if (likely(opp_table->clk_count == 1 && opp->rates[0]))
+> > +	if (likely(opp_table->clk_count == 1 && opp->rates[0])) {
+> >  		id = opp->rates[0];
+> > -	else
+> > +		snprintf(name, sizeof(name), "opp:%lu-%u", id, opp->level);
+> 
+> This would be confusing for devices that don't have the level
+> property. Maybe add the second part only if level is used.
+> 
 
-During testing, restart occasionally failed on Toradex modules.
+Yeah. I got to know that the level field as an 'OPP_LEVEL_UNSET' default value.
+So I can use that:
 
-The issue was traced to an interaction between the EC-based reset/poweroff
-handler and the PSCI restart handler. While the embedded controller is
-resetting or powering off the module, the PSCI code may still be invoked,
-triggering an I2C transaction to the PMIC. This can leave the PMIC I2C
-in a frozen state.
++       if (likely(opp_table->clk_count == 1 && opp->rates[0])) {
++               if (opp->level == OPP_LEVEL_UNSET)
++                       snprintf(name, sizeof(name), "opp:%lu", opp->rates[0]);
++               else
++                       snprintf(name, sizeof(name), "opp:%lu-%u", opp->rates[0], opp->level);
++       } else {
++               snprintf(name, sizeof(name), "opp:%u", _get_opp_count(opp_table));
++       }
 
-Add a delay after issuing the EC reset or power-off command to give the
-controller time to complete the operation and avoid falling back to another
-restart/poweroff provider.
+- Mani
 
-Also print an error message if sending the command to the embedded controller
-fails.
-
-Fixes: 18672fe12367 ("power: reset: add Toradex Embedded Controller")
-Cc: stable@vger.kernel.org
-Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
----
- drivers/power/reset/tdx-ec-poweroff.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/drivers/power/reset/tdx-ec-poweroff.c b/drivers/power/reset/tdx-ec-poweroff.c
-index 3302a127fce5..8040aa03d74d 100644
---- a/drivers/power/reset/tdx-ec-poweroff.c
-+++ b/drivers/power/reset/tdx-ec-poweroff.c
-@@ -8,7 +8,10 @@
-  */
- 
- #include <linux/array_size.h>
-+#include <linux/bug.h>
-+#include <linux/delay.h>
- #include <linux/device.h>
-+#include <linux/dev_printk.h>
- #include <linux/err.h>
- #include <linux/i2c.h>
- #include <linux/mod_devicetable.h>
-@@ -31,6 +34,8 @@
- 
- #define EC_REG_MAX                      0xD0
- 
-+#define EC_CMD_TIMEOUT_MS             	1000
-+
- static const struct regmap_range volatile_ranges[] = {
- 	regmap_reg_range(EC_CMD_REG, EC_CMD_REG),
- };
-@@ -75,6 +80,13 @@ static int tdx_ec_power_off(struct sys_off_data *data)
- 
- 	err = tdx_ec_cmd(regmap, EC_CMD_POWEROFF);
- 
-+	if (err) {
-+		dev_err(data->dev, "Failed to send power off command\n");
-+	} else {
-+		mdelay(EC_CMD_TIMEOUT_MS);
-+		WARN_ONCE(1, "Unable to power off system\n");
-+	}
-+
- 	return err ? NOTIFY_BAD : NOTIFY_DONE;
- }
- 
-@@ -85,6 +97,13 @@ static int tdx_ec_restart(struct sys_off_data *data)
- 
- 	err = tdx_ec_cmd(regmap, EC_CMD_RESET);
- 
-+	if (err) {
-+		dev_err(data->dev, "Failed to send restart command\n");
-+	} else {
-+		mdelay(EC_CMD_TIMEOUT_MS);
-+		WARN_ONCE(1, "Unable to restart system\n");
-+	}
-+
- 	return err ? NOTIFY_BAD : NOTIFY_DONE;
- }
- 
 -- 
-2.43.0
-
+மணிவண்ணன் சதாசிவம்
 
