@@ -1,147 +1,178 @@
-Return-Path: <linux-pm+bounces-41830-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41831-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CtoVH58afmncVgIAu9opvQ
-	(envelope-from <linux-pm+bounces-41830-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Jan 2026 16:07:11 +0100
+	id mAjuNNocfmn5VgIAu9opvQ
+	(envelope-from <linux-pm+bounces-41831-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Jan 2026 16:16:42 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D316EC29F1
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Jan 2026 16:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 07567C2A7D
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Jan 2026 16:16:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8B53C300AB2F
-	for <lists+linux-pm@lfdr.de>; Sat, 31 Jan 2026 15:07:09 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 24906300B120
+	for <lists+linux-pm@lfdr.de>; Sat, 31 Jan 2026 15:16:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C574E32BF26;
-	Sat, 31 Jan 2026 15:07:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E32528DB56;
+	Sat, 31 Jan 2026 15:16:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="adpZlQ21"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jkjZIKPs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10EC76026;
-	Sat, 31 Jan 2026 15:07:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C927A20CCDC
+	for <linux-pm@vger.kernel.org>; Sat, 31 Jan 2026 15:16:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769872028; cv=none; b=ZKzUTSGSWZ+Hvgi+tgBJb/iNCk/Bfi/TGf146p9Zqh209RJbn16tIW4n5v06syrMmNKTwn9ZJj4FCAKXubV1xDX6gsx8LZ4hgKTpiH35LU0ldnFuxP92APCxS/n8dOHNyWZInZ75PBLGfX3X0QhN8X28zLaDbSlTLBVEqKK3CuY=
+	t=1769872599; cv=none; b=ntNtliOSXJbVt+X2YYZmkp2N4EwuDUviB4iR2jx3O18lnQNoakfEmdHW6LcSVlzfzN1jBG8SeWSf/jveR9ueM8a58k5N8DRVlU+d06Ia4iMXqIv5zuG818PzSZ/d9Aj38UmkAVvhuMYIZ1R3GIVso5sxIK38BgQVURLSYWqltec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769872028; c=relaxed/simple;
-	bh=m4ZHaiDKsZInmlYkHLTCkez4gr8tSzASeFxCTaESUC4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JOl1LIeAjX8EvlS5ZHxYX9Cmwd7uJbMsN8tjMlQJ75OjfQIxubogiZs/2SqYxnrrxu4Pr1ldR+j2UhmGljCI+f6MTcaueLltf90KlKSQwnFg7B1FQScTQQKGnVZq1E+p7b4R/C0nKDpcJxQdJJpAIRWk+kzcofDwFoSeyqqG79c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=adpZlQ21; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 077DFC4CEF1;
-	Sat, 31 Jan 2026 15:07:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769872028;
-	bh=m4ZHaiDKsZInmlYkHLTCkez4gr8tSzASeFxCTaESUC4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=adpZlQ21t7enHkdpnYyR5rIJ/nh5hhuxRB1S/aC9RmQ5s0GbQp/+gnqgCZbUVtXar
-	 zNY1W7vivRjC+lePrzZweY10g6p5NUnFGT5z2cMCeNYy84SV6kPHv/iRGV3SXIuSPr
-	 2wJ/mlMD6tbyTu468msMnZ9MzYZBOyexh4lh4GvsTJQ0kICUc7sVeIcEG8g6HXuhyg
-	 fSdzP81wgQQht0mq7Uro8RTLukmDT77coCiXLv+svDWwAIlJFMnQUGqlk/w9gPSr2F
-	 nF5mnJU5IauIXTGgXVNrAspZqTileedUb3hgm/Si1Ag25xgWbKr6RDl8wDiQ5pmLrh
-	 Z3jjckuCQucvQ==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id 61B4E1AC52C4; Sat, 31 Jan 2026 15:07:04 +0000 (GMT)
-Date: Sat, 31 Jan 2026 15:07:04 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Aishwarya TCV <Aiswarya.TCV@arm.com>
-Subject: Re: [PATCH] thermal/drivers/qcom/lmh: Remove spurious IRQF_ONESHOT
-Message-ID: <aX4amIuUFUtv7M2J@sirena.co.uk>
-References: <20260130-thermal-lmh-oneshot-v1-1-9b132204ef1b@kernel.org>
- <md3ohsrso7hldhhlqwsky4rc7yf4uvpugyctvpge3emfc5xgsl@flei5hr3fxw5>
+	s=arc-20240116; t=1769872599; c=relaxed/simple;
+	bh=QklRex04lsv9sydApIJql2WafhSZODxLKXRvx39yn4M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VyZIFtFsFCdNpCDyhjtZyufR8yNlNJwGKdvONpVm9CCp75Dbcd2C1zg96M+qsjT5NMIoqW6XEeB8lm9U6a2rtd2QvoLnxCNbcHS3tjkehRj2uAwyDxPXEoWiSZE4QDqQs+M4XssYVowawdVVmN9R6LehsM73ilQGcXJNVN1dDS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jkjZIKPs; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2a07fac8aa1so22815375ad.1
+        for <linux-pm@vger.kernel.org>; Sat, 31 Jan 2026 07:16:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769872597; x=1770477397; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CGDyJsMy6AHy/TBRAYTPojspsnlgHkAhmaua/x9b1+0=;
+        b=jkjZIKPsyxYLTIYclDIhAPVQ5r4HtnIAX+XzoJ96qu63x2f6f8gF7Fz7lqsFPLPg8m
+         wlQHanlgJ60jMD/7/ZzfH+Q4W63B3MUed/TJz5B/iZAtzREOf/XcOI0zKIh2HezOMK5A
+         omxfVxHqugggSxJSnHk223mVyhxuthcBT13tr5pYpxE8pBedlzdWNBagydhKr9R71uME
+         zD5ZeKjqv25L7l1kb5/LFR7a9RvBSQT9EZDKN+j+xq6GZllTvrM1OO2qZFefC9e4T78V
+         bvMOYbNxstcBSQirHd+N06weK5OScWSCh5ebtidByJh1PP68DH1BhAPNMGvWEtF+c+ML
+         3qNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769872597; x=1770477397;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CGDyJsMy6AHy/TBRAYTPojspsnlgHkAhmaua/x9b1+0=;
+        b=PKnhSeOQfd9rWVIL/bqTIykkPU9O3EUksL66ASAGrTHfrxG9Qu04q+5aiAY120uBPV
+         eRJ/5+HqqLxD7hPISaBkc5Z1xrWZkLf5onNOP7rVCu11fvwHFSCYmsGfAryOPMddFjuU
+         8PHYo5PHNKoXLtsvYjtQs4Gq5kqSWjR4ir2LNxBJD+1HdLQbPMRuYQmawrXQXQ4TOZtc
+         1aA4uwe61j5t4JPNsJMdDP4yW24xeWE8EOkxcDH0HAaC6hHDrAaXVRjkRfq6/ERDXqSn
+         S+/quZ9bhN0qtBj/L1XQaJoDSPU5xcYiLtRWizXVXQtVMbITCuFtB1tYhJnKcIAwz3bk
+         3UTw==
+X-Forwarded-Encrypted: i=1; AJvYcCXYEwbUO6HlF9gEH2ltSgw1I9CYeRbCLTbY2S20BEJvX0qSBfQvjV0LvIcLUHE9XP9O+6nX6z9gqg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAgW6VuDiNZfML5zF/eCqAQ5GnY7qDhaXYQg1nT8hUtkkf/EHB
+	CcYoHAk+tJgoMyYc/QuRAdIuOFecADjpaEiZav1ECiJc2PtzRL4+vsGQ
+X-Gm-Gg: AZuq6aL/gPNthoQrFVJuVZiJtiVYpaM7fbv64NtC/wEiNnXD9FYU7A/2Gk7T5+4NWP1
+	tuZTdhYkWkdGt10Z4q4ylc6WJQgb/r/0JpH7sptkwvMTv5x0EA+Ydb/03jj46fW4HiE9PIVJFAd
+	DAFxhTjAareQwbOqa5KE1PgjwN1n93ZQC6Md2YnjVpzhTSac2eUsXxvJE+aAoKDA9Zy0rZohuRZ
+	qY6DUU8vp5uYRm9gI+/nqM4gwn7HcCADS4P0rYRi/di0Gu7hlgiosln3PsTgV10yKBawIheqnFj
+	G7JsWEvRH51qaUyKzHm2HIipbMvSCqDOC1Sjitm1Y4sDoipVKYvrOpS3EbIQsqdVswoxD+RYk25
+	nc77Cw77L9dGi0wkXehWy0kSX7QTBILc4DcgpMyQCCOZA+PejjhOwfI0PL71ciMWwuhY4osCnLf
+	hQn4d6XQUts64RwtzuQIBkEQEiHA==
+X-Received: by 2002:a17:903:38c8:b0:295:5da6:6011 with SMTP id d9443c01a7336-2a8d7eb595emr68327685ad.11.1769872597120;
+        Sat, 31 Jan 2026 07:16:37 -0800 (PST)
+Received: from gmail.com ([2402:e280:3e9b:22f:1ecb:768f:dd7b:8c69])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b6e4110sm97826815ad.84.2026.01.31.07.16.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Jan 2026 07:16:36 -0800 (PST)
+From: Sumeet Pawnikar <sumeet4linux@gmail.com>
+To: rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	rui.zhang@intel.com,
+	linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	sumeet4linux@gmail.com
+Subject: [PATCH] drivers: thermal: intel: tcc_cooling: remove unused variable
+Date: Sat, 31 Jan 2026 20:46:15 +0530
+Message-ID: <20260131151615.6230-1-sumeet4linux@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="iB8/nrYcm2WVfPQD"
-Content-Disposition: inline
-In-Reply-To: <md3ohsrso7hldhhlqwsky4rc7yf4uvpugyctvpge3emfc5xgsl@flei5hr3fxw5>
-X-Cookie: Think big.  Pollute the Mississippi.
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.76 / 15.00];
-	SIGNED_PGP(-2.00)[];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,linaro.org,intel.com,arm.com,vger.kernel.org];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41830-lists,linux-pm=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_FROM(0.00)[bounces-41831-lists,linux-pm=lfdr.de];
+	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
 	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	FROM_NEQ_ENVFROM(0.00)[sumeet4linux@gmail.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[broonie@kernel.org,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_NONE(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D316EC29F1
+X-Rspamd-Queue-Id: 07567C2A7D
 X-Rspamd-Action: no action
 
+Remove the unused variable 'ret' in tcc_cooling_init() and simplify the
+error handling path. The variable 'ret' was declared but only used to
+store the return value of PTR_ERR(tcc_cdev) before immediately returning
+it, which is redundant.
 
---iB8/nrYcm2WVfPQD
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Remove the duplicate variable declaration where both 'ret' and 'err' were
+declared, but only 'err' was actually needed.
+Also, simplify the error path by directly returning PTR_ERR(tcc_cdev)
+instead of storing it in an intermediate variable.
 
-On Sat, Jan 31, 2026 at 08:59:03AM +0200, Dmitry Baryshkov wrote:
-> On Fri, Jan 30, 2026 at 04:54:45PM +0000, Mark Brown wrote:
+Signed-off-by: Sumeet Pawnikar <sumeet4linux@gmail.com>
+---
+ drivers/thermal/intel/intel_tcc_cooling.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-> > This warning is there because IRQF_ONESHOT is only meaningful when there is
-> > a threaded interrupt handler and this driver does not register one. Just
-> > remove IRQF_ONESHOT, it wasn't doing anything.
+diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
+index f352ecafbedf..a5b31b25225e 100644
+--- a/drivers/thermal/intel/intel_tcc_cooling.c
++++ b/drivers/thermal/intel/intel_tcc_cooling.c
+@@ -72,12 +72,10 @@ MODULE_DEVICE_TABLE(x86cpu, tcc_ids);
+ 
+ static int __init tcc_cooling_init(void)
+ {
+-	int ret;
++	int err;
+ 	u64 val;
+ 	const struct x86_cpu_id *id;
+ 
+-	int err;
+-
+ 	id = x86_match_cpu(tcc_ids);
+ 	if (!id)
+ 		return -ENODEV;
+@@ -103,10 +101,9 @@ static int __init tcc_cooling_init(void)
+ 	tcc_cdev =
+ 	    thermal_cooling_device_register("TCC Offset", NULL,
+ 					    &tcc_cooling_ops);
+-	if (IS_ERR(tcc_cdev)) {
+-		ret = PTR_ERR(tcc_cdev);
+-		return ret;
+-	}
++	if (IS_ERR(tcc_cdev))
++		return PTR_ERR(tcc_cdev);
++
+ 	return 0;
+ }
+ 
+-- 
+2.43.0
 
-> I think it might be not that easy. The IRQ is level-triggered, with the
-> IRQ source (if I'm not mistaken) cointinuing to be high level while CPU
-> is overheated. By removing this IRQF_ONESHOT we might get an IRQ storm.
-
-See the commit log for aef30c8d569c ("genirq: Warn about using
-IRQF_ONESHOT without a threaded handler"), and note that a oneshot
-interrupt will be unmasked if the main handler directly handles it and
-returns IRQ_HANDLED instead of waking the thread with IRQ_WAKE_THREAD.
-The handler in this driver unconditionally returns IRQ_HANDLED.
-
-The above sounds like the interrupt needs to be edge triggered?
-
---iB8/nrYcm2WVfPQD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAml+GpcACgkQJNaLcl1U
-h9AA3Af+NZCzcDh2uprkeaQp7NNnLIY3Lug6c1HJIbDwVvucgAwODX+D5h2wmqFn
-HlYRG5Jbizvk2rcc4T3azXHT9cMwEZysAm2bqh9T9DiwuFgr6UGLi9yb1HfLS4JF
-/+ewKB9Iba+I7E+SQo+d+U2JtvdpPk0FMe1pnYxAD4JSQmh/jfqBjW/+f6XFOvc+
-Hy+sEEDglZHla7oQIg2Y1ytiRuFLy6eqyIxHwkIVaOz/wPNVCD866VpMJHjtT4NP
-fhfr+2mKdKheFh0GKrRzGQxusdEXpq8hF6vZFU1RsjBZcYCVLIB907xPZiyKowP4
-pNtNIAvJizIigg5vqq8mHNwQZWRVlQ==
-=jtup
------END PGP SIGNATURE-----
-
---iB8/nrYcm2WVfPQD--
 
