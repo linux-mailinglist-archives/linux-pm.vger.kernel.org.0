@@ -1,222 +1,181 @@
-Return-Path: <linux-pm+bounces-41956-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41957-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id mJkFAOXWgWlYKgMAu9opvQ
-	(envelope-from <linux-pm+bounces-41956-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 12:07:17 +0100
+	id SMeGCvXZgWlBLQMAu9opvQ
+	(envelope-from <linux-pm+bounces-41957-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 12:20:21 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E25CD813E
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 12:07:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC650D82EB
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 12:20:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 0C51D300699C
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Feb 2026 11:07:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7E1AE30C03AE
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Feb 2026 11:18:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2702832F753;
-	Tue,  3 Feb 2026 11:07:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2C333438D;
+	Tue,  3 Feb 2026 11:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ovxU0G58"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CR38R0no"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE7A32D7FB
-	for <linux-pm@vger.kernel.org>; Tue,  3 Feb 2026 11:07:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC44B331A57
+	for <linux-pm@vger.kernel.org>; Tue,  3 Feb 2026 11:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770116828; cv=pass; b=G186fHkhnUhZ3jFek2Re737U7cgnaHKaY71Y0UFw4L/4Ku3mAdc5DNkuqZcLLRuLyRa2Qj7FYqWKQSJXOHtM08auIdOa2lFbKA3KC+xVIhPznqwVt6jNAaDbhUeO7fR5rrSrQO2CQB7zEfkzepTegj0kVaLPNjiZ9+oeVQUmIno=
+	t=1770117514; cv=pass; b=JfGNBeHWHtqid0SbnSdrhGRenx9pwaCldzrQnPSQjFQ+MsPuyzRLSo7QGzT1fBg3KR0K+5nSBR/C7BoKpO/GIdY6CeiU2MvNYMQm9t8lfxKsEfqDF3lWUZoqHAhwJypgc+bPvy+k4B0M6Gh+AVIf/gI86s20WNL4y02Yccp3D24=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770116828; c=relaxed/simple;
-	bh=OH7+HSlnA2x81hRfL4m4AByJ0bZZKFk99H50SaARSyc=;
+	s=arc-20240116; t=1770117514; c=relaxed/simple;
+	bh=x0ozsReFvwxqdxxBW0bsucHLklQvL5qKhZ07z2jxlOA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QYslYaN5QRrIwWGF1HqbXC4IejWFBC/kmj0lK2YWh8ofR3+pgd9WzXf5ACP9yvwTWILQ9+u5X982eQcNztaa/ELqwBfcw492lyuGSJOda9+FdojEEk52Ahp2uG8ilx2x6IZ+/LNa+MLUYhHPetjHeRIXFX+xkXdDXXpJeV3Li4Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ovxU0G58; arc=pass smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-59b672f8ec4so6089837e87.1
-        for <linux-pm@vger.kernel.org>; Tue, 03 Feb 2026 03:07:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770116825; cv=none;
+	 To:Cc:Content-Type; b=e4MM7Q7WiqHnGZ++v5Bmw5e4qa8W5oOH13RN6tIe0pmH4IGG074sjQjcyJ+2PyB9dfVbqNHd2Q8u8XCWRNLie8b40S8gmTFx0nikF+vwnpO4tuyQ5O9YADzMjcEpgn9vmAEeOEu2fa4zf7vIy8YXZ9zqk8HU8t8da8wh2Nei0sw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CR38R0no; arc=pass smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4801d7c72a5so43362435e9.0
+        for <linux-pm@vger.kernel.org>; Tue, 03 Feb 2026 03:18:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770117511; cv=none;
         d=google.com; s=arc-20240605;
-        b=VyxNyfq8ZR5YmD0TjE3dwEQNpMJiauAoxO+a+16nmGuMxw/6M/Kj+5nd9SGhQOXg7e
-         zrCNqggufSvSMeFsuus9ewRqunlFawbwV3nQleZaa80E1U4qPaKlll1Nx0ieRjKXEt2c
-         jW2wa0NBLOtBFP6nU595DuenafoekZY4wFo+Ef8DduWODo18NrKsnDoVXZLdxeHPZvKV
-         1PzVgHbj3hxRZBhT8cev4I3zacRs6ObodVd8MTNCjA51Ug7vdEEXJIf2yVwSD76SCOso
-         dpV0Ijh7vFEkMYSP6nn4MzhIZ0sr4KyaBLzUmvSzHeodyH50t6s4X3Cp3Inx7Ugc9QGW
-         ljtA==
+        b=ZzASkX1EkztPEucx6tB8525d+WBUGTSVbABhgLDaIfx/wyPATOkMuXDSqvZjn3qagI
+         yI4SFoSer4okp2DW2mGswZoY8pZxRZYkLrDDSb6wu/mMOyOOUsvg09LaQmN42fQIZJ5p
+         lYuysd0tacvFJ0f5fm03iEo7wsf3bL+AUgo+H3+9Vh0o1mRk89Us5nc0MvcgwoI/uYg5
+         KUHriwcU7T5y2r74ETe+P2cjzulYDlzeSF1kYD98D9B8Sj6oUAbTRU+xSQ6dR0L0+fMh
+         4O5AaeK9+sqDbir7ioK/y8NvWqB9IAhLex/A5RZdWspu8Ih1iRwcQDYmT3hrSCN5bNZN
+         ujdg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=mpau5hvO+i/E0AiXJ5P3htmR+ezocch+kVwOVkTz9TQ=;
-        fh=O23JTvWBBlu9UjjxgR/lGl29SbH2cMU/3Ah1AzmMlXk=;
-        b=X/yDU5BP53wrmtbFslAH0BlYRez4c6A9JSx6QfypNOAsyPd+o1jjI4bkK7tTTD2328
-         hueDDXMKP49zD4DsEm2Ab1SYgopE+DDj1XhNuHdqv587GVmIh/ixxHyaPxt0ruqHqSEV
-         5lIvq3kmgDrDGdXUMuTfLVDeiIL1KqoveN0bCCMNHlOboNqudGLmMmA0Vj6hQYvG+L/+
-         947YnpqMbwH2VC1UNcFJuGk8zZhkcrwNTNFLWttqRBI1wDHPpn/t/AVbx9YLrzXOI5TV
-         aPt6wBsDd+zxyEj8XPs0ByIzyIwZmxbEXzRzxqBctDdHgTrdJ+P56MMmOvhH72idC8Li
-         67kQ==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2zZNMGa3yn75FsqDEZyP0PuDAGN3sitzxX2byO47nv0=;
+        fh=P7AMaHxsSZIJsLkmXa30JhiSRekZsO2grDRi27IM9TQ=;
+        b=jrfAWAmOzmsvuJzapYMgcEHJJ1EQdRgT73x58xe2teztrADl1I6uPAu/8Ne8dVWYEH
+         kqXWXDZFumSAGnV/IuFzScHgN91oEpFhn4KJNERoMJRVYVVIr8e9JFAQrDql512IJX/v
+         eiMmjdkQNUFOsdg6xldbmy0BiglOfkd2WFgWvDPla9Wx0ErH5aQr/mgzBe/4rZvPHYTy
+         y0XH9hnHgSlLD9JtCQSczQraSisOEiDT2fVdl4r7YpzbLvNhkgpobZPeH6JUqlXBI+hB
+         XfdA0TJMDLI4FMuSG5+CY4E41grUsqsm8T26Z9WB3ArT+QuQSXuY8xc1D0thofr9aG+1
+         O9nQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1770116824; x=1770721624; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mpau5hvO+i/E0AiXJ5P3htmR+ezocch+kVwOVkTz9TQ=;
-        b=ovxU0G58i/m4Q0Uz+/0XRnDV3liD+GhF7Is8sjvMq8PxNzFmeUhwUrKwHOVJkRf4ad
-         Lwpb8Emr8sSgMbx/BaLiYM+13DEqQYNCkvUf3Q8mszJezihuMlEzVffC6sIBZ/7/2bmi
-         kHP6Or7HYkIWUpgusEh+baC5nS3S94ebazilBW9kmEf3kCKM3ndZfh84tVHDPmdTTWzN
-         gHPqxscfc5/3pcaFLcqvNifKv6HmC7BezPO7zkcxfZU0H3E7IoRbRAA4yOWvyGPWSBtI
-         2oiAf7B39IQE5GuVnWtMklIKDb05NcJAGMgdYG0MRhZIAiMCzX8TXMeMQO7EKMGONWui
-         O1ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770116824; x=1770721624;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1770117511; x=1770722311; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mpau5hvO+i/E0AiXJ5P3htmR+ezocch+kVwOVkTz9TQ=;
-        b=dwRWNHtKWJ5AK8T364D0vxLq/fKE3ePj6Cld/cHm4l0urZRLXK4k2GQLudecl11Y3g
-         Nqkl9d4VnAOi8KNIStWfWMZvtCg4DPg/f6Bio0KRmmrx8u5g/mvM7rIWC1zVJjYGwunO
-         TMZ5UwfRbz67INafiNRnjKI5eyXABTOqhh7noD/s7qRqa/+yICTIjtYp4XPYvCAXciC1
-         rcVuPsItTmRw5hFQHxsDiedigIKkjtJ2HiO1yJL4XMxHOAmcnqo1DpObXce3ClR3qt2Y
-         GMzLVGZ7pD/VV4V+qSCNEu9hIqdKExDzyDw1VkTV3QqIlQkjmscnaa7L75GX6tj1hSPq
-         VN6g==
-X-Forwarded-Encrypted: i=1; AJvYcCXdWJqryNcawJxyK6RglJbQrY6IlSIABoB6XZngD86Bztd9pHriSOzPhYVfNuS2hc5PtL5vWSVV9g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/x2DytBqgAo7SsdbEVGW2rpDAPfTaCQQguMMraPX2oOOPVuJz
-	gcIUaNXbakLwqDeK1+jzWsLhmi+saXQp237i0IOcd5LpfeYvATpuvIJPaOFLyaGYDGlSpZTWvJk
-	H8IJRj98PJ62VVOKTw+Ity1XQy+gT1wFreZxcYEqzDw==
-X-Gm-Gg: AZuq6aLYtG9wEl5loaf6kibmnXNlBQQvVxEqO0gJh03FK7ZFnEIQrgtI4pHHF3D/GHF
-	Cm3ovT5fp3pr3b8VbeEpaTtYkN2BpqM4KvLFgErwblUJ7Qc0z04Z46YTL7OQPrfTwx2vxMSRSr9
-	EEviESGSxNcmSNVf0TKnQSlTA8fvtnVba72xUGvMQ9Dt3hOjugxOT/RwN1GvXlIMA2UTtukb5lu
-	gjn3GTtl2R7V8aOuvYWLorZVcndSdm7lU4ZNIBcia4kRmhyXOQSv0457HkGMpURQNedkwWf
-X-Received: by 2002:a05:6512:10c2:b0:59d:a4ed:1aee with SMTP id
- 2adb3069b0e04-59e16424bf4mr4915624e87.40.1770116824273; Tue, 03 Feb 2026
- 03:07:04 -0800 (PST)
+        bh=2zZNMGa3yn75FsqDEZyP0PuDAGN3sitzxX2byO47nv0=;
+        b=CR38R0nobPSER2TyZ4NQnKNQFmU8280WcWQeveL1FiVa1jy1p0hTfo/fYR0DxZ/Dfq
+         227hwIzSY8zyulWXMhJy1ilRwNdo7bOkpfKGNk/jf/3ic05KANKYyYHfwB9IcTjbiiuj
+         p40E0biNTgPNkBryF/S3zEG++0TdkAlUKTdEsZZqEt2n+25QgIMklWtnzoTFzIDCMAbj
+         S5fGBmTP94HJCosPKdVubJOMDNkJ1BbUnF2GJNpihtI9H6m3O0rJyF76OV8B2pbWDukj
+         n8b3/KXIhhf1WA2dpRpi4dW+LVGqaij7UIXvK0mKzU1cwJnFxljqrv+FgT00wXQwYIPJ
+         9kjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770117511; x=1770722311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2zZNMGa3yn75FsqDEZyP0PuDAGN3sitzxX2byO47nv0=;
+        b=e5pV5dOx/oOz0w+hwf2DYSX/ODokIx4wKCi/+cYdLg2bbMK+g4HcWvreqSStBUpDLO
+         RrtFC/r+djuzznsx7yyilbdCKkXtpVccDADkStNNJygzdVzIy/o+CVqHpxdKQo1N/EjU
+         Usscj8LdEuvhisLF/S2APRGMDadKmv3/v6YuLyL/uvQNMnfsdMfaBtM0Jw3/fVKNdZwU
+         xNfZmYp+iiL2gSqAIWmPISB7iVb54kKSruDpVcHs3dYNMTKiYlMGXlxAe8+Rfr8xgdt3
+         XaUAQ1/rnDoQjEO7PW0xKvJym3TLx/Cf6icwcRMPGEijnjZ2sQFtvoByko3sxeyMkPPf
+         vIRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWfe3gK1oS/Vzd0uiGzM5m5rOtlf2iJY/zX6/oInn9f6jL7s3ZDHE5RsPElUdjVPZq2dxUkKgm9RQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLACs+Ys6QXiyJcmIcV35nZBoEuGyKRgYp0pfpvWE4+lLBNExo
+	tGCVn/r8VLXRjox8b7kgGxFseehHKkUjpUiTQQagAxijMPLHG6ZCbO1kfrUSUyPjcyRSmMTA/z2
+	13Zl5GW7ga6twg63f8PGTKxCKjNe+y7c=
+X-Gm-Gg: AZuq6aKMYagpnuUDFNyL2Hy6CgHevMprrKaQM/QyPDLSZ/kAZtfNYlpvUaFAMfUfL90
+	L5nr4ipQOJU8y51RzrarbvoHN6QAus6sDQOFdUUJM+3+ztytmzG5QmIaOiQXI+edhV5pu2+Mmy6
+	ZQk6STEvN6gXQ4FqoeqGEgTDsHLKostXHlJFtoNGjMyFx/tZ+2GRFMTEMEaZ3r5TbBG3gOAqw3D
+	3vq/njOU9gtWip1e4UtAtK7U/Bq1dKOMCl1I8V6jRJIdk4ZwuT5BFzQwVqdC92gZ4M4IhH1
+X-Received: by 2002:a05:600c:1c06:b0:480:6bef:63a0 with SMTP id
+ 5b1f17b1804b1-482db4d859amr196633815e9.21.1770117510819; Tue, 03 Feb 2026
+ 03:18:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202074730.738760-1-xu.yang_2@nxp.com>
-In-Reply-To: <20260202074730.738760-1-xu.yang_2@nxp.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 3 Feb 2026 12:06:28 +0100
-X-Gm-Features: AZwV_Qh2hAOTL2iZXhJf4HtRUDzm3SZegUCoMSRIOsgW54neZTtXwIBhuC9chV8
-Message-ID: <CAPDyKFpqfo1R8Qkq284L9DTURjZnvm_n8W3a6KQTomg7A-M_Ug@mail.gmail.com>
-Subject: Re: [PATCH 1/2] pmdomain: imx8mp-blk-ctrl: set awake path for
- power_dev if attached device needs wakeup
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Frank.Li@nxp.com, s.hauer@pengutronix.de, kernel@pengutronix.de, 
-	festevam@gmail.com, peng.fan@nxp.com, jun.li@nxp.com, 
-	rafael.j.wysocki@intel.com, a.fatoum@pengutronix.de, ping.bai@nxp.com, 
-	shawnguo@kernel.org, l.stach@pengutronix.de, linux-pm@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
+References: <20260201104343.79231-1-clamor95@gmail.com> <20260201104343.79231-7-clamor95@gmail.com>
+ <aYHU5g5iOVjrHrE_@google.com>
+In-Reply-To: <aYHU5g5iOVjrHrE_@google.com>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Tue, 3 Feb 2026 13:18:19 +0200
+X-Gm-Features: AZwV_QheFCGeHv9dTwRKbCZ3hfG3HmOrfJbSWa64fyut6TH7i-1Px0zxlCCElGo
+Message-ID: <CAPVz0n0YXJ2KdO2LPJ8gYr_8=TuaEnY+=sVy1AsiiNtJG=nx3w@mail.gmail.com>
+Subject: Re: [PATCH v1 6/9] input: keyboard: Add driver for Asus Transformer
+ dock multimedia keys
+To: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sebastian Reichel <sre@kernel.org>, 
+	=?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>, 
+	Ion Agorria <ion@agorria.com>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-41956-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-41957-lists,linux-pm=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[nxp.com,pengutronix.de,gmail.com,intel.com,kernel.org,vger.kernel.org,lists.linux.dev,lists.infradead.org];
-	RCPT_COUNT_TWELVE(0.00)[16];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[linaro.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:email,mail.gmail.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linaro.org:dkim]
-X-Rspamd-Queue-Id: 1E25CD813E
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: BC650D82EB
 X-Rspamd-Action: no action
 
-On Mon, 2 Feb 2026 at 08:46, Xu Yang <xu.yang_2@nxp.com> wrote:
+=D0=B2=D1=82, 3 =D0=BB=D1=8E=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 13:00 Dmitr=
+y Torokhov <dmitry.torokhov@gmail.com> =D0=BF=D0=B8=D1=88=D0=B5:
 >
-> Current design will power off all dependent GPC power domains in
-> imx8mp_blk_ctrl_suspend(), even though the user device has enabled
-> wakeup capability. The result is that wakeup function never works
-> for such device.
+> Hi Svyatoslav,
 >
-> An example will be USB wakeup on i.MX8MP. PHY device '382f0040.usb-phy'
-> is attached to power domain 'hsioblk-usb-phy2' which is spawned by hsio
-> block control. A virtual power domain device 'genpd:3:32f10000.blk-ctrl'
-> is created to build connection with 'hsioblk-usb-phy2' and it depends on
-> GPC power domain 'usb-otg2'. If device '382f0040.usb-phy' enable wakeup,
-> only power domain 'hsioblk-usb-phy2' keeps on during system suspend,
-> power domain 'usb-otg2' is off all the time. So the wakeup event can't
-> happen.
+> On Sun, Feb 01, 2026 at 12:43:40PM +0200, Svyatoslav Ryhel wrote:
+> > +static void asus_ec_input_event(struct input_handle *handle,
+> > +                             unsigned int event_type,
+> > +                             unsigned int event_code, int value)
+> > +{
+> > +     struct asus_ec_keys_data *priv =3D handle->handler->private;
+> > +
+> > +     /* Store special key state */
+> > +     if (event_type =3D=3D EV_KEY && event_code =3D=3D KEY_RIGHTALT)
+> > +             priv->special_key_pressed =3D !!value;
 >
-> Let's propagate wakeup path to virtual power domain device so the wakeup
-> event can happen properly.
+> Is this functionality supposed to be triggered by any keyboard or only
+> the dock one?
 >
-> Fixes: 556f5cf9568a ("soc: imx: add i.MX8MP HSIO blk-ctrl")
-> Cc: stable@kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
->  drivers/pmdomain/imx/imx8mp-blk-ctrl.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
-> index 34576be606e3..f3bfd6d22722 100644
-> --- a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
-> +++ b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
-> @@ -804,12 +804,20 @@ static int imx8mp_blk_ctrl_suspend(struct device *dev)
->
->         for (i = 0; i < bc->onecell_data.num_domains; i++) {
->                 struct imx8mp_blk_ctrl_domain *domain = &bc->domains[i];
-> +               struct pm_domain_data *pdd;
->
->                 ret = pm_runtime_get_sync(domain->power_dev);
->                 if (ret < 0) {
->                         pm_runtime_put_noidle(domain->power_dev);
->                         goto out_fail;
->                 }
-> +
-> +               list_for_each_entry(pdd, &domain->genpd.dev_list, list_node) {
-> +                       if (device_awake_path(pdd->dev)) {
-> +                               device_set_awake_path(domain->power_dev);
-> +                               break;
-> +                       }
-> +               }
 
-This is really messy in my opinion. Ideally the above should not be
-used by a genpd provider as it's internal data structures are managed
-by genpd itself.
+Any keyboard. Dock keyboard is basically a regular keyboard fused with
+a multimedia top row.
 
-If I understand correctly, this problem boils down to the fact that we
-should have tried harder to model child/parent domains, rather than
-using runtime PM to manage the parent domains. I understand there are
-problems with that, due to specific power on/off sequences we have for
-imx power-domains, but I wonder if those could be managed better by
-using genpd on/off notifiers?
-
-Anyway, that said. Rather than walking through the list of devices as
-above, I suggest that you use the ->power_off() callback for the
-corresponding genpd(s) to dev in combination with a genpd power on/off
-notifier for the corresponding genpd that the power_dev is attached
-to.
-
-More precisely, if the "child domain(s)" that corresponds to "dev" has
-not been powered-off (because device_awake_path() is set for some
-device) during system suspend, the power-off notifier should return
-NOTIFY_BAD to prevent the "parent domain" that corresponds to
-power_dev from being powered-off.
-
-Would that work, you think?
-
-Kind regards
-Uffe
+> Thanks.
+>
+> --
+> Dmitry
 
