@@ -1,208 +1,185 @@
-Return-Path: <linux-pm+bounces-41928-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41929-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0HfyGlAPgWnmDwMAu9opvQ
-	(envelope-from <linux-pm+bounces-41928-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Feb 2026 21:55:44 +0100
+	id MAycHSlRgWmLFgMAu9opvQ
+	(envelope-from <linux-pm+bounces-41929-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 02:36:41 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1652DD1575
-	for <lists+linux-pm@lfdr.de>; Mon, 02 Feb 2026 21:55:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D066DD36C0
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 02:36:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 686613004F34
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Feb 2026 20:55:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 96A11300DF56
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Feb 2026 01:36:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 804162C0281;
-	Mon,  2 Feb 2026 20:55:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A244273809;
+	Tue,  3 Feb 2026 01:36:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A3Ln8NAw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RLv93Bw6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f44.google.com (mail-yx1-f44.google.com [74.125.224.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8DF30F7EF
-	for <linux-pm@vger.kernel.org>; Mon,  2 Feb 2026 20:55:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBED17C21C
+	for <linux-pm@vger.kernel.org>; Tue,  3 Feb 2026 01:36:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770065740; cv=none; b=knZ8+cIo9B8uMHJg3aDaYWt+SxVHcjGEOp57vVgFWX2zJkQQ7Oj1fNd/y7SlbqugRwr/q1aFRr/K77ZoGXVXLQ2WqKRvCyEuro6QxO2eBFoWJFLR5EAPQtCzpgrCXIDMWX9YqoFM0cdyrsZl+puzTTDc89OlAiU4b1vaeSItcRc=
+	t=1770082580; cv=none; b=eRe8GIJ48ubv+2zGutyRxjW9ewU+5ipuwfI0ETdPU1kh2Usij20p4lmRZbQdInoDXyZLEBzdIH5u/a0l2YA6PW1vgoM41tPVQrfc2P8Th6SsB7cICVq4iM2eNhzoQyaoopcZedlU+A4K5K2f4GXuTr8hPRB4Z9NJFEBJet8ILRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770065740; c=relaxed/simple;
-	bh=1aUjeloTGNxsBospztyc8sZYBvlLW5N8QNDPtH+e3bs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oMbn7rYPP9xgkP/qOMsEAmpfZaNEX9TmlNLo1Fd8mb6XRJDO3RodUwNqSmEzlMTRbz/Lo8nSr/ov4crv1pHzrh66eKVNFvd92kq36czV0j+niZHyMy/2TU4+mOYi7WlBTRaTqioCEa3yoART8UXJuCITub4z43L+EqJoCm/9r0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A3Ln8NAw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD3ECC19421
-	for <linux-pm@vger.kernel.org>; Mon,  2 Feb 2026 20:55:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770065739;
-	bh=1aUjeloTGNxsBospztyc8sZYBvlLW5N8QNDPtH+e3bs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=A3Ln8NAwY+nNCr5a2s2FNrfYaVpAoCPgouUPX1tChVEAoWxmY06QJZ7NCUsUSNm9T
-	 wm2OquxM7eay2su/ifcxvb+lwblIy0bNdbLuxzvJ6CZt/4qnNv/Dzq2aKAdkx32vj2
-	 bhE5oRKgMcexbLzVJqml3ViAcMQy9i8kb6UfjmNUc0O97I+xLM9AxFPmohar9/fbwu
-	 +4v4Fo4LdKdJrzKPrxI3reXB2a5oCeXu+WsghjvGpU0x3Q1yfVSWIgJaIvdzRpoNm1
-	 hSOzLjsx0N6yofLu5hBa2uYetKML5actHAXRSgQR49Y2Z5VUsCOk/L90wU5vDY5V/K
-	 pMOw47CnM+Y5w==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-663097987f6so2608412eaf.0
-        for <linux-pm@vger.kernel.org>; Mon, 02 Feb 2026 12:55:39 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVNGtSvESE+pgTQn8jkuEz7aAvWjuhXbGtwy1bFiUh8Fvh2VaTZ2DUQgPLmGHgNdE+Obw+rw502KQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0Dg3HcwJietrL/Y8YaAwNTlLkqYbJIm884BmioGARnXLU+KKl
-	TJnVEQ+ov8+YZGISoMtEbkaQMdx5VApQNKXTSXUKMmwILV1UhYsq3KZekpC33bHWSoBD0bB7k9d
-	BP5FIY68BE9XeFBvHYYHFaioGEHAJ5H4=
-X-Received: by 2002:a4a:e1da:0:b0:663:11eb:1176 with SMTP id
- 006d021491bc7-66311eb1761mr4002461eaf.32.1770065738930; Mon, 02 Feb 2026
- 12:55:38 -0800 (PST)
+	s=arc-20240116; t=1770082580; c=relaxed/simple;
+	bh=2X+mytXBtNSV0apIC0KsjvAvt2VlH2ZbcBkfrYklwOs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PqUlADEWIdsnCQbvSFnwb5PgC6Y24d8WqtMRsXBdKrUPpUXmYgKc8vfVEyBTtCfcZT4RaA8xJVyvEezTKnrGWSAQ7uHmnj6YoEaNB+0n4vd915w/f8U6pZuFu4XD7XlK6OERgehBBOtOLNznmYC9Oq4YrOkPMqV3epbb+pGRBrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RLv93Bw6; arc=none smtp.client-ip=74.125.224.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f44.google.com with SMTP id 956f58d0204a3-649ba412cd4so2088640d50.0
+        for <linux-pm@vger.kernel.org>; Mon, 02 Feb 2026 17:36:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770082578; x=1770687378; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IDGINNniODK4Zc3R8bth6pqq7qdppNjLL1gm7R6GyLM=;
+        b=RLv93Bw6xpk89FZZDN9UOJBCxmu+ZX80fcvlX6bt8TqwUJTiClbdTH5AQD8E5w77/G
+         EmANL4xl7htJb2EnggaR7Oey2IPQHsNxiJhn/qp1wRaN4TL9cFC2IaOwf80olBg7wgED
+         Fl89qLbZ+dHAAjGRgL4KqL+UdRcPIWczq0jHo9rwVw4NVl6hy5Uon8bpCNIWOpXvn29N
+         WYjhEg/iODYyxI4+zhoKTRsfw/GW7YfvfiamnYtVLIghpvMDOOyy6t+MJXT4cxjcPwkD
+         KdiNUwbAjbe3Ea7Ku9JdabafkB+05C/KwUceMICFVY9+a40saVM2iBZ4/xO44EPHXENN
+         nrfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770082578; x=1770687378;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IDGINNniODK4Zc3R8bth6pqq7qdppNjLL1gm7R6GyLM=;
+        b=oIFUpcU9oLtKgjF3Yphh+pqFVthCSPDJddfN6VO9IpQmUDCgAOobL/Ye+s1Z8Vz2R1
+         IlaPbrzUZBO7djkQkt1E0+PlnHM3F0Wa6vlnJEf0IjRlo6PYzPKWCxvbbXUGQNG1F6qZ
+         FKruhPfMW5zlgP5dlZ0RfZlX8VaCSz4AwDM4dwBUzRCvn3kTIXnsNxKk6ZYpLNAlEzw3
+         U+4UmAcgAuaNu2h/4x0KSmqnRqoibx5ZyDAwFpbgsr77fYyyme11x/ChvBB7293FTwnq
+         zUQJGEYHwsKoqbAdQJjSL3aTxeqJIM/DnEX6fwbNtUqytN2CiZCrQ+QWHM2xlEiOSQ3k
+         5ITQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVBnEEmUjiTTxWSkz2Z5C/SD5E/DKZQ564xofd4TAEpYOBYVmlmqbK9W6QNz5uH5G/tg9IrOydKWw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYtbitc3fRNwdxfjnqxUes0nAoWbSwjoPmhyEaum0Wq/Bi8VIK
+	mjkBFyE3Usn4pHaFUklinDHwv7nywQ+asXhfSj0klPzUmofZvSbZP5tw
+X-Gm-Gg: AZuq6aKUh+UamZqu8Oll15rhnL6MHYzy4hytWvndShaSp/OuebGaIz9gsVwHN1MfWqj
+	MsAyc0RQYZgpxFcZXs5epvKXjI4vV5W+clBf7IwnD9sWU2pcFqpuz764XGFZ6RoICPzqaQGag56
+	/NahIixyrutLhXbU5NaAmA7frUVIXTpMY4T5SelbFBGAluXzyxNuiTMrlOiDl25JXexE+f6VTTf
+	WOinorMboiy7R7U4tRSvo44CE82aqOGHr8OncgLWaToXbEPMuCT2n9MTN9X2wFaPqFeUOStz9r7
+	AEqznDYHkKvCtU5wwITF1QHUwfri4UXLDRYN7AjrAcMSwpZJh9IpWzncLeZt0mE7IL/IADb/4gZ
+	U+ArLclNCGj0tUA9HNkWKQDpjWGiWFg2k8H8qSi6An/IeE2vMRxAEHvDAu+b00EntAPNO5qiiSN
+	kY5XZ1je1Z3n5k8AJft6T85n3xcVV8boQ0505qlw==
+X-Received: by 2002:a05:690e:408e:b0:649:523d:e701 with SMTP id 956f58d0204a3-649a852de09mr10271339d50.92.1770082578400;
+        Mon, 02 Feb 2026 17:36:18 -0800 (PST)
+Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
+        by smtp.googlemail.com with ESMTPSA id 956f58d0204a3-649d447df2bsm423325d50.4.2026.02.02.17.36.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Feb 2026 17:36:17 -0800 (PST)
+Message-ID: <74f3e6cf-7c13-43e6-a8f6-2b46184b8ad6@gmail.com>
+Date: Mon, 2 Feb 2026 19:36:14 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260131101254.56423-1-hanguidong02@gmail.com>
-In-Reply-To: <20260131101254.56423-1-hanguidong02@gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 2 Feb 2026 21:55:28 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j=_57sMMQ9vunxGUAo6FS928SnX6nE8=8t4Kz+R2R3mA@mail.gmail.com>
-X-Gm-Features: AZwV_QjTfSqPqOL5gZJxISow0wXoG1Hrto020jhqIMfigqaOSCvgeer-EKSQ06I
-Message-ID: <CAJZ5v0j=_57sMMQ9vunxGUAo6FS928SnX6nE8=8t4Kz+R2R3mA@mail.gmail.com>
-Subject: Re: [PATCH] PM: sleep: wakeirq: harden dev_pm_clear_wake_irq()
- against races
-To: Gui-Dong Han <hanguidong02@gmail.com>
-Cc: rafael@kernel.org, pavel@kernel.org, lenb@kernel.org, 
-	gregkh@linuxfoundation.org, dakr@kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, baijiaju1990@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 4/7] ACPI: CPPC: add APIs and sysfs interface for
+ min/max_perf
+To: Sumit Gupta <sumitg@nvidia.com>, "zhenglifeng (A)"
+ <zhenglifeng1@huawei.com>, pierre.gondois@arm.com
+Cc: rafael@kernel.org, viresh.kumar@linaro.org, ionela.voinescu@arm.com,
+ lenb@kernel.org, robert.moore@intel.com, corbet@lwn.net,
+ rdunlap@infradead.org, ray.huang@amd.com, gautham.shenoy@amd.com,
+ mario.limonciello@amd.com, perry.yuan@amd.com, zhanjie9@hisilicon.com,
+ linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+ treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
+ ksitaraman@nvidia.com, sanjayc@nvidia.com, nhartman@nvidia.com,
+ bbasu@nvidia.com
+References: <20260129104817.3752340-1-sumitg@nvidia.com>
+ <20260129104817.3752340-5-sumitg@nvidia.com>
+ <4432fa04-e67c-422a-aae4-2938be431985@huawei.com>
+ <c96312c7-b13f-4f5c-9512-cc0382c1c77b@nvidia.com>
+Content-Language: en-US
+From: Russell Haley <yumpusamongus@gmail.com>
+In-Reply-To: <c96312c7-b13f-4f5c-9512-cc0382c1c77b@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[kernel.org,linuxfoundation.org,vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-41928-lists,linux-pm=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-41929-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[28];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
-	MISSING_XM_UA(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[yumpusamongus@gmail.com,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 1652DD1575
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D066DD36C0
 X-Rspamd-Action: no action
 
-On Sat, Jan 31, 2026 at 11:13=E2=80=AFAM Gui-Dong Han <hanguidong02@gmail.c=
-om> wrote:
->
-> dev_pm_clear_wake_irq() currently uses a dangerous pattern where
-> dev->power.wakeirq is read and checked for NULL outside the lock. If two
-> callers invoke this function concurrently, both might see a valid
-> pointer and proceed. This could result in a double-free when the second
-> caller acquires the lock and tries to release the same object.
->
-> Address this by using double-checked locking. This retains the
-> performance benefit of avoiding the lock when dev->power.wakeirq is
-> NULL, consistent with the original logic, but adds a necessary re-check
-> after acquiring dev->power.lock. Additionally, use READ_ONCE() and
-> WRITE_ONCE() to annotate the shared variable accesses to avoid data races
-> as defined by the kernel documentation.
->
-> Based on a quick scan of current users, I did not find an actual bug as
-> drivers seem to rely on their own synchronization. However, since
-> asynchronous usage patterns exist (e.g., in
-> drivers/net/wireless/ti/wlcore), I believe a race is theoretically
-> possible if the API is used less carefully in the future. This change
-> hardens the API to be robust against such cases.
->
-> Fixes: 4990d4fe327b ("PM / Wakeirq: Add automated device wake IRQ handlin=
-g")
-> Signed-off-by: Gui-Dong Han <hanguidong02@gmail.com>
-> ---
-> While studying wakeirq, I noticed dev_pm_clear_wake_irq() handles
-> sequential re-entry (via the NULL check) but may lead to a double-free
-> on concurrent calls.
->
-> I considered whether we should simply document that concurrent calls are
-> forbidden. However, since the double-check locking pattern is
-> straightforward and adds negligible performance overhead (we still skip
-> the lock in the NULL case), I believe hardening the API is the better
-> approach.
->
-> I also noticed comments for dev_pm_enable_wake_irq_check() and friends
-> appear outdated. They claim "Caller must hold &dev->power.lock" and
-> limit usage to rpm_suspend/resume, yet pm_runtime_force_suspend/resume()
-> now call them lockless. While this usage appears safe due to the specific
-> context, it conflicts with the comments.
->
-> I can submit a follow-up patch to fix this doc drift but am unsure
-> whether to simply remove the restriction text or complicate it with
-> exceptions. Guidance is welcome.
-> ---
->  drivers/base/power/wakeirq.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
-> index 8aa28c08b289..acb520626195 100644
-> --- a/drivers/base/power/wakeirq.c
-> +++ b/drivers/base/power/wakeirq.c
-> @@ -30,7 +30,7 @@ static int dev_pm_attach_wake_irq(struct device *dev, s=
-truct wake_irq *wirq)
->                 return -EEXIST;
->         }
->
-> -       dev->power.wakeirq =3D wirq;
-> +       WRITE_ONCE(dev->power.wakeirq, wirq);
->         device_wakeup_attach_irq(dev, wirq);
->
->         spin_unlock_irqrestore(&dev->power.lock, flags);
-> @@ -83,15 +83,21 @@ EXPORT_SYMBOL_GPL(dev_pm_set_wake_irq);
->   */
->  void dev_pm_clear_wake_irq(struct device *dev)
->  {
-> -       struct wake_irq *wirq =3D dev->power.wakeirq;
-> +       struct wake_irq *wirq =3D READ_ONCE(dev->power.wakeirq);
+On 1/31/26 7:58 AM, Sumit Gupta wrote:
+> 
+> On 31/01/26 09:36, zhenglifeng (A) wrote:
+>> External email: Use caution opening links or attachments
+>>
+>>
+>> Hi Sumit,
+>>
+>> I am thinking that maybe it is better to call these two sysfs interface
+>> 'min_freq' and 'max_freq' as users read and write khz instead of raw
+>> value.
+> 
+> Thanks for the suggestion.
+> Kept min_perf/max_perf to match the CPPC register names
+> (MIN_PERF/MAX_PERF), making it clear to users familiar with
+> CPPC what's being controlled.
+> The kHz unit is documented in the ABI.
+> 
+> Thank you,
+> Sumit Gupta
 
-Just remove the dev->power.wakeirq access from here.
+On my x86 machine with kernel 6.18.5, the kernel is exposing raw values:
 
->         unsigned long flags;
->
->         if (!wirq)
->                 return;
+> grep . /sys/devices/system/cpu/cpu0/acpi_cppc/*
+/sys/devices/system/cpu/cpu0/acpi_cppc/feedback_ctrs:ref:342904018856568
+del:437439724183386
+/sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:63
+/sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf:88
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq:0
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf:36
+/sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf:1
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq:3900
+/sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf:62
+/sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf:62
+/sys/devices/system/cpu/cpu0/acpi_cppc/wraparound_time:18446744073709551615
 
-Along with the check above because it is still racy.
+It would be surprising for a nearby sysfs interface with very similar
+names to use kHz instead.
 
->         spin_lock_irqsave(&dev->power.lock, flags);
-> +       wirq =3D dev->power.wakeirq;
-> +       if (!wirq) {
-> +               spin_unlock_irqrestore(&dev->power.lock, flags);
-> +               return;
-> +       }
+Thanks,
 
-And just do the above.
-
-WRITE_ONCE() will not be needed then.
-
-> +
->         device_wakeup_detach_irq(dev);
-> -       dev->power.wakeirq =3D NULL;
-> +       WRITE_ONCE(dev->power.wakeirq, NULL);
->         spin_unlock_irqrestore(&dev->power.lock, flags);
->
->         if (wirq->status & WAKE_IRQ_DEDICATED_ALLOCATED) {
-> --
+Russell Haley
 
