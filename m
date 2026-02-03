@@ -1,176 +1,279 @@
-Return-Path: <linux-pm+bounces-41985-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41986-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IMshObEmgmnPPgMAu9opvQ
-	(envelope-from <linux-pm+bounces-41985-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 17:47:45 +0100
+	id CAsBKHQogmnPPgMAu9opvQ
+	(envelope-from <linux-pm+bounces-41986-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 17:55:16 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FABFDC381
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 17:47:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10AC3DC557
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 17:55:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AA8F630AA9CB
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Feb 2026 16:45:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A5B073025D02
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Feb 2026 16:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D7A73D331D;
-	Tue,  3 Feb 2026 16:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F5933D6DF;
+	Tue,  3 Feb 2026 16:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kGrg7t3I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l2dQmV9r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A97B3D1CD7
-	for <linux-pm@vger.kernel.org>; Tue,  3 Feb 2026 16:45:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770137151; cv=none; b=EeNQPUayuajkIDTT8xtdxNV+SzLP4YGwibkr3z/3jFJC0NQ73JnypQxc1YQeBYr2KFTQSU9lIq8uJ1xNBxyM3yzFMAe8wGyh5mHMl84BQMisbSi16DZkOOI3qaBGvaXioEB5qMG/G+Np7a18FINLetouT+RGms5fUosGbQ3uVNw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770137151; c=relaxed/simple;
-	bh=2IX2Jb8lpm29me5/jiISeudswVSt0f7Ria8TXxFoeRc=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E72F395D99
+	for <linux-pm@vger.kernel.org>; Tue,  3 Feb 2026 16:50:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770137417; cv=pass; b=UmAvRETtNfDBi6+6xR6r+Zf+VxnzQE/1EXt3cYVf8eOM/haXMoAaOUjoRLKADYoBhA1kXfD9LOLmB+rxqiT7H1PCY5671Q4SRrXcUYW5YdlDGf4u0gSU8rcMOiwn2LlTlo/4PWhI+HbrdN5Frpi4XRpME3wMXIc31kdd1Mg1KXk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770137417; c=relaxed/simple;
+	bh=LrQnpvin4jtRqTsha3/cBUOZ8TmO+h7BvZEhl43PHAw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U0yPff3385C2f51lTNbFhcbv22Avjgvy1L59yOfb4Zv2NXhLD7MWw+NYjzj9uFrKQqkGnfFVf5hslr7vIqKdo9LBcUQi6krljGtDF8CL5QsT/KVSRGl1x4TMaMiPJAf/9ji+0D4hC0eWgvfSlIMhLM+Dzi4/QOYP7lwJlWQ4UPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kGrg7t3I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B134C16AAE
-	for <linux-pm@vger.kernel.org>; Tue,  3 Feb 2026 16:45:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770137151;
-	bh=2IX2Jb8lpm29me5/jiISeudswVSt0f7Ria8TXxFoeRc=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kGrg7t3IWmjdERwFOnkzMrnUbb6MWFzrSh4KCwA32aU+pCCQ0i000gHl+iGOfrVtv
-	 zN5eBHBgQZiTOWxn35PPieRlNlA9lysH7hCuEtG7oC+CZ9P2vG/DOsJH45cc5tdGGo
-	 reMevxpRE7GIU5ln/w1bjMIT7ZQtgyQMVDnTftEw4oHqVDkhOI9hQq/Uqm7Blv1Zqj
-	 uRY7zVbZH4hN1SwLon7WxhTarICx15PElV4CM6GcMeNLCojIzA6B8bCSl3ARx32OrH
-	 sIQXSNKj9m4cXih8zUkmpi+OF1WrpLqgdVJliQzyY00znwt6zAZAjpu9MglEzyYCSS
-	 lP+R4DYb+d/Qw==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-668fdb244c4so357643eaf.0
-        for <linux-pm@vger.kernel.org>; Tue, 03 Feb 2026 08:45:50 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUXadwY03I8P/uG8+mt4mwp/cd4KLBFUGkMlhoiAWu2Ou5szYdnf0hCMm07RbRnprRgxIGAySeN/Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyndEzzzBIolqf+ZuhyKN0qNBKYqbdYfT+8abv9QQ4kLQDq5Xx1
-	460XvFvpcISN9yKuhBJU1eX9Ph9c3YCgA53vkbU8fW+cfA9PmSd0Q1Zc/v1Q7Np8JFMumqTkSDT
-	4uRMpbP2EUvlIJ6hEau09U85UHHZE5j0=
-X-Received: by 2002:a05:6820:f006:b0:662:ffc4:8349 with SMTP id
- 006d021491bc7-66a23df0466mr89575eaf.81.1770137150149; Tue, 03 Feb 2026
- 08:45:50 -0800 (PST)
+	 To:Cc:Content-Type; b=fO9TtO1NtqFpqrPrzWbK9h7gBj3SBNJPHcn9gKCMFvMfuyDhHUY1rXhlAXYorIb5F0Xg5A+6HHv1/6IdgGlmutYynhBkJUtQ20xg4FRV7HSHZch4c10AcgJ/B2lQtmUVz9ay3irjSEaYlIy/yQ9JWG9sKK9bx1OAGO63hXIzUY0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l2dQmV9r; arc=pass smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47f5c2283b6so47935195e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 Feb 2026 08:50:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770137413; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Q8+TvQsgQH6BzGFz3k3aTN+puCJrvIPOoTaP7QUxa7eQSqePW+ZH0GhIrSQqidWMPw
+         tOZbdFWuAKZ1JfIYM5PGWo2j5osJEzydPXWh9cNhj3ILyejXyQ/o+im4+I6OPOhizQUL
+         NwApNK9UGwndGLIzQ4SSdMwHYbHEJvhMV+RTMSQ7PGj934U4NXxbn8njpElZmDwVbW2I
+         uic/0KcBbiJ/hF+n8vQ4s3pbqtLSIKbagqb8oFTNqx5jVVmnOwMC2AGFM62LEMoVQzZH
+         hECYVcO45zkULRQrXZOsGmKYCnVw+lEquwYKeDtQU8Og7bCpsIMvorgcFwUhRRMHJG7t
+         k96Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=peC1LbgC8hk+M9QjMfBLz3bgPIBhDM3o4nZmhT+Urjk=;
+        fh=NIFTA/p8TyQN2mNwKVIQ85iA77j+sWQDTDfJ4V2q0kM=;
+        b=No5Bew3iwANT9SaUAvD1FhExOpLQOjZQD7SXqxb7PKvR99k7YhQKS62Yv+8EWK+Dls
+         tPWr7+22ENEcMJd96H1QvF6cI+QRAy2uBxbLYElPVYUYp8THJna51TPg1AO5xqrLtqeu
+         +EfgB/8xCszz96Lu8H9GJmCtCQRmZQmegOmulMngrLMybP4ppAGkmGss+RfBvhWVS+L2
+         02Bhfah7vE3V3toiYodblQeWnMlUeoigBkZSRs/L5a66UkOrVClxv5Pqh3+t1NB5aeRO
+         icCdMifXrnPNalYzY68amwBFx+NyUCaVH7vttAg2r9pHToJ7pZaQPiepnBCqw9A7xPBc
+         suGw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770137413; x=1770742213; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=peC1LbgC8hk+M9QjMfBLz3bgPIBhDM3o4nZmhT+Urjk=;
+        b=l2dQmV9rfqTvBDqTAxv/XOKuhb1MNeWZmU0EFv+Apr8CU1PzRklu24uu3akqqWRpKf
+         1D93WWfNTeSex8YQ5j6Cfkf4Ol7dvWfSqUcjXWCNTNIYTbIgfe7g2c2Rg9wUbWCSwY5B
+         E97KAd/ZWA8bAS+dlvZ8XJNo3gWgOB1CQtI0Wp3hgsq2z7w2SMPA2kx/55qBprAUEA0E
+         mtSNsxJUg4v2h5mVu5GZVLGmzuYthb5Owz1867Q40GqSztumvSiQ1FSNJe6uJrxVfsdR
+         wTZjbGj8EuqwdDgnefbI+HLiEYPH7z7+rzMRRC2httg0Zajl7eqYp+SomWUXnEBZOBnn
+         3SXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770137413; x=1770742213;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=peC1LbgC8hk+M9QjMfBLz3bgPIBhDM3o4nZmhT+Urjk=;
+        b=Ga08ZKDboHxGBV7/tUizBScprhj3VnEYVrXUdciAt/1PYOu+RHxzdXz6qzaN37jTRL
+         2OL94AhWPJPsvPEW/CZ/SBFg+JW1YzST6ok3jYZFYQfkfiWxX5qzgvemdk4rCQw44TMr
+         bEisg6mXo3OaCSxl2PFpFgKd8VsFHwN3aXbE+MuXFLATHc54Ziilg4V2Z/pi/FHLagXK
+         mkxciuwSoPGFIuAQFpHkzWK0FNXNQ88EG8cjV4GEGsmvauakbbRZ5vMX2XYRgnOHkp2d
+         GK8MaQznUWY0hnqP6kfGJ2h0TSH2JW4uBwvXoiHxLxU5yxdlLS94m9CryRPxjdWSJvyF
+         gCnA==
+X-Forwarded-Encrypted: i=1; AJvYcCUHQZNfNplZWZnrdVDTzkVqxtZATuTkzPNXC4fVx3g9cNaM6s1hu1vZK60gOTH6dZYztHnRv3NgSA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxv66iRe6gwUQYjSiORp4CMf6y+mw9maRsHEgSpk6ZaHmd6+Xz8
+	WHokjKMafuqAhHoXeOZtuGlzVfxDu+TRrcqdphCTN8Qc779FlWZvv6pvgI7GAJyaeFDbAOA5ZyD
+	VKgOLR0FydE4WeKCzss9OTF+pqPZ1lFI=
+X-Gm-Gg: AZuq6aIK9ucxBXOYeL9prC3mBi6wzeYLPNJ9OX7aqQk9eEP0Phjn80ZGo18lfsqjWLc
+	ZgvDQ2NApvg76+jA9MBE8NBO2uZcPKsaX5/4azXAXkzK3j51HR7jnuFuAkPk1XlXNyOC4ysECQ6
+	ycyOKZyycjNt3uxsdmB5BW1PJ0tWyAZdbt/SjEW7Digt2SfyYDVQa/UBF1UQGcrdGfb29kOCH6B
+	8Uh1D8wPAooEdjUn3w0LdcOQd+C9lE359J/+Kh9tLSlQ/sH3fuib6pGjH/xble0LCTUiJ+x
+X-Received: by 2002:a05:600c:4513:b0:47d:18b0:bb9a with SMTP id
+ 5b1f17b1804b1-4830e97a05bmr3659285e9.33.1770137413203; Tue, 03 Feb 2026
+ 08:50:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <d4690be7-9b81-498e-868b-fb4f1d558e08@oracle.com>
- <39c7d882-6711-4178-bce6-c1e4fc909b84@arm.com> <005401dc64a4$75f1d770$61d58650$@telus.net>
- <b36a7037-ca96-49ec-9b39-6e9808d6718c@oracle.com> <6347bf83-545b-4e85-a5af-1d0c7ea24844@arm.com>
- <849ee0ff-e15b-4b69-84de-6503e3b3168d@oracle.com> <003e01dc9013$e3bc5060$ab34f120$@telus.net>
- <004e01dc90b1$4b28f9e0$e17aeda0$@telus.net> <002601dc916e$6acbe650$4063b2f0$@telus.net>
- <CAJZ5v0gcSb_6QPMfHkjSMJ6OOF+PaCZrUKOafYQ++tHE2jBB4w@mail.gmail.com>
- <3b0720d2-9b72-48d0-998a-1fd091cec44f@arm.com> <5d4b624c-f993-49aa-95ab-5f279f7f6599@oracle.com>
- <8fd5a9d4-e555-4db1-aa02-8fe5b8a2962c@arm.com> <3395ad0b-425e-40f5-844c-627cff471353@oracle.com>
- <3f0cfac2-b753-413c-9a7e-0892c23cdbf4@arm.com>
-In-Reply-To: <3f0cfac2-b753-413c-9a7e-0892c23cdbf4@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 3 Feb 2026 17:45:38 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j+jfTHog+rVO0816mofk7nSSKCt7dbwSa2QCpYSN013Q@mail.gmail.com>
-X-Gm-Features: AZwV_QhB2zexcuvHiHohqEhk5MUVIDPfQO25Kl692r5gItoGoTXA2N-3_AmANog
-Message-ID: <CAJZ5v0j+jfTHog+rVO0816mofk7nSSKCt7dbwSa2QCpYSN013Q@mail.gmail.com>
-Subject: Re: Performance regressions introduced via Revert "cpuidle: menu:
- Avoid discarding useful information" on 5.15 LTS
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: Harshvardhan Jha <harshvardhan.j.jha@oracle.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Doug Smythies <dsmythies@telus.net>, Sasha Levin <sashal@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org, 
-	stable@vger.kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Sergey Senozhatsky <senozhatsky@chromium.org>
+References: <20260201104343.79231-1-clamor95@gmail.com> <20260201104343.79231-3-clamor95@gmail.com>
+ <2026020350-unrevised-humming-7a42@gregkh> <CAPVz0n35NkEXjur-oJhW6Yxwme_KMLdYCnRAtjHEWSPEVrSUXQ@mail.gmail.com>
+ <2026020346-ashamed-campfire-b483@gregkh> <CAPVz0n2HmLwdif5ry+y56LB8Gpwh2o9_gJ7K2jhcZVR=rPgfPA@mail.gmail.com>
+ <2026020314-humbling-mobility-c24a@gregkh>
+In-Reply-To: <2026020314-humbling-mobility-c24a@gregkh>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Tue, 3 Feb 2026 18:50:01 +0200
+X-Gm-Features: AZwV_QhyAHDV7XSYIRgT7-uQ1XQONO6unrRbKGh2IXqIB7iOHyEWGvsJ3FZAmW0
+Message-ID: <CAPVz0n0TMOCYnMiVUZ7xx-1SqrXuaVCOY-o4-x9L=f-xSMDj8g@mail.gmail.com>
+Subject: Re: [PATCH v1 2/9] misc: Support Asus Transformer's EC access device
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Sebastian Reichel <sre@kernel.org>, 
+	=?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>, 
+	Ion Agorria <ion@agorria.com>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41985-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41986-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,arndb.de,rere.qmqm.pl,agorria.com,vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
 	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 7FABFDC381
+X-Rspamd-Queue-Id: 10AC3DC557
 X-Rspamd-Action: no action
 
-On Tue, Feb 3, 2026 at 10:31=E2=80=AFAM Christian Loehle
-<christian.loehle@arm.com> wrote:
+=D0=B2=D1=82, 3 =D0=BB=D1=8E=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 18:45 Greg =
+Kroah-Hartman <gregkh@linuxfoundation.org> =D0=BF=D0=B8=D1=88=D0=B5:
 >
-> On 2/3/26 09:16, Harshvardhan Jha wrote:
+> On Tue, Feb 03, 2026 at 06:28:11PM +0200, Svyatoslav Ryhel wrote:
+> > =D0=B2=D1=82, 3 =D0=BB=D1=8E=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 14:00 G=
+reg Kroah-Hartman <gregkh@linuxfoundation.org> =D0=BF=D0=B8=D1=88=D0=B5:
+> > >
+> > > On Tue, Feb 03, 2026 at 01:54:58PM +0200, Svyatoslav Ryhel wrote:
+> > > > =D0=B2=D1=82, 3 =D0=BB=D1=8E=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 13:=
+41 Greg Kroah-Hartman <gregkh@linuxfoundation.org> =D0=BF=D0=B8=D1=88=D0=B5=
+:
+> > > > >
+> > > > > On Sun, Feb 01, 2026 at 12:43:36PM +0200, Svyatoslav Ryhel wrote:
+> > > > > > --- /dev/null
+> > > > > > +++ b/drivers/misc/asus-dockram.c
+> > > > > > @@ -0,0 +1,327 @@
+> > > > > > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > > > > > +/*
+> > > > > > + * ASUS EC: DockRAM
+> > > > > > + */
+> > > > > > +
+> > > > > > +#include <linux/device.h>
+> > > > > > +#include <linux/err.h>
+> > > > > > +#include <linux/i2c.h>
+> > > > > > +#include <linux/mfd/asus-ec.h>
+> > > > > > +#include <linux/mod_devicetable.h>
+> > > > > > +#include <linux/module.h>
+> > > > > > +#include <linux/mutex.h>
+> > > > > > +#include <linux/slab.h>
+> > > > > > +#include <linux/string.h>
+> > > > > > +#include <linux/sysfs.h>
+> > > > > > +#include <linux/types.h>
+> > > > > > +#include <linux/unaligned.h>
+> > > > > > +
+> > > > > > +struct dockram_ec_data {
+> > > > > > +     struct mutex ctl_lock; /* prevent simultaneous access */
+> > > > > > +     char ctl_data[DOCKRAM_ENTRY_BUFSIZE];
+> > > > > > +};
+> > > > > > +
+> > > > > > +int asus_dockram_read(struct i2c_client *client, int reg, char=
+ *buf)
+> > > > > > +{
+> > > > > > +     int rc;
+> > > > > > +
+> > > > > > +     memset(buf, 0, DOCKRAM_ENTRY_BUFSIZE);
+> > > > > > +     rc =3D i2c_smbus_read_i2c_block_data(client, reg, DOCKRAM=
+_ENTRY_BUFSIZE, buf);
+> > > > > > +     if (rc < 0)
+> > > > > > +             return rc;
+> > > > > > +
+> > > > > > +     if (buf[0] > DOCKRAM_ENTRY_SIZE) {
+> > > > > > +             dev_err(&client->dev, "bad data len; buffer: %*ph=
+; rc: %d\n",
+> > > > > > +                     DOCKRAM_ENTRY_BUFSIZE, buf, rc);
+> > > > > > +             return -EPROTO;
+> > > > > > +     }
+> > > > > > +
+> > > > > > +     dev_dbg(&client->dev, "got data; buffer: %*ph; rc: %d\n",
+> > > > > > +             DOCKRAM_ENTRY_BUFSIZE, buf, rc);
+> > > > > > +
+> > > > > > +     return 0;
+> > > > > > +}
+> > > > > > +EXPORT_SYMBOL_GPL(asus_dockram_read);
+> > > > >
+> > > > > No documentation for these new public symbols?
+> > > > >
+> > > >
+> > > > These functions are mainly used in communication between the dockra=
+m
+> > > > device, asus-ec and its subdevices. Export is used here because all
+> > > > mentioned devices can be built as modules. I can add descriptions o=
+f
+> > > > functions into header if needed, but they should never be used outs=
+ide
+> > > > of dockram-EC complex. Same applies to 2 export functions in the EC
+> > > > MFD.
+> > >
+> > > Then you should properly document this :)
+> > >
+> > > > > > +static BIN_ATTR_RW(dockram, DOCKRAM_ENTRIES * DOCKRAM_ENTRY_SI=
+ZE);
+> > > > > > +static DEVICE_ATTR_RW(control_reg);
+> > > > >
+> > > > > You did not document your new sysfs files in Documentation/ABI/ w=
+hich is
+> > > > > required.
+> > > > >
+> > > > > Also, why do you need a brand new user/kernel api at all?  Who is=
+ going
+> > > > > to use this and for what?
+> > > > >
+> > > >
+> > > > These api were used mainly for debugging/logging purposes and desce=
+nd
+> > > > from original downstream EC driver. I can both add documentation in=
+to
+> > > > ABI or remove them if that is absolutely necessary.
+> > >
+> > > Debugging should not be in sysfs, please put this type of stuff into
+> > > debugfs instead if you really need it.
+> > >
 > >
-> > On 03/02/26 2:37 PM, Christian Loehle wrote:
-> >> On 2/2/26 17:31, Harshvardhan Jha wrote:
-
-[cut]
-
-> >> FWIW Jasper Lake seems to be supported from 5.6 on, see
-> >> b2d32af0bff4 ("x86/cpu: Add Jasper Lake to Intel family")
-> >
-> > Oh I see, but shouldn't avoiding regressions on established platforms b=
-e
-> > a priority over further optimizing for specific newer platforms like
-> > Jasper Lake?
-> >
+> > There is no similar way to handle BIN_ATTR_RW in the debugfs (), may I
+> > preserve  dockram_read/write with __maybe_unused instead of removing
+> > them? I will add comment with explanation
 >
-> Well avoiding regressions on established platforms is what lead to
-> 10fad4012234 Revert "cpuidle: menu: Avoid discarding useful information"
-> being applied and backported.
-> The expectation for stable is that we avoid regressions and potentially
-> miss out on improvements. If you want the latest greatest performance you
-> should probably run a latest greatest kernel.
-> The original
-> 85975daeaa4d cpuidle: menu: Avoid discarding useful information
-> was seen as a fix and overall improvement,
+> debugfs allows you to do much much more than simple stuff like
+> BIN_ATTR_RW().  Go wild there, but don't put debugging stuff in sysfs,
+> that is NOT what it is there for at all, but rather, that is exactly
+> what debugfs is for.
+>
 
-Note, however, that commit 85975daeaa4d carries no Fixes: tag and no
-Cc: stable.  It was picked up into stable kernels for another reason.
+I am removing said stuff from sysfs, that is not what I am asking.
+Debugs does not allow to upload register values in a form of binary
+block. It allows only dumping via debugfs_create_blob or
+debugfs_create_regset32 but not writing. If you know examples of
+reading and writing register sets as binary data, please point me to
+it.
 
-> that's why it was backported, but Sergey's regression report contradicted=
- that.
+I am asking if it is possible only to preserve dockram_read/write
+functions in the code, without exposing it to sysfs.
 
-Exactly.
-
-> What is "established" and "newer" for a stable kernel is quite handwavy
-> IMO but even here Sergey's regression report is a clear data point...
-
-Which wasn't known at the time commit 85975daeaa4d went in.
-
-> Your report is only restoring 5.15 (and others) performance to 5.15
-> upstream-ish levels which is within the expectations of running a stable
-> kernel. No doubt it's frustrating either way!
-
-That is a consequence of the time it takes for mainline changes to
-propagate to distributions (Chrome OS in this particular case) at
-which point they get tested on a wider range of systems.  Until that
-happens, it is not really guaranteed that the given change will stay
-in.
-
-In this particular case, restoring commit 85975daeaa4d would cause the
-same problems on the systems adversely affected by it to become
-visible again and I don't think it would be fair to say "Too bad" to
-the users of those systems.  IMV, it cannot be restored without a way
-to at least limit the adverse effect on performance.
-
-I have an idea to test, but getting something workable out of it may
-be a challenge, even if it turns out to be a good one.
+> thanks,
+>
+> greg k-h
 
