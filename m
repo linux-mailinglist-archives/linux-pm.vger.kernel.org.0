@@ -1,155 +1,222 @@
-Return-Path: <linux-pm+bounces-41955-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41956-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AAGRDlHVgWkCKgMAu9opvQ
-	(envelope-from <linux-pm+bounces-41955-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 12:00:33 +0100
+	id mJkFAOXWgWlYKgMAu9opvQ
+	(envelope-from <linux-pm+bounces-41956-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 12:07:17 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1D40D8032
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 12:00:32 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E25CD813E
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 12:07:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 13FB33004DC0
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Feb 2026 11:00:32 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 0C51D300699C
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Feb 2026 11:07:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A46D32C33D;
-	Tue,  3 Feb 2026 11:00:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2702832F753;
+	Tue,  3 Feb 2026 11:07:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bBRpzMFW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ovxU0G58"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8229223184A
-	for <linux-pm@vger.kernel.org>; Tue,  3 Feb 2026 11:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770116431; cv=none; b=qu1XzslAmC3oUcnfNYtx/Aqw/X4CdOT7bFp1xMUZyqbNDW9mMrYW6K/BKgtmQao6ezbeboziyn2g4pjskpqQ00aJ93SPiXvxLywuIug5h2ASpZIy7olWACfAHXqSWU+k9AI7T1op3cZhXxwYyfhiUtTS1XNOANlNYJKvI18mgzw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770116431; c=relaxed/simple;
-	bh=hudPfaB5Y8u+39+QhqcnbqU4DSfvZiJpkZwi23yNzcM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tfHRW5JvFLMu1aWnv9DdExZZL+SlYY+1GfZyNU35MKfCq5x6rd7AsVqCdSVQ8l/KYUyXqix6WtAxujNPzCzSX71ZyhYaFuSTVDj+E+pA3kSW1zeUyvRxYvvSzuOFv/zWWCoqqdRYrtK0zt4wGYysRAwG0TWQZeThk1G1nLfTQ1c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bBRpzMFW; arc=none smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2b6b0500e06so8095288eec.1
-        for <linux-pm@vger.kernel.org>; Tue, 03 Feb 2026 03:00:29 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE7A32D7FB
+	for <linux-pm@vger.kernel.org>; Tue,  3 Feb 2026 11:07:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770116828; cv=pass; b=G186fHkhnUhZ3jFek2Re737U7cgnaHKaY71Y0UFw4L/4Ku3mAdc5DNkuqZcLLRuLyRa2Qj7FYqWKQSJXOHtM08auIdOa2lFbKA3KC+xVIhPznqwVt6jNAaDbhUeO7fR5rrSrQO2CQB7zEfkzepTegj0kVaLPNjiZ9+oeVQUmIno=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770116828; c=relaxed/simple;
+	bh=OH7+HSlnA2x81hRfL4m4AByJ0bZZKFk99H50SaARSyc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QYslYaN5QRrIwWGF1HqbXC4IejWFBC/kmj0lK2YWh8ofR3+pgd9WzXf5ACP9yvwTWILQ9+u5X982eQcNztaa/ELqwBfcw492lyuGSJOda9+FdojEEk52Ahp2uG8ilx2x6IZ+/LNa+MLUYhHPetjHeRIXFX+xkXdDXXpJeV3Li4Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ovxU0G58; arc=pass smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-59b672f8ec4so6089837e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 Feb 2026 03:07:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770116825; cv=none;
+        d=google.com; s=arc-20240605;
+        b=VyxNyfq8ZR5YmD0TjE3dwEQNpMJiauAoxO+a+16nmGuMxw/6M/Kj+5nd9SGhQOXg7e
+         zrCNqggufSvSMeFsuus9ewRqunlFawbwV3nQleZaa80E1U4qPaKlll1Nx0ieRjKXEt2c
+         jW2wa0NBLOtBFP6nU595DuenafoekZY4wFo+Ef8DduWODo18NrKsnDoVXZLdxeHPZvKV
+         1PzVgHbj3hxRZBhT8cev4I3zacRs6ObodVd8MTNCjA51Ug7vdEEXJIf2yVwSD76SCOso
+         dpV0Ijh7vFEkMYSP6nn4MzhIZ0sr4KyaBLzUmvSzHeodyH50t6s4X3Cp3Inx7Ugc9QGW
+         ljtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=mpau5hvO+i/E0AiXJ5P3htmR+ezocch+kVwOVkTz9TQ=;
+        fh=O23JTvWBBlu9UjjxgR/lGl29SbH2cMU/3Ah1AzmMlXk=;
+        b=X/yDU5BP53wrmtbFslAH0BlYRez4c6A9JSx6QfypNOAsyPd+o1jjI4bkK7tTTD2328
+         hueDDXMKP49zD4DsEm2Ab1SYgopE+DDj1XhNuHdqv587GVmIh/ixxHyaPxt0ruqHqSEV
+         5lIvq3kmgDrDGdXUMuTfLVDeiIL1KqoveN0bCCMNHlOboNqudGLmMmA0Vj6hQYvG+L/+
+         947YnpqMbwH2VC1UNcFJuGk8zZhkcrwNTNFLWttqRBI1wDHPpn/t/AVbx9YLrzXOI5TV
+         aPt6wBsDd+zxyEj8XPs0ByIzyIwZmxbEXzRzxqBctDdHgTrdJ+P56MMmOvhH72idC8Li
+         67kQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770116428; x=1770721228; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0JgnMsXOh9YRopf/e3+gz8PgFtk2UitVTNFeIUt3zTk=;
-        b=bBRpzMFWc8IrJor0xe+IV8RxvGmwWg2IpM+53bbVASZd4OkxSngWIl2MFsLiOonJoJ
-         xcJZQcwaXuyOVM4fqJxUwBvA18HTc/8qpo8MKA3ce1MrHwEBbmkQoyrVPTW16jNpRso6
-         ntlLX8WJ3qOMSVmTJKjPs91RM0TI6BRM7U/fR84Mj4wF7q6LHua4cLe3cNcBSOj692a8
-         oZjPP5rPdXcjhmS+qCQchB4Yp60mtm4DX6JoAeaiaMUGA4x3dxt3nxItVVc7orX6nLju
-         8FIWXxyczFTl+olaraL90nsYdL3tT4xxoCsNtlgv3m7FkABGH/qxnK9B86rwKq1lsEh5
-         07dQ==
+        d=linaro.org; s=google; t=1770116824; x=1770721624; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mpau5hvO+i/E0AiXJ5P3htmR+ezocch+kVwOVkTz9TQ=;
+        b=ovxU0G58i/m4Q0Uz+/0XRnDV3liD+GhF7Is8sjvMq8PxNzFmeUhwUrKwHOVJkRf4ad
+         Lwpb8Emr8sSgMbx/BaLiYM+13DEqQYNCkvUf3Q8mszJezihuMlEzVffC6sIBZ/7/2bmi
+         kHP6Or7HYkIWUpgusEh+baC5nS3S94ebazilBW9kmEf3kCKM3ndZfh84tVHDPmdTTWzN
+         gHPqxscfc5/3pcaFLcqvNifKv6HmC7BezPO7zkcxfZU0H3E7IoRbRAA4yOWvyGPWSBtI
+         2oiAf7B39IQE5GuVnWtMklIKDb05NcJAGMgdYG0MRhZIAiMCzX8TXMeMQO7EKMGONWui
+         O1ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770116428; x=1770721228;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0JgnMsXOh9YRopf/e3+gz8PgFtk2UitVTNFeIUt3zTk=;
-        b=r+h3JNgsMTIBx8Cu4SLoKsyU1QF+jJET48+aJiPUHhgHOEYhXWVeQ191eAg7p5bA26
-         LK4c2oQPgQfOqFTnKQ6KyW8kMCLX7jHHHX7mJe2Lh9lXFxjjxGXtQkB4C0MC3EpRKmXn
-         k/6ekfKWBnXLX5RmaSD+p11UROoc0AtKiJZO/MAQKjfFlrVd8XEHiBSlPZEobG38dVYq
-         bcRiWwP0+Is3Tewq5SL+8n+RHLfSiZqXVugi01ivHAo0dOppVLRYvBVOffgf2JZfhfLg
-         PLhcx0VG/FbeYbmpnPqftfCstpQt05aPH/f70s+ts6lyqcY8gU6eUwLZnrRDCpjc3Cwi
-         H0Og==
-X-Forwarded-Encrypted: i=1; AJvYcCXODHCbHu0hvLj7C5lAA0gMfnP8EsS81g0ipq6f9CmOC1UDFyhaMl5f9vu1gBsuc3Glq+GsA7NnuQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLP4jJ/oU2Y6RScsGRJEbITPrkV3UYJ+hZhd5EQdHbObMkHCbm
-	Ple8ubr5gYyRAwAnEcbMeqj/DvsMPtOmvHuqLYF2r7Ejf8HilvoF6I5+
-X-Gm-Gg: AZuq6aI4j1H+fQD9cQwFb8ySjRiVJx5VJIvRJed/T7Lx7BTs3jblsPStrCWf/espFz9
-	2rfM867xclaklFmnzxHIAkAPahAetPre2LQ0pxKFLUbAiy1bhWCZFiYel3LbmOcJA7TQhHZD4/k
-	lqDZzGW/EiYW6dlG2uU9tPES8oya4rH6kgItzAPv0uIfSwo9fCX8Bx+ixHPYS8Mv6+1z1OJv3zX
-	2TX9y5w6Ia6YlatpDuoyzdSlLv60h4dPZptQ8niJOfuriLuxt13NwDiMeYZp9++UI6DnkPTziIZ
-	Wa5CrUoAWhqIQTu0FAr6OXMcPHD/+YuVfGwByb+/A1622aJDtGhCtcu+STIvT5TlSHWFYWa/Zu3
-	wJN119XmIjLYuqsCTvbgtGLFfxuJ0m57yl8lBOQ7zf7HFIEd2MchxUgd6gi+KLJrEqi7jHxR9OJ
-	mTcYlIz3bwI2NTeHg6JbCr0MG1RR5MlzVZmIVkCFY4m6ZGyX+u
-X-Received: by 2002:a05:7300:4306:b0:2a4:7f22:cc0d with SMTP id 5a478bee46e88-2b7c8909ad3mr6722053eec.32.1770116428294;
-        Tue, 03 Feb 2026 03:00:28 -0800 (PST)
-Received: from google.com ([2a00:79e0:2ebe:8:ea13:571:b19b:36])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b7a1add664sm22262633eec.26.2026.02.03.03.00.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 03:00:27 -0800 (PST)
-Date: Tue, 3 Feb 2026 03:00:24 -0800
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Pavel Machek <pavel@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Sebastian Reichel <sre@kernel.org>, 
-	=?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>, Ion Agorria <ion@agorria.com>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 6/9] input: keyboard: Add driver for Asus Transformer
- dock multimedia keys
-Message-ID: <aYHU5g5iOVjrHrE_@google.com>
-References: <20260201104343.79231-1-clamor95@gmail.com>
- <20260201104343.79231-7-clamor95@gmail.com>
+        d=1e100.net; s=20230601; t=1770116824; x=1770721624;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mpau5hvO+i/E0AiXJ5P3htmR+ezocch+kVwOVkTz9TQ=;
+        b=dwRWNHtKWJ5AK8T364D0vxLq/fKE3ePj6Cld/cHm4l0urZRLXK4k2GQLudecl11Y3g
+         Nqkl9d4VnAOi8KNIStWfWMZvtCg4DPg/f6Bio0KRmmrx8u5g/mvM7rIWC1zVJjYGwunO
+         TMZ5UwfRbz67INafiNRnjKI5eyXABTOqhh7noD/s7qRqa/+yICTIjtYp4XPYvCAXciC1
+         rcVuPsItTmRw5hFQHxsDiedigIKkjtJ2HiO1yJL4XMxHOAmcnqo1DpObXce3ClR3qt2Y
+         GMzLVGZ7pD/VV4V+qSCNEu9hIqdKExDzyDw1VkTV3QqIlQkjmscnaa7L75GX6tj1hSPq
+         VN6g==
+X-Forwarded-Encrypted: i=1; AJvYcCXdWJqryNcawJxyK6RglJbQrY6IlSIABoB6XZngD86Bztd9pHriSOzPhYVfNuS2hc5PtL5vWSVV9g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/x2DytBqgAo7SsdbEVGW2rpDAPfTaCQQguMMraPX2oOOPVuJz
+	gcIUaNXbakLwqDeK1+jzWsLhmi+saXQp237i0IOcd5LpfeYvATpuvIJPaOFLyaGYDGlSpZTWvJk
+	H8IJRj98PJ62VVOKTw+Ity1XQy+gT1wFreZxcYEqzDw==
+X-Gm-Gg: AZuq6aLYtG9wEl5loaf6kibmnXNlBQQvVxEqO0gJh03FK7ZFnEIQrgtI4pHHF3D/GHF
+	Cm3ovT5fp3pr3b8VbeEpaTtYkN2BpqM4KvLFgErwblUJ7Qc0z04Z46YTL7OQPrfTwx2vxMSRSr9
+	EEviESGSxNcmSNVf0TKnQSlTA8fvtnVba72xUGvMQ9Dt3hOjugxOT/RwN1GvXlIMA2UTtukb5lu
+	gjn3GTtl2R7V8aOuvYWLorZVcndSdm7lU4ZNIBcia4kRmhyXOQSv0457HkGMpURQNedkwWf
+X-Received: by 2002:a05:6512:10c2:b0:59d:a4ed:1aee with SMTP id
+ 2adb3069b0e04-59e16424bf4mr4915624e87.40.1770116824273; Tue, 03 Feb 2026
+ 03:07:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260201104343.79231-7-clamor95@gmail.com>
+References: <20260202074730.738760-1-xu.yang_2@nxp.com>
+In-Reply-To: <20260202074730.738760-1-xu.yang_2@nxp.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 3 Feb 2026 12:06:28 +0100
+X-Gm-Features: AZwV_Qh2hAOTL2iZXhJf4HtRUDzm3SZegUCoMSRIOsgW54neZTtXwIBhuC9chV8
+Message-ID: <CAPDyKFpqfo1R8Qkq284L9DTURjZnvm_n8W3a6KQTomg7A-M_Ug@mail.gmail.com>
+Subject: Re: [PATCH 1/2] pmdomain: imx8mp-blk-ctrl: set awake path for
+ power_dev if attached device needs wakeup
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Frank.Li@nxp.com, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+	festevam@gmail.com, peng.fan@nxp.com, jun.li@nxp.com, 
+	rafael.j.wysocki@intel.com, a.fatoum@pengutronix.de, ping.bai@nxp.com, 
+	shawnguo@kernel.org, l.stach@pengutronix.de, linux-pm@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
+	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-41956-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41955-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_FROM(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[nxp.com,pengutronix.de,gmail.com,intel.com,kernel.org,vger.kernel.org,lists.linux.dev,lists.infradead.org];
 	RCPT_COUNT_TWELVE(0.00)[16];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[dmitrytorokhov@gmail.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
 	TO_DN_SOME(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D1D40D8032
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ulf.hansson@linaro.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[linaro.org:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:email,mail.gmail.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linaro.org:dkim]
+X-Rspamd-Queue-Id: 1E25CD813E
 X-Rspamd-Action: no action
 
-Hi Svyatoslav,
-
-On Sun, Feb 01, 2026 at 12:43:40PM +0200, Svyatoslav Ryhel wrote:
-> +static void asus_ec_input_event(struct input_handle *handle,
-> +				unsigned int event_type,
-> +				unsigned int event_code, int value)
-> +{
-> +	struct asus_ec_keys_data *priv = handle->handler->private;
+On Mon, 2 Feb 2026 at 08:46, Xu Yang <xu.yang_2@nxp.com> wrote:
+>
+> Current design will power off all dependent GPC power domains in
+> imx8mp_blk_ctrl_suspend(), even though the user device has enabled
+> wakeup capability. The result is that wakeup function never works
+> for such device.
+>
+> An example will be USB wakeup on i.MX8MP. PHY device '382f0040.usb-phy'
+> is attached to power domain 'hsioblk-usb-phy2' which is spawned by hsio
+> block control. A virtual power domain device 'genpd:3:32f10000.blk-ctrl'
+> is created to build connection with 'hsioblk-usb-phy2' and it depends on
+> GPC power domain 'usb-otg2'. If device '382f0040.usb-phy' enable wakeup,
+> only power domain 'hsioblk-usb-phy2' keeps on during system suspend,
+> power domain 'usb-otg2' is off all the time. So the wakeup event can't
+> happen.
+>
+> Let's propagate wakeup path to virtual power domain device so the wakeup
+> event can happen properly.
+>
+> Fixes: 556f5cf9568a ("soc: imx: add i.MX8MP HSIO blk-ctrl")
+> Cc: stable@kernel.org
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> ---
+>  drivers/pmdomain/imx/imx8mp-blk-ctrl.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
+> index 34576be606e3..f3bfd6d22722 100644
+> --- a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
+> +++ b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
+> @@ -804,12 +804,20 @@ static int imx8mp_blk_ctrl_suspend(struct device *dev)
+>
+>         for (i = 0; i < bc->onecell_data.num_domains; i++) {
+>                 struct imx8mp_blk_ctrl_domain *domain = &bc->domains[i];
+> +               struct pm_domain_data *pdd;
+>
+>                 ret = pm_runtime_get_sync(domain->power_dev);
+>                 if (ret < 0) {
+>                         pm_runtime_put_noidle(domain->power_dev);
+>                         goto out_fail;
+>                 }
 > +
-> +	/* Store special key state */
-> +	if (event_type == EV_KEY && event_code == KEY_RIGHTALT)
-> +		priv->special_key_pressed = !!value;
+> +               list_for_each_entry(pdd, &domain->genpd.dev_list, list_node) {
+> +                       if (device_awake_path(pdd->dev)) {
+> +                               device_set_awake_path(domain->power_dev);
+> +                               break;
+> +                       }
+> +               }
 
-Is this functionality supposed to be triggered by any keyboard or only
-the dock one?
+This is really messy in my opinion. Ideally the above should not be
+used by a genpd provider as it's internal data structures are managed
+by genpd itself.
 
-Thanks.
+If I understand correctly, this problem boils down to the fact that we
+should have tried harder to model child/parent domains, rather than
+using runtime PM to manage the parent domains. I understand there are
+problems with that, due to specific power on/off sequences we have for
+imx power-domains, but I wonder if those could be managed better by
+using genpd on/off notifiers?
 
--- 
-Dmitry
+Anyway, that said. Rather than walking through the list of devices as
+above, I suggest that you use the ->power_off() callback for the
+corresponding genpd(s) to dev in combination with a genpd power on/off
+notifier for the corresponding genpd that the power_dev is attached
+to.
+
+More precisely, if the "child domain(s)" that corresponds to "dev" has
+not been powered-off (because device_awake_path() is set for some
+device) during system suspend, the power-off notifier should return
+NOTIFY_BAD to prevent the "parent domain" that corresponds to
+power_dev from being powered-off.
+
+Would that work, you think?
+
+Kind regards
+Uffe
 
