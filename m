@@ -1,338 +1,323 @@
-Return-Path: <linux-pm+bounces-41946-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-41947-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QL6JBM/AgWm7JAMAu9opvQ
-	(envelope-from <linux-pm+bounces-41946-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 10:33:03 +0100
+	id QECqAvvAgWm7JAMAu9opvQ
+	(envelope-from <linux-pm+bounces-41947-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 10:33:47 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63A90D6CBC
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 10:33:02 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71626D6CF5
+	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 10:33:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id CA29F303DD66
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Feb 2026 09:31:48 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5045D304EA72
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Feb 2026 09:33:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6362D261B96;
-	Tue,  3 Feb 2026 09:31:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4565A30F92E;
+	Tue,  3 Feb 2026 09:33:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="aRS/lCZo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 359831DFE12;
-	Tue,  3 Feb 2026 09:31:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770111108; cv=none; b=GnQ8L9LXRuKpLGtn+/LMLj2+tqbnp5XGaMBpoFyByUCs2KjcPpC2aLMsYeHDoLALprRr9uBB+98ZHU7002MhuB7jxKR+b64tdy1EHgYgLpJZg93Z9hdELL7y4d7xImC3mtOMPEjxyg988DUedOqky4G6HZbs4n2oaSoFVCaBm3o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770111108; c=relaxed/simple;
-	bh=e3sfQYnOGO2DjibUbMN9/Ori0jRxDDPKihNZ7PwltqQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oPYM2vs+uAhSSJNiBQf334pfQzBRHeg6LJQPEx/c15jYQa2yQq+ZicJ8C45rgl4lbg+OfpxHNLthavKHnehFSbIyrs3b70Q2uAopqOlBujh2A+4exc39Rs/ZgsFLEIosYcZ8a85WESFW6nRB5BenF7UgYdNU4c6X2Qhh+ngy8lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DC27339;
-	Tue,  3 Feb 2026 01:31:39 -0800 (PST)
-Received: from [10.57.68.168] (unknown [10.57.68.168])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 834A43F632;
-	Tue,  3 Feb 2026 01:31:43 -0800 (PST)
-Message-ID: <3f0cfac2-b753-413c-9a7e-0892c23cdbf4@arm.com>
-Date: Tue, 3 Feb 2026 09:31:41 +0000
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010017.outbound.protection.outlook.com [52.101.84.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D44E212548;
+	Tue,  3 Feb 2026 09:33:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770111221; cv=fail; b=qM0Z3BkxyHDIwyT1uJYzu9N+rd283TL+bcW6QFkPSJkVdZ61Z+dMTO28BIKcYCOSMSRqdyCDDkVVG8U4HzfkhiuDuUxfQ64JyVnUti4EUXFdc2GZP5aGx6AgZAePe2bKVgZ2SwPqH8mGfSUkqpzSG236t+ZibR6VsilLPmAepoM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770111221; c=relaxed/simple;
+	bh=Yk6xHtnaSOtmVOZKxd0l4obIiRVPCuNHpn6GiKnowf8=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=Eh1mLQT+aJhdu07E3JKapDQMGbp3pLJgCZSuZMrAmGY1sUcy8gl/nyM8/TvU+aO5z+7kwx2GqQRUfL+cRSgsvrUHU5zWQoY8Nlb30U8bGhVUpbc2Jpr9iwaSLb2ax4QMnRZrH0wT9H6pmwRLAjJH/MQcBRUfdRyRUCIuNBe3DCg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=aRS/lCZo; arc=fail smtp.client-ip=52.101.84.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rHpVi9yXAauigsGx9CqRUC70uA2Y+Q6Bx3BIX+/XvJRZuz8wNZ1gzEibTiTIJMi28UEsc4tvpLoFa1meSBrut0jJ/Y2wCoQZ+P5Dvkpg9mPbJD8F/unuyR4gP6scK6FcWM66ESwSJIqwoHL5f32ueNCnXiB9PodQbCTY30sV/YjdXKlCzsC/hzA9z7W002H7jP+sAMC4pHAZG/UdlWMsDvjp/AG8Z6e7mksib4um+wVjhCL7FDrTog5YKsvdff5ktSp0YphBNxPrEowm+FSmMqXdTouDBGCzDs1JplEH9KseTR/KihKZxBmWIpvTYo88rXzpuw/MU3yzXIq0Ljn/0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VHXTDepcNvb/UKG8YIUdLguzAPMbdpe/48tNOU2zslI=;
+ b=DhGQNBiTh2Mjzgo/TKFZz00iE7iAlwIol/iVociIWQEnf8kdoCuG9JmaGf/3uM/SWk4d50VNhrNL74xk1VgMZ5GUVOtTduleM1b7xRM3lFG4MOHhM7N+i+NMoHfynjp5kEMD/N+1JPNX5CQZ5A2eZtRUVkNRXDbXaMahDH3OfHhjsUI5oEt/xIsRAcX2qYf0pirOuIZVkq5fDBcCtipa66cwBqn1omoQKybQosa3davHOKUP/sbxtI1TDaU1lO6rj2h7EE3PwmxWI2GSJCBymJUqvQTvJd9PfETfeNCjNl8PNB10sNHbwpjKqKZijrLDj/2z0TNr/H4snVq0Ew2oHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VHXTDepcNvb/UKG8YIUdLguzAPMbdpe/48tNOU2zslI=;
+ b=aRS/lCZoG5z1dewQpnIkfnmRViVJAyZpdOek0WuyPPOWfktyPEyCMKdy5LkGcsCFo2GJ3amE5ZpWOFloULofaVpzfEnM/ZO9ufC8VZPYVJuwJWpEM5Yabw1mu7TkMHosma/As0FprkJCduLnuAQt1DRqPUzFDwNdAewjmi2798gLLzxpBEpmpzfQrHZXeZWYnPnIX8wO0FO+EHeziogAl6amDC+3RwoCYmnamEXw5rmvrDB8+14jSx0SRsdjO2v2eiKbo5WE6xXoRMS6n4WCGcyMxrBvuFi2fQ25dY3HzE5qdzDf4hYPF/y/5K6fAVZhSEnag/RyNg2Chg8qJ5WbdA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PAXPR04MB8254.eurprd04.prod.outlook.com (2603:10a6:102:1cd::24)
+ by VI0PR04MB12187.eurprd04.prod.outlook.com (2603:10a6:800:335::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Tue, 3 Feb
+ 2026 09:33:35 +0000
+Received: from PAXPR04MB8254.eurprd04.prod.outlook.com
+ ([fe80::2755:55ac:5d6f:4f87]) by PAXPR04MB8254.eurprd04.prod.outlook.com
+ ([fe80::2755:55ac:5d6f:4f87%4]) with mapi id 15.20.9564.016; Tue, 3 Feb 2026
+ 09:33:35 +0000
+Message-ID: <ac798f2a-b47e-4d8b-b09e-7377951f6df7@oss.nxp.com>
+Date: Tue, 3 Feb 2026 17:33:24 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] arm64: dts: imx8mq: Restore VPU G2 clock to 600MHz for
+ 4K60fps decoding
+To: Lucas Stach <l.stach@pengutronix.de>,
+ Nicolas Dufresne <nicolas@ndufresne.ca>, linux-media@vger.kernel.org
+Cc: mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+ benjamin.gaignard@collabora.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, p.zabel@pengutronix.de, sebastian.fricke@collabora.com,
+ shawnguo@kernel.org, ulf.hansson@linaro.org, s.hauer@pengutronix.de,
+ kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+ Frank.li@nxp.com, peng.fan@nxp.com, eagle.zhou@nxp.com,
+ devicetree@vger.kernel.org, imx@lists.linux.dev, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20260130084133.2159-1-ming.qian@oss.nxp.com>
+ <df8d5d5f28870752e77ec74f34fea7ceb6e97286.camel@ndufresne.ca>
+ <0b24716b-438c-4185-8a93-3a3879147c24@oss.nxp.com>
+ <169eba79e8e1f906b1a0b59e22a531dfc7e57a1f.camel@ndufresne.ca>
+ <5e3431c69da07557edb20a252c4759be8c857f08.camel@ndufresne.ca>
+ <ca3a8042-1394-4925-9c61-dbfcbf4cf7d9@oss.nxp.com>
+ <20602b86caa7166a5ac8eb75d38be07c7d7bb264.camel@pengutronix.de>
+From: "Ming Qian(OSS)" <ming.qian@oss.nxp.com>
+In-Reply-To: <20602b86caa7166a5ac8eb75d38be07c7d7bb264.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR01CA0053.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::7) To PAXPR04MB8254.eurprd04.prod.outlook.com
+ (2603:10a6:102:1cd::24)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Performance regressions introduced via Revert "cpuidle: menu:
- Avoid discarding useful information" on 5.15 LTS
-To: Harshvardhan Jha <harshvardhan.j.jha@oracle.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Doug Smythies <dsmythies@telus.net>
-Cc: Sasha Levin <sashal@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org,
- stable@vger.kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>,
- Sergey Senozhatsky <senozhatsky@chromium.org>
-References: <d4690be7-9b81-498e-868b-fb4f1d558e08@oracle.com>
- <39c7d882-6711-4178-bce6-c1e4fc909b84@arm.com>
- <005401dc64a4$75f1d770$61d58650$@telus.net>
- <b36a7037-ca96-49ec-9b39-6e9808d6718c@oracle.com>
- <6347bf83-545b-4e85-a5af-1d0c7ea24844@arm.com>
- <849ee0ff-e15b-4b69-84de-6503e3b3168d@oracle.com>
- <003e01dc9013$e3bc5060$ab34f120$@telus.net>
- <004e01dc90b1$4b28f9e0$e17aeda0$@telus.net>
- <002601dc916e$6acbe650$4063b2f0$@telus.net>
- <CAJZ5v0gcSb_6QPMfHkjSMJ6OOF+PaCZrUKOafYQ++tHE2jBB4w@mail.gmail.com>
- <3b0720d2-9b72-48d0-998a-1fd091cec44f@arm.com>
- <5d4b624c-f993-49aa-95ab-5f279f7f6599@oracle.com>
- <8fd5a9d4-e555-4db1-aa02-8fe5b8a2962c@arm.com>
- <3395ad0b-425e-40f5-844c-627cff471353@oracle.com>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <3395ad0b-425e-40f5-844c-627cff471353@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8254:EE_|VI0PR04MB12187:EE_
+X-MS-Office365-Filtering-Correlation-Id: bd07324d-faa7-434f-84ff-08de63074d48
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|19092799006|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dTd3eGVYTGQwQUVra3VDdUp2Y2lIbUFJR1JiU1RXbytEcjIwOFNySEl0ckxZ?=
+ =?utf-8?B?ZEptOEtOazNWdXJ2OGFBRm9rUWVocjVqU1RiRTYvQjdMZHJ5NW9BSFhhTGg5?=
+ =?utf-8?B?a0Z4ajFVQ2trMGtvOWpWWWYwL2xkd0xiRVdpbnA3K0JDQXk1d1JQd25NNElY?=
+ =?utf-8?B?YjZia0ZEREpHckJHR1VoUUdhL2ZVclhjaUExekV4MWpjRzJpQzJaVm10b2ha?=
+ =?utf-8?B?d0Q0Vk5BSk9QUzMvUkRPSFRFNTdISnhHdWZZWEd2VXNUSFcxdjNmZDdMci9j?=
+ =?utf-8?B?UjhHUW8yc0JpcEFSYmU1MXJWcGo2d0NpVTZOZHdjZGhzLzU1ZlhGaWlBdFNa?=
+ =?utf-8?B?Y0NBelFTcUpXaWNZNE5uRlR6SUFHNXYyaFFvTDBPOU52S1JzZnhYMW12WnFn?=
+ =?utf-8?B?dm00VFNCYTFqbjBmQU05cXRrcE56a1lRZnc5R0hMRWJoUWkvQzE0c3djSVhI?=
+ =?utf-8?B?N1JoT3hCY0NCVzcxSHkyRmhZQWVLMXllNEF3ZkNWUXAxKzBPWEluUERPUzdK?=
+ =?utf-8?B?b00rS0VBUzlCbU9mNXRKM2xaRTdOS2FtakRSbUhBS3JHN3UwS0NCd01UdjA3?=
+ =?utf-8?B?cDRrV1dXVjhONkloSG1tUXg1S2dic3lja2QrZHRNOVZqVlRMWUQyQnZrMUEx?=
+ =?utf-8?B?VmFYeElDM21VcTdRQS9MT0xZS3Z5QVFGZUhpY0dwcWlOU2ZWaDkxMWsyWlBo?=
+ =?utf-8?B?czRacHNnTXg0dkdUYXZKOVgrd01ZRmxGbG1rNWdNRFVuRlhXZUFROWNTZS9j?=
+ =?utf-8?B?bHk2WlErODczays4QWM4SmpkRXpWZUhjaWhwTTkwUVhxYU5Ya3BGNERlWjJn?=
+ =?utf-8?B?V2lDZ1RSNjlYTTZIOW1JeFVvUXhsUXJWY2hrcE16NkU5SzB3c1hxdnlhMC9y?=
+ =?utf-8?B?cXlPbVJpdHNFY0ZrMnZqc1hFOVJBU0ltR1dJb1hEckFrSkZxK2s1U0MyeWRk?=
+ =?utf-8?B?cXIvTGhYdkpZWm1Zai8rU3VvVkpQL0o4QlErcWhVMFRxbnRBbGRESExGWkkv?=
+ =?utf-8?B?eUY1dEptMDZxUTNUUExCRC9WL2JpaDlaWVNmWVFidXZuaGhEUnR2SURrOVFL?=
+ =?utf-8?B?cFdBTGVSM2JoaU1rMW5OU0JOMk9sVStoQmVRaVlOY1IrSmNNUWZzUTVaVnZG?=
+ =?utf-8?B?Q0RnSjk2MFVQV3VFOHBFMEVFUW9RbmtINXZHTXFnLzUycFlYeG81bDMyT2xG?=
+ =?utf-8?B?Uk9KL2UvdlF3cVBKSHAvd0loNHFYOVozZWUwQjN6WVQrTlRkTXNnc3JKUG9j?=
+ =?utf-8?B?cEVzcjVZQTh4VDVoU1FTQzJYZFYyZU5RaHNBZFJuZXppVHhCT2k0SlMzL3Ur?=
+ =?utf-8?B?dGRRc0Y2OGRvM2ZGcnpBUVRYTExVZ1B1cnlHSkpCRUtWUFk4STlKRWlUTEdt?=
+ =?utf-8?B?NkhKc1RUdUpjYTMyMG1rV0dkNjR0TzdyNXFyVE9LdmdSb05WNGo5RjR6Y1ky?=
+ =?utf-8?B?MnJkZ2lTQTRDNUU2dENzak9xWk1VblE0NUp2dC9tcTRqVy9ianVzUnFjVTNT?=
+ =?utf-8?B?c2xLU3Z0S3hDK0c4U2pROGlTNVVEcCtrOXczblNTY0k5TjRQSDJJdkFCbEFJ?=
+ =?utf-8?B?cDc0R1FZSitNZmtYdERGQ0VUSTVPZ01YVE9OY2d0aHBFczV6QlJpbXYrL0s5?=
+ =?utf-8?B?Rmw0cDZWSUJtUTA2d3Z4QXRVeUxOZExrUUM3V1VtQVpTSkNaQnlmNUhiSWdz?=
+ =?utf-8?B?Yis1L3ZpLzUyYnZCSlM0Mm4zR3p2ek1nWUl5WHJONEhVODlyd1djU2hHWkR4?=
+ =?utf-8?B?MTdGZU9mS29ZdGQybDZ0MkJmVjF0WDBpM2Y3TTh0ZzhlUUJTQWluSDRWV0d4?=
+ =?utf-8?B?Q0hEWTlFOFM1Mys4MHhYK3Z1RFowZERjK0FvYklKand2T3JuR2ViS0U3S2Zq?=
+ =?utf-8?B?MVRSdEJhLzYzS09aVjg5RUtkbnM2amRMVkNKK2MwZnRyWXpyY2pqaXNDT0ZT?=
+ =?utf-8?B?RXYwWCt4eUt0YktBblo3eUQrZGlYRmZnRHhBL0ZGeVRBNEx1RTU1NjhpZEJG?=
+ =?utf-8?B?Y3kxQUtoeStpTnZ1N1hlN2tlbjY0aUFiR3cyaFZkLzV2bzgzVnB6TW9RTTRp?=
+ =?utf-8?B?bHE4M1BuOGQrcHEvN0hyNFYyRTFKTGkxeGk0UWF4RmNoY1FsdVpHTTdueFBP?=
+ =?utf-8?Q?Y5Y8=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8254.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(19092799006)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?QzEwWXpEaTN3M1g5MHdXQXlYVm9nVm90NDFSR0JraW42SHdFNkdiVk92UlRz?=
+ =?utf-8?B?SjRaMjJwYTF1MllZU3dodzV1UmF6WGNqRU9SWmRCMEo0TUtjUGRuWDcwcEhU?=
+ =?utf-8?B?cllaWjdlQkpYV2MxRHRXdG1yMndEOUVkVFhNU2lndDMvVzZ1L3JhZlZ4djhm?=
+ =?utf-8?B?QVJidWZvbFp3VExtaTZ6TVl1czZZOU5vOEt4NE1kWjFTRzZKd2gyQno2Z1Vv?=
+ =?utf-8?B?UnZjVDhNWUlUcjdYNXptUXArckhsd0FZRitLRzQxbU9zclNqWTNCWjFZRXd5?=
+ =?utf-8?B?V0dmUllOaVJweUtDeTdPbUxmbFZub3BKTUhtV05Ia2NlcURMLzBDcTZPYURI?=
+ =?utf-8?B?VXRwbEJqTEFvd1laUDZGNUZuWk1SUnlzemJ0alJaTGJtVy9ZZFhiUjhjYUxC?=
+ =?utf-8?B?T0xBdWprcm1xSXBQdlJDZnovYzAzMW1iYmlUMER4K29CWkUybzlMRGFHajY1?=
+ =?utf-8?B?WWIwZnVHc0VSS2ltTmx2RW1hSjZpWWNSUjhiNHhqb3E1WXVmWWxMZVY3V0lt?=
+ =?utf-8?B?RmdaRjJIZjFtQVR6MnhLWk5FTHBMNHllOUxUNG96S0RKVnVyZkJSWHpqSDVG?=
+ =?utf-8?B?c0RIblpEMG9NN0xKaFlRMUlRQkt6Tk5rQnNPRHFmdjYxb3NNQURPNmx2ZW1r?=
+ =?utf-8?B?TGdnc2ZidUtjRDJaSWxTVGx6UUdveE9rUDRhNDhYd1R0UVhCR2NaRFZ6Mzdh?=
+ =?utf-8?B?enNoSzI0WmE0aFMwWlBVdHZkS1ppSFJuU0pPVE1CVUxIak1udUxNeXRJYkVB?=
+ =?utf-8?B?ZjBoYllEN2RUMnZqVlQvZmtZcnl6VXcwNzNaZTBacGI0VUxvcWVyUVpCd2dR?=
+ =?utf-8?B?VnlPVFM3eGpDVVpUNlE2MDJRUEN1cXNxcUl3SW16WXFMaHFQUWFHWE9VOXkw?=
+ =?utf-8?B?ZDNmZ01qbGh0bzhhL0Z4VldhL2xPNWErTDVkMUY4Umw3Z1Z2U2ljWE9WUEli?=
+ =?utf-8?B?eHBqWmtNbDlKamVKcWZhNWM4REFTL0QrQ1R0OFVnS2QxNVBPOFByRml3Z1Bv?=
+ =?utf-8?B?QzVCRkVQa0ZETlN5L0ttbzRJTVd5eEVPZjE2TG9YdWoyOWFBVW1nOHJQUWlm?=
+ =?utf-8?B?bERDWDlkZGtXRzJzQmZodTRZOGZVYVZ5TGZJenF2ZFRDQ00wWXlTVXJzd2N0?=
+ =?utf-8?B?RkVDRFl6MmdoZUZYV0RSNVlTc1pOUHBDZHhtcVRCeGdhQjRxSE56U0tta1ls?=
+ =?utf-8?B?dHNJZEhRUk9EbmhvaUhIMEllTG9wTHJvTVNNSENnVllUOEUzT043MzJQZHdo?=
+ =?utf-8?B?ZW94TDE3My9raW85NVpsTW1sNE03bi94ODFsQVQ4eHdyNXk3UEJ6aTZpdkhm?=
+ =?utf-8?B?QkZjSjJSUlZGNWRSVEpjWTJMVXYyUTN4ekxhTU5CaXhveDZZTmdMcXVzNjIy?=
+ =?utf-8?B?dEYwZlpJbTlKRUtMaWF1b2ZrMFk3QitVMTI4ZGkvbmxQVVVOK255cm4yQjRl?=
+ =?utf-8?B?ejJMMW9qeXY0ZHNNTXovMWFQRldibnJ1RGVGWnB2OHNxcmp5VStZTHF1eTlT?=
+ =?utf-8?B?Ujl6WDd6Mmt5dlI3VEhqQ2RkZW1xMGNQV05mYWxWQmM0L0NaKzR0aVdqQjNu?=
+ =?utf-8?B?T3RZaGxWM1JseEhUOXJqRk1mSm0xQnFvK2dSS2s4TklOV0p3UUJwR2hJdXVV?=
+ =?utf-8?B?c3FmbzBRcEd0Skp4MzI0TU02UmxxMkRGcE50b3dpM0FpeDZoVUJDVzZqa2RJ?=
+ =?utf-8?B?V3pMTkFidEYzRGZoNHkwVDJSWnFudzlMOTdkUXp6V1lrVFZJcGlpUjZndkJw?=
+ =?utf-8?B?S0R0ZTUvemJCb2JOVnNtNVp0VSsxQUViSkZIaDQzcUxSblVzK2lGbE1mV3B1?=
+ =?utf-8?B?OVRCTUdaWnFjQ1Q2U2k4dHRVQWpJd0RBclVtV21mVHBSWDdjZWZOSlB5eGtM?=
+ =?utf-8?B?Q0RIZTlEM0RTd2E4U3dLSzJmT2VEUnRTbUR6Tng3TWlySVJLMkpSd1JpVmhs?=
+ =?utf-8?B?VmZUdEFEUFpla1Z3MXhuQkhuSndWWjVVSW50cFJ6S3VyZ1hSMFk5NEdtUEs0?=
+ =?utf-8?B?ZmgxSWh4MTRVYkFaS1pHNDZ2UTArNlVQLzZHY2FCUHI3eGczS05iYWM4TmVN?=
+ =?utf-8?B?M1N6N3dTUDZIV3VUSXV0amZ2b01yVE14TlgyQUVQVGZqQ3p3WURud3VFbXdC?=
+ =?utf-8?B?UFZCTStwOWZDc0ZMdWlYN0UzNVFrKzd4SndNY1l3bitKU0kzZmtmUHFBTDNB?=
+ =?utf-8?B?SW4wa3FmMTRvS3dPamt4RDFOS1BaY1BsZm9ZeDdLRS9pYi9mekk5YzlUekky?=
+ =?utf-8?B?K2xDRUJXcjZzaFQyZ0wrTTlIZmJIcEJ1RC9kcllXSm5xbDBqWVE3R081WVhy?=
+ =?utf-8?B?SnRrUEVpMkZwd0xLQzJvZDRFbWdDYkxodUdCU3VHcDMwMFhXeEt1UT09?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bd07324d-faa7-434f-84ff-08de63074d48
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8254.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2026 09:33:35.0371
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Kne8F5CTSEhzuQyf5FbiNqYoYBS1YSu3MNkodEIml+i45bT5t8IVeVr/HpkBD3biPkLHYNocalggFqS037GvbA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB12187
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.36 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [1.94 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[NXP1.onmicrosoft.com:s=selector1-NXP1-onmicrosoft-com];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
+	DMARC_POLICY_SOFTFAIL(0.10)[nxp.com : SPF not aligned (relaxed), DKIM not aligned (relaxed),none];
 	HAS_LIST_UNSUB(-0.01)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-41946-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-41947-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	REDIRECTOR_URL(0.00)[urldefense.com];
-	TAGGED_RCPT(0.00)[linux-pm];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	FREEMAIL_CC(0.00)[kernel.org,xs4all.nl,collabora.com,pengutronix.de,linaro.org,gmail.com,nxp.com,vger.kernel.org,lists.linux.dev,lists.infradead.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[christian.loehle@arm.com,linux-pm@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[ming.qian@oss.nxp.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[NXP1.onmicrosoft.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,arm.com:mid]
-X-Rspamd-Queue-Id: 63A90D6CBC
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,NXP1.onmicrosoft.com:dkim]
+X-Rspamd-Queue-Id: 71626D6CF5
 X-Rspamd-Action: no action
 
-On 2/3/26 09:16, Harshvardhan Jha wrote:
-> 
-> On 03/02/26 2:37 PM, Christian Loehle wrote:
->> On 2/2/26 17:31, Harshvardhan Jha wrote:
->>> On 02/02/26 12:50 AM, Christian Loehle wrote:
->>>> On 1/30/26 19:28, Rafael J. Wysocki wrote:
->>>>> On Thu, Jan 29, 2026 at 11:27 PM Doug Smythies <dsmythies@telus.net> wrote:
->>>>>> On 2026.01.28 15:53 Doug Smythies wrote:
->>>>>>> On 2026.01.27 21:07 Doug Smythies wrote:
->>>>>>>> On 2026.01.27 07:45 Harshvardhan Jha wrote:
->>>>>>>>> On 08/12/25 6:17 PM, Christian Loehle wrote:
->>>>>>>>>> On 12/8/25 11:33, Harshvardhan Jha wrote:
->>>>>>>>>>> On 04/12/25 4:00 AM, Doug Smythies wrote:
->>>>>>>>>>>> On 2025.12.03 08:45 Christian Loehle wrote:
->>>>>>>>>>>>> On 12/3/25 16:18, Harshvardhan Jha wrote:
->>>>>>> ... snip ...
->>>>>>>
->>>>>>>>>> It would be nice to get the idle states here, ideally how the states' usage changed
->>>>>>>>>> from base to revert.
->>>>>>>>>> The mentioned thread did this and should show how it can be done, but a dump of
->>>>>>>>>> cat /sys/devices/system/cpu/cpu*/cpuidle/state*/*
->>>>>>>>>> before and after the workload is usually fine to work with:
->>>>>>>>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-pm/8da42386-282e-4f97-af93-4715ae206361@arm.com/__;!!ACWV5N9M2RV99hQ!PEhkFcO7emFLMaNxWEoE2Gtnw3zSkpghP17iuEvZM3W6KUpmkbgKw_tr91FwGfpzm4oA5f7c5sz8PkYvKiEVwI_iLIPpMt53$
->>>>>>>>> Apologies for the late reply, I'm attaching a tar ball which has the cpu
->>>>>>>>> states for the test suites before and after tests. The folders with the
->>>>>>>>> name of the test contain two folders good-kernel and bad-kernel
->>>>>>>>> containing two files having the before and after states. Please note
->>>>>>>>> that different machines were used for different test suites due to
->>>>>>>>> compatibility reasons. The jbb test was run using containers.
->>>>>>> Please provide the results of the test runs that were done for
->>>>>>> the supplied before and after idle data.
->>>>>>> In particular, what is the "fio" test and it results. Its idle data is not very revealing.
->>>>>>> Is it a test I can run on my test computer?
->>>>>> I see that I have fio installed on my test computer.
->>>>>>
->>>>>>>> It is a considerable amount of work to manually extract and summarize the data.
->>>>>>>> I have only done it for the phoronix-sqlite data.
->>>>>>> I have done the rest now, see below.
->>>>>>> I have also attached the results, in case the formatting gets screwed up.
->>>>>>>
->>>>>>>> There seems to be 40 CPUs, 5 idle states, with idle state 3 defaulting to disabled.
->>>>>>>> I remember seeing a Linux-pm email about why but couldn't find it just now.
->>>>>>>> Summary (also attached as a PNG file, in case the formatting gets messed up):
->>>>>>>> The total idle entries (usage)  and time seem low to me, which is why the ???.
->>>>>>>>
->>>>>>>> phoronix-sqlite
->>>>>>>>      Good Kernel: Time between samples 4 seconds (estimated and ???)
->>>>>>>>              Usage   Above   Below   Above   Below
->>>>>>>> state 0      220     0       218     0.00%   99.09%
->>>>>>>> state 1      70212   5213    34602   7.42%   49.28%
->>>>>>>> state 2      30273   5237    1806    17.30%  5.97%
->>>>>>>> state 3      0       0       0       0.00%   0.00%
->>>>>>>> state 4      11824   2120    0       17.93%  0.00%
->>>>>>>>
->>>>>>>> total                112529  12570   36626   43.72%   <<< Misses %
->>>>>>>>
->>>>>>>>      Bad Kernel: Time between samples 3.8 seconds (estimated and ???)
->>>>>>>>              Usage   Above   Below   Above   Below
->>>>>>>> state 0      262     0       260     0.00%   99.24%
->>>>>>>> state 1      62751   3985    35588   6.35%   56.71%
->>>>>>>> state 2      24941   7896    1433    31.66%  5.75%
->>>>>>>> state 3      0       0       0       0.00%   0.00%
->>>>>>>> state 4      24489   11543   0       47.14%  0.00%
->>>>>>>>
->>>>>>>> total                112443  23424   37281   53.99%   <<< Misses %
->>>>>>>>
->>>>>>>> Observe 2X use of idle state 4 for the "Bad Kernel"
->>>>>>>>
->>>>>>>> I have a template now, and can summarize the other 40 CPU data
->>>>>>>> faster, but I would have to rework the template for the 56 CPU data,
->>>>>>>> and is it a 64 CPU data set at 4 idle states per CPU?
->>>>>>> jbb: 40 CPU's; 5 idle states, with idle state 3 defaulting to disabled.
->>>>>>> POLL, C1, C1E, C3 (disabled), C6
->>>>>>>
->>>>>>>       Good Kernel: Time between samples > 2 hours (estimated)
->>>>>>>       Usage           Above           Below           Above   Below
->>>>>>> state 0       297550          0               296084          0.00%   99.51%
->>>>>>> state 1       8062854 341043          4962635 4.23%   61.55%
->>>>>>> state 2       56708358        12688379        6252051 22.37%  11.02%
->>>>>>> state 3       0               0               0               0.00%   0.00%
->>>>>>> state 4       54624476        15868752        0               29.05%  0.00%
->>>>>>>
->>>>>>> total 119693238       28898174        11510770        33.76%  <<< Misses
->>>>>>>
->>>>>>>       Bad Kernel: Time between samples > 2 hours (estimated)
->>>>>>>       Usage           Above           Below           Above   Below
->>>>>>> state 0       90715           0               75134           0.00%   82.82%
->>>>>>> state 1       8878738 312970          6082180 3.52%   68.50%
->>>>>>> state 2       12048728        2576251 603316          21.38%  5.01%
->>>>>>> state 3       0               0               0               0.00%   0.00%
->>>>>>> state 4       85999424        44723273        0               52.00%  0.00%
->>>>>>>
->>>>>>> total 107017605       47612494        6760630 50.81%  <<< Misses
->>>>>>>
->>>>>>> As with the previous test, observe 1.6X use of idle state 4 for the "Bad Kernel"
->>>>>>>
->>>>>>> fio: 64 CPUs; 4 idle states; POLL, C1, C1E, C6.
->>>>>>>
->>>>>>> fio
->>>>>>>       Good Kernel: Time between samples ~ 1 minute (estimated)
->>>>>>>       Usage           Above   Below   Above   Below
->>>>>>> state 0       3822            0       3818    0.00%   99.90%
->>>>>>> state 1       148640          4406    68956   2.96%   46.39%
->>>>>>> state 2       593455          45344   105675  7.64%   17.81%
->>>>>>> state 3       3209648 807014  0       25.14%  0.00%
->>>>>>>
->>>>>>> total 3955565 856764  178449  26.17%  <<< Misses
->>>>>>>
->>>>>>>       Bad Kernel: Time between samples ~ 1 minute (estimated)
->>>>>>>       Usage           Above   Below   Above   Below
->>>>>>> state 0       916             0       756     0.00%   82.53%
->>>>>>> state 1       80230           2028    42791   2.53%   53.34%
->>>>>>> state 2       59231           6888    6791    11.63%  11.47%
->>>>>>> state 3       2455784 564797  0       23.00%  0.00%
->>>>>>>
->>>>>>> total 2596161 573713  50338   24.04%  <<< Misses
->>>>>>>
->>>>>>> It is not clear why the number of idle entries differs so much
->>>>>>> between the tests, but there is a bit of a different distribution
->>>>>>> of the workload among the CPUs.
->>>>>>>
->>>>>>> rds-stress: 56 CPUs; 5 idle states, with idle state 3 defaulting to disabled.
->>>>>>> POLL, C1, C1E, C3 (disabled), C6
->>>>>>>
->>>>>>> rds-stress-test
->>>>>>>       Good Kernel: Time between samples ~70 Seconds (estimated)
->>>>>>>       Usage   Above   Below   Above   Below
->>>>>>> state 0       1561    0       1435    0.00%   91.93%
->>>>>>> state 1       13855   899     2410    6.49%   17.39%
->>>>>>> state 2       467998  139254  23679   29.76%  5.06%
->>>>>>> state 3       0       0       0       0.00%   0.00%
->>>>>>> state 4       213132  107417  0       50.40%  0.00%
->>>>>>>
->>>>>>> total 696546  247570  27524   39.49%  <<< Misses
->>>>>>>
->>>>>>>       Bad Kernel: Time between samples ~ 70 Seconds (estimated)
->>>>>>>       Usage   Above   Below   Above   Below
->>>>>>> state 0       231     0       231     0.00%   100.00%
->>>>>>> state 1       5413    266     1186    4.91%   21.91%
->>>>>>> state 2       54365   719     3789    1.32%   6.97%
->>>>>>> state 3       0       0       0       0.00%   0.00%
->>>>>>> state 4       267055  148327  0       55.54%  0.00%
->>>>>>>
->>>>>>> total 327064  149312  5206    47.24%  <<< Misses
->>>>>>>
->>>>>>> Again, differing numbers of idle entries between tests.
->>>>>>> This time the load distribution between CPUs is more
->>>>>>> obvious. In the "Bad" case most work is done on 2 or 3 CPU's.
->>>>>>> In the "Good" case the work is distributed over more CPUs.
->>>>>>> I assume without proof, that the scheduler is deciding not to migrate
->>>>>>> the next bit of work to another CPU in the one case verses the other.
->>>>>> The above is incorrect. The CPUs involved between the "Good"
->>>>>> and "Bad" tests are very similar, mainly 2 CPUs with a little of
->>>>>> a 3rd and 4th. See the attached graph for more detail / clarity.
->>>>>>
->>>>>> All of the tests show higher usage of shallower idle states with
->>>>>> the "Good" verses the "Bad", which was the expectation of the
->>>>>> original patch, as has been mentioned a few times in the emails.
->>>>>>
->>>>>> My input is to revert the reversion.
->>>>> OK, noted, thanks!
->>>>>
->>>>> Christian, what do you think?
->>>> I've attached readable diffs of the values provided the tldr is:
->>>>
->>>> +--------------------+-----------+-----------+
->>>> | Workload           | Δ above % | Δ below % |
->>>> +--------------------+-----------+-----------+
->>>> | fio                |  -10.11   |  +2.36    |
->>>> | rds-stress-test    |   -0.44   |  +2.57    |
->>>> | jbb                |  -20.35   |  +3.30    |
->>>> | phoronix-sqlite    |   -9.66   |  -0.61    |
->>>> +--------------------+-----------+-----------+
->>>>
->>>> I think the overall trend however is clear, the commit
->>>> 85975daeaa4d ("cpuidle: menu: Avoid discarding useful information")
->>>> improved menu on many systems and workloads, I'd dare to say most.
->>>>
->>>> Even on the reported regression introduced by it, the cpuidle governor
->>>> performed better on paper, system metrics regressed because other
->>>> CPUs' P-states weren't available due to being in a shallower state.
->>>> https://urldefense.com/v3/__https://lore.kernel.org/linux-pm/36iykr223vmcfsoysexug6s274nq2oimcu55ybn6ww4il3g3cv@cohflgdbpnq7/__;!!ACWV5N9M2RV99hQ!KSEGRBOHs7E_E4fRenT3y3MovrhDewsTY-E4lu1JCX0Py-r4GiEJefoLfcHrummpmvmeO_vp1beh-OO_MYxG9xLU0BuBunAS$ 
->>>> (+CC Sergey)
->>>> It could be argued that this is a limitation of a per-CPU cpuidle
->>>> governor and a more holistic approach would be needed for that platform
->>>> (i.e. power/thermal-budget-sharing-CPUs want to use higher P-states,
->>>> skew towards deeper cpuidle states).
->>>>
->>>> I also think that the change made sense, for small residency values
->>>> with a bit of random noise mixed in, performing the same statistical
->>>> test doesn't seem sensible, the short intervals will look noisier.
->>>>
->>>> So options are:
->>>> 1. Revert revert on mainline+stable
->>>> 2. Revert revert on mainline only
->>>> 3. Keep revert, miss out on the improvement for many.
->>>> 4. Revert only when we have a good solution for the platforms like
->>>> Sergey's.
->>>>
->>>> I'd lean towards 2 because 4 won't be easy, unless of course a minor
->>>> hack like playing with the deep idle state residency values would
->>>> be enough to mitigate.
->>> Wouldn't it be better to choose option 1 as reverting the revert has
->>> even more pronounced improvements on older kernels? I've tested this on
->>> 6.12, 5.15 and 5.4 stable based kernels and found massive improvements.
->>> Since the revert has optimizations present only in Jasper Lake Systems
->>> which is new, isn't reverting the revert more relevant on stable
->>> kernels? It's more likely that older hardware runs older kernels than
->>> newer hardware although not always necessary imo.
->>>
->> FWIW Jasper Lake seems to be supported from 5.6 on, see
->> b2d32af0bff4 ("x86/cpu: Add Jasper Lake to Intel family")
-> 
-> Oh I see, but shouldn't avoiding regressions on established platforms be
-> a priority over further optimizing for specific newer platforms like
-> Jasper Lake?
-> 
+Hi Lucas,
 
-Well avoiding regressions on established platforms is what lead to
-10fad4012234 Revert "cpuidle: menu: Avoid discarding useful information"
-being applied and backported.
-The expectation for stable is that we avoid regressions and potentially
-miss out on improvements. If you want the latest greatest performance you
-should probably run a latest greatest kernel.
-The original
-85975daeaa4d cpuidle: menu: Avoid discarding useful information
-was seen as a fix and overall improvement, that's why it was backported,
-but Sergey's regression report contradicted that.
-What is "established" and "newer" for a stable kernel is quite handwavy
-IMO but even here Sergey's regression report is a clear data point...
-Your report is only restoring 5.15 (and others) performance to 5.15
-upstream-ish levels which is within the expectations of running a stable
-kernel. No doubt it's frustrating either way!
+On 2/3/2026 5:04 PM, Lucas Stach wrote:
+> Hi,
+> 
+> Am Dienstag, dem 03.02.2026 um 15:13 +0800 schrieb Ming Qian(OSS):
+>> Hi Nicolas,
+>>
+>> On 2/3/2026 3:12 AM, Nicolas Dufresne wrote:
+>>> Hi,
+>>>
+>>> Le lundi 02 février 2026 à 13:44 -0500, Nicolas Dufresne a écrit :
+>>>>> This doesn't sound like just a VPU issue; it's related to the display or
+>>>>> DDR.
+>>>>> If not displayed, do the fluster test cases yield different results at
+>>>>> 600MHz and 300MHz?
+>>>>
+>>>> Didn't you run these tests before sending ? I can try again, but in my
+>>>> internal
+>>>> notes, I wrote:
+>>>>
+>>>>     > Tested that, and everything becomes unstable
+>>>>
+>>>> That was before I figure-out the IRQ handler didn't handle exception bits that
+>>>> didn't stop the decoder (or dry IRQ, which strangely is common from the G2).
+>>>
+>>> Ran some fluster tests now. With this patch the results is not consistent
+>>> anymore. Then I ran it with weston being started, and in the middle of the test
+>>> the display turned black. Matches my past observation. We did reproduce this on
+>>> BSP kernel too. When the display goes black, the recent hantro drivers reports:
+>>>
+>>> [  827.581586] hantro-vpu 38310000.video-codec: frame decode timed out.
+>>> [  827.720201] hantro-vpu 38310000.video-codec: not all macroblocks were
+>>> decoded.
+>>>
+>>>
+>>> I have local patches to reduce the cascade of errors, so it likely survived
+>>> longer then last time. I will send these patches soon. The "not all macroblocks
+>>> were decoded." is triggered by a bit in the status register that is not
+>>> documented in NXP TRM. I found that bit in some VC8000D documentation (the
+>>> sucessor of G2). I concluded it was the same meaning after looking at the failed
+>>> buffer visually, it is indeed missing couple of macroblocks near th end. Each
+>>> time we see this error, the DCSS gives up and turn either black, or sometimes
+>>> other color. The second case has been tracked to a DCSS Scaler underrun, the
+>>> first we don't know.
+>>>
+>>> Fluster command ran (two threads, never completes):
+>>>
+>>> ./fluster.py run -d GStreamer-H.265-V4L2SL-Gst1.0 -ts JCT-VC-HEVC_V1 -j2 -t90
+>>>
+>>> Nicolas
+>>
+>> My test results for fluster differ from yours.
+>> On my end, the results for JCT-VC-HEVC_V1 are consistent at both 300MHz
+>> and 600MHz.
+>> And results remained unchanged after multiple tests.
+>>
+>> I'm not sure what caused the differences between us.
+>>
+>> Below are my test results:
+>>
+>> 600Mhz, 0.9v
+>> 	cat /sys/kernel/debug/regulator/regulator_summary  |grep SW1C
+>> 	 SW1C                             0    1      0 unknown   900mV     0mA
+>>     825mV  1100mV
+>> 	cat /sys/kernel/debug/clk/vpu_g2/clk_rate
+>> 	600000000
+> 
+> You are driving the SoC out of spec. The datasheet clearly states that
+> you need a 1000mV typical voltage for 600MHz VPU clock.
+> 
+> If you drive the SoC outside of those ratings it squarely depends on
+> the individual SoC if it will tolerate the too low voltage without
+> errors. Some SoCs land on the better side of PVT curve and will run at
+> the higher speed without issues, but some will not and will exhibit
+> random issues outside of the datasheet provided specs.
+> 
+> There isn't much to discuss here. The upstream DT for the i.MX8MQ runs
+> all the clocks at a rate to meet the nominal drive voltage specs. If
+> some peripheral clock does violate this, this is a bug not a feature to
+> replicate in new patches.
+> 
+> Regards,
+> Lucas
+
+I agree with you, it's meaningless that test vpu with overdriver clock
+frequency and nominal drive voltage.
+We should focus on the overdrive mode at a frequency of 600 MHz and a
+voltage of 1.0 V.
+
+It is my mistake that not to adjust the voltage in this patch.
+
+Regards,
+Ming
 
