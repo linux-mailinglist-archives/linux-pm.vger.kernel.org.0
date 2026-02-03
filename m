@@ -1,249 +1,200 @@
-Return-Path: <linux-pm+bounces-42011-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42012-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6NgDBCN8gmnAVQMAu9opvQ
-	(envelope-from <linux-pm+bounces-42011-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 23:52:19 +0100
+	id KB8jHfuAgmneVgMAu9opvQ
+	(envelope-from <linux-pm+bounces-42012-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 00:12:59 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A700DDF683
-	for <lists+linux-pm@lfdr.de>; Tue, 03 Feb 2026 23:52:18 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE21EDF99F
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 00:12:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4788B30CC101
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Feb 2026 22:51:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id CE520309CC6A
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Feb 2026 23:12:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F59378D9E;
-	Tue,  3 Feb 2026 22:51:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6081431AAAB;
+	Tue,  3 Feb 2026 23:12:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZZx1Iq7h"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="gNFazDB1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2732374758;
-	Tue,  3 Feb 2026 22:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D487374188
+	for <linux-pm@vger.kernel.org>; Tue,  3 Feb 2026 23:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770159076; cv=none; b=pgUDfrSqbXoT4aR+6iSx4uiSOZd+AkSm5FW5w/2ttREcaHwZ/M+71bjTHAqZ/kvXarwvUac61nzsjGCAMGyPRAMEkZfJSsTjwMF34fBYOJw3qs3KNHcCpsIUk5qz0hwrJ+VxITQudjW45d4pP99cB/Y/muBZYvc2EtMJ5CGE1QA=
+	t=1770160377; cv=none; b=Z4XhkmzWFubnj6DjHoyScDNeNMyRUrcJT+NXwqL1z+t9/yqNDJBRo4h3XKts+xTBwnLEO4aYvX+KILhK0DUyzLPFdiT8Qy5VZqqnFU8PXjPAD78QdYsmPN4kUvMwIq6OD0pvBxdulbQXo9VZTvSJ6VOqvlUdjy3h9xxaJxSbcBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770159076; c=relaxed/simple;
-	bh=x5l6L76bIyObE98V1AMZSCPiXBprN9x6wKcuM4vyGCs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qz58mHroMLRsPLfOz8DYxlRxUpX9WG9rgTdmRUtlfl6DOKCaGgxhoht1TVrXP02V75NCuDpw0Jw1JCB8Xct8pl/Oy2lgCmwKD7HXxNCVeguRgtLOZH9dS1rAv2y+hx3yyRd3DGGZwYbmYuY+ls/k9O+2+MhQf5z0CaXzs0rld84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZZx1Iq7h; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 95631C19425;
-	Tue,  3 Feb 2026 22:51:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770159076;
-	bh=x5l6L76bIyObE98V1AMZSCPiXBprN9x6wKcuM4vyGCs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=ZZx1Iq7hdeQwip2aOnYmX4gspMBunrojV4zhw1+QkWgVCCXcY2HcMO2f3RLDPV6e5
-	 tjfufeZyyziUvcectEsxuubPaUoEDwuUPvJREJ8eLra51BeLjQeaINLxj+QdvSJ818
-	 9XDecjIv69F0XvWW6u26ketPyk45rZDcy8R3tATDJQrQ0Vf+BvkeTN1taNJfVhh6LW
-	 wE7grJ1hWVxdJI1La9hkHOyFkI9mYnvv13x5HXh9BhrvCp3YomjHutB4V4+OjfHWDz
-	 D5TdNpRvhlNNazCcQvONvbCHDtddgfco6K0iTnLXEvRv+DMMFPt7+eXo+/GAcubPS0
-	 b0EQSySoUVU3Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 85722E8B37E;
-	Tue,  3 Feb 2026 22:51:16 +0000 (UTC)
-From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
-Date: Tue, 03 Feb 2026 22:50:31 +0000
-Subject: [PATCH v5 5/5] usb: typec: tcpm/tcpci_maxim: deprecate WAR for
- setting charger mode
+	s=arc-20240116; t=1770160377; c=relaxed/simple;
+	bh=b+6ezU8PaueXB2DpM+akcgePYGBcPLLporezIjuLT+g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=p0IBhHluOyCPcnLUggn6/uEbPLdTY+kY0vAnZJhWFNEIuPxkf/0ZUplj6hLUFIKO87ZtonS7NbWbz61lqHLOrjtA0QNS51bME3qBOddlKOhucG8V6fUmwkgybePZQFL0It6GHCvp+vrgruXnZhCxgKQFfl6TBkDumsJHMW7C8rI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=gNFazDB1; arc=none smtp.client-ip=209.85.210.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-823c56765fdso2184382b3a.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 Feb 2026 15:12:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1770160374; x=1770765174; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hCOjNNMnUuznv6tosNTA/iIRiTXu2wBeg3Ia+sthXnc=;
+        b=gNFazDB1fEFOxYJalqDLQnf2a9KU5UxQM/7PkxkGtDV1nok7eq3eZveSWzBoI8jd7w
+         3aAy7gNFXbkum1bc1XR7TP4nvkqBrlIBd1CI8VTkEVJkgPBK0+i/vdf+VIou32iFFDoF
+         3FwjHmPqRIRcFbvdKe2QqpAlMUsCTEjyv6esizdi+gglNAoTdyJ/niobMbs67Gm7UkUq
+         OgVkjl5lVs00rpiaKmLVRWhGiPFgOm10RJlOTgpv5DnIEHqWi2NkTgfPpAfyTSH3qq3d
+         QilVD2rfiBGOZ9K8pSZpLnQOaANb2d/Tw+ykFOpAjPBNuZcJ7rDAGbJjxZCqvqX8NgRj
+         8vgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770160374; x=1770765174;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hCOjNNMnUuznv6tosNTA/iIRiTXu2wBeg3Ia+sthXnc=;
+        b=b2iG5Atv7/SS2+bv0et0EoKG+L1zGKBmiejNTBXK8ao+RcwL1tpDClS7aOy39UtJgf
+         +YYwAbCNYePh1u4ae0FLNNdHEv1Ir/iz/o8c9aIctIBrDUB4zTqVNsq//xY/XIBbr59s
+         IPGhXn4iUnSmH2J0OSjtRRSUuCkUUgPUh0a4q6REyL6SnQc133xlIJesnvDGQ4E2FPd5
+         QM3/uUEZXqABQ6GeQCW7aoMXJem8Oo/gNEO4BLNEpZO1Qj0Gb5e2+EvknWfql7tiCfQE
+         CZ8q5LW+Q7lvJDCq4glm+PO0lOuWrsVV/0HHKGh5fKZe4z9PrpBV2SPBlsBeFQCweKEs
+         CMbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXNGDnSl1fErohOVXn90lMwTImt8E448qDKuv9JdAXHzoeuptHaEMMRiQNWss0WLEEtqLv1WZ8mfA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw50Gp+y+AHn2kt4cQ8lugVuGI/P7KvGMFr9Bcqkp/XJ9IYzEWx
+	xphjXixnkzGoHHP5Oraoy3CCCUtFBBhd6TPbcEP/1becvMvlsSQytobM1aUT4/fcc8A=
+X-Gm-Gg: AZuq6aJ7p5j5pAsjlFuR9D8f7fT7dPy0Ow7gqvQVMssShG6Fc66X08M2wWwPX7ODZOH
+	aAvKW1XvmpRIvvbWtnxIdKXjPUZVLESzUXvmlDxpi/3Ye/+FXRZSq407H8ZLRz+1uupzaX3zcF0
+	PNtXXwVovpNGwN1pKieiu8KajUkKxNYOapZI21UczOOghjGXQ/iPuFVxCDSlc8UwugN0Xxvb5bI
+	/l3nYBjiKcjWWFjlxuVunBMBmWc1hVouJ/C7YUm/2/bIM0fh7jck7aC+AVsMj8N9tCzOEcAc4JF
+	ORAATfpNvMO5Cmcv36+2XAn1zGlhpMwmlQHh4o1xfu30GcFYpyRgmH5+06RaqVhduCfdMruDeGQ
+	PxqhVEKC3KXsYZ2TDZBwGBjbIE6mvmz1IoHrR4I/8hWN9UMEluBHbLcScYr3dG6GM3z7MQ2Z0/Z
+	+IK7pm3hS2M1dg4hau354=
+X-Received: by 2002:a05:6a20:9185:b0:366:58cc:b74b with SMTP id adf61e73a8af0-393720cfdddmr966865637.21.1770160374489;
+        Tue, 03 Feb 2026 15:12:54 -0800 (PST)
+Received: from localhost ([71.212.200.220])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c6c84c70e08sm321672a12.20.2026.02.03.15.12.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 15:12:53 -0800 (PST)
+From: Kevin Hilman <khilman@baylibre.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, Cristian Marussi
+ <cristian.marussi@arm.com>, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org, arm-scmi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RFC v5 1/2] pmdomain: core: support domain hierarchy via
+ power-domain-map
+In-Reply-To: <20260127151735.GA1699112-robh@kernel.org>
+References: <20260122-pmdomain-hierarchy-onecell-v5-0-76855ec856bd@baylibre.com>
+ <20260122-pmdomain-hierarchy-onecell-v5-1-76855ec856bd@baylibre.com>
+ <20260127151735.GA1699112-robh@kernel.org>
+Date: Tue, 03 Feb 2026 15:12:53 -0800
+Message-ID: <7hjywtzaiy.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260203-max77759-charger-v5-5-b50395376a5f@google.com>
-References: <20260203-max77759-charger-v5-0-b50395376a5f@google.com>
-In-Reply-To: <20260203-max77759-charger-v5-0-b50395376a5f@google.com>
-To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
- Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Badhri Jagan Sridharan <badhri@google.com>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>, 
- Amit Sunil Dhamne <amitsd@google.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1770159075; l=4047;
- i=amitsd@google.com; s=20241031; h=from:subject:message-id;
- bh=DVhKKtAmFJeTde3lBLRKS7iTM2jYoSejns4c8Q7KrrM=;
- b=b0GO3q1YufX0GQelLtqZNXAOGw6l83elJv47namzZa5QOjjUjJ2hMMY/Pbsbe0+J0pd85DTbg
- 3NPQKZB5AevBcaCB7cBaBEI7zOGiBDb0w89cvkYwb/OQ3kuzCU8lDH7
-X-Developer-Key: i=amitsd@google.com; a=ed25519;
- pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
-X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
- auth_id=262
-X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
-Reply-To: amitsd@google.com
+Content-Type: text/plain
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_MISSING_CHARSET(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[baylibre-com.20230601.gappssmtp.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42011-lists,linux-pm=lfdr.de,amitsd.google.com];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[21];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	HAS_REPLYTO(0.00)[amitsd@google.com];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,linaro.org:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A700DDF683
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[baylibre-com.20230601.gappssmtp.com:+];
+	TAGGED_FROM(0.00)[bounces-42012-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DMARC_NA(0.00)[baylibre.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[khilman@baylibre.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	NEURAL_HAM(-0.00)[-0.999];
+	DBL_PROHIBIT(0.00)[0.0.0.11:email];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,baylibre.com:mid,baylibre-com.20230601.gappssmtp.com:dkim]
+X-Rspamd-Queue-Id: EE21EDF99F
 X-Rspamd-Action: no action
 
-From: Amit Sunil Dhamne <amitsd@google.com>
+Rob Herring <robh@kernel.org> writes:
 
-TCPCI maxim driver directly writes to the charger's register space to
-set charger mode depending on the power role. As MAX77759 chg driver
-exists, this WAR is not required.
+> On Thu, Jan 22, 2026 at 05:14:00PM -0800, Kevin Hilman (TI) wrote:
+>> Add of_genpd_[add|remove]_subdomain_map() helper functions to support
+>> hierarchical PM domains defined by using power-domains-map
+>
+> power-domain-map. No 's'.
+>
+>> property (c.f. nexus node maps in DT spec, section 2.5.1).
+>> 
+>> This enables PM domain providers with #power-domain-cells > 0 to
+>> establish subdomain relationships via the power-domain-map property,
+>> which was not previously possible.
+>> 
+>> These new helper functions:
+>> - uses an OF helper to iterate to over entries in power-domain-map
+>> - For each mapped entry: extracts child specifier, resolves parent phandle,
+>>   extracts parent specifier args, and establishes subdomain relationship
+>> - Calls genpd_[add|remove]_subdomain() with proper gpd_list_lock mutex protection
+>> 
+>> Example from k3-am62l.dtsi:
+>> 
+>>   scmi_pds: protocol@11 {
+>>       #power-domain-cells = <1>;
+>>       power-domain-map = <15 &MAIN_PD>,  /* TIMER0 */
+>>                          <19 &WKUP_PD>;  /* WKUP_TIMER0 */
+>>   };
+>> 
+>>   MAIN_PD: power-controller-main {
+>>       #power-domain-cells = <0>;
+>>   };
+>> 
+>>   WKUP_PD: power-controller-main {
+>>       #power-domain-cells = <0>;
+>>   };
+>> 
+>> This allows SCMI power domain 15 to become a subdomain of MAIN_PD, and
+>> domain 19 to become a subdomain of WKUP_PD.
+>
+> One concern I have here is generally *-map is transparent meaning when 
+> you lookup <&scmi_pds 15>, &MAIN_PD is returned as the provider. It's 
+> also possible to have a map point to another map until you get to the 
+> final provider. The only way we have to support both behaviors is the 
+> consumer has to specify (i.e. with of_parse_phandle_with_args_map() vs. 
+> of_parse_phandle_with_args()), but the consumer shouldn't really know 
+> this detail.
+>
+> Maybe a transparent map of power-domains would never make sense. IDK. If 
+> so, then there's not really any issue since the pmdomain core handles 
+> everyone the same way.
 
-Instead, use a regulator interface to source vbus when typec is in
-source power mode. In other power modes, this regulator will be turned
-off if active.
+I don't really know enough about potential usage of maps to know if
+there's ever a usecase for transparent maps.  However, the problem I'm
+trying to solve is less about transparent maps, and more about
+describing hierarchy in a situation where "leaf" domains of the same
+type (e.g. SCMI) can have different parent domains.
 
-Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: André Draszik <andre.draszik@linaro.org>
----
- drivers/usb/typec/tcpm/tcpci_maxim.h      |  1 +
- drivers/usb/typec/tcpm/tcpci_maxim_core.c | 54 +++++++++++++++++++------------
- 2 files changed, 34 insertions(+), 21 deletions(-)
+When I first proposed this[1], I didn't use a map, but you suggested I
+try using a map[2].  So I'm not sure if I misunderstood what you
+proposed, or if now that you see it implemented, you're second guessing if
+the map is the right approach.
 
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim.h b/drivers/usb/typec/tcpm/tcpci_maxim.h
-index b33540a42a953dc6d8197790ee4af3b6f52791ce..b314606eb0f67ddbc80d8760244aa6dee61bebc1 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim.h
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim.h
-@@ -60,6 +60,7 @@ struct max_tcpci_chip {
- 	struct tcpm_port *port;
- 	enum contamiant_state contaminant_state;
- 	bool veto_vconn_swap;
-+	struct regulator *vbus_reg;
- };
- 
- static inline int max_tcpci_read16(struct max_tcpci_chip *chip, unsigned int reg, u16 *val)
-diff --git a/drivers/usb/typec/tcpm/tcpci_maxim_core.c b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-index 19f63865079658fb2a446dc390262d141b940e9a..e9e2405c5ca036e28c307088d4b785726834e71f 100644
---- a/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-+++ b/drivers/usb/typec/tcpm/tcpci_maxim_core.c
-@@ -10,6 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/usb/pd.h>
- #include <linux/usb/tcpci.h>
- #include <linux/usb/tcpm.h>
-@@ -35,12 +36,6 @@
-  */
- #define TCPC_RECEIVE_BUFFER_LEN				32
- 
--#define MAX_BUCK_BOOST_SID				0x69
--#define MAX_BUCK_BOOST_OP				0xb9
--#define MAX_BUCK_BOOST_OFF				0
--#define MAX_BUCK_BOOST_SOURCE				0xa
--#define MAX_BUCK_BOOST_SINK				0x5
--
- static const struct regmap_range max_tcpci_tcpci_range[] = {
- 	regmap_reg_range(0x00, 0x95)
- };
-@@ -202,32 +197,49 @@ static void process_rx(struct max_tcpci_chip *chip, u16 status)
- 	tcpm_pd_receive(chip->port, &msg, rx_type);
- }
- 
-+static int get_vbus_regulator_handle(struct max_tcpci_chip *chip)
-+{
-+	if (IS_ERR_OR_NULL(chip->vbus_reg)) {
-+		chip->vbus_reg = devm_regulator_get_exclusive(chip->dev,
-+							      "vbus");
-+		if (IS_ERR_OR_NULL(chip->vbus_reg)) {
-+			dev_err(chip->dev,
-+				"Failed to get vbus regulator handle");
-+			return -ENODEV;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int max_tcpci_set_vbus(struct tcpci *tcpci, struct tcpci_data *tdata, bool source, bool sink)
- {
- 	struct max_tcpci_chip *chip = tdata_to_max_tcpci(tdata);
--	u8 buffer_source[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SOURCE};
--	u8 buffer_sink[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_SINK};
--	u8 buffer_none[2] = {MAX_BUCK_BOOST_OP, MAX_BUCK_BOOST_OFF};
--	struct i2c_client *i2c = chip->client;
- 	int ret;
- 
--	struct i2c_msg msgs[] = {
--		{
--			.addr = MAX_BUCK_BOOST_SID,
--			.flags = i2c->flags & I2C_M_TEN,
--			.len = 2,
--			.buf = source ? buffer_source : sink ? buffer_sink : buffer_none,
--		},
--	};
--
- 	if (source && sink) {
- 		dev_err(chip->dev, "Both source and sink set\n");
- 		return -EINVAL;
- 	}
- 
--	ret = i2c_transfer(i2c->adapter, msgs, 1);
-+	ret = get_vbus_regulator_handle(chip);
-+	if (ret) {
-+		/*
-+		 * Regulator is not necessary for sink only applications. Return
-+		 * success in cases where sink mode is being modified.
-+		 */
-+		return source ? ret : 1;
-+	}
-+
-+	if (source) {
-+		if (!regulator_is_enabled(chip->vbus_reg))
-+			ret = regulator_enable(chip->vbus_reg);
-+	} else {
-+		if (regulator_is_enabled(chip->vbus_reg))
-+			ret = regulator_disable(chip->vbus_reg);
-+	}
- 
--	return  ret < 0 ? ret : 1;
-+	return ret < 0 ? ret : 1;
- }
- 
- static void process_power_status(struct max_tcpci_chip *chip)
+Kevin
 
--- 
-2.53.0.rc2.204.g2597b5adb4-goog
-
-
+[1] https://lore.kernel.org/r/20250528-pmdomain-hierarchy-onecell-v1-1-851780700c68@baylibre.com
+[2] https://lore.kernel.org/r/20250528203532.GA704342-robh@kernel.org
 
