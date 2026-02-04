@@ -1,719 +1,315 @@
-Return-Path: <linux-pm+bounces-42106-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42107-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ECgBJm+Hg2niowMAu9opvQ
-	(envelope-from <linux-pm+bounces-42106-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 18:52:47 +0100
+	id iPn9B3aPg2lCpQMAu9opvQ
+	(envelope-from <linux-pm+bounces-42107-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 19:27:02 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 242E1EB3A9
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 18:52:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 904C3EB9FA
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 19:27:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B702C3092E3F
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 17:47:30 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 12C01303181D
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 18:24:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDFBE354ACD;
-	Wed,  4 Feb 2026 17:47:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24913423A80;
+	Wed,  4 Feb 2026 18:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ku1oly+O"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kf773FjR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54A6634B691
-	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 17:47:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770227249; cv=none; b=YJkjjq9TuoRb9JOCDuDvjzpZFtMUbhu+wgS3TvoDVTZaIZwR67qt56KN8skceP+hg01Qb+3LX3dyKilMQWPDb88MZFM7PlyfewNqa0bhrEwK87ac3WNWXTWNQXY7DSJhDpwg2AeH6UqK/7rwLYtlCin4ldUOb6z7jD2pLEK83/k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770227249; c=relaxed/simple;
-	bh=XkqSi1HplrKbjiVV6ScU+4uLWhhSfG10JXDfQpNyV1o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SSguCjCnT1MRcqwHK4LgslvLlpc3Ln1I9X+ss9ILpwPt+hAFBmATA/OvafWBwnGQVn463tRJBbrDXnIS2IkDl+414NzJrXGU3qFIzccQWAffgPl8iEXqj+6tkdJFKiBDmH545s6ogRuyti8cCI9vyHBzGHu9F9TyTjBIl2JkTN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ku1oly+O; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-435a517be33so90583f8f.0
-        for <linux-pm@vger.kernel.org>; Wed, 04 Feb 2026 09:47:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770227248; x=1770832048; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=LmnL809AcP5kG1n3ddE5uCdr4+hPrc8W8jMbdaYCzVk=;
-        b=Ku1oly+OX0hvPkaRIlytOYDVy3P4lO/uedrAkk/hmOn4oRbgJkYnIj1qW3DxUanTTW
-         RpngMxRHYuhSHWpshqqCyHaINnJXoLP4zeUYA30R6XimaLPjuYXglj0xFhg5dcMZhZqw
-         pAf82tGHwOgjuNI87mGFM0b8Df0Ka9VOvECyhBdFXqVuQynx4GcjqeRPRAHYakkeLSRv
-         +5aNgr49pA9VQ8Lm3pfXramYFrsj9CO9lZ5DsT3RMIgQEJ67xt8Ey56ISjLtm7obcQni
-         w/zSyd+rxDr1xETsySNcNNUjKQ+GPLE8VqWQBVlodZt8t44U1nhzPQ20PT8XqJs6928p
-         Ix+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770227248; x=1770832048;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LmnL809AcP5kG1n3ddE5uCdr4+hPrc8W8jMbdaYCzVk=;
-        b=HB0vhak48Mwjtgz/+nCaIBtr494ZVWvDmlZPyFEr/IJDHSLbYXG/+Ew3PTmeITUxUH
-         RHORNyE3qC74tE5ZCbak80rr5zPYlwk7NO7Qhb1RL8fH01q7Ao35utqtvQOT5LFG8GPk
-         n0VEJFSmXhHs/1MAgG/ZKAcj+npgDmw5thYbXZXgDiHD0HXvpsMmi/uBqYRvBfrZ8JuW
-         Aoe2n9VYl/WrV0nTdeWO8ChPAswOT+ruvJb0Tj4NQyGtKc3C7a7kJXGGp7lgXv6b7zJX
-         jE/mHBWA3wUvpQ9d7zYSGVkFnKHiZoYOkOzA2n+ekcD2cVWKgYpWtu3B3hJu5jCUSE5G
-         5+2A==
-X-Forwarded-Encrypted: i=1; AJvYcCWEkPw7k6mT8nJh1J0eCJ+jr/CNLACbnNGl8TGXP4LcUub9AU83V4huPpvb+BK7mgCZe4HJLoXnQA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXjlxWvmQ3i6BGbztoDm9Ln7V1gjfzxQRytUDQTVc6GP8Ikor/
-	bXJeQhL1bAidGjEH1CrjM2Ttl3QYKD+gj0//chezDzGDpy8LJ7c2XZaK
-X-Gm-Gg: AZuq6aK2uAR8pD+HT9emLHaYj57N7KDAXkotqf8KWXme5osM+UChxkRIlWhBmvJM2SX
-	f6MYqrpYADkrlWURKBqP6uUrctnntfCmtFvrEPvJXp1RPl33pCuHmN+KBKnsefgCpPJLadZhrn8
-	Cap2LWq7qHLDWRcOxiUjmj5vI4BTetpw3wClua75iafAac+MfVUHjA/gSkUfy1EU/9qnoaDXbFT
-	kNM90sArMdLgOPk4lQkpoZg2oAn7sdfKuecl9u2G2O1Rysu5h8fDf79bm2XnNs7h70plTJ3O3BG
-	rFbZvR5R7vH6XCviM/6KSYl9NuljnLQJbSobDZVzwyZZ7kGer6Fhk7duzkGRQEGYZP1Qh5ZmOjy
-	N3oCBjzBjBsP6SIQj8PzIRcG9CSSn+FxT6evGwpSBAyaMLtei/1/Ml8De4oJP95iYAZHG93cQU0
-	5cGlcSmfB+fu2UmIWvAwvxtbsoJ5WkmzsFDcP8cI6NHnKw89enX2d1MqC5mmBB
-X-Received: by 2002:a05:6000:230f:b0:435:b7ca:7521 with SMTP id ffacd0b85a97d-43617e41ef4mr6015696f8f.15.1770227247485;
-        Wed, 04 Feb 2026 09:47:27 -0800 (PST)
-Received: from [192.168.0.29] (static-95-59-231-77.ipcom.comunitel.net. [77.231.59.95])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43617e250b2sm8813826f8f.8.2026.02.04.09.47.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Feb 2026 09:47:26 -0800 (PST)
-Message-ID: <7324306f-16cd-4a2c-8b4d-0bf65129acd3@gmail.com>
-Date: Wed, 4 Feb 2026 18:47:24 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B6A340A70;
+	Wed,  4 Feb 2026 18:24:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770229470; cv=fail; b=LpoJJhW4ZyyotRNhCCgmUSOmLRPRGN/Ctzb7C9WCFd9eJc1d9JfynX7zmazyHksRbUamTEhU7O5KhdOVhZQxPt1L0Ij+CQapF9j0T2Om3bC/4Lo5CrWOe3s/9xK2LkyOf2PChMHUsDdwjVZiU9jVxgUX+MUTZ1KJqoS3ulSRhC8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770229470; c=relaxed/simple;
+	bh=v8HwyrNhzbS9tqtA+liemXMcZXK72OIEZ9o4ipze85U=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=XS9SMQvCPbBKV5bXEJq8P4o1LBuUmUq3YdG9//2Hk8++gbT8iou8RERzhw4x/Idqxypr42n+JiqDk6AvUWihabuzajgCU+W9kxDmeMCO/qwrPZbxkuYH7oZrEICeQIXwGYDe4QllTV6jOCah01jK3RD/duWrqcN54gPuizjST9M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kf773FjR; arc=fail smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770229470; x=1801765470;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=v8HwyrNhzbS9tqtA+liemXMcZXK72OIEZ9o4ipze85U=;
+  b=Kf773FjRyTzQ4SyxqAGp+r92AICfMAhD6ecm3BM+kgPyrHkoiJGadqhr
+   texLX8kUSx+xcpmtereAyHuKvvF/2xkbq3Wdzc7LSLZ65BXrOTM+Yzol/
+   s5YWFtlp/vkxQ/5bNl8v0asVfmchf6UIuOhnMcbT4dtGMANr8RlD0KaP+
+   dRfUDgH943FMRawsxFrmUW3o9jzeMZd6Ul1/6wvI8la/AGln9HPxePEOq
+   NNkD3RYOrLw+Brol3C2nazMGJD4O4zoX0HcdeijHPDN8oJdiCy3dd1SbP
+   RmBWkqaxNo2lwbfyyjgE5I1dE5WOV1jXdtJabl7KZv2wjntCyT43abjE8
+   g==;
+X-CSE-ConnectionGUID: CjXDRrNfQ/aCVhtGOYlBcQ==
+X-CSE-MsgGUID: 3kKsTuL2SM6AwRDcBctzqA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11691"; a="82792977"
+X-IronPort-AV: E=Sophos;i="6.21,273,1763452800"; 
+   d="scan'208";a="82792977"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 10:24:29 -0800
+X-CSE-ConnectionGUID: h+AaDke/SxqUY9IHqoqPWw==
+X-CSE-MsgGUID: UTzJNPEVRWKRUmLHS7ling==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,273,1763452800"; 
+   d="scan'208";a="214920967"
+Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2026 10:24:28 -0800
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Wed, 4 Feb 2026 10:24:28 -0800
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Wed, 4 Feb 2026 10:24:28 -0800
+Received: from SA9PR02CU001.outbound.protection.outlook.com (40.93.196.34) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Wed, 4 Feb 2026 10:24:28 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JsTVOVoOazmk8ycSCTTHy36TIn1DY2XGlMGz2xwC9f3LiSzlftFzIj9AAR7r0GrAnft+zI1CMiM1nExEG+xFV3ZAOXoZzRabqHF3C+VyRivdbXPAcNAskjmupEZF7m4P8t8kK2CxORGFtU/opjEMNoJbjPnnzYFTVShvF2wEzDyfKyRNHBYKZpaztpA3LGYqaPAemAp9XLdMHCZR6Bf6WcCS6YGMirR9RhqzL3SZRsRsSPGZDgnFDm1aKWoiUilLscoVk8V51G8YfZSZuPvjTjwHxCUGW5md1wudEaXYEKQ7kUtHJDlSggKM4p/e3zX+mIrC2zqoFr5S+5LL6dOxQw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6JpqdiMGFA1SYLl+8zZMkWb4wMsDYVuyttjWfqGiU5o=;
+ b=pjNmILh5A+082PhWlS6JRZhsb7blo5cz4DS/fjWAgc89kPmPHm+B0UlW0RzCJgi71zBa2q2dsTgwCie22+3x/JQXKD3r6+zmc8diYQoFnjsKpegR83mGJfneEwfYfeB702bTAFQz0lyLRMXzTq406rrxSd5/qnSFDBjxeD2sIF7lLexFLrWKsi+xA35iy32KnkZZR7TM3fF2zvkgY5s+60t8Ms5RKldIE3Asw50j7ykBtktbh5LFGdEvWI0LKlUDm4+9RWgRzD5S9poJ6DzP/+h6CxGM5mpuEyZQua3fjvRQ43mo/EfqPMHS1VoAOzpTgLnXU6tvYl0BWq1G2TXVVA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from IA1PR11MB7198.namprd11.prod.outlook.com (2603:10b6:208:419::15)
+ by IA3PR11MB9423.namprd11.prod.outlook.com (2603:10b6:208:582::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Wed, 4 Feb
+ 2026 18:24:26 +0000
+Received: from IA1PR11MB7198.namprd11.prod.outlook.com
+ ([fe80::2c4e:e92a:4fa:a456]) by IA1PR11MB7198.namprd11.prod.outlook.com
+ ([fe80::2c4e:e92a:4fa:a456%6]) with mapi id 15.20.9564.016; Wed, 4 Feb 2026
+ 18:24:26 +0000
+Message-ID: <a650c5c6-5975-40c6-828e-eaa27403adfd@intel.com>
+Date: Wed, 4 Feb 2026 20:24:21 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 2/6] i3c: master: Mark last_busy on IBI when runtime PM
+ is allowed
+To: Frank Li <Frank.li@nxp.com>
+CC: <alexandre.belloni@bootlin.com>, <rafael@kernel.org>,
+	<linux-i3c@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>
+References: <20260204111511.78626-1-adrian.hunter@intel.com>
+ <20260204111511.78626-3-adrian.hunter@intel.com>
+ <aYNveVUsiixWWlWL@lizhi-Precision-Tower-5810>
+Content-Language: en-US
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: c/o Alberga Business Park,
+ 6 krs, Bertel Jungin Aukio 5, 02600 Espoo, Business Identity Code: 0357606 -
+ 4, Domiciled in Helsinki
+In-Reply-To: <aYNveVUsiixWWlWL@lizhi-Precision-Tower-5810>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DU7PR01CA0028.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:50e::13) To IA1PR11MB7198.namprd11.prod.outlook.com
+ (2603:10b6:208:419::15)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] pmdomain: mediatek: Add power domain driver for
- MT8189 SoC
-To: "irving.ch.lin" <irving-ch.lin@mediatek.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- Project_Global_Chrome_Upstream_Group@mediatek.com,
- Qiqi Wang <qiqi.wang@mediatek.com>, sirius.wang@mediatek.com,
- vince-wl.liu@mediatek.com, jh.hsu@mediatek.com
-References: <20260202064820.347550-1-irving-ch.lin@mediatek.com>
- <20260202064820.347550-4-irving-ch.lin@mediatek.com>
-Content-Language: en-US, ca-ES, es-ES
-From: Matthias Brugger <matthias.bgg@gmail.com>
-Autocrypt: addr=matthias.bgg@gmail.com; keydata=
- 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
-In-Reply-To: <20260202064820.347550-4-irving-ch.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR11MB7198:EE_|IA3PR11MB9423:EE_
+X-MS-Office365-Filtering-Correlation-Id: d5cdcc37-a0cf-4667-c54b-08de641aa096
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?NWlTaG5aSVp4OHFBYzRITE5MOVA0UHk5b3NPZysvZUtOYmZUbjVibkk2azR2?=
+ =?utf-8?B?YlZwRTJHK3Z6NytkTHdGYUdPOSt6RWx3a0RXcDhZSHA0UjlaYmxRbDMrSzhK?=
+ =?utf-8?B?NWs3aE44czNOK2Y2U0c3SVVTZHVOMDZnby9VWXZjOXQ5SC9zWWpFdWdnZUJa?=
+ =?utf-8?B?M21pZHRzQ0RzOWJZQjJHdFVyeiswWGpmMEpiZ2xKQkF5VGhSN0NLbjY4OUdX?=
+ =?utf-8?B?djY4Q3B5SkJpUSs1MkRMb1ltUGhYejlERDFjZXNSblZLeDRkVitpZndpaWhh?=
+ =?utf-8?B?Y1d1T1FxcmdYeFZtaVBsOUxFWFR1UkNlbkFNOGFaUUptdnNUVnoyK3FEdVFL?=
+ =?utf-8?B?ZTFVMzFoNnFNY2FRRXJ4SGJOK2hwd0x0WWxZTWdYdUlNYUVaMm9uV1FLdEZi?=
+ =?utf-8?B?SmlrMC94dzYxb04wZ1FnOS9SUXdsQk4zTkRXT1VSNGFOR2RRM3h3TEI4ZzBw?=
+ =?utf-8?B?YlBOeWF2Uk9IOTlwS0x6dFNTYUU5T1g5UlZNcW9mRjN5aFkyQnlIOHBIK2FB?=
+ =?utf-8?B?d1o4OEVhVkRCYVc5cHJPSUdXbUpmdlQwWTdVdDhOZlN1SkY0RzRzWlhPR3dP?=
+ =?utf-8?B?Ukd1NFVrclR0RTdTZTNuTy9QOUFhTmlzM1cweDFyNEhlcDVsNlVnSktlUnow?=
+ =?utf-8?B?TXZIWFN1K25lSmNRSUpHblFGTUI5N0JhNmc1bVcxOGE4M0kwSmx4Vy9abDk1?=
+ =?utf-8?B?ZUNwMFVDZ0tISEsxQ0NaN1hZRlJ3aXJKN1ViSmM3Nm0zdE55THkxN1RKalQz?=
+ =?utf-8?B?QThoN2E4bFVCWHE4cVZabUd0Y21XaHNvSWYvQllmeVZqbmlHYnB3NkEyRzN2?=
+ =?utf-8?B?RlJabVlpQzVhelgxSmYraGU0QVBHZGxaWlUzRmNuWVZJNy95d04wanJza2ls?=
+ =?utf-8?B?QTQ4VUxrKzYrUTNXTmxiTUJBaGRsZHpUK0d0Nkx3OXFZaG5TaDhsMm9KYTRH?=
+ =?utf-8?B?eXpMeEllUytNcithUVFmOU9KOWUyOXdjdFUvWlEwOHNyMXFtcjU3TW81K003?=
+ =?utf-8?B?dStVV01aWk5id3k2bXhnMG8xdWhEcjJGTmM1Y2h2bU91WjloRXB1RHpsOW15?=
+ =?utf-8?B?Mk9tb3AwT2RadzhBM1F1R1JyZWZGbVRVN3dpMkJKS3hFS0Q3aW12dndvQnJ3?=
+ =?utf-8?B?K3pZNmN2RUJFN3A2cytVaEc0UHBIUjhrV0lPRVZiZkRQZ3RjWFUzU3JCS2M0?=
+ =?utf-8?B?OFF1Si9IRCtpWWtEZTdlc1kweHRKV2ZrZGcyUjM5bGZ1bk55UjFHWnRNMExV?=
+ =?utf-8?B?NGZpbnBHWHgxRDNuRjVqSzg2citFVHNmYjBkb2ovZHhIOWJoL1FBL01QN1BS?=
+ =?utf-8?B?SEp4NE9JbURFQldja0lFL3lVK2wyZWxON0h6eUJCSnZoa1VSYkw2SEFmQ0l4?=
+ =?utf-8?B?Q0NxaEdWYXBYMm9pMVlmRCtjbjNkSHNudFMzZVNwZzNpU1pyUXBTRktzVFNV?=
+ =?utf-8?B?L0hSS0pqejdGMFYvdWxXYzN3cHdrUEpKU2N3RnNRN2svQ0VtOGZONXZQV3Y4?=
+ =?utf-8?B?RG03Yllka1VjR2xIZ1F2UndHblc1YUZvWEVFdmd0WEZkQ2tZT1BWSHBhd2c0?=
+ =?utf-8?B?V2UzSDY0b0pWSmhudVhaUFYyTnhXRWZjamJINHBDelcrOTQ3WXhVTDhXZndy?=
+ =?utf-8?B?ZFhXditDWlNqa2EwUndva3poVE5GTkhHajNBU0VtRmI2dnZJbkplRnhRVEhn?=
+ =?utf-8?B?SGxZb0IwNE5DS1BYaHF6czB0NC9Wclh5RTNvZk9nbXNIV3pzTkt6Wk5TWmJF?=
+ =?utf-8?B?dDcwUFBtSi9SSHdoRHNFcVZLdXo0cmdsODEyYkFXODFheUlZZUpsUlZCMkVY?=
+ =?utf-8?B?M2NJNkNlOG1WcmNGQlAxdDRsS1I0S2hyRkxwcklERE16cTRXa3VCN1N1KzVz?=
+ =?utf-8?B?cHVlSGx5a05jeEk2eFhOYmViSFAvQStLSkNnVmlienM3b3Z6d1IzV2llL2Yv?=
+ =?utf-8?B?M3lkVkpMNXhxb09oT0tiRDRWYzNJbGtyY0FuQlpFdmh4U25vYXE0YnFFKy92?=
+ =?utf-8?B?RE1mRmMvb2tJM2hSVW90eW4rZThiMHo0alhHL3BVdlVTRHJsaUt4RDFuajFV?=
+ =?utf-8?B?Rk8wcmVQK0pndlYrYVdsRzRaK1FLaFpyTnk3KzZUK2xZZ2lOd2pEQmJpbFR2?=
+ =?utf-8?Q?vB7A=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB7198.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OFV1UHRsakdYUG9UWWlUclhvTU0wQ3Rtam5sVFBmTDI4V0ZjUmlpdTM1ZXl5?=
+ =?utf-8?B?RElIMWlJZFkyQVpYOUFzTEx4Qmx6bEdDUVFKSVZHVitPVUV1d3JmTVgvK3Z1?=
+ =?utf-8?B?b1hpMXlGS1pvR1p3cjY3YzNnT2ozeTd6Q3B4N1RRK1pqWVY1V2FMM2RWWERu?=
+ =?utf-8?B?R0xxMzl3aHBTTGhlb1BUcFBqTkVHVEU4WDNrOXplWk5KQmxQY0N4RndHQXZX?=
+ =?utf-8?B?aTkyalBSbkl5TC90VElKanQ2RnF0Mk9YWWFkRDVzRk14ZVhSWE5vVm1EaHVm?=
+ =?utf-8?B?SHlMY3huaENGYytTNlo3T2pIUm4vOVUzWkI2RDNodFpNWk9aNVJFc3pXYXE4?=
+ =?utf-8?B?a3dXZXlmK1FkL1p0VElGL0xvQUp5VDQ3UG5RZjNnZVk1aDg3SmRyakl1T25V?=
+ =?utf-8?B?MFd1dWR0T3JqTHlkUlJaUCt4SmZ4MnVpZ1FaTVdrVzQ5Wk04ckJSczdmR3Ju?=
+ =?utf-8?B?VDdtY3ZvOG10Mm9Ja1hCTTd2VFIrVHE3Ui9lR2tUSExJaHdrNFRGSmVERDRZ?=
+ =?utf-8?B?cEZiTHBYN09pQVMrZFBONHZqbGV3OHJuZjgvbzQ1TklIZEFQRGl0c0xnVlpp?=
+ =?utf-8?B?K2lFZENaNThqakJoUGtaaUk1VEFjSFFNSHh5TnV6a1RoR2ZFenhGcGNXNGJ0?=
+ =?utf-8?B?ZmRrdmdQZmI0SUhQN2xFeDlJODlrcWd4Z0dzSVloZWREcEFWTmJwS2Ywd3lz?=
+ =?utf-8?B?di9zUDcwYmV3dFVVZE8rOFFuM2dLU1J6YVd1b20yU3IvRjdpay9tV08zdFcz?=
+ =?utf-8?B?Zk5pcm1TaU9sSDVSZlBDVHNlM1FMNVFIM0k0THYzKyt5dW5NM0FmTEVxL2d4?=
+ =?utf-8?B?c1lQUXZQclBNREEyQXA2Z29BMmloT0Z5TS92aE4xbFIySlhqaXNObVBBUUtu?=
+ =?utf-8?B?dkM0OEVNQmdMTU5jdlNPVTNrdlFjQkw1V2phaktZNHdRR1Zjdm9lMmUrck9W?=
+ =?utf-8?B?c2dhTWE1RjFNUjFMWm5HL3JVQWJQUnhUbHJHUGZOQ2EweW11SlVkb1lJZFBO?=
+ =?utf-8?B?MFV6eXNZSTB5aHVuK2hZNTZ2ZGFiQkMwZlIxcmJzbmh1Q1VScTY4aVR4d2lU?=
+ =?utf-8?B?bHRVdjZZeEl4SHNhNm1jNkFLc2ZlUzFTTHpBRWdWcWFPT2RWUmFUMDg3RFY1?=
+ =?utf-8?B?R2pRTXdnSTBtVnE5djYwcTllTUxRd2RDV0hkdXJPWGtsa0tBNmgra0ZXZE85?=
+ =?utf-8?B?OVZTckpBWnJtbnhOeDc3dHlQQktjZUY1QTVFeGNyWVdwazNwNlp5VjBDclVT?=
+ =?utf-8?B?Umhza0ZpTUpSd29XVm5RcC9lZEFMcTFjZVd5WjZJeGNaZUhuYVJzcGh3aGxY?=
+ =?utf-8?B?RWJDYXBna3F4ZElmZWI2ZXZZRjczb3FwSTlyV3J1dzJ3V2l6Zk5iNzVlc0h6?=
+ =?utf-8?B?K1ZGZHBIcDdlVlR5NTZVa1VlMDZXUjY1RmdtRnVHdU9WOXVWOWJ3T3F1UnRv?=
+ =?utf-8?B?R05DWkNydlBKb3lhWG1rWWhCNTQ4YnpNY2x5VG5pWlBURXZSVXhmSUhPcW1Q?=
+ =?utf-8?B?VjlOU0NRRlN0d0hKN21mQVpmR3FZNVFSaG4yN29rVEJUWE0zcEhkMFJmT0lO?=
+ =?utf-8?B?dTBUTStWKzRjWUZzQUJmZTFaSmtCMUNMQ2kwYlltYStVeVpvanVKTzFsWDQ4?=
+ =?utf-8?B?SVFGeFFzWGhBdWtVMzJ2aThLSk4yYS9uaFczS0xJUkZLUWhjVktLNTIxVTBT?=
+ =?utf-8?B?TXpjY1E1NG1XSUplQ2RLM0RENXlncko4dmdjWHdxL1lYUkljMmJFYVBGejhN?=
+ =?utf-8?B?YVg2MFVzVURRYnJzTDVTREx1UWJEc0xxR3VHS2hvSjM2VjV3RlV4NVdqVjBQ?=
+ =?utf-8?B?ckhxZ2NxdDZMQ2loRjBLTXZKVkF2dUd3RjRpelBWNUpCbFRWWWdVWjFLTURt?=
+ =?utf-8?B?WW4zVDZDNkRhS3lpY2l6cU8xWlR4cllOY3k5ak4xRytiNEUvcnFDT1owSE5O?=
+ =?utf-8?B?OUQ4bDg4eWEwRnlSTDNSV0NjWVJFWHpUYjY5NExsVDhUeGl6L3EzNWk3bHJQ?=
+ =?utf-8?B?NmJOcU1DNTdsMkJJRXR0YnAydTRsRHNUSVBvL1gxZzJGS0JsTFVJYjFnMkVs?=
+ =?utf-8?B?aFhmSXdBL0ZEVjhBVVdyWGROb0pZNHozdDZNK24rdXZzQ1JMMlZWaGZXT3hC?=
+ =?utf-8?B?RjBNdGNISXlWTE4yV0tDWUNnMUw4REt1QlA3K2lDYThVeFJDNDJMMTJCZzN1?=
+ =?utf-8?B?MHVuVVpQeWYwbUlYZDRsTUtsalNQRDNhVTZPOXRReG5EcG1kVjNuTDRCWmsw?=
+ =?utf-8?B?bFdSNVJrRkYwdkhlUms4N0ovc2xuSC91by9kOTFMbFhmRTc3UWFzNld4akRl?=
+ =?utf-8?B?YVFLKzhmR205cUFLZzREMzFUMEZSL1F4VUZYK25DMnh4aHBoazB4Zz09?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5cdcc37-a0cf-4667-c54b-08de641aa096
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB7198.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2026 18:24:26.1956
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bvQBKcootC/i6A23DlHhmbTE/LMPGSGnR8zKmRLmcKWo1VWsNxU1wLZ4NhLisvTVQP75jKgjqI7UB47TGcB2Lw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA3PR11MB9423
+X-OriginatorOrg: intel.com
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-42107-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42106-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[mediatek.com,kernel.org,linaro.org,gmail.com,collabora.com];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[matthiasbgg@gmail.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
+	URIBL_MULTI_FAIL(0.00)[intel.com:server fail,sea.lore.kernel.org:server fail];
+	HAS_ORG_HEADER(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mediatek.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 242E1EB3A9
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[adrian.hunter@intel.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-pm];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[10]
+X-Rspamd-Queue-Id: 904C3EB9FA
 X-Rspamd-Action: no action
 
-
-
-On 02/02/2026 07:48, irving.ch.lin wrote:
-> From: Irving-CH Lin <irving-ch.lin@mediatek.com>
+On 04/02/2026 18:10, Frank Li wrote:
+> On Wed, Feb 04, 2026 at 01:15:07PM +0200, Adrian Hunter wrote:
+>> When an IBI can be received after the controller is
+>> pm_runtime_put_autosuspend()'ed, the interrupt may occur just before the
+>> device is auto-suspended.  In such cases, the runtime PM core may not see
+>> any recent activity and may suspend the device earlier than intended.
+>>
+>> Mark the controller as last busy whenever an IBI is queued (when
+>> rpm_ibi_allowed is set) so that the auto-suspend delay correctly reflects
+>> recent bus activity and avoids premature suspension.
+>>
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
 > 
-> Introduce a new power domain (pmd) driver for the MediaTek mt8189 SoC.
-> This driver ports and refines the power domain framework, dividing
-> hardware blocks (CPU, GPU, peripherals, etc.) into independent power
-> domains for precise and energy-efficient power management.
+> Although it is no harmful, I think it is not necessary to mark last busy.
 > 
-> Signed-off-by: Irving-CH Lin <irving-ch.lin@mediatek.com>
-
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
-
-> ---
->   drivers/pmdomain/mediatek/mt8189-pm-domains.h | 485 ++++++++++++++++++
->   drivers/pmdomain/mediatek/mtk-pm-domains.c    |   5 +
->   2 files changed, 490 insertions(+)
->   create mode 100644 drivers/pmdomain/mediatek/mt8189-pm-domains.h
+> schedule's workqueue task to do i3c transfer, which will call run time
+> resume.
 > 
-> diff --git a/drivers/pmdomain/mediatek/mt8189-pm-domains.h b/drivers/pmdomain/mediatek/mt8189-pm-domains.h
-> new file mode 100644
-> index 000000000000..c28b9460c074
-> --- /dev/null
-> +++ b/drivers/pmdomain/mediatek/mt8189-pm-domains.h
-> @@ -0,0 +1,485 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2025 MediaTek Inc.
-> + * Author: Qiqi Wang <qiqi.wang@mediatek.com>
-> + */
-> +
-> +#ifndef __SOC_MEDIATEK_MT8189_PM_DOMAINS_H
-> +#define __SOC_MEDIATEK_MT8189_PM_DOMAINS_H
-> +
-> +#include "mtk-pm-domains.h"
-> +#include <dt-bindings/power/mediatek,mt8189-power.h>
-> +
-> +/*
-> + * MT8189 power domain support
-> + */
-> +
-> +#define MT8189_SPM_PWR_STATUS				0x0f40
-> +#define MT8189_SPM_PWR_STATUS_2ND			0x0f44
-> +#define MT8189_SPM_PWR_STATUS_MSB			0x0f48
-> +#define MT8189_SPM_PWR_STATUS_MSB_2ND			0x0f4c
-> +#define MT8189_SPM_XPU_PWR_STATUS			0x0f50
-> +#define MT8189_SPM_XPU_PWR_STATUS_2ND			0x0f54
-> +
-> +#define MT8189_PROT_EN_EMICFG_GALS_SLP_SET		0x0084
-> +#define MT8189_PROT_EN_EMICFG_GALS_SLP_CLR		0x0088
-> +#define MT8189_PROT_EN_EMICFG_GALS_SLP_RDY		0x008c
-> +#define MT8189_PROT_EN_MMSYS_STA_0_SET			0x0c14
-> +#define MT8189_PROT_EN_MMSYS_STA_0_CLR			0x0c18
-> +#define MT8189_PROT_EN_MMSYS_STA_0_RDY			0x0c1c
-> +#define MT8189_PROT_EN_MMSYS_STA_1_SET			0x0c24
-> +#define MT8189_PROT_EN_MMSYS_STA_1_CLR			0x0c28
-> +#define MT8189_PROT_EN_MMSYS_STA_1_RDY			0x0c2c
-> +#define MT8189_PROT_EN_INFRASYS_STA_0_SET		0x0c44
-> +#define MT8189_PROT_EN_INFRASYS_STA_0_CLR		0x0c48
-> +#define MT8189_PROT_EN_INFRASYS_STA_0_RDY		0x0c4c
-> +#define MT8189_PROT_EN_INFRASYS_STA_1_SET		0x0c54
-> +#define MT8189_PROT_EN_INFRASYS_STA_1_CLR		0x0c58
-> +#define MT8189_PROT_EN_INFRASYS_STA_1_RDY		0x0c5c
-> +#define MT8189_PROT_EN_PERISYS_STA_0_SET		0x0c84
-> +#define MT8189_PROT_EN_PERISYS_STA_0_CLR		0x0c88
-> +#define MT8189_PROT_EN_PERISYS_STA_0_RDY		0x0c8c
-> +#define MT8189_PROT_EN_MCU_STA_0_SET			0x0c94
-> +#define MT8189_PROT_EN_MCU_STA_0_CLR			0x0c98
-> +#define MT8189_PROT_EN_MCU_STA_0_RDY			0x0c9c
-> +#define MT8189_PROT_EN_MD_STA_0_SET			0x0ca4
-> +#define MT8189_PROT_EN_MD_STA_0_CLR			0x0ca8
-> +#define MT8189_PROT_EN_MD_STA_0_RDY			0x0cac
-> +
-> +#define MT8189_PROT_EN_EMISYS_STA_0_MM_INFRA		(GENMASK(21, 20))
-> +#define MT8189_PROT_EN_INFRASYS_STA_0_CONN		(BIT(8))
-> +#define MT8189_PROT_EN_INFRASYS_STA_1_CONN		(BIT(12))
-> +#define MT8189_PROT_EN_INFRASYS_STA_0_MM_INFRA		(BIT(16))
-> +#define MT8189_PROT_EN_INFRASYS_STA_1_MM_INFRA		(BIT(11))
-> +#define MT8189_PROT_EN_INFRASYS_STA_1_MFG1		(BIT(20))
-> +#define MT8189_PROT_EN_MCU_STA_0_CONN			(BIT(1))
-> +#define MT8189_PROT_EN_MCU_STA_0_CONN_2ND		(BIT(0))
-> +#define MT8189_PROT_EN_MD_STA_0_MFG1			(BIT(0) | BIT(2))
-> +#define MT8189_PROT_EN_MD_STA_0_MFG1_2ND		(BIT(4))
-> +#define MT8189_PROT_EN_MM_INFRA_IGN			(BIT(1))
-> +#define MT8189_PROT_EN_MM_INFRA_2_IGN			(BIT(0))
-> +#define MT8189_PROT_EN_MMSYS_STA_0_CAM_MAIN		(GENMASK(31, 30))
-> +#define MT8189_PROT_EN_MMSYS_STA_1_CAM_MAIN		(GENMASK(10, 9))
-> +#define MT8189_PROT_EN_MMSYS_STA_0_DISP			(GENMASK(1, 0))
-> +#define MT8189_PROT_EN_MMSYS_STA_0_ISP_IMG1		(BIT(3))
-> +#define MT8189_PROT_EN_MMSYS_STA_1_ISP_IMG1		(BIT(7))
-> +#define MT8189_PROT_EN_MMSYS_STA_0_ISP_IPE		(BIT(2))
-> +#define MT8189_PROT_EN_MMSYS_STA_1_ISP_IPE		(BIT(8))
-> +#define MT8189_PROT_EN_MMSYS_STA_0_MDP0			(BIT(18))
-> +#define MT8189_PROT_EN_MMSYS_STA_1_MM_INFRA		(GENMASK(3, 2))
-> +#define MT8189_PROT_EN_MMSYS_STA_1_MM_INFRA_2ND		(GENMASK(15, 7))
-> +#define MT8189_PROT_EN_MMSYS_STA_0_VDE0			(BIT(20))
-> +#define MT8189_PROT_EN_MMSYS_STA_1_VDE0			(BIT(13))
-> +#define MT8189_PROT_EN_MMSYS_STA_0_VEN0			(BIT(12))
-> +#define MT8189_PROT_EN_MMSYS_STA_1_VEN0			(BIT(12))
-> +#define MT8189_PROT_EN_PERISYS_STA_0_AUDIO		(BIT(6))
-> +#define MT8189_PROT_EN_PERISYS_STA_0_SSUSB		(BIT(7))
-> +#define MT8189_PROT_EN_EMICFG_GALS_SLP_MFG1		(GENMASK(5, 4))
-> +
-> +static enum scpsys_bus_prot_block scpsys_bus_prot_blocks_mt8189[] = {
-> +	BUS_PROT_BLOCK_INFRA, BUS_PROT_BLOCK_SMI
-> +};
-> +
-> +static const struct scpsys_domain_data scpsys_domain_data_mt8189[] = {
-> +	[MT8189_POWER_DOMAIN_CONN] = {
-> +		.name = "conn",
-> +		.sta_mask = BIT(1),
-> +		.ctl_offs = 0xe04,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MCU_STA_0_CONN,
-> +					MT8189_PROT_EN_MCU_STA_0_SET,
-> +					MT8189_PROT_EN_MCU_STA_0_CLR,
-> +					MT8189_PROT_EN_MCU_STA_0_RDY),
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_INFRASYS_STA_1_CONN,
-> +					MT8189_PROT_EN_INFRASYS_STA_1_SET,
-> +					MT8189_PROT_EN_INFRASYS_STA_1_CLR,
-> +					MT8189_PROT_EN_INFRASYS_STA_1_RDY),
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MCU_STA_0_CONN_2ND,
-> +					MT8189_PROT_EN_MCU_STA_0_SET,
-> +					MT8189_PROT_EN_MCU_STA_0_CLR,
-> +					MT8189_PROT_EN_MCU_STA_0_RDY),
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_INFRASYS_STA_0_CONN,
-> +					MT8189_PROT_EN_INFRASYS_STA_0_SET,
-> +					MT8189_PROT_EN_INFRASYS_STA_0_CLR,
-> +					MT8189_PROT_EN_INFRASYS_STA_0_RDY),
-> +		},
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +	},
-> +	[MT8189_POWER_DOMAIN_AUDIO] = {
-> +		.name = "audio",
-> +		.sta_mask = BIT(6),
-> +		.ctl_offs = 0xe18,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_PERISYS_STA_0_AUDIO,
-> +					MT8189_PROT_EN_PERISYS_STA_0_SET,
-> +					MT8189_PROT_EN_PERISYS_STA_0_CLR,
-> +					MT8189_PROT_EN_PERISYS_STA_0_RDY),
-> +		},
-> +	},
-> +	[MT8189_POWER_DOMAIN_ADSP_TOP_DORMANT] = {
-> +		.name = "adsp-top-dormant",
-> +		.sta_mask = BIT(7),
-> +		.ctl_offs = 0xe1c,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(9),
-> +		.sram_pdn_ack_bits = BIT(13),
-> +		.caps = MTK_SCPD_SRAM_ISO | MTK_SCPD_SRAM_PDN_INVERTED |
-> +			MTK_SCPD_ACTIVE_WAKEUP | MTK_SCPD_KEEP_DEFAULT_OFF,
-> +	},
-> +	[MT8189_POWER_DOMAIN_ADSP_INFRA] = {
-> +		.name = "adsp-infra",
-> +		.sta_mask = BIT(8),
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.ctl_offs = 0xe20,
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +	},
-> +	[MT8189_POWER_DOMAIN_ADSP_AO] = {
-> +		.name = "adsp-ao",
-> +		.sta_mask = BIT(9),
-> +		.ctl_offs = 0xe24,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +	},
-> +	[MT8189_POWER_DOMAIN_ISP_IMG1] = {
-> +		.name = "isp-img1",
-> +		.sta_mask = BIT(10),
-> +		.ctl_offs = 0xe28,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_0_ISP_IMG1,
-> +					MT8189_PROT_EN_MMSYS_STA_0_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_0_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_0_RDY),
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_1_ISP_IMG1,
-> +					MT8189_PROT_EN_MMSYS_STA_1_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_1_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_1_RDY),
-> +		},
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +	},
-> +	[MT8189_POWER_DOMAIN_ISP_IMG2] = {
-> +		.name = "isp-img2",
-> +		.sta_mask = BIT(11),
-> +		.ctl_offs = 0xe2c,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +	},
-> +	[MT8189_POWER_DOMAIN_ISP_IPE] = {
-> +		.name = "isp-ipe",
-> +		.sta_mask = BIT(12),
-> +		.ctl_offs = 0xe30,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_0_ISP_IPE,
-> +					MT8189_PROT_EN_MMSYS_STA_0_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_0_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_0_RDY),
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_1_ISP_IPE,
-> +					MT8189_PROT_EN_MMSYS_STA_1_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_1_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_1_RDY),
-> +		},
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +	},
-> +	[MT8189_POWER_DOMAIN_VDE0] = {
-> +		.name = "vde0",
-> +		.sta_mask = BIT(14),
-> +		.ctl_offs = 0xe38,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_0_VDE0,
-> +					MT8189_PROT_EN_MMSYS_STA_0_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_0_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_0_RDY),
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_1_VDE0,
-> +					MT8189_PROT_EN_MMSYS_STA_1_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_1_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_1_RDY),
-> +		},
-> +	},
-> +	[MT8189_POWER_DOMAIN_VEN0] = {
-> +		.name = "ven0",
-> +		.sta_mask = BIT(16),
-> +		.ctl_offs = 0xe40,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_0_VEN0,
-> +					MT8189_PROT_EN_MMSYS_STA_0_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_0_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_0_RDY),
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_1_VEN0,
-> +					MT8189_PROT_EN_MMSYS_STA_1_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_1_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_1_RDY),
-> +		},
-> +	},
-> +	[MT8189_POWER_DOMAIN_CAM_MAIN] = {
-> +		.name = "cam-main",
-> +		.sta_mask = BIT(18),
-> +		.ctl_offs = 0xe48,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_0_CAM_MAIN,
-> +					MT8189_PROT_EN_MMSYS_STA_0_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_0_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_0_RDY),
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_1_CAM_MAIN,
-> +					MT8189_PROT_EN_MMSYS_STA_1_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_1_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_1_RDY),
-> +		},
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +	},
-> +	[MT8189_POWER_DOMAIN_CAM_SUBA] = {
-> +		.name = "cam-suba",
-> +		.sta_mask = BIT(20),
-> +		.ctl_offs = 0xe50,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +	},
-> +	[MT8189_POWER_DOMAIN_CAM_SUBB] = {
-> +		.name = "cam-subb",
-> +		.sta_mask = BIT(21),
-> +		.ctl_offs = 0xe54,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +	},
-> +	[MT8189_POWER_DOMAIN_MDP0] = {
-> +		.name = "mdp0",
-> +		.sta_mask = BIT(26),
-> +		.ctl_offs = 0xe68,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_0_MDP0,
-> +					MT8189_PROT_EN_MMSYS_STA_0_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_0_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_0_RDY),
-> +		},
-> +	},
-> +	[MT8189_POWER_DOMAIN_DISP] = {
-> +		.name = "disp",
-> +		.sta_mask = BIT(28),
-> +		.ctl_offs = 0xe70,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_0_DISP,
-> +					MT8189_PROT_EN_MMSYS_STA_0_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_0_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_0_RDY),
-> +		},
-> +	},
-> +	[MT8189_POWER_DOMAIN_MM_INFRA] = {
-> +		.name = "mm-infra",
-> +		.sta_mask = BIT(30),
-> +		.ctl_offs = 0xe78,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_1_MM_INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_1_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_1_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_1_RDY),
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MMSYS_STA_1_MM_INFRA_2ND,
-> +					MT8189_PROT_EN_MMSYS_STA_1_SET,
-> +					MT8189_PROT_EN_MMSYS_STA_1_CLR,
-> +					MT8189_PROT_EN_MMSYS_STA_1_RDY),
-> +			BUS_PROT_WR_IGN_SUBCLK(INFRA,
-> +					       MT8189_PROT_EN_MM_INFRA_IGN,
-> +					       MT8189_PROT_EN_MMSYS_STA_1_SET,
-> +					       MT8189_PROT_EN_MMSYS_STA_1_CLR,
-> +					       MT8189_PROT_EN_MMSYS_STA_1_RDY),
-> +			BUS_PROT_WR_IGN_SUBCLK(INFRA,
-> +					       MT8189_PROT_EN_MM_INFRA_2_IGN,
-> +					       MT8189_PROT_EN_MMSYS_STA_1_SET,
-> +					       MT8189_PROT_EN_MMSYS_STA_1_CLR,
-> +					       MT8189_PROT_EN_MMSYS_STA_1_RDY),
-> +		},
-> +	},
-> +	[MT8189_POWER_DOMAIN_DP_TX] = {
-> +		.name = "dp-tx",
-> +		.sta_mask = BIT(0),
-> +		.ctl_offs = 0xe80,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS_MSB,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_MSB_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +	},
-> +	[MT8189_POWER_DOMAIN_CSI_RX] = {
-> +		.name = "csi-rx",
-> +		.sta_mask = BIT(7),
-> +		.ctl_offs = 0xe9c,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS_MSB,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_MSB_2ND,
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +	},
-> +	[MT8189_POWER_DOMAIN_SSUSB] = {
-> +		.name = "ssusb",
-> +		.sta_mask = BIT(10),
-> +		.ctl_offs = 0xea8,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS_MSB,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_MSB_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_PERISYS_STA_0_SSUSB,
-> +					MT8189_PROT_EN_PERISYS_STA_0_SET,
-> +					MT8189_PROT_EN_PERISYS_STA_0_CLR,
-> +					MT8189_PROT_EN_PERISYS_STA_0_RDY),
-> +		},
-> +		.caps = MTK_SCPD_ACTIVE_WAKEUP,
-> +	},
-> +	[MT8189_POWER_DOMAIN_MFG0] = {
-> +		.name = "mfg0",
-> +		.sta_mask = BIT(1),
-> +		.ctl_offs = 0xeb4,
-> +		.pwr_sta_offs = MT8189_SPM_XPU_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_XPU_PWR_STATUS_2ND,
-> +		.caps = MTK_SCPD_DOMAIN_SUPPLY,
-> +	},
-> +	[MT8189_POWER_DOMAIN_MFG1] = {
-> +		.name = "mfg1",
-> +		.sta_mask = BIT(2),
-> +		.ctl_offs = 0xeb8,
-> +		.pwr_sta_offs = MT8189_SPM_XPU_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_XPU_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.bp_cfg = {
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_INFRASYS_STA_1_MFG1,
-> +					MT8189_PROT_EN_INFRASYS_STA_1_SET,
-> +					MT8189_PROT_EN_INFRASYS_STA_1_CLR,
-> +					MT8189_PROT_EN_INFRASYS_STA_1_RDY),
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MD_STA_0_MFG1,
-> +					MT8189_PROT_EN_MD_STA_0_SET,
-> +					MT8189_PROT_EN_MD_STA_0_CLR,
-> +					MT8189_PROT_EN_MD_STA_0_RDY),
-> +			BUS_PROT_WR_IGN(INFRA,
-> +					MT8189_PROT_EN_MD_STA_0_MFG1_2ND,
-> +					MT8189_PROT_EN_MD_STA_0_SET,
-> +					MT8189_PROT_EN_MD_STA_0_CLR,
-> +					MT8189_PROT_EN_MD_STA_0_RDY),
-> +			BUS_PROT_WR_IGN(SMI,
-> +					MT8189_PROT_EN_EMICFG_GALS_SLP_MFG1,
-> +					MT8189_PROT_EN_EMICFG_GALS_SLP_SET,
-> +					MT8189_PROT_EN_EMICFG_GALS_SLP_CLR,
-> +					MT8189_PROT_EN_EMICFG_GALS_SLP_RDY),
-> +		},
-> +		.caps = MTK_SCPD_DOMAIN_SUPPLY,
-> +	},
-> +	[MT8189_POWER_DOMAIN_MFG2] = {
-> +		.name = "mfg2",
-> +		.sta_mask = BIT(3),
-> +		.ctl_offs = 0xebc,
-> +		.pwr_sta_offs = MT8189_SPM_XPU_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_XPU_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +	},
-> +	[MT8189_POWER_DOMAIN_MFG3] = {
-> +		.name = "mfg3",
-> +		.sta_mask = BIT(4),
-> +		.ctl_offs = 0xec0,
-> +		.pwr_sta_offs = MT8189_SPM_XPU_PWR_STATUS,
-> +		.pwr_sta2nd_offs = MT8189_SPM_XPU_PWR_STATUS_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +	},
-> +	[MT8189_POWER_DOMAIN_EDP_TX_DORMANT] = {
-> +		.name = "edp-tx-dormant",
-> +		.sta_mask = BIT(12),
-> +		.ctl_offs = 0xf70,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS_MSB,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_MSB_2ND,
-> +		.sram_pdn_bits = BIT(9),
-> +		.sram_pdn_ack_bits = 0,
-> +		.caps = MTK_SCPD_SRAM_ISO | MTK_SCPD_SRAM_PDN_INVERTED,
-> +	},
-> +	[MT8189_POWER_DOMAIN_PCIE] = {
-> +		.name = "pcie",
-> +		.sta_mask = BIT(13),
-> +		.ctl_offs = 0xf74,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS_MSB,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_MSB_2ND,
-> +		.sram_pdn_bits = BIT(8),
-> +		.sram_pdn_ack_bits = BIT(12),
-> +		.caps = MTK_SCPD_ACTIVE_WAKEUP,
-> +	},
-> +	[MT8189_POWER_DOMAIN_PCIE_PHY] = {
-> +		.name = "pcie-phy",
-> +		.sta_mask = BIT(14),
-> +		.ctl_offs = 0xf78,
-> +		.pwr_sta_offs = MT8189_SPM_PWR_STATUS_MSB,
-> +		.pwr_sta2nd_offs = MT8189_SPM_PWR_STATUS_MSB_2ND,
-> +	},
-> +};
-> +
-> +static const struct scpsys_soc_data mt8189_scpsys_data = {
-> +	.domains_data = scpsys_domain_data_mt8189,
-> +	.num_domains = ARRAY_SIZE(scpsys_domain_data_mt8189),
-> +	.bus_prot_blocks = scpsys_bus_prot_blocks_mt8189,
-> +	.num_bus_prot_blocks = ARRAY_SIZE(scpsys_bus_prot_blocks_mt8189),
-> +};
-> +
-> +#endif /* __SOC_MEDIATEK_MT8189_PM_DOMAINS_H */
-> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> index 3eeb0dabf7d7..58648f4f689b 100644
-> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> @@ -26,6 +26,7 @@
->   #include "mt8183-pm-domains.h"
->   #include "mt8186-pm-domains.h"
->   #include "mt8188-pm-domains.h"
-> +#include "mt8189-pm-domains.h"
->   #include "mt8192-pm-domains.h"
->   #include "mt8195-pm-domains.h"
->   #include "mt8196-pm-domains.h"
-> @@ -1171,6 +1172,10 @@ static const struct of_device_id scpsys_of_match[] = {
->   		.compatible = "mediatek,mt8188-power-controller",
->   		.data = &mt8188_scpsys_data,
->   	},
-> +	{
-> +		.compatible = "mediatek,mt8189-power-controller",
-> +		.data = &mt8189_scpsys_data,
-> +	},
->   	{
->   		.compatible = "mediatek,mt8192-power-controller",
->   		.data = &mt8192_scpsys_data,
+> Are sure it will block your function without this patch?
+
+It is not necessary at this time.  I wanted to cover the case
+where an IBI is not followed by a transfer from the target
+device driver.  Perhaps a device could operate almost entirely
+using IBIs, but there is nothing like that presently.
+
+Let me know if you think we should leave it for now.
+
+> 
+> Frank
+> 
+>>
+>>
+>> Changes in V2:
+>>
+>> 	Adjusted slightly for earlier changes
+>>
+>>
+>>  drivers/i3c/master.c | 5 +++++
+>>  1 file changed, 5 insertions(+)
+>>
+>> diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
+>> index 49fb6e30a68e..48d1b1256290 100644
+>> --- a/drivers/i3c/master.c
+>> +++ b/drivers/i3c/master.c
+>> @@ -2721,9 +2721,14 @@ static void i3c_master_unregister_i3c_devs(struct i3c_master_controller *master)
+>>   */
+>>  void i3c_master_queue_ibi(struct i3c_dev_desc *dev, struct i3c_ibi_slot *slot)
+>>  {
+>> +	struct i3c_master_controller *master = i3c_dev_get_master(dev);
+>> +
+>>  	if (!dev->ibi || !slot)
+>>  		return;
+>>
+>> +	if (master->rpm_ibi_allowed)
+>> +		pm_runtime_mark_last_busy(master->dev.parent);
+>> +
+>>  	atomic_inc(&dev->ibi->pending_ibis);
+>>  	queue_work(dev->ibi->wq, &slot->work);
+>>  }
+>> --
+>> 2.51.0
+>>
 
 
