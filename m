@@ -1,217 +1,142 @@
-Return-Path: <linux-pm+bounces-42099-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42100-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WL03HBFxg2mFmwMAu9opvQ
-	(envelope-from <linux-pm+bounces-42099-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 17:17:21 +0100
+	id ELhaKEp4g2mFmwMAu9opvQ
+	(envelope-from <linux-pm+bounces-42100-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 17:48:10 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9B1CEA115
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 17:17:20 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8128EA7D7
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 17:48:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A7855300A50A
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 16:16:46 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id AE5823002F73
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 16:47:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E777E425CF7;
-	Wed,  4 Feb 2026 16:16:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8437D338597;
+	Wed,  4 Feb 2026 16:47:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yu2PN//I"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZHj8q1Uc"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AB93F0774
-	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 16:16:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1E13033EC;
+	Wed,  4 Feb 2026 16:47:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770221803; cv=none; b=aP88WOI617y5zkZ2anNkYLX8U1h5fZc146PONx9Y4xWw9EeW6+Ylr2aA9hsYjKIZ3kAyjDvEgntLjfflYn/V1El2hlU0i0qPQU3EME8cOwZyNUEtwCTga41sO7veLB93NN9jxQnsT4f40WTgrQd1+nwjueFfbmJO2oQeD7aUDfE=
+	t=1770223620; cv=none; b=ox08H25JRFw8N9euMqED2JnSx0NhOmyell6dpVdIKUTfCGFsFqVqKPGp79e2B05VsvOa5K3RKvurrECtOsvV4KnalXP3INnzmWubZ7zKWxN2PdiOAaaRJ1xUZtr1/SzZ3YqhQG/0JcGUrU2DeMws3wLd2fu6jm6b9jqUVTZxGow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770221803; c=relaxed/simple;
-	bh=kuTzrDTASSkVJ4OoaiWI0gBTvugmCRaWgpO8sRuvlLw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ja6+VFpKtfAwV/tx/9kTrNEmInwF/inMuEb15UI+Agn7ww9eOkMVO4MaoD1TWHKFm894a5iynfsXj5DUmps7mdBrq/GfmSysSbrEKPN9+i7qNraVt0gorGrwvVJdJdQIclAUtDMyY25gXpsHljXBqFBzatewjUNq/aaliN7XC5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yu2PN//I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 762EFC19424
-	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 16:16:43 +0000 (UTC)
+	s=arc-20240116; t=1770223620; c=relaxed/simple;
+	bh=dy73/9OQI/HuBvsd+ptSVtFrF/SFQ/zEvH4RIO0j4i4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=lJeBf6qZ0mZnnXmkTJWUxamZjm8G2ZET1S1TiGOEFK0khtCKwEzHyiMglAA3emjRbp+9QAhQ9ehSPsGOU2kQbpupQ83FmvJ474gXIBvcqVihBO6oJv8xgZVIa+KEEVljjyLnvZxiNqjFmUvaKVlfm1tV4TtFjoOvcBj5+j0MBMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZHj8q1Uc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF418C4CEF7;
+	Wed,  4 Feb 2026 16:46:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770221803;
-	bh=kuTzrDTASSkVJ4OoaiWI0gBTvugmCRaWgpO8sRuvlLw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Yu2PN//IJuiShIhF6H5FgrEe8LdDuh80Q8mWNjUvOoPzsw4/rACEZ40KgNVA8Ci6K
-	 DfOd9wplAzmtomKAxGpjQGsfhWdwnIqb6MkLrT9x9f10elaNy+JbaxXg2eN25sj5e7
-	 Nul53Fm/fcGGhpAGnGbH86nxJcNK+DvByA8KJeHuDjOQQGxhfoHoNmVWIt+VoIlk5T
-	 7l87EctP5TLUAt7m9HmW+t9/Hr9zLQZeLdM5uLLtf8mhIZsqbxvj6zsc9A1UlaJmc3
-	 JHLZMXluzzN6tec1QkHyKEHodjB6OENIezwk2b1KrDzjSLQ0xMWH+me8i1UAAxBJvd
-	 LbKGBbHsQ2E6A==
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-45efe81556fso4671868b6e.2
-        for <linux-pm@vger.kernel.org>; Wed, 04 Feb 2026 08:16:43 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX7/KxdmLOuf+wpPa++takiZOwrOF4fexXYD15d5/lN9tokyURSlAIjZI9dYRR9oRfk39oDGZFVYA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwVO52ypIxP8noMCknbstKo9TotdvwWiZiCUhWck+Da21gQF4GE
-	8MjdQyKPnIKvOpQVejzIFyjbOkv5gZ6YvQ47vFsnLhhJPYJt4tOWl7iO2zgqaI5Kpix4KP8QSsx
-	FzkrFvhzaPxFzdLyK7yidfFPlDu5VzKw=
-X-Received: by 2002:a05:6808:f0a:b0:45e:b650:c798 with SMTP id
- 5614622812f47-462d5a5e779mr2392449b6e.58.1770221802451; Wed, 04 Feb 2026
- 08:16:42 -0800 (PST)
+	s=k20201202; t=1770223620;
+	bh=dy73/9OQI/HuBvsd+ptSVtFrF/SFQ/zEvH4RIO0j4i4=;
+	h=Date:To:From:Subject:Cc:References:In-Reply-To:From;
+	b=ZHj8q1Ucvt7QcaZcn9QuPYACGDPfU/YL82+e6kQIaszjDn8/K3Lk25/ytj8Malksx
+	 QTrROJpGVUsMkMWTzjQvp0wcUGKl69dlGdw+uM4ZXkcku66CUCCFf+JntNkoa9XeFK
+	 UBAoEJloaJHzf8XjFtFKSgZDr+rjjdpxj021cT2FEEhwdvxmV1QnS69elAgBlCG2S1
+	 5VpdKtuK+x95jkiRP0Q0olnVlaCNxNMiWvM9N5rJSdpQVInfdYkjh/kMwVzxggH0vt
+	 xi4ko64jYM5R0Fh8vdICZWmXXV6iTywKSpHzFCGMppUp7E+ZJ8jy9VLrS1L5oDN6Sy
+	 z8aQSzU00WK2A==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260204111511.78626-1-adrian.hunter@intel.com>
- <20260204111511.78626-6-adrian.hunter@intel.com> <aYNumA0-FvE-g7nl@lizhi-Precision-Tower-5810>
-In-Reply-To: <aYNumA0-FvE-g7nl@lizhi-Precision-Tower-5810>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 4 Feb 2026 17:16:30 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0goZmY08MQccrYfQPUhoGKHxv-CbQZfWSv4+O3xGMsrrQ@mail.gmail.com>
-X-Gm-Features: AZwV_Qgr6vLt5tJ0f_J-XLTAgmPSqe75ihBd8-EDyOVAoNcIZ2R5UcY2Sv2d4ZA
-Message-ID: <CAJZ5v0goZmY08MQccrYfQPUhoGKHxv-CbQZfWSv4+O3xGMsrrQ@mail.gmail.com>
-Subject: Re: [PATCH V2 5/6] i3c: mipi-i3c-hci-pci: Add optional ability to
- manage child runtime PM
-To: Frank Li <Frank.li@nxp.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>, alexandre.belloni@bootlin.com, 
-	rafael@kernel.org, linux-i3c@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 04 Feb 2026 17:46:51 +0100
+Message-Id: <DG6BWC5SOHUG.2K1ZXGYNVB69V@kernel.org>
+To: "Andreas Hindborg" <a.hindborg@kernel.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+Subject: Re: [PATCH v14 1/9] rust: types: Add Ownable/Owned types
+Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>,
+ "Gary Guo" <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Alice
+ Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Dave Ertman"
+ <david.m.ertman@intel.com>, "Ira Weiny" <ira.weiny@intel.com>, "Leon
+ Romanovsky" <leon@kernel.org>, "Paul Moore" <paul@paul-moore.com>, "Serge
+ Hallyn" <sergeh@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ "David Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>, "Christian Brauner"
+ <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>, "Igor Korotin"
+ <igor.korotin.linux@gmail.com>, "Daniel Almeida"
+ <daniel.almeida@collabora.com>, "Lorenzo Stoakes"
+ <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Viresh Kumar" <vireshk@kernel.org>, "Nishanth Menon" <nm@ti.com>, "Stephen
+ Boyd" <sboyd@kernel.org>, "Bjorn Helgaas" <bhelgaas@google.com>,
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <linux-block@vger.kernel.org>, <linux-security-module@vger.kernel.org>,
+ <dri-devel@lists.freedesktop.org>, <linux-fsdevel@vger.kernel.org>,
+ <linux-mm@kvack.org>, <linux-pm@vger.kernel.org>,
+ <linux-pci@vger.kernel.org>, "Asahi Lina" <lina+kernel@asahilina.net>
+References: <20260204-unique-ref-v14-0-17cb29ebacbb@kernel.org>
+ <20260204-unique-ref-v14-1-17cb29ebacbb@kernel.org>
+ <7uftlTZxNVxMw7VNqETbf9dBIWLrQ1Px16pM3qnAcc6FPgQj-ERdWfAACc5aDSAdeHM5lLTdSBZYkcOIgu7mWA==@protonmail.internalid> <DG6AIA0QK77C.EKG7X4NBEJ00@kernel.org> <87fr7gpk6d.fsf@t14s.mail-host-address-is-not-set>
+In-Reply-To: <87fr7gpk6d.fsf@t14s.mail-host-address-is-not-set>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MV_CASE(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42100-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42099-lists,linux-pm=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,garyguo.net,protonmail.com,google.com,umich.edu,linuxfoundation.org,intel.com,paul-moore.com,ffwll.ch,zeniv.linux.org.uk,suse.cz,collabora.com,oracle.com,ti.com,vger.kernel.org,lists.freedesktop.org,kvack.org,asahilina.net];
+	RCPT_COUNT_TWELVE(0.00)[39];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[dakr@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[7];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:email,mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,intel.com:email]
-X-Rspamd-Queue-Id: D9B1CEA115
+	TAGGED_RCPT(0.00)[linux-pm,kernel];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: D8128EA7D7
 X-Rspamd-Action: no action
 
-On Wed, Feb 4, 2026 at 5:06=E2=80=AFPM Frank Li <Frank.li@nxp.com> wrote:
->
-> On Wed, Feb 04, 2026 at 01:15:10PM +0200, Adrian Hunter wrote:
-> > Some platforms implement the MIPI I3C HCI Multi-Bus Instance capability=
-,
-> > where a single parent device hosts multiple I3C controller instances.  =
-In
-> > such designs, the parent - not the individual child instances - may nee=
-d to
-> > coordinate runtime PM so that all controllers runtime PM callbacks are
-> > invoked in a controlled and synchronized manner.
-> >
-> > For example, if the parent enables IBI-wakeup when transitioning into a
-> > low-power state, every bus instance must remain able to receive IBIs up
-> > until that point.  This requires deferring the individual controllers'
-> > runtime suspend callbacks (which disable bus activity) until the parent
-> > decides it is safe for all instances to suspend together.
-> >
-> > To support this usage model:
-> >
-> >   * Add runtime PM and system PM callbacks in the PCI driver to invoke
-> >     the mipi-i3c-hci driver's runtime PM callbacks for each instance.
-> >
-> >   * Introduce a driver-data flag, control_instance_pm, which opts into
-> >     the new parent-managed PM behaviour.
-> >
-> >   * Ensure the callbacks are only used when the corresponding instance =
-is
-> >     operational at suspend time.  This is reliable because the operatio=
-nal
-> >     state cannot change while the parent device is undergoing a PM
-> >     transition, and PCI always performs a runtime resume before system
-> >     suspend on current configurations, so that suspend and resume alter=
-nate
-> >     irrespective of whether it is runtime or system PM.
-> >
-> > By that means, parent-managed runtime PM coordination for multi-instanc=
+On Wed Feb 4, 2026 at 5:06 PM CET, Andreas Hindborg wrote:
+> It is my understanding that the SoB needs confirmation from the author
+> if the code was changed. I changed the code and did not want to bother
+> the original author, because it is my understanding they do not wish to
+> be contacted. I did not want to misrepresent the original author, and so
+> I did not change the "From:" line.
+
+Frankly, I don't know what's the correct thing to do in this case; maybe th=
 e
-> > MIPI I3C HCI PCI devices is provided without altering existing behaviou=
-r on
-> > platforms that do not require it.
-> >
-> > Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> > ---
-> ...
-> > +
-> > +static int mipi_i3c_hci_pci_suspend(struct device *dev)
-> > +{
-> > +     struct mipi_i3c_hci_pci *hci =3D dev_get_drvdata(dev);
-> > +     struct mipi_i3c_hci_pci_pm_data pm_data =3D {};
-> > +     int ret;
-> > +
-> > +     if (!hci->info->control_instance_pm)
-> > +             return 0;
-> > +
-> > +     ret =3D device_for_each_child_reverse(dev, &pm_data, mipi_i3c_hci=
-_pci_suspend_instance);
-> > +     if (ret) {
-> > +             if (ret =3D=3D -EAGAIN || ret =3D=3D -EBUSY)
-> > +                     pm_runtime_mark_last_busy(&hci->pci->dev);
->
-> This should not neccessary, the runtime suspend API already call it now.
+correct thing is to just keep the SoB, but list all the changes that have b=
+een
+made.
 
-I'm not sure what you mean.
+Technically, the same thing is common practice when maintainers (including
+myself) apply (minor) changes to a patch when applying them to their tree.
 
-This is an error path in a system suspend callback, so when exactly
-runtime PM will update the last busy time?
+> How would you prefer to account for the work by Abdiel and Boqun?
 
-> > +             for (int i =3D 0; i < pm_data.dev_cnt; i++)
-> > +                     i3c_hci_rpm_resume(pm_data.dev[i]);
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> > +static int mipi_i3c_hci_pci_resume(struct device *dev)
-> > +{
-> > +     struct mipi_i3c_hci_pci *hci =3D dev_get_drvdata(dev);
-> > +     struct mipi_i3c_hci_pci_pm_data pm_data =3D {};
-> > +     int ret;
-> > +
-> > +     if (!hci->info->control_instance_pm)
-> > +             return 0;
-> > +
-> > +     ret =3D device_for_each_child(dev, &pm_data, mipi_i3c_hci_pci_res=
-ume_instance);
-> > +     if (ret)
-> > +             for (int i =3D 0; i < pm_data.dev_cnt; i++)
-> > +                     i3c_hci_rpm_suspend(pm_data.dev[i]);
-> > +
-> > +     return ret;
-> > +}
-> > +
-> >  static void mipi_i3c_hci_pci_rpm_allow(struct device *dev)
-> >  {
-> >       pm_runtime_put(dev);
-> > @@ -323,6 +455,8 @@ static void mipi_i3c_hci_pci_remove(struct pci_dev =
-*pci)
-> >
-> >  /* PM ops must exist for PCI to put a device to a low power state */
-> >  static const struct dev_pm_ops mipi_i3c_hci_pci_pm_ops =3D {
-> > +     RUNTIME_PM_OPS(mipi_i3c_hci_pci_suspend, mipi_i3c_hci_pci_resume,=
- NULL)
-> > +     SYSTEM_SLEEP_PM_OPS(mipi_i3c_hci_pci_suspend, mipi_i3c_hci_pci_re=
-sume)
-> >  };
-> >
-> >  static const struct pci_device_id mipi_i3c_hci_pci_devices[] =3D {
-> > --
+I mean, I don't have a preference and if I would have one, it wouldn't be
+relevant. :) I just wanted to bring it up since the very first version was =
+sent
+by the two of them. So, I think we should just ask.
 
