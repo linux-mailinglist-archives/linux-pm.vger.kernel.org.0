@@ -1,199 +1,269 @@
-Return-Path: <linux-pm+bounces-42079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42080-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cF7SHUhBg2kPkQMAu9opvQ
-	(envelope-from <linux-pm+bounces-42079-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 13:53:28 +0100
+	id gOXBMn1Dg2nqkgMAu9opvQ
+	(envelope-from <linux-pm+bounces-42080-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 14:02:53 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9D27E60A5
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 13:53:27 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33217E621A
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 14:02:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C8585300CFCC
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 12:53:26 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 878203002B62
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 13:02:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFF383E9F61;
-	Wed,  4 Feb 2026 12:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 528C140759F;
+	Wed,  4 Feb 2026 13:02:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivier.eu header.i=laurent@vivier.eu header.b="LICtSYF7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+o1V0p+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A09C1D90DD;
-	Wed,  4 Feb 2026 12:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE843F23AC
+	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 13:02:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770209605; cv=none; b=NtUaKKuMvWGKytIIi8Moi06psyTag5xJwrIIZoev7EGDKSh90hpbm/wNuLeZw6b4oT7DzvPEUMM5hGK3BYtSgo2dek8EtwBjJdx1cMc/IC1WeA6WUKg6i2c5eI5U/jKZtv7NRr+YVwZYWd8i+DNjPCR5ZVG25QIxZ4QNQXxw0zg=
+	t=1770210164; cv=none; b=TfMMO6hMrAaj3gW3X4xN6r6ThnAVLMwKhT2o5bgdagQ2j2gsO9Zw6C/USomq0L48pRxeQP+VUhOyLBWlI3vcLX1x7mrmOoieWqP3fe97VDPBCRQoXak3ev0LabXISSPzgiYEZlWvV5c90KX8/O9Y1+r3GE5ir5wz4NYQlU3eSUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770209605; c=relaxed/simple;
-	bh=XKZ0O4tib32/WcZrVvEJHYSf0v/u8ruNYekVR/2Gpt0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Z7KgKQY11F23K1TuQDKV1ei4l2/rNNS/Ykoy5B3lIDdpf22uLAvKiJI/vn4eRdOBj5YHIoNI0QRx3/UrG/5QGp4wklvJ+nEM6TkJv8AT6C+CxCWUzU4w9d/kZ0fsIwTrmV8HNq9LdXZO9XgR5BDUI4YnJyoqj3bC7bwPCPnWpK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivier.eu; spf=pass smtp.mailfrom=vivier.eu; dkim=pass (2048-bit key) header.d=vivier.eu header.i=laurent@vivier.eu header.b=LICtSYF7; arc=none smtp.client-ip=217.72.192.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivier.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivier.eu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivier.eu;
-	s=s1-ionos; t=1770209580; x=1770814380; i=laurent@vivier.eu;
-	bh=XKZ0O4tib32/WcZrVvEJHYSf0v/u8ruNYekVR/2Gpt0=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=LICtSYF7t70Dbj0bVHC7hxS6Ai4Bbk04f84ar5V2x3ER1zNpmOELcsiUtrFr9DY9
-	 N+tSGxd5O8dcK7Q1CwiEw1TfhD3m/aCmKoWmlzq7SDgsJiwUotAnniPLYh1QXBtvy
-	 E4yozK0zw4t9/oskASSNALOPEJh1U/zOSfeopfYQQ68X34NxIlSSe++ur2qEwdgyN
-	 xCXKFvZru0yVgPBJJag7FfCURWPTbRH27y1eG6c31DemzpdPtrmQ0QlPE2a1iV0JI
-	 BJof6pMZmpP8F/qLYSB888wH4I1j45jV6EIvwiUeJ5WZVpg6yQWVEESmTO0KTy9lo
-	 zdmsHa9GvD5I9IqnGg==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from [192.168.100.1] ([82.64.211.94]) by mrelayeu.kundenserver.de
- (mreue109 [213.165.67.119]) with ESMTPSA (Nemesis) id
- 1MBDvU-1vzDU20SVy-00EZNJ; Wed, 04 Feb 2026 13:53:00 +0100
-Message-ID: <2a4ebbea-12c9-4362-aa09-dd3a7de1be46@vivier.eu>
-Date: Wed, 4 Feb 2026 13:52:52 +0100
+	s=arc-20240116; t=1770210164; c=relaxed/simple;
+	bh=I+ebxz3GapT/F42T4+CxRemWso5iJAqp78kDiVsXGsA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f2FA3PVgm3okMJA0t6gNYNgUm+VCrc9fECr+HWd3RNr8z3lpOju7tqRBq+tgPvlCQF7gzVQqq2PpZQBRlPJPZ6xR1V/DgOTgdrfv1FmnPXtpLJRvhnlHMMjqCwT64zQYzqgG3uBhCnrovAA+TEROUK+GZmieJ8euColF4bkvLkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+o1V0p+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2314C2BCB4
+	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 13:02:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770210163;
+	bh=I+ebxz3GapT/F42T4+CxRemWso5iJAqp78kDiVsXGsA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=A+o1V0p+UV4zad/pXOSvyYXpJryJxwHncAa0iJHbGVWU8b7xM+oGjpHHgkmLCKxWO
+	 9KGc5KfTqs8qEGPXEDk2tqd/ItLmH7BkRwURbhD2H5OBTJh82HL1muVPAwNVqsXhmj
+	 nlJyeVMbNnXbna6n9Z+j2iDMGo//gQyj0AuLp6A/c6FX6b5Jygb3T6pH9CNmxJ+57E
+	 dQ/3yi7H8tam/sNyx6uLPCtUSx3xmUFgMRnKxXdi88hPkfswdxJMGyl84jvL+b4VwQ
+	 FfnlV91MOYhmDfzZfPowo91F51d5Xk7B1vkLagaNkrvB0qpZMsO9TB9UnePFyKJp6r
+	 Q8cGSthK33Lnw==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-408778a8ec4so4430591fac.0
+        for <linux-pm@vger.kernel.org>; Wed, 04 Feb 2026 05:02:43 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVHVCT/Iy9hWIRnY0vbrtuOUokrlLqoMt6OSs8VhDXuJ0tc0O4dY3xpmkCcpCbuc45T4u1LaRdONA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDdG9mQ+RMThrFGHiqkrhZoOt9lvs/QO9l6vLMWIPKV6EZTFy0
+	4dY3MyfRMzadNK3HqdyK2IXaPI2VaX+FbRb453wVaQn2cLy0z4YyG1AmLX/vvqj9MpIf2RsVOy4
+	227csNaA6CgAaY/59pi0XVPG+aZ8vLoc=
+X-Received: by 2002:a4a:e906:0:b0:659:9a49:8eb8 with SMTP id
+ 006d021491bc7-66a23432fe4mr1265953eaf.60.1770210162665; Wed, 04 Feb 2026
+ 05:02:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] Add QEMU virt-ctrl driver and update m68k virt
-To: Daniel Palmer <daniel@0x0f.com>
-Cc: Kuan-Wei Chiu <visitorckw@gmail.com>, sre@kernel.org,
- jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com, linux-kernel@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-pm@vger.kernel.org,
- Geert Uytterhoeven <geert@linux-m68k.org>
-References: <20260203170824.2968045-1-visitorckw@gmail.com>
- <CAMuHMdUMBoLd8cKXMK64qjGfTqQfK21mDAXMh8DdJHkL7QbDVQ@mail.gmail.com>
- <e7ddd671-6e25-4114-9d4c-21ecebe82ef5@vivier.eu>
- <CAFr9PX=heS=ywLCidd8o_BzS4TS5U=GA8yv7itzNFp5nuwf2XA@mail.gmail.com>
-Content-Language: fr
-From: Laurent Vivier <laurent@vivier.eu>
-Autocrypt: addr=laurent@vivier.eu; keydata=
- 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
-In-Reply-To: <CAFr9PX=heS=ywLCidd8o_BzS4TS5U=GA8yv7itzNFp5nuwf2XA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+References: <20260129104817.3752340-1-sumitg@nvidia.com> <20260129104817.3752340-5-sumitg@nvidia.com>
+ <4432fa04-e67c-422a-aae4-2938be431985@huawei.com> <c96312c7-b13f-4f5c-9512-cc0382c1c77b@nvidia.com>
+ <74f3e6cf-7c13-43e6-a8f6-2b46184b8ad6@gmail.com> <944fc140-e5c5-425f-a6ad-883e87eed8a3@nvidia.com>
+ <CAJZ5v0hUdLsh8UK5G6rHHD49RQGYLAiU1J-11DK-fLTKnuqhUQ@mail.gmail.com>
+ <CAJZ5v0ggzD0PEti-r20Sm-8n0gPigPh=NgE2Oa=UKzMmwB0jpw@mail.gmail.com>
+ <211d9dfa-26e6-4fc3-b70b-f5fbca49e5fd@nvidia.com> <CAJZ5v0if=tMiyLB-efkzB67SniJS-2pCVv1-eN+vzZxqrdAM8Q@mail.gmail.com>
+ <e7570bc3-5420-4743-8a75-8602559ca235@amd.com> <b8603fcb-b0ab-47da-ae90-e82f7b9bcd67@nvidia.com>
+In-Reply-To: <b8603fcb-b0ab-47da-ae90-e82f7b9bcd67@nvidia.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 4 Feb 2026 14:02:31 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h4yOAW5y-B76EooeBLdMBmmL1hRf3PZ0udA+FYR4EPKQ@mail.gmail.com>
+X-Gm-Features: AZwV_QhCjeh-XYu45P0hnBYAXK49X1-cttxr4eR82FwIbJTI78XtQKvZNdg_NH4
+Message-ID: <CAJZ5v0h4yOAW5y-B76EooeBLdMBmmL1hRf3PZ0udA+FYR4EPKQ@mail.gmail.com>
+Subject: Re: [PATCH v7 4/7] ACPI: CPPC: add APIs and sysfs interface for min/max_perf
+To: Sumit Gupta <sumitg@nvidia.com>
+Cc: Mario Limonciello <mario.limonciello@amd.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Russell Haley <yumpusamongus@gmail.com>, "zhenglifeng (A)" <zhenglifeng1@huawei.com>, 
+	pierre.gondois@arm.com, viresh.kumar@linaro.org, ionela.voinescu@arm.com, 
+	corbet@lwn.net, rdunlap@infradead.org, ray.huang@amd.com, 
+	gautham.shenoy@amd.com, perry.yuan@amd.com, zhanjie9@hisilicon.com, 
+	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
+	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, treding@nvidia.com, 
+	jonathanh@nvidia.com, vsethi@nvidia.com, ksitaraman@nvidia.com, 
+	sanjayc@nvidia.com, nhartman@nvidia.com, bbasu@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:dnU8ToB1l10ON9VWpX9DtFusS+B83vjoCMcTgHBE9iZSWwTpKJw
- MyszHosrdCRKZ37xN+Vimg+0Wvcl5wISHv6O3gZjAXPs6BhtAwDOGQmXkCr1Ub298vmj4aa
- dzz2lwLbB+rXmjgaOm7sE6RPWL0f9FSQcM40cbxSzENWYjyyGNFnKXs35zTZqfynUt92t8Q
- 3WDr21klMcbo1FhCvxVlA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:WGzCrz8zgbs=;f/HvPiGzegGuXldSlulnyctZ5R6
- 9txvZhbcvL7rKeuwAPEWZL5k3Mzh43Zm0Tk9P+91FbXKZCi5dCzdmwRPgGPJbs9bDlbGQwAWD
- HGAsaYLdLa4T8mpDG2Otlw5SIG9mUmVpAE84cCRVWsQbTnOZDndRz+ASCQ+RRoDpE+V6aWf33
- giBVUBU9iU3Q8WrBqBaGpLSSored1RI7PfNBlgtyJdBDssRTBP0aQYPVRcuD4cXz2SJMEM5c/
- L+pROkPGQlxT7buVeM5IB9gCSCqj2VdlPZZGEN4P1fnZqqXcRoHvGo/H52RnIr/ww0rMdLWvN
- h2Sgpd7QOJrqI2t1AKLRzLYrX92RgC6OoX+6NVN19ImqeP3hiUG4bVXOkTzyZXeaTEMNH7uoA
- tGM+FNDrGP4oh11yKe12Qnkwf9TsE7N7p+G0TNvwLXNooIliWRAyGjK/zNQwTPYG12y/PuN7w
- dbTUnZV0TaWgclpfo1vO5yHWGhNnbwb1N+qfrYGA7OkpdSkK6RFflEzw6nLDC8daCLwVvq1HZ
- OkWPVLn7d9PgB2sHSjgrLXGF1E4fUagFRzujAjkObS5YhaqxsllbzRCZFuVM+RQ9ByVmhzuAq
- 7Su0h2CgOiCt2nxilzgwIG7WxRuBEFZBhtkpmraHRNkqeEIbwucJeP2baEGEScWOnr/a3WTdz
- uL+qP9qgqYYh3srh5X0ze7gerwxMNOSZstyGMEBg3vb4f6CzShUAExCjgaARSCWYjz8Md/4Km
- HGX/+ZdjaAsv8EBQeQiKBjRCUNb+tt0I7qz1OwAEgkk+7SR6kG+/stnFHmUIAmR4Gj72vGlHa
- QwjLkbltvMF3hbBRFGAL1IA2iFU5SKIgVSVOq7RghnRraE0R6E5A1f0UycvOQp8Zlhwx1cBKI
- ZMe4+XuKSqHObfFPQFZqevuL18Kvhm/hkgmq2X3iWFizhm7PdtZBhzyOeExcs2XpyqGlHFSu8
- q29/edoFVwwSZDkQv/ykge4zBP42PNiIhN0bov9UiKTpshI9tzLlIb7fXbrHkt+/pPt8clab6
- OY0nxOL1DhMhu63CbXxSHcExHv0gxthZohBuVebZPWJxXXrNx0gC3/7RMO76mliDD0QLksJtV
- EGM55nJCuqJsqTphiWMtNQUfOGS5jN52tHrMI+hP4fGCg4kadC39nZkIrpE5RgZxrkjsaPCDr
- CEIon2nmKkaU9xEiVj/JyKP81+NesAv2eRywZzX2c8MZh0I5bkO6dno6vYGNh3LxXhE9TlZ+C
- GJhVrnMLztE3HcpojqeGQTe84HHb+FYiitkfsXnFFEkwp+tpHY3BIX2ZuWqQlbumXnf3wKrNL
- VilMsQ8ZpUnMv7kDFhG20QwPR1ZU5RjoLQwDF3YtdPLFQKzXqWAIyVqJvufyauXA/J2aLXL/w
- +pv/yZnBWbG9h781Nn4GL6Flu5ComJ6zwbNPfyubG7SsmfRxtk9f0vjyfi01NJyq6JCLjx0BW
- Tpbk4nsWORBaEjf0R4jucclMsejDcDkfcN1TKdWH3rUmnku1hSSnJ8wNnabllgNbBRy718u0V
- Lc9O/2mK7dfIk7xkrdKQDygNevFIWOXzADN0KRnRxZ7mvDusClH/9FDVt2VKhPWkb62Q3txlO
- jEMn2u7FLhrLjzCXzZ9b2oW4AAj2yeBrGh04DbSKKlANdB7cJxbVdlRv59F5tiL2+QMe76KTl
- N9lkSj7sFYeO1uxnaNJss4xPTvHMJEbOOcjKATZOvnKWVf5FB13nV0gLy1jiu9nAWF1rgOpVs
- edQyUbwHS68sGi0tpL1uL+j3qjZlQcbNZt/MxJ/lP2s8dGqPqDhA9/jY=
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[vivier.eu,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[vivier.eu:s=s1-ionos];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,kernel.org,ccns.ncku.edu.tw,vger.kernel.org,lists.linux-m68k.org,linux-m68k.org];
-	TAGGED_FROM(0.00)[bounces-42079-lists,linux-pm=lfdr.de];
-	DKIM_TRACE(0.00)[vivier.eu:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[amd.com,kernel.org,gmail.com,huawei.com,arm.com,linaro.org,lwn.net,infradead.org,hisilicon.com,vger.kernel.org,lists.linux.dev,nvidia.com];
+	TAGGED_FROM(0.00)[bounces-42080-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RSPAMD_URIBL_FAIL(0.00)[nvidia.com:query timed out];
 	MIME_TRACE(0.00)[0:+];
-	NEURAL_HAM(-0.00)[-1.000];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[27];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[laurent@vivier.eu,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: E9D27E60A5
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid,nvidia.com:email]
+X-Rspamd-Queue-Id: 33217E621A
 X-Rspamd-Action: no action
 
-Le 04/02/2026 =C3=A0 13:47, Daniel Palmer a =C3=A9crit=C2=A0:
-> Hi Laurent,
->=20
-> On Wed, 4 Feb 2026 at 18:09, Laurent Vivier <laurent@vivier.eu> wrote:
->=20
->> Please cc: me on the next version
->=20
-> FWIW support for the m68k virt machine also just got merged to u-boot:
-> https://lore.kernel.org/u-boot/177007672356.4123720.10843284111217950440=
-.b4-ty@konsulko.com/
+On Wed, Feb 4, 2026 at 10:51=E2=80=AFAM Sumit Gupta <sumitg@nvidia.com> wro=
+te:
+>
+>
+> On 04/02/26 01:58, Mario Limonciello wrote:
+> > External email: Use caution opening links or attachments
+> >
+> >
+> > On 2/3/26 2:24 PM, Rafael J. Wysocki wrote:
+> >> On Tue, Feb 3, 2026 at 3:32=E2=80=AFPM Sumit Gupta <sumitg@nvidia.com>=
+ wrote:
+> >>>
+> >>>
+> >>> On 03/02/26 18:24, Rafael J. Wysocki wrote:
+> >>>> External email: Use caution opening links or attachments
+> >>>>
+> >>>>
+> >>>> On Tue, Feb 3, 2026 at 1:45=E2=80=AFPM Rafael J. Wysocki
+> >>>> <rafael@kernel.org> wrote:
+> >>>>> On Tue, Feb 3, 2026 at 10:41=E2=80=AFAM Sumit Gupta <sumitg@nvidia.=
+com>
+> >>>>> wrote:
+> >>>>>>>>> Hi Sumit,
+> >>>>>>>>>
+> >>>>>>>>> I am thinking that maybe it is better to call these two sysfs
+> >>>>>>>>> interface
+> >>>>>>>>> 'min_freq' and 'max_freq' as users read and write khz instead
+> >>>>>>>>> of raw
+> >>>>>>>>> value.
+> >>>>>>>> Thanks for the suggestion.
+> >>>>>>>> Kept min_perf/max_perf to match the CPPC register names
+> >>>>>>>> (MIN_PERF/MAX_PERF), making it clear to users familiar with
+> >>>>>>>> CPPC what's being controlled.
+> >>>>>>>> The kHz unit is documented in the ABI.
+> >>>>>>>>
+> >>>>>>>> Thank you,
+> >>>>>>>> Sumit Gupta
+> >>>>>>> On my x86 machine with kernel 6.18.5, the kernel is exposing raw
+> >>>>>>> values:
+> >>>>>>>
+> >>>>>>>> grep . /sys/devices/system/cpu/cpu0/acpi_cppc/*
+> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/feedback_ctrs:ref:34290401=
+8856568
+> >>>>>>>
+> >>>>>>> del:437439724183386
+> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:63
+> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf:88
+> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq:0
+> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf:36
+> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf:1
+> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq:3900
+> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf:62
+> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf:62
+> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/wraparound_time:1844674407=
+3709551615
+> >>>>>>>
+> >>>>>>>
+> >>>>>>> It would be surprising for a nearby sysfs interface with very
+> >>>>>>> similar
+> >>>>>>> names to use kHz instead.
+> >>>>>>>
+> >>>>>>> Thanks,
+> >>>>>>>
+> >>>>>>> Russell Haley
+> >>>>>> I can rename to either of the below:
+> >>>>>> - min/max_freq: might be confused with scaling_min/max_freq.
+> >>>>>> - min/max_perf_freq: keeps the CPPC register association clear.
+> >>>>>>
+> >>>>>> Rafael, Any preferences here?
+> >>>>> On x86 the units in CPPC are not kHz and there is no easy reliable
+> >>>>> way
+> >>>>> to convert them to kHz.
+> >>>>>
+> >>>>> Everything under /sys/devices/system/cpu/cpu0/acpi_cppc/ needs to b=
+e
+> >>>>> in CPPC units, not kHz (unless, of course, kHz are CPPC units).
+> >>>
+> >>>
+> >>> In v1 [1], these controls were added under acpi_cppc sysfs.
+> >>> After discussion, they were moved under cpufreq, and [2] was merged
+> >>> first.
+> >>> The decision to use frequency scale instead of raw perf was made
+> >>> for consistency with other cpufreq interfaces as per (v3 [3]).
+> >>>
+> >>> CPPC units in our case are also not in kHz. The kHz conversion uses t=
+he
+> >>> existing cppc_perf_to_khz()/cppc_khz_to_perf() helpers which are
+> >>> already
+> >>> used in cppc_cpufreq attributes. So the conversion behavior is
+> >>> consistent
+> >>> with existing cpufreq interfaces.
+> >>>
+> >>> [1]
+> >>> https://lore.kernel.org/lkml/076c199c-a081-4a7f-956c-f395f4d5e156@nvi=
+dia.com/
+> >>>
+> >>> [2]
+> >>> https://lore.kernel.org/all/20250507031941.2812701-1-zhenglifeng1@hua=
+wei.com/
+> >>>
+> >>> [3]
+> >>> https://lore.kernel.org/lkml/80e16de0-63e4-4ead-9577-4ebba9b1a02d@nvi=
+dia.com/
+> >>>
+> >>>
+> >>>> That said, the new attributes will show up elsewhere.
+> >>>>
+> >>>> So why do you need to add these things in the first place?
+> >>>
+> >>> Currently there's no sysfs interface to dynamically control the
+> >>> MIN_PERF/MAX_PERF bounds when using autonomous mode. This helps
+> >>> users tune power and performance at runtime.
+> >>
+> >> So what about scaling_min_freq and scaling_max_freq?
+> >>
+> >> intel_pstate uses them for an analogous purpose.
+> >
+> > FWIW same thing for amd_pstate.
+> >
+>
+> intel_pstate and amd_pstate seem to use setpolicy() to update
+> scaling_min/max_freq and program MIN_PERF/MAX_PERF.
 
-It's great. I did a port of petitboot but never merged it to QEMU.
+That's one possibility.
 
-How to use it with QEMU? Do we need some changes in the code?
+intel_pstate has a "cpufreq-compatible" mode (in which case it is
+called intel_cpufreq) and still uses HWP (which is the underlying
+mechanism for CPPC on Intel platforms).
 
-Thanks,
-Laurent
+> However, as discussed in v5 [1], cppc_cpufreq cannot switch to
+> a setpolicy based approach because:
+> - We need per-CPU control of auto_sel: With setpolicy, we can't
+>    dynamically disable auto_sel for individual CPUs and return to the
+>    target() (no target hook available).
+>    intel_pstate and amd_pstate seem to set HW autonomous mode for
+>    all CPUs, not per-CPU.
+> - We need to retain the target() callback - the CPPC spec allows
+>    desired_perf to be used even when autonomous selection is enabled.
+
+intel_pstate in the "cpufreq-compatible" mode updates its HWP min and
+max limits when .target() (or .fast_switch() or .adjust_perf()) is
+called.
+
+I guess that would not be sufficient in cppc_cpufreq for some reason?
+
+> [1]
+> https://lore.kernel.org/lkml/66f58f43-631b-40a0-8d42-4e90cd24b757@arm.com=
+/
 
