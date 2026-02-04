@@ -1,269 +1,157 @@
-Return-Path: <linux-pm+bounces-42080-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42081-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gOXBMn1Dg2nqkgMAu9opvQ
-	(envelope-from <linux-pm+bounces-42080-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 14:02:53 +0100
+	id YFgpGftEg2nqkgMAu9opvQ
+	(envelope-from <linux-pm+bounces-42081-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 14:09:15 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33217E621A
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 14:02:48 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA3ABE6341
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 14:09:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 878203002B62
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 13:02:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A512B308A85F
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 13:02:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 528C140759F;
-	Wed,  4 Feb 2026 13:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FD1940B6C0;
+	Wed,  4 Feb 2026 13:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A+o1V0p+"
+	dkim=pass (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b="pCfs27vd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE843F23AC
-	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 13:02:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770210164; cv=none; b=TfMMO6hMrAaj3gW3X4xN6r6ThnAVLMwKhT2o5bgdagQ2j2gsO9Zw6C/USomq0L48pRxeQP+VUhOyLBWlI3vcLX1x7mrmOoieWqP3fe97VDPBCRQoXak3ev0LabXISSPzgiYEZlWvV5c90KX8/O9Y1+r3GE5ir5wz4NYQlU3eSUU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770210164; c=relaxed/simple;
-	bh=I+ebxz3GapT/F42T4+CxRemWso5iJAqp78kDiVsXGsA=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D6083D3CF8
+	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 13:02:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770210178; cv=pass; b=U5vBOsdzqYwOfAMIzNYYhZHCI9ymzpZNXH56HQ2W8tlN0/adMrLgjbYlaAQX+nzqbw07VIeOxwmlc4ekwnaM24ZAFU5qhhqibcdst0+qfvI6Ze4x2noL16S/rEmJaaFhezOvoYNLLaTB6PmqJv424snVXsHnV7DONFtQql9SnJ4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770210178; c=relaxed/simple;
+	bh=jqB50L1VPXgD56TAUS5qWxfi8WyhK/RAKlozHuVqM+E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f2FA3PVgm3okMJA0t6gNYNgUm+VCrc9fECr+HWd3RNr8z3lpOju7tqRBq+tgPvlCQF7gzVQqq2PpZQBRlPJPZ6xR1V/DgOTgdrfv1FmnPXtpLJRvhnlHMMjqCwT64zQYzqgG3uBhCnrovAA+TEROUK+GZmieJ8euColF4bkvLkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A+o1V0p+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2314C2BCB4
-	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 13:02:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770210163;
-	bh=I+ebxz3GapT/F42T4+CxRemWso5iJAqp78kDiVsXGsA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=A+o1V0p+UV4zad/pXOSvyYXpJryJxwHncAa0iJHbGVWU8b7xM+oGjpHHgkmLCKxWO
-	 9KGc5KfTqs8qEGPXEDk2tqd/ItLmH7BkRwURbhD2H5OBTJh82HL1muVPAwNVqsXhmj
-	 nlJyeVMbNnXbna6n9Z+j2iDMGo//gQyj0AuLp6A/c6FX6b5Jygb3T6pH9CNmxJ+57E
-	 dQ/3yi7H8tam/sNyx6uLPCtUSx3xmUFgMRnKxXdi88hPkfswdxJMGyl84jvL+b4VwQ
-	 FfnlV91MOYhmDfzZfPowo91F51d5Xk7B1vkLagaNkrvB0qpZMsO9TB9UnePFyKJp6r
-	 Q8cGSthK33Lnw==
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-408778a8ec4so4430591fac.0
-        for <linux-pm@vger.kernel.org>; Wed, 04 Feb 2026 05:02:43 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVHVCT/Iy9hWIRnY0vbrtuOUokrlLqoMt6OSs8VhDXuJ0tc0O4dY3xpmkCcpCbuc45T4u1LaRdONA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDdG9mQ+RMThrFGHiqkrhZoOt9lvs/QO9l6vLMWIPKV6EZTFy0
-	4dY3MyfRMzadNK3HqdyK2IXaPI2VaX+FbRb453wVaQn2cLy0z4YyG1AmLX/vvqj9MpIf2RsVOy4
-	227csNaA6CgAaY/59pi0XVPG+aZ8vLoc=
-X-Received: by 2002:a4a:e906:0:b0:659:9a49:8eb8 with SMTP id
- 006d021491bc7-66a23432fe4mr1265953eaf.60.1770210162665; Wed, 04 Feb 2026
- 05:02:42 -0800 (PST)
+	 To:Cc:Content-Type; b=PItZ7y8eRms55w6oaz6wvzS36yADk7oqiX2GeTmyaLS8sairEtaXSbPIul+x5JpBsY9JNsC8SaV0VOOQqBaTU01WM1SPh7gWldLtj93gfCUHjYRJJyxWSu/ItB1CVjBPdwQCIJSehd21mVXjoR6a0y5bvVRYx1/XFvT0WhdIKOw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com; spf=pass smtp.mailfrom=0x0f.com; dkim=pass (1024-bit key) header.d=0x0f.com header.i=@0x0f.com header.b=pCfs27vd; arc=pass smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x0f.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0x0f.com
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-34be2be4b7cso3654710a91.3
+        for <linux-pm@vger.kernel.org>; Wed, 04 Feb 2026 05:02:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770210177; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jJZo775iv3xgwFdJG0xkhapAoBXQO5jkxiI1y2qhe0LibAOOeuwpX0lOnexXadUxh6
+         xavniLS6gxu2brDBaW39Clivjpf/ZBVTZ6EGuufGaNoPJ6+AJQQqkAvg+VpWtzgu8k+Y
+         ZwauxKWeiw+GmP1p8WsCiCN2PYUZT72atj5BpGwRgFhfP6/UkCjLzblPmQYw99cGYy10
+         PD7E3OJIuZiReLXSOmkVucrL4uWKLP5j59aHbiYCYf8ax6Skz/wKfEVc502g9TqPK/Mn
+         A7ITAx8prqzgF6S4G7Ff9Q5eFAU7FJXMKTaXdea/bY1SSOgzMAhRf3fiwm19C6XsDY8I
+         /DUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=jqB50L1VPXgD56TAUS5qWxfi8WyhK/RAKlozHuVqM+E=;
+        fh=an0+osjGDIvqUNZzPppfIv+P+HJrqGpf3u1461hsgVo=;
+        b=UL2XYMnd7xGeF2ME278jTNXK040jkyVAMgJv574fMgqh1IoX40XbEaDnM+MKWIDD05
+         usAF/l6wPt1HPXBejkWuLWLD+ZP1ixd+tcuaCHTA3txrjX6ulvNDBKFf9EO/sWgqWD3/
+         DYMj/AwIA7TWck8hu1sz7NpoWs3O6p9twbIVrsqEy5M3sg/IFV9IquEIm3E60VLuKMOl
+         uc7CRnrmvK00gonz9cfdSd5bM5sFbBX/XiBZg8i8n3D0Pu4tpL4uorL1JXccSQG1+MIQ
+         I9EbscsHMJ7Ng+iT7Ji61vpRVAL+NBnCqcNPgFTocbXRpoNI8bv4N6gEOERw7sGpKHRg
+         Ow5g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=0x0f.com; s=google; t=1770210177; x=1770814977; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jqB50L1VPXgD56TAUS5qWxfi8WyhK/RAKlozHuVqM+E=;
+        b=pCfs27vd2Urzkj8tJ7K8/ouPKEgTalhMwIgbDbQERtPG0SnJTHuI/yWVYN4qqT/sXH
+         a2wGrATIWpaLIvhjm5izA6AgUsBKRKgOJnSl9P7WBlz7wXNnhTibP3r/I3vNFojjJN5P
+         uvM066dACXe4rRmBXqK6uZAtD5zNsZYmiVgNo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770210177; x=1770814977;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jqB50L1VPXgD56TAUS5qWxfi8WyhK/RAKlozHuVqM+E=;
+        b=OwaPMsQVaXduMryf48DmQh0qWoJpHkOrXTTB5hGKpZkwsrhiFY39g5yBKBYy0x/UE6
+         n8gGPdDR3TdhafU8Teo10iqs604s7dI97hEtUNWJojhCHL7iHLn+AKEaH+CDc32jk28P
+         D4nE9mcpnSI8QgG2mEsVk/lVpTFgKHiz3LyljtfdhUl9CuS4sXZ24FeFGM0DY3M/ilNg
+         B1wixCnG0rJg7K8+khwPe/iCICyTwXq6ZzK7ia47T0gIS9tq3Z2x6E/Pzh9bEP9DV+l2
+         A2Pk+fY6N9YZ7ySpjPDGCsxyvarAXZ6xS9yRWMwGTnQYLL4z2eaCjR0aSK3rd395PcDm
+         lXRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW0/Z+7MGbl0F/Y15HdyyhjgJ9Bj5F59+nLF01SUtgcTSMBI7LU0Udo5M1+m63LBRif7AFXanrGMQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzySxXLpM41EMwhLehQRqU3m6awNL+Q00eFTyLY1H1SuL3AH1FY
+	mEeHrcnjVPHg90OcO7R8Ex0suPEbZFjAFpUwLCqQSZf0YFEX5RSUQsnS3v3UGIXtyRzOfvkn77v
+	Ny9jPXp9d2WxfNyKA2KcCcGrse+zYmz/Cw3oDCcVOMA==
+X-Gm-Gg: AZuq6aKnlaLIVcAbc6YNIIhmV715UPHV9/nW4/CEggBVZPVK/PghZnCq8r3fzlX1MbW
+	hDJEYeovEGDyLhkswmS72EPOTNSpab4cJ7vGQJiHblLFX63iMryhBml4qBZc4wkcnH+6uNRTLmm
+	+NFPwuPEk/2XCXNdfS7pXVq59cgVKGFnkDzWt8WxVCJ2hkBvRn5OZrQddqCxY+zR/fWAgZw/RTp
+	vJzOlOOBujXW4fyLMnDAqRmIEhflSOMkOR63iw75LOWsnMeTkQpIeomLr7iNQ/bHBSax87Pgg==
+X-Received: by 2002:a17:90b:350d:b0:341:315:f4ed with SMTP id
+ 98e67ed59e1d1-354870eb613mr2584532a91.10.1770210177520; Wed, 04 Feb 2026
+ 05:02:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129104817.3752340-1-sumitg@nvidia.com> <20260129104817.3752340-5-sumitg@nvidia.com>
- <4432fa04-e67c-422a-aae4-2938be431985@huawei.com> <c96312c7-b13f-4f5c-9512-cc0382c1c77b@nvidia.com>
- <74f3e6cf-7c13-43e6-a8f6-2b46184b8ad6@gmail.com> <944fc140-e5c5-425f-a6ad-883e87eed8a3@nvidia.com>
- <CAJZ5v0hUdLsh8UK5G6rHHD49RQGYLAiU1J-11DK-fLTKnuqhUQ@mail.gmail.com>
- <CAJZ5v0ggzD0PEti-r20Sm-8n0gPigPh=NgE2Oa=UKzMmwB0jpw@mail.gmail.com>
- <211d9dfa-26e6-4fc3-b70b-f5fbca49e5fd@nvidia.com> <CAJZ5v0if=tMiyLB-efkzB67SniJS-2pCVv1-eN+vzZxqrdAM8Q@mail.gmail.com>
- <e7570bc3-5420-4743-8a75-8602559ca235@amd.com> <b8603fcb-b0ab-47da-ae90-e82f7b9bcd67@nvidia.com>
-In-Reply-To: <b8603fcb-b0ab-47da-ae90-e82f7b9bcd67@nvidia.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 4 Feb 2026 14:02:31 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h4yOAW5y-B76EooeBLdMBmmL1hRf3PZ0udA+FYR4EPKQ@mail.gmail.com>
-X-Gm-Features: AZwV_QhCjeh-XYu45P0hnBYAXK49X1-cttxr4eR82FwIbJTI78XtQKvZNdg_NH4
-Message-ID: <CAJZ5v0h4yOAW5y-B76EooeBLdMBmmL1hRf3PZ0udA+FYR4EPKQ@mail.gmail.com>
-Subject: Re: [PATCH v7 4/7] ACPI: CPPC: add APIs and sysfs interface for min/max_perf
-To: Sumit Gupta <sumitg@nvidia.com>
-Cc: Mario Limonciello <mario.limonciello@amd.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Russell Haley <yumpusamongus@gmail.com>, "zhenglifeng (A)" <zhenglifeng1@huawei.com>, 
-	pierre.gondois@arm.com, viresh.kumar@linaro.org, ionela.voinescu@arm.com, 
-	corbet@lwn.net, rdunlap@infradead.org, ray.huang@amd.com, 
-	gautham.shenoy@amd.com, perry.yuan@amd.com, zhanjie9@hisilicon.com, 
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	linux-doc@vger.kernel.org, acpica-devel@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, treding@nvidia.com, 
-	jonathanh@nvidia.com, vsethi@nvidia.com, ksitaraman@nvidia.com, 
-	sanjayc@nvidia.com, nhartman@nvidia.com, bbasu@nvidia.com
+References: <20260203170824.2968045-1-visitorckw@gmail.com>
+ <CAMuHMdUMBoLd8cKXMK64qjGfTqQfK21mDAXMh8DdJHkL7QbDVQ@mail.gmail.com>
+ <e7ddd671-6e25-4114-9d4c-21ecebe82ef5@vivier.eu> <CAFr9PX=heS=ywLCidd8o_BzS4TS5U=GA8yv7itzNFp5nuwf2XA@mail.gmail.com>
+ <2a4ebbea-12c9-4362-aa09-dd3a7de1be46@vivier.eu>
+In-Reply-To: <2a4ebbea-12c9-4362-aa09-dd3a7de1be46@vivier.eu>
+From: Daniel Palmer <daniel@0x0f.com>
+Date: Wed, 4 Feb 2026 22:02:46 +0900
+X-Gm-Features: AZwV_Qizyl8upErpfnTfEOGA157wPCSy37URTJkgip2hxCDhdYxq0FUzjc6r6AU
+Message-ID: <CAFr9PXmqSv00Dt=fwwGsDcr8DgpELsa-X=beqazcQOJvxB0=1w@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Add QEMU virt-ctrl driver and update m68k virt
+To: Laurent Vivier <laurent@vivier.eu>
+Cc: Kuan-Wei Chiu <visitorckw@gmail.com>, sre@kernel.org, jserv@ccns.ncku.edu.tw, 
+	eleanor15x@gmail.com, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-pm@vger.kernel.org, 
+	Geert Uytterhoeven <geert@linux-m68k.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+X-Spamd-Result: default: False [-1.66 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[0x0f.com:s=google];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[amd.com,kernel.org,gmail.com,huawei.com,arm.com,linaro.org,lwn.net,infradead.org,hisilicon.com,vger.kernel.org,lists.linux.dev,nvidia.com];
-	TAGGED_FROM(0.00)[bounces-42080-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42081-lists,linux-pm=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RSPAMD_URIBL_FAIL(0.00)[nvidia.com:query timed out];
-	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	DMARC_NA(0.00)[0x0f.com];
+	FREEMAIL_CC(0.00)[gmail.com,kernel.org,ccns.ncku.edu.tw,vger.kernel.org,lists.linux-m68k.org,linux-m68k.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[27];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	DKIM_TRACE(0.00)[0x0f.com:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[daniel@0x0f.com,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid,nvidia.com:email]
-X-Rspamd-Queue-Id: 33217E621A
+	RCPT_COUNT_SEVEN(0.00)[9];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[]
+X-Rspamd-Queue-Id: BA3ABE6341
 X-Rspamd-Action: no action
 
-On Wed, Feb 4, 2026 at 10:51=E2=80=AFAM Sumit Gupta <sumitg@nvidia.com> wro=
-te:
->
->
-> On 04/02/26 01:58, Mario Limonciello wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > On 2/3/26 2:24 PM, Rafael J. Wysocki wrote:
-> >> On Tue, Feb 3, 2026 at 3:32=E2=80=AFPM Sumit Gupta <sumitg@nvidia.com>=
- wrote:
-> >>>
-> >>>
-> >>> On 03/02/26 18:24, Rafael J. Wysocki wrote:
-> >>>> External email: Use caution opening links or attachments
-> >>>>
-> >>>>
-> >>>> On Tue, Feb 3, 2026 at 1:45=E2=80=AFPM Rafael J. Wysocki
-> >>>> <rafael@kernel.org> wrote:
-> >>>>> On Tue, Feb 3, 2026 at 10:41=E2=80=AFAM Sumit Gupta <sumitg@nvidia.=
-com>
-> >>>>> wrote:
-> >>>>>>>>> Hi Sumit,
-> >>>>>>>>>
-> >>>>>>>>> I am thinking that maybe it is better to call these two sysfs
-> >>>>>>>>> interface
-> >>>>>>>>> 'min_freq' and 'max_freq' as users read and write khz instead
-> >>>>>>>>> of raw
-> >>>>>>>>> value.
-> >>>>>>>> Thanks for the suggestion.
-> >>>>>>>> Kept min_perf/max_perf to match the CPPC register names
-> >>>>>>>> (MIN_PERF/MAX_PERF), making it clear to users familiar with
-> >>>>>>>> CPPC what's being controlled.
-> >>>>>>>> The kHz unit is documented in the ABI.
-> >>>>>>>>
-> >>>>>>>> Thank you,
-> >>>>>>>> Sumit Gupta
-> >>>>>>> On my x86 machine with kernel 6.18.5, the kernel is exposing raw
-> >>>>>>> values:
-> >>>>>>>
-> >>>>>>>> grep . /sys/devices/system/cpu/cpu0/acpi_cppc/*
-> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/feedback_ctrs:ref:34290401=
-8856568
-> >>>>>>>
-> >>>>>>> del:437439724183386
-> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/guaranteed_perf:63
-> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/highest_perf:88
-> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq:0
-> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_nonlinear_perf:36
-> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_perf:1
-> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq:3900
-> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_perf:62
-> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/reference_perf:62
-> >>>>>>> /sys/devices/system/cpu/cpu0/acpi_cppc/wraparound_time:1844674407=
-3709551615
-> >>>>>>>
-> >>>>>>>
-> >>>>>>> It would be surprising for a nearby sysfs interface with very
-> >>>>>>> similar
-> >>>>>>> names to use kHz instead.
-> >>>>>>>
-> >>>>>>> Thanks,
-> >>>>>>>
-> >>>>>>> Russell Haley
-> >>>>>> I can rename to either of the below:
-> >>>>>> - min/max_freq: might be confused with scaling_min/max_freq.
-> >>>>>> - min/max_perf_freq: keeps the CPPC register association clear.
-> >>>>>>
-> >>>>>> Rafael, Any preferences here?
-> >>>>> On x86 the units in CPPC are not kHz and there is no easy reliable
-> >>>>> way
-> >>>>> to convert them to kHz.
-> >>>>>
-> >>>>> Everything under /sys/devices/system/cpu/cpu0/acpi_cppc/ needs to b=
-e
-> >>>>> in CPPC units, not kHz (unless, of course, kHz are CPPC units).
-> >>>
-> >>>
-> >>> In v1 [1], these controls were added under acpi_cppc sysfs.
-> >>> After discussion, they were moved under cpufreq, and [2] was merged
-> >>> first.
-> >>> The decision to use frequency scale instead of raw perf was made
-> >>> for consistency with other cpufreq interfaces as per (v3 [3]).
-> >>>
-> >>> CPPC units in our case are also not in kHz. The kHz conversion uses t=
-he
-> >>> existing cppc_perf_to_khz()/cppc_khz_to_perf() helpers which are
-> >>> already
-> >>> used in cppc_cpufreq attributes. So the conversion behavior is
-> >>> consistent
-> >>> with existing cpufreq interfaces.
-> >>>
-> >>> [1]
-> >>> https://lore.kernel.org/lkml/076c199c-a081-4a7f-956c-f395f4d5e156@nvi=
-dia.com/
-> >>>
-> >>> [2]
-> >>> https://lore.kernel.org/all/20250507031941.2812701-1-zhenglifeng1@hua=
-wei.com/
-> >>>
-> >>> [3]
-> >>> https://lore.kernel.org/lkml/80e16de0-63e4-4ead-9577-4ebba9b1a02d@nvi=
-dia.com/
-> >>>
-> >>>
-> >>>> That said, the new attributes will show up elsewhere.
-> >>>>
-> >>>> So why do you need to add these things in the first place?
-> >>>
-> >>> Currently there's no sysfs interface to dynamically control the
-> >>> MIN_PERF/MAX_PERF bounds when using autonomous mode. This helps
-> >>> users tune power and performance at runtime.
-> >>
-> >> So what about scaling_min_freq and scaling_max_freq?
-> >>
-> >> intel_pstate uses them for an analogous purpose.
-> >
-> > FWIW same thing for amd_pstate.
-> >
->
-> intel_pstate and amd_pstate seem to use setpolicy() to update
-> scaling_min/max_freq and program MIN_PERF/MAX_PERF.
+Hi Laurent,
 
-That's one possibility.
+On Wed, 4 Feb 2026 at 21:53, Laurent Vivier <laurent@vivier.eu> wrote:
+> How to use it with QEMU? Do we need some changes in the code?
 
-intel_pstate has a "cpufreq-compatible" mode (in which case it is
-called intel_cpufreq) and still uses HWP (which is the underlying
-mechanism for CPPC on Intel platforms).
+You just load u-boot instead of the linux kernel. I don't think you
+can actually do much with it because there's no virtio support to load
+linux etc yet.
+But I have that all working in my own branch and now Kuan-Wei has got
+the first parts merged adding the remaining parts to boot linux
+shouldn't be too difficult.
 
-> However, as discussed in v5 [1], cppc_cpufreq cannot switch to
-> a setpolicy based approach because:
-> - We need per-CPU control of auto_sel: With setpolicy, we can't
->    dynamically disable auto_sel for individual CPUs and return to the
->    target() (no target hook available).
->    intel_pstate and amd_pstate seem to set HW autonomous mode for
->    all CPUs, not per-CPU.
-> - We need to retain the target() callback - the CPPC spec allows
->    desired_perf to be used even when autonomous selection is enabled.
+Cheers,
 
-intel_pstate in the "cpufreq-compatible" mode updates its HWP min and
-max limits when .target() (or .fast_switch() or .adjust_perf()) is
-called.
-
-I guess that would not be sufficient in cppc_cpufreq for some reason?
-
-> [1]
-> https://lore.kernel.org/lkml/66f58f43-631b-40a0-8d42-4e90cd24b757@arm.com=
-/
+Daniel
 
