@@ -1,232 +1,251 @@
-Return-Path: <linux-pm+bounces-42042-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42043-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UFdFNiT/gmmagQMAu9opvQ
-	(envelope-from <linux-pm+bounces-42042-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 09:11:16 +0100
+	id gCj1OaMIg2lLgwMAu9opvQ
+	(envelope-from <linux-pm+bounces-42043-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 09:51:47 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98763E2FC8
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 09:11:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F451E3567
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 09:51:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 43A8130158AF
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 08:11:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 38C9430252AD
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 08:48:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F192138F92E;
-	Wed,  4 Feb 2026 08:11:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5F8399030;
+	Wed,  4 Feb 2026 08:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="DsEFJ3Nh"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="GPtYRxfQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013059.outbound.protection.outlook.com [52.101.72.59])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDC936A027;
-	Wed,  4 Feb 2026 08:11:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770192672; cv=none; b=rl4E/+zUXhQHwa6PSyjqbcf2fec5qwyvZABWCdt+Y72hysCNsQ3xYdi/nrHbgwmm8euXT+bFiy6q0YvqFAKq2g3P5Ol6HWC9S1C3EnVIKBqjAJftYd6B82MnbU9P8NaiTqObDNKNqdUttgcpuQrch3C50Qc7KEuS9xL4ES5PBxE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770192672; c=relaxed/simple;
-	bh=8j8R8MPrfWY6vBRRIpvDiircDbGhdSwDxXfuiVs5GeI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=njr3Td8ocY2hdwhpuEjoCl2LtemEFzWZUSWnT4ypP8igm5JuQHnWcYoPyrVJwoNt8t6dpVfd3FuTVLJ2UBFf+OCeD4OVX5knf3Ru2d35mS+g/2AQrfIRgnRIYH9qC+8aK/pYldPSirN+DeMv7bB1bPTkjNiJRDrMLRWiAxYnvN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=DsEFJ3Nh; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1770192670;
-	bh=8j8R8MPrfWY6vBRRIpvDiircDbGhdSwDxXfuiVs5GeI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=DsEFJ3Nhca0gHPn0WW46xPuzuZwRmLNuOpKTYci/Grpz+8iFbAUufcYWOTdolbhe4
-	 4Rju+q4X4pcKmAjKivkByu4y4dJjqVFYuCz5WFEYfcwMkREFh1aD8b/HUnDvbBGA4O
-	 K1Tom/wQJod9y9Z6en141msQx34QphBNYgjipqSBG0XBBmR/FBZVfKVSfxPegpTbfj
-	 w4RljDBo2vI4n3721FrPdjwSS+bIn9ahzDlJQUGlfuXZledsqf1PdT+3XYuZqoD+lC
-	 i/NCr5O3feDTRIiu+CdMizfBKEWtDKIfpGXKb9i0DyOQihsMQ5R5bLUkGRJ15nhaFH
-	 ZJJ99EmmtpDZA==
-Received: from fedora (unknown [IPv6:2a01:e0a:2c:6930:d919:a6e:5ea1:8a9f])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bbrezillon)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id AE37317E114C;
-	Wed,  4 Feb 2026 09:11:09 +0100 (CET)
-Date: Wed, 4 Feb 2026 09:11:04 +0100
-From: Boris Brezillon <boris.brezillon@collabora.com>
-To: "Gary Guo" <gary@garyguo.net>
-Cc: "Daniel Almeida" <daniel.almeida@collabora.com>, "Alice Ryhl"
- <aliceryhl@google.com>, "Maxime Ripard" <mripard@kernel.org>, "Rafael J.
- Wysocki" <rafael@kernel.org>, "Viresh Kumar" <viresh.kumar@linaro.org>,
- "Danilo Krummrich" <dakr@kernel.org>, "Maarten Lankhorst"
- <maarten.lankhorst@linux.intel.com>, "Thomas Zimmermann"
- <tzimmermann@suse.de>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
- <simona@ffwll.ch>, "Drew Fustini" <fustini@kernel.org>, "Guo Ren"
- <guoren@kernel.org>, "Fu Wei" <wefu@redhat.com>, Uwe =?UTF-8?B?S2xlaW5l?=
- =?UTF-8?B?LUvDtm5pZw==?= <ukleinek@kernel.org>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Miguel
- Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>,
- =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Trevor
- Gross" <tmgross@umich.edu>, <linux-pm@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
- <linux-riscv@lists.infradead.org>, <linux-pwm@vger.kernel.org>,
- <linux-clk@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
-Message-ID: <20260204091104.0a9c4a13@fedora>
-In-Reply-To: <DG5M5MVHTNS4.1CUD61S0PD9NU@garyguo.net>
-References: <20260107-clk-type-state-v3-0-77d3e3ee59c2@collabora.com>
-	<20260107-clk-type-state-v3-1-77d3e3ee59c2@collabora.com>
-	<20260108-delectable-fennec-of-sunshine-ffca19@houat>
-	<98CD0BF6-3350-40B9-B8A9-F569AE3E3220@collabora.com>
-	<20260119-thundering-tested-robin-4be817@houat>
-	<aW4lCfUyumOKRRJm@google.com>
-	<20260203113902.501e5803@fedora>
-	<E7286D12-0BD9-4726-B072-FE5A040312B1@collabora.com>
-	<20260203150855.77c93e22@fedora>
-	<4DD13AE1-C85F-450F-93F2-C7C75766E518@collabora.com>
-	<DG5HJPIYMS7B.152WPGG9MZZJ5@garyguo.net>
-	<B94452FD-5F6F-44D4-80D8-4D4B7004C4B5@collabora.com>
-	<DG5M5MVHTNS4.1CUD61S0PD9NU@garyguo.net>
-Organization: Collabora
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09EBF352F98;
+	Wed,  4 Feb 2026 08:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.59
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770194923; cv=fail; b=QUZOBCXEj9EP5zCg0WIYkHJNhjfs1i08SEnYxk0xuxdG+rFxoCelhhqwX2puqZNZ5bcU3bnV4lBOSgoTIZLM9xZYZulRryLdhvXXmpNdJ0fCWoU5M1g5xU092+Ncnfdh4100CIqSTvOjBp7s+r9k6UxaRmyg2+OntVlk862dhKo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770194923; c=relaxed/simple;
+	bh=TOvCbTWt6am+7RVV7kPYhpHG7Msvs7Cq8BhjWO8AMMk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=Ma6VjnGpeHx69aTUrdRWNNiZwRZEayLJFLJJBeKbrE+7FHV9xHOLS3L8BOfOLTHyYI7dcsUiJKUKk0Ws6LqLTZ+gdGqgXLj4x5sRYYop7z4x2I/varjJz2W55tM/7sekX8cfwQ0YqqKi3uEEpxo5CXugOliDURXbuV7vkXHjSnY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=GPtYRxfQ; arc=fail smtp.client-ip=52.101.72.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=C95dMMoQuFdofMdn4NHy3T5Z7c14qHzhHWxEuU+76wYuFknFKSrW2WU3EfRH0oALsdZlwjXgjXuejfSaEaRwM3G4v8w6KL+Cb7FrbwDHYYIfztlvmGz3P1xxDiBhsFL0UfJlc4QJ6b3YyESP0AeOknU1FDOD0rCWxl4CF58hpsN4YR5UMoErlUn7fFz/s2teSmjaeBTrQ0188DqfECDItgi4eSUfdZgLSUmTZSzAN/3AkyCKYfo/DhPXHsa8R5ala1aeGf3Q8SXMSTr4xSu5lTqI4cjfBFreu68en9qPE+kFAvquOYkp0mgX1nCwaTmh9J/onrjny7QQJk9qlUfCWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5HxJibqe8D4Gx4xTBQ7Wpzv8ikZXbXdDdChs6ZU9e/U=;
+ b=JJhWJVwI/y5s8/X/0JnJvSXnpUOZDe3spYJcHQOJiU9BUKzv8hmU3sJ2dWAoY3/dARf9l+XkugYO+RGO56sBn4pMCB7yspOn8gT0Z79OsWp0kyoCosMtEz07aQs1YfgECo9weZw2oE91Gkfz8QQyJovOUotQAJkjFXPWc7zUCiomNzh5bgw0n6ZJA25EiIvNRlwym4JVceuovKpOb2GmbfNW9c7N1oHz6H4rzrdArZ96eUAIjcXqMYMAy0P7jwVa0mNlTBjHenDD7bXLFPvFxC62fKymcKwGtOwKpQg1iZMDswrK0I9cN+r1+WchERVDrV72Zs9eBr+qlw697YJNHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5HxJibqe8D4Gx4xTBQ7Wpzv8ikZXbXdDdChs6ZU9e/U=;
+ b=GPtYRxfQoE4D8uLPZE5UsxMyeayPBiDxm/KTiLK6QaQ/gfziPJsKmE4IOhD4mlbooNNKJfTRRBr2dLnHdyZZ+kaXz+JaTFJQiGWdWO3z5CYAaUHx7a0RHeQ7ba7rQOugqOVILznPy/Wn583xuxcGg8n+hZpO9dHPPgFVE9E/IZfC2rpC8JBi2BEnuTl1THn9AH89CIeppCjUrN49ocaQwAQDgESIJpL+llo57LK6Tuepivn+g+zP2ji8GDYrBL59lqEZBQWqTf8Bz15+sAfXupLQWjzEHP3O7PjaF7NZSGEfLAJgXDUGkyatREyEUo7VTQ0aTza82Fk7Ye8SSAxP5A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8829.eurprd04.prod.outlook.com (2603:10a6:102:20c::17)
+ by OSMPR04MB11296.eurprd04.prod.outlook.com (2603:10a6:e10:93::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Wed, 4 Feb
+ 2026 08:48:39 +0000
+Received: from PAXPR04MB8829.eurprd04.prod.outlook.com
+ ([fe80::52de:f9c9:8c2e:7dd5]) by PAXPR04MB8829.eurprd04.prod.outlook.com
+ ([fe80::52de:f9c9:8c2e:7dd5%5]) with mapi id 15.20.9587.010; Wed, 4 Feb 2026
+ 08:48:39 +0000
+Date: Wed, 4 Feb 2026 16:41:05 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Frank.Li@nxp.com, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+	festevam@gmail.com, peng.fan@nxp.com, jun.li@nxp.com, rafael.j.wysocki@intel.com, 
+	a.fatoum@pengutronix.de, ping.bai@nxp.com, shawnguo@kernel.org, l.stach@pengutronix.de, 
+	linux-pm@vger.kernel.org, imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] pmdomain: imx8mp-blk-ctrl: set awake path for
+ power_dev if attached device needs wakeup
+Message-ID: <lh3cb2r3qvv2ar76ai33fjiuseqyiwoks2zjrmowknvut4qfcg@2db76miyk4wn>
+References: <20260202074730.738760-1-xu.yang_2@nxp.com>
+ <CAPDyKFpqfo1R8Qkq284L9DTURjZnvm_n8W3a6KQTomg7A-M_Ug@mail.gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpqfo1R8Qkq284L9DTURjZnvm_n8W3a6KQTomg7A-M_Ug@mail.gmail.com>
+X-ClientProxiedBy: MA5PR01CA0129.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:1d5::15) To PAXPR04MB8829.eurprd04.prod.outlook.com
+ (2603:10a6:102:20c::17)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8829:EE_|OSMPR04MB11296:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2fbd65d1-51c7-4a4c-b357-08de63ca2f43
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|1800799024|366016|52116014|19092799006|376014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?PiayPJI/dzLVuuQG4qJFZT2kCYDjBnnTsv6r6tFoR+ieoYvioZC2tuSntx/v?=
+ =?us-ascii?Q?rVEstHtIVnxjUajzTE6vSiRP7zcn3SGrmBBvTm5myETbdd0T2cLxxY+MY7DX?=
+ =?us-ascii?Q?47Qql80Yy+akIQmrda2vhcNNmCoDXxQPhnVYGLPqA5NOELYPtKKp1BgHpkpL?=
+ =?us-ascii?Q?wRrbBQKV4BQTd/GoDcbgpgp6jlCvV/uBrOwIdG6ZovLx6K3hC1wx3zJFxBU3?=
+ =?us-ascii?Q?pSd10OHAQdyrsZt92J6Ga/4FmKjOePJoei8pthUAgtqI8amUinAadsuoZY8u?=
+ =?us-ascii?Q?Vrl2zXbwjtJbreuQ7+Inex5YH9mdjuaWlo+eWveJbbKdMAtZrZ/nkRe6Snek?=
+ =?us-ascii?Q?fRFzqM8CzTFdboSVlgM73dbAQXtsK2pufV0GTg1d0Nx4RKkB2RNlrASmwFqJ?=
+ =?us-ascii?Q?LiSWS2Jaa+RDyGHMvcjowVVAuAXzHan/WA+ChuPDrFaTRzcqOA+vuGw15Mrf?=
+ =?us-ascii?Q?mh8jEeukHOMDW6FTLlK/iJ4uIvzO5vksSvHkBWNyUqicc1Dz+/hdIcDn37yI?=
+ =?us-ascii?Q?FvQqBSMXLo4f0qtgLs4A/qnlS4y6yACrW76H9PVt4ztb5mLPVRbAnTkmQpjE?=
+ =?us-ascii?Q?K6dOpERe7ffiI/lTjYP+ODI6f4TSqlP6W4q0yGWSj01ReGGvHbp1Apuzxaxs?=
+ =?us-ascii?Q?gdX5bkalMZZHDdrkrYiQzwC2T4joAA4YAe1l3ZBMdG55/vU/lv7WZhP1qg0Z?=
+ =?us-ascii?Q?ExzrTPn2o3EbGa+LklH5iqd58q6tsYMHm3HfgcfzbbOoK8WVQoUK7YSSTlNT?=
+ =?us-ascii?Q?DslZueL4pBcGl9MsKOiojEktYkCb3uWCSEzO32JDcNhy8vZNIi99VZegkPF6?=
+ =?us-ascii?Q?9KdcdI3IP31TdKXAWLTZJ/WWwHKnpMSdv5nHHeZI+lJOiZe6G3DF2FoWnKeK?=
+ =?us-ascii?Q?uh/38V/GUsq7woaBRkPkamEgem+KnyymUU0dAlSO/mhr55x7Su3K7sX9mgwg?=
+ =?us-ascii?Q?jaSd4XpAEN8WkNzyhJ75clZ56XalGfJut4DNk7m92gsUF8+Q+5BfHNjVXWZN?=
+ =?us-ascii?Q?C8yN4wkn80gklgKyCWPp311i9clTPzXfxByfpkIwQu52+fw3m7Bw8Fr35ci/?=
+ =?us-ascii?Q?RVtrzAxrMcRMHNzbiZJAaWnicitXl1FiyYlZ19f81SwYx7sHtCKdSq3zFxyD?=
+ =?us-ascii?Q?gHioZdMEBNwt4pz0fWFLA5BZIVCGPppiWKG2MmH12fjfBjP7uMuCVgcrcqjM?=
+ =?us-ascii?Q?csXHoYoHK0WZccqJFkE2CcZ8t/d8jyzkzm4JgUBU1lXTTctFWlQS6TNYItRb?=
+ =?us-ascii?Q?YWgr6guNhnMo5JQZzCAxzQMVhBpNEZFDuvxiEsDbyIv7NbxJCdSIOPIWdpxm?=
+ =?us-ascii?Q?Asw5+IgyLqbLubll7m5CkfZIqh+2wqOYE9dukf27OPONGSW1QL/UNdi5yK6Z?=
+ =?us-ascii?Q?KyNksfNz3XQ2h+hPiXROoctftL98td+1ffDHsCVQ/v8XgbYlITWcNesESDxk?=
+ =?us-ascii?Q?abgX7aSnQ/QKECGzOjZVvKXV3LywJDu96ntmpLsPg8uhVyyO5kMpeJ1ap+qx?=
+ =?us-ascii?Q?5ehfnbxf9OgALlKvVku6/GBdkG4BpXpzxNRbFpKeJL4Afmecuu+UBEK1Bv+j?=
+ =?us-ascii?Q?md/biPrdFDrmFVwMrRQNW5klp7Pa8pN5JKV4jBPRkdceeEZOQMocDgcdoE6t?=
+ =?us-ascii?Q?s2TUIZo6J6+3QgDnABXWLSA=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8829.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(366016)(52116014)(19092799006)(376014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?0HaFrN0nq6qlik4ylVDPqidzNDKzQJB5vJajH6/nBdw44PEiKAewZvq+VLmO?=
+ =?us-ascii?Q?8/fnFvki2XMg+o0UYzAGvNcsidaTZkbnAutbUQGTGpqYEa6LSGHXRDOySH5v?=
+ =?us-ascii?Q?lFred+iR9pULSIOFKIWEQuDSlYJZvIjMpYT6iMT+s7r4nV2EreznElHZwzmH?=
+ =?us-ascii?Q?tLF4GtMOfnC7iBtSDKEJnAsR4S3Z63nIqu+wT0lnZSLI76m1kv0i94GB4W6h?=
+ =?us-ascii?Q?n2uUSxFigU/PQjlwTi37SfqKAIRnbhSTLIwJjL5TryI/x7aN0EkriXmYYh74?=
+ =?us-ascii?Q?PzlVDYe1vEIsf5LWb0ExQoLZRuWvRECfdAWQzsWlXJBTHEFJ+D/b1yh6xFq7?=
+ =?us-ascii?Q?aTYjctc8vI+VmKl9OuA4AsPiOE34eB0YVRUTcWJWDOGEq2WNC8HZMng0cEJH?=
+ =?us-ascii?Q?b6DEWl7SC1mZSXpBnKIPL8lS3HntzFvCRpcjORENnkYkv3IbBWwy8ib30wbn?=
+ =?us-ascii?Q?77FLJrV7vmaMxw7ONOoJLvCqSSBB3rvEnRWCSsvTIzLN9hZLhDjIhmmFwtoh?=
+ =?us-ascii?Q?j3ANJE33RU2RsIg/ua7Iq6B6HJ/CtH/ak2tBXaiqYfcBym2NHoQPbLb593C3?=
+ =?us-ascii?Q?jsmPYTnXUm0fByhkBIjPEs3g2ydnHAQNVLoXRArHbnQdWaYhpLZA2C+TrCMH?=
+ =?us-ascii?Q?4D76bP9SnL/uyWs+eqworStSsiErk7t7DdMY6YEy4x3ViuQdjRm4sQJtdnIi?=
+ =?us-ascii?Q?AfFeoqm7PzWQY14t1pT2KdaaYKGZY3NbuJz94YzvKUF78nQDdEiHJDGHctxt?=
+ =?us-ascii?Q?DI5KJ5EosS/X0Q2Eyit4bOeFZmhdbOLjCevi9ewT/zzcepT7rMyJNaDLJczW?=
+ =?us-ascii?Q?c+UfljQaDlPyKcdcp/g5un82xhjfiiC/ABSl9aIE2rQZ3ePYDQa6YtGifO8J?=
+ =?us-ascii?Q?FY7esFCjJPsIl0UahuYVFj9NPE+jma0KXH/fRZAOIOI8To8jQYrBAe0SScDj?=
+ =?us-ascii?Q?Cakpfrt+M2gu3tdLB8JD7zZ4WE7uJvw1p0y/5KZCfSsgKvfxEhFGMJ52lC3d?=
+ =?us-ascii?Q?JPAqwhPCJ46NXdE0uJf3ejeRNBerjevrr7aHWVBFBWcxH/3RfX7e5x9Z9Hp4?=
+ =?us-ascii?Q?YH28cybncTtPU5BL3yISCAAcnvCsInqcx3QUAJmme2YXY1wHxHT6MCf9Ob8p?=
+ =?us-ascii?Q?D7hCgy06mOiM321oVQQAm/PHSqmLWz7Th46P2rIlDKvNlkwrSTKyvFhRekg2?=
+ =?us-ascii?Q?amdLpvTH5h3tHeVVj8KKkFCQdfWmT/Rv1vjOSJRmXaEo+N1D7PUkgaAe8MPj?=
+ =?us-ascii?Q?UoWpwMevUrHwZJVrYuJJH1YOtERoZ7722gUBjPTlqRZ9dqLyLrjMyAuPdetU?=
+ =?us-ascii?Q?yXN9R88Gqp8pzO8sbumcxOpmJzIYinHr9x/Bz99wcVm1MlGiRkRHs9Pu61AG?=
+ =?us-ascii?Q?nDdRQVjkZLx3BIqXqdUImO4mWeQgcAnvXAGMSyAqRS9zYchpmcn7Ojn2TZtO?=
+ =?us-ascii?Q?JRkXJfZR3+B8bx7GALp5G5DluTWs9eJcMR6Z2iLFHhchQvXWhWwwVmFvD1VS?=
+ =?us-ascii?Q?iMkTA1xxMcDUtkDdE6J/ot4tPaq+XU5zi2trTRZsraoreWKYCRB82kgM0eLV?=
+ =?us-ascii?Q?Z5AMEO4qs4ElrgZ87h8LOT6kMAP3XKpfKmcGL6zlbm+31cgM9BzVImji5JL6?=
+ =?us-ascii?Q?Vwo6AGgCR2rrn9oWBLs+BuG21Iimp67jEr+jc0o0oy7jq4yX3zxpM2NEtXpj?=
+ =?us-ascii?Q?S6UfV8+knwcxO6OFJQkgebwwbKpW3i60zKfa+C0UJcS09wDgMkpXMUSBg9zR?=
+ =?us-ascii?Q?2Au41OvY3Q=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2fbd65d1-51c7-4a4c-b357-08de63ca2f43
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8829.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2026 08:48:39.4910
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iSwXr1RZoPXbhyx0vTISZCvnYGnASEBXp7sa3vnbEN3DfWU29ulIsOj+S0uR0MFtRfve7kfGo5AKeT7Jvap2pg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSMPR04MB11296
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [0.34 / 15.00];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
 	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[collabora.com:s=mail];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-42043-lists,linux-pm=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[16];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42042-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	HAS_ORG_HEADER(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[30];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[collabora.com,google.com,kernel.org,linaro.org,linux.intel.com,suse.de,gmail.com,ffwll.ch,redhat.com,baylibre.com,protonmail.com,umich.edu,vger.kernel.org,lists.freedesktop.org,lists.infradead.org];
+	FREEMAIL_CC(0.00)[nxp.com,pengutronix.de,gmail.com,intel.com,kernel.org,vger.kernel.org,lists.linux.dev,lists.infradead.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[boris.brezillon@collabora.com,linux-pm@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[collabora.com:+];
+	FROM_NEQ_ENVFROM(0.00)[xu.yang_2@nxp.com,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[nxp.com:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,garyguo.net:email]
-X-Rspamd-Queue-Id: 98763E2FC8
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[nxp.com:email,nxp.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 6F451E3567
 X-Rspamd-Action: no action
 
-Hi Gary, Daniel,
+On Tue, Feb 03, 2026 at 12:06:28PM +0100, Ulf Hansson wrote:
+> On Mon, 2 Feb 2026 at 08:46, Xu Yang <xu.yang_2@nxp.com> wrote:
+> > +
+> > +               list_for_each_entry(pdd, &domain->genpd.dev_list, list_node) {
+> > +                       if (device_awake_path(pdd->dev)) {
+> > +                               device_set_awake_path(domain->power_dev);
+> > +                               break;
+> > +                       }
+> > +               }
+> 
+> This is really messy in my opinion. Ideally the above should not be
+> used by a genpd provider as it's internal data structures are managed
+> by genpd itself.
+> 
+> If I understand correctly, this problem boils down to the fact that we
+> should have tried harder to model child/parent domains, rather than
+> using runtime PM to manage the parent domains. I understand there are
+> problems with that, due to specific power on/off sequences we have for
+> imx power-domains, but I wonder if those could be managed better by
+> using genpd on/off notifiers?
 
-On Tue, 03 Feb 2026 20:36:30 +0000
-"Gary Guo" <gary@garyguo.net> wrote:
+Indeed. I have tried using subdomain will resolve the wakeup issue because
+the parent domain will manage the child domain. But I shouldn't use
+subdomain and runtime PM way together to avoid any unexpected behaviors
+according to my understanding.
 
-> On Tue Feb 3, 2026 at 7:26 PM GMT, Daniel Almeida wrote:
-> > =20
-> >>=20
-> >> I think it's fine to have all of these:
-> >> * `Clone` impl
-> >> * `enable` which consumes `Clk<Prepared>` by value and spit out `Clk<E=
-nabled>`
-> >> * `with_enabled` that gives `&Clk<Enabled>`
-> >>=20
-> >> This way, if you only want to enable in short time, you can do `with_e=
-nabled`.
-> >> If the closure callback wants to keep clock enabled for longer, it can=
- just do
-> >> `.clone()` inside the closure and obtain an owned `Clk<Enabled>`.
-> >>=20
-> >> If the user just have a reference and want to enable the callback they=
- can do
-> >> `prepared_clk.clone().enable()` which gives an owned `Clk<Enabled>`. T=
-houghts?
-> >>=20
-> >> Best,
-> >> Gary =20
-> >
-> >
-> > I=E2=80=99m ok with what you proposed above. The only problem is that i=
-mplementing
-> > clone() is done through an Arc<*mut bindings::clk>  in Boris=E2=80=99 c=
-urrent
-> > design, so this requires an extra allocation. =20
->=20
-> Hmm, that's a very good point. `struct clk` is already a reference into
-> clk_core, so having to put another level of indirection over is not ideal.
-> However, if we're going to keep C code unchanged and do a zero-cost abstr=
-action
-> on the Rust side, then we won't be able to have have multiple prepare/ena=
-ble to
-> the same `struct clk` with the current design.
->=20
-> It feels like we can to do a trade-off and choose from:
-> 1. Not be able to have multiple prepare/enable calls on the same `clk` (t=
-his can
->    limit users that need dynamically enable/disable clocks, with the very=
- limited
->    exception that closure-callback is fine).
-> 2. Do an extra allocation
-> 3. Put lifetime on types that represent a prepared/enabled `Clk`
-> 4. Change C to make `struct clk` refcounted.
+> 
+> Anyway, that said. Rather than walking through the list of devices as
+> above, I suggest that you use the ->power_off() callback for the
+> corresponding genpd(s) to dev in combination with a genpd power on/off
+> notifier for the corresponding genpd that the power_dev is attached
+> to.
+> 
+> More precisely, if the "child domain(s)" that corresponds to "dev" has
+> not been powered-off (because device_awake_path() is set for some
+> device) during system suspend, the power-off notifier should return
+> NOTIFY_BAD to prevent the "parent domain" that corresponds to
+> power_dev from being powered-off.
+> 
+> Would that work, you think?
 
-It probably comes to no surprise that I'd be more in favor of option 2
-or 4. Maybe option 2 first, so we can get the user-facing API merged
-without too much churn, and then we can see if the clk maintainers are
-happy adding a refcnt to struct clk to optimize things.
+Thank you for the suggestion. It works for me.
 
-If we really feel that the indirection/memory overhead is going to
-hurt us, we can also start with option 1, and extend it to 2 and/or 4
-(needed to add a Clone support) when it becomes evident we can't do
-without it. But as I was saying in my previous reply to Daniel, I
-expect the extra indirection/memory overhead to be negligible since:
+With this way the rejected count is increasing. Does this have any impact?
+The count is just used for statistics, right?
 
-1. clks are usually not {prepared,enabled}/{disabled,unprepared} in a
-   hot path
-2. in the rare occasions where they might be ({dev,cpu}freq ?), this
-   clk state change is usually one operation in an ocean of other
-   slower operations (regulator reconfiguration, for instance, which
-   usually goes over a slow I2C bus, or a
-   relatively-faster-but-still-slow SPI one, at least when we compare
-   it to an IoMem access for in-SoCs clks). So overall, the clk state
-   change might account for a very small portion of the CPU cycles
-   spent in this bigger operation
-3. if I focus solely on the clk aspect, and look at the existing
-   indirections in the clk framework (clk -> clk_core -> clk_{hw,ops} ->
-   clk_methods), I'd expect the Arc indirection to be just noise in
-   this pre-existing overhead
-4. in term of memory, we're talking about 16 more bytes allocated per
-   Clk on a 64-bit architecture (refcount is an int, but the alignment
-   for the clk pointer forces 4 bytes of padding on most
-   architectures). On a 64 bit arch, struct clk is 72 bytes if my math
-   is correct, so that's a 22% overhead, compared to 11% overhead if
-   the refcount was in struct clk (or in a struct
-   refcounted_clk variant if we don't want C users to pay the price).
-   Not great, but not terrible either
+# cat /sys/kernel/debug/pm_genpd/usb-otg2/idle_states
+State          Time Spent(ms) Usage      Rejected   Above      Below
+S0             1203           0          1          0          0
 
-So yeah my gut feeling is that we might be overthinking this extra
-allocation/indirection issue. This being said, one thing I'd really like
-to avoid is us being dragged into infinite discussions about a perfect
-implementation causing the merging of these changes to be delayed and
-other contributions being blocked on this (perfect is the enemy of
-good). I mean, option #1 is already an improvement compared to the raw
-functions we have at the moment, so if that's the middle-ground we
-agree on, I'm happy to give it my R-b.
-
-Regards,
-
-Boris
+Thanks,
+Xu Yang
 
