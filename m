@@ -1,221 +1,188 @@
-Return-Path: <linux-pm+bounces-42073-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42074-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ML6jCQc6g2ngjwMAu9opvQ
-	(envelope-from <linux-pm+bounces-42073-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 13:22:31 +0100
+	id KHZrGWg+g2kPkQMAu9opvQ
+	(envelope-from <linux-pm+bounces-42074-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 13:41:12 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BBFBE5BAA
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 13:22:30 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3BCEE5EEC
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 13:41:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9C213304343A
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 12:14:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 790A43013EEC
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 12:41:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A0F23EDAA9;
-	Wed,  4 Feb 2026 12:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9ADC3F077B;
+	Wed,  4 Feb 2026 12:40:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jYpao+gt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XgxOCnFp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 425603EDAA4
-	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 12:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B4637A4B5
+	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 12:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770207258; cv=pass; b=Jj+rBPVYPJJYrWrNlFneJGvVXVi1AapiKGT/1opNuT4Dmexxpw6kred3YFAVlljEAs3cIm2JZzWVuM6B/v3Eh5zh8rW8GcqiHCTToTpD5oX9zcYYlN6TFYYT2Kt1mJRb3frF5k+/KZdSWLPwrdPfkzUUltumbKMGujp1wmx/AM8=
+	t=1770208856; cv=pass; b=r7X7CgYJ4ubKmoZ6U36IfsrFDxKcOKsrJAifQ6kR8L54bDA+WWQ31qRcVp0o0Fakf3mMlMZlQTGy/SNL7ek2B5RWtLiYB6gKWps5+Y+b0JIl4SXnfkgEm3IaY6Oc6Dyxae8BZu2ey4S09egF1qnb5x6KPc72PFJ85y/D/xYHKs0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770207258; c=relaxed/simple;
-	bh=8MBG04U3QnqDPVnLNJWrfhfSqjRKRLTT5N9P9lWlMes=;
+	s=arc-20240116; t=1770208856; c=relaxed/simple;
+	bh=VVoqN1cbo7saKNRizaznTRjcFiDowh+PjgHqkK04EXg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ql+DTUdWgSZXpsT5qjpzvu4cPU4CMfJNE3nRPvJwdA1bZFvCMo/ZDn1oQW1HwN9Xq9uys7bUXjwczryXBWCwGWlyXoAW7/CIiFSuz0M2bBTNSWUxzl5OTJBvJM/eH3UlXmf56s+0H2nN3Fe7WX93yNILfC96TV7vZ9iYmYpQodg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jYpao+gt; arc=pass smtp.client-ip=209.85.222.176
+	 To:Cc:Content-Type; b=pMjgyLBvYhvICc8QtOpRWrZGHo1GmsyBxaPALhImlHdKNRwpHS0JqpABqGY+kMpbD6ItpPXxRn8RF3dTAOn0DY+kBUF+aTQN2oPbO+5tOMOuRJxZ+Dt+fKMbgi5AdoG1YdpY4cjFX+6N+mdABNFG9oJHDzJJ8TGFemoUQfOZOIE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XgxOCnFp; arc=pass smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8c711959442so72154785a.0
-        for <linux-pm@vger.kernel.org>; Wed, 04 Feb 2026 04:14:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770207257; cv=none;
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-432d256c2e6so5416881f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 04 Feb 2026 04:40:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770208855; cv=none;
         d=google.com; s=arc-20240605;
-        b=XeJJDqTFJWugj+ZUdD/xZ/BGwWXx+xd9JDrvqepzldp7VYiPmerJ4Zl3yaiVxkqH7W
-         RdzbKyOdBibMYOYp75LMdFGmDk4HPTgIFNJsYVquFGY/BT7tNxVmWaDpRqF7aJyhwWC1
-         3M2O8YY/sHY5+FctNeZf/4iwaoDVimrQ+PZCaohvD9qEL4DufsaQEyYb3pB4ydguxj+5
-         dWEk4OWyAsmNsIsa6riKgvOiHYZ/ihYHtmWKTjM8igk3/ZL510Wi1ONUR5exNYjvH7/7
-         FClD3EMaIIfDplNpiR3roVWHyUR7FzJsREFxmhi+i0w/wth2ACoGRSl7CFhKe/Luf6va
-         Hwog==
+        b=ZYEDghzYqX4+Tf0zD5JccjL05y+eI1s3lKMS4qZjW+2H0j8hnYbO0eT2AlQsTYRWst
+         x2UN2MBgpIiwh4sVXuNkoWs0uvEOrr4dshIoIjDklNvWpy5BuQtTF+3fcC6DUegDz4qE
+         Pl9yTpilnlgZWXpNN18kSq6r0ewgaLUdC0q26JVceC5vKteB2G4AD9LuRWg9RR4BdXSt
+         tCIrtFgfFGR9gqWeko9IFbROiHMJmTlj6bP9tRFS9vdivcet7kvrxN1mFzhmmHNfuged
+         KMgnpO9Cl4RVUjKYXrNomzNYexEl/6z7XJlE3kKVTpB0s/zYchzhQ5jABOd20ZKbi4DX
+         DAfA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=eduYzEJPsJnZXgDJCbQOgrg2ueFR/j81lePqCh6da1g=;
-        fh=3A+YfaT2lCHg2b57Gm3LtVRr2H564G6Hy1zUeZFyCV4=;
-        b=loNZiAspCZNA9Oi4k6qcBSvt9AUir+T+1A5n5XimgqPyXJRk0fWQETVOvxc4XuApL+
-         9w0+KKM9LKDCY+0ia9b8ZPOTWYor+tk/mM0JOvEOp/cMqg71s5J4ozsuWeMquCIoLbr9
-         yUvifjvdWzSiNNxlzM4KQK0MMFenvqIt/oydo1FxARq4Yd4ZHOMs9A35PdZ+YPVF+J+c
-         Ac5+YBRK9z0juL7EQti/lcRaQCrDGSKkUhVLeg/ZkPTXRVDgDobAdI6YoP5qGES/sRJ4
-         y0gNGrIjPnweSjjP0zn+hVUp0NDwWsLIGjMxAaLcUlI7zmjdjlX+1h7obi7fep1bUonx
-         4zIA==;
+        bh=m/zIsfoECBdgIZPuFNRz333Sc6yOkWK7EWk2qzyAS08=;
+        fh=mF/PC73Kj7OakwYtdPOq5HIUWBvtJKJ2/2P2DNs0RG4=;
+        b=BeCHZ9EIumIB3gmzkLbkDkh/gLOXaWIH0CtI9xlTZkz7Bg/XbcY1zbBGZbatVAxJpP
+         46bRyqPBvsQj0ZjuffwUmEnCRpm6VbeBBHJ6w0oefllYwPIxdNcqtlyp/0/R9YiAi+Yz
+         mXavH90YMORxdTw+o/C2GkMKG3Rjm42cxBZqCkOklVsC4ejnz3+GfYGz4oabB0kTp6vO
+         qNxTV2sg67Hu+4TNA2DxBzQlfwKyj0pwTDcrMu/bWTBA1CP02mSOAPN9ytUVkkzGuOCb
+         9zrosqUT8gjVJ2ZRxRsbiRA/AtQwF2Bqm6Ec1iVxv5hth+Uf/D6NAZY2zQE48wDSdqQW
+         dgFQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770207257; x=1770812057; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770208855; x=1770813655; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eduYzEJPsJnZXgDJCbQOgrg2ueFR/j81lePqCh6da1g=;
-        b=jYpao+gto73rIYyZzCOcYyWkHdG1mR49/T0Ex0HEorqoPmK/d+RF7t6RlXisUA8hxp
-         fAUq3eqBfSfaYMj9j9uBToFt+4XasMZK8n7z8kZlSqFUikGCWqZwkkJecrplTLixOnYv
-         l8tf+Bc23e6gxJFa8uyczJtTDUmH51euiksn92hnv35k54ibc6zfOy9mY+FAdEpXk2xA
-         X1Z6MUUDimorsyq3ZJVPiq39up5fmgZoYcuu8qBzkMRcNOp4bRZjcg/vWeVCTF4leWcP
-         jlZKsJoZy+hdiniBPfVosU4/Qu0TPIMclUEBeKzQv6EgL2bwX5KCV4YupkW9g3YB9hdh
-         yqsQ==
+        bh=m/zIsfoECBdgIZPuFNRz333Sc6yOkWK7EWk2qzyAS08=;
+        b=XgxOCnFpLIcB14A1aqEtxqTxGYRcjFq2R+iF1g/G5VUZLLl4achDnCyhdFu/2VotNv
+         LY9MiT9k8Wicu+tPAzFZyowDFRtmAbjsOAcqM66SIJZhT4kJEd29ilyOsreQ/H5f6XQs
+         /cc3ApU/IfhiZYMgbwF7uCnjd9/t5aA43XjucmuSNE6UkG+Gy8ClfhS4JX0CADP/YNP2
+         uXEd6w/MNVVlDGqklHl/H5uCrmyGfGJHw4ETON6HTPIbv2OjvZVm1xaiXmsYs31a5XTU
+         IPDe0+IG98N/866vOVNahnRtXxTavtQxwwO+xalzKfes4S37JBAiS6WdbUj++rcS9CaS
+         pRuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770207257; x=1770812057;
+        d=1e100.net; s=20230601; t=1770208855; x=1770813655;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=eduYzEJPsJnZXgDJCbQOgrg2ueFR/j81lePqCh6da1g=;
-        b=v532TZsMXpVybPJj5pzj4igL8GTAhQTXPu/QoxbzEhL8SdQbj1GXq91l2bLDqmSiYl
-         xstoMq/Wez/LzPPby0GU6YQYlTuZdX6x6eJaHMM+RYBGP97tJrINnzUV50CWIncGe282
-         0W6Cn96If6T+7ytYZJElzGtc3ticyE2YxkArVisrq96E1Cdu2P6HejjxXsr/OV/9LYXh
-         8BJKMBWWKiQwXDdxlhZT/zyqieiPzjo46LKSo+qr7LLs579W//xkdB84vx/gEAm8yu94
-         KrdIXzMJtDZMLUssKVj601iwkIbzK1P0yHbNdO9+4VrpTK8aEs5L2vfVtj+yo9iSgOUj
-         IeWA==
-X-Gm-Message-State: AOJu0YyifxtbW0FfWwYoo39l8cb2yJmfBgj2NefwQBi5tWhV7K7Uj29S
-	hn0cQXcr15YABSZ6Kp+zq+8uxZpOzVPlE2xb9ZwPjVyA7KquMCVB3AddzDYVuW/D6teJ+hCEKFA
-	MRfdbChBm25vITqGafH6d6R6GZWx63NI=
-X-Gm-Gg: AZuq6aJexL/apQodq5vo0dAopxQIEQS5Uw6rPh30D24QVV6C91Q1VbT6AlhKJ3WC5Mq
-	v+HaaXv3Eflez9+pfr4rxYh7sNGAVnRu4GsQ2q+WJ/vbXslB0bgdcmrvNKI5AIW7k+V5ekwtCwJ
-	3P8peXuvpRZPIkcX3Tq3vvgIrAbSfAnb0ijnRnEDmEijNrX/6t4QhicRI3yT0VSbB5m2MEWLmRq
-	A3AWEZH1jLt2KK4L/zjTRCkaJsC+9sXx8cFM5oznUecIa/AFgt0VSzbeehvxLYIdWe+EQx1
-X-Received: by 2002:a05:622a:1a85:b0:4ec:f260:57bc with SMTP id
- d75a77b69052e-5061bb36254mr24074161cf.10.1770207257192; Wed, 04 Feb 2026
- 04:14:17 -0800 (PST)
+        bh=m/zIsfoECBdgIZPuFNRz333Sc6yOkWK7EWk2qzyAS08=;
+        b=DB4HDiqInVPdJXmO68WHj4tbyRj0l9nLxcWz/k0g4llYIeD8nVScJXwtpvTMobg8UG
+         sfXOSPgD52h6mFEBtpF9kH1P3esb2ghAORUO1ThWsaXrF5IG+7oai3XDt5m7ag/4zNLO
+         YtFKCgd3hDHn0WdDbyr3a4QJoF54IyL6blUb8YSbVV5LPylTikGAAw2vAhm6tMp4ZXWo
+         x9fhoLAMDPU76Ogf1a/kvpcd0X1gjYXubIaEzDPDupJhZ86ruLCa0XqYprHYEqQc3JNK
+         np6scQu8HbPFvXnlHMaVTxNrBzCkmuXKlVkoUQX0YMt4CnNxHl4Y0zqWHe3+WIhseGbB
+         lKlA==
+X-Forwarded-Encrypted: i=1; AJvYcCWucpZ1emV1OHc9BBS4kIyIzASZhjOY4ewQbvv/OAvvhX2EH2ErxgyejLsCG2jec/elpcg1PysExA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRr1Rt0RfS5lFr0qHM3KKPFweO4ffnvkjimUBxosTYqsMhixIj
+	6PN+TBMA5+e5/oG0UoxfrJJMs4Mv+IQ6I8uIXY6GgITboPFD5TiQkpn3cDR974NiRkyt1u5gRKZ
+	MilJztLY5cytYckZ/KyG1vnqIKg6/p0I=
+X-Gm-Gg: AZuq6aJ74rmgJHhYbXropGf8LpNjEXNWk7ZE3GMF4UY8wmpqzPLrl94eVBqdzYwvgWg
+	tiTdUDHJMkrlSYstPhIbfZ8OO1We/JVa8XHX0fYvUjiGvnclCZeIFx9y8TQ2qYpvT6oAxGbbEse
+	fzkIY0wZVMLMb726xNsm80WaFo10rulRtIgbNX51GURILzR7qSaPa+Pu44ppI28JGIhrYeo7R9q
+	JWZENYkyDsY5L63b5G41sR90hqFWQI3fg+QPWJ+JMJzYf25RtXZfbUXEZ653r2L92uPOukV
+X-Received: by 2002:a05:6000:238a:b0:431:38f:8bc4 with SMTP id
+ ffacd0b85a97d-4361805fbf4mr4039864f8f.61.1770208854743; Wed, 04 Feb 2026
+ 04:40:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12852589.O9o76ZdvQC@rafael.j.wysocki> <CAB8ipk_VX2VPm706Jwa1=8NSA7_btWL2ieXmBgHr2JcULEP76g@mail.gmail.com>
- <CAJZ5v0iScM-1nTXuex3rhhWOhe+NcVj1X-ObKY=c5TnZk_eB7A@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iScM-1nTXuex3rhhWOhe+NcVj1X-ObKY=c5TnZk_eB7A@mail.gmail.com>
-From: Xuewen Yan <xuewen.yan94@gmail.com>
-Date: Wed, 4 Feb 2026 20:14:05 +0800
-X-Gm-Features: AZwV_QhhaSYVG5wBsBlPGQ75e8_9-tJqmHChVmwpabJZBGZv6rm7XJDVtt9tr30
-Message-ID: <CAB8ipk8jYoqP_JF2sP4jvvW=s0cMA7GUOg00XoMeDQ4p9PEtnA@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: sleep: core: Clear device async state upfront
- during suspend
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Saravana Kannan <saravanak@google.com>, 
-	Xuewen Yan <xuewen.yan@unisoc.com>
+References: <20260201104343.79231-1-clamor95@gmail.com> <20260201104343.79231-3-clamor95@gmail.com>
+ <2026020350-unrevised-humming-7a42@gregkh> <CAPVz0n35NkEXjur-oJhW6Yxwme_KMLdYCnRAtjHEWSPEVrSUXQ@mail.gmail.com>
+ <2026020346-ashamed-campfire-b483@gregkh> <CAPVz0n2HmLwdif5ry+y56LB8Gpwh2o9_gJ7K2jhcZVR=rPgfPA@mail.gmail.com>
+ <2026020314-humbling-mobility-c24a@gregkh> <CAPVz0n0TMOCYnMiVUZ7xx-1SqrXuaVCOY-o4-x9L=f-xSMDj8g@mail.gmail.com>
+ <2026020347-mushy-lunar-d12d@gregkh>
+In-Reply-To: <2026020347-mushy-lunar-d12d@gregkh>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Wed, 4 Feb 2026 14:40:43 +0200
+X-Gm-Features: AZwV_Qgnx8Hqpc3gLtz5e76GzgExX_xLHyQNYXgz5FpI0RojQ_lqa8cEDXcBX9o
+Message-ID: <CAPVz0n0jrRxPQD-g7Pq-koDTW1Wr_FxNZc-SmY2-eE71dfei+Q@mail.gmail.com>
+Subject: Re: [PATCH v1 2/9] misc: Support Asus Transformer's EC access device
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Sebastian Reichel <sre@kernel.org>, 
+	=?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>, 
+	Ion Agorria <ion@agorria.com>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_ALL(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42073-lists,linux-pm=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-42074-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[16];
+	FREEMAIL_CC(0.00)[kernel.org,gmail.com,arndb.de,rere.qmqm.pl,agorria.com,vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[xuewenyan94@gmail.com,linux-pm@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[clamor95@gmail.com,linux-pm@vger.kernel.org];
 	DKIM_TRACE(0.00)[gmail.com:+];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TAGGED_RCPT(0.00)[linux-pm];
-	RCPT_COUNT_FIVE(0.00)[6];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,intel.com:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 3BBFBE5BAA
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,linuxfoundation.org:email,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: E3BCEE5EEC
 X-Rspamd-Action: no action
 
-On Wed, Feb 4, 2026 at 8:11=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
+=D0=B2=D1=82, 3 =D0=BB=D1=8E=D1=82. 2026=E2=80=AF=D1=80. =D0=BE 18:58 Greg =
+Kroah-Hartman <gregkh@linuxfoundation.org> =D0=BF=D0=B8=D1=88=D0=B5:
 >
-> On Wed, Feb 4, 2026 at 3:57=E2=80=AFAM Xuewen Yan <xuewen.yan94@gmail.com=
-> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On Wed, Feb 4, 2026 at 4:38=E2=80=AFAM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > In all of the system suspend transition phases, async state of all
-> > > devices needs to be cleared before starting async processing for any =
-of
-> > > them because the latter may race with power.work_in_progress updates =
-for
-> > > the device's parent or suppliers and if it touches bit fields from th=
-e
-> > > same group (for example, power.must_resume or power.wakeup_path), bit
-> > > field corruption is possible.
-> > >
-> > > Rearrange the code accordingly.
-> >
-> > Could we use the following patch:
->
-> Yes, we can make this change.
->
-> > diff --git a/include/linux/pm.h b/include/linux/pm.h
-> > index 98a899858ece..afcaaa37a812 100644
-> > --- a/include/linux/pm.h
-> > +++ b/include/linux/pm.h
-> > @@ -681,10 +681,10 @@ struct dev_pm_info {
-> >         struct list_head        entry;
-> >         struct completion       completion;
-> >         struct wakeup_source    *wakeup;
-> > +       bool                    work_in_progress;       /* Owned by
-> > the PM core */
-> >         bool                    wakeup_path:1;
-> >         bool                    syscore:1;
-> >         bool                    no_pm_callbacks:1;      /* Owned by
-> > the PM core */
-> > -       bool                    work_in_progress:1;     /* Owned by
-> > the PM core */
-> >         bool                    smart_suspend:1;        /* Owned by
-> > the PM core */
-> >         bool                    must_resume:1;          /* Owned by
-> > the PM core */
-> >         bool                    may_skip_resume:1;      /* Set by subsy=
-stems */
-> >
-> > Due to byte alignment, the size of struct dev_pm_info remains unchanged=
+> On Tue, Feb 03, 2026 at 06:50:01PM +0200, Svyatoslav Ryhel wrote:
+> > > debugfs allows you to do much much more than simple stuff like
+> > > BIN_ATTR_RW().  Go wild there, but don't put debugging stuff in sysfs=
 ,
+> > > that is NOT what it is there for at all, but rather, that is exactly
+> > > what debugfs is for.
+> > >
+> >
+> > I am removing said stuff from sysfs, that is not what I am asking.
+> > Debugs does not allow to upload register values in a form of binary
+> > block. It allows only dumping via debugfs_create_blob or
+> > debugfs_create_regset32 but not writing. If you know examples of
+> > reading and writing register sets as binary data, please point me to
+> > it.
 >
-> I had considered making it, but I thought it would cause struct
-> dev_pm_info to grow.
+> You can easily write your own given that debugfs allows you to use what
+> ever file operations you want to use for a file.  Why not just use that?
 >
-> > while also preventing concurrency issues between work_in_progress and
-> > other variables. Additionally, with this modification, there=E2=80=99s =
-no need to traverse the
-> > device list twice.
+> > I am asking if it is possible only to preserve dockram_read/write
+> > functions in the code, without exposing it to sysfs.
 >
-> Sure.
+> Why would you want to do that?
 >
-> I'll just commit the above change with your sign-off, please let me
-> know if there are any issues with that.
 
-I have no other questions.
+Nevermind, everything is good. I have figured it out hopefully.
 
-Thanks!
-
-BR
---
-xuewen
+> confused,
+>
+> greg k-h
 
