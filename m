@@ -1,155 +1,168 @@
-Return-Path: <linux-pm+bounces-42040-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42041-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cIDYIn7rgmnqewMAu9opvQ
-	(envelope-from <linux-pm+bounces-42040-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 07:47:26 +0100
+	id CIKeDtL7gmm6gAMAu9opvQ
+	(envelope-from <linux-pm+bounces-42041-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 08:57:06 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3042E2690
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 07:47:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id D00F1E2DD1
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 08:57:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8A562306859B
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 06:46:02 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9CDBE302BA5E
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 07:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4FB387562;
-	Wed,  4 Feb 2026 06:46:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MonAV9Wt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C060838F251;
+	Wed,  4 Feb 2026 07:56:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8B0385EFE
-	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 06:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A68B38F249
+	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 07:56:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770187561; cv=none; b=bsF8/Vm0pEtajAv2yJ2kRIZ3AC1AFv/h5NreZm6AvvaKJJhsReZHWlUXJom5nuMW47lmMqAvG6XGBrY7eiWgYoMIDrJd86ciQ8jlAZi3YIfpe+ddj5LQ60f6U7gE6a9x+DP+Jiqw6TqB409aRqGHfWXocmpNaGj2tPkjQ7m2Iww=
+	t=1770191813; cv=none; b=AxhM0/OlR5wSf4Nltq0uzOGiyJSqg+h7h1D+2F+vG28vjmIbvQUkriEefex+Rwa+zzWczRjUg+a5n9XdwdZ7bkadvDjfpY/d7mRTWWmg8ktcapXSQguwbwR2WkHBNlCS6LChjlFK4wML7u2e47AhSThpxCkmUsEFegaFbHCSRHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770187561; c=relaxed/simple;
-	bh=IdONEzeO/kcku0TNPRScc8YoDp0OPcTwD4lfoMWDGls=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MEipBX7c+Dp6CmLv3ksprlIf8g/xZH3osYZC0kP/HhWPAhKTq9zqs0qYGt1qrH9jl4ychyX5pEqe25kJCwxtJXoiTYu09g8ghE+cCMuWYdFzUtuNs8f+rULToWrOz1o2jG3lelcmJh4VQiHA8qpoksqAqSGPVgML3Lo5jW3pgJ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MonAV9Wt; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4806bf03573so31512865e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 03 Feb 2026 22:46:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1770187560; x=1770792360; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=IdONEzeO/kcku0TNPRScc8YoDp0OPcTwD4lfoMWDGls=;
-        b=MonAV9WtdyE7UMKkwNZh6mmFeiqnI7HjPePX1UpVAEJa/uIbRessX3pQTShd1OxggQ
-         wf3O4s29UibTQ6tdFC+rqh+YThiEUz715lmKSkCHWd5usJBpbq7L1PYrSsUEPgz478QU
-         U4HMVw+2YuO7p/tkvZvrTOGRxiTeJhWWR1VsIfoN0MOjhSjyoH8RN2ONnCScBGK245WB
-         lzrVu6gpPF3syjHUf4FO+95cHMZo0N56o1EKOBJ81CiJsMS71jERgHSAHMKM1qLWEL9L
-         LESXIxXOMKnuYmx8Gkb6iih5wlvAxAoSK/dd8ahoYIXcKii2BbMAaKQfNXn/JltkS8QF
-         MM4g==
+	s=arc-20240116; t=1770191813; c=relaxed/simple;
+	bh=Bo7ME9ToS5tPp5uXCO48/XFese+VeUE1U4BmF1HgIFk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=chWlnNENRYfxnKovbvE/v59CYTawd8O/tqU7hZEA5V3B4Spyf1fh00HCD67eVj3dn20UckG/59qGMUGv6M2Wg8E0dOY6jB0e98UhZlQgveLbPJNn9piGotufDuTuJXLNsOJ5/ursb7TAbp3MWv9l0XfBNPwA9HhhDfsovKm0Ses=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-5f524301a76so452328137.1
+        for <linux-pm@vger.kernel.org>; Tue, 03 Feb 2026 23:56:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770187560; x=1770792360;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IdONEzeO/kcku0TNPRScc8YoDp0OPcTwD4lfoMWDGls=;
-        b=MkjbAW4z8+K3RYq9OYqZVLTtjHDO+Eft/pH518rHTbjZ8pX4kK/jmv6p7cdvVc48LY
-         6CyMRTWBSw2dxqDlIN95tdVz7rz3FVIRVaInI+uNm2ifhmJL182j7NFRZQIfQK9/Upl6
-         xvBtVyScX/n2/SdmOLySW6D+Bs7bUP6XXj+hzqB3rddKF+H7HHx9FGyqgAsurODsk9xp
-         tAdE6iTOMvM7Sav9g8gbR/J4a1//6YqnFwiZQvI4Wcti8h2UwVfF3nOTeLzN2SNQSh4z
-         0S83a7xnUv9TZ48tXTD689zRe4PF0ASZ88+q9IUaLLGABG/8FnKzOe8dt6fA5gMV+LoG
-         uJTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWsPrq9ZG1+MMQ2Vu5mzDi0A52bzXCINk35SKwCvVZnsIJWv/xX1iSMIi/4kOULCVJUT33REt91Tg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YysuUPI5vBzh9DirPP5v1kIrIkDlCPDY5fCRf/0UqP5cqrLrjY3
-	k7faRXN0V5uKTq+XbH80rTCrp/0+ZN4pQZMzwXn+hqnvo6AxfZ5qDYpWcMx1NY5MYeI=
-X-Gm-Gg: AZuq6aJbnfzvqYVLBfKa/0Iu8mX4c0mxDDWajrnscng1huJhy0O8g9Z5gOdxykSAWdM
-	O28tsgKOeAi3pIqz2B7w2ksu+uQiMbPPmVuafAwWBsRL0tWutPnX2FnW/MbshnAKAOcwe2yft6H
-	1/zjDEqZ+dTNDV1R5NcN/b6MKBKJ+mxdyopPi+LshZ5YLlyKgH7zjSoLZU0RvJO7DYEaUOCMUdP
-	i9GK8Am2vT8DeinoC2FZdPBWBwx5MSghDCxocx3lJrhN1gAGM3WghvUyef0Sehpi2iWV8//1sV6
-	V9lEdYh+/D+JQo4/4kEoR3A2jq2myPKElou4hMssE/5+MKB2y/xAl2vM+a72Xs6u/lp4YZIIWQ7
-	wQKg+fIzTfpBzC8I26w0FzFVZwhGvwBbLG1tolunkmOEPt1jyQRDSlp2gKz2mYj/b0LI9+iM1hj
-	mh57gvThuSpE01b8OlfA==
-X-Received: by 2002:a05:600c:4fc4:b0:477:63db:c718 with SMTP id 5b1f17b1804b1-4830e95d692mr25283575e9.16.1770187559933;
-        Tue, 03 Feb 2026 22:45:59 -0800 (PST)
-Received: from draszik.lan ([212.129.76.169])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4831088d318sm36527855e9.10.2026.02.03.22.45.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 22:45:59 -0800 (PST)
-Message-ID: <977c081395c664a110389255e0cfa7eaafac912a.camel@linaro.org>
-Subject: Re: [PATCH v5 3/5] mfd: max77759: add register bitmasks and modify
- irq configs for charger
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: amitsd@google.com, Sebastian Reichel <sre@kernel.org>, Rob Herring	
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley	
- <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>, Greg Kroah-Hartman	
- <gregkh@linuxfoundation.org>, Badhri Jagan Sridharan <badhri@google.com>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, Peter Griffin
- <peter.griffin@linaro.org>, Tudor Ambarus	 <tudor.ambarus@linaro.org>, Alim
- Akhtar <alim.akhtar@samsung.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, RD
- Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Date: Wed, 04 Feb 2026 06:46:16 +0000
-In-Reply-To: <20260203-max77759-charger-v5-3-b50395376a5f@google.com>
-References: <20260203-max77759-charger-v5-0-b50395376a5f@google.com>
-	 <20260203-max77759-charger-v5-3-b50395376a5f@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-2+build4 
+        d=1e100.net; s=20230601; t=1770191812; x=1770796612;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dXGWtBpUTgth/iKHPt+hkEg/14yqbliQ+nz6kMcrt74=;
+        b=S9eClN2ugdSXJcRqzRkkcf8OhL4HMxIovkNtEQ3enbhViUBLtmLGSpGdbzPIDRqNcD
+         pYAstS9sdDM7gfh+1i9nnXCs9MHlnb5MTs/88iaW23fvsie705uc6i6Aa69MgmxuILLk
+         ojA23V55+AFUklgBpFhq6RXTKWTq8zA/mwa7/ADgoEWrhw3s8G73b+hngQhYGaRW8+2k
+         2vP/xrHFvDkPQR5K7gjkLOrzZ8qHZ0rGTCe+pUQxU1TLqySUXSzENOifoaIJCwGAJrKC
+         alQYxdNOSTrskMQ+rue9BBoVtLySMzEX77POkHUx0VmsgpF356/W4FBhHBRutCQebQkf
+         KwVA==
+X-Forwarded-Encrypted: i=1; AJvYcCWuvRxLx2uUqIdd26dPgRVX1UU1Qba3yAeoudZis+iBGcxWWdtUIGTvPdGe95wD1S07wwcLo/lhfA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwIaEA6ZjRLxF0WUDm2hnsQlzwUfCJF/QDT2JJPFvp7bF6fC8Fd
+	nOVt/PyjI+qVwrVEsqCDoAGMhuLFedpcmD5Z1hG6vX82nG9wcAAKDP0beeQdRgXoR38=
+X-Gm-Gg: AZuq6aIoVn1BK2Z09cMvV6hYkTl3UUM6C8wCHPkFGGNOL0qKtSocXCwKH09+6EGxsRs
+	MWfofP6KLAOfPUkEIMuQyrAd/n4gqt716HucPF/hljMup+IDCDqBaH9+qGyBlC0yj3+OFCRqZ+T
+	vZXMtd3/Fg1KBNHXzYUhsmTagptFSN4IvY9kxa+znYu9/KqvP23SczSNpiSSRadu2xZ4QF1zHHR
+	RdzcFjPlKM3Wqvr0vkO1QjeoE7I8L2mVSroWD5a+8nXG+wYHDQNnC1mYaINaJMy8TPZXRYnfL3v
+	TRxViBPlhxXUwhHuYltwkkDeJEqsZ7KIeTLhyPa06z6wewd26lLR6iXys6AynnpGFTNuHEBY8u3
+	UtyGASkQvL7aeP57y9yzqx4LdBM29HNyU0nDu+LMRiYAG+LwXhbPJDBf5NwzUpBogqd3o5JGNk8
+	udEFym/CYtsfy8Cue9h2jTTCwVmO2qDWjDVdC7+NzhNckcTG8W
+X-Received: by 2002:a05:6102:d8a:b0:5f8:e53a:2d81 with SMTP id ada2fe7eead31-5f92a0184b7mr1966449137.8.1770191812582;
+        Tue, 03 Feb 2026 23:56:52 -0800 (PST)
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com. [209.85.217.51])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-948dfe6e174sm580232241.4.2026.02.03.23.56.51
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Feb 2026 23:56:51 -0800 (PST)
+Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-5f5418c40daso657468137.0
+        for <linux-pm@vger.kernel.org>; Tue, 03 Feb 2026 23:56:51 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVkdkrY3Sj8ThXbkQBX6uMlUJT4JqeE5lvM5a6OAqSSS7yZQyunT0Os24tugGntjONmh3IGpisTEw==@vger.kernel.org
+X-Received: by 2002:a05:6102:3f10:b0:5ef:b32c:dff8 with SMTP id
+ ada2fe7eead31-5f929fb3cf1mr2280613137.5.1770191811365; Tue, 03 Feb 2026
+ 23:56:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260203170824.2968045-1-visitorckw@gmail.com>
+In-Reply-To: <20260203170824.2968045-1-visitorckw@gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 4 Feb 2026 08:56:39 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUMBoLd8cKXMK64qjGfTqQfK21mDAXMh8DdJHkL7QbDVQ@mail.gmail.com>
+X-Gm-Features: AZwV_QiZ43YMMxxlNYjUnXgr3m8Z6Sx77aM5dfYmM2j6flED7-BvFG_oafzMSL8
+Message-ID: <CAMuHMdUMBoLd8cKXMK64qjGfTqQfK21mDAXMh8DdJHkL7QbDVQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] Add QEMU virt-ctrl driver and update m68k virt
+To: Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: sre@kernel.org, jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com, 
+	daniel@0x0f.com, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-pm@vger.kernel.org, 
+	Laurent Vivier <laurent@vivier.eu>
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linaro.org,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[linaro.org:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42040-lists,linux-pm=lfdr.de];
-	DKIM_TRACE(0.00)[linaro.org:+];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[andre.draszik@linaro.org,linux-pm@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,ccns.ncku.edu.tw,gmail.com,0x0f.com,vger.kernel.org,lists.linux-m68k.org,vivier.eu];
+	TAGGED_FROM(0.00)[bounces-42041-lists,linux-pm=lfdr.de];
+	DMARC_NA(0.00)[linux-m68k.org];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linaro.org:email,linaro.org:dkim,linaro.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E3042E2690
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[geert@linux-m68k.org,linux-pm@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	NEURAL_HAM(-0.00)[-0.995];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	R_DKIM_NA(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[gitlab.com:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
+X-Rspamd-Queue-Id: D00F1E2DD1
 X-Rspamd-Action: no action
 
-On Tue, 2026-02-03 at 22:50 +0000, Amit Sunil Dhamne via B4 Relay wrote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
->=20
-> Add register bitmasks for charger function.
-> In addition split the charger IRQs further such that each bit represents
-> an IRQ downstream of charger regmap irq chip. In addition populate the
-> ack_base to offload irq ack to the regmap irq chip framework.
->=20
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> ---
-> =C2=A0drivers/mfd/max77759.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 =
-91 +++++++++++++++++--
-> =C2=A0include/linux/mfd/max77759.h | 204 ++++++++++++++++++++++++++++++++=
-+++++------
-> =C2=A02 files changed, 258 insertions(+), 37 deletions(-)
+CC vivier
 
-Reviewed-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+On Tue, 3 Feb 2026 at 18:08, Kuan-Wei Chiu <visitorckw@gmail.com> wrote:
+> Introduce a generic platform driver for the QEMU 'virt-ctrl' device [1]
+> and transitions the m68k 'virt' machine to use it, replacing
+> architecture-specific hooks.
+>
+> The new driver ('qemu-virt-ctrl') registers a restart handler and
+> populates the global 'pm_power_off' callback.
+>
+> On the m68k side, the platform initialization is updated to register
+> the 'qemu-virt-ctrl' platform device. Additionally, the 'mach_reset'
+> hook is bridged to 'do_kernel_restart()' to ensure the kernel's restart
+> handler chain is correctly invoked.
+>
+> Verified on QEMU m68k virt. Both system reset and power-off were
+> confirmed functional by invoking 'reboot(LINUX_REBOOT_CMD_RESTART)' and
+> 'reboot(LINUX_REBOOT_CMD_POWER_OFF)' from userspace.
+>
+> Link: https://gitlab.com/qemu-project/qemu/-/blob/v10.2.0/hw/misc/virt_ctrl.c [1]
+> ---
+> Changes in v2:
+> - Use devm_register_sys_off_handler() instead of register_restart_handler()
+>   and global pm_power_off.
+> - Switch Kconfig to tristate to support modular build.
+> - Add .id_table to platform_driver and use MODULE_DEVICE_TABLE() to correct
+>   module auto-loading.
+>
+> v1: https://lore.kernel.org/lkml/20260112182258.1851769-1-visitorckw@gmail.com/
+>
+> Kuan-Wei Chiu (2):
+>   power: reset: Add QEMU virt-ctrl driver
+>   m68k: virt: Switch to qemu-virt-ctrl driver
+>
+>  MAINTAINERS                          |  6 ++
+>  arch/m68k/virt/config.c              | 42 +------------
+>  arch/m68k/virt/platform.c            | 20 ++++++-
+>  drivers/power/reset/Kconfig          | 10 ++++
+>  drivers/power/reset/Makefile         |  1 +
+>  drivers/power/reset/qemu-virt-ctrl.c | 89 ++++++++++++++++++++++++++++
+>  6 files changed, 124 insertions(+), 44 deletions(-)
+>  create mode 100644 drivers/power/reset/qemu-virt-ctrl.c
+>
+> --
+> 2.53.0.rc1.225.gd81095ad13-goog
 
