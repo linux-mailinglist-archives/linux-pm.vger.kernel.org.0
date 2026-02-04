@@ -1,276 +1,312 @@
-Return-Path: <linux-pm+bounces-42109-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42110-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SDoFGRO+g2mqtwMAu9opvQ
-	(envelope-from <linux-pm+bounces-42109-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 22:45:55 +0100
+	id IHu+KOTWg2lbuwMAu9opvQ
+	(envelope-from <linux-pm+bounces-42110-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Feb 2026 00:31:48 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE40DECD64
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 22:45:54 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F12DAED490
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Feb 2026 00:31:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B253C300899F
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 21:45:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 36E15301C8AD
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 23:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963E5285068;
-	Wed,  4 Feb 2026 21:45:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCD0439E6F6;
+	Wed,  4 Feb 2026 23:28:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="KLNDyXgk"
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="kppxTa81";
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="eRLn0W4C";
+	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="eRLn0W4C"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013008.outbound.protection.outlook.com [40.107.159.8])
+Received: from mail1.bemta45.messagelabs.com (mail1.bemta45.messagelabs.com [85.158.142.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2079A2C859;
-	Wed,  4 Feb 2026 21:45:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770241552; cv=fail; b=lmyWtzXU63s0gzvKTSbeeiBR9Wu5KuMUiRzjzlstkSReEmalmbwW1ZB3MS1jPLyKDed0sLbUkExB1H2uJ5PPmy36IBuaE0411YOaJl1VxTMCKLEMYydR9cW99h/3lYvNTbiWER+WU2ZlqUpB4C9z7HbRvMsKtXgU5PyolrmMMc4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770241552; c=relaxed/simple;
-	bh=LlZVJoz8POChJCI3PPDuHdleAIF4EHeCKyx0LbxWjUY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=qmPJnd6T2k4jrIBzssILy7Br6zXRK+Xx++gQJVo81qB+mH/6svwmCoIBcenRy6BNFqI0QY81bA9J3bEu6hGpbADXxtq1PH44k6N6AQ086B+BoMPMmUzNDVjFIqzVSsWJ2IrFWrIy1kjDUwzBR6Fkp9wrwwjsAwvBQx5Q5k4VI9M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=KLNDyXgk; arc=fail smtp.client-ip=40.107.159.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iXE+ZyuYGth+UR8FUKB5pM4e/twMP35zR1PGjCzfQ7VA+AvS/GvmI8fmIVRkXdQNja4TMum7/vF3lPIlQ9SOuffMv6/jsm2WUS4yghA3Vb4AZH91kp6tq6Qqf0/0hpFezxIuzksi6BzSVfxAE3ju/Un7Zi926K9giLZqCyyaVSffjhcrxut2DJuC+nfZpLKLk3JiSx4OfKH/uXuU37+8SKKgWC5U+M4Xw8AHOS5Dq3t3nGNOTgcfJbr36QSjNhsqiGhIohKrNW6S2WxfBaAgnZdglqY7bogcYQ+I9R6w6A/lh5+qIU6A9nWolRWlr5g1KVBM7UUFIXhHTUZ5zk3CDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=txaf5Zi8Tee9Fvz9nfrxlC6PHo314Phzhr41aQJN7LY=;
- b=k/W1Z42Gk4doM+hsVv1MUWHRVO/KqpeL7NV/5qYxa+YPBzQYF93qeQnUk0iZL3Ri3lpKaD2pCiIxhTjtBEMZGc5o7rE9t95IyYv/tpEy+JdxWI9H7my5cPeBZZzvCD19/sgmKSFeZyk9cwCwj3GuHIGhEMRVw9W2jqCNZa6qm8ax0/FH1dKMPfzSpMl8xwMw0SyvNfbpMmLrqzWqImM2Ch5hsVcW4DMOdxHrpbx1j3RsTPglxujB9SJhBSA7O70dKvo8IswlwnV2ObMDxMjEl65HDJNbxqM/FGEFbD22sVz1miCiYBDSEMoRAjT2rHDdIzpD1pO0JjODiviWL9ysgg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=txaf5Zi8Tee9Fvz9nfrxlC6PHo314Phzhr41aQJN7LY=;
- b=KLNDyXgkqmXtuFYZhnXH9sikjV21uWq7H5+M9CY38eoybTcdO/Q5ykGlNoL4qNwAlJUkgWfWzWQnEsqWUDp6GjcHyd6uo0GfpFNpfWuvtMS1ZpLfej1QGLmnVYAGDHLcJadiDhuz+PzBP0IrPTshxwKZXp904aWDi917006S9Zw4WkSEnVOhvYjXz7/m8s2hJY+gPnaqFCF5+kiED6ul2aRYOO+NQTFOdthNrC7Ybufq//Ad2KaH8vnox8dXIVAOOmLj2DIkQ+CHRcFedSL+2pycDsw7OsuL3388TpPe0H0ANDxm6wFvZDDYhby7YcliQuop1FaCd9GHWRDl+aoPqg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com (2603:10a6:102:2a9::8)
- by DU4PR04MB11458.eurprd04.prod.outlook.com (2603:10a6:10:5d3::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Wed, 4 Feb
- 2026 21:45:48 +0000
-Received: from PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588]) by PA4PR04MB9366.eurprd04.prod.outlook.com
- ([fe80::75e4:8143:ddbc:6588%6]) with mapi id 15.20.9587.010; Wed, 4 Feb 2026
- 21:45:48 +0000
-Date: Wed, 4 Feb 2026 16:45:42 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Adrian Hunter <adrian.hunter@intel.com>
-Cc: alexandre.belloni@bootlin.com, rafael@kernel.org,
-	linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH V2 2/6] i3c: master: Mark last_busy on IBI when runtime
- PM is allowed
-Message-ID: <aYO-BlFaIV_gTeqH@lizhi-Precision-Tower-5810>
-References: <20260204111511.78626-1-adrian.hunter@intel.com>
- <20260204111511.78626-3-adrian.hunter@intel.com>
- <aYNveVUsiixWWlWL@lizhi-Precision-Tower-5810>
- <a650c5c6-5975-40c6-828e-eaa27403adfd@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a650c5c6-5975-40c6-828e-eaa27403adfd@intel.com>
-X-ClientProxiedBy: PH8P220CA0048.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:510:2d9::25) To PA4PR04MB9366.eurprd04.prod.outlook.com
- (2603:10a6:102:2a9::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A761039E6CB;
+	Wed,  4 Feb 2026 23:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.158.142.112
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770247687; cv=none; b=rqDbAhLvX8IX9pssrQ+ipEGI4kww2H9nhg4hwa+/7t43TJe7vIoKgmFrVfiqPY/Sih9w9jXZQX4G7lv+6WDIUiIhs5A6RJ0sJXD4LuKhiOxilXeT2c/GHv7xkI+VMkrUXn+frw+AYUHsuPNI8q012iw7M6WqN9axDyonmyRRyKI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770247687; c=relaxed/simple;
+	bh=RTgoh1URLzesQ/bDDWsOSGNKKatiPoxeEWWxVFDR/R4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YpDj1kDJvxxIchcFJrp9eu5xutMHoXWEDtp2QFZ+MKFiI0yqBTteu3GrAfvzlCQPgoP5EvwmOUBkZ/m7Rq+1uDB1JGb345R1UbyjgoYBMl16lIK+1V3RV2UcOXi5IGFvinfjxPewSe7lAqN/TwLpJEK81TbavLKW8Tb/1YMInpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=kppxTa81; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=eRLn0W4C; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=eRLn0W4C; arc=none smtp.client-ip=85.158.142.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+	s=170520fj; t=1770247684; i=@fujitsu.com;
+	bh=/wcBbpG/fe1WA2GpRprGItWbDS58o1LvjODQUxOXBgs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Transfer-Encoding;
+	b=kppxTa81axupJRTu6pYoMis4a8zkzfiSGsueKAhmGvkKitYjES1WF8IeQj0R8FpaI
+	 GDTIBFxvRlDG9eiCsozX88YEpbcBgxKWNuLiB9qaZlJgSqfw3y+J/Yq9Gbb3H9rIWZ
+	 YY4hdqyfSNgVryJwgAIEuYEVijvt8JfhUBfQ/B3DrdHLtIGQBGv9zUOD9DpHi9/7SZ
+	 cozBjWP0k8nOIjh3sg8PtgtWPgrgmHCGnp8a8W5/QNJRCsxQwu8d/w6+uEtUQj/Cae
+	 46wEifpQ57t9UZxqwJaebA8afWUDfr4Yxq+n0cV7ViAYqO2zzKlHmQedNUA85822ac
+	 GNudX8IJodxwA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA22Se0xTZxjG+51bDx0lh4LpJ6IkFXXRUJFd8rk
+  xNl1mTsYC2x+QRUe2Uzy01VJqWwyYTHGlTmGC6CpruajxMmGoXJWqCBLCbWbcyRCZsIHDOgIM
+  MrpRdKcQ1CX77837/J7nff54aVw2QgXRfJqZN+o5nYKSEFGR9MkwUb9FG/7MrUBDv3VS6O/ZS
+  YDyiv/C0Ez5Uwrl2zoBah04TKEfBsoAspy/RqGOKg+F6sd+J1BBvgVDJ2v7cFR6rp9Cjm/rMN
+  ThaCfQ7bo2AvXcLKTQzPEmgKzFEwAdHbNhqMTtIdHRyQwctRxvwFDRrA1HD05fAih/fIFEZbP
+  TOBps7SDR/RPNGJp3CwF3mh4S74Wwc9YcgrV2L1Cs0zEkZjObJki26vJG9vztxxhbWXqMYuuL
+  ysTseJUdsA2uBcDaCg6x9842idmZyjXsfEEz+NhvJ6nVq1LSviA19zJzgKEqLC0zN4PMAL2hW
+  UBCy5hqALtanOIs4EMTTCz8tXyK8goEc52AD+pqwBL1NQbdRy6Ty5TT5Sb/hyoCsPqRdZGimM
+  3w51OFwDsHMsGw/NkN3AvhTA0FM7tvLEIBDA+HZ3Kwpdh1sL21iPDOUuYdWOkcXTRDJgSesbU
+  t8j5MJLzl6cW9s4x5Gz4auUIu8f6wzT4qeGnhwAZ4rVjmXeOC1VJTgC/FrId9P1XiJ0Cg4yWH
+  44XD8ZLjLMBLwVYTb9zPG8MilCqjVq0xJ3NanZI7EMYp+VRjioEP06cYzZotSnWiQcmbTEpTe
+  nKibrdSz5srgfBnkil/shbMLVg3N4KVNKZYIcW1Fq3MT5WyO13DmTSfG1N1vKkRBNO0Akoreg
+  TN38ir+bQkrU741mUZ0r6KQGlJryBLTQYu2aRVL0nt4DX6WH1WA05PP7bdxWWEPkXPB8mlU10
+  CynhRTar+edDy53eD1UEBUiASiWS+Bt6YrDX/V3cBOQ0UAdJ4bx9frd78/J5LqIIJVfovHvZW
+  MXMvpKAMLMEW3Tee2ii7XrXNM5k1dOFgzOon8jguAg2Gfja86r54pGLA9kl2dO7A3h/VR+5M/
+  bHrXXeLepdPuCXR05S9Vhwv/qdE0v4hEbi948L2u6+K7M6guOj96wpfORBxrvRq10dcZBSXtC
+  Z2X9Ims/ngG80lO54upD7se3+iLkF16Tv13p21e3bEndp0dSw2r2JFq/9wiAT2FB/C9rS2faW
+  J18uzPQU+TGfom18abr1ulzXTmSNv9Ralb033u3mmNmtl/bw86lN/sj2KUCSczl9lz50O/+aX
+  70cNNqcse+22wSsxCXYPyp5QWYKdH+RV9EvyhlTVMa4Nc1Nj1fI/e/bFKGiMe6IgTBpuy0bca
+  OL+BUGOxLR0BAAA
+X-Env-Sender: tomasz.wolski@fujitsu.com
+X-Msg-Ref: server-3.tower-838.messagelabs.com!1770247679!32445!1
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received:
+X-StarScan-Version: 9.120.1; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 12431 invoked from network); 4 Feb 2026 23:28:00 -0000
+Received: from unknown (HELO n03ukasimr02.n03.fujitsu.local) (62.60.8.146)
+  by server-3.tower-838.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 4 Feb 2026 23:28:00 -0000
+Received: from n03ukasimr02.n03.fujitsu.local (localhost [127.0.0.1])
+	by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTP id 49B18100614;
+	Wed,  4 Feb 2026 23:27:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 n03ukasimr02.n03.fujitsu.local 49B18100614
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+	s=dspueurope; t=1770247679;
+	bh=/wcBbpG/fe1WA2GpRprGItWbDS58o1LvjODQUxOXBgs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=eRLn0W4CelTHDfI+I8ssjb0yJQMPREvqo/AvbhrJ7HvlffkpW5+foyRXvXddoP40X
+	 7uFZdN5whb6wyO4st63AVh7+uk41Hw4cI/6l+giT9ejVgjRjgi5sZbiDvzzZ7QwtBh
+	 +U0yYsVpYZ3HpB+GnFHFSjWvveedRvykCWmp21gq54OnU9YwunGf82FYtQoB1gsEEs
+	 ncFVAvImjyBQqg1RQpdE+aLKZPgnNO8WnQHjSpXHrKOTuA6OkGAtObgZSGao+kjV4/
+	 ePnA2rHtS2/ALu9gd9Pbv/I2RhbFSjG1Ze3HWZSZUyd7yvf6+RSPFskiBu7FrvonBA
+	 lGA+/GTUFt7Tg==
+Received: from ubuntudhcp (unknown [10.172.107.4])
+	(using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTPS id 1CCB51005E1;
+	Wed,  4 Feb 2026 23:27:59 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 n03ukasimr02.n03.fujitsu.local 1CCB51005E1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+	s=dspueurope; t=1770247679;
+	bh=/wcBbpG/fe1WA2GpRprGItWbDS58o1LvjODQUxOXBgs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=eRLn0W4CelTHDfI+I8ssjb0yJQMPREvqo/AvbhrJ7HvlffkpW5+foyRXvXddoP40X
+	 7uFZdN5whb6wyO4st63AVh7+uk41Hw4cI/6l+giT9ejVgjRjgi5sZbiDvzzZ7QwtBh
+	 +U0yYsVpYZ3HpB+GnFHFSjWvveedRvykCWmp21gq54OnU9YwunGf82FYtQoB1gsEEs
+	 ncFVAvImjyBQqg1RQpdE+aLKZPgnNO8WnQHjSpXHrKOTuA6OkGAtObgZSGao+kjV4/
+	 ePnA2rHtS2/ALu9gd9Pbv/I2RhbFSjG1Ze3HWZSZUyd7yvf6+RSPFskiBu7FrvonBA
+	 lGA+/GTUFt7Tg==
+Received: from isar2.ecs00.fujitsu.local (unknown [10.172.183.27])
+	by ubuntudhcp (Postfix) with ESMTP id 326B122045F;
+	Wed,  4 Feb 2026 23:28:41 +0000 (UTC)
+From: Tomasz Wolski <tomasz.wolski@fujitsu.com>
+To: dan.j.williams@intel.com
+Cc: Smita.KoralahalliChannabasappa@amd.com,
+	alison.schofield@intel.com,
+	ardb@kernel.org,
+	benjamin.cheatham@amd.com,
+	bp@alien8.de,
+	dave.jiang@intel.com,
+	dave@stgolabs.net,
+	gregkh@linuxfoundation.org,
+	huang.ying.caritas@gmail.com,
+	ira.weiny@intel.com,
+	jack@suse.cz,
+	jeff.johnson@oss.qualcomm.com,
+	jonathan.cameron@huawei.com,
+	len.brown@intel.com,
+	linux-cxl@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	lizhijian@fujitsu.com,
+	ming.li@zohomail.com,
+	nathan.fontenot@amd.com,
+	nvdimm@lists.linux.dev,
+	pavel@kernel.org,
+	peterz@infradead.org,
+	rafael@kernel.org,
+	rrichter@amd.com,
+	skoralah@amd.com,
+	terry.bowman@amd.com,
+	tomasz.wolski@fujitsu.com,
+	vishal.l.verma@intel.com,
+	willy@infradead.org,
+	yaoxt.fnst@fujitsu.com,
+	yazen.ghannam@amd.com
+Subject: Re: [PATCH v5 6/7] dax/hmem, cxl: Defer and resolve ownership of Soft Reserved memory ranges
+Date: Thu,  5 Feb 2026 00:27:54 +0100
+Message-Id: <20260204232754.9531-1-tomasz.wolski@fujitsu.com>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <697bd8b7fb6f_1d6f100e9@dwillia2-mobl4.notmuch>
+References: <697bd8b7fb6f_1d6f100e9@dwillia2-mobl4.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PA4PR04MB9366:EE_|DU4PR04MB11458:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff8eeab1-69d5-4acc-4c56-08de6436c23c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|52116014|376014|19092799006|366016|38350700014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?x4LfvNM3AsRPlIJleFXZGBlgAcaCQnod5BrXvmU9x/hx1PKwoJ1mQXEWwAOO?=
- =?us-ascii?Q?Gbmrm5l5w9Y1acLl3zVI313G7uqdshgLHJUhZo2ns5E/pgjij7V/7DhQZTDr?=
- =?us-ascii?Q?J0/E56d/zkGNISmAlbLGNYM6+IjaHu1Ctis8oStUjBnbTlFhkZF7IfOt7ZSg?=
- =?us-ascii?Q?Im8HsvLy0UVsSrRFgLWM60RZFFKfFSe01oPX2kYtHXOIeMADvuq8UOPPMbiv?=
- =?us-ascii?Q?wanGx53Fx0sxTebNCT5cXEA//umwtw+t6fQqDS3z3L6fe+Obl4SLUwxvNBcz?=
- =?us-ascii?Q?WSUkjal9XjpvgCHasczidY+Gdp3E2LetefY98WymMidP9yPnq9mD5b2FZ2fm?=
- =?us-ascii?Q?ywytfdJh5wDR3lFiyhkdRbn5RmiFDB8PC2zl16DAraqGGLgUrT1dzbwXgFt/?=
- =?us-ascii?Q?JZFwpr51u611hNM9jCtejESp51Z+vvsELBtIQsKJJezyl8UMQ5OdOsjk9bZF?=
- =?us-ascii?Q?YLW594SI/RbO6LxkowxqWFDi2oVWsuxWqDuRwr9QpVKrUsHplk5ZPMxD5dSb?=
- =?us-ascii?Q?kK2q7RVk7e4rvxjEB0g5uoZ3bUIs85nf2+Lyr2Cm2Rr6nhS6W4UPbOZIDMSN?=
- =?us-ascii?Q?i1uw26UwxV6ZxZqKIfTASY8T1b5PX0IUS1BWs5oQTsKNpYjPFd+ZdXRHBSow?=
- =?us-ascii?Q?TemLs2nMUdfXJV0pAo26lK25pVJ6jmcZ2d6mALgH3sV4F/4+wzH9xSxdBVOA?=
- =?us-ascii?Q?n+pNIxD6k1AkdjFYuP2VzNoXNQQjq+3/fUCYRVyaABmZA6qAp1RppzOZRlIg?=
- =?us-ascii?Q?DbkPXVk/tbBShNiucxuP5dupZRLvsCx5MejfMOTB0yZnnGDp+qmIMM2Xz8S7?=
- =?us-ascii?Q?YQ1D/Y2Mqk3P3IG7i4OTWPH2R1t94M480iNpl4DS+dmzp7CNY0o+fpo1H4nE?=
- =?us-ascii?Q?XQF8uqSKljoKu9BrPV2PPva1Ak7qw6yKXf5ntt57aL/aCWZ2MBAJ2O2k9sQO?=
- =?us-ascii?Q?rHrCu+4r12uure92ZK6L6MTFF1nz8J5bGjfP0ZT7WpYhE8h6U+4TThQyGBHx?=
- =?us-ascii?Q?nRPZqUZYIiH7//8P7UXi0QCDvmz5zsri0RmSRLKdx6Ylubg/G6fyliHpcqcs?=
- =?us-ascii?Q?mApgPkS0+0hRPjkQOrwsAlFZOMy14nWoGE7Ra52PnMz0L6AluDjK0jtAUNN8?=
- =?us-ascii?Q?7O7jV95XG5A/F2b/AtSmR8Sf8kHa85Au8Bt7r+Pdkrk9iT6da3zVHZ1mqgMN?=
- =?us-ascii?Q?cMQWiv4cSkp18gRZAi2yR8TU0721mVJskw/d2IZ3bdkDJApegO/wgO/igMAf?=
- =?us-ascii?Q?h9X1X1ipurIPzaY/RcIL0wPJ93hsDo0DqjSpjVLQrK+r7qZMJ6uqpLTdTBeH?=
- =?us-ascii?Q?MIDRFysJIl3lAE3L/LfUqBpX0mgHtFw9SMDXlODbQWkkMcdIGN+00RVE3NYS?=
- =?us-ascii?Q?VshwyD9AJatLsohxmCdG7NijGF5lrS9U1tVWFJYIpGiYOws31ZvR3UrSAu/4?=
- =?us-ascii?Q?SEUgq864Fd9khvC6Sc4s6f6H+haamgr6+F+wfK8bPnjpfIN14qRaPAXe57Ya?=
- =?us-ascii?Q?jb1+NbH/s7an62x82/uHIlA3vVieWgRzVNZARpYodLhPogHJhpSg+IrTIo57?=
- =?us-ascii?Q?kUSPNds5TIUOQNOHXvefKtwkrQXHhtuR7T4mLcknigY9JLZLX0PFUZ/HhZHv?=
- =?us-ascii?Q?5/Z0IRhbFm9VWphWmPGSFn8=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9366.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(52116014)(376014)(19092799006)(366016)(38350700014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?kjj9TuLS/dxr2BJaoeqcZZX2jH/OmctO85Pwd2ay7weSLn+OXJyqW2chSPBY?=
- =?us-ascii?Q?dCDSzuEhv7eUlnS/eB/lfXTCSR+HJQjFeRd8LTJHzkYk5iS4Gvr0FAui8lQQ?=
- =?us-ascii?Q?hze5c20I4dFIReROgkGjCA6yd0avjZQj8mcYGDLsYTDlEif1qzNvxJcFzbtu?=
- =?us-ascii?Q?N10GRumGCt6yS/FyJq81/9ToUtHGFV/HhsGtJsf2gz5on8lcpGmX1hU4oAy7?=
- =?us-ascii?Q?OFiYOqVKTLOzUckIJtJSU0J3ExNwjvz1L0gHZu3jk+fkTIZPY0q6eXd+SJMZ?=
- =?us-ascii?Q?iK6NJKUHZa7jN1TtuYNqx3o0GRiiR67Jj1f1QyF3a5E/YZwHNhCJv6Qrck4u?=
- =?us-ascii?Q?ewCRrlQQdr9U3BLzgCppdtaIFV5eISNNSlR4j3QGMzq7+KxkPWmuXqcgTvDa?=
- =?us-ascii?Q?VyHoEZybpdin0I8aErXEpcjs6XHCzS9HMh1FzKUhElz4x77LDVzTAn2lKSi6?=
- =?us-ascii?Q?5//+ThtjcQXo6TB1i0/48fT5y8uCMBlSSOYWTvdb3NU55ceNkp4HZr0lOpjw?=
- =?us-ascii?Q?wG37dMPFLZxBRJD4iSma+S6tGLAcCETXyxMJbvfP7k0Rh+ch/BjdefFAsThR?=
- =?us-ascii?Q?gNSL+4RUefDHIynpl27SuENtgNjpuc8Ii58Xw3hwtseIC8cPBNggfxD7M4wk?=
- =?us-ascii?Q?VkYzZ9cVSSRaZMi0C3p84lURQb9OQOzfb8Wtvwtl74d7702vAWbi1ybvSL5q?=
- =?us-ascii?Q?j1N0tp7t8BnMR92tMiVDAQQNhqOgyZpdvbhn9AoQmV4zeuKjjZQCWFA5XTkU?=
- =?us-ascii?Q?R2eChFV93JyhbKas9HyLBx5tLLEAMDH0WTnFpRMO9w321yFwBKHyjbv1mngD?=
- =?us-ascii?Q?+EvzxrHNGSDY94S+zdeyrw170dtZO6KneODN/TktxSUKxsJuZkEfy4yaRVnK?=
- =?us-ascii?Q?llgzcynvDzaNS7M3X+QQ4KYf3ly1U2mfy4WD2j8l20UOBA74VdrxGG/gYHkr?=
- =?us-ascii?Q?AVzRjNJ9guMekZZVTuhSSPMTHE6k4lxZW3np0C88Bo0L84VIPbNf2f5uXRwO?=
- =?us-ascii?Q?eSb30fmkExMi90aqbO8ZWZdeTA52u7phV5AEoFqeUU0VfD4NSOoNxk+mBka0?=
- =?us-ascii?Q?ex/3ntIsGjsXXjxDG2Fzz7nBy1oBeboDdiG3vcnA4D+7koMjRxSCklXjGSYA?=
- =?us-ascii?Q?fc0Ja2dZesluIX+V8C2TlDEjlNxRp+h/CqbrjTX0mhIe8SEG3SmjCZMlimiB?=
- =?us-ascii?Q?ETNcBo7EcxNFVLLOJXFyexTL5knReRERuADErGJYuR/MQvXcIx9ij4L+eyXE?=
- =?us-ascii?Q?ck189OHOo4iv9rZwo6Yx5hj7esM5bpv/0xC1Q8cQqbdGpn/txlVCh/hAsxXR?=
- =?us-ascii?Q?qh1GafjubVvZGHPzuOWR4n6nEL/GECP0EZMltDaeXPw8//3G7otLxBRKjQxf?=
- =?us-ascii?Q?kuNof2i+Ta2TlxEAfc7/BzeUwan0Lajbx/BVYi7qV4n16JuhRMopJDXOgWoM?=
- =?us-ascii?Q?rV0jNu0F7rclq+uNGMypiauw3lkr4xZWmcoDTJidEoNb9f2u81//xrCZU1jS?=
- =?us-ascii?Q?YlMgiO1CNS1J/SOAshGRgvfxXJ8dRh6+X5tFfAmut/ulsDbf0OWsGrgVoERn?=
- =?us-ascii?Q?KF6ixTYHgL5vl/ApbP9mgZa4QjxQkzQZ9Qh4sxhDt7vOvj39o7umQrphnLrX?=
- =?us-ascii?Q?hOtPsobxVv0jdU5uPuQSLw0MInUh150lzQdL6GDo3qN+AlDsskVE+PgN9lIN?=
- =?us-ascii?Q?5IyVXYh01alsMaY79iXQU6d8lD3L1z/ivMPZrM3WQAA351f8?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff8eeab1-69d5-4acc-4c56-08de6436c23c
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9366.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2026 21:45:48.4802
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: po43Vq/y/qg1ajWNseRuRJfPSKc+dR5xpsKpBMLd5+qLGSIE+yBX1+2G3US2/R9T/3fQCuyTHl/O7WHd6OJREA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR04MB11458
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: ClamAV using ClamSMTP
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.34 / 15.00];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	MID_RHS_NOT_FQDN(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[nxp.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[nxp.com:s=selector1];
+	SUSPICIOUS_RECIPS(1.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_CONTAINS_FROM(1.00)[];
+	DMARC_POLICY_ALLOW(-0.50)[fujitsu.com,reject];
+	R_DKIM_ALLOW(-0.20)[fujitsu.com:s=170520fj,fujitsu.com:s=dspueurope];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42109-lists,linux-pm=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[amd.com,intel.com,kernel.org,alien8.de,stgolabs.net,linuxfoundation.org,gmail.com,suse.cz,oss.qualcomm.com,huawei.com,vger.kernel.org,fujitsu.com,zohomail.com,lists.linux.dev,infradead.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42110-lists,linux-pm=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[Frank.li@nxp.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[nxp.com:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[tomasz.wolski@fujitsu.com,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[fujitsu.com:+];
+	TO_DN_NONE(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[infradead.org:url,infradead.org:email,intel.com:email,nxp.com:dkim]
-X-Rspamd-Queue-Id: EE40DECD64
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_TWELVE(0.00)[34];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: F12DAED490
 X-Rspamd-Action: no action
 
-On Wed, Feb 04, 2026 at 08:24:21PM +0200, Adrian Hunter wrote:
-> On 04/02/2026 18:10, Frank Li wrote:
-> > On Wed, Feb 04, 2026 at 01:15:07PM +0200, Adrian Hunter wrote:
-> >> When an IBI can be received after the controller is
-> >> pm_runtime_put_autosuspend()'ed, the interrupt may occur just before the
-> >> device is auto-suspended.  In such cases, the runtime PM core may not see
-> >> any recent activity and may suspend the device earlier than intended.
-> >>
-> >> Mark the controller as last busy whenever an IBI is queued (when
-> >> rpm_ibi_allowed is set) so that the auto-suspend delay correctly reflects
-> >> recent bus activity and avoids premature suspension.
-> >>
-> >> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-> >> ---
-> >
-> > Although it is no harmful, I think it is not necessary to mark last busy.
-> >
-> > schedule's workqueue task to do i3c transfer, which will call run time
-> > resume.
-> >
-> > Are sure it will block your function without this patch?
+>> > I was thinking through what Alison asked about what to do later in boot
+>> > when other regions are being dynamically created. It made me wonder if
+>> > this safety can be achieved more easily by just making sure that the
+>> > alloc_dax_region() call fails.
+>> 
+>> Agreed with all the points above, including making alloc_dax_region() 
+>> fail as the safety mechanism. This also cleanly avoids the no Soft 
+>> Reserved case Alison pointed out, where dax_cxl_mode can remain stuck in 
+>> DEFER and return -EPROBE_DEFER.
+>> 
+>> What I’m still trying to understand is the case of “other regions being 
+>> dynamically created.” Once HMEM has claimed the relevant HPA range, any 
+>> later userspace attempts to create regions (via cxl create-region) 
+>> should naturally fail due to the existing HPA allocation. This already 
+>> shows up as an HPA allocation failure currently.
+>> 
+>> #cxl create-region -d decoder0.0 -m mem2 -w 1 -g256
+>> cxl region: create_region: region0: set_size failed: Numerical result 
+>> out of range
+>> cxl region: cmd_create_region: created 0 regions
+>> 
+>> And in the dmesg:
+>> [  466.819353] alloc_hpa: cxl region0: HPA allocation error (-34) for 
+>> size:0x0000002000000000 in CXL Window 0 [mem 0x850000000-0x284fffffff 
+>> flags 0x200]
+>> 
+>> Also, at this point, with the probe-ordering fixes and the use of 
+>> wait_for_device_probe(), region probing should have fully completed.
+>> 
+>> Am I missing any other scenario where regions could still be created 
+>> dynamically beyond this?
 >
-> It is not necessary at this time.  I wanted to cover the case
-> where an IBI is not followed by a transfer from the target
-> device driver.
+>The concern is what to do about regions and memory devices that are
+>completely innocent. So, for example imagine deviceA is handled by BIOS
+>and deviceB is ignored by BIOS. If deviceB was ignored by BIOS then it
+>would be rude to tear down any regions that might be established for
+>deviceB. So if alloc_dax_region() exclusion and HPA space reservation
+>prevent future collisions while not disturbing innocent devices, then I
+>think userspace can pick up the pieces from there.
 
-look like it is impossible. Device raise IBI, which means device need do
-some things. otherwise, why raise IBI.
+I'm trying to follow the idea of "deviceB being ignored by BIOS" 
+Do you consider hot-plug devices and user creating reqions manually? 
+Could you please describe such scenario?
 
-Let's defer this special case when we really meet in future.
-
-Frank
-
-> Perhaps a device could operate almost entirely
-> using IBIs, but there is nothing like that presently.
+>> > Something like (untested / incomplete, needs cleanup handling!)
+>> > 
+>> > diff --git a/drivers/dax/bus.c b/drivers/dax/bus.c
+>> > index fde29e0ad68b..fd18343e0538 100644
+>> > --- a/drivers/dax/bus.c
+>> > +++ b/drivers/dax/bus.c
+>> > @@ -10,6 +10,7 @@
+>> >   #include "dax-private.h"
+>> >   #include "bus.h"
+>> >   
+>> > +static struct resource dax_regions = DEFINE_RES_MEM_NAMED(0, -1, "DAX Regions");
+>> >   static DEFINE_MUTEX(dax_bus_lock);
+>> >   
+>> >   /*
+>> > @@ -661,11 +662,7 @@ struct dax_region *alloc_dax_region(struct device *parent, int region_id,
+>> >          dax_region->dev = parent;
+>> >          dax_region->target_node = target_node;
+>> >          ida_init(&dax_region->ida);
+>> > -       dax_region->res = (struct resource) {
+>> > -               .start = range->start,
+>> > -               .end = range->end,
+>> > -               .flags = IORESOURCE_MEM | flags,
+>> > -       };
+>> > +       dax_region->res = __request_region(&dax_regions, range->start, range->end, flags);
+>> >   
+>> >          if (sysfs_create_groups(&parent->kobj, dax_region_attribute_groups)) {
+>> >                  kfree(dax_region);
+>> > 
+>> > ...which will result in enforcing only one of dax_hmem or dax_cxl being
+>> > able to register a dax_region.
+>> > 
+>> > Yes, this would leave a mess of disabled cxl_dax_region devices lying
+>> > around, but it would leave more breadcrumbs for debug, and reduce the
+>> > number of races you need to worry about.
+>> > 
+>> > In other words, I thought total teardown would be simpler, but as the
+>> > feedback keeps coming in, I think that brings a different set of
+>> > complexity. So just inject failures for dax_cxl to trip over and then we
+>> > can go further later to effect total teardown if that proves to not be
+>> > enough.
+>> 
+>> One concern with the approach of not tearing down CXL regions is the 
+>> state it leaves behind in /proc/iomem. Soft Reserved ranges are 
+>> REGISTERed to HMEM while CXL regions remain present. The resulting 
+>> nesting (dax under region, region under window and window under SR) 
+>> visually suggests a coherent CXL hierarchy, even though ownership has 
+>> effectively moved to HMEM. When users, then attempt to tear regions down 
+>> and recreate them from userspace, they hit the same HPA allocation 
+>> failures described above.
 >
-> Let me know if you think we should leave it for now.
+>So this gets back to a question of do we really need "Soft Reserved" to
+>show up in /proc/iomem? It is an ABI change to stop publishing it
+>altogether, so at a minimum we need to be prepared to keep publishing it
+>if it causes someone's working setup to regress.
 >
-> >
-> > Frank
-> >
-> >>
-> >>
-> >> Changes in V2:
-> >>
-> >> 	Adjusted slightly for earlier changes
-> >>
-> >>
-> >>  drivers/i3c/master.c | 5 +++++
-> >>  1 file changed, 5 insertions(+)
-> >>
-> >> diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
-> >> index 49fb6e30a68e..48d1b1256290 100644
-> >> --- a/drivers/i3c/master.c
-> >> +++ b/drivers/i3c/master.c
-> >> @@ -2721,9 +2721,14 @@ static void i3c_master_unregister_i3c_devs(struct i3c_master_controller *master)
-> >>   */
-> >>  void i3c_master_queue_ibi(struct i3c_dev_desc *dev, struct i3c_ibi_slot *slot)
-> >>  {
-> >> +	struct i3c_master_controller *master = i3c_dev_get_master(dev);
-> >> +
-> >>  	if (!dev->ibi || !slot)
-> >>  		return;
-> >>
-> >> +	if (master->rpm_ibi_allowed)
-> >> +		pm_runtime_mark_last_busy(master->dev.parent);
-> >> +
-> >>  	atomic_inc(&dev->ibi->pending_ibis);
-> >>  	queue_work(dev->ibi->wq, &slot->work);
-> >>  }
-> >> --
-> >> 2.51.0
-> >>
+>The current state of the for-7.0/cxl-init branch drops publishing "Soft
+>Reserved". I am cautiously optimistic no one notices as long as DAX
+>devices keep appearing, but at the first sign of regression we need a
+>plan B.
 >
+>> If we decide not to tear down regions in the REGISTER case, should we 
+>> gate decoder resets during user initiated region teardown? Today, 
+>> decoders are reset when regions are torn down dynamically, and 
+>> subsequent attempts to recreate regions can trigger a large amount of 
+>> mailbox traffic. Much of what shows up as repeated “Reading event logs/ 
+>> Clearing …” messages which ends up interleaved with the HPA allocation 
+>> failure, which can be confusing.
 >
-> --
-> linux-i3c mailing list
-> linux-i3c@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-i3c
+>One of the nice side effects of installing the "Soft Reserved" entries
+>late, when HMEM takes over, is that they are easier to remove.
+>
+>So the flow would be, if you know what you are doing, is to disable the
+>HMEM device which uninstalls the "Soft Reserved" entries, before trying
+>to decommit the region and reclaim the HPA space.
+>
 
