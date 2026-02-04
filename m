@@ -1,214 +1,169 @@
-Return-Path: <linux-pm+bounces-42076-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42075-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WDenFF4/g2kPkQMAu9opvQ
-	(envelope-from <linux-pm+bounces-42076-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 13:45:18 +0100
+	id 6OecMyo/g2kPkQMAu9opvQ
+	(envelope-from <linux-pm+bounces-42075-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 13:44:26 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08CDCE5F60
-	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 13:45:18 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 772DBE5F49
+	for <lists+linux-pm@lfdr.de>; Wed, 04 Feb 2026 13:44:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 28450300DD51
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 12:44:42 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id CE157300613B
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Feb 2026 12:44:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61CFC3F23AC;
-	Wed,  4 Feb 2026 12:44:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C2A3F23AF;
+	Wed,  4 Feb 2026 12:44:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="D9fY5vsY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NYVLeejA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6AB3F23A0;
-	Wed,  4 Feb 2026 12:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770209079; cv=pass; b=Yx4AiIPnhuY0OqeuUhrd1cQAO/M79zc926VtcrXKCVfkDwgQjFSrJuCcAIcnnv+5eMIHy6dl+OF5vMVaEN2Gw87LSlgN4iGO89qjvxPa94c1cCBbFq+r16y5SZl+4qjcRvFgQ770NmHXL5N3vIboU92wDjPv6P2ftJ5tBs4FuzE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770209079; c=relaxed/simple;
-	bh=7rJyrkWcUJTJPVf3Jfxd0+6rylK9Rvt56+nJ5FndSaM=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=N6I03RvTDNyZE2nL2m7CzGyLeVyfZ4IKw3sRx4WMX1iRw3JzDk4dtlAd4y8CyEjpVPFqYpFd9J7rgjlpoqrMG+4ZLWBhacsyRK2q1FF/C5RkMBbAmlmdD3EDiAYSDtqj8U4OgUzvDZLtzpKgzLOMMLI1hAaecfeOZEFnZI/vxY4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=D9fY5vsY; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1770209056; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=VlpkdDeeeuo06wVd3QoFjeQF4Ze/WvqBlenT7Jxm0kIXdrUYyqy7ANv1tLtDRRzzqfLYNdrPNkWVquUaNRftFbw42AH49LYk/zkoDXAH0Ntfo1HhhYgXERyL497cdRdqm1Ex72I7fUcm5KVNgfWVA5+svJoKXiMwu0aq6H6hApQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1770209056; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=ZHEfRwCP34SKP/etqf2R3yvPOUYfeiMlExy0k9a0BNk=; 
-	b=EY8CFOFttnCRasix3rIcqXqI3UN2g9W04GFEFPR1ZNNP7jOpoKfAPlwvbOXuBrv3ukECbHXQdEntU4zuZB9MoDDQYHSsmIMITHZTSaQnIUbIz/xw2HPCQXTbcSNzzFhJfuJWkqdUlbiIeqlXhHvA8G8g9SXqaQK0wBphiTsMpOs=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
-	dmarc=pass header.from=<daniel.almeida@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1770209056;
-	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
-	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
-	bh=ZHEfRwCP34SKP/etqf2R3yvPOUYfeiMlExy0k9a0BNk=;
-	b=D9fY5vsYmDzxbb3wnJ6GeN2NPcWUM3P96dDZwTdg8wRu0RO5UFiU0nieyb+hVJ0q
-	yI8/bK2piXW4wuCwLcUWSkwryxH+w1MDZSTV5OJjf4H1/lV+m+0ge2r2zOoB7bn9DUC
-	xBaM6iGniq4R2heDGhtciZgJAlf8pNM31KS9AmSI=
-Received: by mx.zohomail.com with SMTPS id 1770209055218580.5695590716871;
-	Wed, 4 Feb 2026 04:44:15 -0800 (PST)
-Content-Type: text/plain;
-	charset=utf-8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142F33F23A0
+	for <linux-pm@vger.kernel.org>; Wed,  4 Feb 2026 12:44:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770209061; cv=none; b=Vry/5XjFU8+IMsgX50NqbKd9XlULfL/ycdSP89xCkDwfbFDQ+AkX504fNEVlV024Xd/emU5R5VYslDFMdp9IHaAi7aX3TpPm7lqRRHhb72vInQ7UN3PI2cuvDWl478tQ/lU368WHFbNbSa1V6OzDOziJ/YKe8T+tUuGwEM0ckus=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770209061; c=relaxed/simple;
+	bh=2ccQeih6irYO5XzSFtymX8LSiL0DW7BGri+FxKdFDR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hV2Nls9t9wW7mAhzTJwvWT6w2uRHJb60mbBuvkQxv5MH3I8XJdvJKj8u9C5BLnY2+YL7mmFV+D6vffn0KmzPTrkBf7Vwt8I9pljPJUtyGWHmKYY9xDmdxdD+GpSBsHmvH8LG8W88ctHu2w6NXThdEj9GMfQsFNcsGjtTvuBLSfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NYVLeejA; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-435a517be33so4103966f8f.0
+        for <linux-pm@vger.kernel.org>; Wed, 04 Feb 2026 04:44:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770209059; x=1770813859; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=HdeWbr93zk7sz3NtKAzxThy4aGeFCJLtK1+LR0Bzdck=;
+        b=NYVLeejASjOK53lwlOzxLANcaoH9vubIJNtZxO6/TjzGJc+qkfYIEFtucOYzu2T7Iy
+         tGpVQy0XFNf0r438iOZRWdAw6rnAiXI9z9f39jkdRXeLyckWdKSJHzyGIVgQe0Z5t4Fg
+         TGPCNkrse4xVMHYfL/qRKkq1WvvHcj1MahqBbC+IPZ4Va+WNUHM/cITzyGdLRQl3DHsW
+         WD56APQofcq/5FyR2D9TmavUgROtySZjjmyEUJgJ9nwAn69AzRWwsWzQufJOWJkWmy+T
+         tssNBIi8F+/dtZv8LM/T6lGrFEM3un0+NGf5EuiT8oNabtuSENSzG6F+6cCH+3txonGy
+         RQLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770209059; x=1770813859;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HdeWbr93zk7sz3NtKAzxThy4aGeFCJLtK1+LR0Bzdck=;
+        b=J8TTDTO4gdcl+ImvhGJ3xUh2OhZ7C5XJEEVg0gWe9FeMGtRa0JsuUCBJNZx3dYlxca
+         SbMcE9sVzU+Ndnqhc+OQuPgKnkQkl2nYL2ixzv2srt8srA0kLkc+dXbbWWJ62OOs2XjO
+         VfESkaEYLZmpytsN2fRnCGX3Ful3s4r/uERSGgdwkazaU5XlTzjOKOJ0YxfVA86kYR2l
+         mBGOGEcRUIV8loXU2oyodIb9BjPy/4ajnWwXtZrRz69yqPZv3sSg9WuG9jAWhQ9NLytE
+         4ypsinuEDzdCZV/hDAR38dhtZ6j30lSKMSTQPBvOMt7ajLpI0mYE20hThPm3CytZ8hko
+         IOhg==
+X-Forwarded-Encrypted: i=1; AJvYcCVgynLas54UIFZtIMXrptdebzZoiYUO5FgVp971GLp1ePfhFdRMbmPY4Z6JX9WTBy05o4FXkXzNqw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9wMRFrOiEnXEdh4oN7KwQp+2LUyUzlFZtg4y4xe56VyeRBmNo
+	ZEKN3Jy2f+qRiwfGA3vM2t1DevvsvPaq5WqnmffuWow0UH82/YfLlZxj
+X-Gm-Gg: AZuq6aJvprw1tedczLPtNCkSpMcirYUaGscBVIDe8FOpnynjN6r/3Y0uEIwgt7aQ9fR
+	vILCcCOd8FTORWfNuYnmGdMnyN/lKwlIpERRl+qQultdKsWdJMVukdIEt8VV/CYN/tIs2SG6FBU
+	HAtn6DcXaNyJDSCfIX5ITPkRArPYlWtQ0M5un9s5lmDc+1QRogXZtxZlM22TR4v6T9fg9G3lfiu
+	G/i6i3tND/VKsgfN1jsdOQ75oI+hsbblCidI4uEz1mwTSNcyrV5w7t16dvzRWg0iRRBaGQt6XQe
+	1k8OqlFlHp1h92CT9W0GoIJB10DoQpvc6wuVpSUAqVeiKo4zZscY7WkmaiMPKlht/DqyTwkeoEy
+	7FkmXw+ata5I3caV1FVVTX/Aq3IqFdlnJkIY4ok8n2gamPPtl0ilNPvsTzPIXlavJG3JTUdXZiv
+	ca3+9ta3w=
+X-Received: by 2002:a05:6000:2086:b0:435:ad52:31d9 with SMTP id ffacd0b85a97d-436180321b0mr4035154f8f.28.1770209059152;
+        Wed, 04 Feb 2026 04:44:19 -0800 (PST)
+Received: from legfed1 ([2a00:79c0:684:8900:e22:b7ee:dcfc:b04a])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43618058473sm6521891f8f.22.2026.02.04.04.44.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Feb 2026 04:44:18 -0800 (PST)
+Date: Wed, 4 Feb 2026 13:44:16 +0100
+From: Dimitri Fedrau <dima.fedrau@gmail.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: dimitri.fedrau@liebherr.com, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] power: supply: gpio-charger: add support for
+ fast-charge timer
+Message-ID: <20260204124416.GA3066@legfed1>
+References: <20260109-gpio-charger-timer-v2-0-63fd1ba75830@liebherr.com>
+ <20260109-gpio-charger-timer-v2-2-63fd1ba75830@liebherr.com>
+ <aX0tJLqfY7b9oNAi@venus>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH v3 1/3] rust: clk: use the type-state pattern
-From: Daniel Almeida <daniel.almeida@collabora.com>
-In-Reply-To: <20260204-nickel-seal-of-poetry-8fdefb@houat>
-Date: Wed, 4 Feb 2026 09:43:55 -0300
-Cc: Danilo Krummrich <dakr@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Drew Fustini <fustini@kernel.org>,
- Guo Ren <guoren@kernel.org>,
- Fu Wei <wefu@redhat.com>,
- =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>,
- Miguel Ojeda <ojeda@kernel.org>,
- Boqun Feng <boqun.feng@gmail.com>,
- Gary Guo <gary@garyguo.net>,
- =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>,
- Trevor Gross <tmgross@umich.edu>,
- linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org,
- linux-riscv@lists.infradead.org,
- linux-pwm@vger.kernel.org,
- linux-clk@vger.kernel.org,
- rust-for-linux@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <91A92D84-1F2E-45F3-82EC-6A97D32E2A78@collabora.com>
-References: <20260108-delectable-fennec-of-sunshine-ffca19@houat>
- <98CD0BF6-3350-40B9-B8A9-F569AE3E3220@collabora.com>
- <20260119-thundering-tested-robin-4be817@houat> <aW4lCfUyumOKRRJm@google.com>
- <518D8B09-B9A1-4DB4-85CD-37A2DD3D5FB1@collabora.com>
- <DFSLCI9U4NCW.2HI2UPUI7G134@kernel.org>
- <20260119-weightless-pelican-of-anger-190db0@houat>
- <DFSN4FDCYHMW.3J3237PEBV2ZP@kernel.org>
- <20260122-majestic-masterful-jaguarundi-d0abde@houat>
- <2F3D3A40-6EF9-46FC-A769-E5A3AAF67E65@collabora.com>
- <20260204-nickel-seal-of-poetry-8fdefb@houat>
-To: Maxime Ripard <mripard@kernel.org>
-X-Mailer: Apple Mail (2.3826.700.81)
-X-ZohoMailClient: External
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aX0tJLqfY7b9oNAi@venus>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[collabora.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
-	R_DKIM_ALLOW(-0.20)[collabora.com:s=zohomail];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42076-lists,linux-pm=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,google.com,linaro.org,linux.intel.com,suse.de,gmail.com,ffwll.ch,redhat.com,baylibre.com,garyguo.net,protonmail.com,umich.edu,vger.kernel.org,lists.freedesktop.org,lists.infradead.org];
-	RCPT_COUNT_TWELVE(0.00)[29];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-42075-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[daniel.almeida@collabora.com,linux-pm@vger.kernel.org];
-	DKIM_TRACE(0.00)[collabora.com:+];
+	FROM_NEQ_ENVFROM(0.00)[dimafedrau@gmail.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-pm];
-	APPLE_MAILER_COMMON(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,collabora.com:mid,collabora.com:dkim]
-X-Rspamd-Queue-Id: 08CDCE5F60
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[liebherr.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 772DBE5F49
 X-Rspamd-Action: no action
 
->=20
-> I'm probably missing something then, but let's assume you have a =
-driver
-> that wants its clock prepared and enabled in an hypothetical enable()
-> callback, and disabled / unprepared in a disable() callback.
->=20
-> =46rom a PM management perspective, this usecase makes total sense, is =
-a
-> valid usecase, is widely used in the kernel, and is currently =
-supported
-> by both the C and Rust clk APIs.
->=20
-> The only solution to this you suggested so far (I think?) to implement
-> this on top of the new clk API you propose is to have a driver =
-specific
-> enum that would store each of the possible state transition.
+Am Fri, Jan 30, 2026 at 11:19:44PM +0100 schrieb Sebastian Reichel:
+> Hi,
+> 
+> On Fri, Jan 09, 2026 at 07:41:20PM +0100, Dimitri Fedrau via B4 Relay wrote:
+> > From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+> > 
+> > On some devices like TIs BQ24081 battery charger it is possible to activate
+> > or deactivate a fast-charge timer that provides a backup safety for charge
+> > termination. In case of the BQ24081 it is a fixed 7-hour timer. Add support
+> > for enabling/disabling the fast-charge timer via GPIO.
+> > 
+> > Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+> > ---
+> 
+> The documentation is missing _a lot of information_. What happens
+> when the fast-charge timer is disabled? What happens when it is
+> enabled and times out? What do you expect users to do with this
+> control knob?
+>
 
-Yes, you need an enum _if_ you want to model transitions at runtime. =
-IIUC you
-only need two variants to implement the pattern you described. I do not
-consider this  =E2=80=9Cboilerplate=E2=80=9D, but rather a small cost to =
-pay.
+Yes, you are right. Will add the missing information for the BQ24081.
+When the timer is enabled and 7-hours are passed the device will enter
+state "Timer fault" where charging is disabled and cannot be enabled
+without powering the device down and up again.
 
-I would understand if this was some elaborate pattern that had to be
-implemented by all drivers, but a two-variant enum is as straightforward =
-as it
-gets.
+Disabling the timer will just deactive the mechanism above but charging
+is not affected by it.
 
+It's just a safety feature that can be turned on/off.
 
->=20
-> That's the boilerplate I'm talking about. If every driver wanting to
-> implement that pattern has to make such an enum, with all the relevant
-> traits implementation that might come with it, we go from an API where
-> everything works at no-cost from a code-size perspective to a =
-situation
-> where every driver has to develop and maintain that enum.
->=20
-> Maxime
+Will add this information, am I missing anything else ?
 
-There are no "traits that come with it". It's just an enum, with two =
-variants.
+Best regards,
+Dimitri Fedrau
 
-> API where everything works at no-cost
-
-The previous API was far from =E2=80=9Ceverything works=E2=80=9D. It was =
-fundamentally
-broken by design in multiple ways, i.e.:
-
-> a) It only keeps track of a count to clk_get(), which means that users =
-have
-> to manually call disable() and unprepare(), or a variation of those, =
-like
-> disable_unprepare().
->=20
-> b) It allows repeated calls to prepare() or enable(), but it keeps no =
-track
-> of how often these were called, i.e., it's currently legal to write =
-the
-> following:
->=20
-> clk.prepare();
-> clk.prepare();
-> clk.enable();
-> clk.enable();
->=20
-> And nothing gets undone on drop().
-
-IMHO, what we have here is an improvement that has been long overdue.
-
-=E2=80=94 Daniel=
+[...]
 
