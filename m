@@ -1,281 +1,147 @@
-Return-Path: <linux-pm+bounces-42172-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42173-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 8C2xMLDyhGkF7AMAu9opvQ
-	(envelope-from <linux-pm+bounces-42172-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Feb 2026 20:42:40 +0100
+	id 4CN6J5/zhGkq7AMAu9opvQ
+	(envelope-from <linux-pm+bounces-42173-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Feb 2026 20:46:39 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A4A9F6E83
-	for <lists+linux-pm@lfdr.de>; Thu, 05 Feb 2026 20:42:40 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04427F6ED9
+	for <lists+linux-pm@lfdr.de>; Thu, 05 Feb 2026 20:46:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BBEE83016528
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Feb 2026 19:42:38 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 55BCD3004C6C
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Feb 2026 19:46:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED1C9329C78;
-	Thu,  5 Feb 2026 19:42:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 540AE327BF6;
+	Thu,  5 Feb 2026 19:46:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M9qSoCP5"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="H3YWAR/S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA904329C5F
-	for <linux-pm@vger.kernel.org>; Thu,  5 Feb 2026 19:42:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93E7288B8
+	for <linux-pm@vger.kernel.org>; Thu,  5 Feb 2026 19:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770320557; cv=none; b=HdkFPiOud5FrIyB6fINzTuzHQeIPqAzAwyRkJQ34jJeWx6S4MERde/vWbCysTW4zcKyDb28oQLmFUwQiUy3Iw5b+c7R0Ci5mlh6SL9HBQe3HzSeuFYaYdGT6J3MEF1SAXbcbGQUSpHsTeUB/QQf5drJAEOmfAl+ClxAwuuKH7ZI=
+	t=1770320781; cv=none; b=bEgRnNaSLJGWP1FtUZ+w3XHklh1iX5EA/cpzThCp4KFOaGsHWgkKSfEUgpJDa3VgIKAqq7smo933xT5IsE9SAdzhb+zWSQEZaLoDMcqPd/RQ7BKv2EjaeKVVWWe3n/glpZ8/gddohJWn7Jj6qg0n06D37pweYcXtXNgMNrUOsNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770320557; c=relaxed/simple;
-	bh=5WVz5Jep1PszBcH0ttRMBL3JFtE4hrI25hoBStHHHps=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=VFUy0D1kquOBcV6DGMKu9rIpPKWpTBXpjCT6BsL/TbgRNUCJHgJeQTrZdXIZaycPO2HCYF73wj2JgiXjaHJdlmWvACxwjpAqjACdNoCZAUPsZwWY3DBgQ9Tqq7KaxFnqrFaXI1uVdZrhmWqUmJaW1K3O3lj8A6V6a4k2cRtw+BU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M9qSoCP5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 716E8C4AF0B
-	for <linux-pm@vger.kernel.org>; Thu,  5 Feb 2026 19:42:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770320557;
-	bh=5WVz5Jep1PszBcH0ttRMBL3JFtE4hrI25hoBStHHHps=;
-	h=From:Date:Subject:To:Cc:From;
-	b=M9qSoCP571hzo5db60JZFke7Mn+dTd07PA6uIlHwVYiNZlhAA0KPAUdwdP0vJeJhr
-	 U1BCr/TYMbwWLptem2AR0kKDYjnTo+2iyDwgqW7YooCm7awbyFPd/MYylDfifrZ4yi
-	 7BPOBQpfLuP1864SOtPGTBtWl+/1wFfQ/RbPYAEbWaIu3r/XqyAcspg4sd6pddO9H3
-	 1bwd04r41s76KIsUMgA1oQbiEwphhyb6Y4Ssz6/Toip2MX6Ymkl4uRzwfkoHMDqr07
-	 3MKoCZVJCEmj2gmz3HpvODlZgIc1uVBkc+RTeo3IjQFQ0HD6Mx/XGiu5yyzZBA+kJK
-	 PJ9QWbe055UqA==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-66a12c77a2cso781355eaf.3
-        for <linux-pm@vger.kernel.org>; Thu, 05 Feb 2026 11:42:37 -0800 (PST)
-X-Gm-Message-State: AOJu0YxvG7DqUpGyxsAtztQQBtVymFDHZ1PDu9OmLVJPkgZJxPkSU5Oa
-	0GTTDNG5eKHY5romxNoKJvx+EAJOMQtOkCE0lcp8uA4IRBsUx58f5Qxd2SyZJoxeYnCu7lttMV8
-	wrkg59nAkQ6QAh99X0Mhqt/djwc78qCM=
-X-Received: by 2002:a05:6820:1c98:b0:662:f746:5728 with SMTP id
- 006d021491bc7-66d0c6666aamr214835eaf.60.1770320556461; Thu, 05 Feb 2026
- 11:42:36 -0800 (PST)
+	s=arc-20240116; t=1770320781; c=relaxed/simple;
+	bh=u5OPuZMOac8rMUCqfVFVuHAGYPLRRl8Me9JB/haRe3M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Za8eNlid/LjQaTYnHakTeqbAH0wVHFQ+eiT6YviU+Ofo/BnH0pe4XDE6N3G7ClIRc9ys/ZjKfD9b5N/8NVq/EzT/P1mxoVdxehGtQaQ1biHZGl1IqgiG3LtPRNHLuXGJL00k4764KjGRtSSealu33yae1Kbi48IqX2DJqJ57Xas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=H3YWAR/S; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770320768;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=IvBuOfpCo0+VIpkSQ9liw7TJLNLW+8V64cAq9/bRrgg=;
+	b=H3YWAR/S9RPEGh/7LguThmHCT60hRqQ/k9epVaJRwWzwNo+1WC42aCwr/QOw2ldPhICFSh
+	09rScjUbaRIdBTzkgkd3mhueMzIYyHegtXN78H8A1hJjV3l6GvTT/PJ4nuStZtjc+T+Ens
+	uAvx/bTRBDgXUPc+tglUvs0D3SCLfmo=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: Markus Mayer <mmayer@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND] thermal/drivers/brcmstb_thermal: Use max to simplify brcmstb_get_temp
+Date: Thu,  5 Feb 2026 20:45:42 +0100
+Message-ID: <20260205194542.1013198-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 5 Feb 2026 20:42:25 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hOUCPEPeE1bN3BkgRnM3ouDX301f5qnK53BTD+oU5=rw@mail.gmail.com>
-X-Gm-Features: AZwV_Qg_PBKt0KwCcVNFUErnqpTpkdFpjZMCnzZ55TUbg-y2VOCD2raFwlY1wKk
-Message-ID: <CAJZ5v0hOUCPEPeE1bN3BkgRnM3ouDX301f5qnK53BTD+oU5=rw@mail.gmail.com>
-Subject: [GIT PULL] Thermal control updates for v6.20-rc1/v7.0-rc1
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	ACPI Devel Maling List <linux-acpi@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_ALL(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-42172-lists,linux-pm=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	MIME_TRACE(0.00)[0:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[rafael@kernel.org,linux-pm@vger.kernel.org];
+	RCVD_COUNT_THREE(0.00)[3];
+	RCVD_TLS_LAST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-42173-lists,linux-pm=lfdr.de];
+	DKIM_TRACE(0.00)[linux.dev:+];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-pm];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[thorsten.blum@linux.dev,linux-pm@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 2A4A9F6E83
+	TAGGED_RCPT(0.00)[linux-pm];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,linux.dev:dkim,linux.dev:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,broadcom.com:email]
+X-Rspamd-Queue-Id: 04427F6ED9
 X-Rspamd-Action: no action
 
-Hi Linus,
+Use max() to simplify brcmstb_get_temp() and improve its readability.
+Since avs_tmon_code_to_temp() returns an int, change the data type of
+the local variable 't' from long to int.  No functional changes.
 
-This goes a bit early, but it's ready.
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ drivers/thermal/broadcom/brcmstb_thermal.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-Please pull from the tag
+diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+index f46f2ddc174e..a9ffa596f7c0 100644
+--- a/drivers/thermal/broadcom/brcmstb_thermal.c
++++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+@@ -16,6 +16,7 @@
+ #include <linux/irqreturn.h>
+ #include <linux/interrupt.h>
+ #include <linux/kernel.h>
++#include <linux/minmax.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+@@ -154,7 +155,7 @@ static int brcmstb_get_temp(struct thermal_zone_device *tz, int *temp)
+ {
+ 	struct brcmstb_thermal_priv *priv = thermal_zone_device_priv(tz);
+ 	u32 val;
+-	long t;
++	int t;
+ 
+ 	val = __raw_readl(priv->tmon_base + AVS_TMON_STATUS);
+ 
+@@ -164,10 +165,7 @@ static int brcmstb_get_temp(struct thermal_zone_device *tz, int *temp)
+ 	val = (val & AVS_TMON_STATUS_data_msk) >> AVS_TMON_STATUS_data_shift;
+ 
+ 	t = avs_tmon_code_to_temp(priv, val);
+-	if (t < 0)
+-		*temp = 0;
+-	else
+-		*temp = t;
++	*temp = max(0, t);
+ 
+ 	return 0;
+ }
+-- 
+Thorsten Blum <thorsten.blum@linux.dev>
+GPG: 1D60 735E 8AEF 3BE4 73B6  9D84 7336 78FD 8DFE EAD4
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.20-rc1
-
-with top-most commit 8035d70cf85e86f36f5eb1e07b243f300a936b8b
-
- Merge branch 'thermal-intel'
-
-on top of commit 9ace4753a5202b02191d54e9fdf7f9e3d02b85eb
-
- Linux 6.19-rc4
-
-to receive thermal control updates for 6.20-rc1/7.0-rc1 (whichever it
-turns out to be).
-
-These add support for "slow" (long-term trend) workload type hints
-to the Intel int340x thermal driver and selftests (and enable it for
-Panther Lake), add support for MT8196 along with DT bindings and for
-MT7987 to the Mediatek LVTS thermal driver, add support for RZ/T2H and
-RZ/N2H along with DT bindings to the Renesas rzg3e thermal driver,
-add support for the Panther Lake, Wildcat Lake and Nova Lake processors
-to the intel_tcc_cooling driver, fix bugs, make some cosmetic changes
-including code cleanups and library function substitutions, and update
-documentation.
-
-Specifics:
-
- - Add Panther Lake, Wildcat Lake and Nova Lake processor IDs to the
-   list of supported processors in the intel_tcc_cooling thermal
-   driver (Srinivas Pandruvada)
-
- - Drop unnecessary explicit driver data clearing on removal from the
-   intel_pch_thermal driver (Kaushlendra Kumar)
-
- - Add support for "slow" workload type hints to the int340x
-   processor_thermal driver and enable it on the Panther Lake
-   platform (Srinivas Pandruvada)
-
- - Use sysfs_emit{_at}() in sysfs show functions in Intel thermal
-   drivers (Thorsten Blum)
-
- - Update the x86_pkg_temp_thermal driver to handle THERMAL_TEMP_INVALID
-   that can be passed to it via sysfs as expected (Rafael Wysocki)
-
- - Drop a redundant local variable from the intel_tcc_cooling thermal
-   driver and fix a kerneldoc comment typo in the TCC library (Sumeet
-   Pawnikar)
-
- - Fix CFLAGS and LDFLAGS in the pkg-config libthermal template (Romain
-   Gantois)
-
- - Support multiple temp to raw conversion functions in the Mediatek
-   LVTS thermal driver and add MT8196 and MT6991 support to it (Laura
-   Nao)
-
- - Add Mediatek LVTS driver support for MT7987 (Frank Wunderlich)
-
- - Use the existing HZ_PER_MHZ macro on STM32 (Andy Shevchenko)
-
- - Use the existing clamp() macro on BCM2835 (Thorsten Blum)
-
- - Make the reset line optional in order to support new Renesas SoCs
-   where it is not available and add support for RZ/T2H and RZ/N2H
-   to the rzg3e thermal driver (Cosmin Tanislav)
-
- - Document RZ/V2N TSU in the r9a09g047-tsu DT bindings (Ovidiu
-   Panait)
-
- - Fix all kernel-doc warnings in the internal thermal core header
-   file (Randy Dunlap)
-
- - Fix a device node reference leak in thermal_of_cm_lookup() (Felix Gu)
-
- - Replace some old-style library function calls with ones that are
-   currently recommended in several places in the thermal core and
-   debugfs code (Sumeet Pawnikar, Thorsten Blum)
-
-Thanks!
-
-
----------------
-
-Andy Shevchenko (1):
-      thermal/drivers/stm32: Use predefined HZ_PER_MHZ instead of a custom one
-
-Cosmin Tanislav (5):
-      thermal: renesas: rzg3e: make reset optional
-      thermal: renesas: rzg3e: make min and max temperature per-chip
-      thermal: renesas: rzg3e: make calibration value retrieval per-chip
-      dt-bindings: thermal: r9a09g047-tsu: document RZ/T2H and RZ/N2H
-      thermal: renesas: rzg3e: add support for RZ/T2H and RZ/N2H
-
-Felix Gu (1):
-      thermal/of: Fix reference leak in thermal_of_cm_lookup()
-
-Frank Wunderlich (2):
-      dt-bindings: thermal: mediatek: Add LVTS thermal controller
-definition for MT7987
-      thermal/drivers/mediatek/lvts_thermal: Add mt7987 support
-
-Kaushlendra Kumar (1):
-      thermal: intel: intel_pch_thermal: Drop explicit driver data clearing
-
-Laura Nao (8):
-      dt-bindings: thermal: mediatek: Add LVTS thermal controller
-support for MT8196
-      thermal/drivers/mediatek/lvts: Make number of calibration
-offsets configurable
-      thermal/drivers/mediatek/lvts: Add platform ops to support
-alternative conversion logic
-      thermal/drivers/mediatek/lvts: Add lvts_temp_to_raw variant
-      thermal/drivers/mediatek/lvts: Add support for ATP mode
-      thermal/drivers/mediatek/lvts: Support MSR offset for 16-bit
-calibration data
-      thermal/drivers/mediatek/lvts_thermal: Add MT8196 support
-      dt-bindings: nvmem: mediatek: efuse: Add support for MT8196
-
-Ovidiu Panait (1):
-      dt-bindings: thermal: r9a09g047-tsu: Document RZ/V2N TSU
-
-Rafael J. Wysocki (1):
-      thermal: intel: x86_pkg_temp_thermal: Handle invalid temperature
-
-Randy Dunlap (1):
-      thermal: core: thermal_core.h: fix all kernel-doc warnings
-
-Romain Gantois (1):
-      tools: lib: thermal: Correct CFLAGS and LDFLAGS in pkg-config template
-
-Srinivas Pandruvada (3):
-      thermal: intel: intel_tcc_cooling: Add CPU models in the support list
-      thermal: int340x: processor_thermal: Enable slow workload type hints
-      thermal: intel: selftests: workload_hint: Support slow workload hints
-
-Sumeet Pawnikar (4):
-      thermal: Replace sprintf() with sysfs_emit() for sysfs show functions
-      thermal: debugfs: Use seq_puts() for constant string output
-      thermal: intel: fix typo "nagative" in comment for cpu argument
-      drivers: thermal: intel: tcc_cooling: Drop redundant local variable
-
-Thorsten Blum (5):
-      thermal: core: Use strnlen() in thermal_zone_device_register_with_trips()
-      thermal: intel: int340x: Use sysfs_emit{_at}() in sysfs show functions
-      thermal: sysfs: Replace snprintf() with strscpy() in policy_store()
-      thermal: intel: Use sysfs_emit() in a sysfs show function
-      thermal/drivers/broadcom: Use clamp to simplify bcm2835_thermal_temp2adc
-
----------------
-
- .../devicetree/bindings/nvmem/mediatek,efuse.yaml  |   1 +
- .../bindings/thermal/mediatek,lvts-thermal.yaml    |   3 +
- .../bindings/thermal/renesas,r9a09g047-tsu.yaml    |  34 +-
- Documentation/driver-api/thermal/intel_dptf.rst    |   3 +
- drivers/thermal/broadcom/bcm2835_thermal.c         |   8 +-
- .../int340x_thermal/processor_thermal_device.c     |   5 +-
- .../intel/int340x_thermal/processor_thermal_rfim.c |   9 +-
- .../int340x_thermal/processor_thermal_wt_hint.c    |  57 +++-
- .../int340x_thermal/processor_thermal_wt_req.c     |   7 +-
- drivers/thermal/intel/intel_pch_thermal.c          |   1 -
- drivers/thermal/intel/intel_tcc.c                  |   8 +-
- drivers/thermal/intel/intel_tcc_cooling.c          |  13 +-
- drivers/thermal/intel/therm_throt.c                |   5 +-
- drivers/thermal/intel/x86_pkg_temp_thermal.c       |   3 +
- drivers/thermal/mediatek/lvts_thermal.c            | 362 +++++++++++++++++++--
- drivers/thermal/renesas/rzg3e_thermal.c            | 123 ++++---
- drivers/thermal/st/stm_thermal.c                   |   4 +-
- drivers/thermal/thermal_core.c                     |   8 +-
- drivers/thermal/thermal_core.h                     |   7 +-
- drivers/thermal/thermal_debugfs.c                  |   2 +-
- drivers/thermal/thermal_hwmon.c                    |   4 +-
- drivers/thermal/thermal_of.c                       |   4 +-
- drivers/thermal/thermal_sysfs.c                    |  38 +--
- .../dt-bindings/thermal/mediatek,lvts-thermal.h    |  29 ++
- tools/lib/thermal/libthermal.pc.template           |   4 +-
- .../intel/workload_hint/workload_hint_test.c       |  74 +++--
- 26 files changed, 651 insertions(+), 165 deletions(-)
 
