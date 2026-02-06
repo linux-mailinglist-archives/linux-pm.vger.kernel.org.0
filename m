@@ -1,188 +1,284 @@
-Return-Path: <linux-pm+bounces-42196-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42197-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YLoNFMyzhWmbFQQAu9opvQ
-	(envelope-from <linux-pm+bounces-42196-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Feb 2026 10:26:36 +0100
+	id yIYCJ327hWmOFgQAu9opvQ
+	(envelope-from <linux-pm+bounces-42197-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Feb 2026 10:59:25 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3F19FC018
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Feb 2026 10:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 040A6FC582
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Feb 2026 10:59:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 81E1130226BB
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Feb 2026 09:23:43 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BB74E3006B2B
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Feb 2026 09:58:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8FF635B64E;
-	Fri,  6 Feb 2026 09:23:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25CB36075D;
+	Fri,  6 Feb 2026 09:58:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l+W61SwE"
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="6LtHyeTA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B452B355025
-	for <linux-pm@vger.kernel.org>; Fri,  6 Feb 2026 09:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1E0530FC16;
+	Fri,  6 Feb 2026 09:58:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770369822; cv=none; b=GspkudXnGG6ltI42j7egiWqvgRA7iKkioNhdj2JTWE4p/HHuNlpdsrUGsWmlD6tKJXQ4OLJOkoTHAJM64/ad9j2B4JYPRo1XmhWPzKPTQ5lU7IzhkGRFtlxPM3OiM7tA58xoGjJJLELxnELbs91x22f+kBgO4FU+rvolyfvyCVs=
+	t=1770371882; cv=none; b=CydjDvbYxBVN5oLf7trU8ppFjYqoZN1qf3iP2CgC/QGrgG0Z4JeJMKA8LL+SdJvVXlkTR/EdtF+/IiM8I21Eyn8S3u0hsXOxBXM60Ptu9REaw1h7dWLYtcubJlVmVqSibuVM3Zkq6WznC3gZsqvikl0iaiSez8g17O53QqvyqdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770369822; c=relaxed/simple;
-	bh=oHrIAjiA3w8rr/43sMJV+DvF/OlfA20d1q3N81NAVV4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nlL7Ym/5Kp1HTy7Cwj3NsPla06YBRKgU2owQ/TDg93K85GdrkQExDk2PoqQkWMcmoIObgwtSOshiTqy+7cxdvAjMZnTU9H8epjsHRXSKDVE2QZek2H1iI7HvcK1BJqLrVX0LYbLyTCH1ZI6hwnZ0DGywOwxWPdBccdB5JaNBuMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l+W61SwE; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-29f102b013fso4852755ad.2
-        for <linux-pm@vger.kernel.org>; Fri, 06 Feb 2026 01:23:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770369822; x=1770974622; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yuTzOBlCIALqpyQtHwJ+tH2O4xb49e/uTcQGRnE7ybI=;
-        b=l+W61SwEe4A8hXGObDhNqGpYIF75xG36MbZipS38qFTOvRXGOH8HLrWwGXt1Erf033
-         EfVTdnkC+qn8rTfVrAgY1P/3nbV2uyeWURKgtsvpQ8k+koab7Gfs1q/GkgZVNo43z24p
-         ajwRiAL0HxhQT6+dZ574ycOnRu3IFRp9V/PGgMp9ekJQhLfoYsK2PCE0mc7tM4kIOcMo
-         eHNhynCoXzYRe4SGxe0n0/5Km84qtCvdQLR3WT4GE/k6Tocsi2uKFU+FZ3lpQOz4AoR8
-         mPU359KOc4wu0T1vAtXX1mEp9X1YkGD3kkjc0KZgrKK1kCRcn4ujxTE7w2kcK7POaVkU
-         XpZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770369822; x=1770974622;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yuTzOBlCIALqpyQtHwJ+tH2O4xb49e/uTcQGRnE7ybI=;
-        b=L8y2izgDEi0cOeS9jhSM+nTzFQr8MyVlA9vLM5sM1IrqBwRQDrfUBz3v4hQh2tTWH7
-         g70dKEFG0qf6uQWaHR2IIpFcin7Exsp2PCZzCNMLFxDpuqRbHG1htmEKT5jIeknANal4
-         j+vByWForqGjzzsE5cOd5KJifP2xqEkM27dlv2JgZsuRPzIXhUklk+xCPjKTqD075fH2
-         RTH8kzNJzSJYisqxXJVCJZthP+vSn/vcvWB4dcooiVZ2IfWBYgBex106+geX+Ker2//z
-         5yEmUki72pLuj5e2lY7slTcfN92Nm+uAlfyqZFbxd98LPPKkkZzjSM9gT7KoLrHxfuKU
-         0U+g==
-X-Gm-Message-State: AOJu0YwTB8S15r7f5w7JJyi0wg9wNcS+CVtLZ59rLKSwtH97GKyPIuEL
-	h9a7qDqhOWpEyhO5l72AQKnf8UKoGxun29Pjp69XbvL6p25Xvbt0u9lXOir7Pa4Ylac=
-X-Gm-Gg: AZuq6aJrRofMIQg45KCkkjycEdi3MKn9d9mHYdPgXW4XqXKl7Bauq1vlv934hOuAVZO
-	vuYJgB5FGdCh7isibIf7LGzq/EEHOpJBF8M9sGKYAbGYmqXQQOFb2cwZatuLphSK6Iv/FUg1tgq
-	LsRtNPF/T2kPktOZrfFIO2/QFFM2ScB4T45nkLaC+7PklRD6M4qLoMQ2vadYOEBz2nWUGDYMK8D
-	5HRnUGw1H7uvTA8w/B96LaGY1h/PooBdSawnc7i8vN4PGO0E+PfZgpuBKRJZM18vCcksDoEdl0d
-	hC4vEH8OZp2G7XJrzkIdVV3lbM8R/9Dam791p9P1RRpvKsPTSeo2hJ1iOLr93ekBK4/8d4CIOv/
-	GPf/gyGTBB+tmYwHXtnqwcguCp/Ams01JijiV4ac0zihcpzzDMh7Q8kq927G93yRqUyEeOhTxw/
-	CPkMoaaCXWSbaNzNz3ePaDFlFhdz/+al3n0/xZag1vwVYEST2JGokUlIAoeB9XQITV810=
-X-Received: by 2002:a17:902:e84c:b0:295:62d:5004 with SMTP id d9443c01a7336-2a9516c4cb8mr25023275ad.26.1770369821942;
-        Fri, 06 Feb 2026 01:23:41 -0800 (PST)
-Received: from eurus-Lenovo-Legion-Y70002021.. (n119237241079.netvigator.com. [119.237.241.79])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a951c8578dsm19124415ad.32.2026.02.06.01.23.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Feb 2026 01:23:41 -0800 (PST)
-From: Wang Jiayue <akaieurus@gmail.com>
-To: rafael@kernel.org,
-	lenb@kernel.org,
-	pavel@kernel.org,
-	gregkh@linuxfoundation.org,
-	dakr@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Wang Jiayue <akaieurus@gmail.com>,
-	Gui-Dong Han <hanguidong02@gmail.com>
-Subject: [PATCH v2] PM: sleep: wakeirq: Update outdated documentation comments
-Date: Fri,  6 Feb 2026 17:23:17 +0800
-Message-Id: <20260206092317.148885-1-akaieurus@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1770371882; c=relaxed/simple;
+	bh=BEmwiq72zBE0klGcj6xELmKJtHUh+w9CgjynqQrpcJw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=R518WxZby8a6UMU5IqKjq6PCwVD00aUJCnmDCK5tyBidcg9EWUpt75+Y+g3ooHkNM7Fbjz+NUkNQaoyqDPB2uqXAql2gBMJS5ykUMVEJk8orcgxvGmkVfK5CzSGknc5HgN6L6/YwJ0kV10bIk3WQyjRZESsNcOTdmFEv/7sJzGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=6LtHyeTA; arc=none smtp.client-ip=113.46.200.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=QCCxSwUSjYSX6lhaYzgvb5EaDtE7CqfWMfyMf84FJNA=;
+	b=6LtHyeTA6DD2NB/13hvsqOLfqozq0nLg2zRfP1/b4UhTIRnxAZKImRSTFsM3qpikG5DB1YmKs
+	JLpQexxO7s7kPLeJAxjNUJs3Ni1wRd3utecQk6wWBHPqIn/EfQMInLl19xkSPdETc0qjOrUnNep
+	MTYPp+iT7VR4CK6g7u9D/6Y=
+Received: from mail.maildlp.com (unknown [172.19.162.92])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4f6qCf16PPzLlSX;
+	Fri,  6 Feb 2026 17:53:18 +0800 (CST)
+Received: from kwepemf200001.china.huawei.com (unknown [7.202.181.227])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5657440568;
+	Fri,  6 Feb 2026 17:57:53 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemf200001.china.huawei.com
+ (7.202.181.227) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 6 Feb
+ 2026 17:57:52 +0800
+Message-ID: <4257cdb1-c18b-4274-95b4-617f1da76518@huawei.com>
+Date: Fri, 6 Feb 2026 17:57:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] ACPI: processor: Add acpi_processor_start() back to parse
+ _CPC tables before CPU online
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Jonathan Cameron <jonathan.cameron@huawei.com>, <catalin.marinas@arm.com>,
+	<linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <gshan@redhat.com>, <miguel.luis@oracle.com>,
+	<guohanjun@huawei.com>, <zhanjie9@hisilicon.com>, <lihuisong@huawei.com>,
+	<yubowen8@huawei.com>, <zhangpengjie2@huawei.com>, <wangzhi12@huawei.com>,
+	<linhongye@h-partners.com>, <salil.mehta@huawei.com>, Viresh Kumar
+	<viresh.kumar@linaro.org>, Linux PM <linux-pm@vger.kernel.org>
+References: <20260120113242.3843463-1-zhenglifeng1@huawei.com>
+ <CAJZ5v0hX839+J-MdKUwpRv0D9HSj-sbtMN0o-OOYatu9dU+bFQ@mail.gmail.com>
+ <20260127165824.0000247f@huawei.com>
+ <CAJZ5v0irPpqEZkCLPmdMU4CxR6ma_j11Z6Nxx8c5fd0aFq9dBw@mail.gmail.com>
+ <762300a5-acd8-476d-bc6c-494b912995d3@huawei.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <762300a5-acd8-476d-bc6c-494b912995d3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
+ kwepemf200001.china.huawei.com (7.202.181.227)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[huawei.com,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[huawei.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,gmail.com];
-	TAGGED_FROM(0.00)[bounces-42196-lists,linux-pm=lfdr.de];
-	RCVD_COUNT_FIVE(0.00)[5];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[18];
+	TAGGED_FROM(0.00)[bounces-42197-lists,linux-pm=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[huawei.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[akaieurus@gmail.com,linux-pm@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[9];
-	NEURAL_HAM(-0.00)[-1.000];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_RCPT(0.00)[linux-pm];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhenglifeng1@huawei.com,linux-pm@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A3F19FC018
+	RCVD_COUNT_FIVE(0.00)[6];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-0.999];
+	TAGGED_RCPT(0.00)[linux-pm];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,huawei.com:email,huawei.com:dkim,huawei.com:mid]
+X-Rspamd-Queue-Id: 040A6FC582
 X-Rspamd-Action: no action
 
-The comments claiming that dev_pm_*wake_irq*() helpers must be called
-with dev->power.lock held and only from rpm_suspend/resume paths are no
-longer correct, since pm_runtime_force_suspend/resume() call them
-lockless. Update the comments to reflect it.
+On 2026/1/29 20:45, zhenglifeng (A) wrote:
+> 
+> 
+> On 2026/1/28 2:00, Rafael J. Wysocki wrote:
+>> +linux-pm and Viresh
+>>
+>> On Tue, Jan 27, 2026 at 5:58 PM Jonathan Cameron
+>> <jonathan.cameron@huawei.com> wrote:
+>>>
+>>> On Tue, 27 Jan 2026 15:42:16 +0100
+>>> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+>>>
+>>>> On Tue, Jan 20, 2026 at 12:33 PM Lifeng Zheng <zhenglifeng1@huawei.com> wrote:
+>>>>>
+>>>>> Currently, if boot with maxcpus less than NR_CPUS, the cppc_cpufreq driver
+>>>>> will fail to register. Because it requires the domain information of all
+>>>>> possible CPUs to construct shared_cpu_map, which shows the CPUs that share
+>>>>> the same domain.
+>>>>>
+>>>>> Commit c1385c1f0ba3 ("ACPI: processor: Simplify initial onlining to use
+>>>>> same path for cold and hotplug") removes probe() of acpi_processor_driver
+>>>>> and makes acpi_cppc_processor_probe() only being called the first time CPU
+>>>>> goes online. This means that CPUs that haven't yet gone online will not
+>>>>> have pre-parsed _CPC objects and causes cppc_cpufreq driver register fail.
+>>>>>
+>>>>> Add acpi_processor_start() back as the probe() callback of
+>>>>> acpi_processor_driver and call acpi_cppc_processor_probe() in it to make
+>>>>> sure all _CPC tables will be parsed when acpi_processor_driver registered.
+>>>>>
+>>>>> Fixes: c1385c1f0ba3 ("ACPI: processor: Simplify initial onlining to use same path for cold and hotplug")
+>>>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+>>>>> ---
+>>>>>  drivers/acpi/processor_driver.c | 30 ++++++++++++++++++++++++++----
+>>>>>  1 file changed, 26 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
+>>>>> index 65e779be64ff..c8b4daf580b0 100644
+>>>>> --- a/drivers/acpi/processor_driver.c
+>>>>> +++ b/drivers/acpi/processor_driver.c
+>>>>> @@ -33,6 +33,7 @@ MODULE_AUTHOR("Paul Diefenbaugh");
+>>>>>  MODULE_DESCRIPTION("ACPI Processor Driver");
+>>>>>  MODULE_LICENSE("GPL");
+>>>>>
+>>>>> +static int acpi_processor_start(struct device *dev);
+>>>>>  static int acpi_processor_stop(struct device *dev);
+>>>>>
+>>>>>  static const struct acpi_device_id processor_device_ids[] = {
+>>>>> @@ -46,6 +47,7 @@ static struct device_driver acpi_processor_driver = {
+>>>>>         .name = "processor",
+>>>>>         .bus = &cpu_subsys,
+>>>>>         .acpi_match_table = processor_device_ids,
+>>>>> +       .probe = acpi_processor_start,
+>>>>>         .remove = acpi_processor_stop,
+>>>>>  };
+>>>>>
+>>>>> @@ -162,10 +164,6 @@ static int __acpi_processor_start(struct acpi_device *device)
+>>>>>         if (!pr)
+>>>>>                 return -ENODEV;
+>>>>>
+>>>>> -       result = acpi_cppc_processor_probe(pr);
+>>>>> -       if (result && !IS_ENABLED(CONFIG_ACPI_CPU_FREQ_PSS))
+>>>>> -               dev_dbg(&device->dev, "CPPC data invalid or not present\n");
+>>>>> -
+>>>>>         if (!cpuidle_get_driver() || cpuidle_get_driver() == &acpi_idle_driver)
+>>>>>                 acpi_processor_power_init(pr);
+>>>>>
+>>>>> @@ -192,6 +190,30 @@ static int __acpi_processor_start(struct acpi_device *device)
+>>>>>         return result;
+>>>>>  }
+>>>>>
+>>>>> +static int acpi_processor_start(struct device *dev)
+>>>>> +{
+>>>>> +       struct acpi_device *device = ACPI_COMPANION(dev);
+>>>>> +       struct acpi_processor *pr;
+>>>>> +       int result;
+>>>>> +
+>>>>> +       if (!device)
+>>>>> +               return -ENODEV;
+>>>>> +
+>>>>> +       pr = acpi_driver_data(device);
+>>>>> +       if (!pr)
+>>>>> +               return -ENODEV;
+>>>>> +
+>>>>> +       /* Protect against concurrent CPU hotplug operations */
+>>>>> +       cpu_hotplug_disable();
+>>>>> +       result = acpi_cppc_processor_probe(pr);
+>>>>> +       cpu_hotplug_enable();
+>>>>
+>>>> This means that CPPC will be initialized for vCPUs that are not
+>>>> enabled on ARM if I'm not mistaken.
+>>>
+>>> If we are just talking powered down at boot it used to do that
+>>> so I assume it was fine. The corner case is ones we are explicitly
+>>> saying are not onlineable yet but marked online capable and will
+>>> turn up later.
+>>>
+>>>>
+>>>> I'm not sure if it is valid to do so.
+>>>
+>>> The conclusion of the following is I think this is fine but I'm not
+>>> entirely confident about it.
+>>>
+>>> I'm struggling to figure out the right answer to this and
+>>> it's not easy to test. I vaguely recall having some nasty emulation
+>>> hacks to poke some x86 related _CPC stuff a while back.
+>>> I might be able to hack something up for this as well and try to
+>>> create pathological corner cases.
+>>>
+>>> The short answer is CPPC + hotplug isn't a thing today in KVM + QEMU,
+>>> but that's not to say it never will be if someone virtualizes CPC for
+>>> a guest.  Let's consider that hypothetical virtualization / emulation.
+>>>
+>>> So the questions:
+>>> 1) Does simply making this acpi_cppc_processor_probe() result in any
+>>>    register accesses to the registers that might be found in _CPC or
+>>>    used via other ACPI methods?
+>>> 2) Can we rely on a a VMM not do something nasty if those are accessed
+>>>    on CPUs that haven't been instantiated yet?  e.g. Bus error.
+>>>    A related useful question is: Can we assume these registers are
+>>>    accessible on offlined CPUs?  If they can be unsafe to access from
+>>>    CPUs that are temporary powered down / offline then I think we are fine because
+>>>    the CPPC code must guarantee not to access them. (I'm relying on this!)
+>>>
+>>> For the particular case Lifeng has run into, I think the code that matters
+>>> (beyond instantiation of the infrastructure) is the creation of the
+>>> domain info in acpi_get_psd(). I think _PSD can only be static data so
+>>> shouldn't cause any register accesses to the powered down CPUs.
+>>>
+>>> So 'probably' fine + we'll not really know unless we get CPU HP and
+>>> CPC.
+>>>
+>>> Alternative much more complex change would be to separate the grabbing of
+>>> static data (done here) from setting up anything dynamic which would remain
+>>> in the hotplug handler.  If those registers haven't been discovered we definitely
+>>> can't access them from the cpu freq driver.
+>>
+>> I'm thinking that maybe cppc_cpufreq should be updated instead.
+>>
+>> I'm not really sure why it needs to collect information on offline
+>> CPUs.  Surely, they don't matter until they are brought online.
+> 
+> This information is collected in order to generate related_cpus. Without
+> doing so, a new policy will be created when the second CPU in the same
+> domain comes online, instead of reusing the existing policy. And this will
+> make a mess.
+> 
+> I can't find a good way to solve this problem in cppc_cpufreq or cpufreq.
 
-Reported-by: Gui-Dong Han <hanguidong02@gmail.com>
-Closes: https://lore.kernel.org/all/CAJZ5v0jN9fU9NdWqc-+F5hiSEP4JkR=_qcdGzzHtk1i5tvCDbQ@mail.gmail.com/
-Fixes: c46a0d5ae4f9 ("PM: runtime: Extend support for wakeirq for force_suspend|resume")
-Signed-off-by: Wang Jiayue <akaieurus@gmail.com>
----
-v2:
-* Rephrase the comments to also cover the
-  pm_runtime_force_suspend/resume() case, as suggested by Rafael J. Wysocki
-v1:
-* Initial fix just remove outdated comments
----
- drivers/base/power/wakeirq.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Hi Rafael,
 
-diff --git a/drivers/base/power/wakeirq.c b/drivers/base/power/wakeirq.c
-index 8aa28c08b289..f5db37c4818e 100644
---- a/drivers/base/power/wakeirq.c
-+++ b/drivers/base/power/wakeirq.c
-@@ -270,8 +270,10 @@ EXPORT_SYMBOL_GPL(dev_pm_set_dedicated_wake_irq_reverse);
-  * otherwise try to disable already disabled wakeirq. The wake-up interrupt
-  * starts disabled with IRQ_NOAUTOEN set.
-  *
-- * Should be only called from rpm_suspend() and rpm_resume() path.
-- * Caller must hold &dev->power.lock to change wirq->status
-+ * Should be called from rpm_suspend(), rpm_resume(),
-+ * pm_runtime_force_suspend() or pm_runtime_force_resume().
-+ * Caller must hold &dev->power.lock or disable runtime PM to change
-+ * wirq->status.
-  */
- void dev_pm_enable_wake_irq_check(struct device *dev,
- 				  bool can_change_status)
-@@ -303,7 +305,8 @@ void dev_pm_enable_wake_irq_check(struct device *dev,
-  * @cond_disable: if set, also check WAKE_IRQ_DEDICATED_REVERSE
-  *
-  * Disables wake-up interrupt conditionally based on status.
-- * Should be only called from rpm_suspend() and rpm_resume() path.
-+ * Should be called from rpm_suspend(), rpm_resume(),
-+ * pm_runtime_force_suspend() or pm_runtime_force_resume().
-  */
- void dev_pm_disable_wake_irq_check(struct device *dev, bool cond_disable)
- {
-@@ -329,7 +332,7 @@ void dev_pm_disable_wake_irq_check(struct device *dev, bool cond_disable)
-  * enable wake IRQ after running ->runtime_suspend() which depends on
-  * WAKE_IRQ_DEDICATED_REVERSE.
-  *
-- * Should be only called from rpm_suspend() path.
-+ * Should be called from rpm_suspend() or pm_runtime_force_suspend().
-  */
- void dev_pm_enable_wake_irq_complete(struct device *dev)
- {
--- 
-2.34.1
+If we have to make sure not to use the information on offline CPUs, there
+will be many things that need to be modified:
+
+1. acpi_get_psd_map() in cppc_acpi.c: only use the information on online
+CPUs, and update shared_cpu_map when a new CPU in the same domain goes
+online.
+
+2. cpufreq_online() in cpufreq.c: create a new policy and decide whether it
+should be kept because it may turns out that the CPU should share an
+already exist policy with other CPUs.
+
+3. The init() callbacks in cppc_cpufreq, acpi-cpufreq and maybe other
+drivers: verify whether the newly generated policy is necessary and return
+the result.
+
+...
+
+Is it necessary to make such a big change for solving this problem? It
+seems to me that it is reasonable and fewer changes to parse the _CPC table
+for all CPUs in advance because it never change, isn't it?
 
 
