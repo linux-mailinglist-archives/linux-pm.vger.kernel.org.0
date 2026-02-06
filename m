@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-42212-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42213-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iHKxDQj6hWl7IwQAu9opvQ
-	(envelope-from <linux-pm+bounces-42212-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Feb 2026 15:26:16 +0100
+	id eCjiLJn5hWlEIwQAu9opvQ
+	(envelope-from <linux-pm+bounces-42213-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Feb 2026 15:24:25 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D18CFFEE21
-	for <lists+linux-pm@lfdr.de>; Fri, 06 Feb 2026 15:26:15 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CE33FED5B
+	for <lists+linux-pm@lfdr.de>; Fri, 06 Feb 2026 15:24:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9A8DA3034564
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Feb 2026 14:23:29 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1FC0A301751D
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Feb 2026 14:23:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4153A3EF0A4;
-	Fri,  6 Feb 2026 14:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB0A73EFD32;
+	Fri,  6 Feb 2026 14:23:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="biDG7Lt0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BU84qQiq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E155212542;
-	Fri,  6 Feb 2026 14:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48CE3EF0A4;
+	Fri,  6 Feb 2026 14:23:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770387809; cv=none; b=sgpHrnoM9wkq3DZTVqhcxPRRGRPBAOLusjkhXkI7RiLZDyYBsMtUWSNHBQctYDK0NokbmccoxgPF5AlgyaJ6vOS5tVvVZciRNslHGcPcATS2vubh7SuzgLNmIRTMVJ62KuTVfbGf5+Skf4UsI4ves7UaWwcjqsxS5FAc6gQipkM=
+	t=1770387816; cv=none; b=f7eX+vgGLKxuVjIQ7odAgmnHXp0hhDUjERzl2p15kJN+Az1WBDtYRnGZO9paHsDGLafzIjYzQCNTAO5PDrMpve4F4jlg+F24Ji0iCEUZHWJSSjAwV8wx48PiGzFFNrGGUh9WoCDSJGbwYi7EIgtTbeCssOm24f/J4HkxzV9S+zE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770387809; c=relaxed/simple;
-	bh=g8tVOSmKODdWDGu0H8GcuoZ/GglJDm/0ZHioXuiWVfI=;
+	s=arc-20240116; t=1770387816; c=relaxed/simple;
+	bh=DaRfqtPxemmkp+aTTTQoiIZqc3SEzpEw+S8gq3cyoPY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G6c2OhrdPiD+IUM/FZsdeVI60f4hJZHjfIc+NL72x8IoqqZSSgAnqAG7fooKZ5WDPdzVNWtMsPog5D/5fudyUJfga7fMQuoKBliCi+Q97vq+5ohyZP+7vkknL9eab/6uiMZb/oSjIyJD7UM4QwKnEKssOy0KGpvqIuHbApgMIHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=biDG7Lt0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56251C116C6;
-	Fri,  6 Feb 2026 14:23:21 +0000 (UTC)
+	 MIME-Version; b=EbuDHij1Sn1FA8lQ8FQNcyHxe1abnePMkhueH8jn3RWTMpuEuo/eYaLLj5O8bTmAtBn/E8+GLAnePZyKUEpCAUnqCUAX4X8WGSTJ4UbmOBp/7YHplnN4jH+QQyU5kl2K6SmfYzXaFguDjuAsrlz6VnYH8ZPMiyosmr9iTUeigFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BU84qQiq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 223F1C19421;
+	Fri,  6 Feb 2026 14:23:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770387808;
-	bh=g8tVOSmKODdWDGu0H8GcuoZ/GglJDm/0ZHioXuiWVfI=;
+	s=k20201202; t=1770387816;
+	bh=DaRfqtPxemmkp+aTTTQoiIZqc3SEzpEw+S8gq3cyoPY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=biDG7Lt0Ev43G9yPf/tgbfgfwOIveTEAb5DEh8dtk+U1XX8gz0Q/dtBZNfgOtMJEl
-	 kNfCLFIfPB6t6uP61zZj+shuMOeqZpOC31b4NHcrsKWospmBqyGW9A6Qq3TQJ4oPWp
-	 70x4mH4gbM+55OkCaL8A7oEHXbswaRXY+tnV/SzSPKOeUNh4EUFhAowwgCz9W2ycM3
-	 qgFsurW+hcFm187yRedu7bgw/O83UsalM4x9AAr3yvdOKALeJ/Det5+MMsFD6sxceg
-	 aGycEmOIKs+IR8sy/n14LeKQpTkOc2iVjLeUzbFPrBqK/lSA0Anv/bcODsH4+wsvyN
-	 oR5GpdjQzF1XQ==
+	b=BU84qQiqPenzVeN7b6iVXZU3Aq98TI8RnVWp5ThVnZaQ61YRQiT8g8RJ4n31aWvM+
+	 Bc8FPIVGx6kobB/Pk0WfSAe1Q7nrqN3RQ2LAeyq3lQJyFcTZVmJaB8Dkd4LJpIa0cb
+	 F6F5ZKuxGoI8CQ7TisaeuHWEm46TNDEGIRT6xlIGKC63IuNB282k3riJV1x8sy8HsH
+	 dNuPM3JGMwVOfV3JK8DMe7cYWVli/dyd2Fdo5kUBNs3VoO/CrsP/Y2zKlpbxEq11o1
+	 r2W+zflG36srXMqKgrj9zAMyOgMwEEFX0e0e/CiLQdsskyHwQsb2+jC82mVhAVo5pF
+	 dfIwwG2nb3dNw==
 From: Frederic Weisbecker <frederic@kernel.org>
 To: LKML <linux-kernel@vger.kernel.org>
 Cc: Frederic Weisbecker <frederic@kernel.org>,
@@ -81,9 +81,9 @@ Cc: Frederic Weisbecker <frederic@kernel.org>,
 	linux-s390@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	Shrikanth Hegde <sshegde@linux.ibm.com>
-Subject: [PATCH 04/15] powerpc/time: Prepare to stop elapsing in dynticks-idle
-Date: Fri,  6 Feb 2026 15:22:34 +0100
-Message-ID: <20260206142245.58987-5-frederic@kernel.org>
+Subject: [PATCH 05/15] s390/time: Prepare to stop elapsing in dynticks-idle
+Date: Fri,  6 Feb 2026 15:22:35 +0100
+Message-ID: <20260206142245.58987-6-frederic@kernel.org>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20260206142245.58987-1-frederic@kernel.org>
 References: <20260206142245.58987-1-frederic@kernel.org>
@@ -102,14 +102,14 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FREEMAIL_CC(0.00)[kernel.org,linux.ibm.com,linutronix.de,google.com,gmail.com,arm.com,redhat.com,siemens.com,nvidia.com,suse.de,ellerman.id.au,infradead.org,goodmis.org,linaro.org,163.com,vger.kernel.org,lists.ozlabs.org];
 	RCVD_COUNT_THREE(0.00)[4];
 	RCPT_COUNT_TWELVE(0.00)[36];
-	TAGGED_FROM(0.00)[bounces-42212-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42213-lists,linux-pm=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
@@ -122,9 +122,9 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	NEURAL_HAM(-0.00)[-0.999];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: D18CFFEE21
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 2CE33FED5B
 X-Rspamd-Action: no action
 
 Currently the tick subsystem stores the idle cputime accounting in
@@ -142,11 +142,13 @@ Prepare for that and introduce three new APIs which will be used in
 subsequent patches:
 
 _ vtime_dynticks_start() is deemed to be called when idle enters in
-  dyntick mode. The idle cputime that elapsed so far is accumulated.
+  dyntick mode. The idle cputime that elapsed so far is accumulated
+  and accounted. Also idle time accounting is ignored.
 
 - vtime_dynticks_stop() is deemed to be called when idle exits from
   dyntick mode. The vtime entry clocks are fast-forward to current time
-  so that idle accounting restarts elapsing from now.
+  so that idle accounting restarts elapsing from now. Also idle time
+  accounting is resumed.
 
 - vtime_reset() is deemed to be called from dynticks idle IRQ entry to
   fast-forward the clock to current time so that the IRQ time is still
@@ -157,19 +159,151 @@ accounting twice the idle cputime, along with nohz accounting.
 
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- arch/powerpc/kernel/time.c | 41 ++++++++++++++++++++++++++++++++++++++
- include/linux/vtime.h      |  6 ++++++
- 2 files changed, 47 insertions(+)
+ arch/s390/include/asm/idle.h | 14 +++++---
+ arch/s390/kernel/idle.c      | 19 +++++++----
+ arch/s390/kernel/vtime.c     | 65 ++++++++++++++++++++++++++++++------
+ 3 files changed, 77 insertions(+), 21 deletions(-)
 
-diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
-index 4bbeb8644d3d..18506740f4a4 100644
---- a/arch/powerpc/kernel/time.c
-+++ b/arch/powerpc/kernel/time.c
-@@ -376,6 +376,47 @@ void vtime_task_switch(struct task_struct *prev)
- 		acct->starttime = acct0->starttime;
- 	}
- }
+diff --git a/arch/s390/include/asm/idle.h b/arch/s390/include/asm/idle.h
+index 09f763b9eb40..285b3da318d6 100644
+--- a/arch/s390/include/asm/idle.h
++++ b/arch/s390/include/asm/idle.h
+@@ -8,17 +8,21 @@
+ #ifndef _S390_IDLE_H
+ #define _S390_IDLE_H
+ 
++#include <linux/percpu-defs.h>
+ #include <linux/types.h>
+ #include <linux/device.h>
+ 
+ struct s390_idle_data {
+-	unsigned long idle_count;
+-	unsigned long idle_time;
+-	unsigned long clock_idle_enter;
+-	unsigned long timer_idle_enter;
+-	unsigned long mt_cycles_enter[8];
++	bool		idle_dyntick;
++	unsigned long	idle_count;
++	unsigned long	idle_time;
++	unsigned long	clock_idle_enter;
++	unsigned long	timer_idle_enter;
++	unsigned long	mt_cycles_enter[8];
+ };
+ 
++DECLARE_PER_CPU(struct s390_idle_data, s390_idle);
 +
+ extern struct device_attribute dev_attr_idle_count;
+ extern struct device_attribute dev_attr_idle_time_us;
+ 
+diff --git a/arch/s390/kernel/idle.c b/arch/s390/kernel/idle.c
+index 39cb8d0ae348..614db5ea6ea3 100644
+--- a/arch/s390/kernel/idle.c
++++ b/arch/s390/kernel/idle.c
+@@ -19,7 +19,7 @@
+ #include <asm/smp.h>
+ #include "entry.h"
+ 
+-static DEFINE_PER_CPU(struct s390_idle_data, s390_idle);
++DEFINE_PER_CPU(struct s390_idle_data, s390_idle);
+ 
+ void account_idle_time_irq(void)
+ {
+@@ -35,7 +35,15 @@ void account_idle_time_irq(void)
+ 			this_cpu_add(mt_cycles[i], cycles_new[i] - idle->mt_cycles_enter[i]);
+ 	}
+ 
++	WRITE_ONCE(idle->idle_count, READ_ONCE(idle->idle_count) + 1);
++
++	/* Account time spent with enabled wait psw loaded as idle time. */
+ 	idle_time = lc->int_clock - idle->clock_idle_enter;
++	WRITE_ONCE(idle->idle_time, READ_ONCE(idle->idle_time) + idle_time);
++
++	/* Dyntick idle time accounted by nohz/scheduler */
++	if (idle->idle_dyntick)
++		return;
+ 
+ 	lc->steal_timer += idle->clock_idle_enter - lc->last_update_clock;
+ 	lc->last_update_clock = lc->int_clock;
+@@ -43,9 +51,6 @@ void account_idle_time_irq(void)
+ 	lc->system_timer += lc->last_update_timer - idle->timer_idle_enter;
+ 	lc->last_update_timer = lc->sys_enter_timer;
+ 
+-	/* Account time spent with enabled wait psw loaded as idle time. */
+-	WRITE_ONCE(idle->idle_time, READ_ONCE(idle->idle_time) + idle_time);
+-	WRITE_ONCE(idle->idle_count, READ_ONCE(idle->idle_count) + 1);
+ 	account_idle_time(cputime_to_nsecs(idle_time));
+ }
+ 
+@@ -61,8 +66,10 @@ void noinstr arch_cpu_idle(void)
+ 	set_cpu_flag(CIF_ENABLED_WAIT);
+ 	if (smp_cpu_mtid)
+ 		stcctm(MT_DIAG, smp_cpu_mtid, (u64 *)&idle->mt_cycles_enter);
+-	idle->clock_idle_enter = get_tod_clock_fast();
+-	idle->timer_idle_enter = get_cpu_timer();
++	if (!idle->idle_dyntick) {
++		idle->clock_idle_enter = get_tod_clock_fast();
++		idle->timer_idle_enter = get_cpu_timer();
++	}
+ 	bpon();
+ 	__load_psw_mask(psw_mask);
+ }
+diff --git a/arch/s390/kernel/vtime.c b/arch/s390/kernel/vtime.c
+index 234a0ba30510..c19528eb4ee3 100644
+--- a/arch/s390/kernel/vtime.c
++++ b/arch/s390/kernel/vtime.c
+@@ -17,6 +17,7 @@
+ #include <asm/vtimer.h>
+ #include <asm/vtime.h>
+ #include <asm/cpu_mf.h>
++#include <asm/idle.h>
+ #include <asm/smp.h>
+ 
+ #include "entry.h"
+@@ -111,23 +112,30 @@ static void account_system_index_scaled(struct task_struct *p, u64 cputime,
+ 	account_system_index_time(p, cputime_to_nsecs(cputime), index);
+ }
+ 
+-/*
+- * Update process times based on virtual cpu times stored by entry.S
+- * to the lowcore fields user_timer, system_timer & steal_clock.
+- */
+-static int do_account_vtime(struct task_struct *tsk)
++static inline void vtime_reset_last_update(struct lowcore *lc)
+ {
+-	u64 timer, clock, user, guest, system, hardirq, softirq;
+-	struct lowcore *lc = get_lowcore();
+-
+-	timer = lc->last_update_timer;
+-	clock = lc->last_update_clock;
+ 	asm volatile(
+ 		"	stpt	%0\n"	/* Store current cpu timer value */
+ 		"	stckf	%1"	/* Store current tod clock value */
+ 		: "=Q" (lc->last_update_timer),
+ 		  "=Q" (lc->last_update_clock)
+ 		: : "cc");
++}
++
++/*
++ * Update process times based on virtual cpu times stored by entry.S
++ * to the lowcore fields user_timer, system_timer & steal_clock.
++ */
++static int do_account_vtime(struct task_struct *tsk)
++{
++	u64 timer, clock, user, guest, system, hardirq, softirq;
++	struct lowcore *lc = get_lowcore();
++
++	timer = lc->last_update_timer;
++	clock = lc->last_update_clock;
++
++	vtime_reset_last_update(lc);
++
+ 	clock = lc->last_update_clock - clock;
+ 	timer -= lc->last_update_timer;
+ 
+@@ -261,6 +269,43 @@ void vtime_account_hardirq(struct task_struct *tsk)
+ 	virt_timer_forward(delta);
+ }
+ 
 +#ifdef CONFIG_NO_HZ_COMMON
 +/**
 + * vtime_reset - Fast forward vtime entry clocks
@@ -179,62 +313,37 @@ index 4bbeb8644d3d..18506740f4a4 100644
 + */
 +void vtime_reset(void)
 +{
-+	struct cpu_accounting_data *acct = get_accounting(current);
-+
-+	acct->starttime = mftb();
-+#ifdef CONFIG_ARCH_HAS_SCALED_CPUTIME
-+	acct->startspurr = read_spurr(acct->starttime);
-+#endif
++	vtime_reset_last_update(get_lowcore());
 +}
 +
 +/**
 + * vtime_dyntick_start - Inform vtime about entry to idle-dynticks
 + *
 + * Called when idle enters in dyntick mode. The idle cputime that elapsed so far
-+ * is accumulated and the tick subsystem takes over the idle cputime accounting.
++ * is flushed and the tick subsystem takes over the idle cputime accounting.
 + */
 +void vtime_dyntick_start(void)
 +{
-+	vtime_account_idle(current);
++	__this_cpu_write(s390_idle.idle_dyntick, true);
++	vtime_flush(current);
 +}
 +
 +/**
 + * vtime_dyntick_stop - Inform vtime about exit from idle-dynticks
 + *
 + * Called when idle exits from dyntick mode. The vtime entry clocks are
-+ * fast-forward to current time so that idle accounting restarts elapsing from
-+ * now.
++ * fast-forward to current time and idle accounting resumes.
 + */
 +void vtime_dyntick_stop(void)
 +{
-+	vtime_reset();
++	vtime_reset_last_update(get_lowcore());
++	__this_cpu_write(s390_idle.idle_dyntick, false);
 +}
 +#endif /* CONFIG_NO_HZ_COMMON */
- #endif /* CONFIG_VIRT_CPU_ACCOUNTING_NATIVE */
- 
- void __no_kcsan __delay(unsigned long loops)
-diff --git a/include/linux/vtime.h b/include/linux/vtime.h
-index 336875bea767..61b94c12d7dd 100644
---- a/include/linux/vtime.h
-+++ b/include/linux/vtime.h
-@@ -37,11 +37,17 @@ extern void vtime_account_irq(struct task_struct *tsk, unsigned int offset);
- extern void vtime_account_softirq(struct task_struct *tsk);
- extern void vtime_account_hardirq(struct task_struct *tsk);
- extern void vtime_flush(struct task_struct *tsk);
-+extern void vtime_reset(void);
-+extern void vtime_dyntick_start(void);
-+extern void vtime_dyntick_stop(void);
- #else /* !CONFIG_VIRT_CPU_ACCOUNTING_NATIVE */
- static inline void vtime_account_irq(struct task_struct *tsk, unsigned int offset) { }
- static inline void vtime_account_softirq(struct task_struct *tsk) { }
- static inline void vtime_account_hardirq(struct task_struct *tsk) { }
- static inline void vtime_flush(struct task_struct *tsk) { }
-+static inline void vtime_reset(void) { }
-+static inline void vtime_dyntick_start(void) { }
-+extern inline void vtime_dyntick_stop(void) { }
- #endif
- 
++
  /*
+  * Sorted add to a list. List is linear searched until first bigger
+  * element is found.
 -- 
 2.51.1
 
