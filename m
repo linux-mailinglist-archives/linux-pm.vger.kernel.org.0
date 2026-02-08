@@ -1,252 +1,212 @@
-Return-Path: <linux-pm+bounces-42259-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42260-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UHpoCdpiiGmapAQAu9opvQ
-	(envelope-from <linux-pm+bounces-42259-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 11:18:02 +0100
+	id yHvBBDuKiGliqwQAu9opvQ
+	(envelope-from <linux-pm+bounces-42260-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 14:06:03 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F82F108564
-	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 11:18:01 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64FB5108B22
+	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 14:06:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BC3C23009FA6
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Feb 2026 10:17:59 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 56E6C3002931
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Feb 2026 13:05:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607D52F28E3;
-	Sun,  8 Feb 2026 10:17:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0514E274B4A;
+	Sun,  8 Feb 2026 13:05:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="fuoXs4l4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J7EhQkTh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from OS0P286CU011.outbound.protection.outlook.com (mail-japanwestazon11010066.outbound.protection.outlook.com [52.101.228.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f65.google.com (mail-wm1-f65.google.com [209.85.128.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F2286277;
-	Sun,  8 Feb 2026 10:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.228.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770545878; cv=fail; b=fjbJDxWiO+A7MeHKB2DCTgfVohnMgFp8V1KaJYqIISBry09PJEtM033hMtZkHNBYVjOkf76PIRDrCsoSJR58Vu6g0t0Lp0n2Dia/yQGKVGyILZcy2LSJg1Knw1GQy/uguQDcT8ocdKn3/KD6g6VvAyQgXGMCX4zqrC3mN7c9sQM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770545878; c=relaxed/simple;
-	bh=MUIGigF0E3IjyGIZSebupGVVe5FKX4Obckrnz1c7mUE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=hZ7Tp5ot3Xz08ZVkWqbcg6cYZZRjxqPE2hgqMFNSCFuUjgWVCuGkuFrg94gdbwHxssb3Yy5d3/jMCS/orepkdUIbFUXyroshnrIqnkpol0xaJyHeIX8w3VHhqaN1oBJ+Qgd5yrRFwlvIizcO4lW7TwwtdZw4iw/GmDgUuZ6xEcs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=fuoXs4l4; arc=fail smtp.client-ip=52.101.228.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=a8mLkXVm7/2ZvRU3qCXcQueJFoBWe+l8iyX0HVf7UNYYzBEnMyZyMw4Wt3wjighE4IHDi3FUWYwEk9KNu9/dRegyFkEJo+WS73sCLh7I3+vN39k/FIpaP9Xp4X43tAAZQd5FL4iH2oZ1yMtnfS2/EomkuIs8Gsr5YbFzwHKQ3zsG9A5n8vO102MSj2Rbfs8KgejmU8x3fgs5xwzcNKfMEULmMrjL+Nwg6WbyHOihHdrXijpWifpbmCgK0/pO+z9+uw8jPaJ51MKz7ZUrdI05aaobfd0K8HUjh6qOtCVjRvlj3TuUBLISgijeF4BzpeJIUIgmuSSA7GaVml8bV9zi7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NFD60ecOcEKaXHXykg+FO20hesvoZK9fVa/i0kBflY4=;
- b=eGTKneP1+YTZgOLHwp8bqWz8wWe98cf3W99SBUkitHydPkrD+zU5WtFQtBZ4h0/kDZOXf2vhLAyWOTSMR8SWToTLZmwdKFwC293S1gWvf8VOLDbGxz3EMgMHKkQKoxJTXnGwkcOeqZidg1rZV36lggnalGe6WBZgmppIi6vXuzJzEvIqCL12vGw9403eFdEjI3Bl4U3U9XVzEK6W+zgD+1Oo4ZoTEsyHosIL1KnBV/8Y6QuDTjqKyVEe551Ty3zYdK6yKP9DZueThiNMIwFMwmeGd8FcUvYL/ajUZpJ9FyCx6LJSr9tdMSgc4rVaVBK4ocGULhZhsVE6Cgm+6fh+/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NFD60ecOcEKaXHXykg+FO20hesvoZK9fVa/i0kBflY4=;
- b=fuoXs4l4e/evWNopx4nCXZy3u2EHBLxl18DY9AhQLiiC10sLsVCyIx2zb6rt8OfzErJeF4bbJt0KKDyU7VqmiK7KHwxVKbXdLtcLi53YiKlr8pTgvwQWP1+IBar/DW14siVta1bkZEkqx7yqPxabfKYzELLUwUOb76z79A7xBIc=
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
- by TY3PR01MB9667.jpnprd01.prod.outlook.com (2603:1096:400:22a::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.18; Sun, 8 Feb
- 2026 10:17:50 +0000
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::87d1:4928:d55:97de]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::87d1:4928:d55:97de%4]) with mapi id 15.20.9587.017; Sun, 8 Feb 2026
- 10:17:45 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: biju.das.au <biju.das.au@gmail.com>, John Madieu
-	<john.madieu.xa@bp.renesas.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-CC: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Geert
- Uytterhoeven <geert+renesas@glider.be>, Prabhakar Mahadev Lad
-	<prabhakar.mahadev-lad.rj@bp.renesas.com>, biju.das.au
-	<biju.das.au@gmail.com>, "linux-renesas-soc@vger.kernel.org"
-	<linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH] thermal: renesas: rzg3e: Drop unused kernel-doc comments
-Thread-Topic: [PATCH] thermal: renesas: rzg3e: Drop unused kernel-doc comments
-Thread-Index: AQHcmN1Z6UkJ4av95ECQBJc8l9MOQ7V4ldLQ
-Date: Sun, 8 Feb 2026 10:17:45 +0000
-Message-ID:
- <TY3PR01MB11346FF4FBB88C666B2DA2AC58664A@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20260208092848.5313-1-biju.das.jz@bp.renesas.com>
-In-Reply-To: <20260208092848.5313-1-biju.das.jz@bp.renesas.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TY3PR01MB9667:EE_
-x-ms-office365-filtering-correlation-id: 0616cc92-bfaa-4998-3dfe-08de66fb4da6
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?PyjzDGpigo7nnWSBHmHPlbxzS1NtXzBOljqNsl7FeNbwnfQMNswrOG18dH0j?=
- =?us-ascii?Q?ZYY4by3jrWWmxo8jpGlh80H2HG2Qc1lefCapIlTHIr1EXQn1kqq67+woN2Lf?=
- =?us-ascii?Q?FNwN/6k+z2WO0Qhc7K3EvcV0zMAK4EOuvouT0+UJWa0N1DGu7TO49eLRPViT?=
- =?us-ascii?Q?Mc9YY5QWYLEcaWlEf33Ah0+zs6ggolwW97mkJ4xOfQOOZ9e7RCECTAWekTwq?=
- =?us-ascii?Q?k6BL5ApOHJ/tkDTb69YPAPgqu73O6Cf+q2XkyhzJvX7ofvfIFt99KSvveHSD?=
- =?us-ascii?Q?eLuRLNrcu4Pi2IT3Bepxn3YOYMrrrm8Ou84XD7Dnhy2zqctQiMLW5om/xzOe?=
- =?us-ascii?Q?ibsGrswoZ9Ls+vYis9AP6ZWEGNqdIZnAySg0pZLABsiUb6PNRDP3Du2Wnbg/?=
- =?us-ascii?Q?yASrKd6jeRrSHpoG+aev2quJrkhO1jASk2ElTwhsTj3ShfQVTpzz6TKYG/sY?=
- =?us-ascii?Q?VOIpyVAvbkjtFgcGYsRHcpluqY5IyWg8UJ1PrEHbVMbTkNuFm7t5lNui7Lr/?=
- =?us-ascii?Q?20+mTBuNwqYYrtAn+YQVcaKtnaLpxYMK1FdDPibkZl0Q+oSPHkovL01rOO1A?=
- =?us-ascii?Q?IZtQC2uIwQWIPVxzwIszlsCOqsJekMls6OdaCjOsMdOeIh+P2O8SDqmsaCYl?=
- =?us-ascii?Q?fjTz1CECJunpqbfwybAsRlpttiNVJhZThutPx5af7vvY84xDl/cZagRxVE64?=
- =?us-ascii?Q?CDLSYcSfNq/zeK4GoIQaDhyJjskHyscyfu0A4LTP9jnsoepD2EggDVzmbPuw?=
- =?us-ascii?Q?whyetVwCSuaS62DXVx1k5UfjqjnhAPn/r+6UpmocrqudH0bes5h9ZcPBZxLP?=
- =?us-ascii?Q?yAs4IfXbxN8efK4yWc8ItVME1Rz2V0BYs11J2+fWexlrC3HGqcQgsH+Ucat8?=
- =?us-ascii?Q?Kox92Lg5kLh0AYrn6mGAhhV8qGJNvsBmTYvpP74+jBMeHMbkSyvbLXmSVqyj?=
- =?us-ascii?Q?htNZHmXnyYx7ln/QBE4ShvlHHGt3ZGZjO4Sjz9AFbsb3VmFxw2OzcDEeGN9W?=
- =?us-ascii?Q?xn81SDXM912xOz3GeABC8K48bwsxvZDYekUCMidGKbkQATZ4MgG2DYv448w6?=
- =?us-ascii?Q?q0oNnBVPIAWLiXGwVbk52KHMDU1mEKTBODp8IJMU4IIpW6+aOTedZXBI+kV8?=
- =?us-ascii?Q?fZtSqOOZMLhpmUEbLnUD29xZTJ/gLxR7uPhLxa0xWfVwo10zwmV6dJpcxpde?=
- =?us-ascii?Q?DolfpjSW1yLPSzcpgDmy8LTLN21+33uVCZjToW0nqGuN0ZjtMNiBVhp0Hkza?=
- =?us-ascii?Q?hWsLv40sQHz1/j5dWLIe0F8cLgqZSQ+GftMwvACMoaptV7DqgD8/lkgldwnq?=
- =?us-ascii?Q?HJpO1JHySgPf145TwXdLMTDj3M0CwEA0ZSoGD9fjYyNi4sIKO1+YurUO53Ih?=
- =?us-ascii?Q?c1UK+R+EbOlzjlz4C6Wkw32hW5yAYFjIzVlrNyJw0pL35K7PX6hTI/d/xEHc?=
- =?us-ascii?Q?51hnduRnSOUZ75AAF8knHqt2uEnz3INml4EfFQU0R0PXRMb1GhixcZqpbbCI?=
- =?us-ascii?Q?FrNtrydmA0uCj6LEa1JAFAJhmc+U+gnndtz+DxEkYh5V4Bz6twoonwy0vHeU?=
- =?us-ascii?Q?NwkXiWquTEr7U+ROke77YTjlZ+e1LHkHFKEOO+Bvc9VC8U+A7K3itz8ivKSl?=
- =?us-ascii?Q?A6//5QvMaIq5nKmZeYAeDO8=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?g7kVL63CkxAnLdDPQeXV0/LNR+RmSE2+y33PIkuBMQZXNHri+RQZk4YFdLGY?=
- =?us-ascii?Q?lijzBO00B5yBdp64qsdTKEst3TYv/74l5b+JLDfdrjksfB8atAN6vx5ppUjn?=
- =?us-ascii?Q?sUcb1MCyQk4JLUDY5VSw8p+/nzlmtNgNRnV9IZJyq9eDsAA5Mv/uhpmpt2zW?=
- =?us-ascii?Q?zCBlQjS/AZofToDt8pMC7ErS/LVjRZOEMN5KQKlvBr70yWkY75pqT5Vr5I9d?=
- =?us-ascii?Q?v7n2hZWD0nMcROjoe7ozadVMvyG/pBduOMlOR0nvDXfMMy8raY3fXWIA+9Qe?=
- =?us-ascii?Q?99ATzUrDEcBJd9zRj3Sh76GfRPDmkbQDqhsskkHQV7+WGNqyiGSkSAYm05np?=
- =?us-ascii?Q?96JVQzjOrCdXUE00xuzqZpNNc2Xkquq+6ntQgwgNY1C9oHXful466kZLOawL?=
- =?us-ascii?Q?R5I9FtEiEOCINBTN6/yVnNuxmfJYgv04lGb+V+9KldOeBXOym8LdRP2SAdlx?=
- =?us-ascii?Q?WkUyng7OApL3a4sxLqiqFO2IjdSnGgTDoNyn8znB0BPvF2RrkkY4v9921SFG?=
- =?us-ascii?Q?FvoLe4z2T+AaqlEXzgkeeZd3XITwinN3eceXHwSvvj5rb6V6kr9fRzuOjpSH?=
- =?us-ascii?Q?ZdB9L0fnFkzxUvR7oytXGe0UThE4hCpAo0Kp6cGYXZH2PMFrBmQUV/xNfoTm?=
- =?us-ascii?Q?HRNi+9DF+sycbHr5AzBIWCdsGYGd/bk+WibT0P1Fwh04U4x7Ccp8ncbmESFH?=
- =?us-ascii?Q?YWgXL2Q/+DT4p8jfIIsiekldT/ePGJL0DNe4tyaCKZF7UDctGtMVlqRVyk53?=
- =?us-ascii?Q?xn9IrH63+OQ+YI/84seFvtti6b+4X9EVkw3PLrjtHjBYIpA37IOnwANorN0b?=
- =?us-ascii?Q?7CUNbiMe07D89hX8RFWtJfLW4yM/6AQvFPRjVifB3v7MdprFN3i4EysPfuhQ?=
- =?us-ascii?Q?PoE6Wrc+DTsepVJQD4u6NPcGqwNkJwR5wmYNAU+HXsn/6+Fd1mkOAwXNUoER?=
- =?us-ascii?Q?8e+UujfBJ+nIVaO0FZicFz0g/Qen9kHGx9H21floUiA2OOlCxf7d7cme062S?=
- =?us-ascii?Q?tRUycK4a8bb3/GAajuW8AybGA+/B8ZNAjezk7WNRptOCPFpgI0/Nz2okbzRQ?=
- =?us-ascii?Q?7FQy3sqXKMigcdiNx4GyEGaVJcj32zQiVQhG106OwNFHdr4+k0DV1dDiUz7y?=
- =?us-ascii?Q?FcT55Lks02vsEf4YSoKiQlarR6jxfiw18yvDF6AeCu/cTwR0UG6JJdc9Ili6?=
- =?us-ascii?Q?jIA/QanZXbO5aGp2kwSmuJfMwH01yPVl9l48BogFMTwP3D6qRCGk34XNphvX?=
- =?us-ascii?Q?zz5CNQH9khxUNYF0nij7mssoBdwk+DX96QFUqNzv5ZqjYH+gP/ClVMETn4YG?=
- =?us-ascii?Q?3gQ3IX8w2EJuyRM4zIZsK+TIGnhzBIemin8CvmeskKUlyX7JW8caKqdYxf/J?=
- =?us-ascii?Q?7b6dEbAAE5iP8uf/uHYYlDXKr6jOCdwzbrQ08Iino5xqLV1Vin3sEEPeXwcO?=
- =?us-ascii?Q?PAipb1zUxx6d52cnRwlV3FpWbgm0hLR9bJTgZqp1Yt26k/EPhdol6wfaGafa?=
- =?us-ascii?Q?jGsRh/0g33CeOQcsKdx6PdTF562xVMOnOiwVtTaEPDNiXCE4oto5UC+LhK5n?=
- =?us-ascii?Q?Cd7CImE1sYe4et4J7MXqG9I16dYcIvfiLbgoxmTVp0rzq8AjTKvJgQv/iUgJ?=
- =?us-ascii?Q?nEWQDgnC5PMoSRF/GjlgPA4tcdDK5/QmTGSbJUXXd5ClpvFYxzJf2xDgTypB?=
- =?us-ascii?Q?Eq0HTyLUmeulW8+2qECBjkJ7k/dJmoQUnYuYwFGSQB6Eir65hjmn04DmtE97?=
- =?us-ascii?Q?RSzoLx18Sw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0D6258ED4
+	for <linux-pm@vger.kernel.org>; Sun,  8 Feb 2026 13:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.65
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770555954; cv=none; b=JQRmJ9ZiOQ46aDiP/pVGMgAl3k1eK5zJC/sDjBNOa95tFJnaUuEwwdx2CU9jOpIB+ZMemGAkMpGjUlmuWxPo0km4AA5N201xc55gnuLUzhAAUzHYeEByBO/i7dkDWQs+naC0zAMTUUoHxzGAvlI1rKRBqWXL9Qu1o/nSd4ZKwnw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770555954; c=relaxed/simple;
+	bh=osT0EUva0gXZ1pK88EukUzwSiu7f4mThiV/KwigTGzQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LkseUiRZ2SapQ19qIFxgyZ1qL8r/0k2Zqp4YetK99+J1Y4l8M1aI0Xn5QDEn0ctSh9cxI21oB/u6E3zv6AzKZXC1hfGg9dg2ATwNKMmw3SC7VuRQAVzjAJlwSDEZ8mbFYgzR98uzzScVG04avAeO2pFDOngYNJZIj9Kz6njZIe8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J7EhQkTh; arc=none smtp.client-ip=209.85.128.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f65.google.com with SMTP id 5b1f17b1804b1-47ee76e8656so55280605e9.0
+        for <linux-pm@vger.kernel.org>; Sun, 08 Feb 2026 05:05:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770555953; x=1771160753; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S6ZaHSw9LpRz01vg6acbUDvWM+cc8+yuVQwbsTXMnoc=;
+        b=J7EhQkThA2l+rof3AOzI/crRVbSKPsQ3H1oU5Cl77W8vHcmN64O4AW36/L0bBRuYao
+         QA1NJCRLmSI7GzB51Sz1funRAp2CG3svzIxhcwGgnGFkx51hK+drRRm6aEagZYEZvBh8
+         FgoJFbogl6kj7vZ88/Qg+r2GfszxFt2Eh5YPT7L2rZbtll8h5oEOuJT2pWOQuBX5dniJ
+         W+3ZgdEuSqtruad4O3g75HBhtOWYQFXCfUzp9oyaGfkpmpEyDhmgEvNNSulny1rj5vd3
+         xlLpRusLQNtvNGtiDwAr6zWXveOzhbRNtCmvfGKLeQugIS1CWKAk/6BdjmBR/a4ZFE4A
+         TzTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770555953; x=1771160753;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S6ZaHSw9LpRz01vg6acbUDvWM+cc8+yuVQwbsTXMnoc=;
+        b=uS3pATfHADFVcolAws32xtW+fKLfb0jiXi5QcrgjCniPAqkCwpAPLrreENL3Msuemx
+         Xux9IEFAv0d4/RiTaw2Fnv7Z5DujKRmfoxbwfsZOPj0J733B9Gai9OhFxndXFNhGg16n
+         Kd4JuJjD/r8jG+QFViRChRQTxXuN9YlupYtziK8JnDqk0FA5FymX78+b0HvdTYrBum6I
+         IpB4X1WPW6vZJepw3rDYO2mq5g6INb+6XJmRvAqHaLwHGzCmEN0FaL1nH6cghdIBgzzD
+         VcV1NleKAKsn6S9oD42LP2RVtnfTR4SWGDjI+WlnfwJR6tlszPJeIZV7r/A0NV7rSagb
+         fDbw==
+X-Forwarded-Encrypted: i=1; AJvYcCUaxJBI8cgEMD7TRFtNtvx4PXf5qbqVVI+TCs8HOzlkjDXD7SFbINRKYsqaGpiE5FDkznxpFcWXmQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzy4c0ZfcufoEhRsFV2/CUe3zNIg2AKwUdFmpmZm8bHF6T3vt+Q
+	ud9HHYBY19f2TBbzrjmb8KVM55GEoHQjKPeW7+d59JTEaoUVMFKsSAVC
+X-Gm-Gg: AZuq6aJ8G5GMyVbjhWOOmdiwgOGDBt6uAzyDKvxWi43nEmveNpqcaBi1FRvcrayB3rI
+	ajlIHTwvY6pgdTUU2uRGYyHJYknRQ3hTiF3wUJk2wqZuf0vq5C8aymZ89IX5ecWMynhAQauxFlc
+	+COIW07CQDt+u3JgEyNH9oKIFblxpqy2IkOnFTKmWT6K2WnBn/SmQYECm3tVrUZRIFstHbwQGmI
+	Y0fkAPYMATmkz6yIvHR2BNq7PYBTQ0Oq1dsnuJRTzBQSQKCY+nqLmK5d6y3ceMAPLhH/MrNlUH1
+	dJwcOm2sWJMu3fjvdoSI8AdX3PYQTxumTZ64w78UR2oNKT56KrWQcB0Pj3N0P6R6jqQgZGOWT9U
+	wpRlpxXN859wgvc2UUL5AodwHFU9jkC9JjWaCGp62IRRXJ8Qe+WiuroRMhfrdC5YRo0pTVhHUsw
+	L574AsWcdM5LIFOIYNVM8upK8=
+X-Received: by 2002:a05:600c:4f54:b0:47d:403e:9cd5 with SMTP id 5b1f17b1804b1-4832020df4emr103964445e9.11.1770555952781;
+        Sun, 08 Feb 2026 05:05:52 -0800 (PST)
+Received: from [192.168.0.131] ([194.183.54.57])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-436296b2110sm19201164f8f.3.2026.02.08.05.05.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 Feb 2026 05:05:52 -0800 (PST)
+Message-ID: <0033b0b2-1eb3-4486-abe4-62d25f10b22c@gmail.com>
+Date: Sun, 8 Feb 2026 14:05:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0616cc92-bfaa-4998-3dfe-08de66fb4da6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Feb 2026 10:17:45.8736
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 44WCtQ66tSoHsALRIZN/8uML2RJz5qoxWm/UPNrvWudlhUdGlH62YIKnuJHw8wXwo7Q2u/i/zCd/UJFmx/Qp+A3CxZXvorLbVTapB+Rz970=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB9667
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 02/12] dt-bindings: leds: document Samsung S2M series
+ PMIC RGB LED device
+To: Kaustabh Chakraborty <kauschluss@disroot.org>,
+ Rob Herring <robh@kernel.org>
+Cc: Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Sebastian Reichel <sre@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20260126-s2mu005-pmic-v2-0-78f1a75f547a@disroot.org>
+ <20260126-s2mu005-pmic-v2-2-78f1a75f547a@disroot.org>
+ <20260206133837.GA157817-robh@kernel.org>
+ <DG7XJ6T9I7HU.1UVHH2QWX31O1@disroot.org>
+Content-Language: en-US
+From: Jacek Anaszewski <jacek.anaszewski@gmail.com>
+In-Reply-To: <DG7XJ6T9I7HU.1UVHH2QWX31O1@disroot.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.34 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_REJECT(1.00)[cv is fail on i=2];
-	DMARC_POLICY_ALLOW(-0.50)[renesas.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[bp.renesas.com:s=selector1];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-42259-lists,linux-pm=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com,bp.renesas.com,kernel.org,linaro.org];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[intel.com,arm.com,vger.kernel.org,glider.be,bp.renesas.com,gmail.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[biju.das.jz@bp.renesas.com,linux-pm@vger.kernel.org];
+	TAGGED_FROM(0.00)[bounces-42260-lists,linux-pm=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[bp.renesas.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-pm,renesas];
-	NEURAL_HAM(-0.00)[-0.994];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7F82F108564
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jacekanaszewski@gmail.com,linux-pm@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.993];
+	TAGGED_RCPT(0.00)[linux-pm,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[disroot.org:email]
+X-Rspamd-Queue-Id: 64FB5108B22
 X-Rspamd-Action: no action
 
-Hi All,
+Hi Kaustabh,
 
-> -----Original Message-----
-> From: Biju <biju.das.au@gmail.com>
-> Sent: 08 February 2026 09:29
-> Subject: [PATCH] thermal: renesas: rzg3e: Drop unused kernel-doc comments
->=20
-> From: Biju Das <biju.das.jz@bp.renesas.com>
->=20
-> Drop unused kernel-doc comments from struct rzg3e_thermal_priv.
->=20
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+On 2/6/26 14:56, Kaustabh Chakraborty wrote:
+> On 2026-02-06 07:38 -06:00, Rob Herring wrote:
+>> On Mon, Jan 26, 2026 at 12:37:09AM +0530, Kaustabh Chakraborty wrote:
+>>> Certain Samsung S2M series PMICs have a three-channel LED device with
+>>> independent brightness control for each channel, typically used as
+>>> status indicators in mobile phones. Document the devicetree schema from
+>>> this device.
+>>>
+>>> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
+>>> ---
+>>>   .../bindings/leds/samsung,s2mu005-rgb.yaml         | 34 ++++++++++++++++++++++
+>>>   1 file changed, 34 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml b/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml
+>>> new file mode 100644
+>>> index 0000000000000..6806b6d869ff7
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/leds/samsung,s2mu005-rgb.yaml
+>>> @@ -0,0 +1,34 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/leds/samsung,s2mu005-rgb.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: RGB LED Controller for Samsung S2M series PMICs
+>>> +
+>>> +maintainers:
+>>> +  - Kaustabh Chakraborty <kauschluss@disroot.org>
+>>> +
+>>> +description: |
+>>> +  The Samsung S2M series PMIC RGB LED is a three-channel LED device with
+>>> +  8-bit brightness control for each channel, typically used as status
+>>> +  indicators in mobile phones.
+>>> +
+>>> +  This is a part of device tree bindings for S2M and S5M family of Power
+>>> +  Management IC (PMIC).
+>>> +
+>>> +  See also Documentation/devicetree/bindings/mfd/samsung,s2mps11.yaml for
+>>> +  additional information and example.
+>>> +
+>>> +allOf:
+>>> +  - $ref: common.yaml#
+>>
+>> This looks a bit lacking. Don't you need 3 child nodes for each or
+>> reference to the multi-color schema?
+> 
+> 	rgb {
+> 		compatible = "samsung,s2mu005-rgb";
+> 		label = "notification:rgb:indicator";
+> 		color = <LED_COLOR_ID_RGB>;
+> 		function = LED_FUNCTION_INDICATOR;
+> 		linux,default-trigger = "pattern";
+> 	};
 
-If it all Fixes tag required to make the code in sync with kernel-doc
+Having label together with color and function doesn't make sense.
+Please read label documentation in [0].
 
-Fixes: c33edd8f936c ("thermal: renesas: rzg3e: make calibration value retri=
-eval per-chip")
+[0] Documentation/devicetree/bindings/leds/common.yaml
 
-> ---
->  drivers/thermal/renesas/rzg3e_thermal.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-> diff --git a/drivers/thermal/renesas/rzg3e_thermal.c b/drivers/thermal/re=
-nesas/rzg3e_thermal.c
-> index dde021e283b7..086bd3da10e1 100644
-> --- a/drivers/thermal/renesas/rzg3e_thermal.c
-> +++ b/drivers/thermal/renesas/rzg3e_thermal.c
-> @@ -87,13 +87,11 @@ struct rzg3e_thermal_info {
->   * struct rzg3e_thermal_priv - RZ/G3E TSU private data
->   * @base: TSU register base
->   * @dev: device pointer
-> - * @syscon: regmap for calibration values
->   * @zone: thermal zone device
->   * @rstc: reset control
->   * @info: chip type specific information
->   * @trmval0: calibration value 0 (b)
->   * @trmval1: calibration value 1 (c)
-> - * @trim_offset: offset for trim registers in syscon
->   * @lock: protects hardware access during conversions
->   */
->  struct rzg3e_thermal_priv {
-> --
-> 2.43.0
+-- 
+Best regards,
+Jacek Anaszewski
 
 
