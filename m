@@ -1,165 +1,195 @@
-Return-Path: <linux-pm+bounces-42255-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42256-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cFiuOFdXiGnaoQQAu9opvQ
-	(envelope-from <linux-pm+bounces-42255-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 10:28:55 +0100
+	id 6PU1KCxbiGkNowQAu9opvQ
+	(envelope-from <linux-pm+bounces-42256-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 10:45:16 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62DCD10837A
-	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 10:28:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4957F108427
+	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 10:45:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 05951301112C
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Feb 2026 09:28:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 62DF63011F1C
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Feb 2026 09:45:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40D6133D6DC;
-	Sun,  8 Feb 2026 09:28:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C34EA346766;
+	Sun,  8 Feb 2026 09:45:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zov1yUhp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bZZuMnB2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3212D8762
-	for <linux-pm@vger.kernel.org>; Sun,  8 Feb 2026 09:28:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9615542049;
+	Sun,  8 Feb 2026 09:45:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770542933; cv=none; b=M3T1cPnJXjXIRZZWcSwdSZ3/L2hlaqjVm4zhlxQPbPFIFW1dLz6ctiZOaYVC6s2gOXXMtuYH3T2cjZbd3PqjarEFmGkG4MSMe3FQzLYJVEq2ZDOv++TleRqR/iyDPfHop03yL/YIOYJCB4rMV8RNhj1EXsRw/on1Z50h64vtVOA=
+	t=1770543909; cv=none; b=C3HLh7AR5TLQJtQ9DO7Q+O3B4x4v+6o201DxD/z2Jh9BIfwnW6bPs65o/zmYgrhZInIGJzgVAGjAu61yY4J/ZSHT1MhltNIrSG8bPws/4jXc8FaNAz1vNGEefZqNh71xCU+7HzXncJ9BicQFmCTyEMIAMDWknVfmqHCWqjxB2UI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770542933; c=relaxed/simple;
-	bh=TI+RlJWXb2vDMS68WDTD+JOZiTemj9ayojnCp31xpjc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nc6gsl6KtbDvo98IHAqHOU0cSlpg5/s/xasyWikV2j77vSs7YFQQsTZBgUjQMRwrCJ6014BdGR0MyTwhdLXMjeMqsdq/l4b7Sxe3NYOHlhNx+cBhAL2hLYX7IFJnYBh4q83RUt6mjgR8WrR2mVsQJDw8KXJ0svoiu1uzvZ4HuYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zov1yUhp; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-4376de3f128so47158f8f.0
-        for <linux-pm@vger.kernel.org>; Sun, 08 Feb 2026 01:28:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770542931; x=1771147731; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UMp8+XE43yviL5lzSATz3TUvs31rQGhCrOgDU6c1JKk=;
-        b=Zov1yUhp/ShI+B1EWTQy2iZQUDzX2sXgQ+FDTJWqNarRqCMjJSmYocnXmYcvLEWxkj
-         YndbQ/pfLzBuspl61WXA6aLSB64ZGzDm46i2uDFyHW7E/NdoC6en3HEbT0l3yvwT4xfG
-         xtJIH6FjfC/6FZy5VJNEclzkeXrwAA80D9xXX7OGHcPjnGxwigUCRSg8O14sbptkOtHV
-         QylPIQuDQbQuh0aZwZsZPlwqoCFGJVe3IWbt5wdQrk35++qX2s4PS3fKKdaGi29lOmfI
-         6K1YSrXK2ieyHEJDWfi77/hQJDG/oB4TVRgrFkab1cwGcThRrVm2y/XWz3iWaIxZ0Gsj
-         2wEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770542931; x=1771147731;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UMp8+XE43yviL5lzSATz3TUvs31rQGhCrOgDU6c1JKk=;
-        b=nGLqnRTri8rUgknK5lhHACeuRrah6LEoYks8ZxYohNy1SKiV0HyRR/RFZrsU0sp0IG
-         ooue8b2chcohA/lluUI2KOSxwLXWSplwz+kzsJpesKS3diTeFX9FBk1AE+Gox5zWlDCh
-         NPRON4h1hEqah8vlR2sic5m3Q8gWAZjtD3R52Hr0LkBifZxnUD1m5ypDYjMxzKsFg64r
-         2k4N61GR8r31b85JWi/kWFP+CHzjhbHFaC9PuYxhidqK8bQ9Dl6UKEgHl1jAwygUiI3A
-         eeJZ+3llvRVFgva3nIEgJTN1GhKhXIXu48l9HMIUXc8pKMqsMFzX07yoIN7o1BdyUHrL
-         eMAA==
-X-Forwarded-Encrypted: i=1; AJvYcCWmnYy9/Ogq+20XEOaMBP96/PHqEhtsKG7K1QWkJYyundhuRSYJPI2CnTmMbJbkY8gpa2Oz1U6zXQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxolT0ZrLGH7g19Qxnj0O8xliHYz7y6EBw7CVRQ0YPsiLTO+zDh
-	Esxbf0/CsPx6GDnI+nup/5JYL45JyLezpddzal5xj6brGCN517g/RFb8WL8Mq6Ff
-X-Gm-Gg: AZuq6aJQ49UhvV8NOO8dhUUo/lh19UJzlLOpZqcAI5fIFwmYeJWehUrhEbrpBI8+7bL
-	ZZexlwJOv4Yu2NwA432XAEa86oVSwPZxkB8AWas8OHkKvxnYUykV8HvHICMhXqVYt803+uwn9xs
-	sctMZCBEbn+AQxOXeTqi6MoPRyj4mI6hh0NMcmlrSgjjuI87xPSbCPauwVLCZdYvGEgZEOI0AZf
-	kzIXSpS6/VsE9nIAIZBoFe//bzw9NbsVnjqsOOlHVc86sp5cVMPHSQ5A4ah28d4aWGv6W8G52b4
-	0MayXfmfnk4R6F1LwyW2V5mpDfck74NXmVA68b4I9nxv2zTrMsPwE+NJToQi8jR1OBQbSd9RWy8
-	1Gjs07FvsgsR9nJBGd0ZGWDPBL92BRH/iJWNx0T9dtDguOaIDDY0NnAPFKui8F2ehQ8Nnetwy5o
-	A64HeZ+WuPHK0AFJ2WXFKsf1n36vI2zaDzrfzFtCy9Hcc=
-X-Received: by 2002:a05:6000:25ca:b0:437:6b2e:a279 with SMTP id ffacd0b85a97d-4376b2ea4f5mr1531339f8f.10.1770542931122;
-        Sun, 08 Feb 2026 01:28:51 -0800 (PST)
-Received: from localhost.localdomain ([2a00:23c4:a758:8a01:1656:80b:8f7e:841])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4362974b230sm19959983f8f.36.2026.02.08.01.28.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Feb 2026 01:28:50 -0800 (PST)
-From: Biju <biju.das.au@gmail.com>
-X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
-To: John Madieu <john.madieu.xa@bp.renesas.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>,
-	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH] thermal: renesas: rzg3e: Drop unused kernel-doc comments
-Date: Sun,  8 Feb 2026 09:28:46 +0000
-Message-ID: <20260208092848.5313-1-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1770543909; c=relaxed/simple;
+	bh=FIQg0zmD65iPVufX+m5FEFh4Z4LKQ7VDLk2wjOo/qCk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N92cuoBmtIz/JmN5tGXKPXJPTJsiz6gbztle9srhidZMkTiFVa3NXnidQ3RcQsUCb8SQuHKIXh/jsTIEV8el4oQZt1Sw1b5yfg0FnAYK4KjZLR24MSGBBlVy8mKn5ephFs32GtneX2jd0XaZc38g6l7V36Bgxh8dpFU9S240M0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bZZuMnB2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A601C4CEF7;
+	Sun,  8 Feb 2026 09:45:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770543909;
+	bh=FIQg0zmD65iPVufX+m5FEFh4Z4LKQ7VDLk2wjOo/qCk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bZZuMnB29q82TNoks3Sk5Zp68uuY7hshQik8SChh2sZDShRkSzuFYz+pyHDRPYu7B
+	 tQfgiz7lPoMqY2MH/r9FcySRokmHo1+DWtaYD3UW5+VVlY/lEnpI6egBPROImOca+W
+	 KMIfqnon8weZykJJ/X0nTYc1N7+ec46eifhPZ149NU519zP1BualaBEKYmPDm7qFJx
+	 CshKM6ix1ECOjslst+qIy56Fq5jaJmCJVeThAJGDxYODOiYelbGlKEwxKaxdxAto9R
+	 ABhU+Po42gw/9gGlnnbBZLq09xVl6fAkliFjo+IA1hLPbDPsGLtHgQco+BqTYbUxQ1
+	 2GnGkNGE1cIlg==
+Message-ID: <19a5b5dd-a3d2-4246-8519-ac9125d8698b@kernel.org>
+Date: Sun, 8 Feb 2026 10:45:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/7] dt-bindings: clock: qcom,sm8250-videocc: account
+ for the MX domain
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+ Jonathan Marek <jonathan@marek.ca>, Ulf Hansson <ulf.hansson@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Bryan O'Donoghue <bod@kernel.org>,
+ Vikash Garodia <vikash.garodia@oss.qualcomm.com>,
+ Dikshita Agarwal <dikshita.agarwal@oss.qualcomm.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Stanimir Varbanov <stanimir.varbanov@linaro.org>,
+ Abhinav Kumar <abhinav.kumar@linux.dev>, Hans Verkuil <hverkuil@kernel.org>,
+ Stefan Schmidt <stefan.schmidt@linaro.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Dikshita Agarwal <dikshita@qti.qualcomm.com>, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-media@vger.kernel.org,
+ Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+References: <20260204-iris-venus-fix-sm8250-v3-0-70fa68e57f96@oss.qualcomm.com>
+ <20260204-iris-venus-fix-sm8250-v3-1-70fa68e57f96@oss.qualcomm.com>
+ <20260205-abiding-beautiful-locust-6ee1b5@quoll>
+ <mlpe7ph27grv4bulvwlo5lbbsjmwqqfwc3rrfwfcu7tl7qltsu@xrtzonb2t44k>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <mlpe7ph27grv4bulvwlo5lbbsjmwqqfwc3rrfwfcu7tl7qltsu@xrtzonb2t44k>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_RHS_MATCH_TO(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[bijudasau@gmail.com,linux-pm@vger.kernel.org];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42255-lists,linux-pm=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-42256-lists,linux-pm=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FREEMAIL_CC(0.00)[bp.renesas.com,intel.com,arm.com,vger.kernel.org,glider.be,gmail.com];
-	PRECEDENCE_BULK(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_RCPT(0.00)[linux-pm,renesas];
-	NEURAL_HAM(-0.00)[-0.999];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[29];
+	FROM_HAS_DN(0.00)[];
 	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-0.996];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[krzk@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-pm,dt,huawei];
 	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: 62DCD10837A
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 4957F108427
 X-Rspamd-Action: no action
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+On 05/02/2026 13:48, Dmitry Baryshkov wrote:
+>>
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: iface
+>>> +      - const: bi_tcxo
+>>> +      - const: bi_tcxo_ao
+>>> +
+>>> +  power-domains:
+>>> +    items:
+>>> +      - description:
+>>> +          A phandle and PM domain specifier for the MMCX power domain.
+>>> +      - description:
+>>> +          A phandle and PM domain specifier for the MX power domain.
+>>
+>> This is an ABI break, so please say in the commit what was not working
+>> or why this ABI break is really justified. Currently you just give a
+>> hint that it is needed for PLL configuration, but honestly - why would
+>> we care to configure PLL if everything was working correct before?
+> 
+> I must admit, I c&p'ed the commit message from [1] which was ack'ed by
+> Rob and accepted into the kernel. What is the difference?
 
-Drop unused kernel-doc comments from struct rzg3e_thermal_priv.
+No difference. To me both are insufficiently explained as fixes, but
+other maintainer might have different opinion. I don't mind that.
 
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
----
- drivers/thermal/renesas/rzg3e_thermal.c | 2 --
- 1 file changed, 2 deletions(-)
+> 
+> [1] https://lore.kernel.org/all/20250530-videocc-pll-multi-pd-voting-v5-1-02303b3a582d@quicinc.com/
+> 
 
-diff --git a/drivers/thermal/renesas/rzg3e_thermal.c b/drivers/thermal/renesas/rzg3e_thermal.c
-index dde021e283b7..086bd3da10e1 100644
---- a/drivers/thermal/renesas/rzg3e_thermal.c
-+++ b/drivers/thermal/renesas/rzg3e_thermal.c
-@@ -87,13 +87,11 @@ struct rzg3e_thermal_info {
-  * struct rzg3e_thermal_priv - RZ/G3E TSU private data
-  * @base: TSU register base
-  * @dev: device pointer
-- * @syscon: regmap for calibration values
-  * @zone: thermal zone device
-  * @rstc: reset control
-  * @info: chip type specific information
-  * @trmval0: calibration value 0 (b)
-  * @trmval1: calibration value 1 (c)
-- * @trim_offset: offset for trim registers in syscon
-  * @lock: protects hardware access during conversions
-  */
- struct rzg3e_thermal_priv {
--- 
-2.43.0
 
+Best regards,
+Krzysztof
 
