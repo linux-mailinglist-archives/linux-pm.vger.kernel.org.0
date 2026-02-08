@@ -1,81 +1,81 @@
-Return-Path: <linux-pm+bounces-42271-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42272-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uBXMOCUHiWnI1QQAu9opvQ
-	(envelope-from <linux-pm+bounces-42271-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 22:59:01 +0100
+	id WH5QJGAHiWnK1QQAu9opvQ
+	(envelope-from <linux-pm+bounces-42272-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 23:00:00 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A1F610A4C9
-	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 22:59:00 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A21010A523
+	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 23:00:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9BD7530046A4
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Feb 2026 21:58:53 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1BE9A303674F
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Feb 2026 21:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58ED135BDC9;
-	Sun,  8 Feb 2026 21:58:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FBDC35D613;
+	Sun,  8 Feb 2026 21:58:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d0EZ3oZM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dG9qI0kY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A19335A93F
-	for <linux-pm@vger.kernel.org>; Sun,  8 Feb 2026 21:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51BCB350A05
+	for <linux-pm@vger.kernel.org>; Sun,  8 Feb 2026 21:58:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770587931; cv=none; b=ILLh+thYQFRdAW3m/msD/iV6m03mUc7IOrYmBWDwwrMQAQL1eoO+DfSQq6BK6hRVUAPbaa8at3YeBVIpOLAJ/wPMPR+/4RhDvyjAzFXqoHEPO/JHVm3VUMMk9PmpA8bHSWo7YAa0txusdpdqecl6ivNB3bHHK2Mlbvl8+W/YE94=
+	t=1770587932; cv=none; b=YztZkB6iCxmsh+F0IqtuOdbXpUwlwq5CW70BmLZn2dtP7WeGlRKY7Ef2XkJ577uSoTzKx8o3Kjs9Fze2q4k+35KnWs+78athOAmZXYSlOyw7aA86CAMawTeHxhrwA7r2XbnZgEtZx7tk8xtQFN2wLM00L9J8mJHMLwcn6PUE0c0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770587931; c=relaxed/simple;
-	bh=GETDChp4MZA6lB2IvMCiWU0XpNLogukkMxKKyzcImvk=;
+	s=arc-20240116; t=1770587932; c=relaxed/simple;
+	bh=ODJpTK6yx8sL3Yjx3SR46wf2FGw+h0vJmlVT0y2AyfQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VOXdWKHL5nZJ6rIT+5E8gRjMTZ0DskQM/dp/9NFIZz9GQrH0fFg6qQhyisSErIVOuWd5vcsenM2Odfpbc92XTJ9+HlYHxoBH7bkdmrygMToTJ7/w+icRerDkK2rofAfG2hDXaVLrTdsCZOx+YWdtG3v5gwAn3zsGkUsorYzX/xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d0EZ3oZM; arc=none smtp.client-ip=209.85.161.52
+	 MIME-Version; b=m5DoWipOp/bDGa0Yq0G4YGdHqXwBCQ54NHtJ30GsdZptD3tQUQcHzrATtABvL7gDD5QPTTvBqlaKYt4tqgShbW8q4xRHENq2VNWV1KAVT9EIApcZO/BeYhoyeR5M/UFZgpTPityMn9oQN4Xhg88noJ4xVSsi4Gefm5AL661GM4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dG9qI0kY; arc=none smtp.client-ip=209.85.210.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-6630d0685abso2320212eaf.0
-        for <linux-pm@vger.kernel.org>; Sun, 08 Feb 2026 13:58:50 -0800 (PST)
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7cfcb46ffc9so2705437a34.0
+        for <linux-pm@vger.kernel.org>; Sun, 08 Feb 2026 13:58:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770587930; x=1771192730; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770587931; x=1771192731; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bkTf0BqWuQBW5wS4SMRRzp+y8TABCQWi3klTIzIW13I=;
-        b=d0EZ3oZMJ/bjUA73w0evJ3XIgId+dorjCIjtMM/OWb+GQBzymPrAYB2o+edrZjUmS9
-         AwiuQYjvTBKpffwSCOLFEN+lKo/vIwWOgMzlTko8FcxPo/ZDw64rhM1HnchHBXQqNoJV
-         hrroEIZCpdDVUh0kgTWRjhVr58FoFRkVR/bfK7qigDDZBKWlNRgo/9DDzP7daAygPuh0
-         J1JlFxRi/VEUIdrN6L9ikBRU/nltJ4wpUCnoQqvVYi15GOcxzGpyLSn8g/Q0rUUbjRoj
-         rhSBrTDI5rr6RpUViHqRwIYQIh7TWPdPm+ca/ts8OrTDUcyWz0+Z97DVPPEeAVu4WVwx
-         1/gQ==
+        bh=HpwswEDlCandEKSEcjjhsX6vu11jfmhgbFRVqdS0y6A=;
+        b=dG9qI0kYQmhW6JNCk95pxW7PPQil8zbjJFz87Ku7Nkh86EZVGIPPfNKoiPpKUmt7ah
+         Ca/uVBL1FGUlsicpkOLBKVBeF8Tm6yKbgdvfnUokxsG2Jwl0ef/NyQXx2j9P4TrIDzYQ
+         +hAZaq5nvpUYgyR3rDhRKvq/tpfPLSaLXoa3qfqak/nQGQwtpqJUL34fGjOXlW2V5v8E
+         OfF4NhluWoIili8uqIAamc0ElWDSY4pF9uaYeCuv36FG7XyWD1YlHXboNTxwbZ/CfZ0q
+         R8EKETELmcXLN8hUii6EH7dj+Z/os38EJ6fiUWe+uTIzESMFDTcEh+te/nqiVJyE429D
+         7Ajg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770587930; x=1771192730;
+        d=1e100.net; s=20230601; t=1770587931; x=1771192731;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=bkTf0BqWuQBW5wS4SMRRzp+y8TABCQWi3klTIzIW13I=;
-        b=gWwa7QxdIyMDx3m2wC2Q0B9UqQmiR5qk1gABdWIDNoQKE+Fzp1gyCgH9osRwwdXgND
-         LNsu7ALGa9KxfdqlZWuLVIh8xAVUMbJ54enCtchYakzhCZF5J4d1IuEHJOR5xBGYPRlD
-         m0ZLXl7vAmU8+Ty2jmls7oroRDn0ReAVYSsOLio5AbgdI06Qvw+Dovgd8hLjKS8vr4fN
-         0svh2JxLE8VlKKh508NEN4Nbfg2fie2Ec/4y3Wd+wjXvg6X+wtc3MvfFgGFowshOLqgV
-         eFmw9u7Fio40E44hRbpjtuPORbW1uU6ZmtSR1nC7Db/Fe6D+CayBdeMGqMBUFLOW8x8E
-         WX3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUFSSELCYi3Anojrplhc2Eg+f0f980AL5p+OSEMcQcfXDMWGhQgXTdu3ylKxgErD8DSDx+E5rvjBA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7uGqVagm7b097lE83NBrQK0vXcOO9H5ZYiaxS1BA+t5O6Rudk
-	haApxnssz9YGoT3Isk038TacfGO3G3jml+1E2sWFHdTRNKhrqndcBbRj
-X-Gm-Gg: AZuq6aIpQ3rhVTdIPe3vIYQnSo47ptK7iwG3FvmL2+vy7vdsZ5NzxIKGQnR5CoaXWac
-	wNRZfgOrlghTcyqvpL8l9M4GrHuqBK+i6kBORxtMq1exGz5OgqH6gsuAohDJK/oJ9DuqGFOsEoW
-	0w6n1Gl6N+qDN2rvaoysykcw60x6661x7qQA5exT8mE/QAWD3PW59NLm+iBgcUhuyLrh2YcfNG6
-	UgGdZ9E1sOIJ5wIc8SrQoSwfzY0ixiERYdLgxu35bKca92UjlwXXhZK+mXVBVGbmD1ApnI2vAxl
-	mOi7kSjOOcofOHOgJW4xYr/nkFHb1dtvq4116emicrDeAH6QxwgwFFivBRye6CPXw2LR1O70dJj
-	XXywtAQA/lHlsLP/z6QKush+TtkYsGWbS7k8KHqRPrMooKMvXu3vH5JdTCohJEX8SWp5NU0Kwvq
-	jbEusGAEPfrK7gTGl/7Ao9kUYUx8fn5cZrgw==
-X-Received: by 2002:a05:6820:3088:b0:663:888:6093 with SMTP id 006d021491bc7-66d0ce25452mr4103771eaf.70.1770587929794;
-        Sun, 08 Feb 2026 13:58:49 -0800 (PST)
-Received: from localhost ([2a03:2880:10ff:56::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-66d391ae639sm4736638eaf.7.2026.02.08.13.58.48
+        bh=HpwswEDlCandEKSEcjjhsX6vu11jfmhgbFRVqdS0y6A=;
+        b=oIZ9z4CYUw22HX0qJsU3r3sny+8xY4JPxVASwiSL7v668k1A3s+KFRgngNDg06fSq0
+         M8yaFx/Q/aOBERqpeTOaLoY8778qqP90jU6o/XY+AR2JLfBw3ZQZMEo7/DGf48tLWdZd
+         cD1qfH4ada1y2zOCn+PMiEK0eI8V3mhILBXn46szU0A92d3kzVx6EryMIyk5yK1f7diX
+         wLNkx4yPWpxdNjfc3c5HD2A7/fTLSxa+/pASirKHT9IN4Cf8rxmAJcT39esCUUaDagVx
+         G8aEEFRH6yKEnlaEoQLSxXD03Czrz7IMCOLPpNgtQkECbeEtJXPMhz7wGZJSpEXnllIG
+         YClA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgc+aMvQ/vjSBE+GWzP+YvZ4ft8x4doijV0Pg1qtyI0MKH3LH2Bhc5hbHi0Q6syv1J5YI8HnAvww==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAHph3f4027wbwb3WW2q7Eqs3WJsMqsG9R3AMioGi0+qTRY3XN
+	Jr1pDt1pu/Sn5+MWAsH1hpP10DQh5bEiwRHXOhx34Z60F85U05phLcwF
+X-Gm-Gg: AZuq6aI2BAkVdHxv+apfQ4DKog3iteWR4yBlrqzdn7jaOfFl0d8h0isQF09W7McNwCV
+	dyvNwXZVUOJK5RgqxdqJQCiE+ew/yirBcPZ4ssDSwcAm8wwAPf2wEp3w7DI5x6yFjgvG2gid2Hg
+	izc1tvqspRxBLiTkVRJDzirmyVUJ5KAOYsN0BIFp63BAAxn6RaxCIrFaIy+diMIeiwhSq5mKb+z
+	fsHstOPKs7oUqkytf5Gz0pBeWBlZpzsH1mkFHJM62RsmeGMPesFPAl8upN91jt3TKvKVBAHoI08
+	iZX2drSm/XGe5hfJYgKEka1ZABTw872fSSUwePtlbPktwxg83ODDEaQmDI8Lxuqz7iIh83BqWls
+	Ws8V6BXfNsBjhoZQIb+JaYZR6GA+pWzsZ7rVy3/iKiYvzzosl7/Si8bPMIV78kw8vjaYW76PoXk
+	T5g08OkYodte8/GNSrxulP5ANMcnncASFeEA==
+X-Received: by 2002:a05:6830:828c:b0:7d1:93ea:5bc0 with SMTP id 46e09a7af769-7d4633df66dmr5296308a34.9.1770587931097;
+        Sun, 08 Feb 2026 13:58:51 -0800 (PST)
+Received: from localhost ([2a03:2880:10ff:70::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d4646fb89fsm6346653a34.1.2026.02.08.13.58.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Feb 2026 13:58:49 -0800 (PST)
+        Sun, 08 Feb 2026 13:58:50 -0800 (PST)
 From: Nhat Pham <nphamcs@gmail.com>
 To: linux-mm@kvack.org
 Cc: akpm@linux-foundation.org,
@@ -116,9 +116,9 @@ Cc: akpm@linux-foundation.org,
 	jannh@google.com,
 	pfalcato@suse.de,
 	zhengqi.arch@bytedance.com
-Subject: [PATCH v3 03/20] mm: swap: add an abstract API for locking out swapoff
-Date: Sun,  8 Feb 2026 13:58:16 -0800
-Message-ID: <20260208215839.87595-4-nphamcs@gmail.com>
+Subject: [PATCH v3 04/20] zswap: add new helpers for zswap entry operations
+Date: Sun,  8 Feb 2026 13:58:17 -0800
+Message-ID: <20260208215839.87595-5-nphamcs@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260208215839.87595-1-nphamcs@gmail.com>
 References: <20260208215839.87595-1-nphamcs@gmail.com>
@@ -137,7 +137,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -147,8 +147,8 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42271-lists,linux-pm=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-42272-lists,linux-pm=lfdr.de];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
@@ -160,310 +160,159 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	NEURAL_HAM(-0.00)[-0.999];
 	FREEMAIL_FROM(0.00)[gmail.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0A1F610A4C9
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 3A21010A523
 X-Rspamd-Action: no action
 
-Currently, we get a reference to the backing swap device in order to
-prevent swapoff from freeing the metadata of a swap entry. This does not
-make sense in the new virtual swap design, especially after the swap
-backends are decoupled - a swap entry might not have any backing swap
-device at all, and its backend might change at any time during its
-lifetime.
-
-In preparation for this, abstract away the swapoff locking out behavior
-into a generic API.
+Add new helper functions to abstract away zswap entry operations, in
+order to facilitate re-implementing these functions when swap is
+virtualized.
 
 Signed-off-by: Nhat Pham <nphamcs@gmail.com>
 ---
- include/linux/swap.h | 17 +++++++++++++++++
- mm/memory.c          | 13 +++++++------
- mm/mincore.c         | 15 +++------------
- mm/shmem.c           | 12 ++++++------
- mm/swap_state.c      | 14 +++++++-------
- mm/userfaultfd.c     | 15 +++++++++------
- mm/zswap.c           |  5 ++---
- 7 files changed, 51 insertions(+), 40 deletions(-)
+ mm/zswap.c | 59 ++++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 40 insertions(+), 19 deletions(-)
 
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index aa29d8ac542d1..3da637b218baf 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -659,5 +659,22 @@ static inline bool mem_cgroup_swap_full(struct folio *folio)
- }
- #endif
- 
-+static inline bool tryget_swap_entry(swp_entry_t entry,
-+				struct swap_info_struct **sip)
-+{
-+	struct swap_info_struct *si = get_swap_device(entry);
-+
-+	if (sip)
-+		*sip = si;
-+
-+	return si;
-+}
-+
-+static inline void put_swap_entry(swp_entry_t entry,
-+				struct swap_info_struct *si)
-+{
-+	put_swap_device(si);
-+}
-+
- #endif /* __KERNEL__*/
- #endif /* _LINUX_SWAP_H */
-diff --git a/mm/memory.c b/mm/memory.c
-index da360a6eb8a48..90031f833f52e 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -4630,6 +4630,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 	struct swap_info_struct *si = NULL;
- 	rmap_t rmap_flags = RMAP_NONE;
- 	bool need_clear_cache = false;
-+	bool swapoff_locked = false;
- 	bool exclusive = false;
- 	softleaf_t entry;
- 	pte_t pte;
-@@ -4698,8 +4699,8 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 	}
- 
- 	/* Prevent swapoff from happening to us. */
--	si = get_swap_device(entry);
--	if (unlikely(!si))
-+	swapoff_locked = tryget_swap_entry(entry, &si);
-+	if (unlikely(!swapoff_locked))
- 		goto out;
- 
- 	folio = swap_cache_get_folio(entry);
-@@ -5047,8 +5048,8 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 		if (waitqueue_active(&swapcache_wq))
- 			wake_up(&swapcache_wq);
- 	}
--	if (si)
--		put_swap_device(si);
-+	if (swapoff_locked)
-+		put_swap_entry(entry, si);
- 	return ret;
- out_nomap:
- 	if (vmf->pte)
-@@ -5066,8 +5067,8 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 		if (waitqueue_active(&swapcache_wq))
- 			wake_up(&swapcache_wq);
- 	}
--	if (si)
--		put_swap_device(si);
-+	if (swapoff_locked)
-+		put_swap_entry(entry, si);
- 	return ret;
- }
- 
-diff --git a/mm/mincore.c b/mm/mincore.c
-index e5d13eea92347..f3eb771249d67 100644
---- a/mm/mincore.c
-+++ b/mm/mincore.c
-@@ -77,19 +77,10 @@ static unsigned char mincore_swap(swp_entry_t entry, bool shmem)
- 	if (!softleaf_is_swap(entry))
- 		return !shmem;
- 
--	/*
--	 * Shmem mapping lookup is lockless, so we need to grab the swap
--	 * device. mincore page table walk locks the PTL, and the swap
--	 * device is stable, avoid touching the si for better performance.
--	 */
--	if (shmem) {
--		si = get_swap_device(entry);
--		if (!si)
--			return 0;
--	}
-+	if (!tryget_swap_entry(entry, &si))
-+		return 0;
- 	folio = swap_cache_get_folio(entry);
--	if (shmem)
--		put_swap_device(si);
-+	put_swap_entry(entry, si);
- 	/* The swap cache space contains either folio, shadow or NULL */
- 	if (folio && !xa_is_value(folio)) {
- 		present = folio_test_uptodate(folio);
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 1db97ef2d14eb..b40be22fa5f09 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2307,7 +2307,7 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
- 	softleaf_t index_entry;
- 	struct swap_info_struct *si;
- 	struct folio *folio = NULL;
--	bool skip_swapcache = false;
-+	bool swapoff_locked, skip_swapcache = false;
- 	int error, nr_pages, order;
- 	pgoff_t offset;
- 
-@@ -2319,16 +2319,16 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
- 	if (softleaf_is_poison_marker(index_entry))
- 		return -EIO;
- 
--	si = get_swap_device(index_entry);
-+	swapoff_locked = tryget_swap_entry(index_entry, &si);
- 	order = shmem_confirm_swap(mapping, index, index_entry);
--	if (unlikely(!si)) {
-+	if (unlikely(!swapoff_locked)) {
- 		if (order < 0)
- 			return -EEXIST;
- 		else
- 			return -EINVAL;
- 	}
- 	if (unlikely(order < 0)) {
--		put_swap_device(si);
-+		put_swap_entry(index_entry, si);
- 		return -EEXIST;
- 	}
- 
-@@ -2448,7 +2448,7 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
- 	}
- 	folio_mark_dirty(folio);
- 	swap_free_nr(swap, nr_pages);
--	put_swap_device(si);
-+	put_swap_entry(swap, si);
- 
- 	*foliop = folio;
- 	return 0;
-@@ -2466,7 +2466,7 @@ static int shmem_swapin_folio(struct inode *inode, pgoff_t index,
- 		swapcache_clear(si, folio->swap, folio_nr_pages(folio));
- 	if (folio)
- 		folio_put(folio);
--	put_swap_device(si);
-+	put_swap_entry(swap, si);
- 
- 	return error;
- }
-diff --git a/mm/swap_state.c b/mm/swap_state.c
-index 34c9d9b243a74..bece18eb540fa 100644
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -538,8 +538,7 @@ struct folio *read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
- 	pgoff_t ilx;
- 	struct folio *folio;
- 
--	si = get_swap_device(entry);
--	if (!si)
-+	if (!tryget_swap_entry(entry, &si))
- 		return NULL;
- 
- 	mpol = get_vma_policy(vma, addr, 0, &ilx);
-@@ -550,7 +549,7 @@ struct folio *read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
- 	if (page_allocated)
- 		swap_read_folio(folio, plug);
- 
--	put_swap_device(si);
-+	put_swap_entry(entry, si);
- 	return folio;
- }
- 
-@@ -763,6 +762,7 @@ static struct folio *swap_vma_readahead(swp_entry_t targ_entry, gfp_t gfp_mask,
- 	for (addr = start; addr < end; ilx++, addr += PAGE_SIZE) {
- 		struct swap_info_struct *si = NULL;
- 		softleaf_t entry;
-+		bool swapoff_locked = false;
- 
- 		if (!pte++) {
- 			pte = pte_offset_map(vmf->pmd, addr);
-@@ -781,14 +781,14 @@ static struct folio *swap_vma_readahead(swp_entry_t targ_entry, gfp_t gfp_mask,
- 		 * holding a reference to, try to grab a reference, or skip.
- 		 */
- 		if (swp_type(entry) != swp_type(targ_entry)) {
--			si = get_swap_device(entry);
--			if (!si)
-+			swapoff_locked = tryget_swap_entry(entry, &si);
-+			if (!swapoff_locked)
- 				continue;
- 		}
- 		folio = __read_swap_cache_async(entry, gfp_mask, mpol, ilx,
- 						&page_allocated, false);
--		if (si)
--			put_swap_device(si);
-+		if (swapoff_locked)
-+			put_swap_entry(entry, si);
- 		if (!folio)
- 			continue;
- 		if (page_allocated) {
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index e6dfd5f28acd7..25f89eba0438c 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -1262,9 +1262,11 @@ static long move_pages_ptes(struct mm_struct *mm, pmd_t *dst_pmd, pmd_t *src_pmd
- 	pte_t *dst_pte = NULL;
- 	pmd_t dummy_pmdval;
- 	pmd_t dst_pmdval;
-+	softleaf_t entry;
- 	struct folio *src_folio = NULL;
- 	struct mmu_notifier_range range;
- 	long ret = 0;
-+	bool swapoff_locked = false;
- 
- 	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm,
- 				src_addr, src_addr + len);
-@@ -1429,7 +1431,7 @@ static long move_pages_ptes(struct mm_struct *mm, pmd_t *dst_pmd, pmd_t *src_pmd
- 					len);
- 	} else { /* !pte_present() */
- 		struct folio *folio = NULL;
--		const softleaf_t entry = softleaf_from_pte(orig_src_pte);
-+		entry = softleaf_from_pte(orig_src_pte);
- 
- 		if (softleaf_is_migration(entry)) {
- 			pte_unmap(src_pte);
-@@ -1449,8 +1451,8 @@ static long move_pages_ptes(struct mm_struct *mm, pmd_t *dst_pmd, pmd_t *src_pmd
- 			goto out;
- 		}
- 
--		si = get_swap_device(entry);
--		if (unlikely(!si)) {
-+		swapoff_locked = tryget_swap_entry(entry, &si);
-+		if (unlikely(!swapoff_locked)) {
- 			ret = -EAGAIN;
- 			goto out;
- 		}
-@@ -1480,8 +1482,9 @@ static long move_pages_ptes(struct mm_struct *mm, pmd_t *dst_pmd, pmd_t *src_pmd
- 				pte_unmap(src_pte);
- 				pte_unmap(dst_pte);
- 				src_pte = dst_pte = NULL;
--				put_swap_device(si);
-+				put_swap_entry(entry, si);
- 				si = NULL;
-+				swapoff_locked = false;
- 				/* now we can block and wait */
- 				folio_lock(src_folio);
- 				goto retry;
-@@ -1507,8 +1510,8 @@ static long move_pages_ptes(struct mm_struct *mm, pmd_t *dst_pmd, pmd_t *src_pmd
- 	if (dst_pte)
- 		pte_unmap(dst_pte);
- 	mmu_notifier_invalidate_range_end(&range);
--	if (si)
--		put_swap_device(si);
-+	if (swapoff_locked)
-+		put_swap_entry(entry, si);
- 
- 	return ret;
- }
 diff --git a/mm/zswap.c b/mm/zswap.c
-index ac9b7a60736bc..315e4d0d08311 100644
+index 315e4d0d08311..a5a3f068bd1a6 100644
 --- a/mm/zswap.c
 +++ b/mm/zswap.c
-@@ -1009,14 +1009,13 @@ static int zswap_writeback_entry(struct zswap_entry *entry,
- 	int ret = 0;
+@@ -234,6 +234,38 @@ static inline struct xarray *swap_zswap_tree(swp_entry_t swp)
+ 		>> ZSWAP_ADDRESS_SPACE_SHIFT];
+ }
  
- 	/* try to allocate swap cache folio */
--	si = get_swap_device(swpentry);
--	if (!si)
-+	if (!tryget_swap_entry(swpentry, &si))
- 		return -EEXIST;
++static inline void *zswap_entry_store(swp_entry_t swpentry,
++		struct zswap_entry *entry)
++{
++	struct xarray *tree = swap_zswap_tree(swpentry);
++	pgoff_t offset = swp_offset(swpentry);
++
++	return xa_store(tree, offset, entry, GFP_KERNEL);
++}
++
++static inline void *zswap_entry_load(swp_entry_t swpentry)
++{
++	struct xarray *tree = swap_zswap_tree(swpentry);
++	pgoff_t offset = swp_offset(swpentry);
++
++	return xa_load(tree, offset);
++}
++
++static inline void *zswap_entry_erase(swp_entry_t swpentry)
++{
++	struct xarray *tree = swap_zswap_tree(swpentry);
++	pgoff_t offset = swp_offset(swpentry);
++
++	return xa_erase(tree, offset);
++}
++
++static inline bool zswap_empty(swp_entry_t swpentry)
++{
++	struct xarray *tree = swap_zswap_tree(swpentry);
++
++	return xa_empty(tree);
++}
++
+ #define zswap_pool_debug(msg, p)			\
+ 	pr_debug("%s pool %s\n", msg, (p)->tfm_name)
  
- 	mpol = get_task_policy(current);
- 	folio = __read_swap_cache_async(swpentry, GFP_KERNEL, mpol,
- 			NO_INTERLEAVE_INDEX, &folio_was_allocated, true);
--	put_swap_device(si);
-+	put_swap_entry(swpentry, si);
- 	if (!folio)
- 		return -ENOMEM;
+@@ -1000,8 +1032,6 @@ static bool zswap_decompress(struct zswap_entry *entry, struct folio *folio)
+ static int zswap_writeback_entry(struct zswap_entry *entry,
+ 				 swp_entry_t swpentry)
+ {
+-	struct xarray *tree;
+-	pgoff_t offset = swp_offset(swpentry);
+ 	struct folio *folio;
+ 	struct mempolicy *mpol;
+ 	bool folio_was_allocated;
+@@ -1040,8 +1070,7 @@ static int zswap_writeback_entry(struct zswap_entry *entry,
+ 	 * old compressed data. Only when this is successful can the entry
+ 	 * be dereferenced.
+ 	 */
+-	tree = swap_zswap_tree(swpentry);
+-	if (entry != xa_load(tree, offset)) {
++	if (entry != zswap_entry_load(swpentry)) {
+ 		ret = -ENOMEM;
+ 		goto out;
+ 	}
+@@ -1051,7 +1080,7 @@ static int zswap_writeback_entry(struct zswap_entry *entry,
+ 		goto out;
+ 	}
  
+-	xa_erase(tree, offset);
++	zswap_entry_erase(swpentry);
+ 
+ 	count_vm_event(ZSWPWB);
+ 	if (entry->objcg)
+@@ -1427,9 +1456,7 @@ static bool zswap_store_page(struct page *page,
+ 	if (!zswap_compress(page, entry, pool))
+ 		goto compress_failed;
+ 
+-	old = xa_store(swap_zswap_tree(page_swpentry),
+-		       swp_offset(page_swpentry),
+-		       entry, GFP_KERNEL);
++	old = zswap_entry_store(page_swpentry, entry);
+ 	if (xa_is_err(old)) {
+ 		int err = xa_err(old);
+ 
+@@ -1563,11 +1590,9 @@ bool zswap_store(struct folio *folio)
+ 		unsigned type = swp_type(swp);
+ 		pgoff_t offset = swp_offset(swp);
+ 		struct zswap_entry *entry;
+-		struct xarray *tree;
+ 
+ 		for (index = 0; index < nr_pages; ++index) {
+-			tree = swap_zswap_tree(swp_entry(type, offset + index));
+-			entry = xa_erase(tree, offset + index);
++			entry = zswap_entry_erase(swp_entry(type, offset + index));
+ 			if (entry)
+ 				zswap_entry_free(entry);
+ 		}
+@@ -1599,9 +1624,7 @@ bool zswap_store(struct folio *folio)
+ int zswap_load(struct folio *folio)
+ {
+ 	swp_entry_t swp = folio->swap;
+-	pgoff_t offset = swp_offset(swp);
+ 	bool swapcache = folio_test_swapcache(folio);
+-	struct xarray *tree = swap_zswap_tree(swp);
+ 	struct zswap_entry *entry;
+ 
+ 	VM_WARN_ON_ONCE(!folio_test_locked(folio));
+@@ -1619,7 +1642,7 @@ int zswap_load(struct folio *folio)
+ 		return -EINVAL;
+ 	}
+ 
+-	entry = xa_load(tree, offset);
++	entry = zswap_entry_load(swp);
+ 	if (!entry)
+ 		return -ENOENT;
+ 
+@@ -1648,7 +1671,7 @@ int zswap_load(struct folio *folio)
+ 	 */
+ 	if (swapcache) {
+ 		folio_mark_dirty(folio);
+-		xa_erase(tree, offset);
++		zswap_entry_erase(swp);
+ 		zswap_entry_free(entry);
+ 	}
+ 
+@@ -1658,14 +1681,12 @@ int zswap_load(struct folio *folio)
+ 
+ void zswap_invalidate(swp_entry_t swp)
+ {
+-	pgoff_t offset = swp_offset(swp);
+-	struct xarray *tree = swap_zswap_tree(swp);
+ 	struct zswap_entry *entry;
+ 
+-	if (xa_empty(tree))
++	if (zswap_empty(swp))
+ 		return;
+ 
+-	entry = xa_erase(tree, offset);
++	entry = zswap_entry_erase(swp);
+ 	if (entry)
+ 		zswap_entry_free(entry);
+ }
 -- 
 2.47.3
 
