@@ -1,59 +1,59 @@
-Return-Path: <linux-pm+bounces-42264-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42266-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YAF7LZ7NiGn6wAQAu9opvQ
-	(envelope-from <linux-pm+bounces-42264-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 18:53:34 +0100
+	id MIdtF8zNiGn6wAQAu9opvQ
+	(envelope-from <linux-pm+bounces-42266-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 18:54:20 +0100
 X-Original-To: lists+linux-pm@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 285111099A2
-	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 18:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 05CB21099CF
+	for <lists+linux-pm@lfdr.de>; Sun, 08 Feb 2026 18:54:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6B4F030086ED
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Feb 2026 17:53:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BDEEE3030B39
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Feb 2026 17:53:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 994532E542C;
-	Sun,  8 Feb 2026 17:53:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36F562E8DEB;
+	Sun,  8 Feb 2026 17:53:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="kT3oJbop"
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="OoSsIyae"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC35F23A9B3;
-	Sun,  8 Feb 2026 17:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2ACE2E7623;
+	Sun,  8 Feb 2026 17:53:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770573205; cv=none; b=rzp0uw3StzBa/gQlipflhg1ycP7iN87eX3aWaliGmu54RIcIhwrlxQD+oFWT9l8WDDpZGN3+K9xWrJbsTVAkYjQg+wQOzIfczuTK90np08XUxO5688rX8RndP3LxrVwIhuhkedNZ4JRz1BzYB6NMm5y80ojqjLwHpNdBYxDMYEY=
+	t=1770573209; cv=none; b=IWx9wNTi7EPkJUZZcXS79zDLvNNP9pT3T6/t8A5iZWvpgbXK6UtaJMzm+T9bNNDqv0Lp+8w1jeeZks/RKLHVoao9TjyRLkIk2a5/KsV1pRay5GD8qTCW+M2KnSOWw4qjh2eVK0ZUjIzNno0RC6AUf4k0DnodQ0q4yREd5hxMo60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770573205; c=relaxed/simple;
-	bh=Pu+m854baPlsj4/F+h1GYe5y3YUWvgvtyTFNfAh4qAs=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ML4rnel7ZYZfeEk/jFzCVz5ufLWPrKZbCrWSBkw0XlY5+/gpfMdwO+7aLz67dlCZDY4dvS+Mxx1vCTIHTIbinT6vz2b+T1JiEUvkP1sCQEVsyhuJNrlYeJBWjgAWJa9RR7IpwDF8RJyYtxUHRyAJqfJgK7xlnlR61hjqufF1mVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=kT3oJbop; arc=none smtp.client-ip=178.21.23.139
+	s=arc-20240116; t=1770573209; c=relaxed/simple;
+	bh=E+H4LBoeJ/ftgGgKbAViwKF8hz1RW0oyNxeyhY46F8Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=EG515bzWtWk8EX5X+xU7g1T3dGKY6caRPPVW1dUty7oQlnEv5spfhroowZq5eqa8vbzgX3SvY+HUeGR325kZj0ybqxQeNGHT5Dwj6h4OT6U4YWIZDTHVf9LrsFmQTrGU1tKVc/0rWbJkbL+Ya4Taxu/WXdlPypkHAS/vr+3b7rI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=OoSsIyae; arc=none smtp.client-ip=178.21.23.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Received: from [127.0.0.1] (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 38877276CF;
-	Sun,  8 Feb 2026 18:53:17 +0100 (CET)
+	by disroot.org (Postfix) with ESMTP id 37D6D27185;
+	Sun,  8 Feb 2026 18:53:22 +0100 (CET)
 X-Virus-Scanned: SPAM Filter at disroot.org
 Received: from layka.disroot.org ([127.0.0.1])
  by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id qFa9nsA_yZ2F; Sun,  8 Feb 2026 18:53:16 +0100 (CET)
+ id lkt_tuI4LeyE; Sun,  8 Feb 2026 18:53:21 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1770573196; bh=Pu+m854baPlsj4/F+h1GYe5y3YUWvgvtyTFNfAh4qAs=;
-	h=From:Subject:Date:To:Cc;
-	b=kT3oJbopiX3ioUiGxC/zfDP2omZyLYPUt2ShHidtjJylrHTaBLbHlT4F4U6k3lRP+
-	 y4ovpWyhFp391QqA0+U/zU3rBknkhmog0cXOtVqQdZxFf9/M1zb9yRUw4aNZPHLcr8
-	 IC9LTgMQngLlXYMqtlcmP6c0rLyMCJmOi3hG9JlX6H2c1PjLHG4Z0F7NgOZGCn4h6F
-	 w0Wc0a/lJ31S03LxjD+bAnh8qvf0bQaMIMQPzOK8iA535ad6EULmB/Bv8kyXqbzPsV
-	 r+ZOP7Z2Z7h8uubpSIHKk4Cip0IbSeOdROmtnKfMmpW/uVzqc3jtweP4k7alkgfdUe
-	 PO1xXY97kKFhw==
+	t=1770573201; bh=E+H4LBoeJ/ftgGgKbAViwKF8hz1RW0oyNxeyhY46F8Y=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc;
+	b=OoSsIyae3tW0ZcjyxxWu0qJojQ6ZeK08IAFaNG5oaxT0rKJPpUwOIdo9V919FQAtb
+	 ctj31+YsOsIoMd5TjUtxOTj7mTIfehZfLscZHEhkuDyIMSMh+LEsZ7W44s+Y3XJ7Sa
+	 xpw40Y5sdq47PmiV8p6+PGYB7cl9St0kujGtufVubzIBo9KfbNwJysESorpfKMlT0+
+	 R3I5eLyCXeAInDc2Skh9wRfdxOkIBaX3VvRusGLnK8kfx2n3FkrSgjccM4gipRzsuF
+	 P1/pU1mDfIycrYFGkbpsRERDbD98OCDJuzMc1MQLf+Kcr3+LhvoATrUItTa7GzHec3
+	 +RRz8uVMTtlUQ==
 From: Kaustabh Chakraborty <kauschluss@disroot.org>
-Subject: [PATCH v2 0/2] Add support for Samsung S2MU005 battery fuel gauge
- device
-Date: Sun, 08 Feb 2026 23:22:29 +0530
-Message-Id: <20260208-s2mu005-fuelgauge-v2-0-be3af8969291@disroot.org>
+Date: Sun, 08 Feb 2026 23:22:30 +0530
+Subject: [PATCH v2 1/2] dt-bindings: power: supply: document Samsung
+ S2MU005 battery fuel gauge
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,11 +62,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAF3NiGkC/32NQQ7CIBBFr9LMWsyAlhRX3sN0UWVKJ9HSQCGah
- ruLPYDL9/P/+xtECkwRLs0GgTJH9nMFdWjgMQ2zI8G2MihUGqXSIqpXQmzFmOjphlQLqiVjTUs
- nvGuouyXQyO/deesrTxxXHz77RZa/9J8tS4FCd4M8a7LYSXO1HIP369EHB30p5QtLTz9btAAAA
- A==
-X-Change-ID: 20260126-s2mu005-fuelgauge-25e9d95e30b6
+Message-Id: <20260208-s2mu005-fuelgauge-v2-1-be3af8969291@disroot.org>
+References: <20260208-s2mu005-fuelgauge-v2-0-be3af8969291@disroot.org>
+In-Reply-To: <20260208-s2mu005-fuelgauge-v2-0-be3af8969291@disroot.org>
 To: Yassine Oudjana <y.oudjana@protonmail.com>, 
  Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -84,7 +82,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42264-lists,linux-pm=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-42266-lists,linux-pm=lfdr.de];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FREEMAIL_TO(0.00)[protonmail.com,kernel.org];
 	RCVD_TLS_LAST(0.00)[];
@@ -97,53 +95,82 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[kauschluss@disroot.org,linux-pm@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.972];
+	NEURAL_HAM(-0.00)[-0.956];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-pm,dt];
 	DBL_BLOCKED_OPENRESOLVER(0.00)[disroot.org:email,disroot.org:dkim,disroot.org:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 285111099A2
+X-Rspamd-Queue-Id: 05CB21099CF
 X-Rspamd-Action: no action
 
-This patch series adds supports for the battery fuel gauge device for
-Samsung S2MU005 PMIC battery chargers. It reports various metrics,
-including incoming voltage, current, battery capacity, etc.
-
-Although this device is independent of the actual PMIC which it
-accompanies in functionality, it is used in conjunction with the PMIC's
-charger sub-device to provide complete battery status.
+Samsung S2MU005 is a PMIC device which has LED controllers, an MUIC and
+a battery charger. The battery charger is paired with an independent
+device connected via I2C which can be used to access various metrics of
+the battery. Document the device as a schema.
 
 Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
 ---
-Changes in v2:
-- s/fuelgauge/fuel-gauge in dt-bindings (Conor Dooley)
-- do not print error messages for -ENOMEM (Sebastian Reichel)
-- remove redundant irq_get_trigger_type() (Sebastian Reichel)
-- set regmap val_bits to 16 (Sebastian Reichel)
-- switch to regmap_{read,write}()
-- add current_avg and voltage_avg properties
-- implement workaround for false positives due to hysteresis
-- Link to v1: https://lore.kernel.org/r/20260126-s2mu005-fuelgauge-v1-0-68a146ed0819@disroot.org
+ .../power/supply/samsung,s2mu005-fuel-gauge.yaml   | 49 ++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
----
-Kaustabh Chakraborty (1):
-      dt-bindings: power: supply: document Samsung S2MU005 battery fuel gauge
+diff --git a/Documentation/devicetree/bindings/power/supply/samsung,s2mu005-fuel-gauge.yaml b/Documentation/devicetree/bindings/power/supply/samsung,s2mu005-fuel-gauge.yaml
+new file mode 100644
+index 0000000000000..05e420316a26b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/samsung,s2mu005-fuel-gauge.yaml
+@@ -0,0 +1,49 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/samsung,s2mu005-fuel-gauge.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Battery Fuel Gauge for Samsung S2M series PMICs
++
++maintainers:
++  - Kaustabh Chakraborty <kauschluss@disroot.org>
++
++allOf:
++  - $ref: power-supply.yaml#
++
++properties:
++  compatible:
++    enum:
++      - samsung,s2mu005-fuel-gauge
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      fuel-gauge@3b {
++        compatible = "samsung,s2mu005-fuel-gauge";
++        reg = <0x3b>;
++
++        interrupt-parent = <&gpa0>;
++        interrupts = <3 IRQ_TYPE_EDGE_BOTH>;
++
++        monitored-battery = <&battery>;
++      };
++    };
 
-Yassine Oudjana (1):
-      power: supply: add support for S2MU005 battery fuel gauge device
-
- .../power/supply/samsung,s2mu005-fuel-gauge.yaml   |  49 ++++
- drivers/power/supply/Kconfig                       |   9 +
- drivers/power/supply/Makefile                      |   1 +
- drivers/power/supply/s2mu005-battery.c             | 306 +++++++++++++++++++++
- 4 files changed, 365 insertions(+)
----
-base-commit: 9845cf73f7db6094c0d8419d6adb848028f4a921
-change-id: 20260126-s2mu005-fuelgauge-25e9d95e30b6
-
-Best regards,
 -- 
-Kaustabh Chakraborty <kauschluss@disroot.org>
+2.52.0
 
 
