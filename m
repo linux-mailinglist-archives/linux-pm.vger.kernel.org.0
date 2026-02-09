@@ -1,816 +1,639 @@
-Return-Path: <linux-pm+bounces-42351-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-42352-lists+linux-pm=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id sFiNLU29iWmkBQUAu9opvQ
-	(envelope-from <linux-pm+bounces-42351-lists+linux-pm=lfdr.de@vger.kernel.org>)
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 11:56:13 +0100
+	id 6NEwFe7UiWmECAAAu9opvQ
+	(envelope-from <linux-pm+bounces-42352-lists+linux-pm=lfdr.de@vger.kernel.org>)
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 13:37:02 +0100
 X-Original-To: lists+linux-pm@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30DB210E6A6
-	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 11:56:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCE0410EBDD
+	for <lists+linux-pm@lfdr.de>; Mon, 09 Feb 2026 13:37:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id DDB283002D1E
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 10:56:10 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0F31530078EE
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Feb 2026 12:20:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A15836997D;
-	Mon,  9 Feb 2026 10:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C10330B536;
+	Mon,  9 Feb 2026 12:20:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="niMTIiZm";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="KdW7NM7L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gcOek+Qe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DC6369232
-	for <linux-pm@vger.kernel.org>; Mon,  9 Feb 2026 10:56:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289D92459EA
+	for <linux-pm@vger.kernel.org>; Mon,  9 Feb 2026 12:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770634570; cv=none; b=symTHvxoaPqosNawfkIz5ox6fxiVz8N1LN3FyjG+IqjYVBIkqiuwmcjd0mJL2uILmb0wqsuPamLuh7JqrFmK95UoIKKpo+BmWsMkYAs7n9oEnj0/3ELs1xKu4638nhi2F7lZEfXfo/uzcpLJ91BS+3/UteDtl+Y/+pvXLrv3Cmc=
+	t=1770639635; cv=none; b=OsSo/UDKpGJ0A/LQv+S300rWZRLxtFP+mbRfkEdHYvqmrm0ebaKGdnzdPEXfvXWwQglWdeJF/sdO5q1Va3VyhkYms39ZbHWqhPwxEH8b5HOiCpixkmR4e+dYlm7F/fUYgV4vX1Xva5ZdWeFyyfdc4H7HZfOgGDss3YPY+hoT7YM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770634570; c=relaxed/simple;
-	bh=P2BPamJHPtcuuWhm18+eCvTBbxttVG4dBcXZlqn5RUA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fbPH4Twh1O2A6a4WVF94lZ9qhBZPwPoQGaLaFPIQ4/0N8CIaStYSPmaD9QDycRVYUgyIkpTzVz1uaoNI4aMJPELhjAi+ojTZhmDFN966jUVHwlHG3ocwDQiTD1aOCSHIyvkVWJXnqS8vrpbPA5EC7SCMU3foXCV/gSg2Qpd18LI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=niMTIiZm; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=KdW7NM7L; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 619Aqs3D3454175
-	for <linux-pm@vger.kernel.org>; Mon, 9 Feb 2026 10:56:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=CTaeFh7u1N5
-	giG75aIskIklhdwHdZk+keGXehWBrs4w=; b=niMTIiZmP8yW3ivkvelNapt9pnu
-	E5Pees/kmLX5filperJwWZYKHKFXrTUvA0f4aP1XWZ3oFy7KgDR6vbc5uEQ7TTNE
-	cnpc8eyRjviITJ9fUBTyJkpTrc5mKTcEw65CdnbSWnEI5GZy/zc/DhJnZer5yn/s
-	Ku4qqUuJ4UbNsUFY0//DXjuGNfQos5w+uQXHAUvpVvmLvf1gArI7fEspHwE8KzRP
-	JoqN8bg94x0p8gkExMrggssh6e1jEy7fPOzZHMCFWhZRpapl/+jn0ZtFtezK/TiH
-	xKaM+mbRZ2IBAGzAVWFDDZMLpp6q/ii+c63wvivdni8UKRWWVmAUDIJPeOw==
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4c7e7g80a1-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Mon, 09 Feb 2026 10:56:09 +0000 (GMT)
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-35620e2faf0so1419784a91.3
-        for <linux-pm@vger.kernel.org>; Mon, 09 Feb 2026 02:56:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1770634568; x=1771239368; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CTaeFh7u1N5giG75aIskIklhdwHdZk+keGXehWBrs4w=;
-        b=KdW7NM7LLX5bAY4Uk/daxVGC/CWZRZXXDOfl/R7DZtXwDDBycWGdo9ZMqfQSvpBj+z
-         ed1Bl3PtTBBLIwoeUioOwW2eAOwe5n0NnVzPgUesM/yTUE1Hhw1Y+0nQRkmmJZERVqYC
-         gUW2TVLNW6WVgR4nAWvVWYdzE/dH8U1+3Z8V0PccACKZeYZphJmy+Zn1VI/IMnEj3K5o
-         Vl1+9UPNlsRwn7N6gEYBoOQxVSfgHzrwRXfJFe8+6NFWnInOhNt0SXZHOiWDjttr9IFB
-         z3juYsAK8S7YM0Phpc7nd6AtuAU0rz1Ty+eg5NCZJ9kP9kME1L9DoMupQiRCrguFA68o
-         JStA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770634568; x=1771239368;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CTaeFh7u1N5giG75aIskIklhdwHdZk+keGXehWBrs4w=;
-        b=ukJQgH8hvv3p5icR76Si75BLz1lQJed7PeXnYtGausvAvvCi8Vtl/7HagDm1H5Ostu
-         n0bAi+Lxshtisdjthb2q5osxUuBOxcMyP5QutiCX0/MDPEw5mO3/AB417h3B36M0v9n8
-         wIeK0UnLICLCwSrBi/FJ5wdIegV6lacXJpZdDE4ZkC6YA6pPBA/djSLIwWnphddL9z0w
-         lSdzmDhV5ifH8e/gaATl9W3btcjq4Wlg/fNSyX5IdwiZwixR5ImVKgoc3hCBUNOdW34B
-         etDB66G3OEzi0Kofc94wQitNjydDWfVvkEWWnboY1LewZtXZ4vPtE4810ol+IV0CyRSx
-         L/sQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUv2JNtn4SaN8KJu6Sv7CXMYhf3afFVTtot/dD4ln+a0VV5o5iTX3TDzN0NXs2qwH/Yc/V+2ECLYg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxPOvfOlJBNpbolMklN1AfUOxnfjbUvss88dnPkBMfdEXo40kN
-	r053WBnTtxd5R6ltzQ5stFiweXHCKcNvyRhZtc9qdqg4sE/6yJRLU/dkE9axgG0wljEb3qYijLJ
-	Rr/kCk+XtWb741sznFA+HBZYoCs7H2PcFdO0K/NLp4u+exe4NuTgXZeThHLglIg==
-X-Gm-Gg: AZuq6aLt6Z6wd0hLhyyWLMpU4C0Q6Zo/qbww9IdarJXoSRTz9La3ddB+ZqxJBpbqmKw
-	kHeMTrlzKiSB2mmt1CSjY3EOcc0pRiFkq5lQq3I8FWex0TIUyjovIjigNUKfgVtbY22RHnVOnRO
-	aN2qViqzmX8z3F0Dr68m0VbufzEk5TDADxo4kChTEo1mbFcLDvDgp4plrXTAyRwGzgM7uhaK4mF
-	p7bZL8Fd/x+PWVbPkF1I2gzA1++6FX2m5RJrPkHTsbP6YgMXueb7wmSurVwQDU48rLMts8e+dV1
-	IgN1k1TPUkPURaAzlRs50zLsjPpzexBsIajiXzM8cTF7rrT9B5/eCAHhxJwQb/jl8Zi4/5+Tk3Q
-	UO1d1JeaLTT+fkrZTsjUMBtJZ2Ltf4eCvskMKMdtX0g49
-X-Received: by 2002:a05:6a20:e20d:b0:38b:d93f:b45a with SMTP id adf61e73a8af0-393ad376b08mr9888686637.58.1770634567830;
-        Mon, 09 Feb 2026 02:56:07 -0800 (PST)
-X-Received: by 2002:a05:6a20:e20d:b0:38b:d93f:b45a with SMTP id adf61e73a8af0-393ad376b08mr9888640637.58.1770634567110;
-        Mon, 09 Feb 2026 02:56:07 -0800 (PST)
-Received: from hu-jprakash-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c6dcb5e5f6bsm8358837a12.20.2026.02.09.02.55.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Feb 2026 02:56:06 -0800 (PST)
-From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-To: jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-        agross@kernel.org, andersson@kernel.org, lumag@kernel.org,
-        dmitry.baryshkov@oss.qualcomm.com, konradybcio@kernel.org,
-        daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
-        thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
-        subbaraman.narayanamurthy@oss.qualcomm.com,
-        david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
-        kamal.wadhwa@oss.qualcomm.com
-Cc: rui.zhang@intel.com, lukasz.luba@arm.com, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        cros-qcom-dts-watchers@chromium.org, jishnu.prakash@oss.qualcomm.com,
-        quic_kotarake@quicinc.com, neil.armstrong@linaro.org,
-        stephan.gerhold@linaro.org,
-        Jonathan Cameron <jonathan.cameron@huawei.com>
-Subject: [PATCH V11 4/4] thermal: qcom: add support for PMIC5 Gen3 ADC thermal monitoring
-Date: Mon,  9 Feb 2026 16:24:38 +0530
-Message-Id: <20260209105438.596339-5-jishnu.prakash@oss.qualcomm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260209105438.596339-1-jishnu.prakash@oss.qualcomm.com>
-References: <20260209105438.596339-1-jishnu.prakash@oss.qualcomm.com>
+	s=arc-20240116; t=1770639635; c=relaxed/simple;
+	bh=6D6LeMNA2nHolaHXRnfLbh8Q3Uq6J6Gi+ROI9jGFKp8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GDT6TPRWaBrDoQKWIQi0cA2yeYPvenG8E1btq2jpxwXgbKycq5EEtPIsL1dlsGCtbCHKbKSeL3o9NvuWZKl5tSBwgJ1nhpDw4kXKIpjuMkyp2UwOL5StTmx1UY/M0CQ8pM+DnlUPEkiD1/bEKBfGdH0ht8UGwTwMPjYLPv9QZAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gcOek+Qe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B94CAC4AF0C
+	for <linux-pm@vger.kernel.org>; Mon,  9 Feb 2026 12:20:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770639634;
+	bh=6D6LeMNA2nHolaHXRnfLbh8Q3Uq6J6Gi+ROI9jGFKp8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=gcOek+Qecn7nwAYgzTJH1l4rukFi5+fSwF5q4ZRa3D7xiTUCH9rxgfiAeVFiydO8E
+	 +AnF5zKT63st7rTIvsGhUWX94Xx6ZfX8+5pTfgNJIaIoTVk782M1ufhLEFOD+PMCk9
+	 HG6V6gQrCj1XiamAY+aRAyP5ApUcjXyHrAJd+7bS1zOd3qKyRDGL9Htm+ba1mPDq/3
+	 eTjziCnRFlcOrDdEEZQ8LHg/McigrhCoTHfbft1OnZwQu0ot4Omy+QLFpLMWt+ywHa
+	 jiOHlA+7aQanIZkcjlbKYj0HGjLEjBn/6wBuiFZ6nQL3RvhaEWx6Kqk5hjGKFgL0go
+	 xvnTku2QTm6mQ==
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-6481bd173c0so2370478d50.2
+        for <linux-pm@vger.kernel.org>; Mon, 09 Feb 2026 04:20:34 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXz+4cg1l2VmBdFdoD40gMb/IcpDUPg+/itbHeje90l2LicKuIqPtz36dxmkwG+coqXFypVECJc1g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwC12LLaXn5NWtg1PUlyv/O6nsL9uGTRuX3wJSeIe0NzWecj/Oy
+	RA9KAnyzFneL7Z47SAiOl1B6Qj2f3bQ4IVNApq2iZF1GomisxIrpP/e630A5iiOTaKLzg1qUAtF
+	DnMxhgbfwsY/XvRm1HV3veEG1w1ARFAsgBI+5YeKxjg==
+X-Received: by 2002:a05:690c:ed6:b0:796:37bb:9eb2 with SMTP id
+ 00721157ae682-79637bba28cmr52773487b3.5.1770639633751; Mon, 09 Feb 2026
+ 04:20:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 2xoUMSa4Axgd8jVn8K7gOGWPHDEravbK
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA5MDA4OSBTYWx0ZWRfX9KohgCEuzNFT
- gG1c9w2EisZIAe1uQcdDSkQ8dDh1FvPDD4gzoFQ/3kwJlox7Nn11KqXDgAb/iyK0DJ6qHiWfLLz
- l/+y4Y7EDJTSHqZIwg6vebhkFMYeKndsgl9VZrADEK5Kg2/eB8NyNij8tHX8/5vXBf6nYNtI7+A
- TWO3nWsGRDk9rJ/l70uh2Qx1NbgJsK4gYCC+6otVcEp530QJasPq1HUQ9KGqqkR4qTuQkTJw599
- wcdEDM9mQinWORa4VburwNJ7d5H17RL3wUhhXc87jYJU/q4SXhLFnUtV7CmVKwbw9oLGv/iGMXU
- XHTC/DHb3xBTBYp6rKHQgkkFmKUUMqMtkGbfqhuxApU42mwrc2ZGbWp8ocxSDsrWyo3KKoYA6Ds
- xdyqBr6oJHaAfpeP8Jme/iNwJXIDVTqQf1ngLSIP314ZpndTbW3pMPgMyoScnYnb7KSGehdcKAV
- EVGrJJZGc2D8OAV3snw==
-X-Authority-Analysis: v=2.4 cv=GMMF0+NK c=1 sm=1 tr=0 ts=6989bd49 cx=c_pps
- a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=fChuTYTh2wq5r3m49p7fHw==:17
- a=HzLeVaNsDn8A:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=i0EeH86SAAAA:8
- a=EUspDBNiAAAA:8 a=hpoCfrBzasziBmgo1UAA:9 a=uKXjsCUrEbL0IQVhDsJ9:22
-X-Proofpoint-GUID: 2xoUMSa4Axgd8jVn8K7gOGWPHDEravbK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-08_05,2026-02-09_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 phishscore=0 priorityscore=1501 suspectscore=0 clxscore=1015
- adultscore=0 bulkscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602090089
+References: <20260208215839.87595-2-nphamcs@gmail.com> <20260208223143.366416-1-nphamcs@gmail.com>
+In-Reply-To: <20260208223143.366416-1-nphamcs@gmail.com>
+From: Chris Li <chrisl@kernel.org>
+Date: Mon, 9 Feb 2026 04:20:21 -0800
+X-Gmail-Original-Message-ID: <CACePvbXsngZmn0OrJZjvMhhHnL5FazxYX7ShEpbU9RwHSJaUuA@mail.gmail.com>
+X-Gm-Features: AZwV_QgrawpqSc96hXS3osxRNT9gK0yrZXayn3y2q6KwtRXx9G3p6M1k2h8G_zA
+Message-ID: <CACePvbXsngZmn0OrJZjvMhhHnL5FazxYX7ShEpbU9RwHSJaUuA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/20] Virtual Swap Space
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: akpm@linux-foundation.org, hannes@cmpxchg.org, hughd@google.com, 
+	yosry.ahmed@linux.dev, mhocko@kernel.org, roman.gushchin@linux.dev, 
+	shakeel.butt@linux.dev, muchun.song@linux.dev, len.brown@intel.com, 
+	chengming.zhou@linux.dev, kasong@tencent.com, huang.ying.caritas@gmail.com, 
+	ryan.roberts@arm.com, shikemeng@huaweicloud.com, viro@zeniv.linux.org.uk, 
+	baohua@kernel.org, bhe@redhat.com, osalvador@suse.de, 
+	christophe.leroy@csgroup.eu, pavel@kernel.org, linux-mm@kvack.org, 
+	kernel-team@meta.com, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	linux-pm@vger.kernel.org, peterx@redhat.com, riel@surriel.com, 
+	joshua.hahnjy@gmail.com, npache@redhat.com, gourry@gourry.net, 
+	axelrasmussen@google.com, yuanchu@google.com, weixugc@google.com, 
+	rafael@kernel.org, jannh@google.com, pfalcato@suse.de, 
+	zhengqi.arch@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_TO(0.00)[kernel.org,oss.qualcomm.com,linaro.org,gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[32];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-42352-lists,linux-pm=lfdr.de];
+	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-42351-lists,linux-pm=lfdr.de];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jishnu.prakash@oss.qualcomm.com,linux-pm@vger.kernel.org];
+	FREEMAIL_CC(0.00)[linux-foundation.org,cmpxchg.org,google.com,linux.dev,kernel.org,intel.com,tencent.com,gmail.com,arm.com,huaweicloud.com,zeniv.linux.org.uk,redhat.com,suse.de,csgroup.eu,kvack.org,meta.com,vger.kernel.org,surriel.com,gourry.net,bytedance.com];
+	RCPT_COUNT_TWELVE(0.00)[38];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oss.qualcomm.com:mid,oss.qualcomm.com:dkim,qualcomm.com:email,qualcomm.com:dkim,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,huawei.com:email];
-	TAGGED_RCPT(0.00)[linux-pm,dt];
-	NEURAL_HAM(-0.00)[-0.990];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[chrisl@kernel.org,linux-pm@vger.kernel.org];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-pm];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 30DB210E6A6
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,lwn.net:url]
+X-Rspamd-Queue-Id: BCE0410EBDD
 X-Rspamd-Action: no action
 
-Add support for ADC_TM part of PMIC5 Gen3.
+On Sun, Feb 8, 2026 at 4:15=E2=80=AFPM Nhat Pham <nphamcs@gmail.com> wrote:
+>
+> My sincerest apologies - it seems like the cover letter (and just the
+> cover letter) fails to be sent out, for some reason. I'm trying to figure
+> out what happened - it works when I send the entire patch series to
+> myself...
+>
+> Anyway, resending this (in-reply-to patch 1 of the series):
 
-This is an auxiliary driver under the Gen3 ADC driver, which implements the
-threshold setting and interrupt generating functionalities of QCOM ADC_TM
-drivers, used to support thermal trip points.
+For the record I did receive your original V3 cover letter from the
+linux-mm mailing list.
 
-Reviewed-by: Jonathan Cameron <jonathan.cameron@huawei.com>
-Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
----
-Changes since v10:
-- Made following changes to address Jonathan's comments:
-  - Replaced inclusion of device.h header file in 
-    drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c with forwards declaration
-    of struct device.
-  - Updated all for() loops to declare and initialize the loop iterator
-    inside the for() loop statement.
-  - Removed two blank lines and updated dev_warn() call in adc_tm5_register_tzd()
-    to dev_info().
-- Collected Reviewed-by tag from Jonathan.
+> Changelog:
+> * RFC v2 -> v3:
+>     * Implement a cluster-based allocation algorithm for virtual swap
+>       slots, inspired by Kairui Song and Chris Li's implementation, as
+>       well as Johannes Weiner's suggestions. This eliminates the lock
+>           contention issues on the virtual swap layer.
+>     * Re-use swap table for the reverse mapping.
+>     * Remove CONFIG_VIRTUAL_SWAP.
+>     * Reducing the size of the swap descriptor from 48 bytes to 24
 
-Changes since v9:
-- Replaced the break statement within scoped_guard() in tm_handler_work() with
-  return statement to fix the error reported by kernel test robot.
+Is the per swap slot entry overhead 24 bytes in your implementation?
+The current swap overhead is 3 static +8 dynamic, your 24 dynamic is a
+big jump. You can argue that 8->24 is not a big jump . But it is an
+unnecessary price compared to the alternatives, which is 8 dynamic +
+4(optional redirect).
 
-Changes since v8:
-- Made following changes to address Dmitry's comment to use module_auxiliary_driver():
-  - Dropped the wrapper struct containing the auxiliary driver (struct adc_tm5_auxiliary_drv)
-    which was originally meant to expose the TM interrupt callback to be called by
-    main driver and replaced it with standalone definition of the auxiliary_driver struct.
-  - Added call to adc5_gen3_register_tm_event_notifier() in probe to initialize the
-    TM callback for main driver.
-  - Replaced the module_init() and module_exit() calls with module_auxiliary_driver().
-- Made following changes to address Jonathan's comments:
-  - Updated header files included in drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
-    to follow IWYU (include-what-you-use) principles.
-  - Added a DEFINE_GUARD() definition for mutex lock/unlock functions and replaced
-    their existing calls with guard() and scoped_guard() statements using this definition.
-  - Moved some variable declarations in tm_handler_work() to inside the for() loop.
-  - Fixed if() check condition for low_temp in adc_tm5_gen3_set_trip_temp().
-- Dropped the wrapper function adc_tm5_gen3_disable_channel() around
-  _adc_tm5_gen3_disable_channel() as it only calls the inner function with no other actions.
-- Replaced a pr_debug() call with dev_dbg() in tm_handler_work().
+>       bytes, i.e another 50% reduction in memory overhead from v2.
+>     * Remove swap cache and zswap tree and use the swap descriptor
+>       for this.
+>     * Remove zeromap, and replace the swap_map bytemap with 2 bitmaps
+>       (one for allocated slots, and one for bad slots).
+>     * Rebase on top of 6.19 (7d0a66e4bb9081d75c82ec4957c50034cb0ea449)
 
-Changes since v7:
-- Addressed following comments from Jonathan:
-  - Replaced {0} with { } in tm_handler_work()
-  - Simplified logic for setting upper_set and lower_set into
-    a single line each, in tm_handler_work()
-  - Cleaned up local variable declarations and high/low threshold
-    check in adc_tm5_gen3_configure()
-  - Moved cleanup action to disable all ADC_TM channels to probe
-    end and added comment to describe it.
-  - Fixed { } formatting in adctm5_auxiliary_id_table[].
+My git log shows 7d0a66e4bb9081d75c82ec4957c50034cb0ea449 is tag "v6.18".
 
-Changes since v6:
-- Addressed following comments from Jonathan:
-  - Added error check for devm_thermal_add_hwmon_sysfs() call.
-  - Used local variable `dev` in multiple places in adc_tm5_probe().
-    in place of `&aux_dev->dev` and `adc_tm5->dev`.
-  - Added a comment to explain cleanup action calling adc5_gen3_clear_work()
-    near probe end.
-  - Fixed return statement at probe end to return last called API's
-    return value directly.
+>         * Update cover letter to include new benchmark results and discus=
+sion
+>           on overhead in various cases.
+> * RFC v1 -> RFC v2:
+>     * Use a single atomic type (swap_refs) for reference counting
+>       purpose. This brings the size of the swap descriptor from 64 B
+>       down to 48 B (25% reduction). Suggested by Yosry Ahmed.
+>     * Zeromap bitmap is removed in the virtual swap implementation.
+>       This saves one bit per phyiscal swapfile slot.
+>     * Rearrange the patches and the code change to make things more
+>       reviewable. Suggested by Johannes Weiner.
+>     * Update the cover letter a bit.
+>
+> This patch series implements the virtual swap space idea, based on Yosry'=
+s
+> proposals at LSFMMBPF 2023 (see [1], [2], [3]), as well as valuable
+> inputs from Johannes Weiner. The same idea (with different
+> implementation details) has been floated by Rik van Riel since at least
+> 2011 (see [8]).
+>
+> This patch series is based on 6.19. There are a couple more
+> swap-related changes in the mm-stable branch that I would need to
+> coordinate with, but I would like to send this out as an update, to show
 
-Changes since v5:
-- Addressed following comments from Jonathan:
-  - Corrected all files to follow kernel-doc formatting fully.
-  - Cleaned up formatting in struct definitions.
-  - Used sizeof() to specify length in register read/write calls
-    instead of using integers directly.
-  - Added comments in adc_tm5_probe() for skipping first SDAM for
-    IRQ request and for usage of auxiliary_set_drvdata().
-  - Corrected line wrap length driver file.
-  - Moved INIT_WORK() and auxiliary_set_drvdata() to earlier
-    locations to ensure they are ready when needed.
+Ah, you need to mention that in the first line to Andrew. Spell out
+this series is not for Andrew to consume in the MM series. It can't
+any way because it does not apply to mm-unstable nor mm-stable.
 
-Changes since v4:
-- Fixed a compilation error and updated dependencies in config as suggested
-  by Krzysztof.
+BTW, I have the following compile error with this series (fedora 43).
+Same config compile fine on v6.19.
 
- drivers/thermal/qcom/Kconfig                  |   9 +
- drivers/thermal/qcom/Makefile                 |   1 +
- drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c | 507 ++++++++++++++++++
- 3 files changed, 517 insertions(+)
- create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
+In file included from ./include/linux/local_lock.h:5,
+                 from ./include/linux/mmzone.h:24,
+                 from ./include/linux/gfp.h:7,
+                 from ./include/linux/mm.h:7,
+                 from mm/vswap.c:7:
+mm/vswap.c: In function =E2=80=98vswap_cpu_dead=E2=80=99:
+./include/linux/percpu-defs.h:221:45: error: initialization from
+pointer to non-enclosed address space
+  221 |         const void __percpu *__vpp_verify =3D (typeof((ptr) +
+0))NULL;    \
+      |                                             ^
+./include/linux/local_lock_internal.h:105:40: note: in definition of
+macro =E2=80=98__local_lock_acquire=E2=80=99
+  105 |                 __l =3D (local_lock_t *)(lock);
+         \
+      |                                        ^~~~
+./include/linux/local_lock.h:17:41: note: in expansion of macro
+=E2=80=98__local_lock=E2=80=99
+   17 | #define local_lock(lock)                __local_lock(this_cpu_ptr(l=
+ock))
+      |                                         ^~~~~~~~~~~~
+./include/linux/percpu-defs.h:245:9: note: in expansion of macro
+=E2=80=98__verify_pcpu_ptr=E2=80=99
+  245 |         __verify_pcpu_ptr(ptr);
+         \
+      |         ^~~~~~~~~~~~~~~~~
+./include/linux/percpu-defs.h:256:27: note: in expansion of macro =E2=80=98=
+raw_cpu_ptr=E2=80=99
+  256 | #define this_cpu_ptr(ptr) raw_cpu_ptr(ptr)
+      |                           ^~~~~~~~~~~
+./include/linux/local_lock.h:17:54: note: in expansion of macro
+=E2=80=98this_cpu_ptr=E2=80=99
+   17 | #define local_lock(lock)
+__local_lock(this_cpu_ptr(lock))
+      |
+^~~~~~~~~~~~
+mm/vswap.c:1518:9: note: in expansion of macro =E2=80=98local_lock=E2=80=99
+ 1518 |         local_lock(&percpu_cluster->lock);
+      |         ^~~~~~~~~~
 
-diff --git a/drivers/thermal/qcom/Kconfig b/drivers/thermal/qcom/Kconfig
-index a6bb01082ec6..1acb11e4ac80 100644
---- a/drivers/thermal/qcom/Kconfig
-+++ b/drivers/thermal/qcom/Kconfig
-@@ -21,6 +21,15 @@ config QCOM_SPMI_ADC_TM5
- 	  Thermal client sets threshold temperature for both warm and cool and
- 	  gets updated when a threshold is reached.
- 
-+config QCOM_SPMI_ADC_TM5_GEN3
-+	tristate "Qualcomm SPMI PMIC Thermal Monitor ADC5 Gen3"
-+	depends on QCOM_SPMI_ADC5_GEN3
-+	help
-+	  This enables the auxiliary thermal driver for the ADC5 Gen3 thermal
-+	  monitoring device. It shows up as a thermal zone with multiple trip points.
-+	  Thermal client sets threshold temperature for both warm and cool and
-+	  gets updated when a threshold is reached.
-+
- config QCOM_SPMI_TEMP_ALARM
- 	tristate "Qualcomm SPMI PMIC Temperature Alarm"
- 	depends on OF && SPMI && IIO
-diff --git a/drivers/thermal/qcom/Makefile b/drivers/thermal/qcom/Makefile
-index 0fa2512042e7..828d9e7bc797 100644
---- a/drivers/thermal/qcom/Makefile
-+++ b/drivers/thermal/qcom/Makefile
-@@ -4,5 +4,6 @@ obj-$(CONFIG_QCOM_TSENS)	+= qcom_tsens.o
- qcom_tsens-y			+= tsens.o tsens-v2.o tsens-v1.o tsens-v0_1.o \
- 				   tsens-8960.o
- obj-$(CONFIG_QCOM_SPMI_ADC_TM5)	+= qcom-spmi-adc-tm5.o
-+obj-$(CONFIG_QCOM_SPMI_ADC_TM5_GEN3)	+= qcom-spmi-adc-tm5-gen3.o
- obj-$(CONFIG_QCOM_SPMI_TEMP_ALARM)	+= qcom-spmi-temp-alarm.o
- obj-$(CONFIG_QCOM_LMH)		+= lmh.o
-diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
-new file mode 100644
-index 000000000000..fde9b073f482
---- /dev/null
-+++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
-@@ -0,0 +1,507 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
-+ */
-+
-+#include <linux/auxiliary_bus.h>
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
-+#include <linux/cleanup.h>
-+#include <linux/container_of.h>
-+#include <linux/device/devres.h>
-+#include <linux/dev_printk.h>
-+#include <linux/err.h>
-+#include <linux/iio/adc/qcom-adc5-gen3-common.h>
-+#include <linux/interrupt.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/thermal.h>
-+#include <linux/types.h>
-+#include <linux/workqueue.h>
-+#include <linux/unaligned.h>
-+
-+#include "../thermal_hwmon.h"
-+
-+struct device;
-+struct adc_tm5_gen3_chip;
-+
-+/**
-+ * struct adc_tm5_gen3_channel_props - ADC_TM channel structure
-+ * @timer: time period of recurring TM measurement.
-+ * @tm_chan_index: TM channel number used (ranging from 1-7).
-+ * @sdam_index: SDAM on which this TM channel lies.
-+ * @common_props: structure with common  ADC channel properties.
-+ * @high_thr_en: TM high threshold crossing detection enabled.
-+ * @low_thr_en: TM low threshold crossing detection enabled.
-+ * @chip: ADC TM device.
-+ * @tzd: pointer to thermal device corresponding to TM channel.
-+ * @last_temp: last temperature that caused threshold violation,
-+ *	or a thermal TM channel.
-+ * @last_temp_set: indicates if last_temp is stored.
-+ */
-+struct adc_tm5_gen3_channel_props {
-+	unsigned int timer;
-+	unsigned int tm_chan_index;
-+	unsigned int sdam_index;
-+	struct adc5_channel_common_prop common_props;
-+	bool high_thr_en;
-+	bool low_thr_en;
-+	struct adc_tm5_gen3_chip *chip;
-+	struct thermal_zone_device *tzd;
-+	int last_temp;
-+	bool last_temp_set;
-+};
-+
-+/**
-+ * struct adc_tm5_gen3_chip - ADC Thermal Monitoring device structure
-+ * @dev_data: Top-level ADC device data.
-+ * @chan_props: Array of ADC_TM channel structures.
-+ * @nchannels: number of TM channels allocated
-+ * @dev: SPMI ADC5 Gen3 device.
-+ * @tm_handler_work: handler for TM interrupt for threshold violation.
-+ */
-+struct adc_tm5_gen3_chip {
-+	struct adc5_device_data *dev_data;
-+	struct adc_tm5_gen3_channel_props *chan_props;
-+	unsigned int nchannels;
-+	struct device *dev;
-+	struct work_struct tm_handler_work;
-+};
-+
-+DEFINE_GUARD(adc5_gen3, struct adc_tm5_gen3_chip *, adc5_gen3_mutex_lock(_T->dev),
-+	     adc5_gen3_mutex_unlock(_T->dev))
-+
-+static int get_sdam_from_irq(struct adc_tm5_gen3_chip *adc_tm5, int irq)
-+{
-+	for (int i = 0; i < adc_tm5->dev_data->num_sdams; i++) {
-+		if (adc_tm5->dev_data->base[i].irq == irq)
-+			return i;
-+	}
-+	return -ENOENT;
-+}
-+
-+static irqreturn_t adctm5_gen3_isr(int irq, void *dev_id)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = dev_id;
-+	int ret, sdam_num;
-+	u8 tm_status[2];
-+	u8 status, val;
-+
-+	sdam_num = get_sdam_from_irq(adc_tm5, irq);
-+	if (sdam_num < 0) {
-+		dev_err(adc_tm5->dev, "adc irq %d not associated with an sdam\n",
-+			irq);
-+		return IRQ_HANDLED;
-+	}
-+
-+	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_num, ADC5_GEN3_STATUS1,
-+			     &status, sizeof(status));
-+	if (ret) {
-+		dev_err(adc_tm5->dev, "adc read status1 failed with %d\n", ret);
-+		return IRQ_HANDLED;
-+	}
-+
-+	if (status & ADC5_GEN3_STATUS1_CONV_FAULT) {
-+		dev_err_ratelimited(adc_tm5->dev,
-+				    "Unexpected conversion fault, status:%#x\n",
-+				    status);
-+		val = ADC5_GEN3_CONV_ERR_CLR_REQ;
-+		adc5_gen3_status_clear(adc_tm5->dev_data, sdam_num,
-+				       ADC5_GEN3_CONV_ERR_CLR, &val, 1);
-+		return IRQ_HANDLED;
-+	}
-+
-+	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_num, ADC5_GEN3_TM_HIGH_STS,
-+			     tm_status, sizeof(tm_status));
-+	if (ret) {
-+		dev_err(adc_tm5->dev, "adc read TM status failed with %d\n", ret);
-+		return IRQ_HANDLED;
-+	}
-+
-+	if (tm_status[0] || tm_status[1])
-+		schedule_work(&adc_tm5->tm_handler_work);
-+
-+	dev_dbg(adc_tm5->dev, "Interrupt status:%#x, high:%#x, low:%#x\n",
-+		status, tm_status[0], tm_status[1]);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int adc5_gen3_tm_status_check(struct adc_tm5_gen3_chip *adc_tm5,
-+				     int sdam_index, u8 *tm_status, u8 *buf)
-+{
-+	int ret;
-+
-+	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_index, ADC5_GEN3_TM_HIGH_STS,
-+			     tm_status, 2);
-+	if (ret) {
-+		dev_err(adc_tm5->dev, "adc read TM status failed with %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = adc5_gen3_status_clear(adc_tm5->dev_data, sdam_index, ADC5_GEN3_TM_HIGH_STS_CLR,
-+				     tm_status, 2);
-+	if (ret) {
-+		dev_err(adc_tm5->dev, "adc status clear conv_req failed with %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	ret = adc5_gen3_read(adc_tm5->dev_data, sdam_index, ADC5_GEN3_CH_DATA0(0),
-+			     buf, 16);
-+	if (ret)
-+		dev_err(adc_tm5->dev, "adc read data failed with %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static void tm_handler_work(struct work_struct *work)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = container_of(work, struct adc_tm5_gen3_chip,
-+							 tm_handler_work);
-+	int sdam_index = -1;
-+	u8 tm_status[2] = { };
-+	u8 buf[16] = { };
-+
-+	for (int i = 0; i < adc_tm5->nchannels; i++) {
-+		struct adc_tm5_gen3_channel_props *chan_prop = &adc_tm5->chan_props[i];
-+		int offset = chan_prop->tm_chan_index;
-+		bool upper_set, lower_set;
-+		int ret, temp;
-+		u16 code;
-+
-+		scoped_guard(adc5_gen3, adc_tm5) {
-+			if (chan_prop->sdam_index != sdam_index) {
-+				sdam_index = chan_prop->sdam_index;
-+				ret = adc5_gen3_tm_status_check(adc_tm5, sdam_index,
-+								tm_status, buf);
-+				if (ret)
-+					return;
-+			}
-+
-+			upper_set = ((tm_status[0] & BIT(offset)) && chan_prop->high_thr_en);
-+			lower_set = ((tm_status[1] & BIT(offset)) && chan_prop->low_thr_en);
-+		}
-+
-+		if (!(upper_set || lower_set))
-+			continue;
-+
-+		code = get_unaligned_le16(&buf[2 * offset]);
-+		dev_dbg(adc_tm5->dev, "ADC_TM threshold code:%#x\n", code);
-+
-+		ret = adc5_gen3_therm_code_to_temp(adc_tm5->dev,
-+						   &chan_prop->common_props,
-+						   code, &temp);
-+		if (ret) {
-+			dev_err(adc_tm5->dev,
-+				"Invalid temperature reading, ret = %d, code=%#x\n",
-+				ret, code);
-+			continue;
-+		}
-+
-+		chan_prop->last_temp = temp;
-+		chan_prop->last_temp_set = true;
-+		thermal_zone_device_update(chan_prop->tzd, THERMAL_TRIP_VIOLATED);
-+	}
-+}
-+
-+static int adc_tm5_gen3_get_temp(struct thermal_zone_device *tz, int *temp)
-+{
-+	struct adc_tm5_gen3_channel_props *prop = thermal_zone_device_priv(tz);
-+	struct adc_tm5_gen3_chip *adc_tm5;
-+
-+	if (!prop || !prop->chip)
-+		return -EINVAL;
-+
-+	adc_tm5 = prop->chip;
-+
-+	if (prop->last_temp_set) {
-+		pr_debug("last_temp: %d\n", prop->last_temp);
-+		prop->last_temp_set = false;
-+		*temp = prop->last_temp;
-+		return 0;
-+	}
-+
-+	return adc5_gen3_get_scaled_reading(adc_tm5->dev, &prop->common_props,
-+					    temp);
-+}
-+
-+static int adc_tm5_gen3_disable_channel(struct adc_tm5_gen3_channel_props *prop)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = prop->chip;
-+	int ret;
-+	u8 val;
-+
-+	prop->high_thr_en = false;
-+	prop->low_thr_en = false;
-+
-+	ret = adc5_gen3_poll_wait_hs(adc_tm5->dev_data, prop->sdam_index);
-+	if (ret)
-+		return ret;
-+
-+	val = BIT(prop->tm_chan_index);
-+	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
-+			      ADC5_GEN3_TM_HIGH_STS_CLR, &val, sizeof(val));
-+	if (ret)
-+		return ret;
-+
-+	val = MEAS_INT_DISABLE;
-+	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
-+			      ADC5_GEN3_TIMER_SEL, &val, sizeof(val));
-+	if (ret)
-+		return ret;
-+
-+	/* To indicate there is an actual conversion request */
-+	val = ADC5_GEN3_CHAN_CONV_REQ | prop->tm_chan_index;
-+	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
-+			      ADC5_GEN3_PERPH_CH, &val, sizeof(val));
-+	if (ret)
-+		return ret;
-+
-+	val = ADC5_GEN3_CONV_REQ_REQ;
-+	return adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
-+			       ADC5_GEN3_CONV_REQ, &val, sizeof(val));
-+}
-+
-+#define ADC_TM5_GEN3_CONFIG_REGS 12
-+
-+static int adc_tm5_gen3_configure(struct adc_tm5_gen3_channel_props *prop,
-+				  int low_temp, int high_temp)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = prop->chip;
-+	u8 buf[ADC_TM5_GEN3_CONFIG_REGS];
-+	u8 conv_req;
-+	u16 adc_code;
-+	int ret;
-+
-+	ret = adc5_gen3_poll_wait_hs(adc_tm5->dev_data, prop->sdam_index);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = adc5_gen3_read(adc_tm5->dev_data, prop->sdam_index,
-+			     ADC5_GEN3_SID, buf, sizeof(buf));
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Write SID */
-+	buf[0] = FIELD_PREP(ADC5_GEN3_SID_MASK, prop->common_props.sid);
-+
-+	/* Select TM channel and indicate there is an actual conversion request */
-+	buf[1] = ADC5_GEN3_CHAN_CONV_REQ | prop->tm_chan_index;
-+
-+	buf[2] = prop->timer;
-+
-+	/* Digital param selection */
-+	adc5_gen3_update_dig_param(&prop->common_props, &buf[3]);
-+
-+	/* Update fast average sample value */
-+	buf[4] &= ~ADC5_GEN3_FAST_AVG_CTL_SAMPLES_MASK;
-+	buf[4] |= prop->common_props.avg_samples | ADC5_GEN3_FAST_AVG_CTL_EN;
-+
-+	/* Select ADC channel */
-+	buf[5] = prop->common_props.channel;
-+
-+	/* Select HW settle delay for channel */
-+	buf[6] = FIELD_PREP(ADC5_GEN3_HW_SETTLE_DELAY_MASK,
-+			    prop->common_props.hw_settle_time_us);
-+
-+	/* High temperature corresponds to low voltage threshold */
-+	prop->low_thr_en = (high_temp != INT_MAX);
-+	if (prop->low_thr_en) {
-+		adc_code = qcom_adc_tm5_gen2_temp_res_scale(high_temp);
-+		put_unaligned_le16(adc_code, &buf[8]);
-+	}
-+
-+	/* Low temperature corresponds to high voltage threshold */
-+	prop->high_thr_en = (low_temp != -INT_MAX);
-+	if (prop->high_thr_en) {
-+		adc_code = qcom_adc_tm5_gen2_temp_res_scale(low_temp);
-+		put_unaligned_le16(adc_code, &buf[10]);
-+	}
-+
-+	buf[7] = 0;
-+	if (prop->high_thr_en)
-+		buf[7] |= ADC5_GEN3_HIGH_THR_INT_EN;
-+	if (prop->low_thr_en)
-+		buf[7] |= ADC5_GEN3_LOW_THR_INT_EN;
-+
-+	ret = adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index, ADC5_GEN3_SID,
-+			      buf, sizeof(buf));
-+	if (ret < 0)
-+		return ret;
-+
-+	conv_req = ADC5_GEN3_CONV_REQ_REQ;
-+	return adc5_gen3_write(adc_tm5->dev_data, prop->sdam_index,
-+			       ADC5_GEN3_CONV_REQ, &conv_req, sizeof(conv_req));
-+}
-+
-+static int adc_tm5_gen3_set_trip_temp(struct thermal_zone_device *tz,
-+				      int low_temp, int high_temp)
-+{
-+	struct adc_tm5_gen3_channel_props *prop = thermal_zone_device_priv(tz);
-+	struct adc_tm5_gen3_chip *adc_tm5;
-+
-+	if (!prop || !prop->chip)
-+		return -EINVAL;
-+
-+	adc_tm5 = prop->chip;
-+
-+	dev_dbg(adc_tm5->dev, "channel:%s, low_temp(mdegC):%d, high_temp(mdegC):%d\n",
-+		prop->common_props.label, low_temp, high_temp);
-+
-+	guard(adc5_gen3)(adc_tm5);
-+	if (high_temp == INT_MAX && low_temp == -INT_MAX)
-+		return adc_tm5_gen3_disable_channel(prop);
-+
-+	return adc_tm5_gen3_configure(prop, low_temp, high_temp);
-+}
-+
-+static const struct thermal_zone_device_ops adc_tm_ops = {
-+	.get_temp = adc_tm5_gen3_get_temp,
-+	.set_trips = adc_tm5_gen3_set_trip_temp,
-+};
-+
-+static int adc_tm5_register_tzd(struct adc_tm5_gen3_chip *adc_tm5)
-+{
-+	struct thermal_zone_device *tzd;
-+	unsigned int channel;
-+	int ret;
-+
-+	for (int i = 0; i < adc_tm5->nchannels; i++) {
-+		channel = ADC5_GEN3_V_CHAN(adc_tm5->chan_props[i].common_props);
-+		tzd = devm_thermal_of_zone_register(adc_tm5->dev, channel,
-+						    &adc_tm5->chan_props[i],
-+						    &adc_tm_ops);
-+		if (IS_ERR(tzd)) {
-+			if (PTR_ERR(tzd) == -ENODEV) {
-+				dev_info(adc_tm5->dev,
-+					 "thermal sensor on channel %d is not used\n",
-+					 channel);
-+				continue;
-+			}
-+			return dev_err_probe(adc_tm5->dev, PTR_ERR(tzd),
-+					     "Error registering TZ zone:%ld for channel:%d\n",
-+					     PTR_ERR(tzd), channel);
-+		}
-+		adc_tm5->chan_props[i].tzd = tzd;
-+		ret = devm_thermal_add_hwmon_sysfs(adc_tm5->dev, tzd);
-+		if (ret)
-+			return ret;
-+	}
-+	return 0;
-+}
-+
-+static void adc5_gen3_clear_work(void *data)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = data;
-+
-+	cancel_work_sync(&adc_tm5->tm_handler_work);
-+}
-+
-+static void adc5_gen3_disable(void *data)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = data;
-+
-+	guard(adc5_gen3)(adc_tm5);
-+	/* Disable all available TM channels */
-+	for (int i = 0; i < adc_tm5->nchannels; i++)
-+		adc_tm5_gen3_disable_channel(&adc_tm5->chan_props[i]);
-+}
-+
-+static void adctm_event_handler(struct auxiliary_device *adev)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5 = auxiliary_get_drvdata(adev);
-+
-+	schedule_work(&adc_tm5->tm_handler_work);
-+}
-+
-+static int adc_tm5_probe(struct auxiliary_device *aux_dev,
-+			 const struct auxiliary_device_id *id)
-+{
-+	struct adc_tm5_gen3_chip *adc_tm5;
-+	struct tm5_aux_dev_wrapper *aux_dev_wrapper;
-+	struct device *dev = &aux_dev->dev;
-+	int ret;
-+
-+	adc_tm5 = devm_kzalloc(dev, sizeof(*adc_tm5), GFP_KERNEL);
-+	if (!adc_tm5)
-+		return -ENOMEM;
-+
-+	aux_dev_wrapper = container_of(aux_dev, struct tm5_aux_dev_wrapper,
-+				       aux_dev);
-+
-+	adc_tm5->dev = dev;
-+	adc_tm5->dev_data = aux_dev_wrapper->dev_data;
-+	adc_tm5->nchannels = aux_dev_wrapper->n_tm_channels;
-+	adc_tm5->chan_props = devm_kcalloc(dev, aux_dev_wrapper->n_tm_channels,
-+					   sizeof(*adc_tm5->chan_props), GFP_KERNEL);
-+	if (!adc_tm5->chan_props)
-+		return -ENOMEM;
-+
-+	for (int i = 0; i < adc_tm5->nchannels; i++) {
-+		adc_tm5->chan_props[i].common_props = aux_dev_wrapper->tm_props[i];
-+		adc_tm5->chan_props[i].timer = MEAS_INT_1S;
-+		adc_tm5->chan_props[i].sdam_index = (i + 1) / 8;
-+		adc_tm5->chan_props[i].tm_chan_index = (i + 1) % 8;
-+		adc_tm5->chan_props[i].chip = adc_tm5;
-+	}
-+
-+	INIT_WORK(&adc_tm5->tm_handler_work, tm_handler_work);
-+
-+	/*
-+	 * Skipping first SDAM IRQ as it is requested in parent driver.
-+	 * If there is a TM violation on that IRQ, the parent driver calls
-+	 * the notifier (adctm_event_handler) exposed from this driver to handle it.
-+	 */
-+	for (int i = 1; i < adc_tm5->dev_data->num_sdams; i++) {
-+		ret = devm_request_threaded_irq(dev,
-+						adc_tm5->dev_data->base[i].irq,
-+						NULL, adctm5_gen3_isr, IRQF_ONESHOT,
-+						adc_tm5->dev_data->base[i].irq_name,
-+						adc_tm5);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	/*
-+	 * This drvdata is only used in the function (adctm_event_handler)
-+	 * called by parent ADC driver in case of TM violation on the first SDAM.
-+	 */
-+	auxiliary_set_drvdata(aux_dev, adc_tm5);
-+
-+	adc5_gen3_register_tm_event_notifier(dev, adctm_event_handler);
-+
-+	/*
-+	 * This is to cancel any instances of tm_handler_work scheduled by
-+	 * TM interrupt, at the time of module removal.
-+	 */
-+	ret = devm_add_action(dev, adc5_gen3_clear_work, adc_tm5);
-+	if (ret)
-+		return ret;
-+
-+	ret = adc_tm5_register_tzd(adc_tm5);
-+	if (ret)
-+		return ret;
-+
-+	/* This is to disable all ADC_TM channels in case of probe failure. */
-+
-+	return devm_add_action(dev, adc5_gen3_disable, adc_tm5);
-+}
-+
-+static const struct auxiliary_device_id adctm5_auxiliary_id_table[] = {
-+	{ .name = "qcom_spmi_adc5_gen3.adc5_tm_gen3", },
-+	{ }
-+};
-+
-+MODULE_DEVICE_TABLE(auxiliary, adctm5_auxiliary_id_table);
-+
-+static struct auxiliary_driver adctm5gen3_auxiliary_driver = {
-+	.id_table = adctm5_auxiliary_id_table,
-+	.probe = adc_tm5_probe,
-+};
-+
-+module_auxiliary_driver(adctm5gen3_auxiliary_driver);
-+
-+MODULE_DESCRIPTION("SPMI PMIC Thermal Monitor ADC driver");
-+MODULE_LICENSE("GPL");
-+MODULE_IMPORT_NS("QCOM_SPMI_ADC5_GEN3");
--- 
-2.25.1
+> that the lock contention issues that plagued earlier versions have been
+> resolved and performance on the kernel build benchmark is now on-par with
+> baseline. Furthermore, memory overhead has been substantially reduced
+> compared to the last RFC version.
+>
+>
+> I. Motivation
+>
+> Currently, when an anon page is swapped out, a slot in a backing swap
+> device is allocated and stored in the page table entries that refer to
+> the original page. This slot is also used as the "key" to find the
+> swapped out content, as well as the index to swap data structures, such
+> as the swap cache, or the swap cgroup mapping. Tying a swap entry to its
+> backing slot in this way is performant and efficient when swap is purely
+> just disk space, and swapoff is rare.
+>
+> However, the advent of many swap optimizations has exposed major
+> drawbacks of this design. The first problem is that we occupy a physical
+> slot in the swap space, even for pages that are NEVER expected to hit
+> the disk: pages compressed and stored in the zswap pool, zero-filled
+> pages, or pages rejected by both of these optimizations when zswap
+> writeback is disabled. This is the arguably central shortcoming of
+> zswap:
+> * In deployments when no disk space can be afforded for swap (such as
+>   mobile and embedded devices), users cannot adopt zswap, and are forced
+>   to use zram. This is confusing for users, and creates extra burdens
+>   for developers, having to develop and maintain similar features for
+>   two separate swap backends (writeback, cgroup charging, THP support,
+>   etc.). For instance, see the discussion in [4].
+> * Resource-wise, it is hugely wasteful in terms of disk usage. At Meta,
+>   we have swapfile in the order of tens to hundreds of GBs, which are
+>   mostly unused and only exist to enable zswap usage and zero-filled
+>   pages swap optimizations.
+> * Tying zswap (and more generally, other in-memory swap backends) to
+>   the current physical swapfile infrastructure makes zswap implicitly
+>   statically sized. This does not make sense, as unlike disk swap, in
+>   which we consume a limited resource (disk space or swapfile space) to
+>   save another resource (memory), zswap consume the same resource it is
+>   saving (memory). The more we zswap, the more memory we have available,
+>   not less. We are not rationing a limited resource when we limit
+>   the size of he zswap pool, but rather we are capping the resource
+>   (memory) saving potential of zswap. Under memory pressure, using
+>   more zswap is almost always better than the alternative (disk IOs, or
+>   even worse, OOMs), and dynamically sizing the zswap pool on demand
+>   allows the system to flexibly respond to these precarious scenarios.
+> * Operationally, static provisioning the swapfile for zswap pose
+>   significant challenges, because the sysadmin has to prescribe how
+>   much swap is needed a priori, for each combination of
+>   (memory size x disk space x workload usage). It is even more
+>   complicated when we take into account the variance of memory
+>   compression, which changes the reclaim dynamics (and as a result,
+>   swap space size requirement). The problem is further exarcebated for
+>   users who rely on swap utilization (and exhaustion) as an OOM signal.
+>
+>   All of these factors make it very difficult to configure the swapfile
+>   for zswap: too small of a swapfile and we risk preventable OOMs and
+>   limit the memory saving potentials of zswap; too big of a swapfile
+>   and we waste disk space and memory due to swap metadata overhead.
+>   This dilemma becomes more drastic in high memory systems, which can
+>   have up to TBs worth of memory.
+>
+> Past attempts to decouple disk and compressed swap backends, namely the
+> ghost swapfile approach (see [13]), as well as the alternative
+> compressed swap backend zram, have mainly focused on eliminating the
+> disk space usage of compressed backends. We want a solution that not
+> only tackles that same problem, but also achieve the dyamicization of
+> swap space to maximize the memory saving potentials while reducing
+> operational and static memory overhead.
+>
+> Finally, any swap redesign should support efficient backend transfer,
+> i.e without having to perform the expensive page table walk to
+> update all the PTEs that refer to the swap entry:
+> * The main motivation for this requirement is zswap writeback. To quote
+>   Johannes (from [14]): "Combining compression with disk swap is
+>   extremely powerful, because it dramatically reduces the worst aspects
+>   of both: it reduces the memory footprint of compression by shedding
+>   the coldest data to disk; it reduces the IO latencies and flash wear
+>   of disk swap through the writeback cache. In practice, this reduces
+>   *average event rates of the entire reclaim/paging/IO stack*."
+> * Another motivation is to simplify swapoff, which is both complicated
+>   and expensive in the current design, precisely because we are storing
+>   an encoding of the backend positional information in the page table,
+>   and thus requires a full page table walk to remove these references.
+>
+>
+> II. High Level Design Overview
+>
+> To fix the aforementioned issues, we need an abstraction that separates
+> a swap entry from its physical backing storage. IOW, we need to
+> =E2=80=9Cvirtualize=E2=80=9D the swap space: swap clients will work with =
+a dynamically
+> allocated virtual swap slot, storing it in page table entries, and
+> using it to index into various swap-related data structures. The
+> backing storage is decoupled from the virtual swap slot, and the newly
+> introduced layer will =E2=80=9Cresolve=E2=80=9D the virtual swap slot to =
+the actual
+> storage. This layer also manages other metadata of the swap entry, such
+> as its lifetime information (swap count), via a dynamically allocated,
+> per-swap-entry descriptor:
+>
+> struct swp_desc {
+>         union {
+>                 swp_slot_t         slot;                 /*     0     8 *=
+/
+>                 struct zswap_entry * zswap_entry;        /*     0     8 *=
+/
+>         };                                               /*     0     8 *=
+/
+>         union {
+>                 struct folio *     swap_cache;           /*     8     8 *=
+/
+>                 void *             shadow;               /*     8     8 *=
+/
+>         };                                               /*     8     8 *=
+/
+>         unsigned int               swap_count;           /*    16     4 *=
+/
+>         unsigned short             memcgid:16;           /*    20: 0  2 *=
+/
+>         bool                       in_swapcache:1;       /*    22: 0  1 *=
+/
+>
+>         /* Bitfield combined with previous fields */
+>
+>         enum swap_type             type:2;               /*    20:17  4 *=
+/
+>
+>         /* size: 24, cachelines: 1, members: 6 */
+>         /* bit_padding: 13 bits */
+>         /* last cacheline: 24 bytes */
+> };
+>
+> (output from pahole).
+>
+> This design allows us to:
+> * Decouple zswap (and zeromapped swap entry) from backing swapfile:
+>   simply associate the virtual swap slot with one of the supported
+>   backends: a zswap entry, a zero-filled swap page, a slot on the
+>   swapfile, or an in-memory page.
+> * Simplify and optimize swapoff: we only have to fault the page in and
+>   have the virtual swap slot points to the page instead of the on-disk
+>   physical swap slot. No need to perform any page table walking.
+>
+> The size of the virtual swap descriptor is 24 bytes. Note that this is
+> not all "new" overhead, as the swap descriptor will replace:
+> * the swap_cgroup arrays (one per swap type) in the old design, which
+>   is a massive source of static memory overhead. With the new design,
+>   it is only allocated for used clusters.
+> * the swap tables, which holds the swap cache and workingset shadows.
+> * the zeromap bitmap, which is a bitmap of physical swap slots to
+>   indicate whether the swapped out page is zero-filled or not.
+> * huge chunk of the swap_map. The swap_map is now replaced by 2 bitmaps,
+>   one for allocated slots, and one for bad slots, representing 3 possible
+>   states of a slot on the swapfile: allocated, free, and bad.
+> * the zswap tree.
+>
+> So, in terms of additional memory overhead:
+> * For zswap entries, the added memory overhead is rather minimal. The
+>   new indirection pointer neatly replaces the existing zswap tree.
+>   We really only incur less than one word of overhead for swap count
+>   blow up (since we no longer use swap continuation) and the swap type.
+> * For physical swap entries, the new design will impose fewer than 3 word=
+s
+>   memory overhead. However, as noted above this overhead is only for
+>   actively used swap entries, whereas in the current design the overhead =
+is
+>   static (including the swap cgroup array for example).
+>
+>   The primary victim of this overhead will be zram users. However, as
+>   zswap now no longer takes up disk space, zram users can consider
+>   switching to zswap (which, as a bonus, has a lot of useful features
+>   out of the box, such as cgroup tracking, dynamic zswap pool sizing,
+>   LRU-ordering writeback, etc.).
+>
+> For a more concrete example, suppose we have a 32 GB swapfile (i.e.
+> 8,388,608 swap entries), and we use zswap.
+>
+> 0% usage, or 0 entries: 0.00 MB
+> * Old design total overhead: 25.00 MB
+> * Vswap total overhead: 0.00 MB
+>
+> 25% usage, or 2,097,152 entries:
+> * Old design total overhead: 57.00 MB
+> * Vswap total overhead: 48.25 MB
+>
+> 50% usage, or 4,194,304 entries:
+> * Old design total overhead: 89.00 MB
+> * Vswap total overhead: 96.50 MB
+>
+> 75% usage, or 6,291,456 entries:
+> * Old design total overhead: 121.00 MB
+> * Vswap total overhead: 144.75 MB
+>
+> 100% usage, or 8,388,608 entries:
+> * Old design total overhead: 153.00 MB
+> * Vswap total overhead: 193.00 MB
+>
+> So even in the worst case scenario for virtual swap, i.e when we
+> somehow have an oracle to correctly size the swapfile for zswap
+> pool to 32 GB, the added overhead is only 40 MB, which is a mere
+> 0.12% of the total swapfile :)
+>
+> In practice, the overhead will be closer to the 50-75% usage case, as
+> systems tend to leave swap headroom for pathological events or sudden
+> spikes in memory requirements. The added overhead in these cases are
+> practically neglible. And in deployments where swapfiles for zswap
+> are previously sparsely used, switching over to virtual swap will
+> actually reduce memory overhead.
+>
+> Doing the same math for the disk swap, which is the worst case for
+> virtual swap in terms of swap backends:
+>
+> 0% usage, or 0 entries: 0.00 MB
+> * Old design total overhead: 25.00 MB
+> * Vswap total overhead: 2.00 MB
+>
+> 25% usage, or 2,097,152 entries:
+> * Old design total overhead: 41.00 MB
+> * Vswap total overhead: 66.25 MB
+>
+> 50% usage, or 4,194,304 entries:
+> * Old design total overhead: 57.00 MB
+> * Vswap total overhead: 130.50 MB
+>
+> 75% usage, or 6,291,456 entries:
+> * Old design total overhead: 73.00 MB
+> * Vswap total overhead: 194.75 MB
+>
+> 100% usage, or 8,388,608 entries:
+> * Old design total overhead: 89.00 MB
+> * Vswap total overhead: 259.00 MB
+>
+> The added overhead is 170MB, which is 0.5% of the total swapfile size,
+> again in the worst case when we have a sizing oracle.
+>
+> Please see the attached patches for more implementation details.
+>
+>
+> III. Usage and Benchmarking
+>
+> This patch series introduce no new syscalls or userspace API. Existing
+> userspace setups will work as-is, except we no longer have to create a
+> swapfile or set memory.swap.max if we want to use zswap, as zswap is no
+> longer tied to physical swap. The zswap pool will be automatically and
+> dynamically sized based on memory usage and reclaim dynamics.
+>
+> To measure the performance of the new implementation, I have run the
+> following benchmarks:
+>
+> 1. Kernel building: 52 workers (one per processor), memory.max =3D 3G.
+>
+> Using zswap as the backend:
+>
+> Baseline:
+> real: mean: 185.2s, stdev: 0.93s
+> sys: mean: 683.7s, stdev: 33.77s
+>
+> Vswap:
+> real: mean: 184.88s, stdev: 0.57s
+> sys: mean: 675.14s, stdev: 32.8s
 
+Can you show your user space time as well to complete the picture?
+
+How many runs do you have for stdev 32.8s?
+
+>
+> We actually see a slight improvement in systime (by 1.5%) :) This is
+> likely because we no longer have to perform swap charging for zswap
+> entries, and virtual swap allocator is simpler than that of physical
+> swap.
+>
+> Using SSD swap as the backend:
+Please include zram swap test data as well. Android heavily uses zram
+for swapping.
+
+>
+> Baseline:
+> real: mean: 200.3s, stdev: 2.33s
+> sys: mean: 489.88s, stdev: 9.62s
+>
+> Vswap:
+> real: mean: 201.47s, stdev: 2.98s
+> sys: mean: 487.36s, stdev: 5.53s
+>
+> The performance is neck-to-neck.
+
+I strongly suspect there is some performance difference that hasn't
+been covered by your test yet. Need more conformation by others on the
+performance measurement. The swap testing is tricky. You want to push
+to stress barely within the OOM limit. Need more data.
+
+Chris
+
+>
+>
+> IV. Future Use Cases
+>
+> While the patch series focus on two applications (decoupling swap
+> backends and swapoff optimization/simplification), this new,
+> future-proof design also allows us to implement new swap features more
+> easily and efficiently:
+>
+> * Multi-tier swapping (as mentioned in [5]), with transparent
+>   transferring (promotion/demotion) of pages across tiers (see [8] and
+>   [9]). Similar to swapoff, with the old design we would need to
+>   perform the expensive page table walk.
+> * Swapfile compaction to alleviate fragmentation (as proposed by Ying
+>   Huang in [6]).
+> * Mixed backing THP swapin (see [7]): Once you have pinned down the
+>   backing store of THPs, then you can dispatch each range of subpages
+>   to appropriate backend swapin handler.
+> * Swapping a folio out with discontiguous physical swap slots
+>   (see [10]).
+> * Zswap writeback optimization: The current architecture pre-reserves
+>   physical swap space for pages when they enter the zswap pool, giving
+>   the kernel no flexibility at writeback time. With the virtual swap
+>   implementation, the backends are decoupled, and physical swap space
+>   is allocated on-demand at writeback time, at which point we can make
+>   much smarter decisions: we can batch multiple zswap writeback
+>   operations into a single IO request, allocating contiguous physical
+>   swap slots for that request. We can even perform compressed writeback
+>   (i.e writing these pages without decompressing them) (see [12]).
+>
+>
+> V. References
+>
+> [1]: https://lore.kernel.org/all/CAJD7tkbCnXJ95Qow_aOjNX6NOMU5ovMSHRC+95U=
+4wtW6cM+puw@mail.gmail.com/
+> [2]: https://lwn.net/Articles/932077/
+> [3]: https://www.youtube.com/watch?v=3DHwqw_TBGEhg
+> [4]: https://lore.kernel.org/all/Zqe_Nab-Df1CN7iW@infradead.org/
+> [5]: https://lore.kernel.org/lkml/CAF8kJuN-4UE0skVHvjUzpGefavkLULMonjgkXU=
+ZSBVJrcGFXCA@mail.gmail.com/
+> [6]: https://lore.kernel.org/linux-mm/87o78mzp24.fsf@yhuang6-desk2.ccr.co=
+rp.intel.com/
+> [7]: https://lore.kernel.org/all/CAGsJ_4ysCN6f7qt=3D6gvee1x3ttbOnifGneqcR=
+m9Hoeun=3DuFQ2w@mail.gmail.com/
+> [8]: https://lore.kernel.org/linux-mm/4DA25039.3020700@redhat.com/
+> [9]: https://lore.kernel.org/all/CA+ZsKJ7DCE8PMOSaVmsmYZL9poxK6rn0gvVXbjp=
+qxMwxS2C9TQ@mail.gmail.com/
+> [10]: https://lore.kernel.org/all/CACePvbUkMYMencuKfpDqtG1Ej7LiUS87VRAXb8=
+sBn1yANikEmQ@mail.gmail.com/
+> [11]: https://lore.kernel.org/all/CAMgjq7BvQ0ZXvyLGp2YP96+i+6COCBBJCYmjXH=
+GBnfisCAb8VA@mail.gmail.com/
+> [12]: https://lore.kernel.org/linux-mm/ZeZSDLWwDed0CgT3@casper.infradead.=
+org/
+> [13]: https://lore.kernel.org/all/20251121-ghost-v1-1-cfc0efcf3855@kernel=
+.org/
+> [14]: https://lore.kernel.org/linux-mm/20251202170222.GD430226@cmpxchg.or=
+g/
+>
+> Nhat Pham (20):
+>   mm/swap: decouple swap cache from physical swap infrastructure
+>   swap: rearrange the swap header file
+>   mm: swap: add an abstract API for locking out swapoff
+>   zswap: add new helpers for zswap entry operations
+>   mm/swap: add a new function to check if a swap entry is in swap
+>     cached.
+>   mm: swap: add a separate type for physical swap slots
+>   mm: create scaffolds for the new virtual swap implementation
+>   zswap: prepare zswap for swap virtualization
+>   mm: swap: allocate a virtual swap slot for each swapped out page
+>   swap: move swap cache to virtual swap descriptor
+>   zswap: move zswap entry management to the virtual swap descriptor
+>   swap: implement the swap_cgroup API using virtual swap
+>   swap: manage swap entry lifecycle at the virtual swap layer
+>   mm: swap: decouple virtual swap slot from backing store
+>   zswap: do not start zswap shrinker if there is no physical swap slots
+>   swap: do not unnecesarily pin readahead swap entries
+>   swapfile: remove zeromap bitmap
+>   memcg: swap: only charge physical swap slots
+>   swap: simplify swapoff using virtual swap
+>   swapfile: replace the swap map with bitmaps
+>
+>  Documentation/mm/swap-table.rst |   69 --
+>  MAINTAINERS                     |    2 +
+>  include/linux/cpuhotplug.h      |    1 +
+>  include/linux/mm_types.h        |   16 +
+>  include/linux/shmem_fs.h        |    7 +-
+>  include/linux/swap.h            |  135 ++-
+>  include/linux/swap_cgroup.h     |   13 -
+>  include/linux/swapops.h         |   25 +
+>  include/linux/zswap.h           |   17 +-
+>  kernel/power/swap.c             |    6 +-
+>  mm/Makefile                     |    5 +-
+>  mm/huge_memory.c                |   11 +-
+>  mm/internal.h                   |   12 +-
+>  mm/memcontrol-v1.c              |    6 +
+>  mm/memcontrol.c                 |  142 ++-
+>  mm/memory.c                     |  101 +-
+>  mm/migrate.c                    |   13 +-
+>  mm/mincore.c                    |   15 +-
+>  mm/page_io.c                    |   83 +-
+>  mm/shmem.c                      |  215 +---
+>  mm/swap.h                       |  157 +--
+>  mm/swap_cgroup.c                |  172 ---
+>  mm/swap_state.c                 |  306 +----
+>  mm/swap_table.h                 |   78 +-
+>  mm/swapfile.c                   | 1518 ++++-------------------
+>  mm/userfaultfd.c                |   18 +-
+>  mm/vmscan.c                     |   28 +-
+>  mm/vswap.c                      | 2025 +++++++++++++++++++++++++++++++
+>  mm/zswap.c                      |  142 +--
+>  29 files changed, 2853 insertions(+), 2485 deletions(-)
+>  delete mode 100644 Documentation/mm/swap-table.rst
+>  delete mode 100644 mm/swap_cgroup.c
+>  create mode 100644 mm/vswap.c
+>
+>
+> base-commit: 05f7e89ab9731565d8a62e3b5d1ec206485eeb0b
+> --
+> 2.47.3
+>
 
